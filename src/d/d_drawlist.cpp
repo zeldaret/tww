@@ -2126,6 +2126,7 @@ dDlst_list_c::dDlst_list_c() {
     mpSpotModel = NULL;
 }
 
+/* 80083668-800836E0       .text J3DDrawBuffer__create__FUl */
 static J3DDrawBuffer * J3DDrawBuffer__create(u32 size) {
     J3DDrawBuffer * buffer = new J3DDrawBuffer();
     if (buffer != NULL) {

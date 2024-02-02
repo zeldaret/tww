@@ -1236,7 +1236,6 @@ s16 dShop_get_next_select(int param_1, ShopItems_c* shopItems) {
 
 /* 80060138-80060154       .text setItemSetDataList__11ShopItems_cFv */
 void ShopItems_c::setItemSetDataList() {
-    /* Nonmatching */
     mpItemSetList = Item_set_data_tbl[mItemSetListGlobalIdx];
 }
 

@@ -194,7 +194,6 @@ void mDoMtx_lookAt(Mtx mtx, const Vec* param_1, const Vec* param_2, s16 param_3)
 
 /* 8000D148-8000D284       .text mDoMtx_lookAt__FPA4_fPC3VecPC3VecPC3Vecs */
 void mDoMtx_lookAt(Mtx mtx, const Vec* param_1, const Vec* param_2, const Vec* param_3, s16 param_4) {
-    /* Nonmatching */
     cXyz local_4c(*(cXyz*)param_1);
     cXyz local_58(*(cXyz*)param_2);
     cXyz local_64(*(cXyz*)param_3);
@@ -221,7 +220,6 @@ void mDoMtx_concatProjView(const Mtx44 a, const Mtx b, Mtx44 c) {
 
 /* 8000D388-8000D530       .text mDoMtx_inverseTranspose__FPA4_CfPA4_f */
 bool mDoMtx_inverseTranspose(const Mtx a, Mtx b) {
-    /* Nonmatching */
     f32 var1 = a[0][0] * a[1][1] * a[2][2] + a[0][1] * a[1][2] * a[2][0] +
                a[0][2] * a[1][0] * a[2][1] - a[2][0] * a[1][1] * a[0][2] -
                a[1][0] * a[0][1] * a[2][2] - a[0][0] * a[2][1] * a[1][2];

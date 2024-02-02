@@ -30,22 +30,27 @@ static u32 l_msgId;
 static msg_class* l_msg;
 static u8 msg_mode;
 
+/* 00000078-00000084       .text getEventNo__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getEventNo() {
     return mBase.mParameters >> 0x18;
 }
 
+/* 00000084-00000090       .text getSwbit__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getSwbit() {
     return mBase.mParameters >> 8 & 0xff;
 }
 
+/* 00000090-0000009C       .text getSwbit2__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getSwbit2() {
     return mBase.mParameters >> 0x10 & 0xff;
 }
 
+/* 0000009C-000000A8       .text getType2__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getType2() {
     return mBase.mParameters >> 6 & 3;
 }
 
+/* 000000A8-0000015C       .text myDemoName__11daTag_Msg_cFv */
 const char* daTag_Msg_c::myDemoName() {
     dStage_EventInfo_c *pEventInfo;
     u32 eventNo;
@@ -62,14 +67,17 @@ const char* daTag_Msg_c::myDemoName() {
     return pEventInfo->events[eventNo].mName;
 }
 
+/* 0000015C-00000168       .text getMessage__11daTag_Msg_cFv */
 u16 daTag_Msg_c::getMessage() {
     return home.angle.x;
 }
 
+/* 00000168-00000174       .text getEventFlag__11daTag_Msg_cFv */
 u16 daTag_Msg_c::getEventFlag() {
     return home.angle.z;
 }
 
+/* 00000174-0000021C       .text arrivalTerms__11daTag_Msg_cFv */
 BOOL daTag_Msg_c::arrivalTerms() {
     int swBit;
     u16 eventFlag;
@@ -105,6 +113,7 @@ BOOL daTag_Msg_c::rangeCheck() {
     return FALSE;
 }
 
+/* 000002FC-0000041C       .text otherCheck__11daTag_Msg_cFv */
 BOOL daTag_Msg_c::otherCheck() {
     s16 targetAngle = fopAcM_searchPlayerAngleY(this);
     daPy_lk_c* player = daPy_getPlayerLinkActorClass();
@@ -132,6 +141,7 @@ BOOL daTag_Msg_c::otherCheck() {
     return TRUE;
 }
 
+/* 0000041C-0000065C       .text daTag_Msg_actionEvent__FP11daTag_Msg_c */
 static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
     int message = a_this->getMessage();
     switch (msg_mode / 1) {
@@ -181,6 +191,7 @@ static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
     return TRUE;
 }
 
+/* 0000065C-00000754       .text daTag_Msg_actionHunt__FP11daTag_Msg_c */
 static BOOL daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
     u8 swBit;
 
@@ -218,10 +229,12 @@ static BOOL daTag_Msg_actionArrival(daTag_Msg_c* a_this) {
     return TRUE;
 }
 
+/* 000007B0-000007B8       .text daTag_Msg_actionWait__FP11daTag_Msg_c */
 static BOOL daTag_Msg_actionWait(daTag_Msg_c*) {
     return TRUE;
 }
 
+/* 000007B8-000007C0       .text daTag_Msg_Draw__FP11daTag_Msg_c */
 static BOOL daTag_Msg_Draw(daTag_Msg_c*) {
     return TRUE;
 }
@@ -260,19 +273,23 @@ s32 daTag_Msg_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
+/* 000007C0-000007FC       .text daTag_Msg_Execute__FP11daTag_Msg_c */
 static BOOL daTag_Msg_Execute(daTag_Msg_c* a_this) {
     return a_this->execute();
 }
 
+/* 000007FC-00000804       .text daTag_Msg_IsDelete__FP11daTag_Msg_c */
 static BOOL daTag_Msg_IsDelete(daTag_Msg_c*) {
     return TRUE;
 }
 
+/* 00000804-00000834       .text daTag_Msg_Delete__FP11daTag_Msg_c */
 static BOOL daTag_Msg_Delete(daTag_Msg_c* a_this) {
     a_this->~daTag_Msg_c();
     return TRUE;
 }
 
+/* 00000834-00000964       .text daTag_Msg_Create__FP10fopAc_ac_c */
 static s32 daTag_Msg_Create(fopAc_ac_c* i_this) {
     daTag_Msg_c* a_this = (daTag_Msg_c*)i_this;
     return a_this->create();

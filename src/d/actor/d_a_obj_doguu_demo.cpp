@@ -13,10 +13,12 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
+/* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjDoguuD_c*)i_this)->CreateHeap();
 }
 
+/* 00000098-00000214       .text CreateHeap__13daObjDoguuD_cFv */
 BOOL daObjDoguuD_c::CreateHeap() {
     mUnusedParam = fopAcM_GetParam(this) & 0xFF;  // Im not sure why this is here, none of the other
                                                   // classes I looked at did this
@@ -44,6 +46,7 @@ BOOL daObjDoguuD_c::CreateHeap() {
     return TRUE;
 }
 
+/* 00000214-00000294       .text CreateInit__13daObjDoguuD_cFv */
 void daObjDoguuD_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -30000.0f, -5000.0f, -30000.0f, 30000.0f, 40000.0f, 30000.0f);
@@ -52,6 +55,7 @@ void daObjDoguuD_c::CreateInit() {
     set_mtx();
 }
 
+/* 00000294-00000314       .text set_mtx__13daObjDoguuD_cFv */
 void daObjDoguuD_c::set_mtx() {
     mpModel->setBaseScale(mScale);
     mDoMtx_stack_c::transS(current.pos);
@@ -76,6 +80,7 @@ s32 daObjDoguuD_c::_create() {
     return ret;
 }
 
+/* 00000314-000003BC       .text daObjDoguuD_create__FPv */
 static s32 daObjDoguuD_create(void* i_this) {
     return ((daObjDoguuD_c*)i_this)->_create();
 }
@@ -88,6 +93,7 @@ BOOL daObjDoguuD_c::_delete() {
     return TRUE;
 }
 
+/* 000003BC-00000424       .text daObjDoguuD_Delete__FPv */
 static BOOL daObjDoguuD_Delete(void* i_this) {
     return ((daObjDoguuD_c*)i_this)->_delete();
 }
@@ -101,6 +107,7 @@ BOOL daObjDoguuD_c::_draw() {
     return TRUE;
 }
 
+/* 00000424-000004C8       .text daObjDoguuD_Draw__FPv */
 static BOOL daObjDoguuD_Draw(void* i_this) {
     return ((daObjDoguuD_c*)i_this)->_draw();
 }
@@ -116,10 +123,12 @@ BOOL daObjDoguuD_c::_execute() {
     return TRUE;
 }
 
+/* 000004C8-00000538       .text daObjDoguuD_Execute__FPv */
 static BOOL daObjDoguuD_Execute(void* i_this) {
     return ((daObjDoguuD_c*)i_this)->_execute();
 }
 
+/* 00000538-00000540       .text daObjDoguuD_IsDelete__FPv */
 static BOOL daObjDoguuD_IsDelete(void*) {
     return TRUE;
 }

@@ -294,6 +294,7 @@ bool dNpc_PathRun_c::decIdx() {
     return ret;
 }
 
+/* 8021B0F0-8021B134       .text decIdxLoop__14dNpc_PathRun_cFv */
 bool dNpc_PathRun_c::decIdxLoop() {
     bool ret = true;
 
@@ -308,6 +309,7 @@ bool dNpc_PathRun_c::decIdxLoop() {
     return ret;
 }
 
+/* 8021B134-8021B1B0       .text decIdxAuto__14dNpc_PathRun_cFv */
 bool dNpc_PathRun_c::decIdxAuto() {
     bool hitEnd = true;
 
@@ -330,6 +332,7 @@ bool dNpc_PathRun_c::decIdxAuto() {
     return hitEnd;
 }
 
+/* 8021B1B0-8021B224       .text nextIdx__14dNpc_PathRun_cFv */
 bool dNpc_PathRun_c::nextIdx() {
     bool hitEnd;
 
@@ -349,6 +352,7 @@ bool dNpc_PathRun_c::nextIdx() {
     return hitEnd;
 }
 
+/* 8021B224-8021B298       .text nextIdxAuto__14dNpc_PathRun_cFv */
 bool dNpc_PathRun_c::nextIdxAuto() {
     bool hitEnd;
 
@@ -368,6 +372,7 @@ bool dNpc_PathRun_c::nextIdxAuto() {
     return hitEnd;
 }
 
+/* 8021B298-8021B328       .text absIdx__14dNpc_PathRun_cFUcUc */
 s32 dNpc_PathRun_c::absIdx(u8 startIdx, u8 lastIdx) {
     if(mPath == 0) {
         return 0;
@@ -389,6 +394,7 @@ s32 dNpc_PathRun_c::absIdx(u8 startIdx, u8 lastIdx) {
     return diff_1;
 }
 
+/* 8021B328-8021B348       .text maxPoint__14dNpc_PathRun_cFv */
 u8 dNpc_PathRun_c::maxPoint() {
     u8 max = 0xFF;
     if(mPath != 0) {
@@ -398,6 +404,7 @@ u8 dNpc_PathRun_c::maxPoint() {
     return max;
 }
 
+/* 8021B348-8021B384       .text pointArg__14dNpc_PathRun_cFUc */
 u8 dNpc_PathRun_c::pointArg(u8 idx) {
     u8 arg = 0;
     if(mPath != 0 && idx < (u8)mPath->m_num) {
@@ -513,6 +520,7 @@ bool dNpc_PathRun_c::chkInside(cXyz* param_1) {
 
 #include "d/d_npc_event_cut.inc"
 
+/* 8021B95C-8021B998       .text setActorInfo__15dNpc_EventCut_cFPcP10fopAc_ac_c */
 void dNpc_EventCut_c::setActorInfo(char* staffName, fopAc_ac_c* pActor) {
     mpEvtStaffName = staffName;
     mpActor = pActor;
@@ -522,6 +530,7 @@ void dNpc_EventCut_c::setActorInfo(char* staffName, fopAc_ac_c* pActor) {
     mCurActIdx = -1;
 }
 
+/* 8021B998-8021B9D8       .text setActorInfo2__15dNpc_EventCut_cFPcP12fopNpc_npc_c */
 void dNpc_EventCut_c::setActorInfo2(char* staffName, fopNpc_npc_c* pActor) {
     mpEvtStaffName = staffName;
     mpActor = pActor;
@@ -532,6 +541,7 @@ void dNpc_EventCut_c::setActorInfo2(char* staffName, fopNpc_npc_c* pActor) {
     mCurActIdx = -1;
 }
 
+/* 8021B9D8-8021BABC       .text dNpc_setAnmIDRes__FP14mDoExt_McaMorfiffiiPCc */
 bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float speed, int animResId, int soundResId, const char* arcName) {
     void* pSoundAnimRes = 0;
     bool ret = false;
@@ -570,6 +580,7 @@ bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 spee
     return ret;
 }
 
+/* 8021BBA8-8021BC8C       .text dNpc_setAnm__FP14mDoExt_McaMorfiffiiPCc */
 bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName) {
     void* pSoundAnimRes = 0;
     bool ret = false;
@@ -588,6 +599,7 @@ bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int a
     return ret;
 }
 
+/* 8021BC8C-8021BD2C       .text dNpc_setShadowModel__FP8J3DModelP12J3DModelDataP8J3DModel */
 void dNpc_setShadowModel(J3DModel* param_1, J3DModelData* param_2, J3DModel* param_3) {
     for(int i = 0; i < param_2->getWEvlpMtxNum(); i++) {
         mDoMtx_copy(param_3->mpWeightEnvMtx[i], param_1->mpWeightEnvMtx[i]);
@@ -597,6 +609,7 @@ void dNpc_setShadowModel(J3DModel* param_1, J3DModelData* param_2, J3DModel* par
     }
 }
 
+/* 8021BD2C-8021BDE8       .text dNpc_playerEyePos__Ff */
 cXyz dNpc_playerEyePos(f32 offsetY) {
     daPy_py_c* pPlayer = daPy_getPlayerActorClass();
     cXyz pos = pPlayer->getHeadTopPos();
@@ -628,6 +641,7 @@ void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, s16* param
     }
 }
 
+/* 8021BEC4-8021BF30       .text dNpc_chkArasoi__Fv */
 bool dNpc_chkArasoi() {
     return dComIfGs_isEventBit(0x1220) && !dComIfGs_isEventBit(0x1808);
 }
@@ -641,6 +655,7 @@ bool dNpc_chkLetterPassed() {
     return ret;
 }
 
+/* 8021BF98-8021C010       .text setCollision__12fopNpc_npc_cFff */
 void fopNpc_npc_c::setCollision(f32 radius, f32 height) {
     mCyl.SetC(current.pos);
     mCyl.SetR(radius);
@@ -648,6 +663,7 @@ void fopNpc_npc_c::setCollision(f32 radius, f32 height) {
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
+/* 8021C010-8021C120       .text talk__12fopNpc_npc_cFi */
 u16 fopNpc_npc_c::talk(int param_1) {
     u16 status = 0xFF;
 
@@ -683,6 +699,7 @@ u16 fopNpc_npc_c::talk(int param_1) {
     return status;
 }
 
+/* 8021C120-8021C238       .text dNpc_setAnm_2__FP14mDoExt_McaMorfiffiiPCc */
 bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName) {
     if(0 <= soundFileIdx) {
         void* pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFileIdx);
@@ -748,6 +765,7 @@ void dNpc_HeadAnm_c::swing_horizone() {
     }
 }
 
+/* 8021C55C-8021C5D8       .text move__14dNpc_HeadAnm_cFv */
 void dNpc_HeadAnm_c::move() {
     if(mFunc) {
         (this->*mFunc)();
@@ -782,6 +800,7 @@ void dNpc_JntCtrl_c::turn_fromBackbone2Head(s16 param_1, s16* param_2, s16* para
     }
 }
 
+/* 8021C6D8-8021C780       .text turn_fromHead2Backbone__14dNpc_JntCtrl_cFsPsPs */
 void dNpc_JntCtrl_c::turn_fromHead2Backbone(s16 param_1, s16* param_2, s16* param_3) {
     *param_2 = 0;
     if(!mbHeadLock) {
@@ -796,6 +815,7 @@ void dNpc_JntCtrl_c::turn_fromHead2Backbone(s16 param_1, s16* param_2, s16* para
     }
 }
 
+/* 8021C780-8021C7D0       .text follow_current__14dNpc_JntCtrl_cFPss */
 s16 dNpc_JntCtrl_c::follow_current(s16* pAngle, s16 diff) {
     s16 angle = *pAngle;
     *pAngle -= diff;

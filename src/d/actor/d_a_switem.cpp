@@ -79,7 +79,6 @@ s32 daSwItem_c::_create() {
 
 /* 00000408-000006DC       .text _execute__10daSwItem_cFv */
 bool daSwItem_c::_execute() {
-    /* Nonmatching */
     bool triggered = false;
     if (mCyl.ChkTgHit()) {
         cCcD_Obj* obj = mCyl.GetTgHitObj();

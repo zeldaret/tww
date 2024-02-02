@@ -1,5 +1,6 @@
 /**
  * d_a_kytag04.cpp
+ * Tag - Weather Tag 4
  */
 
 #include "d/actor/d_a_kytag04.h"
@@ -8,6 +9,7 @@
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
+/* 00000078-00000080       .text daKytag04_Draw__FP13kytag04_class */
 static BOOL daKytag04_Draw(kytag04_class*) {
     return TRUE;
 }

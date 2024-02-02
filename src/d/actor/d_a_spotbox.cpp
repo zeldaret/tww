@@ -38,10 +38,6 @@ BOOL daSpotbox_c::execute() {
     return TRUE;
 }
 
-u32 daSpotbox_c::getType() {
-    return fopAcM_GetParam(this) & 1;
-}
-
 /* 00000078-000000C4       .text daSpotbox_Draw__FP11daSpotbox_c */
 static BOOL daSpotbox_Draw(daSpotbox_c* i_this) {
     return ((daSpotbox_c*)i_this)->draw();

@@ -8,6 +8,7 @@
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 
+/* 00000078-00000180       .text daSwc00_Execute__FP11swc00_class */
 static BOOL daSwc00_Execute(swc00_class* i_this) {
     s32 enable_sw = daSwc00_getSw2No(i_this);
     fopAc_ac_c* actor = i_this;
@@ -31,14 +32,17 @@ static BOOL daSwc00_Execute(swc00_class* i_this) {
     return TRUE;
 }
 
+/* 00000180-00000188       .text daSwc00_IsDelete__FP11swc00_class */
 static BOOL daSwc00_IsDelete(swc00_class* i_this) {
     return TRUE;
 }
 
+/* 00000188-00000190       .text daSwc00_Delete__FP11swc00_class */
 static BOOL daSwc00_Delete(swc00_class* i_this) {
     return TRUE;
 }
 
+/* 00000190-00000274       .text daSwc00_Create__FP10fopAc_ac_c */
 static s32 daSwc00_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, swc00_class);
 

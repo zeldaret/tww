@@ -57,7 +57,7 @@ class daBomb_c : public fopAc_ac_c {
 public:
     typedef bool(daBomb_c::*procFunc)();
 
-    daBomb_c();
+    daBomb_c() {}
 
     void draw_norm();
     void draw_nut();

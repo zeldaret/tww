@@ -619,7 +619,6 @@ void cBgW::CopyOldMtx() {
 
 /* 802493B4-80249584       .text Move__4cBgWFv */
 void cBgW::Move() {
-    /* Nonmatching */
     if (!ChkLock() && ChkMoveBg()) {
         if (!ChkNoCalcVtx()) {
             if (mMoveCounter >= 0xFF ||
@@ -656,7 +655,6 @@ void cBgW::Move() {
 
 /* 80249584-80249698       .text RwgShdwDraw__4cBgWFiP13cBgS_ShdwDraw */
 void cBgW::RwgShdwDraw(int index, cBgS_ShdwDraw* shdw) {
-    /* Nonmatching */
     while (true) {
         cBgW_RwgElm* rwg = &pm_rwg[index];
         if (!ChkShdwDrawThrough(index, shdw->GetPolyPassChk())) {

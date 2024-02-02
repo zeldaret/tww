@@ -1,10 +1,13 @@
-/*
+/**
  * J3DVisibility.cpp
+ * J3DU - Visibility
  */
+
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 
+/* 802F36BC-802F377C       .text setVisibility__20J3DVisibilityManagerFP12J3DModelData */
 void J3DVisibilityManager::setVisibility(J3DModelData* pModel) {
     u8 visibility;
 
@@ -20,5 +23,3 @@ void J3DVisibilityManager::setVisibility(J3DModelData* pModel) {
         }
     }
 }
-
-J3DVisibilityManager::~J3DVisibilityManager() {}

@@ -4262,6 +4262,7 @@ void daPy_lk_c::playerInit() {
     }
 }
 
+/* 80125CC8-80125D30       .text phase_1__FP9daPy_lk_c */
 int phase_1(daPy_lk_c* i_this) {
     dComIfGp_setPlayer(0, i_this);
     dComIfGp_setLinkPlayer(i_this);
@@ -4276,6 +4277,7 @@ int phase_1(daPy_lk_c* i_this) {
     return cPhs_NEXT_e;
 }
 
+/* 80125D30-80125DB4       .text phase_2__FP9daPy_lk_c */
 int phase_2(daPy_lk_c* i_this) {
     int result;
 
@@ -4308,10 +4310,12 @@ int daPy_lk_c::makeBgWait() {
     return cPhs_NEXT_e;
 }
 
+/* 80127B50-80127B70       .text phase_3__FP9daPy_lk_c */
 int phase_3(daPy_lk_c* i_this) {
     return i_this->makeBgWait();
 }
 
+/* 80127B70-80127BA0       .text daPy_Create__FP10fopAc_ac_c */
 static s32 daPy_Create(fopAc_ac_c* i_this) {
     static int (*l_method[4])(daPy_lk_c*) = {
         phase_1,

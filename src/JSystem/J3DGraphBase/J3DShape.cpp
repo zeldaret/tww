@@ -17,7 +17,6 @@ extern void J3DFifoLoadPosMtxImm(Mtx, u32);
 extern void J3DFifoLoadNrmMtxImm(Mtx, u32);
 
 /* 802DD18C-802DD1FC       .text initialize__8J3DShapeFv */
-
 void J3DShape::initialize() {
     mMaterial = NULL;
     mIndex = -1;

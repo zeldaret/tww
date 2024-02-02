@@ -694,6 +694,7 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
     }
 }
 
+/* 8001BA34-8001BA68       .text BigLittleChange__FUl */
 u32 BigLittleChange(u32 param_0) {
     u32 big = param_0;
     u32 little;

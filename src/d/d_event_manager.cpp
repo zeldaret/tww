@@ -427,6 +427,7 @@ BOOL dEvent_manager_c::getIsAddvance(int staffIdx) {
     return mList.getStaffP(staffIdx)->mAdvance;
 }
 
+/* 8007473C-80074824       .text dEvmng_strcmp__FPCcPc */
 int dEvmng_strcmp(const char* s1, char* s2) {
     /* Nonmatching */
     u32 len1 = strlen(s1);

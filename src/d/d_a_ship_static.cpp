@@ -1,8 +1,11 @@
-/*
+/**
  * d_a_ship_static.cpp
+ * King of Red Lions - Static
  */
+
 #include "d/actor/d_a_ship.h"
 
+/* 80067D94-80067E78       .text initStartPos__8daShip_cFPC4cXyzs */
 void daShip_c::initStartPos(const cXyz* pos, short rotY) {
     current.pos = *pos;
     old.pos = *pos;
@@ -21,4 +24,3 @@ void daShip_c::initStartPos(const cXyz* pos, short rotY) {
     m19AC.end();
     m19C0.end();
 }
-

@@ -57,6 +57,7 @@ static dCcD_SrcCyl l_cyl_src = {
     },
 };
 
+/* 00004838-00004B2C       .text draw__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::draw() {
     u8 toCheck = getSw0();
     u8 behavior = getType();
@@ -150,6 +151,7 @@ BOOL daAgbsw0_c::draw() {
     return true;
 }
 
+/* 00004F80-00005458       .text create__10daAgbsw0_cFv */
 int daAgbsw0_c::create() {
     u8 behavior = current.angle.z & 0xFF;
     u8 condition = getSw0();
@@ -300,6 +302,7 @@ BOOL daAgbsw0_c::execute() {
 agb_mail_struct daAgbsw0_c::mMail;
 u32 daAgbsw0_c::mSE;
 
+/* 00000078-00000344       .text ExeSubA__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubA() {
     u32 sw = getSw0();
     s16 condition = getParamNo();
@@ -384,6 +387,7 @@ BOOL daAgbsw0_c::ExeSubA() {
     return true;
 }
 
+/* 00000344-0000066C       .text ExeSubAT__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubAT() {
     u32 flag = getSw0();
     s16 condition = getParamNo();
@@ -473,6 +477,7 @@ BOOL daAgbsw0_c::ExeSubAT() {
     return true;
 }
 
+/* 0000066C-00000940       .text ExeSubA2__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubA2() {
     u32 sw = getSw0();
     s16 condition = getParamNo();
@@ -553,6 +558,7 @@ BOOL daAgbsw0_c::ExeSubA2() {
     return true;
 }
 
+/* 00000940-00000AB4       .text ExeSubF__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubF() {
     u32 sw = getSw0();
     s16 condition = getParamNo();
@@ -588,6 +594,7 @@ BOOL daAgbsw0_c::ExeSubF() {
     return true;
 }
 
+/* 00000AB4-00000E48       .text ExeSubF2__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubF2() {
     u32 sw = getSw0();
     s16 condition = getParamNo();
@@ -680,6 +687,7 @@ BOOL daAgbsw0_c::ExeSubF2() {
     return true;
 }
 
+/* 00000E48-00000FE4       .text ExeSubM__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubM() {
     u32 sw = getSw0();
     if(sw != 0xFF && !fopAcM_isSwitch(this, sw)) {
@@ -714,6 +722,7 @@ BOOL daAgbsw0_c::ExeSubM() {
     }
 }
 
+/* 00001198-00001368       .text ExeSubM3__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubM2() {
     if(dComIfGs_isEventBit(0x2D01)) {
         if(field_0x298 == 1) {
@@ -755,6 +764,7 @@ BOOL daAgbsw0_c::ExeSubM2() {
     }
 }
 
+/* 00001198-00001368       .text ExeSubM3__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubM3() {
     if(dComIfGs_getTriforceNum() == 8) {
         if(field_0x298 == 1) {
@@ -804,6 +814,7 @@ BOOL daAgbsw0_c::ExeSubM3() {
 #if VERSION == VERSION_JPN
 u32 daAgbsw0_c::TriforceCheck()
 #else
+/* 00001368-000017B0       .text TriforceCheck__10daAgbsw0_cFP7daAgb_c */
 u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 #endif
 {
@@ -1010,6 +1021,7 @@ u16 daAgbsw0_c::DisposedMsg[] = {
     0x005C,
 };
 
+/* 000017B0-00001AD0       .text ExeSubMW__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubMW() {
     u8 sw = getSw0();
 
@@ -1068,6 +1080,7 @@ BOOL daAgbsw0_c::ExeSubMW() {
     return true;
 }
 
+/* 00000344-0000066C       .text ExeSubAT__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubT() {
     u8 sw = getSw0();
 
@@ -1114,6 +1127,7 @@ BOOL daAgbsw0_c::ExeSubT() {
     return true;
 }
 
+/* 00001CC8-00001FAC       .text ExeSubS__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubS() {
     u8 sw = getSw0();
     u8 sw1 = getSw1();
@@ -1181,6 +1195,7 @@ BOOL daAgbsw0_c::ExeSubS() {
     return true;
 }
 
+/* 00001FAC-000021EC       .text ExeSubR__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubR() {
     u8 sw = getSw0();
     daAgb_c* agb = dComIfGp_getAgb();
@@ -1224,6 +1239,7 @@ BOOL daAgbsw0_c::ExeSubR() {
     return TRUE;
 }
 
+/* 000021EC-00002A28       .text ExeSubB__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubB() {
     u8 sw = getSw0();
     s16 restriction = getParamNo();
@@ -1401,6 +1417,7 @@ BOOL daAgbsw0_c::ExeSubB() {
     return true;
 }
 
+/* 00002A28-00002D90       .text ExeSubD__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubD() {
     u8 sw = getSw0();
     daAgb_c* agb = dComIfGp_getAgb();
@@ -1486,6 +1503,7 @@ BOOL daAgbsw0_c::ExeSubD() {
     return true;
 }
 
+/* 00002D90-000030DC       .text ExeSubFA__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubFA() {
     u8 sw = getSw0();
     s16 condition = getParamNo();
@@ -1587,6 +1605,7 @@ BOOL daAgbsw0_c::ExeSubFA() {
     return true;
 }
 
+/* 000030DC-0000320C       .text HitCheck__10daAgbsw0_cFP10fopAc_ac_c */
 BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
     if(mNonCircular == false) {
         f32 y_diff = param_1->current.pos.y - current.pos.y;
@@ -1611,6 +1630,7 @@ BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
     return false;
 }
 
+/* 0000320C-00003344       .text HitCheck__10daAgbsw0_cF4cXyzf */
 BOOL daAgbsw0_c::HitCheck(cXyz param_1, f32 param_2) {
     if(mNonCircular == false) {
         f32 y_diff = param_1.y - current.pos.y;
@@ -1635,6 +1655,7 @@ BOOL daAgbsw0_c::HitCheck(cXyz param_1, f32 param_2) {
     return false;
 }
 
+/* 00003344-0000476C       .text MoveCheck__10daAgbsw0_cFs */
 BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
     switch(param_1) {
         case 1:
@@ -2441,6 +2462,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
     return 1;
 }
 
+/* 0000477C-00004818       .text MailSend__10daAgbsw0_cFUsUcUcUcUc */
 void daAgbsw0_c::MailSend(u16 msgID, u8 reactType, u8 toCheck, u8 toSet, u8 sfx) {
     mMail.msgID = msgID;
     mMail.swToSet = toSet;
@@ -2453,18 +2475,22 @@ void daAgbsw0_c::MailSend(u16 msgID, u8 reactType, u8 toCheck, u8 toSet, u8 sfx)
     mDoGac_SendDataSet((u32*)&mMail, 8, 5, 0);
 }
 
+/* 00004818-00004838       .text daAgbsw0_Draw__FP10daAgbsw0_c */
 static BOOL daAgbsw0_Draw(daAgbsw0_c* i_this) {
     return i_this->draw();
 }
 
+/* 00004B2C-00004CF8       .text daAgbsw0_Execute__FP10daAgbsw0_c */
 static void daAgbsw0_Execute(daAgbsw0_c* i_this) {
     i_this->execute();
 }
 
-static bool daAgbsw0_IsDelete(daAgbsw0_c*) {
-    return true;
+/* 00004CF8-00004D00       .text daAgbsw0_IsDelete__FP10daAgbsw0_c */
+static BOOL daAgbsw0_IsDelete(daAgbsw0_c*) {
+    return TRUE;
 }
 
+/* 00004D00-00004E98       .text daAgbsw0_Delete__FP10daAgbsw0_c */
 static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
     daAgb_c* agb = dComIfGp_getAgb();
     u32 id = i_this->current.angle.z & 0xFF;
@@ -2513,6 +2539,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
     return true;
 }
 
+/* 00004E98-00004F80       .text daAgbsw0_Create__FP10fopAc_ac_c */
 static int daAgbsw0_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, daAgbsw0_c);
 

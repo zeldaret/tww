@@ -14,10 +14,6 @@ daMagma_c::~daMagma_c() {
     dComIfG_resDelete(&mPhs, "Magma");
 }
 
-s32 daMagma_c::getPathNo() {
-    return fopAcM_GetParam(this);
-}
-
 s32 daMagma_c::create() {
     fopAcM_SetupActor(this, daMagma_c);
 

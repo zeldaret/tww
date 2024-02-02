@@ -521,18 +521,22 @@ const u8 daShopItem_c::mModelType[255] = {
     2,
 };
 
+/* 800689F0-800689F8       .text getScaleP__12daShopItem_cFv */
 cXyz* daShopItem_c::getScaleP() {
     return &mScale;
 }
 
+/* 800689F8-80068A00       .text getRotateP__12daShopItem_cFv */
 csXyz* daShopItem_c::getRotateP() {
     return &current.angle;
 }
 
+/* 80068A00-80068A08       .text getPosP__12daShopItem_cFv */
 cXyz* daShopItem_c::getPosP() {
     return &current.pos;
 }
 
+/* 80068A08-80068A58       .text getCenter__12daShopItem_cFv */
 cXyz daShopItem_c::getCenter() {
     f32 height;
     if(FLOWER_1 <= m_itemNo && m_itemNo <= PRESIDENT_STATUE) {

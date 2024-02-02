@@ -40,7 +40,7 @@ public:
         mAnmVisibility = visibility;
         mbActive = 1;
     }
-    virtual ~J3DVisibilityManager();
+    virtual ~J3DVisibilityManager() {}
     virtual void setVisibility(J3DModelData*);
 
     /* 0x04 */ J3DAnmVisibilityFull* mAnmVisibility;

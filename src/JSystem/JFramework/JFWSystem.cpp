@@ -42,6 +42,7 @@ JUTConsoleManager* JFWSystem::systemConsoleManager = 0;
 JUTConsole* JFWSystem::systemConsole = 0;
 bool JFWSystem::sInitCalled = false;
 
+/* 80254DD0-80254E54       .text firstInit__9JFWSystemFv */
 void JFWSystem::firstInit() {
     JUT_ASSERT(80, rootHeap == 0);
 
@@ -53,6 +54,7 @@ void JFWSystem::firstInit() {
     return;
 }
 
+/* 80254E54-802551C0       .text init__9JFWSystemFv */
 void JFWSystem::init() {
     /* Nonmatching - regalloc */
     JUT_ASSERT(101, sInitCalled == false);

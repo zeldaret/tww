@@ -8,6 +8,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
 
+/* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
     return a_this->CreateHeap();
@@ -24,6 +25,7 @@ BOOL daObjPbka_c::CreateHeap() {
     return TRUE;
 }
 
+/* 0000015C-000001CC       .text CreateInit__11daObjPbka_cFv */
 void daObjPbka_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -300.0f, -300.0f, -300.0f, 300.0f, 300.0f, 300.0f);
@@ -31,6 +33,7 @@ void daObjPbka_c::CreateInit() {
     set_mtx();
 }
 
+/* 000001CC-0000024C       .text set_mtx__11daObjPbka_cFv */
 void daObjPbka_c::set_mtx() {
     J3DModel* model;
     model = mpModel;
@@ -56,6 +59,7 @@ s32 daObjPbka_c::_create() {
     return phase_state;
 }
 
+/* 0000024C-000002EC       .text daObjPbka_Create__FPv */
 static int daObjPbka_Create(void* i_this) {
     return static_cast<daObjPbka_c*>(i_this)->_create();
 }
@@ -65,6 +69,7 @@ BOOL daObjPbka_c::_delete() {
     return TRUE;
 }
 
+/* 000002EC-0000031C       .text daObjPbka_Delete__FPv */
 static BOOL daObjPbka_Delete(void* i_this) {
     static_cast<daObjPbka_c*>(i_this)->_delete();
     return TRUE;
@@ -80,6 +85,7 @@ BOOL daObjPbka_c::_draw() {
     return TRUE;
 }
 
+/* 0000031C-000003C0       .text daObjPbka_Draw__FPv */
 static BOOL daObjPbka_Draw(void* i_this) {
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
     return a_this->_draw();
@@ -93,10 +99,12 @@ BOOL daObjPbka_c::_execute() {
     return TRUE;
 }
 
+/* 000003C0-00000450       .text daObjPbka_Execute__FPv */
 static BOOL daObjPbka_Execute(void* i_this) {
     return static_cast<daObjPbka_c*>(i_this)->_execute();
 }
 
+/* 00000450-00000458       .text daObjPbka_IsDelete__FPv */
 static BOOL daObjPbka_IsDelete(void*) {
     return TRUE;
 }

@@ -103,7 +103,7 @@ bool dDetect_c::chk_quake_area(const cXyz* pos) const {
 
 /* 8009C32C-8009C588       .text search_tag_light__9dDetect_cFPvPv */
 void* dDetect_c::search_tag_light(void* i_proc, void* i_pos) {
-    /* Nonmatching */
+    /* Nonmatching - chk_inside */
     if (fopAc_IsActor(i_proc) && fopAcM_GetProfName(i_proc) == PROC_Tag_Light) {
         daTagLight::Act_c* light = (daTagLight::Act_c*)i_proc;
         const cXyz* pos = (const cXyz*)i_pos;

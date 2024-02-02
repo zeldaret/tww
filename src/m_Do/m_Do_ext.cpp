@@ -603,7 +603,6 @@ void mDoExt_backupMatBlock_c::store(J3DMaterial* i_material) {
 
 /* 800101BC-8001084C       .text restore__23mDoExt_backupMatBlock_cFP11J3DMaterial */
 void mDoExt_backupMatBlock_c::restore(J3DMaterial* i_material) {
-    /* Nonmatching */
     J3DColorBlock* colorBlock = i_material->getColorBlock();
     colorBlock->setColorChanNum(mColorChanNum);
     for (u32 i = 0; i < 2; i++) {

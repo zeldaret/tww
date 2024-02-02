@@ -6,6 +6,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_event_manager.h"
 
+/* 8021CC4C-8021CED0       .text cutProc__15dNpc_EventCut_cFv */
 bool dNpc_EventCut_c::cutProc() {
     static char* action_table[] = {
         "WAIT",
@@ -80,6 +81,7 @@ bool dNpc_EventCut_c::cutProc() {
     }
 }
 
+/* 8021CED0-8021CF3C       .text cutWaitStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutWaitStart() {
     u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
     if(timer) {
@@ -90,12 +92,14 @@ void dNpc_EventCut_c::cutWaitStart() {
     }
 }
 
+/* 8021CF3C-8021CF88       .text cutWaitProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutWaitProc() {
     if(cLib_calcTimer(&mTimer) == 0) {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
 }
 
+/* 8021CF88-8021D1C8       .text cutTurnToActorStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToActorStart() {
     mpActorName = dComIfGp_evmng_getMyStringP(mEvtStaffId, "ActorName");
 
@@ -166,6 +170,7 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
     field_0x44 = 0;
 }
 
+/* 8021D1C8-8021D51C       .text cutTurnToActorProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToActorProc() {
     if(mSetId != 0) {
         mTargetActorPos.set(0.0f, 0.0f, 0.0f);
@@ -232,6 +237,7 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
     field_0x44 = fabsf(tAngle - mpActor->current.angle.y);
 }
 
+/* 8021D51C-8021D730       .text cutMoveToActorStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToActorStart() {
     mpActorName = dComIfGp_evmng_getMyStringP(mEvtStaffId, "ActorName");
     u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
@@ -336,6 +342,7 @@ void dNpc_EventCut_c::cutMoveToActorProc() {
     }
 }
 
+/* 8021D9DC-8021DC7C       .text findActorCallBack__15dNpc_EventCut_cFP10fopAc_ac_cPv */
 fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) {
     dNpc_EventCut_c* cut = static_cast<dNpc_EventCut_c*>(pData);
 
@@ -380,6 +387,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
     return 0;
 }
 
+/* 8021DC7C-8021DE2C       .text cutTurnToPosStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToPosStart() {
     cXyz* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "Pos");
     if(pos) {
@@ -432,6 +440,7 @@ void dNpc_EventCut_c::cutTurnToPosStart() {
     field_0x44 = 0;
 }
 
+/* 8021DE2C-8021DFB0       .text cutTurnToPosProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToPosProc() {
     s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
     mbAttention = 1;
@@ -466,6 +475,7 @@ void dNpc_EventCut_c::cutTurnToPosProc() {
     field_0x44 = fabsf(tAngle - mpActor->current.angle.y);
 }
 
+/* 8021DFB0-8021E168       .text cutMoveToPosStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToPosStart() {
     cXyz* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "Pos");
     f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
@@ -543,6 +553,7 @@ void dNpc_EventCut_c::cutMoveToPosProc() {
     }
 }
 
+/* 8021E4C0-8021E58C       .text cutTalkMsgProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgStart() {
     if(mpTalkActor != 0) {
         u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
@@ -572,6 +583,7 @@ void dNpc_EventCut_c::cutTalkMsgStart() {
     }
 }
 
+/* 8021E444-8021E4C0       .text cutContinueTalkStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutContinueTalkStart() {
     if(mpTalkActor != 0) {
         u32* endMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_num");
@@ -584,6 +596,7 @@ void dNpc_EventCut_c::cutContinueTalkStart() {
     }
 }
 
+/* 8021E338-8021E444       .text cutTalkMsgStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgProc() {
     if(mpTalkActor == 0 || field_0x52 == 0) {
         dComIfGp_evmng_cutEnd(mEvtStaffId);

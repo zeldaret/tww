@@ -19,10 +19,12 @@ enum {
     ACT_TIMER_SET = 30,
 };
 
+/* 00000078-00000080       .text daAndsw0_Draw__FP12andsw0_class */
 static s32 daAndsw0_Draw(andsw0_class*) {
     return 1;
 }
 
+/* 00000080-000003C4       .text daAndsw0_check__FP12andsw0_class */
 static void daAndsw0_check(andsw0_class* i_this) {
     s32 numToCheck = i_this->mNumSwitchesToCheck;
     u32 switchToCheck;
@@ -138,6 +140,7 @@ static void daAndsw0_check(andsw0_class* i_this) {
 static void* ac[7];
 static s32 check_count;
 
+/* 000003C4-0000044C       .text bk_s_sub1__FPvPv */
 static void* bk_s_sub1(void* i_this, void*) {
     if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 7)  {
         s32 count = check_count; //regswaps without this
@@ -152,6 +155,7 @@ static void* bk_s_sub1(void* i_this, void*) {
     return 0;
 }
 
+/* 0000044C-000004D4       .text bk_s_sub2__FPvPv */
 static void* bk_s_sub2(void* i_this, void*) {
     if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 4)  {
         s32 count = check_count; //regswaps without this
@@ -166,6 +170,7 @@ static void* bk_s_sub2(void* i_this, void*) {
     return 0;
 }
 
+/* 000004D4-0000055C       .text bk_s_sub3__FPvPv */
 static void* bk_s_sub3(void* i_this, void*) {
     if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 5)  {
         s32 count = check_count; //regswaps without this
@@ -180,6 +185,7 @@ static void* bk_s_sub3(void* i_this, void*) {
     return 0;
 }
 
+/* 0000055C-000005D4       .text bb_s_sub__FPvPv */
 static void* bb_s_sub(void* i_this, void*) {
     if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BB)  {
         s32 count = check_count; //regswaps without this
@@ -194,6 +200,7 @@ static void* bb_s_sub(void* i_this, void*) {
     return 0;
 }
 
+/* 000005D4-000006AC       .text hajimari_actor_entry__FP12andsw0_class */
 static s32 hajimari_actor_entry(andsw0_class* i_this) {
     for(int i = 0; i < 7; i++) {
         ac[i] = 0;
@@ -215,6 +222,7 @@ static s32 hajimari_actor_entry(andsw0_class* i_this) {
     return 1;
 }
 
+/* 000006AC-0000081C       .text hajimarinomori_check__FP12andsw0_class */
 static void hajimarinomori_check(andsw0_class* i_this) {
     fopAc_ac_c* actor = i_this;
     if (i_this->mBehaviorType == 0) {
@@ -260,6 +268,7 @@ static void hajimarinomori_check(andsw0_class* i_this) {
     }
 }
 
+/* 0000081C-00000914       .text event_start_check__FP12andsw0_class */
 static void event_start_check(andsw0_class* i_this) {
     fopAc_ac_c* actor = i_this;
     switch (i_this->mEventState) {
@@ -284,6 +293,7 @@ static void event_start_check(andsw0_class* i_this) {
     }
 }
 
+/* 00000914-00000964       .text daAndsw0_Execute__FP12andsw0_class */
 static s32 daAndsw0_Execute(andsw0_class* i_this) {
     event_start_check(i_this);
     if (i_this->mNumSwitchesToCheck == 0xFF)
@@ -293,14 +303,17 @@ static s32 daAndsw0_Execute(andsw0_class* i_this) {
     return 1;
 }
 
+/* 00000964-0000096C       .text daAndsw0_IsDelete__FP12andsw0_class */
 static s32 daAndsw0_IsDelete(andsw0_class*) {
     return 1;
 }
 
+/* 0000096C-00000974       .text daAndsw0_Delete__FP12andsw0_class */
 static s32 daAndsw0_Delete(andsw0_class*) {
     return 1;
 }
 
+/* 00000974-00000A64       .text daAndsw0_Create__FP10fopAc_ac_c */
 static s32 daAndsw0_Create(fopAc_ac_c* ac) {
     fopAcM_SetupActor(ac, andsw0_class);
 

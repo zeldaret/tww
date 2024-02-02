@@ -56,7 +56,6 @@ static s32 phase_3(char*) {
 
 /* 8022F9BC-8022F9FC       .text resLoad__FP30request_of_phase_process_classPc */
 s32 resLoad(request_of_phase_process_class* param_1, char* param_2) {
-    /* Nonmatching */
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,
