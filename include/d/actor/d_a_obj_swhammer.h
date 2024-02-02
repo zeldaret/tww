@@ -29,7 +29,7 @@ namespace daObjSwhammer {
         void crush_proc();
         void eff_crush();
         void calc_top_pos();
-        void jnodeCB(J3DNode*, int);
+        static BOOL jnodeCB(J3DNode*, int);
         void mode_upper_init();
         void mode_upper();
         void mode_u_l_init();

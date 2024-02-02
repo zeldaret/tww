@@ -7,7 +7,7 @@
 #include "m_Do/m_Do_ext.h"
 
 /* 00000078-00000098       .text daNpc_tt_XyCheckCB__FPvi */
-void daNpc_tt_XyCheckCB(void*, int) {
+static s16 daNpc_tt_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void daNpc_Tt_c::XyCheckCB(int) {
 }
 
 /* 000000BC-00000108       .text daNpc_tt_XyEventCB__FPvi */
-void daNpc_tt_XyEventCB(void*, int) {
+static s16 daNpc_tt_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

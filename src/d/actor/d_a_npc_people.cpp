@@ -42,12 +42,12 @@ void daNpcPeople_c::createHeap() {
 }
 
 /* 00000E0C-00000E2C       .text daNpcPeople_XyCheckCB__FPvi */
-void daNpcPeople_XyCheckCB(void*, int) {
+static s16 daNpcPeople_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
 /* 00000E2C-00000E4C       .text daNpcPeople_XyEventCB__FPvi */
-void daNpcPeople_XyEventCB(void*, int) {
+static s16 daNpcPeople_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

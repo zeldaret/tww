@@ -12,7 +12,7 @@ void dWpillar_c::jointCallBack(int) {
 }
 
 /* 8023E9E4-8023EA28       .text dWpillar_jointCallBack__FP7J3DNodei */
-void dWpillar_jointCallBack(J3DNode*, int) {
+static BOOL dWpillar_jointCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 

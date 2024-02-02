@@ -52,7 +52,7 @@ void daNpcBmcon_c::createHeap() {
 }
 
 /* 0000105C-0000107C       .text daNpcBmcon_XyCheckCB__FPvi */
-void daNpcBmcon_XyCheckCB(void*, int) {
+static s16 daNpcBmcon_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 

@@ -13,8 +13,8 @@ public:
 
     void modeProcInit(int) {}
 
-    void NodeCallBack(J3DNode*, int);
-    void TailNodeCallBack(J3DNode*, int);
+    static BOOL NodeCallBack(J3DNode*, int);
+    static BOOL TailNodeCallBack(J3DNode*, int);
     void TailControl();
     void _createHeap();
     void XyEventCB(int);

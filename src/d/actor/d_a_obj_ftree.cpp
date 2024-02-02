@@ -297,22 +297,22 @@ void daObjFtree::Act_c::solidHeapCB(fopAc_ac_c*) {
 }
 
 /* 00002C14-00002D94       .text NodeCallBack_Effect__Q210daObjFtree5Act_cFP7J3DNodei */
-void daObjFtree::Act_c::NodeCallBack_Effect(J3DNode*, int) {
+BOOL daObjFtree::Act_c::NodeCallBack_Effect(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00002D94-00002DDC       .text Ftree_NodeCallBack_Effect__10daObjFtreeFP7J3DNodei */
-void daObjFtree::Ftree_NodeCallBack_Effect(J3DNode*, int) {
+BOOL daObjFtree::Ftree_NodeCallBack_Effect(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00002DDC-00002E9C       .text Ftree_NodeCallBack_M__10daObjFtreeFP7J3DNodei */
-void daObjFtree::Ftree_NodeCallBack_M(J3DNode*, int) {
+BOOL daObjFtree::Ftree_NodeCallBack_M(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00002E9C-00002F5C       .text Ftree_NodeCallBack_L__10daObjFtreeFP7J3DNodei */
-void daObjFtree::Ftree_NodeCallBack_L(J3DNode*, int) {
+BOOL daObjFtree::Ftree_NodeCallBack_L(J3DNode*, int) {
     /* Nonmatching */
 }
 

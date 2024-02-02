@@ -32,7 +32,7 @@ namespace daObjSwpush {
         void init_mtx();
         void set_btp_frame();
         void rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-        void jnodeCB(J3DNode*, int);
+        static BOOL jnodeCB(J3DNode*, int);
         void calc_top_pos();
         void top_bg_aim_req(float, short);
         void set_push_flag();

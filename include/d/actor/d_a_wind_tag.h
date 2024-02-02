@@ -4,7 +4,7 @@
 #include "f_op/f_op_actor.h"
 
 namespace daWindTag {
-    static void CheckCreateHeap(fopAc_ac_c*);
+    static BOOL CheckCreateHeap(fopAc_ac_c*);
 
     class daWindTag_c : public fopAc_ac_c {
     public:

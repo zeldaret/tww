@@ -16,9 +16,9 @@ namespace daObjFtree {
     static void Ftree_checkXyEventCallBack(void*, int);
     static void Ftree_XyEventCallBack(void*, int);
     static void is_broughtID(int);
-    static void Ftree_NodeCallBack_Effect(J3DNode*, int);
-    static void Ftree_NodeCallBack_M(J3DNode*, int);
-    static void Ftree_NodeCallBack_L(J3DNode*, int);
+    static BOOL Ftree_NodeCallBack_Effect(J3DNode*, int);
+    static BOOL Ftree_NodeCallBack_M(J3DNode*, int);
+    static BOOL Ftree_NodeCallBack_L(J3DNode*, int);
 
     class Act_c : public fopAc_ac_c {
     public:
@@ -85,7 +85,7 @@ namespace daObjFtree {
         void process_init(int, short);
         void process_main();
         void solidHeapCB(fopAc_ac_c*);
-        void NodeCallBack_Effect(J3DNode*, int);
+        BOOL NodeCallBack_Effect(J3DNode*, int);
         void create_heap();
         s32 _create();
         BOOL _delete();

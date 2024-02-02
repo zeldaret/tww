@@ -18,7 +18,7 @@ void daPy_lk_c::bowJointCB(int) {
 }
 
 /* 80149F88-80149FD0       .text daPy_bowJointCB__FP7J3DNodei */
-void daPy_bowJointCB(J3DNode*, int) {
+static BOOL daPy_bowJointCB(J3DNode*, int) {
     /* Nonmatching */
 }
 

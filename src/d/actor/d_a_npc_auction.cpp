@@ -42,12 +42,12 @@ void daNpcAuction_c::createHeap() {
 }
 
 /* 00000E74-00000E94       .text daNpcAuction_XyCheckCB__FPvi */
-void daNpcAuction_XyCheckCB(void*, int) {
+static s16 daNpcAuction_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
 /* 00000E94-00000EB4       .text daNpcAuction_XyEventCB__FPvi */
-void daNpcAuction_XyEventCB(void*, int) {
+static s16 daNpcAuction_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

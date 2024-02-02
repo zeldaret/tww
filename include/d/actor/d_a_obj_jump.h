@@ -31,7 +31,7 @@ namespace daObjJump {
         void clear_push_flag();
         void calc_vib_pos();
         void rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-        void jnodeCB_lower(J3DNode*, int);
+        static BOOL jnodeCB_lower(J3DNode*, int);
         void mode_wait_init();
         void mode_wait();
         void mode_w_l_init();

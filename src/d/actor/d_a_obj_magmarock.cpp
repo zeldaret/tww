@@ -82,7 +82,7 @@ void daObjMagmarock::ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 00000AEC-00000B0C       .text CheckCreateHeap__14daObjMagmarockFP10fopAc_ac_c */
-void daObjMagmarock::CheckCreateHeap(fopAc_ac_c*) {
+BOOL daObjMagmarock::CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

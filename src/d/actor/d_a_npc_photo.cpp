@@ -42,12 +42,12 @@ void daNpcPhoto_c::createHeap() {
 }
 
 /* 00000CA0-00000CC0       .text daNpcPhoto_XyCheckCB__FPvi */
-void daNpcPhoto_XyCheckCB(void*, int) {
+static s16 daNpcPhoto_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
 /* 00000CC0-00000CE0       .text daNpcPhoto_XyEventCB__FPvi */
-void daNpcPhoto_XyEventCB(void*, int) {
+static s16 daNpcPhoto_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

@@ -17,7 +17,7 @@ daObj_hsh_c::~daObj_hsh_c() {
 }
 
 /* 000002A4-000002C4       .text daObj_hsh_XyCheckCB__FPvi */
-void daObj_hsh_XyCheckCB(void*, int) {
+static s16 daObj_hsh_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daObj_hsh_c::XyCheckCB(int) {
 }
 
 /* 000002E8-00000308       .text daObj_hsh_XyEventCB__FPvi */
-void daObj_hsh_XyEventCB(void*, int) {
+static s16 daObj_hsh_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

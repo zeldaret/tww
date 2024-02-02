@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-00000110       .text CreateHeapCB__7daStoneFP10fopAc_ac_c */
-void daStone::CreateHeapCB(fopAc_ac_c*) {
+BOOL daStone::CreateHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

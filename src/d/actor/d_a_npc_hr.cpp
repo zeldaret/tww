@@ -82,7 +82,7 @@ void daNpc_Hr_c::getSwbit() {
 }
 
 /* 00000818-00000838       .text daNpc_hr_XyCheckCB__FPvi */
-void daNpc_hr_XyCheckCB(void*, int) {
+static s16 daNpc_hr_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
@@ -92,7 +92,7 @@ void daNpc_Hr_c::XyCheckCB(int) {
 }
 
 /* 0000085C-000008AC       .text daNpc_hr_XyEventCB__FPvi */
-void daNpc_hr_XyEventCB(void*, int) {
+static s16 daNpc_hr_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

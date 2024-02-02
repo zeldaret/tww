@@ -1,6 +1,6 @@
 /**
  * J3DVisibility.cpp
- * J3DU - Visibility
+ * J3DGraphAnimator - Visibility Manager
  */
 
 #include "JSystem/J3DGraphAnimator/J3DModel.h"

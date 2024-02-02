@@ -22,7 +22,7 @@ daNpc_Ds1_HIO_c::daNpc_Ds1_HIO_c() {
 }
 
 /* 000002F8-00000318       .text daNpc_Ds1_XyEventCB__FPvi */
-void daNpc_Ds1_XyEventCB(void*, int) {
+static s16 daNpc_Ds1_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

@@ -47,7 +47,7 @@ void daDai_c::checkOrder() {
 }
 
 /* 00000AFC-00000B1C       .text daDai_XyCheckCB__FPvi */
-void daDai_XyCheckCB(void*, int) {
+static s16 daDai_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daDai_c::XyCheckCB(int) {
 }
 
 /* 00000BA8-00000BC8       .text daDai_XyEventCB__FPvi */
-void daDai_XyEventCB(void*, int) {
+static s16 daDai_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

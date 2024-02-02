@@ -12,7 +12,7 @@ static BOOL daNpcNz_NodeCallBack(J3DNode*, int) {
 }
 
 /* 00000128-0000024C       .text NodeCallBack__10daNpc_Nz_cFP7J3DNodei */
-void daNpc_Nz_c::NodeCallBack(J3DNode*, int) {
+BOOL daNpc_Nz_c::NodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ static BOOL daNpcNz_TailNodeCallBack(J3DNode*, int) {
 }
 
 /* 000002C4-000003A4       .text TailNodeCallBack__10daNpc_Nz_cFP7J3DNodei */
-void daNpc_Nz_c::TailNodeCallBack(J3DNode*, int) {
+BOOL daNpc_Nz_c::TailNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -47,12 +47,12 @@ daNpc_Nz_HIO_c::daNpc_Nz_HIO_c() {
 }
 
 /* 00001010-000011A0       .text daNpc_Nz_XyCheckCB__FPvi */
-void daNpc_Nz_XyCheckCB(void*, int) {
+static s16 daNpc_Nz_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
 /* 000011A0-000011C0       .text daNpc_Nz_XyEventCB__FPvi */
-void daNpc_Nz_XyEventCB(void*, int) {
+static s16 daNpc_Nz_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

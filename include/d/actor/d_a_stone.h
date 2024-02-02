@@ -4,7 +4,7 @@
 #include "f_op/f_op_actor.h"
 
 namespace daStone {
-    void CreateHeapCB(fopAc_ac_c*);
+    static BOOL CreateHeapCB(fopAc_ac_c*);
     
     struct Data_c {
         

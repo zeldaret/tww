@@ -12,7 +12,7 @@ static BOOL nodeCallBack_Ho(J3DNode*, int) {
 }
 
 /* 0000022C-0000024C       .text daNpc_ho_XyCheckCB__FPvi */
-void daNpc_ho_XyCheckCB(void*, int) {
+static s16 daNpc_ho_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 

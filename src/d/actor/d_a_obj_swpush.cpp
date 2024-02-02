@@ -62,7 +62,7 @@ void daObjSwpush::Act_c::rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 00000FBC-0000105C       .text jnodeCB__Q211daObjSwpush5Act_cFP7J3DNodei */
-void daObjSwpush::Act_c::jnodeCB(J3DNode*, int) {
+BOOL daObjSwpush::Act_c::jnodeCB(J3DNode*, int) {
     /* Nonmatching */
 }
 

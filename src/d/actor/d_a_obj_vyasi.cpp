@@ -27,7 +27,7 @@ void daObjVyasi::Act_c::set_collision() {
 }
 
 /* 000005F4-000009B8       .text JointNodeCallBack__10daObjVyasiFP7J3DNodei */
-void daObjVyasi::JointNodeCallBack(J3DNode*, int) {
+BOOL daObjVyasi::JointNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 

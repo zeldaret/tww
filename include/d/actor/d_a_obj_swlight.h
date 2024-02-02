@@ -25,7 +25,7 @@ namespace daObjSwlight {
         void create_heap();
         s32 _create();
         BOOL _delete();
-        void jnodeCB_moon(J3DNode*, int);
+        static BOOL jnodeCB_moon(J3DNode*, int);
         void set_mtx();
         void init_mtx();
         void init_cc();

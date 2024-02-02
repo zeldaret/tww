@@ -17,7 +17,7 @@ daNpc_Bs1_HIO_c::daNpc_Bs1_HIO_c() {
 }
 
 /* 000002C4-000002E4       .text daNpc_Bs1_XyEventCB__FPvi */
-void daNpc_Bs1_XyEventCB(void*, int) {
+static s16 daNpc_Bs1_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

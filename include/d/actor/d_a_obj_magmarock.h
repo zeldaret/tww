@@ -7,7 +7,7 @@ class dBgW;
 
 namespace daObjMagmarock {
     static void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-    static void CheckCreateHeap(fopAc_ac_c*);
+    static BOOL CheckCreateHeap(fopAc_ac_c*);
     
     class Act_c : public fopAc_ac_c {
     public:

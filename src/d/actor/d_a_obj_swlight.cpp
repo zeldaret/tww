@@ -32,7 +32,7 @@ BOOL daObjSwlight::Act_c::_delete() {
 }
 
 /* 00000CB8-00000CC0       .text jnodeCB_moon__Q212daObjSwlight5Act_cFP7J3DNodei */
-void daObjSwlight::Act_c::jnodeCB_moon(J3DNode*, int) {
+BOOL daObjSwlight::Act_c::jnodeCB_moon(J3DNode*, int) {
     /* Nonmatching */
 }
 

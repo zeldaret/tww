@@ -427,12 +427,12 @@ void daNpc_Cb1_c::carryPlayerAction(void*) {
 }
 
 /* 0000707C-000070D0       .text daNpc_Cb1_XyCheckCB__FPvi */
-void daNpc_Cb1_XyCheckCB(void*, int) {
+static s16 daNpc_Cb1_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
 /* 000070D0-000070D8       .text daNpc_Cb1_XyEventCB__FPvi */
-void daNpc_Cb1_XyEventCB(void*, int) {
+static s16 daNpc_Cb1_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

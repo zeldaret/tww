@@ -12,7 +12,7 @@ BOOL daWindTag::daWindTag_c::_delete() {
 }
 
 /* 000000F0-00000110       .text CheckCreateHeap__9daWindTagFP10fopAc_ac_c */
-void daWindTag::CheckCreateHeap(fopAc_ac_c*) {
+BOOL daWindTag::CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

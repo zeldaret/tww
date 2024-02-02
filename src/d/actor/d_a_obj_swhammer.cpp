@@ -82,7 +82,7 @@ void daObjSwhammer::Act_c::calc_top_pos() {
 }
 
 /* 00000E74-00000F94       .text jnodeCB__Q213daObjSwhammer5Act_cFP7J3DNodei */
-void daObjSwhammer::Act_c::jnodeCB(J3DNode*, int) {
+BOOL daObjSwhammer::Act_c::jnodeCB(J3DNode*, int) {
     /* Nonmatching */
 }
 

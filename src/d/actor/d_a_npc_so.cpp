@@ -52,7 +52,7 @@ void daNpc_So_c::_searchMinigameTagSo(fopAc_ac_c*) {
 }
 
 /* 000005C8-000005E8       .text daNpc_So_XyCheckCB__FPvi */
-void daNpc_So_XyCheckCB(void*, int) {
+static s16 daNpc_So_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ void daNpc_So_c::XyCheckCB(int) {
 }
 
 /* 00000680-000006A0       .text daNpc_So_XyEventCB__FPvi */
-void daNpc_So_XyEventCB(void*, int) {
+static s16 daNpc_So_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

@@ -12,7 +12,7 @@ daNpc_Ji1_HIO_c::daNpc_Ji1_HIO_c() {
 }
 
 /* 000003C0-000003E4       .text daNpc_Ji1_XyCheckCB__FPvi */
-void daNpc_Ji1_XyCheckCB(void*, int) {
+static s16 daNpc_Ji1_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 

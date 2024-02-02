@@ -62,7 +62,7 @@ void daObjJump::Act_c::rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 00000E74-00000F48       .text jnodeCB_lower__Q29daObjJump5Act_cFP7J3DNodei */
-void daObjJump::Act_c::jnodeCB_lower(J3DNode*, int) {
+BOOL daObjJump::Act_c::jnodeCB_lower(J3DNode*, int) {
     /* Nonmatching */
 }
 

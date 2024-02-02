@@ -43,7 +43,7 @@ void daNpcRoten_c::createHeap() {
 }
 
 /* 00000E88-00000EA8       .text daNpcRoten_XyEventCB__FPvi */
-void daNpcRoten_XyEventCB(void*, int) {
+static s16 daNpcRoten_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 

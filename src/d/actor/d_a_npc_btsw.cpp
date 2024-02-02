@@ -67,7 +67,7 @@ void daNpc_Btsw_c::anmAtr(unsigned short) {
 }
 
 /* 00000F0C-00000F30       .text daNpc_Btsw_XyCheckCB__FPvi */
-void daNpc_Btsw_XyCheckCB(void*, int) {
+static s16 daNpc_Btsw_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 

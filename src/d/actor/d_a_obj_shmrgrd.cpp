@@ -112,7 +112,7 @@ void daObjShmrgrd_c::calc_top_pos() {
 }
 
 /* 000013FC-0000151C       .text jnodeCB__14daObjShmrgrd_cFP7J3DNodei */
-void daObjShmrgrd_c::jnodeCB(J3DNode*, int) {
+BOOL daObjShmrgrd_c::jnodeCB(J3DNode*, int) {
     /* Nonmatching */
 }
 

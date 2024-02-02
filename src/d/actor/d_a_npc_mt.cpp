@@ -42,7 +42,7 @@ void daNpcMt_c::createHeap() {
 }
 
 /* 00000B98-00000BB8       .text daNpcMt_XyCheckCB__FPvi */
-void daNpcMt_XyCheckCB(void*, int) {
+static s16 daNpcMt_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
