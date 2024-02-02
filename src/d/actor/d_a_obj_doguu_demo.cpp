@@ -20,8 +20,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000214       .text CreateHeap__13daObjDoguuD_cFv */
 BOOL daObjDoguuD_c::CreateHeap() {
-    mUnusedParam = fopAcM_GetParam(this) & 0xFF;  // Im not sure why this is here, none of the other
-                                                  // classes I looked at did this
+    mUnusedParam = fopAcM_GetParam(this) & 0xFF;
 
     J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("DoguuD", 0x04));
     JUT_ASSERT(0x65, modelData != 0);
@@ -32,7 +31,7 @@ BOOL daObjDoguuD_c::CreateHeap() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::scaleM(mScale);
-    mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 
     mpBgW = new dBgW();
 
@@ -40,7 +39,7 @@ BOOL daObjDoguuD_c::CreateHeap() {
         return FALSE;
     }
 
-    if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("DoguuD", 0x07), cBgW::MOVE_BG_e, &mtx))
+    if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("DoguuD", 0x07), cBgW::MOVE_BG_e, &mMtx))
         return FALSE;
 
     return TRUE;
@@ -51,7 +50,7 @@ void daObjDoguuD_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -30000.0f, -5000.0f, -30000.0f, 30000.0f, 40000.0f, 30000.0f);
     dComIfG_Bgsp()->Regist(mpBgW, this);
-    mFlag = 1;
+    mBgwRegistered = true;
     set_mtx();
 }
 
@@ -65,19 +64,18 @@ void daObjDoguuD_c::set_mtx() {
 
 s32 daObjDoguuD_c::_create() {
     fopAcM_SetupActor(this, daObjDoguuD_c);
-    mFlag = 0;
+    mBgwRegistered = false;
 
-    s32 ret = dComIfG_resLoad(&mPhs, "DoguuD");
+    s32 phase_state = dComIfG_resLoad(&mPhs, "DoguuD");
 
-    if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460) == 0) {
-            ret = cPhs_ERROR_e;
-        } else {
-            CreateInit();
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460)) {
+            return cPhs_ERROR_e;
         }
+        CreateInit();
     }
 
-    return ret;
+    return phase_state;
 }
 
 /* 00000314-000003BC       .text daObjDoguuD_create__FPv */
@@ -86,7 +84,7 @@ static s32 daObjDoguuD_create(void* i_this) {
 }
 
 BOOL daObjDoguuD_c::_delete() {
-    if (heap != NULL && mFlag == 1)
+    if (heap != NULL && mBgwRegistered == true)
         dComIfG_Bgsp()->Release(mpBgW);
 
     dComIfG_resDelete(&mPhs, "DoguuD");

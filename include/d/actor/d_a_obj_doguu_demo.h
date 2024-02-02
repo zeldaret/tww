@@ -20,9 +20,8 @@ public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ dBgW* mpBgW;
-    /* 0x2A0 */ Mtx mtx;
-    /* 0x2D0 */ u8 mFlag;  // this field seems to be set to 1 only when initalized with CreateInit,
-                           // can probably be a bool
+    /* 0x2A0 */ Mtx mMtx;
+    /* 0x2D0 */ bool mBgwRegistered;
     /* 0x2D1 */ u8 mUnusedParam;
     /* 0x2D4 */ u32 mShape;
 };

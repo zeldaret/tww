@@ -450,7 +450,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     /* Nonmatching */
     if (mDoGph_gInf_c::isAutoForcus()) {
         f32 projv[7];
-        f32 viewv[4];
+        f32 viewv[6];
         f32 x, y, z;
 
         GXGetProjectionv(projv);
@@ -679,11 +679,15 @@ u8* mDoGph_allocFromAny(u32 size, int align) {
 void mDoGph_screenCaptureDraw() {
     s32 sizeW = mCaptureSizeWidth;
     s32 sizeH = mCaptureSizeHeight;
+    s32 sizeW_double = sizeW * 2;
+    s32 sizeH_double = sizeH * 2;
+    s32 sizeW_half = sizeW / 2;
+    s32 sizeH_half = sizeH / 2;
     s32 centerX = mCaptureCenterX;
     s32 centerY = mCaptureCenterY;
 
     f32 projv[7];
-    f32 viewv[4];
+    f32 viewv[6];
     u32 left, top, width, height;
     GXTexObj texObj;
 
@@ -706,9 +710,9 @@ void mDoGph_screenCaptureDraw() {
     if (mCaptureDraw == 1) {
         drawRectangle(centerX - sizeW, centerY - sizeH, centerX + sizeW, centerY + sizeH);
     } else if (mCaptureDraw == 2) {
-        drawRectangle(centerX - (sizeW >> 1), centerY - (sizeH >> 1), centerX + (sizeW >> 1), centerY + (sizeH >> 1));
+        drawRectangle(centerX - sizeW_half, centerY - sizeH_half, centerX + sizeW_half, centerY + sizeH_half);
     } else if (mCaptureDraw == 3) {
-        drawRectangle(centerX + sizeW * -2, centerY + sizeH * -2, centerX + sizeW * 2, centerY + sizeH * 2);
+        drawRectangle(centerX - sizeW_double, centerY - sizeH_double, centerX + sizeW_double, centerY + sizeH_double);
     } else if (mCaptureDraw == 4) {
         drawRectangle(centerX - sizeW, centerY - sizeH, centerX, centerY);
         drawRectangle(centerX, centerY - sizeH, centerX + sizeW, centerY);
@@ -761,7 +765,6 @@ void mCaptureGXDrawSyncTimeOut(OSAlarm*, OSContext*) {
 
 /* 8000AC3C-8000AEA4       .text mDoGph_screenCapture__Fv */
 bool mDoGph_screenCapture() {
-    /* Nonmatching */
     s32 sizeW = mCaptureSizeWidth;
     s32 sizeH = mCaptureSizeHeight;
     s32 sizeW2 = sizeW << 1;
@@ -770,7 +773,7 @@ bool mDoGph_screenCapture() {
     s32 centerY = mCaptureCenterY;
 
     f32 projv[7];
-    f32 viewv[4];
+    f32 viewv[6];
     u32 left, top, width, height;
 
     mCaptureTextureSize = GXGetTexBufferSize(sizeW, sizeH, mCaptureTextureFormat, GX_FALSE, 0);

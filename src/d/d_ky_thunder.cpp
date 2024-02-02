@@ -16,6 +16,15 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+class dThunder_modelInfo_c {
+public:
+    // Offsets are relative to dThunder_c instead of dThunder_modelInfo_c
+    /* 0x0FC */ J3DModel * mpModel;
+    /* 0x100 */ mDoExt_invisibleModel mInvisModel;
+    /* 0x108 */ mDoExt_btkAnm mBtk;
+    /* 0x11C */ mDoExt_brkAnm mBrk;
+};
+
 class dThunder_c : public kankyo_class {
 public:
     inline ~dThunder_c();
@@ -27,10 +36,7 @@ public:
 
 public:
     /* 0x0F8 */ JKRSolidHeap * solid_heap;
-    /* 0x0FC */ J3DModel * mpModel;
-    /* 0x100 */ mDoExt_invisibleModel mInvisModel;
-    /* 0x108 */ mDoExt_btkAnm mBtk;
-    /* 0x11C */ mDoExt_brkAnm mBrk;
+    /* 0x0FC */ dThunder_modelInfo_c mModelInfo;
     /* 0x134 */ cXyz mScale;
     /* 0x140 */ cXyz mPos;
     /* 0x14C */ cXyz mPosNeg;
@@ -43,8 +49,8 @@ dThunder_c::~dThunder_c() {
 }
 
 BOOL dThunder_c::execute() {
-    mBrk.setPlaySpeed(1.0f);
-    if (mBrk.play()) {
+    mModelInfo.mBrk.setPlaySpeed(1.0f);
+    if (mModelInfo.mBrk.play()) {
         mDoAud_seStart(JA_SE_OBJ_THUNDER_FAR, &mPos);
         fopKyM_Delete(this);
     }
@@ -59,17 +65,17 @@ BOOL dThunder_c::draw() {
 
     Mtx m;
     MTXCopy(mDoMtx_stack_c::get(), m);
-    mpModel->setBaseScale(mScale);
-    mpModel->setBaseTRMtx(m);
+    mModelInfo.mpModel->setBaseScale(mScale);
+    mModelInfo.mpModel->setBaseTRMtx(m);
 
-    mBtk.entry(mpModel->getModelData(), mBtkTime);
-    mBrk.entry(mpModel->getModelData());
+    mModelInfo.mBtk.entry(mModelInfo.mpModel->getModelData(), mBtkTime);
+    mModelInfo.mBrk.entry(mModelInfo.mpModel->getModelData());
 
     dComIfGd_setList();
-    mDoExt_modelUpdateDL(mpModel);
-    mInvisModel.entryMaskOff();
-    mBtk.remove(mpModel->getModelData());
-    mBrk.remove(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mModelInfo.mpModel);
+    mModelInfo.mInvisModel.entryMaskOff();
+    mModelInfo.mBtk.remove(mModelInfo.mpModel->getModelData());
+    mModelInfo.mBrk.remove(mModelInfo.mpModel->getModelData());
     return TRUE;
 }
 
@@ -108,7 +114,6 @@ BOOL dThunder_IsDelete(dThunder_c* i_this) {
 
 /* 80198ABC-80198B68       .text dThunder_Delete__FP10dThunder_c */
 BOOL dThunder_Delete(dThunder_c* i_this) {
-    /* Nonmatching */
     mDoAud_seDeleteObject(&i_this->mPos);
     mDoAud_seDeleteObject(&i_this->mPosNeg);
     i_this->~dThunder_c();
@@ -135,21 +140,21 @@ s32 dThunder_c::create() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YTHDR00);
     JUT_ASSERT(0x6e, modelData != 0);
 
-    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x01000200);
-    if (mpModel == NULL)
+    mModelInfo.mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x01000200);
+    if (mModelInfo.mpModel == NULL)
         return cPhs_ERROR_e;
 
-    if (!mInvisModel.create(mpModel))
+    if (!mModelInfo.mInvisModel.create(mModelInfo.mpModel))
         return cPhs_ERROR_e;
 
     J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", ALWAYS_BTK_YTHDR00);
     JUT_ASSERT(0x7d, anm != 0);
-    if (!mBtk.init(modelData, anm, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
+    if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 
     J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", ALWAYS_BRK_YTHDR00);
     JUT_ASSERT(0x8c, canm != 0);
-    if (!mBrk.init(modelData, canm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+    if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 
     mBtkTime = cM_rndF(1.0f);
