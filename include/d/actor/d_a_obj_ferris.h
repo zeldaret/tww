@@ -18,8 +18,8 @@ namespace daObjFerris {
         struct Attr_c {
             /* 0x00 */ s16 field_0x00;
             /* 0x02 */ s16 field_0x02;
-            /* 0x04 */ f32 field_0x04;
-            /* 0x08 */ f32 field_0x08;
+            /* 0x04 */ f32 mCylR;
+            /* 0x08 */ f32 mCylH;
             /* 0x0C */ f32 field_0x0c;
             /* 0x10 */ f32 field_0x10;
             /* 0x14 */ f32 field_0x14;
@@ -74,7 +74,7 @@ namespace daObjFerris {
         /* 0x1238 */ dCcD_Sph field_0x1238[5];
         /* 0x1814 */ J3DModel* mpModel[6];
         /* 0x182C */ Mtx mMtx[6];
-        /* 0x194C */ s16 field_0x194c;
+        /* 0x194C */ s16 mRotTimer;
         /* 0x194E */ s16 mRotState;
         /* 0x1950 */ s16 mRotAngle;
         /* 0x1952 */ s16 mRotSpeed;
