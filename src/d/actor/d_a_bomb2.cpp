@@ -12,6 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
+#include "d/res/res_vbakh.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};

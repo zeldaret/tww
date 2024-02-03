@@ -13,6 +13,7 @@
 #include "d/actor/d_a_item.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
+#include "d/res/res_cloth.h"
 
 enum FDAI_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

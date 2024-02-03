@@ -712,8 +712,7 @@ void dKyr_rain_init() {
 
 /* 8008D0B4-8008D0DC       .text rain_bg_chk__FP19dKankyo_rain_Packeti */
 void rain_bg_chk(dKankyo_rain_Packet* pPkt, int idx) {
-    camera_class* pCamera = g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera;
-    pPkt->mEff[idx].field_0x30 = pCamera->mLookat.mCenter.y + -800.0f;
+    pPkt->mEff[idx].field_0x30 = dComIfGp_getCamera(0)->mLookat.mCenter.y + -800.0f;
 }
 
 /* 8008D0DC-8008D53C       .text overhead_bg_chk__Fv */

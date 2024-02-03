@@ -6,7 +6,8 @@
 #include "d/d_item_data.h"
 #include "d/d_particle_name.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/types.h"
+#include "d/res/res_always.h"
+#include "d/res/res_link.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -488,7 +489,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x00: HEART
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ 0x002A,
+        /* mBmdIdx      */ ALWAYS_BDL_VHRTL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -632,7 +633,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x09: S_MAGIC
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ 0x0032,
+        /* mBmdIdx      */ ALWAYS_BDL_MPODA,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -648,7 +649,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0A: L_MAGIC
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ 0x0033,
+        /* mBmdIdx      */ ALWAYS_BDL_MPODB,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -744,7 +745,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x10: ARROW_10
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
-        /* mBmdIdx      */ 0x001E,
+        /* mBmdIdx      */ ALWAYS_BDL_ARROWITEM,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -760,7 +761,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x11: ARROW_20
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
-        /* mBmdIdx      */ 0x001E,
+        /* mBmdIdx      */ ALWAYS_BDL_ARROWITEM,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -776,7 +777,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x12: ARROW_30
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
-        /* mBmdIdx      */ 0x001E,
+        /* mBmdIdx      */ ALWAYS_BDL_ARROWITEM,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -968,7 +969,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x1E: TRIPLE_HEART
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ 0x002A,
+        /* mBmdIdx      */ ALWAYS_BDL_VHRTL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4587,7 +4588,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x00: HEART
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x002A,
+        /* mBmdIdx   */ ALWAYS_BDL_VHRTL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4600,10 +4601,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x01: GREEN_RUPEE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x003A,
-        /* mSrtIdx   */ 0x005D,
+        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
+        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x0051,
+        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x00,
@@ -4613,10 +4614,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x02: BLUE_RUPEE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x003A,
-        /* mSrtIdx   */ 0x005D,
+        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
+        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x0051,
+        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x01,
@@ -4626,10 +4627,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x03: YELLOW_RUPEE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x003A,
-        /* mSrtIdx   */ 0x005D,
+        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
+        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x0051,
+        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x02,
@@ -4639,10 +4640,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x04: RED_RUPEE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x003A,
-        /* mSrtIdx   */ 0x005D,
+        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
+        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x0051,
+        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x03,
@@ -4652,10 +4653,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x05: PURPLE_RUPEE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x003A,
-        /* mSrtIdx   */ 0x005D,
+        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
+        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x0051,
+        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x04,
@@ -4665,10 +4666,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x06: ORANGE_RUPEE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x003A,
-        /* mSrtIdx   */ 0x005D,
+        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
+        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x0051,
+        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x05,
@@ -4678,8 +4679,8 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x07: KAKERA_HEART
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0038,
-        /* mSrtIdx   */ 0x005B,
+        /* mBmdIdx   */ ALWAYS_BDL_VHKAL,
+        /* mSrtIdx   */ ALWAYS_BTK_VHKAL,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
@@ -4691,8 +4692,8 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x08: UTUWA_HEART
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0039,
-        /* mSrtIdx   */ 0x005C,
+        /* mBmdIdx   */ ALWAYS_BDL_VHUTL,
+        /* mSrtIdx   */ ALWAYS_BTK_VHUTL,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
@@ -4704,7 +4705,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x09: S_MAGIC
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0032,
+        /* mBmdIdx   */ ALWAYS_BDL_MPODA,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4717,7 +4718,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0A: L_MAGIC
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0033,
+        /* mBmdIdx   */ ALWAYS_BDL_MPODB,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4730,7 +4731,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0B: BOMB_5
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ 0x003C,
+        /* mBmdIdx   */ LINK_BDL_BOMB,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4743,7 +4744,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0C: BOMB_10
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ 0x003C,
+        /* mBmdIdx   */ LINK_BDL_BOMB,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4756,7 +4757,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0D: BOMB_20
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ 0x003C,
+        /* mBmdIdx   */ LINK_BDL_BOMB,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4769,7 +4770,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0E: BOMB_30
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ 0x003C,
+        /* mBmdIdx   */ LINK_BDL_BOMB,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4782,10 +4783,10 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x0F: SILVER_RUPEE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x003A,
-        /* mSrtIdx   */ 0x005D,
+        /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
+        /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x0051,
+        /* mTevIdx   */ ALWAYS_BRK_VLUPL,
         /* mTevIdx2  */ -1,
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x06,
@@ -4795,7 +4796,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x10: ARROW_10
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x001E,
+        /* mBmdIdx   */ ALWAYS_BDL_ARROWITEM,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4808,7 +4809,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x11: ARROW_20
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x001E,
+        /* mBmdIdx   */ ALWAYS_BDL_ARROWITEM,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4821,7 +4822,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x12: ARROW_30
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x001E,
+        /* mBmdIdx   */ ALWAYS_BDL_ARROWITEM,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4860,7 +4861,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x15: SMALL_KEY
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x002B,
+        /* mBmdIdx   */ ALWAYS_BDL_VKEYL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4873,12 +4874,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x16: RECOVER_FAIRY
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x001F,
+        /* mBmdIdx   */ ALWAYS_BDL_FA,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x000C,
+        /* mBckIdx   */ ALWAYS_BCK_FA,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x4000
@@ -4977,7 +4978,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x1E: TRIPLE_HEART
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x002A,
+        /* mBmdIdx   */ ALWAYS_BDL_VHRTL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -4990,12 +4991,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x1F: PENDANT
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0029,
+        /* mBmdIdx   */ ALWAYS_BDL_VHAPL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0015,
+        /* mBckIdx   */ ALWAYS_BCK_VHAPL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x0FE0
@@ -5276,7 +5277,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x35: MAGIC_ARROW
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ 0x0037,
+        /* mBmdIdx   */ LINK_BDL_ARROW,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5289,7 +5290,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x36: LIGHT_ARROW
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
-        /* mBmdIdx   */ 0x0037,
+        /* mBmdIdx   */ LINK_BDL_ARROW,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5484,12 +5485,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x45: SKULL_NECKLACE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0027,
+        /* mBmdIdx   */ ALWAYS_BDL_VDOKL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0012,
+        /* mBckIdx   */ ALWAYS_BCK_VDOKL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x08A0
@@ -5497,12 +5498,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x46: BOKOBABA_SEED
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0026,
+        /* mBmdIdx   */ ALWAYS_BDL_VBOKL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0010,
+        /* mBckIdx   */ ALWAYS_BCK_VBOKL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x0720
@@ -5510,12 +5511,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x47: GOLDEN_FEATHER
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0037,
-        /* mSrtIdx   */ 0x005A,
+        /* mBmdIdx   */ ALWAYS_BDL_VHANL,
+        /* mSrtIdx   */ ALWAYS_BTK_VHANL,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x0050,
+        /* mTevIdx   */ ALWAYS_BRK_VHANL,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0014,
+        /* mBckIdx   */ ALWAYS_BCK_VHANL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000222,
         /* mHeapSize */ 0x0EC0
@@ -5523,12 +5524,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x48: BOKO_BELT
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0025,
-        /* mSrtIdx   */ 0x0059,
+        /* mBmdIdx   */ ALWAYS_BDL_VBELL,
+        /* mSrtIdx   */ ALWAYS_BTK_VBELL,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x000F,
+        /* mBckIdx   */ ALWAYS_BCK_VBELL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000222,
         /* mHeapSize */ 0x0760
@@ -5536,12 +5537,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x49: RED_JELLY
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0036,
+        /* mBmdIdx   */ ALWAYS_BDL_VCHUL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x004F,
+        /* mTevIdx   */ ALWAYS_BRK_VCHUL,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0011,
+        /* mBckIdx   */ ALWAYS_BCK_VCHUL,
         /* mTevFrm   */ 0x01,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x0800
@@ -5549,12 +5550,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x4A: GREEN_JELLY
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0036,
+        /* mBmdIdx   */ ALWAYS_BDL_VCHUL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x004F,
+        /* mTevIdx   */ ALWAYS_BRK_VCHUL,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0011,
+        /* mBckIdx   */ ALWAYS_BCK_VCHUL,
         /* mTevFrm   */ 0x00,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x0800
@@ -5562,12 +5563,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x4B: BLUE_JELLY
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0036,
+        /* mBmdIdx   */ ALWAYS_BDL_VCHUL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
-        /* mTevIdx   */ 0x004F,
+        /* mTevIdx   */ ALWAYS_BRK_VCHUL,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0011,
+        /* mBckIdx   */ ALWAYS_BCK_VCHUL,
         /* mTevFrm   */ 0x02,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x0800
@@ -6277,12 +6278,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x82: BIRD_ESA_5
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
-        /* mBmdIdx   */ 0x0028,
+        /* mBmdIdx   */ ALWAYS_BDL_VESAL,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0013,
+        /* mBckIdx   */ ALWAYS_BCK_VESAL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x0740

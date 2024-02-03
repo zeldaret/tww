@@ -444,7 +444,7 @@ void dPa_control_c::createCommon(const void* param_1) {
     mEmitterMng = new(mHeap, 0) JPAEmitterManager(mCommonResMng, 3000, 150, 200, mHeap);
     JUT_ASSERT(1324, mEmitterMng != 0);
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(mHeap);
-    mModelControl = new dPa_modelControl_c((J3DModelData*)g_dComIfG_gameInfo.mResControl.getObjectRes("Always", 0x31));
+    mModelControl = new dPa_modelControl_c((J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPODA));
     JUT_ASSERT(1332, mModelControl != 0);
     for (u16 i = 0; i < 8; i++) {
         u16 var1 = dPa_name::j_o_id[i];

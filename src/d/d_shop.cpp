@@ -1344,7 +1344,7 @@ u8 dShop_BoughtErrorStatus(ShopItems_c* shopItems, int param_2, int param_3) {
     
     if (buyCond & Shop_BuyCond_MUST_OWN_ITEM_e) {
         if (itemData->mMustOwnItemNo == BOW) {
-            if (g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(0xC) == 0xFF) {
+            if (dComIfGs_getItem(0xC) == 0xFF) {
                 errorStatus |= Shop_BuyCond_MUST_OWN_ITEM_e;
             }
         } else {

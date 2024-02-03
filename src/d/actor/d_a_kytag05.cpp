@@ -50,8 +50,7 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
         return TRUE;
     }
     
-    if (dComIfGp_event_runCheck() && dComIfGp_evmng_startCheck("demo41") &&
-        g_dComIfG_gameInfo.play.getDemo()) {
+    if (dComIfGp_event_runCheck() && dComIfGp_evmng_startCheck("demo41") && dComIfGp_demo_get()) {
         u32 demoFrame = dComIfGp_demo_get()->getFrame();
         if(demoFrame >= 0x186) {
             f32 fVar7 = ((f32)demoFrame - 390.0f) / 100.0f;

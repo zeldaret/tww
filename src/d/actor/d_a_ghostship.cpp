@@ -10,6 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_kankyo_wether.h"
+#include "d/res/res_cloth.h"
 
 enum AYUSH_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

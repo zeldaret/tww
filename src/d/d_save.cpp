@@ -1792,16 +1792,16 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
         buffer += sizeof(dSv_player_status_c_c);
     }
     
-    memcpy(g_dComIfG_gameInfo.save.getPSave(), buffer,  sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX);
+    memcpy(dComIfGs_getPCourseInfo(), buffer,  sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX);
     buffer += sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX;
     
-    memcpy(g_dComIfG_gameInfo.save.getPOcean(), buffer,  sizeof(dSv_ocean_c));
+    memcpy(dComIfGs_getPOcean(), buffer,  sizeof(dSv_ocean_c));
     buffer += sizeof(dSv_ocean_c);
     
-    memcpy(g_dComIfG_gameInfo.save.getPEvent(), buffer,  sizeof(dSv_event_c));
+    memcpy(dComIfGs_getPEvent(), buffer,  sizeof(dSv_event_c));
     buffer += sizeof(dSv_event_c);
     
-    memcpy(g_dComIfG_gameInfo.save.getPReserve(), buffer,  sizeof(dSv_reserve_c));
+    memcpy(dComIfGs_getPReserve(), buffer,  sizeof(dSv_reserve_c));
     buffer += sizeof(dSv_reserve_c);
     
     s32 load_size = buffer - buffer_start;

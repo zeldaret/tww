@@ -15,6 +15,12 @@ public:
     BOOL _closeAnime();
     virtual void draw();
 
+    void addCounter() {}
+    void decCounter() {}
+    void getCounter() {}
+    void changeTexture(const ResTIMG*) {}
+    void deleteScreen() {}
+
 public:
     /* 0x04 */ J2DScreen * scrn;
     /* 0x08 */ fopMsgM_pane_class pane;

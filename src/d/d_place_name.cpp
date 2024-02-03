@@ -135,7 +135,7 @@ void dPlace_name_c::draw() {
 s32 dPn_c::_create() {
     s32 rt = dComIfG_resLoad(&mPhs, "PName");
 
-    if (dMenu_flag() || (g_dComIfG_gameInfo.play.getHeapLockFlag() != 0 && g_dComIfG_gameInfo.play.getHeapLockFlag() != 10) || g_dComIfG_gameInfo.play.field_0x492a != 0)
+    if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 10) || g_dComIfG_gameInfo.play.field_0x492a != 0)
         return cPhs_INIT_e;
 
     if (mState == 0) {
@@ -143,8 +143,8 @@ s32 dPn_c::_create() {
             dRes_info_c * resInfo = dComIfG_getObjectResInfo("PName");
             JUT_ASSERT(VERSION_SELECT(147, 169, 169), resInfo != 0);
 
-            mpHeap = g_dComIfG_gameInfo.play.getExpHeap2D();
-            g_dComIfG_gameInfo.play.setHeapLockFlag(10);
+            mpHeap = dComIfGp_getExpHeap2D();
+            dComIfGp_setHeapLockFlag(10);
             JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
             dPn_scrn = new dPlace_name_c();
             JUT_ASSERT(VERSION_SELECT(155, 177, 177), dPn_scrn != 0);
@@ -202,9 +202,9 @@ s32 dPn_c::_create() {
 
 /* 801614E8-80161554       .text _execute__5dPn_cFv */
 BOOL dPn_c::_execute() {
-    if (g_dComIfG_gameInfo.play.mPlacenameState == 2) {
+    if (dComIfGp_checkStageName() == 2) {
         dPn_scrn->_openAnime();
-    } else if (g_dComIfG_gameInfo.play.mPlacenameState == 1) {
+    } else if (dComIfGp_checkStageName() == 1) {
         if (dPn_scrn->_closeAnime())
             fopMsgM_Delete(this);
     }
@@ -228,7 +228,7 @@ BOOL dPn_c::_delete() {
         delete dvd;
     mpHeap->free(mpTIMG);
     mpHeap->freeAll();
-    g_dComIfG_gameInfo.play.offHeapLockFlag();
+    dComIfGp_offHeapLockFlag();
     mDoExt_setCurrentHeap(oldHeap);
     dComIfG_resDelete(&mPhs, "PName");
     return TRUE;

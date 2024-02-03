@@ -550,7 +550,7 @@ BOOL dEvt_control_c::check() {
     }
 
     if (!runCheck() && checkStart())
-        g_dComIfG_gameInfo.play.getVibration().StopQuake(-1);
+        dComIfGp_getVibration().StopQuake(-1);
 
     soundProc();
     mOrderCount = 0;
