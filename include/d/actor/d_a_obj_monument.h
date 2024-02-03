@@ -28,13 +28,13 @@ namespace daObjMonument {
             PRM_SWSAVE_W = 0x08,
             PRM_SWSAVE_S = 0x08,
         };
-    
+
         static BOOL solidHeapCB(fopAc_ac_c *i_this);
         static const char M_arcname[6];
-    
+
         Type_e prm_get_type() const { return (Type_e)daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
         u32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-    
+
         s32 _create();
         bool _execute();
         bool _draw();
@@ -42,7 +42,7 @@ namespace daObjMonument {
         bool create_heap();
         void init_mtx();
         void set_mtx();
-    
+
     public:
         /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ J3DModel * mpModel;

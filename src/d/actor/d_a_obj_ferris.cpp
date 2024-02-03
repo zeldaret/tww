@@ -4,16 +4,130 @@
 //
 
 #include "d/actor/d_a_obj_ferris.h"
-#include "dolphin/types.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo_wether.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+
+namespace daObjFerris {
+    namespace {
+        static const Attr_c L_attr[1] = {
+            { 0x2D, 0x01, 50.0f, 195.0f, 0.0f, -100.0f, -135.0f, 1820.0f, 0.0f, 30.0f },
+        };
+
+        inline const Attr_c & attr(Type_e type) { return L_attr[type]; }
+    }
+
+    const dCcD_SrcCyl Act_c::M_cyl_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ ~(AT_TYPE_LIGHT | AT_TYPE_UNK400000 | AT_TYPE_WIND | AT_TYPE_UNK20000 | AT_TYPE_WATER),
+            /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_GRP,
+            /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ 0,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGCylS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 100.0f,
+            /* Height */ 200.0f,
+        },
+    };
+
+    const dCcD_SrcSph Act_c::M_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ 0,
+            /* SrcObjTg  SPrm    */ 0,
+            /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ 0,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 35.0f,
+        },
+    };
+};
+
+const char daObjFerris::Act_c::M_arcname[8] = "Skanran";
 
 /* 000000EC-00000110       .text solidHeapCB__Q211daObjFerris5Act_cFP10fopAc_ac_c */
-void daObjFerris::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjFerris::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 00000110-0000048C       .text create_heap__Q211daObjFerris5Act_cFv */
-void daObjFerris::Act_c::create_heap() {
+bool daObjFerris::Act_c::create_heap() {
     /* Nonmatching */
+    J3DModelData* mdl_data_gondola = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x04);
+    JUT_ASSERT(0x183, mdl_data_gondola != 0);
+    if (mdl_data_gondola != NULL) {
+        for (s32 i = 0; i < 5; i++)
+            mpModel[i] = mDoExt_J3DModel__create(mdl_data_gondola, 0, 0x11020203);
+    }
+
+    J3DModelData* mdl_data_wheelbase = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x06);
+    JUT_ASSERT(0x18c, mdl_data_wheelbase != 0);
+    if (mdl_data_wheelbase != NULL) {
+        mpModel[5] = mDoExt_J3DModel__create(mdl_data_wheelbase, 0, 0x11020203);
+    }
+
+    if (mdl_data_gondola != NULL && mdl_data_wheelbase != NULL)
+        init_mtx();
+
+    cBgD_t* bgw_data_gondola = (cBgD_t*)dComIfG_getObjectRes(M_arcname, 0x0A);
+    JUT_ASSERT(0x1a0, bgw_data_gondola != 0);
+    if (bgw_data_gondola != NULL) {
+        for (s32 i = 0; i < 5; i++) {
+            mpBgW[i] = new dBgW();
+            if (mpBgW[i] != NULL && mpBgW[i]->Set(bgw_data_gondola, dBgW::MOVE_BG_e, &mpModel[i]->getBaseTRMtx()) == 1)
+                return false;
+        }
+    }
+
+    cBgD_t* bgw_data_wheelbase = (cBgD_t*)dComIfG_getObjectRes(M_arcname, 0x0A);
+    JUT_ASSERT(0x1b0, bgw_data_wheelbase != 0);
+    if (bgw_data_wheelbase != NULL) {
+        mpBgW[5] = new dBgW();
+        if (mpBgW[5] != NULL && mpBgW[5]->Set(bgw_data_wheelbase, dBgW::MOVE_BG_e, &mMtx[5]) == 1)
+            return false;
+    }
+
+    return ((mdl_data_gondola != NULL && mpModel[0] != NULL && mpModel[1] != NULL && mpModel[2] != NULL && mpModel[3] != NULL && mpModel[4] != NULL) &&
+            (mdl_data_wheelbase != NULL && mpModel[5] != NULL) &&
+            (bgw_data_gondola != NULL && mpBgW[0] != NULL && mpBgW[1] != NULL && mpBgW[2] != NULL && mpBgW[3] != NULL && mpBgW[4] != NULL) &&
+            (bgw_data_wheelbase != NULL && mpBgW[5] != NULL));
 }
 
 /* 0000048C-000004DC       .text ride_call_back__Q211daObjFerris5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
@@ -23,47 +137,247 @@ void daObjFerris::Act_c::ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 
 /* 000004DC-00000898       .text _create__Q211daObjFerris5Act_cFv */
 s32 daObjFerris::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+
+    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+
+    if (ret == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x11a00)) {
+            fopAcM_SetMtx(this, mpModel[5]->getBaseTRMtx());
+            for (s32 i = 0; i < 6; i++) {
+                dComIfG_Bgsp()->Regist(mpBgW[i], this);
+                mpBgW[i]->SetCrrFunc(dBgS_MoveBGProc_Typical);
+                if (i < 5)
+                    mpBgW[i]->SetRideCallback(ride_call_back);
+            }
+            fopAcM_setCullSizeBox(this, -1400.0f, -1400.0f, -500.f, 1400.0f, 1400.0f, 800.0f);
+            fopAcM_setCullSizeFar(this, 10.0f);
+            if (is_switch() == 1) {
+                field_0x1952 = 45;
+                field_0x194e = 1;
+            } else {
+                field_0x1952 = 0;
+                field_0x194e = 0;
+            }
+
+            field_0x1954 = dComIfGp_evmng_getEventIdx("kanran_vive", 0xFF);
+            field_0x1956 = dComIfGp_evmng_getEventIdx("kanran_start", 0xFF);
+            field_0x1950 = 0x1800;
+            field_0x195a = 0;
+
+            for (s32 i = 0; i < 5; i++) {
+                field_0x02d4[i].Init(0xFF, 0xFF, this);
+                field_0x0400[i].Set(M_cyl_src);
+                field_0x0400[i].SetStts(&field_0x02d4[i]);
+                field_0x0400[i].SetTgVec((cXyz&)cXyz::Zero);
+                field_0x0400[i].OnTgNoHitMark();
+
+                field_0x09f0[i].Init(0xFF, 0xFF, this);
+                field_0x0b1c[i].Set(M_cyl_src);
+                field_0x0b1c[i].SetStts(&field_0x09f0[i]);
+                field_0x0b1c[i].SetTgVec((cXyz&)cXyz::Zero);
+                field_0x0b1c[i].OnTgNoHitMark();
+
+                field_0x110c[i].Init(0xFF, 0xFF, this);
+                field_0x1238[i].Set(M_sph_src);
+                field_0x1238[i].SetStts(&field_0x110c[i]);
+                field_0x1238[i].SetTgVec((cXyz&)cXyz::Zero);
+                field_0x1238[i].OnTgNoHitMark();
+            }
+        } else {
+            ret = cPhs_ERROR_e;
+        }
+    }
+
+    return ret;
 }
 
 /* 00000DE8-00000EA8       .text _delete__Q211daObjFerris5Act_cFv */
-BOOL daObjFerris::Act_c::_delete() {
+bool daObjFerris::Act_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000EA8-000011B8       .text set_mtx__Q211daObjFerris5Act_cFi */
-void daObjFerris::Act_c::set_mtx(int) {
+void daObjFerris::Act_c::set_mtx(int idx) {
     /* Nonmatching */
+    static cXyz offset[6] = {
+        cXyz(0.56f, 1078.13f, 162.68f),
+        cXyz(1026.17f, 332.98f, 162.68f),
+        cXyz(634.42f, 872.69f, 162.68f),
+        cXyz(-633.3f, 872.69f, 162.68f),
+        cXyz(-1025.04f, 332.98f, 162.68f),
+        cXyz(0.0f, 0.0f, 0.0f),
+    };
+
+    if (idx < 5) {
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::ZrotM(field_0x1950);
+        mDoMtx_stack_c::transM(offset[idx]);
+        mDoMtx_stack_c::ZrotM(-field_0x1950);
+        mDoMtx_stack_c::ZrotM(field_0x195a);
+        mpModel[idx]->setBaseTRMtx(mDoMtx_stack_c::get());
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx[idx]);
+    } else if (idx == 5) {
+        cXyz pos = current.pos;
+        VECAdd(&pos, &offset[6], &pos);
+        mDoMtx_stack_c::transS(pos);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::ZrotM(field_0x1950);
+        mpModel[idx]->setBaseTRMtx(mDoMtx_stack_c::get());
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx[idx]);
+    }
 }
 
 /* 000011B8-00001240       .text init_mtx__Q211daObjFerris5Act_cFv */
 void daObjFerris::Act_c::init_mtx() {
-    /* Nonmatching */
+    for (s32 i = 0; i < 6; i++) {
+        mpModel[i]->setBaseScale(mScale);
+        set_mtx(i);
+        mpModel[i]->calc();
+    }
 }
 
 /* 00001240-0000126C       .text now_event__Q211daObjFerris5Act_cFs */
-void daObjFerris::Act_c::now_event(short) {
-    /* Nonmatching */
+bool daObjFerris::Act_c::now_event(s16 p1) {
+    return field_0x1974 != 0 && field_0x1972 == p1;
 }
 
 /* 0000126C-00001294       .text set_event__Q211daObjFerris5Act_cFs */
-void daObjFerris::Act_c::set_event(short) {
-    /* Nonmatching */
+BOOL daObjFerris::Act_c::set_event(s16 p1) {
+    if (field_0x1974 == 0) {
+        field_0x1972 = p1;
+        field_0x1974 = 1;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00001294-0000135C       .text exe_event__Q211daObjFerris5Act_cFv */
 void daObjFerris::Act_c::exe_event() {
-    /* Nonmatching */
+    switch (field_0x1974) {
+    case 1:
+        if (mEvtInfo.checkCommandDemoAccrpt()) {
+            field_0x1974 = 2;
+        } else {
+            fopAcM_orderOtherEventId(this, field_0x1972);
+            mEvtInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+        break;
+    case 2:
+        if (dComIfGp_evmng_endCheck(field_0x1972)) {
+            dComIfGp_event_reset();
+            field_0x1972 = -1;
+            field_0x1974 = 0;
+        }
+        break;
+    }
 }
 
 /* 0000135C-000013B4       .text angle_mng__Q211daObjFerris5Act_cFv */
 void daObjFerris::Act_c::angle_mng() {
-    /* Nonmatching */
+    field_0x195c += 500;
+    field_0x195a = cM_ssin(field_0x195c) * 380.0f;
 }
 
 /* 000013B4-000016C0       .text rot_mng__Q211daObjFerris5Act_cFv */
 void daObjFerris::Act_c::rot_mng() {
     /* Nonmatching */
+    switch (field_0x194e) {
+    case 0:
+        field_0x1952 = 0;
+        field_0x1950 = 0x1800;
+        if (is_switch()) {
+            cXyz* wind = dKyw_get_wind_vec();
+            s16 windAngle = cM_atan2s(wind->x, wind->z);
+            if (windAngle == -0x8000) {
+                if (set_event(field_0x1956)) {
+                    field_0x194e = 6;
+                    field_0x1952 = 0;
+                    field_0x194c = 0;
+                    mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+                }
+            } else {
+                if (set_event(field_0x1954)) {
+                    field_0x194e = 2;
+                    field_0x1952 = 0;
+                    field_0x194c = 0;
+                    off_switch();
+                }
+            }
+        }
+        break;
+    case 2:
+    case 6:
+        field_0x194c++;
+        if (field_0x194c > 20) {
+            field_0x194c = 0;
+            field_0x194e++;
+        }
+        break;
+    case 3:
+    case 4:
+    case 5:
+    case 7:
+    case 8:
+    case 9:
+        if (field_0x194c < 11) {
+            field_0x1952 = 4;
+        } else {
+            switch (field_0x194e) {
+            case 9:
+            case 5:
+                if (!(field_0x1958 & 3))
+                    field_0x1952--;
+                break;
+            default:
+                field_0x1952--;
+                break;
+            }
+        }
+
+        field_0x194c++;
+        if (field_0x1952 < 0) {
+            field_0x1952 = 0;
+            field_0x194c = 0;
+
+            switch (field_0x194e) {
+            case 6:
+                break;
+            case 3:
+                field_0x194e++;
+                break;
+            case 5:
+                field_0x194e = 10;
+                break;
+            case 9:
+                field_0x194e = 1;
+                break;
+            }
+        }
+        break;
+    case 10:
+        field_0x1952 = -5;
+        if (field_0x1950 < 0x1800 || !now_event(field_0x1954)) {
+            field_0x194e = 0;
+            field_0x1952 = 0;
+        }
+        break;
+    case 1:
+        dComIfGs_onEventBit(0x2104);
+        if (!(field_0x1958 & 3))
+            field_0x1952++;
+
+        if (now_event(field_0x1956)) {
+            if (field_0x1952 > 67)
+                field_0x1952 = 67;
+        } else {
+            if (field_0x1952 > 45)
+                field_0x1952 = 45;
+        }
+        angle_mng();
+        break;
+    }
 }
 
 /* 000016C0-00001A50       .text set_collision__Q211daObjFerris5Act_cFv */
@@ -77,11 +391,82 @@ void daObjFerris::Act_c::make_lean() {
 }
 
 /* 00001C30-00001D58       .text _execute__Q211daObjFerris5Act_cFv */
-BOOL daObjFerris::Act_c::_execute() {
+bool daObjFerris::Act_c::_execute() {
     /* Nonmatching */
+    const Attr_c& at = attr(ONE_e);
+
+    field_0x1950 += field_0x1952;
+    mDoAud_seStart(JA_SE_OBJ_FER_WHEEL_ROUND, &current.pos, at.field_0x04 / at.field_0x08);
+    rot_mng();
+    exe_event();
+    make_lean();
+    for (s32 i = 0; i < 6; i++) {
+        set_mtx(i);
+        if (i < 6)
+            mpBgW[i]->Move();
+    }
+    set_collision();
+    field_0x1958++;
+    return true;
 }
 
 /* 00001D58-00001E18       .text _draw__Q211daObjFerris5Act_cFv */
-BOOL daObjFerris::Act_c::_draw() {
-    /* Nonmatching */
+bool daObjFerris::Act_c::_draw() {
+    dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
+    dComIfGd_setListBG();
+    for (s32 i = 0; i < 6; i++) {
+        dKy_getEnvlight().setLightTevColorType(mpModel[i], &mTevStr);
+        mDoExt_modelUpdateDL(mpModel[i]);
+    }
+    dComIfGd_setList();
+    return true;
 }
+
+namespace daObjFerris {
+    namespace {
+        s32 Mthd_Create(void* i_this) {
+            return ((Act_c*)i_this)->_create();
+        }
+
+        BOOL Mthd_Delete(void* i_this) {
+            return ((Act_c*)i_this)->_delete();
+        }
+
+        BOOL Mthd_Execute(void* i_this) {
+            return ((Act_c*)i_this)->_execute();
+        }
+
+        BOOL Mthd_Draw(void* i_this) {
+            return ((Act_c*)i_this)->_draw();
+        }
+
+        BOOL Mthd_IsDelete(void* i_this) {
+            return TRUE;
+        }
+
+        static actor_method_class Mthd_Table = {
+            (process_method_func)daObjFerris::Mthd_Create,
+            (process_method_func)daObjFerris::Mthd_Delete,
+            (process_method_func)daObjFerris::Mthd_Execute,
+            (process_method_func)daObjFerris::Mthd_IsDelete,
+            (process_method_func)daObjFerris::Mthd_Draw,
+        };
+    }
+}
+
+actor_process_profile_definition g_profile_Obj_Ferris = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 3,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Ferris,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjFerris::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x003C,
+    /* Actor SubMtd */ &daObjFerris::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
