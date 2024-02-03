@@ -1048,9 +1048,7 @@ void daRd_c::modeCryWait() {
         onIkari();
         setBtkAnm(3);
     }
-    // The dComIfGp_event_runCheck inline breaks the codegen here.
-    // if (dComIfGp_event_runCheck()) {
-    if (g_dComIfG_gameInfo.play.getEvent().runCheck()) {
+    if (dComIfGp_event_runCheck()) {
         mTimer1 = 60;
         mTimer2 = 45;
     } else if (isAnm(AnmPrm_WALK)) {

@@ -2490,7 +2490,7 @@ inline void dComIfGp_clearMesgAnimeTagInfo() {
  * === EVENT ===
  */
 
-inline BOOL dComIfGp_event_runCheck() {
+inline bool dComIfGp_event_runCheck() {
     return g_dComIfG_gameInfo.play.getEvent().runCheck();
 }
 
@@ -2510,7 +2510,7 @@ inline void dComIfGp_event_offEventFlag(s16 flag) {
     g_dComIfG_gameInfo.play.getEvent().offEventFlag(flag);
 }
 
-inline BOOL dComIfGp_event_chkEventFlag(s16 flag) {
+inline u16 dComIfGp_event_chkEventFlag(s16 flag) {
     return g_dComIfG_gameInfo.play.getEvent().chkEventFlag(flag);
 }
 

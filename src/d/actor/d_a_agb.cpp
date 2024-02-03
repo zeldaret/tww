@@ -914,11 +914,9 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     if (dKyw_gbwind_use_check()) {
         mFlags.field_0xb_6 = 1;
         s16 r3;
-        // Fakematch: using the dComIfGp_event_runCheck inline breaks the match
-        // if (dComIfGp_event_runCheck() && (dComIfGp_evmng_startCheck("TACT_WINDOW2_SHIP") || dComIfGp_evmng_startCheck("TACT_WINDOW2"))) {
-        if (g_dComIfG_gameInfo.play.getEvent().runCheck() &&
-            (dComIfGp_evmng_startCheck("TACT_WINDOW2_SHIP") || dComIfGp_evmng_startCheck("TACT_WINDOW2")))
-        {
+        if (dComIfGp_event_runCheck() &&
+            (dComIfGp_evmng_startCheck("TACT_WINDOW2_SHIP") || dComIfGp_evmng_startCheck("TACT_WINDOW2"))
+        ) {
             r3 = field_0x658;
         } else {
             cXyz* wind_vec = dKyw_get_wind_vec();

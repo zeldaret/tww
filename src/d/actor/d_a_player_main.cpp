@@ -3141,13 +3141,9 @@ BOOL daPy_lk_c::execute() {
         offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
     }
     
-    // Using the dComIfGp_event_runCheck inline breaks the match
-    // if (dComIfGp_event_runCheck()) {
-    if (g_dComIfG_gameInfo.play.getEvent().runCheck()) {
+    if (dComIfGp_event_runCheck()) {
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Link", this);
-        // Using the dComIfGp_event_chkEventFlag inline breaks the match
-        // if (mEvtInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(0x4) && mHeldItemType == 0x101) {
-        if (mEvtInfo.checkCommandDoor() && !g_dComIfG_gameInfo.play.getEvent().chkEventFlag(0x4) && mHeldItemType == 0x101) {
+        if (mEvtInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(0x4) && mHeldItemType == 0x101) {
             fopAc_ac_c* equipActor = mActorKeepEquip.getActor();
             if (equipActor) {
                 s16 angle = shape_angle.y + 0x8000;
@@ -3573,9 +3569,7 @@ BOOL daPy_lk_c::execute() {
     
     offNoResetFlg1((daPy_FLG1)(daPyFlg1_NPC_CALL_COMMAND | daPyFlg1_VINE_CATCH));
     
-    // Using the dComIfGp_event_runCheck inline breaks the match
-    // if (dComIfGp_event_runCheck() || checkNoControll()) {
-    if (g_dComIfG_gameInfo.play.getEvent().runCheck() || checkNoControll()) {
+    if (dComIfGp_event_runCheck() || checkNoControll()) {
         dComIfGp_setDoStatus(0);
         dComIfGp_setRStatus(0);
     } else {

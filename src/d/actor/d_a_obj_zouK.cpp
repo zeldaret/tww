@@ -215,20 +215,18 @@ BOOL daObjZouk::Act_c::jokai_demo() {
 
 /* 000012F0-00001510       .text _execute__Q29daObjZouk5Act_cFv */
 bool daObjZouk::Act_c::_execute() {
-    fopAc_ac_c* actor = this;
     set_mtx();
     texture_scroll();
     fopAcM_rollPlayerCrash(this, 288.0f, 0x0D);
     if (!jokai_demo())
         play_stop_joint_anime();
     if (param_get_arg0() == 0) {
-        dBgS* bgsp = dComIfG_Bgsp();
         if (dComIfGp_event_runCheck()) {
             if (mBgBefore != NULL && mBgAfter != NULL) {
                 if (mBgAfter->ChkUsed())
-                    bgsp->Release(mBgAfter);
+                    dComIfG_Bgsp()->Release(mBgAfter);
                 if (!mBgBefore->ChkUsed()) {
-                    bgsp->Regist(mBgBefore, actor);
+                    dComIfG_Bgsp()->Regist(mBgBefore, this);
                     mBgBefore->SetCrrFunc(NULL);
                     mBgMode = 0;
                 }
@@ -239,8 +237,8 @@ bool daObjZouk::Act_c::_execute() {
         } else {
             if (mBgMode == 0 && dComIfGs_isCollect(0, 1) && mBgBefore != NULL && mBgAfter != NULL) {
                 if (mBgBefore->ChkUsed())
-                    bgsp->Release(mBgBefore);
-                bgsp->Regist(mBgAfter, actor);
+                    dComIfG_Bgsp()->Release(mBgBefore);
+                dComIfG_Bgsp()->Regist(mBgAfter, this);
                 mBgAfter->SetCrrFunc(NULL);
                 mBgMode = 1;
             }

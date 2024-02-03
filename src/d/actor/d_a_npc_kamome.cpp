@@ -957,9 +957,7 @@ BOOL daNpc_kam_c::eventProc() {
     }
     
     int staffId = dComIfGp_evmng_getMyStaffId(l_staff_name);
-    // The dComIfGp_event_runCheck inline breaks the codegen here.
-    // if (dComIfGp_event_runCheck() && !checkCommandTalk()) {
-    if (g_dComIfG_gameInfo.play.getEvent().runCheck() && !checkCommandTalk()) {
+    if (dComIfGp_event_runCheck() && !checkCommandTalk()) {
         if (staffId != -1) {
             int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
             if (actIdx == -1) {

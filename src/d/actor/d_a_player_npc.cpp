@@ -159,9 +159,7 @@ BOOL daPy_npc_c::initialRestartOption(s8 option, int save) {
 
 /* 8015ABD8-8015AC74       .text checkNowPosMove__10daPy_npc_cFPCc */
 BOOL daPy_npc_c::checkNowPosMove(const char* pName) {
-    // Using the dComIfGp_event_runCheck inline makes the codegen not match.
-    // if (!dComIfGp_event_runCheck()) {
-    if (!g_dComIfG_gameInfo.play.getEvent().runCheck()) {
+    if (!dComIfGp_event_runCheck()) {
         return TRUE;
     }
     if (mEvtInfo.checkCommandTalk()) {
