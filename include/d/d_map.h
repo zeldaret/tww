@@ -153,10 +153,13 @@ public:
 
 class dMap_c {
 public:
+    static u8 getMapAlpha() { return mAlpha; }
     static void setMapAlpha(u8 alpha) { mAlpha = alpha; }
     static void setIconFreeAlpha(u8 alpha) { mIconFreeAlpha = alpha; }
     static void setMapDispMode(u8 mode) { mMapDispMode = mode; }
+    static s16 getMapDspPosLeftUpX() { return mDispPosLeftUpX; }
     static void setMapDispPosLeftUpX(s16 x) { mDispPosLeftUpX = x; }
+    static s16 getMapDspPosLeftUpY() { return mDispPosLeftUpY; }
     static void setMapDispPosLeftUpY(s16 y) { mDispPosLeftUpY = y; }
     static void setIconFreePosX(s16 x) { mIconFreePosX = x; }
     static void setIconFreePosY(s16 y) { mIconFreePosY = y; }
@@ -166,84 +169,81 @@ public:
     static u8 getIconDispMode() { return mIconDispMode; }
     static void setIconDispMode(u8 mode) { mIconDispMode = mode; }
 
-    void clrAGBMapSendStopFlg() {}
-    void getMapAlpha() {}
-    void getMapDspPosLeftUpX() {}
-    void getMapDspPosLeftUpY() {}
-    void getMapDspSizeHeight() {}
-    void getMapDspSizeWidth() {}
-    void getNowRoom() {}
-    void isAGBMapSendStopFlg() {}
-    void isMapDispTypeEnlargementSize() {}
-    void isMapDispTypeRealSize() {}
-    void setAGBMapSendStopFlg() {}
-    void setMapChgSizeEnlargementSize() {}
-    void setMapChgSizeRealSize() {}
+    static void setAGBMapSendStopFlg() {}
+    static void clrAGBMapSendStopFlg() {}
+    static void isAGBMapSendStopFlg() {}
+    static void getMapDspSizeHeight() {}
+    static void getMapDspSizeWidth() {}
+    static void getNowRoom() {}
+    static void isMapDispTypeEnlargementSize() {}
+    static void isMapDispTypeRealSize() {}
+    static void setMapChgSizeEnlargementSize() {}
+    static void setMapChgSizeRealSize() {}
 
     static void create();
-    void isEnableEnlargementScroll();
+    static void isEnableEnlargementScroll();
     static bool isEnableDispMap();
-    void getKindMapType();
+    static void getKindMapType();
     static void remove();
     static void setImage(int, int, f32);
     static void deleteImage(int);
-    void setNowRoom(int);
-    void mapDrawIconFree(s16, s16, u8);
-    void mapDrawIconSelf(s16, s16, u8);
-    void mapDrawFrame(u8);
-    void mapDrawEnlargementSize(f32, f32, f32, f32, u8);
-    void mapDrawRealSize(f32, f32, u8);
+    static void setNowRoom(int);
+    static void mapDrawIconFree(s16, s16, u8);
+    static void mapDrawIconSelf(s16, s16, u8);
+    static void mapDrawFrame(u8);
+    static void mapDrawEnlargementSize(f32, f32, f32, f32, u8);
+    static void mapDrawRealSize(f32, f32, u8);
     static void mapAGBSendIslandData();
-    void setPlayerStayAgbMapTypeNow(f32, f32);
-    void agbMapNoSet(u8, u8);
-    void agbMapNoSetCall();
-    void agbIsMsgSend();
-    void agbResetCursor();
-    void agbScrollX();
-    void agbScrollY();
-    void agbFlashCheck();
-    void agbIsActive();
-    void isInDspArea(f32, f32, bool);
-    void mapAGBSendStatInit();
-    void mapAGBSendMapMain(f32, f32);
-    void calcEnlargementSizeParameter(f32, f32);
-    void calcScissor();
-    void mapMoveAll(f32, f32, int, f32);
-    void mapDrawAll(f32, f32, int, f32);
-    void mapDrawIcon();
-    void draw(f32, f32, int, f32);
-    void point2Grid(f32, f32, s8*, s8*);
-    void point2GridAndLocal(f32, f32, s8*, s8*, s16*, s16*);
-    void getCheckPointUseGrid(s8, s8);
-    void getFmapChkPntPrm(int, s8*, s8*, s16*, s16*, u8*);
-    void setFmapChkDtPrm();
-    void getFmapChkPntDtPnt(int);
-    void initPoint();
-    void setGbaPoint_ocean(u8, f32, f32, s16, u8, u8, u8, u8);
-    void isPointStayInDspNowRoomAgbScr(s16, s16);
-    void setCollectPoint(u8, u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
-    void setGbaPoint_dungeon(u8, f32, f32, s16, u8, u8, u8, u8);
-    void getPosAgbMapType(f32, f32, bool);
-    void setGbaPoint(u8, f32, f32, s16, u8, u8, u8, u8);
-    void setArriveInfo(f32, f32);
-    void drawPointPlayer(f32, f32, s16);
-    void drawPointEnemy(f32, f32);
-    void drawPointAgbCursor(f32, f32);
-    void drawPointTbox(f32, f32, f32, f32);
-    void drawPointDoor(f32, f32, f32, f32, s16, u8);
-    void drawPointRestart(f32, f32, s16, f32, f32);
-    void drawPointFriend(f32, f32, f32);
-    void drawPointShip(f32, f32, s16, f32, f32);
-    void drawPointGc(u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
-    void drawPointMain(u8, u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
-    void drawPointAgb(u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
-    void getTypeAgbGcFromTypeAcs(u8, u8*, u8*);
+    static void setPlayerStayAgbMapTypeNow(f32, f32);
+    static void agbMapNoSet(u8, u8);
+    static void agbMapNoSetCall();
+    static void agbIsMsgSend();
+    static void agbResetCursor();
+    static void agbScrollX();
+    static void agbScrollY();
+    static void agbFlashCheck();
+    static void agbIsActive();
+    static void isInDspArea(f32, f32, bool);
+    static void mapAGBSendStatInit();
+    static void mapAGBSendMapMain(f32, f32);
+    static void calcEnlargementSizeParameter(f32, f32);
+    static void calcScissor();
+    static void mapMoveAll(f32, f32, int, f32);
+    static void mapDrawAll(f32, f32, int, f32);
+    static void mapDrawIcon();
+    static void draw(f32, f32, int, f32);
+    static void point2Grid(f32, f32, s8*, s8*);
+    static void point2GridAndLocal(f32, f32, s8*, s8*, s16*, s16*);
+    static void getCheckPointUseGrid(s8, s8);
+    static void getFmapChkPntPrm(int, s8*, s8*, s16*, s16*, u8*);
+    static void setFmapChkDtPrm();
+    static void getFmapChkPntDtPnt(int);
+    static void initPoint();
+    static void setGbaPoint_ocean(u8, f32, f32, s16, u8, u8, u8, u8);
+    static void isPointStayInDspNowRoomAgbScr(s16, s16);
+    static void setCollectPoint(u8, u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
+    static void setGbaPoint_dungeon(u8, f32, f32, s16, u8, u8, u8, u8);
+    static void getPosAgbMapType(f32, f32, bool);
+    static void setGbaPoint(u8, f32, f32, s16, u8, u8, u8, u8);
+    static void setArriveInfo(f32, f32);
+    static void drawPointPlayer(f32, f32, s16);
+    static void drawPointEnemy(f32, f32);
+    static void drawPointAgbCursor(f32, f32);
+    static void drawPointTbox(f32, f32, f32, f32);
+    static void drawPointDoor(f32, f32, f32, f32, s16, u8);
+    static void drawPointRestart(f32, f32, s16, f32, f32);
+    static void drawPointFriend(f32, f32, f32);
+    static void drawPointShip(f32, f32, s16, f32, f32);
+    static void drawPointGc(u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
+    static void drawPointMain(u8, u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
+    static void drawPointAgb(u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
+    static void getTypeAgbGcFromTypeAcs(u8, u8*, u8*);
     static void drawPointSingle(u8, f32, f32, f32, s8, s16, u8, u8, u8);
     static void drawActorPointMiniMap(fopAc_ac_c*);
-    void mapBufferSendAGB_commonCursor();
-    void mapBufferSendAGB_ocean();
-    void mapBufferSendAGB_dungeon();
-    void mapSetPointAll();
+    static void mapBufferSendAGB_commonCursor();
+    static void mapBufferSendAGB_ocean();
+    static void mapBufferSendAGB_dungeon();
+    static void mapSetPointAll();
     static void mapBufferSendAGB(int);
 
     static u8 mAlpha;
@@ -262,5 +262,33 @@ public:
 inline void dMap_drawPoint(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9) {
     dMap_c::drawPointSingle(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9);
 }
+inline void dMap_drawActorPointMiniMap(fopAc_ac_c* actor) { dMap_c::drawActorPointMiniMap(actor); }
+inline bool dMap_isEnableDispMap() { return dMap_c::isEnableDispMap(); }
+inline void dMap_mapAGBSendIslandData() { dMap_c::mapAGBSendIslandData(); }
+
+inline u8 dMap_getMapAlpha() { return dMap_c::getMapAlpha(); }
+inline void dMap_setMapAlpha(u8 alpha) { return dMap_c::setMapAlpha(alpha); }
+inline void dMap_setIconFreeAlpha(u8 alpha) { return dMap_c::setIconFreeAlpha(alpha); }
+inline void dMap_setMapDispMode(u8 mode) { return dMap_c::setMapDispMode(mode); }
+inline s16 dMap_getMapDispPosLeftUpX() { return dMap_c::getMapDspPosLeftUpX(); }
+inline void dMap_setMapDispPosLeftUpX(s16 x) { return dMap_c::setMapDispPosLeftUpX(x); }
+inline s16 dMap_getMapDispPosLeftUpY() { return dMap_c::getMapDspPosLeftUpY(); }
+inline void dMap_setMapDispPosLeftUpY(s16 y) { return dMap_c::setMapDispPosLeftUpY(y); }
+inline void dMap_setIconFreePosX(s16 x) { return dMap_c::setIconFreePosX(x); }
+inline void dMap_setIconFreePosY(s16 y) { return dMap_c::setIconFreePosY(y); }
+inline void dMap_setIconFreeScale(f32 scale) { return dMap_c::setIconFreeScale(scale); }
+inline void dMap_setIconSelfAlpha(u8 alpha) { return dMap_c::setIconSelfAlpha(alpha); }
+inline void dMap_setIconSelfScale(f32 scale) { return dMap_c::setIconSelfScale(scale); }
+inline void dMap_setIconDispMode(u8 mode) { return dMap_c::setIconDispMode(mode); }
+
+inline void dMap_getCheckPointUseGrid(s8, s8) {}
+inline void dMap_getFmapChkPntPrm(int, s8*, s8*, s16*, s16*, u8*) {}
+inline void dMap_getMapDispSizeHeight() {}
+inline void dMap_getMapDispSizeWidth() {}
+inline void dMap_isSaveArriveGridUseGridNo(int) {}
+inline void dMap_isSaveArriveGridUseGridPos(int, int) {}
+inline void dMap_isSaveArriveGrid_UseWorldPos(f32, f32) {}
+inline void dMap_onSaveArriveGridUseGridNo(int) {}
+inline void dMap_point2Grid(f32, f32, s8*, s8*) {}
 
 #endif /* D_MAP_H */

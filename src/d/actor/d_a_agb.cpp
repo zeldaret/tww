@@ -137,7 +137,7 @@ int daAgb_c::uploadInitCheck() {
     dStage_FileList_dt_c* fili_p =
         dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
-    if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_SEA_e && !dMap_c::isEnableDispMap()) ||
+    if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_SEA_e && !dMap_isEnableDispMap()) ||
         (fili_p != NULL && dStage_FileList_dt_CheckAgbCom(fili_p)))
     {
         l_msgCtrl.init(1);
@@ -307,7 +307,7 @@ int daAgb_c::uploadConnect() {
         NameConv();
         mDoGac_SendDataSet((u32*)&mPlayerName, sizeof(mPlayerName), 10, 0);
 
-        dMap_c::mapAGBSendIslandData();
+        dMap_mapAGBSendIslandData();
     } else {
         mDoGaC_GbaReboot();
         l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
@@ -1505,8 +1505,8 @@ static int daAgb_Draw(daAgb_c* i_this) {
         }
     }
 
-    dMap_c::drawPointSingle(3, i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z,
-                            i_this->current.roomNo, -0x8000, var_r6, 0, 0);
+    dMap_drawPoint(3, i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z,
+                   i_this->current.roomNo, -0x8000, var_r6, 0, 0);
     return 1;
 }
 

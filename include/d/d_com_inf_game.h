@@ -1973,11 +1973,11 @@ inline void dComIfGp_map_deleteImage(int param_0) {
 }
 
 inline void dComIfGp_map_setAGBMapSendStopFlg() {
-    // dMap_c::setAGBMapSendStopFlg();
+    dMap_c::setAGBMapSendStopFlg();
 }
 
 inline void dComIfGp_map_clrAGBMapSendStopFlg() {
-    // dMap_c::clrAGBMapSendStopFlg();
+    dMap_c::clrAGBMapSendStopFlg();
 }
 
 inline void dComIfGp_createDemo() {

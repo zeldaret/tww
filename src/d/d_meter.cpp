@@ -1950,17 +1950,17 @@ dMeter_map_HIO_c::dMeter_map_HIO_c() {
 
 /* 802059E0-80205A44       .text initMapCtrlDisp__13mapCtrlDisp_cFv */
 void mapCtrlDisp_c::initMapCtrlDisp() {
-    dMap_c::setMapAlpha(0);
-    dMap_c::setIconFreeAlpha(0);
-    dMap_c::setMapDispMode(1);
-    dMap_c::setMapDispPosLeftUpX(g_meter_mapHIO.field_0x8);
-    dMap_c::setMapDispPosLeftUpY(g_meter_mapHIO.field_0xa);
-    dMap_c::setIconFreePosX(g_meter_mapHIO.field_0x14);
-    dMap_c::setIconFreePosY(g_meter_mapHIO.field_0x16);
-    dMap_c::setIconFreeScale(0.0f);
-    dMap_c::setIconSelfAlpha(0);
-    dMap_c::setIconSelfScale(0.0f);
-    dMap_c::setIconDispMode(0);
+    dMap_setMapAlpha(0);
+    dMap_setIconFreeAlpha(0);
+    dMap_setMapDispMode(1);
+    dMap_setMapDispPosLeftUpX(g_meter_mapHIO.field_0x8);
+    dMap_setMapDispPosLeftUpY(g_meter_mapHIO.field_0xa);
+    dMap_setIconFreePosX(g_meter_mapHIO.field_0x14);
+    dMap_setIconFreePosY(g_meter_mapHIO.field_0x16);
+    dMap_setIconFreeScale(0.0f);
+    dMap_setIconSelfAlpha(0);
+    dMap_setIconSelfScale(0.0f);
+    dMap_setIconDispMode(0);
     field_0x0 = 0;
     field_0x1 = 0;
     field_0x2 = 0;

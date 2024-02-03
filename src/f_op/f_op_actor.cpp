@@ -58,7 +58,7 @@ s32 fopAc_Draw(void* pProc) {
         fopAcM_OffStatus(actor, fopAcStts_NODRAW_e);
 
         if (dComIfGp_roomControl_getStayNo() >= 0 && fopAcM_checkStatus(actor, fopAcStts_SHOWMAP_e))
-            dMap_c::drawActorPointMiniMap(actor);
+            dMap_drawActorPointMiniMap(actor);
     }
 
     return ret;
