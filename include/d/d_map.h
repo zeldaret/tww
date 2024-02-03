@@ -35,10 +35,10 @@ public:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5;
     /* 0x08 */ dMap_2DMtMapSpcl_tex_c* field_0x8;
-    /* 0x0C */ short field_0xc;
-    /* 0x0E */ short field_0xe;
-    /* 0x10 */ short field_0x10;
-    /* 0x12 */ short field_0x12;
+    /* 0x0C */ s16 field_0xc;
+    /* 0x0E */ s16 field_0xe;
+    /* 0x10 */ s16 field_0x10;
+    /* 0x12 */ s16 field_0x12;
 };
 
 class dMap_2DAGBScrDsp_c : public dDlst_base_c {
@@ -153,8 +153,20 @@ public:
 
 class dMap_c {
 public:
+    static void setMapAlpha(u8 alpha) { mAlpha = alpha; }
+    static void setIconFreeAlpha(u8 alpha) { mIconFreeAlpha = alpha; }
+    static void setMapDispMode(u8 mode) { mMapDispMode = mode; }
+    static void setMapDispPosLeftUpX(s16 x) { mDispPosLeftUpX = x; }
+    static void setMapDispPosLeftUpY(s16 y) { mDispPosLeftUpY = y; }
+    static void setIconFreePosX(s16 x) { mIconFreePosX = x; }
+    static void setIconFreePosY(s16 y) { mIconFreePosY = y; }
+    static void setIconFreeScale(f32 scale) { mIconFreeScale = scale; }
+    static void setIconSelfAlpha(u8 alpha) { mIconSelfAlpha = alpha; }
+    static void setIconSelfScale(f32 scale) { mIconSelfScale = scale; }
+    static u8 getIconDispMode() { return mIconDispMode; }
+    static void setIconDispMode(u8 mode) { mIconDispMode = mode; }
+
     void clrAGBMapSendStopFlg() {}
-    void getIconDispMode() {}
     void getMapAlpha() {}
     void getMapDspPosLeftUpX() {}
     void getMapDspPosLeftUpY() {}
@@ -165,19 +177,8 @@ public:
     void isMapDispTypeEnlargementSize() {}
     void isMapDispTypeRealSize() {}
     void setAGBMapSendStopFlg() {}
-    void setIconDispMode(u8) {}
-    void setIconFreeAlpha(u8) {}
-    void setIconFreePosX(s16) {}
-    void setIconFreePosY(s16) {}
-    void setIconFreeScale(f32) {}
-    void setIconSelfAlpha(u8) {}
-    void setIconSelfScale(f32) {}
-    void setMapAlpha(u8) {}
     void setMapChgSizeEnlargementSize() {}
     void setMapChgSizeRealSize() {}
-    void setMapDispMode(u8) {}
-    void setMapDispPosLeftUpX(s16) {}
-    void setMapDispPosLeftUpY(s16) {}
 
     static void create();
     void isEnableEnlargementScroll();
@@ -244,6 +245,18 @@ public:
     void mapBufferSendAGB_dungeon();
     void mapSetPointAll();
     static void mapBufferSendAGB(int);
+
+    static u8 mAlpha;
+    static u8 mIconFreeAlpha;
+    static u8 mMapDispMode;
+    static u16 mDispPosLeftUpX;
+    static u16 mDispPosLeftUpY;
+    static u16 mIconFreePosX;
+    static u16 mIconFreePosY;
+    static f32 mIconFreeScale;
+    static u8 mIconSelfAlpha;
+    static f32 mIconSelfScale;
+    static u8 mIconDispMode;
 };
 
 inline void dMap_drawPoint(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9) {

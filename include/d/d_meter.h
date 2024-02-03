@@ -518,8 +518,22 @@ public:
 
 class mapCtrlDisp_c {
 public:
+    // TODO: these two functions are supposed to be weak
     void initMapCtrlDisp();
     void moveMapCtrlDisp();
+
+    void Create() {}
+    void Delete() {}
+    void getAlpha() {}
+    void getHideOffsetX() {}
+    void getShowOffsetX() {}
+    void hideSEOff() {}
+    void hideSEOn() {}
+    void isMode() {}
+    void setAlpha(u8) {}
+    void setHide() {}
+    void showSEOff() {}
+    void showSEOn() {}
 
     /* 0x00 */ u8 field_0x0;
     /* 0x01 */ u8 field_0x1;
@@ -560,6 +574,9 @@ public:
     /* 0x2F60 */ ResTIMG* moveIconTex[3];
     /* 0x2F6C */ u8 field_0x2f6c[0x3024 - 0x2F6C];
     /* 0x3024 */ u8 field_0x3024;
+    /* 0x3025 */ u8 field_0x3025;
+    /* 0x3026 */ u8 field_0x3026;
+    /* 0x3027 */ u8 field_0x3027;
 };
 
 extern dMeter_menuHIO_c g_menuHIO;

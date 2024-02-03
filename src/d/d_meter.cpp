@@ -15,7 +15,10 @@
 #include "d/d_timer.h"
 #include "stdio.h"
 
+u8 dummy_3569[0xC];
+
 dMeter_info_c dMeter_Info;
+fopMsgM_pane_class item_parts;
 dMeter_map_HIO_c g_meter_mapHIO;
 dMeter_HIO_c g_meterHIO;
 dMeter_menuHIO_c g_menuHIO;
@@ -58,6 +61,13 @@ dDlst_2DMETER1_c meter1;
 dDlst_2DMETER2_c meter2;
 dDlst_2Dm_c tekari;
 dDlst_2Dm_c clock[3];
+
+static const char* arrowTexImage[] = {
+    "arrow_00.bti",
+    "arrow_01.bti",
+    "arrow_02.bti",
+    "arrow_03.bti",
+};
 
 static void dummy(f32* m, u32 p2, s32 p3) {
     m[0] = 0.8f;
@@ -588,8 +598,6 @@ void dMeter_onAuctionFlag() {
 void dMeter_offAuctionFlag() {
     dMeter_auctionFlag = false;
 }
-
-fopMsgM_pane_class item_parts;
 
 /* 801EF9C4-801EFA38       .text dMeter_itemMoveSet__FP18fopMsgM_pane_classUcUc */
 void dMeter_itemMoveSet(fopMsgM_pane_class* pane, u8 btn, u8 item) {
@@ -1133,6 +1141,18 @@ void dMeter_actionAlpha(sub_meter_class* i_this) {
 /* 801F4C80-801F4CC4       .text dMeter_numberSet__FP7J2DPaneUc */
 void dMeter_numberSet(J2DPane*, u8) {
     /* Nonmatching */
+    static const char* number[] = {
+        "count_num_0.bti",
+        "count_num_1.bti",
+        "count_num_2.bti",
+        "count_num_3.bti",
+        "count_num_4.bti",
+        "count_num_5.bti",
+        "count_num_6.bti",
+        "count_num_7.bti",
+        "count_num_8.bti",
+        "count_num_9.bti",
+    };
 }
 
 /* 801F4CC4-801F4E04       .text dMeter_numberColor__FP7J2DPaneUcUc */
@@ -1507,12 +1527,17 @@ void dMeter_clockMultiMove(sub_meter_class* i_this) {
 
 /* 801FF184-801FF1F8       .text dMeter_mapInit__FP15sub_meter_class */
 void dMeter_mapInit(sub_meter_class* i_this) {
-    /* Nonmatching */
+    i_this->field_0x3027 = 0xFF;
+    i_this->field_0x0100[0].mUserArea = dComIfGs_isDungeonItemCompass();
+    dMeter_mMapCtrlDisp.field_0x0 = 0;
+    dMeter_mMapCtrlDisp.field_0x4 = g_meter_mapHIO.field_0xc - g_meter_mapHIO.field_0x8;
+    dMeter_mMapCtrlDisp.initMapCtrlDisp();
 }
 
 /* 801FF1F8-801FF684       .text dMeter_mapMove__FP15sub_meter_class */
 void dMeter_mapMove(sub_meter_class* i_this) {
     /* Nonmatching */
+    dMeter_mMapCtrlDisp.moveMapCtrlDisp();
 }
 
 /* 801FF684-801FF76C       .text dMeter_arwInit__FP15sub_meter_class */
@@ -1699,7 +1724,6 @@ BOOL dMeter_Draw(sub_meter_class* i_this) {
 
 /* 80204820-80204C20       .text dMeter_Execute__FP15sub_meter_class */
 BOOL dMeter_Execute(sub_meter_class* i_this) {
-    /* Nonmatching */
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_this->heap);
     i_this->field_0x3024 = 0;
     dMeter_statusCheck(i_this);
@@ -1709,6 +1733,50 @@ BOOL dMeter_Execute(sub_meter_class* i_this) {
     dMeter_weponMove(i_this);
     dMeter_xyMove(i_this);
     dMeter_rMove(i_this);
+
+    f32 f31 = g_meterHIO.field_0x40 / 100.0f;
+    f32 f30 = g_meterHIO.field_0x44 / 100.0f;
+    f32 f29 = g_meterHIO.field_0x46 / 100.0f;
+    
+    dMeter_parentPaneTrans(i_this->field_0x2438 + 0x16, f31);
+    dMeter_childPaneTrans(i_this->field_0x2438 + 0x14, i_this->field_0x2438 + 0x16, f31);
+    dMeter_childPaneTrans(i_this->field_0x2438 + 0x15, i_this->field_0x2438 + 0x16, f31);
+    dMeter_childPaneTransOnly(i_this->field_0x1638 + 0x1F, i_this->field_0x2438 + 0x16, f31, f30);
+    dMeter_childPaneTransOnly(i_this->field_0x2438 + 0x12, i_this->field_0x2438 + 0x16, f31, f29);
+    dMeter_childPaneTransChildTrans(i_this->field_0x2438 + 0x13, i_this->field_0x2438 + 0x16, i_this->field_0x2438 + 0x12, f31, f29);
+    dMeter_childPaneTransOnly(i_this->field_0x1d38 + 0x00, i_this->field_0x2438 + 0x16, f31, f30);
+    
+    for (int i = 0; i < 2; i++) {
+        dMeter_childPaneTrans(i_this->field_0x1d38 + 0x04 + i, i_this->field_0x2438 + 0x16, f31);
+        dMeter_childPaneTrans(i_this->field_0x1d38 + 0x02 + i, i_this->field_0x2438 + 0x16, f31);
+    }
+    
+    dMeter_childPaneTrans(i_this->field_0x2438 + 0x0E, i_this->field_0x2438 + 0x16, f31);
+    dMeter_childPaneTrans(i_this->field_0x2438 + 0x0F, i_this->field_0x2438 + 0x16, f31);
+    dMeter_childPaneTrans(i_this->field_0x2438 + 0x10, i_this->field_0x2438 + 0x16, f31);
+    dMeter_childPaneTrans(i_this->field_0x2438 + 0x11, i_this->field_0x2438 + 0x16, f31);
+    
+    for (int i = 0; i < 3; i++) {
+        dMeter_childPaneTransOnly(i_this->field_0x1d38 + 0x0F + i, i_this->field_0x2438 + 0x16, f31, f29);
+        dMeter_childPaneTransChildTransOnly(i_this->field_0x1d38 + 0x0C + i, i_this->field_0x2438 + 0x16, i_this->field_0x1d38 + 0x0F + i, f31, f29);
+        dMeter_childPaneTransChildTransOnly(i_this->field_0x1d38 + 0x09 + i, i_this->field_0x2438 + 0x16, i_this->field_0x1d38 + 0x0F + i, f31, f29);
+        dMeter_childPaneTransChildTrans(i_this->field_0x1d38 + 0x12 + i, i_this->field_0x2438 + 0x16, i_this->field_0x1d38 + 0x0F + i, f31, f29);
+        dMeter_childPaneTransChildTrans(i_this->field_0x1d38 + 0x1B + i, i_this->field_0x2438 + 0x16, i_this->field_0x1d38 + 0x0F + i, f31, f29);
+        dMeter_childPaneTransChildTrans(i_this->field_0x1d38 + 0x1E + i, i_this->field_0x2438 + 0x16, i_this->field_0x1d38 + 0x0F + i, f31, f29);
+        dMeter_childPaneTransChildTrans(i_this->field_0x2438 + 0x01 + i, i_this->field_0x2438 + 0x16, i_this->field_0x1d38 + 0x0F + i, f31, f29);
+    }
+    
+    dMeter_childPaneTrans(i_this->field_0x2438 + 0x04, i_this->field_0x2438 + 0x16, f31);
+    
+    for (int i = 0; i < 2; i++) {
+        dMeter_childPaneTrans(i_this->field_0x2438 + 0x05 + i, i_this->field_0x2438 + 0x16, f31);
+        dMeter_childPaneTrans(i_this->field_0x2438 + 0x07 + i, i_this->field_0x2438 + 0x16, f31);
+        dMeter_childPaneTrans(i_this->field_0x2438 + 0x09 + i, i_this->field_0x2438 + 0x16, f31);
+    }
+    
+    dMeter_childPaneTransOnly(i_this->field_0x1638 + 0x1E, i_this->field_0x2438 + 0x16, f31, f29);
+    dMeter_childPaneTrans(i_this->field_0x2438 + 0x0C, i_this->field_0x2438 + 0x16, f31);
+    dMeter_childPaneTrans(i_this->field_0x2438 + 0x0B, i_this->field_0x2438 + 0x16, f31);
 
     dMeter_enemyMove(i_this);
     dMeter_magicMove(i_this);
@@ -1882,7 +1950,21 @@ dMeter_map_HIO_c::dMeter_map_HIO_c() {
 
 /* 802059E0-80205A44       .text initMapCtrlDisp__13mapCtrlDisp_cFv */
 void mapCtrlDisp_c::initMapCtrlDisp() {
-    /* Nonmatching */
+    dMap_c::setMapAlpha(0);
+    dMap_c::setIconFreeAlpha(0);
+    dMap_c::setMapDispMode(1);
+    dMap_c::setMapDispPosLeftUpX(g_meter_mapHIO.field_0x8);
+    dMap_c::setMapDispPosLeftUpY(g_meter_mapHIO.field_0xa);
+    dMap_c::setIconFreePosX(g_meter_mapHIO.field_0x14);
+    dMap_c::setIconFreePosY(g_meter_mapHIO.field_0x16);
+    dMap_c::setIconFreeScale(0.0f);
+    dMap_c::setIconSelfAlpha(0);
+    dMap_c::setIconSelfScale(0.0f);
+    dMap_c::setIconDispMode(0);
+    field_0x0 = 0;
+    field_0x1 = 0;
+    field_0x2 = 0;
+    field_0x4 = 0;
 }
 
 /* 80205A44-80205D24       .text moveMapCtrlDisp__13mapCtrlDisp_cFv */
