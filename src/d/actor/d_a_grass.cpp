@@ -152,7 +152,7 @@ static s32 daGrass_Create(fopAc_ac_c* i_ac) {
                 pos.x = acpos.x + ofpos->x;
                 pos.y = acpos.y;
                 pos.z = acpos.z + ofpos->z;
-                g_dComIfG_gameInfo.play.getGrass()->newData(pos, fopAcM_GetRoomNo(i_this), item);
+                dComIfGp_getGrass()->newData(pos, fopAcM_GetRoomNo(i_this), item);
             }
         }
     } else if (kind == 1) {
@@ -166,7 +166,7 @@ static s32 daGrass_Create(fopAc_ac_c* i_ac) {
                 pos.x = acpos.x + (ofpos->x * cosR + ofpos->z * sinR);
                 pos.y = acpos.y;
                 pos.z = acpos.z + (ofpos->z * cosR - ofpos->x * sinR);
-                g_dComIfG_gameInfo.play.getTree()->newData(pos, 0, fopAcM_GetRoomNo(i_this));
+                dComIfGp_getTree()->newData(pos, 0, fopAcM_GetRoomNo(i_this));
             }
         }
     } else if (kind == 2 || kind == 3) {
@@ -187,7 +187,7 @@ static s32 daGrass_Create(fopAc_ac_c* i_ac) {
                 pos.x = acpos.x + ofpos->x;
                 pos.y = acpos.y;
                 pos.z = acpos.z + ofpos->z;
-                g_dComIfG_gameInfo.play.getFlower()->newData(flowerType, pos, fopAcM_GetRoomNo(i_this), item);
+                dComIfGp_getFlower()->newData(flowerType, pos, fopAcM_GetRoomNo(i_this), item);
             }
         }
     }

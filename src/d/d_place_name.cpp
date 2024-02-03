@@ -221,7 +221,7 @@ BOOL dPn_c::_draw() {
 /* 80161594-8016168C       .text _delete__5dPn_cFv */
 BOOL dPn_c::_delete() {
     JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
-    g_dComIfG_gameInfo.play.mPlacenameState = 0;
+    dComIfGp_setStageNameDelete();
     delete dPn_scrn->scrn;
     delete dPn_scrn;
     if (dvd != NULL)

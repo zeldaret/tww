@@ -260,6 +260,7 @@ public:
         mPlacenameIndex = idx;
         mPlacenameState = 2;
     }
+    void setStageNameDelete() { mPlacenameState = 0; }
     void setStageNameOff() { mPlacenameState = 1; }
 
     void setGameoverStatus(u8 stts) { mGameoverStatus = stts; }
@@ -472,6 +473,9 @@ public:
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
 
+    u8 getButtonMode() { return mButtonMode; }
+    void setButtonMode(u8 mode) { mButtonMode = mode; }
+
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
     /* 0x3DF8 */ dADM mADM;
@@ -586,7 +590,7 @@ public:
     /* 0x493F */ u8 field_0x493f;
     /* 0x4940 */ u8 field_0x4940;
     /* 0x4941 */ u8 field_0x4941;
-    /* 0x4942 */ u8 field_0x4942;
+    /* 0x4942 */ u8 mButtonMode;
     /* 0x4943 */ u8 field_0x4943;
     /* 0x4944 */ u8 field_0x4944;
     /* 0x4945 */ u8 field_0x4945;
@@ -1602,6 +1606,10 @@ inline dSv_reserve_c* dComIfGs_getPReserve() {
     return g_dComIfG_gameInfo.save.getPReserve();
 }
 
+inline u8* dComIfGs_getPEventBit() {
+    return g_dComIfG_gameInfo.save.getEvent().getPEventBit();
+}
+
 u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
 
 stage_scls_info_class* dComIfGd_getMeshSceneList(Vec& vec);
@@ -1648,6 +1656,10 @@ inline u8 dComIfGp_checkStageName() {
 
 inline void dComIfGp_setStageNameOn(u8 idx) {
     g_dComIfG_gameInfo.play.setStageNameOn(idx);
+}
+
+inline void dComIfGp_setStageNameDelete() {
+    g_dComIfG_gameInfo.play.setStageNameDelete();
 }
 
 inline void dComIfGp_setStageNameOff() {
@@ -2361,6 +2373,14 @@ inline void dComIfGp_offPictureFlag(u8 i) {
 
 inline void dComIfGp_setBossBattleData(JKRAramBlock* aramHeap, int i) {
     g_dComIfG_gameInfo.play.setBossBattleData(aramHeap, i);
+}
+
+inline u8 dComIfGp_getButtonActionMode() {
+    return g_dComIfG_gameInfo.play.getButtonMode();
+}
+
+inline void dComIfGp_setButtonActionMode(u8 mode) {
+    g_dComIfG_gameInfo.play.setButtonMode(mode);
 }
 
 /**

@@ -1073,9 +1073,9 @@ inline u8 dStage_FileList_dt_CheckAgbHover(dStage_FileList_dt_c* i_fili) {
     
 // }
 
-// inline u8 dStage_FileList_dt_GetParticleNo(dStage_FileList_dt_c* i_fili) {
-    // 0x1FE00000
-// }
+inline u32 dStage_FileList_dt_GetParticleNo(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam >> 21) & 0xFF;
+}
 
 bool dStage_chkPlayerId(int playerId, int room_no);
 

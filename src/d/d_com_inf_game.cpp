@@ -122,7 +122,7 @@ void dComIfG_play_c::itemInit() {
     field_0x493f = 0;
     field_0x4940 = 0;
     field_0x4941 = 0;
-    field_0x4942 = 0;
+    mButtonMode = 0;
 
     if (dComIfGs_checkGetItem(TELESCOPE)) {
         field_0x4943 = 0;

@@ -558,6 +558,8 @@ public:
     /* 0x2F48 */ ResTIMG* xyIconTex[3];
     /* 0x2F54 */ ResTIMG* field_0x2f54[3];
     /* 0x2F60 */ ResTIMG* moveIconTex[3];
+    /* 0x2F6C */ u8 field_0x2f6c[0x3024 - 0x2F6C];
+    /* 0x3024 */ u8 field_0x3024;
 };
 
 extern dMeter_menuHIO_c g_menuHIO;

@@ -1701,6 +1701,7 @@ BOOL dMeter_Draw(sub_meter_class* i_this) {
 BOOL dMeter_Execute(sub_meter_class* i_this) {
     /* Nonmatching */
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_this->heap);
+    i_this->field_0x3024 = 0;
     dMeter_statusCheck(i_this);
     dMeter_alphaControl(i_this);
     dMeter_heartMove(i_this);
@@ -1726,7 +1727,7 @@ BOOL dMeter_Execute(sub_meter_class* i_this) {
     dMeter_placeNameMove();
     dMeter_menuMove(i_this);
     dMeter_gaugeAlpha(i_this);
-    g_dComIfG_gameInfo.play.field_0x4942 = 1; // field_0x3024;
+    dComIfGp_setButtonActionMode(i_this->field_0x3024);
     mDoExt_setCurrentHeap(oldHeap);
     return TRUE;
 }

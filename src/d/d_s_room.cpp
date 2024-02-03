@@ -213,7 +213,7 @@ s32 phase_2(room_of_scene_class* i_this) {
             if (lbnk != NULL) {
                 u8 * banks = lbnk->m_bank;
                 if (banks != NULL) {
-                    u32 layerNo = g_dComIfG_gameInfo.play.getLayerNo(roomNo);
+                    u32 layerNo = dComIfG_play_c::getLayerNo(roomNo);
                     s32 bank = banks[layerNo];
                     if (bank != 0xFF) {
                         JUT_ASSERT(0x1db, 0 <= bank && bank < 100);
@@ -228,7 +228,8 @@ s32 phase_2(room_of_scene_class* i_this) {
         dStage_FileList_dt_c * fileList = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
         JUT_ASSERT(499, fileList != 0);
 
-        i_this->mbHasRoomParticle = dComIfGp_particle_readScene(fileList->mParam >> 21, &i_this->sceneCommand);
+        u8 particleNo = dStage_FileList_dt_GetParticleNo(fileList);
+        i_this->mbHasRoomParticle = dComIfGp_particle_readScene(particleNo, &i_this->sceneCommand);
     }
 
     return cPhs_NEXT_e;

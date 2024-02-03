@@ -143,7 +143,7 @@ void mDoAud_Create() {
         } else {
             OSReport_Error("ヒープ確保失敗につきオーディオ初期化できません\n");
         }
-        g_mDoAud_zelAudio.setEventBit(g_dComIfG_gameInfo.save.getEvent().getPEventBit());
+        g_mDoAud_zelAudio.setEventBit(dComIfGs_getPEventBit());
         g_mDoAud_zelAudio.reset();
         JAIZelBasic::zel_basic->setOutputMode(OSGetSoundMode());
         JKRHeap::free(l_affCommand->getMemAddress(), NULL);
