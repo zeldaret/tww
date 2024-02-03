@@ -138,9 +138,11 @@ JAIZelBasic::JAIZelBasic() {
     field_0x0200 = 0;
     field_0x0205 = 0;
     field_0x0066 = 0;
+#if VERSION != VERSION_JPN
     field_0x00bf = 0;
     field_0x0028 = 0;
     field_0x0062 = 0;
+#endif
 }
 
 /* 802A1EB4-802A2F48       .text zeldaGFrameWork__11JAIZelBasicFv */
@@ -250,7 +252,9 @@ void JAIZelBasic::resetRecover() {
     field_0x0206 = 0;
     field_0x0207 = 0;
     field_0x0201 = 0;
+#if VERSION != VERSION_JPN
     field_0x00bf = 0;
+#endif
 }
 
 /* 802A334C-802A33D0       .text bgmStreamPrepare__11JAIZelBasicFUl */
@@ -985,9 +989,11 @@ void JAIZelBasic::setCameraGroupInfo(u8 param_1) {
     if (field_0x00bd) {
         return;
     }
+#if VERSION != VERSION_JPN
     if (field_0x00bf) {
         return;
     }
+#endif
     if (param_1 != mCameraSeaFloorGroupInfo) {
         if ((param_1 & 0x80)) {
             mIslandRoomNo = param_1 & 0x3f;
@@ -1141,10 +1147,10 @@ void JAIZelBasic::setScene(s32 param_1, s32 roomNo, s32 param_3, s32 layerNo) {
         } else if (param_1 == 19 && checkEventBit(0x801) == 0) {
             bgmNum = 0;
         } else if (param_1 == 2 && field_0x0021 != 0) {
-            if (g_dComIfG_gameInfo.save.getSavedata().mMemory[3].getBit().isDungeonItem(5)) {
+            if (dComIfGs_isStageBossDemoSaveBit(dSv_save_c::STAGE_DRC)) {
                 field_0x00cd = 1;
             }
-            if (g_dComIfG_gameInfo.save.getSavedata().mMemory[3].getBit().isDungeonItem(3)) {
+            if (dComIfGs_isStageBossEnemySaveBit(dSv_save_c::STAGE_DRC)) {
                 bgmNum = m_scene_info[1].bgmNum;
                 bgmNum = expandSceneBgmNum(bgmNum);
                 field_0x0204 = 1;
@@ -1153,10 +1159,10 @@ void JAIZelBasic::setScene(s32 param_1, s32 roomNo, s32 param_3, s32 layerNo) {
                 bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 7 && field_0x0021 != 0) {
-            if (g_dComIfG_gameInfo.save.getSavedata().mMemory[4].getBit().isDungeonItem(5)) {
+            if (dComIfGs_isStageBossDemoSaveBit(dSv_save_c::STAGE_FW)) {
                 field_0x00cd = 1;
             }
-            if (g_dComIfG_gameInfo.save.getSavedata().mMemory[4].getBit().isDungeonItem(3)) {
+            if (dComIfGs_isStageBossEnemySaveBit(dSv_save_c::STAGE_FW)) {
                 bgmNum = m_scene_info[3].bgmNum;
                 bgmNum = expandSceneBgmNum(bgmNum);
             } else {
@@ -1164,10 +1170,10 @@ void JAIZelBasic::setScene(s32 param_1, s32 roomNo, s32 param_3, s32 layerNo) {
                 bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 37 && field_0x0021 != 0) {
-            if (g_dComIfG_gameInfo.save.getSavedata().mMemory[5].getBit().isDungeonItem(5)) {
+            if (dComIfGs_isStageBossDemoSaveBit(dSv_save_c::STAGE_TOTG)) {
                 field_0x00cd = 1;
             }
-            if (g_dComIfG_gameInfo.save.getSavedata().mMemory[5].getBit().isDungeonItem(3)) {
+            if (dComIfGs_isStageBossEnemySaveBit(dSv_save_c::STAGE_TOTG)) {
                 bgmNum = m_scene_info[10].bgmNum;
                 bgmNum = expandSceneBgmNum(bgmNum);
             } else {
@@ -1175,24 +1181,24 @@ void JAIZelBasic::setScene(s32 param_1, s32 roomNo, s32 param_3, s32 layerNo) {
                 bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 24 && field_0x0021 != 0) {
-            if (g_dComIfG_gameInfo.save.getSavedata().mMemory[7].getBit().isDungeonItem(5)) {
+            if (dComIfGs_isStageBossDemoSaveBit(dSv_save_c::STAGE_WT)) {
                 field_0x00cd = 1;
             }
             if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
                 bgmNum = 0;
-            } else if (g_dComIfG_gameInfo.save.getSavedata().mMemory[7].getBit().isDungeonItem(3)) {
+            } else if (dComIfGs_isStageBossEnemySaveBit(dSv_save_c::STAGE_WT)) {
                 bgmNum = 0;
             } else {
                 bgmNum = m_scene_info[param_1].bgmNum;
                 bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 45 && field_0x0021 != 0) {
-            if (g_dComIfG_gameInfo.save.getSavedata().mMemory[6].getBit().isDungeonItem(5)) {
+            if (dComIfGs_isStageBossDemoSaveBit(dSv_save_c::STAGE_ET)) {
                 field_0x00cd = 1;
             }
             if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
                 bgmNum = 0;
-            } else if (g_dComIfG_gameInfo.save.getSavedata().mMemory[6].getBit().isDungeonItem(3)) {
+            } else if (dComIfGs_isStageBossEnemySaveBit(dSv_save_c::STAGE_ET)) {
                 bgmNum = 0;
             } else {
                 bgmNum = m_scene_info[param_1].bgmNum;
@@ -1316,7 +1322,9 @@ void JAIZelBasic::setSceneName(char* param_1, s32 roomNo, s32 param_3) {
         }
         menuOut();
         field_0x0066 = 1;
+#if VERSION != VERSION_JPN
         field_0x00bf = 0;
+#endif
     } else {
         field_0x0066 = 0;
     }

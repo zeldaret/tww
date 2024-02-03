@@ -169,7 +169,7 @@ s32 phase_0(room_of_scene_class* i_this) {
 /* 80236D58-80236DE8       .text phase_1__FP19room_of_scene_class */
 s32 phase_1(room_of_scene_class* i_this) {
     s32 roomNo = fopScnM_GetParam(i_this);
-    JKRExpHeap * pHeap = g_dComIfG_gameInfo.play.getRoomControl()->getMemoryBlock(roomNo);
+    JKRExpHeap * pHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
     if (pHeap != NULL && pHeap->getTotalUsedSize() != 0)
         return cPhs_INIT_e;
 

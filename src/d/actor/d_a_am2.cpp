@@ -206,7 +206,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                     i_this->mState = 2;
                 } else {
                     dComIfGp_particle_set(0x10, &hitPos, &player->shape_angle);
-                    // Using the fopAcM_seStart breaks the codegen.
+                    // Using the fopAcM_seStart inline breaks the codegen.
                     // fopAcM_seStart(i_this, JA_SE_CM_AM2_PARALYZED, 0);
                     mDoAud_seStart(JA_SE_CM_AM2_PARALYZED, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                     fopAcM_monsSeStart(i_this, JA_SE_CV_AM2_PARALYZED, 0x42);

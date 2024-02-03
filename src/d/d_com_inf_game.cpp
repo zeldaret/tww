@@ -152,7 +152,7 @@ void dComIfG_play_c::itemInit() {
     mPlacenameState = 0;
     mGameoverStatus = 0;
     field_0x495a = 0;
-    field_0x495b = 0;
+    mPictureFlag = 0;
     field_0x495c = 0;
     field_0x495d = 0;
     mPictureStatus = 0;

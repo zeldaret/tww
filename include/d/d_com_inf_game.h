@@ -228,7 +228,7 @@ public:
     /* 0x04 */ s32 mTimerNowTimeMs;
     /* 0x08 */ s32 mTimerLimitTimeMs;
     /* 0x0C */ s32 mTimerMode;
-    /* 0x10 */ u16 mTimerType;
+    /* 0x10 */ u16 mWaveFrame;
 };
 
 class dADM_CharTbl : public cDT {
@@ -478,6 +478,8 @@ public:
     s32 getTimerNowTimeMs() { return mTimerInfo.mTimerNowTimeMs; }
     void setTimerLimitTimeMs(s32 ms) { mTimerInfo.mTimerLimitTimeMs = ms; }
     s32 getTimerLimitTimeMs() { return mTimerInfo.mTimerLimitTimeMs; }
+    void setWaveFrame(u16 frame) { mTimerInfo.mWaveFrame = frame; }
+    u16 getWaveFrame() { return mTimerInfo.mWaveFrame; }
 
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
@@ -602,6 +604,13 @@ public:
     ItemTableList* getItemTable() { return mpItemTable; }
     void setFmapData(void * pData) { mpFmapData = pData; }
 
+    void setPictureBoxData(JKRAramBlock* aramHeap, int i) { mPictureBoxDataHeap[i] = aramHeap; }
+    void offPictureFlag(u8 i) {
+        u8 mask = (1 << i);
+        mPictureFlag &= ~mask;
+    }
+    void setBossBattleData(JKRAramBlock* aramHeap, int i) { mBossBattleDataHeap[i] = aramHeap; }
+
     void stopFwaterTimer() { mFwaterTimer = 0; }
     u8 checkFwaterTimer() { return mFwaterTimer; }
 
@@ -660,13 +669,13 @@ public:
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
 #if VERSION != VERSION_JPN
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
-    /* 0x4800 */ JKRAramBlock* mAramHeap0[3];
-    /* 0x480C */ JKRAramBlock* mAramHeap1[4];
+    /* 0x4800 */ JKRAramBlock* mPictureBoxDataHeap[3];
+    /* 0x480C */ JKRAramBlock* mBossBattleDataHeap[4];
     /* 0x481C */ JKRAramBlock* field_0x481c;
     /* 0x4820 */ JKRAramBlock* field_0x4820;
 #else
-    /* 0x47FC */ JKRAramBlock* mAramHeap0[3];
-    /* 0x480C */ JKRAramBlock* mAramHeap1[4];
+    /* 0x47FC */ JKRAramBlock* mPictureBoxDataHeap[3];
+    /* 0x480C */ JKRAramBlock* mBossBattleDataHeap[4];
 #endif
     /* Offsets below are for USA/PAL */
 
@@ -753,7 +762,7 @@ public:
     /* 0x4958 */ u8 mPlacenameState;
     /* 0x4959 */ u8 mGameoverStatus;
     /* 0x495A */ u8 field_0x495a;
-    /* 0x495B */ u8 field_0x495b;
+    /* 0x495B */ u8 mPictureFlag;
     /* 0x495C */ u8 field_0x495c;
     /* 0x495D */ u8 field_0x495d;
     /* 0x495E */ u8 mPictureStatus;
@@ -1295,24 +1304,6 @@ inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no) {
     g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onSwitch(i_no);
 }
 
-BOOL dComIfGs_isStageBossEnemy(int i_stageNo);
-
-inline BOOL dComIfGs_isStageBossEnemy() {
-    return g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossEnemy();
-}
-
-inline void dComIfGs_onStageLife() {
-    g_dComIfG_gameInfo.save.getMemory().getBit().onStageLife();
-}
-
-void dComIfGs_onStageLife(int i_stageNo);
-
-BOOL dComIfGs_isStageLife(int i_stageNo);
-
-inline BOOL dComIfGs_isStageLife() {
-    return g_dComIfG_gameInfo.save.getMemory().getBit().isStageLife();
-}
-
 inline BOOL dComIfGs_isCollect(int i_idx, u8 i_item) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isCollect(i_idx, i_item);
 }
@@ -1379,6 +1370,36 @@ inline BOOL dComIfGs_isDungeonItemBossKey() {
 
 inline void dComIfGs_onDungeonItemBossKey() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onDungeonItemBossKey();
+}
+
+BOOL dComIfGs_isStageBossEnemy(int i_stageNo);
+
+inline BOOL dComIfGs_isStageBossEnemy() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossEnemy();
+}
+
+inline BOOL dComIfGs_isStageBossEnemySaveBit(int i_stageNo) {
+    return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isStageBossEnemy();
+}
+
+inline void dComIfGs_onStageLife() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().onStageLife();
+}
+
+BOOL dComIfGs_isStageLife(int i_stageNo);
+
+inline BOOL dComIfGs_isStageLife() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isStageLife();
+}
+
+void dComIfGs_onStageLife(int i_stageNo);
+
+inline BOOL dComIfGs_isStageBossDemo() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossDemo();
+}
+
+inline BOOL dComIfGs_isStageBossDemoSaveBit(int i_stageNo) {
+    return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isStageBossDemo();
 }
 
 inline void dComIfGs_onSwitch(int i_no, int i_roomNo) {
@@ -2486,6 +2507,18 @@ inline void dComIfGp_clearMesgAnimeTagInfo() {
     g_dComIfG_gameInfo.play.clearNowAnimeID();
 }
 
+inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramHeap, int i) {
+    g_dComIfG_gameInfo.play.setPictureBoxData(aramHeap, i);
+}
+
+inline void dComIfGp_offPictureFlag(u8 i) {
+    g_dComIfG_gameInfo.play.offPictureFlag(i);
+}
+
+inline void dComIfGp_setBossBattleData(JKRAramBlock* aramHeap, int i) {
+    g_dComIfG_gameInfo.play.setBossBattleData(aramHeap, i);
+}
+
 /**
  * === EVENT ===
  */
@@ -2998,6 +3031,10 @@ inline dRes_info_c* dComIfG_getObjectResInfo(const char* arcName) {
     return g_dComIfG_gameInfo.mResControl.getObjectResInfo(arcName);
 }
 
+inline void dComIfG_dumpResControl() {
+    g_dComIfG_gameInfo.mResControl.dump();
+}
+
 /**
  * === PARTICLE ===
  */
@@ -3151,6 +3188,10 @@ inline bool dComIfGp_particle_readScene(u8 particle_no, mDoDvdThd_toMainRam_c** 
     return g_dComIfG_gameInfo.play.getParticle()->readScene(particle_no, param_1);
 }
 
+inline void dComIfGp_particle_create() {
+    g_dComIfG_gameInfo.play.createParticle();
+}
+
 inline void dComIfGp_particle_createCommon(const void * pArc) {
     g_dComIfG_gameInfo.play.getParticle()->createCommon(pArc);
 }
@@ -3189,6 +3230,7 @@ inline void dComIfGp_particle_draw2DmenuBack(JPADrawInfo* inf) { if (g_dComIfG_g
 
 inline u32 dComIfGp_particle_getParticleNum() { return g_dComIfG_gameInfo.play.getParticle()->getParticleNum(); }
 inline u32 dComIfGp_particle_getEmitterNum() { return g_dComIfG_gameInfo.play.getParticle()->getEmitterNum(); }
+inline JKRHeap* dComIfGp_particle_getCommonHeap() { return g_dComIfG_gameInfo.play.getParticle()->getHeap(); }
 
 /**
  * === ATTENTION ===
@@ -3219,6 +3261,9 @@ inline u32 dComIfG_getTimerLimitTimeMs() { return g_dComIfG_gameInfo.play.getTim
 
 inline void dComIfG_setTimerNowTimeMs(int ms) { g_dComIfG_gameInfo.play.setTimerNowTimeMs(ms); }
 inline u32 dComIfG_getTimerNowTimeMs() { return g_dComIfG_gameInfo.play.getTimerNowTimeMs(); }
+
+inline void dComIfGp_setWaveFrame(u16 frame) { g_dComIfG_gameInfo.play.setWaveFrame(frame); }
+inline u16 dComIfGp_getWaveFrame() { return g_dComIfG_gameInfo.play.getWaveFrame(); }
 
 inline u32 dComIfG_getTimerRestTimeMs() { return g_dComIfG_gameInfo.play.getTimerLimitTimeMs() - g_dComIfG_gameInfo.play.getTimerNowTimeMs(); }
 

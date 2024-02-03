@@ -129,7 +129,7 @@ JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
         if (command->mExpandSwitch == EXPAND_SWITCH_UNKNOWN1) {
             if (command->mAddress == 0 && command->mBlock == NULL) {
                 command->mBlock =
-                    JKRAram::getAramHeap()->alloc(uncompressedSize, JKRAramHeap::HEAD);
+                    JKRAllocFromAram(uncompressedSize, JKRAramHeap::HEAD);
                 if (command->mBlock) {
                     command->mAddress = command->mBlock->getAddress();
                 }

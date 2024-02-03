@@ -78,7 +78,7 @@ void daBg_btkAnm_c::entry(J3DModelData* modelData) {
 /* 800D86C4-800D8728       .text play__13daBg_btkAnm_cFv */
 void daBg_btkAnm_c::play() {
     if (special == 1) {
-        anm->setFrame(g_dComIfG_gameInfo.play.mTimerInfo.mTimerType);
+        anm->setFrame(dComIfGp_getWaveFrame());
     } else {
         anm->play();
     }
@@ -343,7 +343,7 @@ s32 daBg_c::create() {
     fopAcM_SetupActor(this, daBg_c);
 
     s32 roomNo = fopAcM_GetParam(this);
-    JKRExpHeap * roomHeap = g_dComIfG_gameInfo.play.getRoomControl()->getMemoryBlock(roomNo);
+    JKRExpHeap * roomHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
     if (roomHeap != NULL) {
         heap = JKRSolidHeap::create(-1, roomHeap, false);
         JUT_ASSERT(0x2fd, heap != 0);

@@ -90,7 +90,7 @@ public:
     void remove();
     dStage_Event_dt_c* getStageEventDt();
     dStage_Event_dt_c* nextStageEventDt(void*);
-    int getPId(void*);
+    u32 getPId(void*);
     fopAc_ac_c* convPId(unsigned int);
     u8 getTactFreeMStick(int);
     u8 getTactFreeCStick(int);
@@ -119,7 +119,7 @@ public:
     void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
     void reset() { onEventFlag(8); }
 
-    bool runCheck() { return mMode != 0; }
+    bool runCheck() { return mMode != dEvtMode_NONE_e; }
     u32 getMode() { return mMode & 0xFF; } // &0xFF added to fix dEvt_control_c::moveApproval, probably fakematch
 
     void checkHind(u16) {}

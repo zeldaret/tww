@@ -321,7 +321,7 @@ bool Debug_console(JUTGamePad* i_pad) {
                     }
 
                     DynamicModuleControlBase::dump();
-                    g_dComIfG_gameInfo.mResControl.dump();
+                    dComIfG_dumpResControl();
                 }
 
                 if (i_pad->getTrigger() & CButton::DPAD_RIGHT) {

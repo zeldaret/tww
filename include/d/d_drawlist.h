@@ -364,16 +364,15 @@ public:
     dDlst_shadowControl_c() { mRealNum = 0; }
     void init();
     void reset();
-    void imageDraw(f32 (*)[4]);
-    void draw(f32 (*)[4]);
+    void imageDraw(Mtx);
+    void draw(Mtx);
     int setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     int setReal2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     bool addReal(u32, J3DModel*);
     int setSimple(cXyz*, f32, f32, cXyz*, s16, f32, GXTexObj*);
-    static void setSimpleTex(void *);
 
+    static void setSimpleTex(void*);
     static GXTexObj* getSimpleTex() { return &mSimpleTexObj; }
-
     static GXTexObj mSimpleTexObj;
 
 private:

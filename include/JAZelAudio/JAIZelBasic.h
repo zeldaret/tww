@@ -218,7 +218,9 @@ public:
     /* 0x0054 */ Vec field_0x0054;
     /* 0x0060 */ u8 mbLandingDemoStarted;
     /* 0x0061 */ u8 field_0x0061;
+#if VERSION != VERSION_JPN
     /* 0x0062 */ u8 field_0x0062;
+#endif
     /* 0x0063 */ u8 field_0x0063;
     /* 0x0064 */ u8 field_0x0064;
     /* 0x0065 */ u8 field_0x0065;
@@ -254,7 +256,9 @@ public:
     /* 0x00BC */ u8 field_0x00bc;
     /* 0x00BD */ u8 field_0x00bd;
     /* 0x00BE */ u8 field_0x00be;
+#if VERSION != VERSION_JPN
     /* 0x00BF */ u8 field_0x00bf;
+#endif
     /* 0x00C0 */ u8 field_0x00c0;
     /* 0x00C1 */ s8 field_0x00c1;
     /* 0x00C4 */ int field_0x00c4;

@@ -609,9 +609,9 @@ BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     mDoExt_getRubyFont();
 
 #if VERSION == VERSION_JPN
-    if (g_msgDHIO.field_0x08 == 0 && g_dComIfG_gameInfo.play.mpFont0Archive != NULL) {
-        g_dComIfG_gameInfo.play.mpFont0Archive->unmount();
-        g_dComIfG_gameInfo.play.mpFont0Archive = NULL;
+    if (g_msgDHIO.field_0x08 == 0 && dComIfGp_getFontArchive() != NULL) {
+        dComIfGp_getFontArchive()->unmount();
+        dComIfGp_setFontArchive(NULL);
     }
 #endif
 
@@ -626,22 +626,21 @@ BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     delete l_lodCommand;
 
     ResTIMG * timg = (ResTIMG *)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
-    g_dComIfG_gameInfo.drawlist.mShadowControl.setSimpleTex(timg);
+    dDlst_shadowControl_c::setSimpleTex(timg);
     dComIfG_deleteObjectRes("Logo");
     dComIfGp_setWindowNum(0);
 
     for (s32 i = 0; i < 3; i++) {
-        g_dComIfG_gameInfo.play.mAramHeap0[i] = JKRAram::getAramHeap()->alloc(0x2000, JKRAramHeap::HEAD);
-        u8 mask = (1 << (u8)i);
-        g_dComIfG_gameInfo.play.field_0x495b &= ~mask;
+        dComIfGp_setPictureBoxData(JKRAllocFromAram(0x2000, JKRAramHeap::HEAD), i);
+        dComIfGp_offPictureFlag(i);
     }
 
     for (s32 i = 0; i < 4; i++) {
-        g_dComIfG_gameInfo.play.mAramHeap1[i] = JKRAram::getAramHeap()->alloc(0x70, JKRAramHeap::HEAD);
+        dComIfGp_setBossBattleData(JKRAllocFromAram(0x70, JKRAramHeap::HEAD), i);
     }
 
 #if VERSION == VERSION_PAL
-    g_dComIfG_gameInfo.play.field_0x4820 = JKRAram::getAramHeap()->alloc(0xB000, JKRAramHeap::HEAD);
+    g_dComIfG_gameInfo.play.field_0x4820 = JKRAllocFromAram(0xB000, JKRAramHeap::HEAD);
 #endif
 
     mDoExt_setSafeGameHeapSize();
@@ -752,7 +751,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     if (rt != 0)
         return cPhs_INIT_e;
 
-    g_dComIfG_gameInfo.play.createParticle();
+    dComIfGp_particle_create();
 
     ResTIMG * timg;
     
@@ -928,7 +927,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     l_fontCommand = onMemMount("/res/Msg/fontres.arc");
 #endif
     l_rubyCommand = onMemMount("/res/Msg/rubyres.arc");
-    l_particleCommand = mDoDvdThd_toMainRam_c::create("/res/Particle/common.jpc", JKRArchive::UNKNOWN_MOUNT_DIRECTION, g_dComIfG_gameInfo.play.getParticle()->getHeap());
+    l_particleCommand = mDoDvdThd_toMainRam_c::create("/res/Particle/common.jpc", JKRArchive::UNKNOWN_MOUNT_DIRECTION, dComIfGp_particle_getCommonHeap());
     l_itemTableCommand = mDoDvdThd_toMainRam_c::create("/res/ItemTable/item_table.bin", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1418, 1743, 1783), l_itemTableCommand != 0);
     l_ActorDataCommand = mDoDvdThd_toMainRam_c::create("/res/ActorDat/ActorDat.bin", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);

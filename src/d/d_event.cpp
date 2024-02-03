@@ -108,7 +108,7 @@ void dEvt_control_c::afterFlagProc(dEvt_order_c* order) {
         mPt2 = getPId(NULL);
 
     if ((order->mFlag & dEvtFlag_STAFF_ALL_e))
-        g_dComIfG_gameInfo.play.getEvtManager().issueStaff("ALL");
+        dComIfGp_getPEvtManager()->issueStaff("ALL");
 
     if ((order->mFlag & dEvtFlag_UNK8_e))
         onEventFlag(0x20);
@@ -272,7 +272,7 @@ BOOL dEvt_control_c::talkEnd() {
     if (actor2 != NULL)
         actor2->mEvtInfo.setCommand(dEvtCmd_NONE_e);
     if (mEventId != -1) {
-        g_dComIfG_gameInfo.play.getEvtManager().endProc(mEventId, 1);
+        dComIfGp_getPEvtManager()->endProc(mEventId, 1);
         mEventId = -1;
     }
     fopAc_ac_c* itemPartner = fopAcM_getItemEventPartner(NULL);
@@ -324,10 +324,10 @@ BOOL dEvt_control_c::demoEnd() {
     if (actor2 != NULL)
         actor2->mEvtInfo.setCommand(dEvtCmd_NONE_e);
     if (mEventId != -1) {
-        g_dComIfG_gameInfo.play.getEvtManager().endProc(mEventId, 1);
+        dComIfGp_getPEvtManager()->endProc(mEventId, 1);
         mEventId = -1;
     }
-    g_dComIfG_gameInfo.play.getEvtManager().cancelStaff("ALL");
+    dComIfGp_getPEvtManager()->cancelStaff("ALL");
     return TRUE;
 }
 
@@ -355,7 +355,7 @@ BOOL dEvt_control_c::doorCheck(dEvt_order_c* order) {
         fopAc_ac_c* actor2 = getPt2();
         if (mEventId == -1 && actor2 != NULL && actor2->mEvtInfo.getEventId() != -1)
             mEventId = actor2->mEvtInfo.getEventId();
-        if (mEventId != -1 && g_dComIfG_gameInfo.play.getEvtManager().getEventData(mEventId) != NULL) {
+        if (mEventId != -1 && dComIfGp_getPEvtManager()->getEventData(mEventId) != NULL) {
             if (!dComIfGp_evmng_order(mEventId))
                 JUT_ASSERT(0x2c0, 0);
         } else {
@@ -700,7 +700,7 @@ dStage_Event_dt_c* dEvt_control_c::nextStageEventDt(void* idxp) {
 }
 
 /* 800715B8-800715DC       .text getPId__14dEvt_control_cFPv */
-int dEvt_control_c::getPId(void* ac) {
+u32 dEvt_control_c::getPId(void* ac) {
     if (ac == NULL)
         return -1;
     return fopAcM_GetID(ac);
@@ -745,7 +745,7 @@ char* dEvt_info_c::getEventName() {
     if (mEventId == -1) {
         return NULL;
     } else {
-        dEvDtEvent_c* evtData = g_dComIfG_gameInfo.play.getEvtManager().getEventData(mEventId);
+        dEvDtEvent_c* evtData = dComIfGp_getPEvtManager()->getEventData(mEventId);
         if (evtData == NULL)
             return NULL;
         return evtData->getName();
