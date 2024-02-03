@@ -63,7 +63,8 @@ namespace daObjFerris {
 
     public:
         /* 0x0290 */ dBgW* mpBgW[6];
-        /* 0x02A8 */ void* field_0x02a8[9];
+        /* 0x02A8 */ s32 mRideState[6];
+        /* 0x02C0 */ cXyz mRidePos;
         /* 0x02CC */ request_of_phase_process_class mPhs;
         /* 0x02D4 */ dCcD_Stts field_0x02d4[5];
         /* 0x0400 */ dCcD_Cyl field_0x0400[5];
@@ -73,21 +74,20 @@ namespace daObjFerris {
         /* 0x1238 */ dCcD_Sph field_0x1238[5];
         /* 0x1814 */ J3DModel* mpModel[6];
         /* 0x182C */ Mtx mMtx[6];
-        /* 0x194C */ short field_0x194c;
-        /* 0x194E */ short field_0x194e;
-        /* 0x1950 */ short field_0x1950;
-        /* 0x1952 */ short field_0x1952;
-        /* 0x1954 */ short field_0x1954;
-        /* 0x1956 */ short field_0x1956;
-        /* 0x1958 */ short field_0x1958;
-        /* 0x195A */ short field_0x195a;
-        /* 0x195C */ short field_0x195c;
-        /* 0x195E */ short field_0x195e;
-        /* 0x1960 */ void* field_0x1960[4];
-        /* 0x1970 */ short field_0x1970;
-        /* 0x1972 */ short field_0x1972;
-        /* 0x1974 */ short field_0x1974;
-        /* 0x1976 */ short field_0x1976;
+        /* 0x194C */ s16 field_0x194c;
+        /* 0x194E */ s16 mRotState;
+        /* 0x1950 */ s16 mRotAngle;
+        /* 0x1952 */ s16 mRotSpeed;
+        /* 0x1954 */ s16 mEventIdx_kanban_vive;
+        /* 0x1956 */ s16 mEventIdx_kanban_start;
+        /* 0x1958 */ s16 mFrameTimer;
+        /* 0x195A */ s16 mGondolaWaveAngle;
+        /* 0x195C */ s16 mGondolaWaveTimer;
+        /* 0x195E */ s16 mRideWaveAngle[5];
+        /* 0x1968 */ s16 mRideWaveTarget[5];
+        /* 0x1972 */ s16 mEventIdx;
+        /* 0x1974 */ s16 mEventState;
+        /* 0x1976 */ s16 field_0x1976;
     };
 };
 
