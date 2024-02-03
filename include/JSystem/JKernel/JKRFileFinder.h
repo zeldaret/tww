@@ -4,11 +4,11 @@
 #include "dolphin/dvd/dvd.h"
 
 struct JKRFileFinder_UnknownBase {
-    const char* mEntryName;
-    s32 mEntryFileIndex;
-    u16 mEntryId;
-    u16 mEntryTypeFlags;
-};
+    /* 0x00 */ const char* mEntryName;
+    /* 0x04 */ s32 mEntryFileIndex;
+    /* 0x08 */ u16 mEntryId;
+    /* 0x0A */ u16 mEntryTypeFlags;
+};  // Size: 0x0C
 
 class JKRFileFinder : public JKRFileFinder_UnknownBase {
 public:
@@ -16,14 +16,14 @@ public:
         mIsAvailable = false;
         mIsFileOrDirectory = false;
     }
-    inline virtual ~JKRFileFinder() {};
+    virtual ~JKRFileFinder() {}
 
     bool isAvailable() const { return mIsAvailable; }
     bool isFile() const { return mIsFileOrDirectory; }
     bool isDirectory() const { return mIsFileOrDirectory; }
 
 public:
-    /* vt[3] */ virtual bool findNextFile(void) = 0;
+    /* vt[3] */ virtual bool findNextFile() = 0;
 
 protected:
     /* 0x00 */  // JKRFileFinder_UnknownBase
@@ -37,7 +37,7 @@ class JKRArchive;
 class JKRArcFinder : public JKRFileFinder {
 public:
     JKRArcFinder(JKRArchive*, s32, s32);
-    inline virtual ~JKRArcFinder() {};
+    virtual ~JKRArcFinder() {}
 
 public:
     /* vt[3] */ virtual bool findNextFile(void); /* override */

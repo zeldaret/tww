@@ -189,7 +189,7 @@ int dRes_info_c::loadResource() {
 
     u32 *pResType = &l_readResType[0];
     for (i = 0; i < ARRAY_SIZE(l_readResType); i++, pResType++) {
-        JKRArcFinder * pArcFinder = mpArchive->getFirstResource(*pResType);
+        JKRFileFinder * pArcFinder = mpArchive->getFirstResource(*pResType);
 
         for (; pArcFinder->isAvailable(); pArcFinder->findNextFile()) {
             u32 resType;
@@ -455,7 +455,11 @@ int dRes_info_c::setRes() {
 
         u32 heapSize = mDataHeap->getHeapSize();
         void* heapStartAddr = mDataHeap->getStartAddr();
+#if VERSION == VERSION_JPN
+        DCFlushRangeNoSync(heapStartAddr, heapSize);
+#else
         DCStoreRangeNoSync(heapStartAddr, heapSize);
+#endif
     }
 
     return 0;
@@ -479,30 +483,23 @@ static void dummy() {
 
 /* 8006EBF8-8006ECF4       .text dump_long__11dRes_info_cFP11dRes_info_ci */
 void dRes_info_c::dump_long(dRes_info_c* pRes, int num) {
-    // regalloc
-    s32 size;
-    JKRArchive* archive;
-    mDoDvdThd_command_c* command;
-    SArcHeader* header;
-    s32 refCount;
-    s32 heapSize;
-    s32 i;
-
     JUTReportConsole_f("dRes_info_c::dump %08x %d\n", pRes, num);
     JUTReportConsole_f("No Command  Archive  ArcHeader(size) SolidHeap(size) Resource Count ArchiveName\n");
 
-    for (i = 0; i < num; i++) {
-        refCount = pRes->getCount();
-        if (refCount != 0) {
-            heapSize = JKRHeap::getSize(pRes->mDataHeap, NULL);
-            size = JKRHeap::getSize(getArcHeader(pRes->getArchive()), NULL);
-            archive = pRes->getArchive();
-            command = pRes->getDMCommand();
-            header = getArcHeader(archive);
-
+    for (s32 i = 0; i < num; i++) {
+        if (pRes->getCount() != 0) {
             JUTReportConsole_f("%2d %08x %08x %08x(%5x) %08x(%5x) %08x %3d   %s\n",
-                i, command, archive, header, size, pRes->mDataHeap,
-                heapSize, pRes->mRes, refCount, pRes->getArchiveName());
+                i,
+                pRes->getDMCommand(),
+                pRes->getArchive(),
+                getArcHeader(pRes->getArchive()),
+                JKRGetMemBlockSize(NULL, getArcHeader(pRes->getArchive())),
+                pRes->mDataHeap,
+                JKRGetMemBlockSize(NULL, pRes->mDataHeap),
+                pRes->mRes,
+                pRes->getCount(),
+                pRes->getArchiveName()
+            );
         }
         pRes++;
     }

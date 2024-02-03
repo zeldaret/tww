@@ -64,9 +64,6 @@ void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 param
     J3DSys::mParentS.z = transformInfo->mScale.z;
 }
 
-/* 8000DCF0-8000DCF4       .text getTransform__15J3DAnmTransformCFUsP16J3DTransformInfo */
-void J3DAnmTransform::getTransform(u16, J3DTransformInfo*) const {}
-
 /* 8000DCF4-8000DD4C       .text isCurrentSolidHeap__Fv */
 bool isCurrentSolidHeap() {
     if (JKRGetCurrentHeap()->getHeapType() != 'SLID') {

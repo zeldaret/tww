@@ -333,7 +333,7 @@ public:
     }
 
     virtual ~J3DAnmTransform() {}
-    virtual void getTransform(u16, J3DTransformInfo*) const = 0;
+    virtual void getTransform(u16, J3DTransformInfo*) const {}
 
 protected:
     /* 0x10 */ f32* mScaleData;
