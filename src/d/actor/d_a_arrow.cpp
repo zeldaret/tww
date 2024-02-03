@@ -973,7 +973,7 @@ BOOL daArrow_c::procStop_BG() {
             field_0x6a0--;
             
             if (field_0x6a0 < 60) {
-                // This matches but probably isn't what they actually wrote.
+                // Fakematch
                 u32 signBit = ((u32)field_0x6a0)>>31;
                 if ((((field_0x6a0&1) ^ signBit) - signBit) == 0) {
                     field_0x698 = false;

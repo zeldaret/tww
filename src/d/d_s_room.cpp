@@ -161,8 +161,7 @@ BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
 /* 80236D24-80236D58       .text phase_0__FP19room_of_scene_class */
 s32 phase_0(room_of_scene_class* i_this) {
     s32 roomNo = fopScnM_GetParam(i_this);
-    // g_dComIfG_gameInfo.play.getRoomControl()->setStatusProcID(roomNo, fopScnM_GetID(i_this));
-    g_dComIfG_gameInfo.play.getRoomControl()->mStatus[roomNo].mProcID = fopScnM_GetID(i_this);
+    dStage_roomControl_c::setStatusProcID(roomNo, fopScnM_GetID(i_this));
     return cPhs_NEXT_e;
 }
 
@@ -200,7 +199,7 @@ s32 phase_2(room_of_scene_class* i_this) {
     s32 zoneNo = dComIfGp_roomControl_getZoneNo(roomNo);
     if (zoneNo < 0) {
         zoneNo = dComIfGs_createZone(roomNo);
-        dComIfGp_roomControl_setZoneNo(roomNo, zoneNo); // this isn't getting inlined for some reason
+        dComIfGp_roomControl_setZoneNo(roomNo, zoneNo);
     }
 
     i_this->mpRoomDt = dComIfGp_roomControl_getStatusRoomDt(roomNo);
@@ -233,12 +232,6 @@ s32 phase_2(room_of_scene_class* i_this) {
     }
 
     return cPhs_NEXT_e;
-}
-
-// TODO: Not sure why this weak function doesn't get inlined.
-/* 802370A0-802370B8       .text setZoneNo__20dStage_roomControl_cFii */
-void dStage_roomControl_c::setZoneNo(int i_roomNo, int i_zoneNo) {
-    mStatus[i_roomNo].mZoneNo = i_zoneNo;
 }
 
 /* 802370B8-802371D0       .text phase_3__FP19room_of_scene_class */

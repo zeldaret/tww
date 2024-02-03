@@ -1485,12 +1485,6 @@ void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
     }
 }
 
-// TODO: Not sure why this weak function doesn't get inlined.
-/* 8005DCD0-8005DCEC       .text getZoneNo__20dStage_roomControl_cFi */
-int dStage_roomControl_c::getZoneNo(int i_roomNo) {
-    return mStatus[i_roomNo].mZoneNo;
-}
-
 /* 8005DCEC-8005DE98       .text offSwitch__10dSv_info_cFii */
 void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
     JUT_ASSERT(VERSION_SELECT(3421, 3448, 3448),

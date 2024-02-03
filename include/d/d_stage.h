@@ -849,7 +849,12 @@ public:
     void checkDrawArea() const;
     dStage_darkStatus_c* getDarkStatus();
     u32 getDarkMode();
-    static dBgW* getBgW(int i_roomNo);// { return mStatus[i_roomNo].mpBgW; }
+
+    dKy_tevstr_c* getTevStr(int i_roomNo) { return &mStatus[i_roomNo].mTevStr; }
+    BOOL checkStatusFlag(int i_roomNo, u8 flag) const { return cLib_checkBit(mStatus[i_roomNo].mFlags, flag); }
+    void offStatusFlag(int i_roomNo, u8 flag) { cLib_offBit(mStatus[i_roomNo].mFlags, flag); }
+    void onStatusFlag(int i_roomNo, u8 flag) { cLib_onBit(mStatus[i_roomNo].mFlags, flag); }
+    void setStatusFlag(int i_roomNo, u8 flag) { mStatus[i_roomNo].mFlags = flag; }
 
     static JKRExpHeap* createMemoryBlock(int, u32);
     static void destroyMemoryBlock();
@@ -857,14 +862,12 @@ public:
     static JKRExpHeap* getMemoryBlock(int);
     static void setStayNo(int);
     static s32 GetTimePass();
-    static void setZoneNo(int i_roomNo, int i_zoneNo);// { mStatus[i_roomNo].mZoneNo = i_zoneNo; }
-    static int getZoneNo(int i_roomNo);// { return mStatus[i_roomNo].mZoneNo; }
+    static void setZoneNo(int i_roomNo, int i_zoneNo) { mStatus[i_roomNo].mZoneNo = i_zoneNo; }
+    static int getZoneNo(int i_roomNo) { return mStatus[i_roomNo].mZoneNo; }
     static void setZoneCount(int i_roomNo, int count) { mStatus[i_roomNo].mZoneCount = count; }
 
     static s8 getStayNo() { return mStayNo; }
     static s8 getMemoryBlockID(int i_roomNo) { return mStatus[i_roomNo].mMemBlockID; }
-    dKy_tevstr_c* getTevStr(int i_roomNo) { return &mStatus[i_roomNo].mTevStr; }
-    void setStatusFlag(int i_roomNo, u8 flag) { mStatus[i_roomNo].mFlags = flag; }
     static void onStatusDraw(int i_roomNo) { mStatus[i_roomNo].mDraw = true; }
     static void setProcID(u32 id) { mProcID = id; }
     static u32 getProcID() { return mProcID; }
@@ -879,11 +882,8 @@ public:
         mStatus[i_roomNo].mMemBlockID = i_blockID;
     }
 
+    static dBgW* getBgW(int i_roomNo) { return mStatus[i_roomNo].mpBgW; }
     static void setBgW(int i_roomNo, dBgW* i_bgw) { mStatus[i_roomNo].mpBgW = i_bgw; }
-
-    BOOL checkStatusFlag(int i_roomNo, u8 flag) const { return cLib_checkBit(mStatus[i_roomNo].mFlags, flag); }
-    void offStatusFlag(int i_roomNo, u8 flag) { cLib_offBit(mStatus[i_roomNo].mFlags, flag); }
-    void onStatusFlag(int i_roomNo, u8 flag) { cLib_onBit(mStatus[i_roomNo].mFlags, flag); }
 
     static JKRExpHeap* mMemoryBlock[16];
     static dStage_roomStatus_c mStatus[64];

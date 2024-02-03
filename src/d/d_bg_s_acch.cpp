@@ -463,18 +463,3 @@ static void dummy2() {
     OSReport("\033[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
     dBgS_ObjAcch acch; // fakematch to get dBgS_ObjAcch's vtable and destructor to show up in this TU
 }
-
-// TODO: Figure out what's going on with dStage_roomControl_c's weak functions. This is a fakematch.
-// dStage_roomControl_c::getBgW is supposed to be a weak function defined in d_stage.h, but putting it in the class body
-// makes it inline, and putting it outside the class body causes it to be included in every TU that includes d_stage.h.
-// It should only appear in d_bg_s_acch, but putting it in d_bg_s_acch.cpp would normally screw up the order of weak
-// functions in this TU because of the `-sym on` compiler flag.
-// This can be fixed by putting the function in a fake separate file and including it in only this TU.
-// But in this case we simulate this by using the #line directive's second argument to force the filename for this one
-// function to be different from the other functions in this file. This tricks `-sym on` into splitting it into its own
-// .text section, and the weak function order winds up being correct.
-#line 1 "d_stage.h"
-/* 800A4434-800A444C       .text getBgW__20dStage_roomControl_cFi */
-dBgW* dStage_roomControl_c::getBgW(int i_roomNo) {
-    return mStatus[i_roomNo].mpBgW;
-}

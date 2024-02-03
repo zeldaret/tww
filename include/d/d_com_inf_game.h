@@ -1791,7 +1791,7 @@ inline int dComIfGp_roomControl_getStayNo() {
 }
 
 inline dBgW* dComIfGp_roomControl_getBgW(int i_roomNo) {
-    return dStage_roomControl_c::getBgW(i_roomNo);
+    return g_dComIfG_gameInfo.play.getRoomControl()->getBgW(i_roomNo);
 }
 
 inline void dComIfGp_roomControl_setBgW(int i_roomNo, dBgW * i_bgw) {
@@ -1799,11 +1799,11 @@ inline void dComIfGp_roomControl_setBgW(int i_roomNo, dBgW * i_bgw) {
 }
 
 inline s32 dComIfGp_roomControl_getZoneNo(int i_roomNo) {
-    return dStage_roomControl_c::getZoneNo(i_roomNo);
+    return g_dComIfG_gameInfo.play.getRoomControl()->getZoneNo(i_roomNo);
 }
 
 inline void dComIfGp_roomControl_setZoneNo(int i_roomNo, int i_zoneNo) {
-    dStage_roomControl_c::setZoneNo(i_roomNo, i_zoneNo);
+    g_dComIfG_gameInfo.play.getRoomControl()->setZoneNo(i_roomNo, i_zoneNo);
 }
 
 inline dKy_tevstr_c* dComIfGp_roomControl_getTevStr(int room_no) {
