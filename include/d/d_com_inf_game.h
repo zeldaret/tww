@@ -524,7 +524,8 @@ public:
     void setRStatus(u8 status) { field_0x492d = status; }
     u8 getRStatusForce() { return field_0x4930; }
     void setRStatusForce(u8 status) { field_0x4930 = status; }
-    inline u8 getPictureStatus() { return mPictureStatus; }
+    u8 getPictureStatus() { return mPictureStatus; }
+    void setPictureStatusOn() { mPictureStatus = 2; }
 
     u8 getScopeType() { return mbCamOverrideFarPlane; }
     void setScopeType(u8 v) { mbCamOverrideFarPlane = v; }
@@ -2402,6 +2403,10 @@ inline void dComIfGp_setRStatusForce(u8 status) {
 
 inline u8 dComIfGp_getPictureStatus() {
     return g_dComIfG_gameInfo.play.getPictureStatus();
+}
+
+inline void dComIfGp_setPictureStatusOn() {
+    g_dComIfG_gameInfo.play.setPictureStatusOn();
 }
 
 inline s16 dComIfGp_getMiniGameRupee() {

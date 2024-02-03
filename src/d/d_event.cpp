@@ -103,7 +103,7 @@ BOOL dEvt_control_c::beforeFlagProc(dEvt_order_c* order) {
 }
 
 /* 8007018C-80070218       .text afterFlagProc__14dEvt_control_cFP12dEvt_order_c */
-BOOL dEvt_control_c::afterFlagProc(dEvt_order_c* order) {
+void dEvt_control_c::afterFlagProc(dEvt_order_c* order) {
     if ((order->mFlag & dEvtFlag_NOPARTNER_e))
         mPt2 = getPId(NULL);
 
@@ -153,14 +153,66 @@ BOOL dEvt_control_c::talkCheck(dEvt_order_c* order) {
 
 /* 80070390-8007055C       .text talkXyCheck__14dEvt_control_cFP12dEvt_order_c */
 BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
-    /* Nonmatching */
     const char* defaultEventName = "DEFAULT_TALK_XY";
-    OSReport("DEFAULT_TALK_XY");
+    
+    fopAc_ac_c* actor2 = order->mActor2;
+    
+    int equippedItemIdx;
+    switch (order->mEventType) {
+    case dEvtType_SHOWITEM_X_e:
+        equippedItemIdx = 0;
+        break;
+    case dEvtType_SHOWITEM_Y_e:
+        equippedItemIdx = 1;
+        break;
+    default:
+        equippedItemIdx = 2;
+        break;
+    }
+    
+    if (dComIfGp_getSelectItem(equippedItemIdx) == NO_ITEM) {
+        return FALSE;
+    }
+    
+    if (actor2 == NULL || !actor2->mEvtInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
+        return FALSE;
+    }
+    
+    if (commonCheck(order, dEvtCnd_CANTALK_e, dEvtCmd_INTALK_e)) {
+        mMode = dEvtMode_TALK_e;
+        mItemNo = dComIfGp_getSelectItem(equippedItemIdx);
+        
+        switch (order->mEventType) {
+        case dEvtType_SHOWITEM_X_e:
+            mTalkButton = 1;
+            break;
+        case dEvtType_SHOWITEM_Y_e:
+            mTalkButton = 2;
+            break;
+        default:
+            mTalkButton = 3;
+            break;
+        }
+        
+        // Fakematch
+        s16 r3;
+        if (actor2 != NULL && (r3 = actor2->mEvtInfo.runXyEventCB(actor2, equippedItemIdx), r3 != -1)) {
+            mEventId = r3;
+        } else {
+            mEventId = dComIfGp_evmng_getEventIdx(defaultEventName, 0xFF);
+        }
+        
+        if (!dComIfGp_evmng_order(mEventId)) {
+            JUT_ASSERT(401, 0);
+        }
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
 /* 8007055C-800706D8       .text photoCheck__14dEvt_control_cFP12dEvt_order_c */
 BOOL dEvt_control_c::photoCheck(dEvt_order_c* order) {
-    /* Nonmatching */
     fopAc_ac_c* actor2 = order->mActor2;
     const char* defaultEventName = "DEFAULT_TALK";
 
@@ -188,7 +240,7 @@ BOOL dEvt_control_c::photoCheck(dEvt_order_c* order) {
         return FALSE;
     }
 
-    return TRUE;
+    return FALSE;
 }
 
 /* 800706D8-800707C0       .text catchCheck__14dEvt_control_cFP12dEvt_order_c */
@@ -361,16 +413,20 @@ BOOL dEvt_control_c::endProc() {
 
 /* 80070DD4-80070E1C       .text checkChange__14dEvt_control_cFv */
 BOOL dEvt_control_c::checkChange() {
-    /* Nonmatching */
     if (mOrderCount != 0) {
-        s8 idx = mFirstOrderIdx;
+        dEvt_order_c* order;
+        s8 nextIdx = mFirstOrderIdx;
         while (true) {
-            s8 nextIdx = mOrder[idx].mNextOrderIdx;
-            if ((s32)mOrder[idx].mEventType == dEvtType_CHANGE_e)
+            order = &mOrder[nextIdx];
+            nextIdx = order->mNextOrderIdx;
+            if ((s32)order->mEventType != dEvtType_CHANGE_e) {
+                // Fakematch, assigning a float member to itself tricks the compiler into creating a beq then a b.
+                mCullFarClipRatio = mCullFarClipRatio;
+            } else {
                 return TRUE;
+            }
 
-            idx = nextIdx;
-            if (idx < 0)
+            if (nextIdx < 0)
                 break;
         }
     }
@@ -380,17 +436,20 @@ BOOL dEvt_control_c::checkChange() {
 
 /* 80070E1C-80070EA8       .text changeProc__14dEvt_control_cFv */
 BOOL dEvt_control_c::changeProc() {
-    /* Nonmatching */
     if (mOrderCount != 0) {
         mOrderCount = 0;
-        s8 idx = mFirstOrderIdx;
+        s8 nextIdx = mFirstOrderIdx;
         while (true) {
-            s8 nextIdx = mOrder[idx].mNextOrderIdx;
-            if ((s32)mOrder[idx].mEventType == dEvtType_CHANGE_e && demoCheck(&mOrder[idx]))
+            dEvt_order_c* order = &mOrder[nextIdx];
+            nextIdx = order->mNextOrderIdx;
+            if ((s32)order->mEventType != dEvtType_CHANGE_e) {
+                // Fakematch, assigning a float member to itself tricks the compiler into creating a beq then a b.
+                mCullFarClipRatio = mCullFarClipRatio;
+            } else if (demoCheck(order)) {
                 return TRUE;
+            }
 
-            idx = nextIdx;
-            if (idx < 0)
+            if (nextIdx < 0)
                 break;
         }
     }
@@ -500,12 +559,58 @@ BOOL dEvt_control_c::check() {
 
 /* 80071140-80071270       .text photoCheck__14dEvt_control_cFv */
 BOOL dEvt_control_c::photoCheck() {
-    /* Nonmatching */
+    fopAc_ac_c* actor1;
+    fopAc_ac_c* actor2;
+    s8 orderIdx = mFirstOrderIdx;
+    if (mOrderCount != 0) {
+        dEvt_order_c* order = &mOrder[orderIdx];
+        int equippedItemIdx = -1;
+        switch (order->mEventType) {
+        case dEvtType_SHOWITEM_X_e:
+            equippedItemIdx = 0;
+            break;
+        case dEvtType_SHOWITEM_Y_e:
+            equippedItemIdx = 1;
+            break;
+        case dEvtType_SHOWITEM_Z_e:
+            equippedItemIdx = 2;
+            break;
+        }
+        
+        if (equippedItemIdx != -1 &&
+            (dComIfGp_getSelectItem(equippedItemIdx) == CAMERA || dComIfGp_getSelectItem(equippedItemIdx) == CAMERA2) &&
+            dComIfGs_getPictureNum() != 0
+        ) {
+            actor2 = order->mActor2;
+            if (actor2 == NULL) {
+                return FALSE;
+            }
+            if (!(actor2->mAttentionInfo.mFlags & fopAc_Attn_UNK1000000_e)) {
+                return FALSE;
+            }
+            if (dComIfGp_getPictureStatus() == 2) {
+                return FALSE;
+            }
+            actor1 = order->mActor1;
+            if (actor1 == NULL) {
+                return FALSE;
+            }
+            if (!actor1->mEvtInfo.chkCondition(dEvtCnd_CANTALK_e) ||
+                !actor2->mEvtInfo.chkCondition(dEvtCnd_CANTALK_e)
+            ) {
+                return FALSE;
+            }
+            order->mEventType = dEvtType_PHOTO_e;
+            dComIfGp_setPictureStatusOn();
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
 }
 
 /* 80071270-80071418       .text moveApproval__14dEvt_control_cFPv */
 s32 dEvt_control_c::moveApproval(void* actor) {
-    /* Nonmatching */
     fopAc_ac_c* i_ac = (fopAc_ac_c*)actor;
     if (getMode() == dEvtMode_NONE_e)
         return dEvtMove_MOVE_e;
@@ -547,7 +652,7 @@ s32 dEvt_control_c::moveApproval(void* actor) {
 
 /* 80071418-80071468       .text compulsory__14dEvt_control_cFPvPCcUs */
 BOOL dEvt_control_c::compulsory(void* actor, const char* eventName, u16 p3) {
-    if (getMode() != 0)
+    if (getMode() != dEvtMode_NONE_e)
         return FALSE;
 
     return orderOld(dEvtType_COMPULSORY_e, 1, 0, p3, actor, NULL, eventName);
@@ -573,7 +678,7 @@ void dEvt_control_c::remove() {
 /* 800714AC-80071534       .text getStageEventDt__14dEvt_control_cFv */
 dStage_Event_dt_c* dEvt_control_c::getStageEventDt() {
     dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
-    if (getMode() == 0)
+    if (getMode() == dEvtMode_NONE_e)
         return NULL;
 
     if (stageEventInfo == NULL || mEventInfoIdx == 0xFF || mEventInfoIdx >= stageEventInfo->num)

@@ -66,7 +66,7 @@ public:
     s32 order(u16, u16, u16, u16, void*, void*, s16, u8);
     void setParam(dEvt_order_c*);
     BOOL beforeFlagProc(dEvt_order_c*);
-    BOOL afterFlagProc(dEvt_order_c*);
+    void afterFlagProc(dEvt_order_c*);
     BOOL commonCheck(dEvt_order_c*, u16, u16);
     BOOL talkCheck(dEvt_order_c*);
     BOOL talkXyCheck(dEvt_order_c*);
@@ -120,7 +120,7 @@ public:
     void reset() { onEventFlag(8); }
 
     bool runCheck() { return mMode != 0; }
-    u8 getMode() { return mMode; }
+    u32 getMode() { return mMode & 0xFF; } // &0xFF added to fix dEvt_control_c::moveApproval, probably fakematch
 
     void checkHind(u16) {}
     void chkPhoto() {}

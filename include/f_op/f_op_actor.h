@@ -67,6 +67,7 @@ enum fopAc_AttentionFlag_e {
     fopAc_Attn_ACTION_DOOR_e        = 0x00000020,
     fopAc_Attn_ACTION_TREASURE_e    = 0x00000040,
     fopAc_Attn_ACTION_SHIP_e        = 0x00000080,
+    fopAc_Attn_UNK1000000_e         = 0x01000000,
     fopAc_Attn_TALKFLAG_NOTALK_e    = 0x02000000,
     fopAc_Attn_ENEMYFLAG_NOLOCKON_e = 0x04000000,
     fopAc_Attn_TALKFLAG_LOOK_e      = 0x08000000,
@@ -166,22 +167,22 @@ public:
     void setCommand(u16 command) { mCommand = command; }
 
     void setXyEventCB(CallbackFunc cb) { mpEventCB = cb; }
-    s16 runXyEventCB(void* ac, int flag) {
+    s16 runXyEventCB(void* ac, int equippedItemIdx) {
         if (mpEventCB == NULL)
             return -1;
-        return mpEventCB(ac, flag);
+        return mpEventCB(ac, equippedItemIdx);
     }
     void setXyCheckCB(CallbackFunc cb) { mpCheckCB = cb; }
-    s16 runXyCheckCB(void* ac, int flag) {
+    s16 runXyCheckCB(void* ac, int equippedItemIdx) {
         if (mpCheckCB == NULL)
             return -1;
-        return mpCheckCB(ac, flag);
+        return mpCheckCB(ac, equippedItemIdx);
     }
     void setPhotoEventCB(CallbackFunc cb) { mpPhotoCB = cb; }
-    s16 runPhotoEventCB(void* ac, int flag) {
+    s16 runPhotoEventCB(void* ac, int equippedItemIdx) {
         if (mpPhotoCB == NULL)
             return -1;
-        return mpPhotoCB(ac, flag);
+        return mpPhotoCB(ac, equippedItemIdx);
     }
 
 public:

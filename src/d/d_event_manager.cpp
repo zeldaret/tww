@@ -405,7 +405,7 @@ int dEvent_manager_c::getMyStaffId(const char* name, fopAc_ac_c* actor, int tagI
 
     for (s32 i = 0; i < mList.getEventNum(); i++) {
         dEvDtEvent_c* event = mList.getEventP(i);
-        if (event->mEventState == 2 || event->mEventState == 4 || event->mEventState == 3) {
+        if (event->mEventState == dEvDtEvent_c::PLAY_e || event->mEventState == dEvDtEvent_c::CLOSE_e || event->mEventState == dEvDtEvent_c::UNK3_e) {
             s32 nStaff = event->getNStaff();
             for (s32 j = 0; j < nStaff; j++) {
                 u32 staffIdx = event->getStaff(j);

@@ -173,7 +173,7 @@ BOOL dTimer_c::_execute() {
 
     if (mState == 0 || mState == 2) {
         if (mTimerMode == 3 || mTimerMode == 2) {
-            if (dMenu_flag() || dComIfGp_event_getMode() == 1)
+            if (dMenu_flag() || dComIfGp_event_getMode() == dEvtMode_TALK_e)
                 stop(1);
             else
                 restart(1);
@@ -433,7 +433,7 @@ void dDlst_TimerScrnDraw_c::setTimer(int time) {
     changeNumberTexture(mTimerNumber[2], sec % 10);
     changeNumberTexture(mTimerNumber[3], ms / 100);
     changeNumberTexture(mTimerNumber[4], (ms % 100) / 10);
-    if (dComIfGp_event_getMode() == 1) {
+    if (dComIfGp_event_getMode() == dEvtMode_TALK_e) {
         if (mClockIcon.mUserArea < 5) {
             mClockIcon.mUserArea++;
             s16 alphaStep = 5 - mClockIcon.mUserArea;
@@ -448,7 +448,7 @@ void dDlst_TimerScrnDraw_c::setTimer(int time) {
     } else {
         if (mClockIcon.mUserArea > 0) {
             mClockIcon.mUserArea--;
-            int alphaStep = 5 - mClockIcon.mUserArea;
+            s16 alphaStep = 5 - mClockIcon.mUserArea;
             f32 alpha = ((f32)alphaStep * (f32)alphaStep) / 25.0f;
             fopMsgM_setNowAlpha(&mClockIcon, alpha);
             fopMsgM_setNowAlpha(&mClockBG, alpha);
@@ -486,7 +486,7 @@ void dDlst_TimerScrnDraw_c::setRupee(s16 num) {
         changeNumberTexture(mRupeeNumberShadow[2], r100);
     }
 
-    if (dComIfGp_event_getMode() == 1) {
+    if (dComIfGp_event_getMode() == dEvtMode_TALK_e) {
         if (mRupee.mUserArea < 5) {
             mRupee.mUserArea++;
             s16 alphaStep = mRupee.mUserArea;
