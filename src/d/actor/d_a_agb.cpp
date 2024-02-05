@@ -1554,15 +1554,14 @@ int daAgb_c::createHeap() {
 }
 
 /* 800D3B58-800D3D2C       .text daAgb_Create__FP10fopAc_ac_c */
-// NONMATCHING - dBgS_CrrPos::Set needs works
 static int daAgb_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, daAgb_c);
     daAgb_c* a_this = (daAgb_c*)i_this;
+    fopAcM_SetupActor(i_this, daAgb_c);
 
     int phase = dComIfG_resLoad(&a_this->mPhase, "Agb");
     if (phase == cPhs_COMPLEATE_e) {
         dComIfGp_setAgb(a_this);
-        if (!fopAcM_entrySolidHeap(a_this, createHeap_CB, 0x500)) {
+        if (!fopAcM_entrySolidHeap(i_this, createHeap_CB, 0x500)) {
             return cPhs_ERROR_e;
         }
 
@@ -1570,7 +1569,7 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
         a_this->mCrrPos.SetWall(171.0f, 50.0f);
         a_this->mCrrPos.SetGndUpY(170.0f);
         a_this->mCrrPos.ClrNoRoof();
-        a_this->mAcch.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), a_this, 1, &a_this->mAcchCir);
+        a_this->mAcch.Set(fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this), i_this, 1, &a_this->mAcchCir);
         a_this->mAcch.OnLineCheck();
         a_this->mAcch.SetGrndNone();
         a_this->mAcchCir.SetWall(171.0f, 40.0f);

@@ -2383,7 +2383,7 @@ inline void dComIfGp_setButtonActionMode(u8 mode) {
  * === EVENT ===
  */
 
-inline bool dComIfGp_event_runCheck() {
+inline BOOL dComIfGp_event_runCheck() {
     return g_dComIfG_gameInfo.play.getEvent().runCheck();
 }
 

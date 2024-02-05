@@ -857,7 +857,6 @@ bool daObjTpost_c::_execute() {
     setAttention();
     setCollision(40.0f, 140.0f);
     modeProc(PROC_EXEC, 5);
-    dBgS* bgs = dComIfG_Bgsp();
 
     if(dComIfGp_event_runCheck() && !mEventCut.cutProc()) {
         cutProc();
@@ -865,7 +864,7 @@ bool daObjTpost_c::_execute() {
     eventOrder();
 
     fopAcM_posMoveF(this, 0);
-    mAcch.CrrPos(*bgs);
+    mAcch.CrrPos(*dComIfG_Bgsp());
     mStts.Move();
     if(mCyl.ChkTgHit()) {
         daObj::HitSeStart(&mEyePos, current.roomNo, &mCyl, 0x0B);

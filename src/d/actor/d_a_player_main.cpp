@@ -589,15 +589,13 @@ void daPy_lk_c::setPriTextureAnime(u16 r4, int r30) {
     if (m_tex_anm_heap.field_0x2 != btpIdx) {
         m_tex_anm_heap.field_0x2 = btpIdx;
         if (m_tex_anm_heap.field_0x4 == 0xFFFF) {
-            J3DAnmTexPattern* btp = loadTextureAnimeResource(btpIdx, FALSE);
-            setTextureAnimeResource(btp, r30);
+            setTextureAnimeResource(loadTextureAnimeResource(btpIdx, FALSE), r30);
         }
     }
     if (m_tex_scroll_heap.field_0x2 != btkIdx) {
         m_tex_scroll_heap.field_0x2 = btkIdx;
         if (m_tex_scroll_heap.field_0x4 == 0xFFFF) {
-            J3DAnmTextureSRTKey* btk = loadTextureScrollResource(btkIdx, FALSE);
-            setTextureScrollResource(btk, r30);
+            setTextureScrollResource(loadTextureScrollResource(btkIdx, FALSE), r30);
         }
     }
 }
@@ -607,15 +605,13 @@ void daPy_lk_c::resetPriTextureAnime() {
     if (m_tex_anm_heap.field_0x2 != 0xFFFF) {
         m_tex_anm_heap.field_0x2 = 0xFFFF;
         if (m_tex_anm_heap.field_0x4 == 0xFFFF) {
-            J3DAnmTexPattern* btp = loadTextureAnimeResource(m_tex_anm_heap.mIdx, FALSE);
-            setTextureAnimeResource(btp, 0);
+            setTextureAnimeResource(loadTextureAnimeResource(m_tex_anm_heap.mIdx, FALSE), 0);
         }
     }
     if (m_tex_scroll_heap.field_0x2 != 0xFFFF) {
         m_tex_scroll_heap.field_0x2 = 0xFFFF;
         if (m_tex_scroll_heap.field_0x4 == 0xFFFF) {
-            J3DAnmTextureSRTKey* btk = loadTextureScrollResource(m_tex_scroll_heap.mIdx, FALSE);
-            setTextureScrollResource(btk, 0);
+            setTextureScrollResource(loadTextureScrollResource(m_tex_scroll_heap.mIdx, FALSE), 0);
         }
     }
 }
@@ -625,14 +621,12 @@ void daPy_lk_c::setDemoTextureAnime(u16 btpIdx, u16 btkIdx, int r30, u16 r31) {
     if (m_tex_anm_heap.field_0x4 != btpIdx || m_tex_anm_heap.field_0x6 != r31) {
         m_tex_anm_heap.field_0x4 = btpIdx;
         m_tex_anm_heap.field_0x6 = r31;
-        J3DAnmTexPattern* btp = loadTextureAnimeResource(btpIdx, TRUE);
-        setTextureAnimeResource(btp, r30);
+        setTextureAnimeResource(loadTextureAnimeResource(btpIdx, TRUE), r30);
     }
     if (m_tex_scroll_heap.field_0x4 != btkIdx || m_tex_scroll_heap.field_0x6 != r31) {
         m_tex_scroll_heap.field_0x4 = btkIdx;
         m_tex_scroll_heap.field_0x6 = r31;
-        J3DAnmTextureSRTKey* btk = loadTextureScrollResource(btkIdx, TRUE);
-        setTextureScrollResource(btk, r30);
+        setTextureScrollResource(loadTextureScrollResource(btkIdx, TRUE), r30);
     }
 }
 
@@ -4556,7 +4550,6 @@ void daPy_lk_c::onDekuSpReturnFlg(u8 i_point) {
 
 /* 801289A8-80128AA4       .text changeTextureAnime__9daPy_lk_cFUsUsi */
 void daPy_lk_c::changeTextureAnime(u16 btpIdx, u16 btkIdx, int r7) {
-    /* Nonmatching - regalloc */
     if (!dComIfGp_event_runCheck()) {
         return;
     }
@@ -4564,14 +4557,12 @@ void daPy_lk_c::changeTextureAnime(u16 btpIdx, u16 btkIdx, int r7) {
         if (m_tex_anm_heap.field_0x4 != btpIdx || m_tex_anm_heap.field_0x6 != 0xFFFE) {
             m_tex_anm_heap.field_0x4 = btpIdx;
             m_tex_anm_heap.field_0x6 = 0xFFFE;
-            J3DAnmTexPattern* btp = loadTextureAnimeResource(btpIdx, FALSE);
-            setTextureAnimeResource(btp, 0);
+            setTextureAnimeResource(loadTextureAnimeResource(btpIdx, FALSE), 0);
         }
         if (m_tex_scroll_heap.field_0x4 != btkIdx || m_tex_scroll_heap.field_0x6 != 0xFFFE) {
             m_tex_scroll_heap.field_0x4 = btkIdx;
             m_tex_scroll_heap.field_0x6 = 0xFFFE;
-            J3DAnmTextureSRTKey* btk = loadTextureScrollResource(btkIdx, FALSE);
-            setTextureScrollResource(btk, 0);
+            setTextureScrollResource(loadTextureScrollResource(btkIdx, FALSE), 0);
         }
     } else {
         setDemoTextureAnime(btpIdx, btkIdx, 0, r7);

@@ -40,7 +40,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     
     dBgS* bgs = dComIfG_Bgsp(); // This is kinda weird, maybe fakematch
     
-    if (!dComIfGp_event_runCheck()) {
+    if (dComIfGp_event_runCheck() == FALSE) {
         if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
         } else {
@@ -169,7 +169,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
         return TRUE;
     }
     
-    if (!dComIfGp_event_runCheck()) {
+    if (dComIfGp_event_runCheck() == FALSE) {
         if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
         }

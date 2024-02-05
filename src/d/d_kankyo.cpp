@@ -511,7 +511,7 @@ void dScnKy_env_light_c::setDaytime() {
     }
 #endif
 
-    if (!dKy_checkEventNightStop() && dComIfGs_isGetItem(2, 0) && !dComIfGp_event_runCheck() &&
+    if (!dKy_checkEventNightStop() && dComIfGs_isGetItem(2, 0) && dComIfGp_event_runCheck() == FALSE &&
         !var_r30)
     {
         if (dComIfGp_roomControl_getTimePass()) {

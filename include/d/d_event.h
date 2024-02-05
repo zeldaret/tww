@@ -119,7 +119,7 @@ public:
     void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
     void reset() { onEventFlag(8); }
 
-    bool runCheck() { return mMode != dEvtMode_NONE_e; }
+    BOOL runCheck() { return mMode != dEvtMode_NONE_e; }
     u32 getMode() { return mMode & 0xFF; } // &0xFF added to fix dEvt_control_c::moveApproval, probably fakematch
 
     void checkHind(u16) {}
