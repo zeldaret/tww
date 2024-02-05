@@ -404,7 +404,7 @@ public:
 
     void CStickUse() {}
     void CStickUseless() {}
-    void Eye() {}
+    cXyz Eye() { return mEye + mEyeShake; }
     void StickUse() {}
     void StickUseless() {}
     void clrFlag(u32) {}

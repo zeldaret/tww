@@ -25,7 +25,7 @@ class camera_class : public camera_process_class {
 public:
     /* 0x23C */ int field_0x23c;
     /* 0x240 */ int field_0x244;
-     /* 0x244 */ dCamera_c mCamera;
+    /* 0x244 */ dCamera_c mCamera;
 };
 
 struct camera_process_profile_definition {

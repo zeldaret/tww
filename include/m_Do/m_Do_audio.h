@@ -3,6 +3,7 @@
 
 #include "JAZelAudio/JAIZelBasic.h"
 #include "JAZelAudio/JAIZelInst.h"
+#include "SSystem/SComponent/c_xyz.h"
 
 class mDoAud_zelAudio_c : public JAIZelBasic {
 public:
@@ -264,6 +265,50 @@ inline void mDoAud_bgmNowBattle(f32 distance) {
 
 inline bool mDoAud_checkAllWaveLoadStatus() {
     return mDoAud_zelAudio_c::getInterface()->checkAllWaveLoadStatus();
+}
+
+inline void mDoAud_initSeaEnvPos() {
+    mDoAud_zelAudio_c::getInterface()->initSeaEnvPos();
+}
+
+inline void mDoAud_registSeaEnvPos(Vec* param_0) {
+    mDoAud_zelAudio_c::getInterface()->registSeaEnvPos(param_0);
+}
+
+inline void mDoAud_seaEnvSePlay(u32 param_0) {
+    mDoAud_zelAudio_c::getInterface()->seaEnvSePlay(param_0, 0);
+}
+
+inline void mDoAud_startSeaShoreSE(Vec* param_0, u32 param_1) {
+    mDoAud_zelAudio_c::getInterface()->seaShoreSE(param_1, param_0, 0, 0);
+}
+
+inline void mDoAud_continueSeaShoreSE(Vec* param_0, u32 param_1) {
+    mDoAud_zelAudio_c::getInterface()->seaShoreSE(param_1, param_0, 1, 0);
+}
+
+inline void mDoAud_initRiverPos() {
+    mDoAud_zelAudio_c::getInterface()->initRiverPos();
+}
+
+inline void mDoAud_registRiverPos(cXyz* param_0) {
+    mDoAud_zelAudio_c::getInterface()->registRiverPos(param_0);
+}
+
+inline void mDoAud_riverSePlay(u8 param_0, s8 param_1) {
+    mDoAud_zelAudio_c::getInterface()->riverSePlay(param_0, param_1);
+}
+
+inline void mDoAud_waterfallSePlay(u8 param_0, cXyz* param_1, s8 param_2) {
+    mDoAud_zelAudio_c::getInterface()->waterfallSePlay(param_0, param_1, param_2);
+}
+
+inline void mDoAud_initWindowPos() {
+    mDoAud_zelAudio_c::getInterface()->initWindowPos();
+}
+
+inline void mDoAud_registWindowPos(Vec* param_0) {
+    mDoAud_zelAudio_c::getInterface()->registWindowPos(param_0);
 }
 
 #endif /* M_DO_AUDIO_H */

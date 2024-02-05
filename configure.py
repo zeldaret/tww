@@ -448,7 +448,7 @@ config.libs = [
             Object(NonMatching, "d/d_auction_screen.cpp"),
             Object(Matching,    "d/d_place_name.cpp"),
             Object(NonMatching, "d/d_camera.cpp"),
-            Object(NonMatching, "d/d_envse.cpp"),
+            Object(Matching,    "d/d_envse.cpp"),
             Object(NonMatching, "d/d_file_error.cpp"),
             Object(NonMatching, "d/d_file_select.cpp"),
             Object(NonMatching, "d/d_gameover.cpp"),

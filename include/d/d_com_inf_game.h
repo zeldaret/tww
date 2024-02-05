@@ -1806,10 +1806,6 @@ inline dBgW* dComIfGp_roomControl_getBgW(int i_roomNo) {
     return g_dComIfG_gameInfo.play.getRoomControl()->getBgW(i_roomNo);
 }
 
-inline void dComIfGp_roomControl_setBgW(int i_roomNo, dBgW * i_bgw) {
-    dStage_roomControl_c::setBgW(i_roomNo, i_bgw);
-}
-
 inline s32 dComIfGp_roomControl_getZoneNo(int i_roomNo) {
     return g_dComIfG_gameInfo.play.getRoomControl()->getZoneNo(i_roomNo);
 }

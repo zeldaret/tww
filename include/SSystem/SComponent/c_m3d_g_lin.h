@@ -23,6 +23,10 @@ public:
         mStart = start;
         mEnd = end;
     }
+    void set(const Vec& start, const Vec& end) {
+        mStart = start;
+        mEnd = end;
+    }
     void CalcPos(Vec*, f32) const { /* TODO */ }
     void CalcVec(Vec* pOut) const { VECSubtract(&this->mEnd, &this->mStart, pOut); }
     void SetEnd(const cXyz& pos) { mEnd = pos; }
@@ -35,7 +39,6 @@ public:
     const cXyz& GetEnd() const { return mEnd; }
     cXyz& GetEnd() { return mEnd; }
     void GetLen() const { /* TODO */ }
-    void set(const Vec&, const Vec&) { /* TODO */ }
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cM3dGLin));

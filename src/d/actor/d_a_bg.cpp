@@ -208,7 +208,7 @@ BOOL daBg_c::createHeap() {
             return FALSE;
         if (bgw->Set(dzb, cBgW::GLOBAL_e, NULL))
             return FALSE;
-        dComIfGp_roomControl_setBgW(roomNo, bgw);
+        dStage_roomControl_c::setBgW(roomNo, bgw);
         bgw->mWallCorrectPriority = 0;
     } else {
         bgw = NULL;
@@ -223,7 +223,7 @@ daBg_c::~daBg_c() {
 
     if (heap != NULL && bgw != NULL) {
         dComIfG_Bgsp()->Release(bgw);
-        dComIfGp_roomControl_setBgW(roomNo, NULL);
+        dStage_roomControl_c::setBgW(roomNo, NULL);
     }
     if (dComIfGp_getMagma() != NULL)
         dComIfGp_getMagma()->deleteRoom(roomNo);
