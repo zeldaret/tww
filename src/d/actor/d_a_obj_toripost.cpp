@@ -189,12 +189,7 @@ void daObjTpost_c::cutSetAnmStart(int staffIdx) {
 
 /* 00000500-00000560       .text cutSetAnmProc__12daObjTpost_cFi */
 void daObjTpost_c::cutSetAnmProc(int staffIdx) {
-    // Using the mDoExt_McaMorf::isStop inline causes regswap.
-    // if(mMorf->isStop()) {
-    mDoExt_McaMorf* morf = mMorf;
-    bool stopped = true;
-    if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-    if (stopped) {
+    if(mMorf->isStop()) {
         dComIfGp_evmng_cutEnd(staffIdx);
     }
 }
@@ -746,12 +741,7 @@ void daObjTpost_c::modeTalkXY() {
     }
 
     if(field_0x6C9 == 2 || field_0x6C9 == 3) {
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if(mMorf->isStop()) {
-        mDoExt_McaMorf* morf = mMorf;
-        bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (stopped) {
+        if(mMorf->isStop()) {
             if(cLib_calcTimer(&field_0x8DC) == 0 && talk(1) == fopMsgStts_BOX_CLOSED_e) {
                 modeProc(PROC_INIT, 0);
                 dComIfGp_event_reset();

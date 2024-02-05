@@ -827,12 +827,7 @@ void daRd_c::modeDeathInit() {
 
 /* 00001E68-00001F14       .text modeDeath__6daRd_cFv */
 void daRd_c::modeDeath() {
-    // Using the mDoExt_McaMorf::isStop inline causes regswap.
-    // if (!mpMorf->isStop()) {
-    mDoExt_McaMorf* morf = mpMorf;
-    bool stopped = true;
-    if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-    if (!stopped) {
+    if (!mpMorf->isStop()) {
         return;
     }
     
@@ -860,12 +855,7 @@ void daRd_c::modeDamage() {
         return;
     }
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
-    // Using the mDoExt_McaMorf::isStop inline causes regswap.
-    // if (!mpMorf->isStop()) {
-    mDoExt_McaMorf* morf = mpMorf;
-    bool stopped = true;
-    if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-    if (!stopped) {
+    if (!mpMorf->isStop()) {
         return;
     }
     
@@ -887,7 +877,6 @@ void daRd_c::modeParalysisInit() {
 
 /* 000020EC-000021F0       .text modeParalysis__6daRd_cFv */
 void daRd_c::modeParalysis() {
-    /* Nonmatching: isStop inline regalloc */
     if (isAnm(AnmPrm_BEAM_HIT) && mpMorf->isStop()) {
         setAnm(AnmPrm_BEAM, false);
     } else if (isAnm(AnmPrm_BEAM)) {

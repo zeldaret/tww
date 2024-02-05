@@ -538,12 +538,7 @@ static void action_dousa(am_class* i_this) {
         }
         break;
     case 2:
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (!i_this->mpMorf->isStop()) {
-        mDoExt_McaMorf* morf = i_this->mpMorf;
-        bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (!stopped) {
+        if (!i_this->mpMorf->isStop()) {
             break;
         }
         i_this->mState += 1;
@@ -609,12 +604,7 @@ static void action_dousa(am_class* i_this) {
         break;
     case 6:
         if (i_this->mCurrBckIdx == AM_BCK_CLOSE) {
-            // Using the mDoExt_McaMorf::isStop inline causes regswap.
-            // if (i_this->mpMorf->isStop()) {
-            mDoExt_McaMorf* morf = i_this->mpMorf;
-            bool stopped = true;
-            if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-            if (stopped) {
+            if (i_this->mpMorf->isStop()) {
                 anm_init(i_this, AM_BCK_CLOSE_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             }
         }
@@ -684,12 +674,7 @@ static void action_dousa(am_class* i_this) {
         i_this->mState += 1;
         break;
     case 10:
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (i_this->mpMorf->isStop()) {
-        morf = i_this->mpMorf;
-        stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (stopped) {
+        if (i_this->mpMorf->isStop()) {
             i_this->mState = 0;
         }
         break;
@@ -812,12 +797,7 @@ static void action_itai_move(am_class* i_this) {
         // Fall-through
     case 0x29:
         cLib_addCalc0(&i_this->speedF, 0.8f, 2.0f);
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (!i_this->mpMorf->isStop()) {
-        mDoExt_McaMorf* morf = i_this->mpMorf;
-        bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (!stopped) {
+        if (!i_this->mpMorf->isStop()) {
             break;
         }
         i_this->mCountDownTimers[0] = 100;
@@ -838,12 +818,7 @@ static void action_itai_move(am_class* i_this) {
         i_this->mState += 1;
         break;
     case 0x2B:
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (!i_this->mpMorf->isStop()) {
-        morf = i_this->mpMorf;
-        stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (!stopped) {
+        if (!i_this->mpMorf->isStop()) {
             break;
         }
         i_this->mNeedleCyl.OnAtSetBit();
@@ -888,12 +863,7 @@ static void action_itai_move(am_class* i_this) {
             i_this->m0340 = dComIfGp_particle_set(0x8156, &i_this->mJawPos);
         }
 
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (!i_this->mpMorf->isStop()) {
-        morf = i_this->mpMorf;
-        stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (!stopped) {
+        if (!i_this->mpMorf->isStop()) {
             break;
         }
         i_this->mCountDownTimers[0] = 100;
@@ -947,12 +917,7 @@ static void action_itai_move(am_class* i_this) {
         break;
     case 0x2F:
         bomb_move_set(i_this, 1);
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (!i_this->mpMorf->isStop()) {
-        morf = i_this->mpMorf;
-        stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (!stopped) {
+        if (!i_this->mpMorf->isStop()) {
             break;
         }
         cXyz centerPos = i_this->current.pos;

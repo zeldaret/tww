@@ -514,12 +514,7 @@ static void action_dousa(am2_class* i_this) {
         if (i_this->mpMorf->checkFrame(24.0f)) {
             fopAcM_seStart(i_this, JA_SE_CM_AM2_SPIKE_OUT, 0);
         }
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (!i_this->mpMorf->isStop()) {
-        mDoExt_McaMorf* morf = i_this->mpMorf;
-        bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (!stopped) {
+        if (!i_this->mpMorf->isStop()) {
             break;
         }
         i_this->mState++;
@@ -603,12 +598,7 @@ static void action_dousa(am2_class* i_this) {
         i_this->mState++;
         // Fall-through
     case 7:
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (!i_this->mpMorf->isStop()) {
-        morf = i_this->mpMorf;
-        stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (stopped) {
+        if (i_this->mpMorf->isStop()) {
             for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
                 i_this->mCountUpTimers[i] = 0;
             }
@@ -671,12 +661,7 @@ static void action_mahi(am2_class* i_this) {
     case 0xB:
         cLib_addCalc0(&actor->speedF, 0.5f, 1.0f);
         if (actor->speedF < 0.2f) {
-            // Using the mDoExt_McaMorf::isStop inline causes regswap.
-            // if (!i_this->mpMorf->isStop()) {
-            mDoExt_McaMorf* morf = i_this->mpMorf;
-            bool stopped = true;
-            if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-            if (stopped) {
+            if (i_this->mpMorf->isStop()) {
                 actor->speedF = 0.0f;
                 i_this->mCountDownTimers[2] = 20*30;
                 anm_init(i_this, AM2_BCK_MAHI, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
@@ -916,12 +901,7 @@ static void action_itai(am2_class* i_this) {
         i_this->mState++;
         break;
     case 0x17:
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (!i_this->mpMorf->isStop()) {
-        mDoExt_McaMorf* morf = i_this->mpMorf;
-        bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (!stopped) {
+        if (!i_this->mpMorf->isStop()) {
             break;
         }
         i_this->mNeedleCyl.OnAtSetBit();
@@ -972,12 +952,7 @@ static void action_itai(am2_class* i_this) {
         }
         break;
     case 0x19:
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (!i_this->mpMorf->isStop()) {
-        morf = i_this->mpMorf;
-        stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (!stopped) {
+        if (!i_this->mpMorf->isStop()) {
             break;
         }
         

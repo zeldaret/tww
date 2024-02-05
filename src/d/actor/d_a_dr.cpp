@@ -92,12 +92,7 @@ static void move(dr_class* i_this) {
         break;
     case 2:
         isIdle = true;
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (i_this->mpMorf->isStop()) {
-        mDoExt_McaMorf* morf = i_this->mpMorf;
-        bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (stopped) {
+        if (i_this->mpMorf->isStop()) {
             i_this->mState = 0;
         }
         break;
@@ -113,12 +108,7 @@ static void move(dr_class* i_this) {
             i_this->mCountDownTimers[1] = 5;
         }
         
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (i_this->mpMorf->isStop()) {
-        morf = i_this->mpMorf;
-        stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (stopped) {
+        if (i_this->mpMorf->isStop()) {
             i_this->m2C9 = 1;
             if (i_this->mpBreathEmitter) {
                 i_this->mpBreathEmitter->becomeInvalidEmitter();
@@ -165,12 +155,7 @@ static void move(dr_class* i_this) {
             i_this->mCountDownTimers[1] = 5;
         }
         
-        // Using the mDoExt_McaMorf::isStop inline causes regswap.
-        // if (i_this->mpMorf->isStop()) {
-        morf = i_this->mpMorf;
-        stopped = true;
-        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
-        if (stopped) {
+        if (i_this->mpMorf->isStop()) {
             i_this->mState = 0;
             if (i_this->mpBreathEmitter) {
                 i_this->mpBreathEmitter->becomeInvalidEmitter();

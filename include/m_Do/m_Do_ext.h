@@ -34,11 +34,7 @@ public:
     void setPlayMode(int i_mode) { mFrameCtrl->setAttribute(i_mode); }
     void setLoopFrame(f32 i_frame) { mFrameCtrl->setLoop(i_frame); }
     BOOL isStop() {
-        bool stopped = true;
-        if (!mFrameCtrl->checkState(J3DFrameCtrl::STATE_STOP_E) && mFrameCtrl->getRate() != 0.0f) {
-            stopped = false;
-        }
-        return stopped;
+        return mFrameCtrl->checkState(J3DFrameCtrl::STATE_STOP_E) || mFrameCtrl->getRate() == 0.0f;
     }
     BOOL isLoop() { return mFrameCtrl->checkState(J3DFrameCtrl::STATE_LOOP_E); }
 
@@ -351,12 +347,8 @@ public:
     void setPlaySpeed(f32 speed) { mFrameCtrl.setRate(speed); }
     f32 getFrame() { return mFrameCtrl.getFrame(); }
     void setFrame(f32 frame) { mFrameCtrl.setFrame((s16)frame); }
-    BOOL isStop() { //regswap somewhere here
-        bool stopped = true;
-        if (!mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && mFrameCtrl.getRate() != 0.0f) {
-            stopped = false;
-        }
-        return stopped;
+    BOOL isStop() {
+        return mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) || mFrameCtrl.getRate() == 0.0f;
     }
     BOOL checkFrame(f32 frame) {
         return mFrameCtrl.checkPass(frame);
@@ -411,12 +403,8 @@ public:
     void setPlaySpeed(f32 speed) { mFrameCtrl.setRate(speed); }
     f32 getFrame() { return mFrameCtrl.getFrame(); }
     void setFrame(f32 frame) { mFrameCtrl.setFrame((s16)frame); }
-    BOOL isStop() { //regswap somewhere here
-        bool stopped = true;
-        if (!mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && mFrameCtrl.getRate() != 0.0f) {
-            stopped = false;
-        }
-        return stopped;
+    BOOL isStop() {
+        return mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) || mFrameCtrl.getRate() == 0.0f;
     }
     BOOL checkFrame(f32 frame) {
         return mFrameCtrl.checkPass(frame);
