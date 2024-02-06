@@ -121,7 +121,7 @@ public:
     void specialStaffProc(dEvDtStaff_c*);
 
     char * getName() { return mName; }
-    u32 getStaff(int idx) { return mStaffIdx[idx]; }
+    int getStaff(int idx) { return mStaffIdx[idx]; }
     s32 getNStaff() { return mNStaff; }
     u32 getPriority() { return mPriority; }
     u8 getEndSound() { return mEventEndSound; }

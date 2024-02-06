@@ -235,24 +235,23 @@ static void* allOffObjectCallBack(fopAc_ac_c* actor, void*) {
 
 /* 80073FF0-80074108       .text startProc__16dEvent_manager_cFP12dEvDtEvent_c */
 void dEvent_manager_c::startProc(dEvDtEvent_c* event) {
-    /* Nonmatching */
     dEv_seach_prm prm(NULL, 0, 0);
     for (s32 i = 0; i < event->getNStaff(); i++) {
-        u32 staffIdx = event->getStaff(i);
+        int staffIdx = event->getStaff(i);
         dEvDtStaff_c* staff = mList.getStaffP(staffIdx);
         if (staff->getType() == dEvDtStaff_c::NORMAL_e) {
-            fopAc_ac_c* actor = specialCast(staff->mName, 1);
+            fopAc_ac_c* actor = specialCast(staff->getName(), 1);
             if (actor == NULL) {
                 setPrmStaff(&prm, staffIdx);
-                actor = (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)findObjectCallBack, &prm);
+                actor = fopAcM_Search((fopAcIt_JudgeFunc)findObjectCallBack, &prm);
             }
             if (actor != NULL) {
                 fopAcM_OnStatus(actor, fopAcStts_FORCEMOVE_e);
             }
         }
-        if (staff->mStaffType == dEvDtStaff_c::ALL_e) {
+        if (staff->getType() == dEvDtStaff_c::ALL_e) {
             setPrmStaff(&prm, staffIdx);
-            fopAcIt_Judge((fopAcIt_JudgeFunc)extraOnObjectCallBack, &prm);
+            fopAcM_Search((fopAcIt_JudgeFunc)extraOnObjectCallBack, &prm);
         }
         staff->init();
     }
@@ -392,8 +391,6 @@ BOOL dEvent_manager_c::endCheckOld(const char* eventName) {
 
 /* 800745E0-80074718       .text getMyStaffId__16dEvent_manager_cFPCcP10fopAc_ac_ci */
 int dEvent_manager_c::getMyStaffId(const char* name, fopAc_ac_c* actor, int tagId) {
-    /* Nonmatching */
-
     if (dComIfGp_event_getMode() == dEvtMode_NONE_e)
         return -1;
 
@@ -408,7 +405,7 @@ int dEvent_manager_c::getMyStaffId(const char* name, fopAc_ac_c* actor, int tagI
         if (event->mEventState == dEvDtEvent_c::PLAY_e || event->mEventState == dEvDtEvent_c::CLOSE_e || event->mEventState == dEvDtEvent_c::UNK3_e) {
             s32 nStaff = event->getNStaff();
             for (s32 j = 0; j < nStaff; j++) {
-                u32 staffIdx = event->getStaff(j);
+                int staffIdx = event->getStaff(j);
                 dEvDtStaff_c* staff = mList.getStaffP(staffIdx);
                 if (staff->mStaffType != dEvDtStaff_c::ALL_e && strcmp(name, staff->getName()) == 0 && tagId == staff->getTagID())
                     return staffIdx;
@@ -429,7 +426,6 @@ BOOL dEvent_manager_c::getIsAddvance(int staffIdx) {
 
 /* 8007473C-80074824       .text dEvmng_strcmp__FPCcPc */
 int dEvmng_strcmp(const char* s1, char* s2) {
-    /* Nonmatching */
     u32 len1 = strlen(s1);
     u32 len2 = strlen(s2);
 
@@ -441,13 +437,9 @@ int dEvmng_strcmp(const char* s1, char* s2) {
     if (len1 > len2)
         return 1;
 
-    const char* p1 = s1;
-    const char* p2 = s2;
-    while (len1-- > 0) {
-        if (*p1 != *p2)
+    for (int i = 0; i < len1; i++) {
+        if (s1[i] != s2[i])
             return 1;
-        p2++;
-        p1++;
     }
 
     return 0;
@@ -573,17 +565,20 @@ u8 dEvent_manager_c::getEventEndSound(s16 eventIdx) {
 
 /* 80074BE4-80074D78       .text exceptionProc__16dEvent_manager_cFv */
 void dEvent_manager_c::exceptionProc() {
-    /* Nonmatching */
-
     const char* eventName = mException.getEventName();
-    s32 eventIdx = getEventIdx(eventName, 0xFF);
+    s16 eventIdx = getEventIdx(eventName, 0xFF);
 
     if (eventIdx == -1) {
         mException.mEventInfoIdx = -1;
         return;
     }
 
-    u8 mapToolID = mException.mEventInfoIdx < 200 ? mException.mEventInfoIdx : 0xFF;
+    u8 mapToolID;
+    if (200 <= mException.mEventInfoIdx) {
+        mapToolID = 0xFF;
+    } else {
+        mapToolID = mException.mEventInfoIdx;
+    }
 
     switch (mException.mState) {
     case 0:
@@ -769,7 +764,7 @@ dEv_seach_prm::dEv_seach_prm(const char* name, u32 mask, u32 value) {
 }
 
 /* 80075394-800753A8       .text dEv_extra_createCB__FPv */
-static int dEv_extra_createCB(void* actor) {
+int dEv_extra_createCB(void* actor) {
     fopAcM_OnStatus((fopAc_ac_c*)actor, fopAcStts_UNK800_e);
     return 4;
 }
@@ -820,6 +815,11 @@ static u8 daNpc_Tt_tact_table[] = {
     0x02,
     0x01,
 };
+
+// Fakematch: dEvmng_daNpc_Tt_Conv and dEvmng_daNpc_Tt_GetEvFlag are unused but need to appear in this TU for a match.
+// Strangely, these two functions do not appear in the debug symbol maps, but do appear in the non-debug maps for both
+// the demo and the full game.
+#pragma force_active on
 
 /* 800754EC-80075590       .text dEvmng_daNpc_Tt_Conv__FUc */
 u8 dEvmng_daNpc_Tt_Conv(u8 param_0) {

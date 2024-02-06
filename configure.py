@@ -368,7 +368,7 @@ config.libs = [
             Object(NonMatching, "d/d_material.cpp"),
             Object(Matching,    "d/d_event.cpp"),
             Object(Matching,    "d/d_event_data.cpp"),
-            Object(NonMatching, "d/d_event_manager.cpp"),
+            Object(Matching,    "d/d_event_manager.cpp"),
             Object(NonMatching, "d/d_magma.cpp"),
             Object(NonMatching, "d/d_boss_magma.cpp"),
             Object(NonMatching, "d/d_grass.cpp"),

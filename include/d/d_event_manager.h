@@ -88,4 +88,6 @@ public:
     /* 0x0C */ u16 mCastInFlag;
 };
 
+int dEv_extra_createCB(void* actor);
+
 #endif /* D_EVENT_D_EVENT_MANAGER_H */
