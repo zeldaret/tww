@@ -34,7 +34,7 @@ void daBomb_c::setBombCheck_Flag() {
 void daBomb_c::setBombFire_ON() {
     _prm_chk_version();
 
-    field_0x6F2 = true;
+    mBombFire = true;
 }
 
 /* 80068068-800680CC       .text setBombNoHit__8daBomb_cFv */
