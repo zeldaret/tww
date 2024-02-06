@@ -158,12 +158,12 @@ void daBomb2::Act_c::remove_fuse_effect() {
 
 /* 80068488-80068490       .text set_time__Q27daBomb25Act_cFi */
 void daBomb2::Act_c::set_time(int time) {
-    field_0x738 = time;
+    mBombTimer = time;
 }
 
 /* 80068490-80068498       .text get_time__Q27daBomb25Act_cCFv */
 int daBomb2::Act_c::get_time() const {
-    return field_0x738;
+    return mBombTimer;
 }
 
 /* 80068498-800684A0       .text chk_eat__Q27daBomb25Act_cCFv */

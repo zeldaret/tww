@@ -197,7 +197,7 @@ namespace daBomb2 {
         /* 0x6CC */ cXyz field_0x6CC;
         /* 0x6D8 */ cXyz field_0x6D8;
         /* 0x6E4 */ Env_c mEnv;
-        /* 0x738 */ int field_0x738;
+        /* 0x738 */ int mBombTimer;
         /* 0x73C */ int field_0x73C;
         /* 0x740 */ u8 field_0x740;
         /* 0x741 */ u8 field_0x741;

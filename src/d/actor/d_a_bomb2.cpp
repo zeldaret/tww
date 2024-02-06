@@ -396,7 +396,7 @@ namespace daBomb2 {
         current.pos = home.pos;
         init_mtx();
 
-        field_0x738 = attr().field_0x8;
+        mBombTimer = attr().field_0x8;
         field_0x740 = 0;
         field_0x741 = 0;
         field_0x742 = 0;
@@ -618,17 +618,17 @@ namespace daBomb2 {
     }
 
     void Act_c::set_nut_exp_interval() {
-        if(field_0x738 > attr().field_0xA) {
-            field_0x738 = attr().field_0xA;
+        if(mBombTimer > attr().field_0xA) { // attr().field_0xA appears to be the bomb timer cap
+            mBombTimer = attr().field_0xA;
 
             f32 frame = 0x87 - attr().field_0xA;
             mBck0.getFrameCtrl()->setFrame(frame);
             mBrk0.getFrameCtrl()->setFrame(frame);
         }
     }
-
+    // runs mBrk0.play twice if the timer is less than 0x87
     void Act_c::anm_play() {
-        if(field_0x738 + 1 <= 0x87) {
+        if(mBombTimer + 1 <= 0x87) {
             mBck0.play();
             mBrk0.play();
         }
@@ -844,7 +844,7 @@ namespace daBomb2 {
     }
 
     bool Act_c::chk_exp_cc() {
-        if(field_0x738 > 0) {
+        if(mBombTimer > 0) {
             return chk_exp_cc_nut();
         }
 
@@ -882,10 +882,10 @@ namespace daBomb2 {
     bool Act_c::chk_exp_bg() {
         return chk_exp_bg_nut();
     }
-
+    //counts down the bomb timer by 1, then checks if it has expired. returns true and runs eff_explode if the timer expired, otherwise returns false
     bool Act_c::chk_exp_timer() {
         bool ret = false;
-        if(field_0x738 > 0 && --field_0x738 == 0) {
+        if(mBombTimer > 0 && --mBombTimer == 0) {
             eff_explode();
             ret = true;
         }
@@ -1066,7 +1066,7 @@ namespace daBomb2 {
         mSph.OffCoSPrmBit(CO_SPRM_SET);
         mSph.OnAtSPrmBit(AT_SPRM_SET);
         fopAcM_cancelCarryNow(this);
-        field_0x738 = 0;
+        mBombTimer = 0;
         field_0x73C = 4;
         dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     }
