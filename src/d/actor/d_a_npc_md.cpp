@@ -993,16 +993,17 @@ s16 daNpc_Md_c::getStickAngY(BOOL param_1) {
 
 /* 00003430-00003588       .text calcStickPos__10daNpc_Md_cFsP4cXyz */
 int daNpc_Md_c::calcStickPos(s16 param_1, cXyz* param_2) {
-    /* Nonmatching - dAttention_c::Lockon regswap */
-    dAttList_c* attList = dComIfGp_getAttention().GetLockonList(0);
+    // This temp variable for attention is probably a fakematch, but it fixes a regswap in dAttention_c::Lockon.
+    dAttention_c& attention = dComIfGp_getAttention();
+    dAttList_c* attList = attention.GetLockonList(0);
     
-    bool r26 = dComIfGp_getAttention().Lockon();
+    bool r26 = attention.Lockon();
     
     int r31;
     if (!r26) {
         r31 = 0;
     } else {
-        BOOL lockon = dComIfGp_getAttention().LockonTruth();
+        BOOL lockon = attention.LockonTruth();
         r31 = -1;
         if (lockon) {
             r31 = 1;
@@ -1010,7 +1011,7 @@ int daNpc_Md_c::calcStickPos(s16 param_1, cXyz* param_2) {
     }
     
     if (attList == NULL) {
-        attList = dComIfGp_getAttention().GetActionList(0);
+        attList = attention.GetActionList(0);
     }
     if (attList) {
         *param_2 = attList->getActor()->mEyePos;

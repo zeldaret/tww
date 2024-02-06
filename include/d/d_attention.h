@@ -167,7 +167,7 @@ public:
 
     fopAc_ac_c* Owner() { return (fopAc_ac_c*)mpPlayer; }
     
-    BOOL chkFlag(u32 flag) { return (mFlags & flag) ? TRUE : FALSE; }
+    bool chkFlag(u32 flag) { return (mFlags & flag) ? true : false; }
     void setFlag(u32 flag) { mFlags |= flag; }
     void clrFlag(u32 flag) { mFlags &= ~flag; }
     bool Lockon() { return LockonTruth() || chkFlag(0x20000000); } // regswap

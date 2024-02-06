@@ -546,10 +546,9 @@ static void action_dousa(am_class* i_this) {
     case 3:
         if (i_this->mCurrBckIdx != AM_BCK_CLOSE && i_this->mCurrBckIdx != AM_BCK_CLOSE_LOOP) {
             if (i_this->mCurrBckIdx != AM_BCK_DAMAGE_END) {
+                fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
                 // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-                // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
                 // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
-                mDoAud_seStart(JA_SE_CM_AM_NEEDLE_OUT, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                 mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             }
             anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
@@ -636,8 +635,8 @@ static void action_dousa(am_class* i_this) {
             anm_init(i_this, AM_BCK_DAMAGE, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
             // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_IN, 0);
-            // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_OPEN, 0);
             mDoAud_seStart(JA_SE_CM_AM_NEEDLE_IN, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_OPEN, 0);
             mDoAud_seStart(JA_SE_CM_AM_MOUTH_OPEN, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             fopAcM_monsSeStart(i_this, JA_SE_CV_AM_OPEN_MOUTH, 0);
             i_this->mNeedleCyl.OffAtSetBit();
@@ -761,10 +760,9 @@ static void action_handou_move(am_class* i_this) {
         }
         i_this->mTargetAngleY = i_this->current.angle.y;
         if (i_this->mCurrBckIdx != AM_BCK_CLOSE && i_this->mCurrBckIdx != AM_BCK_CLOSE_LOOP) {
+            fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
             // Using the fopAcM_seStart inline multiple times makes the codegen not match.
-            // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
             // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
-            mDoAud_seStart(JA_SE_CM_AM_NEEDLE_OUT, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         }
@@ -810,10 +808,9 @@ static void action_itai_move(am_class* i_this) {
             break;
         }
         anm_init(i_this, AM_BCK_DAMAGE_END, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
         // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-        // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
         // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
-        mDoAud_seStart(JA_SE_CM_AM_NEEDLE_OUT, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
         mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
         i_this->mState += 1;
         break;
@@ -899,9 +896,7 @@ static void action_itai_move(am_class* i_this) {
         dComIfGp_particle_set(0x8127, &i_this->mWaistPos);
         dComIfGp_particle_set(0x8128, &i_this->mWaistPos);
 
-        // The fopAcM_seStart inline makes the codegen not match.
-        // fopAcM_seStart(i_this, JA_SE_CM_AM_BEF_EXPLODE, 0);
-        mDoAud_seStart(JA_SE_CM_AM_BEF_EXPLODE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+        fopAcM_seStart(i_this, JA_SE_CM_AM_BEF_EXPLODE, 0);
         i_this->mTargetAngleY = i_this->current.angle.y;
 
         if (i_this->m033C) {
@@ -936,10 +931,9 @@ static void action_itai_move(am_class* i_this) {
             }
         }
 
+        fopAcM_seStart(i_this, JA_SE_CM_AM_EXPLODE, 0);
         // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-        // fopAcM_seStart(i_this, JA_SE_CM_AM_EXPLODE, 0);
         // fopAcM_seStart(i_this, JA_SE_LK_LAST_HIT, 0);
-        mDoAud_seStart(JA_SE_CM_AM_EXPLODE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
         mDoAud_seStart(JA_SE_LK_LAST_HIT, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
 
         fopAcM_createDisappear(i_this, &centerPos, 5);

@@ -823,9 +823,7 @@ static void action_mahi(am2_class* i_this) {
                 anm_init(i_this, AM2_BCK_BURUBURU, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
                 i_this->mCountDownTimers[3] = 20*30;
                 actor->mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
-                // Using the fopAcM_seStart inline multiple times makes the codegen not match.
-                // fopAcM_seStart(i_this, JA_SE_CM_AM2_RECOVER, 0);
-                mDoAud_seStart(JA_SE_CM_AM2_RECOVER, &actor->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+                fopAcM_seStart(i_this, JA_SE_CM_AM2_RECOVER, 0);
                 fopAcM_monsSeStart(actor, JA_SE_CV_AM2_AWAKE, 0);
             }
             
@@ -960,7 +958,7 @@ static void action_itai(am2_class* i_this) {
         centerPos.y += 50.0f;
         dComIfGp_particle_set(0x81AF, &i_this->current.pos, &i_this->shape_angle);
         dComIfGp_particle_set(0x81B0, &i_this->current.pos, &i_this->shape_angle);
-        mDoAud_seStart(JA_SE_CM_AM2_EXPLODE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+        fopAcM_seStart(i_this, JA_SE_CM_AM2_EXPLODE, 0);
         fopAcM_createDisappear(i_this, &centerPos, 5);
         fopAcM_onActor(i_this);
         fopAcM_delete(i_this);

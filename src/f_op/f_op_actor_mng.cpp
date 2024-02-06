@@ -27,6 +27,9 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_malloc.h"
 
+#define MAKE_ITEM_PARAMS(itemNo, itemBitNo, switchNo2, type, action)                               \
+    ((itemNo & 0xFF) << 0 | (itemBitNo & 0xFF) << 0x8 | switchNo2 << 0x10 | (type & 0x3) << 0x18 | (action & 0x3F) << 0x1A)
+
 static Vec dummy_3569;
 
 /* 80024060-80024104       .text fopAcM_setStageLayer__FPv */
@@ -962,7 +965,7 @@ s32 fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int 
     prmRot.z = switchNo;
     
     u8 itemNo = check_itemno(i_itemNo);
-    u32 params = (i_itemBitNo & 0xFF) << 0x08 | itemNo & 0xFF | switchNo2 << 16 | (type & 3) << 24 | action << 26;
+    u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
     
     switch (i_itemNo) {
     case RECOVER_FAIRY:
@@ -1001,7 +1004,7 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     prmRot.z = switchNo;
 
     u8 itemNo = check_itemno(i_itemNo);
-    u32 params = (i_itemBitNo & 0xFF) << 0x08 | itemNo & 0xFF | switchNo2 << 16 | (type & 3) << 24 | action << 26;
+    u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
 
     switch (i_itemNo) {
     case RECOVER_FAIRY:
@@ -1057,7 +1060,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
     
     u8 itemNo = check_itemno(i_itemNo);
     u8 itemBitNo = i_itemBitNo;
-    u32 params = (itemNo & 0xFF) << 0 | (itemBitNo & 0xFF) << 8 | switchNo2 << 16 | (type & 3) << 24 | action << 26;
+    u32 params = MAKE_ITEM_PARAMS(itemNo, itemBitNo, switchNo2, type, action);
 
     if (isHeart(i_itemNo)) {
         speedF = 2.0f * speedF;
