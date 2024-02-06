@@ -10,7 +10,6 @@ public:
     enum {
         /* 0x1 */ FIND = 1,
         /* 0x2 */ IN = 2,
-        /* 0x4 */ MOVE_BG_ONLY = 4
     };
 
     dBgS_SplGrpChk();
@@ -19,15 +18,13 @@ public:
     virtual ~dBgS_SplGrpChk() {}
 
     void OffFind() { m_flags &= ~FIND; }
-    void OffIn() { m_flags &= ~IN; }
-    void OffMoveBGOnly() { m_flags &= ~MOVE_BG_ONLY; }
-    void OnMoveBGOnly() { m_flags |= MOVE_BG_ONLY; }
     void OnFind() { m_flags |= FIND; }
-    bool ChkMoveBGOnly() { return m_flags & MOVE_BG_ONLY; }
+    void OffIn() { m_flags &= ~IN; }
+    void OnIn() { m_flags |= IN; }
     void SetHeight(f32 height) { m_height = height; }
     f32 GetHeight() { return m_height; }
     cXyz* GetPosP() { return &m_ground; }
-    f32 GetRoof() const { return m_roof; }
+    f32 GetRoof() { return m_roof; }
     void Set(cXyz& ground, f32 roof) {
         m_ground = ground;
         m_roof = roof;

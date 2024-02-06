@@ -40,9 +40,12 @@ public:
 
 class dBgS_ObjGndChk_Wtr : public dBgS_ObjGndChk {
 public:
-    dBgS_ObjGndChk_Wtr();
+    dBgS_ObjGndChk_Wtr() {
+        OffNormalGrp();
+        OnWaterGrp();
+    }
 
-    virtual ~dBgS_ObjGndChk_Wtr();
+    virtual ~dBgS_ObjGndChk_Wtr() {}
 };
 
 class dBgS_ObjGndChk_Spl : public dBgS_ObjGndChk {

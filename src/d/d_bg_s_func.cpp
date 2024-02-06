@@ -3,39 +3,84 @@
 // Translation Unit: d_bg_s_func.cpp
 //
 
-#include "d_bg_s_func.h"
-#include "dolphin/types.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_bg_s_gnd_chk.h"
+#include "d/d_bg_s_spl_grp_chk.h"
+#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_sea.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 800A4564-800A4778       .text dBgS_ObjGndChk_Func__FR4cXyz */
-void dBgS_ObjGndChk_Func(cXyz&) {
-    /* Nonmatching */
+f32 dBgS_ObjGndChk_Func(cXyz& r25) {
+    dBgS_ObjGndChk gndChk;
+    gndChk.SetPos(&r25);
+    f32 height = dComIfG_Bgsp()->GroundCross(&gndChk);
+    return height;
 }
 
 /* 800A4778-800A49E0       .text dBgS_ObjGndChk_Wtr_Func__FR4cXyz */
-void dBgS_ObjGndChk_Wtr_Func(cXyz&) {
-    /* Nonmatching */
+f32 dBgS_ObjGndChk_Wtr_Func(cXyz& r19) {
+    dBgS_ObjGndChk_Wtr gndChk;
+    gndChk.SetPos(&r19);
+    f32 height = dComIfG_Bgsp()->GroundCross(&gndChk);
+    return height;
 }
 
 /* 800A49E0-800A4F68       .text dBgS_SplGrpChk_In_ObjGnd__FR4cXyzP14dBgS_SplGrpChkf */
-void dBgS_SplGrpChk_In_ObjGnd(cXyz&, dBgS_SplGrpChk*, float) {
-    /* Nonmatching */
+BOOL dBgS_SplGrpChk_In_ObjGnd(cXyz& r30, dBgS_SplGrpChk* r31, f32 f31) {
+    dBgS_ObjGndChk gndChk;
+    cXyz sp1c = r30;
+    sp1c.y += f31;
+    gndChk.SetPos(&sp1c);
+    f32 height = dComIfG_Bgsp()->GroundCross(&gndChk);
+    r31->SetHeight(height);
+    if (height == -1e9f) {
+        return FALSE;
+    }
+    
+    int room_no = dComIfG_Bgsp()->GetRoomId(gndChk);
+    JUT_ASSERT(93, 0 <= room_no && room_no < 64);
+    dBgW* bgw = dComIfGp_roomControl_getBgW(room_no);
+    if (bgw == NULL) {
+        return FALSE;
+    }
+    
+    f32 max, min;
+    bgw->GetTopUnder(&max, &min);
+    cXyz sp10 = r30;
+    sp10.y = height;
+    r31->Set(sp10, max);
+    if (dComIfG_Bgsp()->SplGrpChk(r31)) {
+        if (r31->GetHeight() > r30.y) {
+            r31->OnIn();
+        }
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 800A4F68-800A51FC       .text dBgS_GetWaterHeight__FR4cXyz */
-void dBgS_GetWaterHeight(cXyz&) {
-    /* Nonmatching */
+f32 dBgS_GetWaterHeight(cXyz& r19) {
+    dBgS_ObjGndChk_Wtr gndChk;
+    gndChk.SetPos(&r19);
+    f32 height = dComIfG_Bgsp()->GroundCross(&gndChk);
+    if (daSea_ChkArea(r19.x, r19.z)) {
+        f32 f1 = daSea_calcWave(r19.x, r19.z);
+        if (height < f1) {
+            height = f1;
+        }
+    }
+    return height;
 }
 
 /* 800A51FC-800A54F8       .text dBgS_GetGndMtrlSndId_Func__F4cXyzf */
-void dBgS_GetGndMtrlSndId_Func(cXyz, float) {
-    /* Nonmatching */
+u32 dBgS_GetGndMtrlSndId_Func(cXyz r21, f32 f1) {
+    r21.y += f1;
+    dBgS_ObjGndChk gndChk;
+    gndChk.SetPos(&r21);
+    if (dComIfG_Bgsp()->GroundCross(&gndChk) == -1e9f) {
+        return 0;
+    }
+    return dComIfG_Bgsp()->GetMtrlSndId(gndChk);
 }
-
-/* 800A54F8-800A5660       .text __dt__18dBgS_ObjGndChk_WtrFv */
-dBgS_ObjGndChk_Wtr::~dBgS_ObjGndChk_Wtr() {
-    /* Nonmatching */
-}
-
-
-
-

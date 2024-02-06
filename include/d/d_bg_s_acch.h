@@ -74,10 +74,6 @@ public:
         /* 0x020000 */ SEA_CHECK = (1 << 17),
         /* 0x040000 */ SEA_WATER_HEIGHT = (1 << 18),
         /* 0x080000 */ SEA_IN = (1 << 19),
-        /* 0x100000 */ MOVE_BG_ONLY = (1 << 20),
-        /* 0x200000 */ GND_THIN_CELLING_OFF = (1 << 21),
-        /* 0x400000 */ WALL_SORT = (1 << 22),
-        /* 0x800000 */ LINE_DOWN = (1 << 23),
     };
 
     dBgS_Acch();
@@ -109,8 +105,6 @@ public:
         for (s32 i = 0; i < m_tbl_size; i++)
             pm_acch_cir[i].CalcWallRR();
     }
-    void SetMoveBGOnly();
-    void ClrMoveBGOnly();
     void SetGndThinCellingOff();
     void ClrGndThinCellingOff();
     bool ChkGndThinCellingOff();
@@ -169,7 +163,6 @@ public:
     void SetGrndNone() { m_flags |= GRND_NONE; }
     void ClrGrndNone() { m_flags &= ~GRND_NONE; }
     void SetGroundCheckOffset(f32 offset) { m_ground_check_offset = offset; }
-    bool ChkMoveBGOnly() const { return m_flags & MOVE_BG_ONLY; }
     void SetWallHit() { m_flags |= WALL_HIT; }
     void ClrWallNone() { m_flags &= ~WALL_NONE; }
     void OnSeaCheckOn() { m_flags |= SEA_CHECK;}
