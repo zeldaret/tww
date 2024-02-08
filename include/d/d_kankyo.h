@@ -432,6 +432,7 @@ void dKy_setLight_again();
 void dKy_GxFog_set();
 void dKy_GxFog_sea_set();
 void dKy_GxFog_tevstr_set(dKy_tevstr_c*);
+void dKy_GfFog_tevstr_set(dKy_tevstr_c*);
 void GxXFog_set();
 void dKy_set_actcol_ratio(f32 ratio);
 void dKy_set_bgcol_ratio(f32 ratio);
@@ -445,5 +446,6 @@ cXyz dKy_get_orion_pos();
 cXyz dKy_get_hokuto_pos();
 void dKy_DayProc();
 u8 dKy_get_schbit();
+int dKy_rain_check();
 
 #endif /* D_KANKYO_D_KANKYO_H */
