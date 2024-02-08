@@ -24,7 +24,7 @@ namespace daBomb2 {
             /* 0x00 */ const char* resName;
             /* 0x04 */ u32 heapSize;
             /* 0x08 */ s16 field_0x8;
-            /* 0x0A */ s16 field_0xA;
+            /* 0x0A */ s16 field_0xA; // Appears to be the bomb timer cap
             /* 0x0C */ f32 gravity;
             /* 0x10 */ f32 maxFallSpeed;
             /* 0x14 */ f32 field_0x14;
@@ -618,7 +618,7 @@ namespace daBomb2 {
     }
 
     void Act_c::set_nut_exp_interval() {
-        if(mBombTimer > attr().field_0xA) { // attr().field_0xA appears to be the bomb timer cap
+        if(mBombTimer > attr().field_0xA) {
             mBombTimer = attr().field_0xA;
 
             f32 frame = 0x87 - attr().field_0xA;
@@ -626,7 +626,7 @@ namespace daBomb2 {
             mBrk0.getFrameCtrl()->setFrame(frame);
         }
     }
-    // runs mBrk0.play twice if the timer is less than 0x87
+
     void Act_c::anm_play() {
         if(mBombTimer + 1 <= 0x87) {
             mBck0.play();
@@ -882,7 +882,7 @@ namespace daBomb2 {
     bool Act_c::chk_exp_bg() {
         return chk_exp_bg_nut();
     }
-    //counts down the bomb timer by 1, then checks if it has expired. returns true and runs eff_explode if the timer expired, otherwise returns false
+
     bool Act_c::chk_exp_timer() {
         bool ret = false;
         if(mBombTimer > 0 && --mBombTimer == 0) {
