@@ -11,9 +11,11 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+static u8 dummy[0x4C];
+
 namespace daObjFerris {
     namespace {
-        static const Attr_c L_attr = { 45, 0x01, 50.0f, 195.0f, 0.0f, -100.0f, -135.0f, 1820.0f, 0.0f, 30.0f };
+        static const Attr_c L_attr = { 45, 0x01, 50.0f, 195.0f, { 0.0f, -100.0f, -135.0f }, 1820.0f, 0.0f, 30.0f };
         inline const Attr_c & attr() { return L_attr; }
     }
 
@@ -141,6 +143,8 @@ void daObjFerris::Act_c::ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c*
 
 /* 000004DC-00000898       .text _create__Q211daObjFerris5Act_cFv */
 s32 daObjFerris::Act_c::_create() {
+    /* Nonmatching */
+
     fopAcM_SetupActor(this, Act_c);
 
     s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
@@ -213,7 +217,6 @@ bool daObjFerris::Act_c::_delete() {
 
 /* 00000EA8-000011B8       .text set_mtx__Q211daObjFerris5Act_cFi */
 void daObjFerris::Act_c::set_mtx(int idx) {
-    /* Nonmatching */
     static cXyz offset[6] = {
         cXyz(0.56f, 1078.13f, 162.68f),
         cXyz(1026.17f, 332.98f, 162.68f),
@@ -454,27 +457,28 @@ void daObjFerris::Act_c::set_collision() {
 /* 00001A50-00001C30       .text make_lean__Q211daObjFerris5Act_cFv */
 void daObjFerris::Act_c::make_lean() {
     /* Nonmatching */
+    cXyz pt0;
+    cXyz pt1;
     cXyz offs1(0.0f, -100.0f, -135.0f);
     cXyz offs0(0.0f, 0.0f, 0.0f);
+    cXyz delta;
+    cXyz delta2;
+
     for (s32 i = 0; i < 5; i++) {
         if (mRideState[i] == 1) {
             Mtx& mtx = mMtx[i];
-            cXyz pt0;
-            cXyz pt1;
             mDoMtx_multVec(mtx, &offs0, &pt0);
             mDoMtx_multVec(mtx, &offs1, &pt1);
 
-            cXyz delta;
             delta.x = pt1.x - pt0.x;
             delta.y = 0.0f;
             delta.z = pt1.z - pt0.z;
 
-            f32 dz = mRidePos.z - delta.z;
-            f32 dx = mRidePos.x - delta.x;
+            delta2.set(mRidePos.x - delta.x, 0.0f, mRidePos.z - delta.z);
             delta.normalizeRS();
 
-            f32 h = fabsf(cM3d_VectorProduct2d(delta.z, delta.x, pt0.z, pt0.x, mRidePos.z, mRidePos.x)) / 162.0f;
-            if (delta.x * dx - delta.z * dz < 0.0f) {
+            f32 h = fabsf(-(-delta.z * pt0.x + delta.x * pt0.z) + (-delta.z * mRidePos.x + delta.x * mRidePos.z)) / 162.0f;
+            if (delta.x * delta2.x - delta.z * delta2.z < 0.0f) {
                 mRideWaveTarget[i] = h * -550.0f;
             } else {
                 mRideWaveTarget[i] = h * 550.0f;

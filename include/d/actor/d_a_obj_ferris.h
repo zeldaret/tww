@@ -20,9 +20,7 @@ namespace daObjFerris {
             /* 0x02 */ s16 field_0x02;
             /* 0x04 */ f32 mCylR;
             /* 0x08 */ f32 mCylH;
-            /* 0x0C */ f32 field_0x0c;
-            /* 0x10 */ f32 field_0x10;
-            /* 0x14 */ f32 field_0x14;
+            /* 0x0C */ Vec mOffset;
             /* 0x18 */ f32 field_0x18;
             /* 0x1C */ f32 field_0x1c;
             /* 0x20 */ f32 field_0x20;
