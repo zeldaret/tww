@@ -2502,6 +2502,10 @@ inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo) {
     return g_dComIfG_gameInfo.play.getEvtManager().getEventIdx(pName, evNo);
 }
 
+inline int dComIfGp_evmng_getToolId(u8 idx, int sub) {
+    return dComIfGp_getPEvtManager()->getToolId(idx, sub);
+}
+
 inline int dComIfGp_evmng_getMyStaffId(const char* pName, fopAc_ac_c* pActor = NULL, int staffType = 0) {
     return dComIfGp_getPEvtManager()->getMyStaffId(pName, pActor, staffType);
 }

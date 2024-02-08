@@ -169,9 +169,9 @@ public:
     static u8 getIconDispMode() { return mIconDispMode; }
     static void setIconDispMode(u8 mode) { mIconDispMode = mode; }
 
-    static void setAGBMapSendStopFlg() {}
-    static void clrAGBMapSendStopFlg() {}
-    static void isAGBMapSendStopFlg() {}
+    static void setAGBMapSendStopFlg() { mAGBMapSendStopFlg = true; }
+    static void clrAGBMapSendStopFlg() { mAGBMapSendStopFlg = false; }
+    static bool isAGBMapSendStopFlg() { return mAGBMapSendStopFlg; }
     static void getMapDspSizeHeight() {}
     static void getMapDspSizeWidth() {}
     static void getNowRoom() {}
@@ -257,6 +257,7 @@ public:
     static u8 mIconSelfAlpha;
     static f32 mIconSelfScale;
     static u8 mIconDispMode;
+    static bool mAGBMapSendStopFlg;
 };
 
 inline void dMap_drawPoint(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9) {

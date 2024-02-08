@@ -70,53 +70,164 @@ BOOL dDoor_info_c::adjoinPlayer() {
 }
 
 /* 8006B4C4-8006B554       .text getViewRoomNo__12dDoor_info_cFv */
-void dDoor_info_c::getViewRoomNo() {
-    /* Nonmatching */
+u8 dDoor_info_c::getViewRoomNo() {
+    cXyz delta = dComIfGd_getView()->mLookat.mEye - current.pos;
+    if (delta.x * mAngleVec.x + delta.z * mAngleVec.z < 0.0f)
+        return getBRoomNo();
+    else
+        return getFRoomNo();
 }
 
 /* 8006B554-8006B5E4       .text frontCheckOld__12dDoor_info_cFv */
-void dDoor_info_c::frontCheckOld() {
+s32 dDoor_info_c::frontCheckOld() {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cSGlobe globe(player->current.pos - current.pos);
+    cSAngle angle1;
+    angle1 = (globe.U() - player->current.angle.y);
+    s16 angle = angle1.Abs();
+    if (angle < 0x4000 && angle >= 0)
+        return 0;
+    else
+        return 1;
 }
 
 /* 8006B65C-8006B6F4       .text frontCheck__12dDoor_info_cFv */
-void dDoor_info_c::frontCheck() {
-    /* Nonmatching */
+s32 dDoor_info_c::frontCheck() {
+    s32 stayNo = dComIfGp_roomControl_getStayNo();
+    if (getFRoomNo() == getBRoomNo())
+        return frontCheckOld();
+
+    return stayNo == getFRoomNo() ? 0 :
+        stayNo == getBRoomNo() ? 1 : 2;
 }
 
 /* 8006B6F4-8006B824       .text drawCheck_local__12dDoor_info_cFv */
-void dDoor_info_c::drawCheck_local() {
-    /* Nonmatching */
+s32 dDoor_info_c::drawCheck_local() {
+    if (!adjoinPlayer() && !mEvtInfo.checkCommandDemoAccrpt() && !mEvtInfo.checkCommandDoor())
+        return 0;
+
+    if (getFRoomNo() == 0x3F || getBRoomNo() == 0x3F)
+        mTevStr.mRoomNo = dComIfGp_roomControl_getStayNo();
+    else
+        mTevStr.mRoomNo = getViewRoomNo();
+
+    current.roomNo = mTevStr.mRoomNo;
+
+    u8 front = frontCheck();
+    if (front == 2)
+        mRoomNo = -1;
+    else
+        mRoomNo = dComIfGp_roomControl_getStayNo();
+
+    if (!dComIfGp_roomControl_checkRoomDisp(mTevStr.mRoomNo))
+        return 1;
+
+    if (getViewRoomNo() == 0x3F && (getFRoomNo() != 0x3F || getBRoomNo() != 0x3F))
+        return 1;
+    else
+        return 2;
 }
 
 /* 8006B824-8006B8AC       .text drawCheck__12dDoor_info_cFi */
-void dDoor_info_c::drawCheck(int) {
-    /* Nonmatching */
+u8 dDoor_info_c::drawCheck(int mode) {
+    s32 rt = drawCheck_local();
+    if (rt != 0) {
+        if (mode) {
+            fopAcM_SetStatusMap(this, 0x0A);
+        }  else {
+            fopAcM_SetStatusMap(this, 0x09);
+        }
+    } else {
+        fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
+    }
+    return rt == 2;
 }
 
 /* 8006B8AC-8006B954       .text checkExecute__12dDoor_info_cFv */
-void dDoor_info_c::checkExecute() {
-    /* Nonmatching */
+u8 dDoor_info_c::checkExecute() {
+    mFrontCheck = frontCheck();
+    if (fopAcM_checkStatus(this, fopAcStts_UNK1000_e))
+        return 1;
+
+    if (mEvtInfo.checkCommandDemoAccrpt() || mEvtInfo.checkCommandDoor())
+        return 2;
+
+    if (mRoomNo2 != dComIfGp_roomControl_getStayNo())
+        return 0;
+
+    if (mFrontCheck != 2 && adjoinPlayer())
+        return 2;
+
+    return 0;
 }
 
 /* 8006B954-8006BA30       .text startDemoProc__12dDoor_info_cFv */
 void dDoor_info_c::startDemoProc() {
-    /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
+    shape_angle.y = current.angle.y;
+    JUT_ASSERT(0x112, player);
+    s16 delta = player->home.angle.y - home.angle.y;
+    if (delta < 0)
+        delta = -delta;
+    if (delta < 0x1000 && delta > -1000)
+        shape_angle.y += 0x7FFF;
 }
 
 /* 8006BA30-8006BB5C       .text makeEventId__12dDoor_info_cFi */
-void dDoor_info_c::makeEventId(int) {
+void dDoor_info_c::makeEventId(int spl) {
     /* Nonmatching */
+    static const char* table[] = {
+        "DEFAULT_STOP_OPEN",
+        "DEFAULT_STOP_OPEN",
+        "DEFAULT_SHUTTER_DOOR_F",
+        "DEFAULT_SHUTTER_DOOR_F",
+        "DEFAULT_SHUTTER_DOOR_F_STOP",
+        "DEFAULT_SHUTTER_DOOR_F_STOP",
+        "DEFAULT_BS_SHUTTER_F",
+        "DEFAULT_KNOB_DOOR_F_OPEN",
+        "DEFAULT_KNOB_DOOR_B_OPEN",
+        "DEFAULT_KNOB_TALK",
+        "HKYO_DOOR",
+        "SHUTTER_DROP_CARRY",
+    };
+
+    for (s32 i = 0; i < 12; i++) {
+        mToolId[i] = dComIfGp_evmng_getToolId(getEventNo(), i);
+        mEventIdx[i] = dComIfGp_evmng_getEventIdx(table[i], mToolId[i]);
+    }
+
+    switch (spl) {
+    case 1:
+        mEventIdx[2] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[2]);
+        mEventIdx[3] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[3]);
+        break;
+    case 2:
+        mEventIdx[2] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[2]);
+        mEventIdx[3] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[3]);
+        break;
+    }
 }
 
 /* 8006BB5C-8006BBB0       .text initProc__12dDoor_info_cFi */
-void dDoor_info_c::initProc(int) {
-    /* Nonmatching */
+void dDoor_info_c::initProc(int spl) {
+    mAngleVec.set(cM_ssin(home.angle.y), 0.0f, cM_scos(home.angle.y));
+    makeEventId(spl);
 }
 
 /* 8006BBB0-8006BC50       .text initOpenDemo__12dDoor_info_cFi */
-void dDoor_info_c::initOpenDemo(int) {
-    /* Nonmatching */
+void dDoor_info_c::initOpenDemo(int evt) {
+    if (field_0x2c6 != 9)
+        dComIfGp_map_setAGBMapSendStopFlg();
+
+    shape_angle.y = current.angle.y;
+    if (mFrontCheck == 1)
+        shape_angle.y += 0x7FFF;
+
+    mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
+    if (evt)
+        dComIfGp_event_onEventFlag(2);
 }
 
 /* 8006BC50-8006BDBC       .text checkArea__12dDoor_info_cFfff */
@@ -125,28 +236,101 @@ void dDoor_info_c::checkArea(f32, f32, f32) {
 }
 
 /* 8006BDBC-8006BE94       .text openInitCom__12dDoor_info_cFi */
-void dDoor_info_c::openInitCom(int) {
+void dDoor_info_c::openInitCom(int ship) {
     /* Nonmatching */
+    if (mFrontCheck == 0) {
+        mFromRoomNo = getFRoomNo();
+        mToRoomNo = getBRoomNo();
+    } else {
+        mFromRoomNo = getBRoomNo();
+        mToRoomNo = getFRoomNo();
+    }
+
+    if (mFromRoomNo != mToRoomNo && mFromRoomNo != 0x3F && mToRoomNo != 0x3F)
+        dComIfGp_roomControl_offStatusFlag(mToRoomNo, 0x08);
+
+    if (ship && getShipId() != 0x3F)
+        dStage_setShipPos(getShipId(), mToRoomNo);
 }
 
 /* 8006BE94-8006BF74       .text openProcCom__12dDoor_info_cFv */
 void dDoor_info_c::openProcCom() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    s16 angle = shape_angle.y + 0x7FFF;
+    cXyz target;
+    cXyz playerPos = player->current.pos;
+    target = current.pos;
+    target.x += cM_ssin(angle) * -100.0f;
+    target.z += cM_scos(angle) * -100.0f;
+    playerPos.x = playerPos.x * 0.9f + target.x * 0.1f;
+    playerPos.z = playerPos.z * 0.9f + target.z * 0.1f;
+    player->setPlayerPosAndAngle(&playerPos, player->current.angle.y);
 }
 
 /* 8006BF74-8006C0A4       .text closeEndCom__12dDoor_info_cFv */
 void dDoor_info_c::closeEndCom() {
     /* Nonmatching */
+    if (mFromRoomNo != mToRoomNo && mFromRoomNo != 0x3F && mToRoomNo != 0x3F)
+        dComIfGp_roomControl_onStatusFlag(mFromRoomNo, 0x08);
+
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    cXyz delta = player->current.pos - current.pos;
+    f32 rad;
+    f32 dot = delta.x * mAngleVec.x + delta.z * mAngleVec.z;
+    if (dot < 0.0f)
+        rad = 180.0f;
+    else
+        rad = -180.0f;
+
+    cXyz pos(player->current.pos.x - rad * mAngleVec.x, player->current.pos.y, player->current.pos.z - rad * mAngleVec.z);
+    g_dComIfG_gameInfo.save.getRestart().setRoom(pos,
+        dot > 0.0f ? player->current.angle.y : (s16)(player->current.angle.y + 0x8000),
+        fopAcM_GetRoomNo(player));
 }
 
 /* 8006C0A4-8006C0EC       .text getDemoAction__12dDoor_info_cFv */
-void dDoor_info_c::getDemoAction() {
-    /* Nonmatching */
+s32 dDoor_info_c::getDemoAction() {
+    static char* action_table[] = {
+        "WAIT",
+        "STOP_OPEN",
+        "STOP_CLOSE",
+        "OPEN",
+        "CLOSE",
+        "SMOKE",
+        "SMOKE_END",
+        "SETGOAL",
+        "UNLOCK",
+        "SETSTART",
+        "SETANGLE",
+        "ADJUSTMENT",
+        "OPEN_PUSH",
+        "OPEN_PULL",
+        "OPEN_PUSH2",
+        "OPEN_PULL2",
+        "TALK",
+        "SETSTART_PUSH",
+        "SETSTART_PULL",
+        "END_CHECK",
+        "DROP_BF",
+        "DROP_AF",
+    };
+
+    return dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
 }
 
 /* 8006C0EC-8006C1D8       .text setGoal__12dDoor_info_cFv */
 void dDoor_info_c::setGoal() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    cXyz playerPos = player->current.pos;
+    cXyz target = current.pos;
+    s16 angle = shape_angle.y + 0x7FFF;
+    playerPos.x += cM_ssin(angle) * 350.0f;
+    playerPos.z += cM_scos(angle) * 350.0f;
+    target.x += cM_ssin(angle) * 250.0f;
+    target.z += cM_scos(angle) * 250.0f;
+    playerPos.x = playerPos.x * 0.8f + target.x * 0.2f;
+    playerPos.z = playerPos.z * 0.8f + target.z * 0.2f;
+    dComIfGp_evmng_setGoal(&playerPos);
 }
 
 /* 8006C1D8-8006C200       .text setPlayerAngle__12dDoor_info_cFi */
