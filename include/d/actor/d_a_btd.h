@@ -6,6 +6,8 @@
 class btd_class : public fopAc_ac_c {
 public:
     /* Place member variables here */
+    /* 0x0290 */ u8 field_0x290[0x6e16 - 0x290];
+    /* 0x6E16 */ s16 field_0x6e16;
 };
 
 class daBtd_HIO_c {
