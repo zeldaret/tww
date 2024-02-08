@@ -24,7 +24,7 @@ namespace daBomb2 {
             /* 0x00 */ const char* resName;
             /* 0x04 */ u32 heapSize;
             /* 0x08 */ s16 field_0x8;
-            /* 0x0A */ s16 field_0xA;
+            /* 0x0A */ s16 field_0xA; // Appears to be the bomb timer cap
             /* 0x0C */ f32 gravity;
             /* 0x10 */ f32 maxFallSpeed;
             /* 0x14 */ f32 field_0x14;
@@ -396,7 +396,7 @@ namespace daBomb2 {
         current.pos = home.pos;
         init_mtx();
 
-        field_0x738 = attr().field_0x8;
+        mBombTimer = attr().field_0x8;
         field_0x740 = 0;
         field_0x741 = 0;
         field_0x742 = 0;
@@ -618,8 +618,8 @@ namespace daBomb2 {
     }
 
     void Act_c::set_nut_exp_interval() {
-        if(field_0x738 > attr().field_0xA) {
-            field_0x738 = attr().field_0xA;
+        if(mBombTimer > attr().field_0xA) {
+            mBombTimer = attr().field_0xA;
 
             f32 frame = 0x87 - attr().field_0xA;
             mBck0.getFrameCtrl()->setFrame(frame);
@@ -628,7 +628,7 @@ namespace daBomb2 {
     }
 
     void Act_c::anm_play() {
-        if(field_0x738 + 1 <= 0x87) {
+        if(mBombTimer + 1 <= 0x87) {
             mBck0.play();
             mBrk0.play();
         }
@@ -844,7 +844,7 @@ namespace daBomb2 {
     }
 
     bool Act_c::chk_exp_cc() {
-        if(field_0x738 > 0) {
+        if(mBombTimer > 0) {
             return chk_exp_cc_nut();
         }
 
@@ -885,7 +885,7 @@ namespace daBomb2 {
 
     bool Act_c::chk_exp_timer() {
         bool ret = false;
-        if(field_0x738 > 0 && --field_0x738 == 0) {
+        if(mBombTimer > 0 && --mBombTimer == 0) {
             eff_explode();
             ret = true;
         }
@@ -1066,7 +1066,7 @@ namespace daBomb2 {
         mSph.OffCoSPrmBit(CO_SPRM_SET);
         mSph.OnAtSPrmBit(AT_SPRM_SET);
         fopAcM_cancelCarryNow(this);
-        field_0x738 = 0;
+        mBombTimer = 0;
         field_0x73C = 4;
         dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     }

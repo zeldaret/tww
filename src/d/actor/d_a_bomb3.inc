@@ -1026,9 +1026,9 @@ void daBomb_c::waitState_bomtyu() {
     cLib_chaseF(&mScale.x, 1.0f, 0.05f);
     cLib_chaseF(&mScale.y, 1.0f, 0.05f);
     cLib_chaseF(&mScale.z, 1.0f, 0.05f);
-    if(field_0x6F2) {
+    if(mBombFire) {
         setFuseEffect();
-        field_0x6F2 = 0;
+        mBombFire = 0;
         field_0x6F4 = 1;
         change_state(STATE_1);
     }

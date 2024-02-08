@@ -188,7 +188,7 @@ private:
     /* 0x6E4 */ daBomb_fuseSparksEcallBack mSparks;
     /* 0x6F0 */ u8 field_0x6F0;
     /* 0x6F1 */ u8 field_0x6F1;
-    /* 0x6F2 */ u8 field_0x6F2;
+    /* 0x6F2 */ u8 mBombFire;
     /* 0x6F3 */ u8 field_0x6F3;
     /* 0x6F4 */ u8 field_0x6F4;
     /* 0x6F5 */ u8 field_0x6F5;
