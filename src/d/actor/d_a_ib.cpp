@@ -320,39 +320,6 @@ void daIball_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-// TODO: This is a hack. I have no idea why this one variable needs to go in .data instead of .sdata.
-SECTION_DATA char daIball_c::m_arcname[] = "Always";
-
-dCcD_SrcCyl daIball_c::m_cyl_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ ~(AT_TYPE_LIGHT),
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ G_AT_SPRM_STOP_NO_CON_HIT,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_HIT_MARK,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
-        /* Radius */ 30.0f,
-        /* Height */ 80.0f,
-    },
-};
-
 /* 800F42E8-800F441C       .text CreateInit__9daIball_cFv */
 void daIball_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -511,6 +478,41 @@ static BOOL daIball_IsDelete(daIball_c* i_this) {
 static BOOL daIball_Execute(daIball_c* i_this) {
     return i_this->_daIball_execute();
 }
+
+// This symbol needs to go in .data, but as it's only 7 bytes long, it would normally go in .sdata or .sdata2.
+// But if the variable is only defined *after* it gets used in daIball_c::CreateHeap that forces it into .data.
+// The size of the variable is ignored, and even whether it's const or not is ignored.
+const char daIball_c::m_arcname[] = "Always";
+
+dCcD_SrcCyl daIball_c::m_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ ~(AT_TYPE_LIGHT),
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ G_AT_SPRM_STOP_NO_CON_HIT,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_HIT_MARK,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 30.0f,
+        /* Height */ 80.0f,
+    },
+};
 
 actor_method_class l_daIball_Method = {
     (process_method_func)daIball_Create,

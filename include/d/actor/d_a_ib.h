@@ -42,7 +42,7 @@ public:
     
     static u32 m_ib_actor[5];
     
-    static char m_arcname[];
+    static const char m_arcname[];
     static dCcD_SrcCyl m_cyl_src;
 
 public:
