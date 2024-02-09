@@ -21,7 +21,7 @@ public:
     /* 0x18 */ s32 mHitSoundId; // TODO: Not sure what this is, argument passed to bgmHitSound
 };
 
-int cc_pl_cut_bit_get();
+u16 cc_pl_cut_bit_get();
 u32 at_se_get(cCcD_Obj*);
 u32 at_se_getC(cCcD_Obj*);
 void def_se_set(fopAc_ac_c*, cCcD_Obj*, unsigned long);

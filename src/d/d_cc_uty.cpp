@@ -13,9 +13,9 @@
 #include "d/d_s_play.h"
 
 /* 800AE938-800AE9E8       .text cc_pl_cut_bit_get__Fv */
-int cc_pl_cut_bit_get() {
+u16 cc_pl_cut_bit_get() {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    int r3 = 0;
+    u16 r3 = 0x00;
     if (player->getCutType() == 1) {
         r3 = 0x01;
     } else if (player->getCutType() == 2) {

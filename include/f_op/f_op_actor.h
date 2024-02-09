@@ -319,10 +319,10 @@ public:
         setBtHeight(height);
         setBtBodyR(radius);
     }
-    f32 getBtHeight() const { return m290; }
-    void setBtHeight(f32 height) { m290 = height; }
-    f32 getBtBodyR() const { return m294; }
-    void setBtBodyR(f32 radius) { m294 = radius; }
+    f32 getBtHeight() const { return mBtHeight; }
+    void setBtHeight(f32 height) { mBtHeight = height; }
+    f32 getBtBodyR() const { return mBtBodyR; }
+    void setBtBodyR(f32 radius) { mBtBodyR = radius; }
     
     // TODO
     void setBtAttackData(f32, f32, f32, u8) {}
@@ -337,8 +337,8 @@ public:
     void getBtMaxDis() const {}
     void setBtMaxDis(f32) {}
     
-    /* 0x290 */ f32 m290;
-    /* 0x294 */ f32 m294;
+    /* 0x290 */ f32 mBtHeight;
+    /* 0x294 */ f32 mBtBodyR;
     /* 0x298 */ f32 m298;
     /* 0x29C */ f32 m29C;
     /* 0x2A0 */ f32 m2A0;
