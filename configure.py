@@ -398,7 +398,7 @@ config.libs = [
             Object(NonMatching, "d/d_bg_w_hf.cpp"),
             Object(NonMatching, "d/d_bg_w_sv.cpp"),
             Object(Matching,    "d/d_cc_d.cpp"),
-            Object(NonMatching, "d/d_cc_mass_s.cpp"),
+            Object(Matching,    "d/d_cc_mass_s.cpp"),
             Object(NonMatching, "d/d_cc_s.cpp"),
             Object(Matching,    "d/d_cc_uty.cpp"),
             Object(NonMatching, "d/d_cam_param.cpp"),

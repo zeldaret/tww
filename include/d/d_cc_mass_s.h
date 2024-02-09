@@ -17,13 +17,23 @@ public:
 public:
     dCcMassS_Obj() {}
     virtual ~dCcMassS_Obj() {}
-    void Set(cCcD_Obj* p_obj, u8 priority, dCcMassS_ObjCallback callback);
-    void Clear();
 
-    cCcD_Obj* GetObj() { return mpObj; }
+    cCcD_Obj* GetObj() const { return mpObj; }
     u8 GetPriority() const { return mPriority; }
-    dCcMassS_ObjCallback GetCallback() const { return mpCallback; }
-    cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
+    dCcMassS_ObjCallback GetAreaCheckFunc() const { return mpCallback; }
+    cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
+
+    void Clear() {
+        mpObj = NULL;
+        mPriority = 5;
+        mpCallback = NULL;
+        mDivideInfo.Set(0);
+    }
+    void Set(cCcD_Obj* p_obj, u8 priority, dCcMassS_ObjCallback callback) {
+        mpObj = p_obj;
+        mPriority = priority;
+        mpCallback = callback;
+    }
 };  // Size = 0x18
 
 STATIC_ASSERT(0x18 == sizeof(dCcMassS_Obj));
@@ -37,12 +47,20 @@ private:
 
 public:
     virtual ~dCcMassS_HitInf() {}
-    void ClearPointer();
     void SetAreaHitObj(cCcD_Obj* obj) { mpArea = obj; }
     void SetCoHitObj(cCcD_Obj* obj) { mpCoObj = obj; }
     void SetAtHitObj(cCcD_Obj* obj) { mpAtObj = obj; }
     void SetCoHitLen(f32 len) { mCoHitLen = len; }
     cCcD_Obj* GetAtHitObj() const { return mpAtObj; }
+
+    void ClearPointer() {
+        mpArea = NULL;
+        mpAtObj = NULL;
+        mpCoObj = NULL;
+        mCoHitLen = 0.0f;
+    }
+    void GetCoHitLen() const {}
+    void GetCoHitObj() const {}
 };
 
 class dCcMassS_Mng {
@@ -81,7 +99,7 @@ public:
     void Set(cCcD_Obj* p_obj, u8 priority);
     void SetAreaChk(cCcD_Obj*, u8, void (*)(fopAc_ac_c*, cXyz*, u32));
     void SetCam(cM3dGCps const& cps);
-    u8 GetResultCam() const;
+    u32 GetResultCam() const;
     void GetCamTopPos(Vec* p_out);
 };
 

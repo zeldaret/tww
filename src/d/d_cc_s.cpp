@@ -19,23 +19,86 @@ void dCcS::Dt() {
 }
 
 /* 800AD604-800AD748       .text ChkShieldFrontRange__4dCcSFP8cCcD_ObjP8cCcD_Obj */
-bool dCcS::ChkShieldFrontRange(cCcD_Obj*, cCcD_Obj*) {
-    /* Nonmatching */
+bool dCcS::ChkShieldFrontRange(cCcD_Obj* obj1, cCcD_Obj* obj2) {
+    dCcD_GObjInf* inf1 = (dCcD_GObjInf*)obj1->GetGObjInf();
+    if (inf1 == NULL) { return false; }
+    dCcD_Stts* stts1 = (dCcD_Stts*)inf1->GetStts();
+    fopAc_ac_c* ac1 = stts1 == NULL ? NULL : stts1->GetAc();
+    if (ac1 == NULL) { return false; }
+    dCcD_GObjInf* inf2 = (dCcD_GObjInf*)obj2->GetGObjInf();
+    if (inf2 == NULL) { return false; }
+    dCcD_Stts* stts2 = (dCcD_Stts*)inf2->GetStts();
+    fopAc_ac_c* ac2 = stts2 == NULL ? NULL : stts2->GetAc();
+    if (ac2 == NULL) { return false; }
+    
+    cXyz delta;
+    VECSubtract(&ac1->mEyePos, &ac2->mEyePos, &delta);
+    f32 dist = PSVECMag(&delta);
+    if (cM3d_IsZero(dist)) {
+        return false;
+    }
+    PSVECNormalize(&delta, &delta);
+    s16 deltaAngle = cM_atan2s(delta.x, delta.z);
+    s16 shieldAngle = inf2->GetTgShieldFrontRangeYAngle() ? *inf2->GetTgShieldFrontRangeYAngle() : ac2->shape_angle.y;
+    if (cLib_distanceAngleS(deltaAngle, shieldAngle) > 0x4000) {
+        return false;
+    }
+    
+    return true;
 }
 
 /* 800AD748-800AD7D0       .text ChkShield__4dCcSFP8cCcD_ObjP8cCcD_ObjP12dCcD_GObjInfP12dCcD_GObjInf */
-bool dCcS::ChkShield(cCcD_Obj*, cCcD_Obj*, dCcD_GObjInf*, dCcD_GObjInf*) {
-    /* Nonmatching */
+bool dCcS::ChkShield(cCcD_Obj* obj1, cCcD_Obj* obj2, dCcD_GObjInf* inf1, dCcD_GObjInf* inf2) {
+    if (inf1->ChkAtNoGuard()) {
+        return false;
+    }
+    if (inf2->ChkTgShield()) {
+        if (inf2->ChkTgShieldFrontRange()) {
+            return ChkShieldFrontRange(obj1, obj2);
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
 /* 800AD7D0-800AD86C       .text CalcTgPlusDmg__4dCcSFP8cCcD_ObjP8cCcD_ObjP9cCcD_SttsP9cCcD_Stts */
-void dCcS::CalcTgPlusDmg(cCcD_Obj*, cCcD_Obj*, cCcD_Stts*, cCcD_Stts*) {
-    /* Nonmatching */
+void dCcS::CalcTgPlusDmg(cCcD_Obj* obj1, cCcD_Obj* obj2, cCcD_Stts* stts1, cCcD_Stts* stts2) {
+    dCcD_GObjInf* inf1 = (dCcD_GObjInf*)obj1->GetGObjInf();
+    dCcD_GObjInf* inf2 = (dCcD_GObjInf*)obj2->GetGObjInf();
+    if (!ChkShield(obj1, obj2, inf1, inf2)) {
+        int atp = obj1->GetAtAtp();
+        if (stts2->GetDmg() < atp) {
+            stts2->PlusDmg(atp);
+        }
+    }
 }
 
 /* 800AD86C-800AD8EC       .text ChkAtTgHitAfterCross__4dCcSFbbPC12cCcD_GObjInfPC12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts */
-bool dCcS::ChkAtTgHitAfterCross(bool, bool, const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*) {
-    /* Nonmatching */
+bool dCcS::ChkAtTgHitAfterCross(bool r4, bool r5, const cCcD_GObjInf* r6, const cCcD_GObjInf* r7,
+                                cCcD_Stts* r8, cCcD_Stts* r9, cCcD_GStts* r10, cCcD_GStts* sp8) {
+    dCcD_GStts* r10_d = (dCcD_GStts*)r10;
+    dCcD_GStts* r9_d = (dCcD_GStts*)r9;
+    dCcD_GStts* r8_d = (dCcD_GStts*)r8;
+    dCcD_GStts* sp8_d = (dCcD_GStts*)sp8;
+    dCcD_GObjInf* r6_d = (dCcD_GObjInf*)r6;
+    dCcD_GObjInf* r7_d = (dCcD_GObjInf*)r7;
+    unsigned int r11 = r8->GetApid();
+    unsigned int r3 = r9->GetApid();
+    if (r4) {
+        r10_d->SetAtApid(r3);
+        if (r6_d->ChkAtNoConHit() && r10_d->GetAtOldApid() == r9_d->GetAtOldApid()) {
+            return true;
+        }
+    }
+    if (r5) {
+        sp8_d->SetTgApid(r11);
+        if (r7_d->ChkTgNoConHit() && !r6_d->ChkAtStopNoConHit() && sp8_d->GetTgOldApid() == r8_d->GetAtOldApid()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /* 800AD8EC-800ADA30       .text SetCoGObjInf__4dCcSFbbP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts */
@@ -43,9 +106,45 @@ void dCcS::SetCoGObjInf(bool, bool, cCcD_GObjInf*, cCcD_GObjInf*, cCcD_Stts*, cC
     /* Nonmatching */
 }
 
+static u8 rank_tbl[11][11] = {
+    { 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 },
+    { 0,  50, 100, 100, 100, 100, 100, 100, 100, 100, 100 },
+    { 0,   0,  50,  75,  90, 100, 100, 100, 100, 100, 100 },
+    { 0,   0,  25,  50,  75,  90, 100, 100, 100, 100, 100 },
+    { 0,   0,  10,  25,  50,  75,  90, 100, 100, 100, 100 },
+    { 0,   0,   0,  10,  25,  50,  75,  90, 100, 100, 100 },
+    { 0,   0,   0,   0,  10,  25,  50,  75,  90, 100, 100 },
+    { 0,   0,   0,   0,   0,  10,  25,  50,  75, 100, 100 },
+    { 0,   0,   0,   0,   0,   0,  10,  25,  50, 100, 100 },
+    { 0,   0,   0,   0,   0,   0,   0,   0,   0,  50, 100 },
+    { 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0 },
+};
+
 /* 800ADA30-800ADAD4       .text GetRank__4dCcSFUc */
-int dCcS::GetRank(u8) {
-    /* Nonmatching */
+int dCcS::GetRank(u8 weight) {
+    if (weight == 0xFF) {
+        return 10;
+    } else if (weight == 0xFE) {
+        return 9;
+    } else if (weight >= 0xD9) {
+        return 8;
+    } else if (weight >= 0xB5) {
+        return 7;
+    } else if (weight >= 0x91) {
+        return 6;
+    } else if (weight >= 0x6D) {
+        return 5;
+    } else if (weight >= 0x49) {
+        return 4;
+    } else if (weight >= 0x25) {
+        return 3;
+    } else if (weight >= 0x02) {
+        return 2;
+    } else if (weight == 0x01) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 /* 800ADAD4-800ADEF0       .text SetPosCorrect__4dCcSFP8cCcD_ObjP4cXyzP8cCcD_ObjP4cXyzf */
