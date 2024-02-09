@@ -7,6 +7,11 @@
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/JMath/JMATrigonometric.h"
 
+// This symbol needs to go in .data, but as it's only 8 bytes long, it would normally go in .sdata or .sdata2.
+// But if the array doesn't have a size specified in its declaration, and its definition comes *after* it gets used,
+// that forces it into .data instead because the size is unknown when it's used. Even const is ignored.
+f32 PSMulUnit01[2] = { 0.0f, -1.0f };
+
 /* 802DA0A8-802DA0B0       .text __MTGQR7__FUl */
 void __MTGQR7(register u32 v) {
     asm {

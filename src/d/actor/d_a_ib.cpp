@@ -480,8 +480,8 @@ static BOOL daIball_Execute(daIball_c* i_this) {
 }
 
 // This symbol needs to go in .data, but as it's only 7 bytes long, it would normally go in .sdata or .sdata2.
-// But if the variable is only defined *after* it gets used in daIball_c::CreateHeap that forces it into .data.
-// The size of the variable is ignored, and even whether it's const or not is ignored.
+// But if the array doesn't have a size specified in its declaration, and its definition comes *after* it gets used,
+// that forces it into .data instead because the size is unknown when it's used. Even const is ignored.
 const char daIball_c::m_arcname[] = "Always";
 
 dCcD_SrcCyl daIball_c::m_cyl_src = {
