@@ -36,7 +36,7 @@ static dCcD_SrcCyl l_cyl_src = {
     /* SrcGObjTg Mtrl    */ 0,
     /* SrcGObjTg SPrm    */ 4,
     /* SrcGObjCo SPrm    */ 0};
-
+// Missing Geometry of the cylinder
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */
 void daSpcItem01_c::set_mtx() {
     /* Nonmatching */
@@ -86,8 +86,8 @@ void daSpcItem01_c::CreateInit() {
     mStts.Init(0, 0xFF, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
-    f32 tempVar1 = (f32) getHeight();
-    f32 tempVar2 = (f32) getR();
+    f32 tempVar1 = (f32)getHeight();
+    f32 tempVar2 = (f32)getR();
     if (mScale.x > 1.0f) {
         tempVar1 *= mScale.x;
         tempVar2 *= mScale.x;
@@ -127,15 +127,18 @@ BOOL daSpcItem01_c::_execute() {
 /* 8015DFE8-8015E070       .text set_effect__13daSpcItem01_cFv */
 void daSpcItem01_c::set_effect() {
     /* Nonmatching */
-    if (field_0x644 & 1 && dItem_data::checkAppearEffect(m_itemNo) && field_0x642 && m_itemNo != BOKO_BELT) {
+    if (field_0x644 & 1 && dItem_data::checkAppearEffect(m_itemNo) && field_0x642 &&
+        m_itemNo != BOKO_BELT)
+    {
         u8 appearEffect = dItem_data::getAppearEffect(m_itemNo);
-        dComIfGp_particle_setSimple((u16) appearEffect, &current.pos, (u8) 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple((u16)appearEffect, &current.pos, (u8)0xFF, g_whiteColor,
+                                    g_whiteColor, 0);
     }
 }
 
 /* 8015E070-8015E0D8       .text scale_anim__13daSpcItem01_cFv */
 void daSpcItem01_c::scale_anim() {
-    if(isRupee(m_itemNo)) {
+    if (isRupee(m_itemNo)) {
         cLib_chaseF(&mScale.x, 1.0f, 0.05f);
         cLib_chaseF(&mScale.y, 1.0f, 0.05f);
         cLib_chaseF(&mScale.z, 1.0f, 0.05f);
@@ -201,25 +204,24 @@ void daSpcItem01_c::setCol() {
 
 /* 8015E27C-8015E2A8       .text _draw__13daSpcItem01_cFv */
 BOOL daSpcItem01_c::_draw() {
-    return this->DrawBase();
+    return DrawBase();
 }
 
 /* 8015E2A8-8015E368       .text setTevStr__13daSpcItem01_cFv */
 void daSpcItem01_c::setTevStr() {
     if (this->m_itemNo == BOKO_BELT) {
-        dKy_getEnvlight().settingTevStruct(2, &this->current.pos, &mTevStr);
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &this->current.pos, &mTevStr);
     } else {
-        dKy_getEnvlight().settingTevStruct(0, &this->current.pos, &mTevStr);
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &this->current.pos, &mTevStr);
     }
     dKy_getEnvlight().setLightTevColorType(this->mpModel, &this->mTevStr);
-    int modelIndex = 0;
-    do {
+
+    for (s32 modelIndex = 0; modelIndex < (s32)ARRAY_SIZE(mpModelArrow); modelIndex++) {
         J3DModel* modelArrow = mpModelArrow[modelIndex];
         if (modelArrow != NULL) {
             dKy_getEnvlight().setLightTevColorType(modelArrow, &mTevStr);
         }
-        modelIndex += 1;
-    } while (modelIndex < 2);
+    }
 }
 
 /* 8015E368-8015E388       .text daSpcItem01_Draw__FP13daSpcItem01_c */
