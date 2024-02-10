@@ -17,25 +17,31 @@ const float magic_double = -24.0f;
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 4,
+        /* SrcGObjCo SPrm    */ 0,
+        /* SrcCylAttr.mCyl.Vec.x mCenter */ 0.0f,
+        /* SrcCylAttr.mCyl.Vec.y mCenter */ 0.0f,
+        /* SrcCylAttr.mCyl.Vec.z mCenter */ 0.0f,
+        /* SrcCylAttr.mCyl.f32 mRadius */ 0.0f,
+        /* SrcCylAttr.mCyl.f32 mHeight */ 0.0f,
 
-    /* Flags             */ 0,
-    /* SrcObjAt  Type    */ 0,
-    /* SrcObjAt  Atp     */ 0,
-    /* SrcObjAt  SPrm    */ 0,
-    /* SrcObjTg  Type    */ AT_TYPE_ALL,
-    /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
-    /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2,
-    /* SrcGObjAt Se      */ 0,
-    /* SrcGObjAt HitMark */ 0,
-    /* SrcGObjAt Spl     */ 0,
-    /* SrcGObjAt Mtrl    */ 0,
-    /* SrcGObjAt SPrm    */ 0,
-    /* SrcGObjTg Se      */ 0,
-    /* SrcGObjTg HitMark */ 0,
-    /* SrcGObjTg Spl     */ 0,
-    /* SrcGObjTg Mtrl    */ 0,
-    /* SrcGObjTg SPrm    */ 4,
-    /* SrcGObjCo SPrm    */ 0};
+    };
 // Missing Geometry of the cylinder
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */
 void daSpcItem01_c::set_mtx() {
