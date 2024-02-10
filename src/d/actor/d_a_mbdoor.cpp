@@ -170,7 +170,7 @@ BOOL daMbdoor_c::CreateHeap() {
     cBgD_t* dzbData = (cBgD_t*)dComIfG_getObjectRes(getArcName(), getDzb());
     if (!dzbData) { return FALSE; }
     calcMtx();
-    bool error = mpBgW->Set(dzbData, 1, &mpFuModel->getBaseTRMtx());
+    bool error = mpBgW->Set(dzbData, cBgW::MOVE_BG_e, &mpFuModel->getBaseTRMtx());
     return error != true ? TRUE : FALSE;
 }
 

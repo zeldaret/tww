@@ -64,8 +64,11 @@ int dBgS_MoveBgActor::MoveBGCreate(const char* i_arcName, int i_dzb_id,
         return cPhs_ERROR_e;
     }
 
-    // return Create() ? cPhs_COMPLEATE_e : cPhs_ERROR_e;  // using enums here changes code gen
-    return Create() ? 4 : 5;
+    if (Create()) {
+        return cPhs_COMPLEATE_e;
+    } else {
+        return cPhs_ERROR_e;
+    }
 }
 
 /* 800A58F4-800A5980       .text MoveBGDelete__16dBgS_MoveBgActorFv */

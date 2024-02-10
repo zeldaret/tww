@@ -239,8 +239,11 @@ s32 daTbox_c::effectShapeSet() {
     J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH);
     int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, 0, 1.0f, 0, -1, false, 0);
 
-    // Using cPhs_COMPLEATE_e and cPhs_ERROR_e break the match here.
-    return regInit != 0 ? 4 : 5;
+    if (regInit) {
+        return cPhs_COMPLEATE_e;
+    } else {
+        return cPhs_ERROR_e;
+    }
 }
 
 /* 00000764-00000928       .text envShapeSet__8daTbox_cFv */
@@ -286,7 +289,7 @@ s32 daTbox_c::bgCheckSet() {
         return cPhs_ERROR_e;
     }
 
-    if (mpBgWClosed->Set(bgd, 1, &mMtx) == 1) {
+    if (mpBgWClosed->Set(bgd, cBgW::MOVE_BG_e, &mMtx) == 1) {
         return cPhs_ERROR_e;
     }
 
@@ -298,7 +301,7 @@ s32 daTbox_c::bgCheckSet() {
         return cPhs_ERROR_e;
     }
 
-    if (mpBgWOpen->Set(bgd, 1, &mMtx) == 1) {
+    if (mpBgWOpen->Set(bgd, cBgW::MOVE_BG_e, &mMtx) == 1) {
         return cPhs_ERROR_e;
     }
 
@@ -311,7 +314,7 @@ s32 daTbox_c::bgCheckSet() {
             return cPhs_ERROR_e;
         }
 
-        if (mpBgWVines->Set(bgd, 1, &mMtx) == 1) {
+        if (mpBgWVines->Set(bgd, cBgW::MOVE_BG_e, &mMtx) == 1) {
             return cPhs_ERROR_e;
         }
     }

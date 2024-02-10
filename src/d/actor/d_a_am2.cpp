@@ -166,7 +166,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
             CcAtInfo atInfo;
             cXyz hitPos = *i_this->mEyeSph.GetTgHitPosP();
 
-            if (hitObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK) {
+            if (hitObj->ChkAtType(AT_TYPE_GRAPPLING_HOOK)) {
                 if (i_this->mCurrBckIdx != AM2_BCK_SLEEP) {
                     if (i_this->mStealItemLeft > 0) {
                         s8 origHealth = i_this->mHealth;
@@ -184,7 +184,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                 return TRUE;
             }
             
-            if (hitObj->GetAtType() & AT_TYPE_LIGHT_ARROW) {
+            if (hitObj->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
                 ret = true;
                 i_this->mEnemyIce.mLightShrinkTimer = 1;
                 i_this->mEnemyIce.mParticleScale = 1.0f;
@@ -193,7 +193,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                 return TRUE;
             }
             
-            if (hitObj->GetAtType() & (AT_TYPE_NORMAL_ARROW | AT_TYPE_FIRE_ARROW | AT_TYPE_ICE_ARROW)) {
+            if (hitObj->ChkAtType(AT_TYPE_NORMAL_ARROW | AT_TYPE_FIRE_ARROW | AT_TYPE_ICE_ARROW)) {
                 ret = true;
                 if (i_this->mCurrBckIdx == AM2_BCK_SLEEP) {
                     anm_init(i_this, AM2_BCK_WAIT, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
@@ -244,8 +244,7 @@ static BOOL week_atari_check(am2_class* i_this) {
             }
             
             u8 hitType = 0;
-            u32 atType = hitObj->GetAtType();
-            if (atType & AT_TYPE_LIGHT_ARROW) {
+            if (hitObj->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
                 i_this->mEnemyIce.mLightShrinkTimer = 1;
                 i_this->mEnemyIce.mParticleScale = 1.0f;
                 i_this->mEnemyIce.mYOffset = 80.0f;
@@ -253,7 +252,7 @@ static BOOL week_atari_check(am2_class* i_this) {
                 return TRUE;
             }
             
-            switch (atType) {
+            switch (hitObj->GetAtType()) {
             case AT_TYPE_SWORD:
             case AT_TYPE_MACHETE:
             case AT_TYPE_UNK800:

@@ -13,7 +13,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_s_play.h"
-#include "dolphin/types.h"
+#include "d/res/res_link.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -89,8 +89,12 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 800D457C-800D4648       .text _createHeap__9daArrow_cFv */
 BOOL daArrow_c::_createHeap() {
-    // arrowglitter.bdl for Light Arrows, arrow.bdl otherwise.
-    s32 modelFileIndex = (mArrowType == TYPE_LIGHT ? 0x38 : 0x37) & 0xFFFF;
+    u16 modelFileIndex;
+    if (mArrowType == TYPE_LIGHT) {
+        modelFileIndex = LINK_BDL_ARROWGLITTER;
+    } else {
+        modelFileIndex = LINK_BDL_ARROW;
+    }
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, modelFileIndex);
     JUT_ASSERT(190, modelData != 0);
     
@@ -1248,9 +1252,11 @@ s32 daArrow_c::_create() {
         return cPhs_ERROR_e;
     }
     
-    // Using the enum here breaks the match.
-    // return createInit() ? cPhs_COMPLEATE_e : cPhs_ERROR_e;
-    return createInit() ? 4 : 5;
+    if (createInit()) {
+        return cPhs_COMPLEATE_e;
+    } else {
+        return cPhs_ERROR_e;
+    }
 }
 
 /* 800D81D0-800D8200       .text _delete__9daArrow_cFv */

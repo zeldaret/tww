@@ -41,7 +41,7 @@ u16 cc_pl_cut_bit_get() {
 /* 800AE9E8-800AEA60       .text at_se_get__FP8cCcD_Obj */
 u32 at_se_get(cCcD_Obj* obj) {
     dCcD_GObjInf* gObjInf = dCcD_GetGObjInf(obj);
-    if (gObjInf->GetAtType() & (AT_TYPE_SKULL_HAMMER | AT_TYPE_STALFOS_MACE)) {
+    if (gObjInf->ChkAtType(AT_TYPE_SKULL_HAMMER | AT_TYPE_STALFOS_MACE)) {
         return JA_SE_LK_HAMMER_HIT;
     } else if (gObjInf->GetAtSe() == dCcD_SE_UNK4) {
         return JA_SE_LK_W_WEP_HIT;
@@ -59,7 +59,7 @@ u32 at_se_get(cCcD_Obj* obj) {
 /* 800AEA60-800AEAD8       .text at_se_getC__FP8cCcD_Obj */
 u32 at_se_getC(cCcD_Obj* obj) {
     dCcD_GObjInf* gObjInf = dCcD_GetGObjInf(obj);
-    if (gObjInf->GetAtType() & (AT_TYPE_SKULL_HAMMER | AT_TYPE_STALFOS_MACE)) {
+    if (gObjInf->ChkAtType(AT_TYPE_SKULL_HAMMER | AT_TYPE_STALFOS_MACE)) {
         return JA_SE_LK_HAMMER_HIT;
     } else if (gObjInf->GetAtSe() == dCcD_SE_UNK4) {
         return JA_SE_LK_W_WEP_CRT_HIT;
@@ -95,16 +95,16 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
     atInfo->mResultingAttackType = 0xC;
     atInfo->mDamage = 0;
     
-    if (atInfo->mpObj->GetAtType() & AT_TYPE_WATER) {
+    if (atInfo->mpObj->ChkAtType(AT_TYPE_WATER)) {
         atInfo->mResultingAttackType = 0x4;
         return atInfo->mpActor;
-    } else if (atInfo->mpObj->GetAtType() & AT_TYPE_WIND) {
+    } else if (atInfo->mpObj->ChkAtType(AT_TYPE_WIND)) {
         atInfo->mResultingAttackType = 0x8;
         return atInfo->mpActor;
-    } else if (atInfo->mpObj->GetAtType() & AT_TYPE_UNK20000) {
+    } else if (atInfo->mpObj->ChkAtType(AT_TYPE_UNK20000)) {
         atInfo->mResultingAttackType = 0x5;
         return atInfo->mpActor;
-    } else if (atInfo->mpObj->GetAtType() & (AT_TYPE_FIRE | AT_TYPE_FIRE_ARROW)) {
+    } else if (atInfo->mpObj->ChkAtType(AT_TYPE_FIRE | AT_TYPE_FIRE_ARROW)) {
         atInfo->mResultingAttackType = 0x5;
     }
     
@@ -112,7 +112,7 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
         atInfo->mDamage = atInfo->mpObj->GetAtAtp();
         
         if (fopAcM_GetName(atInfo->mpActor) == PROC_PLAYER) {
-            if (atInfo->mpObj->GetAtType() & AT_TYPE_SKULL_HAMMER) {
+            if (atInfo->mpObj->ChkAtType(AT_TYPE_SKULL_HAMMER)) {
                 atInfo->mResultingAttackType = 0x9;
             } else {
                 atInfo->mResultingAttackType = 0x1;
@@ -202,7 +202,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
         }
         atInfo->m0C.y = cM_atan2s(-f2, -f0);
         
-        if (atInfo->mpObj->GetAtType() & AT_TYPE_HOOKSHOT) {
+        if (atInfo->mpObj->ChkAtType(AT_TYPE_HOOKSHOT)) {
             if (fopAcM_checkStatus(tgActor, fopAcStts_UNK80000_e | fopAcStts_HOOK_CARRY_e | fopAcStts_UNK200000_e)) {
                 atInfo->mDamage = 0;
             }

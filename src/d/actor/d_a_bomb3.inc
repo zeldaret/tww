@@ -1118,7 +1118,7 @@ void daBomb_c::set_wind_vec() {
     cCcD_Obj* hitObj = mSph.GetTgHitObj();
     if (hitObj == NULL)
         return;
-    if (!(hitObj->GetAtType() & AT_TYPE_WIND))
+    if (!hitObj->ChkAtType(AT_TYPE_WIND))
         return;
     cXyz sp48 = *mSph.GetTgRVecP();
     f32 f31 = sp48.abs2();

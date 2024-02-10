@@ -1173,11 +1173,10 @@ BOOL daItem_c::checkGetItem() {
     if (mCyl.ChkTgHit()) {
         cCcD_Obj* hitObj = mCyl.GetTgHitObj();
         if (hitObj) {
-            u32 atType = hitObj->GetAtType();
-            if (atType & AT_TYPE_SWORD) {
+            if (hitObj->ChkAtType(AT_TYPE_SWORD)) {
                 itemGetExecute();
                 return TRUE;
-            } else if (atType & AT_TYPE_BOOMERANG) {
+            } else if (hitObj->ChkAtType(AT_TYPE_BOOMERANG)) {
                 setFlag(FLAG_BOOMERANG);
             }
         }

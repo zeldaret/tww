@@ -297,15 +297,14 @@ void daIball_c::damage() {
     if (mCyl.ChkTgHit()) {
         cCcD_Obj* hitObj = mCyl.GetTgHitObj();
         if (hitObj) {
-            u32 atType = hitObj->GetAtType();
-            if (atType & AT_TYPE_SWORD || atType & AT_TYPE_BOKO_STICK ||
-                atType & AT_TYPE_MACHETE || atType & AT_TYPE_SKULL_HAMMER ||
-                atType & AT_TYPE_UNK2000000 || atType & AT_TYPE_STALFOS_MACE ||
-                atType & AT_TYPE_DARKNUT_SWORD || atType & AT_TYPE_HOOKSHOT ||
-                atType & AT_TYPE_BOOMERANG || atType & AT_TYPE_NORMAL_ARROW ||
-                atType & AT_TYPE_FIRE_ARROW || atType & AT_TYPE_ICE_ARROW ||
-                atType & AT_TYPE_LIGHT_ARROW || atType & AT_TYPE_MOBLIN_SPEAR)
-            {
+            if (hitObj->ChkAtType(AT_TYPE_SWORD)         || hitObj->ChkAtType(AT_TYPE_BOKO_STICK)   ||
+                hitObj->ChkAtType(AT_TYPE_MACHETE)       || hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) ||
+                hitObj->ChkAtType(AT_TYPE_UNK2000000)    || hitObj->ChkAtType(AT_TYPE_STALFOS_MACE) ||
+                hitObj->ChkAtType(AT_TYPE_DARKNUT_SWORD) || hitObj->ChkAtType(AT_TYPE_HOOKSHOT)     ||
+                hitObj->ChkAtType(AT_TYPE_BOOMERANG)     || hitObj->ChkAtType(AT_TYPE_NORMAL_ARROW) ||
+                hitObj->ChkAtType(AT_TYPE_FIRE_ARROW)    || hitObj->ChkAtType(AT_TYPE_ICE_ARROW)    ||
+                hitObj->ChkAtType(AT_TYPE_LIGHT_ARROW)   || hitObj->ChkAtType(AT_TYPE_MOBLIN_SPEAR)
+            ) {
                 createItem();
             }
         }
