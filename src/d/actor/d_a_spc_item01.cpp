@@ -13,6 +13,11 @@
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
+namespace daSpcItem01_prm {
+    inline u8 getItemNo(daSpcItem01_c* i_this) { return fopAcM_GetParam(i_this) >> 0 & 0xFF; }
+    inline u16 getFlag(daSpcItem01_c* i_this) { return fopAcM_GetParam(i_this) >> 8 & 0xFFFF; }
+};
+
 const float magic_double = -24.0f;
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -40,21 +45,18 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcCylAttr.mCyl.Vec.z mCenter */ 0.0f,
         /* SrcCylAttr.mCyl.f32 mRadius */ 0.0f,
         /* SrcCylAttr.mCyl.f32 mHeight */ 0.0f,
-
     };
-// Missing Geometry of the cylinder
+
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */
 void daSpcItem01_c::set_mtx() {
     /* Nonmatching */
-    current.pos = mScale;
-    f32 dVar6 = 0.0f;
-    if (m_itemNo == BOKO_BELT) {
-        dVar6 = -24.0f;
-    }
-    mpModel->setBaseScale(mScale);
+    csXyz angle = current.angle;
+    cXyz scale = mScale;
+    f32 offsetY = (s8)m_itemNo != BOKO_BELT ? 0.0f : -24.0f;
+    mpModel->setBaseScale(scale);
 
-    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + dVar6, current.pos.z);
-    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + offsetY, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(angle);
 
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -67,7 +69,7 @@ BOOL daSpcItem01_c::_delete() {
 /* 8015DBF4-8015DDD0       .text _create__13daSpcItem01_cFv */
 cPhs__Step daSpcItem01_c::_create() {
     fopAcM_SetupActor(this, daSpcItem01_c);
-    m_itemNo = fopAcM_GetParam(this);
+    m_itemNo = daSpcItem01_prm::getItemNo(this);
     if (m_itemNo == SHIELD && dComIfGs_isEventBit(0xE20)) {
         this->setLoadError();
         return cPhs_ERROR_e;
@@ -85,8 +87,7 @@ cPhs__Step daSpcItem01_c::_create() {
 }
 
 /* 8015DDD0-8015DF4C       .text CreateInit__13daSpcItem01_cFv */
-void daSpcItem01_c::CreateInit() {
-    /* Nonmatching */
+BOOL daSpcItem01_c::CreateInit() {
     set_mtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     mStts.Init(0, 0xFF, this);
@@ -103,16 +104,21 @@ void daSpcItem01_c::CreateInit() {
     mAcchCir.SetWall(30.0f, 30.0f);
     mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
 
-    field_0x644 = fopAcM_GetParam(this);
-    if (m_itemNo == SHIELD) {
+    field_0x644 = daSpcItem01_prm::getFlag(this);
+    fopAcM_SetGravity(this, -4.0f);
+    switch ((s8)m_itemNo) {
+    case SHIELD:
         mScale.x = 1.5f;
         mScale.y = 1.5f;
         mScale.z = 1.5f;
         current.angle.x = 4000;
-        current.angle.y = 0x1068;
-        current.angle.z = 0x1450;
-        mGravity = 0.0f;
+        current.angle.y = 4200;
+        current.angle.z = 5200;
+        fopAcM_SetGravity(this, 0.0f);
+        break;
     }
+
+    return TRUE;
 }
 
 /* 8015DF4C-8015DFE8       .text _execute__13daSpcItem01_cFv */
@@ -132,13 +138,8 @@ BOOL daSpcItem01_c::_execute() {
 
 /* 8015DFE8-8015E070       .text set_effect__13daSpcItem01_cFv */
 void daSpcItem01_c::set_effect() {
-    /* Nonmatching */
-    if (field_0x644 & 1 && dItem_data::checkAppearEffect(m_itemNo) && field_0x642 &&
-        m_itemNo != BOKO_BELT)
-    {
-        u8 appearEffect = dItem_data::getAppearEffect(m_itemNo);
-        dComIfGp_particle_setSimple((u16)appearEffect, &current.pos, (u8)0xFF, g_whiteColor,
-                                    g_whiteColor, 0);
+    if (field_0x644 & 1 && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != BOKO_BELT) {
+        dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos, (u8)0xFF, g_whiteColor, g_whiteColor, 0);
     }
 }
 
@@ -162,28 +163,32 @@ void daSpcItem01_c::anim_play() {
 
 /* 8015E11C-8015E20C       .text move__13daSpcItem01_cFv */
 void daSpcItem01_c::move() {
-    /* Nonmatching */
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     mAcch.CrrPos(*dComIfG_Bgsp());
-    if (m_itemNo != SHIELD) {
-        if (m_itemNo < SHIELD && m_itemNo == PENDANT) {
-            if (mAcch.m_flags & dBgS_Acch::GROUND_LANDING) {
-                speed.x = 0.0f;
-                speed.y = 0.0f;
-                speed.z = 0.0f;
-                speedF = 0.0f;
-            }
-        } else if (mAcch.m_flags & dBgS_Acch::GROUND_LANDING) {
+    switch (m_itemNo) {
+    case SHIELD:
+        break;
+    case PENDANT:
+        if (mAcch.m_flags & dBgS_Acch::GROUND_LANDING) {
+            speed.x = 0.0f;
+            speed.y = 0.0f;
+            speed.z = 0.0f;
+            speedF = 0.0f;
+        }
+        break;
+    default:
+        if (mAcch.m_flags & dBgS_Acch::GROUND_LANDING) {
             field_0x642 += 1;
             f32 newGravity = field_0x63C * 0.62f;
-            if (newGravity <= mGravity - 0.5f) {
+            if (newGravity > mGravity - 0.5f) {
+                speedF = 0.0f;
+            } else {
                 speed.x = 0.0f;
                 speed.y = -newGravity;
                 speed.z = 0.0f;
-            } else {
-                speedF = 0.0f;
             }
         }
+        break;
     }
 
     if (speed.y != 0.0f) {

@@ -10,7 +10,7 @@ public:
     void set_mtx();
     BOOL _delete();
     cPhs__Step _create();
-    void CreateInit();
+    BOOL CreateInit();
     BOOL _execute();
     void set_effect();
     void scale_anim();
@@ -22,14 +22,11 @@ public:
     void setTevStr();
 
     /* Place member variables here */
-    // 0x0 - 0x28F -> fopAc_ac_c
-    // 0x290 - 0x63B -> daItem_Base_c
     f32 field_0x63C;
     s16 field_0x640;
     u8 field_0x642;
     u8 field_0x643;
-    u8 field_0x644;
-    u8 field_0x645;
+    u16 field_0x644;
     u8 field_0x646;
     u8 field_0x647;
 };
