@@ -4,95 +4,253 @@
 //
 
 #include "d/actor/d_a_spc_item01.h"
-#include "dolphin/types.h"
 
+#include "d/d_bg_s_acch.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_item.h"
+#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_scene_mng.h"
+#include "m_Do/m_Do_mtx.h"
+
+const float magic_double = -24.0f;
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 4,
+        /* SrcGObjCo SPrm    */ 0,
+        /* SrcCylAttr.mCyl.Vec.x mCenter */ 0.0f,
+        /* SrcCylAttr.mCyl.Vec.y mCenter */ 0.0f,
+        /* SrcCylAttr.mCyl.Vec.z mCenter */ 0.0f,
+        /* SrcCylAttr.mCyl.f32 mRadius */ 0.0f,
+        /* SrcCylAttr.mCyl.f32 mHeight */ 0.0f,
+
+    };
+// Missing Geometry of the cylinder
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */
 void daSpcItem01_c::set_mtx() {
     /* Nonmatching */
+    current.pos = mScale;
+    f32 dVar6 = 0.0f;
+    if (m_itemNo == BOKO_BELT) {
+        dVar6 = -24.0f;
+    }
+    mpModel->setBaseScale(mScale);
+
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + dVar6, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 8015DBC0-8015DBF4       .text _delete__13daSpcItem01_cFv */
 BOOL daSpcItem01_c::_delete() {
-    /* Nonmatching */
+    return DeleteBase(dItem_data::getFieldArc(m_itemNo));
 }
 
 /* 8015DBF4-8015DDD0       .text _create__13daSpcItem01_cFv */
-s32 daSpcItem01_c::_create() {
-    /* Nonmatching */
+cPhs__Step daSpcItem01_c::_create() {
+    fopAcM_SetupActor(this, daSpcItem01_c);
+    m_itemNo = fopAcM_GetParam(this);
+    if (m_itemNo == SHIELD && dComIfGs_isEventBit(0xE20)) {
+        this->setLoadError();
+        return cPhs_ERROR_e;
+    }
+    cPhs__Step phs_step = (cPhs__Step)dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
+    if (phs_step == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, &CheckFieldItemCreateHeap,
+                                   dItem_data::getHeapSize(m_itemNo)))
+        {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+    return phs_step;
 }
 
 /* 8015DDD0-8015DF4C       .text CreateInit__13daSpcItem01_cFv */
 void daSpcItem01_c::CreateInit() {
     /* Nonmatching */
+    set_mtx();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    mStts.Init(0, 0xFF, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    f32 tempVar1 = (f32)getHeight();
+    f32 tempVar2 = (f32)getR();
+    if (mScale.x > 1.0f) {
+        tempVar1 *= mScale.x;
+        tempVar2 *= mScale.x;
+    }
+    mCyl.SetR(tempVar2);
+    mCyl.SetH(tempVar1);
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+
+    field_0x644 = fopAcM_GetParam(this);
+    if (m_itemNo == SHIELD) {
+        mScale.x = 1.5f;
+        mScale.y = 1.5f;
+        mScale.z = 1.5f;
+        current.angle.x = 4000;
+        current.angle.y = 0x1068;
+        current.angle.z = 0x1450;
+        mGravity = 0.0f;
+    }
 }
 
 /* 8015DF4C-8015DFE8       .text _execute__13daSpcItem01_cFv */
 BOOL daSpcItem01_c::_execute() {
-    /* Nonmatching */
+    mEyePos = current.pos;
+    mAttentionInfo.mPosition = current.pos;
+    field_0x634++;
+    set_effect();
+    scale_anim();
+    anim_play();
+    move();
+    rotate_item();
+    setCol();
+    set_mtx();
+    return TRUE;
 }
 
 /* 8015DFE8-8015E070       .text set_effect__13daSpcItem01_cFv */
 void daSpcItem01_c::set_effect() {
     /* Nonmatching */
+    if (field_0x644 & 1 && dItem_data::checkAppearEffect(m_itemNo) && field_0x642 &&
+        m_itemNo != BOKO_BELT)
+    {
+        u8 appearEffect = dItem_data::getAppearEffect(m_itemNo);
+        dComIfGp_particle_setSimple((u16)appearEffect, &current.pos, (u8)0xFF, g_whiteColor,
+                                    g_whiteColor, 0);
+    }
 }
 
 /* 8015E070-8015E0D8       .text scale_anim__13daSpcItem01_cFv */
 void daSpcItem01_c::scale_anim() {
-    /* Nonmatching */
+    if (isRupee(m_itemNo)) {
+        cLib_chaseF(&mScale.x, 1.0f, 0.05f);
+        cLib_chaseF(&mScale.y, 1.0f, 0.05f);
+        cLib_chaseF(&mScale.z, 1.0f, 0.05f);
+    }
 }
 
 /* 8015E0D8-8015E11C       .text anim_play__13daSpcItem01_cFv */
 void daSpcItem01_c::anim_play() {
-    /* Nonmatching */
+    f32 animPlayParam = 1.0f;
+    if (m_itemNo == BOKO_BELT) {
+        animPlayParam = 0.0f;
+    }
+    animPlay(1.0f, 1.0f, 1.0f, 1.0f, animPlayParam);
 }
 
 /* 8015E11C-8015E20C       .text move__13daSpcItem01_cFv */
 void daSpcItem01_c::move() {
     /* Nonmatching */
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    if (m_itemNo != SHIELD) {
+        if (m_itemNo < SHIELD && m_itemNo == PENDANT) {
+            if (mAcch.m_flags & dBgS_Acch::GROUND_LANDING) {
+                speed.x = 0.0f;
+                speed.y = 0.0f;
+                speed.z = 0.0f;
+                speedF = 0.0f;
+            }
+        } else if (mAcch.m_flags & dBgS_Acch::GROUND_LANDING) {
+            field_0x642 += 1;
+            f32 newGravity = field_0x63C * 0.62f;
+            if (newGravity <= mGravity - 0.5f) {
+                speed.x = 0.0f;
+                speed.y = -newGravity;
+                speed.z = 0.0f;
+            } else {
+                speedF = 0.0f;
+            }
+        }
+    }
+
+    if (speed.y != 0.0f) {
+        field_0x63C = speed.y;
+    }
 }
 
 /* 8015E20C-8015E278       .text rotate_item__13daSpcItem01_cFv */
 void daSpcItem01_c::rotate_item() {
-    /* Nonmatching */
+    if (isRupee(m_itemNo)) {
+        if (field_0x642 == 0) {
+            field_0x640 = current.angle.x + 0x2000;
+        } else {
+            field_0x640 = 0;
+        }
+        cLib_chaseAngleS(&current.angle.x, field_0x640, 0x2000);
+    }
 }
 
 /* 8015E278-8015E27C       .text setCol__13daSpcItem01_cFv */
 void daSpcItem01_c::setCol() {
-    /* Nonmatching */
+    /* Empty Function */
 }
 
 /* 8015E27C-8015E2A8       .text _draw__13daSpcItem01_cFv */
 BOOL daSpcItem01_c::_draw() {
-    /* Nonmatching */
+    return DrawBase();
 }
 
 /* 8015E2A8-8015E368       .text setTevStr__13daSpcItem01_cFv */
 void daSpcItem01_c::setTevStr() {
-    /* Nonmatching */
+    if (this->m_itemNo == BOKO_BELT) {
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &this->current.pos, &mTevStr);
+    } else {
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &this->current.pos, &mTevStr);
+    }
+    dKy_getEnvlight().setLightTevColorType(this->mpModel, &this->mTevStr);
+
+    for (s32 modelIndex = 0; modelIndex < (s32)ARRAY_SIZE(mpModelArrow); modelIndex++) {
+        J3DModel* modelArrow = mpModelArrow[modelIndex];
+        if (modelArrow != NULL) {
+            dKy_getEnvlight().setLightTevColorType(modelArrow, &mTevStr);
+        }
+    }
 }
 
 /* 8015E368-8015E388       .text daSpcItem01_Draw__FP13daSpcItem01_c */
-static BOOL daSpcItem01_Draw(daSpcItem01_c*) {
-    /* Nonmatching */
+static BOOL daSpcItem01_Draw(daSpcItem01_c* i_this) {
+    return i_this->_draw();
 }
 
 /* 8015E388-8015E3A8       .text daSpcItem01_Execute__FP13daSpcItem01_c */
-static BOOL daSpcItem01_Execute(daSpcItem01_c*) {
-    /* Nonmatching */
+static BOOL daSpcItem01_Execute(daSpcItem01_c* i_this) {
+    return i_this->_execute();
 }
 
 /* 8015E3A8-8015E3B0       .text daSpcItem01_IsDelete__FP13daSpcItem01_c */
-static BOOL daSpcItem01_IsDelete(daSpcItem01_c*) {
-    /* Nonmatching */
+static BOOL daSpcItem01_IsDelete(daSpcItem01_c* ignored) {
+    return TRUE;
 }
 
 /* 8015E3B0-8015E3D0       .text daSpcItem01_Delete__FP13daSpcItem01_c */
-static BOOL daSpcItem01_Delete(daSpcItem01_c*) {
-    /* Nonmatching */
+static BOOL daSpcItem01_Delete(daSpcItem01_c* i_this) {
+    return i_this->_delete();
 }
 
 /* 8015E3D0-8015E3F0       .text daSpcItem01_Create__FP10fopAc_ac_c */
-static s32 daSpcItem01_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daSpcItem01_Create(fopAc_ac_c* i_this) {
+    return ((daSpcItem01_c*)i_this)->_create();
 }
-

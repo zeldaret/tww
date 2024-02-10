@@ -1,13 +1,15 @@
 #ifndef D_A_SPC_ITEM01_H
 #define D_A_SPC_ITEM01_H
 
+#include "d/actor/d_a_itembase.h"
 #include "f_op/f_op_actor.h"
+#include "SSystem/SComponent/c_phase.h"
 
-class daSpcItem01_c : public fopAc_ac_c {
+class daSpcItem01_c : public daItemBase_c {
 public:
     void set_mtx();
     BOOL _delete();
-    s32 _create();
+    cPhs__Step _create();
     void CreateInit();
     BOOL _execute();
     void set_effect();
@@ -19,8 +21,18 @@ public:
     BOOL _draw();
     void setTevStr();
 
-public:
     /* Place member variables here */
+    // 0x0 - 0x28F -> fopAc_ac_c
+    // 0x290 - 0x63B -> daItem_Base_c
+    f32 field_0x63C;
+    s16 field_0x640;
+    u8 field_0x642;
+    u8 field_0x643;
+    u8 field_0x644;
+    u8 field_0x645;
+    u8 field_0x646;
+    u8 field_0x647;
 };
 
+STATIC_ASSERT(sizeof(daSpcItem01_c) == 0x648);
 #endif /* D_A_SPC_ITEM01_H */
