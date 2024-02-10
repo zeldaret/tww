@@ -70,7 +70,7 @@ public:
     /* 0xB8 */ u16 mRoomNo;
     /* 0xBA */ u8 mFlag;
     /* 0xBB */ u8 mRoomNo2;
-};
+};  // Size: 0xBC
 
 dBgW* dBgW_NewSet(cBgD_t*, unsigned long, float(*)[3][4]);
 

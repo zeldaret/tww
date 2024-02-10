@@ -17,6 +17,10 @@ public:
     virtual void CrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);
     void TransPosWork(cXyz*, int, int, int);
     virtual void TransPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);
-};
+
+public:
+    /* 0xBC */ u32 mBC;
+    /* 0xC0 */ Vec* mC0;
+};  // Size: 0xC4
 
 #endif /* D_BG_W_SV_H */
