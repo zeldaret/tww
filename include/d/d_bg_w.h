@@ -33,7 +33,7 @@ public:
     void positionWallCorrect(dBgS_Acch*, f32, cM3dGPla&, cXyz*, f32);
     void RwgWallCorrect(dBgS_Acch*, u16);
     void WallCorrectRp(dBgS_Acch*, int);
-    void WallCorrectGrpRp(dBgS_Acch*, int, int);
+    bool WallCorrectGrpRp(dBgS_Acch*, int, int);
     void RwgRoofChk(u16, dBgS_RoofChk*);
     void RoofChkRp(dBgS_RoofChk*, int);
     bool RoofChkGrpRp(dBgS_RoofChk*, int, int);
@@ -44,9 +44,9 @@ public:
     void SphChkRp(dBgS_SphChk*, void*, int);
     bool SphChkGrpRp(dBgS_SphChk*, void*, int, int);
     void positionWallCrrPos(cM3dGTri&, dBgS_CrrPos*, cXyz*, f32, f32);
-    void RwgWallCrrPos(u16, dBgS_CrrPos*);
-    void WallCrrPosRp(dBgS_CrrPos*, int);
-    void WallCrrPosGrpRp(dBgS_CrrPos*, int, int);
+    bool RwgWallCrrPos(u16, dBgS_CrrPos*);
+    bool WallCrrPosRp(dBgS_CrrPos*, int);
+    bool WallCrrPosGrpRp(dBgS_CrrPos*, int, int);
     bool WallCrrPos(dBgS_CrrPos*);
     void ChangeAttributeCodeByPathPntNo(int, u32);
 

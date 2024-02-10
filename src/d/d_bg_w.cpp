@@ -4,7 +4,7 @@
 //
 
 #include "d/d_bg_w.h"
-#include "dolphin/types.h"
+#include "d/d_bg_s.h"
 
 /* 800A5C3C-800A5CA8       .text __ct__4dBgWFv */
 dBgW::dBgW() {
@@ -32,7 +32,7 @@ void dBgW::WallCorrectRp(dBgS_Acch*, int) {
 }
 
 /* 800A7004-800A7120       .text WallCorrectGrpRp__4dBgWFP9dBgS_Acchii */
-void dBgW::WallCorrectGrpRp(dBgS_Acch*, int, int) {
+bool dBgW::WallCorrectGrpRp(dBgS_Acch*, int, int) {
     /* Nonmatching */
 }
 
@@ -87,48 +87,141 @@ void dBgW::positionWallCrrPos(cM3dGTri&, dBgS_CrrPos*, cXyz*, f32, f32) {
 }
 
 /* 800A819C-800A8964       .text RwgWallCrrPos__4dBgWFUsP11dBgS_CrrPos */
-void dBgW::RwgWallCrrPos(u16, dBgS_CrrPos*) {
+bool dBgW::RwgWallCrrPos(u16, dBgS_CrrPos*) {
     /* Nonmatching */
 }
 
 /* 800A8964-800A8B70       .text WallCrrPosRp__4dBgWFP11dBgS_CrrPosi */
-void dBgW::WallCrrPosRp(dBgS_CrrPos*, int) {
-    /* Nonmatching */
+bool dBgW::WallCrrPosRp(dBgS_CrrPos* crr, int i) {
+    cBgW_NodeTree* node = &pm_node_tree[i];
+    if (!node->Cross(crr->GetCylP()))
+        return false;
+
+    bool ret = false;
+    cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
+    if (tree->mFlag & 1) {
+        if (pm_blk[tree->mBlock].wall != 0xFFFF && RwgWallCrrPos(pm_blk[tree->mBlock].wall, crr))
+            ret = true;
+        if (pm_blk[tree->mBlock].roof != 0xFFFF && RwgWallCrrPos(pm_blk[tree->mBlock].roof, crr))
+            ret = true;
+        return ret;
+    } else {
+        if (tree->mChild[0] != 0xFFFF && WallCrrPosRp(crr, tree->mChild[0]))
+            ret = true;
+        if (tree->mChild[1] != 0xFFFF && WallCrrPosRp(crr, tree->mChild[1]))
+            ret = true;
+        if (tree->mChild[2] != 0xFFFF && WallCrrPosRp(crr, tree->mChild[2]))
+            ret = true;
+        if (tree->mChild[3] != 0xFFFF && WallCrrPosRp(crr, tree->mChild[3]))
+            ret = true;
+        if (tree->mChild[4] != 0xFFFF && WallCrrPosRp(crr, tree->mChild[4]))
+            ret = true;
+        if (tree->mChild[5] != 0xFFFF && WallCrrPosRp(crr, tree->mChild[5]))
+            ret = true;
+        if (tree->mChild[6] != 0xFFFF && WallCrrPosRp(crr, tree->mChild[6]))
+            ret = true;
+        if (tree->mChild[7] != 0xFFFF && WallCrrPosRp(crr, tree->mChild[7]))
+            ret = true;
+        return ret;
+    }
 }
 
 /* 800A8B70-800A8C8C       .text WallCrrPosGrpRp__4dBgWFP11dBgS_CrrPosii */
-void dBgW::WallCrrPosGrpRp(dBgS_CrrPos*, int, int) {
-    /* Nonmatching */
+bool dBgW::WallCrrPosGrpRp(dBgS_CrrPos* crr, int grp_id, int depth) {
+    if (ChkGrpThrough(grp_id, crr->GetGrpPassChk(), depth))
+        return false;
+
+    cBgW_GrpElm* grp = &pm_grp[grp_id];
+
+    if (!grp->aab.Cross(crr->GetCylP()))
+        return false;
+
+    bool ret = false;
+    u32 tree_idx = pm_bgd->m_g_tbl[grp_id].m_tree_idx;
+    if (tree_idx != 0xFFFF && WallCrrPosRp(crr, tree_idx))
+        ret = true;
+
+    s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
+    while (true) {
+        if (child_idx == 0xFFFF)
+            break;
+        if (WallCrrPosGrpRp(crr, child_idx, depth + 1))
+            ret = true;
+        child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
+    }
+
+    return ret;
 }
 
 /* 800A8C8C-800A8CB4       .text WallCrrPos__4dBgWFP11dBgS_CrrPos */
-bool dBgW::WallCrrPos(dBgS_CrrPos*) {
-    /* Nonmatching */
+bool dBgW::WallCrrPos(dBgS_CrrPos* crr) {
+    return WallCrrPosGrpRp(crr, m_rootGrpIdx, 1);
 }
 
 /* 800A8CB4-800A8CF0       .text CrrPos__4dBgWFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgW::CrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
-    /* Nonmatching */
+void dBgW::CrrPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
+    if (m_crr_func != NULL)
+        m_crr_func(this, user, poly, accept, pos, angle1, angle2);
 }
 
 /* 800A8CF0-800A8D2C       .text TransPos__4dBgWFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgW::TransPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
-    /* Nonmatching */
+void dBgW::TransPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
+    if (m_crr_func != NULL)
+        m_crr_func(this, user, poly, accept, pos, angle1, angle2);
 }
 
 /* 800A8D2C-800A9474       .text ChkPolyThrough__4dBgWFiP16cBgS_PolyPassChk */
-bool dBgW::ChkPolyThrough(int, cBgS_PolyPassChk*) {
+bool dBgW::ChkPolyThrough(int poly_index, cBgS_PolyPassChk* chk) {
     /* Nonmatching */
+    if (chk == NULL)
+        return false;
+    if (chk->mbObjThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x02)
+        return true;
+    if (chk->mbCamThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x01)
+        return true;
+    if (chk->mbLinkThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x04)
+        return true;
+    if (chk->mbArrowThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x08)
+        return true;
+    if (chk->mbBombThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x20)
+        return true;
+    if (chk->mbBoomerangThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x40)
+        return true;
+    if (chk->mbRopeThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x80)
+        return true;
+    return false;
 }
 
 /* 800A9474-800A9684       .text ChkShdwDrawThrough__4dBgWFiP16cBgS_PolyPassChk */
-bool dBgW::ChkShdwDrawThrough(int, cBgS_PolyPassChk*) {
+bool dBgW::ChkShdwDrawThrough(int poly_index, cBgS_PolyPassChk* chk) {
     /* Nonmatching */
+    if ((GetPolyInf0(GetPolyInfId(poly_index)) >> 27) & 1)
+        return true;
+
+    if (GetPolyInf3(GetPolyInfId(poly_index)) & 0x08)
+        return true;
+
+    return false;
 }
 
 /* 800A9684-800A974C       .text ChkGrpThrough__4dBgWFiP15cBgS_GrpPassChki */
-bool dBgW::ChkGrpThrough(int, cBgS_GrpPassChk*, int) {
-    /* Nonmatching */
+bool dBgW::ChkGrpThrough(int grp_id, cBgS_GrpPassChk* _chk, int depth) {
+    dBgS_GrpPassChk* chk = (dBgS_GrpPassChk*)_chk;
+    if (depth != 2 || chk == NULL)
+        return false;
+
+    int info = pm_bgd->m_g_tbl[grp_id].m_info;
+    if (!(info & 0x80700) && chk->MaskNormalGrp())
+        return false;
+    if ((info & 0x00100) && chk->MaskWaterGrp())
+        return false;
+    if ((info & 0x00200) && chk->MaskYoganGrp())
+        return false;
+    if ((info & 0x00400) && chk->MaskDokuGrp())
+        return false;
+    if ((info & 0x80000) && chk->MaskLightGrp())
+        return false;
+    return true;
 }
 
 /* 800A974C-800A97E4       .text ChangeAttributeCodeByPathPntNo__4dBgWFiUl */
