@@ -7,6 +7,7 @@
 
 #include "d/d_bg_s_acch.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
 #include "d/d_item.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_actor_mng.h"
@@ -22,6 +23,7 @@ const float magic_double = -24.0f;
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
+    {
         /* Flags             */ 0,
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
@@ -40,12 +42,14 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjTg Mtrl    */ 0,
         /* SrcGObjTg SPrm    */ 4,
         /* SrcGObjCo SPrm    */ 0,
-        /* SrcCylAttr.mCyl.Vec.x mCenter */ 0.0f,
-        /* SrcCylAttr.mCyl.Vec.y mCenter */ 0.0f,
-        /* SrcCylAttr.mCyl.Vec.z mCenter */ 0.0f,
-        /* SrcCylAttr.mCyl.f32 mRadius */ 0.0f,
-        /* SrcCylAttr.mCyl.f32 mHeight */ 0.0f,
-    };
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 0.0f,
+        /* Height */ 0.0f,
+    },
+};
 
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */
 void daSpcItem01_c::set_mtx() {
@@ -71,7 +75,7 @@ cPhs__Step daSpcItem01_c::_create() {
     fopAcM_SetupActor(this, daSpcItem01_c);
     m_itemNo = daSpcItem01_prm::getItemNo(this);
     if (m_itemNo == SHIELD && dComIfGs_isEventBit(0xE20)) {
-        this->setLoadError();
+        setLoadError();
         return cPhs_ERROR_e;
     }
     cPhs__Step phs_step = (cPhs__Step)dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
@@ -138,7 +142,7 @@ BOOL daSpcItem01_c::_execute() {
 
 /* 8015DFE8-8015E070       .text set_effect__13daSpcItem01_cFv */
 void daSpcItem01_c::set_effect() {
-    if (field_0x644 & 1 && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != BOKO_BELT) {
+    if (cLib_checkBit(field_0x644, (u16)0x01) && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != BOKO_BELT) {
         dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos, (u8)0xFF, g_whiteColor, g_whiteColor, 0);
     }
 }
@@ -169,7 +173,7 @@ void daSpcItem01_c::move() {
     case SHIELD:
         break;
     case PENDANT:
-        if (mAcch.m_flags & dBgS_Acch::GROUND_LANDING) {
+        if (mAcch.ChkGroundLanding()) {
             speed.x = 0.0f;
             speed.y = 0.0f;
             speed.z = 0.0f;
@@ -177,7 +181,7 @@ void daSpcItem01_c::move() {
         }
         break;
     default:
-        if (mAcch.m_flags & dBgS_Acch::GROUND_LANDING) {
+        if (mAcch.ChkGroundLanding()) {
             field_0x642 += 1;
             f32 newGravity = field_0x63C * 0.62f;
             if (newGravity > mGravity - 0.5f) {
@@ -220,12 +224,12 @@ BOOL daSpcItem01_c::_draw() {
 
 /* 8015E2A8-8015E368       .text setTevStr__13daSpcItem01_cFv */
 void daSpcItem01_c::setTevStr() {
-    if (this->m_itemNo == BOKO_BELT) {
-        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &this->current.pos, &mTevStr);
+    if (m_itemNo == BOKO_BELT) {
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
     } else {
-        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &this->current.pos, &mTevStr);
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     }
-    dKy_getEnvlight().setLightTevColorType(this->mpModel, &this->mTevStr);
+    dKy_getEnvlight().setLightTevColorType(mpModel, &mTevStr);
 
     for (s32 modelIndex = 0; modelIndex < (s32)ARRAY_SIZE(mpModelArrow); modelIndex++) {
         J3DModel* modelArrow = mpModelArrow[modelIndex];
@@ -259,3 +263,28 @@ static BOOL daSpcItem01_Delete(daSpcItem01_c* i_this) {
 static s32 daSpcItem01_Create(fopAc_ac_c* i_this) {
     return ((daSpcItem01_c*)i_this)->_create();
 }
+
+static actor_method_class l_daSpcItem01_Method = {
+    (process_method_func)daSpcItem01_Create,
+    (process_method_func)daSpcItem01_Delete,
+    (process_method_func)daSpcItem01_Execute,
+    (process_method_func)daSpcItem01_IsDelete,
+    (process_method_func)daSpcItem01_Draw,
+};
+
+actor_process_profile_definition g_profile_SPC_ITEM01 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SPC_ITEM01,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daSpcItem01_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0100,
+    /* Actor SubMtd */ &l_daSpcItem01_Method,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_UNK4000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};
