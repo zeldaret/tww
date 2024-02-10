@@ -53,10 +53,14 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */
 void daSpcItem01_c::set_mtx() {
-    /* Nonmatching */
     csXyz angle = current.angle;
     cXyz scale = mScale;
-    f32 offsetY = (s8)m_itemNo != BOKO_BELT ? 0.0f : -24.0f;
+    f32 offsetY = 0.0f;
+    switch (m_itemNo) {
+    case BOKO_BELT:
+        offsetY = -24.0f;
+        break;
+    }
     mpModel->setBaseScale(scale);
 
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + offsetY, current.pos.z);
