@@ -18,7 +18,7 @@ public:
     typedef void(*Callback)(dBgS_SphChk*, cBgD_Vtx_t*, int, int, int, cM3dGPla*, void*);
     void SetCallback(Callback cb) { mpCallback = cb; }
 
-private:
+public:
     /* 0x4c */ Callback mpCallback;
 };  // Size: 0x50
 

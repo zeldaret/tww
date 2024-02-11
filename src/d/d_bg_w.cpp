@@ -107,8 +107,29 @@ bool dBgW::WallCorrectGrpRp(dBgS_Acch* acch, int grp_id, int depth) {
 }
 
 /* 800A7120-800A72E0       .text RwgRoofChk__4dBgWFUsP12dBgS_RoofChk */
-bool dBgW::RwgRoofChk(u16, dBgS_RoofChk*) {
+bool dBgW::RwgRoofChk(u16 poly_index, dBgS_RoofChk* chk) {
     /* Nonmatching */
+
+    bool ret = false;
+    while (true) {
+        f32 y;
+        if (pm_tri[poly_index].m_plane.getCrossY(*chk->GetPosP(), &y) && chk->GetPosP()->y > y && y < chk->GetNowY()) {
+            cBgD_Tri_t* tri;
+            tri = &pm_bgd->m_t_tbl[poly_index];
+            if (cM3d_CrossY_Tri(pm_vtx_tbl[tri->vtx0], pm_vtx_tbl[tri->vtx1], pm_vtx_tbl[tri->vtx2], pm_tri[poly_index].m_plane, chk->GetPosP()) && !ChkPolyThrough(poly_index, chk->GetPolyPassChk())) {
+                chk->SetNowY(y);
+                chk->SetPolyIndex(poly_index);
+                ret = true;
+            }
+        }
+
+        if (pm_rwg[poly_index].next == 0xFFFF)
+            break;
+
+        poly_index = pm_rwg[poly_index].next;
+    }
+
+    return ret;
 }
 
 /* 800A72E0-800A7514       .text RoofChkRp__4dBgWFP12dBgS_RoofChki */
@@ -176,8 +197,29 @@ bool dBgW::RoofChkGrpRp(dBgS_RoofChk* chk, int grp_id, int depth) {
 }
 
 /* 800A767C-800A783C       .text RwgSplGrpChk__4dBgWFUsP14dBgS_SplGrpChk */
-bool dBgW::RwgSplGrpChk(u16, dBgS_SplGrpChk* chk) {
+bool dBgW::RwgSplGrpChk(u16 poly_index, dBgS_SplGrpChk* chk) {
     /* Nonmatching */
+
+    bool ret = false;
+    while (true) {
+        f32 y;
+        if (pm_tri[poly_index].m_plane.getCrossY(*chk->GetPosP(), &y) && chk->GetPosP()->y > y && y < chk->GetHeight()) {
+            cBgD_Tri_t* tri;
+            tri = &pm_bgd->m_t_tbl[poly_index];
+            if (cM3d_CrossY_Tri(pm_vtx_tbl[tri->vtx0], pm_vtx_tbl[tri->vtx1], pm_vtx_tbl[tri->vtx2], pm_tri[poly_index].m_plane, chk->GetPosP()) && !ChkPolyThrough(poly_index, chk->GetPolyPassChk())) {
+                chk->SetHeight(y);
+                chk->SetPolyIndex(poly_index);
+                ret = true;
+            }
+        }
+
+        if (pm_rwg[poly_index].next == 0xFFFF)
+            break;
+
+        poly_index = pm_rwg[poly_index].next;
+    }
+
+    return ret;
 }
 
 /* 800A783C-800A7A74       .text SplGrpChkRp__4dBgWFP14dBgS_SplGrpChki */
@@ -244,8 +286,36 @@ bool dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk* chk, int grp_id, int depth) {
 }
 
 /* 800A7BDC-800A7DCC       .text RwgSphChk__4dBgWFUsP11dBgS_SphChkPv */
-bool dBgW::RwgSphChk(u16, dBgS_SphChk* chk, void*) {
+bool dBgW::RwgSphChk(u16 poly_index, dBgS_SphChk* chk, void* user) {
     /* Nonmatching */
+    cM3dGTri gtri;
+
+    bool ret = false;
+    while (true) {
+        if (!ChkPolyThrough(poly_index, chk->GetPolyPassChk())) {
+            cBgW_TriElm* tri_elm;
+            cBgD_Tri_t* tri;
+
+            tri = &pm_bgd->m_t_tbl[poly_index];
+            tri_elm = &pm_tri[poly_index];
+
+            gtri.setBg(&pm_vtx_tbl[tri->vtx0], &pm_vtx_tbl[tri->vtx1], &pm_vtx_tbl[tri->vtx2], &tri_elm->m_plane);
+            if (cM3d_Cross_SphTri(chk, &gtri)) {
+                if (chk->mpCallback != NULL) {
+                    chk->mpCallback(chk, (cBgD_Vtx_t*)pm_vtx_tbl, tri->vtx0, tri->vtx1, tri->vtx2, &pm_tri[poly_index].m_plane, user);
+                }
+                chk->SetPolyIndex(poly_index);
+                ret = true;
+            }
+        }
+
+        if (pm_rwg[poly_index].next == 0xFFFF)
+            break;
+
+        poly_index = pm_rwg[poly_index].next;
+    }
+
+    return ret;
 }
 
 /* 800A7DCC-800A8038       .text SphChkRp__4dBgWFP11dBgS_SphChkPvi */

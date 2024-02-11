@@ -24,10 +24,12 @@ public:
     cXyz* GetNP() { return &mNormal; }
     const cXyz* GetNP() const { return &mNormal; }
     f32 GetD() const { return mD; }
-    void getCrossY(const cXyz& i_axis, f32* i_value) const {
-        if (!cM3d_IsZero(mNormal.y)) {
-            *i_value = (-mNormal.x * i_axis.x - mNormal.z * i_axis.z - mD) / mNormal.y;
+    bool getCrossY(const cXyz& i_axis, f32* i_value) const {
+        if (cM3d_IsZero(mNormal.y)) {
+            return false;
         }
+        *i_value = (-mNormal.x * i_axis.x - mNormal.z * i_axis.z - mD) / mNormal.y;
+        return true;
     }
     f32 getCrossY_NonIsZero(const cXyz& i_axis) const {
         return (-mNormal.x * i_axis.x - mNormal.z * i_axis.z - mD) / mNormal.y;
