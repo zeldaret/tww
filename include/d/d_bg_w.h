@@ -31,17 +31,17 @@ public:
 
     void Move();
     void positionWallCorrect(dBgS_Acch*, f32, cM3dGPla&, cXyz*, f32);
-    void RwgWallCorrect(dBgS_Acch*, u16);
-    void WallCorrectRp(dBgS_Acch*, int);
+    bool RwgWallCorrect(dBgS_Acch*, u16);
+    bool WallCorrectRp(dBgS_Acch*, int);
     bool WallCorrectGrpRp(dBgS_Acch*, int, int);
-    void RwgRoofChk(u16, dBgS_RoofChk*);
-    void RoofChkRp(dBgS_RoofChk*, int);
+    bool RwgRoofChk(u16, dBgS_RoofChk*);
+    bool RoofChkRp(dBgS_RoofChk*, int);
     bool RoofChkGrpRp(dBgS_RoofChk*, int, int);
-    void RwgSplGrpChk(u16, dBgS_SplGrpChk*);
-    void SplGrpChkRp(dBgS_SplGrpChk*, int);
+    bool RwgSplGrpChk(u16, dBgS_SplGrpChk*);
+    bool SplGrpChkRp(dBgS_SplGrpChk*, int);
     bool SplGrpChkGrpRp(dBgS_SplGrpChk*, int, int);
-    void RwgSphChk(u16, dBgS_SphChk*, void*);
-    void SphChkRp(dBgS_SphChk*, void*, int);
+    bool RwgSphChk(u16, dBgS_SphChk*, void*);
+    bool SphChkRp(dBgS_SphChk*, void*, int);
     bool SphChkGrpRp(dBgS_SphChk*, void*, int, int);
     void positionWallCrrPos(cM3dGTri&, dBgS_CrrPos*, cXyz*, f32, f32);
     bool RwgWallCrrPos(u16, dBgS_CrrPos*);

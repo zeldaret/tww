@@ -6,6 +6,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_acch.h"
+#include "d/d_bg_s_sph_chk.h"
 
 #define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
 
@@ -38,68 +39,286 @@ void dBgW::positionWallCorrect(dBgS_Acch* acch, f32 dist, cM3dGPla& plane, cXyz*
 }
 
 /* 800A5E64-800A6DF8       .text RwgWallCorrect__4dBgWFP9dBgS_AcchUs */
-void dBgW::RwgWallCorrect(dBgS_Acch*, u16) {
+bool dBgW::RwgWallCorrect(dBgS_Acch*, u16) {
     /* Nonmatching */
 }
 
 /* 800A6DF8-800A7004       .text WallCorrectRp__4dBgWFP9dBgS_Acchi */
-void dBgW::WallCorrectRp(dBgS_Acch*, int) {
-    /* Nonmatching */
+bool dBgW::WallCorrectRp(dBgS_Acch* acch, int i) {
+    cBgW_NodeTree* node = &m_nt_tbl[i];
+    if (!node->Cross(acch->GetWallBmdCylP()))
+        return false;
+
+    cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
+    bool ret = false;
+    if (tree->mFlag & 1) {
+        if (pm_blk[tree->mBlock].wall != 0xFFFF && RwgWallCorrect(acch, pm_blk[tree->mBlock].wall))
+            ret = true;
+        if (pm_blk[tree->mBlock].roof != 0xFFFF && RwgWallCorrect(acch, pm_blk[tree->mBlock].roof))
+            ret = true;
+        return ret;
+    } else {
+        if (tree->mChild[0] != 0xFFFF && WallCorrectRp(acch, tree->mChild[0]))
+            ret = true;
+        if (tree->mChild[1] != 0xFFFF && WallCorrectRp(acch, tree->mChild[1]))
+            ret = true;
+        if (tree->mChild[2] != 0xFFFF && WallCorrectRp(acch, tree->mChild[2]))
+            ret = true;
+        if (tree->mChild[3] != 0xFFFF && WallCorrectRp(acch, tree->mChild[3]))
+            ret = true;
+        if (tree->mChild[4] != 0xFFFF && WallCorrectRp(acch, tree->mChild[4]))
+            ret = true;
+        if (tree->mChild[5] != 0xFFFF && WallCorrectRp(acch, tree->mChild[5]))
+            ret = true;
+        if (tree->mChild[6] != 0xFFFF && WallCorrectRp(acch, tree->mChild[6]))
+            ret = true;
+        if (tree->mChild[7] != 0xFFFF && WallCorrectRp(acch, tree->mChild[7]))
+            ret = true;
+        return ret;
+    }
 }
 
 /* 800A7004-800A7120       .text WallCorrectGrpRp__4dBgWFP9dBgS_Acchii */
-bool dBgW::WallCorrectGrpRp(dBgS_Acch*, int, int) {
+bool dBgW::WallCorrectGrpRp(dBgS_Acch* acch, int grp_id, int depth) {
     /* Nonmatching */
+    if (ChkGrpThrough(grp_id, acch->GetGrpPassChk(), depth))
+        return false;
+
+    cBgW_GrpElm* grp = &pm_grp[grp_id];
+
+    if (!grp->aab.Cross(acch->GetWallBmdCylP()))
+        return false;
+
+    bool ret = false;
+    u32 tree_idx = pm_bgd->m_g_tbl[grp_id].m_tree_idx;
+    if (tree_idx != 0xFFFF && WallCorrectRp(acch, tree_idx))
+        ret = true;
+
+    s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
+    while (true) {
+        if (child_idx == 0xFFFF)
+            break;
+        if (WallCorrectGrpRp(acch, child_idx, depth + 1))
+            ret = true;
+        child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
+    }
+
+    return ret;
 }
 
 /* 800A7120-800A72E0       .text RwgRoofChk__4dBgWFUsP12dBgS_RoofChk */
-void dBgW::RwgRoofChk(u16, dBgS_RoofChk*) {
+bool dBgW::RwgRoofChk(u16, dBgS_RoofChk*) {
     /* Nonmatching */
 }
 
 /* 800A72E0-800A7514       .text RoofChkRp__4dBgWFP12dBgS_RoofChki */
-void dBgW::RoofChkRp(dBgS_RoofChk*, int) {
+bool dBgW::RoofChkRp(dBgS_RoofChk* chk, int i) {
     /* Nonmatching */
+    cBgW_NodeTree* node = &m_nt_tbl[i];
+    // if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetNowY()) || node->TopPlaneYUnder(chk->GetPosP()->y))
+    if (!node->CrossY(chk->GetPosP()) || !(node->GetMinY() < chk->GetNowY()) || node->TopPlaneYUnder(chk->GetPosP()->y))
+        return false;
+
+    cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
+    if (tree->mFlag & 1) {
+        if (pm_blk[tree->mBlock].roof != 0xFFFF && RwgRoofChk(pm_blk[tree->mBlock].roof, chk))
+            return true;
+        return false;
+    } else {
+        bool ret = false;
+        if (tree->mChild[0] != 0xFFFF && RoofChkRp(chk, tree->mChild[0]))
+            ret = true;
+        if (tree->mChild[1] != 0xFFFF && RoofChkRp(chk, tree->mChild[1]))
+            ret = true;
+        if (tree->mChild[2] != 0xFFFF && RoofChkRp(chk, tree->mChild[2]))
+            ret = true;
+        if (tree->mChild[3] != 0xFFFF && RoofChkRp(chk, tree->mChild[3]))
+            ret = true;
+        if (tree->mChild[4] != 0xFFFF && RoofChkRp(chk, tree->mChild[4]))
+            ret = true;
+        if (tree->mChild[5] != 0xFFFF && RoofChkRp(chk, tree->mChild[5]))
+            ret = true;
+        if (tree->mChild[6] != 0xFFFF && RoofChkRp(chk, tree->mChild[6]))
+            ret = true;
+        if (tree->mChild[7] != 0xFFFF && RoofChkRp(chk, tree->mChild[7]))
+            ret = true;
+        return ret;
+    }
 }
 
 /* 800A7514-800A767C       .text RoofChkGrpRp__4dBgWFP12dBgS_RoofChkii */
-bool dBgW::RoofChkGrpRp(dBgS_RoofChk*, int, int) {
-    /* Nonmatching */
+bool dBgW::RoofChkGrpRp(dBgS_RoofChk* chk, int grp_id, int depth) {
+    if (ChkGrpThrough(grp_id, chk->GetGrpPassChk(), depth))
+        return false;
+
+    cBgW_GrpElm* grp = &pm_grp[grp_id];
+
+    // if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetNowY()) || grp->aab.TopPlaneYUnder(chk->GetPosP()->y))
+    if (!grp->aab.CrossY(chk->GetPosP()) || !(grp->aab.GetMinY() < chk->GetNowY()) || grp->aab.TopPlaneYUnder(chk->GetPosP()->y))
+        return false;
+
+    bool ret = false;
+    cBgD_Grp_t* grpd = &pm_bgd->m_g_tbl[grp_id];
+    u32 tree_idx = grpd->m_tree_idx;
+    if (tree_idx != 0xFFFF && RoofChkRp(chk, tree_idx))
+        ret = true;
+
+    s32 child_idx = grpd->m_first_child;
+    while (true) {
+        if (child_idx == 0xFFFF)
+            break;
+        if (RoofChkGrpRp(chk, child_idx, depth + 1))
+            ret = true;
+        child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
+    }
+
+    return ret;
 }
 
 /* 800A767C-800A783C       .text RwgSplGrpChk__4dBgWFUsP14dBgS_SplGrpChk */
-void dBgW::RwgSplGrpChk(u16, dBgS_SplGrpChk*) {
+bool dBgW::RwgSplGrpChk(u16, dBgS_SplGrpChk* chk) {
     /* Nonmatching */
 }
 
 /* 800A783C-800A7A74       .text SplGrpChkRp__4dBgWFP14dBgS_SplGrpChki */
-void dBgW::SplGrpChkRp(dBgS_SplGrpChk*, int) {
-    /* Nonmatching */
+bool dBgW::SplGrpChkRp(dBgS_SplGrpChk* chk, int i) {
+    cBgW_NodeTree* node = &m_nt_tbl[i];
+    // if (!node->CrossY(chk->GetPosP()) || !node->UnderPlaneYUnder(chk->GetRoof()) || node->TopPlaneYUnder(chk->GetHeight()))
+    if (!node->CrossY(chk->GetPosP()) || !(node->GetMinY() < chk->GetRoof()) || node->GetMaxY() < chk->GetHeight())
+        return false;
+
+    cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
+    if (tree->mFlag & 1) {
+        if (pm_blk[tree->mBlock].ground != 0xFFFF && RwgSplGrpChk(pm_blk[tree->mBlock].ground, chk))
+            return true;
+        return false;
+    } else {
+        bool ret = false;
+        if (tree->mChild[0] != 0xFFFF && SplGrpChkRp(chk, tree->mChild[0]))
+            ret = true;
+        if (tree->mChild[1] != 0xFFFF && SplGrpChkRp(chk, tree->mChild[1]))
+            ret = true;
+        if (tree->mChild[2] != 0xFFFF && SplGrpChkRp(chk, tree->mChild[2]))
+            ret = true;
+        if (tree->mChild[3] != 0xFFFF && SplGrpChkRp(chk, tree->mChild[3]))
+            ret = true;
+        if (tree->mChild[4] != 0xFFFF && SplGrpChkRp(chk, tree->mChild[4]))
+            ret = true;
+        if (tree->mChild[5] != 0xFFFF && SplGrpChkRp(chk, tree->mChild[5]))
+            ret = true;
+        if (tree->mChild[6] != 0xFFFF && SplGrpChkRp(chk, tree->mChild[6]))
+            ret = true;
+        if (tree->mChild[7] != 0xFFFF && SplGrpChkRp(chk, tree->mChild[7]))
+            ret = true;
+        return ret;
+    }
 }
 
 /* 800A7A74-800A7BDC       .text SplGrpChkGrpRp__4dBgWFP14dBgS_SplGrpChkii */
-bool dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk*, int, int) {
-    /* Nonmatching */
+bool dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk* chk, int grp_id, int depth) {
+    if (ChkGrpThrough(grp_id, chk->GetGrpPassChk(), depth))
+        return false;
+
+    cBgW_GrpElm* grp = &pm_grp[grp_id];
+
+    // if (!grp->aab.CrossY(chk->GetPosP()) || !grp->aab.UnderPlaneYUnder(chk->GetRoof()) || grp->aab.TopPlaneYUnder(chk->GetHeight()))
+    if (!grp->aab.CrossY(chk->GetPosP()) || !(grp->aab.GetMinY() < chk->GetRoof()) || grp->aab.GetMaxY() < chk->GetHeight())
+        return false;
+
+    bool ret = false;
+    cBgD_Grp_t* grpd = &pm_bgd->m_g_tbl[grp_id];
+    u16 tree_idx = grpd->m_tree_idx;
+    if (tree_idx != 0xFFFF && SplGrpChkRp(chk, tree_idx))
+        ret = true;
+
+    s32 child_idx = grpd->m_first_child;
+    while (true) {
+        if (child_idx == 0xFFFF)
+            break;
+        if (SplGrpChkGrpRp(chk, child_idx, depth + 1))
+            ret = true;
+        child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
+    }
+
+    return ret;
 }
 
 /* 800A7BDC-800A7DCC       .text RwgSphChk__4dBgWFUsP11dBgS_SphChkPv */
-void dBgW::RwgSphChk(u16, dBgS_SphChk*, void*) {
+bool dBgW::RwgSphChk(u16, dBgS_SphChk* chk, void*) {
     /* Nonmatching */
 }
 
 /* 800A7DCC-800A8038       .text SphChkRp__4dBgWFP11dBgS_SphChkPvi */
-void dBgW::SphChkRp(dBgS_SphChk*, void*, int) {
-    /* Nonmatching */
+bool dBgW::SphChkRp(dBgS_SphChk* chk, void* user, int i) {
+    cBgW_NodeTree* node = &m_nt_tbl[i];
+    if (!node->Cross(chk))
+        return false;
+
+    cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
+    bool ret = false;
+    if (tree->mFlag & 1) {
+        if (pm_blk[tree->mBlock].ground != 0xFFFF && RwgSphChk(pm_blk[tree->mBlock].ground, chk, user))
+            ret = true;
+        if (pm_blk[tree->mBlock].roof != 0xFFFF && RwgSphChk(pm_blk[tree->mBlock].roof, chk, user))
+            ret = true;
+        if (pm_blk[tree->mBlock].wall != 0xFFFF && RwgSphChk(pm_blk[tree->mBlock].wall, chk, user))
+            ret = true;
+        return ret;
+    } else {
+        if (tree->mChild[0] != 0xFFFF && SphChkRp(chk, user, tree->mChild[0]))
+            ret = true;
+        if (tree->mChild[1] != 0xFFFF && SphChkRp(chk, user, tree->mChild[1]))
+            ret = true;
+        if (tree->mChild[2] != 0xFFFF && SphChkRp(chk, user, tree->mChild[2]))
+            ret = true;
+        if (tree->mChild[3] != 0xFFFF && SphChkRp(chk, user, tree->mChild[3]))
+            ret = true;
+        if (tree->mChild[4] != 0xFFFF && SphChkRp(chk, user, tree->mChild[4]))
+            ret = true;
+        if (tree->mChild[5] != 0xFFFF && SphChkRp(chk, user, tree->mChild[5]))
+            ret = true;
+        if (tree->mChild[6] != 0xFFFF && SphChkRp(chk, user, tree->mChild[6]))
+            ret = true;
+        if (tree->mChild[7] != 0xFFFF && SphChkRp(chk, user, tree->mChild[7]))
+            ret = true;
+        return ret;
+    }
 }
 
 /* 800A8038-800A8158       .text SphChkGrpRp__4dBgWFP11dBgS_SphChkPvii */
-bool dBgW::SphChkGrpRp(dBgS_SphChk*, void*, int, int) {
-    /* Nonmatching */
+bool dBgW::SphChkGrpRp(dBgS_SphChk* chk, void* user, int grp_id, int depth) {
+    if (ChkGrpThrough(grp_id, chk->GetGrpPassChk(), depth))
+        return false;
+
+    cBgW_GrpElm* grp = &pm_grp[grp_id];
+
+    if (!grp->aab.Cross(chk))
+        return false;
+
+    bool ret = false;
+    cBgD_Grp_t* grpd = &pm_bgd->m_g_tbl[grp_id];
+    u16 tree_idx = grpd->m_tree_idx;
+    if (tree_idx != 0xFFFF && SphChkRp(chk, user, tree_idx))
+        ret = true;
+
+    s32 child_idx = grpd->m_first_child;
+    while (true) {
+        if (child_idx == 0xFFFF)
+            break;
+        if (SphChkGrpRp(chk, user, child_idx, depth + 1))
+            ret = true;
+        child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
+    }
+
+    return ret;
 }
 
 /* 800A8158-800A819C       .text positionWallCrrPos__4dBgWFR8cM3dGTriP11dBgS_CrrPosP4cXyzff */
-void dBgW::positionWallCrrPos(cM3dGTri&, dBgS_CrrPos*, cXyz*, f32, f32) {
-    /* Nonmatching */
+void dBgW::positionWallCrrPos(cM3dGTri& plane, dBgS_CrrPos* crr, cXyz* pos, f32 dist, f32 rad) {
+    crr->SetWallHit();
+    f32 move = (crr->GetWallR() - rad) * dist;
+    pos->x += move * plane.mNormal.x;
+    pos->z += move * plane.mNormal.z;
 }
 
 /* 800A819C-800A8964       .text RwgWallCrrPos__4dBgWFUsP11dBgS_CrrPos */
@@ -241,11 +460,22 @@ bool dBgW::ChkGrpThrough(int grp_id, cBgS_GrpPassChk* _chk, int depth) {
 }
 
 /* 800A974C-800A97E4       .text ChangeAttributeCodeByPathPntNo__4dBgWFiUl */
-void dBgW::ChangeAttributeCodeByPathPntNo(int, u32) {
-    /* Nonmatching */
+void dBgW::ChangeAttributeCodeByPathPntNo(int pnt_no, u32 attr) {
+    if (pm_bgd != NULL) {
+        for (s32 i = 0; i < pm_bgd->m_ti_num; i++) {
+            u32 ti_pnt_no = dBgS_GetRoomPathPntNo(pm_bgd->m_ti_tbl[i].mPolyInf2);
+            if (ti_pnt_no == pnt_no)
+                dBgS_ChangeAttributeCode(attr, &pm_bgd->m_ti_tbl[i].mPolyInf1);
+        }
+    }
 }
 
 /* 800A97E4-800A986C       .text dBgW_NewSet__FP6cBgD_tUlPA3_A4_f */
-dBgW* dBgW_NewSet(cBgD_t*, u32, f32(*)[3][4]) {
-    /* Nonmatching */
+dBgW* dBgW_NewSet(cBgD_t* bgd, u32 flag, Mtx* mtx) {
+    dBgW* rt = new dBgW();
+    if (rt == NULL)
+        return NULL;
+    if (rt->Set(bgd, flag, mtx))
+        return NULL;
+    return rt;
 }
