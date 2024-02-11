@@ -9,16 +9,20 @@
 // Axis aligned bounding box
 class cM3dGAab {
 private:
-public:
     /* 0x00 */ cXyz mMin;
     /* 0x0C */ cXyz mMax;
-    /* 0x18 vtable */
+    /* 0x18 */ /* vtable */
 
+public:
     virtual ~cM3dGAab() {}
     void SetMinMax(const cXyz&);
-    void Set(const cXyz& min, const cXyz& max) {
-        mMin = min;
-        mMax = max;
+    void SetMinMax(const cM3dGAab& aab) {
+        SetMinMax(aab.mMin);
+        SetMinMax(aab.mMax);
+    }
+    void Set(const cXyz* min, const cXyz* max) {
+        mMin = *min;
+        mMax = *max;
     }
     void SetMin(const cXyz&);
     void SetMax(const cXyz&);
@@ -56,6 +60,26 @@ public:
         mMax.y = -1000000000.0f;
         mMax.x = -1000000000.0f;
     }
+    void ClearForMinMaxY() {
+        mMin.y = 1000000000.0f;
+        mMax.y = -1000000000.0f;
+    }
+    void SetMinMaxY(f32 y) {
+        if (mMin.y > y) {
+            mMin.y = y;
+        }
+        if (mMax.y < y) {
+            mMax.y = y;
+        }
+    }
+    void PlusR(f32 r) {
+        mMin.x -= r;
+        mMin.y -= r;
+        mMin.z -= r;
+        mMax.x += r;
+        mMax.y += r;
+        mMax.z += r;
+    }
     bool CrossY(const cXyz* v) const {
         if (mMin.x > v->x || mMax.x < v->x || mMin.z > v->z || mMax.z < v->z) {
             return false;
@@ -69,6 +93,13 @@ public:
     bool TopPlaneYUnder(f32 y) const {
         return mMax.y < y;
     }
+
+    void Cross(const cM3dGAab*) const {}
+    void Cross(const cM3dGCyl*) const {}
+    void Cross(const cM3dGLin*) const {}
+    void Cross(const cM3dGSph*) const {}
+    void SetMaxY(f32) {}
+    void SetMinY(f32) {}
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cM3dGAab));

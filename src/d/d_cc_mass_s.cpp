@@ -37,22 +37,19 @@ void dCcMassS_Mng::Prepare() {
         JUT_ASSERT(61, pobj != 0);
         attr = pobj->GetShapeAttr();
         attr->CalcAabBox();
-        area.SetMinMax(attr->GetWorkAab().mMin);
-        area.SetMinMax(attr->GetWorkAab().mMax);
+        area.SetMinMax(attr->GetWorkAab());
     }
     for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
         cCcD_Obj* parea = mass->GetObj();
         JUT_ASSERT(73, parea != 0);
         attr = parea->GetShapeAttr();
         attr->CalcAabBox();
-        area.SetMinMax(attr->GetWorkAab().mMin);
-        area.SetMinMax(attr->GetWorkAab().mMax);
+        area.SetMinMax(attr->GetWorkAab());
     }
     if (mFlag & 1) {
         mCpsAttr.CalcAabBox();
         attr = &mCpsAttr;
-        area.SetMinMax(attr->GetWorkAab().mMin);
-        area.SetMinMax(attr->GetWorkAab().mMax);
+        area.SetMinMax(attr->GetWorkAab());
     }
     mDivideArea.SetArea(area);
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {

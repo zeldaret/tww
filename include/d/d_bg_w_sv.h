@@ -5,6 +5,8 @@
 
 class dBgWSv : public dBgW {
 public:
+    virtual ~dBgWSv() {}
+
     virtual void MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {}
     bool ChkNoCrrPos() { return mSvFlag & 1; }
     void SetFlag(u32 flag) { mSvFlag = flag; }

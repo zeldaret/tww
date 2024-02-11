@@ -14,7 +14,7 @@ class cBgS_ShdwDraw : public cBgS_Chk {
 public:
     cBgS_ShdwDraw() {}
     virtual ~cBgS_ShdwDraw() {}
-    void Set(cXyz& min, cXyz& max) { mM3dGAab.Set(min, max); }
+    void Set(cXyz& min, cXyz& max) { mM3dGAab.Set(&min, &max); }
     void SetCallback(cBgS_ShdwDraw_Callback callback) { mCallbackFun = callback; }
 
     cM3dGAab* GetBndP() { return &mM3dGAab; }

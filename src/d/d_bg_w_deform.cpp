@@ -8,12 +8,12 @@
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 
 /* 800A9928-800A9A48       .text Set__10dBgWDeformFP6cBgD_tP8J3DModelUl */
-bool dBgWDeform::Set(cBgD_t* bgd, J3DModel* pmodel, u32 r30) {
+bool dBgWDeform::Set(cBgD_t* bgd, J3DModel* pmodel, u32 flag) {
     JUT_ASSERT(32, pmodel->getModelData()->isDeformablePositionFormat() == true);
     if (cBgW::Set(bgd, 0x33, NULL)) {
         return true;
     }
-    SetFlag(r30);
+    SetFlag(flag);
     if (pmodel->setSkinDeform(this, 1) == J3DErrType_OutOfMemory) {
         return true;
     }

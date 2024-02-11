@@ -44,14 +44,13 @@ public:
     bool cross(const cM3dGCyl*, f32*) const;
     bool Cross(const cM3dGCps* cps, cXyz* dst) const { return cM3d_Cross_CpsCyl(*cps, *this, dst); }
     bool Cross(const cM3dGTri& tri, cXyz* dst) const { return cM3d_Cross_CylTri(this, &tri, dst); }
+    cXyz& GetC() { return mCenter; }
+    const cXyz& GetC() const { return mCenter; }
+    cXyz* GetCP() { return &mCenter; }
     const cXyz* GetCP() const { return &mCenter; }
     f32 GetR() const { return mRadius; }
+    f32* GetRP() { return &mRadius; }
     f32 GetH() const { return mHeight; }
-    cXyz& GetC() { return mCenter; }
-
-    void GetC() const {}
-    void GetCP() {}
-    void GetRP() {}
 };  // Size = 0x18
 
 STATIC_ASSERT(0x18 == sizeof(cM3dGCyl));

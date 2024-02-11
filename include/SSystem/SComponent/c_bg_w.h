@@ -268,7 +268,7 @@ public:
     /* 0x94 */ cBgD_t* pm_bgd;
     /* 0x98 */ cBgW_BlkElm* pm_blk;
     /* 0x9C */ cBgW_GrpElm* pm_grp;
-    /* 0xA0 */ cBgW_NodeTree* pm_node_tree;
+    /* 0xA0 */ cBgW_NodeTree* m_nt_tbl;
     /* 0xA4 */ int m_rootGrpIdx;
 };
 

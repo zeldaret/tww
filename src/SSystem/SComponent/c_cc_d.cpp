@@ -52,8 +52,8 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
     } else {
         u32 divInfo, yDivInfo, zDivInfo;
         if (!mXDiffIsZero) {
-            s32 var1 = mInvScaledXDiff * (aab.mMin.x - mMin.x);
-            s32 var3 = mInvScaledXDiff * (aab.mMax.x - mMin.x);
+            s32 var1 = mInvScaledXDiff * (aab.GetMinP()->x - GetMinP()->x);
+            s32 var3 = mInvScaledXDiff * (aab.GetMaxP()->x - GetMinP()->x);
             if (10 < var3) {
                 var3 = 10;
             }
@@ -68,8 +68,8 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
         }
 
         if (!mYDiffIsZero) {
-            s32 var1 = mInvScaledYDiff * (aab.mMin.y - mMin.y);
-            s32 var3 = mInvScaledYDiff * (aab.mMax.y - mMin.y);
+            s32 var1 = mInvScaledYDiff * (aab.GetMinP()->y - GetMinP()->y);
+            s32 var3 = mInvScaledYDiff * (aab.GetMaxP()->y - GetMinP()->y);
             if (9 < var3) {
                 var3 = 9;
             }
@@ -85,8 +85,8 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
         divInfo |= yDivInfo << 11;
 
         if (!mZDiffIsZero) {
-            s32 var1 = mInvScaledZDiff * (aab.mMin.z - mMin.z);
-            s32 var3 = mInvScaledZDiff * (aab.mMax.z - mMin.z);
+            s32 var1 = mInvScaledZDiff * (aab.GetMinP()->z - GetMinP()->z);
+            s32 var3 = mInvScaledZDiff * (aab.GetMaxP()->z - GetMinP()->z);
             if (10 < var3) {
                 var3 = 10;
             }
@@ -109,8 +109,8 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
 void cCcD_DivideArea::CalcDivideInfoOverArea(cCcD_DivideInfo* pDivideInfo, const cM3dGAab& aab) {
     u32 divInfo, yDivInfo, zDivInfo;
     if (!mXDiffIsZero) {
-        s32 var1 = mInvScaledXDiff * (aab.mMin.x - mMin.x);
-        s32 var3 = mInvScaledXDiff * (aab.mMax.x - mMin.x);
+        s32 var1 = mInvScaledXDiff * (aab.GetMinP()->x - GetMinP()->x);
+        s32 var3 = mInvScaledXDiff * (aab.GetMaxP()->x - GetMinP()->x);
         if ((var1 < 0 && var3 < 0) || (10 < var1 && var3 > 10)) {
             divInfo = 0;
         } else {
@@ -129,8 +129,8 @@ void cCcD_DivideArea::CalcDivideInfoOverArea(cCcD_DivideInfo* pDivideInfo, const
     }
 
     if (!mYDiffIsZero) {
-        s32 var1 = mInvScaledYDiff * (aab.mMin.y - mMin.y);
-        s32 var3 = mInvScaledYDiff * (aab.mMax.y - mMin.y);
+        s32 var1 = mInvScaledYDiff * (aab.GetMinP()->y - GetMinP()->y);
+        s32 var3 = mInvScaledYDiff * (aab.GetMaxP()->y - GetMinP()->y);
         if ((var1 < 0 && var3 < 0) || (9 < var1 && var3 > 9)) {
             yDivInfo = 0;
         } else {
@@ -150,8 +150,8 @@ void cCcD_DivideArea::CalcDivideInfoOverArea(cCcD_DivideInfo* pDivideInfo, const
     divInfo |= yDivInfo << 11;
 
     if (!mZDiffIsZero) {
-        s32 var1 = mInvScaledZDiff * (aab.mMin.z - mMin.z);
-        s32 var3 = mInvScaledZDiff * (aab.mMax.z - mMin.z);
+        s32 var1 = mInvScaledZDiff * (aab.GetMinP()->z - GetMinP()->z);
+        s32 var3 = mInvScaledZDiff * (aab.GetMaxP()->z - GetMinP()->z);
         if ((var1 < 0 && var3 < 0) || (10 < var1 && var3 > 10)) {
             zDivInfo = 0;
         } else {
@@ -337,16 +337,10 @@ bool cCcD_CpsAttr::CrossCo(const cCcD_SphAttr& sph, f32* dst) const {
 
 /* 802421EC-80242294       .text CalcAabBox__12cCcD_CpsAttrFv */
 void cCcD_CpsAttr::CalcAabBox() {
-    mAab.ClearForMinMax();
-    mAab.SetMinMax(GetStart());
-    mAab.SetMinMax(GetEnd());
-    f32 r = mRadius;
-    mAab.mMin.x -= r;
-    mAab.mMin.y -= r;
-    mAab.mMin.z -= r;
-    mAab.mMax.x += r;
-    mAab.mMax.y += r;
-    mAab.mMax.z += r;
+    GetWorkAab().ClearForMinMax();
+    GetWorkAab().SetMinMax(*GetStartP());
+    GetWorkAab().SetMinMax(*GetEndP());
+    GetWorkAab().PlusR(GetR());
 }
 
 /* 80242294-802423FC       .text GetNVec__12cCcD_CpsAttrCFRC4cXyzP4cXyz */
@@ -442,14 +436,13 @@ bool cCcD_CylAttr::CrossCo(const cCcD_CpsAttr& cps, f32* dst) const {
 /* 802425E8-8024264C       .text CalcAabBox__12cCcD_CylAttrFv */
 void cCcD_CylAttr::CalcAabBox() {
     cXyz min, max;
-    min.x = mCenter.x - mRadius;
-    min.y = mCenter.y;
-    min.z = mCenter.z - mRadius;
-    max.x = mCenter.x + mRadius;
-    max.y = mCenter.y + mHeight;
-    max.z = mCenter.z + mRadius;
-    mAab.mMin.set(min);
-    mAab.mMax.set(max);
+    min.x = GetCP()->x - GetR();
+    min.y = GetCP()->y;
+    min.z = GetCP()->z - GetR();
+    max.x = GetCP()->x + GetR();
+    max.y = GetCP()->y + GetH();
+    max.z = GetCP()->z + GetR();
+    mAab.Set(&min, &max);
 }
 
 /* 8024264C-80242734       .text GetNVec__12cCcD_CylAttrCFRC4cXyzP4cXyz */
@@ -546,7 +539,7 @@ void cCcD_SphAttr::CalcAabBox() {
     max.x += GetR();
     max.y += GetR();
     max.z += GetR();
-    GetWorkAab().Set(min, max);
+    GetWorkAab().Set(&min, &max);
 }
 
 /* 802429B8-80242A54       .text GetNVec__12cCcD_SphAttrCFRC4cXyzP4cXyz */

@@ -109,7 +109,7 @@ bool dBgW::RwgWallCrrPos(u16, dBgS_CrrPos*) {
 
 /* 800A8964-800A8B70       .text WallCrrPosRp__4dBgWFP11dBgS_CrrPosi */
 bool dBgW::WallCrrPosRp(dBgS_CrrPos* crr, int i) {
-    cBgW_NodeTree* node = &pm_node_tree[i];
+    cBgW_NodeTree* node = &m_nt_tbl[i];
     if (!node->Cross(crr->GetCylP()))
         return false;
 
