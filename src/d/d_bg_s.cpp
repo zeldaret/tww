@@ -436,7 +436,7 @@ bool dBgS::WallCrrPos(dBgS_CrrPos* crr) {
 }
 
 /* 800A1954-800A1A74       .text MoveBgCrrPos__4dBgSFR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
-void dBgS::MoveBgCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
+void dBgS::MoveBgCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
     if (!accept || !polyInfo.ChkBgIndex())
         return;
 
@@ -446,13 +446,13 @@ void dBgS::MoveBgCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* 
     if (m_chk_element[bg_index].ChkUsed()) {
         dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
         if (bgwp->mFlag & 1 && ChkPolySafe(polyInfo)) {
-            bgwp->CrrPos(polyInfo, m_chk_element[bg_index].m_actor_ptr, accept, pos, angle1, angle2);
+            bgwp->CrrPos(polyInfo, m_chk_element[bg_index].m_actor_ptr, accept, pos, angle, shape_angle);
         }
     }
 }
 
 /* 800A1A74-800A1B94       .text MoveBgTransPos__4dBgSFR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
-void dBgS::MoveBgTransPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
+void dBgS::MoveBgTransPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
     if (!accept || !polyInfo.ChkBgIndex())
         return;
 
@@ -462,13 +462,13 @@ void dBgS::MoveBgTransPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz
     if (m_chk_element[bg_index].ChkUsed()) {
         dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
         if (bgwp->mFlag & 1 && ChkPolySafe(polyInfo)) {
-            bgwp->TransPos(polyInfo, m_chk_element[bg_index].m_actor_ptr, accept, pos, angle1, angle2);
+            bgwp->TransPos(polyInfo, m_chk_element[bg_index].m_actor_ptr, accept, pos, angle, shape_angle);
         }
     }
 }
 
 /* 800A1B94-800A1C98       .text MoveBgMatrixCrrPos__4dBgSFR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
-void dBgS::MoveBgMatrixCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
+void dBgS::MoveBgMatrixCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
     if (!accept || !polyInfo.ChkBgIndex())
         return;
 
@@ -478,13 +478,13 @@ void dBgS::MoveBgMatrixCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, c
     if (m_chk_element[bg_index].ChkUsed()) {
         dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
         if (bgwp->mFlag & 1) {
-            bgwp->MatrixCrrPos(polyInfo, m_chk_element[bg_index].m_actor_ptr, accept, pos, angle1, angle2);
+            bgwp->MatrixCrrPos(polyInfo, m_chk_element[bg_index].m_actor_ptr, accept, pos, angle, shape_angle);
         }
     }
 }
 
 /* 800A1C98-800A1D18       .text dBgS_MoveBGProc_Typical__FP4dBgWPvR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
-void dBgS_MoveBGProc_Typical(dBgW* pbgw, void* user, cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
+void dBgS_MoveBGProc_Typical(dBgW* pbgw, void* user, cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
     Mtx inv;
     if (MTXInverse(pbgw->mOldMtx, inv)) {
         cXyz local, newPos;
@@ -495,25 +495,25 @@ void dBgS_MoveBGProc_Typical(dBgW* pbgw, void* user, cBgS_PolyInfo& polyInfo, bo
 }
 
 /* 800A1D18-800A1D4C       .text dBgS_MoveBGProc_RotY__FP4dBgWPvR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
-void dBgS_MoveBGProc_RotY(dBgW* pbgw, void* user, cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
-    if (angle2 == NULL)
+void dBgS_MoveBGProc_RotY(dBgW* pbgw, void* user, cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
+    if (shape_angle == NULL)
         return;
 
     s32 rot = pbgw->mRotYDelta;
-    if (angle2 != NULL)
-        angle2->y += rot;
-    if (angle1 != NULL)
-        angle1->y += rot;
+    if (shape_angle != NULL)
+        shape_angle->y += rot;
+    if (angle != NULL)
+        angle->y += rot;
 }
 
 /* 800A1D4C-800A1DB8       .text dBgS_MoveBGProc_TypicalRotY__FP4dBgWPvR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
-void dBgS_MoveBGProc_TypicalRotY(dBgW* pbgw, void* user, cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
-    dBgS_MoveBGProc_Typical(pbgw, user, polyInfo, accept, pos, angle1, angle2);
-    dBgS_MoveBGProc_RotY(pbgw, user, polyInfo, accept, pos, angle1, angle2);
+void dBgS_MoveBGProc_TypicalRotY(dBgW* pbgw, void* user, cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
+    dBgS_MoveBGProc_Typical(pbgw, user, polyInfo, accept, pos, angle, shape_angle);
+    dBgS_MoveBGProc_RotY(pbgw, user, polyInfo, accept, pos, angle, shape_angle);
 }
 
 /* 800A1DB8-800A1DF8       .text dBgS_MoveBGProc_Trans__FP4dBgWPvR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
-void dBgS_MoveBGProc_Trans(dBgW* pbgw, void*, cBgS_PolyInfo& polyInfo, bool, cXyz* pos, csXyz*, csXyz*) {
+void dBgS_MoveBGProc_Trans(dBgW* pbgw, void*, cBgS_PolyInfo& polyInfo, bool, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
     cXyz trans;
     pbgw->GetTrans(&trans);
     VECAdd(pos, &trans, pos);
@@ -617,6 +617,6 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
 }
 
 /* 800A2550-800A257C       .text MatrixCrrPos__4dBgWFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgW::MatrixCrrPos(cBgS_PolyInfo& polyInfo, void* param_2, bool param_3, cXyz* param_4, csXyz* param_5, csXyz* param_6) {
-    CrrPos(polyInfo, param_2, param_3, param_4, param_5, param_6);
+void dBgW::MatrixCrrPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
+    CrrPos(poly, user, accept, pos, angle, shape_angle);
 }

@@ -159,15 +159,15 @@ bool dBgW::WallCrrPos(dBgS_CrrPos* crr) {
 }
 
 /* 800A8CB4-800A8CF0       .text CrrPos__4dBgWFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgW::CrrPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
+void dBgW::CrrPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
     if (m_crr_func != NULL)
-        m_crr_func(this, user, poly, accept, pos, angle1, angle2);
+        m_crr_func(this, user, poly, accept, pos, angle, shape_angle);
 }
 
 /* 800A8CF0-800A8D2C       .text TransPos__4dBgWFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgW::TransPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
+void dBgW::TransPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
     if (m_crr_func != NULL)
-        m_crr_func(this, user, poly, accept, pos, angle1, angle2);
+        m_crr_func(this, user, poly, accept, pos, angle, shape_angle);
 }
 
 /* 800A8D2C-800A9474       .text ChkPolyThrough__4dBgWFiP16cBgS_PolyPassChk */
