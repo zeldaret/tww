@@ -4,34 +4,139 @@
 //
 
 #include "d/d_bg_w_sv.h"
-#include "dolphin/types.h"
+#include "SSystem/SComponent/c_bg_s_poly_info.h"
 
 /* 800AABFC-800AAC84       .text Set__6dBgWSvFP6cBgD_tUl */
-void dBgWSv::Set(cBgD_t*, unsigned long) {
-    /* Nonmatching */
+bool dBgWSv::Set(cBgD_t* bgd, u32 flag) {
+    if (cBgW::Set(bgd, 0x63, NULL)) {
+        return true;
+    }
+    mSvFlag = flag;
+    if (ChkNoCrrPos()) {
+        return false;
+    }
+    SetBackVtx(new Vec[pm_bgd->m_v_num]);
+    if (GetBackVtx() == NULL) {
+        return true;
+    }
+    return false;
 }
 
 /* 800AAC84-800AACF0       .text CopyBackVtx__6dBgWSvFv */
 void dBgWSv::CopyBackVtx() {
-    /* Nonmatching */
+    if (mBackVtx == NULL || pm_vtx_tbl == NULL) {
+        return;
+    }
+    for (int i = 0; i < pm_bgd->m_v_num; i++) {
+        mBackVtx[i] = pm_vtx_tbl[i];
+    }
 }
 
 /* 800AACF0-800AAEA8       .text CrrPosWork__6dBgWSvFP4cXyziii */
-void dBgWSv::CrrPosWork(cXyz*, int, int, int) {
-    /* Nonmatching */
+bool dBgWSv::CrrPosWork(cXyz* r4, int r5, int r6, int r7) {
+    cXyz sp2c;
+    cXyz sp20;
+    sp2c.x = mBackVtx[r6].x - mBackVtx[r5].x;
+    sp2c.y = mBackVtx[r6].y - mBackVtx[r5].y;
+    sp2c.z = mBackVtx[r6].z - mBackVtx[r5].z;
+    sp20.x = mBackVtx[r7].x - mBackVtx[r5].x;
+    sp20.y = mBackVtx[r7].y - mBackVtx[r5].y;
+    sp20.z = mBackVtx[r7].z - mBackVtx[r5].z;
+    if (cM3d_IsZero(sp2c.z) || cM3d_IsZero(sp20.z)) { return true; }
+    
+    f32 f8 = sp2c.x - (sp2c.z * (sp20.x / sp20.z));
+    f32 f5 = sp20.x - (sp20.z * (sp2c.x / sp2c.z));
+    if (cM3d_IsZero(f8) || cM3d_IsZero(f5)) { return true; }
+    
+    r4->x -= mBackVtx[r5].x;
+    r4->z -= mBackVtx[r5].z;
+    
+    f32 f6 = (r4->x - (r4->z * (sp20.x / sp20.z))) / f8;
+    f32 f7 = (r4->x - (r4->z * (sp2c.x / sp2c.z))) / f5;
+    
+    cXyz sp14;
+    cXyz sp08;
+    sp14.x = pm_vtx_tbl[r6].x - pm_vtx_tbl[r5].x;
+    sp14.z = pm_vtx_tbl[r6].z - pm_vtx_tbl[r5].z;
+    sp08.x = pm_vtx_tbl[r7].x - pm_vtx_tbl[r5].x;
+    sp08.z = pm_vtx_tbl[r7].z - pm_vtx_tbl[r5].z;
+    
+    r4->x = f6 * sp14.x + f7 * sp08.x;
+    r4->z = f6 * sp14.z + f7 * sp08.z;
+    
+    r4->x += pm_vtx_tbl[r5].x;
+    r4->z += pm_vtx_tbl[r5].z;
+    
+    return false;
 }
 
 /* 800AAEA8-800AAF64       .text CrrPos__6dBgWSvFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgWSv::CrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
-    /* Nonmatching */
+void dBgWSv::CrrPos(cBgS_PolyInfo& r4, void*, bool r6, cXyz* r7, csXyz*, csXyz*) {
+    if (ChkNoCrrPos()) { return; }
+    if (!r6) { return; }
+    u16 polyIndex = r4.GetPolyIndex();
+    int vtx0 = pm_bgd->m_t_tbl[polyIndex].vtx0;
+    int vtx1 = pm_bgd->m_t_tbl[polyIndex].vtx1;
+    int vtx2 = pm_bgd->m_t_tbl[polyIndex].vtx2;
+    if (!CrrPosWork(r7, vtx0, vtx1, vtx2)) { return; }
+    if (!CrrPosWork(r7, vtx1, vtx2, vtx0)) { return; }
+    if (!CrrPosWork(r7, vtx2, vtx0, vtx1)) {}
 }
 
 /* 800AAF64-800AB180       .text TransPosWork__6dBgWSvFP4cXyziii */
-void dBgWSv::TransPosWork(cXyz*, int, int, int) {
-    /* Nonmatching */
+bool dBgWSv::TransPosWork(cXyz* r4, int r5, int r6, int r7) {
+    cXyz sp2c;
+    cXyz sp20;
+    sp2c.x = mBackVtx[r6].x - mBackVtx[r5].x;
+    sp2c.y = mBackVtx[r6].y - mBackVtx[r5].y;
+    sp2c.z = mBackVtx[r6].z - mBackVtx[r5].z;
+    sp20.x = mBackVtx[r7].x - mBackVtx[r5].x;
+    sp20.y = mBackVtx[r7].y - mBackVtx[r5].y;
+    sp20.z = mBackVtx[r7].z - mBackVtx[r5].z;
+    if (cM3d_IsZero(sp2c.z) || cM3d_IsZero(sp20.z)) { return true; }
+    
+    f32 f8 = sp2c.x - (sp2c.z * (sp20.x / sp20.z));
+    f32 f4 = sp20.x - (sp20.z * (sp2c.x / sp2c.z));
+    if (cM3d_IsZero(f8) || cM3d_IsZero(f4)) { return true; }
+    
+    f32 f5 = r4->x - mBackVtx[r5].x;
+    f32 f1 = r4->z - mBackVtx[r5].z;
+    f32 f8_2 = (f5 - (f1 * (sp20.x / sp20.z))) / f8;
+    f32 f9 = (f5 - (f1 * (sp2c.x / sp2c.z))) / f4;
+    
+    if (f8_2 < 0.0f || f8_2 > 1.0f || f9 < 0.0f || f9 > 1.0f) {
+        return true;
+    }
+    
+    cXyz sp14;
+    cXyz sp08;
+    sp14.x = pm_vtx_tbl[r6].x - pm_vtx_tbl[r5].x;
+    sp14.y = pm_vtx_tbl[r6].y - pm_vtx_tbl[r5].y;
+    sp14.z = pm_vtx_tbl[r6].z - pm_vtx_tbl[r5].z;
+    sp08.x = pm_vtx_tbl[r7].x - pm_vtx_tbl[r5].x;
+    sp08.y = pm_vtx_tbl[r7].y - pm_vtx_tbl[r5].y;
+    sp08.z = pm_vtx_tbl[r7].z - pm_vtx_tbl[r5].z;
+    
+    r4->x = f8_2 * sp14.x + f9 * sp08.x;
+    r4->y = f8_2 * sp14.y + f9 * sp08.y;
+    r4->z = f8_2 * sp14.z + f9 * sp08.z;
+    
+    r4->x += pm_vtx_tbl[r5].x;
+    r4->y += pm_vtx_tbl[r5].y;
+    r4->z += pm_vtx_tbl[r5].z;
+    
+    return false;
 }
 
 /* 800AB180-800AB23C       .text TransPos__6dBgWSvFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgWSv::TransPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
-    /* Nonmatching */
+void dBgWSv::TransPos(cBgS_PolyInfo& r4, void*, bool r6, cXyz* r7, csXyz*, csXyz*) {
+    if (ChkNoCrrPos()) { return; }
+    if (!r6) { return; }
+    u16 polyIndex = r4.GetPolyIndex();
+    int vtx0 = pm_bgd->m_t_tbl[polyIndex].vtx0;
+    int vtx1 = pm_bgd->m_t_tbl[polyIndex].vtx1;
+    int vtx2 = pm_bgd->m_t_tbl[polyIndex].vtx2;
+    if (!TransPosWork(r7, vtx0, vtx1, vtx2)) { return; }
+    if (!TransPosWork(r7, vtx1, vtx2, vtx0)) { return; }
+    if (!TransPosWork(r7, vtx2, vtx0, vtx1)) {}
 }

@@ -5,22 +5,22 @@
 
 class dBgWSv : public dBgW {
 public:
-    void ChkNoCrrPos() {}
-    void GetBackVtx() {}
     virtual void MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {}
-    void SetBackVtx(Vec*) {}
-    void SetFlag(unsigned long) {}
+    bool ChkNoCrrPos() { return mSvFlag & 1; }
+    void SetFlag(u32 flag) { mSvFlag = flag; }
+    Vec* GetBackVtx() { return mBackVtx; }
+    void SetBackVtx(Vec* vtx) { mBackVtx = vtx; }
     
-    void Set(cBgD_t*, unsigned long);
+    bool Set(cBgD_t*, u32);
     void CopyBackVtx();
-    void CrrPosWork(cXyz*, int, int, int);
+    bool CrrPosWork(cXyz*, int, int, int);
     virtual void CrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);
-    void TransPosWork(cXyz*, int, int, int);
+    bool TransPosWork(cXyz*, int, int, int);
     virtual void TransPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);
 
-public:
-    /* 0xBC */ u32 mBC;
-    /* 0xC0 */ Vec* mC0;
+private:
+    /* 0xBC */ u32 mSvFlag;
+    /* 0xC0 */ Vec* mBackVtx;
 };  // Size: 0xC4
 
 #endif /* D_BG_W_SV_H */
