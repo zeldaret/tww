@@ -5,20 +5,36 @@
 
 #include "d/d_bg_w.h"
 #include "d/d_bg_s.h"
+#include "d/d_bg_s_acch.h"
+
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
 
 /* 800A5C3C-800A5CA8       .text __ct__4dBgWFv */
 dBgW::dBgW() {
-    /* Nonmatching */
+    mRotYDelta = 0;
+    mOldRotY = 0;
+    m_crr_func = NULL;
+    mpRideCb = NULL;
+    mpPushPullCb = NULL;
+    mFlag = 0;
+    mRoomNo = 0xFFFF;
+    mRoomNo2 = 0xFF;
 }
 
 /* 800A5CA8-800A5CD4       .text Move__4dBgWFv */
 void dBgW::Move() {
-    /* Nonmatching */
+    mFlag |= 0x01;
+    cBgW::Move();
 }
 
 /* 800A5CD4-800A5E64       .text positionWallCorrect__4dBgWFP9dBgS_AcchfR8cM3dGPlaP4cXyzf */
-void dBgW::positionWallCorrect(dBgS_Acch*, f32, cM3dGPla&, cXyz*, f32) {
-    /* Nonmatching */
+void dBgW::positionWallCorrect(dBgS_Acch* acch, f32 dist, cM3dGPla& plane, cXyz* pupper_pos, f32 speed) {
+    acch->SetWallHit();
+    f32 move = speed * dist;
+    pupper_pos->x += move * plane.mNormal.x;
+    pupper_pos->z += move * plane.mNormal.z;
+    CHECK_FLOAT_CLASS(0xd0, pupper_pos->x);
+    CHECK_FLOAT_CLASS(0xd1, pupper_pos->z);
 }
 
 /* 800A5E64-800A6DF8       .text RwgWallCorrect__4dBgWFP9dBgS_AcchUs */

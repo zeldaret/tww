@@ -165,10 +165,10 @@ public:
     void SetGroundCheckOffset(f32 offset) { m_ground_check_offset = offset; }
     void SetWallHit() { m_flags |= WALL_HIT; }
     void ClrWallNone() { m_flags &= ~WALL_NONE; }
-    void OnSeaCheckOn() { m_flags |= SEA_CHECK;}
+    void OnSeaCheckOn() { m_flags |= SEA_CHECK; }
     bool ChkSeaCheckOn() { return m_flags & SEA_CHECK;}
-    void OnSeaWaterHeight() { m_flags |= SEA_WATER_HEIGHT;}
-    bool ChkSeaWaterHeight() { return m_flags & SEA_WATER_HEIGHT;}
+    void OnSeaWaterHeight() { m_flags |= SEA_WATER_HEIGHT; }
+    bool ChkSeaWaterHeight() { return m_flags & SEA_WATER_HEIGHT; }
     bool ChkSeaIn() { return m_flags & SEA_IN;}
     cM3dGCyl* GetWallBmdCylP() { return &m_wall_cyl; }
 
