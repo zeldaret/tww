@@ -21,6 +21,7 @@
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_cb1.h"
 #include "d/actor/d_a_bomb.h"
+#include "stdio.h"
 
 static u8 dummy_3569[0xC];
 
@@ -188,7 +189,7 @@ u8 sjis2chrNo(const char* i_chr) {
     char* chrNo;
     if (i_chr[0] & 0x80) {
         chrNo = (char*)l_sjis2chrNo;
-        for (u8 i = 0; i < 245; chrNo += 2, i++) {
+        for (u8 i = 0; i < ARRAY_SIZE(l_sjis2chrNo)/2; chrNo += 2, i++) {
             if (i_chr[0] == chrNo[0] && i_chr[1] == chrNo[1] ||
                 (i_chr[0] == 0x83 && i_chr[1] == 0x5C && chrNo[0] == 0x91 && chrNo[1] == 0x66) ||
                 (i_chr[0] == 0x83 && i_chr[1] == 0x77 && chrNo[0] == 0x82 && chrNo[1] == 0xD6) ||
@@ -211,7 +212,7 @@ u8 sjis2chrNo(const char* i_chr) {
         }
     } else {
         chrNo = (char*)l_sjis1chrNo;
-        for (u8 i = 0; i < 188; chrNo++, i++) {
+        for (u8 i = 0; i < ARRAY_SIZE(l_sjis1chrNo)-1; chrNo++, i++) {
             if (i_chr[0] == chrNo[0]) {
                 return i;
             }
@@ -224,6 +225,7 @@ u8 sjis2chrNo(const char* i_chr) {
 /* 800CF7B4-800CF7F8       .text sjis2chrNo__FUc */
 u8 sjis2chrNo(u8 i_chr) {
     static u8 l_sjis2chrNo[] = {
+#if VERSION == VERSION_USA
         ' ',  'A',  'B',  'C',  'D',  'E',  'F',  'G',  'H',  'I',  'J',  'K',  'L',  'M',  'N',
         'O',  'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',  'X',  'Y',  'Z',  'a',  'b',  'c',
         'd',  'e',  'f',  'g',  'h',  'i',  'j',  'k',  'l',  'm',  'n',  'o',  'p',  'q',  'r',
@@ -235,9 +237,22 @@ u8 sjis2chrNo(u8 i_chr) {
         0xe9, 0xed, 0xf3, 0xfa, 0xfd, 0xc2, 0xca, 0xce, 0xd4, 0xdb, 0xe2, 0xea, 0xee, 0xf4, 0xfb,
         0xc3, 0xd1, 0xd5, 0xe3, 0xf1, 0xf5, 0xc4, 0xcb, 0xcf, 0xd6, 0xdc, 0x9f, 0xe4, 0xeb, 0xef,
         0xf6, 0xfc, 0xff, 0xc5, 0xe5, 0x8a, 0x9a, 0xba, 0xaa,
+#elif VERSION == VERSION_PAL
+        ' ',  'A',  'B',  'C',  'D',  'E',  'F',  'G',  'H',  'I',  'J',  'K',  'L',  'M',  'N',
+        'O',  'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',  'X',  'Y',  'Z',  'a',  'b',  'c',
+        'd',  'e',  'f',  'g',  'h',  'i',  'j',  'k',  'l',  'm',  'n',  'o',  'p',  'q',  'r',
+        's',  't',  'u',  'v',  'w',  'x',  'y',  'z',  '0',  '1',  '2',  '3',  '4',  '5',  '6',
+        '7',  '8',  '9',  ' ',  0xf8, 0xd8, 0xfe, 0xde, 0x9c, 0x8c, 0xe6, 0xc6, 0xf0, 0xd0, 0xc7,
+        0xe7, 0xdf, ' ',  ' ',  '+',  0xbf, 0xa1, 0xab, 0xbb, 0x84, 0x93, '!',  '~',  '-',  '?',
+        '/',  ' ',  '(',  ')',  ' ',  '.',  ',',  0xd7, 0xf7, '\'', '\"', 0x85, ':',  '&',  0xc0,
+        0xc8, 0xcc, 0xd2, 0xd9, 0xe0, 0xe8, 0xec, 0xf2, 0xf9, 0xc1, 0xc9, 0xcd, 0xd3, 0xda, 0xdd,
+        0xe1, 0xe9, 0xed, 0xf3, 0xfa, 0xfd, 0xc2, 0xca, 0xce, 0xd4, 0xdb, 0xe2, 0xea, 0xee, 0xf4,
+        0xfb, 0xc3, 0xd1, 0xd5, 0xe3, 0xf1, 0xf5, 0xc4, 0xcb, 0xcf, 0xd6, 0xdc, 0x9f, 0xe4, 0xeb,
+        0xef, 0xf6, 0xfc, 0xff, 0xc5, 0xe5, 0x8a, 0x9a, 0xba, 0xaa,
+#endif
     };
 
-    for (u8 i = 0; i < 159; i++) {
+    for (u8 i = 0; i < ARRAY_SIZE(l_sjis2chrNo); i++) {
         if (i_chr == l_sjis2chrNo[i]) {
             return i;
         }
@@ -355,10 +370,18 @@ int daAgb_c::uploadSelect() {
 
 #if VERSION == VERSION_JPN
             l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client.bin", 0, dMsg_getAgbWorkArea());
-#else
+#elif VERSION == VERSION_USA
             l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client_u.bin", 0, dMsg_getAgbWorkArea());
+#elif VERSION == VERSION_PAL
+            char path[28];
+            char pathNum[4];
+            strcpy(path, "/res/Gba/client_");
+            sprintf(pathNum, "%d", g_dComIfG_gameInfo.play.mGameLanguage);
+            strcat(path, pathNum);
+            strcat(path, ".bin");
+            l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, dMsg_getAgbWorkArea());
 #endif
-            JUT_ASSERT(VERSION_SELECT(591, 860, 860), l_gbaCommand != 0);
+            JUT_ASSERT(VERSION_SELECT(591, 860, 861), l_gbaCommand != 0);
 
             mDoGaC_GbaReboot();
             mDoGaC_setPortNo(mPortNo);
@@ -374,7 +397,7 @@ int daAgb_c::uploadSelect() {
 int daAgb_c::uploadJoyboot1() {
     if (l_gbaCommand->sync()) {
         void* programp = l_gbaCommand->getMemAddress();
-        JUT_ASSERT(VERSION_SELECT(622, 891, 891), programp != 0);
+        JUT_ASSERT(VERSION_SELECT(622, 891, 892), programp != 0);
 
         JUTGba::getManager()->doJoyBoot(mDoGaC_getPortNo(), 3, -1, (u8*)programp,
                                         l_gbaCommand->getMemSize() - 4, NULL, NULL);
@@ -423,8 +446,18 @@ int daAgb_c::uploadJoyboot2() {
 int daAgb_c::uploadMessageLoad() {
     field_0x664--;
     if (field_0x664 == 0) {
+#if VERSION != VERSION_PAL
         l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/msg_LZ.bin", 0, NULL);
-        JUT_ASSERT(VERSION_SELECT(715, 1000, 1000), l_gbaCommand != 0);
+#else
+        char path[28];
+        char pathNum[4];
+        strcpy(path, "/res/Gba/msg_LZ");
+        sprintf(pathNum, "%d", g_dComIfG_gameInfo.play.mGameLanguage);
+        strcat(path, pathNum);
+        strcat(path, ".bin");
+        l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, NULL);
+#endif
+        JUT_ASSERT(VERSION_SELECT(715, 1000, 1001), l_gbaCommand != 0);
 
         mUploadAction  = UpAct_UNK7;
         mDoGaC_onComEnable();
@@ -447,7 +480,7 @@ int daAgb_c::uploadMessageLoad2() {
 int daAgb_c::uploadConnect() {
     if (mDoGaC_getComEnable() && mDoGaC_GbaLink()) {
         void* programp = l_gbaCommand->getMemAddress();
-        JUT_ASSERT(VERSION_SELECT(760, 1045, 1045), programp != 0);
+        JUT_ASSERT(VERSION_SELECT(760, 1045, 1046), programp != 0);
         mDoGac_SendDataSet((u32*)programp, l_gbaCommand->getMemSize(), 0, 0);
 
         mUploadAction  = UpAct_UNK8;
@@ -1693,7 +1726,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 800D396C-800D3B58       .text createHeap__7daAgb_cFv */
 int daAgb_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", 4);
-    JUT_ASSERT(VERSION_SELECT(2960, 3277, 3277), modelData != 0);
+    JUT_ASSERT(VERSION_SELECT(2960, 3277, 3286), modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
     if (mpModel == NULL) {
