@@ -43,6 +43,7 @@ public:
     void Set(u32 fmtNum, char **pFmt, u32 nameNum, char **pName, u8* pData);
     
     int GetNameIndex(const char* pName, int start) const { return mName.GetIndex(pName, start); }
+    int GetFormatIndex(const char* pName) const { return mFmt.GetIndex(pName, 0); }
 
     cDT_Format mFmt;
     cDT_Name mName;

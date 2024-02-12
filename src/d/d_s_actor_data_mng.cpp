@@ -14,55 +14,58 @@ dADM_CharTbl::~dADM_CharTbl() {
 }
 
 /* 800C2758-800C2844       .text SetData__12dADM_CharTblFUlUlUlUlUlUlUl */
-void dADM_CharTbl::SetData(u32 offs, u32 row_num, u32 row_offs, u32 colum_num, u32 colum_offs, u32 dat_size, u32 data) {
-    /* Nonmatching - regalloc */
-    u32* row = (u32*)row_offs;
+void dADM_CharTbl::SetData(u32 offs, u32 row_num, u32 row_offs, u32 colum_num, u32 colum_offs, u32 dat_size, u32 data_offs) {
+    char** pFmt = (char**)row_offs;
+    char** pName = (char**)colum_offs;
+    u8* pData = (u8*)data_offs;
+
+    u32* row = (u32*)pFmt;
     for (u32 i = 0; i < row_num; i++, row++)
         *row += offs;
 
-    u32* colum = (u32*)colum_offs;
+    u32* colum = (u32*)pName;
     for (u32 i = 0; i < colum_num; i++, colum++)
         *colum += offs;
 
     JUT_ASSERT(0x39, dat_size == row_num * colum_num);
-    cDT::Set(row_num, (char**)row_offs, colum_num, (char**)colum_offs, (u8*)data);
+    cDT::Set(row_num, pFmt, colum_num, pName, pData);
     SetUpIndex();
 }
 
 /* 800C2844-800C2B40       .text SetUpIndex__12dADM_CharTblFv */
 void dADM_CharTbl::SetUpIndex() {
-    mIndex_ARG = mFmt.GetIndex("ARG", 0);
-    mIndex_N_ITEM[0] = mFmt.GetIndex("N_ITEM0", 0);
-    mIndex_N_ITEM[1] = mFmt.GetIndex("N_ITEM1", 0);
-    mIndex_N_ITEM[2] = mFmt.GetIndex("N_ITEM2", 0);
-    mIndex_N_ITEM[3] = mFmt.GetIndex("N_ITEM3", 0);
-    mIndex_N_ITEM[4] = mFmt.GetIndex("N_ITEM4", 0);
-    mIndex_N_ITEM[5] = mFmt.GetIndex("N_ITEM5", 0);
-    mIndex_N_ITEM[6] = mFmt.GetIndex("N_ITEM6", 0);
-    mIndex_N_ITEM[7] = mFmt.GetIndex("N_ITEM7", 0);
-    mIndex_N_ITEM[8] = mFmt.GetIndex("N_ITEM8", 0);
-    mIndex_N_ITEM[9] = mFmt.GetIndex("N_ITEM9", 0);
-    mIndex_N_ITEM[10] = mFmt.GetIndex("N_ITEM10", 0);
-    mIndex_N_ITEM[11] = mFmt.GetIndex("N_ITEM11", 0);
-    mIndex_N_ITEM[12] = mFmt.GetIndex("N_ITEM12", 0);
-    mIndex_N_ITEM[13] = mFmt.GetIndex("N_ITEM13", 0);
-    mIndex_N_ITEM[14] = mFmt.GetIndex("N_ITEM14", 0);
-    mIndex_N_ITEM[15] = mFmt.GetIndex("N_ITEM15", 0);
-    mIndex_percent = mFmt.GetIndex("percent", 0);
-    mIndex_ITEM[0] = mFmt.GetIndex("ITEM0", 0);
-    mIndex_ITEM[1] = mFmt.GetIndex("ITEM1", 0);
-    mIndex_ITEM[2] = mFmt.GetIndex("ITEM2", 0);
-    mIndex_ITEM[3] = mFmt.GetIndex("ITEM3", 0);
-    mIndex_ITEM[4] = mFmt.GetIndex("ITEM4", 0);
-    mIndex_ITEM[5] = mFmt.GetIndex("ITEM5", 0);
-    mIndex_ITEM[6] = mFmt.GetIndex("ITEM6", 0);
-    mIndex_ITEM[7] = mFmt.GetIndex("ITEM7", 0);
+    mIndex_ARG = GetFormatIndex("ARG");
+    mIndex_N_ITEM[0] = GetFormatIndex("N_ITEM0");
+    mIndex_N_ITEM[1] = GetFormatIndex("N_ITEM1");
+    mIndex_N_ITEM[2] = GetFormatIndex("N_ITEM2");
+    mIndex_N_ITEM[3] = GetFormatIndex("N_ITEM3");
+    mIndex_N_ITEM[4] = GetFormatIndex("N_ITEM4");
+    mIndex_N_ITEM[5] = GetFormatIndex("N_ITEM5");
+    mIndex_N_ITEM[6] = GetFormatIndex("N_ITEM6");
+    mIndex_N_ITEM[7] = GetFormatIndex("N_ITEM7");
+    mIndex_N_ITEM[8] = GetFormatIndex("N_ITEM8");
+    mIndex_N_ITEM[9] = GetFormatIndex("N_ITEM9");
+    mIndex_N_ITEM[10] = GetFormatIndex("N_ITEM10");
+    mIndex_N_ITEM[11] = GetFormatIndex("N_ITEM11");
+    mIndex_N_ITEM[12] = GetFormatIndex("N_ITEM12");
+    mIndex_N_ITEM[13] = GetFormatIndex("N_ITEM13");
+    mIndex_N_ITEM[14] = GetFormatIndex("N_ITEM14");
+    mIndex_N_ITEM[15] = GetFormatIndex("N_ITEM15");
+    mIndex_percent = GetFormatIndex("percent");
+    mIndex_ITEM[0] = GetFormatIndex("ITEM0");
+    mIndex_ITEM[1] = GetFormatIndex("ITEM1");
+    mIndex_ITEM[2] = GetFormatIndex("ITEM2");
+    mIndex_ITEM[3] = GetFormatIndex("ITEM3");
+    mIndex_ITEM[4] = GetFormatIndex("ITEM4");
+    mIndex_ITEM[5] = GetFormatIndex("ITEM5");
+    mIndex_ITEM[6] = GetFormatIndex("ITEM6");
+    mIndex_ITEM[7] = GetFormatIndex("ITEM7");
 }
 
 /* 800C2B40-800C2BC8       .text GetNameIndex2__12dADM_CharTblCFPCci */
 int dADM_CharTbl::GetNameIndex2(const char* pName, int index) const {
     for (int start = 0; ; start++) {
-        int col = mName.GetIndex(pName, start);
+        int col = GetNameIndex(pName, start);
         if (col == -1)
             return -1;
 
@@ -120,4 +123,3 @@ void dADM::SetData(void* pData) {
         mCharTbl.SetData((u32)pData, row, rowOffs, name, nameOffs, dat_size, dataOffs);
     }
 }
-
