@@ -206,7 +206,7 @@ public:
         if (mEffCounter < 0)
             mEffCounter = 0;
     }
-    bool ChkEffCounter() { return mEffCounter >= 0; }
+    bool ChkEffCounter() { return mEffCounter > 0; }
     virtual ~dCcD_GAtTgCoCommonBase() {}
 
     void ClrEffCounter() { mEffCounter = 0; }

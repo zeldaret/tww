@@ -31,11 +31,11 @@ bool dCcS::ChkShieldFrontRange(cCcD_Obj* obj1, cCcD_Obj* obj2) {
     
     cXyz delta;
     VECSubtract(&ac1->mEyePos, &ac2->mEyePos, &delta);
-    f32 dist = PSVECMag(&delta);
+    f32 dist = VECMag(&delta);
     if (cM3d_IsZero(dist)) {
         return false;
     }
-    PSVECNormalize(&delta, &delta);
+    VECNormalize(&delta, &delta);
     s16 deltaAngle = cM_atan2s(delta.x, delta.z);
     s16 shieldAngle = inf2->GetTgShieldFrontRangeYAngle() ? *inf2->GetTgShieldFrontRangeYAngle() : ac2->shape_angle.y;
     if (cLib_distanceAngleS(deltaAngle, shieldAngle) > 0x4000) {
@@ -177,13 +177,125 @@ int dCcS::GetRank(u8 weight) {
 }
 
 /* 800ADAD4-800ADEF0       .text SetPosCorrect__4dCcSFP8cCcD_ObjP4cXyzP8cCcD_ObjP4cXyzf */
-void dCcS::SetPosCorrect(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, f32) {
-    /* Nonmatching */
+void dCcS::SetPosCorrect(cCcD_Obj* obj1, cXyz* ppos1, cCcD_Obj* obj2, cXyz* ppos2, f32 cross_len) {
+    if (obj1->ChkCoNoCrr() || obj2->ChkCoNoCrr()) {
+        return;
+    }
+    if (obj1->GetStts() == NULL || obj2->GetStts() == NULL) {
+        return;
+    }
+    if (obj1->GetStts()->GetActor() != NULL && obj1->GetStts()->GetActor() == obj2->GetStts()->GetActor()) {
+        return;
+    }
+    if (cM3d_IsZero(cross_len)) {
+        return;
+    }
+    
+    SetCoGCorrectProc(obj1, obj2);
+    
+    bool correctY = false;
+    if (obj1->ChkCoSph3DCrr() && obj2->ChkCoSph3DCrr()) {
+        correctY = true;
+    }
+    
+    if ((obj1->GetStts()->GetWeightUc() == 0 && obj2->GetStts()->GetWeightUc() == 0) ||
+        (obj1->GetStts()->GetWeightUc() == 0xFF && obj2->GetStts()->GetWeightUc() == 0xFF)
+    ) {
+        return;
+    }
+    int obj1WeightRank = GetRank(obj1->GetStts()->GetWeightUc());
+    int obj2WeightRank = GetRank(obj2->GetStts()->GetWeightUc());
+    u8 rank = rank_tbl[obj1WeightRank][obj2WeightRank];
+    u8 invRank = 100 - rank;
+    f32 obj2Weight = rank * 0.01f;
+    f32 obj1Weight = invRank * 0.01f;
+    
+    f32 objDistLen;
+    Vec vec1;
+    Vec vec2;
+    Vec objsDist;
+    if (correctY) {
+        objsDist.x = ppos2->x - ppos1->x;
+        objsDist.y = ppos2->y - ppos1->y;
+        objsDist.z = ppos2->z - ppos1->z;
+        objDistLen = sqrtf(objsDist.x*objsDist.x + objsDist.y*objsDist.y + objsDist.z*objsDist.z);
+    } else {
+        objsDist.x = ppos2->x - ppos1->x;
+        objsDist.y = 0.0f;
+        objsDist.z = ppos2->z - ppos1->z;
+        objDistLen = sqrtf(objsDist.x*objsDist.x + objsDist.z*objsDist.z);
+    }
+    if (!cM3d_IsZero(objDistLen)) {
+        if (correctY) {
+            f32 pushFactor = cross_len / objDistLen;
+            objsDist.x *= pushFactor;
+            objsDist.y *= pushFactor;
+            objsDist.z *= pushFactor;
+            vec1.x = -objsDist.x * obj2Weight;
+            vec1.y = -objsDist.y * obj2Weight;
+            vec1.z = -objsDist.z * obj2Weight;
+            vec2.x = objsDist.x * obj1Weight;
+            vec2.y = objsDist.y * obj1Weight;
+            vec2.z = objsDist.z * obj1Weight;
+        } else {
+            f32 pushFactor = cross_len / objDistLen;
+            objsDist.x *= pushFactor;
+            objsDist.z *= pushFactor;
+            vec1.x = -objsDist.x * obj2Weight;
+            vec1.y = 0;
+            vec1.z = -objsDist.z * obj2Weight;
+            vec2.x = objsDist.x * obj1Weight;
+            vec2.y = 0;
+            vec2.z = objsDist.z * obj1Weight;
+        }
+    } else {
+        vec1.y = 0;
+        vec1.z = 0;
+        vec2.y = 0;
+        vec2.z = 0;
+        if (!cM3d_IsZero(cross_len)) {
+            vec1.x = -cross_len * obj2Weight;
+            vec2.x = cross_len * obj1Weight;
+        } else {
+            vec1.x = -obj2Weight;
+            vec2.x = obj1Weight;
+        }
+    }
+    
+    obj1->GetStts()->PlusCcMove(vec1.x, vec1.y, vec1.z);
+    obj2->GetStts()->PlusCcMove(vec2.x, vec2.y, vec2.z);
+    (*ppos1) += vec1;
+    (*ppos2) += vec2;
 }
 
 /* 800ADEF0-800ADFF8       .text CalcParticleAngle__4dCcSFP12dCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP5csXyz */
-void dCcS::CalcParticleAngle(dCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, csXyz*) {
-    /* Nonmatching */
+void dCcS::CalcParticleAngle(dCcD_GObjInf* i_atObjInf, cCcD_Stts* i_atStts, cCcD_Stts* i_tgStts, csXyz* o_angle) {
+    cXyz vec(*i_atObjInf->GetAtVecP());
+
+    if (cM3d_IsZero(VECMag(&vec))) {
+        fopAc_ac_c* atActor = i_atStts->GetActor();
+        fopAc_ac_c* tgActor = i_tgStts->GetActor();
+
+        if (atActor == NULL || tgActor == NULL) {
+            vec.z = 0.0f;
+            vec.x = 0.0f;
+            vec.y = -1.0f;
+        } else {
+            VECSubtract(&tgActor->current.pos, &atActor->current.pos, &vec);
+
+            if (cM3d_IsZero(VECMag(&vec))) {
+                vec.z = 0.0f;
+                vec.x = 0.0f;
+                vec.y = -1.0f;
+            } else {
+                VECNormalize(&vec, &vec);
+            }
+        }
+    } else {
+        VECNormalize(&vec, &vec);
+    }
+
+    cM3d_CalcVecZAngle(vec, o_angle);
 }
 
 /* 800ADFF8-800AE308       .text ProcAtTgHitmark__4dCcSFbbP8cCcD_ObjP8cCcD_ObjP12dCcD_GObjInfP12dCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10dCcD_GSttsP10dCcD_GSttsP4cXyz */
@@ -224,8 +336,83 @@ void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* r6, cCcD_Obj* r7, dCcD_GObjInf*
 }
 
 /* 800AE308-800AE5AC       .text SetAtTgGObjInf__4dCcSFbbP8cCcD_ObjP8cCcD_ObjP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GSttsP4cXyz */
-void dCcS::SetAtTgGObjInf(bool, bool, cCcD_Obj*, cCcD_Obj*, cCcD_GObjInf*, cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*, cXyz*) {
+void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* param_2, cCcD_Obj* param_3,
+                          cCcD_GObjInf* i_atObjInf, cCcD_GObjInf* i_tgObjInf, cCcD_Stts* param_6,
+                          cCcD_Stts* param_7, cCcD_GStts* param_8, cCcD_GStts* param_9,
+                          cXyz* i_hitPos) {
     /* Nonmatching */
+    dCcD_GObjInf* atObjInf = (dCcD_GObjInf*)i_atObjInf;
+    dCcD_GObjInf* tgObjInf = (dCcD_GObjInf*)i_tgObjInf;
+    dCcD_GStts* stts1 = (dCcD_GStts*)param_8;
+    dCcD_GStts* stts2 = (dCcD_GStts*)param_9;
+
+    bool chk_shield = ChkShield(param_2, param_3, atObjInf, tgObjInf);
+
+    if (i_setAt) {
+        atObjInf->SetAtHitPos(*i_hitPos);
+        atObjInf->SetAtRVec(*tgObjInf->GetTgVecP());
+
+        if (stts1 != NULL && stts1->GetTgSpl() == 0) {
+            stts1->SetTgSpl(tgObjInf->GetTgSpl());
+        }
+
+        atObjInf->SetAtHitApid(param_7->GetApid());
+
+        if (chk_shield) {
+            atObjInf->OnAtShieldHit();
+        }
+
+        if (stts2->ChkNoActor()) {
+            atObjInf->OnAtHitNoActor();
+        }
+    }
+
+    if (i_setTg) {
+        tgObjInf->SetTgHitPos(*i_hitPos);
+        tgObjInf->SetTgRVec(*atObjInf->GetAtVecP());
+
+        if (stts2 != NULL && stts1->GetAtSpl() == 0) {
+            stts2->SetAtSpl(atObjInf->GetAtSpl());
+        }
+
+        tgObjInf->SetTgHitApid(param_6->GetApid());
+
+        if (chk_shield) {
+            tgObjInf->OnTgShieldHit();
+        }
+
+        if (stts1->ChkNoActor()) {
+            tgObjInf->OnTgHitNoActor();
+        }
+    }
+
+    if (i_setAt) {
+        dCcD_HitCallback at_callback = atObjInf->GetAtHitCallback();
+
+        if (at_callback != NULL) {
+            fopAc_ac_c* atAc = atObjInf->GetAc();
+            fopAc_ac_c* tgAc = tgObjInf->GetAc();
+            at_callback(atAc, atObjInf, tgAc, tgObjInf);
+        }
+    }
+
+    if (i_setTg) {
+        dCcD_HitCallback tg_callback = tgObjInf->GetTgHitCallback();
+
+        if (tg_callback != NULL) {
+            fopAc_ac_c* tgAc = tgObjInf->GetAc();
+            fopAc_ac_c* atAc = atObjInf->GetAc();
+            tg_callback(tgAc, tgObjInf, atAc, atObjInf);
+        }
+    }
+
+    if (i_setAt && i_setTg && (!atObjInf->ChkAtEffCounter() || !tgObjInf->ChkTgEffCounter())) {
+        atObjInf->SetAtEffCounterTimer();
+        tgObjInf->SetTgEffCounterTimer();
+
+        ProcAtTgHitmark(i_setAt, i_setTg, param_2, param_3, atObjInf, tgObjInf, param_6, param_7,
+                        stts1, stts2, i_hitPos);
+    }
 }
 
 /* 800AE5AC-800AE814       .text ChkCamera__4dCcSFR4cXyzR4cXyzfP10fopAc_ac_cP10fopAc_ac_c */
