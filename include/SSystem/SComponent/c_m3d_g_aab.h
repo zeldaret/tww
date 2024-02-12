@@ -72,6 +72,16 @@ public:
             mMax.y = y;
         }
     }
+    void SetMinY(f32 y) {
+        if (mMin.y > y) {
+            mMin.y = y;
+        }
+    }
+    void SetMaxY(f32 y) {
+        if (mMax.y < y) {
+            mMax.y = y;
+        }
+    }
     void PlusR(f32 r) {
         mMin.x -= r;
         mMin.y -= r;
@@ -98,8 +108,6 @@ public:
     void Cross(const cM3dGCyl*) const {}
     void Cross(const cM3dGLin*) const {}
     void Cross(const cM3dGSph*) const {}
-    void SetMaxY(f32) {}
-    void SetMinY(f32) {}
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cM3dGAab));

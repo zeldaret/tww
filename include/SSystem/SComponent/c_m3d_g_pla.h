@@ -15,7 +15,7 @@ public:
 public:
     cM3dGPla() {}
     void CalcAngleXz(short* pAngleX, short* pAngleY) const;
-    void SetupNP0(const Vec&, const Vec&);
+    void SetupNP0(const Vec& pNormal, const Vec& pPoint);
     
     f32 getPlaneFunc(const Vec *p) const {
         return mD + VECDotProduct(&mNormal, p);

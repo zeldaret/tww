@@ -413,7 +413,6 @@ static void dummy() {
 /* 802485FC-80248868       .text LineCheckRp__4cBgWFP11cBgS_LinChki */
 bool cBgW::LineCheckRp(cBgS_LinChk* chk, int i) {
     cBgW_NodeTree* node = &m_nt_tbl[i];
-    // node->Cross(chk->GetLinP());
     if (!cM3d_Cross_MinMaxBoxLine(node->GetMinP(), node->GetMaxP(), chk->GetLinP()->GetStartP(), chk->GetLinP()->GetEndP()))
         return false;
 

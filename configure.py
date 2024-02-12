@@ -395,7 +395,7 @@ config.libs = [
             Object(Matching,    "d/d_bg_s_wtr_chk.cpp"),
             Object(NonMatching, "d/d_bg_w.cpp"),
             Object(Matching,    "d/d_bg_w_deform.cpp"),
-            Object(NonMatching, "d/d_bg_w_hf.cpp"),
+            Object(Matching,    "d/d_bg_w_hf.cpp"),
             Object(Matching,    "d/d_bg_w_sv.cpp"),
             Object(Matching,    "d/d_cc_d.cpp"),
             Object(Matching,    "d/d_cc_mass_s.cpp"),
