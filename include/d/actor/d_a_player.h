@@ -473,11 +473,11 @@ public:
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
     virtual f32 getGroundY() = 0;
-    virtual s32 getTactMusic() const { return -1; }
+    virtual s32 getTactMusic() const;// { return -1; }
     virtual int getTactTimerCancel() const { return 0; }
     virtual BOOL checkPlayerGuard() const { return FALSE; }
     virtual fopAc_ac_c* getGrabMissActor() { return NULL; }
-    virtual u32 checkPlayerFly() const { return 0; }
+    virtual u32 checkPlayerFly() const;// { return 0; }
     virtual BOOL checkFrontRoll() const { return FALSE; }
     virtual BOOL checkBottleSwing() const { return FALSE; }
     virtual BOOL checkCutCharge() const { return FALSE; }
