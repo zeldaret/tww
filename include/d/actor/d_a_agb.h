@@ -47,6 +47,23 @@ public:
         // TODO
     };
 
+    enum {
+        /* 0x0 */ UpAct_UNK0,
+        /* 0x1 */ UpAct_UNK1,
+        /* 0x2 */ UpAct_UNK2,
+        /* 0x3 */ UpAct_UNK3,
+        /* 0x4 */ UpAct_UNK4,
+        /* 0x5 */ UpAct_UNK5,
+        /* 0x6 */ UpAct_UNK6,
+        /* 0x7 */ UpAct_UNK7,
+        /* 0x8 */ UpAct_UNK8,
+#if VERSION != VERSION_JPN
+        /* 0x9 */ UpAct_UNK9,
+#endif
+        /* 0xA */ UpAct_UNKA,
+        /* 0xB */ UpAct_UNKB,
+    };
+
     void NameConv();
     int uploadInitCheck();
     int uploadPortCheckWait();
@@ -121,7 +138,7 @@ public:
         /* 0x3 */ u8 field_0x3;
         /* 0x4 */ u16 field_0x4;
         /* 0x6 */ u16 field_0x6;
-    };
+    };  // Size: 0x8
 
     struct daAgb_Switch {
         /* 0x0 */ u8 field_0x0;
@@ -130,7 +147,7 @@ public:
         /* 0x3 */ u8 field_0x3;
         /* 0x4 */ u8 field_0x4;
         u8 field_0x5[0x8 - 0x5];
-    };
+    };  // Size: 0x8
 
     struct daAgb_Item {
         /* 0x0 */ u8 field_0x0;
@@ -145,10 +162,12 @@ public:
 
     static int mEffect;
     static daAgb_ItemBuy mItemBuy;
+#if VERSION != VERSION_JPN
     static daAgb_GbaFlg mGbaFlg;
     static daAgb_Switch mSwitch;
     static daAgb_Item mItem;
     static daAgb_Shop mShop;
+#endif
     static u8 DungeonNoTable[];
 
     struct daAgb_Flags {
@@ -211,11 +230,20 @@ public:
     /* 0x5E8 */ dBgS_AcchCir mAcchCir;
     /* 0x628 */ f32 field_0x628;
     /* 0x62C */ f32 field_0x62c;
+
+#if VERSION == VERSION_JPN
+    /* 0x630 */ daAgb_Switch mSwitch;
+    /* 0x638 */ daAgb_Item mItem;
+    /* 0x63C */ daAgb_Shop mShop;
+    /* 0x640 */ u16 field_0x630;
+    /* 0x642 */ u16 field_0x632;
+    /* 0x644 */ daAgb_GbaFlg mGbaFlg;
+#else
     /* 0x630 */ u16 field_0x630;
     /* 0x632 */ u16 field_0x632;
-#if VERSION == VERSION_JPN
-    u8 jpn_padding[0x18];
 #endif
+    /* Offsets below are for USA/PAL */
+
     /* 0x634 */ cXyz field_0x634;
     /* 0x640 */ int field_0x640;
     /* 0x648 */ u64 mPlayerName;

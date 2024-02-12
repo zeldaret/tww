@@ -24,18 +24,20 @@
 
 static u8 dummy_3569[0xC];
 
-// stripped or compiler generated?
-static u32 unused_lit_2100[] = {0x3F800000, 0x3F800000, 0x3F800000,
-                                0x3F800000, 0x3F800000, 0x3F800000};
+// Needed for the .data section to match.
+static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
+static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 
 int daAgb_c::mEffect;
 daAgb_c::daAgb_ItemBuy daAgb_c::mItemBuy;
+#if VERSION != VERSION_JPN
 daAgb_c::daAgb_GbaFlg daAgb_c::mGbaFlg;
 daAgb_c::daAgb_Switch daAgb_c::mSwitch;
 daAgb_c::daAgb_Item daAgb_c::mItem;
 daAgb_c::daAgb_Shop daAgb_c::mShop;
+#endif
 
 /* 800CF5EC-800CF6B8       .text __ct__11daAgb_HIO_cFv */
 daAgb_HIO_c::daAgb_HIO_c() {
@@ -89,6 +91,136 @@ int dMsgCtrl_c::execute() {
 
 static dMsgCtrl_c l_msgCtrl;
 
+#if VERSION == VERSION_JPN
+u8 sjis2chrNo(const char* i_chr) {
+    static u8 l_sjis1chrNo[] = {
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A,
+        0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2D, 0x20, 0x3F,
+        0x21, 0x2A, 0x2C, 0x2D, 0x5B, 0x5D, 0x30, 0x31,
+        0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
+        0x52, 0x4C, 0x41, 0x42, 0x53, 0x54, 0x2A, 0x45,
+        0x43, 0x50, 0x55, 0x48, 0x44, 0x46, 0x47, 0x49,
+        0x4A, 0x4B, 0x4D, 0x4E, 0x4F, 0x51, 0x56, 0x57,
+        0x58, 0x59, 0x5A, 0x61, 0x62, 0x63, 0x64, 0x65,
+        0x66, 0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D,
+        0x6E, 0x6F, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75,
+        0x76, 0x77, 0x78, 0x79, 0x7A, 0x2A, 0x28, 0x29,
+        0x2A, 0x2E, 0x27, 0x22, 0x00,
+    };
+
+    static u8 l_sjis2chrNo[] = {
+        0x82, 0xA0, 0x82, 0xA2, 0x82, 0xA4, 0x82, 0xA6,
+        0x82, 0xA8, 0x82, 0xA9, 0x82, 0xAB, 0x82, 0xAD,
+        0x82, 0xAF, 0x82, 0xB1, 0x82, 0xB3, 0x82, 0xB5,
+        0x82, 0xB7, 0x82, 0xB9, 0x82, 0xBB, 0x82, 0xBD,
+        0x82, 0xBF, 0x82, 0xC2, 0x82, 0xC4, 0x82, 0xC6,
+        0x82, 0xC8, 0x82, 0xC9, 0x82, 0xCA, 0x82, 0xCB,
+        0x82, 0xCC, 0x82, 0xCD, 0x82, 0xD0, 0x82, 0xD3,
+        0x82, 0xD6, 0x82, 0xD9, 0x82, 0xDC, 0x82, 0xDD,
+        0x82, 0xDE, 0x82, 0xDF, 0x82, 0xE0, 0x82, 0xE2,
+        0x82, 0xE4, 0x82, 0xE6, 0x82, 0xE7, 0x82, 0xE8,
+        0x82, 0xE9, 0x82, 0xEA, 0x82, 0xEB, 0x82, 0xED,
+        0x82, 0xF0, 0x82, 0xF1, 0x82, 0x9F, 0x82, 0xA1,
+        0x82, 0xA3, 0x82, 0xA5, 0x82, 0xA7, 0x82, 0xC1,
+        0x82, 0xE1, 0x82, 0xE3, 0x82, 0xE5, 0x83, 0x41,
+        0x83, 0x43, 0x83, 0x45, 0x83, 0x47, 0x83, 0x49,
+        0x83, 0x4A, 0x83, 0x4C, 0x83, 0x4E, 0x83, 0x50,
+        0x83, 0x52, 0x83, 0x54, 0x83, 0x56, 0x83, 0x58,
+        0x83, 0x5A, 0x83, 0x5C, 0x83, 0x5E, 0x83, 0x60,
+        0x83, 0x63, 0x83, 0x65, 0x83, 0x67, 0x83, 0x69,
+        0x83, 0x6A, 0x83, 0x6B, 0x83, 0x6C, 0x83, 0x6D,
+        0x83, 0x6E, 0x83, 0x71, 0x83, 0x74, 0x83, 0x7A,
+        0x83, 0x7D, 0x83, 0x7E, 0x83, 0x80, 0x83, 0x81,
+        0x83, 0x82, 0x83, 0x84, 0x83, 0x86, 0x83, 0x88,
+        0x83, 0x89, 0x83, 0x8B, 0x83, 0x8C, 0x83, 0x8D,
+        0x83, 0x8F, 0x83, 0x92, 0x83, 0x93, 0x83, 0x40,
+        0x83, 0x42, 0x83, 0x44, 0x83, 0x46, 0x83, 0x48,
+        0x83, 0x62, 0x83, 0x83, 0x83, 0x85, 0x83, 0x87,
+        0x81, 0x45, 0x81, 0x5B, 0x81, 0x40, 0x81, 0x48,
+        0x81, 0x49, 0x81, 0x42, 0x81, 0x41, 0x81, 0x60,
+        0x81, 0x75, 0x81, 0x76, 0x82, 0x4F, 0x82, 0x50,
+        0x82, 0x51, 0x82, 0x52, 0x82, 0x53, 0x82, 0x54,
+        0x82, 0x55, 0x82, 0x56, 0x82, 0x57, 0x82, 0x58,
+        0x82, 0x71, 0x82, 0x6B, 0x82, 0x60, 0x82, 0x61,
+        0x82, 0x72, 0x82, 0x73, 0x81, 0x7B, 0x82, 0x64,
+        0x82, 0x62, 0x82, 0x6F, 0x82, 0x74, 0x82, 0x67,
+        0x82, 0x63, 0x82, 0x65, 0x82, 0x66, 0x82, 0x68,
+        0x82, 0x69, 0x82, 0x6A, 0x82, 0x6C, 0x82, 0x6D,
+        0x82, 0x6E, 0x82, 0x70, 0x82, 0x75, 0x82, 0x76,
+        0x82, 0x77, 0x82, 0x78, 0x82, 0x79, 0x82, 0x81,
+        0x82, 0x82, 0x82, 0x83, 0x82, 0x84, 0x82, 0x85,
+        0x82, 0x86, 0x82, 0x87, 0x82, 0x88, 0x82, 0x89,
+        0x82, 0x8A, 0x82, 0x8B, 0x82, 0x8C, 0x82, 0x8D,
+        0x82, 0x8E, 0x82, 0x8F, 0x82, 0x90, 0x82, 0x91,
+        0x82, 0x92, 0x82, 0x93, 0x82, 0x94, 0x82, 0x95,
+        0x82, 0x96, 0x82, 0x97, 0x82, 0x98, 0x82, 0x99,
+        0x82, 0x9A, 0x81, 0x63, 0x81, 0x69, 0x81, 0x6A,
+        0x81, 0x7E, 0x81, 0x44, 0x81, 0x66, 0x81, 0x68,
+        0x81, 0x9C, 0x82, 0xAA, 0x82, 0xAC, 0x82, 0xAE,
+        0x82, 0xB0, 0x82, 0xB2, 0x82, 0xB4, 0x82, 0xB6,
+        0x82, 0xB8, 0x82, 0xBA, 0x82, 0xBC, 0x82, 0xBE,
+        0x82, 0xC0, 0x82, 0xC3, 0x82, 0xC5, 0x82, 0xC7,
+        0x82, 0xCE, 0x82, 0xD1, 0x82, 0xD4, 0x82, 0xD7,
+        0x82, 0xDA, 0x83, 0x4B, 0x83, 0x4D, 0x83, 0x4F,
+        0x83, 0x51, 0x83, 0x53, 0x83, 0x55, 0x83, 0x57,
+        0x83, 0x59, 0x83, 0x5B, 0x83, 0x5D, 0x83, 0x5F,
+        0x83, 0x61, 0x83, 0x64, 0x83, 0x66, 0x83, 0x68,
+        0x83, 0x6F, 0x83, 0x72, 0x83, 0x75, 0x83, 0x78,
+        0x83, 0x7B, 0x83, 0x94, 0x82, 0xCF, 0x82, 0xD2,
+        0x82, 0xD5, 0x82, 0xD8, 0x82, 0xDB, 0x83, 0x70,
+        0x83, 0x73, 0x83, 0x76, 0x83, 0x79, 0x83, 0x7C,
+        0x83, 0x5C, 0x83, 0x77, 0x83, 0x8A, 0x81, 0x7C,
+        0x81, 0x45, 0x00,
+    };
+
+    char* chrNo;
+    if (i_chr[0] & 0x80) {
+        chrNo = (char*)l_sjis2chrNo;
+        for (u8 i = 0; i < 245; chrNo += 2, i++) {
+            if (i_chr[0] == chrNo[0] && i_chr[1] == chrNo[1] ||
+                (i_chr[0] == 0x83 && i_chr[1] == 0x5C && chrNo[0] == 0x91 && chrNo[1] == 0x66) ||
+                (i_chr[0] == 0x83 && i_chr[1] == 0x77 && chrNo[0] == 0x82 && chrNo[1] == 0xD6) ||
+                (i_chr[0] == 0x83 && i_chr[1] == 0x8A && chrNo[0] == 0x82 && chrNo[1] == 0xE8) ||
+                (i_chr[0] == 0x81 && i_chr[1] == 0x7C && chrNo[0] == 0x81 && chrNo[1] == 0x5B) ||
+                (i_chr[0] == 0x81 && i_chr[1] == 0x45 && chrNo[0] == 0x81 && chrNo[1] == 0x42)
+            ) {
+                if (i == 0xF0)
+                    return 0x45;
+                if (i == 0xF1)
+                    return 0x1C;
+                if (i == 0xF2)
+                    return 0x27;
+                if (i == 0xF3)
+                    return 0x6D;
+                if (i == 0xF4)
+                    return 0x6C;
+                return i;
+            }
+        }
+    } else {
+        chrNo = (char*)l_sjis1chrNo;
+        for (u8 i = 0; i < 188; chrNo++, i++) {
+            if (i_chr[0] == chrNo[0]) {
+                return i;
+            }
+        }
+    }
+
+    return 0xFF;
+}
+#else
 /* 800CF7B4-800CF7F8       .text sjis2chrNo__FUc */
 u8 sjis2chrNo(u8 i_chr) {
     static u8 l_sjis2chrNo[] = {
@@ -113,6 +245,7 @@ u8 sjis2chrNo(u8 i_chr) {
 
     return 0xFF;
 }
+#endif
 
 /* 800CF7F8-800CF894       .text NameConv__7daAgb_cFv */
 void daAgb_c::NameConv() {
@@ -121,9 +254,20 @@ void daAgb_c::NameConv() {
     mPlayerName = 0;
 
     for (i = 0; i < 8; i++) {
+#if VERSION == VERSION_JPN
+        u8 chr = sjis2chrNo(name);
+#else
         u8 chr = sjis2chrNo(*name);
+#endif
         mPlayerName |= chr;
+#if VERSION == VERSION_JPN
+        if (*name & 0x80)
+            name += 2;
+        else
+            name++;
+#else
         name++;
+#endif
 
         if (i < 7) {
             mPlayerName <<= 8;
@@ -141,22 +285,22 @@ int daAgb_c::uploadInitCheck() {
         (fili_p != NULL && dStage_FileList_dt_CheckAgbCom(fili_p)))
     {
         l_msgCtrl.init(1);
-        mUploadAction = 10;
+        mUploadAction  = UpAct_UNKA;
     } else if (!mDoGaC_getComEnable()) {
         field_0x66f = 0;
         mIsMsgSend = false;
         JUTGba::getManager()->doInitProbe(1, NULL, NULL);
         JUTGba::getManager()->doInitProbe(2, NULL, NULL);
         JUTGba::getManager()->doInitProbe(3, NULL, NULL);
-        mUploadAction = 1;
+        mUploadAction  = UpAct_UNK1;
     } else if (mDoGaC_GbaLink()) {
         l_msgCtrl.init(2);
-        mUploadAction = 10;
+        mUploadAction  = UpAct_UNKA;
     } else {
         JUTGba::getManager()->doInitProbe(1, NULL, NULL);
         JUTGba::getManager()->doInitProbe(2, NULL, NULL);
         JUTGba::getManager()->doInitProbe(3, NULL, NULL);
-        mUploadAction = 1;
+        mUploadAction  = UpAct_UNK1;
         mDoGaC_ConnectSleep();
     }
 
@@ -177,19 +321,19 @@ int daAgb_c::uploadPortCheckWait() {
 
     if (mDoGaC_GbaLink()) {
         l_msgCtrl.init(2);
-        mUploadAction = 10;
+        mUploadAction  = UpAct_UNKA;
     } else {
         for (int i = 0; i < 3; i++) {
             if (sp8[i] == 0 && sp14[i] == 0x40000) {
                 mPortNo = i + 1;
                 l_msgCtrl.init(5);
-                mUploadAction = 2;
+                mUploadAction  = UpAct_UNK2;
                 return 1;
             }
         }
 
         l_msgCtrl.init(3);
-        mUploadAction = 10;
+        mUploadAction  = UpAct_UNKA;
         mDoGaC_ConnectWake();
     }
 
@@ -207,11 +351,14 @@ int daAgb_c::uploadSelect() {
         } else {
             l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
             fopMsgM_messageSet(6);  // "Now calling Tingle..."
-            mUploadAction = 3;
+            mUploadAction  = UpAct_UNK3;
 
-            l_gbaCommand =
-                mDoDvdThd_toMainRam_c::create("/res/Gba/client_u.bin", 0, dMsg_getAgbWorkArea());
-            JUT_ASSERT(860, l_gbaCommand != 0);
+#if VERSION == VERSION_JPN
+            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client.bin", 0, dMsg_getAgbWorkArea());
+#else
+            l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/client_u.bin", 0, dMsg_getAgbWorkArea());
+#endif
+            JUT_ASSERT(VERSION_SELECT(591, 860, 860), l_gbaCommand != 0);
 
             mDoGaC_GbaReboot();
             mDoGaC_setPortNo(mPortNo);
@@ -227,11 +374,11 @@ int daAgb_c::uploadSelect() {
 int daAgb_c::uploadJoyboot1() {
     if (l_gbaCommand->sync()) {
         void* programp = l_gbaCommand->getMemAddress();
-        JUT_ASSERT(891, programp != 0);
+        JUT_ASSERT(VERSION_SELECT(622, 891, 891), programp != 0);
 
         JUTGba::getManager()->doJoyBoot(mDoGaC_getPortNo(), 3, -1, (u8*)programp,
                                         l_gbaCommand->getMemSize() - 4, NULL, NULL);
-        mUploadAction = 4;
+        mUploadAction  = UpAct_UNK4;
         field_0x664 = 450;
     }
 
@@ -249,12 +396,12 @@ int daAgb_c::uploadJoyboot2() {
 
         if (result == 0) {
             field_0x664 = 15;
-            mUploadAction = 6;
+            mUploadAction  = UpAct_UNK6;
         } else {
             l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
             fopMsgM_messageSet(7);  // "An error has occurred."
             fopMsgM_messageSendOn();
-            mUploadAction = 10;
+            mUploadAction  = UpAct_UNKA;
         }
     } else {
         field_0x664--;
@@ -262,7 +409,7 @@ int daAgb_c::uploadJoyboot2() {
             l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
             fopMsgM_messageSet(7);  // "An error has occurred."
             fopMsgM_messageSendOn();
-            mUploadAction = 10;
+            mUploadAction  = UpAct_UNKA;
 
             JKRHeap::free(l_gbaCommand->getMemAddress(), NULL);
             delete l_gbaCommand;
@@ -277,9 +424,9 @@ int daAgb_c::uploadMessageLoad() {
     field_0x664--;
     if (field_0x664 == 0) {
         l_gbaCommand = mDoDvdThd_toMainRam_c::create("/res/Gba/msg_LZ.bin", 0, NULL);
-        JUT_ASSERT(1000, l_gbaCommand != 0);
+        JUT_ASSERT(VERSION_SELECT(715, 1000, 1000), l_gbaCommand != 0);
 
-        mUploadAction = 7;
+        mUploadAction  = UpAct_UNK7;
         mDoGaC_onComEnable();
         mDoGaC_ComStart();
     }
@@ -290,7 +437,7 @@ int daAgb_c::uploadMessageLoad() {
 /* 800CFF58-800CFF78       .text uploadMessageLoad2__7daAgb_cFv */
 int daAgb_c::uploadMessageLoad2() {
     if (l_gbaCommand->sync()) {
-        mUploadAction = 5;
+        mUploadAction  = UpAct_UNK5;
     }
 
     return 1;
@@ -300,10 +447,10 @@ int daAgb_c::uploadMessageLoad2() {
 int daAgb_c::uploadConnect() {
     if (mDoGaC_getComEnable() && mDoGaC_GbaLink()) {
         void* programp = l_gbaCommand->getMemAddress();
-        JUT_ASSERT(1045, programp != 0);
+        JUT_ASSERT(VERSION_SELECT(760, 1045, 1045), programp != 0);
         mDoGac_SendDataSet((u32*)programp, l_gbaCommand->getMemSize(), 0, 0);
 
-        mUploadAction = 8;
+        mUploadAction  = UpAct_UNK8;
         NameConv();
         mDoGac_SendDataSet((u32*)&mPlayerName, sizeof(mPlayerName), 10, 0);
 
@@ -313,7 +460,7 @@ int daAgb_c::uploadConnect() {
         l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
         fopMsgM_messageSet(7);  // "An error has occurred."
         fopMsgM_messageSendOn();
-        mUploadAction = 10;
+        mUploadAction  = UpAct_UNKA;
 
         JKRHeap::free(l_gbaCommand->getMemAddress(), NULL);
         delete l_gbaCommand;
@@ -330,7 +477,7 @@ int daAgb_c::uploadMessageSend() {
             l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
             fopMsgM_messageSet(8);  // "Tingle appeared on your Game Boy Advance!"
             fopMsgM_messageSendOn();
-            mUploadAction = 11;
+            mUploadAction  = UpAct_UNKB;
             field_0x664 = 60;
 
             dComIfGs_onEventBit(0x1A20);
@@ -340,22 +487,28 @@ int daAgb_c::uploadMessageSend() {
             delete l_gbaCommand;
         }
     } else if (mDoGaC_getDataStatus(0) == 9) {
+#if VERSION == VERSION_JPN
+        mUploadAction = UpAct_UNK5;
+#else
         field_0x664 = 5;
-        mUploadAction = 9;
+        mUploadAction  = UpAct_UNK9;
+#endif
     }
 
     return 1;
 }
 
+#if VERSION != VERSION_JPN
 /* 800D01F4-800D021C       .text uploadRetryWait__7daAgb_cFv */
 int daAgb_c::uploadRetryWait() {
     field_0x664--;
     if (field_0x664 == 0) {
-        mUploadAction = 5;
+        mUploadAction  = UpAct_UNK5;
     }
 
     return 1;
 }
+#endif
 
 /* 800D021C-800D0264       .text uploadMsgEndWait__7daAgb_cFv */
 int daAgb_c::uploadMsgEndWait() {
@@ -384,10 +537,20 @@ int daAgb_c::uploadMsgEndTimer() {
 }
 
 daAgb_c::uploadFunc daAgb_c::uploadFuncTable[] = {
-    &daAgb_c::uploadInitCheck,   &daAgb_c::uploadPortCheckWait, &daAgb_c::uploadSelect,
-    &daAgb_c::uploadJoyboot1,    &daAgb_c::uploadJoyboot2,      &daAgb_c::uploadConnect,
-    &daAgb_c::uploadMessageLoad, &daAgb_c::uploadMessageLoad2,  &daAgb_c::uploadMessageSend,
-    &daAgb_c::uploadRetryWait,   &daAgb_c::uploadMsgEndWait,    &daAgb_c::uploadMsgEndTimer,
+    &daAgb_c::uploadInitCheck,
+    &daAgb_c::uploadPortCheckWait,
+    &daAgb_c::uploadSelect,
+    &daAgb_c::uploadJoyboot1,
+    &daAgb_c::uploadJoyboot2,
+    &daAgb_c::uploadConnect,
+    &daAgb_c::uploadMessageLoad,
+    &daAgb_c::uploadMessageLoad2,
+    &daAgb_c::uploadMessageSend,
+#if VERSION != VERSION_JPN
+    &daAgb_c::uploadRetryWait,
+#endif
+    &daAgb_c::uploadMsgEndWait,
+    &daAgb_c::uploadMsgEndTimer,
 };
 
 /* 800D02E8-800D0364       .text modeLoad__7daAgb_cFv */
@@ -396,7 +559,7 @@ void daAgb_c::modeLoad() {
         uploadFunc func = uploadFuncTable[mUploadAction];
         (this->*func)();
     } else {
-        mUploadAction = 0;
+        mUploadAction  = UpAct_UNK0;
         mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
         mMode = 0;
     }
@@ -1159,7 +1322,7 @@ void daAgb_c::modeMove() {
     u16 stage_type = dStage_stagInfo_GetSTType(stag_info);
     
     if (mEvtInfo.checkCommandTalk()) {
-        mUploadAction = 0;
+        mUploadAction  = UpAct_UNK0;
         mMode = 2;
         return;
     }
@@ -1530,7 +1693,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 800D396C-800D3B58       .text createHeap__7daAgb_cFv */
 int daAgb_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", 4);
-    JUT_ASSERT(3277, modelData != 0);
+    JUT_ASSERT(VERSION_SELECT(2960, 3277, 3277), modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
     if (mpModel == NULL) {
@@ -1574,10 +1737,10 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
         a_this->mAcch.SetGrndNone();
         a_this->mAcchCir.SetWall(171.0f, 40.0f);
 
-        TestDataManager[4].field_0x0 = (u32)&daAgb_c::mGbaFlg;
-        TestDataManager[8].field_0x0 = (u32)&daAgb_c::mSwitch;
-        TestDataManager[6].field_0x0 = (u32)&daAgb_c::mItem;
-        TestDataManager[12].field_0x0 = (u32)&daAgb_c::mShop;
+        TestDataManager[4].field_0x0 = (u32)&a_this->mGbaFlg;
+        TestDataManager[8].field_0x0 = (u32)&a_this->mSwitch;
+        TestDataManager[6].field_0x0 = (u32)&a_this->mItem;
+        TestDataManager[12].field_0x0 = (u32)&a_this->mShop;
 
         a_this->field_0x670 = 0;
         a_this->field_0x65c = 0;
