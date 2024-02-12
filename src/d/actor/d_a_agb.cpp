@@ -1150,13 +1150,13 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
 
 /* 800D272C-800D303C       .text modeMove__7daAgb_cFv */
 void daAgb_c::modeMove() {
-    /* Nonmatching - regalloc */
     daPy_py_c* player = daPy_getPlayerActorClass();
     
     // single | instead of double ||: bug?
     BOOL r26 = dComIfGp_event_runCheck() | dMenu_flag();
     
-    u32 stage_type = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+    u16 stage_type = dStage_stagInfo_GetSTType(stag_info);
     
     if (mEvtInfo.checkCommandTalk()) {
         mUploadAction = 0;
@@ -1343,8 +1343,8 @@ void daAgb_c::modeProcCall() {
 }
 
 /* 800D30D4-800D36F4       .text daAgb_Execute__FP7daAgb_c */
-// NONMATCHING - regswap
 static int daAgb_Execute(daAgb_c* i_this) {
+    fopAc_ac_c* i_actor = i_this;
     daPy_py_c* player = daPy_getPlayerActorClass();
     i_this->field_0x679 = 0;
 
@@ -1432,7 +1432,7 @@ static int daAgb_Execute(daAgb_c* i_this) {
                 if (i_this->field_0x676 != 0) {
                     i_this->shape_angle.z += 0x1000;
                 } else {
-                    i_this->shape_angle.z = fopAcM_searchPlayerAngleY(i_this);
+                    i_this->shape_angle.z = fopAcM_searchPlayerAngleY(i_actor);
                 }
             } else {
                 i_this->shape_angle.z += 0x200;
@@ -1447,7 +1447,7 @@ static int daAgb_Execute(daAgb_c* i_this) {
         i_this->mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
         if (i_this->mMode == 1) {
-            i_this->mBrk.setFrame(15.0f);
+            i_this->mBrk.setFrame(19.0f);
         } else if (i_this->field_0x65c != 0 &&
                    (i_this->field_0x66b == 4 || i_this->field_0x66b == 13 ||
                     i_this->field_0x66b == 12 || i_this->field_0x66b == 3))
