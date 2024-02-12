@@ -87,7 +87,9 @@ void dBgWHf::ClassifyPlane() {
     }
     
     for (int b = 0; b < pm_bgd->m_b_num; b++) {
+#if VERSION != VERSION_JPN
         JUT_ASSERT(140, 0 <= b && b < pm_bgd->m_b_num);
+#endif
         
         int r6 = pm_bgd->m_b_tbl[b].startTri;
         int r29;
@@ -103,7 +105,9 @@ void dBgWHf::ClassifyPlane() {
         int sp8 = (u16)-1;
         
         for (int t = r6; t <= r29; t++) {
+#if VERSION != VERSION_JPN
             JUT_ASSERT(159, 0 <= t && t < pm_bgd->m_t_num);
+#endif
             BlckConnect(&pm_blk[b].ground, &sp8, t);
         }
     }
@@ -122,7 +126,9 @@ void dBgWHf::MoveHf() {
 
 /* 800A9EDC-800A9FA0       .text MakeBlckMinMaxHf__6dBgWHfFiPfPf */
 void dBgWHf::MakeBlckMinMaxHf(int v_index, f32* r30, f32* r31) {
+#if VERSION != VERSION_JPN
     JUT_ASSERT(198, 0 <= v_index && v_index < pm_bgd->m_v_num);
+#endif
     Vec* vtx = &pm_vtx_tbl[v_index];
     if (*r30 > vtx->y) {
         *r30 = vtx->y;
@@ -134,7 +140,9 @@ void dBgWHf::MakeBlckMinMaxHf(int v_index, f32* r30, f32* r31) {
 
 /* 800A9FA0-800AA164       .text MakeBlckBndHf__6dBgWHfFiPfPf */
 void dBgWHf::MakeBlckBndHf(int blck_id, f32* r28, f32* r29) {
+#if VERSION != VERSION_JPN
     JUT_ASSERT(221, blck_id >= 0 && blck_id < pm_bgd->m_b_num);
+#endif
     
     int r7 = pm_bgd->m_b_tbl[blck_id].startTri;
     int r31;
@@ -148,7 +156,9 @@ void dBgWHf::MakeBlckBndHf(int blck_id, f32* r28, f32* r29) {
     *r29 = -1000000000.0f;
     
     for (int t = r7; t <= r31; t++) {
+#if VERSION != VERSION_JPN
         JUT_ASSERT(238, 0 <= t && t < pm_bgd->m_t_num);
+#endif
         MakeBlckMinMaxHf(pm_bgd->m_t_tbl[t].vtx0, r28, r29);
         MakeBlckMinMaxHf(pm_bgd->m_t_tbl[t].vtx1, r28, r29);
         MakeBlckMinMaxHf(pm_bgd->m_t_tbl[t].vtx2, r28, r29);
@@ -160,7 +170,9 @@ void dBgWHf::MakeBlckBndHf(int blck_id, f32* r28, f32* r29) {
 
 /* 800AA164-800AA8AC       .text MakeNodeTreeRpHf__6dBgWHfFi */
 void dBgWHf::MakeNodeTreeRpHf(int node_index) {
+#if VERSION != VERSION_JPN
     JUT_ASSERT(258, 0 <= node_index && node_index < pm_bgd->m_tree_num);
+#endif
     
     cBgD_Tree_t* r30 = &pm_bgd->m_tree_tbl[node_index];
     if (r30->mFlag & 0x01) {
@@ -211,13 +223,17 @@ void dBgWHf::MakeNodeTreeRpHf(int node_index) {
         }
     }
     
+#if VERSION != VERSION_JPN
     CHECK_MINMAX_1(353, m_nt_tbl[node_index].GetMinP(), m_nt_tbl[node_index].GetMaxP());
     CHECK_MINMAX_2(365, m_nt_tbl[node_index].GetMinP(), m_nt_tbl[node_index].GetMaxP());
+#endif
 }
 
 /* 800AA8AC-800AAA70       .text MakeNodeTreeGrpRpHf__6dBgWHfFi */
 void dBgWHf::MakeNodeTreeGrpRpHf(int g) {
+#if VERSION != VERSION_JPN
     JUT_ASSERT(377, 0 <= g && g < pm_bgd->m_g_num);
+#endif
     
     if (pm_bgd->m_g_tbl[g].m_tree_idx != (u16)-1) {
         MakeNodeTreeRpHf(pm_bgd->m_g_tbl[g].m_tree_idx);
