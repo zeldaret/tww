@@ -29,14 +29,14 @@ namespace daObjFerris {
 
     class Act_c : public fopAc_ac_c {
     public:
-        enum Prm_e {
+        enum Param_e {
             PRM_SWSAVE_W = 0x08,
             PRM_SWSAVE_S = 0x00,
         };
 
         bool is_switch() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), param_get_swSave()); }
         void off_switch() const { return fopAcM_offSwitch(const_cast<Act_c*>(this), param_get_swSave()); }
-        s32 param_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        s32 param_get_swSave() const { return daObj::PrmAbstract<Param_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
 
         bool create_heap();
         s32 _create();
@@ -56,8 +56,6 @@ namespace daObjFerris {
         static BOOL solidHeapCB(fopAc_ac_c*);
         static void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
         static const char M_arcname[8];
-        static const dCcD_SrcCyl M_cyl_src;
-        static const dCcD_SrcSph M_sph_src;
 
     public:
         /* 0x0290 */ dBgW* mpBgW[6];

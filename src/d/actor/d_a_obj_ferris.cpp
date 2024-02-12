@@ -19,7 +19,7 @@ namespace daObjFerris {
         inline const Attr_c & attr() { return L_attr; }
     }
 
-    const dCcD_SrcCyl Act_c::M_cyl_src = {
+    const dCcD_SrcCyl M_cyl_src = {
         // dCcD_SrcGObjInf
         {
             /* Flags             */ 0,
@@ -49,7 +49,7 @@ namespace daObjFerris {
         },
     };
 
-    const dCcD_SrcSph Act_c::M_sph_src = {
+    const dCcD_SrcSph M_sph_src = {
         // dCcD_SrcGObjInf
         {
             /* Flags             */ 0,
@@ -88,15 +88,15 @@ BOOL daObjFerris::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000110-0000048C       .text create_heap__Q211daObjFerris5Act_cFv */
 bool daObjFerris::Act_c::create_heap() {
-    /* Nonmatching */
-    J3DModelData* mdl_data_gondola = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x04);
+    s32 i;
+    J3DModelData* mdl_data_gondola = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 0x04));
     JUT_ASSERT(0x183, mdl_data_gondola != 0);
     if (mdl_data_gondola != NULL) {
-        for (s32 i = 0; i < 5; i++)
+        for (i = 0; i < 5; i++)
             mpModel[i] = mDoExt_J3DModel__create(mdl_data_gondola, 0, 0x11020203);
     }
 
-    J3DModelData* mdl_data_wheelbase = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x06);
+    J3DModelData* mdl_data_wheelbase = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 0x06));
     JUT_ASSERT(0x18c, mdl_data_wheelbase != 0);
     if (mdl_data_wheelbase != NULL) {
         mpModel[5] = mDoExt_J3DModel__create(mdl_data_wheelbase, 0, 0x11020203);
@@ -105,17 +105,17 @@ bool daObjFerris::Act_c::create_heap() {
     if (mdl_data_gondola != NULL && mdl_data_wheelbase != NULL)
         init_mtx();
 
-    cBgD_t* bgw_data_gondola = (cBgD_t*)dComIfG_getObjectRes(M_arcname, 0x0A);
+    cBgD_t* bgw_data_gondola = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, 0x0A));
     JUT_ASSERT(0x1a0, bgw_data_gondola != 0);
     if (bgw_data_gondola != NULL) {
-        for (s32 i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             mpBgW[i] = new dBgW();
             if (mpBgW[i] != NULL && mpBgW[i]->Set(bgw_data_gondola, dBgW::MOVE_BG_e, &mMtx[i]) == 1)
                 return false;
         }
     }
 
-    cBgD_t* bgw_data_wheelbase = (cBgD_t*)dComIfG_getObjectRes(M_arcname, 0x0B);
+    cBgD_t* bgw_data_wheelbase = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, 0x0B));
     JUT_ASSERT(0x1b0, bgw_data_wheelbase != 0);
     if (bgw_data_wheelbase != NULL) {
         mpBgW[5] = new dBgW();
@@ -143,16 +143,15 @@ void daObjFerris::Act_c::ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c*
 
 /* 000004DC-00000898       .text _create__Q211daObjFerris5Act_cFv */
 s32 daObjFerris::Act_c::_create() {
-    /* Nonmatching */
-
     fopAcM_SetupActor(this, Act_c);
 
     s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
 
+    s32 i;
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x11a00)) {
             fopAcM_SetMtx(this, mpModel[5]->getBaseTRMtx());
-            for (s32 i = 0; i < 6; i++) {
+            for (i = 0; i < 6; i++) {
                 dComIfG_Bgsp()->Regist(mpBgW[i], this);
                 mpBgW[i]->SetCrrFunc(dBgS_MoveBGProc_Typical);
                 if (i < 5)
@@ -173,7 +172,7 @@ s32 daObjFerris::Act_c::_create() {
             mRotAngle = 0x1800;
             mGondolaWaveAngle = 0;
 
-            for (s32 i = 0; i < 5; i++) {
+            for (i = 0; i < 5; i++) {
                 field_0x02d4[i].Init(0xFF, 0xFF, this);
                 field_0x0400[i].Set(M_cyl_src);
                 field_0x0400[i].SetStts(&field_0x02d4[i]);
@@ -220,8 +219,8 @@ void daObjFerris::Act_c::set_mtx(int idx) {
     static cXyz offset[6] = {
         cXyz(0.56f, 1078.13f, 162.68f),
         cXyz(1026.17f, 332.98f, 162.68f),
-        cXyz(634.42f, 872.69f, 162.68f),
-        cXyz(-633.3f, 872.69f, 162.68f),
+        cXyz(634.42f, -872.69f, 162.68f),
+        cXyz(-633.3f, -872.69f, 162.68f),
         cXyz(-1025.04f, 332.98f, 162.68f),
         cXyz(0.0f, 0.0f, 0.0f),
     };
@@ -401,13 +400,11 @@ void daObjFerris::Act_c::rot_mng() {
 
 /* 000016C0-00001A50       .text set_collision__Q211daObjFerris5Act_cFv */
 void daObjFerris::Act_c::set_collision() {
-    const Attr_c& at = attr();
-
     for (s32 i = 0; i < 5; i++) {
         static cXyz zero_offset(0.0f, 0.0f, 0.0f);
         cXyz pt;
         mDoMtx_multVec(mMtx[i], &zero_offset, &pt);
-        if (pt.y <= 1280.0f) {
+        if (pt.y <= 1820.0f) {
             field_0x0400[i].SetR(50.0f);
             field_0x0400[i].SetH(195.0f);
             cXyz offs0(0.0f, -100.0f, -135.0f);
@@ -446,7 +443,7 @@ void daObjFerris::Act_c::set_collision() {
         cXyz pt;
         mDoMtx_multVec(now, &zero_offset, &pt);
 
-        if (pt.y <= 1280.0f) {
+        if (pt.y <= 1820.0f) {
             field_0x1238[i].SetC(pt);
             field_0x1238[i].SetR(30.0f);
             dComIfG_Ccsp()->Set(&field_0x1238[i]);
@@ -456,7 +453,6 @@ void daObjFerris::Act_c::set_collision() {
 
 /* 00001A50-00001C30       .text make_lean__Q211daObjFerris5Act_cFv */
 void daObjFerris::Act_c::make_lean() {
-    /* Nonmatching */
     cXyz pt0;
     cXyz pt1;
     cXyz offs1(0.0f, -100.0f, -135.0f);
@@ -464,43 +460,43 @@ void daObjFerris::Act_c::make_lean() {
     cXyz delta;
     cXyz delta2;
 
+    Mtx* mtx;
+    s32* pRideState; // Fakematch?
     for (s32 i = 0; i < 5; i++) {
-        if (mRideState[i] == 1) {
-            Mtx& mtx = mMtx[i];
-            mDoMtx_multVec(mtx, &offs0, &pt0);
-            mDoMtx_multVec(mtx, &offs1, &pt1);
+        pRideState = &mRideState[i];
+        if (*pRideState == 1) {
+            mtx = &mMtx[i];
+            mDoMtx_multVec(*mtx, &offs0, &pt0);
+            mDoMtx_multVec(*mtx, &offs1, &pt1);
 
             delta.x = pt1.x - pt0.x;
             delta.y = 0.0f;
             delta.z = pt1.z - pt0.z;
 
-            delta2.set(mRidePos.x - delta.x, 0.0f, mRidePos.z - delta.z);
+            delta2.set(mRidePos.x - pt0.x, 0.0f, mRidePos.z - pt0.z);
             delta.normalizeRS();
 
-            f32 h = fabsf(-(-delta.z * pt0.x + delta.x * pt0.z) + (-delta.z * mRidePos.x + delta.x * mRidePos.z)) / 162.0f;
-            if (delta.x * delta2.x - delta.z * delta2.z < 0.0f) {
-                mRideWaveTarget[i] = h * -550.0f;
-            } else {
+            f32 z = -delta.z;
+            f32 h = fabsf(-(z * pt0.x + delta.x * pt0.z) + (z * mRidePos.x + delta.x * mRidePos.z)) / 162.0f;
+            if (delta.x * delta2.z - delta.z * delta2.x < 0.0f) {
                 mRideWaveTarget[i] = h * 550.0f;
+            } else {
+                mRideWaveTarget[i] = h * -550.0f;
             }
         } else {
             mRideWaveTarget[i] = 0;
         }
 
         cLib_addCalcAngleS2(&mRideWaveAngle[i], mRideWaveTarget[i], 4, 0x1000);
-        mRideState[i] = 0;
+        *pRideState = 0;
     }
 }
 
 /* 00001C30-00001D58       .text _execute__Q211daObjFerris5Act_cFv */
 bool daObjFerris::Act_c::_execute() {
-    /* Nonmatching */
-    const Attr_c& at = attr();
-
     mRotAngle += mRotSpeed;
     f32 volume = (mRotSpeed / 45.0f) * 100.0f;
-    if (volume > 100.0f)
-        volume = 100.0f;
+    volume = volume > 100.0f ? 100.0f : volume;
     mDoAud_seStart(JA_SE_OBJ_FER_WHEEL_ROUND, &current.pos, volume);
     rot_mng();
     exe_event();
