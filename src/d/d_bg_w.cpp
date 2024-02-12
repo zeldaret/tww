@@ -113,7 +113,7 @@ bool dBgW::RwgRoofChk(u16 poly_index, dBgS_RoofChk* chk) {
     bool ret = false;
     while (true) {
         f32 y;
-        if (pm_tri[poly_index].m_plane.getCrossY(*chk->GetPosP(), &y) && chk->GetPosP()->y > y && y < chk->GetNowY()) {
+        if (pm_tri[poly_index].m_plane.getCrossY(*chk->GetPosP(), &y) && y > chk->GetPosP()->y && y < chk->GetNowY()) {
             cBgD_Tri_t* tri;
             tri = &pm_bgd->m_t_tbl[poly_index];
             if (cM3d_CrossY_Tri(pm_vtx_tbl[tri->vtx0], pm_vtx_tbl[tri->vtx1], pm_vtx_tbl[tri->vtx2], pm_tri[poly_index].m_plane, chk->GetPosP()) && !ChkPolyThrough(poly_index, chk->GetPolyPassChk())) {
@@ -203,7 +203,7 @@ bool dBgW::RwgSplGrpChk(u16 poly_index, dBgS_SplGrpChk* chk) {
     bool ret = false;
     while (true) {
         f32 y;
-        if (pm_tri[poly_index].m_plane.getCrossY(*chk->GetPosP(), &y) && chk->GetPosP()->y > y && y < chk->GetHeight()) {
+        if (pm_tri[poly_index].m_plane.getCrossY(*chk->GetPosP(), &y) && y < chk->GetRoof() && y > chk->GetHeight()) {
             cBgD_Tri_t* tri;
             tri = &pm_bgd->m_t_tbl[poly_index];
             if (cM3d_CrossY_Tri(pm_vtx_tbl[tri->vtx0], pm_vtx_tbl[tri->vtx1], pm_vtx_tbl[tri->vtx2], pm_tri[poly_index].m_plane, chk->GetPosP()) && !ChkPolyThrough(poly_index, chk->GetPolyPassChk())) {
