@@ -191,7 +191,10 @@ public:
         mHitCallback = NULL;
         mEffCounter = 0;
     }
-    void SetHitApid(unsigned int);
+    void SetHitApid(unsigned int id) {
+        mApid = id;
+        mAc = NULL;
+    }
     fopAc_ac_c* GetAc();
     void Set(dCcD_SrcGAtTgCoCommonBase const& base) {
         mSPrm = base.mSPrm;
@@ -212,11 +215,11 @@ public:
     u32 MskSPrm(u32 mask) { return mSPrm & mask; }
     u32 MskRPrm(u32 mask) { return mRPrm & mask; }
     bool ChkSPrm(u32 mask) { return MskSPrm(mask); }
+    bool ChkRPrm(u32 flag) { return MskRPrm(flag); }
     void OnSPrm(u32 flag) { mSPrm |= flag; }
     void OnRPrm(u32 flag) { mRPrm |= flag; }
     void OffSPrm(u32 flag) { mSPrm &= ~flag; }
     void OffRPrm(u32 flag) { mRPrm &= ~flag; }
-    bool ChkRPrm(u32 flag) { return MskRPrm(flag); }
     void SetHitCallback(dCcD_HitCallback callback) { mHitCallback = callback; }
     dCcD_HitCallback GetHitCallback() { return mHitCallback; }
 };  // Size = 0x1C

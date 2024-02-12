@@ -90,8 +90,7 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
     if (atInfo->mpObj == NULL) {
         return NULL;
     }
-    cCcD_Stts* stts = atInfo->mpObj->GetStts();
-    atInfo->mpActor = stts == NULL ? NULL : stts->GetAc();
+    atInfo->mpActor = atInfo->mpObj->GetAc();
     atInfo->mResultingAttackType = 0xC;
     atInfo->mDamage = 0;
     

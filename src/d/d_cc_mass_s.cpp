@@ -102,13 +102,13 @@ u32 dCcMassS_Mng::Chk(cXyz* r29, fopAc_ac_c** r30, dCcMassS_HitInf* r31) {
             f32 sp10;
             if (pobj->ChkCoSet() && mCylAttr.CrossCo(*shape, &sp10)) {
                 r26 |= 0x04;
-                *r30 = pobj->GetStts()->GetAc();
+                *r30 = pobj->GetStts()->GetActor();
                 if (r31) {
                     r31->SetAreaHitObj(pobj);
                 }
                 dCcMassS_ObjCallback callback = mass->GetAreaCheckFunc();
                 if (callback) {
-                    callback(pobj->GetStts()->GetAc(), r29, mResultCamBit);
+                    callback(pobj->GetStts()->GetActor(), r29, mResultCamBit);
                 }
             }
         }
@@ -128,7 +128,7 @@ u32 dCcMassS_Mng::Chk(cXyz* r29, fopAc_ac_c** r30, dCcMassS_HitInf* r31) {
             mCylAttr.CrossAtTg(*shape, &temp) && (field_0x128 & 0x1)
         ) {
             r26 |= 0x01;
-            *r30 = pobj->GetStts()->GetAc();
+            *r30 = pobj->GetStts()->GetActor();
             if (r31) {
                 r31->SetAtHitObj(pobj);
             }
@@ -137,7 +137,7 @@ u32 dCcMassS_Mng::Chk(cXyz* r29, fopAc_ac_c** r30, dCcMassS_HitInf* r31) {
         f32 sp10;
         if (pobj->ChkCoSet() && mCylAttr.CrossCo(*shape, &sp10) && (field_0x128 & 0x02)) {
             r26 |= 0x02;
-            *r30 = pobj->GetStts()->GetAc();
+            *r30 = pobj->GetStts()->GetActor();
             
             if (field_0x128 & 0x10) {
                 Vec vec;

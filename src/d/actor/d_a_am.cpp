@@ -402,15 +402,10 @@ static BOOL bomb_nomi_check(am_class* i_this) {
     if (i_this->mMouthSph.ChkCoHit()) {
         cCcD_Obj* hitObj = i_this->mMouthSph.GetCoHitObj();
         if (hitObj) {
-            cCcD_Stts* hitStts = hitObj->GetStts();
-            if (hitStts == NULL) {
-                actor = NULL;
-            } else {
-                actor = hitStts->GetAc();
-            }
-            if (actor) {
-                if (fpcM_GetName(actor) == PROC_BOMB) {
-                    daBomb_c* bomb = (daBomb_c*)actor;
+            fopAc_ac_c* hitActor = hitObj->GetAc();
+            if (hitActor) {
+                if (fpcM_GetName(hitActor) == PROC_BOMB) {
+                    daBomb_c* bomb = (daBomb_c*)hitActor;
                     if (!bomb->getBombCheck_Flag() && bomb->getBombRestTime() > 1) {
                         f32 offsetY = 20.0f + g_regHIO.mChild[8].mFloatRegs[1];
                         if (i_this->mMouthPos.y - offsetY < bomb->current.pos.y) {
@@ -425,8 +420,8 @@ static BOOL bomb_nomi_check(am_class* i_this) {
                             return TRUE;
                         }
                     }
-                } else if (fpcM_GetName(actor) == PROC_Bomb2) {
-                    daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)actor;
+                } else if (fpcM_GetName(hitActor) == PROC_Bomb2) {
+                    daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)hitActor;
                     if (!bomb2->chk_eat() && bomb2->get_time() > 1) {
                         f32 offsetY = 20.0f + g_regHIO.mChild[8].mFloatRegs[1];
                         if (i_this->mMouthPos.y - offsetY < bomb2->current.pos.y) {

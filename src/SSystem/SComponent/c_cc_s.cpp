@@ -257,7 +257,7 @@ void cCcS::SetPosCorrect(cCcD_Obj* obj1, cXyz* ppos1, cCcD_Obj* obj2, cXyz* ppos
     if (obj1->GetStts() == NULL || obj2->GetStts() == NULL) {
         return;
     }
-    if (obj1->GetStts()->GetAc() != NULL && obj1->GetStts()->GetAc() == obj2->GetStts()->GetAc()) {
+    if (obj1->GetStts()->GetActor() != NULL && obj1->GetStts()->GetActor() == obj2->GetStts()->GetActor()) {
         return;
     }
     if (fabsf(cross_len) < (1.0f / 125.0f)) {

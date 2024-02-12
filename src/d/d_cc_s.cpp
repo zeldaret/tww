@@ -22,13 +22,11 @@ void dCcS::Dt() {
 bool dCcS::ChkShieldFrontRange(cCcD_Obj* obj1, cCcD_Obj* obj2) {
     dCcD_GObjInf* inf1 = (dCcD_GObjInf*)obj1->GetGObjInf();
     if (inf1 == NULL) { return false; }
-    dCcD_Stts* stts1 = (dCcD_Stts*)inf1->GetStts();
-    fopAc_ac_c* ac1 = stts1 == NULL ? NULL : stts1->GetAc();
+    fopAc_ac_c* ac1 = inf1->GetAc();
     if (ac1 == NULL) { return false; }
     dCcD_GObjInf* inf2 = (dCcD_GObjInf*)obj2->GetGObjInf();
     if (inf2 == NULL) { return false; }
-    dCcD_Stts* stts2 = (dCcD_Stts*)inf2->GetStts();
-    fopAc_ac_c* ac2 = stts2 == NULL ? NULL : stts2->GetAc();
+    fopAc_ac_c* ac2 = inf2->GetAc();
     if (ac2 == NULL) { return false; }
     
     cXyz delta;
@@ -76,25 +74,25 @@ void dCcS::CalcTgPlusDmg(cCcD_Obj* obj1, cCcD_Obj* obj2, cCcD_Stts* stts1, cCcD_
 }
 
 /* 800AD86C-800AD8EC       .text ChkAtTgHitAfterCross__4dCcSFbbPC12cCcD_GObjInfPC12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts */
-bool dCcS::ChkAtTgHitAfterCross(bool r4, bool r5, const cCcD_GObjInf* r6, const cCcD_GObjInf* r7,
-                                cCcD_Stts* r8, cCcD_Stts* r9, cCcD_GStts* r10, cCcD_GStts* sp8) {
-    dCcD_GStts* r10_d = (dCcD_GStts*)r10;
-    dCcD_GStts* r9_d = (dCcD_GStts*)r9;
-    dCcD_GStts* r8_d = (dCcD_GStts*)r8;
-    dCcD_GStts* sp8_d = (dCcD_GStts*)sp8;
-    dCcD_GObjInf* r6_d = (dCcD_GObjInf*)r6;
-    dCcD_GObjInf* r7_d = (dCcD_GObjInf*)r7;
-    unsigned int r11 = r8->GetApid();
-    unsigned int r3 = r9->GetApid();
+bool dCcS::ChkAtTgHitAfterCross(bool r4, bool r5, const cCcD_GObjInf* inf1_, const cCcD_GObjInf* inf2_,
+                                cCcD_Stts* stts1_, cCcD_Stts* stts2_, cCcD_GStts* gstts1_, cCcD_GStts* gstts2_) {
+    dCcD_GObjInf* inf1 = (dCcD_GObjInf*)inf1_;
+    dCcD_GObjInf* inf2 = (dCcD_GObjInf*)inf2_;
+    dCcD_Stts* stts1 = (dCcD_Stts*)stts1_;
+    dCcD_Stts* stts2 = (dCcD_Stts*)stts2_;
+    dCcD_GStts* gstts1 = (dCcD_GStts*)gstts1_;
+    dCcD_GStts* gstts2 = (dCcD_GStts*)gstts2_;
+    unsigned int r11 = stts1->GetApid();
+    unsigned int r3 = stts2->GetApid();
     if (r4) {
-        r10_d->SetAtApid(r3);
-        if (r6_d->ChkAtNoConHit() && r10_d->GetAtOldApid() == r9_d->GetAtOldApid()) {
+        gstts1->SetAtApid(r3);
+        if (inf1->ChkAtNoConHit() && gstts1->GetAtOldApid() == stts2->GetApid()) {
             return true;
         }
     }
     if (r5) {
-        sp8_d->SetTgApid(r11);
-        if (r7_d->ChkTgNoConHit() && !r6_d->ChkAtStopNoConHit() && sp8_d->GetTgOldApid() == r8_d->GetAtOldApid()) {
+        gstts2->SetTgApid(r11);
+        if (inf2->ChkTgNoConHit() && !inf1->ChkAtStopNoConHit() && gstts2->GetTgOldApid() == stts1->GetApid()) {
             return true;
         }
     }
@@ -102,8 +100,39 @@ bool dCcS::ChkAtTgHitAfterCross(bool r4, bool r5, const cCcD_GObjInf* r6, const 
 }
 
 /* 800AD8EC-800ADA30       .text SetCoGObjInf__4dCcSFbbP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts */
-void dCcS::SetCoGObjInf(bool, bool, cCcD_GObjInf*, cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*) {
-    /* Nonmatching */
+void dCcS::SetCoGObjInf(bool r4, bool r5, cCcD_GObjInf* inf1_, cCcD_GObjInf* inf2_, cCcD_Stts* stts1, cCcD_Stts* stts2,
+                        cCcD_GStts* gstts1_, cCcD_GStts* gstts2_) {
+    dCcD_GObjInf* inf1 = (dCcD_GObjInf*)inf1_;
+    dCcD_GObjInf* inf2 = (dCcD_GObjInf*)inf2_;
+    dCcD_GStts* gstts1 = (dCcD_GStts*)gstts1_;
+    dCcD_GStts* gstts2 = (dCcD_GStts*)gstts2_;
+    if (r4) {
+        inf1->SetCoHitApid(stts2->GetApid());
+        if (gstts2->ChkNoActor())
+            inf1->OnCoHitNoActor();
+    }
+    if (r5) {
+        inf2->SetCoHitApid(stts1->GetApid());
+        if (gstts1->ChkNoActor())
+            inf2->OnCoHitNoActor();
+    }
+    
+    if (r4) {
+        dCcD_HitCallback callback = inf1->GetCoHitCallback();
+        if (callback != NULL) {
+            fopAc_ac_c* ac1 = inf1->GetAc();
+            fopAc_ac_c* ac2 = inf2->GetAc();
+            callback(ac1, inf1, ac2, inf2);
+        }
+    }
+    if (r5) {
+        dCcD_HitCallback callback = inf2->GetCoHitCallback();
+        if (callback != NULL) {
+            fopAc_ac_c* ac2 = inf2->GetAc();
+            fopAc_ac_c* ac1 = inf1->GetAc();
+            callback(ac2, inf2, ac1, inf1);
+        }
+    }
 }
 
 static u8 rank_tbl[11][11] = {
@@ -200,18 +229,40 @@ void dCcS::SetAtTgGObjInf(bool, bool, cCcD_Obj*, cCcD_Obj*, cCcD_GObjInf*, cCcD_
 }
 
 /* 800AE5AC-800AE814       .text ChkCamera__4dCcSFR4cXyzR4cXyzfP10fopAc_ac_cP10fopAc_ac_c */
-bool dCcS::ChkCamera(cXyz&, cXyz&, f32, fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+bool dCcS::ChkCamera(cXyz& start, cXyz& end, f32 radius, fopAc_ac_c* r26, fopAc_ac_c* r27) {
+    if (mObjCoCount <= 0)
+        return false;
+    
+    cCcD_Obj** objCoEnd = mpObjCo + mObjCoCount;
+    cCcD_CpsAttr cpsAttr;
+    cpsAttr.Set(start, end, radius);
+    cpsAttr.CalcAabBox();
+    cCcD_DivideInfo divideInfo;
+    mDivideArea.CalcDivideInfoOverArea(&divideInfo, cpsAttr.GetWorkAab());
+    for (cCcD_Obj** pObjCo = mpObjCo; pObjCo < objCoEnd; pObjCo++) {
+        if (!(*pObjCo)->ChkCoSet())
+            continue;
+        if ((*pObjCo)->GetAc() == r26 || (*pObjCo)->GetAc() == r27)
+            continue;
+        if ((*pObjCo)->GetDivideInfo().Chk(divideInfo)) {
+            cCcD_ShapeAttr* shapeAttr = (*pObjCo)->GetShapeAttr();
+            if (shapeAttr == NULL)
+                continue;
+            f32 cross_len;
+            if (shapeAttr->CrossCo(cpsAttr, &cross_len))
+                return true;
+        }
+    }
+    
+    return false;
 }
 
 /* 800AE814-800AE818       .text MoveAfterCheck__4dCcSFv */
 void dCcS::MoveAfterCheck() {
-    /* Nonmatching */
 }
 
 /* 800AE818-800AE81C       .text DrawAfter__4dCcSFv */
 void dCcS::DrawAfter() {
-    /* Nonmatching */
 }
 
 /* 800AE81C-800AE83C       .text Move__4dCcSFv */

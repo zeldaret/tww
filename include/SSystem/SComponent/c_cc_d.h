@@ -368,19 +368,16 @@ public:
     virtual void Ct();
     void PlusCcMove(f32, f32, f32);
     void ClrCcMove() {
-        m_cc_move.z = 0.0f;
-        m_cc_move.y = 0.0f;
-        m_cc_move.x = 0.0f;
+        m_cc_move.x = m_cc_move.y = m_cc_move.z = 0.0f;
     }
     void PlusDmg(int dmg) { mDmg = dmg; }
     u8 GetDmg() { return mDmg; }
     f32 GetWeightF() const { return (s32)mWeight; }
+    u8 GetWeightUc() const { return mWeight; }
+    void SetWeight(u8 weight) { mWeight = weight; }
     virtual void ClrAt() {}
     virtual void ClrTg() { mDmg = 0; }
     
-    u8 GetWeightUc() const { return mWeight; }
-    void SetWeight(u8 weight) { mWeight = weight; }
-    fopAc_ac_c* GetAc() { return mActor; }
     fopAc_ac_c* GetActor() const { return mActor; }
     void SetActor(void* ac) { mActor = (fopAc_ac_c*)ac; }
     cXyz* GetCCMoveP() { return &m_cc_move; }
@@ -618,7 +615,7 @@ public:
 
     cCcD_Stts* GetStts() { return mStts; }
     void SetStts(cCcD_Stts* stts) { mStts = stts; }
-    fopAc_ac_c* GetAc() { return GetStts() == NULL ? NULL : GetStts()->GetActor(); }
+    fopAc_ac_c* GetAc() { return mStts == NULL ? NULL : mStts->GetActor(); }
     cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
     cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
     u32 ChkBsRevHit() const { return mFlags & 2; }
