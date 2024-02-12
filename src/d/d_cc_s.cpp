@@ -340,7 +340,6 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* param_2, cCcD_Ob
                           cCcD_GObjInf* i_atObjInf, cCcD_GObjInf* i_tgObjInf, cCcD_Stts* param_6,
                           cCcD_Stts* param_7, cCcD_GStts* param_8, cCcD_GStts* param_9,
                           cXyz* i_hitPos) {
-    /* Nonmatching */
     dCcD_GObjInf* atObjInf = (dCcD_GObjInf*)i_atObjInf;
     dCcD_GObjInf* tgObjInf = (dCcD_GObjInf*)i_tgObjInf;
     dCcD_GStts* stts1 = (dCcD_GStts*)param_8;

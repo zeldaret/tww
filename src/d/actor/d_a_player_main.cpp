@@ -1793,7 +1793,7 @@ BOOL daPy_lk_c::changeDamageProc() {
             r27 = mStts.GetAtSpl();
         }
     } else {
-        r27 = (dCcG_At_Spl)0;
+        r27 = dCcG_At_Spl_UNK0;
     }
     
     if (checkModeFlg(ModeFlg_04000000)) {

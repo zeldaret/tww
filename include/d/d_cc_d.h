@@ -51,7 +51,11 @@ enum CcG_Tg_HitMark {
     /* 0xC */ G_TG_MARK_PURPLE_HIT = dPa_name::ID_COMMON_PURPLE_HIT,
 };
 
-enum dCcG_At_Spl {};
+enum dCcG_At_Spl {
+    /* 0x0 */ dCcG_At_Spl_UNK0 = 0,
+    /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
+    /* 0xB */ dCcG_At_Spl_UNKB = 0xB,
+};
 
 enum dCcG_Tg_Spl {};
 

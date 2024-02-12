@@ -279,7 +279,7 @@ void daArrow_c::arrowShooting() {
     if (mArrowType == TYPE_LIGHT && !mbSetByZelda) {
         if (strcmp(dComIfGp_getStartStageName(), "GanonK") != 0) {
             // Not in Puppet Ganon's boss room.
-            mAtCps.SetAtSpl((dCcG_At_Spl)0xB);
+            mAtCps.SetAtSpl(dCcG_At_Spl_UNKB);
         }
     }
     
@@ -1112,14 +1112,14 @@ BOOL daArrow_c::_execute() {
     if (mbSetByZelda) {
         if (!mbLinkReflect) {
             if (daPy_getPlayerLinkActorClass()->checkPlayerGuard()) {
-                mAtCps.SetAtSpl((dCcG_At_Spl)0);
+                mAtCps.SetAtSpl(dCcG_At_Spl_UNK0);
                 mAtCps.SetAtType(AT_TYPE_NORMAL_ARROW);
             } else {
-                mAtCps.SetAtSpl((dCcG_At_Spl)0xB);
+                mAtCps.SetAtSpl(dCcG_At_Spl_UNKB);
                 mAtCps.SetAtType(AT_TYPE_LIGHT_ARROW);
             }
         } else {
-            mAtCps.SetAtSpl((dCcG_At_Spl)0);
+            mAtCps.SetAtSpl(dCcG_At_Spl_UNK0);
             mAtCps.SetAtType(AT_TYPE_NORMAL_ARROW);
         }
     }

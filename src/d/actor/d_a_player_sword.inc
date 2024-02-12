@@ -11,6 +11,7 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_hio.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 
@@ -153,28 +154,92 @@ void daPy_lk_c::getSwordBlurColor() {
 }
 
 /* 801555FC-80155694       .text setNormalCutAtParam__9daPy_lk_cFUc */
-void daPy_lk_c::setNormalCutAtParam(u8) {
-    /* Nonmatching */
+void daPy_lk_c::setNormalCutAtParam(u8 cutType) {
+    int atp;
+    f32 radius;
+    if (checkNormalSwordEquip()) {
+        atp = 1;
+        radius = daPy_HIO_cut_c0::m.field_0x3C;
+        m35FC = daPy_HIO_cut_c0::m.field_0x40;
+    } else {
+        atp = 2;
+        radius = daPy_HIO_cut_c0::m.field_0x44;
+        m35FC = daPy_HIO_cut_c0::m.field_0x48;
+    }
+    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK0, dCcD_SE_UNK1, G_AT_MARK_NORMAL_HIT, cutType, radius);
 }
 
 /* 80155694-8015572C       .text setFinishCutAtParam__9daPy_lk_cFUc */
-void daPy_lk_c::setFinishCutAtParam(u8) {
-    /* Nonmatching */
+void daPy_lk_c::setFinishCutAtParam(u8 cutType) {
+    int atp;
+    f32 radius;
+    if (checkNormalSwordEquip()) {
+        atp = 2;
+        radius = daPy_HIO_cut_c0::m.field_0x3C;
+        m35FC = daPy_HIO_cut_c0::m.field_0x40;
+    } else {
+        atp = 4;
+        radius = daPy_HIO_cut_c0::m.field_0x44;
+        m35FC = daPy_HIO_cut_c0::m.field_0x48;
+    }
+    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, cutType, radius);
 }
 
 /* 8015572C-801557C4       .text setExtraCutAtParam__9daPy_lk_cFUc */
-void daPy_lk_c::setExtraCutAtParam(u8) {
-    /* Nonmatching */
+void daPy_lk_c::setExtraCutAtParam(u8 cutType) {
+    int atp;
+    f32 radius;
+    if (checkNormalSwordEquip()) {
+        atp = 1;
+        radius = daPy_HIO_cut_c0::m.field_0x5C;
+        m35FC = daPy_HIO_cut_c0::m.field_0x60;
+    } else {
+        atp = 2;
+        radius = daPy_HIO_cut_c0::m.field_0x64;
+        m35FC = daPy_HIO_cut_c0::m.field_0x68;
+    }
+    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK0, dCcD_SE_UNK1, G_AT_MARK_NORMAL_HIT, cutType, radius);
 }
 
 /* 801557C4-8015585C       .text setExtraFinishCutAtParam__9daPy_lk_cFUc */
-void daPy_lk_c::setExtraFinishCutAtParam(u8) {
-    /* Nonmatching */
+void daPy_lk_c::setExtraFinishCutAtParam(u8 cutType) {
+    int atp;
+    f32 radius;
+    if (checkNormalSwordEquip()) {
+        atp = 2;
+        radius = daPy_HIO_cut_c0::m.field_0x5C;
+        m35FC = daPy_HIO_cut_c0::m.field_0x60;
+    } else {
+        atp = 4;
+        radius = daPy_HIO_cut_c0::m.field_0x64;
+        m35FC = daPy_HIO_cut_c0::m.field_0x68;
+    }
+    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, cutType, radius);
 }
 
 /* 8015585C-80155970       .text setJumpCutAtParam__9daPy_lk_cFv */
 void daPy_lk_c::setJumpCutAtParam() {
-    /* Nonmatching */
+    mCutCount = 0;
+    if (mHeldItemType == 0x103) {
+        int atp;
+        f32 radius;
+        if (checkNormalSwordEquip()) {
+            atp = 2;
+            radius = daPy_HIO_cut_c0::m.field_0x4C;
+            m35FC = daPy_HIO_cut_c0::m.field_0x50;
+        } else {
+            atp = 4;
+            radius = daPy_HIO_cut_c0::m.field_0x54;
+            m35FC = daPy_HIO_cut_c0::m.field_0x58;
+        }
+        setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, 0xA, radius);
+    } else if (mHeldItemType == HUMMER) {
+        setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK1, dCcD_SE_UNK5, G_AT_MARK_NORMAL_HIT, 0x13, 50.0f);
+    } else if (mActorKeepEquip.getActor()) {
+        setEnemyWeaponAtParam(TRUE);
+    } else {
+        setAtParam(AT_TYPE_MACHETE, 2, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, 0xE, 30.0f);
+    }
 }
 
 /* 80155970-801559F0       .text getCutDirection__9daPy_lk_cFv */

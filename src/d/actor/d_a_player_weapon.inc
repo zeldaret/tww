@@ -11,10 +11,31 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_boko.h"
 
 /* 80153554-801535D8       .text setEnemyWeaponAtParam__9daPy_lk_cFi */
-void daPy_lk_c::setEnemyWeaponAtParam(int) {
-    /* Nonmatching */
+void daPy_lk_c::setEnemyWeaponAtParam(BOOL r4) {
+    static const u8 cut_type[] = {
+        0x0B,
+        0x0D,
+        0x14,
+        0x16,
+        0x18,
+        0x1C,
+    };
+    daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
+    u8 cutType = cut_type[fopAcM_GetParam(boko)];
+    dCcG_At_Spl spl;
+    u8 hitMark;
+    if (r4) {
+        spl = dCcG_At_Spl_UNK1;
+        hitMark = G_AT_MARK_BIG_HIT;
+        cutType++;
+    } else {
+        spl = dCcG_At_Spl_UNK0;
+        hitMark = G_AT_MARK_NORMAL_HIT;
+    }
+    setAtParam(boko->getAtType(), boko->getAtPoint(), spl, boko->getSeType(), hitMark, cutType, boko->getCpsR());
 }
 
 /* 801535D8-8015372C       .text procWeaponNormalSwing_init__9daPy_lk_cFv */

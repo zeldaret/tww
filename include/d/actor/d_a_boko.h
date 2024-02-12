@@ -2,6 +2,7 @@
 #define D_A_BOKO_H
 
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_particle.h"
@@ -24,14 +25,14 @@ public:
     static f32 m_blur_rate[6];
     static u8 m_se_type[6];
 
-    void getAtPoint() {}
-    void getAtType() {}
+    s32 getAtPoint() { return m_at_point[fopAcM_GetParam(this)]; }
+    u32 getAtType() { return m_at_type[fopAcM_GetParam(this)]; }
     void getBlurRate() {}
-    void getCpsR() {}
+    f32 getCpsR() { return m_cps_r[fopAcM_GetParam(this)]; }
     void getFlameTimer() {}
     void getJumpBlurRate() {}
     void getNowMode() {}
-    void getSeType() {}
+    u8 getSeType() { return m_se_type[fopAcM_GetParam(this)]; }
     void moveStateInit(f32 speedForward, f32 speedY, s16 angleY) {
         speed.y = speedY;
         speedF = speedForward;

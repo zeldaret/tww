@@ -507,13 +507,6 @@ public:
         daPyProc_DEMO_ICE_SLIP_e = 0xDA,
     };
 
-    enum daPy_HEAP_TYPE {
-        HEAP_TYPE_UNDER_UPPER_e = 0,
-        HEAP_TYPE_TEXTURE_ANIME_e = 1,
-        HEAP_TYPE_TEXTURE_SCROLL_e = 2,
-        HEAP_TYPE_ITEM_ANIME_e = 3,
-    };
-
     enum daPy_ANM {
         ANM_WAITS = 0x00,
         ANM_WALK = 0x01,
@@ -749,6 +742,13 @@ public:
         ANM_TAKTFUJIN = 0xE7,
         ANM_TAKTAYATSURI = 0xE8,
         ANM_TAKTCHISIN = 0xE9,
+    };
+
+    enum daPy_HEAP_TYPE {
+        HEAP_TYPE_UNDER_UPPER_e = 0,
+        HEAP_TYPE_TEXTURE_ANIME_e = 1,
+        HEAP_TYPE_TEXTURE_SCROLL_e = 2,
+        HEAP_TYPE_ITEM_ANIME_e = 3,
     };
 
     enum daPy_UNDER {
@@ -1550,7 +1550,7 @@ public:
     BOOL procBottleSwing();
     BOOL procBottleGet_init();
     BOOL procBottleGet();
-    void setEnemyWeaponAtParam(int);
+    void setEnemyWeaponAtParam(BOOL);
     BOOL procWeaponNormalSwing_init();
     BOOL procWeaponNormalSwing();
     BOOL procWeaponSideSwing_init();
