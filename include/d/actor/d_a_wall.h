@@ -10,19 +10,19 @@
 class daWall_c : public fopAc_ac_c {
 public:
     inline daWall_c();
-    BOOL _delete();
+    bool _delete();
     BOOL CreateHeap();
     void CreateInit();
     s32 _create();
     void set_mtx();
     void setMoveBGMtx();
-    BOOL _execute();
+    bool _execute();
     void mode_wait();
     void mode_break();
     void set_tri();
     void set_effect();
     void set_se();
-    BOOL _draw();
+    bool _draw();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
@@ -34,7 +34,7 @@ public:
     /* 0x5AC */ u8 mState;
     /* 0x5B0 */ dPa_smokeEcallBack mSmokeCb;
     /* 0x5D0 */ JPABaseEmitter* mpEmitter;
-    /* 0x5D4 */ float mpDst;
+    /* 0x5D4 */ float mDst;
     /* 0x5D8 */ u8 mBreakCounter;
     /* 0x5DC */ s32 mSwitchIndex;
     /* 0x5E0 */ u8 mType;

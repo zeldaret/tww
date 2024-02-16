@@ -21,10 +21,18 @@ const s16 daWall_c::m_bmdname[3] = {0x04, 0x04, 0x04};
 const s16 daWall_c::m_dzbname[3] = {0x07, 0x07, 0x07};
 
 const Vec daWall_c::m_tri_vtx[3][4] = {
-    {{150.0f, -120.0f, 0.0f}, {-150.0f, -120.0f, 0.0f}, {-150.0f, 120.0f, 0.0f},
-    {150.0f, 120.0f, 0.0f}},  {{700.0f, -500.0f, 0.0f},  {-700.0f, -500.0f, 0.0f},
-    {-700.0f, 500.0f, 0.0f}, {700.0f, 500.0f, 0.0f}},   {{180.0f, -90.0f, 0.0f},
-    {-180.0f, -90.0f, 0.0f}, {-180.0f, 90.0f, 0.0f},   {180.0f, 90.0f, 0.0f}},
+    {{150.0f, -120.0f, 0.0f},
+     {-150.0f, -120.0f, 0.0f},
+     {-150.0f, 120.0f, 0.0f},
+     {150.0f, 120.0f, 0.0f}},
+    {{700.0f, -500.0f, 0.0f},
+     {-700.0f, -500.0f, 0.0f},
+     {-700.0f, 500.0f, 0.0f},
+     {700.0f, 500.0f, 0.0f}},
+    {{180.0f, -90.0f, 0.0f},
+     {-180.0f, -90.0f, 0.0f},
+     {-180.0f, 90.0f, 0.0f},
+     {180.0f, 90.0f, 0.0f}},
 };
 
 const Vec daWall_c::m_cull_size[6] = {
@@ -83,7 +91,8 @@ static dCcD_SrcTri l_tri_src = {
 
 daWall_c::daWall_c() : mSmokeCb(m_smoke_color, NULL, 0) {}
 
-BOOL daWall_c::_delete() {
+/* 00000078-00000100       .text _delete__8daWall_cFv */
+bool daWall_c::_delete() {
     mSmokeCb.end();
     if (heap != NULL && mState == false)
         dComIfG_Bgsp()->Release(mpBgW);
@@ -92,6 +101,7 @@ BOOL daWall_c::_delete() {
     return TRUE;
 }
 
+/* 00000100-00000120       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daWall_c*)i_this)->CreateHeap();
 }
@@ -134,6 +144,7 @@ void daWall_c::CreateInit() {
     mState = false;
 }
 
+/* 00000380-000004EC       .text _create__8daWall_cFv */
 s32 daWall_c::_create() {
     fopAcM_SetupActor(this, daWall_c);
     mType = fopAcM_GetParam(this) >> 8;
@@ -172,7 +183,7 @@ void daWall_c::setMoveBGMtx() {
 }
 
 /* 000008F0-00000980       .text _execute__8daWall_cFv */
-BOOL daWall_c::_execute() {
+bool daWall_c::_execute() {
     /* Nonmatching */
     typedef void (daWall_c::*procFunc)();
     static procFunc mode_proc[] = {
@@ -188,7 +199,7 @@ BOOL daWall_c::_execute() {
 void daWall_c::mode_wait() {
     for (int i = 0; i < 2; i++) {
         if (mTri[i].ChkTgHit()) {
-            cCcD_Obj * at = mTri[i].GetTgHitObj();
+            cCcD_Obj* at = mTri[i].GetTgHitObj();
             if (at != NULL && at->ChkAtType(AT_TYPE_BOMB)) {
                 set_effect();
                 set_se();
@@ -212,14 +223,13 @@ void daWall_c::mode_break() {
         case 0:
         case 1:
         case 2:
-            int tmp;
-            if ((mBreakCounter > 10) && (tmp = cLib_chaseF(&mpDst, 0.0, 2.222222), tmp != 0)) {
+            if ((mBreakCounter > 10) && (cLib_chaseF(&mDst, 0.0f, 2.222222f))) {
                 fopAcM_delete(this);
             }
 
             JPABaseEmitter* pEmitter = mSmokeCb.mpEmitter;
             if (pEmitter != NULL) {
-                pEmitter->mGlobalPrmColor.a = mpDst;
+                pEmitter->mGlobalPrmColor.a = mDst;
             }
             break;
         default:
@@ -272,20 +282,22 @@ void daWall_c::set_effect() {
 
     csXyz local_28 = current.angle;
     local_28.y += 0x8000;
-    mpDst = 200.00;
+    mDst = 200.00f;
 
     switch (mType) {
     case 0:
     case 1:
     case 2:
         dComIfGp_particle_setProjection(projection_id[mType], &current.pos, &current.angle, NULL,
-                                        0xFF, NULL, fopAcM_GetRoomNo(this), &mTevStr.mColorK0, &mTevStr.mColorK0);
-        dComIfGp_particle_setProjection(projection_id[mType], &current.pos, &local_28, NULL,
-                                        0xFF, NULL, fopAcM_GetRoomNo(this), &mTevStr.mColorK0, &mTevStr.mColorK0);
+                                        0xFF, NULL, fopAcM_GetRoomNo(this), &mTevStr.mColorK0,
+                                        &mTevStr.mColorK0);
+        dComIfGp_particle_setProjection(projection_id[mType], &current.pos, &local_28, NULL, 0xFF,
+                                        NULL, fopAcM_GetRoomNo(this), &mTevStr.mColorK0,
+                                        &mTevStr.mColorK0);
         mpEmitter = dComIfGp_particle_set(particle_id[mType], &current.pos, &current.angle, NULL,
-                                        mpDst, &mSmokeCb, fopAcM_GetRoomNo(this));
+                                          mDst, &mSmokeCb, fopAcM_GetRoomNo(this));
         if (mpEmitter != NULL) {
-            mpEmitter->mFlags = mpEmitter->mFlags | 0x40;
+            mpEmitter->becomeImmortalEmitter();
         }
         break;
     default:
@@ -306,29 +318,34 @@ void daWall_c::set_se() {
 }
 
 /* 00000FE4-00001044       .text _draw__8daWall_cFv */
-BOOL daWall_c::_draw() {
+bool daWall_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     mDoExt_modelUpdateDL(mpModel);
     return TRUE;
 }
 
+/* 00001044-00001064       .text daWall_Create__FPv */
 static s32 daWall_Create(void* i_this) {
     return ((daWall_c*)i_this)->_create();
 }
 
+/* 00001064-00001088       .text daWall_Delete__FPv */
 static BOOL daWall_Delete(void* i_this) {
-    return ((daWall_c*)i_this)->_delete() & 0xFF;
+    return ((daWall_c*)i_this)->_delete();
 }
 
+/* 00001088-000010AC       .text daWall_Draw__FPv */
 static BOOL daWall_Draw(void* i_this) {
-    return ((daWall_c*)i_this)->_draw() & 0xFF;
+    return ((daWall_c*)i_this)->_draw();
 }
 
+/* 000010AC-000010D0       .text daWall_Execute__FPv */
 static BOOL daWall_Execute(void* i_this) {
-    return ((daWall_c*)i_this)->_execute() & 0xFF;
+    return ((daWall_c*)i_this)->_execute();
 }
 
+/* 000010D0-000010D8       .text daWall_IsDelete__FPv */
 static BOOL daWall_IsDelete(void*) {
     return TRUE;
 }
