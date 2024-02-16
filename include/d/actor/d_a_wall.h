@@ -9,7 +9,7 @@
 
 class daWall_c : public fopAc_ac_c {
 public:
-    inline daWall_c();
+    daWall_c() : mSmokeCb(m_smoke_color, NULL, 0) {}
     bool _delete();
     BOOL CreateHeap();
     void CreateInit();
@@ -34,15 +34,15 @@ public:
     /* 0x5AC */ u8 mState;
     /* 0x5B0 */ dPa_smokeEcallBack mSmokeCb;
     /* 0x5D0 */ JPABaseEmitter* mpEmitter;
-    /* 0x5D4 */ float mDst;
+    /* 0x5D4 */ f32 mDst;
     /* 0x5D8 */ u8 mBreakCounter;
     /* 0x5DC */ s32 mSwitchIndex;
     /* 0x5E0 */ u8 mType;
 
-    static _GXColor m_smoke_color;
+    static GXColor m_smoke_color;
     static const s16 m_heapsize[3];
     static const char* m_arcname[3];
-    static const Vec m_cull_size[6];
+    static const Vec m_cull_size[][2];
     static const Vec m_tri_vtx[3][4];
     static const s16 m_bmdname[3];
     static const s16 m_dzbname[3];

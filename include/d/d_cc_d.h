@@ -477,7 +477,7 @@ public:
 class dCcD_Tri : public dCcD_GObjInf, public cCcD_TriAttr {
 public:
     void Set(dCcD_SrcTri const&);
-    cCcD_ShapeAttr* GetShapeAttr();
+    cCcD_ShapeAttr* GetShapeAttr() { return this; }
     virtual ~dCcD_Tri() {}
     dCcD_Tri() {}
 };

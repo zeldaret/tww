@@ -50,10 +50,17 @@ public:
         mA = *a;
         mB = *b;
         mC = *c;
-        *((cM3dGPla*)this) = *pla;
+        Set(pla);
     }
-    void setPos(const Vec*, const Vec*, const Vec*) {}
-    void setUp() {}
+    void setPos(const Vec* a, const Vec* b, const Vec* c) {
+        mA = *a;
+        mB = *b;
+        mC = *c;
+        setUp();
+    }
+    void setUp() {
+        SetupFrom3Vtx(&mA, &mB, &mC);
+    }
     ~cM3dGTri() {}
 };  // Size: 0x38
 

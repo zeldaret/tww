@@ -44,12 +44,17 @@ public:
     f32 getSignedLenPos(const cXyz* param_1) const {
         return cM3d_SignedLenPlaAndPos(this, param_1);
     }
+    void Set(const cM3dGPla* pla) {
+        mNormal = *pla->GetNP();
+        mD = pla->GetD();
+    }
+    void SetupFrom3Vtx(const Vec* a, const Vec* b, const Vec* c) {
+        cM3d_CalcPla(a, b, c, &mNormal, &mD);
+    }
     
     virtual ~cM3dGPla() {}
 
     // TODO
-    void Set(const cM3dGPla*) {}
-    void SetupFrom3Vtx(const Vec*, const Vec*, const Vec*) {}
     cM3dGPla(const cXyz*, f32) {}
     void cross(const cM3dGLin&, Vec&) const {}
 };  // Size: 0x14

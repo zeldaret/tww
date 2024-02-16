@@ -11,6 +11,12 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
+// Needed for the .data section to match.
+static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
+static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
+static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+
 const s16 daWall_c::m_heapsize[3] = {
     0x1160,
     0x1DD0,
@@ -35,9 +41,10 @@ const Vec daWall_c::m_tri_vtx[3][4] = {
      {180.0f, 90.0f, 0.0f}},
 };
 
-const Vec daWall_c::m_cull_size[6] = {
-    {-180.0f, -150.0f, -50.0f}, {180.0f, 150.0f, 50.0f},    {-700.0f, -600.0f, -100.0f},
-    {700.0f, 600.0f, 100.0f},   {-200.0f, -100.0f, -50.0f}, {200.0f, 100.0f, 50.0f},
+const Vec daWall_c::m_cull_size[][2] = {
+    {{-180.0f, -150.0f, -50.0f}, {180.0f, 150.0f, 50.0f}},
+    {{-700.0f, -600.0f, -100.0f}, {700.0f, 600.0f, 100.0f}},
+    {{-200.0f, -100.0f, -50.0f}, {200.0f, 100.0f, 50.0f}},
 };
 
 const char* daWall_c::m_arcname[3] = {
@@ -46,12 +53,7 @@ const char* daWall_c::m_arcname[3] = {
     "Hbw2",
 };
 
-_GXColor daWall_c::m_smoke_color = {
-    /* r */ 0x86,
-    /* g */ 0x66,
-    /* b */ 0x6D,
-    /* a */ 0xC8,
-};
+GXColor daWall_c::m_smoke_color = { 0x86, 0x66, 0x6D, 0xC8 };
 
 static dCcD_SrcTri l_tri_src = {
     // dCcD_SrcGObjInf
@@ -77,19 +79,11 @@ static dCcD_SrcTri l_tri_src = {
     },
     // cM3dGTriS
     {
-        /* a */ 0.0f,
-        0.0f,
-        0.0f,
-        /* b */ 0.0f,
-        0.0f,
-        0.0f,
-        /* c */ 0.0f,
-        0.0f,
-        0.0f,
+        /* a */ 0.0f, 0.0f, 0.0f,
+        /* b */ 0.0f, 0.0f, 0.0f,
+        /* c */ 0.0f, 0.0f, 0.0f,
     },
 };
-
-daWall_c::daWall_c() : mSmokeCb(m_smoke_color, NULL, 0) {}
 
 /* 00000078-00000100       .text _delete__8daWall_cFv */
 bool daWall_c::_delete() {
@@ -131,8 +125,8 @@ BOOL daWall_c::CreateHeap() {
 /* 00000288-00000380       .text CreateInit__8daWall_cFv */
 void daWall_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    Vec cullMin = m_cull_size[mType * 2];
-    Vec cullMax = m_cull_size[mType * 2 + 1];
+    Vec cullMin = m_cull_size[mType][0];
+    Vec cullMax = m_cull_size[mType][1];
     fopAcM_setCullSizeBox(this, cullMin.x, cullMin.y, cullMin.z, cullMax.x, cullMax.y, cullMax.z);
     fopAcM_setCullSizeFar(this, 1.0f);
     mStts.Init(0xFF, 0xFF, this);
@@ -184,7 +178,6 @@ void daWall_c::setMoveBGMtx() {
 
 /* 000008F0-00000980       .text _execute__8daWall_cFv */
 bool daWall_c::_execute() {
-    /* Nonmatching */
     typedef void (daWall_c::*procFunc)();
     static procFunc mode_proc[] = {
         &daWall_c::mode_wait,
@@ -218,18 +211,18 @@ void daWall_c::mode_wait() {
 /* 00000A58-00000B14       .text mode_break__8daWall_cFv */
 void daWall_c::mode_break() {
     if (mBreakCounter != 0) {
-        mBreakCounter = mBreakCounter + 1;
+        mBreakCounter++;
         switch (mType) {
         case 0:
         case 1:
         case 2:
-            if ((mBreakCounter > 10) && (cLib_chaseF(&mDst, 0.0f, 2.222222f))) {
+            if ((mBreakCounter > 10) && cLib_chaseF(&mDst, 0.0f, 2.2222223f)) {
                 fopAcM_delete(this);
             }
 
             JPABaseEmitter* pEmitter = mSmokeCb.mpEmitter;
             if (pEmitter != NULL) {
-                pEmitter->mGlobalPrmColor.a = mDst;
+                pEmitter->setGlobalAlpha(mDst);
             }
             break;
         default:
@@ -257,22 +250,16 @@ void daWall_c::set_tri() {
     for (int i = 0; i < 3; i++) {
         mDoMtx_stack_c::multVec(&vertex[i], &vertex[i]);
     }
-    mTri[0].mA = vertex[0];
-    mTri[0].mB = vertex[1];
-    mTri[0].mC = vertex[2];
-
-    cM3d_CalcPla(&mTri[0].mA, &mTri[0].mB, &mTri[0].mC, &mTri[0].mNormal, &mTri[0].mD);
+    mTri[0].setPos(&vertex[0], &vertex[1], &vertex[2]);
 
     vertex[0] = m_tri_vtx[mType][0];
     vertex[1] = m_tri_vtx[mType][2];
     vertex[2] = m_tri_vtx[mType][3];
+
     for (int i = 0; i < 3; i++) {
         mDoMtx_stack_c::multVec(&vertex[i], &vertex[i]);
     }
-    mTri[1].mA = vertex[0];
-    mTri[1].mB = vertex[1];
-    mTri[1].mC = vertex[2];
-    cM3d_CalcPla(&mTri[1].mA, &mTri[1].mB, &mTri[1].mC, &mTri[1].mNormal, &mTri[1].mD);
+    mTri[1].setPos(&vertex[0], &vertex[1], &vertex[2]);
 }
 
 /* 00000D84-00000F74       .text set_effect__8daWall_cFv */
@@ -313,7 +300,6 @@ void daWall_c::set_effect() {
 
 /* 00000F74-00000FE4       .text set_se__8daWall_cFv */
 void daWall_c::set_se() {
-    /* Nonmatching - incorrect rodata offsets */
     fopAcM_seStart(this, JA_SE_OBJ_BOMB_WALL_BRK, 0);
 }
 
