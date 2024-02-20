@@ -57,7 +57,7 @@ int fopKyM_create(s16 i_procName, int i_param, cXyz* i_pos, cXyz* i_scale, fopKy
     fopKyM_prm_class* params = createAppend(i_param, i_pos, i_scale);
 
     if (params == NULL) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
 
     return fopKyM_Create(i_procName, i_createFunc, params);
@@ -80,7 +80,7 @@ int fopKyM_createWpillar(cXyz const* i_pos, f32 scaleXZ, f32 scaleY, int i_param
     fopKyM_prm_class* params = fopKyM_CreateAppend();
 
     if (params == NULL) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
 
     params->mPos = *i_pos;

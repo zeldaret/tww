@@ -8,6 +8,7 @@
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_pause.h"
 #include "f_pc/f_pc_executor.h"
+#include "f_pc/f_pc_manager.h"
 
 static cPhs__Step fopScnRq_phase_ClearOverlap(scene_request_class* i_sceneReq) {
     if (fopOvlpM_ClearOfReq() == 1) {
@@ -119,14 +120,14 @@ s32 fopScnRq_Request(int param_1, scene_class* i_scene, s16 param_3, void* param
         &submethod);
 
     if (!pScnReq) {
-        ret = -1;
+        ret = fpcM_ERROR_PROCESS_ID_e;
     } else {
         if (param_5 != 0x7fff) {
             phase_handler_table = fadeFase;
             tmp = (int)fopScnRq_FadeRequest(param_5, param_6);
             if (!tmp) {
                 fpcNdRq_Delete(&pScnReq->mCrtReq);
-                return -1;
+                return fpcM_ERROR_PROCESS_ID_e;
             }
         }
         pScnReq->mFadeRequest = tmp;

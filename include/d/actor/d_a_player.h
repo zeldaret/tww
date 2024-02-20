@@ -488,9 +488,9 @@ public:
     virtual BOOL checkComboCutTurn() const { return false; }
     virtual f32 getBaseAnimeFrameRate() = 0;
     virtual f32 getBaseAnimeFrame() = 0;
-    virtual u32 getItemID() const { return -1; }
-    virtual u32 getThrowBoomerangID() const { return -1; }
-    virtual u32 getGrabActorID() const;// { return -1; }
+    virtual u32 getItemID() const { return fpcM_ERROR_PROCESS_ID_e; }
+    virtual u32 getThrowBoomerangID() const { return fpcM_ERROR_PROCESS_ID_e; }
+    virtual u32 getGrabActorID() const;// { return fpcM_ERROR_PROCESS_ID_e; }
     virtual BOOL checkGrabBarrel() { return FALSE; }
     virtual u32 checkPlayerNoDraw() { return FALSE; }
     virtual BOOL checkRopeTag() { return FALSE; }

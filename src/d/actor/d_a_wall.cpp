@@ -17,14 +17,38 @@ static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
 
+enum HBW1_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    HBW1_BDL_HBW1=0x4,
+    
+    /* DZB */
+    HBW1_DZB_HBW1=0x7,
+};
+
+enum HTW1_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    HTW1_BDL_HTW1=0x4,
+    
+    /* DZB */
+    HTW1_DZB_HTW1=0x7,
+};
+
+enum HBW2_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    HBW2_BDL_HBW2=0x4,
+    
+    /* DZB */
+    HBW2_DZB_HBW2=0x7,
+};
+
 const s16 daWall_c::m_heapsize[3] = {
     0x1160,
     0x1DD0,
     0x2000,
 };
 
-const s16 daWall_c::m_bmdname[3] = {0x04, 0x04, 0x04};
-const s16 daWall_c::m_dzbname[3] = {0x07, 0x07, 0x07};
+const s16 daWall_c::m_bmdname[3] = {HBW1_BDL_HBW1, HTW1_BDL_HTW1, HBW2_BDL_HBW2};
+const s16 daWall_c::m_dzbname[3] = {HBW1_DZB_HBW1, HTW1_DZB_HTW1, HBW2_DZB_HBW2};
 
 const Vec daWall_c::m_tri_vtx[3][4] = {
     {{150.0f, -120.0f, 0.0f},

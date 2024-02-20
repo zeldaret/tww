@@ -155,7 +155,7 @@ s32 fopAcM_delete(unsigned int actorID) {
 s32 fopAcM_create(s16 procName, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
     fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, fpcM_ERROR_PROCESS_ID_e);
     if (params == NULL)
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
 
     return fpcM_Create(procName, createFunc, params);
 }
@@ -164,7 +164,7 @@ s32 fopAcM_create(s16 procName, u32 parameter, cXyz* pPos, int roomNo, csXyz* pA
 s32 fopAcM_create(char* pProcNameString, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
     dStage_objectNameInf * nameInf = dStage_searchName(pProcNameString);
     if (nameInf == NULL)
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
 
     return fopAcM_create(nameInf->mProcName, parameter, pPos, roomNo, pAngle, pScale, nameInf->mSubtype, createFunc);
 }
@@ -191,7 +191,7 @@ void* fopAcM_fastCreate(char* pProcNameString, u32 parameter, cXyz* pPos, int ro
 s32 fopAcM_createChild(s16 procName, unsigned int parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
     fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, parentPcId);
     if (params == NULL)
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
 
     return fpcM_Create(procName, createFunc, params);
 }
@@ -200,7 +200,7 @@ s32 fopAcM_createChild(s16 procName, unsigned int parentPcId, u32 parameter, cXy
 s32 fopAcM_createChild(char* pProcNameString, unsigned int parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
     dStage_objectNameInf * nameInf = dStage_searchName(pProcNameString);
     if (nameInf == NULL)
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
 
     return fopAcM_createChild(nameInf->mProcName, parentPcId, parameter, pPos, roomNo, pAngle, pScale, nameInf->mSubtype, createFunc);
 }
@@ -233,7 +233,7 @@ s32 fopAcM_createChildFromOffset(s16 procName, unsigned int parentPcId, u32 para
 
     fopAcM_prm_class* params = createAppend(parameter, &pos, roomNo, &angle, pScale, subtype, parentPcId);
     if (params == NULL)
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
 
     return fpcM_Create(procName, createFunc, params);
 }
@@ -773,7 +773,7 @@ s32 fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, int roo
     dComIfGp_event_setGtItm(i_itemNo);
 
     if (i_itemNo == NO_ITEM) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
 
     return fopAcM_createDemoItem(pos, i_itemNo, roomNo, rot, param_5, scale, argFlag);
@@ -786,7 +786,7 @@ s32 fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param
     dComIfGp_event_setGtItm(i_itemNo);
 
     if (i_itemNo == NO_ITEM) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
 
     return fopAcM_createDemoItem(pos, i_itemNo, roomNo, rot, param_5, scale, 0x00);
@@ -837,7 +837,7 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int r
         case 0x13:
         case 0x14:
             if (itemTableList == NULL) {
-                return -1;
+                return fpcM_ERROR_PROCESS_ID_e;
             }
             u8* pItemTable = itemTableList->mItemTables[tableIdx];
             u32 itemNo;
@@ -874,7 +874,7 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int r
     }
 
     if (i_itemNo == 0x3F || i_itemNo == 0xFF) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     } else {
         u32 itemNo = getItemNoByLife(i_itemNo);
         daItem_c* item = (daItem_c*)fopAcM_fastCreateItem2(p_pos, itemNo, i_itemBitNo, roomNo, type, p_angle, action, p_scale);
@@ -894,7 +894,7 @@ s32 fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int
     }
     
     if (i_itemNo == 0x3F || i_itemNo == 0xFF) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
     
     i_itemNo = getItemNoByLife(i_itemNo);
@@ -907,7 +907,7 @@ s32 fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz*
                            createFunc createFunc) {
     JUT_ASSERT(2716, 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == NO_ITEM) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
 
     return fopAcM_create(PROC_ShopItem, i_itemNo, pos, roomNo, rot, scale, -1, createFunc);
@@ -917,7 +917,7 @@ s32 fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz*
 s32 fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, int param_7) {
     JUT_ASSERT(2763, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == NO_ITEM) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
 
     i_itemNo = check_itemno(i_itemNo);
@@ -929,7 +929,7 @@ s32 fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, 
 s32 fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, u8 argFlag) {
     JUT_ASSERT(2813, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == NO_ITEM) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
 
     u32 params = i_itemNo & 0xFF | (i_itemBitNo & 0x7F) << 0x08 | (argFlag & 0xFF) << 0x10;
@@ -955,7 +955,7 @@ s32 fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int 
     JUT_ASSERT(2915, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     
     if (i_itemNo == NO_ITEM) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
     
     csXyz prmRot = csXyz::Zero;
@@ -1210,7 +1210,7 @@ s32 fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int i_roomNo, csXyz* p_ang
         strcmp(dComIfGp_getStartStageName(), "Cave11") == 0)
     {
         // Savage Labyrinth
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
     
     if (dropChance > randPercent) {

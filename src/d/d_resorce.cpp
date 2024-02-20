@@ -317,9 +317,10 @@ int dRes_info_c::loadResource() {
                 if (pRes == NULL)
                     return -1;
             } else if (resType == 'BCKS' || resType == 'BCK ') {
+                JUTDataFileHeader* fileHeader = (JUTDataFileHeader*)pRes;
                 void *pBasData;
-                if (*((u32*)((char*)pRes + 0x1C)) != 0xFFFFFFFF)
-                    pBasData = (void*)(*((u32*)((char*)pRes + 0x1C)) + ((u32)pRes));
+                if (fileHeader->mSeAnmOffset != -1)
+                    pBasData = (char*)fileHeader->mSeAnmOffset + (u32)pRes;
                 else
                     pBasData = NULL;
 
@@ -405,7 +406,7 @@ int dRes_info_c::setRes() {
             mDataHeap = mDoExt_createSolidHeapFromGameToCurrent(0, 0);
             if (mDataHeap == NULL) {
                 OSReport_Error("<%s.arc> mDMCommandsetRes: can\'t alloc memory\n", this);
-                return 0xFFFFFFFF;
+                return -1;
             }
 
             loadResource();

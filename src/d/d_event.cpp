@@ -702,7 +702,7 @@ dStage_Event_dt_c* dEvt_control_c::nextStageEventDt(void* idxp) {
 /* 800715B8-800715DC       .text getPId__14dEvt_control_cFPv */
 u32 dEvt_control_c::getPId(void* ac) {
     if (ac == NULL)
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     return fopAcM_GetID(ac);
 }
 

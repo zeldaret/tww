@@ -32,12 +32,28 @@ struct _dummy {
     0.0f, 2.125f, 0.0f, 1.75f, 0.0f,
 };
 
+enum BITA_RES_FILE_ID { // IDs and indexes are synced
+    /* BDLM */
+    BITA_BDL_EF_BTDITA0=0x5,
+    BITA_BDL_EF_BTDITA1=0x6,
+    BITA_BDL_MBIT1=0x7,
+    BITA_BDL_MBIT2=0x8,
+    
+    /* BRK */
+    BITA_BRK_EF_BTDITA0=0xB,
+    BITA_BRK_EF_BTDITA1=0xC,
+    
+    /* DZB */
+    BITA_DZB_MBIT1=0xF,
+    BITA_DZB_MBIT2=0x10,
+};
+
 static btd_class* btd = NULL;
 
-static u32 ita_bmd[]    = { 0x07, 0x08 };
-static u32 ita_dzb[]    = { 0x0F, 0x10 };
-static u32 ita_Ef_bmd[] = { 0x05, 0x06 };
-static u32 ita_Ef[]     = { 0x0B, 0x0C };
+static u32 ita_bmd[]    = { BITA_BDL_MBIT1, BITA_BDL_MBIT2 };
+static u32 ita_dzb[]    = { BITA_DZB_MBIT1, BITA_DZB_MBIT2 };
+static u32 ita_Ef_bmd[] = { BITA_BDL_EF_BTDITA0, BITA_BDL_EF_BTDITA1 };
+static u32 ita_Ef[]     = { BITA_BRK_EF_BTDITA0, BITA_BRK_EF_BTDITA1 };
 
 /* 00000078-000000C4       .text b_a_sub__FPvPv */
 static void* b_a_sub(void* search, void* user) {

@@ -29,6 +29,14 @@ static u8 dummy_3569[0xC];
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 
+enum AGB_RES_FILE_ID { // IDs and indexes are synced
+    /* BDLM */
+    AGB_BDL_AGBCURSOR=0x4,
+    
+    /* BRK */
+    AGB_BRK_AGBCURSOR=0x7,
+};
+
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 
 int daAgb_c::mEffect;
@@ -1725,7 +1733,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 800D396C-800D3B58       .text createHeap__7daAgb_cFv */
 int daAgb_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", 4);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", AGB_BDL_AGBCURSOR);
     JUT_ASSERT(VERSION_SELECT(2960, 3277, 3286), modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -1733,7 +1741,7 @@ int daAgb_c::createHeap() {
         return 0;
     }
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Agb", 7);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Agb", AGB_BRK_AGBCURSOR);
     if (!mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 1)) {
         return 0;
     }
