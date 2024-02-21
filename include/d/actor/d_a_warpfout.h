@@ -10,10 +10,10 @@ public:
 
     inline BOOL _draw();
 
-    BOOL _delete();
+    bool _delete();
     void CreateInit();
     s32 _create();
-    BOOL _execute();
+    bool _execute();
     void checkOrder();
     void eventOrder();
     void demo_proc();
@@ -35,7 +35,7 @@ public:
     /* 0x290 */ int unk0;
     /* 0x294 */ int mTimer;
     /* 0x298 */ int mStaffId;
-    /* 0x29B */ s16 unk3;
+    /* 0x29B */ s16 unknownInitFlag;
 };
 
 #endif /* D_A_WARPFOUT_H */
