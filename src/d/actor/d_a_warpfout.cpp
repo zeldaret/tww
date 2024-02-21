@@ -85,9 +85,9 @@ void daWarpfout_c::demo_proc() {
 }
 
 /* 00000248-000002A8       .text initWarp1__12daWarpfout_cFi */
-BOOL daWarpfout_c::initWarp1(int) {
+void daWarpfout_c::initWarp1(int) {
     mTimer = 5;
-    JAIZelBasic::zel_basic->seStart(JA_SE_LK_BOSS_WARP_EFF_ED, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+    mDoAud_seStart(JA_SE_LK_BOSS_WARP_EFF_ED);
 }
 
 /* 000002A8-00000344       .text actWarp1__12daWarpfout_cFi */
@@ -99,7 +99,7 @@ BOOL daWarpfout_c::actWarp1(int) {
         set_effect_wind01(effectPos, 0);
     }
 
-    if (!cLib_calcTimer(&mTimer)) {
+    if (cLib_calcTimer(&mTimer) == 0) {
         return TRUE;
     } else {
         return FALSE;
@@ -107,7 +107,7 @@ BOOL daWarpfout_c::actWarp1(int) {
 }
 
 /* 00000344-000003C0       .text initWarp2__12daWarpfout_cFi */
-BOOL daWarpfout_c::initWarp2(int) {
+void daWarpfout_c::initWarp2(int) {
     cXyz effectPos = dComIfGp_getLinkPlayer()->current.pos;
     effectPos.y += 60.0f;
 
@@ -117,7 +117,7 @@ BOOL daWarpfout_c::initWarp2(int) {
 
 /* 000003C0-000003EC       .text actWarp2__12daWarpfout_cFi */
 BOOL daWarpfout_c::actWarp2(int) {
-    if (!cLib_calcTimer(&mTimer)) {
+    if (cLib_calcTimer(&mTimer) == 0) {
         return TRUE;
     } else {
         return FALSE;
@@ -125,7 +125,7 @@ BOOL daWarpfout_c::actWarp2(int) {
 }
 
 /* 000003EC-00000468       .text initWarp3__12daWarpfout_cFi */
-BOOL daWarpfout_c::initWarp3(int) {
+void daWarpfout_c::initWarp3(int) {
     cXyz effectPos = dComIfGp_getLinkPlayer()->current.pos;
     effectPos.y += 80.0f;
 
@@ -135,7 +135,7 @@ BOOL daWarpfout_c::initWarp3(int) {
 
 /* 00000468-00000494       .text actWarp3__12daWarpfout_cFi */
 BOOL daWarpfout_c::actWarp3(int) {
-    if (!cLib_calcTimer(&mTimer)) {
+    if (cLib_calcTimer(&mTimer) == 0) {
         return TRUE;
     } else {
         return FALSE;
@@ -143,11 +143,11 @@ BOOL daWarpfout_c::actWarp3(int) {
 }
 
 /* 00000494-0000051C       .text initWarp4__12daWarpfout_cFi */
-BOOL daWarpfout_c::initWarp4(int) {
+void daWarpfout_c::initWarp4(int) {
     fopAc_ac_c* link = dComIfGp_getLinkPlayer();
 
     for (int i = 0; i < 6; i++) {
-        dComIfGp_particle_set(0x830e, &link->current.pos);
+        dComIfGp_particle_set(dPa_name::ID_WARPFOUT_WARP4, &link->current.pos);
     }
 }
 
@@ -157,7 +157,7 @@ BOOL daWarpfout_c::actWarp4(int) {
 }
 
 /* 00000524-00000528       .text initEnd__12daWarpfout_cFi */
-BOOL daWarpfout_c::initEnd(int) {}
+void daWarpfout_c::initEnd(int) {}
 
 /* 00000528-0000054C       .text actEnd__12daWarpfout_cFi */
 BOOL daWarpfout_c::actEnd(int) {
@@ -195,7 +195,7 @@ static s32 daWarpfout_Create(void* i) {
 static BOOL daWarpfout_Delete(void* i) {
     daWarpfout_c* i_this = static_cast<daWarpfout_c*>(i);
 
-    return i_this->_delete() & 0xff;
+    return i_this->_delete();
 }
 
 /* 000006B4-000006BC       .text daWarpfout_Draw__FPv */
