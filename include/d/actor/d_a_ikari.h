@@ -10,7 +10,7 @@ public:
     daObjIkariHIO_c() {
         unk[0] = 0;
         unk[1] = 0;
-        mWindPowerScale = 0.1;
+        mWindPowerScale = 0.1f;
     }
     virtual ~daObjIkariHIO_c(){};
 

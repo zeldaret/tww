@@ -35,8 +35,8 @@ void daIkari_c::setMtx() {
 bool daIkari_c::_createHeap() {
     static int ikari_bdl[5] = {0x03, 0x03, 0x03, 0x04, 0x05};
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(
-        dComIfG_getObjectRes(daIkari_c::M_arcname, ikari_bdl[mModelType]));
+    J3DModelData* modelData =
+        static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ikari_bdl[mModelType]));
     JUT_ASSERT(0x7e, modelData != 0);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
 
@@ -58,14 +58,13 @@ void daIkari_c::getArg() {
     }
 
     if (mEnvType == 0xff) {
-        mScale.x = 1.0;
-        mScale.y = 1.0;
-        mScale.z = 1.0;
-        return;
+        mScale.x = 1.0f;
+        mScale.y = 1.0f;
+        mScale.z = 1.0f;
     } else if (mEnvType == 0x01) {
-        mScale.x = 1.27;
-        mScale.y = 1.27;
-        mScale.z = 1.27;
+        mScale.x = 1.27f;
+        mScale.y = 1.27f;
+        mScale.z = 1.27f;
     }
 }
 
@@ -110,7 +109,7 @@ bool daIkari_c::_draw() {
 
 /* 00000494-000005B0       .text _create__9daIkari_cFv */
 int daIkari_c::_create() {
-    int phase = dComIfG_resLoad(&mPhs, daIkari_c::M_arcname);
+    int phase = dComIfG_resLoad(&mPhs, M_arcname);
 
     fopAcM_SetupActor(this, daIkari_c);
 
@@ -133,9 +132,9 @@ int daIkari_c::_create() {
                                   /* maxX */ 160.0f * mScaleX,
                                   /* maxY */ 100.0f * mScaleX,
                                   /* maxZ */ 600.0f * mScaleX);
-            fopAcM_setCullSizeFar(this, 10.0);
+            fopAcM_setCullSizeFar(this, 10.0f);
 
-            mTimer = (short)(int)cM_rndF(32768.0);
+            mTimer = (short)(int)cM_rndF(32768.0f);
         }
     }
 
@@ -151,24 +150,21 @@ bool daIkari_c::_delete() {
 /* 000005E0-00000600       .text daIkariCreate__FPv */
 static s32 daIkariCreate(void* i_this) {
     return ((daIkari_c*)i_this)->_create();
-    /* Nonmatching */
 }
 
 /* 00000600-00000624       .text daIkariDelete__FPv */
 static BOOL daIkariDelete(void* i_this) {
-    return ((daIkari_c*)i_this)->_delete() & 0xff;
-    /* Nonmatching */
+    return ((daIkari_c*)i_this)->_delete();
 }
 
 /* 00000624-00000648       .text daIkariExecute__FPv */
 static BOOL daIkariExecute(void* i_this) {
-    return ((daIkari_c*)i_this)->_execute() & 0xff;
-    /* Nonmatching */
+    return ((daIkari_c*)i_this)->_execute();
 }
 
 /* 00000648-0000066C       .text daIkariDraw__FPv */
 static BOOL daIkariDraw(void* i_this) {
-    return ((daIkari_c*)i_this)->_draw() & 0xff;
+    return ((daIkari_c*)i_this)->_draw();
 }
 
 /* 0000066C-00000674       .text daIkariIsDelete__FPv */
