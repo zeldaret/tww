@@ -64,7 +64,9 @@ void daWarpfout_c::demo_proc() {
 
     mStaffId = dComIfGp_evmng_getMyStaffId("Warpfo");
 
-    if (gameinfo->play.getEvent().getMode() != 0 && mEvtInfo.mCommand != 1 && mStaffId != -1) {
+    if (gameinfo->play.getEvent().getMode() != dEvtMode_NONE_e && !mEvtInfo.checkCommandTalk() &&
+        mStaffId != -1)
+    {
         int actIdx =
             dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
 
