@@ -1615,7 +1615,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_toge"),
     ActorRel(NonMatching, "d_a_tori_flag"),
     ActorRel(Matching,    "d_a_wall", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_warpfout"),
+    ActorRel(Matching,    "d_a_warpfout"),
     ActorRel(NonMatching, "d_a_warpgn"),
     ActorRel(NonMatching, "d_a_warpls"),
     ActorRel(NonMatching, "d_a_warpmj"),
