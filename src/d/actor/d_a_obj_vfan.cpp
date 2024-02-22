@@ -4,54 +4,258 @@
 //
 
 #include "d/actor/d_a_obj_vfan.h"
-#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_mtx.h"
+
+namespace daObjVfan {
+s16 m_evid;
+}
+
+Mtx daObjVfan::Act_c::M_tmp_mtx;
+const char daObjVfan::Act_c::M_arcname[5] = "Vfan";
+
+static dCcD_SrcCyl cyl_check_src = {{
+                                 /* Flags             */ 0,
+                                 /* SrcObjAt  Type    */ 0,
+                                 /* SrcObjAt  Atp     */ 0,
+                                 /* SrcObjAt  SPrm    */ 0,
+                                 /* SrcObjTg  Type    */ 1 << 29,
+                                 /* SrcObjTg  SPrm    */ 9,
+                                 /* SrcObjCo  SPrm    */ 0,
+                                 /* SrcGObjAt Se      */ 0,
+                                 /* SrcGObjAt HitMark */ 0,
+                                 /* SrcGObjAt Spl     */ 0,
+                                 /* SrcGObjAt Mtrl    */ 0,
+                                 /* SrcGObjAt SPrm    */ 0,
+                                 /* SrcGObjTg Se      */ 0,
+                                 /* SrcGObjTg HitMark */ 0,
+                                 /* SrcGObjTg Spl     */ 0,
+                                 /* SrcGObjTg Mtrl    */ 0,
+                                 /* SrcGObjTg SPrm    */ 0,
+                                 /* SrcGObjCo SPrm    */ 0,
+                             },
+                             {
+                                 /* Center */
+                                 0.0f,
+                                 0.0f,
+                                 0.0f,
+                                 /* Radius */ 100.0f,
+                                 /* Height */ 300.0f,
+                             }};
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */
 int daObjVfan::Act_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 4));
+
+    JUT_ASSERT(0x8c, model_data != 0);
+
+    mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
+
+    if (mpModel == NULL) {
+        return false;
+    }
+    return true;
 }
 
 /* 00000134-00000214       .text Create__Q29daObjVfan5Act_cFv */
 int daObjVfan::Act_c::Create() {
-    /* Nonmatching */
+    Mtx* mtx = &mpModel->mBaseTransformMtx;
+    mCullMtx = mpModel->mBaseTransformMtx;
+
+    init_mtx();
+
+    fopAcM_setCullSizeBox(this, -4000.0, -500.0, -4000.0, 4000.0, 500.0, 4000.0);
+
+    mStts.Init(0xff, 0xff, this);
+    mCyl.Set(cyl_check_src);
+    mCyl.SetC(current.pos);
+    mCyl.SetStts(&mStts);
+
+    mIsAlive = true;
+    mBreakTimer = 0;
+    mSwitchNo = 0;
+
+    m_evid = dComIfGp_evmng_getEventIdx("Vfan", 0xff);
+
+    return TRUE;
 }
 
 /* 00000214-000003D0       .text Mthd_Create__Q29daObjVfan5Act_cFv */
-void daObjVfan::Act_c::Mthd_Create() {
-    /* Nonmatching */
+cPhs__Step daObjVfan::Act_c::Mthd_Create() {
+    fopAcM_SetupActor(this, daObjVfan::Act_c);
+
+    cPhs__Step phase_state;
+
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        return cPhs_UNK3_e;
+    } else {
+        phase_state = (cPhs__Step)dComIfG_resLoad(&mPhs, M_arcname);
+        if (phase_state == cPhs_COMPLEATE_e) {
+            phase_state = (cPhs__Step)MoveBGCreate(M_arcname, 7, NULL, 0xa60);
+
+            JUT_ASSERT(0xc6, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+        }
+    }
+
+    return phase_state;
 }
 
 /* 00000588-00000590       .text Delete__Q29daObjVfan5Act_cFv */
 BOOL daObjVfan::Act_c::Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000590-000005E8       .text Mthd_Delete__Q29daObjVfan5Act_cFv */
-void daObjVfan::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+BOOL daObjVfan::Act_c::Mthd_Delete() {
+    int res = MoveBGDelete();
+    if (mBase.mCreateResult != 3) {
+        dComIfG_resDelete(&mPhs, M_arcname);
+    }
+    return res;
 }
 
 /* 000005E8-00000680       .text set_mtx__Q29daObjVfan5Act_cFv */
 void daObjVfan::Act_c::set_mtx() {
-    /* Nonmatching */
+    shape_angle = current.angle;
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    MTXCopy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 00000680-000006BC       .text init_mtx__Q29daObjVfan5Act_cFv */
 void daObjVfan::Act_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->mBaseScale = mScale;
+
+    set_mtx();
 }
 
 /* 000006BC-000009B4       .text ParticleSet__Q29daObjVfan5Act_cFv */
 void daObjVfan::Act_c::ParticleSet() {
-    /* Nonmatching */
+    // was this manually unrolled?
+    dComIfGp_particle_set(0x83cd, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83ce, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83cf, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83d0, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83d1, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83d2, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83d3, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83d4, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83d5, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83d6, &current.pos, &current.angle);
+    dComIfGp_particle_set(0x83d7, &current.pos, &current.angle);
 }
 
 /* 000009B4-00000C74       .text Execute__Q29daObjVfan5Act_cFPPA3_A4_f */
-int daObjVfan::Act_c::Execute(float(**)[3][4]) {
-    /* Nonmatching */
+int daObjVfan::Act_c::Execute(Mtx** mtx) {
+    switch (mSwitchNo) {
+    case 0:
+        g_dComIfG_gameInfo.play.mCcS.Set(static_cast<cCcD_Obj*>(&mCyl));
+        if (mCyl.ChkTgHit()) {
+            if (mpBgW != NULL) {
+                if (mpBgW->ChkUsed()) {
+                    dComIfG_Bgsp()->Release(mpBgW);
+                }
+            }
+            fopAcM_orderOtherEventId(this, m_evid);
+            mSwitchNo = 1;
+        }
+
+        break;
+
+    case 1:
+        if (mEvtInfo.checkCommandDemoAccrpt()) {
+            mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+            fopAcM_seStartCurrent(this, JA_SE_OBJ_GN_SW_DR_LIGHT, 0);
+
+            ParticleSet();
+            mBreakTimer = 0;
+            mSwitchNo = 2;
+        } else {
+            fopAcM_orderOtherEventId(this, m_evid);
+        }
+
+        break;
+
+    case 2:
+        if (mBreakTimer == 0x96) {
+            mIsAlive = false;
+            fopAcM_seStartCurrent(this, JA_SE_OBJ_GN_SW_DR_BREAK, 0);
+        }
+
+        mBreakTimer += 1;
+
+        if (dComIfGp_evmng_endCheck(m_evid)) {
+            fopAcM_onSwitch(this, prm_get_swSave());
+            dComIfGs_onEventBit(0x3a08);
+            dComIfGp_event_onEventFlag(8);
+            fopAcM_delete(this);
+        }
+        break;
+    }
+
+    set_mtx();
+    *mtx = &M_tmp_mtx;
+    return TRUE;
 }
 
 /* 00000C74-00000D20       .text Draw__Q29daObjVfan5Act_cFv */
 BOOL daObjVfan::Act_c::Draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+
+    dComIfGd_setListBG();
+    // This comparison is necessary to generate "cmplwi 0x1; bne" instead of "cmplwi 0x0; beq"
+    if (mIsAlive == true) {
+        mDoExt_modelUpdateDL(mpModel);
+    }
+    dComIfGd_setList();
+
+    return TRUE;
 }
+
+namespace daObjVfan {
+namespace {
+static int Mthd_Create(void* i_this) {
+    return static_cast<daObjVfan::Act_c*>(i_this)->Mthd_Create();
+}
+static int Mthd_Delete(void* i_this) {
+    return static_cast<daObjVfan::Act_c*>(i_this)->Mthd_Delete();
+}
+static int Mthd_Execute(void* i_this) {
+    return static_cast<daObjVfan::Act_c*>(i_this)->MoveBGExecute();
+}
+static int Mthd_Draw(void* i_this) {
+    return static_cast<daObjVfan::Act_c*>(i_this)->Draw();
+}
+static int Mthd_IsDelete(void* i_this) {
+    return static_cast<daObjVfan::Act_c*>(i_this)->IsDelete();
+}
+
+static actor_method_class Mthd_Vfan = {
+    (process_method_func)Mthd_Create,   (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,  (process_method_func)Mthd_Draw,
+    (process_method_func)Mthd_IsDelete,
+};
+};  // namespace
+};  // namespace daObjVfan
+
+actor_process_profile_definition g_profile_Obj_Vfan = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 3,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Vfan,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjVfan::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0020,
+    /* Actor SubMtd */ &daObjVfan::Mthd_Vfan,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
