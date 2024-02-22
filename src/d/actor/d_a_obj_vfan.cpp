@@ -60,12 +60,11 @@ int daObjVfan::Act_c::CreateHeap() {
 
 /* 00000134-00000214       .text Create__Q29daObjVfan5Act_cFv */
 int daObjVfan::Act_c::Create() {
-    Mtx* mtx = &mpModel->mBaseTransformMtx;
-    mCullMtx = mpModel->mBaseTransformMtx;
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
     init_mtx();
 
-    fopAcM_setCullSizeBox(this, -4000.0, -500.0, -4000.0, 4000.0, 500.0, 4000.0);
+    fopAcM_setCullSizeBox(this, -4000.0f, -500.0f, -4000.0f, 4000.0f, 500.0f, 4000.0f);
 
     mStts.Init(0xff, 0xff, this);
     mCyl.Set(cyl_check_src);
@@ -109,7 +108,7 @@ BOOL daObjVfan::Act_c::Delete() {
 /* 00000590-000005E8       .text Mthd_Delete__Q29daObjVfan5Act_cFv */
 BOOL daObjVfan::Act_c::Mthd_Delete() {
     int res = MoveBGDelete();
-    if (mBase.mCreateResult != 3) {
+    if (fpcM_CreateResult(this) != cPhs_UNK3_e) {
         dComIfG_resDelete(&mPhs, M_arcname);
     }
     return res;
@@ -128,7 +127,7 @@ void daObjVfan::Act_c::set_mtx() {
 
 /* 00000680-000006BC       .text init_mtx__Q29daObjVfan5Act_cFv */
 void daObjVfan::Act_c::init_mtx() {
-    mpModel->mBaseScale = mScale;
+    mpModel->setBaseScale(mScale);
 
     set_mtx();
 }
@@ -153,7 +152,7 @@ void daObjVfan::Act_c::ParticleSet() {
 int daObjVfan::Act_c::Execute(Mtx** mtx) {
     switch (mSwitchNo) {
     case 0:
-        g_dComIfG_gameInfo.play.mCcS.Set(static_cast<cCcD_Obj*>(&mCyl));
+        dComIfG_Ccsp()->Set(&mCyl);
         if (mCyl.ChkTgHit()) {
             if (mpBgW != NULL) {
                 if (mpBgW->ChkUsed()) {
@@ -191,7 +190,7 @@ int daObjVfan::Act_c::Execute(Mtx** mtx) {
         if (dComIfGp_evmng_endCheck(m_evid)) {
             fopAcM_onSwitch(this, prm_get_swSave());
             dComIfGs_onEventBit(0x3a08);
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
             fopAcM_delete(this);
         }
         break;
