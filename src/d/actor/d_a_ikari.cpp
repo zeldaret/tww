@@ -4,70 +4,193 @@
 //
 
 #include "d/actor/d_a_ikari.h"
-#include "dolphin/types.h"
+#include "d/d_kankyo_wether.h"
+#include "d/d_procname.h"
+#include "d/d_s_play.h"
+#include "m_Do/m_Do_mtx.h"
+
+daObjIkariHIO_c l_HIO;
+
+const char daIkari_c::M_arcname[6] = "Ikari";
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c*) {
-    /* Nonmatching */
+static int createHeap_CB(fopAc_ac_c* i_this) {
+    return ((daIkari_c*)i_this)->_createHeap();
 }
 
 /* 0000010C-000001C4       .text setMtx__9daIkari_cFv */
 void daIkari_c::setMtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(mScale);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::XrotM(current.angle.x);
+    mDoMtx_stack_c::YrotM(-shape_angle.y);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000001C4-00000290       .text _createHeap__9daIkari_cFv */
-void daIkari_c::_createHeap() {
-    /* Nonmatching */
+BOOL daIkari_c::_createHeap() {
+    static int ikari_bdl[5] = {0x03, 0x03, 0x03, 0x04, 0x05};
+
+    J3DModelData* modelData =
+        static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ikari_bdl[mModelType]));
+    JUT_ASSERT(0x7e, modelData != 0);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
+
+    if (mpModel == NULL) {
+        return false;
+    }
+    return true;
 }
 
 /* 00000290-000002F8       .text getArg__9daIkari_cFv */
 void daIkari_c::getArg() {
-    /* Nonmatching */
+    u32 param = fopAcM_GetParam(this);
+
+    mModelType = fopAcM_GetParamBit(param, 8, 16);
+    mEnvType = param;
+
+    if (mModelType == 0xff) {
+        mModelType = 0;
+    }
+
+    if (mEnvType == 0xff) {
+        mScale.x = 1.0f;
+        mScale.y = 1.0f;
+        mScale.z = 1.0f;
+    } else if (mEnvType == 0x01) {
+        mScale.x = 1.27f;
+        mScale.y = 1.27f;
+        mScale.z = 1.27f;
+    }
 }
 
 /* 000002F8-000003CC       .text _execute__9daIkari_cFv */
-BOOL daIkari_c::_execute() {
-    /* Nonmatching */
+bool daIkari_c::_execute() {
+    mTimer++;
+
+    cXyz* windVec = dKyw_get_wind_vec();
+    s16 windAngle = cM_atan2s(windVec->x, windVec->z);
+    f32* windPow = dKyw_get_wind_power();
+
+    shape_angle.y = windAngle;
+
+    f32 rotX = *windPow * 10000.0f * l_HIO.mWindPowerScale;
+
+    current.angle.x =
+        rotX + rotX * JMASSin(mTimer * (g_regHIO.mChild[0].mShortRegs[5] + 500) & 0xffff);
+
+    setMtx();
+
+    return true;
 }
 
 /* 000003CC-00000494       .text _draw__9daIkari_cFv */
-BOOL daIkari_c::_draw() {
-    /* Nonmatching */
+bool daIkari_c::_draw() {
+    if (mEnvType == 1) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
+        mTevStr.mColorC0.r = g_env_light.mActorC0.r;
+        mTevStr.mColorC0.g = g_env_light.mActorC0.g;
+        mTevStr.mColorC0.b = g_env_light.mActorC0.b;
+        mTevStr.mColorC0.a = g_env_light.mActorC0.a;
+        mTevStr.mColorK0.r = g_env_light.mActorK0.r;
+        mTevStr.mColorK0.g = g_env_light.mActorK0.g;
+        mTevStr.mColorK0.b = g_env_light.mActorK0.b;
+    } else {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    }
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    return true;
 }
 
 /* 00000494-000005B0       .text _create__9daIkari_cFv */
-s32 daIkari_c::_create() {
-    /* Nonmatching */
+int daIkari_c::_create() {
+    int phase = dComIfG_resLoad(&mPhs, M_arcname);
+
+    fopAcM_SetupActor(this, daIkari_c);
+
+    if (phase == cPhs_COMPLEATE_e) {
+        getArg();
+
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0xC20)) {
+            return cPhs_ERROR_e;
+        } else {
+            /* 00000524 00000618  4B FF FB E9	bl setMtx__9daIkari_cFv  */
+            setMtx();
+
+            f32 mScaleX = mScale.x;
+
+            fopAcM_SetMtx(this, &mpModel->mBaseTransformMtx[0]);
+            fopAcM_setCullSizeBox(this,
+                                  /* minX */ -160.0f * mScaleX,
+                                  /* minY */ -2500.0f * mScaleX,
+                                  /* minZ */ -600.0f * mScaleX,
+                                  /* maxX */ 160.0f * mScaleX,
+                                  /* maxY */ 100.0f * mScaleX,
+                                  /* maxZ */ 600.0f * mScaleX);
+            fopAcM_setCullSizeFar(this, 10.0f);
+
+            mTimer = (short)(int)cM_rndF(32768.0f);
+        }
+    }
+
+    return phase;
 }
 
 /* 000005B0-000005E0       .text _delete__9daIkari_cFv */
-BOOL daIkari_c::_delete() {
-    /* Nonmatching */
+bool daIkari_c::_delete() {
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 000005E0-00000600       .text daIkariCreate__FPv */
-static s32 daIkariCreate(void*) {
-    /* Nonmatching */
+static s32 daIkariCreate(void* i_this) {
+    return ((daIkari_c*)i_this)->_create();
 }
 
 /* 00000600-00000624       .text daIkariDelete__FPv */
-static BOOL daIkariDelete(void*) {
-    /* Nonmatching */
+static BOOL daIkariDelete(void* i_this) {
+    return ((daIkari_c*)i_this)->_delete();
 }
 
 /* 00000624-00000648       .text daIkariExecute__FPv */
-static BOOL daIkariExecute(void*) {
-    /* Nonmatching */
+static BOOL daIkariExecute(void* i_this) {
+    return ((daIkari_c*)i_this)->_execute();
 }
 
 /* 00000648-0000066C       .text daIkariDraw__FPv */
-static BOOL daIkariDraw(void*) {
-    /* Nonmatching */
+static BOOL daIkariDraw(void* i_this) {
+    return ((daIkari_c*)i_this)->_draw();
 }
 
 /* 0000066C-00000674       .text daIkariIsDelete__FPv */
-static BOOL daIkariIsDelete(void*) {
-    /* Nonmatching */
+static BOOL daIkariIsDelete(void* i_this) {
+    return TRUE;
 }
 
+static actor_method_class daIkariMethodTable = {
+    (process_method_func)daIkariCreate,  (process_method_func)daIkariDelete,
+    (process_method_func)daIkariExecute, (process_method_func)daIkariIsDelete,
+    (process_method_func)daIkariDraw,
+};
+
+actor_process_profile_definition g_profile_IKARI = {
+    fpcLy_CURRENT_e,
+    7,
+    fpcPi_CURRENT_e,
+    PROC_IKARI,
+    &g_fpcLf_Method.mBase,
+    sizeof(daIkari_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x019d,
+    &daIkariMethodTable,
+    fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_CUSTOM_e,
+};

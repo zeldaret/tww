@@ -1,18 +1,33 @@
 #ifndef D_A_IKARI_H
 #define D_A_IKARI_H
 
-#include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
+
+class daObjIkariHIO_c : public mDoHIO_entry_c {
+public:
+    daObjIkariHIO_c() {
+        unk[0] = 0;
+        unk[1] = 0;
+        mWindPowerScale = 0.1f;
+    }
+    virtual ~daObjIkariHIO_c(){};
+
+public:
+    /* 0x04 */ u8 unk[2];
+    /* 0x08 */ f32 mWindPowerScale;
+};
 
 class daIkari_c : public fopAc_ac_c {
 public:
     void setMtx();
-    void _createHeap();
+    BOOL _createHeap();
     void getArg();
-    BOOL _execute();
-    BOOL _draw();
-    s32 _create();
-    BOOL _delete();
+    bool _execute();
+    bool _draw();
+    int _create();
+    bool _delete();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
@@ -21,6 +36,8 @@ public:
     /* 0x29D */ u8 mModelType;
     /* 0x29E */ u8 m29E[0x2A0 - 0x29E];
     /* 0x2A0 */ int mTimer;
+
+    static const char M_arcname[6];
 };
 
 #endif /* D_A_IKARI_H */
