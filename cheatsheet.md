@@ -1,35 +1,43 @@
 # Cheatsheet
 
 ## Common Inlines
-When accessing a field in `g_dComIfG_gameInfo`, there is likely an inline using the format `dComIfG_XXX`,
-check `d_com_inf_game.h`
 
-Common interactions with the `fopAc_ac_c` struct involve the `fopAcM_` inlines. Check `f_op_actor_mng.h`
-Other Actor inlines can be found in `f_pc_manager.h`
+| Struct/Object        | Inline Definition  |
+|----------------------|--------------------|
+| `g_dComIfG_gameInfo` | `d_com_inf_game.h` |
+| `fopAc_ac_c`         | `f_op_actor_mng.h` |
+| `fopAc_ac_c`         | `f_pc_manager.h`   |
+| Mtx                  | `m_Do_mtx.h`       |
+| Stage                | `d_stage.h`        |
 
-Accessing `g_env_light` should use the inline `dKy_getEnvlight()`
-
-The stage based inlines can be found in `d_stage.h`
+Accessing `g_env_light` might use `dKy_getEnvlight()`, in a small handful of places.
 
 Audio Inlines are in `m_Do_audio.h`, check when dealing with `mDoAud_zelAudio_c`
 
-The `Mtx` struct has a lot of inlines in the `m_Do_mtx.h` file
-
-*TODO - insert JKR inlines, might be more useful to pair with Ghidra output examples?*
-
 ### Finding Inlines
-Make sure to reference the debug map when dealing with functions, especially on the first pass.
 
-This can hint at a local `inline` when you see something like `function__##currentNamespace_varation##currentNamespace`, for example
-`getItemNo__15daSpcItem01_prmFP13daSpcItem01_c`. That same format can hint at another file's inline being referenced.
+Make sure to reference the debug map when dealing with functions, especially on the first pass. 
+You can find the map pinned in the Main Decomp channel in the Discord. You can think of this map as one
+of the last steps of the compiler, where it writes a record of what symbols it used and where it used them. Particularly
+for debugging purposes.
+
+If you go into the `.text section layout` of the Map file, 
+you'll be able to spot what inlines are used, and in what function.
+
+This can hint at a locally defined `inline` when you see something like `function__##currentNamespace_varation##currentNamespace`,
+for example
+`getItemNo__15daSpcItem01_prmFP13daSpcItem01_c`.
 
 ## Macros
 
 The two main Macros you'll likely see are the `fopAcm_SetupActor` Macro, and the `JUTAssertion` Macros.
 
 ### fopAcm_SetupActor
-For `fopAcm_SetupActor` the first hint is being in some sort of `create` function, in Ghidra the macro is already expanded
+
+For `fopAcm_SetupActor` the first hint is being in some sort of `create` function, in Ghidra the macro is already
+expanded
 so just keep an eye out for something like the following.
+
 ```c++
 if (((this->parent).mCondition & Constructed) == 0) {
     if(this != (structPointer_c *) 0x0) {
@@ -39,11 +47,14 @@ if (((this->parent).mCondition & Constructed) == 0) {
     (this->parent).mCondition = (this->parent).mCondition | Constructed;
 }
 ```
+
 Everything within the first `if` statement is handled by the `fopAcm_SetupActor` Macro.
 
 ### JUTAssertion
+
 This is more a "family" of Macros, however most of the time we're dealing with `JUT_ASSERT`. Super easy pattern to spot,
 just the following.
+
 ```c++
 if (condition) {
   tempVar = JUTAssertion::getSDevice();
@@ -51,12 +62,13 @@ if (condition) {
   m_Do_printf::OSPanic("current_file.cpp", lineNumber, "Halt");
 }
 ```
+
 This is really useful for figuring out the variable names used, so keep an eye out for it. See `JUTAssert.h` for the
 full family of Macros.
 
 ## Recognize the 'switch'
-The original developers of The Wind Waker used switch statements extensively. Ghidra fails to recognize small switches,
-so here is a quick example to refer to.
+
+Ghidra fails occasionally to recognize switch statements, so here is a quick example to refer to.
 
 ```c++
 if (m_itemNo != SHIELD) {
@@ -84,7 +96,9 @@ default:
     break;
 }
 ```
+
 You can also get single case switch statements instead of `if/else`. For example,
+
 ```c++
 if (m_itemNo == BOKO_BELT) {
     offsetY = -24.0f;
@@ -96,8 +110,10 @@ case BOKO_BELT:
     break;
 }
 ```
-The above is especially useful to try out in case you're dealing with register mismatch.
-The assembly will hint at as the switch statement if you get this pattern,
+
+However, a single switch statement will be uncommon. When in doubt you can view the Assembly, and switch statements
+will always have the following pattern.
+
 ```asm
 cmpwi
 beq
@@ -106,57 +122,27 @@ bge
 cmpwi
 beq
 b
-;; Aka cmpwi + a lot of branching is likely a small switch statement.
+;; Aka cmpwi + a lot of branching -> Switch Statement
 ```
 
-## Register Problems
-When dealing with register mismatching, we've found the following situations to help.
-When dealing with enums, you might have to do a double return. For example
+## General Styling / Matching
+
+Compilers are weird, here are some oddities we've found, and solutions to get them to match.
+
 ```c++
-return createInit() ? 4 : 5 
-// Matches, but we know Enums were used in this function.
+// Intuition would be the following.
+return createInit() ? cPhs_COMPLEATE_e : cPhs_ERROR_e; 
+// Which fails to match, try this instead.
 if (createInit()) {
    return cPhs_COMPLEATE_e;
 } else {
    return cPhs_ERROR_e;
 }
 ```
-This pattern also holds for general `if` statements.
-```c++
-s32 modelFileName = (mArrowType == TYPE_LIGHT ? 0x38 : 0x37) & 0xFFFF;
-// Matches, but Enums are preferred.
-u16 modelFileIndex;
-if (mArrowType == TYPE_LIGHT) {
-    modelFileIndex = LINK_BOL_ARROWGLITTER;
-} else {
-    modelFileIndex = LINK_BOL_ARROW;
-}
-```
 
+- Insert more oddities as they crop up.
 ## Struct Size
-Not all the Structs in Ghidra have been defined. You'll see array access syntax for undersized structs. Cross-reference 
+
+Not all the Structs in Ghidra have been defined. You'll see array access syntax for undersized structs. Cross-reference
 with [this resource](https://github.com/LagoLunatic/WW-Hacking-Docs/blob/master/Extracted%20Data/Actor%20Instance%20Sizes.txt)
 and adjust accordingly.
-
-As there are still plenty of fields we don't have names for, defining our struct is very useful, you'll see the following
-patterns in the codebase.
-
-```c++
-public:
-  /* 0xOFFSET */ type mName; 
-// Offset value for the field, Ghidra is useful for this.
-  /* 0xOFFSET */ type* mpName;
-// AKA standard C naming conventions.
-
-// The following are more "personal preference" approaches to handling unknown values.
-  /* 0xOFFSET */ u8 mOffset[0xHigh_Unknown - 0xOffset];
-// All the values between 0xHigh_Unknown - 0xOffset are still unknown.
-  /* 0xOFFSET  */ u8 field_0xOFFSET;
-  /* 0xOFFSET1 */ u8 field_0xOFFSET1;
-// Similar to the array approach, but defines all the unkown `u8` as their own field instead.
-  /* 0xOFFSET */  type field_0xOFFSET;
-// This field is typed correctly, but has an unknown purpose. `type mOffset` could also convey this. 
-} // Size 0xVALUE
-// ^ Total size of the Struct, could also do the folling
-STATIC_ASSERT(sizeof(MyStruct) == 0xVALUE);
-```
