@@ -16,33 +16,33 @@ Mtx daObjVfan::Act_c::M_tmp_mtx;
 const char daObjVfan::Act_c::M_arcname[5] = "Vfan";
 
 static dCcD_SrcCyl cyl_check_src = {{
-                                 /* Flags             */ 0,
-                                 /* SrcObjAt  Type    */ 0,
-                                 /* SrcObjAt  Atp     */ 0,
-                                 /* SrcObjAt  SPrm    */ 0,
-                                 /* SrcObjTg  Type    */ 1 << 29,
-                                 /* SrcObjTg  SPrm    */ 9,
-                                 /* SrcObjCo  SPrm    */ 0,
-                                 /* SrcGObjAt Se      */ 0,
-                                 /* SrcGObjAt HitMark */ 0,
-                                 /* SrcGObjAt Spl     */ 0,
-                                 /* SrcGObjAt Mtrl    */ 0,
-                                 /* SrcGObjAt SPrm    */ 0,
-                                 /* SrcGObjTg Se      */ 0,
-                                 /* SrcGObjTg HitMark */ 0,
-                                 /* SrcGObjTg Spl     */ 0,
-                                 /* SrcGObjTg Mtrl    */ 0,
-                                 /* SrcGObjTg SPrm    */ 0,
-                                 /* SrcGObjCo SPrm    */ 0,
-                             },
-                             {
-                                 /* Center */
-                                 0.0f,
-                                 0.0f,
-                                 0.0f,
-                                 /* Radius */ 100.0f,
-                                 /* Height */ 300.0f,
-                             }};
+                                        /* Flags             */ 0,
+                                        /* SrcObjAt  Type    */ 0,
+                                        /* SrcObjAt  Atp     */ 0,
+                                        /* SrcObjAt  SPrm    */ 0,
+                                        /* SrcObjTg  Type    */ 1 << 29,
+                                        /* SrcObjTg  SPrm    */ 9,
+                                        /* SrcObjCo  SPrm    */ 0,
+                                        /* SrcGObjAt Se      */ 0,
+                                        /* SrcGObjAt HitMark */ 0,
+                                        /* SrcGObjAt Spl     */ 0,
+                                        /* SrcGObjAt Mtrl    */ 0,
+                                        /* SrcGObjAt SPrm    */ 0,
+                                        /* SrcGObjTg Se      */ 0,
+                                        /* SrcGObjTg HitMark */ 0,
+                                        /* SrcGObjTg Spl     */ 0,
+                                        /* SrcGObjTg Mtrl    */ 0,
+                                        /* SrcGObjTg SPrm    */ 0,
+                                        /* SrcGObjCo SPrm    */ 0,
+                                    },
+                                    {
+                                        /* Center */
+                                        0.0f,
+                                        0.0f,
+                                        0.0f,
+                                        /* Radius */ 100.0f,
+                                        /* Height */ 300.0f,
+                                    }};
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */
 int daObjVfan::Act_c::CreateHeap() {
@@ -236,9 +236,9 @@ static int Mthd_IsDelete(void* i_this) {
 }
 
 static actor_method_class Mthd_Vfan = {
-    (process_method_func)Mthd_Create,   (process_method_func)Mthd_Delete,
-    (process_method_func)Mthd_Execute,  (process_method_func)Mthd_Draw,
-    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Create,  (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute, (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
 };
 };  // namespace
 };  // namespace daObjVfan
