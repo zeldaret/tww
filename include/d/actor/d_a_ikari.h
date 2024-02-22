@@ -22,7 +22,7 @@ public:
 class daIkari_c : public fopAc_ac_c {
 public:
     void setMtx();
-    bool _createHeap();
+    BOOL _createHeap();
     void getArg();
     bool _execute();
     bool _draw();

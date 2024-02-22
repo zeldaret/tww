@@ -14,9 +14,8 @@ daObjIkariHIO_c l_HIO;
 const char daIkari_c::M_arcname[6] = "Ikari";
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c* i_this) {
-    ((daIkari_c*)i_this)->_createHeap();
-    return;
+static int createHeap_CB(fopAc_ac_c* i_this) {
+    return ((daIkari_c*)i_this)->_createHeap();
 }
 
 /* 0000010C-000001C4       .text setMtx__9daIkari_cFv */
@@ -33,7 +32,7 @@ void daIkari_c::setMtx() {
 }
 
 /* 000001C4-00000290       .text _createHeap__9daIkari_cFv */
-bool daIkari_c::_createHeap() {
+BOOL daIkari_c::_createHeap() {
     static int ikari_bdl[5] = {0x03, 0x03, 0x03, 0x04, 0x05};
 
     J3DModelData* modelData =
