@@ -246,7 +246,7 @@ static s32 daBita_Create(fopAc_ac_c* i_ac) {
             /* SrcObjCo  SPrm    */ 0,
             /* SrcGObjAt Se      */ dCcD_SE_UNK6,
             /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0x01,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
             /* SrcGObjTg Se      */ 0,

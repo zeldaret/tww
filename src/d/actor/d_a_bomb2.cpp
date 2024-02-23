@@ -314,7 +314,7 @@ namespace daBomb2 {
             /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
             /* SrcGObjAt Se      */ 0,
             /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0x01,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
             /* SrcGObjTg Se      */ 0,

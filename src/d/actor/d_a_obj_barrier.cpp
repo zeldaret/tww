@@ -28,7 +28,7 @@ static const dCcD_SrcCyl l_cyl_at_src = {
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0x09,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK9,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ G_AT_SPRM_NO_CON_HIT | G_AT_SPRM_NO_HIT_MARK,
         /* SrcGObjTg Se      */ 0,

@@ -114,7 +114,7 @@ static dCcD_SrcCyl l_at_cyl_src = {
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ G_AT_MARK_BIG_HIT,
-        /* SrcGObjAt Spl     */ 0x01,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
