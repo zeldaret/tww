@@ -22,19 +22,19 @@ extern dScnPly_reg_HIO_c g_regHIO;
 const char daObjTpost_c::m_arc_name[] = "Toripost";
 
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
-    {false, 0x1AAF, 0x07, dSv_evtBit_c::NOTE_TO_MOM},
-    {false, 0x0CF9, 0x07, 0xB503},
-    {false, 0x0CFA, 0xC3, 0x7D03},
-    {false, 0x0CFC, 0x04, 0x7B03},
-    {false, 0x0805, 0x04, 0x9D03},
-    {false, 0x0CFD, 0x01, 0x7A03},
-    {true,  0x0DB6, 0xCB, 0xB203},
-    {false, 0x1148, 0x04, 0x8B03},
-    {false, 0x1AAF, 0x07, dSv_evtBit_c::NOTE_TO_MOM},
-    {true,  0x0F76, 0x9D, 0xB003},
-    {false, 0x19A6, 0x3F, 0xAE03},
-    {true,  0x0CFB, 0x04, 0x7C03},
-    {true,  0x0F77, 0x9E, 0xAF03}
+    {false, 0x1AAF, KAKERA_HEART,    dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {false, 0x0CF9, KAKERA_HEART,    dSv_evtBit_c::LETTER_KOMALIS_FATHER},
+    {false, 0x0CFA, COLLECT_MAP_60,  dSv_evtBit_c::LETTER_BOMBS_AD},
+    {false, 0x0CFC, RED_RUPEE,       dSv_evtBit_c::LETTER_ORCA},
+    {false, 0x0805, RED_RUPEE,       dSv_evtBit_c::LETTER_GRANDMA},
+    {false, 0x0CFD, GREEN_RUPEE,     dSv_evtBit_c::LETTER_ROCK_SPIRE_SHOP_AD},
+    {true,  0x0DB6, COLLECT_MAP_52,  dSv_evtBit_c::LETTER_TINGLE},
+    {false, 0x1148, RED_RUPEE,       dSv_evtBit_c::LETTER_ARYLL},
+    {false, 0x1AAF, KAKERA_HEART,    dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {true,  0x0F76, KAISEN_PRESENT1, dSv_evtBit_c::LETTER_SILVER_MEMBERSHIP},
+    {false, 0x19A6, KAKERA_HEART2,   dSv_evtBit_c::LETTER_HOSKITS_GIRLFRIEND},
+    {true,  0x0CFB, RED_RUPEE,       dSv_evtBit_c::LETTER_BAITO},
+    {true,  0x0F77, KAISEN_PRESENT2, dSv_evtBit_c::LETTER_GOLD_MEMBERSHIP}
 };
 
 const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
@@ -217,7 +217,7 @@ void daObjTpost_c::deliverLetter() {
             dComIfGs_onEventBit(0x1220);
             break;
         case MAGIC_SEED:
-            dLetter_send(dSv_evtBit_c::NOTE_TO_MOM);
+            dLetter_send(dSv_evtBit_c::LETTER_BAITOS_MOM);
             break;
     }
 }
@@ -900,7 +900,7 @@ void daObjTpost_c::createInit() {
         dLetter_autoStock(0x7D03);
     }
 
-    if(dLetter_isDelivery(dSv_evtBit_c::NOTE_TO_MOM) && dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_ET)) {
+    if(dLetter_isDelivery(dSv_evtBit_c::LETTER_BAITOS_MOM) && dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_ET)) {
         dLetter_autoStock(0x7C03);
     }
 

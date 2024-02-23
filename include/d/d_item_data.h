@@ -157,7 +157,7 @@ enum ItemTable {
     /* 0x96 */ POSTMAN_STATUE,
     /* 0x97 */ PRESIDENT_STATUE,
     /* 0x98 */ LETTER00,
-    /* 0x99 */ MAGIC_SEED,
+    /* 0x99 */ MAGIC_SEED, // actually Note to Mom
     /* 0x9A */ MAGYS_LETTER,
     /* 0x9B */ MO_LETTER,
     /* 0x9C */ COTTAGE_PAPER,
