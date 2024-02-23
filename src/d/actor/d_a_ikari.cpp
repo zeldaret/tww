@@ -14,7 +14,7 @@ daObjIkariHIO_c l_HIO;
 const char daIkari_c::M_arcname[6] = "Ikari";
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-static int createHeap_CB(fopAc_ac_c* i_this) {
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
     return ((daIkari_c*)i_this)->_createHeap();
 }
 

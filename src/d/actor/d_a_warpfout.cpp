@@ -60,13 +60,9 @@ void daWarpfout_c::eventOrder() {}
 
 /* 0000012C-00000248       .text demo_proc__12daWarpfout_cFv */
 void daWarpfout_c::demo_proc() {
-    dComIfG_inf_c* gameinfo = &g_dComIfG_gameInfo;
-
     mStaffId = dComIfGp_evmng_getMyStaffId("Warpfo");
 
-    if (gameinfo->play.getEvent().getMode() != dEvtMode_NONE_e && !mEvtInfo.checkCommandTalk() &&
-        mStaffId != -1)
-    {
+    if (dComIfGp_event_runCheck() && !mEvtInfo.checkCommandTalk() && mStaffId != -1) {
         int actIdx =
             dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
 

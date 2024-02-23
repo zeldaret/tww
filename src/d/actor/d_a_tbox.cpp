@@ -961,7 +961,7 @@ void daTbox_c::setCollision() {
 
 /* 000024AC-000024B4       .text actionWait__8daTbox_cFv */
 BOOL daTbox_c::actionWait() {
-    return true;
+    return TRUE;
 }
 
 /* 000024B4-000025A4       .text actionDemo__8daTbox_cFv */
@@ -972,7 +972,8 @@ BOOL daTbox_c::actionDemo() {
 
     if (dComIfGp_evmng_endCheck(eventId)) {
         setAction(&daTbox_c::actionWait);
-        play->mEvtCtrl.reset();
+        // dComIfGp_event_reset();
+        play->getEvent().reset();
 
         dKy_set_allcol_ratio(1.0f);
 
@@ -991,7 +992,7 @@ BOOL daTbox_c::actionDemo() {
         demoProc();
     }
 
-    return true;
+    return TRUE;
 }
 
 /* 000025A4-00002634       .text actionDemo2__8daTbox_cFv */
@@ -1004,7 +1005,7 @@ BOOL daTbox_c::actionDemo2() {
         demoProc();
     }
 
-    return true;
+    return TRUE;
 }
 
 /* 00002634-000027C8       .text actionOpenWait__8daTbox_cFv */
@@ -1052,7 +1053,7 @@ BOOL daTbox_c::actionOpenWait() {
         }
     }
 
-    return true;
+    return TRUE;
 }
 
 /* 000027C8-000028A0       .text actionSwOnWait__8daTbox_cFv */
@@ -1070,7 +1071,7 @@ BOOL daTbox_c::actionSwOnWait() {
         }
     }
 
-    return true;
+    return TRUE;
 }
 
 /* 000028A0-00002914       .text actionSwOnWait2__8daTbox_cFv */
@@ -1080,7 +1081,7 @@ BOOL daTbox_c::actionSwOnWait2() {
         setDzb();
     }
 
-    return true;
+    return TRUE;
 }
 
 /* 00002914-00002A2C       .text actionGenocide__8daTbox_cFv */
@@ -1105,7 +1106,7 @@ BOOL daTbox_c::actionGenocide() {
         }
     }
 
-    return true;
+    return TRUE;
 }
 
 /* 00002C10-00002FB0       .text draw__8daTbox_cFv */
