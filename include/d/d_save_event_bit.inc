@@ -4,6 +4,7 @@ class dSv_evtBit_c {
 public:
     enum {
         ENDLESS_NIGHT = 0x0A02,
+        MEDLI_GAVE_FATHERS_LETTER = 0x0E02,
         MET_KORL = 0x0F80,
         RODE_KORL = 0x2A08,
         BARRIER_BREAK = 0x2C02,

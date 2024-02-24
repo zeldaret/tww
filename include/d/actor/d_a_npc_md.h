@@ -207,10 +207,16 @@ public:
     };
     
     typedef BOOL (daNpc_Md_c::*ActionFunc)(void*);
+    typedef void (daNpc_Md_c::*EventActionInitFunc)(int evtStaffId);
+    typedef BOOL (daNpc_Md_c::*EventActionFunc)(int evtStaffId);
     
     BOOL chkPlayerAction(ActionFunc func) { return mCurrPlayerActionFunc == func; }
     BOOL chkNpcAction(ActionFunc func) { return mCurrNpcActionFunc == func; }
     
+    bool checkStatusFly() { return cLib_checkBit(m30F0, 0x10UL); }
+    void onBitCamTagIn() { cLib_onBit(m30F0, 0x20UL); }
+    void offBitCamTagIn() { cLib_offBit(m30F0, 0x20UL); }
+    bool checkStatusCamTagIn() { return cLib_checkBit(m30F0, 0x20UL); }
     void onXYTalk() { cLib_onBit(m30F0, 0x100UL); }
     void offXYTalk() { cLib_offBit(m30F0, 0x100UL); }
     bool isXYTalk() { return cLib_checkBit(m30F0, 0x100UL); }
@@ -270,27 +276,29 @@ public:
     u8 checkBitHairMode(u8 bit) { return m3134 & bit; }
     void setBitHairMode(u8 bit) { m3134 |= bit; }
     
+    u8 getPiyo2TalkCNT() { return m313C & 0xFF; } // TODO: fakematch?
+    void countPiyo2TalkCNT() {
+        m313C++;
+        if (m313C >= 3) {
+            m313C = 0;
+        }
+    }
+    
     void calcFlyingTimer() {}
     void checkBitEffectStatus(u8) {}
     void checkStatus(u32) {}
-    bool checkStatusCamTagIn() { return cLib_checkBit(m30F0, 0x20UL); }
-    bool checkStatusFly() { return cLib_checkBit(m30F0, 0x10UL); }
     void clearJntAng() {}
     void clearStatus() {}
     void clearStatus(u32) {}
-    void countPiyo2TalkCNT() {}
     void getFlyingTimer() {}
-    void getPiyo2TalkCNT() {}
     void getTalkType() {}
     void isLightBodyHit() {}
     void isMirror() {}
     void isShipRide() {}
-    void offBitCamTagIn() { cLib_offBit(m30F0, 0x20UL); }
     void offFlying() {}
     void offMirror() {}
     void offPlayerRoom() {}
     void offShipRide() {}
-    void onBitCamTagIn() { cLib_onBit(m30F0, 0x20UL); }
     void onFlying() {}
     void onMirror() {}
     void onPlayerRoom() {}
@@ -320,7 +328,7 @@ public:
     s16 getStickAngY(int);
     int calcStickPos(s16, cXyz*);
     BOOL flyCheck();
-    bool mirrorCancelCheck();
+    BOOL mirrorCancelCheck();
     void setWingEmitter();
     void setHane02Emitter();
     void deleteHane02Emitter();
@@ -333,7 +341,7 @@ public:
     BOOL lightHitCheck();
     int wallHitCheck();
     void NpcCall(int*);
-    void checkCollision(int);
+    BOOL checkCollision(int);
     void restartPoint(s16);
     void setMessageAnimation(u8);
     void waitGroundCheck();
@@ -382,51 +390,51 @@ public:
     BOOL landPlayerAction(void*);
     BOOL mkamaePlayerAction(void*);
     BOOL carryPlayerAction(void*);
-    void eventProc();
+    BOOL eventProc();
     void initialDefault(int);
-    bool actionDefault(int);
+    BOOL actionDefault(int);
     void initialWaitEvent(int);
-    bool actionWaitEvent(int);
+    BOOL actionWaitEvent(int);
     void initialLetterEvent(int);
     void initialMsgSetEvent(int);
-    bool actionMsgSetEvent(int);
+    BOOL actionMsgSetEvent(int);
     BOOL actionMsgEndEvent(int);
     void initialMovePosEvent(int);
     void initialFlyEvent(int);
-    bool actionFlyEvent(int);
+    BOOL actionFlyEvent(int);
     void initialGlidingEvent(int);
-    bool actionGlidingEvent(int);
+    BOOL actionGlidingEvent(int);
     void initialLandingEvent(int);
-    bool actionLandingEvent(int);
+    BOOL actionLandingEvent(int);
     void initialWalkEvent(int);
-    bool actionWalkEvent(int);
-    bool actionDashEvent(int);
+    BOOL actionWalkEvent(int);
+    BOOL actionDashEvent(int);
     void initialEndEvent(int);
-    bool actionTactEvent(int);
+    BOOL actionTactEvent(int);
     void initialTakeOffEvent(int);
-    bool actionTakeOffEvent(int);
+    BOOL actionTakeOffEvent(int);
     void initialOnetimeEvent(int);
-    bool actionOnetimeEvent(int);
+    BOOL actionOnetimeEvent(int);
     void initialQuake(int);
     void setHarpPlayNum(int);
     void initialHarpPlayEvent(int);
-    bool actionHarpPlayEvent(int);
+    BOOL actionHarpPlayEvent(int);
     void initialOffLinkEvent(int);
     void initialOnLinkEvent(int);
     void initialTurnEvent(int);
-    bool actionTurnEvent(int);
+    BOOL actionTurnEvent(int);
     void initialSetAnmEvent(int);
     void initialLookDown(int);
     void initialLookUp(int);
-    bool actionLookDown(int);
-    bool talk_init();
+    BOOL actionLookDown(int);
+    BOOL talk_init();
     BOOL talk(int);
-    void getAnmType(u8);
+    int getAnmType(u8);
     BOOL initTexPatternAnm(u8, bool);
     void playTexPatternAnm();
     BOOL initLightBtkAnm(bool);
     void playLightBtkAnm();
-    bool setAnm(int);
+    BOOL setAnm(int);
     bool dNpc_Md_setAnm(mDoExt_McaMorf2*, f32, int, f32, f32, char*, char*, const char*);
     bool dNpc_Md_setAnm(mDoExt_McaMorf*, int, f32, f32, char*, const char*);
     void chkAttention(cXyz, s16, int);
@@ -434,9 +442,9 @@ public:
     void carryCheck();
     void eventOrder();
     void checkOrder();
-    bool checkCommandTalk();
+    BOOL checkCommandTalk();
     u16 next_msgStatus(u32*);
-    void getMsg();
+    u32 getMsg();
     void setCollision();
     void setAttention(bool);
     void lookBack(int, int, int);
@@ -546,9 +554,10 @@ public:
     /* 0x3136 */ u8 m3136;
     /* 0x3137 */ u8 m3137;
     /* 0x3138 */ u8 m3138;
-    /* 0x3139 */ u8 mCurEvent;
+    /* 0x3139 */ s8 mCurEvent;
     /* 0x313A */ u8 m313A;
-    /* 0x313B */ u8 m313B[0x313D - 0x313B];
+    /* 0x313B */ u8 m313B[0x313C - 0x313B];
+    /* 0x313C */ u8 m313C;
     /* 0x313D */ u8 m313D;
     /* 0x313E */ u8 m313E[0x3140 - 0x313E];
     /* 0x3140 */ bool m3140;

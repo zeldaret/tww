@@ -604,6 +604,10 @@ inline f32 fopAcM_searchPlayerDistance(fopAc_ac_c* actor) {
     return fopAcM_searchActorDistance(actor, (fopAc_ac_c*)dComIfGp_getPlayer(0));
 }
 
+inline f32 fopAcM_searchPlayerDistance2(fopAc_ac_c* actor) {
+    return fopAcM_searchActorDistance2(actor, (fopAc_ac_c*)dComIfGp_getPlayer(0));
+}
+
 s8 dComIfGp_getReverb(int roomNo);
 
 inline void fopAcM_seStartCurrent(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
