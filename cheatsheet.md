@@ -32,9 +32,9 @@ for example
 
 The two main Macros you'll likely see are the `fopAcm_SetupActor` Macro, and the `JUTAssertion` Macros.
 
-### fopAcm_SetupActor
+### fopAcM_SetupActor
 
-For `fopAcm_SetupActor` the first hint is being in some sort of `create` function, in Ghidra the macro is already
+For `fopAcM_SetupActor` the first hint is being in some sort of `create` function, in Ghidra the macro is already
 expanded
 so just keep an eye out for something like the following.
 
@@ -97,13 +97,13 @@ default:
 }
 ```
 
-You can also get single case switch statements instead of `if/else`. For example,
+You can rarely get single case switch statements instead of `if/else`. For example,
 
 ```c++
 if (m_itemNo == BOKO_BELT) {
     offsetY = -24.0f;
 }
-// Should be
+// Instead
 switch (m_itemNo) {
 case BOKO_BELT:
     offsetY = -24.0f;
