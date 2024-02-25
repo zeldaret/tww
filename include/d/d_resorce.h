@@ -101,6 +101,10 @@ public:
         return getRes(arcName, resName, &mStageInfo[0], ARRAY_SIZE(mStageInfo));
     }
 
+    void* getStageRes(const char* arcName, s32 index) {
+        return getRes(arcName, index, &mStageInfo[0], ARRAY_SIZE(mStageInfo));
+    }
+
     dRes_info_c* getObjectResInfo(const char* arcName) {
         return getResInfo(arcName, &mObjectInfo[0], ARRAY_SIZE(mObjectInfo));
     }

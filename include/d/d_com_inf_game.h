@@ -429,6 +429,7 @@ public:
     void setFmapResArchive(JKRArchive * pArc) { mpFmapResArchive = pArc; }
     void setDmapResArchive(JKRArchive * pArc) { mpDmapResArchive = pArc; }
     void setOptResArchive(JKRArchive * pArc) { mpOptResArchive = pArc; }
+    JKRArchive* getClothResArchive() { return mpClothResArchive; }
     void setClothResArchive(JKRArchive * pArc) { mpClothResArchive = pArc; }
     void setSaveResArchive(JKRArchive * pArc) { mpSaveResArchive = pArc; }
     void setItemIconArchive(JKRArchive * pArc) { mpItemIconArchive = pArc; }
@@ -698,6 +699,7 @@ extern GXColor g_saftyWhiteColor;
  * === SAVE ===
  */
 
+void dComIfGs_gameStart();
 u8 dComIfGs_checkGetItem(u8);
 
 inline void dComIfGs_init() {
@@ -2831,6 +2833,7 @@ inline void dComIfGp_setClctResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.p
 inline void dComIfGp_setFmapResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFmapResArchive(pArc); }
 inline void dComIfGp_setDmapResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setDmapResArchive(pArc); }
 inline void dComIfGp_setOptResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setOptResArchive(pArc); }
+inline JKRArchive* dComIfGp_getClothResArchive() { return g_dComIfG_gameInfo.play.getClothResArchive(); }
 inline void dComIfGp_setClothResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setClothResArchive(pArc); }
 inline void dComIfGp_setSaveResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSaveResArchive(pArc); }
 inline void dComIfGp_setItemIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setItemIconArchive(pArc); }
@@ -2896,6 +2899,10 @@ inline int dComIfG_deleteStageRes(const char* res) {
 
 inline void* dComIfG_getStageRes(const char* arcName, const char* resName) {
     return g_dComIfG_gameInfo.mResControl.getStageRes(arcName, resName);
+}
+
+inline void* dComIfG_getStageRes(const char* arcName, int index) {
+    return g_dComIfG_gameInfo.mResControl.getStageRes(arcName, index);
 }
 
 inline void* dComIfG_getObjectRes(const char* arcName, const char* resName) {

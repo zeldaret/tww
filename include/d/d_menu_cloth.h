@@ -18,7 +18,7 @@ public:
     void getPos() {}
     void getShadowPos() {}
     void getTexObj() {}
-    void setArchive(JKRArchive*) {}
+    void setArchive(JKRArchive* arc) {}
     void setClothType(unsigned char) {}
 
     void lightSet1(cXyz);

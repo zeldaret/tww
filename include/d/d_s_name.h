@@ -9,8 +9,8 @@ class J2DScreen;
 class JKRMemArchive;
 class dFile_error_c;
 class dFile_select_c;
-class dMCloth;
 class dMenu_save_c;
+class dMCloth_c;
 class dName_c;
 class mDoDvdThd_toMainRam_c;
 
@@ -57,7 +57,7 @@ public:
     ~dDlst_FLSEL_CLOTH_c() {}
     void draw();
 
-    /* 0x04 */ dMCloth* cloth_c;
+    /* 0x04 */ dMCloth_c* cloth_c;
 };
 
 class dScnName_c : public scene_class {
@@ -69,9 +69,9 @@ public:
     void cloth2D_create();
     void buttonIconCreate();
     void paneTransButtonIcon(s16, u8, f32, f32, u8);
-    s32 execute();
+    BOOL execute();
     void setView();
-    s32 draw();
+    BOOL draw();
     void MemCardCheckMain();
     void MemCardStatCheck();
     void MemCardLoadWait();
@@ -120,7 +120,7 @@ public:
 
     /* 0x1C4 */ request_of_phase_process_class mPhs;
     /* 0x1CC */ JKRHeap* heap;
-    /* 0x1D0 */ JKRHeap* field_0x1d0;
+    /* 0x1D0 */ JKRHeap* oldHeap;
     /* 0x1D4 */ u8 field_0x1d4[0x29C - 0x1D4];
     /* 0x29C */ f32 field_0x29c;
     /* 0x2A0 */ f32 field_0x2a0;
@@ -137,7 +137,7 @@ public:
     /* 0x3A4 */ u8 field_0x3a4[0x3B4 - 0x3A4];
     /* 0x3B4 */ Mtx field_0x3b4;
     /* 0x3E4 */ u8 field_0x3e4[0x40C - 0x3E4];
-    /* 0x40C */ JKRMemArchive* field_0x40c;
+    /* 0x40C */ JKRMemArchive* mArchive;
     /* 0x410 */ mDoDvdThd_toMainRam_c* field_0x410;
     /* 0x414 */ dDlst_BTICN_c btnIcon;
     /* 0x41C */ dDlst_FLSEL_CLOTH_c cloth;
@@ -151,7 +151,18 @@ public:
     /* 0x4AC */ fopMsgM_pane_class field_0x4ac;
     /* 0x4E4 */ fopMsgM_pane_class field_0x4e4;
     /* 0x41C */ fopMsgM_pane_class field_0x51c;
-    /* 0x554 */ u8 field_0x554[0x560 - 0x554];
+    /* 0x554 */ u8 mMainProc;
+    /* 0x555 */ u8 field_0x555;
+    /* 0x556 */ u8 field_0x556;
+    /* 0x557 */ u8 mDrawProc;
+    /* 0x558 */ u8 field_0x558;
+    /* 0x559 */ u8 field_0x559;
+    /* 0x55A */ u8 field_0x55a;
+    /* 0x55B */ u8 field_0x55b;
+    /* 0x55C */ u8 field_0x55c;
+    /* 0x55D */ u8 field_0x55d;
+    /* 0x55E */ u8 field_0x55e;
+    /* 0x55F */ u8 field_0x55f;
     /* 0x560 */ u8 field_0x560[0x1650];
     /* 0x1BB0 */ void* savePicDatabuf;
     /* 0x1BB4 */ short field_0x1bb4;

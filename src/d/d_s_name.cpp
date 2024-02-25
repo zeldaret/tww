@@ -4,49 +4,70 @@
 //
 
 #include "d/d_s_name.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
+#include "d/d_file_select.h"
 #include "d/d_procname.h"
-#include "new.h"
+#include "d/d_menu_cloth.h"
+#include "f_op/f_op_draw_iter.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "f_op/f_op_scene_mng.h"
+#include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_Reset.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
 
 static Vec lit_2100 = {1.0f, 1.0f, 1.0f};
 static Vec lit_2080 = {1.0f, 1.0f, 1.0f};
+
+class dFile_error_c {
+public:
+    void _move();
+};
 
 dSn_HIO_c g_snHIO;
 
 /* 8022F86C-8022F8F0       .text __ct__9dSn_HIO_cFv */
 dSn_HIO_c::dSn_HIO_c() {
-    this->field_0x5 = 20;
-    this->field_0x6 = 15;
-    this->field_0x7 = 30;
-    this->field_0x8 = 0;
-    this->field_0x9 = 0;
-    this->field_0xa = 0;
-    this->field_0xb = 0;
-    this->field_0xe = 7;
-    this->field_0xc = -200;
-    this->field_0xf = 2;
-    this->field_0x10 = 0;
-    this->field_0x11 = 0;
-    this->field_0x12 = 0;
-    this->field_0x13 = 0;
-    this->field_0x14 = 0;
-    this->field_0x15 = 0;
-    this->field_0x16 = 0;
-    this->field_0x17 = 0;
-    this->field_0x18 = 0;
-    this->field_0x19 = 0;
-    this->field_0x1a = 0;
-    this->field_0x1b = 0;
+    field_0x5 = 20;
+    field_0x6 = 15;
+    field_0x7 = 30;
+    field_0x8 = 0;
+    field_0x9 = 0;
+    field_0xa = 0;
+    field_0xb = 0;
+    field_0xe = 7;
+    field_0xc = -200;
+    field_0xf = 2;
+    field_0x10 = 0;
+    field_0x11 = 0;
+    field_0x12 = 0;
+    field_0x13 = 0;
+    field_0x14 = 0;
+    field_0x15 = 0;
+    field_0x16 = 0;
+    field_0x17 = 0;
+    field_0x18 = 0;
+    field_0x19 = 0;
+    field_0x1a = 0;
+    field_0x1b = 0;
 }
 
 /* 8022F8F0-8022F95C       .text phase_1__FPc */
-static void phase_1(char*) {
-    /* Nonmatching */
+static s32 phase_1(char* resName) {
+    mDoAud_bgmStart(JA_BGM_SELECT);
+    return !dComIfG_setStageRes(resName, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
 }
 
 /* 8022F95C-8022F9B4       .text phase_2__FPc */
-static void phase_2(char*) {
-    /* Nonmatching */
+static s32 phase_2(char* resName) {
+    s32 rt = dComIfG_syncStageRes(resName);
+    if (rt < 0)
+        return cPhs_ERROR_e;
+    else if (rt > 0)
+        return cPhs_INIT_e;
+    return cPhs_NEXT_e;
 }
 
 /* 8022F9B4-8022F9BC       .text phase_3__FPc */
@@ -55,36 +76,61 @@ static s32 phase_3(char*) {
 }
 
 /* 8022F9BC-8022F9FC       .text resLoad__FP30request_of_phase_process_classPc */
-s32 resLoad(request_of_phase_process_class* param_1, char* param_2) {
+s32 resLoad(request_of_phase_process_class* phase, char* resName) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,
         (cPhs__Handler)phase_3,
     };
-    if (param_1->id == 2) {
+    if (phase->id == 2) {
         return cPhs_COMPLEATE_e;
     }
-    return dComLbG_PhaseHandler(param_1, l_method, param_2);
+    return dComLbG_PhaseHandler(phase, l_method, resName);
 }
 
 /* 8022F9FC-802301C8       .text create__10dScnName_cFv */
 s32 dScnName_c::create() {
     /* Nonmatching */
+    dComIfGp_offEnableNextStage();
+    dComIfGp_setNextStage("Name", 0, 0);
+    dComIfGp_setStartStage(dComIfGp_getNextStartStage());
+    dComIfGp_offEnableNextStage();
+
+    s32 rt = resLoad(&mPhs, "Stage");
+    if (rt == cPhs_COMPLEATE_e) {
+        heap = JKRCreateExpHeap(0x68000, mDoExt_getGameHeap(), false);
+        JUT_ASSERT(0x1c8, heap != 0);
+    }
+
+    oldHeap = mDoExt_setCurrentHeap(heap);
+    mArchive = new JKRMemArchive();
+    mArchive->mountFixed(dComIfG_getStageRes("Stage", 0x17), JKRMEMBREAK_FLAG_UNKNOWN0);
+    cloth_create();
+    buttonIconCreate();
+    dFs_c = new dFile_select_c();
 }
 
 /* 802301C8-802301FC       .text cloth_create__10dScnName_cFv */
 void dScnName_c::cloth_create() {
-    /* Nonmatching */
+    cloth2D_create();
+    field_0x55d = 0;
 }
 
 /* 802301FC-80230240       .text cloth_move__10dScnName_cFv */
 void dScnName_c::cloth_move() {
     /* Nonmatching */
+    if (field_0x55d && !g_snHIO.field_0xb)
+        cloth.cloth_c->cloth_move();
 }
 
 /* 80230240-802302F8       .text cloth2D_create__10dScnName_cFv */
 void dScnName_c::cloth2D_create() {
     /* Nonmatching */
+    JKRArchive* clothRes = dComIfGp_getClothResArchive();
+    cloth.cloth_c = new dMCloth_c();
+    JUT_ASSERT(0x321, cloth.cloth_c != 0);
+    cloth.cloth_c->setArchive(clothRes);
+    cloth.cloth_c->setClothType(1); // ?
 }
 
 /* 802302F8-80230500       .text buttonIconCreate__10dScnName_cFv */
@@ -155,8 +201,20 @@ void (dScnName_c::*DrawProc[])() = {
 };
 
 /* 802305E0-80230678       .text execute__10dScnName_cFv */
-s32 dScnName_c::execute() {
+BOOL dScnName_c::execute() {
     /* Nonmatching */
+    if (!fopOvlpM_IsPeek())
+        dComIfG_resetToOpening(this);
+
+    if (mDoRst::isReset())
+        return TRUE;
+    cloth_move();
+
+    if (dFe_c != NULL)
+        dFe_c->_move();
+    (this->*(MainProc[mMainProc]))();
+    buttonIconProc();
+    return TRUE;
 }
 
 /* 80230678-80230714       .text setView__10dScnName_cFv */
@@ -165,8 +223,16 @@ void dScnName_c::setView() {
 }
 
 /* 80230714-802307EC       .text draw__10dScnName_cFv */
-s32 dScnName_c::draw() {
-    /* Nonmatching */
+BOOL dScnName_c::draw() {
+    setView();
+    for (create_tag_class* pTag = fopDwIt_Begin(); pTag != NULL; pTag = fopDwIt_Next(pTag))
+        fpcM_Draw(pTag->mpTagData);
+    if (field_0x55d && !g_snHIO.field_0xb) {
+        dComIfGd_set2DOpa(&cloth);
+    }
+    (this->*(DrawProc[mDrawProc]))();
+    dComIfGd_set2DOpa(&btnIcon);
+    return TRUE;
 }
 
 /* 802307EC-80230A14       .text __dt__10dScnName_cFv */
@@ -312,7 +378,11 @@ void dScnName_c::FileSelectMainExSave() {
 
 /* 80231D00-80231D28       .text ResetWait__10dScnName_cFv */
 void dScnName_c::ResetWait() {
-    /* Nonmatching */
+    if (field_0x558) {
+        field_0x558--;
+        return;
+    }
+    mDoRst::onReset();
 }
 
 /* 80231D28-80231E9C       .text FileSelectClose__10dScnName_cFv */
@@ -384,11 +454,21 @@ void dScnName_c::SaveDraw() {
 }
 
 /* 8023229C-802322A0       .text NoneDraw__10dScnName_cFv */
-void dScnName_c::NoneDraw() {}
+void dScnName_c::NoneDraw() {
+}
 
 /* 802322A0-80232338       .text changeGameScene__10dScnName_cFv */
 void dScnName_c::changeGameScene() {
-    /* Nonmatching */
+    if (fopOvlpM_IsPeek())
+        return;
+
+    dComIfGs_gameStart();
+    u32 procName = field_0x55f ? PROC_OPEN_SCENE : PROC_PLAY_SCENE;
+    if (fopScnM_ChangeReq(this, procName, 0, 5)) {
+        g_dComIfG_gameInfo.save.getDan().mStageNo = -1;
+        dComIfGs_setRestartRoomParam(0);
+        mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
+    }
 }
 
 /* 80232338-80232358       .text dScnName_Draw__FP10dScnName_c */
@@ -420,7 +500,9 @@ s32 dScnName_Create(scene_class* i_scn) {
 
 /* 802323F8-8023245C       .text draw__13dDlst_BTICN_cFv */
 void dDlst_BTICN_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+    scr->draw(0.0f, 0.0f, graf);
 }
 
 /* 8023245C-80232518       .text draw__19dDlst_FLSEL_CLOTH_cFv */
