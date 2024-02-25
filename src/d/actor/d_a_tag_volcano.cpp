@@ -154,11 +154,13 @@ bool daTagvolcano::Act_c::_execute() {
                 field_0x2a4 = 1;
                 fopAcM_orderOtherEvent(this, "TAG_VOLCANO", dEvtFlag_NOPARTNER_e);
             }
+#if VERSION != VERSION_JPN
         } else {
             mDoAud_seStart(JA_SE_ISLE_TIMER_0);
             dComIfGp_getVibration().StartShock(6, -33, cXyz(0.0f, 1.0f, 0.0f));
             field_0x2a4 = 1;
             fopAcM_orderOtherEvent(this, "TAG_VOLCANO", dEvtFlag_NOPARTNER_e);
+#endif
         }
 
         if (field_0x2a4 == 1) {
