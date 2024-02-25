@@ -11,8 +11,9 @@ public:
     void SetPos(cXyz* pos) {
         m_pos = *pos;
     }
-    void SetPos(Vec*);
-    void PreCheck();
+    void SetPos(Vec* pos) {
+        m_pos = *pos;
+    }
 
     virtual ~cBgS_GndChk() {}
 
@@ -22,6 +23,7 @@ public:
     u32 GetGndPrecheck() const { return mGndPrecheck; }
     u32 GetWallPrecheck() const { return mWallPrecheck; }
     void OffWall() { mFlag &= ~2; }
+    void PreCheck() {}
 
 public:
     /* 0x24 */ cXyz m_pos;

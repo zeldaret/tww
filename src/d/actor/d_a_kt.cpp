@@ -19,18 +19,18 @@ float kt_scale = 1.5f;
 void kotori_draw(kt_class* i_this) {
     /* Nonmatching */
     kt_scale = g_regHIO.mChild[0].mFloatRegs[0] + 1.0f;
-    MtxTrans(i_this->current.pos.x, i_this->current.pos.y + i_this->field_0x2c0, i_this->current.pos.z, false);
+    MtxTrans(i_this->current.pos.x, i_this->current.pos.y + i_this->mLiftY, i_this->current.pos.z, false);
     cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
-    cMtx_XrotM(*calc_mtx, i_this->field_0x31a);
+    cMtx_XrotM(*calc_mtx, i_this->mAngleRoll);
     cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
     f32 scale = kt_scale * 0.2f;
     MtxScale(scale, scale, scale, true);
     J3DModel* model = i_this->mpModel;
     model->setBaseTRMtx(*calc_mtx);
     mDoExt_modelUpdate(model);
-    if (i_this->field_0x2e0 < 10.0f) {
+    if (i_this->mWingScale < 10.0f) {
         MtxTrans(0.0, 130.0f, 80.0f, true);
-        MtxScale(1.0f, i_this->field_0x2e0, 1.0f, true);
+        MtxScale(1.0f, i_this->mWingScale, 1.0f, true);
         i_this->mpModelWing->setBaseTRMtx(*calc_mtx);
         mDoExt_modelUpdate(i_this->mpModelWing);
     }
@@ -46,18 +46,18 @@ static BOOL daKt_Draw(kt_class* i_this) {
 void kotori_move(kt_class* i_this) {
     /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    bool updAng = false;
+    bool dispWing = false;
     u8 ret = 0;
     dBgS_GndChk gndChk;
 
     f32 dx = player->current.pos.x - i_this->current.pos.x;
     f32 dz = player->current.pos.z - i_this->current.pos.z;
     f32 dist_xz = sqrtf(dx*dx + dz*dz);
-    cLib_addCalcAngleS2(&i_this->field_0x31a, 0, 2, g_regHIO.mChild[0].mShortRegs[4] + 0x1000);
+    cLib_addCalcAngleS2(&i_this->mAngleRoll, 0, 2, g_regHIO.mChild[0].mShortRegs[4] + 0x1000);
 
-    f32 vx = i_this->field_0x2f0.x - i_this->current.pos.x;
-    f32 vy = i_this->field_0x2f0.y - i_this->current.pos.y;
-    f32 vz = i_this->field_0x2f0.z - i_this->current.pos.z;
+    f32 vx = i_this->mTargetPos.x - i_this->current.pos.x;
+    f32 vy = i_this->mTargetPos.y - i_this->current.pos.y;
+    f32 vz = i_this->mTargetPos.z - i_this->current.pos.z;
     s16 angleX = cM_atan2s(vx, vz);
     s16 angleY = -cM_atan2s(vy, sqrtf(vx*vx + vz*vz));
 
@@ -68,13 +68,13 @@ void kotori_move(kt_class* i_this) {
 
     switch (i_this->mState) {
     case 0:
-        i_this->field_0x2d0 = kt_scale * 20.0f + 30.0f;
+        i_this->mSpeedFwd = kt_scale * 20.0f + 30.0f;
         if (CPad_CHECK_TRIG_LEFT(0) && fopAcM_GetParam(i_this) == 1000) {
-            i_this->field_0x2f0.x = i_this->current.pos.x;
-            i_this->field_0x2f0.y = i_this->current.pos.y + 500.0f;
-            i_this->field_0x2f0.z = i_this->current.pos.z;
+            i_this->mTargetPos.x = i_this->current.pos.x;
+            i_this->mTargetPos.y = i_this->current.pos.y + 500.0f;
+            i_this->mTargetPos.z = i_this->current.pos.z;
             i_this->mState = 2;
-            i_this->field_0x2c8 = 0.0f;
+            i_this->mSpeedLerp = 0.0f;
         } else {
             if (i_this->mTimer[2] == 0) {
                 i_this->mState = 1;
@@ -84,25 +84,25 @@ void kotori_move(kt_class* i_this) {
                 cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
 
                 MtxPosition(&offs, &pt);
-                i_this->field_0x2fc.x = player->current.pos.x + pt.x + cM_rndFX(g_regHIO.mChild[0].mFloatRegs[14] + 200.0f);
-                i_this->field_0x2fc.y = player->current.pos.y + 1000.0f;
-                i_this->field_0x2fc.z = player->current.pos.z + pt.z + cM_rndFX(g_regHIO.mChild[0].mFloatRegs[14] + 200.0f);
+                i_this->mTargetPosHome.x = player->current.pos.x + pt.x + cM_rndFX(g_regHIO.mChild[0].mFloatRegs[14] + 200.0f);
+                i_this->mTargetPosHome.y = player->current.pos.y + 1000.0f;
+                i_this->mTargetPosHome.z = player->current.pos.z + pt.z + cM_rndFX(g_regHIO.mChild[0].mFloatRegs[14] + 200.0f);
 
-                gndChk.SetPos(&i_this->field_0x2fc);
-                i_this->field_0x2fc.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-                if (i_this->field_0x2fc.y == -100000000.0f)
-                    i_this->field_0x2fc = player->current.pos;
-                i_this->field_0x2f0 = i_this->field_0x2fc;
-                i_this->field_0x2c8 = 0.0f;
+                gndChk.SetPos(&i_this->mTargetPosHome);
+                i_this->mTargetPosHome.y = dComIfG_Bgsp()->GroundCross(&gndChk);
+                if (i_this->mTargetPosHome.y == -100000000.0f)
+                    i_this->mTargetPosHome = player->current.pos;
+                i_this->mTargetPos = i_this->mTargetPosHome;
+                i_this->mSpeedLerp = 0.0f;
             } else if (i_this->mTimer[0] == 0) {
                 i_this->mTimer[0] = cM_rndF(250.0f) + 60.0f;
-                i_this->field_0x2f0.x += cM_rndFX(2000.0f);
-                i_this->field_0x2f0.z += cM_rndFX(2000.0f);
-                i_this->field_0x2f0.y += cM_rndFX(1000.0f);
-                i_this->field_0x2c8 = 0.0f;
+                i_this->mTargetPos.x = i_this->mTargetPosHome.x + cM_rndFX(2000.0f);
+                i_this->mTargetPos.z = i_this->mTargetPosHome.z + cM_rndFX(2000.0f);
+                i_this->mTargetPos.y = i_this->mTargetPosHome.y + cM_rndFX(1000.0f);
+                i_this->mSpeedLerp = 0.0f;
             }
 
-            cLib_addCalc2(&i_this->field_0x2c8, 1.0f, 1.0f, 0.1f);
+            cLib_addCalc2(&i_this->mSpeedLerp, 1.0f, 1.0f, 0.1f);
         }
         goto calc_012;
     case 1:
@@ -110,95 +110,100 @@ void kotori_move(kt_class* i_this) {
         if (dist < g_regHIO.mChild[0].mFloatRegs[1] * 10.0f + 800.0f) {
             i_this->mState = 8;
         }
-        cLib_addCalc2(&i_this->field_0x2c8, 3.0f, 1.0f, 0.1f);
-        cLib_addCalcAngleS2(&i_this->current.angle.y, angleX, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 500.0f) * i_this->field_0x2c8));
-        cLib_addCalcAngleS2(&i_this->current.angle.x, angleY, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 500.0f) * i_this->field_0x2c8));
+        cLib_addCalc2(&i_this->mSpeedLerp, 3.0f, 1.0f, 0.1f);
+calc_012:
+        cLib_addCalcAngleS2(&i_this->current.angle.y, angleX, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 500.0f) * i_this->mSpeedLerp));
+        cLib_addCalcAngleS2(&i_this->current.angle.x, angleY, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 500.0f) * i_this->mSpeedLerp));
         offs.x = 0.0f;
         offs.y = 0.0f;
-        offs.z = i_this->field_0x2d0;
+        offs.z = i_this->mSpeedFwd;
         mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
         mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-        MtxPosition(&offs, &i_this->field_0x2d4);
-        i_this->current.pos.x += i_this->field_0x2d4.x;
-        i_this->current.pos.y += i_this->field_0x2d4.y;
-        i_this->current.pos.z += i_this->field_0x2d4.z;
-        if (i_this->field_0x2c4 >= 0.0f)
-            updAng = 1;
+        MtxPosition(&offs, &i_this->mSpeedVel);
+        i_this->current.pos.x += i_this->mSpeedVel.x;
+        i_this->current.pos.y += i_this->mSpeedVel.y;
+        i_this->current.pos.z += i_this->mSpeedVel.z;
+        if (i_this->mLiftYTimer >= 0.0f)
+            dispWing = true;
         ret = 2;
         break;
+    case 8:
+        cLib_addCalcAngleS2(&i_this->current.angle.y, angleX, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 1500.0f) * i_this->mSpeedLerp));
+        cLib_addCalc0(&i_this->mSpeedLerp, g_regHIO.mChild[0].mFloatRegs[4], 1.0f);
+        cLib_addCalc0(&i_this->mSpeedFwd, g_regHIO.mChild[0].mFloatRegs[5], 1.0f);
+        offs.x = 0.0f;
+        offs.y = 0.0f;
+        offs.z = i_this->mSpeedFwd;
+        mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+        MtxPosition(&offs, &i_this->mSpeedVel);
+        i_this->current.pos.x += i_this->mSpeedVel.x;
+        i_this->current.pos.z += i_this->mSpeedVel.z;
+        cLib_addCalc2(&i_this->current.pos.y, i_this->mGroundY, g_regHIO.mChild[0].mFloatRegs[6] + 0.3f, g_regHIO.mChild[0].mFloatRegs[7] + 20.0f);
+        if (fabsf(i_this->current.pos.y - i_this->mGroundY) < 1.0f) {
+            i_this->current.pos.y = i_this->mGroundY;
+            i_this->mState = 10;
+        }
+        dispWing = true;
+        ret = 1;
+        break;
     case 2:
-        i_this->field_0x2f0 = headTopPos;
-        i_this->field_0x2f0.y += 200.0f;
+        i_this->mTargetPos = headTopPos;
+        i_this->mTargetPos.y += 200.0f;
         dist = sqrtf(vx*vx + vy*vy + vz*vz);
         if (dist < g_regHIO.mChild[0].mFloatRegs[1] * 10.0f + 800.0f) {
             i_this->mState = 9;
         }
-        cLib_addCalc2(&i_this->field_0x2c8, 3.0f, 1.0f, 0.1f);
-calc_012:
-        cLib_addCalcAngleS2(&i_this->current.angle.y, angleX, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 500.0f) * i_this->field_0x2c8));
-        cLib_addCalcAngleS2(&i_this->current.angle.x, angleY, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 500.0f) * i_this->field_0x2c8));
-        offs.x = 0.0f;
-        offs.y = 0.0f;
-        offs.z = i_this->field_0x2d0;
-        mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-        mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-        MtxPosition(&offs, &i_this->field_0x2d4);
-        i_this->current.pos.x += i_this->field_0x2d4.x;
-        i_this->current.pos.y += i_this->field_0x2d4.y;
-        i_this->current.pos.z += i_this->field_0x2d4.z;
-        if (i_this->field_0x2c4 >= 0.0f)
-            updAng = 1;
-        ret = 2;
-        break;
-    case 8:
-        cLib_addCalcAngleS2(&i_this->current.angle.y, angleX, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 1500.0f) * i_this->field_0x2c8));
-        cLib_addCalc0(&i_this->field_0x2c8, 0.0f, 1.0f);
-        cLib_addCalc0(&i_this->field_0x2d0, 0.0f, 1.0f);
-        offs.x = 0.0f;
-        offs.y = 0.0f;
-        offs.z = i_this->field_0x2d0;
-        mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-        MtxPosition(&offs, &i_this->field_0x2d4);
-        i_this->current.pos.x += i_this->field_0x2d4.x;
-        i_this->current.pos.z += i_this->field_0x2d4.z;
-        cLib_addCalc2(&i_this->current.pos.y, i_this->field_0x2bc, g_regHIO.mChild[0].mFloatRegs[6] + 0.3f, g_regHIO.mChild[0].mFloatRegs[7] + 20.0f);
-        if (fabsf(i_this->current.pos.y - i_this->field_0x2bc) < 1.0f) {
-            i_this->current.pos.y = i_this->field_0x2bc;
-            i_this->mState = 10;
-        }
-        updAng = 1;
-        ret = 1;
+        cLib_addCalc2(&i_this->mSpeedLerp, 3.0f, 1.0f, 0.1f);
+        goto calc_012;
         break;
     case 9:
-        i_this->field_0x2f0 = headTopPos;
-        i_this->field_0x2f0.y += 100.0f;
-        cLib_addCalcAngleS2(&i_this->current.angle.y, angleX, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 1500.0f) * i_this->field_0x2c8));
-        cLib_addCalc0(&i_this->field_0x2c8, 0.0f, 1.0f);
-        cLib_addCalc0(&i_this->field_0x2d0, 0.0f, 1.0f);
+        i_this->mTargetPos = headTopPos;
+        i_this->mTargetPos.y += 100.0f;
+        cLib_addCalcAngleS2(&i_this->current.angle.y, angleX, 10, (s16)((g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 1500.0f) * i_this->mSpeedLerp));
+        cLib_addCalc0(&i_this->mSpeedLerp, g_regHIO.mChild[0].mFloatRegs[4], 1.0f);
+        cLib_addCalc0(&i_this->mSpeedFwd, g_regHIO.mChild[0].mFloatRegs[5], 1.0f);
         offs.x = 0.0f;
         offs.y = 0.0f;
-        offs.z = i_this->field_0x2d0;
+        offs.z = i_this->mSpeedFwd;
         mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-        MtxPosition(&offs, &i_this->field_0x2d4);
-        i_this->current.pos.x += i_this->field_0x2d4.x;
-        i_this->current.pos.z += i_this->field_0x2d4.z;
-        cLib_addCalc2(&i_this->current.pos.y, i_this->field_0x2bc, g_regHIO.mChild[0].mFloatRegs[6] + 0.3f, g_regHIO.mChild[0].mFloatRegs[7] + 20.0f);
-        if (fabsf(i_this->current.pos.y - i_this->field_0x2bc) < 1.0f) {
-            i_this->current.pos.y = i_this->field_0x2bc;
+        MtxPosition(&offs, &i_this->mSpeedVel);
+        i_this->current.pos.x += i_this->mSpeedVel.x;
+        i_this->current.pos.z += i_this->mSpeedVel.z;
+        cLib_addCalc2(&i_this->current.pos.y, i_this->mGroundY, g_regHIO.mChild[0].mFloatRegs[6] + 0.3f, g_regHIO.mChild[0].mFloatRegs[7] + 20.0f);
+        if (fabsf(i_this->current.pos.y - i_this->mGroundY) < 1.0f) {
+            i_this->current.pos.y = i_this->mGroundY;
             i_this->mState = 20;
         }
-        updAng = 1;
+        dispWing = true;
         ret = 1;
         break;
+    case 20:
+        i_this->mTargetPos = headTopPos;
+        cLib_addCalc2(&i_this->current.pos.x, i_this->mTargetPos.x, 1.0f, i_this->mSpeedLerp);
+        cLib_addCalc2(&i_this->current.pos.y, i_this->mTargetPos.y, 1.0f, i_this->mSpeedLerp / 2.0f);
+        cLib_addCalc2(&i_this->current.pos.z, i_this->mTargetPos.z, 1.0f, i_this->mSpeedLerp);
+        cLib_addCalc2(&i_this->mSpeedLerp, 1000.0f, 1.0f, g_regHIO.mChild[0].mFloatRegs[16] + 10.0f);
+        cLib_addCalcAngleS2(&i_this->current.angle.y, player->shape_angle.y, 2, 0x1000);
+        if (fabsf(i_this->current.pos.y - i_this->mTargetPos.y) > 1.0f)
+            dispWing = true;
+        if (CPad_CHECK_TRIG_LEFT(0)) {
+            i_this->mState = 0;
+            i_this->mTimer[0] = 0;
+            i_this->mLiftYTimer = cM_rndFX(10.0f) + 10.0f;
+            i_this->mTargetPosHome.y += 2000.0f;
+            i_this->current.angle.x = -0x2000;
+            i_this->mTimer[2] = g_regHIO.mChild[0].mShortRegs[5] + 300;
+        }
+        break;
     case 10:
-        i_this->field_0x2c0 += i_this->field_0x2c4;
-        i_this->field_0x2c4 -= g_regHIO.mChild[0].mFloatRegs[9] * 0.1f + 5.0f;
-        if (i_this->field_0x2c0 <= 0.0f) {
-            i_this->field_0x2c4 = g_regHIO.mChild[0].mFloatRegs[9] + 15.0f;
-            i_this->field_0x2c0 = 0.0f;
+        i_this->mLiftY += i_this->mLiftYTimer;
+        i_this->mLiftYTimer -= g_regHIO.mChild[0].mFloatRegs[9] * 0.1f + 5.0f;
+        if (i_this->mLiftY <= 0.0f) {
+            i_this->mLiftYTimer = g_regHIO.mChild[0].mFloatRegs[9] + 15.0f;
+            i_this->mLiftY = 0.0f;
         }
         cLib_addCalcAngleS2(&i_this->current.angle.y, angleX, 10, (s16)(g_regHIO.mChild[0].mFloatRegs[0] * 10.0f + 500.0f));
-        if (i_this->mTimer[1] == 0 && i_this->field_0x2c0 <= 0.0f) {
+        if (i_this->mTimer[1] == 0 && i_this->mLiftY <= 0.0f) {
             i_this->mTimer[1] = 20.0f + cM_rndF(20.0f);
             i_this->mState = 11;
         }
@@ -206,9 +211,9 @@ calc_012:
         offs.y = 0.0f;
         offs.z = g_regHIO.mChild[0].mFloatRegs[11] + 10.0f;
         mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-        MtxPosition(&offs, &i_this->field_0x2d4);
-        i_this->current.pos.x += i_this->field_0x2d4.x;
-        i_this->current.pos.z += i_this->field_0x2d4.z;
+        MtxPosition(&offs, &i_this->mSpeedVel);
+        i_this->current.pos.x += i_this->mSpeedVel.x;
+        i_this->current.pos.z += i_this->mSpeedVel.z;
         goto calc_11;
         break;
     case 11:
@@ -216,75 +221,62 @@ calc_012:
             i_this->mTimer[0] = cM_rndF(2.0f) + 10.0f + g_regHIO.mChild[0].mFloatRegs[12];
         }
         if (i_this->mTimer[0] > g_regHIO.mChild[0].mShortRegs[1] + 8) {
-            cLib_addCalcAngleS2(&i_this->field_0x31a, g_regHIO.mChild->mShortRegs[2] + 0x3000, 2, g_regHIO.mChild->mShortRegs[3] + 0x2000);
+            cLib_addCalcAngleS2(&i_this->mAngleRoll, g_regHIO.mChild->mShortRegs[2] + 0x3000, 2, g_regHIO.mChild->mShortRegs[3] + 0x2000);
         }
         if (i_this->mTimer[1] == 0) {
             i_this->mTimer[1] = 20.0f + cM_rndF(50.0f);
             i_this->mState = 10;
-            i_this->field_0x2f0.x += cM_rndFX(1000.0f);
-            i_this->field_0x2f0.y += cM_rndFX(1000.0f);
+            i_this->mTargetPos.x += cM_rndFX(1000.0f);
+            i_this->mTargetPos.y += cM_rndFX(1000.0f);
         }
 calc_11:
         i_this->current.pos.y -= 5.0f;
-        if (i_this->field_0x31e == 0 || dx < (g_regHIO.mChild[0].mFloatRegs[15] * 100.0f + 1500.0f)) {
+        if (!i_this->mHitGround || dx < (g_regHIO.mChild[0].mFloatRegs[15] * 100.0f + 1500.0f)) {
             i_this->mState = 0;
             i_this->mTimer[0] = 0;
-            i_this->field_0x2c4 = 10.0f + cM_rndFX(10.0f);
-            i_this->field_0x2fc.y += 2000.0f;
-            i_this->current.angle.x = -0x2000;
-            i_this->mTimer[2] = g_regHIO.mChild[0].mShortRegs[5] + 300;
-        }
-        break;
-    case 20:
-        i_this->field_0x2f0 = headTopPos;
-        cLib_addCalc2(&i_this->current.pos.x, i_this->field_0x2f0.x, 1.0f, i_this->field_0x2c8);
-        cLib_addCalc2(&i_this->current.pos.y, i_this->field_0x2f0.y, 1.0f, i_this->field_0x2c8 / 2.0f);
-        cLib_addCalc2(&i_this->current.pos.z, i_this->field_0x2f0.z, 1.0f, i_this->field_0x2c8);
-        cLib_addCalc2(&i_this->field_0x2c8, 1000.0f, 1.0f, g_regHIO.mChild[0].mFloatRegs[16] + 10.0f);
-        cLib_addCalcAngleS2(&i_this->current.angle.y, player->shape_angle.y, 2, 0x1000);
-        if (CPad_CHECK_TRIG_LEFT(0)) {
-            i_this->mState = 0;
-            i_this->mTimer[0] = 0;
-            i_this->field_0x2c4 = cM_rndFX(10.0f) + 10.0f;
-            i_this->field_0x2fc.y += 2000.0f;
+            i_this->mLiftYTimer = 10.0f + cM_rndFX(10.0f);
+            i_this->mTargetPosHome.y += 2000.0f;
             i_this->current.angle.x = -0x2000;
             i_this->mTimer[2] = g_regHIO.mChild[0].mShortRegs[5] + 300;
         }
         break;
     }
 
-    i_this->field_0x31e = 0;
-    if (i_this->mState > 10) {
-        gndChk.SetPos(&i_this->current.pos);
-        gndChk.GetPointP()->y += 1000.0f;
-        i_this->field_0x2bc = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (i_this->current.pos.y <= i_this->field_0x2bc) {
-            i_this->current.pos.y = i_this->field_0x2bc;
-            i_this->field_0x31e = 1;
+    i_this->mHitGround = false;
+    if (i_this->mState >= 8) {
+        Vec pos;
+        pos.x = i_this->current.pos.x;
+        pos.y = i_this->current.pos.y + 1000.0f;
+        pos.z = i_this->current.pos.z;
+        gndChk.SetPos(&pos);
+        i_this->mGroundY = dComIfG_Bgsp()->GroundCross(&gndChk);
+        if (i_this->current.pos.y <= i_this->mGroundY) {
+            i_this->current.pos.y = i_this->mGroundY;
+            i_this->mHitGround = true;
         }
     }
 
     if (ret == 2) {
-        i_this->field_0x2c0 += i_this->field_0x2c4;
-        i_this->field_0x2c4 -= 1.0f;
-        if (i_this->field_0x2c0 <= 0.0f) {
-            i_this->field_0x2c4 = cM_rndF(5.0f) + 15.0f;
+        i_this->mLiftY += i_this->mLiftYTimer;
+        i_this->mLiftYTimer -= 1.0f;
+        if (i_this->mLiftY <= 0.0f) {
+            i_this->mLiftYTimer = cM_rndF(5.0f) + 15.0f;
         }
     } else if (ret == 1) {
-        cLib_addCalc0(&i_this->field_0x2c0, 0.0f, 1.0f);
-        i_this->field_0x2c4 = 0.0f;
+        cLib_addCalc0(&i_this->mLiftY, 0.0f, 1.0f);
+        i_this->mLiftYTimer = 0.0f;
     }
 
-    if (updAng) {
-        i_this->field_0x2e0 = cM_ssin(i_this->field_0x2cc);
+    if (dispWing) {
+        i_this->mWingScale = cM_ssin(i_this->mWingTimer);
     } else {
-        i_this->field_0x2e0 = 100.0f;
+        i_this->mWingScale = 100.0f;
     }
 }
 
 /* 000011D4-00001240       .text daKt_Execute__FP8kt_class */
 static BOOL daKt_Execute(kt_class* i_this) {
-    i_this->field_0x2cc = i_this->field_0x2cc + 0x5e76 + g_regHIO.mChild[0].mShortRegs[0];
+    i_this->mWingTimer = i_this->mWingTimer + 0x5e76 + g_regHIO.mChild[0].mShortRegs[0];
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mTimer); i++)
         if (i_this->mTimer[i] != 0)
             --i_this->mTimer[i];
@@ -305,7 +297,6 @@ static BOOL daKt_Delete(kt_class* i_this) {
 
 /* 00001278-0000134C       .text daKt_solidHeapCB__FP10fopAc_ac_c */
 static BOOL daKt_solidHeapCB(fopAc_ac_c* i_ac) {
-    /* Nonmatching */
     kt_class* i_this = (kt_class*)i_ac;
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kt", 0x0B);
@@ -342,7 +333,7 @@ static s32 daKt_Create(fopAc_ac_c* i_ac) {
             i_this->mpModel->setBaseScale(i_this->mScale);
             i_this->mpModelWing->setBaseScale(i_this->mScale);
             i_this->current.pos.y += 2500.0f;
-            i_this->field_0x2fc = i_this->field_0x308 = i_this->current.pos;
+            i_this->mTargetPosHome = i_this->mHomePos = i_this->current.pos;
             i_this->mTimer[2] = g_regHIO.mChild[0].mShortRegs[5] + 500;
         } else {
             rt = cPhs_ERROR_e;
