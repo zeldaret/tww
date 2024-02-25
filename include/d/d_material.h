@@ -31,8 +31,8 @@ public:
     void entryDL(J3DModel*, s8, mDoExt_invisibleModel*);
     void entryDL(mDoExt_McaMorf*, s8, mDoExt_invisibleModel*);
 
-    /* 0x00 */ J3DMaterialTable* field_0x0;
-    /* 0x04 */ mDoExt_btkAnm field_0x4;
+    /* 0x00 */ J3DMaterialTable* mMaterialTable;
+    /* 0x04 */ mDoExt_btkAnm mBtkAnm;
 };
 
 class dMat_control_c {
@@ -55,9 +55,8 @@ public:
         mIce->updateDL(morf, param_2, invisModel);
     }
 
-    // TODO:
-    static void pop(J3DModelData*) {}
-    static void push(J3DModelData*) {}
+    static void push(J3DModelData* modelData) { mTempBackup.create(modelData); }
+    static void pop(J3DModelData* modelData) { mTempBackup.restore(modelData); }
 
     static mDoExt_backupMaterial_c mTempBackup;
     static JKRSolidHeap* mHeap;

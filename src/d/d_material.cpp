@@ -4,6 +4,7 @@
 //
 
 #include "d/d_material.h"
+#include "d/d_com_inf_game.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
@@ -21,48 +22,124 @@ void dMat_backup_c::restore() {
 
 /* 8006F69C-8006F740       .text create__10dMat_ice_cFP16J3DMaterialTableP19J3DAnmTextureSRTKey */
 void dMat_ice_c::create(J3DMaterialTable* param_1, J3DAnmTextureSRTKey* param_2) {
-    /* Nonmatching */
-    field_0x0 = param_1;
-    int rt = field_0x4.init(field_0x0, param_2, 1, 2, 1.0f, 0, -1, false, 0);
+    mMaterialTable = param_1;
+    int rt = mBtkAnm.init(mMaterialTable, param_2, 1, 2, 1.0f, 0, -1, false, 0);
     JUT_ASSERT(98, rt != 0);
-    field_0x4.entry(field_0x0, field_0x4.getFrameCtrl()->getFrame());
+    mBtkAnm.entry(mMaterialTable, mBtkAnm.getFrameCtrl()->getFrame());
 }
 
 /* 8006F740-8006F780       .text play__10dMat_ice_cFv */
 void dMat_ice_c::play() {
-    /* Nonmatching */
-    field_0x4.play();
-    field_0x4.entryFrame();
+    mBtkAnm.play();
+    mBtkAnm.entryFrame();
 }
 
 /* 8006F780-8006F83C       .text copy__10dMat_ice_cFP12J3DModelData */
-void dMat_ice_c::copy(J3DModelData*) {
-    /* Nonmatching */
+void dMat_ice_c::copy(J3DModelData* modelData) {
+    J3DMaterial* srcMat = mMaterialTable->getMaterialNodePointer(0);
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
+        J3DMaterial* mat = modelData->getMaterialNodePointer(i);
+        mat->copy(srcMat);
+        mat->setMaterialAnm(srcMat->getMaterialAnm());
+        mat->setMaterialMode(srcMat->getMaterialMode());
+    }
+    J3DTexture* srcTex = mMaterialTable->getTexture();
+    if (srcTex->getNum() != 0) {
+        modelData->setTexture(srcTex);
+        modelData->setTextureName(mMaterialTable->getTextureName());
+    }
 }
 
 /* 8006F83C-8006F90C       .text updateDL__10dMat_ice_cFP8J3DModelScP21mDoExt_invisibleModel */
-void dMat_ice_c::updateDL(J3DModel*, signed char, mDoExt_invisibleModel*) {
-    /* Nonmatching */
+void dMat_ice_c::updateDL(J3DModel* model, s8 backupNo, mDoExt_invisibleModel* inv) {
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DModelData* modelData = model->getModelData();
+    if (backupNo < 0)
+        dMat_control_c::push(modelData);
+    dComIfGd_setList();
+    copy(modelData);
+    mDoExt_modelUpdateDL(model);
+    if (backupNo < 0)
+        dMat_control_c::pop(modelData);
+    else
+        dMat_control_c::restore(backupNo);
+
+    if (inv != NULL)
+        inv->entry();
+
+    j3dSys.setDrawBuffer(buffer0, 0);
+    j3dSys.setDrawBuffer(buffer1, 1);
 }
 
 /* 8006F90C-8006F9E0       .text updateDL__10dMat_ice_cFP14mDoExt_McaMorfScP21mDoExt_invisibleModel */
-void dMat_ice_c::updateDL(mDoExt_McaMorf*, signed char, mDoExt_invisibleModel*) {
-    /* Nonmatching */
+void dMat_ice_c::updateDL(mDoExt_McaMorf* morf, s8 backupNo, mDoExt_invisibleModel* inv) {
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DModelData* modelData = morf->getModel()->getModelData();
+    if (backupNo < 0)
+        dMat_control_c::push(modelData);
+    dComIfGd_setList();
+    copy(modelData);
+    morf->updateDL();
+    if (backupNo < 0)
+        dMat_control_c::pop(modelData);
+    else
+        dMat_control_c::restore(backupNo);
+
+    if (inv != NULL)
+        inv->entry();
+
+    j3dSys.setDrawBuffer(buffer0, 0);
+    j3dSys.setDrawBuffer(buffer1, 1);
 }
 
 /* 8006F9E0-8006FAB0       .text entryDL__10dMat_ice_cFP8J3DModelScP21mDoExt_invisibleModel */
-void dMat_ice_c::entryDL(J3DModel*, signed char, mDoExt_invisibleModel*) {
-    /* Nonmatching */
+void dMat_ice_c::entryDL(J3DModel* model, s8 backupNo, mDoExt_invisibleModel* inv) {
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DModelData* modelData = model->getModelData();
+    if (backupNo < 0)
+        dMat_control_c::push(modelData);
+    dComIfGd_setList();
+    copy(modelData);
+    mDoExt_modelEntryDL(model);
+    if (backupNo < 0)
+        dMat_control_c::pop(modelData);
+    else
+        dMat_control_c::restore(backupNo);
+
+    if (inv != NULL)
+        inv->entry();
+
+    j3dSys.setDrawBuffer(buffer0, 0);
+    j3dSys.setDrawBuffer(buffer1, 1);
 }
 
 /* 8006FAB0-8006FB84       .text entryDL__10dMat_ice_cFP14mDoExt_McaMorfScP21mDoExt_invisibleModel */
-void dMat_ice_c::entryDL(mDoExt_McaMorf*, signed char, mDoExt_invisibleModel*) {
-    /* Nonmatching */
+void dMat_ice_c::entryDL(mDoExt_McaMorf* morf, s8 backupNo, mDoExt_invisibleModel* inv) {
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DModelData* modelData = morf->getModel()->getModelData();
+    if (backupNo < 0)
+        dMat_control_c::push(modelData);
+    dComIfGd_setList();
+    copy(modelData);
+    morf->entryDL();
+    if (backupNo < 0)
+        dMat_control_c::pop(modelData);
+    else
+        dMat_control_c::restore(backupNo);
+
+    if (inv != NULL)
+        inv->entry();
+
+    j3dSys.setDrawBuffer(buffer0, 0);
+    j3dSys.setDrawBuffer(buffer1, 1);
 }
 
 /* 8006FB84-8006FCF0       .text create__14dMat_control_cFP16J3DMaterialTableP19J3DAnmTextureSRTKey */
 void dMat_control_c::create(J3DMaterialTable* param_1, J3DAnmTextureSRTKey* param_2) {
-    /* Nonmatching */
     mHeap = mDoExt_createSolidHeapFromSystem(0, 0);
     JUT_ASSERT(308, mHeap != 0);
     JKRHeap* heap = mDoExt_setCurrentHeap(mHeap);
@@ -90,7 +167,6 @@ void dMat_control_c::remove() {
 
 /* 8006FDBC-8006FDF4       .text restore__14dMat_control_cFSc */
 void dMat_control_c::restore(s8 param_1) {
-    /* Nonmatching */
     if (param_1 < 0) {
         return;
     }

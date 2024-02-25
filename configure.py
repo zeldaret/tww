@@ -365,7 +365,7 @@ config.libs = [
             Object(NonMatching, "d/d_demo.cpp"),
             Object(NonMatching, "d/d_door.cpp"),
             Object(Matching,    "d/d_resorce.cpp", extra_cflags=['-pragma "nosyminline on"']),
-            Object(NonMatching, "d/d_material.cpp"),
+            Object(Matching,    "d/d_material.cpp"),
             Object(Matching,    "d/d_event.cpp"),
             Object(Matching,    "d/d_event_data.cpp"),
             Object(Matching,    "d/d_event_manager.cpp"),

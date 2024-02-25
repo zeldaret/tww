@@ -59,6 +59,7 @@ public:
     int JSGGetNodeTransformation(u32 no, Mtx dst) const {
         JUT_ASSERT(0x52, mModel != 0);
         cMtx_copy(mModel->getAnmMtx((u16)no), dst);
+        return 1;
     }
     f32 JSGGetAnimationFrameMax() const { return mAnimationFrameMax; }
     f32 JSGGetTextureAnimationFrameMax() const { return mTexAnimationFrameMax; }
