@@ -8,24 +8,39 @@
 #include "JSystem/JStage/JSGFog.h"
 #include "JSystem/JStage/JSGLight.h"
 #include "JSystem/JStage/JSGSystem.h"
+#include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTNameTab.h"
+#include "m_Do/m_Do_mtx.h"
 
 class dDemo_system_c;
-class TControl;
-class dMesg_tControl;
+namespace JStudio {
+    class TControl {
+    public:
+        TControl();
+        /* 0x00 */ u32 field_0x00[10];
+    };
+}
+class dMesg_tControl {
+public:
+    dMesg_tControl();
+    /* 0x00 */ u32 field_0x00[29];
+};
 class fopAc_ac_c;
 
 class dDemo_actor_c : public JStage::TActor {
 public:
     dDemo_actor_c();
     ~dDemo_actor_c();
-    void getActor();
+    fopAc_ac_c* getActor();
     void setActor(fopAc_ac_c*);
-    void getP_BtpData(const char*);
-    void getP_BrkData(const char*);
-    void getP_BtkData(const char*);
+    void* getP_BtpData(const char*);
+    void* getP_BrkData(const char*);
+    void* getP_BtkData(const char*);
     void getPrm_Morf();
     void JSGSetData(u32, const void*, u32);
     void JSGSetTranslation(const Vec&);
@@ -37,13 +52,23 @@ public:
     void JSGSetAnimationTransition(f32);
     void JSGSetTextureAnimation(u32);
     void JSGSetTextureAnimationFrame(f32);
-    s32 JSGFindNodeID(const char*) const;
-    int JSGGetNodeTransformation(u32, f32(*)[4]) const;
-    f32 JSGGetAnimationFrameMax() const;
-    f32 JSGGetTextureAnimationFrameMax() const;
-    void JSGGetTranslation(Vec*) const;
-    void JSGGetScaling(Vec*) const;
-    void JSGGetRotation(Vec*) const;
+    s32 JSGFindNodeID(const char* name) const {
+        JUT_ASSERT(0x4d, mModel != 0);
+        return mModel->getModelData()->getJointName()->getIndex(name);
+    }
+    int JSGGetNodeTransformation(u32 no, Mtx dst) const {
+        JUT_ASSERT(0x52, mModel != 0);
+        cMtx_copy(mModel->getAnmMtx((u16)no), dst);
+    }
+    f32 JSGGetAnimationFrameMax() const { return mAnimationFrameMax; }
+    f32 JSGGetTextureAnimationFrameMax() const { return mTexAnimationFrameMax; }
+    void JSGGetTranslation(Vec* dst) const { *dst = mTranslation; }
+    void JSGGetScaling(Vec* dst) const { *dst = mScaling; }
+    void JSGGetRotation(Vec* dst) const {
+        dst->x = cM_sht2d(mRotation.x);
+        dst->y = cM_sht2d(mRotation.y);
+        dst->z = cM_sht2d(mRotation.z);
+    }
 
     bool checkEnable(u16 mask) { return mFlags & mask; }
     csXyz* getRatate() { return &mRotation; }
@@ -81,10 +106,10 @@ public:
     /* 0x38 */ f32 mAnimationFrameMax;
     /* 0x3C */ s32 mTexAnimation;
     /* 0x40 */ f32 mTexAnimationFrame;
-    /* 0x44 */ void* mTexAnimationFrameMax;
-    /* 0x48 */ J3DModel* mpModel;
+    /* 0x44 */ f32 mTexAnimationFrameMax;
+    /* 0x48 */ J3DModel* mModel;
     /* 0x4C */ u32 field_0x4c;
-    /* 0x50 */ void* field_0x50;
+    /* 0x50 */ const void* field_0x50;
     /* 0x54 */ u32 field_0x54;
     /* 0x58 */ s32 mActorPcId;
     /* 0x5C */ s32 mBckId;
@@ -95,7 +120,8 @@ public:
 
 class dDemo_camera_c : public JStage::TCamera {
 public:
-    ~dDemo_camera_c();
+    dDemo_camera_c() { mFlags = 0; }
+    ~dDemo_camera_c() {}
     f32 JSGGetProjectionNear() const;
     void JSGSetProjectionNear(f32);
     f32 JSGGetProjectionFar() const;
@@ -112,32 +138,69 @@ public:
     void JSGSetViewTargetPosition(const Vec&);
     f32 JSGGetViewRoll() const;
     void JSGSetViewRoll(f32);
+
+private:
+    /* 0x04 */ u8 mFlags;
+    /* 0x08 */ f32 mProjNear;
+    /* 0x0C */ f32 mProjFar;
+    /* 0x10 */ f32 mFovy;
+    /* 0x14 */ f32 mAspect;
+    /* 0x18 */ cXyz mViewPosition;
+    /* 0x24 */ cXyz mUpVector;
+    /* 0x30 */ cXyz mTargetPosition;
+    /* 0x3C */ f32 mRoll;
 };
 
 class dDemo_ambient_c : public JStage::TAmbientLight {
 public:
-    ~dDemo_ambient_c();
-    void JSGSetColor(_GXColor);
+    dDemo_ambient_c() { mFlags = 0; }
+    ~dDemo_ambient_c() {}
+    void JSGSetColor(GXColor color);
+
+private:
+    /* 0x04 */ u8 mFlags;
+    /* 0x08 */ GXColor mColor;
 };
 
 class dDemo_light_c : public JStage::TLight {
 public:
-    ~dDemo_light_c();
+    dDemo_light_c() { mFlags = 0; }
+    ~dDemo_light_c() {}
     void JSGSetLightType(JStage::TELight);
     void JSGSetPosition(const Vec&);
     void JSGSetColor(_GXColor);
     void JSGSetDistanceAttenuation(f32, f32, _GXDistAttnFn);
     void JSGSetAngleAttenuation(f32, _GXSpotFn);
     void JSGSetDirection(const Vec&);
+
+private:
+    /* 0x04 */ u8 mFlags;
+    /* 0x08 */ JStage::TELight mLightType;
+    /* 0x0C */ GXDistAttnFn mAttnFn;
+    /* 0x10 */ GXSpotFn mSpotFn;
+    /* 0x14 */ cXyz mPosition;
+    /* 0x20 */ GXColor mColor;
+    /* 0x24 */ f32 mDistAttn0;
+    /* 0x28 */ f32 mDistAttn1;
+    /* 0x2C */ f32 mAngleAttn;
+    /* 0x30 */ cXyz mDirection;
 };
 
 class dDemo_fog_c : public JStage::TFog {
 public:
-    ~dDemo_fog_c();
+    dDemo_fog_c() { mFlags = 0; }
+    ~dDemo_fog_c() {}
     void JSGSetFogFunction(_GXFogType);
     void JSGSetStartZ(f32);
     void JSGSetEndZ(f32);
     void JSGSetColor(_GXColor);
+
+private:
+    /* 0x04 */ u8 mFlags;
+    /* 0x05 */ u8 mFogType;
+    /* 0x08 */ f32 mStartZ;
+    /* 0x0C */ f32 mEndZ;
+    /* 0x10 */ GXColor mColor;
 };
 
 class dDemo_object_c {
@@ -145,13 +208,13 @@ public:
     dDemo_object_c();
     ~dDemo_object_c();
 
-    void appendActor(fopAc_ac_c*);
+    dDemo_actor_c* appendActor(fopAc_ac_c*);
     dDemo_actor_c* getActor(u8);
-    void createCamera();
-    void getActiveCamera();
-    void createAmbient();
-    void appendLight();
-    void createFog();
+    dDemo_camera_c* createCamera();
+    dDemo_camera_c* getActiveCamera();
+    dDemo_ambient_c* createAmbient();
+    dDemo_light_c* appendLight();
+    dDemo_fog_c* createFog();
     void remove();
 
     /* 0x00 */ u8 mNumActor;
@@ -160,13 +223,18 @@ public:
     /* 0x84 */ dDemo_camera_c* mpActiveCamera;
     /* 0x88 */ dDemo_ambient_c* mpAmbient;
     /* 0x8C */ dDemo_light_c* mpLight[8];
-    /* 0xAC */ u8 field_0xac[4];
+    /* 0xAC */ dDemo_fog_c* mpFog;
 };
 
 class dDemo_system_c : public JStage::TSystem {
 public:
+    dDemo_system_c() : mObject(NULL) {}
     ~dDemo_system_c();
-    bool JSGFindObject(const char*, JStage::TEObject) const;
+    void* JSGFindObject(const char*, JStage::TEObject) const;
+    void setObject(dDemo_object_c* obj) { mObject = obj; }
+
+private:
+    /* 0x04 */ dDemo_object_c* mObject;
 };
 
 class dDemo_manager_c {
@@ -183,7 +251,7 @@ public:
     s32 getMode() { return mMode; }
 
     /* 0x00 */ dDemo_system_c* mSystem;
-    /* 0x04 */ TControl* mControl;
+    /* 0x04 */ JStudio::TControl* mControl;
     /* 0x08 */ void* mStage;
     /* 0x0C */ void* mAudio;
     /* 0x10 */ void* mParticle;
@@ -191,7 +259,7 @@ public:
     /* 0x18 */ dMesg_tControl* mMesgControl;
     /* 0x1C */ void* mMessage;
     /* 0x20 */ dDemo_object_c mDemoObj;
-    /* 0xD0 */ void* field_0xd0;
+    /* 0xD0 */ char* mCurFile;
     /* 0xD4 */ int mFrame;
     /* 0xD8 */ int mFrameNoMsg;
     /* 0xDC */ int mMode;

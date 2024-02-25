@@ -6,7 +6,9 @@
 #include "dolphin/gx/GXStruct.h"
 
 namespace JStage {
-    enum TELight {};
+    enum TELight {
+        kLightMax = 0xFFFFFFFF,
+    };
 
     struct TLight : public TObject {
         virtual ~TLight() = 0;
