@@ -186,18 +186,18 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         }
     }
 
-    if(field_0x68 != 0) {
+    if(mpJntCtrl) {
         switch(mTurnType) {
             case 2:
-                field_0x68[0xA] = 1;
+                mpJntCtrl->setTrn();
             case 1:
-                field_0x68[0xC] = 0;
+                mpJntCtrl->offBackBoneLock();
                 break;
             case 0:
-                field_0x68[0xC] = 1;
+                mpJntCtrl->onBackBoneLock();
                 break;
             default:
-                field_0x68[0xC] = 0;
+                mpJntCtrl->offBackBoneLock();
                 break;
         }
     }
@@ -445,18 +445,18 @@ void dNpc_EventCut_c::cutTurnToPosProc() {
     s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
     mbAttention = 1;
 
-    if(field_0x68 != 0) {
+    if(mpJntCtrl) {
         switch(mTurnType) {
             case 2:
-                field_0x68[0xA] = 1;
+                mpJntCtrl->setTrn();
             case 1:
-                field_0x68[0xC] = 0;
+                mpJntCtrl->offBackBoneLock();
                 break;
             case 0:
-                field_0x68[0xC] = 1;
+                mpJntCtrl->onBackBoneLock();
                 break;
             default:
-                field_0x68[0xC] = 0;
+                mpJntCtrl->offBackBoneLock();
                 break;
         }
     }

@@ -204,7 +204,9 @@ public:
     u8 getCatchChgItem() { return mCatch.getChangeItem(); }
     void getCatghTarget() {}
     void offAleart() {}
-    void revivalAleart() {}
+    void revivalAleart() {
+        clrFlag(0x80000000);
+    }
     void LookRequest(fopAc_ac_c*, f32, f32, f32, s16, int) {}
     void Look2RequestF(fopAc_ac_c*, s16, int) {}
     void ZHintRequest(fopAc_ac_c*, int) {}

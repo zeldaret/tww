@@ -447,6 +447,8 @@ s32 fopAcM_createChild(s16 procName, unsigned int parentPId, u32 parameters, cXy
                        int roomNo, csXyz* p_angle, cXyz* p_scale = NULL, s8 subType = -1,
                        createFunc p_createFunc = NULL);
 
+s32 fopAcM_createChild(char* pProcNameString, unsigned int parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc);
+
 s32 fopAcM_createChildFromOffset(s16 procName, unsigned int parentProcID, u32 actorParams,
                                  cXyz* p_pos, int roomNo, csXyz* p_angle,
                                  cXyz* p_scale, s8 subType, createFunc p_createFunc);

@@ -10,6 +10,7 @@
 #include "d/d_a_obj.h"
 #include "SSystem/SComponent/c_angle.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "m_Do/m_Do_mtx.h"
 
 namespace daTsubo {
     class Act_c : public fopAc_ac_c {
@@ -31,7 +32,20 @@ namespace daTsubo {
         void data() const {}
         void data_spec_boko(int) {}
         void is_switch() const {}
-        void pos_init() {}
+        void pos_init() {
+            current.pos = home.pos;
+            current.angle = home.angle;
+            shape_angle = home.angle;
+
+            m688.Val(cSAngle::_0);
+            m68A.Val(cSAngle::_0);
+            m68C.Val(cSAngle::_0);
+            m68E.Val(cSAngle::_0);
+            m690.Val(cSAngle::_0);
+            m692.Val(current.angle.y);
+
+            mDoMtx_identity(mPoseMtx);
+        }
         void prmZ_get_swSave() const {}
         void prm_get_cull() const {}
         void prm_get_itemNo() const {}

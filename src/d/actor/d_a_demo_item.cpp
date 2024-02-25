@@ -189,7 +189,7 @@ u8 daDitem_c::m_effect_type[0x100] = {
     /* TINGLE_STATUE5   */ 0x00,
     /* TINGLE_STATUE6   */ 0x00,
     /* noentry169       */ 0x04,
-    /* noentry170       */ 0x04,
+    /* HURRICANE_SPIN   */ 0x04,
     /* MAX_RUPEE_UP1    */ 0x00,
     /* MAX_RUPEE_UP2    */ 0x00,
     /* MAX_BOMB_UP1     */ 0x00,

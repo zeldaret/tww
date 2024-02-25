@@ -202,6 +202,9 @@ public:
     void setEmitterTranslation(const JGeometry::TVec3<f32>& trans) {
         mEmitterTranslation.set(trans);
     }
+    void setEmitterTranslation(f32 x, f32 y, f32 z) {
+        mEmitterTranslation.set(x, y, z);
+    }
     void setEmitterScale(const JGeometry::TVec3<f32>& scale) {
         mEmitterScale.set(scale);
     }
@@ -224,6 +227,7 @@ public:
     void setVolumeSize(u16 size) { mVolumeSize = size; }
     void setLifeTime(s16 i_lifeTime) { mLifeTime = i_lifeTime; }
     void setRate(f32 i_rate) { mRate = i_rate; }
+    void setRandomDirectionSpeed(f32 i_speed) { mInitialVelRndm = i_speed; }
     void setDirectionalSpeed(f32 i_speed) { mInitialVelDir = i_speed; }
     void setAwayFromAxisSpeed(f32 i_speed) { mInitialVelAxis = i_speed; }
     void setAwayFromCenterSpeed(f32 i_speed) { mInitialVelOmni = i_speed; }
@@ -290,7 +294,6 @@ public:
     void setGlobalParticleScale(f32, f32) {}
     void setGlobalParticleWidthScale(f32) {}
     void setGlobalSRTMatrix(MtxP) {}
-    void setRandomDirectionSpeed(f32) {}
 
     static JPAEmitterInfo emtrInfo;
 

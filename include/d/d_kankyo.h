@@ -392,6 +392,7 @@ void dKy_set_nexttime(f32);
 void dKy_instant_timechg(f32);
 void dKy_instant_rainchg();
 SND_INFLUENCE * dKy_Sound_get();
+void dKy_SordFlush_set(cXyz hitPos, int lightType);
 void dKy_Sound_set(cXyz i_pos, int param_1, unsigned int i_actorID, int param_3);
 void dKy_SordFlush_set(cXyz hitPos, int lightType);
 void dKy_itudemo_se();

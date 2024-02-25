@@ -106,6 +106,7 @@ public:
 };
 
 class dNpc_EventCut_c {
+private:
     /* 0x00 */ char* mpEvtStaffName;
     /* 0x04 */ int mEvtStaffId;
     /* 0x08 */ fopAc_ac_c* mpActor;
@@ -129,13 +130,13 @@ class dNpc_EventCut_c {
     /* 0x61 */ u8 mbNoTurn;
     /* 0x62 */ s16 mTurnSpeed;
     /* 0x64 */ u32 mTurnType;
-    /* 0x68 */ u8* field_0x68;
+    /* 0x68 */ dNpc_JntCtrl_c* mpJntCtrl;
 
 public:
     dNpc_EventCut_c() {
         mpActor = 0;
         mpTalkActor = 0;
-        field_0x68 = 0;
+        mpJntCtrl = 0;
     }
 
     void setActorInfo(char*, fopAc_ac_c*);
@@ -155,6 +156,21 @@ public:
     void cutTalkMsgStart();
     void cutContinueTalkStart();
     void cutTalkMsgProc();
+
+    char* getActorName() {
+        return mpEvtStaffName;
+    }
+
+    bool getAttnFlag() {
+        return mbAttention;
+    }
+    cXyz getAttnPos() {
+        return mPos;
+    }
+
+    void setJntCtrlPtr(dNpc_JntCtrl_c* ctrl) {
+        mpJntCtrl = ctrl;
+    }
     
     static fopAc_ac_c* findActorCallBack(fopAc_ac_c*, void*);
 };
@@ -196,12 +212,23 @@ public:
     void swing_horizone_init(s16 param_1, s16 param_2, s16 param_3, int param_4);
     void swing_horizone();
     void move();
+    
+    dNpc_HeadAnm_c() {
+        field_0x14 = 0.0f;
+        field_0x18 = 0.0f;
+        field_0x1C = 0.0f;
+        field_0x1E = 0;
+        field_0x20 = 0;
+        field_0x00 = 0;
+        field_0x02 = 0;
+        field_0x04 = 0;
+    }
 
     typedef void (dNpc_HeadAnm_c::*swing_func)(void);
 
     /* 0x00 */ s16 field_0x00;
     /* 0x02 */ s16 field_0x02;
-    /* 0x04 */ u32 field_0x04;
+    /* 0x04 */ s16 field_0x04;
     /* 0x08 */ swing_func mFunc;
     /* 0x14 */ f32 field_0x14;
     /* 0x18 */ f32 field_0x18;
