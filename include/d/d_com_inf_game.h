@@ -462,6 +462,12 @@ public:
 
     u8 getMiniGameType() { return mMiniGameType; }
 
+    void endMiniGame(u16 param_1) {
+        mMiniGameType = 0;
+        field_0x4A38 ^= 1 << (param_1 - 1); // toggle Nth bit
+        field_0x4A3E = 0;
+    }
+
     void show2dOn() { m2dShow = true; }
     void show2dOff() { m2dShow = false; }
     bool show2dCheck() { return m2dShow; }
@@ -2252,9 +2258,7 @@ inline u8 dComIfGp_getMiniGameType() {
 }
 
 inline void dComIfGp_endMiniGame(u16 param_1) {
-    g_dComIfG_gameInfo.play.mMiniGameType = 0;
-    g_dComIfG_gameInfo.play.field_0x4A38 ^= 1 << param_1 - 1; // what
-    g_dComIfG_gameInfo.play.field_0x4A3E = 0;
+    g_dComIfG_gameInfo.play.endMiniGame(param_1);
 }
 
 inline u8 dComIfGp_getAStatus() {
