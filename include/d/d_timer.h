@@ -105,4 +105,6 @@ public:
 
 s32 dTimer_createStockTimer();
 
+void dTimer_createTimer(int, u16, u8, u8, f32, f32, f32, f32);
+
 #endif /* D_TIMER_H */

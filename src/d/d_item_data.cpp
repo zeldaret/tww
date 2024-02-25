@@ -3206,7 +3206,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0xAA: noentry170
+        // 0xAA: HURRICANE_SPIN
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ NULL,
         /* mBmdIdx      */ 0x0003,
@@ -6796,7 +6796,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xAA: noentry170
+        // 0xAA: HURRICANE_SPIN
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -9108,7 +9108,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0xAA: noentry170
+        // 0xAA: HURRICANE_SPIN
         0x00,
         0x00,
         0x00,

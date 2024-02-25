@@ -174,7 +174,7 @@ enum ItemTable {
     /* 0xA7 */ TINGLE_STATUE5,
     /* 0xA8 */ TINGLE_STATUE6,
     /* 0xA9 */ noentry169,
-    /* 0xAA */ noentry170,
+    /* 0xAA */ HURRICANE_SPIN,
     /* 0xAB */ MAX_RUPEE_UP1,
     /* 0xAC */ MAX_RUPEE_UP2,
     /* 0xAD */ MAX_BOMB_UP1,

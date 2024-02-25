@@ -280,6 +280,7 @@ public:
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
 
     s16 getMiniGameRupee() { return mMiniGameRupee; }
+    void setMiniGameRupee(s16 count) { mMiniGameRupee = count; }
     void plusMiniGameRupee(s16 count) {
         if(mMiniGameRupee + count > 0) {
             mMiniGameRupee += count;
@@ -638,10 +639,10 @@ public:
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
     /* 0x4A28 */ u32 mPlayerStatus[2][2];
-    /* 0x4A38 */ u8 field_0x4A38[0x4A3A - 0x4A38];
+    /* 0x4A38 */ u16 field_0x4A38;
     /* 0x4A3A */ u8 mMiniGameType;
     /* 0x4A3C */ s16 mMiniGameRupee;
-    /* 0x4A3D */ u8 field_0x4A3E[0x4A40 - 0x4A3E];
+    /* 0x4A3E */ u8 field_0x4A3E;
     /* 0x4A40 */ __d_timer_info_c mTimerInfo;
     /* 0x4A54 */ dDlst_window_c* mCurrentWindow;
     /* 0x4A58 */ view_class* mCurrentView;
@@ -1922,6 +1923,10 @@ inline dAttention_c& dComIfGp_getAttention() {
     return g_dComIfG_gameInfo.play.getAttention();
 }
 
+inline void dComIfGp_att_revivalAleart() {
+    return dComIfGp_getAttention().revivalAleart();
+}
+
 inline dDetect_c& dComIfGp_getDetect() {
     return g_dComIfG_gameInfo.play.getDetect();
 }
@@ -2246,6 +2251,12 @@ inline u8 dComIfGp_getMiniGameType() {
     return g_dComIfG_gameInfo.play.getMiniGameType();
 }
 
+inline void dComIfGp_endMiniGame(u16 param_1) {
+    g_dComIfG_gameInfo.play.mMiniGameType = 0;
+    g_dComIfG_gameInfo.play.field_0x4A38 ^= 1 << param_1 - 1; // what
+    g_dComIfG_gameInfo.play.field_0x4A3E = 0;
+}
+
 inline u8 dComIfGp_getAStatus() {
     return g_dComIfG_gameInfo.play.getAStatus();
 }
@@ -2284,6 +2295,10 @@ inline void dComIfGp_setPictureStatusOn() {
 
 inline s16 dComIfGp_getMiniGameRupee() {
     return g_dComIfG_gameInfo.play.getMiniGameRupee();
+}
+
+inline void dComIfGp_setMiniGameRupee(s16 count) {
+    return g_dComIfG_gameInfo.play.setMiniGameRupee(count);
 }
 
 inline void dComIfGp_plusMiniGameRupee(s16 count) {

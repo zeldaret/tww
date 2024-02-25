@@ -102,4 +102,8 @@ void fopMsgM_messageSendOn();
 u32 fopMsgM_tactMessageSet();
 void fopMsgM_demoMsgFlagOn();
 
+void fopMsgM_demoMsgFlagOn();
+void fopMsgM_demoMsgFlagOff();
+bool fopMsgM_demoMsgFlagCheck();
+
 #endif
