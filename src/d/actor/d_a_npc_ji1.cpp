@@ -2120,7 +2120,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
                 dComIfGp_setMessageCountNumber(field_0xD70);
                 field_0x2C8 = &normalAction;
-                if(dComIfG_getTimerPtr()) {
+                if (dComIfG_getTimerPtr()) {
                     dComIfG_TimerDeleteRequest();
                     setClearRecord(field_0xD70);
                 }
@@ -2140,9 +2140,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
     if(field_0xC3C > 2) {
         Func_t temp = &battleAction;
         if(field_0x2B0 == temp) {
-            if(dComIfG_getTimerPtr()) {
-                dComIfG_TimerDeleteRequest();
-            }
+            dComIfG_TimerDeleteRequest();
             
             if(isClearRecord(field_0xD70)) {
                 setClearRecord(field_0xD70);

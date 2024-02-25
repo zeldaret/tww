@@ -637,6 +637,8 @@ inline void fopAcM_offDraw(fopAc_ac_c* actor) {
 
 inline void fopAcM_monsSeStart(fopAc_ac_c*, unsigned long, Vec*, unsigned long) {}
 inline void fopAcM_getNameString(fopAc_ac_c*, char*) {}
-inline void fopAcM_orderOtherEvent(fopAc_ac_c*, char*, unsigned short) {}
+inline void fopAcM_orderOtherEvent(fopAc_ac_c* ac, char* event, u16 flag) {
+    fopAcM_orderOtherEvent2(ac, event, flag);
+}
 
 #endif

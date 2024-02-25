@@ -2341,7 +2341,7 @@ void dStage_escapeRestart() {
     dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y,
                             fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
 
-    if (dComIfG_getTimerMode() == 3 && dComIfG_getTimerPtr() != NULL) {
+    if (dComIfG_getTimerMode() == 3) {
         dComIfG_TimerDeleteRequest();
     }
 
