@@ -413,10 +413,10 @@ public:
     void setAnmRate(f32) {} // TODO
 
     /* 0x50 */ J3DModel* mpModel;
-    /* 0x54 */ J3DAnmTransform* field_0x54;
-    /* 0x58 */ J3DAnmTransform* field_0x58;
-    /* 0x5C */ int field_0x5c;
-    /* 0x60 */ int field_0x60;
+    /* 0x54 */ J3DAnmTransform* mpAnm1;
+    /* 0x58 */ J3DAnmTransform* mpAnm2;
+    /* 0x5C */ J3DTransformInfo* mpTransformInfo;
+    /* 0x60 */ Quaternion* mpQuat;
     /* 0x64 */ J3DFrameCtrl mFrameCtrl;
     /* 0x78 */ f32 field_0x78;
     /* 0x7C */ f32 field_0x7c;

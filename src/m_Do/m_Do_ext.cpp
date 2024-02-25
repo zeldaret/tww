@@ -1182,17 +1182,21 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
     if (param_8) {
         mpSound = new mDoExt_zelAnime();
         if (!mpSound) {
-            goto cleanup;
+            goto ERROR_EXIT;
         }
     }
     setAnm(anmTransform, loopMode, 0.0f, param_5, param_6, param_7, basAnm);
     mPrevMorf = -1.0f;
     mpTransformInfo = new J3DTransformInfo[modelData->getJointNum()];
     if (!mpTransformInfo) {
-        goto cleanup;
+        goto ERROR_EXIT;
     }
     mpQuat = new Quaternion[modelData->getJointNum()];
-    if (mpQuat) {
+    if (!mpQuat) {
+        goto ERROR_EXIT;
+    }
+
+    {
         J3DTransformInfo* info = mpTransformInfo;
         Quaternion* quat = mpQuat;
         J3DModelData* r23 = mpModel->getModelData();
@@ -1208,7 +1212,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
         return;
     }
     
-cleanup:
+ERROR_EXIT:
     if (mpSound) {
         mpSound->stop();
         mpSound = NULL;
@@ -1222,7 +1226,6 @@ cleanup:
     if (mpModel) {
         mpModel = NULL;
     }
-    return;
 }
 
 /* 80012A2C-80012D78       .text calc__14mDoExt_McaMorfFUs */
@@ -1341,32 +1344,66 @@ bool mDoExt_McaMorf::play(Vec*, u32, s8) {
 
 /* 800130D0-8001314C       .text update__14mDoExt_McaMorfFv */
 void mDoExt_McaMorf::update() {
-    /* Nonmatching */
+    if (mpModel) {
+        if (mpAnm) {
+            mpAnm->setFrame(mFrameCtrl.getFrame());
+        }
+        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(this);
+        mDoExt_modelUpdate(mpModel);
+        mPrevMorf = mCurMorf;
+    }
 }
 
 /* 8001314C-800131C8       .text updateDL__14mDoExt_McaMorfFv */
 void mDoExt_McaMorf::updateDL() {
-    /* Nonmatching */
+    if (mpModel) {
+        if (mpAnm) {
+            mpAnm->setFrame(mFrameCtrl.getFrame());
+        }
+        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(this);
+        mDoExt_modelUpdateDL(mpModel);
+        mPrevMorf = mCurMorf;
+    }
 }
 
 /* 800131C8-8001322C       .text updateDL__14mDoExt_McaMorfFP16J3DMaterialTable */
-void mDoExt_McaMorf::updateDL(J3DMaterialTable*) {
-    /* Nonmatching */
+void mDoExt_McaMorf::updateDL(J3DMaterialTable* pMaterialTable) {
+    if (mpModel) {
+        J3DModelData* modelData = mpModel->getModelData();
+        J3DTexture* origTexture = modelData->getTexture();
+        JUTNameTab* origTextureName = modelData->getTextureName();
+        modelData->setMaterialTable(pMaterialTable, J3DMatCopyFlag_Texture);
+        updateDL();
+        modelData->setTexture(origTexture);
+        modelData->setTextureName(origTextureName);
+    }
 }
 
 /* 8001322C-80013258       .text entry__14mDoExt_McaMorfFv */
 void mDoExt_McaMorf::entry() {
-    /* Nonmatching */
+    if (mpModel) {
+        mDoExt_modelEntry(mpModel);
+    }
 }
 
 /* 80013258-80013284       .text entryDL__14mDoExt_McaMorfFv */
 void mDoExt_McaMorf::entryDL() {
-    /* Nonmatching */
+    if (mpModel) {
+        mDoExt_modelEntryDL(mpModel);
+    }
 }
 
 /* 80013284-800132E8       .text entryDL__14mDoExt_McaMorfFP16J3DMaterialTable */
-void mDoExt_McaMorf::entryDL(J3DMaterialTable*) {
-    /* Nonmatching */
+void mDoExt_McaMorf::entryDL(J3DMaterialTable* pMaterialTable) {
+    if (mpModel) {
+        J3DModelData* modelData = mpModel->getModelData();
+        J3DTexture* origTexture = modelData->getTexture();
+        JUTNameTab* origTextureName = modelData->getTextureName();
+        modelData->setMaterialTable(pMaterialTable, J3DMatCopyFlag_Texture);
+        entryDL();
+        modelData->setTexture(origTexture);
+        modelData->setTextureName(origTextureName);
+    }
 }
 
 /* 800132E8-8001335C       .text calc__14mDoExt_McaMorfFv */
@@ -1376,7 +1413,9 @@ void mDoExt_McaMorf::calc() {
 
 /* 8001335C-80013388       .text stopZelAnime__14mDoExt_McaMorfFv */
 void mDoExt_McaMorf::stopZelAnime() {
-    /* Nonmatching */
+    if (mpSound) {
+        mpSound->stop();
+    }
 }
 
 /* 80013388-800136F4       .text __ct__15mDoExt_McaMorf2FP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformP15J3DAnmTransformifiiiPvUlUl */
@@ -1385,27 +1424,202 @@ mDoExt_McaMorf2::mDoExt_McaMorf2(J3DModelData* modelData, mDoExt_McaMorfCallBack
                                  J3DAnmTransform* anmTransform1, J3DAnmTransform* anmTransform2,
                                  int loopMode, f32 param_5, int param_6, int param_7, int param_8,
                                  void* basAnm, u32 modelFlag, u32 differedDlistFlag) {
-    /* Nonmatching */
+    mpModel = NULL;
+    mpSound = NULL;
+    mpTransformInfo = NULL;
+    mpQuat = NULL;
+    if (!modelData) {
+        return;
+    }
+    if (modelData->getModelDataType() == 1 && modelFlag == 0) {
+        if (modelFlag = modelData->isLocked()) {
+            modelFlag = 0x20000;
+        } else {
+            modelFlag = 0x80000;
+        }
+    }
+    mpModel = mDoExt_J3DModel__create(modelData, modelFlag, differedDlistFlag);
+    if (!mpModel) {
+        return;
+    }
+    if (modelFlag != 0x80000) {
+        mDoExt_changeMaterial(mpModel);
+    }
+    if (basAnm == NULL && anmTransform1) {
+        basAnm = ((mDoExt_transAnmBas*)anmTransform1)->getBas();
+        if (basAnm) {
+            param_8 = 1;
+        }
+    }
+    if (param_8) {
+        mpSound = new mDoExt_zelAnime();
+        if (!mpSound) {
+            ERROR_EXIT();
+            return;
+        }
+    }
+    setAnm(anmTransform1, anmTransform2, 0.0f, loopMode, 0.0f, param_5, param_6, param_7, basAnm);
+    mpTransformInfo = new J3DTransformInfo[modelData->getJointNum()];
+    if (!mpTransformInfo) {
+        ERROR_EXIT();
+        return;
+    }
+    mpQuat = new Quaternion[modelData->getJointNum()];
+    if (!mpQuat) {
+        ERROR_EXIT();
+        return;
+    }
+
+    J3DTransformInfo* info = mpTransformInfo;
+    Quaternion* quat = mpQuat;
+    J3DModelData* r23 = mpModel->getModelData();
+    u16 jointNum = r23->getJointNum();
+    for (int i = 0; i < jointNum; i++) {
+        *info = r23->getJointNodePointer(i)->getTransformInfo();
+        JMAEulerToQuat(info->mRotation.x, info->mRotation.y, info->mRotation.z, quat);
+        info++;
+        quat++;
+    }
+    mpCallback1 = callback1;
+    mpCallback2 = callback2;
 }
 
 /* 800136F4-80013770       .text ERROR_EXIT__15mDoExt_McaMorf2Fv */
 void mDoExt_McaMorf2::ERROR_EXIT() {
-    /* Nonmatching */
+    if (mpSound) {
+        mpSound->stop();
+        mpSound = NULL;
+    }
+    if (mpTransformInfo) {
+        mpTransformInfo = NULL;
+    }
+    if (mpQuat) {
+        mpQuat = NULL;
+    }
+    if (mpModel) {
+        mpModel = NULL;
+    }
 }
 
 /* 80013770-80013E50       .text calc__15mDoExt_McaMorf2FUs */
-void mDoExt_McaMorf2::calc(u16) {
+void mDoExt_McaMorf2::calc(u16 param_0) {
     /* Nonmatching */
+    if (!mpModel) {
+        return;
+    }
+    j3dSys.setCurrentMtxCalc(this);
+    J3DTransformInfo info1;
+    J3DTransformInfo* infoPtr;
+    if (mpTransformInfo == NULL) {
+        infoPtr = &info1;
+    } else {
+        infoPtr = &mpTransformInfo[param_0];
+    }
+    Quaternion quat1;
+    Quaternion* quatPtr;
+    if (mpQuat == NULL) {
+        quatPtr = &quat1;
+    } else {
+        quatPtr = &mpQuat[param_0];
+    }
+    if (!mpAnm1) {
+        *infoPtr = mpModel->getModelData()->getJointNodePointer(param_0)->getTransformInfo();
+        if (mpCallback1) {
+            mpCallback1->execute(param_0, infoPtr);
+        }
+        JMAEulerToQuat(infoPtr->mRotation.x, infoPtr->mRotation.y, infoPtr->mRotation.z, quatPtr);
+        calcTransform(param_0, *infoPtr);
+    } else if (field_0x78 >= 1.0f || !mpTransformInfo || !mpQuat) {
+        mpAnm1->getTransform(param_0, &info1);
+        if (!mpAnm2) {
+            if (mpCallback1) {
+                mpCallback1->execute(param_0, &info1);
+            }
+            JMAEulerToQuat(info1.mRotation.x, info1.mRotation.y, info1.mRotation.z, quatPtr);
+            calcTransform(param_0, info1);
+            *infoPtr = info1;
+        } else {
+            mpAnm2->getTransform(param_0, &info1);
+            JMAEulerToQuat(info1.mRotation.x, info1.mRotation.y, info1.mRotation.z, quatPtr);
+            calcTransform(param_0, info1);
+        }
+    } else {
+        f32 f31 = (field_0x78 - field_0x7c) / (1.0f - field_0x7c);
+        f32 f30 = 1.0f - f31;
+        J3DTransformInfo info2;
+        Quaternion quat2;
+        mpAnm1->getTransform(param_0, &info2);
+        if (mpCallback1) {
+            mpCallback1->execute(param_0, &info2);
+        }
+        JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat2);
+        JMAQuatLerp(quatPtr, &quat2, f31, quatPtr);
+        Mtx mtx;
+        mDoMtx_quat(mtx, quatPtr);
+        infoPtr->mTranslate.x = infoPtr->mTranslate.x * f30 + info2.mTranslate.x * f31;
+        infoPtr->mTranslate.y = infoPtr->mTranslate.y * f30 + info2.mTranslate.y * f31;
+        infoPtr->mTranslate.z = infoPtr->mTranslate.z * f30 + info2.mTranslate.z * f31;
+        infoPtr->mScale.x = infoPtr->mScale.x * f30 + info2.mScale.x * f31;
+        infoPtr->mScale.y = infoPtr->mScale.y * f30 + info2.mScale.y * f31;
+        infoPtr->mScale.z = infoPtr->mScale.z * f30 + info2.mScale.z * f31;
+        mDoExt_setJ3DData(mtx, infoPtr, param_0);
+    }
+    if (mpCallback2) {
+        mpCallback2->execute(param_0);
+    }
 }
 
 /* 80013E50-800140A0       .text setAnm__15mDoExt_McaMorf2FP15J3DAnmTransformP15J3DAnmTransformfiffffPv */
-void mDoExt_McaMorf2::setAnm(J3DAnmTransform*, J3DAnmTransform*, f32, int, f32, f32, f32, f32, void*) {
-    /* Nonmatching */
+void mDoExt_McaMorf2::setAnm(J3DAnmTransform* bckAnm1, J3DAnmTransform* bckAnm2, f32 f1,
+                             int loopMode, f32 morf, f32 playSpeed, f32 startFrame, f32 endFrame,
+                             void* basAnm) {
+    mpAnm1 = bckAnm1;
+    mpAnm2 = bckAnm2;
+    field_0x84 = f1;
+    setStartFrame(startFrame);
+    if (endFrame < 0.0f) {
+        if (!mpAnm1) {
+            mFrameCtrl.init(0);
+        } else {
+            mFrameCtrl.init(mpAnm1->getFrameMax());
+        }
+    } else {
+        mFrameCtrl.init(endFrame);
+    }
+    if (loopMode < 0) {
+        loopMode = bckAnm1->getAttribute();
+    }
+    setPlayMode(loopMode);
+    setPlaySpeed(playSpeed);
+    if (playSpeed >= 0.0f) {
+        setFrame(startFrame);
+    } else {
+        setFrame(getEndFrame());
+    }
+    setLoopFrame(getFrame());
+    setMorf(morf);
+    if (mpSound) {
+        if (basAnm == NULL && bckAnm1) {
+            basAnm = ((mDoExt_transAnmBas*)bckAnm1)->getBas();
+        }
+        mpSound->mpBasAnm = basAnm;
+        if (mpSound->mpBasAnm) {
+            mpSound->initActorAnimSound(basAnm, getPlaySpeed() >= 0.0f ? 1 : -1, getLoopFrame());
+        } else {
+            mpSound->stop();
+        }
+    }
 }
 
 /* 800140A0-800140D8       .text setMorf__15mDoExt_McaMorf2Ff */
-void mDoExt_McaMorf2::setMorf(f32) {
-    /* Nonmatching */
+void mDoExt_McaMorf2::setMorf(f32 f1) {
+    if (f1 <= 0.0f) {
+        field_0x78 = 1.0f;
+    } else {
+        field_0x78 = 0.0f;
+        field_0x80 = 1.0f / f1;
+    }
+    field_0x7c = field_0x78;
 }
 
 /* 800140D8-8001419C       .text play__15mDoExt_McaMorf2FP3VecUlSc */
@@ -1415,7 +1629,9 @@ void mDoExt_McaMorf2::play(Vec*, u32, s8) {
 
 /* 8001419C-800141C8       .text entryDL__15mDoExt_McaMorf2Fv */
 void mDoExt_McaMorf2::entryDL() {
-    /* Nonmatching */
+    if (mpModel) {
+        mDoExt_modelEntryDL(mpModel);
+    }
 }
 
 /* 800141C8-80014250       .text calc__15mDoExt_McaMorf2Fv */
@@ -1425,7 +1641,9 @@ void mDoExt_McaMorf2::calc() {
 
 /* 80014250-8001427C       .text stopZelAnime__15mDoExt_McaMorf2Fv */
 void mDoExt_McaMorf2::stopZelAnime() {
-    /* Nonmatching */
+    if (mpSound) {
+        mpSound->stop();
+    }
 }
 
 /* 8001427C-800142B8       .text draw__24mDoExt_offCupOnAupPacketFv */

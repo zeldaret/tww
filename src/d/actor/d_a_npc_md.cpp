@@ -1541,6 +1541,87 @@ BOOL daNpc_Md_c::carryPlayerAction(void*) {
     /* Nonmatching */
 }
 
+daNpc_Md_c::ActionFunc dummy_5931 = &daNpc_Md_c::mwaitNpcAction;
+daNpc_Md_c::ActionFunc dummy_5934 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_5955 = &daNpc_Md_c::waitPlayerAction;
+daNpc_Md_c::ActionFunc dummy_5960 = &daNpc_Md_c::mkamaePlayerAction;
+daNpc_Md_c::ActionFunc dummy_5968 = &daNpc_Md_c::flyPlayerAction;
+daNpc_Md_c::ActionFunc dummy_6061 = &daNpc_Md_c::mkamaePlayerAction;
+daNpc_Md_c::ActionFunc dummy_6064 = &daNpc_Md_c::flyPlayerAction;
+daNpc_Md_c::ActionFunc dummy_6110 = &daNpc_Md_c::shipNpcAction;
+daNpc_Md_c::ActionFunc dummy_6118 = &daNpc_Md_c::jumpPlayerAction;
+daNpc_Md_c::ActionFunc dummy_6120 = &daNpc_Md_c::fallNpcAction;
+daNpc_Md_c::ActionFunc dummy_6122 = &daNpc_Md_c::fall02NpcAction;
+daNpc_Md_c::ActionFunc dummy_6301 = &daNpc_Md_c::searchNpcAction;
+daNpc_Md_c::ActionFunc dummy_6331 = &daNpc_Md_c::hitPlayerAction;
+daNpc_Md_c::ActionFunc dummy_6334 = &daNpc_Md_c::hitNpcAction;
+daNpc_Md_c::ActionFunc dummy_6367 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_6375 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_6377 = &daNpc_Md_c::searchNpcAction;
+daNpc_Md_c::ActionFunc dummy_6379 = &daNpc_Md_c::searchNpcAction;
+daNpc_Md_c::ActionFunc dummy_6386 = &daNpc_Md_c::carryNpcAction;
+daNpc_Md_c::ActionFunc dummy_6440 = &daNpc_Md_c::fallNpcAction;
+daNpc_Md_c::ActionFunc dummy_6587 = &daNpc_Md_c::demoFlyNpcAction;
+daNpc_Md_c::ActionFunc dummy_6766 = &daNpc_Md_c::squatdownNpcAction;
+daNpc_Md_c::ActionFunc dummy_6769 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_6776 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_6783 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_6836 = &daNpc_Md_c::shipNpcAction;
+daNpc_Md_c::ActionFunc dummy_6874 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_6969 = &daNpc_Md_c::searchNpcAction;
+daNpc_Md_c::ActionFunc dummy_6972 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7006 = &daNpc_Md_c::sqwait01NpcAction;
+daNpc_Md_c::ActionFunc dummy_7036 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7114 = &daNpc_Md_c::throwNpcAction;
+daNpc_Md_c::ActionFunc dummy_7117 = &daNpc_Md_c::land03NpcAction;
+daNpc_Md_c::ActionFunc dummy_7125 = &daNpc_Md_c::fall02NpcAction;
+daNpc_Md_c::ActionFunc dummy_7128 = &daNpc_Md_c::fallNpcAction;
+daNpc_Md_c::ActionFunc dummy_7133 = &daNpc_Md_c::throwNpcAction;
+daNpc_Md_c::ActionFunc dummy_7136 = &daNpc_Md_c::sqwait01NpcAction;
+daNpc_Md_c::ActionFunc dummy_7292 = &daNpc_Md_c::land01NpcAction;
+daNpc_Md_c::ActionFunc dummy_7297 = &daNpc_Md_c::wallHitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7302 = &daNpc_Md_c::glidingNpcAction;
+daNpc_Md_c::ActionFunc dummy_7362 = &daNpc_Md_c::land01NpcAction;
+daNpc_Md_c::ActionFunc dummy_7365 = &daNpc_Md_c::land01NpcAction;
+daNpc_Md_c::ActionFunc dummy_7372 = &daNpc_Md_c::wallHitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7375 = &daNpc_Md_c::wallHitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7393 = &daNpc_Md_c::fall02NpcAction;
+daNpc_Md_c::ActionFunc dummy_7396 = &daNpc_Md_c::fall02NpcAction;
+daNpc_Md_c::ActionFunc dummy_7570 = &daNpc_Md_c::land01NpcAction;
+daNpc_Md_c::ActionFunc dummy_7575 = &daNpc_Md_c::wallHitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7612 = &daNpc_Md_c::fall02NpcAction;
+daNpc_Md_c::ActionFunc dummy_7633 = &daNpc_Md_c::land01NpcAction;
+daNpc_Md_c::ActionFunc dummy_7638 = &daNpc_Md_c::wallHitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7685 = &daNpc_Md_c::land03NpcAction;
+daNpc_Md_c::ActionFunc dummy_7690 = &daNpc_Md_c::wallHitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7695 = &daNpc_Md_c::land03NpcAction;
+daNpc_Md_c::ActionFunc dummy_7700 = &daNpc_Md_c::wallHitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7763 = &daNpc_Md_c::land02NpcAction;
+daNpc_Md_c::ActionFunc dummy_7768 = &daNpc_Md_c::land02NpcAction;
+daNpc_Md_c::ActionFunc dummy_7826 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7831 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7865 = &daNpc_Md_c::piyo2NpcAction;
+daNpc_Md_c::ActionFunc dummy_7884 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_7903 = &daNpc_Md_c::piyo2NpcAction;
+daNpc_Md_c::ActionFunc dummy_7925 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_8240 = &daNpc_Md_c::jumpNpcAction;
+daNpc_Md_c::ActionFunc dummy_8247 = &daNpc_Md_c::jumpNpcAction;
+daNpc_Md_c::ActionFunc dummy_8446 = &daNpc_Md_c::kyohiNpcAction;
+daNpc_Md_c::ActionFunc dummy_8455 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_8525 = &daNpc_Md_c::land03NpcAction;
+daNpc_Md_c::ActionFunc dummy_8625 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_8667 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_8671 = &daNpc_Md_c::waitNpcAction;
+daNpc_Md_c::ActionFunc dummy_8720 = &daNpc_Md_c::walkPlayerAction;
+daNpc_Md_c::ActionFunc dummy_8771 = &daNpc_Md_c::waitPlayerAction;
+daNpc_Md_c::ActionFunc dummy_8776 = &daNpc_Md_c::jumpPlayerAction;
+daNpc_Md_c::ActionFunc dummy_8783 = &daNpc_Md_c::jumpPlayerAction;
+daNpc_Md_c::ActionFunc dummy_8869 = &daNpc_Md_c::waitPlayerAction;
+daNpc_Md_c::ActionFunc dummy_8914 = &daNpc_Md_c::jumpPlayerAction;
+daNpc_Md_c::ActionFunc dummy_8949 = &daNpc_Md_c::landPlayerAction;
+daNpc_Md_c::ActionFunc dummy_9045 = &daNpc_Md_c::waitPlayerAction;
+daNpc_Md_c::ActionFunc dummy_9093 = &daNpc_Md_c::waitPlayerAction;
+
 static daNpc_Md_c::EventActionInitFunc event_init_tbl[] = {
     &daNpc_Md_c::initialWaitEvent,
     &daNpc_Md_c::initialLetterEvent,
@@ -1901,8 +1982,48 @@ BOOL daNpc_Md_c::talk_init() {
 }
 
 /* 0000CC10-0000CDCC       .text talk__10daNpc_Md_cFi */
-BOOL daNpc_Md_c::talk(int) {
-    /* Nonmatching */
+BOOL daNpc_Md_c::talk(int r4) {
+    u16 msgStatus = l_msg->mStatus;
+    u8 msgAnmAtr = dComIfGp_getMesgAnimeAttrInfo();
+    if (msgStatus == fopMsgStts_MSG_DISPLAYED_e) {
+        l_msg->mStatus = next_msgStatus(&mMsgId);
+        if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+            fopMsgM_messageSet(mMsgId);
+            m313A = 0;
+        }
+    } else if (msgStatus == fopMsgStts_UNK15_e) {
+        if (r4 != 0) {
+            if (dComIfGp_checkMesgCancelButton()) {
+                l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
+                fopMsgM_messageSendOn();
+                cLib_onBit(m30F0, 0x200UL);
+            }
+            if (cLib_checkBit(m30F0, 0x400UL)) {
+                l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
+                fopMsgM_messageSendOn();
+            }
+        }
+    } else if (msgStatus == fopMsgStts_MSG_TYPING_e) {
+        if (m313A == 0 && !fopAcM_checkCarryNow(this) && !cLib_checkBit(m30F0, 0x1000UL) && mMsgId != 0x05AC) {
+            int anmType = getAnmType(msgAnmAtr);
+            if (anmType >= 0) {
+                setAnm(anmType);
+            }
+        }
+    } else if (msgStatus == fopMsgStts_BOX_CLOSED_e) {
+        l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+        offXYTalk();
+        return TRUE;
+    }
+    
+    if (!fopAcM_checkCarryNow(this) && !cLib_checkBit(m30F0, 0x1000UL) && mMsgId != 0x05AC) {
+        if (m313A == 1 && msgAnmAtr == 0x14 && m312A != 0) {
+            setAnm(0x1B);
+            m313A = 1;
+        }
+    }
+    
+    return FALSE;
 }
 
 /* 0000CDCC-0000CDF4       .text getAnmType__10daNpc_Md_cFUc */
@@ -1962,24 +2083,39 @@ int daNpc_Md_c::getAnmType(u8 r4) {
 }
 
 /* 0000CDF4-0000CF18       .text initTexPatternAnm__10daNpc_Md_cFUcb */
-BOOL daNpc_Md_c::initTexPatternAnm(u8 btpIdx, bool param_2) {
+BOOL daNpc_Md_c::initTexPatternAnm(u8 btpAnmTblIdx, bool param_2) {
     struct btp_anm_tbl {
         /* 0x00 */ char m00[0x20];
         /* 0x20 */ u8 m20;
     };
     static btp_anm_tbl btpAnmTbl[] = {
-        {}, // TODO
+        {"maba.btp", 0},
+        {"md_fall.btp", 0},
+        {"md_fall02.btp", 0},
+        {"md_fly02.btp", 0},
+        {"md_kamae.btp", 1},
+        {"md_kamaewait.btp", 0},
+        {"md_land.btp", 1},
+        {"md_land02.btp", 1},
+        {"md_piyo2.btp", 1},
+        {"md_harpplay.btp", 0},
+        {"md_watasu.btp", 1},
+        {"fuan.btp", 1},
+        {"md_caught.btp", 0},
+        {"md_komari.btp", 0},
+        {"md_kyoro2.btp", 1},
+        {"md_unazuki.btp", 1},
     };
     
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     bool ret = false;
-    J3DAnmTexPattern* eyeTexPtrn = (J3DAnmTexPattern*)dComIfG_getObjectRes(mModelArcName, btpAnmTbl[btpIdx].m00);
+    J3DAnmTexPattern* eyeTexPtrn = (J3DAnmTexPattern*)dComIfG_getObjectRes(mModelArcName, btpAnmTbl[btpAnmTblIdx].m00);
     JUT_ASSERT(7502, eyeTexPtrn != 0);
     if (m0520.init(modelData, eyeTexPtrn, 1, 1, 1.0f, 0, -1, param_2, 0)) {
         m3112 = eyeTexPtrn->getFrameMax();
         m3133 = 0;
-        m3136 = btpAnmTbl[btpIdx].m20;
-        m3137 = btpIdx;
+        m3136 = btpAnmTbl[btpAnmTblIdx].m20;
+        m3137 = btpAnmTblIdx;
         ret = true;
     }
     
@@ -1988,7 +2124,16 @@ BOOL daNpc_Md_c::initTexPatternAnm(u8 btpIdx, bool param_2) {
 
 /* 0000CF18-0000CFCC       .text playTexPatternAnm__10daNpc_Md_cFv */
 void daNpc_Md_c::playTexPatternAnm() {
-    /* Nonmatching */
+    if (m3136 == 1) {
+        m0520.setFrame(m30D0);
+        return;
+    }
+    if (m0520.play()) {
+        if (cLib_calcTimer(&m3133) == 0) {
+            m3133 = 30.0f + cM_rndF(60.0f);
+            m0520.initPlay(m3112, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0f, 0, -1, true);
+        }
+    }
 }
 
 /* 0000CFCC-0000D0B8       .text initLightBtkAnm__10daNpc_Md_cFb */
@@ -2008,25 +2153,150 @@ BOOL daNpc_Md_c::setAnm(int anmIdx) {
         /* 0x20 */ char m20[0x20];
     };
     struct anm_prm {
-        /* 0x00 */ s8 m00;
-        /* 0x01 */ u8 m01;
-        /* 0x02 */ u8 m02;
+        /* 0x00 */ s8 anmTblIdx;
+        /* 0x01 */ u8 armAnmTblIdx;
+        /* 0x02 */ u8 btpAnmTblIdx;
         /* 0x04 */ int loopMode;
         /* 0x08 */ f32 morf;
         /* 0x0C */ f32 speed;
     };
 
-    static anm_tbl l_anmTbl[0x27] = {
-        // TODO
+    static anm_tbl l_anmTbl[] = {
+        {"md_wait01.bck", ""},
+        {"md_walk.bck", "md_run.bck"},
+        {"md_squatdown.bck", ""},
+        {"md_sqwait01.bck", ""},
+        {"md_sqwait02.bck", ""},
+        {"md_firing.bck", ""},
+        {"md_fly01.bck", ""},
+        {"md_fly02.bck", ""},
+        {"md_gliding.bck", ""},
+        {"md_fall.bck", ""},
+        {"md_fall02.bck", ""},
+        {"md_land.bck", ""},
+        {"md_land02.bck", ""},
+        {"md_land03.bck", ""},
+        {"md_kamaewait.bck", ""},
+        {"md_kamae.bck", ""},
+        {"md_piyo2.bck", ""},
+        {"md_ojigi.bck", ""},
+        {"md_harpplay01.bck", ""},
+        {"md_harpplay02.bck", ""},
+        {"md_takeoff01.bck", ""},
+        {"md_takeoff02.bck", ""},
+        {"md_watasu.bck", ""},
+        {"md_talk01.bck", ""},
+        {"md_talk02.bck", ""},
+        {"md_talk03.bck", ""},
+        {"md_talk04.bck", ""},
+        {"md_mkamae.bck", ""},
+        {"md_mwait.bck", ""},
+        {"md_oriwait.bck", ""},
+        {"md_shipwait.bck", ""},
+        {"md_caught01.bck", ""},
+        {"md_caught02.bck", ""},
+        {"md_kyohi.bck", ""},
+        {"md_kyoro2.bck", ""},
+        {"md_shipwait02.bck", ""},
+        {"md_shiptalk01.bck", ""},
+        {"md_talk05.bck", ""},
+        {"md_unazuki.bck", ""},
     };
-    static anm_prm l_anmPrm[0x32] = {
-        // TODO
+    static anm_prm l_anmPrm[] = {
+        {0x00, 0x00, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x00, 0x00, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x01, 0x01, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
+        {0x02, 0x02, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   4.0f, 1.0f},
+        {0x03, 0x03, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
+        {0x04, 0x04, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
+        {0x05, 0x81, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   0.0f, 1.0f},
+        {0x06, 0x82, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 3.0f, 1.0f},
+        {0x06, 0x82, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   3.0f, 1.0f},
+        {0x07, 0x83, 0x03, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x07, 0x83, 0x03, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x08, 0x84, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
+        {0x09, 0x05, 0x01, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x0A, 0x06, 0x02, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x0B, 0x07, 0x06, J3DFrameCtrl::LOOP_ONCE_e,   0.0f, 1.0f},
+        {0x0C, 0x08, 0x07, J3DFrameCtrl::LOOP_ONCE_e,   0.0f, 1.0f},
+        {0x0D, 0x09, 0x06, J3DFrameCtrl::LOOP_ONCE_e,   0.0f, 1.0f},
+        {0x0E, 0x0A, 0x05, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x0F, 0x0B, 0x04, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x0F, 0x0B, 0x04, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, -1.0f},
+        {0x10, 0x0C, 0x08, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x11, 0x0D, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x12, 0x0E, 0x09, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x13, 0x0F, 0x09, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x14, 0x10, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x15, 0x85, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x16, 0x11, 0x0A, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x17, 0x12, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x18, 0x13, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x19, 0x14, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x1A, 0x15, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x1B, 0x16, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.4f},
+        {0x1C, 0x17, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 0.0f},
+        {0x1B, 0x16, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, -1.4f},
+        {0x1D, 0x18, 0x0B, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x1E, 0x19, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x1F, 0x86, 0x0C, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x20, 0x87, 0x0C, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x17, 0x12, 0x05, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x21, 0x1A, 0x0D, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x22, 0x1B, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x1A, 0x15, 0x05, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x23, 0x1C, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x24, 0x1D, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x25, 0x1E, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x25, 0x1E, 0x05, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x07, 0x83, 0x03, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
+        {0x04, 0x04, 0x05, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
+        {0x00, 0x00, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 1.0f},
+        {0x26, 0x1F, 0x0F, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
     };
-    static anm_tbl armAnmTbl[0x20] = {
-        // TODO
+    static anm_tbl armAnmTbl[] = {
+        {"mdarm_wait01.bck", ""},
+        {"mdarm_walk.bck", "mdarm_run.bck"},
+        {"mdarm_squatdown.bck", ""},
+        {"mdarm_sqwait01.bck", ""},
+        {"mdarm_sqwait02.bck", ""},
+        {"mdarm_fall.bck", ""},
+        {"mdarm_fall02.bck", ""},
+        {"mdarm_land.bck", ""},
+        {"mdarm_land02.bck", ""},
+        {"mdarm_land03.bck", ""},
+        {"mdarm_kamaewait.bck", ""},
+        {"mdarm_kamae.bck", ""},
+        {"mdarm_piyo2.bck", ""},
+        {"mdarm_ojigi.bck", ""},
+        {"mdarm_harpplay01.bck", ""},
+        {"mdarm_harpplay02.bck", ""},
+        {"mdarm_takeoff01.bck", ""},
+        {"mdarm_watasu.bck", ""},
+        {"mdarm_talk01.bck", ""},
+        {"mdarm_talk02.bck", ""},
+        {"mdarm_talk03.bck", ""},
+        {"mdarm_talk04.bck", ""},
+        {"mdarm_mkamae.bck", ""},
+        {"mdarm_mwait.bck", ""},
+        {"mdarm_oriwait.bck", ""},
+        {"mdarm_shipwait.bck", ""},
+        {"mdarm_kyohi.bck", ""},
+        {"mdarm_kyoro2.bck", ""},
+        {"mdarm_shipwait02.bck", ""},
+        {"mdarm_shiptalk01.bck", ""},
+        {"mdarm_talk05.bck", ""},
+        {"mdarm_unazuki.bck", ""},
     };
-    static anm_tbl wingAnmTbl[8] = {
-        // TODO
+    static anm_tbl wingAnmTbl[] = {
+        {"mdwing_wait01.bck", ""},
+        {"mdwing_firing.bck", ""},
+        {"mdwing_fly01.bck", ""},
+        {"mdwing_fly02.bck", ""},
+        {"mdwing_gliding.bck", ""},
+        {"mdwing_takeoff02.bck", ""},
+        {"mdwing_caught01.bck", ""},
+        {"mdwing_caught02.bck", ""},
     };
     
     BOOL ret = FALSE;
@@ -2050,20 +2320,20 @@ BOOL daNpc_Md_c::setAnm(int anmIdx) {
         morf = l_HIO.m1A8;
     }
     
-    if (prm->m00 != m312D || mpMorf->getPlaySpeed() != prm->speed) {
-        m312D = prm->m00;
+    if (prm->anmTblIdx != m312D || mpMorf->getPlaySpeed() != prm->speed) {
+        m312D = prm->anmTblIdx;
         anm_tbl* bodyAnm = &l_anmTbl[m312D];
         m312A = 0;
         dNpc_Md_setAnm(mpMorf, m30FC, prm->loopMode, morf, speed, bodyAnm->m00, bodyAnm->m20, mModelArcName);
         m30D0 = mpMorf->getFrame();
         
-        if (prm->m01 < 0x80) {
-            anm_tbl* armAnm = &armAnmTbl[prm->m01];
+        if (prm->armAnmTblIdx < 0x80) {
+            anm_tbl* armAnm = &armAnmTbl[prm->armAnmTblIdx];
             dNpc_Md_setAnm(mpArmMorf, m30FC, prm->loopMode, morf, speed, armAnm->m00, armAnm->m20, mModelArcName);
             ret = FALSE;
         } else {
             if (m3138 != 7) {
-                dNpc_Md_setAnm(mpWingMorf, prm->loopMode, morf, speed, wingAnmTbl[prm->m01 - 0x80].m00, mModelArcName);
+                dNpc_Md_setAnm(mpWingMorf, prm->loopMode, morf, speed, wingAnmTbl[prm->armAnmTblIdx - 0x80].m00, mModelArcName);
             }
             ret = TRUE;
         }
@@ -2075,8 +2345,8 @@ BOOL daNpc_Md_c::setAnm(int anmIdx) {
         }
     }
     
-    if (prm->m02 != m3137) {
-        initTexPatternAnm(prm->m02, true);
+    if (prm->btpAnmTblIdx != m3137) {
+        initTexPatternAnm(prm->btpAnmTblIdx, true);
     }
     
     if (m312D == 0x0E || m312D == 0x12 || m312D == 0x13 || m312D == 0x1A || m312D == 0x1C || m312D == 0x25) {
