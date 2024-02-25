@@ -69,9 +69,9 @@ public:
     }
 
     /* 0x00 */ dTimer_c* mTimerPtr;
-    /* 0x04 */ s32 mTimerNowTimeMs;
-    /* 0x08 */ s32 mTimerLimitTimeMs;
-    /* 0x0C */ s32 mTimerMode;
+    /* 0x04 */ int mTimerNowTimeMs;
+    /* 0x08 */ int mTimerLimitTimeMs;
+    /* 0x0C */ int mTimerMode;
     /* 0x10 */ u16 mWaveFrame;
 };
 
@@ -318,12 +318,12 @@ public:
 
     void setTimerPtr(dTimer_c* timer) { mTimerInfo.mTimerPtr = timer; }
     dTimer_c* getTimerPtr() { return mTimerInfo.mTimerPtr; }
-    void setTimerMode(s32 mode) { mTimerInfo.mTimerMode = mode; }
-    s32 getTimerMode() { return mTimerInfo.mTimerMode; }
-    void setTimerNowTimeMs(s32 ms) { mTimerInfo.mTimerNowTimeMs = ms; }
-    s32 getTimerNowTimeMs() { return mTimerInfo.mTimerNowTimeMs; }
-    void setTimerLimitTimeMs(s32 ms) { mTimerInfo.mTimerLimitTimeMs = ms; }
-    s32 getTimerLimitTimeMs() { return mTimerInfo.mTimerLimitTimeMs; }
+    void setTimerMode(int mode) { mTimerInfo.mTimerMode = mode; }
+    int getTimerMode() { return mTimerInfo.mTimerMode; }
+    void setTimerNowTimeMs(int ms) { mTimerInfo.mTimerNowTimeMs = ms; }
+    int getTimerNowTimeMs() { return mTimerInfo.mTimerNowTimeMs; }
+    void setTimerLimitTimeMs(int ms) { mTimerInfo.mTimerLimitTimeMs = ms; }
+    int getTimerLimitTimeMs() { return mTimerInfo.mTimerLimitTimeMs; }
     void setWaveFrame(u16 frame) { mTimerInfo.mWaveFrame = frame; }
     u16 getWaveFrame() { return mTimerInfo.mWaveFrame; }
 
@@ -3144,17 +3144,17 @@ inline void dComIfG_setTimerPtr(dTimer_c* timer) { g_dComIfG_gameInfo.play.setTi
 inline dTimer_c* dComIfG_getTimerPtr() { return g_dComIfG_gameInfo.play.getTimerPtr(); }
 
 inline void dComIfG_setTimerLimitTimeMs(int ms) { g_dComIfG_gameInfo.play.setTimerLimitTimeMs(ms); }
-inline u32 dComIfG_getTimerLimitTimeMs() { return g_dComIfG_gameInfo.play.getTimerLimitTimeMs(); }
+inline int dComIfG_getTimerLimitTimeMs() { return g_dComIfG_gameInfo.play.getTimerLimitTimeMs(); }
 
 inline void dComIfG_setTimerNowTimeMs(int ms) { g_dComIfG_gameInfo.play.setTimerNowTimeMs(ms); }
-inline u32 dComIfG_getTimerNowTimeMs() { return g_dComIfG_gameInfo.play.getTimerNowTimeMs(); }
+inline int dComIfG_getTimerNowTimeMs() { return g_dComIfG_gameInfo.play.getTimerNowTimeMs(); }
 
 inline void dComIfGp_setWaveFrame(u16 frame) { g_dComIfG_gameInfo.play.setWaveFrame(frame); }
 inline u16 dComIfGp_getWaveFrame() { return g_dComIfG_gameInfo.play.getWaveFrame(); }
 
-inline s32 dComIfG_getTimerRestTimeMs() {
-    s32 limit = g_dComIfG_gameInfo.play.getTimerLimitTimeMs();
-    s32 now = g_dComIfG_gameInfo.play.getTimerNowTimeMs();
+inline int dComIfG_getTimerRestTimeMs() {
+    int limit = g_dComIfG_gameInfo.play.getTimerLimitTimeMs();
+    int now = g_dComIfG_gameInfo.play.getTimerNowTimeMs();
     return limit - now;
 }
 
@@ -3162,18 +3162,18 @@ inline void dComIfG_TimerDeleteRequest() {
     if (dComIfG_getTimerPtr() != NULL)
         dComIfG_getTimerPtr()->deleteRequest();
 }
-inline void dComIfG_TimerStart(s32 timer, s16 mode) {
+inline void dComIfG_TimerStart(int timer, s16 mode) {
     if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL)
         if (timer != 0)
             dComIfG_getTimerPtr()->start(timer);
         else
             dComIfG_getTimerPtr()->start();
 }
-inline void dComIfG_TimerReStart(s32 timer) {
+inline void dComIfG_TimerReStart(int timer) {
     if (dComIfG_getTimerPtr() != NULL)
         dComIfG_getTimerPtr()->restart(timer);
 }
-inline void dComIfG_TimerStop(s32 timer) {
+inline void dComIfG_TimerStop(int timer) {
     if (dComIfG_getTimerPtr() != NULL)
         dComIfG_getTimerPtr()->stop(timer);
 }

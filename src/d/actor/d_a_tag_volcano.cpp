@@ -78,9 +78,6 @@ bool daTagvolcano::Act_c::_delete() {
 
 /* 000003BC-00000998       .text _execute__Q212daTagvolcano5Act_cFv */
 bool daTagvolcano::Act_c::_execute() {
-    /* Nonmatching */
-    const Attr_c& a = attr();
-
     if (mType == 0) {
         if (fopAcM_isSwitch(this, prm_get_swSave())) {
             if (field_0x2a0 > 0) {
