@@ -19,262 +19,262 @@ static u8 dummy[0x4C]; // TODO
 const int daDitem_c::m_rot_time = 8*30;
 
 u8 daDitem_c::m_effect_type[0x100] = {
-    /* HEART            */ 0x04,
-    /* GREEN_RUPEE      */ 0x03,
-    /* BLUE_RUPEE       */ 0x03,
-    /* YELLOW_RUPEE     */ 0x03,
-    /* RED_RUPEE        */ 0x03,
-    /* PURPLE_RUPEE     */ 0x03,
-    /* ORANGE_RUPEE     */ 0x03,
-    /* KAKERA_HEART     */ 0x00,
-    /* UTUWA_HEART      */ 0x00,
-    /* S_MAGIC          */ 0x04,
-    /* L_MAGIC          */ 0x04,
-    /* BOMB_5           */ 0x04,
-    /* BOMB_10          */ 0x04,
-    /* BOMB_20          */ 0x04,
-    /* BOMB_30          */ 0x04,
-    /* SILVER_RUPEE     */ 0x03,
-    /* ARROW_10         */ 0x04,
-    /* ARROW_20         */ 0x04,
-    /* ARROW_30         */ 0x04,
-    /* noentry19        */ 0x04,
-    /* noentry20        */ 0x04,
-    /* SMALL_KEY        */ 0x02,
-    /* RECOVER_FAIRY    */ 0x04,
-    /* noentry23        */ 0x04,
-    /* noentry24        */ 0x04,
-    /* noentry25        */ 0x04,
-    /* SUB_DUN_RUPEE    */ 0x03,
-    /* noentry27        */ 0x04,
-    /* noentry28        */ 0x04,
-    /* noentry29        */ 0x04,
-    /* TRIPLE_HEART     */ 0x04,
-    /* PENDANT          */ 0x01,
-    /* TELESCOPE        */ 0x00,
-    /* TNCL_WHITSL      */ 0x00,
-    /* WIND_TACT        */ 0x00,
-    /* CAMERA           */ 0x00,
-    /* EMONO_BAG        */ 0x00,
-    /* ROPE             */ 0x00,
-    /* CAMERA2          */ 0x00,
-    /* BOW              */ 0x00,
-    /* PWR_GROOVE       */ 0x00,
-    /* HVY_BOOTS        */ 0x00,
-    /* DRGN_SHIELD      */ 0x00,
-    /* WATER_BOOTS      */ 0x04,
-    /* ESA_BAG          */ 0x00,
-    /* BOOMERANG        */ 0x00,
-    /* BARE_HAND        */ 0x04,
-    /* HOOKSHOT         */ 0x00,
-    /* WARASHIBE_BAG    */ 0x00,
-    /* BOMB_BAG         */ 0x00,
-    /* FUKU             */ 0x03,
-    /* HUMMER           */ 0x00,
-    /* DEKU_LEAF        */ 0x00,
-    /* MAGIC_ARROW      */ 0x00,
-    /* LIGHT_ARROW      */ 0x00,
-    /* noentry55        */ 0x04,
-    /* SWORD            */ 0x00,
-    /* MASTER_SWORD     */ 0x00,
-    /* LV3_SWORD        */ 0x04,
-    /* SHIELD           */ 0x00,
-    /* MIRROR_SHIELD    */ 0x00,
-    /* DROPPED_SWORD    */ 0x00,
-    /* MASTER_SWORD_EX  */ 0x04,
-    /* KAKERA_HEART2    */ 0x01,
-    /* noentry64        */ 0x04,
-    /* noentry65        */ 0x04,
-    /* PIRATES_OMAMORI  */ 0x00,
-    /* HEROS_OMAMORI    */ 0x00,
-    /* GRASS_BALL       */ 0x04,
-    /* SKULL_NECKLACE   */ 0x01,
-    /* BOKOBABA_SEED    */ 0x01,
-    /* GOLDEN_FEATHER   */ 0x01,
-    /* BOKO_BELT        */ 0x01,
-    /* RED_JELLY        */ 0x01,
-    /* GREEN_JELLY      */ 0x01,
-    /* BLUE_JELLY       */ 0x01,
-    /* MAP              */ 0x01,
-    /* COMPASS          */ 0x01,
-    /* BOSS_KEY         */ 0x00,
-    /* EMPTY_BSHIP      */ 0x04,
-    /* EMPTY_BOTTLE     */ 0x00,
-    /* RED_BOTTLE       */ 0x02,
-    /* GREEN_BOTTLE     */ 0x02,
-    /* BLUE_BOTTLE      */ 0x02,
-    /* BOTTLESHIP       */ 0x00,
-    /* SOUP_BOTTLE      */ 0x00,
-    /* BIN_IN_WATER     */ 0x02,
-    /* FAIRY_BOTTLE     */ 0x02,
-    /* FIREFLY_BOTTLE   */ 0x00,
-    /* FWATER_BOTTLE    */ 0x02,
-    /* UNK_BOTTLE_5A    */ 0x04,
-    /* UNK_BOTTLE_5B    */ 0x04,
-    /* UNK_BOTTLE_5C    */ 0x04,
-    /* UNK_BOTTLE_5D    */ 0x04,
-    /* UNK_BOTTLE_5E    */ 0x04,
-    /* UNK_BOTTLE_5F    */ 0x04,
-    /* UNK_BOTTLE_60    */ 0x04,
-    /* TRIFORCE1        */ 0x00,
-    /* TRIFORCE2        */ 0x00,
-    /* TRIFORCE3        */ 0x00,
-    /* TRIFORCE4        */ 0x00,
-    /* TRIFORCE5        */ 0x00,
-    /* TRIFORCE6        */ 0x00,
-    /* TRIFORCE7        */ 0x00,
-    /* TRIFORCE8        */ 0x00,
-    /* PEARL1           */ 0x00,
-    /* PEARL2           */ 0x00,
-    /* PEARL3           */ 0x00,
-    /* KNOWLEDGE_TF     */ 0x04,
-    /* TACT_SONG1       */ 0x04,
-    /* TACT_SONG2       */ 0x04,
-    /* TACT_SONG3       */ 0x04,
-    /* TACT_SONG4       */ 0x04,
-    /* TACT_SONG5       */ 0x04,
-    /* TACT_SONG6       */ 0x04,
-    /* noentry115       */ 0x04,
-    /* noentry116       */ 0x04,
-    /* noentry117       */ 0x04,
-    /* noentry118       */ 0x04,
-    /* noentry119       */ 0x04,
-    /* NORMAL_SAIL      */ 0x00,
-    /* TRIFORCE_MAP1    */ 0x00,
-    /* TRIFORCE_MAP2    */ 0x00,
-    /* TRIFORCE_MAP3    */ 0x00,
-    /* TRIFORCE_MAP4    */ 0x00,
-    /* TRIFORCE_MAP5    */ 0x00,
-    /* TRIFORCE_MAP6    */ 0x00,
-    /* TRIFORCE_MAP7    */ 0x00,
-    /* TRIFORCE_MAP8    */ 0x00,
-    /* noentry129       */ 0x04,
-    /* BIRD_ESA_5       */ 0x02,
-    /* ANIMAL_ESA       */ 0x02,
-    /* ESA1             */ 0x04,
-    /* ESA2             */ 0x04,
-    /* ESA3             */ 0x04,
-    /* ESA4             */ 0x04,
-    /* ESA5             */ 0x04,
-    /* MAGIC_BEAN       */ 0x04,
-    /* BIRD_ESA_10      */ 0x04,
-    /* noentry139       */ 0x04,
-    /* FLOWER_1         */ 0x02,
-    /* FLOWER_2         */ 0x02,
-    /* FLOWER_3         */ 0x02,
-    /* HEROS_FLAG       */ 0x02,
-    /* TAIRYO_FLAG      */ 0x02,
-    /* SALES_FLAG       */ 0x02,
-    /* WIND_FLAG        */ 0x02,
-    /* RED_FLAG         */ 0x02,
-    /* FOSSIL_HEAD      */ 0x02,
-    /* WATER_STATUE     */ 0x02,
-    /* POSTMAN_STATUE   */ 0x02,
-    /* PRESIDENT_STATUE */ 0x02,
-    /* LETTER00         */ 0x02,
-    /* MAGIC_SEED       */ 0x02,
-    /* MAGYS_LETTER     */ 0x02,
-    /* MO_LETTER        */ 0x02,
-    /* COTTAGE_PAPER    */ 0x00,
-    /* KAISEN_PRESENT1  */ 0x02,
-    /* KAISEN_PRESENT2  */ 0x02,
-    /* SALVAGE_ITEM1    */ 0x00,
-    /* SALVAGE_ITEM2    */ 0x04,
-    /* SALVAGE_ITEM3    */ 0x04,
-    /* XXX_039          */ 0x04,
-    /* TINGLE_STATUE1   */ 0x00,
-    /* TINGLE_STATUE2   */ 0x00,
-    /* TINGLE_STATUE3   */ 0x00,
-    /* TINGLE_STATUE4   */ 0x00,
-    /* TINGLE_STATUE5   */ 0x00,
-    /* TINGLE_STATUE6   */ 0x00,
-    /* noentry169       */ 0x04,
-    /* HURRICANE_SPIN   */ 0x04,
-    /* MAX_RUPEE_UP1    */ 0x00,
-    /* MAX_RUPEE_UP2    */ 0x00,
-    /* MAX_BOMB_UP1     */ 0x00,
-    /* MAX_BOMB_UP2     */ 0x00,
-    /* MAX_ARROW_UP1    */ 0x00,
-    /* MAX_ARROW_UP2    */ 0x00,
-    /* MAGIC_POWER      */ 0x04,
-    /* MAX_MP_UP1       */ 0x04,
-    /* TINCLE_RUPEE1    */ 0x03,
-    /* TINCLE_RUPEE2    */ 0x03,
-    /* TINCLE_RUPEE3    */ 0x03,
-    /* TINCLE_RUPEE4    */ 0x03,
-    /* TINCLE_RUPEE5    */ 0x03,
-    /* TINCLE_RUPEE6    */ 0x03,
-    /* LITHOGRAPH1      */ 0x04,
-    /* LITHOGRAPH2      */ 0x04,
-    /* LITHOGRAPH3      */ 0x04,
-    /* LITHOGRAPH4      */ 0x04,
-    /* LITHOGRAPH5      */ 0x04,
-    /* LITHOGRAPH6      */ 0x04,
-    /* COLLECT_MAP_64   */ 0x04,
-    /* COLLECT_MAP_63   */ 0x04,
-    /* COLLECT_MAP_62   */ 0x04,
-    /* COLLECT_MAP_61   */ 0x00,
-    /* COLLECT_MAP_60   */ 0x00,
-    /* COLLECT_MAP_59   */ 0x00,
-    /* COLLECT_MAP_58   */ 0x00,
-    /* COLLECT_MAP_57   */ 0x00,
-    /* COLLECT_MAP_56   */ 0x00,
-    /* COLLECT_MAP_55   */ 0x00,
-    /* COLLECT_MAP_54   */ 0x00,
-    /* COLLECT_MAP_53   */ 0x00,
-    /* COLLECT_MAP_52   */ 0x00,
-    /* COLLECT_MAP_51   */ 0x00,
-    /* COLLECT_MAP_50   */ 0x00,
-    /* COLLECT_MAP_49   */ 0x00,
-    /* COLLECT_MAP_48   */ 0x00,
-    /* COLLECT_MAP_47   */ 0x00,
-    /* COLLECT_MAP_46   */ 0x00,
-    /* COLLECT_MAP_45   */ 0x00,
-    /* COLLECT_MAP_44   */ 0x00,
-    /* COLLECT_MAP_43   */ 0x00,
-    /* COLLECT_MAP_42   */ 0x00,
-    /* COLLECT_MAP_41   */ 0x00,
-    /* COLLECT_MAP_40   */ 0x00,
-    /* COLLECT_MAP_39   */ 0x00,
-    /* COLLECT_MAP_38   */ 0x00,
-    /* COLLECT_MAP_37   */ 0x00,
-    /* COLLECT_MAP_36   */ 0x00,
-    /* COLLECT_MAP_35   */ 0x00,
-    /* COLLECT_MAP_34   */ 0x00,
-    /* COLLECT_MAP_33   */ 0x00,
-    /* COLLECT_MAP_32   */ 0x00,
-    /* COLLECT_MAP_31   */ 0x00,
-    /* COLLECT_MAP_30   */ 0x00,
-    /* COLLECT_MAP_29   */ 0x00,
-    /* COLLECT_MAP_28   */ 0x00,
-    /* COLLECT_MAP_27   */ 0x00,
-    /* COLLECT_MAP_26   */ 0x00,
-    /* COLLECT_MAP_25   */ 0x00,
-    /* COLLECT_MAP_24   */ 0x00,
-    /* COLLECT_MAP_23   */ 0x00,
-    /* COLLECT_MAP_22   */ 0x00,
-    /* COLLECT_MAP_21   */ 0x00,
-    /* COLLECT_MAP_20   */ 0x00,
-    /* COLLECT_MAP_19   */ 0x00,
-    /* COLLECT_MAP_18   */ 0x00,
-    /* COLLECT_MAP_17   */ 0x00,
-    /* COLLECT_MAP_16   */ 0x00,
-    /* COLLECT_MAP_15   */ 0x00,
-    /* COLLECT_MAP_14   */ 0x00,
-    /* COLLECT_MAP_13   */ 0x00,
-    /* COLLECT_MAP_12   */ 0x00,
-    /* COLLECT_MAP_11   */ 0x00,
-    /* COLLECT_MAP_10   */ 0x00,
-    /* COLLECT_MAP_09   */ 0x00,
-    /* COLLECT_MAP_08   */ 0x00,
-    /* COLLECT_MAP_07   */ 0x00,
-    /* COLLECT_MAP_06   */ 0x00,
-    /* COLLECT_MAP_05   */ 0x00,
-    /* COLLECT_MAP_04   */ 0x00,
-    /* COLLECT_MAP_03   */ 0x00,
-    /* COLLECT_MAP_02   */ 0x00,
-    /* COLLECT_MAP_01   */ 0x00,
-    /* NO_ITEM          */ 0x04,
+    0x04, // dItem_HEART_e
+    0x03, // dItem_GREEN_RUPEE_e
+    0x03, // dItem_BLUE_RUPEE_e
+    0x03, // dItem_YELLOW_RUPEE_e
+    0x03, // dItem_RED_RUPEE_e
+    0x03, // dItem_PURPLE_RUPEE_e
+    0x03, // dItem_ORANGE_RUPEE_e
+    0x00, // KAKERA_HEART
+    0x00, // UTUWA_HEART
+    0x04, // S_MAGIC
+    0x04, // L_MAGIC
+    0x04, // BOMB_5
+    0x04, // BOMB_10
+    0x04, // BOMB_20
+    0x04, // BOMB_30
+    0x03, // dItem_SILVER_RUPEE_e
+    0x04, // ARROW_10
+    0x04, // ARROW_20
+    0x04, // ARROW_30
+    0x04, // noentry19
+    0x04, // noentry20
+    0x02, // dItem_SMALL_KEY_e
+    0x04, // RECOVER_FAIRY
+    0x04, // noentry23
+    0x04, // noentry24
+    0x04, // noentry25
+    0x03, // SUB_DUN_RUPEE
+    0x04, // noentry27
+    0x04, // noentry28
+    0x04, // noentry29
+    0x04, // dItem_TRIPLE_HEART_e
+    0x01, // dItem_JOY_PENDANT_e
+    0x00, // dItem_TELESCOPE_e
+    0x00, // dItem_TINGLE_TUNER_e
+    0x00, // dItem_WIND_WAKER_e
+    0x00, // CAMERA
+    0x00, // EMONO_BAG
+    0x00, // dItem_GRAPPLING_HOOK_e
+    0x00, // CAMERA2
+    0x00, // dItem_BOW_e
+    0x00, // PWR_GROOVE
+    0x00, // dItem_IRON_BOOTS_e
+    0x00, // dItem_MAGIC_ARMOR_e
+    0x04, // WATER_BOOTS
+    0x00, // ESA_BAG
+    0x00, // dItem_BOOMERANG_e
+    0x04, // BARE_HAND
+    0x00, // dItem_HOOKSHOT_e
+    0x00, // dItem_DELIVERY_BAG_e
+    0x00, // BOMB_BAG
+    0x03, // dItem_FUKU_e
+    0x00, // dItem_SKULL_HAMMER_e
+    0x00, // dItem_DEKU_LEAF_e
+    0x00, // dItem_MAGIC_ARROW_e
+    0x00, // dItem_LIGHT_ARROW_e
+    0x04, // dItem_NEW_FUKU_e
+    0x00, // SWORD
+    0x00, // MASTER_SWORD
+    0x04, // LV3_SWORD
+    0x00, // SHIELD
+    0x00, // MIRROR_SHIELD
+    0x00, // DROPPED_SWORD
+    0x04, // MASTER_SWORD_EX
+    0x01, // KAKERA_HEART2
+    0x04, // noentry64
+    0x04, // noentry65
+    0x00, // PIRATES_OMAMORI
+    0x00, // HEROS_OMAMORI
+    0x04, // GRASS_BALL
+    0x01, // SKULL_NECKLACE
+    0x01, // BOKOBABA_SEED
+    0x01, // GOLDEN_FEATHER
+    0x01, // BOKO_BELT
+    0x01, // RED_JELLY
+    0x01, // GREEN_JELLY
+    0x01, // BLUE_JELLY
+    0x01, // dItem_MAP_e
+    0x01, // dItem_COMPASS_e
+    0x00, // dItem_BOSS_KEY_e
+    0x04, // EMPTY_BSHIP
+    0x00, // EMPTY_BOTTLE
+    0x02, // RED_BOTTLE
+    0x02, // GREEN_BOTTLE
+    0x02, // BLUE_BOTTLE
+    0x00, // dItem_HALF_SOUP_BOTTLE_e
+    0x00, // dItem_SOUP_BOTTLE_e
+    0x02, // BIN_IN_WATER
+    0x02, // FAIRY_BOTTLE
+    0x00, // FIREFLY_BOTTLE
+    0x02, // FWATER_BOTTLE
+    0x04, // UNK_BOTTLE_5A
+    0x04, // UNK_BOTTLE_5B
+    0x04, // UNK_BOTTLE_5C
+    0x04, // UNK_BOTTLE_5D
+    0x04, // UNK_BOTTLE_5E
+    0x04, // UNK_BOTTLE_5F
+    0x04, // UNK_BOTTLE_60
+    0x00, // TRIFORCE1
+    0x00, // TRIFORCE2
+    0x00, // TRIFORCE3
+    0x00, // TRIFORCE4
+    0x00, // TRIFORCE5
+    0x00, // TRIFORCE6
+    0x00, // TRIFORCE7
+    0x00, // TRIFORCE8
+    0x00, // dItem_PEARL_NAYRU_e
+    0x00, // dItem_PEARL_DIN_e
+    0x00, // dItem_PEARL_FARORE_e
+    0x04, // KNOWLEDGE_TF
+    0x04, // TACT_SONG1
+    0x04, // TACT_SONG2
+    0x04, // TACT_SONG3
+    0x04, // TACT_SONG4
+    0x04, // TACT_SONG5
+    0x04, // TACT_SONG6
+    0x04, // noentry115
+    0x04, // noentry116
+    0x04, // noentry117
+    0x04, // noentry118
+    0x04, // noentry119
+    0x00, // NORMAL_SAIL
+    0x00, // TRIFORCE_MAP1
+    0x00, // TRIFORCE_MAP2
+    0x00, // TRIFORCE_MAP3
+    0x00, // TRIFORCE_MAP4
+    0x00, // TRIFORCE_MAP5
+    0x00, // TRIFORCE_MAP6
+    0x00, // TRIFORCE_MAP7
+    0x00, // TRIFORCE_MAP8
+    0x04, // noentry129
+    0x02, // BIRD_ESA_5
+    0x02, // dItem_HYOI_PEAR_e
+    0x04, // ESA1
+    0x04, // ESA2
+    0x04, // ESA3
+    0x04, // ESA4
+    0x04, // ESA5
+    0x04, // MAGIC_BEAN
+    0x04, // BIRD_ESA_10
+    0x04, // noentry139
+    0x02, // FLOWER_1
+    0x02, // FLOWER_2
+    0x02, // FLOWER_3
+    0x02, // HEROS_FLAG
+    0x02, // TAIRYO_FLAG
+    0x02, // SALES_FLAG
+    0x02, // WIND_FLAG
+    0x02, // RED_FLAG
+    0x02, // FOSSIL_HEAD
+    0x02, // WATER_STATUE
+    0x02, // POSTMAN_STATUE
+    0x02, // PRESIDENT_STATUE
+    0x02, // dItem_FATHER_LETTER_e
+    0x02, // dItem_NOTE_TO_MOM_e
+    0x02, // MAGYS_LETTER
+    0x02, // MO_LETTER
+    0x00, // COTTAGE_PAPER
+    0x02, // KAISEN_PRESENT1
+    0x02, // KAISEN_PRESENT2
+    0x00, // SALVAGE_ITEM1
+    0x04, // SALVAGE_ITEM2
+    0x04, // SALVAGE_ITEM3
+    0x04, // XXX_039
+    0x00, // TINGLE_STATUE1
+    0x00, // TINGLE_STATUE2
+    0x00, // TINGLE_STATUE3
+    0x00, // TINGLE_STATUE4
+    0x00, // TINGLE_STATUE5
+    0x00, // TINGLE_STATUE6
+    0x04, // noentry169
+    0x04, // dItem_HURRICANE_SPIN_e
+    0x00, // MAX_RUPEE_UP1
+    0x00, // MAX_RUPEE_UP2
+    0x00, // MAX_BOMB_UP1
+    0x00, // MAX_BOMB_UP2
+    0x00, // MAX_ARROW_UP1
+    0x00, // MAX_ARROW_UP2
+    0x04, // MAGIC_POWER
+    0x04, // MAX_MP_UP1
+    0x03, // TINCLE_RUPEE1
+    0x03, // TINCLE_RUPEE2
+    0x03, // TINCLE_RUPEE3
+    0x03, // TINCLE_RUPEE4
+    0x03, // TINCLE_RUPEE5
+    0x03, // TINCLE_RUPEE6
+    0x04, // LITHOGRAPH1
+    0x04, // LITHOGRAPH2
+    0x04, // LITHOGRAPH3
+    0x04, // LITHOGRAPH4
+    0x04, // LITHOGRAPH5
+    0x04, // LITHOGRAPH6
+    0x04, // COLLECT_MAP_64
+    0x04, // COLLECT_MAP_63
+    0x04, // COLLECT_MAP_62
+    0x00, // COLLECT_MAP_61
+    0x00, // COLLECT_MAP_60
+    0x00, // COLLECT_MAP_59
+    0x00, // COLLECT_MAP_58
+    0x00, // COLLECT_MAP_57
+    0x00, // COLLECT_MAP_56
+    0x00, // COLLECT_MAP_55
+    0x00, // COLLECT_MAP_54
+    0x00, // COLLECT_MAP_53
+    0x00, // COLLECT_MAP_52
+    0x00, // COLLECT_MAP_51
+    0x00, // COLLECT_MAP_50
+    0x00, // COLLECT_MAP_49
+    0x00, // COLLECT_MAP_48
+    0x00, // COLLECT_MAP_47
+    0x00, // COLLECT_MAP_46
+    0x00, // COLLECT_MAP_45
+    0x00, // COLLECT_MAP_44
+    0x00, // COLLECT_MAP_43
+    0x00, // COLLECT_MAP_42
+    0x00, // COLLECT_MAP_41
+    0x00, // COLLECT_MAP_40
+    0x00, // COLLECT_MAP_39
+    0x00, // COLLECT_MAP_38
+    0x00, // COLLECT_MAP_37
+    0x00, // COLLECT_MAP_36
+    0x00, // COLLECT_MAP_35
+    0x00, // COLLECT_MAP_34
+    0x00, // COLLECT_MAP_33
+    0x00, // COLLECT_MAP_32
+    0x00, // COLLECT_MAP_31
+    0x00, // COLLECT_MAP_30
+    0x00, // COLLECT_MAP_29
+    0x00, // COLLECT_MAP_28
+    0x00, // COLLECT_MAP_27
+    0x00, // COLLECT_MAP_26
+    0x00, // COLLECT_MAP_25
+    0x00, // COLLECT_MAP_24
+    0x00, // COLLECT_MAP_23
+    0x00, // COLLECT_MAP_22
+    0x00, // COLLECT_MAP_21
+    0x00, // COLLECT_MAP_20
+    0x00, // COLLECT_MAP_19
+    0x00, // COLLECT_MAP_18
+    0x00, // COLLECT_MAP_17
+    0x00, // COLLECT_MAP_16
+    0x00, // COLLECT_MAP_15
+    0x00, // COLLECT_MAP_14
+    0x00, // COLLECT_MAP_13
+    0x00, // COLLECT_MAP_12
+    0x00, // COLLECT_MAP_11
+    0x00, // COLLECT_MAP_10
+    0x00, // COLLECT_MAP_09
+    0x00, // COLLECT_MAP_08
+    0x00, // COLLECT_MAP_07
+    0x00, // COLLECT_MAP_06
+    0x00, // COLLECT_MAP_05
+    0x00, // COLLECT_MAP_04
+    0x00, // COLLECT_MAP_03
+    0x00, // COLLECT_MAP_02
+    0x00, // COLLECT_MAP_01
+    0x04, // dItem_NONE_e
 };
 
 /* 000000EC-00000320       .text setParticle__9daDitem_cFv */
@@ -382,8 +382,8 @@ void daDitem_c::anim_control() {
     case RED_BOTTLE:
     case GREEN_BOTTLE:
     case BLUE_BOTTLE:
-    case BOTTLESHIP:
-    case SOUP_BOTTLE:
+    case dItem_HALF_SOUP_BOTTLE_e:
+    case dItem_SOUP_BOTTLE_e:
     case BIN_IN_WATER:
     case FAIRY_BOTTLE:
     case FIREFLY_BOTTLE:
@@ -427,7 +427,7 @@ void daDitem_c::set_mtx() {
 
 /* 00000880-000008F0       .text settingBeforeDraw__9daDitem_cFv */
 void daDitem_c::settingBeforeDraw() {
-    if (isBomb(m_itemNo) || m_itemNo == BOMB_BAG || m_itemNo == HUMMER || m_itemNo == SMALL_KEY) {
+    if (isBomb(m_itemNo) || m_itemNo == BOMB_BAG || m_itemNo == dItem_SKULL_HAMMER_e || m_itemNo == dItem_SMALL_KEY_e) {
         dDlst_texSpecmapST(&mEyePos, &mTevStr, mpModel->getModelData(), 1.0f);
     }
 }
@@ -459,7 +459,7 @@ s32 daDitem_c::create() {
     
     char* arcName = dItem_data::getArcname(m_itemNo);
     if (dItem_data::getBmdIdx(m_itemNo) == -1 || arcName == NULL) {
-        m_itemNo = GREEN_RUPEE;
+        m_itemNo = dItem_GREEN_RUPEE_e;
     }
     
     s32 phase_state = dComIfG_resLoad(&mPhs, dItem_data::getArcname(m_itemNo));

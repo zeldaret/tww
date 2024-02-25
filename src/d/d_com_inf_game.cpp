@@ -124,7 +124,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4941 = 0;
     mButtonMode = 0;
 
-    if (dComIfGs_checkGetItem(TELESCOPE)) {
+    if (dComIfGs_checkGetItem(dItem_TELESCOPE_e)) {
         field_0x4943 = 0;
     } else {
         field_0x4943 = 0x15;
@@ -795,17 +795,17 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
             get_item = 1;
         }
         break;
-    case PEARL1:
+    case dItem_PEARL_NAYRU_e:
         if (dComIfGs_isSymbol(0)) {
             get_item = 1;
         }
         break;
-    case PEARL2:
+    case dItem_PEARL_DIN_e:
         if (dComIfGs_isSymbol(1)) {
             get_item = 1;
         }
         break;
-    case PEARL3:
+    case dItem_PEARL_FARORE_e:
         if (dComIfGs_isSymbol(2)) {
             get_item = 1;
         }
@@ -833,8 +833,8 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
             }
         }
 
-        if (i_itemNo >= 0xBF && i_itemNo <= NO_ITEM - 1 &&
-            dComIfGs_isGetCollectMap(NO_ITEM - i_itemNo))
+        if (i_itemNo >= 0xBF && i_itemNo <= dItem_NONE_e - 1 &&
+            dComIfGs_isGetCollectMap(dItem_NONE_e - i_itemNo))
         {
             get_item++;
         }
@@ -919,17 +919,17 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             get_item = 1;
         }
         break;
-    case PEARL1:
+    case dItem_PEARL_NAYRU_e:
         if (dComIfGs_isSymbol(0)) {
             get_item = 1;
         }
         break;
-    case PEARL2:
+    case dItem_PEARL_DIN_e:
         if (dComIfGs_isSymbol(1)) {
             get_item = 1;
         }
         break;
-    case PEARL3:
+    case dItem_PEARL_FARORE_e:
         if (dComIfGs_isSymbol(2)) {
             get_item = 1;
         }
@@ -944,7 +944,7 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             get_item = 1;
         }
         break;
-    case BOW:
+    case dItem_BOW_e:
         if (dComIfGs_getItem(12)) {
             get_item = dComIfGs_getArrowNum();
         }
@@ -1003,9 +1003,9 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             }
         }
         break;
-    case PENDANT:
+    case dItem_JOY_PENDANT_e:
         for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == PENDANT) {
+            if (dComIfGs_getBeast(i) == dItem_JOY_PENDANT_e) {
                 get_item = dComIfGs_getBeastNum(7);
             }
         }
@@ -1023,8 +1023,8 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             }
         }
 
-        if (i_itemNo >= 0xBF && i_itemNo <= NO_ITEM - 1 &&
-            dComIfGs_isGetCollectMap(NO_ITEM - i_itemNo))
+        if (i_itemNo >= 0xBF && i_itemNo <= dItem_NONE_e - 1 &&
+            dComIfGs_isGetCollectMap(dItem_NONE_e - i_itemNo))
         {
             get_item = 1;
         }
@@ -1281,16 +1281,16 @@ void dComIfGs_setPlayerRecollectionData() {
         tbl = 3;
         dComIfGp_setPlayerInfoBufferStageNo(4);
     } else {
-        dComIfGs_setSelectItem(0, NO_ITEM);
-        dComIfGs_setSelectItem(1, NO_ITEM);
-        dComIfGs_setSelectItem(2, NO_ITEM);
+        dComIfGs_setSelectItem(0, dItem_NONE_e);
+        dComIfGs_setSelectItem(1, dItem_NONE_e);
+        dComIfGs_setSelectItem(2, dItem_NONE_e);
         return;
     }
     
-    if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[0] != TELESCOPE) {
-        dComIfGs_setSelectItem(0, NO_ITEM);
-        dComIfGs_setSelectItem(1, NO_ITEM);
-        dComIfGs_setSelectItem(2, NO_ITEM);
+    if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[0] != dItem_TELESCOPE_e) {
+        dComIfGs_setSelectItem(0, dItem_NONE_e);
+        dComIfGs_setSelectItem(1, dItem_NONE_e);
+        dComIfGs_setSelectItem(2, dItem_NONE_e);
         return;
     }
 
@@ -1389,9 +1389,9 @@ void dComIfGs_setPlayerRecollectionData() {
     dComIfGs_setItem(17, tmp_item.mItems[17]);
     dComIfGs_setItem(8,  tmp_item.mItems[8]);
     
-    dComIfGs_setSelectItem(0, NO_ITEM);
-    dComIfGs_setSelectItem(1, NO_ITEM);
-    dComIfGs_setSelectItem(2, NO_ITEM);
+    dComIfGs_setSelectItem(0, dItem_NONE_e);
+    dComIfGs_setSelectItem(1, dItem_NONE_e);
+    dComIfGs_setSelectItem(2, dItem_NONE_e);
 }
 
 /* 80055318-80055580       .text dComIfGs_revPlayerRecollectionData__Fv */
@@ -1488,9 +1488,9 @@ void dComIfGs_revPlayerRecollectionData() {
     dComIfGs_setItem(17, tmp_item.mItems[17]);
     dComIfGs_setItem(8,  tmp_item.mItems[8]);
     
-    dComIfGs_setSelectItem(0, NO_ITEM);
-    dComIfGs_setSelectItem(1, NO_ITEM);
-    dComIfGs_setSelectItem(2, NO_ITEM);
+    dComIfGs_setSelectItem(0, dItem_NONE_e);
+    dComIfGs_setSelectItem(1, dItem_NONE_e);
+    dComIfGs_setSelectItem(2, dItem_NONE_e);
 }
 
 /* 80055580-8005586C       .text dComIfGs_exchangePlayerRecollectionData__Fv */

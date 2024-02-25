@@ -677,7 +677,7 @@ void item_func_triple_heart() {
 
 /* 800C3200-800C3258       .text item_func_pendant__Fv */
 void item_func_pendant() {
-    dComIfGs_setBeastItem(PENDANT);
+    dComIfGs_setBeastItem(dItem_JOY_PENDANT_e);
     dComIfGs_onGetItemBeast(0x7);
     dComIfGp_setItemBeastNumCount(0x7, 1);
 }
@@ -685,19 +685,19 @@ void item_func_pendant() {
 /* 800C3258-800C329C       .text item_func_telescope__Fv */
 void item_func_telescope() {
     dComIfGs_onGetItem(0x0, 0);
-    dComIfGs_setItem(0x0, TELESCOPE);
+    dComIfGs_setItem(0x0, dItem_TELESCOPE_e);
 }
 
 /* 800C329C-800C32E0       .text item_func_tncl_whitsl__Fv */
 void item_func_tncl_whitsl() {
     dComIfGs_onGetItem(0x7, 0);
-    dComIfGs_setItem(0x7, TNCL_WHITSL);
+    dComIfGs_setItem(0x7, dItem_TINGLE_TUNER_e);
 }
 
 /* 800C32E0-800C3324       .text item_func_wind_tact__Fv */
 void item_func_wind_tact() {
     dComIfGs_onGetItem(0x2, 0);
-    dComIfGs_setItem(0x2, WIND_TACT);
+    dComIfGs_setItem(0x2, dItem_WIND_WAKER_e);
 }
 
 /* 800C3324-800C3368       .text item_func_camera__Fv */
@@ -715,7 +715,7 @@ void item_func_emono_bag() {
 /* 800C33AC-800C33F0       .text item_func_rope__Fv */
 void item_func_rope() {
     dComIfGs_onGetItem(0x3, 0);
-    dComIfGs_setItem(0x3, ROPE);
+    dComIfGs_setItem(0x3, dItem_GRAPPLING_HOOK_e);
 }
 
 /* 800C33F0-800C3434       .text item_func_camera2__Fv */
@@ -727,7 +727,7 @@ void item_func_camera2() {
 /* 800C3434-800C3484       .text item_func_bow__Fv */
 void item_func_bow() {
     dComIfGs_onGetItem(0xC, 0);
-    dComIfGs_setItem(0xC, BOW);
+    dComIfGs_setItem(0xC, dItem_BOW_e);
     dComIfGs_setArrowNum(30);
     dComIfGs_setArrowMax(30);
 }
@@ -741,13 +741,13 @@ void item_func_pwr_groove() {
 /* 800C34C4-800C3508       .text item_func_hvy_boots__Fv */
 void item_func_hvy_boots() {
     dComIfGs_onGetItem(0x9, 0);
-    dComIfGs_setItem(0x9, HVY_BOOTS);
+    dComIfGs_setItem(0x9, dItem_IRON_BOOTS_e);
 }
 
 /* 800C3508-800C354C       .text item_func_drgn_shield__Fv */
 void item_func_drgn_shield() {
     dComIfGs_onGetItem(0xA, 0);
-    dComIfGs_setItem(0xA, DRGN_SHIELD);
+    dComIfGs_setItem(0xA, dItem_MAGIC_ARMOR_e);
 }
 
 /* 800C354C-800C3550       .text item_func_water_boots__Fv */
@@ -763,7 +763,7 @@ void item_func_esa_bag() {
 /* 800C3594-800C35D8       .text item_func_boomerang__Fv */
 void item_func_boomerang() {
     dComIfGs_onGetItem(0x5, 0);
-    dComIfGs_setItem(0x5, BOOMERANG);
+    dComIfGs_setItem(0x5, dItem_BOOMERANG_e);
 }
 
 /* 800C35D8-800C3600       .text item_func_bare_hand__Fv */
@@ -774,13 +774,13 @@ void item_func_bare_hand() {
 /* 800C3600-800C3644       .text item_func_hookshot__Fv */
 void item_func_hookshot() {
     dComIfGs_onGetItem(0x13, 0);
-    dComIfGs_setItem(0x13, HOOKSHOT);
+    dComIfGs_setItem(0x13, dItem_HOOKSHOT_e);
 }
 
 /* 800C3644-800C3688       .text item_func_warasibe_bag__Fv */
 void item_func_warasibe_bag() {
     dComIfGs_onGetItem(0x12, 0);
-    dComIfGs_setItem(0x12, WARASHIBE_BAG);
+    dComIfGs_setItem(0x12, dItem_DELIVERY_BAG_e);
 }
 
 /* 800C3688-800C36D8       .text item_func_bomb_bag__Fv */
@@ -798,13 +798,13 @@ void item_func_fuku() {
 /* 800C36DC-800C3720       .text item_func_hummer__Fv */
 void item_func_hummer() {
     dComIfGs_onGetItem(0x14, 0);
-    dComIfGs_setItem(0x14, HUMMER);
+    dComIfGs_setItem(0x14, dItem_SKULL_HAMMER_e);
 }
 
 /* 800C3720-800C377C       .text item_func_deku_leaf__Fv */
 void item_func_deku_leaf() {
     dComIfGs_onGetItem(0x6, 0);
-    dComIfGs_setItem(0x6, DEKU_LEAF);
+    dComIfGs_setItem(0x6, dItem_DEKU_LEAF_e);
     dComIfGp_setItemMaxMagicCount(16);
     dComIfGp_setItemMagicCount(16);
 }
@@ -812,12 +812,12 @@ void item_func_deku_leaf() {
 /* 800C377C-800C3928       .text item_func_magic_arrow__Fv */
 void item_func_magic_arrow() {
     dComIfGs_onGetItem(0xC, 1);
-    dComIfGs_setItem(0xC, MAGIC_ARROW);
+    dComIfGs_setItem(0xC, dItem_MAGIC_ARROW_e);
     
 #if VERSION != VERSION_JPN
     // If the regular bow was equipped on an X/Y/Z button, force it to update.
     for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
-        if (dComIfGp_getSelectItem(btnIdx) == BOW) {
+        if (dComIfGp_getSelectItem(btnIdx) == dItem_BOW_e) {
             dComIfGp_setSelectItem(btnIdx);
         }
     }
@@ -827,12 +827,12 @@ void item_func_magic_arrow() {
 /* 800C3928-800C3AD4       .text item_func_light_arrow__Fv */
 void item_func_light_arrow() {
     dComIfGs_onGetItem(0xC, 2);
-    dComIfGs_setItem(0xC, LIGHT_ARROW);
+    dComIfGs_setItem(0xC, dItem_LIGHT_ARROW_e);
     
 #if VERSION != VERSION_JPN
     // If the fire/ice bow was equipped on an X/Y/Z button, force it to update.
     for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
-        if (dComIfGp_getSelectItem(btnIdx) == MAGIC_ARROW) {
+        if (dComIfGp_getSelectItem(btnIdx) == dItem_MAGIC_ARROW_e) {
             dComIfGp_setSelectItem(btnIdx);
         }
     }
@@ -990,12 +990,12 @@ void item_func_blue_bottle() {
 
 /* 800C4134-800C4164       .text item_func_bottleship__Fv */
 void item_func_bottleship() {
-    dComIfGs_onGetBottleItem(BOTTLESHIP);
+    dComIfGs_onGetBottleItem(dItem_HALF_SOUP_BOTTLE_e);
 }
 
 /* 800C4164-800C4194       .text item_func_soup_bottle__Fv */
 void item_func_soup_bottle() {
-    dComIfGs_onGetBottleItem(SOUP_BOTTLE);
+    dComIfGs_onGetBottleItem(dItem_SOUP_BOTTLE_e);
 }
 
 /* 800C4194-800C41C4       .text item_func_bin_in_water__Fv */
@@ -1158,7 +1158,7 @@ void item_func_bird_esa_5() {
 /* 800C462C-800C4670       .text item_func_animal_esa__Fv */
 void item_func_animal_esa() {
     dComIfGs_onGetItemBait(0x1);
-    dComIfGs_setBaitItem(ANIMAL_ESA);
+    dComIfGs_setBaitItem(dItem_HYOI_PEAR_e);
 }
 
 /* 800C4670-800C4674       .text item_func_esa1__Fv */
@@ -1264,13 +1264,13 @@ void item_func_president_statue() {
 /* 800C49BC-800C4A00       .text item_func_letter00__Fv */
 void item_func_letter00() {
     dComIfGs_onGetItemReserve(0xC);
-    dComIfGs_setReserveItem(LETTER00);
+    dComIfGs_setReserveItem(dItem_FATHER_LETTER_e);
 }
 
 /* 800C4A00-800C4A44       .text item_func_magic_seed__Fv */
 void item_func_magic_seed() {
     dComIfGs_onGetItemReserve(0xD);
-    dComIfGs_setReserveItem(MAGIC_SEED);
+    dComIfGs_setReserveItem(dItem_NOTE_TO_MOM_e);
 }
 
 /* 800C4A44-800C4A88       .text item_func_magys_letter__Fv */
@@ -2246,12 +2246,12 @@ int item_getcheck_func_blue_bottle() {
 
 /* 800C6DD0-800C6E00       .text item_getcheck_func_bottleship__Fv */
 int item_getcheck_func_bottleship() {
-    return dComIfGs_isGetBottleItem(BOTTLESHIP);
+    return dComIfGs_isGetBottleItem(dItem_HALF_SOUP_BOTTLE_e);
 }
 
 /* 800C6E00-800C6E30       .text item_getcheck_func_bin_in_bottleship__Fv */
 int item_getcheck_func_bin_in_bottleship() {
-    return dComIfGs_isGetBottleItem(SOUP_BOTTLE);
+    return dComIfGs_isGetBottleItem(dItem_SOUP_BOTTLE_e);
 }
 
 /* 800C6E30-800C6E60       .text item_getcheck_func_bin_in_water__Fv */
@@ -2652,7 +2652,7 @@ BOOL isArrow(u8 itemNo) {
 /* 800C7BD4-800C7C08       .text isEmono__FUc */
 BOOL isEmono(u8 itemNo) {
     BOOL isEmono = FALSE;
-    if (itemNo == PENDANT || itemNo == SKULL_NECKLACE || itemNo == BOKOBABA_SEED || itemNo == GOLDEN_FEATHER ||
+    if (itemNo == dItem_JOY_PENDANT_e || itemNo == SKULL_NECKLACE || itemNo == BOKOBABA_SEED || itemNo == GOLDEN_FEATHER ||
         itemNo == BOKO_BELT || itemNo == RED_JELLY || itemNo == GREEN_JELLY || itemNo == BLUE_JELLY)
     {
         isEmono = TRUE;
@@ -2663,7 +2663,7 @@ BOOL isEmono(u8 itemNo) {
 /* 800C7C08-800C7C34       .text isEsa__FUc */
 BOOL isEsa(u8 itemNo) {
     BOOL isEsa = FALSE;
-    if (itemNo == BIRD_ESA_5 || itemNo == ANIMAL_ESA || itemNo == MAGIC_BEAN) {
+    if (itemNo == BIRD_ESA_5 || itemNo == dItem_HYOI_PEAR_e || itemNo == MAGIC_BEAN) {
         isEsa = TRUE;
     }
     return isEsa;
@@ -2672,8 +2672,8 @@ BOOL isEsa(u8 itemNo) {
 /* 800C7C34-800C7C60       .text isRupee__FUc */
 BOOL isRupee(u8 itemNo) {
     BOOL isRupee = FALSE;
-    if (itemNo == GREEN_RUPEE || itemNo == BLUE_RUPEE || itemNo == YELLOW_RUPEE || itemNo == RED_RUPEE ||
-        itemNo == PURPLE_RUPEE || itemNo == ORANGE_RUPEE || itemNo == SILVER_RUPEE)
+    if (itemNo == dItem_GREEN_RUPEE_e || itemNo == dItem_BLUE_RUPEE_e || itemNo == dItem_YELLOW_RUPEE_e || itemNo == dItem_RED_RUPEE_e ||
+        itemNo == dItem_PURPLE_RUPEE_e || itemNo == dItem_ORANGE_RUPEE_e || itemNo == dItem_SILVER_RUPEE_e)
     {
         isRupee = TRUE;
     }
@@ -2692,7 +2692,7 @@ BOOL isLimitedItem(u8 itemNo) {
 /* 800C7C7C-800C7CB0       .text isNonSavedEmono__FUc */
 BOOL isNonSavedEmono(u8 itemNo) {
     BOOL isEmono = FALSE;
-    if (itemNo == PENDANT || itemNo == SKULL_NECKLACE || itemNo == BOKOBABA_SEED || itemNo == GOLDEN_FEATHER ||
+    if (itemNo == dItem_JOY_PENDANT_e || itemNo == SKULL_NECKLACE || itemNo == BOKOBABA_SEED || itemNo == GOLDEN_FEATHER ||
         itemNo == BOKO_BELT || itemNo == RED_JELLY || itemNo == GREEN_JELLY) // No BLUE_JELLY
     {
         isEmono = TRUE;
@@ -2723,7 +2723,7 @@ BOOL isTriforce(u8 itemNo) {
 /* 800C7D08-800C7D28       .text isHeart__FUc */
 BOOL isHeart(u8 itemNo) {
     BOOL isHeart = FALSE;
-    if (itemNo == HEART || itemNo == TRIPLE_HEART) {
+    if (itemNo == dItem_HEART_e || itemNo == dItem_TRIPLE_HEART_e) {
         isHeart = TRUE;
     }
     return isHeart;
@@ -2737,11 +2737,11 @@ u8 getItemNoByLife(u8 itemNo) {
     if (lifePercent != 100) {
         return itemNo;
     }
-    if (itemNo == HEART) {
-        itemNo = GREEN_RUPEE;
+    if (itemNo == dItem_HEART_e) {
+        itemNo = dItem_GREEN_RUPEE_e;
     }
-    if (itemNo == TRIPLE_HEART) {
-        return YELLOW_RUPEE;
+    if (itemNo == dItem_TRIPLE_HEART_e) {
+        return dItem_YELLOW_RUPEE_e;
     }
     return itemNo;
 }
@@ -2749,32 +2749,32 @@ u8 getItemNoByLife(u8 itemNo) {
 /* 800C7D70-800C7ED0       .text check_itemno__Fi */
 u8 check_itemno(int itemNo) {
     if (dComIfGs_getMaxMagic() == 0 && (itemNo == S_MAGIC || itemNo == L_MAGIC)) {
-        return GREEN_RUPEE;
+        return dItem_GREEN_RUPEE_e;
     }
     if (!dComIfGs_isGetItem(0xC, 0) && !dComIfGs_isGetItem(0xC, 1) && !dComIfGs_isGetItem(0xC, 2)) {
         // Does not own any bow.
         if (isArrow(itemNo)) {
-            return GREEN_RUPEE;
+            return dItem_GREEN_RUPEE_e;
         }
     }
     if (!dComIfGs_isGetItem(0xD, 0)) {
         // Does not own bombs.
         if (isBomb(itemNo)) {
-            return GREEN_RUPEE;
+            return dItem_GREEN_RUPEE_e;
         }
     }
     if (!checkItemGet(ESA_BAG, TRUE)) {
         if (isEsa(itemNo)) {
-            return GREEN_RUPEE;
+            return dItem_GREEN_RUPEE_e;
         }
     }
     if (!checkItemGet(EMONO_BAG, TRUE)) {
         if (isEmono(itemNo)) {
-            return GREEN_RUPEE;
+            return dItem_GREEN_RUPEE_e;
         }
     }
-    if (itemNo == TRIPLE_HEART) {
-        itemNo = HEART;
+    if (itemNo == dItem_TRIPLE_HEART_e) {
+        itemNo = dItem_HEART_e;
     }
     return itemNo;
 }
@@ -2821,7 +2821,7 @@ u8 getEmonoItemFromLifeBallTable(u16 itemTableIdx) {
         }
     }
     
-    return NO_ITEM;
+    return dItem_NONE_e;
 }
 
 /* 800C8214-800C8498       .text getItemFromLifeBallTableWithoutEmono__FUs */
@@ -2847,16 +2847,16 @@ u8 getItemFromLifeBallTableWithoutEmono(u16 itemTableIdx) {
     
     for (int i = 0; i < 8; i++) {
         int randIdx = cM_rndF(15.999f);
-        if (!isEmono(items[randIdx]) && items[randIdx] != NO_ITEM) {
+        if (!isEmono(items[randIdx]) && items[randIdx] != dItem_NONE_e) {
             return items[randIdx];
         }
     }
     
     for (int i = 0; i < 16; i++) {
-        if (!isEmono(items[i]) && items[i] != NO_ITEM) {
+        if (!isEmono(items[i]) && items[i] != dItem_NONE_e) {
             return items[i];
         }
     }
     
-    return NO_ITEM;
+    return dItem_NONE_e;
 }

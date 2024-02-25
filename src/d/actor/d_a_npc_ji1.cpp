@@ -941,16 +941,16 @@ void daNpc_Ji1_c::createItem() {
         itemNo = SWORD;
     }
     else if(field_0xD7B == 1) {
-        itemNo = HURRICANE_SPIN;
+        itemNo = dItem_HURRICANE_SPIN_e;
     }
     else if(dComIfGs_getEventReg(0xD003) == 1) {
-        itemNo = PURPLE_RUPEE;
+        itemNo = dItem_PURPLE_RUPEE_e;
     }
     else if(dComIfGs_getEventReg(0xD003) == 2) {
-        itemNo = ORANGE_RUPEE;
+        itemNo = dItem_ORANGE_RUPEE_e;
     }
     else if(field_0xD70 >= l_HIO.field_0x60[3] && dComIfGs_isEventBit(0xF10)) {
-        itemNo = SILVER_RUPEE;
+        itemNo = dItem_SILVER_RUPEE_e;
     }
     else {
         itemNo = KAKERA_HEART;

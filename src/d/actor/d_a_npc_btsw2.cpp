@@ -598,7 +598,7 @@ BOOL daNpc_Btsw2_c::wait_action(void*) {
 s32 daNpc_Btsw2_c::_create() {
     fopAcM_SetupActor(this, daNpc_Btsw2_c);
     
-    if (dComIfGs_getEventReg(0xC203) == 3 || !checkItemGet(PEARL2, TRUE)) {
+    if (dComIfGs_getEventReg(0xC203) == 3 || !checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
         return cPhs_ERROR_e;
     }
     

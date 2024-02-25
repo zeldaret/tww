@@ -486,7 +486,7 @@ enum ItemTextureIdx {
 /* 803842B0-803866B0       .data item_resource__10dItem_data */
 dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
-        // 0x00: HEART
+        // 0x00: dItem_HEART_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ ALWAYS_BDL_VHRTL,
@@ -502,7 +502,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0B80
     },
     {
-        // 0x01: GREEN_RUPEE
+        // 0x01: dItem_GREEN_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
@@ -518,7 +518,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0x02: BLUE_RUPEE
+        // 0x02: dItem_BLUE_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
@@ -534,7 +534,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0x03: YELLOW_RUPEE
+        // 0x03: dItem_YELLOW_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
@@ -550,7 +550,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0x04: RED_RUPEE
+        // 0x04: dItem_RED_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
@@ -566,7 +566,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0x05: PURPLE_RUPEE
+        // 0x05: dItem_PURPLE_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
@@ -582,7 +582,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0x06: ORANGE_RUPEE
+        // 0x06: dItem_ORANGE_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
@@ -726,7 +726,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x0F: SILVER_RUPEE
+        // 0x0F: dItem_SILVER_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
@@ -822,7 +822,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x5500
     },
     {
-        // 0x15: SMALL_KEY
+        // 0x15: dItem_SMALL_KEY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VKEYN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_KEY],
         /* mBmdIdx      */ 0x0003,
@@ -966,7 +966,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0x1E: TRIPLE_HEART
+        // 0x1E: dItem_TRIPLE_HEART_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ ALWAYS_BDL_VHRTL,
@@ -982,7 +982,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0B80
     },
     {
-        // 0x1F: PENDANT
+        // 0x1F: dItem_JOY_PENDANT_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHAPP],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_08],
         /* mBmdIdx      */ 0x0003,
@@ -998,7 +998,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x20: TELESCOPE
+        // 0x20: dItem_TELESCOPE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_TELE_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TELESCOPE],
         /* mBmdIdx      */ 0x0004,
@@ -1014,7 +1014,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3320
     },
     {
-        // 0x21: TNCL_WHITSL
+        // 0x21: dItem_TINGLE_TUNER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_WHISTLE],
         /* mBmdIdx      */ 0x0003,
@@ -1030,7 +1030,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x22: WIND_TACT
+        // 0x22: dItem_WIND_WAKER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTACT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
         /* mBmdIdx      */ 0x0003,
@@ -1078,7 +1078,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x25: ROPE
+        // 0x25: dItem_GRAPPLING_HOOK_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VROPE],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ROPE],
         /* mBmdIdx      */ 0x0004,
@@ -1110,7 +1110,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0x27: BOW
+        // 0x27: dItem_BOW_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOW],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
         /* mBmdIdx      */ 0x0004,
@@ -1142,7 +1142,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x29: HVY_BOOTS
+        // 0x29: dItem_IRON_BOOTS_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOOT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOOTS_00],
         /* mBmdIdx      */ 0x0004,
@@ -1158,7 +1158,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x2A: DRGN_SHIELD
+        // 0x2A: dItem_MAGIC_ARMOR_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAGS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_02],
         /* mBmdIdx      */ 0x0005,
@@ -1206,7 +1206,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x2D: BOOMERANG
+        // 0x2D: dItem_BOOMERANG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOOM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOOMERANG],
         /* mBmdIdx      */ 0x0003,
@@ -1238,7 +1238,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x2F: HOOKSHOT
+        // 0x2F: dItem_HOOKSHOT_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHOOK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HOOKSHOT],
         /* mBmdIdx      */ 0x0004,
@@ -1254,7 +1254,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x30: WARASHIBE_BAG
+        // 0x30: dItem_DELIVERY_BAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY],
         /* mBmdIdx      */ 0x0003,
@@ -1286,7 +1286,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x32: FUKU
+        // 0x32: dItem_FUKU_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VFUKU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CLOTHES],
         /* mBmdIdx      */ 0x0003,
@@ -1302,7 +1302,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x33: HUMMER
+        // 0x33: dItem_SKULL_HAMMER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHAMM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HAMMER_01],
         /* mBmdIdx      */ 0x0003,
@@ -1318,7 +1318,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x34: DEKU_LEAF
+        // 0x34: dItem_DEKU_LEAF_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEAF],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_FAN],
         /* mBmdIdx      */ 0x0003,
@@ -1334,7 +1334,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x35: MAGIC_ARROW
+        // 0x35: dItem_MAGIC_ARROW_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VARFI],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROW_POWER_01],
         /* mBmdIdx      */ 0x0004,
@@ -1350,7 +1350,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x36: LIGHT_ARROW
+        // 0x36: dItem_LIGHT_ARROW_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VARRL],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROW_POWER_02],
         /* mBmdIdx      */ 0x0004,
@@ -1366,7 +1366,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x37: noentry55
+        // 0x37: dItem_NEW_FUKU_e
         /* mArcname     */ NULL,
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CLOTHES],
         /* mBmdIdx      */ -1,
@@ -1702,7 +1702,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x4C: MAP
+        // 0x4C: dItem_MAP_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDUNM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DUNGEON_MAP],
         /* mBmdIdx      */ 0x0003,
@@ -1718,7 +1718,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x4D: COMPASS
+        // 0x4D: dItem_COMPASS_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDUNC],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COMPASS],
         /* mBmdIdx      */ 0x0004,
@@ -1734,7 +1734,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x4E: BOSS_KEY
+        // 0x4E: dItem_BOSS_KEY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_KEY_01],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOSS_KEY],
         /* mBmdIdx      */ 0x0004,
@@ -1830,7 +1830,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x54: BOTTLESHIP
+        // 0x54: dItem_HALF_SOUP_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_09],
         /* mBmdIdx      */ 0x0004,
@@ -1846,7 +1846,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x55: SOUP_BOTTLE
+        // 0x55: dItem_SOUP_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_04],
         /* mBmdIdx      */ 0x0004,
@@ -2166,7 +2166,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x69: PEARL1
+        // 0x69: dItem_PEARL_NAYRU_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_N],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_02],
         /* mBmdIdx      */ 0x0004,
@@ -2182,7 +2182,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x6A: PEARL2
+        // 0x6A: dItem_PEARL_DIN_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_D],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_00],
         /* mBmdIdx      */ 0x0004,
@@ -2198,7 +2198,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x6B: PEARL3
+        // 0x6B: dItem_PEARL_FARORE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_F],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_01],
         /* mBmdIdx      */ 0x0004,
@@ -2582,7 +2582,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0x83: ANIMAL_ESA
+        // 0x83: dItem_HYOI_PEAR_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHYOI],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BAIT_02],
         /* mBmdIdx      */ 0x0003,
@@ -2918,7 +2918,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x98: LETTER00
+        // 0x98: dItem_FATHER_LETTER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLETT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_13],
         /* mBmdIdx      */ 0x0003,
@@ -2934,7 +2934,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x99: MAGIC_SEED
+        // 0x99: dItem_NOTE_TO_MOM_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEOF],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_14],
         /* mBmdIdx      */ 0x0003,
@@ -3206,7 +3206,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0xAA: HURRICANE_SPIN
+        // 0xAA: dItem_HURRICANE_SPIN_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ NULL,
         /* mBmdIdx      */ 0x0003,
@@ -4566,7 +4566,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xFF: NO_ITEM
+        // 0xFF: dItem_NONE_e
         /* mArcname     */ NULL,
         /* mTexture     */ NULL,
         /* mBmdIdx      */ -1,
@@ -4586,7 +4586,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
 /* 803866B0-803882B0       .data field_item_res__10dItem_data */
 dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
-        // 0x00: HEART
+        // 0x00: dItem_HEART_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VHRTL,
         /* mSrtIdx   */ -1,
@@ -4599,7 +4599,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0680
     },
     {
-        // 0x01: GREEN_RUPEE
+        // 0x01: dItem_GREEN_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
         /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
@@ -4612,7 +4612,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CA0
     },
     {
-        // 0x02: BLUE_RUPEE
+        // 0x02: dItem_BLUE_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
         /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
@@ -4625,7 +4625,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CA0
     },
     {
-        // 0x03: YELLOW_RUPEE
+        // 0x03: dItem_YELLOW_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
         /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
@@ -4638,7 +4638,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CA0
     },
     {
-        // 0x04: RED_RUPEE
+        // 0x04: dItem_RED_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
         /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
@@ -4651,7 +4651,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CA0
     },
     {
-        // 0x05: PURPLE_RUPEE
+        // 0x05: dItem_PURPLE_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
         /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
@@ -4664,7 +4664,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CA0
     },
     {
-        // 0x06: ORANGE_RUPEE
+        // 0x06: dItem_ORANGE_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
         /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
@@ -4781,7 +4781,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CC0
     },
     {
-        // 0x0F: SILVER_RUPEE
+        // 0x0F: dItem_SILVER_RUPEE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VLUPL,
         /* mSrtIdx   */ ALWAYS_BTK_VLUPL,
@@ -4859,7 +4859,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x5500
     },
     {
-        // 0x15: SMALL_KEY
+        // 0x15: dItem_SMALL_KEY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VKEYL,
         /* mSrtIdx   */ -1,
@@ -4976,7 +4976,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x1E: TRIPLE_HEART
+        // 0x1E: dItem_TRIPLE_HEART_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VHRTL,
         /* mSrtIdx   */ -1,
@@ -4989,7 +4989,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0B80
     },
     {
-        // 0x1F: PENDANT
+        // 0x1F: dItem_JOY_PENDANT_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VHAPL,
         /* mSrtIdx   */ -1,
@@ -5002,7 +5002,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0FE0
     },
     {
-        // 0x20: TELESCOPE
+        // 0x20: dItem_TELESCOPE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5015,7 +5015,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x21: TNCL_WHITSL
+        // 0x21: dItem_TINGLE_TUNER_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5028,7 +5028,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x22: WIND_TACT
+        // 0x22: dItem_WIND_WAKER_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5067,7 +5067,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x25: ROPE
+        // 0x25: dItem_GRAPPLING_HOOK_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5093,7 +5093,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x27: BOW
+        // 0x27: dItem_BOW_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5119,7 +5119,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x29: HVY_BOOTS
+        // 0x29: dItem_IRON_BOOTS_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5132,7 +5132,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x2A: DRGN_SHIELD
+        // 0x2A: dItem_MAGIC_ARMOR_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5171,7 +5171,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x2D: BOOMERANG
+        // 0x2D: dItem_BOOMERANG_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5197,7 +5197,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x2F: HOOKSHOT
+        // 0x2F: dItem_HOOKSHOT_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5210,7 +5210,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x30: WARASHIBE_BAG
+        // 0x30: dItem_DELIVERY_BAG_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5236,7 +5236,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x32: FUKU
+        // 0x32: dItem_FUKU_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5249,7 +5249,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x33: HUMMER
+        // 0x33: dItem_SKULL_HAMMER_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5262,7 +5262,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x34: DEKU_LEAF
+        // 0x34: dItem_DEKU_LEAF_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VLEAF],
         /* mBmdIdx   */ 0x0003,
         /* mSrtIdx   */ -1,
@@ -5275,7 +5275,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x3000
     },
     {
-        // 0x35: MAGIC_ARROW
+        // 0x35: dItem_MAGIC_ARROW_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ LINK_BDL_ARROW,
         /* mSrtIdx   */ -1,
@@ -5288,7 +5288,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x5500
     },
     {
-        // 0x36: LIGHT_ARROW
+        // 0x36: dItem_LIGHT_ARROW_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ LINK_BDL_ARROW,
         /* mSrtIdx   */ -1,
@@ -5301,7 +5301,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x5500
     },
     {
-        // 0x37: noentry55
+        // 0x37: dItem_NEW_FUKU_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5574,7 +5574,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0800
     },
     {
-        // 0x4C: MAP
+        // 0x4C: dItem_MAP_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5587,7 +5587,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x4D: COMPASS
+        // 0x4D: dItem_COMPASS_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5600,7 +5600,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x4E: BOSS_KEY
+        // 0x4E: dItem_BOSS_KEY_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5678,7 +5678,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x54: BOTTLESHIP
+        // 0x54: dItem_HALF_SOUP_BOTTLE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5691,7 +5691,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x55: SOUP_BOTTLE
+        // 0x55: dItem_SOUP_BOTTLE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5951,7 +5951,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x69: PEARL1
+        // 0x69: dItem_PEARL_NAYRU_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5964,7 +5964,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x6A: PEARL2
+        // 0x6A: dItem_PEARL_DIN_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5977,7 +5977,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x6B: PEARL3
+        // 0x6B: dItem_PEARL_FARORE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6289,7 +6289,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0740
     },
     {
-        // 0x83: ANIMAL_ESA
+        // 0x83: dItem_HYOI_PEAR_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VHYOI],
         /* mBmdIdx   */ 0x0003,
         /* mSrtIdx   */ -1,
@@ -6562,7 +6562,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x1000
     },
     {
-        // 0x98: LETTER00
+        // 0x98: dItem_FATHER_LETTER_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6575,7 +6575,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x99: MAGIC_SEED
+        // 0x99: dItem_NOTE_TO_MOM_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6796,7 +6796,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xAA: HURRICANE_SPIN
+        // 0xAA: dItem_HURRICANE_SPIN_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7901,7 +7901,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xFF: NO_ITEM
+        // 0xFF: dItem_NONE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7918,49 +7918,49 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
 /* 803882B0-803886B0       .data item_info__10dItem_data */
 dItem_data_item_info dItem_data::item_info[0x100] = {
     {
-        // 0x00: HEART
+        // 0x00: dItem_HEART_e
         0x0F,
         0x28,
         0x1E,
         0x00,
     },
     {
-        // 0x01: GREEN_RUPEE
+        // 0x01: dItem_GREEN_RUPEE_e
         0x19,
         0x37,
         0x23,
         0x00,
     },
     {
-        // 0x02: BLUE_RUPEE
+        // 0x02: dItem_BLUE_RUPEE_e
         0x19,
         0x37,
         0x23,
         0x00,
     },
     {
-        // 0x03: YELLOW_RUPEE
+        // 0x03: dItem_YELLOW_RUPEE_e
         0x19,
         0x37,
         0x23,
         0x00,
     },
     {
-        // 0x04: RED_RUPEE
+        // 0x04: dItem_RED_RUPEE_e
         0x19,
         0x37,
         0x23,
         0x00,
     },
     {
-        // 0x05: PURPLE_RUPEE
+        // 0x05: dItem_PURPLE_RUPEE_e
         0x19,
         0x37,
         0x23,
         0x00,
     },
     {
-        // 0x06: ORANGE_RUPEE
+        // 0x06: dItem_ORANGE_RUPEE_e
         0x19,
         0x37,
         0x23,
@@ -8023,7 +8023,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x0F: SILVER_RUPEE
+        // 0x0F: dItem_SILVER_RUPEE_e
         0x19,
         0x37,
         0x23,
@@ -8065,7 +8065,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x15: SMALL_KEY
+        // 0x15: dItem_SMALL_KEY_e
         0x14,
         0x28,
         0x1E,
@@ -8128,35 +8128,35 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x1E: TRIPLE_HEART
+        // 0x1E: dItem_TRIPLE_HEART_e
         0x0F,
         0x28,
         0x1E,
         0x00,
     },
     {
-        // 0x1F: PENDANT
+        // 0x1F: dItem_JOY_PENDANT_e
         0x1E,
         0x46,
         0x23,
         0x00,
     },
     {
-        // 0x20: TELESCOPE
+        // 0x20: dItem_TELESCOPE_e
         0x28,
         0x00,
         0x00,
         0x05,
     },
     {
-        // 0x21: TNCL_WHITSL
+        // 0x21: dItem_TINGLE_TUNER_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x22: WIND_TACT
+        // 0x22: dItem_WIND_WAKER_e
         0x00,
         0x00,
         0x00,
@@ -8177,7 +8177,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x25: ROPE
+        // 0x25: dItem_GRAPPLING_HOOK_e
         0x00,
         0x00,
         0x00,
@@ -8191,7 +8191,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x27: BOW
+        // 0x27: dItem_BOW_e
         0x00,
         0x00,
         0x00,
@@ -8205,14 +8205,14 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x29: HVY_BOOTS
+        // 0x29: dItem_IRON_BOOTS_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x2A: DRGN_SHIELD
+        // 0x2A: dItem_MAGIC_ARMOR_e
         0x00,
         0x00,
         0x00,
@@ -8233,7 +8233,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x2D: BOOMERANG
+        // 0x2D: dItem_BOOMERANG_e
         0x00,
         0x00,
         0x00,
@@ -8247,14 +8247,14 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x2F: HOOKSHOT
+        // 0x2F: dItem_HOOKSHOT_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x30: WARASHIBE_BAG
+        // 0x30: dItem_DELIVERY_BAG_e
         0x00,
         0x00,
         0x00,
@@ -8268,42 +8268,42 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x32: FUKU
+        // 0x32: dItem_FUKU_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x33: HUMMER
+        // 0x33: dItem_SKULL_HAMMER_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x34: DEKU_LEAF
+        // 0x34: dItem_DEKU_LEAF_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x35: MAGIC_ARROW
+        // 0x35: dItem_MAGIC_ARROW_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x36: LIGHT_ARROW
+        // 0x36: dItem_LIGHT_ARROW_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x37: noentry55
+        // 0x37: dItem_NEW_FUKU_e
         0x00,
         0x00,
         0x00,
@@ -8450,21 +8450,21 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x4C: MAP
+        // 0x4C: dItem_MAP_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x4D: COMPASS
+        // 0x4D: dItem_COMPASS_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x4E: BOSS_KEY
+        // 0x4E: dItem_BOSS_KEY_e
         0x00,
         0x00,
         0x00,
@@ -8506,14 +8506,14 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x54: BOTTLESHIP
+        // 0x54: dItem_HALF_SOUP_BOTTLE_e
         0x00,
         0x28,
         0x28,
         0x00,
     },
     {
-        // 0x55: SOUP_BOTTLE
+        // 0x55: dItem_SOUP_BOTTLE_e
         0x00,
         0x28,
         0x28,
@@ -8653,21 +8653,21 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x69: PEARL1
+        // 0x69: dItem_PEARL_NAYRU_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x6A: PEARL2
+        // 0x6A: dItem_PEARL_DIN_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x6B: PEARL3
+        // 0x6B: dItem_PEARL_FARORE_e
         0x00,
         0x00,
         0x00,
@@ -8835,7 +8835,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x83: ANIMAL_ESA
+        // 0x83: dItem_HYOI_PEAR_e
         0x19,
         0x28,
         0x28,
@@ -8982,14 +8982,14 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x98: LETTER00
+        // 0x98: dItem_FATHER_LETTER_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x99: MAGIC_SEED
+        // 0x99: dItem_NOTE_TO_MOM_e
         0x00,
         0x00,
         0x00,
@@ -9108,7 +9108,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0xAA: HURRICANE_SPIN
+        // 0xAA: dItem_HURRICANE_SPIN_e
         0x00,
         0x00,
         0x00,
@@ -9703,7 +9703,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0xFF: NO_ITEM
+        // 0xFF: dItem_NONE_e
         0x00,
         0x00,
         0x00,
@@ -9714,37 +9714,37 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
 /* 803886B0-803888B4       .data effect_info__10dItem_data */
 dItem_data_effect_info dItem_data::effect_info[0x81] = {
     {
-        // 0x00: HEART
+        // 0x00: dItem_HEART_e
         0x0002,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x01: GREEN_RUPEE
+        // 0x01: dItem_GREEN_RUPEE_e
         0x0003,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x02: BLUE_RUPEE
+        // 0x02: dItem_BLUE_RUPEE_e
         0x0003,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x03: YELLOW_RUPEE
+        // 0x03: dItem_YELLOW_RUPEE_e
         0x0003,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x04: RED_RUPEE
+        // 0x04: dItem_RED_RUPEE_e
         0x0003,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x05: PURPLE_RUPEE
+        // 0x05: dItem_PURPLE_RUPEE_e
         0x0003,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x06: ORANGE_RUPEE
+        // 0x06: dItem_ORANGE_RUPEE_e
         0x0002,
         dPa_name::ID_SCENE_END,
     },
@@ -9789,7 +9789,7 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x0F: SILVER_RUPEE
+        // 0x0F: dItem_SILVER_RUPEE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9819,7 +9819,7 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x15: SMALL_KEY
+        // 0x15: dItem_SMALL_KEY_e
         0x0003,
         dPa_name::ID_SCENE_END,
     },
@@ -9864,27 +9864,27 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x1E: TRIPLE_HEART
+        // 0x1E: dItem_TRIPLE_HEART_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x1F: PENDANT
+        // 0x1F: dItem_JOY_PENDANT_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x20: TELESCOPE
+        // 0x20: dItem_TELESCOPE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x21: TNCL_WHITSL
+        // 0x21: dItem_TINGLE_TUNER_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x22: WIND_TACT
+        // 0x22: dItem_WIND_WAKER_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9899,7 +9899,7 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x25: ROPE
+        // 0x25: dItem_GRAPPLING_HOOK_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9909,7 +9909,7 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x27: BOW
+        // 0x27: dItem_BOW_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9919,12 +9919,12 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x29: HVY_BOOTS
+        // 0x29: dItem_IRON_BOOTS_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x2A: DRGN_SHIELD
+        // 0x2A: dItem_MAGIC_ARMOR_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9939,7 +9939,7 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x2D: BOOMERANG
+        // 0x2D: dItem_BOOMERANG_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9949,12 +9949,12 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x2F: HOOKSHOT
+        // 0x2F: dItem_HOOKSHOT_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x30: WARASHIBE_BAG
+        // 0x30: dItem_DELIVERY_BAG_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9964,32 +9964,32 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x32: FUKU
+        // 0x32: dItem_FUKU_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x33: HUMMER
+        // 0x33: dItem_SKULL_HAMMER_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x34: DEKU_LEAF
+        // 0x34: dItem_DEKU_LEAF_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x35: MAGIC_ARROW
+        // 0x35: dItem_MAGIC_ARROW_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x36: LIGHT_ARROW
+        // 0x36: dItem_LIGHT_ARROW_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x37: noentry55
+        // 0x37: dItem_NEW_FUKU_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10094,17 +10094,17 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         0x0293,
     },
     {
-        // 0x4C: MAP
+        // 0x4C: dItem_MAP_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x4D: COMPASS
+        // 0x4D: dItem_COMPASS_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x4E: BOSS_KEY
+        // 0x4E: dItem_BOSS_KEY_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10134,12 +10134,12 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x54: BOTTLESHIP
+        // 0x54: dItem_HALF_SOUP_BOTTLE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x55: SOUP_BOTTLE
+        // 0x55: dItem_SOUP_BOTTLE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10239,17 +10239,17 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x69: PEARL1
+        // 0x69: dItem_PEARL_NAYRU_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x6A: PEARL2
+        // 0x6A: dItem_PEARL_DIN_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x6B: PEARL3
+        // 0x6B: dItem_PEARL_FARORE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },

@@ -233,7 +233,7 @@ void daPy_lk_c::setJumpCutAtParam() {
             m35FC = daPy_HIO_cut_c0::m.field_0x58;
         }
         setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, 0xA, radius);
-    } else if (mHeldItemType == HUMMER) {
+    } else if (mHeldItemType == dItem_SKULL_HAMMER_e) {
         setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK1, dCcD_SE_UNK5, G_AT_MARK_NORMAL_HIT, 0x13, 50.0f);
     } else if (mActorKeepEquip.getActor()) {
         setEnemyWeaponAtParam(TRUE);

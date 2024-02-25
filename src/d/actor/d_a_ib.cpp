@@ -138,11 +138,11 @@ BOOL daIball_c::createItem() {
             itemBitNo = daIball_prm::getItemBitNo(this);
             if ((itemBitNo == 0x1F || itemBitNo == 0xFF || itemBitNo == -1) || fopAcM_isItemForIb(itemBitNo, items[i], current.roomNo)) {
                 itemBitNo = -1;
-                items[i] = YELLOW_RUPEE;
+                items[i] = dItem_YELLOW_RUPEE_e;
             }
         } else if (isNonSavedEmono(items[i])) {
             if (daIball_prm::getItemBitNo(this) != 0) {
-                items[i] = YELLOW_RUPEE;
+                items[i] = dItem_YELLOW_RUPEE_e;
             }
             itemBitNo = -1;
         }

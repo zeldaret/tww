@@ -25,31 +25,31 @@ void daRaceItem_c::raceItemForceGet() {
 /* 80068AA4-80068D48       .text raceItemGet__12daRaceItem_cFv */
 void daRaceItem_c::raceItemGet() {
     switch(m_itemNo) {
-        case GREEN_RUPEE:
+        case dItem_GREEN_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(1);
             break;
-        case BLUE_RUPEE:
+        case dItem_BLUE_RUPEE_e:
             mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(5);
             break;
-        case YELLOW_RUPEE:
+        case dItem_YELLOW_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(10);
             break;
-        case RED_RUPEE:
+        case dItem_RED_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             dComIfGp_plusMiniGameRupee(20);
             break;
-        case PURPLE_RUPEE:
+        case dItem_PURPLE_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(50);
             break;
-        case ORANGE_RUPEE:
+        case dItem_ORANGE_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(100);
             break;
-        case SILVER_RUPEE:
+        case dItem_SILVER_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(200);
             break;
@@ -65,25 +65,25 @@ void daRaceItem_c::normalItemGet() {
     }
 
     switch(m_itemNo) {
-        case GREEN_RUPEE:
+        case dItem_GREEN_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             break;
-        case BLUE_RUPEE:
+        case dItem_BLUE_RUPEE_e:
             mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
             break;
-        case YELLOW_RUPEE:
+        case dItem_YELLOW_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case RED_RUPEE:
+        case dItem_RED_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case PURPLE_RUPEE:
+        case dItem_PURPLE_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case ORANGE_RUPEE:
+        case dItem_ORANGE_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case SILVER_RUPEE:
+        case dItem_SILVER_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
         case S_MAGIC:
@@ -101,7 +101,7 @@ void daRaceItem_c::normalItemGet() {
         case ARROW_30:
             mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
             break;
-        case TRIPLE_HEART:
+        case dItem_TRIPLE_HEART_e:
             mDoAud_seStart(JA_SE_HEART_PIECE);
             break;
     }

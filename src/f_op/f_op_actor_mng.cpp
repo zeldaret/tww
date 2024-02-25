@@ -772,7 +772,7 @@ s32 fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, int roo
 
     dComIfGp_event_setGtItm(i_itemNo);
 
-    if (i_itemNo == NO_ITEM) {
+    if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
@@ -785,7 +785,7 @@ s32 fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param
 
     dComIfGp_event_setGtItm(i_itemNo);
 
-    if (i_itemNo == NO_ITEM) {
+    if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
@@ -842,7 +842,7 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int r
             u8* pItemTable = itemTableList->mItemTables[tableIdx];
             u32 itemNo;
             u32 lastItemPID;
-            for (int i = 0; (itemNo = *pItemTable) != NO_ITEM && i < 0x10; pItemTable++, i++) {
+            for (int i = 0; (itemNo = *pItemTable) != dItem_NONE_e && i < 0x10; pItemTable++, i++) {
                 if (p_pos) {
                     pos = *p_pos;
                 }
@@ -906,7 +906,7 @@ s32 fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int
 s32 fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz* scale,
                            createFunc createFunc) {
     JUT_ASSERT(2716, 0 <= i_itemNo && i_itemNo < 256);
-    if (i_itemNo == NO_ITEM) {
+    if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
@@ -916,7 +916,7 @@ s32 fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz*
 /* 8002688C-80026980       .text fopAcM_createRaceItem__FP4cXyziiP5csXyziP4cXyzi */
 s32 fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, int param_7) {
     JUT_ASSERT(2763, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
-    if (i_itemNo == NO_ITEM) {
+    if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
@@ -928,7 +928,7 @@ s32 fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, 
 /* 80026980-80026A68       .text fopAcM_createDemoItem__FP4cXyziiP5csXyziP4cXyzUc */
 s32 fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, u8 argFlag) {
     JUT_ASSERT(2813, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
-    if (i_itemNo == NO_ITEM) {
+    if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
@@ -954,7 +954,7 @@ s32 fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int 
     
     JUT_ASSERT(2915, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     
-    if (i_itemNo == NO_ITEM) {
+    if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
     
@@ -970,7 +970,7 @@ s32 fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int 
     switch (i_itemNo) {
     case RECOVER_FAIRY:
         return fopAcM_create(PROC_NPC_FA1, 1, pos, roomNo, rot, scale);
-    case TRIPLE_HEART:
+    case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (int i = 0; i < 2; i++) {
             fopAcM_create(PROC_ITEM, params, pos, roomNo, &prmRot, scale);
@@ -994,7 +994,7 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     
     csXyz prmRot = csXyz::Zero;
 
-    if (i_itemNo == NO_ITEM) {
+    if (i_itemNo == dItem_NONE_e) {
         return NULL;
     }
 
@@ -1009,7 +1009,7 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     switch (i_itemNo) {
     case RECOVER_FAIRY:
         return fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, rot, scale);
-    case TRIPLE_HEART:
+    case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (i = 0; i < 2; i++) {
             fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmRot, scale);
@@ -1023,7 +1023,7 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
 /* 80026E5C-80026F5C       .text fopAcM_createItemForKP2__FP4cXyziiP5csXyzP4cXyzfffUs */
 fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXyz* scale, f32 speedF, f32 speedY, f32 gravity, u16 i_itemBitNo) {
     JUT_ASSERT(0xc25, 0 <= i_itemNo && i_itemNo < 256);
-    if (i_itemNo == NO_ITEM)
+    if (i_itemNo == dItem_NONE_e)
         return NULL;
 
     fopAc_ac_c* ac = (fopAc_ac_c*)fopAcM_fastCreate(PROC_SPC_ITEM01, i_itemNo | (i_itemBitNo & 0xFFFF) << 8, pos, roomNo, rot, scale);
@@ -1052,7 +1052,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
     int switchNo2 = 0xFF;
     
     JUT_ASSERT(3201, 0 <= i_itemNo && i_itemNo < 256);
-    if (i_itemNo == NO_ITEM) {
+    if (i_itemNo == dItem_NONE_e) {
         return NULL;
     }
     
@@ -1072,7 +1072,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
     case RECOVER_FAIRY:
         item = (daItem_c*)fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, rot, scale);
         return item;
-    case TRIPLE_HEART:
+    case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (i = 0; i < 2; i++) {
             if (rot) {
@@ -1140,7 +1140,7 @@ void* fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int i_roomNo, csXyz* p_an
         }
         i_itemBitNo = -1;
     } else {
-        if (itemNo == NO_ITEM) {
+        if (itemNo == dItem_NONE_e) {
             itemNo = getItemFromLifeBallTableWithoutEmono(i_tblNo);
         }
         i_itemBitNo = -1;
@@ -1181,7 +1181,7 @@ void* fopAcM_createItemFromEnemyTable(u16 itemTableIdx, int i_itemBitNo, int i_r
             )
         ) {
             i_itemBitNo = -1;
-            items[itemIdx] = YELLOW_RUPEE;
+            items[itemIdx] = dItem_YELLOW_RUPEE_e;
         }
     } else if (isNonSavedEmono(items[itemIdx])) {
         if (i_itemBitNo != 0) {
@@ -1427,8 +1427,8 @@ s32 fopAcM_getWaterY(const cXyz* pPos, f32* pDstWaterY) {
 /* 80028684-80028724       .text fopAcM_setGbaName__FP10fopAc_ac_cUcUcUc */
 void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1) {
     if (dComIfGs_checkGetItem(itemNo) ||
-        (itemNo == BOW && (dComIfGs_checkGetItem(MAGIC_ARROW) || dComIfGs_checkGetItem(LIGHT_ARROW))) ||
-        (itemNo == MAGIC_ARROW && dComIfGs_checkGetItem(LIGHT_ARROW))
+        (itemNo == dItem_BOW_e && (dComIfGs_checkGetItem(dItem_MAGIC_ARROW_e) || dComIfGs_checkGetItem(dItem_LIGHT_ARROW_e))) ||
+        (itemNo == dItem_MAGIC_ARROW_e && dComIfGs_checkGetItem(dItem_LIGHT_ARROW_e))
     )
         i_this->mGbaName = gbaName1;
     else

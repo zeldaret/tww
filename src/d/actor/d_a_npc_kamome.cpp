@@ -101,7 +101,7 @@ static s16 daNpc_kam_XyCheckCB(void* i_this, int equippedItemIdx) {
 
 /* 00000260-000002A4       .text XyCheckCB__11daNpc_kam_cFi */
 s16 daNpc_kam_c::XyCheckCB(int equippedItemIdx) {
-    if (dComIfGp_getSelectItem(equippedItemIdx) == ANIMAL_ESA) {
+    if (dComIfGp_getSelectItem(equippedItemIdx) == dItem_HYOI_PEAR_e) {
         return callDemoStartCheck();
     } else {
         return FALSE;

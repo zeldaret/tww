@@ -170,7 +170,7 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
         break;
     }
     
-    if (dComIfGp_getSelectItem(equippedItemIdx) == NO_ITEM) {
+    if (dComIfGp_getSelectItem(equippedItemIdx) == dItem_NONE_e) {
         return FALSE;
     }
     

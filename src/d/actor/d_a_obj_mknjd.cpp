@@ -160,7 +160,7 @@ static s16 daObjMknjD_XyEventCB(void* i_this, int i_param2) {
 
 /* 000002F0-00000314       .text XyCheckCB__Q210daObjMknjD5Act_cFi */
 s16 daObjMknjD::Act_c::XyCheckCB(int i_itemIdx) {
-    return dComIfGp_getSelectItem(i_itemIdx) == WIND_TACT ? 1 : 0;
+    return dComIfGp_getSelectItem(i_itemIdx) == dItem_WIND_WAKER_e ? 1 : 0;
 }
 
 /* 00000314-0000031C       .text XyEventCB__Q210daObjMknjD5Act_cFi */

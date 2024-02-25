@@ -29,12 +29,12 @@ void dSv_player_status_a_c::init() {
     field_0x8 = 0;
 
     for (int i = 0; i < 5; i++) {
-        mSelectItem[i] = NO_ITEM;
+        mSelectItem[i] = dItem_NONE_e;
         dComIfGp_setSelectItem(i);
     }
 
     for (int i = 0; i < 4; i++) {
-        mSelectEquip[i] = NO_ITEM;
+        mSelectEquip[i] = dItem_NONE_e;
     }
 
     mRupee = 0;
@@ -75,7 +75,7 @@ void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status
 /* 80058C60-80058C7C       .text init__17dSv_player_item_cFv */
 void dSv_player_item_c::init() {
     for (int i = 0; i < 21; i++) {
-        mItems[i] = NO_ITEM;
+        mItems[i] = dItem_NONE_e;
     }
 }
 
@@ -103,7 +103,7 @@ void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
 void dSv_player_item_c::setEmptyBottle() {
     for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
         int invIdx = 0xE + bottleIdx;
-        if (dComIfGs_getItem((u8)invIdx) == NO_ITEM) {
+        if (dComIfGs_getItem((u8)invIdx) == dItem_NONE_e) {
             dComIfGs_setItem((u8)invIdx, EMPTY_BOTTLE);
             break;
         }
@@ -230,10 +230,10 @@ void dSv_player_get_item_c::onBottleItem(u8 i_item) {
     case BLUE_BOTTLE:
         mItemFlags[0] |= 0x20;
         break;
-    case BOTTLESHIP:
+    case dItem_HALF_SOUP_BOTTLE_e:
         mItemFlags[0] |= 0x40;
         break;
-    case SOUP_BOTTLE:
+    case dItem_SOUP_BOTTLE_e:
         mItemFlags[0] |= 0x80;
         break;
     case BIN_IN_WATER:
@@ -285,9 +285,9 @@ BOOL dSv_player_get_item_c::isBottleItem(u8 i_item) {
         return (mItemFlags[0] >> 4) & 1;
     case BLUE_BOTTLE:
         return (mItemFlags[0] >> 5) & 1;
-    case BOTTLESHIP:
+    case dItem_HALF_SOUP_BOTTLE_e:
         return (mItemFlags[0] >> 6) & 1;
-    case SOUP_BOTTLE:
+    case dItem_SOUP_BOTTLE_e:
         return (mItemFlags[0] >> 7) & 1;
     case BIN_IN_WATER:
         return (mItemFlags[1] >> 1) & 1;
@@ -366,15 +366,15 @@ void dSv_player_item_max_c::init() {
 /* 80059908-80059968       .text init__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::init() {
     for (int i = 0; i < 8; i++) {
-        mBeast[i] = NO_ITEM;
+        mBeast[i] = dItem_NONE_e;
     }
 
     for (int i = 0; i < 8; i++) {
-        mBait[i] = NO_ITEM;
+        mBait[i] = dItem_NONE_e;
     }
 
     for (int i = 0; i < 8; i++) {
-        mReserve[i] = NO_ITEM;
+        mReserve[i] = dItem_NONE_e;
     }
 }
 
@@ -382,7 +382,7 @@ void dSv_player_bag_item_c::init() {
 void dSv_player_bag_item_c::setBeastItem(u8 i_itemNo) {
     if (!checkBeastItem(i_itemNo)) {
         for (int i = 0; i < 8; i++) {
-            if (mBeast[i] == NO_ITEM) {
+            if (mBeast[i] == dItem_NONE_e) {
                 mBeast[i] = i_itemNo;
                 return;
             }
@@ -395,11 +395,11 @@ void dSv_player_bag_item_c::setBeastItemEmpty(u8 i_itemNo) {
     if (checkBeastItem(i_itemNo)) {
         for (int i = 0; i < 8; i++) {
             if (mBeast[i] == i_itemNo) {
-                mBeast[i] = NO_ITEM;
+                mBeast[i] = dItem_NONE_e;
                 for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
                     if (dComIfGp_getSelectItem(btnIdx) == i_itemNo) {
-                        dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), NO_ITEM);
-                        dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), NO_ITEM);
+                        dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), dItem_NONE_e);
+                        dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), dItem_NONE_e);
                         dComIfGp_setSelectItem(btnIdx);
                     }
                 }
@@ -490,9 +490,9 @@ void dSv_player_bag_item_c::setBaitItemEmpty() {
     u8 num = dComIfGs_getBaitNum(baitSlotIdx);
     u8 itemNo = dComIfGp_getSelectItem(btnIdx);
     
-    if (itemNo == ANIMAL_ESA) {
+    if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
-        setBaitItemChange(NO_ITEM);
+        setBaitItemChange(dItem_NONE_e);
     } else if (itemNo == BIRD_ESA_5) {
         num = dComIfGs_getBaitNum(baitSlotIdx);
         if (num > 0) {
@@ -500,7 +500,7 @@ void dSv_player_bag_item_c::setBaitItemEmpty() {
         }
         dComIfGs_setBaitNum(baitSlotIdx, num);
         if (num == 0) {
-            setBaitItemChange(NO_ITEM);
+            setBaitItemChange(dItem_NONE_e);
         }
     }
 }
@@ -523,9 +523,9 @@ void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
     u8 num = dComIfGs_getBaitNum(baitSlotIdx);
     u8 itemNo = dComIfGp_getSelectItem(i_btnIdx);
     
-    if (itemNo == ANIMAL_ESA) {
+    if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
-        setBaitItemChange(i_btnIdx, NO_ITEM);
+        setBaitItemChange(i_btnIdx, dItem_NONE_e);
     } else if (itemNo == BIRD_ESA_5) {
         num = dComIfGs_getBaitNum(baitSlotIdx);
         if (num > 0) {
@@ -533,7 +533,7 @@ void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
         }
         dComIfGs_setBaitNum(baitSlotIdx, num);
         if (num == 0) {
-            setBaitItemChange(i_btnIdx, NO_ITEM);
+            setBaitItemChange(i_btnIdx, dItem_NONE_e);
         }
     }
 }
@@ -542,7 +542,7 @@ void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
 void dSv_player_bag_item_c::setBaitItem(u8 i_itemNo) {
     if (checkBaitItemEmpty()) {
         for (int i = 0; i < 8; i++) {
-            if (mBait[i] == NO_ITEM) {
+            if (mBait[i] == dItem_NONE_e) {
                 mBait[i] = i_itemNo;
                 dComIfGs_setBaitNum(i, 3);
                 return;
@@ -553,7 +553,7 @@ void dSv_player_bag_item_c::setBaitItem(u8 i_itemNo) {
 
 /* 8005A2D0-8005A2F4       .text checkBaitItemEmpty__21dSv_player_bag_item_cFv */
 u8 dSv_player_bag_item_c::checkBaitItemEmpty() {
-    return checkBaitItem(NO_ITEM);
+    return checkBaitItem(dItem_NONE_e);
 }
 
 /* 8005A2F4-8005A334       .text checkBaitItem__21dSv_player_bag_item_cFUc */
@@ -616,19 +616,19 @@ void dSv_player_bag_item_c::setReserveItemChange(u8 i_btnIdx, u8 i_itemNo) {
 
 /* 8005A79C-8005A7C0       .text setReserveItemEmpty__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::setReserveItemEmpty() {
-    setReserveItemChange(NO_ITEM);
+    setReserveItemChange(dItem_NONE_e);
 }
 
 /* 8005A7C0-8005A7E4       .text setReserveItemEmpty__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setReserveItemEmpty(u8 i_itemNo) {
-    setReserveItemChange(i_itemNo, NO_ITEM);
+    setReserveItemChange(i_itemNo, dItem_NONE_e);
 }
 
 /* 8005A7E4-8005A854       .text setReserveItem__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setReserveItem(u8 i_itemNo) {
     if (checkReserveItemEmpty()) {
         for (int i = 0; i < 8; i++) {
-            if (mReserve[i] == NO_ITEM) {
+            if (mReserve[i] == dItem_NONE_e) {
                 mReserve[i] = i_itemNo;
                 return;
             }
@@ -638,7 +638,7 @@ void dSv_player_bag_item_c::setReserveItem(u8 i_itemNo) {
 
 /* 8005A854-8005A878       .text checkReserveItemEmpty__21dSv_player_bag_item_cFv */
 u8 dSv_player_bag_item_c::checkReserveItemEmpty() {
-    return checkReserveItem(NO_ITEM);
+    return checkReserveItem(dItem_NONE_e);
 }
 
 /* 8005A878-8005A8B8       .text checkReserveItem__21dSv_player_bag_item_cFUc */

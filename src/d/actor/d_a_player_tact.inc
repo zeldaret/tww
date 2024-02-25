@@ -30,11 +30,11 @@ u32 daPy_lk_c::getDayNightParamData() {
 
 /* 8014D7D4-8014D8AC       .text setTactModel__9daPy_lk_cFv */
 void daPy_lk_c::setTactModel() {
-    if (mHeldItemType == WIND_TACT)
+    if (mHeldItemType == dItem_WIND_WAKER_e)
         return;
     
     deleteEquipItem(FALSE);
-    mHeldItemType = WIND_TACT;
+    mHeldItemType = dItem_WIND_WAKER_e;
     JKRHeap* oldHeap = setItemHeap();
     
     J3DModelData* modelData = initModel(&mpHeldItemModel, LINK_BDL_TAKT, 0x37221222);
@@ -124,7 +124,7 @@ void daPy_lk_c::setTactZev(unsigned int tactZevPartnerPID, int r30, char* r31) {
 
 /* 8014DA78-8014DACC       .text getTactTopPos__9daPy_lk_cFP4cXyz */
 BOOL daPy_lk_c::getTactTopPos(cXyz* out) {
-    if (mHeldItemType != WIND_TACT || mpHeldItemModel == NULL) {
+    if (mHeldItemType != dItem_WIND_WAKER_e || mpHeldItemModel == NULL) {
         return FALSE;
     } else {
         MTXMultVec(mpHeldItemModel->getBaseTRMtx(), &l_tact_top, out);

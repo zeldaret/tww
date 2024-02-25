@@ -22,19 +22,19 @@ extern dScnPly_reg_HIO_c g_regHIO;
 const char daObjTpost_c::m_arc_name[] = "Toripost";
 
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
-    {false, 0x1AAF, KAKERA_HEART,    dSv_evtBit_c::LETTER_BAITOS_MOM},
-    {false, 0x0CF9, KAKERA_HEART,    dSv_evtBit_c::LETTER_KOMALIS_FATHER},
-    {false, 0x0CFA, COLLECT_MAP_60,  dSv_evtBit_c::LETTER_BOMBS_AD},
-    {false, 0x0CFC, RED_RUPEE,       dSv_evtBit_c::LETTER_ORCA},
-    {false, 0x0805, RED_RUPEE,       dSv_evtBit_c::LETTER_GRANDMA},
-    {false, 0x0CFD, GREEN_RUPEE,     dSv_evtBit_c::LETTER_ROCK_SPIRE_SHOP_AD},
-    {true,  0x0DB6, COLLECT_MAP_52,  dSv_evtBit_c::LETTER_TINGLE},
-    {false, 0x1148, RED_RUPEE,       dSv_evtBit_c::LETTER_ARYLL},
-    {false, 0x1AAF, KAKERA_HEART,    dSv_evtBit_c::LETTER_BAITOS_MOM},
-    {true,  0x0F76, KAISEN_PRESENT1, dSv_evtBit_c::LETTER_SILVER_MEMBERSHIP},
-    {false, 0x19A6, KAKERA_HEART2,   dSv_evtBit_c::LETTER_HOSKITS_GIRLFRIEND},
-    {true,  0x0CFB, RED_RUPEE,       dSv_evtBit_c::LETTER_BAITO},
-    {true,  0x0F77, KAISEN_PRESENT2, dSv_evtBit_c::LETTER_GOLD_MEMBERSHIP}
+    {false, 0x1AAF, KAKERA_HEART,        dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {false, 0x0CF9, KAKERA_HEART,        dSv_evtBit_c::LETTER_KOMALIS_FATHER},
+    {false, 0x0CFA, COLLECT_MAP_60,      dSv_evtBit_c::LETTER_BOMBS_AD},
+    {false, 0x0CFC, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_ORCA},
+    {false, 0x0805, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_GRANDMA},
+    {false, 0x0CFD, dItem_GREEN_RUPEE_e, dSv_evtBit_c::LETTER_ROCK_SPIRE_SHOP_AD},
+    {true,  0x0DB6, COLLECT_MAP_52,      dSv_evtBit_c::LETTER_TINGLE},
+    {false, 0x1148, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_ARYLL},
+    {false, 0x1AAF, KAKERA_HEART,        dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {true,  0x0F76, KAISEN_PRESENT1,     dSv_evtBit_c::LETTER_SILVER_MEMBERSHIP},
+    {false, 0x19A6, KAKERA_HEART2,       dSv_evtBit_c::LETTER_HOSKITS_GIRLFRIEND},
+    {true,  0x0CFB, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_BAITO},
+    {true,  0x0F77, KAISEN_PRESENT2,     dSv_evtBit_c::LETTER_GOLD_MEMBERSHIP},
 };
 
 const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
@@ -216,7 +216,7 @@ void daObjTpost_c::deliverLetter() {
         case MAGYS_LETTER:
             dComIfGs_onEventBit(0x1220);
             break;
-        case MAGIC_SEED:
+        case dItem_NOTE_TO_MOM_e:
             dLetter_send(dSv_evtBit_c::LETTER_BAITOS_MOM);
             break;
     }
@@ -324,7 +324,7 @@ int daObjTpost_c::getMsgXY() {
     cXyz scale(2.0f, 2.0f, 2.0f);
 
     switch(mPreItemNo) {
-        case MAGIC_SEED:
+        case dItem_NOTE_TO_MOM_e:
         case MAGYS_LETTER:
             msgId = 0xCE8;
             col.r = g_regHIO.mChild[12].mShortRegs[0] + 0x80;
@@ -335,7 +335,7 @@ int daObjTpost_c::getMsgXY() {
             dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             
             break;
-        case LETTER00:
+        case dItem_FATHER_LETTER_e:
         case MO_LETTER:
             setAnm(3, false);
             field_0x8EA = 1;

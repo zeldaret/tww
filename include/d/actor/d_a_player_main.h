@@ -1676,7 +1676,7 @@ public:
         }
     }
     bool checkSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) != NO_ITEM ||
+        return dComIfGs_getSelectEquip(0) != dItem_NONE_e ||
             dComIfGp_getMiniGameType() == 2;
     }
     

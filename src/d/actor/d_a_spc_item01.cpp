@@ -176,7 +176,7 @@ void daSpcItem01_c::move() {
     switch (m_itemNo) {
     case SHIELD:
         break;
-    case PENDANT:
+    case dItem_JOY_PENDANT_e:
         if (mAcch.ChkGroundLanding()) {
             speed.x = 0.0f;
             speed.y = 0.0f;

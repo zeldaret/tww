@@ -269,10 +269,10 @@ s32 phase_4(room_of_scene_class* i_this) {
 
     setMapImage(i_this);
 
-    if (dComIfGs_checkGetItem(PEARL2))
+    if (dComIfGs_checkGetItem(dItem_PEARL_DIN_e))
         i_this->field_0x1dc = 1;
 
-    if (strcmp(dComIfGp_getStartStageName(), "Omori") == 0 && dComIfGs_checkGetItem(PEARL3))
+    if (strcmp(dComIfGp_getStartStageName(), "Omori") == 0 && dComIfGs_checkGetItem(dItem_PEARL_FARORE_e))
         i_this->field_0x1dc = 2;
 
     if (roomNo == 13) {

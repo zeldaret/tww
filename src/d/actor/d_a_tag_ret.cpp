@@ -47,7 +47,7 @@ namespace daTagRet {
     s32 Act_c::_create() {
         fopAcM_SetupActor(this, daTagRet::Act_c);
 
-        if (checkItemGet(PEARL3, TRUE)) {
+        if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
             return cPhs_UNK3_e;
         }
 

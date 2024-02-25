@@ -650,7 +650,7 @@ bool dNpc_chkArasoi() {
 bool dNpc_chkLetterPassed() {
     bool ret = false;
     if(dComIfGs_isGetItemReserve(0xC)) {
-        ret = dComIfGs_checkReserveItem(LETTER00) == 0;
+        ret = dComIfGs_checkReserveItem(dItem_FATHER_LETTER_e) == 0;
     }
     return ret;
 }

@@ -19,13 +19,13 @@
 
 /* 80154334-801543A0       .text setHyoiModel__9daPy_lk_cFv */
 void daPy_lk_c::setHyoiModel() {
-    if (mHeldItemType == ANIMAL_ESA) {
+    if (mHeldItemType == dItem_HYOI_PEAR_e) {
         return;
     }
     JKRHeap* oldHeap = setItemHeap();
     initModel(&mpHeldItemModel, LINK_BDL_HYOINOMI, 0x13000022);
     mDoExt_setCurrentHeap(oldHeap);
-    mHeldItemType = ANIMAL_ESA;
+    mHeldItemType = dItem_HYOI_PEAR_e;
 }
 
 /* 801543A0-801546F4       .text procFoodThrow_init__9daPy_lk_cFv */
@@ -151,7 +151,7 @@ BOOL daPy_lk_c::procFoodThrow() {
 BOOL daPy_lk_c::procFoodSet_init() {
     if (mCurProc == daPyProc_FOOD_SET_e) {
         if (mDemo.getParam0() == 1) {
-            if (mHeldItemType == ANIMAL_ESA) {
+            if (mHeldItemType == dItem_HYOI_PEAR_e) {
                 u8 btnIdx = dComIfGp_event_getTalkXYBtn();
                 if (btnIdx == 1) {
                     dComIfGs_setEquipBottleItemEmpty(0);

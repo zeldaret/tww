@@ -951,7 +951,7 @@ static void action_itai_move(am_class* i_this) {
 
 /* 000034F4-000039A4       .text daAM_Execute__FP8am_class */
 static BOOL daAM_Execute(am_class* i_this) {
-    fopAcM_setGbaName(i_this, BOW, 0xC, 0x2A);
+    fopAcM_setGbaName(i_this, dItem_BOW_e, 0xC, 0x2A);
 
     if (enemy_ice(&i_this->mEnemyIce)) {
         i_this->mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());

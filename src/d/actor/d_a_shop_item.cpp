@@ -202,7 +202,7 @@ bool daShopItem_c::_draw() {
 
 /* 00000694-0000070C       .text settingBeforeDraw__12daShopItem_cFv */
 void daShopItem_c::settingBeforeDraw() {
-    if(isBomb(m_itemNo) || (m_itemNo == BOMB_BAG) || (m_itemNo == HUMMER) || m_itemNo == SMALL_KEY || m_itemNo == PRESIDENT_STATUE) {
+    if(isBomb(m_itemNo) || (m_itemNo == BOMB_BAG) || (m_itemNo == dItem_SKULL_HAMMER_e) || m_itemNo == dItem_SMALL_KEY_e || m_itemNo == PRESIDENT_STATUE) {
         dDlst_texSpecmapST(&mEyePos, &mTevStr, mpModel->getModelData(), 1.0f);
     }
 }
@@ -232,7 +232,7 @@ int daShopItem_c::_create() {
     
     const char* arcName = getShopArcname();
     if (getShopBmdIdx() == -1 || arcName == 0) {
-        m_itemNo = GREEN_RUPEE;
+        m_itemNo = dItem_GREEN_RUPEE_e;
     }
 
     arcName = getShopArcname();

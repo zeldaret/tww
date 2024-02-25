@@ -49,8 +49,8 @@ float daItem_c::getYOffset() {
     case GREEN_JELLY:
     case BLUE_JELLY:
         return 0.0f;
-    case SMALL_KEY:
-    case BOSS_KEY:
+    case dItem_SMALL_KEY_e:
+    case dItem_BOSS_KEY_e:
         return 0.0f;
     case SHIELD:
         return 23.0f;
@@ -61,15 +61,15 @@ float daItem_c::getYOffset() {
     case KAKERA_HEART:
     case UTUWA_HEART:
         return 0.0f;
-    case GREEN_RUPEE:
-    case BLUE_RUPEE:
-    case YELLOW_RUPEE:
-    case RED_RUPEE:
-    case PURPLE_RUPEE:
-    case ORANGE_RUPEE:
-    case SILVER_RUPEE:
+    case dItem_GREEN_RUPEE_e:
+    case dItem_BLUE_RUPEE_e:
+    case dItem_YELLOW_RUPEE_e:
+    case dItem_RED_RUPEE_e:
+    case dItem_PURPLE_RUPEE_e:
+    case dItem_ORANGE_RUPEE_e:
+    case dItem_SILVER_RUPEE_e:
         return 0.0f;
-    case HEART:
+    case dItem_HEART_e:
         return 0.0f;
     default:
         return 0.0f;
@@ -168,7 +168,7 @@ void daItem_c::CreateInit() {
     
     show();
     
-    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != SMALL_KEY || (m_itemNo == SMALL_KEY && checkFlag(FLAG_UNK02)))) {
+    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != dItem_SMALL_KEY_e || (m_itemNo == dItem_SMALL_KEY_e && checkFlag(FLAG_UNK02)))) {
         u16 particleID = dItem_data::getSpecialEffect(m_itemNo);
         dComIfGp_particle_set(particleID, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb);
     }
@@ -582,35 +582,35 @@ void daItem_c::itemGetExecute() {
     mItemStatus = STATUS_INIT_NORMAL;
     
     switch (m_itemNo) {
-    case HEART:
+    case dItem_HEART_e:
         mDoAud_seStart(JA_SE_HEART_PIECE);
         execItemGet(m_itemNo);
         break;
-    case GREEN_RUPEE:
+    case dItem_GREEN_RUPEE_e:
         mDoAud_seStart(JA_SE_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case BLUE_RUPEE:
+    case dItem_BLUE_RUPEE_e:
         mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case YELLOW_RUPEE:
+    case dItem_YELLOW_RUPEE_e:
         mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case RED_RUPEE:
+    case dItem_RED_RUPEE_e:
         mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case PURPLE_RUPEE:
+    case dItem_PURPLE_RUPEE_e:
         mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case ORANGE_RUPEE:
+    case dItem_ORANGE_RUPEE_e:
         mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case SILVER_RUPEE:
+    case dItem_SILVER_RUPEE_e:
         mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
@@ -640,14 +640,14 @@ void daItem_c::itemGetExecute() {
         mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
         execItemGet(m_itemNo);
         break;
-    case SMALL_KEY:
+    case dItem_SMALL_KEY_e:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case TRIPLE_HEART:
+    case dItem_TRIPLE_HEART_e:
         mDoAud_seStart(JA_SE_HEART_PIECE);
         execItemGet(m_itemNo);
         break;
-    case PENDANT:
+    case dItem_JOY_PENDANT_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(7)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -656,7 +656,7 @@ void daItem_c::itemGetExecute() {
             execItemGet(m_itemNo);
         }
         break;
-    case DEKU_LEAF:
+    case dItem_DEKU_LEAF_e:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case SWORD:
@@ -748,7 +748,7 @@ void daItem_c::itemGetExecute() {
             execItemGet(m_itemNo);
         }
         break;
-    case ANIMAL_ESA:
+    case dItem_HYOI_PEAR_e:
         mDoAud_seStart(JA_SE_ESA_GET);
         if (!dComIfGs_isGetItemBait(1)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -1132,12 +1132,12 @@ void daItem_c::set_bound_se() {
     }
     
     switch (m_itemNo) {
-    case GREEN_RUPEE:
-    case BLUE_RUPEE:
-    case YELLOW_RUPEE:
-    case RED_RUPEE:
-    case PURPLE_RUPEE:
-    case ORANGE_RUPEE:
+    case dItem_GREEN_RUPEE_e:
+    case dItem_BLUE_RUPEE_e:
+    case dItem_YELLOW_RUPEE_e:
+    case dItem_RED_RUPEE_e:
+    case dItem_PURPLE_RUPEE_e:
+    case dItem_ORANGE_RUPEE_e:
         fopAcM_seStart(this, JA_SE_OBJ_LUPY_BOUND, temp);
         break;
     case S_MAGIC:
@@ -1147,8 +1147,8 @@ void daItem_c::set_bound_se() {
     case ARROW_10:
     case ARROW_20:
     case ARROW_30:
-    case MAGIC_ARROW:
-    case LIGHT_ARROW:
+    case dItem_MAGIC_ARROW_e:
+    case dItem_LIGHT_ARROW_e:
         fopAcM_seStart(this, JA_SE_CM_BST_ARROW_BOUND, temp);
         break;
     case KAKERA_HEART:
@@ -1237,7 +1237,7 @@ void daItem_c::mode_water_init() {
     
     cXyz scale;
     f32 temp = dItem_data::getShadowSize(m_itemNo);
-    f32 temp3 = temp / dItem_data::getShadowSize(GREEN_RUPEE);
+    f32 temp3 = temp / dItem_data::getShadowSize(dItem_GREEN_RUPEE_e);
     temp3 *= mScale.x;
     scale.setall(temp3);
     
@@ -1253,8 +1253,8 @@ void daItem_c::mode_wait() {
     }
     
     switch (m_itemNo) {
-    case HEART:
-    case TRIPLE_HEART:
+    case dItem_HEART_e:
+    case dItem_TRIPLE_HEART_e:
         itemActionForHeart();
         break;
     case KAKERA_HEART:
@@ -1266,16 +1266,16 @@ void daItem_c::mode_wait() {
     case ARROW_10:
     case ARROW_20:
     case ARROW_30:
-    case MAGIC_ARROW:
-    case LIGHT_ARROW:
+    case dItem_MAGIC_ARROW_e:
+    case dItem_LIGHT_ARROW_e:
         itemActionForArrow();
         break;
-    case SMALL_KEY:
+    case dItem_SMALL_KEY_e:
         itemActionForKey();
         break;
     case S_MAGIC:
     case L_MAGIC:
-    case PENDANT:
+    case dItem_JOY_PENDANT_e:
     case SKULL_NECKLACE:
     case BOKOBABA_SEED:
     case GOLDEN_FEATHER:

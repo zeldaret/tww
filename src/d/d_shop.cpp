@@ -43,8 +43,8 @@ ShopItems_c__ItemData shopItemData_FoodAll = {
 };
 
 ShopItems_c__ItemData shopItemData_FoodHyoi = {
-    /* mItemNo           */ ANIMAL_ESA,
-    /* mMustNotOwnItemNo */ ANIMAL_ESA,
+    /* mItemNo           */ dItem_HYOI_PEAR_e,
+    /* mMustNotOwnItemNo */ dItem_HYOI_PEAR_e,
     /* mMustOwnItemNo    */ ESA_BAG,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
@@ -52,14 +52,14 @@ ShopItems_c__ItemData shopItemData_FoodHyoi = {
 ShopItems_c__ItemData shopItemData_arrow10 = {
     /* mItemNo           */ ARROW_10,
     /* mMustNotOwnItemNo */ ARROW_10,
-    /* mMustOwnItemNo    */ BOW,
+    /* mMustOwnItemNo    */ dItem_BOW_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_arrow30 = {
     /* mItemNo           */ ARROW_30,
     /* mMustNotOwnItemNo */ ARROW_30,
-    /* mMustOwnItemNo    */ BOW,
+    /* mMustOwnItemNo    */ dItem_BOW_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
@@ -1314,7 +1314,7 @@ BOOL dShop_now_triggercheck(msg_class* msg, STControl* stickControl, ShopItems_c
 
 /* 8006036C-8006044C       .text dShop_maxCheck__Fii */
 BOOL dShop_maxCheck(int itemNo, int) {
-    if (itemNo == BIRD_ESA_5 || itemNo == ANIMAL_ESA) {
+    if (itemNo == BIRD_ESA_5 || itemNo == dItem_HYOI_PEAR_e) {
         if (!dComIfGs_checkBaitItemEmpty()) {
             return TRUE;
         }
@@ -1343,7 +1343,7 @@ u8 dShop_BoughtErrorStatus(ShopItems_c* shopItems, int param_2, int param_3) {
     u8 errorStatus = 0x00;
     
     if (buyCond & Shop_BuyCond_MUST_OWN_ITEM_e) {
-        if (itemData->mMustOwnItemNo == BOW) {
+        if (itemData->mMustOwnItemNo == dItem_BOW_e) {
             if (dComIfGs_getItem(0xC) == 0xFF) {
                 errorStatus |= Shop_BuyCond_MUST_OWN_ITEM_e;
             }

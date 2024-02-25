@@ -33,7 +33,7 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
                     if (health < 0x0D) {
                         static u32 ki_item_d[] = {
-                            HEART,
+                            dItem_HEART_e,
                             L_MAGIC,
                             ARROW_10,
                         };

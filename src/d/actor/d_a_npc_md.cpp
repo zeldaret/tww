@@ -331,7 +331,7 @@ static s16 daNpc_Md_XyCheckCB(void* i_this, int param_1) {
 s16 daNpc_Md_c::XyCheckCB(int equippedItemIdx) {
     u8 selectItemNo = dComIfGp_getSelectItem(equippedItemIdx);
     if (m3138 == 3) {
-        if (selectItemNo == WIND_TACT) {
+        if (selectItemNo == dItem_WIND_WAKER_e) {
             return TRUE;
         }
         if (selectItemNo == GOLDEN_FEATHER) {
@@ -358,7 +358,7 @@ static s16 daNpc_Md_XyEventCB(void* i_this, int param_1) {
 /* 0000081C-00000864       .text XyEventCB__10daNpc_Md_cFi */
 s16 daNpc_Md_c::XyEventCB(int equippedItemIdx) {
     u8 selectItemNo = dComIfGp_getSelectItem(equippedItemIdx);
-    if (selectItemNo == WIND_TACT) {
+    if (selectItemNo == dItem_WIND_WAKER_e) {
         offDefaultTalkXY();
         return mEventIdxTable[5];
     } else if (selectItemNo == GOLDEN_FEATHER) {
