@@ -33,6 +33,10 @@ namespace daTsubo {
         void data_spec_boko(int) {}
         void is_switch() const {}
         void pos_init() {
+            if (m678 != 2) {
+                return;
+            }
+
             current.pos = home.pos;
             current.angle = home.angle;
             shape_angle = home.angle;

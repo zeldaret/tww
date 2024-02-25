@@ -235,7 +235,7 @@ daNpc_Ji1_HIO_c::daNpc_Ji1_HIO_c() {
 }
 
 /* 000003C0-000003E4       .text daNpc_Ji1_XyCheckCB__FPvi */
-s16 daNpc_Ji1_XyCheckCB(void*, int equippedItemIdx) {
+static s16 daNpc_Ji1_XyCheckCB(void*, int equippedItemIdx) {
     return dComIfGp_getSelectItem(equippedItemIdx) == BOKO_BELT ? TRUE : FALSE;
 }
 
@@ -351,12 +351,12 @@ void daNpc_Ji1_c::setClearRecord(s16 hits) {
 }
 
 /* 000006F8-00000864       .text daNpc_Ji1_plRoomOutCheck__Fv */
-BOOL daNpc_Ji1_plRoomOutCheck() {
+static BOOL daNpc_Ji1_plRoomOutCheck() {
     cXyz plyrPos = daPy_getPlayerActorClass()->current.pos;
     static cXyz out_chk_pos(0.0f, 0.0f, 500.0f);
 
     cXyz temp = plyrPos - out_chk_pos;
-    if(temp.absXZ() < 100.0f && g_dComIfG_gameInfo.play.getDoStatus() == 0xB) {
+    if(temp.absXZ() < 100.0f && dComIfGp_getDoStatus() == 0xB) {
         return true;
     }
 
@@ -560,7 +560,8 @@ u32 daNpc_Ji1_c::kaitenExpAction(void*) {
     /* Nonmatching */
 
     daPy_py_c* player = daPy_getPlayerActorClass();
-    f32 temp = sqrtf((player->current.pos - current.pos).getMagXZ());
+    cXyz delta = player->current.pos - current.pos;
+    f32 temp = delta.absXZ();
 
     if(field_0xD64 == 0x10) {
         if(field_0x330->checkFrame(19.0f)) {
@@ -913,7 +914,7 @@ u32 daNpc_Ji1_c::speakBadAction(void*) {
 
 /* 00003F54-00004050       .text initPosObject__11daNpc_Ji1_cFPvPv */
 void* daNpc_Ji1_c::initPosObject(void* pActor, void* pData) {
-    if(fopAc_IsActor(pActor) && fopAcM_GetName(pActor) == PROC_TSUBO && static_cast<daTsubo::Act_c*>(pActor)->m678 == 2) {
+    if(fopAc_IsActor(pActor) && fopAcM_GetName(pActor) == PROC_TSUBO) {
         ((daTsubo::Act_c*)pActor)->pos_init();
     }
 
@@ -926,7 +927,7 @@ void daNpc_Ji1_c::initPos(int param_1) {
         setAnm(param_1, 0.0f, 0);
     }
 
-    fopAcM_Search((fopAcIt_JudgeFunc)&initPosObject, this);
+    fopAcM_Search(&initPosObject, this);
     old.pos = field_0xD28;
     current.pos = old.pos;
     current.angle = csXyz(home.angle.y, 0, 0);
@@ -1599,7 +1600,7 @@ void daNpc_Ji1_c::teachSubActionJump() {
 }
 
 /* 00007F14-00009070       .text teachAction__11daNpc_Ji1_cFPv */
-void daNpc_Ji1_c::teachAction(void*) {
+u32 daNpc_Ji1_c::teachAction(void*) {
     /* Nonmatching */
 }
 

@@ -202,9 +202,6 @@ public:
     void setEmitterTranslation(const JGeometry::TVec3<f32>& trans) {
         mEmitterTranslation.set(trans);
     }
-    void setEmitterTranslation(f32 x, f32 y, f32 z) {
-        mEmitterTranslation.set(x, y, z);
-    }
     void setEmitterScale(const JGeometry::TVec3<f32>& scale) {
         mEmitterScale.set(scale);
     }

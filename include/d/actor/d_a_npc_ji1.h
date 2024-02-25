@@ -80,7 +80,7 @@ public:
     void teachSubActionAttack();
     void teachSubActionJumpInit();
     void teachSubActionJump();
-    void teachAction(void*);
+    u32 teachAction(void*);
     u32 teachSPRollCutAction(void*);
     void battleGameSetTimer();
     void battleMove(float);
