@@ -3152,13 +3152,17 @@ inline u32 dComIfG_getTimerNowTimeMs() { return g_dComIfG_gameInfo.play.getTimer
 inline void dComIfGp_setWaveFrame(u16 frame) { g_dComIfG_gameInfo.play.setWaveFrame(frame); }
 inline u16 dComIfGp_getWaveFrame() { return g_dComIfG_gameInfo.play.getWaveFrame(); }
 
-inline s32 dComIfG_getTimerRestTimeMs() { return g_dComIfG_gameInfo.play.getTimerLimitTimeMs() - g_dComIfG_gameInfo.play.getTimerNowTimeMs(); }
+inline s32 dComIfG_getTimerRestTimeMs() {
+    s32 limit = g_dComIfG_gameInfo.play.getTimerLimitTimeMs();
+    s32 now = g_dComIfG_gameInfo.play.getTimerNowTimeMs();
+    return limit - now;
+}
 
 inline void dComIfG_TimerDeleteRequest() {
     if (dComIfG_getTimerPtr() != NULL)
         dComIfG_getTimerPtr()->deleteRequest();
 }
-inline bool dComIfG_TimerStart(s32 timer, s16 mode) {
+inline void dComIfG_TimerStart(s32 timer, s16 mode) {
     if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL)
         if (timer != 0)
             dComIfG_getTimerPtr()->start(timer);

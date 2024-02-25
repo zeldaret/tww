@@ -1609,7 +1609,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_tag_island"),
     ActorRel(NonMatching, "d_a_tag_kf1"),
     ActorRel(Matching,    "d_a_tag_ret", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_tag_volcano"),
+    ActorRel(Matching,    "d_a_tag_volcano"),
     ActorRel(NonMatching, "d_a_title"),
     ActorRel(NonMatching, "d_a_tn"),
     ActorRel(NonMatching, "d_a_toge"),
