@@ -1656,7 +1656,11 @@ public:
         onNoResetFlg0(daPyFlg0_SHIP_DROP);
         m3550 = param_1;
     }
-    void checkCarryActionNow() const {}
+    bool checkCarryActionNow() const {
+        return mCurProc == daPyProc_GRAB_PUT_e ||
+            mCurProc == daPyProc_GRAB_UP_e ||
+            mCurProc == daPyProc_GRAB_THROW_e;
+    }
     bool checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void clearDamageWait() {}
     void exchangeGrabActor(fopAc_ac_c*) {}

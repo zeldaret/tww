@@ -201,9 +201,11 @@ public:
 class daNpc_Md_c : public daPy_npc_c {
 public:
     enum ActionStatus {
-        ACTION_STARTING = 0,
-        ACTION_ONGOING  = 1,
-        ACTION_ENDING   = -1,
+        ACTION_STARTING  = 0,
+        ACTION_ONGOING_1 = 1,
+        ACTION_ONGOING_2 = 2,
+        ACTION_ONGOING_3 = 3,
+        ACTION_ENDING    = -1,
     };
     
     typedef BOOL (daNpc_Md_c::*ActionFunc)(void*);
@@ -223,28 +225,34 @@ public:
     void noCarryAction() { cLib_onBit(m30F0, 0x800UL); }
     void offNoCarryAction() { cLib_offBit(m30F0, 0x800UL); }
     bool isNoCarryAction() { return cLib_checkBit(m30F0, 0x800UL); }
+    void onShipRide() { cLib_onBit(m30F0, 0x1000UL); }
+    void offShipRide() { cLib_offBit(m30F0, 0x1000UL); }
+    bool isShipRide() { return cLib_checkBit(m30F0, 0x1000UL); }
     void onLightHit() { cLib_onBit(m30F0, 0x2000UL); }
     void offLightHit() { cLib_offBit(m30F0, 0x2000UL); }
     bool isLightHit() { return cLib_checkBit(m30F0, 0x2000UL); }
     void onLightBodyHit() { cLib_onBit(m30F0, 0x8000UL); }
     void offLightBodyHit() { cLib_offBit(m30F0, 0x8000UL); }
+    bool isLightBodyHit() { return cLib_checkBit(m30F0, 0x8000UL); }
     bool isOldLightBodyHit() { return cLib_checkBit(m30F0, 0x8000UL); }
     void onDefaultTalkXY() { cLib_onBit(m30F0, 0x10000UL); }
     void offDefaultTalkXY() { cLib_offBit(m30F0, 0x10000UL); }
     bool isDefaultTalkXY() { return cLib_checkBit(m30F0, 0x10000UL); }
     
-    void setTypeEdaichi() { m3138 = 4; }
-    void setTypeM_Dai() { m3138 = 5; }
-    void setTypeM_DaiB() { m3138 = 6; }
-    void setTypeShipRide() { m3138 = 7; }
-    void isTypeAdanmae() {}
-    void isTypeAtorizk() {}
-    void isTypeM_Dra09() {}
-    void isTypeSea() {}
-    bool isTypeEdaichi() { return m3138 == 4; }
-    bool isTypeM_Dai() { return m3138 == 5; }
-    bool isTypeM_DaiB() { return m3138 == 6; }
-    bool isTypeShipRide() { return m3138 == 7; }
+    void setOldLightBodyHit() {} // 0x20000?
+    
+    void setTypeEdaichi() { mType = 4; }
+    void setTypeM_Dai() { mType = 5; }
+    void setTypeM_DaiB() { mType = 6; }
+    void setTypeShipRide() { mType = 7; }
+    bool isTypeAtorizk() { return mType == 0; }
+    bool isTypeAdanmae() { return mType == 1; }
+    bool isTypeM_Dra09() { return mType == 2; }
+    bool isTypeSea() { return mType == 3; }
+    bool isTypeEdaichi() { return mType == 4; }
+    bool isTypeM_Dai() { return mType == 5; }
+    bool isTypeM_DaiB() { return mType == 6; }
+    bool isTypeShipRide() { return mType == 7; }
     
     s16 getHead_x() { return mJntCtrl.getHead_x(); }
     s16 getHead_y() { return mJntCtrl.getHead_y(); }
@@ -284,34 +292,22 @@ public:
         }
     }
     
+    void getFlyingTimer() {}
+    void setFlyingTimer(s16) {}
     void calcFlyingTimer() {}
     void checkBitEffectStatus(u8) {}
     void checkStatus(u32) {}
+    void setStatus(u32) {}
     void clearJntAng() {}
     void clearStatus() {}
     void clearStatus(u32) {}
-    void getFlyingTimer() {}
     void getTalkType() {}
-    void isLightBodyHit() {}
-    void isMirror() {}
-    void isShipRide() {}
-    void offFlying() {}
-    void offMirror() {}
-    void offPlayerRoom() {}
-    void offShipRide() {}
-    void onFlying() {}
-    void onMirror() {}
-    void onPlayerRoom() {}
-    void onShipRide() {}
+    void setTalkType(u8) {}
     void setBitEffectStatus(u8) {}
     void setBitStatus(u32) {}
     void setEffectStatus(u8) {}
-    void setFlyingTimer(s16) {}
-    void setOldLightBodyHit() {}
     void setPiyo2TalkCNT(u8) {}
     void setRunRate(f32) {}
-    void setStatus(u32) {}
-    void setTalkType(u8) {}
     
     daNpc_Md_c() {}
     ~daNpc_Md_c();
@@ -322,9 +318,9 @@ public:
     BOOL createHeap();
     BOOL setAction(ActionFunc*, ActionFunc, void*);
     void npcAction(void*);
-    void setNpcAction(ActionFunc, void*);
+    void setNpcAction(ActionFunc, void* = NULL);
     void playerAction(void*);
-    void setPlayerAction(ActionFunc, void*);
+    void setPlayerAction(ActionFunc, void* = NULL);
     s16 getStickAngY(int);
     int calcStickPos(s16, cXyz*);
     BOOL flyCheck();
@@ -475,11 +471,18 @@ public:
     static bool m_playerRoom;
     
     static bool isFlying() { return m_flying; }
+    static void onFlying() { m_flying = true; }
+    static void offFlying() { m_flying = false; }
+    static bool isMirror() { return m_mirror; }
+    static void onMirror() { m_mirror = true; }
+    static void offMirror() { m_mirror = false; }
     static bool isSeaTalk() { return m_seaTalk; }
     static void onSeaTalk() { m_seaTalk = true; }
     static void offSeaTalk() { m_seaTalk = false; }
     static s16 getMaxFlyingTimer();
     static bool isPlayerRoom() { return m_playerRoom; }
+    static void onPlayerRoom() { m_playerRoom = true; }
+    static void offPlayerRoom() { m_playerRoom = false; }
     
 public:
     /* 0x04EC */ request_of_phase_process_class mPhs;
@@ -553,7 +556,7 @@ public:
     /* 0x3135 */ u8 m3135[0x3136 - 0x3135];
     /* 0x3136 */ u8 m3136;
     /* 0x3137 */ u8 m3137;
-    /* 0x3138 */ u8 m3138;
+    /* 0x3138 */ u8 mType;
     /* 0x3139 */ s8 mCurEvent;
     /* 0x313A */ u8 m313A;
     /* 0x313B */ u8 m313B[0x313C - 0x313B];

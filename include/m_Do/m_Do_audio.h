@@ -158,6 +158,10 @@ inline void mDoAud_monsSeInit() {
     mDoAud_zelAudio_c::getInterface()->monsSeInit();
 }
 
+inline void mDoAud_monsSeStart(u32 i_seNum, Vec* param_1, u32 param_2, u32 param_3) {
+    mDoAud_zelAudio_c::getInterface()->monsSeStart(i_seNum, param_1, param_2, param_3, 0);
+}
+
 inline void mDoAud_monsSeStart(u32 i_seNum, Vec* param_1, u32 param_2, u32 param_3, s8 i_reverb) {
     mDoAud_zelAudio_c::getInterface()->monsSeStart(i_seNum, param_1, param_2, param_3, i_reverb);
 }

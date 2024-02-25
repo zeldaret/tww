@@ -1365,7 +1365,7 @@ s32 fopAcM_otoCheck(fopAc_ac_c* actor, f32 param_2) {
 
 /* 800282F8-8002833C       .text fopAcM_getProcNameString__FP10fopAc_ac_c */
 const char * fopAcM_getProcNameString(fopAc_ac_c* i_this) {
-    const char * pProcNameString = dStage_getName2(fpcM_GetProfName(i_this), i_this->mSubtype);
+    const char * pProcNameString = dStage_getName2(fopAcM_GetProfName(i_this), i_this->mSubtype);
     if (pProcNameString != NULL)
         return pProcNameString;
     return "UNKOWN";
@@ -1434,6 +1434,9 @@ void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1) 
     else
         i_this->mGbaName = gbaName0;
 }
+
+// Unused function, only exists in debug.
+void fopAcM_getNameString(fopAc_ac_c*, char*) {}
 
 /* 80028724-800287D8       .text fpoAcM_absolutePos__FP10fopAc_ac_cP4cXyzP4cXyz */
 void fpoAcM_absolutePos(fopAc_ac_c* i_this, cXyz* relPos, cXyz* absPos) {

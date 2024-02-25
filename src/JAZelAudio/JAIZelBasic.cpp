@@ -1002,8 +1002,8 @@ void JAIZelBasic::setCameraGroupInfo(u8 param_1) {
                 setScene(0x12, mIslandRoomNo, 1, -1);
                 load1stDynamicWave();
                 load2ndDynamicWave();
-                this->field_0x021e = 0;
-                this->field_0x022d = 1;
+                field_0x021e = 0;
+                field_0x022d = 1;
             } else {
                 OSReport("[JAIZelBasic::setCameraGroupInfo] Inner Edge -> Outer Edge\n");
             }

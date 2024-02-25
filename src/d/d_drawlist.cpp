@@ -483,19 +483,19 @@ void dDlst_2DM_c::draw() {
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3s16(mX0, mY0, 0.0f);
+    GXPosition3s16(mX0, mY0, 0);
     GXTexCoord2s16(tex0_s0, tex0_t0);
     GXTexCoord2s16(tex1_s0, tex1_t0);
 
-    GXPosition3s16(mX1, mY0, 0.0f);
+    GXPosition3s16(mX1, mY0, 0);
     GXTexCoord2s16(tex0_s1, tex0_t0);
     GXTexCoord2s16(tex1_s1, tex1_t0);
 
-    GXPosition3s16(mX1, mY1, 0.0f);
+    GXPosition3s16(mX1, mY1, 0);
     GXTexCoord2s16(tex0_s1, tex0_t1);
     GXTexCoord2s16(tex1_s1, tex1_t1);
 
-    GXPosition3s16(mX0, mY1, 0.0f);
+    GXPosition3s16(mX0, mY1, 0);
     GXTexCoord2s16(tex0_s0, tex0_t1);
     GXTexCoord2s16(tex1_s0, tex1_t1);
     GXEnd();
@@ -560,12 +560,12 @@ void dDlst_2Dm_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX1, GX_DIRECT);
-    GXLoadTexObj(&this->mTex[0].mTexObj, GX_TEXMAP0);
-    if (this->mTex[0].mbHasTlut)
-        GXLoadTlut(&this->mTex[0].mTlutObj, GXGetTexObjTlut(&mTex[0].mTexObj));
-    GXLoadTexObj(&this->mTex[1].mTexObj, GX_TEXMAP1);
-    if (this->mTex[1].mbHasTlut != 0)
-        GXLoadTlut(&this->mTex[1].mTlutObj, GXGetTexObjTlut(&mTex[1].mTexObj));
+    GXLoadTexObj(&mTex[0].mTexObj, GX_TEXMAP0);
+    if (mTex[0].mbHasTlut)
+        GXLoadTlut(&mTex[0].mTlutObj, GXGetTexObjTlut(&mTex[0].mTexObj));
+    GXLoadTexObj(&mTex[1].mTexObj, GX_TEXMAP1);
+    if (mTex[1].mbHasTlut != 0)
+        GXLoadTlut(&mTex[1].mTlutObj, GXGetTexObjTlut(&mTex[1].mTexObj));
 
     GXSetNumChans(0);
     GXSetTevColor(GX_TEVREG0, mC0);
@@ -595,19 +595,19 @@ void dDlst_2Dm_c::draw() {
     GXSetCurrentMtx(GX_PNMTX0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3s16(mX0, mY0, 0.0f);
+    GXPosition3s16(mX0, mY0, 0);
     GXTexCoord2s16(tex0_s0, tex0_t0);
     GXTexCoord2s16(tex1_s0, tex1_t0);
 
-    GXPosition3s16(mX1, mY0, 0.0f);
+    GXPosition3s16(mX1, mY0, 0);
     GXTexCoord2s16(tex0_s1, tex0_t0);
     GXTexCoord2s16(tex1_s1, tex1_t0);
 
-    GXPosition3s16(mX1, mY1, 0.0f);
+    GXPosition3s16(mX1, mY1, 0);
     GXTexCoord2s16(tex0_s1, tex0_t1);
     GXTexCoord2s16(tex1_s1, tex1_t1);
 
-    GXPosition3s16(mX0, mY1, 0.0f);
+    GXPosition3s16(mX0, mY1, 0);
     GXTexCoord2s16(tex0_s0, tex0_t1);
     GXTexCoord2s16(tex1_s0, tex1_t1);
     GXEnd();

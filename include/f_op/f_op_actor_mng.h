@@ -624,6 +624,10 @@ inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
     mDoAud_monsSeStart(i_seNum, &actor->mEyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
+inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 i_seNum, Vec* i_sePos, u32 param_2) {
+    mDoAud_monsSeStart(i_seNum, i_sePos, fopAcM_GetID(actor), param_2);
+}
+
 void fopDwTg_ToDrawQ(create_tag_class*, int);
 void fopDwTg_DrawQTo(create_tag_class*);
 
@@ -635,8 +639,6 @@ inline void fopAcM_offDraw(fopAc_ac_c* actor) {
     fopDwTg_DrawQTo(&actor->mDwTg);
 }
 
-inline void fopAcM_monsSeStart(fopAc_ac_c*, unsigned long, Vec*, unsigned long) {}
-inline void fopAcM_getNameString(fopAc_ac_c*, char*) {}
 inline void fopAcM_orderOtherEvent(fopAc_ac_c* ac, char* event, u16 flag) {
     fopAcM_orderOtherEvent2(ac, event, flag);
 }

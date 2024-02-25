@@ -10,7 +10,7 @@
 namespace daTagvolcano {
     namespace {
         struct Attr_c {
-            /* 0x00 */ u32 field_0x00;
+            /* 0x00 */ u16 field_0x00;
         };
 
         static const Attr_c L_attr = {
