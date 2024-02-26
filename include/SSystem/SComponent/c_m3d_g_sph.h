@@ -28,7 +28,10 @@ public:
         SetC(src.mCenter);
         SetR(src.mRadius);
     }
-    void Set(const cXyz&, f32) {}
+    void Set(const cXyz& srcCenter, f32 srcRadius) {
+        SetC(srcCenter);
+        SetR(srcRadius);
+    }
     bool Cross(const cM3dGCps* cps, cXyz* dst) const {
         return cM3d_Cross_CpsSph(*cps, *this, dst);
     }
