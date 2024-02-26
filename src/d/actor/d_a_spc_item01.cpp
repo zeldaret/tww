@@ -75,15 +75,15 @@ BOOL daSpcItem01_c::_delete() {
 }
 
 /* 8015DBF4-8015DDD0       .text _create__13daSpcItem01_cFv */
-cPhs__Step daSpcItem01_c::_create() {
+s32 daSpcItem01_c::_create() {
     fopAcM_SetupActor(this, daSpcItem01_c);
     m_itemNo = daSpcItem01_prm::getItemNo(this);
     if (m_itemNo == SHIELD && dComIfGs_isEventBit(0xE20)) {
         setLoadError();
         return cPhs_ERROR_e;
     }
-    cPhs__Step phs_step = (cPhs__Step)dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
-    if (phs_step == cPhs_COMPLEATE_e) {
+    int phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
+    if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, &CheckFieldItemCreateHeap,
                                    dItem_data::getHeapSize(m_itemNo)))
         {
@@ -91,7 +91,7 @@ cPhs__Step daSpcItem01_c::_create() {
         }
         CreateInit();
     }
-    return phs_step;
+    return phase_state;
 }
 
 /* 8015DDD0-8015DF4C       .text CreateInit__13daSpcItem01_cFv */

@@ -1193,7 +1193,7 @@ static BOOL daAM2_IsDelete(am2_class* i_this) {
 
 /* 00003AC0-00003B18       .text daAM2_Delete__FP9am2_class */
 static BOOL daAM2_Delete(am2_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "AM2");
+    dComIfG_resDelete(&i_this->mPhase, "AM2");
 
     i_this->mSmokeCb.end();
     i_this->mRippleCb.end();
@@ -1275,7 +1275,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
 
     am2_class* i_this = (am2_class*)i_actor;
 
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "AM2");
+    s32 phase_state = dComIfG_resLoad(&i_this->mPhase, "AM2");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1AA0)) {
             return cPhs_ERROR_e;

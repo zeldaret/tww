@@ -13,36 +13,37 @@ s16 m_evid;
 }
 
 Mtx daObjVfan::Act_c::M_tmp_mtx;
-const char daObjVfan::Act_c::M_arcname[5] = "Vfan";
+const char daObjVfan::Act_c::M_arcname[] = "Vfan";
 
-static dCcD_SrcCyl cyl_check_src = {{
-                                        /* Flags             */ 0,
-                                        /* SrcObjAt  Type    */ 0,
-                                        /* SrcObjAt  Atp     */ 0,
-                                        /* SrcObjAt  SPrm    */ 0,
-                                        /* SrcObjTg  Type    */ AT_TYPE_PGANON_SWORD,
-                                        /* SrcObjTg  SPrm    */ 9,
-                                        /* SrcObjCo  SPrm    */ 0,
-                                        /* SrcGObjAt Se      */ 0,
-                                        /* SrcGObjAt HitMark */ 0,
-                                        /* SrcGObjAt Spl     */ 0,
-                                        /* SrcGObjAt Mtrl    */ 0,
-                                        /* SrcGObjAt SPrm    */ 0,
-                                        /* SrcGObjTg Se      */ 0,
-                                        /* SrcGObjTg HitMark */ 0,
-                                        /* SrcGObjTg Spl     */ 0,
-                                        /* SrcGObjTg Mtrl    */ 0,
-                                        /* SrcGObjTg SPrm    */ 0,
-                                        /* SrcGObjCo SPrm    */ 0,
-                                    },
-                                    {
-                                        /* Center */
-                                        0.0f,
-                                        0.0f,
-                                        0.0f,
-                                        /* Radius */ 100.0f,
-                                        /* Height */ 300.0f,
-                                    }};
+static dCcD_SrcCyl cyl_check_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_PGANON_SWORD,
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 100.0f,
+        /* Height */ 300.0f,
+    }
+};
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */
 int daObjVfan::Act_c::CreateHeap() {
@@ -84,14 +85,14 @@ int daObjVfan::Act_c::Create() {
 s32 daObjVfan::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjVfan::Act_c);
 
-    cPhs__Step phase_state;
+    int phase_state;
 
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         return cPhs_UNK3_e;
     } else {
-        phase_state = (cPhs__Step)dComIfG_resLoad(&mPhs, M_arcname);
+        phase_state = dComIfG_resLoad(&mPhs, M_arcname);
         if (phase_state == cPhs_COMPLEATE_e) {
-            phase_state = (cPhs__Step)MoveBGCreate(M_arcname, 7, NULL, 0xa60);
+            phase_state = MoveBGCreate(M_arcname, 7, NULL, 0xa60);
 
             JUT_ASSERT(0xc6, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
         }

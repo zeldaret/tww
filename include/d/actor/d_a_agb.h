@@ -108,10 +108,10 @@ public:
     BOOL isFree() { return mIsFree; }
     void offFree() { mIsFree = false; }
     BOOL isHold() { return mHold; }
-    s32 getFollowTarget() { return mFollowTarget; }
-    void setFollowTarget(bool) {}
-    void getTargetID() {}
-    void setTargetID(unsigned int) {}
+    BOOL getFollowTarget() { return mFollowTarget; }
+    void setFollowTarget(bool follow) { mFollowTarget = follow; }
+    unsigned int getTargetID() { return mTargetID; }
+    void setTargetID(unsigned int pid) { mTargetID = pid; }
 
     struct daAgb_ItemBuy {
         union {
@@ -247,7 +247,7 @@ public:
     /* 0x634 */ cXyz field_0x634;
     /* 0x640 */ int field_0x640;
     /* 0x648 */ u64 mPlayerName;
-    /* 0x650 */ u32 field_0x650;
+    /* 0x650 */ u32 mTargetID;
     /* 0x654 */ int field_0x654;
     /* 0x658 */ s16 field_0x658;
     /* 0x65A */ u16 mPrevButtons;
@@ -265,23 +265,23 @@ public:
     /* 0x66D */ u8 field_0x66d;
     /* 0x66E */ u8 field_0x66e;
     /* 0x66F */ s8 field_0x66f;
-    /* 0x670 */ u8 field_0x670;
+    /* 0x670 */ bool field_0x670;
     /* 0x671 */ bool mIsFree;
     /* 0x672 */ bool mIsActive;
-    /* 0x673 */ u8 field_0x673;
+    /* 0x673 */ bool field_0x673;
     /* 0x674 */ bool mHold;
-    /* 0x675 */ u8 field_0x675;
-    /* 0x676 */ u8 field_0x676;
-    /* 0x677 */ u8 mFollowTarget;
+    /* 0x675 */ bool field_0x675;
+    /* 0x676 */ bool field_0x676;
+    /* 0x677 */ bool mFollowTarget;
     /* 0x678 */ bool mIsMsgSend;
-    /* 0x679 */ u8 field_0x679;
+    /* 0x679 */ bool field_0x679;
     /* 0x67A */ bool field_0x67a;
-    /* 0x67B */ u8 field_0x67b;
+    /* 0x67B */ bool field_0x67b;
     /* 0x67C */ bool mBombDeny;
-    /* 0x67D */ u8 field_0x67d;
-    /* 0x67E */ u8 field_0x67e;
-    /* 0x67F */ u8 field_0x67f;
-    /* 0x680 */ u8 field_0x680;
+    /* 0x67D */ bool field_0x67d;
+    /* 0x67E */ bool field_0x67e;
+    /* 0x67F */ bool field_0x67f;
+    /* 0x680 */ bool field_0x680;
     /* 0x684 */ dPa_followEcallBack field_0x684;
 };
 

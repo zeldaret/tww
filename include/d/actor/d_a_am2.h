@@ -10,7 +10,7 @@
 
 class am2_class : public fopEn_enemy_c {
 public:
-    /* 0x2AC */ request_of_phase_process_class mPhs;
+    /* 0x2AC */ request_of_phase_process_class mPhase;
     /* 0x2B4 */ JntHit_c* mEyeJntHit;
     /* 0x2B8 */ mDoExt_McaMorf* mpMorf;
     /* 0x2BC */ u8 m2BC[0x2C0 - 0x2BC];

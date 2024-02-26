@@ -279,16 +279,14 @@ void daAgb_c::NameConv() {
     for (i = 0; i < 8; i++) {
 #if VERSION == VERSION_JPN
         u8 chr = sjis2chrNo(name);
-#else
-        u8 chr = sjis2chrNo(*name);
-#endif
         mPlayerName |= chr;
-#if VERSION == VERSION_JPN
         if (*name & 0x80)
             name += 2;
         else
             name++;
 #else
+        u8 chr = sjis2chrNo(*name);
+        mPlayerName |= chr;
         name++;
 #endif
 
@@ -310,7 +308,7 @@ int daAgb_c::uploadInitCheck() {
         l_msgCtrl.init(1);
         mUploadAction  = UpAct_UNKA;
     } else if (!mDoGaC_getComEnable()) {
-        field_0x66f = 0;
+        field_0x66f = false;
         mIsMsgSend = false;
         JUTGba::getManager()->doInitProbe(1, NULL, NULL);
         JUTGba::getManager()->doInitProbe(2, NULL, NULL);
@@ -393,7 +391,7 @@ int daAgb_c::uploadSelect() {
 
             mDoGaC_GbaReboot();
             mDoGaC_setPortNo(mPortNo);
-            field_0x66f = 0;
+            field_0x66f = false;
             mIsMsgSend = false;
         }
     }
@@ -514,7 +512,7 @@ int daAgb_c::uploadConnect() {
 int daAgb_c::uploadMessageSend() {
     if (mDoGaC_getDataStatus(0) == 0) {
         mIsMsgSend = true;
-        if (field_0x67a != 0) {
+        if (field_0x67a) {
             l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
             fopMsgM_messageSet(8);  // "Tingle appeared on your Game Boy Advance!"
             fopMsgM_messageSendOn();
@@ -570,7 +568,7 @@ int daAgb_c::uploadMsgEndTimer() {
             l_msgCtrl.setMsgStatus(fopMsgStts_MSG_ENDS_e);
             fopMsgM_messageSendOn();
         } else if (field_0x664 == 30) {
-            field_0x66f = 1;
+            field_0x66f = true;
         }
     }
 
@@ -622,10 +620,8 @@ void daAgb_c::modeLookAttention() {
             se_flag = false;
 
             field_0x65c = 1;
-            if (mHold == 0) {
-                shape_angle.x = 0;
-                shape_angle.y = 0;
-                shape_angle.z = 0;
+            if (!mHold) {
+                shape_angle.setall(0);
                 field_0x628 = 2.5f;
             }
         }
@@ -640,7 +636,7 @@ u8 daAgb_c::DungeonNoGet() {
 
     u8 dungeon_no = var_r0;
     if (dungeon_no == 0) {
-        if (field_0x67e != 0) {
+        if (field_0x67e) {
             switch (field_0x66d) {
             case 1:
                 dungeon_no = 10;
@@ -692,8 +688,8 @@ u8 daAgb_c::DungeonNoTable[] = {
 void daAgb_c::MapNoSet(u8 param_0, u8 param_1, u8 param_2) {
     field_0x66c = param_0;
     field_0x66d = param_1;
-    field_0x67e = param_2 != 0;
-    field_0x670 = 1;
+    field_0x67e = param_2;
+    field_0x670 = true;
 
     mFlags.field_0xb_3 = DungeonNoGet();
 }
@@ -701,8 +697,8 @@ void daAgb_c::MapNoSet(u8 param_0, u8 param_1, u8 param_2) {
 /* 800D05D4-800D05F0       .text onFree__7daAgb_cFv */
 void daAgb_c::onFree() {
     mIsFree = true;
-    field_0x650 = -1;
-    mFollowTarget = 0;
+    setTargetID(fpcM_ERROR_PROCESS_ID_e);
+    setFollowTarget(false);
 }
 
 /* 800D05F0-800D0608       .text onHold__7daAgb_cFv */
@@ -721,8 +717,8 @@ void daAgb_c::offHold() {
 void daAgb_c::resetCursor(bool param_0) {
     fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
     mIsFree = false;
-    mFollowTarget = 0;
-    field_0x650 = -1;
+    setFollowTarget(false);
+    setTargetID(fpcM_ERROR_PROCESS_ID_e);
 
     if (fopAcM_GetName(player_p) != PROC_NPC_KAM) {
         current.pos = player_p->current.pos;
@@ -733,17 +729,15 @@ void daAgb_c::resetCursor(bool param_0) {
     }
 
     field_0x628 = 2.5f;
-    shape_angle.x = 0;
-    shape_angle.y = 0;
-    shape_angle.z = 0;
+    shape_angle.setall(0);
 
     if (param_0) {
         if (field_0x66b == 14) {
             field_0x65c = 0;
         }
 
-        field_0x675 = 0;
-        field_0x676 = 0;
+        field_0x675 = false;
+        field_0x676 = false;
     }
 
     mHold = false;
@@ -752,7 +746,7 @@ void daAgb_c::resetCursor(bool param_0) {
 
 /* 800D070C-800D0734       .text FlashCheck__7daAgb_cFv */
 bool daAgb_c::FlashCheck() {
-    if (mIsFree != 0 || mFollowTarget == 1) {
+    if (mIsFree || mFollowTarget == true) {
         return true;
     }
 
@@ -790,7 +784,7 @@ void daAgb_c::FlagsRecv() {
     g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags = 0;
 
     mPrevButtons = buttons;
-    field_0x673 = mGbaFlg.field_0x3 != 0;
+    field_0x673 = mGbaFlg.field_0x3;
     field_0x630 = BigLittleChange(mGbaFlg.field_0x4) >> 0x10;
     field_0x632 = BigLittleChange(mGbaFlg.field_0x6) >> 0x10;
     field_0x67a = mGbaFlg.field_0x2.m2;
@@ -890,14 +884,14 @@ void daAgb_c::GbaItemUse() {
         ) {
             mEffect = BigLittleChange(0x1F0300);
             return;
-        } else if (field_0x67d != 0) {
+        } else if (field_0x67d) {
             mEffect = BigLittleChange((field_0x662 << 0x10) | 0x300);
             return;
         }
-        field_0x67f = 1;
+        field_0x67f = true;
         break;
     case 2:
-        if (field_0x67b != 0) {
+        if (field_0x67b) {
             mEffect = BigLittleChange((field_0x65e << 0x10) | 0x300);
             return;
         }
@@ -911,14 +905,14 @@ void daAgb_c::GbaItemUse() {
 
         if (isFree() || getFollowTarget() == 1) {
             if (!isFree() && dComIfGs_getGbaRupeeCount() < 24 &&
-                fopAcM_IsExecuting(field_0x650))
+                fopAcM_IsExecuting(getTargetID()))
             {
-                fopAc_ac_c* actor_p = fopAcM_SearchByID(field_0x650);
+                fopAc_ac_c* actor_p = fopAcM_SearchByID(getTargetID());
 
                 if (cM_rndF(5.0f) < 4.0) {
-                    field_0x640 = 3;
+                    field_0x640 = dItem_YELLOW_RUPEE_e;
                 } else {
-                    field_0x640 = 4;
+                    field_0x640 = dItem_RED_RUPEE_e;
                 }
 
                 field_0x634 = actor_p->current.pos;
@@ -927,18 +921,18 @@ void daAgb_c::GbaItemUse() {
             }
 
             fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
-            field_0x65c = 0x78;
+            field_0x65c = 120;
         } else {
             temp_r29 = 0xe;
             onFree();
-            field_0x65c = 0x10e;
+            field_0x65c = 270;
             mBrk.setPlaySpeed(6.0f);
         }
         break;
     case 0x15:
         resetCursor(false);
         fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
-        field_0x65c = 0x78;
+        field_0x65c = 120;
         break;
     case 0x11:
         mEffect = BigLittleChange(temp_r29);
@@ -946,7 +940,7 @@ void daAgb_c::GbaItemUse() {
     case 3:
         daPy_getPlayerLinkActorClass()->setHoverBoots(5*30);
         resetCursor(false);
-        field_0x65c = 0x96;
+        field_0x65c = 150;
         mBrk.setPlaySpeed(6.0f);
         break;
     case 0x12:
@@ -1049,7 +1043,7 @@ void daAgb_c::GbaItemUse() {
         return;
     }
 
-    mIsActive = false;
+    offActive();
     dComIfGp_setItemRupeeCount(-mItem.field_0x1);
     mEffect = BigLittleChange(temp_r29);
     field_0x66b = temp_r29;
@@ -1142,10 +1136,10 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     mFlags.field_0x7_2 = dKy_getdaytime_minute();
     mFlags.field_0x8_1 = dComIfGs_getLife();
     mFlags.field_0xa_1 = dComIfGs_isEventBit(0x1708);
-    mFlags.field_0x7_1 = dComIfGs_isEventBit(0x1A10);
-    mFlags.field_0x7_0 = dComIfGs_isEventBit(0x1A08);
+    mFlags.field_0x7_1 = dComIfGs_isEventBit(dSv_evtBit_c::UNLOCK_TINGLE_BALLOON_DISCOUNT);
+    mFlags.field_0x7_0 = dComIfGs_isEventBit(dSv_evtBit_c::UNLOCK_TING_DISCOUNT);
     
-    if (!dComIfGs_isEventBit(0x0F80) || dComIfGs_isEventBit(0x1E80)) {
+    if (!dComIfGs_isEventBit(dSv_evtBit_c::MET_KORL) || dComIfGs_isEventBit(0x1E80)) {
         mFlags.field_0x9_7 = 0;
         mFlags.field_0x9_6 = 0;
         mFlags.field_0x9_5 = 0;
@@ -1164,9 +1158,9 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     }
     
     if (dComIfGs_isEventBit(0x3920)) {
-        mFlags.field_0x9_4 = !dComIfGs_isEventBit(0x1480);
-        mFlags.field_0x9_3 = !dComIfGs_isEventBit(0x1440);
-        mFlags.field_0x9_2 = !dComIfGs_isEventBit(0x1410);
+        mFlags.field_0x9_4 = !dComIfGs_isEventBit(dSv_evtBit_c::PLACED_DINS_PEARL);
+        mFlags.field_0x9_3 = !dComIfGs_isEventBit(dSv_evtBit_c::PLACED_FARORES_PEARL);
+        mFlags.field_0x9_2 = !dComIfGs_isEventBit(dSv_evtBit_c::PLACED_NAYRUS_PEARL);
     } else {
         mFlags.field_0x9_4 = 0;
         mFlags.field_0x9_3 = 0;
@@ -1182,7 +1176,7 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     }
     mFlags.field_0xa_3 = dComIfGs_isEventBit(0x1E40);
     mFlags.field_0xa_0 = mIsFree;
-    mFlags.field_0xb_7 = mFollowTarget;
+    mFlags.field_0xb_7 = getFollowTarget();
     if (stage_type == dSv_save_c::STAGE_ET) {
         mFlags.field_0x8_0 = 1;
     } else {
@@ -1214,13 +1208,13 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     
     f32 f31;
     if (stage_type == dSv_save_c::STAGE_WT) {
-        f31 = field_0x67e != 0 ? 50.0f : 781.25f;
+        f31 = field_0x67e ? 50.0f : 781.25f;
     } else {
         f31 = 25.0f;
     }
     
     if (cLib_chaseF(&field_0x628, 2.5f, field_0x62c) &&
-        field_0x673 != 0 && isActive() && !mHold &&
+        field_0x673 && isActive() && !mHold &&
         !CPad_CHECK_HOLD_L(mDoGaC_getPortNo())
     ) {
         if (CPad_CHECK_HOLD_LEFT(mDoGaC_getPortNo())) {
@@ -1234,7 +1228,7 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
             actor->home.pos.z += f31;
         }
         
-        if (stage_type == dSv_save_c::STAGE_WT && field_0x67e == 0) {
+        if (stage_type == dSv_save_c::STAGE_WT && !field_0x67e) {
             if (actor->home.pos.x < -350000.0f) {
                 actor->home.pos.x = -350000.0f;
             } else if (actor->home.pos.x > 350000.0f) {
@@ -1267,14 +1261,14 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
         
         f32 playerDist = fopAcM_searchPlayerDistanceXZ(actor);
         if (playerDist > 212100.0f) {
-            if (mIsFree || mFollowTarget == 0) {
+            if (mIsFree || !mFollowTarget) {
                 cXyz r1_50 = player->current.pos - actor->current.pos;
                 actor->home.pos.x = player->current.pos.x - r1_50.x * 212100.0f / playerDist;
                 actor->home.pos.z = player->current.pos.z - r1_50.z * 212100.0f / playerDist;
             } else {
                 mIsFree = false;
-                mFollowTarget = 0;
-                field_0x650 = -1;
+                setFollowTarget(false);
+                setTargetID(fpcM_ERROR_PROCESS_ID_e);
             }
         }
     }
@@ -1316,7 +1310,7 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
         return;
     }
     
-    field_0x679 = 1;
+    field_0x679 = true;
     
     if (mCrrPos.ChkXCrr()) {
         actor->home.pos.x = actor->current.pos.x;
@@ -1383,7 +1377,7 @@ void daAgb_c::modeMove() {
             field_0x65c--;
             
             if (field_0x66b == 0xE) {
-                if (field_0x65c == 0x78) {
+                if (field_0x65c == 120) {
                     fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
                 } else if (field_0x65c == 0) {
                     resetCursor(false);
@@ -1395,10 +1389,10 @@ void daAgb_c::modeMove() {
             }
         }
     }
-    if (field_0x673 != 0 && !r26 && field_0x65c == 0) {
-        mIsActive = true;
+    if (field_0x673 && !r26 && field_0x65c == 0) {
+        onActive();
     } else {
-        mIsActive = false;
+        offActive();
     }
     
     if (mDoGaC_GbaLink() && mDoGaC_RecvStatusCheck(6) && mDoGac_SendStatusCheck(7)) {
@@ -1412,10 +1406,10 @@ void daAgb_c::modeMove() {
         mDoGac_SendDataSet((u32*)&mEffect, 4, 7, mEffect);
     }
     
-    if (field_0x67f != 0) {
-        field_0x67f = 0;
+    if (field_0x67f) {
+        field_0x67f = false;
         
-        if (field_0x67d == 0 &&
+        if (!field_0x67d &&
             !daPy_getPlayerLinkActorClass()->checkNoControll() &&
             !dComIfGp_checkPlayerStatus0(0, daPyStts0_CRAWL_e) &&
             (
@@ -1425,7 +1419,7 @@ void daAgb_c::modeMove() {
             )
         ) {
             mMode = 1;
-            mIsActive = false;
+            offActive();
             mEyePos = current.pos;
             
             cXyz sp3c = mEyePos - player->current.pos;
@@ -1437,7 +1431,7 @@ void daAgb_c::modeMove() {
             
             if (isHold()) {
                 s16 angle = fopAcM_searchPlayerAngleY(this);
-                if (field_0x675 == 0) {
+                if (!field_0x675) {
                     angle = -angle;
                 }
                 shape_angle.z = angle;
@@ -1459,14 +1453,14 @@ void daAgb_c::modeMove() {
     }
     
     if ((g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && fopAcM_GetName(player) != PROC_NPC_KAM) &&
-        ((isActive() && field_0x675 == 0 && CPad_CHECK_TRIG_R(mDoGaC_getPortNo())) ||
+        ((isActive() && !field_0x675 && CPad_CHECK_TRIG_R(mDoGaC_getPortNo())) ||
         (mFlags.field_0x3_5 != 0 && (CPad_CHECK_TRIG_R(mDoGaC_getPortNo()) || CPad_CHECK_TRIG_A(mDoGaC_getPortNo())))))
     {
         offHold();
         mIsFree = false;
         if (getFollowTarget() != 0) {
-            field_0x650 = -1;
-            mFollowTarget = 0;
+            setTargetID(fpcM_ERROR_PROCESS_ID_e);
+            setFollowTarget(false);
         } else if (stage_type != dSv_save_c::STAGE_ET) {
             dAttList_c* attList = dComIfGp_getAttention().GetLockonList(0);
             if (attList) {
@@ -1475,8 +1469,8 @@ void daAgb_c::modeMove() {
                     if (fopAcM_CheckStatusMap(r3, 0) && !fopAcM_checkStatus(r3, fopAcStts_BOSS_e) && fopAcM_GetName(r3) != PROC_FGANON) {
                         current.pos = r3->current.pos;
                         home.pos = r3->current.pos;
-                        field_0x650 = attList->getPid();
-                        mFollowTarget = 1;
+                        setTargetID(attList->getPid());
+                        setFollowTarget(true);
                     }
                 }
             }
@@ -1485,10 +1479,10 @@ void daAgb_c::modeMove() {
     
     if (!isFree()) {
         if (getFollowTarget() == 1) {
-            fopAc_ac_c* r3 = fopAcM_SearchByID(field_0x650);
+            fopAc_ac_c* r3 = fopAcM_SearchByID(getTargetID());
             if (r3 == NULL || !fopAcM_CheckStatusMap(r3, 0)) {
-                field_0x650 = -1;
-                mFollowTarget = 0;
+                setTargetID(fpcM_ERROR_PROCESS_ID_e);
+                setFollowTarget(false);
             }
         }
         
@@ -1500,7 +1494,7 @@ void daAgb_c::modeMove() {
                 home.pos = player->current.pos;
             }
         } else {
-            fopAc_ac_c* r3 = fopAcM_SearchByID(field_0x650);
+            fopAc_ac_c* r3 = fopAcM_SearchByID(getTargetID());
             current.pos = r3->current.pos;
             home.pos = r3->current.pos;
         }
@@ -1550,7 +1544,7 @@ void daAgb_c::modeProcCall() {
 static int daAgb_Execute(daAgb_c* i_this) {
     fopAc_ac_c* i_actor = i_this;
     daPy_py_c* player = daPy_getPlayerActorClass();
-    i_this->field_0x679 = 0;
+    i_this->field_0x679 = false;
 
     if (mDoGaC_GbaLink() && mDoGaC_RecvStatusCheck(4)) {
         i_this->FlagsRecv();
@@ -1573,11 +1567,11 @@ static int daAgb_Execute(daAgb_c* i_this) {
             i_this->FlagsSend(stage_type);
         }
 
-        i_this->field_0x680 = 1;
+        i_this->field_0x680 = true;
     } else if (i_this->field_0x680) {
-        i_this->field_0x680 = 0;
+        i_this->field_0x680 = false;
         i_this->resetCursor(true);
-        i_this->mIsActive = false;
+        i_this->offActive();
 
         if (i_this->field_0x65c != 0) {
             if (i_this->field_0x66b == 3 || i_this->field_0x66b == 12) {
@@ -1632,8 +1626,8 @@ static int daAgb_Execute(daAgb_c* i_this) {
         }
 
         if (i_this->isHold() && !var_r27 && i_this->mMode != 1) {
-            if (i_this->field_0x675 != 0) {
-                if (i_this->field_0x676 != 0) {
+            if (i_this->field_0x675) {
+                if (i_this->field_0x676) {
                     i_this->shape_angle.z += 0x1000;
                 } else {
                     i_this->shape_angle.z = fopAcM_searchPlayerAngleY(i_actor);
@@ -1661,7 +1655,7 @@ static int daAgb_Execute(daAgb_c* i_this) {
             } else {
                 i_this->mBrk.play();
             }
-        } else if (((i_this->isActive() || i_this->field_0x676 != 0) &&
+        } else if (((i_this->isActive() || i_this->field_0x676) &&
                     (i_this->isFree() || i_this->getFollowTarget() == 1)) ||
                    (i_this->field_0x66b == 14 && i_this->field_0x65c > 120))
         {
@@ -1679,7 +1673,7 @@ static int daAgb_Draw(daAgb_c* i_this) {
     u8 var_r6 = 1;
 
     if (mDoGaC_GbaLink()) {
-        if (i_this->field_0x66f != 0 && !daAgb_c::mFlags.field_0xa_7 &&
+        if (i_this->field_0x66f && !daAgb_c::mFlags.field_0xa_7 &&
             (!dComIfGp_event_runCheck() ||
              dComIfGp_evmng_startCheck("DEFAULT_AGB_LOOK_ATTENTION") ||
              i_this->mMode == 2) &&
@@ -1698,8 +1692,7 @@ static int daAgb_Draw(daAgb_c* i_this) {
 
             mDoExt_modelUpdateDL(i_this->mpModel);
 
-            if (i_this->field_0x679 != 0 &&
-                i_this->current.pos.y - i_this->mCrrPos.GetGroundH() > 2.5f)
+            if (i_this->field_0x679 && (i_this->current.pos.y - i_this->mCrrPos.GetGroundH()) > 2.5f)
             {
                 dComIfGd_setSimpleShadow2(&i_this->current.pos, i_this->mCrrPos.GetGroundH(), 50.0f,
                                           i_this->mCrrPos.mGndChk, 0, 1.0f, &i_this->mTexObj);
@@ -1783,16 +1776,16 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
         TestDataManager[6].field_0x0 = (u32)&a_this->mItem;
         TestDataManager[12].field_0x0 = (u32)&a_this->mShop;
 
-        a_this->field_0x670 = 0;
+        a_this->field_0x670 = false;
         a_this->field_0x65c = 0;
         a_this->field_0x66b = 0;
         a_this->field_0x66f = mDoGaC_getComEnable();
         a_this->mIsMsgSend = mDoGaC_getComEnable() > 0;
         a_this->field_0x654 = 0;
-        a_this->field_0x650 = -1;
-        a_this->mFollowTarget = 0;
-        a_this->field_0x67b = 0;
-        a_this->field_0x680 = 1;
+        a_this->setTargetID(fpcM_ERROR_PROCESS_ID_e);
+        a_this->setFollowTarget(false);
+        a_this->field_0x67b = false;
+        a_this->field_0x680 = true;
 
         fopAcM_setStageLayer(a_this);
         a_this->mEvtInfo.setEventName("DEFAULT_AGB_USE");

@@ -15,7 +15,7 @@ public:
             }
         }
 
-        dComIfG_resDelete(&mPhs, m_arcname);
+        dComIfG_resDelete(&mPhase, m_arcname);
     }
     inline s32 create();
     inline BOOL draw();
@@ -30,7 +30,7 @@ public:
     
     MtxP getJointMtx(const char*);
 
-    /* 0x0290 */ request_of_phase_process_class mPhs;
+    /* 0x0290 */ request_of_phase_process_class mPhase;
     /* 0x0298 */ J3DModel* mModel[2];
     /* 0x02A0 */ u8 dummy2[0x08];
     /* 0x02A8 */ mDoExt_McaMorf* mAnims[2];

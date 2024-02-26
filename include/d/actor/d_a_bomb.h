@@ -168,7 +168,7 @@ public:
 
 private:
     /* 0x290 */ procFunc mFunc;
-    /* 0x29C */ request_of_phase_process_class mPhs;
+    /* 0x29C */ request_of_phase_process_class mPhase;
     /* 0x2A4 */ J3DModel* mpModel;
     /* 0x2A8 */ mDoExt_bckAnm mBck0;
     /* 0x2B8 */ mDoExt_bckAnm mBck1;

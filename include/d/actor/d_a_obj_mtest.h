@@ -62,7 +62,7 @@ namespace daObjMtest {
     
     public:
         /* 0x2C8 */ Mtx mMtx;
-        /* 0x2F8 */ request_of_phase_process_class mPhs;
+        /* 0x2F8 */ request_of_phase_process_class mPhase;
         /* 0x300 */ J3DModel* mpModel;
         /* 0x304 */ dCcD_Stts mStts;
         /* 0x340 */ dCcD_Cyl mCyl;

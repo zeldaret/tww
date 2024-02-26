@@ -281,7 +281,7 @@ int daObjMknjD::Act_c::Create() {
     mAttentionInfo.mDistances[3] = 0x3D;
     mAttentionInfo.mFlags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
-    if (checkItemGet(mGiveItemNo, 1) == 0) {
+    if (!checkItemGet(mGiveItemNo, 1)) {
         m043F = 8;
         mEvtInfo.setXyCheckCB(daObjMknjD_XyCheckCB);
         mEvtInfo.setXyEventCB(daObjMknjD_XyEventCB);
@@ -859,7 +859,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             privateCut();
 
             if (!dComIfGp_event_runCheck()) {
-                if (checkItemGet(mGiveItemNo, 1) != 0) {
+                if (checkItemGet(mGiveItemNo, 1)) {
                     m043F = 0;
                 }
                 else {
@@ -877,7 +877,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 player->offPlayerNoDraw();
                 dComIfGp_event_reset();
 
-                if (checkItemGet(mGiveItemNo, 1) != 0) {
+                if (checkItemGet(mGiveItemNo, 1)) {
                     m043F = 0;
                 }
                 else {

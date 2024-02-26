@@ -67,7 +67,7 @@ s32 daObjYgush00_c::_create() {
             mType = 0;
     }
 
-    s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
+    s32 ret = dComIfG_resLoad(&mPhase, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x740) == 1) {
@@ -89,7 +89,7 @@ s32 daObjYgush00_c::_create() {
 
 /* 000004F4-00000524       .text _delete__14daObjYgush00_cFv */
 bool daObjYgush00_c::_delete() {
-    dComIfG_resDelete(&mPhs, l_arcname);
+    dComIfG_resDelete(&mPhase, l_arcname);
     return true;
 }
 

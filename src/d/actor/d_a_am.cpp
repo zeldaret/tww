@@ -1070,7 +1070,7 @@ static BOOL daAM_IsDelete(am_class* i_this) {
 
 /* 000039AC-00003A84       .text daAM_Delete__FP8am_class */
 static BOOL daAM_Delete(am_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "AM");
+    dComIfG_resDelete(&i_this->mPhase, "AM");
 
     for (int i = 0; i < 4; i++) {
         i_this->mSmokeCbs[i].end();
@@ -1139,7 +1139,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
 
     am_class* i_this = (am_class*)i_actor;
 
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "AM");
+    s32 phase_state = dComIfG_resLoad(&i_this->mPhase, "AM");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1C80)) {
             return cPhs_ERROR_e;

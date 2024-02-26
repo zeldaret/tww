@@ -485,7 +485,7 @@ public:
     static void offPlayerRoom() { m_playerRoom = false; }
     
 public:
-    /* 0x04EC */ request_of_phase_process_class mPhs;
+    /* 0x04EC */ request_of_phase_process_class mPhase;
     /* 0x04F4 */ J3DModel* mpHarpModel;
     /* 0x04F8 */ J3DModel* mpHarpLightModel;
     /* 0x04FC */ mDoExt_McaMorf2* mpMorf;

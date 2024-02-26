@@ -1252,7 +1252,7 @@ bool daBomb_c::bombDelete() {
 
     se_cannon_fly_stop();
     if(mType == 1) {
-        dComIfG_resDelete(&mPhs, m_attrType[mType].resName);
+        dComIfG_resDelete(&mPhase, m_attrType[mType].resName);
     }
 
     dKy_actor_addcol_set(0, 0, 0, 0.0f);
@@ -1333,7 +1333,7 @@ int daBomb_c::create() {
 
     int status;
     if(mType == 1) {
-        status = dComIfG_resLoad(&mPhs, m_attrType[mType].resName);
+        status = dComIfG_resLoad(&mPhase, m_attrType[mType].resName);
     }
     else {
         status = cPhs_COMPLEATE_e;

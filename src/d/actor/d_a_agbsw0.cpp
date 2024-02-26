@@ -655,7 +655,7 @@ BOOL daAgbsw0_c::ExeSubF2() {
                 agb->current.pos.z = z;
                 agb->home.pos.z = z;
                 agb->shape_angle.x = 0x3FFF;
-                agb->field_0x67f = 1;
+                agb->field_0x67f = true;
                 mOrigScaleX = mScale.x;
                 mOrigScaleZ = mScale.z;
                 mScale.z = 50.0f;
@@ -1294,13 +1294,13 @@ BOOL daAgbsw0_c::ExeSubB() {
     else if(restriction == 5) {
         if(agb) {
             if(HitCheck(player->current.pos, 60.0f)) {
-                agb->field_0x67d = 1;
+                agb->field_0x67d = true;
                 agb->field_0x662 = fopAcM_GetParam(this);
                 field_0x298 = 1;
             }
             else {
                 if(field_0x298 == 1) {
-                    agb->field_0x67d = 0;
+                    agb->field_0x67d = false;
                     field_0x298 = 0;
                 }
             }
@@ -1376,7 +1376,7 @@ BOOL daAgbsw0_c::ExeSubB() {
                 agb->offBombDeny();
             }
             else if(restriction != 6) {
-                agb->field_0x67b = 0;
+                agb->field_0x67b = false;
             }
         }
         
@@ -1400,13 +1400,13 @@ BOOL daAgbsw0_c::ExeSubB() {
             }
             else {
                 if(HitCheck(agb)) {
-                    agb->field_0x67b = 1;
-                    agb->field_0x65e = fopAcM_GetParam(this);
+                    agb->field_0x67b = true;
+                    agb->field_0x65e = fopAcM_GetParam(this) & 0xFFFF;
                     field_0x298 = 1;
                 }
                 else {
                     if(field_0x298 == 1) {
-                        agb->field_0x67b = 0;
+                        agb->field_0x67b = false;
                         field_0x298 = 0;
                     }
                 }
@@ -1438,7 +1438,7 @@ BOOL daAgbsw0_c::ExeSubD() {
                     if(agb->isActive() && agb->isFree() && HitCheck(agb)) {
                         MailSend(0x5F00, 0xC, 0xFF, 0xFF, 0x19);
                         agb->onHold();
-                        agb->field_0x675 = 1;
+                        agb->field_0x675 = true;
 
                         f32 x = current.pos.x;
                         agb->current.pos.x = x;
@@ -1450,7 +1450,7 @@ BOOL daAgbsw0_c::ExeSubD() {
                         agb->current.pos.z = z;
                         agb->home.pos.z = z;
                         agb->shape_angle.x = -0x3FFF;
-                        agb->field_0x67f = 1;
+                        agb->field_0x67f = true;
                         mOrigScaleX = mScale.x;
                         mOrigScaleZ = mScale.z;
                         mScale.z = 50.0f;
@@ -1465,7 +1465,7 @@ BOOL daAgbsw0_c::ExeSubD() {
                         agb->shape_angle.x = 0x3FFF;
                         agb->home.pos.y += 50.0f;
                         agb->current.pos.y = agb->home.pos.y;
-                        agb->field_0x676 = 1;
+                        agb->field_0x676 = true;
 
                         field_0x299 += 1;
                     }
@@ -2507,10 +2507,10 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
                 daAgbsw0_c::mFigureBeat = 0;
             }
             else if(temp == 5) {
-                agb->field_0x67d = 0;
+                agb->field_0x67d = false;
             }
             else {
-                agb->field_0x67b = 0;
+                agb->field_0x67b = false;
             }
         }
         else if(id == 4) {

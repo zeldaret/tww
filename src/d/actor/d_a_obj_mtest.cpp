@@ -279,7 +279,7 @@ s32 daObjMtest::Act_c::Mthd_Create() {
     M_type = prm_get_type();
     JUT_ASSERT(327, M_type < Type_Max);
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname[M_type]);
+    s32 phase_state = dComIfG_resLoad(&mPhase, M_arcname[M_type]);
     if (phase_state == cPhs_COMPLEATE_e) {
         s32 dzb_idx = 0;
         if (prm_get_arg1() == 1) {
@@ -322,7 +322,7 @@ BOOL daObjMtest::Act_c::Delete() {
 /* 00000960-000009B8       .text Mthd_Delete__Q210daObjMtest5Act_cFv */
 BOOL daObjMtest::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
-    dComIfG_resDelete(&mPhs, M_arcname[M_type]);
+    dComIfG_resDelete(&mPhase, M_arcname[M_type]);
     return result;
 }
 

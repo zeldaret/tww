@@ -409,7 +409,7 @@ namespace daBomb2 {
     int Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
 
-        int status = dComIfG_resLoad(&mPhs, attr().resName);
+        int status = dComIfG_resLoad(&mPhase, attr().resName);
 
         if(status == cPhs_COMPLEATE_e) {
             if(fopAcM_entrySolidHeap(this, solidHeapCB, attr().heapSize)) {
@@ -428,7 +428,7 @@ namespace daBomb2 {
     bool Act_c::_delete() {
         eff_fuse_end();
         mEnv.clean();
-        dComIfG_resDelete(&mPhs, attr().resName);
+        dComIfG_resDelete(&mPhase, attr().resName);
 
         return true;
     }

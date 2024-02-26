@@ -10,7 +10,7 @@ class dPath;
 
 class bk_class : public fopEn_enemy_c {
 public:
-    /* 0x02AC */ request_of_phase_process_class mPhs;
+    /* 0x02AC */ request_of_phase_process_class mPhase;
     /* 0x02B4 */ u8 mType;
     /* 0x02B5 */ u8 m02B5;
     /* 0x02B6 */ u8 m02B6;

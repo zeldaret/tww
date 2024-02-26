@@ -1354,7 +1354,7 @@ static BOOL daBk_IsDelete(bk_class* i_this) {
 
 /* 0000DD24-0000DDD8       .text daBk_Delete__FP8bk_class */
 static BOOL daBk_Delete(bk_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Bk");
+    dComIfG_resDelete(&i_this->mPhase, "Bk");
     if (i_this->heap) {
         i_this->mpMorf->stopZelAnime();
     }
@@ -1588,7 +1588,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, bk_class);
     bk_class* i_this = (bk_class*)i_actor;
     
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "Bk");
+    s32 phase_state = dComIfG_resLoad(&i_this->mPhase, "Bk");
     if (phase_state == cPhs_COMPLEATE_e) {
         i_this->mGbaName = 1;
         

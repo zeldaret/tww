@@ -192,7 +192,7 @@ inline s32 daBranch_c::create() {
 
     fopAcM_SetupActor(this, daBranch_c);
 
-    phase_state = dComIfG_resLoad(&mPhs, daBranch_c::m_arcname);
+    phase_state = dComIfG_resLoad(&mPhase, daBranch_c::m_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, daBranch_c::solidHeapCB, 0x4000)) {
             for (int i = 0; i < (s32)ARRAY_SIZE(mAnims); i++) {

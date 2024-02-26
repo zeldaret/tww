@@ -173,8 +173,7 @@ namespace daBomb2 {
         };
 
     private:
-        //some of these might need updating since i initially copied them from daBomb_c
-        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x290 */ request_of_phase_process_class mPhase;
         /* 0x298 */ J3DModel* mpModel;
         /* 0x29C */ mDoExt_bckAnm mBck0;
         /* 0x2AC */ mDoExt_brkAnm mBrk0;

@@ -429,7 +429,7 @@ s32 daNpc_Md_c::create() {
         heapSizeIdx = 1;
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, mModelArcName);
+    s32 phase_state = dComIfG_resLoad(&mPhase, mModelArcName);
     m313D = 1;
     if (phase_state == cPhs_COMPLEATE_e) {
         if (dComIfGp_getCb1Player() != NULL) {
@@ -3044,7 +3044,7 @@ void daNpc_Md_c::emitterDelete(JPABaseEmitter** pEmitter) {
 
 /* 000109DC-000110BC       .text __dt__10daNpc_Md_cFv */
 daNpc_Md_c::~daNpc_Md_c() {
-    dComIfG_resDelete(&mPhs, mModelArcName);
+    dComIfG_resDelete(&mPhase, mModelArcName);
     if (heap) {
         mpMorf->stopZelAnime();
     }

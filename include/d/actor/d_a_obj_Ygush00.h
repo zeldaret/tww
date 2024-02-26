@@ -23,7 +23,7 @@ public:
     static BOOL solidHeapCB(fopAc_ac_c*);
 
 public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel * mpModel;
     /* 0x29C */ mDoExt_btkAnm mBtkAnm;
     /* 0x2B0 */ mDoExt_bckAnm mBckAnm;

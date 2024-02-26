@@ -30,7 +30,7 @@ public:
     void flagOff(u16 flag) { mFlags &= ~flag; }
     void flagClr() { mFlags = 0; }
     BOOL flagCheck(u16 flag) { return mFlags & flag; }
-    request_of_phase_process_class* getPhase() { return &mPhs; }
+    request_of_phase_process_class* getPhase() { return &mPhase; }
     bool action() { return (this->*mActionFunc)(); }
     void setAction(ActionFunc func) { mActionFunc = func; }
     void deleteProc() {} // Maybe only used in the demo
@@ -79,7 +79,7 @@ public:
 
 public:
     /* 0x290 */ s32 mRoomNo;
-    /* 0x294 */ request_of_phase_process_class mPhs;
+    /* 0x294 */ request_of_phase_process_class mPhase;
     /* 0x29C */ J3DModel* mpChestMdl;
     /* 0x2A0 */ mDoExt_bckAnm mOpenAnm;
     /* 0x2B0 */ mDoExt_btkAnm* mpAppearTexAnm;

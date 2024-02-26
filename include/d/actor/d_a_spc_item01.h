@@ -9,7 +9,7 @@ class daSpcItem01_c : public daItemBase_c {
 public:
     void set_mtx();
     BOOL _delete();
-    cPhs__Step _create();
+    s32 _create();
     BOOL CreateInit();
     BOOL _execute();
     void set_effect();

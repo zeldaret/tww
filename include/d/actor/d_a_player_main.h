@@ -1692,7 +1692,7 @@ public:
     void offModeFlg(u32 flag) { mModeFlg &= ~flag; }
     u32 checkModeFlg(u32 flag) const { return mModeFlg & flag; }
     
-    request_of_phase_process_class* getPhase() { return &mPhsLoad; }
+    request_of_phase_process_class* getPhase() { return &mPhase; }
     
     J3DAnmTransform* getNowAnmPackUnder(daPy_UNDER idx) { return mAnmRatioUnder[idx].getAnmTransform(); }
     J3DAnmTransform* getNowAnmPackUpper(daPy_UPPER idx) { return mAnmRatioUpper[idx].getAnmTransform(); }
@@ -1798,7 +1798,7 @@ public:
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
 public:
-    /* 0x0320 */ request_of_phase_process_class mPhsLoad;
+    /* 0x0320 */ request_of_phase_process_class mPhase;
     /* 0x0328 */ J3DModelData* mpCLModelData;
     /* 0x032C */ J3DModel* mpCLModel;
     /* 0x0330 */ J3DModel* mpKatsuraModel;

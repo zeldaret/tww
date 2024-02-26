@@ -43,17 +43,17 @@ bool daObjGaship2::Act_c::create_heap() {
 /* 00000220-000002F8       .text _create__Q212daObjGaship25Act_cFv */
 s32 daObjGaship2::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
-    cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mphs, M_arcname);
-    if (phase == cPhs_COMPLEATE_e) {
+    int phase_state = dComIfG_resLoad(&mphs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             dComIfG_Bgsp()->Regist(mpBgW, this);
             mpBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);
         } else {
-            phase = cPhs_ERROR_e;
+            phase_state = cPhs_ERROR_e;
         }
     }
-    return phase;
+    return phase_state;
 }
 
 /* 000002F8-00000384       .text _delete__Q212daObjGaship25Act_cFv */

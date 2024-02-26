@@ -126,12 +126,8 @@ int daIkari_c::_create() {
 
             fopAcM_SetMtx(this, &mpModel->mBaseTransformMtx[0]);
             fopAcM_setCullSizeBox(this,
-                                  /* minX */ -160.0f * mScaleX,
-                                  /* minY */ -2500.0f * mScaleX,
-                                  /* minZ */ -600.0f * mScaleX,
-                                  /* maxX */ 160.0f * mScaleX,
-                                  /* maxY */ 100.0f * mScaleX,
-                                  /* maxZ */ 600.0f * mScaleX);
+                -160.0f * mScaleX, -2500.0f * mScaleX, -600.0f * mScaleX,
+                160.0f * mScaleX, 100.0f * mScaleX, 600.0f * mScaleX);
             fopAcM_setCullSizeFar(this, 10.0f);
 
             mTimer = (short)(int)cM_rndF(32768.0f);
