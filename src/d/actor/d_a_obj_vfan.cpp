@@ -20,7 +20,7 @@ static dCcD_SrcCyl cyl_check_src = {{
                                         /* SrcObjAt  Type    */ 0,
                                         /* SrcObjAt  Atp     */ 0,
                                         /* SrcObjAt  SPrm    */ 0,
-                                        /* SrcObjTg  Type    */ 1 << 29,
+                                        /* SrcObjTg  Type    */ AT_TYPE_PGANON_SWORD,
                                         /* SrcObjTg  SPrm    */ 9,
                                         /* SrcObjCo  SPrm    */ 0,
                                         /* SrcGObjAt Se      */ 0,
@@ -73,7 +73,7 @@ int daObjVfan::Act_c::Create() {
 
     mIsAlive = true;
     mBreakTimer = 0;
-    mSwitchNo = 0;
+    mState = 0;
 
     m_evid = dComIfGp_evmng_getEventIdx("Vfan", 0xff);
 
@@ -81,7 +81,7 @@ int daObjVfan::Act_c::Create() {
 }
 
 /* 00000214-000003D0       .text Mthd_Create__Q29daObjVfan5Act_cFv */
-cPhs__Step daObjVfan::Act_c::Mthd_Create() {
+s32 daObjVfan::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjVfan::Act_c);
 
     cPhs__Step phase_state;
@@ -134,7 +134,6 @@ void daObjVfan::Act_c::init_mtx() {
 
 /* 000006BC-000009B4       .text ParticleSet__Q29daObjVfan5Act_cFv */
 void daObjVfan::Act_c::ParticleSet() {
-    // was this manually unrolled?
     dComIfGp_particle_set(0x83cd, &current.pos, &current.angle);
     dComIfGp_particle_set(0x83ce, &current.pos, &current.angle);
     dComIfGp_particle_set(0x83cf, &current.pos, &current.angle);
@@ -150,7 +149,7 @@ void daObjVfan::Act_c::ParticleSet() {
 
 /* 000009B4-00000C74       .text Execute__Q29daObjVfan5Act_cFPPA3_A4_f */
 int daObjVfan::Act_c::Execute(Mtx** mtx) {
-    switch (mSwitchNo) {
+    switch (mState) {
     case 0:
         dComIfG_Ccsp()->Set(&mCyl);
         if (mCyl.ChkTgHit()) {
@@ -160,7 +159,7 @@ int daObjVfan::Act_c::Execute(Mtx** mtx) {
                 }
             }
             fopAcM_orderOtherEventId(this, m_evid);
-            mSwitchNo = 1;
+            mState = 1;
         }
 
         break;
@@ -172,7 +171,7 @@ int daObjVfan::Act_c::Execute(Mtx** mtx) {
 
             ParticleSet();
             mBreakTimer = 0;
-            mSwitchNo = 2;
+            mState = 2;
         } else {
             fopAcM_orderOtherEventId(this, m_evid);
         }
@@ -185,7 +184,7 @@ int daObjVfan::Act_c::Execute(Mtx** mtx) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_GN_SW_DR_BREAK, 0);
         }
 
-        mBreakTimer += 1;
+        mBreakTimer++;
 
         if (dComIfGp_evmng_endCheck(m_evid)) {
             fopAcM_onSwitch(this, prm_get_swSave());

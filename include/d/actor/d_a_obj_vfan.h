@@ -25,7 +25,7 @@ public:
 
     int CreateHeap();
     int Create();
-    cPhs__Step Mthd_Create();
+    s32 Mthd_Create();
     BOOL Delete();
     BOOL Mthd_Delete();
     void set_mtx();
@@ -39,7 +39,7 @@ public:
     /* 0x2D0 */ J3DModel* mpModel;
     /* 0x2D4 */ dCcD_Stts mStts;
     /* 0x310 */ dCcD_Cyl mCyl;
-    /* 0x440 */ int mSwitchNo;
+    /* 0x440 */ int mState;
     /* 0x444 */ bool mIsAlive;
     /* 0x448 */ int mBreakTimer;
 };
