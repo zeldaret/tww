@@ -9,14 +9,6 @@
 
 // maybe belongs in d_a_salvage.h?
 namespace daSalvage_prm {
-    // 0011c008 000010 80121748  4 getKindCmapNo__13daSalvage_prmFP10fopAc_ac_c 	d_salvage.o 
-    // 0011c058 00000c 80121798  4 getSwitchNo__13daSalvage_prmFP10fopAc_ac_c 	d_salvage.o 
-    // 0011c064 000030 801217a4  4 getRoomNo__13daSalvage_prmFP10fopAc_ac_c 	d_salvage.o 
-    // 0011c094 000030 801217d4  4 getSvNo__13daSalvage_prmFP10fopAc_ac_c 	d_salvage.o 
-    // 0011c0c4 000030 80121804  4 getType__13daSalvage_prmFP10fopAc_ac_c 	d_salvage.o 
-    // 0011c0f4 000030 80121834  4 getItemNo__13daSalvage_prmFP10fopAc_ac_c 	d_salvage.o 
-    // 0011c124 000030 80121864  4 getKind__13daSalvage_prmFP10fopAc_ac_c 	d_salvage.o 
-
     inline u8 getKindCmapNo(fopAc_ac_c* pact) { return pact->home.angle.z & 0x03; }
     inline s32 getSwitchNo(fopAc_ac_c* pact) { return pact->home.angle.z & 0xFF; }
     inline u8 getRoomNo(fopAc_ac_c* pact) { return fopAcM_GetParam(pact) >> 12; }
@@ -49,34 +41,42 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
     /* Nonmatching */
     JUT_ASSERT(0x8b, pact != 0);
     s8 roomNo = fopAcM_GetRoomNo(pact);
-    u8 kind = daSalvage_prm::getKind(pact);
-    u8 itemNo = daSalvage_prm::getItemNo(pact);
-    u8 type = daSalvage_prm::getType(pact);
-    u8 saveNo = daSalvage_prm::getSvNo(pact);
-    s8 cmapNo = daSalvage_prm::getRoomNo(pact);
+    u32 kind = daSalvage_prm::getKind(pact);
+    u32 itemNo = daSalvage_prm::getItemNo(pact);
+    u32 type = daSalvage_prm::getType(pact);
+    u32 saveNo = daSalvage_prm::getSvNo(pact);
+    s8 roomNoPrm = daSalvage_prm::getRoomNo(pact);
+    // s8 cmapNo;
     s32 switchNo = daSalvage_prm::getSwitchNo(pact);
     s32 no;
 
     bool invalid = false;
     if (roomNo != 0) {
         no = mRoomNum + MAX_SEA;
-        cmapNo = roomNo;
+        // cmapNo = roomNoPrm;
+        roomNoPrm = roomNo;
+    } else {
+        no = mSeaNum;
+        // cmapNo = roomNoPrm;
+    }
+
+    no = roomNo != 0 ? mRoomNum + MAX_SEA : mSeaNum;
+    if (roomNo != 0) {
         if (mRoomNum > MAX_ROOM)
             invalid = true;
     } else {
-        no = mSeaNum;
         if (mSeaNum > MAX_SEA)
             invalid = true;
     }
 
-    if (cmapNo <= 0 || cmapNo > 64)
+    if (roomNoPrm <= 0 || roomNoPrm > 64)
         invalid = true;
 
     if (kind == 2 || kind == 3) {
         if (saveNo > 15)
             invalid = true;
     } else if (kind == 0) {
-        if (saveNo <= 0 || saveNo > 128)
+        if (saveNo < 1 || saveNo > 128)
             invalid = true;
     }
     if (kind == 2 && switchNo == 0xFF)
@@ -85,32 +85,32 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
     if (invalid)
         return;
 
-    mInfo[no].mFlag = 0;
-    mInfo[no].mFlag &= ~1;
+    mInfo[no].resetFlag();
+    mInfo[no].clrFlag(1);
     switch (kind) {
     case 0:
-        if (dComIfGs_isCompleteCollectMap(cmapNo))
+        if (dComIfGs_isCompleteCollectMap(saveNo))
             return;
         if (daSalvage_prm::getKindCmapNo(pact) != dComIfGs_getRandomSalvagePoint())
             return;
-        mInfo[no].mFlag |= 1;
+        mInfo[no].setFlag(1);
         break;
     case 2:
         if (!fopAcM_isSwitch(pact, switchNo))
-            mInfo[no].mFlag |= 1;
+            mInfo[no].setFlag(1);
     case 3:
-        if (cmapNo != 31 && dComIfGs_isOceanSvBit(cmapNo, saveNo))
+        if (saveNo != 31 && dComIfGs_isOceanSvBit(roomNoPrm, saveNo))
             return;
         break;
     case 4:
-        if (cmapNo != 31 && dComIfGs_isOceanSvBit(cmapNo, saveNo))
+        if (saveNo != 31 && dComIfGs_isOceanSvBit(roomNoPrm, saveNo))
             return;
         if (!dKy_daynight_check())
-            mInfo[no].mFlag |= 1;
+            mInfo[no].setFlag(1);
         break;
     case 6:
-        if (dKy_moon_type_chk() || dComIfGs_isEventBit(daSalvage_c::m_savelabel[saveNo]))
-            mInfo[no].mFlag |= 1;
+        if (dKy_moon_type_chk() || dComIfGs_isEventBit(daSalvage_c::m_savelabel[saveNo & 0xFF]))
+            mInfo[no].setFlag(1);
         break;
     }
 
@@ -174,7 +174,7 @@ void dSalvage_control_c::init_one_sub(int no) {
     mInfo[no].mItemNo = 0;
     mInfo[no].mSwitchNo = 0;
     mInfo[no].mEmtr = NULL;
-    mInfo[no].mFlag = 0;
+    mInfo[no].resetFlag();
 }
 
 /* 800CCCA8-800CCDAC       .text calcDistanceXZ__18dSalvage_control_cFv */
@@ -260,12 +260,12 @@ u8 dSalvage_control_c::getDrawMode(int no) {
 
 /* 800CCEBC-800CCEDC       .text checkRegist__18dSalvage_control_cFi */
 BOOL dSalvage_control_c::checkRegist(int no) {
-    /* Nonmatching */
+    return mInfo[no].mRoomNo != -1 ? TRUE : FALSE;
 }
 
 /* 800CCEDC-800CCEF8       .text checkUsed__18dSalvage_control_cFi */
 bool dSalvage_control_c::checkUsed(int no) {
-    return !(mInfo[no].mFlag & 1);
+    return !mInfo[no].checkFlag(1);
 }
 
 /* 800CCEF8-800CCF1C       .text setPos__18dSalvage_control_cFi4cXyz */
@@ -275,12 +275,12 @@ void dSalvage_control_c::setPos(int no, cXyz pos) {
 
 /* 800CCF1C-800CCF34       .text setFlag__18dSalvage_control_cFiUc */
 void dSalvage_control_c::setFlag(int no, u8 v) {
-    mInfo[no].mFlag |= v;
+    mInfo[no].setFlag(v);
 }
 
 /* 800CCF34-800CCF4C       .text clrFlag__18dSalvage_control_cFiUc */
 void dSalvage_control_c::clrFlag(int no, u8 v) {
-    mInfo[no].mFlag &= ~v;
+    mInfo[no].clrFlag(v);
 }
 
 /* 800CCF4C-800CCF5C       .text setNowAlpha__18dSalvage_control_cFiUc */

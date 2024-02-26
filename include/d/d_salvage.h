@@ -2,11 +2,19 @@
 #define D_SALVAGE_H
 
 #include "SSystem/SComponent/c_xyz.h"
+#include "SSystem/SComponent/c_lib.h"
 
 class JPABaseEmitter;
 class fopAc_ac_c;
 
-struct dSalvage_info_c {
+class dSalvage_info_c {
+public:
+    void setFlag(u8 bit) { cLib_onBit(mFlag, bit); }
+    void clrFlag(u8 bit) { cLib_offBit(mFlag, bit); }
+    void resetFlag() { mFlag = 0; }
+    u8 checkFlag(u8 bit) { return cLib_checkBit(mFlag, bit); }
+
+public:
     /* 0x00 */ cXyz mPos;
     /* 0x0C */ cXyz mScale;
     /* 0x18 */ f32 mR;
