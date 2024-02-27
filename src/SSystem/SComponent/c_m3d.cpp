@@ -16,7 +16,7 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "float.h"
 
-const f32 G_CM3D_F_ABS_MIN = 3.814697e-06;
+const f32 G_CM3D_F_ABS_MIN = 3.8146973e-06f;
 
 // TODO: these should be in .sdata2
 u32 BPCP_OUTCODE0 = 0x00000001;
@@ -355,8 +355,13 @@ bool cM3d_CrossX_Tri(const cM3dGTri*, const Vec*) {
 }
 
 /* 8024BF1C-8024BFA0       .text cM3d_CrossX_Tri__FPC8cM3dGTriPC3VecPf */
-void cM3d_CrossX_Tri(const cM3dGTri*, const Vec*, f32*) {
-    /* Nonmatching */
+bool cM3d_CrossX_Tri(const cM3dGTri* tri, const Vec* r30, f32* r31) {
+    if (cM3d_CrossX_Tri(tri, r30)) {
+        *r31 = ((r30->y * -tri->GetNP()->y) - (r30->z * tri->GetNP()->z) - tri->GetD()) / tri->GetNP()->x;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8024BFA0-8024C188       .text cM3d_CrossY_Tri__FPC8cM3dGTriPC3Vec */
@@ -375,8 +380,13 @@ bool cM3d_CrossY_Tri_Front(const Vec&, const Vec&, const Vec&, const Vec*) {
 }
 
 /* 8024C4D0-8024C554       .text cM3d_CrossY_Tri__FPC8cM3dGTriPC3VecPf */
-bool cM3d_CrossY_Tri(const cM3dGTri*, const Vec*, f32*) {
-    /* Nonmatching */
+bool cM3d_CrossY_Tri(const cM3dGTri* tri, const Vec* r30, f32* r31) {
+    if (cM3d_CrossY_Tri(tri, r30)) {
+        *r31 = ((r30->x * -tri->GetNP()->x) - (r30->z * tri->GetNP()->z) - tri->GetD()) / tri->GetNP()->y;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8024C554-8024C738       .text cM3d_CrossY_Tri__FPC8cM3dGTriPC3Vecf */
@@ -400,18 +410,40 @@ bool cM3d_CrossZ_Tri(const cM3dGTri*, const Vec*) {
 }
 
 /* 8024CBF4-8024CC78       .text cM3d_CrossZ_Tri__FPC8cM3dGTriPC3VecPf */
-void cM3d_CrossZ_Tri(const cM3dGTri*, const Vec*, f32*) {
-    /* Nonmatching */
+bool cM3d_CrossZ_Tri(const cM3dGTri* tri, const Vec* r30, f32* r31) {
+    if (cM3d_CrossZ_Tri(tri, r30)) {
+        *r31 = ((r30->x * -tri->GetNP()->x) - (r30->y * tri->GetNP()->y) - tri->GetD()) / tri->GetNP()->z;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8024CC78-8024CD50       .text cM3d_Cross_LinTri__FPC8cM3dGLinPC8cM3dGTriP3Vecbb */
-bool cM3d_Cross_LinTri(const cM3dGLin*, const cM3dGTri*, Vec*, bool, bool) {
-    /* Nonmatching */
+bool cM3d_Cross_LinTri(const cM3dGLin* lin, const cM3dGTri* tri, Vec* dst, bool a, bool b) {
+    if (!cM3d_Cross_LinPla(lin, tri, dst, a, b)) {
+        return false;
+    }
+    if ((fabsf(tri->GetNP()->x) < 0.008f || cM3d_CrossX_Tri(tri, dst)) &&
+        (fabsf(tri->GetNP()->y) < 0.008f || cM3d_CrossY_Tri(tri, dst)) &&
+        (fabsf(tri->GetNP()->z) < 0.008f || cM3d_CrossZ_Tri(tri, dst))
+    ) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8024CD50-8024CE0C       .text cM3d_Cross_LinTri_Easy__FPC8cM3dGTriPC3Vec */
-bool cM3d_Cross_LinTri_Easy(const cM3dGTri*, const Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_LinTri_Easy(const cM3dGTri* tri, const Vec* r31) {
+    if ((cM3d_IsZero(tri->GetNP()->x) || cM3d_CrossX_Tri(tri, r31)) &&
+        (cM3d_IsZero(tri->GetNP()->y) || cM3d_CrossY_Tri(tri, r31)) &&
+        (cM3d_IsZero(tri->GetNP()->z) || cM3d_CrossZ_Tri(tri, r31))
+    ) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8024CE0C-8024CE54       .text cM3d_Cross_SphPnt__FPC8cM3dGSphPC3Vec */
@@ -509,10 +541,11 @@ int cM3d_Cross_CylPntPnt(const cM3dGCyl* cyl, const Vec* a, const Vec* b, Vec* d
 /* 8024FB04-8024FB68       .text cM3d_Cross_CylPnt__FPC8cM3dGCylPC3Vec */
 bool cM3d_Cross_CylPnt(const cM3dGCyl* cyl, const Vec* pt) {
     /* Nonmatching */
-    f32 dX = cyl->GetCP()->x - pt->x;
-    f32 dZ = cyl->GetCP()->z - pt->z;
-    f32 maxY = cyl->GetCP()->y + cyl->GetH();
-    if (dX * dX + dZ * dZ < cyl->GetR() * cyl->GetR() && cyl->GetCP()->y < pt->y && maxY > pt->y) {
+    const cXyz& center = cyl->GetC();
+    f32 dX = center.x - pt->x;
+    f32 dZ = center.z - pt->z;
+    f32 maxY = center.y + cyl->GetH();
+    if (dX * dX + dZ * dZ < cyl->GetR() * cyl->GetR() && center.y < pt->y && maxY > pt->y) {
         return true;
     } else {
         return false;
