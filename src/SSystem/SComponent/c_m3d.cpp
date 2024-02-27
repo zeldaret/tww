@@ -65,31 +65,54 @@ inline f32 cM3d_Len2dSq(f32 x0, f32 y0, f32 x1, f32 y1) {
 }
 
 /* 8024A4B4-8024A56C       .text cM3d_Len2dSqPntAndSegLine__FffffffPfPfPf */
-bool cM3d_Len2dSqPntAndSegLine(f32 xp, f32 yp, f32 x0, f32 y0, f32 x1, f32 y1, f32* outx, f32* outy, f32* seg) {
-    /* Nonmatching */
+bool cM3d_Len2dSqPntAndSegLine(f32 xp, f32 yp, f32 x0, f32 y0, f32 x1, f32 y1, f32* outx, f32* outy,
+                               f32* seg) {
     bool ret = false;
     f32 xd = x1 - x0;
     f32 yd = y1 - y0;
-    f32 dot = (xd*xd + yd*yd);
+    f32 dot = (xd * xd + yd * yd);
     if (cM3d_IsZero(dot)) {
         *seg = 0.0f;
-        return ret;
+        return false;
     }
 
-    f32 t = (x1 * (xp - x0) + y1 * (yp - y0)) / dot;
-    if (t >= 0.0f && t <= 1.0f) {
+    f32 mag = (xd * (xp - x0) + yd * (yp - y0)) / dot;
+    if (mag >= 0.0f && mag <= 1.0f) {
         ret = true;
     }
 
-    *outx = x0 + xd * t;
-    *outy = y0 + yd * t;
+    *outx = x0 + xd * mag;
+    *outy = y0 + yd * mag;
     *seg = cM3d_Len2dSq(*outx, *outy, xp, yp);
     return ret;
 }
 
 /* 8024A56C-8024A670       .text cM3d_Len3dSqPntAndSegLine__FPC8cM3dGLinPC3VecP3VecPf */
-bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin*, const Vec*, Vec*, f32*) {
-    /* Nonmatching */
+bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin* line, const Vec* pos, Vec* pDst, f32* pT) {
+    Vec work2;
+    Vec work1;
+
+    PSVECSubtract(&line->mEnd, &line->mStart, &work2);
+    f32 midPoint = PSVECDotProduct(&work2, &work2);
+    if ((cM3d_IsZero(midPoint))) {
+        *pT = 0.0f;
+        return false;
+    }
+
+    PSVECSubtract(pos, &line->mStart, &work1);
+    midPoint = PSVECDotProduct(&work1, &work2) / midPoint;
+
+    bool success;
+    if (midPoint < 0.0f || midPoint > 1.0f) {
+        success = false;
+    } else {
+        success = true;
+    };
+
+    PSVECScale(&work2, &work2, midPoint);
+    PSVECAdd(&work2, &line->mStart, pDst);
+    *pT = PSVECSquareDistance(pDst, pos);
+    return success;
 }
 
 /* 8024A670-8024A6F0       .text cM3d_SignedLenPlaAndPos__FPC8cM3dGPlaPC3Vec */

@@ -78,6 +78,7 @@ bool cM3d_Cross_TriTri(const cM3dGTri&, const cM3dGTri&, Vec*);
 bool cM3d_Cross_CpsTri(const cM3dGCps&, cM3dGTri, Vec*);
 void cM3d_CalcVecAngle(const Vec&, short*, short*);
 void cM3d_CalcVecZAngle(const Vec&, csXyz*);
+bool cM3d_NearPos_Cps(const cM3dGCps&, const Vec&, Vec*);
 void cM3d_PlaneCrossLineProcWork(f32, f32, f32, f32, f32, f32, f32, f32*, f32*);
 int cM3d_2PlaneCrossLine(const cM3dGPla&, const cM3dGPla&, cM3dGLin*);
 bool cM3d_3PlaneCrossPos(const cM3dGPla&, const cM3dGPla&, const cM3dGPla&, Vec*);

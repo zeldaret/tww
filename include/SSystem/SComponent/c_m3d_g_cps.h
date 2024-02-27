@@ -36,7 +36,9 @@ public:
     f32 GetR() const { return mRadius; }
     void SetR(f32 r) { mRadius = r; }
 
-    void NearPos(cXyz, cXyz*) const {}
+    bool NearPos(const cXyz& pos, cXyz* outPos) {
+        return cM3d_NearPos_Cps(*this, pos, outPos);
+    }
 };  // Size = 0x20
 
 STATIC_ASSERT(0x20 == sizeof(cM3dGCps));
