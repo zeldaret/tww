@@ -13,10 +13,12 @@
 #include "SSystem/SComponent/c_m3d_g_sph.h"
 #include "SSystem/SComponent/c_m3d_g_tri.h"
 #include "SSystem/SComponent/c_math.h"
+#include "SSystem/SComponent/c_sxyz.h"
 #include "float.h"
 
+const f32 G_CM3D_F_ABS_MIN = 3.814697e-06;
+
 // TODO: these should be in .sdata2
-f32 G_CM3D_F_ABS_MIN = 3.814697e-06;
 u32 BPCP_OUTCODE0 = 0x00000001;
 u32 BPCP_OUTCODE1 = 0x00000002;
 u32 BPCP_OUTCODE4 = 0x00000010;
@@ -92,15 +94,15 @@ bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin* line, const Vec* pos, Vec* pDst, 
     Vec work2;
     Vec work1;
 
-    PSVECSubtract(&line->mEnd, &line->mStart, &work2);
-    f32 midPoint = PSVECDotProduct(&work2, &work2);
+    VECSubtract(line->GetEndP(), line->GetStartP(), &work2);
+    f32 midPoint = VECDotProduct(&work2, &work2);
     if ((cM3d_IsZero(midPoint))) {
         *pT = 0.0f;
         return false;
     }
 
-    PSVECSubtract(pos, &line->mStart, &work1);
-    midPoint = PSVECDotProduct(&work1, &work2) / midPoint;
+    VECSubtract(pos, line->GetStartP(), &work1);
+    midPoint = VECDotProduct(&work1, &work2) / midPoint;
 
     bool success;
     if (midPoint < 0.0f || midPoint > 1.0f) {
@@ -109,9 +111,9 @@ bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin* line, const Vec* pos, Vec* pDst, 
         success = true;
     };
 
-    PSVECScale(&work2, &work2, midPoint);
-    PSVECAdd(&work2, &line->mStart, pDst);
-    *pT = PSVECSquareDistance(pDst, pos);
+    VECScale(&work2, &work2, midPoint);
+    VECAdd(&work2, line->GetStartP(), pDst);
+    *pT = VECSquareDistance(pDst, pos);
     return success;
 }
 
@@ -528,13 +530,53 @@ bool cM3d_Cross_CpsCyl(const cM3dGCps&, const cM3dGCyl&, Vec*) {
 }
 
 /* 802506D4-80250840       .text cM3d_Cross_CpsSph_CrossPos__FRC8cM3dGCpsRC8cM3dGSphRC3VecP3Vec */
-bool cM3d_Cross_CpsSph_CrossPos(const cM3dGCps&, const cM3dGSph&, const Vec&, Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_CpsSph_CrossPos(const cM3dGCps& param_1, const cM3dGSph& param_2, const Vec& param_3, Vec* param_4) {
+    Vec aVStack_70;
+    Vec VStack_7c;
+    int iVar5 = cM3d_Cross_LinSph_CrossPos(param_2, param_1, &aVStack_70, &VStack_7c);
+    if (iVar5 == 1) {
+        *param_4 = aVStack_70;
+    } else if (iVar5 == 2) {
+        f32 dVar8 = VECSquareDistance(&aVStack_70, param_1.GetStartP());
+        f32 dVar9 = VECSquareDistance(&VStack_7c, param_1.GetStartP());
+        if (dVar8 < dVar9) {
+            *param_4 = aVStack_70;
+        } else {
+            *param_4 = VStack_7c;
+        }
+    } else {
+        f32 dVar8 = param_1.GetR() + param_2.GetR();
+        *param_4 = param_3;
+        if (cM3d_IsZero(dVar8)) {
+            *param_4 = param_3;
+        }
+        Vec auStack_88;
+        VECSubtract(&param_3, param_2.GetCP(), &auStack_88);
+        VECScale(&auStack_88, &auStack_88, param_1.GetR() / dVar8);
+        VECAdd(param_4, &auStack_88, param_4);
+    }
 }
 
 /* 80250840-802509B0       .text cM3d_Cross_CpsSph__FRC8cM3dGCpsRC8cM3dGSphP3Vec */
-bool cM3d_Cross_CpsSph(const cM3dGCps&, const cM3dGSph&, Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_CpsSph(const cM3dGCps& param_1, const cM3dGSph& param_2, Vec* param_3) {
+    f32 local_38 = VECDistance(param_1.GetStartP(), param_2.GetCP());
+    if (local_38 < param_1.GetR() + param_2.GetR()) {
+        cM3d_Cross_CpsSph_CrossPos(param_1, param_2, *param_1.GetStartP(), param_3);
+        return true;
+    }
+    local_38 = VECDistance(param_1.GetEndP(), param_2.GetCP());
+    if (local_38 < param_1.GetR() + param_2.GetR()) {
+        cM3d_Cross_CpsSph_CrossPos(param_1, param_2, *param_1.GetEndP(), param_3);
+        return true;
+    }
+    Vec auStack_34;
+    if (cM3d_Len3dSqPntAndSegLine(&param_1, param_2.GetCP(), &auStack_34, &local_38) != 0) {
+        if (sqrtf(local_38) < param_1.GetR() + param_2.GetR()) {
+            cM3d_Cross_CpsSph_CrossPos(param_1, param_2, auStack_34, param_3);
+            return true;
+        }
+    }
+    return false;
 }
 
 /* 802509B0-80250D70       .text cM3d_Cross_TriTri__FRC8cM3dGTriRC8cM3dGTriP3Vec */
@@ -548,7 +590,7 @@ bool cM3d_Cross_CpsTri(const cM3dGCps&, cM3dGTri, Vec*) {
 }
 
 /* 80251280-802514EC       .text cM3d_NearPos_Cps__FRC8cM3dGCpsRC3VecP3Vec */
-void cM3d_NearPos_Cps(const cM3dGCps&, const Vec&, Vec*) {
+bool cM3d_NearPos_Cps(const cM3dGCps&, const Vec&, Vec*) {
     /* Nonmatching */
 }
 
@@ -559,8 +601,10 @@ void cM3d_CalcVecAngle(const Vec& vec, s16* a, s16* b) {
 }
 
 /* 80251560-80251634       .text cM3d_CalcVecZAngle__FRC3VecP5csXyz */
-void cM3d_CalcVecZAngle(const Vec&, csXyz*) {
-    /* Nonmatching */
+void cM3d_CalcVecZAngle(const Vec& param_0, csXyz* param_1) {
+    param_1->x = -cM_atan2s(param_0.y, sqrtf(param_0.x * param_0.x + param_0.z * param_0.z));;
+    param_1->y = cM_atan2s(param_0.x, param_0.z);
+    param_1->z = 0;
 }
 
 /* 80251634-8025172C       .text cM3d_UpMtx_Base__FRC3VecRC3VecPA4_f */

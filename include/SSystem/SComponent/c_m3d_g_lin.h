@@ -6,12 +6,12 @@
 
 // Line
 class cM3dGLin {
-    // private:
-public:
+private:
     /* 0x00 */ cXyz mStart;
     /* 0x0C */ cXyz mEnd;
     /* 0x18 vtable */
 
+public:
     cM3dGLin() {}
     cM3dGLin(const cXyz&, const cXyz&);
     virtual ~cM3dGLin() {}
@@ -38,7 +38,7 @@ public:
     cXyz* GetEndP() { return &mEnd; }
     const cXyz& GetEnd() const { return mEnd; }
     cXyz& GetEnd() { return mEnd; }
-    void GetLen() const { /* TODO */ }
+    f32 GetLen() const { return VECDistance(&mStart, &mEnd); }
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cM3dGLin));

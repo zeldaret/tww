@@ -27,7 +27,7 @@ public:
         SetR(src.mRadius);
     }
     void SetCps(const cM3dGCps& cps) {
-        Set(cps.mStart, cps.mEnd, cps.mRadius);
+        Set(cps.GetStart(), cps.GetEnd(), cps.GetR());
     }
     bool Cross(cM3dGCps const* cps, cXyz* xyz) const { return cM3d_Cross_CpsCps(*this, *cps, xyz); }
     bool Cross(cM3dGCyl const* cyl, cXyz* xyz) const { return cM3d_Cross_CpsCyl(*this, *cyl, xyz); }

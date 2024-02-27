@@ -9,8 +9,7 @@
 /* 80247418-80247480       .text ct__11cBgS_LinChkFv */
 void cBgS_LinChk::ct() {
     cXyz zero = cXyz::Zero;
-    mLin.mStart = zero;
-    mLin.mEnd = zero;
+    mLin.SetStartEnd(zero, zero);
     field_0x40 = zero;
     SetActorPid(fpcM_ERROR_PROCESS_ID_e);
     mFlag = 0;
@@ -20,8 +19,7 @@ void cBgS_LinChk::ct() {
 
 /* 80247480-80247500       .text Set2__11cBgS_LinChkFP4cXyzP4cXyzUi */
 void cBgS_LinChk::Set2(cXyz* pStart, cXyz* pEnd, unsigned int actorPid) {
-    mLin.mStart.set(*pStart);
-    mLin.mEnd.set(*pEnd);
+    mLin.SetStartEnd(*pStart, *pEnd);
     field_0x40 = *pEnd;
     SetActorPid(actorPid);
     ClrHit();
