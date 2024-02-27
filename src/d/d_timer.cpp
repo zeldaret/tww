@@ -8,6 +8,7 @@
 #include "d/d_item.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
+#include "m_Do/m_Do_audio.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRArchive.h"
@@ -122,18 +123,18 @@ s32 dTimer_c::_create() {
     field_0x15c = 0;
 
     u32* seTable = NULL;
-    field_0x16c = 0;
-    field_0x168 = 0;
+    mSeTableIndex = 0;
+    mSeTimeLeft = 0;
     switch (mTimerMode) {
     case 2: seTable = ShipRaceSeTable; break;
     case 3: seTable = VolcanoSeTable; break;
     }
     if (seTable != NULL) {
-        while (field_0x168 >= 0) {
-            field_0x168 = seTable[field_0x16c * 2 + 0];
-            if (getRestTimeMs() > field_0x168)
+        while (mSeTimeLeft >= 0) {
+            mSeTimeLeft = seTable[mSeTableIndex * 2 + 0];
+            if (getRestTimeMs() > mSeTimeLeft)
                 break;
-            field_0x16c++;
+            mSeTableIndex++;
         }
     }
 
@@ -235,8 +236,11 @@ BOOL dTimer_c::_delete() {
 }
 
 /* 8023C0B8-8023C110       .text RestTimeCheck__8dTimer_cFi */
-void dTimer_c::RestTimeCheck(int) {
-    /* Nonmatching */
+BOOL dTimer_c::RestTimeCheck(int time) {
+    bool ret = false;
+    if (getRestTimeMs() <= time && time > field_0x150)
+        ret = true;
+    return ret;
 }
 
 /* 8023C110-8023C124       .text deleteCheck__8dTimer_cFv */
@@ -246,7 +250,22 @@ BOOL dTimer_c::deleteCheck() {
 
 /* 8023C124-8023C268       .text SetSE__8dTimer_cFv */
 void dTimer_c::SetSE() {
-    /* Nonmatching */
+    if (field_0x162 == 0 && mTimerMode != 4 && (getRestTimeMs() / 1000) < (field_0x150 / 1000))
+        mDoAud_seStart(JA_SE_MINIGAME_TIMER_EACH);
+    
+    if (RestTimeCheck(mSeTimeLeft)) {
+        u32* seTable;
+        switch (mTimerMode) {
+        case 2: seTable = ShipRaceSeTable; break;
+        case 3: seTable = VolcanoSeTable; break;
+        default: return;
+        }
+        if (seTable[mSeTableIndex * 2 + 1] != 0xFFFFFFFF) {
+            mDoAud_seStart(seTable[mSeTableIndex * 2 + 1]);
+            mSeTableIndex++;
+            mSeTimeLeft = seTable[mSeTableIndex * 2 + 0];
+        }
+    }
 }
 
 /* 8023C268-8023C2CC       .text start__8dTimer_cFv */
@@ -477,13 +496,13 @@ void dDlst_TimerScrnDraw_c::setRupee(s16 num) {
         s32 r010 = (mRupeeNum % 100) / 10;
         s32 r100 = mRupeeNum / 100;
 
-        changeNumberTexture(mRupeeNumber[0], r001);
-        changeNumberTexture(mRupeeNumber[1], r010);
         changeNumberTexture(mRupeeNumber[2], r100);
+        changeNumberTexture(mRupeeNumber[1], r010);
+        changeNumberTexture(mRupeeNumber[0], r001);
 
-        changeNumberTexture(mRupeeNumberShadow[0], r001);
-        changeNumberTexture(mRupeeNumberShadow[1], r010);
         changeNumberTexture(mRupeeNumberShadow[2], r100);
+        changeNumberTexture(mRupeeNumberShadow[1], r010);
+        changeNumberTexture(mRupeeNumberShadow[0], r001);
     }
 
     if (dComIfGp_event_getMode() == dEvtMode_TALK_e) {
@@ -570,8 +589,6 @@ void dDlst_TimerScrnDraw_c::setShowType(u8 type) {
 
 /* 8023D1F8-8023D318       .text setIconType__21dDlst_TimerScrnDraw_cFPvUc */
 void dDlst_TimerScrnDraw_c::setIconType(void* tex, u8 type) {
-    /* Nonmatching */
-
     u32 itemNo;
     switch (type) {
     case 0:
@@ -583,12 +600,11 @@ void dDlst_TimerScrnDraw_c::setIconType(void* tex, u8 type) {
     case 4:
         itemNo = dItem_FATHER_LETTER_e;
         break;
-    default:
-        itemNo = (u32)tex;
-        break;
     }
 
-    JKRArchive::readTypeResource(tex, 0xC00, 'TIMG', dItem_data::getTexture(itemNo), dComIfGp_getItemIconArchive());
+    JKRArchive* arc = dComIfGp_getItemIconArchive();
+    const char* iconTex = dItem_data::getTexture(itemNo);
+    JKRArchive::readTypeResource(tex, 0xC00, 'TIMG', iconTex, arc);
     mIconPicture = new J2DPicture((ResTIMG*)tex);
     ((J2DPicture*)mRupee.pane)->setWhite(JUtility::TColor(0));
     ((J2DPicture*)mRupeeShadow.pane)->setWhite(JUtility::TColor(0));
@@ -598,17 +614,19 @@ void dDlst_TimerScrnDraw_c::setIconType(void* tex, u8 type) {
 /* 8023D318-8023D644       .text anime__21dDlst_TimerScrnDraw_cFv */
 void dDlst_TimerScrnDraw_c::anime() {
     /* Nonmatching */
+    static const s16 animeFrame[] = { 7, 15, 22 };
 }
 
 /* 8023D644-8023D848       .text closeAnime__21dDlst_TimerScrnDraw_cFv */
 BOOL dDlst_TimerScrnDraw_c::closeAnime() {
     /* Nonmatching */
-    bool ret = false;
+    BOOL ret = FALSE;
     field_0x234++;
     if (field_0x234 <= 7) {
-        s32 alphaStep = 7 - field_0x234;
+        f32 x = (((f32)field_0x234 * (f32)field_0x234) / 49.0f);
+        s16 alphaStep = 7 - field_0x234;
         f32 alpha = ((f32)alphaStep * (f32)alphaStep) / 49.0f;
-        f32 x = (((f32)field_0x234 * (f32)field_0x234) / 49.0f) * -50.0f;
+        x = -50.0f * x;
         fopMsgM_paneTrans(&mClockIcon, x, 0.0f);
         fopMsgM_paneTrans(&mClockBG, x, 0.0f);
         fopMsgM_paneTrans(&mTimerNumberBG, x, 0.0f);
@@ -627,7 +645,7 @@ BOOL dDlst_TimerScrnDraw_c::closeAnime() {
     }
 
     if (field_0x234 >= 7)
-        ret = true;
+        ret = TRUE;
 
     return ret;
 }

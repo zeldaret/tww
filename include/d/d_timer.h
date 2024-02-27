@@ -61,7 +61,7 @@ public:
     BOOL _execute();
     BOOL _draw();
     BOOL _delete();
-    void RestTimeCheck(int);
+    BOOL RestTimeCheck(int);
     BOOL deleteCheck();
     void SetSE();
     bool start();
@@ -89,7 +89,7 @@ public:
     /* 0x140 */ OSTime mLimitTime;
     /* 0x148 */ u32 field_0x148;
     /* 0x14C */ u32 field_0x14c;
-    /* 0x150 */ u32 field_0x150;
+    /* 0x150 */ s32 field_0x150;
     /* 0x154 */ s32 mTimerMode;
     /* 0x158 */ s32 field_0x158;
     /* 0x15C */ s32 field_0x15c;
@@ -97,8 +97,8 @@ public:
     /* 0x162 */ u8 field_0x162;
     /* 0x163 */ u8 field_0x163;
     /* 0x164 */ u8 mState;
-    /* 0x168 */ s32 field_0x168;
-    /* 0x16C */ u32 field_0x16c;
+    /* 0x168 */ s32 mSeTimeLeft;
+    /* 0x16C */ u32 mSeTableIndex;
     /* 0x170 */ JKRSolidHeap* mpSolidHeap;
     /* 0x174 */ u32 field_0x174;
 };
