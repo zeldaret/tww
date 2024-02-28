@@ -50,7 +50,7 @@ static BOOL daHitobj_Execute(hitobj_class* i_this) {
     if (i_this->m029a != 0) {
         i_this->m029a--;
         
-        (&(i_this->mSph))->SetC(i_this->current.pos);
+        i_this->mSph.SetC(i_this->current.pos);
         
         (&(&g_dComIfG_gameInfo)->play.mCcS)->Set((cCcD_Obj *)(&(i_this->mSph)));
     } else {
