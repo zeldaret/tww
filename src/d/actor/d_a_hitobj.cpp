@@ -15,11 +15,11 @@ static dCcD_SrcSph m_co_sph_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0x00000100,
+        /* SrcObjAt  Type    */ AT_TYPE_WATER,
         /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0x0000000B,
+        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_VS_OTHER,
         /* SrcObjTg  Type    */ 0,
-        /* SrcObjTg  SPrm    */ 0x00000003,
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
@@ -40,75 +40,55 @@ static dCcD_SrcSph m_co_sph_src = {
     },
 };
 
-s32 hitobj_class::_create() {
-    fopAcM_SetupActor(this, hitobj_class);
-
-    int res = dComIfG_resLoad(&(this->mPhs), "Hitobj");
-    if (res == cPhs_COMPLEATE_e) {
-        this->m0298 = this->mBase.mParameters;
-
-        this->mStts.Init(0xFF, 0xFF, this);
-
-        this->mUnkownObj.Set(m_co_sph_src);
-
-        this->mUnkownObj.SetStts(&this->mStts);
-
-        this->m029a = 3;
-    }
-    return res;
-}
-
-BOOL hitobj_class::_delete() {
-    dComIfG_resDelete(&(this->mPhs), "Hitobj");
-    return TRUE;
-}
-
-BOOL hitobj_class::_isDelete() {
-    return TRUE;
-}
-
-BOOL hitobj_class::_execute() {
-    if (this->m029a != 0) {
-        this->m029a -= (short)1;
-        
-        (&(this->mUnkownObj))->SetC(this->current.pos);
-        
-        (&(&g_dComIfG_gameInfo)->play.mCcS)->Set((cCcD_Obj *)(&(this->mUnkownObj)));
-    } else {
-        fopKyM_Delete(this);
-    }
-
-    return TRUE;
-}
-
-BOOL hitobj_class::_draw() {
-    return TRUE;
-}
-
 /* 00000078-00000080       .text daHitobj_Draw__FP12hitobj_class */
-static BOOL daHitobj_Draw(hitobj_class* pHitobj) {
-    return pHitobj->_draw();
+static BOOL daHitobj_Draw(hitobj_class* i_this) {
+    return TRUE;
 }
 
 /* 00000080-000000E8       .text daHitobj_Execute__FP12hitobj_class */
-static BOOL daHitobj_Execute(hitobj_class* pHitObj) {
-    return pHitObj->_execute();
+static BOOL daHitobj_Execute(hitobj_class* i_this) {
+    if (i_this->m029a != 0) {
+        i_this->m029a--;
+        
+        (&(i_this->mSph))->SetC(i_this->current.pos);
+        
+        (&(&g_dComIfG_gameInfo)->play.mCcS)->Set((cCcD_Obj *)(&(i_this->mSph)));
+    } else {
+        fopKyM_Delete(i_this);
+    }
+
+    return TRUE;
 }
 
 /* 000000E8-000000F0       .text daHitobj_IsDelete__FP12hitobj_class */
-static BOOL daHitobj_IsDelete(hitobj_class* pHitobj) {
-    return pHitobj->_isDelete();
+static BOOL daHitobj_IsDelete(hitobj_class* i_this) {
+    return TRUE;
 }
 
 /* 000000F0-00000120       .text daHitobj_Delete__FP12hitobj_class */
-static BOOL daHitobj_Delete(hitobj_class* hitobj) {
-    return hitobj->_delete();
+static BOOL daHitobj_Delete(hitobj_class* i_this) {
+    dComIfG_resDelete(&(i_this->mPhs), "Hitobj");
+    return TRUE;
 }
 
 /* 00000120-0000025C       .text daHitobj_Create__FP10fopAc_ac_c */
 static s32 daHitobj_Create(fopAc_ac_c* pActor) {
     hitobj_class* i_this = (hitobj_class*)pActor;
-    return i_this->_create();
+    fopAcM_SetupActor(i_this, hitobj_class);
+
+    int res = dComIfG_resLoad(&(i_this->mPhs), "Hitobj");
+    if (res == cPhs_COMPLEATE_e) {
+        i_this->m0298 = fopAcM_GetParam(i_this) & 0xFF; 
+
+        i_this->mStts.Init(0xFF, 0xFF, i_this);
+
+        i_this->mSph.Set(m_co_sph_src);
+
+        i_this->mSph.SetStts(&i_this->mStts);
+
+        i_this->m029a = 3;
+    }
+    return res;
 }
 
 static actor_method_class l_daHitobj_Method = {

@@ -11,20 +11,12 @@
 
 class hitobj_class : public fopAc_ac_c {
 public:
-    inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _isDelete();
-    inline BOOL _execute();
-    inline BOOL _draw();
-
-public:
-    /* Place member variables here */
     /* 0x0290 */ request_of_phase_process_class mPhs;
     /* 0x0298 */ u8 m0298;
     /* 0x0299 */ u8 m0299;
     /* 0x029A */ s16 m029a;
     /* 0x029C */ dCcD_Stts mStts;
-    /* 0x02D8 */ dCcD_Sph mUnkownObj;
+    /* 0x02D8 */ dCcD_Sph mSph;
 }; // Size: 0x0404
 
 #endif /* D_A_HITOBJ_H */
