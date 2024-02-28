@@ -5,28 +5,133 @@
 
 #include "d/actor/d_a_hitobj.h"
 #include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor.h"
+#include "f_op/f_op_kankyo_mng.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_procname.h"
+
+static dCcD_SrcSph m_co_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0x00000100,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0x0000000B,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0x00000003,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 100.0f,
+    },
+};
+
+s32 hitobj_class::_create() {
+    fopAcM_SetupActor(this, hitobj_class);
+
+    int res = dComIfG_resLoad(&(this->mPhs), "Hitobj");
+    if (res == cPhs_COMPLEATE_e) {
+        this->m0298 = this->mBase.mParameters;
+
+        this->mStts.Init(0xFF, 0xFF, this);
+
+        this->mUnkownObj.Set(m_co_sph_src);
+
+        this->mUnkownObj.SetStts(&this->mStts);
+
+        this->m029a = 3;
+    }
+    return res;
+}
+
+BOOL hitobj_class::_delete() {
+    dComIfG_resDelete(&(this->mPhs), "Hitobj");
+    return TRUE;
+}
+
+BOOL hitobj_class::_isDelete() {
+    return TRUE;
+}
+
+BOOL hitobj_class::_execute() {
+    if (this->m029a != 0) {
+        this->m029a -= (short)1;
+        
+        (&(this->mUnkownObj))->SetC(this->current.pos);
+        
+        (&(&g_dComIfG_gameInfo)->play.mCcS)->Set((cCcD_Obj *)(&(this->mUnkownObj)));
+    } else {
+        fopKyM_Delete(this);
+    }
+
+    return TRUE;
+}
+
+BOOL hitobj_class::_draw() {
+    return TRUE;
+}
 
 /* 00000078-00000080       .text daHitobj_Draw__FP12hitobj_class */
-static BOOL daHitobj_Draw(hitobj_class*) {
-    /* Nonmatching */
+static BOOL daHitobj_Draw(hitobj_class* pHitobj) {
+    return pHitobj->_draw();
 }
 
 /* 00000080-000000E8       .text daHitobj_Execute__FP12hitobj_class */
-static BOOL daHitobj_Execute(hitobj_class*) {
-    /* Nonmatching */
+static BOOL daHitobj_Execute(hitobj_class* pHitObj) {
+    return pHitObj->_execute();
 }
 
 /* 000000E8-000000F0       .text daHitobj_IsDelete__FP12hitobj_class */
-static BOOL daHitobj_IsDelete(hitobj_class*) {
-    /* Nonmatching */
+static BOOL daHitobj_IsDelete(hitobj_class* pHitobj) {
+    return pHitobj->_isDelete();
 }
 
 /* 000000F0-00000120       .text daHitobj_Delete__FP12hitobj_class */
-static BOOL daHitobj_Delete(hitobj_class*) {
-    /* Nonmatching */
+static BOOL daHitobj_Delete(hitobj_class* hitobj) {
+    return hitobj->_delete();
 }
 
 /* 00000120-0000025C       .text daHitobj_Create__FP10fopAc_ac_c */
-static s32 daHitobj_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daHitobj_Create(fopAc_ac_c* pActor) {
+    hitobj_class* i_this = (hitobj_class*)pActor;
+    return i_this->_create();
 }
+
+static actor_method_class l_daHitobj_Method = {
+    (process_method_func)daHitobj_Create,
+    (process_method_func)daHitobj_Delete,
+    (process_method_func)daHitobj_Execute,
+    (process_method_func)daHitobj_IsDelete,
+    (process_method_func)daHitobj_Draw,
+};
+
+actor_process_profile_definition g_profile_HITOBJ = {
+    fpcLy_CURRENT_e,
+    7,
+    fpcPi_CURRENT_e,
+    PROC_HITOBJ,
+    &g_fpcLf_Method.mBase,
+    sizeof(hitobj_class),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x00AB,
+    &l_daHitobj_Method,
+    fopAcStts_UNK40000_e,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_0_e,
+};
