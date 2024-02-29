@@ -635,6 +635,6 @@ void dr_matrix_set(damagereaction* dr) {
 }
 
 /* 800225D0-800226C8       .text damage_reaction__FP14damagereaction */
-void damage_reaction(damagereaction* dr) {
+int damage_reaction(damagereaction* dr) {
     /* Nonmatching */
 }

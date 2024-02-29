@@ -13,7 +13,7 @@ namespace daObj_Search {
         };
         
         static bool getFindFlag() { return m_find_flag == true; }
-        void setFindFlag(bool flag) { m_find_flag = flag; }
+        static void setFindFlag(bool flag) { m_find_flag = flag; }
         
         static bool m_find_flag;
         
@@ -66,6 +66,8 @@ namespace daObj_Search {
     
     public:
         /* Place member variables here */
+        /* 0x290 */ u8 m290[0x664 - 0x290];
+        /* 0x664 */ u8 m664;
     };
 
     class Bgc_c {

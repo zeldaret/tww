@@ -12,9 +12,8 @@
 class hitobj_class : public fopAc_ac_c {
 public:
     /* 0x0290 */ request_of_phase_process_class mPhs;
-    /* 0x0298 */ u8 m0298;
-    /* 0x0299 */ u8 m0299;
-    /* 0x029A */ s16 m029a;
+    /* 0x0298 */ u8 mUnusedParam;
+    /* 0x029A */ s16 mTimer;
     /* 0x029C */ dCcD_Stts mStts;
     /* 0x02D8 */ dCcD_Sph mSph;
 }; // Size: 0x0404

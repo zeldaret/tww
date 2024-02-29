@@ -349,18 +349,16 @@ void daNpc_Btsw2_c::anmAtr(u16) {
 
 /* 0000097C-000009EC       .text getMsg__13daNpc_Btsw2_cFv */
 u32 daNpc_Btsw2_c::getMsg() {
+    u32 ret;
     if (!dComIfGs_isEventBit(0x3102)) {
         dComIfGs_onEventBit(0x3102);
-        return 0x1AB0;
+        ret = 0x1AB0;
+    } else if (dKy_daynight_check()) {
+        ret = 0x1AB2;
+    } else {
+        ret = 0x1AB1;
     }
-    
-    // Fakematch? Need to force the compiler to use a branch here, but it optimizes an if statement away.
-    switch (dKy_daynight_check()) {
-    default:
-        return 0x1AB2;
-    case FALSE:
-        return 0x1AB1;
-    }
+    return ret;
 }
 
 /* 000009EC-000009F4       .text next_msgStatus__13daNpc_Btsw2_cFPUl */

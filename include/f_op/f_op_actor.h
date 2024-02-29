@@ -324,26 +324,30 @@ public:
     f32 getBtBodyR() const { return mBtBodyR; }
     void setBtBodyR(f32 radius) { mBtBodyR = radius; }
     
-    // TODO
-    void setBtAttackData(f32, f32, f32, u8) {}
-    void getBtStartFrame() const {}
-    void setBtStartFrame(f32) {}
-    void getBtEndFrame() const {}
-    void setBtEndFrame(f32) {}
-    void getBtNowFrame() const {}
-    void setBtNowFrame(f32) {}
-    void getBtAttackType() const {}
-    void setBtAttackType(u8) {}
-    void getBtMaxDis() const {}
-    void setBtMaxDis(f32) {}
+    void setBtAttackData(f32 startFrame, f32 endFrame, f32 maxDis, u8 attackType) {
+        setBtStartFrame(startFrame);
+        setBtEndFrame(endFrame);
+        setBtMaxDis(maxDis);
+        setBtAttackType(attackType);
+    }
+    f32 getBtStartFrame() const { return mBtStartFrame; }
+    void setBtStartFrame(f32 frame) { mBtStartFrame = frame; }
+    f32 getBtEndFrame() const { return mBtEndFrame; }
+    void setBtEndFrame(f32 frame) { mBtEndFrame = frame; }
+    f32 getBtNowFrame() const { return mBtNowFrame; }
+    void setBtNowFrame(f32 frame) { mBtNowFrame = frame; }
+    u8 getBtAttackType() const { return mBtAttackType; }
+    void setBtAttackType(u8 type) { mBtAttackType = type; }
+    f32 getBtMaxDis() const { return mBtMaxDis; }
+    void setBtMaxDis(f32 dis) { mBtMaxDis = dis; }
     
     /* 0x290 */ f32 mBtHeight;
     /* 0x294 */ f32 mBtBodyR;
-    /* 0x298 */ f32 m298;
-    /* 0x29C */ f32 m29C;
-    /* 0x2A0 */ f32 m2A0;
-    /* 0x2A4 */ f32 m2A4;
-    /* 0x2A8 */ u8 mCurrParryOpeningType;
+    /* 0x298 */ f32 mBtMaxDis;
+    /* 0x29C */ f32 mBtStartFrame;
+    /* 0x2A0 */ f32 mBtEndFrame;
+    /* 0x2A4 */ f32 mBtNowFrame;
+    /* 0x2A8 */ u8 mBtAttackType; // Which type of parry opening to give the player
     /* 0x2A9 */ u8 field_2A9[0x2AC - 0x2A9];
 };  // Size: 0x2AC
 

@@ -324,9 +324,11 @@ static BOOL medama_atari_check(am_class* i_this) {
         break;
     }
 
-    // return ret; // Doesn't match, too few instructions
-    // return ret ? TRUE : FALSE; // Doesn't match, optimized into arithmetic instead of a branch
-    return ret ? (ret ? TRUE : TRUE) : FALSE; // Matches, tricking the compiler into using a branch
+    if (ret) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 00000D14-00000F04       .text bomb_move_set__FP8am_classUc */

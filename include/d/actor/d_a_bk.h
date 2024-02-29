@@ -7,6 +7,7 @@
 #include "m_Do/m_Do_hostIO.h"
 
 class dPath;
+namespace daObj_Search { class Act_c; };
 
 class bk_class : public fopEn_enemy_c {
 public:
@@ -38,14 +39,12 @@ public:
     /* 0x02E0 */ u32 mShadowId;
     /* 0x02E4 */ u8 m02E4[0x02E8 - 0x02E4];
     /* 0x02E8 */ J3DModel* m02E8;
-    /* 0x02EC */ u8 m02EC[0x02F8 - 0x02EC];
+    /* 0x02EC */ f32 m02EC;
+    /* 0x02F0 */ int m02F0;
+    /* 0x02F4 */ int m02F4;
     /* 0x02F8 */ int m02F8;
     /* 0x02FC */ int m02FC;
-    /* 0x0300 */ s16 m0300;
-    /* 0x0302 */ s16 m0302;
-    /* 0x0304 */ s16 m0304;
-    /* 0x0306 */ s16 m0306;
-    /* 0x0308 */ s16 m0308;
+    /* 0x0300 */ s16 m0300[5];
     /* 0x030A */ s16 m030A;
     /* 0x030C */ s16 m030C;
     /* 0x030E */ s16 m030E;
@@ -73,7 +72,11 @@ public:
     /* 0x0B34 */ int m0B34;
     /* 0x0B38 */ u8 m0B38[0x0B44 - 0x0B38];
     /* 0x0B44 */ cXyz m0B44[2];
-    /* 0x0B5C */ u8 m0B5C[0x0B88 - 0x0B5C];
+    /* 0x0B5C */ u8 m0B5C[0x0B78 - 0x0B5C];
+    /* 0x0B78 */ s16 m0B78;
+    /* 0x0B7A */ s8 m0B7A;
+    /* 0x0B7B */ s8 m0B7B;
+    /* 0x0B7C */ u8 m0B7C[0x0B88 - 0x0B7C];
     /* 0x0B88 */ dCcD_Cyl m0B88;
     /* 0x0CB8 */ dCcD_Cyl m0CB8;
     /* 0x0DE8 */ dCcD_Sph m0DE8;
@@ -83,7 +86,9 @@ public:
     /* 0x1178 */ cXyz m1178;
     /* 0x1184 */ u8 m1184[0x11A8 - 0x1184];
     /* 0x11A8 */ cXyz m11A8;
-    /* 0x11B4 */ u8 m11B4[0x11F0 - 0x11B4];
+    /* 0x11B4 */ u8 m11B4[0x11CC - 0x11B4];
+    /* 0x11CC */ cXyz m11CC;
+    /* 0x11D8 */ u8 m11D8[0x11F0 - 0x11D8];
     /* 0x11F0 */ u8 m11F0;
     /* 0x11F1 */ u8 m11F1;
     /* 0x11F2 */ u8 m11F2;
@@ -92,7 +97,7 @@ public:
     /* 0x11F8 */ fopAc_ac_c* m11F8;
     /* 0x11FC */ u32 m11FC;
     /* 0x1200 */ u32 m1200;
-    /* 0x1204 */ u8 m1204[0x1208 - 0x1204];
+    /* 0x1204 */ u32 m1204;
     /* 0x1208 */ u16 m1208;
     /* 0x120C */ int m120C;
     /* 0x1210 */ u8 m1210;
@@ -102,11 +107,12 @@ public:
     /* 0x1216 */ s8 m1216;
     /* 0x1217 */ s8 m1217;
     /* 0x1218 */ dPath* ppd;
-    /* 0x121C */ u8 m121C;
+    /* 0x121C */ s8 m121C;
     /* 0x121D */ u8 m121D;
     /* 0x121E */ u8 m121E[0x121F - 0x121E];
     /* 0x121F */ s8 m121F;
-    /* 0x1220 */ u8 m1220[0x1230 - 0x1220];
+    /* 0x1220 */ daObj_Search::Act_c* m1220;
+    /* 0x1224 */ u8 m1224[0x1230 - 0x1224];
     /* 0x1230 */ J3DMaterialTable* m1230;
     /* 0x1234 */ u8 m1234[0x1264 - 0x1234];
     /* 0x1264 */ enemyice mEnemyIce;

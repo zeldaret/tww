@@ -47,8 +47,8 @@ static BOOL daHitobj_Draw(hitobj_class* i_this) {
 
 /* 00000080-000000E8       .text daHitobj_Execute__FP12hitobj_class */
 static BOOL daHitobj_Execute(hitobj_class* i_this) {
-    if (i_this->m029a != 0) {
-        i_this->m029a--;
+    if (i_this->mTimer != 0) {
+        i_this->mTimer--;
         
         i_this->mSph.SetC(i_this->current.pos);
         
@@ -67,7 +67,7 @@ static BOOL daHitobj_IsDelete(hitobj_class* i_this) {
 
 /* 000000F0-00000120       .text daHitobj_Delete__FP12hitobj_class */
 static BOOL daHitobj_Delete(hitobj_class* i_this) {
-    dComIfG_resDelete(&(i_this->mPhs), "Hitobj");
+    dComIfG_resDelete(&i_this->mPhs, "Hitobj");
     return TRUE;
 }
 
@@ -78,15 +78,13 @@ static s32 daHitobj_Create(fopAc_ac_c* pActor) {
 
     int res = dComIfG_resLoad(&(i_this->mPhs), "Hitobj");
     if (res == cPhs_COMPLEATE_e) {
-        i_this->m0298 = fopAcM_GetParam(i_this) & 0xFF; 
+        i_this->mUnusedParam = fopAcM_GetParam(i_this) & 0xFF; 
 
         i_this->mStts.Init(0xFF, 0xFF, i_this);
-
         i_this->mSph.Set(m_co_sph_src);
-
         i_this->mSph.SetStts(&i_this->mStts);
 
-        i_this->m029a = 3;
+        i_this->mTimer = 3;
     }
     return res;
 }

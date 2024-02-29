@@ -198,6 +198,6 @@ void hang_ang_get(damagereaction*);
 void dr_damage_set(damagereaction*);
 void dr_damage_anime(damagereaction*);
 void dr_matrix_set(damagereaction*);
-void damage_reaction(damagereaction*);
+int damage_reaction(damagereaction*);
 
 #endif /* C_DAMAGEREACTION_H */
