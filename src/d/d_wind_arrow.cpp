@@ -3,8 +3,8 @@
 // Translation Unit: d_wind_arrow.cpp
 //
 
-#include "d_wind_arrow.h"
-#include "dolphin/types.h"
+#include "d/d_wind_arrow.h"
+#include "f_op/f_op_kankyo.h"
 
 /* 8023E3C4-8023E420       .text createHeap__12dWindArrow_cFv */
 void dWindArrow_c::createHeap() {
@@ -45,4 +45,3 @@ void dWindArrow_Delete(dWindArrow_c*) {
 void dWindArrow_Create(kankyo_class*) {
     /* Nonmatching */
 }
-

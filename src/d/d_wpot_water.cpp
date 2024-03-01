@@ -3,8 +3,8 @@
 // Translation Unit: d_wpot_water.cpp
 //
 
-#include "d_wpot_water.h"
-#include "dolphin/types.h"
+#include "d/d_wpot_water.h"
+#include "f_op/f_op_kankyo.h"
 
 /* 8023F5D0-8023F64C       .text draw__20dWpotWater_EcallBackFP14JPABaseEmitter */
 void dWpotWater_EcallBack::draw(JPABaseEmitter*) {
@@ -35,19 +35,3 @@ void dWpotWater_Delete(dWpotWater_c*) {
 void dWpotWater_Create(kankyo_class*) {
     /* Nonmatching */
 }
-
-/* 8023FFCC-80240038       .text __dt__20dWpotWater_EcallBackFv */
-dWpotWater_EcallBack::~dWpotWater_EcallBack() {
-    /* Nonmatching */
-}
-
-/* 80240038-8024003C       .text execute__20dWpotWater_EcallBackFP14JPABaseEmitter */
-void dWpotWater_EcallBack::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 8024003C-80240040       .text setup__20dWpotWater_EcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dWpotWater_EcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
-}
-

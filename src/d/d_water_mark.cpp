@@ -3,8 +3,8 @@
 // Translation Unit: d_water_mark.cpp
 //
 
-#include "d_water_mark.h"
-#include "dolphin/types.h"
+#include "d/d_water_mark.h"
+#include "f_op/f_op_kankyo.h"
 
 /* 8023DB48-8023DBF8       .text dWaterMark_Draw__FP12dWaterMark_c */
 void dWaterMark_Draw(dWaterMark_c*) {
@@ -40,4 +40,3 @@ void dWaterMark_Create(kankyo_class*) {
 void dWaterMark_c::create() {
     /* Nonmatching */
 }
-

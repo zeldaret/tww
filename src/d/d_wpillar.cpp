@@ -3,8 +3,10 @@
 // Translation Unit: d_wpillar.cpp
 //
 
-#include "d_wpillar.h"
-#include "dolphin/types.h"
+#include "d/d_wpillar.h"
+#include "f_op/f_op_kankyo.h"
+
+class J3DNode;
 
 /* 8023E968-8023E9E4       .text jointCallBack__10dWpillar_cFi */
 void dWpillar_c::jointCallBack(int) {
@@ -60,4 +62,3 @@ void dWpillar_c::create() {
 void dWpillar_Create(kankyo_class*) {
     /* Nonmatching */
 }
-

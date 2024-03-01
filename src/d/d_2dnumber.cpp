@@ -3,7 +3,7 @@
 // Translation Unit: d_2dnumber.cpp
 //
 
-#include "d_2dnumber.h"
+#include "d/d_2dnumber.h"
 #include "dolphin/types.h"
 
 /* 800C8498-800C84B4       .text __ct__16dDlst_2DNumber_cFv */
@@ -17,8 +17,7 @@ dDlst_2DNumber_c::~dDlst_2DNumber_c() {
 }
 
 /* 800C8510-800C8644       .text init__16dDlst_2DNumber_cFissssUc */
-void dDlst_2DNumber_c::init(int, short, short, short, short, unsigned char) {
-    /* Nonmatching */
+void dDlst_2DNumber_c::init(int, s16, s16, s16, s16, u8) { /* Nonmatching */
 }
 
 /* 800C8644-800C874C       .text draw__16dDlst_2DNumber_cFv */
@@ -102,27 +101,27 @@ void dDlst_2DOutFont_c::iconset(int, char**) {
 }
 
 /* 800C9D5C-800CA8A8       .text messageSet__17dDlst_2DOutFont_cFUl */
-void dDlst_2DOutFont_c::messageSet(unsigned long) {
+void dDlst_2DOutFont_c::messageSet(u32) {
     /* Nonmatching */
 }
 
 /* 800CA8A8-800CAB5C       .text outFontStickAnime1__17dDlst_2DOutFont_cFUc */
-void dDlst_2DOutFont_c::outFontStickAnime1(unsigned char) {
+void dDlst_2DOutFont_c::outFontStickAnime1(u8) {
     /* Nonmatching */
 }
 
 /* 800CAB5C-800CADEC       .text outFontStickAnime2__17dDlst_2DOutFont_cFUcUc */
-void dDlst_2DOutFont_c::outFontStickAnime2(unsigned char, unsigned char) {
+void dDlst_2DOutFont_c::outFontStickAnime2(u8, u8) {
     /* Nonmatching */
 }
 
 /* 800CADEC-800CB0C0       .text outFontStickAnime3__17dDlst_2DOutFont_cFUcUc */
-void dDlst_2DOutFont_c::outFontStickAnime3(unsigned char, unsigned char) {
+void dDlst_2DOutFont_c::outFontStickAnime3(u8, u8) {
     /* Nonmatching */
 }
 
 /* 800CB0C0-800CB2E0       .text outFontStickAnimePiece__17dDlst_2DOutFont_cFUcUc */
-void dDlst_2DOutFont_c::outFontStickAnimePiece(unsigned char, unsigned char) {
+void dDlst_2DOutFont_c::outFontStickAnimePiece(u8, u8) {
     /* Nonmatching */
 }
 
@@ -132,22 +131,6 @@ void dDlst_2DOutFont_c::move() {
 }
 
 /* 800CB474-800CB4B0       .text setAlpha__17dDlst_2DOutFont_cFUc */
-void dDlst_2DOutFont_c::setAlpha(unsigned char) {
+void dDlst_2DOutFont_c::setAlpha(u8) {
     /* Nonmatching */
 }
-
-/* 800CB4B0-800CB50C       .text __dt__16dDlst_2DObject_cFv */
-dDlst_2DObject_c::~dDlst_2DObject_c() {
-    /* Nonmatching */
-}
-
-/* 800CB50C-800CB568       .text __dt__17dDlst_2DBattery_cFv */
-dDlst_2DBattery_c::~dDlst_2DBattery_c() {
-    /* Nonmatching */
-}
-
-/* 800CB568-800CB5C4       .text __dt__18dDlst_2DMinigame_cFv */
-dDlst_2DMinigame_c::~dDlst_2DMinigame_c() {
-    /* Nonmatching */
-}
-

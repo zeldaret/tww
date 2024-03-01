@@ -3,11 +3,11 @@
 // Translation Unit: d_spline_path.cpp
 //
 
-#include "d_spline_path.h"
+#include "d/d_spline_path.h"
 #include "dolphin/types.h"
 
 /* 800C239C-800C2430       .text Init__14d2DBSplinePathFll */
-void d2DBSplinePath::Init(long, long) {
+void d2DBSplinePath::Init(s32, s32) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,6 @@ void d2DBSplinePath::Calc(cXyz*) {
 }
 
 /* 800C268C-800C26D4       .text Calc__14d2DBSplinePathFPf */
-void d2DBSplinePath::Calc(float*) {
+void d2DBSplinePath::Calc(f32*) {
     /* Nonmatching */
 }
-

@@ -7,32 +7,32 @@
 #include "dolphin/types.h"
 
 /* 800CB5CC-800CB778       .text aroundWalk__17daNpc_Mk_Static_cFP10fopAc_ac_cP10fopAc_ac_cUc */
-void daNpc_Mk_Static_c::aroundWalk(fopAc_ac_c*, fopAc_ac_c*, unsigned char) {
+void daNpc_Mk_Static_c::aroundWalk(fopAc_ac_c*, fopAc_ac_c*, u8) {
     /* Nonmatching */
 }
 
 /* 800CB778-800CB88C       .text turnPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
-void daNpc_Mk_Static_c::turnPath(fopAc_ac_c*, dNpc_PathRun_c*, unsigned char) {
+void daNpc_Mk_Static_c::turnPath(fopAc_ac_c*, dNpc_PathRun_c*, u8) {
     /* Nonmatching */
 }
 
 /* 800CB88C-800CB934       .text chkPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
-void daNpc_Mk_Static_c::chkPath(fopAc_ac_c*, dNpc_PathRun_c*, unsigned char) {
+void daNpc_Mk_Static_c::chkPath(fopAc_ac_c*, dNpc_PathRun_c*, u8) {
     /* Nonmatching */
 }
 
 /* 800CB934-800CB990       .text walkPath__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cUc */
-void daNpc_Mk_Static_c::walkPath(fopAc_ac_c*, dNpc_PathRun_c*, unsigned char) {
+void daNpc_Mk_Static_c::walkPath(fopAc_ac_c*, dNpc_PathRun_c*, u8) {
     /* Nonmatching */
 }
 
 /* 800CB990-800CBA18       .text getSpeedF__17daNpc_Mk_Static_cFff */
-void daNpc_Mk_Static_c::getSpeedF(float, float) {
+void daNpc_Mk_Static_c::getSpeedF(f32, f32) {
     /* Nonmatching */
 }
 
 /* 800CBA18-800CBA3C       .text init__17daNpc_Mk_Static_cFUcUs */
-void daNpc_Mk_Static_c::init(unsigned char, unsigned short) {
+void daNpc_Mk_Static_c::init(u8, u16) {
     /* Nonmatching */
 }
 
@@ -47,12 +47,12 @@ void daNpc_Mk_Static_c::goFarLink_2(fopAc_ac_c*, dNpc_PathRun_c*) {
 }
 
 /* 800CBE7C-800CBEE0       .text runaway_com2__17daNpc_Mk_Static_cFP14dNpc_PathRun_cUc */
-void daNpc_Mk_Static_c::runaway_com2(dNpc_PathRun_c*, unsigned char) {
+void daNpc_Mk_Static_c::runaway_com2(dNpc_PathRun_c*, u8) {
     /* Nonmatching */
 }
 
 /* 800CBEE0-800CC374       .text runAwayProc__17daNpc_Mk_Static_cFP10fopAc_ac_cP14dNpc_PathRun_cP8dCcD_CylPs */
-void daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c*, dNpc_PathRun_c*, dCcD_Cyl*, short*) {
+void daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c*, dNpc_PathRun_c*, dCcD_Cyl*, s16*) {
     /* Nonmatching */
 }
 
@@ -70,4 +70,3 @@ void daNpc_Mk_Static_c::setRndPathPos(fopAc_ac_c*, dNpc_PathRun_c*) {
 void daNpc_Mk_Static_c::chkPointPass(cXyz*, cXyz*, cXyz*) {
     /* Nonmatching */
 }
-
