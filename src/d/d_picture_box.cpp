@@ -3,8 +3,8 @@
 // Translation Unit: d_picture_box.cpp
 //
 
-#include "d_picture_box.h"
-#include "dolphin/types.h"
+#include "d/d_picture_box.h"
+#include "f_op/f_op_msg.h"
 
 /* 802258C8-80225954       .text dPb_erasePicture__Fv */
 void dPb_erasePicture() {
@@ -285,9 +285,3 @@ void dPb_Delete(sub_pb_class*) {
 void dPb_Create(msg_class*) {
     /* Nonmatching */
 }
-
-/* 8022C03C-8022C0B4       .text __dt__9dJle_Pb_cFv */
-dJle_Pb_c::~dJle_Pb_c() {
-    /* Nonmatching */
-}
-

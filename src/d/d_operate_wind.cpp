@@ -3,8 +3,8 @@
 // Translation Unit: d_operate_wind.cpp
 //
 
-#include "d_operate_wind.h"
-#include "dolphin/types.h"
+#include "d/d_operate_wind.h"
+#include "f_op/f_op_msg.h"
 
 /* 8021E58C-8021E5F8       .text __ct__9dOw_HIO_cFv */
 dOw_HIO_c::dOw_HIO_c() {
@@ -22,12 +22,12 @@ void dDlst_Ow_mask_c::draw() {
 }
 
 /* 8021E708-8021E7E4       .text dOw_angleRegular__15dOperate_wind_cFf */
-void dOperate_wind_c::dOw_angleRegular(float) {
+void dOperate_wind_c::dOw_angleRegular(f32) {
     /* Nonmatching */
 }
 
 /* 8021E7E4-8021E974       .text dOw_stickControl__15dOperate_wind_cFis */
-void dOperate_wind_c::dOw_stickControl(int, short) {
+void dOperate_wind_c::dOw_stickControl(int, s16) {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void dOperate_wind_c::screenSet() {
 }
 
 /* 8021ED4C-8021EE9C       .text alphaSet__15dOperate_wind_cFf */
-void dOperate_wind_c::alphaSet(float) {
+void dOperate_wind_c::alphaSet(f32) {
     /* Nonmatching */
 }
 
@@ -67,17 +67,17 @@ void dOperate_wind_c::windSet() {
 }
 
 /* 802208C4-8022098C       .text ringScale__15dOperate_wind_cFf */
-void dOperate_wind_c::ringScale(float) {
+void dOperate_wind_c::ringScale(f32) {
     /* Nonmatching */
 }
 
 /* 8022098C-80220A60       .text directionTrans__15dOperate_wind_cFf */
-void dOperate_wind_c::directionTrans(float) {
+void dOperate_wind_c::directionTrans(f32) {
     /* Nonmatching */
 }
 
 /* 80220A60-80220CD8       .text lineInit__15dOperate_wind_cFf */
-void dOperate_wind_c::lineInit(float) {
+void dOperate_wind_c::lineInit(f32) {
     /* Nonmatching */
 }
 
@@ -87,7 +87,7 @@ void dOperate_wind_c::lineDraw() {
 }
 
 /* 80220D80-80220E18       .text arrowRotate__15dOperate_wind_cFP18fopMsgM_pane_classs */
-void dOperate_wind_c::arrowRotate(fopMsgM_pane_class*, short) {
+void dOperate_wind_c::arrowRotate(fopMsgM_pane_class*, s16) {
     /* Nonmatching */
 }
 
@@ -160,24 +160,3 @@ void dOw_Delete(dOw_c*) {
 void dOw_Create(msg_class*) {
     /* Nonmatching */
 }
-
-/* 80221AA0-80221AFC       .text __dt__15dDlst_Ow_mask_cFv */
-dDlst_Ow_mask_c::~dDlst_Ow_mask_c() {
-    /* Nonmatching */
-}
-
-/* 80221AFC-80221B58       .text __dt__15dDlst_Ow_main_cFv */
-dDlst_Ow_main_c::~dDlst_Ow_main_c() {
-    /* Nonmatching */
-}
-
-/* 80221B58-80221BA0       .text __dt__15dOperate_wind_cFv */
-dOperate_wind_c::~dOperate_wind_c() {
-    /* Nonmatching */
-}
-
-/* 80221BA0-80221BFC       .text __dt__9dOw_HIO_cFv */
-dOw_HIO_c::~dOw_HIO_c() {
-    /* Nonmatching */
-}
-

@@ -3,8 +3,8 @@
 // Translation Unit: d_scope.cpp
 //
 
-#include "d_scope.h"
-#include "dolphin/types.h"
+#include "d/d_scope.h"
+#include "f_op/f_op_msg.h"
 
 /* 80237568-802375E8       .text draw__13dDlst_2DSCP_cFv */
 void dDlst_2DSCP_c::draw() {
@@ -210,9 +210,3 @@ void dScp_Delete(sub_scp_class*) {
 void dScp_Create(msg_class*) {
     /* Nonmatching */
 }
-
-/* 8023B49C-8023B4F8       .text __dt__13dDlst_2DSCP_cFv */
-dDlst_2DSCP_c::~dDlst_2DSCP_c() {
-    /* Nonmatching */
-}
-

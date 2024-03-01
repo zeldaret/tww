@@ -7,7 +7,7 @@
 #include "f_op/f_op_kankyo.h"
 
 /* 8023E3C4-8023E420       .text createHeap__12dWindArrow_cFv */
-void dWindArrow_c::createHeap() {
+BOOL dWindArrow_c::createHeap() {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void dWindArrow_Draw(dWindArrow_c*) {
 }
 
 /* 8023E48C-8023E6F4       .text draw__12dWindArrow_cFv */
-void dWindArrow_c::draw() {
+BOOL dWindArrow_c::draw() {
     /* Nonmatching */
 }
 

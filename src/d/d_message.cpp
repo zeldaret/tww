@@ -3,31 +3,31 @@
 // Translation Unit: d_message.cpp
 //
 
-#include "d_message.h"
-#include "dolphin/types.h"
+#include "d/d_message.h"
+#include "f_op/f_op_msg.h"
 
 /* 801E73B4-801E74F4       .text dMsg2_value_init__FP14sub_msg2_classUc */
-void dMsg2_value_init(sub_msg2_class*, unsigned char) {
+void dMsg2_value_init(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
 /* 801E74F4-801E75A8       .text dMsg2_setString__FP14sub_msg2_classUc */
-void dMsg2_setString(sub_msg2_class*, unsigned char) {
+void dMsg2_setString(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
 /* 801E75A8-801E75CC       .text dMsg2_messagePaneShow__FP14sub_msg2_classUc */
-void dMsg2_messagePaneShow(sub_msg2_class*, unsigned char) {
+void dMsg2_messagePaneShow(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
 /* 801E75CC-801E75F0       .text dMsg2_messagePaneHide__FP14sub_msg2_classUc */
-void dMsg2_messagePaneHide(sub_msg2_class*, unsigned char) {
+void dMsg2_messagePaneHide(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
 /* 801E75F0-801E76DC       .text dMsg2_outFontHide__FP14sub_msg2_classUc */
-void dMsg2_outFontHide(sub_msg2_class*, unsigned char) {
+void dMsg2_outFontHide(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
@@ -72,12 +72,12 @@ void dMsg2_fontdataInit(sub_msg2_class*) {
 }
 
 /* 801E7A74-801E7AB8       .text dMsg2_screenDataSet__FP14sub_msg2_classUc */
-void dMsg2_screenDataSet(sub_msg2_class*, unsigned char) {
+void dMsg2_screenDataSet(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
 /* 801E7AB8-801E8154       .text dMsg2_screenDataInit__FP14sub_msg2_classUc */
-void dMsg2_screenDataInit(sub_msg2_class*, unsigned char) {
+void dMsg2_screenDataInit(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
@@ -97,22 +97,22 @@ void dMsg2_stickInfoCheck(sub_msg2_class*) {
 }
 
 /* 801E833C-801E84E8       .text dMsg2_multiTexDraw__FP14sub_msg2_classssss */
-void dMsg2_multiTexDraw(sub_msg2_class*, short, short, short, short) {
+void dMsg2_multiTexDraw(sub_msg2_class*, s16, s16, s16, s16) {
     /* Nonmatching */
 }
 
 /* 801E84E8-801E8668       .text dMsg2_messageOut__FP14sub_msg2_classUci */
-void dMsg2_messageOut(sub_msg2_class*, unsigned char, int) {
+void dMsg2_messageOut(sub_msg2_class*, u8, int) {
     /* Nonmatching */
 }
 
 /* 801E8668-801E86E8       .text dMsg2_yose_select__FP14sub_msg2_classUc */
-void dMsg2_yose_select(sub_msg2_class*, unsigned char) {
+void dMsg2_yose_select(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
 /* 801E86E8-801E8798       .text dMsg2_textPosition__FP14sub_msg2_classUc */
-void dMsg2_textPosition(sub_msg2_class*, unsigned char) {
+void dMsg2_textPosition(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
@@ -147,7 +147,7 @@ void dMsg2_aimBrightness() {
 }
 
 /* 801E8C78-801E9054       .text dMsg2_setCharAlpha__FP14sub_msg2_classUc */
-void dMsg2_setCharAlpha(sub_msg2_class*, unsigned char) {
+void dMsg2_setCharAlpha(sub_msg2_class*, u8) {
     /* Nonmatching */
 }
 
@@ -225,14 +225,3 @@ void dMsg2_Delete(sub_msg2_class*) {
 void dMsg2_Create(msg_class*) {
     /* Nonmatching */
 }
-
-/* 801EAFC0-801EB01C       .text __dt__14dDlst_2DCopy_cFv */
-dDlst_2DCopy_c::~dDlst_2DCopy_c() {
-    /* Nonmatching */
-}
-
-/* 801EB01C-801EB078       .text __dt__14dDlst_2DMSG2_cFv */
-dDlst_2DMSG2_c::~dDlst_2DMSG2_c() {
-    /* Nonmatching */
-}
-

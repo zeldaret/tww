@@ -5,6 +5,9 @@
 
 class dWaterMark_c {
 public:
+    inline BOOL draw();
+    inline BOOL execute();
+    inline BOOL wm_delete();
     void setMatrix();
     void create();
 };

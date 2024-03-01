@@ -3,8 +3,8 @@
 // Translation Unit: d_auction_screen.cpp
 //
 
-#include "d_auction_screen.h"
-#include "dolphin/types.h"
+#include "d/d_auction_screen.h"
+#include "f_op/f_op_msg.h"
 
 /* 8015F550-8015F560       .text __ct__9dAs_HIO_cFv */
 dAs_HIO_c::dAs_HIO_c() {
@@ -17,7 +17,7 @@ void dAuction_screen_c::screenSet() {
 }
 
 /* 8015F8D8-8015F910       .text initPosSet__17dAuction_screen_cFP18fopMsgM_pane_classff */
-void dAuction_screen_c::initPosSet(fopMsgM_pane_class*, float, float) {
+void dAuction_screen_c::initPosSet(fopMsgM_pane_class*, f32, f32) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void dAuction_screen_c::nowRupeeSet() {
 }
 
 /* 8015FA68-8015FAFC       .text nextRupeeSet__17dAuction_screen_cFs */
-void dAuction_screen_c::nextRupeeSet(short) {
+void dAuction_screen_c::nextRupeeSet(s16) {
     /* Nonmatching */
 }
 
@@ -195,19 +195,3 @@ void dAuction_screen_gaugeDown() {
 void dAs_timerCalc() {
     /* Nonmatching */
 }
-
-/* 80160E64-80160EC0       .text __dt__17dAuction_screen_cFv */
-dAuction_screen_c::~dAuction_screen_c() {
-    /* Nonmatching */
-}
-
-/* 80160EC0-80160EE0       .text draw__17dAuction_screen_cFv */
-void dAuction_screen_c::draw() {
-    /* Nonmatching */
-}
-
-/* 80160EE0-80160F28       .text __dt__9dAs_HIO_cFv */
-dAs_HIO_c::~dAs_HIO_c() {
-    /* Nonmatching */
-}
-

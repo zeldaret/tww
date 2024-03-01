@@ -3,8 +3,9 @@
 // Translation Unit: d_mesg.cpp
 //
 
-#include "d_mesg.h"
-#include "dolphin/types.h"
+#include "d/d_mesg.h"
+#include "JSystem/JMessage/resource.h"
+#include "f_op/f_op_msg.h"
 
 /* 801DFEE4-801E000C       .text _create__15dMesg_outFont_cFv */
 void dMesg_outFont_c::_create() {
@@ -22,7 +23,7 @@ void dMesg_outFont_c::_initialize() {
 }
 
 /* 801E0120-801E0184       .text _set__15dMesg_outFont_cFsssUlUc */
-void dMesg_outFont_c::_set(short, short, short, unsigned long, unsigned char) {
+void dMesg_outFont_c::_set(s16, s16, s16, u32, u8) {
     /* Nonmatching */
 }
 
@@ -32,7 +33,7 @@ void dMesg_outFont_c::_draw() {
 }
 
 /* 801E01D0-801E01E4       .text _setAlpha__15dMesg_outFont_cFUc */
-void dMesg_outFont_c::_setAlpha(unsigned char) {
+void dMesg_outFont_c::_setAlpha(u8) {
     /* Nonmatching */
 }
 
@@ -42,7 +43,7 @@ dMesg_tControl::dMesg_tControl() {
 }
 
 /* 801E0274-801E0288       .text do_word__14dMesg_tControlFUl */
-void dMesg_tControl::do_word(unsigned long) {
+void dMesg_tControl::do_word(u32) {
     /* Nonmatching */
 }
 
@@ -87,7 +88,7 @@ void dMesg_tSequenceProcessor::do_jump(const void*, const char*) {
 }
 
 /* 801E0870-801E0874       .text do_branch_query__24dMesg_tSequenceProcessorFUs */
-void dMesg_tSequenceProcessor::do_branch_query(unsigned short) {
+void dMesg_tSequenceProcessor::do_branch_query(u16) {
     /* Nonmatching */
 }
 
@@ -107,7 +108,7 @@ void dMesg_tSequenceProcessor::do_character(int) {
 }
 
 /* 801E0DE8-801E161C       .text do_tag__24dMesg_tSequenceProcessorFUlPCvUl */
-void dMesg_tSequenceProcessor::do_tag(unsigned long, const void*, unsigned long) {
+void dMesg_tSequenceProcessor::do_tag(u32, const void*, u32) {
     /* Nonmatching */
 }
 
@@ -122,7 +123,7 @@ void dMesg_tSequenceProcessor::ruby_character(char*, int) {
 }
 
 /* 801E1858-801E1B5C       .text do_systemTagCode__24dMesg_tSequenceProcessorFUsPCvUl */
-void dMesg_tSequenceProcessor::do_systemTagCode(unsigned short, const void*, unsigned long) {
+void dMesg_tSequenceProcessor::do_systemTagCode(u16, const void*, u32) {
     /* Nonmatching */
 }
 
@@ -142,12 +143,12 @@ void dMesg_tMeasureProcessor::do_end() {
 }
 
 /* 801E1F9C-801E27BC       .text do_tag__23dMesg_tMeasureProcessorFUlPCvUl */
-void dMesg_tMeasureProcessor::do_tag(unsigned long, const void*, unsigned long) {
+void dMesg_tMeasureProcessor::do_tag(u32, const void*, u32) {
     /* Nonmatching */
 }
 
 /* 801E27BC-801E28A8       .text do_systemTagCode__23dMesg_tMeasureProcessorFUsPCvUl */
-void dMesg_tMeasureProcessor::do_systemTagCode(unsigned short, const void*, unsigned long) {
+void dMesg_tMeasureProcessor::do_systemTagCode(u16, const void*, u32) {
     /* Nonmatching */
 }
 
@@ -172,12 +173,12 @@ void dMesg_tRenderingProcessor::do_character(int) {
 }
 
 /* 801E28F0-801E2970       .text do_tag__25dMesg_tRenderingProcessorFUlPCvUl */
-void dMesg_tRenderingProcessor::do_tag(unsigned long, const void*, unsigned long) {
+void dMesg_tRenderingProcessor::do_tag(u32, const void*, u32) {
     /* Nonmatching */
 }
 
 /* 801E2970-801E29A4       .text do_systemTagCode__25dMesg_tRenderingProcessorFUsPCvUl */
-void dMesg_tRenderingProcessor::do_systemTagCode(unsigned short, const void*, unsigned long) {
+void dMesg_tRenderingProcessor::do_systemTagCode(u16, const void*, u32) {
     /* Nonmatching */
 }
 
@@ -242,7 +243,7 @@ void dMesg_screenDataTalk_c::closeAnime() {
 }
 
 /* 801E3CE0-801E402C       .text setTextPosition__22dMesg_screenDataTalk_cFUc */
-void dMesg_screenDataTalk_c::setTextPosition(unsigned char) {
+void dMesg_screenDataTalk_c::setTextPosition(u8) {
     /* Nonmatching */
 }
 
@@ -321,11 +322,6 @@ dMesg_tSequenceProcessor::~dMesg_tSequenceProcessor() {
     /* Nonmatching */
 }
 
-/* 801E5C18-801E5C8C       .text __dt__Q28JMessage18TResourceContainerFv */
-JMessage::TResourceContainer::~TResourceContainer() {
-    /* Nonmatching */
-}
-
 /* 801E5C8C-801E5E14       .text dMesg_parse__Fv */
 void dMesg_parse() {
     /* Nonmatching */
@@ -352,7 +348,7 @@ void dMesg_fontsizeCenter(sub_mesg_class*, int, int) {
 }
 
 /* 801E5FB0-801E627C       .text dMesg_hyrule_language_check__FUl */
-void dMesg_hyrule_language_check(unsigned long) {
+void dMesg_hyrule_language_check(u32) {
     /* Nonmatching */
 }
 
@@ -372,7 +368,7 @@ void dMesg_screenData_c::changeFont(JUTFont*) {
 }
 
 /* 801E6764-801E6768       .text setTextPosition__18dMesg_screenData_cFUc */
-void dMesg_screenData_c::setTextPosition(unsigned char) {
+void dMesg_screenData_c::setTextPosition(u8) {
     /* Nonmatching */
 }
 
@@ -465,4 +461,3 @@ dMesg_screenDataItem_c::~dMesg_screenDataItem_c() {
 dMesg_screenDataTalk_c::~dMesg_screenDataTalk_c() {
     /* Nonmatching */
 }
-

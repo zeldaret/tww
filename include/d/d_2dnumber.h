@@ -36,6 +36,8 @@ public:
 
 class dDlst_2DOutFont_c {
 public:
+    void setLeftUpPos(f32, f32) {}
+    
     void initial();
     void setPane(JUTFont*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*);
     void setPaneEx(JUTFont*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, char*);

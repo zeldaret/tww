@@ -3,8 +3,9 @@
 // Translation Unit: d_minigame_starter.cpp
 //
 
-#include "d_minigame_starter.h"
-#include "dolphin/types.h"
+#include "d/d_minigame_starter.h"
+#include "f_op/f_op_msg.h"
+#include "f_op/f_op_msg_mng.h"
 
 /* 80205FE8-80206124       .text _create__19dMinigame_Starter_cFv */
 void dMinigame_Starter_c::_create() {
@@ -52,12 +53,12 @@ void dDlst_StarterScrnDraw_c::anime2() {
 }
 
 /* 80206CB0-80206DA4       .text scaleAnime__23dDlst_StarterScrnDraw_cFf */
-void dDlst_StarterScrnDraw_c::scaleAnime(float) {
+void dDlst_StarterScrnDraw_c::scaleAnime(f32) {
     /* Nonmatching */
 }
 
 /* 80206DA4-80206E44       .text setRotate__23dDlst_StarterScrnDraw_cFP18fopMsgM_pane_classf */
-void dDlst_StarterScrnDraw_c::setRotate(fopMsgM_pane_class*, float) {
+void dDlst_StarterScrnDraw_c::setRotate(fopMsgM_pane_class*, f32) {
     /* Nonmatching */
 }
 
@@ -90,9 +91,3 @@ void dMinigame_Starter_Delete(dMinigame_Starter_c*) {
 void dMinigame_Starter_Create(msg_class*) {
     /* Nonmatching */
 }
-
-/* 80206F64-80206FC0       .text __dt__23dDlst_StarterScrnDraw_cFv */
-dDlst_StarterScrnDraw_c::~dDlst_StarterScrnDraw_c() {
-    /* Nonmatching */
-}
-

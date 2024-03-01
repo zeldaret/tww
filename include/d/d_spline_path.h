@@ -7,6 +7,8 @@ class cXyz;
 
 class d2DBSplinePath {
 public:
+    void Last() {}
+
     void Init(s32, s32);
     void Step();
     void Calc(cXyz*);

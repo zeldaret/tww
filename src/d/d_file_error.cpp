@@ -3,7 +3,7 @@
 // Translation Unit: d_file_error.cpp
 //
 
-#include "d_file_error.h"
+#include "d/d_file_error.h"
 #include "dolphin/types.h"
 
 /* 8017DB40-8017DBA8       .text __ct__9dFe_HIO_cFv */
@@ -26,13 +26,8 @@ void dFile_error_c::_delete() {
     /* Nonmatching */
 }
 
-/* 8017DEA4-8017DF04       .text __dt__8MyScreenFv */
-MyScreen::~MyScreen() {
-    /* Nonmatching */
-}
-
 /* 8017DF04-8017E010       .text setErrMessage__13dFile_error_cFUli */
-void dFile_error_c::setErrMessage(unsigned long, int) {
+void dFile_error_c::setErrMessage(u32, int) {
     /* Nonmatching */
 }
 
@@ -117,7 +112,7 @@ void dFile_error_c::displayInit() {
 }
 
 /* 8017F3FC-8017F5A4       .text PaneTranceBase__13dFile_error_cFsUcffffUci */
-void dFile_error_c::PaneTranceBase(short, unsigned char, float, float, float, float, unsigned char, int) {
+void dFile_error_c::PaneTranceBase(s16, u8, f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
@@ -135,34 +130,3 @@ void dFile_error_c::draw2() {
 void dDlst_FileErr_c::draw() {
     /* Nonmatching */
 }
-
-/* 8017F67C-8017F6D8       .text __dt__15dDlst_FileErr_cFv */
-dDlst_FileErr_c::~dDlst_FileErr_c() {
-    /* Nonmatching */
-}
-
-/* 8017F6D8-8017F760       .text createPane__8MyScreenFRCQ27J2DPane18J2DScrnBlockHeaderP20JSURandomInputStreamP7J2DPane */
-void MyScreen::createPane(const J2DPane::J2DScrnBlockHeader&, JSURandomInputStream*, J2DPane*) {
-    /* Nonmatching */
-}
-
-/* 8017F760-8017F768       .text getTypeID__9J2DScreenFv */
-void J2DScreen::getTypeID() {
-    /* Nonmatching */
-}
-
-/* 8017F768-8017F79C       .text calcMtx__9J2DScreenFv */
-void J2DScreen::calcMtx() {
-    /* Nonmatching */
-}
-
-/* 8017F79C-8017F7A0       .text drawSelf__7J2DPaneFff */
-void J2DPane::drawSelf(float, float) {
-    /* Nonmatching */
-}
-
-/* 8017F7A0-8017F7E8       .text __dt__9dFe_HIO_cFv */
-dFe_HIO_c::~dFe_HIO_c() {
-    /* Nonmatching */
-}
-

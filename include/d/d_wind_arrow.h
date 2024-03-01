@@ -5,9 +5,11 @@
 
 class dWindArrow_c {
 public:
-    void createHeap();
+    inline s32 create();
+    inline BOOL execute();
+    BOOL createHeap();
     void adjustHeap();
-    void draw();
+    BOOL draw();
 };
 
 #endif /* D_WIND_ARROW_H */

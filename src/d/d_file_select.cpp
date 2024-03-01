@@ -3,7 +3,7 @@
 // Translation Unit: d_file_select.cpp
 //
 
-#include "d_file_select.h"
+#include "d/d_file_select.h"
 #include "dolphin/types.h"
 
 /* 8017F8B0-8017FA20       .text __ct__9dFs_HIO_cFv */
@@ -107,7 +107,7 @@ void dFile_select_c::dataSelMoveSet() {
 }
 
 /* 801824DC-801827A0       .text makeRecInfo__14dFile_select_cFUc */
-void dFile_select_c::makeRecInfo(unsigned char) {
+void dFile_select_c::makeRecInfo(u8) {
     /* Nonmatching */
 }
 
@@ -117,7 +117,7 @@ void dFile_select_c::dataSelectPaneMove() {
 }
 
 /* 80182A2C-80182A90       .text MessagePaneMoveSet__14dFile_select_cFffffUci */
-void dFile_select_c::MessagePaneMoveSet(float, float, float, float, unsigned char, int) {
+void dFile_select_c::MessagePaneMoveSet(f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
@@ -197,32 +197,27 @@ void dFile_select_c::saveCopyBWColor() {
 }
 
 /* 8018471C-80184B84       .text DataSelectPaneCopyMove__14dFile_select_cFss */
-void dFile_select_c::DataSelectPaneCopyMove(short, short) {
+void dFile_select_c::DataSelectPaneCopyMove(s16, s16) {
     /* Nonmatching */
 }
 
 /* 80184B84-801852E4       .text DataSelectPaneCopyBackMove__14dFile_select_cFss */
-void dFile_select_c::DataSelectPaneCopyBackMove(short, short) {
+void dFile_select_c::DataSelectPaneCopyBackMove(s16, s16) {
     /* Nonmatching */
 }
 
 /* 801852E4-80185A28       .text DataSelectPaneCopyMove2__14dFile_select_cFss */
-void dFile_select_c::DataSelectPaneCopyMove2(short, short) {
+void dFile_select_c::DataSelectPaneCopyMove2(s16, s16) {
     /* Nonmatching */
 }
 
 /* 80185A28-801870B0       .text DataSelectPaneCopyColorMove__14dFile_select_cFsUci */
-void dFile_select_c::DataSelectPaneCopyColorMove(short, unsigned char, int) {
-    /* Nonmatching */
-}
-
-/* 801870B0-801870BC       .text __ct__Q28JUtility6TColorFv */
-JUtility::TColor::TColor() {
+void dFile_select_c::DataSelectPaneCopyColorMove(s16, u8, int) {
     /* Nonmatching */
 }
 
 /* 801870BC-801874F4       .text DataSelectPaneBackFromCopyMove__14dFile_select_cFUcUc */
-void dFile_select_c::DataSelectPaneBackFromCopyMove(unsigned char, unsigned char) {
+void dFile_select_c::DataSelectPaneBackFromCopyMove(u8, u8) {
     /* Nonmatching */
 }
 
@@ -297,7 +292,7 @@ void dFile_select_c::backDatSelWait2() {
 }
 
 /* 80188704-80188C70       .text DataSelectPaneBackMove__14dFile_select_cFsss */
-void dFile_select_c::DataSelectPaneBackMove(short, short, short) {
+void dFile_select_c::DataSelectPaneBackMove(s16, s16, s16) {
     /* Nonmatching */
 }
 
@@ -327,102 +322,102 @@ void dFile_select_c::yesNoPaneMoveSet() {
 }
 
 /* 8018A46C-8018A4B0       .text MessagePaneMove__14dFile_select_cFffffsUci */
-void dFile_select_c::MessagePaneMove(float, float, float, float, short, unsigned char, int) {
+void dFile_select_c::MessagePaneMove(f32, f32, f32, f32, s16, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018A4B0-8018A4F4       .text recInfoPaneMove__14dFile_select_cFffffsUci */
-void dFile_select_c::recInfoPaneMove(float, float, float, float, short, unsigned char, int) {
+void dFile_select_c::recInfoPaneMove(f32, f32, f32, f32, s16, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018A4F4-8018A644       .text menuPaneMove__14dFile_select_cFffsUci */
-void dFile_select_c::menuPaneMove(float, float, short, unsigned char, int) {
+void dFile_select_c::menuPaneMove(f32, f32, s16, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018A644-8018A714       .text yesNoPaneMove__14dFile_select_cFffsUci */
-void dFile_select_c::yesNoPaneMove(float, float, short, unsigned char, int) {
+void dFile_select_c::yesNoPaneMove(f32, f32, s16, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018A714-8018A83C       .text PaneTranceTitle__14dFile_select_cFsUcffUci */
-void dFile_select_c::PaneTranceTitle(short, unsigned char, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceTitle(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018A83C-8018A8F4       .text PaneAlphaTitleTxt__14dFile_select_cFsUc */
-void dFile_select_c::PaneAlphaTitleTxt(short, unsigned char) {
+void dFile_select_c::PaneAlphaTitleTxt(s16, u8) {
     /* Nonmatching */
 }
 
 /* 8018A8F4-8018AA88       .text PaneTranceRecTlt1__14dFile_select_cFsUcffffUci */
-void dFile_select_c::PaneTranceRecTlt1(short, unsigned char, float, float, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceRecTlt1(s16, u8, f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018AA88-8018AC1C       .text PaneTranceRecTlt2__14dFile_select_cFsUcffffUci */
-void dFile_select_c::PaneTranceRecTlt2(short, unsigned char, float, float, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceRecTlt2(s16, u8, f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018AC1C-8018ADB0       .text PaneTranceRecTlt3__14dFile_select_cFsUcffffUci */
-void dFile_select_c::PaneTranceRecTlt3(short, unsigned char, float, float, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceRecTlt3(s16, u8, f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018ADB0-8018AEE8       .text PaneTranceRecInfo1__14dFile_select_cFsUcffffUci */
-void dFile_select_c::PaneTranceRecInfo1(short, unsigned char, float, float, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceRecInfo1(s16, u8, f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018AEE8-8018B020       .text PaneTranceRecInfo2__14dFile_select_cFsUcffffUci */
-void dFile_select_c::PaneTranceRecInfo2(short, unsigned char, float, float, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceRecInfo2(s16, u8, f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018B020-8018B158       .text PaneTranceRecInfo3__14dFile_select_cFsUcffffUci */
-void dFile_select_c::PaneTranceRecInfo3(short, unsigned char, float, float, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceRecInfo3(s16, u8, f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018B158-8018B494       .text PaneTranceRecBase__14dFile_select_cFsUcffffUci */
-void dFile_select_c::PaneTranceRecBase(short, unsigned char, float, float, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceRecBase(s16, u8, f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018B494-8018B5D8       .text PaneTranceMessageBase__14dFile_select_cFsUcffffUci */
-void dFile_select_c::PaneTranceMessageBase(short, unsigned char, float, float, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceMessageBase(s16, u8, f32, f32, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018B5D8-8018B6E0       .text PaneTranceYes__14dFile_select_cFsUcffUci */
-void dFile_select_c::PaneTranceYes(short, unsigned char, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceYes(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018B6E0-8018B7E8       .text PaneTranceNo__14dFile_select_cFsUcffUci */
-void dFile_select_c::PaneTranceNo(short, unsigned char, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceNo(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018B7E8-8018B8F0       .text PaneTranceStart__14dFile_select_cFsUcffUci */
-void dFile_select_c::PaneTranceStart(short, unsigned char, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceStart(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018B8F0-8018B9F8       .text PaneTranceCopy__14dFile_select_cFsUcffUci */
-void dFile_select_c::PaneTranceCopy(short, unsigned char, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceCopy(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018B9F8-8018BB00       .text PaneTranceErase__14dFile_select_cFsUcffUci */
-void dFile_select_c::PaneTranceErase(short, unsigned char, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceErase(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8018BB00-8018BC08       .text PaneTranceBack__14dFile_select_cFsUcffUci */
-void dFile_select_c::PaneTranceBack(short, unsigned char, float, float, unsigned char, int) {
+void dFile_select_c::PaneTranceBack(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
@@ -520,14 +515,3 @@ void dFile_select_c::ExErrorMsgPaneMove() {
 void dFile_select_c::ExErrorMsgPaneMove2() {
     /* Nonmatching */
 }
-
-/* 8018DD30-8018DD8C       .text __dt__15dDlst_FileSel_cFv */
-dDlst_FileSel_c::~dDlst_FileSel_c() {
-    /* Nonmatching */
-}
-
-/* 8018DD8C-8018DDD4       .text __dt__9dFs_HIO_cFv */
-dFs_HIO_c::~dFs_HIO_c() {
-    /* Nonmatching */
-}
-

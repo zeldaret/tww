@@ -3,7 +3,7 @@
 // Translation Unit: d_name.cpp
 //
 
-#include "d_name.h"
+#include "d/d_name.h"
 #include "dolphin/types.h"
 
 /* 80215E38-80215F64       .text __ct__9dNm_HIO_cFv */
@@ -72,7 +72,7 @@ void dName_c::MojiSelect() {
 }
 
 /* 80216F14-80217284       .text mojiChange__7dName_cFUc */
-void dName_c::mojiChange(unsigned char) {
+void dName_c::mojiChange(u8) {
     /* Nonmatching */
 }
 
@@ -142,7 +142,7 @@ void dName_c::backSpace() {
 }
 
 /* 80218428-802184EC       .text mojiListChange__7dName_cFUc */
-void dName_c::mojiListChange(unsigned char) {
+void dName_c::mojiListChange(u8) {
     /* Nonmatching */
 }
 
@@ -177,47 +177,47 @@ void dName_c::paneTransInit() {
 }
 
 /* 8021960C-802197A0       .text PaneTranceTitle__7dName_cFsUcffUci */
-void dName_c::PaneTranceTitle(short, unsigned char, float, float, unsigned char, int) {
+void dName_c::PaneTranceTitle(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 802197A0-802199F4       .text PaneTranceName__7dName_cFsUcffUci */
-void dName_c::PaneTranceName(short, unsigned char, float, float, unsigned char, int) {
+void dName_c::PaneTranceName(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 802199F4-80219ADC       .text PaneTranceBase0__7dName_cFsUcffUci */
-void dName_c::PaneTranceBase0(short, unsigned char, float, float, unsigned char, int) {
+void dName_c::PaneTranceBase0(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 80219ADC-80219D04       .text PaneTranceBase__7dName_cFsUcffUci */
-void dName_c::PaneTranceBase(short, unsigned char, float, float, unsigned char, int) {
+void dName_c::PaneTranceBase(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 80219D04-80219E14       .text PaneTranceHira__7dName_cFsUcffUci */
-void dName_c::PaneTranceHira(short, unsigned char, float, float, unsigned char, int) {
+void dName_c::PaneTranceHira(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 80219E14-80219F24       .text PaneTranceKata__7dName_cFsUcffUci */
-void dName_c::PaneTranceKata(short, unsigned char, float, float, unsigned char, int) {
+void dName_c::PaneTranceKata(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 80219F24-8021A034       .text PaneTranceEisu__7dName_cFsUcffUci */
-void dName_c::PaneTranceEisu(short, unsigned char, float, float, unsigned char, int) {
+void dName_c::PaneTranceEisu(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8021A034-8021A144       .text PaneTranceArrow__7dName_cFsUcffUci */
-void dName_c::PaneTranceArrow(short, unsigned char, float, float, unsigned char, int) {
+void dName_c::PaneTranceArrow(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
 /* 8021A144-8021A254       .text PaneTranceEnd__7dName_cFsUcffUci */
-void dName_c::PaneTranceEnd(short, unsigned char, float, float, unsigned char, int) {
+void dName_c::PaneTranceEnd(s16, u8, f32, f32, u8, int) {
     /* Nonmatching */
 }
 
@@ -235,9 +235,3 @@ void dName_c::NameStrSet() {
 void dDlst_NameIN_c::draw() {
     /* Nonmatching */
 }
-
-/* 8021A6BC-8021A704       .text __dt__9dNm_HIO_cFv */
-dNm_HIO_c::~dNm_HIO_c() {
-    /* Nonmatching */
-}
-
