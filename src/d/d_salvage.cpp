@@ -38,7 +38,6 @@ void dSalvage_control_c::init_end() {
 
 /* 800CC7C4-800CCB70       .text entry__18dSalvage_control_cFP10fopAc_ac_cP14JPABaseEmitter */
 void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
-    /* Nonmatching */
     JUT_ASSERT(0x8b, pact != 0);
     s8 roomNo = fopAcM_GetRoomNo(pact);
     u32 kind = daSalvage_prm::getKind(pact);
@@ -46,21 +45,19 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
     u32 type = daSalvage_prm::getType(pact);
     u32 saveNo = daSalvage_prm::getSvNo(pact);
     s8 roomNoPrm = daSalvage_prm::getRoomNo(pact);
-    // s8 cmapNo;
     s32 switchNo = daSalvage_prm::getSwitchNo(pact);
+    s8 cmapNo;
     s32 no;
 
     bool invalid = false;
     if (roomNo != 0) {
+        cmapNo = roomNo;
         no = mRoomNum + MAX_SEA;
-        // cmapNo = roomNoPrm;
-        roomNoPrm = roomNo;
     } else {
         no = mSeaNum;
-        // cmapNo = roomNoPrm;
+        cmapNo = roomNoPrm;
     }
 
-    no = roomNo != 0 ? mRoomNum + MAX_SEA : mSeaNum;
     if (roomNo != 0) {
         if (mRoomNum > MAX_ROOM)
             invalid = true;
@@ -69,7 +66,7 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
             invalid = true;
     }
 
-    if (roomNoPrm <= 0 || roomNoPrm > 64)
+    if (cmapNo <= 0 || cmapNo > 64)
         invalid = true;
 
     if (kind == 2 || kind == 3) {
@@ -99,11 +96,11 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
         if (!fopAcM_isSwitch(pact, switchNo))
             mInfo[no].setFlag(1);
     case 3:
-        if (saveNo != 31 && dComIfGs_isOceanSvBit(roomNoPrm, saveNo))
+        if (saveNo != 31 && dComIfGs_isOceanSvBit(cmapNo, saveNo))
             return;
         break;
     case 4:
-        if (saveNo != 31 && dComIfGs_isOceanSvBit(roomNoPrm, saveNo))
+        if (saveNo != 31 && dComIfGs_isOceanSvBit(cmapNo, saveNo))
             return;
         if (!dKy_daynight_check())
             mInfo[no].setFlag(1);
@@ -127,11 +124,11 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
     switch (kind) {
     case 0:
         mInfo[no].mH = pact->mScale.y * 1000.0f;
-        mInfo[no].mR = pact->mScale.x * 500.0f;
+        mInfo[no].mR = pact->mScale.x * 700.0f;
         break;
     case 5:
         mInfo[no].mH = pact->mScale.y * 1000.0f;
-        mInfo[no].mR = pact->mScale.x * 700.0f;
+        mInfo[no].mR = pact->mScale.x * 500.0f;
         break;
     default:
         mInfo[no].mH = pact->mScale.y * 500.0f;

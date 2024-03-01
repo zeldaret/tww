@@ -416,7 +416,7 @@ config.libs = [
             Object(NonMatching, "d/d_2dnumber.cpp"),
             Object(Matching,    "d/d_a_npc_cb1_static.cpp"),
             Object(NonMatching, "d/d_a_npc_mk_static.cpp"),
-            Object(NonMatching, "d/d_salvage.cpp"),
+            Object(Matching,    "d/d_salvage.cpp"),
             Object(Matching,    "d/d_snap.cpp"),
             Object(Matching,    "d/d_point_wind.cpp"),
             Object(Matching,    "d/actor/d_a_agb.cpp", extra_cflags=['-pragma "nosyminline on"']),
