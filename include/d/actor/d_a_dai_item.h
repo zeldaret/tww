@@ -8,6 +8,7 @@
 
 class JPABaseEmitter;
 class mDoExt_bckAnm;
+class J3DNode;
 
 class daStandItem_c : public fopAc_ac_c {
 public:
