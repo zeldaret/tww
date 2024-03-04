@@ -3,6 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
 
 class daObjTower_c : public fopAc_ac_c {
 public:
@@ -16,8 +17,7 @@ public:
     void set_mtx();
 
 public:
-    /* 0x290 */ u8 m290;
-    /* 0x291 */ u8 m291[0x298 - 0x291];
+    /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ dBgW* mpBgW;
     /* 0x2A0 */ Mtx mMtx;

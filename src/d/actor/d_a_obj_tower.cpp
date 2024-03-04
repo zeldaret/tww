@@ -5,26 +5,30 @@
 
 #include "d/actor/d_a_obj_tower.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_printf.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c* param_1) {
-    ((daObjTower_c*)param_1)->CreateHeap();
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    ((daObjTower_c*)i_this)->CreateHeap();
 }
 
 /* 00000098-0000020C       .text CreateHeap__12daObjTower_cFv */
 bool daObjTower_c::CreateHeap() {
     J3DModelData* pModel = (J3DModelData*)dRes_control_c::getRes(
         "X_tower", 4, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+
     if (pModel == NULL) {
         JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_a_obj_tower.cpp", 0x56,
                                  "modelData != 0");
-        OSPanic("d_a_obj_tower.cpp", 0x56, "Halt ");
+        OSPanic("d_a_obj_tower.cpp", 0x56, "Halt");
     }
+
     mpModel = mDoExt_J3DModel__create(pModel, 0, 0x11020203);
+
     if (mpModel == NULL) {
         return false;
     } else {
@@ -32,7 +36,9 @@ bool daObjTower_c::CreateHeap() {
         mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y);
         mDoMtx_stack_c::scaleM(mScale.x, mScale.y, mScale.z);
         PSMTXCopy(mDoMtx_stack_c::now, mMtx);
+
         mpBgW = new dBgW();
+
         if (mpBgW == NULL) {
             return false;
         } else {
@@ -56,31 +62,33 @@ void daObjTower_c::CreateInit() {
 void daObjTower_c::set_mtx() {
     J3DModel* pJVar1;
     pJVar1 = mpModel;
+
     (pJVar1->mBaseScale).x = mScale.x;
     (pJVar1->mBaseScale).y = mScale.y;
     (pJVar1->mBaseScale).z = mScale.z;
+
     PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_YrotM(mDoMtx_stack_c::now, current.angle.y);
     PSMTXCopy(mDoMtx_stack_c::now, mpModel->mBaseTransformMtx);
 }
 
 /* 0000030C-000003DC       .text daObjTower_Create__FPv */
-static cPhs__Step daObjTower_Create(void* param_1) {
+static cPhs__Step daObjTower_Create(void* i_this) {
     cPhs__Step PVar3;
 
-    fopAcM_SetupActor(((daObjTower_c*)param_1), daObjTower_c);
+    fopAcM_SetupActor(((daObjTower_c*)i_this), daObjTower_c);
 
-    ((daObjTower_c*)param_1)->field_0x2d0 = 0;
+    ((daObjTower_c*)i_this)->field_0x2d0 = 0;
+
     if (!g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x1e40)) {
         PVar3 = cPhs_UNK3_e;
     } else {
-        PVar3 = (cPhs__Step)dComIfG_resLoad(
-            (request_of_phase_process_class*)&((daObjTower_c*)param_1)->m290, "X_tower");
+        PVar3 = (cPhs__Step)dComIfG_resLoad(&((daObjTower_c*)i_this)->mPhs, "X_tower");
         if (PVar3 == cPhs_COMPLEATE_e) {
-            if (!fopAcM_entrySolidHeap(((daObjTower_c*)param_1), CheckCreateHeap, 0x1c6c0)) {
+            if (!fopAcM_entrySolidHeap(((daObjTower_c*)i_this), CheckCreateHeap, 0x1c6c0)) {
                 PVar3 = cPhs_ERROR_e;
             } else {
-                ((daObjTower_c*)param_1)->CreateInit();
+                ((daObjTower_c*)i_this)->CreateInit();
             }
         }
     }
@@ -88,44 +96,52 @@ static cPhs__Step daObjTower_Create(void* param_1) {
 }
 
 /* 000003DC-00000444       .text daObjTower_Delete__FPv */
-static BOOL daObjTower_Delete(void* param_1) {
-    if (((daObjTower_c*)(param_1))->field_0x2d0 == 1) {
+static BOOL daObjTower_Delete(void* i_this) {
+    if (((daObjTower_c*)(i_this))->field_0x2d0 == 1) {
         ((cBgS*)&g_dComIfG_gameInfo.play.mBgS.m_chk_element[0].m_bgw_base_ptr)
-            ->Release((cBgW*)((daObjTower_c*)param_1)->mpBgW);
+            ->Release((cBgW*)((daObjTower_c*)i_this)->mpBgW);
     }
-    if (((daObjTower_c*)param_1)->mBase.mCreateResult != 3) {
-        dComIfG_resDelete((request_of_phase_process_class*)&(((daObjTower_c*)param_1)->m290),
-                          "X_tower");
+
+    if (((daObjTower_c*)i_this)->mBase.mCreateResult != 3) {
+        dComIfG_resDelete(&(((daObjTower_c*)i_this)->mPhs), "X_tower");
     }
+
     return TRUE;
 }
 
 /* 00000444-000004E8       .text daObjTower_Draw__FPv */
-static BOOL daObjTower_Draw(void* param_1) {
-    g_env_light.settingTevStruct(1, &((daObjTower_c*)param_1)->current.pos,
-                                 &((daObjTower_c*)param_1)->mTevStr);
-    g_env_light.setLightTevColorType(((daObjTower_c*)param_1)->mpModel,
-                                     &((daObjTower_c*)param_1)->mTevStr);
+static BOOL daObjTower_Draw(void* i_this) {
+    g_env_light.settingTevStruct(1, &((daObjTower_c*)i_this)->current.pos,
+                                 &((daObjTower_c*)i_this)->mTevStr);
+    g_env_light.setLightTevColorType(((daObjTower_c*)i_this)->mpModel,
+                                     &((daObjTower_c*)i_this)->mTevStr);
+
     j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaListBG;
     j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluListBG;
-    mDoExt_modelUpdateDL(((daObjTower_c*)param_1)->mpModel);
+
+    mDoExt_modelUpdateDL(((daObjTower_c*)i_this)->mpModel);
+
     j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaList;
     j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluList;
+
     return TRUE;
 }
 
 /* 000004E8-00000568       .text daObjTower_Execute__FPv */
-static BOOL daObjTower_Execute(void* param_1) {
-    u8 idx = ((daObjTower_c*)param_1)->mDemoActorId;
+static BOOL daObjTower_Execute(void* i_this) {
+    u8 idx = ((daObjTower_c*)i_this)->mDemoActorId;
+
     if (idx != 0) {
         dDemo_actor_c* pdVar1 = (g_dComIfG_gameInfo.play.mDemo)->mDemoObj.getActor(idx);
         if ((pdVar1 != 0) && (pdVar1->mFlags & 2)) {
-            ((daObjTower_c*)param_1)->current.pos.x = (pdVar1->mTranslation).x;
-            ((daObjTower_c*)param_1)->current.pos.y = (pdVar1->mTranslation).y;
-            ((daObjTower_c*)param_1)->current.pos.z = (pdVar1->mTranslation).z;
+            ((daObjTower_c*)i_this)->current.pos.x = (pdVar1->mTranslation).x;
+            ((daObjTower_c*)i_this)->current.pos.y = (pdVar1->mTranslation).y;
+            ((daObjTower_c*)i_this)->current.pos.z = (pdVar1->mTranslation).z;
         }
     }
-    ((daObjTower_c*)param_1)->set_mtx();
+
+    ((daObjTower_c*)i_this)->set_mtx();
+
     return TRUE;
 }
 
@@ -133,3 +149,26 @@ static BOOL daObjTower_Execute(void* param_1) {
 static BOOL daObjTower_IsDelete(void*) {
     return TRUE;
 }
+
+static actor_method_class daObj_TowerMethodTable = {
+    (process_method_func)daObjTower_Create,  (process_method_func)daObjTower_Delete,
+    (process_method_func)daObjTower_Execute, (process_method_func)daObjTower_IsDelete,
+    (process_method_func)daObjTower_Draw,
+};
+
+struct actor_process_profile_definition g_profile_Obj_Tower = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Tower,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjTower_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x1C4,
+    /* Actor SubMtd */ &daObj_TowerMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
