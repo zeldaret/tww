@@ -601,7 +601,7 @@ config.libs = [
         [
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-control.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-data.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-math.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio/jstudio-math.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-object.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/functionvalue.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
