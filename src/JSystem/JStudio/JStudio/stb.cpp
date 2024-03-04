@@ -7,7 +7,7 @@
 #include "JSystem/JStudio/JStudio/jstudio-object.h"
 #include "dolphin/types.h"
 #include "algorithm.h"
-#include "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include/string.h"
+#include "string.h"
 
 namespace JStudio {
 namespace stb {

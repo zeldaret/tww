@@ -3,7 +3,7 @@
 // Translation Unit: control.cpp
 //
 
-#include "control.h"
+#include "JSystem/JStudio/JStudio_JStage/control.h"
 #include "dolphin/types.h"
 
 /* 80275BAC-80275C0C       .text __dt__Q214JStudio_JStage13TCreateObjectFv */
@@ -12,7 +12,7 @@ JStudio_JStage::TCreateObject::~TCreateObject() {
 }
 
 /* 80275C0C-80275D5C       .text create__Q214JStudio_JStage13TCreateObjectFPPQ27JStudio7TObjectRCQ47JStudio3stb4data20TParse_TBlock_object */
-void JStudio_JStage::TCreateObject::create(JStudio::TObject**, const JStudio::stb::data::TParse_TBlock_object&) {
+bool JStudio_JStage::TCreateObject::create(JStudio::TObject**, const JStudio::stb::data::TParse_TBlock_object&) {
     /* Nonmatching */
 }
 
@@ -20,9 +20,3 @@ void JStudio_JStage::TCreateObject::create(JStudio::TObject**, const JStudio::st
 void JStudio_JStage::TCreateObject::find(const JStudio::stb::data::TParse_TBlock_object&, JStage::TEObject) {
     /* Nonmatching */
 }
-
-
-
-
-
-

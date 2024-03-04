@@ -2,6 +2,7 @@
 #define D_FILE_ERROR_H
 
 #include "dolphin/types.h"
+#include "JSystem/J2DGraph/J2DPane.h"
 
 class MyScreen {
 public:

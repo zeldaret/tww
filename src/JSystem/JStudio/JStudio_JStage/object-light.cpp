@@ -3,7 +3,7 @@
 // Translation Unit: object-light.cpp
 //
 
-#include "object-light.h"
+#include "JSystem/JStudio/JStudio_JStage/object-light.h"
 #include "dolphin/types.h"
 
 /* 80278228-802782C4       .text __ct__Q214JStudio_JStage14TAdaptor_lightFPCQ26JStage7TSystemPQ26JStage6TLight */
@@ -32,27 +32,27 @@ void JStudio_JStage::TAdaptor_light::adaptor_do_end(const JStudio::TObject*) {
 }
 
 /* 80278610-802787C4       .text adaptor_do_update__Q214JStudio_JStage14TAdaptor_lightFPCQ27JStudio7TObjectUl */
-void JStudio_JStage::TAdaptor_light::adaptor_do_update(const JStudio::TObject*, unsigned long) {
+void JStudio_JStage::TAdaptor_light::adaptor_do_update(const JStudio::TObject*, u32) {
     /* Nonmatching */
 }
 
 /* 802787C4-802787F8       .text adaptor_do_data__Q214JStudio_JStage14TAdaptor_lightFPCQ27JStudio7TObjectPCvUlPCvUl */
-void JStudio_JStage::TAdaptor_light::adaptor_do_data(const JStudio::TObject*, const void*, unsigned long, const void*, unsigned long) {
+void JStudio_JStage::TAdaptor_light::adaptor_do_data(const JStudio::TObject*, const void*, u32, const void*, u32) {
     /* Nonmatching */
 }
 
 /* 802787F8-80278870       .text adaptor_do_FACULTY__Q214JStudio_JStage14TAdaptor_lightFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_light::adaptor_do_FACULTY(JStudio::data::TEOperationData, const void*, unsigned long) {
+void JStudio_JStage::TAdaptor_light::adaptor_do_FACULTY(JStudio::data::TEOperationData, const void*, u32) {
     /* Nonmatching */
 }
 
 /* 80278870-80278894       .text adaptor_do_ENABLE__Q214JStudio_JStage14TAdaptor_lightFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_light::adaptor_do_ENABLE(JStudio::data::TEOperationData, const void*, unsigned long) {
+void JStudio_JStage::TAdaptor_light::adaptor_do_ENABLE(JStudio::data::TEOperationData, const void*, u32) {
     /* Nonmatching */
 }
 
 /* 80278894-802788A0       .text __cl__Q314JStudio_JStage14TAdaptor_light20TVVOutput_direction_CFfPQ27JStudio8TAdaptor */
-void JStudio_JStage::TAdaptor_light::TVVOutput_direction_::operator()(float, JStudio::TAdaptor*) const {
+void JStudio_JStage::TAdaptor_light::TVVOutput_direction_::operator()(f32, JStudio::TAdaptor*) const {
     /* Nonmatching */
 }
 

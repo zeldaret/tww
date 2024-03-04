@@ -3,7 +3,7 @@
 // Translation Unit: object-ambientlight.cpp
 //
 
-#include "object-ambientlight.h"
+#include "JSystem/JStudio/JStudio_JStage/object-ambientlight.h"
 #include "dolphin/types.h"
 
 /* 802770D8-8027716C       .text __ct__Q214JStudio_JStage21TAdaptor_ambientLightFPCQ26JStage7TSystemPQ26JStage13TAmbientLight */
@@ -32,12 +32,11 @@ void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_end(const JStudio::TObjec
 }
 
 /* 802772C8-80277320       .text adaptor_do_update__Q214JStudio_JStage21TAdaptor_ambientLightFPCQ27JStudio7TObjectUl */
-void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_update(const JStudio::TObject*, unsigned long) {
+void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_update(const JStudio::TObject*, u32) {
     /* Nonmatching */
 }
 
 /* 80277320-80277354       .text adaptor_do_data__Q214JStudio_JStage21TAdaptor_ambientLightFPCQ27JStudio7TObjectPCvUlPCvUl */
-void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_data(const JStudio::TObject*, const void*, unsigned long, const void*, unsigned long) {
+void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_data(const JStudio::TObject*, const void*, u32, const void*, u32) {
     /* Nonmatching */
 }
-

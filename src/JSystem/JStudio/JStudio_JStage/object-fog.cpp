@@ -3,7 +3,7 @@
 // Translation Unit: object-fog.cpp
 //
 
-#include "object-fog.h"
+#include "JSystem/JStudio/JStudio_JStage/object-fog.h"
 #include "dolphin/types.h"
 
 /* 80277C64-80277CF8       .text __ct__Q214JStudio_JStage12TAdaptor_fogFPCQ26JStage7TSystemPQ26JStage4TFog */
@@ -32,22 +32,11 @@ void JStudio_JStage::TAdaptor_fog::adaptor_do_end(const JStudio::TObject*) {
 }
 
 /* 80277EF0-80277F48       .text adaptor_do_update__Q214JStudio_JStage12TAdaptor_fogFPCQ27JStudio7TObjectUl */
-void JStudio_JStage::TAdaptor_fog::adaptor_do_update(const JStudio::TObject*, unsigned long) {
+void JStudio_JStage::TAdaptor_fog::adaptor_do_update(const JStudio::TObject*, u32) {
     /* Nonmatching */
 }
 
 /* 80277F48-80277F7C       .text adaptor_do_data__Q214JStudio_JStage12TAdaptor_fogFPCQ27JStudio7TObjectPCvUlPCvUl */
-void JStudio_JStage::TAdaptor_fog::adaptor_do_data(const JStudio::TObject*, const void*, unsigned long, const void*, unsigned long) {
+void JStudio_JStage::TAdaptor_fog::adaptor_do_data(const JStudio::TObject*, const void*, u32, const void*, u32) {
     /* Nonmatching */
 }
-
-/* 80278198-802781F8       .text __dt__Q214JStudio_JStage77TVariableValueOutput_object_<Q214JStudio_JStage12TAdaptor_fog,Q26JStage4TFog>Fv */
-JStudio_JStage::TVariableValueOutput_object_<JStudio_JStage::TAdaptor_fog, JStage::TFog>::~TVariableValueOutput_object_() {
-    /* Nonmatching */
-}
-
-/* 802781F8-80278228       .text __cl__Q214JStudio_JStage77TVariableValueOutput_object_<Q214JStudio_JStage12TAdaptor_fog,Q26JStage4TFog>CFfPQ27JStudio8TAdaptor */
-void JStudio_JStage::TVariableValueOutput_object_<JStudio_JStage::TAdaptor_fog, JStage::TFog>::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
-}
-
