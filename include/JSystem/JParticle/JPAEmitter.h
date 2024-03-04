@@ -183,6 +183,9 @@ public:
     void setGlobalRTMatrix(MtxP mtx) {
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
+    void setGlobalSRTMatrix(MtxP mtx) {
+        JPASetRMtxSTVecfromMtx(mtx, mGlobalRotation, mGlobalDynamicsScale, mGlobalTranslation);
+    }
     void setGlobalRotation(const JGeometry::TVec3<s16>& rot) {
         JPAGetXYZRotateMtx(rot.x, rot.y, rot.z, mGlobalRotation);
     }
@@ -290,7 +293,6 @@ public:
     void setGlobalParticleHeightScale(f32) {}
     void setGlobalParticleScale(f32, f32) {}
     void setGlobalParticleWidthScale(f32) {}
-    void setGlobalSRTMatrix(MtxP) {}
 
     static JPAEmitterInfo emtrInfo;
 

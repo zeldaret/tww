@@ -3,81 +3,209 @@
 // Translation Unit: object-particle.cpp
 //
 
-#include "object-particle.h"
+#include "JSystem/JStudio/JStudio_JParticle/object-particle.h"
+#include "JSystem/JParticle/JPAEmitterManager.h"
+#include "JSystem/JStudio/JStudio/jstudio-math.h"
 #include "dolphin/types.h"
 
 /* 80279878-80279954       .text __ct__Q217JStudio_JParticle17TAdaptor_particleFP17JPAEmitterManagerPCQ26JStage7TSystem */
-JStudio_JParticle::TAdaptor_particle::TAdaptor_particle(JPAEmitterManager*, const JStage::TSystem*) {
-    /* Nonmatching */
-}
-
-/* 80279954-802799B0       .text __dt__Q317JStudio_JParticle17TAdaptor_particle13TJPACallback_Fv */
-JStudio_JParticle::TAdaptor_particle::TJPACallback_::~TJPACallback_() {
-    /* Nonmatching */
+JStudio_JParticle::TAdaptor_particle::TAdaptor_particle(JPAEmitterManager* emitterManager, const JStage::TSystem* system)
+    : mEmitterManager(emitterManager)
+    , mEmitter(NULL)
+    , mCallback(this)
+    , _188(-1)
+    , _18C(0)
+    , _190(0)
+    , _194(0)
+    , mSystem(system)
+    , _19C(NULL)
+    , _1A0(0xFFFFFFFF)
+    , _1A4(0)
+{
 }
 
 /* 802799B0-80279A50       .text __dt__Q217JStudio_JParticle17TAdaptor_particleFv */
 JStudio_JParticle::TAdaptor_particle::~TAdaptor_particle() {
-    /* Nonmatching */
+	if (mEmitter != NULL) {
+		mEmitterManager->forceDeleteEmitter(mEmitter);
+	}
 }
 
 /* 80279A50-80279BD4       .text adaptor_do_prepare__Q217JStudio_JParticle17TAdaptor_particleFPCQ27JStudio7TObject */
-void JStudio_JParticle::TAdaptor_particle::adaptor_do_prepare(const JStudio::TObject*) {
+void JStudio_JParticle::TAdaptor_particle::adaptor_do_prepare(const JStudio::TObject* param_1) {
     /* Nonmatching */
+	static TSetVariableValue_immediate aoData[18] = {
+		TSetVariableValue_immediate(0, 0.0f),    TSetVariableValue_immediate(1, 0.0f),    TSetVariableValue_immediate(2, 0.0f),
+		TSetVariableValue_immediate(3, 0.0f),    TSetVariableValue_immediate(4, 0.0f),    TSetVariableValue_immediate(5, 0.0f),
+		TSetVariableValue_immediate(6, 1.0f),    TSetVariableValue_immediate(7, 1.0f),    TSetVariableValue_immediate(8, 1.0f),
+		TSetVariableValue_immediate(9, 255.0f),  TSetVariableValue_immediate(10, 255.0f), TSetVariableValue_immediate(11, 255.0f),
+		TSetVariableValue_immediate(12, 255.0f), TSetVariableValue_immediate(13, 255.0f), TSetVariableValue_immediate(14, 255.0f),
+		TSetVariableValue_immediate(15, 255.0f), TSetVariableValue_immediate(16, 255.0f), TSetVariableValue_immediate(0xFFFFFFFF, NAN)
+	};
+	adaptor_setVariableValue_immediate(aoData);
+	mCallback.mObject = param_1;
 }
 
 /* 80279BD4-80279BD8       .text adaptor_do_end__Q217JStudio_JParticle17TAdaptor_particleFPCQ27JStudio7TObject */
-void JStudio_JParticle::TAdaptor_particle::adaptor_do_end(const JStudio::TObject*) {
-    /* Nonmatching */
-}
+void JStudio_JParticle::TAdaptor_particle::adaptor_do_end(const JStudio::TObject*) {}
 
 /* 80279BD8-80279C2C       .text adaptor_do_update__Q217JStudio_JParticle17TAdaptor_particleFPCQ27JStudio7TObjectUl */
-void JStudio_JParticle::TAdaptor_particle::adaptor_do_update(const JStudio::TObject*, unsigned long) {
-    /* Nonmatching */
+void JStudio_JParticle::TAdaptor_particle::adaptor_do_update(const JStudio::TObject* param_1, u32 param_2) {
+	if (_190 == 0) {
+		return;
+	}
+	if (_194 >= _190) {
+		return;
+	}
+	_194 += param_2;
+	if (_194 < _190) {
+		return;
+	}
+	switch (_18C) {
+	case 2:
+        break;
+    default:
+		_18C     = 0;
+        break;
+	}
+	_190 = 0;
+	_194 = 0;
 }
 
 /* 80279C2C-80279C40       .text adaptor_do_PARTICLE__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARTICLE(JStudio::data::TEOperationData, const void*, unsigned long) {
-    /* Nonmatching */
+void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARTICLE(JStudio::data::TEOperationData operation, const void* r5, u32) {
+	switch (operation) {
+	case JStudio::data::UNK_0x19:
+        _188 = *(int*)r5;
+		break;
+	}
 }
 
 /* 80279C40-80279CA4       .text adaptor_do_PARENT__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT(JStudio::data::TEOperationData, const void*, unsigned long) {
+void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT(JStudio::data::TEOperationData operation, const void* param_2, u32) {
     /* Nonmatching */
+	switch (operation) {
+	case JStudio::data::UNK_0x18:
+		_19C = NULL;
+		JStage::TObject* object = NULL;
+		if (mSystem->JSGFindObject((const char*)param_2, JStage::TOBJ_ACTOR_UNK) == 0) {
+			_19C = object;
+		}
+		break;
+	}
 }
 
 /* 80279CA4-80279D24       .text adaptor_do_PARENT_NODE__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, const void*, unsigned long) {
-    /* Nonmatching */
+void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData operation, const void* param_2, u32) {
+	switch (operation) {
+	case JStudio::data::UNK_0x18:
+		if (_19C != NULL) {
+			_1A0 = _19C->JSGFindNodeID((const char*)param_2);
+			if (_1A0 == 0xFFFFFFFF) {
+				return;
+			}
+		}
+		break;
+	case JStudio::data::UNK_0x19:
+		_1A0 = *(u32*)param_2;
+		break;
+	}
 }
 
 /* 80279D24-80279D40       .text adaptor_do_PARENT_ENABLE__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, const void*, unsigned long) {
-    /* Nonmatching */
+void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData operation, const void* param_2, u32 param_3) {
+	switch (operation) {
+	case JStudio::data::UNK_0x2:
+		_1A4 = *(u32*)param_2;
+		break;
+	}
 }
 
-/* 80279D40-80279E2C       .text __cl__Q317JStudio_JParticle17TAdaptor_particle21TVVOOn_BEGIN_FADE_IN_CFfPQ27JStudio8TAdaptor */
-void JStudio_JParticle::TAdaptor_particle::TVVOOn_BEGIN_FADE_IN_::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
-}
+// /* 80279D40-80279E2C       .text __cl__Q317JStudio_JParticle17TAdaptor_particle21TVVOOn_BEGIN_FADE_IN_CFfPQ27JStudio8TAdaptor */
+// void JStudio_JParticle::TAdaptor_particle::TVVOOn_BEGIN_FADE_IN_::operator()(float, JStudio::TAdaptor*) const {
+//     /* Nonmatching */
+// }
 
-/* 80279E2C-80279F08       .text __cl__Q317JStudio_JParticle17TAdaptor_particle20TVVOOn_END_FADE_OUT_CFfPQ27JStudio8TAdaptor */
-void JStudio_JParticle::TAdaptor_particle::TVVOOn_END_FADE_OUT_::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
-}
+// /* 80279E2C-80279F08       .text __cl__Q317JStudio_JParticle17TAdaptor_particle20TVVOOn_END_FADE_OUT_CFfPQ27JStudio8TAdaptor */
+// void JStudio_JParticle::TAdaptor_particle::TVVOOn_END_FADE_OUT_::operator()(float, JStudio::TAdaptor*) const {
+//     /* Nonmatching */
+// }
 
 /* 80279F08-8027A2B8       .text execute__Q317JStudio_JParticle17TAdaptor_particle13TJPACallback_FP14JPABaseEmitter */
-void JStudio_JParticle::TAdaptor_particle::TJPACallback_::execute(JPABaseEmitter*) {
+void JStudio_JParticle::TAdaptor_particle::TJPACallback_::execute(JPABaseEmitter* emitter) {
     /* Nonmatching */
-}
+	bool check = false;
+	if (emitter->isEnableDeleteEmitter()) {
+		check = true;
+	}
 
-/* 8027A2B8-8027A318       .text __dt__Q317JStudio_JParticle17TAdaptor_particle20TVVOOn_END_FADE_OUT_Fv */
-JStudio_JParticle::TAdaptor_particle::TVVOOn_END_FADE_OUT_::~TVVOOn_END_FADE_OUT_() {
-    /* Nonmatching */
-}
+	if (check) {
+		mAdaptor->mEmitterManager->forceDeleteEmitter(emitter);
+		mAdaptor->mEmitter = NULL;
+		mAdaptor->_18C     = 0;
+		mAdaptor->_190     = 0;
+		mAdaptor->_194     = 0;
+		return;
+	}
 
-/* 8027A318-8027A378       .text __dt__Q317JStudio_JParticle17TAdaptor_particle21TVVOOn_BEGIN_FADE_IN_Fv */
-JStudio_JParticle::TAdaptor_particle::TVVOOn_BEGIN_FADE_IN_::~TVVOOn_BEGIN_FADE_IN_() {
-    /* Nonmatching */
-}
+	f64 val1 = mAdaptor->_190; // u32 stored as f64
+	f64 val2 = mAdaptor->_194; // u32 stored as f64
 
+	f64 alpha = 1.0;
+	switch (mAdaptor->_18C) {
+	case 1:
+		alpha = val2 / val1;
+		break;
+	case 3:
+		alpha = (val1 - val2) / val1;
+		break;
+	}
+
+	const JStudio::TControl* ctrl = static_cast<const JStudio::TControl*>(mObject->getControl()); // r28
+
+	Vec srts[3]; // 0x64
+	mAdaptor->adaptor_getVariableValue_Vec(&srts[2], sauVariableValue_3_TRANSLATION_XYZ);
+	mAdaptor->adaptor_getVariableValue_Vec(&srts[1], sauVariableValue_3_ROTATION_XYZ);
+	mAdaptor->adaptor_getVariableValue_Vec(&srts[0], sauVariableValue_3_SCALING_XYZ);
+
+	Vec* pos; // r29
+
+	if (!mAdaptor->_1A4) {
+		if (!ctrl->transformOnGet_isEnabled()) {
+			pos = srts;
+		} else {
+			Vec outVec[3];
+			PSMTXMultVec(ctrl->transformOnSet_getMatrix(), &srts[2], &outVec[0]);
+			outVec[1].x = srts[1].x;
+			outVec[1].y = ctrl->transformOnSet_getRotationY() + srts[1].y;
+			outVec[1].z = srts[1].z;
+			pos         = outVec;
+		}
+		emitter->setGlobalTranslation(pos[0]);
+
+        emitter->setGlobalRotation(JGeometry::TVec3<s16>(65536.0 * (pos[1].x / 360.0), 65536.0 * (pos[1].y / 360.0), 65536.0 * (pos[1].z / 360.0)));
+		JGeometry::TVec3<f32> scaleVec(((JGeometry::TVec3<f32>*)pos)[2]);
+		emitter->setGlobalScale(scaleVec);
+	} else {
+		Mtx mtx1;
+        JStudio::math::getTransformation_SRxyzT(mtx1, srts[0], srts[1], srts[2]);
+        Mtx mtx2;
+        MTXConcat(NULL, mtx1, mtx2);
+        emitter->setGlobalSRTMatrix(mtx2);
+	}
+
+	GXColor color;
+	mAdaptor->adaptor_getVariableValue_GXColor(&color, sauVariableValue_4_COLOR_RGBA);
+	emitter->setGlobalPrmColor(color.r, color.g, color.b);
+
+	alpha *= (f64)color.a;
+	u8 emitAlpha = 255;
+	if (alpha < 255.0) {
+		emitAlpha = (u8)alpha;
+	}
+
+	emitter->setGlobalAlpha(emitAlpha);
+
+	mAdaptor->adaptor_getVariableValue_GXColor(&color, sauVariableValue_4_COLOR1_RGBA);
+	emitter->setGlobalEnvColor(color.r, color.g, color.b);
+}

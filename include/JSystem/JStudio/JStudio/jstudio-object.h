@@ -14,6 +14,7 @@ namespace data {
         UNK_0x3 = 0x3,
         UNK_0x10 = 0x10,
         UNK_0x12 = 0x12,
+        UNK_0x18 = 0x18,
         UNK_0x19 = 0x19,
     };
 };
@@ -108,6 +109,7 @@ public:
 
     TAdaptor* getAdaptor() { return mpAdaptor; }
     TControl* getControl() { return (TControl*)stb::TObject::getControl(); }
+    const TControl* getControl() const { return (const TControl*)stb::TObject::getControl(); }
 
     void prepareAdaptor() {
         if (mpAdaptor != NULL) {
@@ -133,10 +135,22 @@ public:
 };
 
 struct TAdaptor {
-    struct TSetVariableValue_immediate {
-        u32 field_0x0;
-        f32 field_0x4;
-    };
+	inline TAdaptor(TVariableValue* values, int count)
+	    : pValue_(values)
+	    , u(count)
+	{
+	}
+
+	struct TSetVariableValue_immediate {
+		inline TSetVariableValue_immediate(u32 p1, f32 p2)
+		    : _00(p1)
+		    , _04(p2)
+		{
+		}
+
+		u32 _00; // _00
+		f32 _04; // _04
+	};
     typedef void (*setVarFunc)(JStudio::TAdaptor*, JStudio::TObject*, u32, void const*, u32);
     virtual ~TAdaptor() = 0;
     virtual void adaptor_do_prepare(const JStudio::TObject*);
@@ -277,6 +291,11 @@ struct TObject_light : public TObject {
 };
 
 struct TAdaptor_message : public TAdaptor {
+	inline TAdaptor_message()
+	    : TAdaptor(NULL, 0)
+	{
+	}
+
     virtual ~TAdaptor_message() = 0;
 };
 
@@ -289,17 +308,22 @@ struct TObject_message : public TObject {
 };
 
 struct TAdaptor_particle : public TAdaptor {
+	TAdaptor_particle()
+	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
+	    , mValue()
+	{
+	}
     virtual ~TAdaptor_particle() = 0;
 
     /* 0x10 */ TVariableValue mValue[20];
 
-    static u8 const sauVariableValue_3_TRANSLATION_XYZ[12];
-    static u8 const sauVariableValue_3_ROTATION_XYZ[12];
-    static u8 const sauVariableValue_3_SCALING_XYZ[12];
-    static u8 const sauVariableValue_3_COLOR_RGB[12];
-    static u8 const sauVariableValue_4_COLOR_RGBA[16];
-    static u8 const sauVariableValue_3_COLOR1_RGB[12];
-    static u8 const sauVariableValue_4_COLOR1_RGBA[16];
+    static u32 const sauVariableValue_3_TRANSLATION_XYZ[12];
+    static u32 const sauVariableValue_3_ROTATION_XYZ[12];
+    static u32 const sauVariableValue_3_SCALING_XYZ[12];
+    static u32 const sauVariableValue_3_COLOR_RGB[12];
+    static u32 const sauVariableValue_4_COLOR_RGBA[16];
+    static u32 const sauVariableValue_3_COLOR1_RGB[12];
+    static u32 const sauVariableValue_4_COLOR1_RGBA[16];
 };
 
 struct TObject_particle : public TObject {

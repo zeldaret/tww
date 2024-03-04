@@ -3,17 +3,57 @@
 // Translation Unit: control.cpp
 //
 
-#include "control.h"
+#include "JSystem/JStudio/JStudio_JParticle/control.h"
 #include "dolphin/types.h"
 
+namespace JStudio_JParticle {
+
+namespace {
+// Fake inline.
+// TODO: supposed to use JStudio::TObject::createFromAdaptor instead of this somehow
+static inline JStudio::TObject_particle* create(const JStudio::stb::data::TParse_TBlock_object& data, TAdaptor_particle* adaptor)
+{
+	JStudio::TObject_particle* object = new JStudio::TObject_particle(data, adaptor);
+	if (object == NULL) {
+		// TODO: This should probably delete the adaptor in NONMATCHING builds, if the object couldn't get created.
+		return NULL;
+	} else {
+		if (object->mpAdaptor != NULL) {
+			object->mpAdaptor->adaptor_do_prepare(object);
+		}
+	}
+	return object;
+}
+
+/* 802796E4-802797A0       .text createObject_PARTICLE_JPA___Q217JStudio_JParticle21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectP17JPAEmitterManagerPCQ26JStage7TSystem */
+JStudio::TObject_particle* createObject_PARTICLE_JPA_(const JStudio::stb::data::TParse_TBlock_object& data, JPAEmitterManager* manager,
+                                                      const JStage::TSystem* system)
+{
+	TAdaptor_particle* adaptor = new TAdaptor_particle(manager, system);
+	if (adaptor == NULL) {
+		return NULL;
+	}
+	JStudio::TObject_particle* object = create(data, adaptor);
+	return object;
+}
+} // namespace
 
 /* 802797A0-80279800       .text __dt__Q217JStudio_JParticle13TCreateObjectFv */
-JStudio_JParticle::TCreateObject::~TCreateObject() {
-    /* Nonmatching */
-}
+TCreateObject::~TCreateObject() {}
 
 /* 80279800-80279878       .text create__Q217JStudio_JParticle13TCreateObjectFPPQ27JStudio7TObjectRCQ47JStudio3stb4data20TParse_TBlock_object */
-void JStudio_JParticle::TCreateObject::create(JStudio::TObject**, const JStudio::stb::data::TParse_TBlock_object&) {
-    /* Nonmatching */
+bool TCreateObject::create(JStudio::TObject** newObject, const JStudio::stb::data::TParse_TBlock_object& data) {
+	JStudio::TObject_particle* (*func)(const JStudio::stb::data::TParse_TBlock_object&, JPAEmitterManager*, const JStage::TSystem*);
+	switch (data.get()->type) {
+	case 'JPTC': {
+		func = &createObject_PARTICLE_JPA_;
+		break;
+	}
+	default:
+		return false;
+	}
+	*newObject = func(data, pJPAEmitterManager_, pJSGSystem_);
+	return true;
 }
 
+} // namespace JStudio_JParticle

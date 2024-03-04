@@ -635,14 +635,14 @@ config.libs = [
     JSystemLib(
         "JStudio_JParticle",
         [
-            Object(NonMatching, "JSystem/JStudio/JStudio_JParticle/control.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JParticle/control.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio_JParticle/object-particle.cpp"),
         ],
     ),
     JSystemLib(
         "JStudio_JMessage",
         [
-            Object(NonMatching, "JSystem/JStudio/JStudio_JMessage/control.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JMessage/control.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio_JMessage/object-message.cpp"),
         ],
     ),

@@ -3,21 +3,25 @@
 // Translation Unit: object-message.cpp
 //
 
-#include "object-message.h"
+#include "JSystem/JStudio/JStudio_JMessage/object-message.h"
 #include "dolphin/types.h"
 
 /* 8027A614-8027A64C       .text __ct__Q216JStudio_JMessage16TAdaptor_messageFPQ28JMessage8TControl */
-JStudio_JMessage::TAdaptor_message::TAdaptor_message(JMessage::TControl*) {
-    /* Nonmatching */
+JStudio_JMessage::TAdaptor_message::TAdaptor_message(JMessage::TControl* control)
+    : JStudio::TAdaptor_message()
+    , mControl(control)
+{
 }
 
 /* 8027A64C-8027A6AC       .text __dt__Q216JStudio_JMessage16TAdaptor_messageFv */
-JStudio_JMessage::TAdaptor_message::~TAdaptor_message() {
-    /* Nonmatching */
-}
+JStudio_JMessage::TAdaptor_message::~TAdaptor_message() {}
 
 /* 8027A6AC-8027A6EC       .text adaptor_do_MESSAGE__Q216JStudio_JMessage16TAdaptor_messageFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JMessage::TAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOperationData, const void*, unsigned long) {
+void JStudio_JMessage::TAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOperationData operation, const void* param_2, u32 param_3) {
     /* Nonmatching */
+	switch (operation) {
+	case JStudio::data::UNK_0x19:
+		mControl->setMessageCode((*(u32*)param_2) >> 0x10, (*(u32*)param_3));
+		break;
+	}
 }
-

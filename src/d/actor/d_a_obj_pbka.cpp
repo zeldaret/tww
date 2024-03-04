@@ -35,14 +35,10 @@ void daObjPbka_c::CreateInit() {
 
 /* 000001CC-0000024C       .text set_mtx__11daObjPbka_cFv */
 void daObjPbka_c::set_mtx() {
-    J3DModel* model;
-    model = mpModel;
-    model->mBaseScale.x = mScale.x;
-    model->mBaseScale.y = mScale.y;
-    model->mBaseScale.z = mScale.z;
-    mDoMtx_trans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
-    mDoMtx_copy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+    mpModel->setBaseScale(mScale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 s32 daObjPbka_c::_create() {
