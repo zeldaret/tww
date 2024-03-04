@@ -49,27 +49,22 @@ void JStudio::TFactory::appendCreateObject(JStudio::TCreateObject* param_0) {
 
 /* 8026E360-8026E438       .text create__Q27JStudio8TFactoryFRCQ47JStudio3stb4data20TParse_TBlock_object */
 JStudio::TObject* JStudio::TFactory::create(const JStudio::stb::data::TParse_TBlock_object& param_0) {
-    /* Nonmatching */
     JGadget::TContainerEnumerator<TCreateObject, -4> aTStack_368(&mList);
     while(aTStack_368) {
         TCreateObject& piVar1 = *aTStack_368;
-        JStudio::TObject* obj;
+        JStudio::TObject* obj = NULL;
         if (piVar1.create(&obj, param_0)) {
             return obj;
         }
     }
-    return NULL;
+    return stb::TFactory::create(param_0);
 }
 
 /* 8026E438-8026E48C       .text __ct__Q27JStudio6TParseFPQ27JStudio8TControl */
-JStudio::TParse::TParse(JStudio::TControl* param_0) : stb::TParse(param_0) {
-    /* Nonmatching */
-}
+JStudio::TParse::TParse(JStudio::TControl* param_0) : stb::TParse(param_0), field_0x04(&param_0->fvb_Control) {}
 
 /* 8026E48C-8026E4FC       .text __dt__Q27JStudio6TParseFv */
-JStudio::TParse::~TParse() {
-    /* Nonmatching */
-}
+JStudio::TParse::~TParse() {}
 
 /* 8026E4FC-8026E56C       .text parseHeader__Q27JStudio6TParseFRCQ47JStudio3stb4data14TParse_THeaderUl */
 bool JStudio::TParse::parseHeader(const JStudio::stb::data::TParse_THeader& param_0, u32 param_1) {
@@ -98,8 +93,6 @@ bool JStudio::TParse::parseBlock_block(const JStudio::stb::data::TParse_TBlock& 
 
 /* 8026E5B0-8026E610       .text parseBlock_block_fvb___Q27JStudio6TParseFRCQ47JStudio3stb4data13TParse_TBlockUl */
 bool JStudio::TParse::parseBlock_block_fvb_(const JStudio::stb::data::TParse_TBlock& param_0, u32 param_1) {
-    /* Nonmatching */
-    TControl* pControl = getControl();
     const void* pContent = param_0.getContent();
     u32 uVar4 = param_1 & 0xf;
     if ((param_1 & 0x10) != 0) {
@@ -111,9 +104,5 @@ bool JStudio::TParse::parseBlock_block_fvb_(const JStudio::stb::data::TParse_TBl
     if ((param_1 & 0x40) != 0) {
         uVar4 |= 0x40;
     }
-    fvb::TParse aTStack_30(&pControl->fvb_Control);
-    if (!aTStack_30.parse(pContent, uVar4)) {
-        return false;
-    } 
-    return true;
+    return field_0x04.parse(pContent, uVar4);
 }

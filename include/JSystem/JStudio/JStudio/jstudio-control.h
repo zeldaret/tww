@@ -109,6 +109,8 @@ struct TParse : public stb::TParse {
     virtual bool parseBlock_block(JStudio::stb::data::TParse_TBlock const&, u32);
 
     TControl* getControl() { return (TControl*)stb::TParse::getControl(); }
+
+    /* 0x04 */ fvb::TParse field_0x04;
 };
 
 };  // namespace JStudio
