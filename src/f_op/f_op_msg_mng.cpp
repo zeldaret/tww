@@ -22,6 +22,79 @@ static bool demoFlag;
 static bool tactFlag;
 static bool nextMsg;
 
+static struct {
+    u8 itemNo;
+    const char* filename;
+} itemicon[] = {
+    /* 0x00 */ {dItem_TELESCOPE_e, "telescope.bti"},
+    /* 0x01 */ {NORMAL_SAIL, "sail_00.bti"},
+    /* 0x02 */ {dItem_WIND_WAKER_e, "baton.bti"},
+    /* 0x03 */ {dItem_GRAPPLING_HOOK_e, "rope.bti"},
+    /* 0x04 */ {EMONO_BAG, "coverofbeast.bti"},
+    /* 0x05 */ {dItem_BOOMERANG_e, "boomerang.bti"},
+    /* 0x06 */ {dItem_DEKU_LEAF_e, "fan.bti"},
+    /* 0x07 */ {dItem_TINGLE_TUNER_e, "whistle.bti"},
+    /* 0x08 */ {CAMERA, "camera.bti"},
+    /* 0x09 */ {dItem_IRON_BOOTS_e, "boots_00.bti"},
+    /* 0x0A */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x0B */ {ESA_BAG, "coverofbait.bti"},
+    /* 0x0C */ {dItem_BOW_e, "bow_01.bti"},
+    /* 0x0D */ {BOMB_BAG, "bomb_00.bti"},
+    /* 0x0E */ {EMPTY_BOTTLE, "bottle_00.bti"},
+    /* 0x0F */ {RED_BOTTLE, "bottle_01.bti"},
+    /* 0x10 */ {GREEN_BOTTLE, "bottle_02.bti"},
+    /* 0x11 */ {BLUE_BOTTLE, "bottle_03.bti"},
+    /* 0x12 */ {dItem_DELIVERY_BAG_e, "delivery.bti"},
+    /* 0x13 */ {dItem_HOOKSHOT_e, "hookshot.bti"},
+    /* 0x14 */ {dItem_SKULL_HAMMER_e, "hammer_01.bti"},
+    
+    /* 0x15 */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x16 */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
+    /* 0x17 */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
+    
+    /* 0x18 */ {SKULL_NECKLACE, "beast_01.bti"},
+    /* 0x19 */ {BOKOBABA_SEED, "beast_02.bti"},
+    /* 0x1A */ {GOLDEN_FEATHER, "beast_03.bti"},
+    /* 0x1B */ {BOKO_BELT, "beast_04.bti"},
+    /* 0x1C */ {RED_JELLY, "beast_05.bti"},
+    /* 0x1D */ {GREEN_JELLY, "beast_06.bti"},
+    /* 0x1E */ {BLUE_JELLY, "beast_07.bti"},
+    /* 0x1F */ {dItem_JOY_PENDANT_e, "beast_08.bti"},
+    
+    /* 0x20 */ {dItem_NONE_e, "beast_09.bti"},
+    /* 0x21 */ {dItem_NONE_e, "beast_10.bti"},
+    /* 0x22 */ {dItem_NONE_e, "beast_11.bti"},
+    /* 0x23 */ {dItem_NONE_e, "beast_12.bti"},
+    
+    /* 0x24 */ {dItem_HYOI_PEAR_e, "beast_02.bti"},
+    /* 0x25 */ {BIRD_ESA_5, "beast_02.bti"},
+    /* 0x26 */ {dItem_NONE_e, "beast_03.bti"},
+    /* 0x27 */ {dItem_NONE_e, "beast_04.bti"},
+    /* 0x28 */ {dItem_NONE_e, "beast_05.bti"},
+    /* 0x29 */ {dItem_NONE_e, "beast_06.bti"},
+    /* 0x2A */ {dItem_NONE_e, "beast_07.bti"},
+    /* 0x2B */ {dItem_NONE_e, "beast_08.bti"},
+    
+    /* 0x2C */ {dItem_NONE_e, "beast_09.bti"},
+    /* 0x2D */ {dItem_NONE_e, "beast_10.bti"},
+    /* 0x2E */ {dItem_NONE_e, "beast_11.bti"},
+    /* 0x2F */ {dItem_NONE_e, "beast_12.bti"},
+    
+    /* 0x30 */ {FLOWER_1, "beast_02.bti"},
+    /* 0x31 */ {FLOWER_2, "beast_02.bti"},
+    /* 0x32 */ {FLOWER_3, "beast_03.bti"},
+    /* 0x33 */ {HEROS_FLAG, "beast_04.bti"},
+    /* 0x34 */ {TAIRYO_FLAG, "beast_05.bti"},
+    /* 0x35 */ {SALES_FLAG, "beast_06.bti"},
+    /* 0x36 */ {WIND_FLAG, "beast_07.bti"},
+    /* 0x37 */ {RED_FLAG, "beast_08.bti"},
+    
+    /* 0x38 */ {FOSSIL_HEAD, "beast_09.bti"},
+    /* 0x39 */ {WATER_STATUE, "beast_10.bti"},
+    /* 0x3A */ {POSTMAN_STATUE, "beast_11.bti"},
+    /* 0x3B */ {PRESIDENT_STATUE, "beast_12.bti"},
+};
+
 class mesg_header;
 class fopMsgM_pane_alpha_class;
 
@@ -282,14 +355,68 @@ bool fopMsgM_releaseScopeMode() {
     return false;
 }
 
+static const char* fopMsgM_buttonTex[] = {
+    /* 0x00 */ {"font_00.bti"},
+    /* 0x01 */ {"font_01.bti"},
+    /* 0x02 */ {"font_09.bti"},
+    /* 0x03 */ {"font_04.bti"},
+    /* 0x04 */ {"font_05.bti"},
+    /* 0x05 */ {"font_02.bti"},
+    /* 0x06 */ {"font_03.bti"},
+    /* 0x07 */ {"font_06.bti"},
+    /* 0x08 */ {"font_08.bti"},
+    /* 0x09 */ {"font_07_01.bti"},
+    /* 0x0A */ {"font_10.bti"},
+    /* 0x0B */ {"font_10.bti"},
+    /* 0x0C */ {"font_10.bti"},
+    /* 0x0D */ {"font_10.bti"},
+    /* 0x0E */ {"font_07_01.bti"},
+    /* 0x0F */ {"font_07_01.bti"},
+    /* 0x10 */ {"font_07_01.bti"},
+    /* 0x11 */ {"font_07_01.bti"},
+    /* 0x12 */ {"font_07_01.bti"},
+    /* 0x13 */ {"font_07_01.bti"},
+    /* 0x14 */ {"font_12.bti"},
+    /* 0x15 */ {"font_13.bti"},
+    /* 0x16 */ {"font_14.bti"},
+    /* 0x17 */ {"font_15.bti"},
+};
+
+static GXColor fopMsgM_buttonW[] = {
+    /* 0x00 */ {0x00, 0xFF, 0xB4, 0xFF},
+    /* 0x01 */ {0xFF, 0x32, 0x32, 0xFF},
+    /* 0x02 */ {0xFF, 0xC8, 0x32, 0xFF},
+    /* 0x03 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x04 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x05 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x06 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x07 */ {0xC8, 0x96, 0xFF, 0xFF},
+    /* 0x08 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x09 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x0A */ {0xFF, 0xC8, 0x32, 0xFF},
+    /* 0x0B */ {0xFF, 0xC8, 0x32, 0xFF},
+    /* 0x0C */ {0xFF, 0xC8, 0x32, 0xFF},
+    /* 0x0D */ {0xFF, 0xC8, 0x32, 0xFF},
+    /* 0x0E */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x0F */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x10 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x11 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x12 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x13 */ {0xC8, 0xC8, 0xC8, 0xFF},
+    /* 0x14 */ {0x00, 0xFF, 0xB4, 0xFF},
+    /* 0x15 */ {0xFF, 0x32, 0x32, 0xFF},
+    /* 0x16 */ {0xFF, 0xFF, 0xFF, 0xFF},
+    /* 0x17 */ {0xFF, 0xFF, 0xFF, 0xFF},
+};
+
 /* 8002C6B0-8002C6C4       .text fopMsgM_outFontTex__Fi */
-void fopMsgM_outFontTex(int) {
-    /* Nonmatching */
+const char* fopMsgM_outFontTex(int i) {
+    return fopMsgM_buttonTex[i];
 }
 
 /* 8002C6C4-8002C6D8       .text fopMsgM_outFontColorWhite__Fi */
-void fopMsgM_outFontColorWhite(int) {
-    /* Nonmatching */
+GXColor fopMsgM_outFontColorWhite(int i) {
+    return fopMsgM_buttonW[i];
 }
 
 /* 8002C6D8-8002C9B0       .text fopMsgM_outFontSet__FP10J2DPictureP10J2DPicturePsUlUc */
@@ -640,13 +767,20 @@ void fopMsgM_msgDataProc_c::getAutoSendFlag() {
 }
 
 /* 80034FE0-80034FF4       .text fopMsgM_itemNumIdx__FUc */
-void fopMsgM_itemNumIdx(u8) {
-    /* Nonmatching */
+u8 fopMsgM_itemNumIdx(u8 i) {
+    return itemicon[i].itemNo;
 }
 
 /* 80034FF4-80035060       .text fopMsgM_itemNum__FUc */
-void fopMsgM_itemNum(u8) {
-    /* Nonmatching */
+u8 fopMsgM_itemNum(u8 itemNo) {
+    u8 invIdx = 0;
+    for (u8 i = 0; i < ARRAY_SIZE(itemicon); i++) {
+        if (itemNo == fopMsgM_itemNumIdx(i)) {
+            invIdx = i;
+            break;
+        }
+    }
+    return invIdx;
 }
 
 /* 80035060-800350B8       .text fopMsgM_getColorTable__FUs */
