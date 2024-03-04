@@ -45,7 +45,7 @@ BOOL daObjTower_c::CreateHeap() {
 /* 0000020C-0000028C       .text CreateInit__12daObjTower_cFv */
 void daObjTower_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -30000.0, -5000.0, -30000.0, 30000.0, 40000.0, 30000.0);
+    fopAcM_setCullSizeBox(this, -30000.0f, -5000.0f, -30000.0f, 30000.0f, 40000.0f, 30000.0f);
     dComIfG_Bgsp()->Regist(mpBgW, this);
     field_0x2d0 = 1;
     set_mtx();
@@ -56,7 +56,7 @@ void daObjTower_c::set_mtx() {
     mpModel->setBaseScale(mScale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    mDoMtx_copy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 cPhs__Step daObjTower_c::_create() {
@@ -64,17 +64,17 @@ cPhs__Step daObjTower_c::_create() {
 
     fopAcM_SetupActor(this, daObjTower_c);
 
-    this->field_0x2d0 = 0;
+    field_0x2d0 = 0;
 
     if (!dComIfGs_isEventBit(0x1e40)) {
         PVar3 = cPhs_UNK3_e;
     } else {
-        PVar3 = (cPhs__Step)dComIfG_resLoad(&this->mPhs, "X_tower");
+        PVar3 = (cPhs__Step)dComIfG_resLoad(&mPhs, "X_tower");
         if (PVar3 == cPhs_COMPLEATE_e) {
             if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1c6c0)) {
                 PVar3 = cPhs_ERROR_e;
             } else {
-                this->CreateInit();
+                CreateInit();
             }
         }
     }
@@ -87,12 +87,12 @@ static cPhs__Step daObjTower_Create(void* i_this) {
 }
 
 BOOL daObjTower_c::_delete() {
-    if (this->field_0x2d0 == 1) {
-        dComIfG_Bgsp()->Release(this->mpBgW);
+    if (field_0x2d0 == 1) {
+        dComIfG_Bgsp()->Release(mpBgW);
     }
 
     if (fpcM_CreateResult(this) != cPhs_UNK3_e) {
-        dComIfG_resDelete(&(this->mPhs), "X_tower");
+        dComIfG_resDelete(&(mPhs), "X_tower");
     }
 
     return TRUE;
@@ -104,11 +104,11 @@ static BOOL daObjTower_Delete(void* i_this) {
 }
 
 BOOL daObjTower_c::_draw() {
-    g_env_light.settingTevStruct(1, &this->current.pos, &this->mTevStr);
-    g_env_light.setLightTevColorType(this->mpModel, &this->mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
 
     dComIfGd_setListBG();
-    mDoExt_modelUpdateDL(this->mpModel);
+    mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
 
     return TRUE;
@@ -120,16 +120,16 @@ static BOOL daObjTower_Draw(void* i_this) {
 }
 
 BOOL daObjTower_c::_execute() {
-    u8 mDemoActorId = this->mDemoActorId;
+    u8 mDemoActorId = mDemoActorId;
 
     if (mDemoActorId != 0) {
         dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(mDemoActorId);
         if (pdVar1 != NULL && pdVar1->checkEnable(0x02)) {
-            this->current.pos = pdVar1->mTranslation;
+            current.pos = pdVar1->mTranslation;
         }
     }
 
-    this->set_mtx();
+    set_mtx();
     return TRUE;
 }
 
@@ -165,3 +165,4 @@ struct actor_process_profile_definition g_profile_Obj_Tower = {
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
+3
