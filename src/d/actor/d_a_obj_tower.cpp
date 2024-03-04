@@ -13,136 +13,129 @@
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
-    ((daObjTower_c*)i_this)->CreateHeap();
+    return ((daObjTower_c*)i_this)->CreateHeap();
 }
 
 /* 00000098-0000020C       .text CreateHeap__12daObjTower_cFv */
-bool daObjTower_c::CreateHeap() {
-    J3DModelData* pModel = (J3DModelData*)dRes_control_c::getRes(
-        "X_tower", 4, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+BOOL daObjTower_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("X_tower", 4);
 
-    if (pModel == NULL) {
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_a_obj_tower.cpp", 0x56,
-                                 "modelData != 0");
-        OSPanic("d_a_obj_tower.cpp", 0x56, "Halt");
-    }
+    JUT_ASSERT(0x56, modelData != 0);
 
-    mpModel = mDoExt_J3DModel__create(pModel, 0, 0x11020203);
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
-    if (mpModel == NULL) {
-        return false;
-    } else {
-        PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-        mDoMtx_YrotM(mDoMtx_stack_c::now, shape_angle.y);
-        mDoMtx_stack_c::scaleM(mScale.x, mScale.y, mScale.z);
-        PSMTXCopy(mDoMtx_stack_c::now, mMtx);
+    if (mpModel == NULL)
+        return FALSE;
 
-        mpBgW = new dBgW();
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::scaleM(mScale.x, mScale.y, mScale.z);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 
-        if (mpBgW == NULL) {
-            return false;
-        } else {
-            cBgD_t* pData = (cBgD_t*)dRes_control_c::getRes(
-                "X_tower", 7, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
-            return !mpBgW->Set(pData, cBgW::MOVE_BG_e, &mMtx);
-        }
-    }
+    mpBgW = new dBgW();
+
+    if (mpBgW == NULL)
+        return FALSE;
+
+    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("X_tower", 7);
+
+    return mpBgW->Set(pData, cBgW::MOVE_BG_e, &mMtx) ? FALSE : TRUE;
 }
 
 /* 0000020C-0000028C       .text CreateInit__12daObjTower_cFv */
 void daObjTower_c::CreateInit() {
-    mCullMtx = mpModel->mBaseTransformMtx;
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -30000.0, -5000.0, -30000.0, 30000.0, 40000.0, 30000.0);
-    g_dComIfG_gameInfo.play.mBgS.Regist(mpBgW, this);
+    dComIfG_Bgsp()->Regist(mpBgW, this);
     field_0x2d0 = 1;
     set_mtx();
 }
 
 /* 0000028C-0000030C       .text set_mtx__12daObjTower_cFv */
 void daObjTower_c::set_mtx() {
-    J3DModel* pJVar1;
-    pJVar1 = mpModel;
-
-    (pJVar1->mBaseScale).x = mScale.x;
-    (pJVar1->mBaseScale).y = mScale.y;
-    (pJVar1->mBaseScale).z = mScale.z;
-
-    PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, current.angle.y);
-    PSMTXCopy(mDoMtx_stack_c::now, mpModel->mBaseTransformMtx);
+    mpModel->setBaseScale(mScale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
 }
 
-/* 0000030C-000003DC       .text daObjTower_Create__FPv */
-static cPhs__Step daObjTower_Create(void* i_this) {
+cPhs__Step daObjTower_c::_create() {
     cPhs__Step PVar3;
 
-    fopAcM_SetupActor(((daObjTower_c*)i_this), daObjTower_c);
+    fopAcM_SetupActor(this, daObjTower_c);
 
-    ((daObjTower_c*)i_this)->field_0x2d0 = 0;
+    this->field_0x2d0 = 0;
 
-    if (!g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x1e40)) {
+    if (!dComIfGs_isEventBit(0x1e40)) {
         PVar3 = cPhs_UNK3_e;
     } else {
-        PVar3 = (cPhs__Step)dComIfG_resLoad(&((daObjTower_c*)i_this)->mPhs, "X_tower");
+        PVar3 = (cPhs__Step)dComIfG_resLoad(&this->mPhs, "X_tower");
         if (PVar3 == cPhs_COMPLEATE_e) {
-            if (!fopAcM_entrySolidHeap(((daObjTower_c*)i_this), CheckCreateHeap, 0x1c6c0)) {
+            if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1c6c0)) {
                 PVar3 = cPhs_ERROR_e;
             } else {
-                ((daObjTower_c*)i_this)->CreateInit();
+                this->CreateInit();
             }
         }
     }
+
     return PVar3;
+}
+/* 0000030C-000003DC       .text daObjTower_Create__FPv */
+static cPhs__Step daObjTower_Create(void* i_this) {
+    return ((daObjTower_c*)i_this)->_create();
+}
+
+BOOL daObjTower_c::_delete() {
+    if (this->field_0x2d0 == 1) {
+        dComIfG_Bgsp()->Release(this->mpBgW);
+    }
+
+    if (fpcM_CreateResult(this) != cPhs_UNK3_e) {
+        dComIfG_resDelete(&(this->mPhs), "X_tower");
+    }
+
+    return TRUE;
 }
 
 /* 000003DC-00000444       .text daObjTower_Delete__FPv */
 static BOOL daObjTower_Delete(void* i_this) {
-    if (((daObjTower_c*)(i_this))->field_0x2d0 == 1) {
-        ((cBgS*)&g_dComIfG_gameInfo.play.mBgS.m_chk_element[0].m_bgw_base_ptr)
-            ->Release((cBgW*)((daObjTower_c*)i_this)->mpBgW);
-    }
+    return ((daObjTower_c*)i_this)->_delete();
+}
 
-    if (((daObjTower_c*)i_this)->mBase.mCreateResult != 3) {
-        dComIfG_resDelete(&(((daObjTower_c*)i_this)->mPhs), "X_tower");
-    }
+BOOL daObjTower_c::_draw() {
+    g_env_light.settingTevStruct(1, &this->current.pos, &this->mTevStr);
+    g_env_light.setLightTevColorType(this->mpModel, &this->mTevStr);
+
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(this->mpModel);
+    dComIfGd_setList();
 
     return TRUE;
 }
 
 /* 00000444-000004E8       .text daObjTower_Draw__FPv */
 static BOOL daObjTower_Draw(void* i_this) {
-    g_env_light.settingTevStruct(1, &((daObjTower_c*)i_this)->current.pos,
-                                 &((daObjTower_c*)i_this)->mTevStr);
-    g_env_light.setLightTevColorType(((daObjTower_c*)i_this)->mpModel,
-                                     &((daObjTower_c*)i_this)->mTevStr);
+    return ((daObjTower_c*)i_this)->_draw();
+}
 
-    j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaListBG;
-    j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluListBG;
+BOOL daObjTower_c::_execute() {
+    u8 mDemoActorId = this->mDemoActorId;
 
-    mDoExt_modelUpdateDL(((daObjTower_c*)i_this)->mpModel);
+    if (mDemoActorId != 0) {
+        dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(mDemoActorId);
+        if (pdVar1 != NULL && pdVar1->checkEnable(0x02)) {
+            this->current.pos = pdVar1->mTranslation;
+        }
+    }
 
-    j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaList;
-    j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluList;
-
+    this->set_mtx();
     return TRUE;
 }
 
 /* 000004E8-00000568       .text daObjTower_Execute__FPv */
 static BOOL daObjTower_Execute(void* i_this) {
-    u8 idx = ((daObjTower_c*)i_this)->mDemoActorId;
-
-    if (idx != 0) {
-        dDemo_actor_c* pdVar1 = (g_dComIfG_gameInfo.play.mDemo)->mDemoObj.getActor(idx);
-        if ((pdVar1 != 0) && (pdVar1->mFlags & 2)) {
-            ((daObjTower_c*)i_this)->current.pos.x = (pdVar1->mTranslation).x;
-            ((daObjTower_c*)i_this)->current.pos.y = (pdVar1->mTranslation).y;
-            ((daObjTower_c*)i_this)->current.pos.z = (pdVar1->mTranslation).z;
-        }
-    }
-
-    ((daObjTower_c*)i_this)->set_mtx();
-
-    return TRUE;
+    return ((daObjTower_c*)i_this)->_execute();
 }
 
 /* 00000568-00000570       .text daObjTower_IsDelete__FPv */
