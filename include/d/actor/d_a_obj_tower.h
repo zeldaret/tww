@@ -11,16 +11,18 @@ public:
     inline BOOL _draw();
     inline BOOL _execute();
 
-    void CreateHeap();
+    bool CreateHeap();
     void CreateInit();
     void set_mtx();
 
 public:
-    /* 0x290 */ u8 m290[0x298 - 0x290];
+    /* 0x290 */ u8 m290;
+    /* 0x291 */ u8 m291[0x298 - 0x291];
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ dBgW* mpBgW;
     /* 0x2A0 */ Mtx mMtx;
-    /* 0x2D0 */ u8 m2D0[0x2D4 - 0x2D0];
+    /* 0x2D0 */ u8 field_0x2d0;
+    /* 0x2D1 */ u8 m2D0[0x2D4 - 0x2D1];
 };
 
 #endif /* D_A_OBJ_TOWER_H */
