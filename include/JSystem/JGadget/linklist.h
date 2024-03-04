@@ -185,10 +185,21 @@ struct TLinkList_factory : public TLinkList<T, I> {
     virtual void Do_destroy(T*) = 0;
 };
 
-template <typename T, int I>
+template <typename T>
 struct TEnumerator {
-    TLinkList<T, I> field_0x0;
-    TLinkList<T, I> field_0x4;
+    inline TEnumerator(T _current, T _end)
+        : current(_current), end(_end) {}
+
+    bool isEnd() const { return current != end; }
+    operator bool() const { return isEnd(); }
+    T operator*() {
+        T rv = current;
+        ++current;
+        return rv;
+    }
+
+    T current;
+    T end;
 };
 
 // TEnumerator2 should be the same but there are two issues:
@@ -221,7 +232,10 @@ struct TContainerEnumerator : public TEnumerator2<TLinkList<T, I>::iterator, T> 
 };
 
 template <typename T, int I>
-struct TContainerEnumerator_const : public TEnumerator<T, I> {};
+struct TContainerEnumerator_const : public TEnumerator2<TLinkList<T, I>::const_iterator, const T> {
+    inline TContainerEnumerator_const(const TLinkList<T, I>* param_0)
+        : TEnumerator2<TLinkList<T, I>::const_iterator, const T>(param_0->begin(), param_0->end()) {}
+};
 
 };  // namespace JGadget
 

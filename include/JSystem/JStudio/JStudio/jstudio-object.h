@@ -137,17 +137,17 @@ struct TAdaptor {
         u32 field_0x0;
         f32 field_0x4;
     };
-    typedef void (*setVarFunc)(JStudio::TAdaptor*, JStudio::TControl*, u32, void const*, u32);
+    typedef void (*setVarFunc)(JStudio::TAdaptor*, JStudio::TObject*, u32, void const*, u32);
     virtual ~TAdaptor() = 0;
-    virtual void adaptor_do_prepare();
-    virtual void adaptor_do_begin();
-    virtual void adaptor_do_end();
-    virtual void adaptor_do_update(u32);
-    virtual void adaptor_do_data(void const*, u32, void const*, u32);
+    virtual void adaptor_do_prepare(const JStudio::TObject*);
+    virtual void adaptor_do_begin(const JStudio::TObject*);
+    virtual void adaptor_do_end(const JStudio::TObject*);
+    virtual void adaptor_do_update(const JStudio::TObject*, u32);
+    virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32);
 
-    void adaptor_setVariableValue(JStudio::TControl*, u32,
+    void adaptor_setVariableValue(JStudio::TObject*, u32,
                                                  JStudio::data::TEOperationData, void const*, u32);
-    void adaptor_setVariableValue_n(JStudio::TControl*, u32 const*, u32,
+    void adaptor_setVariableValue_n(JStudio::TObject*, u32 const*, u32,
                                                    JStudio::data::TEOperationData, void const*,
                                                    u32);
     void
@@ -156,21 +156,18 @@ struct TAdaptor {
     void adaptor_getVariableValue_Vec(Vec*, u32 const*) const;
     void adaptor_setVariableValue_GXColor(u32 const*, GXColor const&);
     void adaptor_getVariableValue_GXColor(GXColor*, u32 const*) const;
-    void adaptor_updateVariableValue(JStudio::TControl*, u32);
-    static void adaptor_setVariableValue_VOID_(JStudio::TAdaptor*, JStudio::TControl*, u32,
+    void adaptor_updateVariableValue(JStudio::TObject*, u32);
+    static void adaptor_setVariableValue_VOID_(JStudio::TAdaptor*, JStudio::TObject*, u32,
                                                        void const*, u32);
-    static void adaptor_setVariableValue_IMMEDIATE_(JStudio::TAdaptor*, JStudio::TControl*,
+    static void adaptor_setVariableValue_IMMEDIATE_(JStudio::TAdaptor*, JStudio::TObject*,
                                                             u32, void const*, u32);
-    static void adaptor_setVariableValue_TIME_(JStudio::TAdaptor*, JStudio::TControl*, u32,
+    static void adaptor_setVariableValue_TIME_(JStudio::TAdaptor*, JStudio::TObject*, u32,
                                                        void const*, u32);
-    static void adaptor_setVariableValue_FVR_NAME_(JStudio::TAdaptor*, JStudio::TControl*,
+    static void adaptor_setVariableValue_FVR_NAME_(JStudio::TAdaptor*, JStudio::TObject*,
                                                            u32, void const*, u32);
-    static void adaptor_setVariableValue_FVR_INDEX_(JStudio::TAdaptor*, JStudio::TControl*,
+    static void adaptor_setVariableValue_FVR_INDEX_(JStudio::TAdaptor*, JStudio::TObject*,
                                                             u32, void const*, u32);
 
-    void adaptor_setObject_(const TObject* pObject) {
-        pObject_ = pObject;
-    }
 
     TVariableValue* adaptor_referVariableValue(u32 param_0) {
         return &pValue_[param_0];
@@ -184,9 +181,8 @@ struct TAdaptor {
         return &pValue_[param_0];
     }
 
-    /* 0x4 */ const TObject* pObject_;
-    /* 0x8 */ TVariableValue* pValue_;
-    /* 0xC */ u32 u;
+    /* 0x4 */ TVariableValue* pValue_;
+    /* 0x8 */ u32 u;
 };
 
 struct TAdaptor_actor : public TAdaptor {

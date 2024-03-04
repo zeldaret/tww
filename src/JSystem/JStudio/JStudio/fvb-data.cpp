@@ -3,6 +3,7 @@
 // Translation Unit: fvb-data.cpp
 //
 
-#include "fvb-data.h"
+#include "JSystem/JStudio/JStudio/fvb-data.h"
 #include "dolphin/types.h"
 
+const char JStudio::fvb::data::ga4cSignature[4] = "FVB";

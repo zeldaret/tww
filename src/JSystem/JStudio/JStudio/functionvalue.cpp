@@ -3,411 +3,935 @@
 // Translation Unit: functionvalue.cpp
 //
 
-#include "functionvalue.h"
+#include "JSystem/JStudio/JStudio/functionvalue.h"
+#include "JSystem/JUtility/JUTException.h"
+#include "JSystem/JGadget/linklist.h"
 #include "dolphin/types.h"
+#include "math.h"
+#include "arith.h"
+
+namespace JGadget {
+template <typename Iterator, typename B1>
+// TODO
+Iterator findUpperBound_binary_current(Iterator, Iterator, Iterator, const B1&);
+};  // namespace JGadget
+
+namespace JStudio {
+
+namespace functionvalue {
+f64 extrapolateParameter_raw(f64, f64);
+inline f64 extrapolateParameter_repeat(f64, f64);
+f64 extrapolateParameter_turn(f64, f64);
+f64 extrapolateParameter_clamp(f64, f64);
+static inline f64 i_extrapolateParameter_repeat(f64 a1, f64 a2) {
+    f64 t = fmod(a1, a2);
+
+    if (t < 0.0)
+        t += a2;
+
+    return t;
+}
+};  // namespace functionvalue
+
+namespace {
+ExtrapolateParameter gapfnExtrapolateParameter_[4] = {
+    functionvalue::extrapolateParameter_raw,
+    functionvalue::extrapolateParameter_repeat,
+    functionvalue::extrapolateParameter_turn,
+    functionvalue::extrapolateParameter_clamp,
+};
+}  // namespace
 
 /* 80271020-80271068       .text toFunction_outside__Q27JStudio14TFunctionValueFi */
-void JStudio::TFunctionValue::toFunction_outside(int) {
+ExtrapolateParameter TFunctionValue::toFunction_outside(int idx) {
     /* Nonmatching */
+    ExtrapolateParameter fallback = NULL;
+    ExtrapolateParameter result;
+
+    result = JGadget::toValueFromIndex<ExtrapolateParameter>(idx, gapfnExtrapolateParameter_, 4,
+                                                             fallback);
+
+    if (result == NULL) {
+        JUTWarn w;
+        w << "unknown outside : " << idx;
+
+        return gapfnExtrapolateParameter_[0];
+    }
+
+    return result;
 }
 
 /* 80271068-80271078       .text __ct__Q27JStudio14TFunctionValueFv */
-JStudio::TFunctionValue::TFunctionValue() {
-    /* Nonmatching */
-}
+TFunctionValue::TFunctionValue() {}
 
 /* 80271078-802710C0       .text __dt__Q27JStudio14TFunctionValueFv */
-JStudio::TFunctionValue::~TFunctionValue() {
-    /* Nonmatching */
-}
+TFunctionValue::~TFunctionValue() {}
 
 /* 802710C0-802710E8       .text refer_initialize__Q27JStudio29TFunctionValueAttribute_referFv */
-void JStudio::TFunctionValueAttribute_refer::refer_initialize() {
-    /* Nonmatching */
+void TFunctionValueAttribute_refer::refer_initialize() {
+    clear();
 }
 
+namespace functionvalue {
+
 /* 802710E8-8027114C       .text interpolateValue_hermite__Q27JStudio13functionvalueFddddddd */
-void JStudio::functionvalue::interpolateValue_hermite(double, double, double, double, double, double, double) {
+f64 interpolateValue_hermite(f64 c0, f64 c1, f64 x, f64 c2, f64 x2, f64 c3, f64 x3) {
     /* Nonmatching */
+    f64 a;
+    f64 b;
+    f64 c;
+    f64 d;
+
+    a = c0 - c1;
+    b = a * (1.0 / (x2 - c1));               // (a - b) * 1.0 / (c - d)
+    c = b - 1.0;                             // 1.0
+    d = (3.0 + -2.0 * b) * (b * b);  // 3.0 - 2.0 * b
+    f64 cab = (c * a * b);
+    f64 coeffx3 = cab * x3;
+    f64 cca = (c * c * a);
+    f64 coeffc2 = cca * c2;
+    return ((1.0 - d) * x + (d * c3)) + coeffc2 + coeffx3;
 }
 
 /* 8027114C-802711B0       .text interpolateValue_BSpline_uniform__Q27JStudio13functionvalueFddddd */
-void JStudio::functionvalue::interpolateValue_BSpline_uniform(double, double, double, double, double) {
+f64 interpolateValue_BSpline_uniform(f64 f1, f64 f2, f64 f3, f64 f4, f64 f5) {
     /* Nonmatching */
+    // pow3(1.0 - f1)
+    f64 f6 = (1.0 - f1);
+    f64 temp = f6;
+    temp = (f6 * f6) * temp;
+
+    f64 f0 = f1 * f1;
+    f64 f8 = f0 * f1;
+
+    f64 temp2 = (0.5 + (1.0 / 6.0) * ((f1 + f0) - f8));
+    f64 temp3 = temp2 * f4;
+
+    f64 temp4 = (((1.0 / 6.0) * f8 - f0) + (2.0 / 3.0));
+    f64 temp5 = temp4 * f3;
+
+    return temp5 + (temp * f2 + f8 * f5) * 0.5 +
+           temp3;
 }
 
 /* 802711B0-80271290       .text interpolateValue_BSpline_nonuniform__Q27JStudio13functionvalueFdPCdPCd */
-void JStudio::functionvalue::interpolateValue_BSpline_nonuniform(double, const double*, const double*) {
+f64 interpolateValue_BSpline_nonuniform(f64, const f64*, const f64*) {
     /* Nonmatching */
+}
+
+inline f64 interpolateValue_linear(double a1, double a2, double a3, double a4, double a5) {
+    return a3 + ((a5 - a3) * (a1 - a2)) / (a4 - a2);
+}
+
+inline f64 interpolateValue_linear_1(f64 a1, f64 a2, f64 a3, f64 a4) {
+    return a3 + (a4 - a3) * (a1 - a2);
+}
+
+inline f64 interpolateValue_plateau(f64 a1, f64 a2, f64 a3, f64 a4, f64 a5) {
+    return interpolateValue_hermite(a1, a2, a3, 0.0, a4, a5, 0.0);
 }
 
 /* 80271290-802712F0       .text extrapolateParameter_turn__Q27JStudio13functionvalueFdd */
-void JStudio::functionvalue::extrapolateParameter_turn(double, double) {
-    /* Nonmatching */
+f64 extrapolateParameter_turn(f64 param_0, f64 param_1) {
+    f64 dVar2 = 2.0 * param_1;
+    f64 dVar1 = i_extrapolateParameter_repeat(param_0, dVar2);
+    if (dVar1 >= param_1) {
+        dVar1 = dVar2 - dVar1;
+    }
+    return dVar1;
 }
 
+}  // namespace functionvalue
+
 /* 802712F0-80271324       .text range_initialize__Q27JStudio29TFunctionValueAttribute_rangeFv */
-void JStudio::TFunctionValueAttribute_range::range_initialize() {
-    /* Nonmatching */
+void TFunctionValueAttribute_range::range_initialize() {
+    fBegin_ = NAN;
+    fEnd_ = fBegin_;
+    fDifference_ = fBegin_;
+
+    range_setProgress(TFunctionValue::PROG_INIT);
+    range_setAdjust(TFunctionValue::ADJ_INIT);
+    range_setOutside(TFunctionValue::OUT_INIT);
 }
 
 /* 80271324-802713CC       .text range_prepare__Q27JStudio29TFunctionValueAttribute_rangeFv */
-void JStudio::TFunctionValueAttribute_range::range_prepare() {
-    /* Nonmatching */
+void TFunctionValueAttribute_range::range_prepare() {
+    TFunctionValue::TEProgress progress = range_getProgress();
+
+    switch (progress) {
+    default:
+        JUTWarn w;
+        w << "unknown progress : " << progress;
+    case 0:
+        _20 = 0.0;
+        _28 = 1.0;
+        break;
+    case 1:
+        _20 = 0.0;
+        _28 = -1.0;
+        break;
+    case 2:
+        _20 = fBegin_;
+        _28 = -1.0;
+        break;
+    case 3:
+        _20 = fEnd_;
+        _28 = -1.0;
+        break;
+    case 4:
+        _20 = 0.5 * (fBegin_ + fEnd_);
+        _28 = -1.0;
+        break;
+    }
 }
 
 /* 802713CC-802713E0       .text range_set__Q27JStudio29TFunctionValueAttribute_rangeFdd */
-void JStudio::TFunctionValueAttribute_range::range_set(double, double) {
-    /* Nonmatching */
+void TFunctionValueAttribute_range::range_set(f64 begin, f64 end) {
+    fBegin_ = begin;
+    fEnd_ = end;
+    fDifference_ = end - begin;
+
+    ASSERT(fDifference_ >= TValue(0));
 }
 
 /* 802713E0-802716F0       .text range_getParameter__Q27JStudio29TFunctionValueAttribute_rangeCFddd */
-void JStudio::TFunctionValueAttribute_range::range_getParameter(double, double, double) const {
-    /* Nonmatching */
+f64 TFunctionValueAttribute_range::range_getParameter(f64 arg1, f64 arg2, f64 arg3) const {
+    f64 progress = range_getParameter_progress(arg1);
+    TFunctionValue::TEAdjust adjust = range_getAdjust();
+
+    f64 result;
+
+    switch (adjust) {
+    default:
+        JUTWarn w;
+        w << "unknown adjust : " << adjust;
+    case 0:
+        result = range_getParameter_outside(progress);
+        break;
+    case 1:
+        result = range_getParameter_outside(progress + fBegin_);
+        break;
+    case 2:
+        result = range_getParameter_outside(progress + fEnd_);
+        break;
+    case 3:
+        result = range_getParameter_outside(progress + 0.5 * (fBegin_ + fEnd_));
+        break;
+    case 4:
+        f64 temp = range_getParameter_outside(progress);
+        result = arg2 + ((temp - fBegin_) * (arg3 - arg2)) / fDifference_;
+        break;
+    }
+    return result;
 }
 
 /* 802716F0-80271734       .text __ct__Q27JStudio29TFunctionValueAttribute_rangeFv */
-JStudio::TFunctionValueAttribute_range::TFunctionValueAttribute_range() {
-    /* Nonmatching */
-}
+TFunctionValueAttribute_range::TFunctionValueAttribute_range()
+    : fBegin_(NAN), fEnd_(fBegin_), fDifference_(fBegin_),
+      mProgress(TFunctionValue::PROG_INIT), mAdjust(TFunctionValue::ADJ_INIT), _20(fBegin_),
+      _28(fBegin_), mBegin(TFunctionValue::OUT_INIT), mEnd(TFunctionValue::OUT_INIT) {}
 
 /* 80271734-80271790       .text __ct__Q27JStudio24TFunctionValue_compositeFv */
-JStudio::TFunctionValue_composite::TFunctionValue_composite() {
+TFunctionValue_composite::TFunctionValue_composite() : pfn_(NULL), data((void*)NULL) {
     /* Nonmatching */
 }
 
 /* 80271790-80271798       .text getType__Q27JStudio24TFunctionValue_compositeCFv */
-void JStudio::TFunctionValue_composite::getType() const {
-    /* Nonmatching */
+u32 TFunctionValue_composite::getType() const {
+    return 1;
 }
 
 /* 80271798-802717B8       .text getAttributeSet__Q27JStudio24TFunctionValue_compositeFv */
-void JStudio::TFunctionValue_composite::getAttributeSet() {
-    /* Nonmatching */
+TFunctionValueAttributeSet TFunctionValue_composite::getAttributeSet() {
+    return TFunctionValueAttributeSet(this, NULL, NULL);
 }
 
 /* 802717B8-802717FC       .text initialize__Q27JStudio24TFunctionValue_compositeFv */
-void JStudio::TFunctionValue_composite::initialize() {
-    /* Nonmatching */
+void TFunctionValue_composite::initialize() {
+    refer_initialize();
+    pfn_ = NULL;
+    data = TData((void*)NULL);
 }
 
 /* 802717FC-80271800       .text prepare__Q27JStudio24TFunctionValue_compositeFv */
-void JStudio::TFunctionValue_composite::prepare() {
-    /* Nonmatching */
-}
+void TFunctionValue_composite::prepare() {}
 
 /* 80271800-80271834       .text getValue__Q27JStudio24TFunctionValue_compositeFd */
-void JStudio::TFunctionValue_composite::getValue(double) {
-    /* Nonmatching */
+f64 TFunctionValue_composite::getValue(f64 arg1) {
+    const TFunctionValueAttribute_refer* container = refer_getContainer();
+    ASSERT(!refer_isReferring(this));
+    ASSERT(pfn_ != NULL);
+
+    return pfn_(arg1, container, data_getData());
 }
 
 /* 80271834-802718A0       .text composite_raw__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
-void JStudio::TFunctionValue_composite::composite_raw(const JGadget::TVector_pointer<JStudio::TFunctionValue*>&, const JStudio::TFunctionValue_composite::TData&, double) {
-    /* Nonmatching */
+f64 TFunctionValue_composite::composite_raw(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
+    u32 index = param_2.get_unsignedInteger();
+    u32 size = param_1.size();
+    if (index >= size) {
+        return 0.0;
+    }
+    TFunctionValue** local_18 = (TFunctionValue**)param_1.begin();
+    // std::advance_pointer(local_18, index);
+    local_18 += index;
+    TFunctionValue* piVar4 = *local_18;
+    return piVar4->getValue(param_3);
 }
 
 /* 802718A0-80271A04       .text composite_index__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
-void JStudio::TFunctionValue_composite::composite_index(const JGadget::TVector_pointer<JStudio::TFunctionValue*>&, const JStudio::TFunctionValue_composite::TData&, double) {
+f64 TFunctionValue_composite::composite_index(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
     /* Nonmatching */
+    s32 size = param_1.size();
+    if (size <= 1) {
+        return 0.0;
+    }
+    TFunctionValue** local_148 = (TFunctionValue**)param_1.begin();
+    TFunctionValue* pFront = *local_148;
+    // JUT_ASSERT(599, pFront!=0);
+    f64 dVar4 = pFront->getValue(param_3);
+    s32 index = floor(dVar4);
+    u32 uVar2 = param_2.get_unsignedInteger();
+    switch (uVar2) {
+    case 0:
+    case 3:
+    default:
+        if (index < 0) {
+            index = 0;
+        } else if (index >= size - 1) {
+            index = size - 2;
+        }
+        break;
+    case 1:
+        div_t dt = div(index, size - 1);
+        index = dt.rem;
+        if (index < 0) {
+            index = size + index;
+            index--;
+        }
+        break;
+    case 2:
+        if (size - 1 == 1) {
+            index = 0;
+        } else {
+            u32 uVar3 = (u32)(size - 2) * 2;
+            div_t dt2 = div(index, uVar3);
+            index = dt2.rem;
+            if (index < 0) {
+                index += uVar3;
+            }
+            if (index >= size - 1) {
+                index = uVar3 - index;
+            }
+        }
+        break;
+    }
+   
+    // std::advance_pointer(local_148, index + 1);
+    local_148 += index + 1;
+    pFront = *local_148;
+    return pFront->getValue(param_3);
 }
 
+// TODO: remove when TContainerEnumerator_const is generic enough
+template <typename T>
+struct TContainerEnumerator_const_TVector : public JGadget::TEnumerator<const T*> {
+    inline TContainerEnumerator_const_TVector(JGadget::TVector_pointer<T> const& param_1)
+        : JGadget::TEnumerator<const T*>(param_1.begin(), param_1.end()) {}
+};
+
 /* 80271A04-80271A70       .text composite_parameter__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
-void JStudio::TFunctionValue_composite::composite_parameter(const JGadget::TVector_pointer<JStudio::TFunctionValue*>&, const JStudio::TFunctionValue_composite::TData&, double) {
-    /* Nonmatching */
+f64 TFunctionValue_composite::composite_parameter(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
+    f64 dVar4 = param_3 - param_2.get_value();
+    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    while (aTStack_18) {
+        TFunctionValue* const* ppiVar3 = *aTStack_18;
+        TFunctionValue* piVar3 = *ppiVar3;
+        dVar4 = piVar3->getValue(dVar4);
+    }
+    return dVar4;
 }
 
 /* 80271A70-80271AF8       .text composite_add__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
-void JStudio::TFunctionValue_composite::composite_add(const JGadget::TVector_pointer<JStudio::TFunctionValue*>&, const JStudio::TFunctionValue_composite::TData&, double) {
-    /* Nonmatching */
+f64 TFunctionValue_composite::composite_add(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
+    f64 dVar4 = param_2.get_value();
+    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    while (aTStack_18) {
+        TFunctionValue* const* ppiVar3 = *aTStack_18;
+        TFunctionValue* piVar3 = *ppiVar3;
+        dVar4 += piVar3->getValue(param_3);
+    }
+    return dVar4;
 }
 
 /* 80271AF8-80271BE8       .text composite_subtract__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
-void JStudio::TFunctionValue_composite::composite_subtract(const JGadget::TVector_pointer<JStudio::TFunctionValue*>&, const JStudio::TFunctionValue_composite::TData&, double) {
-    /* Nonmatching */
+f64 TFunctionValue_composite::composite_subtract(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
+    u32 size = param_1.size();
+    if (size == 0) {
+        return 0.0;
+    }
+    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    TFunctionValue* const* local_148 = *aTStack_18;
+    TFunctionValue* pFront = *local_148;
+    // JUT_ASSERT(688, pFront!=0);
+    f64 dVar4 = pFront->getValue(param_3);
+    while (aTStack_18) {
+        TFunctionValue* const* ppiVar3 = *aTStack_18;
+        TFunctionValue* piVar3 = *ppiVar3;
+        dVar4 -= piVar3->getValue(param_3);
+    }
+    dVar4 -= param_2.f32data;
+    return dVar4;
 }
 
 /* 80271BE8-80271C70       .text composite_multiply__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
-void JStudio::TFunctionValue_composite::composite_multiply(const JGadget::TVector_pointer<JStudio::TFunctionValue*>&, const JStudio::TFunctionValue_composite::TData&, double) {
-    /* Nonmatching */
+f64 TFunctionValue_composite::composite_multiply(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
+    f64 dVar4 = param_2.get_value();
+    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    while (aTStack_18) {
+        TFunctionValue* const* ppiVar3 = *aTStack_18;
+        TFunctionValue* piVar3 = *ppiVar3;
+        dVar4 *= piVar3->getValue(param_3);
+    }
+    return dVar4;
 }
 
 /* 80271C70-80271D60       .text composite_divide__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
-void JStudio::TFunctionValue_composite::composite_divide(const JGadget::TVector_pointer<JStudio::TFunctionValue*>&, const JStudio::TFunctionValue_composite::TData&, double) {
-    /* Nonmatching */
+f64 TFunctionValue_composite::composite_divide(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
+    u32 size = param_1.size();
+    if (size == 0) {
+        return 0.0;
+    }
+    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    TFunctionValue* const* local_148 = *aTStack_18;
+    TFunctionValue* pFront = *local_148;
+    // JUT_ASSERT(724, pFront!=0);
+    f64 dVar4 = pFront->getValue(param_3);
+    while (aTStack_18) {
+        TFunctionValue* const* ppiVar3 = *aTStack_18;
+        TFunctionValue* piVar3 = *ppiVar3;
+        dVar4 /= piVar3->getValue(param_3);
+    }
+    dVar4 /= param_2.f32data;
+    return dVar4;
 }
 
 /* 80271D60-80271DA8       .text __ct__Q27JStudio23TFunctionValue_constantFv */
-JStudio::TFunctionValue_constant::TFunctionValue_constant() {
-    /* Nonmatching */
-}
+TFunctionValue_constant::TFunctionValue_constant() : fValue_(NAN) {}
 
 /* 80271DA8-80271DB0       .text getType__Q27JStudio23TFunctionValue_constantCFv */
-void JStudio::TFunctionValue_constant::getType() const {
-    /* Nonmatching */
+u32 TFunctionValue_constant::getType() const {
+    return 2;
 }
 
 /* 80271DB0-80271DC4       .text getAttributeSet__Q27JStudio23TFunctionValue_constantFv */
-void JStudio::TFunctionValue_constant::getAttributeSet() {
-    /* Nonmatching */
+TFunctionValueAttributeSet TFunctionValue_constant::getAttributeSet() {
+    return TFunctionValueAttributeSet(NULL, NULL, NULL);
 }
 
 /* 80271DC4-80271DD4       .text initialize__Q27JStudio23TFunctionValue_constantFv */
-void JStudio::TFunctionValue_constant::initialize() {
-    /* Nonmatching */
+void TFunctionValue_constant::initialize() {
+    fValue_ = NAN;
 }
 
 /* 80271DD4-80271DD8       .text prepare__Q27JStudio23TFunctionValue_constantFv */
-void JStudio::TFunctionValue_constant::prepare() {
-    /* Nonmatching */
+void TFunctionValue_constant::prepare() {
 }
 
 /* 80271DD8-80271DE0       .text getValue__Q27JStudio23TFunctionValue_constantFd */
-void JStudio::TFunctionValue_constant::getValue(double) {
-    /* Nonmatching */
+f64 TFunctionValue_constant::getValue(f64) {
+    return fValue_;
 }
 
 /* 80271DE0-80271E40       .text __ct__Q27JStudio25TFunctionValue_transitionFv */
-JStudio::TFunctionValue_transition::TFunctionValue_transition() {
-    /* Nonmatching */
-}
+TFunctionValue_transition::TFunctionValue_transition() : _48(NAN), _50(_48) {}
 
 /* 80271E40-80271E48       .text getType__Q27JStudio25TFunctionValue_transitionCFv */
-void JStudio::TFunctionValue_transition::getType() const {
-    /* Nonmatching */
+u32 TFunctionValue_transition::getType() const {
+    return 3;
 }
 
 /* 80271E48-80271E78       .text getAttributeSet__Q27JStudio25TFunctionValue_transitionFv */
-void JStudio::TFunctionValue_transition::getAttributeSet() {
-    /* Nonmatching */
+TFunctionValueAttributeSet TFunctionValue_transition::getAttributeSet() {
+    return TFunctionValueAttributeSet(NULL, this, this);
 }
 
 /* 80271E78-80271EC4       .text initialize__Q27JStudio25TFunctionValue_transitionFv */
-void JStudio::TFunctionValue_transition::initialize() {
-    /* Nonmatching */
+void TFunctionValue_transition::initialize() {
+    range_initialize();
+    interpolate_initialize();
+
+    _48 = NAN;
+    _50 = _48;
 }
 
 /* 80271EC4-80271EE8       .text prepare__Q27JStudio25TFunctionValue_transitionFv */
-void JStudio::TFunctionValue_transition::prepare() {
-    /* Nonmatching */
+void TFunctionValue_transition::prepare() {
+    range_prepare();
+    interpolate_prepare();
 }
 
 /* 80271EE8-802720B0       .text getValue__Q27JStudio25TFunctionValue_transitionFd */
-void JStudio::TFunctionValue_transition::getValue(double) {
+f64 TFunctionValue_transition::getValue(f64 param_1) {
     /* Nonmatching */
+    f64 progress = range_getParameter_progress(param_1);
+    f64 dVar3 = range_getParameter_outside(progress);
+    switch (range_getAdjust()) {
+    default:
+        if (dVar3 < range_getBegin()) {
+            return _48;
+        }
+        return _50;
+    case TFunctionValue::ADJ_UNK2:
+        if (dVar3 < range_getEnd()) {
+            return _48;
+        }
+        return _50;
+    case TFunctionValue::ADJ_UNK3:
+        ADJ_UNK3_label:
+        if (dVar3 < 0.5 * (range_getBegin() + range_getEnd())) {
+            return _48;
+        }
+        return _50;
+    case TFunctionValue::ADJ_UNK4:
+        if (dVar3 < range_getBegin()) {
+            return _48;
+        }
+        if (dVar3 >= range_getEnd()) {
+            return _50;
+        }
+        switch (interpolate_get()) {
+        case 0:
+            goto ADJ_UNK3_label;
+        case 1:
+        case 3:
+            return _48 + ((dVar3 - range_getBegin()) * data_getDifference()) / range_getDifference();
+        case 2:
+            return functionvalue::interpolateValue_plateau(dVar3, range_getBegin(), _48, range_getEnd(), _50);
+        }
+    }
 }
 
 /* 802720B0-80272114       .text __ct__Q27JStudio19TFunctionValue_listFv */
-JStudio::TFunctionValue_list::TFunctionValue_list() {
-    /* Nonmatching */
-}
+TFunctionValue_list::TFunctionValue_list() : _44(NULL), uData_(0), _50(NAN), pfnUpdate_(NULL) {}
 
 /* 80272114-8027211C       .text getType__Q27JStudio19TFunctionValue_listCFv */
-void JStudio::TFunctionValue_list::getType() const {
-    /* Nonmatching */
+u32 TFunctionValue_list::getType() const {
+    return 4;
 }
 
 /* 8027211C-8027214C       .text getAttributeSet__Q27JStudio19TFunctionValue_listFv */
-void JStudio::TFunctionValue_list::getAttributeSet() {
-    /* Nonmatching */
+TFunctionValueAttributeSet TFunctionValue_list::getAttributeSet() {
+    return TFunctionValueAttributeSet(NULL, this, this);
 }
 
 /* 8027214C-8027219C       .text initialize__Q27JStudio19TFunctionValue_listFv */
-void JStudio::TFunctionValue_list::initialize() {
-    /* Nonmatching */
+void TFunctionValue_list::initialize() {
+    range_initialize();
+    interpolate_initialize();
+
+    _44 = NULL;
+    uData_ = 0;
+    _50 = NAN;
+    pfnUpdate_ = NULL;
 }
 
 /* 8027219C-8027224C       .text prepare__Q27JStudio19TFunctionValue_listFv */
-void JStudio::TFunctionValue_list::prepare() {
-    /* Nonmatching */
+void TFunctionValue_list::prepare() {
+    range_prepare();
+    interpolate_prepare();
+
+    u32 interp = interpolate_get();
+
+    switch (interp) {
+    default:
+        JUTWarn w;
+        w << "unknown interpolation : " << interp;
+    case 0:
+        pfnUpdate_ = update_INTERPOLATE_NONE_;
+        break;
+    case 1:
+        pfnUpdate_ = update_INTERPOLATE_LINEAR_;
+        break;
+    case 2:
+        pfnUpdate_ = update_INTERPOLATE_PLATEAU_;
+        break;
+    case 3:
+        pfnUpdate_ = update_INTERPOLATE_BSPLINE_dataMore3_;
+        if (uData_ == 2)
+            pfnUpdate_ = update_INTERPOLATE_LINEAR_;
+        break;
+    }
 }
 
 /* 8027224C-80272604       .text getValue__Q27JStudio19TFunctionValue_listFd */
-void JStudio::TFunctionValue_list::getValue(double) {
-    /* Nonmatching */
+f64 TFunctionValue_list::getValue(f64 param_1) {
+    f64 dVar9 = range_getParameter_progress(param_1);
+    u32 iVar7 = uData_ - 1;
+    TFunctionValue::TEAdjust iVar5 = range_getAdjust();
+    f64 dVar12 = iVar7;
+    TIndexData_ local_178;
+    f64 parOutside;
+    switch (iVar5) {
+    case 0:
+    default:
+        parOutside = range_getParameter_outside(dVar9);
+        local_178._0 = parOutside / _50;
+        break;
+    case 1:
+        parOutside = range_getParameter_outside(dVar9 + range_getBegin());
+        local_178._0 = parOutside / _50;
+        break;
+    case 2:
+        parOutside = range_getParameter_outside(dVar9 + range_getEnd());
+        local_178._0 = parOutside / _50;
+        break;
+    case 3:
+        parOutside = range_getParameter_outside(dVar9 + 0.5 * (range_getBegin() + range_getEnd()));
+        local_178._0 = parOutside / _50;
+        break;
+    case 4:
+        parOutside = range_getParameter_outside(dVar9);
+        local_178._0 = (dVar12 * (parOutside - range_getBegin())) / range_getDifference();
+        break;
+    }
+   
+    if (local_178._0 < 0.0) {
+        return _44[0];
+    }
+    if (local_178._0 >= dVar12) {
+        return _44[iVar7];
+    }
+    local_178._8 = floor(local_178._0);
+    local_178._10 = local_178._8;
+    // JUT_ASSERT(1063, pfnUpdate_!=0);
+    return pfnUpdate_(*this, local_178);
 }
 
 /* 80272604-80272618       .text update_INTERPOLATE_NONE___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_ */
-void update_INTERPOLATE_NONE___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_ {
-    /* Nonmatching */
+f64 TFunctionValue_list::update_INTERPOLATE_NONE_(const TFunctionValue_list& rThis, const TFunctionValue_list::TIndexData_& data) {
+    return rThis._44[data._10];
 }
 
 /* 80272618-8027264C       .text update_INTERPOLATE_LINEAR___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_ */
-void update_INTERPOLATE_LINEAR___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_ {
-    /* Nonmatching */
+f64 TFunctionValue_list::update_INTERPOLATE_LINEAR_(const TFunctionValue_list& rThis, const TFunctionValue_list::TIndexData_& data) {
+    return functionvalue::interpolateValue_linear_1(data._0, data._8, rThis._44[data._10], rThis._44[data._10 + 1]);
 }
 
 /* 8027264C-8027269C       .text update_INTERPOLATE_PLATEAU___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_ */
-void update_INTERPOLATE_PLATEAU___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_ {
-    /* Nonmatching */
+f64 TFunctionValue_list::update_INTERPOLATE_PLATEAU_(const TFunctionValue_list& rThis, const TFunctionValue_list::TIndexData_& data) {
+    const f32* arr = rThis._44;
+    return functionvalue::interpolateValue_plateau(data._0, data._8, arr[data._10], 1.0 + data._8, arr[data._10 + 1]);
 }
 
 /* 8027269C-80272728       .text update_INTERPOLATE_BSPLINE_dataMore3___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_ */
-void update_INTERPOLATE_BSPLINE_dataMore3___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_ {
-    /* Nonmatching */
+f64 TFunctionValue_list::update_INTERPOLATE_BSPLINE_dataMore3_(const TFunctionValue_list& rThis, const TFunctionValue_list::TIndexData_& data) {
+    f64 dVar11 = rThis._44[data._10];
+    f64 dVar10 = rThis._44[data._10 + 1];
+    f64 dVar9;
+    f64 dVar8;
+    if (data._10 == 0) {
+        // JUT_ASSERT(1119, rThis.uData_>=3);
+        dVar9 = 2.0 * dVar11 - dVar10;
+        dVar8 = rThis._44[data._10 + 2];
+    } else {
+        if (data._10 == rThis.uData_ - 2) {
+            // JUT_ASSERT(1125, rThis.uData_>=3);
+            dVar9 = rThis._44[data._10 - 1];
+            dVar8 = 2.0 * dVar10 - dVar11;
+        } else {
+            // JUT_ASSERT(1131, rThis.uData_>=3);
+            dVar9 = rThis._44[data._10 - 1];
+            dVar8 = rThis._44[data._10 + 2];
+        }
+    }
+    functionvalue::interpolateValue_BSpline_uniform(data._0 - data._8, dVar9, dVar11, dVar10, dVar8);
 }
 
 /* 80272728-80272794       .text __ct__Q27JStudio29TFunctionValue_list_parameterFv */
-JStudio::TFunctionValue_list_parameter::TFunctionValue_list_parameter() {
-    /* Nonmatching */
-}
+TFunctionValue_list_parameter::TFunctionValue_list_parameter() : pfData_(NULL), uData_(0), dat1(NULL), dat2(dat1), dat3(dat1), pfnUpdate_(NULL) {}
 
 /* 80272794-8027279C       .text getType__Q27JStudio29TFunctionValue_list_parameterCFv */
-void JStudio::TFunctionValue_list_parameter::getType() const {
-    /* Nonmatching */
+u32 TFunctionValue_list_parameter::getType() const {
+    return 5;
 }
 
 /* 8027279C-802727CC       .text getAttributeSet__Q27JStudio29TFunctionValue_list_parameterFv */
-void JStudio::TFunctionValue_list_parameter::getAttributeSet() {
-    /* Nonmatching */
+TFunctionValueAttributeSet TFunctionValue_list_parameter::getAttributeSet() {
+    return TFunctionValueAttributeSet(NULL, this, this);
 }
 
 /* 802727CC-802727FC       .text data_set__Q27JStudio29TFunctionValue_list_parameterFPCfUl */
-void JStudio::TFunctionValue_list_parameter::data_set(const float*, unsigned long) {
-    /* Nonmatching */
+void TFunctionValue_list_parameter::data_set(const f32* pf, u32 u) {
+    ASSERT((pf != NULL) || (u == 0));
+
+    pfData_ = pf;
+    uData_ = u;
+
+    dat1.set(pfData_);
+    dat2.set(&pfData_[uData_ * 2]);
+    dat3 = dat1;
 }
 
 /* 802727FC-80272854       .text initialize__Q27JStudio29TFunctionValue_list_parameterFv */
-void JStudio::TFunctionValue_list_parameter::initialize() {
-    /* Nonmatching */
+void TFunctionValue_list_parameter::initialize() {
+    range_initialize();
+    interpolate_initialize();
+
+    pfData_ = NULL;
+    uData_ = 0;
+
+    TIterator_data_ iter(NULL);
+
+    dat1 = iter;
+    dat2 = dat1;
+    dat3 = dat1;
+    pfnUpdate_ = NULL;
 }
 
 /* 80272854-80272904       .text prepare__Q27JStudio29TFunctionValue_list_parameterFv */
-void JStudio::TFunctionValue_list_parameter::prepare() {
-    /* Nonmatching */
+void TFunctionValue_list_parameter::prepare() {
+    range_prepare();
+    interpolate_prepare();
+
+    u32 interp = interpolate_get();
+    switch (interp) {
+    default:
+        JUTWarn w;
+        w << "unknown interpolation : " << interp;
+    case 0:
+        pfnUpdate_ = update_INTERPOLATE_NONE_;
+        break;
+    case 1:
+        pfnUpdate_ = update_INTERPOLATE_LINEAR_;
+        break;
+    case 2:
+        pfnUpdate_ = update_INTERPOLATE_PLATEAU_;
+        break;
+    case 3:
+        pfnUpdate_ = update_INTERPOLATE_BSPLINE_dataMore3_;
+        if (uData_ != 2)
+            return;
+        pfnUpdate_ = update_INTERPOLATE_LINEAR_;
+        break;
+    }
 }
 
 /* 80272904-802729DC       .text getValue__Q27JStudio29TFunctionValue_list_parameterFd */
-void JStudio::TFunctionValue_list_parameter::getValue(double) {
+f64 TFunctionValue_list_parameter::getValue(f64 pfData_) {
     /* Nonmatching */
+    pfData_ = range_getParameter(pfData_, data_getValue_front(), data_getValue_back());
+    // JUT_ASSERT(1395, pfData_!=0)
+
+    dat3 = JGadget::findUpperBound_binary_current(dat1, dat2, dat3, pfData_);
+    if (dat3 == dat1) {
+        return dat3.get()[1];
+    }
+    if (dat3 == dat2) {
+        --dat3;
+        return dat3.get()[1];
+    } 
+
+    const f32* pf = dat3.get();
+    const int suData_size = 1;
+    // JUT_ASSERT(1411, (pfData_<=pf-suData_size)&&(pf<pfData_+suData_size*uData_));
+    // JUT_ASSERT(1412, pfnUpdate_!=0);
+    return pfnUpdate_(*this, pfData_);
 }
 
 /* 802729DC-802729E8       .text update_INTERPOLATE_NONE___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd */
-void update_INTERPOLATE_NONE___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd {
-    /* Nonmatching */
+f64 TFunctionValue_list_parameter::update_INTERPOLATE_NONE_(const TFunctionValue_list_parameter& rThis, f64 d) {
+    return rThis.dat3.get()[-1];
 }
 
 /* 802729E8-80272A18       .text update_INTERPOLATE_LINEAR___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd */
-void update_INTERPOLATE_LINEAR___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd {
-    /* Nonmatching */
+f64 TFunctionValue_list_parameter::update_INTERPOLATE_LINEAR_(const TFunctionValue_list_parameter& rThis, f64 d) {
+    const f32* a = rThis.dat3.get();
+    return functionvalue::interpolateValue_linear(d, a[-2], a[-1], a[0], a[1]);
 }
 
 /* 80272A18-80272A54       .text update_INTERPOLATE_PLATEAU___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd */
-void update_INTERPOLATE_PLATEAU___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd {
-    /* Nonmatching */
+f64 TFunctionValue_list_parameter::update_INTERPOLATE_PLATEAU_(const TFunctionValue_list_parameter& rThis, f64 d) {
+    const f32* a = rThis.dat3.get();
+    return functionvalue::interpolateValue_plateau(d, a[-2], a[-1], a[0], a[1]);
 }
 
 /* 80272A54-80272CB8       .text update_INTERPOLATE_BSPLINE_dataMore3___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd */
-void update_INTERPOLATE_BSPLINE_dataMore3___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd {
-    /* Nonmatching */
+f64 TFunctionValue_list_parameter::update_INTERPOLATE_BSPLINE_dataMore3_(const TFunctionValue_list_parameter& rThis, f64 d) {
+    // JUT_ASSERT(1457, rThis.uData_>=3)
+    const f32* pfVar2 = rThis.dat3.get();
+    f64 local_68[4];
+    f64 local_48[6];
+    local_68[1] = pfVar2[-1];
+    local_68[2] = pfVar2[1];
+    local_48[2] = pfVar2[-2];
+    local_48[3] = pfVar2[0];
+    s32 iVar3 = ((int)rThis.dat2.get() - (int)pfVar2) / 4;
+    s32 iVar5 = ((int)pfVar2 - (int)rThis.dat1.get()) / 4;
+    switch(iVar5) {
+    case 2:
+        local_68[0] = 2.0 * local_68[1] - local_68[2];
+        local_68[3] = pfVar2[3];
+        local_48[4] = pfVar2[2];
+        local_48[1] = 2.0 * local_48[2] - local_48[3];
+        local_48[0] = 2.0 * local_48[2] - local_48[4];
+        switch (iVar3) {
+        case 2:
+        case 4:
+            local_48[5] = 2.0 * local_48[4] - local_48[3];
+            break;
+        default:
+            local_48[5] = pfVar2[4];
+            break;
+        }
+        break;
+    case 4:
+        local_68[0] = pfVar2[-3];
+        local_48[1] = pfVar2[-4];
+        local_48[0] = 2.0 * local_48[1] - local_48[2];
+        switch (iVar3)
+        {
+        case 2:
+            local_68[3] = 2.0 * local_68[2] - local_68[1];
+            local_48[4] = 2.0 * local_48[3] - local_48[2];
+            local_48[5] = 2.0 * local_48[3] - local_48[1];
+            break;
+        case 4:
+            local_68[3] = pfVar2[3];
+            local_48[4] = pfVar2[2];
+            local_48[5] = 2.0 * local_48[4] - local_48[3];
+            break;
+        default:
+            local_68[3] = pfVar2[3];
+            local_48[4] = pfVar2[2];
+            local_48[5] = pfVar2[4];
+        }
+        break;
+    default:
+        local_68[0] = pfVar2[-3];
+        local_48[1] = pfVar2[-4];
+        local_48[0] = pfVar2[-6];
+        switch (iVar3) {
+        case 2:
+            local_68[3] = 2.0 * local_68[2] - local_68[1];
+            local_48[4] = 2.0 * local_48[3] - local_48[2];
+            local_48[5] = 2.0 * local_48[3] - local_48[1];
+            break;
+        case 4:
+            local_68[3] = pfVar2[3];
+            local_48[4] = pfVar2[2];
+            local_48[5] = 2.0 * local_48[4] - local_48[3];
+            break;
+        default:
+            local_68[3] = pfVar2[3];
+            local_48[4] = pfVar2[2];
+            local_48[5] = pfVar2[4];
+            break;
+        }
+        break;
+    }
+    functionvalue::interpolateValue_BSpline_nonuniform(d, (f64*)&local_68, (f64*)&local_48);
 }
 
 /* 80272CB8-80272D38       .text __ct__Q27JStudio22TFunctionValue_hermiteFv */
-JStudio::TFunctionValue_hermite::TFunctionValue_hermite() {
-    /* Nonmatching */
-}
+TFunctionValue_hermite::TFunctionValue_hermite() : pf_(NULL), u_(0), uSize_(0), dat1(*this, NULL), dat2(dat1), dat3(dat1) {}
 
 /* 80272D38-80272D40       .text getType__Q27JStudio22TFunctionValue_hermiteCFv */
-void JStudio::TFunctionValue_hermite::getType() const {
-    /* Nonmatching */
+u32 TFunctionValue_hermite::getType() const {
+    return 6;
 }
 
 /* 80272D40-80272D60       .text getAttributeSet__Q27JStudio22TFunctionValue_hermiteFv */
-void JStudio::TFunctionValue_hermite::getAttributeSet() {
-    /* Nonmatching */
+TFunctionValueAttributeSet TFunctionValue_hermite::getAttributeSet() {
+    return TFunctionValueAttributeSet(NULL, this, NULL);
 }
 
 /* 80272D60-80272DB0       .text data_set__Q27JStudio22TFunctionValue_hermiteFPCfUlUl */
-void JStudio::TFunctionValue_hermite::data_set(const float*, unsigned long, unsigned long) {
-    /* Nonmatching */
+void TFunctionValue_hermite::data_set(const f32* pf, u32 u, u32 uSize) {
+    ASSERT((pf != NULL) || (u == 0));
+    ASSERT((uSize == 3) || (uSize == 4));
+
+    pf_ = pf;
+    u_ = u;
+    uSize_ = uSize;
+
+    dat1.set(pf_, uSize_);
+    dat2.set(&pf_[u_ * uSize_], uSize_);
+    dat3 = dat1;
 }
 
 /* 80272DB0-80272E1C       .text initialize__Q27JStudio22TFunctionValue_hermiteFv */
-void JStudio::TFunctionValue_hermite::initialize() {
-    /* Nonmatching */
+void TFunctionValue_hermite::initialize() {
+    range_initialize();
+
+    pf_ = NULL;
+    u_ = 0;
+    uSize_ = 0;
+
+    TIterator_data_ data(*this, NULL);
+    dat1 = data;
+    dat2 = dat1;
+    dat3 = dat1;
 }
 
 /* 80272E1C-80272E40       .text prepare__Q27JStudio22TFunctionValue_hermiteFv */
-void JStudio::TFunctionValue_hermite::prepare() {
-    /* Nonmatching */
+void TFunctionValue_hermite::prepare() {
+    range_prepare();
 }
 
 /* 80272E40-80272F64       .text getValue__Q27JStudio22TFunctionValue_hermiteFd */
-void JStudio::TFunctionValue_hermite::getValue(double) {
+f64 TFunctionValue_hermite::getValue(f64 pfData_) {
     /* Nonmatching */
+    pfData_ = range_getParameter(pfData_, data_getValue_front(), data_getValue_back());
+    // JUT_ASSERT(1395, pfData_!=0)
+    dat3 = JGadget::findUpperBound_binary_current(dat1, dat2, dat3, pfData_);
+    
+    if (dat3 == dat1) {
+        return dat3.get()[1];
+    }
+    if (dat3 == dat2) {
+        --dat3;
+        return dat3.get()[1];
+    }
+
+    const f32* pfVar5 = dat3.get();
+    const f32* pfVar7 = pfVar5 - uSize_;
+    return functionvalue::interpolateValue_hermite(
+        pfData_, pfVar7[0], pfVar7[1],
+        pfVar7[uSize_ - 1], pfVar5[0],
+        pfVar5[1], pfVar5[2]);
 }
 
+namespace functionvalue {
+    
 /* 80272F64-80272F68       .text extrapolateParameter_raw__Q27JStudio13functionvalueFdd */
-void JStudio::functionvalue::extrapolateParameter_raw(double, double) {
-    /* Nonmatching */
+f64 extrapolateParameter_raw(f64 a1, f64 a2) {
+    return a1;
 }
 
 /* 80272F68-80272FA4       .text extrapolateParameter_repeat__Q27JStudio13functionvalueFdd */
-void JStudio::functionvalue::extrapolateParameter_repeat(double, double) {
+f64 extrapolateParameter_repeat(f64 a1, f64 a2) {
     /* Nonmatching */
+    f64 t = fmod(a1, a2);
+
+    if (t < 0.0)
+        t += a2;
+
+    return t;
 }
 
 /* 80272FA4-80272FD0       .text extrapolateParameter_clamp__Q27JStudio13functionvalueFdd */
-void JStudio::functionvalue::extrapolateParameter_clamp(double, double) {
+f64 extrapolateParameter_clamp(f64 value, f64 max) {
     /* Nonmatching */
+    if (value <= 0.0)
+        return 0.0;
+
+    if (max <= value)
+        value = max;
+
+    return value;
 }
 
-/* 80272FD0-80273028       .text findUpperBound_binary_current<Q37JStudio29TFunctionValue_list_parameter15TIterator_data_,d>__7JGadgetFQ37JStudio29TFunctionValue_list_parameter15TIterator_data_Q37JStudio29TFunctionValue_list_parameter15TIterator_data_Q37JStudio29TFunctionValue_list_parameter15TIterator_data_RCd */
-void JGadget::findUpperBound_binary_current<JStudio::TFunctionValue_list_parameter::TIterator_data_, double>(JStudio::TFunctionValue_list_parameter::TIterator_data_, JStudio::TFunctionValue_list_parameter::TIterator_data_, JStudio::TFunctionValue_list_parameter::TIterator_data_, const double&) {
-    /* Nonmatching */
-}
+}  // namespace functionvalue
 
-/* 80273028-8027324C       .text findUpperBound_binary_current<Q37JStudio29TFunctionValue_list_parameter15TIterator_data_,d,Q23std7less<d>>__7JGadgetFQ37JStudio29TFunctionValue_list_parameter15TIterator_data_Q37JStudio29TFunctionValue_list_parameter15TIterator_data_Q37JStudio29TFunctionValue_list_parameter15TIterator_data_RCdQ23std7less<d> */
-void JGadget::findUpperBound_binary_current<JStudio::TFunctionValue_list_parameter::TIterator_data_, double, std::less<double>>(JStudio::TFunctionValue_list_parameter::TIterator_data_, JStudio::TFunctionValue_list_parameter::TIterator_data_, JStudio::TFunctionValue_list_parameter::TIterator_data_, const double&, std::less<double>) {
-    /* Nonmatching */
-}
-
-/* 8027324C-802732BC       .text findUpperBound_binary_current<Q37JStudio22TFunctionValue_hermite15TIterator_data_,d>__7JGadgetFQ37JStudio22TFunctionValue_hermite15TIterator_data_Q37JStudio22TFunctionValue_hermite15TIterator_data_Q37JStudio22TFunctionValue_hermite15TIterator_data_RCd */
-void JGadget::findUpperBound_binary_current<JStudio::TFunctionValue_hermite::TIterator_data_, double>(JStudio::TFunctionValue_hermite::TIterator_data_, JStudio::TFunctionValue_hermite::TIterator_data_, JStudio::TFunctionValue_hermite::TIterator_data_, const double&) {
-    /* Nonmatching */
-}
-
-/* 802732BC-802735A8       .text findUpperBound_binary_current<Q37JStudio22TFunctionValue_hermite15TIterator_data_,d,Q23std7less<d>>__7JGadgetFQ37JStudio22TFunctionValue_hermite15TIterator_data_Q37JStudio22TFunctionValue_hermite15TIterator_data_Q37JStudio22TFunctionValue_hermite15TIterator_data_RCdQ23std7less<d> */
-void JGadget::findUpperBound_binary_current<JStudio::TFunctionValue_hermite::TIterator_data_, double, std::less<double>>(JStudio::TFunctionValue_hermite::TIterator_data_, JStudio::TFunctionValue_hermite::TIterator_data_, JStudio::TFunctionValue_hermite::TIterator_data_, const double&, std::less<double>) {
-    /* Nonmatching */
-}
-
-/* 802735A8-80273608       .text __dt__Q27JStudio22TFunctionValue_hermiteFv */
-JStudio::TFunctionValue_hermite::~TFunctionValue_hermite() {
-    /* Nonmatching */
-}
-
-/* 80273608-80273668       .text __dt__Q27JStudio29TFunctionValue_list_parameterFv */
-JStudio::TFunctionValue_list_parameter::~TFunctionValue_list_parameter() {
-    /* Nonmatching */
-}
-
-/* 80273668-802736C8       .text __dt__Q27JStudio19TFunctionValue_listFv */
-JStudio::TFunctionValue_list::~TFunctionValue_list() {
-    /* Nonmatching */
-}
-
-/* 802736C8-80273728       .text __dt__Q27JStudio25TFunctionValue_transitionFv */
-JStudio::TFunctionValue_transition::~TFunctionValue_transition() {
-    /* Nonmatching */
-}
-
-/* 80273728-80273788       .text __dt__Q27JStudio23TFunctionValue_constantFv */
-JStudio::TFunctionValue_constant::~TFunctionValue_constant() {
-    /* Nonmatching */
-}
-
-/* 80273788-80273808       .text __dt__Q27JStudio24TFunctionValue_compositeFv */
-JStudio::TFunctionValue_composite::~TFunctionValue_composite() {
-    /* Nonmatching */
-}
-
-/* 80273808-8027389C       .text upper_bound<Q37JStudio29TFunctionValue_list_parameter15TIterator_data_,d,Q23std7less<d>>__3stdFQ37JStudio29TFunctionValue_list_parameter15TIterator_data_Q37JStudio29TFunctionValue_list_parameter15TIterator_data_RCdQ23std7less<d> */
-void std::upper_bound<JStudio::TFunctionValue_list_parameter::TIterator_data_, double, std::less<double>>(JStudio::TFunctionValue_list_parameter::TIterator_data_, JStudio::TFunctionValue_list_parameter::TIterator_data_, const double&, std::less<double>) {
-    /* Nonmatching */
-}
-
-/* 8027389C-80273964       .text upper_bound<Q37JStudio22TFunctionValue_hermite15TIterator_data_,d,Q23std7less<d>>__3stdFQ37JStudio22TFunctionValue_hermite15TIterator_data_Q37JStudio22TFunctionValue_hermite15TIterator_data_RCdQ23std7less<d> */
-void std::upper_bound<JStudio::TFunctionValue_hermite::TIterator_data_, double, std::less<double>>(JStudio::TFunctionValue_hermite::TIterator_data_, JStudio::TFunctionValue_hermite::TIterator_data_, const double&, std::less<double>) {
-    /* Nonmatching */
-}
-
+}  // namespace JStudio

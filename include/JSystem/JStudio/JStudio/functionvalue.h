@@ -225,9 +225,9 @@ public:
     TData data;
 };
 
-class TFunctionValue_transition : TFunctionValue,
-                                  TFunctionValueAttribute_range,
-                                  TFunctionValueAttribute_interpolate {
+class TFunctionValue_transition : public TFunctionValue,
+                                  public TFunctionValueAttribute_range,
+                                  public TFunctionValueAttribute_interpolate {
 public:
     TFunctionValue_transition();
     virtual ~TFunctionValue_transition() {}
@@ -250,9 +250,9 @@ private:
     /* 0x50 */ f64 _50;
 };
 
-class TFunctionValue_list : TFunctionValue,
-                            TFunctionValueAttribute_range,
-                            TFunctionValueAttribute_interpolate {
+class TFunctionValue_list : public TFunctionValue,
+                            public TFunctionValueAttribute_range,
+                            public TFunctionValueAttribute_interpolate {
 public:
     struct TIndexData_ {
         f64 _0;
@@ -301,9 +301,9 @@ private:
     /* 0x58 */ update_INTERPOLATE pfnUpdate_;
 };
 
-class TFunctionValue_list_parameter : TFunctionValue,
-                                      TFunctionValueAttribute_range,
-                                      TFunctionValueAttribute_interpolate {
+class TFunctionValue_list_parameter : public TFunctionValue,
+                                      public TFunctionValueAttribute_range,
+                                      public TFunctionValueAttribute_interpolate {
 public:
     struct TIterator_data_ {
         TIterator_data_(const f32* value) : value_(value) {}
@@ -356,7 +356,7 @@ private:
     /* 0x58 */ update_INTERPOLATE pfnUpdate_;
 };
 
-class TFunctionValue_hermite : TFunctionValue, TFunctionValueAttribute_range {
+class TFunctionValue_hermite : public TFunctionValue, public TFunctionValueAttribute_range {
 public:
     struct TIterator_data_ {
         TIterator_data_(const TFunctionValue_hermite& rParent, const f32* value) {

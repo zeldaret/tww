@@ -3,6 +3,7 @@
 // Translation Unit: jstudio-data.cpp
 //
 
-#include "jstudio-data.h"
+#include "JSystem/JStudio/JStudio/jstudio-data.h"
 #include "dolphin/types.h"
 
+const char JStudio::data::ga8cSignature[8] = "jstudio";
