@@ -120,7 +120,7 @@ static BOOL daObjTower_Draw(void* i_this) {
 }
 
 BOOL daObjTower_c::_execute() {
-    u8 mDemoActorId = mDemoActorId;
+    u8 mDemoActorId = this->mDemoActorId;
 
     if (mDemoActorId != 0) {
         dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(mDemoActorId);
