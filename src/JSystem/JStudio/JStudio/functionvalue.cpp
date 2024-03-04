@@ -4,6 +4,7 @@
 //
 
 #include "JSystem/JStudio/JStudio/functionvalue.h"
+#include "JSystem/JStudio/JStudio/functionvalue_weak.h"
 #include "JSystem/JUtility/JUTException.h"
 #include "JSystem/JGadget/linklist.h"
 #include "dolphin/types.h"
@@ -17,21 +18,6 @@ Iterator findUpperBound_binary_current(Iterator, Iterator, Iterator, const B1&);
 };  // namespace JGadget
 
 namespace JStudio {
-
-namespace functionvalue {
-f64 extrapolateParameter_raw(f64, f64);
-inline f64 extrapolateParameter_repeat(f64, f64);
-f64 extrapolateParameter_turn(f64, f64);
-f64 extrapolateParameter_clamp(f64, f64);
-static inline f64 i_extrapolateParameter_repeat(f64 a1, f64 a2) {
-    f64 t = fmod(a1, a2);
-
-    if (t < 0.0)
-        t += a2;
-
-    return t;
-}
-};  // namespace functionvalue
 
 namespace {
 ExtrapolateParameter gapfnExtrapolateParameter_[4] = {
@@ -76,7 +62,6 @@ namespace functionvalue {
 
 /* 802710E8-8027114C       .text interpolateValue_hermite__Q27JStudio13functionvalueFddddddd */
 f64 interpolateValue_hermite(f64 c0, f64 c1, f64 x, f64 c2, f64 x2, f64 c3, f64 x3) {
-    /* Nonmatching */
     f64 a;
     f64 b;
     f64 c;
@@ -134,7 +119,7 @@ inline f64 interpolateValue_plateau(f64 a1, f64 a2, f64 a3, f64 a4, f64 a5) {
 /* 80271290-802712F0       .text extrapolateParameter_turn__Q27JStudio13functionvalueFdd */
 f64 extrapolateParameter_turn(f64 param_0, f64 param_1) {
     f64 dVar2 = 2.0 * param_1;
-    f64 dVar1 = i_extrapolateParameter_repeat(param_0, dVar2);
+    f64 dVar1 = extrapolateParameter_repeat(param_0, dVar2);
     if (dVar1 >= param_1) {
         dVar1 = dVar2 - dVar1;
     }
@@ -156,6 +141,7 @@ void TFunctionValueAttribute_range::range_initialize() {
 
 /* 80271324-802713CC       .text range_prepare__Q27JStudio29TFunctionValueAttribute_rangeFv */
 void TFunctionValueAttribute_range::range_prepare() {
+    /* Nonmatching */
     TFunctionValue::TEProgress progress = range_getProgress();
 
     switch (progress) {
@@ -196,6 +182,7 @@ void TFunctionValueAttribute_range::range_set(f64 begin, f64 end) {
 
 /* 802713E0-802716F0       .text range_getParameter__Q27JStudio29TFunctionValueAttribute_rangeCFddd */
 f64 TFunctionValueAttribute_range::range_getParameter(f64 arg1, f64 arg2, f64 arg3) const {
+    /* Nonmatching */
     f64 progress = range_getParameter_progress(arg1);
     TFunctionValue::TEAdjust adjust = range_getAdjust();
 
@@ -281,7 +268,6 @@ f64 TFunctionValue_composite::composite_raw(const JGadget::TVector_pointer<TFunc
 
 /* 802718A0-80271A04       .text composite_index__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
 f64 TFunctionValue_composite::composite_index(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
-    /* Nonmatching */
     s32 size = param_1.size();
     if (size <= 1) {
         return 0.0;
@@ -566,6 +552,7 @@ void TFunctionValue_list::prepare() {
 
 /* 8027224C-80272604       .text getValue__Q27JStudio19TFunctionValue_listFd */
 f64 TFunctionValue_list::getValue(f64 param_1) {
+    /* Nonmatching */
     f64 dVar9 = range_getParameter_progress(param_1);
     u32 iVar7 = uData_ - 1;
     TFunctionValue::TEAdjust iVar5 = range_getAdjust();
@@ -901,37 +888,5 @@ f64 TFunctionValue_hermite::getValue(f64 pfData_) {
         pfVar7[uSize_ - 1], pfVar5[0],
         pfVar5[1], pfVar5[2]);
 }
-
-namespace functionvalue {
-    
-/* 80272F64-80272F68       .text extrapolateParameter_raw__Q27JStudio13functionvalueFdd */
-f64 extrapolateParameter_raw(f64 a1, f64 a2) {
-    return a1;
-}
-
-/* 80272F68-80272FA4       .text extrapolateParameter_repeat__Q27JStudio13functionvalueFdd */
-f64 extrapolateParameter_repeat(f64 a1, f64 a2) {
-    /* Nonmatching */
-    f64 t = fmod(a1, a2);
-
-    if (t < 0.0)
-        t += a2;
-
-    return t;
-}
-
-/* 80272FA4-80272FD0       .text extrapolateParameter_clamp__Q27JStudio13functionvalueFdd */
-f64 extrapolateParameter_clamp(f64 value, f64 max) {
-    /* Nonmatching */
-    if (value <= 0.0)
-        return 0.0;
-
-    if (max <= value)
-        value = max;
-
-    return value;
-}
-
-}  // namespace functionvalue
 
 }  // namespace JStudio

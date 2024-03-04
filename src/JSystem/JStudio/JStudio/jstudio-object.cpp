@@ -307,11 +307,11 @@ JStudio::TObject_message::TObject_message(const JStudio::stb::data::TParse_TBloc
 
 /* 802700F4-80270184       .text do_paragraph__Q27JStudio15TObject_messageFUlPCvUl */
 void JStudio::TObject_message::do_paragraph(u32 param_1, const void* param_2, u32 param_3) {
-    /* Nonmatching */
     TAdaptor* adaptor = getAdaptor();
     if (adaptor != NULL) {
         u32 uVar1 = (param_1 >> 5);
         param_1 &= 0x1f;
+        u8 temp = param_1; // fakematch?
         paragraphFunc pmfn_ = NULL;
         switch (uVar1) {
         case 0x42:
@@ -320,7 +320,7 @@ void JStudio::TObject_message::do_paragraph(u32 param_1, const void* param_2, u3
         default:
             return;
         }
-        (((TObject*)adaptor)->*pmfn_)(param_1, param_2, param_3);
+        (((TObject*)adaptor)->*pmfn_)(temp, param_2, param_3);
     }
 }
 
