@@ -1574,7 +1574,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_smplbg"),
     ActorRel(NonMatching, "d_a_obj_tapestry"),
     ActorRel(NonMatching, "d_a_obj_tntrap"),
-    ActorRel(NonMatching, "d_a_obj_tower"),
+    ActorRel(Matching, "d_a_obj_tower"),
     ActorRel(NonMatching, "d_a_obj_trap"),
     ActorRel(NonMatching, "d_a_obj_tribox"),
     ActorRel(NonMatching, "d_a_obj_try"),
