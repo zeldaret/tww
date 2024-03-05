@@ -49,32 +49,32 @@ void TParse_TParagraph::getData(TParse_TParagraph::TData* pData) const {
 void TParse_TParagraph_data::getData(TParse_TParagraph_data::TData* pData) const {
     u8* set2;
 
-	int dSize = pData->dataSize = 0;
-	pData->_8                  = 0;
-	pData->fileCount            = NULL;
-	pData->_10                  = NULL;
-	u8* filedata = (u8*)getRaw();
-	if (filedata == NULL)
-		return;
-	u8 set       = *filedata;
-	pData->status = set & ~0x8;
-	if (!set)
-		return;
+    int dSize = pData->dataSize = 0;
+    pData->_8                  = 0;
+    pData->fileCount            = NULL;
+    pData->_10                  = NULL;
+    u8* filedata = (u8*)getRaw();
+    if (filedata == NULL)
+        return;
+    u8 set       = *filedata;
+    pData->status = set & ~0x8;
+    if (!set)
+        return;
     int is8;
-	int set3 = 1;
-	is8 = set & 8;
+    int set3 = 1;
+    is8 = set & 8;
     // Probably fake match
-	if (set2 = (filedata + 1), is8) {
-		set3 = *set2++;
-	}
-	pData->_8       = set3;
-	pData->fileCount = set2;
+    if (set2 = (filedata + 1), is8) {
+        set3 = *set2++;
+    }
+    pData->_8       = set3;
+    pData->fileCount = set2;
 
-	if (!(set & 7))
-		return;
-	dSize          = (gauDataSize_TEParagraph_data)[set &= 7];
-	pData->dataSize = dSize;
-	pData->_10      = (u8*)set2 + (dSize * set3);
+    if (!(set & 7))
+        return;
+    dSize          = (gauDataSize_TEParagraph_data)[set &= 7];
+    pData->dataSize = dSize;
+    pData->_10      = (u8*)set2 + (dSize * set3);
 }
 
 }  // namespace data

@@ -11,24 +11,24 @@ namespace binary {
     
 /* 802BFA48-802BFAAC       .text parseVariableUInt_16_32_following__Q27JGadget6binaryFPCvPUlPUlPQ37JGadget6binary5TEBit */
 const void* parseVariableUInt_16_32_following(const void* buffer, u32* param_1, u32* param_2, TEBit* bit) {
-	JGadget::binary::TEBit temp;
-	if (bit == NULL) {
-		bit = &temp;
-	}
-	u32 uVar1 = *(u16*)buffer;
-	if ((uVar1 & 0x8000) == 0) {
-		bit->value = 0x10;
-		*param_1 = uVar1;
-		*param_2 = *(u16*)((u8*)buffer + 2);
-		return (u8*)buffer + 4;
-	}
-	bit->value = 0x20;
-	uVar1 <<= 16;
-	uVar1 &= 0x7fff0000;
-	uVar1 |= *(u16*)((u8*)buffer + 2);
-	*param_1 = uVar1;
-	*param_2 = *(u32*)((u8*)buffer + 4);
-	return (u8*)buffer + 8;
+    JGadget::binary::TEBit temp;
+    if (bit == NULL) {
+        bit = &temp;
+    }
+    u32 uVar1 = *(u16*)buffer;
+    if ((uVar1 & 0x8000) == 0) {
+        bit->value = 0x10;
+        *param_1 = uVar1;
+        *param_2 = *(u16*)((u8*)buffer + 2);
+        return (u8*)buffer + 4;
+    }
+    bit->value = 0x20;
+    uVar1 <<= 16;
+    uVar1 &= 0x7fff0000;
+    uVar1 |= *(u16*)((u8*)buffer + 2);
+    *param_1 = uVar1;
+    *param_2 = *(u32*)((u8*)buffer + 4);
+    return (u8*)buffer + 8;
 }
 
 /* 802BFAAC-802BFAF4       .text __dt__Q37JGadget6binary19TParse_header_blockFv */
@@ -36,33 +36,33 @@ TParse_header_block::~TParse_header_block() {}
 
 /* 802BFAF4-802BFC00       .text parse_next__Q37JGadget6binary19TParse_header_blockFPPCvUl */
 bool TParse_header_block::parse_next(const void** ptrLocation, u32 idx) {
-	u32 headerEnd, blockEnd;
+    u32 headerEnd, blockEnd;
 
-	if ((ptrLocation == NULL) || (*ptrLocation == NULL)) {
-		return false;
-	}
-	bool check, checkLastBlock;
-	checkLastBlock = check = false;
+    if ((ptrLocation == NULL) || (*ptrLocation == NULL)) {
+        return false;
+    }
+    bool check, checkLastBlock;
+    checkLastBlock = check = false;
 
-	check = checkNext(ptrLocation, &headerEnd, idx);
+    check = checkNext(ptrLocation, &headerEnd, idx);
 
-	checkLastBlock = check;
-	if (!(idx & 1) && (check == false)) {
-		return check;
-	}
+    checkLastBlock = check;
+    if (!(idx & 1) && (check == false)) {
+        return check;
+    }
 
-	while (headerEnd > 0) {
-		check = false;
-		if (parseBlock_next(ptrLocation, &blockEnd, idx) && checkLastBlock) {
-			check = true;
-		}
-		checkLastBlock = check;
-		if (((idx & 2) == 0) && (check == false)) {
-			return check;
-		}
-		headerEnd--;
-	}
-	return checkLastBlock;
+    while (headerEnd > 0) {
+        check = false;
+        if (parseBlock_next(ptrLocation, &blockEnd, idx) && checkLastBlock) {
+            check = true;
+        }
+        checkLastBlock = check;
+        if (((idx & 2) == 0) && (check == false)) {
+            return check;
+        }
+        headerEnd--;
+    }
+    return checkLastBlock;
 }
 
 } // namespace binary

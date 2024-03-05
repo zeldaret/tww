@@ -15,11 +15,11 @@ u32 vector::extend_default(u32, u32 param_2, u32) {
 
 /* 802BFF1C-802BFF48       .text __ct__Q27JGadget20TVector_pointer_voidFRCQ27JGadget14TAllocator<Pv> */
 TVector_pointer_void::TVector_pointer_void(const TAllocator<void*>& allocator) {
-	_00 = allocator._00;
-	mBegin = NULL;
-	mEnd = mBegin;
-	_0C = NULL;
-	mExtend = vector::extend_default;
+    _00 = allocator._00;
+    mBegin = NULL;
+    mEnd = mBegin;
+    _0C = NULL;
+    mExtend = vector::extend_default;
 }
 
 /* 802BFF48-802BFFF0       .text __dt__Q27JGadget20TVector_pointer_voidFv */

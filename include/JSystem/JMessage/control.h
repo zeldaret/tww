@@ -41,16 +41,16 @@ struct TControl {
 
     /* 0x04 */ void* _04;
     /* 0x08 */ void* _08;
-	/* 0x0C */ TSequenceProcessor* mBaseProcSeq;
-	/* 0x10 */ TRenderingProcessor* mBaseProcRender;
-	/* 0x14 */ u16 mMessageCode;
-	/* 0x16 */ u16 mMessageIndex;
-	/* 0x18 */ const TResource* mResourceCache;
-	/* 0x1C */ const char* mMessageBegin;
-	/* 0x20 */ const char* _20;
-	/* 0x24 */ const char* mCurrentText;
-	/* 0x28 */ void* mEntry;
-	/* 0x2C */ TProcessor::TStack_ mRenderStack;
+    /* 0x0C */ TSequenceProcessor* mBaseProcSeq;
+    /* 0x10 */ TRenderingProcessor* mBaseProcRender;
+    /* 0x14 */ u16 mMessageCode;
+    /* 0x16 */ u16 mMessageIndex;
+    /* 0x18 */ const TResource* mResourceCache;
+    /* 0x1C */ const char* mMessageBegin;
+    /* 0x20 */ const char* _20;
+    /* 0x24 */ const char* mCurrentText;
+    /* 0x28 */ void* mEntry;
+    /* 0x2C */ TProcessor::TStack_ mRenderStack;
 };
 };  // namespace JMessage
 

@@ -13,7 +13,7 @@ public:
 
     bool isEqual(JStudio::object::TIDData const&, JStudio::object::TIDData const&);
     inline const void* getID() const { return mID; }
-	inline u32 getIDSize() const { return mID_size; }
+    inline u32 getIDSize() const { return mID_size; }
 
 private:
     /* 0x00 */ const void* mID;

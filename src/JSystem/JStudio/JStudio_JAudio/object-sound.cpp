@@ -27,13 +27,13 @@ TAdaptor_sound::~TAdaptor_sound() {
 
 /* 80278E38-80278F40       .text adaptor_do_prepare__Q214JStudio_JAudio14TAdaptor_soundFPCQ27JStudio7TObject */
 void TAdaptor_sound::adaptor_do_prepare(const JStudio::TObject* param_1) {
-	static TSetVariableValue_immediate aoData[] = {
-		TSetVariableValue_immediate(0, 0.0f),
+    static TSetVariableValue_immediate aoData[] = {
+        TSetVariableValue_immediate(0, 0.0f),
         TSetVariableValue_immediate(1, 0.0f),
         TSetVariableValue_immediate(2, 0.0f),
-		TSetVariableValue_immediate(0xFFFFFFFF, NAN),
-	};
-	adaptor_setVariableValue_immediate(aoData);
+        TSetVariableValue_immediate(0xFFFFFFFF, NAN),
+    };
+    adaptor_setVariableValue_immediate(aoData);
     pValue_[3].setOutput(&TAdaptor_sound::soVVOOn_BEGIN_FADE_IN_);
     pValue_[4].setOutput(&TAdaptor_sound::soVVOOn_END_FADE_OUT_);
 

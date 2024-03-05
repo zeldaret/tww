@@ -238,23 +238,23 @@ bool TSequenceProcessor::do_tag_(u32, const void*, u32) {
 /* 8029F9D4-8029FA2C       .text do_systemTagCode___Q28JMessage18TSequenceProcessorFUsPCvUl */
 void TSequenceProcessor::do_systemTagCode_(u16 p1, const void* p2, u32 p3) {
     /* Nonmatching */
-	switch (p1) {
-	case 6:
-		_3C = 3;
-		_40 = &process_onJump_;
-		_44 = *(u32*)p2;
-		break;
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-		break;
-	case 4:
-	case 5:
-	default:
-		TProcessor::do_systemTagCode_(p1, p2, p3);
-		break;
-	}
+    switch (p1) {
+    case 6:
+        _3C = 3;
+        _40 = &process_onJump_;
+        _44 = *(u32*)p2;
+        break;
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+        break;
+    case 4:
+    case 5:
+    default:
+        TProcessor::do_systemTagCode_(p1, p2, p3);
+        break;
+    }
 }
 
 /* 8029FA2C-8029FA5C       .text process_jump_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */

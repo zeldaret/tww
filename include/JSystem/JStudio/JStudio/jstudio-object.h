@@ -81,9 +81,9 @@ struct TVariableValue {
         }
     }
 
-	inline void setOutput(const TOutput* output) {
-		pOutput_ = (output != NULL ? (TOutput*)output : (TOutput*)&soOutput_none_);
-	}
+    inline void setOutput(const TOutput* output) {
+        pOutput_ = (output != NULL ? (TOutput*)output : (TOutput*)&soOutput_none_);
+    }
 
     static u8 soOutput_none_[4 + 4 /* padding */];
 
@@ -139,22 +139,22 @@ public:
 };
 
 struct TAdaptor {
-	inline TAdaptor(TVariableValue* values, int count)
-	    : pValue_(values)
-	    , u(count)
-	{
-	}
+    inline TAdaptor(TVariableValue* values, int count)
+        : pValue_(values)
+        , u(count)
+    {
+    }
 
-	struct TSetVariableValue_immediate {
-		inline TSetVariableValue_immediate(u32 p1, f32 p2)
-		    : field_0x0(p1)
-		    , field_0x4(p2)
-		{
-		}
+    struct TSetVariableValue_immediate {
+        inline TSetVariableValue_immediate(u32 p1, f32 p2)
+            : field_0x0(p1)
+            , field_0x4(p2)
+        {
+        }
 
-		u32 field_0x0;
-		f32 field_0x4;
-	};
+        u32 field_0x0;
+        f32 field_0x4;
+    };
     typedef void (*setVarFunc)(JStudio::TAdaptor*, JStudio::TObject*, u32, void const*, u32);
     virtual ~TAdaptor() = 0;
     virtual void adaptor_do_prepare(const JStudio::TObject*);
@@ -204,11 +204,11 @@ struct TAdaptor {
 };
 
 struct TAdaptor_actor : public TAdaptor {
-	TAdaptor_actor()
-	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
-	    , mValue()
-	{
-	}
+    TAdaptor_actor()
+        : TAdaptor(mValue, ARRAY_SIZE(mValue))
+        , mValue()
+    {
+    }
     virtual ~TAdaptor_actor() = 0;
 
     /* 0x10 */ TVariableValue mValue[14];
@@ -227,11 +227,11 @@ struct TObject_actor : public TObject {
 };
 
 struct TAdaptor_ambientLight : public TAdaptor {
-	TAdaptor_ambientLight()
-	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
-	    , mValue()
-	{
-	}
+    TAdaptor_ambientLight()
+        : TAdaptor(mValue, ARRAY_SIZE(mValue))
+        , mValue()
+    {
+    }
     virtual ~TAdaptor_ambientLight()  = 0;
 
     /* 0x10 */ TVariableValue mValue[4];
@@ -249,11 +249,11 @@ struct TObject_ambientLight : public TObject {
 };
 
 struct TAdaptor_camera : public TAdaptor {
-	TAdaptor_camera()
-	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
-	    , mValue()
-	{
-	}
+    TAdaptor_camera()
+        : TAdaptor(mValue, ARRAY_SIZE(mValue))
+        , mValue()
+    {
+    }
     virtual ~TAdaptor_camera() = 0;
 
     /* 0x10 */ TVariableValue mValue[12];
@@ -272,11 +272,11 @@ struct TObject_camera : public TObject {
 };
 
 struct TAdaptor_fog : public TAdaptor {
-	TAdaptor_fog()
-	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
-	    , mValue()
-	{
-	}
+    TAdaptor_fog()
+        : TAdaptor(mValue, ARRAY_SIZE(mValue))
+        , mValue()
+    {
+    }
     virtual ~TAdaptor_fog() = 0;
 
     /* 0x10 */ TVariableValue mValue[6];
@@ -295,11 +295,11 @@ struct TObject_fog : public TObject {
 };
 
 struct TAdaptor_light : public TAdaptor {
-	TAdaptor_light()
-	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
-	    , mValue()
-	{
-	}
+    TAdaptor_light()
+        : TAdaptor(mValue, ARRAY_SIZE(mValue))
+        , mValue()
+    {
+    }
     virtual ~TAdaptor_light() = 0;
 
     /* 0x10 */ TVariableValue mValue[13];
@@ -320,10 +320,10 @@ struct TObject_light : public TObject {
 };
 
 struct TAdaptor_message : public TAdaptor {
-	TAdaptor_message()
-	    : TAdaptor(NULL, 0)
-	{
-	}
+    TAdaptor_message()
+        : TAdaptor(NULL, 0)
+    {
+    }
 
     virtual ~TAdaptor_message() = 0;
 };
@@ -337,11 +337,11 @@ struct TObject_message : public TObject {
 };
 
 struct TAdaptor_particle : public TAdaptor {
-	TAdaptor_particle()
-	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
-	    , mValue()
-	{
-	}
+    TAdaptor_particle()
+        : TAdaptor(mValue, ARRAY_SIZE(mValue))
+        , mValue()
+    {
+    }
     virtual ~TAdaptor_particle() = 0;
 
     /* 0x10 */ TVariableValue mValue[20];
@@ -364,11 +364,11 @@ struct TObject_particle : public TObject {
 };
 
 struct TAdaptor_sound : public TAdaptor {
-	TAdaptor_sound()
-	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
-	    , mValue()
-	{
-	}
+    TAdaptor_sound()
+        : TAdaptor(mValue, ARRAY_SIZE(mValue))
+        , mValue()
+    {
+    }
     virtual ~TAdaptor_sound() = 0;
 
     /* 0x10 */ TVariableValue mValue[11];

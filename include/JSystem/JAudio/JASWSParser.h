@@ -49,12 +49,12 @@ namespace JASystem {
         };
         struct TWaveArchive {
             /* 0x00 */ char mFileName[0x74];
-	        /* 0x74 */ u32 mWaveOffsets[1];
+            /* 0x74 */ u32 mWaveOffsets[1];
         };
         struct TWaveArchiveBank {
             /* 0x00 */ u32 mMagic;
             /* 0x04 */ u8 field_0x4[0x08 - 0x04];
-	        /* 0x08 */ u32 mArchiveOffsets[1];
+            /* 0x08 */ u32 mArchiveOffsets[1];
         };
 
         u32 getGroupCount(void*);
