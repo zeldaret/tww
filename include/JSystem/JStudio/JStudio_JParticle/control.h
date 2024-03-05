@@ -36,6 +36,17 @@ struct TAdaptor_particle : public JStudio::TAdaptor_particle {
 		const JStudio::TObject* mObject; // _08
 	};
 
+    struct TVVOOn_BEGIN_FADE_IN_ : public JStudio::TVariableValue::TOutput {
+        void operator()(float, JStudio::TAdaptor*) const;
+    };
+
+    struct TVVOOn_END_FADE_OUT_ : public JStudio::TVariableValue::TOutput {
+        void operator()(float, JStudio::TAdaptor*) const;
+    };
+
+    static TVVOOn_BEGIN_FADE_IN_ soVVOOn_BEGIN_FADE_IN_;
+    static TVVOOn_END_FADE_OUT_ soVVOOn_END_FADE_OUT_;
+
     TAdaptor_particle(JPAEmitterManager*, const JStage::TSystem*);
     void beginParticle_fadeIn_();
     void endParticle_fadeOut_(u32);

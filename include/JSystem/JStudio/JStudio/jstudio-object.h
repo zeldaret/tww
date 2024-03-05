@@ -81,6 +81,10 @@ struct TVariableValue {
         }
     }
 
+	inline void setOutput(const TOutput* output) {
+		pOutput_ = (output != NULL ? (TOutput*)output : (TOutput*)&soOutput_none_);
+	}
+
     static u8 soOutput_none_[4 + 4 /* padding */];
 
     /* 0x00 */ f32 mValue;
@@ -143,13 +147,13 @@ struct TAdaptor {
 
 	struct TSetVariableValue_immediate {
 		inline TSetVariableValue_immediate(u32 p1, f32 p2)
-		    : _00(p1)
-		    , _04(p2)
+		    : field_0x0(p1)
+		    , field_0x4(p2)
 		{
 		}
 
-		u32 _00; // _00
-		f32 _04; // _04
+		u32 field_0x0;
+		f32 field_0x4;
 	};
     typedef void (*setVarFunc)(JStudio::TAdaptor*, JStudio::TObject*, u32, void const*, u32);
     virtual ~TAdaptor() = 0;
