@@ -10,34 +10,47 @@ struct TControl {
     virtual ~TControl();
 
     void reset();
-    int update();
+    bool update();
     void render();
-    int setMessageCode(u16, u16);
-    int setMessageID(u32, u32, bool*);
+    void setMessageCode(u32 param_1) {
+        setMessageCode(param_1 >> 0x10, param_1);
+    }
+    void setMessageCode(u16 message_code, u16 message_index) {
+        mMessageCode = message_code;
+        mMessageIndex = message_index;
+        setMessageCode_flush_();
+    }
+    bool setMessageCode_flush_();
 
-    bool isReady_update_() const { return pMessageText_begin_ != 0 && pSequenceProcessor_ != NULL; }
-    bool isReady_render_() const { return field_0x20 != 0 && pRenderingProcessor_ != NULL; }
+    bool isReady_update_() const { return mResourceCache != NULL && mMessageBegin != 0 && mBaseProcSeq != NULL; }
+    bool isReady_render_() const { return mResourceCache != NULL && _20 != NULL && mBaseProcRender != NULL; }
 
     TProcessor* getProcessor() const {
-        return pSequenceProcessor_ != NULL ? (TProcessor*)pSequenceProcessor_ :
-                                             (TProcessor*)pRenderingProcessor_;
+        return mBaseProcSeq != NULL ? (TProcessor*)mBaseProcSeq : (TProcessor*)mBaseProcRender;
     }
 
-    const char* getMessageText_begin() const { return pMessageText_begin_; }
-    void* getMessageEntry() const { return pEntry_; }
-    void setSequenceProcessor(TSequenceProcessor* processor) { pSequenceProcessor_ = processor; }
-    void setRenderingProcessor(TRenderingProcessor* processor) { pRenderingProcessor_ = processor; }
+    const char* getMessageText_begin() const { return mMessageBegin; }
+    void* getMessageEntry() const { return mEntry; }
+    void setSequenceProcessor(TSequenceProcessor* processor) { mBaseProcSeq = processor; }
+    void setRenderingProcessor(TRenderingProcessor* processor) { mBaseProcRender = processor; }
 
-    /* 0x04 */ TSequenceProcessor* pSequenceProcessor_;
-    /* 0x08 */ TRenderingProcessor* pRenderingProcessor_;
-    /* 0x0C */ u16 messageCode_;
-    /* 0x0E */ u16 field_0xe;
-    /* 0x10 */ const TResource* pResourceCache_;
-    /* 0x14 */ void* pEntry_;
-    /* 0x18 */ const char* pMessageText_begin_;
-    /* 0x1C */ const char* pszText_update_current_;
-    /* 0x20 */ const char* field_0x20;
-    /* 0x24 */ TProcessor::TStack_ oStack_renderingProcessor_;
+    void getResource_groupID(u16) const;
+    void getMessageData(u16, u16) const;
+    void do_word(u32);
+    void reset_();
+
+    /* 0x04 */ void* _04;
+    /* 0x08 */ void* _08;
+	/* 0x0C */ TSequenceProcessor* mBaseProcSeq;
+	/* 0x10 */ TRenderingProcessor* mBaseProcRender;
+	/* 0x14 */ u16 mMessageCode;
+	/* 0x16 */ u16 mMessageIndex;
+	/* 0x18 */ const TResource* mResourceCache;
+	/* 0x1C */ const char* mMessageBegin;
+	/* 0x20 */ const char* _20;
+	/* 0x24 */ const char* mCurrentText;
+	/* 0x28 */ void* mEntry;
+	/* 0x2C */ TProcessor::TStack_ mRenderStack;
 };
 };  // namespace JMessage
 

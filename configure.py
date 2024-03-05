@@ -643,13 +643,13 @@ config.libs = [
         "JStudio_JMessage",
         [
             Object(Matching,    "JSystem/JStudio/JStudio_JMessage/control.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio_JMessage/object-message.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JMessage/object-message.cpp"),
         ],
     ),
     JSystemLib(
         "JStudioToolLibrary",
         [
-            Object(NonMatching, "JSystem/JStudio/JStudioToolLibrary/console.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudioToolLibrary/console.cpp"),
         ],
     ),
     JSystemLib(
@@ -726,7 +726,7 @@ config.libs = [
     JSystemLib(
         "JMessage",
         [
-            Object(NonMatching, "JSystem/JMessage/data.cpp"),
+            Object(Matching,    "JSystem/JMessage/data.cpp"),
             Object(NonMatching, "JSystem/JMessage/control.cpp"),
             Object(NonMatching, "JSystem/JMessage/processor.cpp"),
             Object(NonMatching, "JSystem/JMessage/resource.cpp"),

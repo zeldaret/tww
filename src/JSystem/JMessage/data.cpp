@@ -3,6 +3,11 @@
 // Translation Unit: data.cpp
 //
 
-#include "data.h"
+#include "JSystem/JMessage/data.h"
 #include "dolphin/types.h"
 
+namespace JMessage {
+namespace data {
+const int ga4cSignature       = 'MESG';
+} // namespace data
+} // namespace JMessage

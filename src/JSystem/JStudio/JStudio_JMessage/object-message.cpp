@@ -21,7 +21,7 @@ void JStudio_JMessage::TAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOpe
     /* Nonmatching */
 	switch (operation) {
 	case JStudio::data::UNK_0x19:
-		mControl->setMessageCode((*(u32*)param_2) >> 0x10, (*(u32*)param_3));
+		mControl->setMessageCode(*(u32*)param_2);
 		break;
 	}
 }

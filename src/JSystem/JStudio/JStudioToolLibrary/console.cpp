@@ -3,21 +3,13 @@
 // Translation Unit: console.cpp
 //
 
-#include "console.h"
+#include "JSystem/JStudio/JStudioToolLibrary/console.h"
 #include "dolphin/types.h"
 
-/* 8027A6EC-8027A75C       .text __dt__20JSUMemoryInputStreamFv */
-JSUMemoryInputStream::~JSUMemoryInputStream() {
-    /* Nonmatching */
-}
+// This translation unit had dozens of GUI-related functions for the debug build, but none of those
+// made it into the release build. Only a few weak destructors are present in the release TU.
 
-/* 8027A75C-8027A7BC       .text __dt__20JSURandomInputStreamFv */
-JSURandomInputStream::~JSURandomInputStream() {
-    /* Nonmatching */
+static void dummy() {
+    JSUMemoryInputStream temp(NULL, 0);
+    temp.~JSUMemoryInputStream();
 }
-
-/* 8027A7BC-8027A804       .text __dt__10JSUIosBaseFv */
-JSUIosBase::~JSUIosBase() {
-    /* Nonmatching */
-}
-
