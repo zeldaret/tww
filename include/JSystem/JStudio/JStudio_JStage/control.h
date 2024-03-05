@@ -12,14 +12,14 @@
 namespace JStudio_JStage {
 struct TCreateObject : public JStudio::TCreateObject {
     TCreateObject(const JStage::TSystem* pSystem) {
-        pJSGSystem_ = pSystem;
+        mSystem = pSystem;
     }
 
     virtual ~TCreateObject();
     virtual bool create(JStudio::TObject**, JStudio::stb::data::TParse_TBlock_object const&);
-    virtual void find(const JStudio::stb::data::TParse_TBlock_object&, JStage::TEObject);
+    virtual JStage::TObject* find(const JStudio::stb::data::TParse_TBlock_object&, JStage::TEObject);
 
-    /* 0x0C */ const JStage::TSystem* pJSGSystem_;
+    /* 0x0C */ const JStage::TSystem* mSystem;
 };
 
 struct TAdaptor_object_ {
@@ -27,8 +27,8 @@ struct TAdaptor_object_ {
     void adaptor_ENABLE_(JStage::TObject*, JStudio::data::TEOperationData, void const*, u32);
 
     /* 0x0 */ JStudio::TAdaptor* field_0x0;
-    /* 0x4 */ JStage::TSystem* pJSGSystem_;
-    /* 0x8 */ JStage::TObject* pJSGObject_;
+    /* 0x4 */ JStage::TSystem* mSystem;
+    /* 0x8 */ JStage::TObject* mObject;
 };
 
 struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::TAdaptor_object_ {
@@ -74,15 +74,8 @@ struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::T
     static u8 saoVVOutput_[64];
     static u8 saoVVOutput_ANIMATION_FRAME_[144 + 4 /* padding */];
 
-    /* 0x134 */ u32 field_0x134;
-    /* 0x138 */ u32 field_0x138;
-    /* 0x13C */ u32 field_0x13c;
-    /* 0x140 */ u32 field_0x140;
-    /* 0x144 */ u32 field_0x144;
-    /* 0x148 */ u8 field_0x148;
-    /* 0x14C */ u32 field_0x14c;
-    /* 0x150 */ u32 field_0x150;
-};
+    /* 0x130 */ u8 field_0x130[0x144 - 0x130];
+};  // Size: 0x144
 
 struct TAdaptor_ambientLight : public JStudio::TAdaptor_ambientLight {
     TAdaptor_ambientLight(JStage::TSystem const*, JStage::TAmbientLight*);
@@ -93,7 +86,9 @@ struct TAdaptor_ambientLight : public JStudio::TAdaptor_ambientLight {
     virtual void adaptor_do_end(const JStudio::TObject*);
     virtual void adaptor_do_update(const JStudio::TObject*, u32);
     virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32);
-};
+
+    /* 0x5C */ u8 field_0x5C[0x64- 0x5C];
+};  // Size: 0x64
 
 struct TAdaptor_camera : public JStudio::TAdaptor_camera {
     TAdaptor_camera(JStage::TSystem const*, JStage::TCamera*);
@@ -120,7 +115,9 @@ struct TAdaptor_camera : public JStudio::TAdaptor_camera {
     void getJSG_targetPosition_(JStudio::TControl const*);
 
     static u8 saoVVOutput_[160 + 4 /* padding */];
-};
+
+    /* 0xE8 */ u8 field_0xE8[0xF8 - 0xE8];
+};  // Size: 0xF8
 
 struct TAdaptor_fog : public JStudio::TAdaptor_fog {
     TAdaptor_fog(JStage::TSystem const*, JStage::TFog*);
@@ -132,7 +129,9 @@ struct TAdaptor_fog : public JStudio::TAdaptor_fog {
     virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32);
 
     static u8 saoVVOutput_[96 + 4 /* padding */];
-};
+
+    /* 0x84 */ u8 field_0x110[0x8C - 0x84];
+};  // Size: 0x8C
 
 struct TAdaptor_light : public JStudio::TAdaptor_light {
     struct TVVOutput_direction_ {
@@ -151,7 +150,9 @@ struct TAdaptor_light : public JStudio::TAdaptor_light {
     virtual void adaptor_do_FACULTY(JStudio::data::TEOperationData, void const*, u32);
 
     static u8 saoVVOutput_direction_[72];
-};
+
+    /* 0x110 */ u8 field_0x110[0x11C - 0x110];
+};  // Size: 0x11C
 
 void
     transform_toGlobalFromLocal(f32 (*)[4],

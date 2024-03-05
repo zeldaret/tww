@@ -256,7 +256,7 @@ struct TAdaptor_camera : public TAdaptor {
     }
     virtual ~TAdaptor_camera() = 0;
 
-    /* 0x10 */ TVariableValue mValue[12];
+    /* 0x10 */ TVariableValue mValue[11];
 
     static u8 const sauVariableValue_3_POSITION_XYZ[12];
     static u8 const sauVariableValue_3_TARGET_POSITION_XYZ[12];

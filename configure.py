@@ -616,7 +616,7 @@ config.libs = [
     JSystemLib(
         "JStudio_JStage",
         [
-            Object(NonMatching, "JSystem/JStudio/JStudio_JStage/control.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JStage/control.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-actor.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-ambientlight.cpp"),

@@ -4,6 +4,16 @@
 #include "dolphin/mtx/mtxvec.h"
 
 namespace JStage {
+    enum TEObject {
+        /* 0x0 */ TOBJ_ACTOR_UNK,
+        /* 0x1 */ TOBJ_UNK1,
+        /* 0x2 */ TOBJ_ACTOR,
+        /* 0x3 */ TOBJ_CAMERA,
+        /* 0x4 */ TOBJ_AMBIENT,
+        /* 0x5 */ TOBJ_LIGHT,
+        /* 0x6 */ TOBJ_FOG,
+    };
+
     struct TObject {
         virtual ~TObject() = 0;
         virtual s32 JSGFGetType() const = 0;
