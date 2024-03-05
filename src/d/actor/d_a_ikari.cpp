@@ -119,7 +119,6 @@ int daIkari_c::_create() {
         if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0xC20)) {
             return cPhs_ERROR_e;
         } else {
-            /* 00000524 00000618  4B FF FB E9	bl setMtx__9daIkari_cFv  */
             setMtx();
 
             f32 mScaleX = mScale.x;

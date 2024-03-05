@@ -1,65 +1,71 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef JGADGET_VECTOR_H
+#define JGADGET_VECTOR_H
 
-
-extern u8 data_804511E0;
-extern u8 lit_569[];
+#include "JSystem/JGadget/allocator.h"
+#include "dolphin/types.h"
 
 namespace JGadget {
-
 namespace vector {
-
-u32 extend_default(u32 arg1, u32 arg2, u32 arg3);
+u32 extend_default(u32, u32, u32);
 
 typedef u32 (*ExtendFunc)(u32, u32, u32);
 
-}  // namespace vector
-
-template <typename T>
-struct TAllocator {
-    static TAllocator get() {}
-    inline TAllocator() { _0 = lit_569[0]; }
-    /* 0x0 */ u8 _0;
-    /* 0x4 */ u32 _4;
-    /* 0x8 */ u32 _8;
-    /* 0xc */ u32 _c;
-};
+} // namespace vector
 
 template <typename T, template <class> class Allocator>
 struct TVector {
-    TVector(Allocator<T> alloc) {
-        _0 = NULL;
-        pBegin_ = _0;
-        _c = NULL;
-        extend = vector::extend_default;
-    }
+    // struct Destructed_deallocate_ {
+    //     ~Destructed_deallocate_(); // unused/inlined
+    // };
+
+    // TVector(u32, const T&, const Allocator<T>&);
+
+    // TVector(Allocator<T> alloc)
+    // {
+    //     _00     = alloc._00;
+    //     _04     = nullptr;
+    //     mBegin = nullptr;
+    //     mEnd  = nullptr;
+    //     mExtend = vector::extend_default;
+    // }
+
+    ~TVector();
+
+    void insert(T*, u32, const T&);
+    void Insert_raw(T*, u32);
+    void insert(T*, const T&);
+    void assign(u32, const T&);
+    void resize(u32, const T&);
+    void Resize_raw(u32);
+    void operator=(const TVector<T, Allocator>& rhs);
 
     inline u32 size() const {
-        if (pBegin_ == NULL) {
+        if (mBegin == NULL) {
             return 0;
         }
 
-        return ((int)pEnd_ - (int)pBegin_) / 4;
+        return ((int)mEnd - (int)mBegin) / 4;
     }
 
-    void **const begin() const { return pBegin_; }
-    void **const end() const { return pEnd_; }
-    void** begin() { return pBegin_; }
-    void** end() { return pEnd_; }
-    // void erase(void** arg1, void** arg2) {}
+    void** begin() { return mBegin; }
+    void** const begin() const { return mBegin; }
+    void** end() { return mEnd; }
+    void** const end() const { return mEnd; }
 
-    void** _0;
-    void** pBegin_;
-    void** pEnd_;
-    u32 _c;
-    vector::ExtendFunc extend;
+    u8 _00;
+    void** mBegin;
+    void** mEnd;
+    void** _0C;
+    vector::ExtendFunc mExtend;
 };
 
 struct TVector_pointer_void : TVector<void*, TAllocator> {
-    TVector_pointer_void(JGadget::TAllocator<void*> const&);
+    TVector_pointer_void(const JGadget::TAllocator<void*>&);
+
     ~TVector_pointer_void();
-    void erase(void**, void**);
+
     void insert(void**, void* const&);
+    void erase(void**, void**);
 
     void clear() { erase(begin(), end()); }
     void push_back(const void*& ref) { insert(end(), (void* const&)ref); }
@@ -83,4 +89,4 @@ struct TVector_pointer : TVector_pointer_void {
 
 }  // namespace JGadget
 
-#endif /* VECTOR_H */
+#endif /* JGADGET_VECTOR_H */

@@ -628,7 +628,7 @@ config.libs = [
     JSystemLib(
         "JStudio_JAudio",
         [
-            Object(NonMatching, "JSystem/JStudio/JStudio_JAudio/control.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JAudio/control.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio_JAudio/object-sound.cpp"),
         ],
     ),
@@ -808,7 +808,7 @@ config.libs = [
     JSystemLib(
         "JGadget",
         [
-            Object(NonMatching, "JSystem/JGadget/binary.cpp"),
+            Object(Matching,    "JSystem/JGadget/binary.cpp"),
             Object(Matching,    "JSystem/JGadget/linklist.cpp"),
             Object(NonMatching, "JSystem/JGadget/std-vector.cpp"),
         ],
@@ -1574,7 +1574,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_smplbg"),
     ActorRel(NonMatching, "d_a_obj_tapestry"),
     ActorRel(NonMatching, "d_a_obj_tntrap"),
-    ActorRel(Matching, "d_a_obj_tower"),
+    ActorRel(Matching,    "d_a_obj_tower"),
     ActorRel(NonMatching, "d_a_obj_trap"),
     ActorRel(NonMatching, "d_a_obj_tribox"),
     ActorRel(NonMatching, "d_a_obj_try"),

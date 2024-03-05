@@ -204,6 +204,11 @@ struct TAdaptor {
 };
 
 struct TAdaptor_actor : public TAdaptor {
+	TAdaptor_actor()
+	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
+	    , mValue()
+	{
+	}
     virtual ~TAdaptor_actor() = 0;
 
     /* 0x10 */ TVariableValue mValue[14];
@@ -222,6 +227,11 @@ struct TObject_actor : public TObject {
 };
 
 struct TAdaptor_ambientLight : public TAdaptor {
+	TAdaptor_ambientLight()
+	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
+	    , mValue()
+	{
+	}
     virtual ~TAdaptor_ambientLight()  = 0;
 
     /* 0x10 */ TVariableValue mValue[4];
@@ -239,6 +249,11 @@ struct TObject_ambientLight : public TObject {
 };
 
 struct TAdaptor_camera : public TAdaptor {
+	TAdaptor_camera()
+	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
+	    , mValue()
+	{
+	}
     virtual ~TAdaptor_camera() = 0;
 
     /* 0x10 */ TVariableValue mValue[12];
@@ -257,6 +272,11 @@ struct TObject_camera : public TObject {
 };
 
 struct TAdaptor_fog : public TAdaptor {
+	TAdaptor_fog()
+	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
+	    , mValue()
+	{
+	}
     virtual ~TAdaptor_fog() = 0;
 
     /* 0x10 */ TVariableValue mValue[6];
@@ -275,6 +295,11 @@ struct TObject_fog : public TObject {
 };
 
 struct TAdaptor_light : public TAdaptor {
+	TAdaptor_light()
+	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
+	    , mValue()
+	{
+	}
     virtual ~TAdaptor_light() = 0;
 
     /* 0x10 */ TVariableValue mValue[13];
@@ -295,7 +320,7 @@ struct TObject_light : public TObject {
 };
 
 struct TAdaptor_message : public TAdaptor {
-	inline TAdaptor_message()
+	TAdaptor_message()
 	    : TAdaptor(NULL, 0)
 	{
 	}
@@ -339,9 +364,14 @@ struct TObject_particle : public TObject {
 };
 
 struct TAdaptor_sound : public TAdaptor {
+	TAdaptor_sound()
+	    : TAdaptor(mValue, ARRAY_SIZE(mValue))
+	    , mValue()
+	{
+	}
     virtual ~TAdaptor_sound() = 0;
 
-    /* 0x10 */ TVariableValue mValue[13];
+    /* 0x10 */ TVariableValue mValue[11];
 
     static u8 const sauVariableValue_3_POSITION_XYZ[12];
 };  // Size: 0x114

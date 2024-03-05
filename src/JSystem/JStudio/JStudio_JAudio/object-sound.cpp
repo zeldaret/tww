@@ -3,86 +3,77 @@
 // Translation Unit: object-sound.cpp
 //
 
-#include "object-sound.h"
+#include "JSystem/JStudio/JStudio_JAudio/object-sound.h"
+#include "JSystem/JAudio/JAISound.h"
+#include "math.h"
 #include "dolphin/types.h"
 
+namespace JStudio_JAudio {
+
 /* 80278D20-80278DC0       .text __ct__Q214JStudio_JAudio14TAdaptor_soundFP8JAIBasic */
-JStudio_JAudio::TAdaptor_sound::TAdaptor_sound(JAIBasic*) {
-    /* Nonmatching */
+TAdaptor_sound::TAdaptor_sound(JAIBasic* basic) {
+    mpBasic = basic;
+    mpSound = NULL;
+    _F0 = -1;
+    _F4 = 0;
 }
 
 /* 80278DC0-80278E38       .text __dt__Q214JStudio_JAudio14TAdaptor_soundFv */
-JStudio_JAudio::TAdaptor_sound::~TAdaptor_sound() {
-    /* Nonmatching */
+TAdaptor_sound::~TAdaptor_sound() {
+    if (mpSound != NULL) {
+        mpSound->stop(0);
+    }
 }
 
 /* 80278E38-80278F40       .text adaptor_do_prepare__Q214JStudio_JAudio14TAdaptor_soundFPCQ27JStudio7TObject */
-void JStudio_JAudio::TAdaptor_sound::adaptor_do_prepare(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_sound::adaptor_do_prepare(const JStudio::TObject* param_1) {
+	static TSetVariableValue_immediate aoData[] = {
+		TSetVariableValue_immediate(0, 0.0f),
+        TSetVariableValue_immediate(1, 0.0f),
+        TSetVariableValue_immediate(2, 0.0f),
+		TSetVariableValue_immediate(0xFFFFFFFF, NAN),
+	};
+	adaptor_setVariableValue_immediate(aoData);
+    pValue_[3].setOutput(&TAdaptor_sound::soVVOOn_BEGIN_FADE_IN_);
+    pValue_[4].setOutput(&TAdaptor_sound::soVVOOn_END_FADE_OUT_);
+
+    for (TAdaptor_sound::TVVOSetValue_* value = TAdaptor_sound::saoVVOSetValue_; value->_04 != -1; value++) {
+        pValue_[value->_04].setOutput(value);
+    }
 }
 
+TAdaptor_sound::TVVOOn_BEGIN_FADE_IN_ TAdaptor_sound::soVVOOn_BEGIN_FADE_IN_;
+TAdaptor_sound::TVVOOn_END_FADE_OUT_ TAdaptor_sound::soVVOOn_END_FADE_OUT_;
+TAdaptor_sound::TVVOSetValue_ TAdaptor_sound::saoVVOSetValue_[6];
+
 /* 80278F40-80278FB8       .text adaptor_do_update__Q214JStudio_JAudio14TAdaptor_soundFPCQ27JStudio7TObjectUl */
-void JStudio_JAudio::TAdaptor_sound::adaptor_do_update(const JStudio::TObject*, unsigned long) {
+void TAdaptor_sound::adaptor_do_update(const JStudio::TObject*, unsigned long) {
     /* Nonmatching */
 }
 
 /* 80278FB8-80279064       .text adaptor_do_SOUND__Q214JStudio_JAudio14TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JAudio::TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperationData, const void*, unsigned long) {
+void TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperationData, const void*, unsigned long) {
     /* Nonmatching */
 }
 
 /* 80279064-8027908C       .text adaptor_do_LOCATED__Q214JStudio_JAudio14TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JAudio::TAdaptor_sound::adaptor_do_LOCATED(JStudio::data::TEOperationData, const void*, unsigned long) {
+void TAdaptor_sound::adaptor_do_LOCATED(JStudio::data::TEOperationData, const void*, unsigned long) {
     /* Nonmatching */
 }
 
 /* 8027908C-8027915C       .text __cl__Q314JStudio_JAudio14TAdaptor_sound21TVVOOn_BEGIN_FADE_IN_CFfPQ27JStudio8TAdaptor */
-void JStudio_JAudio::TAdaptor_sound::TVVOOn_BEGIN_FADE_IN_::operator()(float, JStudio::TAdaptor*) const {
+void TAdaptor_sound::TVVOOn_BEGIN_FADE_IN_::operator()(float, JStudio::TAdaptor*) const {
     /* Nonmatching */
 }
 
 /* 8027915C-8027919C       .text __cl__Q314JStudio_JAudio14TAdaptor_sound20TVVOOn_END_FADE_OUT_CFfPQ27JStudio8TAdaptor */
-void JStudio_JAudio::TAdaptor_sound::TVVOOn_END_FADE_OUT_::operator()(float, JStudio::TAdaptor*) const {
+void TAdaptor_sound::TVVOOn_END_FADE_OUT_::operator()(float, JStudio::TAdaptor*) const {
     /* Nonmatching */
 }
 
 /* 8027919C-802791D8       .text __cl__Q314JStudio_JAudio14TAdaptor_sound13TVVOSetValue_CFfPQ27JStudio8TAdaptor */
-void JStudio_JAudio::TAdaptor_sound::TVVOSetValue_::operator()(float, JStudio::TAdaptor*) const {
+void TAdaptor_sound::TVVOSetValue_::operator()(float, JStudio::TAdaptor*) const {
     /* Nonmatching */
 }
 
-/* 802791D8-802791FC       .text setDemoFxmix__8JAISoundFfUl */
-void JAISound::setDemoFxmix(float, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 802791FC-80279220       .text setDemoPitch__8JAISoundFfUl */
-void JAISound::setDemoPitch(float, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80279220-80279244       .text setDemoPan__8JAISoundFfUl */
-void JAISound::setDemoPan(float, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80279244-80279268       .text setDemoVolume__8JAISoundFfUl */
-void JAISound::setDemoVolume(float, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80279268-802792C8       .text __dt__Q314JStudio_JAudio14TAdaptor_sound13TVVOSetValue_Fv */
-JStudio_JAudio::TAdaptor_sound::TVVOSetValue_::~TVVOSetValue_() {
-    /* Nonmatching */
-}
-
-/* 802792C8-80279328       .text __dt__Q314JStudio_JAudio14TAdaptor_sound20TVVOOn_END_FADE_OUT_Fv */
-JStudio_JAudio::TAdaptor_sound::TVVOOn_END_FADE_OUT_::~TVVOOn_END_FADE_OUT_() {
-    /* Nonmatching */
-}
-
-/* 80279328-80279388       .text __dt__Q314JStudio_JAudio14TAdaptor_sound21TVVOOn_BEGIN_FADE_IN_Fv */
-JStudio_JAudio::TAdaptor_sound::TVVOOn_BEGIN_FADE_IN_::~TVVOOn_BEGIN_FADE_IN_() {
-    /* Nonmatching */
-}
-
+}; // namespace JStudio_JAudio

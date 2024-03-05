@@ -49,7 +49,7 @@ void TObject::prepare(const data::TParse_TBlock& rBlock, TControl* pControl) {
             } else {
                 JGadget::TVector_pointer<TFunctionValue*>& rCnt = pfvaRefer->refer_referContainer();
                 data::TParse_TParagraph::TData** pBegin =
-                    (data::TParse_TParagraph::TData**)rCnt.pBegin_;
+                    (data::TParse_TParagraph::TData**)rCnt.mBegin;
                 // todo: these definitely use a different struct
                 for (data::TParse_TParagraph::TData* i = *pBegin; i != NULL; i = *pBegin) {
                     TObject* pObject = pControl->getObject(pContent, i->u32Size);
@@ -75,7 +75,7 @@ void TObject::prepare(const data::TParse_TBlock& rBlock, TControl* pControl) {
             } else {
                 JGadget::TVector_pointer<TFunctionValue*>& rCnt = pfvaRefer->refer_referContainer();
                 data::TParse_TParagraph::TData** pBegin =
-                    (data::TParse_TParagraph::TData**)rCnt.pBegin_;
+                    (data::TParse_TParagraph::TData**)rCnt.mBegin;
                 for (data::TParse_TParagraph::TData* i = *pBegin; i != NULL; i = *pBegin) {
                     TObject* pObject = pControl->getObject_index(u32Size);
                     if (pObject == NULL) {
@@ -198,7 +198,6 @@ TFunctionValue_composite::TData getCompositeData_multiply_(const void* arg1) {
 
 /* 80273C18-80273C24       .text getCompositeData_divide___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
 TFunctionValue_composite::TData getCompositeData_divide_(const void* arg1) {
-    /* Nonmatching */
     return TFunctionValue_composite::TData(*(f32*)arg1);
 }
 

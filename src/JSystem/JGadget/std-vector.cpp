@@ -3,46 +3,53 @@
 // Translation Unit: std-vector.cpp
 //
 
-#include "std-vector.h"
+#include "JSystem/JGadget/vector.h"
 #include "dolphin/types.h"
 
+namespace JGadget {
+    
 /* 802BFF14-802BFF1C       .text extend_default__Q27JGadget6vectorFUlUlUl */
-void JGadget::vector::extend_default(unsigned long, unsigned long, unsigned long) {
-    /* Nonmatching */
+u32 vector::extend_default(u32, u32 param_2, u32) {
+    return param_2 * 2;
 }
 
 /* 802BFF1C-802BFF48       .text __ct__Q27JGadget20TVector_pointer_voidFRCQ27JGadget14TAllocator<Pv> */
-JGadget::TVector_pointer_void::TVector_pointer_void(const JGadget::TAllocator<void*>&) {
-    /* Nonmatching */
+TVector_pointer_void::TVector_pointer_void(const TAllocator<void*>& allocator) {
+	_00 = allocator._00;
+	mBegin = NULL;
+	mEnd = mBegin;
+	_0C = NULL;
+	mExtend = vector::extend_default;
 }
 
 /* 802BFF48-802BFFF0       .text __dt__Q27JGadget20TVector_pointer_voidFv */
-JGadget::TVector_pointer_void::~TVector_pointer_void() {
+TVector_pointer_void::~TVector_pointer_void() {
     /* Nonmatching */
 }
 
 /* 802BFFF0-802C0010       .text insert__Q27JGadget20TVector_pointer_voidFPPvRCPv */
-void JGadget::TVector_pointer_void::insert(void**, void* const&) {
+void TVector_pointer_void::insert(void**, void* const&) {
     /* Nonmatching */
 }
 
 /* 802C0010-802C0068       .text erase__Q27JGadget20TVector_pointer_voidFPPvPPv */
-void JGadget::TVector_pointer_void::erase(void**, void**) {
+void TVector_pointer_void::erase(void**, void**) {
     /* Nonmatching */
 }
 
-/* 802C0068-802C00D8       .text insert__Q27JGadget38TVector<Pv,Q27JGadget14TAllocator<Pv>>FPPvUlRCPv */
-void JGadget::TVector<void*, JGadget::TAllocator<void*>>::insert(void**, unsigned long, void* const&) {
-    /* Nonmatching */
-}
+// /* 802C0068-802C00D8       .text insert__Q27JGadget38TVector<Pv,Q27JGadget14TAllocator<Pv>>FPPvUlRCPv */
+// void TVector<void*, TAllocator<void*>>::insert(void**, u32, void* const&) {
+//     /* Nonmatching */
+// }
 
-/* 802C00D8-802C037C       .text Insert_raw__Q27JGadget38TVector<Pv,Q27JGadget14TAllocator<Pv>>FPPvUl */
-void JGadget::TVector<void*, JGadget::TAllocator<void*>>::Insert_raw(void**, unsigned long) {
-    /* Nonmatching */
-}
+// /* 802C00D8-802C037C       .text Insert_raw__Q27JGadget38TVector<Pv,Q27JGadget14TAllocator<Pv>>FPPvUl */
+// void TVector<void*, TAllocator<void*>>::Insert_raw(void**, u32) {
+//     /* Nonmatching */
+// }
 
-/* 802C037C-802C03D4       .text insert__Q27JGadget38TVector<Pv,Q27JGadget14TAllocator<Pv>>FPPvRCPv */
-void JGadget::TVector<void*, JGadget::TAllocator<void*>>::insert(void**, void* const&) {
-    /* Nonmatching */
-}
+// /* 802C037C-802C03D4       .text insert__Q27JGadget38TVector<Pv,Q27JGadget14TAllocator<Pv>>FPPvRCPv */
+// void TVector<void*, TAllocator<void*>>::insert(void**, void* const&) {
+//     /* Nonmatching */
+// }
 
+} // namespace JGadget
