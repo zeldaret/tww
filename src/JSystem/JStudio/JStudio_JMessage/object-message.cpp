@@ -18,7 +18,6 @@ JStudio_JMessage::TAdaptor_message::~TAdaptor_message() {}
 
 /* 8027A6AC-8027A6EC       .text adaptor_do_MESSAGE__Q216JStudio_JMessage16TAdaptor_messageFQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JMessage::TAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOperationData operation, const void* param_2, u32 param_3) {
-    /* Nonmatching */
     switch (operation) {
     case JStudio::data::UNK_0x19:
         mControl->setMessageCode(*(u32*)param_2);

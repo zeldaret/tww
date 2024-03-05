@@ -86,7 +86,7 @@ public:
     inline virtual void execute(T);
     inline virtual void executeAfter(T);
     inline virtual void draw(T);
-};
+};  // Size: 0x04
 
 template<typename T, typename U>
 class JPACallBackBase2 {

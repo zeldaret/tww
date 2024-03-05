@@ -42,16 +42,16 @@ struct TProcessor {
 
         inline void pop() { mSize--; }
 
-        u32 mSize;             // _00
-        const char* mStack[3]; // _04
+        /* 0x00 */ u32 mSize;
+        /* 0x04 */ const char* mStack[3];
     };
 
     struct TProcess {
         struct TProcessData {
-            ProcessOnSelectCallBack mSelectCallback; // _00
-            const char* mBase;                       // _04
-            const void* mOffset;                     // _08
-            u32 mRest;                               // _0C
+            /* 0x00 */ ProcessOnSelectCallBack mSelectCallback;
+            /* 0x04 */ const char* mBase;
+            /* 0x08 */ const void* mOffset;
+            /* 0x0C */ u32 mRest;
         };
 
         TProcess() { reset_normal(); }
@@ -59,8 +59,8 @@ struct TProcessor {
         void reset_normal() { mEndCallback = process_onCharacterEnd_normal_; }
         void reset_select() { mEndCallback = process_onCharacterEnd_select_; }
 
-        OnCharacterEndCallBack mEndCallback; // _00
-        TProcessData mData;                  // _04
+        /* 0x00 */ OnCharacterEndCallBack mEndCallback;
+        /* 0x04 */ TProcessData mData;
     };
 
     ~TProcessor();
@@ -114,12 +114,12 @@ struct TProcessor {
     void on_tag_();
     void process_character_();
 
-    // _00 = VTBL
-    const TReference* mReference;    // _04
-    const TResource* mResourceCache; // _08
-    const char* mCurrent;            // _0C
-    TStack_ mStack;                  // _10
-    TProcess mProcess;               // _24
+    /* 0x00 */ /* vtable */
+    /* 0x04 */ const TReference* mReference;
+    /* 0x08 */ const TResource* mResourceCache;
+    /* 0x0C */ const char* mCurrent;
+    /* 0x10 */ TStack_ mStack;
+    /* 0x24 */ TProcess mProcess;
 };
 
 struct TSequenceProcessor : public TProcessor {
@@ -178,13 +178,12 @@ struct TSequenceProcessor : public TProcessor {
         do_begin_(param_1, param_2);
     }
 
-    // _00     = VTBL
-    // _00-_38 = TProcessor
-    TControl* _38;              // _38
-    int _3C;                    // _3C
-    ProcessOnJumpCallBack* _40; // _40 - processorCallBack(void*, ulong) pointer?
-    u32 _44;                    // _44
-    u32 _48;                    // _48
+    /* 0x00 */ /* TProcessor */
+    /* 0x38 */ TControl* _38;
+    /* 0x3C */ int _3C;
+    /* 0x40 */ ProcessOnJumpCallBack* _40;
+    /* 0x44 */ u32 _44;
+    /* 0x48 */ u32 _48;
 };
 
 struct TRenderingProcessor : public TProcessor {
@@ -201,8 +200,7 @@ struct TRenderingProcessor : public TProcessor {
     
     void process(const char*);
 
-    // _00     = VTBL
-    // _00-_38 = TProcessor
+    /* 0x00 */ /* TProcessor */
 };
 } // namespace JMessage
 

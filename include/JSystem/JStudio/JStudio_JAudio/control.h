@@ -23,11 +23,11 @@ struct TAdaptor_sound : public JStudio::TAdaptor_sound {
         virtual void operator()(f32, JStudio::TAdaptor*) const; // _08
         virtual ~TVVOSetValue_();                               // _0C (weak)
 
-        // _00 = VTBL
-        int _04; // _04
-        u32 _08; // _08, unknown
-        int _0C; // _0C
-        int _10; // _10
+        /* 0x00 */ /* JStudio::TVariableValue::TOutput */
+        /* 0x04 */ int _04;
+        /* 0x08 */ u32 _08;
+        /* 0x0C */ int _0C;
+        /* 0x10 */ int _10;
     };
 
     static TVVOOn_BEGIN_FADE_IN_ soVVOOn_BEGIN_FADE_IN_;
@@ -77,10 +77,9 @@ struct TCreateObject : public JStudio::TCreateObject {
     virtual ~TCreateObject();                                                                                // _08
     virtual bool create(JStudio::TObject** newObject, const JStudio::stb::data::TParse_TBlock_object& data); // _0C
 
-    // _00     = VTBL
-    // _00-_0C = JStudio::TCreateObject
-    JAIBasic* mSound;               // _04
-    const JStage::TSystem* mSystem; // _08
+    /* 0x00 */ /* JStudio::TCreateObject */
+    /* 0x0C */ JAIBasic* mSound;
+    /* 0x10 */ const JStage::TSystem* mSystem;
 };
 } // namespace JStudio_JAudio
 

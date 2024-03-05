@@ -32,8 +32,8 @@ struct TAdaptor_particle : public JStudio::TAdaptor_particle {
         virtual ~TJPACallback_() { }           // _08 (weak)
         virtual void execute(JPABaseEmitter*); // _0C
 
-        TAdaptor_particle* mAdaptor;     // _04
-        const JStudio::TObject* mObject; // _08
+        /* 0x04 */ TAdaptor_particle* mAdaptor;
+        /* 0x08 */ const JStudio::TObject* mObject;
     };
 
     struct TVVOOn_BEGIN_FADE_IN_ : public JStudio::TVariableValue::TOutput {

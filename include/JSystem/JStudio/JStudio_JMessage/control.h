@@ -19,7 +19,7 @@ struct TCreateObject : public TCreateObject_base {
     virtual ~TCreateObject();                                                          // _08
     virtual JMessage::TControl* find(const JStudio::stb::data::TParse_TBlock_object&); // _10
 
-    JMessage::TControl* mControl; // _0C
+    /* 0x0C */ JMessage::TControl* mControl;
 };
 
 struct TAdaptor_message : public JStudio::TAdaptor_message {
@@ -27,7 +27,7 @@ struct TAdaptor_message : public JStudio::TAdaptor_message {
     virtual void adaptor_do_MESSAGE(JStudio::data::TEOperationData, const void*, u32); // _20
 
     TAdaptor_message(JMessage::TControl*);
-    JMessage::TControl* mControl; // _10
+    /* 0x0C */ JMessage::TControl* mControl;
 };
 } // namespace JStudio_JMessage
 

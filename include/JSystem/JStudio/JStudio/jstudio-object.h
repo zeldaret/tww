@@ -24,7 +24,7 @@ struct TVariableValue {
     struct TOutput {
         virtual void operator()(f32, JStudio::TAdaptor*) const = 0;
         ~TOutput();
-    };
+    };  // Size: 0x04
 
     struct TOutput_none_ {
         ~TOutput_none_();
