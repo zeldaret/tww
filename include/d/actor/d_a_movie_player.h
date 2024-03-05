@@ -2,6 +2,7 @@
 #define D_A_MOVIE_PLAYER_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_drawlist.h"
 
 class daMP_c : public fopAc_ac_c {
 public:
@@ -18,6 +19,22 @@ public:
 public:
     /* 0x290 */ u32 (*mpCallBack1)();
     /* 0x294 */ u32 (*mpCallBack2)(f32);
+};
+
+class daMP_Dlst_base_c : public dDlst_base_c {
+    void draw();
+};
+
+struct daMP_THPReadBuffer {
+    
+};
+
+struct THPVideoInfo {
+    
+};
+
+struct THPAudioInfo {
+    
 };
 
 #endif /* D_A_MOVIE_PLAYER_H */

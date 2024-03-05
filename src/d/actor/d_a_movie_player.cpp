@@ -6,145 +6,149 @@
 #include "d/actor/d_a_movie_player.h"
 #include "dolphin/types.h"
 
+extern "C" {
+
 /* 000000EC-00000584       .text THPAudioDecode */
-void THPAudioDecode {
+void THPAudioDecode() {
     /* Nonmatching */
 }
 
 /* 00000584-00000614       .text __THPAudioGetNewSample */
-void __THPAudioGetNewSample {
+void __THPAudioGetNewSample() {
     /* Nonmatching */
 }
 
 /* 00000614-00000650       .text __THPAudioInitialize */
-void __THPAudioInitialize {
+void __THPAudioInitialize() {
     /* Nonmatching */
 }
 
 /* 00000650-00000894       .text THPVideoDecode */
-void THPVideoDecode {
+void THPVideoDecode() {
     /* Nonmatching */
 }
 
 /* 00000894-000008DC       .text __THPSetupBuffers */
-void __THPSetupBuffers {
+void __THPSetupBuffers() {
     /* Nonmatching */
 }
 
 /* 000008DC-00000A1C       .text __THPReadFrameHeader */
-void __THPReadFrameHeader {
+void __THPReadFrameHeader() {
     /* Nonmatching */
 }
 
 /* 00000A1C-00000B48       .text __THPReadScaneHeader */
-void __THPReadScaneHeader {
+void __THPReadScaneHeader() {
     /* Nonmatching */
 }
 
 /* 00000B48-00000EFC       .text __THPReadQuantizationTable */
-void __THPReadQuantizationTable {
+void __THPReadQuantizationTable() {
     /* Nonmatching */
 }
 
 /* 00000EFC-000010E4       .text __THPReadHuffmanTableSpecification */
-void __THPReadHuffmanTableSpecification {
+void __THPReadHuffmanTableSpecification() {
     /* Nonmatching */
 }
 
 /* 000010E4-000011C4       .text __THPHuffGenerateSizeTable */
-void __THPHuffGenerateSizeTable {
+void __THPHuffGenerateSizeTable() {
     /* Nonmatching */
 }
 
 /* 000011C4-00001238       .text __THPHuffGenerateCodeTable */
-void __THPHuffGenerateCodeTable {
+void __THPHuffGenerateCodeTable() {
     /* Nonmatching */
 }
 
 /* 00001238-00001330       .text __THPHuffGenerateDecoderTables */
-void __THPHuffGenerateDecoderTables {
+void __THPHuffGenerateDecoderTables() {
     /* Nonmatching */
 }
 
 /* 00001330-0000138C       .text __THPRestartDefinition */
-void __THPRestartDefinition {
+void __THPRestartDefinition() {
     /* Nonmatching */
 }
 
 /* 0000138C-000015CC       .text __THPPrepBitStream */
-void __THPPrepBitStream {
+void __THPPrepBitStream() {
     /* Nonmatching */
 }
 
 /* 000015CC-000016B0       .text __THPDecompressYUV */
-void __THPDecompressYUV {
+void __THPDecompressYUV() {
     /* Nonmatching */
 }
 
 /* 000016B0-000016D0       .text __THPGQRRestore */
-void __THPGQRRestore {
+void __THPGQRRestore() {
     /* Nonmatching */
 }
 
 /* 000016D0-00001704       .text __THPGQRSetup */
-void __THPGQRSetup {
+void __THPGQRSetup() {
     /* Nonmatching */
 }
 
 /* 00001704-00001944       .text __THPDecompressiMCURow512x448 */
-void __THPDecompressiMCURow512x448 {
+void __THPDecompressiMCURow512x448() {
     /* Nonmatching */
 }
 
 /* 00001944-00001DE4       .text __THPInverseDCTY8 */
-void __THPInverseDCTY8 {
+void __THPInverseDCTY8() {
     /* Nonmatching */
 }
 
 /* 00001DE4-0000227C       .text __THPInverseDCTNoYPos */
-void __THPInverseDCTNoYPos {
+void __THPInverseDCTNoYPos() {
     /* Nonmatching */
 }
 
 /* 0000227C-000024C0       .text __THPDecompressiMCURow640x480 */
-void __THPDecompressiMCURow640x480 {
+void __THPDecompressiMCURow640x480() {
     /* Nonmatching */
 }
 
 /* 000024C0-00002714       .text __THPDecompressiMCURowNxN */
-void __THPDecompressiMCURowNxN {
+void __THPDecompressiMCURowNxN() {
     /* Nonmatching */
 }
 
 /* 00002714-00002B20       .text __THPHuffDecodeDCTCompY */
-void __THPHuffDecodeDCTCompY {
+void __THPHuffDecodeDCTCompY() {
     /* Nonmatching */
 }
 
 /* 00002B20-00002D98       .text __THPHuffDecodeTab */
-void __THPHuffDecodeTab {
+void __THPHuffDecodeTab() {
     /* Nonmatching */
 }
 
 /* 00002D98-00002F80       .text __THPHuffDecodeDCTCompU */
-void __THPHuffDecodeDCTCompU {
+void __THPHuffDecodeDCTCompU() {
     /* Nonmatching */
 }
 
 /* 00002F80-00003168       .text __THPHuffDecodeDCTCompV */
-void __THPHuffDecodeDCTCompV {
+void __THPHuffDecodeDCTCompV() {
     /* Nonmatching */
 }
 
 /* 00003168-000031D4       .text THPInit */
-void THPInit {
+void THPInit() {
     /* Nonmatching */
 }
 
 /* 000031D4-00003208       .text OSInitFastCast */
-void OSInitFastCast {
+void OSInitFastCast() {
     /* Nonmatching */
 }
+
+};
 
 /* 00003208-0000323C       .text daMP_PopReadedBuffer__Fv */
 void daMP_PopReadedBuffer() {
@@ -192,7 +196,7 @@ void daMP_Reader(void*) {
 }
 
 /* 000034A0-00003550       .text daMP_CreateReadThread__Fl */
-void daMP_CreateReadThread(long) {
+void daMP_CreateReadThread(s32) {
     /* Nonmatching */
 }
 
@@ -207,7 +211,7 @@ void daMP_PushFreeTextureSet(void*) {
 }
 
 /* 000035B4-000035F8       .text daMP_PopDecodedTextureSet__Fl */
-void daMP_PopDecodedTextureSet(long) {
+void daMP_PopDecodedTextureSet(s32) {
     /* Nonmatching */
 }
 
@@ -232,7 +236,7 @@ void daMP_VideoDecoderForOnMemory(void*) {
 }
 
 /* 0000395C-00003A74       .text daMP_CreateVideoDecodeThread__FlPUc */
-void daMP_CreateVideoDecodeThread(long, unsigned char*) {
+void daMP_CreateVideoDecodeThread(s32, u8*) {
     /* Nonmatching */
 }
 
@@ -257,7 +261,7 @@ void daMP_PushFreeAudioBuffer(void*) {
 }
 
 /* 00003B54-00003B98       .text daMP_PopDecodedAudioBuffer__Fl */
-void daMP_PopDecodedAudioBuffer(long) {
+void daMP_PopDecodedAudioBuffer(s32) {
     /* Nonmatching */
 }
 
@@ -282,7 +286,7 @@ void daMP_AudioDecoderForOnMemory(void*) {
 }
 
 /* 00003D74-00003E70       .text daMP_CreateAudioDecodeThread__FlPUc */
-void daMP_CreateAudioDecodeThread(long, unsigned char*) {
+void daMP_CreateAudioDecodeThread(s32, u8*) {
     /* Nonmatching */
 }
 
@@ -302,42 +306,22 @@ void daMP_THPGXRestore() {
 }
 
 /* 00004004-000044BC       .text daMP_THPGXYuv2RgbSetup__FPC16_GXRenderModeObj */
-void daMP_THPGXYuv2RgbSetup(const _GXRenderModeObj*) {
-    /* Nonmatching */
-}
-
-/* 000044BC-000044E4       .text GXSetTexCoordGen */
-void GXSetTexCoordGen {
+void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj*) {
     /* Nonmatching */
 }
 
 /* 000044E4-000046F8       .text daMP_THPGXYuv2RgbDraw__FPUcPUcPUcssssss */
-void daMP_THPGXYuv2RgbDraw(unsigned char*, unsigned char*, unsigned char*, short, short, short, short, short, short) {
-    /* Nonmatching */
-}
-
-/* 000046F8-000046FC       .text GXEnd */
-void GXEnd {
-    /* Nonmatching */
-}
-
-/* 000046FC-0000470C       .text GXTexCoord2u16 */
-void GXTexCoord2u16 {
-    /* Nonmatching */
-}
-
-/* 0000470C-00004720       .text GXPosition3s16 */
-void GXPosition3s16 {
+void daMP_THPGXYuv2RgbDraw(u8*, u8*, u8*, s16, s16, s16, s16, s16, s16) {
     /* Nonmatching */
 }
 
 /* 00004720-0000494C       .text daMP_MixAudio__FPsPsUl */
-void daMP_MixAudio(short*, short*, unsigned long) {
+void daMP_MixAudio(s16*, s16*, u32) {
     /* Nonmatching */
 }
 
 /* 0000494C-00004A04       .text daMP_audioCallbackWithMSound__Fl */
-void daMP_audioCallbackWithMSound(long) {
+void daMP_audioCallbackWithMSound(s32) {
     /* Nonmatching */
 }
 
@@ -362,7 +346,7 @@ void daMP_PopUsedTextureSet() {
 }
 
 /* 00004ACC-00004BA4       .text daMP_THPPlayerInit__Fl */
-void daMP_THPPlayerInit(long) {
+void daMP_THPPlayerInit(s32) {
     /* Nonmatching */
 }
 
@@ -387,7 +371,7 @@ void daMP_THPPlayerCalcNeedMemory() {
 }
 
 /* 000050B8-000052D0       .text daMP_THPPlayerSetBuffer__FPUc */
-void daMP_THPPlayerSetBuffer(unsigned char*) {
+void daMP_THPPlayerSetBuffer(u8*) {
     /* Nonmatching */
 }
 
@@ -407,7 +391,7 @@ void daMP_ProperTimingForGettingNextFrame() {
 }
 
 /* 00005554-00005810       .text daMP_PlayControl__FUl */
-void daMP_PlayControl(unsigned long) {
+void daMP_PlayControl(u32) {
     /* Nonmatching */
 }
 
@@ -422,7 +406,7 @@ void daMP_PrepareReady(int) {
 }
 
 /* 00005880-00005B68       .text daMP_THPPlayerPrepare__Flll */
-void daMP_THPPlayerPrepare(long, long, long) {
+void daMP_THPPlayerPrepare(s32, s32, s32) {
     /* Nonmatching */
 }
 
@@ -442,7 +426,7 @@ void daMP_THPPlayerStop() {
 }
 
 /* 00005CCC-00005DAC       .text daMP_THPPlayerDrawCurrentFrame__FPC16_GXRenderModeObjUlUlUlUl */
-void daMP_THPPlayerDrawCurrentFrame(const _GXRenderModeObj*, unsigned long, unsigned long, unsigned long, unsigned long) {
+void daMP_THPPlayerDrawCurrentFrame(const GXRenderModeObj*, u32, u32, u32, u32) {
     /* Nonmatching */
 }
 
@@ -467,22 +451,12 @@ void daMP_THPPlayerGetState() {
 }
 
 /* 00005E70-00005F9C       .text daMP_THPPlayerSetVolume__Fll */
-void daMP_THPPlayerSetVolume(long, long) {
+void daMP_THPPlayerSetVolume(s32, s32) {
     /* Nonmatching */
 }
 
 /* 00005F9C-00006104       .text daMP_ActivePlayer_Init__FPCc */
 void daMP_ActivePlayer_Init(const char*) {
-    /* Nonmatching */
-}
-
-/* 00006104-0000610C       .text getRenderMode__8JUTVideoCFv */
-void JUTVideo::getRenderMode() const {
-    /* Nonmatching */
-}
-
-/* 0000610C-0000611C       .text getManager__8JUTVideoFv */
-void JUTVideo::getManager() {
     /* Nonmatching */
 }
 
@@ -521,31 +495,6 @@ void daMP_c::daMP_c_Init() {
     /* Nonmatching */
 }
 
-/* 00006500-00006534       .text setFrameRate__13mDoGph_gInf_cFUs */
-void mDoGph_gInf_c::setFrameRate(unsigned short) {
-    /* Nonmatching */
-}
-
-/* 00006534-00006544       .text setFrameRate__10JFWDisplayFUs */
-void JFWDisplay::setFrameRate(unsigned short) {
-    /* Nonmatching */
-}
-
-/* 00006544-00006554       .text getManager__10JFWDisplayFv */
-void JFWDisplay::getManager() {
-    /* Nonmatching */
-}
-
-/* 00006554-00006578       .text getFrameRate__13mDoGph_gInf_cFv */
-void mDoGph_gInf_c::getFrameRate() {
-    /* Nonmatching */
-}
-
-/* 00006578-00006580       .text getFrameRate__10JFWDisplayCFv */
-void JFWDisplay::getFrameRate() const {
-    /* Nonmatching */
-}
-
 /* 00006580-000065F8       .text daMP_c_Finish__6daMP_cFv */
 void daMP_c::daMP_c_Finish() {
     /* Nonmatching */
@@ -557,17 +506,12 @@ void daMP_c::daMP_c_Main() {
 }
 
 /* 0000661C-0000663C       .text draw__16daMP_Dlst_base_cFv */
-BOOL daMP_Dlst_base_c::draw() {
+void daMP_Dlst_base_c::draw() {
     /* Nonmatching */
 }
 
 /* 0000663C-00006668       .text daMP_c_Draw__6daMP_cFv */
 void daMP_c::daMP_c_Draw() {
-    /* Nonmatching */
-}
-
-/* 00006698-000066C4       .text set2DOpa__12dDlst_list_cFP12dDlst_base_c */
-void dDlst_list_c::set2DOpa(dDlst_base_c*) {
     /* Nonmatching */
 }
 
@@ -595,4 +539,3 @@ void daMP_c::daMP_c_Callback_Draw(daMP_c*) {
 void daMP_Callback_Dummy(daMP_c*) {
     /* Nonmatching */
 }
-
