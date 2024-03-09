@@ -49,7 +49,7 @@ base_process_class* fpcFCtRq_Request(layer_class* i_layer, s16 i_procTypeID,
                 }
             }
 #if VERSION == VERSION_JPN
-            fpcCtRq_Delete(&request->mBase);
+            fpcCtRq_Delete(&request->base);
 #else
             fpcCtRq_Cancel(&request->base);
 #endif

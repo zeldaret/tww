@@ -70,8 +70,10 @@ BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
     }
     JUTReport(40, 420, "十字右：進む　十字左：戻る");
     JUTReport(200, 400, "曜日：%s", local_58[l_weekpat]);
+#if VERSION == VERSION_PAL
     static const char* language[] = {"ENGLISH", "GERMAN", "FRENCH", "SPANISH", "ITALIAN"};
     JUTReport(40, 440, "%s", language[g_dComIfG_gameInfo.play.mGameLanguage]);
+#endif
     if (dComIfGs_isEventBit(0x2d01)) {
         JUTReport(400, 420, "３コン（Ａ）:デモ２３　ＯＮ");
     } else {
@@ -155,7 +157,9 @@ s32 dScnMenu_Create(scene_class* i_scn) {
         (cPhs__Handler)phase_2,
     };
     menu_of_scene_class* i_this = (menu_of_scene_class *)i_scn;
+#if VERSION == VERSION_PAL
     l_languageType = g_dComIfG_gameInfo.play.mGameLanguage;
+#endif
     return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }
 
