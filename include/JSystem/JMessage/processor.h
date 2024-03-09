@@ -11,56 +11,46 @@ struct TControl;
 struct TResource;
 
 struct TProcessor {
-    typedef bool (*OnCharacterEndCallBack)(TProcessor*);
+public:
+    TProcessor(TControl *control) : mControl(control), mCurrent(NULL) {}
+
+    typedef bool (*ProcessorCallBack)(TProcessor*);
     typedef const char* (*OnSelectBeginCallBack)(TProcessor*);
     typedef const char* (*ProcessOnSelectCallBack)(TProcessor*);
 
     struct TStack_ {
         TStack_() { clear(); }
 
-        TStack_(const TStack_& other)
-        {
-            mSize = other.mSize;
-            for (int i = 0; i < mSize; i++) {
+        TStack_(const TStack_& other) {
+            for (int i = 0; i < mNum; i++) {
                 mStack[i] = mStack[i];
             }
+            mNum = other.mNum;
         }
 
-        inline bool empty() const { return mSize == 0; }
-        inline bool isPushable() const { return mSize < 4; }
-        inline void clear() { mSize = 0; }
-
-        inline u32 getMaxSize() const { return 4; }
-        inline u32 getSize() const { return mSize; }
-        inline const char* getTop() const { return mStack[mSize - 1]; }
-
-        inline void push(const char* str)
-        {
-            mStack[mSize] = str;
-            mSize++;
+        inline void clear() { mNum = 0; }
+        inline void push(const char* str) {
+            mStack[mNum - 1] = str;
+            mNum++;
         }
+        inline bool IsStorable() const { return mNum < 4; }
+        inline void pop() { mNum--; }
+        inline const char* top() const { return mStack[mNum - 2]; }
+        inline bool empty() const { return mNum == 0; }
 
-        inline void pop() { mSize--; }
-
-        /* 0x00 */ u32 mSize;
-        /* 0x04 */ const char* mStack[3];
+        /* 0x00 */ const char* mStack[3];
+        /* 0x0C */ u32 mNum;
     };
 
+    // XXX: None of this shows up in the debug map. Is this TStatusData?
     struct TProcess {
-        struct TProcessData {
-            /* 0x00 */ ProcessOnSelectCallBack mSelectCallback;
-            /* 0x04 */ const char* mBase;
-            /* 0x08 */ const void* mOffset;
-            /* 0x0C */ u32 mRest;
-        };
-
         TProcess() { reset_normal(); }
 
-        void reset_normal() { mEndCallback = process_onCharacterEnd_normal_; }
-        void reset_select() { mEndCallback = process_onCharacterEnd_select_; }
+        void reset_normal() { mCallBack = process_onCharacterEnd_normal_; }
+        void reset_select() { mCallBack = process_onCharacterEnd_select_; }
 
-        /* 0x00 */ OnCharacterEndCallBack mEndCallback;
-        /* 0x04 */ TProcessData mData;
+        /* 0x00 */ ProcessorCallBack mCallBack;
+        /* 0x04 */ void* mCallBackWork[4];
     };
 
     ~TProcessor();
@@ -90,36 +80,25 @@ struct TProcessor {
     static const char* process_onSelect_(TProcessor*);
     void reset_(const char*);
 
-    void process_select_limited_(TProcessor*);
-    void process_select_(TProcessor*);
+    static const char* process_select_limited_(TProcessor*);
+    static const char* process_select_(TProcessor*);
 
-    int setBegin_messageEntryText(const TResource* resource, const void* entry, const char* param_2)
-    {
-        // mResourceCache = resource;
-        reset_(param_2);
-        do_begin_(entry, param_2);
-        return TRUE;
-    }
-
-    const TResource* getResourceCache() const { return mResourceCache; }
-    const char* getCurrent() const { return mCurrent; }
-    const TReference* getReference() const { return mReference; }
-
-    // Unused/inlined:
     void pushCurrent(const char*);
     const char* popCurrent();
     void on_select_begin(OnSelectBeginCallBack, const void*, const char*, u32);
     void on_select_end();
     void on_select_separate();
     void on_tag_();
-    void process_character_();
+    bool process_character_();
+
+    const char* getCurrent() const { return mCurrent; }
 
     /* 0x00 */ /* vtable */
-    /* 0x04 */ const TReference* mReference;
-    /* 0x08 */ const TResource* mResourceCache;
-    /* 0x0C */ const char* mCurrent;
-    /* 0x10 */ TStack_ mStack;
-    /* 0x24 */ TProcess mProcess;
+    /* 0x04 */ TControl* mControl;
+    /* 0x08 */ const char* mCurrent;
+    /* 0x0C */ void* field_0x0C;
+    /* 0x0C */ TStack_ mStack;
+    /* 0x20 */ TProcess mProcess;
 };
 
 struct TSequenceProcessor : public TProcessor {
@@ -130,38 +109,32 @@ struct TSequenceProcessor : public TProcessor {
     TSequenceProcessor(const TReference*, TControl*);
     TSequenceProcessor(TControl*);
 
-    virtual ~TSequenceProcessor();                         // _08
-    virtual void do_reset_(const char*);                   // _28
-    virtual bool do_setBegin_isReady_() const;             // _2C
-    virtual void do_begin_(const void*, const char*);      // _30
-    virtual void do_end_();                                // _34
-    virtual bool do_tag_(u32, const void*, u32);           // _38
-    virtual void do_systemTagCode_(u16, const void*, u32); // _3C
-    virtual void do_begin(const void*, const char*);       // _40
-    virtual void do_end();                                 // _44
-    virtual bool do_isReady();                             // _48
-    virtual bool do_jump_isReady();                        // _4C
-    virtual void do_jump(const void*, const char*);        // _50
-    virtual void do_branch_query(u16);                     // _54
-    virtual int do_branch_queryResult();                   // _58
-    virtual void do_branch(const void*, const char*);      // _5C
+    /* 0x08 */ virtual ~TSequenceProcessor();
+    /* 0x30 */ virtual void do_begin_(const void*, const char*);
+    /* 0x34 */ virtual void do_end_();
+    /* 0x38 */ virtual bool do_tag_(u32, const void*, u32);
+    /* 0x3C */ virtual void do_systemTagCode_(u16, const void*, u32);
+    /* 0x40 */ virtual void do_begin(const void*, const char*);
+    /* 0x44 */ virtual void do_end();
+    /* 0x48 */ virtual bool do_isReady();
+    /* 0x4C */ virtual bool do_jump_isReady();
+    /* 0x50 */ virtual void do_jump(const void*, const char*);
+    /* 0x54 */ virtual void do_branch_query(u16);
+    /* 0x58 */ virtual int do_branch_queryResult();
+    /* 0x5C */ virtual void do_branch(const void*, const char*);
 
     char* process(const char*);
     bool on_isReady();
-    void on_jump_isReady();
+    bool on_jump_isReady();
     void on_jump(const void*, const char*);
-    void on_branch_queryResult();
+    int on_branch_queryResult();
     void on_branch(const void*, const char*);
-    void process_onJump_limited_(const TSequenceProcessor*);
-    static void* process_onJump_(const TSequenceProcessor*);
-    void process_onBranch_limited_(const TSequenceProcessor*, u32);
-    void process_onBranch_(const TSequenceProcessor*, u32);
 
     void reset_(const char*);
-    void process_jump_limited_(TSequenceProcessor*);
-    void process_jump_(TSequenceProcessor*);
-    void process_branch_limited_(TSequenceProcessor*, u32);
-    void process_branch_(TSequenceProcessor*, u32);
+    static bool process_jump_limited_(TSequenceProcessor*);
+    static bool process_jump_(TSequenceProcessor*);
+    static bool process_branch_limited_(TSequenceProcessor*, u32);
+    static bool process_branch_(TSequenceProcessor*, u32);
 
     // Unused/inlined:
     const char* toString_status(int);
@@ -179,16 +152,17 @@ struct TSequenceProcessor : public TProcessor {
     }
 
     /* 0x00 */ /* TProcessor */
-    /* 0x38 */ TControl* _38;
-    /* 0x3C */ int _3C;
-    /* 0x40 */ ProcessOnJumpCallBack* _40;
-    /* 0x44 */ u32 _44;
-    /* 0x48 */ u32 _48;
+    /* 0x34 */ int mStatus;
 };
 
 struct TRenderingProcessor : public TProcessor {
     TRenderingProcessor(const TReference*);
     TRenderingProcessor(TControl*);
+
+    void setBegin(const void* param_1, const char* param_2) {
+        reset_(param_2);
+        do_begin_(param_1, param_2);
+    }
 
     virtual void do_begin_(const void*, const char*);
     virtual void do_end_();
@@ -197,7 +171,7 @@ struct TRenderingProcessor : public TProcessor {
     virtual ~TRenderingProcessor();
     virtual void do_begin(const void*, const char*);
     virtual void do_end();
-    
+
     void process(const char*);
 
     /* 0x00 */ /* TProcessor */

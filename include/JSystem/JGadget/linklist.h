@@ -183,6 +183,10 @@ struct TLinkList_factory : public TLinkList<T, I> {
     virtual ~TLinkList_factory() {}
     virtual T* Do_create() = 0;
     virtual void Do_destroy(T*) = 0;
+    void Erase_destroy(T* elem) {
+        Erase(elem);
+        Do_destroy(elem);
+    }
 };
 
 template <typename T>

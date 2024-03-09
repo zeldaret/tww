@@ -4,28 +4,34 @@
 //
 
 #include "JSystem/JMessage/resource.h"
+#include "JSystem/JMessage/data.h"
 #include "JSystem/JUtility/JUTResFont.h"
 #include "dolphin/types.h"
 
 /* 8029FCC4-8029FD04       .text __ct__Q28JMessage18TResourceContainerFv */
 JMessage::TResourceContainer::TResourceContainer() {
-    /* Nonmatching */
-    field_0x10 = 0;
-    field_0x14 = NULL;
+    mEncoding = 0;
+    mIsLeadByteFunc = NULL;
 }
 
 /* 8029FD04-8029FD90       .text Get_groupID__Q28JMessage18TResourceContainerFUs */
-void JMessage::TResourceContainer::Get_groupID(u16) {
+JMessage::TResource* JMessage::TResourceContainer::Get_groupID(u16 groupID) {
     /* Nonmatching */
+    for (iterator iter = begin(); iter != end(); ++iter) {
+        TResource* res = &(*iter);
+        if (res->mInfo.get_groupID() == groupID)
+            return res;
+    }
+    return NULL;
 }
 
 /* 8029FD90-8029FDC8       .text SetEncoding__Q28JMessage18TResourceContainerFUc */
-void JMessage::TResourceContainer::SetEncoding(u8 param_1) {
-    if (param_1 == 0) {
-        field_0x10 = param_1;
-        field_0x14 = 0;
+void JMessage::TResourceContainer::SetEncoding(u8 encoding) {
+    if (encoding == 0) {
+        mEncoding = encoding;
+        mIsLeadByteFunc = NULL;
     } else {
-        SetEncoding_(param_1);
+        SetEncoding_(encoding);
     }
 }
 
@@ -52,31 +58,86 @@ namespace JMessage {
 
 /* 8029FE38-8029FE68       .text SetEncoding___Q28JMessage18TResourceContainerFUc */
 void JMessage::TResourceContainer::SetEncoding_(u8 param_1) {
-    field_0x10 = param_1;
+    mEncoding = param_1;
     u32 r4 = param_1;
-    field_0x14 = 0;
+    mIsLeadByteFunc = 0;
     if (r4 >= 4) {
         return;
     }
-    field_0x14 = gapfnIsLeadByte_[r4];
+    mIsLeadByteFunc = gapfnIsLeadByte_[r4];
 }
 
 /* 8029FE68-8029FE90       .text __ct__Q28JMessage6TParseFPQ28JMessage18TResourceContainer */
-JMessage::TParse::TParse(JMessage::TResourceContainer*) {
-    /* Nonmatching */
+JMessage::TParse::TParse(JMessage::TResourceContainer* container) : mResourceContainer(container), mResource(NULL) {
 }
 
 /* 8029FE90-8029FEF0       .text __dt__Q28JMessage6TParseFv */
 JMessage::TParse::~TParse() {
-    /* Nonmatching */
 }
 
 /* 8029FEF0-802A0024       .text parseHeader_next__Q28JMessage6TParseFPPCvPUlUl */
-void JMessage::TParse::parseHeader_next(const void**, u32*, u32) {
+bool JMessage::TParse::parseHeader_next(const void** ppData, u32* pOutSize, u32 flag) {
     /* Nonmatching */
+    const void* pData = *ppData;
+    data::TParse_THeader header(pData);
+    *ppData = header.getContent();
+    *pOutSize = header.get_blockNumber();
+
+    if (memcmp(header.get_signature(), &data::ga4cSignature, sizeof(data::ga4cSignature)) != 0)
+        return false;
+
+    if (header.get_type() != 'bmg1')
+        return false;
+
+    u8 encoding = header.get_encoding();
+    if (encoding != 0) {
+        if (!mResourceContainer->IsEncodingSettable(encoding))
+            return false;
+
+        mResourceContainer->SetEncoding(encoding);
+    }
+
+    if (flag & 0x10)
+        return true;
+
+    mResource = mResourceContainer->Do_create();
+    if (mResource == NULL)
+        return flag & 0x20 ? true : false;
+
+    mResource->setData_header(header.getRaw());
+    mResourceContainer->Push_back(mResource);
+    return true;
 }
 
 /* 802A0024-802A0170       .text parseBlock_next__Q28JMessage6TParseFPPCvPUlUl */
-void JMessage::TParse::parseBlock_next(const void**, u32*, u32) {
+bool JMessage::TParse::parseBlock_next(const void** ppData, u32* pOutSize, u32 flag) {
     /* Nonmatching */
+    JUTDataBlockHeader* pHeader = *(JUTDataBlockHeader**)ppData;
+    *(char**)ppData += pHeader->mSize;
+    *pOutSize = pHeader->mSize;
+
+    switch (pHeader->mType) {
+    case 'INF1':
+        mResource->setData_block_info(pHeader);
+        break;
+    case 'DAT1':
+        mResource->setData_block_messageData((char*)&pHeader[1]);
+        TResource* res = mResourceContainer->Get_groupID(mResource->mInfo.get_groupID());
+        if (res != mResource && !!(flag & 0x80)) {
+            mResourceContainer->Erase_destroy(res);
+        }
+        break;
+    case 'STR1':
+        mResource->setData_block_stringAttribute((char*)&pHeader[1]);
+        break;
+    case 'MID1':
+        mResource->setData_block_messageID(pHeader);
+        break;
+    default:
+        if (!(flag & 0x40))
+            return false;
+        break;
+    }
+
+    return true;
 }

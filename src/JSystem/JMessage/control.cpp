@@ -8,15 +8,15 @@
 
 /* 8029E930-8029E970       .text __ct__Q28JMessage8TControlFv */
 JMessage::TControl::TControl()
-    : _04(NULL)
-    , _08(NULL)
+    : mResourceContainer(NULL)
+    , mResource(NULL)
     , mBaseProcSeq(NULL)
     , mBaseProcRender(NULL)
     , mMessageCode(0)
     , mMessageIndex(0)
     , mResourceCache(NULL)
-    , mEntry(NULL)
     , mMessageBegin(NULL)
+    , _20(NULL)
     , mCurrentText(NULL)
 {
     /* Nonmatching */
@@ -50,7 +50,6 @@ void JMessage::TControl::reset() {
 
 /* 8029EB1C-8029EC00       .text update__Q28JMessage8TControlFv */
 bool JMessage::TControl::update() {
-    /* Nonmatching */
     if (!isReady_update_()) {
         return false;
     }
@@ -66,6 +65,7 @@ bool JMessage::TControl::update() {
         mMessageBegin = NULL;
         return false;
     }
+
     return true;
 }
 
@@ -76,15 +76,15 @@ void JMessage::TControl::render() {
         return;
     }
 
-    mBaseProcRender->setBegin_messageEntryText(mResourceCache, mEntry, _20);
-    mBaseProcRender->mCurrent = _20;
+    mBaseProcRender->setBegin(mResourceCache, _20);
+    mBaseProcRender->field_0x0C = mEntry;
     mBaseProcRender->mStack = mRenderStack;
     mBaseProcRender->process(mCurrentText);
 }
 
 /* 8029ECCC-8029ECD4       .text do_word__Q28JMessage8TControlFUl */
-void JMessage::TControl::do_word(u32) {
-    /* Nonmatching */
+bool JMessage::TControl::do_word(u32) {
+    return false;
 }
 
 /* 8029ECD4-8029ED88       .text setMessageCode_flush___Q28JMessage8TControlFv */
@@ -94,5 +94,9 @@ bool JMessage::TControl::setMessageCode_flush_() {
 
 /* 8029ED88-8029EDA4       .text reset___Q28JMessage8TControlFv */
 void JMessage::TControl::reset_() {
-    /* Nonmatching */
+    mResourceCache = NULL;
+    mMessageBegin = NULL;
+    _20 = NULL;
+    mCurrentText = NULL;
+    mRenderStack.clear();
 }

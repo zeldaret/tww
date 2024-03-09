@@ -36,11 +36,11 @@ struct TControl {
 
     void getResource_groupID(u16) const;
     void getMessageData(u16, u16) const;
-    void do_word(u32);
+    bool do_word(u32);
     void reset_();
 
-    /* 0x04 */ void* _04;
-    /* 0x08 */ void* _08;
+    /* 0x04 */ TResourceContainer* mResourceContainer;
+    /* 0x08 */ void* mResource;
     /* 0x0C */ TSequenceProcessor* mBaseProcSeq;
     /* 0x10 */ TRenderingProcessor* mBaseProcRender;
     /* 0x14 */ u16 mMessageCode;

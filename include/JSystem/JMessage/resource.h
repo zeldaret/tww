@@ -1,53 +1,70 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-#include <dolphin/types.h>
+#include "JSystem/JGadget/binary.h"
+#include "JSystem/JGadget/linklist.h"
+#include "JSystem/JMessage/data.h"
+#include "JSystem/JUtility/JUTDataHeader.h"
 
 namespace JMessage {
+    namespace data {
+        struct JUTMesgInfo;
+        struct JUTMesgIDData;
+    };
+
     class TResource {
     public:
-        TResource() {
-            field_0x0 = 0;
-            field_0x4 = 0;
-            field_0x8 = 0;
-            field_0xc = 0;
-            field_0x10 = 0;
-            field_0x14 = 0;
-            field_0x18 = 0;
+        TResource() : mHeader(NULL), mInfo(NULL) {
+            mMessageData = NULL;
+            mStringAttribute = NULL;
+            mMessageID = NULL;
         }
 
-        int field_0x0;
-        int field_0x4;
-        int field_0x8;
-        int field_0xc;
-        int field_0x10;
-        int field_0x14;
-        int field_0x18;
-    };
-    class TResourceContainer {
-    public:
-        int field_0x0;
-        int field_0x4;
-        int field_0x8;
+        void setData_header(const void* p) { mHeader.setRaw(p); }
+        void setData_block_info(const void* p) { mInfo.setRaw(p); }
+        void setData_block_messageData(const void* p) { mMessageData = (const char*)p; }
+        void setData_block_stringAttribute(const void* p) { mStringAttribute = (const char*)p; }
+        void setData_block_messageID(const void* p) { mMessageID = (data::JUTMesgIDData*)p; }
 
+        /* 0x00 */ JGadget::TLinkListNode mLinkNode;
+        /* 0x08 */ data::TParse_THeader mHeader;
+        /* 0x0C */ data::TParse_TBlock_info mInfo;
+        /* 0x10 */ const char* mMessageData;
+        /* 0x14 */ const char* mStringAttribute;
+        /* 0x18 */ data::JUTMesgIDData* mMessageID;
+    };
+
+    class TResourceContainer : public JGadget::TLinkList_factory<TResource, -offsetof(TResource, mLinkNode)> {
+    public:
         TResourceContainer();
-        virtual ~TResourceContainer();
-        void Get_groupID(u16);
-        void SetEncoding(u8);
         virtual TResource* Do_create();
         virtual void Do_destroy(JMessage::TResource*);
+
+        TResource* Get_groupID(u16 groupID);
+        void SetEncoding(u8);
+
+        bool IsEncodingSettable(u8 encoding) const {
+            return mEncoding == encoding || encoding == 0;
+        }
+
+    private:
         void SetEncoding_(u8);
 
-        u8 field_0x10;
-        bool (*field_0x14)(int);
+    private:
+        /* 0x10 */ u8 mEncoding;
+        /* 0x14 */ bool (*mIsLeadByteFunc)(int);
     };
 
-    class TParse {
+    class TParse : public JGadget::binary::TParse_header_block {
     public:
         TParse(JMessage::TResourceContainer*);
         virtual ~TParse();
-        virtual void parseHeader_next(const void**, u32*, u32);
-        virtual void parseBlock_next(const void**, u32*, u32);
+        virtual bool parseHeader_next(const void**, u32*, u32);
+        virtual bool parseBlock_next(const void**, u32*, u32);
+
+    public:
+        /* 0x04 */ TResourceContainer* mResourceContainer;
+        /* 0x08 */ TResource* mResource;
     };
 }
 

@@ -30,10 +30,6 @@ template <int T>
 struct TParseData_aligned : public TParseData {
     TParseData_aligned(const void* pContent) : TParseData(pContent) {}
     void setRaw(const void* p) {
-        /* if ((u32)p % T != 0) {
-            JUTWarn w;
-            w << "misaligned : " << (u32)p;
-        } */
         static_cast<TParseData*>(this)->setRaw(p);
     }
 };

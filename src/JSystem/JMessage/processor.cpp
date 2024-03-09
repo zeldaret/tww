@@ -4,14 +4,14 @@
 //
 
 #include "JSystem/JMessage/processor.h"
-#include "dolphin/types.h"
+#include "JSystem/JMessage/control.h"
 
 namespace JMessage {
 
 namespace {
 
 /* 8029EDA4-8029EDCC       .text process_setMessageIndex_reserved___Q28JMessage23@unnamed@processor_cpp@FUs */
-void process_setMessageIndex_reserved_(u16) {
+bool process_setMessageIndex_reserved_(u16 messageIndex) {
     /* Nonmatching */
 }
 
@@ -28,27 +28,60 @@ void process_setMessage_code_(TControl*, u32) {
 }; // namespace
 
 /* 8029EE6C-8029EEA4       .text pushCurrent__Q28JMessage10TProcessorFPCc */
-void TProcessor::pushCurrent(const char*) {
-    /* Nonmatching */
+void TProcessor::pushCurrent(const char* v) {
+    if (v == NULL)
+        return;
+
+    if (!mStack.IsStorable())
+        return;
+
+    mStack.push(mCurrent);
+    mCurrent = v;
 }
 
 /* 8029EEA4-8029EEC8       .text popCurrent__Q28JMessage10TProcessorFv */
 const char* TProcessor::popCurrent() {
-    /* Nonmatching */
+    mCurrent = mStack.top();
+    mStack.pop();
 }
 
+struct SelectCallbackWork {
+    /* 0x00 */ TProcessor::OnSelectBeginCallBack mCallBack;
+    /* 0x04 */ const char* mBase;
+    /* 0x08 */ const void* mOffset;
+    /* 0x0C */ u32 mRest;
+};
+
 /* 8029EEC8-8029EF54       .text on_select_begin__Q28JMessage10TProcessorFPFPQ28JMessage10TProcessor_PCcPCvPCcUl */
-void TProcessor::on_select_begin(OnSelectBeginCallBack, const void*, const char*, u32) { /* Nonmatching */
+void TProcessor::on_select_begin(OnSelectBeginCallBack callback, const void* offs, const char* base, u32 rest) {
+    if (mStack.IsStorable()) {
+        mProcess.reset_select();
+        SelectCallbackWork* work = (SelectCallbackWork*)&mProcess.mCallBackWork;
+        work->mCallBack = callback;
+        work->mBase = base;
+        work->mOffset = offs;
+        work->mRest = rest;
+
+        const char *v = work->mCallBack(this);
+        pushCurrent(v);
+        do_select_begin(rest);
+    }
 }
 
 /* 8029EF54-8029EFA0       .text on_select_end__Q28JMessage10TProcessorFv */
 void TProcessor::on_select_end() {
-    /* Nonmatching */
+    mProcess.reset_normal();
+    popCurrent();
+    do_select_end();
 }
 
 /* 8029EFA0-8029EFFC       .text on_select_separate__Q28JMessage10TProcessorFv */
 void TProcessor::on_select_separate() {
-    /* Nonmatching */
+    popCurrent();
+    SelectCallbackWork* work = (SelectCallbackWork*)&mProcess.mCallBackWork;
+    const char *v = work->mCallBack(this);
+    pushCurrent(v);
+    do_select_separate();
 }
 
 /* 8029EFFC-8029F000       .text do_character__Q28JMessage10TProcessorFi */
@@ -82,13 +115,25 @@ TProcessor::~TProcessor() {
 }
 
 /* 8029F064-8029F080       .text reset___Q28JMessage10TProcessorFPCc */
-void TProcessor::reset_(const char*) {
-    /* Nonmatching */
+void TProcessor::reset_(const char* v) {
+    mCurrent = v;
+    mStack.clear();
+    mProcess.reset_normal();
 }
 
 /* 8029F080-8029F120       .text on_tag___Q28JMessage10TProcessorFv */
 void TProcessor::on_tag_() {
-    /* Nonmatching */
+    u32 size;
+    const u8* current = (const u8*)getCurrent();
+    size = current[1];
+
+    mCurrent = (const char*)current + size;
+    u32 tag = (current[2] << 16 | current[3] << 8);
+    tag |= current[4];
+
+    if (!do_tag(tag, &current[5], size - 5)) {
+        do_tag_(tag, &current[5], size - 5);
+    }
 }
 
 /* 8029F120-8029F248       .text do_tag___Q28JMessage10TProcessorFUlPCvUl */
@@ -102,33 +147,68 @@ void TProcessor::do_systemTagCode_(u16, const void*, u32) {
 }
 
 /* 8029F2A0-8029F37C       .text process_character___Q28JMessage10TProcessorFv */
-void TProcessor::process_character_() {
+bool TProcessor::process_character_() {
     /* Nonmatching */
+    const char * current = getCurrent();
+    switch (current[0]) {
+    case 0:
+        if (!mProcess.mCallBack(this))
+            return false;
+        break;
+    case 0x1A:
+        on_tag_();
+        break;
+    default:
+        // mControl->do_word(current[0]);
+        break;
+    }
+    return true;
 }
 
 /* 8029F37C-8029F3C4       .text process_onCharacterEnd_normal___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
-bool TProcessor::process_onCharacterEnd_normal_(TProcessor*) {
-    /* Nonmatching */
+bool TProcessor::process_onCharacterEnd_normal_(TProcessor* proc) {
+    if (!proc->mStack.empty()) {
+        proc->popCurrent();
+        return true;
+    } else {
+        proc->do_end_();
+        return false;
+    }
 }
 
 /* 8029F3C4-8029F40C       .text process_onCharacterEnd_select___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
-bool TProcessor::process_onCharacterEnd_select_(TProcessor*) {
-    /* Nonmatching */
+bool TProcessor::process_onCharacterEnd_select_(TProcessor* proc) {
+    SelectCallbackWork* work = (SelectCallbackWork*) &proc->mProcess.mCallBackWork;
+    work->mRest--;
+    if (work->mRest != 0) {
+        proc->on_select_separate();
+        return true;
+    } else {
+        proc->on_select_end();
+        return true;
+    }
 }
 
 /* 8029F40C-8029F428       .text process_select_limited___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
-void TProcessor::process_select_limited_(TProcessor*) {
-    /* Nonmatching */
+const char* TProcessor::process_select_limited_(TProcessor* proc) {
+    SelectCallbackWork* work = (SelectCallbackWork*) &proc->mProcess.mCallBackWork;
+    u16 offs = ((const u16*)work->mOffset)[0];
+    work->mOffset = (const char*)work->mOffset + sizeof(offs);
+    return &work->mBase[offs];
 }
 
 /* 8029F428-8029F444       .text process_select___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
-void TProcessor::process_select_(TProcessor*) {
+const char* TProcessor::process_select_(TProcessor* proc) {
     /* Nonmatching */
+    SelectCallbackWork* work = (SelectCallbackWork*) &proc->mProcess.mCallBackWork;
+    u32 offs = ((const u32*)work->mOffset)[0];
+    work->mOffset = (const char*)work->mOffset + sizeof(offs);
+    return &work->mBase[offs];
 }
 
 /* 8029F444-8029F480       .text __ct__Q28JMessage18TSequenceProcessorFPQ28JMessage8TControl */
-TSequenceProcessor::TSequenceProcessor(TControl*) {
-    /* Nonmatching */
+TSequenceProcessor::TSequenceProcessor(TControl* control) : TProcessor(control) {
+    mStatus = 0;
 }
 
 /* 8029F480-8029F4E0       .text __dt__Q28JMessage18TSequenceProcessorFv */
@@ -142,37 +222,54 @@ char* TSequenceProcessor::process(const char*) {
 
 /* 8029F658-8029F684       .text on_isReady__Q28JMessage18TSequenceProcessorFv */
 bool TSequenceProcessor::on_isReady() {
-    /* Nonmatching */
+    return do_isReady();
 }
 
+struct JumpCallbackWork {
+    /* 0x00 */ u32 mTarget;
+};
+
 /* 8029F684-8029F698       .text on_jump_register__Q28JMessage18TSequenceProcessorFPFPQ28JMessage18TSequenceProcessor_bUl */
-void TSequenceProcessor::on_jump_register(OnJumpRegisterCallBack*, u32) {
-    /* Nonmatching */
+void TSequenceProcessor::on_jump_register(OnJumpRegisterCallBack callback, u32 target) {
+    mStatus = 3;
+    mProcess.mCallBack = (ProcessorCallBack)callback;
+    JumpCallbackWork* work = (JumpCallbackWork*) &mProcess.mCallBackWork;
+    work->mTarget = target;
 }
 
 /* 8029F698-8029F6C4       .text on_jump_isReady__Q28JMessage18TSequenceProcessorFv */
-void TSequenceProcessor::on_jump_isReady() {
-    /* Nonmatching */
+bool TSequenceProcessor::on_jump_isReady() {
+    return do_jump_isReady();
 }
 
 /* 8029F6C4-8029F720       .text on_jump__Q28JMessage18TSequenceProcessorFPCvPCc */
-void TSequenceProcessor::on_jump(const void*, const char*) {
-    /* Nonmatching */
+void TSequenceProcessor::on_jump(const void* target, const char* v) {
+    reset_(v);
+    do_jump(target, v);
 }
 
+struct BranchCallbackWork {
+    /* 0x00 */ const void* mOffset;
+    /* 0x04 */ u32 mRest;
+};
+
 /* 8029F720-8029F730       .text on_branch_register__Q28JMessage18TSequenceProcessorFPFPQ28JMessage18TSequenceProcessorUl_bPCvUl */
-void TSequenceProcessor::on_branch_register(OnBranchRegisterCallBack*, const void*, u32) {
-    /* Nonmatching */
+void TSequenceProcessor::on_branch_register(OnBranchRegisterCallBack callback, const void* offset, u32 rest) {
+    mProcess.mCallBack = (ProcessorCallBack)callback;
+    BranchCallbackWork* work = (BranchCallbackWork*) &mProcess.mCallBackWork;
+    work->mOffset = offset;
+    work->mRest = rest;
 }
 
 /* 8029F730-8029F764       .text on_branch_query__Q28JMessage18TSequenceProcessorFUs */
-void TSequenceProcessor::on_branch_query(u16) {
-    /* Nonmatching */
+void TSequenceProcessor::on_branch_query(u16 branch) {
+    mStatus = 4;
+    do_branch_query(branch);
 }
 
 /* 8029F764-8029F790       .text on_branch_queryResult__Q28JMessage18TSequenceProcessorFv */
-void TSequenceProcessor::on_branch_queryResult() {
-    /* Nonmatching */
+int TSequenceProcessor::on_branch_queryResult() {
+    return do_branch_queryResult();
 }
 
 /* 8029F790-8029F7EC       .text on_branch__Q28JMessage18TSequenceProcessorFPCvPCc */
@@ -240,9 +337,8 @@ void TSequenceProcessor::do_systemTagCode_(u16 p1, const void* p2, u32 p3) {
     /* Nonmatching */
     switch (p1) {
     case 6:
-        _3C = 3;
-        _40 = &process_onJump_;
-        _44 = *(u32*)p2;
+        u32 v = *(u32*)p2;
+        on_jump_register(process_jump_, v);
         break;
     case 0:
     case 1:
@@ -258,27 +354,27 @@ void TSequenceProcessor::do_systemTagCode_(u16 p1, const void* p2, u32 p3) {
 }
 
 /* 8029FA2C-8029FA5C       .text process_jump_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
-void TSequenceProcessor::process_jump_limited_(TSequenceProcessor*) {
+bool TSequenceProcessor::process_jump_limited_(TSequenceProcessor*) {
     /* Nonmatching */
 }
 
 /* 8029FA5C-8029FA88       .text process_jump___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
-void TSequenceProcessor::process_jump_(TSequenceProcessor*) {
+bool TSequenceProcessor::process_jump_(TSequenceProcessor*) {
     /* Nonmatching */
 }
 
 /* 8029FA88-8029FAB8       .text process_branch_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */
-void TSequenceProcessor::process_branch_limited_(TSequenceProcessor*, u32) {
+bool TSequenceProcessor::process_branch_limited_(TSequenceProcessor*, u32) {
     /* Nonmatching */
 }
 
 /* 8029FAB8-8029FAE8       .text process_branch___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */
-void TSequenceProcessor::process_branch_(TSequenceProcessor*, u32) {
+bool TSequenceProcessor::process_branch_(TSequenceProcessor*, u32) {
     /* Nonmatching */
 }
 
 /* 8029FAE8-8029FB20       .text __ct__Q28JMessage19TRenderingProcessorFPQ28JMessage8TControl */
-TRenderingProcessor::TRenderingProcessor(TControl*) {
+TRenderingProcessor::TRenderingProcessor(TControl* control) : TProcessor(control) {
     /* Nonmatching */
 }
 
