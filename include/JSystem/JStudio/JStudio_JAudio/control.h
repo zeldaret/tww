@@ -69,17 +69,15 @@ struct TAdaptor_sound : public JStudio::TAdaptor_sound {
 };  // Size: 0x104
 
 struct TCreateObject : public JStudio::TCreateObject {
-    TCreateObject(JAIBasic* jai, const JStage::TSystem* system)
+    TCreateObject(JAIBasic* jai)
     {
         mSound  = jai;
-        mSystem = system;
     }
     virtual ~TCreateObject();                                                                                // _08
     virtual bool create(JStudio::TObject** newObject, const JStudio::stb::data::TParse_TBlock_object& data); // _0C
 
     /* 0x00 */ /* JStudio::TCreateObject */
     /* 0x0C */ JAIBasic* mSound;
-    /* 0x10 */ const JStage::TSystem* mSystem;
 };
 } // namespace JStudio_JAudio
 

@@ -37,9 +37,15 @@ public:
 
     TControl();
     virtual ~TControl();
-    void setFactory(JStudio::TFactory*);
     void transformOnSet_setOrigin(const Vec&, f32);
     void transformOnGet_setOrigin(const Vec&, f32);
+
+    void setFactory(JStudio::TFactory* factory) {
+        stb::TFactory* stb_factory = factory;
+        fvb::TFactory* fvb_factory = factory == NULL ? NULL : &factory->fvb_Factory;
+        stb::TControl::setFactory(stb_factory);
+        fvb_Control.setFactory(fvb_factory);
+    }
 
     void stb_destroyObject_all() { stb::TControl::destroyObject_all(); }
     void fvb_destroyObject_all() { fvb_Control.destroyObject_all(); }
@@ -55,13 +61,13 @@ public:
     void transformOnGet_enable(bool param_0) { mTransformOnGet = param_0; }
 
     void transform_enable(bool param_0) {
-        transformOnSet_enable(param_0);
         transformOnGet_enable(param_0);
+        transformOnSet_enable(param_0);
     }
 
     void transform_setOrigin(const Vec& xyz, f32 rotY) {
-        transformOnSet_setOrigin(xyz, rotY);
         transformOnGet_setOrigin(xyz, rotY);
+        transformOnSet_setOrigin(xyz, rotY);
     }
 
     f32 transformOnSet_getRotationY() const { return mTransformOnSet_RotationY; }

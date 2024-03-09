@@ -6,6 +6,7 @@
 #include "d/d_demo.h"
 #include "f_op/f_op_camera_mng.h"
 #include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_printf.h"
 
 /* 800692C4-80069330       .text __ct__13dDemo_actor_cFv */
 dDemo_actor_c::dDemo_actor_c() {
@@ -20,7 +21,15 @@ dDemo_actor_c::dDemo_actor_c() {
 
 /* 80069330-800693C0       .text __dt__13dDemo_actor_cFv */
 dDemo_actor_c::~dDemo_actor_c() {
-    /* Nonmatching */
+    fopAc_ac_c* actor = getActor();
+    if (actor) {
+        actor->demoActorID = 0;
+    }
+    mActorPcId = fpcM_ERROR_PROCESS_ID_e;
+    mBckId = -1;
+    mBtpId = -1;
+    mBtkId = -1;
+    mBrkId = -1;
 }
 
 /* 800693C0-800693F4       .text getActor__13dDemo_actor_cFv */
@@ -31,7 +40,7 @@ fopAc_ac_c* dDemo_actor_c::getActor() {
 /* 800693F4-80069434       .text setActor__13dDemo_actor_cFP10fopAc_ac_c */
 void dDemo_actor_c::setActor(fopAc_ac_c* ac) {
     if (ac == NULL)
-        mActorPcId = -1;
+        mActorPcId = fpcM_ERROR_PROCESS_ID_e;
     else
         mActorPcId = fopAcM_GetID(ac);
     mBckId = -1;
@@ -70,6 +79,10 @@ void dDemo_getJaiPointer(const char*, u32, int, u16*) {
 /* 800698C0-80069BC0       .text dDemo_setDemoData__FP10fopAc_ac_cUcP14mDoExt_McaMorfPCciPUsUlSc */
 BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int, u16*, u32, s8) {
     /* Nonmatching */
+    char* a_name;
+    JUT_ASSERT(0, a_name != 0);
+    void* i_key;
+    JUT_ASSERT(0, i_key != 0);
 }
 
 /* 80069BC0-80069BDC       .text JSGSetData__13dDemo_actor_cFUlPCvUl */
@@ -479,47 +492,101 @@ void* dDemo_system_c::JSGFindObject(const char* name, JStage::TEObject type) con
 
 /* 8006A92C-8006ADA0       .text __ct__15dDemo_manager_cFv */
 dDemo_manager_c::dDemo_manager_c() {
-    /* Nonmatching */
     mCurFile = NULL;
     mFrame = 0;
+    
     mMesgControl = new dMesg_tControl();
-    JUT_ASSERT(0x5b6, mMesgControl != 0);
+    JUT_ASSERT(0x5b7, mMesgControl != 0);
     mSystem = new dDemo_system_c();
     JUT_ASSERT(0x5ba, mSystem != 0);
     mControl = new JStudio::TControl();
-    // TODO: finish this once we make progress on JStudio headers
-    // mFactory->appendCreateObj(mStage);
-    // mFactory->appendCreateObj(mAudio);
-    // mFactory->appendCreateObj(mParticle);
+    JUT_ASSERT(0x5bc, mControl != 0);
+    mStage = new JStudio_JStage::TCreateObject(mSystem);
+    JUT_ASSERT(0x5be, mStage != 0);
+    mAudio = new JStudio_JAudio::TCreateObject(mDoAud_zelAudio_c::getInterface());
+    JUT_ASSERT(0x5c0, mAudio != 0);
+    mParticle = new JStudio_JParticle::TCreateObject(dPa_control_c::getEmitterManager(), mSystem);
+    JUT_ASSERT(0x5c3, mParticle != 0);
+    mMessage = new JStudio_JMessage::TCreateObject(mMesgControl);
+    JUT_ASSERT(0x5c6, mMessage != 0);
+    mFactory = new JStudio::TFactory();
+    JUT_ASSERT(0x5c9, mFactory != 0);
+    
+    // This gets compiled to a double literal, but the lack of precision indicates it was written as a float literal.
+    mControl->mSecondPerFrame = 1/30.0f;
+    mControl->setFactory(mFactory);
+    mFactory->appendCreateObject(mStage);
+    mFactory->appendCreateObject(mAudio);
+    mFactory->appendCreateObject(mParticle);
     mSystem->setObject(&mDemoObj);
-    // mFactory->appendCreateObj(mMessage);
+    mFactory->appendCreateObject(mMessage);
     mMode = 0;
 }
 
 /* 8006ADA0-8006AEFC       .text __dt__15dDemo_manager_cFv */
 dDemo_manager_c::~dDemo_manager_c() {
-    /* Nonmatching */
+    remove();
+    delete mFactory;
+    delete mMessage;
+    delete mParticle;
+    delete mAudio;
+    delete mStage;
+    delete mControl;
+    delete mSystem;
+    delete mMesgControl;
 }
-
-/* 8006AEFC-8006AF5C       .text __dt__14dMesg_tControlFv */
-// dMesg_tControl::~dMesg_tControl() {
-//     /* Nonmatching */
-// }
 
 /* 8006AF5C-8006AFBC       .text __dt__14dDemo_system_cFv */
 dDemo_system_c::~dDemo_system_c() {}
 
 /* 8006AFBC-8006B0D4       .text create__15dDemo_manager_cFPCUcP4cXyzf */
-void dDemo_manager_c::create(const u8*, cXyz*, f32) {
-    /* Nonmatching */
+bool dDemo_manager_c::create(const u8* r29, cXyz* r30, f32 f31) {
+    JStudio::TParse sp0C(mControl);
+    const void* sp08 = r29;
+    if (!sp0C.parse_next(&sp08, 0)) {
+        // "Demo data loading error!!\n"
+        OSReport_Error("デモデータ読み込みエラー！！\n");
+        return false;
+    }
+    mControl->forward(0);
+    if (r30 == NULL) {
+        mControl->transform_enable(false);
+    } else {
+        mControl->transform_enable(true);
+        mControl->transform_setOrigin(*r30, f31);
+    }
+    mFrame = 0;
+    mFrameNoMsg = 0;
+    mCurFile = (char*)r29;
+    mMode = 1;
+    return true;
+}
+
+static void dummy() {
+    // "Demo data reloading error!!\n"
+    OSReport_Error("デモデータ再読み込みエラー！！\n");
 }
 
 /* 8006B0D4-8006B12C       .text remove__15dDemo_manager_cFv */
 void dDemo_manager_c::remove() {
-    /* Nonmatching */
+    mControl->destroyObject_all();
+    mDemoObj.remove();
+    mCurFile = NULL;
+    mMode = 0;
 }
 
 /* 8006B12C-8006B1B4       .text update__15dDemo_manager_cFv */
-void dDemo_manager_c::update() {
-    /* Nonmatching */
+bool dDemo_manager_c::update() {
+    if (mCurFile == NULL) {
+        return false;
+    }
+    if (mControl->forward(1)) {
+        mFrame++;
+        if (!mControl->isSuspended()) {
+            mFrameNoMsg++;
+        }
+    } else {
+        mMode = 2;
+    }
+    return true;
 }

@@ -32,7 +32,7 @@ struct TControl {
         return mResource != NULL && mResource->getGroupID() == groupID;
     }
 
-    const char* getMessageData_cached_messageEntry_(u16 messageIndex, const void* messageEntry) const {}
+    const char* getMessageData_cached_messageEntry_(u16 messageIndex, const void* messageEntry) const { /* TODO */ return NULL; }
 
     bool isReady_update_() const { return mMessageEntry != NULL && mMessageDataStart != 0 && mBaseProcSeq != NULL; }
     bool isReady_render_() const { return mMessageEntry != NULL && mMessageDataCurrent != NULL && mBaseProcRender != NULL; }

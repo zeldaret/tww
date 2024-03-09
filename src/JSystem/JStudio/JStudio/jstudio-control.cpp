@@ -13,8 +13,9 @@
 JStudio::TControl::TControl() {
     mTransformOnSet = false;
     mTransformOnGet = false;
-    Vec aVStack_20 = {0.0f,0.0f,0.0f};
-    transform_setOrigin(aVStack_20, 0.0f);
+    Vec aVStack_20 = {0.0f, 0.0f, 0.0f};
+    transformOnSet_setOrigin(aVStack_20, 0.0f);
+    transformOnGet_setOrigin(aVStack_20, 0.0f);
 }
 
 /* 8026E110-8026E180       .text __dt__Q27JStudio8TControlFv */

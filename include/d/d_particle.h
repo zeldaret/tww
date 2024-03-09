@@ -475,7 +475,9 @@ public:
     static void offStatus(u8 status) { mStatus &= ~status; }
     static u8 mStatus;
 
+    static JPAEmitterManager* getEmitterManager() { return mEmitterMng; }
     static JPAEmitterManager* mEmitterMng;
+
     static dPa_stripesEcallBack mStripes;
     static dPa_kageroEcallBack mKagero;
     static dPa_smokeEcallBack mSmokeEcallback;

@@ -442,7 +442,7 @@ BOOL sound_attention(fopAc_ac_c* actor, void* userWork) {
 
 /* 8009EAA4-8009EB38       .text runSoundProc__12dAttention_cFv */
 void dAttention_c::runSoundProc() {
-    mEnemyBsPcId = -1;
+    mEnemyBsPcId = fpcM_ERROR_PROCESS_ID_e;
     mEnemyDistance = 10000.0f;
     if (!(mFlags & 0x80000000)) {
         fopAcIt_Executor((fopAcIt_ExecutorFunc)sound_attention, this);
@@ -639,15 +639,15 @@ fopAc_ac_c* dAttLook_c::convPId(unsigned int i_procID) {
 
 /* 8009FE40-8009FE58       .text init__10dAttLook_cFv */
 void dAttLook_c::init() {
-    field_0x0 = -1;
-    mLookTargetID = -1;
+    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mLookTargetID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }
 
 /* 8009FE58-8009FE74       .text proc__10dAttLook_cFv */
 void dAttLook_c::proc() {
     mLookTargetID = field_0x0;
-    field_0x0 = -1;
+    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }
 

@@ -52,7 +52,7 @@ bool TCreateObject::create(JStudio::TObject** newObject, const JStudio::stb::dat
     default:
         return false;
     }
-    *newObject = func(data, pJPAEmitterManager_, pJSGSystem_);
+    *newObject = func(data, mEmitterMgr, mSystem);
     return true;
 }
 

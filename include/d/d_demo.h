@@ -15,22 +15,21 @@
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTNameTab.h"
+#include "JSystem/JStudio/JStudio/jstudio-control.h"
+#include "JSystem/JStudio/JStudio_JAudio/control.h"
+#include "JSystem/JStudio/JStudio_JMessage/control.h"
+#include "JSystem/JStudio/JStudio_JParticle/control.h"
+#include "JSystem/JStudio/JStudio_JStage/control.h"
 #include "m_Do/m_Do_mtx.h"
 
-class dDemo_system_c;
-namespace JStudio {
-    class TControl {
-    public:
-        TControl();
-        /* 0x00 */ u32 field_0x00[10];
-    };
-}
-class dMesg_tControl {
+class fopAc_ac_c;
+
+class dMesg_tControl : public JMessage::TControl {
 public:
     dMesg_tControl();
-    /* 0x00 */ u32 field_0x00[29];
-};
-class fopAc_ac_c;
+
+    /* 0x3C */ u8 field_0x3C[0x74 - 0x3C];
+};  // Size: 0x74
 
 class dDemo_actor_c : public JStage::TActor {
 public:
@@ -243,9 +242,9 @@ public:
     dDemo_manager_c();
     ~dDemo_manager_c();
 
-    void create(u8 const*, cXyz*, f32);
+    bool create(const u8*, cXyz*, f32);
     void remove();
-    void update();
+    bool update();
 
     int getFrame() { return mFrame; }
     u32 getFrameNoMsg() { return mFrameNoMsg; }
@@ -253,12 +252,12 @@ public:
 
     /* 0x00 */ dDemo_system_c* mSystem;
     /* 0x04 */ JStudio::TControl* mControl;
-    /* 0x08 */ void* mStage;
-    /* 0x0C */ void* mAudio;
-    /* 0x10 */ void* mParticle;
-    /* 0x14 */ void* mFactory;
+    /* 0x08 */ JStudio_JStage::TCreateObject* mStage;
+    /* 0x0C */ JStudio_JAudio::TCreateObject* mAudio;
+    /* 0x10 */ JStudio_JParticle::TCreateObject* mParticle;
+    /* 0x14 */ JStudio::TFactory* mFactory;
     /* 0x18 */ dMesg_tControl* mMesgControl;
-    /* 0x1C */ void* mMessage;
+    /* 0x1C */ JStudio_JMessage::TCreateObject* mMessage;
     /* 0x20 */ dDemo_object_c mDemoObj;
     /* 0xD0 */ char* mCurFile;
     /* 0xD4 */ int mFrame;
