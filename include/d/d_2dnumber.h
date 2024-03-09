@@ -1,37 +1,60 @@
 #ifndef D_2DNUMBER_H
 #define D_2DNUMBER_H
 
-#include "dolphin/types.h"
+#include "d/d_drawlist.h"
 
 struct ResTIMG;
 class JUTFont;
 class fopMsgM_pane_class;
 
-class dDlst_2DNumber_c {
+class dDlst_2DNumber_c : public dDlst_base_c {
 public:
     dDlst_2DNumber_c();
     ~dDlst_2DNumber_c();
-    void init(int, s16, s16, s16, s16, u8);
+    bool init(int, s16, s16, s16, s16, u8);
     void draw();
+
+private:
+    /* 0x04 */ J2DPicture* mPicture[4];
+    /* 0x14 */ cXy mPos[4];
+    /* 0x34 */ f32 mWidth;
+    /* 0x38 */ f32 mHeight;
+    /* 0x3C */ int mValue;
+    /* 0x40 */ u8 mFlag;
+    /* 0x41 */ u8 mDigitNum;
 };
 
-class dDlst_2DMinigame_c {
+class dDlst_2DMinigame_c : public dDlst_base_c {
 public:
-    void init(ResTIMG*, ResTIMG*);
+    bool init(ResTIMG* img1, ResTIMG* img2);
     void draw();
+
+public:
+    /* 0x04 */ J2DPicture* mPicture[3];
+    /* 0x10 */ cXy mPos1;
+    /* 0x18 */ cXy mSize1;
+    /* 0x20 */ cXy mPos2;
+    /* 0x28 */ cXy mSize2;
 };
 
-class dDlst_2DBattery_c {
+class dDlst_2DBattery_c : public dDlst_base_c {
 public:
-    void init(ResTIMG*, ResTIMG*, ResTIMG*, ResTIMG*);
+    bool init(ResTIMG*, ResTIMG*, ResTIMG*, ResTIMG*);
     void setRotate(float);
     void draw();
 };
 
-class dDlst_2DObject_c {
+class dDlst_2DObject_c : public dDlst_base_c {
 public:
-    void init(ResTIMG*, ResTIMG*);
+    bool init(ResTIMG*, ResTIMG*);
     void draw();
+
+public:
+    /* 0x04 */ J2DPicture* mPicture[2];
+    /* 0x0C */ cXy mPos;
+    /* 0x10 */ cXy mSize[2];
+    /* 0x18 */ f32 mScale;
+    /* 0x1C */ u8 mCurrentNo;
 };
 
 class dDlst_2DOutFont_c {

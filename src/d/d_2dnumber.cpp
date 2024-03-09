@@ -4,39 +4,96 @@
 //
 
 #include "d/d_2dnumber.h"
-#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "printf.h"
 
 /* 800C8498-800C84B4       .text __ct__16dDlst_2DNumber_cFv */
 dDlst_2DNumber_c::dDlst_2DNumber_c() {
-    /* Nonmatching */
 }
 
 /* 800C84B4-800C8510       .text __dt__16dDlst_2DNumber_cFv */
 dDlst_2DNumber_c::~dDlst_2DNumber_c() {
-    /* Nonmatching */
 }
 
 /* 800C8510-800C8644       .text init__16dDlst_2DNumber_cFissssUc */
-void dDlst_2DNumber_c::init(int, s16, s16, s16, s16, u8) { /* Nonmatching */
+bool dDlst_2DNumber_c::init(int digitNum, s16 x, s16 y, s16 w, s16 h, u8 flag) { /* Nonmatching */
+    mDigitNum = digitNum;
+    mFlag = flag;
+    mWidth = w;
+    mHeight = h;
+
+    for (s32 i = 0; i < mDigitNum; i++) {
+        mPicture[i] = new J2DPicture("rupy_num_00.bti");
+        if (mPicture[i] == NULL)
+            return false;
+
+        mPos[i].x = x - w * i;
+        mPos[i].y = y;
+    }
+
+    return true;
 }
 
 /* 800C8644-800C874C       .text draw__16dDlst_2DNumber_cFv */
 void dDlst_2DNumber_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    s32 value = mValue;
+    
+    graf->setPort();
+    if (mFlag & 2)
+        return;
+
+    for (s32 i = 0; i < mDigitNum; i++) {
+        if (i != 0 && value == 0 && !(mFlag & 1))
+            break;
+
+        s32 digit = value % 10;
+        value /= 10;
+
+        char buf[16];
+        sprintf(buf, "rupy_num_%02d.bti", digit);
+        mPicture[i]->changeTexture(buf, 0);
+        mPicture[i]->draw(mPos[i].x, mPos[i].y, mWidth, mHeight, false, false, false);
+    }
 }
 
 /* 800C874C-800C8944       .text init__18dDlst_2DMinigame_cFP7ResTIMGP7ResTIMG */
-void dDlst_2DMinigame_c::init(ResTIMG*, ResTIMG*) {
+bool dDlst_2DMinigame_c::init(ResTIMG* img1, ResTIMG* img2) {
     /* Nonmatching */
+    mPicture[0] = new J2DPicture(img1);
+    if (mPicture[0] == NULL)
+        return false;
+
+    mPicture[1] = new J2DPicture(img2);
+    if (mPicture[1] == NULL)
+        return false;
+
+    mPicture[2] = new J2DPicture(img2);
+    if (mPicture[2] == NULL)
+        return false;
+
+    mSize1.x = img1->width * 1.33f;
+    mSize1.y = img1->height * 1.33f;
+    mSize2.x = img1->width * 1.16f;
+    mSize2.y = img1->height * 1.16f;
+
+    mPicture[2]->setCornerColor(0x000000FF);
+    return true;
 }
 
 /* 800C8944-800C8A00       .text draw__18dDlst_2DMinigame_cFv */
 void dDlst_2DMinigame_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+
+    mPicture[2]->draw(mPos2.x + 4.0f, mPos2.y + 4.0f, mSize2.x, mSize2.y, false, false, false);
+    mPicture[1]->draw(mPos2.x, mPos2.y, mSize2.x, mSize2.y, false, false, false);
+    mPicture[0]->draw(mPos1.x, mPos1.y, mSize1.x, mSize1.y, false, false, false);
 }
 
 /* 800C8A00-800C8FAC       .text init__17dDlst_2DBattery_cFP7ResTIMGP7ResTIMGP7ResTIMGP7ResTIMG */
-void dDlst_2DBattery_c::init(ResTIMG*, ResTIMG*, ResTIMG*, ResTIMG*) {
+bool dDlst_2DBattery_c::init(ResTIMG*, ResTIMG*, ResTIMG*, ResTIMG*) {
     /* Nonmatching */
 }
 
@@ -51,13 +108,34 @@ void dDlst_2DBattery_c::draw() {
 }
 
 /* 800C9348-800C946C       .text init__16dDlst_2DObject_cFP7ResTIMGP7ResTIMG */
-void dDlst_2DObject_c::init(ResTIMG*, ResTIMG*) {
-    /* Nonmatching */
+bool dDlst_2DObject_c::init(ResTIMG* img1, ResTIMG* img2) {
+    mPicture[0] = new J2DPicture(img1);
+    if (mPicture[0] == NULL)
+        return false;
+    mSize[0].x = img1->width;
+    mSize[0].y = img1->height;
+
+    mPicture[1] = new J2DPicture(img2);
+    if (mPicture[1] == NULL)
+        return false;
+    mSize[1].x = img2->width;
+    mSize[1].y = img2->height;
+    mScale = 1.0f;
+    mCurrentNo = 0;
+
+    return true;
 }
 
 /* 800C946C-800C9520       .text draw__16dDlst_2DObject_cFv */
 void dDlst_2DObject_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+
+    if (mCurrentNo == 0) {
+        mPicture[0]->draw(mPos.x, mPos.y, mSize[0].x * mScale, mSize[0].y * mScale, false, false, false);
+    } else {
+        mPicture[1]->draw(mPos.x, mPos.y, mSize[1].x * mScale, mSize[1].y * mScale, false, false, false);
+    }
 }
 
 /* 800C9520-800C9690       .text initial__17dDlst_2DOutFont_cFv */
