@@ -12,17 +12,33 @@ namespace {
 
 /* 8029EDA4-8029EDCC       .text process_setMessageIndex_reserved___Q28JMessage23@unnamed@processor_cpp@FUs */
 bool process_setMessageIndex_reserved_(u16 messageIndex) {
-    /* Nonmatching */
+    switch (messageIndex) {
+    case 0xFFFF:
+        return false;
+    default:
+        return false;
+    }
 }
 
 /* 8029EDCC-8029EE18       .text process_setMessage_index___Q28JMessage23@unnamed@processor_cpp@FPQ28JMessage8TControlUs */
-void process_setMessage_index_(TControl*, u16) {
-    /* Nonmatching */
+bool process_setMessage_index_(TControl* control, u16 index) {
+    if (index >= 0xFF00) {
+        return process_setMessageIndex_reserved_(index);
+    } else {
+        control->mMessageIndex = index;
+        return !!control->setMessageCode_flush_();
+    }
 }
 
 /* 8029EE18-8029EE6C       .text process_setMessage_code___Q28JMessage23@unnamed@processor_cpp@FPQ28JMessage8TControlUl */
-void process_setMessage_code_(TControl*, u32) {
+bool process_setMessage_code_(TControl* control, u32 code) {
     /* Nonmatching */
+    u16 messageIndex = code & 0xFFFF;
+    if (messageIndex >= 0xFF00) {
+        return process_setMessageIndex_reserved_(code);
+    } else {
+        return !!control->setMessageCode(code);
+    }
 }
 
 }; // namespace
@@ -45,10 +61,10 @@ const char* TProcessor::popCurrent() {
     mStack.pop();
 }
 
-struct SelectCallbackWork {
+struct SelectCallBackWork {
     /* 0x00 */ TProcessor::OnSelectBeginCallBack mCallBack;
     /* 0x04 */ const char* mBase;
-    /* 0x08 */ const void* mOffset;
+    /* 0x08 */ const void* mTable;
     /* 0x0C */ u32 mRest;
 };
 
@@ -56,10 +72,10 @@ struct SelectCallbackWork {
 void TProcessor::on_select_begin(OnSelectBeginCallBack callback, const void* offs, const char* base, u32 rest) {
     if (mStack.IsStorable()) {
         mProcess.reset_select();
-        SelectCallbackWork* work = (SelectCallbackWork*)&mProcess.mCallBackWork;
+        SelectCallBackWork* work = (SelectCallBackWork*)&mProcess.mCallBackWork;
         work->mCallBack = callback;
         work->mBase = base;
-        work->mOffset = offs;
+        work->mTable = offs;
         work->mRest = rest;
 
         const char *v = work->mCallBack(this);
@@ -78,7 +94,7 @@ void TProcessor::on_select_end() {
 /* 8029EFA0-8029EFFC       .text on_select_separate__Q28JMessage10TProcessorFv */
 void TProcessor::on_select_separate() {
     popCurrent();
-    SelectCallbackWork* work = (SelectCallbackWork*)&mProcess.mCallBackWork;
+    SelectCallBackWork* work = (SelectCallBackWork*)&mProcess.mCallBackWork;
     const char *v = work->mCallBack(this);
     pushCurrent(v);
     do_select_separate();
@@ -137,13 +153,38 @@ void TProcessor::on_tag_() {
 }
 
 /* 8029F120-8029F248       .text do_tag___Q28JMessage10TProcessorFUlPCvUl */
-bool TProcessor::do_tag_(u32, const void*, u32) {
-    /* Nonmatching */
+bool TProcessor::do_tag_(u32 tag, const void* data, u32 size) {
+    u16 code = data::getTagCode(tag);
+    u8 group = data::getTagGroup(tag);
+
+    switch (group) {
+    case 0xFF:
+        if (!do_systemTagCode(code, data, size)) {
+            do_systemTagCode_(code, data, size);
+        }
+        break;
+    case 0xFE:
+        pushCurrent(mControl->on_word(code));
+        break;
+    case 0xFD:
+        pushCurrent(mControl->on_message_limited(code));
+        break;
+    case 0xF6:
+        on_select_begin(process_select_limited_, data, (char*)data + size, code);
+        break;
+    case 0xF5:
+        on_select_begin(process_select_, data, (char*)data + size, code);
+        break;
+    }
 }
 
 /* 8029F248-8029F2A0       .text do_systemTagCode___Q28JMessage10TProcessorFUsPCvUl */
-void TProcessor::do_systemTagCode_(u16, const void*, u32) {
-    /* Nonmatching */
+void TProcessor::do_systemTagCode_(u16 code, const void* data, u32 size) {
+    switch (code) {
+    case 0x05:
+        pushCurrent(mControl->on_message(JGadget::binary::TParseValue<u32, JGadget::binary::TParseValue_endian_big_>::parse(data)));
+        break;
+    }
 }
 
 /* 8029F2A0-8029F37C       .text process_character___Q28JMessage10TProcessorFv */
@@ -178,7 +219,7 @@ bool TProcessor::process_onCharacterEnd_normal_(TProcessor* proc) {
 
 /* 8029F3C4-8029F40C       .text process_onCharacterEnd_select___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
 bool TProcessor::process_onCharacterEnd_select_(TProcessor* proc) {
-    SelectCallbackWork* work = (SelectCallbackWork*) &proc->mProcess.mCallBackWork;
+    SelectCallBackWork* work = (SelectCallBackWork*) &proc->mProcess.mCallBackWork;
     work->mRest--;
     if (work->mRest != 0) {
         proc->on_select_separate();
@@ -191,24 +232,33 @@ bool TProcessor::process_onCharacterEnd_select_(TProcessor* proc) {
 
 /* 8029F40C-8029F428       .text process_select_limited___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
 const char* TProcessor::process_select_limited_(TProcessor* proc) {
-    SelectCallbackWork* work = (SelectCallbackWork*) &proc->mProcess.mCallBackWork;
-    u16 offs = ((const u16*)work->mOffset)[0];
-    work->mOffset = (const char*)work->mOffset + sizeof(offs);
+    SelectCallBackWork* work = (SelectCallBackWork*) &proc->mProcess.mCallBackWork;
+    u16 offs = ((const u16*)work->mTable)[0];
+    work->mTable = (const char*)work->mTable + sizeof(offs);
     return &work->mBase[offs];
 }
 
 /* 8029F428-8029F444       .text process_select___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
 const char* TProcessor::process_select_(TProcessor* proc) {
     /* Nonmatching */
-    SelectCallbackWork* work = (SelectCallbackWork*) &proc->mProcess.mCallBackWork;
-    u32 offs = ((const u32*)work->mOffset)[0];
-    work->mOffset = (const char*)work->mOffset + sizeof(offs);
+    SelectCallBackWork* work = (SelectCallBackWork*) &proc->mProcess.mCallBackWork;
+    u32 offs = ((const u32*)work->mTable)[0];
+    work->mTable = (const char*)work->mTable + sizeof(offs);
     return &work->mBase[offs];
 }
 
+struct JumpCallBackWork {
+    /* 0x00 */ u32 mTarget;
+};
+
+struct BranchCallBackWork {
+    /* 0x00 */ const void* mTable;
+    /* 0x04 */ u32 mTarget;
+};
+
 /* 8029F444-8029F480       .text __ct__Q28JMessage18TSequenceProcessorFPQ28JMessage8TControl */
 TSequenceProcessor::TSequenceProcessor(TControl* control) : TProcessor(control) {
-    mStatus = 0;
+    mStatus = kStatus_Begin;
 }
 
 /* 8029F480-8029F4E0       .text __dt__Q28JMessage18TSequenceProcessorFv */
@@ -216,8 +266,52 @@ TSequenceProcessor::~TSequenceProcessor() {
 }
 
 /* 8029F4E0-8029F658       .text process__Q28JMessage18TSequenceProcessorFPCc */
-char* TSequenceProcessor::process(const char*) {
+const char* TSequenceProcessor::process(const char* stop) {
     /* Nonmatching */
+    do {
+        switch (mStatus) {
+        case kStatus_Normal:
+            break;
+        case kStatus_Jump:
+            if (!on_jump_isReady())
+                return mCurrent;
+
+            mStatus = kStatus_Normal;
+            if (mProcess.mCallBack(this))
+                on_jump(mControl->getMessageEntry(), mControl->getMessageData_begin());
+            break;
+        case kStatus_Branch:
+            {
+                BranchCallBackWork* work = (BranchCallBackWork*) &mProcess.mCallBackWork;
+                u32 rt = on_branch_queryResult();
+
+                if (rt > 0xFFFF) {
+                    switch (rt) {
+                    case -1:
+                        return mCurrent;
+                    case -2:
+                        mStatus = kStatus_Normal;
+                        break;
+                    }
+                } else {
+                    mStatus = kStatus_Normal;
+                    if (rt < work->mTarget && mProcess.mCallBack(this))
+                        on_branch(mControl->getMessageEntry(), mControl->getMessageData_begin());
+                }
+            }
+            break;
+        }
+
+        if (mCurrent == stop) {
+            do_end_();
+            return NULL;
+        }
+
+        if (!on_isReady())
+            return mCurrent;
+    } while (process_character_());
+
+    return NULL;
 }
 
 /* 8029F658-8029F684       .text on_isReady__Q28JMessage18TSequenceProcessorFv */
@@ -225,15 +319,11 @@ bool TSequenceProcessor::on_isReady() {
     return do_isReady();
 }
 
-struct JumpCallbackWork {
-    /* 0x00 */ u32 mTarget;
-};
-
 /* 8029F684-8029F698       .text on_jump_register__Q28JMessage18TSequenceProcessorFPFPQ28JMessage18TSequenceProcessor_bUl */
 void TSequenceProcessor::on_jump_register(OnJumpRegisterCallBack callback, u32 target) {
-    mStatus = 3;
+    mStatus = kStatus_Jump;
     mProcess.mCallBack = (ProcessorCallBack)callback;
-    JumpCallbackWork* work = (JumpCallbackWork*) &mProcess.mCallBackWork;
+    JumpCallBackWork* work = (JumpCallBackWork*) &mProcess.mCallBackWork;
     work->mTarget = target;
 }
 
@@ -248,17 +338,12 @@ void TSequenceProcessor::on_jump(const void* target, const char* v) {
     do_jump(target, v);
 }
 
-struct BranchCallbackWork {
-    /* 0x00 */ const void* mOffset;
-    /* 0x04 */ u32 mRest;
-};
-
 /* 8029F720-8029F730       .text on_branch_register__Q28JMessage18TSequenceProcessorFPFPQ28JMessage18TSequenceProcessorUl_bPCvUl */
-void TSequenceProcessor::on_branch_register(OnBranchRegisterCallBack callback, const void* offset, u32 rest) {
+void TSequenceProcessor::on_branch_register(OnBranchRegisterCallBack callback, const void* offset, u32 target) {
     mProcess.mCallBack = (ProcessorCallBack)callback;
-    BranchCallbackWork* work = (BranchCallbackWork*) &mProcess.mCallBackWork;
-    work->mOffset = offset;
-    work->mRest = rest;
+    BranchCallBackWork* work = (BranchCallBackWork*) &mProcess.mCallBackWork;
+    work->mTable = offset;
+    work->mTarget = target;
 }
 
 /* 8029F730-8029F764       .text on_branch_query__Q28JMessage18TSequenceProcessorFUs */
@@ -273,8 +358,9 @@ int TSequenceProcessor::on_branch_queryResult() {
 }
 
 /* 8029F790-8029F7EC       .text on_branch__Q28JMessage18TSequenceProcessorFPCvPCc */
-void TSequenceProcessor::on_branch(const void*, const char*) {
-    /* Nonmatching */
+void TSequenceProcessor::on_branch(const void* target, const char* v) {
+    reset_(v);
+    do_branch(target, v);
 }
 
 /* 8029F7EC-8029F7F0       .text do_begin__Q28JMessage18TSequenceProcessorFPCvPCc */
@@ -313,69 +399,105 @@ void TSequenceProcessor::do_branch(const void*, const char*) {
 }
 
 /* 8029F818-8029F868       .text reset___Q28JMessage18TSequenceProcessorFPCc */
-void TSequenceProcessor::reset_(const char*) {
-    /* Nonmatching */
+void TSequenceProcessor::reset_(const char* v) {
+    TProcessor::reset_(v);
+    mStatus = kStatus_Begin;
+    if (v != NULL)
+        mStatus = kStatus_Normal;
 }
 
 /* 8029F868-8029F894       .text do_begin___Q28JMessage18TSequenceProcessorFPCvPCc */
-void TSequenceProcessor::do_begin_(const void*, const char*) {
-    /* Nonmatching */
+void TSequenceProcessor::do_begin_(const void* target, const char* v) {
+    do_begin(target, v);
 }
 
 /* 8029F894-8029F8C8       .text do_end___Q28JMessage18TSequenceProcessorFv */
 void TSequenceProcessor::do_end_() {
-    /* Nonmatching */
+    mStatus = kStatus_End;
+    do_end();
 }
 
 /* 8029F8C8-8029F9D4       .text do_tag___Q28JMessage18TSequenceProcessorFUlPCvUl */
-bool TSequenceProcessor::do_tag_(u32, const void*, u32) {
-    /* Nonmatching */
+bool TSequenceProcessor::do_tag_(u32 tag, const void* data, u32 size) {
+    const char* datap = (const char*)data;
+    u16 code = data::getTagCode(tag);
+    u8 group = data::getTagGroup(tag);
+
+    switch (group) {
+    case 0xFC:
+        on_jump_register(process_jump_limited_, code);
+        break;
+    case 0xFB:
+        on_branch_register(process_branch_limited_, datap, code);
+        break;
+    case 0xFA:
+        on_branch_register(process_branch_, datap, code);
+        break;
+    case 0xF9:
+        on_branch_query(code);
+        break;
+    case 0xF8:
+        on_branch_register(process_branch_limited_, datap + 2, JGadget::binary::TParseValue<u16, JGadget::binary::TParseValue_endian_big_>::parse(datap));
+        on_branch_query(code);
+        break;
+    case 0xF7:
+        on_branch_register(process_branch_, datap + 2, JGadget::binary::TParseValue<u16, JGadget::binary::TParseValue_endian_big_>::parse(datap));
+        on_branch_query(code);
+        break;
+    default:
+        TProcessor::do_tag_(tag, data, size);
+        break;
+    }
 }
 
 /* 8029F9D4-8029FA2C       .text do_systemTagCode___Q28JMessage18TSequenceProcessorFUsPCvUl */
-void TSequenceProcessor::do_systemTagCode_(u16 p1, const void* p2, u32 p3) {
-    /* Nonmatching */
-    switch (p1) {
-    case 6:
-        u32 v = *(u32*)p2;
-        on_jump_register(process_jump_, v);
-        break;
+void TSequenceProcessor::do_systemTagCode_(u16 code, const void* data, u32 size) {
+    switch (code) {
     case 0:
     case 1:
     case 2:
     case 3:
         break;
+    case 6:
+        u32 target = JGadget::binary::TParseValue<u32, JGadget::binary::TParseValue_endian_big_>::parse(data);
+        on_jump_register(process_jump_, target);
+        break;
     case 4:
     case 5:
     default:
-        TProcessor::do_systemTagCode_(p1, p2, p3);
+        TProcessor::do_systemTagCode_(code, data, size);
         break;
     }
 }
 
 /* 8029FA2C-8029FA5C       .text process_jump_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
-bool TSequenceProcessor::process_jump_limited_(TSequenceProcessor*) {
-    /* Nonmatching */
+bool TSequenceProcessor::process_jump_limited_(TSequenceProcessor* proc) {
+    JumpCallBackWork* work = (JumpCallBackWork*) &proc->mProcess.mCallBackWork;
+    process_setMessage_index_(proc->mControl, work->mTarget);
 }
 
 /* 8029FA5C-8029FA88       .text process_jump___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
-bool TSequenceProcessor::process_jump_(TSequenceProcessor*) {
-    /* Nonmatching */
+bool TSequenceProcessor::process_jump_(TSequenceProcessor* proc) {
+    JumpCallBackWork* work = (JumpCallBackWork*) &proc->mProcess.mCallBackWork;
+    process_setMessage_code_(proc->mControl, work->mTarget);
 }
 
 /* 8029FA88-8029FAB8       .text process_branch_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */
-bool TSequenceProcessor::process_branch_limited_(TSequenceProcessor*, u32) {
+bool TSequenceProcessor::process_branch_limited_(TSequenceProcessor* proc, u32 choice) {
     /* Nonmatching */
+    BranchCallBackWork* work = (BranchCallBackWork*) &proc->mProcess.mCallBackWork;
+    process_setMessage_index_(proc->mControl, ((u16*)work->mTable)[choice]);
 }
 
 /* 8029FAB8-8029FAE8       .text process_branch___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */
-bool TSequenceProcessor::process_branch_(TSequenceProcessor*, u32) {
+bool TSequenceProcessor::process_branch_(TSequenceProcessor* proc, u32 choice) {
     /* Nonmatching */
+    BranchCallBackWork* work = (BranchCallBackWork*) &proc->mProcess.mCallBackWork;
+    process_setMessage_code_(proc->mControl, ((u32*)work->mTable)[choice]);
 }
 
 /* 8029FAE8-8029FB20       .text __ct__Q28JMessage19TRenderingProcessorFPQ28JMessage8TControl */
 TRenderingProcessor::TRenderingProcessor(TControl* control) : TProcessor(control) {
-    /* Nonmatching */
 }
 
 /* 8029FB20-8029FB80       .text __dt__Q28JMessage19TRenderingProcessorFv */
@@ -383,8 +505,15 @@ TRenderingProcessor::~TRenderingProcessor() {
 }
 
 /* 8029FB80-8029FBF0       .text process__Q28JMessage19TRenderingProcessorFPCc */
-void TRenderingProcessor::process(const char*) {
+const char* TRenderingProcessor::process(const char* stop) {
     /* Nonmatching */
+    do {
+        if (mCurrent == stop) {
+            do_end_();
+            return NULL;
+        }
+    } while(process_character_());
+    return NULL;
 }
 
 /* 8029FBF0-8029FBF4       .text do_begin__Q28JMessage19TRenderingProcessorFPCvPCc */
@@ -396,23 +525,46 @@ void TRenderingProcessor::do_end() {
 }
 
 /* 8029FBF8-8029FC24       .text do_begin___Q28JMessage19TRenderingProcessorFPCvPCc */
-void TRenderingProcessor::do_begin_(const void*, const char*) {
-    /* Nonmatching */
+void TRenderingProcessor::do_begin_(const void* entry, const char* data) {
+    do_begin(entry, data);
 }
 
 /* 8029FC24-8029FC50       .text do_end___Q28JMessage19TRenderingProcessorFv */
 void TRenderingProcessor::do_end_() {
-    /* Nonmatching */
+    do_end();
 }
 
 /* 8029FC50-8029FC84       .text do_tag___Q28JMessage19TRenderingProcessorFUlPCvUl */
-bool TRenderingProcessor::do_tag_(u32, const void*, u32) {
-    /* Nonmatching */
+bool TRenderingProcessor::do_tag_(u32 tag, const void* data, u32 size) {
+    u8 group = data::getTagGroup(tag);
+
+    switch (group) {
+    case 0xFC:
+    case 0xFB:
+    case 0xFA:
+    case 0xF9:
+    case 0xF8:
+    case 0xF7:
+        break;
+    default:
+        TProcessor::do_tag_(tag, data, size);
+        break;
+    }
 }
 
 /* 8029FC84-8029FCC4       .text do_systemTagCode___Q28JMessage19TRenderingProcessorFUsPCvUl */
-void TRenderingProcessor::do_systemTagCode_(u16, const void*, u32) {
-    /* Nonmatching */
+void TRenderingProcessor::do_systemTagCode_(u16 code, const void* data, u32 size) {
+    switch (code) {
+    case 0x06:
+    case 0x03:
+    case 0x02:
+    case 0x01:
+    case 0x00:
+        break;
+    default:
+        TProcessor::do_systemTagCode_(code, data, size);
+        break;
+    }
 }
 
 }; // namespace JMessage

@@ -4,7 +4,7 @@
 //
 
 #include "JSystem/JMessage/control.h"
-#include "dolphin/types.h"
+#include "JSystem/JMessage/resource.h"
 
 /* 8029E930-8029E970       .text __ct__Q28JMessage8TControlFv */
 JMessage::TControl::TControl()
@@ -12,11 +12,11 @@ JMessage::TControl::TControl()
     , mResource(NULL)
     , mBaseProcSeq(NULL)
     , mBaseProcRender(NULL)
-    , mMessageCode(0)
+    , mGroupID(0)
     , mMessageIndex(0)
-    , mResourceCache(NULL)
-    , mMessageBegin(NULL)
-    , _20(NULL)
+    , mMessageEntry(NULL)
+    , mMessageDataStart(NULL)
+    , mMessageDataCurrent(NULL)
     , mCurrentText(NULL)
 {
     /* Nonmatching */
@@ -26,13 +26,26 @@ JMessage::TControl::TControl()
 JMessage::TControl::~TControl() {}
 
 /* 8029E9B8-8029EA34       .text getResource_groupID__Q28JMessage8TControlCFUs */
-void JMessage::TControl::getResource_groupID(u16) const {
-    /* Nonmatching */
+JMessage::TResource* JMessage::TControl::getResource_groupID(u16 groupID) const {
+    if (isResourceCached_groupID(groupID))
+        return mResource;
+
+    if (mResourceContainer == NULL)
+        return NULL;
+
+    mResource = mResourceContainer->Get_groupID(groupID);
+    return mResource;
 }
 
 /* 8029EA34-8029EAC8       .text getMessageData__Q28JMessage8TControlCFUsUs */
-void JMessage::TControl::getMessageData(u16, u16) const {
-    /* Nonmatching */
+const char* JMessage::TControl::getMessageData(u16 groupID, u16 messageIndex) const {
+    TResource* resource = getResource_groupID(groupID);
+    // this seems like an inline
+    void *messageEntry = resource == NULL ? NULL : resource->getMessageData_messageIndex(messageIndex);
+    if (messageEntry == NULL)
+        return NULL;
+    u32 offs = *(u32*)messageEntry;
+    return mResource->mMessageData + offs;
 }
 
 /* 8029EAC8-8029EB1C       .text reset__Q28JMessage8TControlFv */
@@ -55,14 +68,14 @@ bool JMessage::TControl::update() {
     }
 
     if (mCurrentText == NULL) {
-        mCurrentText = mMessageBegin;
-        mBaseProcSeq->setBegin(mResourceCache, mMessageBegin);
+        mCurrentText = mMessageDataStart;
+        mBaseProcSeq->setBegin(mMessageEntry, mMessageDataStart);
     }
 
     mCurrentText = mBaseProcSeq->process(NULL);
 
     if (!mCurrentText) {
-        mMessageBegin = NULL;
+        mMessageDataStart = NULL;
         return false;
     }
 
@@ -76,27 +89,39 @@ void JMessage::TControl::render() {
         return;
     }
 
-    mBaseProcRender->setBegin(mResourceCache, _20);
-    mBaseProcRender->field_0x0C = mEntry;
+    mBaseProcRender->setBegin(mMessageEntry, mMessageDataCurrent);
+    // mBaseProcRender->field_0x0C = field_0x28;
     mBaseProcRender->mStack = mRenderStack;
     mBaseProcRender->process(mCurrentText);
 }
 
 /* 8029ECCC-8029ECD4       .text do_word__Q28JMessage8TControlFUl */
-bool JMessage::TControl::do_word(u32) {
-    return false;
+const char* JMessage::TControl::do_word(u32) {
+    return NULL;
 }
 
 /* 8029ECD4-8029ED88       .text setMessageCode_flush___Q28JMessage8TControlFv */
 bool JMessage::TControl::setMessageCode_flush_() {
     /* Nonmatching */
+    reset_();
+    u16 messageIndex = mMessageIndex;
+    TResource* resource = getResource_groupID(mGroupID);
+    void *messageEntry = resource == NULL ? NULL : resource->getMessageData_messageIndex(messageIndex);
+    mMessageEntry = messageEntry;
+    if (mMessageEntry == NULL)
+        return false;
+
+    u32 offs = *(u32*)messageEntry;
+    mMessageDataStart = mResource->mMessageData + offs;
+    mMessageDataCurrent = mMessageDataStart;
+    return true;
 }
 
 /* 8029ED88-8029EDA4       .text reset___Q28JMessage8TControlFv */
 void JMessage::TControl::reset_() {
-    mResourceCache = NULL;
-    mMessageBegin = NULL;
-    _20 = NULL;
+    mMessageEntry = NULL;
+    mMessageDataStart = NULL;
+    mMessageDataCurrent = NULL;
     mCurrentText = NULL;
     mRenderStack.clear();
 }

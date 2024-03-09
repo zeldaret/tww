@@ -5,51 +5,64 @@
 #include "dolphin/types.h"
 
 namespace JMessage {
+class TResource;
+
 struct TControl {
     TControl();
     virtual ~TControl();
+    virtual const char* do_word(u32);
 
     void reset();
     bool update();
     void render();
-    void setMessageCode(u32 param_1) {
-        setMessageCode(param_1 >> 0x10, param_1);
+    bool setMessageCode(u32 packed) {
+        return setMessageCode(packed >> 16, packed & 0xFFFF);
     }
-    void setMessageCode(u16 message_code, u16 message_index) {
-        mMessageCode = message_code;
-        mMessageIndex = message_index;
-        setMessageCode_flush_();
+    bool setMessageCode(u16 groupID, u16 messageIndex) {
+        mGroupID = groupID;
+        mMessageIndex = messageIndex;
+        return setMessageCode_flush_();
     }
     bool setMessageCode_flush_();
 
-    bool isReady_update_() const { return mResourceCache != NULL && mMessageBegin != 0 && mBaseProcSeq != NULL; }
-    bool isReady_render_() const { return mResourceCache != NULL && _20 != NULL && mBaseProcRender != NULL; }
+    const void* getMessageEntry() const { return mMessageEntry; }
+    const char* getMessageData_begin() const { return mMessageDataStart; }
+
+    bool isResourceCached_groupID(u16 groupID) const {
+        return mResource != NULL && mResource->getGroupID() == groupID;
+    }
+
+    const char* getMessageData_cached_messageEntry_(u16 messageIndex, const void* messageEntry) const {}
+
+    bool isReady_update_() const { return mMessageEntry != NULL && mMessageDataStart != 0 && mBaseProcSeq != NULL; }
+    bool isReady_render_() const { return mMessageEntry != NULL && mMessageDataCurrent != NULL && mBaseProcRender != NULL; }
 
     TProcessor* getProcessor() const {
         return mBaseProcSeq != NULL ? (TProcessor*)mBaseProcSeq : (TProcessor*)mBaseProcRender;
     }
 
-    const char* getMessageText_begin() const { return mMessageBegin; }
-    void* getMessageEntry() const { return mEntry; }
     void setSequenceProcessor(TSequenceProcessor* processor) { mBaseProcSeq = processor; }
     void setRenderingProcessor(TRenderingProcessor* processor) { mBaseProcRender = processor; }
 
-    void getResource_groupID(u16) const;
-    void getMessageData(u16, u16) const;
-    bool do_word(u32);
+    const char* on_message(u32 code) { return getMessageData(code >> 16, code); }
+    const char* on_message_limited(u16 messageIndex) { return getMessageData(mGroupID, messageIndex); }
+    const char* on_word(u16 messageIndex) { return do_word(messageIndex); }
+
+    TResource* getResource_groupID(u16) const;
+    const char* getMessageData(u16, u16) const;
     void reset_();
 
     /* 0x04 */ TResourceContainer* mResourceContainer;
-    /* 0x08 */ void* mResource;
+    /* 0x08 */ mutable TResource* mResource;
     /* 0x0C */ TSequenceProcessor* mBaseProcSeq;
     /* 0x10 */ TRenderingProcessor* mBaseProcRender;
-    /* 0x14 */ u16 mMessageCode;
+    /* 0x14 */ u16 mGroupID;
     /* 0x16 */ u16 mMessageIndex;
-    /* 0x18 */ const TResource* mResourceCache;
-    /* 0x1C */ const char* mMessageBegin;
-    /* 0x20 */ const char* _20;
+    /* 0x18 */ const void* mMessageEntry;
+    /* 0x1C */ const char* mMessageDataStart;
+    /* 0x20 */ const char* mMessageDataCurrent;
     /* 0x24 */ const char* mCurrentText;
-    /* 0x28 */ void* mEntry;
+    /* 0x28 */ void* field_0x28;
     /* 0x2C */ TProcessor::TStack_ mRenderStack;
 };
 };  // namespace JMessage

@@ -26,6 +26,19 @@ namespace JMessage {
         void setData_block_stringAttribute(const void* p) { mStringAttribute = (const char*)p; }
         void setData_block_messageID(const void* p) { mMessageID = (data::JUTMesgIDData*)p; }
 
+        u16 getMessageEntryNumber() const { return mInfo.get_messageEntryNumber(); }
+        u16 getMessageEntrySize() const { return mInfo.get_messageEntrySize(); }
+        u16 getGroupID() const { return mInfo.get_groupID(); }
+        bool isContained_messageIndex(u16 messageIndex) const {
+            return messageIndex < getMessageEntryNumber();
+        }
+        void* getMessageData_messageIndex(u16 messageIndex) const {
+            if (messageIndex >= getMessageEntryNumber())
+                return NULL;
+            return mInfo.getContent() + (messageIndex * getMessageEntrySize());
+        }
+
+    public:
         /* 0x00 */ JGadget::TLinkListNode mLinkNode;
         /* 0x08 */ data::TParse_THeader mHeader;
         /* 0x0C */ data::TParse_TBlock_info mInfo;

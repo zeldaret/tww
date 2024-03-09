@@ -2,7 +2,6 @@
 #define JMESSAGE_PROCESSOR_H
 
 #include "JSystem/JMessage/resource.h"
-#include "dolphin/types.h"
 
 namespace JMessage {
 
@@ -71,7 +70,6 @@ public:
     void setBegin_messageCode(u32); // weak
     TResource* getResource_groupID(u16) const;
     u32 toMessageCode_messageID(u32, u32, bool*) const;
-    char* on_message_limited(u16) const;         // weak
     char* on_message(u32) const;                 // weak
     char* getMessageText_messageCode(u32) const; // weak
     static bool process_onCharacterEnd_normal_(TProcessor*);
@@ -123,7 +121,7 @@ struct TSequenceProcessor : public TProcessor {
     /* 0x58 */ virtual int do_branch_queryResult();
     /* 0x5C */ virtual void do_branch(const void*, const char*);
 
-    char* process(const char*);
+    const char* process(const char*);
     bool on_isReady();
     bool on_jump_isReady();
     void on_jump(const void*, const char*);
@@ -151,6 +149,14 @@ struct TSequenceProcessor : public TProcessor {
         do_begin_(param_1, param_2);
     }
 
+    enum {
+        kStatus_Begin,
+        kStatus_End,
+        kStatus_Normal,
+        kStatus_Jump,
+        kStatus_Branch,
+    };
+
     /* 0x00 */ /* TProcessor */
     /* 0x34 */ int mStatus;
 };
@@ -159,9 +165,9 @@ struct TRenderingProcessor : public TProcessor {
     TRenderingProcessor(const TReference*);
     TRenderingProcessor(TControl*);
 
-    void setBegin(const void* param_1, const char* param_2) {
-        reset_(param_2);
-        do_begin_(param_1, param_2);
+    void setBegin(const void* entry, const char* data) {
+        reset_(data);
+        do_begin_(entry, data);
     }
 
     virtual void do_begin_(const void*, const char*);
@@ -172,7 +178,7 @@ struct TRenderingProcessor : public TProcessor {
     virtual void do_begin(const void*, const char*);
     virtual void do_end();
 
-    void process(const char*);
+    const char* process(const char*);
 
     /* 0x00 */ /* TProcessor */
 };
