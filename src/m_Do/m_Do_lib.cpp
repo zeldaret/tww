@@ -4,6 +4,8 @@
 //
 
 #include "m_Do/m_Do_lib.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/d_com_inf_game.h"
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTTexture.h"
@@ -11,6 +13,7 @@
 
 /* 80017530-800176BC       .text mDoLib_setResTimgObj__FP7ResTIMGP9_GXTexObjUlP10_GXTlutObj */
 u8 mDoLib_setResTimgObj(ResTIMG* i_img, GXTexObj* o_texObj, u32 i_tlut_name, GXTlutObj * o_tlutObj) {
+    /* Nonmatching - regalloc */
     if (i_img->indexTexture) {
         JUT_ASSERT(0x2b, o_tlutObj != 0);
         GXInitTlutObj(o_tlutObj, ((char*)i_img) + i_img->paletteOffset, (GXTlutFmt)i_img->colorFormat, i_img->numColors);
@@ -29,8 +32,8 @@ u8 mDoLib_setResTimgObj(ResTIMG* i_img, GXTexObj* o_texObj, u32 i_tlut_name, GXT
 }
 
 J3DUClipper mDoLib_clipper::mClipper;
-f32 mDoLib_clipper::mFovyRate;
 f32 mDoLib_clipper::mSystemFar;
+f32 mDoLib_clipper::mFovyRate;
 
 /* 800176BC-80017748       .text setup__14mDoLib_clipperFffff */
 void mDoLib_clipper::setup(f32 fovY, f32 aspect, f32 n, f32 f) {
@@ -41,26 +44,89 @@ void mDoLib_clipper::setup(f32 fovY, f32 aspect, f32 n, f32 f) {
     mSystemFar = f;
     mClipper.calcViewFrustum();
 
-    s16 ang = (s16)(fovY * 182.0444f);
+    s16 ang = (s16)(fovY * 182.04445f);
     mFovyRate = JMASCos(ang) / JMASSin(ang);
 }
 
 /* 80017748-80017924       .text mDoLib_project__FP3VecP3Vec */
-void mDoLib_project(Vec*, Vec*) {
-    /* Nonmatching */
+void mDoLib_project(Vec* src, Vec* dst) {
+    if (dComIfGd_getView() == NULL) {
+        dst->x = 0.0f;
+        dst->y = 0.0f;
+        dst->z = 0.0f;
+        return;
+    }
+    Mtx44* projMtx = dComIfGd_getProjViewMtx();
+    cMtx_multVec(*projMtx, src, dst);
+
+    f32 calcFloat = (src->x * (*dComIfGd_getProjViewMtx())[3][0]) +
+                    (src->y * (*dComIfGd_getProjViewMtx())[3][1]) +
+                    (src->z * (*dComIfGd_getProjViewMtx())[3][2]) +
+                    (*dComIfGd_getProjViewMtx())[3][3];
+    if (dst->z >= 0.0f) {
+        dst->z = 0.0f;
+    }
+    f32 f3;
+    if (calcFloat <= 0.0f) {
+        if (calcFloat == 0.0f) {
+            dst->z *= 500000.0f;
+        } else {
+            dst->z *= (0.5f / calcFloat);
+        }
+        f3 = 500000.0f;
+    } else {
+        f3 = 0.5f / calcFloat;
+        dst->z *= f3;
+    }
+
+    view_port_class* viewPort = dComIfGd_getViewport();
+    f32 xOffset;
+    f32 yOffset;
+    f32 xSize;
+    f32 ySize;
+    if (viewPort->mXOrig != 0.0f) {
+        xOffset = (0.5f * ((2.0f * viewPort->mXOrig) + viewPort->mWidth)) - 320.0f;
+        xSize = 640.0f;
+    } else {
+        xOffset = viewPort->mXOrig;
+        xSize = viewPort->mWidth;
+    }
+
+    if (viewPort->mYOrig != 0.0f) {
+        yOffset = (0.5f * ((2.0f * viewPort->mYOrig) + viewPort->mHeight)) - 240.0f;
+        ySize = 480.0f;
+    } else {
+        yOffset = viewPort->mYOrig;
+        ySize = viewPort->mHeight;
+    }
+
+    dst->x = ((0.5f + (dst->x * f3)) * xSize) + xOffset;
+    dst->y = ((0.5f + (dst->y * (-f3))) * ySize) + yOffset;
 }
 
 /* 80017924-80017960       .text mDoLib_pos2camera__FP3VecP3Vec */
-void mDoLib_pos2camera(Vec*, Vec*) {
-    /* Nonmatching */
+void mDoLib_pos2camera(Vec* src, Vec* dst) {
+    cMtx_multVec(dComIfGd_getView()->mViewMtx, src, dst);
 }
 
 /* 80017960-80017994       .text mDoLib_cnvind32__FUl */
-void mDoLib_cnvind32(unsigned long) {
-    /* Nonmatching */
+u32 mDoLib_cnvind32(u32 r3) {
+    u8 sp0C[4];
+    u8 sp08[4];
+    *(u32*)sp0C = r3;
+    sp08[0] = sp0C[3];
+    sp08[1] = sp0C[2];
+    sp08[2] = sp0C[1];
+    sp08[3] = sp0C[0];
+    return *(u32*)sp08;
 }
 
 /* 80017994-800179B8       .text mDoLib_cnvind16__FUs */
-void mDoLib_cnvind16(unsigned short) {
-    /* Nonmatching */
+u16 mDoLib_cnvind16(u16 r3) {
+    u8 sp0C[2];
+    u8 sp08[2];
+    *(u16*)sp0C = r3;
+    sp08[0] = sp0C[1];
+    sp08[1] = sp0C[0];
+    return *(u16*)sp08;
 }

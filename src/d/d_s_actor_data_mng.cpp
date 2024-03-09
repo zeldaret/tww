@@ -83,9 +83,7 @@ dADM::dADM() {
 }
 
 /* 800C2C14-800C2C78       .text __dt__4dADMFv */
-dADM::~dADM() {
-    /* Nonmatching */
-}
+dADM::~dADM() {}
 
 /* 800C2C78-800C2CC0       .text FindTag__4dADMFUlPUlPUl */
 bool dADM::FindTag(u32 tag, u32* pSize, u32* pOffs) {
