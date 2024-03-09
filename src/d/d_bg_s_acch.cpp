@@ -303,8 +303,8 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
                         SetWaterIn();
                     }
 
-                    JUT_ASSERT_FLOAT(718, m_wtr.GetHeight() >= ground.y);
-                    JUT_ASSERT_FLOAT(719, m_wtr.GetHeight() <= top);
+                    JUT_ASSERT(718, m_wtr.GetHeight() >= ground.y);
+                    JUT_ASSERT(719, m_wtr.GetHeight() <= top);
                 }
             }
         }
