@@ -274,7 +274,7 @@ static void event_start_check(andsw0_class* i_this) {
     switch (i_this->mEventState) {
     case 0:
         if (i_this->mEventIdx != -1 && fopAcM_isSwitch(actor, i_this->mSwitchToSet)) {
-            if (actor->mEvtInfo.checkCommandDemoAccrpt()) {
+            if (actor->eventInfo.checkCommandDemoAccrpt()) {
                 i_this->mEventState++;
             } else {
                 fopAcM_orderOtherEventId(actor, i_this->mEventIdx, i_this->mEventNo);
@@ -350,7 +350,7 @@ actor_process_profile_definition g_profile_ANDSW0 = {
     7,
     fpcPi_CURRENT_e,
     PROC_ANDSW0,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(andsw0_class),
     0,
     0,

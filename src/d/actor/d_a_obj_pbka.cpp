@@ -35,7 +35,7 @@ void daObjPbka_c::CreateInit() {
 
 /* 000001CC-0000024C       .text set_mtx__11daObjPbka_cFv */
 void daObjPbka_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -73,7 +73,7 @@ static BOOL daObjPbka_Delete(void* i_this) {
 
 BOOL daObjPbka_c::_draw() {
     dKy_tevstr_c * pTevStr;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &tevStr);
     g_env_light.setLightTevColorType(mpModel, pTevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
@@ -118,7 +118,7 @@ actor_process_profile_definition g_profile_Obj_Pbka = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Obj_Pbka,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjPbka_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

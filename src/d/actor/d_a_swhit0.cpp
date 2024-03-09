@@ -145,11 +145,11 @@ s32 daSwhit0_c::CreateInit() {
 
     mColStatus.Init(0xFF, 0xFF, this);
 
-    mAttentionInfo.mPosition.x += cM_ssin(home.angle.x) * 65.0f * cM_ssin(home.angle.y);
-    mAttentionInfo.mPosition.y += cM_scos(home.angle.x) * 65.0f;
-    mAttentionInfo.mPosition.z += cM_ssin(home.angle.x) * 65.0f * cM_scos(home.angle.y);
+    attention_info.position.x += cM_ssin(home.angle.x) * 65.0f * cM_ssin(home.angle.y);
+    attention_info.position.y += cM_scos(home.angle.x) * 65.0f;
+    attention_info.position.z += cM_ssin(home.angle.x) * 65.0f * cM_scos(home.angle.y);
 
-    mEyePos = mAttentionInfo.mPosition;
+    eyePos = attention_info.position;
 
     if (mRetType == 0) {
         mColCyl.Set(l_cyl_src);
@@ -161,7 +161,7 @@ s32 daSwhit0_c::CreateInit() {
 
     mColSph.Set(l_sph_src);
     mColSph.SetStts(&mColStatus);
-    mColSph.SetC(mAttentionInfo.mPosition);
+    mColSph.SetC(attention_info.position);
     
     if (dComIfGs_isSwitch(getSwNo(), current.roomNo)) {
         mState = 4;
@@ -249,7 +249,7 @@ s32 daSwhit0_c::actionOffWait() {
                 mState = 2;
                 
                 fopAcM_orderOtherEventId(this, mEventIdx, getEvNo());
-                mEvtInfo.onCondition(dEvtCnd_UNK2_e);
+                eventInfo.onCondition(dEvtCnd_UNK2_e);
 
                 break;
             default:
@@ -279,7 +279,7 @@ s32 daSwhit0_c::actionToOnReady() {
         mState = 2;
 
         fopAcM_orderOtherEventId(this, mEventIdx, getEvNo());
-        mEvtInfo.onCondition(dEvtCnd_UNK2_e);
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
 
     return TRUE;
@@ -287,7 +287,7 @@ s32 daSwhit0_c::actionToOnReady() {
 
 /* 00000E24-00000EC8       .text actionToOnOrder__10daSwhit0_cFv */
 s32 daSwhit0_c::actionToOnOrder() {
-    if (mEvtInfo.checkCommandDemoAccrpt()) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         mState = 3;
         mStaffId = dComIfGp_evmng_getMyStaffId("SWITCH");
         
@@ -295,7 +295,7 @@ s32 daSwhit0_c::actionToOnOrder() {
     }
     else {
         fopAcM_orderOtherEventId(this, mEventIdx, getEvNo());
-        mEvtInfo.onCondition(dEvtCnd_UNK2_e);
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
 
     return TRUE;
@@ -363,7 +363,7 @@ s32 daSwhit0_c::actionOnTimer() {
 
 /* 0000115C-000011E4       .text setDrawMtx__10daSwhit0_cFv */
 void daSwhit0_c::setDrawMtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(current.angle);
@@ -379,8 +379,8 @@ s32 daSwhit0_c::draw() {
         { 0x78, 0x64, 0x32, 0x64 }
     };
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
 
     J3DModelData* modelData = mpModel->getModelData();
     s32 flag = checkFlag(0x01);
@@ -478,7 +478,7 @@ actor_process_profile_definition g_profile_SWHIT0 = {
     8,
     fpcPi_CURRENT_e,
     PROC_SWHIT0,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daSwhit0_c),
     0,
     0,

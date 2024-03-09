@@ -70,7 +70,7 @@ bool daObjGaship2::Act_c::_delete() {
 
 /* 00000384-00000430       .text set_mtx__Q212daObjGaship25Act_cFv */
 void daObjGaship2::Act_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 
@@ -88,9 +88,9 @@ bool daObjGaship2::Act_c::_execute() {
 
 /* 00000468-00000508       .text _draw__Q212daObjGaship25Act_cFv */
 bool daObjGaship2::Act_c::_draw() {
-    dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
+    dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     dComIfGd_setListBG();
-    dKy_getEnvlight().setLightTevColorType(mpModel, &mTevStr);
+    dKy_getEnvlight().setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
     return TRUE;
@@ -133,7 +133,7 @@ actor_process_profile_definition g_profile_Obj_Gaship2 = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Gaship2,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGaship2::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

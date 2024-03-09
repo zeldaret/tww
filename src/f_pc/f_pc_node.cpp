@@ -28,7 +28,7 @@ s32 fpcNd_Execute(process_node_class* i_procNode) {
     s32 ret;
     layer_class* curLayer_p = fpcLy_CurrentLayer();
     fpcLy_SetCurrentLayer(&i_procNode->mLayer);
-    ret = fpcMtd_Execute(&i_procNode->mpNodeMtd->mBase, i_procNode);
+    ret = fpcMtd_Execute(&i_procNode->mpNodeMtd->base, i_procNode);
     fpcLy_SetCurrentLayer(curLayer_p);
     return ret;
 }
@@ -39,7 +39,7 @@ int g_fpcNd_type;
 void* fpcNd_IsCreatingFromUnder(void* i_procNode) {
     layer_class* layer;
     process_node_class* pProcNode = static_cast<process_node_class*>(i_procNode);
-    if (pProcNode != NULL && fpcBs_Is_JustOfType(g_fpcNd_type, pProcNode->mBase.mSubType) != FALSE) {
+    if (pProcNode != NULL && fpcBs_Is_JustOfType(g_fpcNd_type, pProcNode->base.mSubType) != FALSE) {
         layer = &pProcNode->mLayer;
         if (fpcLy_IsCreatingMesg(layer) == 0) {
             return (process_node_class*)fpcLyIt_Judge(
@@ -65,13 +65,13 @@ s32 fpcNd_IsDeleteTiming(process_node_class* i_procNode) {
 
 /* 8003F174-8003F19C       .text fpcNd_IsDelete__FP18process_node_class */
 s32 fpcNd_IsDelete(process_node_class* i_procNode) {
-    return fpcMtd_IsDelete(&i_procNode->mpNodeMtd->mBase, i_procNode);
+    return fpcMtd_IsDelete(&i_procNode->mpNodeMtd->base, i_procNode);
 }
 
 /* 8003F19C-8003F200       .text fpcNd_Delete__FP18process_node_class */
 s32 fpcNd_Delete(process_node_class* i_procNode) {
-    if ((fpcLy_IsDeletingMesg(&i_procNode->mLayer) == 0) && fpcMtd_Delete(&i_procNode->mpNodeMtd->mBase, i_procNode) == 1) {
-        i_procNode->mBase.mSubType = 0;
+    if ((fpcLy_IsDeletingMesg(&i_procNode->mLayer) == 0) && fpcMtd_Delete(&i_procNode->mpNodeMtd->base, i_procNode) == 1) {
+        i_procNode->base.mSubType = 0;
         return fpcLy_Delete(&i_procNode->mLayer);
     } else {
         return 0;
@@ -85,16 +85,16 @@ s32 fpcNd_Create(process_node_class* i_procNode) {
     process_node_class* pProcNode = (process_node_class*)i_procNode;
     layer_class* curLayer_p;
     s32 ret;
-    if (pProcNode->mBase.mInitState == 0) {
-        node_process_profile_definition* pProcProfileDef = (node_process_profile_definition*)pProcNode->mBase.mpProf;
-        pProcNode->mBase.mSubType = fpcBs_MakeOfType(&g_fpcNd_type);
-        pProcNode->mpNodeMtd = (nodedraw_method_class*)pProcProfileDef->mSubMtd;
+    if (pProcNode->base.mInitState == 0) {
+        node_process_profile_definition* pProcProfileDef = (node_process_profile_definition*)pProcNode->base.mpProf;
+        pProcNode->base.mSubType = fpcBs_MakeOfType(&g_fpcNd_type);
+        pProcNode->mpNodeMtd = (nodedraw_method_class*)pProcProfileDef->sub_method;
         fpcLy_Create(&pProcNode->mLayer, pProcNode, pProcNode->mLayerNodeLists, 0x10);
         pProcNode->mUnk0 = 0;
     }
     curLayer_p = fpcLy_CurrentLayer();
     fpcLy_SetCurrentLayer(&pProcNode->mLayer);
-    ret = fpcMtd_Create(&pProcNode->mpNodeMtd->mBase, pProcNode);
+    ret = fpcMtd_Create(&pProcNode->mpNodeMtd->base, pProcNode);
     fpcLy_SetCurrentLayer(curLayer_p);
     return ret;
 }

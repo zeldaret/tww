@@ -13,7 +13,7 @@ public:
     static const char M_arcname[];
 
     void set_mtx() {
-        mpMorf->getModel()->setBaseScale(mScale);
+        mpMorf->getModel()->setBaseScale(scale);
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
         mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());

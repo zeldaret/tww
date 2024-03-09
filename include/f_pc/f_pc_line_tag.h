@@ -5,7 +5,7 @@
 #include "SSystem/SComponent/c_tag.h"
 
 typedef struct line_tag {
-    create_tag_class mBase;
+    create_tag_class base;
     s32 mLineListID;
 } line_tag;
 

@@ -26,7 +26,7 @@ static s32 daBossItem_Create(fopAc_ac_c* i_this) {
 
     fopAcM_SetupActor(bItem, bossitem_class);
 
-    int stageNo = bItem->mBase.mParameters & 0xFF;
+    int stageNo = bItem->base.mParameters & 0xFF;
     BOOL isStageBossDead = dComIfGs_isStageBossEnemy(stageNo);
 
     if (isStageBossDead && !dComIfGs_isStageLife(stageNo)) {
@@ -52,7 +52,7 @@ actor_process_profile_definition g_profile_BOSSITEM = {
     7,
     fpcLy_CURRENT_e,
     PROC_BOSSITEM,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(bossitem_class),
     0,
     0,

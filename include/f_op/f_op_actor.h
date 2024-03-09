@@ -103,11 +103,11 @@ enum fopAc_Cull_e {
 };
 
 struct actor_process_profile_definition {
-    /* 0x00 */ leaf_process_profile_definition mBase;
-    /* 0x24 */ actor_method_class* mSubMtd;
-    /* 0x28 */ u32 mStatus;
-    /* 0x2C */ u8 mGroup;
-    /* 0x2D */ u8 mCullType;
+    /* 0x00 */ leaf_process_profile_definition base;
+    /* 0x24 */ actor_method_class* sub_method;
+    /* 0x28 */ u32 status;
+    /* 0x2C */ u8 group;
+    /* 0x2D */ u8 cullType;
 };  // Size: 0x30
 
 // Unclear what this is. Only appears in 2 profiles (PLAYER,BG)
@@ -204,9 +204,9 @@ struct actor_place {
 };
 
 struct actor_attention_types {
-    /* 0x00 */ u8 mDistances[8];
-    /* 0x08 */ cXyz mPosition;
-    /* 0x14 */ u32 mFlags;
+    /* 0x00 */ u8 distances[8];
+    /* 0x08 */ cXyz position;
+    /* 0x14 */ u32 flags;
 };  // Size = 0x18
 
 class JntHit_c;
@@ -214,16 +214,16 @@ class JntHit_c;
 struct fopAc_cullSizeSphere {
 public:
 #ifdef __INTELLISENSE__
-    /* 0x0 */ Vec mCenter;
-    /* 0xC */ f32 mRadius;
+    /* 0x0 */ Vec center;
+    /* 0xC */ f32 radius;
 #else
-    /* 0x0 */ cXyz mCenter;
-    /* 0xC */ f32 mRadius;
+    /* 0x0 */ cXyz center;
+    /* 0xC */ f32 radius;
 
     fopAc_cullSizeSphere() {}
     fopAc_cullSizeSphere(cXyz p, f32 r) {
-        mCenter = p;
-        mRadius = r;
+        center = p;
+        radius = r;
     }
     ~fopAc_cullSizeSphere() {}
 #endif
@@ -232,67 +232,67 @@ public:
 struct fopAc_cullSizeBox {
 public:
 #ifdef __INTELLISENSE__
-    /* 0x0 */ Vec mMin;
-    /* 0xC */ Vec mMax;
+    /* 0x0 */ Vec min;
+    /* 0xC */ Vec max;
 #else
     fopAc_cullSizeBox() {}
     fopAc_cullSizeBox(const fopAc_cullSizeBox& box) {
-        mMin = box.mMin;
-        mMax = box.mMax;
+        min = box.min;
+        max = box.max;
     }
     fopAc_cullSizeBox(cXyz min, cXyz max) {
-        mMin = min;
-        mMax = max;
+        this->min = min;
+        this->max = max;
     }
     ~fopAc_cullSizeBox() {}
 
-    /* 0x0 */ cXyz mMin;
-    /* 0xC */ cXyz mMax;
+    /* 0x0 */ cXyz min;
+    /* 0xC */ cXyz max;
 #endif
 };
 
 class fopAc_ac_c : public leafdraw_class {
 public:
-    /* 0x0C0 */ int mAcType;
-    /* 0x0C4 */ create_tag_class mAcTg;
-    /* 0x0D8 */ create_tag_class mDwTg;
-    /* 0x0EC */ actor_method_class* mSubMtd;
+    /* 0x0C0 */ int actor_type;
+    /* 0x0C4 */ create_tag_class actor_tag;
+    /* 0x0D8 */ create_tag_class draw_tag;
+    /* 0x0EC */ actor_method_class* sub_method;
     /* 0x0F0 */ JKRSolidHeap* heap;
-    /* 0x0F4 */ dEvt_info_c mEvtInfo;
-    /* 0x10C */ dKy_tevstr_c mTevStr;
-    /* 0x1BC */ u16 mSetId;
-    /* 0x1BE */ u8 mGroup;
-    /* 0x1BF */ u8 mCullType;
-    /* 0x1C0 */ u8 mDemoActorId;
-    /* 0x1C1 */ s8 mSubtype;
-    /* 0x1C2 */ u8 mGbaName;
-    /* 0x1C4 */ u32 mStatus;
-    /* 0x1C8 */ u32 mCondition;
-    /* 0x1CC */ u32 mParentPcId;
+    /* 0x0F4 */ dEvt_info_c eventInfo;
+    /* 0x10C */ dKy_tevstr_c tevStr;
+    /* 0x1BC */ u16 setID;
+    /* 0x1BE */ u8 group;
+    /* 0x1BF */ u8 cullType;
+    /* 0x1C0 */ u8 demoActorID;
+    /* 0x1C1 */ s8 subtype;
+    /* 0x1C2 */ u8 gbaName;
+    /* 0x1C4 */ u32 actor_status;
+    /* 0x1C8 */ u32 actor_condition;
+    /* 0x1CC */ u32 parentActorID;
     /* 0x1D0 */ actor_place home;
     /* 0x1E4 */ actor_place old;
     /* 0x1F8 */ actor_place current;
     /* 0x20C */ csXyz shape_angle;
-    /* 0x214 */ cXyz mScale;
+    /* 0x214 */ cXyz scale;
     /* 0x220 */ cXyz speed;
-    /* 0x22C */ MtxP mCullMtx;
+    /* 0x22C */ MtxP cullMtx;
     union {
-        /* 0x230 */ fopAc_cullSizeBox mBox;
-        /* 0x230 */ fopAc_cullSizeSphere mSphere;
-    } mCull;
-    /* 0x248 */ f32 mCullSizeFar;
+        /* 0x230 */ fopAc_cullSizeBox box;
+        /* 0x230 */ fopAc_cullSizeSphere sphere;
+    } cull;
+    /* 0x248 */ f32 cullSizeFar;
     /* 0x24C */ J3DModel* model;
-    /* 0x250 */ JntHit_c* mJntHit;
+    /* 0x250 */ JntHit_c* jntHit;
     /* 0x254 */ f32 speedF;
-    /* 0x258 */ f32 mGravity;
-    /* 0x25C */ f32 mMaxFallSpeed;
-    /* 0x260 */ cXyz mEyePos;
-    /* 0x26C */ actor_attention_types mAttentionInfo;
-    /* 0x284 */ s8 mMaxHealth;
-    /* 0x285 */ s8 mHealth;
-    /* 0x288 */ s32 mItemTableIdx;
-    /* 0x28C */ u8 mStealItemBitNo; // For limited items (Blue Chu Jelly), this is the first itemBitNo to set.
-    /* 0x28D */ s8 mStealItemLeft;
+    /* 0x258 */ f32 gravity;
+    /* 0x25C */ f32 maxFallSpeed;
+    /* 0x260 */ cXyz eyePos;
+    /* 0x26C */ actor_attention_types attention_info;
+    /* 0x284 */ s8 max_health;
+    /* 0x285 */ s8 health;
+    /* 0x288 */ s32 itemTableIdx;
+    /* 0x28C */ u8 stealItemBitNo; // For limited items (Blue Chu Jelly), this is the first itemBitNo to set.
+    /* 0x28D */ s8 stealItemLeft;
 
     fopAc_ac_c();
     ~fopAc_ac_c();

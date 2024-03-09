@@ -523,7 +523,7 @@ const u8 daShopItem_c::mModelType[255] = {
 
 /* 800689F0-800689F8       .text getScaleP__12daShopItem_cFv */
 cXyz* daShopItem_c::getScaleP() {
-    return &mScale;
+    return &scale;
 }
 
 /* 800689F8-80068A00       .text getRotateP__12daShopItem_cFv */

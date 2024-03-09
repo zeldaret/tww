@@ -13,10 +13,10 @@
 s32 daSpotbox_c::create() {
     fopAcM_SetupActor(this, daSpotbox_c);
     f32 baseScale = getType() != 0 ? 1000.0f : 100.0f;
-    mScale.x *= baseScale;
-    mScale.y *= baseScale;
-    mScale.z *= (baseScale * 1.2f);
-    current.pos.y += mScale.y * 0.5f;
+    scale.x *= baseScale;
+    scale.y *= baseScale;
+    scale.z *= (baseScale * 1.2f);
+    current.pos.y += scale.y * 0.5f;
     fopAcM_SetMtx(this, mMtx);
     fopAcM_setCullSizeBox(this, -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
 
@@ -33,7 +33,7 @@ BOOL daSpotbox_c::draw() {
 BOOL daSpotbox_c::execute() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    mDoMtx_stack_c::scaleM(mScale);
+    mDoMtx_stack_c::scaleM(scale);
     cMtx_copy(mDoMtx_stack_c::get(), mMtx);
     return TRUE;
 }
@@ -78,7 +78,7 @@ actor_process_profile_definition g_profile_SPOTBOX = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_SPOTBOX,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSpotbox_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

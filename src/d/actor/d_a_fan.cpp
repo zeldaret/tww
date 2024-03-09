@@ -127,7 +127,7 @@ int daFan_c::Create() {
     }
 
     mModel->calc();
-    mWindSePId = fopKyM_create(PROC_LEVEL_SE, JA_SE_OBJ_WIND_TAG, &mEyePos);
+    mWindSePId = fopKyM_create(PROC_LEVEL_SE, JA_SE_OBJ_WIND_TAG, &eyePos);
     return TRUE;
 }
 
@@ -173,7 +173,7 @@ s32 daFan_c::_create() {
 
 /* 00000C28-00000D28       .text set_mtx__7daFan_cFv */
 void daFan_c::set_mtx() {
-    mModel->setBaseScale(mScale);
+    mModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(current.angle);
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -244,9 +244,9 @@ int daFan_c::Execute(Mtx** mtxP) {
 
 /* 00001088-0000118C       .text Draw__7daFan_cFv */
 BOOL daFan_c::Draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mModel, &mTevStr);
-    g_env_light.setLightTevColorType(mWindModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mModel, &tevStr);
+    g_env_light.setLightTevColorType(mWindModel, &tevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mModel);
     dComIfGd_setList();
@@ -295,7 +295,7 @@ actor_process_profile_definition g_profile_FAN = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_FAN,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFan_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

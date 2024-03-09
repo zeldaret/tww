@@ -459,8 +459,8 @@ public:
     
     virtual BOOL isTagCheckOK();
     virtual f32 getGroundY() { return mAcch.GetGroundH(); }
-    virtual MtxP getLeftHandMatrix() { return mCullMtx; }
-    virtual MtxP getRightHandMatrix() { return mCullMtx; }
+    virtual MtxP getLeftHandMatrix() { return cullMtx; }
+    virtual MtxP getRightHandMatrix() { return cullMtx; }
     virtual f32 getBaseAnimeFrameRate() { return 1.0f; }
     virtual f32 getBaseAnimeFrame() { return 0.0f; }
     

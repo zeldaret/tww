@@ -298,7 +298,7 @@ actor_process_profile_definition g_profile_VRBOX2 = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_VRBOX2,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(vrbox2_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

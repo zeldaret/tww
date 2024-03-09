@@ -71,14 +71,14 @@ s32 daObjYgush00_c::_create() {
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x740) == 1) {
-            mpModel->setBaseScale(mScale);
+            mpModel->setBaseScale(scale);
             mDoMtx_stack_c::transS(current.pos);
             mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
             fopAcM_setCullSizeBox(this,
-                mScale.x * -80.0f, 0.0f, mScale.z * -80.0f,
-                mScale.x * 80.0f, mScale.y * 125.0f, mScale.z * 80.0f);
+                scale.x * -80.0f, 0.0f, scale.z * -80.0f,
+                scale.x * 80.0f, scale.y * 125.0f, scale.z * 80.0f);
         } else {
             ret = cPhs_ERROR_e;
         }
@@ -117,8 +117,8 @@ bool daObjYgush00_c::_execute() {
 
 /* 0000066C-000006FC       .text _draw__14daObjYgush00_cFv */
 bool daObjYgush00_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mBtkAnm.entry(mpModel->getModelData());
     mBckAnm.entry(mpModel->getModelData());
     mDoExt_modelUpdateDL(mpModel);
@@ -163,7 +163,7 @@ actor_process_profile_definition g_profile_Obj_Ygush00 = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Ygush00,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjYgush00_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

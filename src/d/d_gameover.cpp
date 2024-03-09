@@ -412,7 +412,7 @@ msg_process_profile_definition g_profile_GAMEOVER = {
     /* ListID       */ 12,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_GAMEOVER,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dGameover_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

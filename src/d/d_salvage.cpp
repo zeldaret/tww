@@ -113,7 +113,7 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
 
     mInfo[no].mRoomNo = roomNo;
     mInfo[no].mPos = pact->current.pos;
-    mInfo[no].mScale = pact->mScale;
+    mInfo[no].mScale = pact->scale;
     mInfo[no].mSaveNo = saveNo;
     mInfo[no].mType = type;
     mInfo[no].mKind = kind;
@@ -123,16 +123,16 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
 
     switch (kind) {
     case 0:
-        mInfo[no].mH = pact->mScale.y * 1000.0f;
-        mInfo[no].mR = pact->mScale.x * 700.0f;
+        mInfo[no].mH = pact->scale.y * 1000.0f;
+        mInfo[no].mR = pact->scale.x * 700.0f;
         break;
     case 5:
-        mInfo[no].mH = pact->mScale.y * 1000.0f;
-        mInfo[no].mR = pact->mScale.x * 500.0f;
+        mInfo[no].mH = pact->scale.y * 1000.0f;
+        mInfo[no].mR = pact->scale.x * 500.0f;
         break;
     default:
-        mInfo[no].mH = pact->mScale.y * 500.0f;
-        mInfo[no].mR = pact->mScale.x * 400.0f;
+        mInfo[no].mH = pact->scale.y * 500.0f;
+        mInfo[no].mR = pact->scale.x * 400.0f;
         break;
     }
 

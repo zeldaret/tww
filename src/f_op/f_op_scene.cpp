@@ -33,13 +33,13 @@ static s32 fopScn_Create(void* i_this) {
     scene_class* scene = static_cast<scene_class*>(i_this);
     if (fpcM_IsFirstCreating(i_this)) {
         scene_process_profile_definition* profile = (scene_process_profile_definition*)fpcM_GetProfile(i_this);
-        scene->mpMtd = profile->mpMtd;
+        scene->mpMtd = profile->sub_method;
         fopScnTg_Init(&scene->mScnTg, i_this);
         fopScnTg_ToQueue(&scene->mScnTg);
 
         u32* append = (u32*)fpcM_GetAppend(i_this);
         if (append != NULL) {
-            scene->mBase.mBase.mParameters = *append;
+            scene->base.base.mParameters = *append;
         }
     }
 

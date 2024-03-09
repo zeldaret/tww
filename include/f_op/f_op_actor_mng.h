@@ -96,15 +96,15 @@ inline s16 fopAcM_GetName(void* pActor) {
 }
 
 inline MtxP fopAcM_GetMtx(fopAc_ac_c* pActor) {
-    return pActor->mCullMtx;
+    return pActor->cullMtx;
 }
 
 inline bool fopAcM_checkStatus(fopAc_ac_c* pActor, u32 status) {
-    return pActor->mStatus & status;
+    return pActor->actor_status & status;
 }
 
 inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
-    return pActor->mStatus & fopAcStts_CARRY_e;
+    return pActor->actor_status & fopAcStts_CARRY_e;
 }
 
 inline u32 fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
@@ -124,7 +124,7 @@ inline void fopAcM_SetParam(void* p_actor, u32 param) {
 }
 
 inline void fopAcM_SetJntHit(fopAc_ac_c* i_actorP, JntHit_c* i_jntHitP) {
-    i_actorP->mJntHit = i_jntHitP;
+    i_actorP->jntHit = i_jntHitP;
 }
 
 inline s16 fopAcM_GetProfName(void* pActor) {
@@ -140,28 +140,28 @@ inline void fopAcM_SetPriority(void* pActor, int priority) {
 }
 
 inline u8 fopAcM_GetGroup(fopAc_ac_c* p_actor) {
-    return p_actor->mGroup;
+    return p_actor->group;
 }
 
 inline void fopAcM_SetGroup(fopAc_ac_c* pActor, u8 group) {
-    pActor->mGroup = group;
+    pActor->group = group;
 }
 
 inline void fopAcM_OnStatus(fopAc_ac_c* pActor, u32 flag) {
-    pActor->mStatus |= flag;
+    pActor->actor_status |= flag;
 }
 
 inline void fopAcM_OffStatus(fopAc_ac_c* pActor, u32 flag) {
-    pActor->mStatus &= ~flag;
+    pActor->actor_status &= ~flag;
 }
 
 inline BOOL fopAcM_CheckStatusMap(fopAc_ac_c* pActor, u32) {
     // TODO: This implementation probably isn't right, the u32 argument is likely used for something
-    return (pActor->mStatus & fopAcStts_SHOWMAP_e) && (pActor->mStatus & 0x1F) == 0;
+    return (pActor->actor_status & fopAcStts_SHOWMAP_e) && (pActor->actor_status & 0x1F) == 0;
 }
 
 inline void fopAcM_SetStatusMap(fopAc_ac_c* pActor, u32 flag) {
-    pActor->mStatus = (pActor->mStatus & ~0x3F) | fopAcStts_SHOWMAP_e | flag;
+    pActor->actor_status = (pActor->actor_status & ~0x3F) | fopAcStts_SHOWMAP_e | flag;
 }
 
 inline fopAc_ac_c* fopAcM_Search(fopAcIt_JudgeFunc func, void* param) {
@@ -197,15 +197,15 @@ inline csXyz* fopAcM_GetShapeAngle_p(fopAc_ac_c* pActor) {
 }
 
 inline bool fopAcM_CheckCondition(fopAc_ac_c* p_actor, u32 flag) {
-    return p_actor->mCondition & flag;
+    return p_actor->actor_condition & flag;
 }
 
 inline void fopAcM_OnCondition(fopAc_ac_c* p_actor, u32 flag) {
-    p_actor->mCondition |= flag;
+    p_actor->actor_condition |= flag;
 }
 
 inline void fopAcM_OffCondition(fopAc_ac_c* p_actor, u32 flag) {
-    p_actor->mCondition &= ~flag;
+    p_actor->actor_condition &= ~flag;
 }
 
 inline BOOL fopAcM_IsActor(void* actor) {
@@ -233,15 +233,15 @@ inline void fopAcM_SetHomeRoomNo(fopAc_ac_c* pActor, s8 roomNo) {
 }
 
 inline void fopAcM_SetGravity(fopAc_ac_c* actor, f32 gravity) {
-    actor->mGravity = gravity;
+    actor->gravity = gravity;
 }
 
 inline void fopAcM_SetMaxFallSpeed(fopAc_ac_c* actor, f32 speed) {
-    actor->mMaxFallSpeed = speed;
+    actor->maxFallSpeed = speed;
 }
 
 inline void fopAcM_SetMtx(fopAc_ac_c* actor, MtxP m) {
-    actor->mCullMtx = m;
+    actor->cullMtx = m;
 }
 
 inline void fopAcM_SetSpeed(fopAc_ac_c* actor, f32 x, f32 y, f32 z) {
@@ -253,7 +253,7 @@ inline void fopAcM_SetSpeedF(fopAc_ac_c* actor, f32 f) {
 }
 
 inline void fopAcM_SetStatus(fopAc_ac_c* actor, u32 status) {
-    actor->mStatus = status;
+    actor->actor_status = status;
 }
 
 inline void fopAcM_SetModel(fopAc_ac_c* actor, J3DModel* model) {
@@ -277,31 +277,31 @@ inline f32 fopAcM_GetSpeedF(fopAc_ac_c* p_actor) {
 }
 
 inline f32 fopAcM_GetGravity(fopAc_ac_c* p_actor) {
-    return p_actor->mGravity;
+    return p_actor->gravity;
 }
 
 inline f32 fopAcM_GetMaxFallSpeed(fopAc_ac_c* p_actor) {
-    return p_actor->mMaxFallSpeed;
+    return p_actor->maxFallSpeed;
 }
 
 inline JntHit_c* fopAcM_GetJntHit(fopAc_ac_c* i_actor) {
-    return i_actor->mJntHit;
+    return i_actor->jntHit;
 }
 
 inline void fopAcM_setCullSizeFar(fopAc_ac_c* i_actor, f32 i_far) {
-    i_actor->mCullSizeFar = i_far;
+    i_actor->cullSizeFar = i_far;
 }
 
 inline f32 fopAcM_getCullSizeFar(fopAc_ac_c* i_actor) {
-    return i_actor->mCullSizeFar;
+    return i_actor->cullSizeFar;
 }
 
 inline void fopAcM_SetCullSize(fopAc_ac_c* i_actor, int i_culltype) {
-    i_actor->mCullType = i_culltype;
+    i_actor->cullType = i_culltype;
 }
 
 inline int fopAcM_GetCullSize(fopAc_ac_c* i_actor) {
-    return i_actor->mCullType;
+    return i_actor->cullType;
 }
 
 inline BOOL fopAcM_CULLSIZE_IS_BOX(int i_culltype) {
@@ -317,19 +317,19 @@ inline int fopAcM_CULLSIZE_Q_IDX(int i_culltype) {
 }
 
 inline cXyz* fopAcM_getCullSizeSphereCenter(fopAc_ac_c* i_actor) {
-    return (cXyz*)&i_actor->mCull.mSphere.mCenter;
+    return (cXyz*)&i_actor->cull.sphere.center;
 }
 
 inline f32 fopAcM_getCullSizeSphereR(fopAc_ac_c* i_actor) {
-    return i_actor->mCull.mSphere.mRadius;
+    return i_actor->cull.sphere.radius;
 }
 
 inline cXyz* fopAcM_getCullSizeBoxMax(fopAc_ac_c* actor) {
-    return (cXyz*)&actor->mCull.mBox.mMax;
+    return (cXyz*)&actor->cull.box.max;
 }
 
 inline cXyz* fopAcM_getCullSizeBoxMin(fopAc_ac_c* actor) {
-    return (cXyz*)&actor->mCull.mBox.mMin;
+    return (cXyz*)&actor->cull.box.min;
 }
 
 inline void dComIfGs_onSwitch(int i_no, int i_roomNo);
@@ -392,7 +392,7 @@ inline f32 fopAcM_searchActorDistanceY(fopAc_ac_c* actorA, fopAc_ac_c* actorB) {
 }
 
 inline u16 fopAcM_GetSetId(fopAc_ac_c* p_actor) {
-    return p_actor->mSetId;
+    return p_actor->setID;
 }
 
 inline void dComIfGs_onActor(int bitNo, int roomNo);
@@ -459,13 +459,13 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback,
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
 #ifndef __INTELLISENSE__
-    p_actor->mCull.mBox.mMin.set(minX, minY, minZ);
+    p_actor->cull.box.min.set(minX, minY, minZ);
 #endif
 }
 
 inline void fopAcM_SetMax(fopAc_ac_c* p_actor, f32 maxX, f32 maxY, f32 maxZ) {
 #ifndef __INTELLISENSE__
-    p_actor->mCull.mBox.mMax.set(maxX, maxY, maxZ);
+    p_actor->cull.box.max.set(maxX, maxY, maxZ);
 #endif
 }
 
@@ -617,11 +617,11 @@ inline void fopAcM_seStartCurrent(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
 }
 
 inline void fopAcM_seStart(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
-    mDoAud_seStart(i_seNum, &actor->mEyePos, param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+    mDoAud_seStart(i_seNum, &actor->eyePos, param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
 inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
-    mDoAud_monsSeStart(i_seNum, &actor->mEyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+    mDoAud_monsSeStart(i_seNum, &actor->eyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
 inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 i_seNum, Vec* i_sePos, u32 param_2) {
@@ -632,11 +632,11 @@ void fopDwTg_ToDrawQ(create_tag_class*, int);
 void fopDwTg_DrawQTo(create_tag_class*);
 
 inline void fopAcM_onDraw(fopAc_ac_c* actor) {
-    fopDwTg_ToDrawQ(&actor->mDwTg, fpcLf_GetPriority(actor));
+    fopDwTg_ToDrawQ(&actor->draw_tag, fpcLf_GetPriority(actor));
 }
 
 inline void fopAcM_offDraw(fopAc_ac_c* actor) {
-    fopDwTg_DrawQTo(&actor->mDwTg);
+    fopDwTg_DrawQTo(&actor->draw_tag);
 }
 
 inline void fopAcM_orderOtherEvent(fopAc_ac_c* ac, char* event, u16 flag) {

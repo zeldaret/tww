@@ -232,7 +232,7 @@ void daIball_c::mode_wait_init() {
 void daIball_c::mode_wait() {
     if (mAcch.ChkGroundLanding()) {
         mPrevSpeedY *= m_data.mBounceSpeedMult;
-        if (mPrevSpeedY > mGravity - 0.5f) {
+        if (mPrevSpeedY > gravity - 0.5f) {
             speedF = 0.0f;
         } else {
             speed.set(0.0f, -mPrevSpeedY, 0.0f);
@@ -248,7 +248,7 @@ void daIball_c::mode_wait() {
 
 /* 800F3F6C-800F3FE8       .text mode_water_init__9daIball_cFv */
 void daIball_c::mode_water_init() {
-    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &mScale, 0xFF, &mRippleCb);
+    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &scale, 0xFF, &mRippleCb);
     mRippleCb.setRate(0.0f);
     mMode = MODE_WATER;
 }
@@ -313,7 +313,7 @@ void daIball_c::damage() {
 
 /* 800F4250-800F42E8       .text set_mtx__9daIball_cFv */
 void daIball_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + m_data.mYOffset, current.pos.z);
     mDoMtx_stack_c::XYZrotM(current.angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -331,7 +331,7 @@ void daIball_c::CreateInit() {
     mAcch.OnSeaWaterHeight();
     
     mbPlayedSe = false;
-    mGravity = m_data.mGravity;
+    gravity = m_data.mGravity;
     mMode = MODE_WAIT;
     current.pos.y -= m_data.mYOffset;
     
@@ -349,8 +349,8 @@ void daIball_c::CreateInit() {
 
 /* 800F441C-800F4544       .text _daIball_draw__9daIball_cFv */
 BOOL daIball_c::_daIball_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     
     for (int i = 0; i < (int)ARRAY_SIZE(mBrkAnm); i++) {
         mBrkAnm[i].entry(mpModel->getModelData());
@@ -372,8 +372,8 @@ BOOL daIball_c::_daIball_draw() {
 
 /* 800F4544-800F4634       .text _daIball_execute__9daIball_cFv */
 BOOL daIball_c::_daIball_execute() {
-    mEyePos = current.pos;
-    mEyePos.y = current.pos.y + 45.0f;
+    eyePos = current.pos;
+    eyePos.y = current.pos.y + 45.0f;
     
     mTimer++;
     
@@ -526,7 +526,7 @@ actor_process_profile_definition g_profile_Iball = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Iball,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daIball_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

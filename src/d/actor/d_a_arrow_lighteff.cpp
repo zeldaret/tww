@@ -14,7 +14,7 @@
 
 /* 00000078-00000108       .text setTopPos__18daArrow_Lighteff_cFv */
 void daArrow_Lighteff_c::setTopPos() {
-    daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(mParentPcId));
+    daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(parentActorID));
     if(arrow) {
         mDoMtx_stack_c::copy(arrow->field_0x6b4);
         mDoMtx_stack_c::transM(0.0f, 0.0f, 62.0f);
@@ -173,7 +173,7 @@ void daArrow_Lighteff_c::CreateInit() {
 void daArrow_Lighteff_c::set_mtx() {
     field_0x298->setBaseScale(field_0x2A8);
 
-    daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(mParentPcId));
+    daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(parentActorID));
     if(arrow) {
         mDoMtx_stack_c::copy(arrow->field_0x6b4);
         mDoMtx_stack_c::transM(0.0f, 0.0f, 62.0f);
@@ -211,7 +211,7 @@ bool daArrow_Lighteff_c::_delete() {
     if(field_0x2EA == 1) {
         daPy_py_c* link = daPy_getPlayerActorClass();
 
-        daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(mParentPcId));
+        daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(parentActorID));
         if(arrow) {
             if(!arrow->isSetByZelda()) {
                 link->offUseArrowEffect();
@@ -305,7 +305,7 @@ bool daArrow_Lighteff_c::_execute() {
     brk_play();
 
     daPy_py_c* link = daPy_getPlayerActorClass();
-    daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(mParentPcId));
+    daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(parentActorID));
     if(arrow) {
         field_0x2EC = fopAcM_GetParam(arrow);
         if(arrow->field_0x6e4 == 1) {
@@ -412,7 +412,7 @@ actor_process_profile_definition g_profile_ARROW_LIGHTEFF = {
     9,
     fpcPi_CURRENT_e,
     PROC_ARROW_LIGHTEFF,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daArrow_Lighteff_c),
     0,
     0,

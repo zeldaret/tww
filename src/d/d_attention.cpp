@@ -117,7 +117,7 @@ dAttList_c* dAttention_c::GetLockonList(s32 idx) {
 dAttList_c* dAttention_c::getActionBtnB() {
     /* Nonmatching */
     dAttList_c* list = GetLockonList(0);
-    if (list != NULL && list->getActor() != NULL && list->mType == 1 && LockonTruth() != 0 && !(list->getActor()->mAttentionInfo.mFlags & fopAc_Attn_TALKFLAG_NOTALK_e))
+    if (list != NULL && list->getActor() != NULL && list->mType == 1 && LockonTruth() != 0 && !(list->getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
         return list;
 
     if (mActionNum == 0)
@@ -125,7 +125,7 @@ dAttList_c* dAttention_c::getActionBtnB() {
 
     for (s32 i = 0; i < mActionNum; i++) {
         if (mActionList[i].mType == 3) {
-            if (!(mActionList[i].getActor()->mAttentionInfo.mFlags & fopAc_Attn_TALKFLAG_NOTALK_e))
+            if (!(mActionList[i].getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
                 return &mActionList[i];
         } else {
             return &mActionList[i];
@@ -141,12 +141,12 @@ dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
     dAttList_c* list = GetLockonList(0);
     if (list != NULL && list->getActor() != NULL && list->mType == 1 && LockonTruth() != 0) {
         fopAc_ac_c* actor = list->getActor();
-        if (actor->mEvtInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
+        if (actor->eventInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
             s16 rt;
-            if (actor->mEvtInfo.mpCheckCB == NULL)
+            if (actor->eventInfo.mpCheckCB == NULL)
                 rt = 1;
             else
-                rt = actor->mEvtInfo.mpCheckCB(actor, button);
+                rt = actor->eventInfo.mpCheckCB(actor, button);
 
             if (rt)
                 return list;
@@ -160,12 +160,12 @@ dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
         for (s32 i = 0; i < mActionNum; i++) {
             if (mActionList[i].mType == 3) {
                 fopAc_ac_c* actor = mActionList[i].getActor();
-                if (actor->mEvtInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
+                if (actor->eventInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
                     s16 rt;
-                    if (actor->mEvtInfo.mpCheckCB == NULL)
+                    if (actor->eventInfo.mpCheckCB == NULL)
                         rt = 1;
                     else
-                        rt = actor->mEvtInfo.mpCheckCB(actor, button);
+                        rt = actor->eventInfo.mpCheckCB(actor, button);
 
                     if (rt)
                         return &mActionList[i];
@@ -339,12 +339,12 @@ int dAttention_c::SelectAttention(fopAc_ac_c* ac) {
     if (ac == mpPlayer || mpPlayer == NULL)
         return 0;
 
-    mFlagMask = ac->mAttentionInfo.mFlags;
+    mFlagMask = ac->attention_info.flags;
 
-    cSGlobe globe1(ac->mAttentionInfo.mPosition - mpPlayer->mAttentionInfo.mPosition);
+    cSGlobe globe1(ac->attention_info.position - mpPlayer->attention_info.position);
     cSAngle angle1 = globe1.U() - mpPlayer->shape_angle.y;
 
-    cSGlobe globe2(mpPlayer->mAttentionInfo.mPosition - ac->mAttentionInfo.mPosition);
+    cSGlobe globe2(mpPlayer->attention_info.position - ac->attention_info.position);
     cSAngle angle2 = globe2.U() - mpPlayer->shape_angle.y;
 
     u32 type;
@@ -418,11 +418,11 @@ f32 dAttention_c::EnemyDistance(fopAc_ac_c* actor) {
     if (fopAcM_GetProfName(actor) == PROC_PLAYER)
         return -1.0f;
 
-    if (!(actor->mAttentionInfo.mFlags & 4) && !(actor->mAttentionInfo.mFlags & 0x4000000))
+    if (!(actor->attention_info.flags & 4) && !(actor->attention_info.flags & 0x4000000))
         return -1.0f;
 
     f32 dist = fopAcM_searchActorDistance(actor, mpPlayer);
-    if (dist < (dist_table[actor->mAttentionInfo.mDistances[2]].mDistXZMax + dist_table[actor->mAttentionInfo.mDistances[2]].mDistXZAngleAdjust))
+    if (dist < (dist_table[actor->attention_info.distances[2]].mDistXZMax + dist_table[actor->attention_info.distances[2]].mDistXZAngleAdjust))
         return dist;
     return -1.0f;
 }

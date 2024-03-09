@@ -9,7 +9,7 @@ typedef struct layer_class layer_class;
 typedef int (*fstCreateFunc)(void*, void*);
 
 typedef struct fast_create_request {
-    /* 0x00 */ create_request mBase;
+    /* 0x00 */ create_request base;
     /* 0x48 */ fstCreateFunc mpFastCreateFunc;
     /* 0x4C */ void* mpFastCreateData;
 } fast_create_request;  // Size: 0x50

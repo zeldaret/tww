@@ -44,7 +44,7 @@ void daBranch_c::set_mtx() {
         pMdl = mModel[i];
 
         if (pMdl) {
-            pMdl->setBaseScale(mScale);
+            pMdl->setBaseScale(scale);
 
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::XYZrotM(current.angle);
@@ -123,8 +123,8 @@ inline BOOL daBranch_c::draw() {
         activeIdx = 1;
     }
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mModel[activeIdx], &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mModel[activeIdx], &tevStr);
 
     mAnims[activeIdx]->updateDL();
 
@@ -138,7 +138,7 @@ static BOOL daBranch_Draw(daBranch_c* i_this) {
 }
 
 inline BOOL daBranch_c::execute() {
-    u8 demoId = mDemoActorId;
+    u8 demoId = demoActorID;
 
     if (demoId == 0) {
         if (m02B8 == 5) {
@@ -246,7 +246,7 @@ actor_process_profile_definition g_profile_BRANCH = {
     7,
     fpcLy_CURRENT_e,
     PROC_BRANCH,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daBranch_c),
     0,
     0,

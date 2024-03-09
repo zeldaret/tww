@@ -148,8 +148,8 @@ void daHookshot_shape::draw() {
     dKy_GxFog_set();
     // Not sure why the size passed here is smaller than l_matDL's size in the symbol maps.
     GXCallDisplayList(&l_matDL, sizeof(l_matDL) - 0x08);
-    GXSetTevColorS10(GX_TEVREG0, hookshot->mTevStr.mColorC0);
-    GXSetTevColor(GX_TEVREG1, hookshot->mTevStr.mColorK0);
+    GXSetTevColorS10(GX_TEVREG0, hookshot->tevStr.mColorC0);
+    GXSetTevColor(GX_TEVREG1, hookshot->tevStr.mColorK0);
     GXSetCurrentMtx(0);
     
     cXyz chain_pos = daPy_getPlayerLinkActorClass()->getHookshotRootPos();
@@ -176,7 +176,7 @@ void daHookshot_shape::draw() {
 
 /* 800F12C8-800F1324       .text draw__12daHookshot_cFv */
 BOOL daHookshot_c::draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     dComIfGd_getOpaListP1()->entryImm(&mShape, 0);
     return TRUE;
 }
@@ -370,14 +370,14 @@ s32 daHookshot_c::create() {
     mShape.setUserArea(reinterpret_cast<u32>(this));
     mLinChk.ClrSttsRoofOff();
     procWait_init(FALSE);
-    mGravity = -5.0f;
+    gravity = -5.0f;
     
     mStts.Init(10, 0xFF, this);
     mCps.Set(l_at_cps_src);
     mCps.SetStts(&mStts);
     
     int roomNo = dComIfGp_roomControl_getStayNo();
-    mTevStr.mRoomNo = roomNo;
+    tevStr.mRoomNo = roomNo;
     mStts.SetRoomId(roomNo);
     current.roomNo = roomNo;
     
@@ -402,7 +402,7 @@ actor_process_profile_definition g_profile_HOOKSHOT = {
     /* ListID       */ 6,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_HOOKSHOT,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daHookshot_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

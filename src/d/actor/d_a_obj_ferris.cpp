@@ -249,7 +249,7 @@ void daObjFerris::Act_c::set_mtx(int idx) {
 /* 000011B8-00001240       .text init_mtx__Q211daObjFerris5Act_cFv */
 void daObjFerris::Act_c::init_mtx() {
     for (s32 i = 0; i < 6; i++) {
-        mpModel[i]->setBaseScale(mScale);
+        mpModel[i]->setBaseScale(scale);
         set_mtx(i);
         mpModel[i]->calc();
     }
@@ -274,11 +274,11 @@ BOOL daObjFerris::Act_c::set_event(s16 p1) {
 void daObjFerris::Act_c::exe_event() {
     switch (mEventState) {
     case 1:
-        if (mEvtInfo.checkCommandDemoAccrpt()) {
+        if (eventInfo.checkCommandDemoAccrpt()) {
             mEventState = 2;
         } else {
             fopAcM_orderOtherEventId(this, mEventIdx);
-            mEvtInfo.onCondition(dEvtCnd_UNK2_e);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
         break;
     case 2:
@@ -514,10 +514,10 @@ bool daObjFerris::Act_c::_execute() {
 
 /* 00001D58-00001E18       .text _draw__Q211daObjFerris5Act_cFv */
 bool daObjFerris::Act_c::_draw() {
-    dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
+    dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     dComIfGd_setListBG();
     for (s32 i = 0; i < 6; i++) {
-        dKy_getEnvlight().setLightTevColorType(mpModel[i], &mTevStr);
+        dKy_getEnvlight().setLightTevColorType(mpModel[i], &tevStr);
         mDoExt_modelUpdateDL(mpModel[i]);
     }
     dComIfGd_setList();
@@ -561,7 +561,7 @@ actor_process_profile_definition g_profile_Obj_Ferris = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Ferris,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjFerris::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

@@ -12,14 +12,14 @@ struct overlap_method_class {
 
 class overlap_task_class : public leafdraw_class {
 public:
-    /* 0xC0 */ overlap_method_class* mSubMtd;
+    /* 0xC0 */ overlap_method_class* sub_method;
     /* 0xC4 */ request_base_class mRq;
     /* 0xC8 */ int mScenePId;
 };  // Size: 0xCC
 
 struct overlap_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
-    /* 0x24 */ overlap_method_class* mSubMtd;
+    /* 0x24 */ overlap_method_class* sub_method;
 };  // Size: 0x28
 
 int fopOvlpM_SceneIsStop();

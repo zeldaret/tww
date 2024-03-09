@@ -164,7 +164,7 @@ bool daTagvolcano::Act_c::_execute() {
         }
 
         if (field_0x2a4 == 1) {
-            if (mEvtInfo.checkCommandDemoAccrpt()) {
+            if (eventInfo.checkCommandDemoAccrpt()) {
                 if (mType == 1) {
                     dComIfGp_setNextStage("sea", 2, 20);
                 } else {
@@ -221,7 +221,7 @@ actor_process_profile_definition g_profile_Tag_Volcano = {
     /* ListID       */ 2,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Tag_Volcano,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagvolcano::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

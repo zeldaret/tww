@@ -43,7 +43,7 @@ void daObjDmgroom_c::CreateInit() {
 
 /* 0000026C-000002EC       .text set_mtx__14daObjDmgroom_cFv */
 void daObjDmgroom_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -71,8 +71,8 @@ bool daObjDmgroom_c::_delete() {
 }
 
 bool daObjDmgroom_c::_execute() {
-    if (mDemoActorId != 0) {
-        dDemo_actor_c * demoAc = dComIfGp_demo_getActor(mDemoActorId);
+    if (demoActorID != 0) {
+        dDemo_actor_c * demoAc = dComIfGp_demo_getActor(demoActorID);
         if (demoAc != NULL && demoAc->checkEnable(0x40))
             mBrkAnm.setFrame(demoAc->mAnimationFrame);
     }
@@ -81,8 +81,8 @@ bool daObjDmgroom_c::_execute() {
 }
 
 bool daObjDmgroom_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
     mBrkAnm.entry(mpModel->getModelData());
     mDoExt_modelUpdateDL(mpModel);
@@ -129,7 +129,7 @@ actor_process_profile_definition g_profile_Obj_Dmgroom = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Dmgroom,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjDmgroom_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

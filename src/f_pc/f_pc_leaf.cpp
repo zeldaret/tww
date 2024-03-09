@@ -25,19 +25,19 @@ s32 fpcLf_Draw(leafdraw_class* i_leaf) {
 
 /* 8003DCF8-8003DD20       .text fpcLf_Execute__FP14leafdraw_class */
 s32 fpcLf_Execute(leafdraw_class* i_leaf) {
-    return fpcMtd_Execute(&i_leaf->mpDrawMtd->mBase, i_leaf);
+    return fpcMtd_Execute(&i_leaf->mpDrawMtd->base, i_leaf);
 }
 
 /* 8003DD20-8003DD48       .text fpcLf_IsDelete__FP14leafdraw_class */
 s32 fpcLf_IsDelete(leafdraw_class* i_leaf) {
-    return fpcMtd_IsDelete(&i_leaf->mpDrawMtd->mBase, i_leaf);
+    return fpcMtd_IsDelete(&i_leaf->mpDrawMtd->base, i_leaf);
 }
 
 /* 8003DD48-8003DD8C       .text fpcLf_Delete__FP14leafdraw_class */
 s32 fpcLf_Delete(leafdraw_class* i_leaf) {
-    s32 ret = fpcMtd_Delete(&i_leaf->mpDrawMtd->mBase, i_leaf);
+    s32 ret = fpcMtd_Delete(&i_leaf->mpDrawMtd->base, i_leaf);
     if (ret == 1) {
-        i_leaf->mBase.mSubType = 0;
+        i_leaf->base.mSubType = 0;
     }
     return ret;
 }
@@ -47,14 +47,14 @@ int g_fpcLf_type;
 /* 8003DD8C-8003DE00       .text fpcLf_Create__FP14leafdraw_class */
 s32 fpcLf_Create(leafdraw_class* i_leaf) {
     leaf_process_profile_definition* profDef;
-    if (i_leaf->mBase.mInitState == 0) {
-        profDef = (leaf_process_profile_definition*)i_leaf->mBase.mpProf;
-        i_leaf->mpDrawMtd = profDef->mSubMtd;
-        i_leaf->mBase.mSubType = fpcBs_MakeOfType(&g_fpcLf_type);
+    if (i_leaf->base.mInitState == 0) {
+        profDef = (leaf_process_profile_definition*)i_leaf->base.mpProf;
+        i_leaf->mpDrawMtd = profDef->sub_method;
+        i_leaf->base.mSubType = fpcBs_MakeOfType(&g_fpcLf_type);
         fpcDwPi_Init(&i_leaf->mDwPi, profDef->mPriority);
         i_leaf->mbUnk0 = 0;
     }
-    return fpcMtd_Create(&i_leaf->mpDrawMtd->mBase, i_leaf);
+    return fpcMtd_Create(&i_leaf->mpDrawMtd->base, i_leaf);
 }
 
 leafdraw_method_class g_fpcLf_Method = {

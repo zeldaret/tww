@@ -186,7 +186,7 @@ s32 daWall_c::_create() {
 
 /* 00000800-00000880       .text set_mtx__8daWall_cFv */
 void daWall_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -196,7 +196,7 @@ void daWall_c::set_mtx() {
 void daWall_c::setMoveBGMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(fopAcM_GetShapeAngle_p(this)->y);
-    mDoMtx_stack_c::scaleM(mScale);
+    mDoMtx_stack_c::scaleM(scale);
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 }
 
@@ -254,7 +254,7 @@ void daWall_c::mode_break() {
             break;
         }
     }
-    fopDwTg_DrawQTo(&mDwTg);
+    fopDwTg_DrawQTo(&draw_tag);
 }
 
 /* 00000B14-00000D84       .text set_tri__8daWall_cFv */
@@ -300,11 +300,11 @@ void daWall_c::set_effect() {
     case 1:
     case 2:
         dComIfGp_particle_setProjection(projection_id[mType], &current.pos, &current.angle, NULL,
-                                        0xFF, NULL, fopAcM_GetRoomNo(this), &mTevStr.mColorK0,
-                                        &mTevStr.mColorK0);
+                                        0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0,
+                                        &tevStr.mColorK0);
         dComIfGp_particle_setProjection(projection_id[mType], &current.pos, &local_28, NULL, 0xFF,
-                                        NULL, fopAcM_GetRoomNo(this), &mTevStr.mColorK0,
-                                        &mTevStr.mColorK0);
+                                        NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0,
+                                        &tevStr.mColorK0);
         mpEmitter = dComIfGp_particle_set(particle_id[mType], &current.pos, &current.angle, NULL,
                                           mDst, &mSmokeCb, fopAcM_GetRoomNo(this));
         if (mpEmitter != NULL) {
@@ -329,8 +329,8 @@ void daWall_c::set_se() {
 
 /* 00000FE4-00001044       .text _draw__8daWall_cFv */
 bool daWall_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return TRUE;
 }
@@ -371,7 +371,7 @@ actor_process_profile_definition g_profile_WALL = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_WALL,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWall_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

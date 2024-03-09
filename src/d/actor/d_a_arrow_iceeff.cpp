@@ -98,8 +98,8 @@ void daArrow_Iceeff_c::set_mtx() {
         }
     }
     else {
-        mScale.setall(1.0f);
-        mpModel->setBaseScale(mScale);
+        scale.setall(1.0f);
+        mpModel->setBaseScale(scale);
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -109,7 +109,7 @@ void daArrow_Iceeff_c::set_mtx() {
 s32 daArrow_Iceeff_c::_create() {
     fopAcM_SetupActor(this, daArrow_Iceeff_c);
 
-    void* arrow = fopAcM_SearchByID(mParentPcId);
+    void* arrow = fopAcM_SearchByID(parentActorID);
     if(arrow == 0) {
         return cPhs_ERROR_e;
     }
@@ -153,10 +153,10 @@ bool daArrow_Iceeff_c::_draw() {
     field_0xA1C->setFrame(field_0xA34);
     dComIfGd_setListP1();
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     if(field_0xA38 == 0) {
         for(int i = 0; i < temp; i++) {
-            g_env_light.setLightTevColorType(field_0x298[i], &mTevStr);
+            g_env_light.setLightTevColorType(field_0x298[i], &tevStr);
 
             if(field_0xA3C == 1) {
                 mDoExt_modelUpdateDL(field_0x298[i]);
@@ -164,7 +164,7 @@ bool daArrow_Iceeff_c::_draw() {
         }
     }
     else {
-        g_env_light.setLightTevColorType(mpModel, &mTevStr);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
         J3DModelData* mdl_data = mpModel->getModelData();
         mBck.entry(mdl_data, mBck.getFrame());
         if(field_0xA3C == 1) {
@@ -193,7 +193,7 @@ static BOOL daArrow_Iceeff_Execute(void* i_this) {
 bool daArrow_Iceeff_c::_execute() {
     static cXyz ripple_scale(1.0f, 1.0f, 1.0f);
 
-    daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(mParentPcId));
+    daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(parentActorID));
     if(field_0xA38 == 0) {
         if(arrow == 0) {
             dComIfGp_particle_setP1(0x55, &current.pos, &current.angle);
@@ -306,7 +306,7 @@ actor_process_profile_definition g_profile_ARROW_ICEEFF = {
     9,
     fpcPi_CURRENT_e,
     PROC_ARROW_ICEEFF,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daArrow_Iceeff_c),
     0,
     0,

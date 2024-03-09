@@ -517,8 +517,8 @@ void daObjTpost_c::eventOrder() {
     };
 
     if(field_0x8F7 == 1 || field_0x8F7 == 2) {
-        mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
-        mEvtInfo.onCondition(dEvtCnd_CANTALKITEM_e);
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
 
         if(field_0x8F7 == 1) {
             fopAcM_orderSpeakEvent(this);
@@ -531,12 +531,12 @@ void daObjTpost_c::eventOrder() {
 
 /* 00000DC0-00000E48       .text checkOrder__12daObjTpost_cFv */
 void daObjTpost_c::checkOrder() {
-    if(mEvtInfo.checkCommandDemoAccrpt()) {
+    if(eventInfo.checkCommandDemoAccrpt()) {
         field_0x8F7 = 0;
         return;
     }
 
-    if(mEvtInfo.checkCommandTalk()) {
+    if(eventInfo.checkCommandTalk()) {
         if(field_0x8F7 == 1 || field_0x8F7 == 2) {
             field_0x8F7 = 0;
             if(dComIfGp_event_chkTalkXY()) {
@@ -553,10 +553,10 @@ void daObjTpost_c::checkOrder() {
 
 /* 00000E48-00000EA4       .text setAttention__12daObjTpost_cFv */
 void daObjTpost_c::setAttention() {
-    mAttentionInfo.mPosition = current.pos;
-    mAttentionInfo.mPosition.y += l_HIO.attn_pos_offset;
-    mEyePos = current.pos;
-    mEyePos.y += l_HIO.eye_pos_offset;
+    attention_info.position = current.pos;
+    attention_info.position.y += l_HIO.attn_pos_offset;
+    eyePos = current.pos;
+    eyePos.y += l_HIO.eye_pos_offset;
 }
 
 /* 00000EA4-0000100C       .text setAnm__12daObjTpost_cFScb */
@@ -632,7 +632,7 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
 /* 0000100C-00001094       .text setMtx__12daObjTpost_cFv */
 void daObjTpost_c::setMtx() {
     J3DModel* pModel = mMorf->getModel();
-    pModel->setBaseScale(mScale);
+    pModel->setBaseScale(scale);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -857,7 +857,7 @@ bool daObjTpost_c::_execute() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     mStts.Move();
     if(mCyl.ChkTgHit()) {
-        daObj::HitSeStart(&mEyePos, current.roomNo, &mCyl, 0x0B);
+        daObj::HitSeStart(&eyePos, current.roomNo, &mCyl, 0x0B);
     }
     daObj::HitEff_kikuzu(this, &mCyl);
     fopAcM_rollPlayerCrash(this, 40.0f, 7);
@@ -882,8 +882,8 @@ bool daObjTpost_c::_draw() {
     }
 
     J3DModel* pModel = mMorf->getModel();
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(pModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(pModel, &tevStr);
     mMorf->entryDL();
     dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), 40.0f, mAcch.m_gnd, shape_angle.y, 1.0f, 0);
 
@@ -916,9 +916,9 @@ void daObjTpost_c::createInit() {
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
     mpCurrMsg = 0;
 
-    mAttentionInfo.mDistances[1] = 5;
-    mAttentionInfo.mDistances[3] = 6;
-    mAttentionInfo.mFlags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    attention_info.distances[1] = 5;
+    attention_info.distances[3] = 6;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
     setAnm(1, false);
     setMtx();
@@ -938,7 +938,7 @@ void daObjTpost_c::createInit() {
     mAcchCir.SetWall(30.0f, 30.0f);
     mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     mAcch.SetRoofNone();
-    mGravity = -4.5f;
+    gravity = -4.5f;
 
     mEventCut.setActorInfo2("Tpost", this);
 }
@@ -1010,7 +1010,7 @@ actor_process_profile_definition g_profile_OBJ_TORIPOST = {
     3,
     fpcPi_CURRENT_e,
     PROC_OBJ_TORIPOST,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daObjTpost_c),
     0,
     0,

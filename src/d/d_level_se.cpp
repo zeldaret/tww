@@ -53,7 +53,7 @@ kankyo_process_profile_definition g_profile_LEVEL_SE = {
     2,
     fpcPi_CURRENT_e,
     PROC_LEVEL_SE,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(dLevelSe_c),
     0,
     0,

@@ -84,7 +84,7 @@ void daShopItem_c::CreateInit() {
     }
     show();
 
-    mScale = getData()[m_itemNo].mScale;
+    scale = getData()[m_itemNo].mScale;
     home.pos = current.pos;
     set_mtx();
 
@@ -132,7 +132,7 @@ BOOL daShopItem_c::clothCreate() {
         ResTIMG* shopArc = (ResTIMG*)dComIfG_getObjectRes(getShopArcname(), clothRes[field_0x648]);
         ResTIMG* clothArc = (ResTIMG*)dComIfG_getObjectRes(m_cloth_arcname, CLOTH_BTI_CLOTHTOON);
 
-        field_0x644 = (*clothFunc[field_0x648])(shopArc, clothArc, &mTevStr, 0);
+        field_0x644 = (*clothFunc[field_0x648])(shopArc, clothArc, &tevStr, 0);
         if (field_0x644 == 0) {
             return 0;
         }
@@ -146,7 +146,7 @@ BOOL daShopItem_c::clothCreate() {
 
 /* 000003BC-000005A8       .text set_mtx__12daShopItem_cFv */
 void daShopItem_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     MTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
     MTXCopy(mDoMtx_stack_c::get(), field_0x64C);
@@ -173,7 +173,7 @@ void daShopItem_c::set_mtx() {
 
         mDoMtx_stack_c::transM(local[field_0x648]);
         mDoMtx_stack_c::YrotM(0x4000);
-        field_0x644->setScale(mScale);
+        field_0x644->setScale(scale);
         field_0x644->setMtx(mDoMtx_stack_c::get());
     }
 }
@@ -203,17 +203,17 @@ bool daShopItem_c::_draw() {
 /* 00000694-0000070C       .text settingBeforeDraw__12daShopItem_cFv */
 void daShopItem_c::settingBeforeDraw() {
     if(isBomb(m_itemNo) || (m_itemNo == BOMB_BAG) || (m_itemNo == dItem_SKULL_HAMMER_e) || m_itemNo == dItem_SMALL_KEY_e || m_itemNo == PRESIDENT_STATUE) {
-        dDlst_texSpecmapST(&mEyePos, &mTevStr, mpModel->getModelData(), 1.0f);
+        dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }
 
 /* 0000070C-000007A4       .text setTevStr__12daShopItem_cFv */
 void daShopItem_c::setTevStr() {
-    g_env_light.settingTevStruct(tevType, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(tevType, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     for(int i = 0; i < 2; i++) {
         if(mpModelArrow[i] != 0) {
-            g_env_light.setLightTevColorType(mpModelArrow[i], &mTevStr);
+            g_env_light.setLightTevColorType(mpModelArrow[i], &tevStr);
         }
     }
     
@@ -314,7 +314,7 @@ actor_process_profile_definition g_profile_ShopItem = {
     7,
     fpcPi_CURRENT_e,
     PROC_ShopItem,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daShopItem_c),
     0,
     0,

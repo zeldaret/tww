@@ -62,7 +62,7 @@ void daWarpfout_c::eventOrder() {}
 void daWarpfout_c::demo_proc() {
     mStaffId = dComIfGp_evmng_getMyStaffId("Warpfo");
 
-    if (dComIfGp_event_runCheck() && !mEvtInfo.checkCommandTalk() && mStaffId != -1) {
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mStaffId != -1) {
         int actIdx =
             dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
 
@@ -222,7 +222,7 @@ actor_process_profile_definition g_profile_WARPFOUT = {
     3,
     fpcPi_CURRENT_e,
     PROC_WARPFOUT,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daWarpfout_c),
     0,
     0,

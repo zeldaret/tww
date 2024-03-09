@@ -40,7 +40,7 @@ s32 daThrowstone_c::_create() {
         } else {
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(shape_angle.y);
-            mDoMtx_stack_c::scaleM(mScale);
+            mDoMtx_stack_c::scaleM(scale);
 
             mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -70,7 +70,7 @@ BOOL daThrowstoneDelete(void* ptr) {
 BOOL daThrowstone_c::_execute() {
     dDemo_setDemoData(this, 0x6a, NULL, NULL, 0, NULL, 0, 0);
 
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     f32 pos_x = current.pos.x;
     mDoMtx_stack_c::transS(pos_x, current.pos.y, current.pos.z);
     s16 rot_x = shape_angle.x;
@@ -91,8 +91,8 @@ bool daThrowstone_c::_draw() {
     if (!dComIfGs_isEventBit(0x0310))
         return TRUE;
 
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
 
     return TRUE;
@@ -121,7 +121,7 @@ actor_process_profile_definition g_profile_THROWSTONE = {
     2,
     fpcPi_CURRENT_e,
     PROC_THROWSTONE,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daThrowstone_c),
     0,
     0,

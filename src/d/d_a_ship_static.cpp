@@ -12,7 +12,7 @@ void daShip_c::initStartPos(const cXyz* pos, short rotY) {
     shape_angle.y = rotY;
     current.angle.y = shape_angle.y;
     m0358 &= ~0x10;
-    mGravity = -2.5f;
+    gravity = -2.5f;
 
     mWaveL.remove();
     mWaveR.remove();

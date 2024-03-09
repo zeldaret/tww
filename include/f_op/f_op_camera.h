@@ -10,7 +10,7 @@ typedef struct leafdraw_method_class leafdraw_method_class;
 
 class camera_process_class : public view_class {
 public:
-    /* 0x210 */ create_tag_class mDwTg;
+    /* 0x210 */ create_tag_class draw_tag;
     /* 0x224 */ leafdraw_method_class* mpMtd;
     /* 0x228 */ u8 field_0x228[4];
     /* 0x22C */ s8 mPrm1;
@@ -29,8 +29,8 @@ public:
 };
 
 struct camera_process_profile_definition {
-    /* 0x00 */ view_process_profile_definition mBase;
-    /* 0x3C */ leafdraw_method_class* mSubMtd; // Subclass methods
+    /* 0x00 */ view_process_profile_definition base;
+    /* 0x3C */ leafdraw_method_class* sub_method; // Subclass methods
 };
 
 #endif

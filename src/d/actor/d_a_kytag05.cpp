@@ -128,7 +128,7 @@ static int daKytag05_Create(fopAc_ac_c* i_this) {
     }
     a_this->mIndex = 0;
     a_this->mTimer = 0;
-    a_this->mUnknownParam = i_this->mBase.mParameters & 0xff;
+    a_this->mUnknownParam = i_this->base.mParameters & 0xff;
     dKyw_evt_wind_set_go();
     dKyw_evt_wind_set(0, 0);
     g_env_light.mSnowCount = 200;
@@ -155,7 +155,7 @@ actor_process_profile_definition g_profile_KYTAG05 = {
     7,
     fpcLy_CURRENT_e,
     PROC_KYTAG05,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(kytag05_class),
     0,
     0,

@@ -1012,7 +1012,7 @@ int daNpc_Md_c::calcStickPos(s16 param_1, cXyz* param_2) {
         attList = attention.GetActionList(0);
     }
     if (attList) {
-        *param_2 = attList->getActor()->mEyePos;
+        *param_2 = attList->getActor()->eyePos;
         return r31;
     }
     
@@ -1459,7 +1459,7 @@ BOOL daNpc_Md_c::hitNpcAction(void* r29) {
         current.angle.y = angle;
         speedF = 10.0f;
         speed.y = 20.0f;
-        mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
+        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
         mAcchCir[1].SetWall(60.0f, 20.0f);
         cLib_offBit(m30F0, 0x01UL | 0x04UL);
         cLib_onBit(m30F0, 0x02UL);
@@ -1582,8 +1582,8 @@ BOOL daNpc_Md_c::mkamaePlayerAction(void*) {
         setAnm(0x1F);
         shape_angle.x = 0;
         shape_angle.z = 0;
-        mGravity = l_HIO.m0F4;
-        mMaxFallSpeed = -100.0f;
+        gravity = l_HIO.m0F4;
+        maxFallSpeed = -100.0f;
         speedF = 0.0f;
         speed.y = 0.0f;
         mAcchCir[1].SetWall(60.0f, 20.0f);
@@ -1788,7 +1788,7 @@ static char* cut_name_tbl[] = {
 
 /* 0000A9BC-0000AC80       .text eventProc__10daNpc_Md_cFv */
 BOOL daNpc_Md_c::eventProc() {
-    if (mEvtInfo.checkCommandDemoAccrpt() && mCurEventMode != 0) {
+    if (eventInfo.checkCommandDemoAccrpt() && mCurEventMode != 0) {
         if (mCurEventMode == 0xC) {
             if (dComIfGp_evmng_startCheck("OPTION_CHAR_END") || dComIfGp_evmng_endCheck("OPTION_CHAR_END")) {
                 dComIfGp_event_setTalkPartner(dComIfGp_getLinkPlayer());
@@ -1832,7 +1832,7 @@ BOOL daNpc_Md_c::eventProc() {
         }
         if (staffIdx != -1) {
             return TRUE;
-        } else if (dComIfGp_getLinkPlayer()->mEvtInfo.checkCommandDoor() == FALSE) {
+        } else if (dComIfGp_getLinkPlayer()->eventInfo.checkCommandDoor() == FALSE) {
             return TRUE;
         }
     }
@@ -1904,8 +1904,8 @@ BOOL daNpc_Md_c::actionFlyEvent(int) {
 
 /* 0000B870-0000B890       .text initialGlidingEvent__10daNpc_Md_cFi */
 void daNpc_Md_c::initialGlidingEvent(int) {
-    mGravity = l_HIO.m0F4;
-    mMaxFallSpeed = -100.0f;
+    gravity = l_HIO.m0F4;
+    maxFallSpeed = -100.0f;
 }
 
 /* 0000B890-0000B934       .text actionGlidingEvent__10daNpc_Md_cFi */
@@ -2452,7 +2452,7 @@ BOOL daNpc_Md_c::setAnm(int anmIdx) {
     
     if (m312D == 0x10) {
         if (m0508[1] == NULL) {
-            m0508[1] = dComIfGp_particle_set(0x819D, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &mTevStr.mColorK0, &mTevStr.mColorK0);
+            m0508[1] = dComIfGp_particle_set(0x819D, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0, &tevStr.mColorK0);
             if (m0508[1]) {
                 m0508[1]->becomeImmortalEmitter();
             }
@@ -2514,7 +2514,7 @@ void daNpc_Md_c::checkOrder() {
 
 /* 0000DC14-0000DCB0       .text checkCommandTalk__10daNpc_Md_cFv */
 BOOL daNpc_Md_c::checkCommandTalk() {
-    if (mEvtInfo.checkCommandTalk()) {
+    if (eventInfo.checkCommandTalk()) {
         if (dComIfGp_event_chkTalkXY()) {
             onXYTalk();
             if (!isDefaultTalkXY()) {
@@ -2920,9 +2920,9 @@ BOOL daNpc_Md_c::draw() {
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
     
-    g_env_light.settingTevStruct(0, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     drawDamageFog();
-    g_env_light.setLightTevColorType(model, &mTevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
     m0520.entry(modelData);
     mpMorf->entryDL();
     m0520.remove(modelData);
@@ -2930,20 +2930,20 @@ BOOL daNpc_Md_c::draw() {
     if (!isTypeShipRide()) {
         if (cLib_checkBit(m30F0, 0x1UL)) {
             model = mpWingMorf->getModel();
-            g_env_light.setLightTevColorType(model, &mTevStr);
+            g_env_light.setLightTevColorType(model, &tevStr);
             mpWingMorf->entryDL();
         } else {
             model = mpArmMorf->getModel();
-            g_env_light.setLightTevColorType(model, &mTevStr);
+            g_env_light.setLightTevColorType(model, &tevStr);
             mpArmMorf->entryDL();
         }
     } else {
         model = mpArmMorf->getModel();
-        g_env_light.setLightTevColorType(model, &mTevStr);
+        g_env_light.setLightTevColorType(model, &tevStr);
         mpArmMorf->entryDL();
     }
     
-    g_env_light.setLightTevColorType(mpHarpModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpHarpModel, &tevStr);
     mDoExt_modelUpdateDL(mpHarpModel);
     
     if (isLightHit()) {
@@ -2968,7 +2968,7 @@ BOOL daNpc_Md_c::draw() {
         cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
         mShadowId = dComIfGd_setShadow(
             mShadowId, 0, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
-            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &mTevStr,
+            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
             0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
         );
         
@@ -3007,7 +3007,7 @@ void daNpc_Md_c::particle_set(JPABaseEmitter** pEmitter, u16 particleID) {
     if (*pEmitter) {
         return;
     }
-    (*pEmitter) = dComIfGp_particle_set(particleID, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &mTevStr.mColorK0, &mTevStr.mColorK0);
+    (*pEmitter) = dComIfGp_particle_set(particleID, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0, &tevStr.mColorK0);
     if (*pEmitter) {
         (*pEmitter)->becomeImmortalEmitter();
     }
@@ -3127,7 +3127,7 @@ actor_process_profile_definition g_profile_NPC_MD = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_NPC_MD,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Md_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

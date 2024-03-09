@@ -63,7 +63,7 @@ BOOL daObjDragonhead_c::CreateHeap() {
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
-    mDoMtx_stack_c::scaleM(mScale);
+    mDoMtx_stack_c::scaleM(scale);
     mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
 
     mpBgW = new dBgW();
@@ -103,7 +103,7 @@ void daObjDragonhead_c::CreateInit() {
 
 /* 0000034C-000003CC       .text set_mtx__17daObjDragonhead_cFv */
 void daObjDragonhead_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -154,7 +154,7 @@ BOOL daObjDragonhead_c::_execute() {
             if (!dComIfG_Bgsp()->Release(mpBgW))
                 field_0x40c = 0;
 
-            mDoAud_seStart(JA_SE_OBJ_ICEVERG_MELT, &mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+            mDoAud_seStart(JA_SE_OBJ_ICEVERG_MELT, &eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
         }
 
         if (mAlpha != 0) {
@@ -181,8 +181,8 @@ BOOL daObjDragonhead_c::_execute() {
 }
 
 BOOL daObjDragonhead_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
     J3DModelData* modelData = mpModel->getModelData();
     u16 materialNum = modelData->getMaterialNum();
@@ -233,7 +233,7 @@ actor_process_profile_definition g_profile_Obj_Dragonhead = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Dragonhead,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjDragonhead_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

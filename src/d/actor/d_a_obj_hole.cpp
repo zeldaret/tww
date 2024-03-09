@@ -54,19 +54,19 @@ void daObj_Hole_c::setMtx() {
     }
 
     if (mHasModel == 0xFF) {
-        float scale = l_HIO.m08 * mScale.x;
+        f32 scaleMag = l_HIO.m08 * scale.x;
 
         if (l_HIO.m0C != 0) {
-            scale += l_HIO.m0C * 10;
+            scaleMag += l_HIO.m0C * 10;
         }
         else {
-            scale += mScaleLocal * 10;
+            scaleMag += mScaleLocal * 10;
         }
 
-        scale /= l_HIO.m08;
+        scaleMag /= l_HIO.m08;
 
         cXyz scaleVec;
-        scaleVec.setall(scale);
+        scaleVec.setall(scaleMag);
         mpMdl->setBaseScale(scaleVec);
 
         mDoMtx_stack_c::transS(adjustPos);
@@ -103,16 +103,16 @@ void daObj_Hole_c::modeWaitInit() {
 
 /* 00000410-000004F0       .text modeWait__12daObj_Hole_cFv */
 void daObj_Hole_c::modeWait() {
-    float scale = l_HIO.m08 * mScale.x;
+    f32 scaleMag = l_HIO.m08 * scale.x;
 
     if (l_HIO.m0C != 0) {
-        scale += l_HIO.m0C * 10;
+        scaleMag += l_HIO.m0C * 10;
     }
     else {
-        scale += mScaleLocal * 10;
+        scaleMag += mScaleLocal * 10;
     }
 
-    if (dLib_checkPlayerInCircle(current.pos, scale, 20.0f)) {
+    if (dLib_checkPlayerInCircle(current.pos, scaleMag, 20.0f)) {
         modeProcInit(MODE_EVENT);
     }
 }
@@ -127,7 +127,7 @@ void daObj_Hole_c::modeEventInit() {
 
 /* 000004F4-000005D0       .text modeEvent__12daObj_Hole_cFv */
 void daObj_Hole_c::modeEvent() {
-    if (mEvtInfo.checkCommandDemoAccrpt()) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         int staffId = dComIfGp_evmng_getMyStaffId("Ypit00");
 
         if (dComIfGp_evmng_endCheck("DEFAULT_PITFALL")) {
@@ -196,8 +196,8 @@ bool daObj_Hole_c::_draw() {
     }
 
     if (mHasModel == 0xFF) {
-        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-        g_env_light.setLightTevColorType(mpMdl, &mTevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpMdl, &tevStr);
 
         mDoExt_modelUpdateDL(mpMdl);
     }
@@ -319,7 +319,7 @@ actor_process_profile_definition g_profile_OBJ_HOLE = {
     3,
     fpcPi_CURRENT_e,
     PROC_OBJ_HOLE,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daObj_Hole_c),
     0,
     0,

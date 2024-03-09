@@ -36,7 +36,7 @@ BOOL daTag_Etc_c::rangeCheck(fopAc_ac_c* pActor) {
     if (delta.y < 0.0f)
         return FALSE;
 
-    if (delta.absXZ() < (mScale.x * 100.0f) && delta.y <= (mScale.y * 100.0f))
+    if (delta.absXZ() < (scale.x * 100.0f) && delta.y <= (scale.y * 100.0f))
         return TRUE;
 
     return FALSE;
@@ -125,9 +125,9 @@ s32 daTag_Etc_c::create() {
     shape_angle.x = 0;
     current.angle.z = 0;
     current.angle.x = 0;
-    mAttentionInfo.mFlags = fopAc_Attn_ACTION_TALK_e;
-    mAttentionInfo.mPosition.y += 150.0f;
-    mEyePos.y += 150.0f;
+    attention_info.flags = fopAc_Attn_ACTION_TALK_e;
+    attention_info.position.y += 150.0f;
+    eyePos.y += 150.0f;
     return cPhs_COMPLEATE_e;
 }
 
@@ -169,7 +169,7 @@ static BOOL daTag_Etc_action_event(daTag_Etc_c* i_this) {
 /* 00000560-0000063C       .text daTag_Etc_action_ready__FP11daTag_Etc_c */
 static BOOL daTag_Etc_action_ready(daTag_Etc_c* i_this) {
     fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mMedliPID);
-    if (i_this->mEvtInfo.checkCommandDemoAccrpt()) {
+    if (i_this->eventInfo.checkCommandDemoAccrpt()) {
         i_this->demoInitProc();
         i_this->setActio(ACT_EVENT);
         daTag_Etc_action_event(i_this);
@@ -256,7 +256,7 @@ actor_process_profile_definition g_profile_TAG_ETC = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_TAG_ETC,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Etc_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

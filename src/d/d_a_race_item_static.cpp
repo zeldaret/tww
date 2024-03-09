@@ -119,10 +119,10 @@ BOOL daRaceItem_c::endOffsetPos(f32 param_1, cXyz* param_2, f32 param_3, f32 par
         current.angle = *param_5;
     }
     if(param_2) {
-        mScale = *param_2;
+        scale = *param_2;
     }
 
-    mGravity = param_1;
+    gravity = param_1;
     speedF = param_4;
     speed.y = param_3;
     field_0x640 = 3;
@@ -142,7 +142,7 @@ BOOL daRaceItem_c::checkOffsetPos() {
 
 /* 80069064-800690E4       .text set_mtx__12daRaceItem_cFP4cXyz */
 void daRaceItem_c::set_mtx(cXyz* param_1) {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(*param_1);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());

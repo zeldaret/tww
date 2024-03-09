@@ -414,20 +414,20 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
 
 /* 800250E4-80025100       .text fopAcM_setCullSizeBox__FP10fopAc_ac_cffffff */
 void fopAcM_setCullSizeBox(fopAc_ac_c* i_this, f32 minX, f32 minY, f32 minZ, f32 maxX, f32 maxY, f32 maxZ) {
-    i_this->mCull.mBox.mMin.x = minX;
-    i_this->mCull.mBox.mMin.y = minY;
-    i_this->mCull.mBox.mMin.z = minZ;
-    i_this->mCull.mBox.mMax.x = maxX;
-    i_this->mCull.mBox.mMax.y = maxY;
-    i_this->mCull.mBox.mMax.z = maxZ;
+    i_this->cull.box.min.x = minX;
+    i_this->cull.box.min.y = minY;
+    i_this->cull.box.min.z = minZ;
+    i_this->cull.box.max.x = maxX;
+    i_this->cull.box.max.y = maxY;
+    i_this->cull.box.max.z = maxZ;
 }
 
 /* 80025100-80025114       .text fopAcM_setCullSizeSphere__FP10fopAc_ac_cffff */
 void fopAcM_setCullSizeSphere(fopAc_ac_c* i_this, f32 x, f32 y, f32 z, f32 r) {
-    i_this->mCull.mSphere.mCenter.x = x;
-    i_this->mCull.mSphere.mCenter.y = y;
-    i_this->mCull.mSphere.mCenter.z = z;
-    i_this->mCull.mSphere.mRadius = r;
+    i_this->cull.sphere.center.x = x;
+    i_this->cull.sphere.center.y = y;
+    i_this->cull.sphere.center.z = z;
+    i_this->cull.sphere.radius = r;
 }
 
 /* 80025114-80025144       .text fopAcM_addAngleY__FP10fopAc_ac_css */
@@ -602,11 +602,11 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
             fopAc_cullSizeBox& cullBox = l_cullSizeBox[fopAcM_CULLSIZE_IDX(fopAcM_GetCullSize(i_this))];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                s32 ret = mDoLib_clipper::clip(pMtx, &cullBox.mMax, &cullBox.mMin);
+                s32 ret = mDoLib_clipper::clip(pMtx, &cullBox.max, &cullBox.min);
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
-                return mDoLib_clipper::clip(pMtx, &cullBox.mMax, &cullBox.mMin);
+                return mDoLib_clipper::clip(pMtx, &cullBox.max, &cullBox.min);
             }
         }
     } else { // Sphere
@@ -626,14 +626,14 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
             fopAc_cullSizeSphere& cullSphere = l_cullSizeSphere[fopAcM_CULLSIZE_Q_IDX(fopAcM_GetCullSize(i_this))];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                f32 radius = cullSphere.mRadius;
-                Vec center = cullSphere.mCenter;
+                f32 radius = cullSphere.radius;
+                Vec center = cullSphere.center;
                 s32 ret = mDoLib_clipper::clip(pMtx, center, radius);
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
-                f32 radius = cullSphere.mRadius;
-                return mDoLib_clipper::clip(pMtx, cullSphere.mCenter, radius);
+                f32 radius = cullSphere.radius;
+                return mDoLib_clipper::clip(pMtx, cullSphere.center, radius);
             }
         }
     }
@@ -1087,7 +1087,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
             if (item) {
                 item->speedF = speedF * (1.0f + cM_rndFX(0.3f));
                 item->speed.y = speedY * (1.0f + cM_rndFX(0.2f));
-                item->mGravity = gravity;
+                item->gravity = gravity;
             }
         }
         // Fall-through
@@ -1103,7 +1103,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
         if (item) {
             item->speedF = speedF;
             item->speed.y = speedY;
-            item->mGravity = gravity;
+            item->gravity = gravity;
         }
         return item;
     }
@@ -1113,7 +1113,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
 BOOL stealItem_CB(void* actor) {
     if (actor) {
         daItem_c* item = (daItem_c*)actor;
-        item->mScale.setall(1.0f);
+        item->scale.setall(1.0f);
         item->setFlag(daItem_c::FLAG_HOOK);
     }
     return TRUE;
@@ -1239,7 +1239,7 @@ void fopAcM_createWarpFlower(cXyz* p_pos, csXyz* p_angle, int i_roomNo, u8 param
 fopAc_ac_c * enemySearchJugge(void* ptr, void*) {
     if (ptr != NULL && fopAc_IsActor(ptr)) {
         fopAc_ac_c * i_ac = (fopAc_ac_c *)ptr;
-        if (i_ac->mGroup == fopAc_ENEMY_e)
+        if (i_ac->group == fopAc_ENEMY_e)
             return i_ac;
     }
     return NULL;
@@ -1265,7 +1265,7 @@ s32 fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_he
     u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | i_health & 0xFF;
     fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor), fopAcM_GetAngle_p(i_actor));
     if (disappear) {
-        disappear->mItemTableIdx = i_actor->mItemTableIdx;
+        disappear->itemTableIdx = i_actor->itemTableIdx;
     }
     return fopAcM_GetID(disappear);
 }
@@ -1331,7 +1331,7 @@ void fopAcM_cancelCarryNow(fopAc_ac_c* i_this) {
         fopAcM_setRoomLayer(i_this, fopAcM_GetRoomNo(i_this));
         i_this->shape_angle.z = 0;
 
-        if (dComIfGp_event_runCheck() && i_this->mGroup != fopAc_ENEMY_e) {
+        if (dComIfGp_event_runCheck() && i_this->group != fopAc_ENEMY_e) {
             fopAcM_OnStatus(i_this, fopAcStts_UNK800_e);
         }
     }
@@ -1341,10 +1341,10 @@ void fopAcM_cancelCarryNow(fopAc_ac_c* i_this) {
 BOOL fopAcM_viewCutoffCheck(fopAc_ac_c* actor, f32 param_2) {
     if (param_2 > 0.0f) {
         camera_class* camera = dComIfGp_getCamera(0);
-        cXyz delta = (camera->mLookat.mEye - actor->mEyePos);
+        cXyz delta = (camera->mLookat.mEye - actor->eyePos);
         if (delta.abs() > param_2) {
             dBgS_LinChk linChk;
-            linChk.Set(&camera->mLookat.mEye, &actor->mEyePos, actor);
+            linChk.Set(&camera->mLookat.mEye, &actor->eyePos, actor);
             return dComIfG_Bgsp()->LineCross(&linChk);
         }
     }
@@ -1365,7 +1365,7 @@ s32 fopAcM_otoCheck(fopAc_ac_c* actor, f32 param_2) {
 
 /* 800282F8-8002833C       .text fopAcM_getProcNameString__FP10fopAc_ac_c */
 const char * fopAcM_getProcNameString(fopAc_ac_c* i_this) {
-    const char * pProcNameString = dStage_getName2(fopAcM_GetProfName(i_this), i_this->mSubtype);
+    const char * pProcNameString = dStage_getName2(fopAcM_GetProfName(i_this), i_this->subtype);
     if (pProcNameString != NULL)
         return pProcNameString;
     return "UNKOWN";
@@ -1380,7 +1380,7 @@ fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* it, void* i_prm) {
     if (inf == NULL)
         return NULL;
 
-    if (inf->mProcName == fopAcM_GetProfName(it) && inf->mSubtype == it->mSubtype && (Prm->mParamMask == 0 || Prm->mParameter == (fopAcM_GetParam(it) & Prm->mParamMask)))
+    if (inf->mProcName == fopAcM_GetProfName(it) && inf->mSubtype == it->subtype && (Prm->mParamMask == 0 || Prm->mParameter == (fopAcM_GetParam(it) & Prm->mParamMask)))
         return it;
 
     return NULL;
@@ -1430,9 +1430,9 @@ void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1) 
         (itemNo == dItem_BOW_e && (dComIfGs_checkGetItem(dItem_MAGIC_ARROW_e) || dComIfGs_checkGetItem(dItem_LIGHT_ARROW_e))) ||
         (itemNo == dItem_MAGIC_ARROW_e && dComIfGs_checkGetItem(dItem_LIGHT_ARROW_e))
     )
-        i_this->mGbaName = gbaName1;
+        i_this->gbaName = gbaName1;
     else
-        i_this->mGbaName = gbaName0;
+        i_this->gbaName = gbaName0;
 }
 
 // Unused function, only exists in debug.

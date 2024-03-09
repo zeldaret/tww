@@ -30,7 +30,7 @@ bool dCcS::ChkShieldFrontRange(cCcD_Obj* obj1, cCcD_Obj* obj2) {
     if (ac2 == NULL) { return false; }
     
     cXyz delta;
-    VECSubtract(&ac1->mEyePos, &ac2->mEyePos, &delta);
+    VECSubtract(&ac1->eyePos, &ac2->eyePos, &delta);
     f32 dist = VECMag(&delta);
     if (cM3d_IsZero(dist)) {
         return false;

@@ -31,18 +31,18 @@ u8 daAndsw2_c::getEventNo() {
 /* 00000084-00000090       .text getSwbit__10daAndsw2_cFv */
 u8 daAndsw2_c::getSwbit() {
     // Switch to set.
-    return (mBase.mParameters & 0x00FF0000) >> 16;
+    return (base.mParameters & 0x00FF0000) >> 16;
 }
 
 /* 00000090-0000009C       .text getSwbit2__10daAndsw2_cFv */
 u8 daAndsw2_c::getSwbit2() {
     // First switch to check.
-    return (mBase.mParameters & 0xFF000000) >> 24;
+    return (base.mParameters & 0xFF000000) >> 24;
 }
 
 /* 0000009C-000000A8       .text getType__10daAndsw2_cFv */
 u8 daAndsw2_c::getType() {
-    return (mBase.mParameters & 0x0000FF00) >> 8;
+    return (base.mParameters & 0x0000FF00) >> 8;
 }
 
 /* 000000A8-000000B4       .text getTimer__10daAndsw2_cFv */
@@ -53,7 +53,7 @@ u8 daAndsw2_c::getTimer() {
 /* 000000B4-000000C0       .text getNum__10daAndsw2_cFv */
 u8 daAndsw2_c::getNum() {
     // Number of switches to check.
-    return (mBase.mParameters & 0x000000FF) >> 0;
+    return (base.mParameters & 0x000000FF) >> 0;
 }
 
 /* 000000C0-00000130       .text getTopSw__10daAndsw2_cFv */
@@ -129,7 +129,7 @@ static BOOL daAndsw2_actionTimer(daAndsw2_c* i_this) {
 
 /* 00000380-00000438       .text daAndsw2_actionOrder__FP10daAndsw2_c */
 static BOOL daAndsw2_actionOrder(daAndsw2_c* i_this) {
-    if (i_this->mEvtInfo.checkCommandDemoAccrpt()) {
+    if (i_this->eventInfo.checkCommandDemoAccrpt()) {
         i_this->setActio(ACT_EVENT);
         int room = i_this->current.roomNo;
         int sw = i_this->getSwbit();
@@ -267,7 +267,7 @@ actor_process_profile_definition g_profile_ANDSW2 = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_ANDSW2,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAndsw2_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

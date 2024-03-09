@@ -166,26 +166,26 @@ void daItemBase_c::settingBeforeDraw() {
     }
     
     if (m_itemNo == BOMB_BAG || m_itemNo == dItem_SKULL_HAMMER_e || m_itemNo == dItem_SMALL_KEY_e) {
-        dDlst_texSpecmapST(&mEyePos, &mTevStr, mpModel->getModelData(), 1.0f);
+        dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }
 
 /* 800F9244-800F92DC       .text setTevStr__12daItemBase_cFv */
 void daItemBase_c::setTevStr() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     
     for (int i = 0; i < 2; i++) {
         if (!mpModelArrow[i]) {
             continue;
         }
-        g_env_light.setLightTevColorType(mpModelArrow[i], &mTevStr);
+        g_env_light.setLightTevColorType(mpModelArrow[i], &tevStr);
     }
 }
 
 /* 800F92DC-800F93A8       .text setShadow__12daItemBase_cFv */
 void daItemBase_c::setShadow() {
-    f32 shadowSize = mScale.x * dItem_data::getShadowSize(m_itemNo);
+    f32 shadowSize = scale.x * dItem_data::getShadowSize(m_itemNo);
     if (!dItem_data::chkFlag(m_itemNo, 0x10)) {
         dComIfGd_setSimpleShadow2(
             &current.pos, mAcch.GetGroundH(), shadowSize, mAcch.m_gnd,
@@ -194,7 +194,7 @@ void daItemBase_c::setShadow() {
     } else {
         mShadowId = dComIfGd_setShadow(
             mShadowId, 1, mpModel, &current.pos, 80.0f, shadowSize,
-            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &mTevStr,
+            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
             0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
         );
     }

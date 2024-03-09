@@ -49,8 +49,8 @@ void daSwTact_c::CreateInit() {
     mAnswer = daSwTact_prm::getAnswer(this);
     if (daSwTact_prm::getModel(this) == 1) {
         fopAcM_SetMtx(this, model->getBaseTRMtx());
-        f32 scaleZ = mScale.z;
-        f32 scaleX = mScale.x;
+        f32 scaleZ = scale.z;
+        f32 scaleX = scale.x;
         fopAcM_setCullSizeBox(this, cull_size[0] * scaleX, cull_size[1], cull_size[2] * scaleZ, cull_size[3] * scaleX, cull_size[4], cull_size[5] * scaleZ);
         mRadius = 100.0f;
     } else {
@@ -61,7 +61,7 @@ void daSwTact_c::CreateInit() {
 /* 0000024C-000002CC       .text set_mtx__10daSwTact_cFv */
 void daSwTact_c::set_mtx() {
     if (daSwTact_prm::getModel(this) == 1) {
-        model->setBaseScale(mScale);
+        model->setBaseScale(scale);
         mDoMtx_stack_c::transS(current.pos);
         model->setBaseTRMtx(mDoMtx_stack_c::get());
     }
@@ -172,8 +172,8 @@ bool daSwTact_c::_draw() {
     if (daSwTact_prm::getModel(this) == 0)
         return TRUE;
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(model, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
     mDoExt_modelUpdateDL(model);
     return TRUE;
 }
@@ -216,7 +216,7 @@ actor_process_profile_definition g_profile_SW_TACT = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_SW_TACT,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSwTact_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

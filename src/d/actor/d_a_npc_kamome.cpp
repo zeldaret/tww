@@ -201,11 +201,11 @@ daNpc_kam_c::~daNpc_kam_c() {
 void daNpc_kam_c::setAttention(bool param_1, int param_2) {
     if (param_1) {
         cXyz headTopPos = getHeadTopPos();
-        mEyePos.set(headTopPos.x, headTopPos.y - 20.0f, headTopPos.z);
+        eyePos.set(headTopPos.x, headTopPos.y - 20.0f, headTopPos.z);
         if (param_2) {
-            mAttentionInfo.mPosition.set(current.pos.x, current.pos.y, current.pos.z);
+            attention_info.position.set(current.pos.x, current.pos.y, current.pos.z);
         } else {
-            mAttentionInfo.mPosition.set(home.pos.x, home.pos.y, home.pos.z);
+            attention_info.position.set(home.pos.x, home.pos.y, home.pos.z);
         }
     }
 }
@@ -407,9 +407,9 @@ BOOL daNpc_kam_c::init() {
     mUnusedC06 = 0;
     mEventState = -1;
     mCurrEventIdxIdx = -1;
-    mScale *= 1000.0f;
-    mMaxY = home.pos.y + mScale.y;
-    mMinY = home.pos.y - mScale.y;
+    scale *= 1000.0f;
+    mMaxY = home.pos.y + scale.y;
+    mMinY = home.pos.y - scale.y;
     
     mTargetSpeedF = l_HIO.mHio1.mSpeedF;
     mAngVelY = l_HIO.mHio1.mGlidingAngVelY;
@@ -437,16 +437,16 @@ BOOL daNpc_kam_c::init() {
     
     setBaseMtx();
     
-    mAttentionInfo.mFlags = 0;
-    mAttentionInfo.mDistances[1] = 38;
-    mAttentionInfo.mDistances[3] = 38;
+    attention_info.flags = 0;
+    attention_info.distances[1] = 38;
+    attention_info.distances[3] = 38;
     
     for (int i = 0; i < 3; i++) {
         mEventIdxs[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xFF);
     }
     
-    mEvtInfo.setXyCheckCB(daNpc_kam_XyCheckCB);
-    mEvtInfo.setXyEventCB(daNpc_kam_XyEventCB);
+    eventInfo.setXyCheckCB(daNpc_kam_XyCheckCB);
+    eventInfo.setXyEventCB(daNpc_kam_XyEventCB);
     
     return TRUE;
 }
@@ -538,7 +538,7 @@ BOOL daNpc_kam_c::changeAreaCheck() {
     } else {
         // For all other sectors, simple check if Link is within the Hyoi Seagull's moveable range.
         delta = player->current.pos - home.pos;
-        if (delta.absXZ() < mScale.x) {
+        if (delta.absXZ() < scale.x) {
             offNpcNotChange();
             return TRUE;
         }
@@ -550,7 +550,7 @@ BOOL daNpc_kam_c::changeAreaCheck() {
 /* 0000235C-00002450       .text areaOutCheck__11daNpc_kam_cFv */
 BOOL daNpc_kam_c::areaOutCheck() {
     cXyz delta = (current.pos - home.pos);
-    return delta.absXZ() > mScale.x ? TRUE : FALSE;
+    return delta.absXZ() > scale.x ? TRUE : FALSE;
 }
 
 /* 00002450-000025B0       .text getStickAngY__11daNpc_kam_cFPsPs */
@@ -648,10 +648,10 @@ int daNpc_kam_c::waitNpcAction(void*) {
         mC0C = cLib_getRndValue(10, 80);
     } else if (mActionStatus != ACTION_ENDING) {
         if (changeAreaCheck()) {
-            mAttentionInfo.mFlags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
+            attention_info.flags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
             mEventState = 6;
         } else {
-            mAttentionInfo.mFlags &= ~(fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
+            attention_info.flags &= ~(fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
             mEventState = -1;
         }
         
@@ -863,7 +863,7 @@ void daNpc_kam_c::eventOrder() {
     }
     if (mEventState == 5 || mEventState == 4) {
         if (dComIfGp_getPlayer(0) != this) {
-            mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
             if (mEventState == 5) {
                 fopAcM_orderSpeakEvent(this);
             }
@@ -872,8 +872,8 @@ void daNpc_kam_c::eventOrder() {
         }
     } else if (mEventState == 6) {
         if (dComIfGp_getPlayer(0) != this) {
-            mEvtInfo.onCondition(dEvtCnd_CANTALKITEM_e);
-            mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+            eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
         } else {
             mEventState = -1;
         }
@@ -885,7 +885,7 @@ void daNpc_kam_c::eventOrder() {
 
 /* 0000315C-00003194       .text checkOrder__11daNpc_kam_cFv */
 void daNpc_kam_c::checkOrder() {
-    if (!mEvtInfo.checkCommandTalk()) {
+    if (!eventInfo.checkCommandTalk()) {
         return;
     }
     if (mEventState != 5 && mEventState != 4 && mEventState != 6) {
@@ -896,7 +896,7 @@ void daNpc_kam_c::checkOrder() {
 
 /* 00003194-00003200       .text checkCommandTalk__11daNpc_kam_cFv */
 BOOL daNpc_kam_c::checkCommandTalk() {
-    if (mEvtInfo.checkCommandTalk()) {
+    if (eventInfo.checkCommandTalk()) {
         if (dComIfGp_event_chkTalkXY()) {
             if (mEventState == 6) {
                 mEventState = -1;
@@ -938,7 +938,7 @@ static char* cut_name_tbl[] = {
 
 /* 00003248-000034A8       .text eventProc__11daNpc_kam_cFv */
 BOOL daNpc_kam_c::eventProc() {
-    if (mEvtInfo.checkCommandDemoAccrpt()) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         if (mEventState != -1) {
             if (mEventState == 0) {
                 if (dComIfGp_evmng_startCheck("OPTION_CHAR_END") || dComIfGp_evmng_endCheck("OPTION_CHAR_END")) {
@@ -1253,7 +1253,7 @@ void daNpc_kam_c::animationPlay() {
         mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd);
     }
     
-    mReachedAnimEnd = mpMorf->play(&mEyePos, mtrlSndId, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    mReachedAnimEnd = mpMorf->play(&eyePos, mtrlSndId, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     
     f32 frame = mpMorf->getFrame();
     if (mpMorf->getPlaySpeed() < 0.0f) {
@@ -1309,8 +1309,8 @@ BOOL daNpc_kam_c::execute() {
             if (mAcch.GetGroundH() != -1000000000.0f) {
                 s8 roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 fopAcM_SetRoomNo(this, roomNo);
-                mTevStr.mRoomNo = roomNo;
-                mTevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
+                tevStr.mRoomNo = roomNo;
+                tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
                 mStts.SetRoomId(roomNo);
                 mPolyInfo.SetPolyInfo(mAcch.m_gnd);
             }
@@ -1384,18 +1384,18 @@ BOOL daNpc_kam_c::execute() {
 BOOL daNpc_kam_c::draw() {
     J3DModel* model = mpMorf->getModel();
     
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     
     drawDamageFog();
     
-    g_env_light.setLightTevColorType(model, &mTevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
     
     mpMorf->entryDL();
     
     cXyz shadowPos(current.pos.x, current.pos.y, current.pos.z);
     mShadowId = dComIfGd_setShadow(
         mShadowId, 1, model, &shadowPos, 800.0f, 20.0f,
-        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &mTevStr,
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
         0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
     );
     
@@ -1443,7 +1443,7 @@ actor_process_profile_definition g_profile_NPC_KAM = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_NPC_KAM,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_kam_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

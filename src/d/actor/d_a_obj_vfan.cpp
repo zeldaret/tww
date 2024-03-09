@@ -128,7 +128,7 @@ void daObjVfan::Act_c::set_mtx() {
 
 /* 00000680-000006BC       .text init_mtx__Q29daObjVfan5Act_cFv */
 void daObjVfan::Act_c::init_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
 
     set_mtx();
 }
@@ -166,7 +166,7 @@ int daObjVfan::Act_c::Execute(Mtx** mtx) {
         break;
 
     case 1:
-        if (mEvtInfo.checkCommandDemoAccrpt()) {
+        if (eventInfo.checkCommandDemoAccrpt()) {
             mDoAud_seStart(JA_SE_READ_RIDDLE_1);
             fopAcM_seStartCurrent(this, JA_SE_OBJ_GN_SW_DR_LIGHT, 0);
 
@@ -203,8 +203,8 @@ int daObjVfan::Act_c::Execute(Mtx** mtx) {
 
 /* 00000C74-00000D20       .text Draw__Q29daObjVfan5Act_cFv */
 BOOL daObjVfan::Act_c::Draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
 
     dComIfGd_setListBG();
     // This comparison is necessary to generate "cmplwi 0x1; bne" instead of "cmplwi 0x0; beq"
@@ -247,7 +247,7 @@ actor_process_profile_definition g_profile_Obj_Vfan = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Vfan,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVfan::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

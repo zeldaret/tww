@@ -17,7 +17,7 @@ static BOOL daSwc00_Execute(swc00_class* i_this) {
 
         f32 xz_dist2 = fopAcM_searchPlayerDistanceXZ2(i_this);
         f32 y_diff = fopAcM_searchPlayerDistanceY(i_this);
-        if(xz_dist2 < i_this->mScale.x && (-100.0f < y_diff && y_diff < i_this->mScale.y)) {
+        if(xz_dist2 < i_this->scale.x && (-100.0f < y_diff && y_diff < i_this->scale.y)) {
             dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(i_this));
 
             if(daSwc00_getType(i_this) != 0) {
@@ -58,10 +58,10 @@ static s32 daSwc00_Create(fopAc_ac_c* i_actor) {
         }
     }
 
-    i_this->mScale.x *= 100.0f;
-    i_this->mScale.x += 30.0f;
-    i_this->mScale.x *= i_this->mScale.x;
-    i_this->mScale.y *= 100.0f;
+    i_this->scale.x *= 100.0f;
+    i_this->scale.x += 30.0f;
+    i_this->scale.x *= i_this->scale.x;
+    i_this->scale.y *= 100.0f;
 
     return cPhs_COMPLEATE_e;
 }
@@ -80,7 +80,7 @@ actor_process_profile_definition g_profile_SWC00 = {
     7,
     fpcPi_CURRENT_e,
     PROC_SWC00,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(swc00_class),
     0,
     0,

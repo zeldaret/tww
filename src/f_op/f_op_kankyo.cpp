@@ -17,7 +17,7 @@ static int fopKy_Draw(void* i_ky) {
     kankyo_class* i_this = (kankyo_class*)i_ky;
 
     if (!dMenu_flag()) {
-        ret = fpcLf_DrawMethod((leafdraw_method_class*)i_this->mSubMtd, i_this);
+        ret = fpcLf_DrawMethod((leafdraw_method_class*)i_this->sub_method, i_this);
     }
 
     return ret;
@@ -29,7 +29,7 @@ static int fopKy_Execute(void* i_ky) {
     kankyo_class* i_this = (kankyo_class*)i_ky;
 
     if (!dScnPly_ply_c::isPause() && (!dMenu_flag() || fpcM_GetName(i_ky) == PROC_ENVSE || fpcM_GetName(i_ky) == PROC_LEVEL_SE)) {
-        ret = fpcMtd_Execute((process_method_class*)i_this->mSubMtd, i_ky);
+        ret = fpcMtd_Execute((process_method_class*)i_this->sub_method, i_ky);
     }
 
     return ret;
@@ -40,9 +40,9 @@ static int fopKy_IsDelete(void* i_ky) {
     int ret;
     kankyo_class* i_this = (kankyo_class*)i_ky;
 
-    ret = fpcMtd_IsDelete((process_method_class*)i_this->mSubMtd, i_this);
+    ret = fpcMtd_IsDelete((process_method_class*)i_this->sub_method, i_this);
     if (ret == 1) {
-        fopDwTg_DrawQTo(&i_this->mDwTg);
+        fopDwTg_DrawQTo(&i_this->draw_tag);
     }
 
     return ret;
@@ -52,8 +52,8 @@ static int fopKy_IsDelete(void* i_ky) {
 static int fopKy_Delete(void* i_ky) {
     kankyo_class* i_this = (kankyo_class*)i_ky;
 
-    int ret = fpcMtd_Delete((process_method_class*)i_this->mSubMtd, i_this);
-    fopDwTg_DrawQTo(&i_this->mDwTg);
+    int ret = fpcMtd_Delete((process_method_class*)i_this->sub_method, i_this);
+    fopDwTg_DrawQTo(&i_this->draw_tag);
 
     return ret;
 }
@@ -68,9 +68,9 @@ static int fopKy_Create(void* i_ky) {
         kankyo_process_profile_definition* profile = (kankyo_process_profile_definition*)fpcM_GetProfile(i_ky);
 
         i_this->mBsType = fpcBs_MakeOfType(&fopKy_KANKYO_TYPE);
-        i_this->mSubMtd = profile->mSubMtd;
+        i_this->sub_method = profile->sub_method;
 
-        fopDwTg_Init(&i_this->mDwTg, i_this);
+        fopDwTg_Init(&i_this->draw_tag, i_this);
         fopKyM_prm_class* append = (fopKyM_prm_class*)fopKyM_GetAppend(i_this);
 
         if (append != NULL) {
@@ -80,10 +80,10 @@ static int fopKy_Create(void* i_ky) {
         }
     }
 
-    int ret = fpcMtd_Create((process_method_class*)i_this->mSubMtd, i_this);
+    int ret = fpcMtd_Create((process_method_class*)i_this->sub_method, i_this);
     if (ret == cPhs_COMPLEATE_e) {
         s32 priority = fpcLf_GetPriority(i_this);
-        fopDwTg_ToDrawQ(&i_this->mDwTg, priority);
+        fopDwTg_ToDrawQ(&i_this->draw_tag, priority);
     }
 
     return ret;

@@ -81,12 +81,12 @@ static cXyz l_ef_scale(1.0f, 1.0f, 1.0f);
 
 /* 000000EC-0000018C       .text init_mtx__14daObjBarrier_cFv */
 void daObjBarrier_c::init_mtx() {
-    mAnm.getMdlP()->setBaseScale(mScale);
+    mAnm.getMdlP()->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mAnm.getMdlP()->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    mDoMtx_stack_c::scaleM(mScale);
+    mDoMtx_stack_c::scaleM(scale);
     cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
@@ -154,7 +154,7 @@ bool daObjBarrier_c::checkCollision_Tg() {
                 }
             }
 
-            mEffect.birth(hit_actor, mScale.x * 1000.0f, mTgCyl.GetC(), hit_pos, no_set_effect);
+            mEffect.birth(hit_actor, scale.x * 1000.0f, mTgCyl.GetC(), hit_pos, no_set_effect);
         }
 
         mTgCyl.ClrTgHit();
@@ -170,7 +170,7 @@ void daObjBarrier_c::checkCollision_At() {
         fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
 
         if (hit_actor != NULL && hit_actor == player_p) {
-            mEffect.birth(hit_actor, mScale.x * 1000.0f, mAtCyl.GetC(), hit_actor->current.pos, 1);
+            mEffect.birth(hit_actor, scale.x * 1000.0f, mAtCyl.GetC(), hit_actor->current.pos, 1);
         }
 
         mAtCyl.ClrAtHit();
@@ -182,8 +182,8 @@ void daObjBarrier_c::registCollisionTable() {
     cXyz pos = current.pos;
     pos.y -= 300.0f;
 
-    f32 base_radius = mScale.x * 1000.0f;
-    f32 height = mScale.y * 10000.0f + 300.0f;
+    f32 base_radius = scale.x * 1000.0f;
+    f32 height = scale.y * 10000.0f + 300.0f;
 
     mAtCyl.SetC(pos);
     mAtCyl.SetR(base_radius - 60.0f);
@@ -203,7 +203,7 @@ void daObjBarrier_c::registCollisionTable() {
 /* 00000754-00000884       .text brkAnmPlay__14daObjBarrier_cFv */
 void daObjBarrier_c::brkAnmPlay() {
     f32 dist_to_playerXZ = (dComIfGp_getPlayer(0)->current.pos - current.pos).absXZ();
-    f32 radius = mScale.x * 1000.0f - 150.0f;
+    f32 radius = scale.x * 1000.0f - 150.0f;
 
     f32 var_r3;
     if (dist_to_playerXZ > radius) {
@@ -253,11 +253,11 @@ void daObjBarrier_c::break_start_wait_proc() {
 
 /* 000009F0-00000A58       .text break_order_proc__14daObjBarrier_cFv */
 void daObjBarrier_c::break_order_proc() {
-    if (mEvtInfo.checkCommandDemoAccrpt()) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         mBarrierProc = PROC_BREAK_END_WAIT;
     } else {
         fopAcM_orderOtherEventId(this, mEventID);
-        mEvtInfo.onCondition(dEvtCnd_UNK2_e);
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
 }
 
@@ -501,7 +501,7 @@ int daObjBarrier_c::_create() {
                 phase = cPhs_ERROR_e;
             } else {
                 mpBgW->SetCrrFunc(NULL);
-                mScale.z = mScale.x;
+                scale.z = scale.x;
                 fopAcM_SetMtx(this, mAnm.getMdlP()->getBaseTRMtx());
                 init_mtx();
 
@@ -619,7 +619,7 @@ actor_process_profile_definition g_profile_Obj_Barrier = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Barrier,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBarrier_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

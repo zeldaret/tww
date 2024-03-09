@@ -124,6 +124,6 @@ bool dDetect_c::chk_attention(cXyz* outPos) const {
     if (target == NULL)
         return false;
     
-    *outPos = target->mEyePos;
+    *outPos = target->eyePos;
     return true;
 }

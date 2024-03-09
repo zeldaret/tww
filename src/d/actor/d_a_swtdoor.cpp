@@ -16,14 +16,14 @@
 /* 00000078-000000C4       .text daSwtdoor_Draw__FP13swtdoor_class */
 static BOOL daSwtdoor_Draw(swtdoor_class* i_this) {
     J3DModel * model = i_this->model;
-    g_env_light.setLightTevColorType(model, &i_this->mTevStr);
+    g_env_light.setLightTevColorType(model, &i_this->tevStr);
     mDoExt_modelUpdateDL(model);
     return TRUE;
 }
 
 /* 000000C4-000001BC       .text daSwtdoor_Execute__FP13swtdoor_class */
 static BOOL daSwtdoor_Execute(swtdoor_class* i_this) {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->tevStr);
     if (dComIfGs_isSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this)) && i_this->home.pos.y > -300.0f)
         i_this->home.pos.y -= 10.0f;
 
@@ -98,7 +98,7 @@ actor_process_profile_definition g_profile_SWTDOOR = {
     7,
     fpcPi_CURRENT_e,
     PROC_SWTDOOR,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(swtdoor_class),
     0,
     0,

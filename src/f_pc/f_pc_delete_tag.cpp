@@ -23,12 +23,12 @@ BOOL fpcDtTg_IsEmpty() {
 /* 8003D188-8003D1BC       .text fpcDtTg_ToDeleteQ__FP16delete_tag_class */
 void fpcDtTg_ToDeleteQ(delete_tag_class* i_deleteTag) {
     i_deleteTag->mTimer = 1;
-    cTg_Addition(&g_fpcDtTg_Queue, &i_deleteTag->mBase);
+    cTg_Addition(&g_fpcDtTg_Queue, &i_deleteTag->base);
 }
 
 /* 8003D1BC-8003D1DC       .text fpcDtTg_DeleteQTo__FP16delete_tag_class */
 void fpcDtTg_DeleteQTo(delete_tag_class* i_deleteTag) {
-    cTg_SingleCut(&i_deleteTag->mBase);
+    cTg_SingleCut(&i_deleteTag->base);
 }
 
 /* 8003D1DC-8003D25C       .text fpcDtTg_Do__FP16delete_tag_classPFPv_i */
@@ -36,7 +36,7 @@ s32 fpcDtTg_Do(delete_tag_class* i_deleteTag, delete_tag_func i_func) {
     if (i_deleteTag->mTimer <= 0) {
         s32 ret;
         fpcDtTg_DeleteQTo(i_deleteTag);
-        ret = i_func(i_deleteTag->mBase.mpTagData);
+        ret = i_func(i_deleteTag->base.mpTagData);
         if (ret == 0) {
             fpcDtTg_ToDeleteQ(i_deleteTag);
             return 0;
@@ -51,6 +51,6 @@ s32 fpcDtTg_Do(delete_tag_class* i_deleteTag, delete_tag_func i_func) {
 
 /* 8003D25C-8003D280       .text fpcDtTg_Init__FP16delete_tag_classPv */
 s32 fpcDtTg_Init(delete_tag_class* i_deleteTag, void* i_data) {
-    cTg_Create(&i_deleteTag->mBase, i_data);
+    cTg_Create(&i_deleteTag->base, i_data);
     return 1;
 }

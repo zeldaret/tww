@@ -57,9 +57,9 @@ namespace daObjHomensmoke {
             culling_dat[mType].mMax.x, culling_dat[mType].mMax.y, culling_dat[mType].mMax.z
         );
         
-        fopAc_ac_c* parent = fopAcM_SearchByID(mParentPcId);
+        fopAc_ac_c* parent = fopAcM_SearchByID(parentActorID);
         if (parent) {
-            mTevStr = parent->mTevStr;
+            tevStr = parent->tevStr;
         }
         
         return cPhs_COMPLEATE_e;
@@ -102,7 +102,7 @@ namespace daObjHomensmoke {
             
             JPABaseEmitter* rubbleEmitter = dComIfGp_particle_setToon(0x81B1, &current.pos);
             if (rubbleEmitter) {
-                rubbleEmitter->setGlobalPrmColor(mTevStr.mColorK0.r, mTevStr.mColorK0.g, mTevStr.mColorK0.b);
+                rubbleEmitter->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
                 if (mType == 1) {
                     JGeometry::TVec3<f32> scale(0.6f, 0.6f, 0.6f);
                     rubbleEmitter->setEmitterScale(scale);
@@ -165,7 +165,7 @@ actor_process_profile_definition g_profile_Obj_Homensmk = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Obj_Homensmk,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjHomensmoke::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

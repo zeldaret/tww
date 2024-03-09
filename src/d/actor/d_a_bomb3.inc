@@ -190,8 +190,8 @@ BOOL daBomb_c::draw() {
         return true;
     }
     
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
 
     if(mType == 1) {
         draw_nut();
@@ -452,10 +452,10 @@ void daBomb_c::water_tention() {
 void daBomb_c::posMoveF() {
     cM3dGPla* tri;
     bool temp = mNoGravityTime > 0;
-    f32 gravity;
+    f32 origGravity;
     if(temp) {
-        gravity = mGravity;
-        mGravity = 0.0f;
+        origGravity = gravity;
+        gravity = 0.0f;
     }
 
     if(mType == 0 && chk_water_in()) {
@@ -490,7 +490,7 @@ void daBomb_c::posMoveF() {
     }
     
     if(temp) {
-        mGravity = gravity;
+        gravity = origGravity;
         mNoGravityTime--;
     }
 }
@@ -634,13 +634,13 @@ void daBomb_c::setRoomInfo() {
     s32 roomNo;
     if(mAcch.GetGroundH() != -1.0e9f) {
         roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
-        mTevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
+        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
     }
     else {
         roomNo = dComIfGp_roomControl_getStayNo();
     }
 
-    mTevStr.mRoomNo = roomNo;
+    tevStr.mRoomNo = roomNo;
     mStts.SetRoomId(roomNo);
     current.roomNo = roomNo;
 }
@@ -696,8 +696,8 @@ void daBomb_c::setFuseEffect() {
         mFusePos2 = mFusePos;
         mFusePos3 = mFusePos;
 
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &mFusePos, NULL, &mScale, 0xFF, &mSparks);
-        dComIfGp_particle_setToonP1(0x2012, &mFusePos, NULL, &mScale, 0xDC, &mSmoke);
+        dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &mFusePos, NULL, &scale, 0xFF, &mSparks);
+        dComIfGp_particle_setToonP1(0x2012, &mFusePos, NULL, &scale, 0xDC, &mSmoke);
         mSmoke.field_0x0C = &mFusePos2;
         mSmoke.field_0x10 = &mFusePos3;
         mSmoke.field_0x04 = 0x14;
@@ -706,28 +706,28 @@ void daBomb_c::setFuseEffect() {
 
 /* 800DAD6C-800DAE54       .text eff_explode_normal__8daBomb_cFPC5csXyz */
 void daBomb_c::eff_explode_normal(const csXyz* rotation) {
-    dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &mScale);
-    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &current.pos, NULL, &mScale);
-    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &mScale);
-    dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &mScale);
+    dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &current.pos, NULL, &scale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
+    dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
 }
 
 /* 800DAE54-800DAF94       .text eff_explode_cheap__8daBomb_cFPC5csXyz */
 void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
-    JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &mScale);
+    JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
     if(emitter) {
         emitter->mLifeTime = 0xC;
         JGeometry::TVec3<f32> vec(0.5f, 0.67f, 1.0f);
         emitter->setGlobalParticleScale(vec);
     }
 
-    dComIfGp_particle_setBombSmoke(0x232A, &current.pos, NULL, &mScale);
-    emitter = dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &mScale);
+    dComIfGp_particle_setBombSmoke(0x232A, &current.pos, NULL, &scale);
+    emitter = dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
     if(emitter) {
         emitter->mLifeTime = 0x46;
     }
     
-    emitter = dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &mScale);
+    emitter = dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
     if(emitter) {
         emitter->mLifeTime = 0x46;
         emitter->mInitialVelAxis = 25.0f;
@@ -817,13 +817,13 @@ int daBomb_c::procExplode_init() {
     mFunc = &daBomb_c::procExplode;
     speedF = 0.0f;
     speed = cXyz::Zero;
-    mGravity = 0.0f;
+    gravity = 0.0f;
 
     if(!chk_state(STATE_8)) {
         change_state(STATE_0);
     }
 
-    mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
+    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
 
     if(field_0x6F0) {
         daPy_getPlayerLinkActorClass()->decrementBombCnt();
@@ -928,7 +928,7 @@ bool daBomb_c::procCarry_init() {
     change_state(STATE_2);
     speedF = 0.0f;
     speed.set(cXyz::Zero);
-    mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
+    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
     mSph.OffCoSPrmBit(CO_SPRM_SET);
 
     return true;
@@ -1002,10 +1002,10 @@ bool daBomb_c::procWait() {
             if(!temp && !field_0x781) {
                 bound(y_vel);
                 if((mAcch.ChkGroundHit() || chk_state(STATE_5)) && !mAcch.ChkGroundLanding()) {
-                    mAttentionInfo.mFlags |= fopAc_Attn_ACTION_CARRY_e;
+                    attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
                 }
                 else {
-                    mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
+                    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
                 }
             }
 
@@ -1023,9 +1023,9 @@ bool daBomb_c::waitState_cannon() {
 
 /* 800DBBC4-800DBC4C       .text waitState_bomtyu__8daBomb_cFv */
 void daBomb_c::waitState_bomtyu() {
-    cLib_chaseF(&mScale.x, 1.0f, 0.05f);
-    cLib_chaseF(&mScale.y, 1.0f, 0.05f);
-    cLib_chaseF(&mScale.z, 1.0f, 0.05f);
+    cLib_chaseF(&scale.x, 1.0f, 0.05f);
+    cLib_chaseF(&scale.y, 1.0f, 0.05f);
+    cLib_chaseF(&scale.z, 1.0f, 0.05f);
     if(mBombFire) {
         setFuseEffect();
         mBombFire = 0;
@@ -1067,10 +1067,10 @@ BOOL daBomb_c::execute() {
         }
 
         mStts.Move();
-        mAttentionInfo.mPosition.x = current.pos.x;
-        mAttentionInfo.mPosition.y = current.pos.y + 50.0f;
-        mAttentionInfo.mPosition.z = current.pos.z;
-        mEyePos = mAttentionInfo.mPosition;
+        attention_info.position.x = current.pos.x;
+        attention_info.position.y = current.pos.y + 50.0f;
+        attention_info.position.z = current.pos.z;
+        eyePos = attention_info.position;
         if(!chk_attrState(this, ATTR_STATE_20)) {
             set_mtx();
             mFusePos3 = mFusePos2;
@@ -1081,7 +1081,7 @@ BOOL daBomb_c::execute() {
             pos.y = current.pos.y + 30.0f;
             pos.z = current.pos.z;
             mSph.SetC(pos);
-            mSph.SetR(mScale.x * 30.0f);
+            mSph.SetR(scale.x * 30.0f);
             if(mMassCounter != g_Counter.mCounter0) {
                 dComIfG_Ccsp()->Set(&mSph);
                 //using inline breaks match
@@ -1172,7 +1172,7 @@ void daBomb_c::anm_play_nut() {
 
 /* 800DC2D0-800DC384       .text set_mtx__8daBomb_cFv */
 void daBomb_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     if(prm_get_angXZero()) {
         mDoMtx_stack_c::ZXYrotM(0, shape_angle.y, shape_angle.z);
@@ -1410,12 +1410,12 @@ void daBomb_c::create_init() {
         mSph.GetObjAt().SetAtp(2);
     }
 
-    mGravity = -2.9f;
-    mMaxFallSpeed = -100.0f;
+    gravity = -2.9f;
+    maxFallSpeed = -100.0f;
     mRestTime = 0x96;
     mInitialState = prm_get_state();
     if(!chk_state(STATE_4)) {
-        mAttentionInfo.mFlags |= fopAc_Attn_ACTION_CARRY_e;
+        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
     }
 
     field_0x77C = 0;
@@ -1432,7 +1432,7 @@ void daBomb_c::create_init() {
 
     mMassCounter = g_Counter.mCounter0 - 1;
     if(chk_attrState(this, ATTR_STATE_2)) {
-        mScale.setall(0.0f);
+        scale.setall(0.0f);
     }
     if(chk_attrState(this, ATTR_STATE_4)) {
         setFuseEffect();
@@ -1456,12 +1456,12 @@ void daBomb_c::create_init() {
         procWait_init();
     }
 
-    mCull.mBox.mMin.x = -36.0f;
-    mCull.mBox.mMin.y = 0.0f;
-    mCull.mBox.mMin.z = -36.0f;
-    mCull.mBox.mMax.x = 36.0f;
-    mCull.mBox.mMax.y = 66.0f;
-    mCull.mBox.mMax.z = 36.0f;
+    cull.box.min.x = -36.0f;
+    cull.box.min.y = 0.0f;
+    cull.box.min.z = -36.0f;
+    cull.box.max.x = 36.0f;
+    cull.box.max.y = 66.0f;
+    cull.box.max.z = 36.0f;
     fopAcM_setCullSizeFar(this, 10.0f);
 
     init_mtx();
@@ -1480,7 +1480,7 @@ actor_process_profile_definition g_profile_BOMB = {
     7,
     fpcPi_CURRENT_e,
     PROC_BOMB,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daBomb_c),
     0,
     0,

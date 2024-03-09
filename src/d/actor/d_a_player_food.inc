@@ -59,9 +59,9 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         f32 offset2 = cM_scos(shape_angle.y) * 150.0f;
         cXyz start;
         start.set(
-            mAttentionInfo.mPosition.x,
-            mAttentionInfo.mPosition.y - 50.0f,
-            mAttentionInfo.mPosition.z
+            attention_info.position.x,
+            attention_info.position.y - 50.0f,
+            attention_info.position.z
         );
         cXyz end;
         end.set(

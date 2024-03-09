@@ -97,7 +97,7 @@ void dEvt_control_c::setParam(dEvt_order_c* order) {
 /* 8007015C-8007018C       .text beforeFlagProc__14dEvt_control_cFP12dEvt_order_c */
 BOOL dEvt_control_c::beforeFlagProc(dEvt_order_c* order) {
     fopAc_ac_c* actor2 = order->mActor2;
-    if ((order->mFlag & dEvtFlag_TALK_e) && !actor2->mEvtInfo.chkCondition(dEvtCnd_CANTALK_e))
+    if ((order->mFlag & dEvtFlag_TALK_e) && !actor2->eventInfo.chkCondition(dEvtCnd_CANTALK_e))
         return false;
     return true;
 }
@@ -118,9 +118,9 @@ void dEvt_control_c::afterFlagProc(dEvt_order_c* order) {
 BOOL dEvt_control_c::commonCheck(dEvt_order_c* order, u16 cond, u16 cmd) {
     fopAc_ac_c* actor1 = order->mActor1;
     fopAc_ac_c* actor2 = order->mActor2;
-    if (actor1 != NULL && actor1->mEvtInfo.chkCondition(cond) && actor2 != NULL && actor2->mEvtInfo.chkCondition(cond)) {
-        actor1->mEvtInfo.setCommand(cmd);
-        actor2->mEvtInfo.setCommand(cmd);
+    if (actor1 != NULL && actor1->eventInfo.chkCondition(cond) && actor2 != NULL && actor2->eventInfo.chkCondition(cond)) {
+        actor1->eventInfo.setCommand(cmd);
+        actor2->eventInfo.setCommand(cmd);
         setParam(order);
         return TRUE;
     } else {
@@ -135,8 +135,8 @@ BOOL dEvt_control_c::talkCheck(dEvt_order_c* order) {
     if (commonCheck(order, dEvtCnd_CANTALK_e, dEvtCmd_INTALK_e)) {
         mMode = dEvtMode_TALK_e;
         if (mEventId == -1) {
-            if (actor2 != NULL && actor2->mEvtInfo.getEventName() != NULL) {
-                mEventId = actor2->mEvtInfo.getEventId();
+            if (actor2 != NULL && actor2->eventInfo.getEventName() != NULL) {
+                mEventId = actor2->eventInfo.getEventId();
             } else {
                 mEventId = dComIfGp_evmng_getEventIdx(defaultEventName, 0xFF);
             }
@@ -174,7 +174,7 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
         return FALSE;
     }
     
-    if (actor2 == NULL || !actor2->mEvtInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
+    if (actor2 == NULL || !actor2->eventInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
         return FALSE;
     }
     
@@ -196,7 +196,7 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
         
         // Fakematch
         s16 r3;
-        if (actor2 != NULL && (r3 = actor2->mEvtInfo.runXyEventCB(actor2, equippedItemIdx), r3 != -1)) {
+        if (actor2 != NULL && (r3 = actor2->eventInfo.runXyEventCB(actor2, equippedItemIdx), r3 != -1)) {
             mEventId = r3;
         } else {
             mEventId = dComIfGp_evmng_getEventIdx(defaultEventName, 0xFF);
@@ -223,7 +223,7 @@ BOOL dEvt_control_c::photoCheck(dEvt_order_c* order) {
         if (!commonCheck(order, dEvtCnd_CANTALK_e, dEvtCmd_INTALK_e))
             return FALSE;
 
-        s16 eventId = actor2->mEvtInfo.runPhotoEventCB(actor2, 0);
+        s16 eventId = actor2->eventInfo.runPhotoEventCB(actor2, 0);
         if (eventId != -1) {
             mEventId = eventId;
         } else {
@@ -248,12 +248,12 @@ BOOL dEvt_control_c::catchCheck(dEvt_order_c* order) {
     fopAc_ac_c* actor2 = order->mActor2;
     fopAc_ac_c* actor1 = order->mActor1;
 
-    if (actor1 == NULL || (actor2 != NULL && !actor2->mEvtInfo.chkCondition(dEvtCnd_CANCATCH_e)))
+    if (actor1 == NULL || (actor2 != NULL && !actor2->eventInfo.chkCondition(dEvtCnd_CANCATCH_e)))
         return FALSE;
 
-    actor1->mEvtInfo.setCommand(dEvtCmd_INCATCH_e);
+    actor1->eventInfo.setCommand(dEvtCmd_INCATCH_e);
     if (actor2 != NULL)
-        actor2->mEvtInfo.setCommand(dEvtCmd_INCATCH_e);
+        actor2->eventInfo.setCommand(dEvtCmd_INCATCH_e);
     setParam(order);
     mItemNo = dComIfGp_att_getCatchChgItem();
     mMode = dEvtMode_DEMO_e;
@@ -267,10 +267,10 @@ BOOL dEvt_control_c::catchCheck(dEvt_order_c* order) {
 BOOL dEvt_control_c::talkEnd() {
     fopAc_ac_c* actor1 = getPt1();
     if (actor1 != NULL)
-        actor1->mEvtInfo.setCommand(dEvtCmd_NONE_e);
+        actor1->eventInfo.setCommand(dEvtCmd_NONE_e);
     fopAc_ac_c* actor2 = getPt2();
     if (actor2 != NULL)
-        actor2->mEvtInfo.setCommand(dEvtCmd_NONE_e);
+        actor2->eventInfo.setCommand(dEvtCmd_NONE_e);
     if (mEventId != -1) {
         dComIfGp_getPEvtManager()->endProc(mEventId, 1);
         mEventId = -1;
@@ -299,9 +299,9 @@ BOOL dEvt_control_c::demoCheck(dEvt_order_c* order) {
         return FALSE;
 
     if (actor1 != NULL)
-        actor1->mEvtInfo.setCommand(dEvtCmd_INDEMO_e);
+        actor1->eventInfo.setCommand(dEvtCmd_INDEMO_e);
     if (actor2 != NULL)
-        actor2->mEvtInfo.setCommand(dEvtCmd_INDEMO_e);
+        actor2->eventInfo.setCommand(dEvtCmd_INDEMO_e);
 
     mMode = dEvtMode_DEMO_e;
     setParam(order);
@@ -319,10 +319,10 @@ BOOL dEvt_control_c::demoCheck(dEvt_order_c* order) {
 BOOL dEvt_control_c::demoEnd() {
     fopAc_ac_c* actor1 = getPt1();
     if (actor1 != NULL)
-        actor1->mEvtInfo.setCommand(dEvtCmd_NONE_e);
+        actor1->eventInfo.setCommand(dEvtCmd_NONE_e);
     fopAc_ac_c* actor2 = getPt2();
     if (actor2 != NULL)
-        actor2->mEvtInfo.setCommand(dEvtCmd_NONE_e);
+        actor2->eventInfo.setCommand(dEvtCmd_NONE_e);
     if (mEventId != -1) {
         dComIfGp_getPEvtManager()->endProc(mEventId, 1);
         mEventId = -1;
@@ -341,7 +341,7 @@ BOOL dEvt_control_c::potentialCheck(dEvt_order_c* order) {
     if (!beforeFlagProc(order))
         return FALSE;
 
-    actor1->mEvtInfo.setCommand(dEvtCmd_INDEMO_e);
+    actor1->eventInfo.setCommand(dEvtCmd_INDEMO_e);
     mMode = dEvtMode_DEMO_e;
     setParam(order);
     afterFlagProc(order);
@@ -353,8 +353,8 @@ BOOL dEvt_control_c::doorCheck(dEvt_order_c* order) {
     if (commonCheck(order, dEvtCnd_CANDOOR_e, dEvtCmd_INDOOR_e)) {
         mMode = dEvtMode_DEMO_e;
         fopAc_ac_c* actor2 = getPt2();
-        if (mEventId == -1 && actor2 != NULL && actor2->mEvtInfo.getEventId() != -1)
-            mEventId = actor2->mEvtInfo.getEventId();
+        if (mEventId == -1 && actor2 != NULL && actor2->eventInfo.getEventId() != -1)
+            mEventId = actor2->eventInfo.getEventId();
         if (mEventId != -1 && dComIfGp_getPEvtManager()->getEventData(mEventId) != NULL) {
             if (!dComIfGp_evmng_order(mEventId))
                 JUT_ASSERT(0x2c0, 0);
@@ -585,7 +585,7 @@ BOOL dEvt_control_c::photoCheck() {
             if (actor2 == NULL) {
                 return FALSE;
             }
-            if (!(actor2->mAttentionInfo.mFlags & fopAc_Attn_UNK1000000_e)) {
+            if (!(actor2->attention_info.flags & fopAc_Attn_UNK1000000_e)) {
                 return FALSE;
             }
             if (dComIfGp_getPictureStatus() == 2) {
@@ -595,8 +595,8 @@ BOOL dEvt_control_c::photoCheck() {
             if (actor1 == NULL) {
                 return FALSE;
             }
-            if (!actor1->mEvtInfo.chkCondition(dEvtCnd_CANTALK_e) ||
-                !actor2->mEvtInfo.chkCondition(dEvtCnd_CANTALK_e)
+            if (!actor1->eventInfo.chkCondition(dEvtCnd_CANTALK_e) ||
+                !actor2->eventInfo.chkCondition(dEvtCnd_CANTALK_e)
             ) {
                 return FALSE;
             }
@@ -623,7 +623,7 @@ s32 dEvt_control_c::moveApproval(void* actor) {
     case dEvtMode_DEMO_e:
         if (convPId(mPt1) == i_ac || convPId(mPt2) == i_ac)
             return dEvtMove_FORCE_e;
-        if (i_ac->mDemoActorId != 0)
+        if (i_ac->demoActorID != 0)
             return dEvtMove_FORCE_e;
         break;
     case dEvtMode_COMPULSORY_e:

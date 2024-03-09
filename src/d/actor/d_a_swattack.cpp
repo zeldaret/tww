@@ -50,8 +50,8 @@ void daSwAt_c::CreateInit() {
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
-    mCyl.SetR(mScale.x * 25.0f);
-    mCyl.SetH(mScale.y * 50.0f);
+    mCyl.SetR(scale.x * 25.0f);
+    mCyl.SetH(scale.y * 50.0f);
     mAtType = daSwAt_prm::getAtType(this);
     mSwitchNo = daSwAt_prm::getSwitchNo(this);
     fopAcM_offDraw(this);
@@ -165,7 +165,7 @@ actor_process_profile_definition g_profile_SW_ATTACK = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_SW_ATTACK,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSwAt_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

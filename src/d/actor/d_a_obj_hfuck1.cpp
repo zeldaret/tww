@@ -58,7 +58,7 @@ namespace {
 
 /* 00000078-00000100       .text init_mtx__13daObjHfuck1_cFv */
 void daObjHfuck1_c::init_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -172,8 +172,8 @@ bool daObjHfuck1_c::_execute() {
 
 /* 000007CC-0000082C       .text _draw__13daObjHfuck1_cFv */
 bool daObjHfuck1_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return true;
 }
@@ -216,7 +216,7 @@ actor_process_profile_definition g_profile_Obj_Hfuck1 = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Hfuck1,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjHfuck1_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

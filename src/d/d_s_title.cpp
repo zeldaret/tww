@@ -138,11 +138,11 @@ extern scene_process_profile_definition g_profile_TITLE_SCENE = {
     1,
     fpcPi_CURRENT_e,
     PROC_TITLE_SCENE,
-    &g_fpcNd_Method.mBase,
+    &g_fpcNd_Method.base,
     sizeof(title_of_scene_class),
     0,
     0,
-    &g_fopScn_Method.mBase,
+    &g_fopScn_Method.base,
     &l_dScnTitle_Method,
 };
 
@@ -151,10 +151,10 @@ extern scene_process_profile_definition g_profile_ENDING_SCENE = {
     1,
     fpcPi_CURRENT_e,
     PROC_ENDING_SCENE,
-    &g_fpcNd_Method.mBase,
+    &g_fpcNd_Method.base,
     sizeof(title_of_scene_class),
     0,
     0,
-    &g_fopScn_Method.mBase,
+    &g_fopScn_Method.base,
     &l_dScnTitle_Method,
 };

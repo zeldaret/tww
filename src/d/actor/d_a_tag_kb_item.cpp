@@ -96,7 +96,7 @@ actor_process_profile_definition g_profile_TAG_KB_ITEM = {
     7,
     fpcLy_CURRENT_e,
     PROC_TAG_KB_ITEM,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daTagKbItem_c),
     0,
     0,

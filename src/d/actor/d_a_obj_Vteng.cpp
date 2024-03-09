@@ -18,11 +18,11 @@ namespace {
 
 /* 00000078-00000120       .text init_mtx__12daObjVteng_cFv */
 void daObjVteng_c::init_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    mDoMtx_stack_c::scaleM(mScale);
+    mDoMtx_stack_c::scaleM(scale);
     MTXCopy(mDoMtx_stack_c::get(), mtx);
 }
 
@@ -114,8 +114,8 @@ bool daObjVteng_c::_execute() {
 
 /* 00000510-00000578       .text _draw__12daObjVteng_cFv */
 bool daObjVteng_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mpMorf->updateDL();
     fopAcM_SetModel(this, mpModel);
     return true;
@@ -159,7 +159,7 @@ actor_process_profile_definition g_profile_Obj_Vteng = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Vteng,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVteng_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

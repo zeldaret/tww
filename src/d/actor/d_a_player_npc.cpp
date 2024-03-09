@@ -40,7 +40,7 @@ BOOL daPy_npc_c::check_moveStop() {
             speedF = 0.0f;
             m4E8 = 0;
         }
-        if (dComIfGp_getPlayer(0)->mEvtInfo.mCommand != dEvtCmd_INDOOR_e) {
+        if (dComIfGp_getPlayer(0)->eventInfo.mCommand != dEvtCmd_INDOOR_e) {
             offNpcCallCommand();
         }
         return TRUE;
@@ -51,7 +51,7 @@ BOOL daPy_npc_c::check_moveStop() {
 /* 8015A524-8015A590       .text setRestart__10daPy_npc_cFSc */
 void daPy_npc_c::setRestart(s8 option) {
     if (option == dComIfGs_getRestartOption()) {
-        bool playerInDoor = dComIfGp_getPlayer(0)->mEvtInfo.checkCommandDoor();
+        bool playerInDoor = dComIfGp_getPlayer(0)->eventInfo.checkCommandDoor();
         s8 roomNo = current.roomNo;
         s8 optionRoomNo = dComIfGs_getRestartOptionRoomNo();
         if (!playerInDoor && roomNo != optionRoomNo) {
@@ -162,7 +162,7 @@ BOOL daPy_npc_c::checkNowPosMove(const char* pName) {
     if (!dComIfGp_event_runCheck()) {
         return TRUE;
     }
-    if (mEvtInfo.checkCommandTalk()) {
+    if (eventInfo.checkCommandTalk()) {
         return TRUE;
     }
     if (isEventAccept() && !isReturnLink()) {
@@ -186,12 +186,12 @@ void daPy_npc_c::drawDamageFog() {
     cXyz camPos;
     mDoLib_pos2camera(&current.pos, &camPos);
     f32 adjust = fabsf(cM_ssin(g_Counter.mTimer * 0x800));
-    mTevStr.mFogColor.r = 255;
-    mTevStr.mFogColor.g = 60;
-    mTevStr.mFogColor.b = 60;
+    tevStr.mFogColor.r = 255;
+    tevStr.mFogColor.g = 60;
+    tevStr.mFogColor.b = 60;
     
-    mTevStr.mFogStartZ = (-camPos.z - 200.0f) + 200.0f * adjust;
-    mTevStr.mFogEndZ = mTevStr.mFogStartZ + 300.0f;
+    tevStr.mFogStartZ = (-camPos.z - 200.0f) + 200.0f * adjust;
+    tevStr.mFogEndZ = tevStr.mFogStartZ + 300.0f;
 }
 
 /* 8015AD20-8015AEF8       .text chkMoveBlock__10daPy_npc_cFP4cXyz */

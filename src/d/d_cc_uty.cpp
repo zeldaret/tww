@@ -207,18 +207,18 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
             }
         }
         
-        if (fopAcM_GetName(atInfo->mpActor) == PROC_HIMO2 && tgActor->mStealItemLeft != 0) {
-            tgActor->mStealItemLeft--;
-            fopAcM_createStealItem(&tgActor->current.pos, tgActor->mItemTableIdx, tgActor->current.roomNo, NULL, tgActor->mStealItemBitNo);
-            tgActor->mStealItemBitNo++;
+        if (fopAcM_GetName(atInfo->mpActor) == PROC_HIMO2 && tgActor->stealItemLeft != 0) {
+            tgActor->stealItemLeft--;
+            fopAcM_createStealItem(&tgActor->current.pos, tgActor->itemTableIdx, tgActor->current.roomNo, NULL, tgActor->stealItemBitNo);
+            tgActor->stealItemBitNo++;
             atInfo->mDamage = 0;
         }
         
         if ((s8)atInfo->mDamage > 0) {
-            tgActor->mHealth -= atInfo->mDamage;
+            tgActor->health -= atInfo->mDamage;
         }
         
-        if (tgActor->mHealth <= 0) {
+        if (tgActor->health <= 0) {
             atInfo->mbDead = true;
             
             fopAcM_seStart(tgActor, JA_SE_LK_LAST_HIT, 0);

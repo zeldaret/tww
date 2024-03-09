@@ -45,7 +45,7 @@ void daObjAdnno_c::CreateInit() {
 void daObjAdnno_c::set_mtx() {
     for (int i = 0; i < 16; i++) {
         J3DModel * model = mpModel[i];
-        model->setBaseScale(mScale);
+        model->setBaseScale(scale);
 
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
@@ -144,7 +144,7 @@ actor_process_profile_definition g_profile_Obj_Adnno = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Adnno,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjAdnno_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

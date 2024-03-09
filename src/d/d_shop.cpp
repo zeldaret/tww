@@ -940,7 +940,7 @@ BOOL ShopCam_action_c::rsh_talk_cam_action_init(fopAc_ac_c* param_1, cXyz param_
     daPy_getPlayerActorClass()->onPlayerNoDraw();
     setCamAction(&ShopCam_action_c::rsh_talk_cam_action);
     
-    mDoMtx_stack_c::transS(param_1->mAttentionInfo.mPosition);
+    mDoMtx_stack_c::transS(param_1->attention_info.position);
     mDoMtx_stack_c::YrotM(param_1->current.angle.y);
     cXyz r1_20;
     mDoMtx_stack_c::multVec(&param_2, &r1_20);

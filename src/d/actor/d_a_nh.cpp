@@ -83,8 +83,8 @@ daNh_c::~daNh_c() {
 /* 800F9874-800F9980       .text setBaseMtx__6daNh_cFv */
 void daNh_c::setBaseMtx() {
     J3DModel* model = mpModel;
-    mScale.setall(l_HIO.prm.mModelScale);
-    model->setBaseScale(mScale);
+    scale.setall(l_HIO.prm.mModelScale);
+    model->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -149,7 +149,7 @@ s32 daNh_c::create() {
 BOOL daNh_c::init() {
     mType = fopAcM_GetParam(this) & 0xFF;
     speed.y = 1.0f;
-    mGravity = l_HIO.prm.mGravity;
+    gravity = l_HIO.prm.mGravity;
     mGlowAlpha = l_HIO.prm.mDefaultGlowAlpha;
     mPlayerDist = 0.0f;
     mAlpha = 0xFF;
@@ -163,7 +163,7 @@ BOOL daNh_c::init() {
     mCyl.SetStts(&mStts);
     
     setBaseMtx();
-    mEyePos = mAttentionInfo.mPosition = current.pos;
+    eyePos = attention_info.position = current.pos;
     
     return TRUE;
 }
@@ -198,7 +198,7 @@ BOOL daNh_c::setAction(ActionFunc actionFunc, void* arg) {
 
 /* 800F9EB8-800F9F3C       .text checkBinCatch__6daNh_cFv */
 BOOL daNh_c::checkBinCatch() {
-    if (mEvtInfo.checkCommandCatch()) {
+    if (eventInfo.checkCommandCatch()) {
         fopAcM_delete(this);
         return TRUE;
     }
@@ -209,7 +209,7 @@ BOOL daNh_c::checkBinCatch() {
         l_HIO.prm.field_0x10, l_HIO.prm.field_0x3c,
         1
     );
-    mEvtInfo.onCondition(dEvtCnd_CANCATCH_e);
+    eventInfo.onCondition(dEvtCnd_CANCATCH_e);
     
     return FALSE;
 }
@@ -275,8 +275,8 @@ void daNh_c::BGCheck() {
     f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
     if (groundY != -1000000000.0f) {
         mGroundY = groundY;
-        mTevStr.mRoomNo = current.roomNo = dComIfG_Bgsp()->GetRoomId(gndChk);
-        mTevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(gndChk);
+        tevStr.mRoomNo = current.roomNo = dComIfG_Bgsp()->GetRoomId(gndChk);
+        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(gndChk);
     }
 }
 
@@ -284,9 +284,9 @@ void daNh_c::BGCheck() {
 void daNh_c::airMove() {
     f32 idealY = mGroundY + l_HIO.prm.mHeightAboveGround;
     if (current.pos.y < idealY - 10.0f) {
-        mMaxFallSpeed = l_HIO.prm.mAscentSpeed;
+        maxFallSpeed = l_HIO.prm.mAscentSpeed;
     } else if (current.pos.y > idealY + 10.0f) {
-        mMaxFallSpeed = l_HIO.prm.mDescentSpeed;
+        maxFallSpeed = l_HIO.prm.mDescentSpeed;
     }
 }
 
@@ -383,15 +383,15 @@ BOOL daNh_c::execute() {
     
     mGlowAlpha = l_HIO.prm.mDefaultGlowAlpha;
     
-    if (mMaxFallSpeed < speed.y) {
-        speed.y -= mGravity;
-        if (speed.y < mMaxFallSpeed) {
-            speed.y = mMaxFallSpeed;
+    if (maxFallSpeed < speed.y) {
+        speed.y -= gravity;
+        if (speed.y < maxFallSpeed) {
+            speed.y = maxFallSpeed;
         }
-    } else if (mMaxFallSpeed > speed.y) {
-        speed.y += mGravity;
-        if (speed.y > mMaxFallSpeed) {
-            speed.y = mMaxFallSpeed;
+    } else if (maxFallSpeed > speed.y) {
+        speed.y += gravity;
+        if (speed.y > maxFallSpeed) {
+            speed.y = maxFallSpeed;
         }
     }
     
@@ -416,7 +416,7 @@ BOOL daNh_c::execute() {
     }
     
     setBaseMtx();
-    mEyePos = mAttentionInfo.mPosition = current.pos;
+    eyePos = attention_info.position = current.pos;
     
     return TRUE;
 }
@@ -442,8 +442,8 @@ void daNh_c::playBrkAnm() {
 
 /* 800FACE8-800FAE1C       .text draw__6daNh_cFv */
 BOOL daNh_c::draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     
     J3DModelData* modelData = mpModel->getModelData();
     
@@ -511,7 +511,7 @@ actor_process_profile_definition g_profile_NH = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_NH,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNh_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

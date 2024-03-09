@@ -103,7 +103,7 @@ void daItem_c::set_mtx_base(J3DModel* pModel, cXyz pos, csXyz rot) {
         return;
     }
     
-    pModel->setBaseScale(mScale);
+    pModel->setBaseScale(scale);
     
     mDoMtx_stack_c::transS(pos.x, pos.y + getYOffset(), pos.z);
     
@@ -148,9 +148,9 @@ void daItem_c::CreateInit() {
     // f32 radius = dItem_data::getR(m_itemNo);
     f32 height = dItem_data::item_info[m_itemNo].mCollisionH;
     f32 radius = dItem_data::item_info[m_itemNo].mCollisionR;
-    if (mScale.x > 1.0f) {
-        height *= mScale.x;
-        radius *= mScale.x;
+    if (scale.x > 1.0f) {
+        height *= scale.x;
+        radius *= scale.x;
     }
     mCyl.SetR(radius);
     mCyl.SetH(height);
@@ -259,9 +259,9 @@ BOOL daItem_c::_daItem_execute() {
     
     timeCount();
     
-    mEyePos = current.pos;
-    mEyePos.y += dItem_data::getH(m_itemNo)/2.0f;
-    mAttentionInfo.mPosition = current.pos;
+    eyePos = current.pos;
+    eyePos.y += dItem_data::getH(m_itemNo)/2.0f;
+    attention_info.position = current.pos;
     
     switch (mItemStatus) {
     case STATUS_BRING_NEZUMI:
@@ -348,13 +348,13 @@ void daItem_c::execInitNormalDirection() {
     current.pos = headPos;
     current.angle.z = 0;
     current.angle.x = 0;
-    mScale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
+    scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     mExtraZRot = 0;
     
     field_0x65c = getData()->field_0x40;
     f32 speedY = getData()->mPickedUpInitialSpeedY;
     speed.set(0.0f, speedY, 0.0f);
-    mGravity = getData()->mPickedUpGravity;
+    gravity = getData()->mPickedUpGravity;
     
     show();
     
@@ -400,7 +400,7 @@ void daItem_c::execInitGetDemoDirection() {
     
     if (player == link) {
         fopAcM_orderItemEvent(this);
-        mEvtInfo.onCondition(dEvtCnd_CANGETITEM_e);
+        eventInfo.onCondition(dEvtCnd_CANGETITEM_e);
         mDemoItemBsPcId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, current.roomNo);
         mItemStatus = STATUS_WAIT_GET_DEMO;
     }
@@ -410,14 +410,14 @@ void daItem_c::execInitGetDemoDirection() {
 void daItem_c::execWaitGetDemoDirection() {
     hide();
     
-    if (mEvtInfo.checkCommandItem()) {
+    if (eventInfo.checkCommandItem()) {
         mItemStatus = STATUS_MAIN_GET_DEMO;
         if (mDemoItemBsPcId != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(mDemoItemBsPcId);
         }
     } else {
         fopAcM_orderItemEvent(this);
-        mEvtInfo.onCondition(dEvtCnd_CANGETITEM_e);
+        eventInfo.onCondition(dEvtCnd_CANGETITEM_e);
     }
 }
 
@@ -451,9 +451,9 @@ void daItem_c::execWaitMain() {
         f32 scaleStepX = mScaleTarget.x / getData()->mScaleAnimSpeed;
         f32 scaleStepY = mScaleTarget.y / getData()->mScaleAnimSpeed;
         f32 scaleStepZ = mScaleTarget.z / getData()->mScaleAnimSpeed;
-        cLib_chaseF(&mScale.x, mScaleTarget.x, scaleStepX);
-        cLib_chaseF(&mScale.y, mScaleTarget.y, scaleStepY);
-        cLib_chaseF(&mScale.z, mScaleTarget.z, scaleStepZ);
+        cLib_chaseF(&scale.x, mScaleTarget.x, scaleStepX);
+        cLib_chaseF(&scale.y, mScaleTarget.y, scaleStepY);
+        cLib_chaseF(&scale.z, mScaleTarget.z, scaleStepZ);
     }
     
     if (checkItemDisappear() && mDisappearTimer == 0) {
@@ -494,17 +494,17 @@ void daItem_c::execWaitMainFromBoss() {
 /* 800F5FC0-800F60C0       .text scaleAnimFromBossItem__8daItem_cFv */
 void daItem_c::scaleAnimFromBossItem() {
     if (field_0x638 < 30) {
-        mScale.x = cM_ssin(field_0x634*0x2000 - 0x4000)*2.0f / field_0x634+1.0f;
-        if (mScale.x < 0.0f) {
-            mScale.x = 0.0f;
+        scale.x = cM_ssin(field_0x634*0x2000 - 0x4000)*2.0f / field_0x634+1.0f;
+        if (scale.x < 0.0f) {
+            scale.x = 0.0f;
         }
-        mScale.y = mScale.x;
-        mScale.z = mScale.x;
+        scale.y = scale.x;
+        scale.z = scale.x;
     } else {
         if (field_0x638 == 30) {
             fopAcM_seStart(this, JA_SE_CM_BOSS_HEART_APPEAR, 0);
         }
-        mScale.setall(1.0f);
+        scale.setall(1.0f);
     }
 }
 
@@ -518,21 +518,21 @@ BOOL daItem_c::_daItem_draw() {
 
 /* 800F6110-800F61C8       .text setTevStr__8daItem_cFv */
 void daItem_c::setTevStr() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     
-    mTevStr.mColorC0.r = 0x96;
-    mTevStr.mColorC0.g = 0x96;
-    mTevStr.mColorC0.b = 0x96;
-    mTevStr.mColorK0.r = 0xFF;
-    mTevStr.mColorK0.g = 0xFF;
-    mTevStr.mColorK0.b = 0xFF;
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    tevStr.mColorC0.r = 0x96;
+    tevStr.mColorC0.g = 0x96;
+    tevStr.mColorC0.b = 0x96;
+    tevStr.mColorK0.r = 0xFF;
+    tevStr.mColorK0.g = 0xFF;
+    tevStr.mColorK0.b = 0xFF;
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     
     for (int i = 0; i < 2; i++) {
         if (!mpModelArrow[i]) {
             continue;
         }
-        g_env_light.setLightTevColorType(mpModelArrow[i], &mTevStr);
+        g_env_light.setLightTevColorType(mpModelArrow[i], &tevStr);
     }
 }
 
@@ -832,7 +832,7 @@ BOOL daItem_c::itemActionForRupee() {
     
     if (mAcch.ChkGroundLanding()) {
         f32 temp2 = field_0x650 * getData()->field_0x04;
-        if (temp2 > mGravity - 0.5f) {
+        if (temp2 > gravity - 0.5f) {
             speedF = 0.0f;
         } else {
             speed.set(0.0f, -temp2, 0.0f);
@@ -874,7 +874,7 @@ BOOL daItem_c::itemActionForRupee() {
 BOOL daItem_c::itemActionForHeart() {
     f32 origSpeedY = speed.y;
     if (origSpeedY < 0.0f) {
-        mGravity = 0.0f;
+        gravity = 0.0f;
         speed.set(0.0f, getData()->field_0x20, 0.0f);
     }
     
@@ -902,7 +902,7 @@ BOOL daItem_c::itemActionForKey() {
     
     if (mAcch.ChkGroundLanding()) {
         f32 temp2 = field_0x650 * getData()->field_0x04;
-        if (temp2 > mGravity - 0.5f) {
+        if (temp2 > gravity - 0.5f) {
             speedF = 0.0f;
             current.angle.x = 0x4000;
             mTargetAngleX = current.angle.x;
@@ -946,7 +946,7 @@ BOOL daItem_c::itemActionForEmono() {
     
     if (mAcch.ChkGroundLanding()) {
         f32 temp2 = field_0x650 * getData()->field_0x04;
-        if (temp2 > mGravity - 0.5f) {
+        if (temp2 > gravity - 0.5f) {
             speedF = 0.0f;
         } else {
             speed.set(0.0f, -temp2, 0.0f);
@@ -975,7 +975,7 @@ BOOL daItem_c::itemActionForSword() {
     bool isQuake = dComIfGp_getDetect().chk_quake(&current.pos);
     if (isQuake && !checkFlag(FLAG_QUAKE) && mAcch.ChkGroundHit()) {
         speed.set(0.0f, 21.0f, 0.0f);
-        mGravity = -3.5f;
+        gravity = -3.5f;
     }
     
     if (mAcch.ChkGroundLanding()) {
@@ -1048,7 +1048,7 @@ BOOL daItem_c::itemActionForArrow() {
     
     if (mAcch.ChkGroundLanding()) {
         f32 temp_f3 = field_0x650 * getData()->field_0x04;
-        if (temp_f3 > mGravity - 0.5f) {
+        if (temp_f3 > gravity - 0.5f) {
             speedF = 0.0f;
         } else {
             speed.set(0.0f, -temp_f3, 0.0f);
@@ -1206,7 +1206,7 @@ BOOL daItem_c::timeCount() {
 /* 800F7F0C-800F7F50       .text mode_wait_init__8daItem_cFv */
 void daItem_c::mode_wait_init() {
     mMode = 0;
-    mGravity = getData()->mFieldItemGravity;
+    gravity = getData()->mFieldItemGravity;
     mPtclRippleCb.end();
 }
 
@@ -1233,12 +1233,12 @@ void daItem_c::mode_water_init() {
     mExtraZRot = 0;
     field_0x654 = 0;
     clrFlag(FLAG_UNK04);
-    mScale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
+    scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     
     cXyz scale;
     f32 temp = dItem_data::getShadowSize(m_itemNo);
     f32 temp3 = temp / dItem_data::getShadowSize(dItem_GREEN_RUPEE_e);
-    temp3 *= mScale.x;
+    temp3 *= scale.x;
     scale.setall(temp3);
     
     dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &scale, 0xFF, &mPtclRippleCb);
@@ -1335,7 +1335,7 @@ void daItem_c::mode_water() {
 /* 800F8528-800F8950       .text initAction__8daItem_cFv */
 BOOL daItem_c::initAction() {
     if (checkFlag(FLAG_UNK02)) {
-        mScale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
+        scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
         
         switch (mAction) {
         case 4:
@@ -1347,20 +1347,20 @@ BOOL daItem_c::initAction() {
         case 5:
             speed.setall(0.0f);
             speedF = 0.0f;
-            mScale.setall(0.0f);
+            scale.setall(0.0f);
             mItemStatus = STATUS_WAIT_BOSS1;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             field_0x654 = 0x4A8;
             break;
         case 0xC:
-            mScale.setall(1.0f);
+            scale.setall(1.0f);
             mItemStatus = STATUS_WAIT_BOSS2;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             field_0x654 = 0x4A8;
             break;
         }
         
-        mGravity = getData()->mFieldItemGravity;
+        gravity = getData()->mFieldItemGravity;
         clrFlag(FLAG_UNK04);
         mMode = 0;
         
@@ -1401,8 +1401,8 @@ BOOL daItem_c::initAction() {
         speedF = getData()->mVelocityScale;
         break;
     case 0xA:
-        mGravity = getData()->mFieldItemGravity;
-        mScale.setall(0.0f);
+        gravity = getData()->mFieldItemGravity;
+        scale.setall(0.0f);
         mMode = 0;
         break;
     case 0xB:
@@ -1425,12 +1425,12 @@ BOOL daItem_c::initAction() {
         mExtraZRot = cM_rndFX(getData()->mHeartMaxRandomZRot);
     }
     
-    mGravity = getData()->mFieldItemGravity;
+    gravity = getData()->mFieldItemGravity;
     speed.set(0.0f, temp_f31, 0.0f);
     // This line setting speedF to itself gets optimized out and produces no code, but affects regalloc.
     // It's not known what the original code that got optimized out here was, it could be speedF or something else.
     speedF = speedF;
-    mScale.setall(0.0f);
+    scale.setall(0.0f);
     
     mMode = 0;
     
@@ -1512,7 +1512,7 @@ actor_process_profile_definition g_profile_ITEM = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_ITEM,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daItem_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

@@ -26,7 +26,7 @@ u32 fopAc_ac_c::stopStatus;
 
 /* 80023514-80023540       .text fopAc_IsActor__FPv */
 s32 fopAc_IsActor(void* pProc) {
-    return fpcBs_Is_JustOfType(g_fopAc_type, ((fopAc_ac_c*)pProc)->mAcType);
+    return fpcBs_Is_JustOfType(g_fopAc_type, ((fopAc_ac_c*)pProc)->actor_type);
 }
 
 /* 80023540-8002362C       .text fopAc_Draw__FPv */
@@ -50,7 +50,7 @@ s32 fopAc_Draw(void* pProc) {
             ) && !fopAcM_checkStatus(actor, fopAcStts_NODRAW_e)
         ) {
             fopAcM_OffCondition(actor, fopAcCnd_NODRAW_e);
-            ret = fpcLf_DrawMethod((leafdraw_method_class*)actor->mSubMtd, actor);
+            ret = fpcLf_DrawMethod((leafdraw_method_class*)actor->sub_method, actor);
         } else {
             fopAcM_OnCondition(actor, fopAcCnd_NODRAW_e);
         }
@@ -78,7 +78,7 @@ s32 fopAc_Execute(void* pProc) {
     CHECK_VEC3_RANGE(0x286, actor->current.pos);
 
     if (fopAcM_checkStatus(actor, fopAcStts_NOPAUSE_e) || (!dMenu_flag() && !dScnPly_ply_c::isPause())) {
-        actor->mEvtInfo.beforeProc();
+        actor->eventInfo.beforeProc();
 
         s32 moveApproval = dComIfGp_event_moveApproval(actor);
 
@@ -99,7 +99,7 @@ s32 fopAc_Execute(void* pProc) {
         ) {
             fopAcM_OffCondition(actor, fopAcCnd_NOEXEC_e);
             actor->old = actor->current;
-            ret = fpcMtd_Execute((process_method_class*)actor->mSubMtd, actor);
+            ret = fpcMtd_Execute((process_method_class*)actor->sub_method, actor);
         } else {
             fopAcM_OnCondition(actor, fopAcCnd_NOEXEC_e);
         }
@@ -116,24 +116,24 @@ s32 fopAc_Execute(void* pProc) {
 /* 80023BDC-80023C30       .text fopAc_IsDelete__FPv */
 s32 fopAc_IsDelete(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
-    s32 ret = fpcMtd_IsDelete((process_method_class*)actor->mSubMtd, actor);
+    s32 ret = fpcMtd_IsDelete((process_method_class*)actor->sub_method, actor);
     if (ret == 1)
-        fopDwTg_DrawQTo(&actor->mDwTg);
+        fopDwTg_DrawQTo(&actor->draw_tag);
     return ret;
 }
 
 /* 80023C30-80023CD4       .text fopAc_Delete__FPv */
 s32 fopAc_Delete(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
-    s32 ret = fpcMtd_Delete((process_method_class*)actor->mSubMtd, actor);
+    s32 ret = fpcMtd_Delete((process_method_class*)actor->sub_method, actor);
     if (ret == 1) {
-        fopAcTg_ActorQTo(&actor->mAcTg);
-        fopDwTg_DrawQTo(&actor->mDwTg);
+        fopAcTg_ActorQTo(&actor->actor_tag);
+        fopDwTg_DrawQTo(&actor->draw_tag);
         fopAcM_DeleteHeap(actor);
-        dDemo_actor_c *pDemoActor = dComIfGp_demo_getActor(actor->mDemoActorId);
+        dDemo_actor_c *pDemoActor = dComIfGp_demo_getActor(actor->demoActorID);
         if (pDemoActor != NULL)
             pDemoActor->setActor(NULL);
-        mDoAud_seDeleteObject(&actor->mEyePos);
+        mDoAud_seDeleteObject(&actor->eyePos);
         mDoAud_seDeleteObject(&actor->current.pos);
     }
     return ret;
@@ -145,14 +145,14 @@ s32 fopAc_Create(void* pProc) {
 
     if (fpcM_IsFirstCreating(actor)) {
         actor_process_profile_definition* profile = (actor_process_profile_definition*)fpcM_GetProfile(pProc);
-        actor->mAcType = fpcBs_MakeOfType(&g_fopAc_type);
-        actor->mSubMtd = profile->mSubMtd;
-        fopAcTg_Init(&actor->mAcTg, actor);
-        fopAcTg_ToActorQ(&actor->mAcTg);
-        fopDwTg_Init(&actor->mDwTg, actor);
-        actor->mStatus = profile->mStatus;
-        actor->mGroup = profile->mGroup;
-        actor->mCullType = profile->mCullType;
+        actor->actor_type = fpcBs_MakeOfType(&g_fopAc_type);
+        actor->sub_method = profile->sub_method;
+        fopAcTg_Init(&actor->actor_tag, actor);
+        fopAcTg_ToActorQ(&actor->actor_tag);
+        fopDwTg_Init(&actor->draw_tag, actor);
+        actor->actor_status = profile->status;
+        actor->group = profile->group;
+        actor->cullType = profile->cullType;
 
         fopAcM_prm_class* prm = fopAcM_GetAppend(actor);
         if (prm != NULL) {
@@ -160,34 +160,34 @@ s32 fopAc_Create(void* pProc) {
             actor->home.pos = prm->mPos;
             actor->home.angle = prm->mAngle;
             actor->shape_angle = prm->mAngle;
-            actor->mParentPcId = prm->mParentPcId;
-            actor->mSubtype = prm->mSubtype;
-            actor->mGbaName = prm->mGbaName;
-            actor->mScale.set(prm->mScale.x * 0.1f, prm->mScale.y * 0.1f, prm->mScale.z * 0.1f);
-            actor->mSetId = prm->mSetId;
+            actor->parentActorID = prm->mParentPcId;
+            actor->subtype = prm->mSubtype;
+            actor->gbaName = prm->mGbaName;
+            actor->scale.set(prm->mScale.x * 0.1f, prm->mScale.y * 0.1f, prm->mScale.z * 0.1f);
+            actor->setID = prm->mSetId;
             actor->home.roomNo = prm->mRoomNo;
         }
 
         actor->old = actor->home;
         actor->current = actor->home;
-        actor->mEyePos = actor->home.pos;
-        actor->mMaxFallSpeed = -100.0f;
-        actor->mAttentionInfo.mDistances[0] = 1;
-        actor->mAttentionInfo.mDistances[1] = 2;
-        actor->mAttentionInfo.mDistances[2] = 3;
-        actor->mAttentionInfo.mDistances[3] = 7;
-        actor->mAttentionInfo.mDistances[4] = 8;
-        actor->mAttentionInfo.mDistances[7] = 15;
-        actor->mAttentionInfo.mDistances[5] = 16;
-        actor->mAttentionInfo.mDistances[6] = 16;
-        actor->mAttentionInfo.mPosition = actor->home.pos;
-        dKy_tevstr_init(&actor->mTevStr, actor->home.roomNo, 0xFF);
+        actor->eyePos = actor->home.pos;
+        actor->maxFallSpeed = -100.0f;
+        actor->attention_info.distances[0] = 1;
+        actor->attention_info.distances[1] = 2;
+        actor->attention_info.distances[2] = 3;
+        actor->attention_info.distances[3] = 7;
+        actor->attention_info.distances[4] = 8;
+        actor->attention_info.distances[7] = 15;
+        actor->attention_info.distances[5] = 16;
+        actor->attention_info.distances[6] = 16;
+        actor->attention_info.position = actor->home.pos;
+        dKy_tevstr_init(&actor->tevStr, actor->home.roomNo, 0xFF);
     }
 
-    s32 status = fpcMtd_Create((process_method_class*)actor->mSubMtd, actor);
+    s32 status = fpcMtd_Create((process_method_class*)actor->sub_method, actor);
     if (status == cPhs_COMPLEATE_e) {
         s32 priority = fpcLf_GetPriority(actor);
-        fopDwTg_ToDrawQ(&actor->mDwTg, priority);
+        fopDwTg_ToDrawQ(&actor->draw_tag, priority);
     }
 
     return status;

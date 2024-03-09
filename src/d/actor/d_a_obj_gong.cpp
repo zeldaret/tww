@@ -70,7 +70,7 @@ s32 daObjGong::Act_c::_create() {
             fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
             init_mtx();
             fopAcM_setCullSizeBox(this, -100.0f, -1.0f, -50.0f, 100.0f, 230.0f, 50.0f);
-            mEyePos.y += attr().offsetY;
+            eyePos.y += attr().offsetY;
         } else {
             ret = cPhs_ERROR_e;
         }
@@ -94,7 +94,7 @@ void daObjGong::Act_c::set_mtx() {
 
 /* 00000414-00000454       .text init_mtx__Q29daObjGong5Act_cFv */
 void daObjGong::Act_c::init_mtx() {
-    mpMorf->getModel()->setBaseScale(mScale);
+    mpMorf->getModel()->setBaseScale(scale);
     set_mtx();
 }
 
@@ -115,9 +115,9 @@ bool daObjGong::Act_c::_execute() {
 bool daObjGong::Act_c::_draw() {
     J3DModel* model = (J3DModel*)mpMorf->getModel();
     J3DModelData* modelData = (J3DModelData*)model->getModelData();
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(model, &mTevStr);
-    dDlst_texSpecmapST(&mEyePos, &mTevStr, modelData, attr().spec);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
+    dDlst_texSpecmapST(&eyePos, &tevStr, modelData, attr().spec);
     mpMorf->updateDL();
     return true;
 }
@@ -164,7 +164,7 @@ actor_process_profile_definition g_profile_Obj_Gong = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Gong,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGong::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

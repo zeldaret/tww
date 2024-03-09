@@ -67,8 +67,8 @@ BOOL daGhostship_c::_createHeap() {
     ResTIMG* res2 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTI_B_GSHIP_HO));
     ResTIMG* res3 = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_cloth_arc_name, CLOTH_BTI_CLOTHTOON));
 
-    mpCloth = dCloth_packetXlu_create(res1, res3, 5, 5, 700.0f, 350.0f, &mTevStr, 0);
-    mpCloth2 = dCloth_packetXlu_create(res2, res3, 6, 6, 1800.0f, 1000.0f, &mTevStr, 0);
+    mpCloth = dCloth_packetXlu_create(res1, res3, 5, 5, 700.0f, 350.0f, &tevStr, 0);
+    mpCloth2 = dCloth_packetXlu_create(res2, res3, 6, 6, 1800.0f, 1000.0f, &tevStr, 0);
     if(!mpCloth || !mpCloth2) {
         return false;
     }
@@ -226,7 +226,7 @@ void daGhostship_c::createInit() {
     shape_angle.x = mWave.mRotX;
     shape_angle.z = mWave.mRotZ;
 
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle.x, 0, shape_angle.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -383,7 +383,7 @@ bool daGhostship_c::_execute() {
     shape_angle.x = mWave.mRotX;
     shape_angle.z = mWave.mRotZ;
 
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle.x, 0, shape_angle.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -425,8 +425,8 @@ bool daGhostship_c::_draw() {
     }
 
     if(!l_HIO.hideShip) {
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-        g_env_light.setLightTevColorType(mpModel, &mTevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
 
         J3DModelData* modelData = mpModel->getModelData();
         u8 i;
@@ -439,9 +439,9 @@ bool daGhostship_c::_draw() {
         mDoExt_modelUpdateDL(mpModel);
         mBtk.remove(modelData);
 
-        mTevStr.mColorC0.a = alpha;
+        tevStr.mColorC0.a = alpha;
         mpCloth->cloth_draw();
-        mTevStr.mColorC0.a = alpha;
+        tevStr.mColorC0.a = alpha;
         mpCloth2->cloth_draw();
     }
 
@@ -466,7 +466,7 @@ actor_process_profile_definition g_profile_AYUSH = {
     7,
     fpcPi_CURRENT_e,
     PROC_AYUSH,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daGhostship_c),
     0,
     0,

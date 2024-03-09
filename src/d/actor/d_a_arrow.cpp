@@ -150,7 +150,7 @@ void daArrow_c::_atHit(dCcD_GObjInf* thisObjInf, fopAc_ac_c* hitActor, dCcD_GObj
 void daArrow_c::checkCreater() {
     // Check if this arrow was fired by Princess Zelda (during the Ganondorf fight).
     fopAc_ac_c* archer;
-    if (fopAcM_SearchByID(mParentPcId, &archer)) {
+    if (fopAcM_SearchByID(parentActorID, &archer)) {
         if (fpcM_GetName(archer) == PROC_PZ) {
             mbSetByZelda = true;
         }
@@ -525,12 +525,12 @@ void daArrow_c::setRoomInfo() {
     f32 groundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
     if (groundY != -1000000000.0f) {
         roomNo = dComIfG_Bgsp()->GetRoomId(mGndChk);
-        mTevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mGndChk);
+        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mGndChk);
     } else {
         roomNo = dComIfGp_roomControl_getStayNo();
     }
     
-    mTevStr.mRoomNo = roomNo;
+    tevStr.mRoomNo = roomNo;
     mStts.SetRoomId(roomNo);
     current.roomNo = roomNo;
 }
@@ -540,7 +540,7 @@ void daArrow_c::setKeepMatrix() {
     // Transform the arrow onto its archer's hand.
     if (mbSetByZelda) {
         fopNpc_npc_c* zelda;
-        fopAcM_SearchByID(mParentPcId, (fopAc_ac_c**)&zelda);
+        fopAcM_SearchByID(parentActorID, (fopAc_ac_c**)&zelda);
         
         mDoMtx_stack_c::transS(0.7f, -0.07f, -0.2f);
         mDoMtx_stack_c::XYZrotM(0x238E, 0x2CDF, 0x29BE);
@@ -1075,12 +1075,12 @@ BOOL daArrow_c::createInit() {
     
     setKeepMatrix();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    mCull.mBox.mMin.x = -6.0f;
-    mCull.mBox.mMin.y = -6.0f;
-    mCull.mBox.mMin.z = 0.0f;
-    mCull.mBox.mMax.x = 6.0f;
-    mCull.mBox.mMax.y = 6.0f;
-    mCull.mBox.mMax.z = 65.0f;
+    cull.box.min.x = -6.0f;
+    cull.box.min.y = -6.0f;
+    cull.box.min.z = 0.0f;
+    cull.box.max.x = 6.0f;
+    cull.box.max.y = 6.0f;
+    cull.box.max.z = 65.0f;
     
     mStts.Init(10, 0xFF, this);
     mAtCps.Set(m_at_cps_src);
@@ -1151,15 +1151,15 @@ BOOL daArrow_c::_execute() {
         
         if (mpSparkleEmitter) {
             if (mSparkleTimer != 0) {
-                f32 scale = mSparkleTimer*2.0f;
-                if (scale > 7.0f) {
-                    scale = 7.0f;
+                f32 scaleMag = mSparkleTimer*2.0f;
+                if (scaleMag > 7.0f) {
+                    scaleMag = 7.0f;
                 }
                 mpSparkleEmitter->setGlobalTranslation(current.pos.x, current.pos.y, current.pos.z);
                 JGeometry::TVec3<f32> scaleVec;
-                scaleVec.x = scale;
-                scaleVec.y = scale;
-                scaleVec.z = scale;
+                scaleVec.x = scaleMag;
+                scaleVec.y = scaleMag;
+                scaleVec.z = scaleMag;
                 mpSparkleEmitter->setGlobalScale(scaleVec);
             } else {
                 mpSparkleEmitter->becomeInvalidEmitter();
@@ -1193,8 +1193,8 @@ BOOL daArrow_c::_execute() {
         (this->*mCurrProcFunc)();
     }
     
-    mAttentionInfo.mPosition = current.pos;
-    mEyePos = current.pos;
+    attention_info.position = current.pos;
+    eyePos = current.pos;
     setRoomInfo();
     
     return TRUE;
@@ -1206,8 +1206,8 @@ BOOL daArrow_c::_draw() {
         return TRUE;
     }
     
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     
     if (mArrowType != TYPE_LIGHT) {
         mpTipMat->getShape()->show();
@@ -1310,7 +1310,7 @@ actor_process_profile_definition g_profile_ARROW = {
     /* ListID       */ 9,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_ARROW,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daArrow_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

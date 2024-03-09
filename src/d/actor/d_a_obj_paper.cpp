@@ -114,12 +114,12 @@ namespace daObjPaper {
 
         if (result == cPhs_COMPLEATE_e) {
             if (fopAcM_entrySolidHeap(this, solidHeapCB, attr(mType).mHeapSize)) {
-                mEyePos.y += attr(mType).mEyeOffset;
+                eyePos.y += attr(mType).mEyeOffset;
 
-                mAttentionInfo.mPosition.y += attr(mType).mAttentionOffset;
-                mAttentionInfo.mDistances[1] = attr(mType).mAttentionDist1;
-                mAttentionInfo.mDistances[3] = attr(mType).mAttentionDist2;
-                mAttentionInfo.mFlags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_READ_e;
+                attention_info.position.y += attr(mType).mAttentionOffset;
+                attention_info.distances[1] = attr(mType).mAttentionDist1;
+                attention_info.distances[3] = attr(mType).mAttentionDist2;
+                attention_info.flags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_READ_e;
 
                 mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
@@ -168,11 +168,11 @@ namespace daObjPaper {
 
     /* 00000748-00000784       .text mode_wait__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_wait() {
-        if (mEvtInfo.mCommand == dEvtCmd_INTALK_e) {
+        if (eventInfo.mCommand == dEvtCmd_INTALK_e) {
             mode_talk0_init();
         }
         else {
-            mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
     }
 
@@ -186,7 +186,7 @@ namespace daObjPaper {
     /* 000007A4-00000820       .text mode_talk0__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0() {
         if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
-            mMsgId = fopMsgM_messageSet(prm_get_msgNo(), &mEyePos);
+            mMsgId = fopMsgM_messageSet(prm_get_msgNo(), &eyePos);
 
             mode_talk1_init();
         }
@@ -232,7 +232,7 @@ namespace daObjPaper {
 
     /* 00000948-00000984       .text init_mtx__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::init_mtx() {
-        mpModel->setBaseScale(mScale);
+        mpModel->setBaseScale(scale);
         set_mtx();
     }
 
@@ -240,7 +240,7 @@ namespace daObjPaper {
     void daObjPaper::Act_c::damage_cc_proc() {
         u32 hitResult = mCylinderCol.ChkTgHit();
         if (hitResult) {
-            daObj::HitSeStart(&mEyePos, current.roomNo, &mCylinderCol, 0x0D);
+            daObj::HitSeStart(&eyePos, current.roomNo, &mCylinderCol, 0x0D);
             dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
 
             daObj::HitEff_hibana(this, &mCylinderCol);
@@ -279,8 +279,8 @@ namespace daObjPaper {
 
     /* 00000B58-00000BD4       .text _draw__Q210daObjPaper5Act_cFv */
     bool daObjPaper::Act_c::_draw() {
-        g_env_light.settingTevStruct(attr(mType).mTevType == 0 ? TEV_TYPE_BG0 : TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-        g_env_light.setLightTevColorType(mpModel, &mTevStr);
+        g_env_light.settingTevStruct(attr(mType).mTevType == 0 ? TEV_TYPE_BG0 : TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
 
         mDoExt_modelUpdateDL(mpModel);
 
@@ -328,7 +328,7 @@ actor_process_profile_definition g_profile_Obj_Paper = {
     7,
     fpcLy_CURRENT_e,
     PROC_Obj_Paper,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daObjPaper::Act_c),
     0,
     0,

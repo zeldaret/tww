@@ -89,8 +89,8 @@ bool daObj_Bscurtain_c::_execute() {
 
 bool daObj_Bscurtain_c::_draw() {
     dComIfGd_setListBG();
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
     return true;
@@ -134,7 +134,7 @@ actor_process_profile_definition g_profile_Obj_Bscurtain = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Bscurtain,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Bscurtain_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

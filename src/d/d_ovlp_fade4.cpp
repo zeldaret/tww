@@ -51,7 +51,7 @@ dOvlpFd4_c::dOvlpFd4_c() {
     field_0x2ac = 1;
     field_0xcc = &dOvlpFd4_c::execFirstSnap;
     field_0xd8 = &dOvlpFd4_c::drawFadeOut;
-    if (mBase.mProcName == PROC_OVERLAP4) {
+    if (base.mProcName == PROC_OVERLAP4) {
         field_0xfc.init(mDoGph_gInf_c::mFrameBufferTimg, 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
     } else {
         GXColor tmp = {0, 0, 0, 0};
@@ -146,7 +146,7 @@ overlap_process_profile_definition g_profile_OVERLAP4 = {
     2,
     fpcPi_CURRENT_e,
     PROC_OVERLAP4,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(dOvlpFd4_c),
     0,
     0,
@@ -160,7 +160,7 @@ overlap_process_profile_definition g_profile_OVERLAP5 = {
     2,
     fpcPi_CURRENT_e,
     PROC_OVERLAP5,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(dOvlpFd4_c),
     0,
     0,

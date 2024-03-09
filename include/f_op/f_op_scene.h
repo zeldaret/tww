@@ -13,14 +13,14 @@ struct scene_method_class {
 };
 
 typedef struct scene_process_profile_definition {
-    /* 0x00 */ node_process_profile_definition mBase;
-    /* 0x20 */ scene_method_class* mpMtd; // Subclass methods
-    /* 0x24 */ u32 field_0x24;            // padding?
+    /* 0x00 */ node_process_profile_definition base;
+    /* 0x20 */ scene_method_class* sub_method; // Subclass methods
+    /* 0x24 */ u32 field_0x24; // padding?
 } scene_process_profile_definition;
 
 class scene_class {
 public:
-    /* 0x000 */ process_node_class mBase;
+    /* 0x000 */ process_node_class base;
     /* 0x1AC */ scene_method_class* mpMtd;
     /* 0x1B0 */ scene_tag_class mScnTg;
 };

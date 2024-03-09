@@ -200,7 +200,7 @@ s32 daTbox_c::commonShapeSet() {
         }
     }
 
-    mpChestMdl->setBaseScale(mScale);
+    mpChestMdl->setBaseScale(scale);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -605,7 +605,7 @@ void daTbox_c::CreateInit() {
         mAcchCir.SetWall(30.0f, 0.0f);
         mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
 
-        mGravity = -2.5f;
+        gravity = -2.5f;
     }
 
     mOpenedSwitch = getTboxNo();
@@ -967,7 +967,7 @@ BOOL daTbox_c::actionWait() {
 /* 000024B4-000025A4       .text actionDemo__8daTbox_cFv */
 BOOL daTbox_c::actionDemo() {
     /* Fakematch - the temp variable for play is definitely not right. */
-    s16 eventId = mEvtInfo.getEventId();
+    s16 eventId = eventInfo.getEventId();
     dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
 
     if (dComIfGp_evmng_endCheck(eventId)) {
@@ -1010,7 +1010,7 @@ BOOL daTbox_c::actionDemo2() {
 
 /* 00002634-000027C8       .text actionOpenWait__8daTbox_cFv */
 BOOL daTbox_c::actionOpenWait() {
-    if (mEvtInfo.checkCommandDoor()) {
+    if (eventInfo.checkCommandDoor()) {
         dComIfGp_event_onEventFlag(0x04);
 
         u8 itemNo = getItemNo();
@@ -1042,13 +1042,13 @@ BOOL daTbox_c::actionOpenWait() {
     }
     else {
         if (boxCheck()) {
-            mEvtInfo.onCondition(dEvtCnd_CANDOOR_e);
+            eventInfo.onCondition(dEvtCnd_CANDOOR_e);
 
             if (getShapeType() == 0) {
-                mEvtInfo.setEventName("DEFAULT_TREASURE_A");
+                eventInfo.setEventName("DEFAULT_TREASURE_A");
             }
             else {
-                mEvtInfo.setEventName("DEFAULT_TREASURE");
+                eventInfo.setEventName("DEFAULT_TREASURE");
             }
         }
     }
@@ -1058,7 +1058,7 @@ BOOL daTbox_c::actionOpenWait() {
 
 /* 000027C8-000028A0       .text actionSwOnWait__8daTbox_cFv */
 BOOL daTbox_c::actionSwOnWait() {
-    if (mEvtInfo.checkCommandDemoAccrpt()) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(&daTbox_c::actionDemo2);
 
         mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE");
@@ -1067,7 +1067,7 @@ BOOL daTbox_c::actionSwOnWait() {
     else {
         if (dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
             fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
-            mEvtInfo.onCondition(dEvtCnd_UNK2_e);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
     }
 
@@ -1086,7 +1086,7 @@ BOOL daTbox_c::actionSwOnWait2() {
 
 /* 00002914-00002A2C       .text actionGenocide__8daTbox_cFv */
 BOOL daTbox_c::actionGenocide() {
-    if (mEvtInfo.checkCommandDemoAccrpt()) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(&daTbox_c::actionDemo2);
 
         mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE");
@@ -1099,7 +1099,7 @@ BOOL daTbox_c::actionGenocide() {
             }
             else {
                 fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
-                mEvtInfo.onCondition(dEvtCnd_UNK2_e);
+                eventInfo.onCondition(dEvtCnd_UNK2_e);
 
                 dComIfGs_onSwitch(getSwNo(), mRoomNo);
             }
@@ -1125,16 +1125,16 @@ BOOL daTbox_c::draw() {
     }
 
     if (!checkOpen()) {
-        dMap_drawPoint(5, current.pos.x, current.pos.y, current.pos.z, mRoomNo, -0x8000, openFlag, mGbaName, 0);
+        dMap_drawPoint(5, current.pos.x, current.pos.y, current.pos.z, mRoomNo, -0x8000, openFlag, gbaName, 0);
     }
 
-    mTevStr.mRoomNo = mRoomNo;
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    tevStr.mRoomNo = mRoomNo;
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 
     if (getFuncType() == FUNC_TYPE_TACT) {
         J3DModelData* platMdlData = mpTactPlatformMdl->getModelData();
 
-        g_env_light.setLightTevColorType(mpTactPlatformMdl, &mTevStr);
+        g_env_light.setLightTevColorType(mpTactPlatformMdl, &tevStr);
         mTactPlatformBrk.entry(platMdlData);
         mDoExt_modelUpdateDL(mpTactPlatformMdl);
     }
@@ -1143,7 +1143,7 @@ BOOL daTbox_c::draw() {
         return TRUE;
     }
 
-    g_env_light.setLightTevColorType(mpChestMdl, &mTevStr);
+    g_env_light.setLightTevColorType(mpChestMdl, &tevStr);
 
     J3DModelData* chestMdlData = mpChestMdl->getModelData();
     mOpenAnm.entry(chestMdlData);
@@ -1233,7 +1233,7 @@ BOOL daTbox_c::execute() {
         fopAcM_posMoveF(this, NULL);
         mObjAcch.CrrPos(*dComIfG_Bgsp());
 
-        mAttentionInfo.mPosition = current.pos;
+        attention_info.position = current.pos;
 
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::YrotM(home.angle.y);
@@ -1320,7 +1320,7 @@ static s32 daTbox_Create(fopAc_ac_c* i_actor) {
         }
         else {
             tbox->CreateInit();
-            tbox->mAttentionInfo.mFlags = fopAc_Attn_ACTION_TREASURE_e;
+            tbox->attention_info.flags = fopAc_Attn_ACTION_TREASURE_e;
         }
     }
 
@@ -1340,7 +1340,7 @@ actor_process_profile_definition g_profile_TBOX = {
     7,
     fpcPi_CURRENT_e,
     PROC_TBOX,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daTbox_c),
     0,
     0,

@@ -104,15 +104,15 @@ s32 dDoor_info_c::frontCheck() {
 
 /* 8006B6F4-8006B824       .text drawCheck_local__12dDoor_info_cFv */
 s32 dDoor_info_c::drawCheck_local() {
-    if (!adjoinPlayer() && !mEvtInfo.checkCommandDemoAccrpt() && !mEvtInfo.checkCommandDoor())
+    if (!adjoinPlayer() && !eventInfo.checkCommandDemoAccrpt() && !eventInfo.checkCommandDoor())
         return 0;
 
     if (getFRoomNo() == 0x3F || getBRoomNo() == 0x3F)
-        mTevStr.mRoomNo = dComIfGp_roomControl_getStayNo();
+        tevStr.mRoomNo = dComIfGp_roomControl_getStayNo();
     else
-        mTevStr.mRoomNo = getViewRoomNo();
+        tevStr.mRoomNo = getViewRoomNo();
 
-    current.roomNo = mTevStr.mRoomNo;
+    current.roomNo = tevStr.mRoomNo;
 
     u8 front = frontCheck();
     if (front == 2)
@@ -120,7 +120,7 @@ s32 dDoor_info_c::drawCheck_local() {
     else
         mRoomNo = dComIfGp_roomControl_getStayNo();
 
-    if (!dComIfGp_roomControl_checkRoomDisp(mTevStr.mRoomNo))
+    if (!dComIfGp_roomControl_checkRoomDisp(tevStr.mRoomNo))
         return 1;
 
     if (getViewRoomNo() == 0x3F && (getFRoomNo() != 0x3F || getBRoomNo() != 0x3F))
@@ -150,7 +150,7 @@ u8 dDoor_info_c::checkExecute() {
     if (fopAcM_checkStatus(this, fopAcStts_UNK1000_e))
         return 1;
 
-    if (mEvtInfo.checkCommandDemoAccrpt() || mEvtInfo.checkCommandDoor())
+    if (eventInfo.checkCommandDemoAccrpt() || eventInfo.checkCommandDoor())
         return 2;
 
     if (mRoomNo2 != dComIfGp_roomControl_getStayNo())
@@ -345,13 +345,13 @@ void dDoor_info_c::setPlayerAngle(BOOL flip) {
 
 /* 8006C200-8006C2BC       .text setPosAndAngle__12dDoor_info_cFP4cXyzs */
 void dDoor_info_c::setPosAndAngle(cXyz* pPos, s16 angle) {
-    if (mEvtInfo.checkCommandDemoAccrpt() || mEvtInfo.checkCommandDoor()) {
+    if (eventInfo.checkCommandDemoAccrpt() || eventInfo.checkCommandDoor()) {
         return;
     }
     if (pPos) {
-        mAttentionInfo.mPosition = current.pos = *pPos;
-        mAttentionInfo.mPosition.y += 150.0f;
-        mEyePos = mAttentionInfo.mPosition;
+        attention_info.position = current.pos = *pPos;
+        attention_info.position.y += 150.0f;
+        eyePos = attention_info.position;
     }
     current.angle.y = angle;
     shape_angle.y = current.angle.y;

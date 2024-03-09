@@ -92,7 +92,7 @@ BOOL daObjEayogn_c::check_ev_bit() const {
 
 /* 00000360-000003E8       .text init_mtx__13daObjEayogn_cFv */
 void daObjEayogn_c::init_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -105,8 +105,8 @@ bool daObjEayogn_c::_execute() {
 
 /* 000003F0-00000490       .text _draw__13daObjEayogn_cFv */
 bool daObjEayogn_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
@@ -153,7 +153,7 @@ actor_process_profile_definition g_profile_Obj_Eayogn = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Eayogn,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEayogn_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

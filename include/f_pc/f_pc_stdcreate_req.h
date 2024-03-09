@@ -8,7 +8,7 @@ typedef struct layer_class layer_class;
 typedef int (*stdCreateFunc)(void*, void*);
 
 typedef struct standard_create_request_class {
-    /* 0x00 */ create_request mBase;
+    /* 0x00 */ create_request base;
     /* 0x48 */ request_of_phase_process_class mPhase;
     /* 0x50 */ s16 mProcName;
     /* 0x54 */ void* mpUserData;

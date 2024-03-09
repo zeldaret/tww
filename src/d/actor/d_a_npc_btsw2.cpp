@@ -187,7 +187,7 @@ static BOOL nodeCallBack(J3DNode* node, int param_1) {
                 mDoMtx_stack_c::XrotM(-i_this->m_jnt.getHead_x());
                 mDoMtx_stack_c::YrotM(-i_this->current.angle.y);
                 mDoMtx_stack_c::concat(sp14);
-                mDoMtx_stack_c::multVec(&a_eye_pos_offst, &i_this->mEyePos);
+                mDoMtx_stack_c::multVec(&a_eye_pos_offst, &i_this->eyePos);
             } else if (jointNo == i_this->m_jnt.getBackboneJntNum()) {
                 int backboneY = i_this->m_jnt.getBackbone_y();
                 mDoMtx_stack_c::XrotM(backboneY);
@@ -292,7 +292,7 @@ bool daNpc_Btsw2_c::chkAttention(cXyz pos, s16 facingAngleY) {
 /* 000007D0-00000820       .text eventOrder__13daNpc_Btsw2_cFv */
 void daNpc_Btsw2_c::eventOrder() {
     if (m746 == 1 || m746 == 2) {
-        mEvtInfo.onCondition(dEvtCmd_INTALK_e);
+        eventInfo.onCondition(dEvtCmd_INTALK_e);
         if (m746 == 1) {
             fopAcM_orderSpeakEvent(this);
         }
@@ -301,10 +301,10 @@ void daNpc_Btsw2_c::eventOrder() {
 
 /* 00000820-00000860       .text checkOrder__13daNpc_Btsw2_cFv */
 void daNpc_Btsw2_c::checkOrder() {
-    if (mEvtInfo.checkCommandDemoAccrpt()) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         return;
     }
-    if (mEvtInfo.checkCommandTalk()) {
+    if (eventInfo.checkCommandTalk()) {
         if (m746 == 1 || m746 == 2) {
             m746 = 0;
             m71E = true;
@@ -368,7 +368,7 @@ u16 daNpc_Btsw2_c::next_msgStatus(u32*) {
 
 /* 000009F4-00000A20       .text setAttention__13daNpc_Btsw2_cFv */
 void daNpc_Btsw2_c::setAttention() {
-    mAttentionInfo.mPosition.set(m704.x, m704.y + l_HIO.mNpc.mAttnYOffset, m704.z);
+    attention_info.position.set(m704.x, m704.y + l_HIO.mNpc.mAttnYOffset, m704.z);
 }
 
 /* 00000A20-00000B94       .text lookBack__13daNpc_Btsw2_cFv */
@@ -396,7 +396,7 @@ void daNpc_Btsw2_c::lookBack() {
             sp38 = dNpc_playerEyePos(l_HIO.mNpc.m04);
             r31 = &sp38;
             sp2c = current.pos;
-            sp2c.y = mEyePos.y;
+            sp2c.y = eyePos.y;
         }
         break;
     }
@@ -459,8 +459,8 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
 /* 00000EFC-000010F8       .text CreateInit__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::CreateInit() {
     m714 = current.angle;
-    mAttentionInfo.mFlags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e;
-    mGravity = -30.0f;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e;
+    gravity = -30.0f;
     setAction(&daNpc_Btsw2_c::wait_action, NULL);
     m704 = current.pos;
     mStts.Init(0xFF, 0xFF, this);
@@ -477,8 +477,8 @@ BOOL daNpc_Btsw2_c::CreateInit() {
     m736 = 0;
     m740 = 0;
     mEventCut.setActorInfo2("Btsw2", this);
-    mAttentionInfo.mDistances[1] = 0xAB;
-    mAttentionInfo.mDistances[3] = 0xAB;
+    attention_info.distances[1] = 0xAB;
+    attention_info.distances[3] = 0xAB;
     return TRUE;
 }
 
@@ -634,15 +634,15 @@ BOOL daNpc_Btsw2_c::_execute() {
         l_HIO.mNpc.mMaxTurnStep
     );
     playTexPatternAnm();
-    mpMcaMorf->play(&mEyePos, 0, 0);
+    mpMcaMorf->play(&eyePos, 0, 0);
     checkOrder();
     if (!mEventCut.cutProc()) {
         (this->*mCurrActionFunc)(NULL);
     }
     eventOrder();
     mObjAcch.CrrPos(*dComIfG_Bgsp());
-    mTevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
-    mTevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
     
     J3DModel* model = mpMcaMorf->getModel();
     mDoMtx_stack_c::transS(current.pos);
@@ -659,10 +659,10 @@ BOOL daNpc_Btsw2_c::_draw() {
     J3DModel* model = mpMcaMorf->getModel();
     J3DModelData* modelData = model->getModelData();
     
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(model, &mTevStr);
-    g_env_light.setLightTevColorType(m6D0, &mTevStr);
-    g_env_light.setLightTevColorType(m6D4, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
+    g_env_light.setLightTevColorType(m6D0, &tevStr);
+    g_env_light.setLightTevColorType(m6D4, &tevStr);
     
     mBtpAnm.entry(modelData, m6F0);
     mpMcaMorf->updateDL();
@@ -675,7 +675,7 @@ BOOL daNpc_Btsw2_c::_draw() {
     cXyz sp8(current.pos.x, current.pos.y + 130.0f, current.pos.z);
     mShadowId = dComIfGd_setShadow(
         mShadowId, 1, mpMcaMorf->getModel(), &sp8, 800.0f, 20.0f,
-        current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &mTevStr,
+        current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr,
         0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
     );
     
@@ -722,7 +722,7 @@ actor_process_profile_definition g_profile_NPC_BTSW2 = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_NPC_BTSW2,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Btsw2_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

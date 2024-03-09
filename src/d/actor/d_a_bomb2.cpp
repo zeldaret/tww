@@ -388,8 +388,8 @@ namespace daBomb2 {
             on_carry();
         }
 
-        mGravity = attr().gravity;
-        mMaxFallSpeed = attr().maxFallSpeed;
+        gravity = attr().gravity;
+        maxFallSpeed = attr().maxFallSpeed;
         bgCrrPos();
         speed.y = 0.0f;
         speedF = 0.0f;
@@ -434,7 +434,7 @@ namespace daBomb2 {
     }
 
     void Act_c::set_mtx() {
-        mpModel->setBaseScale(mScale);
+        mpModel->setBaseScale(scale);
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::concat(field_0x754);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -467,10 +467,10 @@ namespace daBomb2 {
         } else if (r4) {
             r31 = false;
         } else if (r31) {
-            radius = mScale.x * 30.0f;
+            radius = scale.x * 30.0f;
             static cXyz local_center(0.0f, 30.0f, 0.0f);
             mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
-            mDoMtx_stack_c::scaleM(mScale);
+            mDoMtx_stack_c::scaleM(scale);
             mDoMtx_stack_c::multVec(&local_center, &pos);
         }
         
@@ -577,13 +577,13 @@ namespace daBomb2 {
         s32 roomNo;
         if(mAcch.GetGroundH() != -1.0e9f) {
             roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
-            mTevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
+            tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
         else {
             roomNo = dComIfGp_roomControl_getStayNo();
         }
 
-        mTevStr.mRoomNo = roomNo;
+        tevStr.mRoomNo = roomNo;
         mStts.SetRoomId(roomNo);
         current.roomNo = roomNo;
     }
@@ -702,10 +702,10 @@ namespace daBomb2 {
     }
 
     void Act_c::eff_explode_normal(const csXyz* rotation) {
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &mScale);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &current.pos, NULL, &mScale);
-        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &mScale);
-        dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &mScale);
+        dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &current.pos, NULL, &scale);
+        dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
+        dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
     }
 
     void Act_c::eff_explode_water() {
@@ -734,8 +734,8 @@ namespace daBomb2 {
             field_0x6CC = field_0x6C0;
             field_0x6D8 = field_0x6C0;
 
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &field_0x6C0, NULL, &mScale, 0xFF, &mSparks);
-            dComIfGp_particle_setToonP1(0x2012, &field_0x6C0, NULL, &mScale, 0xDC, &mSmoke);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
+            dComIfGp_particle_setToonP1(0x2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
             mSmoke.setOldPosP(&field_0x6CC, &field_0x6D8);
         }
     }
@@ -958,16 +958,16 @@ namespace daBomb2 {
     }
 
     void Act_c::on_carry() {
-        mAttentionInfo.mFlags |= fopAc_Attn_ACTION_CARRY_e;
+        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
     }
 
     void Act_c::off_carry() {
-        mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
+        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
     }
 
     void Act_c::mode_wait_init() {
         mState = 0;
-        mGravity = attr().gravity;
+        gravity = attr().gravity;
         mSph.OnCoSPrmBit(CO_SPRM_SET);
     }
 
@@ -1060,7 +1060,7 @@ namespace daBomb2 {
         mEnv.set(current.pos);
         speedF = 0.0f;
         speed = cXyz::Zero;
-        mGravity = 0.0f;
+        gravity = 0.0f;
         off_carry();
         mSph.OffTgSPrmBit(TG_SPRM_SET);
         mSph.OffCoSPrmBit(CO_SPRM_SET);
@@ -1245,10 +1245,10 @@ namespace daBomb2 {
             tensor_proc_call();
             anm_play();
 
-            mAttentionInfo.mPosition.x = current.pos.x;
-            mAttentionInfo.mPosition.y = current.pos.y + 50.0f;
-            mAttentionInfo.mPosition.z = current.pos.z;
-            mEyePos = mAttentionInfo.mPosition;
+            attention_info.position.x = current.pos.x;
+            attention_info.position.y = current.pos.y + 50.0f;
+            attention_info.position.z = current.pos.z;
+            eyePos = attention_info.position;
 
             set_mtx();
             cc_set();
@@ -1303,8 +1303,8 @@ namespace daBomb2 {
     /* 800E0A0C-800E0A80       .text _draw__Q27daBomb25Act_cFv */
     bool Act_c::_draw() {
         if(is_draw()) {
-            g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-            g_env_light.setLightTevColorType(mpModel, &mTevStr);
+            g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+            g_env_light.setLightTevColorType(mpModel, &tevStr);
             draw_nut();
             draw_shadow();
         }
@@ -1349,7 +1349,7 @@ actor_process_profile_definition g_profile_Bomb2 = {
     7,
     fpcPi_CURRENT_e,
     PROC_Bomb2,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daBomb2::Act_c),
     0,
     0,

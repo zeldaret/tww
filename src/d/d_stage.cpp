@@ -1486,7 +1486,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
     JUT_ASSERT(1842, stageProc != 0);
 
-    if (stageProc->mBase.mBase.mProcName != PROC_PLAY_SCENE) {
+    if (stageProc->base.base.mProcName != PROC_PLAY_SCENE) {
         fopAcM_create(PROC_TITLE, 0);
     }
 

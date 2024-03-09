@@ -41,7 +41,7 @@ void daTag_Gship_c::modeClearEventInit() {
 
 /* 00000214-00000418 .text modeClearEvent__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearEvent() {
-    if(mEvtInfo.checkCommandDemoAccrpt()) {
+    if(eventInfo.checkCommandDemoAccrpt()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("PScnChg");
         if(strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "WARAIGOE") == 0) {
             if(dComIfGs_getEventReg(0x8803) == 3) {
@@ -175,7 +175,7 @@ actor_process_profile_definition g_profile_TAG_GSHIP = {
     8,
     fpcPi_CURRENT_e,
     PROC_TAG_GSHIP,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daTag_Gship_c),
     0,
     0,

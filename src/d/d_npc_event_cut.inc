@@ -350,7 +350,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
         return 0;
     }
     
-    if(cut->mSetId != 0 && pActor->mSetId == cut->mSetId) {
+    if(cut->mSetId != 0 && pActor->setID == cut->mSetId) {
         cut->mTargetActorPos = pActor->current.pos;
         cut->mpTargetActor = pActor;
 
@@ -366,7 +366,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
                 return 0;
             }
             else {
-                if(obj->mProcName == fopAcM_GetProfName(pActor) && obj->mSubtype == pActor->mSubtype) {
+                if(obj->mProcName == fopAcM_GetProfName(pActor) && obj->mSubtype == pActor->subtype) {
                     if(cut->mTargetActorPos.abs() == 0.0f) {
                         cut->mTargetActorPos = pActor->current.pos;
                         cut->mpTargetActor = pActor;

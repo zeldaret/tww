@@ -57,7 +57,7 @@ void daPy_lk_c::initShipRideUseItem(int param_1, int param_2) {
         return;
     }
     dComIfGp_getShipActor()->m034D = 2; // TODO probably inline setter
-    mGravity = 0.0f;
+    gravity = 0.0f;
     speed.y = 0.0f;
     if (param_1 == 1) {
         setOldRootQuaternion(0, 0x4000, 0);

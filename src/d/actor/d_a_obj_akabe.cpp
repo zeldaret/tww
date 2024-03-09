@@ -105,14 +105,14 @@ namespace daObjAkabe {
     void Act_c::init_scale() {
         s32 scl = prm_get_scl();
         if (scl == 1) {
-            mScale.x *= 10.0f;
-            mScale.y *= 10.0f;
-            mScale.z = 1.0f;
+            scale.x *= 10.0f;
+            scale.y *= 10.0f;
+            scale.z = 1.0f;
         } else if (scl == 2) {
         } else if (scl == 3) {
-            mScale *= 10.0f;
+            scale *= 10.0f;
         } else {
-            mScale.z = 1.0f;
+            scale.z = 1.0f;
         }
     }
 
@@ -120,7 +120,7 @@ namespace daObjAkabe {
     void Act_c::init_mtx() {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
-        mDoMtx_stack_c::scaleM(mScale);
+        mDoMtx_stack_c::scaleM(scale);
         mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
     }
 
@@ -189,7 +189,7 @@ actor_process_profile_definition g_profile_Obj_Akabe = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Obj_Akabe,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjAkabe::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

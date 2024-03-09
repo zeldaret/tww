@@ -140,8 +140,8 @@ public:
     BOOL execute();
     BOOL draw();
     f32 getGroundY() { return mAcch.GetGroundH(); }
-    MtxP getLeftHandMatrix() { return mCullMtx; }
-    MtxP getRightHandMatrix() { return mCullMtx; }
+    MtxP getLeftHandMatrix() { return cullMtx; }
+    MtxP getRightHandMatrix() { return cullMtx; }
     f32 getBaseAnimeFrameRate() { return 1.0f; }
     f32 getBaseAnimeFrame() { return 0.0f; }
     void restartPoint(s16) {}

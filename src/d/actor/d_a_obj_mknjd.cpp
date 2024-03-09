@@ -262,7 +262,7 @@ int daObjMknjD::Act_c::Create() {
 
         mTactMode = 4;
         mGiveItemNo = TACT_SONG5;
-        mEvtInfo.setEventName("MKNJD_K_TALK");
+        eventInfo.setEventName("MKNJD_K_TALK");
         m0430 = 0x2910;
     }
     else {
@@ -273,18 +273,18 @@ int daObjMknjD::Act_c::Create() {
 
         mTactMode = 3;
         mGiveItemNo = TACT_SONG4;
-        mEvtInfo.setEventName("MKNJD_D_TALK");
+        eventInfo.setEventName("MKNJD_D_TALK");
         m0430 = 0x2920;
     }
 
-    mAttentionInfo.mDistances[1] = 0x3D;
-    mAttentionInfo.mDistances[3] = 0x3D;
-    mAttentionInfo.mFlags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    attention_info.distances[1] = 0x3D;
+    attention_info.distances[3] = 0x3D;
+    attention_info.flags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
     if (!checkItemGet(mGiveItemNo, 1)) {
         m043F = 8;
-        mEvtInfo.setXyCheckCB(daObjMknjD_XyCheckCB);
-        mEvtInfo.setXyEventCB(daObjMknjD_XyEventCB);
+        eventInfo.setXyCheckCB(daObjMknjD_XyCheckCB);
+        eventInfo.setXyEventCB(daObjMknjD_XyEventCB);
     }
     else {
         m043F = 0;
@@ -601,12 +601,12 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
         mEmitters[0] = dComIfGp_particle_set(0x8185, &current.pos, &current.angle);
 
         GXColor emitter2Color;
-        emitter2Color.r = mTevStr.mColorC0.r;
-        emitter2Color.g = mTevStr.mColorC0.g;
-        emitter2Color.b = mTevStr.mColorC0.b;
-        emitter2Color.a = mTevStr.mColorC0.a;
+        emitter2Color.r = tevStr.mColorC0.r;
+        emitter2Color.g = tevStr.mColorC0.g;
+        emitter2Color.b = tevStr.mColorC0.b;
+        emitter2Color.a = tevStr.mColorC0.a;
         
-        mEmitters[1] = dComIfGp_particle_setProjection(0x8186, &current.pos, &current.angle, NULL, 0xFF, NULL, current.roomNo, &mTevStr.mColorK0, &emitter2Color);
+        mEmitters[1] = dComIfGp_particle_setProjection(0x8186, &current.pos, &current.angle, NULL, 0xFF, NULL, current.roomNo, &tevStr.mColorK0, &emitter2Color);
 
         mEmitters[2] = dComIfGp_particle_setToon(0xA187, &current.pos, &current.angle, NULL, 0xFF, &mSmokeCBs[2]);
         mSmokeCBs[2].setRateOff(0);
@@ -708,9 +708,9 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
 
     switch (m043F) {
         case 0:
-            mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
 
-            if (mEvtInfo.checkCommandTalk()) {
+            if (eventInfo.checkCommandTalk()) {
                 m0500 = 1;
                 m043F = 0x0B;
             }
@@ -783,7 +783,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
 
             break;
         case 3:
-            if (mEvtInfo.checkCommandDemoAccrpt()) {
+            if (eventInfo.checkCommandDemoAccrpt()) {
                 m043F = 4;
             }
 
@@ -802,7 +802,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
 
             break;
         case 6:
-            if (mEvtInfo.checkCommandDemoAccrpt()) {
+            if (eventInfo.checkCommandDemoAccrpt()) {
                 m043F = 7;
 
                 mDoAud_bgmStop(0x1E);
@@ -833,10 +833,10 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
 
             break;
         case 8:
-            mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
-            mEvtInfo.onCondition(dEvtCnd_CANTALKITEM_e);
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
+            eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
 
-            if (mEvtInfo.checkCommandTalk()) {
+            if (eventInfo.checkCommandTalk()) {
                 if (dComIfGp_event_chkTalkXY()) {
                     m0500 = 0;
                     m043F = 9;
@@ -951,11 +951,11 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
 
 /* 000022FC-00002430       .text Draw__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mBreakMdl, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mBreakMdl, &tevStr);
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mMainMdl, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mMainMdl, &tevStr);
 
     dComIfGd_setListBG();
 
@@ -1019,7 +1019,7 @@ actor_process_profile_definition g_profile_Obj_MknjD = {
     3,
     fpcPi_CURRENT_e,
     PROC_Obj_MknjD,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daObjMknjD::Act_c),
     0,
     0,

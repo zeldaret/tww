@@ -273,7 +273,7 @@ msg_process_profile_definition g_profile_PLACE_NAME = {
     12,
     fpcPi_CURRENT_e,
     PROC_PLACE_NAME,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(dPn_c),
     0,
     0,

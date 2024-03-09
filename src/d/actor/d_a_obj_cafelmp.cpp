@@ -38,7 +38,7 @@ void daObjCafelmp_c::CreateInit() {
 
 /* 000001CC-0000024C       .text set_mtx__14daObjCafelmp_cFv */
 void daObjCafelmp_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -72,8 +72,8 @@ BOOL daObjCafelmp_c::_execute() {
 }
 
 BOOL daObjCafelmp_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
@@ -118,7 +118,7 @@ actor_process_profile_definition g_profile_Obj_Cafelmp = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Cafelmp,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjCafelmp_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

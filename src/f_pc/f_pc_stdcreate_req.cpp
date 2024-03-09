@@ -24,27 +24,27 @@ s32 fpcSCtRq_phase_Load(standard_create_request_class* i_SCtReq) {
 
 /* 8004069C-80040704       .text fpcSCtRq_phase_CreateProcess__FP29standard_create_request_class */
 s32 fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_SCtReq) {
-    fpcLy_SetCurrentLayer(i_SCtReq->mBase.mpLayer);
-    i_SCtReq->mBase.mpRes = fpcBs_Create(i_SCtReq->mProcName, i_SCtReq->mBase.mBsPcId, i_SCtReq->mpUserData);
-    if (i_SCtReq->mBase.mpRes == NULL) {
+    fpcLy_SetCurrentLayer(i_SCtReq->base.mpLayer);
+    i_SCtReq->base.mpRes = fpcBs_Create(i_SCtReq->mProcName, i_SCtReq->base.mBsPcId, i_SCtReq->mpUserData);
+    if (i_SCtReq->base.mpRes == NULL) {
         fpcLd_Free(i_SCtReq->mProcName);
         return cPhs_ERROR_e;
     } else {
-        i_SCtReq->mBase.mpRes->mpCtRq = (struct create_request*)i_SCtReq;
+        i_SCtReq->base.mpRes->mpCtRq = (struct create_request*)i_SCtReq;
         return cPhs_NEXT_e;
     }
 }
 
 /* 80040704-8004073C       .text fpcSCtRq_phase_SubCreateProcess__FP29standard_create_request_class */
 s32 fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_SCtReq) {
-    fpcLy_SetCurrentLayer(i_SCtReq->mBase.mpLayer);
-    return fpcBs_SubCreate(i_SCtReq->mBase.mpRes);
+    fpcLy_SetCurrentLayer(i_SCtReq->base.mpLayer);
+    return fpcBs_SubCreate(i_SCtReq->base.mpRes);
 }
 
 /* 8004073C-80040794       .text fpcSCtRq_phase_IsComplete__FP29standard_create_request_class */
 s32 fpcSCtRq_phase_IsComplete(standard_create_request_class* i_SCtReq) {
-    process_node_class* procNode = (process_node_class*)i_SCtReq->mBase.mpRes;
-    if (fpcBs_Is_JustOfType(g_fpcNd_type, procNode->mBase.mSubType) == 1) {
+    process_node_class* procNode = (process_node_class*)i_SCtReq->base.mpRes;
+    if (fpcBs_Is_JustOfType(g_fpcNd_type, procNode->base.mSubType) == 1) {
         if (fpcLy_IsCreatingMesg(&procNode->mLayer) == 1) {
             return cPhs_INIT_e;
         }
@@ -54,7 +54,7 @@ s32 fpcSCtRq_phase_IsComplete(standard_create_request_class* i_SCtReq) {
 
 /* 80040794-800407E4       .text fpcSCtRq_phase_PostMethod__FP29standard_create_request_class */
 s32 fpcSCtRq_phase_PostMethod(standard_create_request_class* i_SCtReq) {
-    if (i_SCtReq->mpCallBack != NULL && i_SCtReq->mpCallBack(i_SCtReq->mBase.mpRes, i_SCtReq->mpCallBackUserData) == 0) {
+    if (i_SCtReq->mpCallBack != NULL && i_SCtReq->mpCallBack(i_SCtReq->base.mpRes, i_SCtReq->mpCallBackUserData) == 0) {
         return cPhs_INIT_e;
     } else {
         return cPhs_NEXT_e;
@@ -122,7 +122,7 @@ s32 fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc i_creat
             request->mpCallBack = i_createFunc;
             request->mpCallBackUserData = param_4;
             request->mpUserData = param_5;
-            return request->mBase.mBsPcId;
+            return request->base.mBsPcId;
         }
     }
 }

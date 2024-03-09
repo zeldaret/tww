@@ -187,7 +187,7 @@ void daObjZouk::Act_c::set_mtx() {
     cXyz trans(0.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::transS(trans);
     mDoMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
-    M_anm->getModel()->setBaseScale(mScale);
+    M_anm->getModel()->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     M_anm->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -205,7 +205,7 @@ void daObjZouk::Act_c::play_stop_joint_anime() {
 
 /* 00001270-000012F0       .text jokai_demo__Q29daObjZouk5Act_cFv */
 BOOL daObjZouk::Act_c::jokai_demo() {
-    if (dComIfGp_demo_getActor(mDemoActorId) != NULL) {
+    if (dComIfGp_demo_getActor(demoActorID) != NULL) {
         dDemo_setDemoData(this, 0x6a, M_anm, "VzouK", 0, 0, 0, 0);
         return true;
     } else {
@@ -266,10 +266,10 @@ static void dummy() {
 
 /* 00001510-000015F0       .text _draw__Q29daObjZouk5Act_cFv */
 bool daObjZouk::Act_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     dComIfGd_setListBG();
-    g_env_light.setLightTevColorType(M_anm->getModel(), &mTevStr);
-    setEffectMtx(&mEyePos, 0.5f);
+    g_env_light.setLightTevColorType(M_anm->getModel(), &tevStr);
+    setEffectMtx(&eyePos, 0.5f);
     M_anm->updateDL();
     dComIfGd_setList();
     dComIfGd_setSimpleShadow2(&current.pos, mGndY, 388.0f, mGndChk, shape_angle.y, 1.0f, dDlst_shadowControl_c::getSimpleTex());
@@ -277,20 +277,20 @@ bool daObjZouk::Act_c::_draw() {
 }
 
 /* 000015F0-00001804       .text setEffectMtx__Q29daObjZouk5Act_cFPC4cXyzf */
-void daObjZouk::Act_c::setEffectMtx(const cXyz* pos, f32 scale) {
+void daObjZouk::Act_c::setEffectMtx(const cXyz* pos, f32 scaleMag) {
     static Mtx mtx_adj = {
         0.5f, 0.0f, 0.0f, 0.5f,
         0.0f, -0.5f, 0.0f, 0.5f,
         0.0f, 0.0f, 1.0f, 0.0f,
     };
 
-    f32 inv = 1.0f / scale;
+    f32 inv = 1.0f / scaleMag;
     camera_class * camera = dCam_getCamera();
     cXyz lookDir = *pos - camera->mLookat.mEye;
     cXyz lightDir;
     cXyz refl;
 
-    dKyr_get_vectle_calc(&mTevStr.mLightPosWorld, (cXyz*)pos, &lightDir);
+    dKyr_get_vectle_calc(&tevStr.mLightPosWorld, (cXyz*)pos, &lightDir);
     C_VECHalfAngle(&lookDir, &lightDir, &refl);
     Mtx lookatMtx;
     C_MTXLookAt(lookatMtx, &cXyz::Zero, &cXyz::BaseY, &refl);
@@ -350,7 +350,7 @@ actor_process_profile_definition g_profile_Obj_Zouk = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Zouk,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjZouk::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

@@ -20,7 +20,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 0000010C-000001C4       .text setMtx__9daIkari_cFv */
 void daIkari_c::setMtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -58,13 +58,13 @@ void daIkari_c::getArg() {
     }
 
     if (mEnvType == 0xff) {
-        mScale.x = 1.0f;
-        mScale.y = 1.0f;
-        mScale.z = 1.0f;
+        scale.x = 1.0f;
+        scale.y = 1.0f;
+        scale.z = 1.0f;
     } else if (mEnvType == 0x01) {
-        mScale.x = 1.27f;
-        mScale.y = 1.27f;
-        mScale.z = 1.27f;
+        scale.x = 1.27f;
+        scale.y = 1.27f;
+        scale.z = 1.27f;
     }
 }
 
@@ -91,18 +91,18 @@ bool daIkari_c::_execute() {
 /* 000003CC-00000494       .text _draw__9daIkari_cFv */
 bool daIkari_c::_draw() {
     if (mEnvType == 1) {
-        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-        mTevStr.mColorC0.r = g_env_light.mActorC0.r;
-        mTevStr.mColorC0.g = g_env_light.mActorC0.g;
-        mTevStr.mColorC0.b = g_env_light.mActorC0.b;
-        mTevStr.mColorC0.a = g_env_light.mActorC0.a;
-        mTevStr.mColorK0.r = g_env_light.mActorK0.r;
-        mTevStr.mColorK0.g = g_env_light.mActorK0.g;
-        mTevStr.mColorK0.b = g_env_light.mActorK0.b;
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+        tevStr.mColorC0.r = g_env_light.mActorC0.r;
+        tevStr.mColorC0.g = g_env_light.mActorC0.g;
+        tevStr.mColorC0.b = g_env_light.mActorC0.b;
+        tevStr.mColorC0.a = g_env_light.mActorC0.a;
+        tevStr.mColorK0.r = g_env_light.mActorK0.r;
+        tevStr.mColorK0.g = g_env_light.mActorK0.g;
+        tevStr.mColorK0.b = g_env_light.mActorK0.b;
     } else {
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     }
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return true;
 }
@@ -121,7 +121,7 @@ int daIkari_c::_create() {
         } else {
             setMtx();
 
-            f32 mScaleX = mScale.x;
+            f32 mScaleX = scale.x;
 
             fopAcM_SetMtx(this, &mpModel->mBaseTransformMtx[0]);
             fopAcM_setCullSizeBox(this,
@@ -178,7 +178,7 @@ actor_process_profile_definition g_profile_IKARI = {
     7,
     fpcPi_CURRENT_e,
     PROC_IKARI,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daIkari_c),
     0,
     0,

@@ -351,7 +351,7 @@ dDemo_object_c::~dDemo_object_c() {
 
 /* 8006A234-8006A2F8       .text appendActor__14dDemo_object_cFP10fopAc_ac_c */
 dDemo_actor_c* dDemo_object_c::appendActor(fopAc_ac_c* ac) {
-    dDemo_actor_c* demoActor = dComIfGp_demo_getActor(ac->mDemoActorId);
+    dDemo_actor_c* demoActor = dComIfGp_demo_getActor(ac->demoActorID);
     if (demoActor != NULL)
         return demoActor;
 
@@ -364,7 +364,7 @@ dDemo_actor_c* dDemo_object_c::appendActor(fopAc_ac_c* ac) {
 
     mpActors[mNumActor++] = demoActor;
     demoActor->setActor(ac);
-    ac->mDemoActorId = mNumActor;
+    ac->demoActorID = mNumActor;
     return demoActor;
 }
 

@@ -208,9 +208,9 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
             f32 f31 = 200.0f * cM_ssin(shape_angle.y);
             f32 f30 = 200.0f * cM_scos(shape_angle.y);
             cXyz startPos(
-                mAttentionInfo.mPosition.x,
-                mAttentionInfo.mPosition.y - 50.0f,
-                mAttentionInfo.mPosition.z
+                attention_info.position.x,
+                attention_info.position.y - 50.0f,
+                attention_info.position.z
             );
             cXyz endPos(
                 startPos.x + f31,

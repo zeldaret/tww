@@ -11,7 +11,7 @@
 
 /* 80040520-80040570       .text fpcFCtRq_Do__FP19fast_create_request */
 s32 fpcFCtRq_Do(fast_create_request* i_createReq) {
-    if (i_createReq->mpFastCreateFunc != NULL && i_createReq->mpFastCreateFunc(i_createReq->mBase.mpRes, i_createReq->mpFastCreateData) == 0) {
+    if (i_createReq->mpFastCreateFunc != NULL && i_createReq->mpFastCreateFunc(i_createReq->base.mpRes, i_createReq->mpFastCreateData) == 0) {
         return cPhs_UNK3_e;
     } else {
         return cPhs_COMPLEATE_e;
@@ -40,8 +40,8 @@ base_process_class* fpcFCtRq_Request(layer_class* i_layer, s16 i_procTypeID,
             proc = fpcBs_Create(i_procTypeID, fpcBs_MakeOfId(), pData);
             if (proc != NULL) {
                 proc->mpCtRq = (struct create_request*)request;
-                request->mBase.mpRes = proc;
-                request->mBase.mBsPcId = proc->mBsPcId;
+                request->base.mpRes = proc;
+                request->base.mBsPcId = proc->mBsPcId;
                 if (fpcBs_SubCreate(proc) == 2) {
                     request->mpFastCreateFunc = i_createFunc;
                     request->mpFastCreateData = i_createData;
@@ -51,7 +51,7 @@ base_process_class* fpcFCtRq_Request(layer_class* i_layer, s16 i_procTypeID,
 #if VERSION == VERSION_JPN
             fpcCtRq_Delete(&request->mBase);
 #else
-            fpcCtRq_Cancel(&request->mBase);
+            fpcCtRq_Cancel(&request->base);
 #endif
         }
         return NULL;

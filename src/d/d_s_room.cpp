@@ -311,11 +311,11 @@ scene_process_profile_definition g_profile_ROOM_SCENE = {
     0,
     fpcPi_CURRENT_e,
     PROC_ROOM_SCENE,
-    &g_fpcNd_Method.mBase,
+    &g_fpcNd_Method.base,
     sizeof(room_of_scene_class),
     0,
     0,
-    &g_fopScn_Method.mBase,
+    &g_fopScn_Method.base,
     &l_dScnRoom_Method,
     NULL,
 };

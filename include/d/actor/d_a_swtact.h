@@ -7,7 +7,7 @@
 
 class daSwTact_c : public fopAc_ac_c {
 public:
-    f32 getR() { return mRadius * mScale.x; }
+    f32 getR() { return mRadius * scale.x; }
 
     bool _delete();
     BOOL CreateHeap();

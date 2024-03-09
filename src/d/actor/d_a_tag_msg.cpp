@@ -32,22 +32,22 @@ static u8 msg_mode;
 
 /* 00000078-00000084       .text getEventNo__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getEventNo() {
-    return mBase.mParameters >> 0x18;
+    return base.mParameters >> 0x18;
 }
 
 /* 00000084-00000090       .text getSwbit__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getSwbit() {
-    return mBase.mParameters >> 8 & 0xff;
+    return base.mParameters >> 8 & 0xff;
 }
 
 /* 00000090-0000009C       .text getSwbit2__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getSwbit2() {
-    return mBase.mParameters >> 0x10 & 0xff;
+    return base.mParameters >> 0x10 & 0xff;
 }
 
 /* 0000009C-000000A8       .text getType2__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getType2() {
-    return mBase.mParameters >> 6 & 3;
+    return base.mParameters >> 6 & 3;
 }
 
 /* 000000A8-0000015C       .text myDemoName__11daTag_Msg_cFv */
@@ -105,8 +105,8 @@ BOOL daTag_Msg_c::rangeCheck() {
     if (diff.y < 0.0f) {
         diff.y = -diff.y;
     }
-    if (diff.abs2XZ() < mScale.x * mScale.x * 10000.0f) {
-        if(diff.y <= mScale.y * 100.0f) {
+    if (diff.abs2XZ() < scale.x * scale.x * 10000.0f) {
+        if(diff.y <= scale.y * 100.0f) {
             return TRUE;
         }
     }
@@ -151,7 +151,7 @@ static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
         }
         break;
     case 1:
-        l_msgId = fopMsgM_messageSet(message, &a_this->mAttentionInfo.mPosition);
+        l_msgId = fopMsgM_messageSet(message, &a_this->attention_info.position);
         if (l_msgId != fpcM_ERROR_PROCESS_ID_e) {
             msg_mode++;
         }
@@ -195,7 +195,7 @@ static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
 static BOOL daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
     u8 swBit;
 
-    if (a_this->mEvtInfo.mCommand == dEvtCmd_INTALK_e) {
+    if (a_this->eventInfo.mCommand == dEvtCmd_INTALK_e) {
         a_this->setActio(3);
         swBit = a_this->getSwbit();
         if ((swBit & 0xff) != 0xff) {
@@ -211,7 +211,7 @@ static BOOL daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
         if (a_this->getType2() & 1) {
             fopAcM_orderSpeakEvent(a_this);
         }
-        a_this->mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+        a_this->eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
     return TRUE;
 }
@@ -222,7 +222,7 @@ static BOOL daTag_Msg_actionArrival(daTag_Msg_c* a_this) {
 
     if (a_this->arrivalTerms() != 0) {
         cutsceneName = (char*)a_this->myDemoName();
-        a_this->mEvtInfo.setEventName(cutsceneName);
+        a_this->eventInfo.setEventName(cutsceneName);
         a_this->setActio(2);
         daTag_Msg_actionHunt(a_this);
     }
@@ -265,10 +265,10 @@ s32 daTag_Msg_c::create() {
     shape_angle.x = 0;
     current.angle.z = 0;
     current.angle.x = 0;
-    mAttentionInfo.mFlags = fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    attention_info.flags = fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
     if (getMessage() != 0x836) {
-        mAttentionInfo.mPosition.y += 150;
-        mEyePos.y += 150.0f;
+        attention_info.position.y += 150;
+        eyePos.y += 150.0f;
     }
     return cPhs_COMPLEATE_e;
 }
@@ -308,7 +308,7 @@ actor_process_profile_definition g_profile_TAG_MSG = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_TAG_MSG,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Msg_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

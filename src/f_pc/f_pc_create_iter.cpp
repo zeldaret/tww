@@ -27,7 +27,7 @@ void* fpcCtIt_Judge(fpcCtIt_JudgeFunc i_judgeFunc, void* i_data) {
 
 /* 8003CC80-8003CCD4       .text fpcCtIt_filter_JudgeInLayer__FP10create_tagP16fpcCtIt_jilprm_c */
 void* fpcCtIt_filter_JudgeInLayer(create_tag* i_createTag, fpcCtIt_jilprm_c* i_iterData) {
-    create_request* create_req = static_cast<create_request*>(i_createTag->mBase.mpTagData);
+    create_request* create_req = static_cast<create_request*>(i_createTag->base.mpTagData);
     if (create_req->mpLayer->mLayerID == i_iterData->mLayerID) {
         return i_iterData->mFunc((node_class*)create_req->mpRes, i_iterData->mpUserData);
     } else {

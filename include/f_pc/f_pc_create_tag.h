@@ -6,7 +6,7 @@
 #include "SSystem/SComponent/c_tag.h"
 
 typedef struct create_tag {
-    create_tag_class mBase;
+    create_tag_class base;
 } create_tag;
 
 void fpcCtTg_ToCreateQ(create_tag* pTag);

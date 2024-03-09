@@ -407,7 +407,7 @@ void daDitem_c::anim_control() {
 
 /* 00000760-00000880       .text set_mtx__9daDitem_cFv */
 void daDitem_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     fopAcM_addAngleY(this, current.angle.y + 0x0111, 0x0111);
     
     if (chkArgFlag(0x02) || chkArgFlag(0x04) || chkArgFlag(0x08)) {
@@ -428,7 +428,7 @@ void daDitem_c::set_mtx() {
 /* 00000880-000008F0       .text settingBeforeDraw__9daDitem_cFv */
 void daDitem_c::settingBeforeDraw() {
     if (isBomb(m_itemNo) || m_itemNo == BOMB_BAG || m_itemNo == dItem_SKULL_HAMMER_e || m_itemNo == dItem_SMALL_KEY_e) {
-        dDlst_texSpecmapST(&mEyePos, &mTevStr, mpModel->getModelData(), 1.0f);
+        dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }
 
@@ -544,7 +544,7 @@ actor_process_profile_definition g_profile_Demo_Item = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Demo_Item,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDitem_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

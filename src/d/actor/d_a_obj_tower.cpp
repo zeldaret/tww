@@ -29,7 +29,7 @@ BOOL daObjTower_c::CreateHeap() {
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
-    mDoMtx_stack_c::scaleM(mScale.x, mScale.y, mScale.z);
+    mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 
     mpBgW = new dBgW();
@@ -53,7 +53,7 @@ void daObjTower_c::CreateInit() {
 
 /* 0000028C-0000030C       .text set_mtx__12daObjTower_cFv */
 void daObjTower_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -104,8 +104,8 @@ static BOOL daObjTower_Delete(void* i_this) {
 }
 
 BOOL daObjTower_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
 
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
@@ -120,8 +120,8 @@ static BOOL daObjTower_Draw(void* i_this) {
 }
 
 BOOL daObjTower_c::_execute() {
-    if (mDemoActorId != 0) {
-        dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(mDemoActorId);
+    if (demoActorID != 0) {
+        dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(demoActorID);
         if (pdVar1 != NULL && pdVar1->checkEnable(0x02)) {
             current.pos = pdVar1->mTranslation;
         }
@@ -152,7 +152,7 @@ struct actor_process_profile_definition g_profile_Obj_Tower = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Obj_Tower,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTower_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

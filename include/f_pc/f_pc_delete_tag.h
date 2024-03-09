@@ -9,7 +9,7 @@ typedef struct layer_class layer_class;
 typedef int (*delete_tag_func)(void*);
 
 typedef struct delete_tag_class {
-    create_tag_class mBase;
+    create_tag_class base;
     layer_class* mpLayer;
     s16 mTimer;
 } delete_tag_class;

@@ -23,8 +23,8 @@ void kotori_draw(kt_class* i_this) {
     cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
     cMtx_XrotM(*calc_mtx, i_this->mAngleRoll);
     cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
-    f32 scale = kt_scale * 0.2f;
-    MtxScale(scale, scale, scale, true);
+    f32 scaleMag = kt_scale * 0.2f;
+    MtxScale(scaleMag, scaleMag, scaleMag, true);
     J3DModel* model = i_this->mpModel;
     model->setBaseTRMtx(*calc_mtx);
     mDoExt_modelUpdate(model);
@@ -330,8 +330,8 @@ static s32 daKt_Create(fopAc_ac_c* i_ac) {
                 }
             }
 
-            i_this->mpModel->setBaseScale(i_this->mScale);
-            i_this->mpModelWing->setBaseScale(i_this->mScale);
+            i_this->mpModel->setBaseScale(i_this->scale);
+            i_this->mpModelWing->setBaseScale(i_this->scale);
             i_this->current.pos.y += 2500.0f;
             i_this->mTargetPosHome = i_this->mHomePos = i_this->current.pos;
             i_this->mTimer[2] = g_regHIO.mChild[0].mShortRegs[5] + 500;

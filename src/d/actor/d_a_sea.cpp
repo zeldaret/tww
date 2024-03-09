@@ -401,7 +401,7 @@ actor_process_profile_definition g_profile_SEA = {
     /* ListID       */ 2,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_SEA,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sea_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

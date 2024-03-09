@@ -38,7 +38,7 @@ typedef struct node_create_request {
 } node_create_request;  // Size: 0x64
 
 typedef struct request_node_class {
-    node_class mBase;
+    node_class base;
     node_create_request* mNodeCrReq;
 } request_node_class;
 

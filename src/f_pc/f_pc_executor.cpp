@@ -36,9 +36,9 @@ s32 fpcEx_Execute(base_process_class* i_proc) {
 /* 8003D690-8003D73C       .text fpcEx_ToLineQ__FP18base_process_class */
 s32 fpcEx_ToLineQ(base_process_class* i_proc) {
     layer_class* pLayer = i_proc->mLyTg.mpLayer;
-    base_process_class* pLayerPcNode = &pLayer->mpPcNode->mBase;
+    base_process_class* pLayerPcNode = &pLayer->mpPcNode->base;
 
-    if (pLayer->mLayerID == 0 || cTg_IsUse(&pLayerPcNode->mLnTg.mBase) == TRUE) {
+    if (pLayer->mLayerID == 0 || cTg_IsUse(&pLayerPcNode->mLnTg.base) == TRUE) {
         s32 ret = fpcLnTg_ToQueue(&i_proc->mLnTg, i_proc->mPi.mInfoCurr.mListID);
         if (ret == 0) {
             fpcLyTg_QueueTo(&i_proc->mLyTg);

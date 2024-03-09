@@ -133,7 +133,7 @@ actor_process_profile_definition g_profile_Hot_Floor = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Hot_Floor,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daHot_Floor_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

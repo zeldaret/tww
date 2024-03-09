@@ -594,12 +594,12 @@ daAgb_c::uploadFunc daAgb_c::uploadFuncTable[] = {
 
 /* 800D02E8-800D0364       .text modeLoad__7daAgb_cFv */
 void daAgb_c::modeLoad() {
-    if (mEvtInfo.checkCommandTalk()) {
+    if (eventInfo.checkCommandTalk()) {
         uploadFunc func = uploadFuncTable[mUploadAction];
         (this->*func)();
     } else {
         mUploadAction  = UpAct_UNK0;
-        mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
         mMode = 0;
     }
 }
@@ -608,7 +608,7 @@ void daAgb_c::modeLoad() {
 void daAgb_c::modeLookAttention() {
     static bool se_flag = false;
 
-    if (mEvtInfo.checkCommandDemoAccrpt()) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         if (!se_flag) {
             fopAcM_seStart(this, JA_SE_CV_CHI_MEGAHORN, 0);
             se_flag = true;
@@ -1305,7 +1305,7 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     }
     
     int roomNo = dComIfG_Bgsp()->GetRoomId(mCrrPos.mGndChk);
-    actor->current.roomNo = actor->mTevStr.mRoomNo = roomNo;
+    actor->current.roomNo = actor->tevStr.mRoomNo = roomNo;
     if (roomNo != player->current.roomNo) {
         return;
     }
@@ -1356,7 +1356,7 @@ void daAgb_c::modeMove() {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
     u16 stage_type = dStage_stagInfo_GetSTType(stag_info);
     
-    if (mEvtInfo.checkCommandTalk()) {
+    if (eventInfo.checkCommandTalk()) {
         mUploadAction  = UpAct_UNK0;
         mMode = 2;
         return;
@@ -1420,14 +1420,14 @@ void daAgb_c::modeMove() {
         ) {
             mMode = 1;
             offActive();
-            mEyePos = current.pos;
+            eyePos = current.pos;
             
-            cXyz sp3c = mEyePos - player->current.pos;
+            cXyz sp3c = eyePos - player->current.pos;
             if (sp3c.absXZ() < 10.0f) {
-                mEyePos.x += 10.0f * cM_ssin(player->shape_angle.y);
-                mEyePos.z += 10.0f * cM_scos(player->shape_angle.y);
+                eyePos.x += 10.0f * cM_ssin(player->shape_angle.y);
+                eyePos.z += 10.0f * cM_scos(player->shape_angle.y);
             }
-            mAttentionInfo.mPosition = mEyePos;
+            attention_info.position = eyePos;
             
             if (isHold()) {
                 s16 angle = fopAcM_searchPlayerAngleY(this);
@@ -1437,7 +1437,7 @@ void daAgb_c::modeMove() {
                 shape_angle.z = angle;
             } else {
                 shape_angle.y = fopAcM_searchPlayerAngleY(this);
-                shape_angle.x = cM_atan2s((player->mEyePos - mEyePos).absXZ(), player->mEyePos.y - mEyePos.y);
+                shape_angle.x = cM_atan2s((player->eyePos - eyePos).absXZ(), player->eyePos.y - eyePos.y);
                 field_0x628 = 50.0f;
             }
             
@@ -1514,7 +1514,7 @@ void daAgb_c::modeMove() {
     }
     
     if (mMode == 0) {
-        mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
 }
 
@@ -1788,7 +1788,7 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
         a_this->field_0x680 = true;
 
         fopAcM_setStageLayer(a_this);
-        a_this->mEvtInfo.setEventName("DEFAULT_AGB_USE");
+        a_this->eventInfo.setEventName("DEFAULT_AGB_USE");
     }
 
     return phase;
@@ -1807,7 +1807,7 @@ actor_process_profile_definition g_profile_AGB = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_AGB,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAgb_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

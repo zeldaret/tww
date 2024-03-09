@@ -42,7 +42,7 @@ s32 fopCam_Execute(camera_class* camera) {
 s32 fopCam_IsDelete(camera_class* camera) {
     s32 ret = fpcMtd_IsDelete((process_method_class*)camera->mpMtd, camera);
     if (ret == 1)
-        fopDwTg_DrawQTo(&camera->mDwTg);
+        fopDwTg_DrawQTo(&camera->draw_tag);
     return ret;
 }
 
@@ -50,7 +50,7 @@ s32 fopCam_IsDelete(camera_class* camera) {
 s32 fopCam_Delete(camera_class* camera) {
     s32 ret = fpcMtd_Delete((process_method_class*)camera->mpMtd, camera);
     if (ret == 1)
-        fopDwTg_DrawQTo(&camera->mDwTg);
+        fopDwTg_DrawQTo(&camera->draw_tag);
     return ret;
 }
 
@@ -61,9 +61,9 @@ s32 fopCam_Create(void* pProc) {
     if (fpcM_IsFirstCreating(pProc)) {
         camera_process_profile_definition* profile =
             (camera_process_profile_definition*)fpcM_GetProfile(pProc);
-        camera->mpMtd = profile->mSubMtd;
+        camera->mpMtd = profile->sub_method;
 
-        fopDwTg_Init(&camera->mDwTg, camera);
+        fopDwTg_Init(&camera->draw_tag, camera);
         u32* append = (u32*)fpcM_GetAppend(camera);
 
         if (append) {
@@ -71,10 +71,10 @@ s32 fopCam_Create(void* pProc) {
         }
     }
 
-    s32 ret = fpcMtd_Create(&camera->mpMtd->mBase, camera);
+    s32 ret = fpcMtd_Create(&camera->mpMtd->base, camera);
     if (ret == cPhs_COMPLEATE_e) {
         s32 priority = fpcLf_GetPriority(camera);
-        fopDwTg_ToDrawQ(&camera->mDwTg, priority);
+        fopDwTg_ToDrawQ(&camera->draw_tag, priority);
     }
 
     return ret;

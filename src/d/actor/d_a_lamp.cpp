@@ -45,9 +45,9 @@ static const float partMaxFlickerPerTick = 0.02f;
 
 /* 000000EC-00000158       .text daLamp_Draw__FP10lamp_class */
 static BOOL daLamp_Draw(lamp_class* i_this) {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->tevStr);
     J3DModel* pModel = i_this->mModel;
-    g_env_light.setLightTevColorType(pModel, &i_this->mTevStr);
+    g_env_light.setLightTevColorType(pModel, &i_this->tevStr);
     mDoExt_modelUpdateDL(pModel);
     return TRUE;
 }
@@ -219,7 +219,7 @@ actor_process_profile_definition g_profile_LAMP = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_LAMP,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(lamp_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

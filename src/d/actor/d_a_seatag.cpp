@@ -45,7 +45,7 @@ actor_process_profile_definition g_profile_SEATAG = {
     2,
     fpcLy_CURRENT_e,
     PROC_SEATAG,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daSeatag_c),
     0,
     0,

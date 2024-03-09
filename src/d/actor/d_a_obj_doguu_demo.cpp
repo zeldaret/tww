@@ -30,7 +30,7 @@ BOOL daObjDoguuD_c::CreateHeap() {
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
-    mDoMtx_stack_c::scaleM(mScale);
+    mDoMtx_stack_c::scaleM(scale);
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 
     mpBgW = new dBgW();
@@ -56,7 +56,7 @@ void daObjDoguuD_c::CreateInit() {
 
 /* 00000294-00000314       .text set_mtx__13daObjDoguuD_cFv */
 void daObjDoguuD_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -97,8 +97,8 @@ static BOOL daObjDoguuD_Delete(void* i_this) {
 }
 
 BOOL daObjDoguuD_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
@@ -111,8 +111,8 @@ static BOOL daObjDoguuD_Draw(void* i_this) {
 }
 
 BOOL daObjDoguuD_c::_execute() {
-    if (mDemoActorId != 0) {
-        dDemo_actor_c* demoAc = dComIfGp_demo_getActor(mDemoActorId);
+    if (demoActorID != 0) {
+        dDemo_actor_c* demoAc = dComIfGp_demo_getActor(demoActorID);
         if (demoAc != NULL && demoAc->checkEnable(0x10)) {
             mShape = demoAc->mShapeId;
         }
@@ -142,7 +142,7 @@ actor_process_profile_definition g_profile_Obj_DoguuD = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_DoguuD,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjDoguuD_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

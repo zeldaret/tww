@@ -202,7 +202,7 @@ namespace daObjMovebox {
             cXyz pos;
             mDoMtx_stack_c::multVec(&offset, &pos);
             M_gnd_work[i].SetPos(&pos);
-            M_gnd_work[i].SetActorPid(movebox->mBase.mBsPcId);
+            M_gnd_work[i].SetActorPid(movebox->base.mBsPcId);
             mGroundY[i] = dComIfG_Bgsp()->GroundCross(&M_gnd_work[i]);
             if (mGroundY[i] > maxGroundY) {
                 fopAc_ac_c* groundActor = dComIfG_Bgsp()->GetActorPointer(M_gnd_work[i].GetBgIndex());
@@ -259,7 +259,7 @@ namespace daObjMovebox {
             startPos += movebox->current.pos;
             endPos = startPos + temp_20;
             M_wall_work[i].Set(&startPos, &endPos, const_cast<Act_c*>(movebox));
-            M_wall_work[i].SetActorPid(movebox->mBase.mBsPcId);
+            M_wall_work[i].SetActorPid(movebox->base.mBsPcId);
             if (dComIfG_Bgsp()->LineCross(&M_wall_work[i])) {
                 mWallPos[i] = M_wall_work[i].GetCross();
                 f32 dist = startPos.abs2(mWallPos[i]);
@@ -348,7 +348,7 @@ namespace daObjMovebox {
         startPos += movebox->current.pos;
         endPos = startPos + direction;
         
-        touch_work.SetActorPid(movebox->mBase.mBsPcId);
+        touch_work.SetActorPid(movebox->base.mBsPcId);
         touch_work.Set(&startPos, &endPos, const_cast<Act_c*>(movebox));
         return dComIfG_Bgsp()->LineCross(&touch_work);
     }
@@ -1195,7 +1195,7 @@ namespace daObjMovebox {
     /* 00001674-000016B8       .text init_mtx__Q212daObjMovebox5Act_cFv */
     void Act_c::init_mtx() {
         if (mpModel) {
-            mpModel->mBaseScale = mScale;
+            mpModel->mBaseScale = scale;
         }
         set_mtx();
     }
@@ -1413,7 +1413,7 @@ namespace daObjMovebox {
         );
         
         speedF = 0.0f;
-        mGravity = i_attr()->m14;
+        gravity = i_attr()->m14;
         fopAcM_posMoveF(this, NULL);
         mBgc.proc_vertical(this);
         cLib_offBit(mBgc.mStateFlags, static_cast<Bgc_c::State_e>(Bgc_c::BgcState_JUST_LEFT_GROUND_e | Bgc_c::BgcState_JUST_HIT_GROUND_e | Bgc_c::BgcState_JUST_HIT_WATER_e));
@@ -1574,11 +1574,11 @@ namespace daObjMovebox {
         
         s16 angle = home.angle.y + M_dir_base[m634];
         
-        f32 scale = i_attr()->mScaleXZ;
+        f32 scaleMag = i_attr()->mScaleXZ;
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(angle);
         mDoMtx_stack_c::transM(0.0f, 0.0f, 10.0f);
-        mDoMtx_stack_c::scaleM(scale, scale, scale);
+        mDoMtx_stack_c::scaleM(scaleMag, scaleMag, scaleMag);
         
         for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
             mDoMtx_stack_c::multVec(&base_pos[i], &mSmokeCbs[i].field_0x20);
@@ -1623,7 +1623,7 @@ namespace daObjMovebox {
     /* 00002AD4-00002B48       .text mode_wait_init__Q212daObjMovebox5Act_cFv */
     void Act_c::mode_wait_init() {
         speedF = 0.0f;
-        mGravity = i_attr()->m14;
+        gravity = i_attr()->m14;
         mpBgW->SetCrrFunc(dBgS_MoveBGProc_Trans);
         clr_moment_cnt();
         m634 = -1;
@@ -1698,7 +1698,7 @@ namespace daObjMovebox {
         mDoMtx_stack_c::multVec(&cXyz::Zero, &temp2);
         current.pos.x = temp2.x;
         current.pos.z = temp2.z;
-        mEyePos = current.pos;
+        eyePos = current.pos;
         sound_slip();
         
         if (r28) {
@@ -1755,7 +1755,7 @@ namespace daObjMovebox {
         
         s16 r3 = i_attr()->m38 * (1.0f + cM_rnd());
         m604 += r3;
-        mGravity = (f0 * i_attr()->m28) + i_attr()->m14 + i_attr()->m34 * cM_ssin(m604) + m608;
+        gravity = (f0 * i_attr()->m28) + i_attr()->m14 + i_attr()->m34 * cM_ssin(m604) + m608;
         m608 = 0.0f;
         
         afl_sway();
@@ -1788,7 +1788,7 @@ namespace daObjMovebox {
         particlePos.set(current.pos.x, current.pos.y + 75.0f, current.pos.z);
         JPABaseEmitter* emitter = dComIfGp_particle_set(
             0x3E6, &particlePos, NULL, NULL, 0xFF, NULL, -1,
-            &mTevStr.mColorK0, &mTevStr.mColorK0, &particle_scale
+            &tevStr.mColorK0, &tevStr.mColorK0, &particle_scale
         );
         if (emitter) {
             emitter->setLifeTime(30);
@@ -1803,7 +1803,7 @@ namespace daObjMovebox {
         cXyz centerPos(current.pos.x, current.pos.y + 100.0f, current.pos.z);
         dBgS_ObjGndChk gndChk;
         gndChk.SetPos(&centerPos);
-        gndChk.SetActorPid(mBase.mBsPcId);
+        gndChk.SetActorPid(base.mBsPcId);
         dComIfG_Bgsp()->GroundCross(&gndChk);
         s32 bgIndex = gndChk.GetBgIndex();
         s32 mtrlSndId = 0;
@@ -1823,7 +1823,7 @@ namespace daObjMovebox {
             }
         }
         
-        mDoAud_seStart(i_attr()->mMoveSE, &mEyePos, mtrlSndId, mReverb);
+        mDoAud_seStart(i_attr()->mMoveSE, &eyePos, mtrlSndId, mReverb);
     }
     
     /* 00003BA4-00003C68       .text sound_limit__Q212daObjMovebox5Act_cFv */
@@ -1836,7 +1836,7 @@ namespace daObjMovebox {
             }
         }
         
-        mDoAud_seStart(i_attr()->mCantMoveSE, &mEyePos, mtrlSndId, mReverb);
+        mDoAud_seStart(i_attr()->mCantMoveSE, &eyePos, mtrlSndId, mReverb);
     }
     
     /* 00003C68-00003D2C       .text sound_land__Q212daObjMovebox5Act_cFv */
@@ -1849,7 +1849,7 @@ namespace daObjMovebox {
             }
         }
         
-        mDoAud_seStart(i_attr()->mNormalFallSE, &mEyePos, mtrlSndId, mReverb);
+        mDoAud_seStart(i_attr()->mNormalFallSE, &eyePos, mtrlSndId, mReverb);
     }
     
     /* 00003D2C-00003D80       .text vib_land__Q212daObjMovebox5Act_cFv */
@@ -1875,7 +1875,7 @@ namespace daObjMovebox {
             fopAcM_delete(this);
         } else {
             if (cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_JUST_HIT_WATER_e)) {
-                mDoAud_seStart(i_attr()->mWaterFallSE, &mEyePos, 0, mReverb);
+                mDoAud_seStart(i_attr()->mWaterFallSE, &eyePos, 0, mReverb);
             }
             
             if (mMode == MODE_WAIT) {
@@ -1896,8 +1896,8 @@ namespace daObjMovebox {
             mode_proc_call();
             mBgc.proc_vertical(this);
             if (mBgc.mMaxGroundIdx >= 0) {
-                mTevStr.mRoomNo = current.roomNo;
-                mTevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(Bgc_c::M_gnd_work[mBgc.mMaxGroundIdx]);
+                tevStr.mRoomNo = current.roomNo;
+                tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(Bgc_c::M_gnd_work[mBgc.mMaxGroundIdx]);
             }
             
             if (m648 > 0) {
@@ -1928,8 +1928,8 @@ namespace daObjMovebox {
     BOOL Act_c::Draw() {
         if (mpModel) {
             int tevType = !i_attr()->mbUseBGTevType ? TEV_TYPE_ACTOR : TEV_TYPE_BG0;
-            g_env_light.settingTevStruct(tevType, &current.pos, &mTevStr);
-            g_env_light.setLightTevColorType(mpModel, &mTevStr);
+            g_env_light.settingTevStruct(tevType, &current.pos, &tevStr);
+            g_env_light.setLightTevColorType(mpModel, &tevStr);
             dComIfGd_setListBG();
             mDoExt_modelUpdateDL(mpModel);
             dComIfGd_setList();
@@ -1998,7 +1998,7 @@ actor_process_profile_definition g_profile_Obj_Movebox = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Obj_Movebox,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMovebox::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

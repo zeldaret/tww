@@ -408,7 +408,7 @@ actor_process_profile_definition2 g_profile_BG = {
     7,
     fpcPi_CURRENT_e,
     PROC_BG,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daBg_c),
     0,
     0,

@@ -25,7 +25,7 @@ s32 daMagma_c::create() {
     if (dComIfGp_createMagma()) {
         dComIfGp_getMagma()->newFloor(
             current.pos,
-            mScale,
+            scale,
             current.roomNo,
             getPathNo()
         );
@@ -63,7 +63,7 @@ actor_process_profile_definition g_profile_MAGMA = {
     7,
     fpcPi_CURRENT_e,
     PROC_MAGMA,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daMagma_c),
     0,
     0,

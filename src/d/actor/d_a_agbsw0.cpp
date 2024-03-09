@@ -228,7 +228,7 @@ int daAgbsw0_c::create() {
                 return cPhs_ERROR_e;
         }
         else {
-            if(mScale.x == mScale.z) {
+            if(scale.x == scale.z) {
                 mNonCircular = false;
             }
             else {
@@ -236,18 +236,18 @@ int daAgbsw0_c::create() {
             }
 
             if(behavior == 8) {
-                mScale.x *= 8000.0f;
-                mScale.y *= 8000.0f;
-                mScale.z *= 8000.0f;
+                scale.x *= 8000.0f;
+                scale.y *= 8000.0f;
+                scale.z *= 8000.0f;
             }
             else {
-                mScale.x *= 200.0f;
-                mScale.y *= 200.0f;
-                mScale.z *= 200.0f;
+                scale.x *= 200.0f;
+                scale.y *= 200.0f;
+                scale.z *= 200.0f;
             }
 
-            mOrigScaleX = mScale.x;
-            mOrigScaleZ = mScale.z;
+            mOrigScaleX = scale.x;
+            mOrigScaleZ = scale.z;
             shape_angle.x = 0;
             shape_angle.y = current.angle.y;
             shape_angle.z = 0;
@@ -255,8 +255,8 @@ int daAgbsw0_c::create() {
             field_0x299 = 0;
             mTimer = 0;
 
-            l_cyl_src.mCylAttr.mCyl.mRadius = mScale.x;
-            l_cyl_src.mCylAttr.mCyl.mHeight = mScale.y;
+            l_cyl_src.mCylAttr.mCyl.mRadius = scale.x;
+            l_cyl_src.mCylAttr.mCyl.mHeight = scale.y;
             mStts.Init(0, 0xFF, this);
             mCyl.Set(l_cyl_src);
             mCyl.SetC(current.pos);
@@ -656,10 +656,10 @@ BOOL daAgbsw0_c::ExeSubF2() {
                 agb->home.pos.z = z;
                 agb->shape_angle.x = 0x3FFF;
                 agb->field_0x67f = true;
-                mOrigScaleX = mScale.x;
-                mOrigScaleZ = mScale.z;
-                mScale.z = 50.0f;
-                mScale.x = 50.0f;
+                mOrigScaleX = scale.x;
+                mOrigScaleZ = scale.z;
+                scale.z = 50.0f;
+                scale.x = 50.0f;
                 field_0x299 += 1;
             }
         }
@@ -1045,9 +1045,9 @@ BOOL daAgbsw0_c::ExeSubMW() {
 #endif
         static bool se_flag = 0;
 
-        mEyePos = current.pos;
-        mAttentionInfo.mPosition = current.pos;
-        if(mEvtInfo.checkCommandDemoAccrpt()) {
+        eyePos = current.pos;
+        attention_info.position = current.pos;
+        if(eventInfo.checkCommandDemoAccrpt()) {
             if(!se_flag) {
                 fopAcM_seStart(this, JA_SE_CV_CHI_MEGAHORN, 0);
                 se_flag = 1;
@@ -1055,11 +1055,11 @@ BOOL daAgbsw0_c::ExeSubMW() {
 
             dComIfGp_evmng_getMyStaffId("AGB_SW0");
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
-            cXyz diff = mEyePos - player->current.pos;
+            cXyz diff = eyePos - player->current.pos;
             f32 dist = diff.absXZ();
             if(dist < 0.001f) {
-                mEyePos.x += cM_ssin(player->shape_angle.y) * 10.0f;
-                mEyePos.z += cM_scos(player->shape_angle.y) * 10.0f;
+                eyePos.x += cM_ssin(player->shape_angle.y) * 10.0f;
+                eyePos.z += cM_scos(player->shape_angle.y) * 10.0f;
             }
 
             if(dComIfGp_evmng_endCheck("DEFAULT_AGB_LOOK_ATTENTION")) {
@@ -1208,7 +1208,7 @@ BOOL daAgbsw0_c::ExeSubR() {
             }
 
             if(itemNo != RECOVER_FAIRY) {
-                current.pos.y += mScale.y / 2.0f;
+                current.pos.y += scale.y / 2.0f;
             }
 
             fopAcM_fastCreateItem(&current.pos, itemNo, fopAcM_GetHomeRoomNo(this), NULL, NULL, 0.0f, cM_rndF(10.0f) + 40.0f, -7.0f);
@@ -1317,33 +1317,33 @@ BOOL daAgbsw0_c::ExeSubB() {
                 cXyz posDiff = current.pos - agb->current.pos;
 
                 if(!mNonCircular) {
-                    f32 rad = mScale.x;
+                    f32 rad = scale.x;
                     if(xzDiff < rad - 100.0f) {
-                        if(agb->current.pos.y < current.pos.y + mScale.y / 2.0f) {
+                        if(agb->current.pos.y < current.pos.y + scale.y / 2.0f) {
                             agb->home.pos.y = current.pos.y - 6.0f;
                         }
                         else {
-                            agb->home.pos.y = current.pos.y + mScale.y + 6.0f;
+                            agb->home.pos.y = current.pos.y + scale.y + 6.0f;
                         }
                     }
                     else {
                         agb->home.pos.x = current.pos.x - (posDiff.x * (rad + 1.0f) / xzDiff);
-                        agb->home.pos.z = current.pos.z - (posDiff.z * (mScale.z + 1.0f) / xzDiff);
+                        agb->home.pos.z = current.pos.z - (posDiff.z * (scale.z + 1.0f) / xzDiff);
                     }
                 }
                 else {
                     cXyz rel;
                     fpoAcM_relativePos(this, &agb->current.pos, &rel);
-                    rel.y = rel.y - mScale.y / 2.0f + 5.0f;
-                    f32 x_diff = mScale.x - fabsf(rel.x);
-                    f32 y_diff = (mScale.y / 2.0f) - fabsf(rel.y) + 50.0f; //some register oddity here
-                    f32 z_diff = mScale.z - fabsf(rel.z);
+                    rel.y = rel.y - scale.y / 2.0f + 5.0f;
+                    f32 x_diff = scale.x - fabsf(rel.x);
+                    f32 y_diff = (scale.y / 2.0f) - fabsf(rel.y) + 50.0f; //some register oddity here
+                    f32 z_diff = scale.z - fabsf(rel.z);
                     if(y_diff < x_diff && y_diff < z_diff) {
-                        if(agb->current.pos.y < current.pos.y + mScale.y / 2.0f) {
+                        if(agb->current.pos.y < current.pos.y + scale.y / 2.0f) {
                             agb->home.pos.y = current.pos.y - 6.0f;
                         }
                         else {
-                            agb->home.pos.y = current.pos.y + mScale.y + 6.0f;
+                            agb->home.pos.y = current.pos.y + scale.y + 6.0f;
                         }
                     }
                     else {
@@ -1451,10 +1451,10 @@ BOOL daAgbsw0_c::ExeSubD() {
                         agb->home.pos.z = z;
                         agb->shape_angle.x = -0x3FFF;
                         agb->field_0x67f = true;
-                        mOrigScaleX = mScale.x;
-                        mOrigScaleZ = mScale.z;
-                        mScale.z = 50.0f;
-                        mScale.x = 50.0f;
+                        mOrigScaleX = scale.x;
+                        mOrigScaleZ = scale.z;
+                        scale.z = 50.0f;
+                        scale.x = 50.0f;
                         field_0x299 += 1;
                     }
                 }
@@ -1473,7 +1473,7 @@ BOOL daAgbsw0_c::ExeSubD() {
                 else if(field_0x299 == 2 && fopAcM_isSwitch(this, getSw1())) {
                     s32 itemNo = getParamNo();
                     if(itemNo != RECOVER_FAIRY) {
-                        current.pos.y += mScale.y / 2;
+                        current.pos.y += scale.y / 2;
                     }
                     if(0 <= itemNo && itemNo < 0x1F && itemNo != KAKERA_HEART && itemNo != UTUWA_HEART && itemNo != dItem_SMALL_KEY_e) {
                         s8 roomNo = fopAcM_GetHomeRoomNo(this);
@@ -1493,8 +1493,8 @@ BOOL daAgbsw0_c::ExeSubD() {
         }
         else {
             if(field_0x299 != 0 && field_0x299 < 3) {
-                mScale.x = mOrigScaleX;
-                mScale.z = mOrigScaleZ;
+                scale.x = mOrigScaleX;
+                scale.z = mOrigScaleZ;
                 field_0x299 = 0;
             }
         }
@@ -1609,11 +1609,11 @@ BOOL daAgbsw0_c::ExeSubFA() {
 BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
     if(mNonCircular == false) {
         f32 y_diff = param_1->current.pos.y - current.pos.y;
-        if(-10.0f <= y_diff && y_diff <= mScale.y) {
+        if(-10.0f <= y_diff && y_diff <= scale.y) {
             f32 x_diff = fabsf(param_1->current.pos.x - current.pos.x);
-            if(x_diff < mScale.x) {
+            if(x_diff < scale.x) {
                 f32 z_diff = fabs(param_1->current.pos.z - current.pos.z);
-                if(z_diff < mScale.x && x_diff * x_diff + z_diff * z_diff < mScale.x * mScale.x) {
+                if(z_diff < scale.x && x_diff * x_diff + z_diff * z_diff < scale.x * scale.x) {
                     return true;
                 }
             }
@@ -1622,7 +1622,7 @@ BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
     else {
         cXyz pos;
         fpoAcM_relativePos(this, &param_1->current.pos, &pos);
-        if(-10.0f <= pos.y && pos.y <= mScale.y && fabsf(pos.x) < mScale.x && fabsf(pos.z) < mScale.z) {
+        if(-10.0f <= pos.y && pos.y <= scale.y && fabsf(pos.x) < scale.x && fabsf(pos.z) < scale.z) {
             return true;
         }
     }
@@ -1634,11 +1634,11 @@ BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
 BOOL daAgbsw0_c::HitCheck(cXyz param_1, f32 param_2) {
     if(mNonCircular == false) {
         f32 y_diff = param_1.y - current.pos.y;
-        if(-param_2 <= y_diff && y_diff <= mScale.y) {
+        if(-param_2 <= y_diff && y_diff <= scale.y) {
             f32 x_diff = fabs(param_1.x - current.pos.x);
-            if(x_diff < mScale.x) {
+            if(x_diff < scale.x) {
                 f32 z_diff = fabs(param_1.z - current.pos.z);
-                if(z_diff < mScale.x && x_diff * x_diff + z_diff * z_diff < mScale.x * mScale.x) {
+                if(z_diff < scale.x && x_diff * x_diff + z_diff * z_diff < scale.x * scale.x) {
                     return true;
                 }
             }
@@ -1647,7 +1647,7 @@ BOOL daAgbsw0_c::HitCheck(cXyz param_1, f32 param_2) {
     else {
         cXyz pos;
         fpoAcM_relativePos(this, &param_1, &pos);
-        if(-param_2 <= pos.y && pos.y <= mScale.y && (f32)fabs(pos.x) < mScale.x && (f32)fabs(pos.z) < mScale.z) {
+        if(-param_2 <= pos.y && pos.y <= scale.y && (f32)fabs(pos.x) < scale.x && (f32)fabs(pos.z) < scale.z) {
             return true;
         }
     }
@@ -2560,7 +2560,7 @@ actor_process_profile_definition g_profile_AGBSW0 = {
     7,
     fpcPi_CURRENT_e,
     PROC_AGBSW0,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daAgbsw0_c),
     0,
     0,

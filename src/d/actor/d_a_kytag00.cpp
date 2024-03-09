@@ -50,7 +50,7 @@ void wether_tag_move(kytag00_class* i_this) {
 
     if (dist_xz < i_this->mOuterRadius &&
         (chk_pos.y >= (i_this->current.pos.y - fade_y) &&
-        chk_pos.y < (i_this->current.pos.y + i_this->mScale.y * 5000.0f + fade_y)) &&
+        chk_pos.y < (i_this->current.pos.y + i_this->scale.y * 5000.0f + fade_y)) &&
         i_this->mTarget > 0.0f)
     {
         f32 blend = 1.0f;
@@ -74,7 +74,7 @@ void wether_tag_move(kytag00_class* i_this) {
             }
         } else {
             if (fade_y != 0.0f) {
-                f9 = (chk_pos.y - (i_this->current.pos.y + i_this->mScale.y * 5000.0f)) / fade_y;
+                f9 = (chk_pos.y - (i_this->current.pos.y + i_this->scale.y * 5000.0f)) / fade_y;
                 if (f9 < 0.0f) {
                     f9 = 0.0f;
                 }
@@ -184,7 +184,7 @@ void wether_tag_efect_move(kytag00_class* i_this) {
     
     if (dist_xz < i_this->mOuterRadius &&
         (chk_pos.y >= (i_this->current.pos.y - fade_y) &&
-        chk_pos.y < (i_this->current.pos.y + i_this->mScale.y * 5000.0f + fade_y)) &&
+        chk_pos.y < (i_this->current.pos.y + i_this->scale.y * 5000.0f + fade_y)) &&
         i_this->mTarget > 0.0f)
     {
         f32 blend = 1.0f;
@@ -211,7 +211,7 @@ void wether_tag_efect_move(kytag00_class* i_this) {
             }
         } else {
             if (fade_y != 0.0f) {
-                f9 = (chk_pos.y - (i_this->current.pos.y + i_this->mScale.y * 5000.0f)) / fade_y;
+                f9 = (chk_pos.y - (i_this->current.pos.y + i_this->scale.y * 5000.0f)) / fade_y;
                 if (f9 < 0.0f) {
                     f9 = 0.0f;
                 }
@@ -387,11 +387,11 @@ static s32 daKytag00_Create(fopAc_ac_c* i_ac) {
         i_this->mInnerFadeY = 10;
 
     if (i_this->mMode == 0) {
-        i_this->mInnerRadius = i_this->mScale.x * 5000.0f;
-        i_this->mOuterRadius = i_this->mScale.x * 5000.0f + i_this->mThickness * 100.0f;
+        i_this->mInnerRadius = i_this->scale.x * 5000.0f;
+        i_this->mOuterRadius = i_this->scale.x * 5000.0f + i_this->mThickness * 100.0f;
     } else {
-        i_this->mInnerRadius = i_this->mScale.x * 500.0f;
-        i_this->mOuterRadius = i_this->mScale.x * 500.0f + i_this->mThickness * 10.0f;
+        i_this->mInnerRadius = i_this->scale.x * 500.0f;
+        i_this->mOuterRadius = i_this->scale.x * 500.0f + i_this->mThickness * 10.0f;
     }
 
     i_this->mbEfSet = false;
@@ -414,7 +414,7 @@ actor_process_profile_definition g_profile_KYTAG00 = {
     7,
     fpcPi_CURRENT_e,
     PROC_KYTAG00,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(kytag00_class),
     0,
     0,

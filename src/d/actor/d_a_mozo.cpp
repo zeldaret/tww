@@ -88,7 +88,7 @@ BOOL daMozo_c::CreateHeap() {
 /* 00000A24-00000AAC       .text set_mtx__8daMozo_cFv */
 void daMozo_c::set_mtx() {
     J3DModel* mdl = mAnimMorf->getModel();
-    mdl->setBaseScale(mScale);
+    mdl->setBaseScale(scale);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -156,7 +156,7 @@ s32 daMozo_c::CreateInit() {
     /* Nonmatching */
     J3DModelData* mdlData = mAnimMorf->getModel()->getModelData();
 
-    int param = mBase.mParameters * 0xFF;
+    int param = base.mParameters * 0xFF;
     if (param == 0xFF) {
         param = 0;
     }
@@ -242,8 +242,8 @@ bool daMozo_c::_execute() {
 bool daMozo_c::_draw() {
     /* Nonmatching */
     J3DModelData* mdlData = mAnimMorf->getModel()->getModelData();
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mAnimMorf->getModel(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mAnimMorf->getModel(), &tevStr);
 
     mBrkAnm.entry(mdlData);
     mBtkAnm.entry(mdlData);
@@ -290,7 +290,7 @@ actor_process_profile_definition g_profile_MOZO = {
     7,
     fpcPi_CURRENT_e,
     PROC_MOZO,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daMozo_c),
     0,
     0,

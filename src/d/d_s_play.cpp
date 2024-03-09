@@ -1497,11 +1497,11 @@ extern scene_process_profile_definition g_profile_PLAY_SCENE = {
     1,
     fpcPi_CURRENT_e,
     PROC_PLAY_SCENE,
-    &g_fpcNd_Method.mBase,
+    &g_fpcNd_Method.base,
     sizeof(dScnPly_ply_c),
     0,
     0,
-    &g_fopScn_Method.mBase,
+    &g_fopScn_Method.base,
     &l_dScnPly_Method,
 };
 
@@ -1510,11 +1510,11 @@ extern scene_process_profile_definition g_profile_OPENING_SCENE = {
     1,
     fpcPi_CURRENT_e,
     PROC_OPENING_SCENE,
-    &g_fpcNd_Method.mBase,
+    &g_fpcNd_Method.base,
     sizeof(dScnPly_ply_c),
     0,
     0,
-    &g_fopScn_Method.mBase,
+    &g_fopScn_Method.base,
     &l_dScnPly_Method,
 };
 
@@ -1523,10 +1523,10 @@ extern scene_process_profile_definition g_profile_OPENING2_SCENE = {
     1,
     fpcPi_CURRENT_e,
     PROC_OPENING2_SCENE,
-    &g_fpcNd_Method.mBase,
+    &g_fpcNd_Method.base,
     sizeof(dScnPly_ply_c),
     0,
     0,
-    &g_fopScn_Method.mBase,
+    &g_fopScn_Method.base,
     &l_dScnPly_Method,
 };

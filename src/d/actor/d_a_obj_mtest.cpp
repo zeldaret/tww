@@ -159,9 +159,9 @@ BOOL daObjMtest::Act_c::Create() {
         mCyl.SetStts(&mStts);
         mCyl.SetTgVec((cXyz&)cXyz::Zero);
         mCyl.OnTgNoHitMark();
-        f32 scale = mScale.x < mScale.z ? mScale.x : mScale.z;
-        mCyl.SetR(scale * 50.0f);
-        mCyl.SetH(mScale.y * 100.0f);
+        f32 scaleMag = scale.x < scale.z ? scale.x : scale.z;
+        mCyl.SetR(scaleMag * 50.0f);
+        mCyl.SetH(scale.y * 100.0f);
     }
     
     return TRUE;
@@ -295,9 +295,9 @@ s32 daObjMtest::Act_c::Mthd_Create() {
         mbAppear = chk_appear();
         
         cXyz& scl_mult = M_scl_mult[M_type];
-        mScale.x *= scl_mult.x;
-        mScale.y *= scl_mult.y;
-        mScale.z *= scl_mult.z;
+        scale.x *= scl_mult.x;
+        scale.y *= scl_mult.y;
+        scale.z *= scl_mult.z;
         
         phase_state = MoveBGCreate(M_arcname[M_type], dzb_data[dzb_idx][M_type], NULL, heap_size[dzb_idx][M_type]);
         
@@ -333,14 +333,14 @@ void daObjMtest::Act_c::set_mtx() {
     if (mpModel) {
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     }
-    mDoMtx_stack_c::scaleM(mScale);
+    mDoMtx_stack_c::scaleM(scale);
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 }
 
 /* 00000A4C-00000A90       .text init_mtx__Q210daObjMtest5Act_cFv */
 void daObjMtest::Act_c::init_mtx() {
     if (mpModel) {
-        mpModel->setBaseScale(mScale);
+        mpModel->setBaseScale(scale);
     }
     set_mtx();
 }
@@ -371,8 +371,8 @@ BOOL daObjMtest::Act_c::Execute(Mtx** pMtx) {
 /* 00000B80-00000C64       .text Draw__Q210daObjMtest5Act_cFv */
 BOOL daObjMtest::Act_c::Draw() {
     if (mbAppear && mpModel && prm_get_arg1() != 3 && prm_get_arg1() != 4) {
-        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-        g_env_light.setLightTevColorType(mpModel, &mTevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
         dComIfGd_setListBG();
         mDoExt_modelUpdateDL(mpModel);
         dComIfGd_setList();
@@ -417,7 +417,7 @@ actor_process_profile_definition g_profile_Obj_Mtest = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Obj_Mtest,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMtest::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

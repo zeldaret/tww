@@ -18,13 +18,13 @@ s32 fpcLnTg_Move(line_tag* i_lineTag, int i_newListID) {
 
 /* 800400D8-8004010C       .text fpcLnTg_QueueTo__FP8line_tag */
 void fpcLnTg_QueueTo(line_tag* i_lineTag) {
-    cTg_SingleCutFromTree(&i_lineTag->mBase);
+    cTg_SingleCutFromTree(&i_lineTag->base);
     i_lineTag->mLineListID = -1;
 }
 
 /* 8004010C-80040164       .text fpcLnTg_ToQueue__FP8line_tagi */
 s32 fpcLnTg_ToQueue(line_tag* i_lineTag, int lineListID) {
-    s32 ret = cTg_AdditionToTree(&g_fpcLn_Queue, lineListID, &i_lineTag->mBase);
+    s32 ret = cTg_AdditionToTree(&g_fpcLn_Queue, lineListID, &i_lineTag->base);
 
     if (ret) {
         i_lineTag->mLineListID = lineListID;
@@ -36,6 +36,6 @@ s32 fpcLnTg_ToQueue(line_tag* i_lineTag, int lineListID) {
 
 /* 80040164-80040198       .text fpcLnTg_Init__FP8line_tagPv */
 void fpcLnTg_Init(line_tag* i_lineTag, void* i_data) {
-    cTg_Create(&i_lineTag->mBase, i_data);
+    cTg_Create(&i_lineTag->base, i_data);
     i_lineTag->mLineListID = -1;
 }

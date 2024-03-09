@@ -93,7 +93,7 @@ void daObjMonument::Act_c::set_mtx() {
 
 /* 00000404-00000440       .text init_mtx__Q213daObjMonument5Act_cFv */
 void daObjMonument::Act_c::init_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     set_mtx();
 }
 
@@ -109,8 +109,8 @@ bool daObjMonument::Act_c::_draw() {
     if (dComIfGs_isSwitch(swSave, fopAcM_GetHomeRoomNo(this)))
         return true;
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
@@ -159,7 +159,7 @@ actor_process_profile_definition g_profile_Obj_Monument = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Monument,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMonument::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

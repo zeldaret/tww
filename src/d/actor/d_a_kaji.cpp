@@ -48,10 +48,10 @@ s32 daKaji_c::_create() {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x660)) {
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(shape_angle.y);
-            mDoMtx_stack_c::scaleM(mScale);
+            mDoMtx_stack_c::scaleM(scale);
             MTXCopy(mDoMtx_stack_c::get(), mMtx);
             
-            l_p_ship = (daObjPirateship::Act_c*)fopAcM_SearchByID(mParentPcId);
+            l_p_ship = (daObjPirateship::Act_c*)fopAcM_SearchByID(parentActorID);
         } else {
             return cPhs_ERROR_e;
         }
@@ -92,8 +92,8 @@ bool daKaji_c::_draw() {
     if (!l_p_ship->m2CC) {
         return true;
     }
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpMorf->getModel(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
     mpMorf->update();
     return true;
 }
@@ -136,7 +136,7 @@ actor_process_profile_definition g_profile_Kaji = {
     3,
     fpcLy_CURRENT_e,
     PROC_Kaji,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daKaji_c),
     0,
     0,

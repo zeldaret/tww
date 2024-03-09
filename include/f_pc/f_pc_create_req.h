@@ -17,7 +17,7 @@ typedef struct create_request_method_class {
 } create_request_method_class;
 
 typedef struct create_request {
-    create_tag mBase;
+    create_tag base;
     s8 mbIsCreating;
     s8 mbIsCancelling;
     process_method_tag_class mMtdTg;

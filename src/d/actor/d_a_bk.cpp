@@ -181,7 +181,7 @@ static void yari_off_check(bk_class* i_this) {
         boko->current.angle.y = player->shape_angle.y;
         
         dBgS_LinChk linChk;
-        linChk.Set(&i_this->mEyePos, &boko->current.pos, i_this);
+        linChk.Set(&i_this->eyePos, &boko->current.pos, i_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
             MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(0x10); // mune (chest) joint
             MTXCopy(mtx, *calc_mtx);
@@ -359,7 +359,7 @@ static BOOL daBk_shadowDraw(bk_class* i_this) {
         i_this->mShadowId = dComIfGd_setShadow(
             i_this->mShadowId, 1, model, &shadowPos, temp, shadowSize,
             i_this->current.pos.y, i_this->dr.mAcch.GetGroundH(),
-            i_this->dr.mAcch.m_gnd, &i_this->mTevStr,
+            i_this->dr.mAcch.m_gnd, &i_this->tevStr,
             0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
         );
     }
@@ -874,13 +874,13 @@ static void fight_run(bk_class* i_this) {
         }
         // Fall-through
     case 0x01:
-        f32 scale;
+        f32 scaleMag;
         if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
-            scale = l_bkHIO.m054;
+            scaleMag = l_bkHIO.m054;
         } else {
-            scale = l_bkHIO.m058;
+            scaleMag = l_bkHIO.m058;
         }
-        cLib_addCalc2(&i_this->speedF, scale, 1.0f, 5.0f);
+        cLib_addCalc2(&i_this->speedF, scaleMag, 1.0f, 5.0f);
         i_this->m1212++;
         if (daBk_player_way_check(i_this) && (i_this->m1212 & 0x30) && !r29) {
             if (i_this->m120C != 0) {
@@ -1067,7 +1067,7 @@ static void fight_run(bk_class* i_this) {
             fopAc_ac_c* r29 = (fopAc_ac_c*)fpcM_Search(shot_s_sub, i_this);
             if (r29) {
                 if (r29->speedF > 10.0f) {
-                    cXyz sp18 = (r29->current.pos - i_this->mEyePos);
+                    cXyz sp18 = (r29->current.pos - i_this->eyePos);
                     if (sp18.abs() < r29->speedF * 10.0f) {
                         r27 = true;
                     }
@@ -1389,7 +1389,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
     if (enemy_ice(&i_this->mEnemyIce)) {
         i_this->mpMorf->setPlayMode(J3DFrameCtrl::LOOP_ONCE_e);
         i_this->mpMorf->setPlaySpeed(3.0f);
-        i_this->mpMorf->play(&i_this->mEyePos, 0, 0);
+        i_this->mpMorf->play(&i_this->eyePos, 0, 0);
         i_this->mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
         i_this->mpMorf->calc();
         tate_mtx_set(i_this);
@@ -1397,7 +1397,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
         return TRUE;
     }
     
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
     
     if (i_this->mType == 8) {
         for (int i = 0; i < ARRAY_SIZE(i_this->m0300); i++) {
@@ -1474,7 +1474,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
                         if (fabsf(i_this->speedF) > 10.0f) {
                             another_hit = 1;
                         } else {
-                            i_this->mScale.x = i_this->mScale.y = i_this->mScale.z = 0.5f;
+                            i_this->scale.x = i_this->scale.y = i_this->scale.z = 0.5f;
                         }
                     }
                     i_this->m0B88.SetR(62.5f);
@@ -1509,7 +1509,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
             }
         }
         
-        i_this->mAttentionInfo.mFlags = fopAc_Attn_LOCKON_ENEMY_e;
+        i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
         fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
         i_this->m02F0 = 0;
         i_this->m02F4 = 0;
@@ -1588,10 +1588,10 @@ static BOOL daBk_Execute(bk_class* i_this) {
     }
     
     J3DModel* model = i_this->mpMorf->getModel();
-    model->setBaseScale(i_this->mScale);
+    model->setBaseScale(i_this->scale);
     model->setBaseTRMtx(*calc_mtx);
     if (i_this->m030C == 0) {
-        i_this->mpMorf->play(&i_this->mEyePos, 0, 0);
+        i_this->mpMorf->play(&i_this->eyePos, 0, 0);
     }
     i_this->mpMorf->calc();
     
@@ -1819,7 +1819,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         // TODO check this case as well.
         return cPhs_ERROR_e;
     }
-    i_this->m02E8->setBaseScale(i_this->mScale);
+    i_this->m02E8->setBaseScale(i_this->scale);
     
     if (i_this->m02D4 != 0) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_TATE);
@@ -1958,7 +1958,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     };
     i_this->mpJntHit = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (i_this->mpJntHit) {
-        i_this->mJntHit = i_this->mpJntHit;
+        i_this->jntHit = i_this->mpJntHit;
     } else {
         return FALSE;
     }
@@ -1974,7 +1974,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
     
     s32 phase_state = dComIfG_resLoad(&i_this->mPhase, "Bk");
     if (phase_state == cPhs_COMPLEATE_e) {
-        i_this->mGbaName = 1;
+        i_this->gbaName = 1;
         
         if (strcmp(dComIfGp_getStartStageName(), "ITest63") == 0 ||
             strcmp(dComIfGp_getStartStageName(), "GanonJ") == 0)
@@ -2015,7 +2015,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
             i_this->m02B7 = 0xFF;
         }
         
-        i_this->mItemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Bk", 0);
+        i_this->itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Bk", 0);
         
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x17B20)) {
             return cPhs_ERROR_e;
@@ -2124,9 +2124,9 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
         i_this->dr.mInvincibleTimer = 5;
         
         if (i_this->m02D4 != 0) {
-            i_this->mMaxHealth = i_this->mHealth = 7;
+            i_this->max_health = i_this->health = 7;
         } else {
-            i_this->mMaxHealth = i_this->mHealth = 5;
+            i_this->max_health = i_this->health = 5;
         }
         
         i_this->dr.mStts.Init(200, 0xFF, i_this);
@@ -2304,7 +2304,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
             i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
         }
         
-        i_this->mStealItemLeft = 3;
+        i_this->stealItemLeft = 3;
         
         daBk_Execute(i_this);
     }
@@ -2325,7 +2325,7 @@ actor_process_profile_definition g_profile_BK = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_BK,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bk_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

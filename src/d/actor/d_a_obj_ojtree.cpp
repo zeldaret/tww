@@ -79,7 +79,7 @@ void daObjOjtree::Act_c::set_mtx() {
 
 /* 000003B8-000003F4       .text init_mtx__Q211daObjOjtree5Act_cFv */
 void daObjOjtree::Act_c::init_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     set_mtx();
 }
 
@@ -99,8 +99,8 @@ int daObjOjtree::Act_c::Execute(Mtx** pMtx) {
 
 /* 0000045C-000004FC       .text Draw__Q211daObjOjtree5Act_cFv */
 BOOL daObjOjtree::Act_c::Draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
@@ -144,7 +144,7 @@ actor_process_profile_definition g_profile_Obj_Ojtree = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Obj_Ojtree,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjOjtree::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

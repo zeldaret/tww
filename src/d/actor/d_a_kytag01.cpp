@@ -77,8 +77,8 @@ static s32 daKytag01_Create(fopAc_ac_c* i_ac) {
     fopAcM_SetupActor(i_this, kytag01_class);
 
     i_this->mWaveInfo.mPos = i_this->current.pos;
-    i_this->mWaveInfo.mInnerRadius = i_this->mScale.x * 5000.0f;
-    i_this->mWaveInfo.mOuterRadius = i_this->mScale.z * 5000.0f;
+    i_this->mWaveInfo.mInnerRadius = i_this->scale.x * 5000.0f;
+    i_this->mWaveInfo.mOuterRadius = i_this->scale.z * 5000.0f;
 
     f32 defaultOuter = i_this->mWaveInfo.mInnerRadius + 500.0f;
     if (defaultOuter >= i_this->mWaveInfo.mOuterRadius)
@@ -108,7 +108,7 @@ actor_process_profile_definition g_profile_KYTAG01 = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_KYTAG01,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag01_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

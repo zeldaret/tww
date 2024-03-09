@@ -66,7 +66,7 @@ actor_process_profile_definition g_profile_SCENECHG = {
     3,
     fpcLy_CURRENT_e,
     PROC_SCENECHG,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(d_a_scene_change_c),
     0,
     0,

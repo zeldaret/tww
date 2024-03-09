@@ -57,7 +57,7 @@ s32 fpcDt_ToDeleteQ(base_process_class* i_proc) {
     if (i_proc->mUnk0 == 1) {
         return 0;
     } else {
-        if (cTg_IsUse(&i_proc->mDtTg.mBase) != 0) {
+        if (cTg_IsUse(&i_proc->mDtTg.base) != 0) {
             return 1;
         } else {
             if (fpcBs_Is_JustOfType(g_fpcNd_type, i_proc->mSubType)) {

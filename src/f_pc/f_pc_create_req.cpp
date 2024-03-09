@@ -14,7 +14,7 @@
 
 /* 8003CD0C-8003CD28       .text fpcCtRq_isCreatingByID__FP10create_tagPUi */
 bool fpcCtRq_isCreatingByID(create_tag* i_createTag, unsigned int* i_procID) {
-    create_request* pReq = static_cast<create_request*>(i_createTag->mBase.mpTagData);
+    create_request* pReq = static_cast<create_request*>(i_createTag->base.mpTagData);
     return pReq->mBsPcId == *i_procID;
 }
 
@@ -25,7 +25,7 @@ BOOL fpcCtRq_IsCreatingByID(unsigned int i_id) {
 
 /* 8003CD60-8003CD9C       .text fpcCtRq_CreateQTo__FP14create_request */
 void fpcCtRq_CreateQTo(create_request* i_request) {
-    fpcCtTg_CreateQTo(&i_request->mBase);
+    fpcCtTg_CreateQTo(&i_request->base);
     fpcLy_CreatedMesg(i_request->mpLayer);
     fpcLy_CancelQTo(&i_request->mMtdTg);
 }
@@ -34,7 +34,7 @@ void fpcCtRq_CreateQTo(create_request* i_request) {
 void fpcCtRq_ToCreateQ(create_request* i_request) {
     fpcLy_CreatingMesg(i_request->mpLayer);
     fpcLy_ToCancelQ(i_request->mpLayer, &i_request->mMtdTg);
-    fpcCtTg_ToCreateQ(&i_request->mBase);
+    fpcCtTg_ToCreateQ(&i_request->base);
 }
 
 /* 8003CDE0-8003CE54       .text fpcCtRq_Delete__FP14create_request */
@@ -117,7 +117,7 @@ create_request* fpcCtRq_Create(layer_class* i_layer, u32 i_size, create_request_
     create_request* pReq = (create_request*)cMl::memalignB(-4, i_size);
 
     if (pReq != NULL) {
-        fpcCtTg_Init(&pReq->mBase, pReq);
+        fpcCtTg_Init(&pReq->base, pReq);
         fpcMtdTg_Init(&pReq->mMtdTg, (process_method_tag_func)fpcCtRq_Cancel, pReq);
         pReq->mpLayer = i_layer;
         pReq->mpCtRqMtd = i_CtRqMethods;

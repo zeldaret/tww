@@ -232,7 +232,7 @@ BOOL daMbdoor_c::CreateInit() {
         JUT_ASSERT(334, 0);
     }
     field_0x2ac = true;
-    mTevStr.mRoomNo = current.roomNo;
+    tevStr.mRoomNo = current.roomNo;
     
     if (type == 2) {
         setAction(1);
@@ -250,9 +250,9 @@ BOOL daMbdoor_c::CreateInit() {
     }
     
     field_0x2bc = 30;
-    mAttentionInfo.mPosition.y += 250.0f;
-    mEyePos.y += 250.0f;
-    mAttentionInfo.mFlags = fopAc_Attn_ACTION_DOOR_e;
+    attention_info.position.y += 250.0f;
+    eyePos.y += 250.0f;
+    attention_info.flags = fopAc_Attn_ACTION_DOOR_e;
     calcMtx();
     mpBgW->Move();
     fopAcM_SetStatusMap(this, 0xB);
@@ -467,7 +467,7 @@ BOOL daMbdoor_actionLockWait(daMbdoor_c* i_this) {
 
 /* 0000121C-000012AC       .text daMbdoor_actionLockOff__FP10daMbdoor_c */
 BOOL daMbdoor_actionLockOff(daMbdoor_c* i_this) {
-    if (i_this->mEvtInfo.checkCommandDemoAccrpt()) {
+    if (i_this->eventInfo.checkCommandDemoAccrpt()) {
         i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR");
         i_this->demoProc();
         i_this->setAction(3);
@@ -490,7 +490,7 @@ BOOL daMbdoor_actionLockDemo(daMbdoor_c* i_this) {
 
 /* 00001324-000013E4       .text daMbdoor_actionCloseWait__FP10daMbdoor_c */
 BOOL daMbdoor_actionCloseWait(daMbdoor_c* i_this) {
-    if (i_this->mEvtInfo.checkCommandDoor()) {
+    if (i_this->eventInfo.checkCommandDoor()) {
         i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR");
         i_this->demoProc();
         i_this->setAction(5);
@@ -498,8 +498,8 @@ BOOL daMbdoor_actionCloseWait(daMbdoor_c* i_this) {
         i_this->field_0x2ac = false;
     } else {
         if (i_this->checkArea()) {
-            i_this->mEvtInfo.setEventName("MBDOOR_OPEN");
-            i_this->mEvtInfo.onCondition(dEvtCnd_CANDOOR_e);
+            i_this->eventInfo.setEventName("MBDOOR_OPEN");
+            i_this->eventInfo.onCondition(dEvtCnd_CANDOOR_e);
         }
     }
     return TRUE;
@@ -512,18 +512,18 @@ BOOL daMbdoor_actionOpen(daMbdoor_c* i_this) {
 }
 
 BOOL daMbdoor_c::draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     
-    g_env_light.setLightTevColorType(mpFuModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpFuModel, &tevStr);
     mDoExt_modelUpdateDL(mpFuModel);
     
-    g_env_light.setLightTevColorType(mpLModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpLModel, &tevStr);
     mDoExt_modelUpdateDL(mpLModel);
     
-    g_env_light.setLightTevColorType(mpRModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpRModel, &tevStr);
     mDoExt_modelUpdateDL(mpRModel);
     
-    g_env_light.setLightTevColorType(mpToModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpToModel, &tevStr);
     mDoExt_modelUpdateDL(mpToModel);
     
     return TRUE;
@@ -544,7 +544,7 @@ BOOL daMbdoor_c::execute() {
         &daMbdoor_actionOpen,
     };
     
-    dDemo_actor_c* demoActor = dComIfGp_demo_getActor(mDemoActorId);
+    dDemo_actor_c* demoActor = dComIfGp_demo_getActor(demoActorID);
     if (demoActor) {
         field_0x2ad = 0;
         if (demoActor->checkEnable(0x8)) {
@@ -596,7 +596,7 @@ actor_process_profile_definition g_profile_MBDOOR = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_MBDOOR,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMbdoor_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

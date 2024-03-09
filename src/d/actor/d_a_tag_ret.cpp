@@ -53,8 +53,8 @@ namespace daTagRet {
 
         mStts.Init(0xFF, 0xFF, this);
         mCyl.Set(cyl_check_src);
-        mCyl.SetR(1000.0f*mScale.x);
-        mCyl.SetH(100.0f*mScale.y);
+        mCyl.SetR(1000.0f*scale.x);
+        mCyl.SetH(100.0f*scale.y);
         mCyl.SetStts(&mStts);
 
         return cPhs_COMPLEATE_e;
@@ -73,8 +73,8 @@ namespace daTagRet {
     /* 00000398-00000460       .text _execute__Q28daTagRet5Act_cFv */
     bool Act_c::_execute() {
         mCyl.SetC(current.pos);
-        mCyl.SetR(1000.0f*mScale.x);
-        mCyl.SetH(100.0f*mScale.y);
+        mCyl.SetR(1000.0f*scale.x);
+        mCyl.SetH(100.0f*scale.y);
         dComIfG_Ccsp()->Set(&mCyl);
 
         if (mCyl.ChkCoHit()) {
@@ -133,7 +133,7 @@ actor_process_profile_definition g_profile_Tag_Ret = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Tag_Ret,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTagRet::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

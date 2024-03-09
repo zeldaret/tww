@@ -64,14 +64,14 @@ static void* b_a_sub(void* search, void* user) {
 
 /* 000000C4-0000018C       .text daBita_Draw__FP10bita_class */
 static BOOL daBita_Draw(bita_class* i_this) {
-    dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->mTevStr);
+    dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->tevStr);
     if (i_this->mMode == 1 && i_this->mSub == 1) {
-        dKy_getEnvlight().setLightTevColorType(i_this->mpModelEf, &i_this->mTevStr);
+        dKy_getEnvlight().setLightTevColorType(i_this->mpModelEf, &i_this->tevStr);
         i_this->mpBrkAnm->entry(i_this->mpModelEf->getModelData());
         mDoExt_modelUpdateDL(i_this->mpModelEf);
         i_this->mpBrkAnm->remove(i_this->mpModelEf->getModelData());
     } else {
-        dKy_getEnvlight().setLightTevColorType(i_this->mpModel, &i_this->mTevStr);
+        dKy_getEnvlight().setLightTevColorType(i_this->mpModel, &i_this->tevStr);
         mDoExt_modelUpdateDL(i_this->mpModel);
     }
     return TRUE;
@@ -172,7 +172,7 @@ static BOOL daBita_Execute(bita_class* i_this) {
         VECAdd(&pos, &i_this->current.pos, &pos);
         i_this->mCyl.SetC(pos);
         i_this->mCyl.SetH(60.0f);
-        i_this->mCyl.SetR(i_this->mScale.x * 400.0f);
+        i_this->mCyl.SetR(i_this->scale.x * 400.0f);
         dComIfG_Ccsp()->Set(&i_this->mCyl);
     }
 
@@ -282,17 +282,17 @@ static s32 daBita_Create(fopAc_ac_c* i_ac) {
             return cPhs_ERROR_e;
 
         switch (i_this->mPrmScale) {
-        case 1: i_this->mScale.setall(1.5f); break;
-        case 2: i_this->mScale.setall(2.0f); break;
-        case 3: i_this->mScale.setall(3.0f); break;
-        default: i_this->mScale.y = i_this->mScale.z = i_this->mScale.x = 1.0f; break;
+        case 1: i_this->scale.setall(1.5f); break;
+        case 2: i_this->scale.setall(2.0f); break;
+        case 3: i_this->scale.setall(3.0f); break;
+        default: i_this->scale.y = i_this->scale.z = i_this->scale.x = 1.0f; break;
         }
 
         fopAcM_SetMtx(i_this, i_this->mpModel->getBaseTRMtx());
-        fopAcM_SetMin(i_this, i_this->mScale.x * -1000.0f, -500.0f, i_this->mScale.z * -1000.0f);
-        fopAcM_SetMax(i_this, i_this->mScale.x * 1000.0f, 500.0f, i_this->mScale.z * 1000.0f);
-        i_this->mpModel->setBaseScale(i_this->mScale);
-        i_this->mpModelEf->setBaseScale(i_this->mScale);
+        fopAcM_SetMin(i_this, i_this->scale.x * -1000.0f, -500.0f, i_this->scale.z * -1000.0f);
+        fopAcM_SetMax(i_this, i_this->scale.x * 1000.0f, 500.0f, i_this->scale.z * 1000.0f);
+        i_this->mpModel->setBaseScale(i_this->scale);
+        i_this->mpModelEf->setBaseScale(i_this->scale);
         i_this->shape_angle = i_this->current.angle;
         base_mtx_set(i_this);
         i_this->mpBgW->Move();
@@ -316,7 +316,7 @@ actor_process_profile_definition g_profile_BITA = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_BITA,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bita_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

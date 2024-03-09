@@ -217,7 +217,7 @@ kankyo_process_profile_definition g_profile_KY_THUNDER = {
     7,
     fpcPi_CURRENT_e,
     PROC_KY_THUNDER,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(dThunder_c),
     0,
     0,

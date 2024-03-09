@@ -50,10 +50,10 @@ daDr_HIO_c::daDr_HIO_c() {
 /* 00000148-000001DC       .text daDr_Draw__FP8dr_class */
 static BOOL daDr_Draw(dr_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->mTevStr);
-    g_env_light.setLightTevColorType(model, &i_this->mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.setLightTevColorType(model, &i_this->tevStr);
     i_this->mpMorf->entryDL();
-    dSnap_RegistFig(DSNAP_TYPE_DR, i_this, i_this->mEyePos, i_this->shape_angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_DR, i_this, i_this->eyePos, i_this->shape_angle.y, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
@@ -183,7 +183,7 @@ static void move(dr_class* i_this) {
 /* 0000091C-000009CC       .text daDr_setMtx__FP8dr_class */
 static void daDr_setMtx(dr_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
-    model->setBaseScale(i_this->mScale);
+    model->setBaseScale(i_this->scale);
     mDoMtx_stack_c::transS(i_this->current.pos);
     cMtx_YrotM(mDoMtx_stack_c::get(), i_this->current.angle.y);
     cMtx_XrotM(mDoMtx_stack_c::get(), i_this->current.angle.x);
@@ -203,14 +203,14 @@ static BOOL daDr_Execute(dr_class* i_this) {
     
     move(i_this);
     
-    i_this->mScale.x = i_this->mScale.y = i_this->mScale.z = l_HIO.mScale;
+    i_this->scale.x = i_this->scale.y = i_this->scale.z = l_HIO.mScale;
     
     daDr_setMtx(i_this);
     
     MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x20); // j_dr_sita2 (tongue) joint
     cMtx_copy(tongueJntMtx, *calc_mtx);
     cXyz offset(0.0f, 0.0f, 0.0f);
-    MtxPosition(&offset, &i_this->mEyePos);
+    MtxPosition(&offset, &i_this->eyePos);
     
     return TRUE;
 }
@@ -284,7 +284,7 @@ actor_process_profile_definition g_profile_DR = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_DR,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dr_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

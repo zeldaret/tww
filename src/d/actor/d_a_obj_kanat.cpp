@@ -80,7 +80,7 @@ void daObjKanat::Act_c::set_mtx() {
 
 /* 000003F4-00000430       .text init_mtx__Q210daObjKanat5Act_cFv */
 void daObjKanat::Act_c::init_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     set_mtx();
 }
 
@@ -90,17 +90,17 @@ BOOL daObjKanat::Act_c::Execute(Mtx** pMtx) {
         if (fopAcM_isSwitch(this, prm_get_swSave())) {
             mIsBroken = true;
             GXColor color;
-            color.r = mTevStr.mColorC0.r;
-            color.g = mTevStr.mColorC0.g;
-            color.b = mTevStr.mColorC0.b;
-            color.a = mTevStr.mColorC0.a;
+            color.r = tevStr.mColorC0.r;
+            color.g = tevStr.mColorC0.g;
+            color.b = tevStr.mColorC0.b;
+            color.a = tevStr.mColorC0.a;
             dComIfGp_particle_set(
                 0x82A2, &current.pos, &current.angle, NULL, 0xFF,
-                NULL, current.roomNo, &mTevStr.mColorK0, &color
+                NULL, current.roomNo, &tevStr.mColorK0, &color
             );
             dComIfGp_particle_setToon(
                 0xA2A3, &current.pos, &current.angle, NULL, 0xB4,
-                &mSmokeCb, current.roomNo, &mTevStr.mColorK0, &color
+                &mSmokeCb, current.roomNo, &tevStr.mColorK0, &color
             );
         }
     } else {
@@ -116,8 +116,8 @@ BOOL daObjKanat::Act_c::Execute(Mtx** pMtx) {
 
 /* 00000590-00000644       .text Draw__Q210daObjKanat5Act_cFv */
 BOOL daObjKanat::Act_c::Draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     if (!mIsVisible) {
         return TRUE;
     }
@@ -164,7 +164,7 @@ actor_process_profile_definition g_profile_Obj_Kanat = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_Obj_Kanat,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjKanat::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

@@ -27,7 +27,7 @@ namespace {
 
 /* 00000078-00000100       .text init_mtx__11daObjGbed_cFv */
 void daObjGbed_c::init_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -104,8 +104,8 @@ bool daObjGbed_c::_execute() {
 
 /* 000003E4-00000444       .text _draw__11daObjGbed_cFv */
 bool daObjGbed_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return true;
 }
@@ -148,7 +148,7 @@ actor_process_profile_definition g_profile_Obj_Gbed = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Gbed,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGbed_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

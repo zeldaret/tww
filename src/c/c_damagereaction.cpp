@@ -32,13 +32,13 @@ BOOL ice_bg_check(enemyice* ei) {
             } else {
                 ei->mSpeed.y = 0.0f;
             }
-            if (ac->mHealth <= 0) {
+            if (ac->health <= 0) {
                 ret = TRUE;
             }
         }
     } else if (ei->mBgAcch.ChkGroundHit()) {
         ei->mSpeedF *= 0.5f;
-        if (ac->mHealth <= 0 || speedY < -40.0f + g_regHIO.mChild[0].mFloatRegs[14]) {
+        if (ac->health <= 0 || speedY < -40.0f + g_regHIO.mChild[0].mFloatRegs[14]) {
             ret = TRUE;
         }
         if (speedY < -20.0f) {
@@ -55,7 +55,7 @@ BOOL ice_bg_check(enemyice* ei) {
             } else {
                 ei->mSpeed.y = 0.0f;
             }
-            if (ac->mHealth <= 0) {
+            if (ac->health <= 0) {
                 ret = TRUE;
             }
         }
@@ -120,17 +120,17 @@ BOOL enemy_ice(enemyice* ei) {
         if (ei->mLightShrinkTimer == 1) { // Just started dying to light arrows.
             ei->mLightShrinkTimer++;
             dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_EXPLOSION, &pos, NULL, &particleScale);
-            ac->mTevStr.mFogColor.b = 0xFF;
-            ac->mTevStr.mFogColor.g = 0xFF;
-            ac->mTevStr.mFogColor.r = 0xFF;
-            ac->mTevStr.mFogStartZ = 0.0f;
-            ac->mTevStr.mFogEndZ = 2000.0f;
+            ac->tevStr.mFogColor.b = 0xFF;
+            ac->tevStr.mFogColor.g = 0xFF;
+            ac->tevStr.mFogColor.r = 0xFF;
+            ac->tevStr.mFogStartZ = 0.0f;
+            ac->tevStr.mFogEndZ = 2000.0f;
             fopAcM_seStart(ac, JA_SE_CM_L_ARROW_SHRINK, 0);
-            ac->mAttentionInfo.mFlags &= ~fopAc_Attn_LOCKON_ENEMY_e;
+            ac->attention_info.flags &= ~fopAc_Attn_LOCKON_ENEMY_e;
         } else {
             ei->mLightShrinkTimer++;
             
-            cLib_addCalc2(&ac->mTevStr.mFogEndZ, 10.0f, 1.0f, 80.0f);
+            cLib_addCalc2(&ac->tevStr.mFogEndZ, 10.0f, 1.0f, 80.0f);
             
             mDoMtx_stack_c::transS(ac->current.pos);
             mDoMtx_stack_c::transM(0, ei->mYOffset, 0);
@@ -139,7 +139,7 @@ BOOL enemy_ice(enemyice* ei) {
             mDoMtx_stack_c::YrotM(ac->shape_angle.y);
             mDoMtx_stack_c::XrotM(ac->shape_angle.x);
             mDoMtx_stack_c::ZrotM(ac->shape_angle.z);
-            mDoMtx_stack_c::scaleM(ac->mScale);
+            mDoMtx_stack_c::scaleM(ac->scale);
             
             if (ei->mLightShrinkTimer < (s8)(70 + g_regHIO.mChild[14].mShortRegs[1])) {
                 cLib_addCalc0(&ei->mScaleXZ, 0.1f, 0.01f + g_regHIO.mChild[14].mFloatRegs[0]);
@@ -158,12 +158,12 @@ BOOL enemy_ice(enemyice* ei) {
                     if (fopAcM_GetName(ac) != PROC_PZ) {
                         // If the actor is not Princess Zelda, drop an item ball.
                         // TODO: Why the Zelda check? Is she coded to be able to die to Light Arrows?
-                        fopAcM_createIball(&pos, ac->mItemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->mStealItemBitNo);
+                        fopAcM_createIball(&pos, ac->itemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->stealItemBitNo);
                     }
                     if (ei->mDeathSwitch != 0) {
                         dComIfGs_onSwitch(ei->mDeathSwitch, fopAcM_GetRoomNo(ac));
                     }
-                    ac->mHealth = -0x80;
+                    ac->health = -0x80;
                 }
             }
         }
@@ -205,8 +205,8 @@ BOOL enemy_ice(enemyice* ei) {
                 ei->mSpeed.y = 30.0f;
                 ei->mAngularVelY = (s16)cM_rndFX(3000.0f);
             }
-            ac->mHealth -= 4;
-            if (ac->mHealth <= 0) {
+            ac->health -= 4;
+            if (ac->health <= 0) {
                 // If the enemy died instantly upon being frozen, don't let it fall and shatter instantly.
                 // Instead add a short delay where it will simply stay frozen in the air to emphasize that it froze.
                 ei->mMoveDelayTimer = 40;
@@ -226,10 +226,10 @@ BOOL enemy_ice(enemyice* ei) {
         frozen = TRUE;
         moveAndCollide = TRUE;
         if (ei->m00C != 1) {
-            ac->mAttentionInfo.mFlags |= fopAc_Attn_ACTION_CARRY_e;
-            ac->mAttentionInfo.mDistances[4] = 0x12;
+            ac->attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+            ac->attention_info.distances[4] = 0x12;
             if (fopAcM_checkStatus(ac, fopAcStts_CARRY_e)) {
-                ac->mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
+                ac->attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
                 ei->mState = 3;
                 if (ei->m00C == 2) {
                     ei->m00C = 0;
@@ -336,7 +336,7 @@ BOOL enemy_ice(enemyice* ei) {
                 }
                 
                 fopAcM_seStart(ac, JA_SE_CM_ICE_BREAK, 0);
-                fopAcM_createIball(&pos, ac->mItemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->mStealItemBitNo);
+                fopAcM_createIball(&pos, ac->itemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->stealItemBitNo);
                 ei->mFreezeTimer = 0;
                 if (ei->mDeathSwitch != 0) {
                     dComIfGs_onSwitch(ei->mDeathSwitch, fopAcM_GetRoomNo(ac));
@@ -360,7 +360,7 @@ BOOL enemy_ice(enemyice* ei) {
                 } else {
                     fopAcM_delete(ac);
                     fopAcM_onActor(ac);
-                    ac->mHealth = -0x80;
+                    ac->health = -0x80;
                 }
             }
             
@@ -392,7 +392,7 @@ BOOL enemy_ice(enemyice* ei) {
         mDoMtx_stack_c::YrotM(ac->shape_angle.y);
         mDoMtx_stack_c::XrotM(ac->shape_angle.x);
         mDoMtx_stack_c::ZrotM(ac->shape_angle.z);
-        mDoMtx_stack_c::scaleM(ac->mScale);
+        mDoMtx_stack_c::scaleM(ac->scale);
         fopAcM_OnStatus(ac, fopAcStts_FREEZE_e);
     } else {
         fopAcM_OffStatus(ac, fopAcStts_FREEZE_e);
@@ -591,7 +591,7 @@ void enemy_fire_remove(enemyfire* ef) {
 /* 8001D428-8001D48C       .text enemy_piyo_set__FP10fopAc_ac_c */
 void enemy_piyo_set(fopAc_ac_c* enemy) {
     // Creates the rotating stars particle for when an enemy is stunned.
-    dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_SPIN, &enemy->mAttentionInfo.mPosition);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_SPIN, &enemy->attention_info.position);
 }
 
 /* 8001D48C-8001D890       .text wall_angle_get__FP10fopAc_ac_cs */

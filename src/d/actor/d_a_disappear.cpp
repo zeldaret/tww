@@ -23,7 +23,7 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
         i_this->mTimer--;
         
         if (i_this->mTimer == 0) {
-            s8 health = i_this->mHealth; // TODO: add enum for disappear types (stored in health)
+            s8 health = i_this->health; // TODO: add enum for disappear types (stored in health)
 
             if (health != 1 && health != 3) {
                 if (health == 2) {
@@ -42,7 +42,7 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                     }
                 }
                 else {
-                    fopAcM_createIball(&i_this->current.pos, i_this->mItemTableIdx, i_this->current.roomNo, &i_this->current.angle, i_this->mItemBitNo);
+                    fopAcM_createIball(&i_this->current.pos, i_this->itemTableIdx, i_this->current.roomNo, &i_this->current.angle, i_this->mItemBitNo);
                 }
             }
         }
@@ -71,7 +71,7 @@ void set_disappear(disappear_class* i_this, float scale) {
     cXyz particleScale(scale, scale, scale);
     i_this->mTimer = 58 + g_regHIO.mChild[8].mShortRegs[0];
 
-    switch (i_this->mHealth) {
+    switch (i_this->health) {
         case 0x0:
         case 0x2:
         case 0xA:
@@ -102,15 +102,15 @@ static s32 daDisappear_Create(fopAc_ac_c* i_this) {
 
     fopAcM_SetupActor(dis, disappear_class);
 
-    dis->mHealth = fopAcM_GetParam(dis) & 0xFF;
-    f32 scale = ((fopAcM_GetParam(dis) >> 8) & 0xFF) * 0.1f;
+    dis->health = fopAcM_GetParam(dis) & 0xFF;
+    f32 scaleMag = ((fopAcM_GetParam(dis) >> 8) & 0xFF) * 0.1f;
 
     dis->mItemBitNo = (fopAcM_GetParam(dis) >> 0x10) & 0xFF;
     if (dis->mItemBitNo == 0xFF) {
         dis->mItemBitNo = -1;
     }
 
-    set_disappear(dis, scale);
+    set_disappear(dis, scaleMag);
 
     return cPhs_COMPLEATE_e;
 }
@@ -128,7 +128,7 @@ actor_process_profile_definition g_profile_DISAPPEAR = {
     7,
     fpcLy_CURRENT_e,
     PROC_DISAPPEAR,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(disappear_class),
     0,
     0,

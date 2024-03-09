@@ -305,7 +305,7 @@ void daPy_lk_c::seStartSwordCut(u32 i_seNum) {
 
 /* 8010314C-801031A4       .text voiceStart__9daPy_lk_cFUl */
 void daPy_lk_c::voiceStart(u32 param_1) {
-    mDoAud_linkVoiceStart(param_1, &mEyePos, mDoAud_getLinkVoiceVowel(param_1), mReverb);
+    mDoAud_linkVoiceStart(param_1, &eyePos, mDoAud_getLinkVoiceVowel(param_1), mReverb);
 }
 
 /* 801031A4-801031DC       .text itemButton__9daPy_lk_cCFv */
@@ -737,7 +737,7 @@ void daPy_lk_c::setDrawHandModel() {
 
 /* 80106BD0-80106C40       .text entryDLSetLight__9daPy_lk_cFP8J3DModelUl */
 void daPy_lk_c::entryDLSetLight(J3DModel* model, u32 param_2) {
-    g_env_light.setLightTevColorType(model, &mTevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
     if (param_2 != 0) {
         dMat_control_c::iceEntryDL(model, -1, NULL);
     } else {
@@ -747,7 +747,7 @@ void daPy_lk_c::entryDLSetLight(J3DModel* model, u32 param_2) {
 
 /* 80106C40-80106CB0       .text updateDLSetLight__9daPy_lk_cFP8J3DModelUl */
 void daPy_lk_c::updateDLSetLight(J3DModel* model, u32 param_2) {
-    g_env_light.setLightTevColorType(model, &mTevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
     if (param_2 != 0) {
         dMat_control_c::iceUpdateDL(model, -1, NULL);
     } else {
@@ -786,7 +786,7 @@ BOOL daPy_lk_c::draw() {
     if (mSightPacket.getDrawFlg()) {
         mSightPacket.setSight();
     }
-    g_env_light.settingTevStruct(TEV_TYPE_PLAYER, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_PLAYER, &current.pos, &tevStr);
     if (checkPlayerNoDraw()) {
         offBodyEffect();
         drawMirrorLightModel();
@@ -801,11 +801,11 @@ BOOL daPy_lk_c::draw() {
     
     s16 origFogR, origFogG, origFogB;
     f32 origFogStartZ, origFogEndZ;
-    origFogR = mTevStr.mFogColor.r;
-    origFogG = mTevStr.mFogColor.g;
-    origFogB = mTevStr.mFogColor.b;
-    origFogStartZ = mTevStr.mFogStartZ;
-    origFogEndZ = mTevStr.mFogEndZ;
+    origFogR = tevStr.mFogColor.r;
+    origFogG = tevStr.mFogColor.g;
+    origFogB = tevStr.mFogColor.b;
+    origFogStartZ = tevStr.mFogStartZ;
+    origFogEndZ = tevStr.mFogEndZ;
     if (!checkFreezeState() && mCurProc != daPyProc_ELEC_DAMAGE_e &&
         (daPy_dmEcallBack_c::checkCurse() || checkConfuse() || mDamageWaitTimer > 0)
     ) {
@@ -813,16 +813,16 @@ BOOL daPy_lk_c::draw() {
         mDoLib_pos2camera(&current.pos, &sp18);
         f32 f2 = fabsf(cM_ssin(g_Counter.mTimer * 0x800));
         if (daPy_dmEcallBack_c::checkCurse() || checkConfuse()) {
-            mTevStr.mFogColor.r = 0x80;
-            mTevStr.mFogColor.g = 0x00;
-            mTevStr.mFogColor.b = 0xFF;
+            tevStr.mFogColor.r = 0x80;
+            tevStr.mFogColor.g = 0x00;
+            tevStr.mFogColor.b = 0xFF;
         } else {
-            mTevStr.mFogColor.r = 0xFF;
-            mTevStr.mFogColor.g = 0x3C;
-            mTevStr.mFogColor.b = 0x3C;
+            tevStr.mFogColor.r = 0xFF;
+            tevStr.mFogColor.g = 0x3C;
+            tevStr.mFogColor.b = 0x3C;
         }
-        mTevStr.mFogStartZ = -sp18.z - 200.0f + 200.0f * f2;
-        mTevStr.mFogEndZ = mTevStr.mFogStartZ + 300.0f;
+        tevStr.mFogStartZ = -sp18.z - 200.0f + 200.0f * f2;
+        tevStr.mFogEndZ = tevStr.mFogStartZ + 300.0f;
     }
     
     u16 material_num = mpAnmTexPatternData->getUpdateMaterialNum();
@@ -845,7 +845,7 @@ BOOL daPy_lk_c::draw() {
     mpCLModelData->setTexMtxAnimator(mpTexScrollResData, m_texMtxAnm, NULL);
     mpAnmTexPatternData->setFrame(m3530);
     mpTexScrollResData->setFrame(m3532);
-    g_env_light.setLightTevColorType(mpCLModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpCLModel, &tevStr);
     J3DJoint* link_root_joint = mpCLModelData->getJointNodePointer(0x00); // link_root joint
     mpCLModelData->getJointNodePointer(0x08)->getMesh()->getShape()->hide(); // cl_LhandA joint
     mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape()->hide(); // cl_RhandA joint
@@ -984,11 +984,11 @@ BOOL daPy_lk_c::draw() {
         entryDLSetLight(mpHbootsModels[1], mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
     }
     
-    mTevStr.mFogColor.r = origFogR;
-    mTevStr.mFogColor.g = origFogG;
-    mTevStr.mFogColor.b = origFogB;
-    mTevStr.mFogStartZ = origFogStartZ;
-    mTevStr.mFogEndZ = origFogEndZ;
+    tevStr.mFogColor.r = origFogR;
+    tevStr.mFogColor.g = origFogG;
+    tevStr.mFogColor.b = origFogB;
+    tevStr.mFogStartZ = origFogStartZ;
+    tevStr.mFogEndZ = origFogEndZ;
     
     if (!r24) {
         if (mCurProc == daPyProc_CUT_F_e || mCurProc == daPyProc_BT_VERTICAL_JUMP_CUT_e) {
@@ -1196,7 +1196,7 @@ void daPy_lk_c::posMove() {
 /* 80109E80-80109ED8       .text setShapeAngleToAtnActor__9daPy_lk_cFv */
 void daPy_lk_c::setShapeAngleToAtnActor() {
     if (mpAttnActorLockOn != NULL) {
-        s16 targetAngle = cLib_targetAngleY(&current.pos, &mpAttnActorLockOn->mEyePos);
+        s16 targetAngle = cLib_targetAngleY(&current.pos, &mpAttnActorLockOn->eyePos);
         cLib_addCalcAngleS(&shape_angle.y, targetAngle, 2, 0x2000, 0x800);
     }
 }
@@ -2059,7 +2059,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
         setSmallFanModel();
     } else if (mCurProc == daPyProc_FAN_GLIDE_e) {
         deleteEquipItem(FALSE);
-        mMaxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
+        maxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
         setSmallFanModel();
         mHeldItemType = dItem_DEKU_LEAF_e;
         m35F0 = m3688.y;
@@ -2067,7 +2067,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
         m34E0 = 0;
         m34E4 = 0;
     } else if (mCurProc == daPyProc_SLOW_FALL_e) {
-        mMaxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
+        maxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
     } else if (mCurProc == daPyProc_DEMO_TOOL_e) {
         resetDemoAnime = TRUE;
         speed.y = 0.0f;
@@ -2125,7 +2125,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     dComIfGp_clearPlayerStatus0(0, ~(daPyStts0_BOOMERANG_WAIT_e | daPyStts0_UNK10_e));
     dComIfGp_clearPlayerStatus1(0, ~(daPyStts1_SAIL_e | daPyStts1_UNK8000_e | daPyStts1_UNK40000_e) & 0x000FFFFF);
     
-    mGravity = daPy_HIO_autoJump_c0::m.field_0xC;
+    gravity = daPy_HIO_autoJump_c0::m.field_0xC;
     m34F2 = 0;
     m34F4 = 0;
     onResetFlg0(daPyRFlg0_UNK8000000);
@@ -2734,11 +2734,11 @@ void daPy_lk_c::autoGroundHit() {
 /* 8011AD9C-8011AE20       .text checkAttentionPosAngle__9daPy_lk_cFP10fopAc_ac_cPP4cXyz */
 BOOL daPy_lk_c::checkAttentionPosAngle(fopAc_ac_c* actor, cXyz** pOutPos) {
     if (actor) {
-        s16 targetAngle = cLib_targetAngleY(&current.pos, &actor->mEyePos);
+        s16 targetAngle = cLib_targetAngleY(&current.pos, &actor->eyePos);
         int angleDiff = cLib_distanceAngleS(targetAngle, m34DE);
         if (angleDiff <= 0x6000) {
-            *pOutPos = &actor->mEyePos;
-            if (actor->mGroup == fopAc_ENEMY_e) {
+            *pOutPos = &actor->eyePos;
+            if (actor->group == fopAc_ENEMY_e) {
                 onNoResetFlg1(daPyFlg1_UNK400);
             }
             return TRUE;
@@ -3107,7 +3107,7 @@ BOOL daPy_lk_c::execute() {
     }
     
     if (checkNoControll()) {
-        mAttentionInfo.mFlags = 0;
+        attention_info.flags = 0;
         fopAcM_SetStatusMap(this, 0x10);
         if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
             mStts.SetWeight(0xFF);
@@ -3116,7 +3116,7 @@ BOOL daPy_lk_c::execute() {
             mStts.SetWeight(120);
         }
     } else {
-        mAttentionInfo.mFlags = ~0;
+        attention_info.flags = ~0;
         fopAcM_SetStatusMap(this, 0x01);
         mStts.SetWeight(120);
     }
@@ -3137,7 +3137,7 @@ BOOL daPy_lk_c::execute() {
     
     if (dComIfGp_event_runCheck()) {
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Link", this);
-        if (mEvtInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(0x4) && mHeldItemType == 0x101) {
+        if (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(0x4) && mHeldItemType == 0x101) {
             fopAc_ac_c* equipActor = mActorKeepEquip.getActor();
             if (equipActor) {
                 s16 angle = shape_angle.y + 0x8000;
@@ -3200,7 +3200,7 @@ BOOL daPy_lk_c::execute() {
     daPy_matAnm_c::decMorfFrame();
     daPy_matAnm_c::decMabaTimer();
     
-    if (mCurProc == daPyProc_BOTTLE_SWING_e && mEvtInfo.checkCommandCatch()) {
+    if (mCurProc == daPyProc_BOTTLE_SWING_e && eventInfo.checkCommandCatch()) {
         mDemo.setDemoType(5);
     }
     
@@ -3429,8 +3429,8 @@ BOOL daPy_lk_c::execute() {
     
     equipActor = mActorKeepEquip.getActor();
     if (equipActor) {
-        equipActor->mTevStr.mRoomNo = mTevStr.mRoomNo;
-        equipActor->mTevStr.mEnvrIdxOverride = mTevStr.mEnvrIdxOverride;
+        equipActor->tevStr.mRoomNo = tevStr.mRoomNo;
+        equipActor->tevStr.mEnvrIdxOverride = tevStr.mEnvrIdxOverride;
         equipActor->current.roomNo = roomNo;
     }
     
@@ -3493,7 +3493,7 @@ BOOL daPy_lk_c::execute() {
         }
     }
     
-    cMtx_multVec(mpCLModel->getAnmMtx(0x13), &l_eye_offset, &mEyePos);
+    cMtx_multVec(mpCLModel->getAnmMtx(0x13), &l_eye_offset, &eyePos);
     
     m36D0 = mSwordTopPos;
     m36DC = m36C4;
@@ -3533,12 +3533,12 @@ BOOL daPy_lk_c::execute() {
     
     if (!checkNoResetFlg0((daPy_FLG0)(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000))) {
         if (mAcch.ChkGroundHit() && !daPy_lk_c::checkPlayerFly()) {
-            mEvtInfo.onCondition(dEvtCnd_CANTALK_e | dEvtCnd_CANDOOR_e | dEvtCnd_CANGETITEM_e | dEvtCnd_UNK10_e | dEvtCnd_CANCATCH_e);
+            eventInfo.onCondition(dEvtCnd_CANTALK_e | dEvtCnd_CANDOOR_e | dEvtCnd_CANGETITEM_e | dEvtCnd_UNK10_e | dEvtCnd_CANCATCH_e);
         } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) || (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_UNK100))) {
-            mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
     }
-    mEvtInfo.onCondition(dEvtCnd_CANGETITEM_e);
+    eventInfo.onCondition(dEvtCnd_CANGETITEM_e);
     
     JPABaseEmitter* emitter = mSmokeEcallBack.getEmitter();
     if (emitter) {
@@ -4063,8 +4063,8 @@ void daPy_lk_c::playerInit() {
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(125.0f);
     field_0x2a8 = daPy_HIO_move_c0::m.field_0x18;
-    mGravity = daPy_HIO_autoJump_c0::m.field_0xC;
-    mMaxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
+    gravity = daPy_HIO_autoJump_c0::m.field_0xC;
+    maxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
     mAcchCir[0].SetWall(30.1f, 35.0f);
     mAcchCir[1].SetWall(89.9f, 35.0f);
     mAcchCir[2].SetWall(125.0f, 35.0f);
@@ -4256,11 +4256,11 @@ int phase_1(daPy_lk_c* i_this) {
     dComIfGp_setLinkPlayer(i_this);
 
     fopAcM_setStageLayer(i_this);
-    i_this->mAttentionInfo.mFlags = ~0;
+    i_this->attention_info.flags = ~0;
 
-    i_this->mAttentionInfo.mPosition.x = i_this->current.pos.x;
-    i_this->mAttentionInfo.mPosition.y = i_this->current.pos.y + 125.0f;
-    i_this->mAttentionInfo.mPosition.z = i_this->current.pos.z;
+    i_this->attention_info.position.x = i_this->current.pos.x;
+    i_this->attention_info.position.y = i_this->current.pos.y + 125.0f;
+    i_this->attention_info.position.z = i_this->current.pos.z;
 
     return cPhs_NEXT_e;
 }
@@ -4624,7 +4624,7 @@ actor_process_profile_definition2 g_profile_PLAYER = {
     /* ListID       */ 5,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_PLAYER,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daPy_lk_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

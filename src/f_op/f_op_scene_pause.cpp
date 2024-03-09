@@ -19,7 +19,7 @@ int fopScnPause_Enable(scene_class* i_scene) {
 
 int fopScnPause_Disable(scene_class* i_scene) {
     if (i_scene) {
-        void* tmp = (void*)i_scene->mBase.mBase.mLyTg.mpLayer->mpPcNode;
+        void* tmp = (void*)i_scene->base.base.mLyTg.mpLayer->mpPcNode;
 
         if (!tmp) {
             fpcM_PauseDisable(i_scene, 1);

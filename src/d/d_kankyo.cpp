@@ -2359,7 +2359,7 @@ kankyo_process_profile_definition g_profile_KANKYO = {
     1,
     fpcPi_CURRENT_e,
     PROC_KANKYO,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(sub_kankyo__class),
     0,
     0,

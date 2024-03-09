@@ -54,14 +54,14 @@ static dCcD_SrcCyl l_cyl_src = {
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */
 void daSpcItem01_c::set_mtx() {
     csXyz angle = current.angle;
-    cXyz scale = mScale;
+    cXyz scaleVec = scale;
     f32 offsetY = 0.0f;
     switch (m_itemNo) {
     case BOKO_BELT:
         offsetY = -24.0f;
         break;
     }
-    mpModel->setBaseScale(scale);
+    mpModel->setBaseScale(scaleVec);
 
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + offsetY, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(angle);
@@ -103,9 +103,9 @@ BOOL daSpcItem01_c::CreateInit() {
     mCyl.SetStts(&mStts);
     f32 tempVar1 = (f32)getHeight();
     f32 tempVar2 = (f32)getR();
-    if (mScale.x > 1.0f) {
-        tempVar1 *= mScale.x;
-        tempVar2 *= mScale.x;
+    if (scale.x > 1.0f) {
+        tempVar1 *= scale.x;
+        tempVar2 *= scale.x;
     }
     mCyl.SetR(tempVar2);
     mCyl.SetH(tempVar1);
@@ -116,9 +116,9 @@ BOOL daSpcItem01_c::CreateInit() {
     fopAcM_SetGravity(this, -4.0f);
     switch ((s8)m_itemNo) {
     case SHIELD:
-        mScale.x = 1.5f;
-        mScale.y = 1.5f;
-        mScale.z = 1.5f;
+        scale.x = 1.5f;
+        scale.y = 1.5f;
+        scale.z = 1.5f;
         current.angle.x = 4000;
         current.angle.y = 4200;
         current.angle.z = 5200;
@@ -131,8 +131,8 @@ BOOL daSpcItem01_c::CreateInit() {
 
 /* 8015DF4C-8015DFE8       .text _execute__13daSpcItem01_cFv */
 BOOL daSpcItem01_c::_execute() {
-    mEyePos = current.pos;
-    mAttentionInfo.mPosition = current.pos;
+    eyePos = current.pos;
+    attention_info.position = current.pos;
     field_0x634++;
     set_effect();
     scale_anim();
@@ -154,9 +154,9 @@ void daSpcItem01_c::set_effect() {
 /* 8015E070-8015E0D8       .text scale_anim__13daSpcItem01_cFv */
 void daSpcItem01_c::scale_anim() {
     if (isRupee(m_itemNo)) {
-        cLib_chaseF(&mScale.x, 1.0f, 0.05f);
-        cLib_chaseF(&mScale.y, 1.0f, 0.05f);
-        cLib_chaseF(&mScale.z, 1.0f, 0.05f);
+        cLib_chaseF(&scale.x, 1.0f, 0.05f);
+        cLib_chaseF(&scale.y, 1.0f, 0.05f);
+        cLib_chaseF(&scale.z, 1.0f, 0.05f);
     }
 }
 
@@ -188,7 +188,7 @@ void daSpcItem01_c::move() {
         if (mAcch.ChkGroundLanding()) {
             field_0x642 += 1;
             f32 newGravity = field_0x63C * 0.62f;
-            if (newGravity > mGravity - 0.5f) {
+            if (newGravity > gravity - 0.5f) {
                 speedF = 0.0f;
             } else {
                 speed.x = 0.0f;
@@ -229,16 +229,16 @@ BOOL daSpcItem01_c::_draw() {
 /* 8015E2A8-8015E368       .text setTevStr__13daSpcItem01_cFv */
 void daSpcItem01_c::setTevStr() {
     if (m_itemNo == BOKO_BELT) {
-        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
     } else {
-        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     }
-    dKy_getEnvlight().setLightTevColorType(mpModel, &mTevStr);
+    dKy_getEnvlight().setLightTevColorType(mpModel, &tevStr);
 
     for (s32 modelIndex = 0; modelIndex < (s32)ARRAY_SIZE(mpModelArrow); modelIndex++) {
         J3DModel* modelArrow = mpModelArrow[modelIndex];
         if (modelArrow != NULL) {
-            dKy_getEnvlight().setLightTevColorType(modelArrow, &mTevStr);
+            dKy_getEnvlight().setLightTevColorType(modelArrow, &tevStr);
         }
     }
 }
@@ -281,7 +281,7 @@ actor_process_profile_definition g_profile_SPC_ITEM01 = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_SPC_ITEM01,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSpcItem01_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

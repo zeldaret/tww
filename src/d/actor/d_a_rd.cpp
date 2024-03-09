@@ -427,7 +427,7 @@ bool daRd_c::createArrowHeap() {
     };
     mpJntHit = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (mpJntHit) {
-        mJntHit = mpJntHit;
+        jntHit = mpJntHit;
     } else {
         return false;
     }
@@ -610,7 +610,7 @@ bool daRd_c::checkTgHit() {
             fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x44);
             mEnemyIce.mFreezeDuration = l_HIO.m4A;
             enemy_fire_remove(&mEnemyFire);
-            mHealth += 4;
+            health += 4;
             mHitType = 9;
             break;
         case AT_TYPE_FIRE_ARROW:
@@ -645,7 +645,7 @@ bool daRd_c::checkTgHit() {
             }
             break;
         case AT_TYPE_GRAPPLING_HOOK:
-            dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &mAttentionInfo.mPosition);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &attention_info.position);
             fopAcM_seStart(this, JA_SE_LK_W_WEP_HIT, 0x44);
             mHitType = 0xE;
             r29 = false;
@@ -659,11 +659,11 @@ bool daRd_c::checkTgHit() {
         if (r29) {
             cXyz* hitPos = mCyl.GetTgHitPosP();
             cc_at_check(this, &atInfo);
-            if (mHitType == 1 || mHitType == 7 || mHitType == 8 || mHealth <= 0) {
+            if (mHitType == 1 || mHitType == 7 || mHitType == 8 || health <= 0) {
                 dComIfGp_particle_set(0x10, mCyl.GetTgHitPosP());
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, hitPos, &player->shape_angle, &scale);
-                if (mHealth <= 0) {
+                if (health <= 0) {
                     modeProcInit(MODE_DEATH);
                 } else {
                     modeProcInit(MODE_DAMAGE);
@@ -673,10 +673,10 @@ bool daRd_c::checkTgHit() {
                 modeProcInit(MODE_DAMAGE);
             }
         } else if (mHitType == 0xE) {
-            s8 origHealth = mHealth;
-            mHealth = 0xA;
+            s8 origHealth = health;
+            health = 0xA;
             cc_at_check(this, &atInfo);
-            mHealth = origHealth;
+            health = origHealth;
         }
         
         return true;
@@ -734,17 +734,17 @@ void daRd_c::setAttention() {
     cXyz attnPos(60.0f, 0.0f, 0.0f);
     cXyz eyePos(60.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0x0C)); // ree_atama_1 joint
-    mDoMtx_stack_c::multVec(&attnPos, &mAttentionInfo.mPosition);
+    mDoMtx_stack_c::multVec(&attnPos, &attention_info.position);
     mDoMtx_stack_c::multVecZero(&eyePos);
-    mEyePos = eyePos;
-    mAttentionInfo.mPosition.y += l_HIO.m58;
-    mEyePos.y += l_HIO.m5C;
+    eyePos = eyePos;
+    attention_info.position.y += l_HIO.m58;
+    eyePos.y += l_HIO.m5C;
     
     if (dComIfGp_event_runCheck()) {
-        mAttentionInfo.mPosition = current.pos;
-        mEyePos = current.pos;
-        mAttentionInfo.mPosition.y += 150.0f;
-        mEyePos.y += 150.0f;
+        attention_info.position = current.pos;
+        eyePos = current.pos;
+        attention_info.position.y += 150.0f;
+        eyePos.y += 150.0f;
     }
     
     if (mEnemyIce.mFreezeTimer > 20) {
@@ -757,7 +757,7 @@ void daRd_c::setAttention() {
 /* 00001970-000019F8       .text setMtx__6daRd_cFv */
 void daRd_c::setMtx() {
     J3DModel* model = mpMorf->getModel();
-    model->setBaseScale(mScale);
+    model->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -963,7 +963,7 @@ void daRd_c::modeCry() {
     
     f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
     f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
-    if (mEvtInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
+    if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         if (isLinkControl()) {
             dComIfGp_event_reset();
             modeProcInit(MODE_RETURN);
@@ -1072,7 +1072,7 @@ void daRd_c::modeAttack() {
     
     f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
     f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
-    if (mEvtInfo.checkCommandDemoAccrpt()) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
         if (isAnm(AnmPrm_ATACK)) {
             f32 frame = player->getBaseAnimeFrame();
@@ -1344,10 +1344,10 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
         
         if (newMode == MODE_DEATH || newMode == MODE_SW_WAIT) {
             fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
-            cLib_offBit<u32>(mAttentionInfo.mFlags, fopAc_Attn_LOCKON_ENEMY_e);
+            cLib_offBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_ENEMY_e);
         } else {
             fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
-            cLib_onBit<u32>(mAttentionInfo.mFlags, fopAc_Attn_LOCKON_ENEMY_e);
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_ENEMY_e);
         }
         
         mMode = newMode;
@@ -1695,7 +1695,7 @@ bool daRd_c::_execute() {
     modeProc(PROC_EXEC, MODE_NULL);
     setAnm(AnmPrm_NULL, false);
     setBtkAnm(0x5);
-    g_env_light.settingTevStruct(0, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     
     return false;
 }
@@ -1725,7 +1725,7 @@ bool daRd_c::_draw() {
     
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
-    g_env_light.setLightTevColorType(model, &mTevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
     
     if (mEnemyIce.mFreezeTimer > 20) {
         dMat_control_c::iceEntryDL(mpMorf, -1, &mInvisModel);
@@ -1740,7 +1740,7 @@ bool daRd_c::_draw() {
     cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     mShadowId = dComIfGd_setShadow(
         mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 40.0f,
-        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &mTevStr,
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
         0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
     );
     
@@ -1794,13 +1794,13 @@ void daRd_c::createInit() {
     mpMorf->play(&current.pos, 0, 0);
     mBrkAnm.setFrame(0.0f);
     mpMorf->calc();
-    g_env_light.settingTevStruct(0, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -100.0f, -10.0f, -100.0f, 100.0f, 250.0f, 150.0f);
     
     mD3C = 1;
     mD40 = 1;
-    mStealItemLeft = 5;
+    stealItemLeft = 5;
     
     mEnemyFire.mpMcaMorf = mpMorf;
     mEnemyFire.mpActor = this;
@@ -1820,18 +1820,18 @@ void daRd_c::createInit() {
     mEnemyIce.mWallRadius = 50.0f;
     mEnemyIce.mCylHeight = 250.0f;
     
-    mMaxHealth = l_HIO.m46;
-    mHealth = mMaxHealth;
+    max_health = l_HIO.m46;
+    health = max_health;
     mSpawnPos = current.pos;
     mSpawnAngle = shape_angle.y;
-    mGravity = -4.5f;
+    gravity = -4.5f;
     
     // TODO: figure out if 1 and 2 actually drop different items
     if (mWhichIdleAnm == 0) {
-        mItemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Rdead1", 0);
+        itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Rdead1", 0);
     }
     if (mWhichIdleAnm == 1) {
-        mItemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Rdead2", 0);
+        itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Rdead2", 0);
     }
 }
 
@@ -1916,7 +1916,7 @@ actor_process_profile_definition g_profile_RD = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_RD,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daRd_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

@@ -59,7 +59,7 @@ s32 fpcNdRq_phase_IsDeleted(node_create_request* i_NdCtReq) {
 /* 8003F414-8003F468       .text fpcNdRq_phase_Delete__FP19node_create_request */
 s32 fpcNdRq_phase_Delete(node_create_request* i_NdCtReq) {
     if (i_NdCtReq->mNodeProc.mpNodeProc != NULL) {
-        if (fpcDt_Delete(&i_NdCtReq->mNodeProc.mpNodeProc->mBase) == 0) {
+        if (fpcDt_Delete(&i_NdCtReq->mNodeProc.mpNodeProc->base) == 0) {
             return cPhs_INIT_e;
         }
         i_NdCtReq->mNodeProc.mpNodeProc = NULL;
@@ -138,7 +138,7 @@ s32 fpcNdRq_Handler() {
 
 /* 8003F6BC-8003F728       .text fpcNdRq_IsPossibleTarget__FP18process_node_class */
 s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
-    s32 bsPcId = i_procNode->mBase.mBsPcId;
+    s32 bsPcId = i_procNode->base.mBsPcId;
     request_node_class* currentNode;
     node_create_request* currentNdCr;
     currentNode = (request_node_class*)l_fpcNdRq_Queue.mpHead;
@@ -146,7 +146,7 @@ s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
         currentNdCr = currentNode->mNodeCrReq;
         if ((currentNdCr->mParameter == 2 || currentNdCr->mParameter == 4 || currentNdCr->mParameter == 1) && currentNdCr->mNodeProc.mProcId == bsPcId)
             return 0;
-        currentNode = (request_node_class*)NODE_GET_NEXT((&currentNode->mBase));
+        currentNode = (request_node_class*)NODE_GET_NEXT((&currentNode->base));
     }
     return 1;
 }
@@ -155,13 +155,13 @@ s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
 s32 fpcNdRq_IsIng(process_node_class* i_procNode) {
     request_node_class* currentNode;
     node_create_request* currentNodeReq;
-    s32 bsPcId = i_procNode->mBase.mBsPcId;
+    s32 bsPcId = i_procNode->base.mBsPcId;
     currentNode = (request_node_class*)l_fpcNdRq_Queue.mpHead;
     while (currentNode != NULL) {
         currentNodeReq = currentNode->mNodeCrReq;
         if (currentNodeReq->mCreatingID == bsPcId)
             return 1;
-        currentNode = (request_node_class*)NODE_GET_NEXT((&currentNode->mBase));
+        currentNode = (request_node_class*)NODE_GET_NEXT((&currentNode->base));
     }
     return 0;
 }
@@ -203,8 +203,8 @@ node_create_request* fpcNdRq_ChangeNode(u32 i_requestSize, process_node_class* i
         if (req != NULL) {
             req->mpPhsHandler = methods;
             req->mNodeProc.mpNodeProc = i_procNode;
-            req->mNodeProc.mProcId = i_procNode->mBase.mBsPcId;
-            req->mpLayerClass = i_procNode->mBase.mLyTg.mpLayer;
+            req->mNodeProc.mProcId = i_procNode->base.mBsPcId;
+            req->mpLayerClass = i_procNode->base.mLyTg.mpLayer;
             req->mProcName = i_procName;
             req->mpUserData = i_data;
         }
@@ -228,8 +228,8 @@ node_create_request* fpcNdRq_DeleteNode(u32 i_requestSize, process_node_class* i
         if (req != NULL) {
             req->mpPhsHandler = methods;
             req->mNodeProc.mpNodeProc = i_procNode;
-            req->mNodeProc.mProcId = i_procNode->mBase.mBsPcId;
-            req->mpLayerClass = i_procNode->mBase.mLyTg.mpLayer;
+            req->mNodeProc.mProcId = i_procNode->base.mBsPcId;
+            req->mpLayerClass = i_procNode->base.mLyTg.mpLayer;
         }
         return req;
     } else {
@@ -254,7 +254,7 @@ node_create_request* fpcNdRq_CreateNode(u32 i_requestSize, s16 i_procName, void*
             req->mpPhsHandler = methods;
             if (layer->mLayerID != 0) {
                 req->mNodeProc.mpNodeProc = layer->mpPcNode;
-                req->mNodeProc.mProcId = layer->mpPcNode->mBase.mBsPcId;
+                req->mNodeProc.mProcId = layer->mpPcNode->base.mBsPcId;
             }
             req->mpLayerClass = layer;
             req->mProcName = i_procName;
@@ -307,7 +307,7 @@ s32 fpcNdRq_ReChangeNode(unsigned int i_requestID, s16 i_procName, void* i_data)
             }
             return 0;
         }
-        currentNode = (request_node_class*)NODE_GET_NEXT((&currentNode->mBase));
+        currentNode = (request_node_class*)NODE_GET_NEXT((&currentNode->base));
     }
     return 0;
 }

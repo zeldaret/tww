@@ -55,14 +55,14 @@ BOOL daSwItem_c::CreateInit() {
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
-    mCyl.SetR(mScale.x * 25.0f);
-    mCyl.SetH(mScale.y * 50.0f);
+    mCyl.SetR(scale.x * 25.0f);
+    mCyl.SetH(scale.y * 50.0f);
 
     if (fopAcM_isItem(this, itemBitNo) && itemBitNo != 0x7F) {
         return FALSE;
     }
 
-    fopDwTg_DrawQTo(&mDwTg);
+    fopDwTg_DrawQTo(&draw_tag);
     return TRUE;
 }
 
@@ -215,7 +215,7 @@ actor_process_profile_definition g_profile_SW_ITEM = {
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,
     /* ProcName     */ PROC_SW_ITEM,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSwItem_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

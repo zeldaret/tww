@@ -108,7 +108,7 @@ bool daBomb_c::chk_state(daBomb_c::State_e state) const {
 
 /* 800682C0-800682F0       .text change_state__8daBomb_cFQ28daBomb_c7State_e */
 void daBomb_c::change_state(daBomb_c::State_e new_state) {
-    mBase.mParameters = (mBase.mParameters & ~(((1 << PRM_STATE_W) - 1) << PRM_STATE_S)) | (new_state << PRM_STATE_S); // & 0xFF000000
+    base.mParameters = (base.mParameters & ~(((1 << PRM_STATE_W) - 1) << PRM_STATE_S)) | (new_state << PRM_STATE_S); // & 0xFF000000
 
     _prm_chk_version();
 }

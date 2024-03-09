@@ -181,11 +181,11 @@ scene_process_profile_definition g_profile_MENU_SCENE = {
     1,
     fpcPi_CURRENT_e,
     PROC_MENU_SCENE,
-    &g_fpcNd_Method.mBase,
+    &g_fpcNd_Method.base,
     sizeof(menu_of_scene_class),
     0,
     0,
-    &g_fopScn_Method.mBase,
+    &g_fopScn_Method.base,
     &l_dScnMenu_Method,
     NULL,
 };

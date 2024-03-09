@@ -66,7 +66,7 @@ s32 daObjAjavW_c::_create() {
                 ret = cPhs_ERROR_e;
             } else {
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-                mpModel->setBaseScale(mScale);
+                mpModel->setBaseScale(scale);
                 mDoMtx_stack_c::transS(current.pos);
                 mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -104,8 +104,8 @@ bool daObjAjavW_c::_execute() {
 
 /* 000004F4-0000056C       .text _draw__12daObjAjavW_cFv */
 bool daObjAjavW_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mBtkAnm.entry(mpModel->getModelData());
     mDoExt_modelUpdateDL(mpModel);
     return true;
@@ -149,7 +149,7 @@ actor_process_profile_definition g_profile_Obj_AjavW = {
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_AjavW,
-    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjAjavW_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,

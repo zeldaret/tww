@@ -43,7 +43,7 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 00000078-000000F8       .text set_mtx__12daRaceItem_cFv */
 void daRaceItem_c::set_mtx() {
-    mpModel->setBaseScale(mScale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -90,9 +90,9 @@ BOOL daRaceItem_c::CreateInit() {
     mCyl.SetStts(&mStts);
     f32 height = getHeight();
     f32 radius = getR();
-    if (mScale.x > 1.0f) {
-        height *= mScale.x;
-        radius *= mScale.x;
+    if (scale.x > 1.0f) {
+        height *= scale.x;
+        radius *= scale.x;
     }
     mCyl.SetR(radius);
     mCyl.SetH(height);
@@ -129,8 +129,8 @@ static BOOL daRaceItem_Execute(daRaceItem_c* i_this) {
 BOOL daRaceItem_c::execute() {
     field_0x634++;
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-    mEyePos = current.pos;
-    mEyePos.y += mScale.x * dItem_data::getH(m_itemNo) / 2.0f;
+    eyePos = current.pos;
+    eyePos.y += scale.x * dItem_data::getH(m_itemNo) / 2.0f;
     
     daPy_lk_c* player;
     cXyz headPos;
@@ -153,12 +153,12 @@ BOOL daRaceItem_c::execute() {
             current.angle.x = 0;
             shape_angle.z = 0;
             shape_angle.x = 0;
-            mScale.setall(1.0f);
+            scale.setall(1.0f);
 
             field_0x63C = 0xD;
 
             speed.set(0.0f, 23.0f, 0.0f);
-            mGravity = -6.0f;
+            gravity = -6.0f;
 
             mCyl.ClrTgHit();
             mCyl.ClrCoHit();
@@ -240,7 +240,7 @@ BOOL daRaceItem_c::execute() {
     }
 
     if(!checkOffsetPos()) {
-        mScale.setall(1.0f);
+        scale.setall(1.0f);
     }
 
     set_mtx();
@@ -277,7 +277,7 @@ extern actor_process_profile_definition g_profile_RACEITEM = {
     7,
     fpcPi_CURRENT_e,
     PROC_RACEITEM,
-    &g_fpcLf_Method.mBase,
+    &g_fpcLf_Method.base,
     sizeof(daRaceItem_c),
     0,
     0,
