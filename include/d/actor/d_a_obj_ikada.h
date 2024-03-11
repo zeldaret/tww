@@ -144,7 +144,7 @@ public:
     /* 0x0550 */ Mtx mMtx;
     /* 0x0580 */ dBgS_ObjAcch mObjAcch;
     /* 0x0744 */ dBgS_AcchCir mAcchCir;
-    /* 0x0784 */ u32 mFlagPcId;
+    /* 0x0784 */ uint mFlagPcId;
     /* 0x0788 */ cXyz mFlagOffset;
     /* 0x0794 */ f32 mFlagScale;
     /* 0x0798 */ J3DModel* mpRopeEnd;

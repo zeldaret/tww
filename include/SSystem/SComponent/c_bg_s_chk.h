@@ -17,7 +17,7 @@ class cBgS_Chk {
 private:
     /* 0x0 */ cBgS_PolyPassChk* mPolyPassChk;
     /* 0x4 */ cBgS_GrpPassChk* mGrpPassChk;
-    /* 0x8 */ u32 mActorPid;
+    /* 0x8 */ uint mActorPid;
     /* 0xC */ u8 unk_0x0C;
     /* 0x10 */  // __vtable__
 
@@ -35,8 +35,8 @@ public:
     }
     bool ChkSameActorPid(uint) const;
 
-    void SetActorPid(u32 pid) { mActorPid = pid; }
-    u32 GetActorPid() const { return mActorPid; }
+    void SetActorPid(uint pid) { mActorPid = pid; }
+    uint GetActorPid() const { return mActorPid; }
     void SetPolyPassChk(cBgS_PolyPassChk* p_chk) { mPolyPassChk = p_chk; }
     void SetGrpPassChk(cBgS_GrpPassChk* p_chk) { mGrpPassChk = p_chk; }
     cBgS_PolyPassChk* GetPolyPassChk() const { return mPolyPassChk; }

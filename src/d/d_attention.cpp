@@ -569,8 +569,8 @@ void dAttList_c::setActor(fopAc_ac_c* i_actor) {
 }
 
 /* 8009FAB4-8009FACC       .text getPId__10dAttHint_cFPv */
-u32 dAttHint_c::getPId(void* i_proc) {
-    return fpcM_GetID(i_proc);
+uint dAttHint_c::getPId(void* i_proc) {
+    return fopAcM_GetID(i_proc);
 }
 
 /* 8009FACC-8009FAFC       .text convPId__10dAttHint_cFUi */

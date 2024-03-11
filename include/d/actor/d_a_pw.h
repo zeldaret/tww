@@ -29,7 +29,7 @@ public:
     /* 0x366 */ s16 m366;
     /* 0x368 */ s16 m368;
     /* 0x36A */ u8 m36A[0x36C - 0x36A];
-    /* 0x36C */ int mJalhallaParentId;
+    /* 0x36C */ uint mJalhallaParentId;
     /* 0x370 */ u8 m370[0x374 - 0x370];
     /* 0x374 */ u32 m374;
     /* 0x378 */ s16 m378;

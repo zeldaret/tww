@@ -88,7 +88,7 @@ namespace daObjMknjD {
         /* 0x04E6 */ u8 mGiveItemNo;
         /* 0x04E8 */ cXyz mGoalPos;
         /* 0x04F4 */ u32 mMsgNo;
-        /* 0x04F8 */ u32 mMsgPID;
+        /* 0x04F8 */ uint mMsgPID;
         /* 0x04FC */ msg_class* mMsgPtr;
         /* 0x0500 */ s32 m0500;
         /* 0x0504 */ bool m0504;

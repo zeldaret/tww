@@ -353,7 +353,7 @@ class cCcD_Stts {
 private:
     /* 0x00 */ cXyz m_cc_move;
     /* 0x0C */ fopAc_ac_c* mActor;
-    /* 0x10 */ int mApid;
+    /* 0x10 */ uint mApid;
     /* 0x14 */ u8 mWeight;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ u8 mDmg;

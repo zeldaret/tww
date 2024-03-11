@@ -63,11 +63,11 @@ public:
     void setData(fopAc_ac_c*);
     void clearData();
 
-    u32 getID() const { return mID; }
+    uint getID() const { return mID; }
     fopAc_ac_c* getActor() { return mActor; }
 
 private:
-    /* 0x0 */ u32 mID;
+    /* 0x0 */ uint mID;
     /* 0x4 */ fopAc_ac_c* mActor;
 };  // Size: 0x8
 
@@ -1782,9 +1782,9 @@ public:
     virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && m3570 != 0; }
     virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[UNDER_MOVE0_e].getRate(); }
     virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[UNDER_MOVE0_e].getFrame(); }
-    virtual u32 getItemID() const { return mActorKeepEquip.getID(); }
-    virtual u32 getThrowBoomerangID() const { return mActorKeepThrow.getID(); }
-    virtual u32 getGrabActorID() const { return mActorKeepGrab.getID(); }
+    virtual uint getItemID() const { return mActorKeepEquip.getID(); }
+    virtual uint getThrowBoomerangID() const { return mActorKeepThrow.getID(); }
+    virtual uint getGrabActorID() const { return mActorKeepGrab.getID(); }
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
     virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }

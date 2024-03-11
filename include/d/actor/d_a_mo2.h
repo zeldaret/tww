@@ -114,7 +114,7 @@ public:
     /* 0x2951 */ u8 m2951;
     /* 0x2952 */ s16 m2952;
     /* 0x2954 */ int m2954;
-    /* 0x2958 */ int mWeaponPcId;
+    /* 0x2958 */ uint mWeaponPcId;
     /* 0x295C */ fopAc_ac_c* mpBomb;
     /* 0x2960 */ u16 m2960;
     /* 0x2962 */ u8 m2962[0x2968 - 0x2962];

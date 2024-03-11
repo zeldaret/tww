@@ -15,7 +15,7 @@ typedef int (*FastCreateReqFunc)(void*);
 typedef void (*fpcM_ManagementFunc)(void);
 typedef int (*fpcM_DrawIteraterFunc)(void*, void*);
 
-inline u32 fpcM_GetID(void* pProc) {
+inline uint fpcM_GetID(void* pProc) {
     return pProc != NULL ? ((base_process_class*)pProc)->mBsPcId : fpcM_ERROR_PROCESS_ID_e;
 }
 inline s16 fpcM_GetName(void* pActor) {
@@ -33,7 +33,7 @@ inline s16 fpcM_GetProfName(void* pActor) {
     return ((base_process_class*)pActor)->mProfName;
 }
 
-inline int fpcM_Create(s16 procName, FastCreateReqFunc createFunc, void* process) {
+inline uint fpcM_Create(s16 procName, FastCreateReqFunc createFunc, void* process) {
     return fpcSCtRq_Request(fpcLy_CurrentLayer(), procName, (stdCreateFunc)createFunc, NULL,
                             process);
 }

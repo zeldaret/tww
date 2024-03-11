@@ -30,7 +30,7 @@ public:
     /* 0x29B */ u8 mSwitchID;
     /* 0x29C */ J3DModel* mpModel;
     /* 0x2A0 */ J3DModel* mpModel2;
-    /* 0x2A4 */ int mTargetActorID;
+    /* 0x2A4 */ uint mTargetActorID;
     /* 0x2A8 */ mDoExt_brkAnm* mpBrkAnm1;
     /* 0x2AC */ mDoExt_brkAnm* mpBrkAnm2;
     /* 0x2B0 */ int m2B0;

@@ -121,7 +121,7 @@ BOOL daPy_lk_c::procFoodThrow() {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else {
             dComIfGp_event_reset();
-            u32 playerPID = fopAcM_GetID(this);
+            uint playerPID = fopAcM_GetID(this);
             dCam_getBody()->EndEventCamera(playerPID);
             endDemoMode();
         }
@@ -212,7 +212,7 @@ BOOL daPy_lk_c::procFoodSet() {
         } else if (m34D0 < 0) {
             dComIfGp_event_reset();
             deleteEquipItem(FALSE);
-            u32 playerPID = fopAcM_GetID(this);
+            uint playerPID = fopAcM_GetID(this);
             dCam_getBody()->EndEventCamera(playerPID);
             endDemoMode();
         } else if (m34D0 == 0) {

@@ -957,7 +957,7 @@ void daNpc_Ji1_c::createItem() {
         dComIfGs_onEventBit(0xF10);
     }
 
-    u32 itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
+    uint itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
     if(itemPID != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(itemPID);
     }

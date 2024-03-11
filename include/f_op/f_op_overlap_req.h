@@ -18,7 +18,7 @@ public:
     /* 0x10 */ s16 mProcName;
     /* 0x12 */ u8 field_0x12;
     /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ int mPId;
+    /* 0x14 */ uint mPId;
     /* 0x18 */ request_of_phase_process_class mPhs;
     /* 0x20 */ overlap_task_class * mpTask;
     /* 0x24 */ layer_class* pCurrentLayer;

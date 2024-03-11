@@ -148,7 +148,7 @@ void daGhostship_c::modePathMoveInit() {
 
 /* 0000077C-000007D0       .text modePathMove__13daGhostship_cFv */
 void daGhostship_c::modePathMove() {
-    if(pathId != 0xFF) {
+    if(mPathNo != 0xFF) {
         mPathSpeed = 10.0f;
         pathMove();
     }
@@ -209,8 +209,8 @@ void daGhostship_c::createInit() {
         dLib_setCirclePath(&mPaths[i]);
     }
 
-    if(pathId != 0xFF) {
-        mPath = dPath_GetRoomPath(pathId, fopAcM_GetRoomNo(this));
+    if(mPathNo != 0xFF) {
+        mPath = dPath_GetRoomPath(mPathNo, fopAcM_GetRoomNo(this));
         modePathMoveInit();
     }
     else {
@@ -246,7 +246,7 @@ void daGhostship_c::createInit() {
 /* 00000C78-00000C8C .text getArg__13daGhostship_cFv */
 void daGhostship_c::getArg() {
     u32 param = fopAcM_GetParam(this);
-    pathId = fopAcM_GetParamBit(param, 0x10, 8);
+    mPathNo = fopAcM_GetParamBit(param, 0x10, 8);
     moonPhase = fopAcM_GetParamBit(param, 0, 8);
 }
 

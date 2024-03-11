@@ -54,7 +54,7 @@ public:
     /* 0x1390 */ u8 m1390[0x1408 - 0x1390];
     /* 0x1408 */ int m1408;
     /* 0x140C */ u8 m140C[0x1430 - 0x140C];
-    /* 0x1430 */ int mCapeEntityId;
+    /* 0x1430 */ uint mCapeEntityId;
     /* 0x1434 */ dPa_cutTurnEcallBack_c m1434[3];
     /* 0x1464 */ cXyz m1464[10];
     /* 0x14DC */ u8 m14DC[0x150C - 0x14DC];

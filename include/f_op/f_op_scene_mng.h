@@ -24,7 +24,7 @@ inline layer_class * fpcM_Layer(const void* pProc) {
     return &((process_node_class*)pProc)->mLayer;
 }
 
-inline u32 fopScnM_GetID(void* proc) {
+inline uint fopScnM_GetID(void* proc) {
     return fpcM_GetID(proc);
 }
 

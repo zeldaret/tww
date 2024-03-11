@@ -869,10 +869,10 @@ public:
     static s8 getStayNo() { return mStayNo; }
     static s8 getMemoryBlockID(int i_roomNo) { return mStatus[i_roomNo].mMemBlockID; }
     static void onStatusDraw(int i_roomNo) { mStatus[i_roomNo].mDraw = true; }
-    static void setProcID(u32 id) { mProcID = id; }
-    static u32 getProcID() { return mProcID; }
+    static void setProcID(uint id) { mProcID = id; }
+    static uint getProcID() { return mProcID; }
     static void setStatusProcID(int i_roomNo, uint i_id) { mStatus[i_roomNo].mProcID = i_id; }
-    static int getStatusProcID(int i_roomNo) { return mStatus[i_roomNo].mProcID; }
+    static uint getStatusProcID(int i_roomNo) { return mStatus[i_roomNo].mProcID; }
     static dStage_darkStatus_c& getDarkStatus(int i_idx) { return mDarkStatus[i_idx]; }
     static char* getDemoArcName() { return mDemoArcName; }
     static u8 getDarkRatio() { return mDarkRatio; }
@@ -889,7 +889,7 @@ public:
     static dStage_roomStatus_c mStatus[64];
     static dStage_darkStatus_c mDarkStatus[8];
     static u8 mDarkRatio;
-    static u32 mProcID;
+    static uint mProcID;
     static s8 mStayNo;
     static s8 mOldStayNo;
     static s8 m_time_pass;

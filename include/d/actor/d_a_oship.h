@@ -103,8 +103,8 @@ public:
     /* 0xD08 */ cXyz mSmokePos;
     /* 0xD14 */ cXyz mFlagOffset;
     /* 0xD20 */ Mtx mFlagMtx;
-    /* 0xD50 */ int mFlagPcId;
-    /* 0xD54 */ int mBombPcId[1];
+    /* 0xD50 */ uint mFlagPcId;
+    /* 0xD54 */ uint mBombPcId[1];
     /* 0xD58 */ u8 mD58[0xD68 - 0xD58];
     /* 0xD68 */ f32 mVelocityFwdTarget;
     /* 0xD6C */ int mAimCounter;

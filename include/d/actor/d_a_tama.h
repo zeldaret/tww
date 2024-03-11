@@ -18,8 +18,7 @@ public:
     s32 _create();
 
 public:
-    /* Place member variables here */
-    /* 0x290 */ u32 mPartnerID;
+    /* 0x290 */ uint mPartnerID;
     /* 0x294 */ dBgS_ObjAcch mAcch;
     /* 0x458 */ dBgS_AcchCir mAcchCir;
     /* 0x498 */ dCcD_Stts mStts;

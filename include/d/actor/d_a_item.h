@@ -118,7 +118,7 @@ public:
     /* 0x66B */ u8 mItemStatus;
     /* 0x66C */ u8 mOnGroundTimer;
     /* 0x66D */ u8 field_0x66D[0x670 - 0x66D];
-    /* 0x670 */ u32 mDemoItemBsPcId;
+    /* 0x670 */ uint mDemoItemBsPcId;
     /* 0x674 */ dPa_rippleEcallBack mPtclRippleCb;
     /* 0x688 */ dPa_followEcallBack mPtclFollowCb;
     /* 0x69C */ dPa_smokeEcallBack mPtclSmokeCb;

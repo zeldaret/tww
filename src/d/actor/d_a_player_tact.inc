@@ -343,7 +343,7 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
         stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
         if (dStage_stagInfo_GetSTType(stag_info) == dStageType_SEA_e && m34CC != 1 && r30 != 0) {
             daShip_c* ship = dComIfGp_getShipActor();
-            u32 warpID = fopAcM_create(PROC_TORNADO, 1, &current.pos, current.roomNo);
+            uint warpID = fopAcM_create(PROC_TORNADO, 1, &current.pos, current.roomNo);
             ship->setTactWarpID(warpID);
         }
     }

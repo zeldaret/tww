@@ -54,7 +54,6 @@ BOOL daTama_c::_draw() {
 
 /* 0000011C-000002D4       .text _execute__8daTama_cFv */
 BOOL daTama_c::_execute() {
-    /* Nonmatching */
     fopNpc_npc_c* partner = (fopNpc_npc_c*)fopAcM_SearchByID(mPartnerID);
     bool del = true;
     if (partner != NULL) {

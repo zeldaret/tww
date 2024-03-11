@@ -25,7 +25,7 @@
 struct title_of_scene_class : public scene_class {
 public:
     /* 0x1C4 */ u32 pad[0x97];
-    /* 0x420 */ u32 mMoviePId;
+    /* 0x420 */ uint mMoviePId;
 
 #if VERSION == VERSION_PAL
     static daMP_c* mMp;

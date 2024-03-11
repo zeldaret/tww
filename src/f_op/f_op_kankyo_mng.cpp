@@ -48,12 +48,12 @@ void fopKyM_Delete(void* i_process) {
 }
 
 /* 8002A988-8002A9D8       .text fopKyM_Create__FsPFPv_iPv */
-int fopKyM_Create(s16 i_procName, fopKyM_CreateFunc i_createFunc, void* i_process) {
+uint fopKyM_Create(s16 i_procName, fopKyM_CreateFunc i_createFunc, void* i_process) {
     return fpcM_Create(i_procName, i_createFunc, i_process);
 }
 
 /* 8002A9D8-8002AA38       .text fopKyM_create__FsiP4cXyzP4cXyzPFPv_i */
-int fopKyM_create(s16 i_procName, int i_param, cXyz* i_pos, cXyz* i_scale, fopKyM_CreateFunc i_createFunc) {
+uint fopKyM_create(s16 i_procName, int i_param, cXyz* i_pos, cXyz* i_scale, fopKyM_CreateFunc i_createFunc) {
     fopKyM_prm_class* params = createAppend(i_param, i_pos, i_scale);
 
     if (params == NULL) {
@@ -76,7 +76,7 @@ base_process_class* fopKyM_fastCreate(s16 i_procName, int i_param, cXyz* i_pos, 
 }
 
 /* 8002AA9C-8002AB40       .text fopKyM_createWpillar__FPC4cXyzffi */
-int fopKyM_createWpillar(cXyz const* i_pos, f32 scaleXZ, f32 scaleY, int i_param) {
+uint fopKyM_createWpillar(cXyz const* i_pos, f32 scaleXZ, f32 scaleY, int i_param) {
     fopKyM_prm_class* params = fopKyM_CreateAppend();
 
     if (params == NULL) {

@@ -2378,7 +2378,7 @@ dStage_darkStatus_c dStage_roomControl_c::mDarkStatus[8] = {
     {},
 };
 
-u32 dStage_roomControl_c::mProcID;
+uint dStage_roomControl_c::mProcID;
 s8 dStage_roomControl_c::mStayNo;
 s8 dStage_roomControl_c::mOldStayNo;
 u8 dStage_roomControl_c::mDarkRatio;

@@ -24,7 +24,7 @@ public:
     /* 0x291*/  u8 field_0x291;
     /* 0x292*/  u8 field_0x292;
     /* 0x293*/  u8 field_0x293;
-    /* 0x294 */ s32 mMedliPID;
+    /* 0x294 */ uint mMedliPID;
     /* 0x298 */ s16 mEventIdx;
     /* 0x29A */ short field_0x29A;
 };

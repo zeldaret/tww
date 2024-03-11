@@ -123,7 +123,7 @@ namespace daObjFtree {
         /* 0x4CC */ dCcD_Stts m4CC;
         /* 0x508 */ dCcD_Cyl m508;
         /* 0x638 */ u8 m638[0x64C - 0x638];
-        /* 0x64C */ int mSpawnedHeartPieceProcessId;
+        /* 0x64C */ uint mSpawnedHeartPieceProcessId;
         /* 0x650 */ s16 m650;
         /* 0x652 */ s16 m652;
         /* 0x654 */ GXColorS10 m654;

@@ -22,7 +22,7 @@ public:
 class dAttHint_c {
 public:
     dAttHint_c() {}
-    u32 getPId(void*);
+    uint getPId(void*);
     fopAc_ac_c* convPId(uint);
     int request(fopAc_ac_c*, int);
     void init();
@@ -31,9 +31,9 @@ public:
     fopAc_ac_c* getZHintTarget() { return convPId(field_0x8); }
 
 private:
-    /* 0x0 */ u32 mHintActorID;
+    /* 0x0 */ uint mHintActorID;
     /* 0x4 */ int mPriority;
-    /* 0x8 */ u32 field_0x8;
+    /* 0x8 */ uint field_0x8;
 };
 
 class dAttCatch_c {
@@ -48,14 +48,14 @@ public:
     u8 getChangeItem() { return mChangeItem; }
 
 private:
-    /* 0x00 */ u32 field_0x0;
+    /* 0x00 */ uint field_0x0;
     /* 0x04 */ int field_0x4;
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ u8 field_0xc;
     /* 0x0D */ u8 field_0xd;
     /* 0x0E */ u8 field_0xe;
     /* 0x0F */ u8 field_0xf;
-    /* 0x10 */ u32 mCatghTargetID;
+    /* 0x10 */ uint mCatghTargetID;
     /* 0x14 */ u8 mChangeItem;
 };  // Size: 0x18
 
@@ -87,13 +87,13 @@ public:
     void request(fopAc_ac_c*, f32, f32, f32, s16, int);
     void requestF(fopAc_ac_c*, s16, int);
 
-    u32 getLookTarget() { return mLookTargetID; }
+    uint getLookTarget() { return mLookTargetID; }
 
 private:
-    /* 0x0 */ u32 field_0x0;
+    /* 0x0 */ uint field_0x0;
     /* 0x4 */ u32 field_0x4;
     /* 0x8 */ f32 field_0x8;
-    /* 0xC */ u32 mLookTargetID;
+    /* 0xC */ uint mLookTargetID;
 };  // Size: 0x10
 
 class dAttList_c {
@@ -101,12 +101,12 @@ public:
     fopAc_ac_c* getActor();
     void setActor(fopAc_ac_c*);
 
-    u32 getPid() { return mActorID; }
+    uint getPid() { return mActorID; }
 
     /* 0x0 */ f32 mWeight;
     /* 0x4 */ f32 mDistance;
     /* 0x8 */ u32 mType;
-    /* 0xC */ u32 mActorID;
+    /* 0xC */ uint mActorID;
 };  // Size: 0x10
 
 class dAttDraw_CallBack_c : public mDoExt_McaMorfCallBack1_c {

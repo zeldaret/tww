@@ -63,7 +63,7 @@ void dCcD_GStts::Move() {
 
 /* 800AB3DC-800AB46C       .text Init__9dCcD_SttsFiiP10fopAc_ac_c */
 void dCcD_Stts::Init(int weight, int param_1, fopAc_ac_c* pActor) {
-    u32 procId;
+    uint procId;
     if (pActor) {
         procId = fopAcM_GetID(pActor);
     } else {

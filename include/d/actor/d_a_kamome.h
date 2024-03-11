@@ -47,7 +47,7 @@ public:
     /* 0x2EC */ s16 mRiseTimer;
     /* 0x2EE */ u8 m2EE[0x2F0 - 0x2EE];
     /* 0x2F0 */ f32 mScale;
-    /* 0x2F4 */ int mEsaProcID;
+    /* 0x2F4 */ uint mEsaProcID;
     /* 0x2F8 */ fopAc_ac_c* mpTargetActor;
     /* 0x2FC */ s16 m2FC;
     /* 0x2FE */ u8 mbUsePathMovement;

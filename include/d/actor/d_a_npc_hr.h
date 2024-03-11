@@ -41,7 +41,7 @@ public:
     /* 0x0E8 */ cXyz mSquallPos[4];
     /* 0x118 */ u8 m118;
     /* 0x119 */ u8 m119[0x11C - 0x119];
-    /* 0x11C */ u32 mActorProcID;
+    /* 0x11C */ uint mActorProcID;
     /* 0x120 */ f32 m120;
     /* 0x124 */ f32 m124;
     /* 0x128 */ f32 m128;

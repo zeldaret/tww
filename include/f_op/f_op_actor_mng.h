@@ -39,7 +39,7 @@ struct fopAcM_prm_class {
     /* 0x16 */ u16 mSetId;
     /* 0x18 */ fopAcM_prmScale_class mScale;
     /* 0x1B */ u8 mGbaName;
-    /* 0x1C */ s32 mParentPcId;  // parent process ID
+    /* 0x1C */ uint mParentPcId;  // parent process ID
     /* 0x20 */ s8 mSubtype;
     /* 0x21 */ s8 mRoomNo;
 };
@@ -81,7 +81,7 @@ inline s8 fopAcM_GetRoomNo(fopAc_ac_c* pActor) {
     return pActor->current.roomNo;
 }
 
-inline u32 fopAcM_GetID(void* pActor) {
+inline uint fopAcM_GetID(void* pActor) {
     return fpcM_GetID(pActor);
 }
 
@@ -419,13 +419,13 @@ void fopAcM_Log(fopAc_ac_c* p_actor, char* str);
 s32 fopAcM_delete(fopAc_ac_c* p_actor);
 s32 fopAcM_delete(uint actorID);
 
-s32 fopAcM_create(s16 i_procName, u32 i_parameter, cXyz* i_pos = NULL, int i_roomNo = -1,
-                  csXyz* i_angle = NULL, cXyz* i_scale = NULL, s8 i_subType = -1,
-                  createFunc i_createFunc = NULL);
+uint fopAcM_create(s16 i_procName, u32 i_parameter, cXyz* i_pos = NULL, int i_roomNo = -1,
+                   csXyz* i_angle = NULL, cXyz* i_scale = NULL, s8 i_subType = -1,
+                   createFunc i_createFunc = NULL);
 
-s32 fopAcM_create(char*, u32 i_parameter, cXyz* i_pos = NULL, int i_roomNo = -1,
-                  csXyz* i_angle = NULL, cXyz* i_scale = NULL,
-                  createFunc i_createFunc = NULL);
+uint fopAcM_create(char*, u32 i_parameter, cXyz* i_pos = NULL, int i_roomNo = -1,
+                   csXyz* i_angle = NULL, cXyz* i_scale = NULL,
+                   createFunc i_createFunc = NULL);
 
 inline s32 fopAcM_create(s16 i_procName, createFunc i_createFunc, void*);
 
@@ -437,15 +437,19 @@ void* fopAcM_fastCreate(char* p_actorName, u32 parameter, cXyz* pActorPos = NULL
                         csXyz* p_angle = NULL, cXyz* p_scale = NULL,
                         createFunc p_createFunc = NULL, void* p_createFuncData = NULL);
 
-s32 fopAcM_createChild(s16 procName, uint parentPId, u32 parameters, cXyz* p_pos,
-                       int roomNo, csXyz* p_angle, cXyz* p_scale = NULL, s8 subType = -1,
-                       createFunc p_createFunc = NULL);
+uint fopAcM_createChild(s16 procName, uint parentPId, u32 parameters, cXyz* p_pos,
+                        int roomNo, csXyz* p_angle, cXyz* p_scale = NULL, s8 subType = -1,
+                        createFunc p_createFunc = NULL);
 
-s32 fopAcM_createChild(char* pProcNameString, uint parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc);
+uint fopAcM_createChild(char* pProcNameString, uint parentPcId, u32 parameter, cXyz* pPos,
+                        int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc);
 
-s32 fopAcM_createChildFromOffset(s16 procName, uint parentProcID, u32 actorParams,
-                                 cXyz* p_pos, int roomNo, csXyz* p_angle,
-                                 cXyz* p_scale, s8 subType, createFunc p_createFunc);
+uint fopAcM_createChildFromOffset(s16 procName, uint parentProcID, u32 actorParams,
+                                  cXyz* p_pos, int roomNo, csXyz* p_angle,
+                                  cXyz* p_scale, s8 subType, createFunc p_createFunc);
+uint fopAcM_createChildFromOffset(char* pProcNameString, uint parentPcId, u32 parameter,
+                                  cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale,
+                                  createFunc createFunc);
 
 void fopAcM_DeleteHeap(fopAc_ac_c* p_actor);
 
@@ -509,37 +513,37 @@ fopAc_ac_c* fopAcM_getTalkEventPartner(fopAc_ac_c*);
 fopAc_ac_c* fopAcM_getItemEventPartner(fopAc_ac_c*);
 fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c*);
 
-s32 fopAcM_createItemForPresentDemo(cXyz* p_pos, int i_itemNo, u8 argFlag = 0x00, int i_itemBitNo = -1,
-                                    int i_roomNo = -1, csXyz* p_angle = NULL, cXyz* p_scale = NULL);
+uint fopAcM_createItemForPresentDemo(cXyz* p_pos, int i_itemNo, u8 argFlag = 0x00, int i_itemBitNo = -1,
+                                     int i_roomNo = -1, csXyz* p_angle = NULL, cXyz* p_scale = NULL);
 
-s32 fopAcM_createItemForTrBoxDemo(cXyz* p_pos, int i_itemNo, int i_itemBitNo = -1,
-                                  int i_roomNo = -1, csXyz* p_angle = NULL, cXyz* p_scale = NULL);
+uint fopAcM_createItemForTrBoxDemo(cXyz* p_pos, int i_itemNo, int i_itemBitNo = -1,
+                                   int i_roomNo = -1, csXyz* p_angle = NULL, cXyz* p_scale = NULL);
 
-s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int i_roomNo, int,
-                               csXyz* p_angle, int, cXyz* p_scale = NULL);
+uint fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int i_roomNo, int,
+                                csXyz* p_angle, int, cXyz* p_scale = NULL);
 
-s32 fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int i_roomNo,
-                                   csXyz* angle, cXyz* scale, int param_7);
+uint fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int i_roomNo,
+                                    csXyz* angle, cXyz* scale, int param_7);
 
-s32 fopAcM_createShopItem(cXyz* p_pos, int i_itemNo, csXyz* p_angle, int roomNo, cXyz* scale = NULL,
-                          createFunc createFunc = NULL);
+uint fopAcM_createShopItem(cXyz* p_pos, int i_itemNo, csXyz* p_angle, int roomNo, cXyz* scale = NULL,
+                           createFunc createFunc = NULL);
 
-s32 fopAcM_createRaceItem(cXyz* p_pos, int i_itemNo, int i_itemBitNo, csXyz* p_angle, int roomNo,
-                          cXyz* scale, int param_7);
+uint fopAcM_createRaceItem(cXyz* p_pos, int i_itemNo, int i_itemBitNo, csXyz* p_angle, int roomNo,
+                           cXyz* scale, int param_7);
 
-s32 fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int roomNo, csXyz* p_angle, int itemStealNum);
+uint fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int roomNo, csXyz* p_angle, int itemStealNum);
 
-s32 fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle,
-                          int roomNo, cXyz* scale, u8 argFlag);
+uint fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle,
+                           int roomNo, cXyz* scale, u8 argFlag);
 
-s32 fopAcM_createItemForBoss(cXyz* p_pos, int param_2, int roomNo, csXyz* p_angle,
-                             cXyz* p_scale = NULL, int param_8 = 0);
+uint fopAcM_createItemForBoss(cXyz* p_pos, int param_2, int roomNo, csXyz* p_angle,
+                              cXyz* p_scale = NULL, int param_8 = 0);
 
 daItem_c* fopAcM_createItemForSimpleDemo(cXyz* p_pos, int i_itemNo, int i_roomNo,
                                          csXyz* p_angle, cXyz* p_scale, f32 speedF, f32 speedY);
 
-s32 fopAcM_createItem(cXyz* p_pos, int itemNo, int param_3, int roomNo, int type, csXyz* p_angle,
-                      int action, cXyz* p_scale = NULL);
+uint fopAcM_createItem(cXyz* p_pos, int itemNo, int param_3, int roomNo, int type, csXyz* p_angle,
+                       int action, cXyz* p_scale = NULL);
 
 void* fopAcM_fastCreateItem2(cXyz* p_pos, int itemNo, int param_3, int roomNo, int param_5,
                              csXyz* p_angle, int, cXyz* p_scale = NULL);
@@ -554,7 +558,7 @@ BOOL stealItem_CB(void* actor);
 
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo);
 
-s32 fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health = 0, u8 i_itemBitNo = -1);
+uint fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health = 0, u8 i_itemBitNo = -1);
 void fopAcM_setCarryNow(fopAc_ac_c* i_this, BOOL stageLayer);
 void fopAcM_cancelCarryNow(fopAc_ac_c* i_this);
 s32 fopAcM_otoCheck(fopAc_ac_c*, f32);

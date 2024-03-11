@@ -93,7 +93,7 @@ s32 fpcSCtRq_Cancel(standard_create_request_class* i_SCtReq) {
 }
 
 /* 8004086C-80040900       .text fpcSCtRq_Request__FP11layer_classsPFPvPv_iPvPv */
-s32 fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc i_createFunc, void* param_4, void* param_5) {
+uint fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc i_createFunc, void* param_4, void* param_5) {
     static create_request_method_class submethod = {
         (cPhs__Handler)fpcSCtRq_Handler,
         (process_method_func)fpcSCtRq_Cancel,

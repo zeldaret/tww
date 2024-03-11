@@ -225,17 +225,17 @@ u32 fopMsgM_searchMessageNumber(u32) {
 }
 
 /* 8002B634-8002B778       .text fopMsgM_messageSet__FUlP10fopAc_ac_c */
-int fopMsgM_messageSet(u32, fopAc_ac_c*) {
+uint fopMsgM_messageSet(u32, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 8002B778-8002B8A4       .text fopMsgM_messageSet__FUlP4cXyz */
-int fopMsgM_messageSet(u32, cXyz*) {
+uint fopMsgM_messageSet(u32, cXyz*) {
     /* Nonmatching */
 }
 
 /* 8002B8A4-8002B9C4       .text fopMsgM_messageSet__FUl */
-int fopMsgM_messageSet(u32) {
+uint fopMsgM_messageSet(u32) {
     /* Nonmatching */
 }
 

@@ -514,7 +514,7 @@ public:
     /* 0x30D0 */ f32 m30D0;
     /* 0x30D4 */ ActionFunc mCurrPlayerActionFunc;
     /* 0x30E0 */ ActionFunc mCurrNpcActionFunc;
-    /* 0x30EC */ u32 mMsgId;
+    /* 0x30EC */ u32 mMsgNo;
     /* 0x30F0 */ u32 m30F0;
     /* 0x30F4 */ u8 m30F4[0x30F8 - 0x30F4];
     /* 0x30F8 */ f32 m30F8;

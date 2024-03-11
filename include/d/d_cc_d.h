@@ -140,10 +140,10 @@ public:
     /* 0x05 */ u8 mTgSpl;
     /* 0x06 */ u8 mRoomId;
     /* 0x08 */ u16 mActorPerfTblId;
-    /* 0x0C */ int mAtApid;
-    /* 0x10 */ int mAtOldApid;
-    /* 0x14 */ int mTgApid;
-    /* 0x18 */ int mTgOldApid;
+    /* 0x0C */ uint mAtApid;
+    /* 0x10 */ uint mAtOldApid;
+    /* 0x14 */ uint mTgApid;
+    /* 0x18 */ uint mTgOldApid;
     /* 0x1C */ int field_0x1C;
 };  // Size = 0x20
 
@@ -179,7 +179,7 @@ public:
     /* 0x00 */ u32 mSPrm;
     /* 0x04 */ u32 mRPrm;
     /* 0x08 */ dCcD_HitCallback mHitCallback;
-    /* 0x0C */ u32 mApid;
+    /* 0x0C */ uint mApid;
     /* 0x10 */ fopAc_ac_c* mAc;
     /* 0x14 */ s8 mEffCounter;
     /* 0x15 */ u8 field_0x15[3];

@@ -1249,7 +1249,7 @@ int phase_1(dScnPly_ply_c* i_this) {
         delete l_lkDemoAnmCommand;
     }
 
-    u32 id = fopScnM_GetID(i_this);
+    uint id = fopScnM_GetID(i_this);
     dStage_roomControl_c::setProcID(id);
 
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());

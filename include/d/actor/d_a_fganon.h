@@ -46,7 +46,7 @@ public:
     /* 0x68F */ u8 m68F;
     /* 0x690 */ u8 m690;
     /* 0x691 */ u8 m691[0x6B4 - 0x691];
-    /* 0x6B4 */ int mCapeID;
+    /* 0x6B4 */ uint mCapeID;
     /* 0x6B8 */ dBgS_AcchCir m6B8;
     /* 0x6F8 */ dBgS_Acch m6F8;
     /* 0x8BC */ dCcD_Stts mStts;

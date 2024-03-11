@@ -87,7 +87,7 @@ public:
     /* 0x606 */ u8 field_0x606[0x608 - 0x606];
     /* 0x608 */ s16 mSparkleTimer;
     /* 0x60C */ JPABaseEmitter* mpSparkleEmitter;
-    /* 0x610 */ u32 mHitActorProcID;
+    /* 0x610 */ uint mHitActorProcID;
     /* 0x614 */ s32 mHitJointIndex;
     /* 0x618 */ cXyz field_0x618;
     /* 0x624 */ u8 field_0x624[0x660 - 0x624];
@@ -96,7 +96,7 @@ public:
     /* 0x668 */ dPa_followEcallBack mBlurFollowCb;
     /* 0x67C */ csXyz mBlurAngle;
     /* 0x682 */ u8 field_0x682;
-    /* 0x684 */ u32 mLightEffPID;
+    /* 0x684 */ uint mLightEffPID;
     /* 0x688 */ bool mbHasLightEff;
     /* 0x68C */ daArrow_c_ProcFunc mCurrProcFunc;
     /* 0x698 */ bool field_0x698;

@@ -9,7 +9,7 @@
 // the DOL, even though this is an ugly hack and they're now in the wrong translation unit instead.
 #include "d/actor/d_a_player.h"
 void daPy_py_c::onFrollCrashFlg(u32) {}
-u32 daPy_py_c::getGrabActorID() const { return fpcM_ERROR_PROCESS_ID_e; }
+uint daPy_py_c::getGrabActorID() const { return fpcM_ERROR_PROCESS_ID_e; }
 
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_draw_tag.h"

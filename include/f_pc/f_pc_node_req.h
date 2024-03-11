@@ -17,7 +17,7 @@ typedef struct node_create_request_method_class {
 // needed to match struct copy
 typedef struct unk_process_node_class {
     process_node_class* mpNodeProc;
-    u32 mProcId;
+    uint mProcId;
 } unk_process_node_class;
 
 typedef struct node_create_request {
@@ -30,7 +30,7 @@ typedef struct node_create_request {
     s32 mRequestId;
     unk_process_node_class mNodeProc;
     layer_class* mpLayerClass;
-    u32 mCreatingID;
+    uint mCreatingID;
     s16 mProcName;
     void* mpUserData;
     s16 unk_0x60;

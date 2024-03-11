@@ -23,7 +23,7 @@ typedef struct create_request {
     process_method_tag_class mMtdTg;
     create_request_method_class* mpCtRqMtd;
     void* mpUnk1;
-    s32 mBsPcId;
+    uint mBsPcId;
     struct base_process_class* mpRes;
     layer_class* mpLayer;
 } create_request;  // Size: 0x48

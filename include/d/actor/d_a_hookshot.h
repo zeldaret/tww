@@ -20,7 +20,7 @@ public:
     
     int getChainCnt() { return mChainCnt; }
     cXyz getMoveVec() const { return mMoveVec; }
-    u32 getCarryActorID() const { return mCarryActorID; }
+    uint getCarryActorID() const { return mCarryActorID; }
     void getHookAngle() {}
     MtxP getMtxTop() { return mMtx; }
     void getObjHookFlg() const {}
@@ -71,7 +71,7 @@ public:
     /* 0x398 */ dCcD_Stts mStts;
     /* 0x3D4 */ dCcD_Cps mCps;
     /* 0x50C */ cXyz m50C;
-    /* 0x518 */ u32 mCarryActorID;
+    /* 0x518 */ uint mCarryActorID;
     /* 0x51C */ Mtx mMtx;
     /* 0x54C */ ProcFunc mCurrProcFunc;
 };

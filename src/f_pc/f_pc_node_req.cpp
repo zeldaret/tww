@@ -138,7 +138,7 @@ s32 fpcNdRq_Handler() {
 
 /* 8003F6BC-8003F728       .text fpcNdRq_IsPossibleTarget__FP18process_node_class */
 s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
-    s32 bsPcId = i_procNode->base.mBsPcId;
+    uint bsPcId = i_procNode->base.mBsPcId;
     request_node_class* currentNode;
     node_create_request* currentNdCr;
     currentNode = (request_node_class*)l_fpcNdRq_Queue.mpHead;
@@ -155,7 +155,7 @@ s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
 s32 fpcNdRq_IsIng(process_node_class* i_procNode) {
     request_node_class* currentNode;
     node_create_request* currentNodeReq;
-    s32 bsPcId = i_procNode->base.mBsPcId;
+    uint bsPcId = i_procNode->base.mBsPcId;
     currentNode = (request_node_class*)l_fpcNdRq_Queue.mpHead;
     while (currentNode != NULL) {
         currentNodeReq = currentNode->mNodeCrReq;

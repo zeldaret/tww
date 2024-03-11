@@ -134,7 +134,7 @@ bool daSwItem_c::_execute() {
         }
 
         csXyz angle(0, home.angle.y, 0);
-        u32 itemProcId = fopAcM_createItemFromTable(
+        uint itemProcId = fopAcM_createItemFromTable(
             &current.pos, itemTbl, itemBitNo,
             fopAcM_GetHomeRoomNo(this), 0, &angle, 1
         );

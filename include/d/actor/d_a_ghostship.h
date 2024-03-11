@@ -34,7 +34,7 @@ public:
 
 public:
     /* 0x290 */ u32 mMode;
-    /* 0x294 */ s32 pathId;
+    /* 0x294 */ s32 mPathNo;
     /* 0x298 */ u8 moonPhase;
     /* 0x29C */ cXyz mCurPntPos;
     /* 0x2A8 */ s8 mPathPntNo;

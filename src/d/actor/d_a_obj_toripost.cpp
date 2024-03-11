@@ -166,7 +166,7 @@ void daObjTpost_c::cutPresentStart(int staffIdx) {
 
 /* 000003D8-00000474       .text cutPresentProc__12daObjTpost_cFi */
 void daObjTpost_c::cutPresentProc(int staffIdx) {
-    u32 itemPID = fopAcM_createItemForPresentDemo(&current.pos, m_letter[mNumReadable].mItemNo);
+    uint itemPID = fopAcM_createItemForPresentDemo(&current.pos, m_letter[mNumReadable].mItemNo);
     if(itemPID != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(itemPID);
         dComIfGp_evmng_cutEnd(staffIdx);

@@ -60,10 +60,10 @@ public:
     /* 0x1DA2 */ u8 m1DA2[0x1DA4 - 0x1DA2];
     /* 0x1DA4 */ cXyz m1DA4[3];
     /* 0x1DC8 */ u8 m1DC8[0x1DCC - 0x1DC8];
-    /* 0x1DCC */ int mHeldWeaponEntityId;
+    /* 0x1DCC */ uint mHeldWeaponEntityId;
     /* 0x1DD0 */ u8 m1DD0;
     /* 0x1DD1 */ u8 m1DD1[0x1DD4 - 0x1DD1];
-    /* 0x1DD4 */ int mUpperBodyEntityId;
+    /* 0x1DD4 */ uint mUpperBodyEntityId;
     /* 0x1DD8 */ u8 m1DD8;
     /* 0x1DD9 */ u8 m1DD9[0x1DDA - 0x1DD9];
     /* 0x1DDA */ s16 m1DDA;

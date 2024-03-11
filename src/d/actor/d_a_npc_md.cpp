@@ -2056,10 +2056,10 @@ BOOL daNpc_Md_c::actionLookDown(int) {
 /* 0000CB8C-0000CC10       .text talk_init__10daNpc_Md_cFv */
 BOOL daNpc_Md_c::talk_init() {
     if (l_msgId == fpcM_ERROR_PROCESS_ID_e) {
-        if (mMsgId == 0x5AC) {
+        if (mMsgNo == 0x5AC) {
             l_msgId = fopMsgM_tactMessageSet();
         } else {
-            l_msgId = fopMsgM_messageSet(mMsgId, this);
+            l_msgId = fopMsgM_messageSet(mMsgNo, this);
         }
     } else {
         l_msg = fopMsgM_SearchByID(l_msgId);
@@ -2075,9 +2075,9 @@ BOOL daNpc_Md_c::talk(int r4) {
     u16 msgStatus = l_msg->mStatus;
     u8 msgAnmAtr = dComIfGp_getMesgAnimeAttrInfo();
     if (msgStatus == fopMsgStts_MSG_DISPLAYED_e) {
-        l_msg->mStatus = next_msgStatus(&mMsgId);
+        l_msg->mStatus = next_msgStatus(&mMsgNo);
         if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
-            fopMsgM_messageSet(mMsgId);
+            fopMsgM_messageSet(mMsgNo);
             m313A = 0;
         }
     } else if (msgStatus == fopMsgStts_UNK15_e) {
@@ -2093,7 +2093,7 @@ BOOL daNpc_Md_c::talk(int r4) {
             }
         }
     } else if (msgStatus == fopMsgStts_MSG_TYPING_e) {
-        if (m313A == 0 && !fopAcM_checkCarryNow(this) && !isShipRide() && mMsgId != 0x05AC) {
+        if (m313A == 0 && !fopAcM_checkCarryNow(this) && !isShipRide() && mMsgNo != 0x05AC) {
             int anmType = getAnmType(msgAnmAtr);
             if (anmType >= 0) {
                 setAnm(anmType);
@@ -2105,7 +2105,7 @@ BOOL daNpc_Md_c::talk(int r4) {
         return TRUE;
     }
     
-    if (!fopAcM_checkCarryNow(this) && !isShipRide() && mMsgId != 0x05AC) {
+    if (!fopAcM_checkCarryNow(this) && !isShipRide() && mMsgNo != 0x05AC) {
         if (m313A == 1 && msgAnmAtr == 0x14 && m312A != 0) {
             setAnm(0x1B);
             m313A = 1;

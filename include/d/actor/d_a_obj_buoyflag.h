@@ -48,7 +48,7 @@ namespace daObjBuoyflag {
     
     class Act_c : public fopAc_ac_c {
     public:
-        static s32 make_norm(uint parentPId, cXyz* pos, int roomNo, csXyz* angle) {
+        static uint make_norm(uint parentPId, cXyz* pos, int roomNo, csXyz* angle) {
             u32 params = prm_make(static_cast<Type_e>(0), static_cast<Texture_e>(0), false); // TODO: placeholder
             return fopAcM_createChild(PROC_Obj_Buoyflag, parentPId, params, pos, roomNo, angle);
         }
