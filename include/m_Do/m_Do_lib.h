@@ -14,8 +14,8 @@ struct mDoLib_clipper {
         mClipper.calcViewFrustum();
     }
 
-    static s32 clip(const Mtx m, const Vec* max, const Vec* min) {
-        return mClipper.clip(m, (Vec*)max, (Vec*)min);
+    static s32 clip(const Mtx m, Vec* max, Vec* min) {
+        return mClipper.clip(m, max, min);
     }
 
     static s32 clip(const Mtx m, Vec center, f32 radius) {

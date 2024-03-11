@@ -1466,7 +1466,7 @@ void daAgb_c::modeMove() {
             if (attList) {
                 fopAc_ac_c* r3 = attList->getActor();
                 if (r3) {
-                    if (fopAcM_CheckStatusMap(r3, 0) && !fopAcM_checkStatus(r3, fopAcStts_BOSS_e) && fopAcM_GetName(r3) != PROC_FGANON) {
+                    if (fopAcM_CheckStatusMap(r3, 0) && !fopAcM_CheckStatus(r3, fopAcStts_BOSS_e) && fopAcM_GetName(r3) != PROC_FGANON) {
                         current.pos = r3->current.pos;
                         home.pos = r3->current.pos;
                         setTargetID(attList->getPid());

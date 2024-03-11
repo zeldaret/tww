@@ -193,7 +193,7 @@ void daHookshot_rockLineCallback(fopAc_ac_c* hookshot_actor, dCcD_GObjInf* objIn
     f32 f1 = i_this->m2CC.abs2(i_this->current.pos);
     if (f1 > f31) {
         i_this->m2CC = *objInf->GetAtHitPosP();
-        if (fopAcM_checkStatus(collided_actor, fopAcStts_UNK80000_e | fopAcStts_UNK200000_e | fopAcStts_UNK10000000_e)) {
+        if (fopAcM_CheckStatus(collided_actor, fopAcStts_UNK80000_e | fopAcStts_UNK200000_e | fopAcStts_UNK10000000_e)) {
             i_this->m2B0 = 1;
         } else {
             i_this->m2B0 = 0;
@@ -319,7 +319,7 @@ static BOOL daHookshot_IsDelete(daHookshot_c* i_this) {
 BOOL daHookshot_c::hookshot_delete() {
     if (mCarryActorID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* hooked_actor = fopAcM_SearchByID(mCarryActorID);
-        if (hooked_actor && fopAcM_checkStatus(hooked_actor, fopAcStts_HOOK_CARRY_e)) {
+        if (hooked_actor && fopAcM_CheckStatus(hooked_actor, fopAcStts_HOOK_CARRY_e)) {
             fopAcM_cancelHookCarryNow(hooked_actor);
             mCarryActorID = fpcM_ERROR_PROCESS_ID_e;
         }

@@ -15,13 +15,13 @@ typedef int (*FastCreateReqFunc)(void*);
 typedef void (*fpcM_ManagementFunc)(void);
 typedef int (*fpcM_DrawIteraterFunc)(void*, void*);
 
-inline u32 fpcM_GetID(const void* pProc) {
+inline u32 fpcM_GetID(void* pProc) {
     return pProc != NULL ? ((base_process_class*)pProc)->mBsPcId : fpcM_ERROR_PROCESS_ID_e;
 }
-inline s16 fpcM_GetName(const void* pActor) {
+inline s16 fpcM_GetName(void* pActor) {
     return ((base_process_class*)pActor)->mProcName;
 }
-inline u32 fpcM_GetParam(const void* pActor) {
+inline u32 fpcM_GetParam(void* pActor) {
     return ((base_process_class*)pActor)->mParameters;
 }
 
@@ -29,7 +29,7 @@ inline void fpcM_SetParam(void* p_actor, u32 param) {
     ((base_process_class*)p_actor)->mParameters = param;
 }
 
-inline s16 fpcM_GetProfName(const void* pActor) {
+inline s16 fpcM_GetProfName(void* pActor) {
     return ((base_process_class*)pActor)->mProfName;
 }
 
@@ -38,7 +38,7 @@ inline int fpcM_Create(s16 procName, FastCreateReqFunc createFunc, void* process
                             process);
 }
 
-inline s16 fpcM_DrawPriority(const void* param_0) {
+inline s16 fpcM_DrawPriority(void* param_0) {
     return fpcLf_GetPriority((leafdraw_class*)param_0);
 }
 
@@ -62,7 +62,7 @@ inline process_profile_definition* fpcM_GetProfile(void* proc) {
     return (process_profile_definition*)((base_process_class*)proc)->mpProf;
 }
 
-inline void* fpcM_GetAppend(const void* proc) {
+inline void* fpcM_GetAppend(void* proc) {
     return ((base_process_class*)proc)->mpUserData;
 }
 
@@ -74,7 +74,7 @@ inline void* fpcM_LyJudge(process_node_class* i_node, fpcLyIt_JudgeFunc i_func, 
     return fpcLyIt_Judge(&i_node->mLayer, i_func, i_data);
 }
 
-inline s8 fpcM_CreateResult(const void* pActor) {
+inline s8 fpcM_CreateResult(void* pActor) {
     return ((base_process_class*)pActor)->mCreateResult;
 }
 

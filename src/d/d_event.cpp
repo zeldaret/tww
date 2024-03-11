@@ -632,22 +632,22 @@ s32 dEvt_control_c::moveApproval(void* actor) {
         break;
     }
 
-    if (fopAcM_checkStatus(i_ac, fopAcStts_FORCEMOVE_e))
+    if (fopAcM_CheckStatus(i_ac, fopAcStts_FORCEMOVE_e))
         return dEvtMove_FORCE_e;
 
-    if (getMode() == dEvtMode_TALK_e && fopAcM_checkStatus(i_ac, fopAcStts_UNK40_e))
+    if (getMode() == dEvtMode_TALK_e && fopAcM_CheckStatus(i_ac, fopAcStts_UNK40_e))
         return dEvtMove_MOVE_e;
     if (dComIfGp_demo_mode() == 1)
         return dEvtMove_MOVE_e;
-    if (fopAcM_checkStatus(i_ac, fopAcStts_UNK800_e))
+    if (fopAcM_CheckStatus(i_ac, fopAcStts_UNK800_e))
         return dEvtMove_MOVE_e;
-    if ((dComIfGp_event_getMode() == dEvtMode_COMPULSORY_e || dComIfGp_event_getMode() == dEvtMode_TALK_e) && fopAcM_checkStatus(i_ac, fopAcStts_BOSS_e))
+    if ((dComIfGp_event_getMode() == dEvtMode_COMPULSORY_e || dComIfGp_event_getMode() == dEvtMode_TALK_e) && fopAcM_CheckStatus(i_ac, fopAcStts_BOSS_e))
         return dEvtMove_NOMOVE_e;
-    if (chkEventFlag(0x80) && fopAcM_checkStatus(i_ac, fopAcStts_BOSS_e))
+    if (chkEventFlag(0x80) && fopAcM_CheckStatus(i_ac, fopAcStts_BOSS_e))
         return dEvtMove_NOMOVE_e;
-    if (fopAcM_checkStatus(i_ac, fopAcStts_UNK4000_e))
+    if (fopAcM_CheckStatus(i_ac, fopAcStts_UNK4000_e))
         return dEvtMove_MOVE_e;
-    return fopAcM_checkStatus(i_ac, fopAcStts_CARRY_e) ? dEvtMove_MOVE_e : dEvtMove_NOMOVE_e;
+    return fopAcM_CheckStatus(i_ac, fopAcStts_CARRY_e) ? dEvtMove_MOVE_e : dEvtMove_NOMOVE_e;
 }
 
 /* 80071418-80071468       .text compulsory__14dEvt_control_cFPvPCcUs */

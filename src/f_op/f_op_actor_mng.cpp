@@ -1326,7 +1326,7 @@ void fopAcM_setCarryNow(fopAc_ac_c* i_this, BOOL stageLayer) {
 
 /* 80027E5C-80027ED8       .text fopAcM_cancelCarryNow__FP10fopAc_ac_c */
 void fopAcM_cancelCarryNow(fopAc_ac_c* i_this) {
-    if (fopAcM_checkStatus(i_this, fopAcStts_CARRY_e)) {
+    if (fopAcM_CheckStatus(i_this, fopAcStts_CARRY_e)) {
         fopAcM_OffStatus(i_this, fopAcStts_CARRY_e);
         fopAcM_setRoomLayer(i_this, fopAcM_GetRoomNo(i_this));
         i_this->shape_angle.z = 0;

@@ -202,7 +202,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
         atInfo->m0C.y = cM_atan2s(-f2, -f0);
         
         if (atInfo->mpObj->ChkAtType(AT_TYPE_HOOKSHOT)) {
-            if (fopAcM_checkStatus(tgActor, fopAcStts_UNK80000_e | fopAcStts_HOOK_CARRY_e | fopAcStts_UNK200000_e)) {
+            if (fopAcM_CheckStatus(tgActor, fopAcStts_UNK80000_e | fopAcStts_HOOK_CARRY_e | fopAcStts_UNK200000_e)) {
                 atInfo->mDamage = 0;
             }
         }

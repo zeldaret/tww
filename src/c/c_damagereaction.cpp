@@ -228,7 +228,7 @@ BOOL enemy_ice(enemyice* ei) {
         if (ei->m00C != 1) {
             ac->attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
             ac->attention_info.distances[4] = 0x12;
-            if (fopAcM_checkStatus(ac, fopAcStts_CARRY_e)) {
+            if (fopAcM_CheckStatus(ac, fopAcStts_CARRY_e)) {
                 ac->attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
                 ei->mState = 3;
                 if (ei->m00C == 2) {
@@ -239,7 +239,7 @@ BOOL enemy_ice(enemyice* ei) {
         break;
     case 3: // Frozen and being carried around by the player
         frozen = TRUE;
-        if (!fopAcM_checkStatus(ac, fopAcStts_CARRY_e)) {
+        if (!fopAcM_CheckStatus(ac, fopAcStts_CARRY_e)) {
             if (fopAcM_GetSpeedF(ac) > 0.0f) {
                 ei->mSpeedF = 25.0f + g_regHIO.mChild[0].mFloatRegs[5];
                 ei->mSpeed.y = 20.0f + g_regHIO.mChild[0].mFloatRegs[6];

@@ -565,7 +565,7 @@ fopAc_ac_c* dAttList_c::getActor() {
 
 /* 8009FA98-8009FAB4       .text setActor__10dAttList_cFP10fopAc_ac_c */
 void dAttList_c::setActor(fopAc_ac_c* i_actor) {
-    mActorID = fpcM_GetID(i_actor);
+    mActorID = fopAcM_GetID(i_actor);
 }
 
 /* 8009FAB4-8009FACC       .text getPId__10dAttHint_cFPv */

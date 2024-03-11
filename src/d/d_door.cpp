@@ -147,7 +147,7 @@ u8 dDoor_info_c::drawCheck(int mode) {
 /* 8006B8AC-8006B954       .text checkExecute__12dDoor_info_cFv */
 u8 dDoor_info_c::checkExecute() {
     mFrontCheck = frontCheck();
-    if (fopAcM_checkStatus(this, fopAcStts_UNK1000_e))
+    if (fopAcM_CheckStatus(this, fopAcStts_UNK1000_e))
         return 1;
 
     if (eventInfo.checkCommandDemoAccrpt() || eventInfo.checkCommandDoor())

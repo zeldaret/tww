@@ -798,7 +798,7 @@ BOOL daItem_c::checkItemDisappear() {
     if (mItemStatus == STATUS_UNK4) {
         disappearing = FALSE;
     }
-    if (checkFlag(FLAG_BOOMERANG) || checkFlag(FLAG_HOOK) || fopAcM_checkStatus(this, fopAcStts_HOOK_CARRY_e)) {
+    if (checkFlag(FLAG_BOOMERANG) || checkFlag(FLAG_HOOK) || fopAcM_CheckStatus(this, fopAcStts_HOOK_CARRY_e)) {
         disappearing = FALSE;
         show();
     }

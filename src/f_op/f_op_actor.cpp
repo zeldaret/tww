@@ -41,13 +41,13 @@ s32 fopAc_Draw(void* pProc) {
             (
                 moveApproval == dEvtMove_FORCE_e
                 || (
-                    !fopAcM_checkStatus(actor, fopAc_ac_c::getStopStatus())
+                    !fopAcM_CheckStatus(actor, fopAc_ac_c::getStopStatus())
                     && !(
-                        fopAcM_checkStatus(actor, fopAcStts_CULL_e)
+                        fopAcM_CheckStatus(actor, fopAcStts_CULL_e)
                         && fopAcM_cullingCheck(actor)
                     )
                 )
-            ) && !fopAcM_checkStatus(actor, fopAcStts_NODRAW_e)
+            ) && !fopAcM_CheckStatus(actor, fopAcStts_NODRAW_e)
         ) {
             fopAcM_OffCondition(actor, fopAcCnd_NODRAW_e);
             ret = fpcLf_DrawMethod((leafdraw_method_class*)actor->sub_method, actor);
@@ -57,7 +57,7 @@ s32 fopAc_Draw(void* pProc) {
 
         fopAcM_OffStatus(actor, fopAcStts_NODRAW_e);
 
-        if (dComIfGp_roomControl_getStayNo() >= 0 && fopAcM_checkStatus(actor, fopAcStts_SHOWMAP_e))
+        if (dComIfGp_roomControl_getStayNo() >= 0 && fopAcM_CheckStatus(actor, fopAcStts_SHOWMAP_e))
             dMap_drawActorPointMiniMap(actor);
     }
 
@@ -77,7 +77,7 @@ s32 fopAc_Execute(void* pProc) {
     CHECK_FLOAT_CLASS(0x27f, actor->current.pos.z);
     CHECK_VEC3_RANGE(0x286, actor->current.pos);
 
-    if (fopAcM_checkStatus(actor, fopAcStts_NOPAUSE_e) || (!dMenu_flag() && !dScnPly_ply_c::isPause())) {
+    if (fopAcM_CheckStatus(actor, fopAcStts_NOPAUSE_e) || (!dMenu_flag() && !dScnPly_ply_c::isPause())) {
         actor->eventInfo.beforeProc();
 
         s32 moveApproval = dComIfGp_event_moveApproval(actor);
@@ -88,10 +88,10 @@ s32 fopAc_Execute(void* pProc) {
                 || (
                     (
                         moveApproval != dEvtMove_NOMOVE_e
-                        && !fopAcM_checkStatus(actor, fopAc_ac_c::getStopStatus())
+                        && !fopAcM_CheckStatus(actor, fopAc_ac_c::getStopStatus())
                     )
                     && (
-                        !fopAcM_checkStatus(actor, fopAcStts_NOCULLEXEC_e)
+                        !fopAcM_CheckStatus(actor, fopAcStts_NOCULLEXEC_e)
                         || !fopAcM_CheckCondition(actor, fopAcCnd_NODRAW_e)
                     )
                 )

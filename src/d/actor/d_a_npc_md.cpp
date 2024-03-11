@@ -1136,7 +1136,7 @@ BOOL daNpc_Md_c::lightHitCheck() {
         
         if (mCps.ChkAtHit()) {
             fopAc_ac_c* hitActor = mCps.GetAtHitAc();
-            if (fopAcM_checkStatus(this, fopAcStts_CARRY_e) && !isNoCarryAction()) {
+            if (fopAcM_CheckStatus(this, fopAcStts_CARRY_e) && !isNoCarryAction()) {
                 if (hitActor != dComIfGp_getLinkPlayer() && m3058.getEmitter() == NULL) {
                     dComIfGp_particle_set(0x8232, &current.pos, NULL, NULL, 0xFF, &m3058);
                 }
@@ -2964,7 +2964,7 @@ BOOL daNpc_Md_c::draw() {
         dComIfGd_getXluList()->entryImm(&m0B70, 0x1F);
     }
     
-    if (!isShipRide() && !fopAcM_checkStatus(this, fopAcStts_CARRY_e) && cLib_checkBit(m30F0, 0x20000UL)) {
+    if (!isShipRide() && !fopAcM_CheckStatus(this, fopAcStts_CARRY_e) && cLib_checkBit(m30F0, 0x20000UL)) {
         cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
         mShadowId = dComIfGd_setShadow(
             mShadowId, 0, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,

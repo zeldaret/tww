@@ -397,7 +397,7 @@ int dEvent_manager_c::getMyStaffId(const char* name, fopAc_ac_c* actor, int tagI
     if (mList.getHeaderP() == NULL)
         return -1;
 
-    if (actor && !fopAcM_checkStatus(actor, fopAcStts_FORCEMOVE_e))
+    if (actor && !fopAcM_CheckStatus(actor, fopAcStts_FORCEMOVE_e))
         return -1;
 
     for (s32 i = 0; i < mList.getEventNum(); i++) {

@@ -1704,7 +1704,7 @@ void dSnap_Obj::SetGeoSph(const Vec& center, f32 radius) {
 /* 800CDB68-800CDB94       .text SetInf__9dSnap_ObjFUcPC10fopAc_ac_cUcUcs */
 void dSnap_Obj::SetInf(u8 r4, const fopAc_ac_c* r5, u8 r6, u8 r7, s16 cullAngle) {
     mPhoto = r4;
-    mActorPID = fpcM_GetID(r5);
+    mActorPID = fopAcM_GetID(const_cast<fopAc_ac_c*>(r5));
     field_0x1a = r6;
     field_0x19 = r7;
     mCullAngle = cullAngle;

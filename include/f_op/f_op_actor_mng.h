@@ -16,9 +16,7 @@
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e); \
     }
 
-class J3DModelData;  // placeholder
-class JKRHeap;
-class cM3dGPla;
+class J3DModelData;
 class daItem_c;
 
 struct fopAcM_prmBase_class {
@@ -79,10 +77,6 @@ class dKy_tevstr_c;
 typedef int (*heapCallbackFunc)(fopAc_ac_c*);
 typedef int (*createFunc)(void*);
 
-// struct DOUBLE_POS {
-//     double x, y, z;
-// };
-
 inline s8 fopAcM_GetRoomNo(fopAc_ac_c* pActor) {
     return pActor->current.roomNo;
 }
@@ -99,7 +93,7 @@ inline MtxP fopAcM_GetMtx(fopAc_ac_c* pActor) {
     return pActor->cullMtx;
 }
 
-inline bool fopAcM_checkStatus(fopAc_ac_c* pActor, u32 status) {
+inline bool fopAcM_CheckStatus(fopAc_ac_c* pActor, u32 status) {
     return pActor->actor_status & status;
 }
 
@@ -108,7 +102,7 @@ inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
 }
 
 inline u32 fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
-    return fopAcM_checkStatus(pActor, fopAcStts_HOOK_CARRY_e);
+    return fopAcM_CheckStatus(pActor, fopAcStts_HOOK_CARRY_e);
 }
 
 inline u32 fopAcM_GetParam(void* pActor) {
@@ -566,8 +560,6 @@ void fopAcM_cancelCarryNow(fopAc_ac_c* i_this);
 s32 fopAcM_otoCheck(fopAc_ac_c*, f32);
 BOOL fopAcM_viewCutoffCheck(fopAc_ac_c* actor, f32 param_2);
 BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle);
-// void vectle_calc(DOUBLE_POS*, cXyz*);
-// void get_vectle_calc(cXyz*, cXyz*, cXyz*);
 
 static const char* fopAcM_getProcNameString(fopAc_ac_c* p_actor);
 

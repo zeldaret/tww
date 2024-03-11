@@ -65,7 +65,7 @@ void dCcD_GStts::Move() {
 void dCcD_Stts::Init(int weight, int param_1, fopAc_ac_c* pActor) {
     u32 procId;
     if (pActor) {
-        procId = fpcM_GetID(pActor);
+        procId = fopAcM_GetID(pActor);
     } else {
         procId = fpcM_ERROR_PROCESS_ID_e;
     }
@@ -73,7 +73,7 @@ void dCcD_Stts::Init(int weight, int param_1, fopAc_ac_c* pActor) {
     
     s32 roomNo;
     if (pActor) {
-        roomNo = pActor->current.roomNo;
+        roomNo = fopAcM_GetRoomNo(pActor);
     } else {
         roomNo = 0;
         OnNoActor();

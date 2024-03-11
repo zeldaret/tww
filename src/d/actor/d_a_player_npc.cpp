@@ -174,7 +174,7 @@ BOOL daPy_npc_c::checkNowPosMove(const char* pName) {
         return TRUE;
     }
     
-    return fopAcM_checkStatus(this, fopAcStts_UNK800_e);
+    return fopAcM_CheckStatus(this, fopAcStts_UNK800_e);
 }
 
 /* 8015AC74-8015AD20       .text drawDamageFog__10daPy_npc_cFv */
