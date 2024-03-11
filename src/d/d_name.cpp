@@ -42,12 +42,12 @@ void dName_c::playNameSet(int) {
 }
 
 /* 802162F8-80216670       .text _open__7dName_cFv */
-void dName_c::_open() {
+bool dName_c::_open() {
     /* Nonmatching */
 }
 
 /* 80216670-802169E0       .text _close__7dName_cFv */
-void dName_c::_close() {
+bool dName_c::_close() {
     /* Nonmatching */
 }
 

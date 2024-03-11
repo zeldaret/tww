@@ -1,8 +1,7 @@
 #ifndef D_FILE_ERROR_H
 #define D_FILE_ERROR_H
 
-#include "dolphin/types.h"
-#include "JSystem/J2DGraph/J2DPane.h"
+#include "d/d_drawlist.h"
 
 class MyScreen {
 public:
@@ -14,13 +13,19 @@ public:
     dFe_HIO_c();
 };
 
+class dDlst_FileErr_c : public dDlst_base_c {
+public:
+    void draw();
+};
+
 class dFile_error_c {
 public:
     void getStatus() {}
     void getYesNo() {}
     void setDbgErrMessage(char*, int) {}
     void setTimeCountDownMode() {}
-    
+
+    virtual ~dFile_error_c() {}
     void _create();
     void initial();
     void _delete();
@@ -44,11 +49,10 @@ public:
     void PaneTranceBase(s16, u8, f32, f32, f32, f32, u8, int);
     void _draw();
     void draw2();
-};
 
-class dDlst_FileErr_c {
-public:
-    void draw();
+    /* 0x004 */ u8 field_0x4[0x008 - 0x004];
+    /* 0x008 */ dDlst_FileErr_c field_0x8;
+    /* 0x00C */ u8 field_0xc[0x30C - 0x00C];
 };
 
 #endif /* D_FILE_ERROR_H */
