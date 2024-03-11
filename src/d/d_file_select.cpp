@@ -32,12 +32,12 @@ void dFile_select_c::_move() {
 }
 
 /* 8017FE10-80180118       .text _open__14dFile_select_cFv */
-void dFile_select_c::_open() {
+bool dFile_select_c::_open() {
     /* Nonmatching */
 }
 
 /* 80180118-801801C8       .text _close__14dFile_select_cFv */
-void dFile_select_c::_close() {
+bool dFile_select_c::_close() {
     /* Nonmatching */
 }
 

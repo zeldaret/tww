@@ -1,11 +1,15 @@
 #ifndef D_NAME_H
 #define D_NAME_H
 
-#include "dolphin/types.h"
+#include "d/d_drawlist.h"
 
 class dNm_HIO_c {
 public:
     dNm_HIO_c();
+};
+
+class dDlst_NameIN_c : public dDlst_base_c {
+    void draw();
 };
 
 class dName_c {
@@ -14,15 +18,16 @@ public:
     void getInputStrPtr() {}
     void isInputEnd() {}
     void setNextNameStr(char*) {}
-    
+
+    virtual ~dName_c() {}
     void _create();
     void initial();
     void _delete();
     void _move();
     void nameCheck();
     void playNameSet(int);
-    void _open();
-    void _close();
+    bool _open();
+    bool _close();
     void NameInMain();
     void nameCursorAnime();
     void EndWait();
@@ -59,10 +64,11 @@ public:
     void PaneTranceEnd(s16, u8, f32, f32, u8, int);
     void displayInit();
     void NameStrSet();
-};
 
-class dDlst_NameIN_c {
-    void draw();
+    /* 0x0004 */ u8 field_0x4[0x0008 - 0x0004];
+    /* 0x0008 */ dDlst_NameIN_c field_0x8;
+    /* 0x000C */ u8 field_0xc[0x2AD0 - 0x000C];
+    /* 0x2AD0 */ char field_0x2ad0[0x2AE8 - 0x2AD0];
 };
 
 #endif /* D_NAME_H */

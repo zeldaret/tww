@@ -4,6 +4,7 @@
 #include "d/d_drawlist.h"
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_scene.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J2DScreen;
 class JKRMemArchive;
@@ -14,12 +15,12 @@ class dMCloth_c;
 class dName_c;
 class mDoDvdThd_toMainRam_c;
 
-class dSn_HIO_c {
+class dSn_HIO_c : public JORReflexible {
 public:
     dSn_HIO_c();
     virtual ~dSn_HIO_c() {}
 
-    /* 0x04 */ u8 field_0x4;
+    /* 0x04 */ s8 field_0x4;
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u8 field_0x6;
     /* 0x07 */ u8 field_0x7;
@@ -68,7 +69,7 @@ public:
     void cloth_move();
     void cloth2D_create();
     void buttonIconCreate();
-    void paneTransButtonIcon(s16, u8, f32, f32, u8);
+    BOOL paneTransButtonIcon(s16, u8, f32, f32, u8);
     BOOL execute();
     void setView();
     BOOL draw();
@@ -167,7 +168,9 @@ public:
     /* 0x1BB0 */ void* savePicDatabuf;
     /* 0x1BB4 */ short field_0x1bb4;
     /* 0x1BB6 */ u8 field_0x1bb6;
-    /* 0x1BB7 */ u8 field_0x1bb7[0x1BBC - 0x1BB7];
+    /* 0x1BB7 */ u8 field_0x1bb7;
+    /* 0x1BB8 */ u8 field_0x1bb8;
+    /* 0x1BB9 */ u8 field_0x1bb9[0x1BBC - 0x1BB9];
     /* 0x1BBC */ int field_0x1bbc;
 };
 
