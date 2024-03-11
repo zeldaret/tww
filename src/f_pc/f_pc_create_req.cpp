@@ -13,13 +13,13 @@
 #include "f_pc/f_pc_layer_iter.h"
 
 /* 8003CD0C-8003CD28       .text fpcCtRq_isCreatingByID__FP10create_tagPUi */
-bool fpcCtRq_isCreatingByID(create_tag* i_createTag, unsigned int* i_procID) {
+bool fpcCtRq_isCreatingByID(create_tag* i_createTag, uint* i_procID) {
     create_request* pReq = static_cast<create_request*>(i_createTag->base.mpTagData);
     return pReq->mBsPcId == *i_procID;
 }
 
 /* 8003CD28-8003CD60       .text fpcCtRq_IsCreatingByID__FUi */
-BOOL fpcCtRq_IsCreatingByID(unsigned int i_id) {
+BOOL fpcCtRq_IsCreatingByID(uint i_id) {
     return fpcCtIt_Judge((fpcLyIt_JudgeFunc)fpcCtRq_isCreatingByID, &i_id) != NULL ? TRUE : FALSE;
 }
 

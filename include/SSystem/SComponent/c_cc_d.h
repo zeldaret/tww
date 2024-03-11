@@ -364,7 +364,7 @@ public:
     virtual ~cCcD_Stts() {}
     virtual const cCcD_GStts* GetGStts() const;
     virtual cCcD_GStts* GetGStts();
-    void Init(int, int, void*, unsigned int);
+    void Init(int, int, void*, uint);
     virtual void Ct();
     void PlusCcMove(f32, f32, f32);
     void ClrCcMove() {
@@ -381,7 +381,7 @@ public:
     fopAc_ac_c* GetActor() const { return mActor; }
     void SetActor(void* ac) { mActor = (fopAc_ac_c*)ac; }
     cXyz* GetCCMoveP() { return &m_cc_move; }
-    unsigned int GetApid() const { return mApid; }
+    uint GetApid() const { return mApid; }
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cCcD_Stts));

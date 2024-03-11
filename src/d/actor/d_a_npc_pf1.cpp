@@ -162,7 +162,7 @@ void daNpc_Pf1_c::chk_parts_notMov() {
 }
 
 /* 0000111C-00001170       .text searchByID__11daNpc_Pf1_cFUiPi */
-void daNpc_Pf1_c::searchByID(unsigned int, int*) {
+void daNpc_Pf1_c::searchByID(uint, int*) {
     /* Nonmatching */
 }
 

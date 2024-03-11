@@ -157,7 +157,7 @@ void daNpc_Zk1_c::chk_parts_notMov() {
 }
 
 /* 00001064-000010B8       .text searchByID__11daNpc_Zk1_cFUiPi */
-void daNpc_Zk1_c::searchByID(unsigned int, int*) {
+void daNpc_Zk1_c::searchByID(uint, int*) {
     /* Nonmatching */
 }
 

@@ -18,7 +18,7 @@ void cBgS_LinChk::ct() {
 }
 
 /* 80247480-80247500       .text Set2__11cBgS_LinChkFP4cXyzP4cXyzUi */
-void cBgS_LinChk::Set2(cXyz* pStart, cXyz* pEnd, unsigned int actorPid) {
+void cBgS_LinChk::Set2(cXyz* pStart, cXyz* pEnd, uint actorPid) {
     mLin.SetStartEnd(*pStart, *pEnd);
     field_0x40 = *pEnd;
     SetActorPid(actorPid);

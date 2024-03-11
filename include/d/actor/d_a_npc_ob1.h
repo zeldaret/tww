@@ -44,7 +44,7 @@ public:
     void getMsg();
     void chkAttention();
     void setAttention(bool);
-    void searchByID(unsigned int);
+    void searchByID(uint);
     void partner_srch();
     void bitCount(unsigned char);
     void set_pigCnt();

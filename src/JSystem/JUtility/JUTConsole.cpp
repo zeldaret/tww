@@ -16,7 +16,7 @@
 JUTConsoleManager* JUTConsoleManager::sManager;
 
 /* 802CA2FC-802CA3CC       .text create__10JUTConsoleFUiUiP7JKRHeap */
-JUTConsole* JUTConsole::create(unsigned int param_0, unsigned int maxLines, JKRHeap* p_heap) {
+JUTConsole* JUTConsole::create(uint param_0, uint maxLines, JKRHeap* p_heap) {
     JUTConsoleManager* pManager = JUTConsoleManager::getManager();
     JUT_ASSERT(33, pManager != 0);
 
@@ -32,7 +32,7 @@ JUTConsole* JUTConsole::create(unsigned int param_0, unsigned int maxLines, JKRH
 }
 
 /* 802CA3CC-802CA4C8       .text create__10JUTConsoleFUiPvUl */
-JUTConsole* JUTConsole::create(unsigned int param_0, void* buffer, u32 bufferSize) {
+JUTConsole* JUTConsole::create(uint param_0, void* buffer, u32 bufferSize) {
     JUTConsoleManager* pManager = JUTConsoleManager::getManager();
     JUT_ASSERT(59, pManager != 0);
     JUT_ASSERT(62, ( (u32)buffer & 0x3 ) == 0);
@@ -47,7 +47,7 @@ JUTConsole* JUTConsole::create(unsigned int param_0, void* buffer, u32 bufferSiz
 }
 
 /* 802CA4C8-802CA5AC       .text __ct__10JUTConsoleFUiUib */
-JUTConsole::JUTConsole(unsigned int param_0, unsigned int maxLines, bool param_2) {
+JUTConsole::JUTConsole(uint param_0, uint maxLines, bool param_2) {
     field_0x2c = param_2;
     field_0x20 = param_0;
     mMaxLines = maxLines;
@@ -81,12 +81,12 @@ JUTConsole::~JUTConsole() {
 }
 
 /* 802CA658-802CA668       .text getObjectSizeFromBufferSize__10JUTConsoleFUiUi */
-size_t JUTConsole::getObjectSizeFromBufferSize(unsigned int param_0, unsigned int maxLines) {
+size_t JUTConsole::getObjectSizeFromBufferSize(uint param_0, uint maxLines) {
     return (param_0 + 2) * maxLines + sizeof(JUTConsole);
 }
 
 /* 802CA668-802CA678       .text getLineFromObjectSize__10JUTConsoleFUlUi */
-size_t JUTConsole::getLineFromObjectSize(u32 bufferSize, unsigned int param_1) {
+size_t JUTConsole::getLineFromObjectSize(u32 bufferSize, uint param_1) {
     return (bufferSize - sizeof(JUTConsole)) / (param_1 + 2);
 }
 
@@ -257,7 +257,7 @@ void JUTConsole_print_f_va_(JUTConsole* console, const char* fmt, va_list args) 
 }
 
 /* 802CB03C-802CB19C       .text dumpToTerminal__10JUTConsoleFUi */
-void JUTConsole::dumpToTerminal(unsigned int param_0) {
+void JUTConsole::dumpToTerminal(uint param_0) {
     if (param_0 == 0) {
         return;
     }

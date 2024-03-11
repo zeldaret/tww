@@ -138,7 +138,7 @@ s32 fopScnRq_Request(int param_1, scene_class* i_scene, s16 param_3, void* param
     return ret;
 }
 
-s32 fopScnRq_ReRequest(unsigned int param_1, s16 param_2, void* param_3) {
+s32 fopScnRq_ReRequest(uint param_1, s16 param_2, void* param_3) {
     return fpcNdRq_ReRequest(param_1, param_2, param_3);
 }
 

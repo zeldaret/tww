@@ -12,7 +12,7 @@
 #include "SSystem/SComponent/c_lib.h"
 
 /* 8002A860-8002A880       .text fopKyM_SearchByID__FUi */
-kankyo_class* fopKyM_SearchByID(unsigned int id) {
+kankyo_class* fopKyM_SearchByID(uint id) {
     return (kankyo_class*) fpcEx_SearchByID(id);
 }
 

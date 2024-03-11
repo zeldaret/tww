@@ -112,7 +112,7 @@ void daNpc_De1_c::setAttention() {
 }
 
 /* 00001194-000011C8       .text searchByID__11daNpc_De1_cFUi */
-void daNpc_De1_c::searchByID(unsigned int) {
+void daNpc_De1_c::searchByID(uint) {
     /* Nonmatching */
 }
 

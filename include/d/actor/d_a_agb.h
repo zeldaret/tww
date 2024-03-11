@@ -110,8 +110,8 @@ public:
     BOOL isHold() { return mHold; }
     BOOL getFollowTarget() { return mFollowTarget; }
     void setFollowTarget(bool follow) { mFollowTarget = follow; }
-    unsigned int getTargetID() { return mTargetID; }
-    void setTargetID(unsigned int pid) { mTargetID = pid; }
+    uint getTargetID() { return mTargetID; }
+    void setTargetID(uint pid) { mTargetID = pid; }
 
     struct daAgb_ItemBuy {
         union {

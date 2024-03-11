@@ -483,7 +483,7 @@ public:
     virtual BOOL checkCutCharge() const { return FALSE; }
     virtual BOOL getBokoFlamePos(cXyz*);// { return FALSE; }
     virtual BOOL checkTactWait() const { return FALSE; }
-    virtual void setTactZev(unsigned int, int, char*) {}
+    virtual void setTactZev(uint, int, char*) {}
     virtual void onDekuSpReturnFlg(u8) {}
     virtual BOOL checkComboCutTurn() const { return false; }
     virtual f32 getBaseAnimeFrameRate() = 0;
@@ -500,7 +500,7 @@ public:
     virtual void onFrollCrashFlg(u32);// {}
     virtual MtxP getModelJointMtx(u16) { return NULL; }
     virtual f32 getOldSpeedY() { return 0.0f; }
-    virtual BOOL setHookshotCarryOffset(unsigned int, const cXyz*) { return FALSE; }
+    virtual BOOL setHookshotCarryOffset(uint, const cXyz*) { return FALSE; }
     virtual void setPlayerPosAndAngle(cXyz*, s16) {}
     virtual void setPlayerPosAndAngle(cXyz*, csXyz*) {}
     virtual void setPlayerPosAndAngle(MtxP) {}

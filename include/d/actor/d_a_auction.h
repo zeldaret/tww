@@ -27,7 +27,7 @@ public:
     void setAucMdlNo(unsigned char, unsigned char) {}
     void setItemNo(unsigned char) {}
     void setKind(unsigned char, unsigned char) {}
-    void setNpcID(int, unsigned int) {}
+    void setNpcID(int, uint) {}
     void setStart(unsigned char) {}
 
     s32 _create();

@@ -262,7 +262,7 @@ void daNpc_Zl1_c::chk_parts_notMov() {
 }
 
 /* 00002358-000023AC       .text searchByID__11daNpc_Zl1_cFUiPi */
-void daNpc_Zl1_c::searchByID(unsigned int, int*) {
+void daNpc_Zl1_c::searchByID(uint, int*) {
     /* Nonmatching */
 }
 

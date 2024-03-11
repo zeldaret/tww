@@ -8,8 +8,8 @@
 typedef struct base_process_class base_process_class;
 
 base_process_class* fpcEx_Search(fpcLyIt_JudgeFunc pFunc, void* pUserData);
-base_process_class* fpcEx_SearchByID(unsigned int id);
-BOOL fpcEx_IsExist(unsigned int id);
+base_process_class* fpcEx_SearchByID(uint id);
+BOOL fpcEx_IsExist(uint id);
 s32 fpcEx_ToLineQ(base_process_class* pProc);
 s32 fpcEx_ExecuteQTo(base_process_class* pProc);
 s32 fpcEx_Execute(base_process_class* pProc);

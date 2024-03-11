@@ -113,7 +113,7 @@ BOOL daPy_lk_c::checkTactLastInput() {
 }
 
 /* 8014D9F8-8014DA78       .text setTactZev__9daPy_lk_cFUiiPc */
-void daPy_lk_c::setTactZev(unsigned int tactZevPartnerPID, int r30, char* r31) {
+void daPy_lk_c::setTactZev(uint tactZevPartnerPID, int r30, char* r31) {
     if (tactZevPartnerPID != fpcM_ERROR_PROCESS_ID_e) {
         mDoAud_seStart(JA_SE_PRE_TAKT);
     }

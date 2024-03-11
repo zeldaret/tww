@@ -707,7 +707,7 @@ u32 dEvt_control_c::getPId(void* ac) {
 }
 
 /* 800715DC-8007160C       .text convPId__14dEvt_control_cFUi */
-fopAc_ac_c* dEvt_control_c::convPId(unsigned int pid) {
+fopAc_ac_c* dEvt_control_c::convPId(uint pid) {
     return fopAcM_SearchByID(pid);
 }
 

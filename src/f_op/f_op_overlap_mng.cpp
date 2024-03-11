@@ -37,7 +37,7 @@ void fopOvlpM_Done(overlap_task_class* pTaskClass) {
     cReq_Done(&pTaskClass->mRq);
 }
 
-void fopOvlpM_ToldAboutID(unsigned int pcId) {
+void fopOvlpM_ToldAboutID(uint pcId) {
     if (l_fopOvlpM_overlap[0] != NULL)
         l_fopOvlpM_overlap[0]->mpTask->mScenePId = pcId;
 }

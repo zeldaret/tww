@@ -558,12 +558,12 @@ void dCamera_c::GetForceLockOnActor() {
 }
 
 /* 8017BCEC-8017BD2C       .text ForceLockOn__9dCamera_cFUi */
-void dCamera_c::ForceLockOn(unsigned int) {
+void dCamera_c::ForceLockOn(uint) {
     /* Nonmatching */
 }
 
 /* 8017BD2C-8017BD5C       .text ForceLockOff__9dCamera_cFUi */
-void dCamera_c::ForceLockOff(unsigned int) {
+void dCamera_c::ForceLockOff(uint) {
     /* Nonmatching */
 }
 

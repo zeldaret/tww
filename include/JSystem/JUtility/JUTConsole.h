@@ -21,23 +21,23 @@ public:
         /* 0x3 */ OUTPUT_OSR_AND_CONSOLE,
     };
 
-    static JUTConsole* create(unsigned int, void*, u32);
-    static JUTConsole* create(unsigned int, unsigned int, JKRHeap*);
-    JUTConsole(unsigned int, unsigned int, bool);
-    static size_t getObjectSizeFromBufferSize(unsigned int, unsigned int);
-    static size_t getLineFromObjectSize(u32, unsigned int);
+    static JUTConsole* create(uint, void*, u32);
+    static JUTConsole* create(uint, uint, JKRHeap*);
+    JUTConsole(uint, uint, bool);
+    static size_t getObjectSizeFromBufferSize(uint, uint);
+    static size_t getLineFromObjectSize(u32, uint);
     void clear();
     void doDraw(JUTConsole::EConsoleType) const;
     void print_f(char const*, ...);
     void print(char const*);
-    void dumpToTerminal(unsigned int);
+    void dumpToTerminal(uint);
     void scroll(int);
     int getUsedLine() const;
     int getLineOffset() const;
 
     virtual ~JUTConsole();
 
-    void setOutput(unsigned int output) { mOutput = output; }
+    void setOutput(uint output) { mOutput = output; }
     void setPosition(int x, int y) {
         mPositionX = x;
         mPositionY = y;

@@ -172,7 +172,7 @@ void daNpc_Gp1_c::setAttention(bool) {
 }
 
 /* 00001790-000017C4       .text searchByID__11daNpc_Gp1_cFUi */
-void daNpc_Gp1_c::searchByID(unsigned int) {
+void daNpc_Gp1_c::searchByID(uint) {
     /* Nonmatching */
 }
 

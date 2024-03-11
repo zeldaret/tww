@@ -49,7 +49,7 @@ s32 fpcM_Delete(void* i_proc) {
 }
 
 /* 8003E3B0-8003E3D0       .text fpcM_IsCreating__FUi */
-BOOL fpcM_IsCreating(unsigned int pID) {
+BOOL fpcM_IsCreating(uint pID) {
     return fpcCt_IsCreatingByID(pID);
 }
 
@@ -294,7 +294,7 @@ void fpcM_PauseDisable(void* i_proc, u8 i_flag) {
 }
 
 /* 8003EE8C-8003EF00       .text fpcM_JudgeInLayer__FUiPFPvPv_PvPv */
-void* fpcM_JudgeInLayer(unsigned int i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, void* i_data) {
+void* fpcM_JudgeInLayer(uint i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, void* i_data) {
     layer_class* layer = fpcLy_Layer(i_layerID);
     if (layer != NULL) {
         void* ret = fpcCtIt_JudgeInLayer(i_layerID, i_judgeFunc, i_data);

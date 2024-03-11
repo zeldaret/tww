@@ -27,10 +27,10 @@ s32 fpcPi_QueueTo(process_priority_class* pPi);
 s32 fpcPi_ToQueue(process_priority_class* pPi);
 process_priority_class* fpcPi_GetFromQueue(void);
 s32 fpcPi_Delete(process_priority_class* pPi);
-s32 fpcPi_IsNormal(unsigned int layer, u16 listID, u16 priority);
-s32 fpcPi_Change(process_priority_class* pPi, unsigned int layer, u16 listID, u16 priority);
+s32 fpcPi_IsNormal(uint layer, u16 listID, u16 priority);
+s32 fpcPi_Change(process_priority_class* pPi, uint layer, u16 listID, u16 priority);
 s32 fpcPi_Handler(void);
-s32 fpcPi_Init(process_priority_class* pPi, void* pUserData, unsigned int layer, u16 listID,
+s32 fpcPi_Init(process_priority_class* pPi, void* pUserData, uint layer, u16 listID,
                u16 priority);
 
 extern s8 data_804505F0;  // roomReadId

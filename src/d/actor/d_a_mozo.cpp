@@ -213,7 +213,7 @@ bool daMozo_c::_delete() {
 }
 
 /* 0000242C-00002498       .text getBeamActor__8daMozo_cFUi */
-fopAc_ac_c* daMozo_c::getBeamActor(unsigned int apid) {
+fopAc_ac_c* daMozo_c::getBeamActor(uint apid) {
     fopAc_ac_c* ac = fopAcM_SearchByID(apid);
     if (ac == NULL)
         return NULL;

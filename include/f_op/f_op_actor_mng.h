@@ -262,7 +262,7 @@ inline fopAcM_prm_class* fopAcM_GetAppend(void* actor) {
     return (fopAcM_prm_class*)fpcM_GetAppend(actor);
 }
 
-inline BOOL fopAcM_IsExecuting(unsigned int id) {
+inline BOOL fopAcM_IsExecuting(uint id) {
     return fpcM_IsExecuting(id);
 }
 
@@ -343,7 +343,7 @@ inline BOOL fopAcM_isSwitch(fopAc_ac_c* pActor, int sw) {
     return dComIfGs_isSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
 }
 
-inline fopAc_ac_c* fopAcM_SearchByID(unsigned int id) {
+inline fopAc_ac_c* fopAcM_SearchByID(uint id) {
     return (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &id);
 }
 
@@ -404,7 +404,7 @@ void fopAcM_setStageLayer(void* p_proc);
 
 void fopAcM_setRoomLayer(void* p_proc, int roomNo);
 
-s32 fopAcM_SearchByID(unsigned int id, fopAc_ac_c** p_actor);
+s32 fopAcM_SearchByID(uint id, fopAc_ac_c** p_actor);
 
 s32 fopAcM_SearchByName(s16 procName, fopAc_ac_c** p_actor);
 
@@ -412,12 +412,12 @@ fopAcM_prm_class* fopAcM_CreateAppend();
 
 fopAcM_prm_class* createAppend(u16 enemyNo, u32 parameters, cXyz* p_pos, int roomNo,
                                csXyz* p_angle, cXyz* p_scale, s8 subType,
-                               unsigned int parentPId);
+                               uint parentPId);
 
 void fopAcM_Log(fopAc_ac_c* p_actor, char* str);
 
 s32 fopAcM_delete(fopAc_ac_c* p_actor);
-s32 fopAcM_delete(unsigned int actorID);
+s32 fopAcM_delete(uint actorID);
 
 s32 fopAcM_create(s16 i_procName, u32 i_parameter, cXyz* i_pos = NULL, int i_roomNo = -1,
                   csXyz* i_angle = NULL, cXyz* i_scale = NULL, s8 i_subType = -1,
@@ -437,13 +437,13 @@ void* fopAcM_fastCreate(char* p_actorName, u32 parameter, cXyz* pActorPos = NULL
                         csXyz* p_angle = NULL, cXyz* p_scale = NULL,
                         createFunc p_createFunc = NULL, void* p_createFuncData = NULL);
 
-s32 fopAcM_createChild(s16 procName, unsigned int parentPId, u32 parameters, cXyz* p_pos,
+s32 fopAcM_createChild(s16 procName, uint parentPId, u32 parameters, cXyz* p_pos,
                        int roomNo, csXyz* p_angle, cXyz* p_scale = NULL, s8 subType = -1,
                        createFunc p_createFunc = NULL);
 
-s32 fopAcM_createChild(char* pProcNameString, unsigned int parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc);
+s32 fopAcM_createChild(char* pProcNameString, uint parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc);
 
-s32 fopAcM_createChildFromOffset(s16 procName, unsigned int parentProcID, u32 actorParams,
+s32 fopAcM_createChildFromOffset(s16 procName, uint parentProcID, u32 actorParams,
                                  cXyz* p_pos, int roomNo, csXyz* p_angle,
                                  cXyz* p_scale, s8 subType, createFunc p_createFunc);
 

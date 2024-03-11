@@ -20,7 +20,7 @@ namespace daObj_Search {
         void isSecond() {}
         void modeProcInit(int) {}
         void setBkControl(bool) {}
-        void setChildId(unsigned int) {}
+        void setChildId(uint) {}
         
         void _createHeap();
         void searchCreateHeap();

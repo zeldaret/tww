@@ -41,7 +41,7 @@ public:
     void getMsg();
     void chkAttention();
     void setAttention(bool);
-    void searchByID(unsigned int);
+    void searchByID(uint);
     void partner_srch_sub(void* (*)(void*, void*));
     void partner_srch();
     void ctrl_WAITanm();

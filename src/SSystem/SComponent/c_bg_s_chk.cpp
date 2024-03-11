@@ -11,7 +11,7 @@ cBgS_Chk::~cBgS_Chk() {
 }
 
 /* 8024734C-8024738C       .text ChkSameActorPid__8cBgS_ChkCFUi */
-bool cBgS_Chk::ChkSameActorPid(unsigned int pid) const {
+bool cBgS_Chk::ChkSameActorPid(uint pid) const {
     if (mActorPid == fpcM_ERROR_PROCESS_ID_e || pid == UINT32_MAX || unk_0x0C == 0) {
         return FALSE;
     } else {

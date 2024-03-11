@@ -14,7 +14,7 @@ base_process_class* fpcEx_Search(fpcLyIt_JudgeFunc i_judgeFunc, void* i_data) {
 }
 
 /* 8003D5D0-8003D614       .text fpcEx_SearchByID__FUi */
-base_process_class* fpcEx_SearchByID(unsigned int i_id) {
+base_process_class* fpcEx_SearchByID(uint i_id) {
     if (i_id + 2 <= 1)
         return NULL;
 
@@ -22,7 +22,7 @@ base_process_class* fpcEx_SearchByID(unsigned int i_id) {
 }
 
 /* 8003D614-8003D63C       .text fpcEx_IsExist__FUi */
-BOOL fpcEx_IsExist(unsigned int i_id) {
+BOOL fpcEx_IsExist(uint i_id) {
     return fpcEx_SearchByID(i_id) != NULL ? TRUE : FALSE;
 }
 

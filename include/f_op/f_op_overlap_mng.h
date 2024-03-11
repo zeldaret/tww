@@ -27,7 +27,7 @@ int fopOvlpM_SceneIsStart();
 void fopOvlpM_Management();
 int fopOvlpM_IsOutReq(overlap_task_class* i_this);
 void fopOvlpM_Done(overlap_task_class* i_this);
-void fopOvlpM_ToldAboutID(unsigned int pid);
+void fopOvlpM_ToldAboutID(uint pid);
 int fopOvlpM_IsPeek();
 int fopOvlpM_IsDone();
 int fopOvlpM_IsDoingReq();

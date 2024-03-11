@@ -121,12 +121,12 @@ public:
     void Move();
     void ClrAt() { mAtSpl = 0; }
     void ClrTg() { mTgSpl = 0; }
-    void SetAtApid(unsigned int id) { mAtApid = id; }
-    void SetTgApid(unsigned int id) { mTgApid = id; }
+    void SetAtApid(uint id) { mAtApid = id; }
+    void SetTgApid(uint id) { mTgApid = id; }
     u8 GetRoomId() { return mRoomId; }
     void SetRoomId(int id) { mRoomId = id; }
-    unsigned int GetAtOldApid() { return mAtOldApid; }
-    unsigned int GetTgOldApid() { return mTgOldApid; }
+    uint GetAtOldApid() { return mAtOldApid; }
+    uint GetTgOldApid() { return mTgOldApid; }
     bool ChkNoActor() { return field_0x1C & 1; }
     bool ChkNoneActorPerfTblId() { return mActorPerfTblId == 0xFFFF; }
     dCcG_At_Spl GetAtSpl() { return (dCcG_At_Spl)mAtSpl; }
@@ -197,7 +197,7 @@ public:
         mHitCallback = NULL;
         mEffCounter = 0;
     }
-    void SetHitApid(unsigned int id) {
+    void SetHitApid(uint id) {
         mApid = id;
         mAc = NULL;
     }
@@ -387,9 +387,9 @@ public:
     dCcD_HitCallback GetCoHitCallback() { return mGObjCo.GetHitCallback(); }
     dCcD_HitCallback GetAtHitCallback() { return mGObjAt.GetHitCallback(); }
     dCcD_HitCallback GetTgHitCallback() { return mGObjTg.GetHitCallback(); }
-    void SetCoHitApid(unsigned int apid) { mGObjCo.SetHitApid(apid); }
-    void SetAtHitApid(unsigned int apid) { mGObjAt.SetHitApid(apid); }
-    void SetTgHitApid(unsigned int apid) { mGObjTg.SetHitApid(apid); }
+    void SetCoHitApid(uint apid) { mGObjCo.SetHitApid(apid); }
+    void SetAtHitApid(uint apid) { mGObjAt.SetHitApid(apid); }
+    void SetTgHitApid(uint apid) { mGObjTg.SetHitApid(apid); }
     void OnCoHitNoActor() { mGObjCo.OnRPrm(1); }
     void OffCoHitNoActor() { mGObjCo.OffRPrm(1); }
     void OnAtHitNoActor() { mGObjAt.OnRPrm(2); }

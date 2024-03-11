@@ -23,7 +23,7 @@ class dAttHint_c {
 public:
     dAttHint_c() {}
     u32 getPId(void*);
-    fopAc_ac_c* convPId(unsigned int);
+    fopAc_ac_c* convPId(uint);
     int request(fopAc_ac_c*, int);
     void init();
     void proc();
@@ -39,7 +39,7 @@ private:
 class dAttCatch_c {
 public:
     dAttCatch_c() {}
-    fopAc_ac_c* convPId(unsigned int);
+    fopAc_ac_c* convPId(uint);
     void init();
     void proc();
     void request(fopAc_ac_c*, u8, f32, f32, f32, s16, int);
@@ -81,7 +81,7 @@ public:
 
 class dAttLook_c {
 public:
-    fopAc_ac_c* convPId(unsigned int);
+    fopAc_ac_c* convPId(uint);
     void init();
     void proc();
     void request(fopAc_ac_c*, f32, f32, f32, s16, int);
@@ -156,7 +156,7 @@ public:
     void Draw();
     fopAc_ac_c* LockonTarget(s32);
     void LockonReleaseDistanse();
-    unsigned int LockonTargetPId(s32);
+    uint LockonTargetPId(s32);
     fopAc_ac_c* ActionTarget(s32);
     bool LockonTruth();
 

@@ -28,7 +28,7 @@ public:
     void checkOrder();
     void chkAttention();
     void setAttention();
-    void searchByID(unsigned int);
+    void searchByID(uint);
     void setDemoStartCenter();
     void partner_srch();
     void ccCreate();

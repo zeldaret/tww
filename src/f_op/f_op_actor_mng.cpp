@@ -49,7 +49,7 @@ void fopAcM_setRoomLayer(void* pProc, int room_no) {
 }
 
 /* 800241C0-80024230       .text fopAcM_SearchByID__FUiPP10fopAc_ac_c */
-s32 fopAcM_SearchByID(unsigned int actorID, fopAc_ac_c** pDstActor) {
+s32 fopAcM_SearchByID(uint actorID, fopAc_ac_c** pDstActor) {
     if (fpcM_IsCreating(actorID)) {
         *pDstActor = NULL;
     } else {
@@ -92,7 +92,7 @@ fopAcM_prm_class* fopAcM_CreateAppend() {
 }
 
 /* 80024320-80024474       .text createAppend__FUlP4cXyziP5csXyzP4cXyzScUi */
-fopAcM_prm_class * createAppend(u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, unsigned int parentPcId) {
+fopAcM_prm_class * createAppend(u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, uint parentPcId) {
     fopAcM_prm_class * params = fopAcM_CreateAppend();
     if (params == NULL)
         return NULL;
@@ -139,7 +139,7 @@ s32 fopAcM_delete(fopAc_ac_c* pActor) {
 }
 
 /* 800244B8-8002451C       .text fopAcM_delete__FUi */
-s32 fopAcM_delete(unsigned int actorID) {
+s32 fopAcM_delete(uint actorID) {
     fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcM_SearchByID(actorID);
 
     if (pActor != NULL) {
@@ -188,7 +188,7 @@ void* fopAcM_fastCreate(char* pProcNameString, u32 parameter, cXyz* pPos, int ro
 }
 
 /* 80024710-80024790       .text fopAcM_createChild__FsUiUlP4cXyziP5csXyzP4cXyzScPFPv_i */
-s32 fopAcM_createChild(s16 procName, unsigned int parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
+s32 fopAcM_createChild(s16 procName, uint parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
     fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, parentPcId);
     if (params == NULL)
         return fpcM_ERROR_PROCESS_ID_e;
@@ -197,7 +197,7 @@ s32 fopAcM_createChild(s16 procName, unsigned int parentPcId, u32 parameter, cXy
 }
 
 /* 80024790-80024814       .text fopAcM_createChild__FPcUiUlP4cXyziP5csXyzP4cXyzPFPv_i */
-s32 fopAcM_createChild(char* pProcNameString, unsigned int parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
+s32 fopAcM_createChild(char* pProcNameString, uint parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
     dStage_objectNameInf * nameInf = dStage_searchName(pProcNameString);
     if (nameInf == NULL)
         return fpcM_ERROR_PROCESS_ID_e;
@@ -206,7 +206,7 @@ s32 fopAcM_createChild(char* pProcNameString, unsigned int parentPcId, u32 param
 }
 
 /* 80024814-800249D4       .text fopAcM_createChildFromOffset__FsUiUlP4cXyziP5csXyzP4cXyzScPFPv_i */
-s32 fopAcM_createChildFromOffset(s16 procName, unsigned int parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, s8 subtype, createFunc createFunc) {
+s32 fopAcM_createChildFromOffset(s16 procName, uint parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, s8 subtype, createFunc createFunc) {
     fopAc_ac_c * pParent = fopAcM_SearchByID(parentPcId);
     s16 parentAngleY = pParent->current.angle.y;
 
@@ -239,7 +239,7 @@ s32 fopAcM_createChildFromOffset(s16 procName, unsigned int parentPcId, u32 para
 }
 
 /* 800249D4-80024B78       .text fopAcM_createChildFromOffset__FPcUiUlP4cXyziP5csXyzP4cXyzPFPv_i */
-s32 fopAcM_createChildFromOffset(char* pProcNameString, unsigned int parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, createFunc createFunc) {
+s32 fopAcM_createChildFromOffset(char* pProcNameString, uint parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, createFunc createFunc) {
     fopAc_ac_c * pParent = fopAcM_SearchByID(parentPcId);
     s16 parentAngleY = pParent->current.angle.y;
 

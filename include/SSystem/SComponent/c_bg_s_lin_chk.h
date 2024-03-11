@@ -20,7 +20,7 @@ public:
 public:
     cBgS_LinChk() { ct(); }
     void ct();
-    void Set2(cXyz* pStart, cXyz* pEnd, unsigned int actorPid);
+    void Set2(cXyz* pStart, cXyz* pEnd, uint actorPid);
 
     virtual ~cBgS_LinChk() {}
 

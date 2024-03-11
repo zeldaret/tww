@@ -21,7 +21,7 @@ void cBgS_ChkElm::Init() {
 }
 
 /* 8024645C-80246478       .text Regist2__11cBgS_ChkElmFP4cBgWUiPv */
-void cBgS_ChkElm::Regist2(cBgW* bgw, unsigned int pid, void* actor) {
+void cBgS_ChkElm::Regist2(cBgW* bgw, uint pid, void* actor) {
     m_flags |= 1;
     m_bgw_base_ptr = bgw;
     m_actor_id = pid;
@@ -37,7 +37,7 @@ void cBgS_ChkElm::Release() {
 }
 
 /* 8024649C-80246600       .text Regist__4cBgSFP4cBgWUiPv */
-bool cBgS::Regist(cBgW* bgw, unsigned int pid, void* actor) {
+bool cBgS::Regist(cBgW* bgw, uint pid, void* actor) {
     if (bgw == NULL)
         return true;
 

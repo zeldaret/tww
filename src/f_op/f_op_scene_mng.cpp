@@ -9,7 +9,7 @@
 #include "f_pc/f_pc_searcher.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-scene_class* fopScnM_SearchByID(unsigned int id) {
+scene_class* fopScnM_SearchByID(uint id) {
     return (scene_class*)fopScnIt_Judge((fop_ScnItFunc)fpcSch_JudgeByID, &id);
 }
 
@@ -26,7 +26,7 @@ int fopScnM_ChangeReq(scene_class* i_scene, s16 procName, s16 fadeTime, u16 para
     return 1;
 }
 
-unsigned int fopScnM_DeleteReq(scene_class* i_scene) {
+uint fopScnM_DeleteReq(scene_class* i_scene) {
     u32 sceneRequestID = fopScnRq_Request(1, i_scene, 0x7FFF, 0, 0x7FFF, 0);
     return sceneRequestID != fpcM_ERROR_PROCESS_ID_e;
 }

@@ -21,7 +21,7 @@ public:
     BOOL CreateHeap();
     s32 CreateInit();
     void event_move();
-    fopAc_ac_c* getBeamActor(unsigned int);
+    fopAc_ac_c* getBeamActor(uint);
     void search_beam_proc_init();
     void search_beam_proc();
     void search_fire_proc_init();

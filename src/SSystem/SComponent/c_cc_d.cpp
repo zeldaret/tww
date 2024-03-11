@@ -184,7 +184,7 @@ cCcD_GStts* cCcD_Stts::GetGStts() {
 }
 
 /* 80241934-80241994       .text Init__9cCcD_SttsFiiPvUi */
-void cCcD_Stts::Init(int weight, int param_1, void* pProc, unsigned int procID) {
+void cCcD_Stts::Init(int weight, int param_1, void* pProc, uint procID) {
     Ct();
     mWeight = weight;
     field_0x15 = param_1;

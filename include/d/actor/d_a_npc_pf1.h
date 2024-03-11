@@ -38,7 +38,7 @@ public:
     void checkOrder();
     void chk_talk();
     void chk_parts_notMov();
-    void searchByID(unsigned int, int*);
+    void searchByID(uint, int*);
     void lookBack();
     void chkAttention();
     void setAttention(bool);

@@ -14,7 +14,7 @@
 #include "dolphin/types.h"
 
 // hack to make functions that return comparisons as int match
-extern int __cntlzw(unsigned int);
+extern int __cntlzw(uint);
 inline BOOL checkEqual(s32 a, s32 b) {
     return (u32)__cntlzw(a - b) >> 5;
 }
@@ -81,7 +81,7 @@ s32 fpcBs_Delete(base_process_class* i_proc) {
 }
 
 /* 8003CA60-8003CB5C       .text fpcBs_Create__FsUiPv */
-base_process_class* fpcBs_Create(s16 i_profName, unsigned int i_procID, void* i_data) {
+base_process_class* fpcBs_Create(s16 i_profName, uint i_procID, void* i_data) {
     process_profile_definition* procProfDef;
     base_process_class* procClass;
     u32 size;

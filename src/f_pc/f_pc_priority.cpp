@@ -72,7 +72,7 @@ s32 fpcPi_Delete(process_priority_class* i_procPriority) {
 }
 
 /* 8003FD8C-8003FDC0       .text fpcPi_IsNormal__FUiUsUs */
-s32 fpcPi_IsNormal(unsigned int i_layer, u16 i_listID, u16 i_priority) {
+s32 fpcPi_IsNormal(uint i_layer, u16 i_listID, u16 i_priority) {
     if ((i_layer < fpcLy_SPECIAL_e) && (i_listID < fpcPi_SPECIAL_e) && (i_priority < fpcPi_SPECIAL_e))
         return 1;
 
@@ -80,7 +80,7 @@ s32 fpcPi_IsNormal(unsigned int i_layer, u16 i_listID, u16 i_priority) {
 }
 
 /* 8003FDC0-8003FF00       .text fpcPi_Change__FP22process_priority_classUiUsUs */
-s32 fpcPi_Change(process_priority_class* i_procPriority, unsigned int i_layer, u16 i_listID, u16 i_priority) {
+s32 fpcPi_Change(process_priority_class* i_procPriority, uint i_layer, u16 i_listID, u16 i_priority) {
     base_process_class* pProc = (base_process_class*)i_procPriority->base.mpTagData;
     BOOL changed = 0;
 
@@ -143,7 +143,7 @@ s32 fpcPi_Handler() {
 }
 
 /* 8003FF94-8004003C       .text fpcPi_Init__FP22process_priority_classPvUiUsUs */
-s32 fpcPi_Init(process_priority_class* i_procPriority, void* i_data, unsigned int i_layer, u16 i_listID,
+s32 fpcPi_Init(process_priority_class* i_procPriority, void* i_data, uint i_layer, u16 i_listID,
                u16 i_priority) {
     if (!fpcPi_IsNormal(i_layer, i_listID, i_priority))
         return 0;

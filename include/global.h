@@ -41,7 +41,7 @@
 #endif
 
 // hack to make functions that return comparisons as int match
-extern int __cntlzw(unsigned int);
+extern int __cntlzw(uint);
 inline BOOL checkEqual(s32 a, s32 b) {
     return (u32)__cntlzw(a - b) >> 5;
 }

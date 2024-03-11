@@ -187,7 +187,7 @@ void daNpc_Ob1_c::setAttention(bool) {
 }
 
 /* 000019C4-000019F8       .text searchByID__11daNpc_Ob1_cFUi */
-void daNpc_Ob1_c::searchByID(unsigned int) {
+void daNpc_Ob1_c::searchByID(uint) {
     /* Nonmatching */
 }
 

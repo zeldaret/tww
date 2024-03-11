@@ -94,7 +94,7 @@ public:
     f32 GetWallAllLowH_R();
     f32 GetSpeedY();
     f32 GetWallAddY(Vec&);
-    void SetNowActorInfo(int bg_index, void* bgw, unsigned int apid) {
+    void SetNowActorInfo(int bg_index, void* bgw, uint apid) {
         m_bg_index = bg_index;
         field_0x78 = bgw;
         field_0x7c = apid;

@@ -91,14 +91,14 @@ public:
     dStage_Event_dt_c* getStageEventDt();
     dStage_Event_dt_c* nextStageEventDt(void*);
     u32 getPId(void*);
-    fopAc_ac_c* convPId(unsigned int);
+    fopAc_ac_c* convPId(uint);
     u8 getTactFreeMStick(int);
     u8 getTactFreeCStick(int);
     bool giveItemCut(u8);
 
     u8 getTalkXYBtn() { return mTalkButton; }
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
-    void setPtI_Id(unsigned int id) { mPtItem = id; }
+    void setPtI_Id(uint id) { mPtItem = id; }
     void setPtI(void* actor) { mPtItem = getPId(actor); }
     fopAc_ac_c* getPtI() { return convPId(mPtItem); }
     void setGtItm(u8 itemNo) { mGetItemNo = itemNo; }

@@ -136,7 +136,7 @@ public:
         // not 100% sure if this is right
         Set(i_pos, i_line, fpcM_GetID(actor), param_3);
     }
-    void Set(cXyz* i_pos, cXyz* i_line, unsigned int actorPid, cXyz* param_3) {
+    void Set(cXyz* i_pos, cXyz* i_line, uint actorPid, cXyz* param_3) {
         // not 100% sure if this is right
         pm_pos = i_pos;
         pm_old_pos = i_line;
@@ -177,7 +177,7 @@ public:
     void SetCyl() { mCyl.Set(*pm_pos, mWallRadius, mWallHeight * 2.0f); }
     void SetLin() { mLin.SetStartEnd(*pm_old_pos, *pm_pos); }
 
-    void SetWallActorInfo(int bg_index, void* bgw, unsigned int actor_id) {
+    void SetWallActorInfo(int bg_index, void* bgw, uint actor_id) {
         SetActorInfo(bg_index, bgw, actor_id);
     }
     void SetWallPolyIndex(int) {} // TODO

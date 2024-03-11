@@ -33,7 +33,7 @@ public:
         mActorPid = other.mActorPid;
         unk_0x0C = other.unk_0x0C;
     }
-    bool ChkSameActorPid(unsigned int) const;
+    bool ChkSameActorPid(uint) const;
 
     void SetActorPid(u32 pid) { mActorPid = pid; }
     u32 GetActorPid() const { return mActorPid; }

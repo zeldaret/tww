@@ -3030,7 +3030,7 @@ void dKy_Sound_init() {
 }
 
 /* 801967F4-801969A8       .text dKy_Sound_set__F4cXyziUii */
-void dKy_Sound_set(cXyz pos, int p2, unsigned int p3, int p4) {
+void dKy_Sound_set(cXyz pos, int p2, uint p3, int p4) {
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
 
     BOOL ret = FALSE;

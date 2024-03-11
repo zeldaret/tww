@@ -351,8 +351,8 @@ public:
     void SubjectLockOn(fopAc_ac_c*);
     void SubjectLockOff();
     void GetForceLockOnActor();
-    void ForceLockOn(unsigned int);
-    void ForceLockOff(unsigned int);
+    void ForceLockOn(uint);
+    void ForceLockOff(uint);
     void SetExtendedPosition(cXyz*);
     void ScopeViewMsgModeOff();
 

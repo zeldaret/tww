@@ -293,7 +293,7 @@ node_create_request* fpcNdRq_Request(u32 i_requestSize, int i_reqType,
 }
 
 /* 8003FB70-8003FBE8       .text fpcNdRq_ReChangeNode__FUisPv */
-s32 fpcNdRq_ReChangeNode(unsigned int i_requestID, s16 i_procName, void* i_data) {
+s32 fpcNdRq_ReChangeNode(uint i_requestID, s16 i_procName, void* i_data) {
     request_node_class* currentNode;
     node_create_request* found;
     currentNode = (request_node_class*)l_fpcNdRq_Queue.mpHead;
@@ -313,6 +313,6 @@ s32 fpcNdRq_ReChangeNode(unsigned int i_requestID, s16 i_procName, void* i_data)
 }
 
 /* 8003FBE8-8003FC08       .text fpcNdRq_ReRequest__FUisPv */
-s32 fpcNdRq_ReRequest(unsigned int i_requestID, s16 i_procName, void* i_data) {
+s32 fpcNdRq_ReRequest(uint i_requestID, s16 i_procName, void* i_data) {
     return fpcNdRq_ReChangeNode(i_requestID, i_procName, i_data);
 }

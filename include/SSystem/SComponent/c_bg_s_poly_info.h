@@ -12,7 +12,7 @@ private:
     /* 0x00 */ u16 mPolyIndex;
     /* 0x02 */ u16 mBgIndex;
     /* 0x04 */ cBgW* mpBgW;
-    /* 0x08 */ unsigned int mActorId;
+    /* 0x08 */ uint mActorId;
 
 public:
     cBgS_PolyInfo() {
@@ -27,13 +27,13 @@ public:
     void SetPolyInfo(const cBgS_PolyInfo& other) {
         *this = other;
     }
-    void SetActorInfo(int bg_index, void* bgw, unsigned int actor_id) {
+    void SetActorInfo(int bg_index, void* bgw, uint actor_id) {
         JUT_ASSERT(0x59, 0 <= bg_index);
         mBgIndex = bg_index;
         mpBgW = (cBgW*)bgw;
         mActorId = actor_id;
     }
-    bool ChkSafe(const void* bgw, unsigned int pid) {
+    bool ChkSafe(const void* bgw, uint pid) {
         if (mpBgW == bgw && mActorId == pid)
             return true;
         return false;
@@ -58,7 +58,7 @@ public:
     }
 
     // TODO
-    void ChkSafe(const void*, unsigned int) const {}
+    void ChkSafe(const void*, uint) const {}
     void ChkSetInf() const {}
     void SetPolyIndex(int poly_index) {
         JUT_ASSERT(0x7b, 0 <= poly_index);
