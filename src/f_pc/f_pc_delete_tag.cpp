@@ -9,15 +9,13 @@
 
 node_list_class g_fpcDtTg_Queue = {NULL, NULL, 0};
 
-// hack to make functions that return comparisons as int match
-extern int __cntlzw(uint);
-inline BOOL checkEqual(s32 a, s32 b) {
-    return (u32)__cntlzw(a - b) >> 5;
-}
-
 /* 8003D170-8003D188       .text fpcDtTg_IsEmpty__Fv */
 BOOL fpcDtTg_IsEmpty() {
-    return checkEqual(g_fpcDtTg_Queue.mSize, 0);
+    if (g_fpcDtTg_Queue.mSize == 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 8003D188-8003D1BC       .text fpcDtTg_ToDeleteQ__FP16delete_tag_class */

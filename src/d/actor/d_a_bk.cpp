@@ -199,6 +199,7 @@ static void yari_off_check(bk_class* i_this) {
 
 /* 00000A1C-00000EE8       .text smoke_set_s__FP8bk_classf */
 static void smoke_set_s(bk_class* i_this, f32 rate) {
+    fopAc_ac_c* i_actor = i_this;
     dBgS_LinChk linChk;
     s32 attribCode;
     attribCode = 0;
@@ -206,13 +207,12 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
     startPos.y += 100.0f;
     cXyz endPos = i_this->m0338;
     endPos.y -= 100.0f;
-    linChk.Set(&startPos, &endPos, i_this);
+    linChk.Set(&startPos, &endPos, i_actor);
     
-    dBgS* bgs = dComIfG_Bgsp(); // Fakematch? fixes regalloc
-    if (bgs->LineCross(&linChk)) {
+    if (dComIfG_Bgsp()->LineCross(&linChk)) {
         endPos = linChk.GetCross();
         i_this->m0338.y = endPos.y;
-        attribCode = bgs->GetAttributeCode(linChk);
+        attribCode = dComIfG_Bgsp()->GetAttributeCode(linChk);
     } else {
         i_this->m0338.y -= 20000.0f;
     }
@@ -325,18 +325,177 @@ static void ground_smoke_set(bk_class* i_this) {
 }
 
 /* 000011F0-00001454       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int param_1) {
+    if (!param_1) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        int r28 = joint_check[jntNo];
+        J3DModel* model = j3dSys.getModel();
+        bk_class* i_this = (bk_class*)model->getUserArea();
+        if (i_this) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            if (jntNo == 0x13) { // ago joint
+                mDoMtx_ZrotM(*calc_mtx, i_this->m11F4);
+                model->setAnmMtx(jntNo, *calc_mtx);
+                MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+            } else {
+                mDoMtx_YrotM(*calc_mtx, i_this->dr.m088[r28].y);
+                mDoMtx_XrotM(*calc_mtx, i_this->dr.m088[r28].x);
+                mDoMtx_ZrotM(*calc_mtx, i_this->dr.m088[r28].z);
+                
+                model->setAnmMtx(jntNo, *calc_mtx);
+                MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+                
+                cXyz offset;
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 0.0f;
+                cXyz sp08;
+                if (r28 == 0x00 || r28 == 0x01 || r28 == 0x02 || r28 == 0x03 || r28 == 0x04 ||
+                    r28 == 0x05 || r28 == 0x06 || r28 == 0x07
+                ) {
+                    offset.x = 0.0f;
+                } else if (r28 == 0x12) {
+                    offset.x = 200.0f;
+                    offset.y = -100.0f;
+                    MtxPosition(&offset, &sp08);
+                    offset.x = 0.0f;
+                    offset.y = 0.0f;
+                    MtxPosition(&offset, &i_this->eyePos);
+                    i_this->attention_info.position = i_this->eyePos;
+                    i_this->attention_info.position.y += l_bkHIO.m024;
+                    if (l_bkHIO.m009 == 0) {
+                        i_this->m0330 = cM_atan2s(sp08.x - i_this->eyePos.x, sp08.z - i_this->eyePos.z);
+                    } else {
+                        i_this->m0330 = i_this->current.angle.y;
+                    }
+                    offset.x = 20.75f;
+                    offset.y = 18.5f;
+                    offset.z = 0.0f;
+                    MtxPosition(&offset, &i_this->m116C);
+                    offset.y = -45.0f;
+                }
+                MtxPosition(&offset, &i_this->dr.m100[r28]);
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 00001454-00001564       .text nodeCallBack_P__FP7J3DNodei */
-static BOOL nodeCallBack_P(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_P(J3DNode* node, int param_1) {
+    if (!param_1) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        int r30 = joint_check[jntNo];
+        J3DModel* model = j3dSys.getModel();
+        bk_class* i_this = (bk_class*)model->getUserArea();
+        if (i_this) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            cXyz offset;
+            offset.x = 0.0f;
+            offset.z = 0.0f;
+            offset.y = 0.0f;
+            if (r30 == 0x11) {
+                offset.x = 17.5f;
+                offset.y = -8.75f;
+                offset.z = 0.0f;
+                MtxPosition(&offset, &i_this->m1190);
+            } else if (r30 == 0x10) {
+                MtxPosition(&offset, &i_this->m119C);
+            } else if (r30 == 0x0E || r30 == 0x0F) {
+                offset.y = 25.0f;
+            } else {
+                offset.y = 0.0f;
+            }
+            MtxPosition(&offset, &i_this->dr.m100[r30]);
+        }
+    }
+    return TRUE;
 }
 
 /* 00001564-000019A4       .text search_check_draw__FP8bk_class */
 static void search_check_draw(bk_class* i_this) {
-    /* Nonmatching */
+    if (l_bkHIO.m005 == 0) {
+        return;
+    }
+    cXyz sp14[0x10];
+    cXyz sp08(0.0f, 0.0f, l_bkHIO.m028);
+    int i;
+    s16 r26 = 0;
+    for (i = 0; i < 0x10; i++, r26 += 0x1000) {
+        MtxTrans(i_this->current.pos.x, 2.5f + i_this->dr.mSpawnY, i_this->current.pos.z, 0);
+        mDoMtx_YrotM(*calc_mtx, r26);
+        MtxPosition(&sp08, &sp14[0]);
+        mDoMtx_YrotM(*calc_mtx, 0x1000);
+        MtxPosition(&sp08, &sp14[1]);
+    }
+    sp08.z = l_bkHIO.m02C;
+    for (i = 0; i < 0x10; i++, r26 += 0x1000) {
+        MtxTrans(i_this->current.pos.x, 2.5f + i_this->dr.mSpawnY, i_this->current.pos.z, 0);
+        mDoMtx_YrotM(*calc_mtx, (int)r26);
+        MtxPosition(&sp08, &sp14[0]);
+        mDoMtx_YrotM(*calc_mtx, 0x1000);
+        MtxPosition(&sp08, &sp14[1]);
+    }
+    
+    sp08.x = 0.0f;
+    sp08.z = l_bkHIO.m028;
+    MtxTrans(i_this->eyePos.x, i_this->eyePos.y, i_this->eyePos.z, 0);
+    
+    MtxPush();
+    mDoMtx_YrotM(*calc_mtx, i_this->m0330 - l_bkHIO.m034);
+    sp08.y = l_bkHIO.m038;
+    MtxPosition(&sp08, &sp14[1]);
+    MtxPull();
+    
+    MtxPush();
+    sp08.y = l_bkHIO.m038;
+    mDoMtx_YrotM(*calc_mtx, i_this->m0330 + l_bkHIO.m034);
+    MtxPosition(&sp08, &sp14[2]);
+    MtxPull();
+    
+    MtxPush();
+    mDoMtx_YrotM(*calc_mtx, i_this->m0330 - l_bkHIO.m034);
+    sp08.y = -l_bkHIO.m038;
+    MtxPosition(&sp08, &sp14[4]);
+    MtxPull();
+    
+    sp08.y = -l_bkHIO.m038;
+    mDoMtx_YrotM(*calc_mtx, i_this->m0330 + l_bkHIO.m034);
+    MtxPosition(&sp08, &sp14[5]);
+    
+    sp14[0] = i_this->eyePos;
+    sp14[0].y += l_bkHIO.m038;
+    sp14[3] = i_this->eyePos;
+    sp14[3].y -= l_bkHIO.m038;
+    sp08.x = 0.0f;
+    sp08.z = l_bkHIO.m02C;
+    MtxTrans(i_this->eyePos.x, i_this->eyePos.y, i_this->eyePos.z, 0);
+    mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+    
+    sp08.x = l_bkHIO.m03C;
+    sp08.y = l_bkHIO.m040;
+    sp08.z = l_bkHIO.m044;
+    MtxPosition(&sp08, &sp14[7]);
+    sp08.y = -l_bkHIO.m040;
+    MtxPosition(&sp08, &sp14[5]);
+    sp08.x = -l_bkHIO.m03C;
+    sp08.y = l_bkHIO.m040;
+    MtxPosition(&sp08, &sp14[6]);
+    sp08.y = -l_bkHIO.m040;
+    MtxPosition(&sp08, &sp14[4]);
+    sp08.x = l_bkHIO.m03C;
+    sp08.y = l_bkHIO.m040;
+    sp08.z = l_bkHIO.m048;
+    MtxPosition(&sp08, &sp14[1]);
+    sp08.y = -l_bkHIO.m040;
+    MtxPosition(&sp08, &sp14[3]);
+    sp08.x = -l_bkHIO.m03C;
+    sp08.y = l_bkHIO.m040;
+    MtxPosition(&sp08, &sp14[0]);
+    sp08.y = -l_bkHIO.m040;
+    MtxPosition(&sp08, &sp14[2]);
 }
 
 /* 000019A8-00001B88       .text br_draw__FP8bk_class */
@@ -557,12 +716,7 @@ static void fight_run_set(bk_class* i_this) {
 
 /* 00003C74-00004104       .text path_check__FP8bk_classUc */
 static void path_check(bk_class* i_this, u8 r19) {
-    /* Nonmatching - regalloc */
-    dPath__Point* pnt;
-    int i;
-    bool r6;
-    int i2;
-    int j;
+    fopAc_ac_c* i_actor = i_this;
     
     if (i_this->ppd == NULL) {
         return;
@@ -578,12 +732,12 @@ static void path_check(bk_class* i_this, u8 r19) {
     sp18.y += 100.0f;
     cXyz spc;
     
-    pnt = i_this->ppd->mpPnt;
-    for (i = 0; i < i_this->ppd->m_num; i++, pnt++) {
+    dPath__Point* pnt = i_this->ppd->mpPnt;
+    for (int i = 0; i < i_this->ppd->m_num; i++, pnt++) {
         spc.x = pnt->mPos.x;
         spc.y = pnt->mPos.y + 100.0f;
         spc.z = pnt->mPos.z;
-        linChk.Set(&sp18, &spc, i_this);
+        linChk.Set(&sp18, &spc, i_actor);
         if (!dComIfG_Bgsp()->LineCross(&linChk)) {
             sp90[i] = 1;
         } else {
@@ -592,10 +746,10 @@ static void path_check(bk_class* i_this, u8 r19) {
     }
     
     f32 f0 = 0.0f;
-    r6 = false;
-    for (i2 = 0; i2 < 100; i2++, f0 += 50.0f) {
+    bool r6 = false;
+    for (int i2 = 0; i2 < 100; i2++, f0 += 50.0f) {
         pnt = i_this->ppd->mpPnt;
-        for (j = 0; j < i_this->ppd->m_num; j++, pnt++) {
+        for (int j = 0; j < i_this->ppd->m_num; j++, pnt++) {
             if (sp90[j] == 0) {
                 continue;
             }
@@ -803,13 +957,12 @@ static void stand(bk_class* i_this) {
 
 /* 000053E0-000054E0       .text s_s_sub__FPvPv */
 static void* s_s_sub(void* r29, void* r30) {
-    /* Nonmatching - regalloc */
     bk_class* i_this = (bk_class*)r30;
     if (fopAc_IsActor(r29) && fopAcM_GetName(r29) == PROC_OBJ_SEARCH) {
         daObj_Search::Act_c* search = (daObj_Search::Act_c*)r29;
         cXyz sp18 = i_this->home.pos - search->current.pos;
         if (sp18.abs() < 800.0f) {
-            return search;
+            return r29;
         }
     }
     return NULL;
