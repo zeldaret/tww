@@ -19,7 +19,6 @@ JMessage::TControl::TControl()
     , mMessageDataCurrent(NULL)
     , mCurrentText(NULL)
 {
-    /* Nonmatching */
 }
 
 /* 8029E970-8029E9B8       .text __dt__Q28JMessage8TControlFv */
@@ -84,13 +83,11 @@ bool JMessage::TControl::update() {
 
 /* 8029EC00-8029ECCC       .text render__Q28JMessage8TControlFv */
 void JMessage::TControl::render() {
-    /* Nonmatching */
     if (!isReady_render_()) {
         return;
     }
 
     mBaseProcRender->setBegin(mMessageEntry, mMessageDataCurrent);
-    // mBaseProcRender->field_0x0C = field_0x28;
     mBaseProcRender->mStack = mRenderStack;
     mBaseProcRender->process(mCurrentText);
 }
@@ -102,7 +99,6 @@ const char* JMessage::TControl::do_word(u32) {
 
 /* 8029ECD4-8029ED88       .text setMessageCode_flush___Q28JMessage8TControlFv */
 bool JMessage::TControl::setMessageCode_flush_() {
-    /* Nonmatching */
     reset_();
     u16 messageIndex = mMessageIndex;
     TResource* resource = getResource_groupID(mGroupID);
@@ -111,7 +107,7 @@ bool JMessage::TControl::setMessageCode_flush_() {
     if (mMessageEntry == NULL)
         return false;
 
-    u32 offs = *(u32*)messageEntry;
+    u32 offs = *(u32*)mMessageEntry;
     mMessageDataStart = mResource->mMessageData + offs;
     mMessageDataCurrent = mMessageDataStart;
     return true;

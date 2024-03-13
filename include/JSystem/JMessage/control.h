@@ -52,6 +52,17 @@ struct TControl {
     const char* getMessageData(u16, u16) const;
     void reset_();
 
+    void getMessageCode() const {}
+    void getMessageData(u32) const {}
+    void getMessageEntry(u32) const {}
+    void getMessageEntry(u16, u16) const {}
+    void getMessageGroupID() const {}
+    void getMessageIndex() const {}
+    void on_isLeadByte(int) {}
+    void on_word(u32) {}
+    void setMessageIndex(u16) {}
+    void setResourceContainer(const JMessage::TResourceContainer*) {}
+
     /* 0x04 */ TResourceContainer* mResourceContainer;
     /* 0x08 */ mutable TResource* mResource;
     /* 0x0C */ TSequenceProcessor* mBaseProcSeq;
@@ -62,8 +73,7 @@ struct TControl {
     /* 0x1C */ const char* mMessageDataStart;
     /* 0x20 */ const char* mMessageDataCurrent;
     /* 0x24 */ const char* mCurrentText;
-    /* 0x28 */ void* field_0x28;
-    /* 0x2C */ TProcessor::TStack_ mRenderStack;
+    /* 0x28 */ TProcessor::TStack_ mRenderStack;
 };
 };  // namespace JMessage
 

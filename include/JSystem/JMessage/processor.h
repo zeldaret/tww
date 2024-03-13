@@ -37,8 +37,8 @@ public:
         inline const char* top() const { return mStack[mNum - 2]; }
         inline bool empty() const { return mNum == 0; }
 
-        /* 0x00 */ const char* mStack[3];
-        /* 0x0C */ u32 mNum;
+        /* 0x00 */ const char* mStack[4];
+        /* 0x10 */ u32 mNum;
     };
 
     // XXX: None of this shows up in the debug map. Is this TStatusData?
@@ -94,7 +94,6 @@ public:
     /* 0x00 */ /* vtable */
     /* 0x04 */ TControl* mControl;
     /* 0x08 */ const char* mCurrent;
-    /* 0x0C */ void* field_0x0C;
     /* 0x0C */ TStack_ mStack;
     /* 0x20 */ TProcess mProcess;
 };

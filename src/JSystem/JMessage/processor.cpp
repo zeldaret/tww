@@ -32,9 +32,7 @@ bool process_setMessage_index_(TControl* control, u16 index) {
 
 /* 8029EE18-8029EE6C       .text process_setMessage_code___Q28JMessage23@unnamed@processor_cpp@FPQ28JMessage8TControlUl */
 bool process_setMessage_code_(TControl* control, u32 code) {
-    /* Nonmatching */
-    u16 messageIndex = code & 0xFFFF;
-    if (messageIndex >= 0xFF00) {
+    if ((u16)code >= 0xFF00) {
         return process_setMessageIndex_reserved_(code);
     } else {
         return !!control->setMessageCode(code);
@@ -144,7 +142,7 @@ void TProcessor::on_tag_() {
     size = current[1];
 
     mCurrent = (const char*)current + size;
-    u32 tag = (current[2] << 16 | current[3] << 8);
+    u32 tag = (current[2] << 16 | (u8)current[3] << 8);
     tag |= current[4];
 
     if (!do_tag(tag, &current[5], size - 5)) {
@@ -189,8 +187,8 @@ void TProcessor::do_systemTagCode_(u16 code, const void* data, u32 size) {
 
 /* 8029F2A0-8029F37C       .text process_character___Q28JMessage10TProcessorFv */
 bool TProcessor::process_character_() {
-    /* Nonmatching */
-    const char * current = getCurrent();
+    const u8* current = (const u8*)getCurrent();
+    u32 r31 = current[0];
     switch (current[0]) {
     case 0:
         if (!mProcess.mCallBack(this))
@@ -200,7 +198,14 @@ bool TProcessor::process_character_() {
         on_tag_();
         break;
     default:
-        // mControl->do_word(current[0]);
+        if (mControl->mResourceContainer->IsLeadByte(r31)) {
+            r31 <<= 8;
+            mCurrent++;
+            current = (const u8*)getCurrent();
+            r31 |= current[0];
+        }
+        mCurrent++;
+        do_character(r31);
         break;
     }
     return true;

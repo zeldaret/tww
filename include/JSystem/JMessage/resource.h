@@ -57,8 +57,11 @@ namespace JMessage {
         void SetEncoding(u8);
 
         bool IsEncodingSettable(u8 encoding) const {
-            return mEncoding == encoding || encoding == 0;
+            return mEncoding == encoding || mEncoding == 0;
         }
+        bool IsLeadByte(int param_0) const { return mIsLeadByteFunc(param_0); }
+
+        void Get_groupID(u16) const {}
 
     private:
         void SetEncoding_(u8);
