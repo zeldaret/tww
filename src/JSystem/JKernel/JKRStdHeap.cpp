@@ -106,8 +106,8 @@ void JKRStdHeap::do_freeTail() {
 }
 
 /* 802B12A4-802B12D8       .text do_resize__10JKRStdHeapFPvUl */
-s32 JKRStdHeap::do_resize(void*, u32) {
-    JUTWarningConsole_f("resize: cannot resize memory block (%08x: %d)\n");
+s32 JKRStdHeap::do_resize(void* ptr, u32 newSize) {
+    JUTWarningConsole_f("resize: cannot resize memory block (%08x: %d)\n", ptr, newSize);
     return -1;
 }
 

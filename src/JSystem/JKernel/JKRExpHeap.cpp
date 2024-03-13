@@ -818,9 +818,7 @@ bool JKRExpHeap::dump() {
 }
 
 /* 802B2D5C-802B2F5C       .text dump_sort_by_address__10JKRExpHeapFv */
-// regalloc
 bool JKRExpHeap::dump_sort_by_address() {
-    /* Nonmatching */
     lock();
     bool result = check();
     u32 usedBytes = 0;
@@ -855,7 +853,7 @@ bool JKRExpHeap::dump_sort_by_address() {
         }
 
         if (!block->isValid()) {
-            JUTReportConsole_f("xxxxx %08x: --------  --- ---  (-------- --------)\nabort\n");
+            JUTReportConsole_f("xxxxx %08x: --------  --- ---  (-------- --------)\nabort\n", nextBlock);
             break;
         }
 
