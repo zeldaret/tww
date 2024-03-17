@@ -37,7 +37,7 @@ static BOOL daPW_Draw(pw_class*) {
 }
 
 /* 000004D4-00000600       .text anm_init__FP8pw_classifUcfi */
-void anm_init(pw_class*, int, float, J3DFrameCtrl::Attribute_e frameCtrl, float, int) {
+void anm_init(pw_class*, int, float, unsigned char, float, int) {
     /* Nonmatching */
 }
 
