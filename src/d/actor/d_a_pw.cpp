@@ -205,7 +205,7 @@ void action_dousa(pw_class* i_this) {
         }
         i_this->m370 =
             fopAcM_create(PROC_KANTERA, 0xFF000001, &i_this->m2CC, i_this->current.roomNo);
-        if (i_this->m370 != -1) {
+        if (i_this->m370 != fpcM_ERROR_PROCESS_ID_e) {
             i_this->m382 = 5;
             switch (i_this->mBehaviorType) {
             case OnlyLanternVisibleAtStart:
