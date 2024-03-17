@@ -6,10 +6,11 @@
 #include "d/actor/d_a_pw.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_kankyo_rain.h"
+#include "d/d_procname.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_pc/f_pc_manager.h"
-#include "d/d_procname.h"
+
 
 enum daPW__BehaviorType {
     VisibleFromStart = 0x0,
@@ -202,7 +203,8 @@ void action_dousa(pw_class* i_this) {
         if (i_this->mBehaviorType == InvisibleAtStart) {
             i_this->m38C = fopAcM_searchPlayerDistance(i_this);
         }
-        i_this->m370 = fopAcM_create(PROC_KANTERA, 0xFF000001, &i_this->m2CC, i_this->current.roomNo);
+        i_this->m370 =
+            fopAcM_create(PROC_KANTERA, 0xFF000001, &i_this->m2CC, i_this->current.roomNo);
         if (i_this->m370 != -1) {
             i_this->m382 = 5;
             switch (i_this->mBehaviorType) {
@@ -245,13 +247,13 @@ void action_dousa(pw_class* i_this) {
         }
         break;
     case 0xD:
-        i_this->m384 = 0; // Feels like m384 might be some cXyz?
+        i_this->m384 = 0;  // Feels like m384 might be some cXyz?
         i_this->m388 = 0;
         i_this->m38C = 0;
         i_this->m38E = 0;
         i_this->m340 = 0;
         i_this->m341 = 0;
-        i_this->m378 = (short) cM_rndF(60.0f) + 60.0f;
+        i_this->m378 = (short)cM_rndF(60.0f) + 60.0f;
         if (i_this->m346 && i_this->m374 != 0x23) {
             anm_init(i_this, 0x23, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         } else if (i_this->m374 != 0x24) {
@@ -260,21 +262,22 @@ void action_dousa(pw_class* i_this) {
         i_this->m368 += 1;
     case 0xE:  // 0.0f is a placeholder for some local value
         cLib_addCalc0(&i_this->speedF, 0.0f, 1.0f);
-        if (!i_this->m378) {
-            i_this->m368 += 1;
+        if (i_this->m378) {
+            break;
+        }
+        i_this->m368 += 1;
     case 0xF:
-            i_this->m378 = (short) cM_rndF(120.0f) + 120.0f;
-            if (i_this->m346 && i_this->m374 != 0x14) {
-                anm_init(i_this, 0x14, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
-            } else if (i_this->m374 != 0x15) {
-                anm_init(i_this, 0x15, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
-            }
-            i_this->m38C += (short)cM_rndFX(16384.0f);
-            if (i_this->mPathIndex == 0xFF || i_this->m348 == NULL) {
-                i_this->m368 = 0x10;
-            } else {
-                i_this->m368 = 0x14;
-            }
+        i_this->m378 = (short)cM_rndF(120.0f) + 120.0f;
+        if (i_this->m346 && i_this->m374 != 0x14) {
+            anm_init(i_this, 0x14, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        } else if (i_this->m374 != 0x15) {
+            anm_init(i_this, 0x15, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        }
+        i_this->m38C += (short)cM_rndFX(16384.0f);
+        if (i_this->mPathIndex == 0xFF || i_this->m348 == NULL) {
+            i_this->m368 = 0x10;
+        } else {
+            i_this->m368 = 0x14;
         }
     case 0x10:
         i_this->speedF = 5.0f;
