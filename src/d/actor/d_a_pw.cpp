@@ -9,6 +9,16 @@
 #include "dolphin/types.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_pc/f_pc_manager.h"
+#include "d/d_procname.h"
+
+enum daPW__BehaviorType {
+    VisibleFromStart = 0x0,
+    InvisibleAtStart = 0x1,
+    OnlyLanternVisibleAtStart = 0x2,
+    JalhallaChildA = 0x3,
+    JalhallaChildB = 0x4,
+    UseDefault = 0xFF
+};
 
 /* 00000078-00000158       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -26,7 +36,7 @@ static BOOL daPW_Draw(pw_class*) {
 }
 
 /* 000004D4-00000600       .text anm_init__FP8pw_classifUcfi */
-void anm_init(pw_class*, int, float, unsigned char, float, int) {
+void anm_init(pw_class*, int, float, J3DFrameCtrl::Attribute_e frameCtrl, float, int) {
     /* Nonmatching */
 }
 
@@ -113,21 +123,19 @@ void first_mode_change(pw_class*) {
 /* 00002A90-00003B08       .text action_dousa__FP8pw_class */
 void action_dousa(pw_class* i_this) {
     /* Nonmatching */
-    daPy_py_c* link = daPy_getPlayerActorClass();
+    daPy_py_c* pPlayer = daPy_getPlayerActorClass();
     float randomValue;
     switch (i_this->m368) {
     case 0:
-        anm_init(i_this, 0x23, 7.0, '\x02', 1.0, -1);
+        anm_init(i_this, 0x23, 7.0, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0, -1);
         i_this->m346 = 0;
         i_this->m368 += 1;
         break;
 
     case 0x1:
-        f32 actor_distance = fopAcM_searchActorDistance(i_this, link);
-        if (actor_distance < 500.0f) {
-            anm_init(i_this, 0x10, 3.0, '\0', 1.0, -1);
-            s16 actorYAngle = fopAcM_searchActorAngleY(i_this, link);
-            i_this->m38C = actorYAngle;
+        if (fopAcM_searchActorDistance(i_this, pPlayer) < 500.0f) {
+            anm_init(i_this, 0x10, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            i_this->m38C = fopAcM_searchActorAngleY(i_this, pPlayer);
             i_this->current.angle.y = i_this->m38C;
             i_this->shape_angle.y = i_this->m38C;
             i_this->m3A4 = -80.0f;
@@ -138,22 +146,19 @@ void action_dousa(pw_class* i_this) {
 
     case 0x2:
         i_this->shape_angle.y += 0x1000;
-        cLib_addCalc0(&i_this->m3A4, 1.0, 1.0);
+        cLib_addCalc0(&i_this->m3A4, 1.0f, 1.0f);
         i_this->m39A += 7;
         if (i_this->m39A > 100) {
             i_this->m39A = 100;
         }
-        BOOL iVar6 = i_this->m2B4->mFrameCtrl.checkPass(25.0f);
-        if (iVar6 != FALSE) {
+        if (i_this->m2B4->checkFrame(25.0f)) {
             i_this->m3A4 = 0.0f;
             first_mode_change(i_this);
-            s16 actorAngleY = fopAcM_searchActorAngleY(i_this, link);
-            i_this->m38C = actorAngleY;
+            i_this->m38C = fopAcM_searchActorAngleY(i_this, pPlayer);
             JPABaseEmitter* particle =
                 dComIfGp_particle_set(0x82EE, &i_this->m2CC, &i_this->shape_angle);
             if (particle != NULL) {
-                // JPASetRMtxSTVecfromMtx(i_this->m2B4->mpModel->mpNodeMtxm,
-                // particle->mGlobalRotation, &particle->mGlobalTranslation);
+                particle->setGlobalSRTMatrix(i_this->m2B4->getModel()->getAnmMtx(0x00));
             }
             i_this->attention_info.flags = 0;
             i_this->m368 = 0;
@@ -164,13 +169,7 @@ void action_dousa(pw_class* i_this) {
         if (i_this->m39A > 100) {
             i_this->m39A = 100;
         }
-        BOOL tempVar10 = TRUE;
-        if (!(i_this->m2B4->mFrameCtrl.getState() & 1) &&
-            i_this->m2B4->mFrameCtrl.getRate() != 0.0f)
-        {
-            tempVar10 = FALSE;
-        }
-        if (tempVar10) {
+        if (i_this->m2B4->isStop()) {
             i_this->mBehaviorType = VisibleFromStart;
             i_this->m346 = 1;
             first_mode_change(i_this);
@@ -178,22 +177,20 @@ void action_dousa(pw_class* i_this) {
         }
         break;
     case 0x7:
-        f32 noticeDistance = fopAcM_searchActorDistance(i_this, daPy_getPlayerActorClass());
-        if (noticeDistance < i_this->mNoticeRange) {
-            s16 angleToLink = fopAcM_searchActorAngleY(i_this, daPy_getPlayerActorClass());
-            i_this->m38C = angleToLink;
-            i_this->current.angle.y = angleToLink;
-            i_this->shape_angle.y = angleToLink;
-            anm_init(i_this, 0x12, 3.0f, '\0', 1.0f, -1);
+        if (fopAcM_searchPlayerDistance(i_this) < i_this->mNoticeRange) {
+            s16 angleToPlayer = fopAcM_searchPlayerAngleY(i_this);
+            i_this->m38C = angleToPlayer;
+            i_this->current.angle.y = angleToPlayer;
+            i_this->shape_angle.y = angleToPlayer;
+            anm_init(i_this, 0x12, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->m368 = 6;
         }
         break;
     case 0x8:
         i_this->m380 = 2;
         i_this->m346 = 1;
-        f32 otherDistance = fopAcM_searchActorDistance(i_this, daPy_getPlayerActorClass());
-        if (otherDistance < i_this->m3AC) {
-            anm_init(i_this, 0x11, 3.0f, '\x02', 1.0, -1);
+        if (fopAcM_searchPlayerDistance(i_this) < i_this->m3AC) {
+            anm_init(i_this, 0x11, 3.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             i_this->m368 = 7;
         }
         break;
@@ -203,10 +200,9 @@ void action_dousa(pw_class* i_this) {
         i_this->m368 += 1;
     case 0xA:
         if (i_this->mBehaviorType == InvisibleAtStart) {
-            i_this->m38C = fopAcM_searchActorAngleY(i_this, daPy_getPlayerActorClass());
+            i_this->m38C = fopAcM_searchPlayerDistance(i_this);
         }
-        i_this->m370 = fopAcM_create(0xC2, 0xFF000001, &i_this->m2CC, i_this->current.roomNo, NULL,
-                                     NULL, 0xFF, NULL);
+        i_this->m370 = fopAcM_create(PROC_KANTERA, 0xFF000001, &i_this->m2CC, i_this->current.roomNo);
         if (i_this->m370 != -1) {
             i_this->m382 = 5;
             switch (i_this->mBehaviorType) {
@@ -231,17 +227,14 @@ void action_dousa(pw_class* i_this) {
         i_this->mActorPlace.pos.y = i_this->m2CC.y;
         i_this->mActorPlace.pos.z = i_this->m2CC.z + camfwd.z * 150.0f;
         fopAc_ac_c* searchResult;
-        if (i_this->m370 != -1 && fopAcM_SearchByID(i_this->m370, &searchResult) &&
-            searchResult != NULL && fpcM_GetName(&searchResult) == 0xC2)
+        if (i_this->m370 != fpcM_ERROR_PROCESS_ID_e &&
+            fopAcM_SearchByID(i_this->m370, &searchResult) && searchResult != NULL &&
+            fopAcM_GetName(&searchResult) == PROC_KANTERA)
         {
             searchResult->current.pos = i_this->m2CC;
             searchResult->current.angle.y = i_this->shape_angle.GetY();
-            searchResult->scale = cXyz::BaseXYZ;  // Might not be this, but all ones.
-            BOOL weirdBool = TRUE;
-            if(i_this->m2B4->mFrameCtrl.getState() & 1 == 0 && i_this->m2B4->mFrameCtrl.getRate()) {
-                weirdBool = FALSE;
-            }
-            if(weirdBool) {
+            searchResult->scale = cXyz::BaseXYZ;  // Might not be referencing this symbol?
+            if (!i_this->m2B4->isStop()) {
                 i_this->m341 = 0;
                 i_this->mBehaviorType = VisibleFromStart;
                 first_mode_change(i_this);
@@ -252,51 +245,45 @@ void action_dousa(pw_class* i_this) {
         }
         break;
     case 0xD:
-        i_this->m384 = 0;
+        i_this->m384 = 0; // Feels like m384 might be some cXyz?
         i_this->m388 = 0;
         i_this->m38C = 0;
         i_this->m38E = 0;
         i_this->m340 = 0;
         i_this->m341 = 0;
-        randomValue = cM_rndF(60.0f);
-        i_this->m378 = (short) randomValue + 60.0f;
-        if(i_this->m346 && i_this->m374 != 0x23) {
-            anm_init(i_this,0x23,7.0f,'\x02', 1.0f, -1);
+        i_this->m378 = (short) cM_rndF(60.0f) + 60.0f;
+        if (i_this->m346 && i_this->m374 != 0x23) {
+            anm_init(i_this, 0x23, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         } else if (i_this->m374 != 0x24) {
-            anm_init(i_this,0x24,7.0,'\x02',1.0f, -1);
+            anm_init(i_this, 0x24, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         }
         i_this->m368 += 1;
-    case 0xE:                       // 0.0f is a placeholder for some local value
+    case 0xE:  // 0.0f is a placeholder for some local value
         cLib_addCalc0(&i_this->speedF, 0.0f, 1.0f);
-        if(!i_this->m378) {
+        if (!i_this->m378) {
             i_this->m368 += 1;
-            PART_OF_CASE_E:
-            randomValue = cM_rndF(120.0f);
-            i_this->m378 = (short) randomValue + 120.0f;
-            if(i_this->m346 && i_this->m374 != 0x14) {
-                anm_init(i_this,0x14, 7.0f, '\x02', 1.0f, -1);
+    case 0xF:
+            i_this->m378 = (short) cM_rndF(120.0f) + 120.0f;
+            if (i_this->m346 && i_this->m374 != 0x14) {
+                anm_init(i_this, 0x14, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             } else if (i_this->m374 != 0x15) {
-                anm_init(i_this,0x15, 7.0f, '\x02', 1.0f, -1);
+                anm_init(i_this, 0x15, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             }
-            randomValue = cM_rndFX(16384.0f);
-            i_this->m38C += (short) randomValue;
-            if(i_this->mPathIndex == 0xFF || i_this->m348 == NULL) {
+            i_this->m38C += (short)cM_rndFX(16384.0f);
+            if (i_this->mPathIndex == 0xFF || i_this->m348 == NULL) {
                 i_this->m368 = 0x10;
             } else {
                 i_this->m368 = 0x14;
             }
         }
-        break;
-    case 0xF:
-        goto PART_OF_CASE_E;
     case 0x10:
         i_this->speedF = 5.0f;
         move_sound(i_this);
-        if(i_this->m37A == 0) {
-            if(Line_check(i_this, i_this->current.pos, 0) && hani_check(i_this)) {
-                if(i_this->m378 == 0) {
+        if (i_this->m37A == 0) {
+            if (Line_check(i_this, i_this->current.pos, 0) && hani_check(i_this)) {
+                if (i_this->m378 == 0) {
                     i_this->m368 = 0xF;
-                } 
+                }
             } else {
                 i_this->m37A = 10;
             }
@@ -304,12 +291,11 @@ void action_dousa(pw_class* i_this) {
         break;
     case 0x14:
         // Some wacky stuff here, needs a professional look - 0x80891D34
-        if(i_this->mPathIndex != 0xFF && i_this->m348 != NULL) {
+        if (i_this->mPathIndex != 0xFF && i_this->m348 != NULL) {
             i_this->speedF = 5.0f;
             move_sound(i_this);
             // This part is also wack. going to leave the rest
             // of case 0x14 alone.
-
         }
         break;
     case 0x19:
@@ -317,12 +303,12 @@ void action_dousa(pw_class* i_this) {
         break;
     case 0x1B:
     case 0x1C:
-        if (i_this->actor_status & 0x00100000 == 0) {
+        if (!fopAcM_CheckStatus(i_this, fopAcStts_HOOK_CARRY_e)) {
             i_this->m368 = 0x5A;
-        } 
+        }
         break;
     case 0x65:
-        if (i_this->m2B4->mFrameCtrl.getState() & 1 == 0 && i_this->m2B4->mFrameCtrl.getRate()) {
+        if (!i_this->m2B4->isStop()) {
             break;
         }
     case 0x5A:
@@ -332,30 +318,31 @@ void action_dousa(pw_class* i_this) {
     case 0x5C:
         break;
     case 0x64:
-        anm_init(i_this, 0x17, 6.0f, '\0', 1.0f, -1);
+        anm_init(i_this, 0x17, 6.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         i_this->m368 += 1;
         break;
     case 0x6E:
-        anm_init(i_this, 0xC, 7.0f, '\x02', 1.0f, -1);
+        anm_init(i_this, 0xC, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         break;
     case 0x6F:
         if (i_this->m5C4.mpEmitter != NULL) {
-            //set Actor Position
+            // set Actor Position
         }
-        if(!i_this->mBgsAcch.ChkGroundHit()) break;
+        if (!i_this->mBgsAcch.ChkGroundHit())
+            break;
         // Some VTBL stuff?
         i_this->speedF = 0.0f;
         i_this->speed = cXyz::Zero;
         i_this->gravity = 0.0f;
-        anm_init(i_this, 0x1D, 0.0f, '\0', 1.0f, -1);
+        anm_init(i_this, 0x1D, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         i_this->m368 += 1;
     case 0x70:
-        if (i_this->m2B4->mFrameCtrl.getState() & 1 == 0 && i_this->m2B4->mFrameCtrl.getRate()) {
+        if (!i_this->m2B4->isStop()) {
             i_this->m368 = 0x5A;
         }
-    // Some default case stuff is happening
+        // Some default case stuff is happening
     }
-    if(i_this->mJalhallaParentId == -1) {
+    if (i_this->mJalhallaParentId == fpcM_ERROR_PROCESS_ID_e) {
         fuwafuwa_calc(i_this);
     }
 }

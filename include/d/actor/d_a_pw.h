@@ -9,14 +9,6 @@
 #include "f_op/f_op_actor.h"
 
 
-enum daPW__BehaviorType {
-    VisibleFromStart = 0x0,
-    InvisibleAtStart = 0x1,
-    OnlyLanternVisibleAtStart = 0x2,
-    JalhallaChildA = 0x3,
-    JalhallaChildB = 0x4,
-    UseDefault = 0xFF
-};
 
 class pw_class : public fopEn_enemy_c {
 public:
