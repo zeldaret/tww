@@ -128,7 +128,7 @@ void action_dousa(pw_class* i_this) {
     float randomValue;
     switch (i_this->m368) {
     case 0:
-        anm_init(i_this, 0x23, 7.0, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0, -1);
+        anm_init(i_this, 0x23, 7.0, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, -1);
         i_this->m346 = 0;
         i_this->m368 += 1;
         break;
