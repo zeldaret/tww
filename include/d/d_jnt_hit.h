@@ -47,7 +47,7 @@ public:
         return false;
     }
     bool isCylinder(int type) {
-        if (type == 0 || (u32)type-2 <= 1 || type == 5 || type == 7) {
+        if (type == 0 || type == 2 || type == 3 || type == 5 || type == 7) {
             return true;
         }
         return false;

@@ -451,11 +451,11 @@ static void BG_check(am_class* i_this) {
     f32 radius = 150.0f + g_regHIO.mChild[12].mFloatRegs[4];
     i_this->mAcchCir.SetWall(halfHeight, radius);
 
-    i_this->current.pos.y -= i_this->m02EC;
-    i_this->old.pos.y -= i_this->m02EC;
+    i_this->current.pos.y -= i_this->mCorrectionOffsetY;
+    i_this->old.pos.y -= i_this->mCorrectionOffsetY;
     i_this->mAcch.CrrPos(*dComIfG_Bgsp());
-    i_this->current.pos.y += i_this->m02EC;
-    i_this->old.pos.y += i_this->m02EC;
+    i_this->current.pos.y += i_this->mCorrectionOffsetY;
+    i_this->old.pos.y += i_this->mCorrectionOffsetY;
 }
 
 /* 000011E4-00001504       .text Line_check__FP8am_class4cXyz */
@@ -1190,7 +1190,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
         i_this->max_health = 10;
         i_this->health = 10;
 
-        fopAcM_SetMtx(i_this, i_this->mpMorf->mpModel->getBaseTRMtx());
+        fopAcM_SetMtx(i_this, i_this->mpMorf->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(i_this, -100.0f, -10.0f, -80.0f, 120.0f, 400.0f, 100.0f);
 
         i_this->attention_info.flags = 0;

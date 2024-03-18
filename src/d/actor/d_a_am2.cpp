@@ -1313,7 +1313,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
         i_this->stealItemLeft = 3;
         i_this->model = i_this->mpMorf->getModel();
         
-        fopAcM_SetMtx(i_this, i_this->mpMorf->mpModel->getBaseTRMtx());
+        fopAcM_SetMtx(i_this, i_this->mpMorf->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(i_this, -50.0f, 0.0f, -20.0f, 60.0f, 180.0f, 60.0f);
 
         i_this->attention_info.flags = 0;

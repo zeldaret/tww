@@ -30,7 +30,7 @@ public:
     /* 0x02E0 */ int mCurrBckIdx;
     /* 0x02E4 */ uint mSwallowedActorPID;
     /* 0x02E8 */ f32 mAreaRadius;
-    /* 0x02EC */ f32 m02EC;
+    /* 0x02EC */ f32 mCorrectionOffsetY;
     /* 0x02F0 */ f32 mSpawnPosY;
     /* 0x02F4 */ cXyz mEyeballPos;
     /* 0x0300 */ cXyz mMouthPos;

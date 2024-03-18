@@ -11,7 +11,6 @@
 #include "f_op/f_op_camera_mng.h"
 #include "f_pc/f_pc_manager.h"
 
-
 enum daPW__BehaviorType {
     VisibleFromStart = 0x0,
     InvisibleAtStart = 0x1,
@@ -21,14 +20,73 @@ enum daPW__BehaviorType {
     UseDefault = 0xFF
 };
 
+enum PW_RES_FILE_ID { // IDs and indexes are synced
+    /* BAS */
+    PW_BAS_ATTACK1=0x7,
+    PW_BAS_NIGERU1=0x8,
+    
+    /* BCK */
+    PW_BCK_ANSIN1=0xB,
+    PW_BCK_ATTACK1=0xC,
+    PW_BCK_BUNRETU1=0xD,
+    PW_BCK_DAMAGE1=0xE,
+    PW_BCK_DAMAGE_K1=0xF,
+    PW_BCK_DERUA1=0x10,
+    PW_BCK_DERUB1=0x11,
+    PW_BCK_DERUB2=0x12,
+    PW_BCK_DOKI1=0x13,
+    PW_BCK_IDOU1=0x14,
+    PW_BCK_IDOU2=0x15,
+    PW_BCK_IKIGIRE1=0x16,
+    PW_BCK_JITTAIKA1=0x17,
+    PW_BCK_KIDUKU1=0x18,
+    PW_BCK_KIDUKU2=0x19,
+    PW_BCK_KIZETU1=0x1A,
+    PW_BCK_NIGERU1=0x1B,
+    PW_BCK_PRESS1=0x1C,
+    PW_BCK_SIRIMOTI1=0x1D,
+    PW_BCK_SYOUTEN1=0x1E,
+    PW_BCK_TORITUKI1=0x1F,
+    PW_BCK_TORITUKI2=0x20,
+    PW_BCK_TORITUKI3=0x21,
+    PW_BCK_TORITUKI_WAIT1=0x22,
+    PW_BCK_WAIT1=0x23,
+    PW_BCK_WAIT2=0x24,
+    
+    /* BDLM */
+    PW_BDL_PW=0x27,
+    
+    /* BRK */
+    PW_BRK_DEFAULT=0x2A,
+    PW_BRK_HIT=0x2B,
+    PW_BRK_JITTAIKA1=0x2C,
+    
+    /* BTP */
+    PW_BTP_IROGAE1=0x2F,
+};
+
+static bool TORITUKI_ON = false;
+
 /* 00000078-00000158       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000158-00000230       .text draw_SUB__FP8pw_class */
-void draw_SUB(pw_class*) {
-    /* Nonmatching */
+void draw_SUB(pw_class* i_this) {
+    J3DModel* model = i_this->mpMorf->getModel();
+    model->setBaseScale(i_this->scale);
+    mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y + i_this->m3A4, i_this->current.pos.z);
+    cMtx_YrotM(mDoMtx_stack_c::get(), i_this->shape_angle.y);
+    cMtx_XrotM(mDoMtx_stack_c::get(), i_this->shape_angle.x);
+    cMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    i_this->mpMorf->calc();
+    
+    enemy_fire(&i_this->mEnemyFire);
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
 }
 
 /* 00000230-000004D4       .text daPW_Draw__FP8pw_class */
@@ -37,8 +95,16 @@ static BOOL daPW_Draw(pw_class*) {
 }
 
 /* 000004D4-00000600       .text anm_init__FP8pw_classifUcfi */
-void anm_init(pw_class*, int, float, unsigned char, float, int) {
-    /* Nonmatching */
+void anm_init(pw_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
+    i_this->mBckIdx = bckFileIdx;
+    if (soundFileIdx >= 0) {
+        void* soundAnm = dComIfG_getObjectRes("AM", soundFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
+    } else {
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
+    }
 }
 
 /* 00000600-000006F4       .text kantera_break__FP8pw_class */
@@ -72,13 +138,37 @@ void kantera_calc(pw_class*) {
 }
 
 /* 000018FC-00001990       .text BG_check__FP8pw_class */
-void BG_check(pw_class*) {
-    /* Nonmatching */
+void BG_check(pw_class* i_this) {
+    i_this->mAcchCir.SetWall(70.0f, 140.0f);
+
+    i_this->current.pos.y -= i_this->mCorrectionOffsetY;
+    i_this->old.pos.y -= i_this->mCorrectionOffsetY;
+    i_this->mAcch.CrrPos(*dComIfG_Bgsp());
+    i_this->current.pos.y += i_this->mCorrectionOffsetY;
+    i_this->old.pos.y += i_this->mCorrectionOffsetY;
 }
 
 /* 00001990-00001D60       .text Line_check__FP8pw_class4cXyzUc */
-BOOL Line_check(pw_class*, cXyz, unsigned char) {
-    /* Nonmatching */
+BOOL Line_check(pw_class* i_this, cXyz destPos, u8 r22) {
+    fopAc_ac_c* actor = i_this;
+    dBgS_LinChk linChk;
+    i_this->m314 = destPos;
+    if (!r22) {
+        cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+        cXyz sp14(0.0f, 0.0f, 200.0f);
+        MtxPosition(&sp14, &destPos);
+        i_this->m314 = destPos + i_this->current.pos;
+    }
+    i_this->m314.y += 80.0f;
+    destPos = i_this->m314;
+    i_this->m308 = i_this->current.pos;
+    i_this->m308.y += 80.0f;
+    linChk.Set(&i_this->m308, &destPos, actor);
+    if (!dComIfG_Bgsp()->LineCross(&linChk)) {
+        return FALSE;
+    }
+    i_this->m38C = i_this->current.angle.y + 0x8000;
+    return TRUE;
 }
 
 /* 00002198-00002254       .text alpha_anime__FP8pw_class */
@@ -92,7 +182,7 @@ void fuwafuwa_calc(pw_class*) {
 }
 
 /* 00002400-00002560       .text kougen_hani_check__FP8pw_classUc */
-void kougen_hani_check(pw_class*, unsigned char) {
+void kougen_hani_check(pw_class*, u8) {
     /* Nonmatching */
 }
 
@@ -124,45 +214,93 @@ void first_mode_change(pw_class*) {
 /* 00002A90-00003B08       .text action_dousa__FP8pw_class */
 void action_dousa(pw_class* i_this) {
     /* Nonmatching */
-    daPy_py_c* pPlayer = daPy_getPlayerActorClass();
-    float randomValue;
-    switch (i_this->m368) {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    camera_class* camera = dComIfGp_getCamera(0);
+    cXyz camfwd;
+    switch (i_this->mState) {
     case 0:
-        anm_init(i_this, 0x23, 7.0, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, -1);
+        anm_init(i_this, PW_BCK_WAIT1, 7.0, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, -1);
         i_this->m346 = 0;
-        i_this->m368 += 1;
+        i_this->mState += 1;
         break;
-
     case 0x1:
-        if (fopAcM_searchActorDistance(i_this, pPlayer) < 500.0f) {
-            anm_init(i_this, 0x10, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-            i_this->m38C = fopAcM_searchActorAngleY(i_this, pPlayer);
+        if (fopAcM_searchPlayerDistance(i_this) < 500.0f) {
+            anm_init(i_this, PW_BCK_DERUA1, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
             i_this->current.angle.y = i_this->m38C;
             i_this->shape_angle.y = i_this->m38C;
             i_this->m3A4 = -80.0f;
             i_this->m340 = 1;
-            i_this->m368 += 1;
+            i_this->mState += 1;
         }
         break;
-
     case 0x2:
         i_this->shape_angle.y += 0x1000;
-        cLib_addCalc0(&i_this->m3A4, 1.0f, 1.0f);
+        cLib_addCalc0(&i_this->m3A4, 1.0f, 3.0f);
         i_this->m39A += 7;
         if (i_this->m39A > 100) {
             i_this->m39A = 100;
         }
-        if (i_this->m2B4->checkFrame(25.0f)) {
+        if (i_this->mpMorf->checkFrame(25.0f)) {
             i_this->m3A4 = 0.0f;
             first_mode_change(i_this);
-            i_this->m38C = fopAcM_searchActorAngleY(i_this, pPlayer);
-            JPABaseEmitter* particle =
-                dComIfGp_particle_set(0x82EE, &i_this->m2CC, &i_this->shape_angle);
+            i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
+            JPABaseEmitter* particle = dComIfGp_particle_set(0x82EE, &i_this->m2CC, &i_this->shape_angle);
             if (particle != NULL) {
-                particle->setGlobalSRTMatrix(i_this->m2B4->getModel()->getAnmMtx(0x00));
+                particle->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0x17)); // j_pw_item_r1 joint
             }
             i_this->attention_info.flags = 0;
-            i_this->m368 = 0;
+            i_this->mState = 0x0A;
+        }
+        break;
+    case 0x9:
+        i_this->m39A = 0;
+        i_this->m39C = 0;
+        i_this->mState += 1;
+        // Fall-through
+    case 0xA:
+        if (i_this->mBehaviorType == InvisibleAtStart) {
+            i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
+        }
+        i_this->mKanteraID = fopAcM_create(PROC_KANTERA, 0xFF000001, &i_this->m2CC, i_this->current.roomNo);
+        if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
+            i_this->m382 = 5;
+            switch (i_this->mBehaviorType) {
+            case InvisibleAtStart:
+                i_this->mState = 0xB;
+                break;
+            case OnlyLanternVisibleAtStart:
+                i_this->m341 = 2;
+                i_this->mState = 8;
+                break;
+            default:
+                i_this->m346 = 1;
+                i_this->mState = 0xD;
+                break;
+            }
+        }
+        break;
+    case 0xB:
+        dKyr_get_vectle_calc(&i_this->current.pos, &camera->mLookat.mEye, &camfwd);
+        i_this->mActorPlace.pos.x = i_this->m2CC.x + camfwd.x * 150.0f;
+        i_this->mActorPlace.pos.y = i_this->m2CC.y;
+        i_this->mActorPlace.pos.z = i_this->m2CC.z + camfwd.z * 150.0f;
+        fopAc_ac_c* searchResult;
+        if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e &&
+            fopAcM_SearchByID(i_this->mKanteraID, &searchResult) && searchResult != NULL &&
+            fopAcM_GetName(&searchResult) == PROC_KANTERA)
+        {
+            searchResult->current.pos = i_this->m2CC;
+            searchResult->current.angle.y = i_this->shape_angle.GetY();
+            searchResult->scale.setall(1.0f);
+            if (i_this->mpMorf->isStop()) {
+                i_this->m341 = 0;
+                i_this->mBehaviorType = VisibleFromStart;
+                first_mode_change(i_this);
+                i_this->m382 = 3;
+                i_this->m346 = 1;
+                i_this->mState = 0xD;
+            }
         }
         break;
     case 0x6:
@@ -170,182 +308,173 @@ void action_dousa(pw_class* i_this) {
         if (i_this->m39A > 100) {
             i_this->m39A = 100;
         }
-        if (i_this->m2B4->isStop()) {
+        if (i_this->mpMorf->isStop()) {
             i_this->mBehaviorType = VisibleFromStart;
             i_this->m346 = 1;
             first_mode_change(i_this);
-            i_this->m368 = 0xD;
+            i_this->mState = 0xD;
         }
         break;
     case 0x7:
         if (fopAcM_searchPlayerDistance(i_this) < i_this->mNoticeRange) {
-            s16 angleToPlayer = fopAcM_searchPlayerAngleY(i_this);
-            i_this->m38C = angleToPlayer;
-            i_this->current.angle.y = angleToPlayer;
-            i_this->shape_angle.y = angleToPlayer;
-            anm_init(i_this, 0x12, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-            i_this->m368 = 6;
+            i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
+            i_this->current.angle.y = i_this->m38C;
+            i_this->shape_angle.y = i_this->m38C;
+            anm_init(i_this, PW_BCK_DERUB2, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            i_this->mState = 6;
         }
         break;
     case 0x8:
         i_this->m380 = 2;
         i_this->m346 = 1;
         if (fopAcM_searchPlayerDistance(i_this) < i_this->m3AC) {
-            anm_init(i_this, 0x11, 3.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
-            i_this->m368 = 7;
-        }
-        break;
-    case 0x9:
-        i_this->m39A = 0;
-        i_this->m39C = 0;
-        i_this->m368 += 1;
-    case 0xA:
-        if (i_this->mBehaviorType == InvisibleAtStart) {
-            i_this->m38C = fopAcM_searchPlayerDistance(i_this);
-        }
-        i_this->m370 =
-            fopAcM_create(PROC_KANTERA, 0xFF000001, &i_this->m2CC, i_this->current.roomNo);
-        if (i_this->m370 != fpcM_ERROR_PROCESS_ID_e) {
-            i_this->m382 = 5;
-            switch (i_this->mBehaviorType) {
-            case OnlyLanternVisibleAtStart:
-                i_this->m341 = 2;
-                i_this->m368 = 8;
-                break;
-            case InvisibleAtStart:
-                i_this->m368 = 8;
-                break;
-            default:
-                i_this->m346 = 1;
-                i_this->m368 = 0xD;
-            }
-        }
-        break;
-    case 0xB:
-        cXyz camfwd;
-        camera_class* pCamera = dComIfGp_getCamera(0);
-        dKyr_get_vectle_calc(&i_this->current.pos, &pCamera->mLookat.mCenter, &camfwd);
-        i_this->mActorPlace.pos.x = i_this->m2CC.x + camfwd.x * 150.0f;
-        i_this->mActorPlace.pos.y = i_this->m2CC.y;
-        i_this->mActorPlace.pos.z = i_this->m2CC.z + camfwd.z * 150.0f;
-        fopAc_ac_c* searchResult;
-        if (i_this->m370 != fpcM_ERROR_PROCESS_ID_e &&
-            fopAcM_SearchByID(i_this->m370, &searchResult) && searchResult != NULL &&
-            fopAcM_GetName(&searchResult) == PROC_KANTERA)
-        {
-            searchResult->current.pos = i_this->m2CC;
-            searchResult->current.angle.y = i_this->shape_angle.GetY();
-            searchResult->scale = cXyz::BaseXYZ;  // Might not be referencing this symbol?
-            if (!i_this->m2B4->isStop()) {
-                i_this->m341 = 0;
-                i_this->mBehaviorType = VisibleFromStart;
-                first_mode_change(i_this);
-                i_this->m382 = 3;
-                i_this->m346 = 1;
-                i_this->m368 = 0xD;
-            }
+            anm_init(i_this, PW_BCK_DERUB1, 3.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            i_this->mState = 7;
         }
         break;
     case 0xD:
-        i_this->m384 = 0;  // Feels like m384 might be some cXyz?
-        i_this->m388 = 0;
-        i_this->m38C = 0;
-        i_this->m38E = 0;
+        for (int i = 0; i < 4; i++) {
+            i_this->m384[i] = 0;
+        }
         i_this->m340 = 0;
         i_this->m341 = 0;
-        i_this->m378 = (short)cM_rndF(60.0f) + 60.0f;
-        if (i_this->m346 && i_this->m374 != 0x23) {
-            anm_init(i_this, 0x23, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
-        } else if (i_this->m374 != 0x24) {
-            anm_init(i_this, 0x24, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        i_this->m378 = cM_rndF(60.0f) + 60.0f;
+        if (i_this->m346 && i_this->mBckIdx != PW_BCK_WAIT1) {
+            anm_init(i_this, PW_BCK_WAIT1, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        } else if (i_this->mBckIdx != PW_BCK_WAIT2) {
+            anm_init(i_this, PW_BCK_WAIT2, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         }
-        i_this->m368 += 1;
-    case 0xE:  // 0.0f is a placeholder for some local value
-        cLib_addCalc0(&i_this->speedF, 0.0f, 1.0f);
+        i_this->mState += 1;
+        // Fall-through
+    case 0xE:
+        cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
         if (i_this->m378) {
             break;
         }
-        i_this->m368 += 1;
+        i_this->mState += 1;
+        // Fall-through
     case 0xF:
-        i_this->m378 = (short)cM_rndF(120.0f) + 120.0f;
-        if (i_this->m346 && i_this->m374 != 0x14) {
-            anm_init(i_this, 0x14, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
-        } else if (i_this->m374 != 0x15) {
-            anm_init(i_this, 0x15, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
-        }
-        i_this->m38C += (short)cM_rndFX(16384.0f);
-        if (i_this->mPathIndex == 0xFF || i_this->m348 == NULL) {
-            i_this->m368 = 0x10;
+        i_this->m378 = cM_rndF(120.0f) + 120.0f;
+        if (i_this->m346 == 1) {
+            if (i_this->mBckIdx != PW_BCK_IDOU1) {
+                anm_init(i_this, PW_BCK_IDOU1, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            }
         } else {
-            i_this->m368 = 0x14;
+            if (i_this->mBckIdx != PW_BCK_IDOU2) {
+                anm_init(i_this, PW_BCK_IDOU2, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            }
         }
+        i_this->m38C += (s16)cM_rndFX(16384.0f);
+        if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
+            i_this->mState = 0x14;
+        } else {
+            i_this->mState = 0x10;
+        }
+        break;
     case 0x10:
         i_this->speedF = 5.0f;
         move_sound(i_this);
         if (i_this->m37A == 0) {
-            if (Line_check(i_this, i_this->current.pos, 0) && hani_check(i_this)) {
-                if (i_this->m378 == 0) {
-                    i_this->m368 = 0xF;
-                }
-            } else {
+            if (Line_check(i_this, i_this->current.pos, 0) || hani_check(i_this)) {
                 i_this->m37A = 10;
+            } else if (i_this->m378 == 0) {
+                i_this->mState = 0xF;
             }
         }
         break;
     case 0x14:
-        // Some wacky stuff here, needs a professional look - 0x80891D34
-        if (i_this->mPathIndex != 0xFF && i_this->m348 != NULL) {
+        i_this->m2FC = i_this->current.pos;
+        if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
             i_this->speedF = 5.0f;
             move_sound(i_this);
-            // This part is also wack. going to leave the rest
-            // of case 0x14 alone.
+            dPath__Point* pnt = &i_this->mpPath->mpPnt[i_this->mPathPntIdx];
+            f32 delta_x = pnt->mPos.x - i_this->current.pos.x;
+            f32 delta_z = pnt->mPos.z - i_this->current.pos.z;
+            i_this->m38C = cM_atan2s(delta_x, delta_z);
+            f32 dist_xz = sqrtf(delta_x*delta_x + delta_z*delta_z);
+            if (dist_xz < 80.0f) {
+                i_this->mPathPntIdx++;
+                if (i_this->mPathPntIdx >= i_this->mpPath->m_num) {
+                    i_this->mPathPntIdx = 0;
+                }
+            }
         }
         break;
     case 0x19:
+        i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
+        anm_init(i_this, PW_BCK_DAMAGE_K1, 9.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        i_this->speedF = -2.0f;
+        i_this->mState += 1;
+        break;
     case 0x1A:
         break;
     case 0x1B:
     case 0x1C:
         if (!fopAcM_CheckStatus(i_this, fopAcStts_HOOK_CARRY_e)) {
-            i_this->m368 = 0x5A;
+            i_this->mState = 0x5A;
         }
         break;
     case 0x65:
-        if (!i_this->m2B4->isStop()) {
+        if (!i_this->mpMorf->isStop()) {
             break;
         }
+        // Fall-through
     case 0x5A:
     case 0x5B:
+        // TODO
         Big_pow_gattai_check(i_this);
         break;
     case 0x5C:
         break;
     case 0x64:
-        anm_init(i_this, 0x17, 6.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-        i_this->m368 += 1;
+        anm_init(i_this, PW_BCK_JITTAIKA1, 6.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        i_this->mState += 1;
         break;
     case 0x6E:
-        anm_init(i_this, 0xC, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, PW_BCK_ATTACK1, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        // TODO
+        i_this->mState += 1;
         break;
     case 0x6F:
         if (i_this->m5C4.mpEmitter != NULL) {
-            // set Actor Position
+            i_this->mActorPlace.pos = i_this->current.pos;
+            i_this->mActorPlace.angle = i_this->shape_angle;
         }
-        if (!i_this->mBgsAcch.ChkGroundHit())
+        if (!i_this->mAcch.ChkGroundHit())
             break;
-        // Some VTBL stuff?
+        i_this->m5C4.end();
         i_this->speedF = 0.0f;
-        i_this->speed = cXyz::Zero;
+        i_this->speed.setall(0.0f);
         i_this->gravity = 0.0f;
-        anm_init(i_this, 0x1D, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-        i_this->m368 += 1;
+        anm_init(i_this, PW_BCK_SIRIMOTI1, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        i_this->mState += 1;
     case 0x70:
-        if (!i_this->m2B4->isStop()) {
-            i_this->m368 = 0x5A;
+        // Fall-through
+        if (i_this->mpMorf->isStop()) {
+            i_this->mState = 0x5A;
         }
-        // Some default case stuff is happening
+        break;
     }
-    if (i_this->mJalhallaParentId == fpcM_ERROR_PROCESS_ID_e) {
+    
+    if (i_this->mState <= 0xB) {
+        return;
+    }
+    if (i_this->m37C == 0 && i_this->mState < 0x5A) {
+        if (i_this->mState == 0x0E || i_this->mState == 0x10 || i_this->mState == 0x14) {
+            if (!hani_check(i_this) && fopAcM_searchPlayerDistance(i_this) < 500.0f && fabsf(i_this->current.pos.y - player->current.pos.y) < 100.0f) {
+                if (!Line_check(i_this, i_this->current.pos, 1) && (i_this->m346 == 1 || !TORITUKI_ON)) {
+                    i_this->mAction = 1;
+                    i_this->mState = 0x1E;
+                }
+            }
+        }
+    }
+    
+    if (i_this->mState >= 10 && i_this->mState < 90) {
+        alpha_anime(i_this);
+    }
+    
+    if (i_this->mJalhallaID == fpcM_ERROR_PROCESS_ID_e) {
         fuwafuwa_calc(i_this);
     }
 }
@@ -396,6 +525,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00006720-00006BDC       .text daPW_Create__FP10fopAc_ac_c */
-static s32 daPW_Create(fopAc_ac_c*) {
+static s32 daPW_Create(fopAc_ac_c* i_actor) {
     /* Nonmatching */
+    fopAcM_SetupActor(i_actor, pw_class);
 }
