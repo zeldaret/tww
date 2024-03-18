@@ -6,187 +6,280 @@
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_npc.h"
+#include "d/actor/d_a_player_npc.h"
 #include "d/actor/d_a_pedestal.h"
 #include "d/d_particle.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class mDoExt_McaMorf;
 
 class daNpc_Os_infiniteEcallBack_c : public dPa_levelEcallBack {
 public:
     void end();
-    void makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*);
+    void makeEmitter(u16, const cXyz*, const csXyz*, const cXyz*);
     void execute(JPABaseEmitter*);
-    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
-};
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
 
-class daNpc_Os_c : public fopAc_ac_c {
+    JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
+
+private:
+    /* 0x04 */ JPABaseEmitter* mpBaseEmitter;
+}; // Size: 0x08
+
+class daNpc_Os_c : public daPy_npc_c {
 public:
-    ~daNpc_Os_c();
-    void chkNpcAction(int (daNpc_Os_c::*)(void*)) {}
-    void chkPlayerAction(int (daNpc_Os_c::*)(void*)) {}
-    void clearStatus() {}
-    void getAttentionBasePos() {}
-    void getBackbone_x() {}
-    void getBackbone_y() {}
-    void getBaseAnimeFrame() {}
-    void getBaseAnimeFrameRate() {}
-    void getCattleRoomNo() {}
-    void getEyePos() {}
-    void getGroundY() {}
-    void getHead_x() {}
-    void getHead_y() {}
-    void getLeftHandMatrix() {}
-    void getRightHandMatrix() {}
-    void incAttnSetCount() {}
-    void isFinish() {}
-    void isGravity() {}
-    void isPlayerRoom_Goat() {}
-    void isSetHomePos() {}
-    void isWaterHit() {}
-    void offGravity() {}
-    void offPlayerRoom(int) {}
-    void onFinish() {}
-    void onGravity() {}
-    void onPlayerRoom(int) {}
-    void onSetHomePos() {}
-    void onWaterHit() {}
-    void setCattleRoomNo(signed char) {}
+    typedef int(daNpc_Os_c::*ActionFunc_t)(void*);
 
-    static bool m_playerRoom[3];
-    static s8 m_cattleRoomNo;
-    static dPa_smokeEcallBack m_smoke;
-    static dKy_tevstr_c m_smoke_tevstr;
+    daNpc_Os_c() {}
+    ~daNpc_Os_c();
+    BOOL chkNpcAction(ActionFunc_t action) {
+        return mNpcAction == action;
+    }
+    BOOL chkPlayerAction(ActionFunc_t action) {
+        return mPlayerAction == action;
+    }
+    void clearStatus() { field_0x784 = 0; }
+    cXyz& getAttentionBasePos() { return field_0x754; }
+    s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
+    s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
+    f32 getBaseAnimeFrame() { return 0.0f; }
+    f32 getBaseAnimeFrameRate() { return 1.0f; }
+    s8 getCattleRoomNo() { return m_cattleRoomNo; }
+    cXyz& getEyePos() { return eyePos; }
+    f32 getGroundY() { return mAcch.GetGroundH(); }
+    s16 getHead_x() { return mJntCtrl.getHead_x(); }
+    s16 getHead_y() { return mJntCtrl.getHead_y(); }
+    MtxP getLeftHandMatrix() { return cullMtx; }
+    MtxP getRightHandMatrix() { return cullMtx; }
+    void incAttnSetCount() {
+        if(field_0x7A3 != 0xFF) {
+            field_0x7A3 += 1;
+        }
+    }
+    BOOL isFinish() { return cLib_checkBit(field_0x784, 0x1UL); }
+    BOOL isGravity() { return cLib_checkBit(field_0x784, 0x8UL); }
+    BOOL isPlayerRoom_Goat() {}
+    BOOL isSetHomePos() { return cLib_checkBit(field_0x784, 0x2UL); }
+    BOOL isWaterHit() { return cLib_checkBit(field_0x784, 0x4UL); }
+    void offGravity() { field_0x784 &= ~0x8; }
+    void offPlayerRoom(int idx) { m_playerRoom[idx] = false; }
+    void onFinish() { field_0x784 |= 0x1; }
+    void onGravity() { field_0x784 |= 0x8; }
+    void onPlayerRoom(int idx) { m_playerRoom[idx] = true; }
+    void onSetHomePos() { field_0x784 |= 0x2; }
+    void onWaterHit() { field_0x784 |= 0x4; }
+    void setCattleRoomNo(s8 roomNo) { m_cattleRoomNo = roomNo; }
 
     static bool isPlayerRoom(int idx) { return m_playerRoom[idx]; }
 
     s32 create();
-    void createHeap();
-    void jointCheck(signed char);
-    void wakeupCheck();
+    BOOL createHeap();
+    BOOL jointCheck(s8);
+    BOOL wakeupCheck();
     void setWakeup();
-    void finishCheck();
+    BOOL finishCheck();
     void setFinish();
-    void getWakeupOrderEventNum();
-    void getFinishOrderEventNum();
-    void getMyStaffId();
-    void getRestartNumber();
-    void checkGoalRoom();
+    s8 getWakeupOrderEventNum();
+    s8 getFinishOrderEventNum();
+    int getMyStaffId();
+    s8 getRestartNumber();
+    BOOL checkGoalRoom();
     void checkPlayerRoom();
     void eventOrderCheck();
     void makeBeam(int);
     void endBeam();
-    void wallHitCheck();
-    void walkProc(float, short);
-    void setAction(int (daNpc_Os_c::**)(void*), int (daNpc_Os_c::*)(void*), void*);
+    s32 wallHitCheck();
+    void walkProc(f32, s16);
+    BOOL setAction(ActionFunc_t*, ActionFunc_t, void*);
     void npcAction(void*);
-    void setNpcAction(int (daNpc_Os_c::*)(void*), void*);
+    void setNpcAction(ActionFunc_t, void*);
     void playerAction(void*);
-    void setPlayerAction(int (daNpc_Os_c::*)(void*), void*);
-    void getStickAngY();
-    void calcStickPos(short, cXyz*);
+    void setPlayerAction(ActionFunc_t, void*);
+    s16 getStickAngY();
+    int calcStickPos(s16, cXyz*);
     void returnLinkPlayer();
-    void returnLinkCheck();
-    void waitNpcAction(void*);
-    void finish01NpcAction(void*);
-    void finish02NpcAction(void*);
-    void talkNpcAction(void*);
-    void carryNpcAction(void*);
-    void throwNpcAction(void*);
-    void jumpNpcAction(void*);
-    void routeAngCheck(cXyz&, short*);
-    void routeWallCheck(cXyz&, cXyz&, short*);
-    void checkForwardGroundY(short);
-    void checkWallJump(short);
-    void routeCheck(float, short*);
-    void searchNpcAction(void*);
-    void waitPlayerAction(void*);
-    void walkPlayerAction(void*);
-    void eventProc();
+    BOOL returnLinkCheck();
+    BOOL waitNpcAction(void*);
+    BOOL finish01NpcAction(void*);
+    BOOL finish02NpcAction(void*);
+    BOOL talkNpcAction(void*);
+    BOOL carryNpcAction(void*);
+    BOOL throwNpcAction(void*);
+    BOOL jumpNpcAction(void*);
+    void routeAngCheck(cXyz&, s16*);
+    void routeWallCheck(cXyz&, cXyz&, s16*);
+    f32 checkForwardGroundY(s16);
+    f32 checkWallJump(s16);
+    BOOL routeCheck(f32, s16*);
+    BOOL searchNpcAction(void*);
+    BOOL waitPlayerAction(void*);
+    BOOL walkPlayerAction(void*);
+    BOOL eventProc();
     void initialDefault(int);
-    void actionDefault(int);
+    BOOL actionDefault(int);
     void initialWaitEvent(int);
-    void actionWaitEvent(int);
+    BOOL actionWaitEvent(int);
     void initialWakeupEvent(int);
-    void actionWakeupEvent(int);
+    BOOL actionWakeupEvent(int);
     void initialMoveEvent(int);
-    void actionMoveEvent(int);
+    BOOL actionMoveEvent(int);
     void initialMoveEndEvent(int);
     void initialEndEvent(int);
     void initialTurnEvent(int);
-    void actionTurnEvent(int);
+    BOOL actionTurnEvent(int);
     void initialFinishEvent(int);
-    void actionFinishEvent(int);
+    BOOL actionFinishEvent(int);
     void initialMsgSetEvent(int);
-    void actionMsgSetEvent(int);
-    void actionMsgEndEvent(int);
+    BOOL actionMsgSetEvent(int);
+    BOOL actionMsgEndEvent(int);
     void initialSwitchOnEvent(int);
     void initialNextEvent(int);
     void initialSaveEvent(int);
-    void talk_init();
-    void talk();
+    BOOL talk_init();
+    BOOL talk();
     void setAnm(int);
-    void dNpc_Os_setAnm(mDoExt_McaMorf*, int, float, float, int, const char*);
-    void initBrkAnm(unsigned char, bool);
+    BOOL dNpc_Os_setAnm(mDoExt_McaMorf*, int, f32, f32, int, const char*);
+    BOOL initBrkAnm(u8, bool);
     void playBrkAnm();
     void setAnm_brkAnm(int);
-    void chkAttention(cXyz, short);
-    void chkArea(cXyz*);
+    BOOL chkAttention(cXyz, s16);
+    bool chkArea(cXyz*);
     void carryCheck();
     void eventOrder();
     void checkOrder();
-    void checkCommandTalk();
-    void next_msgStatus(unsigned long*);
-    void getMsg();
+    BOOL checkCommandTalk();
+    u16 next_msgStatus(u32*);
+    u32 getMsg();
     void setCollision();
     void setAttention(bool);
     void lookBack(int, int, int);
     void setBaseMtx();
-    void init();
+    BOOL init();
     BOOL draw();
     void animationPlay();
-    void smokeSet(unsigned short);
+    void smokeSet(u16);
     BOOL execute();
 
-public:
-    /* 0x4EC */ request_of_phase_process_class mPhs;
-    /* 0x4F4 */ mDoExt_McaMorf* m4F4;
-    /* 0x4F8 */ daPedestal::daPds_c* mpPedestal;
-    /* 0x4FC */ u8 m4FC[0x518 - 0x4FC];
-    /* 0x518 */ dBgS_AcchCir mAcchCir1;
-    /* 0x558 */ dBgS_AcchCir mAcchCir2;
-    /* 0x598 */ u8 m598[0x704 - 0x598];
-    /* 0x704 */ dNpc_JntCtrl_c mJntCtrl;
-    /* 0x738 */ u8 m738[0x784 - 0x738];
-    /* 0x784 */ u32 m784;
-    /* 0x788 */ u8 m788[0x798 - 0x788];
-    /* 0x798 */ s16 m798;
-    /* 0x79A */ u8 m79A[0x79C - 0x79A];
-    /* 0x79C */ u8 mTuno1JointIdx;
-    /* 0x79D */ u8 mTuno2JointIdx;
-    /* 0x79E */ u8 mTuno3JointIdx;
-    /* 0x79F */ u8 m79F[0x7A2 - 0x79F];
-    /* 0x7A2 */ u8 m7A2;
-    /* 0x7A3 */ u8 m7A3;
-    /* 0x7A4 */ u8 m7A4[0x7A8 - 0x7A4];
-    /* 0x7A8 */ u8 m7A8;
-    /* 0x7A9 */ u8 m7A9[0x7FC - 0x7A9];
-    /* 0x7FC */ cBgS_PolyInfo m7FC;
-};
+    static bool m_playerRoom[];
+    static s8 m_cattleRoomNo;
+    static dPa_smokeEcallBack m_smoke;
+    static dKy_tevstr_c m_smoke_tevstr;
 
-class daNpc_Os_HIO2_c {
+private:
+    /* 0x4EC */ request_of_phase_process_class mPhs;
+    /* 0x4F4 */ mDoExt_McaMorf* mpMorf;
+    /* 0x4F8 */ daPedestal::daPds_c* mpPedestal;
+    /* 0x4FC */ mDoExt_brkAnm mBrkAnm;
+    /* 0x514 */ u32 mShadowId;
+    /* 0x518 */ dBgS_AcchCir mAcchCir[2];
+    /* 0x598 */ dCcD_Stts mStts;
+    /* 0x5D4 */ dCcD_Cyl mCyl;
+    /* 0x704 */ dNpc_JntCtrl_c mJntCtrl;
+    /* 0x738 */ daNpc_Os_infiniteEcallBack_c field_0x738;
+    /* 0x740 */ daNpc_Os_infiniteEcallBack_c field_0x740;
+    /* 0x748 */ cXyz field_0x748;
+    /* 0x754 */ cXyz field_0x754;
+    /* 0x760 */ f32 mPrevMorfFrame;
+    /* 0x764 */ f32 field_0x764;
+    /* 0x768 */ ActionFunc_t mPlayerAction;
+    /* 0x774 */ ActionFunc_t mNpcAction;
+    /* 0x780 */ u32 field_0x780;
+    /* 0x784 */ u32 field_0x784;
+    /* 0x788 */ f32 field_0x788;
+    /* 0x78C */ s32 field_0x78C;
+    /* 0x790 */ u8 field_0x790[0x794 - 0x790];
+    /* 0x794 */ u32 field_0x794;
+    /* 0x798 */ s16 field_0x798;
+    /* 0x79A */ u8 field_0x79A[0x79C - 0x79A];
+    /* 0x79C */ s8 mTuno1JointIdx;
+    /* 0x79D */ s8 mTuno2JointIdx;
+    /* 0x79E */ s8 mTuno3JointIdx;
+    /* 0x79F */ s8 mReachedAnimEnd;
+    /* 0x7A0 */ s8 field_0x7A0;
+    /* 0x7A0 */ s8 field_0x7A1;
+    /* 0x7A2 */ s8 field_0x7A2;
+    /* 0x7A3 */ u8 field_0x7A3;
+    /* 0x7A4 */ u8 field_0x7A4;
+    /* 0x7A5 */ s8 field_0x7A5;
+    /* 0x7A6 */ s8 field_0x7A6;
+    /* 0x7A7 */ u8 field_0x7A7;
+    /* 0x7A8 */ u8 field_0x7A8;
+    /* 0x7A9 */ s8 field_0x7A9;
+    /* 0x7AA */ s8 field_0x7AA;
+    /* 0x7AB */ u8 field_0x7AB;
+    /* 0x7AC */ s16 field_0x7AC;
+    /* 0x7AE */ s16 field_0x7AE;
+    /* 0x7B0 */ s16 field_0x7B0;
+    /* 0x7B2 */ s16 field_0x7B2;
+    /* 0x7B4 */ s16 field_0x7B4;
+    /* 0x7B6 */ s16 field_0x7B6;
+    /* 0x7B8 */ f32 field_0x7B8;
+    /* 0x7BC */ s16 field_0x7BC;
+    /* 0x7BE */ s16 field_0x7BE;
+    /* 0x7C0 */ s16 field_0x7C0;
+    /* 0x7C2 */ s16 field_0x7C2;
+    /* 0x7C4 */ s16 field_0x7C4[0x10];
+    /* 0x7E4 */ cXyz field_0x7E4;
+    /* 0x7F0 */ cXyz field_0x7F0;
+    /* 0x7FC */ cBgS_PolyInfo field_0x7FC;
+}; // Size: 0x80C
+
+class daNpc_Os_HIO2_c : public JORReflexible {
 public:
     daNpc_Os_HIO2_c();
+    virtual ~daNpc_Os_HIO2_c() {}
 
 public:
-    /* Place member variables here */
-};
+    /* 0x00 - vtable */
 
-class daNpc_Os_HIO_c {
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ s16 field_0x24;
+    /* 0x26 */ s16 field_0x26;
+    /* 0x28 */ s16 field_0x28;
+}; // Size: 0x2A
+
+class daNpc_Os_HIO_c : public JORReflexible {
 public:
     daNpc_Os_HIO_c();
+    virtual ~daNpc_Os_HIO_c() {}
 
 public:
-    /* Place member variables here */
-};
+    /* 0x00 - vtable*/
+
+    /* 0x04 */ s8 field_0x04;
+
+    /* 0x08 */ daNpc_Os_HIO2_c mOs2;
+    /* 0x34 */ dNpc_HIO_c mNpc;
+
+    /* 0x5C */ daNpc_Os_c* field_0x5C;
+    /* 0x60 */ f32 field_0x60;
+    /* 0x64 */ f32 field_0x64;
+    /* 0x68 */ f32 field_0x68;
+    /* 0x6C */ f32 field_0x6C;
+    /* 0x70 */ f32 field_0x70;
+    /* 0x74 */ f32 field_0x74;
+    /* 0x78 */ f32 field_0x78;
+    /* 0x7C */ f32 field_0x7C;
+    /* 0x80 */ f32 field_0x80;
+    /* 0x84 */ f32 field_0x84;
+    /* 0x88 */ f32 field_0x88;
+    /* 0x8C */ f32 field_0x8C;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ f32 field_0x94;
+    /* 0x98 */ f32 field_0x98;
+    /* 0x9C */ f32 field_0x9C;
+    /* 0xA0 */ f32 field_0xA0;
+    /* 0xA4 */ f32 field_0xA4;
+    /* 0xA8 */ f32 field_0xA8;
+    /* 0xAC */ f32 field_0xAC;
+    /* 0xB0 */ f32 field_0xB0;
+}; // Size: 0xB4
 
 #endif /* D_A_NPC_OS_H */

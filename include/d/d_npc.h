@@ -31,7 +31,7 @@ public:
     /* 0x22 */ u8 m22;
     /* 0x23 */ u8 m23[0x24 - 0x23];
     /* 0x24 */ f32 mMaxAttnDistXZ;
-};
+}; // Size: 0x28
 
 class dNpc_JntCtrl_c {
 public:
@@ -73,10 +73,10 @@ public:
     s8 getBackboneJntNum() { return mBackboneJntNum; }
     void setHeadJntNum(s8 jnt) { mHeadJntNum = jnt; }
     void setBackboneJntNum(s8 jnt) { mBackboneJntNum = jnt; }
-    int getHead_x() { return mAngles[0][0]; }
-    int getHead_y() { return mAngles[0][1]; }
-    int getBackbone_x() { return mAngles[1][0]; }
-    int getBackbone_y() { return mAngles[1][1]; }
+    s16 getHead_x() { return mAngles[0][0]; }
+    s16 getHead_y() { return mAngles[0][1]; }
+    s16 getBackbone_x() { return mAngles[1][0]; }
+    s16 getBackbone_y() { return mAngles[1][1]; }
     void setHead_x(s16 angle) { mAngles[0][0] = angle; }
     void setHead_y(s16 angle) { mAngles[0][1] = angle; }
     void setBackBone_x(s16 angle) { mAngles[1][0] = angle; }
@@ -103,7 +103,7 @@ public:
     void turn_fromHead2Backbone(s16, s16*, s16*);
     s16 follow_current(s16*, s16);
     void lookAtTarget_2(s16*, cXyz*, cXyz, s16, s16, bool);
-};
+}; // Size: 0x34
 
 class dNpc_EventCut_c {
 private:
@@ -173,7 +173,7 @@ public:
     }
     
     static fopAc_ac_c* findActorCallBack(fopAc_ac_c*, void*);
-};
+}; // Size: 0x6C
 
 class dNpc_PathRun_c {
 public:
@@ -203,7 +203,7 @@ public:
     /* 0x05 */ u8 mCurrPointIndex;
     /* 0x06 */ u8 mbGoingForwards;
     /* 0x07 */ u8 field_0x07;
-};
+}; // Size: 0x08
 
 class dNpc_HeadAnm_c {
 public:
@@ -235,7 +235,7 @@ public:
     /* 0x1C */ s16 field_0x1C;
     /* 0x1E */ s16 field_0x1E;
     /* 0x20 */ s16 field_0x20;
-};
+}; // Size: 0x22
 
 class fopNpc_npc_c : public fopAc_ac_c {
 public:

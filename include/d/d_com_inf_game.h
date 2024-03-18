@@ -36,7 +36,9 @@ class camera_class;
 class J2DOrthoGraph;
 
 enum daPy__PlayerStatus0 {
+    daPyStts0_UNK1_e           = 0x00000001,
     daPyStts0_UNK10_e          = 0x00000010,
+    daPyStts0_UNK100_e         = 0x00000100,
     daPyStts0_BOW_AIM_e        = 0x00001000,
     daPyStts0_SWORD_SWING_e    = 0x00008000,
     daPyStts0_SHIP_RIDE_e      = 0x00010000,
@@ -44,6 +46,7 @@ enum daPy__PlayerStatus0 {
     daPyStts0_SWIM_e           = 0x00100000,
     daPyStts0_TELESCOPE_LOOK_e = 0x00200000,
     daPyStts0_BOOMERANG_WAIT_e = 0x00400000,
+    daPyStts0_UNK2000000_e     = 0x02000000,
     daPyStts0_CRAWL_e          = 0x08000000,
     daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
@@ -350,6 +353,7 @@ public:
     void setItemTimeCount(s32 time) { mAirMeter = time; }
     void setItemTimeMax(s32 time) { field_0x4928 = time; }
 
+    u8 checkMesgSendButton() { return mMesgSendButton; }
     u8 checkMesgCancelButton() { return mMesgCancelButton; }
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
@@ -604,7 +608,7 @@ public:
     /* 0x4945 */ u8 field_0x4945;
     /* 0x4946 */ u8 field_0x4946;
     /* 0x4947 */ u8 field_0x4947;
-    /* 0x4948 */ u8 field_0x4948;
+    /* 0x4948 */ u8 mMesgSendButton;
     /* 0x4949 */ u8 mMesgCancelButton;
     /* 0x494A */ u8 field_0x494a[6];
     /* 0x4950 */ u8 mMelodyNum;
@@ -850,7 +854,7 @@ inline void dComIfGs_setReserveItem(u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItem(i_itemNo);
 }
 
-inline BOOL dComIfGs_isGetItemReserve(int i_no) {
+inline BOOL dComIfGs_isGetItemReserve(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isReserve(i_no);
 }
 
@@ -2183,6 +2187,10 @@ inline void dComIfGp_setItemArrowNumCount(s16 num) {
 
 inline void dComIfGp_setItemBeastNumCount(int i_idx, s16 num) {
     g_dComIfG_gameInfo.play.setItemBeastNumCount(i_idx, num);
+}
+
+inline u8 dComIfGp_checkMesgSendButton() {
+    return g_dComIfG_gameInfo.play.checkMesgSendButton();
 }
 
 inline u8 dComIfGp_checkMesgCancelButton() {

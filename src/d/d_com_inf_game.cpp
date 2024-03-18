@@ -30,6 +30,8 @@ GXColor g_blackColor      = {0x00, 0x00, 0x00, 0xFF};
 GXColor g_whiteColor      = {0xFF, 0xFF, 0xFF, 0xFF};
 GXColor g_saftyWhiteColor = {0xA0, 0xA0, 0xA0, 0xFF};
 
+u8 daNpc_Os_c::m_playerRoom[] = {false, false, false};
+
 /* 80052134-800521A4       .text ct__14dComIfG_play_cFv */
 #if VERSION == VERSION_JPN
 dComIfG_play_c::dComIfG_play_c()
