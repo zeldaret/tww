@@ -22,6 +22,7 @@
 #include "m_Do/m_Do_audio.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_ship.h"
+#include "d/actor/d_a_npc_os.h"
 
 dComIfG_inf_c g_dComIfG_gameInfo;
 
