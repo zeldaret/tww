@@ -63,7 +63,6 @@ static char* l_daiza_name[] = {
     "Hdai3"
 };
 
-// not sure how to get this from .bss to .data
 static Vec l_finish_home_pos[] = {
     {683.0f, 340.0f, -8947.0f},
     {-683.0f, 340.0f, -8947.0f},
@@ -132,7 +131,7 @@ static fopAc_ac_c* searchFromName(char* name, u32 param_1, u32 param_2) {
     fopAc_ac_c* actor = fopAcM_searchFromName(name, param_1, param_2);
 
     if(actor && fpcM_IsCreating(fopAcM_GetID(actor))) {
-        actor = 0;
+        actor = NULL;
     }
     
     return actor;
@@ -153,8 +152,8 @@ s32 daNpc_Os_c::create() {
 
     int result = dComIfG_resLoad(&mPhs, "Os");
     if(result == cPhs_COMPLEATE_e) {
-        if(fopAcM_entrySolidHeap(this, CheckCreateHeap, l_heap_size) == 0) {
-            mpMorf = 0;
+        if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, l_heap_size)) {
+            mpMorf = NULL;
             return cPhs_ERROR_e;
         }
 
@@ -506,7 +505,7 @@ void daNpc_Os_c::eventOrderCheck() {
 
 /* 00001300-000013D4       .text makeBeam__10daNpc_Os_cFi */
 void daNpc_Os_c::makeBeam(int param_1) {
-    if(field_0x738.getEmitter() == 0) {
+    if(field_0x738.getEmitter() == NULL) {
         field_0x738.makeEmitter(0x826E, &current.pos, &shape_angle, 0);
 
         if(param_1) {
@@ -514,7 +513,7 @@ void daNpc_Os_c::makeBeam(int param_1) {
         }
     }
 
-    if(field_0x740.getEmitter() == 0) {
+    if(field_0x740.getEmitter() == NULL) {
         field_0x740.makeEmitter(0x826F, &current.pos, &shape_angle, 0);
     }
 }
@@ -588,7 +587,7 @@ void daNpc_Os_c::npcAction(void* param_1) {
 
 /* 0000164C-000016B0       .text setNpcAction__10daNpc_Os_cFM10daNpc_Os_cFPCvPvPv_iPv */
 void daNpc_Os_c::setNpcAction(ActionFunc_t action, void* param_2) {
-    mPlayerAction = 0;
+    mPlayerAction = NULL;
     setAction(&mNpcAction, action, param_2);
 }
 
@@ -608,7 +607,7 @@ void daNpc_Os_c::playerAction(void* param_1) {
 
 /* 00001760-000017C4       .text setPlayerAction__10daNpc_Os_cFM10daNpc_Os_cFPCvPvPv_iPv */
 void daNpc_Os_c::setPlayerAction(ActionFunc_t action, void* param_2) {
-    mNpcAction = 0;
+    mNpcAction = NULL;
     setAction(&mPlayerAction, action, param_2);
 }
 
@@ -632,7 +631,7 @@ int daNpc_Os_c::calcStickPos(s16 param_1, cXyz* param_2) {
         ret = dComIfGp_getAttention().LockonTruth() ? 1 : -1;
     }
 
-    if(attList == 0) {
+    if(attList == NULL) {
         attList = dComIfGp_getAttention().GetActionList(0);
     }
 
@@ -772,7 +771,7 @@ BOOL daNpc_Os_c::finish01NpcAction(void* param_1) {
 /* 00001E34-00001F48       .text finish02NpcAction__10daNpc_Os_cFPv */
 BOOL daNpc_Os_c::finish02NpcAction(void* param_1) {
     if(field_0x7A9 == 0) {
-        if(param_1 == 0) {
+        if(param_1 == NULL) {
             if(dComIfGs_isEventBit(0x1B01)) {
                 setAnm_brkAnm(7);
             }
@@ -868,7 +867,7 @@ BOOL daNpc_Os_c::carryNpcAction(void* param_1) {
             return true;
         }
 
-        if(fopAcM_checkCarryNow(this) == 0) {
+        if(!fopAcM_checkCarryNow(this)) {
             if(speedF > 0.0f) {
                 setNpcAction(&throwNpcAction, 0);
 
@@ -1659,7 +1658,7 @@ void daNpc_Os_c::setAnm(int param_1) {
     if(prm.mAnmTblIdx != field_0x7A0 || temp != mpMorf->getPlaySpeed()) {
         field_0x7A0 = prm.mAnmTblIdx;
         mPrevMorfFrame = 0.0f;
-        mReachedAnimEnd = 0;
+        mReachedAnimEnd = false;
         dNpc_Os_setAnm(mpMorf, prm.mLoopMode, prm.mMorf, temp, l_anmTbl[field_0x7A0], "Os");
 
         if(prm.m10 < 0) {
@@ -1901,7 +1900,7 @@ void daNpc_Os_c::setAttention(bool param_1) {
 
 /* 000055D4-000056F4       .text lookBack__10daNpc_Os_cFiii */
 void daNpc_Os_c::lookBack(int param_1, int param_2, int param_3) {
-    cXyz* dstPos = 0;
+    cXyz* dstPos = NULL;
     cXyz temp2;
     cXyz temp(0.0f, 0.0f, 0.0f);
     s16 targetY = shape_angle.y;
@@ -2001,7 +2000,7 @@ BOOL daNpc_Os_c::init() {
     field_0x7AA = -1;
     field_0x7A5 = -1;
     field_0x788 = 120.0f;
-    mpPedestal = 0;
+    mpPedestal = NULL;
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
@@ -2017,7 +2016,7 @@ BOOL daNpc_Os_c::draw() {
     if(fopAcM_GetHomeRoomNo(this) < 0) {
         return true;
     }
-    else if(finishCheck() && mpPedestal == 0) {
+    else if(finishCheck() && mpPedestal == NULL) {
         return true;
     } 
     else if(!dComIfGp_roomControl_checkStatusFlag(fopAcM_GetRoomNo(this), 0x10)) {
@@ -2161,7 +2160,7 @@ BOOL daNpc_Os_c::execute() {
 
         s32 roomNo = fopAcM_GetRoomNo(this);
         BOOL flag = dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10);
-        if(roomNo < 0 || !flag || mpPedestal == 0) {
+        if(roomNo < 0 || !flag || mpPedestal == NULL) {
             endBeam();
 
             return true;
@@ -2236,7 +2235,7 @@ BOOL daNpc_Os_c::execute() {
             field_0x7FC.SetPolyInfo(mAcch.m_gnd);
 
             if(roomNo != 7) {
-                mpPedestal = 0;
+                mpPedestal = NULL;
             }
         }
 
@@ -2413,7 +2412,7 @@ void daNpc_Os_infiniteEcallBack_c::end() {
     if(mpBaseEmitter) {
         mpBaseEmitter->becomeInvalidEmitter();
         mpBaseEmitter->setEmitterCallBackPtr(0);
-        mpBaseEmitter = 0;
+        mpBaseEmitter = NULL;
     }
 }
 
