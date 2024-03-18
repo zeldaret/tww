@@ -22,7 +22,6 @@
 #include "m_Do/m_Do_audio.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_ship.h"
-#include "d/actor/d_a_npc_os.h"
 
 dComIfG_inf_c g_dComIfG_gameInfo;
 
@@ -30,8 +29,6 @@ GXColor g_clearColor      = {0x00, 0x00, 0x00, 0x00};
 GXColor g_blackColor      = {0x00, 0x00, 0x00, 0xFF};
 GXColor g_whiteColor      = {0xFF, 0xFF, 0xFF, 0xFF};
 GXColor g_saftyWhiteColor = {0xA0, 0xA0, 0xA0, 0xFF};
-
-bool daNpc_Os_c::m_playerRoom[] = {false, false, false};
 
 /* 80052134-800521A4       .text ct__14dComIfG_play_cFv */
 #if VERSION == VERSION_JPN
@@ -137,7 +134,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4945 = 0;
     field_0x4946 = 0;
     field_0x4947 = 0;
-    field_0x4948 = 0;
+    mMesgSendButton = 0;
     mMesgCancelButton = 0;
 
     for (int i = 0; i < 6; i++) {
