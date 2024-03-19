@@ -45,7 +45,7 @@ public:
     f32 getBaseAnimeFrame() { return 0.0f; }
     f32 getBaseAnimeFrameRate() { return 1.0f; }
     s8 getCattleRoomNo() { return m_cattleRoomNo; }
-    cXyz& getEyePos() { return eyePos; }
+    cXyz& getEyePos() { return field_0x748; }
     f32 getGroundY() { return mAcch.GetGroundH(); }
     s16 getHead_x() { return mJntCtrl.getHead_x(); }
     s16 getHead_y() { return mJntCtrl.getHead_y(); }
@@ -57,20 +57,20 @@ public:
         }
     }
     BOOL isFinish() { return cLib_checkBit(field_0x784, 0x1UL); }
-    BOOL isGravity() { return cLib_checkBit(field_0x784, 0x8UL); }
-    BOOL isPlayerRoom_Goat() {}
+    void onFinish() { cLib_onBit(field_0x784, 0x1UL); }
     BOOL isSetHomePos() { return cLib_checkBit(field_0x784, 0x2UL); }
+    void onSetHomePos() { cLib_onBit(field_0x784, 0x2UL); }
     BOOL isWaterHit() { return cLib_checkBit(field_0x784, 0x4UL); }
-    void offGravity() { field_0x784 &= ~0x8; }
+    void onWaterHit() { cLib_onBit(field_0x784, 0x4UL); }
+    BOOL isGravity() { return cLib_checkBit(field_0x784, 0x8UL); }
+    void onGravity() { cLib_onBit(field_0x784, 0x8UL); }
+    void offGravity() { cLib_offBit(field_0x784, 0x8UL); }
     void offPlayerRoom(int idx) { m_playerRoom[idx] = false; }
-    void onFinish() { field_0x784 |= 0x1; }
-    void onGravity() { field_0x784 |= 0x8; }
     void onPlayerRoom(int idx) { m_playerRoom[idx] = true; }
-    void onSetHomePos() { field_0x784 |= 0x2; }
-    void onWaterHit() { field_0x784 |= 0x4; }
     void setCattleRoomNo(s8 roomNo) { m_cattleRoomNo = roomNo; }
 
     static bool isPlayerRoom(int idx) { return m_playerRoom[idx]; }
+    static bool isPlayerRoom_Goat() { return isPlayerRoom(1); }
 
     s32 create();
     BOOL createHeap();

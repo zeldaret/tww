@@ -77,25 +77,17 @@ void daPy_npc_c::setOffsetHomePos() {
 
 /* 8015A6A4-8015AA0C       .text setPointRestart__10daPy_npc_cFsSc */
 void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
-    /* Nonmatching (regswaps) */
-    stage_scls_info_dummy_class* sclsinfo;
-    stage_scls_info_class* scls_data;
-    stage_actor_data_class* player_data;
-    int scls_start_code;
-    int i;
-    s16 rotY;
-    s8 roomNo;
-    
     JUT_ASSERT(157, dComIfGp_getStagePlayer() != 0);
-    sclsinfo = dComIfGp_getStageSclsInfo();
+    stage_scls_info_dummy_class* sclsinfo = dComIfGp_getStageSclsInfo();
     JUT_ASSERT(159, sclsinfo != 0);
     
     JUT_ASSERT(161, 0 <= i_point && i_point < sclsinfo->num);
-    scls_data = sclsinfo->m_entries;
+    stage_scls_info_class* scls_data = sclsinfo->m_entries;
     JUT_ASSERT(163, scls_data != 0);
     
-    player_data = dComIfGp_getStagePlayer()->m_entries;
-    scls_start_code = scls_data[i_point].mStart;
+    stage_actor_data_class* player_data = dComIfGp_getStagePlayer()->m_entries;
+    int scls_start_code = scls_data[i_point].mStart;
+    int i;
     for (i = 0; i < dComIfGp_getStagePlayerNum(); i++) {
         u8 plyr_start_code = player_data->mAngle.z & 0xFF;
         if (plyr_start_code == scls_start_code) {
@@ -113,10 +105,7 @@ void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
     old = home;
     shape_angle = home.angle;
     
-    rotY = home.angle.y;
-    roomNo = -1;
-    dComIfGs_setRestartOption(&home.pos, rotY, roomNo, option);
-    dComIfGs_setPlayerPriest(option, home.pos, rotY, roomNo);
+    dComIfGs_setRestartOption(&home.pos, home.angle.y, -1, option);
     dComIfGs_setPlayerPriest(option, dComIfGs_getRestartOptionPos(), dComIfGs_getRestartOptionAngleY(), dComIfGs_getRestartOptionRoomNo());
     fopAcM_setStageLayer(this);
 }
@@ -150,7 +139,6 @@ BOOL daPy_npc_c::initialRestartOption(s8 option, int save) {
             s8 roomNo = current.roomNo;
             rotY = home.angle.y;
             dComIfGs_setRestartOption(&home.pos, rotY, roomNo, option);
-            dComIfGs_setPlayerPriest(option, home.pos, rotY, roomNo);
         }
         return TRUE;
     }

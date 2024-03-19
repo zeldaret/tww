@@ -454,7 +454,6 @@ s32 daNpc_Md_c::create() {
                 s16 angle = dComIfGs_getPlayerPriestRotate();
                 cXyz& pos = dComIfGs_getPlayerPriestPos();
                 dComIfGs_setRestartOption(&pos, angle, roomNo, 2);
-                dComIfGs_setPlayerPriest(2, pos, angle, roomNo);
             }
             checkRestart(2);
         }

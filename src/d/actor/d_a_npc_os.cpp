@@ -17,6 +17,8 @@ static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
 static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
 
+static u8 temp[0x4C]; // TODO
+
 static daNpc_Os_HIO_c l_HIO;
 static s32 l_hio_counter = 0;
 static cXyz l_smoke_scale(0.5f, 0.5f, 0.5f);
@@ -144,8 +146,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000374-00000538       .text create__10daNpc_Os_cFv */
 s32 daNpc_Os_c::create() {
-    /* Nonmatching */
-
     fopAcM_SetupActor(this, daNpc_Os_c)
 
     static u32 l_heap_size = 0xFA0;
@@ -190,8 +190,6 @@ s32 daNpc_Os_c::create() {
 
 /* 00000748-000008CC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int param_1) {
-    /* Nonmatching */
-
     if (!param_1) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
@@ -618,21 +616,24 @@ s16 daNpc_Os_c::getStickAngY() {
 
 /* 0000180C-00001964       .text calcStickPos__10daNpc_Os_cFsP4cXyz */
 int daNpc_Os_c::calcStickPos(s16 param_1, cXyz* param_2) {
-    /* Nonmatching */
-
     int ret;
 
-    dAttList_c* attList = dComIfGp_getAttention().GetLockonList(0);
-    bool lockon = dComIfGp_getAttention().Lockon();
+    // This temp variable for attention is probably a fakematch, but it fixes a regswap in dAttention_c::Lockon.
+    dAttention_c& attention = dComIfGp_getAttention();
+    dAttList_c* attList = attention.GetLockonList(0);
+    bool lockon = attention.Lockon();
     if(!lockon) {
         ret = 0;
-    }
-    else {
-        ret = dComIfGp_getAttention().LockonTruth() ? 1 : -1;
+    } else {
+        BOOL lockon = attention.LockonTruth();
+        ret = -1;
+        if (lockon) {
+            ret = 1;
+        }
     }
 
     if(attList == NULL) {
-        attList = dComIfGp_getAttention().GetActionList(0);
+        attList = attention.GetActionList(0);
     }
 
     if(attList) {
@@ -1054,8 +1055,6 @@ BOOL daNpc_Os_c::routeCheck(f32 param_1, s16* param_2) {
 
 /* 0000375C-000039EC       .text searchNpcAction__10daNpc_Os_cFPv */
 BOOL daNpc_Os_c::searchNpcAction(void*) {
-    /* Nonmatching */
-
     if(field_0x7A9 == 0) {
         attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
         setAnm(1);
@@ -1068,10 +1067,15 @@ BOOL daNpc_Os_c::searchNpcAction(void*) {
 
         BOOL door = player->eventInfo.checkCommandDoor();
         f32 dist = fopAcM_searchPlayerDistanceXZ2(this);
-        f32 temp = dist < l_HIO.field_0x60 * l_HIO.field_0x60 ? 0.0f : l_HIO.field_0xA8;
-        s16 angle = fopAcM_searchPlayerAngleY(this);
-        s16 temp2 = angle;
-        BOOL temp3 = routeCheck(dist, &temp2) && cLib_distanceAngleS(angle, temp2) <= 0x2000;
+        f32 temp;
+        if (dist < l_HIO.field_0x60 * l_HIO.field_0x60) {
+            temp = 0.0f;
+        } else {
+            temp = l_HIO.field_0xA8;
+        }
+        s16 angle, adjustedAngle;
+        angle = adjustedAngle = fopAcM_searchPlayerAngleY(this);
+        BOOL temp3 = routeCheck(dist, &adjustedAngle) && cLib_distanceAngleS(angle, adjustedAngle) <= 0x2000;
         if(door || !temp3 || (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK1_e) || player->checkAttentionLock())) {
             temp = 0.0f;
             offNpcCallCommand();
@@ -1091,7 +1095,7 @@ BOOL daNpc_Os_c::searchNpcAction(void*) {
             }
         }
 
-        walkProc(temp, temp2);
+        walkProc(temp, adjustedAngle);
         cLib_addCalcAngleS(&shape_angle.y, current.angle.y, l_HIO.mOs2.field_0x28, l_HIO.mOs2.field_0x24 * 2, l_HIO.mOs2.field_0x26 * 2);
         s16 temp4 = shape_angle.y;
         lookBack(1, 0, 0);
@@ -1551,15 +1555,8 @@ void daNpc_Os_c::initialNextEvent(int staffIdx) {
 
 /* 00004A60-00004AF8       .text initialSaveEvent__10daNpc_Os_cFi */
 void daNpc_Os_c::initialSaveEvent(int) {
-    /* Nonmatching */
-
     home.pos = current.pos;
-
-    s8 restartNum = getRestartNumber();
-    s8 roomNo = fopAcM_GetRoomNo(this);
-    s16 angleY = home.angle.y;
-    dComIfGs_setRestartOption(&current.pos, angleY, roomNo, restartNum);
-    dComIfGs_setPlayerPriest(restartNum, current.pos, angleY, roomNo);
+    dComIfGs_setRestartOption(&current.pos, home.angle.y, fopAcM_GetRoomNo(this), getRestartNumber());
 }
 
 /* 00004AF8-00004B64       .text talk_init__10daNpc_Os_cFv */
@@ -1597,8 +1594,6 @@ BOOL daNpc_Os_c::talk() {
 
 /* 00004C04-00004D20       .text setAnm__10daNpc_Os_cFi */
 void daNpc_Os_c::setAnm(int param_1) {
-    /* Nonmatching */
-
     struct anmPrm_c {
         /* 0x00 */ s8 mAnmTblIdx;
         /* 0x04 */ int mLoopMode;
@@ -1654,12 +1649,13 @@ void daNpc_Os_c::setAnm(int param_1) {
 
     field_0x78C = param_1;
     anmPrm_c& prm = l_anmPrm[param_1];
-    f32 temp = prm.mPlaySpeed;
-    if(prm.mAnmTblIdx != field_0x7A0 || temp != mpMorf->getPlaySpeed()) {
+    f32 playSpeed = prm.mPlaySpeed;
+    if(prm.mAnmTblIdx != field_0x7A0 || prm.mPlaySpeed != mpMorf->getPlaySpeed()) {
         field_0x7A0 = prm.mAnmTblIdx;
+        s8* temp2 = &l_anmTbl[field_0x7A0]; // fakematch
         mPrevMorfFrame = 0.0f;
         mReachedAnimEnd = false;
-        dNpc_Os_setAnm(mpMorf, prm.mLoopMode, prm.mMorf, temp, l_anmTbl[field_0x7A0], "Os");
+        dNpc_Os_setAnm(mpMorf, prm.mLoopMode, prm.mMorf, playSpeed, *temp2, "Os");
 
         if(prm.m10 < 0) {
             mpMorf->setFrame(mpMorf->getEndFrame());
@@ -1770,8 +1766,6 @@ void daNpc_Os_c::setAnm_brkAnm(int param_1) {
 
 /* 000050B0-00005204       .text chkAttention__10daNpc_Os_cF4cXyzs */
 BOOL daNpc_Os_c::chkAttention(cXyz param_1, s16 param_2) {
-    /* Nonmatching */
-
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 maxDist = l_HIO.mNpc.mMaxAttnDistXZ;
     s32 maxAngle = l_HIO.mNpc.mMaxAttnAngleY;
@@ -1787,9 +1781,9 @@ BOOL daNpc_Os_c::chkAttention(cXyz param_1, s16 param_2) {
         maxAngle += 0x71C;
     }
 
-    s16 temp = angle - param_2;
+    angle -= param_2;
     BOOL ret = false;
-    if(maxAngle > abs(temp) && maxDist > dist) {
+    if(maxAngle > abs(angle) && maxDist > dist) {
         ret = true;
     }
 
@@ -1845,9 +1839,7 @@ void daNpc_Os_c::checkOrder() {
 
 /* 00005454-00005468       .text checkCommandTalk__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::checkCommandTalk() {
-    /* Nonmatching */
-
-    return eventInfo.checkCommandTalk();
+    return eventInfo.checkCommandTalk() ? TRUE : FALSE;
 }
 
 /* 00005468-000054BC       .text next_msgStatus__10daNpc_Os_cFPUl */
@@ -1966,12 +1958,13 @@ static const char* event_name_tbl[] = {
 
 /* 00005824-00005B58       .text init__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::init() {
-    /* Nonmatching */
-
     cXyz dummy(0.0f, 0.0f, 0.0f);
 
     field_0x794 = fopAcM_GetParam(this) >> 0x10 & 0xFF;
     attention_info.distances[4] = 0x27;
+    // Fakematch, the next two lines get optimized out, but they affect the regalloc when copying the tevstr.
+    speedF = speedF;
+    speedF = speedF;
     m_smoke_tevstr = tevStr;
     m_smoke.setTevStr(&m_smoke_tevstr);
     m_playerRoom[subtype] = false;
@@ -2080,8 +2073,6 @@ void daNpc_Os_c::smokeSet(u16 particle) {
 
 /* 00005E5C-00006AF8       .text execute__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::execute() {
-    /* Nonmatching */
-
     static JGeometry::TVec3<f32> splash_scale(0.6f, 0.6f, 0.6f);
     static JGeometry::TVec3<f32> ripple_scale(1.0f, 1.0f, 1.0f);
 
@@ -2352,8 +2343,6 @@ BOOL daNpc_Os_c::execute() {
 
 /* 00006AF8-00006E1C       .text __dt__10daNpc_Os_cFv */
 daNpc_Os_c::~daNpc_Os_c() {
-    /* Nonmatching */
-
     dComIfG_resDelete(&mPhs, "Os");
 
     if (heap) {
@@ -2361,7 +2350,7 @@ daNpc_Os_c::~daNpc_Os_c() {
     }
 
     endBeam();
-    m_smoke.end();
+    m_smoke.remove();
     if(l_hio_counter != 0) {
         l_hio_counter -= 1;
     }

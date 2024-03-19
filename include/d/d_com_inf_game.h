@@ -1036,6 +1036,7 @@ inline void dComIfGs_setRestartOption(s8 i_option) {
 
 inline void dComIfGs_setRestartOption(cXyz* i_pos, s16 i_angle, s8 i_roomNo, s8 i_option) {
     g_dComIfG_gameInfo.save.getRestart().setRestartOption(i_option, i_pos, i_angle, i_roomNo);
+    g_dComIfG_gameInfo.save.getPlayer().getPriest().set(i_option, *i_pos, i_angle, i_roomNo);
 }
 
 inline u32 dComIfGs_getRestartRoomParam() {
