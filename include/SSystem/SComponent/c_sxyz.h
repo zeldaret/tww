@@ -14,9 +14,6 @@ public:
     void operator+=(csXyz&);
     csXyz operator-(csXyz&);
     csXyz operator*(f32);
-    s16 GetX() const { return x; }
-    s16 GetY() const { return y; }
-    s16 GetZ() const { return z; }
 
     void set(s16 oX, s16 oY, s16 oZ) {
         x = oX;

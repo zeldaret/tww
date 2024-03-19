@@ -288,10 +288,10 @@ void action_dousa(pw_class* i_this) {
         fopAc_ac_c* searchResult;
         if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e &&
             fopAcM_SearchByID(i_this->mKanteraID, &searchResult) && searchResult != NULL &&
-            fopAcM_GetName(&searchResult) == PROC_KANTERA)
+            fopAcM_GetName(searchResult) == PROC_KANTERA)
         {
             searchResult->current.pos = i_this->m2CC;
-            searchResult->current.angle.y = i_this->shape_angle.GetY();
+            searchResult->current.angle.y = i_this->shape_angle.y;
             searchResult->scale.setall(1.0f);
             if (i_this->mpMorf->isStop()) {
                 i_this->m341 = 0;

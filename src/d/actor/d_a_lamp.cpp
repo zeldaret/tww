@@ -56,7 +56,7 @@ static BOOL daLamp_Draw(lamp_class* i_this) {
 static BOOL daLamp_Execute(lamp_class* i_this) {
     i_this->mCycleCtr += 1;
     MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, 0);
-    mDoMtx_YrotM(*calc_mtx, i_this->current.angle.GetY());
+    mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
     if (i_this->mParameters == 0) {
         i_this->mLength = 0.1f;
     } else {
