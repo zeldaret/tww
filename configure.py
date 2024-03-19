@@ -1484,7 +1484,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_mt"),
     ActorRel(NonMatching, "d_a_npc_nz"),
     ActorRel(NonMatching, "d_a_npc_ob1"),
-    ActorRel(NonMatching, "d_a_npc_os"),
+    ActorRel(NonMatching, "d_a_npc_os", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_npc_p1"),
     ActorRel(NonMatching, "d_a_npc_p2"),
     ActorRel(NonMatching, "d_a_npc_people"),

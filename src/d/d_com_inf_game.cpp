@@ -134,7 +134,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4945 = 0;
     field_0x4946 = 0;
     field_0x4947 = 0;
-    field_0x4948 = 0;
+    mMesgSendButton = 0;
     mMesgCancelButton = 0;
 
     for (int i = 0; i < 6; i++) {
