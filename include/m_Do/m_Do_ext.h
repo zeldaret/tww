@@ -331,7 +331,7 @@ public:
     void entry();
     void entryDL();
     void entryDL(J3DMaterialTable*);
-    bool play(Vec *, u32, s8);
+    BOOL play(Vec*, u32, s8);
     void stopZelAnime();
 
     J3DModel* getModel() { return mpModel; }
@@ -385,7 +385,7 @@ public:
     void calc(u16);
     void setAnm(J3DAnmTransform*, J3DAnmTransform*, f32, int, f32, f32, f32, f32, void*);
     void setMorf(f32);
-    void play(Vec*, u32, s8);
+    BOOL play(Vec*, u32, s8);
     void entryDL();
     void calc();
     void stopZelAnime();
@@ -409,7 +409,7 @@ public:
     BOOL checkFrame(f32 frame) {
         return mFrameCtrl.checkPass(frame);
     }
-    BOOL isMorf() { return field_0x78 < 1.0f; }
+    BOOL isMorf() { return mCurMorf < 1.0f; }
     void setAnmRate(f32) {} // TODO
 
     /* 0x50 */ J3DModel* mpModel;
@@ -418,9 +418,9 @@ public:
     /* 0x5C */ J3DTransformInfo* mpTransformInfo;
     /* 0x60 */ Quaternion* mpQuat;
     /* 0x64 */ J3DFrameCtrl mFrameCtrl;
-    /* 0x78 */ f32 field_0x78;
-    /* 0x7C */ f32 field_0x7c;
-    /* 0x80 */ f32 field_0x80;
+    /* 0x78 */ f32 mCurMorf;
+    /* 0x7C */ f32 mPrevMorf;
+    /* 0x80 */ f32 mMorfStep;
     /* 0x84 */ f32 field_0x84;
     /* 0x88 */ mDoExt_zelAnime* mpSound;
     /* 0x8C */ mDoExt_McaMorfCallBack1_c * mpCallback1;
@@ -435,7 +435,7 @@ public:
 
 public:
     /* 0x0 */ /* vtable */
-    /* 0x4 */ mDoExt_3DlineMat_c* field_0x4;
+    /* 0x4 */ mDoExt_3DlineMat_c* mpNextLineMat;
 };
 
 class mDoExt_3DlineMatSortPacket : public J3DPacket {
@@ -511,13 +511,13 @@ public:
 
     void draw();
 
-    void setJoint(J3DModel* i_model, u16 param_1) {
+    void setJoint(J3DModel* i_model, u16 i_jntNum) {
         mModel = i_model;
-        field_0x14 = param_1;
+        mJntNum = i_jntNum;
     }
 
-    J3DModel* mModel;
-    u16 field_0x14;
+    /* 0x10 */ J3DModel* mModel;
+    /* 0x14 */ u16 mJntNum;
 };
 
 class mDoExt_invisibleModel {
@@ -577,7 +577,7 @@ public:
 
 public:
     /* 0x08 */ GXColor mColor;
-    /* 0x0C */ dKy_tevstr_c* m0C;
+    /* 0x0C */ dKy_tevstr_c* mpTevStr;
     /* 0x10 */ s16 mNumLines;
     /* 0x12 */ s16 mNumSegmentsPerLine;
     /* 0x14 */ u16 m14;

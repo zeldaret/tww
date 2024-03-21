@@ -60,7 +60,7 @@ static u8 l_chainS3TCTex[] ALIGN_DECL(32) = {
     0x94, 0x92, 0x6B, 0x2D, 0x55, 0x55, 0xAA, 0x00, 0x94, 0x92, 0x6B, 0x2D, 0x55, 0x55, 0xAA, 0x00,
     0xB5, 0xB6, 0x94, 0x92, 0x55, 0x55, 0x00, 0x00, 0xB5, 0xB6, 0x94, 0x92, 0x55, 0x55, 0x00, 0x00
 };
-static Vec l_pos[12] = {
+static Vec l_pos[] = {
     { -2.0f, 1.522254f, -0.0f },
     { -2.0f, 1.522254f, 7.0f },
     { 2.0f, 1.522254f, -0.0f },
@@ -75,19 +75,19 @@ static Vec l_pos[12] = {
     { 2.0f, -1.522254f, 7.0f },
 
 };
-static f32 l_texCoord[24] = {
-    0.02736f, 0.041406f,
-    0.97264f, 0.041406f,
-    0.830848f, 0.40324f,
-    0.169152f, 0.40324f,
-    0.03125f, 0.0f,
-    0.96875f, 0.0f,
-    0.767857f, 0.494086f,
-    0.232143f, 0.494086f,
-    0.038462f, 0.48226f,
-    0.038462f, 0.983522f,
-    0.961538f, 0.48226f,
-    0.961538f, 0.983522f,
+static f32 l_texCoord[][2] = {
+    { 0.02736f, 0.041406f },
+    { 0.97264f, 0.041406f },
+    { 0.830848f, 0.40324f },
+    { 0.169152f, 0.40324f },
+    { 0.03125f, 0.0f },
+    { 0.96875f, 0.0f },
+    { 0.767857f, 0.494086f },
+    { 0.232143f, 0.494086f },
+    { 0.038462f, 0.48226f },
+    { 0.038462f, 0.983522f },
+    { 0.961538f, 0.48226f },
+    { 0.961538f, 0.983522f },
 };
 
 #define CONST_U32(v) ((u8)((v) >> 16)), ((u8)((v) >> 8)), ((u8)((v) >> 0))
@@ -119,7 +119,7 @@ void dChain_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetArray(GX_VA_POS, l_pos, sizeof(*l_pos));
-    GXSetArray(GX_VA_TEX0, l_texCoord, 8);
+    GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(*l_texCoord));
     dKy_GxFog_tevstr_set(mpTevStr);
     GXCallDisplayList(l_matDL, 0xa0);
     GXSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);

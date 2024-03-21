@@ -18,6 +18,9 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 
+// Needed for the .data section to match.
+static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
+
 /* 8000DA70-8000DCF0       .text mDoExt_setJ3DData__FPA4_fPC16J3DTransformInfoUs */
 void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 param_2) {
     bool local_28;
@@ -537,7 +540,7 @@ void mDoExt_backupMatBlock_c::store(J3DMaterial* i_material) {
     u32 texGenMax = 8;
     if (texGenBlock->getType() == 'TGB4') {
         texGenMax = 4;
-    };
+    }
     for (u32 i = 0; i < texGenMax; i++) {
         mTexCoord[i] = *texGenBlock->getTexCoord(i);
     }
@@ -616,7 +619,7 @@ void mDoExt_backupMatBlock_c::restore(J3DMaterial* i_material) {
     u32 texGenMax = 8;
     if (texGenBlock->getType() == 'TGB4') {
         texGenMax = 4;
-    };
+    }
     for (u32 i = 0; i < texGenMax; i++) {
         texGenBlock->setTexCoord(i, &mTexCoord[i]);
     }
@@ -698,9 +701,7 @@ bool mDoExt_backupMaterial_c::create(J3DModelData* i_modelData) {
 mDoExt_backupMatBlock_c::~mDoExt_backupMatBlock_c() {}
 
 /* 80010AC4-80010D44       .text __ct__23mDoExt_backupMatBlock_cFv */
-mDoExt_backupMatBlock_c::mDoExt_backupMatBlock_c() {
-    /* Nonmatching */
-}
+mDoExt_backupMatBlock_c::mDoExt_backupMatBlock_c() {}
 
 /* 80011294-80011300       .text create__23mDoExt_backupMaterial_cFUs */
 bool mDoExt_backupMaterial_c::create(u16 param_0) {
@@ -1230,6 +1231,7 @@ ERROR_EXIT:
 
 /* 80012A2C-80012D78       .text calc__14mDoExt_McaMorfFUs */
 void mDoExt_McaMorf::calc(u16 param_0) {
+    /* Nonmatching - J3DMtxCalcBasic vtable order */
     if (!mpModel) {
         return;
     }
@@ -1327,19 +1329,27 @@ void mDoExt_McaMorf::setAnm(J3DAnmTransform* bckAnm, int loopMode, f32 morf, f32
 }
 
 /* 80012FC8-8001300C       .text setMorf__14mDoExt_McaMorfFf */
-void mDoExt_McaMorf::setMorf(f32 param_0) {
-    if (mPrevMorf < 0.0f || param_0 <= 0.0f) {
+void mDoExt_McaMorf::setMorf(f32 morf) {
+    if (mPrevMorf < 0.0f || morf <= 0.0f) {
         mCurMorf = 1.0f;
     } else {
         mCurMorf = 0.0f;
-        mMorfStep = 1.0f / param_0;
+        mMorfStep = 1.0f / morf;
     }
     mPrevMorf = mCurMorf;
 }
 
 /* 8001300C-800130D0       .text play__14mDoExt_McaMorfFP3VecUlSc */
-bool mDoExt_McaMorf::play(Vec*, u32, s8) {
-    /* Nonmatching */
+BOOL mDoExt_McaMorf::play(Vec* pos, u32 mtrlSndId, s8 reverb) {
+    if (mCurMorf < 1.0f) {
+        mPrevMorf = mCurMorf;
+        cLib_chaseF(&mCurMorf, 1.0f, mMorfStep);
+    }
+    mFrameCtrl.update();
+    if (mpSound && mpSound->mpBasAnm && pos) {
+        mpSound->setAnimSound(pos, getFrame(), getPlaySpeed(), mtrlSndId, reverb);
+    }
+    return isStop();
 }
 
 /* 800130D0-8001314C       .text update__14mDoExt_McaMorfFv */
@@ -1408,7 +1418,14 @@ void mDoExt_McaMorf::entryDL(J3DMaterialTable* pMaterialTable) {
 
 /* 800132E8-8001335C       .text calc__14mDoExt_McaMorfFv */
 void mDoExt_McaMorf::calc() {
-    /* Nonmatching */
+    if (mpModel == NULL) {
+        return;
+    }
+    if (mpAnm != NULL) {
+        mpAnm->setFrame(getFrame());
+    }
+    mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(this);
+    mpModel->calc();
 }
 
 /* 8001335C-80013388       .text stopZelAnime__14mDoExt_McaMorfFv */
@@ -1503,25 +1520,31 @@ void mDoExt_McaMorf2::ERROR_EXIT() {
 
 /* 80013770-80013E50       .text calc__15mDoExt_McaMorf2FUs */
 void mDoExt_McaMorf2::calc(u16 param_0) {
-    /* Nonmatching */
+    /* Nonmatching - J3DMtxCalcBasic vtable order, instruction swap on f30 = field_0x84 */
     if (!mpModel) {
         return;
     }
     j3dSys.setCurrentMtxCalc(this);
-    J3DTransformInfo info1;
+    J3DTransformInfo spD8[2];
+    J3DTransformInfo sp88;
+    J3DTransformInfo sp68;
     J3DTransformInfo* infoPtr;
     if (mpTransformInfo == NULL) {
-        infoPtr = &info1;
+        infoPtr = &sp88;
     } else {
         infoPtr = &mpTransformInfo[param_0];
     }
-    Quaternion quat1;
+    Quaternion sp48[2];
+    Quaternion sp28[2];
+    Quaternion sp18;
+    Quaternion sp08;
     Quaternion* quatPtr;
     if (mpQuat == NULL) {
-        quatPtr = &quat1;
+        quatPtr = &sp18;
     } else {
         quatPtr = &mpQuat[param_0];
     }
+    Mtx mtx;
     if (!mpAnm1) {
         *infoPtr = mpModel->getModelData()->getJointNodePointer(param_0)->getTransformInfo();
         if (mpCallback1) {
@@ -1529,39 +1552,76 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
         }
         JMAEulerToQuat(infoPtr->mRotation.x, infoPtr->mRotation.y, infoPtr->mRotation.z, quatPtr);
         calcTransform(param_0, *infoPtr);
-    } else if (field_0x78 >= 1.0f || !mpTransformInfo || !mpQuat) {
-        mpAnm1->getTransform(param_0, &info1);
+    } else if (mCurMorf >= 1.0f || !mpTransformInfo || !mpQuat) {
+        mpAnm1->getTransform(param_0, &spD8[0]);
         if (!mpAnm2) {
             if (mpCallback1) {
-                mpCallback1->execute(param_0, &info1);
+                mpCallback1->execute(param_0, &spD8[0]);
             }
-            JMAEulerToQuat(info1.mRotation.x, info1.mRotation.y, info1.mRotation.z, quatPtr);
-            calcTransform(param_0, info1);
-            *infoPtr = info1;
+            JMAEulerToQuat(spD8[0].mRotation.x, spD8[0].mRotation.y, spD8[0].mRotation.z, quatPtr);
+            calcTransform(param_0, spD8[0]);
+            *infoPtr = spD8[0];
         } else {
-            mpAnm2->getTransform(param_0, &info1);
-            JMAEulerToQuat(info1.mRotation.x, info1.mRotation.y, info1.mRotation.z, quatPtr);
-            calcTransform(param_0, info1);
+            mpAnm2->getTransform(param_0, &spD8[1]);
+            f32 f30 = field_0x84;
+            f32 f31 = 1.0f - f30;
+            infoPtr->mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
+            infoPtr->mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
+            infoPtr->mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
+            infoPtr->mTranslate.x = spD8[0].mTranslate.x * f31 + spD8[1].mTranslate.x * f30;
+            infoPtr->mTranslate.y = spD8[0].mTranslate.y * f31 + spD8[1].mTranslate.y * f30;
+            infoPtr->mTranslate.z = spD8[0].mTranslate.z * f31 + spD8[1].mTranslate.z * f30;
+            for (int i = 0; i < 2; i++) {
+                JMAEulerToQuat(spD8[i].mRotation.x, spD8[i].mRotation.y, spD8[i].mRotation.z, &sp48[i]);
+            }
+            JMAQuatLerp(&sp48[0], &sp48[1], f30 / (f31 + f30), quatPtr);
+            mDoMtx_quat(mtx, quatPtr);
+            mDoExt_setJ3DData(mtx, infoPtr, param_0);
         }
-    } else {
-        f32 f31 = (field_0x78 - field_0x7c) / (1.0f - field_0x7c);
-        f32 f30 = 1.0f - f31;
-        J3DTransformInfo info2;
-        Quaternion quat2;
-        mpAnm1->getTransform(param_0, &info2);
+    } else if (!mpAnm2) {
+        f32 f30 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
+        f32 f31 = 1.0f - f30;
+        mpAnm1->getTransform(param_0, &sp68);
         if (mpCallback1) {
-            mpCallback1->execute(param_0, &info2);
+            mpCallback1->execute(param_0, &sp68);
         }
-        JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat2);
-        JMAQuatLerp(quatPtr, &quat2, f31, quatPtr);
-        Mtx mtx;
+        JMAEulerToQuat(sp68.mRotation.x, sp68.mRotation.y, sp68.mRotation.z, &sp08);
+        JMAQuatLerp(quatPtr, &sp08, f30, quatPtr);
         mDoMtx_quat(mtx, quatPtr);
-        infoPtr->mTranslate.x = infoPtr->mTranslate.x * f30 + info2.mTranslate.x * f31;
-        infoPtr->mTranslate.y = infoPtr->mTranslate.y * f30 + info2.mTranslate.y * f31;
-        infoPtr->mTranslate.z = infoPtr->mTranslate.z * f30 + info2.mTranslate.z * f31;
-        infoPtr->mScale.x = infoPtr->mScale.x * f30 + info2.mScale.x * f31;
-        infoPtr->mScale.y = infoPtr->mScale.y * f30 + info2.mScale.y * f31;
-        infoPtr->mScale.z = infoPtr->mScale.z * f30 + info2.mScale.z * f31;
+        infoPtr->mTranslate.x = infoPtr->mTranslate.x * f31 + sp68.mTranslate.x * f30;
+        infoPtr->mTranslate.y = infoPtr->mTranslate.y * f31 + sp68.mTranslate.y * f30;
+        infoPtr->mTranslate.z = infoPtr->mTranslate.z * f31 + sp68.mTranslate.z * f30;
+        infoPtr->mScale.x = infoPtr->mScale.x * f31 + sp68.mScale.x * f30;
+        infoPtr->mScale.y = infoPtr->mScale.y * f31 + sp68.mScale.y * f30;
+        infoPtr->mScale.z = infoPtr->mScale.z * f31 + sp68.mScale.z * f30;
+        mDoExt_setJ3DData(mtx, infoPtr, param_0);
+    } else {
+        mpAnm1->getTransform(param_0, &spD8[0]);
+        mpAnm2->getTransform(param_0, &spD8[1]);
+        f32 f30 = field_0x84;
+        f32 f31 = 1.0f - f30;
+        sp68.mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
+        sp68.mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
+        sp68.mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
+        sp68.mTranslate.x = spD8[0].mTranslate.x * f31 + spD8[1].mTranslate.x * f30;
+        sp68.mTranslate.y = spD8[0].mTranslate.y * f31 + spD8[1].mTranslate.y * f30;
+        sp68.mTranslate.z = spD8[0].mTranslate.z * f31 + spD8[1].mTranslate.z * f30;
+        for (int i = 0; i < 2; i++) {
+            JMAEulerToQuat(spD8[i].mRotation.x, spD8[i].mRotation.y, spD8[i].mRotation.z, &sp28[i]);
+        }
+        f32 f1 = (f31 + f30);
+        f1 = f30 / f1;
+        JMAQuatLerp(&sp28[0], &sp28[1], f1, &sp08);
+        f31 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
+        f30 = 1.0f - f31;
+        JMAQuatLerp(quatPtr, &sp08, f31, quatPtr);
+        infoPtr->mTranslate.x = infoPtr->mTranslate.x * f30 + sp68.mTranslate.x * f31;
+        infoPtr->mTranslate.y = infoPtr->mTranslate.y * f30 + sp68.mTranslate.y * f31;
+        infoPtr->mTranslate.z = infoPtr->mTranslate.z * f30 + sp68.mTranslate.z * f31;
+        infoPtr->mScale.x = infoPtr->mScale.x * f30 + sp68.mScale.x * f31;
+        infoPtr->mScale.y = infoPtr->mScale.y * f30 + sp68.mScale.y * f31;
+        infoPtr->mScale.z = infoPtr->mScale.z * f30 + sp68.mScale.z * f31;
+        mDoMtx_quat(mtx, quatPtr);
         mDoExt_setJ3DData(mtx, infoPtr, param_0);
     }
     if (mpCallback2) {
@@ -1612,19 +1672,27 @@ void mDoExt_McaMorf2::setAnm(J3DAnmTransform* bckAnm1, J3DAnmTransform* bckAnm2,
 }
 
 /* 800140A0-800140D8       .text setMorf__15mDoExt_McaMorf2Ff */
-void mDoExt_McaMorf2::setMorf(f32 f1) {
-    if (f1 <= 0.0f) {
-        field_0x78 = 1.0f;
+void mDoExt_McaMorf2::setMorf(f32 morf) {
+    if (morf <= 0.0f) {
+        mCurMorf = 1.0f;
     } else {
-        field_0x78 = 0.0f;
-        field_0x80 = 1.0f / f1;
+        mCurMorf = 0.0f;
+        mMorfStep = 1.0f / morf;
     }
-    field_0x7c = field_0x78;
+    mPrevMorf = mCurMorf;
 }
 
 /* 800140D8-8001419C       .text play__15mDoExt_McaMorf2FP3VecUlSc */
-void mDoExt_McaMorf2::play(Vec*, u32, s8) {
-    /* Nonmatching */
+BOOL mDoExt_McaMorf2::play(Vec* pos, u32 mtrlSndId, s8 reverb) {
+    if (mCurMorf < 1.0f) {
+        mPrevMorf = mCurMorf;
+        cLib_chaseF(&mCurMorf, 1.0f, mMorfStep);
+    }
+    mFrameCtrl.update();
+    if (mpSound && mpSound->mpBasAnm && pos) {
+        mpSound->setAnimSound(pos, getFrame(), getPlaySpeed(), mtrlSndId, reverb);
+    }
+    return isStop();
 }
 
 /* 8001419C-800141C8       .text entryDL__15mDoExt_McaMorf2Fv */
@@ -1636,7 +1704,17 @@ void mDoExt_McaMorf2::entryDL() {
 
 /* 800141C8-80014250       .text calc__15mDoExt_McaMorf2Fv */
 void mDoExt_McaMorf2::calc() {
-    /* Nonmatching */
+    if (mpModel == NULL) {
+        return;
+    }
+    if (mpAnm1 != NULL) {
+        mpAnm1->setFrame(getFrame());
+    }
+    if (mpAnm2 != NULL) {
+        mpAnm2->setFrame(getFrame());
+    }
+    mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(this);
+    mpModel->calc();
 }
 
 /* 80014250-8001427C       .text stopZelAnime__15mDoExt_McaMorf2Fv */
@@ -1658,8 +1736,83 @@ void mDoExt_onCupOffAupPacket::draw() {
 
 /* 800142F4-800143B8       .text draw__19mDoExt_invJntPacketFv */
 void mDoExt_invJntPacket::draw() {
-    /* Nonmatching */
+    static u8 l_invisibleMat[] ALIGN_DECL(32) = {
+        0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x04, 0x00, 0x10, 0x00, 0x00, 0x10, 0x10, 0x00,
+        0x00, 0x04, 0x00, 0x61, 0x28, 0x38, 0x00, 0x00, 0x61, 0xC0, 0x08, 0xFF, 0xFC, 0x61, 0xC1,
+        0x08, 0xFF, 0xF0, 0x61, 0xF3, 0x7F, 0x00, 0x00, 0x61, 0x43, 0x00, 0x00, 0x41, 0x61, 0x40,
+        0x00, 0x00, 0x17, 0x61, 0xEE, 0x00, 0x00, 0x00, 0x61, 0xEF, 0x00, 0x00, 0x00, 0x61, 0xF0,
+        0x00, 0x00, 0x00, 0x61, 0xF1, 0x00, 0x00, 0x00, 0x61, 0xF2, 0x00, 0x00, 0x00, 0x61, 0x41,
+        0x00, 0x00, 0x04, 0x10, 0x00, 0x00, 0x10, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+        0x10, 0x09, 0x00, 0x00, 0x00, 0x01, 0x61, 0x00, 0x00, 0x40, 0x10, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    };
+    GXCallDisplayList(l_invisibleMat, 0x80);
+    J3DModelData* modelData = mModel->getModelData();
+    J3DJoint* joint = modelData->getJointNodePointer(mJntNum);
+    J3DMaterial* material = joint->getMesh();
+    J3DShape::resetVcdVatCache();
+    modelData->getShapeNodePointer(0x00)->loadPreDrawSetting();
+    while (material) {
+        u16 shapeIdx = material->getShape()->getIndex();
+        mModel->getShapePacket(shapeIdx)->drawFast();
+        material = material->getNext();
+    };
+    J3DShape::resetVcdVatCache();
+    GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 1, 0, 1);
 }
+
+u8 l_matDL[] ALIGN_DECL(32) = {
+    0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00, 0x10, 0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00, 0x10,
+    0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x05, 0x06, 0x10, 0x00, 0x00, 0x10, 0x10, 0x00, 0x00, 0x05,
+    0x02, 0x10, 0x00, 0x00, 0x10, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0C, 0xFF,
+    0xFF, 0xFF, 0xFF, 0x61, 0x28, 0x38, 0x00, 0x00, 0x61, 0xC0, 0x08, 0xF6, 0xAF, 0x61, 0xC1, 0x08,
+    0xFF, 0xE0, 0x61, 0x43, 0x00, 0x00, 0x41, 0x61, 0x40, 0x00, 0x00, 0x17, 0x61, 0x41, 0x00, 0x00,
+    0x0C, 0x61, 0xF3, 0x7F, 0x00, 0x00, 0x10, 0x00, 0x00, 0x10, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x10,
+    0x00, 0x00, 0x10, 0x09, 0x00, 0x00, 0x00, 0x01, 0x61, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+u8 l_toonMatDL[] ALIGN_DECL(32) = {
+    0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00, 0x10, 0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00, 0x10,
+    0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x05, 0x06, 0x10, 0x00, 0x00, 0x10, 0x10, 0x00, 0x00, 0x05,
+    0x02, 0x10, 0x00, 0x00, 0x10, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0C, 0xFF,
+    0xFF, 0xFF, 0xFF, 0x61, 0x28, 0x00, 0x00, 0x00, 0x61, 0xC0, 0x08, 0x24, 0xAF, 0x61, 0xC1, 0x08,
+    0xFF, 0xF0, 0x61, 0x28, 0x00, 0x00, 0x00, 0x61, 0xC2, 0x08, 0xF6, 0x0F, 0x61, 0xC3, 0x08, 0xFF,
+    0xE0, 0x61, 0x43, 0x00, 0x00, 0x41, 0x61, 0x40, 0x00, 0x00, 0x17, 0x61, 0x41, 0x00, 0x00, 0x0C,
+    0x61, 0xF3, 0x7F, 0x00, 0x00, 0x10, 0x00, 0x00, 0x10, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00,
+    0x00, 0x10, 0x09, 0x00, 0x00, 0x00, 0x01, 0x61, 0x00, 0x00, 0x04, 0x10, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+u8 l_mat1DL[] ALIGN_DECL(32) = {
+    0x10, 0x00, 0x00, 0x10, 0x40, 0xFF, 0xFF, 0x42, 0x80, 0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00, 0x10,
+    0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x05,
+    0x06, 0x10, 0x00, 0x00, 0x10, 0x10, 0x00, 0x00, 0x05, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0A, 0x00,
+    0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0C, 0xFF, 0xFF, 0xFF, 0xFF, 0x61, 0x28, 0x38, 0x00,
+    0x40, 0x61, 0xC0, 0x08, 0xFA, 0x8F, 0x61, 0xC1, 0x08, 0xFF, 0xF0, 0x61, 0x43, 0x00, 0x00, 0x41,
+    0x61, 0x40, 0x00, 0x00, 0x17, 0x61, 0x41, 0x00, 0x00, 0x0C, 0x61, 0xF3, 0x7F, 0x00, 0x00, 0x10,
+    0x00, 0x00, 0x10, 0x3F, 0x00, 0x00, 0x00, 0x01, 0x10, 0x00, 0x00, 0x10, 0x09, 0x00, 0x00, 0x00,
+    0x01, 0x61, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+u8 l_toonMat1DL[] ALIGN_DECL(32) = {
+    0x10, 0x00, 0x00, 0x10, 0x40, 0xFF, 0xFF, 0x42, 0x80, 0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00, 0x10,
+    0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x05,
+    0x06, 0x10, 0x00, 0x00, 0x10, 0x10, 0x00, 0x00, 0x05, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0A, 0x00,
+    0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0C, 0xFF, 0xFF, 0xFF, 0xFF, 0x61, 0x28, 0x3C, 0x00,
+    0x00, 0x61, 0xC0, 0x08, 0x24, 0xAF, 0x61, 0xC1, 0x08, 0xFF, 0xF0, 0x61, 0x28, 0x3C, 0x00, 0x00,
+    0x61, 0xC2, 0x08, 0xF0, 0x8F, 0x61, 0xC3, 0x08, 0xFF, 0xE0, 0x61, 0x43, 0x00, 0x00, 0x41, 0x61,
+    0x40, 0x00, 0x00, 0x17, 0x61, 0x41, 0x00, 0x00, 0x0C, 0x61, 0xF3, 0x7F, 0x00, 0x00, 0x10, 0x00,
+    0x00, 0x10, 0x3F, 0x00, 0x00, 0x00, 0x01, 0x10, 0x00, 0x00, 0x10, 0x09, 0x00, 0x00, 0x00, 0x01,
+    0x61, 0x00, 0x00, 0x04, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+};
 
 /* 800143B8-80014580       .text init__15mDoExt_3Dline_cFUsii */
 int mDoExt_3Dline_c::init(u16, int, int) {
@@ -1672,18 +1825,35 @@ int mDoExt_3DlineMat0_c::init(u16, u16, int) {
 }
 
 /* 80014664-800146A0       .text __dt__15mDoExt_3Dline_cFv */
-mDoExt_3Dline_c::~mDoExt_3Dline_c() {
-    /* Nonmatching */
-}
+mDoExt_3Dline_c::~mDoExt_3Dline_c() {}
 
 /* 800146A0-800146A4       .text __ct__15mDoExt_3Dline_cFv */
-mDoExt_3Dline_c::mDoExt_3Dline_c() {
-    /* Nonmatching */
-}
+mDoExt_3Dline_c::mDoExt_3Dline_c() {}
 
 /* 800146A4-80014798       .text setMaterial__19mDoExt_3DlineMat0_cFv */
 void mDoExt_3DlineMat0_c::setMaterial() {
-    /* Nonmatching */
+    static u8 l_normal[][3] = {
+        {0x40, 0x00, 0x00},
+        {0xC0, 0x00, 0x00},
+    };
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    dKy_setLight_again();
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_RGB8, 6);
+    GXSetArray(GX_VA_NRM, l_normal, sizeof(*l_normal));
+    if (mpTevStr) {
+        dKy_GxFog_tevstr_set(mpTevStr);
+        GXCallDisplayList(l_toonMatDL, 0x80);
+    } else {
+        dKy_GxFog_set();
+        GXCallDisplayList(l_matDL, 0x80);
+    }
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
+    GXLoadNrmMtxImm(g_mDoMtx_identity, GX_PNMTX0);
 }
 
 /* 80014798-800148B4       .text draw__19mDoExt_3DlineMat0_cFv */
@@ -1708,7 +1878,30 @@ int mDoExt_3DlineMat1_c::init(u16, u16, ResTIMG*, int) {
 
 /* 800154C4-800155DC       .text setMaterial__19mDoExt_3DlineMat1_cFv */
 void mDoExt_3DlineMat1_c::setMaterial() {
-    /* Nonmatching */
+    static u8 l_normal[][3] = {
+        {0x40, 0x00, 0x00},
+        {0xC0, 0x00, 0x00},
+    };
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    dKy_setLight_again();
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_RGB8, 6);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+    GXSetArray(GX_VA_NRM, l_normal, sizeof(*l_normal));
+    if (mpTevStr) {
+        dKy_GxFog_tevstr_set(mpTevStr);
+        GXCallDisplayList(l_toonMat1DL, 0xA0);
+    } else {
+        dKy_GxFog_set();
+        GXCallDisplayList(l_mat1DL, 0x80);
+    }
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
+    GXLoadNrmMtxImm(g_mDoMtx_identity, GX_PNMTX0);
 }
 
 /* 800155DC-80015764       .text draw__19mDoExt_3DlineMat1_cFv */
@@ -1717,12 +1910,12 @@ void mDoExt_3DlineMat1_c::draw() {
 }
 
 /* 80015764-80015E54       .text update__19mDoExt_3DlineMat1_cFUsfR8_GXColorUsP12dKy_tevstr_c */
-void mDoExt_3DlineMat1_c::update(u16, f32, _GXColor&, u16, dKy_tevstr_c*) {
+void mDoExt_3DlineMat1_c::update(u16, f32, GXColor&, u16, dKy_tevstr_c*) {
     /* Nonmatching */
 }
 
 /* 80015E54-80016518       .text update__19mDoExt_3DlineMat1_cFUsR8_GXColorP12dKy_tevstr_c */
-void mDoExt_3DlineMat1_c::update(u16, _GXColor&, dKy_tevstr_c*) {
+void mDoExt_3DlineMat1_c::update(u16, GXColor&, dKy_tevstr_c*) {
     /* Nonmatching */
     u8* size_p = mpLines->mpSize;
     JUT_ASSERT(5243, size_p != 0);
@@ -1730,12 +1923,22 @@ void mDoExt_3DlineMat1_c::update(u16, _GXColor&, dKy_tevstr_c*) {
 
 /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
 void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* pMat) {
-    /* Nonmatching */
+    if (mp3DlineMat == NULL) {
+        j3dSys.getDrawBuffer(0)->entryImm(this, 0);
+    }
+    pMat->mpNextLineMat = mp3DlineMat;
+    mp3DlineMat = pMat;
 }
 
 /* 8001657C-800165E4       .text draw__26mDoExt_3DlineMatSortPacketFv */
 void mDoExt_3DlineMatSortPacket::draw() {
-    /* Nonmatching */
+    mp3DlineMat->setMaterial();
+    mDoExt_3DlineMat_c* lineMat = mp3DlineMat;
+    do {
+        lineMat->draw();
+        lineMat = lineMat->mpNextLineMat;
+    } while (lineMat);
+    J3DShape::resetVcdVatCache();
 }
 
 /* 800165E4-8001683C       .text mDoExt_initFontCommon__FPP7JUTFontPP7ResFONTP7JKRHeapPCcP10JKRArchiveUcUlUl */
@@ -1884,24 +2087,22 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
 }
 
 /* 80016C98-80016CC4       .text setGX__7JUTFontFQ28JUtility6TColorQ28JUtility6TColor */
-void JUTFont::setGX(JUtility::TColor, JUtility::TColor) {
-    /* Nonmatching */
+void JUTFont::setGX(JUtility::TColor col1, JUtility::TColor col2) {
+    setGX();
 }
 
 /* 80016CC4-80016CF0       .text getCellWidth__7JUTFontCFv */
 int JUTFont::getCellWidth() const {
-    /* Nonmatching */
+    return getWidth();
 }
 
 /* 80016CF0-80016D1C       .text getCellHeight__7JUTFontCFv */
 s32 JUTFont::getCellHeight() const {
-    /* Nonmatching */
+    return getHeight();
 }
 
 /* 80016D1C-80016D78       .text __dt__26mDoExt_3DlineMatSortPacketFv */
-mDoExt_3DlineMatSortPacket::~mDoExt_3DlineMatSortPacket() {
-    /* Nonmatching */
-}
+mDoExt_3DlineMatSortPacket::~mDoExt_3DlineMatSortPacket() {}
 
 /* 80016D78-80016D80       .text getMaterialID__19mDoExt_3DlineMat1_cFv */
 int mDoExt_3DlineMat1_c::getMaterialID() {
@@ -1914,26 +2115,16 @@ int mDoExt_3DlineMat0_c::getMaterialID() {
 }
 
 /* 80016D88-80016DE4       .text __dt__24mDoExt_onCupOffAupPacketFv */
-mDoExt_onCupOffAupPacket::~mDoExt_onCupOffAupPacket() {
-    /* Nonmatching */
-}
+mDoExt_onCupOffAupPacket::~mDoExt_onCupOffAupPacket() {}
 
 /* 80016DE4-80016E40       .text __dt__24mDoExt_offCupOnAupPacketFv */
-mDoExt_offCupOnAupPacket::~mDoExt_offCupOnAupPacket() {
-    /* Nonmatching */
-}
+mDoExt_offCupOnAupPacket::~mDoExt_offCupOnAupPacket() {}
 
 /* 80016E40-80016F14       .text __dt__15mDoExt_McaMorf2Fv */
-mDoExt_McaMorf2::~mDoExt_McaMorf2() {
-    /* Nonmatching */
-}
+mDoExt_McaMorf2::~mDoExt_McaMorf2() {}
 
 /* 80017000-800170D4       .text __dt__14mDoExt_McaMorfFv */
-mDoExt_McaMorf::~mDoExt_McaMorf() {
-    /* Nonmatching */
-}
+mDoExt_McaMorf::~mDoExt_McaMorf() {}
 
 /* 800170D4-800171BC       .text __dt__28mDoExt_MtxCalcAnmBlendTblOldFv */
-mDoExt_MtxCalcAnmBlendTblOld::~mDoExt_MtxCalcAnmBlendTblOld() {
-    /* Nonmatching */
-}
+mDoExt_MtxCalcAnmBlendTblOld::~mDoExt_MtxCalcAnmBlendTblOld() {}

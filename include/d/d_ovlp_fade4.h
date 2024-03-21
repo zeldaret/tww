@@ -18,7 +18,7 @@ class dDlst_2Dt_Sp_c : public dDlst_base_c {
 public:
     ~dDlst_2Dt_Sp_c() {}
     void draw();
-    void init(ResTIMG*, f32, f32, f32, f32, _GXColor);
+    void init(ResTIMG*, f32, f32, f32, f32, GXColor);
 
     /* 0x04 */ GXTexObj field_0x4;
     /* 0x24 */ ResTIMG* field_0x24;

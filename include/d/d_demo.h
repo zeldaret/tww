@@ -169,8 +169,8 @@ public:
     void JSGSetLightType(JStage::TELight);
     void JSGSetPosition(const Vec&);
     void JSGSetColor(_GXColor);
-    void JSGSetDistanceAttenuation(f32, f32, _GXDistAttnFn);
-    void JSGSetAngleAttenuation(f32, _GXSpotFn);
+    void JSGSetDistanceAttenuation(f32, f32, GXDistAttnFn);
+    void JSGSetAngleAttenuation(f32, GXSpotFn);
     void JSGSetDirection(const Vec&);
 
 private:

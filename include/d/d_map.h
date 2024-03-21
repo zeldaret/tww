@@ -13,7 +13,7 @@ class dMap_2DMtMapSpcl_tex_c {
 public:
     dMap_2DMtMapSpcl_tex_c();
     ~dMap_2DMtMapSpcl_tex_c();
-    void init(ResTIMG*, u32, const _GXColor&);
+    void init(ResTIMG*, u32, const GXColor&);
     void setScroll(f32, f32, f32, f32);
 
     /* 0x00 */ u8 field_0x0[4];
@@ -114,7 +114,7 @@ public:
 class dMap_2DTri_c : public dDlst_base_c {
 public:
     ~dMap_2DTri_c();
-    void init(s16, s16, const _GXColor&, f32, f32, s16);
+    void init(s16, s16, const GXColor&, f32, f32, s16);
     void draw();
     void setPos(s16, s16);
 };
@@ -123,14 +123,14 @@ class dMap_2DPoint_c : public dDlst_base_c {
 public:
     dMap_2DPoint_c();
     ~dMap_2DPoint_c();
-    void init(s16, s16, const _GXColor&, u8);
+    void init(s16, s16, const GXColor&, u8);
     void draw();
 };
 
 class dMap_2DAGBCursor_c : public dDlst_base_c {
 public:
     ~dMap_2DAGBCursor_c();
-    void init(s16, s16, const _GXColor&, u8);
+    void init(s16, s16, const GXColor&, u8);
     void draw();
 };
 

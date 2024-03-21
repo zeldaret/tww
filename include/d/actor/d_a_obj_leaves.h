@@ -13,7 +13,7 @@ public:
 
     void chk_appear();
     void init_mtx();
-    void birthEffect(int, cXyz*, csXyz*, _GXColor*);
+    void birthEffect(int, cXyz*, csXyz*, GXColor*);
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     void tg_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
