@@ -34,7 +34,7 @@ public:
     /* 0x02D8 */ J3DModel* m02D8;
     /* 0x02DC */ u8 m02DC;
     /* 0x02DD */ u8 m02DD;
-    /* 0x02DE */ u8 m02DE;
+    /* 0x02DE */ s8 m02DE;
     /* 0x02DF */ u8 m02DF[0x02E0 - 0x02DF];
     /* 0x02E0 */ u32 mShadowId;
     /* 0x02E4 */ u8 m02E4[0x02E8 - 0x02E4];
@@ -73,7 +73,13 @@ public:
     /* 0x0B34 */ int m0B34;
     /* 0x0B38 */ u8 m0B38[0x0B44 - 0x0B38];
     /* 0x0B44 */ cXyz m0B44[2];
-    /* 0x0B5C */ u8 m0B5C[0x0B78 - 0x0B5C];
+    /* 0x0B5C */ int m0B5C;
+    /* 0x0B60 */ int m0B60;
+    /* 0x0B64 */ f32 m0B64;
+    /* 0x0B68 */ f32 m0B68;
+    /* 0x0B6C */ f32 m0B6C;
+    /* 0x0B70 */ f32 m0B70;
+    /* 0x0B74 */ f32 m0B74;
     /* 0x0B78 */ s16 m0B78;
     /* 0x0B7A */ s8 m0B7A;
     /* 0x0B7B */ s8 m0B7B;

@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_bk.h"
+#include "d/res/res_bk.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
@@ -21,7 +22,11 @@
 #include "d/d_path.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_cc_uty.h"
+#include "d/d_material.h"
+#include "d/d_snap.h"
 #include "JSystem/JUtility/JUTReport.h"
+
+static u8 dummy[0x49];
 
 static u8 hio_set;
 static u8 another_hit;
@@ -36,113 +41,46 @@ static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
 
 static int bk_at_kind[] = { 0, 1, 0 };
-static int bk_attack_ready_SE[] = { JA_SE_CV_BK_KAMAE, JA_SE_CV_BK_KAMAE, -0xDCF };
-static int bk_attack_go_SE[] = { JA_SE_CV_BK_ATTACK_S, JA_SE_CV_BK_ATTACK_L, -0xDCF };
+static int bk_attack_ready_SE[] = { JA_SE_CV_BK_KAMAE, JA_SE_CV_BK_KAMAE, -0xDCF }; // TODO what is -0xDCF?
+static int bk_attack_go_SE[] = { JA_SE_CV_BK_ATTACK_S, JA_SE_CV_BK_ATTACK_L, -0xDCF }; // TODO what is -0xDCF?
 static int bk_attack_AP[] = { 1, 2, 1 };
 static f32 br_set_tm[] = { -100.0f, -100.0f, -100.0f };
+
+struct attack_info_s {
+    /* 0x00 */ int bckFileIdx;
+    /* 0x04 */ f32 speed;
+    /* 0x08 */ int soundFileIdx;
+};
+
+static attack_info_s attack1_info[] = {
+    { BK_BCK_BK_ATTACK1, 1.2f, BK_BAS_BK_ATTACK1 },
+    { BK_BCK_BK_ATTACK2, 1.0f, BK_BAS_BK_ATTACK2 },
+    { BK_BCK_BK_ATTACK3, 1.0f, BK_BAS_BK_ATTACK3 },
+};
+
+static attack_info_s jattack1_info[] = {
+    { BK_BCK_BK_JATTACK1, 1.0f, -1 },
+    { BK_BCK_BK_JATTACK2, 1.0f, BK_BAS_BK_JATTACK2 },
+    { BK_BCK_BK_JATTACK3, 1.0f, BK_BAS_BK_JATTACK3 },
+};
+
+static attack_info_s kattack1_info[] = {
+    { BK_BCK_BK_KERI1, 1.0f, BK_BAS_BK_KERI1 },
+    { BK_BCK_BK_KERI2, 1.0f, BK_BAS_BK_KERI2 },
+    { -BK_BTP_TMABATAKI, 1.0f, 0 }, // TODO: why is bckFileIdx negative and soundFileIdx zero? bug?
+};
+
+static attack_info_s* attack_info[] = {
+    attack1_info,
+    jattack1_info,
+    kattack1_info,
+};
 
 static s8 joint_check[] = {
       -1,   -1, 0x0B, 0x07, 0x03, 0x0F,   -1, 0x0A, 0x06, 0x02, 0x0E,   -1,   -1,   -1,   -1,   -1,
     0x0C, 0x0D, 0x12, 0x32,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
     0x09, 0x05, 0x01, 0x11,   -1,   -1,   -1,   -1, 0x08, 0x04, 0x00, 0x10,   -1,   -1,   -1,   -1,
       -1,   -1,   -1, 0x13, 
-};
-
-enum BK_RES_FILE_ID { // IDs and indexes are synced
-    /* BAS */
-    BK_BAS_BK_AOMUKE=0x8,
-    BK_BAS_BK_ATTACK1=0x9,
-    BK_BAS_BK_ATTACK2=0xA,
-    BK_BAS_BK_ATTACK3=0xB,
-    BK_BAS_BK_BOKKURI=0xC,
-    BK_BAS_BK_CATCH=0xD,
-    BK_BAS_BK_HAKKEN=0xE,
-    BK_BAS_BK_IATTACK1=0xF,
-    BK_BAS_BK_JATTACK2=0x10,
-    BK_BAS_BK_JATTACK3=0x11,
-    BK_BAS_BK_JUMP1=0x12,
-    BK_BAS_BK_JUMP2=0x13,
-    BK_BAS_BK_KERI1=0x14,
-    BK_BAS_BK_KERI2=0x15,
-    BK_BAS_BK_KYORO1=0x16,
-    BK_BAS_BK_KYORO2=0x17,
-    BK_BAS_BK_NIGERU=0x18,
-    BK_BAS_BK_NOBI=0x19,
-    BK_BAS_BK_NOMWAIT=0x1A,
-    BK_BAS_BK_OKIRUA=0x1B,
-    BK_BAS_BK_OKIRUU=0x1C,
-    BK_BAS_BK_OTISOU1=0x1D,
-    BK_BAS_BK_OTISOU2=0x1E,
-    BK_BAS_BK_RUN=0x1F,
-    BK_BAS_BK_SLEEP=0x20,
-    BK_BAS_BK_SUWARI=0x21,
-    BK_BAS_BK_TUTUKU1=0x22,
-    BK_BAS_BK_UTUBUSE=0x23,
-    BK_BAS_BK_WAIT=0x24,
-    BK_BAS_BK_WALK=0x25,
-    BK_BAS_BK_WALK2=0x26,
-    
-    /* BCK */
-    BK_BCK_BK_AOMUKE=0x29,
-    BK_BCK_BK_ATTACK1=0x2A,
-    BK_BCK_BK_ATTACK2=0x2B,
-    BK_BCK_BK_ATTACK3=0x2C,
-    BK_BCK_BK_BIKKURI=0x2D,
-    BK_BCK_BK_BOUGYO1=0x2E,
-    BK_BCK_BK_BOUGYO2=0x2F,
-    BK_BCK_BK_CATCH=0x30,
-    BK_BCK_BK_HAKKEN=0x31,
-    BK_BCK_BK_HAKOBI=0x32,
-    BK_BCK_BK_HIDARIROT=0x33,
-    BK_BCK_BK_JATTACK1=0x34,
-    BK_BCK_BK_JATTACK2=0x35,
-    BK_BCK_BK_JATTACK3=0x36,
-    BK_BCK_BK_JUMP1=0x37,
-    BK_BCK_BK_JUMP2=0x38,
-    BK_BCK_BK_KERI1=0x39,
-    BK_BCK_BK_KERI2=0x3A,
-    BK_BCK_BK_KIME=0x3B,
-    BK_BCK_BK_KOUKA=0x3C,
-    BK_BCK_BK_KYORO1=0x3D,
-    BK_BCK_BK_KYORO2=0x3E,
-    BK_BCK_BK_MIGIROT=0x3F,
-    BK_BCK_BK_NIGERU=0x40,
-    BK_BCK_BK_NOBI=0x41,
-    BK_BCK_BK_NOMWAIT=0x42,
-    BK_BCK_BK_NOZOKU=0x43,
-    BK_BCK_BK_OKIRUA=0x44,
-    BK_BCK_BK_OKIRUU=0x45,
-    BK_BCK_BK_OTISOU1=0x46,
-    BK_BCK_BK_OTISOU2=0x47,
-    BK_BCK_BK_RUN=0x48,
-    BK_BCK_BK_SLEEP=0x49,
-    BK_BCK_BK_SUWARI=0x4A,
-    BK_BCK_BK_TATAKU=0x4B,
-    BK_BCK_BK_TUTUKU1=0x4C,
-    BK_BCK_BK_TUTUKU2=0x4D,
-    BK_BCK_BK_TUTUKU3=0x4E,
-    BK_BCK_BK_TYAKU=0x4F,
-    BK_BCK_BK_UTUBUSE=0x50,
-    BK_BCK_BK_WAIT=0x51,
-    BK_BCK_BK_WALK=0x52,
-    BK_BCK_BK_WALK2=0x53,
-    
-    /* BDLM */
-    BK_BDL_BK=0x56,
-    BK_BDL_BOUEN=0x57,
-    
-    /* BMD */
-    BK_BMD_BK_KB=0x5A,
-    BK_BMD_BK_TATE=0x5B,
-    
-    /* BMT */
-    BK_BMT_BK_BOKO=0x5E,
-    BK_BMT_BK_KEN=0x5F,
-    BK_BMT_GREEN=0x60,
-    BK_BMT_PINK=0x61,
-    
-    /* BTP */
-    BK_BTP_TMABATAKI=0x64,
 };
 
 /* 000000EC-00000234       .text anm_init__FP8bk_classifUcfi */
@@ -500,12 +438,50 @@ static void search_check_draw(bk_class* i_this) {
 
 /* 000019A8-00001B88       .text br_draw__FP8bk_class */
 static void br_draw(bk_class* i_this) {
-    /* Nonmatching */
+    if (i_this->m02F0 == 0) {
+        return;
+    }
+    if (g_regHIO.mChild[6].mShortRegs[3] != 0) {
+        return;
+    }
+    
+    J3DModel* model = i_this->m02E8;
+    for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
+        J3DMaterial* mat = model->getModelData()->getJointNodePointer(i)->getMesh();
+        while (mat) {
+            J3DShape* shape = mat->getShape();
+            if (i_this->m02F4 == 0) {
+                if (i == 1) {
+                    shape->show();
+                } else {
+                    shape->hide();
+                }
+            } else {
+                if (i == 2) {
+                    shape->show();
+                } else {
+                    shape->hide();
+                }
+            }
+            mat = mat->getNext();
+        }
+    }
+    
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x2C), *calc_mtx);
+    MtxTrans(150.0f + l_bkHIO.m100, g_regHIO.mChild[8].mFloatRegs[1], g_regHIO.mChild[8].mFloatRegs[2], 1);
+    s16 angleX = g_regHIO.mChild[8].mShortRegs[6] + 0x4000;
+    cMtx_XrotM(*calc_mtx, angleX);
+    s16 angleZ = g_regHIO.mChild[8].mShortRegs[7] + 0x4000;
+    cMtx_ZrotM(*calc_mtx, angleZ);
+    MtxScale(l_bkHIO.m018 * i_this->m02EC, l_bkHIO.m018, l_bkHIO.m018, 1);
+    model->setBaseTRMtx(*calc_mtx);
+    
+    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    mDoExt_modelUpdateDL(model);
 }
 
 /* 00001B88-00001CD0       .text daBk_shadowDraw__FP8bk_class */
-static BOOL daBk_shadowDraw(bk_class* i_this) {
-    /* Nonmatching - regalloc */
+static void daBk_shadowDraw(bk_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     if (!fopAcM_checkCarryNow(i_this)) {
         cXyz shadowPos(
@@ -539,12 +515,93 @@ static BOOL daBk_shadowDraw(bk_class* i_this) {
 
 /* 00001CD0-00001F60       .text daBk_Draw__FP8bk_class */
 static BOOL daBk_Draw(bk_class* i_this) {
-    /* Nonmatching */
+    J3DModel* model = i_this->mpMorf->getModel();
+    if (i_this->m02B7 != 0xFF && i_this->mType == 6 && dComIfGs_isSwitch(i_this->m02B7, dComIfGp_roomControl_getStayNo())) {
+        return TRUE;
+    }
+    if (i_this->m02BA != 0 || i_this->mType == 8 || i_this->m121C != 0 || i_this->m02DE != 0) {
+        return TRUE;
+    }
+    
+    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    if (i_this->mEnemyIce.mFreezeTimer > 20) {
+        dMat_control_c::iceEntryDL(i_this->mpMorf, -1, NULL);
+        daBk_shadowDraw(i_this);
+        return TRUE;
+    }
+    
+    br_draw(i_this);
+    
+    search_check_draw(i_this);
+    
+    J3DModelData* modelData = model->getModelData();
+    J3DJoint* rootJoint = modelData->getJointNodePointer(0x00);
+    J3DShape* eyeShape = modelData->getMaterialNodePointer(0x00)->getShape();
+    J3DShape* hatShape = modelData->getMaterialNodePointer(0x01)->getShape();
+    J3DShape* bodyShape = modelData->getMaterialNodePointer(0x02)->getShape();
+    eyeShape->hide();
+    i_this->m02C4->entry(model->getModelData());
+    if (i_this->m1230) {
+        i_this->mpMorf->entryDL(i_this->m1230);
+    } else {
+        i_this->mpMorf->entryDL();
+    }
+    dComIfGd_setListMaskOff();
+    eyeShape->show();
+    model->getMatPacket(0x00)->unlock();
+    hatShape->hide();
+    bodyShape->hide();
+    rootJoint->entryIn();
+    hatShape->show();
+    bodyShape->show();
+    dComIfGd_setList();
+    
+    daBk_shadowDraw(i_this);
+    
+    if (i_this->m02D4 != 0) {
+        g_env_light.setLightTevColorType(i_this->m02D0, &i_this->tevStr);
+        mDoExt_modelUpdateDL(i_this->m02D0);
+    }
+    
+    if (i_this->m02DC != 0) {
+        g_env_light.setLightTevColorType(i_this->m02D8, &i_this->tevStr);
+        mDoExt_modelUpdateDL(i_this->m02D8);
+    }
+    
+    dSnap_RegistFig(DSNAP_TYPE_BK, i_this, 1.0f, 1.0f, 1.0f);
+    
+    return TRUE;
 }
 
 /* 00001F60-00002404       .text way_pos_check__FP8bk_classP4cXyz */
-static void way_pos_check(bk_class* i_this, cXyz*) {
-    /* Nonmatching */
+static void way_pos_check(bk_class* i_this, cXyz* r31) {
+    fopAc_ac_c* i_actor = i_this;
+    dBgS_LinChk linChk;
+    dBgS_GndChk gndChk;
+    cXyz sp2C;
+    cXyz sp20;
+    cXyz sp14;
+    cXyz sp08;
+    sp2C.x = 0.0f;
+    sp2C.y = 50.0f;
+    sp14 = i_this->current.pos;
+    sp14.y += 50.0f;
+    for (int i = 0; i < 100; i++) {
+        sp2C.z = 300.0f + cM_rndF(200.0f);
+        MtxRotY(cM_rndF(M_PI*2), 0);
+        MtxPosition(&sp2C, &sp20);
+        sp08.x = i_this->current.pos.x + sp20.x;
+        sp08.y = i_this->current.pos.y + sp20.y;
+        sp08.z = i_this->current.pos.z + sp20.z;
+        *r31 = sp08;
+        linChk.Set(&sp14, &sp08, i_actor);
+        if (!dComIfG_Bgsp()->LineCross(&linChk)) {
+            gndChk.SetPos(&sp08);
+            if (i_this->dr.mAcch.GetGroundH() - dComIfG_Bgsp()->GroundCross(&gndChk) < 200.0f) {
+                break;
+            }
+        }
+    }
 }
 
 /* 0000259C-00002864       .text ground_4_check__FP8bk_classisf */
@@ -583,8 +640,23 @@ static u8 ground_4_check(bk_class* i_this, int r18, s16 r20, f32 f29) {
 }
 
 /* 00002864-00002C4C       .text daBk_other_bg_check__FP8bk_classP10fopAc_ac_c */
-static void daBk_other_bg_check(bk_class* i_this, fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL daBk_other_bg_check(bk_class* i_this, fopAc_ac_c* r23) {
+    fopAc_ac_c* i_actor = i_this;
+    dBgS_LinChk linChk;
+    cXyz sp14;
+    cXyz sp08;
+    if (r23) {
+        sp08 = r23->current.pos;
+        sp08.y += 50.0f;
+        sp14 = i_actor->eyePos;
+        linChk.Set(&sp14, &sp08, i_actor);
+        if (dComIfG_Bgsp()->LineCross(&linChk)) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 static fopAc_ac_c* target_info[10];
@@ -606,8 +678,60 @@ static void* s_w_sub(void* param_1, void*) {
 }
 
 /* 00002CD4-00002FB0       .text search_wepon__FP8bk_class */
-static u32 search_wepon(bk_class* i_this) {
-    /* Nonmatching */
+static uint search_wepon(bk_class* i_this) {
+    target_info_count = 0;
+    for (int i = 0; i < ARRAY_SIZE(target_info); i++) {
+        target_info[i] = NULL;
+    }
+    
+    fpcM_Search(&s_w_sub, i_this);
+    
+    f32 f29 = 50.0f;
+    if (target_info_count != 0) {
+        fopAc_ac_c* r25;
+        int i = 0;
+        while (i < target_info_count) {
+            r25 = target_info[i];
+            cXyz sp18;
+            sp18.x = r25->current.pos.x - i_this->eyePos.x;
+            sp18.y = 50.0f + r25->current.pos.y - i_this->eyePos.y;
+            sp18.z = r25->current.pos.z - i_this->eyePos.z;
+            f32 f4 = sqrtf(sp18.x*sp18.x + sp18.z*sp18.z);
+            if (f4 < f29 && !daBk_other_bg_check(i_this, r25)) {
+                if (fabsf(r25->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
+                    s16 angleDiff = i_this->m0330 - cM_atan2s(sp18.x, sp18.z);
+                    if (angleDiff < 0) {
+                        angleDiff = -angleDiff;
+                    }
+                    if ((u16)angleDiff < 0x1800) {
+                        return fopAcM_GetID(r25);
+                    }
+                    cMtx_YrotS(*calc_mtx, -i_this->current.angle.y);
+                    cXyz sp0C;
+                    MtxPosition(&sp18, &sp0C);
+                    if (fabsf(sp0C.x) < l_bkHIO.m03C &&
+                        fabsf(sp0C.y) < l_bkHIO.m040 &&
+                        sp0C.z > l_bkHIO.m048 &&
+                        sp0C.z < l_bkHIO.m044
+                    ) {
+                        return fopAcM_GetID(r25);
+                    }
+                }
+            }
+            i++;
+            if (i == target_info_count) {
+                i = 0;
+                f29 += 50.0f;
+                if (f29 > 1500.0f) {
+                    return fpcM_ERROR_PROCESS_ID_e;
+                }
+            }
+        }
+    } else {
+        return fpcM_ERROR_PROCESS_ID_e;
+    }
+    
+    return fpcM_ERROR_PROCESS_ID_e;
 }
 
 /* 00002FB0-0000302C       .text s_b_sub__FPvPv */
@@ -626,8 +750,74 @@ static void* s_b_sub(void* param_1, void*) {
 }
 
 /* 0000302C-000033BC       .text search_bomb__FP8bk_classi */
-static fopAc_ac_c* search_bomb(bk_class* i_this, int) {
-    /* Nonmatching */
+static fopAc_ac_c* search_bomb(bk_class* i_this, BOOL r26) {
+    if (!(i_this->m1208 & 0x0200)) {
+        return NULL;
+    }
+    
+    target_info_count = 0;
+    for (int i = 0; i < ARRAY_SIZE(target_info); i++) {
+        target_info[i] = NULL;
+    }
+    
+    fpcM_Search(&s_b_sub, i_this);
+    
+    f32 f29 = 50.0f;
+    if (target_info_count != 0) {
+        fopAc_ac_c* r24;
+        int i = 0;
+        while (i < target_info_count) {
+            r24 = target_info[i];
+            cXyz sp28;
+            sp28.x = r24->current.pos.x - i_this->eyePos.x;
+            sp28.y = 50.0f + r24->current.pos.y - i_this->eyePos.y;
+            sp28.z = r24->current.pos.z - i_this->eyePos.z;
+            cXyz sp1C;
+            sp1C.x = r24->current.pos.x - i_this->current.pos.x;
+            sp1C.z = r24->current.pos.z - i_this->current.pos.z;
+            f32 f0 = sqrtf(sp28.x*sp28.x + sp28.z*sp28.z);
+            f32 f5 = sqrtf(sp1C.x*sp1C.x + sp1C.z*sp1C.z);
+            if (f0 < f29 && !(f5 > 30.0f + i_this->m031C) &&
+                !(daBk_other_bg_check(i_this, r24) && r26)
+            ) {
+                if (r26) {
+                    if (fabsf(r24->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
+                        s16 angleDiff = i_this->m0330 - cM_atan2s(sp28.x, sp28.z);
+                        if (angleDiff < 0) {
+                            angleDiff = -angleDiff;
+                        }
+                        if ((u16)angleDiff < l_bkHIO.m034) {
+                            return r24;
+                        }
+                        cMtx_YrotS(*calc_mtx, -i_this->current.angle.y);
+                        cXyz sp10;
+                        MtxPosition(&sp28, &sp10);
+                        if (fabsf(sp10.x) < l_bkHIO.m03C &&
+                            fabsf(sp10.y) < l_bkHIO.m040 &&
+                            sp10.z > l_bkHIO.m048 &&
+                            sp10.z < l_bkHIO.m044
+                        ) {
+                            return r24;
+                        }
+                    }
+                } else {
+                    return r24;
+                }
+            }
+            i++;
+            if (i == target_info_count) {
+                i = 0;
+                f29 += 50.0f;
+                if (f29 > 1500.0f) {
+                    return NULL;
+                }
+            }
+        }
+    } else {
+        return NULL;
+    }
+    
+    return NULL;
 }
 
 /* 000033BC-00003438       .text daBk_wepon_view_check__FP8bk_class */
@@ -660,13 +850,67 @@ static BOOL daBk_bomb_check(bk_class* i_this) {
 }
 
 /* 000034B8-0000385C       .text daBk_player_bg_check__FP8bk_classP4cXyz */
-static BOOL daBk_player_bg_check(bk_class* i_this, cXyz*) {
-    /* Nonmatching */
+static BOOL daBk_player_bg_check(bk_class* i_this, cXyz* r22) {
+    fopAc_ac_c* i_actor = i_this;
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if (search_sp != 0 || i_this->mType == 0xA) {
+        return FALSE;
+    }
+    if (i_this->dr.m713 == 0 && fabsf(player->speedF) < 0.1f && player->checkGrabWear()) {
+        return TRUE;
+    }
+    dBgS_LinChk linChk;
+    cXyz sp14;
+    cXyz sp08;
+    sp08 = *r22;
+    sp08.y += 75.0f;
+    sp14 = i_this->eyePos;
+    linChk.Set(&sp14, &sp08, i_actor);
+    if (dComIfG_Bgsp()->LineCross(&linChk)) {
+        i_this->dr.m713 = 0;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 0000385C-00003A18       .text daBk_player_view_check__FP8bk_classP4cXyzss */
-static BOOL daBk_player_view_check(bk_class* i_this, cXyz*, s16, s16) {
-    /* Nonmatching */
+static BOOL daBk_player_view_check(bk_class* i_this, cXyz* r30, s16 r27, s16 r31) {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if (search_sp != 0 || i_this->mType == 0xA) {
+        return TRUE;
+    }
+    if (daBk_player_bg_check(i_this, r30)) {
+        return FALSE;
+    }
+    if (fabsf(player->current.pos.y + 50.0f - i_this->eyePos.y) > l_bkHIO.m038) {
+        return FALSE;
+    }
+    s16 angleDiff = i_this->m0330 - r27;
+    if (angleDiff < 0) {
+        angleDiff = -angleDiff;
+    }
+    if ((u16)angleDiff < r31) {
+        i_this->dr.m713 = 1;
+        return TRUE;
+    }
+    cMtx_YrotS(*calc_mtx, -i_this->current.angle.y);
+    cXyz sp14;
+    sp14.x = r30->x - i_this->current.pos.x;
+    sp14.y = r30->y - i_this->current.pos.y;
+    sp14.z = r30->z - i_this->current.pos.z;
+    cXyz sp08;
+    MtxPosition(& sp14, &sp08);
+    if (fabsf(sp08.x) < l_bkHIO.m03C &&
+        fabsf(sp08.y) < l_bkHIO.m040 &&
+        sp08.z > l_bkHIO.m048 &&
+        sp08.z < l_bkHIO.m044
+    ) {
+        i_this->dr.m713 = 1;
+        return TRUE;
+    } else {
+        i_this->dr.m713 = 0;
+        return FALSE;
+    }
 }
 
 /* 00003A18-00003A5C       .text daBk_player_way_check__FP8bk_class */
@@ -961,7 +1205,7 @@ static void* s_s_sub(void* r29, void* r30) {
     if (fopAc_IsActor(r29) && fopAcM_GetName(r29) == PROC_OBJ_SEARCH) {
         daObj_Search::Act_c* search = (daObj_Search::Act_c*)r29;
         cXyz sp18 = i_this->home.pos - search->current.pos;
-        if (sp18.abs() < 800.0f) {
+        if (sp18.abs() < 600.0f) {
             return r29;
         }
     }
@@ -979,8 +1223,56 @@ static void path_run(bk_class* i_this) {
 }
 
 /* 00006218-0000647C       .text attack_set__FP8bk_classUc */
-static void attack_set(bk_class* i_this, u8) {
-    /* Nonmatching */
+static void attack_set(bk_class* i_this, u8 r28) {
+    i_this->m0B5C = 0;
+    i_this->m11F1 = 0;
+    i_this->m11FC = -1;
+    i_this->m11F2 = 0;
+    i_this->m0B64 = 0.0f;
+    i_this->m0300[4] = 0;
+    cM_rndF(100.0f);
+    i_this->m1040.SetR(60.0f + g_regHIO.mChild[8].mFloatRegs[3]);
+    
+    if (r28 == 2) {
+        i_this->m1040.SetAtType(AT_TYPE_UNK2000);
+        i_this->m1040.SetAtSe(dCcD_SE_UNK6);
+    } else if (i_this->m02D5 != 0) {
+        i_this->m1040.SetAtType(AT_TYPE_UNK800);
+        i_this->m1040.SetAtSe(dCcD_SE_UNK2);
+    } else {
+        i_this->m1040.SetAtType(AT_TYPE_UNK2000);
+        i_this->m1040.SetAtSe(dCcD_SE_UNK4);
+    }
+    
+    if (r28 == 0) {
+        i_this->m0B5C = 0;
+        i_this->m0B68 = 23.0f + g_regHIO.mChild[6].mFloatRegs[4];
+        i_this->m0B6C = 26.0f + g_regHIO.mChild[6].mFloatRegs[5];
+        i_this->m0B70 = 45.0f;
+        i_this->m0B74 = l_bkHIO.m09C;
+    } else if (r28 == 1) {
+        i_this->m0B5C = 1;
+        i_this->m0B68 = 3.0f + g_regHIO.mChild[6].mFloatRegs[8];
+        i_this->m0B6C = 9.0f + g_regHIO.mChild[6].mFloatRegs[9];
+        i_this->m0B70 = 45.0f;
+        i_this->m0B74 = 0.0f;
+    } else if (r28 == 2) {
+        i_this->m0B5C = 2;
+        i_this->m0B68 = g_regHIO.mChild[6].mFloatRegs[4];
+        i_this->m0B6C = 20.0f + g_regHIO.mChild[6].mFloatRegs[5];
+        i_this->m0B70 = 45.0f;
+        i_this->m0B74 = 0.0f;
+        i_this->m1040.SetR(25.0f + g_regHIO.mChild[8].mFloatRegs[3]);
+    }
+    
+    i_this->m0B7A = 1;
+    i_this->m0B60 = 0;
+    
+    attack_info_s* info = attack_info[i_this->m0B5C];
+    anm_init(i_this, info->bckFileIdx, 5.0f, J3DFrameCtrl::LOOP_ONCE_e, info->speed, info->soundFileIdx);
+    if (bk_attack_ready_SE[i_this->m0B5C] != -0xDCF) {
+        fopAcM_monsSeStart(i_this, bk_attack_ready_SE[i_this->m0B5C], 0);
+    }
 }
 
 u16 learn_check;
@@ -1905,7 +2197,7 @@ static BOOL daBk_Delete(bk_class* i_this) {
     return TRUE;
 }
 
-static u8 temp[0x3DC] = {};
+static u8 temp[0x25C] = {};
 
 /* 0000DDD8-0000E2C8       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_actor) {
@@ -2446,11 +2738,29 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
         
         i_this->mEnemyFire.mpMcaMorf = i_this->mpMorf;
         i_this->mEnemyFire.mpActor = i_this;
-        static u8 fire_j[10] = {
-            // TODO
+        static u8 fire_j[ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs)] = {
+            0x12,
+            0x10,
+            0x29,
+            0x2A,
+            0x21,
+            0x22,
+            0x08,
+            0x09,
+            0x03,
+            0x04,
         };
-        static f32 fire_sc[10] = {
-            // TODO
+        static f32 fire_sc[ARRAY_SIZE(i_this->mEnemyFire.mParticleScale)] = {
+            2.0f,
+            2.0f,
+            1.2f,
+            1.0f,
+            1.2f,
+            1.0f,
+            1.2f,
+            1.0f,
+            1.2f,
+            1.0f,
         };
         for (int i = 0; i < ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs); i++) {
             i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];

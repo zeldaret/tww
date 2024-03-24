@@ -16,7 +16,7 @@ scene_class* fopScnM_SearchByID(uint id) {
 static u32 l_scnRqID = fpcM_ERROR_PROCESS_ID_e;
 
 int fopScnM_ChangeReq(scene_class* i_scene, s16 procName, s16 fadeTime, u16 param_4) {
-    u32 sceneRequestID = fopScnRq_Request(2, i_scene, procName, 0, fadeTime, param_4);
+    uint sceneRequestID = fopScnRq_Request(2, i_scene, procName, 0, fadeTime, param_4);
 
     if (sceneRequestID == fpcM_ERROR_PROCESS_ID_e) {
         return 0;
@@ -27,12 +27,12 @@ int fopScnM_ChangeReq(scene_class* i_scene, s16 procName, s16 fadeTime, u16 para
 }
 
 uint fopScnM_DeleteReq(scene_class* i_scene) {
-    u32 sceneRequestID = fopScnRq_Request(1, i_scene, 0x7FFF, 0, 0x7FFF, 0);
+    uint sceneRequestID = fopScnRq_Request(1, i_scene, 0x7FFF, 0, 0x7FFF, 0);
     return sceneRequestID != fpcM_ERROR_PROCESS_ID_e;
 }
 
 int fopScnM_CreateReq(s16 param_1, s16 param_2, u16 param_3, u32 param_4) {
-    u32 sceneRequestID = fopScnRq_Request(0, 0, param_1, (void*)param_4, param_2, param_3);
+    uint sceneRequestID = fopScnRq_Request(0, 0, param_1, (void*)param_4, param_2, param_3);
     return sceneRequestID != fpcM_ERROR_PROCESS_ID_e;
 }
 

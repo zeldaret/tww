@@ -72,7 +72,7 @@ void path_check(bb_class*) {
 }
 
 /* 00002250-0000234C       .text daBb_shadowDraw__FP8bb_class */
-static BOOL daBb_shadowDraw(bb_class*) {
+static void daBb_shadowDraw(bb_class*) {
     /* Nonmatching */
 }
 

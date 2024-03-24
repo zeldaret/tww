@@ -97,7 +97,7 @@ void br_draw(mt_class*) {
 }
 
 /* 00003210-00003360       .text daMt_shadowDraw__FP8mt_class */
-static BOOL daMt_shadowDraw(mt_class*) {
+static void daMt_shadowDraw(mt_class*) {
     /* Nonmatching */
 }
 

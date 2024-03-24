@@ -67,7 +67,7 @@ void br_draw(mo2_class*) {
 }
 
 /* 0000236C-00002418       .text daMo2_shadowDraw__FP9mo2_class */
-static BOOL daMo2_shadowDraw(mo2_class*) {
+static void daMo2_shadowDraw(mo2_class*) {
     /* Nonmatching */
 }
 

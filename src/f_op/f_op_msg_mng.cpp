@@ -210,7 +210,7 @@ void fop_MGameTerm_create(s16, s16, s16, int, int, int (*)(void*)) {
 }
 
 /* 8002B2B0-8002B324       .text fop_Timer_create__FsUcUsUcUcffffPFPv_i */
-s32 fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, int (*)(void*)) {
+uint fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, int (*)(void*)) {
     /* Nonmatching */
 }
 

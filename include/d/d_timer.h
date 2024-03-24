@@ -103,8 +103,8 @@ public:
     /* 0x174 */ u32 field_0x174;
 };
 
-s32 dTimer_createStockTimer();
+uint dTimer_createStockTimer();
 
-s32 dTimer_createTimer(int, u16, u8, u8, f32, f32, f32, f32);
+uint dTimer_createTimer(int, u16, u8, u8, f32, f32, f32, f32);
 
 #endif /* D_TIMER_H */

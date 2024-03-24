@@ -710,14 +710,14 @@ s32 dTimer_Create(msg_class* i_this) {
 }
 
 /* 8023DA28-8023DA88       .text dTimer_createTimer__FiUsUcUcffff */
-s32 dTimer_createTimer(int param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8) {
+uint dTimer_createTimer(int param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8) {
     if (dComIfG_getTimerMode() == -1)
         return fop_Timer_create(PROC_TIMER, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, NULL);
     return fpcM_ERROR_PROCESS_ID_e;
 }
 
 /* 8023DA88-8023DAEC       .text dTimer_createStockTimer__Fv */
-s32 dTimer_createStockTimer() {
+uint dTimer_createStockTimer() {
     if (dComIfG_getTimerMode() != -1)
         return fop_Timer_create(PROC_TIMER, 7, 0, 3, 0, 221.0f, 439.0f, 32.0f, 419.0f, NULL);
     return fpcM_ERROR_PROCESS_ID_e;

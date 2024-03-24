@@ -3230,7 +3230,7 @@ BOOL daNpc_Ji1_c::_draw() {
             dComIfGd_addRealShadow(field_0x3F0, mpMorf->getModel());
         }
 
-        dSnap_RegistFig(0x4D, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
         
         return true;
     }
