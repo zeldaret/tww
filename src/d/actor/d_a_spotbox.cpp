@@ -61,8 +61,8 @@ static BOOL daSpotbox_Delete(daSpotbox_c* i_this) {
 
 /* 00000170-00000250       .text daSpotbox_Create__FP10fopAc_ac_c */
 static s32 daSpotbox_Create(fopAc_ac_c* i_this) {
-    daSpotbox_c* spotbox = (daSpotbox_c*)i_this;
-    return spotbox->create();
+    daSpotbox_c* a_this = (daSpotbox_c*)i_this;
+    return a_this->create();
 }
 
 static actor_method_class l_daSpotbox_Method = {

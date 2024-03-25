@@ -1,6 +1,6 @@
 /**
  * d_a_npc_md.cpp
- * Player - Medli / リト族（メドリ） (Ritozoku (Medli))
+ * Player - Medli
  */
 
 #include "d/actor/d_a_npc_md.h"
@@ -461,7 +461,7 @@ s32 daNpc_Md_c::create() {
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
         if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("リト族（メドリ）", &l_HIO);
+            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("リト族（メドリ）", &l_HIO); // "Rito (Medli)" (Ritozoku (Medli))
             l_HIO.mpActor = this;
         }
         

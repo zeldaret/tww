@@ -1,6 +1,6 @@
 /**
  * d_a_ki.cpp
- * Enemy - Keese / キース (Kiisu)
+ * Enemy - Keese
  */
 
 #include "d/actor/d_a_ki.h"

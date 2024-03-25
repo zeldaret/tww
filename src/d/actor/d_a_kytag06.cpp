@@ -59,15 +59,15 @@ static BOOL daKytag06_Delete(kytag06_class*) {
 
 /* 000001A4-00000224       .text daKytag06_Create__FP10fopAc_ac_c */
 static int daKytag06_Create(fopAc_ac_c* i_this) {
-    kytag06_class* tag = (kytag06_class*)i_this;
+    kytag06_class* a_this = (kytag06_class*)i_this;
     int var;
 
-    fopAcM_SetupActor(tag, kytag06_class);
+    fopAcM_SetupActor(a_this, kytag06_class);
 
     if(dComIfGs_isSymbol(0) != 0) {
         var = 5;
     } else {
-        tag->field_0x294 = 0;
+        a_this->field_0x294 = 0;
         var = 4;
     }
 

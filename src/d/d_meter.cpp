@@ -1883,11 +1883,11 @@ s32 dMeter_Create(msg_class* i_this) {
     g_dComIfG_gameInfo.play.field_0x4930 = 0;
     g_dComIfG_gameInfo.play.field_0x4931 = 0;
 
-    mDoHIO_root.mDoHIO_createChild("通常画面表示", &g_meterHIO);
-    mDoHIO_root.mDoHIO_createChild("メニュー画面", &g_menuHIO);
-    mDoHIO_root.mDoHIO_createChild("Message（会話）", &g_msgHIO);
-    mDoHIO_root.mDoHIO_createChild("Message（看板）", &g_messageHIO);
-    mDoHIO_root.mDoHIO_createChild("マップ２", &g_meter_mapHIO);
+    mDoHIO_root.mDoHIO_createChild("通常画面表示", &g_meterHIO); // "Normal Screen Display"
+    mDoHIO_root.mDoHIO_createChild("メニュー画面", &g_menuHIO); // "Menu Screen"
+    mDoHIO_root.mDoHIO_createChild("Message（会話）", &g_msgHIO); // "Message (Talk)"
+    mDoHIO_root.mDoHIO_createChild("Message（看板）", &g_messageHIO); // "Message (Sign)"
+    mDoHIO_root.mDoHIO_createChild("マップ２", &g_meter_mapHIO); // "Map 2"
 
     dMeter_screenDataSet(i_Meter);
     dMeter_screenDataArrowSet(i_Meter);

@@ -1,6 +1,6 @@
 /**
  * d_a_bk.cpp
- * Enemy - Bokoblin / ボコちゃん (Boko-chan)
+ * Enemy - Bokoblin
  */
 
 #include "d/actor/d_a_bk.h"
@@ -2467,7 +2467,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
         }
         
         if (!hio_set) {
-            l_bkHIO.mChildID = mDoHIO_root.mDoHIO_createChild("ボコちゃん", &l_bkHIO);
+            l_bkHIO.mChildID = mDoHIO_root.mDoHIO_createChild("ボコちゃん", &l_bkHIO); // "Boko-chan"
             i_this->m121D = 1;
             hio_set = 1;
         }

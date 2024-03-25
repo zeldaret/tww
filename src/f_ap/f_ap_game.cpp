@@ -98,7 +98,7 @@ void fapGm_Create() {
     fopDwTg_CreateQueue();
     fopScnM_CreateReq(5, 0x7FFF, 0, 0);
     
-    g_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("ゲームシステム", &g_HIO);
+    g_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("ゲームシステム", &g_HIO); // "Game System"
 }
 
 /* 80023288-800232D0       .text __dt__11fapGm_HIO_cFv */

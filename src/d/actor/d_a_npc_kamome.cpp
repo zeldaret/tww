@@ -1,6 +1,6 @@
 /**
  * d_a_npc_kamome.cpp
- * Player - Hyoi Seagull / かもめ (Kamome)
+ * Player - Hyoi Seagull
  */
 
 #include "d/actor/d_a_npc_kamome.h"
@@ -295,7 +295,7 @@ s32 daNpc_kam_c::create() {
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
         if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("かもめ", &l_HIO);
+            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("かもめ", &l_HIO); // "Seagull" (kamome)
             l_HIO.mpActor = this;
         }
         

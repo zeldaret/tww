@@ -1,3 +1,7 @@
+/**
+ * d_a_rectangle.cpp
+ * Unused Dummy Actor
+ */
 
 #include "d/actor/d_a_rectangle.h"
 #include "f_op/f_op_actor.h"

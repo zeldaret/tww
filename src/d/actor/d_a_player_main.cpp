@@ -4311,9 +4311,9 @@ static s32 daPy_Create(fopAc_ac_c* i_this) {
         phase_3,
         NULL,
     };
-    daPy_lk_c* player_link = (daPy_lk_c*)i_this;
+    daPy_lk_c* a_this = (daPy_lk_c*)i_this;
 
-    return dComLbG_PhaseHandler(player_link->getPhase(), (cPhs__Handler*)l_method, player_link);
+    return dComLbG_PhaseHandler(a_this->getPhase(), (cPhs__Handler*)l_method, a_this);
 }
 
 /* 80127BA0-80127CC0       .text setSeAnime__9daPy_lk_cFPC14daPy_anmHeap_cP12J3DFrameCtrl */

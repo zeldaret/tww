@@ -66,7 +66,6 @@ static s32 daSwc00_Create(fopAc_ac_c* i_actor) {
     return cPhs_COMPLEATE_e;
 }
 
-
 static actor_method_class l_daSwc00_Method = {
     (process_method_func)daSwc00_Create,
     (process_method_func)daSwc00_Delete,

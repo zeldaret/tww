@@ -1446,11 +1446,11 @@ int dSnap_PhotoIndex2TableIndex(int photoIndex) {
 }
 
 /* 800CCFE4-800CD00C       .text dSnap_GetFigRoomId__Fi */
-u8 dSnap_GetFigRoomId(int r3) {
-    if (r3 >= 0x86) {
+u8 dSnap_GetFigRoomId(int tableIndex) {
+    if (tableIndex >= (int)ARRAY_SIZE(l_CharaData)) {
         return 0xFF;
     }
-    return l_CharaData[r3].figRoom;
+    return l_CharaData[tableIndex].figRoom;
 }
 
 /* 800CD00C-800CD068       .text __ct__9dSnap_ObjFv */
