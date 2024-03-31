@@ -42,8 +42,6 @@ extern __shop_items_set_data shopItems_setData_emptybottle;
 extern __shop_items_set_data shopItems_setData_kakera_heart;
 extern __shop_items_set_data shopItems_setData_map;
 
-extern Vec* Item_set_pos_data_tbl;
-
 struct ShopItems_c__select_list_data {
     /* 0x00 */ s16 mLeftIdx;
     /* 0x02 */ s16 mRightIdx;
