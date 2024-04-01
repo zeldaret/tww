@@ -100,7 +100,7 @@ public:
     /* 0x2A0 */ J3DModel* mpModelArr[3];
     /* 0x2AC */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x2B0 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x2C4 */ u8 i_frame;
+    /* 0x2C4 */ u8 mFrame;
     /* 0x2C5 */ u8 m2C5;
     /* 0x2C6 */ s16 m2C6;
     /* 0x2C8 */ J3DModel* mpModel;

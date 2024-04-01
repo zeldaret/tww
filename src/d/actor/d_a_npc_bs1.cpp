@@ -42,7 +42,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 4,
+        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_HIT_MARK,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
@@ -284,7 +284,7 @@ BOOL daNpc_Bs1_c::initTexPatternAnm(bool i_modify) {
     if (!mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0f, 0, -1, i_modify, 0)) {
         return FALSE;
     }
-    i_frame = 0;
+    mFrame = 0;
     m2C6 = 0;
     return TRUE;
 }
@@ -294,11 +294,11 @@ void daNpc_Bs1_c::playTexPatternAnm() {
     /* Nonmatching */
     if (cLib_calcTimer(&m2C6) == 0) {
         s16 frameMax = m_head_tex_pattern->getFrameMax();
-        if (frameMax >= i_frame) {
-            i_frame -= frameMax;
+        if (frameMax >= mFrame) {
+            mFrame -= frameMax;
             m2C6 = cM_rndF(100.0f) + 30.0f;
         } else {
-            i_frame += 1;
+            mFrame += 1;
         }
     }
 }
@@ -326,48 +326,48 @@ void daNpc_Bs1_c::setAnmFromMsgTag() {
     /* Nonmatching */
     switch (dComIfGp_getMesgAnimeAttrInfo()) {
     case 0:
-        setAnm(ANM_UNK_0);
-        setTexAnm(ANM_UNK_1);
+        setAnm(0);
+        setTexAnm(1);
         break;
     case 1:
-        setAnm(ANM_UNK_1);
-        setTexAnm(ANM_UNK_2);
+        setAnm(1);
+        setTexAnm(2);
         break;
     case 2:
-        setAnm(ANM_UNK_2);
-        setTexAnm(ANM_UNK_2);
+        setAnm(2);
+        setTexAnm(2);
         break;
     case 3:
-        setAnm(ANM_UNK_3);
-        setTexAnm(ANM_UNK_2);
+        setAnm(3);
+        setTexAnm(2);
         break;
     case 4:
-        setAnm(ANM_UNK_0);
-        setTexAnm(ANM_UNK_2);
+        setAnm(0);
+        setTexAnm(2);
         break;
     case 5:
-        setAnm(ANM_UNK_4);
-        setTexAnm(ANM_UNK_2);
+        setAnm(4);
+        setTexAnm(2);
         break;
     case 6:
-        setAnm(ANM_UNK_5);
-        setTexAnm(ANM_UNK_2);
+        setAnm(5);
+        setTexAnm(2);
         break;
     case 7:
-        setAnm(ANM_UNK_6);
-        setTexAnm(ANM_UNK_3);
+        setAnm(6);
+        setTexAnm(3);
         break;
     case 8:
-        setAnm(ANM_UNK_7);
-        setTexAnm(ANM_UNK_2);
+        setAnm(7);
+        setTexAnm(2);
         break;
     case 9:
-        setAnm(ANM_UNK_8);
-        setTexAnm(ANM_UNK_2);
+        setAnm(8);
+        setTexAnm(2);
         break;
     case 0xA:
-        setAnm(ANM_UNK_9);
-        setTexAnm(ANM_UNK_2);
+        setAnm(9);
+        setTexAnm(2);
         break;
     default:
         if ((m829 == 0x2 && (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f))) ||
@@ -375,9 +375,9 @@ void daNpc_Bs1_c::setAnmFromMsgTag() {
             (m829 == 0x6 && (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f))) ||
             (m829 == 0x8 && (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f))))
         {
-            setAnm(ANM_UNK_0);
+            setAnm(0);
         } else if (m829 == 0x9 && (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f))) {
-            setAnm(ANM_UNK_3);
+            setAnm(3);
         }
     }
     dComIfGp_clearMesgAnimeAttrInfo();
@@ -649,7 +649,7 @@ void daNpc_Bs1_c::lookBack() {
             setTexAnm(ANM_UNK_2);
         }
     }
-    if (mJntCtrl.mbTrn == false) {
+    if (!mJntCtrl.trnChk()) {
         m724 = 0;
     } else {
         cLib_addCalcAngleS2(&m724, l_HIO.mpChildArray[mLHioChildIdx].mHIO.mMaxAttnAngleY, (s16)4,
@@ -672,33 +672,40 @@ BOOL daNpc_Bs1_c::wait01() {
             m82A = 0;
         }
     }
-    // Return is also not matching
-    return mpMorf->mCurMorf < 1.0f;
+    if (mpMorf->isMorf()) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 00003830-00003970       .text talk01__11daNpc_Bs1_cFv */
 BOOL daNpc_Bs1_c::talk01() {
-    u16 value = talk();
-    if (value == 0x12) {
+    u16 status = talk();
+    if (status == fopMsgStts_BOX_CLOSED_e) {
         daPy_py_c* player = daPy_getPlayerActorClass();
         m830 = m831;
         dComIfGp_event_reset();
         m731 = 0;
-        setAnm(J3DFrameCtrl::LOOP_ONCE_e);
+        setAnm(0);
         player->offPlayerNoDraw();
         mShopCamAction.Reset();
     } else {
-        if (shopMsgCheck(m738) && value == 8) {
+        if (shopMsgCheck(m738) && status == 8) {
             if (mShopItems.getSelectItemBuyMsg() == m738) {
-                dComIfGp_setm4932(0x17);
-                dComIfGp_setm4931(0x27);
+                dComIfGp_setDoStatusForce(0x17);
+                dComIfGp_setAStatusForce(0x27);
             }
-        } else if (value == 8 && checkBeastItemSellMsg(m738)) {
-            dComIfGp_setm4932(0x17);
-            dComIfGp_setm4931(0x27);
+        } else if (status == 8 && checkBeastItemSellMsg(m738)) {
+            dComIfGp_setDoStatusForce(0x17);
+            dComIfGp_setAStatusForce(0x27);
         }
     }
-    return mpMorf->mCurMorf < 1.0f;
+    if (mpMorf->isMorf()) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 00003970-00003A70       .text wait_action__11daNpc_Bs1_cFPv */
@@ -739,10 +746,10 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
         m830 = m831;
         mShopCamAction.Reset();
         u16 itemNo = mShopItems.getSelectItemNo();
-        uint itemPtr =
+        uint itemPID =
             fopAcM_createItemForPresentDemo(&current.pos, (u8)itemNo, 0, -1, current.roomNo);
-        if (itemPtr != -1) {
-            dComIfGp_event_setItemPartnerId(itemPtr);
+        if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
+            dComIfGp_event_setItemPartnerId(itemPID);
         }
         dComIfGp_evmng_cutEnd(staffIdx);
         mShopItems.mSelectedItemIdx = -1;
@@ -853,20 +860,20 @@ BOOL daNpc_Bs1_c::evn_jnt_lock_init(int actorIdx) {
     }
     switch (jnt_to_lock) {
     case 0:
-        mJntCtrl.mbHeadLock = FALSE;
-        mJntCtrl.mbBackBoneLock = FALSE;
+        mJntCtrl.offHeadLock;
+        mJntCtrl.offBackBoneLock();
         break;
     case 1:
-        mJntCtrl.mbHeadLock = TRUE;
-        mJntCtrl.mbBackBoneLock = FALSE;
+        mJntCtrl.onHeadLock();
+        mJntCtrl.offBackBoneLock();
         break;
     case 2:
-        mJntCtrl.mbHeadLock = FALSE;
-        mJntCtrl.mbBackBoneLock = TRUE;
+        mJntCtrl.offHeadLock();
+        mJntCtrl.onBackBoneLock();
         break;
     case 3:
-        mJntCtrl.mbHeadLock = TRUE;
-        mJntCtrl.mbBackBoneLock = TRUE;
+        mJntCtrl.onHeadLock();
+        mJntCtrl.onBackBoneLock();
         break;
     }
     return TRUE;
@@ -1012,21 +1019,21 @@ BOOL daNpc_Bs1_c::event_action(void* a) {
 /* 000044EC-000046E8       .text _draw__11daNpc_Bs1_cFv */
 BOOL daNpc_Bs1_c::_draw() {
     /* Nonmatching */
-    J3DModel* pModel = mpMorf->mpModel;
+    J3DModel* pModel = mpMorf->getModel();
     J3DModelData* pModelData = pModel->getModelData();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(pModel, &tevStr);
-    mBtpAnm.entry(pModelData, i_frame);
+    mBtpAnm.entry(pModelData, mFrame);
     pModel = mpModel;
     g_env_light.setLightTevColorType(pModel, &tevStr);
     mpMorf->updateDL();
     if (l_HIO.mpChildArray[mLHioChildIdx].m2C != 0) {
         mDoMtx_stack_c::copy(pModel->getAnmMtx(m_head_jnt_num));
         mDoMtx_stack_c::transM(4.0f, 0.0f, 0.0f);
-        MTXCopy(mDoMtx_stack_c::get(), pModel->mBaseTransformMtx);
+        pModel->setBaseTRMtx(mDoMtx_stack_c::get());
         mDoExt_modelUpdateDL(pModel);
     }
-    pModelData->removeTexNoAnimator(mBtpAnm.getBtpAnm());
+    mBtpAnm.remove(pModelData);
     cXyz shadowStuff;
     shadowStuff.y = current.pos.y + 150.0f;
     shadowStuff.x = current.pos.x;
@@ -1059,10 +1066,10 @@ BOOL daNpc_Bs1_c::_execute() {
         l_HIO.mpChildArray[index].mHIO.mMaxTurnStep);
     playTexPatternAnm();
     m72E = mpMorf->play(&eyePos, 0, 0);
-    if (mpMorf->mFrameCtrl.getFrame() < m734) {
+    if (mpMorf->getFrame() < m734) {
         m72E = 1;
     }
-    m734 = mpMorf->mFrameCtrl.getFrame();
+    m734 = mpMorf->getFrame();
     checkOrder();
     // Some Call?
     mShopCamAction.move();
