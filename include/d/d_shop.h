@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
+#include "f_pc/f_pc_manager.h"
 
 class msg_class;
 class STControl;
