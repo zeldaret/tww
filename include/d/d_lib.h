@@ -14,6 +14,10 @@ extern Quaternion ZeroQuat;
 
 class STControl {
 public:
+    STControl() {
+        setWaitParm(0xF, 0xF, 0, 0, 0.9f, 0.5f, 0, 0x2000);
+        init();
+    }
     STControl(s16, s16, s16, s16, f32, f32, s16, s16);
     void setWaitParm(s16, s16, s16, s16, f32, f32, s16, s16);
     void init();

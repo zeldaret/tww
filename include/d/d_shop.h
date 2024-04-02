@@ -35,13 +35,6 @@ struct __shop_items_set_data {
     /* 0x10 */ int mCount;
 };
 
-extern __shop_items_set_data shopItems_setData_Bomb30Bs2;
-extern __shop_items_set_data shopItems_setData_arrow30Bs2;
-extern __shop_items_set_data shopItems_setData_red_bottleBs2;
-extern __shop_items_set_data shopItems_setData_emptybottle;
-extern __shop_items_set_data shopItems_setData_kakera_heart;
-extern __shop_items_set_data shopItems_setData_map;
-
 struct ShopItems_c__select_list_data {
     /* 0x00 */ s16 mLeftIdx;
     /* 0x02 */ s16 mRightIdx;
@@ -59,13 +52,26 @@ class ShopCam_action_c {
 public:
     typedef int (ShopCam_action_c::*ActionFunc)();
     
-    ShopCam_action_c() {}
+    ShopCam_action_c() {
+        m50 = 0;
+        m52 = 0;
+        m54 = -1;
+        setCamDataIdx(0);
+        m18.setall(0.0f);
+        m24.set(0.0f, 0.0f, 100.0f);
+        m30 = 60.0f;
+    }
     
     void SetSelectIdx(s16) {}
     void setCamAction(ActionFunc func) { mCurrActionFunc = func; }
     BOOL checkCamAction(ActionFunc func) { return mCurrActionFunc == func; }
-    void getItemZoomPos(f32) {
-        
+    cXyz getItemZoomPos(f32 f31) {
+        cXyz sp38 = m18 - m24;
+        if (!sp38.normalizeRS()) {
+            sp38.set(0.0f, 0.0f, 1.0f);
+        }
+        cXyz sp2C = m24 + sp38 * f31;
+        return sp2C;
     }
     void setCamDataIdx(int idx) { mCamDataIdx = idx; }
     
@@ -88,7 +94,7 @@ public:
     /* 0x34 */ cXyz mOrigCenter;
     /* 0x40 */ cXyz mOrigEye;
     /* 0x4C */ f32 mOrigFovy;
-    /* 0x50 */ u16 m50; // Per daNpc_Bs1_c::constructor
+    /* 0x50 */ u16 m50;
     /* 0x52 */ u16 m52;
     /* 0x54 */ s16 m54;
     /* 0x56 */ s16 mCamDataIdx;
@@ -96,7 +102,17 @@ public:
 
 class ShopItems_c {
 public:
-    ShopItems_c() {}
+    ShopItems_c() {
+        mSelectedItemIdx = -1;
+        m3C = 0;
+        mbIsHide = 0;
+        mNumItems = 0;
+        mItemSetListGlobalIdx = 0;
+        for (int i = 0; i < 8; i++) {
+            mItemActorProcessIds[i] = fpcM_ERROR_PROCESS_ID_e;
+            m28[i] = 0;
+        }
+    }
     ~ShopItems_c() {}
     
     BOOL isSoldOutItem(s16 i) { return m28[i] == 1; }
@@ -180,5 +196,75 @@ BOOL dShop_now_triggercheck(msg_class*, STControl*, ShopItems_c*, u32*, dShop_De
 BOOL dShop_maxCheck(int, int);
 u8 dShop_BoughtErrorStatus(ShopItems_c*, int, int);
 ShopCursor_c* ShopCursor_create(J3DModelData*, J3DAnmTevRegKey*, f32);
+
+extern ShopItems_c__ItemData shopItemData_Feedbag;
+extern ShopItems_c__ItemData shopItemData_FoodAll;
+extern ShopItems_c__ItemData shopItemData_FoodHyoi;
+extern ShopItems_c__ItemData shopItemData_arrow10;
+extern ShopItems_c__ItemData shopItemData_arrow30;
+extern ShopItems_c__ItemData shopItemData_red_bottle;
+extern ShopItems_c__ItemData shopItemData_blue_bottle;
+extern ShopItems_c__ItemData shopItemData_green_bottle;
+extern ShopItems_c__ItemData shopItemData_bomb10;
+extern ShopItems_c__ItemData shopItemData_bomb20;
+extern ShopItems_c__ItemData shopItemData_bomb30;
+extern ShopItems_c__ItemData shopItemData_emptybottle;
+extern ShopItems_c__ItemData shopItemData_kakera_heart;
+extern ShopItems_c__ItemData shopItemData_map;
+extern ShopItems_c__ItemData shopItemData_RotenItem0;
+extern ShopItems_c__ItemData shopItemData_RotenItem1;
+extern ShopItems_c__ItemData shopItemData_RotenItem2;
+extern ShopItems_c__ItemData shopItemData_RotenItem3;
+extern ShopItems_c__ItemData shopItemData_RotenItem4;
+extern ShopItems_c__ItemData shopItemData_RotenItem5;
+extern ShopItems_c__ItemData shopItemData_RotenItem6;
+extern ShopItems_c__ItemData shopItemData_RotenItem7;
+extern ShopItems_c__ItemData shopItemData_RotenItem8;
+extern ShopItems_c__ItemData shopItemData_RotenItem9;
+extern ShopItems_c__ItemData shopItemData_RotenItem10;
+extern ShopItems_c__ItemData shopItemData_RotenItem11;
+extern __shop_items_set_data shopItems_setData_Bomb10_exp;
+extern __shop_items_set_data shopItems_setData_Bomb20_exp;
+extern __shop_items_set_data shopItems_setData_Bomb30_exp;
+extern __shop_items_set_data shopItems_setData_Bomb10;
+extern __shop_items_set_data shopItems_setData_Bomb20;
+extern __shop_items_set_data shopItems_setData_Bomb30;
+extern __shop_items_set_data shopItems_setData_Feedbag;
+extern __shop_items_set_data shopItems_setData_FoodAll;
+extern __shop_items_set_data shopItems_setData_FoodHyoi;
+extern __shop_items_set_data shopItems_setData_Bomb30Bs;
+extern __shop_items_set_data shopItems_setData_arrow10;
+extern __shop_items_set_data shopItems_setData_arrow30;
+extern __shop_items_set_data shopItems_setData_red_bottleBs;
+extern __shop_items_set_data shopItems_setData_Bomb30Bs2;
+extern __shop_items_set_data shopItems_setData_arrow30Bs2;
+extern __shop_items_set_data shopItems_setData_red_bottleBs2;
+extern __shop_items_set_data shopItems_setData_emptybottle;
+extern __shop_items_set_data shopItems_setData_kakera_heart;
+extern __shop_items_set_data shopItems_setData_map;
+extern __shop_items_set_data shopItems_setData_red_bottleDs;
+extern __shop_items_set_data shopItems_setData_green_bottleDs;
+extern __shop_items_set_data shopItems_setData_blue_bottleDs;
+extern __shop_items_set_data shopItems_setData_RotenItem0;
+extern __shop_items_set_data shopItems_setData_RotenItem1;
+extern __shop_items_set_data shopItems_setData_RotenItem2;
+extern __shop_items_set_data shopItems_setData_RotenItem3;
+extern __shop_items_set_data shopItems_setData_RotenItem4;
+extern __shop_items_set_data shopItems_setData_RotenItem5;
+extern __shop_items_set_data shopItems_setData_RotenItem6;
+extern __shop_items_set_data shopItems_setData_RotenItem7;
+extern __shop_items_set_data shopItems_setData_RotenItem8;
+extern __shop_items_set_data shopItems_setData_RotenItem9;
+extern __shop_items_set_data shopItems_setData_RotenItem10;
+extern __shop_items_set_data shopItems_setData_RotenItem11;
+extern __shop_items_set_data* Item_setData_rshop[];
+extern __shop_items_set_data* Item_set_data_dshop[];
+extern __shop_items_set_data* Item_set_data_bmshop1[];
+extern __shop_items_set_data* Item_set_data_bmshop2[];
+extern __shop_items_set_data* Item_set_data_bshop_3[];
+extern __shop_items_set_data* Item_set_data_bshop_4[];
+extern __shop_items_set_data* Item_set_data_bshop_5[];
+extern __shop_items_set_data* Item_set_data_bshop_6[];
+extern __shop_items_set_data** Item_set_data_tbl[];
 
 #endif /* D_SHOP_H */

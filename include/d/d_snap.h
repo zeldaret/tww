@@ -133,7 +133,7 @@ enum {
     /* 0x7D */ DSNAP_TYPE_UNK7D,
     /* 0x7E */ DSNAP_TYPE_UNK7E,
     /* 0x7F */ DSNAP_TYPE_UNK7F,
-    /* 0x80 */ DSNAP_TYPE_UNK80,
+    /* 0x80 */ DSNAP_TYPE_BS,
     /* 0x81 */ DSNAP_TYPE_UNK81,
     /* 0x82 */ DSNAP_TYPE_UNK82,
     /* 0x83 */ DSNAP_TYPE_UNK83,

@@ -15,15 +15,15 @@ public:
     };
 
     void getAttentionBasePos() {}
-    void setAction(ActionFunc func, void*) {
+    void setAction(ActionFunc func, void* arg) {
         if (mCurrActionFunc != func) {
             if (mCurrActionFunc) {
                 mActionStatus = ACTION_ENDING;
-                (this->*mCurrActionFunc)(NULL);
+                (this->*mCurrActionFunc)(arg);
             }
             mCurrActionFunc = func;
             mActionStatus = ACTION_STARTING;
-            (this->*mCurrActionFunc)(NULL);
+            (this->*mCurrActionFunc)(arg);
         }
     }
 
