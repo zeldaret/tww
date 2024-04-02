@@ -10,6 +10,7 @@ class STControl;
 
 typedef u32 (*dShop_DefaultMsgCallback)(void*);
 
+
 enum ShopItems_c__BuyConditions {
     Shop_BuyCond_MUST_OWN_ITEM_e     = 0x01,
     Shop_BuyCond_MUST_NOT_OWN_ITEM_e = 0x02,
@@ -33,6 +34,13 @@ struct __shop_items_set_data {
     /* 0x0C */ u32 m0C;
     /* 0x10 */ int mCount;
 };
+
+extern __shop_items_set_data shopItems_setData_Bomb30Bs2;
+extern __shop_items_set_data shopItems_setData_arrow30Bs2;
+extern __shop_items_set_data shopItems_setData_red_bottleBs2;
+extern __shop_items_set_data shopItems_setData_emptybottle;
+extern __shop_items_set_data shopItems_setData_kakera_heart;
+extern __shop_items_set_data shopItems_setData_map;
 
 struct ShopItems_c__select_list_data {
     /* 0x00 */ s16 mLeftIdx;
@@ -80,7 +88,8 @@ public:
     /* 0x34 */ cXyz mOrigCenter;
     /* 0x40 */ cXyz mOrigEye;
     /* 0x4C */ f32 mOrigFovy;
-    /* 0x50 */ u8 m50[0x54 - 0x50];
+    /* 0x50 */ u16 m50; // Per daNpc_Bs1_c::constructor
+    /* 0x52 */ u16 m52;
     /* 0x54 */ s16 m54;
     /* 0x56 */ s16 mCamDataIdx;
 };

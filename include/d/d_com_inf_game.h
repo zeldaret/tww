@@ -376,6 +376,10 @@ public:
     void setRStatus(u8 status) { field_0x492d = status; }
     u8 getRStatusForce() { return field_0x4930; }
     void setRStatusForce(u8 status) { field_0x4930 = status; }
+    u8 getAStatusForce() { return field_0x4931; }
+    void setAStatusForce(u8 value) { field_0x4931 = value; }
+    u8 getDoStatusForce() { return field_0x4932; }
+    void setDoStatusForce(u8 value) { field_0x4932 = value; }
     u8 getPictureStatus() { return mPictureStatus; }
     void setPictureStatusOn() { mPictureStatus = 2; }
 
@@ -2220,6 +2224,13 @@ inline void dComIfGp_clearPlayerStatus0(int param_0, u32 flag) {
 
 inline void dComIfGp_clearPlayerStatus1(int param_0, u32 flag) {
     g_dComIfG_gameInfo.play.clearPlayerStatus(param_0, 1, flag);
+}
+
+inline void dComIfGp_setDoStatusForce(u8 value) {
+    g_dComIfG_gameInfo.play.setDoStatusForce(value);
+}
+inline void dComIfGp_setAStatusForce(u8 value) {
+    g_dComIfG_gameInfo.play.setAStatusForce(value);
 }
 
 /**
