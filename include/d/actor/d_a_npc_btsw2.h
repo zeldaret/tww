@@ -8,15 +8,21 @@ class daNpc_Btsw2_c : public fopNpc_npc_c {
 public:
     typedef BOOL (daNpc_Btsw2_c::*ActionFunc)(void*);
 
+    enum ActionStatus {
+        ACTION_STARTING = 0,
+        ACTION_ONGOING  = 1,
+        ACTION_ENDING   = -1,
+    };
+
     void getAttentionBasePos() {}
     void setAction(ActionFunc func, void*) {
         if (mCurrActionFunc != func) {
             if (mCurrActionFunc) {
-                m74A = -1;
+                mActionStatus = ACTION_ENDING;
                 (this->*mCurrActionFunc)(NULL);
             }
             mCurrActionFunc = func;
-            m74A = 0;
+            mActionStatus = ACTION_STARTING;
             (this->*mCurrActionFunc)(NULL);
         }
     }
@@ -48,16 +54,16 @@ public:
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ u32 mShadowId;
-    /* 0x6D0 */ J3DModel* m6D0;
-    /* 0x6D4 */ J3DModel* m6D4;
+    /* 0x6D0 */ J3DModel* mpKabanModel; // Bag
+    /* 0x6D4 */ J3DModel* mpTirasiModel; // Flyer
     /* 0x6D8 */ J3DAnmTexPattern* m_btp;
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6F0 */ u8 m6F0;
-    /* 0x6F1 */ s8 m6F1;
-    /* 0x6F2 */ s8 m6F2;
-    /* 0x6F4 */ s16 m6F4;
+    /* 0x6F0 */ u8 mBtpFrame;
+    /* 0x6F1 */ s8 m_handL_jnt_num;
+    /* 0x6F2 */ s8 m_handR_jnt_num;
+    /* 0x6F4 */ s16 mBlinkTimer;
     /* 0x6F6 */ u8 m6F6[0x704 - 0x6F6];
-    /* 0x704 */ cXyz m704;
+    /* 0x704 */ cXyz mAttPos;
     /* 0x710 */ u8 m710[0x714 - 0x710];
     /* 0x714 */ csXyz m714;
     /* 0x71A */ u8 m71A[0x71D - 0x71A];
@@ -70,16 +76,16 @@ public:
     /* 0x735 */ u8 m735;
     /* 0x736 */ u8 m736;
     /* 0x738 */ dPath* mpPath;
-    /* 0x73C */ s16 m73C;
+    /* 0x73C */ s16 mFinalPathPntIdx;
     /* 0x73E */ s16 m73E;
-    /* 0x740 */ s16 m740;
+    /* 0x740 */ s16 mPathPntIdx;
     /* 0x742 */ s16 m742;
     /* 0x744 */ s8 m744;
     /* 0x745 */ s8 m745;
     /* 0x746 */ s8 m746;
     /* 0x747 */ s8 m747;
     /* 0x748 */ u8 m748[0x74A - 0x748];
-    /* 0x74A */ s8 m74A;
+    /* 0x74A */ s8 mActionStatus;
 };
 
 class daNpc_Btsw2_HIO_c {

@@ -285,14 +285,14 @@ void action_dousa(pw_class* i_this) {
         i_this->mActorPlace.pos.x = i_this->m2CC.x + camfwd.x * 150.0f;
         i_this->mActorPlace.pos.y = i_this->m2CC.y;
         i_this->mActorPlace.pos.z = i_this->m2CC.z + camfwd.z * 150.0f;
-        fopAc_ac_c* searchResult;
+        fopAc_ac_c* kantera;
         if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e &&
-            fopAcM_SearchByID(i_this->mKanteraID, &searchResult) && searchResult != NULL &&
-            fopAcM_GetName(searchResult) == PROC_KANTERA)
+            fopAcM_SearchByID(i_this->mKanteraID, &kantera) && kantera != NULL &&
+            fopAcM_GetName(kantera) == PROC_KANTERA)
         {
-            searchResult->current.pos = i_this->m2CC;
-            searchResult->current.angle.y = i_this->shape_angle.y;
-            searchResult->scale.setall(1.0f);
+            kantera->current.pos = i_this->m2CC;
+            kantera->current.angle.y = i_this->shape_angle.y;
+            kantera->scale.setall(1.0f);
             if (i_this->mpMorf->isStop()) {
                 i_this->m341 = 0;
                 i_this->mBehaviorType = VisibleFromStart;

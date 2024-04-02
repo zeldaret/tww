@@ -176,7 +176,7 @@ static BOOL nodeCallBack(J3DNode* node, int param_1) {
             u16 jointNo = joint->getJntNo();
             mDoMtx_stack_c::copy(model->getAnmMtx(jointNo));
             if (jointNo == i_this->m_jnt.getHeadJntNum()) {
-                mDoMtx_stack_c::multVec(&a_att_pos_offst, &i_this->m704);
+                mDoMtx_stack_c::multVec(&a_att_pos_offst, &i_this->mAttPos);
                 Mtx sp14;
                 cMtx_copy(mDoMtx_stack_c::get(), sp14);
                 cXyz sp8;
@@ -189,8 +189,7 @@ static BOOL nodeCallBack(J3DNode* node, int param_1) {
                 mDoMtx_stack_c::concat(sp14);
                 mDoMtx_stack_c::multVec(&a_eye_pos_offst, &i_this->eyePos);
             } else if (jointNo == i_this->m_jnt.getBackboneJntNum()) {
-                int backboneY = i_this->m_jnt.getBackbone_y();
-                mDoMtx_stack_c::XrotM(backboneY);
+                mDoMtx_stack_c::XrotM(i_this->m_jnt.getBackbone_y());
                 mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getBackbone_x());
             }
             cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -201,26 +200,26 @@ static BOOL nodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 0000041C-00000524       .text initTexPatternAnm__13daNpc_Btsw2_cFb */
-BOOL daNpc_Btsw2_c::initTexPatternAnm(bool r31) {
-    J3DModelData* modelData = mpMcaMorf->getModel()->getModelData();
+BOOL daNpc_Btsw2_c::initTexPatternAnm(bool i_modify) {
+    J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, l_btp_ix_tbl[m744]));
     JUT_ASSERT(282, m_btp != 0);
-    if (!mBtpAnm.init(modelData, m_btp, TRUE, 2, 1.0f, 0, -1, r31, 0)) {
+    if (!mBtpAnm.init(modelData, m_btp, TRUE, 2, 1.0f, 0, -1, i_modify, 0)) {
         return FALSE;
     }
-    m6F0 = 0;
-    m6F4 = 0;
+    mBtpFrame = 0;
+    mBlinkTimer = 0;
     return TRUE;
 }
 
 /* 00000524-000005B0       .text playTexPatternAnm__13daNpc_Btsw2_cFv */
 void daNpc_Btsw2_c::playTexPatternAnm() {
-    if (cLib_calcTimer(&m6F4) == 0) {
-        if (m6F0 >= m_btp->getFrameMax()) {
-            m6F0 -= m_btp->getFrameMax();
-            m6F4 = 30 + cM_rndF(100.0f);
+    if (cLib_calcTimer(&mBlinkTimer) == 0) {
+        if (mBtpFrame >= m_btp->getFrameMax()) {
+            mBtpFrame -= m_btp->getFrameMax();
+            mBlinkTimer = 30 + cM_rndF(100.0f);
         } else {
-            m6F0++;
+            mBtpFrame++;
         }
     }
 }
@@ -257,7 +256,7 @@ void daNpc_Btsw2_c::setAnm(s8 param_0) {
     m745 = param_0;
     
     dNpc_setAnm(
-        mpMcaMorf, a_play_mode_tbl[m747],
+        mpMorf, a_play_mode_tbl[m747],
         a_morf_frame_tbl[m747], a_play_speed_tbl[m747],
         l_bck_ix_tbl[m745], -1,
         m_arc_name
@@ -338,7 +337,7 @@ void daNpc_Btsw2_c::anmAtr(u16) {
         break;
     }
     
-    if (mpMcaMorf->checkFrame(mpMcaMorf->getEndFrame()-1.0f)) {
+    if (mpMorf->checkFrame(mpMorf->getEndFrame()-1.0f)) {
         if (m745 == 4 || m745 == 6) {
             setAnm(1);
         }
@@ -349,16 +348,16 @@ void daNpc_Btsw2_c::anmAtr(u16) {
 
 /* 0000097C-000009EC       .text getMsg__13daNpc_Btsw2_cFv */
 u32 daNpc_Btsw2_c::getMsg() {
-    u32 ret;
+    u32 msgNo;
     if (!dComIfGs_isEventBit(0x3102)) {
         dComIfGs_onEventBit(0x3102);
-        ret = 0x1AB0;
+        msgNo = 0x1AB0;
     } else if (dKy_daynight_check()) {
-        ret = 0x1AB2;
+        msgNo = 0x1AB2;
     } else {
-        ret = 0x1AB1;
+        msgNo = 0x1AB1;
     }
-    return ret;
+    return msgNo;
 }
 
 /* 000009EC-000009F4       .text next_msgStatus__13daNpc_Btsw2_cFPUl */
@@ -368,7 +367,7 @@ u16 daNpc_Btsw2_c::next_msgStatus(u32*) {
 
 /* 000009F4-00000A20       .text setAttention__13daNpc_Btsw2_cFv */
 void daNpc_Btsw2_c::setAttention() {
-    attention_info.position.set(m704.x, m704.y + l_HIO.mNpc.mAttnYOffset, m704.z);
+    attention_info.position.set(mAttPos.x, mAttPos.y + l_HIO.mNpc.mAttnYOffset, mAttPos.z);
 }
 
 /* 00000A20-00000B94       .text lookBack__13daNpc_Btsw2_cFv */
@@ -413,13 +412,13 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 BOOL daNpc_Btsw2_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, BTSW_INDEX_BDL_BN));
     JUT_ASSERT(616, modelData != 0);
-    mpMcaMorf = new mDoExt_McaMorf(
+    mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
         static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, BTSW_INDEX_BCK_BN_WAIT01)),
         J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x15020022
     );
-    if (mpMcaMorf == NULL || mpMcaMorf->getModel() == NULL) {
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
     
@@ -427,17 +426,17 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
     JUT_ASSERT(634, m_jnt.getHeadJntNum() >= 0);
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
     JUT_ASSERT(639, m_jnt.getBackboneJntNum() >= 0);
-    m6F1 = modelData->getJointName()->getIndex("handL");
-    m6F2 = modelData->getJointName()->getIndex("handR");
+    m_handL_jnt_num = modelData->getJointName()->getIndex("handL");
+    m_handR_jnt_num = modelData->getJointName()->getIndex("handR");
     
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", BTSW_INDEX_BDL_BN_KABAN));
-    m6D0 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-    if (m6D0 == NULL) {
+    mpKabanModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpKabanModel == NULL) {
         return FALSE;
     }
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", BTSW_INDEX_BDL_BN_TIRASI));
-    m6D4 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-    if (m6D4 == NULL) {
+    mpTirasiModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpTirasiModel == NULL) {
         return FALSE;
     }
     
@@ -446,10 +445,10 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
         return FALSE;
     }
     
-    modelData = mpMcaMorf->getModel()->getModelData();
+    modelData = mpMorf->getModel()->getModelData();
     modelData->getJointNodePointer(m_jnt.getHeadJntNum())->setCallBack(nodeCallBack);
     modelData->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(nodeCallBack);
-    mpMcaMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     
@@ -462,7 +461,7 @@ BOOL daNpc_Btsw2_c::CreateInit() {
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e;
     gravity = -30.0f;
     setAction(&daNpc_Btsw2_c::wait_action, NULL);
-    m704 = current.pos;
+    mAttPos = current.pos;
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
@@ -470,12 +469,12 @@ BOOL daNpc_Btsw2_c::CreateInit() {
     m724 = 0;
     mPathNo = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x10, 8);
     mpPath = dPath_GetRoomPath(mPathNo, current.roomNo);
-    m73C = mpPath->m_num - 1;
+    mFinalPathPntIdx = mpPath->m_num - 1;
     m73E = 1.0f + cM_rndF(3.0f);
     m742 = 90.0f + cM_rndF(300.0f);
     m735 = 0;
     m736 = 0;
-    m740 = 0;
+    mPathPntIdx = 0;
     mEventCut.setActorInfo2("Btsw2", this);
     attention_info.distances[1] = 0xAB;
     attention_info.distances[3] = 0xAB;
@@ -514,19 +513,23 @@ void daNpc_Btsw2_c::pathMove() {
             setAnm(7);
             m73E = 1.0f + cM_rndF(3.0f);
         }
-        if (m745 == 8 && mpMcaMorf->checkFrame(mpMcaMorf->getEndFrame()-1.0f)) {
+        if (m745 == 8 && mpMorf->checkFrame(mpMorf->getEndFrame()-1.0f)) {
             setAnm(0);
         }
         return;
     }
     
-    cXyz sp54;
-    int r30 = m740 < m73C ? (s16)(m740+1) : 0; // fakematch?
-    dPath__Point* pnt = &mpPath->mpPnt[(s16)r30];
-    sp54.set(pnt->mPos.x, pnt->mPos.y, pnt->mPos.z);
-    s16 r29 = cLib_targetAngleY(&current.pos, &sp54);
-    cLib_addCalcAngleS2(&current.angle.y, r29, l_HIO.m32, l_HIO.m30);
-    cXyz sp48 = sp54 - current.pos;
+    s16 pathPntIdx;
+    if (mPathPntIdx < mFinalPathPntIdx) {
+        pathPntIdx = mPathPntIdx+1;
+    } else {
+        pathPntIdx = 0;
+    }
+    dPath__Point* pnt = &mpPath->mpPnt[pathPntIdx];
+    cXyz targetPos(pnt->mPos.x, pnt->mPos.y, pnt->mPos.z);
+    s16 targetAngle = cLib_targetAngleY(&current.pos, &targetPos);
+    cLib_addCalcAngleS2(&current.angle.y, targetAngle, l_HIO.m32, l_HIO.m30);
+    cXyz sp48 = targetPos - current.pos;
     speedF = l_HIO.m34;
     if (sp48.normalizeRS()) {
         cXyz sp3c(
@@ -539,8 +542,8 @@ void daNpc_Btsw2_c::pathMove() {
     
     if (m736 != 0) {
         speedF = 0.0f;
-        s16 r27 = cLib_distanceAngleS(current.angle.y, r29);
-        cLib_addCalcAngleS2(&current.angle.y, r29, 4, 0x1800);
+        s16 r27 = cLib_distanceAngleS(current.angle.y, targetAngle);
+        cLib_addCalcAngleS2(&current.angle.y, targetAngle, 4, 0x1800);
         if (r27 < 0x10) {
             m736 = 0;
             setAnm(7);
@@ -549,9 +552,9 @@ void daNpc_Btsw2_c::pathMove() {
     
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     
-    cXyz sp30 = sp54 - current.pos;
+    cXyz sp30 = targetPos - current.pos;
     if (sp30.absXZ() < 10.0f) {
-        m740 = r30;
+        mPathPntIdx = pathPntIdx;
         if (m73E > 0) {
             m73E--;
             return;
@@ -567,10 +570,10 @@ void daNpc_Btsw2_c::pathMove() {
 
 /* 00001574-00001660       .text wait_action__13daNpc_Btsw2_cFPv */
 BOOL daNpc_Btsw2_c::wait_action(void*) {
-    if (m74A == 0) {
+    if (mActionStatus == ACTION_STARTING) {
         m747 = 1;
-        m74A++;
-    } else if (m74A != -1) {
+        mActionStatus++; // ACTION_ONGOING
+    } else if (mActionStatus != ACTION_ENDING) {
         s16 facingAngleY = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
         mHasAttention = chkAttention(current.pos, facingAngleY);
         m746 = 0;
@@ -607,7 +610,7 @@ s32 daNpc_Btsw2_c::_create() {
             return cPhs_ERROR_e;
         }
         
-        fopAcM_SetMtx(this, mpMcaMorf->getModel()->getBaseTRMtx());
+        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
         if (!CreateInit()) {
             return cPhs_ERROR_e;
@@ -620,8 +623,8 @@ s32 daNpc_Btsw2_c::_create() {
 /* 00001C34-00001C8C       .text _delete__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
-    if (heap && mpMcaMorf) {
-        mpMcaMorf->stopZelAnime();
+    if (heap && mpMorf) {
+        mpMorf->stopZelAnime();
     }
     return TRUE;
 }
@@ -634,7 +637,7 @@ BOOL daNpc_Btsw2_c::_execute() {
         l_HIO.mNpc.mMaxTurnStep
     );
     playTexPatternAnm();
-    mpMcaMorf->play(&eyePos, 0, 0);
+    mpMorf->play(&eyePos, 0, 0);
     checkOrder();
     if (!mEventCut.cutProc()) {
         (this->*mCurrActionFunc)(NULL);
@@ -644,7 +647,7 @@ BOOL daNpc_Btsw2_c::_execute() {
     tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
     
-    J3DModel* model = mpMcaMorf->getModel();
+    J3DModel* model = mpMorf->getModel();
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -656,25 +659,25 @@ BOOL daNpc_Btsw2_c::_execute() {
 
 /* 00001DDC-00001F6C       .text _draw__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::_draw() {
-    J3DModel* model = mpMcaMorf->getModel();
+    J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
     
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(model, &tevStr);
-    g_env_light.setLightTevColorType(m6D0, &tevStr);
-    g_env_light.setLightTevColorType(m6D4, &tevStr);
+    g_env_light.setLightTevColorType(mpKabanModel, &tevStr);
+    g_env_light.setLightTevColorType(mpTirasiModel, &tevStr);
     
-    mBtpAnm.entry(modelData, m6F0);
-    mpMcaMorf->updateDL();
-    m6D0->setBaseTRMtx(model->getAnmMtx(m6F1));
-    m6D4->setBaseTRMtx(model->getAnmMtx(m6F2));
-    mDoExt_modelUpdateDL(m6D0);
-    mDoExt_modelUpdateDL(m6D4);
+    mBtpAnm.entry(modelData, mBtpFrame);
+    mpMorf->updateDL();
+    mpKabanModel->setBaseTRMtx(model->getAnmMtx(m_handL_jnt_num));
+    mpTirasiModel->setBaseTRMtx(model->getAnmMtx(m_handR_jnt_num));
+    mDoExt_modelUpdateDL(mpKabanModel);
+    mDoExt_modelUpdateDL(mpTirasiModel);
     mBtpAnm.remove(modelData);
     
-    cXyz sp8(current.pos.x, current.pos.y + 130.0f, current.pos.z);
+    cXyz shadowPos(current.pos.x, current.pos.y + 130.0f, current.pos.z);
     mShadowId = dComIfGd_setShadow(
-        mShadowId, 1, mpMcaMorf->getModel(), &sp8, 800.0f, 20.0f,
+        mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr,
         0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
     );

@@ -65,6 +65,7 @@ public:
     BOOL isGravity() { return cLib_checkBit(field_0x784, 0x8UL); }
     void onGravity() { cLib_onBit(field_0x784, 0x8UL); }
     void offGravity() { cLib_offBit(field_0x784, 0x8UL); }
+    // Note: The 0x10 bit is used in the final release, but not in the demo debug maps, so its official name is unknown.
     void offPlayerRoom(int idx) { m_playerRoom[idx] = false; }
     void onPlayerRoom(int idx) { m_playerRoom[idx] = true; }
     void setCattleRoomNo(s8 roomNo) { m_cattleRoomNo = roomNo; }

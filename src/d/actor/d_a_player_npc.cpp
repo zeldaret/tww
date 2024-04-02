@@ -130,7 +130,7 @@ BOOL daPy_npc_c::checkRestart(s8 option) {
 }
 
 /* 8015AB28-8015ABD8       .text initialRestartOption__10daPy_npc_cFSci */
-BOOL daPy_npc_c::initialRestartOption(s8 option, int save) {
+BOOL daPy_npc_c::initialRestartOption(s8 option, BOOL save) {
     fopAc_ac_c* partner = dComIfGp_getCb1Player();
     if (!partner) {
         dComIfGp_setCb1Player(this);

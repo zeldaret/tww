@@ -245,7 +245,7 @@ public:
     }
     /* 0x290 */ dNpc_JntCtrl_c m_jnt;
     /* 0x2C4 */ dNpc_EventCut_c mEventCut;
-    /* 0x330 */ mDoExt_McaMorf* mpMcaMorf;
+    /* 0x330 */ mDoExt_McaMorf* mpMorf;
     /* 0x334 */ dBgS_ObjAcch mObjAcch;
     /* 0x4F8 */ dBgS_AcchCir mAcchCir;
     /* 0x538 */ dCcD_Stts mStts;

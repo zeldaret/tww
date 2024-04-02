@@ -35,7 +35,7 @@ public:
     void setOffsetHomePos();
     void setPointRestart(s16, s8);
     BOOL checkRestart(s8);
-    BOOL initialRestartOption(s8, int);
+    BOOL initialRestartOption(s8, BOOL);
     BOOL checkNowPosMove(const char*);
     void drawDamageFog();
     int chkMoveBlock(cXyz*);

@@ -53,7 +53,6 @@ BOOL daBg_btkAnm_c::create(J3DModelData* modelData, J3DAnmTextureSRTKey* anmData
     if (!anm->init(modelData, anmData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
         return FALSE;
 
-    // probably an inline
     J3DAnmTextureSRTKey * data = anm->getBtkAnm();
     for (u16 i = 0; i < data->getUpdateMaterialNum(); i++) {
         u16 mat_no = data->getUpdateMaterialID(i);
@@ -93,7 +92,6 @@ BOOL daBg_brkAnm_c::create(J3DModelData* modelData, J3DAnmTevRegKey* anmData) {
     if (!anm->init(modelData, anmData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
         return FALSE;
 
-    // probably an inline
     J3DAnmTevRegKey * data = anm->getBrkAnm();
     for (u16 i = 0; i < data->getCRegUpdateMaterialNum(); i++) {
         u16 mat_no = data->getCRegUpdateMaterialID(i);

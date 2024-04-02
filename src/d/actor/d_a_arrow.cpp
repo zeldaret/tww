@@ -18,6 +18,7 @@ u32 daPy_py_c::checkPlayerFly() const { return 0; }
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_pz.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_s_play.h"
 #include "d/res/res_link.h"
@@ -539,15 +540,13 @@ void daArrow_c::setRoomInfo() {
 void daArrow_c::setKeepMatrix() {
     // Transform the arrow onto its archer's hand.
     if (mbSetByZelda) {
-        fopNpc_npc_c* zelda;
+        daPz_c* zelda;
         fopAcM_SearchByID(parentActorID, (fopAc_ac_c**)&zelda);
         
         mDoMtx_stack_c::transS(0.7f, -0.07f, -0.2f);
         mDoMtx_stack_c::XYZrotM(0x238E, 0x2CDF, 0x29BE);
         
-        // Copy the matrix of Zelda's hand_R1 joint to the arrow model.
-        // TODO: After daPz_c is implemented, this should use her daPz_c::getRightHandMatrix() inline method.
-        MtxP handMtx = zelda->mpMcaMorf->getModel()->mpNodeMtx[0x13];
+        MtxP handMtx = zelda->getRightHandMatrix();
         cMtx_concat(handMtx, mDoMtx_stack_c::get(), mDoMtx_stack_c::get());
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
         
@@ -984,9 +983,7 @@ BOOL daArrow_c::procStop_BG() {
             field_0x6a0--;
             
             if (field_0x6a0 < 60) {
-                // Fakematch
-                u32 signBit = ((u32)field_0x6a0)>>31;
-                if ((((field_0x6a0&1) ^ signBit) - signBit) == 0) {
+                if (field_0x6a0 % 2 == 0) {
                     field_0x698 = false;
                 } else {
                     field_0x698 = true;

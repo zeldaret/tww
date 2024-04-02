@@ -743,7 +743,7 @@ BOOL daNpc_Os_c::finish01NpcAction(void* param_1) {
     if(field_0x7A9 == 0) {
         if(dComIfGp_getCb1Player() == this) {
             onNpcNotChange();
-            dComIfGp_setCb1Player(0);
+            dComIfGp_setCb1Player(NULL);
         }
         
         setAnm(0);
@@ -1272,7 +1272,7 @@ BOOL daNpc_Os_c::eventProc() {
                 setNpcAction(&waitNpcAction, 0);
                 offNpcCallCommand();
                 onNpcNotChange();
-                dComIfGp_setCb1Player(0);
+                dComIfGp_setCb1Player(NULL);
                 setFinish();
             }
             else if(field_0x7A5 == 8) {
@@ -2024,7 +2024,7 @@ BOOL daNpc_Os_c::draw() {
     
     mBrkAnm.entry(pModelData, mBrkAnm.getFrame());
     mpMorf->entryDL();
-    pModelData->getMaterialTable().removeTevRegAnimator(mBrkAnm.getBrkAnm());
+    mBrkAnm.remove(pModelData);
 
     if(!fopAcM_checkCarryNow(this) && field_0x784 & 0x10) {
         cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
@@ -2082,14 +2082,14 @@ BOOL daNpc_Os_c::execute() {
     if(!finishCheck()) {
         if(!check_initialRoom()) {
             if(dComIfGp_getCb1Player() == this) {
-                dComIfGp_setCb1Player(0);
+                dComIfGp_setCb1Player(NULL);
             }
 
             endBeam();
             return true;
         }
 
-        initialRestartOption(getRestartNumber(), 1);
+        initialRestartOption(getRestartNumber(), TRUE);
 
         if(wakeupCheck()) {
             offNpcNotChange();

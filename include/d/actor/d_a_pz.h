@@ -2,6 +2,7 @@
 #define D_A_PZ_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 
@@ -15,15 +16,15 @@ class daPz_matAnm_c {
     void calc(J3DMaterial*) const;
 };
 
-class daPz_c : public fopAc_ac_c {
+class daPz_c : public fopNpc_npc_c {
 public:
     enum Proc_e {
         
     };
 
-    void getRightHandMatrix() {}
-    void isAnm(signed char) {}
-    void isEyeAnm(signed char) {}
+    MtxP getRightHandMatrix() { return mpMorf->getModel()->getAnmMtx(0x13); } // hand_R1 joint
+    void isAnm(s8) {}
+    void isEyeAnm(s8) {}
     void modeProcInit(int) {}
     void setAfraid() {}
     void setDown() {}
@@ -39,9 +40,9 @@ public:
     void _createHeap();
     void getGndPos();
     void checkEyeArea(cXyz&);
-    void getMsg();
-    void next_msgStatus(unsigned long*);
-    void anmAtr(unsigned short);
+    virtual u32 getMsg();
+    virtual u16 next_msgStatus(u32*);
+    virtual void anmAtr(u16);
     void eventOrder();
     void checkOrder();
     void setFallSplash();
@@ -52,13 +53,13 @@ public:
     void checkTgHit();
     void getArg();
     void setAttention();
-    void setBowAnm(signed char, bool);
+    void setBowAnm(s8, bool);
     void setBowString(bool);
-    void setAnm(signed char, bool, int);
+    void setAnm(s8, bool, int);
     void setAnmRunSpeed();
     void setEyeBtp(int);
     void setEyeBtk(int);
-    void setEyeAnm(signed char);
+    void setEyeAnm(s8);
     void ctrlEye();
     void playEyeAnm();
     void setMtx();
