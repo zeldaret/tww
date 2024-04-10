@@ -326,3 +326,7 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode*, int) {
 }
 
 bool daNpc_kam_c::m_hyoi_kamome;
+
+u8 daNpc_Bs1_c::m_tag_buy_item_max;
+u8 daNpc_Bs1_c::m_tag_buy_item;
+s16 daNpc_Bs1_c::m_tag_pay_rupee;
