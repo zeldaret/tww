@@ -30,8 +30,8 @@ struct ShopItems_c__ItemData {
 
 struct __shop_items_set_data {
     /* 0x00 */ ShopItems_c__ItemData* mpItemData;
-    /* 0x04 */ u32 mShowMsgID;
-    /* 0x08 */ u32 mBuyMsgID;
+    /* 0x04 */ u32 mShowMsgNo;
+    /* 0x08 */ u32 mBuyMsgNo;
     /* 0x0C */ u32 m0C;
     /* 0x10 */ int mCount;
 };

@@ -103,7 +103,7 @@ void dLib_getPosFromMtx(f32(*)[4], cXyz*);
 bool dLib_pathInfo(dPath**, u8);
 void dLib_pathMove(cXyz*, s8*, dPath*, f32, int (*)(cXyz*, cXyz*, cXyz*, void*), void*);
 void dLib_setNextStageBySclsNum(u8 i_sclsnum, s8 room_no);
-u32 dLib_setFirstMsg(u16 eventBit, u32 firstMsgID, u32 secondMsgID);
+u32 dLib_setFirstMsg(u16 eventBit, u32 firstMsgNo, u32 secondMsgNo);
 /**
  * Checks if Link is within a circular area.
  */

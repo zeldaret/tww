@@ -384,7 +384,7 @@ u32 daObjTpost_c::getMsg() {
 }
 
 /* 000009EC-00000CF4       .text next_msgStatus__12daObjTpost_cFPUl */
-u16 daObjTpost_c::next_msgStatus(u32* msgId) {
+u16 daObjTpost_c::next_msgStatus(u32* pMsgNo) {
     static const u32 pay_msg_num[3] = {
         0x0CEC,
         0x0CED,
@@ -392,25 +392,25 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
     };
 
     u16 status = fopMsgStts_MSG_CONTINUES_e;
-    switch(*msgId) {
+    switch(*pMsgNo) {
         case 0xCE5:
         case 0xCE6:
             if(mNumReadable) {
                 dComIfGp_setMessageCountNumber(getReceiveLetterNum());
-                *msgId = 0xCEB;
+                *pMsgNo = 0xCEB;
             }
             else {
-                *msgId = 0xCE7;
+                *pMsgNo = 0xCE7;
             }
 
             break;
         case 0xCEB:
             dComIfGp_setMessageCountNumber(field_0x8F0);
-            *msgId = 0xCF7;
+            *pMsgNo = 0xCF7;
             break;
         case 0xCF7:
             if(l_HIO.field_0x07 != 0 || m_letter[mNumReadable].field_0x00 != 0) {
-                *msgId = 0xCF3;
+                *pMsgNo = 0xCF3;
             }
             else {
                 field_0x8E9 = 1;
@@ -419,13 +419,13 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
 
             break;
         case 0xCE8:
-            *msgId = pay_msg_num[mPayType];
+            *pMsgNo = pay_msg_num[mPayType];
 
             break;
         case 0xCEC:
         case 0xCED:
         case 0xCEE:
-            *msgId = 0xCEF;
+            *pMsgNo = 0xCEF;
 
             break;
         case 0xCEF:
@@ -434,27 +434,27 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
                     dComIfGp_setItemRupeeCount(-getSendPrice());
                     dComIfGs_setReserveItemEmpty();
                     deliverLetter();
-                    *msgId = 0xCF2;
+                    *pMsgNo = 0xCF2;
                 }
                 else {
                     setAnm(3, false);
                     field_0x8EA = 1;
-                    *msgId = 0xCF1;
+                    *pMsgNo = 0xCF1;
                 }
             }
             else {
                 setAnm(3, false);
                 field_0x8EA = 1;
-                *msgId = 0xCF0;
+                *pMsgNo = 0xCF0;
             }
 
             break;
         case 0xCF3:
             if(m_letter[mNumReadable].mEventReg == 0xB203) {
-                *msgId = 0xCF8;
+                *pMsgNo = 0xCF8;
             }
             else {
-                *msgId = 0xCF4;
+                *pMsgNo = 0xCF4;
             }
 
             break;
@@ -471,11 +471,11 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
                     status = fopMsgStts_MSG_ENDS_e;
                 }
                 else {
-                    *msgId = 0xCF6;
+                    *pMsgNo = 0xCF6;
                 }
             }
             else {
-                *msgId = 0xCF5;
+                *pMsgNo = 0xCF5;
             }
 
             break;
@@ -486,7 +486,7 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
             mNumReadable = getReadableLetterNum();
             if(mNumReadable) {
                 dComIfGp_setMessageCountNumber(field_0x8F0);
-                *msgId = 0xCF7;
+                *pMsgNo = 0xCF7;
             }
             else {
                 status = fopMsgStts_MSG_ENDS_e;

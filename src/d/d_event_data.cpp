@@ -270,7 +270,7 @@ void dEvDtStaff_c::specialProcMessage() {
         "TELOP_ON",
         "TELOP_OFF",
     };
-    static u32 l_msgId;
+    static uint l_msgId;
     static msg_class* l_msg;
     static int l_msgNo;
 

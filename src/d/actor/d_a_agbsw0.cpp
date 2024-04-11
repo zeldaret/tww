@@ -791,11 +791,11 @@ BOOL daAgbsw0_c::ExeSubM3() {
                 daAgb_c* agb = dComIfGp_getAgb();
                 if(agb && agb->isActive() && (agb->isFree() || agb->getFollowTarget() != 1) && HitCheck(agb)) {
 #if VERSION == VERSION_JPN
-                    u16 gbaMsgId = TriforceCheck();
+                    u16 gbaMsgNo = TriforceCheck();
 #else
-                    u16 gbaMsgId = TriforceCheck(agb);
+                    u16 gbaMsgNo = TriforceCheck(agb);
 #endif
-                    MailSend(BigLittleChange(gbaMsgId) >> 0x10, 0xF, 0xFF, 0xFF, 0);
+                    MailSend(BigLittleChange(gbaMsgNo) >> 0x10, 0xF, 0xFF, 0xFF, 0);
                     field_0x298 = 1;
                 }
                 else {
@@ -2463,8 +2463,8 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 }
 
 /* 0000477C-00004818       .text MailSend__10daAgbsw0_cFUsUcUcUcUc */
-void daAgbsw0_c::MailSend(u16 msgID, u8 reactType, u8 toCheck, u8 toSet, u8 sfx) {
-    mMail.msgID = msgID;
+void daAgbsw0_c::MailSend(u16 msgNo, u8 reactType, u8 toCheck, u8 toSet, u8 sfx) {
+    mMail.msgNo = msgNo;
     mMail.swToSet = toSet;
     mMail.swToCheck = toCheck;
     mMail.stageSaveTbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
@@ -2525,7 +2525,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
 
     if((id <= 4 || id == 9 || 0xC <= id) && mDoGaC_GbaLink() && i_this->field_0x298 == 1) {
         agb_mail_struct info;
-        info.msgID = 0xFFFF;
+        info.msgNo = 0xFFFF;
         info.swToSet = 0xFF;
         info.swToCheck = 0xFF;
         info.stageSaveTbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());

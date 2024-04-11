@@ -24,7 +24,7 @@ static u8 dummy5[0x4C];
 
 static daNpc_Ji1_HIO_c l_HIO;
 
-static u32 l_msgId;
+static uint l_msgId;
 static msg_class* l_msg;
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -769,7 +769,7 @@ u32 daNpc_Ji1_c::getMsg() {
 }
 
 /* 00002A60-00002C64       .text next_msgStatus__11daNpc_Ji1_cFPUl */
-u16 daNpc_Ji1_c::next_msgStatus(u32* msgId) {
+u16 daNpc_Ji1_c::next_msgStatus(u32* pMsgNo) {
     /* Nonmatching */
 
     u16 status = fopMsgStts_MSG_CONTINUES_e;
@@ -1068,7 +1068,7 @@ u32 daNpc_Ji1_c::evn_talk_init(int staffIdx) {
     u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     u32* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
 
-    l_msgId = -1;
+    l_msgId = fpcM_ERROR_PROCESS_ID_e;
     l_msg = 0;
     if(pMsgNo) {
         field_0x2AC = *pMsgNo;
@@ -1110,7 +1110,7 @@ u32 daNpc_Ji1_c::evn_talk_init(int staffIdx) {
 
 /* 000049AC-00004B1C       .text evn_talk__11daNpc_Ji1_cFv */
 u32 daNpc_Ji1_c::evn_talk() {
-    if(l_msgId == -1) {
+    if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
         l_msgId = fopMsgM_messageSet(field_0x2AC, &eyePos);
     }
     else if(!l_msg) {
@@ -1139,7 +1139,7 @@ u32 daNpc_Ji1_c::evn_talk() {
             if(l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
                 l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                 l_msg = 0;
-                l_msgId = -1;
+                l_msgId = fpcM_ERROR_PROCESS_ID_e;
 
                 return true;
             }
@@ -1170,7 +1170,7 @@ u32 daNpc_Ji1_c::evn_continue_talk_init(int staffIdx) {
 
 /* 00004B84-00004CF4       .text evn_continue_talk__11daNpc_Ji1_cFv */
 u32 daNpc_Ji1_c::evn_continue_talk() {
-    if(l_msgId == -1) {
+    if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
         l_msgId = fopMsgM_messageSet(field_0x2AC, &eyePos);
     }
     else if(!l_msg) {
@@ -1199,7 +1199,7 @@ u32 daNpc_Ji1_c::evn_continue_talk() {
             if(l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
                 l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                 l_msg = 0;
-                l_msgId = -1;
+                l_msgId = fpcM_ERROR_PROCESS_ID_e;
 
                 return true;
             }
@@ -2359,7 +2359,7 @@ void daNpc_Ji1_c::setAnimFromMsgNo(u32 msgNo) {
     /* Nonmatching */
 
     if(l_msg) {
-        msgNo = l_msg->mMsgID;
+        msgNo = l_msg->mMsgNo;
     }
 
     // the switch cases for this are annoying to work out

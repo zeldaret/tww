@@ -259,7 +259,7 @@ public:
     /* 0x6BC */ u8 field_0x6bc[4];
     /* 0x6C0 */ /* vtable */
 
-    virtual u16 next_msgStatus(u32* msgId) { return fopMsgStts_MSG_ENDS_e; }
+    virtual u16 next_msgStatus(u32* pMsgNo) { return fopMsgStts_MSG_ENDS_e; }
     virtual u32 getMsg() { return 0; }
     virtual void anmAtr(u16) {}
 

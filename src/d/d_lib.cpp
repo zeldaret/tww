@@ -206,12 +206,12 @@ void dLib_setNextStageBySclsNum(u8 i_sclsnum, s8 room_no) {
 }
 
 /* 80057EC0-80057F30       .text dLib_setFirstMsg__FUsUlUl */
-u32 dLib_setFirstMsg(u16 eventBit, u32 firstMsgID, u32 secondMsgID) {
+u32 dLib_setFirstMsg(u16 eventBit, u32 firstMsgNo, u32 secondMsgNo) {
     if (!dComIfGs_isEventBit(eventBit)) {
         dComIfGs_onEventBit(eventBit);
-        return firstMsgID;
+        return firstMsgNo;
     } else {
-        return secondMsgID;
+        return secondMsgNo;
     }
 }
 

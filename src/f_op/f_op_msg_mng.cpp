@@ -166,14 +166,14 @@ void fopMsgM_Delete(void* i_this) {
 }
 
 /* 8002AF6C-8002B030       .text createAppend__FP10fopAc_ac_cP4cXyzPUlPUlUi */
-fopMsg_prm_class* createAppend(fopAc_ac_c* actor, cXyz* pos, u32* msg_id, u32* p4, uint p5) {
+fopMsg_prm_class* createAppend(fopAc_ac_c* actor, cXyz* pos, u32* msg_no, u32* p4, uint p5) {
     fopMsg_prm_class* params = (fopMsg_prm_class*) cMl::memalignB(-4, sizeof(fopMsg_prm_class));
     if (params == NULL)
         return NULL;
 
     params->mpActor = actor;
-    if (msg_id != NULL)
-        params->mMsgID = *msg_id;
+    if (msg_no != NULL)
+        params->mMsgNo = *msg_no;
     if (p4 != NULL)
         params->field_0x14 = *p4;
 

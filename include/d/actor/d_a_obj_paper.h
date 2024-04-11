@@ -61,7 +61,7 @@ namespace daObjPaper {
         /* 0x3CC */ dCcD_Stts mColStatus;
         /* 0x408 */ bool mbHasCc;
         /* 0x40C */ int mMode;
-        /* 0x410 */ u32 mMsgId;
+        /* 0x410 */ uint mMsgId;
         /* 0x414 */ msg_class* mpMsg;
         /* 0x418 */ Type_e mType;
     };

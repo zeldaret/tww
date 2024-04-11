@@ -149,7 +149,7 @@ public:
     void eventOrder();
     void checkOrder();
     BOOL checkCommandTalk();
-    u16 next_msgStatus(u32*);
+    u16 next_msgStatus(u32* pMsgNo);
     u32 getMsg();
     void setCollision();
     void setAttention(bool);

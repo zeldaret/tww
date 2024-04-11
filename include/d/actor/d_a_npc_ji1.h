@@ -36,7 +36,7 @@ public:
     u32 getMsg1stType();
     u32 getMsg2ndType();
     u32 getMsg();
-    u16 next_msgStatus(u32* msgId);
+    u16 next_msgStatus(u32* pMsgNo);
     u32 talkAction(void*);
     u32 speakAction(void*);
     u32 speakBadAction(void*);

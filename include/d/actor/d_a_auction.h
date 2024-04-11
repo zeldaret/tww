@@ -94,7 +94,7 @@ public:
     /* 0x7F8 */ u16 mEvtNoItemIdx;
     /* 0x7FA */ u16 mEvtStart2Idx;
     /* 0x7FC */ u16 mEvtEnd2Idx;
-    /* 0x7FE */ u16 mCurrItemNameMsgID;
+    /* 0x7FE */ u16 mCurrItemNameMsgNo;
     /* 0x800 */ u8 m800[0x81C - 0x800];
     /* 0x81C */ u8 m81C;
     /* 0x81D */ u8 m81D;

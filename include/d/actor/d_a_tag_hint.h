@@ -46,7 +46,7 @@ public:
 
 public:
     /* 0x290 */ u8 m290[0x298 - 0x290];
-    /* 0x298 */ u32 mMsgId;
+    /* 0x298 */ u32 mMsgNo;
     /* 0x29C */ int m29C;
     /* 0x2A0 */ s16 m2A0;
     /* 0x2A2 */ u8 mCurProc;

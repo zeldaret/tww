@@ -26,7 +26,7 @@ static u8 bss_941 ALIGN_DECL(4);
 static u8 bss_939 ALIGN_DECL(4);
 static u8 bss_937 ALIGN_DECL(4);
 static u8 bss_936 ALIGN_DECL(4);
-static u32 l_msgId;
+static uint l_msgId;
 static msg_class* l_msg;
 static u8 msg_mode;
 

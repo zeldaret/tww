@@ -796,7 +796,7 @@ BOOL daNpc_Os_c::finish02NpcAction(void* param_1) {
     return true;
 }
 
-static u32 l_msgId;
+static uint l_msgId;
 static msg_class* l_msg;
 
 /* 00001F48-00002118       .text talkNpcAction__10daNpc_Os_cFPv */
@@ -1843,13 +1843,13 @@ BOOL daNpc_Os_c::checkCommandTalk() {
 }
 
 /* 00005468-000054BC       .text next_msgStatus__10daNpc_Os_cFPUl */
-u16 daNpc_Os_c::next_msgStatus(u32* msgId) {
+u16 daNpc_Os_c::next_msgStatus(u32* pMsgNo) {
     u16 status = fopMsgStts_MSG_CONTINUES_e;
 
-    if(*msgId == 0) {
+    if(*pMsgNo == 0) {
         status = fopMsgStts_MSG_ENDS_e;
     }
-    else if(*msgId == 0xEF4) {
+    else if(*pMsgNo == 0xEF4) {
         dComIfGs_onEventBit(0x2510);
         status = fopMsgStts_MSG_ENDS_e;
     }

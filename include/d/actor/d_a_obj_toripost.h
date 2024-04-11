@@ -38,7 +38,7 @@ public:
     int getMsgXY();
     int getMsgNormal();
     u32 getMsg();
-    u16 next_msgStatus(u32* msgId);
+    u16 next_msgStatus(u32* pMsgNo);
     bool checkTalk();
     void eventOrder();
     void checkOrder();

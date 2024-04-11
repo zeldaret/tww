@@ -1454,7 +1454,7 @@ u16 daNpc_Bs1_c::talk() {
             }
 
             if(dComIfGp_checkMesgSendButton()) {
-                m738 = l_msg->mMsgID;
+                m738 = l_msg->mMsgNo;
                 if(!shopStickMoveMsgCheck(m738)) {
                     if(!shopMsgCheck(m738)) {
                         mShopItems.mSelectedItemIdx = -1;

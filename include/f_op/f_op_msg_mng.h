@@ -20,7 +20,7 @@ struct msg_process_profile_definition {
 struct fopMsg_prm_class {
     /* 0x00 */ fopAc_ac_c* mpActor;
     /* 0x04 */ cXyz mPos;
-    /* 0x10 */ u32 mMsgID;
+    /* 0x10 */ u32 mMsgNo;
     /* 0x14 */ u32 field_0x14;
     /* 0x18 */ int field_0x18;
 };  // Size: 0x1C

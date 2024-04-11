@@ -64,7 +64,7 @@ int fopMsg_Create(void* i_this) {
         if (prm != NULL) {
             _this->mpActor = prm->mpActor;
             _this->mPos = prm->mPos;
-            _this->mMsgID = prm->mMsgID;
+            _this->mMsgNo = prm->mMsgNo;
             _this->field_0xf0 = prm->field_0x14;
             _this->field_0xf4 = prm->field_0x18;
         }

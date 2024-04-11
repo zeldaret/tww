@@ -1200,12 +1200,12 @@ u8 ShopItems_c::getSelectItemNo() {
 
 /* 80060078-80060090       .text getSelectItemShowMsg__11ShopItems_cFv */
 u32 ShopItems_c::getSelectItemShowMsg() {
-    return mpItemSetList[mSelectedItemIdx]->mShowMsgID;
+    return mpItemSetList[mSelectedItemIdx]->mShowMsgNo;
 }
 
 /* 80060090-800600A8       .text getSelectItemBuyMsg__11ShopItems_cFv */
 u32 ShopItems_c::getSelectItemBuyMsg() {
-    return mpItemSetList[mSelectedItemIdx]->mBuyMsgID;
+    return mpItemSetList[mSelectedItemIdx]->mBuyMsgNo;
 }
 
 /* 800600A8-80060138       .text dShop_get_next_select__FiP11ShopItems_c */
@@ -1255,7 +1255,7 @@ BOOL ShopItems_c::isSoldOutItemAll() {
 }
 
 /* 8006019C-8006036C       .text dShop_now_triggercheck__FP9msg_classP9STControlP11ShopItems_cPUlPFPv_UlPv */
-BOOL dShop_now_triggercheck(msg_class* msg, STControl* stickControl, ShopItems_c* shopItems, u32* pMsgID, dShop_DefaultMsgCallback defaultMsgCb, void* defaultMsgArg) {
+BOOL dShop_now_triggercheck(msg_class* msg, STControl* stickControl, ShopItems_c* shopItems, u32* pMsgNo, dShop_DefaultMsgCallback defaultMsgCb, void* defaultMsgArg) {
     int itemDataIdx;
     int selectedItemIdx;
     __shop_items_set_data** itemSetList;
@@ -1291,20 +1291,20 @@ BOOL dShop_now_triggercheck(msg_class* msg, STControl* stickControl, ShopItems_c
     if (idxChanged) {
         if (nextIdx < 0) {
             if (defaultMsgCb == NULL) {
-                *pMsgID = default_select_msg[itemDataIdx];
+                *pMsgNo = default_select_msg[itemDataIdx];
             } else {
-                *pMsgID = defaultMsgCb(defaultMsgArg);
+                *pMsgNo = defaultMsgCb(defaultMsgArg);
             }
         } else {
             if (shopItems->isSoldOutItem(nextIdx)) {
-                *pMsgID = itemSetList[nextIdx]->m0C;
+                *pMsgNo = itemSetList[nextIdx]->m0C;
             } else {
-                *pMsgID = itemSetList[nextIdx]->mShowMsgID;
+                *pMsgNo = itemSetList[nextIdx]->mShowMsgNo;
             }
         }
         
         msg->mStatus = fopMsgStts_MSG_CONTINUES_e;
-        fopMsgM_messageSet(*pMsgID);
+        fopMsgM_messageSet(*pMsgNo);
         fopMsgM_messageSendOn();
         shopItems->mSelectedItemIdx = nextIdx;
     }

@@ -30,7 +30,7 @@ public:
     /* 0xD8 */ msg_method_class* sub_method;
     /* 0xDC */ fopAc_ac_c* mpActor;
     /* 0xE0 */ cXyz mPos;
-    /* 0xEC */ u32 mMsgID;
+    /* 0xEC */ u32 mMsgNo;
     /* 0xF0 */ u32 field_0xf0;
     /* 0xF4 */ u32 field_0xf4;
     /* 0xF8 */ u16 mStatus;
