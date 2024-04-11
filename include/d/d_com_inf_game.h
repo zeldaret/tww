@@ -2213,7 +2213,7 @@ inline void dComIfGp_setItemBeastNumCount(int i_idx, s16 num) {
 }
 
 inline s16 dComIfGp_getItemBeastNumCount(int i_idx) {
-    g_dComIfG_gameInfo.play.getItemBeastNumCount(i_idx);
+    return g_dComIfG_gameInfo.play.getItemBeastNumCount(i_idx);
 }
 
 inline u8 dComIfGp_checkMesgSendButton() {
