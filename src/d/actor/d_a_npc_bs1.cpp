@@ -1045,7 +1045,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
 /* 00001F7C-000024B8       .text getMsg__11daNpc_Bs1_cFv */
 u32 daNpc_Bs1_c::getMsg() {
     /* Nonmatching */
-    int msgNo;
+    u32 msgNo;
     if(m740) {
         msgNo = m740;
         m740 = 0;
