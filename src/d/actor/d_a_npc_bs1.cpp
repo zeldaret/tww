@@ -487,28 +487,23 @@ static u32 daNpc_Bs1_getBuyItemMax(int i_itemCost, int i_itemNo) {
 
 /* 00001088-000010EC       .text daNpc_Bs1_setPayRupee__Fii */
 static void daNpc_Bs1_setPayRupee(int unknownParam1, int unknownParam2) {
-    /* Nonmatching */
     int rupee = dComIfGs_getRupee();
-    u16 walletSize;
+    u16 maxRupees;
     switch (dComIfGs_getWalletSize()) {
         case 0:
-            walletSize = 200;
+            maxRupees = 200;
             break;
         case 1:
-            walletSize = 1000;
+            maxRupees = 1000;
             break;
+        case 2:
         default:
-            walletSize = 5000;
+            maxRupees = 5000;
             break;
     }
 
-    int paymentTotal;
-    if(walletSize - rupee > unknownParam1 * unknownParam2) {
-        paymentTotal = unknownParam1 * unknownParam2;
-    }
-    else {
-        paymentTotal = walletSize - rupee;
-    }
+    int r5 = maxRupees - rupee;
+    int paymentTotal = cLib_maxLimit(unknownParam1 * unknownParam2, r5);
 
     daNpc_Bs1_c::m_tag_pay_rupee = paymentTotal;
 }
@@ -653,8 +648,9 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 dComIfGp_setItemBeastNumCount(idx, -m_tag_buy_item);
                 
                 if(*pMsgNo == 0xFD3) {
-                    u8 temp = m_tag_buy_item + dComIfGs_getEventReg(0x7F0F);
-                    temp = temp > 0xF ? 0xF : temp;
+                    u8 r3 = dComIfGs_getEventReg(0x7F0F);
+                    r3 += m_tag_buy_item;
+                    u8 temp = cLib_maxLimit<u8>(r3, 0xF);
 
                     dComIfGs_setEventReg(0x7F0F, temp);
                     if(temp < 0xA) {
@@ -1044,7 +1040,6 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
 
 /* 00001F7C-000024B8       .text getMsg__11daNpc_Bs1_cFv */
 u32 daNpc_Bs1_c::getMsg() {
-    /* Nonmatching */
     u32 msgNo;
     if(m740) {
         msgNo = m740;
@@ -1557,7 +1552,7 @@ void daNpc_Bs1_c::createShopList() {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index = 1;
         }
-        if(dComIfGs_getItem(0xC) != 0xFF) {
+        if(dComIfGs_getItem(0xC) != dItem_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
             index++;
         }
@@ -1567,7 +1562,7 @@ void daNpc_Bs1_c::createShopList() {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index++;
         }
-        if(dComIfGs_getItem(0xC) == 0xFF) {
+        if(dComIfGs_getItem(0xC) == dItem_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
         }
 
@@ -1591,7 +1586,7 @@ void daNpc_Bs1_c::createShopList() {
     mShopItems.setItemSetDataList(mpItemSetList);
     for(int i = 0; i < 3; i++) {
         mShopItems.mSelectedItemIdx = i;
-        if((!dComIfGs_checkGetItem(BOMB_BAG) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(0xC) == 0xFF && isArrow(mShopItems.getSelectItemNo()))) {
+        if((!dComIfGs_checkGetItem(BOMB_BAG) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(0xC) == dItem_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
             mShopItems.SoldOutItem(i);
             m76C[i] = true;
         }
@@ -1608,7 +1603,7 @@ void daNpc_Bs1_c::createShopList() {
 /* 00003018-00003090       .text isSellBomb__11daNpc_Bs1_cFv */
 BOOL daNpc_Bs1_c::isSellBomb() {
     for (int index = 0; index < 3; index++) {
-        if (isBomb(mShopItems.getItemNo(index)) && mShopItems.m28[(s16)index] != 1) {
+        if (isBomb(mShopItems.getItemNo(index)) && !mShopItems.isSoldOutItem(index)) {
             return TRUE;
         }
     }

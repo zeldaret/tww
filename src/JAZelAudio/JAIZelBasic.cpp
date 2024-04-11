@@ -158,8 +158,8 @@ void JAIZelBasic::heartGaugeOn() {
 /* 802A2F54-802A3058       .text processHeartGaugeSound__11JAIZelBasicFv */
 void JAIZelBasic::processHeartGaugeSound() {
     /* Nonmatching */
-    if (dComIfGp_event_getMode() == dEvtMode_NONE_e && field_0x0040) {
-        if (field_0x0034 && field_0x0206 == 0) {
+    if (dComIfGp_event_getMode() == dEvtMode_NONE_e && field_0x0040 != 0) {
+        if (field_0x0034 != 0 && field_0x0206 == 0) {
             if (field_0x0034 <= 2) {
                 seStart(JA_SE_ALMOST_DIE_ALERM_3, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             } else if (field_0x0034 <= 4) {

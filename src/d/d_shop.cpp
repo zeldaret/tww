@@ -1172,7 +1172,7 @@ void ShopItems_c::SoldOutItem(int idx) {
     if (item) {
         item->hide();
     }
-    m28[idx] = 1;
+    mItemIsSoldOut[idx] = true;
 }
 
 /* 8005FF7C-8005FF98       .text getItemNo__11ShopItems_cFi */
@@ -1184,7 +1184,7 @@ u8 ShopItems_c::getItemNo(int idx) {
 void ShopItems_c::showItem() {
     for (int i = 0; i < mNumItems; i++) {
         daShopItem_c* item = (daShopItem_c*)fopAcM_SearchByID(mItemActorProcessIds[i]);
-        if (item && m28[i] != 1) {
+        if (item && mItemIsSoldOut[i] != true) {
             item->show();
             item->current.pos = item->home.pos;
             item->getRotateP()->y = item->home.angle.y;
@@ -1296,7 +1296,7 @@ BOOL dShop_now_triggercheck(msg_class* msg, STControl* stickControl, ShopItems_c
                 *pMsgID = defaultMsgCb(defaultMsgArg);
             }
         } else {
-            if (shopItems->m28[nextIdx] == 1) {
+            if (shopItems->isSoldOutItem(nextIdx)) {
                 *pMsgID = itemSetList[nextIdx]->m0C;
             } else {
                 *pMsgID = itemSetList[nextIdx]->mShowMsgID;
@@ -1344,7 +1344,7 @@ u8 dShop_BoughtErrorStatus(ShopItems_c* shopItems, int param_2, int param_3) {
     
     if (buyCond & Shop_BuyCond_MUST_OWN_ITEM_e) {
         if (itemData->mMustOwnItemNo == dItem_BOW_e) {
-            if (dComIfGs_getItem(0xC) == 0xFF) {
+            if (dComIfGs_getItem(0xC) == dItem_NONE_e) {
                 errorStatus |= Shop_BuyCond_MUST_OWN_ITEM_e;
             }
         } else {

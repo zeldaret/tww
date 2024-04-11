@@ -945,12 +945,12 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
         }
         break;
     case dItem_BOW_e:
-        if (dComIfGs_getItem(12)) {
+        if (dComIfGs_getItem(12) != dItem_HEART_e) { // Bug?
             get_item = dComIfGs_getArrowNum();
         }
         break;
     case BOMB_BAG:
-        if (dComIfGs_getItem(13)) {
+        if (dComIfGs_getItem(13) != dItem_HEART_e) { // Bug?
             get_item = dComIfGs_getBombNum();
         }
         break;

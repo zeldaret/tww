@@ -109,14 +109,14 @@ public:
         mbIsHide = 0;
         mNumItems = 0;
         mItemSetListGlobalIdx = 0;
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < ARRAY_SIZE(mItemActorProcessIds); i++) {
             mItemActorProcessIds[i] = fpcM_ERROR_PROCESS_ID_e;
-            m28[i] = 0;
+            mItemIsSoldOut[i] = false;
         }
     }
     ~ShopItems_c() {}
     
-    BOOL isSoldOutItem(s16 i) { return m28[i] == 1; }
+    BOOL isSoldOutItem(s16 i) { return mItemIsSoldOut[i] == true; }
     BOOL isHide() { return mbIsHide; }
     s16 getItemDataIdx() { return mItemSetListGlobalIdx; }
     void setItemDataIdx(s16 idx) { mItemSetListGlobalIdx = idx; }
@@ -144,11 +144,9 @@ public:
 public:
     /* 0x00 */ s16 mSelectedItemIdx;
     /* 0x02 */ u8 m02[0x04 - 0x02];
-    /* 0x04 */ u32 mItemActorProcessIds[4];
-    /* 0x14 */ u8 m14[0x24 - 0x14];
+    /* 0x04 */ u32 mItemActorProcessIds[8];
     /* 0x24 */ __shop_items_set_data** mpItemSetList;
-    /* 0x28 */ u8 m28[4];
-    /* 0x2C */ u8 m2C[0x30 - 0x2C];
+    /* 0x28 */ bool mItemIsSoldOut[8];
     /* 0x30 */ cXyz m30;
     /* 0x3C */ s16 m3C;
     /* 0x3E */ s16 mbIsHide;
