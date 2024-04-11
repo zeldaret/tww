@@ -1295,35 +1295,35 @@ static u32 daNpc_Bs1_getDefaultMsgCB(void* i_this) {
 
 /* 00002624-00002714       .text getDefaultMsg__11daNpc_Bs1_cFv */
 u32 daNpc_Bs1_c::getDefaultMsg() {
-    int msg;
+    u32 msgNo;
 
     if(mType == 0) {
         u8 points = dComIfGs_getEventReg(0x86FF);
         if(mShopItems.isSoldOutItemAll()) {
-            msg = 0xF5E;
+            msgNo = 0xF5E;
         }
         else if(points >= 60) {
-            msg = 0xF60;
+            msgNo = 0xF60;
         }
         else if(points != 0) {
-            msg = 0xF5F;
+            msgNo = 0xF5F;
         }
         else {
-            msg = 0xF3F;
+            msgNo = 0xF3F;
         }
     }
     else if(!dComIfGs_isEventBit(0x1F08)) {
-        msg = 0x2F48;
+        msgNo = 0x2F48;
     }
     else if(!dComIfGs_isEventBit(0x2108)) {
         dComIfGs_onEventBit(0x2108);
-        msg = 0x2F54;
+        msgNo = 0x2F54;
     }
     else {
-        msg = 0x2F55;
+        msgNo = 0x2F55;
     }
 
-    return msg;
+    return msgNo;
 }
 
 /* 00002714-000027B8       .text shopStickMoveMsgCheck__11daNpc_Bs1_cFUl */
