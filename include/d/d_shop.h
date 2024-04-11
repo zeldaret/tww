@@ -22,7 +22,7 @@ enum ShopItems_c__BuyConditions {
 };
 
 struct ShopItems_c__ItemData {
-    /* 0x00 */ int mItemNo;
+    /* 0x00 */ u32 mItemNo;
     /* 0x04 */ int mMustNotOwnItemNo;
     /* 0x08 */ int mMustOwnItemNo;
     /* 0x0C */ u8 mBuyConditions;
@@ -267,5 +267,6 @@ extern __shop_items_set_data* Item_set_data_bshop_4[];
 extern __shop_items_set_data* Item_set_data_bshop_5[];
 extern __shop_items_set_data* Item_set_data_bshop_6[];
 extern __shop_items_set_data** Item_set_data_tbl[];
+extern Vec* Item_set_pos_data_tbl[];
 
 #endif /* D_SHOP_H */

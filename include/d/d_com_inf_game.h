@@ -277,10 +277,15 @@ public:
         mpPlayer[idx] = (daPy_py_c*)player;
         mCurCamera[idx] = cam;
     }
+    
+    int getMessageRupee() { return mMessageRupee; }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
+
+    void setMessageSetNumber(s16 num) { mMsgSetNumber = num; }
+    s16 getMessageSetNumber() { return mMsgSetNumber; }
 
     s16 getMiniGameRupee() { return mMiniGameRupee; }
     void setMiniGameRupee(s16 count) { mMiniGameRupee = count; }
@@ -349,6 +354,7 @@ public:
     void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
 
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
+    s16 getItemBeastNumCount(int i_idx) { return mItemBeastNumCounts[i_idx]; }
 
     void setItemTimeCount(s32 time) { mAirMeter = time; }
     void setItemTimeMax(s32 time) { field_0x4928 = time; }
@@ -579,8 +585,8 @@ public:
     /* 0x48E8 */ s16 mItemBeastNumCounts[8];
     /* 0x48F8 */ u8 field_0x48F8[0x4918 - 0x48F8];
     /* 0x4918 */ u16 mMsgCountNumber;
-    /* 0x491A */ s16 field_0x491a;
-    /* 0x491C */ s16 field_0x491c;
+    /* 0x491A */ s16 mMsgSetNumber;
+    /* 0x491C */ s16 mMessageRupee;
     /* 0x491E */ s16 field_0x491e;
     /* 0x4920 */ s16 field_0x4920;
     /* 0x4922 */ s16 field_0x4922;
@@ -742,6 +748,10 @@ inline void dComIfGs_setWalletSize(u8 size) {
 
 inline int dComIfGs_getRupee() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupee();
+}
+
+inline int dComIfGp_getMessageRupee() {
+    return g_dComIfG_gameInfo.play.getMessageRupee();
 }
 
 inline void dComIfGs_setRupee(u16 rupee) {
@@ -2126,6 +2136,14 @@ inline void dComIfGp_setItemRupeeCount(s32 count) {
     g_dComIfG_gameInfo.play.setItemRupeeCount(count);
 }
 
+inline s16 dComIfGp_getMessageSetNumber() {
+    return g_dComIfG_gameInfo.play.getMessageSetNumber();
+}
+
+inline void dComIfGp_setMessageSetNumber(s16 num) {
+    g_dComIfG_gameInfo.play.setMessageSetNumber(num);
+}
+
 inline f32 dComIfGp_getItemLifeCount() {
     return g_dComIfG_gameInfo.play.getItemLifeCount();
 }
@@ -2192,6 +2210,10 @@ inline void dComIfGp_setItemArrowNumCount(s16 num) {
 
 inline void dComIfGp_setItemBeastNumCount(int i_idx, s16 num) {
     g_dComIfG_gameInfo.play.setItemBeastNumCount(i_idx, num);
+}
+
+inline s16 dComIfGp_getItemBeastNumCount(int i_idx) {
+    return g_dComIfG_gameInfo.play.getItemBeastNumCount(i_idx);
 }
 
 inline u8 dComIfGp_checkMesgSendButton() {

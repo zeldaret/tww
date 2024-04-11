@@ -91,8 +91,8 @@ void dComIfG_play_c::itemInit() {
     }
 
     mMsgCountNumber = 0;
-    field_0x491a = 0;
-    field_0x491c = 0;
+    mMsgSetNumber = 0;
+    mMessageRupee = 0;
     field_0x491e = 0;
     field_0x4920 = 0;
     field_0x4922 = 0;

@@ -56,15 +56,15 @@ public:
     void eventOrder();
     void checkOrder();
     u16 next_msgStatus(u32*);
-    void getMsg();
+    u32 getMsg();
     void setCollision();
     void talkInit();
     BOOL shopMsgCheck(u32);
-    void getDefaultMsg();
-    void shopStickMoveMsgCheck(u32);
+    u32 getDefaultMsg();
+    BOOL shopStickMoveMsgCheck(u32);
     BOOL checkBeastItemSellMsg(u32);
-    void normal_talk();
-    void shop_talk();
+    u16 normal_talk();
+    u16 shop_talk();
     u16 talk();
     void createShopList();
     BOOL isSellBomb();
@@ -91,6 +91,10 @@ public:
     BOOL _delete();
     s32 _create();
     BOOL CreateHeap();
+    
+    static u8 m_tag_buy_item_max;
+    static u8 m_tag_buy_item;
+    static s16 m_tag_pay_rupee;
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhase;
@@ -113,11 +117,12 @@ public:
     /* 0x640 */ dNpc_EventCut_c mEventCut;
     /* 0x6AC */ dNpc_JntCtrl_c mJntCtrl;
     /* 0x6E0 */ STControl mStickControl;
-    /* 0x708 */ u8 m708[0x718 - 0x708];
+    /* 0x708 */ s8 m708;
+    /* 0x709 */ u8 m70C[0x718 - 0x709];
     /* 0x718 */ cXyz m718;
     /* 0x724 */ s16 m724;
-    /* 0x726 */ u16 m726;
-    /* 0x728 */ u8 m728[0x72E - 0x728];
+    /* 0x726 */ csXyz m726;
+    /* 0x72C */ u16 m72C;
     /* 0x72E */ u8 m72E;
     /* 0x72F */ u8 m72F;
     /* 0x730 */ u8 m730;
@@ -126,7 +131,7 @@ public:
     /* 0x733 */ u8 m733;
     /* 0x734 */ f32 m734;
     /* 0x738 */ u32 m738;
-    /* 0x73C */ u8 m73C[0x740 - 0x73C];
+    /* 0x73C */ u32 m73C;
     /* 0x740 */ u32 m740;
     /* 0x744 */ u32 m744;
     /* 0x748 */ cXyz mItemPosOffsets[3];
@@ -145,12 +150,16 @@ public:
     /* 0x830 */ s8 m830;
     /* 0x831 */ u8 m831;
     /* 0x832 */ s8 mType;
-    /* 0x833 */ u8 mShopIndex;
+    /* 0x833 */ s8 mShopIndex;
     /* 0x834 */ s8 mActionStatus;
-    /* 0x835 */ u8 m835;
-    /* 0x836 */ u8 m836[0x83A - 0x836];
+    /* 0x835 */ s8 m835;
+    /* 0x836 */ s8 m836;
+    /* 0x837 */ s8 m837;
+    /* 0x838 */ s8 m838;
+    /* 0x839 */ u8 m839;
     /* 0x83A */ s16 m83A;
-    /* 0x83C */ u8 m83C[0x844 - 0x83C];
+    /* 0x83C */ u32 m83C;
+    /* 0x840 */ u32 m840;
 };  // Size: 0x844
 
 class daNpc_Bs1_childHIO_c {
