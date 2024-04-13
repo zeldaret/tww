@@ -6,6 +6,7 @@
 class J3DModelData;
 class mDoDvdThd_mountXArchive_c;
 class JKRArchive;
+class JKRExpHeap;
 
 class daLodbg_c : public fopAc_ac_c {
 public:
@@ -20,6 +21,9 @@ public:
     void execCreateWait();
     void execReadWait();
     void execDeleteWait();
+    
+    static s32 sObjectCount;
+    static JKRExpHeap* sLocalHeap;
 
 public:
     /* 0x290 */ int (daLodbg_c::*mExecFunc)();

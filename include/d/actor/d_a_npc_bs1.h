@@ -22,13 +22,14 @@ public:
     s8 getBackboneJntNum() { return m_backbone_jnt_num; }
     s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
     s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
-    void getBuyItem() {}
-    void getBuyItemMax() {}
     int getHeadJntNum() { return m_head_jnt_num; }
     s16 getHead_x() { return mJntCtrl.getHead_x(); }
     s16 getHead_y() { return mJntCtrl.getHead_y(); }
-    void getPayRupee() {}
-    void incAttnSetCount() {}
+    void incAttnSetCount() {
+        if (m72F != 0xFF) {
+            m72F += 1;
+        }
+    }
     void setAction(ActionFunc func, void* arg) {
         if (mCurrActionFunc != func) {
             if (mCurrActionFunc) {
@@ -41,10 +42,14 @@ public:
         }
     }
     void setAttentionBasePos(cXyz value) { m718 = value;}
-    void setBuyItem(u8) {}
-    void setBuyItemMax(u8) {}
     void setEyePos(cXyz other) { eyePos = other; }
-    void setPayRupee(s16) {}
+    
+    static u8 getBuyItemMax() { return m_tag_buy_item_max; }
+    static void setBuyItemMax(u8 count) { m_tag_buy_item_max = count; }
+    static u8 getBuyItem() { return m_tag_buy_item; }
+    static void setBuyItem(u8 count) { m_tag_buy_item = count; }
+    static s16 getPayRupee() { return m_tag_pay_rupee; }
+    static void setPayRupee(s16 count) { m_tag_pay_rupee = count; }
 
     s16 XyEventCB(int);
     BOOL initTexPatternAnm(bool);

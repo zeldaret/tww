@@ -12,7 +12,7 @@ class J3DNode;
 
 class daStandItem_c : public fopAc_ac_c {
 public:
-    void getItemNo() const {}
+    int getItemNo() const { return mItemNo; }
 
     bool _delete();
     void CreateHeap();

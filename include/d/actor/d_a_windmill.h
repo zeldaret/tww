@@ -20,6 +20,8 @@ public:
     void set_at();
     void set_co();
     BOOL _draw();
+    
+    static const s16 m_max_rot_speed[];
 
 public:
     /* Place member variables here */

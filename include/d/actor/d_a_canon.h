@@ -36,6 +36,8 @@ public:
     void PadMove();
     void CreateHeap();
     void GameInfo2DDraw();
+    
+    static daCanon_c* canon_p;
 
 public:
     /* Place member variables here */

@@ -4,7 +4,7 @@
 #include "f_op/f_op_actor.h"
 
 namespace daObjPirateship {
-    static f32 getShipOffsetY(s16*, s16*, f32);
+    f32 getShipOffsetY(s16*, s16*, f32);
     
     class Act_c : public fopAc_ac_c {
     public:

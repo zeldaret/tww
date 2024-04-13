@@ -54,6 +54,16 @@ namespace daTagLight {
         BOOL _execute();
         void set_material(J3DMaterial*, unsigned char);
         BOOL _draw();
+        
+        static const f32 M_box_x_min;
+        static const f32 M_box_x_max;
+        static const f32 M_box_y_min;
+        static const f32 M_box_y_max;
+        static const f32 M_box_z_min;
+        static const f32 M_box_z_max;
+        static const f32 M_cone_lower;
+        static const f32 M_cone_upper;
+        static const f32 M_cone_r;
     
     public:
         /* Place member variables here */

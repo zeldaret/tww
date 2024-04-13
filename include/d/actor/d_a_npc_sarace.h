@@ -14,13 +14,13 @@ public:
 
     void initTexPatternAnm(bool);
     void playTexPatternAnm();
-    void setAnm(signed char, float);
-    void chkAttention(cXyz, short);
+    void setAnm(s8, f32);
+    void chkAttention(cXyz, s16);
     void eventOrder();
     void checkOrder();
-    void next_msgStatus(unsigned long*);
+    void next_msgStatus(u32*);
     void getMsg();
-    void anmAtr(unsigned short);
+    void anmAtr(u16);
     void CreateInit();
     void setAttention();
     void lookBack();
@@ -35,6 +35,9 @@ public:
     BOOL _delete();
     s32 _create();
     void CreateHeap();
+    
+    static s32 ship_race_rupee;
+    static s32 ship_race_result;
 
 public:
     /* Place member variables here */

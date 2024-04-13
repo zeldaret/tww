@@ -27,6 +27,7 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_boko.h"
+#include "d/actor/d_a_npc_sarace.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "m_Do/m_Do_graphic.h"
 
@@ -2966,7 +2967,6 @@ void daPy_lk_c::checkFallCode() {
 
 /* 80120724-80120BBC       .text startRestartRoom__9daPy_lk_cFUlifi */
 BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int i_point) {
-    /* Nonmatching - npc_sarace */
     if (!checkNoResetFlg0(daPyFlg0_UNK4000) && (i_point != 0 || dComIfGp_event_compulsory(this))) {
         mDemo.setOriginalDemoType();
         if (i_point == 0) {
@@ -2978,7 +2978,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
         if (dComIfGp_getMiniGameType() == 1) {
             dComIfGp_setNextStage("sea", 1, 48);
             mDoAud_seStart(JA_SE_FORCE_BACK);
-            // daNpc_Sarace_c::ship_race_result = 3;
+            daNpc_Sarace_c::ship_race_result = 3;
             mTinkleShieldTimer = 0;
             return TRUE;
         } else {

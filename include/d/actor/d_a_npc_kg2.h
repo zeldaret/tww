@@ -7,21 +7,21 @@ class daNpc_Kg2_c : public fopAc_ac_c {
 public:
     void getAttentionBasePos() {}
     void getEyePos() {}
-    void seStart(unsigned long) {}
+    void seStart(u32) {}
     void setAction(int (daNpc_Kg2_c::*)(void*), void*) {}
-    void setCanonGameResult(unsigned char) {}
+    void setCanonGameResult(u8) {}
 
     void set_mtx();
     void initTexPatternAnm(bool);
     void playTexPatternAnm();
-    void setAnm(signed char, float);
+    void setAnm(s8, f32);
     void subAnm();
-    void chkAttention(cXyz, short);
+    void chkAttention(cXyz, s16);
     void eventOrder();
     void checkOrder();
     void getMsg();
-    void next_msgStatus(unsigned long*);
-    void anmAtr(unsigned short);
+    void next_msgStatus(u32*);
+    void anmAtr(u16);
     void setAttention();
     void lookBack();
     void CreateHeap();
@@ -48,6 +48,7 @@ public:
     }
 
     static s8 canon_game_result;
+    static daNpc_Kg2_c* l_kg2_pointer;
 
 public:
     /* Place member variables here */

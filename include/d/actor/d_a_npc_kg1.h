@@ -29,9 +29,11 @@ public:
     void wait_action();
     void clr_seq_flag();
     void getMsg();
-    void next_msgStatus(unsigned long*);
-    void anmAtr(unsigned short);
+    void next_msgStatus(u32*);
+    void anmAtr(u16);
     void setAnm();
+
+    static const u8 m_highscore;
 
 public:
     /* 0x6C4 */ J3DModel* m6C4;

@@ -3,6 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 
+class dPath;
 class JPABaseEmitter;
 class JPABaseParticle;
 
@@ -21,11 +22,13 @@ public:
         }
     };
     
-    static JPABaseEmitter* m_emitter;
     static u8 m_flag;
     static u8 m_alpha_flag;
     static u8 m_alpha;
-    
+    static f32 m_aim_rate;
+    static dPath* m_path;
+    static JPABaseEmitter* m_emitter;
+
     inline s32 _create();
     inline BOOL _delete();
     inline BOOL _draw();

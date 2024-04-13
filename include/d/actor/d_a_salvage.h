@@ -4,13 +4,13 @@
 #include "f_op/f_op_actor.h"
 #include "d/actor/d_a_oship.h"
 
-class daSalvage_control_c;
+class dSalvage_control_c;
 
 class daSalvage_c : public fopAc_ac_c {
 public:
     void checkRegist(int) {}
     void checkUsed(int) {}
-    void clrFlag(int, unsigned char) {}
+    void clrFlag(int, u8) {}
     void debug_print() {}
     void debug_print_reg() {}
     void getAlphaP(int) {}
@@ -33,10 +33,10 @@ public:
     void init_one(int) {}
     void isValidSalvageId() {}
     void setDrawMode(int, int) {}
-    void setFlag(int, unsigned char) {}
-    void setNowAlpha(int, unsigned char) {}
+    void setFlag(int, u8) {}
+    void setNowAlpha(int, u8) {}
     void setPos(int, cXyz) {}
-    void setSRoomNo(signed char) {}
+    void setSRoomNo(s8) {}
     void setSalvageId(int) {}
 
     void CreateHeap();
@@ -57,7 +57,7 @@ public:
     void end_salvage();
     void checkDistance();
     void checkXZDistance();
-    void getDistance(int, float*);
+    void getDistance(int, f32*);
     void send_agb();
     void debug_print2();
     BOOL _draw();
@@ -65,7 +65,7 @@ public:
     void isEffectKind(int);
     void debugDraw();
 
-    static void init_room(signed char);
+    static void init_room(s8);
 
     static void init() {
         mNowRoomNo = -1;
@@ -73,10 +73,10 @@ public:
         mSalvageId = -1;
     }
 
-    static s8 mNowRoomNo;
-    static daSalvage_control_c* mTagData_p;
-    static s32 mSalvageId;
     static const u16 m_savelabel[];
+    static dSalvage_control_c* mTagData_p;
+    static s8 mNowRoomNo;
+    static s32 mSalvageId;
 
 public:
     /* Place member variables here */

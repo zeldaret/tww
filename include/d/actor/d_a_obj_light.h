@@ -16,8 +16,8 @@ namespace daObjLight {
         void draw_fire();
         void exe_fire();
         void delete_fire();
-        void now_event(short);
-        void set_event(short);
+        void now_event(s16);
+        void set_event(s16);
         void exe_event();
         void set_mtx();
         void renew_angle();
@@ -26,11 +26,16 @@ namespace daObjLight {
         BOOL _execute();
         BOOL _draw();
         
-        static void renew_light_angle();
-        static void get_light_angle();
-        static void get_light_dif_angle();
-        static void set_light_dif_angle_LOD(short);
-        static void set_light_dif_angle_FRRS(short);
+        static BOOL renew_light_angle();
+        static s16 get_light_angle();
+        static s16 get_light_dif_angle();
+        static BOOL set_light_dif_angle_LOD(s16);
+        static BOOL set_light_dif_angle_FRRS(s16);
+
+        static s16 M_S_light_angle;
+        static u32 M_S_pre_set_frame_LOD;
+        static u32 M_S_pre_set_frame_FRRS;
+        static u8 M_S_lod_access;
 
 public:
         /* Place member variables here */

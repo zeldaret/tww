@@ -14,7 +14,7 @@ public:
     void CreateHeap();
     void CreateInit();
     
-    static void getCreateCount();
+    static int getCreateCount();
 
 public:
     /* Place member variables here */

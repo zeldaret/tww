@@ -120,7 +120,7 @@ public:
     BOOL isHide() { return mbIsHide; }
     s16 getItemDataIdx() { return mItemSetListGlobalIdx; }
     void setItemDataIdx(s16 idx) { mItemSetListGlobalIdx = idx; }
-    void setItemSum(s16) {}
+    void setItemSum(s16 count) { mNumItems = count; }
     void init() {}
     
     void createItem(int, int);

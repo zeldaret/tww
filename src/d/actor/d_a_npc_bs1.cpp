@@ -241,9 +241,7 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int value) {
                 offset.z = 0.0f;
                 MtxPosition(&offset, &pos);
                 i_this->setEyePos(pos);
-                if (i_this->m72F != (u8)-1) {
-                    i_this->m72F += 1;
-                }
+                i_this->incAttnSetCount();
             } else if (jntNo == i_this->getBackboneJntNum()) {
                 mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
                 mDoMtx_ZrotM(*calc_mtx, -i_this->getBackbone_x());
@@ -505,7 +503,7 @@ static void daNpc_Bs1_setPayRupee(int unknownParam1, int unknownParam2) {
     int r5 = maxRupees - rupee;
     int paymentTotal = cLib_maxLimit(unknownParam1 * unknownParam2, r5);
 
-    daNpc_Bs1_c::m_tag_pay_rupee = paymentTotal;
+    daNpc_Bs1_c::setPayRupee(paymentTotal);
 }
 
 /* 000010EC-00001F7C       .text next_msgStatus__11daNpc_Bs1_cFPUl */
@@ -549,8 +547,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
         case 0xF9E:
             m83C = dComIfGp_getMessageRupee();
             int buyMax = daNpc_Bs1_getBuyItemMax(m83C, m840);
-            m_tag_buy_item_max = buyMax;
-            m_tag_buy_item = buyMax;
+            setBuyItemMax(buyMax);
+            setBuyItem(buyMax);
             if(buyMax != 0) {
                 *pMsgNo += 1;
                 break;
@@ -561,8 +559,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
         case 0xFD4:
             m83C = dComIfGp_getMessageRupee();
             buyMax = daNpc_Bs1_getBuyItemMax(m83C, m840);
-            m_tag_buy_item_max = buyMax;
-            m_tag_buy_item = buyMax;
+            setBuyItemMax(buyMax);
+            setBuyItem(buyMax);
             if(buyMax != 0) {
                 *pMsgNo = 0xF9F;
                 break;
@@ -599,7 +597,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
         case 0xF97:
         case 0xF9C:
         case 0xFD2:
-            daNpc_Bs1_setPayRupee(m83C, m_tag_buy_item);
+            daNpc_Bs1_setPayRupee(m83C, getBuyItem());
             *pMsgNo += 1;
 
             break;
@@ -644,15 +642,15 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                         idx = 3;
                         break;
                 }
-                dComIfGp_setItemRupeeCount(m_tag_pay_rupee);
-                dComIfGp_setItemBeastNumCount(idx, -m_tag_buy_item);
+                dComIfGp_setItemRupeeCount(getPayRupee());
+                dComIfGp_setItemBeastNumCount(idx, -getBuyItem());
                 
                 if(*pMsgNo == 0xFD3) {
                     u8 r3 = dComIfGs_getEventReg(0x7F0F);
-                    r3 += m_tag_buy_item;
+                    r3 += getBuyItem();
                     u8 temp = cLib_maxLimit<u8>(r3, 0xF);
-
                     dComIfGs_setEventReg(0x7F0F, temp);
+
                     if(temp < 0xA) {
                         *pMsgNo = 0xFD5;
                         break;
@@ -912,7 +910,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 execItemGet(itemNo);
 
                 if(mType == 0) {
-                    if(dComIfGs_getEventReg(0x86FF)) {
+                    if(dComIfGs_getEventReg(0x86FF) != 0) {
                         *pMsgNo = 0xF4C;
                         break;
                     }
@@ -1004,7 +1002,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
         case 0xF4C:
         case 0xF4E:
             int points = dComIfGs_getEventReg(0x86FF);
-            points = points + 1 > 0xFF ? 0xFF : points + 1;
+            points += 1;
+            points = cLib_maxLimit<int>(points, 0xFF);
             dComIfGs_setEventReg(0x86FF, points);
 
             if(points > 60) {
@@ -1033,6 +1032,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             break;
         default:
             msgStatus = fopMsgStts_MSG_ENDS_e;
+            break;
     }
 
     return msgStatus;
@@ -1235,6 +1235,7 @@ u32 daNpc_Bs1_c::getMsg() {
                     }
 
                     msgNo = 0x2F5E;
+                    break;
             }
     
             if(dComIfGs_isEventBit(0x1F10)) {
@@ -1582,7 +1583,7 @@ void daNpc_Bs1_c::createShopList() {
         }
     }
 
-    mShopItems.mNumItems = 3;
+    mShopItems.setItemSum(3);
     mShopItems.setItemSetDataList(mpItemSetList);
     for(int i = 0; i < 3; i++) {
         mShopItems.mSelectedItemIdx = i;
