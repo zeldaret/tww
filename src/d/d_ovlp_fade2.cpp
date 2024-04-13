@@ -65,7 +65,7 @@ s32 dOvlpFd2_Delete(dOvlpFd2_c*) {
 /* 8022423C-80224268       .text dOvlpFd2_Create__FPv */
 s32 dOvlpFd2_Create(void* i_this) {
     new (i_this) dOvlpFd2_c();
-    return 4;
+    return cPhs_COMPLEATE_e;
 }
 
 overlap_method_class l_dOvlpFd2_Method = {

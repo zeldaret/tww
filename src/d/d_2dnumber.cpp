@@ -60,7 +60,6 @@ void dDlst_2DNumber_c::draw() {
 
 /* 800C874C-800C8944       .text init__18dDlst_2DMinigame_cFP7ResTIMGP7ResTIMG */
 bool dDlst_2DMinigame_c::init(ResTIMG* img1, ResTIMG* img2) {
-    /* Nonmatching */
     mPicture[0] = new J2DPicture(img1);
     if (mPicture[0] == NULL)
         return false;
@@ -75,8 +74,8 @@ bool dDlst_2DMinigame_c::init(ResTIMG* img1, ResTIMG* img2) {
 
     mSize1.x = img1->width * 1.33f;
     mSize1.y = img1->height * 1.33f;
-    mSize2.x = img1->width * 1.16f;
-    mSize2.y = img1->height * 1.16f;
+    mSize2.x = img2->width * 1.16f;
+    mSize2.y = img2->height * 1.16f;
 
     mPicture[2]->setCornerColor(0x000000FF);
     return true;

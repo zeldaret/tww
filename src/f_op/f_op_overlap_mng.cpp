@@ -79,16 +79,18 @@ request_base_class* fopOvlpM_Request(s16 procName, u16 peekTime) {
         return l_fopOvlpM_overlap[0];
     }
 
-    return 0;
+    return NULL;
 }
 
 void fopOvlpM_Management() {
     if (l_fopOvlpM_overlap[0] != NULL) {
-        int tmp = fopOvlpReq_Handler(l_fopOvlpM_overlap[0]);
-        if (6 <= tmp || 3 > tmp) {
-            return;
+        switch (fopOvlpReq_Handler(l_fopOvlpM_overlap[0])) {
+        case cPhs_UNK3_e:
+        case cPhs_COMPLEATE_e:
+        case cPhs_ERROR_e:
+            l_fopOvlpM_overlap[0] = NULL;
+            break;
         }
-        l_fopOvlpM_overlap[0] = NULL;
     }
 }
 
