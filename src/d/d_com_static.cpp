@@ -359,9 +359,11 @@ void daTagKbItem_c::kb_dig(fopAc_ac_c* i_actor) {
 
 /* 80056AFC-80056CC0       .text dig_main__13daTagKbItem_cFv */
 void daTagKbItem_c::dig_main() {
+#if VERSION != VERSION_JPN
     if (fopAcM_isSwitch(this, field_0x2a4)) {
         return;
     }
+#endif
     if (field_0x299 == 0) {
         return;
     }
@@ -379,7 +381,11 @@ void daTagKbItem_c::dig_main() {
         // Not a pig.
         return;
     }
+#if VERSION == VERSION_JPN
+    if (field_0x2a0 != 0xFF && field_0x298 == 0) {
+#else
     if (field_0x2a0 != 0xFF) {
+#endif
         angle.y = cM_rndF((f32)0x7FFE);
         s8 roomNo = current.roomNo;
         daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(
@@ -389,11 +395,15 @@ void daTagKbItem_c::dig_main() {
         if (item) {
             fopAcM_OnStatus(item, fopAcStts_UNK4000_e);
         }
+#if VERSION == VERSION_JPN
+        fopAcM_delete(this);
+#else
         if (field_0x2a4 != 0xFF) {
             fopAcM_onSwitch(this, field_0x2a4);
         } else {
             fopAcM_delete(this);
         }
+#endif
         r30 = true;
     }
     
