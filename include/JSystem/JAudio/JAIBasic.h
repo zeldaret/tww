@@ -87,9 +87,10 @@ public:
         return JAInter::BankWave::checkAllWaveLoadStatus();
     }
 
+    bool checkEnablePrepare(u32 flags) { return !(flags & 0xc0000000) && !(flags & 0x00000c00); }
+
     // TODO
     void addInitOnCodeSeScene(u32, u32) {}
-    void checkEnablePrepare(u32) {}
     void getAudioCamera() {}
     void getInitDataInfo() {}
     void getInitOnCodeSeScene() {}

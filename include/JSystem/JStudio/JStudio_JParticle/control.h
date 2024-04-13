@@ -35,11 +35,11 @@ struct TAdaptor_particle : public JStudio::TAdaptor_particle {
     };
 
     struct TVVOOn_BEGIN_FADE_IN_ : public JStudio::TVariableValue::TOutput {
-        void operator()(float, JStudio::TAdaptor*) const;
+        virtual void operator()(float, JStudio::TAdaptor*) const;
     };
 
     struct TVVOOn_END_FADE_OUT_ : public JStudio::TVariableValue::TOutput {
-        void operator()(float, JStudio::TAdaptor*) const;
+        virtual void operator()(float, JStudio::TAdaptor*) const;
     };
 
     static TVVOOn_BEGIN_FADE_IN_ soVVOOn_BEGIN_FADE_IN_;

@@ -92,10 +92,10 @@ public:
     void getWait() {}
     void incPlayGameFrameCounter() {}
     void setCustomParameterPointer(void*) {}
-    void setDemoFxmix(f32, u32) {}
-    void setDemoPan(f32, u32) {}
-    void setDemoPitch(f32, u32) {}
-    void setDemoVolume(f32, u32) {}
+    void setDemoFxmix(f32 f1, u32 r4) { setFxmix(f1, r4, 3); }
+    void setDemoPan(f32 f1, u32 r4) { setPan(f1, r4, 3); }
+    void setDemoPitch(f32 f1, u32 r4) { setPitch(f1, r4, 3); }
+    void setDemoVolume(f32 f1, u32 r4) { setVolume(f1, r4, 3); }
     void setFadetime(u32) {}
     void setID(u32) {}
     void setMainSoundPPointer(JAISound**) {}

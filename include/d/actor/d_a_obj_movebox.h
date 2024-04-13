@@ -186,7 +186,7 @@ namespace daObjMovebox {
         void off_switch2() const { fopAcM_offSwitch(const_cast<Act_c*>(this), prmZ_get_swSave2()); };
         
         inline void mode_proc_call();
-        bool chk_walk(cXyz*) { /* TODO */ }
+        void chk_walk(cXyz*) { /* TODO */ }
         void set_rollCrash() { mbRollCrash = TRUE; }
         
         void prmZ_init();

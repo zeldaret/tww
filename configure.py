@@ -629,7 +629,7 @@ config.libs = [
         "JStudio_JAudio",
         [
             Object(Matching,    "JSystem/JStudio/JStudio_JAudio/control.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio_JAudio/object-sound.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JAudio/object-sound.cpp"),
         ],
     ),
     JSystemLib(

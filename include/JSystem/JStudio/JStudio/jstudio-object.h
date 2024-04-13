@@ -23,7 +23,7 @@ struct TAdaptor;
 struct TVariableValue {
     struct TOutput {
         virtual void operator()(f32, JStudio::TAdaptor*) const = 0;
-        ~TOutput();
+        virtual ~TOutput() = 0;
     };  // Size: 0x04
 
     struct TOutput_none_ {
@@ -163,13 +163,9 @@ struct TAdaptor {
     virtual void adaptor_do_update(const JStudio::TObject*, u32);
     virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32);
 
-    void adaptor_setVariableValue(JStudio::TObject*, u32,
-                                                 JStudio::data::TEOperationData, void const*, u32);
-    void adaptor_setVariableValue_n(JStudio::TObject*, u32 const*, u32,
-                                                   JStudio::data::TEOperationData, void const*,
-                                                   u32);
-    void
-    adaptor_setVariableValue_immediate(JStudio::TAdaptor::TSetVariableValue_immediate const*);
+    void adaptor_setVariableValue(JStudio::TObject*, u32, JStudio::data::TEOperationData, void const*, u32);
+    void adaptor_setVariableValue_n(JStudio::TObject*, u32 const*, u32, JStudio::data::TEOperationData, void const*, u32);
+    void adaptor_setVariableValue_immediate(JStudio::TAdaptor::TSetVariableValue_immediate const*);
     void adaptor_setVariableValue_Vec(u32 const*, Vec const&);
     void adaptor_getVariableValue_Vec(Vec*, u32 const*) const;
     void adaptor_setVariableValue_GXColor(u32 const*, GXColor const&);
@@ -364,16 +360,27 @@ struct TObject_particle : public TObject {
 };
 
 struct TAdaptor_sound : public TAdaptor {
+    enum TEVariableValue {
+        UNK_MINUS1_e = -1,
+        UNK_6_e = 6,
+        UNK_7_e = 7,
+        UNK_8_e = 8,
+        UNK_9_e = 9,
+        UNK_A_e = 0xA,
+    };
+
     TAdaptor_sound()
         : TAdaptor(mValue, ARRAY_SIZE(mValue))
         , mValue()
     {
     }
     virtual ~TAdaptor_sound() = 0;
+    virtual void adaptor_do_SOUND(JStudio::data::TEOperationData, const void*, u32) = 0;
+    virtual void adaptor_do_LOCATED(JStudio::data::TEOperationData, const void*, u32) = 0;
 
     /* 0x10 */ TVariableValue mValue[11];
 
-    static u8 const sauVariableValue_3_POSITION_XYZ[12];
+    static const u32 sauVariableValue_3_POSITION_XYZ[3];
 };  // Size: 0x114
 
 struct TObject_sound : public TObject {

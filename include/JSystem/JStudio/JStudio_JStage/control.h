@@ -46,25 +46,17 @@ struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::T
     virtual void adaptor_do_update(const JStudio::TObject*, u32);
     virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32);
     virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32);
-    virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*,
-                                                u32);
-    virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*,
-                                                    u32);
-    virtual void adaptor_do_PARENT_FUNCTION(JStudio::data::TEOperationData, void const*,
-                                                    u32);
+    virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_PARENT_FUNCTION(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_RELATION(JStudio::data::TEOperationData, void const*, u32);
-    virtual void adaptor_do_RELATION_NODE(JStudio::data::TEOperationData, void const*,
-                                                    u32);
-    virtual void adaptor_do_RELATION_ENABLE(JStudio::data::TEOperationData, void const*,
-                                                    u32);
+    virtual void adaptor_do_RELATION_NODE(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_RELATION_ENABLE(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_SHAPE(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_ANIMATION(JStudio::data::TEOperationData, void const*, u32);
-    virtual void adaptor_do_ANIMATION_MODE(JStudio::data::TEOperationData, void const*,
-                                                    u32);
-    virtual void adaptor_do_TEXTURE_ANIMATION(JStudio::data::TEOperationData,
-                                                        void const*, u32);
-    virtual void adaptor_do_TEXTURE_ANIMATION_MODE(JStudio::data::TEOperationData,
-                                                            void const*, u32);
+    virtual void adaptor_do_ANIMATION_MODE(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_TEXTURE_ANIMATION(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_TEXTURE_ANIMATION_MODE(JStudio::data::TEOperationData, void const*, u32);
     
     void setJSG_ID_(void (JStage::TActor::*)(u32),
                                     JStudio::data::TEOperationData, void const*, u32);
@@ -101,13 +93,6 @@ struct TAdaptor_camera : public JStudio::TAdaptor_camera {
     virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32);
-    virtual void adaptor_do_PARENT_FUNCTION(JStudio::data::TEOperationData, void const*,
-                                                   u32);
-    virtual void adaptor_do_TARGET_PARENT(JStudio::data::TEOperationData, void const*, u32);
-    virtual void adaptor_do_TARGET_PARENT_NODE(JStudio::data::TEOperationData, void const*,
-                                                      u32);
-    virtual void adaptor_do_TARGET_PARENT_ENABLE(JStudio::data::TEOperationData, void const*,
-                                                        u32);
 
     void setJSG_position_(JStudio::TControl const*);
     void getJSG_position_(JStudio::TControl const*);
