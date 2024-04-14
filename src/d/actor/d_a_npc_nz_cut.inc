@@ -16,8 +16,6 @@ static BOOL searchEsa_CB(void* param_1, void* i_this) {
 
 /* 000032E8-000034F0       .text _searchEsa__10daNpc_Nz_cFP10fopAc_ac_c */
 BOOL daNpc_Nz_c::_searchEsa(fopAc_ac_c* pActor) {
-    /* Nonmatching */
-
     if(fopAcM_GetName(pActor) == PROC_ESA) {
         esa_class* pBait = static_cast<esa_class*>(pActor);
         if(pBait->field_0x298 == 0) {
@@ -25,7 +23,7 @@ BOOL daNpc_Nz_c::_searchEsa(fopAc_ac_c* pActor) {
             if(mpMorf->getFrame() < 6.0f) {
                 cLib_addCalcPos2(&pBait->current.pos, current.pos, 0.1f, 2.5f);
                 mDoMtx_stack_c::transS(pBait->current.pos);
-                mDoMtx_stack_c::ZXYrotM(current.angle);
+                mDoMtx_stack_c::ZXYrotM(pBait->current.angle);
                 pBait->mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
             }
 
@@ -52,27 +50,22 @@ static BOOL searchNzAndBomb_CB(void* param_1, void*) {
 
 /* 00003528-0000377C       .text searchTsuboAndBarrel_CB__FPvPv */
 static BOOL searchTsuboAndBarrel_CB(void* param_1, void* param_2) {
-    /* Nonmatching */
-
     fopAc_ac_c* pActor1 = static_cast<fopAc_ac_c*>(param_1);
-    fopAc_ac_c* pActor2 = static_cast<fopAc_ac_c*>(param_2);
+    daNpc_Nz_c* i_this = static_cast<daNpc_Nz_c*>(param_2);
 
-    if(fopAcM_GetName(pActor1) == PROC_TSUBO || fopAcM_GetName(pActor1) == PROC_Obj_Barrel) {
-        cXyz delta = pActor1->current.pos - pActor2->current.pos;
+    if(fopAcM_GetName(param_1) == PROC_TSUBO || fopAcM_GetName(param_1) == PROC_Obj_Barrel) {
+        cXyz delta = i_this->field_0x6C4 - pActor1->current.pos;
 
         if(delta.absXZ() < 300.0f) {
+            bool success = false;
             if(fopAcM_GetName(pActor1) == PROC_TSUBO) {
-                static_cast<daTsubo::Act_c*>(pActor1)->pos_init();
-
-                return true;
+                success = static_cast<daTsubo::Act_c*>(pActor1)->pos_init();
             }
-            else if(fopAcM_GetName(pActor1) == PROC_TSUBO) { // this condition seems weird, also has another part with barrel member variables
-                static_cast<daObjBarrel::Act_c*>(pActor1)->pos_init();
-
-                return true;
+            else if(fopAcM_GetName(pActor1) == PROC_TSUBO) {
+                success = static_cast<daObjBarrel::Act_c*>(pActor1)->pos_init();
             }
 
-            if(fopAcM_GetName(pActor1) == PROC_TSUBO) {
+            if(!success) {
                 fopAcM_delete(pActor1);
             }
         }
@@ -90,7 +83,7 @@ static BOOL searchEsaInit_CB(void* pActor1, void* pActor2) {
         cXyz pos(pNz->field_0x6C4);
         pos.x += cM_ssin(pNz->current.angle.y) * 150.0f;
         pos.z += cM_scos(pNz->current.angle.y) * 150.0f;
-        s16 angle = cM_rndFX(358.0f) * 182.0444f;
+        s16 angle = cAngle::d2s(cM_rndFX(358.0f));
         f32 mag = cM_rndF(30.0f);
         pos.x += mag * cM_ssin(angle);
         pos.z += mag * cM_scos(angle);
@@ -108,8 +101,6 @@ static BOOL searchEsaInit_CB(void* pActor1, void* pActor2) {
 
 /* 00003908-00003B90       .text cutProc__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutProc() {
-    /* Nonmatching */
-
     typedef void(daNpc_Nz_c::*Func_t)(void);
     struct mode_entry_t {
         Func_t start;
@@ -167,6 +158,10 @@ void daNpc_Nz_c::cutProc() {
         }
     };
 
+    static char* a_demo_name_tbl[] = {
+        "DEFAULT_NPC_NZ_ESA",
+    };
+
     int actIdx = dComIfGp_evmng_getMyActIdx(field_0x8F4, action_table, ARRAY_SIZE(action_table), 1, 0);
     if(actIdx == -1) {
         dComIfGp_evmng_cutEnd(field_0x8F4);
@@ -187,8 +182,6 @@ void daNpc_Nz_c::cutEatesaStart() {
 
 /* 00003BB8-00003CEC       .text cutEatesaProc__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutEatesaProc() {
-    /* Nonmatching */
-
     fopAcM_Search((fopAcIt_JudgeFunc)&searchEsa_CB, this);
     fopAc_ac_c* pBait = mpBait;
 
@@ -199,7 +192,7 @@ void daNpc_Nz_c::cutEatesaProc() {
     if(pBait) {
         fopAcM_delete(pBait);
         mpBait = 0;
-        field_0x910 = FLOAT_MIN;
+        field_0x910 = FLOAT_MAX;
     }
     else {
         if(mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
@@ -218,8 +211,6 @@ void daNpc_Nz_c::cutEatesaFirstStart() {
 
 /* 00003D40-00003F54       .text cutEatesaFirstProc__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutEatesaFirstProc() {
-    /* Nonmatching */
-
     cXyz target(field_0x6C4);
     target.x += cM_ssin(home.angle.y) * 100.0f;
     target.z += cM_scos(home.angle.y) * 100.0f;
@@ -294,8 +285,6 @@ void daNpc_Nz_c::cutHideProc() {
 
 /* 00004100-00004204       .text cutSetAnmStart__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutSetAnmStart() {
-    /* Nonmatching */
-
     u32* pAnmNo = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "anm_no");
     s32 anmNo = 0;
     u32* pLoopCount = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "loop_count");
@@ -319,8 +308,6 @@ void daNpc_Nz_c::cutSetAnmStart() {
 
 /* 00004204-000043C0       .text cutSetAnmProc__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutSetAnmProc() {
-    /* Nonmatching */
-
     if(mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
         field_0x906--;
     }
@@ -360,8 +347,6 @@ void daNpc_Nz_c::cutGoHomeStart() {
 
 /* 000043C4-000044D4       .text cutGoHomeProc__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutGoHomeProc() {
-    /* Nonmatching */
-
     s16 target = cLib_targetAngleY(&current.pos, &home.pos);
     cLib_addCalcAngleS2(&current.angle.y, target, 4, 0x1000);
     shape_angle.y = current.angle.y;

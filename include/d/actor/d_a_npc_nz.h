@@ -27,7 +27,7 @@ public:
     BOOL NodeCallBack(J3DNode*, int);
     BOOL TailNodeCallBack(J3DNode*, int);
     void TailControl();
-    bool _createHeap();
+    BOOL _createHeap();
     s16 XyEventCB(int);
     void eventOrder();
     void checkOrder();

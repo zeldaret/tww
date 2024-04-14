@@ -32,23 +32,24 @@ namespace daTsubo {
         void data() const {}
         void data_spec_boko(int) {}
         void is_switch() const {}
-        void pos_init() {
-            if (m678 != 2) {
-                return;
+        bool pos_init() {
+            if (m678 == 2) {
+                current.pos = home.pos;
+                current.angle = home.angle;
+                shape_angle = home.angle;
+
+                m688.Val(cSAngle::_0);
+                m68A.Val(cSAngle::_0);
+                m68C.Val(cSAngle::_0);
+                m68E.Val(cSAngle::_0);
+                m690.Val(cSAngle::_0);
+                m692.Val(current.angle.y);
+
+                mDoMtx_identity(mPoseMtx);
+                return true;
+            } else {
+                return false;
             }
-
-            current.pos = home.pos;
-            current.angle = home.angle;
-            shape_angle = home.angle;
-
-            m688.Val(cSAngle::_0);
-            m68A.Val(cSAngle::_0);
-            m68C.Val(cSAngle::_0);
-            m68E.Val(cSAngle::_0);
-            m690.Val(cSAngle::_0);
-            m692.Val(current.angle.y);
-
-            mDoMtx_identity(mPoseMtx);
         }
         void prmZ_get_swSave() const {}
         void prm_get_cull() const {}

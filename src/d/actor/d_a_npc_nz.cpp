@@ -10,7 +10,7 @@
 #include "d/d_item.h"
 #include "d/d_procname.h"
 
-static u8 dummy_bss[0x58];
+static u8 dummy_bss[0x4C];
 
 // need to figure out what's putting this data in front of a bunch of rels
 static f32 dummy[3] = {1.0f, 1.0f, 1.0f};
@@ -59,8 +59,6 @@ static BOOL daNpcNz_TailNodeCallBack(J3DNode* node, int param_1) {
 
 /* 000002C4-000003A4       .text TailNodeCallBack__10daNpc_Nz_cFP7J3DNodei */
 BOOL daNpc_Nz_c::TailNodeCallBack(J3DNode* node, int param_1) {
-    /* Nonmatching */
-
     if (!param_1) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
@@ -84,63 +82,68 @@ BOOL daNpc_Nz_c::TailNodeCallBack(J3DNode* node, int param_1) {
 void daNpc_Nz_c::TailControl() {
     /* Nonmatching */
 
-    cXyz temp(0.0f, 0.0f, 5.0f);
+    cXyz sp64;
+    cXyz sp58;
+    cXyz sp4C;
+    cXyz sp40;
+    sp58.set(0.0f, 0.0f, 5.0f);
     field_0x974[0] = field_0xA64[0];
-    cXyz temp2 = field_0xA64[1] - field_0xA64[0];
-    s32 angle = cM_atan2s(temp2.x, temp2.z);
-    f32 dist = temp2.absXZ();
-    s32 angle2 = cM_atan2s(temp2.x, dist);
+    sp64 = field_0xA64[1] - field_0xA64[0];
+    s32 angle = cM_atan2s(sp64.x, sp64.z);
+    f32 dist = sp64.absXZ();
+    s16 angle2 = -cM_atan2s(sp64.y, dist);
     mDoMtx_stack_c::YrotS(angle);
     mDoMtx_stack_c::XrotM(angle2);
-    mDoMtx_stack_c::multVec(&temp, &temp2);
+    mDoMtx_stack_c::multVec(&sp58, &sp40);
+    cXyz* r19 = &field_0x974[1];
+    cXyz* r18 = &field_0x9EC[1];
+    cXyz* r17 = &field_0x934.mpLines->mpSegments[0];
     dBgS_GndChk gndChk;
 
-    for(int i = 1; i < 10; i++) {
-        f32 temp3 = 1.0f - i * 0.1f;
-        cXyz temp4;
-        temp4.x = field_0x9EC[i].x + temp2.x * temp3;
-        temp4.y = field_0x9EC[i].y + temp2.y * temp3;
-        temp4.z = field_0x9EC[i].z + temp2.z * temp3;
-        f32 temp5 = field_0x974[i].y + temp4.y - 2.0f;
+    for(int i = 1; i < 10; i++, r19++, r18++) {
+        f32 temp3 = 1.0f - (i-1) * 0.1f;
+        cXyz sp34;
+        sp34.x = r18[0].x + sp40.x * temp3;
+        sp34.y = r18[0].y + sp40.y * temp3;
+        sp34.z = r18[0].z + sp40.z * temp3;
+        f32 temp5 = r19[0].y + sp34.y - 2.0f;
         if(temp5 < home.pos.y + 5.0f) {
             temp5 = home.pos.y + 5.0f;
         }
-        cXyz temp6;
-        temp6.y = temp5 - field_0x974[i].y;
-        temp6.x = temp4.x + (field_0x974[i].x - field_0x974[i - 1].x);
-        temp6.z = temp4.z + (field_0x974[i].z - field_0x974[i - 1].z);
-        s16 temp7 = cM_atan2s(temp6.x, temp6.z);
-        f32 temp8 = temp6.absXZ();
-        s16 temp9 = -cM_atan2s(temp6.x, dist);
-        cXyz temp10(0.0f, 0.0f, 20.0f);
+        sp64.y = temp5 - r19[-1].y;
+        sp64.x = sp34.x + (r19[0].x - r19[-1].x);
+        sp64.z = sp34.z + (r19[0].z - r19[-1].z);
+        int temp7 = cM_atan2s(sp64.x, sp64.z);
+        dist = sp64.absXZ();
+        s16 temp9 = -cM_atan2s(sp64.y, dist);
+        sp58.set(0.0f, 0.0f, 20.0f);
         mDoMtx_stack_c::YrotS(temp7);
         mDoMtx_stack_c::XrotM(temp9);
-        mDoMtx_stack_c::multVec(&temp10, &temp6);
-        field_0x9EC[i] = field_0x974[i];
-        field_0x974[i].x = field_0x974[i - 1].x + temp6.x;
-        field_0x974[i].y = field_0x974[i - 1].y + temp6.y;
-        field_0x974[i].z = field_0x974[i - 1].z + temp6.z;
-        field_0x9EC[i].x = (field_0x974[i].x - field_0x9EC[i].x) * 0.8f;
-        field_0x9EC[i].y = (field_0x974[i].y - field_0x9EC[i].y) * 0.8f;
-        field_0x9EC[i].z = (field_0x974[i].z - field_0x9EC[i].z) * 0.8f;
+        mDoMtx_stack_c::multVec(&sp58, &sp4C);
+        r18[0] = r19[0];
+        r19[0].x = r19[-1].x + sp4C.x;
+        r19[0].y = r19[-1].y + sp4C.y;
+        r19[0].z = r19[-1].z + sp4C.z;
+        r18[0].x = (r19[0].x - r18[0].x) * 0.8f;
+        r18[0].y = (r19[0].y - r18[0].y) * 0.8f;
+        r18[0].z = (r19[0].z - r18[0].z) * 0.8f;
     }
 
-    for(int i = 0; i < 10; i++) {
-        field_0x934.mpLines->mpSegments[i] = field_0x974[i];
+    cXyz* r3 = field_0x974;
+    for(int i = 0; i < 10; i++, r3++, r17++) {
+        *r17 = r3[0];
     }
 }
 
 static daNpc_Nz_HIO_c l_HIO;
 
 /* 00000CF8-00000D18       .text createHeap_CB__FP10fopAc_ac_c */
-static int createHeap_CB(fopAc_ac_c* i_this) {
-    /* Nonmatching */
-
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Nz_c*>(i_this)->_createHeap();
 }
 
 /* 00000D18-00000F98       .text _createHeap__10daNpc_Nz_cFv */
-bool daNpc_Nz_c::_createHeap() {
+BOOL daNpc_Nz_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, 3));
     JUT_ASSERT(0xD0, modelData != 0);
 
@@ -175,7 +178,11 @@ bool daNpc_Nz_c::_createHeap() {
         }
     }
 
-    return field_0x934.init(1, 10, static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, 0x2E)), 0) != FALSE;
+    if (field_0x934.init(1, 10, static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, 0x2E)), 0)) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 00000F98-00001010       .text __ct__14daNpc_Nz_HIO_cFv */
@@ -225,9 +232,6 @@ static s16 daNpc_Nz_XyEventCB(void* i_this, int param_1) {
 
 /* 000011C0-00001210       .text XyEventCB__10daNpc_Nz_cFi */
 s16 daNpc_Nz_c::XyEventCB(int) {
-    static char* a_demo_name_tbl[] = {
-        "DEFAULT_NPC_NZ_ESA",
-    };
     field_0x8FA = dComIfGp_evmng_getEventIdx("DEFAULT_NPC_NZ_ESA", -1);
     return field_0x8FA;
 }
@@ -264,11 +268,10 @@ void daNpc_Nz_c::setAttention() {
 
 /* 000012F4-000013E8       .text LookBack__10daNpc_Nz_cFv */
 void daNpc_Nz_c::LookBack() {
-    /* Nonmatching */
-
+    cXyz* dstTemp;
     s16 targetY = current.angle.y;
     cXyz dstPos = dNpc_playerEyePos(0.0f);
-    cXyz* dstTemp = &dstPos;
+    dstTemp = &dstPos;
 
     s16 maxFollowRotVel;
     if (m_jnt.trnChk()) {
@@ -284,8 +287,6 @@ void daNpc_Nz_c::LookBack() {
 
 /* 000013E8-0000146C       .text setAnm__10daNpc_Nz_cFScb */
 void daNpc_Nz_c::setAnm(s8 param_1, bool param_2) {
-    /* Nonmatching */
-
     static const dLib_anm_idx_c a_anm_idx_tbl[] = {
         {0x23, 0x12},
         {0x15, 0x07},
@@ -395,22 +396,22 @@ void daNpc_Nz_c::setMtx() {
         cXyz temp3 = temp + temp2;
 
         switch(field_0x908) {
-            case 0x82:
+            case BIRD_ESA_5:
                 temp4 = -15.0f;
                 break;
-            case 0x83:
+            case dItem_HYOI_PEAR_e:
                 temp4 = -5.0f;
                 break;
-            case 0x51:
-            case 0x53:
+            case RED_BOTTLE:
+            case BLUE_BOTTLE:
                 temp4 = -5.0f;
                 break;
-            case 0xC:
-            case 0xE:
+            case BOMB_10:
+            case BOMB_30:
                 temp4 = -15.0f;
                 break;
-            case 0x10:
-            case 0x12:
+            case ARROW_10:
+            case ARROW_30:
                 temp4 = -10.0f;
                 break;
         }
@@ -461,8 +462,6 @@ void daNpc_Nz_c::modeEventEsa() {
 
 /* 000018EC-000019DC       .text modeProc__10daNpc_Nz_cFQ210daNpc_Nz_c6Proc_ei */
 void daNpc_Nz_c::modeProc(daNpc_Nz_c::Proc_e proc, int newMode) {
-    /* Nonmatching */
-
     typedef void(daNpc_Nz_c::*mode_func_t)(void);
     struct mode_entry_t {
         mode_func_t init;
@@ -574,7 +573,6 @@ void daNpc_Nz_c::deleteShopItem() {
 
 /* 00001CF0-00002038       .text next_msgStatus__10daNpc_Nz_cFPUl */
 u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching */
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
     static const u32 shop_next_msg_tbl[4][2] = {
@@ -781,8 +779,6 @@ void daNpc_Nz_c::anmAtr(u16) {
 
 /* 000022C0-00002390       .text _execute__10daNpc_Nz_cFv */
 bool daNpc_Nz_c::_execute() {
-    /* Nonmatching */
-
     cLib_addCalc2(&speedF, field_0x6EC, 0.3f, 4.0f);
     checkOrder();
     modeProc(PROC_EXEC, 2);
@@ -802,8 +798,6 @@ bool daNpc_Nz_c::_execute() {
 
 /* 00002390-0000254C       .text _draw__10daNpc_Nz_cFv */
 bool daNpc_Nz_c::_draw() {
-    /* Nonmatching */
-
     if(!field_0x8FC) {
         return true;
     }
@@ -834,6 +828,8 @@ bool daNpc_Nz_c::_draw() {
 
         dComIfGd_setList();
 
+        GXColor unusedColor_5609 = {255, 255, 0, 128};
+        GXColor unusedColor_5611 = {255, 0, 0, 128};
         GXColor color = {200, 200, 200, 255};
         field_0x934.update(10, scale.x * 5.0f, color, 6, &tevStr);
         dComIfGd_set3DlineMat(&field_0x934);

@@ -8,13 +8,18 @@ namespace daObjBarrel {
     public:
         void attr() const {}
         void get_slant_angle() {}
-        void pos_init() {
-            current.pos = home.pos;
-            current.angle = home.angle;
-            shape_angle = home.angle;
+        bool pos_init() {
+            if (m60C == 0) {
+                current.pos = home.pos;
+                current.angle = home.angle;
+                shape_angle = home.angle;
+                return true;
+            } else {
+                return false;
+            }
         }
         void prm_get_cull() const {}
-        void set_slant_angle(short) {}
+        void set_slant_angle(s16) {}
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
@@ -58,6 +63,8 @@ namespace daObjBarrel {
     
     public:
         /* Place member variables here */
+        /* 0x290 */ u8 m290[0x60C - 0x290];
+        /* 0x60C */ int m60C;
     };
     
     namespace Method {
