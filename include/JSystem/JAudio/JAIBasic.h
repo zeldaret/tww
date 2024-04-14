@@ -2,10 +2,10 @@
 #define JAIBASIC_H
 
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/mtx/vec.h"
 #include "JSystem/JAudio/JAIBankWave.h"
+#include "JSystem/JAudio/JAISound.h"
+#include "dolphin/mtx/vec.h"
 
-class JAISound;
 class JKRSolidHeap;
 
 namespace JAInter {
@@ -87,7 +87,15 @@ public:
         return JAInter::BankWave::checkAllWaveLoadStatus();
     }
 
+    // this might be wrong, it matches but the size doesn't seem to match the debug map
     bool checkEnablePrepare(u32 flags) { return !(flags & 0xc0000000) && !(flags & 0x00000c00); }
+
+    void prepareSoundVec(u32 flags, JAISound** pSound, Vec* pos, u32 r7, u32 r8, u8 r9) {
+        startSoundVec(flags, pSound, pos, r7, r8, r9);
+        if (*pSound) {
+            (*pSound)->setPrepareFlag(1);
+        }
+    }
 
     // TODO
     void addInitOnCodeSeScene(u32, u32) {}
@@ -99,7 +107,6 @@ public:
     void getWaveLoadStatus(s32) {}
     void initAudio(JKRSolidHeap*, u32, u8) {}
     void loadSceneWave(s32, s32) {}
-    void prepareSoundVec(u32, JAISound**, Vec*, u32, u32, u8) {}
     void setInitDataInfo(char*) {}
     void setInitOnCodeSeScene(u32*) {}
 

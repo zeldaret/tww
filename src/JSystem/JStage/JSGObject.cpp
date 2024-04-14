@@ -16,8 +16,8 @@ bool JStage::TObject::JSGGetName() const {
 }
 
 /* 8026DF90-8026DF98       .text JSGGetFlag__Q26JStage7TObjectCFv */
-bool JStage::TObject::JSGGetFlag() const {
-    return false;
+u32 JStage::TObject::JSGGetFlag() const {
+    return 0;
 }
 
 /* 8026DF98-8026DF9C       .text JSGSetFlag__Q26JStage7TObjectFUl */

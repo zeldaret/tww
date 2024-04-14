@@ -6,37 +6,45 @@
 #include "JSystem/JStudio/JStudio_JStage/object-ambientlight.h"
 #include "dolphin/types.h"
 
+namespace JStudio_JStage {
+    
 /* 802770D8-8027716C       .text __ct__Q214JStudio_JStage21TAdaptor_ambientLightFPCQ26JStage7TSystemPQ26JStage13TAmbientLight */
-JStudio_JStage::TAdaptor_ambientLight::TAdaptor_ambientLight(const JStage::TSystem*, JStage::TAmbientLight*) {
-    /* Nonmatching */
+TAdaptor_ambientLight::TAdaptor_ambientLight(const JStage::TSystem* system, JStage::TAmbientLight* object) 
+    : mSystem(system)
+    , mLight(object)
+{
 }
 
 /* 8027716C-802771E4       .text __dt__Q214JStudio_JStage21TAdaptor_ambientLightFv */
-JStudio_JStage::TAdaptor_ambientLight::~TAdaptor_ambientLight() {
-    /* Nonmatching */
+TAdaptor_ambientLight::~TAdaptor_ambientLight() {
+    adaptor_do_end(NULL);
 }
 
 /* 802771E4-802771E8       .text adaptor_do_prepare__Q214JStudio_JStage21TAdaptor_ambientLightFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_prepare(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_ambientLight::adaptor_do_prepare(const JStudio::TObject*) {
 }
 
 /* 802771E8-80277274       .text adaptor_do_begin__Q214JStudio_JStage21TAdaptor_ambientLightFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_begin(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_ambientLight::adaptor_do_begin(const JStudio::TObject*) {
+    mLight->JSGFEnableFlag(1);
+    adaptor_setVariableValue_GXColor(sauVariableValue_4_COLOR_RGBA, mLight->JSGGetColor());
 }
 
 /* 80277274-802772C8       .text adaptor_do_end__Q214JStudio_JStage21TAdaptor_ambientLightFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_end(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_ambientLight::adaptor_do_end(const JStudio::TObject*) {
+    mLight->JSGFDisableFlag(1);
 }
 
 /* 802772C8-80277320       .text adaptor_do_update__Q214JStudio_JStage21TAdaptor_ambientLightFPCQ27JStudio7TObjectUl */
-void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_update(const JStudio::TObject*, u32) {
-    /* Nonmatching */
+void TAdaptor_ambientLight::adaptor_do_update(const JStudio::TObject*, u32) {
+    GXColor color;
+    adaptor_getVariableValue_GXColor(&color, sauVariableValue_4_COLOR_RGBA);
+    mLight->JSGSetColor(color);
 }
 
 /* 80277320-80277354       .text adaptor_do_data__Q214JStudio_JStage21TAdaptor_ambientLightFPCQ27JStudio7TObjectPCvUlPCvUl */
-void JStudio_JStage::TAdaptor_ambientLight::adaptor_do_data(const JStudio::TObject*, const void*, u32, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_ambientLight::adaptor_do_data(const JStudio::TObject* object, const void* p2, u32 p3, const void* p4, u32 p5) {
+    TAdaptor_object_::adaptor_data_(mLight, p2, p3, p4, p5);
 }
+
+} // namespace JStudio_JStage

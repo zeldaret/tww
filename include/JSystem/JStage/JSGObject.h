@@ -15,10 +15,13 @@ namespace JStage {
     };
 
     struct TObject {
+        void JSGFDisableFlag(u32 flag) { JSGSetFlag(JSGGetFlag() & ~flag); }
+        void JSGFEnableFlag(u32 flag) { JSGSetFlag(JSGGetFlag() | flag); }
+        
         virtual ~TObject() = 0;
         virtual s32 JSGFGetType() const = 0;
         virtual bool JSGGetName() const;
-        virtual bool JSGGetFlag() const;
+        virtual u32 JSGGetFlag() const;
         virtual void JSGSetFlag(u32);
         virtual bool JSGGetData(u32, void*, u32) const;
         virtual void JSGSetData(u32, void const*, u32);

@@ -6,37 +6,58 @@
 #include "JSystem/JStudio/JStudio_JStage/object-fog.h"
 #include "dolphin/types.h"
 
+namespace JStudio_JStage {
+
 /* 80277C64-80277CF8       .text __ct__Q214JStudio_JStage12TAdaptor_fogFPCQ26JStage7TSystemPQ26JStage4TFog */
-JStudio_JStage::TAdaptor_fog::TAdaptor_fog(const JStage::TSystem*, JStage::TFog*) {
-    /* Nonmatching */
+TAdaptor_fog::TAdaptor_fog(const JStage::TSystem* system, JStage::TFog* fog) 
+    : JStudio::TAdaptor_fog()
+    , mSystem(system)
+    , mObject(fog)
+{
 }
 
 /* 80277CF8-80277D70       .text __dt__Q214JStudio_JStage12TAdaptor_fogFv */
-JStudio_JStage::TAdaptor_fog::~TAdaptor_fog() {
-    /* Nonmatching */
+TAdaptor_fog::~TAdaptor_fog() {
+    adaptor_do_end(NULL);
 }
 
+const TAdaptor_fog::TVVOutput TAdaptor_fog::saoVVOutput_[] = {
+    TVVOutput(4, &JStage::TFog::JSGSetStartZ, &JStage::TFog::JSGGetStartZ),
+    TVVOutput(5, &JStage::TFog::JSGSetEndZ, &JStage::TFog::JSGGetEndZ),
+    TVVOutput(-1, NULL, NULL),
+};
+
 /* 80277D70-80277DB8       .text adaptor_do_prepare__Q214JStudio_JStage12TAdaptor_fogFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_fog::adaptor_do_prepare(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_fog::adaptor_do_prepare(const JStudio::TObject*) {
+    for (const TVVOutput* output = saoVVOutput_; output->mValueIndex != -1; output++) {
+        mVariableValues[output->mValueIndex].setOutput(output);
+    }
 }
 
 /* 80277DB8-80277E9C       .text adaptor_do_begin__Q214JStudio_JStage12TAdaptor_fogFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_fog::adaptor_do_begin(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_fog::adaptor_do_begin(const JStudio::TObject*) {
+    mObject->JSGFEnableFlag(1);
+    adaptor_setVariableValue_GXColor(sauVariableValue_4_COLOR_RGBA, mObject->JSGGetColor());
+    for (const TVVOutput* output = saoVVOutput_; output->mValueIndex != -1; output++) {
+        mVariableValues[output->mValueIndex].setValue_immediate((mObject->*(output->mGetter))());
+    }
 }
 
 /* 80277E9C-80277EF0       .text adaptor_do_end__Q214JStudio_JStage12TAdaptor_fogFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_fog::adaptor_do_end(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_fog::adaptor_do_end(const JStudio::TObject*) {
+    mObject->JSGFDisableFlag(1);
 }
 
 /* 80277EF0-80277F48       .text adaptor_do_update__Q214JStudio_JStage12TAdaptor_fogFPCQ27JStudio7TObjectUl */
-void JStudio_JStage::TAdaptor_fog::adaptor_do_update(const JStudio::TObject*, u32) {
-    /* Nonmatching */
+void TAdaptor_fog::adaptor_do_update(const JStudio::TObject*, u32) {
+    GXColor color;
+    adaptor_getVariableValue_GXColor(&color, sauVariableValue_4_COLOR_RGBA);
+    mObject->JSGSetColor(color);
 }
 
 /* 80277F48-80277F7C       .text adaptor_do_data__Q214JStudio_JStage12TAdaptor_fogFPCQ27JStudio7TObjectPCvUlPCvUl */
-void JStudio_JStage::TAdaptor_fog::adaptor_do_data(const JStudio::TObject*, const void*, u32, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_fog::adaptor_do_data(const JStudio::TObject* object, const void* p2, u32 p3, const void* p4, u32 p5) {
+    TAdaptor_object_::adaptor_data_(mObject, p2, p3, p4, p5);
 }
+
+} // namespace JStudio_JStage

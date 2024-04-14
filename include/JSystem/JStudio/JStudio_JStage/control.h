@@ -22,9 +22,33 @@ struct TCreateObject : public JStudio::TCreateObject {
     /* 0x0C */ const JStage::TSystem* mSystem;
 };
 
+template <typename Adaptor, typename Object>
+struct TVariableValueOutput_object_ : public JStudio::TVariableValue::TOutput {
+    typedef void (Object::*Setter)(f32);
+    typedef f32 (Object::*Getter)() const;
+
+    TVariableValueOutput_object_(int valueIndex, Setter setter, Getter getter)
+        : TOutput()
+        , mValueIndex(valueIndex)
+        , mSetter(setter)
+        , mGetter(getter)
+    {
+    }
+
+    virtual void operator()(f32 value, JStudio::TAdaptor* adaptor) const // _08 (weak)
+    {
+        (static_cast<Object*>(static_cast<Adaptor*>(adaptor)->mObject)->*mSetter)(value);
+    }
+    virtual ~TVariableValueOutput_object_() { } // _0C (weak)
+
+    int mValueIndex; // _04
+    Setter mSetter;  // _08
+    Getter mGetter;  // _14
+};
+
 struct TAdaptor_object_ {
-    void adaptor_data_(JStage::TObject*, void const*, u32, void const*, u32);
-    void adaptor_ENABLE_(JStage::TObject*, JStudio::data::TEOperationData, void const*, u32);
+    static void adaptor_data_(JStage::TObject*, void const*, u32, void const*, u32);
+    static void adaptor_ENABLE_(JStage::TObject*, JStudio::data::TEOperationData, void const*, u32);
 
     /* 0x0 */ JStudio::TAdaptor* field_0x0;
     /* 0x4 */ JStage::TSystem* mSystem;
@@ -79,7 +103,8 @@ struct TAdaptor_ambientLight : public JStudio::TAdaptor_ambientLight {
     virtual void adaptor_do_update(const JStudio::TObject*, u32);
     virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32);
 
-    /* 0x5C */ u8 field_0x5C[0x64- 0x5C];
+    /* 0x5C */ const JStage::TSystem* mSystem;
+    /* 0x60 */ JStage::TAmbientLight* mLight;
 };  // Size: 0x64
 
 struct TAdaptor_camera : public JStudio::TAdaptor_camera {
@@ -105,6 +130,8 @@ struct TAdaptor_camera : public JStudio::TAdaptor_camera {
 };  // Size: 0xF8
 
 struct TAdaptor_fog : public JStudio::TAdaptor_fog {
+    typedef TVariableValueOutput_object_<TAdaptor_fog, JStage::TFog> TVVOutput;
+
     TAdaptor_fog(JStage::TSystem const*, JStage::TFog*);
     virtual ~TAdaptor_fog();
     virtual void adaptor_do_prepare(const JStudio::TObject*);
@@ -113,9 +140,10 @@ struct TAdaptor_fog : public JStudio::TAdaptor_fog {
     virtual void adaptor_do_update(const JStudio::TObject*, u32);
     virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32);
 
-    static u8 saoVVOutput_[96 + 4 /* padding */];
+    static const TVVOutput saoVVOutput_[3];
 
-    /* 0x84 */ u8 field_0x110[0x8C - 0x84];
+    /* 0x84 */ const JStage::TSystem* mSystem;
+    /* 0x88 */ JStage::TFog* mObject;
 };  // Size: 0x8C
 
 struct TAdaptor_light : public JStudio::TAdaptor_light {

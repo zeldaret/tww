@@ -44,8 +44,8 @@ void TAdaptor_particle::adaptor_do_prepare(const JStudio::TObject* param_1) {
         TSetVariableValue_immediate(15, 255.0f), TSetVariableValue_immediate(16, 255.0f), TSetVariableValue_immediate(0xFFFFFFFF, NAN)
     };
     adaptor_setVariableValue_immediate(aoData);
-    pValue_[18].setOutput(&TAdaptor_particle::soVVOOn_BEGIN_FADE_IN_);
-    pValue_[19].setOutput(&TAdaptor_particle::soVVOOn_END_FADE_OUT_);
+    mVariableValues[18].setOutput(&TAdaptor_particle::soVVOOn_BEGIN_FADE_IN_);
+    mVariableValues[19].setOutput(&TAdaptor_particle::soVVOOn_END_FADE_OUT_);
     mCallback.mObject = param_1;
 }
 

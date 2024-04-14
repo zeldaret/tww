@@ -140,8 +140,8 @@ public:
 
 struct TAdaptor {
     inline TAdaptor(TVariableValue* values, int count)
-        : pValue_(values)
-        , u(count)
+        : mVariableValues(values)
+        , mCount(count)
     {
     }
 
@@ -184,7 +184,7 @@ struct TAdaptor {
 
 
     TVariableValue* adaptor_referVariableValue(u32 param_0) {
-        return &pValue_[param_0];
+        return &mVariableValues[param_0];
     }
 
     void adaptor_setVariableValue_immediate(u32 param_0, f32 param_1) {
@@ -192,11 +192,11 @@ struct TAdaptor {
     }
 
      const TVariableValue* adaptor_getVariableValue(u32 param_0) const {
-        return &pValue_[param_0];
+        return &mVariableValues[param_0];
     }
 
-    /* 0x4 */ TVariableValue* pValue_;
-    /* 0x8 */ u32 u;
+    /* 0x4 */ TVariableValue* mVariableValues;
+    /* 0x8 */ u32 mCount;
 };
 
 struct TAdaptor_actor : public TAdaptor {
@@ -232,8 +232,8 @@ struct TAdaptor_ambientLight : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[4];
 
-    static u8 const sauVariableValue_3_COLOR_RGB[12];
-    static u8 const sauVariableValue_4_COLOR_RGBA[16];
+    static const u32 sauVariableValue_3_COLOR_RGB[3];
+    static const u32 sauVariableValue_4_COLOR_RGBA[4];
 };
 
 struct TObject_ambientLight : public TObject {
@@ -277,8 +277,8 @@ struct TAdaptor_fog : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[6];
 
-    static u8 const sauVariableValue_3_COLOR_RGB[12];
-    static u8 const sauVariableValue_4_COLOR_RGBA[16];
+    static const u32 sauVariableValue_3_COLOR_RGB[12];
+    static const u32 sauVariableValue_4_COLOR_RGBA[16];
     static u8 sauVariableValue_2_RANGE_BEGIN_END[8];
 };
 

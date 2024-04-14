@@ -161,7 +161,7 @@ void JStudio::TAdaptor::adaptor_getVariableValue_GXColor(GXColor* param_1, const
 void JStudio::TAdaptor::adaptor_updateVariableValue(JStudio::TObject* pObject, u32 param_2) {
     TControl* pControl = pObject->getControl();
     f64 dVar3 = pControl->getSecondPerFrame();
-    JGadget::TEnumerator<JStudio::TVariableValue*> enumerator(pValue_, pValue_ + u);
+    JGadget::TEnumerator<JStudio::TVariableValue*> enumerator(mVariableValues, mVariableValues + mCount);
     while (enumerator) {
         JStudio::TVariableValue* value = *enumerator;
         value->forward(param_2);
@@ -171,30 +171,30 @@ void JStudio::TAdaptor::adaptor_updateVariableValue(JStudio::TObject* pObject, u
 
 /* 8026F064-8026F07C       .text adaptor_setVariableValue_VOID___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio7TObjectUlPCvUl */
 void JStudio::TAdaptor::adaptor_setVariableValue_VOID_(JStudio::TAdaptor* param_1, JStudio::TObject* param_2, u32 param_3, const void* param_4, u32 uSize) {
-    param_1->pValue_[param_3].setValue_none();
+    param_1->mVariableValues[param_3].setValue_none();
 }
 
 /* 8026F07C-8026F0A8       .text adaptor_setVariableValue_IMMEDIATE___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio7TObjectUlPCvUl */
 void JStudio::TAdaptor::adaptor_setVariableValue_IMMEDIATE_(JStudio::TAdaptor* param_1, JStudio::TObject* param_2, u32 param_3, const void* param_4, u32 param_5) {
-    TVariableValue* value = &param_1->pValue_[param_3];
+    TVariableValue* value = &param_1->mVariableValues[param_3];
     value->setValue_immediate(*(f32*)param_4);
 }
 
 /* 8026F0A8-8026F0D4       .text adaptor_setVariableValue_TIME___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio7TObjectUlPCvUl */
 void JStudio::TAdaptor::adaptor_setVariableValue_TIME_(JStudio::TAdaptor* param_1, JStudio::TObject* param_2, u32 param_3, const void* param_4, u32 param_5) {
-    TVariableValue* value = &param_1->pValue_[param_3];
+    TVariableValue* value = &param_1->mVariableValues[param_3];
     value->setValue_time(*(f32*)param_4);
 }
 
 /* 8026F0D4-8026F144       .text adaptor_setVariableValue_FVR_NAME___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio7TObjectUlPCvUl */
 void JStudio::TAdaptor::adaptor_setVariableValue_FVR_NAME_(JStudio::TAdaptor* param_1, JStudio::TObject* param_2, u32 param_3, const void* param_4, u32 param_5) {
-    TVariableValue* value = &param_1->pValue_[param_3];
+    TVariableValue* value = &param_1->mVariableValues[param_3];
     value->setValue_functionValue(param_2->getControl()->getFunctionValue(param_4,param_5));
 }
 
 /* 8026F144-8026F1B0       .text adaptor_setVariableValue_FVR_INDEX___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio7TObjectUlPCvUl */
 void JStudio::TAdaptor::adaptor_setVariableValue_FVR_INDEX_(JStudio::TAdaptor* param_1, JStudio::TObject* param_2, u32 param_3, const void* param_4, u32 param_5) {
-    TVariableValue* value = &param_1->pValue_[param_3];
+    TVariableValue* value = &param_1->mVariableValues[param_3];
     value->setValue_functionValue(param_2->getControl()->getFunctionValue_index(*(u32*)param_4));
 }
 

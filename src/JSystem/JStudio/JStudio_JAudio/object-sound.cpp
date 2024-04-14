@@ -35,11 +35,11 @@ void TAdaptor_sound::adaptor_do_prepare(const JStudio::TObject* param_1) {
         TSetVariableValue_immediate(0xFFFFFFFF, NAN),
     };
     adaptor_setVariableValue_immediate(aoData);
-    pValue_[3].setOutput(&TAdaptor_sound::soVVOOn_BEGIN_FADE_IN_);
-    pValue_[4].setOutput(&TAdaptor_sound::soVVOOn_END_FADE_OUT_);
+    mVariableValues[3].setOutput(&TAdaptor_sound::soVVOOn_BEGIN_FADE_IN_);
+    mVariableValues[4].setOutput(&TAdaptor_sound::soVVOOn_END_FADE_OUT_);
 
     for (TAdaptor_sound::TVVOSetValue_* value = TAdaptor_sound::saoVVOSetValue_; value->mValueIndex != -1; value++) {
-        pValue_[value->mValueIndex].setOutput(value);
+        mVariableValues[value->mValueIndex].setOutput(value);
     }
 }
 
@@ -76,10 +76,7 @@ void TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperationData op, const v
                 mpSound->stop(0);
             }
             mFlags = flags;
-            mpBasic->startSoundVec(flags, &mpSound, mPosition, 0, 0, 4);
-            if (mpSound) {
-                mpSound->setPrepareFlag(1);
-            }
+            mpBasic->prepareSoundVec(flags, &mpSound, mPosition, 0, 0, 4);
             if (!mpSound) {
                 return;
             }

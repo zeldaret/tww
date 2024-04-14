@@ -31,7 +31,7 @@ struct TFactory : public stb::TFactory {
 class TControl : public stb::TControl {
 public:
     struct TTransform_position {
-		Vec mPosition;
+        Vec mPosition;
     };
     struct TTransform_position_direction {};
     struct TTransform_translation_rotation {};

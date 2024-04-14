@@ -23,10 +23,10 @@ struct TAdaptor_sound : public JStudio::TAdaptor_sound {
     };
 
     struct TVVOSetValue_ : public JStudio::TVariableValue::TOutput {
-		TVVOSetValue_(JStudio::TAdaptor_sound::TEVariableValue idx, TVVOSoundSetFunc func) {
-			mValueIndex = idx;
-			mSetFunc = func;
-		}
+        TVVOSetValue_(JStudio::TAdaptor_sound::TEVariableValue idx, TVVOSoundSetFunc func) {
+            mValueIndex = idx;
+            mSetFunc = func;
+        }
 
         virtual void operator()(f32, JStudio::TAdaptor*) const;
         virtual ~TVVOSetValue_() {}

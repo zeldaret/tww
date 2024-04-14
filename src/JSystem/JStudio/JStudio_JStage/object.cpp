@@ -7,11 +7,19 @@
 #include "dolphin/types.h"
 
 /* 80276188-802761D0       .text adaptor_data___Q214JStudio_JStage16TAdaptor_object_FPQ26JStage7TObjectPCvUlPCvUl */
-void JStudio_JStage::TAdaptor_object_::adaptor_data_(JStage::TObject*, const void*, u32, const void*, u32) {
-    /* Nonmatching */
+void JStudio_JStage::TAdaptor_object_::adaptor_data_(JStage::TObject* object, const void* p2, u32 p3, const void* p4, u32 p5) {
+    object->JSGSetData((p3 == 0 ? 0xFFFFFFFF : *(u32*)p2), p4, p5);
 }
 
 /* 802761D0-80276264       .text adaptor_ENABLE___Q214JStudio_JStage16TAdaptor_object_FPQ26JStage7TObjectQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_object_::adaptor_ENABLE_(JStage::TObject*, JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void JStudio_JStage::TAdaptor_object_::adaptor_ENABLE_(JStage::TObject* object, JStudio::data::TEOperationData op, const void* data, u32) {
+    switch (op) {
+    case JStudio::data::UNK_0x2:
+        if ((*(u32*)data) != 0) {
+            object->JSGFEnableFlag(2);
+        } else {
+            object->JSGFDisableFlag(2);
+        }
+        break;
+    }
 }
