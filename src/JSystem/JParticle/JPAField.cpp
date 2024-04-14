@@ -40,7 +40,6 @@ void JPABaseField::loadFieldData(JPAFieldData* data, JPAFieldBlock* block) {
 
 /* 8025A0D8-8025A21C       .text calcVel__12JPABaseFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPABaseField::calcVel(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching - copy of vel shouldn't be using PS */
     JGeometry::TVec3<f32> vel = data->mVel;
 
     if (!(ptcl->mStatus & 0x04)) {
@@ -56,8 +55,17 @@ void JPABaseField::calcVel(JPAFieldData* data, JPABaseParticle* ptcl) {
 }
 
 /* 8025A21C-8025A2B0       .text calcFadeAffect__12JPABaseFieldFP12JPAFieldDataf */
-f32 JPABaseField::calcFadeAffect(JPAFieldData* data, f32 t) {
-    /* Nonmatching */
+f32 JPABaseField::calcFadeAffect(JPAFieldData* data, f32 time) {
+    f32 affect = 1.0f;
+    if (((data->mSttFlag & 0x08) && time < data->mEnTime) || ((data->mSttFlag & 0x10) && time >= data->mDisTime)) {
+        affect = 0.0f;
+    } else {
+        if ((data->mSttFlag & 0x40) && time >= data->mFadeOut)
+            affect = data->mFadeOutRate * (data->mDisTime - time);
+        else if ((data->mSttFlag & 0x20) && time < data->mFadeIn)
+            affect = data->mFadeInRate * (time - data->mEnTime);
+    }
+    return affect;
 }
 
 /* 8025A2B0-8025A330       .text preCalc__12JPABaseFieldFP12JPAFieldData */
@@ -87,17 +95,11 @@ bool JPABaseField::isItinRange(JPAFieldData* data, f32 v) {
 void JPAGravityField::preCalc(JPAFieldData* data) {
     JPABaseField::preCalc(data);
     if (data->mSttFlag & 0x02) {
-        f32 mag = data->mMag;
-        data->mVel.x = data->mDir.x * mag;
-        data->mVel.y = data->mDir.y * mag;
-        data->mVel.z = data->mDir.z * mag;
+        data->mVel.scale(data->mMag, data->mDir);
     } else {
         JGeometry::TVec3<f32> rotDir;
         MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mDir, rotDir);
-        f32 mag = data->mMag;
-        data->mVel.x = rotDir.x * mag;
-        data->mVel.y = rotDir.y * mag;
-        data->mVel.z = rotDir.z * mag;
+        data->mVel.scale(data->mMag, rotDir);
     }
 }
 
@@ -115,10 +117,7 @@ void JPAAirField::preCalc(JPAFieldData* data) {
         MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mDir, data->mLocalDir);
     }
 
-    f32 mag = data->mMag;
-    data->mVel.x = data->mLocalDir.x * mag;
-    data->mVel.y = data->mLocalDir.y * mag;
-    data->mVel.z = data->mLocalDir.z * mag;
+    data->mVel.scale(data->mMag, data->mLocalDir);
     if (data->mSttFlag & 0x01) {
         data->mAirMinDist = JMASCos(data->mVal1 * 0xFFFF);
         if (data->mSttFlag & 0x02) {
@@ -132,6 +131,29 @@ void JPAAirField::preCalc(JPAFieldData* data) {
 /* 8025A510-8025A6EC       .text calc__11JPAAirFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAAirField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
+    if (data->mSttFlag & 0x01) {
+        JGeometry::TVec3<f32> vel;
+        if (data->mSttFlag & 0x02) {
+            vel.sub(ptcl->mPosition, data->mLocalPos);
+        } else {
+            vel.sub(ptcl->mLocalPosition, data->mLocalPos);
+        }
+
+        vel.normalize();
+
+        if (data->mAirMinDist <= data->mLocalDir.dot(vel)) {
+            JPABaseField::calcVel(data, ptcl);
+        }
+    } else {
+        JPABaseField::calcVel(data, ptcl);
+    }
+
+    if (data->mSttFlag & 0x04) {
+        f32 len = ptcl->mBaseVel.length();
+        if (len > data->mMagRndm) {
+            ptcl->mBaseVel.scale(data->mMagRndm / len);
+        }
+    }
 }
 
 /* 8025A6EC-8025A788       .text preCalc__14JPAMagnetFieldFP12JPAFieldData */
@@ -152,15 +174,11 @@ void JPAMagnetField::preCalc(JPAFieldData* data) {
 void JPAMagnetField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
     if (data->mSttFlag & 0x02) {
-        data->mVel.x = data->mLocalPos.x - ptcl->mPosition.x;
-        data->mVel.y = data->mLocalPos.y - ptcl->mPosition.y;
-        data->mVel.z = data->mLocalPos.z - ptcl->mPosition.z;
+        data->mVel.sub(data->mLocalPos, ptcl->mPosition);
     } else {
-        data->mVel.x = data->mLocalPos.x - ptcl->mLocalPosition.x;
-        data->mVel.y = data->mLocalPos.y - ptcl->mLocalPosition.y;
-        data->mVel.z = data->mLocalPos.z - ptcl->mLocalPosition.z;
+        data->mVel.sub(data->mLocalPos, ptcl->mLocalPosition);
     }
-    data->mVel.normalize();
+    data->mVel.setLength(data->mMag);
     calcVel(data, ptcl);
 }
 

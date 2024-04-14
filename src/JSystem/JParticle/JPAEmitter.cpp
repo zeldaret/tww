@@ -23,7 +23,7 @@ void JPABaseEmitter::calcVolumePoint() {
 
 /* 8025C254-8025C394       .text calcVolumeLine__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeLine() {
-    if (mDataFlag & 2) {
+    if (checkEmDataFlag(0x02)) {
         emtrInfo.mVolumePos.set(0.0f, 0.0f, emtrInfo.mVolumeSize * ((f32)emtrInfo.mVolumeEmitIdx / ((f32)emtrInfo.mVolumeEmitCount - 1.0f) - 0.5f));
         emtrInfo.mVolumeEmitIdx++;
     } else {
@@ -37,7 +37,7 @@ void JPABaseEmitter::calcVolumeLine() {
 /* 8025C394-8025C538       .text calcVolumeCircle__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeCircle() {
     s16 angle;
-    if (mDataFlag & 0x02) {
+    if (checkEmDataFlag(0x02)) {
         s16 idx = (0x10000 * emtrInfo.mVolumeEmitIdx / emtrInfo.mVolumeEmitCount);
         angle = idx * mVolumeSweep;
         emtrInfo.mVolumeEmitIdx++;
@@ -46,7 +46,7 @@ void JPABaseEmitter::calcVolumeCircle() {
     }
 
     f32 rad = getRandomF();
-    if (mDataFlag & 0x01)
+    if (checkEmDataFlag(0x01))
         rad = 1.0f - rad * rad;
     rad = emtrInfo.mVolumeSize * (mVolumeMinRad + rad * (1.0f - mVolumeMinRad));
 
@@ -73,7 +73,7 @@ void JPABaseEmitter::calcVolumeCylinder() {
     s16 angle = mVolumeSweep * getRandomSS();
 
     f32 rad = getRandomF();
-    if (mDataFlag & 0x01)
+    if (checkEmDataFlag(0x01))
         rad = 1.0f - rad * rad;
     rad = emtrInfo.mVolumeSize * (mVolumeMinRad + rad * (1.0f - mVolumeMinRad));
 
@@ -125,8 +125,7 @@ void JPABaseEmitter::create(JPADataBlockLinkInfo* info) {
     mInitialVelDir = dyn->getInitVelDir();
     mAccel = dyn->getAccel();
     dyn->getEmitterDir(mEmitterDir);
-    // This appears to be an attempt at a normalize, but it scales by the length instead (???)
-    mEmitterDir.normalize_broken();
+    mEmitterDir.normalize();
     mSpread = dyn->getSpread();
     mDataFlag = dyn->getDataFlag();
     mUseKeyFlag = dyn->getUseKeyFlag();
@@ -197,31 +196,65 @@ void JPABaseEmitter::calc() {
     emtrInfo.mVolumeEmitCount = 0;
     if (!checkStatus(JPAEmtrStts_StopCalc)) {
         calcKey();
-        if (mpEmitterCallBack != NULL)
-            mpEmitterCallBack->execute(this);
+        calcBeforeCB();
         calcEmitterInfo();
         mDraw.calc();
         mFieldManager.preCalc();
         if (!checkStatus(JPAEmtrStts_EnableDeleteEmitter))
             calcCreatePtcls();
-        if (mpEmitterCallBack != NULL)
-            mpEmitterCallBack->executeAfter(this);
+        calcAfterCB();
         calcParticle();
         calcChild();
         mTick += 1.0f;
         if (mTick < 0.0f)
             mTick = 0.0f;
     } else {
-        if (mpEmitterCallBack != NULL)
-            mpEmitterCallBack->execute(this);
-        if (mpEmitterCallBack != NULL)
-            mpEmitterCallBack->executeAfter(this);
+        calcBeforeCB();
+        calcAfterCB();
     }
 }
 
 /* 8025D3C0-8025D5D4       .text calcCreatePtcls__14JPABaseEmitterFv */
 void JPABaseEmitter::calcCreatePtcls() {
     /* Nonmatching */
+    if (checkStatus(JPAEmtrStts_RateStepEmit)) {
+        s32 emitCount = 0;
+        if (checkEmDataFlag(0x02)) { // Fixed interval
+            emitCount = (mVolumeType == 1) ?
+                (mDivNumber + 1) * (mDivNumber - 1) * 4 + 6 : // Sphere
+                mDivNumber;
+            emtrInfo.mVolumeEmitIdx = 0;
+        } else {
+            f32 incr = mRate * (1.0f + mRateRndm * getRandomRF());
+            mEmitCount += incr;
+
+            if (mEmitCount >= 1) {
+                emitCount = mEmitCount;
+                mEmitCount -= emitCount;
+            } else if (mEmitCount > 0 && checkStatus(JPAEmtrStts_FirstEmit)) {
+                emitCount = 1;
+            }
+        }
+
+        emtrInfo.mVolumeEmitCount = emitCount;
+
+        if (checkStatus(JPAEmtrStts_StopEmit))
+            emitCount = 0;
+
+        for (s32 i = 0; i < emitCount; i++) {
+            JPABaseParticle* ptcl = createParticle();
+            if (ptcl == NULL)
+                break;
+        }
+    }
+
+    if (mRateStepTimer++ >= mRateStep + 1) {
+        mRateStepTimer -= mRateStep + 1;
+        setStatus(JPAEmtrStts_RateStepEmit);
+    } else {
+        clearStatus(JPAEmtrStts_RateStepEmit);
+    }
+    clearStatus(JPAEmtrStts_FirstEmit);
 }
 
 /* 8025D5D4-8025D670       .text createChildren__14JPABaseEmitterFP15JPABaseParticle */

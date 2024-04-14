@@ -168,6 +168,8 @@ public:
     bool checkStatus(u32 status) { return mFlags & status; }
     void initStatus(u32 status) { mFlags = status; }
 
+    bool checkEmDataFlag(u32 mask) { return mDataFlag & mask; }
+
     int getParticleNumber() {
         return mActiveParticles.getNumLinks() + mChildParticles.getNumLinks();
     }
@@ -226,6 +228,7 @@ public:
     void setVolumeSweep(f32 i_volSweep) { mVolumeSweep = i_volSweep; }
     void setVolumeSize(u16 size) { mVolumeSize = size; }
     void setLifeTime(s16 i_lifeTime) { mLifeTime = i_lifeTime; }
+    f32 getRate() const { return mRate; }
     void setRate(f32 i_rate) { mRate = i_rate; }
     void setRandomDirectionSpeed(f32 i_speed) { mInitialVelRndm = i_speed; }
     void setDirectionalSpeed(f32 i_speed) { mInitialVelDir = i_speed; }
@@ -241,6 +244,7 @@ public:
     void becomeImmortalEmitter() { setStatus(JPAEmtrStts_Immortal); }
     void quitImmortalEmitter() { clearStatus(JPAEmtrStts_Immortal); }
 
+    void becomeContinuousParticle() { mMaxFrame = 0; }
     void becomeInvalidEmitter() {
         mMaxFrame = -1;
         stopCreateParticle();
@@ -267,11 +271,7 @@ public:
     void setUserWork(u32 work) { mUserData = work; }
 
     // TODO
-    void becomeContinuousParticle() {}
-    void calcAfterCB() {}
-    void calcBeforeCB() {}
     void calcEmitterGlobalTranslation(JGeometry::TVec3<f32>&) {}
-    void checkEmDataFlag(u32) {}
     void drawCB() {}
     void drawEmitterCallBack() {}
     void getAxisYVec(JGeometry::TVec3<f32>&) const {}
@@ -283,7 +283,6 @@ public:
     void getFrame() {}
     void getGlobalParticleScale(JGeometry::TVec3<f32>&) const {}
     void getParticleList() {}
-    void getRate() const {}
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void isChildDraw() {}
     void isContinuousParticle() {}
@@ -308,6 +307,17 @@ public:
     static f32 getAspect() { return emtrInfo.mAspect; }
     static f32 getFovy() { return emtrInfo.mFovy; }
 
+private:
+    void calcAfterCB() {
+        if (mpEmitterCallBack != NULL)
+            mpEmitterCallBack->executeAfter(this);
+    }
+    void calcBeforeCB() {
+        if (mpEmitterCallBack != NULL)
+            mpEmitterCallBack->execute(this);
+    }
+
+public:
     /* 0x000 */ VolumeFunc mVolumeFunc;
     /* 0x00C */ JGeometry::TVec3<f32> mEmitterScale;
     /* 0x018 */ JGeometry::TVec3<f32> mEmitterTranslation;

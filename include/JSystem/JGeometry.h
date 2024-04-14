@@ -144,7 +144,7 @@ struct TVec3<f32> : public Vec {
         return C_VECSquareMag((Vec*)&x);
     }
 
-    f32 normalize_broken() {
+    f32 normalize() {
         f32 sq = squared();
         if (sq <= TUtil<f32>::epsilon()) {
             return 0.0f;
@@ -154,52 +154,21 @@ struct TVec3<f32> : public Vec {
         return norm;
     }
 
-    f32 normalize() {
-        f32 sq = squared();
-        if (sq <= TUtil<f32>::epsilon()) {
-            return 0.0f;
-        }
-        f32 norm = TUtil<f32>::inv_sqrt(sq);
-        scale(1.0f / norm);
-        return norm;
-    }
-
-    f32 normalize(const TVec3<f32>& other) {
-        f32 sq = other.squared();
-        if (sq <= TUtil<f32>::epsilon()) {
-            zero();
-            return 0.0f;
-        }
-        f32 norm = TUtil<f32>::inv_sqrt(sq);
-        scale(1.0f / norm, other);
-        return norm;
-    }
-
     f32 length() const {
         f32 sqr = squared();
         return TUtil<f32>::sqrt(sqr);
     }
 
-    void scale(register f32 sc) {
+    void scale(f32 sc) {
         x *= sc;
         y *= sc;
         z *= sc;
     }
 
-    void scale(register f32 sc, const TVec3<f32>& other) {
-        register const f32* src = &other.x;
-        register f32 z;
-        register f32 x_y;
-        register f32* dst = &x;
-        register f32 zres;
-        asm {
-            psq_l    x_y, 0(src),  0, 0
-            psq_l    z,   8(src),  1, 0
-            ps_muls0 x_y,    x_y, sc
-            psq_st   x_y, 0(dst),  0, 0
-            ps_muls0 zres,       z, sc
-            psq_st   zres,  8(dst),  1, 0
-        };
+    void scale(f32 sc, const TVec3<f32>& b) {
+        x = b.x * sc;
+        y = b.y * sc;
+        z = b.z * sc;
     }
 
     void negate() {
@@ -209,11 +178,15 @@ struct TVec3<f32> : public Vec {
     }
 
     void sub(const TVec3<f32>& b) {
-        C_VECSubtract((Vec*)&x, (Vec*)&b.x, (Vec*)&x);
+        x -= b.x;
+        y -= b.y;
+        z -= b.z;
     }
 
     void sub(const TVec3<f32>& a, const TVec3<f32>& b) {
-        C_VECSubtract((Vec*)&a.x, (Vec*)&b.x, (Vec*)&x);
+        x = a.x - b.x;
+        y = a.y - b.y;
+        z = a.z - b.z;
     }
 
     bool isZero() const {
@@ -233,23 +206,8 @@ struct TVec3<f32> : public Vec {
         scale(norm * len);
     }
 
-    f32 dot(const TVec3<f32>& other) const {
-        register const f32* pThis = &x;
-        register const f32* pOther = &other.x;
-        register f32 otherReg;
-        register f32 thisyz;
-        register f32 res;
-        register f32 thisxy;
-        asm {
-            psq_l thisyz, 4(pThis), 0, 0
-            psq_l otherReg, 4(pOther), 0, 0
-            ps_mul thisyz, thisyz, otherReg
-            psq_l thisxy, 0(pThis), 0, 0
-            psq_l otherReg, 0(pOther), 0, 0
-            ps_madd res, thisxy, otherReg, thisyz
-            ps_sum0 res, res, thisyz, thisyz
-        };
-        return res;
+    f32 dot(const TVec3<f32>& b) const {
+        return x*b.x + y*b.y * z*b.z;
     }
 
     template<typename S>
