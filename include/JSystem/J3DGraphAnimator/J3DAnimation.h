@@ -12,10 +12,13 @@ struct J3DAnmKeyTableBase {
 };  // Size = 0x6
 
 struct J3DAnmColorKeyTable {
-    J3DAnmKeyTableBase mRInfo;
-    J3DAnmKeyTableBase mGInfo;
-    J3DAnmKeyTableBase mBInfo;
-    J3DAnmKeyTableBase mAInfo;
+	enum Color {
+		RED   = 0,
+		GREEN = 1,
+		BLUE  = 2,
+		ALPHA = 3,
+	};
+	/* 0x00 */ J3DAnmKeyTableBase mColorInfo[4];
 };  // Size = 0x18
 
 struct J3DAnmColorFullTable {
@@ -374,7 +377,7 @@ public:
         mAnmTable = NULL;
     }
 
-    virtual ~J3DAnmTransformFull();
+    virtual ~J3DAnmTransformFull() {}
     virtual void getTransform(u16, J3DTransformInfo*) const;
 
 private:
@@ -612,8 +615,8 @@ public:
     void searchUpdateMaterialID(J3DMaterialTable*);
     void searchUpdateMaterialID(J3DModelData*);
 
-    virtual ~J3DAnmColor();
-    virtual void getColor(u16, GXColor*) const;
+    virtual ~J3DAnmColor() {}
+    virtual void getColor(u16, GXColor*) const {}
 
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
@@ -635,22 +638,22 @@ public:
     friend class J3DAnmKeyLoader_v15;
 
     J3DAnmColorKey() {
-        field_0x30 = 0;
-        field_0x34 = 0;
-        field_0x38 = 0;
-        field_0x3c = 0;
-        field_0x40 = 0;
+        mColorR = NULL;
+        mColorG = NULL;
+        mColorB = NULL;
+        mColorA = NULL;
+        mTable = NULL;
     }
 
-    virtual ~J3DAnmColorKey();
+    virtual ~J3DAnmColorKey() {}
     virtual void getColor(u16, GXColor*) const;
 
 private:
-    /* 0x30 */ s16* field_0x30;
-    /* 0x34 */ s16* field_0x34;
-    /* 0x38 */ s16* field_0x38;
-    /* 0x3C */ s16* field_0x3c;
-    /* 0x40 */ J3DAnmColorKeyTable* field_0x40;
+    /* 0x30 */ s16* mColorR;
+    /* 0x34 */ s16* mColorG;
+    /* 0x38 */ s16* mColorB;
+    /* 0x3C */ s16* mColorA;
+    /* 0x40 */ J3DAnmColorKeyTable* mTable;
 };
 
 class J3DAnmColorFull : public J3DAnmColor {
@@ -665,7 +668,7 @@ public:
         mAnmTable = NULL;
     }
 
-    virtual ~J3DAnmColorFull();
+    virtual ~J3DAnmColorFull() {}
     virtual void getColor(u16, GXColor*) const;
 
     J3DAnmColorFullTable * getAnmTable() const { return mAnmTable; }
@@ -696,7 +699,7 @@ public:
         }
     }
 
-    virtual ~J3DAnmVtxColor();
+    virtual ~J3DAnmVtxColor() {}
     virtual void getColor(u8, u16, GXColor*) const {}
 
 protected:
@@ -714,7 +717,7 @@ public:
         }
     }
 
-    virtual ~J3DAnmVtxColorKey();
+    virtual ~J3DAnmVtxColorKey() {}
     virtual void getColor(u8, u16, GXColor*) const;
 
     J3DAnmColorKeyTable * getAnmTable(u8 idx) const { return mpTable[idx]; }
@@ -737,7 +740,7 @@ public:
         }
     }
 
-    virtual ~J3DAnmVtxColorFull();
+    virtual ~J3DAnmVtxColorFull() {}
     virtual void getColor(u8, u16, GXColor*) const;
 
     J3DAnmColorFullTable * getAnmTable(u8 idx) const { return mpTable[idx]; }
