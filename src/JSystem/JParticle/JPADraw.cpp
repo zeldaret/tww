@@ -766,14 +766,14 @@ void JPADraw::setChildClipBoard() {
 
     cb.mPivotX = cb.mPivotY = 0.0f;
 
-    cb.field_0x14[1].y = 0.0f;
-    cb.field_0x14[0].y = 0.0f;
-    cb.field_0x14[3].x = 0.0f;
-    cb.field_0x14[0].x = 0.0f;
-    cb.field_0x14[3].y = 1.0f;
-    cb.field_0x14[2].y = 1.0f;
-    cb.field_0x14[2].x = 1.0f;
-    cb.field_0x14[1].x = 1.0f;
+    cb.mTexCoordPt[1].y = 0.0f;
+    cb.mTexCoordPt[0].y = 0.0f;
+    cb.mTexCoordPt[3].x = 0.0f;
+    cb.mTexCoordPt[0].x = 0.0f;
+    cb.mTexCoordPt[3].y = 1.0f;
+    cb.mTexCoordPt[2].y = 1.0f;
+    cb.mTexCoordPt[2].x = 1.0f;
+    cb.mTexCoordPt[1].x = 1.0f;
 
     cb.mDirTypeFunc = NULL;
     cb.mRotTypeFunc = NULL;
