@@ -48,7 +48,7 @@ class daRd_c : public fopEn_enemy_c {
 public:
     enum Proc_e {
         PROC_INIT = 0,
-        PROC_EXEC = 1
+        PROC_EXEC = 1,
     };
     
     enum Mode {

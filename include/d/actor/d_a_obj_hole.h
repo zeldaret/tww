@@ -9,7 +9,7 @@ class daObj_Hole_c : public fopAc_ac_c {
 public:
     enum Proc_e {
         PROC_INIT = 0,
-        PROC_EXEC = 1
+        PROC_EXEC = 1,
     };
 
     enum Mode {

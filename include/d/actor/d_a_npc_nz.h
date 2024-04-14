@@ -14,15 +14,15 @@ class J3DNode;
 class daNpc_Nz_c : public fopNpc_npc_c {
 public:
     enum Proc_e {
-        PROC_0_e = 0,
-        PROC_1_e = 1,
+        PROC_INIT = 0,
+        PROC_EXEC = 1,
     };
 
     // objdiff says this is a weak function
     // but defining it here with {} causes it to be inlined with fopAcM_SetupActor which breaks things
     daNpc_Nz_c();
 
-    void modeProcInit(int) {}
+    void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
 
     BOOL NodeCallBack(J3DNode*, int);
     BOOL TailNodeCallBack(J3DNode*, int);
