@@ -10,6 +10,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JParticle/JPASweepShape.h"
+#include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JGeometry.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/mtx/mtx.h"
@@ -88,7 +89,36 @@ void JPADrawExecGenIdtMtx::exec(const JPADrawContext* pDC) {
 
 /* 8025FFB0-802602F0       .text exec__20JPADrawExecSetTexMtxFPC14JPADrawContext */
 void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC) {
-    /* Nonmatching */
+    s32 tick = pDC->pbe->mTick;
+    f32 tilingX = 0.5f * pDC->pbsp->getTilingX();
+    f32 tilingY = 0.5f * pDC->pbsp->getTilingY();
+    f32 transX = tick * pDC->pbsp->getTexScrollTransX() + pDC->pbsp->getTexStaticTransX();
+    f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
+    f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
+    f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
+    s32 angle = DEG_TO_RAD(tick * pDC->pbsp->getTexScrollRotate());
+    f32 sin = JMASSin(angle);
+    f32 cos = JMASCos(angle);
+
+    Mtx mtx;
+    mtx[0][0] = scaleX * cos;
+    mtx[0][1] = -scaleX * sin;
+    mtx[0][2] = 0.0f;
+    mtx[0][3] = tilingX + (scaleX * ((sin * (tilingY + transY)) - (cos * (tilingX + transX))));
+
+    mtx[1][0] = scaleY * sin;
+    mtx[1][1] = scaleY * cos;
+    mtx[1][2] = 0.0f;
+    mtx[1][3] = tilingY + (-scaleY * ((sin * (tilingX + transX)) + (cos * (tilingY + transY))));
+
+    mtx[2][0] = 0.0f;
+    mtx[2][1] = 0.0f;
+    mtx[2][2] = 1.0f;
+    mtx[2][3] = 0.0f;
+
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 }
 
 /* 802602F0-8026031C       .text exec__29JPADrawExecLoadDefaultTextureFPC14JPADrawContext */
@@ -176,7 +206,34 @@ void JPADrawExecRegisterPrmAEnv::exec(const JPADrawContext* pDC, JPABaseParticle
 
 /* 80260858-80260B68       .text exec__20JPADrawExecSetTexMtxFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 tick = ptcl->mCurFrame;
+    f32 tilingX = 0.5f * pDC->pbsp->getTilingX();
+    f32 tilingY = 0.5f * pDC->pbsp->getTilingY();
+    f32 transX = tick * pDC->pbsp->getTexScrollTransX() + pDC->pbsp->getTexStaticTransX();
+    f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
+    f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
+    f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
+    s32 angle = DEG_TO_RAD(tick * pDC->pbsp->getTexScrollRotate());
+    f32 sin = JMASSin(angle);
+    f32 cos = JMASCos(angle);
+
+    Mtx mtx;
+    mtx[0][0] = scaleX * cos;
+    mtx[0][1] = -scaleX * sin;
+    mtx[0][2] = 0.0f;
+    mtx[0][3] = tilingX + (scaleX * ((sin * (tilingY + transY)) - (cos * (tilingX + transX))));
+
+    mtx[1][0] = scaleY * sin;
+    mtx[1][1] = scaleY * cos;
+    mtx[1][2] = 0.0f;
+    mtx[1][3] = tilingY + (-scaleY * ((sin * (tilingX + transX)) + (cos * (tilingY + transY))));
+
+    mtx[2][0] = 0.0f;
+    mtx[2][1] = 0.0f;
+    mtx[2][2] = 1.0f;
+    mtx[2][3] = 0.0f;
+
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
 }
 
 /* 80260B68-80260BAC       .text exec__22JPADrawExecLoadTextureFPC14JPADrawContextP15JPABaseParticle */
@@ -617,12 +674,16 @@ void JPADrawCalcColorCopyFromEmitter::calc(const JPADrawContext* pDC, JPABasePar
 
 /* 802657E8-80265880       .text calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 tick = ptcl->mCurFrame;
+    s32 frame = (tick < pDC->pbsp->getColorRegAnmMaxFrm()) ? (s32)ptcl->mCurFrame : pDC->pbsp->getColorRegAnmMaxFrm();
+    JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 80265880-80265918       .text calc__30JPADrawCalcColorAnmFrameRepeatFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 tick = ptcl->mCurFrame;
+    s32 frame = ((ptcl->mLoopOffset & pDC->pbsp->getColLoopOffset()) + tick) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
+    JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 80265918-802659C4       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContextP15JPABaseParticle */
@@ -632,17 +693,30 @@ void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* pDC, JPABasePar
 
 /* 802659C4-80265A90       .text calc__29JPADrawCalcColorAnmFrameMergeFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameMerge::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 start = ptcl->mLoopOffset & pDC->pbsp->getColLoopOffset();
+    s32 maxFrame = pDC->pbsp->getColorRegAnmMaxFrm() + 1;
+    s32 frame = (s32)(start + maxFrame * ptcl->mCurNormTime) % maxFrame;
+    JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 80265A90-80265B14       .text calc__30JPADrawCalcColorAnmFrameRandomFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 frame = (ptcl->mLoopOffset & pDC->pbsp->getColLoopOffset()) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
+    JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 80265B14-80265C40       .text calc__16JPADrawCalcAlphaFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcAlpha::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    f32 time = ptcl->mCurNormTime;
+    f32 alpha;
+    if (time < pDC->pesp->getAlphaInTiming()) {
+        alpha = time * pDC->pesp->getAlphaIncreaseRate() + pDC->pesp->getAlphaInValue();
+    } else if (time > pDC->pesp->getAlphaOutTiming()) {
+        alpha = pDC->pesp->getAlphaBaseValue() + pDC->pesp->getAlphaDecreaseRate() * (time - pDC->pesp->getAlphaOutTiming());
+    } else {
+        alpha = pDC->pesp->getAlphaBaseValue();
+    }
+    ptcl->mAlphaOut = alpha;
 }
 
 /* 80265C40-80265D54       .text calc__27JPADrawCalcAlphaFlickNrmSinFPC14JPADrawContextP15JPABaseParticle */
