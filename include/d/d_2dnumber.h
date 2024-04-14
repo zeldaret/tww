@@ -42,6 +42,11 @@ public:
     bool init(ResTIMG*, ResTIMG*, ResTIMG*, ResTIMG*);
     void setRotate(float);
     void draw();
+
+public:
+    /* 0x04 */ J2DPicture* mPicture[3];
+    /* 0x10 */ J2DPicture* mNum[3][2];
+    /* 0x28 */ f32 field_0x28[14];
 };
 
 class dDlst_2DObject_c : public dDlst_base_c {

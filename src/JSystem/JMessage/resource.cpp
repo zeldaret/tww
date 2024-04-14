@@ -17,7 +17,7 @@ JMessage::TResourceContainer::TResourceContainer() {
 /* 8029FD04-8029FD90       .text Get_groupID__Q28JMessage18TResourceContainerFUs */
 JMessage::TResource* JMessage::TResourceContainer::Get_groupID(u16 groupID) {
     /* Nonmatching */
-    for (iterator iter = begin(); iter != end(); ++iter) {
+    for (iterator iter = begin(); iter != end(); iter++) {
         TResource* res = &(*iter);
         if (res->mInfo.get_groupID() == groupID)
             return res;

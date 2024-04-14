@@ -34,15 +34,15 @@ public:
     u32 getNrmNum() const { return mNrmNum; }
     u32 getVtxNum() const { return mVtxNum; }
     GXVtxAttrFmtList* getVtxAttrFmtList() { return mVtxAttrFmtList; }
-    u8 getVtxPosFrac() const { return mVtxPosFrac; }
-    u8 getVtxNrmFrac() const { return mVtxNrmFrac; }
-    int getVtxPosType() const { return mVtxPosType; }
-    int getVtxNrmType() const { return mVtxNrmType; }
 
-    void setVtxPosFrac(u8 frac) { mVtxPosFrac = frac; }
+    GXCompType getVtxPosType() const { return mVtxPosType; }
     void setVtxPosType(GXCompType type) { mVtxPosType = type; }
-    void setVtxNrmFrac(u8 frac) { mVtxNrmFrac = frac; }
+    u8 getVtxPosFrac() const { return mVtxPosFrac; }
+    void setVtxPosFrac(u8 frac) { mVtxPosFrac = frac; }
+    GXCompType getVtxNrmType() const { return mVtxNrmType; }
     void setVtxNrmType(GXCompType type) { mVtxNrmType = type; }
+    u8 getVtxNrmFrac() const { return mVtxNrmFrac; }
+    void setVtxNrmFrac(u8 frac) { mVtxNrmFrac = frac; }
 
 private:
     friend class J3DModelLoader;
@@ -78,6 +78,8 @@ public:
     s32 allocTransformedVtxPosArray();
     s32 allocTransformedVtxNrmArray();
 
+    J3DVertexData* getVertexData() { return mVtxData; }
+
     void setCurrentVtxPos(void* pVtxPos) { mCurrentVtxPos = pVtxPos; }
     void* getCurrentVtxPos() { return mCurrentVtxPos; }
 
@@ -94,7 +96,20 @@ public:
 
     void* getTransformedVtxPos(int idx) { return mTransformedVtxPosArray[idx]; }
     void* getTransformedVtxNrm(int idx) { return mTransformedVtxNrmArray[idx]; }
-    J3DVertexData* getVertexData() { return mVtxData; }
+    void* getVtxPosArrayPointer(int idx) { return mVtxPosArray[idx]; }
+    void* getVtxNrmArrayPointer(int idx) { return mVtxNrmArray[idx]; }
+
+    void swapVtxPosArrayPointer() {
+        void* tmp = mVtxPosArray[0];
+        mVtxPosArray[0] = mVtxPosArray[1];
+        mVtxPosArray[1] = tmp;
+    }
+
+    void swapVtxNrmArrayPointer() {
+        void* tmp = mVtxNrmArray[0];
+        mVtxNrmArray[0] = mVtxNrmArray[1];
+        mVtxNrmArray[1] = tmp;
+    }
 
     void swapTransformedVtxPos() {
         void* tmp = mTransformedVtxPosArray[0];

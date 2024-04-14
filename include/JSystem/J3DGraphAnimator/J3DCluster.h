@@ -26,10 +26,7 @@ public:
     J3DDeformer* getDeformer() { return mDeformer; }
     void setDeformer(J3DDeformer* deformer) { mDeformer = deformer; }
 
-private:
-    friend class J3DClusterLoader;
-    friend class J3DClusterLoader_v15;
-
+public:
     /* 0x00 */ f32 mMaxAngle;
     /* 0x04 */ f32 mMinAngle;
     /* 0x08 */ J3DClusterKey* mClusterKey;

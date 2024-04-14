@@ -31,7 +31,7 @@ J3DClusterLoader_v15::~J3DClusterLoader_v15() {}
 void* J3DClusterLoader_v15::load(const void* i_data) {
     mpDeformData = new J3DDeformData();
     mpDeformData->clear();
-    
+
     const JUTDataFileHeader* fileHeader = (JUTDataFileHeader*)i_data;
     const JUTDataBlockHeader* block = &fileHeader->mFirstBlock;
     for (int i = 0; i < fileHeader->mBlockNum; i++) {
@@ -45,7 +45,7 @@ void* J3DClusterLoader_v15::load(const void* i_data) {
         }
         block = block->getNext();
     }
-    
+
     return mpDeformData;
 }
 
@@ -56,7 +56,7 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
     mpDeformData->mVtxPosNum = block->mVtxPosNum;
     mpDeformData->mVtxNrmNum = block->mVtxNrmNum;
     mpDeformData->mClusterVertexNum = block->mClusterVertexNum;
-    
+
     if (block->mClusterName != NULL) {
         mpDeformData->mClusterName = new JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(block, block->mClusterName));
     } else {
@@ -67,28 +67,28 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
     } else {
         mpDeformData->mClusterKeyName = NULL;
     }
-    
+
     mpDeformData->mVtxPos = JSUConvertOffsetToPtr<f32>(block, block->mVtxPos);
     mpDeformData->mVtxNrm = JSUConvertOffsetToPtr<f32>(block, block->mVtxNrm);
-    
+
     mpDeformData->mClusterPointer = new J3DCluster[mpDeformData->getClusterNum()];
     J3DCluster* blockCluster = JSUConvertOffsetToPtr<J3DCluster>(block, block->mClusterPointer);
     for (int i = 0; i < mpDeformData->getClusterNum(); i++) {
         mpDeformData->mClusterPointer[i] = blockCluster[i];
     }
-    
+
     mpDeformData->mClusterKeyPointer = new J3DClusterKey[mpDeformData->getClusterKeyNum()];
     J3DClusterKey* blockClusterKey = JSUConvertOffsetToPtr<J3DClusterKey>(block, block->mClusterKeyPointer);
     for (int i = 0; i < mpDeformData->getClusterKeyNum(); i++) {
         mpDeformData->mClusterKeyPointer[i] = blockClusterKey[i];
     }
-    
+
     mpDeformData->mClusterVertex = new J3DClusterVertex[mpDeformData->mClusterVertexNum];
     J3DClusterVertex* blockClusterVertex = JSUConvertOffsetToPtr<J3DClusterVertex>(block, block->mClusterVertex);
     for (int i = 0; i < mpDeformData->mClusterVertexNum; i++) {
         mpDeformData->mClusterVertex[i] = blockClusterVertex[i];
     }
-    
+
     for (int i = 0; i < mpDeformData->getClusterNum(); i++) {
         J3DCluster* cluster = &mpDeformData->mClusterPointer[i];
         cluster->mClusterKey = JSUConvertOffsetToPtr<J3DClusterKey>(block, cluster->mClusterKey);
@@ -103,16 +103,16 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
             deformer->field_0xc = NULL;
         }
         deformer->mFlags = cluster->mFlags;
-        deformer->field_0x8 = new f32[cluster->mKeyNum];
+        deformer->mWeightList = new f32[cluster->mKeyNum];
         cluster->setDeformer(deformer);
     }
-    
+
     for (int i = 0; i < mpDeformData->getClusterKeyNum(); i++) {
         J3DClusterKey* clusterKey = &mpDeformData->mClusterKeyPointer[i];
         clusterKey->field_0x4 = JSUConvertOffsetToPtr<u16>(block, clusterKey->field_0x4);
         clusterKey->field_0x8 = JSUConvertOffsetToPtr<u16>(block, clusterKey->field_0x8);
     }
-    
+
     for (int i = 0; i < mpDeformData->mClusterVertexNum; i++) {
         J3DClusterVertex* clusterVertex = &mpDeformData->mClusterVertex[i];
         clusterVertex->field_0x4 = JSUConvertOffsetToPtr<u16>(block, clusterVertex->field_0x4);

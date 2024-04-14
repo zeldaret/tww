@@ -29,12 +29,12 @@ public:
 
         inline void clear() { mNum = 0; }
         inline void push(const char* str) {
-            mStack[mNum - 1] = str;
+            mStack[mNum] = str;
             mNum++;
         }
         inline bool IsStorable() const { return mNum < 4; }
         inline void pop() { mNum--; }
-        inline const char* top() const { return mStack[mNum - 2]; }
+        inline const char* top() const { return mStack[mNum - 1]; }
         inline bool empty() const { return mNum == 0; }
 
         /* 0x00 */ const char* mStack[4];

@@ -6,6 +6,8 @@
 #include "JSystem/J3DGraphAnimator/J3DCluster.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
+#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
+#include "dolphin/os/OSCache.h"
 
 /* 802F37C4-802F37E4       .text clear__13J3DDeformDataFv */
 void J3DDeformData::clear() {
@@ -28,37 +30,64 @@ void J3DDeformData::deform(J3DModel* model) {
 }
 
 /* 802F3838-802F3900       .text deform__13J3DDeformDataFP15J3DVertexBuffer */
-void J3DDeformData::deform(J3DVertexBuffer*) {
-    /* Nonmatching */
+void J3DDeformData::deform(J3DVertexBuffer* vtx) {
+    vtx->swapVtxPosArrayPointer();
+    vtx->swapVtxNrmArrayPointer();
+
+    for (u16 i = 0; i < mClusterNum; i++)
+        mClusterPointer[i].getDeformer()->deform(vtx, i);
+
+    DCStoreRange(vtx->getVtxPosArrayPointer(0), vtx->getVertexData()->getVtxNum() * 12);
+    DCStoreRange(vtx->getVtxNrmArrayPointer(0), vtx->getVertexData()->getNrmNum() * 12);
+    vtx->setCurrentVtxPos(vtx->getVtxPosArrayPointer(0));
+    vtx->setCurrentVtxNrm(vtx->getVtxNrmArrayPointer(0));
 }
 
 /* 802F3900-802F3920       .text clear__11J3DDeformerFv */
 void J3DDeformer::clear() {
     mDeformData = NULL;
     mAnmCluster = NULL;
-    field_0x8 = NULL;
+    mWeightList = NULL;
     field_0xc = NULL;
     mFlags = 3;
 }
 
 /* 802F3920-802F3A08       .text deform__11J3DDeformerFP15J3DVertexBufferUs */
-void J3DDeformer::deform(J3DVertexBuffer*, u16) {
+void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx) {
     /* Nonmatching */
+    u16 keyIdx = 0;
+    if (mAnmCluster) {
+        for (u16 i = 0; i < idx; i++)
+            keyIdx += mDeformData->getClusterPointer(i)->mKeyNum;
+
+        for (u16 i = 0; i < mDeformData->getClusterPointer(idx)->mKeyNum; i++)
+            mWeightList[i] = mAnmCluster->getWeight(keyIdx++);
+
+        deform(vtx, idx, mWeightList);
+    }
 }
 
 /* 802F3A08-802F3FA8       .text deform__11J3DDeformerFP15J3DVertexBufferUsPf */
-void J3DDeformer::deform(J3DVertexBuffer*, u16, f32*) {
+void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
     /* Nonmatching */
 }
 
 /* 802F3FA8-802F4064       .text normalize__11J3DDeformerFPf */
-void J3DDeformer::normalize(f32*) {
-    /* Nonmatching */
+void J3DDeformer::normalize(f32* vec) {
+    f32 inv = 1.0f / sqrtf(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
+    vec[0] *= inv;
+    vec[1] *= inv;
+    vec[2] *= inv;
 }
 
 /* 802F4064-802F40C0       .text normalizeWeight__11J3DDeformerFiPf */
-void J3DDeformer::normalizeWeight(int, f32*) {
-    /* Nonmatching */
+void J3DDeformer::normalizeWeight(int count, f32* weight) {
+    f32 sum = 0.0f;
+    for (u16 i = 0; i < count; i++)
+        sum += weight[i];
+    sum = 1.0f / sum;
+    for (u16 i = 0; i < count; i++)
+        weight[i] *= sum;
 }
 
 /* 802F40C0-802F40F0       .text __ct__13J3DSkinDeformFv */

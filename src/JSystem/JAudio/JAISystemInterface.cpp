@@ -10,8 +10,11 @@
 JASystem::Kernel::TPortCmd JAInter::SystemInterface::systemPortCmd;
 
 /* 8029E188-8029E1B4       .text checkFileExsistence__Q27JAInter15SystemInterfaceFPc */
-s32 JAInter::SystemInterface::checkFileExsistence(char* param_1) {
-    return DVDConvertPathToEntrynum(param_1) != -1;
+BOOL JAInter::SystemInterface::checkFileExsistence(char* param_1) {
+    if (DVDConvertPathToEntrynum(param_1) != -1)
+        return TRUE;
+    else
+        return FALSE;
 }
 
 /* 8029E1B4-8029E2A0       .text checkSeqActiveFlag__Q27JAInter15SystemInterfaceFPQ28JASystem6TTrack */
