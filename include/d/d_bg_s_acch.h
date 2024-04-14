@@ -135,6 +135,8 @@ public:
     bool ChkWallHit() { return m_flags & WALL_HIT; }
     void OffLineCheckHit() { m_flags &= ~LINE_CHECK_HIT; }
     void OffLineCheck() { m_flags &= ~LINE_CHECK; }
+    void OffLineCheckNone() { m_flags &= ~LINE_CHECK_NONE; }
+    void OnLineCheckNone() { m_flags |= LINE_CHECK_NONE; }
     bool ChkLineCheckNone() { return m_flags & LINE_CHECK_NONE; }
     bool ChkLineCheck() { return m_flags & LINE_CHECK; }
     void ClrRoofHit() { m_flags &= ~ROOF_HIT; }

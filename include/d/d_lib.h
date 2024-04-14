@@ -56,6 +56,12 @@ public:
     virtual s16 getAngleStick();
 };
 
+class dLib_anm_idx_c {
+public:
+    /* 0x00 */ int field_0x00;
+    /* 0x04 */ int field_0x04;
+}; // Size: 0x08
+
 class dLib_anm_prm_c {
 public:
     /* 0x00 */ s8 mBckIdx;
@@ -64,7 +70,7 @@ public:
     /* 0x04 */ f32 mMorf;
     /* 0x08 */ f32 mPlaySpeed;
     /* 0x0C */ int mLoopMode;
-};
+}; // Size: 0x10
 
 class dLib_circle_path_c {
 public:
@@ -85,8 +91,6 @@ public:
     /* 0x08 */ s16 mRotX;
     /* 0x0A */ s16 mRotZ;
 };
-
-class dLib_anm_idx_c;
 
 void dLib_setCirclePath(dLib_circle_path_c*);
 f32 dLib_getWaterY(cXyz& pos, dBgS_ObjAcch& acch);

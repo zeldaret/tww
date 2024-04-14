@@ -8,7 +8,11 @@ namespace daObjBarrel {
     public:
         void attr() const {}
         void get_slant_angle() {}
-        void pos_init() {}
+        void pos_init() {
+            current.pos = home.pos;
+            current.angle = home.angle;
+            shape_angle = home.angle;
+        }
         void prm_get_cull() const {}
         void set_slant_angle(short) {}
     
