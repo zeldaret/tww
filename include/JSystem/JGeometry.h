@@ -74,11 +74,10 @@ struct TVec3<s16> : public SVec {
 
 template <>
 struct TVec3<f32> : public Vec {
-    inline TVec3(const Vec& i_vec) {
-        set(i_vec);
-    }
     TVec3() {}
     TVec3(f32 x, f32 y, f32 z) { set(x, y, z); }
+    TVec3(const Vec& b) { set(b); }
+    TVec3(const TVec3<f32>& b) { set(b); }
 
     operator Vec*() { return (Vec*)&x; }
     operator const Vec*() const { return (Vec*)&x; }
@@ -216,6 +215,15 @@ struct TVec3<f32> : public Vec {
         }
         f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(norm * len);
+    }
+
+    void setLength(const TVec3<f32>& b, f32 len) {
+        f32 sq = b.squared();
+        if (sq <= TUtil<f32>::epsilon()) {
+            return;
+        }
+        f32 norm = TUtil<f32>::inv_sqrt(sq);
+        scale(norm * len, b);
     }
 
     template<typename S>

@@ -112,18 +112,18 @@ void JPAGravityField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 void JPAAirField::preCalc(JPAFieldData* data) {
     JPABaseField::preCalc(data);
     if (data->mSttFlag & 0x02) {
-        data->mWork[2].set(data->mDir);
+        data->mWork2.set(data->mDir);
     } else {
-        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mDir, data->mWork[2]);
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mDir, data->mWork2);
     }
 
-    data->mVel.scale(data->mMag, data->mWork[2]);
+    data->mVel.scale(data->mMag, data->mWork2);
     if (data->mSttFlag & 0x01) {
-        data->mWork[1].x = JMASCos(data->mVal1 * 0xFFFF);
+        data->mWork1.x = JMASCos(data->mVal1 * 0xFFFF);
         if (data->mSttFlag & 0x02) {
-            data->mWork[0].set(data->mPos);
+            data->mWork0.set(data->mPos);
         } else {
-            MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mWork[0], data->mPos);
+            MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mWork0, data->mPos);
         }
     }
 }
@@ -134,13 +134,13 @@ void JPAAirField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     if (data->mSttFlag & 0x01) {
         JGeometry::TVec3<f32> vel;
         if (data->mSttFlag & 0x02) {
-            vel.sub(ptcl->mPosition, data->mWork[0]);
+            vel.sub(ptcl->mPosition, data->mWork0);
         } else {
-            vel.sub(ptcl->mLocalPosition, data->mWork[0]);
+            vel.sub(ptcl->mLocalPosition, data->mWork0);
         }
         vel.normalize();
 
-        if (data->mWork[2].dot(vel) >= data->mWork[1].x) {
+        if (data->mWork2.dot(vel) >= data->mWork1.x) {
             JPABaseField::calcVel(data, ptcl);
         }
     } else {
@@ -159,19 +159,19 @@ void JPAAirField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 void JPAMagnetField::preCalc(JPAFieldData* data) {
     JPABaseField::preCalc(data);
     if (data->mSttFlag & 0x02) {
-        data->mWork[0].set(data->mPos);
+        data->mWork0.set(data->mPos);
     } else {
-        data->mWork[0].sub(data->mPos, JPAFieldData::pEmtrInfo->mEmitterTranslation);
-        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mWork[0], data->mWork[0]);
+        data->mWork0.sub(data->mPos, JPAFieldData::pEmtrInfo->mEmitterTranslation);
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mWork0, data->mWork0);
     }
 }
 
 /* 8025A788-8025A8AC       .text calc__14JPAMagnetFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAMagnetField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     if (data->mSttFlag & 0x02) {
-        data->mVel.sub(data->mWork[0], ptcl->mPosition);
+        data->mVel.sub(data->mWork0, ptcl->mPosition);
     } else {
-        data->mVel.sub(data->mWork[0], ptcl->mLocalPosition);
+        data->mVel.sub(data->mWork0, ptcl->mLocalPosition);
     }
     data->mVel.setLength(data->mMag);
     calcVel(data, ptcl);
@@ -181,10 +181,10 @@ void JPAMagnetField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 void JPANewtonField::preCalc(JPAFieldData* data) {
     JPABaseField::preCalc(data);
     if (data->mSttFlag & 0x02) {
-        data->mWork[0].set(data->mPos);
+        data->mWork0.set(data->mPos);
     } else {
-        data->mWork[0].sub(data->mPos, JPAFieldData::pEmtrInfo->mEmitterTranslation);
-        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mWork[0], data->mWork[0]);
+        data->mWork0.sub(data->mPos, JPAFieldData::pEmtrInfo->mEmitterTranslation);
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mWork0, data->mWork0);
     }
     data->mVal2 = data->mVal1 * data->mVal1;
 }
@@ -192,9 +192,9 @@ void JPANewtonField::preCalc(JPAFieldData* data) {
 /* 8025A954-8025ABB8       .text calc__14JPANewtonFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPANewtonField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     if (data->mSttFlag & 0x02) {
-        data->mVel.sub(data->mWork[0], ptcl->mPosition);
+        data->mVel.sub(data->mWork0, ptcl->mPosition);
     } else {
-        data->mVel.sub(data->mWork[0], ptcl->mLocalPosition);
+        data->mVel.sub(data->mWork0, ptcl->mLocalPosition);
     }
 
     if (data->mSttFlag & 0x100) {
@@ -214,8 +214,8 @@ void JPANewtonField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 /* 8025ABB8-8025ACA0       .text preCalc__14JPAVortexFieldFP12JPAFieldData */
 void JPAVortexField::preCalc(JPAFieldData* data) {
     JPABaseField::preCalc(data);
-    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, &data->mDir, &data->mWork[0]);
-    data->mWork[0].normalize();
+    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, &data->mDir, &data->mWork0);
+    data->mWork0.normalize();
     data->mVal1 = data->mPos.z * data->mPos.z;
     data->mVal2 = 1.0f / data->mVal1;
 }
@@ -225,8 +225,8 @@ void JPAVortexField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 
     JGeometry::TVec3<f32> force;
-    f32 dot = data->mWork[0].dot(ptcl->mLocalPosition);
-    force.scale(dot, data->mWork[0]);
+    f32 dot = data->mWork0.dot(ptcl->mLocalPosition);
+    force.scale(dot, data->mWork0);
     force.sub(ptcl->mLocalPosition, force);
     f32 sqDist = force.squared();
 
@@ -238,7 +238,7 @@ void JPAVortexField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     f32 speed = (1.0f - power) * data->mMag + power * data->mMagRndm;
     force.normalize();
 
-    data->mVel.cross(force, data->mWork[0]);
+    data->mVel.cross(force, data->mWork0);
     data->mVel.scale(speed);
     JPABaseField::calcVel(data, ptcl);
 }
@@ -251,12 +251,12 @@ void JPAConvectionField::preCalc(JPAFieldData* data) {
     axis.cross(data->mPos, data->mDir);
     data->mPos.cross(axis, data->mDir);
     data->mPos.normalize();
-    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, data->mPos, data->mWork[0]);
-    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, data->mDir, data->mWork[1]);
-    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, axis, data->mWork[2]);
-    data->mWork[0].normalize();
-    data->mWork[1].normalize();
-    data->mWork[2].normalize();
+    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, data->mPos, data->mWork0);
+    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, data->mDir, data->mWork1);
+    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, axis, data->mWork2);
+    data->mWork0.normalize();
+    data->mWork1.normalize();
+    data->mWork2.normalize();
 }
 
 /* 8025B114-8025B3CC       .text calc__18JPAConvectionFieldFP12JPAFieldDataP15JPABaseParticle */
@@ -264,8 +264,8 @@ void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 
     JGeometry::TVec3<f32> axisX, axisZ;
-    axisX.scale(data->mWork[0].dot(ptcl->mLocalPosition), data->mWork[0]);
-    axisZ.scale(data->mWork[2].dot(ptcl->mLocalPosition), data->mWork[2]);
+    axisX.scale(data->mWork0.dot(ptcl->mLocalPosition), data->mWork0);
+    axisZ.scale(data->mWork2.dot(ptcl->mLocalPosition), data->mWork2);
 
     JGeometry::TVec3<f32> newPos;
     newPos.add(axisX, axisZ);
@@ -278,7 +278,7 @@ void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 
     JGeometry::TVec3<f32> delta, axisY;
     delta.sub(ptcl->mLocalPosition, newPos);
-    axisY.cross_hack(data->mWork[1], newPos);
+    axisY.cross_hack(data->mWork1, newPos);
     data->mVel.cross_hack(delta, axisY);
     data->mVel.setLength(data->mMag);
 
@@ -336,23 +336,23 @@ void JPASpinField::preCalc(JPAFieldData* data) {
 
     Mtx mtx;
     MTXRotAxisRad(mtx, data->mPos, data->mMag);
-    data->mWork[0].set(mtx[0][0], mtx[1][0], mtx[2][0]);
-    data->mWork[1].set(mtx[0][1], mtx[1][1], mtx[2][1]);
-    data->mWork[2].set(mtx[0][2], mtx[1][2], mtx[2][2]);
+    data->mWork0.set(mtx[0][0], mtx[1][0], mtx[2][0]);
+    data->mWork1.set(mtx[0][1], mtx[1][1], mtx[2][1]);
+    data->mWork2.set(mtx[0][2], mtx[1][2], mtx[2][2]);
 }
 
 /* 8025B718-8025B7F8       .text calc__12JPASpinFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPASpinField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     Mtx mtx;
-    mtx[0][0] = data->mWork[0].x;
-    mtx[1][0] = data->mWork[0].y;
-    mtx[2][0] = data->mWork[0].z;
-    mtx[0][1] = data->mWork[1].x;
-    mtx[1][1] = data->mWork[1].y;
-    mtx[2][1] = data->mWork[1].z;
-    mtx[0][2] = data->mWork[2].x;
-    mtx[1][2] = data->mWork[2].y;
-    mtx[2][2] = data->mWork[2].z;
+    mtx[0][0] = data->mWork0.x;
+    mtx[1][0] = data->mWork0.y;
+    mtx[2][0] = data->mWork0.z;
+    mtx[0][1] = data->mWork1.x;
+    mtx[1][1] = data->mWork1.y;
+    mtx[2][1] = data->mWork1.z;
+    mtx[0][2] = data->mWork2.x;
+    mtx[1][2] = data->mWork2.y;
+    mtx[2][2] = data->mWork2.z;
     mtx[0][3] = mtx[1][3] = mtx[2][3] = 0.0f;
 
     JGeometry::TVec3<f32> newPos;

@@ -683,14 +683,14 @@ void JPADraw::setParticleClipBoard() {
     f32 tilingX = dc.pbsp->getTilingX();
     f32 tilingY = dc.pbsp->getTilingY();
 
-    cb.field_0x14[0].x = 0.0f;
-    cb.field_0x14[0].y = 0.0f;
-    cb.field_0x14[1].x = tilingX;
-    cb.field_0x14[1].y = 0.0f;
-    cb.field_0x14[2].x = tilingX;
-    cb.field_0x14[2].y = tilingY;
-    cb.field_0x14[3].x = 0.0f;
-    cb.field_0x14[3].y = tilingY;
+    cb.mTexCoordPt[0].x = 0.0f;
+    cb.mTexCoordPt[0].y = 0.0f;
+    cb.mTexCoordPt[1].x = tilingX;
+    cb.mTexCoordPt[1].y = 0.0f;
+    cb.mTexCoordPt[2].x = tilingX;
+    cb.mTexCoordPt[2].y = tilingY;
+    cb.mTexCoordPt[3].x = 0.0f;
+    cb.mTexCoordPt[3].y = tilingY;
 
     if (!dc.pbsp->textureIsEmpty() && !dc.pbsp->isEnableTextureAnm())
         mTexIdx = dc.pTexIdx[dc.pbsp->getTextureIndex()], GX_TEXMAP0;
