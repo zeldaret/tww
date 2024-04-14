@@ -270,11 +270,7 @@ void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     JGeometry::TVec3<f32> newPos;
     newPos.add(axisX, axisZ);
 
-    if (newPos.isZero()) {
-        newPos.zero();
-    } else {
-        newPos.setLength(data->mVal1);
-    }
+    newPos.setLength(newPos, data->mVal1);
 
     JGeometry::TVec3<f32> delta, axisY;
     delta.sub(ptcl->mLocalPosition, newPos);

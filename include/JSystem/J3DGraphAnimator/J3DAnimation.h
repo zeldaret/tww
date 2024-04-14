@@ -12,13 +12,13 @@ struct J3DAnmKeyTableBase {
 };  // Size = 0x6
 
 struct J3DAnmColorKeyTable {
-	enum Color {
-		RED   = 0,
-		GREEN = 1,
-		BLUE  = 2,
-		ALPHA = 3,
-	};
-	/* 0x00 */ J3DAnmKeyTableBase mColorInfo[4];
+    enum Color {
+        RED   = 0,
+        GREEN = 1,
+        BLUE  = 2,
+        ALPHA = 3,
+    };
+    /* 0x00 */ J3DAnmKeyTableBase mColorInfo[4];
 };  // Size = 0x18
 
 struct J3DAnmColorFullTable {

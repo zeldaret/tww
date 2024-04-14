@@ -207,22 +207,25 @@ struct TVec3<f32> : public Vec {
         z = a.x * b.y - a.y * b.x;
     }
 
-    void setLength(f32 len) {
+    f32 setLength(f32 len) {
         f32 sq = squared();
         if (sq <= TUtil<f32>::epsilon()) {
-            return;
+            return 0.0f;
         }
         f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(norm * len);
+        return sq * norm;
     }
 
-    void setLength(const TVec3<f32>& b, f32 len) {
+    f32 setLength(const TVec3<f32>& b, f32 len) {
         f32 sq = b.squared();
         if (sq <= TUtil<f32>::epsilon()) {
-            return;
+            zero();
+            return 0.0f;
         }
         f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(norm * len, b);
+        return sq * norm;
     }
 
     template<typename S>

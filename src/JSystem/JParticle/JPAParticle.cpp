@@ -28,13 +28,15 @@ void JPABaseParticle::initParticle() {
 
     mGlobalPosition.set(emtrInfo.mEmitterGlobalCenter);
 
-    velOmni.zero();
-    if (emtr->mInitialVelOmni != 0.0f && !emtrInfo.mVelOmni.isZero())
+    if (emtr->mInitialVelOmni)
         velOmni.setLength(emtrInfo.mVelOmni, emtr->mInitialVelOmni);
+    else
+        velOmni.zero();
 
-    velAxis.zero();
-    if (emtr->mInitialVelAxis != 0.0f && !emtrInfo.mVelAxis.isZero())
+    if (emtr->mInitialVelAxis)
         velAxis.setLength(emtrInfo.mVelAxis, emtr->mInitialVelAxis);
+    else
+        velAxis.zero();
 
     velDir.zero();
     if (emtr->mInitialVelDir != 0.0f) {
@@ -63,12 +65,8 @@ void JPABaseParticle::initParticle() {
 
     MTXMultVec(emtrInfo.mEmitterGlobalRot, mBaseVel, mBaseVel);
 
-    if (mBaseVel.isZero()) {
-        mAccel.zero();
-    } else {
-        f32 accel = emtr->mAccel * (1.0f + emtr->getRandomRF() * emtr->mAccelRndm);
-        mAccel.setLength(mBaseVel, accel);
-    }
+    f32 accel = emtr->mAccel * (1.0f + emtr->getRandomRF() * emtr->mAccelRndm);
+    mAccel.setLength(mBaseVel, accel);
 
     mAirResist = emtr->mAirResist + emtr->mAirResistRndm * emtr->getRandomSF();
     if (mAirResist > 1.0f)
