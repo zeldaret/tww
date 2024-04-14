@@ -15,7 +15,7 @@ public:
     /* 0x2A2 */ u8 field_0x2A2[0x2A4 - 0x2A2];
     /* 0x2A4 */ dPa_rippleEcallBack field_0x2A4;
     /* 0x2B8 */ u8 field_0x2B8;
-    /* 0x2B9 */ s8 field_0x2B9;
+    /* 0x2B9 */ u8 field_0x2B9;
     /* 0x2BA */ u8 field_0x2BA;
     /* 0x2BC */ J3DModel* mpModel;
     /* 0x2C0 */ s16 mTimer[2];

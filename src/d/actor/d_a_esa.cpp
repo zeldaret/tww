@@ -13,6 +13,8 @@
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player_main.h"
 
+static Vec bss_3569;
+
 /* 800E7E60-800E7EA8       .text daEsa_Draw__FP9esa_class */
 static BOOL daEsa_Draw(esa_class* i_this) {
     g_env_light.setLightTevColorType(i_this->mpModel, &i_this->tevStr);
@@ -23,16 +25,13 @@ static BOOL daEsa_Draw(esa_class* i_this) {
 
 /* 800E7EA8-800E849C       .text bg_check__FP9esa_class */
 void bg_check(esa_class* i_this) {
-    /* Nonmatching - stack */
-
     dBgS_GndChk gndChk;
-    f32 x = i_this->current.pos.x;
-    f32 y = i_this->current.pos.y;
-    f32 z = i_this->current.pos.z;
-    y += 100.0f;
-    gndChk.GetPointP()->x = x;
-    gndChk.GetPointP()->y = y;
-    gndChk.GetPointP()->z = z;
+    Vec temp;
+    temp.x = i_this->current.pos.x;
+    temp.y = i_this->current.pos.y;
+    temp.z = i_this->current.pos.z;
+    temp.y += 100.0f;
+    gndChk.SetPos(&temp);
 
     i_this->mGroundHeight = dComIfG_Bgsp()->GroundCross(&gndChk) + 5.0f;
     s8 state = 1;
@@ -44,9 +43,12 @@ void bg_check(esa_class* i_this) {
         }
     }
 
-    cXyz temp(i_this->current.pos);
-    temp.y += 100.0f;
-    f32 waterHeight = dBgS_GetWaterHeight(temp);
+    cXyz sp6C;
+    cXyz sp60;
+    
+    cXyz sp54 = i_this->current.pos;
+    sp54.y += 100.0f;
+    f32 waterHeight = dBgS_GetWaterHeight(sp54);
     if(waterHeight != -1000000000.0f && i_this->mGroundHeight <= waterHeight) {
         i_this->mGroundHeight = waterHeight;
         state = 2;
@@ -61,25 +63,23 @@ void bg_check(esa_class* i_this) {
     }
 
     dBgS_LinChk linChk;
-    cXyz temp4 = i_this->old.pos + (i_this->current.pos - i_this->old.pos) * 1.5f;
-    temp4.y = i_this->old.pos.y;
-    cXyz temp5 = i_this->old.pos - temp4;
+    cXyz sp48 = i_this->old.pos + (i_this->current.pos - i_this->old.pos) * 1.5f;
+    sp48.y = i_this->old.pos.y;
+    cXyz temp5 = i_this->old.pos - sp48;
     if(temp5.abs() > 1.0f) {
-        linChk.Set(&i_this->old.pos, &temp4, i_this);
+        linChk.Set(&i_this->old.pos, &sp48, i_this);
         if(dComIfG_Bgsp()->LineCross(&linChk)) {
             i_this->current.pos.x = i_this->old.pos.x;
             i_this->current.pos.z = i_this->old.pos.z;
             i_this->speedF *= 0.5f;
             i_this->current.angle.y -= 0x8000;
-            cXyz temp6;
-            temp6.x = 0.0f;
-            temp6.y = 0.0f;
-            temp6.z = i_this->speedF;
-            cXyz temp7;
+            sp6C.x = 0.0f;
+            sp6C.y = 0.0f;
+            sp6C.z = i_this->speedF;
             mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-            MtxPosition(&temp6, &temp7);
-            i_this->speed.x = temp7.x;
-            i_this->speed.z = temp7.z;
+            MtxPosition(&sp6C, &sp60);
+            i_this->speed.x = sp60.x;
+            i_this->speed.z = sp60.z;
         }
     }
     else {
@@ -89,19 +89,17 @@ void bg_check(esa_class* i_this) {
 
 /* 800E849C-800E88F8       .text esa_1_move__FP9esa_class */
 void esa_1_move(esa_class* i_this) {
-    /* Nonmatching - stack */
-
+    cXyz sp24;
     switch(i_this->mActionState) {
         case 0:
             i_this->current.angle.y += (s16)cM_rndFX(4000.0f);
             i_this->current.angle.z = cM_rndFX(32768.0f);
-            cXyz temp;
-            temp.x = 0.0f;
-            temp.y = cM_rndF(8.0f) + 15.0f;
-            temp.z = cM_rndF(5.0f) + 10.0f;
-            i_this->speedF = temp.z;
+            sp24.x = 0.0f;
+            sp24.y = cM_rndF(8.0f) + 15.0f;
+            sp24.z = cM_rndF(5.0f) + 10.0f;
+            i_this->speedF = sp24.z;
             mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-            MtxPosition(&temp, &i_this->speed);
+            MtxPosition(&sp24, &i_this->speed);
 
             i_this->mActionState = 1;
         case 1:
@@ -125,15 +123,14 @@ void esa_1_move(esa_class* i_this) {
 
                     i_this->current.angle.y += (s16)cM_rndFX(8000.0f);
                     i_this->speedF *= cM_rndF(0.3f) + 0.3f;
-                    cXyz temp2;
-                    temp2.x = 0.0f;
-                    temp2.y = 0.0f;
-                    temp2.z = i_this->speedF;
+                    sp24.x = 0.0f;
+                    sp24.y = 0.0f;
+                    sp24.z = i_this->speedF;
                     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-                    cXyz temp3;
-                    MtxPosition(&temp2, &temp3);
-                    i_this->speed.x = temp3.x;
-                    i_this->speed.z = temp3.z;
+                    cXyz sp18;
+                    MtxPosition(&sp24, &sp18);
+                    i_this->speed.x = sp18.x;
+                    i_this->speed.z = sp18.z;
                     if(i_this->speedF < 0.1f) {
                         i_this->mActionState = 2;
                         i_this->mTimer[0] = cM_rndF(50.0f) + 200.0f;
@@ -242,8 +239,6 @@ static BOOL daEsa_CreateHeap(fopAc_ac_c* i_actor) {
 
 /* 800E8AB0-800E8CA4       .text daEsa_Create__FP10fopAc_ac_c */
 static s32 daEsa_Create(fopAc_ac_c* i_actor) {
-    /* Nonmatching - regalloc */
-
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     fopAcM_SetupActor(i_actor, esa_class);
@@ -261,7 +256,7 @@ static s32 daEsa_Create(fopAc_ac_c* i_actor) {
     }
 
     if(i_this->field_0x2BA == 0) {
-        int num = i_this->field_0x2B9;
+        s8 num = i_this->field_0x2B9;
         if(num > 0) {
             for(int i = 0; i < num; i++) {
                 fopAcM_prm_class* params = fopAcM_CreateAppend();
