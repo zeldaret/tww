@@ -164,7 +164,7 @@ struct TVec3<f32> : public Vec {
     }
 
     f32 dot(const TVec3<f32>& b) const {
-        return x*b.x + y*b.y * z*b.z;
+        return x*b.x + y*b.y + z*b.z;
     }
 
     f32 squared() const {
@@ -195,7 +195,11 @@ struct TVec3<f32> : public Vec {
     }
 
     void cross(const TVec3<f32>& a, const TVec3<f32>& b) {
-        VECCrossProduct(a, b, *this);
+        set(
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
     }
 
     void setLength(f32 len) {

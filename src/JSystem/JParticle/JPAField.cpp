@@ -112,18 +112,18 @@ void JPAGravityField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 void JPAAirField::preCalc(JPAFieldData* data) {
     JPABaseField::preCalc(data);
     if (data->mSttFlag & 0x02) {
-        data->mLocalDir.set(data->mDir);
+        data->mWork[2].set(data->mDir);
     } else {
-        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mDir, data->mLocalDir);
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mDir, data->mWork[2]);
     }
 
-    data->mVel.scale(data->mMag, data->mLocalDir);
+    data->mVel.scale(data->mMag, data->mWork[2]);
     if (data->mSttFlag & 0x01) {
-        data->mAirMinDist = JMASCos(data->mVal1 * 0xFFFF);
+        data->mWork[1].x = JMASCos(data->mVal1 * 0xFFFF);
         if (data->mSttFlag & 0x02) {
-            data->mLocalPos.set(data->mPos);
+            data->mWork[0].set(data->mPos);
         } else {
-            MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mLocalPos, data->mPos);
+            MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mWork[0], data->mPos);
         }
     }
 }
@@ -134,14 +134,13 @@ void JPAAirField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     if (data->mSttFlag & 0x01) {
         JGeometry::TVec3<f32> vel;
         if (data->mSttFlag & 0x02) {
-            vel.sub(ptcl->mPosition, data->mLocalPos);
+            vel.sub(ptcl->mPosition, data->mWork[0]);
         } else {
-            vel.sub(ptcl->mLocalPosition, data->mLocalPos);
+            vel.sub(ptcl->mLocalPosition, data->mWork[0]);
         }
-
         vel.normalize();
 
-        if (data->mAirMinDist <= data->mLocalDir.dot(vel)) {
+        if (data->mWork[2].dot(vel) >= data->mWork[1].x) {
             JPABaseField::calcVel(data, ptcl);
         }
     } else {
@@ -160,23 +159,19 @@ void JPAAirField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 void JPAMagnetField::preCalc(JPAFieldData* data) {
     JPABaseField::preCalc(data);
     if (data->mSttFlag & 0x02) {
-        data->mLocalPos.set(data->mPos);
+        data->mWork[0].set(data->mPos);
     } else {
-        const JGeometry::TVec3<f32>& emtrTrans = JPAFieldData::pEmtrInfo->mEmitterTranslation;
-        data->mLocalPos.x = data->mPos.x - emtrTrans.x;
-        data->mLocalPos.y = data->mPos.y - emtrTrans.y;
-        data->mLocalPos.z = data->mPos.z - emtrTrans.z;
-        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mLocalPos, data->mLocalPos);
+        data->mWork[0].sub(data->mPos, JPAFieldData::pEmtrInfo->mEmitterTranslation);
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mWork[0], data->mWork[0]);
     }
 }
 
 /* 8025A788-8025A8AC       .text calc__14JPAMagnetFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAMagnetField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching */
     if (data->mSttFlag & 0x02) {
-        data->mVel.sub(data->mLocalPos, ptcl->mPosition);
+        data->mVel.sub(data->mWork[0], ptcl->mPosition);
     } else {
-        data->mVel.sub(data->mLocalPos, ptcl->mLocalPosition);
+        data->mVel.sub(data->mWork[0], ptcl->mLocalPosition);
     }
     data->mVel.setLength(data->mMag);
     calcVel(data, ptcl);
@@ -186,13 +181,10 @@ void JPAMagnetField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 void JPANewtonField::preCalc(JPAFieldData* data) {
     JPABaseField::preCalc(data);
     if (data->mSttFlag & 0x02) {
-        data->mLocalPos.set(data->mPos);
+        data->mWork[0].set(data->mPos);
     } else {
-        const JGeometry::TVec3<f32>& emtrTrans = JPAFieldData::pEmtrInfo->mEmitterTranslation;
-        data->mLocalPos.x = data->mPos.x - emtrTrans.x;
-        data->mLocalPos.y = data->mPos.y - emtrTrans.y;
-        data->mLocalPos.z = data->mPos.z - emtrTrans.z;
-        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mLocalPos, data->mLocalPos);
+        data->mWork[0].sub(data->mPos, JPAFieldData::pEmtrInfo->mEmitterTranslation);
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mWork[0], data->mWork[0]);
     }
     data->mVal2 = data->mVal1 * data->mVal1;
 }
@@ -204,12 +196,34 @@ void JPANewtonField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 
 /* 8025ABB8-8025ACA0       .text preCalc__14JPAVortexFieldFP12JPAFieldData */
 void JPAVortexField::preCalc(JPAFieldData* data) {
-    /* Nonmatching */
+    JPABaseField::preCalc(data);
+    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, &data->mDir, &data->mWork[0]);
+    data->mWork[0].normalize();
+    data->mVal1 = data->mPos.z * data->mPos.z;
+    data->mVal2 = 1.0f / data->mVal1;
 }
 
 /* 8025ACA0-8025AE04       .text calc__14JPAVortexFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAVortexField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
+
+    JGeometry::TVec3<f32> force;
+    f32 dot = data->mWork[0].dot(ptcl->mLocalPosition);
+    force.scale(dot, data->mWork[0]);
+    force.sub(ptcl->mLocalPosition, force);
+    f32 sqDist = force.squared();
+
+    f32 power = sqDist;
+    if (sqDist > data->mVal1)
+        power = data->mVal1;
+    power *= data->mVal2;
+
+    f32 speed = (1.0f - power) * data->mMag + power * data->mMagRndm;
+    force.normalize();
+
+    data->mVel.cross(force, data->mWork[0]);
+    data->mVel.scale(speed);
+    JPABaseField::calcVel(data, ptcl);
 }
 
 /* 8025AE04-8025B114       .text preCalc__18JPAConvectionFieldFP12JPAFieldData */
@@ -225,26 +239,77 @@ void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 /* 8025B3CC-8025B50C       .text calc__14JPARandomFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPARandomField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
+    s32 frame = ptcl->mCurFrame;
+    if (frame != 0) {
+        if (data->mCycle == 0)
+            return;
+
+        if ((frame % data->mCycle) != 0)
+            return;
+    }
+
+    data->mVel.set(
+        JPAFieldData::pEmtrInfo->mpCurEmitter->getRandomSF(),
+        JPAFieldData::pEmtrInfo->mpCurEmitter->getRandomSF(),
+        JPAFieldData::pEmtrInfo->mpCurEmitter->getRandomSF()
+    );
+    data->mVel.scale(data->mMag);
+    JPABaseField::calcVel(data, ptcl);
 }
 
 /* 8025B50C-8025B584       .text init__12JPADragFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPADragField::init(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    ptcl->mFieldDrag = data->mMag + data->mMagRndm * JPAFieldData::pEmtrInfo->mpCurEmitter->getRandomSF();
+    if (ptcl->mFieldDrag > 1.0f)
+        ptcl->mFieldDrag = 1.0f;
 }
 
 /* 8025B584-8025B5F4       .text calc__12JPADragFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPADragField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    if (ptcl->checkStatus(0x04)) {
+        ptcl->mDrag *= ptcl->mFieldDrag;
+    } else {
+        f32 affect = JPABaseField::calcFadeAffect(data, ptcl->mCurNormTime);
+        ptcl->mDrag *= (1.0f - (affect * (1.0f - ptcl->mFieldDrag)));
+    }
 }
 
 /* 8025B5F4-8025B718       .text preCalc__12JPASpinFieldFP12JPAFieldData */
 void JPASpinField::preCalc(JPAFieldData* data) {
-    /* Nonmatching */
+    JPABaseField::preCalc(data);
+    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, data->mDir, data->mPos);
+    data->mPos.normalize();
+
+    Mtx mtx;
+    MTXRotAxisRad(mtx, data->mPos, data->mMag);
+    data->mWork[0].set(mtx[0][0], mtx[1][0], mtx[2][0]);
+    data->mWork[1].set(mtx[0][1], mtx[1][1], mtx[2][1]);
+    data->mWork[2].set(mtx[0][2], mtx[1][2], mtx[2][2]);
 }
 
 /* 8025B718-8025B7F8       .text calc__12JPASpinFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPASpinField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    Mtx mtx;
+    mtx[0][0] = data->mWork[0].x;
+    mtx[1][0] = data->mWork[0].y;
+    mtx[2][0] = data->mWork[0].z;
+    mtx[0][1] = data->mWork[1].x;
+    mtx[1][1] = data->mWork[1].y;
+    mtx[2][1] = data->mWork[1].z;
+    mtx[0][2] = data->mWork[2].x;
+    mtx[1][2] = data->mWork[2].y;
+    mtx[2][2] = data->mWork[2].z;
+    mtx[0][3] = mtx[1][3] = mtx[2][3] = 0.0f;
+
+    JGeometry::TVec3<f32> newPos;
+    MTXMultVecSR(mtx, ptcl->mLocalPosition, newPos);
+    // is this a variant of sub()?
+    data->mVel.set(
+        newPos.x - ptcl->mLocalPosition.x,
+        newPos.y - ptcl->mLocalPosition.y,
+        newPos.z - ptcl->mLocalPosition.z
+    );
+    JPABaseField::calcVel(data, ptcl);
 }
 
 /* 8025B7F8-8025B960       .text initField__15JPAFieldManagerFP20JPADataBlockLinkInfoP14JPAEmitterInfo */
