@@ -296,16 +296,10 @@ void JPAFieldManager::preCalc() {
 
 /* 8025BA10-8025BAD8       .text calc__15JPAFieldManagerFP15JPABaseParticle */
 void JPAFieldManager::calc(JPABaseParticle* ptcl) {
-    /* Nonmatching */
     for (JSULink<JPAFieldData>* link = mList.getFirst(); link != NULL; link = link->getNext()) {
         JPAFieldData* data = link->getObject();
         if (data->mSttFlag & 0x80) {
-            // This isn't quite right, probably a TVec3 inline?
-            f32 z = ptcl->mPosition.z - data->mPos.z; z *= z;
-            f32 x = ptcl->mPosition.x - data->mPos.x; x *= x;
-            f32 y = ptcl->mPosition.y - data->mPos.y; y *= y;
-            f32 dist = z + y + x;
-            if (!data->mpBaseField->isItinRange(data, dist))
+            if (!data->mpBaseField->isItinRange(data, ptcl->mPosition.squared(data->mPos)))
                 continue;
         }
         data->mpBaseField->calc(data, ptcl);

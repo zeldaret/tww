@@ -74,16 +74,10 @@ struct TVec3<s16> : public SVec {
 
 template <>
 struct TVec3<f32> : public Vec {
-    // f32 x;
-    // f32 y;
-    // f32 z;
-
     inline TVec3(const Vec& i_vec) {
         set(i_vec);
     }
-
     TVec3() {}
-
     TVec3(f32 x, f32 y, f32 z) { set(x, y, z); }
 
     operator Vec*() { return (Vec*)&x; }
@@ -107,74 +101,18 @@ struct TVec3<f32> : public Vec {
         z = z_;
     }
 
-    inline void add(const TVec3<f32>& b) {
-        C_VECAdd((Vec*)&x, (Vec*)&b.x, (Vec*)&x);
-    }
-
     void zero() { x = y = z = 0.0f; }
 
-    void mul(const TVec3<f32>& a, const TVec3<f32>& b) {
-        x = a.x * b.x;
-        y = a.y * b.y;
-        z = a.z * b.z;
+    void add(const TVec3<f32>& b) {
+        x += b.x;
+        y += b.y;
+        z += b.z;
     }
 
-    inline TVec3<f32>& operator+=(const TVec3<f32>& b) {
-        add(b);
-        return *this;
-    }
-
-    // inline TVec3<f32> operator+(const TVec3<f32>& b) {
-    //     TVec3<f32> res(*(Vec*)this);
-    //     res += b;
-    //     return res;
-    // }
-
-    inline TVec3<f32>& operator=(const TVec3<f32>& b) {
-        set(b.x, b.y, b.z);
-        return *this;
-    }
-
-    inline TVec3<f32>& operator=(const Vec& vec) {
-        set(vec);
-        return *this;
-    }
-
-    f32 squared() const {
-        return C_VECSquareMag((Vec*)&x);
-    }
-
-    f32 normalize() {
-        f32 sq = squared();
-        if (sq <= TUtil<f32>::epsilon()) {
-            return 0.0f;
-        }
-        f32 norm = TUtil<f32>::inv_sqrt(sq);
-        scale(norm);
-        return norm;
-    }
-
-    f32 length() const {
-        f32 sqr = squared();
-        return TUtil<f32>::sqrt(sqr);
-    }
-
-    void scale(f32 sc) {
-        x *= sc;
-        y *= sc;
-        z *= sc;
-    }
-
-    void scale(f32 sc, const TVec3<f32>& b) {
-        x = b.x * sc;
-        y = b.y * sc;
-        z = b.z * sc;
-    }
-
-    void negate() {
-        x = -x;
-        y = -y;
-        z = -z;
+    void add(const TVec3<f32>& a, const TVec3<f32>& b) {
+        x = a.x + b.x;
+        y = a.x + b.y;
+        z = a.x + b.z;
     }
 
     void sub(const TVec3<f32>& b) {
@@ -187,6 +125,69 @@ struct TVec3<f32> : public Vec {
         x = a.x - b.x;
         y = a.y - b.y;
         z = a.z - b.z;
+    }
+
+    void mul(const TVec3<f32>& b) {
+        x *= b.x;
+        y *= b.y;
+        z *= b.z;
+    }
+
+    void mul(const TVec3<f32>& a, const TVec3<f32>& b) {
+        x = a.x * b.x;
+        y = a.y * b.y;
+        z = a.z * b.z;
+    }
+
+    void scale(f32 scale, const TVec3<f32>& b) {
+        x = b.x * scale;
+        y = b.y * scale;
+        z = b.z * scale;
+    }
+
+    void scale(f32 scale) {
+        x *= scale;
+        y *= scale;
+        z *= scale;
+    }
+
+    void scaleAdd(f32 scale, const TVec3<f32>& b, const TVec3<f32>& c) {
+        x = b.x + c.x * scale;
+        y = b.y + c.y * scale;
+        z = b.z + c.z * scale;
+    }
+
+    void negate() {
+        x = -x;
+        y = -y;
+        z = -z;
+    }
+
+    f32 dot(const TVec3<f32>& b) const {
+        return x*b.x + y*b.y * z*b.z;
+    }
+
+    f32 squared() const {
+        return x*x + y*y + z*z;
+    }
+
+    f32 squared(const TVec3<f32>& b) const {
+        return (x - b.x)*(x - b.x) + (y - b.y)*(y - b.y) + (z - b.z)*(z - b.z);
+    }
+
+    f32 length() const {
+        f32 sqr = squared();
+        return TUtil<f32>::sqrt(sqr);
+    }
+
+    f32 normalize() {
+        f32 sq = squared();
+        if (sq <= TUtil<f32>::epsilon()) {
+            return 0.0f;
+        }
+        f32 norm = TUtil<f32>::inv_sqrt(sq);
+        scale(norm);
+        return norm;
     }
 
     bool isZero() const {
@@ -206,10 +207,6 @@ struct TVec3<f32> : public Vec {
         scale(norm * len);
     }
 
-    f32 dot(const TVec3<f32>& b) const {
-        return x*b.x + y*b.y * z*b.z;
-    }
-
     template<typename S>
     void cubic(const JGeometry::TVec3<f32>& vec1, const JGeometry::TVec3<f32>& vec2, const JGeometry::TVec3<f32>& vec3, const JGeometry::TVec3<f32>& vec4, f32 f19) {
         // TODO: name variables properly
@@ -222,6 +219,26 @@ struct TVec3<f32> : public Vec {
         this->x = (f3 * vec1.x) + (f2 * vec2.x) + (f1 * vec4.x) + (f0 * vec3.z);
         this->y = (f3 * vec1.y) + (f2 * vec2.y) + (f1 * vec4.y) + (f0 * vec3.y);
         this->z = (f3 * vec1.z) + (f2 * vec2.z) + (f1 * vec4.z) + (f0 * vec3.x);
+    }
+
+    inline TVec3<f32>& operator+=(const TVec3<f32>& b) {
+        add(b);
+        return *this;
+    }
+
+    inline TVec3<f32>& operator*=(const TVec3<f32>& b) {
+        mul(b);
+        return *this;
+    }
+
+    inline TVec3<f32>& operator=(const TVec3<f32>& b) {
+        set(b.x, b.y, b.z);
+        return *this;
+    }
+
+    inline TVec3<f32>& operator=(const Vec& vec) {
+        set(vec);
+        return *this;
     }
 };
 
