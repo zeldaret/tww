@@ -5,19 +5,56 @@
 
 #include "d/actor/d_a_toge.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_com_inf_game.h"
+
+const char daToge_c::m_arcname[] = "Htoge1";
 
 /* 00000078-0000013C       .text _delete__8daToge_cFv */
 BOOL daToge_c::_delete() {
-    /* Nonmatching */
+    cBgW *temp_r4;
+    cBgW *temp_r4_2;
+    s32 temp_r0;
+    s32 temp_r0_2;
+    u8 var_r0;
+    u8 var_r0_2;
+
+    dComIfG_resDelete(&m_Phs, m_arcname);
+
+    temp_r4 = this->mpBgW1;
+    if (temp_r4 != NULL) {
+        temp_r0 = temp_r4->GetId();
+        if ((temp_r0 >= 0) && (temp_r0 < 0x100)) {
+            var_r0 = 1;
+        } else {
+            var_r0 = 0;
+        }
+        if (var_r0 != 0) {
+            g_dComIfG_gameInfo.play.mBgS.Release(temp_r4);
+            //Release__4cBgSFP4cBgW(&g_dComIfG_gameInfo + 0x12A0, temp_r4);
+        }
+    }
+    temp_r4_2 = this->mpBgW2;
+    if (temp_r4_2 != NULL) {
+        temp_r0_2 = temp_r4_2->GetId();
+        if ((temp_r0_2 >= 0) && (temp_r0_2 < 0x100)) {
+            var_r0_2 = 1;
+        } else {
+            var_r0_2 = 0;
+        }
+        if (var_r0_2 != 0) {
+            g_dComIfG_gameInfo.play.mBgS.Release(temp_r4_2);
+        }
+    }
+    return TRUE;
 }
 
 /* 0000013C-0000015C       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daToge_c*>(i_this)->CreateHeap();
 }
 
 /* 0000015C-00000290       .text CreateHeap__8daToge_cFv */
-void daToge_c::CreateHeap() {
+BOOL daToge_c::CreateHeap() {
     /* Nonmatching */
 }
 
@@ -72,26 +109,34 @@ BOOL daToge_c::_draw() {
 }
 
 /* 00000D44-00000D64       .text daToge_Create__FPv */
-static s32 daToge_Create(void*) {
-    /* Nonmatching */
+static s32 daToge_Create(void* i_this) {
+    return static_cast<daToge_c*>(i_this)->_create();
 }
 
 /* 00000D64-00000D84       .text daToge_Delete__FPv */
-static BOOL daToge_Delete(void*) {
-    /* Nonmatching */
+static BOOL daToge_Delete(void* i_this) {
+    return static_cast<daToge_c*>(i_this)->_delete();
 }
 
 /* 00000D84-00000DA4       .text daToge_Draw__FPv */
-static BOOL daToge_Draw(void*) {
-    /* Nonmatching */
+static BOOL daToge_Draw(void* i_this) {
+    return static_cast<daToge_c*>(i_this)->_draw();
 }
 
 /* 00000DA4-00000DC4       .text daToge_Execute__FPv */
-static BOOL daToge_Execute(void*) {
-    /* Nonmatching */
+static BOOL daToge_Execute(void* i_this) {
+    return static_cast<daToge_c*>(i_this)->_execute();
 }
 
 /* 00000DC4-00000DCC       .text daToge_IsDelete__FPv */
 static BOOL daToge_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
+
+static actor_method_class daTogeMethodTable = {
+    (process_method_func)daToge_Create,
+    (process_method_func)daToge_Delete,
+    (process_method_func)daToge_Execute,
+    (process_method_func)daToge_IsDelete,
+    (process_method_func)daToge_Draw,
+};
