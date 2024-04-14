@@ -148,9 +148,9 @@ public:
     /* 0x08 */ JPAMagnetField mMagnet;
     /* 0x0C */ JPANewtonField mNewton;
     /* 0x10 */ JPAVortexField mVortex;
-    /* 0x14 */ JPAConvectionField mConvection;
-    /* 0x18 */ JPARandomField mRandom;
-    /* 0x1C */ JPADragField mDrag;
+    /* 0x14 */ JPARandomField mRandom;
+    /* 0x18 */ JPADragField mDrag;
+    /* 0x1C */ JPAConvectionField mConvection;
     /* 0x20 */ JPASpinField mSpin;
 };
 

@@ -202,6 +202,13 @@ struct TVec3<f32> : public Vec {
         );
     }
 
+    void cross_hack(const TVec3<f32>& a, const TVec3<f32>& b) {
+        // obviously fake
+        x = a.y * b.z - a.z * b.y;
+        y = a.z * b.x - a.x * b.z;
+        z = a.x * b.y - a.y * b.x;
+    }
+
     void setLength(f32 len) {
         f32 sq = squared();
         if (sq <= TUtil<f32>::epsilon()) {

@@ -191,7 +191,24 @@ void JPANewtonField::preCalc(JPAFieldData* data) {
 
 /* 8025A954-8025ABB8       .text calc__14JPANewtonFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPANewtonField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    if (data->mSttFlag & 0x02) {
+        data->mVel.sub(data->mWork[0], ptcl->mPosition);
+    } else {
+        data->mVel.sub(data->mWork[0], ptcl->mLocalPosition);
+    }
+
+    if (data->mSttFlag & 0x100) {
+        data->mVel.setLength(data->mMag);
+    } else {
+        f32 sqDist = data->mVel.squared();
+        if (sqDist > data->mVal2) {
+            data->mVel.setLength(data->mMag * 10.0f * data->mVal2 / sqDist);
+        } else {
+            data->mVel.setLength(data->mMag * 10.0f);
+        }
+    }
+
+    JPABaseField::calcVel(data, ptcl);
 }
 
 /* 8025ABB8-8025ACA0       .text preCalc__14JPAVortexFieldFP12JPAFieldData */
@@ -228,12 +245,49 @@ void JPAVortexField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 
 /* 8025AE04-8025B114       .text preCalc__18JPAConvectionFieldFP12JPAFieldData */
 void JPAConvectionField::preCalc(JPAFieldData* data) {
-    /* Nonmatching */
+    JPABaseField::preCalc(data);
+
+    JGeometry::TVec3<f32> axis;
+    axis.cross(data->mPos, data->mDir);
+    data->mPos.cross(axis, data->mDir);
+    data->mPos.normalize();
+    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, data->mPos, data->mWork[0]);
+    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, data->mDir, data->mWork[1]);
+    MTXMultVec(JPAFieldData::pEmtrInfo->mEmitterGlobalRot, axis, data->mWork[2]);
+    data->mWork[0].normalize();
+    data->mWork[1].normalize();
+    data->mWork[2].normalize();
 }
 
 /* 8025B114-8025B3CC       .text calc__18JPAConvectionFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
+
+    JGeometry::TVec3<f32> axisX, axisZ;
+    axisX.scale(data->mWork[0].dot(ptcl->mLocalPosition), data->mWork[0]);
+    axisZ.scale(data->mWork[2].dot(ptcl->mLocalPosition), data->mWork[2]);
+
+    JGeometry::TVec3<f32> newPos;
+    newPos.add(axisX, axisZ);
+
+    if (newPos.isZero()) {
+        newPos.zero();
+    } else {
+        newPos.setLength(data->mVal1);
+    }
+
+    JGeometry::TVec3<f32> delta, axisY;
+    delta.sub(ptcl->mLocalPosition, newPos);
+    axisY.cross_hack(data->mWork[1], newPos);
+    data->mVel.cross_hack(delta, axisY);
+    data->mVel.setLength(data->mMag);
+
+    if (data->mVal2 != 0.0f) {
+        delta.setLength(data->mVal2);
+        data->mVel.add(delta);
+    }
+
+    JPABaseField::calcVel(data, ptcl);
 }
 
 /* 8025B3CC-8025B50C       .text calc__14JPARandomFieldFP12JPAFieldDataP15JPABaseParticle */
@@ -328,9 +382,9 @@ void JPAFieldManager::initField(JPADataBlockLinkInfo* dataInfo, JPAEmitterInfo* 
             case 2: field->mpBaseField = &fc.mMagnet; break;
             case 3: field->mpBaseField = &fc.mNewton; break;
             case 4: field->mpBaseField = &fc.mVortex; break;
-            case 5: field->mpBaseField = &fc.mConvection; break;
-            case 6: field->mpBaseField = &fc.mRandom; break;
-            case 7: field->mpBaseField = &fc.mDrag; break;
+            case 5: field->mpBaseField = &fc.mRandom; break;
+            case 6: field->mpBaseField = &fc.mDrag; break;
+            case 7: field->mpBaseField = &fc.mConvection; break;
             case 8: field->mpBaseField = &fc.mSpin; break;
             default: break;
             }
