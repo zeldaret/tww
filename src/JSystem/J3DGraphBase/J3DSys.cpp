@@ -64,59 +64,47 @@ void J3DSys::loadNrmMtxIndx(int addr, u16 indx) const {
 
 /* 802D8BD8-802D8C58       .text J3DFifoLoadPosMtxImm__FPA4_fUl */
 void J3DFifoLoadPosMtxImm(Mtx mtx, u32 idx) {
-    J3DFifoWriteXFCmd(idx << 2, 12);
-    u32 * mtx_u32 = (u32*)mtx;
-
-    GFX_FIFO(u32) = mtx_u32[0];
-    GFX_FIFO(u32) = mtx_u32[1];
-    GFX_FIFO(u32) = mtx_u32[2];
-    GFX_FIFO(u32) = mtx_u32[3];
-
-    GFX_FIFO(u32) = mtx_u32[4];
-    GFX_FIFO(u32) = mtx_u32[5];
-    GFX_FIFO(u32) = mtx_u32[6];
-    GFX_FIFO(u32) = mtx_u32[7];
-
-    GFX_FIFO(u32) = mtx_u32[8];
-    GFX_FIFO(u32) = mtx_u32[9];
-    GFX_FIFO(u32) = mtx_u32[10];
-    GFX_FIFO(u32) = mtx_u32[11];
+    J3DFifoWriteXFCmdHdr(idx << 2, 12);
+    J3DGXCmd1f32ptr(&mtx[0][0]);
+    J3DGXCmd1f32ptr(&mtx[0][1]);
+    J3DGXCmd1f32ptr(&mtx[0][2]);
+    J3DGXCmd1f32ptr(&mtx[0][3]);
+    J3DGXCmd1f32ptr(&mtx[1][0]);
+    J3DGXCmd1f32ptr(&mtx[1][1]);
+    J3DGXCmd1f32ptr(&mtx[1][2]);
+    J3DGXCmd1f32ptr(&mtx[1][3]);
+    J3DGXCmd1f32ptr(&mtx[2][0]);
+    J3DGXCmd1f32ptr(&mtx[2][1]);
+    J3DGXCmd1f32ptr(&mtx[2][2]);
+    J3DGXCmd1f32ptr(&mtx[2][3]);
 }
 
 /* 802D8C58-802D8CC4       .text J3DFifoLoadNrmMtxImm__FPA4_fUl */
 void J3DFifoLoadNrmMtxImm(Mtx mtx, u32 idx) {
-    J3DFifoWriteXFCmd(0x400 + (idx * 3), 9);
-    u32 * mtx_u32 = (u32*)mtx;
-
-    GFX_FIFO(u32) = mtx_u32[0];
-    GFX_FIFO(u32) = mtx_u32[1];
-    GFX_FIFO(u32) = mtx_u32[2];
-
-    GFX_FIFO(u32) = mtx_u32[4];
-    GFX_FIFO(u32) = mtx_u32[5];
-    GFX_FIFO(u32) = mtx_u32[6];
-
-    GFX_FIFO(u32) = mtx_u32[8];
-    GFX_FIFO(u32) = mtx_u32[9];
-    GFX_FIFO(u32) = mtx_u32[10];
+    J3DFifoWriteXFCmdHdr(0x400 + (idx * 3), 9);
+    J3DGXCmd1f32ptr(&mtx[0][0]);
+    J3DGXCmd1f32ptr(&mtx[0][1]);
+    J3DGXCmd1f32ptr(&mtx[0][2]);
+    J3DGXCmd1f32ptr(&mtx[1][0]);
+    J3DGXCmd1f32ptr(&mtx[1][1]);
+    J3DGXCmd1f32ptr(&mtx[1][2]);
+    J3DGXCmd1f32ptr(&mtx[2][0]);
+    J3DGXCmd1f32ptr(&mtx[2][1]);
+    J3DGXCmd1f32ptr(&mtx[2][2]);
 }
 
 /* 802D8CC4-802D8D30       .text J3DFifoLoadNrmMtxImm3x3__FPA3_fUl */
 void J3DFifoLoadNrmMtxImm3x3(Mtx33 mtx, u32 idx) {
-    J3DFifoWriteXFCmd(0x400 + (idx * 3), 9);
-    u32 * mtx_u32 = (u32*)mtx;
-
-    GFX_FIFO(u32) = mtx_u32[0];
-    GFX_FIFO(u32) = mtx_u32[1];
-    GFX_FIFO(u32) = mtx_u32[2];
-
-    GFX_FIFO(u32) = mtx_u32[3];
-    GFX_FIFO(u32) = mtx_u32[4];
-    GFX_FIFO(u32) = mtx_u32[5];
-
-    GFX_FIFO(u32) = mtx_u32[6];
-    GFX_FIFO(u32) = mtx_u32[7];
-    GFX_FIFO(u32) = mtx_u32[8];
+    J3DFifoWriteXFCmdHdr(0x400 + (idx * 3), 9);
+    J3DGXCmd1f32ptr(&mtx[0][0]);
+    J3DGXCmd1f32ptr(&mtx[0][1]);
+    J3DGXCmd1f32ptr(&mtx[0][2]);
+    J3DGXCmd1f32ptr(&mtx[1][0]);
+    J3DGXCmd1f32ptr(&mtx[1][1]);
+    J3DGXCmd1f32ptr(&mtx[1][2]);
+    J3DGXCmd1f32ptr(&mtx[2][0]);
+    J3DGXCmd1f32ptr(&mtx[2][1]);
+    J3DGXCmd1f32ptr(&mtx[2][2]);
 }
 
 u8 NullTexData[16] ALIGN_DECL(32) = {

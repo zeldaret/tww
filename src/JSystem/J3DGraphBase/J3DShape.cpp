@@ -58,9 +58,9 @@ u32 J3DShape::countBumpMtxNum() const {
 
 /* 802DD2F0-802DD308       .text J3DLoadCPCmd__FUcUl */
 void J3DLoadCPCmd(u8 cmd, u32 param) {
-    GFX_FIFO(u8) = GX_CMD_LOAD_CP_REG;
-    GFX_FIFO(u8) = cmd;
-    GFX_FIFO(u32) = param;
+    GXFIFO.u8 = GX_CMD_LOAD_CP_REG;
+    GXFIFO.u8 = cmd;
+    GXFIFO.u32 = param;
 }
 
 /* 802DD308-802DD344       .text J3DLoadArrayBasePtr__F7_GXAttrPv */
