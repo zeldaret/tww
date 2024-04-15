@@ -273,19 +273,19 @@ struct TVec2 {
         this->y = y;
     }
 
-    void set(const TVec2& other) {
+    void set(const TVec2<T>& other) {
         x = other.x;
         y = other.y;
     }
 
-    void setMin(const TVec2<f32>& min) {
+    void setMin(const TVec2<T>& min) {
         if (x >= min.x)
             x = min.x;
         if (y >= min.y)
             y = min.y;
     }
 
-    void setMax(const TVec2<f32>& max) {
+    void setMax(const TVec2<T>& max) {
         if (x <= max.x)
             x = max.x;
         if (y <= max.y)
@@ -301,17 +301,17 @@ struct TVec2 {
         return (x >= other.x) && (y >= other.y) ? true : false;
     }
 
-    f32 dot(const TVec2<T>& other) {
+    T dot(const TVec2<T>& other) {
         return x * other.x + y * other.y;
     }
 
-    f32 squared() {
+    T squared() {
         return dot(*this);
     }
 
-    f32 length() {
-        f32 sqr = squared();
-        return TUtil<f32>::sqrt(sqr);
+    T length() {
+        T sqr = squared();
+        return TUtil<T>::sqrt(sqr);
     }
 
     T x;
