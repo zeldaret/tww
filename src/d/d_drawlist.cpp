@@ -119,18 +119,14 @@ void dDlst_2DPoint_c::draw() {
 
 /* 80080784-80080A50       .text draw__11dDlst_2DT_cFv */
 void dDlst_2DT_c::draw() {
-    /* Nonmatching */
     f32 texW = mTexW;
     f32 texH = mTexH;
-    int sizeX = mX1 - mX0;
-    int sizeY = mY1 - mY0;
-
-    f32 xo = (sizeX * 0.5f) / mScaleX;
-    f32 yo = (sizeY * 0.5f) / mScaleY;
-    s16 s0 = ((mCenterX - xo) / texW) * 32768.0f;
-    s16 t0 = ((mCenterY - yo) / texH) * 32768.0f;
-    s16 s1 = ((mCenterX + xo) / texW) * 32768.0f;
-    s16 t1 = ((mCenterY + yo) / texH) * 32768.0f;
+    f32 xo = ((mX1 - mX0) * 0.5f) / mScaleX;
+    f32 yo = ((mY1 - mY0) * 0.5f) / mScaleY;
+    u16 s0 = ((mCenterX - xo) / texW) * 32768.0f;
+    u16 t0 = ((mCenterY - yo) / texH) * 32768.0f;
+    u16 s1 = ((mCenterX + xo) / texW) * 32768.0f;
+    u16 t1 = ((mCenterY + yo) / texH) * 32768.0f;
 
     GXTexObj texObj;
     GXInitTexObj(&texObj, mpTexData, mTexW, mTexH, (GXTexFmt)mTexFmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -155,21 +151,21 @@ void dDlst_2DT_c::draw() {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_SET);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
-    GXPosition3s16(mX0, mY0, 0);
+    GXPosition3s16((s32)mX0, (s32)mY0, 0);
     GXColor1u32(0xFFFFFFFF);
-    GXTexCoord2s16(s0, t0);
+    GXTexCoord2u16(s0, t0);
 
-    GXPosition3s16(mX1, mY0, 0);
+    GXPosition3s16((s32)mX1, (s32)mY0, 0);
     GXColor1u32(0xFFFFFFFF);
-    GXTexCoord2s16(s1, t0);
+    GXTexCoord2u16(s1, t0);
 
-    GXPosition3s16(mX1, mY1, 0);
+    GXPosition3s16((s32)mX1, (s32)mY1, 0);
     GXColor1u32(0xFFFFFFFF);
-    GXTexCoord2s16(s1, t1);
+    GXTexCoord2u16(s1, t1);
 
-    GXPosition3s16(mX0, mY1, 0);
+    GXPosition3s16((s32)mX0, (s32)mY1, 0);
     GXColor1u32(0xFFFFFFFF);
-    GXTexCoord2s16(s0, t1);
+    GXTexCoord2u16(s0, t1);
 
     GXEnd();
 }
@@ -422,8 +418,6 @@ void dDlst_2DT2_c::init(ResTIMG* tex, f32 x, f32 y, f32 w, f32 h, u8 p0, u8 p1, 
 
 /* 800812F4-800817CC       .text draw__11dDlst_2DM_cFv */
 void dDlst_2DM_c::draw() {
-    /* Nonmatching */
-
     GXVtxAttrFmtList fmtList[GX_VA_MAX_ATTR + 1];
 
     s16 tex0_s0 = mTex[0].mScrollX;
@@ -483,19 +477,19 @@ void dDlst_2DM_c::draw() {
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3s16(mX0, mY0, 0);
+    GXPosition3s16((s32)mX0, (s32)mY0, 0);
     GXTexCoord2s16(tex0_s0, tex0_t0);
     GXTexCoord2s16(tex1_s0, tex1_t0);
 
-    GXPosition3s16(mX1, mY0, 0);
+    GXPosition3s16((s32)mX1, (s32)mY0, 0);
     GXTexCoord2s16(tex0_s1, tex0_t0);
     GXTexCoord2s16(tex1_s1, tex1_t0);
 
-    GXPosition3s16(mX1, mY1, 0);
+    GXPosition3s16((s32)mX1, (s32)mY1, 0);
     GXTexCoord2s16(tex0_s1, tex0_t1);
     GXTexCoord2s16(tex1_s1, tex1_t1);
 
-    GXPosition3s16(mX0, mY1, 0);
+    GXPosition3s16((s32)mX0, (s32)mY1, 0);
     GXTexCoord2s16(tex0_s0, tex0_t1);
     GXTexCoord2s16(tex1_s0, tex1_t1);
     GXEnd();
@@ -534,8 +528,6 @@ void dDlst_2Dm_c::setScroll(int idx, s16 x, s16 y) {
 
 /* 80081888-80081DA4       .text draw__11dDlst_2Dm_cFv */
 void dDlst_2Dm_c::draw() {
-    /* Nonmatching */
-
     GXVtxAttrFmtList fmtList[GX_VA_MAX_ATTR + 1];
 
     s16 tex0_s0 = mTex[0].mScrollX;
@@ -595,19 +587,19 @@ void dDlst_2Dm_c::draw() {
     GXSetCurrentMtx(GX_PNMTX0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3s16(mX0, mY0, 0);
+    GXPosition3s16((s32)mX0, (s32)mY0, 0);
     GXTexCoord2s16(tex0_s0, tex0_t0);
     GXTexCoord2s16(tex1_s0, tex1_t0);
 
-    GXPosition3s16(mX1, mY0, 0);
+    GXPosition3s16((s32)mX1, (s32)mY0, 0);
     GXTexCoord2s16(tex0_s1, tex0_t0);
     GXTexCoord2s16(tex1_s1, tex1_t0);
 
-    GXPosition3s16(mX1, mY1, 0);
+    GXPosition3s16((s32)mX1, (s32)mY1, 0);
     GXTexCoord2s16(tex0_s1, tex0_t1);
     GXTexCoord2s16(tex1_s1, tex1_t1);
 
-    GXPosition3s16(mX0, mY1, 0);
+    GXPosition3s16((s32)mX0, (s32)mY1, 0);
     GXTexCoord2s16(tex0_s0, tex0_t1);
     GXTexCoord2s16(tex1_s0, tex1_t1);
     GXEnd();
