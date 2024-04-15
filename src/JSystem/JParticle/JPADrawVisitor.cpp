@@ -27,7 +27,7 @@ JPADrawClipBoard* JPADrawContext::pcb;
 /* 8025F960-8025FBE4       .text exec__20JPADrawExecLoadExTexFPC14JPADrawContext */
 void JPADrawExecLoadExTex::exec(const JPADrawContext* pDC) {
     JUT_ASSERT(50, pDC->pTexIdx);
-    
+
     u16 texIdx;
     GXTexCoordID coord = GX_TEXCOORD1;
     switch (pDC->petx->getIndTexMode()) {
@@ -50,7 +50,7 @@ void JPADrawExecLoadExTex::exec(const JPADrawContext* pDC) {
         coord = GX_TEXCOORD3;
         break;
     }
-    
+
     if (pDC->petx->isEnableSecondTex()) {
         GXSetTexCoordGen2(coord, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
         GXEnableTexOffsets(coord, GX_TRUE, GX_TRUE);
@@ -507,30 +507,30 @@ void JPADrawExecRotation::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl)
     f32 cos = JMASCos(ptcl->mRotateAngle);
 
     Mtx rotMtx;
-    JGeometry::TVec3<f32> plane[4];
+    JGeometry::TVec3<f32> pt[4];
     JPADrawContext::pcb->mBasePlaneTypeFunc(
         -ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX),
         +ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX),
         +ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY),
         -ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY),
-        plane
+        pt
     );
     JPADrawContext::pcb->mRotTypeFunc(sin, cos, rotMtx);
 
-    MTXMultVecArray(rotMtx, plane, plane, ARRAY_SIZE(plane));
+    MTXMultVecArray(rotMtx, pt, pt, ARRAY_SIZE(pt));
     f32 x = ptcl->mPosition.x;
     f32 y = ptcl->mPosition.y;
     f32 z = ptcl->mPosition.z;
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     JGeometry::TVec2<f32>* texCoord = JPADrawContext::pcb->mTexCoordPt;
-    GXPosition3f32(plane[0].x + x, plane[0].y + y, plane[0].z + z);
+    GXPosition3f32(pt[0].x + x, pt[0].y + y, pt[0].z + z);
     GXTexCoord2f32(texCoord[0].x, texCoord[0].y);
-    GXPosition3f32(plane[1].x + x, plane[1].y + y, plane[1].z + z);
+    GXPosition3f32(pt[1].x + x, pt[1].y + y, pt[1].z + z);
     GXTexCoord2f32(texCoord[1].x, texCoord[1].y);
-    GXPosition3f32(plane[2].x + x, plane[2].y + y, plane[2].z + z);
+    GXPosition3f32(pt[2].x + x, pt[2].y + y, pt[2].z + z);
     GXTexCoord2f32(texCoord[2].x, texCoord[2].y);
-    GXPosition3f32(plane[3].x + x, plane[3].y + y, plane[3].z + z);
+    GXPosition3f32(pt[3].x + x, pt[3].y + y, pt[3].z + z);
     GXTexCoord2f32(texCoord[3].x, texCoord[3].y);
     GXEnd();
 }
@@ -538,6 +538,58 @@ void JPADrawExecRotation::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl)
 /* 80262FBC-802632EC       .text exec__24JPADrawExecRotationCrossFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecRotationCross::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     /* Nonmatching */
+    if (ptcl->isInvisibleParticle())
+        return;
+
+    f32 sin = JMASSin(ptcl->mRotateAngle);
+    f32 cos = JMASCos(ptcl->mRotateAngle);
+
+    f32 x0 = -ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX);
+    f32 y0 = +ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY);
+    f32 x1 = +ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX);
+    f32 y1 = -ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY);
+
+    JGeometry::TVec3<f32> pt[8];
+    pt[0].set(x0, y0, 0.0f);
+    pt[1].set(x1, y0, 0.0f);
+    pt[2].set(x1, y1, 0.0f);
+    pt[3].set(x0, y1, 0.0f);
+
+    f32 x2 = (x1 + x0) / 2.0f;
+    f32 z0 = (x1 - x0) / 2.0f;
+    f32 z1 = (x0 - x1) / 2.0f;
+    pt[4].set(x2, y0, z0);
+    pt[5].set(x2, y0, z1);
+    pt[6].set(x2, y1, z1);
+    pt[7].set(x2, y1, z0);
+
+    Mtx rotMtx;
+    JPADrawContext::pcb->mRotTypeFunc(sin, cos, rotMtx);
+
+    MTXMultVecArray(rotMtx, pt, pt, ARRAY_SIZE(pt));
+    f32 x = ptcl->mPosition.x;
+    f32 y = ptcl->mPosition.y;
+    f32 z = ptcl->mPosition.z;
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 8);
+    JGeometry::TVec2<f32>* texCoord = JPADrawContext::pcb->mTexCoordPt;
+    GXPosition3f32(pt[0].x + x, pt[0].y + y, pt[0].z + z);
+    GXTexCoord2f32(texCoord[0].x, texCoord[0].y);
+    GXPosition3f32(pt[1].x + x, pt[1].y + y, pt[1].z + z);
+    GXTexCoord2f32(texCoord[1].x, texCoord[1].y);
+    GXPosition3f32(pt[2].x + x, pt[2].y + y, pt[2].z + z);
+    GXTexCoord2f32(texCoord[2].x, texCoord[2].y);
+    GXPosition3f32(pt[3].x + x, pt[3].y + y, pt[3].z + z);
+    GXTexCoord2f32(texCoord[3].x, texCoord[3].y);
+    GXPosition3f32(pt[4].x + x, pt[4].y + y, pt[4].z + z);
+    GXTexCoord2f32(texCoord[0].x, texCoord[0].y);
+    GXPosition3f32(pt[5].x + x, pt[5].y + y, pt[5].z + z);
+    GXTexCoord2f32(texCoord[1].x, texCoord[1].y);
+    GXPosition3f32(pt[6].x + x, pt[6].y + y, pt[6].z + z);
+    GXTexCoord2f32(texCoord[2].x, texCoord[2].y);
+    GXPosition3f32(pt[7].x + x, pt[7].y + y, pt[7].z + z);
+    GXTexCoord2f32(texCoord[3].x, texCoord[3].y);
+    GXEnd();
 }
 
 /* 802632EC-80263380       .text exec__16JPADrawExecPointFPC14JPADrawContextP15JPABaseParticle */
@@ -545,7 +597,8 @@ void JPADrawExecPoint::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     if (ptcl->isInvisibleParticle())
         return;
 
-    JGeometry::TVec3<f32> pos(ptcl->mPosition);
+    JGeometry::TVec3<f32> pos;
+    pos.set(ptcl->mPosition);
     GXBegin(GX_POINTS, GX_VTXFMT0, 1);
     GXPosition3f32(pos.x, pos.y, pos.z);
     GXTexCoord2f32(0.0f, 0.0f);
@@ -557,8 +610,11 @@ void JPADrawExecLine::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     if (ptcl->isInvisibleParticle())
         return;
 
-    JGeometry::TVec3<f32> pt0(ptcl->mPosition);
-    JGeometry::TVec3<f32> vel(ptcl->mVelocity);
+    JGeometry::TVec3<f32> pt0;
+    JGeometry::TVec3<f32> vel;
+
+    pt0.set(ptcl->mPosition);
+    vel.set(ptcl->mVelocity);
     if (!vel.isZero()) {
         vel.normalize();
 
@@ -756,7 +812,8 @@ void JPADrawCalcScaleY::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
 /* 80264EE8-802650B8       .text calc__24JPADrawCalcScaleXBySpeedFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     /* Nonmatching */
-    JGeometry::TVec3<f32> vel(ptcl->mVelocity);
+    JGeometry::TVec3<f32> vel;
+    vel.set(ptcl->mVelocity);
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
         ptcl->mScaleX = ptcl->mScaleOut * ((pDC->pesp->getIncreaseRateX() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueX());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
@@ -770,7 +827,8 @@ void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* 
 /* 802650B8-80265288       .text calc__24JPADrawCalcScaleYBySpeedFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleYBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     /* Nonmatching */
-    JGeometry::TVec3<f32> vel(ptcl->mVelocity);
+    JGeometry::TVec3<f32> vel;
+    vel.set(ptcl->mVelocity);
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
         ptcl->mScaleY = ptcl->mScaleOut * ((pDC->pesp->getIncreaseRateY() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueY());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
