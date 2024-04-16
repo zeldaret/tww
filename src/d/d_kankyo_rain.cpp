@@ -1811,15 +1811,13 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
                     };
 
                     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                    const cXyz & addv = add_table[j];
-                    f32 addX = addv.x, addY = addv.y, addZ = addv.z;
-                    GXPosition3f32(pos[0].x + addX, pos[0].y + addY, pos[0].z + addZ);
+                    GXPosition3f32(pos[0].x + add_table[j].x, pos[0].y + add_table[j].y, pos[0].z + add_table[j].z);
                     GXTexCoord2s16(0, 0);
-                    GXPosition3f32(pos[1].x + addX, pos[1].y + addY, pos[1].z + addZ);
+                    GXPosition3f32(pos[1].x + add_table[j].x, pos[1].y + add_table[j].y, pos[1].z + add_table[j].z);
                     GXTexCoord2s16(0xFF, 0);
-                    GXPosition3f32(pos[2].x + addX, pos[2].y + addY, pos[2].z + addZ);
+                    GXPosition3f32(pos[2].x + add_table[j].x, pos[2].y + add_table[j].y, pos[2].z + add_table[j].z);
                     GXTexCoord2s16(0xFF, 0xFF);
-                    GXPosition3f32(pos[3].x + addX, pos[3].y + addY, pos[3].z + addZ);
+                    GXPosition3f32(pos[3].x + add_table[j].x, pos[3].y + add_table[j].y, pos[3].z + add_table[j].z);
                     GXTexCoord2s16(0, 0xFF);
                     GXEnd();
                 }
@@ -2262,15 +2260,13 @@ void drawWave(Mtx drawMtx, u8** pImg) {
             };
 
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            const cXyz & addv = add_table[j];
-            f32 addX = addv.x, addY = addv.y, addZ = addv.z;
-            GXPosition3f32(pos[0].x + addX, pos[0].y + addY, pos[0].z + addZ);
+            GXPosition3f32(pos[0].x + add_table[j].x, pos[0].y + add_table[j].y, pos[0].z + add_table[j].z);
             GXTexCoord2s16(0, 0);
-            GXPosition3f32(pos[1].x + addX, pos[1].y + addY, pos[1].z + addZ);
+            GXPosition3f32(pos[1].x + add_table[j].x, pos[1].y + add_table[j].y, pos[1].z + add_table[j].z);
             GXTexCoord2s16(0xFA, 0);
-            GXPosition3f32(pos[2].x + addX, pos[2].y + addY, pos[2].z + addZ);
+            GXPosition3f32(pos[2].x + add_table[j].x, pos[2].y + add_table[j].y, pos[2].z + add_table[j].z);
             GXTexCoord2s16(0xFA, 0xFA);
-            GXPosition3f32(pos[3].x + addX, pos[3].y + addY, pos[3].z + addZ);
+            GXPosition3f32(pos[3].x + add_table[j].x, pos[3].y + add_table[j].y, pos[3].z + add_table[j].z);
             GXTexCoord2s16(0, 0xFA);
             GXEnd();
         }
