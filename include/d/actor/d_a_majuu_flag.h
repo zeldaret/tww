@@ -24,7 +24,7 @@ public:
 class daMajuu_Flag_c : public fopAc_ac_c {
 public:
     void setBaseScale(float) {}
-    void setOtherMatrix(float(*)[3][4]) {}
+    void setOtherMatrix(Mtx*) {}
     void setOtherOffset(cXyz*) {}
 
 public:

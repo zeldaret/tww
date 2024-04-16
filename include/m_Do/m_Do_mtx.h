@@ -139,6 +139,10 @@ inline void cMtx_inverse(const Mtx a, Mtx b) {
     mDoMtx_inverse(a, b);
 }
 
+inline void cMtx_inverseTranspose(const Mtx a, Mtx b) {
+    mDoMtx_inverseTranspose(a, b);
+}
+
 class mDoMtx_stack_c {
 public:
     mDoMtx_stack_c() {

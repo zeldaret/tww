@@ -447,5 +447,6 @@ cXyz dKy_get_hokuto_pos();
 void dKy_DayProc();
 u8 dKy_get_schbit();
 int dKy_rain_check();
+void dKy_setLight_mine(dKy_tevstr_c* pTevStr);
 
 #endif /* D_KANKYO_D_KANKYO_H */

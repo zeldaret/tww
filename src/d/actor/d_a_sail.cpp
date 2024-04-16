@@ -517,8 +517,8 @@ static BOOL daSail_checkCreateHeap(fopAc_ac_c* i_actor) {
     if (modelData == NULL) {
         return FALSE;
     }
-    i_this->m02A0.m1C3C = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000002);
-    if (i_this->m02A0.m1C3C) {
+    i_this->mSailPacket.m1C3C = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000002);
+    if (i_this->mSailPacket.m1C3C) {
         return TRUE;
     } else {
         return FALSE;
@@ -546,10 +546,10 @@ static s32 daSail_Create(fopAc_ac_c* i_actor) {
             l_HIO.mChildID = mDoHIO_root.m_subroot.createChild("海賊船の帆", &l_HIO); // "Pirate Ship's Sail"
         }
         
-        i_this->m02A0.m1C44 = 0.0f;
-        i_this->m02A0.m1C48 = 0.0f;
-        cXyz* r6 = &i_this->m02A0.m0884[0];
-        cXyz* r7 = &i_this->m02A0.m00A4[i_this->m02A0.m1C3A * 0x54]; // this is probably one of daSail_packet_c's inlines
+        i_this->mSailPacket.m1C44 = 0.0f;
+        i_this->mSailPacket.m1C48 = 0.0f;
+        cXyz* r6 = &i_this->mSailPacket.m0884[0];
+        cXyz* r7 = &i_this->mSailPacket.m00A4[i_this->mSailPacket.m1C3A * 0x54]; // this is probably one of daSail_packet_c's inlines
         for (int i = 0; i < ARRAY_SIZE(l_pos); i++, r6++, r7++) {
             r6->setall(0.0f);
             r7->set(l_pos[i]);
@@ -558,7 +558,7 @@ static s32 daSail_Create(fopAc_ac_c* i_actor) {
         l_p_ship = (daObjPirateship::Act_c*)fopAcM_SearchByID(i_this->parentActorID);
         if (l_p_ship->m2CE == 0) {
             l_HIO.m06 = 0;
-            i_this->m02A0.m1C44 = 0.6f;
+            i_this->mSailPacket.m1C44 = 0.6f;
         } else {
             l_HIO.m06 = 1;
         }

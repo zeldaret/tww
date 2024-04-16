@@ -7,6 +7,15 @@ class dBgWHf : public dBgWSv {
 public:
     virtual ~dBgWHf() {}
 
+    void SetVtx(Vec* vtx) {
+        if (GetVtxTbl() == NULL) {
+            SetVtxTbl(vtx);
+            CopyBackVtx();
+        } else {
+            SetVtxTbl(vtx);
+        }
+    }
+
     bool Set(cBgD_t*, u16*, f32, int, int, u32);
     void CalcPlane();
     void ClassifyPlane();

@@ -5,6 +5,9 @@
 
 class dBgWSv : public dBgW {
 public:
+    dBgWSv() {
+        mBackVtx = NULL;
+    }
     virtual ~dBgWSv() {}
 
     virtual void MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {}

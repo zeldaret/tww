@@ -4,55 +4,273 @@
 //
 
 #include "d/actor/d_a_bwdg.h"
-#include "dolphin/types.h"
+#include "d/d_bg_w_hf.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "d/actor/d_a_bwd.h"
+#include "f_op/f_op_actor_mng.h"
+#include "dolphin/gf/GFGeometry.h"
+#include "dolphin/gf/GFTev.h"
+#include "dolphin/gf/GFTransform.h"
+
+static bwd_class* boss;
+
+#include "d/actor/d_a_bwdg_data.inc"
+
+// Fakematch: These are supposed to be in-function statics inside daBwdg_packet_c::draw().
+// But for some reason, defining them inside the function causes the function to load them as well
+// as l_matDL and l_Hsand1DL (but not l_texCoord) with different codegen than the original function.
+// Defining them above the function also results in the same thing.
+// But forward declaring them as externs, and then defining them after the function works correctly.
+extern GXVtxDescList l_vtxDescList[];
+extern GXVtxAttrFmtList l_vtxAttrFmtList[];
+
+// Another way of matching the function's codegen is to keep these as in-function statics, but move
+// the d_a_bwdg_data.inc include until after the function, and forward declare the included data.
+// But this method breaks the order of the variables in the .data section as the in-function data
+// would then appear above the included data.
+// extern u8 l_B_sand2TEX[0x10000] ALIGN_DECL(32);
+// extern u8 l_texCoord[0x8408];
+// extern u8 l_Hsand1DL[0xC3E0] ALIGN_DECL(32);
+// extern u8 l_matDL[0xBA] ALIGN_DECL(32);
 
 /* 00000078-000001C4       .text draw__15daBwdg_packet_cFv */
 void daBwdg_packet_c::draw() {
-    /* Nonmatching */
+    // static GXVtxDescList l_vtxDescList[] = {
+    //     {GX_VA_POS, GX_INDEX16},
+    //     {GX_VA_NRM, GX_INDEX16},
+    //     {GX_VA_TEX0, GX_INDEX16},
+    //     {GX_VA_NULL, GX_NONE},
+    // };
+    // static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+    //     {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
+    //     {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
+    //     {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
+    //     {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    // };
+    j3dSys.reinitGX();
+    dKy_GxFog_tevstr_set(mpTevStr);
+    dKy_setLight_mine(mpTevStr);
+    GFSetVtxDescv(l_vtxDescList);
+    GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+    GFSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+    GFSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    GFSetArray(GX_VA_TEX0, l_texCoord, sizeof(cXy));
+    GFSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);
+    GFSetTevColor(GX_TEVREG1, mpTevStr->mColorK0);
+    GXCallDisplayList(l_matDL, 0xA0);
+    GFLoadPosMtxImm(getMtx(), GX_PNMTX0);
+    Mtx sp14;
+    cMtx_inverseTranspose(mMtx, sp14);
+    GFLoadNrmMtxImm(sp14, 0);
+    GXCallDisplayList(l_Hsand1DL, sizeof(l_Hsand1DL));
+    m00010 ^= 0x01;
 }
 
+// Fakematch (see above comment)
+GXVtxDescList l_vtxDescList[] = {
+    {GX_VA_POS, GX_INDEX16},
+    {GX_VA_NRM, GX_INDEX16},
+    {GX_VA_TEX0, GX_INDEX16},
+    {GX_VA_NULL, GX_NONE},
+};
+GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+    {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
+    {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
+    {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
+    {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+};
+
 /* 000001C4-00000260       .text daBwdg_Draw__FP10bwdg_class */
-static BOOL daBwdg_Draw(bwdg_class*) {
-    /* Nonmatching */
+static BOOL daBwdg_Draw(bwdg_class* i_this) {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0_FULL, &i_this->current.pos, &i_this->tevStr);
+    MtxTrans(0.0f, 10.0f, 0.0f, 0);
+    cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mBwdgPacket.getMtx());
+    i_this->mBwdgPacket.setTevStr(&i_this->tevStr);
+    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mBwdgPacket, 0);
+    return TRUE;
 }
 
 /* 00000260-00000308       .text base_xz_set__FP10bwdg_class */
-void base_xz_set(bwdg_class*) {
-    /* Nonmatching */
+static void base_xz_set(bwdg_class* i_this) {
+    cXyz* posVtx = i_this->mBwdgPacket.getPos();
+    for (int i = 0; i < 0x41; i++) {
+        for (int j = 0; j < 0x41; posVtx++, j++) {
+            posVtx->x = j * 130.0f - 4160.0f;
+            posVtx->z = i * 130.0f - 4160.0f;
+        }
+    }
 }
 
 /* 00000308-000006F8       .text wave_cont__FP10bwdg_classUc */
-void wave_cont(bwdg_class*, unsigned char) {
-    /* Nonmatching */
+static void wave_cont(bwdg_class* i_this, u8 r4) {
+    cXyz* posVtx = i_this->mBwdgPacket.getPos();
+    cXyz sp30;
+    f32 f31, f30, f29, f28, f27;
+    if (r4 != 0) {
+        f30 = 1.0f;
+        f31 = 2000.0f;
+        sp30.setall(0.0f);
+        f28 = -0.75f;
+        f29 = 1.0f;
+        f27 = 600.0f;
+    } else {
+        f30 = 0.5f;
+        f31 = 0.0f;
+        i_this->m002B8 += boss->m17D8;
+        sp30 = boss->m17C8;
+        f28 = boss->m17D4;
+        f29 = boss->m17DC;
+        f27 = boss->m17E0;
+    }
+    
+    for (int i = 0; i < 0x1081; posVtx++, i++) {
+        cXyz sp24;
+        sp24.x = posVtx->x - sp30.x;
+        sp24.z = posVtx->z - sp30.z;
+        
+        f32 f0 = sqrtf(sp24.x*sp24.x + sp24.z*sp24.z);
+        f32 f1 = 3000.0f - f0;
+        f32 f3;
+        f32 f4 = f1;
+        if (f4 < 0.0f) {
+            f4 = 0.0f;
+        }
+        f4 *= 0.01f;
+        
+        if (f1 < 0.0f) {
+            f1 = 0.0f;
+        }
+        
+        f3 = 10.0f + f1 * 0.00667f;
+        if (f3 > 30.0f) {
+            f3 = 30.0f;
+        }
+        f32 f2 = cM_ssin(i_this->m002B8 + (s32)(f0*200.0f));
+        
+        cLib_addCalc2(&i_this->m002C0[i], f28*(f4*f4) + f3*f2, f30, f29*((0.3f*f3)+f31));
+        posVtx->y = i_this->m002C0[i] + f27;
+    }
+    
+    cXyz* nrmVtx = i_this->mBwdgPacket.getNrm();
+    posVtx = i_this->mBwdgPacket.getPos();
+    cXyz sp18(0.0f, 0.0f, 1.0f);
+    cMtx_XrotS(*calc_mtx, -0x4A38);
+    cXyz sp0C;
+    MtxPosition(&sp18, &sp0C);
+    
+    for (int i = 0; i < 0x1081; i++, posVtx++, nrmVtx++) {
+        if (i >= 0x1040) {
+            continue;
+        }
+        cMtx_XrotS(*calc_mtx, cM_atan2s(posVtx->y - f27, 400.0f));
+        MtxPosition(&sp0C, nrmVtx);
+    }
 }
 
 /* 00000734-00000780       .text boss_a_d_sub__FPvPv */
-void boss_a_d_sub(void*, void*) {
-    /* Nonmatching */
+static void* boss_a_d_sub(void* param_1, void* param_2) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BWD) {
+        return param_1;
+    }
+    return NULL;
 }
 
 /* 00000780-0000084C       .text daBwdg_Execute__FP10bwdg_class */
-static BOOL daBwdg_Execute(bwdg_class*) {
-    /* Nonmatching */
+static BOOL daBwdg_Execute(bwdg_class* i_this) {
+    cXyz* posVtx = i_this->mBwdgPacket.getPos();
+    if (boss == NULL) {
+        boss = (bwd_class*)fpcM_Search(boss_a_d_sub, i_this);
+        if (boss == NULL) {
+            return TRUE;
+        }
+    }
+    i_this->m002B4++;
+    i_this->mpBgW->CopyBackVtx();
+    wave_cont(i_this, 0);
+    i_this->mpBgW->SetVtx(posVtx);
+    i_this->mpBgW->MoveHf();
+    return TRUE;
 }
 
 /* 0000084C-00000854       .text daBwdg_IsDelete__FP10bwdg_class */
-static BOOL daBwdg_IsDelete(bwdg_class*) {
-    /* Nonmatching */
+static BOOL daBwdg_IsDelete(bwdg_class* i_this) {
+    return TRUE;
 }
 
 /* 00000854-000008B0       .text daBwdg_Delete__FP10bwdg_class */
-static BOOL daBwdg_Delete(bwdg_class*) {
-    /* Nonmatching */
+static BOOL daBwdg_Delete(bwdg_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhase, "Bwdg");
+    if (i_this->heap) {
+        dComIfG_Bgsp()->Release(i_this->mpBgW);
+    }
+    return TRUE;
 }
 
 /* 000008B0-000009A0       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* i_actor) {
+    bwdg_class* i_this = (bwdg_class*)i_actor;
+    
+    i_this->mpBgW = new dBgWHf();
+    if (i_this->mpBgW == NULL) {
+        return FALSE;
+    }
+    
+    u16* r30 = (u16*)dComIfG_getObjectRes("Bwdg", 4);
+    cBgD_t* r3 = (cBgD_t*)dComIfG_getObjectRes("Bwdg", 7);
+    if (!i_this->mpBgW->Set(r3, r30, 130.0f, 0x40, 0x40, 0)) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 000009A0-00000B5C       .text daBwdg_Create__FP10fopAc_ac_c */
-static s32 daBwdg_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daBwdg_Create(fopAc_ac_c* i_actor) {
+    bwdg_class* i_this = (bwdg_class*)i_actor;
+    fopAcM_SetupActor(i_this, bwdg_class);
+    
+    int phase_state = dComIfG_resLoad(&i_this->mPhase, "Bwdg");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        boss = NULL;
+        i_this->current.pos.setall(0.0f);
+        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x96000)) {
+            return cPhs_ERROR_e;
+        }
+        dComIfG_Bgsp()->Regist(i_this->mpBgW, i_this);
+        base_xz_set(i_this);
+        i_this->mBwdgPacket.m00010 ^= 0x01;
+        base_xz_set(i_this);
+        wave_cont(i_this, 1);
+        cXyz* posVtx = i_this->mBwdgPacket.getPos();
+        i_this->mpBgW->SetVtx(posVtx);
+        i_this->mpBgW->CopyBackVtx();
+        i_this->mpBgW->Move();
+    }
+    return phase_state;
 }
 
+static actor_method_class l_daBwdg_Method = {
+    (process_method_func)daBwdg_Create,
+    (process_method_func)daBwdg_Delete,
+    (process_method_func)daBwdg_Execute,
+    (process_method_func)daBwdg_IsDelete,
+    (process_method_func)daBwdg_Draw,
+};
+
+actor_process_profile_definition g_profile_BWDG = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BWDG,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bwdg_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00CE,
+    /* Actor SubMtd */ &l_daBwdg_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

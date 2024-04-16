@@ -1412,7 +1412,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_bst"),
     ActorRel(NonMatching, "d_a_btd"),
     ActorRel(NonMatching, "d_a_bwd"),
-    ActorRel(NonMatching, "d_a_bwdg"),
+    ActorRel(NonMatching, "d_a_bwdg", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_bwds"),
     ActorRel(NonMatching, "d_a_daiocta"),
     ActorRel(NonMatching, "d_a_daiocta_eye"),

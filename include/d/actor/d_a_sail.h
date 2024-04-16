@@ -32,10 +32,10 @@ public:
 
 public:
     /* 0x0010 */ u8 m0010[0x00A4 - 0x0010];
-    /* 0x00A4 */ cXyz m00A4[0xA8];
+    /* 0x00A4 */ cXyz m00A4[0x54 * 2];
     /* 0x0884 */ cXyz m0884[0x54];
-    /* 0x0C74 */ cXyz m0C74[0xA8];
-    /* 0x1454 */ cXyz m1454[0xA8];
+    /* 0x0C74 */ cXyz m0C74[0x54 * 2];
+    /* 0x1454 */ cXyz m1454[0x54 * 2];
     /* 0x1C34 */ s16 m1C34;
     /* 0x1C36 */ s16 m1C36;
     /* 0x1C38 */ s16 m1C38;
@@ -51,7 +51,7 @@ class sail_class : public fopAc_ac_c {
 public:
     /* 0x0290 */ request_of_phase_process_class mClothPhase;
     /* 0x0298 */ request_of_phase_process_class mKaizokusenPhase;
-    /* 0x02A0 */ daSail_packet_c m02A0;
+    /* 0x02A0 */ daSail_packet_c mSailPacket;
     /* 0x1EEC */ u8 m1EEC[0x1EF4 - 0x1EEC];
 };
 
