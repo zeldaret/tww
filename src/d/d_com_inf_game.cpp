@@ -162,7 +162,7 @@ void dComIfG_play_c::itemInit() {
     mHeapLockFlag = 0;
     field_0x4965 = 0;
 
-    strcpy(field_0x4966, "\0");
+    strcpy(mInputPassword, "\0");
 
     field_0x4977 = 0;
     field_0x4978 = 0;

@@ -71,6 +71,10 @@ inline void mDoAud_bgmStop(u32 param_0) {
     mDoAud_zelAudio_c::getInterface()->bgmStop(param_0, 0);
 }
 
+inline void mDoAud_bgmAllMute(u32 param_0) {
+    mDoAud_zelAudio_c::getInterface()->bgmAllMute(param_0);
+}
+
 inline int mDoAud_checkPlayingMainBgmFlag() {
     return mDoAud_zelAudio_c::getInterface()->checkPlayingMainBgmFlag();
 }

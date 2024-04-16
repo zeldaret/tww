@@ -2076,7 +2076,7 @@ BOOL daNpc_Bs1_c::event_action(void*) {
         if (dComIfGp_evmng_endCheck(mEventIdxs[m82B])) {
             m82A = 0;
             m82B = 2;
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
             setAction(&daNpc_Bs1_c::wait_action, NULL);
         }
         lookBack();

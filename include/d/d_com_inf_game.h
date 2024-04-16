@@ -498,6 +498,8 @@ public:
     u8 getButtonMode() { return mButtonMode; }
     void setButtonMode(u8 mode) { mButtonMode = mode; }
 
+    void setInputPassword(const char* password) { strcpy(mInputPassword, password); }
+
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
     /* 0x3DF8 */ dADM mADM;
@@ -645,8 +647,7 @@ public:
     /* 0x4964 */ u8 mGameLanguage;
 #endif
     /* 0x4965 */ u8 field_0x4965;
-    /* 0x4966 */ char field_0x4966[1];
-    /* 0x4967 */ u8 field_0x4967[0x4977 - 0x4967];
+    /* 0x4966 */ char mInputPassword[0x11];
     /* 0x4977 */ u8 field_0x4977;
     /* 0x4978 */ u8 field_0x4978;
     /* 0x4979 */ u8 m2dShow;
@@ -2444,6 +2445,10 @@ inline u8 dComIfGp_getButtonActionMode() {
 
 inline void dComIfGp_setButtonActionMode(u8 mode) {
     g_dComIfG_gameInfo.play.setButtonMode(mode);
+}
+
+inline void dComIfGp_setInputPassword(const char* password) {
+    g_dComIfG_gameInfo.play.setInputPassword(password);
 }
 
 /**
