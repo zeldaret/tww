@@ -232,7 +232,7 @@ static s16 daNpc_Nz_XyEventCB(void* i_this, int param_1) {
 
 /* 000011C0-00001210       .text XyEventCB__10daNpc_Nz_cFi */
 s16 daNpc_Nz_c::XyEventCB(int) {
-    field_0x8FA = dComIfGp_evmng_getEventIdx("DEFAULT_NPC_NZ_ESA", -1);
+    field_0x8FA = dComIfGp_evmng_getEventIdx("DEFAULT_NPC_NZ_ESA");
     return field_0x8FA;
 }
 
@@ -675,7 +675,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
                     setAnm(0, false);
                     dComIfGp_setItemRupeeCount(-dComIfGp_getMessageRupee());
                     field_0x8F8 = 3;
-                    field_0x8FA = dComIfGp_evmng_getEventIdx("DEFAULT_NPC_NZ_GETITEM", -1);
+                    field_0x8FA = dComIfGp_evmng_getEventIdx("DEFAULT_NPC_NZ_GETITEM");
                     dComIfGp_event_setGtItm(field_0x908);
                     msgStatus = fopMsgStts_MSG_ENDS_e;
                     break;
@@ -846,7 +846,7 @@ BOOL daNpc_Nz_c::createInit() {
     modeProcInit(0);
 
     mAcchCir.SetWall(30.0f, 10.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, 0, 0);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     mAcch.OnLineCheckNone();
     mAcch.SetWallNone();
     mAcch.SetRoofNone();

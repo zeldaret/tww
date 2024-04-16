@@ -64,7 +64,7 @@ void daWarpfout_c::demo_proc() {
 
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mStaffId != -1) {
         int actIdx =
-            dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
+            dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 
         if (actIdx == -1) {
             dComIfGp_evmng_cutEnd(mStaffId);

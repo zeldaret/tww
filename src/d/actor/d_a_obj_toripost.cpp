@@ -125,7 +125,7 @@ void daObjTpost_c::cutProc() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Tpost");
     if(staffIdx != -1) {
-        int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 1, 0);
+        int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), TRUE, 0);
         if(actIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
         }

@@ -364,11 +364,11 @@ BOOL daTag_Event_c::actionSpeArrival() {
             setActio(ACTION_WAIT);
             return TRUE;
         }
-        mEventIdx = dComIfGp_evmng_getEventIdx("SUPERELF", -1);
+        mEventIdx = dComIfGp_evmng_getEventIdx("SUPERELF");
     } else if (dComIfGs_isEventBit(0x2740)) {
-        mEventIdx = dComIfGp_evmng_getEventIdx("fairy_flag_on_Jmp", -1);
+        mEventIdx = dComIfGp_evmng_getEventIdx("fairy_flag_on_Jmp");
     } else {
-        mEventIdx = dComIfGp_evmng_getEventIdx("fairy_Jmp", -1);
+        mEventIdx = dComIfGp_evmng_getEventIdx("fairy_Jmp");
     }
     setActio(ACTION_SPE_HUNT);
     return actionSpeHunt();

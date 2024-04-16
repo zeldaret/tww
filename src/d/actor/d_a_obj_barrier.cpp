@@ -243,7 +243,7 @@ void daObjBarrier_c::break_start_wait_proc() {
             case 9:
             case 10:
                 dComIfGs_onEventBit(dSv_evtBit_c::BARRIER_BREAK);
-                mEventID = dComIfGp_evmng_getEventIdx("seal", 0xFF);
+                mEventID = dComIfGp_evmng_getEventIdx("seal");
                 mBarrierProc = PROC_BREAK_ORDER;
                 break;
             }

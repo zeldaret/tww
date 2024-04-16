@@ -162,7 +162,7 @@ void daNpc_Nz_c::cutProc() {
         "DEFAULT_NPC_NZ_ESA",
     };
 
-    int actIdx = dComIfGp_evmng_getMyActIdx(field_0x8F4, action_table, ARRAY_SIZE(action_table), 1, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(field_0x8F4, action_table, ARRAY_SIZE(action_table), TRUE, 0);
     if(actIdx == -1) {
         dComIfGp_evmng_cutEnd(field_0x8F4);
         return;

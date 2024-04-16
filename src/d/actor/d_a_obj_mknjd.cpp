@@ -255,10 +255,10 @@ int daObjMknjD::Act_c::Create() {
     }
 
     if (m043E == true) {
-        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[3], 0xFF);
-        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[1], 0xFF);
-        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[5], 0xFF);
-        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7], 0xFF);
+        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[3]);
+        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[1]);
+        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[5]);
+        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
         mTactMode = 4;
         mGiveItemNo = TACT_SONG5;
@@ -266,10 +266,10 @@ int daObjMknjD::Act_c::Create() {
         m0430 = 0x2910;
     }
     else {
-        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[2], 0xFF);
-        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[0], 0xFF);
-        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[4], 0xFF);
-        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6], 0xFF);
+        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[2]);
+        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[0]);
+        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[4]);
+        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
         mTactMode = 3;
         mGiveItemNo = TACT_SONG4;
@@ -445,7 +445,7 @@ void daObjMknjD::Act_c::privateCut() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("MknjD");
     if (staffIdx != -1) {
-        mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_table, ARRAY_SIZE(cut_name_table), 1, 0);
+        mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_table, ARRAY_SIZE(cut_name_table), TRUE, 0);
 
         if (mActionIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);

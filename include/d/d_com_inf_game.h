@@ -2507,7 +2507,8 @@ inline BOOL dComIfGp_event_compulsory(void* param_1, const char* param_2 = NULL,
     return g_dComIfG_gameInfo.play.getEvent().compulsory(param_1, param_2, param_3);
 }
 
-inline s32 dComIfGp_event_order(u16 eventType, u16 priority, u16 flag, u16 hind, void* pActor1, void* pActor2, s16 eventID, u8 infoIdx) {
+inline s32 dComIfGp_event_order(u16 eventType, u16 priority, u16 flag, u16 hind, void* pActor1,
+                                void* pActor2, s16 eventID = -1, u8 infoIdx = -1) {
     return g_dComIfG_gameInfo.play.getEvent().order(eventType, priority, flag, hind, pActor1, pActor2, eventID, infoIdx);
 }
 
@@ -2570,7 +2571,7 @@ inline u32 dComIfGp_evmng_getEventPrio(s16 eventIdx) {
     return g_dComIfG_gameInfo.play.getEvtManager().getEventPrio(eventIdx);
 }
 
-inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo) {
+inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo = -1) {
     return g_dComIfG_gameInfo.play.getEvtManager().getEventIdx(pName, evNo);
 }
 
@@ -2582,8 +2583,8 @@ inline int dComIfGp_evmng_getMyStaffId(const char* pName, fopAc_ac_c* pActor = N
     return dComIfGp_getPEvtManager()->getMyStaffId(pName, pActor, staffType);
 }
 
-inline int dComIfGp_evmng_getMyActIdx(int staffIdx, char** pActions, int actionCount, int force, int param_5) {
-    return dComIfGp_getPEvtManager()->getMyActIdx(staffIdx, pActions, actionCount, force, param_5);
+inline int dComIfGp_evmng_getMyActIdx(int staffIdx, char** pActions, int actionCount, BOOL force, int nameType) {
+    return dComIfGp_getPEvtManager()->getMyActIdx(staffIdx, pActions, actionCount, force, nameType);
 }
 
 inline char* dComIfGp_evmng_getMyActName(int staffIdx) {
@@ -2675,7 +2676,7 @@ inline void dComIfGp_evmng_cancelStartDemo() {
 }
 
 inline BOOL dComIfGp_evmng_existence(const char* pName) {
-    s16 eventIdx = dComIfGp_evmng_getEventIdx(pName, 0xFF);
+    s16 eventIdx = dComIfGp_evmng_getEventIdx(pName);
     return g_dComIfG_gameInfo.play.getEvtManager().getEventData(eventIdx) != NULL;
 }
 

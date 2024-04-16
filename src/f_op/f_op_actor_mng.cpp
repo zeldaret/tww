@@ -641,47 +641,47 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
 
 /* 800259A8-800259F8       .text fopAcM_orderTalkEvent__FP10fopAc_ac_cP10fopAc_ac_c */
 s32 fopAcM_orderTalkEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
-    return dComIfGp_event_order(dEvtType_TALK_e, 0x1FF, 0, 0x14F, i_this, i_partner, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_TALK_e, 0x1FF, 0, 0x14F, i_this, i_partner);
 }
 
 /* 800259F8-80025A48       .text fopAcM_orderTalkXBtnEvent__FP10fopAc_ac_cP10fopAc_ac_c */
 s32 fopAcM_orderTalkXBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
-    return dComIfGp_event_order(dEvtType_SHOWITEM_X_e, 0x1F4, 0, 0x14F, i_this, i_partner, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_SHOWITEM_X_e, 0x1F4, 0, 0x14F, i_this, i_partner);
 }
 
 /* 80025A48-80025A98       .text fopAcM_orderTalkYBtnEvent__FP10fopAc_ac_cP10fopAc_ac_c */
 s32 fopAcM_orderTalkYBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
-    return dComIfGp_event_order(dEvtType_SHOWITEM_Y_e, 0x1F4, 0, 0x14F, i_this, i_partner, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_SHOWITEM_Y_e, 0x1F4, 0, 0x14F, i_this, i_partner);
 }
 
 /* 80025A98-80025AE8       .text fopAcM_orderTalkZBtnEvent__FP10fopAc_ac_cP10fopAc_ac_c */
 s32 fopAcM_orderTalkZBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
-    return dComIfGp_event_order(dEvtType_SHOWITEM_Z_e, 0x1F4, 0, 0x14F, i_this, i_partner, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_SHOWITEM_Z_e, 0x1F4, 0, 0x14F, i_this, i_partner);
 }
 
 /* 80025AE8-80025B3C       .text fopAcM_orderZHintEvent__FP10fopAc_ac_cP10fopAc_ac_c */
 s32 fopAcM_orderZHintEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
-    return dComIfGp_event_order(dEvtType_TALK_e, 0x1FF, 0, 0xFFFF, i_this, i_partner, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_TALK_e, 0x1FF, 0, 0xFFFF, i_this, i_partner);
 }
 
 /* 80025B3C-80025B8C       .text fopAcM_orderSpeakEvent__FP10fopAc_ac_c */
 s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_this) {
-    return dComIfGp_event_order(dEvtType_TALK_e, 0x1EA, 0, 0x14F, dComIfGp_getPlayer(0), i_this, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_TALK_e, 0x1EA, 0, 0x14F, dComIfGp_getPlayer(0), i_this);
 }
 
 /* 80025B8C-80025BE0       .text fopAcM_orderDoorEvent__FP10fopAc_ac_cP10fopAc_ac_c */
 s32 fopAcM_orderDoorEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
-    return dComIfGp_event_order(dEvtType_DOOR_e, 0xFF, 0, 0xFFFF, i_this, i_partner, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_DOOR_e, 0xFF, 0, 0xFFFF, i_this, i_partner);
 }
 
 /* 80025BE0-80025C34       .text fopAcM_orderCatchEvent__FP10fopAc_ac_cP10fopAc_ac_c */
 s32 fopAcM_orderCatchEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
-    return dComIfGp_event_order(dEvtType_CATCH_e, 1, 0, 0xFFFF, i_this, i_partner, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_CATCH_e, 1, 0, 0xFFFF, i_this, i_partner);
 }
 
 /* 80025C34-80025CC8       .text fopAcM_orderOtherEvent2__FP10fopAc_ac_cPcUsUs */
 s32 fopAcM_orderOtherEvent2(fopAc_ac_c* i_this, char* pEventName, u16 flag, u16 hind) {
-    u16 prio = dComIfGp_evmng_getEventPrio(dComIfGp_evmng_getEventIdx(pEventName, 0xFF));
+    u16 prio = dComIfGp_evmng_getEventPrio(dComIfGp_evmng_getEventIdx(pEventName));
     if (prio == 0)
         prio = 0xFF;
 
@@ -690,12 +690,12 @@ s32 fopAcM_orderOtherEvent2(fopAc_ac_c* i_this, char* pEventName, u16 flag, u16 
 
 /* 80025CC8-80025D28       .text fopAcM_orderChangeEvent__FP10fopAc_ac_cPcUsUs */
 s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, char* pEventName, u16 flag, u16 hind) {
-    return fopAcM_orderChangeEventId(i_this, dComIfGp_evmng_getEventIdx(pEventName, 0xFF), flag, hind);
+    return fopAcM_orderChangeEventId(i_this, dComIfGp_evmng_getEventIdx(pEventName), flag, hind);
 }
 
 /* 80025D28-80025D94       .text fopAcM_orderChangeEvent__FP10fopAc_ac_cP10fopAc_ac_cPcUsUs */
 s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, char* pEventName, u16 flag, u16 hind) {
-    return fopAcM_orderChangeEventId(i_this, i_partner, dComIfGp_evmng_getEventIdx(pEventName, 0xFF), flag, hind);
+    return fopAcM_orderChangeEventId(i_this, i_partner, dComIfGp_evmng_getEventIdx(pEventName), flag, hind);
 }
 
 /* 80025D94-80025E1C       .text fopAcM_orderChangeEventId__FP10fopAc_ac_csUsUs */
@@ -704,7 +704,7 @@ s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, s16 eventIdx, u16 flag, u16 hi
     if (prio == 0)
         prio = 0xFF;
 
-    return dComIfGp_event_order(dEvtType_CHANGE_e, prio, flag, hind, i_this, dComIfGp_getPlayer(0), eventIdx, 0xFF);
+    return dComIfGp_event_order(dEvtType_CHANGE_e, prio, flag, hind, i_this, dComIfGp_getPlayer(0), eventIdx);
 }
 
 /* 80025E1C-80025EA4       .text fopAcM_orderChangeEventId__FP10fopAc_ac_cP10fopAc_ac_csUsUs */
@@ -713,7 +713,7 @@ s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, s16 eve
     if (prio == 0)
         prio = 0xFF;
 
-    return dComIfGp_event_order(dEvtType_CHANGE_e, prio, flag, hind, i_this, i_partner, eventIdx, 0xFF);
+    return dComIfGp_event_order(dEvtType_CHANGE_e, prio, flag, hind, i_this, i_partner, eventIdx);
 }
 
 /* 80025EA4-80025F3C       .text fopAcM_orderOtherEventId__FP10fopAc_ac_csUcUsUsUs */
@@ -735,17 +735,17 @@ s32 fopAcM_orderPotentialEvent(fopAc_ac_c* i_this, u16 flag, u16 hind, u16 prior
     if (priority == 0)
         priority = 0xFF;
 
-    return dComIfGp_event_order(dEvtType_POTENTIAL_e, priority, flag, hind, i_this, dComIfGp_getPlayer(0), -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_POTENTIAL_e, priority, flag, hind, i_this, dComIfGp_getPlayer(0));
 }
 
 /* 80025F9C-80025FF0       .text fopAcM_orderItemEvent__FP10fopAc_ac_c */
 s32 fopAcM_orderItemEvent(fopAc_ac_c* i_this) {
-    return dComIfGp_event_order(dEvtType_ITEM_e, 0xFF, 0, 0xFFFF, dComIfGp_getPlayer(0), i_this, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_ITEM_e, 0xFF, 0, 0xFFFF, dComIfGp_getPlayer(0), i_this);
 }
 
 /* 80025FF0-80026044       .text fopAcM_orderTreasureEvent__FP10fopAc_ac_cP10fopAc_ac_c */
 s32 fopAcM_orderTreasureEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
-    return dComIfGp_event_order(dEvtType_TREASURE_e, 0xFF, 0, 0xFFFF, i_this, i_partner, -1, 0xFF);
+    return dComIfGp_event_order(dEvtType_TREASURE_e, 0xFF, 0, 0xFFFF, i_this, i_partner);
 }
 
 /* 80026044-80026074       .text fopAcM_getTalkEventPartner__FP10fopAc_ac_c */

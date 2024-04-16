@@ -1805,7 +1805,7 @@ BOOL daNpc_Md_c::eventProc() {
     int staffIdx = dComIfGp_evmng_getMyStaffId(l_staff_name);
     if (dComIfGp_event_runCheck() && !checkCommandTalk()) {
         if (staffIdx != -1) {
-            int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+            int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
             if (actIdx == -1) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             } else {

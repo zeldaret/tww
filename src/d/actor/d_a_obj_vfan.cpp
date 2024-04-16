@@ -76,7 +76,7 @@ int daObjVfan::Act_c::Create() {
     mBreakTimer = 0;
     mState = 0;
 
-    m_evid = dComIfGp_evmng_getEventIdx("Vfan", 0xff);
+    m_evid = dComIfGp_evmng_getEventIdx("Vfan");
 
     return TRUE;
 }

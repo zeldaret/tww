@@ -1018,7 +1018,7 @@ s32 daNpc_Ji1_c::getEventActionNo(int staffIdx) {
         "06_dummy"
     };
 
-    return dComIfGp_evmng_getMyActIdx(staffIdx, ActionNames, 7, 0, 0);
+    return dComIfGp_evmng_getMyActIdx(staffIdx, ActionNames, ARRAY_SIZE(ActionNames), FALSE, 0);
 }
 
 /* 00004488-00004714       .text eventAction__11daNpc_Ji1_cFPv */
@@ -2856,27 +2856,27 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     field_0x330->getModel()->setUserArea((u32)this);
 
     field_0x5F8.SetWall(60.0f, 50.0f);
-    field_0x434.Set(&current.pos, &old.pos, this, 1, &field_0x5F8, &speed, 0, 0);
+    field_0x434.Set(&current.pos, &old.pos, this, 1, &field_0x5F8, &speed);
     field_0x434.OnLineCheck();
 
-    field_0xC54 = dComIfGp_evmng_getEventIdx("Ji1_StartSpeak", 0xFF);
-    field_0xC56 = dComIfGp_evmng_getEventIdx("Ji1_Speak", 0xFF);
-    field_0xC58 = dComIfGp_evmng_getEventIdx("Ji1_EndSpeak", 0xFF);
-    field_0xC5A = dComIfGp_evmng_getEventIdx("Ji1_BadSpeak", 0xFF);
-    field_0xC5C = dComIfGp_evmng_getEventIdx("Ji1_linkmove", 0xFF);
-    field_0xC5E = dComIfGp_evmng_getEventIdx("Ji1_kaiten", 0xFF);
-    field_0xC60 = dComIfGp_evmng_getEventIdx("Ji1_kaiten_exp", 0xFF);
-    field_0xC62 = dComIfGp_evmng_getEventIdx("Ji1_ItemGetEnd", 0xFF);
-    field_0xC64 = dComIfGp_evmng_getEventIdx("Ji1_ItemGetTalkEnd", 0xFF);
-    field_0xC66 = dComIfGp_evmng_getEventIdx("Ji1_pl_backroom", 0xFF);
-    field_0xC68 = dComIfGp_evmng_getEventIdx("Ji1_TeachSpRollCut", 0xFF);
-    field_0xC6A = dComIfGp_evmng_getEventIdx("Ji1_SpRollFail", 0xFF);
-    field_0xC6C = dComIfGp_evmng_getEventIdx("Ji1_NormAng", 0xFF);
-    field_0xC6E = dComIfGp_evmng_getEventIdx("Ji1_NormAng2", 0xFF);
-    field_0xC70 = dComIfGp_evmng_getEventIdx("Ji1_NormAngFin", 0xFF);
-    field_0xC72 = dComIfGp_evmng_getEventIdx("Ji1_SwordGetTalkEnd", 0xFF);
-    field_0xC74 = dComIfGp_evmng_getEventIdx("Ji1_KmonTalk", 0xFF);
-    field_0xC76 = dComIfGp_evmng_getEventIdx("Ji1_EquipTalk", 0xFF);
+    field_0xC54 = dComIfGp_evmng_getEventIdx("Ji1_StartSpeak");
+    field_0xC56 = dComIfGp_evmng_getEventIdx("Ji1_Speak");
+    field_0xC58 = dComIfGp_evmng_getEventIdx("Ji1_EndSpeak");
+    field_0xC5A = dComIfGp_evmng_getEventIdx("Ji1_BadSpeak");
+    field_0xC5C = dComIfGp_evmng_getEventIdx("Ji1_linkmove");
+    field_0xC5E = dComIfGp_evmng_getEventIdx("Ji1_kaiten");
+    field_0xC60 = dComIfGp_evmng_getEventIdx("Ji1_kaiten_exp");
+    field_0xC62 = dComIfGp_evmng_getEventIdx("Ji1_ItemGetEnd");
+    field_0xC64 = dComIfGp_evmng_getEventIdx("Ji1_ItemGetTalkEnd");
+    field_0xC66 = dComIfGp_evmng_getEventIdx("Ji1_pl_backroom");
+    field_0xC68 = dComIfGp_evmng_getEventIdx("Ji1_TeachSpRollCut");
+    field_0xC6A = dComIfGp_evmng_getEventIdx("Ji1_SpRollFail");
+    field_0xC6C = dComIfGp_evmng_getEventIdx("Ji1_NormAng");
+    field_0xC6E = dComIfGp_evmng_getEventIdx("Ji1_NormAng2");
+    field_0xC70 = dComIfGp_evmng_getEventIdx("Ji1_NormAngFin");
+    field_0xC72 = dComIfGp_evmng_getEventIdx("Ji1_SwordGetTalkEnd");
+    field_0xC74 = dComIfGp_evmng_getEventIdx("Ji1_KmonTalk");
+    field_0xC76 = dComIfGp_evmng_getEventIdx("Ji1_EquipTalk");
 
     if(dComIfGs_isEventBit(0x1) && !dComIfGs_isEventBit(0x108)) {
         eventInfo.setEventId(field_0xC76);

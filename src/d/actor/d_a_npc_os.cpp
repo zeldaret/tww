@@ -292,7 +292,7 @@ BOOL daNpc_Os_c::createHeap() {
 
     mAcchCir[0].SetWall(20.0f, 40.0f);
     mAcchCir[1].SetWall(60.0f, 40.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 2, &mAcchCir[0], &speed, 0, 0);
+    mAcch.Set(&current.pos, &old.pos, this, 2, &mAcchCir[0], &speed);
     mAcch.OnLineCheck();
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(120.0f);
@@ -1292,7 +1292,7 @@ BOOL daNpc_Os_c::eventProc() {
     int staffIdx = getMyStaffId();
     if(dComIfGp_event_runCheck() && !checkCommandTalk()) {
         if(staffIdx != -1) {
-            int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+            int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
             if(actIdx == -1) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
@@ -1998,7 +1998,7 @@ BOOL daNpc_Os_c::init() {
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
     for(int i = 0; i < 0x10; i++) {
-        field_0x7C4[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], -1);
+        field_0x7C4[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i]);
     }
 
     return true;

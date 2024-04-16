@@ -442,7 +442,7 @@ BOOL daNpc_kam_c::init() {
     attention_info.distances[3] = 38;
     
     for (int i = 0; i < 3; i++) {
-        mEventIdxs[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xFF);
+        mEventIdxs[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i]);
     }
     
     eventInfo.setXyCheckCB(daNpc_kam_XyCheckCB);
@@ -963,7 +963,7 @@ BOOL daNpc_kam_c::eventProc() {
     int staffId = dComIfGp_evmng_getMyStaffId(l_staff_name);
     if (dComIfGp_event_runCheck() && !checkCommandTalk()) {
         if (staffId != -1) {
-            int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+            int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
             if (actIdx == -1) {
                 dComIfGp_evmng_cutEnd(staffId);
             } else {

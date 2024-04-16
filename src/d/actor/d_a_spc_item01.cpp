@@ -110,7 +110,7 @@ BOOL daSpcItem01_c::CreateInit() {
     mCyl.SetR(tempVar2);
     mCyl.SetH(tempVar1);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
 
     field_0x644 = daSpcItem01_prm::getFlag(this);
     fopAcM_SetGravity(this, -4.0f);

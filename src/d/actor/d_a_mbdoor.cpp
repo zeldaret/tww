@@ -292,7 +292,7 @@ s32 daMbdoor_c::getDemoAction() {
         "ADJUSTMENT",
     };
     
-    return dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
+    return dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 }
 
 /* 00000B3C-00000F78       .text demoProc__10daMbdoor_cFv */

@@ -21,7 +21,7 @@ dEvt_order_c::dEvt_order_c() {}
 
 /* 8006FE58-8006FEE8       .text orderOld__14dEvt_control_cFUsUsUsUsPvPvPCv */
 s32 dEvt_control_c::orderOld(u16 eventType, u16 priority, u16 flag, u16 hindFlag, void* ac1, void* ac2, const void* eventName) {
-    s32 eventIdx = dComIfGp_evmng_getEventIdx((const char*)eventName, 0xFF);
+    s32 eventIdx = dComIfGp_evmng_getEventIdx((const char*)eventName);
     return order(eventType, priority, flag, hindFlag, ac1, ac2, eventIdx, 0xFF);
 }
 
@@ -138,7 +138,7 @@ BOOL dEvt_control_c::talkCheck(dEvt_order_c* order) {
             if (actor2 != NULL && actor2->eventInfo.getEventName() != NULL) {
                 mEventId = actor2->eventInfo.getEventId();
             } else {
-                mEventId = dComIfGp_evmng_getEventIdx(defaultEventName, 0xFF);
+                mEventId = dComIfGp_evmng_getEventIdx(defaultEventName);
             }
         }
 
@@ -199,7 +199,7 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
         if (actor2 != NULL && (r3 = actor2->eventInfo.runXyEventCB(actor2, equippedItemIdx), r3 != -1)) {
             mEventId = r3;
         } else {
-            mEventId = dComIfGp_evmng_getEventIdx(defaultEventName, 0xFF);
+            mEventId = dComIfGp_evmng_getEventIdx(defaultEventName);
         }
         
         if (!dComIfGp_evmng_order(mEventId)) {
@@ -227,7 +227,7 @@ BOOL dEvt_control_c::photoCheck(dEvt_order_c* order) {
         if (eventId != -1) {
             mEventId = eventId;
         } else {
-            mEventId = dComIfGp_evmng_getEventIdx(defaultEventName, 0xFF);
+            mEventId = dComIfGp_evmng_getEventIdx(defaultEventName);
         }
 
         if (!dComIfGp_evmng_order(mEventId))
@@ -377,7 +377,7 @@ BOOL dEvt_control_c::itemCheck(dEvt_order_c* order) {
     const char* defaultEventName = "DEFAULT_GETITEM";
     if (commonCheck(order, dEvtCnd_CANGETITEM_e, dEvtCmd_INGETITEM_e)) {
         mMode = dEvtMode_DEMO_e;
-        mEventId = dComIfGp_evmng_getEventIdx(defaultEventName, 0xFF);
+        mEventId = dComIfGp_evmng_getEventIdx(defaultEventName);
         if (!dComIfGp_evmng_order(mEventId))
             JUT_ASSERT(0x2ea, 0);
         return TRUE;
@@ -736,7 +736,7 @@ void dEvt_info_c::setEventName(char* evtName) {
     if (evtName == NULL) {
         mEventId = -1;
     } else {
-        mEventId = dComIfGp_evmng_getEventIdx(evtName, -1);
+        mEventId = dComIfGp_evmng_getEventIdx(evtName);
     }
 }
 

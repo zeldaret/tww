@@ -1629,13 +1629,13 @@ BOOL daNpc_Bs1_c::CreateInit() {
     switch(mType) {
         case 0:
             setAction(&wait_action, 0);
-            m83A = dComIfGp_evmng_getEventIdx("BS1_GETDEMO", 0xFF);
+            m83A = dComIfGp_evmng_getEventIdx("BS1_GETDEMO");
             mEventCut.setActorInfo("Bs1", this);
             mEventCut.setJntCtrlPtr(&mJntCtrl);
             break;
         case 1:
             setAction(&wait_action, 0);
-            m83A = dComIfGp_evmng_getEventIdx("BS2_GETDEMO", 0xFF);
+            m83A = dComIfGp_evmng_getEventIdx("BS2_GETDEMO");
             mEventCut.setActorInfo("Bs2", this);
             mEventCut.setJntCtrlPtr(&mJntCtrl);
             break;
@@ -1674,8 +1674,8 @@ BOOL daNpc_Bs1_c::CreateInit() {
 
     createShopList();
     m82B = 2;
-    mEventIdxs[0] = dComIfGp_evmng_getEventIdx("PUT_PRAICE_TICKET", 0xFF);
-    mEventIdxs[1] = dComIfGp_evmng_getEventIdx("PUT_FULL_TICKET", 0xFF);
+    mEventIdxs[0] = dComIfGp_evmng_getEventIdx("PUT_PRAICE_TICKET");
+    mEventIdxs[1] = dComIfGp_evmng_getEventIdx("PUT_FULL_TICKET");
     
     return TRUE;
 }
@@ -1819,7 +1819,7 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
     };
     
     u32 staffIdx = dComIfGp_evmng_getMyStaffId(a_name[mType]);
-    u32 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, a_cut_name, 2, 0, 0);
+    u32 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, a_cut_name, ARRAY_SIZE(a_cut_name), FALSE, 0);
     if (mActionStatus == ACTION_STARTING) {
         daPy_getPlayerActorClass()->offPlayerNoDraw();
         m830 = m831;
@@ -2012,7 +2012,7 @@ BOOL daNpc_Bs1_c::privateCut() {
     if (staffId == -1) {
         return FALSE;
     }
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, 8, 1, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
     if (actIdx == -1) {
         dComIfGp_evmng_cutEnd(staffId);
     } else {
@@ -2268,7 +2268,7 @@ BOOL daNpc_Bs1_c::CreateHeap() {
     }
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     mpShopCursor = ShopCursor_create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BMD_SHOP_CURSOR01),
                                      (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", BS_INDEX_BRK_SHOP_CURSOR01),
                                      l_HIO.mChild[mType].m30);

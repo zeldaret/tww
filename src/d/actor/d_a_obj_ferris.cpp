@@ -168,8 +168,8 @@ s32 daObjFerris::Act_c::_create() {
                 mRotState = 0;
             }
 
-            mEventIdx_kanban_vive = dComIfGp_evmng_getEventIdx("kanran_vive", 0xFF);
-            mEventIdx_kanban_start = dComIfGp_evmng_getEventIdx("kanran_start", 0xFF);
+            mEventIdx_kanban_vive = dComIfGp_evmng_getEventIdx("kanran_vive");
+            mEventIdx_kanban_start = dComIfGp_evmng_getEventIdx("kanran_start");
             mRotAngle = 0x1800;
             mGondolaWaveAngle = 0;
 

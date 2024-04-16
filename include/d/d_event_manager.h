@@ -43,7 +43,7 @@ public:
     BOOL endCheckOld(const char*);
     int getMyStaffId(const char*, fopAc_ac_c*, int);
     BOOL getIsAddvance(int);
-    int getMyActIdx(int, const char* const*, int, int, int);
+    int getMyActIdx(int staffIdx, const char* const* action, int actionNum, BOOL force, int nameType);
     char* getMyActName(int);
     char* getMyNowCutName(int);
     dEvDtData_c* getMyDataP(int, const char*, int);
