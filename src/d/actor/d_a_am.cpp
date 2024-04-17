@@ -304,7 +304,7 @@ static BOOL medama_atari_check(am_class* i_this) {
         ret = true;
         if (i_this->mCurrBckIdx == AM_BCK_SLEEP || i_this->mCurrBckIdx == AM_BCK_SLEEP_LOOP) {
             anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-            i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+            i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
             i_this->mNeedleCyl.OnAtSPrmBit(AT_SPRM_SET);
             i_this->mNeedleCyl.OnAtHitBit();
             i_this->mAction = ACTION_DOUSA;
@@ -527,7 +527,7 @@ static void action_dousa(am_class* i_this) {
             if (Line_check(i_this, player->current.pos)) {
                 anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 fopAcM_monsSeStart(i_this, JA_SE_CV_AM_AWAKE, 0);
-                i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+                i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                 i_this->mNeedleCyl.OnAtSetBit();
                 i_this->mNeedleCyl.OnAtHitBit();
                 i_this->mState += 1;

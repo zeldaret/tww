@@ -125,7 +125,7 @@ s32 daTag_Etc_c::create() {
     shape_angle.x = 0;
     current.angle.z = 0;
     current.angle.x = 0;
-    attention_info.flags = fopAc_Attn_ACTION_TALK_e;
+    attention_info.flags = fopAc_Attn_ACTION_SPEAK_e;
     attention_info.position.y += 150.0f;
     eyePos.y += 150.0f;
     return cPhs_COMPLEATE_e;

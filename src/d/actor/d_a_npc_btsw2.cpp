@@ -458,7 +458,7 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
 /* 00000EFC-000010F8       .text CreateInit__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::CreateInit() {
     m714 = current.angle;
-    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     gravity = -30.0f;
     setAction(&daNpc_Btsw2_c::wait_action, NULL);
     mAttPos = current.pos;
@@ -476,8 +476,8 @@ BOOL daNpc_Btsw2_c::CreateInit() {
     m736 = 0;
     mPathPntIdx = 0;
     mEventCut.setActorInfo2("Btsw2", this);
-    attention_info.distances[1] = 0xAB;
-    attention_info.distances[3] = 0xAB;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
     return TRUE;
 }
 

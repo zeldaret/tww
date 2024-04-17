@@ -713,7 +713,7 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
             }
         }
 
-        attention_info.flags &= ~(fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e);
+        attention_info.flags &= ~(fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e);
 
         f32 dist = fopAcM_searchPlayerDistance2(this);
         if(!checkNpcCallCommand()) {
@@ -1961,7 +1961,7 @@ BOOL daNpc_Os_c::init() {
     cXyz dummy(0.0f, 0.0f, 0.0f);
 
     field_0x794 = fopAcM_GetParam(this) >> 0x10 & 0xFF;
-    attention_info.distances[4] = 0x27;
+    attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 0x27;
     // Fakematch, the next two lines get optimized out, but they affect the regalloc when copying the tevstr.
     speedF = speedF;
     speedF = speedF;

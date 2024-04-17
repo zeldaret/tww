@@ -197,7 +197,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                 ret = true;
                 if (i_this->mCurrBckIdx == AM2_BCK_SLEEP) {
                     anm_init(i_this, AM2_BCK_WAIT, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-                    i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+                    i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                     fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
                     i_this->mNeedleCyl.OnAtSetBit();
                     i_this->mNeedleCyl.OnAtHitBit();
@@ -499,7 +499,7 @@ static void action_dousa(am2_class* i_this) {
             cXyz centerPos = player->current.pos;
             centerPos.y += 100.0f + g_regHIO.mChild[12].mFloatRegs[19];
             if (Line_check(i_this, centerPos)) {
-                i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+                i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                 fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
                 anm_init(i_this, AM2_BCK_START, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 fopAcM_monsSeStart(i_this, JA_SE_CV_AM2_AWAKE, 0);
@@ -785,7 +785,7 @@ static void action_mahi(am2_class* i_this) {
         actor->shape_angle.y += 0x1000;
         if (i_this->mAcch.ChkGroundHit()) {
             actor->gravity = -3.0f;
-            actor->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+            actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
             fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
             i_this->mAction = ACTION_DOUSA;
             i_this->mState = 3;
@@ -1329,7 +1329,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
         i_this->mEnemyIce.mpActor = i_this;
         i_this->mEnemyIce.mWallRadius = 50.0f;
         i_this->mEnemyIce.mCylHeight = 100.0f;
-        i_this->attention_info.distances[4] = 9;
+        i_this->attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 9;
         
         fopAcM_OnStatus(i_this, fopAcStts_UNK8000000_e);
 

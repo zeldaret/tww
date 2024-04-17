@@ -1954,7 +1954,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
             }
         }
         
-        i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+        i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
         fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
         i_this->m02F0 = 0;
         i_this->m02F4 = 0;

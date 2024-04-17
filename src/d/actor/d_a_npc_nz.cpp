@@ -860,9 +860,9 @@ BOOL daNpc_Nz_c::createInit() {
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -450.0f, -50.0f, -450.0f, 450.0f, 750.0f, 450.0f);
     fopAcM_setCullSizeFar(this, 10.0f);
-    attention_info.distances[1] = 0xB1;
-    attention_info.distances[3] = 0xB1;
-    attention_info.flags = fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xB1;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xB1;
+    attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
     eventInfo.setXyCheckCB(&daNpc_Nz_XyCheckCB);
     eventInfo.setXyEventCB(&daNpc_Nz_XyEventCB);
     mEventCut.setActorInfo2("NpcNz", this);

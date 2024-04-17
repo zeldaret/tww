@@ -422,7 +422,7 @@ f32 dAttention_c::EnemyDistance(fopAc_ac_c* actor) {
         return -1.0f;
 
     f32 dist = fopAcM_searchActorDistance(actor, mpPlayer);
-    if (dist < (dist_table[actor->attention_info.distances[2]].mDistXZMax + dist_table[actor->attention_info.distances[2]].mDistXZAngleAdjust))
+    if (dist < (dist_table[actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e]].mDistXZMax + dist_table[actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e]].mDistXZAngleAdjust))
         return dist;
     return -1.0f;
 }

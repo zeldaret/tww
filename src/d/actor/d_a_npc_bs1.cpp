@@ -1620,9 +1620,9 @@ BOOL daNpc_Bs1_c::CreateInit() {
     m726.y = current.angle.y;
     m726.z = current.angle.z;
 
-    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e;
-    attention_info.distances[1] = 0xAA;
-    attention_info.distances[3] = 0xAA;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
 
     gravity = -30.0f;
 

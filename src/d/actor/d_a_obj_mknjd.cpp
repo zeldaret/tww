@@ -277,9 +277,9 @@ int daObjMknjD::Act_c::Create() {
         m0430 = 0x2920;
     }
 
-    attention_info.distances[1] = 0x3D;
-    attention_info.distances[3] = 0x3D;
-    attention_info.flags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x3D;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x3D;
+    attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
     if (!checkItemGet(mGiveItemNo, 1)) {
         m043F = 8;

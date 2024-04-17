@@ -2210,8 +2210,8 @@ u32 daNpc_Ji1_c::battleAction(void*) {
         field_0xC3C = 0;
         setAnm(5, 0.0f, 0);
         attention_info.flags |= fopAc_Attn_LOCKON_MISC_e;
-        attention_info.flags |= fopAc_Attn_LOCKON_ENEMY_e;
-        attention_info.distances[2] = 3;
+        attention_info.flags |= fopAc_Attn_LOCKON_BATTLE_e;
+        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 3;
         field_0xC30 = (s16)cM_rndF(150.0f) + 30;
         field_0xD70 = 0;
         field_0xD6C = 0;
@@ -2220,8 +2220,8 @@ u32 daNpc_Ji1_c::battleAction(void*) {
         field_0xC78++;
     }
     else if(field_0xC78 == -1) {
-        attention_info.flags &= ~fopAc_Attn_LOCKON_ENEMY_e;
-        attention_info.distances[2] = 0xB5;
+        attention_info.flags &= ~fopAc_Attn_LOCKON_BATTLE_e;
+        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0xB5;
     }
     else {
         cXyz temp = player->current.pos - current.pos;
@@ -2896,7 +2896,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
     fopAcM_SetMtx(this, field_0x330->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
     gravity = -30.0f;
-    attention_info.flags = fopAc_Attn_LOCKON_MISC_e | fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e;
+    attention_info.flags = fopAc_Attn_LOCKON_MISC_e | fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
 
     field_0x638.Init(0xFF, 0xFF, this);
     field_0x674.Init(0xFF, 0xFF, this);
@@ -3062,9 +3062,9 @@ BOOL daNpc_Ji1_c::CreateInit() {
     field_0xD7E = 0;
     
     attention_info.flags |= fopAc_Attn_LOCKON_MISC_e;
-    attention_info.distances[1] = 0xA9;
-    attention_info.distances[3] = 0xA9;
-    attention_info.distances[2] = 0xB5;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
+    attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0xB5;
     field_0x414 = 0.0f;
     field_0x42C = 0.0f;
     field_0x430 = 0;

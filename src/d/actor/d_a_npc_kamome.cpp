@@ -438,8 +438,8 @@ BOOL daNpc_kam_c::init() {
     setBaseMtx();
     
     attention_info.flags = 0;
-    attention_info.distances[1] = 38;
-    attention_info.distances[3] = 38;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 38;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 38;
     
     for (int i = 0; i < 3; i++) {
         mEventIdxs[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i]);
@@ -650,10 +650,10 @@ int daNpc_kam_c::waitNpcAction(void*) {
         mC0C = cLib_getRndValue(10, 80);
     } else if (mActionStatus != ACTION_ENDING) {
         if (changeAreaCheck()) {
-            attention_info.flags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
+            attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
             mEventState = 6;
         } else {
-            attention_info.flags &= ~(fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
+            attention_info.flags &= ~(fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
             mEventState = -1;
         }
         

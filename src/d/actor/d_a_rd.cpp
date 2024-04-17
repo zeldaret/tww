@@ -1344,10 +1344,10 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
         
         if (newMode == MODE_DEATH || newMode == MODE_SW_WAIT) {
             fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
-            cLib_offBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_ENEMY_e);
+            cLib_offBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         } else {
             fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
-            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_ENEMY_e);
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         }
         
         mMode = newMode;

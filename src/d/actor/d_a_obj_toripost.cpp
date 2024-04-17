@@ -916,9 +916,9 @@ void daObjTpost_c::createInit() {
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
     mpCurrMsg = 0;
 
-    attention_info.distances[1] = 5;
-    attention_info.distances[3] = 6;
-    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 5;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 6;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
     setAnm(1, false);
     setMtx();
