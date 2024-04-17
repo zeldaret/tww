@@ -12,26 +12,26 @@ void dWpotWater_EcallBack::draw(JPABaseEmitter*) {
 }
 
 /* 8023F64C-8023F688       .text dWpotWater_Draw__FP12dWpotWater_c */
-void dWpotWater_Draw(dWpotWater_c*) {
+static void dWpotWater_Draw(dWpotWater_c*) {
     /* Nonmatching */
 }
 
 /* 8023F688-8023F740       .text dWpotWater_Execute__FP12dWpotWater_c */
-void dWpotWater_Execute(dWpotWater_c*) {
+static void dWpotWater_Execute(dWpotWater_c*) {
     /* Nonmatching */
 }
 
 /* 8023F740-8023F748       .text dWpotWater_IsDelete__FP12dWpotWater_c */
-void dWpotWater_IsDelete(dWpotWater_c*) {
+static void dWpotWater_IsDelete(dWpotWater_c*) {
     /* Nonmatching */
 }
 
 /* 8023F748-8023F750       .text dWpotWater_Delete__FP12dWpotWater_c */
-void dWpotWater_Delete(dWpotWater_c*) {
+static void dWpotWater_Delete(dWpotWater_c*) {
     /* Nonmatching */
 }
 
 /* 8023F750-8023FFCC       .text dWpotWater_Create__FP12kankyo_class */
-void dWpotWater_Create(kankyo_class*) {
+static void dWpotWater_Create(kankyo_class*) {
     /* Nonmatching */
 }

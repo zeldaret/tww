@@ -232,26 +232,26 @@ void dDlst_2DMSG3_c::outFontDraw() {
 }
 
 /* 801EE104-801EE218       .text dMsg3_Draw__FP14sub_msg3_class */
-void dMsg3_Draw(sub_msg3_class*) {
+static void dMsg3_Draw(sub_msg3_class*) {
     /* Nonmatching */
 }
 
 /* 801EE218-801EE740       .text dMsg3_Execute__FP14sub_msg3_class */
-void dMsg3_Execute(sub_msg3_class*) {
+static void dMsg3_Execute(sub_msg3_class*) {
     /* Nonmatching */
 }
 
 /* 801EE740-801EE748       .text dMsg3_IsDelete__FP14sub_msg3_class */
-void dMsg3_IsDelete(sub_msg3_class*) {
+static void dMsg3_IsDelete(sub_msg3_class*) {
     /* Nonmatching */
 }
 
 /* 801EE748-801EE904       .text dMsg3_Delete__FP14sub_msg3_class */
-void dMsg3_Delete(sub_msg3_class*) {
+static void dMsg3_Delete(sub_msg3_class*) {
     /* Nonmatching */
 }
 
 /* 801EE904-801EEEFC       .text dMsg3_Create__FP9msg_class */
-void dMsg3_Create(msg_class*) {
+static void dMsg3_Create(msg_class*) {
     /* Nonmatching */
 }

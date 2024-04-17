@@ -68,26 +68,26 @@ void dDlst_StarterScrnDraw_c::draw() {
 }
 
 /* 80206EDC-80206EFC       .text dMinigame_Starter_Draw__FP19dMinigame_Starter_c */
-void dMinigame_Starter_Draw(dMinigame_Starter_c*) {
+static void dMinigame_Starter_Draw(dMinigame_Starter_c*) {
     /* Nonmatching */
 }
 
 /* 80206EFC-80206F1C       .text dMinigame_Starter_Execute__FP19dMinigame_Starter_c */
-void dMinigame_Starter_Execute(dMinigame_Starter_c*) {
+static void dMinigame_Starter_Execute(dMinigame_Starter_c*) {
     /* Nonmatching */
 }
 
 /* 80206F1C-80206F24       .text dMinigame_Starter_IsDelete__FP19dMinigame_Starter_c */
-void dMinigame_Starter_IsDelete(dMinigame_Starter_c*) {
+static void dMinigame_Starter_IsDelete(dMinigame_Starter_c*) {
     /* Nonmatching */
 }
 
 /* 80206F24-80206F44       .text dMinigame_Starter_Delete__FP19dMinigame_Starter_c */
-void dMinigame_Starter_Delete(dMinigame_Starter_c*) {
+static void dMinigame_Starter_Delete(dMinigame_Starter_c*) {
     /* Nonmatching */
 }
 
 /* 80206F44-80206F64       .text dMinigame_Starter_Create__FP9msg_class */
-void dMinigame_Starter_Create(msg_class*) {
+static void dMinigame_Starter_Create(msg_class*) {
     /* Nonmatching */
 }

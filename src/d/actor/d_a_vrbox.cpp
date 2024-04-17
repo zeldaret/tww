@@ -194,7 +194,7 @@ static s32 daVrbox_Create(fopAc_ac_c* i_actor) {
     return phase_state;
 }
 
-actor_method_class l_daVrbox_Method = {
+static actor_method_class l_daVrbox_Method = {
     (process_method_func)daVrbox_Create,
     (process_method_func)daVrbox_Delete,
     (process_method_func)daVrbox_Execute,

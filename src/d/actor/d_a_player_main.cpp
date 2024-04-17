@@ -4635,7 +4635,7 @@ BOOL daPy_lk_c::getBokoFlamePos(cXyz* outPos) {
     return FALSE;
 }
 
-actor_method_class2 l_daPy_Method = {
+static actor_method_class2 l_daPy_Method = {
     (process_method_func)daPy_Create,
     (process_method_func)daPy_Delete,
     (process_method_func)daPy_Execute,

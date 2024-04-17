@@ -195,7 +195,7 @@ static s32 daGrass_Create(fopAc_ac_c* i_ac) {
     return cPhs_ERROR_e;
 }
 
-actor_method_class daGrass_METHODS = {
+static actor_method_class daGrass_METHODS = {
     (process_method_func)daGrass_Create,
     (process_method_func)daGrass_Delete,
     (process_method_func)NULL,

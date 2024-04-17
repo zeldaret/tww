@@ -20,7 +20,7 @@ public:
 };
 
 /* 80198758-8019877C       .text dKyeff2_Draw__FP9dKyeff2_c */
-BOOL dKyeff2_Draw(dKyeff2_c* i_this) {
+static BOOL dKyeff2_Draw(dKyeff2_c* i_this) {
     dKyw_wether_draw2();
     return TRUE;
 }
@@ -32,23 +32,23 @@ BOOL dKyeff2_c::execute() {
 }
 
 /* 801987A0-801987C0       .text dKyeff2_Execute__FP9dKyeff2_c */
-BOOL dKyeff2_Execute(dKyeff2_c* i_this) {
+static BOOL dKyeff2_Execute(dKyeff2_c* i_this) {
     return i_this->execute();
 }
 
 /* 801987C0-801987C8       .text dKyeff2_IsDelete__FP9dKyeff2_c */
-BOOL dKyeff2_IsDelete(dKyeff2_c* i_this) {
+static BOOL dKyeff2_IsDelete(dKyeff2_c* i_this) {
     return TRUE;
 }
 
 /* 801987C8-801987EC       .text dKyeff2_Delete__FP9dKyeff2_c */
-BOOL dKyeff2_Delete(dKyeff2_c* i_this) {
+static BOOL dKyeff2_Delete(dKyeff2_c* i_this) {
     dKyw_wether_delete2();
     return TRUE;
 }
 
 /* 801987EC-80198810       .text dKyeff2_Create__FP12kankyo_class */
-s32 dKyeff2_Create(kankyo_class*) {
+static s32 dKyeff2_Create(kankyo_class*) {
     dKyw_wether_init2();
     return cPhs_COMPLEATE_e;
 }

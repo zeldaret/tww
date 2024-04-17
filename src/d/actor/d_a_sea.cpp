@@ -388,7 +388,7 @@ static s32 daSea_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daSea_Method = {
+static actor_method_class l_daSea_Method = {
     (process_method_func)daSea_Create,
     (process_method_func)daSea_Delete,
     (process_method_func)daSea_Execute,

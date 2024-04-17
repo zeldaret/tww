@@ -750,28 +750,28 @@ void dScnName_c::changeGameScene() {
 }
 
 /* 80232338-80232358       .text dScnName_Draw__FP10dScnName_c */
-s32 dScnName_Draw(dScnName_c* i_this) {
+static s32 dScnName_Draw(dScnName_c* i_this) {
     return i_this->draw();
 }
 
 /* 80232358-80232378       .text dScnName_Execute__FP10dScnName_c */
-s32 dScnName_Execute(dScnName_c* i_this) {
+static s32 dScnName_Execute(dScnName_c* i_this) {
     return i_this->execute();
 }
 
 /* 80232378-80232380       .text dScnName_IsDelete__FP10dScnName_c */
-s32 dScnName_IsDelete(dScnName_c*) {
+static s32 dScnName_IsDelete(dScnName_c*) {
     return 1;
 }
 
 /* 80232380-802323A8       .text dScnName_Delete__FP10dScnName_c */
-s32 dScnName_Delete(dScnName_c* i_this) {
+static s32 dScnName_Delete(dScnName_c* i_this) {
     i_this->~dScnName_c();
     return 1;
 }
 
 /* 802323A8-802323F8       .text dScnName_Create__FP11scene_class */
-s32 dScnName_Create(scene_class* i_scn) {
+static s32 dScnName_Create(scene_class* i_scn) {
     dScnName_c* i_this = new (i_scn) dScnName_c();
     return i_this->create();
 }

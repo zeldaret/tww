@@ -1294,7 +1294,7 @@ static BOOL daArrowIsDelete(void* i_this) {
     return TRUE;
 }
 
-actor_method_class daArrowMethodTable = {
+static actor_method_class daArrowMethodTable = {
     (process_method_func)daArrowCreate,
     (process_method_func)daArrowDelete,
     (process_method_func)daArrowExecute,

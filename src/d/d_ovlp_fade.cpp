@@ -18,7 +18,7 @@ public:
 BOOL (*dOvlpFd_execute_f)(overlap1_class*);
 
 /* 802235CC-802235D4       .text dOvlpFd_Draw__FP14overlap1_class */
-BOOL dOvlpFd_Draw(overlap1_class* i_this) {
+static BOOL dOvlpFd_Draw(overlap1_class* i_this) {
     return TRUE;
 }
 
@@ -71,23 +71,23 @@ BOOL dOvlpFd_FadeIn(overlap1_class* i_this) {
 }
 
 /* 802237A4-802237D0       .text dOvlpFd_Execute__FP14overlap1_class */
-BOOL dOvlpFd_Execute(overlap1_class* i_this) {
+static BOOL dOvlpFd_Execute(overlap1_class* i_this) {
     dOvlpFd_execute_f(i_this);
     return TRUE;
 }
 
 /* 802237D0-802237D8       .text dOvlpFd_IsDelete__FP14overlap1_class */
-BOOL dOvlpFd_IsDelete(overlap1_class* i_this) {
+static BOOL dOvlpFd_IsDelete(overlap1_class* i_this) {
     return TRUE;
 }
 
 /* 802237D8-802237E0       .text dOvlpFd_Delete__FP14overlap1_class */
-BOOL dOvlpFd_Delete(overlap1_class* i_this) {
+static BOOL dOvlpFd_Delete(overlap1_class* i_this) {
     return TRUE;
 }
 
 /* 802237E0-802237F4       .text dOvlpFd_Create__FPv */
-BOOL dOvlpFd_Create(void* i_this) {
+static BOOL dOvlpFd_Create(void* i_this) {
     dOvlpFd_execute_f = dOvlpFd_FadeIn;
     return cPhs_COMPLEATE_e;
 }

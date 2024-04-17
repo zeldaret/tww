@@ -389,7 +389,7 @@ static s32 daHookshot_Create(fopAc_ac_c* i_actor) {
     return reinterpret_cast<daHookshot_c*>(i_actor)->create();
 }
 
-actor_method_class l_daHookshot_Method = {
+static actor_method_class l_daHookshot_Method = {
     (process_method_func)daHookshot_Create,
     (process_method_func)daHookshot_Delete,
     (process_method_func)daHookshot_Execute,

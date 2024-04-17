@@ -37,14 +37,14 @@ daMP_c* dScnTitle_c::mMp;
 #endif
 
 /* 802372F4-80237344       .text dScnTitle_Draw__FP20title_of_scene_class */
-BOOL dScnTitle_Draw(title_of_scene_class* i_this) {
+static BOOL dScnTitle_Draw(title_of_scene_class* i_this) {
     for (create_tag_class* pTag = fopDwIt_Begin(); pTag != NULL; pTag = fopDwIt_Next(pTag))
         fpcM_Draw(pTag->mpTagData);
     return TRUE;
 }
 
 /* 80237344-802374C8       .text dScnTitle_Execute__FP20title_of_scene_class */
-BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
+static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
     if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this)) {
 #if VERSION == VERSION_PAL
         daMP_c *movie = dScnTitle_c::mMp;
@@ -89,12 +89,12 @@ BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
 }
 
 /* 802374C8-802374D0       .text dScnTitle_IsDelete__FP20title_of_scene_class */
-BOOL dScnTitle_IsDelete(title_of_scene_class* i_this) {
+static BOOL dScnTitle_IsDelete(title_of_scene_class* i_this) {
     return TRUE;
 }
 
 /* 802374D0-802374D8       .text dScnTitle_Delete__FP20title_of_scene_class */
-BOOL dScnTitle_Delete(title_of_scene_class* i_this) {
+static BOOL dScnTitle_Delete(title_of_scene_class* i_this) {
 #if VERSION == VERSION_PAL
     dComIfGp_event_remove();
 #endif
@@ -102,7 +102,7 @@ BOOL dScnTitle_Delete(title_of_scene_class* i_this) {
 }
 
 /* 802374D8-80237568       .text dScnTitle_Create__FP11scene_class */
-s32 dScnTitle_Create(scene_class* i_scn) {
+static s32 dScnTitle_Create(scene_class* i_scn) {
     title_of_scene_class * i_this = (title_of_scene_class*) i_scn;
 
     if (JAInter::BankWave::checkAllWaveLoadStatus())

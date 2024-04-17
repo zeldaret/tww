@@ -498,7 +498,7 @@ static s32 daNh_Create(fopAc_ac_c* i_this) {
     return ((daNh_c*)i_this)->create();
 }
 
-actor_method_class l_daNh_Method = {
+static actor_method_class l_daNh_Method = {
     (process_method_func)daNh_Create,
     (process_method_func)daNh_Delete,
     (process_method_func)daNh_Execute,

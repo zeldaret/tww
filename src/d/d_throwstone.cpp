@@ -53,7 +53,7 @@ s32 daThrowstone_c::_create() {
 }
 
 /* 8023B5DC-8023B6DC       .text daThrowstoneCreate__FPv */
-s32 daThrowstoneCreate(void* ptr) {
+static s32 daThrowstoneCreate(void* ptr) {
     return ((daThrowstone_c*)ptr)->_create();
 }
 
@@ -63,7 +63,7 @@ BOOL daThrowstone_c::_delete() {
 }
 
 /* 8023B6DC-8023B708       .text daThrowstoneDelete__FPv */
-BOOL daThrowstoneDelete(void* ptr) {
+static BOOL daThrowstoneDelete(void* ptr) {
     return ((daThrowstone_c*)ptr)->_delete();
 }
 
@@ -83,7 +83,7 @@ BOOL daThrowstone_c::_execute() {
 }
 
 /* 8023B708-8023B7C4       .text daThrowstoneExecute__FPv */
-BOOL daThrowstoneExecute(void* ptr) {
+static BOOL daThrowstoneExecute(void* ptr) {
     return ((daThrowstone_c*)ptr)->_execute();
 }
 
@@ -99,16 +99,16 @@ bool daThrowstone_c::_draw() {
 }
 
 /* 8023B7C4-8023B858       .text daThrowstoneDraw__FPv */
-BOOL daThrowstoneDraw(void* ptr) {
+static BOOL daThrowstoneDraw(void* ptr) {
     return ((daThrowstone_c*)ptr)->_draw();
 }
 
 /* 8023B858-8023B860       .text daThrowstoneIsDelete__FPv */
-BOOL daThrowstoneIsDelete(void*) {
+static BOOL daThrowstoneIsDelete(void*) {
     return TRUE;
 }
 
-actor_method_class daThrowstoneMethodTable = {
+static actor_method_class daThrowstoneMethodTable = {
     (process_method_func)daThrowstoneCreate,
     (process_method_func)daThrowstoneDelete,
     (process_method_func)daThrowstoneExecute,

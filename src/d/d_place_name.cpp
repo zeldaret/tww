@@ -235,27 +235,27 @@ BOOL dPn_c::_delete() {
 }
 
 /* 8016168C-801616AC       .text dPn_Draw__FP5dPn_c */
-BOOL dPn_Draw(dPn_c* i_this) {
+static BOOL dPn_Draw(dPn_c* i_this) {
     return i_this->_draw();
 }
 
 /* 801616AC-801616CC       .text dPn_Execute__FP5dPn_c */
-BOOL dPn_Execute(dPn_c* i_this) {
+static BOOL dPn_Execute(dPn_c* i_this) {
     return i_this->_execute();
 }
 
 /* 801616CC-801616D4       .text dPn_IsDelete__FP5dPn_c */
-BOOL dPn_IsDelete(dPn_c* i_this) {
+static BOOL dPn_IsDelete(dPn_c* i_this) {
     return TRUE;
 }
 
 /* 801616D4-801616F4       .text dPn_Delete__FP5dPn_c */
-BOOL dPn_Delete(dPn_c* i_this) {
+static BOOL dPn_Delete(dPn_c* i_this) {
     return i_this->_delete();
 }
 
 /* 801616F4-80161714       .text dPn_Create__FP9msg_class */
-s32 dPn_Create(msg_class* i_msg) {
+static s32 dPn_Create(msg_class* i_msg) {
     dPn_c * i_this = (dPn_c *)i_msg;
     return i_this->_create();
 }

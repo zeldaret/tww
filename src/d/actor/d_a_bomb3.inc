@@ -1467,7 +1467,7 @@ void daBomb_c::create_init() {
     init_mtx();
 }
 
-actor_method_class l_daBomb_Method = {
+static actor_method_class l_daBomb_Method = {
     (process_method_func)daBomb_Create,
     (process_method_func)daBomb_Delete,
     (process_method_func)daBomb_Execute,

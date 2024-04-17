@@ -513,7 +513,7 @@ dCcD_SrcCyl daIball_c::m_cyl_src = {
     },
 };
 
-actor_method_class l_daIball_Method = {
+static actor_method_class l_daIball_Method = {
     (process_method_func)daIball_Create,
     (process_method_func)daIball_Delete,
     (process_method_func)daIball_Execute,

@@ -1718,12 +1718,12 @@ void dMeter_screenDataArrowSet(sub_meter_class* i_this) {
 }
 
 /* 80204404-80204820       .text dMeter_Draw__FP15sub_meter_class */
-BOOL dMeter_Draw(sub_meter_class* i_this) {
+static BOOL dMeter_Draw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80204820-80204C20       .text dMeter_Execute__FP15sub_meter_class */
-BOOL dMeter_Execute(sub_meter_class* i_this) {
+static BOOL dMeter_Execute(sub_meter_class* i_this) {
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_this->heap);
     i_this->field_0x3024 = 0;
     dMeter_statusCheck(i_this);
@@ -1801,17 +1801,17 @@ BOOL dMeter_Execute(sub_meter_class* i_this) {
 }
 
 /* 80204C20-80204C28       .text dMeter_IsDelete__FP15sub_meter_class */
-BOOL dMeter_IsDelete(sub_meter_class* i_this) {
+static BOOL dMeter_IsDelete(sub_meter_class* i_this) {
     return TRUE;
 }
 
 /* 80204C28-80205034       .text dMeter_Delete__FP15sub_meter_class */
-BOOL dMeter_Delete(sub_meter_class* i_this) {
+static BOOL dMeter_Delete(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80205034-802057B8       .text dMeter_Create__FP9msg_class */
-s32 dMeter_Create(msg_class* i_this) {
+static s32 dMeter_Create(msg_class* i_this) {
     /* Nonmatching */
     mapAlpha = 0;
     menu_status = 0;

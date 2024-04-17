@@ -122,26 +122,26 @@ void dMCloth_c::cloth_move() {
 }
 
 /* 8019BDB8-8019BDC0       .text dMenu_ClothCreate__FPv */
-void dMenu_ClothCreate(void*) {
+static void dMenu_ClothCreate(void*) {
     /* Nonmatching */
 }
 
 /* 8019BDC0-8019BDC8       .text dMenu_ClothDelete__FPv */
-void dMenu_ClothDelete(void*) {
+static void dMenu_ClothDelete(void*) {
     /* Nonmatching */
 }
 
 /* 8019BDC8-8019BDD0       .text dMenu_ClothExecute__FPv */
-void dMenu_ClothExecute(void*) {
+static void dMenu_ClothExecute(void*) {
     /* Nonmatching */
 }
 
 /* 8019BDD0-8019BDD8       .text dMenu_ClothDraw__FPv */
-void dMenu_ClothDraw(void*) {
+static void dMenu_ClothDraw(void*) {
     /* Nonmatching */
 }
 
 /* 8019BDD8-8019BDE0       .text dMenu_ClothIsDelete__FPv */
-void dMenu_ClothIsDelete(void*) {
+static void dMenu_ClothIsDelete(void*) {
     /* Nonmatching */
 }

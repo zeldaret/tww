@@ -1794,7 +1794,7 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-actor_method_class l_daAgb_Method = {
+static actor_method_class l_daAgb_Method = {
     (process_method_func)daAgb_Create,
     (process_method_func)daAgb_Delete,
     (process_method_func)daAgb_Execute,

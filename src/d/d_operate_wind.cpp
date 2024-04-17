@@ -137,26 +137,26 @@ void dOw_c::_delete() {
 }
 
 /* 80221880-802218B4       .text dOw_Draw__FP5dOw_c */
-void dOw_Draw(dOw_c*) {
+static void dOw_Draw(dOw_c*) {
     /* Nonmatching */
 }
 
 /* 802218B4-802219A4       .text dOw_Execute__FP5dOw_c */
-void dOw_Execute(dOw_c*) {
+static void dOw_Execute(dOw_c*) {
     /* Nonmatching */
 }
 
 /* 802219A4-802219AC       .text dOw_IsDelete__FP5dOw_c */
-void dOw_IsDelete(dOw_c*) {
+static void dOw_IsDelete(dOw_c*) {
     /* Nonmatching */
 }
 
 /* 802219AC-80221A04       .text dOw_Delete__FP5dOw_c */
-void dOw_Delete(dOw_c*) {
+static void dOw_Delete(dOw_c*) {
     /* Nonmatching */
 }
 
 /* 80221A04-80221AA0       .text dOw_Create__FP9msg_class */
-void dOw_Create(msg_class*) {
+static void dOw_Create(msg_class*) {
     /* Nonmatching */
 }

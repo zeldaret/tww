@@ -97,28 +97,28 @@ void dScnOpen_c::changeGameScene() {
 }
 
 /* 80232E6C-80232E8C       .text dScnOpen_Draw__FP10dScnOpen_c */
-BOOL dScnOpen_Draw(dScnOpen_c* i_this) {
+static BOOL dScnOpen_Draw(dScnOpen_c* i_this) {
     return i_this->draw();
 }
 
 /* 80232E8C-80232EAC       .text dScnOpen_Execute__FP10dScnOpen_c */
-BOOL dScnOpen_Execute(dScnOpen_c* i_this) {
+static BOOL dScnOpen_Execute(dScnOpen_c* i_this) {
     return i_this->execute();
 }
 
 /* 80232EAC-80232EB4       .text dScnOpen_IsDelete__FP10dScnOpen_c */
-BOOL dScnOpen_IsDelete(dScnOpen_c* i_this) {
+static BOOL dScnOpen_IsDelete(dScnOpen_c* i_this) {
     return TRUE;
 }
 
 /* 80232EB4-80232EDC       .text dScnOpen_Delete__FP10dScnOpen_c */
-BOOL dScnOpen_Delete(dScnOpen_c* i_this) {
+static BOOL dScnOpen_Delete(dScnOpen_c* i_this) {
     i_this->~dScnOpen_c();
     return TRUE;
 }
 
 /* 80232EDC-80232EFC       .text dScnOpen_Create__FP11scene_class */
-s32 dScnOpen_Create(scene_class* i_scn) {
+static s32 dScnOpen_Create(scene_class* i_scn) {
     dScnOpen_c* i_this = (dScnOpen_c*)i_scn;
     return i_this->create();
 }

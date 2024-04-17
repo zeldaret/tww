@@ -712,7 +712,7 @@ static BOOL daNpc_Btsw2_IsDelete(daNpc_Btsw2_c* i_this) {
     return TRUE;
 }
 
-actor_method_class l_daNpc_Btsw2_Method = {
+static actor_method_class l_daNpc_Btsw2_Method = {
     (process_method_func)daNpc_Btsw2_Create,
     (process_method_func)daNpc_Btsw2_Delete,
     (process_method_func)daNpc_Btsw2_Execute,

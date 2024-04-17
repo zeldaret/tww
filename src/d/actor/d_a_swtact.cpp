@@ -203,7 +203,7 @@ static BOOL daSwTact_IsDelete(void* i_ac) {
     return TRUE;
 }
 
-actor_method_class daSwTactMethodTable = {
+static actor_method_class daSwTactMethodTable = {
     (process_method_func)daSwTact_Create,
     (process_method_func)daSwTact_Delete,
     (process_method_func)daSwTact_Execute,

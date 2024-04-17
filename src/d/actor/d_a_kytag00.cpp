@@ -401,7 +401,7 @@ static s32 daKytag00_Create(fopAc_ac_c* i_ac) {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daKytag00_Method = {
+static actor_method_class l_daKytag00_Method = {
     (process_method_func)daKytag00_Create,
     (process_method_func)daKytag00_Delete,
     (process_method_func)daKytag00_Execute,

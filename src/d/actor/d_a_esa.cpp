@@ -280,7 +280,7 @@ static s32 daEsa_Create(fopAc_ac_c* i_actor) {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daEsa_Method = {
+static actor_method_class l_daEsa_Method = {
     (process_method_func)daEsa_Create,
     (process_method_func)daEsa_Delete,
     (process_method_func)daEsa_Execute,

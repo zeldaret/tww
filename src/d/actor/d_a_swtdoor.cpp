@@ -85,7 +85,7 @@ static s32 daSwtdoor_Create(fopAc_ac_c* i_ac) {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daSwtdoor_Method = {
+static actor_method_class l_daSwtdoor_Method = {
     (process_method_func)daSwtdoor_Create,
     (process_method_func)daSwtdoor_Delete,
     (process_method_func)daSwtdoor_Execute,

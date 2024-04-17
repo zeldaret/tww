@@ -502,7 +502,7 @@ BOOL dvdWaitDraw(dScnLogo_c* i_this) {
 typedef BOOL(*drawFunc)(dScnLogo_c* i_this);
 
 /* 8022D18C-8022D1DC       .text dScnLogo_Draw__FP10dScnLogo_c */
-BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
+static BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
     static drawFunc l_execFunc[] = {
         nintendoInDraw,
         nintendoOutDraw,
@@ -522,19 +522,19 @@ BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
 }
 
 /* 8022D1DC-8022D21C       .text dScnLogo_Execute__FP10dScnLogo_c */
-BOOL dScnLogo_Execute(dScnLogo_c* i_this) {
+static BOOL dScnLogo_Execute(dScnLogo_c* i_this) {
     if (mDoRst::isReset())
         fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, 0, 5);
     return TRUE;
 }
 
 /* 8022D21C-8022D224       .text dScnLogo_IsDelete__FP10dScnLogo_c */
-BOOL dScnLogo_IsDelete(dScnLogo_c* i_this) {
+static BOOL dScnLogo_IsDelete(dScnLogo_c* i_this) {
     return TRUE;
 }
 
 /* 8022D224-8022D984       .text dScnLogo_Delete__FP10dScnLogo_c */
-BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
+static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     if (mDoRst::isReset())
         mDoRst_reset(0, 0x80000000, 0);
 
@@ -952,7 +952,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 }
 
 /* 8022E9B4-8022E9F4       .text dScnLogo_Create__FP11scene_class */
-s32 dScnLogo_Create(scene_class* i_scn) {
+static s32 dScnLogo_Create(scene_class* i_scn) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_0,
         (cPhs__Handler)phase_1,

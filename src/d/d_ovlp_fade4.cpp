@@ -103,7 +103,7 @@ void dOvlpFd4_c::execFadeIn() {
 }
 
 /* 802255F4-80225658       .text dOvlpFd4_Draw__FP10dOvlpFd4_c */
-s32 dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
+static s32 dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
     void (dOvlpFd4_c::*tmp)() = i_this->field_0xd8;
     if (tmp) {
         (i_this->*i_this->field_0xd8)();
@@ -112,23 +112,23 @@ s32 dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
 }
 
 /* 80225658-80225684       .text dOvlpFd4_Execute__FP10dOvlpFd4_c */
-s32 dOvlpFd4_Execute(dOvlpFd4_c* i_this) {
+static s32 dOvlpFd4_Execute(dOvlpFd4_c* i_this) {
     (i_this->*i_this->field_0xcc)();
     return 1;
 }
 
 /* 80225684-8022568C       .text dOvlpFd4_IsDelete__FP10dOvlpFd4_c */
-s32 dOvlpFd4_IsDelete(dOvlpFd4_c*) {
+static s32 dOvlpFd4_IsDelete(dOvlpFd4_c*) {
     return 1;
 }
 
 /* 8022568C-80225694       .text dOvlpFd4_Delete__FP10dOvlpFd4_c */
-s32 dOvlpFd4_Delete(dOvlpFd4_c*) {
+static s32 dOvlpFd4_Delete(dOvlpFd4_c*) {
     return 1;
 }
 
 /* 80225694-802256C0       .text dOvlpFd4_Create__FPv */
-s32 dOvlpFd4_Create(void* i_this) {
+static s32 dOvlpFd4_Create(void* i_this) {
     new (i_this) dOvlpFd4_c();
     return cPhs_COMPLEATE_e;
 }

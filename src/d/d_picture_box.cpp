@@ -262,26 +262,26 @@ void dJle_Pb_c::_delete(JKRExpHeap*) {
 }
 
 /* 8022BB3C-8022BB7C       .text dPb_Draw__FP12sub_pb_class */
-void dPb_Draw(sub_pb_class*) {
+static void dPb_Draw(sub_pb_class*) {
     /* Nonmatching */
 }
 
 /* 8022BB7C-8022BC84       .text dPb_Execute__FP12sub_pb_class */
-void dPb_Execute(sub_pb_class*) {
+static void dPb_Execute(sub_pb_class*) {
     /* Nonmatching */
 }
 
 /* 8022BC84-8022BC8C       .text dPb_IsDelete__FP12sub_pb_class */
-void dPb_IsDelete(sub_pb_class*) {
+static void dPb_IsDelete(sub_pb_class*) {
     /* Nonmatching */
 }
 
 /* 8022BC8C-8022BD8C       .text dPb_Delete__FP12sub_pb_class */
-void dPb_Delete(sub_pb_class*) {
+static void dPb_Delete(sub_pb_class*) {
     /* Nonmatching */
 }
 
 /* 8022BD8C-8022C03C       .text dPb_Create__FP9msg_class */
-void dPb_Create(msg_class*) {
+static void dPb_Create(msg_class*) {
     /* Nonmatching */
 }

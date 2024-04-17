@@ -20,7 +20,7 @@ public:
 };
 
 /* 80197FE4-80198008       .text dKyeff_Draw__FP8dKyeff_c */
-BOOL dKyeff_Draw(dKyeff_c* i_this) {
+static BOOL dKyeff_Draw(dKyeff_c* i_this) {
     dKyw_wether_draw();
     return TRUE;
 }
@@ -119,23 +119,23 @@ BOOL dKyeff_c::execute() {
 }
 
 /* 801984CC-801984EC       .text dKyeff_Execute__FP8dKyeff_c */
-BOOL dKyeff_Execute(dKyeff_c* i_this) {
+static BOOL dKyeff_Execute(dKyeff_c* i_this) {
     return i_this->execute();
 }
 
 /* 801984EC-801984F4       .text dKyeff_IsDelete__FP8dKyeff_c */
-BOOL dKyeff_IsDelete(dKyeff_c* i_this) {
+static BOOL dKyeff_IsDelete(dKyeff_c* i_this) {
     return TRUE;
 }
 
 /* 801984F4-80198518       .text dKyeff_Delete__FP8dKyeff_c */
-BOOL dKyeff_Delete(dKyeff_c* i_this) {
+static BOOL dKyeff_Delete(dKyeff_c* i_this) {
     dKyw_wether_delete();
     return TRUE;
 }
 
 /* 80198518-80198758       .text dKyeff_Create__FP12kankyo_class */
-s32 dKyeff_Create(kankyo_class* i_ky) {
+static s32 dKyeff_Create(kankyo_class* i_ky) {
     dKyw_wether_init();
 
     if (strcmp(dComIfGp_getStartStageName(), "Name") == 0) {

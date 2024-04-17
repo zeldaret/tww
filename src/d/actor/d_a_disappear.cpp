@@ -115,7 +115,7 @@ static s32 daDisappear_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daDisappear_Method = {
+static actor_method_class l_daDisappear_Method = {
     (process_method_func)daDisappear_Create,
     (process_method_func)daDisappear_Delete,
     (process_method_func)daDisappear_Execute,
