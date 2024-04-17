@@ -1235,13 +1235,13 @@ void daItem_c::mode_water_init() {
     clrFlag(FLAG_UNK04);
     scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     
-    cXyz scale;
+    cXyz particleScale;
     f32 temp = dItem_data::getShadowSize(m_itemNo);
     f32 temp3 = temp / dItem_data::getShadowSize(dItem_GREEN_RUPEE_e);
     temp3 *= scale.x;
-    scale.setall(temp3);
+    particleScale.setall(temp3);
     
-    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &scale, 0xFF, &mPtclRippleCb);
+    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
     mPtclRippleCb.mRate = 0.0f;
 }
 

@@ -179,15 +179,15 @@ BOOL daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
         static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
         static cXyz l_offsetEyePos(24.0f, -16.0f, 0.0f);
         mDoMtx_stack_c::multVec(&l_offsetAttPos, &mTargetPos);
-        mDoMtx_stack_c::XrotM(mJntCtrl.getHead_y());
-        mDoMtx_stack_c::ZrotM(mJntCtrl.getHead_x());
+        mDoMtx_stack_c::XrotM((int)mJntCtrl.getHead_y());
+        mDoMtx_stack_c::ZrotM((int)mJntCtrl.getHead_x());
         mDoMtx_stack_c::multVec(&l_offsetEyePos, &mRdEyePos);
         mDoMtx_stack_c::XrotM(mD1A);
         mDoMtx_stack_c::ZrotM(mD1C);
         mDoMtx_stack_c::YrotM(mD1E);
     } else if (mJntCtrl.getBackboneJntNum() == jntNo) {
-        mDoMtx_stack_c::XrotM(mJntCtrl.getBackbone_y());
-        mDoMtx_stack_c::ZrotM(mJntCtrl.getBackbone_x());
+        mDoMtx_stack_c::XrotM((int)mJntCtrl.getBackbone_y());
+        mDoMtx_stack_c::ZrotM((int)mJntCtrl.getBackbone_x());
     }
     
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -732,11 +732,11 @@ void daRd_c::setIceCollision() {
 /* 0000180C-00001970       .text setAttention__6daRd_cFv */
 void daRd_c::setAttention() {
     cXyz attnPos(60.0f, 0.0f, 0.0f);
-    cXyz eyePos(60.0f, 0.0f, 0.0f);
+    cXyz eyeballPos(60.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0x0C)); // ree_atama_1 joint
     mDoMtx_stack_c::multVec(&attnPos, &attention_info.position);
-    mDoMtx_stack_c::multVecZero(&eyePos);
-    eyePos = eyePos;
+    mDoMtx_stack_c::multVecZero(&eyeballPos);
+    eyePos = eyeballPos;
     attention_info.position.y += l_HIO.m58;
     eyePos.y += l_HIO.m5C;
     
