@@ -2844,8 +2844,33 @@ void daPy_lk_c::setSwordAtCollision() {
 }
 
 /* 8011D6C4-8011D788       .text getBlurTopRate__9daPy_lk_cFv */
-void daPy_lk_c::getBlurTopRate() {
-    /* Nonmatching */
+f32 daPy_lk_c::getBlurTopRate() {
+    if (mCurProc == daPyProc_DEMO_LAST_COMBO_e) {
+        return 0.0f;
+    }
+    
+    if (mHeldItemType == 0x103) {
+        if (checkNormalSwordEquip()) {
+            return 0.5f;
+        } else {
+            return 1.0f;
+        }
+    }
+    
+    if (mHeldItemType == 0x101) {
+        if (mActorKeepEquip.getActor() == NULL) {
+            return 0.0f;
+        } else {
+            daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
+            if (mCurProc == daPyProc_JUMP_CUT_e || mCurProc == daPyProc_JUMP_CUT_LAND_e) {
+                return boko->getJumpBlurRate();
+            } else {
+                return boko->getBlurRate();
+            }
+        }
+    }
+    
+    return 0.0f;
 }
 
 /* 8011D788-8011EC0C       .text setCollision__9daPy_lk_cFv */

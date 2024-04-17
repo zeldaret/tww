@@ -1052,7 +1052,7 @@ public:
     void resetCurse();
     void checkLightHit();
     void setSwordAtCollision();
-    void getBlurTopRate();
+    f32 getBlurTopRate();
     void setCollision();
     void setAttentionPos();
     int setRoomInfo();
