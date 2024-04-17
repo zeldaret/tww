@@ -289,7 +289,8 @@ void JPADrawExecBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl
     scaleX *= (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX);
     scaleY *= (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY);
 
-    JGeometry::TVec3<f32> pt(ptcl->mPosition);
+    JGeometry::TVec3<f32> pt;
+    pt.set(ptcl->mPosition);
     MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, pt, &pt);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
