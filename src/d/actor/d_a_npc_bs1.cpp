@@ -1895,14 +1895,14 @@ BOOL daNpc_Bs1_c::evn_talk() {
     } else {
         setAnmFromMsgTag();
         u16 msgStatus = l_msg->mStatus;
-        if (msgStatus == 0xE) {
+        if (msgStatus == fopMsgStts_MSG_DISPLAYED_e) {
             l_msg->mStatus = next_msgStatus(&m738);
-            if (l_msg->mStatus == 0xF) {
+            if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
                 fopMsgM_messageSet(m738);
             }
         } else {
-            if (msgStatus == 0x12) {
-                l_msg->mStatus = 0x13;
+            if (msgStatus == fopMsgStts_BOX_CLOSED_e) {
+                l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                 l_msg = NULL;
                 l_msgId = fpcM_ERROR_PROCESS_ID_e;
                 return TRUE;

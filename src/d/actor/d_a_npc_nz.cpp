@@ -80,8 +80,6 @@ BOOL daNpc_Nz_c::TailNodeCallBack(J3DNode* node, int param_1) {
 
 /* 000003A4-00000978       .text TailControl__10daNpc_Nz_cFv */
 void daNpc_Nz_c::TailControl() {
-    /* Nonmatching */
-
     cXyz sp64;
     cXyz sp58;
     cXyz sp4C;
@@ -95,12 +93,15 @@ void daNpc_Nz_c::TailControl() {
     mDoMtx_stack_c::YrotS(angle);
     mDoMtx_stack_c::XrotM(angle2);
     mDoMtx_stack_c::multVec(&sp58, &sp40);
+
+    int i;
+    s16 temp9;
+    int temp7;
     cXyz* r19 = &field_0x974[1];
     cXyz* r18 = &field_0x9EC[1];
     cXyz* r17 = &field_0x934.mpLines->mpSegments[0];
     dBgS_GndChk gndChk;
-
-    for(int i = 1; i < 10; i++, r19++, r18++) {
+    for(i = 1; i < 10; i++, r19++, r18++) {
         f32 temp3 = 1.0f - (i-1) * 0.1f;
         cXyz sp34;
         sp34.x = r18[0].x + sp40.x * temp3;
@@ -113,9 +114,9 @@ void daNpc_Nz_c::TailControl() {
         sp64.y = temp5 - r19[-1].y;
         sp64.x = sp34.x + (r19[0].x - r19[-1].x);
         sp64.z = sp34.z + (r19[0].z - r19[-1].z);
-        int temp7 = cM_atan2s(sp64.x, sp64.z);
+        temp7 = cM_atan2s(sp64.x, sp64.z);
         dist = sp64.absXZ();
-        s16 temp9 = -cM_atan2s(sp64.y, dist);
+        temp9 = -cM_atan2s(sp64.y, dist);
         sp58.set(0.0f, 0.0f, 20.0f);
         mDoMtx_stack_c::YrotS(temp7);
         mDoMtx_stack_c::XrotM(temp9);
@@ -340,8 +341,6 @@ void daNpc_Nz_c::setAnm(s8 param_1, bool param_2) {
 
 /* 0000146C-000017E0       .text setMtx__10daNpc_Nz_cFv */
 void daNpc_Nz_c::setMtx() {
-    /* Nonmatching */
-
     mpMorf->getModel()->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -354,32 +353,34 @@ void daNpc_Nz_c::setMtx() {
     daShopItem_c* item = getShopItem(field_0x909);
     if(item) {
         cXyz* pScale = item->getScaleP();
-        field_0xA90 = cLib_maxLimit<int>(field_0xA90 + 1, 0x14);
+        field_0xA90 = cLib_maxLimit<int>(field_0xA90 + 1, 20);
         f32 temp4 = 0.0f;
 
         f32 scaleX;
         f32 scaleY;
-        if(field_0xA90 < 0xC) {
-            scaleX = (field_0xA90 / 12.0f);
-            scaleX *= 0.85f;
-            scaleY = (field_0xA90 / 12.0f) * 1.4f;
+        f32 multX1 = 0.85f;
+        f32 multY1 = 1.4f;
+        f32 multX2 = 1.1f;
+        f32 multY2 = 0.8f;
+        f32 multX3 = 1.0f;
+        f32 multY3 = 1.0f;
+        if(field_0xA90 < 12) {
+            scaleX = field_0xA90 / 12.0f;
+            scaleY = field_0xA90 / 12.0f;
+            scaleX *= multX1;
+            scaleY *= multY1;
         }
-        else if(field_0xA90 < 0x10) {
-            scaleY = (field_0xA90 - 0xC);
-            scaleY *= 0.25f;
-            scaleX = scaleY * 1.1f;
-            f32 temp = (1.0f - scaleY);
-            scaleX += temp * 0.85f;
-            scaleY = scaleY * 0.8f + temp * 1.4f;
+        else if(field_0xA90 < 16) {
+            scaleX = (field_0xA90 - 12) / 4.0f;
+            scaleY = (field_0xA90 - 12) / 4.0f;
+            scaleX = (scaleX * multX2) + (1.0f - scaleX) * multX1;
+            scaleY = (scaleY * multY2) + (1.0f - scaleY) * multY1;
         }
         else {
-            f32 temp = (field_0xA90 - 0x10);
-            temp *= 0.5f;
-            scaleY = temp;
-            scaleY *= 1.0f;
-            temp = 1.0f - temp;
-            scaleX = scaleY + temp * 1.1f;
-            scaleY = scaleY + temp * 0.8f;
+            scaleX = (field_0xA90 - 16) / 2.0f;
+            scaleY = (field_0xA90 - 16) / 2.0f;
+            scaleX = (scaleX * multX3) + (1.0f - scaleX) * multX2;
+            scaleY = (scaleY * multY3) + (1.0f - scaleY) * multY2;
         }
 
         pScale->z = scaleX;
@@ -702,8 +703,6 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
 
 /* 00002038-000022C0       .text anmAtr__10daNpc_Nz_cFUs */
 void daNpc_Nz_c::anmAtr(u16) {
-    /* Nonmatching */
-
     if(field_0x6D5 == 9 && mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
         setAnm(0, false);
     }
@@ -712,12 +711,18 @@ void daNpc_Nz_c::anmAtr(u16) {
     }
 
     if(dComIfGp_checkMesgSendButton()) {
-        if(mpCurrMsg->mStatus == 0x11 || mpCurrMsg->mStatus == 0x12 || mpCurrMsg->mStatus == 0x10) {
+        if (mpCurrMsg->mStatus == fopMsgStts_BOX_CLOSING_e ||
+            mpCurrMsg->mStatus == fopMsgStts_BOX_CLOSED_e ||
+            mpCurrMsg->mStatus == fopMsgStts_MSG_ENDS_e
+        ) {
             return;
         }
 
         daShopItem_c* item;
         switch(mpCurrMsg->mMsgNo) {
+            case 0x33F5:
+            case 0x33F6:
+                break;
             case 0x33F7:
             case 0x33F8:
             case 0x33F9:
@@ -745,7 +750,6 @@ void daNpc_Nz_c::anmAtr(u16) {
                 field_0xA90 = 0;
                 fopAcM_seStart(this, JA_SE_CV_M_NZ_TALK_IN, 0);
                 setAnm(0xC, false);
-
                 break;
             case 0x3405:
             case 0x3406:
@@ -840,8 +844,6 @@ bool daNpc_Nz_c::_draw() {
 
 /* 0000254C-00002768       .text createInit__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::createInit() {
-    /* Nonmatching */
-
     setAnm(0, false);
     modeProcInit(0);
 
@@ -880,8 +882,6 @@ BOOL daNpc_Nz_c::createInit() {
 
 /* 00002768-0000282C       .text setSmokeParticle__10daNpc_Nz_cFv */
 void daNpc_Nz_c::setSmokeParticle() {
-    /* Nonmatching */
-
     if(field_0x914.getEmitter() != NULL) {
         field_0x914.end();
     }
@@ -904,8 +904,6 @@ void daNpc_Nz_c::getArg() {
 
 /* 00002830-000028FC       .text _create__10daNpc_Nz_cFv */
 s32 daNpc_Nz_c::_create() {
-    /* Nonmatching */
-
     fopAcM_SetupActor(this, daNpc_Nz_c);
 
     getArg();
@@ -923,12 +921,22 @@ s32 daNpc_Nz_c::_create() {
     if(!fopAcM_entrySolidHeap(this, createHeap_CB, 0x2FE0)) {
         return cPhs_ERROR_e;
     }
-
-    if(!createInit()) {
-        return cPhs_ERROR_e;
+    
+    BOOL success = createInit();
+    if (!success) {
+        // Fakematch?
+        if (success) {
+            return cPhs_ERROR_e;
+        } else {
+            return cPhs_ERROR_e;
+        }
+    } else {
+        return cPhs_COMPLEATE_e;
     }
+}
 
-    return cPhs_COMPLEATE_e;
+/* 000028FC-00002AF0       .text __ct__10daNpc_Nz_cFv */
+daNpc_Nz_c::daNpc_Nz_c() {
 }
 
 /* 00002E00-00002E6C       .text _delete__10daNpc_Nz_cFv */

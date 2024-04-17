@@ -245,17 +245,16 @@ void daNpc_Nz_c::cutEatesaFirstProc() {
 
 /* 00003F54-0000404C       .text cutKillAllStart__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutKillAllStart() {
-    /* Nonmatching */
-
     fopAcM_Search((fopAcIt_JudgeFunc)&searchNzAndBomb_CB, this);
     fopAcM_Search((fopAcIt_JudgeFunc)&searchTsuboAndBarrel_CB, this);
     fopAcM_Search((fopAcIt_JudgeFunc)&searchEsaInit_CB, this);
     
     cXyz pos = field_0x6C4;
-    pos.x += cM_ssin(home.angle.y + 0x8000) * 250.0f;
-    pos.z += cM_scos(home.angle.y + 0x8000) * 250.0f;
+    s16 r5 = home.angle.y + 0x8000;
+    pos.x += cM_ssin(home.angle.y) * 250.0f;
+    pos.z += cM_scos(home.angle.y) * 250.0f;
 
-    daPy_getPlayerActorClass()->setPlayerPosAndAngle(&pos, home.angle.y + 0x8000);
+    daPy_getPlayerActorClass()->setPlayerPosAndAngle(&pos, r5);
 }
 
 /* 0000404C-00004080       .text cutKillAllProc__10daNpc_Nz_cFv */
