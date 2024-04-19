@@ -405,6 +405,7 @@ public:
     void setCurrentGrafPort(J2DOrthoGraph* i_graf) { mCurrentGrafPort = i_graf; }
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
+    view_port_class* getCurrentViewport() { return mCurrentViewport; }
     void setCurrentViewport(view_port_class* i_viewport) { mCurrentViewport = i_viewport; }
     s32 getWindowNum() { return mDlstWindowNum; }
     void setWindowNum(u8 num) { mDlstWindowNum = num; }
@@ -2371,6 +2372,7 @@ inline void dComIfGp_setWindow(int idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f
 inline J2DOrthoGraph* dComIfGp_getCurrentGrafPort() { return g_dComIfG_gameInfo.play.getCurrentGrafPort(); }
 inline void dComIfGp_setCurrentWindow(dDlst_window_c* window) { return g_dComIfG_gameInfo.play.setCurrentWindow(window); }
 inline void dComIfGp_setCurrentView(view_class* view) { return g_dComIfG_gameInfo.play.setCurrentView(view); }
+inline view_port_class* dComIfGp_getCurrentViewport() { return g_dComIfG_gameInfo.play.getCurrentViewport(); }
 inline void dComIfGp_setCurrentViewport(view_port_class* viewport) { return g_dComIfG_gameInfo.play.setCurrentViewport(viewport); }
 
 inline dADM_CharTbl* dComIfGp_CharTbl() {

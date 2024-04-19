@@ -95,7 +95,6 @@ s32 resLoad(request_of_phase_process_class* phase, char* resName) {
 
 /* 8022F9FC-802301C8       .text create__10dScnName_cFv */
 s32 dScnName_c::create() {
-    /* Nonmatching */
     dComIfGp_offEnableNextStage();
     dComIfGp_setNextStage("Name", 0, 0);
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
@@ -146,7 +145,8 @@ s32 dScnName_c::create() {
         field_0x29c = 5.0f;
         field_0x2a0 = 160000.0f;
         field_0x2a4 = 60.0f;
-        field_0x2a8 = (g_dComIfG_gameInfo.play.mDlstWindow[0].getViewPort()->mWidth / g_dComIfG_gameInfo.play.mDlstWindow[0].getViewPort()->mHeight) * g_HIO.field_0x0c;
+        f32 aspect = dComIfGp_getWindow(0)->getViewPort()->mWidth / dComIfGp_getWindow(0)->getViewPort()->mHeight;
+        field_0x2a8 = aspect * g_HIO.field_0x0c;
         field_0x2ac.x = 9377.0f;
         field_0x2ac.y = 0.0;
         field_0x2ac.z = 7644.0;
@@ -238,14 +238,14 @@ void dScnName_c::buttonIconCreate() {
 
 /* 80230500-802305E0       .text paneTransButtonIcon__10dScnName_cFsUcffUc */
 BOOL dScnName_c::paneTransButtonIcon(s16 param_1, u8 param_2, f32 param_3, f32 param_4, u8 param_5) {
-    /* Nonmatching */
     if (param_1 < 0) {
         return false;
     }
     if (param_1 > param_2) {
         return true;
     }
-    f32 tmp = fopMsgM_valueIncrease(param_2, param_1, param_5) * (param_4 - param_3);
+    f32 tmp = fopMsgM_valueIncrease(param_2, param_1, param_5);
+    tmp *= (param_4 - param_3);
     fopMsgM_paneTrans(&field_0x43c, 0.0f, param_3 + tmp);
     fopMsgM_paneTrans(&field_0x474, 0.0f, param_3 + tmp);
     fopMsgM_paneTrans(&field_0x4ac, 0.0f, param_3 + tmp);
@@ -657,8 +657,7 @@ void dScnName_c::NameInMain() {
 
 /* 80231FF4-80232050       .text NameInClose__10dScnName_cFv */
 void dScnName_c::NameInClose() {
-    /* Nonmatching */
-    if (dNm_c->_close() == 1) {
+    if ((BOOL)dNm_c->_close() == TRUE) {
         dFs_c->initial();
         mMainProc = 3;
         field_0x555 = 0;
@@ -785,12 +784,12 @@ void dDlst_BTICN_c::draw() {
 
 /* 8023245C-80232518       .text draw__19dDlst_FLSEL_CLOTH_cFv */
 void dDlst_FLSEL_CLOTH_c::draw() {
-    /* Nonmatching */
     Mtx44 mtx;
-    view_port_class* viewport = g_dComIfG_gameInfo.play.mCurrentViewport;
-    C_MTXPerspective(mtx, 30.0f, (viewport->mWidth / viewport->mHeight) * g_HIO.field_0x0c, 1.0f, 100000.0f);
+    view_port_class* viewport = dComIfGp_getCurrentViewport();
+    f32 aspect = viewport->mWidth / viewport->mHeight;
+    C_MTXPerspective(mtx, 30.0f, aspect * g_HIO.field_0x0c, 1.0f, 100000.0f);
     GXSetProjection(mtx, GX_PERSPECTIVE);
-    cloth_c->draw(0.0f, (GXColor){0xe3, 0xff, 0xb3, 0xff}, GXColor(), 0);
+    cloth_c->draw(0.0f, (GXColor){0xe3, 0xff, 0xb3, 0xff}, (GXColor){0x00, 0x00, 0x00, 0x00}, 0);
     dComIfGp_getCurrentGrafPort()->setPort();
 }
 
