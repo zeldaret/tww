@@ -460,7 +460,7 @@ BOOL daMbdoor_actionWait(daMbdoor_c* i_this) {
 BOOL daMbdoor_actionLockWait(daMbdoor_c* i_this) {
     if (i_this->checkUnlock()) {
         i_this->setAction(2);
-        fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1);
+        fopAcM_orderOtherEvent(i_this, "MBDOOR_STOP_OPEN");
     }
     return TRUE;
 }
@@ -472,7 +472,7 @@ BOOL daMbdoor_actionLockOff(daMbdoor_c* i_this) {
         i_this->demoProc();
         i_this->setAction(3);
     } else {
-        fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1);
+        fopAcM_orderOtherEvent(i_this, "MBDOOR_STOP_OPEN");
     }
     return TRUE;
 }

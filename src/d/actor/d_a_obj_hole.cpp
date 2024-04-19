@@ -140,7 +140,7 @@ void daObj_Hole_c::modeEvent() {
         }
     }
     else {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_PITFALL", 1);
+        fopAcM_orderOtherEvent(this, "DEFAULT_PITFALL");
     }
 }
 

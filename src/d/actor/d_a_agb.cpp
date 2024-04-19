@@ -626,7 +626,7 @@ void daAgb_c::modeLookAttention() {
             }
         }
     } else {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", 4);
+        fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", dEvtFlag_TALK_e);
     }
 }
 

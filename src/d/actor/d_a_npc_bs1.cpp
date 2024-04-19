@@ -2103,9 +2103,10 @@ BOOL daNpc_Bs1_c::_draw() {
     mBtpAnm.remove(pModelData);
     
     cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
-    m29C = dComIfGd_setShadow(m29C, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f, current.pos.y,
-                              mAcch.GetGroundH(), mAcch.m_gnd, &tevStr, 0, 1.0f,
-                              &dDlst_shadowControl_c::mSimpleTexObj);
+    m29C = dComIfGd_setShadow(
+        m29C, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
+    );
     
     if (mShopItems.mSelectedItemIdx >= 0) {
         mpShopCursor->draw();

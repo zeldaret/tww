@@ -203,7 +203,7 @@ BOOL daBomb_c::draw() {
     if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != -1.0e9f) {
         cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         if(pNormal) {
-            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, &pNormal->mNormal, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, pNormal->GetNP());
         }
     }
 
@@ -472,17 +472,17 @@ void daBomb_c::posMoveF() {
             f32 temp2;
             cXyz* norm;
             if(tri) {
-                norm = &tri->mNormal;
+                norm = tri->GetNP();
                 mag = 0.06f;
                 temp2 = cM_scos(0xA4F);
             }
             else {
-                norm = 0;
+                norm = NULL;
                 mag = 0.0f;
                 temp2 = 0.0f;
             }
 
-            daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &mWindVec, 0.002f, 0.0005f, norm, mag, temp2, 0);
+            daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &mWindVec, 0.002f, 0.0005f, norm, mag, temp2, NULL);
         }
         else {
             fopAcM_posMoveF(this, mStts.GetCCMoveP());

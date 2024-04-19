@@ -593,7 +593,7 @@ void dEvent_manager_c::exceptionProc() {
             if (strcmp(eventName, "look_tetra") == 0)
                 dComIfGs_onEventBit(0x0280);
         } else {
-            fopAcM_orderOtherEvent2(NULL, (char*)eventName, dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(NULL, (char*)eventName);
         }
         break;
     case 2:

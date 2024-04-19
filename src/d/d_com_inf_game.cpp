@@ -562,8 +562,7 @@ int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyIn
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
-        return dComIfGd_setSimpleShadow(i_pos, param_1, param_2, &plane_p->mNormal, i_angle,
-                                        param_5, i_tex);
+        return dComIfGd_setSimpleShadow(i_pos, param_1, param_2, plane_p->GetNP(), i_angle, param_5, i_tex);
     } else {
         return 0;
     }

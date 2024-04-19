@@ -3225,7 +3225,10 @@ BOOL daNpc_Ji1_c::_draw() {
         field_0x3FC.entry(field_0x3F8->getModelData(), (s16)field_0x414);
         mDoExt_modelUpdateDL(field_0x3F8);
         cXyz temp(current.pos.x, current.pos.y + 150.0f, current.pos.z);
-        field_0x3F0 = dComIfGd_setShadow(field_0x3F0, 1, field_0x330->getModel(), &temp, 800.0f, 20.0f, current.pos.y, field_0x434.GetGroundH(), field_0x434.m_gnd, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+        field_0x3F0 = dComIfGd_setShadow(
+            field_0x3F0, 1, field_0x330->getModel(), &temp, 800.0f, 20.0f,
+            current.pos.y, field_0x434.GetGroundH(), field_0x434.m_gnd, &tevStr
+        );
         if(field_0x3F0 != 0 && field_0xD84 != 0) {
             dComIfGd_addRealShadow(field_0x3F0, mpMorf->getModel());
         }

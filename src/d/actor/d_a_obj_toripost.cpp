@@ -525,7 +525,7 @@ void daObjTpost_c::eventOrder() {
         }
     }
     else if(field_0x8F7 >= 3) {
-        fopAcM_orderOtherEvent2(this, a_demo_name_tbl[field_0x8F7 - 3], 1, 0x14F);
+        fopAcM_orderOtherEvent(this, a_demo_name_tbl[field_0x8F7 - 3], 0x14F);
     }
 }
 

@@ -62,7 +62,7 @@ void daTag_Gship_c::modeClearEvent() {
         }
     }
     else {
-        fopAcM_orderOtherEvent2(this, "PSHIP_CLEAR", 1);
+        fopAcM_orderOtherEvent(this, "PSHIP_CLEAR");
     }
 }
 

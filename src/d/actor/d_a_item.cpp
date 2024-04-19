@@ -1103,7 +1103,7 @@ void daItem_c::checkWall() {
     }
     
     cM3dGPla* wallPlane = dComIfG_Bgsp()->GetTriPla(mAcchCir);
-    cXyz wallNorm = wallPlane->mNormal;
+    cXyz wallNorm = *wallPlane->GetNP();
     
     cXyz vel;
     vel.x = speedF * cM_ssin(current.angle.y);

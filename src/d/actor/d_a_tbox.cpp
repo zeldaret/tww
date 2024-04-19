@@ -1066,7 +1066,7 @@ BOOL daTbox_c::actionSwOnWait() {
     }
     else {
         if (dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
-            fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
+            fopAcM_orderOtherEvent(this, "DEFAULT_TREASURE_APPEAR");
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
     }
@@ -1098,7 +1098,7 @@ BOOL daTbox_c::actionGenocide() {
                 mGenocideDelayTimer--;
             }
             else {
-                fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
+                fopAcM_orderOtherEvent(this, "DEFAULT_TREASURE_APPEAR");
                 eventInfo.onCondition(dEvtCnd_UNK2_e);
 
                 dComIfGs_onSwitch(getSwNo(), mRoomNo);

@@ -678,8 +678,7 @@ BOOL daNpc_Btsw2_c::_draw() {
     cXyz shadowPos(current.pos.x, current.pos.y + 130.0f, current.pos.z);
     mShadowId = dComIfGd_setShadow(
         mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
-        current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr,
-        0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+        current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
     
     dSnap_RegistFig(DSNAP_TYPE_BTSW, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);

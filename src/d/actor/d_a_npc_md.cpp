@@ -2967,8 +2967,7 @@ BOOL daNpc_Md_c::draw() {
         cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
         mShadowId = dComIfGd_setShadow(
             mShadowId, 0, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
-            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
-            0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
         );
         
         if (mShadowId != 0) {

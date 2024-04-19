@@ -951,7 +951,7 @@ void daRd_c::modeCryInit() {
     if (dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         dComIfGp_event_reset();
     }
-    fopAcM_orderOtherEvent2(this, "DEFAULT_RD_CRY", 1);
+    fopAcM_orderOtherEvent(this, "DEFAULT_RD_CRY");
     fopAcM_monsSeStart(this, JA_SE_CV_RD_SCREAM, 0);
     mTimer1 = l_HIO.m54;
     mBreakFreeCounter = l_HIO.m78;
@@ -1142,7 +1142,7 @@ void daRd_c::modeAttack() {
             modeProcInit(MODE_CRY_WAIT);
         }
     } else if (!checkTgHit()) {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_RD_ATTACK", 1, 0x1CF);
+        fopAcM_orderOtherEvent(this, "DEFAULT_RD_ATTACK", 0x1CF);
     }
 }
 
@@ -1740,8 +1740,7 @@ bool daRd_c::_draw() {
     cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     mShadowId = dComIfGd_setShadow(
         mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 40.0f,
-        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
-        0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
     );
     
     dSnap_RegistFig(DSNAP_TYPE_RD, this, 1.0f, 1.0f, 1.0f);

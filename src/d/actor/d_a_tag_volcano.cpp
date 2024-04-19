@@ -152,14 +152,14 @@ bool daTagvolcano::Act_c::_execute() {
                     dComIfG_TimerDeleteRequest();
 
                 field_0x2a4 = 1;
-                fopAcM_orderOtherEvent(this, "TAG_VOLCANO", dEvtFlag_NOPARTNER_e);
+                fopAcM_orderOtherEvent(this, "TAG_VOLCANO");
             }
 #if VERSION != VERSION_JPN
         } else {
             mDoAud_seStart(JA_SE_ISLE_TIMER_0);
             dComIfGp_getVibration().StartShock(6, -33, cXyz(0.0f, 1.0f, 0.0f));
             field_0x2a4 = 1;
-            fopAcM_orderOtherEvent(this, "TAG_VOLCANO", dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, "TAG_VOLCANO");
 #endif
         }
 
@@ -171,7 +171,7 @@ bool daTagvolcano::Act_c::_execute() {
                     dComIfGp_setNextStage("sea", 2, 40);
                 }
             } else {
-                fopAcM_orderOtherEvent(this, "TAG_VOLCANO", dEvtFlag_NOPARTNER_e);
+                fopAcM_orderOtherEvent(this, "TAG_VOLCANO");
             }
         }
     }

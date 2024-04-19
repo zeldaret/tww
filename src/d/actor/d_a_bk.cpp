@@ -494,8 +494,7 @@ static void daBk_shadowDraw(bk_class* i_this) {
         i_this->mShadowId = dComIfGd_setShadow(
             i_this->mShadowId, 1, model, &shadowPos, temp, shadowSize,
             i_this->current.pos.y, i_this->dr.mAcch.GetGroundH(),
-            i_this->dr.mAcch.m_gnd, &i_this->tevStr,
-            0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+            i_this->dr.mAcch.m_gnd, &i_this->tevStr
         );
     }
     

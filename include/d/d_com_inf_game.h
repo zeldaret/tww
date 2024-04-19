@@ -2699,16 +2699,19 @@ inline u8 dComIfGp_evmng_getEventEndSound(s16 eventIdx) {
 
 int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
                        f32 y, f32 param_8, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
-                       s16 rotY, f32 param_12, GXTexObj* pTexObj);
+                       s16 rotY = 0, f32 param_12 = 1.0f,
+                       GXTexObj* pTexObj = dDlst_shadowControl_c::getSimpleTex());
 
-inline int dComIfGd_setSimpleShadow(cXyz* pPos, f32 param_1, f32 param_2, cXyz* param_3, s16 angle,
-                                    f32 param_5, GXTexObj* pTex) {
-    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(pPos, param_1, param_2, param_3, angle,
-                                                       param_5, pTex);
+inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 param_1, f32 param_2, cXyz* param_3,
+                                    s16 i_angle = 0, f32 param_5 = 1.0f,
+                                    GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex()) {
+    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, param_1, param_2, param_3, i_angle,
+                                                       param_5, i_tex);
 }
 
-int dComIfGd_setSimpleShadow2(cXyz* pPos, f32 param_1, f32 param_2, cBgS_PolyInfo& pPolyInfo,
-                              s16 param_4, f32 param_5, GXTexObj* pTex);
+int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly,
+                              s16 i_angle = 0, f32 param_5 = 1.0f,
+                              GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex());
 
 inline int dComIfGd_setRealShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5,
                                    f32 param_6, dKy_tevstr_c* pTevStr) {
@@ -2729,8 +2732,6 @@ inline bool dComIfGd_addRealShadow(u32 id, J3DModel* pModel) {
 inline void dComIfGd_imageDrawShadow(Mtx mtx) {
     g_dComIfG_gameInfo.drawlist.imageDrawShadow(mtx);
 }
-
-int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly, s16 i_angle, f32 param_5, GXTexObj* i_tex);
 
 inline void dComIfGd_set3DlineMat(mDoExt_3DlineMat_c* mat) {
     g_dComIfG_gameInfo.drawlist.set3DlineMat(mat);
