@@ -109,10 +109,10 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
             f32* vtxNrmDeform = mDeformData->getVtxNrm();
 
             for (u16 i = 0; i < cluster->mNrmNum; i++) {
-                Vec* dst = &field_0x0c[i];
-                dst->x = 0.0f;
-                dst->y = 0.0f;
-                dst->z = 0.0f;
+                f32* dst = &field_0x0c[i * 3];
+                dst[0] = 0.0f;
+                dst[1] = 0.0f;
+                dst[2] = 0.0f;
 
                 for (u16 j = 0; j < cluster->mKeyNum; j++) {
                     u16 flag = key[j].field_0x8[i];
@@ -129,12 +129,12 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
                     if (flag & 0x2000)
                         srcZ = -srcZ;
 
-                    dst->x += srcX * weightList[j];
-                    dst->y += srcY * weightList[j];
-                    dst->z += srcZ * weightList[j];
+                    dst[0] += srcX * weightList[j];
+                    dst[1] += srcY * weightList[j];
+                    dst[2] += srcZ * weightList[j];
                 }
 
-                normalize((f32*)dst);
+                normalize(dst);
             }
 
             for (u16 i = 0; i < cluster->field_0x16; i++) {

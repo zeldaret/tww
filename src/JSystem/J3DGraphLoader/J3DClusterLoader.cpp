@@ -98,7 +98,7 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
         cluster->mClusterVertex = &mpDeformData->mClusterVertex[vertexIdx];
         J3DDeformer* deformer = new J3DDeformer(mpDeformData);
         if (cluster->mNrmNum != 0) {
-            deformer->field_0x0c = new Vec[cluster->mNrmNum];
+            deformer->field_0x0c = new f32[cluster->mNrmNum * 3];
         } else {
             deformer->field_0x0c = NULL;
         }
