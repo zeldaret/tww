@@ -83,11 +83,11 @@ public:
     bool isConnectParent() const { return mIsConnectParent; }
     void show() { mVisible = true; }
     void hide() { mVisible = false; }
+    bool isVisible() { return mVisible; }
 
     void getBounds() {}
     void getGlbBounds() {}
     void getRotate() const {}
-    void isVisible() {}
     void place(const JGeometry::TBox2<f32>&) {}
     void rotate(f32) {}
     void rotate(f32, f32, J2DRotateAxis, f32) {}

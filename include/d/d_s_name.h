@@ -151,7 +151,7 @@ public:
     /* 0x474 */ fopMsgM_pane_class field_0x474;
     /* 0x4AC */ fopMsgM_pane_class field_0x4ac;
     /* 0x4E4 */ fopMsgM_pane_class field_0x4e4;
-    /* 0x41C */ fopMsgM_pane_class field_0x51c;
+    /* 0x51C */ fopMsgM_pane_class field_0x51c;
     /* 0x554 */ u8 mMainProc;
     /* 0x555 */ u8 field_0x555;
     /* 0x556 */ u8 field_0x556;
