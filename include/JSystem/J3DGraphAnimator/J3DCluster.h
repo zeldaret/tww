@@ -17,8 +17,8 @@ public:
         mKeyNum = other.mKeyNum;
         mPosNum = other.mPosNum;
         mNrmNum = other.mNrmNum;
-        field_0x16 = other.field_0x16;
-        field_0x18 = other.field_0x18;
+        mClusterVertexNum = other.mClusterVertexNum;
+        mPosDstIdx = other.mPosDstIdx;
         mClusterVertex = other.mClusterVertex;
         mDeformer = other.mDeformer;
     }
@@ -35,8 +35,8 @@ public:
     /* 0x10 */ u16 mKeyNum;
     /* 0x12 */ u16 mPosNum;
     /* 0x14 */ u16 mNrmNum;
-    /* 0x16 */ u16 field_0x16;
-    /* 0x18 */ u16* field_0x18;
+    /* 0x16 */ u16 mClusterVertexNum;
+    /* 0x18 */ u16* mPosDstIdx;
     /* 0x1C */ J3DClusterVertex* mClusterVertex;
     /* 0x20 */ J3DDeformer* mDeformer;
 };  // Size: 0x24
@@ -46,32 +46,29 @@ public:
     void operator=(const J3DClusterKey& other) {
         mPosNum = other.mPosNum;
         mNrmNum = other.mNrmNum;
-        field_0x4 = other.field_0x4;
-        field_0x8 = other.field_0x8;
+        mPosFlag = other.mPosFlag;
+        mNrmFlag = other.mNrmFlag;
     }
 
 public:
     /* 0x00 */ u16 mPosNum;
     /* 0x02 */ u16 mNrmNum;
-    /* 0x04 */ u16* field_0x4;
-    /* 0x08 */ u16* field_0x8;
+    /* 0x04 */ u16* mPosFlag;
+    /* 0x08 */ u16* mNrmFlag;
 };  // Size: 0x0C
 
 class J3DClusterVertex {
 public:
     void operator=(const J3DClusterVertex& other) {
         mNum = other.mNum;
-        field_0x4 = other.field_0x4;
-        field_0x8 = other.field_0x8;
+        mSrcIdx = other.mSrcIdx;
+        mDstIdx = other.mDstIdx;
     }
 
-private:
-    friend class J3DClusterLoader;
-    friend class J3DClusterLoader_v15;
-
+public:
     /* 0x00 */ u16 mNum;
-    /* 0x04 */ u16* field_0x4;
-    /* 0x08 */ u16* field_0x8;
+    /* 0x04 */ u16* mSrcIdx;
+    /* 0x08 */ u16* mDstIdx;
 };  // Size: 0x0C
 
 #endif /* J3DCLUSTER_H */

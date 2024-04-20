@@ -86,7 +86,7 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
         Vec* vtxPosDeform = (Vec*)mDeformData->getVtxPos();
 
         for (s32 i = 0; i < posNum; i++) {
-            Vec* vtx = &vtxPosArr[cluster->field_0x18[i]];
+            Vec* vtx = &vtxPosArr[cluster->mPosDstIdx[i]];
             vtx->x = 0.0f;
             vtx->y = 0.0f;
             vtx->z = 0.0f;
@@ -95,9 +95,9 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
         f32 sign[2] = { 1.0f, -1.0f };
         for (u16 i = 0; i < posNum; i++) {
             for (u16 j = 0; j < keyNum; j++) {
-                u16 flag = key[j].field_0x4[i];
-                Vec* dst = &vtxPosDeform[flag & 0x1FFF];
-                Vec* src = &vtxPosArr[cluster->field_0x18[i]];
+                u16 flag = key[j].mPosFlag[i];
+                Vec* src = &vtxPosDeform[flag & 0x1FFF];
+                Vec* dst = &vtxPosArr[cluster->mPosDstIdx[i]];
                 dst->x += src->x * sign[flag >> 15] * weightList[j];
                 dst->y += src->y * sign[flag >> 14] * weightList[j];
                 dst->z += src->z * sign[flag >> 13] * weightList[j];
@@ -115,7 +115,7 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
                 dst[2] = 0.0f;
 
                 for (u16 j = 0; j < cluster->mKeyNum; j++) {
-                    u16 flag = key[j].field_0x8[i];
+                    u16 flag = key[j].mNrmFlag[i];
                     f32* src = &vtxNrmDeform[(flag & 0x1FFF) * 3];
 
                     f32 srcX = src[0];
@@ -137,13 +137,60 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
                 normalize(dst);
             }
 
-            for (u16 i = 0; i < cluster->field_0x16; i++) {
+            for (u16 i = 0; i < cluster->mClusterVertexNum; i++) {
+                J3DClusterVertex* vertex = &cluster->mClusterVertex[i];
+                f32 pos[3];
+                pos[0] = 0.0f;
+                pos[1] = 0.0f;
+                pos[2] = 0.0f;
 
+                f32 weight = 1.0f / (float)vertex->mNum;
+                for (u16 j = 0; j < vertex->mNum; j++) {
+                    f32* src = &field_0x0c[vertex->mSrcIdx[j] * 3];
+                    pos[0] += src[0] * weight;
+                    pos[1] += src[1] * weight;
+                    pos[2] += src[2] * weight;
+                }
+                normalize(pos);
+
+                for (u16 j = 0; j < vertex->mNum; j++) {
+                    u16 dstIdx = vertex->mDstIdx[j];
+                    if (dstIdx == 0xFFFF)
+                        continue;
+
+                    f32* src = &field_0x0c[vertex->mSrcIdx[j] * 3];
+                    f32 dot = pos[0]*src[0] + pos[1]*src[1] + pos[2]*src[2];
+
+                    f32 angle;
+                    if (dot >= 1.0f) {
+                        angle = 0.0f;
+                    } else if (dot > -1.0f) {
+                        angle = acos(dot);
+                        angle = (angle * 180.0f) / 3.1415f;
+                    } else {
+                        angle = 180.0f;
+                    }
+
+                    if (angle <= cluster->mMinAngle) {
+                        vtxNrmArr[dstIdx * 3 + 0] = pos[0];
+                        vtxNrmArr[dstIdx * 3 + 1] = pos[1];
+                        vtxNrmArr[dstIdx * 3 + 2] = pos[2];
+                    } else if (angle > cluster->mMaxAngle) {
+                        vtxNrmArr[dstIdx * 3 + 0] = src[0];
+                        vtxNrmArr[dstIdx * 3 + 1] = src[1];
+                        vtxNrmArr[dstIdx * 3 + 2] = src[2];
+                    } else {
+                        f32 weight = (angle - cluster->mMinAngle) / (cluster->mMaxAngle - cluster->mMinAngle);
+                        f32 inv = 1.0f - weight;
+
+                        vtxNrmArr[dstIdx * 3 + 0] = pos[0] * inv + src[0] * weight;
+                        vtxNrmArr[dstIdx * 3 + 1] = pos[1] * inv + src[1] * weight;
+                        vtxNrmArr[dstIdx * 3 + 2] = pos[2] * inv + src[2] * weight;
+                    }
+                }
             }
         }
     }
-
-    // TODO: the rest of the owl
 }
 
 /* 802F3FA8-802F4064       .text normalize__11J3DDeformerFPf */
