@@ -9,6 +9,7 @@
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "dolphin/os/OS.h"
+#include "string.h"
 
 /* 802F37C4-802F37E4       .text clear__13J3DDeformDataFv */
 void J3DDeformData::clear() {
@@ -334,26 +335,92 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
 }
 
 /* 802F44E8-802F4734       .text changeFastSkinDL__13J3DSkinDeformFP12J3DModelData */
-void J3DSkinDeform::changeFastSkinDL(J3DModelData*) {
+void J3DSkinDeform::changeFastSkinDL(J3DModelData* modelData) {
     /* Nonmatching */
+    for (u16 i = 0; i < modelData->getShapeNum(); i++) {
+        int size[4] = { 0, 1, 1, 2 };
+        int pnmtxIdxOffs = -1;
+        int vtxSize = 0;
+
+        for (GXVtxDescList* desc = modelData->getShapeNodePointer(i)->getVtxDesc(); desc->attr != GX_VA_NULL; desc++) {
+            if (desc->attr == GX_VA_PNMTXIDX) {
+                pnmtxIdxOffs = vtxSize;
+            }
+
+            vtxSize += size[desc->type];
+        }
+
+        if (pnmtxIdxOffs != -1) {
+            for (u16 j = 0; j < modelData->getShapeNodePointer(i)->getMtxGroupNum(); j++) {
+                J3DShapeDraw* shapeDraw = modelData->getShapeNodePointer(i)->getShapeDraw(j);
+                u8* displayListStart = shapeDraw->getDisplayList();
+                u8* dl = displayListStart;
+                u8* dst = displayListStart;
+
+                for (; (dl - displayListStart) < shapeDraw->getDisplayListSize(); ) {
+                    u8 cmd = dl[0];
+                    *dst = cmd;
+                    dst += 1;
+
+                    if (cmd != GX_TRIANGLEFAN && cmd != GX_TRIANGLESTRIP)
+                        break;
+
+                    u32 vtxCount = *(u16*)&dl[1];
+                    *(u16*)dst = vtxCount;
+                    dst += 2;
+
+                    u32 vtxSizeDst = vtxSize - 1; // remove GX_VA_PNMTXIDX
+                    for (s32 k = 0; k < vtxCount; k++) {
+                        memcpy(dst, &dl[vtxSize * k + 3 + 1], vtxSizeDst);
+                        dst += vtxSizeDst;
+                    }
+
+                    dl += vtxSize * vtxCount + 3;
+                }
+
+                u32 newSize = ((u32)dst + 0x1F & ~0x1F) - (u32)displayListStart;
+
+                for (; (dst - displayListStart) < modelData->getShapeNodePointer(i)->getShapeDraw(j)->getDisplayListSize();) {
+                    *dst++ = 0;
+                }
+
+                shapeDraw->setDisplayListSize(newSize);
+                DCStoreRange(displayListStart, shapeDraw->getDisplayListSize());
+            }
+        }
+    }
+
+    for (u16 i = 0; i < modelData->getShapeNum(); i++) {
+        J3DShape* shape = modelData->getShapeNodePointer(i);
+        GXVtxDescList* desc = shape->getVtxDesc();
+        GXVtxDescList* descDst = desc;
+        for (; desc->attr != GX_VA_NULL; desc++) {
+            if (desc->attr != GX_VA_PNMTXIDX) {
+                *descDst = *desc;
+                descDst++;
+            }
+        }
+        descDst->attr = GX_VA_NULL;
+        descDst->type = GX_NONE;
+        shape->makeVcdVatCmd();
+    }
 }
 
 /* 802F4734-802F4850       .text calcNrmMtx__13J3DSkinDeformFP8J3DModel */
 void J3DSkinDeform::calcNrmMtx(J3DModel* model) {
-    /* Nonmatching */
     J3DModelData* modelData = model->getModelData();
     for (u16 i = 0; i < modelData->getDrawMtxNum(); i++) {
         if (modelData->getDrawMtxFlag(i) == 0) {
             if (model->getScaleFlag(modelData->getDrawMtxIndex(i)) == 1) {
-                J3DPSMtx33CopyFrom34(model->getAnmMtx(i), mNrmMtx[i]);
+                J3DPSMtx33CopyFrom34(model->getAnmMtx(modelData->getDrawMtxIndex(i)), mNrmMtx[i]);
             } else {
-                J3DPSCalcInverseTranspose(model->getAnmMtx(i), mNrmMtx[i]);
+                J3DPSCalcInverseTranspose(model->getAnmMtx(modelData->getDrawMtxIndex(i)), mNrmMtx[i]);
             }
         } else {
             if (model->getEnvScaleFlag(modelData->getDrawMtxIndex(i)) == 1) {
-                J3DPSMtx33CopyFrom34(model->getWeightAnmMtx(i), mNrmMtx[i]);
+                J3DPSMtx33CopyFrom34(model->getWeightAnmMtx(modelData->getDrawMtxIndex(i)), mNrmMtx[i]);
             } else {
-                J3DPSCalcInverseTranspose(model->getWeightAnmMtx(i), mNrmMtx[i]);
+                J3DPSCalcInverseTranspose(model->getWeightAnmMtx(modelData->getDrawMtxIndex(i)), mNrmMtx[i]);
             }
         }
     }
