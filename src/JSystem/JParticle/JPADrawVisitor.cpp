@@ -308,6 +308,34 @@ void JPADrawExecBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl
 /* 80260D24-80260F2C       .text exec__23JPADrawExecRotBillBoardFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecRotBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     /* Nonmatching */
+    if (ptcl->isInvisibleParticle())
+        return;
+
+    f32 sin = JMASSin(ptcl->mRotateAngle);
+    f32 cos = JMASCos(ptcl->mRotateAngle);
+
+    f32 scaleX = ptcl->mScaleX;
+    f32 scaleY = ptcl->mScaleY;
+
+    f32 x0 = -ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX);
+    f32 y0 = +ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY);
+    f32 x1 = +ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX);
+    f32 y1 = -ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY);
+
+    JGeometry::TVec3<f32> pt;
+    pt.set(ptcl->mPosition);
+    MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, pt, &pt);
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32((x0 * cos - y0 * sin) + pt.x, x0 + y0 + pt.y, pt.z);
+    GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[0].x, JPADrawContext::pcb->mTexCoordPt[0].y);
+    GXPosition3f32((x1 * cos - y0 * sin) + pt.x, y0 + x1 + pt.y, pt.z);
+    GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[1].x, JPADrawContext::pcb->mTexCoordPt[1].y);
+    GXPosition3f32((x1 * cos - y1 * sin) + pt.x, y1 + x1 + pt.y, pt.z);
+    GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[2].x, JPADrawContext::pcb->mTexCoordPt[2].y);
+    GXPosition3f32((x0 * cos - y1 * sin) + pt.x, y1 + x0 + pt.y, pt.z);
+    GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[3].x, JPADrawContext::pcb->mTexCoordPt[3].y);
+    GXEnd();
 }
 
 /* 80260F2C-8026110C       .text exec__21JPADrawExecYBillBoardFPC14JPADrawContextP15JPABaseParticle */

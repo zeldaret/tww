@@ -50,10 +50,7 @@ public:
         field_0x8 = other.field_0x8;
     }
 
-private:
-    friend class J3DClusterLoader;
-    friend class J3DClusterLoader_v15;
-
+public:
     /* 0x00 */ u16 mPosNum;
     /* 0x02 */ u16 mNrmNum;
     /* 0x04 */ void* field_0x4;

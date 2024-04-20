@@ -7,7 +7,8 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
-#include "dolphin/os/OSCache.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "dolphin/os/OS.h"
 
 /* 802F37C4-802F37E4       .text clear__13J3DDeformDataFv */
 void J3DDeformData::clear() {
@@ -54,7 +55,6 @@ void J3DDeformer::clear() {
 
 /* 802F3920-802F3A08       .text deform__11J3DDeformerFP15J3DVertexBufferUs */
 void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx) {
-    /* Nonmatching */
     u16 keyIdx = 0;
     if (mAnmCluster) {
         for (u16 i = 0; i < idx; i++)
@@ -70,6 +70,31 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx) {
 /* 802F3A08-802F3FA8       .text deform__11J3DDeformerFP15J3DVertexBufferUsPf */
 void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
     /* Nonmatching */
+    if (!(mFlags & 2) || vtx->getVertexData()->getVtxPosType() != GX_F32)
+        return;
+
+    J3DCluster* cluster = mDeformData->getClusterPointer(idx);
+    u16 posNum = cluster->mPosNum;
+    u16 keyNum = cluster->mKeyNum;
+
+    u16 keyStart = 0;
+    for (u16 i = 0; i < idx; i++)
+        keyStart += mDeformData->getClusterPointer(idx)->mKeyNum + 1;
+
+    J3DClusterKey* key = mDeformData->getClusterKeyPointer(keyStart);
+    normalizeWeight(keyNum, weightList);
+
+    Vec* vtxPosArr = (Vec*)vtx->getVtxPosArrayPointer(0);
+    f32* vtxPosDeform = mDeformData->getVtxPos();
+    u16* cluster_0x18 = cluster->field_0x18;
+
+    for (u16 i = 0; i < posNum; i++) {
+        vtxPosArr[i].x = 0.0f;
+        vtxPosArr[i].y = 0.0f;
+        vtxPosArr[i].z = 0.0f;
+    }
+
+    // TODO: the rest of the owl
 }
 
 /* 802F3FA8-802F4064       .text normalize__11J3DDeformerFPf */
@@ -100,8 +125,117 @@ J3DSkinDeform::J3DSkinDeform() {
 }
 
 /* 802F40F0-802F44E8       .text initMtxIndexArray__13J3DSkinDeformFP12J3DModelData */
-int J3DSkinDeform::initMtxIndexArray(J3DModelData*) {
+int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
     /* Nonmatching */
+
+    if (mPosData != NULL && mNrmData != NULL)
+        return J3DErrType_Success;
+
+    mPosData = new u16[modelData->getVtxNum()];
+    if (mPosData == NULL)
+        return J3DErrType_OutOfMemory;
+
+    for (u32 i = 0; i < modelData->getVtxNum(); i++)
+        mPosData[i] = 0xFFFF;
+
+    if (modelData->getNrmNum() != 0) {
+        mNrmData = new u16[modelData->getNrmNum()];
+        if (mNrmData == NULL)
+            return J3DErrType_OutOfMemory;
+
+        for (u32 i = 0; i < modelData->getNrmNum(); i++)
+            mNrmData[i] = 0;
+    } else {
+        mNrmData = NULL;
+    }
+
+    mNrmMtx = new(0x20) Mtx33[modelData->getDrawMtxNum()];
+    if (mNrmMtx == NULL)
+        return J3DErrType_OutOfMemory;
+
+    for (u16 i = 0; i < modelData->getShapeNum(); i++) {
+        int size[4] = { 0, 1, 1, 2 };
+
+        int posOffs = -1;
+        int nrmOffs = -1;
+        int pnmtxIdxOffs = -1;
+        int curOffs = 0;
+        for (GXVtxDescList* desc = modelData->getShapeNodePointer(i)->getVtxDesc(); desc->attr != GX_VA_NULL; desc++) {
+            switch (desc->attr) {
+            case GX_VA_PNMTXIDX:
+                pnmtxIdxOffs = curOffs;
+                break;
+            case GX_VA_POS:
+                posOffs = curOffs;
+                if (desc->type != GX_INDEX16) {
+                    OSReport(" Invlid Data : CPU Pipeline process GX_INDEX16 Data Only\n");
+                }
+                break;
+            case GX_VA_NRM:
+                nrmOffs = curOffs;
+                if (desc->type != GX_INDEX16) {
+                    OSReport(" Invlid Data : CPU Pipeline process GX_INDEX16 Data Only\n");
+                }
+                break;
+            case GX_VA_TEX0:
+                if (desc->type != GX_INDEX16) {
+                    OSReport(" Invlid Data : CPU Pipeline process GX_INDEX16 Data Only\n");
+                }
+                break;
+            }
+
+            curOffs += size[desc->type];
+        }
+
+        for (u32 j = 0; j < modelData->getShapeNodePointer(i)->getMtxGroupNum(); j++) {
+            J3DShapeMtx* shapeMtx = modelData->getShapeNodePointer(i)->getShapeMtx(j);
+            J3DShapeDraw* shapeDraw = modelData->getShapeNodePointer(i)->getShapeDraw(j);
+
+            u8* displayListStart = shapeDraw->getDisplayList();
+            for (u8* dl = displayListStart; (dl - displayListStart) < shapeDraw->getDisplayListSize(); ) {
+                u8 cmd = dl[0];
+                if (cmd != GX_TRIANGLEFAN && cmd != GX_TRIANGLESTRIP)
+                    break;
+
+                u16 vtxCount = *(u16*)(&dl[1]);
+
+                u32 useMtxIdxBuf[10];
+                for (int k = 0; k < vtxCount; vtxCount++) {
+                    int vtxOffs = k * curOffs + 3;
+                    int pnmtxIdx = dl[vtxOffs + pnmtxIdx] / 3;
+                    int posIdx = dl[vtxOffs + posIdx];
+                    int nrmIdx = dl[vtxOffs + nrmIdx];
+
+                    u32 useMtxIdx = shapeMtx->getUseMtxIndex(pnmtxIdx);
+                    if (useMtxIdx == 0xFFFF) {
+                        useMtxIdx = useMtxIdxBuf[pnmtxIdx];
+                    } else if (pnmtxIdx != -1) {
+                        useMtxIdxBuf[pnmtxIdx] = useMtxIdx;
+                    }
+
+                    mPosData[posIdx] = useMtxIdx;
+                    if (nrmOffs != -1)
+                        mNrmData[nrmIdx] = useMtxIdx;
+                }
+
+                dl += vtxCount * curOffs + 3;
+            }
+
+            if (nrmOffs == -1) {
+                modelData->getShapeNodePointer(i)->onFlag(J3DShpFlag_EnableLod);
+                modelData->getShapeNodePointer(i)->offFlag(J3DShpFlag_SkinNrmCpu);
+            }
+        }
+    }
+
+    for (u32 i = 0; i < modelData->getVtxNum(); i++) {
+        if (mPosData[i] == 0xFFFF) {
+            field_0x14 = 0;
+            mPosData[i] = 0;
+        }
+    }
+
+    return J3DErrType_Success;
 }
 
 /* 802F44E8-802F4734       .text changeFastSkinDL__13J3DSkinDeformFP12J3DModelData */
@@ -110,8 +244,24 @@ void J3DSkinDeform::changeFastSkinDL(J3DModelData*) {
 }
 
 /* 802F4734-802F4850       .text calcNrmMtx__13J3DSkinDeformFP8J3DModel */
-void J3DSkinDeform::calcNrmMtx(J3DModel*) {
+void J3DSkinDeform::calcNrmMtx(J3DModel* model) {
     /* Nonmatching */
+    J3DModelData* modelData = model->getModelData();
+    for (u16 i = 0; i < modelData->getDrawMtxNum(); i++) {
+        if (modelData->getDrawMtxFlag(i) == 0) {
+            if (model->getScaleFlag(modelData->getDrawMtxIndex(i)) == 1) {
+                J3DPSMtx33CopyFrom34(model->getAnmMtx(i), mNrmMtx[i]);
+            } else {
+                J3DPSCalcInverseTranspose(model->getAnmMtx(i), mNrmMtx[i]);
+            }
+        } else {
+            if (model->getEnvScaleFlag(modelData->getDrawMtxIndex(i)) == 1) {
+                J3DPSMtx33CopyFrom34(model->getWeightAnmMtx(i), mNrmMtx[i]);
+            } else {
+                J3DPSCalcInverseTranspose(model->getWeightAnmMtx(i), mNrmMtx[i]);
+            }
+        }
+    }
 }
 
 /* 802F4850-802F4974       .text deformVtxPos_F32__13J3DSkinDeformCFP8J3DModel */
@@ -135,6 +285,19 @@ void J3DSkinDeform::deformVtxNrm_S16(J3DModel*) const {
 }
 
 /* 802F4CD8-802F4D78       .text deform__13J3DSkinDeformFP8J3DModel */
-void J3DSkinDeform::deform(J3DModel*) {
-    /* Nonmatching */
+void J3DSkinDeform::deform(J3DModel* model) {
+    if (model->checkFlag(J3DMdlFlag_SkinPosCpu)) {
+        if (model->getModelData()->getVertexData().getVtxPosType() == GX_F32)
+            deformVtxPos_F32(model);
+        else
+            deformVtxPos_S16(model);
+    }
+
+    if (model->checkFlag(J3DMdlFlag_SkinNrmCpu)) {
+        calcNrmMtx(model);
+        if (model->getModelData()->getVertexData().getVtxNrmType() == GX_F32)
+            deformVtxNrm_F32(model);
+        else
+            deformVtxNrm_S16(model);
+    }
 }
