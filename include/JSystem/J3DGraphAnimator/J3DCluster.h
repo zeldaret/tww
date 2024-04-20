@@ -16,7 +16,7 @@ public:
         mFlags = other.mFlags;
         mKeyNum = other.mKeyNum;
         mPosNum = other.mPosNum;
-        field_0x14 = other.field_0x14;
+        mNrmNum = other.mNrmNum;
         field_0x16 = other.field_0x16;
         field_0x18 = other.field_0x18;
         mClusterVertex = other.mClusterVertex;
@@ -34,7 +34,7 @@ public:
     /* 0x0D */ u8 field_0xd[0x10 - 0x0D];
     /* 0x10 */ u16 mKeyNum;
     /* 0x12 */ u16 mPosNum;
-    /* 0x14 */ u16 field_0x14;
+    /* 0x14 */ u16 mNrmNum;
     /* 0x16 */ u16 field_0x16;
     /* 0x18 */ u16* field_0x18;
     /* 0x1C */ J3DClusterVertex* mClusterVertex;
@@ -53,8 +53,8 @@ public:
 public:
     /* 0x00 */ u16 mPosNum;
     /* 0x02 */ u16 mNrmNum;
-    /* 0x04 */ void* field_0x4;
-    /* 0x08 */ void* field_0x8;
+    /* 0x04 */ u16* field_0x4;
+    /* 0x08 */ u16* field_0x8;
 };  // Size: 0x0C
 
 class J3DClusterVertex {

@@ -102,7 +102,7 @@ private:
     /* 0x00 */ J3DDeformData* mDeformData;
     /* 0x04 */ J3DAnmCluster* mAnmCluster;
     /* 0x08 */ f32* mWeightList;
-    /* 0x0C */ f32* field_0xc;
+    /* 0x0C */ Vec* field_0x0c;
     /* 0x10 */ u32 mFlags;
 };  // Size: 0x14
 

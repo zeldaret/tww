@@ -49,7 +49,7 @@ void J3DDeformer::clear() {
     mDeformData = NULL;
     mAnmCluster = NULL;
     mWeightList = NULL;
-    field_0xc = NULL;
+    field_0x0c = NULL;
     mFlags = 3;
 }
 
@@ -70,28 +70,77 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx) {
 /* 802F3A08-802F3FA8       .text deform__11J3DDeformerFP15J3DVertexBufferUsPf */
 void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
     /* Nonmatching */
-    if (!(mFlags & 2) || vtx->getVertexData()->getVtxPosType() != GX_F32)
-        return;
+    if (!!(mFlags & 2) && vtx->getVertexData()->getVtxPosType() == GX_F32) {
+        J3DCluster* cluster = mDeformData->getClusterPointer(idx);
+        u16 posNum = cluster->mPosNum;
+        u16 keyNum = cluster->mKeyNum;
 
-    J3DCluster* cluster = mDeformData->getClusterPointer(idx);
-    u16 posNum = cluster->mPosNum;
-    u16 keyNum = cluster->mKeyNum;
+        u16 keyStart = 0;
+        for (u16 i = 0; i < idx; i++)
+            keyStart += mDeformData->getClusterPointer(idx)->mKeyNum + 1;
 
-    u16 keyStart = 0;
-    for (u16 i = 0; i < idx; i++)
-        keyStart += mDeformData->getClusterPointer(idx)->mKeyNum + 1;
+        J3DClusterKey* key = mDeformData->getClusterKeyPointer(keyStart);
+        normalizeWeight(keyNum, weightList);
 
-    J3DClusterKey* key = mDeformData->getClusterKeyPointer(keyStart);
-    normalizeWeight(keyNum, weightList);
+        Vec* vtxPosArr = (Vec*)vtx->getVtxPosArrayPointer(0);
+        Vec* vtxPosDeform = (Vec*)mDeformData->getVtxPos();
 
-    Vec* vtxPosArr = (Vec*)vtx->getVtxPosArrayPointer(0);
-    f32* vtxPosDeform = mDeformData->getVtxPos();
-    u16* cluster_0x18 = cluster->field_0x18;
+        for (s32 i = 0; i < posNum; i++) {
+            Vec* vtx = &vtxPosArr[cluster->field_0x18[i]];
+            vtx->x = 0.0f;
+            vtx->y = 0.0f;
+            vtx->z = 0.0f;
+        }
 
-    for (u16 i = 0; i < posNum; i++) {
-        vtxPosArr[i].x = 0.0f;
-        vtxPosArr[i].y = 0.0f;
-        vtxPosArr[i].z = 0.0f;
+        f32 sign[2] = { 1.0f, -1.0f };
+        for (u16 i = 0; i < posNum; i++) {
+            for (u16 j = 0; j < keyNum; j++) {
+                u16 flag = key[j].field_0x4[i];
+                Vec* dst = &vtxPosDeform[flag & 0x1FFF];
+                Vec* src = &vtxPosArr[cluster->field_0x18[i]];
+                dst->x += src->x * sign[flag >> 15] * weightList[j];
+                dst->y += src->y * sign[flag >> 14] * weightList[j];
+                dst->z += src->z * sign[flag >> 13] * weightList[j];
+            }
+        }
+
+        if (!!(mFlags & 1) && cluster->mFlags != 0 && vtx->getVertexData()->getVtxNrmType() == GX_F32) {
+            f32* vtxNrmArr = (f32*)vtx->getTransformedVtxNrm(0);
+            f32* vtxNrmDeform = mDeformData->getVtxNrm();
+
+            for (u16 i = 0; i < cluster->mNrmNum; i++) {
+                Vec* dst = &field_0x0c[i];
+                dst->x = 0.0f;
+                dst->y = 0.0f;
+                dst->z = 0.0f;
+
+                for (u16 j = 0; j < cluster->mKeyNum; j++) {
+                    u16 flag = key[j].field_0x8[i];
+                    f32* src = &vtxNrmDeform[(flag & 0x1FFF) * 3];
+
+                    f32 srcX = src[0];
+                    f32 srcY = src[1];
+                    f32 srcZ = src[2];
+
+                    if (flag & 0x8000)
+                        srcX = -srcX;
+                    if (flag & 0x4000)
+                        srcY = -srcY;
+                    if (flag & 0x2000)
+                        srcZ = -srcZ;
+
+                    dst->x += srcX * weightList[j];
+                    dst->y += srcY * weightList[j];
+                    dst->z += srcZ * weightList[j];
+                }
+
+                normalize((f32*)dst);
+            }
+
+            for (u16 i = 0; i < cluster->field_0x16; i++) {
+
+            }
+        }
     }
 
     // TODO: the rest of the owl
