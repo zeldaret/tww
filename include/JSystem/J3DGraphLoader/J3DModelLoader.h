@@ -76,10 +76,33 @@ struct J3DMaterialBlock : public JUTDataBlockHeader {
 
 struct J3DMaterialBlock_v21 : public JUTDataBlockHeader {
     /* 0x08 */ u16 mMaterialNum;
-    /* 0x0C */ void* field_0x0c;
-    /* 0x10 */ void* field_0x10;
+    /* 0x0C */ void* mpMaterialInitData;
+    /* 0x10 */ void* mpMaterialID;
     /* 0x14 */ void* mpNameTable;
-    /* more */
+    /* 0x18 */ void* mpCullMode;
+    /* 0x1C */ void* mpMatColor;
+    /* 0x20 */ void* mpColorChanNum;
+    /* 0x24 */ void* mpColorChanInfo;
+    /* 0x28 */ void* mpTexGenNum;
+    /* 0x2C */ void* mpTexCoordInfo;
+    /* 0x30 */ void* mpTexCoord2Info;
+    /* 0x34 */ void* mpTexMtxInfo;
+    /* 0x38 */ void* field_0x44;
+    /* 0x3C */ void* mpTexNo;
+    /* 0x40 */ void* mpTevOrderInfo;
+    /* 0x44 */ void* mpTevColor;
+    /* 0x48 */ void* mpTevKColor;
+    /* 0x4C */ void* mpTevStageNum;
+    /* 0x50 */ void* mpTevStageInfo;
+    /* 0x54 */ void* mpTevSwapModeInfo;
+    /* 0x58 */ void* mpTevSwapModeTableInfo;
+    /* 0x68 */ void* mpFogInfo;
+    /* 0x6C */ void* mpAlphaCompInfo;
+    /* 0x70 */ void* mpBlendInfo;
+    /* 0x74 */ void* mpZModeInfo;
+    /* 0x78 */ void* mpZCompLoc;
+    /* 0x7C */ void* mpDither;
+    /* 0x80 */ void* mpNBTScaleInfo;
 };
 
 struct J3DMaterialDLBlock : public JUTDataBlockHeader {

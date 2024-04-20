@@ -660,7 +660,6 @@ J3DBlend J3DMaterialFactory::newBlend(int idx) const {
 
 /* 802F9444-802F94A4       .text newZMode__18J3DMaterialFactoryCFi */
 J3DZMode J3DMaterialFactory::newZMode(int idx) const {
-    /* Nonmatching - J3DZModeInfo array seems to be 0x04-sized */
     u8 no = mpMaterialInitData[mpMaterialID[idx]].mZModeIdx;
     if (no != 0xFF)
         return J3DZMode(mpZModeInfo[no]);
