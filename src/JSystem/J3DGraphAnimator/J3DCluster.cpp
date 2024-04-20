@@ -222,7 +222,7 @@ J3DSkinDeform::J3DSkinDeform() {
 
 /* 802F40F0-802F44E8       .text initMtxIndexArray__13J3DSkinDeformFP12J3DModelData */
 int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
 
     if (mPosData != NULL && mNrmData != NULL)
         return J3DErrType_Success;
@@ -255,20 +255,20 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
         int posOffs = -1;
         int nrmOffs = -1;
         int pnmtxIdxOffs = -1;
-        int curOffs = 0;
+        int vtxSize = 0;
         for (GXVtxDescList* desc = modelData->getShapeNodePointer(i)->getVtxDesc(); desc->attr != GX_VA_NULL; desc++) {
             switch (desc->attr) {
             case GX_VA_PNMTXIDX:
-                pnmtxIdxOffs = curOffs;
+                pnmtxIdxOffs = vtxSize;
                 break;
             case GX_VA_POS:
-                posOffs = curOffs;
+                posOffs = vtxSize;
                 if (desc->type != GX_INDEX16) {
                     OSReport(" Invlid Data : CPU Pipeline process GX_INDEX16 Data Only\n");
                 }
                 break;
             case GX_VA_NRM:
-                nrmOffs = curOffs;
+                nrmOffs = vtxSize;
                 if (desc->type != GX_INDEX16) {
                     OSReport(" Invlid Data : CPU Pipeline process GX_INDEX16 Data Only\n");
                 }
@@ -280,29 +280,28 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
                 break;
             }
 
-            curOffs += size[desc->type];
+            vtxSize += size[desc->type];
         }
 
-        for (u32 j = 0; j < modelData->getShapeNodePointer(i)->getMtxGroupNum(); j++) {
+        for (u16 j = 0; j < modelData->getShapeNodePointer(i)->getMtxGroupNum(); j++) {
             J3DShapeMtx* shapeMtx = modelData->getShapeNodePointer(i)->getShapeMtx(j);
-            J3DShapeDraw* shapeDraw = modelData->getShapeNodePointer(i)->getShapeDraw(j);
 
-            u8* displayListStart = shapeDraw->getDisplayList();
-            for (u8* dl = displayListStart; (dl - displayListStart) < shapeDraw->getDisplayListSize(); ) {
+            u8* displayListStart = modelData->getShapeNodePointer(i)->getShapeDraw(j)->getDisplayList();
+            for (u8* dl = displayListStart; (dl - displayListStart) < modelData->getShapeNodePointer(i)->getShapeDraw(j)->getDisplayListSize(); ) {
                 u8 cmd = dl[0];
                 if (cmd != GX_TRIANGLEFAN && cmd != GX_TRIANGLESTRIP)
                     break;
 
-                u16 vtxCount = *(u16*)(&dl[1]);
+                u16 vtxCount = *(u16*)&dl[1];
 
-                u32 useMtxIdxBuf[10];
-                for (int k = 0; k < vtxCount; vtxCount++) {
-                    int vtxOffs = k * curOffs + 3;
-                    int pnmtxIdx = dl[vtxOffs + pnmtxIdx] / 3;
-                    int posIdx = dl[vtxOffs + posIdx];
-                    int nrmIdx = dl[vtxOffs + nrmIdx];
+                u16 useMtxIdxBuf[10];
+                for (s32 k = 0; k < vtxCount; k++) {
+                    u8* vtx = &dl[vtxSize * k + 3];
+                    u8 pnmtxIdx = (u32)vtx[pnmtxIdxOffs] / 3;
+                    u16 posIdx = *(u16*)&vtx[posOffs];
+                    u16 nrmIdx = *(u16*)&vtx[nrmOffs];
 
-                    u32 useMtxIdx = shapeMtx->getUseMtxIndex(pnmtxIdx);
+                    u16 useMtxIdx = shapeMtx->getUseMtxIndex(pnmtxIdx);
                     if (useMtxIdx == 0xFFFF) {
                         useMtxIdx = useMtxIdxBuf[pnmtxIdx];
                     } else if (pnmtxIdx != -1) {
@@ -314,7 +313,7 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
                         mNrmData[nrmIdx] = useMtxIdx;
                 }
 
-                dl += vtxCount * curOffs + 3;
+                dl += vtxSize * vtxCount + 3;
             }
 
             if (nrmOffs == -1) {

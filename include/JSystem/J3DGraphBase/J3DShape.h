@@ -118,8 +118,8 @@ public:
     u32 getPipeline() const { return (mFlags >> 2) & 0x07; }
     u32 getTexMtxLoadType() const { return mFlags & 0xF000; }
     u32 getMtxGroupNum() const { return mMtxGroupNum; }
-    J3DShapeDraw* getShapeDraw(u32 idx) const { return mShapeDraw[idx]; }
-    J3DShapeMtx* getShapeMtx(u32 idx) const { return mShapeMtx[idx]; }
+    J3DShapeDraw* getShapeDraw(u16 idx) const { return mShapeDraw[idx]; }
+    J3DShapeMtx* getShapeMtx(u16 idx) const { return mShapeMtx[idx]; }
     Vec* getMin() { return &mMin; }
     Vec* getMax() { return &mMax; }
 

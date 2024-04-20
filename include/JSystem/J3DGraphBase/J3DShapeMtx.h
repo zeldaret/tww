@@ -41,7 +41,7 @@ public:
     virtual ~J3DShapeMtx() {}
     virtual u32 getType() const { return 'SMTX'; }
     virtual u32 getUseMtxNum() const { return 1; }
-    virtual u32 getUseMtxIndex(u16) const { return mUseMtxIndex; }
+    virtual u16 getUseMtxIndex(u16) const { return mUseMtxIndex; }
     virtual void load() const;
     virtual void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
 
@@ -84,7 +84,7 @@ public:
     virtual ~J3DShapeMtxMultiImm() {}
     virtual u32 getType() const { return 'SMMI'; }
     virtual u32 getUseMtxNum() const { return mUseMtxNum; }
-    virtual u32 getUseMtxIndex(u16 i) const { return mUseMtxIndexTable[i]; }
+    virtual u16 getUseMtxIndex(u16 i) const { return mUseMtxIndexTable[i]; }
     virtual void load() const;
     virtual void loadNrmMtx(int, u16) const;
 
@@ -157,7 +157,7 @@ public:
     virtual ~J3DShapeMtxMulti() {}
     virtual u32 getType() const { return 'SMML'; }
     virtual u32 getUseMtxNum() const { return mUseMtxNum; }
-    virtual u32 getUseMtxIndex(u16 i) const { return mUseMtxIndexTable[i]; }
+    virtual u16 getUseMtxIndex(u16 i) const { return mUseMtxIndexTable[i]; }
     virtual void load() const;
     virtual void calcNBTScale(Vec const&, Mtx33*, Mtx33*);
 
@@ -175,7 +175,7 @@ public:
     virtual ~J3DShapeMtxMultiConcatView() {}
     virtual u32 getType() const { return 'SMMI'; }
     virtual u32 getUseMtxNum() const { return mUseMtxNum; }
-    virtual u32 getUseMtxIndex(u16 i) const { return mUseMtxIndexTable[i]; }
+    virtual u16 getUseMtxIndex(u16 i) const { return mUseMtxIndexTable[i]; }
     virtual void load() const;
     virtual void loadNrmMtx(int, u16) const {}
     virtual void loadNrmMtx(int, u16, f32 (*)[4]) const;
