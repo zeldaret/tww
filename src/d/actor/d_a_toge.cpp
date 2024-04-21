@@ -170,13 +170,25 @@ s32 daToge_c::Create() {
 
     mpBgW1->Move();
     mpBgW2->Move();
-    
+
     return 1;
 }
 
 /* 000004F4-00000620       .text _create__8daToge_cFv */
 s32 daToge_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daToge_c);
+
+    s32 ret = dComIfG_resLoad(&m_Phs, m_arcname);
+
+    if (ret == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1400)) {
+            return cPhs_ERROR_e;
+        }
+
+        Create();
+    }
+
+    return ret;
 }
 
 /* 000007D8-00000868       .text set_mtx__8daToge_cFv */
