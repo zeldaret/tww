@@ -12,8 +12,8 @@ const s16 daToge_c::m_bdlidx = 0x07;
 const s16 daToge_c::m_dzbidx = 0x04;
 const u32 daToge_c::m_heapsize = 0x5000;
 const f32 daToge_c::m_y_min = -150;
-const Vec daToge_c::m_cull_min = { -200.0f, -200.0f, -50.0f, };
-const Vec daToge_c::m_cull_max = { 200.0f, 200.0f, 1600.0f, };
+// const Vec daToge_c::m_cull_min = { -200.0f, -200.0f, -50.0f, };
+// const Vec daToge_c::m_cull_max = { 200.0f, 200.0f, 1600.0f, };
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -24,7 +24,8 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_PLAYER,
         /* SrcObjTg  Type    */ AT_TYPE_ALL,
         /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2 | CO_SPRM_VS_UNK4 | CO_SPRM_VS_UNK8,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2 | CO_SPRM_VS_UNK4 |
+            CO_SPRM_VS_UNK8,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
@@ -40,11 +41,12 @@ static dCcD_SrcCyl l_cyl_src = {
 
     // cCcD_SrcCylAttr
     {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Center */ 0.0f,
+        0.0f,
+        0.0f,
         /* Radius */ 55.0f,
         /* Height */ 150.0f,
-    }
-};
+    }};
 
 /* 00000078-0000013C       .text _delete__8daToge_cFv */
 BOOL daToge_c::_delete() {
@@ -110,28 +112,6 @@ BOOL daToge_c::CreateHeap() {
         return 0;
     }
     return 1;
-#if 0
-    JUTAssertion *temp_r3;
-    void *temp_r3_2;
-
-    temp_r3 = dComIfG_getObjectResInfo(m_arcname)->getRes(4); //getRes__14dRes_control_cFPCclP11dRes_info_ci((dRes_control_c *) &m_arcname__8daToge_c, (s8 *)4, (s32) &g_dComIfG_gameInfo.unk1BFC0, (dRes_info_c *)0x40, M2C_ERROR(/* Read from unset register $r7 */));
-    if (temp_r3 == NULL) {
-        showAssert__12JUTAssertionFUlPCciPCc(getSDevice__12JUTAssertionFv(temp_r3), (u32) &@stringBase0, (s8 *)0x11A, (s32) (&@stringBase0 + 0xD), M2C_ERROR(/* Read from unset register $r7 */));
-        OSPanic(&@stringBase0, 0x11A, &@stringBase0 + 0x1C);
-    }
-    this->unk298 = mDoExt_J3DModel__create__FP12J3DModelDataUlUl((J3DModelData *) temp_r3, 0x80000U, 0x11000002U);
-    temp_r3_2 = this->unk298;
-    if (temp_r3_2 == NULL) {
-        return 0;
-    }
-    temp_r3_2->unk14 = this;
-    this->unk408 = dBgW_NewSet__FP6cBgD_tUlPA3_A4_f(getRes__14dRes_control_cFPCclP11dRes_info_ci((dRes_control_c *) &m_arcname__8daToge_c, (s8 *)7, (s32) &g_dComIfG_gameInfo.unk1BFC0, (dRes_info_c *)0x40, M2C_ERROR(/* Read from unset register $r7 */)), 1U, (f32 (*)[3][4]) this->unk40C[0]);
-    this->unk43C = dBgW_NewSet__FP6cBgD_tUlPA3_A4_f(getRes__14dRes_control_cFPCclP11dRes_info_ci((dRes_control_c *) &m_arcname__8daToge_c, (s8 *)8, (s32) &g_dComIfG_gameInfo.unk1BFC0, (dRes_info_c *)0x40, M2C_ERROR(/* Read from unset register $r7 */)), 1U, (f32 (*)[3][4]) this->unk440[0]);
-    if (((cBgW *) this->unk408 == NULL) || ((cBgW *) this->unk43C == NULL)) {
-        return 0;
-    }
-    return 1;
-#endif
 }
 
 /* 00000290-00000348       .text nodeCallBack__FP7J3DNodei */
@@ -150,22 +130,7 @@ static BOOL nodeCallBack(J3DNode* node, int timing) {
             mDoMtx_copy(mDoMtx_stack_c::get(), i_this->mtx2);
         }
     }
-    return TRUE;
-#if 0
-    if (timing == 0) {
-        temp_r30 = j3dSys.unk38;
-        temp_r31 = temp_r30->unk14;
-        if (temp_r31 != NULL) {
-            temp_r29 = arg0->unk18 * 0x30;
-            daFan_c* i_this = (daFan_c*)model->getUserArea();
-            PSMTXCopy(temp_r30->unk8C + temp_r29, (f32 (*)[3][4]) &now__14mDoMtx_stack_c);
-            transM__14mDoMtx_stack_cFfff(&@4055, @4055.unk0[0], temp_r31->unk470, @4055.unk0[0]);
-            PSMTXCopy((f32 (*)[3][4]) &now__14mDoMtx_stack_c, temp_r30->unk8C + temp_r29);
-            PSMTXCopy((f32 (*)[3][4]) &now__14mDoMtx_stack_c, (f32 (*)[3][4]) &mCurrentMtx__6J3DSys);
-            PSMTXCopy((f32 (*)[3][4]) &now__14mDoMtx_stack_c, temp_r31 + 0x440);
-        }
-    }
-#endif
+
     return TRUE;
 }
 
@@ -175,42 +140,39 @@ s32 daToge_c::Create() {
     f32 scaleZ = scale.z;
     f32 scaleX = scale.x;
     fopAcM_setCullSizeBox(this, 0xC2A00000, 0.0f, 0xC2A00000, 0x42A00000, 0x42F00000, 0x42A00000);
-    mStts.Init(0xFF, 0xFf, this);
+    mStts.Init(0xFF, 0xFF, this);
 
     mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
 
-#if 0
-    Init__9dCcD_SttsFiiP10fopAc_ac_c(&this->unk29C, 0xFF, 0xFF, (fopAc_ac_c *) this);
-    Set__8dCcD_CylFRC11dCcD_SrcCyl(&this->unk2D8, &l_cyl_src);
-    this->unk31C = &this->unk29C;
-    this->unk478 = (s32) (s8) this->unkB0;
-    if (isSwitch__10dSv_info_cFii(&g_dComIfG_gameInfo, this->unk478, (s32) (s8) this->unk1E2) != 0) {
-        this->unk470 = m_arcname__8daToge_c.unk24;
+    this->mSwitchNo = daToge_prm::getSwitchNo(this);
+
+    if (dComIfGs_isSwitch(this->mSwitchNo, fopAcM_GetHomeRoomNo(this))) {
+        this->unk470 = m_y_min;
         this->unk484 = 2;
     }
-    set_mtx__8daToge_cFv(this);
-    PSMTXCopy(&this->unk40C, &this->unk440);
-    temp_r29 = this->unk298->unk4->unk54;
-    var_r28 = 0;
-loop_6:
-    if (var_r28 < (u16) this->unk298->unk4->unk28) {
-        if (strcmp(&@stringBase0 + 0x21, getName__10JUTNameTabCFUs(temp_r29, var_r28)) == 0) {
-            (*(this->unk298->unk4->unk2C + ((var_r28 * 4) & 0x3FFFC)))->unk8 = nodeCallBack__FP7J3DNodei;
-        } else {
-            var_r28 += 1;
-            goto loop_6;
+
+    set_mtx();
+    cMtx_copy(mtx1, mtx2);
+
+    JUTNameTab* jointName = mpModel->getModelData()->getJointName();
+    for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+        if (strcmp("toge", jointName->getName(i)) == 0) {
+            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+            break;
         }
     }
-    temp_r3 = this->unk298;
-    temp_r3->unk0->unk10(temp_r3);
-    Regist__4dBgSFP4cBgWP10fopAc_ac_c(&g_dComIfG_gameInfo.unk12A0, this->unk408, (fopAc_ac_c *) this);
-    Regist__4dBgSFP4cBgWP10fopAc_ac_c(&g_dComIfG_gameInfo.unk12A0, this->unk43C, (fopAc_ac_c *) this);
-    Move__4dBgWFv((dBgW *) this->unk408);
-    Move__4dBgWFv((dBgW *) this->unk43C);
-#endif
+
+    mpModel->calc();
+
+    dComIfG_Bgsp()->Regist(mpBgW1, this);
+    dComIfG_Bgsp()->Regist(mpBgW2, this);
+
+    mpBgW1->Move();
+    mpBgW2->Move();
+    
     return 1;
 }
-
 
 /* 000004F4-00000620       .text _create__8daToge_cFv */
 s32 daToge_c::_create() {
@@ -305,16 +267,14 @@ static BOOL daToge_IsDelete(void*) {
 }
 
 static actor_method_class daTogeMethodTable = {
-    (process_method_func)daToge_Create,
-    (process_method_func)daToge_Delete,
-    (process_method_func)daToge_Execute,
-    (process_method_func)daToge_IsDelete,
+    (process_method_func)daToge_Create,  (process_method_func)daToge_Delete,
+    (process_method_func)daToge_Execute, (process_method_func)daToge_IsDelete,
     (process_method_func)daToge_Draw,
 };
 
-//actor_process_profile_definition g_profile_TOGE = {
-//    /* LayerID      */ fpcLy_CURRENT_e,
-//    /* ListID       */ 7,
-//    /* ListPrio     */ fpcPi_CURRENT_e,
-//    sub_method: &daTogeMethodTable,
-//};
+// actor_process_profile_definition g_profile_TOGE = {
+//     /* LayerID      */ fpcLy_CURRENT_e,
+//     /* ListID       */ 7,
+//     /* ListPrio     */ fpcPi_CURRENT_e,
+//     sub_method: &daTogeMethodTable,
+// };

@@ -26,8 +26,8 @@ public:
     static const s16 m_dzbidx;
     static const u32 m_heapsize;
     static const f32 m_y_min;
-    static const Vec m_cull_min;
-    static const Vec m_cull_max;
+    //static const Vec m_cull_min;
+    //static const Vec m_cull_max;
 
 
 public:
@@ -42,8 +42,16 @@ public:
     /* 0x43C */ dBgW* mpBgW2;      /* inferred */
     /* 0x440 */ Mtx mtx2;          /* inferred */
     /* 0x470 */ f32 unk470;        /* inferred */
-    /* 0x47C */ char pad47C[4];
-    /* 0x480 */ s32 unk480; /* inferred */
+    /* 0x474 */ char pad474[4];
+    /* 0x478 */ u32 mSwitchNo;                         /* inferred */
+    /* 0x47C */ char pad47C[4];                     /* maybe part of unk478[3]? */
+    /* 0x480 */ s32 unk480;                         /* inferred */
+    /* 0x484 */ s8 unk484;                          /* inferred */
 };
+
+namespace daToge_prm {
+    inline u8 getSwitchNo(daToge_c* ac) { return (fopAcM_GetParam(ac) >> 0) & 0xFF; }
+};
+
 
 #endif /* D_A_TOGE_H */
