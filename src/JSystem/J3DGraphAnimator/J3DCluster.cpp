@@ -430,10 +430,7 @@ void J3DSkinDeform::calcNrmMtx(J3DModel* model) {
 /* 802F4850-802F4974       .text deformVtxPos_F32__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxPos_F32(J3DModel* model) const {
     /* Nonmatching */
-    Mtx* mtxArr[2] = {
-        model->mpNodeMtx,
-        model->mpWeightEnvMtx,
-    };
+    Mtx* mtxArr[] = { model->mpNodeMtx, model->mpWeightEnvMtx };
     model->getVertexBuffer()->swapTransformedVtxPos();
 
     s32 vtxNum = model->getModelData()->getVtxNum();
@@ -441,9 +438,8 @@ void J3DSkinDeform::deformVtxPos_F32(J3DModel* model) const {
     Vec* transformedVtxPos = (Vec*)model->getVertexBuffer()->getTransformedVtxPos(0);
 
     for (s32 i = 0; i < vtxNum; i++) {
-        u16 useMtx = mPosUseMtx[i];
-        MtxP mtx = mtxArr[model->getModelData()->getDrawMtxFlag(useMtx)][model->getModelData()->getDrawMtxIndex(useMtx)];
-        J3DPSMulMtxVec(mtx, &curVtxPos[i], &transformedVtxPos[i]);
+        Mtx* mtx = mtxArr[model->getModelData()->getDrawMtxFlag(mPosUseMtx[i])];
+        J3DPSMulMtxVec(mtx[model->getModelData()->getDrawMtxIndex(mPosUseMtx[i])], &curVtxPos[i], &transformedVtxPos[i]);
     }
 
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxPos(0), model->getModelData()->getVtxNum() * sizeof(Vec));
@@ -453,10 +449,7 @@ void J3DSkinDeform::deformVtxPos_F32(J3DModel* model) const {
 /* 802F4974-802F4AB4       .text deformVtxPos_S16__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {
     /* Nonmatching */
-    Mtx* mtxArr[2] = {
-        model->mpNodeMtx,
-        model->mpWeightEnvMtx,
-    };
+    Mtx* mtxArr[] = { model->mpNodeMtx, model->mpWeightEnvMtx };
 
     J3DGQRSetup7(model->getModelData()->getVertexData().getVtxPosFrac(), 7, model->getModelData()->getVertexData().getVtxPosFrac(), 7);
     model->getVertexBuffer()->swapTransformedVtxPos();
@@ -466,9 +459,8 @@ void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {
     SVec* transformedVtxPos = (SVec*)model->getVertexBuffer()->getTransformedVtxPos(0);
 
     for (s32 i = 0; i < vtxNum; i++) {
-        u16 useMtx = mPosUseMtx[i];
-        MtxP mtx = mtxArr[model->getModelData()->getDrawMtxFlag(useMtx)][model->getModelData()->getDrawMtxIndex(useMtx)];
-        J3DPSMulMtxVec(mtx, &curVtxPos[i], &transformedVtxPos[i]);
+        Mtx* mtx = mtxArr[model->getModelData()->getDrawMtxFlag(mPosUseMtx[i])];
+        J3DPSMulMtxVec(mtx[model->getModelData()->getDrawMtxIndex(mPosUseMtx[i])], &curVtxPos[i], &transformedVtxPos[i]);
     }
 
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxPos(0), model->getModelData()->getVtxNum() * sizeof(SVec));
@@ -485,9 +477,7 @@ void J3DSkinDeform::deformVtxNrm_F32(J3DModel* model) const {
     Vec* transformedVtxNrm = (Vec*)model->getVertexBuffer()->getTransformedVtxNrm(0);
 
     for (s32 i = 0; i < vtxNum; i++) {
-        u16 useMtx = mNrmUseMtx[i];
-        Mtx3P mtx = mNrmMtx[useMtx];
-        J3DPSMulMtxVec(mtx, &curVtxNrm[i], &transformedVtxNrm[i]);
+        J3DPSMulMtxVec(mNrmMtx[mNrmUseMtx[i]], &curVtxNrm[i], &transformedVtxNrm[i]);
     }
 
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxNrm(0), model->getModelData()->getNrmNum() * sizeof(Vec));
@@ -497,17 +487,15 @@ void J3DSkinDeform::deformVtxNrm_F32(J3DModel* model) const {
 /* 802F4BB8-802F4CD8       .text deformVtxNrm_S16__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxNrm_S16(J3DModel* model) const {
     /* Nonmatching */
+    J3DGQRSetup7(model->getModelData()->getVertexData().getVtxNrmFrac(), 7, model->getModelData()->getVertexData().getVtxNrmFrac(), 7);
     model->getVertexBuffer()->swapTransformedVtxNrm();
 
-    J3DGQRSetup7(model->getModelData()->getVertexData().getVtxNrmFrac(), 7, model->getModelData()->getVertexData().getVtxNrmFrac(), 7);
     s32 vtxNum = model->getModelData()->getNrmNum();
     SVec* curVtxNrm = (SVec*)model->getCurrentVtxNrm();
     SVec* transformedVtxNrm = (SVec*)model->getVertexBuffer()->getTransformedVtxNrm(0);
 
     for (s32 i = 0; i < vtxNum; i++) {
-        u16 useMtx = mNrmUseMtx[i];
-        Mtx3P mtx = mNrmMtx[useMtx];
-        J3DPSMulMtxVec(mtx, &curVtxNrm[i], &transformedVtxNrm[i]);
+        J3DPSMulMtxVec(mNrmMtx[mNrmUseMtx[i]], &curVtxNrm[i], &transformedVtxNrm[i]);
     }
 
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxNrm(0), model->getModelData()->getNrmNum() * sizeof(SVec));
