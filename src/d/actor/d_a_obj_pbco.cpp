@@ -31,19 +31,15 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000001AC-00000348       .text CreateHeap__12daObj_Pbco_cFv */
 BOOL daObj_Pbco_c::CreateHeap() {
-    int EndlessNightFlag;
     J3DModelData* modelData;
-
-    EndlessNightFlag = dComIfGs_isEventBit(0x0a02);
-    if (EndlessNightFlag && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
+    if (dComIfGs_isEventBit(0x0a02) && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
         modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x04));
     } else {
         modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x05));
     }
     JUT_ASSERT(0xa9, modelData != 0);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-    EndlessNightFlag = dComIfGs_isEventBit(0x0a02);
-    if (EndlessNightFlag && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
+    if (dComIfGs_isEventBit(0x0a02) && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
         mpBgW = NULL;
     } else {
         mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, 0x08), cBgW::MOVE_BG_e,
@@ -67,7 +63,6 @@ s32 daObj_Pbco_c::CreateInit() {
 
 s32 daObj_Pbco_c::_create() {
     fopAcM_SetupActor(this, daObj_Pbco_c);
-
     int phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10000)) {
