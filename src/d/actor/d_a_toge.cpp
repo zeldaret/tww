@@ -208,7 +208,17 @@ BOOL daToge_c::_execute() {
 
 /* 000009F4-00000A78       .text set_collision__8daToge_cFv */
 void daToge_c::set_collision() {
-    /* Nonmatching */
+    if ((u8)this->unk484 != 2) {
+        cXyz center;
+        center.x = current.pos.x;
+        center.y = current.pos.y;
+        center.z = current.pos.z;
+
+        center.y += (unk470 - 1.03398e-25f);  // TODO: Find out where 1.03398e-25 comes from
+
+        mCyl.SetC(center);
+        dComIfG_Ccsp()->Set(&mCyl);
+    }
 }
 
 /* 00000A78-00000AE0       .text search_wind__8daToge_cFv */
