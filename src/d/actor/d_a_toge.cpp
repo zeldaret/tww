@@ -244,8 +244,10 @@ void daToge_c::toge_move() {
 }
 
 /* 00000C1C-00000CA4       .text toge_seStart__8daToge_cFUl */
-void daToge_c::toge_seStart(unsigned long) {
-    /* Nonmatching */
+void daToge_c::toge_seStart(u32 i_seNum) {
+    if (daToge_prm::getSeEnabled(this)) {
+        fopAcM_seStart(this, i_seNum, 0);
+    }
 }
 
 /* 00000CA4-00000D44       .text _draw__8daToge_cFv */

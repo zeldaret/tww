@@ -18,7 +18,7 @@ public:
     void set_collision();
     void search_wind();
     void toge_move();
-    void toge_seStart(unsigned long);
+    void toge_seStart(u32 i_seNum);
     BOOL _draw();
 
     static const char m_arcname[];
@@ -50,8 +50,13 @@ public:
 };
 
 namespace daToge_prm {
-    inline u8 getSwitchNo(daToge_c* ac) { return (fopAcM_GetParam(ac) >> 0) & 0xFF; }
-};
+inline u8 getSwitchNo(daToge_c* ac) {
+    return (fopAcM_GetParam(ac) >> 0) & 0xFF;
+}
 
+inline u8 getSeEnabled(daToge_c* ac) {
+    return (fopAcM_GetParam(ac) >> 8) & 0xF;
+}
+};  // namespace daToge_prm
 
 #endif /* D_A_TOGE_H */
