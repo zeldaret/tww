@@ -274,8 +274,8 @@ static actor_method_class l_daBoko_Method = {
 
 actor_process_profile_definition g_profile_BOKO = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 9,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0009,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_BOKO,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBoko_c),

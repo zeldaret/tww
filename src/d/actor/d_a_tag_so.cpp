@@ -66,7 +66,6 @@ static BOOL daTag_SoIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daTag_SoMethodTable = {
     (process_method_func)daTag_SoCreate,
     (process_method_func)daTag_SoDelete,

@@ -81,7 +81,6 @@ static BOOL daShutter_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daShutterMethodTable = {
     (process_method_func)daShutter_Create,
     (process_method_func)daShutter_Delete,

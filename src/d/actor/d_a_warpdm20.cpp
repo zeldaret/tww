@@ -191,7 +191,6 @@ static BOOL daWarpdm20_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daWarpdm20MethodTable = {
     (process_method_func)daWarpdm20_Create,
     (process_method_func)daWarpdm20_Delete,

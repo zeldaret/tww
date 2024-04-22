@@ -82,7 +82,6 @@ static BOOL daBalanceliftIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daBalanceliftMethodTable = {
     (process_method_func)daBalanceliftCreate,
     (process_method_func)daBalanceliftDelete,

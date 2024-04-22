@@ -562,7 +562,7 @@ static actor_method_class l_daTag_Event_Method = {
 
 actor_process_profile_definition g_profile_TAG_EVENT = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_TAG_EVENT,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

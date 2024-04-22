@@ -43,15 +43,15 @@ static actor_method_class l_daRct_Method = {
 
 actor_process_profile_definition g_profile_RECTANGLE = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_RECTANGLE,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(RECTANGLE_class),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x9F,
+    /* Priority     */ 0x009F,
     /* Actor SubMtd */ &l_daRct_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

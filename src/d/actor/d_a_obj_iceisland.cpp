@@ -96,7 +96,6 @@ static BOOL daObjIceisland_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_IceislandMethodTable = {
     (process_method_func)daObjIceisland_Create,
     (process_method_func)daObjIceisland_Delete,

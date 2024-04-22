@@ -57,7 +57,6 @@ static BOOL daObjLpalmIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObjLpalmMethodTable = {
     (process_method_func)daObjLpalmCreate,
     (process_method_func)daObjLpalmDelete,

@@ -142,7 +142,6 @@ static BOOL daNpc_Kg1IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daNpc_Kg1MethodTable = {
     (process_method_func)daNpc_Kg1Create,
     (process_method_func)daNpc_Kg1Delete,

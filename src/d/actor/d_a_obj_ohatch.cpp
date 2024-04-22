@@ -96,7 +96,6 @@ static BOOL daObjOhatch_IsDelete(daObjOhatch_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daObjOhatch_Method = {
     (process_method_func)daObjOhatch_Create,
     (process_method_func)daObjOhatch_Delete,

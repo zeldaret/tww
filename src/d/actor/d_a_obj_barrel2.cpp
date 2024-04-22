@@ -271,7 +271,6 @@ BOOL daObjBarrel2::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObjBarrel2::Method::Table = {
     (process_method_func)daObjBarrel2::Method::Create,
     (process_method_func)daObjBarrel2::Method::Delete,
@@ -291,7 +290,7 @@ actor_process_profile_definition g_profile_Obj_Barrel2 = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x010A,
-    /* Actor SubMtd */ &daObjBarrel2::daObjBarrel2::Method::Table,
+    /* Actor SubMtd */ &daObjBarrel2::Method::Table,
     /* Status       */ 0x05 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,

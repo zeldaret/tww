@@ -212,7 +212,6 @@ static s32 daBst_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daBst_Method = {
     (process_method_func)daBst_Create,
     (process_method_func)daBst_Delete,

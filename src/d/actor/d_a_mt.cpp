@@ -162,7 +162,6 @@ static s32 daMt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daMt_Method = {
     (process_method_func)daMt_Create,
     (process_method_func)daMt_Delete,

@@ -201,7 +201,6 @@ static BOOL daObjYLzou_IsDelete(daObjYLzou_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daObjYLzou_Method = {
     (process_method_func)daObjYLzou_Create,
     (process_method_func)daObjYLzou_Delete,

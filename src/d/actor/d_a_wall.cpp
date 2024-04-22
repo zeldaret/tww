@@ -360,14 +360,16 @@ static BOOL daWall_IsDelete(void*) {
 }
 
 static actor_method_class daWallMethodTable = {
-    (process_method_func)daWall_Create,  (process_method_func)daWall_Delete,
-    (process_method_func)daWall_Execute, (process_method_func)daWall_IsDelete,
+    (process_method_func)daWall_Create,
+    (process_method_func)daWall_Delete,
+    (process_method_func)daWall_Execute,
+    (process_method_func)daWall_IsDelete,
     (process_method_func)daWall_Draw,
 };
 
 actor_process_profile_definition g_profile_WALL = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_WALL,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -375,7 +377,7 @@ actor_process_profile_definition g_profile_WALL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x198,
+    /* Priority     */ 0x0198,
     /* Actor SubMtd */ &daWallMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

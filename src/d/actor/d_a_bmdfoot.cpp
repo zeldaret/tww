@@ -107,7 +107,6 @@ static s32 daBmdfoot_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daBmdfoot_Method = {
     (process_method_func)daBmdfoot_Create,
     (process_method_func)daBmdfoot_Delete,

@@ -71,7 +71,6 @@ static s32 daMajuu_Flag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daMajuu_Flag_Method = {
     (process_method_func)daMajuu_Flag_Create,
     (process_method_func)daMajuu_Flag_Delete,

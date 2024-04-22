@@ -126,7 +126,6 @@ static BOOL daGoal_FlagIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daGoal_FlagMethodTable = {
     (process_method_func)daGoal_FlagCreate,
     (process_method_func)daGoal_FlagDelete,

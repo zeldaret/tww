@@ -171,7 +171,6 @@ static BOOL daGy_CtrlIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daGy_CtrlMethodTable = {
     (process_method_func)daGy_CtrlCreate,
     (process_method_func)daGy_CtrlDelete,

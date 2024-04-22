@@ -186,7 +186,6 @@ static s32 daKnob00_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daKnob00_Method = {
     (process_method_func)daKnob00_Create,
     (process_method_func)daKnob00_Delete,

@@ -126,7 +126,6 @@ static s32 daKS_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daKS_Method = {
     (process_method_func)daKS_Create,
     (process_method_func)daKS_Delete,

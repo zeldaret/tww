@@ -147,7 +147,7 @@ static actor_method_class l_daTama_Method = {
 
 actor_process_profile_definition g_profile_TAMA = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 9,
+    /* ListID       */ 0x0009,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_TAMA,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -157,7 +157,7 @@ actor_process_profile_definition g_profile_TAMA = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x012C,
     /* Actor SubMtd */ &l_daTama_Method,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_UNK4000_e,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_0_e,
 };

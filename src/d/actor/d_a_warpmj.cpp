@@ -146,7 +146,6 @@ static BOOL daWarpmj_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daWarpmjMethodTable = {
     (process_method_func)daWarpmj_Create,
     (process_method_func)daWarpmj_Delete,

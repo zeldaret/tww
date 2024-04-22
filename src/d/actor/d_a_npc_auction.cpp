@@ -217,7 +217,6 @@ static BOOL daNpc_AuctionIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daNpc_AuctionMethodTable = {
     (process_method_func)daNpc_AuctionCreate,
     (process_method_func)daNpc_AuctionDelete,

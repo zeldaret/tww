@@ -80,7 +80,7 @@ actor_process_profile_definition g_profile_OBJ_OTBLE = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x01B0,
-    /* Actor SubMtd */ &daObj_Otble::daObj_Otble::Mthd::Table,
+    /* Actor SubMtd */ &daObj_Otble::Mthd::Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,

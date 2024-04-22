@@ -47,7 +47,6 @@ static s32 daSyan_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daSyan_Method = {
     (process_method_func)daSyan_Create,
     (process_method_func)daSyan_Delete,

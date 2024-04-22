@@ -287,7 +287,6 @@ static BOOL daDaioctaIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daDaioctaMethodTable = {
     (process_method_func)daDaioctaCreate,
     (process_method_func)daDaioctaDelete,

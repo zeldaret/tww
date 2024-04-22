@@ -337,7 +337,6 @@ static BOOL daNpc_PhotoIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daNpc_PhotoMethodTable = {
     (process_method_func)daNpc_PhotoCreate,
     (process_method_func)daNpc_PhotoDelete,

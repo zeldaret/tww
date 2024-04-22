@@ -142,7 +142,6 @@ static s32 daWZ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daWZ_Method = {
     (process_method_func)daWZ_Create,
     (process_method_func)daWZ_Delete,

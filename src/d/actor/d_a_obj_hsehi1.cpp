@@ -276,7 +276,6 @@ static s32 daObj_hsh_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daObj_hsh_Method = {
     (process_method_func)daObj_hsh_Create,
     (process_method_func)daObj_hsh_Delete,

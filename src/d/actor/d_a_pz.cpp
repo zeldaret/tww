@@ -396,7 +396,6 @@ static BOOL daPzIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daPzMethodTable = {
     (process_method_func)daPzCreate,
     (process_method_func)daPzDelete,

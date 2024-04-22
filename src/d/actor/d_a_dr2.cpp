@@ -97,7 +97,6 @@ static s32 daDr2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daDr2_Method = {
     (process_method_func)daDr2_Create,
     (process_method_func)daDr2_Delete,

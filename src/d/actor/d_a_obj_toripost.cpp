@@ -996,7 +996,6 @@ static BOOL daObjTpostIsDelete(void*) {
     return TRUE;
 }
 
-
 static actor_method_class daObjTpostMethodTable = {
     (process_method_func)daObjTpostCreate,
     (process_method_func)daObjTpostDelete,
@@ -1006,18 +1005,18 @@ static actor_method_class daObjTpostMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_TORIPOST = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_OBJ_TORIPOST,
-    &g_fpcLf_Method.base,
-    sizeof(daObjTpost_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01B3,
-    &daObjTpostMethodTable,
-    0x18 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_4_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OBJ_TORIPOST,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTpost_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01B3,
+    /* Actor SubMtd */ &daObjTpostMethodTable,
+    /* Status       */ 0x18 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
 };

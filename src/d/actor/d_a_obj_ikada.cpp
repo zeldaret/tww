@@ -301,7 +301,6 @@ static BOOL daObj_IkadaIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_IkadaMethodTable = {
     (process_method_func)daObj_IkadaCreate,
     (process_method_func)daObj_IkadaDelete,

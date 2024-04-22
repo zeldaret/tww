@@ -66,7 +66,6 @@ static BOOL daTori_FlagIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daTori_FlagMethodTable = {
     (process_method_func)daTori_FlagCreate,
     (process_method_func)daTori_FlagDelete,

@@ -61,7 +61,6 @@ static s32 daKantera_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daKantera_Method = {
     (process_method_func)daKantera_Create,
     (process_method_func)daKantera_Delete,

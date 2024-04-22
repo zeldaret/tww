@@ -137,7 +137,6 @@ static BOOL daDaiocta_EyeIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daDaiocta_EyeMethodTable = {
     (process_method_func)daDaiocta_EyeCreate,
     (process_method_func)daDaiocta_EyeDelete,

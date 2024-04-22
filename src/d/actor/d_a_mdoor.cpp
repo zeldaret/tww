@@ -136,7 +136,6 @@ static s32 daMdoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daMdoor_Method = {
     (process_method_func)daMdoor_Create,
     (process_method_func)daMdoor_Delete,

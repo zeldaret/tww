@@ -181,7 +181,6 @@ static s32 daTag_MdCb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daTag_MdCb_Method = {
     (process_method_func)daTag_MdCb_Create,
     (process_method_func)daTag_MdCb_Delete,

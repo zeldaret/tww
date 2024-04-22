@@ -71,7 +71,6 @@ static BOOL daObjQuakeIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObjQuakeMethodTable = {
     (process_method_func)daObjQuakeCreate,
     (process_method_func)daObjQuakeDelete,

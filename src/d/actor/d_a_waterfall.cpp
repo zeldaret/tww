@@ -126,7 +126,6 @@ static BOOL daWfall_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daWfallMethodTable = {
     (process_method_func)daWfall_Create,
     (process_method_func)daWfall_Delete,

@@ -91,7 +91,6 @@ static BOOL daObjRcloud_IsDelete(daObjRcloud_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daObjRcloud_Method = {
     (process_method_func)daObjRcloud_Create,
     (process_method_func)daObjRcloud_Delete,

@@ -116,7 +116,6 @@ static s32 daPt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daPt_Method = {
     (process_method_func)daPt_Create,
     (process_method_func)daPt_Delete,

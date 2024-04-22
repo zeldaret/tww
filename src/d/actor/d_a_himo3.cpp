@@ -61,7 +61,6 @@ static s32 daHimo3_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daHimo3_Method = {
     (process_method_func)daHimo3_Create,
     (process_method_func)daHimo3_Delete,

@@ -3453,8 +3453,8 @@ static actor_method_class l_daNpc_Ji1_Method = {
 
 actor_process_profile_definition g_profile_NPC_JI1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_NPC_JI1,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Ji1_c),
@@ -3467,4 +3467,3 @@ actor_process_profile_definition g_profile_NPC_JI1 = {
     /* Group        */ fopAc_ENEMY_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
-

@@ -106,7 +106,6 @@ static BOOL daLStair_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daLStairMethodTable = {
     (process_method_func)daLStair_Create,
     (process_method_func)daLStair_Delete,

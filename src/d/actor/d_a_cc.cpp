@@ -166,7 +166,6 @@ static s32 daCC_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daCC_Method = {
     (process_method_func)daCC_Create,
     (process_method_func)daCC_Delete,

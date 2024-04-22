@@ -116,7 +116,6 @@ static BOOL daObjApzl_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_ApzlMethodTable = {
     (process_method_func)daObjApzl_Create,
     (process_method_func)daObjApzl_Delete,

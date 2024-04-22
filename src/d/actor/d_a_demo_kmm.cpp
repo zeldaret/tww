@@ -66,7 +66,6 @@ static s32 daDemo_Kmm_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daDemo_Kmm_Method = {
     (process_method_func)daDemo_Kmm_Create,
     (process_method_func)daDemo_Kmm_Delete,

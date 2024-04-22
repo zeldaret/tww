@@ -62,7 +62,6 @@ static BOOL daLwood_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daLwoodMethodTable = {
     (process_method_func)daLwood_Create,
     (process_method_func)daLwood_Delete,

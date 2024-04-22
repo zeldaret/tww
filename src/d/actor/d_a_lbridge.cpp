@@ -101,7 +101,6 @@ static BOOL daLbridge_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daLbridgeMethodTable = {
     (process_method_func)daLbridge_Create,
     (process_method_func)daLbridge_Delete,

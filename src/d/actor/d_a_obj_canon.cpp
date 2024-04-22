@@ -181,7 +181,6 @@ static BOOL daObj_CanonIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_CanonMethodTable = {
     (process_method_func)daObj_CanonCreate,
     (process_method_func)daObj_CanonDelete,

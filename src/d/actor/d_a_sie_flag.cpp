@@ -76,7 +76,6 @@ static BOOL daSie_FlagIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daSie_FlagMethodTable = {
     (process_method_func)daSie_FlagCreate,
     (process_method_func)daSie_FlagDelete,

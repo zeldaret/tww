@@ -71,7 +71,6 @@ static s32 daWbird_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daWbird_Method = {
     (process_method_func)daWbird_Create,
     (process_method_func)daWbird_Delete,

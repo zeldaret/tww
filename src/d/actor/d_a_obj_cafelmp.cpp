@@ -105,7 +105,7 @@ static BOOL daObjCafelmp_IsDelete(void* i_this) {
     return TRUE;
 }
 
-static actor_method_class l_daObjCafelmp_Method = {
+static actor_method_class daObj_CafelmpMethodTable = {
     (process_method_func)daObjCafelmp_Create,
     (process_method_func)daObjCafelmp_Delete,
     (process_method_func)daObjCafelmp_Execute,
@@ -115,7 +115,7 @@ static actor_method_class l_daObjCafelmp_Method = {
 
 actor_process_profile_definition g_profile_Obj_Cafelmp = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Cafelmp,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -124,8 +124,8 @@ actor_process_profile_definition g_profile_Obj_Cafelmp = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0077,
-    /* Actor SubMtd */ &l_daObjCafelmp_Method,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Actor SubMtd */ &daObj_CafelmpMethodTable,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

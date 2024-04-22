@@ -146,7 +146,6 @@ static s32 daBgn3_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daBgn3_Method = {
     (process_method_func)daBgn3_Create,
     (process_method_func)daBgn3_Delete,

@@ -124,15 +124,18 @@ static BOOL daObj_PbcoDraw(void* i_this) {
 static BOOL daObj_PbcoIsDelete(void*) {
     return TRUE;
 }
+
 static actor_method_class daObj_PbcoMethodTable = {
-    (process_method_func)daObj_PbcoCreate,  (process_method_func)daObj_PbcoDelete,
-    (process_method_func)daObj_PbcoExecute, (process_method_func)daObj_PbcoIsDelete,
+    (process_method_func)daObj_PbcoCreate,
+    (process_method_func)daObj_PbcoDelete,
+    (process_method_func)daObj_PbcoExecute,
+    (process_method_func)daObj_PbcoIsDelete,
     (process_method_func)daObj_PbcoDraw,
 };
 
 actor_process_profile_definition g_profile_Obj_Pbco = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 2,
+    /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Pbco,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -142,7 +145,7 @@ actor_process_profile_definition g_profile_Obj_Pbco = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0021,
     /* Actor SubMtd */ &daObj_PbcoMethodTable,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_NOCULLEXEC_e,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -91,7 +91,6 @@ static s32 daDemo00_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daDemo00_Method = {
     (process_method_func)daDemo00_Create,
     (process_method_func)daDemo00_Delete,

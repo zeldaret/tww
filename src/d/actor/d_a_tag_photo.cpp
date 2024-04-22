@@ -151,7 +151,6 @@ static BOOL daTagPhotoIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daTagPhotoMethodTable = {
     (process_method_func)daTagPhotoCreate,
     (process_method_func)daTagPhotoDelete,

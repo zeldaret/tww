@@ -162,7 +162,6 @@ static BOOL daNpc_Sarace_IsDelete(daNpc_Sarace_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daNpc_Sarace_Method = {
     (process_method_func)daNpc_Sarace_Create,
     (process_method_func)daNpc_Sarace_Delete,

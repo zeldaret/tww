@@ -263,32 +263,6 @@ static int daRaceItem_Create(fopAc_ac_c* i_this) {
     return static_cast<daRaceItem_c*>(i_this)->create();
 }
 
-
-static actor_method_class l_daRaceItem_Method = {
-    (process_method_func)daRaceItem_Create,
-    (process_method_func)daRaceItem_Delete,
-    (process_method_func)daRaceItem_Execute,
-    (process_method_func)daRaceItem_IsDelete,
-    (process_method_func)daRaceItem_Draw,
-};
-
-extern actor_process_profile_definition g_profile_RACEITEM = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_RACEITEM,
-    &g_fpcLf_Method.base,
-    sizeof(daRaceItem_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x00FD,
-    &l_daRaceItem_Method,
-    0x000C4100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
-};
-
 static actor_method_class l_daRaceItem_Method = {
     (process_method_func)daRaceItem_Create,
     (process_method_func)daRaceItem_Delete,

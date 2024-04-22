@@ -492,7 +492,6 @@ void daNpc_P2_c::cutOmamoriEndProc(int) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daNpc_P2MethodTable = {
     (process_method_func)daNpc_P2Create,
     (process_method_func)daNpc_P2Delete,

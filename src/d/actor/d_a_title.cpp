@@ -86,7 +86,6 @@ BOOL daTitle_proc_c::draw() {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daTitle_Method = {
     (process_method_func)daTitle_Create,
     (process_method_func)daTitle_Delete,

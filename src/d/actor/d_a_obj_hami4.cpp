@@ -71,7 +71,6 @@ static BOOL daObjHami4_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_Hami4MethodTable = {
     (process_method_func)daObjHami4_Create,
     (process_method_func)daObjHami4_Delete,

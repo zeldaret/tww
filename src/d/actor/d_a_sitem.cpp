@@ -86,7 +86,6 @@ static s32 daSitem_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daSitem_Method = {
     (process_method_func)daSitem_Create,
     (process_method_func)daSitem_Delete,

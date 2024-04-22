@@ -241,7 +241,6 @@ static BOOL daGyIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daGyMethodTable = {
     (process_method_func)daGyCreate,
     (process_method_func)daGyDelete,

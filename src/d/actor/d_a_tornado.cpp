@@ -72,7 +72,6 @@ static s32 daTornado_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daTornado_Method = {
     (process_method_func)daTornado_Create,
     (process_method_func)daTornado_Delete,

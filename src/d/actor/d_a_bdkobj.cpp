@@ -67,7 +67,6 @@ static s32 daBdkobj_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daBdkobj_Method = {
     (process_method_func)daBdkobj_Create,
     (process_method_func)daBdkobj_Delete,

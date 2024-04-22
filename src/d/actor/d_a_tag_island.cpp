@@ -191,7 +191,6 @@ static s32 daTag_Island_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daTag_Island_Method = {
     (process_method_func)daTag_Island_Create,
     (process_method_func)daTag_Island_Delete,

@@ -566,7 +566,6 @@ static BOOL daFmIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daFmMethodTable = {
     (process_method_func)daFmCreate,
     (process_method_func)daFmDelete,

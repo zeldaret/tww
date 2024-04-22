@@ -146,7 +146,6 @@ static BOOL daObj_PfallIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_PfallMethodTable = {
     (process_method_func)daObj_PfallCreate,
     (process_method_func)daObj_PfallDelete,

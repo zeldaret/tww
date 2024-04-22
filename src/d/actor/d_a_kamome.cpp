@@ -137,7 +137,6 @@ static s32 daKamome_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daKamome_Method = {
     (process_method_func)daKamome_Create,
     (process_method_func)daKamome_Delete,

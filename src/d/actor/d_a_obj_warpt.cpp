@@ -227,7 +227,6 @@ static BOOL daObj_WarptIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_WarptMethodTable = {
     (process_method_func)daObj_WarptCreate,
     (process_method_func)daObj_WarptDelete,

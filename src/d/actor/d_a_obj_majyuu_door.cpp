@@ -117,7 +117,6 @@ static BOOL daObj_MjDoorIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_MjDoorMethodTable = {
     (process_method_func)daObj_MjDoorCreate,
     (process_method_func)daObj_MjDoorDelete,

@@ -77,7 +77,6 @@ static BOOL daObj_StairIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_StairMethodTable = {
     (process_method_func)daObj_StairCreate,
     (process_method_func)daObj_StairDelete,

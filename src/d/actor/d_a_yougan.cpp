@@ -71,7 +71,6 @@ void daYougan_c::_daYougan_create() {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daYougan_Method = {
     (process_method_func)daYougan_Create,
     (process_method_func)daYougan_Delete,

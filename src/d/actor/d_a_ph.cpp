@@ -171,7 +171,6 @@ static s32 daPH_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daPH_Method = {
     (process_method_func)daPH_Create,
     (process_method_func)daPH_Delete,

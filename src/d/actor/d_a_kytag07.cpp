@@ -31,7 +31,6 @@ static s32 daKytag07_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daKytag07_Method = {
     (process_method_func)daKytag07_Create,
     (process_method_func)daKytag07_Delete,

@@ -121,7 +121,6 @@ static BOOL daObjGryw00_IsDelete(daObjGryw00_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daObjGryw00_Method = {
     (process_method_func)daObjGryw00_Create,
     (process_method_func)daObjGryw00_Delete,

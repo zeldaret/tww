@@ -107,7 +107,6 @@ static BOOL daBeamIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daBeamMethodTable = {
     (process_method_func)daBeamCreate,
     (process_method_func)daBeamDelete,

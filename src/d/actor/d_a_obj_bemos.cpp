@@ -216,7 +216,6 @@ static BOOL daBemosIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daBemosMethodTable = {
     (process_method_func)daBemosCreate,
     (process_method_func)daBemosDelete,

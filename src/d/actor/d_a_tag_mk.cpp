@@ -186,7 +186,6 @@ s32 daTag_Mk_c::create() {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daTag_Mk_Method = {
     (process_method_func)daTag_Mk_Create,
     (process_method_func)daTag_Mk_Delete,

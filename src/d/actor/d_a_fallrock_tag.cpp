@@ -41,7 +41,6 @@ void daFallRockTag_c::getData() {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daFallRockTag_Method = {
     (process_method_func)daFallRockTag_Create,
     (process_method_func)daFallRockTag_Delete,

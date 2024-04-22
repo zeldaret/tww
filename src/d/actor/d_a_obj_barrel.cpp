@@ -245,7 +245,7 @@ actor_process_profile_definition g_profile_Obj_Barrel = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0109,
-    /* Actor SubMtd */ &daObjBarrel::daObjBarrel::Method::Table,
+    /* Actor SubMtd */ &daObjBarrel::Method::Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e | fopAcStts_UNK8000000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,

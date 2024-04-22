@@ -154,7 +154,6 @@ static BOOL daSaku_Execute(daSaku_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daSaku_Method = {
     (process_method_func)daSaku_Create,
     (process_method_func)daSaku_Delete,

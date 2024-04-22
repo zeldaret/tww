@@ -166,7 +166,6 @@ static BOOL daTag_Kf1_IsDelete(daTag_Kf1_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daTag_Kf1_Method = {
     (process_method_func)daTag_Kf1_Create,
     (process_method_func)daTag_Kf1_Delete,

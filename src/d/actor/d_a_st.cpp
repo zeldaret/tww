@@ -201,7 +201,6 @@ static s32 daSt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daSt_Method = {
     (process_method_func)daSt_Create,
     (process_method_func)daSt_Delete,

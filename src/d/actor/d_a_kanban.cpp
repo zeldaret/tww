@@ -107,7 +107,6 @@ static s32 daKanban_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daKanban_Method = {
     (process_method_func)daKanban_Create,
     (process_method_func)daKanban_Delete,

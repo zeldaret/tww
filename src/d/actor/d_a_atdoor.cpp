@@ -86,7 +86,6 @@ static s32 daAtdoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daAtdoor_Method = {
     (process_method_func)daAtdoor_Create,
     (process_method_func)daAtdoor_Delete,

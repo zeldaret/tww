@@ -161,7 +161,6 @@ static BOOL daTag_GshipIsDelete(void*) {
     return true;
 }
 
-
 static actor_method_class daTag_GshipMethodTable = {
     (process_method_func)daTag_GshipCreate,
     (process_method_func)daTag_GshipDelete,
@@ -171,18 +170,18 @@ static actor_method_class daTag_GshipMethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_GSHIP = {
-    fpcLy_CURRENT_e,
-    8,
-    fpcPi_CURRENT_e,
-    PROC_TAG_GSHIP,
-    &g_fpcLf_Method.base,
-    sizeof(daTag_Gship_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0066,
-    &daTag_GshipMethodTable,
-    fopAcStts_UNK40000_e | fopAcStts_UNK4000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_4_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0008,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TAG_GSHIP,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_Gship_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0066,
+    /* Actor SubMtd */ &daTag_GshipMethodTable,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
 };

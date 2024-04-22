@@ -61,7 +61,6 @@ static BOOL daObj_RotenIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_RotenMethodTable = {
     (process_method_func)daObj_RotenCreate,
     (process_method_func)daObj_RotenDelete,

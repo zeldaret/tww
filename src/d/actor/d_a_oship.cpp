@@ -236,7 +236,6 @@ static BOOL daOshipIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daOshipMethodTable = {
     (process_method_func)daOshipCreate,
     (process_method_func)daOshipDelete,

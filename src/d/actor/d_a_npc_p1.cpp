@@ -187,7 +187,6 @@ static s32 daNpc_P1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daNpc_P1_Method = {
     (process_method_func)daNpc_P1_Create,
     (process_method_func)daNpc_P1_Delete,

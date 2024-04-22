@@ -180,7 +180,7 @@ actor_process_profile_definition g_profile_PEDESTAL = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0091,
-    /* Actor SubMtd */ &daPedestal::daPedestal::daActMethodTable,
+    /* Actor SubMtd */ &daPedestal::daActMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,

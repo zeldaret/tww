@@ -701,7 +701,6 @@ static BOOL daNpc_Ko1_IsDelete(daNpc_Ko1_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daNpc_Ko1_Method = {
     (process_method_func)daNpc_Ko1_Create,
     (process_method_func)daNpc_Ko1_Delete,

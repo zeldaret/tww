@@ -2547,7 +2547,6 @@ static int daAgbsw0_Create(fopAc_ac_c* i_this) {
     return static_cast<daAgbsw0_c*>(i_this)->create();
 }
 
-
 static actor_method_class l_daAgbsw0_Method = {
     (process_method_func)daAgbsw0_Create,
     (process_method_func)daAgbsw0_Delete,
@@ -2557,18 +2556,18 @@ static actor_method_class l_daAgbsw0_Method = {
 };
 
 actor_process_profile_definition g_profile_AGBSW0 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_AGBSW0,
-    &g_fpcLf_Method.base,
-    sizeof(daAgbsw0_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x000D,
-    &l_daAgbsw0_Method,
-    fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_AGBSW0,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daAgbsw0_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x000D,
+    /* Actor SubMtd */ &l_daAgbsw0_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

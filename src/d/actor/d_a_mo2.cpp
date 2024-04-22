@@ -341,7 +341,6 @@ static s32 daMo2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daMo2_Method = {
     (process_method_func)daMo2_Create,
     (process_method_func)daMo2_Delete,

@@ -91,7 +91,6 @@ static BOOL daMgBoard_IsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daMgBoardMethodTable = {
     (process_method_func)daMgBoard_Create,
     (process_method_func)daMgBoard_Delete,

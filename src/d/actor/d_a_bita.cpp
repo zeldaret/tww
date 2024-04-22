@@ -313,7 +313,7 @@ static actor_method_class l_daBita_Method = {
 
 actor_process_profile_definition g_profile_BITA = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_BITA,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -323,7 +323,7 @@ actor_process_profile_definition g_profile_BITA = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0096,
     /* Actor SubMtd */ &l_daBita_Method,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_UNK4000_e | fopAcStts_CULL_e,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

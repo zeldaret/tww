@@ -68,7 +68,6 @@ static s32 daKui_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class l_daKui_Method = {
     (process_method_func)daKui_Create,
     (process_method_func)daKui_Delete,

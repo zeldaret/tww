@@ -3122,8 +3122,8 @@ static actor_method_class l_daNpc_Md_Method = {
 
 actor_process_profile_definition g_profile_NPC_MD = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_NPC_MD,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Md_c),

@@ -51,7 +51,6 @@ static BOOL daObj_Demo_BarrelIsDelete(void*) {
     /* Nonmatching */
 }
 
-
 static actor_method_class daObj_Demo_BarrelMethodTable = {
     (process_method_func)daObj_Demo_BarrelCreate,
     (process_method_func)daObj_Demo_BarrelDelete,
