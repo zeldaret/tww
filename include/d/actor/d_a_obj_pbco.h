@@ -2,8 +2,9 @@
 #define D_A_OBJ_PBCO_H
 
 #include "SSystem/SComponent/c_phase.h"
-#include "d/d_bg_w.h"
 #include "f_op/f_op_actor.h"
+
+class dBgW;
 
 class daObj_Pbco_c : public fopAc_ac_c {
 public:

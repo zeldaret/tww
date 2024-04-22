@@ -23,6 +23,7 @@ void daObj_Pbco_c::set_mtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
+
 /* 0000018C-000001AC       .text CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     daObj_Pbco_c* a_this = static_cast<daObj_Pbco_c*>(i_this);
@@ -73,6 +74,7 @@ s32 daObj_Pbco_c::_create() {
     }
     return phase_state;
 }
+
 /* 000003A4-00000434       .text daObj_PbcoCreate__FPv */
 static int daObj_PbcoCreate(void* i_this) {
     return static_cast<daObj_Pbco_c*>(i_this)->_create();
@@ -85,28 +87,33 @@ BOOL daObj_Pbco_c::_delete() {
     dComIfG_resDelete(&mPhs, M_arcname);
     return TRUE;
 }
+
 /* 00000434-0000048C       .text daObj_PbcoDelete__FPv */
 static BOOL daObj_PbcoDelete(void* i_this) {
     static_cast<daObj_Pbco_c*>(i_this)->_delete();
     return TRUE;
 }
+
 BOOL daObj_Pbco_c::_execute() {
     if (mpBgW != NULL)
         mpBgW->Move();
     set_mtx();
     return FALSE;
 }
+
 /* 0000048C-000004D0       .text daObj_PbcoExecute__FPv */
 static BOOL daObj_PbcoExecute(void* i_this) {
     return static_cast<daObj_Pbco_c*>(i_this)->_execute();
 }
 
 BOOL daObj_Pbco_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    dKy_tevstr_c* pTevStr;
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &tevStr);
+    g_env_light.setLightTevColorType(mpModel, pTevStr);
     mDoExt_modelUpdateDL(mpModel);
     return TRUE;
 }
+
 /* 000004D0-0000053C       .text daObj_PbcoDraw__FPv */
 static BOOL daObj_PbcoDraw(void* i_this) {
     daObj_Pbco_c* a_this = (daObj_Pbco_c*)i_this;

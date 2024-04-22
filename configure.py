@@ -1279,7 +1279,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_mshokki"),
     ActorRel(NonMatching, "d_a_obj_ohatch"),
     ActorRel(NonMatching, "d_a_obj_otble"),
-    ActorRel(NonMatching, "d_a_obj_pbco"),
+    ActorRel(Matching,    "d_a_obj_pbco"),
     ActorRel(NonMatching, "d_a_obj_pirateship"),
     ActorRel(NonMatching, "d_a_obj_quake"),
     ActorRel(NonMatching, "d_a_obj_rcloud"),
