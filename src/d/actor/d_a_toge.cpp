@@ -252,7 +252,14 @@ void daToge_c::toge_seStart(u32 i_seNum) {
 
 /* 00000CA4-00000D44       .text _draw__8daToge_cFv */
 BOOL daToge_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+
+    return TRUE;
 }
 
 /* 00000D44-00000D64       .text daToge_Create__FPv */
