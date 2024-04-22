@@ -48,6 +48,31 @@ BOOL daObjGaship::Act_c::_draw() {
 
 namespace daObjGaship {
 namespace {
+/* 0000066C-0000068C       .text Mthd_Create__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 0000068C-000006B0       .text Mthd_Delete__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000006B0-000006D4       .text Mthd_Execute__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000006D4-000006F8       .text Mthd_Draw__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000006F8-00000700       .text Mthd_IsDelete__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

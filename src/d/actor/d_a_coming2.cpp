@@ -183,6 +183,31 @@ BOOL daComing2::Act_c::_draw() {
 
 namespace daComing2 {
 namespace {
+/* 000023B8-000023D8       .text Mthd_Create__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000023D8-000023FC       .text Mthd_Delete__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000023FC-00002420       .text Mthd_Execute__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00002420-00002444       .text Mthd_Draw__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00002444-0000244C       .text Mthd_IsDelete__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

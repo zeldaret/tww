@@ -103,6 +103,31 @@ BOOL daObjLight::Act_c::_draw() {
 
 namespace daObjLight {
 namespace {
+/* 00001528-00001548       .text Mthd_Create__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001548-0000156C       .text Mthd_Delete__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 0000156C-00001590       .text Mthd_Execute__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001590-000015B4       .text Mthd_Draw__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000015B4-000015BC       .text Mthd_IsDelete__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

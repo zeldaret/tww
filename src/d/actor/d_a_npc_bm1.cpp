@@ -861,14 +861,6 @@ actor_process_profile_definition g_profile_NPC_BM1 = {
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
 
-static actor_method_class l_daNpc_Bm1_Method = {
-    (process_method_func)daNpc_Bm1_Create,
-    (process_method_func)daNpc_Bm1_Delete,
-    (process_method_func)daNpc_Bm1_Execute,
-    (process_method_func)daNpc_Bm1_IsDelete,
-    (process_method_func)daNpc_Bm1_Draw,
-};
-
 actor_process_profile_definition g_profile_NPC_BM2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
@@ -884,14 +876,6 @@ actor_process_profile_definition g_profile_NPC_BM2 = {
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
-};
-
-static actor_method_class l_daNpc_Bm1_Method = {
-    (process_method_func)daNpc_Bm1_Create,
-    (process_method_func)daNpc_Bm1_Delete,
-    (process_method_func)daNpc_Bm1_Execute,
-    (process_method_func)daNpc_Bm1_IsDelete,
-    (process_method_func)daNpc_Bm1_Draw,
 };
 
 actor_process_profile_definition g_profile_NPC_BM3 = {
@@ -911,14 +895,6 @@ actor_process_profile_definition g_profile_NPC_BM3 = {
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
 
-static actor_method_class l_daNpc_Bm1_Method = {
-    (process_method_func)daNpc_Bm1_Create,
-    (process_method_func)daNpc_Bm1_Delete,
-    (process_method_func)daNpc_Bm1_Execute,
-    (process_method_func)daNpc_Bm1_IsDelete,
-    (process_method_func)daNpc_Bm1_Draw,
-};
-
 actor_process_profile_definition g_profile_NPC_BM4 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
@@ -934,14 +910,6 @@ actor_process_profile_definition g_profile_NPC_BM4 = {
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
-};
-
-static actor_method_class l_daNpc_Bm1_Method = {
-    (process_method_func)daNpc_Bm1_Create,
-    (process_method_func)daNpc_Bm1_Delete,
-    (process_method_func)daNpc_Bm1_Execute,
-    (process_method_func)daNpc_Bm1_IsDelete,
-    (process_method_func)daNpc_Bm1_Draw,
 };
 
 actor_process_profile_definition g_profile_NPC_BM5 = {

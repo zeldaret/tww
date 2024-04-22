@@ -516,27 +516,27 @@ void daMP_c::daMP_c_Draw() {
 }
 
 /* 000066C4-00006728       .text daMP_c_Callback_Init__6daMP_cFP10fopAc_ac_c */
-void daMP_c::daMP_c_Callback_Init(fopAc_ac_c*) {
+int daMP_c::daMP_c_Callback_Init(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00006728-00006748       .text daMP_c_Callback_Finish__6daMP_cFP6daMP_c */
-void daMP_c::daMP_c_Callback_Finish(daMP_c*) {
+int daMP_c::daMP_c_Callback_Finish(daMP_c*) {
     /* Nonmatching */
 }
 
 /* 00006748-00006780       .text daMP_c_Callback_Main__6daMP_cFP6daMP_c */
-void daMP_c::daMP_c_Callback_Main(daMP_c*) {
+int daMP_c::daMP_c_Callback_Main(daMP_c*) {
     /* Nonmatching */
 }
 
 /* 00006780-000067B8       .text daMP_c_Callback_Draw__6daMP_cFP6daMP_c */
-void daMP_c::daMP_c_Callback_Draw(daMP_c*) {
+int daMP_c::daMP_c_Callback_Draw(daMP_c*) {
     /* Nonmatching */
 }
 
 /* 000067B8-000067C0       .text daMP_Callback_Dummy__FP6daMP_c */
-void daMP_Callback_Dummy(daMP_c*) {
+static int daMP_Callback_Dummy(daMP_c*) {
     /* Nonmatching */
 }
 

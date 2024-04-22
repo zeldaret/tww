@@ -141,7 +141,7 @@ BOOL daObjMagmarock::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 
-static actor_method_class daObjMagmarock::Method::Table = {
+actor_method_class daObjMagmarock::Method::Table = {
     (process_method_func)daObjMagmarock::Method::Create,
     (process_method_func)daObjMagmarock::Method::Delete,
     (process_method_func)daObjMagmarock::Method::Execute,

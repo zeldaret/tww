@@ -98,6 +98,31 @@ BOOL daTagLight::Act_c::_draw() {
 
 namespace daTagLight {
 namespace {
+/* 00001EAC-00001ECC       .text Mthd_Create__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001ECC-00001EF0       .text Mthd_Delete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001EF0-00001F14       .text Mthd_Execute__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001F14-00001F38       .text Mthd_Draw__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001F38-00001F40       .text Mthd_IsDelete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

@@ -138,6 +138,31 @@ BOOL daObjJump::Act_c::Draw() {
 
 namespace daObjJump {
 namespace {
+/* 00001594-000015B4       .text Mthd_Create__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000015B4-000015D4       .text Mthd_Delete__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000015D4-000015F4       .text Mthd_Execute__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000015F4-00001620       .text Mthd_Draw__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001620-0000164C       .text Mthd_IsDelete__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

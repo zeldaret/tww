@@ -93,6 +93,31 @@ BOOL daObjHbrf1::Act_c::Draw() {
 
 namespace daObjHbrf1 {
 namespace {
+/* 00000CBC-00000CDC       .text Mthd_Create__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000CDC-00000CFC       .text Mthd_Delete__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000CFC-00000D1C       .text Mthd_Execute__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000D1C-00000D48       .text Mthd_Draw__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000D48-00000D74       .text Mthd_IsDelete__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Hbrf1 = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

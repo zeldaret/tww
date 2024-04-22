@@ -62,6 +62,31 @@ BOOL daYgcwp_c::_draw() {
 }
 
 namespace {
+/* 000008DC-000008FC       .text Mthd_Create__23@unnamed@d_a_ygcwp_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000008FC-00000920       .text Mthd_Delete__23@unnamed@d_a_ygcwp_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000920-00000944       .text Mthd_Execute__23@unnamed@d_a_ygcwp_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000944-00000968       .text Mthd_Draw__23@unnamed@d_a_ygcwp_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000968-00000970       .text Mthd_IsDelete__23@unnamed@d_a_ygcwp_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Ygcwp_Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

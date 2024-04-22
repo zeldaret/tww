@@ -73,6 +73,31 @@ BOOL daObjAuzu::Act_c::_draw() {
 
 namespace daObjAuzu {
 namespace {
+/* 00000C38-00000C58       .text Mthd_Create__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000C58-00000C7C       .text Mthd_Delete__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000C7C-00000CA0       .text Mthd_Execute__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000CA0-00000CC4       .text Mthd_Draw__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000CC4-00000CCC       .text Mthd_IsDelete__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

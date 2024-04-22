@@ -61,7 +61,7 @@ BOOL daObj_Otble::Mthd::IsDelete(void*) {
     /* Nonmatching */
 }
 
-static actor_method_class daObj_Otble::Mthd::Table = {
+actor_method_class daObj_Otble::Mthd::Table = {
     (process_method_func)daObj_Otble::Mthd::Create,
     (process_method_func)daObj_Otble::Mthd::Delete,
     (process_method_func)daObj_Otble::Mthd::Execute,

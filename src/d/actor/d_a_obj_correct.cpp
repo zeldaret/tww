@@ -128,6 +128,31 @@ BOOL daObjCorrect::Act_c::_execute() {
 
 namespace daObjCorrect {
 namespace {
+/* 00000DD8-00000DF8       .text Mthd_Create__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000DF8-00000E1C       .text Mthd_Delete__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000E1C-00000E40       .text Mthd_Execute__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000E40-00000E48       .text Mthd_Draw__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000E48-00000E50       .text Mthd_IsDelete__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

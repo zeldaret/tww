@@ -98,6 +98,31 @@ BOOL daObjDrift::Act_c::Draw() {
 
 namespace daObjDrift {
 namespace {
+/* 00001270-00001290       .text Mthd_Create__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001290-000012B0       .text Mthd_Delete__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000012B0-000012D0       .text Mthd_Execute__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000012D0-000012FC       .text Mthd_Draw__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000012FC-00001328       .text Mthd_IsDelete__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

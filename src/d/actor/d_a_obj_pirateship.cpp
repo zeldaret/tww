@@ -118,7 +118,7 @@ BOOL daObjPirateship::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 
-static actor_method_class daObjPirateship::Method::Table = {
+actor_method_class daObjPirateship::Method::Table = {
     (process_method_func)daObjPirateship::Method::Create,
     (process_method_func)daObjPirateship::Method::Delete,
     (process_method_func)daObjPirateship::Method::Execute,

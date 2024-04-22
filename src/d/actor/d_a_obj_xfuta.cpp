@@ -43,6 +43,31 @@ BOOL daObjXfuta::Act_c::_draw() {
 
 namespace daObjXfuta {
 namespace {
+/* 0000040C-0000042C       .text Mthd_Create__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 0000042C-00000450       .text Mthd_Delete__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000450-00000474       .text Mthd_Execute__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000474-00000498       .text Mthd_Draw__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000498-000004A0       .text Mthd_IsDelete__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

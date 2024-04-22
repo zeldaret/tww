@@ -43,6 +43,31 @@ BOOL daObjRforce::Act_c::_draw() {
 
 namespace daObjRforce {
 namespace {
+/* 00000508-00000528       .text Mthd_Create__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000528-0000054C       .text Mthd_Delete__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 0000054C-00000570       .text Mthd_Execute__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000570-00000594       .text Mthd_Draw__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000594-0000059C       .text Mthd_IsDelete__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

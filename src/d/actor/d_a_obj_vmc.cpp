@@ -73,6 +73,31 @@ BOOL daObjVmc::Act_c::_draw() {
 
 namespace daObjVmc {
 namespace {
+/* 000012CC-000012EC       .text Mthd_Create__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000012EC-00001310       .text Mthd_Delete__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001310-00001334       .text Mthd_Execute__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001334-00001358       .text Mthd_Draw__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001358-00001360       .text Mthd_IsDelete__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

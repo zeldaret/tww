@@ -611,7 +611,7 @@ BOOL daTsubo::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 
-static actor_method_class daTsubo::Method::Table = {
+actor_method_class daTsubo::Method::Table = {
     (process_method_func)daTsubo::Method::Create,
     (process_method_func)daTsubo::Method::Delete,
     (process_method_func)daTsubo::Method::Execute,

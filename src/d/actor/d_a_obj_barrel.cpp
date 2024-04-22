@@ -226,7 +226,7 @@ BOOL daObjBarrel::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 
-static actor_method_class daObjBarrel::Method::Table = {
+actor_method_class daObjBarrel::Method::Table = {
     (process_method_func)daObjBarrel::Method::Create,
     (process_method_func)daObjBarrel::Method::Delete,
     (process_method_func)daObjBarrel::Method::Execute,

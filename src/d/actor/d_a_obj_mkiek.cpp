@@ -68,6 +68,31 @@ BOOL daObjMkiek::Act_c::Draw() {
 
 namespace daObjMkiek {
 namespace {
+/* 00000E1C-00000E3C       .text Mthd_Create__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000E3C-00000E5C       .text Mthd_Delete__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000E5C-00000E7C       .text Mthd_Execute__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000E7C-00000EA8       .text Mthd_Draw__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000EA8-00000ED4       .text Mthd_IsDelete__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

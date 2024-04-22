@@ -73,6 +73,31 @@ BOOL daObjBuoyrace::Act_c::_draw() {
 
 namespace daObjBuoyrace {
 namespace {
+/* 00000B28-00000B48       .text Mthd_Create__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000B48-00000B6C       .text Mthd_Delete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000B6C-00000B90       .text Mthd_Execute__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000B90-00000BB4       .text Mthd_Draw__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000BB4-00000BBC       .text Mthd_IsDelete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

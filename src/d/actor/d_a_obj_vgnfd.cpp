@@ -72,6 +72,31 @@ BOOL daObjVgnfd_c::_draw() {
 }
 
 namespace {
+/* 000013F0-00001410       .text Mthd_Create__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001410-00001434       .text Mthd_Delete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001434-00001458       .text Mthd_Execute__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001458-0000147C       .text Mthd_Draw__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 0000147C-00001484       .text Mthd_IsDelete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Vgnfd_Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

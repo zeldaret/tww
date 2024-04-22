@@ -28,6 +28,31 @@ BOOL daTagEvsw::Act_c::_draw() {
 
 namespace daTagEvsw {
 namespace {
+/* 00000484-000004A4       .text Mthd_Create__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000004A4-000004C8       .text Mthd_Delete__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000004C8-000004EC       .text Mthd_Execute__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000004EC-00000510       .text Mthd_Draw__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000510-00000518       .text Mthd_IsDelete__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

@@ -54,17 +54,13 @@ BOOL daObjWood::Method::IsDelete(void* i_this) {
     return TRUE;
 }
 
-namespace daObjWood {
-    namespace Method {
-        actor_method_class Table = {
-            (process_method_func)Create,
-            (process_method_func)Delete,
-            (process_method_func)Execute,
-            (process_method_func)IsDelete,
-            (process_method_func)Draw,
-        };
-    }
-}
+actor_method_class daObjWood::Method::Table = {
+    (process_method_func)daObjWood::Method::Create,
+    (process_method_func)daObjWood::Method::Delete,
+    (process_method_func)daObjWood::Method::Execute,
+    (process_method_func)daObjWood::Method::IsDelete,
+    (process_method_func)daObjWood::Method::Draw,
+};
 
 actor_process_profile_definition g_profile_Obj_Wood = {
     /* LayerID      */ fpcLy_CURRENT_e,

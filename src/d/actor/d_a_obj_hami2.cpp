@@ -89,6 +89,31 @@ BOOL daObjHami2::Act_c::Draw() {
 
 namespace daObjHami2 {
 namespace {
+/* 00000B58-00000B78       .text Mthd_Create__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000B78-00000B98       .text Mthd_Delete__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000B98-00000BB8       .text Mthd_Execute__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000BB8-00000BE4       .text Mthd_Draw__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000BE4-00000C10       .text Mthd_IsDelete__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Hami2 = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

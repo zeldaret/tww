@@ -461,14 +461,6 @@ actor_process_profile_definition g_profile_NPC_YM1 = {
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
 
-static actor_method_class l_daNpc_Ym1_Method = {
-    (process_method_func)daNpc_Ym1_Create,
-    (process_method_func)daNpc_Ym1_Delete,
-    (process_method_func)daNpc_Ym1_Execute,
-    (process_method_func)daNpc_Ym1_IsDelete,
-    (process_method_func)daNpc_Ym1_Draw,
-};
-
 actor_process_profile_definition g_profile_NPC_YM2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,

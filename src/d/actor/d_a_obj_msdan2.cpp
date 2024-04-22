@@ -23,6 +23,31 @@ void daObjMsdan2::Act_c::Mthd_Delete() {
 
 namespace daObjMsdan2 {
 namespace {
+/* 0000034C-0000036C       .text Mthd_Create__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 0000036C-0000038C       .text Mthd_Delete__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 0000038C-000003AC       .text Mthd_Execute__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000003AC-000003B4       .text Mthd_Draw__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000003B4-000003BC       .text Mthd_IsDelete__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Msdan2 = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

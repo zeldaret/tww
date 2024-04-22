@@ -172,6 +172,31 @@ BOOL daObjVtil_c::_draw() {
 }
 
 namespace {
+/* 00001864-00001884       .text Mthd_Create__26@unnamed@d_a_obj_vtil_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001884-000018A8       .text Mthd_Delete__26@unnamed@d_a_obj_vtil_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000018A8-000018CC       .text Mthd_Execute__26@unnamed@d_a_obj_vtil_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000018CC-000018F0       .text Mthd_Draw__26@unnamed@d_a_obj_vtil_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000018F0-000018F8       .text Mthd_IsDelete__26@unnamed@d_a_obj_vtil_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Vtil_Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

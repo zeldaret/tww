@@ -68,6 +68,31 @@ BOOL daObjNest::Act_c::Draw() {
 
 namespace daObjNest {
 namespace {
+/* 000007FC-0000081C       .text Mthd_Create__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 0000081C-0000083C       .text Mthd_Delete__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 0000083C-0000085C       .text Mthd_Execute__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 0000085C-00000888       .text Mthd_Draw__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000888-000008B4       .text Mthd_IsDelete__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

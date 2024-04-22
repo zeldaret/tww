@@ -42,6 +42,31 @@ BOOL daObjGnntakis_c::_draw() {
 }
 
 namespace {
+/* 0000058C-000005AC       .text Mthd_Create__34@unnamed@d_a_obj_gnndemotakis_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000005AC-000005D0       .text Mthd_Delete__34@unnamed@d_a_obj_gnndemotakis_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000005D0-000005F4       .text Mthd_Execute__34@unnamed@d_a_obj_gnndemotakis_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000005F4-00000618       .text Mthd_Draw__34@unnamed@d_a_obj_gnndemotakis_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000618-00000620       .text Mthd_IsDelete__34@unnamed@d_a_obj_gnndemotakis_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Gnntakis_Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

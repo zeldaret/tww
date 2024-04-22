@@ -143,6 +143,31 @@ BOOL daObjSwlight::Act_c::_draw() {
 
 namespace daObjSwlight {
 namespace {
+/* 00001AC4-00001AE4       .text Mthd_Create__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001AE4-00001B08       .text Mthd_Delete__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001B08-00001B2C       .text Mthd_Execute__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001B2C-00001B50       .text Mthd_Draw__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001B50-00001B58       .text Mthd_IsDelete__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

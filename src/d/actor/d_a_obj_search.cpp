@@ -256,7 +256,7 @@ BOOL daObj_Search::Mthd::IsDelete(void*) {
     /* Nonmatching */
 }
 
-static actor_method_class daObj_Search::Mthd::Table = {
+actor_method_class daObj_Search::Mthd::Table = {
     (process_method_func)daObj_Search::Mthd::Create,
     (process_method_func)daObj_Search::Mthd::Delete,
     (process_method_func)daObj_Search::Mthd::Execute,

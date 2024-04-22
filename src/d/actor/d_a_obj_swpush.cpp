@@ -188,6 +188,31 @@ void daObjSwpush::Act_c::Mthd_Draw() {
 
 namespace daObjSwpush {
 namespace {
+/* 00001FF8-00002018       .text Mthd_Create__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00002018-00002038       .text Mthd_Delete__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00002038-00002058       .text Mthd_Execute__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00002058-00002078       .text Mthd_Draw__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00002078-00002080       .text Mthd_IsDelete__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

@@ -68,6 +68,31 @@ BOOL daObjEbomzo::Act_c::Draw() {
 
 namespace daObjEbomzo {
 namespace {
+/* 00000B9C-00000BBC       .text Mthd_Create__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000BBC-00000BDC       .text Mthd_Delete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000BDC-00000BFC       .text Mthd_Execute__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000BFC-00000C28       .text Mthd_Draw__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000C28-00000C54       .text Mthd_IsDelete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Ebomzo = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

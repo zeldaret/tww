@@ -43,6 +43,31 @@ BOOL daObjTimer::Act_c::_execute() {
 
 namespace daObjTimer {
 namespace {
+/* 00000394-000003B4       .text Mthd_Create__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000003B4-000003D8       .text Mthd_Delete__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000003D8-000003FC       .text Mthd_Execute__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000003FC-00000404       .text Mthd_Draw__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000404-0000040C       .text Mthd_IsDelete__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

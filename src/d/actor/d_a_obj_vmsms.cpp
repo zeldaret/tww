@@ -47,6 +47,31 @@ BOOL daObjVmsms_c::_draw() {
 }
 
 namespace {
+/* 0000036C-0000038C       .text Mthd_Create__27@unnamed@d_a_obj_vmsms_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 0000038C-000003B0       .text Mthd_Delete__27@unnamed@d_a_obj_vmsms_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000003B0-000003D4       .text Mthd_Execute__27@unnamed@d_a_obj_vmsms_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000003D4-000003F8       .text Mthd_Draw__27@unnamed@d_a_obj_vmsms_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000003F8-00000400       .text Mthd_IsDelete__27@unnamed@d_a_obj_vmsms_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Vmsms_Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

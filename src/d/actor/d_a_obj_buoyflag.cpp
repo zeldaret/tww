@@ -86,13 +86,33 @@ void daObjBuoyflag::Act_c::mode_jumpToSea() {
     /* Nonmatching */
 }
 
-/* 000027AC-000029FC       .text _create__Q213daObjBuoyflag5Act_cFv */
-s32 daObjBuoyflag::Act_c::_create() {
+namespace daObjBuoyflag {
+namespace {
+/* 0000278C-000027AC       .text Mthd_Create__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
+void Mthd_Create(void*) {
     /* Nonmatching */
 }
 
-namespace daObjBuoyflag {
-namespace {
+/* 000029FC-00002A2C       .text Mthd_Delete__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00002A2C-00002B04       .text Mthd_Execute__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00002B04-00002B54       .text Mthd_Draw__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00002B54-00002B5C       .text Mthd_IsDelete__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

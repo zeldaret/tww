@@ -157,6 +157,31 @@ BOOL daObjHha_c::_draw() {
 }
 
 namespace {
+/* 000029F4-00002A14       .text Mthd_Create__25@unnamed@d_a_obj_hha_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00002A14-00002A38       .text Mthd_Delete__25@unnamed@d_a_obj_hha_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00002A38-00002A5C       .text Mthd_Execute__25@unnamed@d_a_obj_hha_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00002A5C-00002A80       .text Mthd_Draw__25@unnamed@d_a_obj_hha_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00002A80-00002A88       .text Mthd_IsDelete__25@unnamed@d_a_obj_hha_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Hha_Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

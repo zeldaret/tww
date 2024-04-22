@@ -78,6 +78,31 @@ BOOL daObjOspbox::Act_c::Draw() {
 
 namespace daObjOspbox {
 namespace {
+/* 000011A4-000011C4       .text Mthd_Create__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000011C4-000011E4       .text Mthd_Delete__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000011E4-00001204       .text Mthd_Execute__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001204-00001230       .text Mthd_Draw__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001230-0000125C       .text Mthd_IsDelete__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

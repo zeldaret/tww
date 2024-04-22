@@ -68,6 +68,31 @@ BOOL daObjEskban::Act_c::Draw() {
 
 namespace daObjEskban {
 namespace {
+/* 000014B4-000014D4       .text Mthd_Create__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000014D4-000014F4       .text Mthd_Delete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000014F4-00001514       .text Mthd_Execute__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001514-00001540       .text Mthd_Draw__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001540-0000156C       .text Mthd_IsDelete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Eskban = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

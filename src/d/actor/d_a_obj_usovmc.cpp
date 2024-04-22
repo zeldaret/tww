@@ -53,6 +53,31 @@ BOOL daObjUsovmc::Act_c::Draw() {
 
 namespace daObjUsovmc {
 namespace {
+/* 0000047C-0000049C       .text Mthd_Create__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 0000049C-000004BC       .text Mthd_Delete__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000004BC-000004DC       .text Mthd_Execute__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000004DC-00000508       .text Mthd_Draw__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000508-00000534       .text Mthd_IsDelete__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Usovmc = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

@@ -43,6 +43,31 @@ BOOL daKomore::Act_c::_draw() {
 
 namespace daKomore {
 namespace {
+/* 00000518-00000538       .text Mthd_Create__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000538-0000055C       .text Mthd_Delete__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 0000055C-00000580       .text Mthd_Execute__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000580-000005A4       .text Mthd_Draw__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000005A4-000005AC       .text Mthd_IsDelete__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

@@ -338,6 +338,31 @@ BOOL daObjTribox::Act_c::_draw() {
 
 namespace daObjTribox {
 namespace {
+/* 00003538-00003558       .text Mthd_Create__Q211daObjTribox28@unnamed@d_a_obj_tribox_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00003558-0000357C       .text Mthd_Delete__Q211daObjTribox28@unnamed@d_a_obj_tribox_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 0000357C-000035A0       .text Mthd_Execute__Q211daObjTribox28@unnamed@d_a_obj_tribox_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000035A0-000035C4       .text Mthd_Draw__Q211daObjTribox28@unnamed@d_a_obj_tribox_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000035C4-000035CC       .text Mthd_IsDelete__Q211daObjTribox28@unnamed@d_a_obj_tribox_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

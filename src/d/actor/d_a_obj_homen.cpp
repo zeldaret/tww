@@ -158,6 +158,31 @@ BOOL daObjHomen::Act_c::_draw() {
 
 namespace daObjHomen {
 namespace {
+/* 00002954-00002974       .text Mthd_Create__Q210daObjHomen27@unnamed@d_a_obj_homen_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00002974-00002998       .text Mthd_Delete__Q210daObjHomen27@unnamed@d_a_obj_homen_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00002998-000029BC       .text Mthd_Execute__Q210daObjHomen27@unnamed@d_a_obj_homen_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000029BC-000029E0       .text Mthd_Draw__Q210daObjHomen27@unnamed@d_a_obj_homen_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000029E0-000029E8       .text Mthd_IsDelete__Q210daObjHomen27@unnamed@d_a_obj_homen_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

@@ -108,6 +108,31 @@ BOOL daObjLadder::Act_c::Draw() {
 
 namespace daObjLadder {
 namespace {
+/* 00001140-00001160       .text Mthd_Create__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001160-00001180       .text Mthd_Delete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001180-000011A0       .text Mthd_Execute__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000011A0-000011CC       .text Mthd_Draw__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000011CC-000011F8       .text Mthd_IsDelete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

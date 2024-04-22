@@ -651,14 +651,6 @@ actor_process_profile_definition g_profile_NPC_BJ1 = {
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
 
-static actor_method_class l_daNpc_Bj1_Method = {
-    (process_method_func)daNpc_Bj1_Create,
-    (process_method_func)daNpc_Bj1_Delete,
-    (process_method_func)daNpc_Bj1_Execute,
-    (process_method_func)daNpc_Bj1_IsDelete,
-    (process_method_func)daNpc_Bj1_Draw,
-};
-
 actor_process_profile_definition g_profile_NPC_BJ2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
@@ -674,14 +666,6 @@ actor_process_profile_definition g_profile_NPC_BJ2 = {
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
-};
-
-static actor_method_class l_daNpc_Bj1_Method = {
-    (process_method_func)daNpc_Bj1_Create,
-    (process_method_func)daNpc_Bj1_Delete,
-    (process_method_func)daNpc_Bj1_Execute,
-    (process_method_func)daNpc_Bj1_IsDelete,
-    (process_method_func)daNpc_Bj1_Draw,
 };
 
 actor_process_profile_definition g_profile_NPC_BJ3 = {
@@ -701,14 +685,6 @@ actor_process_profile_definition g_profile_NPC_BJ3 = {
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
 
-static actor_method_class l_daNpc_Bj1_Method = {
-    (process_method_func)daNpc_Bj1_Create,
-    (process_method_func)daNpc_Bj1_Delete,
-    (process_method_func)daNpc_Bj1_Execute,
-    (process_method_func)daNpc_Bj1_IsDelete,
-    (process_method_func)daNpc_Bj1_Draw,
-};
-
 actor_process_profile_definition g_profile_NPC_BJ4 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
@@ -724,14 +700,6 @@ actor_process_profile_definition g_profile_NPC_BJ4 = {
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
-};
-
-static actor_method_class l_daNpc_Bj1_Method = {
-    (process_method_func)daNpc_Bj1_Create,
-    (process_method_func)daNpc_Bj1_Delete,
-    (process_method_func)daNpc_Bj1_Execute,
-    (process_method_func)daNpc_Bj1_IsDelete,
-    (process_method_func)daNpc_Bj1_Draw,
 };
 
 actor_process_profile_definition g_profile_NPC_BJ5 = {
@@ -751,14 +719,6 @@ actor_process_profile_definition g_profile_NPC_BJ5 = {
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
 
-static actor_method_class l_daNpc_Bj1_Method = {
-    (process_method_func)daNpc_Bj1_Create,
-    (process_method_func)daNpc_Bj1_Delete,
-    (process_method_func)daNpc_Bj1_Execute,
-    (process_method_func)daNpc_Bj1_IsDelete,
-    (process_method_func)daNpc_Bj1_Draw,
-};
-
 actor_process_profile_definition g_profile_NPC_BJ6 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
@@ -774,14 +734,6 @@ actor_process_profile_definition g_profile_NPC_BJ6 = {
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
-};
-
-static actor_method_class l_daNpc_Bj1_Method = {
-    (process_method_func)daNpc_Bj1_Create,
-    (process_method_func)daNpc_Bj1_Delete,
-    (process_method_func)daNpc_Bj1_Execute,
-    (process_method_func)daNpc_Bj1_IsDelete,
-    (process_method_func)daNpc_Bj1_Draw,
 };
 
 actor_process_profile_definition g_profile_NPC_BJ7 = {
@@ -801,14 +753,6 @@ actor_process_profile_definition g_profile_NPC_BJ7 = {
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
 
-static actor_method_class l_daNpc_Bj1_Method = {
-    (process_method_func)daNpc_Bj1_Create,
-    (process_method_func)daNpc_Bj1_Delete,
-    (process_method_func)daNpc_Bj1_Execute,
-    (process_method_func)daNpc_Bj1_IsDelete,
-    (process_method_func)daNpc_Bj1_Draw,
-};
-
 actor_process_profile_definition g_profile_NPC_BJ8 = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
@@ -824,14 +768,6 @@ actor_process_profile_definition g_profile_NPC_BJ8 = {
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
-};
-
-static actor_method_class l_daNpc_Bj1_Method = {
-    (process_method_func)daNpc_Bj1_Create,
-    (process_method_func)daNpc_Bj1_Delete,
-    (process_method_func)daNpc_Bj1_Execute,
-    (process_method_func)daNpc_Bj1_IsDelete,
-    (process_method_func)daNpc_Bj1_Draw,
 };
 
 actor_process_profile_definition g_profile_NPC_BJ9 = {

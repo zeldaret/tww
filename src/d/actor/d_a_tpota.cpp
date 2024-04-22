@@ -47,6 +47,31 @@ BOOL daTpota_c::_draw() {
 }
 
 namespace {
+/* 000004D0-000004F0       .text Mthd_Create__23@unnamed@d_a_tpota_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000004F0-00000514       .text Mthd_Delete__23@unnamed@d_a_tpota_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000514-00000538       .text Mthd_Execute__23@unnamed@d_a_tpota_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000538-0000055C       .text Mthd_Draw__23@unnamed@d_a_tpota_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 0000055C-00000564       .text Mthd_IsDelete__23@unnamed@d_a_tpota_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Tpota_Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

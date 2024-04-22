@@ -161,7 +161,7 @@ BOOL daObjFlame::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 
-static actor_method_class daObjFlame::Method::Table = {
+actor_method_class daObjFlame::Method::Table = {
     (process_method_func)daObjFlame::Method::Create,
     (process_method_func)daObjFlame::Method::Delete,
     (process_method_func)daObjFlame::Method::Execute,

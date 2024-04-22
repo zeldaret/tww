@@ -143,6 +143,31 @@ BOOL daObjComing::Act_c::_draw() {
 
 namespace daObjComing {
 namespace {
+/* 00001318-00001338       .text Mthd_Create__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001338-0000135C       .text Mthd_Delete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 0000135C-00001380       .text Mthd_Execute__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001380-000013A4       .text Mthd_Draw__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000013A4-000013AC       .text Mthd_IsDelete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

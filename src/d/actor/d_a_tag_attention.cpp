@@ -18,6 +18,31 @@ BOOL daTagAttention::Act_c::_execute() {
 
 namespace daTagAttention {
 namespace {
+/* 00000480-000004A0       .text Mthd_Create__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000004A0-000004A8       .text Mthd_Delete__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000004A8-000004C8       .text Mthd_Execute__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000004C8-000004D0       .text Mthd_Draw__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000004D0-000004D8       .text Mthd_IsDelete__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

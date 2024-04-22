@@ -188,6 +188,31 @@ BOOL daObjAjav::Act_c::_draw() {
 
 namespace daObjAjav {
 namespace {
+/* 00002DCC-00002DEC       .text Mthd_Create__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00002DEC-00002E10       .text Mthd_Delete__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00002E10-00002E34       .text Mthd_Execute__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00002E34-00002E58       .text Mthd_Draw__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00002E58-00002E60       .text Mthd_IsDelete__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

@@ -82,6 +82,7 @@ namespace daObj_Search {
         BOOL Execute(void*);
         BOOL Draw(void*);
         BOOL IsDelete(void*);
+        extern actor_method_class Table;
     };
 };
 

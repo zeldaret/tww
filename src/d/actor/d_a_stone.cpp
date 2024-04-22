@@ -236,7 +236,7 @@ BOOL daStone::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 
-static actor_method_class daStone::Method::Table = {
+actor_method_class daStone::Method::Table = {
     (process_method_func)daStone::Method::Create,
     (process_method_func)daStone::Method::Delete,
     (process_method_func)daStone::Method::Execute,

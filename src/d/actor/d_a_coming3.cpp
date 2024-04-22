@@ -123,6 +123,31 @@ BOOL daComing3::Act_c::_draw() {
 
 namespace daComing3 {
 namespace {
+/* 00001D14-00001D34       .text Mthd_Create__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001D34-00001D58       .text Mthd_Delete__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001D58-00001D7C       .text Mthd_Execute__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001D7C-00001DA0       .text Mthd_Draw__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001DA0-00001DA8       .text Mthd_IsDelete__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

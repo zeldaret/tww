@@ -196,14 +196,6 @@ actor_process_profile_definition g_profile_GY_CTRL = {
     /* CullType     */ fopAc_CULLBOX_4_e,
 };
 
-static actor_method_class daGy_CtrlMethodTable = {
-    (process_method_func)daGy_CtrlCreate,
-    (process_method_func)daGy_CtrlDelete,
-    (process_method_func)daGy_CtrlExecute,
-    (process_method_func)daGy_CtrlIsDelete,
-    (process_method_func)daGy_CtrlDraw,
-};
-
 actor_process_profile_definition g_profile_GY_CTRLB = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,

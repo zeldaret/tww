@@ -108,6 +108,31 @@ BOOL daObjShelf::Act_c::Draw() {
 
 namespace daObjShelf {
 namespace {
+/* 00000A50-00000A70       .text Mthd_Create__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000A70-00000A90       .text Mthd_Delete__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000A90-00000AB0       .text Mthd_Execute__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000AB0-00000ADC       .text Mthd_Draw__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000ADC-00000B08       .text Mthd_IsDelete__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

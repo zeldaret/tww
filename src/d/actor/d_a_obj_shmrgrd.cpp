@@ -157,6 +157,31 @@ BOOL daObjShmrgrd_c::_draw() {
 }
 
 namespace {
+/* 00001A74-00001A94       .text Mthd_Create__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001A94-00001AB8       .text Mthd_Delete__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001AB8-00001ADC       .text Mthd_Execute__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001ADC-00001B00       .text Mthd_Draw__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001B00-00001B08       .text Mthd_IsDelete__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Shmrgrd_Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

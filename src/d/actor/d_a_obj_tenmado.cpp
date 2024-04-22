@@ -53,6 +53,31 @@ BOOL daObjTenmado::Act_c::Draw() {
 
 namespace daObjTenmado {
 namespace {
+/* 00000750-00000770       .text Mthd_Create__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000770-00000790       .text Mthd_Delete__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000790-000007B0       .text Mthd_Execute__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000007B0-000007DC       .text Mthd_Draw__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000007DC-00000808       .text Mthd_IsDelete__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Tenmado = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

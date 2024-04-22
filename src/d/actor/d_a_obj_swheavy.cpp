@@ -108,6 +108,31 @@ BOOL daObjSwheavy::Act_c::_draw() {
 
 namespace daObjSwheavy {
 namespace {
+/* 000011C0-000011E0       .text Mthd_Create__Q212daObjSwheavy29@unnamed@d_a_obj_swheavy_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000011E0-00001204       .text Mthd_Delete__Q212daObjSwheavy29@unnamed@d_a_obj_swheavy_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001204-00001228       .text Mthd_Execute__Q212daObjSwheavy29@unnamed@d_a_obj_swheavy_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001228-0000124C       .text Mthd_Draw__Q212daObjSwheavy29@unnamed@d_a_obj_swheavy_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 0000124C-00001254       .text Mthd_IsDelete__Q212daObjSwheavy29@unnamed@d_a_obj_swheavy_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

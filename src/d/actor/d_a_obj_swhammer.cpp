@@ -138,6 +138,31 @@ BOOL daObjSwhammer::Act_c::Draw() {
 
 namespace daObjSwhammer {
 namespace {
+/* 00001564-00001584       .text Mthd_Create__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001584-000015A8       .text Mthd_Delete__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000015A8-000015C8       .text Mthd_Execute__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000015C8-000015F4       .text Mthd_Draw__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000015F4-00001620       .text Mthd_IsDelete__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

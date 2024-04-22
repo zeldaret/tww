@@ -53,6 +53,31 @@ BOOL daObjMsdanSub2::Act_c::Draw() {
 
 namespace daObjMsdanSub2 {
 namespace {
+/* 000009AC-000009CC       .text Mthd_Create__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000009CC-000009EC       .text Mthd_Delete__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000009EC-00000A0C       .text Mthd_Execute__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000A0C-00000A38       .text Mthd_Draw__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000A38-00000A64       .text Mthd_IsDelete__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_MsdanSub2 = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,

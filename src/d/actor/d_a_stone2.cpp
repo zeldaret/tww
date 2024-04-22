@@ -243,6 +243,31 @@ BOOL daStone2::Act_c::Draw() {
 
 namespace daStone2 {
 namespace {
+/* 0000273C-0000275C       .text Mthd_Create__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 0000275C-0000277C       .text Mthd_Delete__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 0000277C-0000279C       .text Mthd_Execute__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 0000279C-000027C8       .text Mthd_Draw__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000027C8-000027F4       .text Mthd_IsDelete__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,
     (process_method_func)Mthd_Delete,
