@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_sitem.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
 void hand_draw(sitem_class*) {
@@ -86,3 +86,28 @@ static s32 daSitem_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daSitem_Method = {
+    (process_method_func)daSitem_Create,
+    (process_method_func)daSitem_Delete,
+    (process_method_func)daSitem_Execute,
+    (process_method_func)daSitem_IsDelete,
+    (process_method_func)daSitem_Draw,
+};
+
+actor_process_profile_definition g_profile_SITEM = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SITEM,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(sitem_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00F3,
+    /* Actor SubMtd */ &l_daSitem_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

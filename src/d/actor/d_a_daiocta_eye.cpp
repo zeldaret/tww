@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_daiocta_eye.h"
 #include "d/d_cc_d.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001B0       .text __ct__19daDaiocta_Eye_HIO_cFv */
 daDaiocta_Eye_HIO_c::daDaiocta_Eye_HIO_c() {
@@ -136,3 +137,28 @@ static BOOL daDaiocta_EyeIsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daDaiocta_EyeMethodTable = {
+    (process_method_func)daDaiocta_EyeCreate,
+    (process_method_func)daDaiocta_EyeDelete,
+    (process_method_func)daDaiocta_EyeExecute,
+    (process_method_func)daDaiocta_EyeIsDelete,
+    (process_method_func)daDaiocta_EyeDraw,
+};
+
+actor_process_profile_definition g_profile_DAIOCTA_EYE = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_DAIOCTA_EYE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daDaiocta_Eye_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00D6,
+    /* Actor SubMtd */ &daDaiocta_EyeMethodTable,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
+};

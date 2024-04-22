@@ -6,7 +6,6 @@
 #include "d/actor/d_a_tag_kb_item.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 
 /* 00000078-000000C8       .text _delete__13daTagKbItem_cFv */
 bool daTagKbItem_c::_delete() {

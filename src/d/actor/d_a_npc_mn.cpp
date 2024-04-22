@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_mn.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000230       .text __ct__9daNpcMn_cFv */
 daNpcMn_c::daNpcMn_c() {
@@ -400,3 +401,28 @@ static BOOL daNpc_MnDraw(void*) {
 static BOOL daNpc_MnIsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daNpc_MnMethodTable = {
+    (process_method_func)daNpc_MnCreate,
+    (process_method_func)daNpc_MnDelete,
+    (process_method_func)daNpc_MnExecute,
+    (process_method_func)daNpc_MnIsDelete,
+    (process_method_func)daNpc_MnDraw,
+};
+
+actor_process_profile_definition g_profile_NPC_MN = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_MN,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcMn_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0182,
+    /* Actor SubMtd */ &daNpc_MnMethodTable,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

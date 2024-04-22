@@ -9,6 +9,7 @@
 // the DOL, even though this is an ugly hack and they're now in the wrong translation unit instead.
 #include "d/actor/d_a_player.h"
 u32 daPy_py_c::checkPlayerFly() const { return 0; }
+#include "d/d_procname.h"
 
 #include "d/actor/d_a_arrow.h"
 #include "m_Do/m_Do_mtx.h"

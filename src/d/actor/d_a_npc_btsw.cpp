@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_btsw.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001E8       .text __ct__16daNpc_Btsw_HIO_cFv */
 daNpc_Btsw_HIO_c::daNpc_Btsw_HIO_c() {
@@ -281,3 +282,28 @@ static BOOL daNpc_Btsw_IsDelete(daNpc_Btsw_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daNpc_Btsw_Method = {
+    (process_method_func)daNpc_Btsw_Create,
+    (process_method_func)daNpc_Btsw_Delete,
+    (process_method_func)daNpc_Btsw_Execute,
+    (process_method_func)daNpc_Btsw_IsDelete,
+    (process_method_func)daNpc_Btsw_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_BTSW = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_BTSW,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Btsw_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0162,
+    /* Actor SubMtd */ &l_daNpc_Btsw_Method,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_12_e,
+};

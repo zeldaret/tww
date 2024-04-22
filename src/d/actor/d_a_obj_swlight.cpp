@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_swlight.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000154       .text is_switch2__Q212daObjSwlight5Act_cCFv */
 void daObjSwlight::Act_c::is_switch2() const {
@@ -140,3 +140,32 @@ void daObjSwlight::setMaterial_Before_mirror(J3DMaterial*, unsigned char) {
 BOOL daObjSwlight::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daObjSwlight {
+namespace {
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjSwlight
+
+actor_process_profile_definition g_profile_Obj_Swlight = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Swlight,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSwlight::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0013,
+    /* Actor SubMtd */ &daObjSwlight::Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+};

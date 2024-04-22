@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_kb.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 00000078-000001A4       .text anm_init__FP8kb_classifUcfi */
 void anm_init(kb_class*, int, float, unsigned char, float, int) {
@@ -181,3 +182,28 @@ static s32 daKb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daKb_Method = {
+    (process_method_func)daKb_Create,
+    (process_method_func)daKb_Delete,
+    (process_method_func)daKb_Execute,
+    (process_method_func)daKb_IsDelete,
+    (process_method_func)daKb_Draw,
+};
+
+actor_process_profile_definition g_profile_KB = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KB,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kb_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00CF,
+    /* Actor SubMtd */ &l_daKb_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENV_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

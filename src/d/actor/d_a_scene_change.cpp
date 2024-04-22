@@ -9,7 +9,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 
 static daSceneChgHIO_c l_HIO;
 

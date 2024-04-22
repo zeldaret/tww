@@ -8,7 +8,6 @@
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_magma.h"
-#include "dolphin/types.h"
 
 daMagma_c::~daMagma_c() {
     dComIfG_resDelete(&mPhs, "Magma");

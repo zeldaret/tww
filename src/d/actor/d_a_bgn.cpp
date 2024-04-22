@@ -6,6 +6,7 @@
 #include "d/actor/d_a_bgn.h"
 #include "d/actor/d_a_bgn2.h"
 #include "d/actor/d_a_bgn3.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000003F0       .text __ct__11daBgn_HIO_cFv */
 daBgn_HIO_c::daBgn_HIO_c() {
@@ -272,3 +273,28 @@ static s32 daBgn_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daBgn_Method = {
+    (process_method_func)daBgn_Create,
+    (process_method_func)daBgn_Delete,
+    (process_method_func)daBgn_Execute,
+    (process_method_func)daBgn_IsDelete,
+    (process_method_func)daBgn_Draw,
+};
+
+actor_process_profile_definition g_profile_BGN = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BGN,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bgn_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00E8,
+    /* Actor SubMtd */ &l_daBgn_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

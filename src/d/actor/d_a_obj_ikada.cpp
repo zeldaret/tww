@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_ikada.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000254       .text __ct__17daObj_Ikada_HIO_cFv */
 daObj_Ikada_HIO_c::daObj_Ikada_HIO_c() {
@@ -301,3 +301,28 @@ static BOOL daObj_IkadaIsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daObj_IkadaMethodTable = {
+    (process_method_func)daObj_IkadaCreate,
+    (process_method_func)daObj_IkadaDelete,
+    (process_method_func)daObj_IkadaExecute,
+    (process_method_func)daObj_IkadaIsDelete,
+    (process_method_func)daObj_IkadaDraw,
+};
+
+actor_process_profile_definition g_profile_OBJ_IKADA = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OBJ_IKADA,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Ikada_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01B4,
+    /* Actor SubMtd */ &daObj_IkadaMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_warpgn.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000120       .text _delete__10daWarpgn_cFv */
 BOOL daWarpgn_c::_delete() {
@@ -176,3 +176,28 @@ static BOOL daWarpgn_IsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daWarpgnMethodTable = {
+    (process_method_func)daWarpgn_Create,
+    (process_method_func)daWarpgn_Delete,
+    (process_method_func)daWarpgn_Execute,
+    (process_method_func)daWarpgn_IsDelete,
+    (process_method_func)daWarpgn_Draw,
+};
+
+actor_process_profile_definition g_profile_WARPGANON = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_WARPGANON,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daWarpgn_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01A7,
+    /* Actor SubMtd */ &daWarpgnMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

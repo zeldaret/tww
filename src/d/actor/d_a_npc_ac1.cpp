@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_ac1.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000150       .text __ct__15daNpc_Ac1_HIO_cFv */
 daNpc_Ac1_HIO_c::daNpc_Ac1_HIO_c() {
@@ -331,3 +331,28 @@ static BOOL daNpc_Ac1_IsDelete(daNpc_Ac1_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daNpc_Ac1_Method = {
+    (process_method_func)daNpc_Ac1_Create,
+    (process_method_func)daNpc_Ac1_Delete,
+    (process_method_func)daNpc_Ac1_Execute,
+    (process_method_func)daNpc_Ac1_IsDelete,
+    (process_method_func)daNpc_Ac1_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_AC1 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_AC1,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Ac1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x017E,
+    /* Actor SubMtd */ &l_daNpc_Ac1_Method,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

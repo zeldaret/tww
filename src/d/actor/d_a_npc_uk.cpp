@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_uk.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000000F8       .text getType__10daNpc_Uk_cFv */
 void daNpc_Uk_c::getType() {
@@ -355,3 +356,28 @@ static BOOL daNpc_Uk_Draw(daNpc_Uk_c*) {
 static BOOL daNpc_Uk_IsDelete(daNpc_Uk_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daNpc_Uk_Method = {
+    (process_method_func)daNpc_Uk_Create,
+    (process_method_func)daNpc_Uk_Delete,
+    (process_method_func)daNpc_Uk_Execute,
+    (process_method_func)daNpc_Uk_IsDelete,
+    (process_method_func)daNpc_Uk_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_UK = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_UK,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Uk_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0177,
+    /* Actor SubMtd */ &l_daNpc_Uk_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

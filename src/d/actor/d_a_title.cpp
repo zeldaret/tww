@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_title.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000638       .text proc_init3D__14daTitle_proc_cFv */
 void daTitle_proc_c::proc_init3D() {
@@ -86,3 +86,28 @@ BOOL daTitle_proc_c::draw() {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daTitle_Method = {
+    (process_method_func)daTitle_Create,
+    (process_method_func)daTitle_Delete,
+    (process_method_func)daTitle_Execute,
+    (process_method_func)daTitle_IsDelete,
+    (process_method_func)daTitle_Draw,
+};
+
+actor_process_profile_definition g_profile_TITLE = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TITLE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTitle_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x000A,
+    /* Actor SubMtd */ &l_daTitle_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

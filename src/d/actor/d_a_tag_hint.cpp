@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_tag_hint.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000000F8       .text getEventNo__12daTag_Hint_cFv */
 void daTag_Hint_c::getEventNo() {
@@ -190,3 +190,28 @@ static BOOL daTag_Hint_Delete(daTag_Hint_c*) {
 static s32 daTag_Hint_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daTag_Hint_Method = {
+    (process_method_func)daTag_Hint_Create,
+    (process_method_func)daTag_Hint_Delete,
+    (process_method_func)daTag_Hint_Execute,
+    (process_method_func)daTag_Hint_IsDelete,
+    (process_method_func)daTag_Hint_Draw,
+};
+
+actor_process_profile_definition g_profile_TAG_HINT = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TAG_HINT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_Hint_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0120,
+    /* Actor SubMtd */ &l_daTag_Hint_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_6_e,
+};

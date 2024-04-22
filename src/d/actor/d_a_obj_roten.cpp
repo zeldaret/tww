@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_roten.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000118       .text __ct__17daObj_Roten_HIO_cFv */
 daObj_Roten_HIO_c::daObj_Roten_HIO_c() {
@@ -61,3 +61,28 @@ static BOOL daObj_RotenIsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daObj_RotenMethodTable = {
+    (process_method_func)daObj_RotenCreate,
+    (process_method_func)daObj_RotenDelete,
+    (process_method_func)daObj_RotenExecute,
+    (process_method_func)daObj_RotenIsDelete,
+    (process_method_func)daObj_RotenDraw,
+};
+
+actor_process_profile_definition g_profile_Obj_Roten = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Roten,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Roten_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01B9,
+    /* Actor SubMtd */ &daObj_RotenMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_kmon.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000118       .text set_mtx__8daKmon_cFv */
 void daKmon_c::set_mtx() {
@@ -55,3 +55,28 @@ static BOOL daKmonDraw(void*) {
 static BOOL daKmonIsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daKmonMethodTable = {
+    (process_method_func)daKmonCreate,
+    (process_method_func)daKmonDelete,
+    (process_method_func)daKmonExecute,
+    (process_method_func)daKmonIsDelete,
+    (process_method_func)daKmonDraw,
+};
+
+actor_process_profile_definition g_profile_Kmon = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Kmon,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daKmon_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x018B,
+    /* Actor SubMtd */ &daKmonMethodTable,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
+};

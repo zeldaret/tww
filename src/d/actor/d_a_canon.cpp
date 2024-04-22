@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_canon.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000002C8       .text set_mtx__9daCanon_cFv */
 void daCanon_c::set_mtx() {
@@ -170,3 +171,28 @@ static BOOL daCanonDraw(void*) {
 static BOOL daCanonIsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daCanonMethodTable = {
+    (process_method_func)daCanonCreate,
+    (process_method_func)daCanonDelete,
+    (process_method_func)daCanonExecute,
+    (process_method_func)daCanonIsDelete,
+    (process_method_func)daCanonDraw,
+};
+
+actor_process_profile_definition g_profile_Canon = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Canon,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daCanon_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01AD,
+    /* Actor SubMtd */ &daCanonMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_bflower.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c*) {
@@ -90,3 +90,28 @@ static BOOL daBFlower_Execute(void*) {
 static BOOL daBFlower_IsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daBFlowerMethodTable = {
+    (process_method_func)daBFlower_Create,
+    (process_method_func)daBFlower_Delete,
+    (process_method_func)daBFlower_Execute,
+    (process_method_func)daBFlower_IsDelete,
+    (process_method_func)daBFlower_Draw,
+};
+
+actor_process_profile_definition g_profile_BOMB_FLOWER = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BOMB_FLOWER,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBFlower_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0117,
+    /* Actor SubMtd */ &daBFlowerMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -4,6 +4,7 @@
 //
 
 #include "global.h"
+#include "d/d_procname.h"
 
 // need to figure out what's putting this data in front of a bunch of rels with the compiler-generated symbol names
 static f32 dummy[3] = {1.0f, 1.0f, 1.0f};

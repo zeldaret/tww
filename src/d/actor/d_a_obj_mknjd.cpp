@@ -25,7 +25,6 @@
 #include "d/d_a_obj.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/types.h"
 
 
 #define ACT_SETGOAL 0

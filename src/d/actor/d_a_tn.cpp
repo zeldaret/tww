@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_tn.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000220       .text anm_init__FP8tn_classifUcfi */
 void anm_init(tn_class*, int, float, unsigned char, float, int) {
@@ -306,3 +307,28 @@ static s32 daTn_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daTn_Method = {
+    (process_method_func)daTn_Create,
+    (process_method_func)daTn_Delete,
+    (process_method_func)daTn_Execute,
+    (process_method_func)daTn_IsDelete,
+    (process_method_func)daTn_Draw,
+};
+
+actor_process_profile_definition g_profile_TN = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TN,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(tn_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00B2,
+    /* Actor SubMtd */ &l_daTn_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

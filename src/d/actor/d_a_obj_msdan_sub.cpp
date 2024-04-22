@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_msdan_sub.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q213daObjMsdanSub5Act_cFv */
 void daObjMsdanSub::Act_c::CreateHeap() {
@@ -50,3 +50,32 @@ void daObjMsdanSub::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjMsdanSub::Act_c::Draw() {
     /* Nonmatching */
 }
+
+namespace daObjMsdanSub {
+namespace {
+static actor_method_class Mthd_MsdanSub = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjMsdanSub
+
+actor_process_profile_definition g_profile_Obj_MsdanSub = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_MsdanSub,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMsdanSub::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0039,
+    /* Actor SubMtd */ &daObjMsdanSub::Mthd_MsdanSub,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_try.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000090       .text prm_set_swSave__Q28daObjTry5Act_cFi */
 void daObjTry::Act_c::prm_set_swSave(int) {
@@ -220,3 +220,32 @@ BOOL daObjTry::Act_c::_execute() {
 BOOL daObjTry::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daObjTry {
+namespace {
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjTry
+
+actor_process_profile_definition g_profile_Obj_Try = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0008,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Try,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTry::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0106,
+    /* Actor SubMtd */ &daObjTry::Mthd_Table,
+    /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK8000000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+};

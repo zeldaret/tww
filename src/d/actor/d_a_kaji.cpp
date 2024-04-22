@@ -11,7 +11,6 @@
 #include "d/d_s_play.h"
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 
 static daObjPirateship::Act_c* l_p_ship;
 

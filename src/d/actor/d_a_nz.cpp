@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_nz.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000138       .text __ct__10daNZ_HIO_cFv */
 daNZ_HIO_c::daNZ_HIO_c() {
@@ -176,3 +177,28 @@ static s32 daNZ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daNZ_Method = {
+    (process_method_func)daNZ_Create,
+    (process_method_func)daNZ_Delete,
+    (process_method_func)daNZ_Execute,
+    (process_method_func)daNZ_IsDelete,
+    (process_method_func)daNZ_Draw,
+};
+
+actor_process_profile_definition g_profile_NZ = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NZ,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(nz_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00B9,
+    /* Actor SubMtd */ &l_daNZ_Method,
+    /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

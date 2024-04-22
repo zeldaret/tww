@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_tc.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000394       .text __ct__14daNpc_Tc_HIO_cFv */
 daNpc_Tc_HIO_c::daNpc_Tc_HIO_c() {
@@ -495,3 +496,28 @@ void daNpc_Tc_c::cutPayStart(int) {
 void daNpc_Tc_c::cutPayProc(int) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daNpc_Tc_Method = {
+    (process_method_func)daNpc_Tc_Create,
+    (process_method_func)daNpc_Tc_Delete,
+    (process_method_func)daNpc_Tc_Execute,
+    (process_method_func)daNpc_Tc_IsDelete,
+    (process_method_func)daNpc_Tc_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_TC = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_TC,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Tc_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0148,
+    /* Actor SubMtd */ &l_daNpc_Tc_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_12_e,
+};

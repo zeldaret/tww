@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_timer.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
 s32 daObjTimer::Act_c::_create() {
@@ -40,3 +40,32 @@ void daObjTimer::Act_c::mode_count() {
 BOOL daObjTimer::Act_c::_execute() {
     /* Nonmatching */
 }
+
+namespace daObjTimer {
+namespace {
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjTimer
+
+actor_process_profile_definition g_profile_Obj_Timer = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x000A,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Timer,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTimer::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x002A,
+    /* Actor SubMtd */ &daObjTimer::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

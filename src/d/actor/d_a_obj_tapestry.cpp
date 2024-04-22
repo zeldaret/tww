@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_tapestry.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001E0       .text __ct__19daObjTapestry_HIO_cFv */
 daObjTapestry_HIO_c::daObjTapestry_HIO_c() {
@@ -340,3 +340,28 @@ static BOOL daObjTapestry_Draw(daObjTapestry_c*) {
 static BOOL daObjTapestry_IsDelete(daObjTapestry_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daObjTapestry_Method = {
+    (process_method_func)daObjTapestry_Create,
+    (process_method_func)daObjTapestry_Delete,
+    (process_method_func)daObjTapestry_Execute,
+    (process_method_func)daObjTapestry_IsDelete,
+    (process_method_func)daObjTapestry_Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Tapestry = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Tapestry,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTapestryPLight_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0087,
+    /* Actor SubMtd */ &l_daObjTapestry_Method,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

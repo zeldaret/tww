@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_pfall.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-0000010C       .text CallbackCreateHeap__FP10fopAc_ac_c */
 static BOOL CallbackCreateHeap(fopAc_ac_c*) {
@@ -146,3 +146,28 @@ static BOOL daObj_PfallIsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daObj_PfallMethodTable = {
+    (process_method_func)daObj_PfallCreate,
+    (process_method_func)daObj_PfallDelete,
+    (process_method_func)daObj_PfallExecute,
+    (process_method_func)daObj_PfallIsDelete,
+    (process_method_func)daObj_PfallDraw,
+};
+
+actor_process_profile_definition g_profile_OBJ_PFALL = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OBJ_PFALL,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Pfall_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01B6,
+    /* Actor SubMtd */ &daObj_PfallMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
+};

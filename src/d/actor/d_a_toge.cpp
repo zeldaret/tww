@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_toge.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000013C       .text _delete__8daToge_cFv */
 BOOL daToge_c::_delete() {
@@ -95,3 +96,28 @@ static BOOL daToge_Execute(void*) {
 static BOOL daToge_IsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daTogeMethodTable = {
+    (process_method_func)daToge_Create,
+    (process_method_func)daToge_Delete,
+    (process_method_func)daToge_Execute,
+    (process_method_func)daToge_IsDelete,
+    (process_method_func)daToge_Draw,
+};
+
+actor_process_profile_definition g_profile_TOGE = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TOGE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daToge_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x018C,
+    /* Actor SubMtd */ &daTogeMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

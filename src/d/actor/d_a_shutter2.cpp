@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_shutter2.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000B8       .text Delete__12daShutter2_cFv */
 BOOL daShutter2_c::Delete() {
@@ -76,3 +76,28 @@ static BOOL daShutter2_IsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daShutter2MethodTable = {
+    (process_method_func)daShutter2_Create,
+    (process_method_func)daShutter2_Delete,
+    (process_method_func)daShutter2_Execute,
+    (process_method_func)daShutter2_IsDelete,
+    (process_method_func)daShutter2_Draw,
+};
+
+actor_process_profile_definition g_profile_SHUTTER2 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SHUTTER2,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daShutter2_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01BB,
+    /* Actor SubMtd */ &daShutter2MethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_swheavy.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q212daObjSwheavy5Act_cFP10fopAc_ac_c */
 void daObjSwheavy::Act_c::solidHeapCB(fopAc_ac_c*) {
@@ -105,3 +105,32 @@ BOOL daObjSwheavy::Act_c::_execute() {
 BOOL daObjSwheavy::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daObjSwheavy {
+namespace {
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjSwheavy
+
+actor_process_profile_definition g_profile_Obj_Swheavy = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Swheavy,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSwheavy::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0011,
+    /* Actor SubMtd */ &daObjSwheavy::Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

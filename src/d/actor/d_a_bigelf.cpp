@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_bigelf.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
@@ -355,3 +355,28 @@ static BOOL daBigelf_Draw(daBigelf_c*) {
 static BOOL daBigelf_IsDelete(daBigelf_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daBigelf_Method = {
+    (process_method_func)daBigelf_Create,
+    (process_method_func)daBigelf_Delete,
+    (process_method_func)daBigelf_Execute,
+    (process_method_func)daBigelf_IsDelete,
+    (process_method_func)daBigelf_Draw,
+};
+
+actor_process_profile_definition g_profile_BIGELF = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BIGELF,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBigelf_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x012B,
+    /* Actor SubMtd */ &l_daBigelf_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_12_e,
+};

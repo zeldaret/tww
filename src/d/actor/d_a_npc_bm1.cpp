@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_bm1.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000108       .text __ct__20daNpc_Bm1_childHIO_cFv */
 daNpc_Bm1_childHIO_c::daNpc_Bm1_childHIO_c() {
@@ -836,3 +836,128 @@ static BOOL daNpc_Bm1_IsDelete(daNpc_Bm1_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daNpc_Bm1_Method = {
+    (process_method_func)daNpc_Bm1_Create,
+    (process_method_func)daNpc_Bm1_Delete,
+    (process_method_func)daNpc_Bm1_Execute,
+    (process_method_func)daNpc_Bm1_IsDelete,
+    (process_method_func)daNpc_Bm1_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_BM1 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_BM1,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Bm1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x014B,
+    /* Actor SubMtd */ &l_daNpc_Bm1_Method,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
+
+static actor_method_class l_daNpc_Bm1_Method = {
+    (process_method_func)daNpc_Bm1_Create,
+    (process_method_func)daNpc_Bm1_Delete,
+    (process_method_func)daNpc_Bm1_Execute,
+    (process_method_func)daNpc_Bm1_IsDelete,
+    (process_method_func)daNpc_Bm1_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_BM2 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_BM2,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Bm1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x014C,
+    /* Actor SubMtd */ &l_daNpc_Bm1_Method,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
+
+static actor_method_class l_daNpc_Bm1_Method = {
+    (process_method_func)daNpc_Bm1_Create,
+    (process_method_func)daNpc_Bm1_Delete,
+    (process_method_func)daNpc_Bm1_Execute,
+    (process_method_func)daNpc_Bm1_IsDelete,
+    (process_method_func)daNpc_Bm1_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_BM3 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_BM3,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Bm1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x014D,
+    /* Actor SubMtd */ &l_daNpc_Bm1_Method,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
+
+static actor_method_class l_daNpc_Bm1_Method = {
+    (process_method_func)daNpc_Bm1_Create,
+    (process_method_func)daNpc_Bm1_Delete,
+    (process_method_func)daNpc_Bm1_Execute,
+    (process_method_func)daNpc_Bm1_IsDelete,
+    (process_method_func)daNpc_Bm1_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_BM4 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_BM4,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Bm1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x014E,
+    /* Actor SubMtd */ &l_daNpc_Bm1_Method,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
+
+static actor_method_class l_daNpc_Bm1_Method = {
+    (process_method_func)daNpc_Bm1_Create,
+    (process_method_func)daNpc_Bm1_Delete,
+    (process_method_func)daNpc_Bm1_Execute,
+    (process_method_func)daNpc_Bm1_IsDelete,
+    (process_method_func)daNpc_Bm1_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_BM5 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_BM5,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Bm1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x014F,
+    /* Actor SubMtd */ &l_daNpc_Bm1_Method,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

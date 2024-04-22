@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_swpush.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-0000011C       .text prmZ_init__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::prmZ_init() {
@@ -185,3 +185,32 @@ void daObjSwpush::Act_c::Mthd_Execute() {
 void daObjSwpush::Act_c::Mthd_Draw() {
     /* Nonmatching */
 }
+
+namespace daObjSwpush {
+namespace {
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjSwpush
+
+actor_process_profile_definition g_profile_Obj_Swpush = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Swpush,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSwpush::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0010,
+    /* Actor SubMtd */ &daObjSwpush::Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_bmdhand.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000118       .text __ct__15daBmdhand_HIO_cFv */
 daBmdhand_HIO_c::daBmdhand_HIO_c() {
@@ -121,3 +121,28 @@ static s32 daBmdhand_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daBmdhand_Method = {
+    (process_method_func)daBmdhand_Create,
+    (process_method_func)daBmdhand_Delete,
+    (process_method_func)daBmdhand_Execute,
+    (process_method_func)daBmdhand_IsDelete,
+    (process_method_func)daBmdhand_Draw,
+};
+
+actor_process_profile_definition g_profile_BMDHAND = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BMDHAND,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bmdhand_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00E0,
+    /* Actor SubMtd */ &l_daBmdhand_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

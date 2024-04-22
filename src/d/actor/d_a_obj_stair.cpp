@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_stair.h"
 #include "d/d_bg_w.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000130       .text __ct__16daobj_stairHIO_cFv */
 daobj_stairHIO_c::daobj_stairHIO_c() {
@@ -76,3 +77,28 @@ static BOOL daObj_StairIsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daObj_StairMethodTable = {
+    (process_method_func)daObj_StairCreate,
+    (process_method_func)daObj_StairDelete,
+    (process_method_func)daObj_StairExecute,
+    (process_method_func)daObj_StairIsDelete,
+    (process_method_func)daObj_StairDraw,
+};
+
+actor_process_profile_definition g_profile_Obj_Stair = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Stair,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Stair_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x006E,
+    /* Actor SubMtd */ &daObj_StairMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENV_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

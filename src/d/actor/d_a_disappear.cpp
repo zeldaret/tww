@@ -10,7 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
-#include "dolphin/types.h"
 
 /* 800E79C0-800E79C8       .text daDisappear_Draw__FP15disappear_class */
 static BOOL daDisappear_Draw(disappear_class*) {

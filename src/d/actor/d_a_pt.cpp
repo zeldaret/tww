@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_pt.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000110       .text __ct__10daPt_HIO_cFv */
 daPt_HIO_c::daPt_HIO_c() {
@@ -116,3 +116,28 @@ static s32 daPt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daPt_Method = {
+    (process_method_func)daPt_Create,
+    (process_method_func)daPt_Delete,
+    (process_method_func)daPt_Execute,
+    (process_method_func)daPt_IsDelete,
+    (process_method_func)daPt_Draw,
+};
+
+actor_process_profile_definition g_profile_PT = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_PT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(pt_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00EC,
+    /* Actor SubMtd */ &l_daPt_Method,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

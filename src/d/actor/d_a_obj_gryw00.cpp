@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_gryw00.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000090       .text get_draw_water_lv__13daObjGryw00_cFPv */
 f32 daObjGryw00_c::get_draw_water_lv(void*) {
@@ -121,3 +121,28 @@ static BOOL daObjGryw00_IsDelete(daObjGryw00_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daObjGryw00_Method = {
+    (process_method_func)daObjGryw00_Create,
+    (process_method_func)daObjGryw00_Delete,
+    (process_method_func)daObjGryw00_Execute,
+    (process_method_func)daObjGryw00_IsDelete,
+    (process_method_func)daObjGryw00_Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Gryw00 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Gryw00,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjGryw00_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0055,
+    /* Actor SubMtd */ &l_daObjGryw00_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

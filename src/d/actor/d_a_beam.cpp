@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_beam.h"
 #include "d/d_cc_d.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000118       .text __ct__12daBeam_HIO_cFv */
 daBeam_HIO_c::daBeam_HIO_c() {
@@ -106,3 +107,28 @@ static BOOL daBeamIsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daBeamMethodTable = {
+    (process_method_func)daBeamCreate,
+    (process_method_func)daBeamDelete,
+    (process_method_func)daBeamExecute,
+    (process_method_func)daBeamIsDelete,
+    (process_method_func)daBeamDraw,
+};
+
+actor_process_profile_definition g_profile_Beam = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Beam,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBeam_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00DC,
+    /* Actor SubMtd */ &daBeamMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_mt.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001E8       .text __ct__10daMt_HIO_cFv */
 daMt_HIO_c::daMt_HIO_c() {
@@ -161,3 +162,28 @@ static s32 daMt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daMt_Method = {
+    (process_method_func)daMt_Create,
+    (process_method_func)daMt_Delete,
+    (process_method_func)daMt_Execute,
+    (process_method_func)daMt_IsDelete,
+    (process_method_func)daMt_Draw,
+};
+
+actor_process_profile_definition g_profile_MT = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_MT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(mt_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00CB,
+    /* Actor SubMtd */ &l_daMt_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e | fopAcStts_UNK8000000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

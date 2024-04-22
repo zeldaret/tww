@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_nzg.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000E4       .text daNZG_Draw__FP9nzg_class */
 static BOOL daNZG_Draw(nzg_class*) {
@@ -45,3 +45,28 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 static s32 daNZG_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daNZG_Method = {
+    (process_method_func)daNZG_Create,
+    (process_method_func)daNZG_Delete,
+    (process_method_func)daNZG_Execute,
+    (process_method_func)daNZG_IsDelete,
+    (process_method_func)daNZG_Draw,
+};
+
+actor_process_profile_definition g_profile_NZG = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NZG,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(nzg_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00BA,
+    /* Actor SubMtd */ &l_daNZG_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_light.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */
 void daObjLight::Act_c::solidHeapCB(fopAc_ac_c*) {
@@ -100,3 +100,32 @@ BOOL daObjLight::Act_c::_execute() {
 BOOL daObjLight::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daObjLight {
+namespace {
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjLight
+
+actor_process_profile_definition g_profile_Obj_Light = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Light,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLight::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0041,
+    /* Actor SubMtd */ &daObjLight::Mthd_Table,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

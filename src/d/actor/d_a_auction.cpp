@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_auction.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
@@ -275,3 +275,28 @@ static BOOL daAuctionDraw(void*) {
 static BOOL daAuctionIsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daAuctionMethodTable = {
+    (process_method_func)daAuctionCreate,
+    (process_method_func)daAuctionDelete,
+    (process_method_func)daAuctionExecute,
+    (process_method_func)daAuctionIsDelete,
+    (process_method_func)daAuctionDraw,
+};
+
+actor_process_profile_definition g_profile_AUCTION = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_AUCTION,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daAuction_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01E0,
+    /* Actor SubMtd */ &daAuctionMethodTable,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

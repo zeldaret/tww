@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_kokiie.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000B4-00000154       .text daKokiie_Draw__FP12kokiie_class */
 static BOOL daKokiie_Draw(kokiie_class*) {
@@ -51,3 +51,28 @@ static s32 daKokiie_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daKokiie_Method = {
+    (process_method_func)daKokiie_Create,
+    (process_method_func)daKokiie_Delete,
+    (process_method_func)daKokiie_Execute,
+    (process_method_func)daKokiie_IsDelete,
+    (process_method_func)daKokiie_Draw,
+};
+
+actor_process_profile_definition g_profile_KOKIIE = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KOKIIE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kokiie_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0094,
+    /* Actor SubMtd */ &l_daKokiie_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_swpropeller.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
 BOOL daSwProp_c::_delete() {
@@ -75,3 +76,28 @@ static BOOL daSwProp_Execute(void*) {
 static BOOL daSwProp_IsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daSwPropMethodTable = {
+    (process_method_func)daSwProp_Create,
+    (process_method_func)daSwProp_Delete,
+    (process_method_func)daSwProp_Execute,
+    (process_method_func)daSwProp_IsDelete,
+    (process_method_func)daSwProp_Draw,
+};
+
+actor_process_profile_definition g_profile_SW_PROPELLER = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SW_PROPELLER,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSwProp_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0199,
+    /* Actor SubMtd */ &daSwPropMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

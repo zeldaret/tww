@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_movie_player.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 extern "C" {
 
@@ -539,3 +539,28 @@ void daMP_c::daMP_c_Callback_Draw(daMP_c*) {
 void daMP_Callback_Dummy(daMP_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class daMP_METHODS = {
+    (process_method_func)daMP_c::daMP_c_Callback_Init,
+    (process_method_func)daMP_c::daMP_c_Callback_Finish,
+    (process_method_func)daMP_c::daMP_c_Callback_Main,
+    (process_method_func)daMP_Callback_Dummy,
+    (process_method_func)daMP_c::daMP_c_Callback_Draw,
+};
+
+actor_process_profile_definition g_profile_MP = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_MP,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daMP_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x000B,
+    /* Actor SubMtd */ &daMP_METHODS,
+    /* Status       */ fopAcStts_NOPAUSE_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

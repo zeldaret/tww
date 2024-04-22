@@ -6,7 +6,6 @@
 #include "d/actor/d_a_obj_gaship2.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "dolphin/types.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"

@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "d/d_procname.h"
 
 // Needed for the .data and .bss sections to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -18,7 +19,6 @@ static u8 dummy5[0x4C];
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/types.h"
 #include "d/actor/d_a_obj_buoyflag.h"
 #include "d/actor/d_a_obj_jump.h"
 #include "d/actor/d_a_obj_mmrr.h"

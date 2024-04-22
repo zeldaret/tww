@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_icelift.h"
 #include "d/d_bg_w.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */
 BOOL daIlift_c::_delete() {
@@ -95,3 +96,28 @@ static BOOL daIlift_Execute(void*) {
 static BOOL daIlift_IsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daIliftMethodTable = {
+    (process_method_func)daIlift_Create,
+    (process_method_func)daIlift_Delete,
+    (process_method_func)daIlift_Execute,
+    (process_method_func)daIlift_IsDelete,
+    (process_method_func)daIlift_Draw,
+};
+
+actor_process_profile_definition g_profile_ICE_LIFT = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ICE_LIFT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daIlift_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x008F,
+    /* Actor SubMtd */ &daIliftMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

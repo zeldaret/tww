@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_hmlif.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000080       .text Delete__9daHmlif_cFv */
 BOOL daHmlif_c::Delete() {
@@ -115,3 +115,28 @@ static BOOL daHmlif_Execute(void*) {
 static BOOL daHmlif_IsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daHmlifMethodTable = {
+    (process_method_func)daHmlif_Create,
+    (process_method_func)daHmlif_Delete,
+    (process_method_func)daHmlif_Execute,
+    (process_method_func)daHmlif_IsDelete,
+    (process_method_func)daHmlif_Draw,
+};
+
+actor_process_profile_definition g_profile_Hmlif = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Hmlif,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daHmlif_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x008D,
+    /* Actor SubMtd */ &daHmlifMethodTable,
+    /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_lstair.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000D4       .text _delete__10daLStair_cFv */
 BOOL daLStair_c::_delete() {
@@ -106,3 +106,28 @@ static BOOL daLStair_IsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daLStairMethodTable = {
+    (process_method_func)daLStair_Create,
+    (process_method_func)daLStair_Delete,
+    (process_method_func)daLStair_Execute,
+    (process_method_func)daLStair_IsDelete,
+    (process_method_func)daLStair_Draw,
+};
+
+actor_process_profile_definition g_profile_LIGHTSTAIR = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_LIGHTSTAIR,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daLStair_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0197,
+    /* Actor SubMtd */ &daLStairMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

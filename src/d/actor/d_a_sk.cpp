@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_sk.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000240       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -50,3 +51,28 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 static s32 daSk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daSk_Method = {
+    (process_method_func)daSk_Create,
+    (process_method_func)daSk_Delete,
+    (process_method_func)daSk_Execute,
+    (process_method_func)daSk_IsDelete,
+    (process_method_func)daSk_Draw,
+};
+
+actor_process_profile_definition g_profile_SK = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SK,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(sk_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0097,
+    /* Actor SubMtd */ &l_daSk_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_daiocta.h"
 #include "d/d_cc_d.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000002B0       .text __ct__15daDaiocta_HIO_cFv */
 daDaiocta_HIO_c::daDaiocta_HIO_c() {
@@ -286,3 +287,28 @@ static BOOL daDaioctaIsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daDaioctaMethodTable = {
+    (process_method_func)daDaioctaCreate,
+    (process_method_func)daDaioctaDelete,
+    (process_method_func)daDaioctaExecute,
+    (process_method_func)daDaioctaIsDelete,
+    (process_method_func)daDaioctaDraw,
+};
+
+actor_process_profile_definition g_profile_DAIOCTA = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_DAIOCTA,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daDaiocta_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00D5,
+    /* Actor SubMtd */ &daDaioctaMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

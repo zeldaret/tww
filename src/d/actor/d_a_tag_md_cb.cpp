@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_tag_md_cb.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000160       .text __ct__16daTag_MdCb_HIO_cFv */
 daTag_MdCb_HIO_c::daTag_MdCb_HIO_c() {
@@ -181,3 +181,28 @@ static s32 daTag_MdCb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daTag_MdCb_Method = {
+    (process_method_func)daTag_MdCb_Create,
+    (process_method_func)daTag_MdCb_Delete,
+    (process_method_func)daTag_MdCb_Execute,
+    (process_method_func)daTag_MdCb_IsDelete,
+    (process_method_func)daTag_MdCb_Draw,
+};
+
+actor_process_profile_definition g_profile_TAG_MDCB = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TAG_MDCB,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_MdCb_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0129,
+    /* Actor SubMtd */ &l_daTag_MdCb_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_6_e,
+};

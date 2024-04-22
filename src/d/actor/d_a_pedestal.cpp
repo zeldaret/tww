@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_pedestal.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000DC       .text _delete__Q210daPedestal7daPds_cFv */
 BOOL daPedestal::daPds_c::_delete() {
@@ -160,3 +160,28 @@ void daPedestal::daPds_infiniteEcallBack_c::end() {
 void daPedestal::daPds_infiniteEcallBack_c::makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*) {
     /* Nonmatching */
 }
+
+static actor_method_class daPedestal::daActMethodTable = {
+    (process_method_func)daPedestal::daPds_Create,
+    (process_method_func)daPedestal::daPds_Delete,
+    (process_method_func)daPedestal::daPds_Execute,
+    (process_method_func)daPedestal::daPds_IsDelete,
+    (process_method_func)daPedestal::daPds_Draw,
+};
+
+actor_process_profile_definition g_profile_PEDESTAL = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_PEDESTAL,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daPedestal::daPds_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0091,
+    /* Actor SubMtd */ &daPedestal::daPedestal::daActMethodTable,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

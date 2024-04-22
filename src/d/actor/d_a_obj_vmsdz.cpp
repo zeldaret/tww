@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_vmsdz.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVmsdz_cFP10fopAc_ac_c */
 void daObjVmsdz_c::solidHeapCB(fopAc_ac_c*) {
@@ -40,3 +40,30 @@ BOOL daObjVmsdz_c::_execute() {
 BOOL daObjVmsdz_c::_draw() {
     /* Nonmatching */
 }
+
+namespace {
+static actor_method_class Vmsdz_Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+
+actor_process_profile_definition g_profile_Obj_Vmsdz = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Vmsdz,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjVmsdz_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x004E,
+    /* Actor SubMtd */ &Vmsdz_Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_fire.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000F8       .text _delete__8daFire_cFv */
 BOOL daFire_c::_delete() {
@@ -110,3 +110,28 @@ static BOOL daFire_Execute(void*) {
 static BOOL daFire_IsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daFireMethodTable = {
+    (process_method_func)daFire_Create,
+    (process_method_func)daFire_Delete,
+    (process_method_func)daFire_Execute,
+    (process_method_func)daFire_IsDelete,
+    (process_method_func)daFire_Draw,
+};
+
+actor_process_profile_definition g_profile_Fire = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Fire,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daFire_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0192,
+    /* Actor SubMtd */ &daFireMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

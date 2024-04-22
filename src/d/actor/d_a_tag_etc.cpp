@@ -7,7 +7,6 @@
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 
 enum Action {
     ACT_WAIT,

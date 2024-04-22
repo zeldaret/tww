@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_kddoor.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */
 void daKddoor_c::chkMakeKey() {
@@ -285,3 +285,28 @@ static BOOL daKddoor_Delete(daKddoor_c*) {
 static s32 daKddoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daKddoor_Method = {
+    (process_method_func)daKddoor_Create,
+    (process_method_func)daKddoor_Delete,
+    (process_method_func)daKddoor_Execute,
+    (process_method_func)daKddoor_IsDelete,
+    (process_method_func)daKddoor_Draw,
+};
+
+actor_process_profile_definition g_profile_KDDOOR = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KDDOOR,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daKddoor_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0131,
+    /* Actor SubMtd */ &l_daKddoor_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_6_e,
+};

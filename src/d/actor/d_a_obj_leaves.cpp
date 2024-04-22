@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_leaves.h"
 #include "d/d_bg_w.h"
+#include "d/d_procname.h"
 
 class J3DMaterial;
 
@@ -117,3 +118,28 @@ static BOOL daObjLeaves_Draw(daObjLeaves_c*) {
 static BOOL daObjLeaves_IsDelete(daObjLeaves_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daObjLeaves_Method = {
+    (process_method_func)daObjLeaves_Create,
+    (process_method_func)daObjLeaves_Delete,
+    (process_method_func)daObjLeaves_Execute,
+    (process_method_func)daObjLeaves_IsDelete,
+    (process_method_func)daObjLeaves_Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Leaves = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Leaves,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLeaves_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0057,
+    /* Actor SubMtd */ &l_daObjLeaves_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_3_e,
+};

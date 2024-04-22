@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_grid.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
+#include "d/d_procname.h"
 
 static daHo_HIO_c l_HIO;
 
@@ -82,3 +83,28 @@ BOOL daGrid_c::_execute() {
 BOOL daGrid_c::_draw() {
     /* Nonmatching */
 }
+
+static actor_method_class l_daGrid_Method = {
+    (process_method_func)daGrid_Create,
+    (process_method_func)daGrid_Delete,
+    (process_method_func)daGrid_Execute,
+    (process_method_func)daGrid_IsDelete,
+    (process_method_func)daGrid_Draw,
+};
+
+actor_process_profile_definition g_profile_GRID = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_GRID,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daGrid_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0102,
+    /* Actor SubMtd */ &l_daGrid_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

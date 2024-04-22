@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_kg1.h"
 #include "d/d_lib.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001E0       .text __ct__15daNpc_Kg1_HIO_cFv */
 daNpc_Kg1_HIO_c::daNpc_Kg1_HIO_c() {
@@ -141,3 +142,28 @@ static BOOL daNpc_Kg1IsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daNpc_Kg1MethodTable = {
+    (process_method_func)daNpc_Kg1Create,
+    (process_method_func)daNpc_Kg1Delete,
+    (process_method_func)daNpc_Kg1Execute,
+    (process_method_func)daNpc_Kg1IsDelete,
+    (process_method_func)daNpc_Kg1Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_KG1 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_KG1,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Kg1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0170,
+    /* Actor SubMtd */ &daNpc_Kg1MethodTable,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_hitobj.h"
-#include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_kankyo_mng.h"

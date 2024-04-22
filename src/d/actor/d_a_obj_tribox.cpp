@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_tribox.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001A4       .text set_state__Q211daObjTribox5Act_cFv */
 void daObjTribox::Act_c::set_state() {
@@ -335,3 +335,32 @@ BOOL daObjTribox::Act_c::_execute() {
 BOOL daObjTribox::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daObjTribox {
+namespace {
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjTribox
+
+actor_process_profile_definition g_profile_Obj_Tribox = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Tribox,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTribox::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0016,
+    /* Actor SubMtd */ &daObjTribox::Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+};

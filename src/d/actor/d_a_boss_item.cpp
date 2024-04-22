@@ -7,7 +7,6 @@
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 
 /* 00000078-00000080       .text daBossItem_IsDelete__FP14bossitem_class */

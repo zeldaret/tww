@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bdk.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-0000015C       .text __ct__11daBdk_HIO_cFv */
 daBdk_HIO_c::daBdk_HIO_c() {
@@ -311,3 +312,28 @@ static s32 daBdk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daBdk_Method = {
+    (process_method_func)daBdk_Create,
+    (process_method_func)daBdk_Delete,
+    (process_method_func)daBdk_Execute,
+    (process_method_func)daBdk_IsDelete,
+    (process_method_func)daBdk_Draw,
+};
+
+actor_process_profile_definition g_profile_BDK = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BDK,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bdk_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00E3,
+    /* Actor SubMtd */ &l_daBdk_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

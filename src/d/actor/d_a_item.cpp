@@ -13,7 +13,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "dolphin/types.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};

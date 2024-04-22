@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_btd.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001C8       .text __ct__11daBtd_HIO_cFv */
 daBtd_HIO_c::daBtd_HIO_c() {
@@ -221,3 +222,28 @@ static s32 daBtd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daBtd_Method = {
+    (process_method_func)daBtd_Create,
+    (process_method_func)daBtd_Delete,
+    (process_method_func)daBtd_Execute,
+    (process_method_func)daBtd_IsDelete,
+    (process_method_func)daBtd_Draw,
+};
+
+actor_process_profile_definition g_profile_BTD = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BTD,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(btd_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00DE,
+    /* Actor SubMtd */ &l_daBtd_Method,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

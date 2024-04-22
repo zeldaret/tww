@@ -17,7 +17,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_do/m_Do_mtx.h"
-#include "dolphin/types.h"
 
 
 #define DEMO_PROC_WAIT 0

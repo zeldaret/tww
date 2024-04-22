@@ -14,7 +14,6 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/types.h"
 
 
 // Needed for the .data section to match.

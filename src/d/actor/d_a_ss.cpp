@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_ss.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001DC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -81,3 +82,28 @@ static s32 daSs_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daSs_Method = {
+    (process_method_func)daSs_Create,
+    (process_method_func)daSs_Delete,
+    (process_method_func)daSs_Execute,
+    (process_method_func)daSs_IsDelete,
+    (process_method_func)daSs_Draw,
+};
+
+actor_process_profile_definition g_profile_SS = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SS,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(ss_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00F1,
+    /* Actor SubMtd */ &l_daSs_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

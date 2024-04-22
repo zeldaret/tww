@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bridge.h"
 #include "d/d_bg_w.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000504       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
@@ -96,3 +97,28 @@ static s32 daBridge_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daBridge_Method = {
+    (process_method_func)daBridge_Create,
+    (process_method_func)daBridge_Delete,
+    (process_method_func)daBridge_Execute,
+    (process_method_func)daBridge_IsDelete,
+    (process_method_func)daBridge_Draw,
+};
+
+actor_process_profile_definition g_profile_BRIDGE = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BRIDGE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bridge_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0089,
+    /* Actor SubMtd */ &l_daBridge_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_mtoge.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000084       .text getSwbit__9daMtoge_cFv */
 void daMtoge_c::getSwbit() {
@@ -86,3 +86,28 @@ static s32 daMtoge_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daMtoge_Method = {
+    (process_method_func)daMtoge_Create,
+    (process_method_func)daMtoge_Delete,
+    (process_method_func)daMtoge_Execute,
+    (process_method_func)daMtoge_IsDelete,
+    (process_method_func)daMtoge_Draw,
+};
+
+actor_process_profile_definition g_profile_MTOGE = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_MTOGE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daMtoge_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0134,
+    /* Actor SubMtd */ &l_daMtoge_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_6_e,
+};

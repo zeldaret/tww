@@ -14,7 +14,6 @@
 #include "d/d_snap.h"
 #include "d/d_letter.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"

@@ -7,7 +7,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "dolphin/mtx/mtx.h"
-#include "dolphin/types.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_printf.h"
 
@@ -142,22 +141,24 @@ static BOOL daObjTower_IsDelete(void*) {
 }
 
 static actor_method_class daObj_TowerMethodTable = {
-    (process_method_func)daObjTower_Create,  (process_method_func)daObjTower_Delete,
-    (process_method_func)daObjTower_Execute, (process_method_func)daObjTower_IsDelete,
+    (process_method_func)daObjTower_Create,
+    (process_method_func)daObjTower_Delete,
+    (process_method_func)daObjTower_Execute,
+    (process_method_func)daObjTower_IsDelete,
     (process_method_func)daObjTower_Draw,
 };
 
-struct actor_process_profile_definition g_profile_Obj_Tower = {
+actor_process_profile_definition g_profile_Obj_Tower = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Tower,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTower_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x1C4,
+    /* Priority     */ 0x01C4,
     /* Actor SubMtd */ &daObj_TowerMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

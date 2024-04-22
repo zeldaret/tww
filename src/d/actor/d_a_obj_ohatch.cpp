@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_ohatch.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000018C       .text set_mtx__13daObjOhatch_cFv */
 void daObjOhatch_c::set_mtx() {
@@ -96,3 +96,28 @@ static BOOL daObjOhatch_IsDelete(daObjOhatch_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daObjOhatch_Method = {
+    (process_method_func)daObjOhatch_Create,
+    (process_method_func)daObjOhatch_Delete,
+    (process_method_func)daObjOhatch_Execute,
+    (process_method_func)daObjOhatch_IsDelete,
+    (process_method_func)daObjOhatch_Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Ohatch = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Ohatch,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjOhatch_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x005C,
+    /* Actor SubMtd */ &l_daObjOhatch_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_5_e,
+};

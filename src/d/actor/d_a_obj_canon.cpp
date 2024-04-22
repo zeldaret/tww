@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_canon.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001A0       .text __ct__17daObj_Canon_HIO_cFv */
 daObj_Canon_HIO_c::daObj_Canon_HIO_c() {
@@ -181,3 +181,28 @@ static BOOL daObj_CanonIsDelete(void*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class daObj_CanonMethodTable = {
+    (process_method_func)daObj_CanonCreate,
+    (process_method_func)daObj_CanonDelete,
+    (process_method_func)daObj_CanonExecute,
+    (process_method_func)daObj_CanonIsDelete,
+    (process_method_func)daObj_CanonDraw,
+};
+
+actor_process_profile_definition g_profile_OBJ_CANON = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OBJ_CANON,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Canon_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01AF,
+    /* Actor SubMtd */ &daObj_CanonMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

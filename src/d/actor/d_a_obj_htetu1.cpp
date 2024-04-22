@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_htetu1.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000178       .text create_s__19daObjHtetu1Splash_cFUsP4cXyzP5csXyzP12dKy_tevstr_c */
 void daObjHtetu1Splash_c::create_s(unsigned short, cXyz*, csXyz*, dKy_tevstr_c*) {
@@ -65,3 +65,30 @@ BOOL daObjHtetu1_c::_execute() {
 BOOL daObjHtetu1_c::_draw() {
     /* Nonmatching */
 }
+
+namespace {
+static actor_method_class Htetu1_Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+
+actor_process_profile_definition g_profile_Obj_Htetu1 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Htetu1,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjHtetu1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x004A,
+    /* Actor SubMtd */ &Htetu1_Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

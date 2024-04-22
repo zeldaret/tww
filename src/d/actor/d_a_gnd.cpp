@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_gnd.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-0000023C       .text __ct__11daGnd_HIO_cFv */
 daGnd_HIO_c::daGnd_HIO_c() {
@@ -196,3 +196,28 @@ static s32 daGnd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+
+static actor_method_class l_daGnd_Method = {
+    (process_method_func)daGnd_Create,
+    (process_method_func)daGnd_Delete,
+    (process_method_func)daGnd_Execute,
+    (process_method_func)daGnd_IsDelete,
+    (process_method_func)daGnd_Draw,
+};
+
+actor_process_profile_definition g_profile_GND = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_GND,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(gnd_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00EB,
+    /* Actor SubMtd */ &l_daGnd_Method,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

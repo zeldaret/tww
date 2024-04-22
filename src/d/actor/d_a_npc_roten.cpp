@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_roten.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_demo_item.h"
+#include "d/d_procname.h"
 
 /* 00000078-000002F0       .text __ct__12daNpcRoten_cFv */
 daNpcRoten_c::daNpcRoten_c() {
@@ -321,3 +322,28 @@ static BOOL daNpc_RotenDraw(void*) {
 static BOOL daNpc_RotenIsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daNpc_RotenMethodTable = {
+    (process_method_func)daNpc_RotenCreate,
+    (process_method_func)daNpc_RotenDelete,
+    (process_method_func)daNpc_RotenExecute,
+    (process_method_func)daNpc_RotenIsDelete,
+    (process_method_func)daNpc_RotenDraw,
+};
+
+actor_process_profile_definition g_profile_NPC_ROTEN = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_ROTEN,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcRoten_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x017A,
+    /* Actor SubMtd */ &daNpc_RotenMethodTable,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

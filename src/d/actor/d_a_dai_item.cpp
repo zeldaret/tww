@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_dai_item.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_procname.h"
 
 /* 800E3638-800E36C8       .text convItemNo__FUc */
 static u32 convItemNo(u8) {
@@ -203,3 +204,28 @@ static BOOL daStandItem_Execute(void* i_this) {
 static BOOL daStandItem_IsDelete(void* i_this) {
     return TRUE;
 }
+
+static actor_method_class daStandItemMethodTable = {
+    (process_method_func)daStandItem_Create,
+    (process_method_func)daStandItem_Delete,
+    (process_method_func)daStandItem_Execute,
+    (process_method_func)daStandItem_IsDelete,
+    (process_method_func)daStandItem_Draw,
+};
+
+actor_process_profile_definition g_profile_STANDITEM = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0008,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_STANDITEM,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daStandItem_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0101,
+    /* Actor SubMtd */ &daStandItemMethodTable,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
