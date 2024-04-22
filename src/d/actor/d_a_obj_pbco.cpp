@@ -102,9 +102,8 @@ static BOOL daObj_PbcoExecute(void* i_this) {
 }
 
 BOOL daObj_Pbco_c::_draw() {
-    dKy_tevstr_c* pTevStr;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &tevStr);
-    g_env_light.setLightTevColorType(mpModel, pTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return TRUE;
 }
