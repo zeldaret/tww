@@ -139,7 +139,7 @@ s32 daToge_c::Create() {
     cullMtx = mpModel->mBaseTransformMtx;
     f32 scaleZ = scale.z;
     f32 scaleX = scale.x;
-    fopAcM_setCullSizeBox(this, 0xC2A00000, 0.0f, 0xC2A00000, 0x42A00000, 0x42F00000, 0x42A00000);
+    fopAcM_setCullSizeBox(this, -80.0f, 0.0f, -80.0f, 80.0f, 120.0f, 80.0f);
     mStts.Init(0xFF, 0xFF, this);
 
     mCyl.Set(l_cyl_src);
