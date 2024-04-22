@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_toge.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 
 const char daToge_c::m_arcname[] = "Htoge1";
@@ -303,9 +304,19 @@ static actor_method_class daTogeMethodTable = {
     (process_method_func)daToge_Draw,
 };
 
-// actor_process_profile_definition g_profile_TOGE = {
-//     /* LayerID      */ fpcLy_CURRENT_e,
-//     /* ListID       */ 7,
-//     /* ListPrio     */ fpcPi_CURRENT_e,
-//     sub_method: &daTogeMethodTable,
-// };
+actor_process_profile_definition g_profile_TOGE = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 3,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TOGE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daToge_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0018C,
+    /* Actor SubMtd */ &daTogeMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
