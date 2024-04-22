@@ -87,7 +87,7 @@ public:
     /* 0x638 */ s16 field_0x638;
     /* 0x63A */ u8 m_itemNo;
     /* 0x63B */ u8 mDrawFlags;
-};
+};  // Size: 0x63C
 
 STATIC_ASSERT(sizeof(daItemBase_c) == 0x63C);
 

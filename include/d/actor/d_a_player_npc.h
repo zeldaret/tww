@@ -39,7 +39,7 @@ public:
     BOOL checkNowPosMove(const char*);
     void drawDamageFog();
     int chkMoveBlock(cXyz*);
-};
+};  // Size: 0x4EC
 
 void* daPy_npc_JudgeForPNameAndDistance(void* i_actor, void* i_prm);
 fopAc_ac_c* daPy_npc_SearchAreaByName(fopAc_ac_c* i_this, s16 procName, f32 areaRadius, cXyz* outActorOffset);
