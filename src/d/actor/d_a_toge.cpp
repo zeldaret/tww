@@ -51,39 +51,16 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 00000078-0000013C       .text _delete__8daToge_cFv */
 BOOL daToge_c::_delete() {
-    cBgW* temp_r4;
-    cBgW* temp_r4_2;
-    s32 temp_r0;
-    s32 temp_r0_2;
-    u8 var_r0;
-    u8 var_r0_2;
-
     dComIfG_resDelete(&m_Phs, m_arcname);
 
-    temp_r4 = this->mpBgW1;
-    if (temp_r4 != NULL) {
-        temp_r0 = temp_r4->GetId();
-        if ((temp_r0 >= 0) && (temp_r0 < 0x100)) {
-            var_r0 = 1;
-        } else {
-            var_r0 = 0;
-        }
-        if (var_r0 != 0) {
-            g_dComIfG_gameInfo.play.mBgS.Release(temp_r4);
-        }
+    if (mpBgW1 != NULL && mpBgW1->ChkUsed()) {
+        dComIfG_Bgsp()->Release(mpBgW1);
     }
-    temp_r4_2 = this->mpBgW2;
-    if (temp_r4_2 != NULL) {
-        temp_r0_2 = temp_r4_2->GetId();
-        if ((temp_r0_2 >= 0) && (temp_r0_2 < 0x100)) {
-            var_r0_2 = 1;
-        } else {
-            var_r0_2 = 0;
-        }
-        if (var_r0_2 != 0) {
-            g_dComIfG_gameInfo.play.mBgS.Release(temp_r4_2);
-        }
+
+    if (mpBgW2 != NULL && mpBgW2->ChkUsed()) {
+        dComIfG_Bgsp()->Release(mpBgW2);
     }
+
     return TRUE;
 }
 
