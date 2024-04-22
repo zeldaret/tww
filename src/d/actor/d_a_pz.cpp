@@ -97,12 +97,12 @@ void daPz_c::checkEyeArea(cXyz&) {
 }
 
 /* 0000114C-00001194       .text getMsg__6daPz_cFv */
-void daPz_c::getMsg() {
+u32 daPz_c::getMsg() {
     /* Nonmatching */
 }
 
 /* 00001194-00001208       .text next_msgStatus__6daPz_cFPUl */
-void daPz_c::next_msgStatus(unsigned long*) {
+u16 daPz_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
