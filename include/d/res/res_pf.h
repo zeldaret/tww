@@ -1,6 +1,8 @@
 #ifndef RES_PF_H
 #define RES_PF_H
 
+#include "global.h"
+
 enum PF_RES_FILE_ID {
     /* BCKS */
     PF_BCK_CRY=0x0,

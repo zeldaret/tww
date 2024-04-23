@@ -1,6 +1,8 @@
 #ifndef RES_LKD00_H
 #define RES_LKD00_H
 
+#include "global.h"
+
 enum LKD00_RES_FILE_ID {
     /* BTP */
     LKD00_BTP_02_CL_C1=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_YGCWP_H
 #define RES_YGCWP_H
 
+#include "global.h"
+
 enum YGCWP_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     YGCWP_BDL_YGCWP00=0x4,

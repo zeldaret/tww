@@ -1,6 +1,8 @@
 #ifndef RES_KM_H
 #define RES_KM_H
 
+#include "global.h"
+
 enum KM_RES_FILE_ID {
     /* BAS */
     KM_BAS_KM_WAIT01=0x0,

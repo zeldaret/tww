@@ -1,6 +1,8 @@
 #ifndef RES_VBOXN_H
 #define RES_VBOXN_H
 
+#include "global.h"
+
 enum VBOXN_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VBOXN_BDL_VBOXN=0x4,

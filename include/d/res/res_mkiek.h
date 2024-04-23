@@ -1,6 +1,8 @@
 #ifndef RES_MKIEK_H
 #define RES_MKIEK_H
 
+#include "global.h"
+
 enum MKIEK_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MKIEK_BDL_MKIEK=0x6,

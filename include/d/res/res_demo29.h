@@ -1,6 +1,8 @@
 #ifndef RES_DEMO29_H
 #define RES_DEMO29_H
 
+#include "global.h"
+
 enum DEMO29_RES_FILE_ID {
     /* STB */
     DEMO29_STB_PRAY_ZOLA=0x0,

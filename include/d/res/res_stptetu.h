@@ -1,6 +1,8 @@
 #ifndef RES_STPTETU_H
 #define RES_STPTETU_H
 
+#include "global.h"
+
 enum STPTETU_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     STPTETU_BDL_STPTETU=0x4,

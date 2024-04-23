@@ -1,6 +1,8 @@
 #ifndef RES_BB_H
 #define RES_BB_H
 
+#include "global.h"
+
 enum BB_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     BB_BAS_ATACK01=0x6,

@@ -1,6 +1,8 @@
 #ifndef RES_LOGO_H
 #define RES_LOGO_H
 
+#include "global.h"
+
 #if VERSION == VERSION_PAL
 enum LOGO_RES_FILE_ID { // IDs and indexes are synced
     /* DAT */

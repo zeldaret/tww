@@ -1,6 +1,8 @@
 #ifndef RES_DEMO_DK_H
 #define RES_DEMO_DK_H
 
+#include "global.h"
+
 enum DEMO_DK_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     DEMO_DK_BCK_DK_L_AKUBI1=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_HI_H
 #define RES_HI_H
 
+#include "global.h"
+
 enum HI_RES_FILE_ID {
     /* BCKS */
     HI_BCK_HI_POSE=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_RS2_H
 #define RES_RS2_H
 
+#include "global.h"
+
 enum RS2_RES_FILE_ID {
     /* BCKS */
     RS2_BCK_RS_JAMP=0x0,

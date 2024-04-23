@@ -1,6 +1,8 @@
 #ifndef RES_HHBOT_H
 #define RES_HHBOT_H
 
+#include "global.h"
+
 enum HHBOT_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     HHBOT_BDL_HHBOT1=0x4,

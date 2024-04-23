@@ -1,6 +1,8 @@
 #ifndef RES_RO_H
 #define RES_RO_H
 
+#include "global.h"
+
 enum RO_RES_FILE_ID {
     /* BCKS */
     RO_BCK_RO_WAIT01=0x0,

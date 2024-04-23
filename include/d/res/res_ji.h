@@ -1,6 +1,8 @@
 #ifndef RES_JI_H
 #define RES_JI_H
 
+#include "global.h"
+
 enum JI_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     JI_BAS_JI_AKIRE=0x8,

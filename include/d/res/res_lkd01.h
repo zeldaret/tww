@@ -1,6 +1,8 @@
 #ifndef RES_LKD01_H
 #define RES_LKD01_H
 
+#include "global.h"
+
 enum LKD01_RES_FILE_ID {
     /* BCKS */
     LKD01_BCK_24_CL_CUT01_RUNSTOP_O=0x0,

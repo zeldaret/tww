@@ -1,6 +1,8 @@
 #ifndef RES_DEMO_KMM_H
 #define RES_DEMO_KMM_H
 
+#include "global.h"
+
 enum DEMO_KMM_RES_FILE_ID {
     /* BMD */
     DEMO_KMM_BMD_KA=0x0,

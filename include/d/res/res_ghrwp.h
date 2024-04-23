@@ -1,6 +1,8 @@
 #ifndef RES_GHRWP_H
 #define RES_GHRWP_H
 
+#include "global.h"
+
 enum GHRWP_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     GHRWP_BDL_GHRWPA00=0x5,

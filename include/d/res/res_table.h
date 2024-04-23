@@ -1,6 +1,8 @@
 #ifndef RES_TABLE_H
 #define RES_TABLE_H
 
+#include "global.h"
+
 enum TABLE_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     TABLE_BDL_YTBLE=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_FGANON_H
 #define RES_FGANON_H
 
+#include "global.h"
+
 enum FGANON_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     FGANON_BCK_DAMAGE1=0x6,

@@ -1,6 +1,8 @@
 #ifndef RES_KAIZOKUSEN_H
 #define RES_KAIZOKUSEN_H
 
+#include "global.h"
+
 enum KAIZOKUSEN_RES_FILE_ID {
     /* DZB */
     KAIZOKUSEN_DZB_ROOM1A=0xF,

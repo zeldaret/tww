@@ -1,6 +1,8 @@
 #ifndef RES_AUZU_H
 #define RES_AUZU_H
 
+#include "global.h"
+
 enum AUZU_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     AUZU_BDL_AUZU=0x4,

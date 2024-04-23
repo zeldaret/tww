@@ -1,6 +1,8 @@
 #ifndef RES_YM_H
 #define RES_YM_H
 
+#include "global.h"
+
 enum YM_RES_FILE_ID {
     /* BCKS */
     YM_BCK_WAIT01=0x0,

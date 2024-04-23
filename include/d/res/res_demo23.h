@@ -1,6 +1,8 @@
 #ifndef RES_DEMO23_H
 #define RES_DEMO23_H
 
+#include "global.h"
+
 enum DEMO23_RES_FILE_ID {
     /* STB */
     DEMO23_STB_RESCUE=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_MKIEB_H
 #define RES_MKIEB_H
 
+#include "global.h"
+
 enum MKIEB_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MKIEB_BDL_MKIEB=0x6,

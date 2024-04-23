@@ -1,6 +1,8 @@
 #ifndef RES_KT_H
 #define RES_KT_H
 
+#include "global.h"
+
 enum KT_RES_FILE_ID {
     /* BCK */
     KT_BCK_KT_ESA=0x8000,

@@ -1,6 +1,8 @@
 #ifndef RES_DBARREL_H
 #define RES_DBARREL_H
 
+#include "global.h"
+
 enum DBARREL_RES_FILE_ID {
     /* BCK */
     DBARREL_BCK_02_TR_CD=0x0,

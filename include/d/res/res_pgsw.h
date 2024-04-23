@@ -1,6 +1,8 @@
 #ifndef RES_PGSW_H
 #define RES_PGSW_H
 
+#include "global.h"
+
 enum PGSW_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     PGSW_BDL_BPG_KEN1=0x4,

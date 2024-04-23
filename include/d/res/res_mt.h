@@ -1,6 +1,8 @@
 #ifndef RES_MT_H
 #define RES_MT_H
 
+#include "global.h"
+
 enum MT_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     MT_BCK_ATTACK=0x7,

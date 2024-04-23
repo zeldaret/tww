@@ -1,6 +1,8 @@
 #ifndef RES_BTSW_H
 #define RES_BTSW_H
 
+#include "global.h"
+
 enum BTSW_RES_FILE_ID {
     /* BCKS */
     BTSW_BCK_BN_KASIGE=0xF,

@@ -1,6 +1,8 @@
 #ifndef RES_DOGUUD_H
 #define RES_DOGUUD_H
 
+#include "global.h"
+
 enum DOGUUD_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     DOGUUD_BDL_ESKZTO=0x4,

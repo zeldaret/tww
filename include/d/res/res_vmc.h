@@ -1,6 +1,8 @@
 #ifndef RES_VMC_H
 #define RES_VMC_H
 
+#include "global.h"
+
 enum VMC_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     VMC_BCK_VMCWG=0x6,

@@ -1,6 +1,8 @@
 #ifndef RES_LINK_H
 #define RES_LINK_H
 
+#include "global.h"
+
 enum LINK_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     LINK_BCK_ATNGSHA=0xA,

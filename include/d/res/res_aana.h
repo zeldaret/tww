@@ -1,6 +1,8 @@
 #ifndef RES_AANA_H
 #define RES_AANA_H
 
+#include "global.h"
+
 enum AANA_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     AANA_BDL_AANA=0x3,

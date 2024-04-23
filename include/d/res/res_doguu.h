@@ -1,6 +1,8 @@
 #ifndef RES_DOGUU_H
 #define RES_DOGUU_H
 
+#include "global.h"
+
 enum DOGUU_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     DOGUU_BCK_VGSBA=0x6,

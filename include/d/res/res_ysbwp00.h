@@ -1,6 +1,8 @@
 #ifndef RES_YSBWP00_H
 #define RES_YSBWP00_H
 
+#include "global.h"
+
 enum YSBWP00_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     YSBWP00_BCK_YSBWP00=0x6,

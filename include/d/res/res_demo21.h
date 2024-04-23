@@ -1,6 +1,8 @@
 #ifndef RES_DEMO21_H
 #define RES_DEMO21_H
 
+#include "global.h"
+
 enum DEMO21_RES_FILE_ID {
     /* STB */
     DEMO21_STB_MASTER_SWORD=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_KANTERA_H
 #define RES_KANTERA_H
 
+#include "global.h"
+
 enum KANTERA_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     KANTERA_BCK_MO_KANTERA=0x6,

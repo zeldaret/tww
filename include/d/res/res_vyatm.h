@@ -1,6 +1,8 @@
 #ifndef RES_VYATM_H
 #define RES_VYATM_H
 
+#include "global.h"
+
 enum VYATM_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VYATM_BDL_VYATM=0x4,

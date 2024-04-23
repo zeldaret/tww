@@ -1,6 +1,8 @@
 #ifndef RES_TT_H
 #define RES_TT_H
 
+#include "global.h"
+
 enum TT_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     TT_BAS_POSE_CC=0x6,

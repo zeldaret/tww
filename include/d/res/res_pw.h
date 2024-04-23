@@ -1,6 +1,8 @@
 #ifndef RES_PW_H
 #define RES_PW_H
 
+#include "global.h"
+
 enum PW_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     PW_BAS_ATTACK1=0x7,

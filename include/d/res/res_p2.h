@@ -1,6 +1,8 @@
 #ifndef RES_P2_H
 #define RES_P2_H
 
+#include "global.h"
+
 enum P2_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     P2_BCK_P2_JUMP=0x7,

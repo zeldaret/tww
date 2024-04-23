@@ -1,6 +1,8 @@
 #ifndef RES_MCRTN_H
 #define RES_MCRTN_H
 
+#include "global.h"
+
 enum MCRTN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MCRTN_BDL_MCRTN1=0x4,

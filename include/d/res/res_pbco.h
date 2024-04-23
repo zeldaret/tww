@@ -1,6 +1,8 @@
 #ifndef RES_PBCO_H
 #define RES_PBCO_H
 
+#include "global.h"
+
 enum PBCO_RES_FILE_ID {
     /* BDL */
     PBCO_BDL_PBCO=0x0,

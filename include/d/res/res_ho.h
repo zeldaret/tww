@@ -1,6 +1,8 @@
 #ifndef RES_HO_H
 #define RES_HO_H
 
+#include "global.h"
+
 enum HO_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     HO_BCK_HO_GLAD=0x6,

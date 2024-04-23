@@ -1,6 +1,8 @@
 #ifndef RES_VTENG_H
 #define RES_VTENG_H
 
+#include "global.h"
+
 enum VTENG_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     VTENG_BCK_VTENG=0x5,

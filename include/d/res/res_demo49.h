@@ -1,6 +1,8 @@
 #ifndef RES_DEMO49_H
 #define RES_DEMO49_H
 
+#include "global.h"
+
 enum DEMO49_RES_FILE_ID {
     /* STB */
     DEMO49_STB_REBIRTH_HYRAL=0x0,

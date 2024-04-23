@@ -1,6 +1,8 @@
 #ifndef RES_DEMO14_H
 #define RES_DEMO14_H
 
+#include "global.h"
+
 enum DEMO14_RES_FILE_ID {
     /* BCKS */
     DEMO14_BCK_14_BJ_CUT10_HOBA_L=0x0,

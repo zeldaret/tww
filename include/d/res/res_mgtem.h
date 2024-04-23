@@ -1,6 +1,8 @@
 #ifndef RES_MGTEM_H
 #define RES_MGTEM_H
 
+#include "global.h"
+
 #if VERSION == VERSION_JPN
 enum MGTEM_RES_FILE_ID { // IDs and indexes are synced
     /* SCRN */

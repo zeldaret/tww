@@ -1,6 +1,8 @@
 #ifndef RES_YLSIC_H
 #define RES_YLSIC_H
 
+#include "global.h"
+
 enum YLSIC_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     YLSIC_BDL_YLSIC=0x4,

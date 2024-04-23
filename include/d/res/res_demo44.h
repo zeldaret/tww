@@ -1,6 +1,8 @@
 #ifndef RES_DEMO44_H
 #define RES_DEMO44_H
 
+#include "global.h"
+
 enum DEMO44_RES_FILE_ID {
     /* BCKS */
     DEMO44_BCK_FN_SET=0x0,

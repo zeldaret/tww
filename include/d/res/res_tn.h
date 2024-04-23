@@ -1,6 +1,8 @@
 #ifndef RES_TN_H
 #define RES_TN_H
 
+#include "global.h"
+
 enum TN_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     TN_BAS_AAT_KAITEN2=0x6,

@@ -1,6 +1,8 @@
 #ifndef RES_GDEMO20_H
 #define RES_GDEMO20_H
 
+#include "global.h"
+
 enum GDEMO20_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     GDEMO20_BCK_GDEMO20_1=0x6,

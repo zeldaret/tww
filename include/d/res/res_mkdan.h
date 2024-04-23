@@ -1,6 +1,8 @@
 #ifndef RES_MKDAN_H
 #define RES_MKDAN_H
 
+#include "global.h"
+
 enum MKDAN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MKDAN_BDL_MKDAN1=0x4,

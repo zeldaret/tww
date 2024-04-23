@@ -1,6 +1,8 @@
 #ifndef RES_BMDFOOT_H
 #define RES_BMDFOOT_H
 
+#include "global.h"
+
 enum BMDFOOT_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BMDFOOT_BCK_ASI_ATTACK1=0x5,

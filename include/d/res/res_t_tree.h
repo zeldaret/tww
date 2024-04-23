@@ -1,6 +1,8 @@
 #ifndef RES_T_TREE_H
 #define RES_T_TREE_H
 
+#include "global.h"
+
 enum T_TREE_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     T_TREE_BCK_WAIT=0xB,

@@ -1,6 +1,8 @@
 #ifndef RES_MTRYB_H
 #define RES_MTRYB_H
 
+#include "global.h"
+
 enum MTRYB_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MTRYB_BDL_MTRYB=0x6,

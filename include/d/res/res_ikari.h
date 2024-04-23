@@ -1,6 +1,8 @@
 #ifndef RES_IKARI_H
 #define RES_IKARI_H
 
+#include "global.h"
+
 enum IKARI_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     IKARI_BDL_S_IKARI2=0x3,

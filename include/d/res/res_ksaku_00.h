@@ -1,6 +1,8 @@
 #ifndef RES_KSAKU_00_H
 #define RES_KSAKU_00_H
 
+#include "global.h"
+
 enum KSAKU_00_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     KSAKU_00_BDL_KSAKU_00=0x3,

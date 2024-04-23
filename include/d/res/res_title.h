@@ -1,6 +1,8 @@
 #ifndef RES_TITLE_H
 #define RES_TITLE_H
 
+#include "global.h"
+
 enum TITLE_RES_FILE_ID { // IDs and indexes are synced
     /* BMD */
     TITLE_BMD_VRBOX=0x6,

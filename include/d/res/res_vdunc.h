@@ -1,6 +1,8 @@
 #ifndef RES_VDUNC_H
 #define RES_VDUNC_H
 
+#include "global.h"
+
 enum VDUNC_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VDUNC_BDL_VDUNC=0x4,

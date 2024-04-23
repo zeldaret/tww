@@ -1,6 +1,8 @@
 #ifndef RES_AYGR_H
 #define RES_AYGR_H
 
+#include "global.h"
+
 enum AYGR_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     AYGR_BDL_AYGR=0x4,

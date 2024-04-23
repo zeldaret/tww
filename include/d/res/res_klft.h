@@ -1,6 +1,8 @@
 #ifndef RES_KLFT_H
 #define RES_KLFT_H
 
+#include "global.h"
+
 enum KLFT_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     KLFT_BDL_LIFT_00=0x5,

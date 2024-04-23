@@ -1,6 +1,8 @@
 #ifndef RES_DEMO10_H
 #define RES_DEMO10_H
 
+#include "global.h"
+
 enum DEMO10_RES_FILE_ID {
     /* BDLM */
     DEMO10_BDL_BMN_WING_COMP=0x0,

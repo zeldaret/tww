@@ -1,6 +1,8 @@
 #ifndef RES_AH_H
 #define RES_AH_H
 
+#include "global.h"
+
 enum AH_RES_FILE_ID {
     /* BCKS */
     AH_BCK_AH_WAIT01=0x0,

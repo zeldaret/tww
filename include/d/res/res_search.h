@@ -1,6 +1,8 @@
 #ifndef RES_SEARCH_H
 #define RES_SEARCH_H
 
+#include "global.h"
+
 enum SEARCH_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     SEARCH_BDL_S_BEAM=0x4,

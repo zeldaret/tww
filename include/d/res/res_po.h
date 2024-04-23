@@ -1,6 +1,8 @@
 #ifndef RES_PO_H
 #define RES_PO_H
 
+#include "global.h"
+
 enum PO_RES_FILE_ID {
     /* BCKS */
     PO_BCK_WAIT01=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_DOOR12_H
 #define RES_DOOR12_H
 
+#include "global.h"
+
 enum DOOR12_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     DOOR12_BDL_DOOR12_GL=0x4,

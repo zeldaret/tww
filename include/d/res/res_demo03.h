@@ -1,6 +1,8 @@
 #ifndef RES_DEMO03_H
 #define RES_DEMO03_H
 
+#include "global.h"
+
 enum DEMO03_RES_FILE_ID {
     /* BTP */
     DEMO03_BTP_MABA_A=0x6,

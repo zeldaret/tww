@@ -1,6 +1,8 @@
 #ifndef RES_DEMO17_H
 #define RES_DEMO17_H
 
+#include "global.h"
+
 enum DEMO17_RES_FILE_ID {
     /* STB */
     DEMO17_STB_BOMBSHOP=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_UO_H
 #define RES_UO_H
 
+#include "global.h"
+
 enum UO_RES_FILE_ID {
     /* BCKS */
     UO_BCK_UO_BIKURI=0x0,

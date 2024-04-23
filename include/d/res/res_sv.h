@@ -1,6 +1,8 @@
 #ifndef RES_SV_H
 #define RES_SV_H
 
+#include "global.h"
+
 enum SV_RES_FILE_ID {
     /* BCKS */
     SV_BCK_SV_BYE=0x3,

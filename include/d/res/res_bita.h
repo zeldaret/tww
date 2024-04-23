@@ -1,6 +1,8 @@
 #ifndef RES_BITA_H
 #define RES_BITA_H
 
+#include "global.h"
+
 enum BITA_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     BITA_BDL_EF_BTDITA0=0x5,

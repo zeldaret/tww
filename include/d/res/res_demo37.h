@@ -1,6 +1,8 @@
 #ifndef RES_DEMO37_H
 #define RES_DEMO37_H
 
+#include "global.h"
+
 enum DEMO37_RES_FILE_ID {
     /* STB */
     DEMO37_STB_ENDING=0x0,

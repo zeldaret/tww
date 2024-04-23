@@ -1,6 +1,8 @@
 #ifndef RES_MO2_H
 #define RES_MO2_H
 
+#include "global.h"
+
 enum MO2_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     MO2_BAS_ADOTSUKI=0x8,

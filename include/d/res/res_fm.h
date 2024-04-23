@@ -1,6 +1,8 @@
 #ifndef RES_FM_H
 #define RES_FM_H
 
+#include "global.h"
+
 enum FM_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     FM_BCK_ASITUKAMI=0x6,

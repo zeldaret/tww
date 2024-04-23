@@ -1,6 +1,8 @@
 #ifndef RES_GM_H
 #define RES_GM_H
 
+#include "global.h"
+
 enum GM_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     GM_BAS_ATACK02=0x6,

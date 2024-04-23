@@ -1,6 +1,8 @@
 #ifndef RES_DEMO27_H
 #define RES_DEMO27_H
 
+#include "global.h"
+
 enum DEMO27_RES_FILE_ID {
     /* STB */
     DEMO27_STB_DANCE_ZOLA=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_VDORA_H
 #define RES_VDORA_H
 
+#include "global.h"
+
 enum VDORA_RES_FILE_ID {
     /* BDL */
     VDORA_BDL_VDORA=0x3,

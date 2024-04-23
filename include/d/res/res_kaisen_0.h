@@ -1,6 +1,8 @@
 #ifndef RES_KAISEN_0_H
 #define RES_KAISEN_0_H
 
+#include "global.h"
+
 #if VERSION == VERSION_PAL
 enum KAISEN_0_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

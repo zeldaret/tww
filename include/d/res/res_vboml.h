@@ -1,6 +1,8 @@
 #ifndef RES_VBOML_H
 #define RES_VBOML_H
 
+#include "global.h"
+
 enum VBOML_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VBOML_BDL_VBOML=0x4,

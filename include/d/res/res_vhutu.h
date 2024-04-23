@@ -1,6 +1,8 @@
 #ifndef RES_VHUTU_H
 #define RES_VHUTU_H
 
+#include "global.h"
+
 enum VHUTU_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VHUTU_BDL_VHUTU=0x4,

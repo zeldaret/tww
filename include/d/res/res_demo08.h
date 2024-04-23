@@ -1,6 +1,8 @@
 #ifndef RES_DEMO08_H
 #define RES_DEMO08_H
 
+#include "global.h"
+
 enum DEMO08_RES_FILE_ID {
     /* STB */
     DEMO08_STB_MEETSHISHIOH=0x0,

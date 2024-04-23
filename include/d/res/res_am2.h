@@ -1,6 +1,8 @@
 #ifndef RES_AM2_H
 #define RES_AM2_H
 
+#include "global.h"
+
 enum AM2_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     AM2_BCK_BURUBURU=0x6,

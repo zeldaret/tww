@@ -1,6 +1,8 @@
 #ifndef RES_ZL_H
 #define RES_ZL_H
 
+#include "global.h"
+
 enum ZL_RES_FILE_ID {
     /* BCKS */
     ZL_BCK_FALL=0x0,

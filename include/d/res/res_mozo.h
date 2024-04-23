@@ -1,6 +1,8 @@
 #ifndef RES_MOZO_H
 #define RES_MOZO_H
 
+#include "global.h"
+
 enum MOZO_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     MOZO_BCK_MOZ=0x6,

@@ -1,6 +1,8 @@
 #ifndef RES_TRND_H
 #define RES_TRND_H
 
+#include "global.h"
+
 enum TRND_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     TRND_BCK_YTRND00=0x6,

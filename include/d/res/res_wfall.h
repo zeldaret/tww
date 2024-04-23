@@ -1,6 +1,8 @@
 #ifndef RES_WFALL_H
 #define RES_WFALL_H
 
+#include "global.h"
+
 enum WFALL_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     WFALL_BDL_HSUI1=0x7,

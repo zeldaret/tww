@@ -1,6 +1,8 @@
 #ifndef RES_BGN_H
 #define RES_BGN_H
 
+#include "global.h"
+
 enum BGN_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BGN_BCK_BGN_HEAD1=0x6,

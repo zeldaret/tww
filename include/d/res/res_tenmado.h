@@ -1,6 +1,8 @@
 #ifndef RES_TENMADO_H
 #define RES_TENMADO_H
 
+#include "global.h"
+
 enum TENMADO_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     TENMADO_BDL_MMADOL=0x4,

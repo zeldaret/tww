@@ -1,6 +1,8 @@
 #ifndef RES_PM_H
 #define RES_PM_H
 
+#include "global.h"
+
 enum PM_RES_FILE_ID {
     /* BAS */
     PM_BAS_FIND=0x0,

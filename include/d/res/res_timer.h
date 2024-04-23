@@ -1,6 +1,8 @@
 #ifndef RES_TIMER_H
 #define RES_TIMER_H
 
+#include "global.h"
+
 #if VERSION == VERSION_JPN
 enum TIMER_RES_FILE_ID { // IDs and indexes are synced
     /* SCRN */

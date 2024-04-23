@@ -1,6 +1,8 @@
 #ifndef RES_AKABE_H
 #define RES_AKABE_H
 
+#include "global.h"
+
 enum AKABE_RES_FILE_ID { // IDs and indexes are synced
     /* DZB */
     AKABE_DZB_AKABE=0x3,

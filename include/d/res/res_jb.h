@@ -1,6 +1,8 @@
 #ifndef RES_JB_H
 #define RES_JB_H
 
+#include "global.h"
+
 enum JB_RES_FILE_ID {
     /* BCKS */
     JB_BCK_JB_APPEAR=0x0,

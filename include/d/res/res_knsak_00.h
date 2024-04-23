@@ -1,6 +1,8 @@
 #ifndef RES_KNSAK_00_H
 #define RES_KNSAK_00_H
 
+#include "global.h"
+
 enum KNSAK_00_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     KNSAK_00_BDL_KNSAK_00=0x3,

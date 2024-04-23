@@ -1,6 +1,8 @@
 #ifndef RES_YBOIL_H
 #define RES_YBOIL_H
 
+#include "global.h"
+
 enum YBOIL_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     YBOIL_BDL_YBOIL00=0x6,

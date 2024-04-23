@@ -1,6 +1,8 @@
 #ifndef RES_TORIPOST_H
 #define RES_TORIPOST_H
 
+#include "global.h"
+
 enum TORIPOST_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     TORIPOST_BCK_POST_GET=0x4,

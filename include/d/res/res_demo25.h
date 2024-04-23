@@ -1,6 +1,8 @@
 #ifndef RES_DEMO25_H
 #define RES_DEMO25_H
 
+#include "global.h"
+
 enum DEMO25_RES_FILE_ID {
     /* BCKS */
     DEMO25_BCK_25_HI_CUT01_WAIT_L=0x1,

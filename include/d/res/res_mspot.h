@@ -1,6 +1,8 @@
 #ifndef RES_MSPOT_H
 #define RES_MSPOT_H
 
+#include "global.h"
+
 enum MSPOT_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     MSPOT_BDL_MSPOCN=0x4,

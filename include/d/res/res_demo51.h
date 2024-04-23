@@ -1,6 +1,8 @@
 #ifndef RES_DEMO51_H
 #define RES_DEMO51_H
 
+#include "global.h"
+
 enum DEMO51_RES_FILE_ID {
     /* STB */
     DEMO51_STB_TITLE=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_DEMO50_H
 #define RES_DEMO50_H
 
+#include "global.h"
+
 enum DEMO50_RES_FILE_ID {
     /* BCKS */
     DEMO50_BCK_21_SWMS_CUT10_O=0x0,

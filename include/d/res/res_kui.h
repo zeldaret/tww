@@ -1,6 +1,8 @@
 #ifndef RES_KUI_H
 #define RES_KUI_H
 
+#include "global.h"
+
 enum KUI_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     KUI_BDL_HKANE1=0x4,

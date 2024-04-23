@@ -1,6 +1,8 @@
 #ifndef RES_DEMO11_H
 #define RES_DEMO11_H
 
+#include "global.h"
+
 enum DEMO11_RES_FILE_ID {
     /* BCKS */
     DEMO11_BCK_11A_DR_CUT03_SHOUT=0x8,

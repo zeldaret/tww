@@ -1,6 +1,8 @@
 #ifndef RES_YGUSH00_H
 #define RES_YGUSH00_H
 
+#include "global.h"
+
 enum YGUSH00_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     YGUSH00_BCK_YGSTP00=0x5,

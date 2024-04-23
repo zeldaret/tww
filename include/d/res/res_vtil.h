@@ -1,6 +1,8 @@
 #ifndef RES_VTIL_H
 #define RES_VTIL_H
 
+#include "global.h"
+
 enum VTIL_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     VTIL_BDL_VTIL1=0x3,

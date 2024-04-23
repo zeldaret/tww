@@ -1,6 +1,8 @@
 #ifndef RES_GBRG00_H
 #define RES_GBRG00_H
 
+#include "global.h"
+
 enum GBRG00_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     GBRG00_BDL_GBRG00=0x7,

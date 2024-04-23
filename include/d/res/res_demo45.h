@@ -1,6 +1,8 @@
 #ifndef RES_DEMO45_H
 #define RES_DEMO45_H
 
+#include "global.h"
+
 enum DEMO45_RES_FILE_ID {
     /* BCKS */
     DEMO45_BCK_45_CUT01_AC_TAIKUU_L=0x0,

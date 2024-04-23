@@ -1,6 +1,8 @@
 #ifndef RES_YLZOU_H
 #define RES_YLZOU_H
 
+#include "global.h"
+
 enum YLZOU_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     YLZOU_BDL_YLZOU=0x4,

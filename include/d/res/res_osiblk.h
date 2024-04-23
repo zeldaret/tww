@@ -1,6 +1,8 @@
 #ifndef RES_OSIBLK_H
 #define RES_OSIBLK_H
 
+#include "global.h"
+
 enum OSIBLK_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     OSIBLK_BDL_OBM_OSIHIKIBLK1=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_MSW_H
 #define RES_MSW_H
 
+#include "global.h"
+
 enum MSW_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MSW_BDL_MSWNG=0x4,

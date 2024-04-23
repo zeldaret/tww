@@ -1,6 +1,8 @@
 #ifndef RES_GKAI00_H
 #define RES_GKAI00_H
 
+#include "global.h"
+
 enum GKAI00_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     GKAI00_BCK_GKAI00=0x8,

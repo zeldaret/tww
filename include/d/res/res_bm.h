@@ -1,6 +1,8 @@
 #ifndef RES_BM_H
 #define RES_BM_H
 
+#include "global.h"
+
 enum BM_RES_FILE_ID {
     /* BCKS */
     BM_BCK_BM02_WAIT01=0x0,

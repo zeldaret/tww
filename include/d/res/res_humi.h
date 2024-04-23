@@ -1,6 +1,8 @@
 #ifndef RES_HUMI_H
 #define RES_HUMI_H
 
+#include "global.h"
+
 enum HUMI_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     HUMI_BDL_HNURE0=0x6,

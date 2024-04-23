@@ -1,6 +1,8 @@
 #ifndef RES_DEMO30_H
 #define RES_DEMO30_H
 
+#include "global.h"
+
 enum DEMO30_RES_FILE_ID {
     /* STB */
     DEMO30_STB_DANCE_KOKIRI=0x0,

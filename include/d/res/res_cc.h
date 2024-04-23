@@ -1,6 +1,8 @@
 #ifndef RES_CC_H
 #define RES_CC_H
 
+#include "global.h"
+
 enum CC_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     CC_BAS_ATACK01=0x8,

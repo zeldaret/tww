@@ -1,6 +1,8 @@
 #ifndef RES_EKSKZ_H
 #define RES_EKSKZ_H
 
+#include "global.h"
+
 enum EKSKZ_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     EKSKZ_BCK_YOCWD00=0x8,

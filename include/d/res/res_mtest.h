@@ -1,6 +1,8 @@
 #ifndef RES_MTEST_H
 #define RES_MTEST_H
 
+#include "global.h"
+
 enum MTEST_RES_FILE_ID { // IDs and indexes are synced
     /* BMDC */
     MTEST_BMD_MCUBE=0x4,

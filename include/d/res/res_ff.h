@@ -1,6 +1,8 @@
 #ifndef RES_FF_H
 #define RES_FF_H
 
+#include "global.h"
+
 enum FF_RES_FILE_ID { // IDs and indexes are synced
     /* BMD */
     FF_BMD_FF=0x4,

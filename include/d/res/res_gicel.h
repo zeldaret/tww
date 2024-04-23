@@ -1,6 +1,8 @@
 #ifndef RES_GICEL_H
 #define RES_GICEL_H
 
+#include "global.h"
+
 enum GICEL_RES_FILE_ID { // IDs and indexes are synced
     /* BDLI */
     GICEL_BDL_GICEL00=0x5,

@@ -1,6 +1,8 @@
 #ifndef RES_HYUF1_H
 #define RES_HYUF1_H
 
+#include "global.h"
+
 enum HYUF1_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     HYUF1_BDL_HYUF1=0x6,

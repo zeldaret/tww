@@ -1,6 +1,8 @@
 #ifndef RES_BMSW_H
 #define RES_BMSW_H
 
+#include "global.h"
+
 enum BMSW_RES_FILE_ID {
     /* BCKS */
     BMSW_BCK_BMARM_TALK01=0x0,

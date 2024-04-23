@@ -1,6 +1,8 @@
 #ifndef RES_DEMO06_H
 #define RES_DEMO06_H
 
+#include "global.h"
+
 enum DEMO06_RES_FILE_ID {
     /* BTK */
     DEMO06_BTK_02_ZL_BC=0x9,

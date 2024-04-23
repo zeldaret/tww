@@ -1,6 +1,8 @@
 #ifndef RES_BST_H
 #define RES_BST_H
 
+#include "global.h"
+
 enum BST_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BST_BCK_BEAM=0x6,

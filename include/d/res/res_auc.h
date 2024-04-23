@@ -1,6 +1,8 @@
 #ifndef RES_AUC_H
 #define RES_AUC_H
 
+#include "global.h"
+
 enum AUC_RES_FILE_ID {
     /* BCKS */
     AUC_BCK_UB_DOUSHO=0x0,

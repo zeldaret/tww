@@ -1,6 +1,8 @@
 #ifndef RES_ROTEN_H
 #define RES_ROTEN_H
 
+#include "global.h"
+
 enum ROTEN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     ROTEN_BDL_ROTEN02=0x4,

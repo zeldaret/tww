@@ -1,6 +1,8 @@
 #ifndef RES_FDAI_H
 #define RES_FDAI_H
 
+#include "global.h"
+
 enum FDAI_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     FDAI_BCK_FOBJ00=0x5,

@@ -1,6 +1,8 @@
 #ifndef RES_PH_H
 #define RES_PH_H
 
+#include "global.h"
+
 enum PH_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     PH_BAS_BCHAKUCHI=0x5,

@@ -1,6 +1,8 @@
 #ifndef RES_KF_H
 #define RES_KF_H
 
+#include "global.h"
+
 enum KF_RES_FILE_ID {
     /* BDL */
     KF_BDL_KF_HAIR=0x0,

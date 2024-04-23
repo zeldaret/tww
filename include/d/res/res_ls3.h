@@ -1,6 +1,8 @@
 #ifndef RES_LS3_H
 #define RES_LS3_H
 
+#include "global.h"
+
 enum LS3_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     LS3_BCK_04_LS_CUT01_SWING=0x5,

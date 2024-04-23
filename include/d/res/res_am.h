@@ -1,6 +1,8 @@
 #ifndef RES_AM_H
 #define RES_AM_H
 
+#include "global.h"
+
 enum AM_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     AM_BAS_BOM_NOMI=0x5,

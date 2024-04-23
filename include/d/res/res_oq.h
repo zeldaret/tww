@@ -1,6 +1,8 @@
 #ifndef RES_OQ_H
 #define RES_OQ_H
 
+#include "global.h"
+
 enum OQ_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     OQ_BCK_AATTACK1=0x6,

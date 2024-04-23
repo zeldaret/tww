@@ -1,6 +1,8 @@
 #ifndef RES_DE_H
 #define RES_DE_H
 
+#include "global.h"
+
 enum DE_RES_FILE_ID {
     /* BCKS */
     DE_BCK_SLEEP=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_KB_H
 #define RES_KB_H
 
+#include "global.h"
+
 enum KB_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     KB_BAS_EAT1=0x7,

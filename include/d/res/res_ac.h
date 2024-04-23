@@ -1,6 +1,8 @@
 #ifndef RES_AC_H
 #define RES_AC_H
 
+#include "global.h"
+
 enum AC_RES_FILE_ID {
     /* BCKS */
     AC_BCK_ACARM_WAIT01=0x0,

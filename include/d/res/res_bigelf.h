@@ -1,6 +1,8 @@
 #ifndef RES_BIGELF_H
 #define RES_BIGELF_H
 
+#include "global.h"
+
 enum BIGELF_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     BIGELF_BCK_ENTER=0x6,

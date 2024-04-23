@@ -1,6 +1,8 @@
 #ifndef RES_SA_H
 #define RES_SA_H
 
+#include "global.h"
+
 enum SA_RES_FILE_ID {
     /* BCKS */
     SA_BCK_SA01HEAD_TALK01=0x5,

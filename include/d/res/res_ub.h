@@ -1,6 +1,8 @@
 #ifndef RES_UB_H
 #define RES_UB_H
 
+#include "global.h"
+
 enum UB_RES_FILE_ID {
     /* BCKS */
     UB_BCK_UB_TALK01=0xD,

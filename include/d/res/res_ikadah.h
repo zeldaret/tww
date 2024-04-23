@@ -1,6 +1,8 @@
 #ifndef RES_IKADAH_H
 #define RES_IKADAH_H
 
+#include "global.h"
+
 enum IKADAH_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     IKADAH_BCK_SVSHIP_KAITEN=0x5,

@@ -1,6 +1,8 @@
 #ifndef RES_DEMO02_H
 #define RES_DEMO02_H
 
+#include "global.h"
+
 enum DEMO02_RES_FILE_ID {
     /* BTP */
     DEMO02_BTP_HANG=0x22,

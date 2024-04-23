@@ -1,6 +1,8 @@
 #ifndef RES_CO_H
 #define RES_CO_H
 
+#include "global.h"
+
 enum CO_RES_FILE_ID {
     /* BCKS */
     CO_BCK_COPEAL_MIGAMAE=0x0,

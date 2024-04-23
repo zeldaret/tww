@@ -1,6 +1,8 @@
 #ifndef RES_SHIP_H
 #define RES_SHIP_H
 
+#include "global.h"
+
 enum SHIP_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     SHIP_BCK_AKIBI1=0x5,

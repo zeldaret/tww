@@ -1,6 +1,8 @@
 #ifndef RES_ASTOP_H
 #define RES_ASTOP_H
 
+#include "global.h"
+
 enum ASTOP_RES_FILE_ID { // IDs and indexes are synced
     /* DZB */
     ASTOP_DZB_A00=0x3,

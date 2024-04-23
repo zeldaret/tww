@@ -1,6 +1,8 @@
 #ifndef RES_DEMO35_H
 #define RES_DEMO35_H
 
+#include "global.h"
+
 enum DEMO35_RES_FILE_ID {
     /* STB */
     DEMO35_STB_KUGUTU_GANON=0x36,

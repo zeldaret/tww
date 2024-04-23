@@ -1,6 +1,8 @@
 #ifndef RES_KWOOD_00_H
 #define RES_KWOOD_00_H
 
+#include "global.h"
+
 enum KWOOD_00_RES_FILE_ID {
     /* BAS */
     KWOOD_00_BAS_BREAK=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_VDS_H
 #define RES_VDS_H
 
+#include "global.h"
+
 enum VDS_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     VDS_BCK_VDSWT0=0x6,

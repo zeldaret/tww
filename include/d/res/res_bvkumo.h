@@ -1,6 +1,8 @@
 #ifndef RES_BVKUMO_H
 #define RES_BVKUMO_H
 
+#include "global.h"
+
 enum BVKUMO_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     BVKUMO_BDL_BVKUMO=0x4,

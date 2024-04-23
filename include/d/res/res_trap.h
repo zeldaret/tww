@@ -1,6 +1,8 @@
 #ifndef RES_TRAP_H
 #define RES_TRAP_H
 
+#include "global.h"
+
 enum TRAP_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     TRAP_BDL_HTORA1=0x5,

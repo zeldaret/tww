@@ -1,6 +1,8 @@
 #ifndef RES_JBO_H
 #define RES_JBO_H
 
+#include "global.h"
+
 enum JBO_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     JBO_BCK_IN1=0x4,

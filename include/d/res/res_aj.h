@@ -1,6 +1,8 @@
 #ifndef RES_AJ_H
 #define RES_AJ_H
 
+#include "global.h"
+
 enum AJ_RES_FILE_ID {
     /* BCKS */
     AJ_BCK_ANGRY=0x0,

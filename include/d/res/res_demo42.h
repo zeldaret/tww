@@ -1,6 +1,8 @@
 #ifndef RES_DEMO42_H
 #define RES_DEMO42_H
 
+#include "global.h"
+
 enum DEMO42_RES_FILE_ID {
     /* BCKS */
     DEMO42_BCK_24_GND_CUT14_WALKING_L=0x0,

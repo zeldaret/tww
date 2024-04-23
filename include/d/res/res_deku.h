@@ -1,6 +1,8 @@
 #ifndef RES_DEKU_H
 #define RES_DEKU_H
 
+#include "global.h"
+
 enum DEKU_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     DEKU_BCK_VLFDK=0x4,

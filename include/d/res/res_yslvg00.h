@@ -1,6 +1,8 @@
 #ifndef RES_YSLVG00_H
 #define RES_YSLVG00_H
 
+#include "global.h"
+
 enum YSLVG00_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     YSLVG00_BDL_YSLVG00=0x5,

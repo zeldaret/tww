@@ -1,6 +1,8 @@
 #ifndef RES_BMD_H
 #define RES_BMD_H
 
+#include "global.h"
+
 enum BMD_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BMD_BCK_CALL_01=0x8,

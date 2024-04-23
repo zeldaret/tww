@@ -1,6 +1,8 @@
 #ifndef RES_MED_R_H
 #define RES_MED_R_H
 
+#include "global.h"
+
 enum MED_R_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     MED_R_BDL_VBINR=0x4,

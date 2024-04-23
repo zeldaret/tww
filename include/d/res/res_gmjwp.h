@@ -1,6 +1,8 @@
 #ifndef RES_GMJWP_H
 #define RES_GMJWP_H
 
+#include "global.h"
+
 enum GMJWP_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     GMJWP_BCK_GMJWP01=0x6,

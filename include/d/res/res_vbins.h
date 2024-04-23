@@ -1,6 +1,8 @@
 #ifndef RES_VBINS_H
 #define RES_VBINS_H
 
+#include "global.h"
+
 enum VBINS_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VBINS_BDL_VBINS=0x4,

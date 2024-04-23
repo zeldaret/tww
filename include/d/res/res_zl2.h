@@ -1,6 +1,8 @@
 #ifndef RES_ZL2_H
 #define RES_ZL2_H
 
+#include "global.h"
+
 enum ZL2_RES_FILE_ID {
     /* BCKS */
     ZL2_BCK_WAIT=0x0,

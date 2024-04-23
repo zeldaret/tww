@@ -1,6 +1,8 @@
 #ifndef RES_EP_H
 #define RES_EP_H
 
+#include "global.h"
+
 enum EP_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     EP_BDL_EP_GA=0x3,

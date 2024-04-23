@@ -1,6 +1,8 @@
 #ifndef RES_SK2_H
 #define RES_SK2_H
 
+#include "global.h"
+
 enum SK2_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     SK2_BCK_KSYLF_00=0x5,

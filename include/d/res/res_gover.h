@@ -1,6 +1,8 @@
 #ifndef RES_GOVER_H
 #define RES_GOVER_H
 
+#include "global.h"
+
 #if VERSION == VERSION_PAL
 enum GOVER_RES_FILE_ID { // IDs and indexes are synced
     /* SCRN */

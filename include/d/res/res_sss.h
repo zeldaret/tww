@@ -1,6 +1,8 @@
 #ifndef RES_SSS_H
 #define RES_SSS_H
 
+#include "global.h"
+
 enum SSS_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     SSS_BCK_SSS_HIRAKU=0x5,

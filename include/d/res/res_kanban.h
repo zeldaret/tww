@@ -1,6 +1,8 @@
 #ifndef RES_KANBAN_H
 #define RES_KANBAN_H
 
+#include "global.h"
+
 enum KANBAN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     KANBAN_BDL_KANBAN=0x3,

@@ -1,6 +1,8 @@
 #ifndef RES_DMGROOM_H
 #define RES_DMGROOM_H
 
+#include "global.h"
+
 enum DMGROOM_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     DMGROOM_BDL_DMGROOM=0x4,

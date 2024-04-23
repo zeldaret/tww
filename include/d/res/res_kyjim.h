@@ -1,6 +1,8 @@
 #ifndef RES_KYJIM_H
 #define RES_KYJIM_H
 
+#include "global.h"
+
 enum KYJIM_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     KYJIM_BCK_KYJIM_00=0x6,

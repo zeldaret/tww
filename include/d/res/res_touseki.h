@@ -1,6 +1,8 @@
 #ifndef RES_TOUSEKI_H
 #define RES_TOUSEKI_H
 
+#include "global.h"
+
 enum TOUSEKI_RES_FILE_ID {
     /* BCK */
     TOUSEKI_BCK_ATOSK_MAKI=0x0,

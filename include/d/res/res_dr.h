@@ -1,6 +1,8 @@
 #ifndef RES_DR_H
 #define RES_DR_H
 
+#include "global.h"
+
 enum DR_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     DR_BAS_ABARE1=0x5,

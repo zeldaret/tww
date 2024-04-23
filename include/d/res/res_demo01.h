@@ -1,6 +1,8 @@
 #ifndef RES_DEMO01_H
 #define RES_DEMO01_H
 
+#include "global.h"
+
 enum DEMO01_RES_FILE_ID {
     /* STB */
     DEMO01_STB_TALE=0xA,

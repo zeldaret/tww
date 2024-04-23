@@ -1,6 +1,8 @@
 #ifndef RES_FIGURE3_H
 #define RES_FIGURE3_H
 
+#include "global.h"
+
 enum FIGURE3_RES_FILE_ID {
     /* BDL */
     FIGURE3_BDL_VF_065=0x0,

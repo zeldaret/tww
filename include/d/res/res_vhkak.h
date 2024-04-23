@@ -1,6 +1,8 @@
 #ifndef RES_VHKAK_H
 #define RES_VHKAK_H
 
+#include "global.h"
+
 enum VHKAK_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VHKAK_BDL_VHKAK=0x4,

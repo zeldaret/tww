@@ -1,6 +1,8 @@
 #ifndef RES_VTRI8_H
 #define RES_VTRI8_H
 
+#include "global.h"
+
 enum VTRI8_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VTRI8_BDL_VTRI8=0x4,

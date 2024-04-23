@@ -1,6 +1,8 @@
 #ifndef RES_SH_H
 #define RES_SH_H
 
+#include "global.h"
+
 enum SH_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     SH_BAS_BCHAKUCHI=0x5,

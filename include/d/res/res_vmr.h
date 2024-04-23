@@ -1,6 +1,8 @@
 #ifndef RES_VMR_H
 #define RES_VMR_H
 
+#include "global.h"
+
 enum VMR_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     VMR_BCK_VMRMZ=0x5,

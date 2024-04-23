@@ -1,6 +1,8 @@
 #ifndef RES_DEMO34_H
 #define RES_DEMO34_H
 
+#include "global.h"
+
 enum DEMO34_RES_FILE_ID {
     /* STB */
     DEMO34_STB_SEAL=0x0,

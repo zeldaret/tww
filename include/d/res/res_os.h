@@ -1,6 +1,8 @@
 #ifndef RES_OS_H
 #define RES_OS_H
 
+#include "global.h"
+
 enum OS_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     OS_BCK_OS_AWAKE=0x5,

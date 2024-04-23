@@ -1,6 +1,8 @@
 #ifndef RES_OKMONO_H
 #define RES_OKMONO_H
 
+#include "global.h"
+
 enum OKMONO_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     OKMONO_BDL_OSTOOL=0x4,

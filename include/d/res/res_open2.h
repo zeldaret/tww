@@ -1,6 +1,8 @@
 #ifndef RES_OPEN2_H
 #define RES_OPEN2_H
 
+#include "global.h"
+
 enum OPEN2_RES_FILE_ID { // IDs and indexes are synced
     /* TIMG */
     OPEN2_BTI_DEMO_3=0x3,

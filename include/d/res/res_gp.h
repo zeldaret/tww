@@ -1,6 +1,8 @@
 #ifndef RES_GP_H
 #define RES_GP_H
 
+#include "global.h"
+
 enum GP_RES_FILE_ID {
     /* BCKS */
     GP_BCK_GIVE=0x0,

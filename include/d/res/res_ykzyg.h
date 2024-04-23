@@ -1,6 +1,8 @@
 #ifndef RES_YKZYG_H
 #define RES_YKZYG_H
 
+#include "global.h"
+
 enum YKZYG_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     YKZYG_BDL_QKZYG=0x6,

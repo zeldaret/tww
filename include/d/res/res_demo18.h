@@ -1,6 +1,8 @@
 #ifndef RES_DEMO18_H
 #define RES_DEMO18_H
 
+#include "global.h"
+
 enum DEMO18_RES_FILE_ID {
     /* BCKS */
     DEMO18_BCK_18_FN_CUT01_KYORO_L=0x0,

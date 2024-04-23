@@ -1,6 +1,8 @@
 #ifndef RES_HAMI2_H
 #define RES_HAMI2_H
 
+#include "global.h"
+
 enum HAMI2_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     HAMI2_BDL_HAMI2=0x4,

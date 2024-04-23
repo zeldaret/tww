@@ -1,6 +1,8 @@
 #ifndef RES_MDOOR_H
 #define RES_MDOOR_H
 
+#include "global.h"
+
 enum MDOOR_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MDOOR_BDL_MORI1=0x4,

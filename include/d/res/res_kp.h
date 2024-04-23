@@ -1,6 +1,8 @@
 #ifndef RES_KP_H
 #define RES_KP_H
 
+#include "global.h"
+
 enum KP_RES_FILE_ID {
     /* BCKS */
     KP_BCK_HAND=0x0,

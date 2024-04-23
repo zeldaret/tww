@@ -1,6 +1,8 @@
 #ifndef RES_VHANE_H
 #define RES_VHANE_H
 
+#include "global.h"
+
 enum VHANE_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VHANE_BDL_VHANE=0x5,

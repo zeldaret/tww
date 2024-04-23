@@ -1,6 +1,8 @@
 #ifndef RES_KAMOME_H
 #define RES_KAMOME_H
 
+#include "global.h"
+
 enum KAMOME_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     KAMOME_BAS_KA_FLY1=0x5,

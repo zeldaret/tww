@@ -1,6 +1,8 @@
 #ifndef RES_GND_H
 #define RES_GND_H
 
+#include "global.h"
+
 enum GND_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     GND_BAS_AATTACK1=0x8,

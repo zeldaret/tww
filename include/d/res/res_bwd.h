@@ -1,6 +1,8 @@
 #ifndef RES_BWD_H
 #define RES_BWD_H
 
+#include "global.h"
+
 enum BWD_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BWD_BCK_BWD_ATTACK=0x7,

@@ -1,6 +1,8 @@
 #ifndef RES_ZK_H
 #define RES_ZK_H
 
+#include "global.h"
+
 enum ZK_RES_FILE_ID {
     /* BCKS */
     ZK_BCK_ZK_TALK01=0x0,

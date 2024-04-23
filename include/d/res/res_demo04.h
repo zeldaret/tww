@@ -1,6 +1,8 @@
 #ifndef RES_DEMO04_H
 #define RES_DEMO04_H
 
+#include "global.h"
+
 enum DEMO04_RES_FILE_ID {
     /* BTP */
     DEMO04_BTP_04_P1A_001_CUT1_LOOK=0x7,

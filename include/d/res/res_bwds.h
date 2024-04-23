@@ -1,6 +1,8 @@
 #ifndef RES_BWDS_H
 #define RES_BWDS_H
 
+#include "global.h"
+
 enum BWDS_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BWDS_BCK_KOBOSS_CLOSE=0x4,

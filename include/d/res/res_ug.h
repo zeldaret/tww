@@ -1,6 +1,8 @@
 #ifndef RES_UG_H
 #define RES_UG_H
 
+#include "global.h"
+
 enum UG_RES_FILE_ID {
     /* BCKS */
     UG_BCK_UG01HEAD_SIT01=0x8,

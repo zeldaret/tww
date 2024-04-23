@@ -1,6 +1,8 @@
 #ifndef RES_BDK_H
 #define RES_BDK_H
 
+#include "global.h"
+
 enum BDK_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     BDK_BAS_ATTACK1=0x7,

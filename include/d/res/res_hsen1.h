@@ -1,6 +1,8 @@
 #ifndef RES_HSEN1_H
 #define RES_HSEN1_H
 
+#include "global.h"
+
 enum HSEN1_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     HSEN1_BDL_HSEN1=0x5,

@@ -1,6 +1,8 @@
 #ifndef RES_DEMO26_H
 #define RES_DEMO26_H
 
+#include "global.h"
+
 enum DEMO26_RES_FILE_ID {
     /* STB */
     DEMO26_STB_FAIRY=0x9,

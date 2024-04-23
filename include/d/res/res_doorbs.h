@@ -1,6 +1,8 @@
 #ifndef RES_DOORBS_H
 #define RES_DOORBS_H
 
+#include "global.h"
+
 enum DOORBS_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     DOORBS_BDL_DOORDR=0x4,

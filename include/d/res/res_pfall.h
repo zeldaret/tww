@@ -1,6 +1,8 @@
 #ifndef RES_PFALL_H
 #define RES_PFALL_H
 
+#include "global.h"
+
 enum PFALL_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     PFALL_BCK_HIKU=0x5,

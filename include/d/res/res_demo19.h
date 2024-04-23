@@ -1,6 +1,8 @@
 #ifndef RES_DEMO19_H
 #define RES_DEMO19_H
 
+#include "global.h"
+
 enum DEMO19_RES_FILE_ID {
     /* STB */
     DEMO19_STB_TOWERD=0x16,

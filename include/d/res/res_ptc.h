@@ -1,6 +1,8 @@
 #ifndef RES_PTC_H
 #define RES_PTC_H
 
+#include "global.h"
+
 enum PTC_RES_FILE_ID {
     /* BDL */
     PTC_BDL_PTCO=0x0,

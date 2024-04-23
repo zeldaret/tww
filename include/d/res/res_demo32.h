@@ -1,6 +1,8 @@
 #ifndef RES_DEMO32_H
 #define RES_DEMO32_H
 
+#include "global.h"
+
 enum DEMO32_RES_FILE_ID {
     /* STB */
     DEMO32_STB_PRAY_KOKIRI=0x0,

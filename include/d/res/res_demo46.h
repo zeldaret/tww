@@ -1,6 +1,8 @@
 #ifndef RES_DEMO46_H
 #define RES_DEMO46_H
 
+#include "global.h"
+
 enum DEMO46_RES_FILE_ID {
     /* BCKS */
     DEMO46_BCK_46_P1A_ALL_WAIT02_L=0x0,

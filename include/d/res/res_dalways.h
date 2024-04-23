@@ -1,6 +1,8 @@
 #ifndef RES_DALWAYS_H
 #define RES_DALWAYS_H
 
+#include "global.h"
+
 enum DALWAYS_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     DALWAYS_BCK_BOXOPENBOX=0x8,

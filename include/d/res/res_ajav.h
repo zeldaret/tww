@@ -1,6 +1,8 @@
 #ifndef RES_AJAV_H
 #define RES_AJAV_H
 
+#include "global.h"
+
 enum AJAV_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     AJAV_BDL_AJAVA=0x4,

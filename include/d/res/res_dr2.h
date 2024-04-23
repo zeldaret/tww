@@ -1,6 +1,8 @@
 #ifndef RES_DR2_H
 #define RES_DR2_H
 
+#include "global.h"
+
 enum DR2_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     DR2_BCK_DR_BOSS_DEMO1=0x9,

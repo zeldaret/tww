@@ -1,6 +1,8 @@
 #ifndef RES_LS2_H
 #define RES_LS2_H
 
+#include "global.h"
+
 enum LS2_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     LS2_BAS_LS_DEMOLOOK=0x6,

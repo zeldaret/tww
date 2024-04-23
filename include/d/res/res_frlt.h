@@ -1,6 +1,8 @@
 #ifndef RES_FRLT_H
 #define RES_FRLT_H
 
+#include "global.h"
+
 enum FRLT_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     FRLT_BDL_YFRLT00=0x4,

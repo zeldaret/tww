@@ -1,6 +1,8 @@
 #ifndef RES_AISI_H
 #define RES_AISI_H
 
+#include "global.h"
+
 enum AISI_RES_FILE_ID {
     /* BDLM */
     AISI_BDL_AISI=0x0,

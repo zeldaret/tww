@@ -1,6 +1,8 @@
 #ifndef RES_KIRI_H
 #define RES_KIRI_H
 
+#include "global.h"
+
 enum KIRI_RES_FILE_ID {
     /* BCK */
     KIRI_BCK_KIRI=0x8000,

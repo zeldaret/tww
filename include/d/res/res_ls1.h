@@ -1,6 +1,8 @@
 #ifndef RES_LS1_H
 #define RES_LS1_H
 
+#include "global.h"
+
 enum LS1_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     LS1_BAS_LS_FURIMUKI=0x5,

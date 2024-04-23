@@ -1,6 +1,8 @@
 #ifndef RES_KAISEN_H
 #define RES_KAISEN_H
 
+#include "global.h"
+
 enum KAISEN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     KAISEN_BDL_AK2SH=0x4,

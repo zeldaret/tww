@@ -1,6 +1,8 @@
 #ifndef RES_YFIRE_00_H
 #define RES_YFIRE_00_H
 
+#include "global.h"
+
 enum YFIRE_00_RES_FILE_ID { // IDs and indexes are synced
     /* BMDM */
     YFIRE_00_BMD_YFIRB_00=0x5,

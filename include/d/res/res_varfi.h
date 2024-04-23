@@ -1,6 +1,8 @@
 #ifndef RES_VARFI_H
 #define RES_VARFI_H
 
+#include "global.h"
+
 enum VARFI_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VARFI_BDL_VARFI=0x4,

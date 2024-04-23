@@ -1,6 +1,8 @@
 #ifndef RES_UW_H
 #define RES_UW_H
 
+#include "global.h"
+
 enum UW_RES_FILE_ID {
     /* BCKS */
     UW_BCK_UW_TALK01=0x4,

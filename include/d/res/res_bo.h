@@ -1,6 +1,8 @@
 #ifndef RES_BO_H
 #define RES_BO_H
 
+#include "global.h"
+
 enum BO_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BO_BCK_ATTACK1=0x5,

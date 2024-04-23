@@ -1,6 +1,8 @@
 #ifndef RES_BJ_H
 #define RES_BJ_H
 
+#include "global.h"
+
 enum BJ_RES_FILE_ID {
     /* BCKS */
     BJ_BCK_BOW=0x0,

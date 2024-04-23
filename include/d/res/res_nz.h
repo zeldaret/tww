@@ -1,6 +1,8 @@
 #ifndef RES_NZ_H
 #define RES_NZ_H
 
+#include "global.h"
+
 enum NZ_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     NZ_BAS_NZ_ATTACK=0x7,

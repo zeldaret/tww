@@ -1,6 +1,8 @@
 #ifndef RES_MBDOOR_H
 #define RES_MBDOOR_H
 
+#include "global.h"
+
 enum MBDOOR_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MBDOOR_BDL_S_MBD_L=0x4,

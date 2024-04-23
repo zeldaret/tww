@@ -1,6 +1,8 @@
 #ifndef RES_ESHATA_H
 #define RES_ESHATA_H
 
+#include "global.h"
+
 enum ESHATA_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     ESHATA_BDL_ESHATA=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_FOBJ01_H
 #define RES_FOBJ01_H
 
+#include "global.h"
+
 enum FOBJ01_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     FOBJ01_BCK_FOBJ01=0x4,

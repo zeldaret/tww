@@ -1,6 +1,8 @@
 #ifndef RES_GRYW00_H
 #define RES_GRYW00_H
 
+#include "global.h"
+
 enum GRYW00_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     GRYW00_BCK_GRYW00=0x6,

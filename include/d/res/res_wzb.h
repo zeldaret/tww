@@ -1,6 +1,8 @@
 #ifndef RES_WZB_H
 #define RES_WZB_H
 
+#include "global.h"
+
 enum WZB_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     WZB_BCK_YSUMN00=0x5,

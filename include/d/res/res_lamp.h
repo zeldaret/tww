@@ -1,6 +1,8 @@
 #ifndef RES_LAMP_H
 #define RES_LAMP_H
 
+#include "global.h"
+
 enum LAMP_RES_FILE_ID { // IDs and indexes are synced
     /* BMD */
     LAMP_BMD_LAMP_00=0x3,

@@ -1,6 +1,8 @@
 #ifndef RES_DEMO43_H
 #define RES_DEMO43_H
 
+#include "global.h"
+
 enum DEMO43_RES_FILE_ID {
     /* BCKS */
     DEMO43_BCK_D43_MS_CUT1_SASIKOMARE_O=0x0,

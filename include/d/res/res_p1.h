@@ -1,6 +1,8 @@
 #ifndef RES_P1_H
 #define RES_P1_H
 
+#include "global.h"
+
 enum P1_RES_FILE_ID {
     /* BMT */
     P1_BMT_P1B_BODY=0xA,

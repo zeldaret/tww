@@ -1,6 +1,8 @@
 #ifndef RES_PZ_H
 #define RES_PZ_H
 
+#include "global.h"
+
 enum PZ_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     PZ_BCK_ARROW_RELORD=0x7,

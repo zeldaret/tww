@@ -1,6 +1,8 @@
 #ifndef RES_ESEKH_H
 #define RES_ESEKH_H
 
+#include "global.h"
+
 enum ESEKH_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     ESEKH_BDL_ESEKH=0x4,

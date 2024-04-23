@@ -1,6 +1,8 @@
 #ifndef RES_DEMO41_H
 #define RES_DEMO41_H
 
+#include "global.h"
+
 enum DEMO41_RES_FILE_ID {
     /* BCKS */
     DEMO41_BCK_11A_BMN_CUT02_LOOKUP_O=0x0,

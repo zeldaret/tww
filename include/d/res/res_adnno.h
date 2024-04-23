@@ -1,6 +1,8 @@
 #ifndef RES_ADNNO_H
 #define RES_ADNNO_H
 
+#include "global.h"
+
 enum ADNNO_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     ADNNO_BDL_ADNNO=0x4,

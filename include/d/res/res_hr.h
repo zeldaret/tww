@@ -1,6 +1,8 @@
 #ifndef RES_HR_H
 #define RES_HR_H
 
+#include "global.h"
+
 enum HR_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     HR_BCK_DAMAGE=0x6,

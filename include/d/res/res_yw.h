@@ -1,6 +1,8 @@
 #ifndef RES_YW_H
 #define RES_YW_H
 
+#include "global.h"
+
 enum YW_RES_FILE_ID {
     /* BCKS */
     YW_BCK_WAIT01=0x0,

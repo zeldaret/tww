@@ -1,6 +1,8 @@
 #ifndef RES_YWARP00_H
 #define RES_YWARP00_H
 
+#include "global.h"
+
 enum YWARP00_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     YWARP00_BCK_YWARP00=0x5,

@@ -1,6 +1,8 @@
 #ifndef RES_ST_H
 #define RES_ST_H
 
+#include "global.h"
+
 enum ST_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     ST_BCK_ATTACKL1=0x4,

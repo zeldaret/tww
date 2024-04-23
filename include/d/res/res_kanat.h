@@ -1,6 +1,8 @@
 #ifndef RES_KANAT_H
 #define RES_KANAT_H
 
+#include "global.h"
+
 enum KANAT_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     KANAT_BDL_KANAT=0x4,

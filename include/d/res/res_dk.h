@@ -1,6 +1,8 @@
 #ifndef RES_DK_H
 #define RES_DK_H
 
+#include "global.h"
+
 enum DK_RES_FILE_ID {
     /* BCKS */
     DK_BCK_DK_MAJYUTO_DEMO1=0x10,

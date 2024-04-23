@@ -1,6 +1,8 @@
 #ifndef RES_KAJI_H
 #define RES_KAJI_H
 
+#include "global.h"
+
 enum KAJI_RES_FILE_ID {
     /* BAS */
     KAJI_BAS_KJ_ANG=0x0,

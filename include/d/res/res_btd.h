@@ -1,6 +1,8 @@
 #ifndef RES_BTD_H
 #define RES_BTD_H
 
+#include "global.h"
+
 enum BTD_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BTD_BCK_BTD_POSE=0x8,

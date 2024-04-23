@@ -1,6 +1,8 @@
 #ifndef RES_MKANOKE_H
 #define RES_MKANOKE_H
 
+#include "global.h"
+
 enum MKANOKE_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MKANOKE_BDL_MOKE1=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_TC_H
 #define RES_TC_H
 
+#include "global.h"
+
 enum TC_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     TC_BCK_DANCE01=0x6,

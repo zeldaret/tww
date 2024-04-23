@@ -1,6 +1,8 @@
 #ifndef RES_MD_SHIP_H
 #define RES_MD_SHIP_H
 
+#include "global.h"
+
 enum MD_SHIP_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     MD_SHIP_BCK_MD_OJIGI=0x7,

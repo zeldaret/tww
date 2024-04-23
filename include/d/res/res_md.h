@@ -1,6 +1,8 @@
 #ifndef RES_MD_H
 #define RES_MD_H
 
+#include "global.h"
+
 enum MD_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     MD_BCK_MD_CAUGHT=0x7,

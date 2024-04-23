@@ -1,6 +1,8 @@
 #ifndef RES_VMAPG_H
 #define RES_VMAPG_H
 
+#include "global.h"
+
 enum VMAPG_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     VMAPG_BDL_VMAPG=0x3,

@@ -1,6 +1,8 @@
 #ifndef RES_BA_H
 #define RES_BA_H
 
+#include "global.h"
+
 enum BA_RES_FILE_ID {
     /* BCKS */
     BA_BCK_05_BA_CUT8_WAIT=0x0,

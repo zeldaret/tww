@@ -1,6 +1,8 @@
 #ifndef RES_WZ_H
 #define RES_WZ_H
 
+#include "global.h"
+
 enum WZ_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     WZ_BCK_AIRDOWN1=0x5,

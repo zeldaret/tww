@@ -1,6 +1,8 @@
 #ifndef RES_KN_H
 #define RES_KN_H
 
+#include "global.h"
+
 enum KN_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     KN_BCK_PATA=0x4,

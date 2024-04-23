@@ -1,6 +1,8 @@
 #ifndef RES_GY_H
 #define RES_GY_H
 
+#include "global.h"
+
 enum GY_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     GY_BCK_ATTACK1=0x4,

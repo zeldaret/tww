@@ -1,6 +1,8 @@
 #ifndef RES_DEMO07_H
 #define RES_DEMO07_H
 
+#include "global.h"
+
 enum DEMO07_RES_FILE_ID {
     /* BTK */
     DEMO07_BTK_LS_DEMOLOOK=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_SARACE_H
 #define RES_SARACE_H
 
+#include "global.h"
+
 enum SARACE_RES_FILE_ID {
     /* BCKS */
     SARACE_BCK_SA01HEAD_TALK01=0x0,

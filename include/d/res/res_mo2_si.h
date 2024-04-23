@@ -1,6 +1,8 @@
 #ifndef RES_MO2_SI_H
 #define RES_MO2_SI_H
 
+#include "global.h"
+
 enum MO2_SI_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     MO2_SI_BCK_AHAZUSHI=0x7,

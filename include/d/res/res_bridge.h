@@ -1,6 +1,8 @@
 #ifndef RES_BRIDGE_H
 #define RES_BRIDGE_H
 
+#include "global.h"
+
 enum BRIDGE_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     BRIDGE_BDL_OBM_BRIDGE=0x4,

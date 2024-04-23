@@ -1,6 +1,8 @@
 #ifndef RES_BPW_H
 #define RES_BPW_H
 
+#include "global.h"
+
 enum BPW_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BPW_BCK_ATTACK_KAN1=0x5,

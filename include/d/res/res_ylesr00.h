@@ -1,6 +1,8 @@
 #ifndef RES_YLESR00_H
 #define RES_YLESR00_H
 
+#include "global.h"
+
 enum YLESR00_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     YLESR00_BCK_YLESR00=0x6,

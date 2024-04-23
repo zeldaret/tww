@@ -1,6 +1,8 @@
 #ifndef RES_VPOWR_H
 #define RES_VPOWR_H
 
+#include "global.h"
+
 enum VPOWR_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VPOWR_BDL_VPOWR=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_DEMO20_H
 #define RES_DEMO20_H
 
+#include "global.h"
+
 enum DEMO20_RES_FILE_ID {
     /* STB */
     DEMO20_STB_WARP_IN=0x0,

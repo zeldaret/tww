@@ -1,6 +1,8 @@
 #ifndef RES_DEMO31_H
 #define RES_DEMO31_H
 
+#include "global.h"
+
 enum DEMO31_RES_FILE_ID {
     /* STB */
     DEMO31_STB_AWAKE_KOKIRI=0x0,

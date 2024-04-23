@@ -1,6 +1,8 @@
 #ifndef RES_VGNFD_H
 #define RES_VGNFD_H
 
+#include "global.h"
+
 enum VGNFD_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VGNFD_BDL_VGNFD0=0x6,

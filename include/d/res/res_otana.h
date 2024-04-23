@@ -1,6 +1,8 @@
 #ifndef RES_OTANA_H
 #define RES_OTANA_H
 
+#include "global.h"
+
 enum OTANA_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     OTANA_BDL_OTANA=0x4,

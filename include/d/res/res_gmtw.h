@@ -1,6 +1,8 @@
 #ifndef RES_GMTW_H
 #define RES_GMTW_H
 
+#include "global.h"
+
 enum GMTW_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     GMTW_BCK_GMTW00=0x6,

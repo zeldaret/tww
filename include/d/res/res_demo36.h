@@ -1,6 +1,8 @@
 #ifndef RES_DEMO36_H
 #define RES_DEMO36_H
 
+#include "global.h"
+
 enum DEMO36_RES_FILE_ID {
     /* STB */
     DEMO36_STB_TO_ROOF=0x10,

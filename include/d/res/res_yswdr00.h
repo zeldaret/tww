@@ -1,6 +1,8 @@
 #ifndef RES_YSWDR00_H
 #define RES_YSWDR00_H
 
+#include "global.h"
+
 enum YSWDR00_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     YSWDR00_BDL_YSWDR00=0x6,

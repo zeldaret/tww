@@ -1,6 +1,8 @@
 #ifndef RES_TLOGOE5_H
 #define RES_TLOGOE5_H
 
+#include "global.h"
+
 #if VERSION == VERSION_PAL
 enum TLOGOE5_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

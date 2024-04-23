@@ -1,6 +1,8 @@
 #ifndef RES_HTOGE1_H
 #define RES_HTOGE1_H
 
+#include "global.h"
+
 enum HTOGE1_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     HTOGE1_BDL_HTOGE1=0x4,

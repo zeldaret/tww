@@ -1,6 +1,8 @@
 #ifndef RES_GK_H
 #define RES_GK_H
 
+#include "global.h"
+
 enum GK_RES_FILE_ID {
     /* BCKS */
     GK_BCK_GK_TALK01=0x0,

@@ -1,6 +1,8 @@
 #ifndef RES_KG_H
 #define RES_KG_H
 
+#include "global.h"
+
 enum KG_RES_FILE_ID {
     /* BDLM */
     KG_BDL_KG=0x0,

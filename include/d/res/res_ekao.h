@@ -1,6 +1,8 @@
 #ifndef RES_EKAO_H
 #define RES_EKAO_H
 
+#include "global.h"
+
 enum EKAO_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     EKAO_BDL_EKAO=0x4,

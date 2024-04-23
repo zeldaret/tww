@@ -1,6 +1,8 @@
 #ifndef RES_GBED_H
 #define RES_GBED_H
 
+#include "global.h"
+
 enum GBED_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     GBED_BDL_K_GBED=0x4,

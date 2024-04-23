@@ -1,6 +1,8 @@
 #ifndef RES_HCBH_H
 #define RES_HCBH_H
 
+#include "global.h"
+
 enum HCBH_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     HCBH_BDL_HCBH1A=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_KI_H
 #define RES_KI_H
 
+#include "global.h"
+
 enum KI_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     KI_BAS_ATTACK1=0x7,

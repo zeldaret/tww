@@ -1,6 +1,8 @@
 #ifndef RES_NITEN_H
 #define RES_NITEN_H
 
+#include "global.h"
+
 enum NITEN_RES_FILE_ID {
     /* BCKS */
     NITEN_BCK_MT_TALK01=0x3,

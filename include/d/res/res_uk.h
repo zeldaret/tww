@@ -1,6 +1,8 @@
 #ifndef RES_UK_H
 #define RES_UK_H
 
+#include "global.h"
+
 enum UK_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     UK_BCK_UK_DA=0x7,

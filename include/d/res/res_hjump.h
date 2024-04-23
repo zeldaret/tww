@@ -1,6 +1,8 @@
 #ifndef RES_HJUMP_H
 #define RES_HJUMP_H
 
+#include "global.h"
+
 enum HJUMP_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     HJUMP_BDL_HBOX1=0x4,

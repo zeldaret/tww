@@ -1,6 +1,8 @@
 #ifndef RES_PT_H
 #define RES_PT_H
 
+#include "global.h"
+
 enum PT_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     PT_BCK_ATACK=0x6,

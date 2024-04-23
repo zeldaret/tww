@@ -1,6 +1,8 @@
 #ifndef RES_MSHOKKI_H
 #define RES_MSHOKKI_H
 
+#include "global.h"
+
 enum MSHOKKI_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MSHOKKI_BDL_KOPPU=0x3,

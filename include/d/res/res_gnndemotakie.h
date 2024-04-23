@@ -1,6 +1,8 @@
 #ifndef RES_GNNDEMOTAKIE_H
 #define RES_GNNDEMOTAKIE_H
 
+#include "global.h"
+
 enum GNNDEMOTAKIE_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_VDOKU_H
 #define RES_VDOKU_H
 
+#include "global.h"
+
 enum VDOKU_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     VDOKU_BDL_VDOKU=0x4,

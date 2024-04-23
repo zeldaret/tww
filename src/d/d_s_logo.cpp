@@ -3,7 +3,6 @@
 // Translation Unit: d_s_logo.cpp
 //
 
-#include "global.h"
 #include "d/res/res_logo.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_mng.h"

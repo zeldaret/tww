@@ -1,6 +1,8 @@
 #ifndef RES_OB_H
 #define RES_OB_H
 
+#include "global.h"
+
 enum OB_RES_FILE_ID {
     /* BCKS */
     OB_BCK_TALK=0x0,

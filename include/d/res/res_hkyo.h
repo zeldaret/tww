@@ -1,6 +1,8 @@
 #ifndef RES_HKYO_H
 #define RES_HKYO_H
 
+#include "global.h"
+
 enum HKYO_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     HKYO_BDL_HKYO1=0x4,

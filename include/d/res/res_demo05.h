@@ -1,6 +1,8 @@
 #ifndef RES_DEMO05_H
 #define RES_DEMO05_H
 
+#include "global.h"
+
 enum DEMO05_RES_FILE_ID {
     /* BTP */
     DEMO05_BTP_05_ZL_CUT13LOOPA=0x14,

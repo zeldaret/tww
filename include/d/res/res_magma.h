@@ -1,6 +1,8 @@
 #ifndef RES_MAGMA_H
 #define RES_MAGMA_H
 
+#include "global.h"
+
 enum MAGMA_RES_FILE_ID { // IDs and indexes are synced
     /* DAT */
     MAGMA_BTI_MAG_COL=0x3,

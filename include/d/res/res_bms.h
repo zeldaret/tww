@@ -1,6 +1,8 @@
 #ifndef RES_BMS_H
 #define RES_BMS_H
 
+#include "global.h"
+
 enum BMS_RES_FILE_ID {
     /* BMDM */
     BMS_BMD_SHOP_CURSOR01=0x4,

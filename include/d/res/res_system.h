@@ -1,6 +1,8 @@
 #ifndef RES_SYSTEM_H
 #define RES_SYSTEM_H
 
+#include "global.h"
+
 enum SYSTEM_RES_FILE_ID { // IDs and indexes are synced
     /* DAT */
     SYSTEM_BTI_TOON=0x3,

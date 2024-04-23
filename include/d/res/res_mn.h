@@ -1,6 +1,8 @@
 #ifndef RES_MN_H
 #define RES_MN_H
 
+#include "global.h"
+
 enum MN_RES_FILE_ID {
     /* BCKS */
     MN_BCK_MN_TALK01=0x4,

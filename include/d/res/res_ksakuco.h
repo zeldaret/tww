@@ -1,6 +1,8 @@
 #ifndef RES_KSAKUCO_H
 #define RES_KSAKUCO_H
 
+#include "global.h"
+
 enum KSAKUCO_RES_FILE_ID { // IDs and indexes are synced
     /* DZB */
     KSAKUCO_DZB_KSAKU_00=0x3,

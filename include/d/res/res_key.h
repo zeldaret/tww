@@ -1,6 +1,8 @@
 #ifndef RES_KEY_H
 #define RES_KEY_H
 
+#include "global.h"
+
 enum KEY_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     KEY_BCK_VLOCB=0x4,

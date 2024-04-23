@@ -1,6 +1,8 @@
 #ifndef RES_KBOTA_00_H
 #define RES_KBOTA_00_H
 
+#include "global.h"
+
 enum KBOTA_00_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     KBOTA_00_BDL_KBOTA_00=0x4,

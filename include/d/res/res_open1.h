@@ -1,6 +1,8 @@
 #ifndef RES_OPEN1_H
 #define RES_OPEN1_H
 
+#include "global.h"
+
 enum OPEN1_RES_FILE_ID { // IDs and indexes are synced
     /* SCRN */
     OPEN1_BLO_OPENING=0x4,

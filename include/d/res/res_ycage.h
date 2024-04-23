@@ -1,6 +1,8 @@
 #ifndef RES_YCAGE_H
 #define RES_YCAGE_H
 
+#include "global.h"
+
 enum YCAGE_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     YCAGE_BCK_YHRBR00=0x7,

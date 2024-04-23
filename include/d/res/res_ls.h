@@ -1,6 +1,8 @@
 #ifndef RES_LS_H
 #define RES_LS_H
 
+#include "global.h"
+
 enum LS_RES_FILE_ID {
     /* BCKS */
     LS_BCK_LS_DEMOLOOK=0x0,

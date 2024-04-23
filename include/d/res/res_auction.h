@@ -1,6 +1,8 @@
 #ifndef RES_AUCTION_H
 #define RES_AUCTION_H
 
+#include "global.h"
+
 enum AUCTION_RES_FILE_ID { // IDs and indexes are synced
     /* SCRN */
     AUCTION_BLO_AUCTION1=0x4,

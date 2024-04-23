@@ -1,6 +1,8 @@
 #ifndef RES_SO_H
 #define RES_SO_H
 
+#include "global.h"
+
 enum SO_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     SO_BCK_SO_JUMP=0x5,

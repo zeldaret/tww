@@ -1,6 +1,8 @@
 #ifndef RES_HHA_H
 #define RES_HHA_H
 
+#include "global.h"
+
 enum HHA_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     HHA_BCK_YGSTP00=0x6,

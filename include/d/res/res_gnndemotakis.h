@@ -1,6 +1,8 @@
 #ifndef RES_GNNDEMOTAKIS_H
 #define RES_GNNDEMOTAKIS_H
 
+#include "global.h"
+
 enum GNNDEMOTAKIS_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     GNNDEMOTAKIS_BDL_GNN_DEMO_TAKI_S=0x4,

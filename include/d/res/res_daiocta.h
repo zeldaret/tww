@@ -1,6 +1,8 @@
 #ifndef RES_DAIOCTA_H
 #define RES_DAIOCTA_H
 
+#include "global.h"
+
 enum DAIOCTA_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     DAIOCTA_BCK_DAMAGE1=0x6,

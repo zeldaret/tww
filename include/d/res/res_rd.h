@@ -1,6 +1,8 @@
 #ifndef RES_RD_H
 #define RES_RD_H
 
+#include "global.h"
+
 enum RD_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     RD_BCK_ATACK=0x6,

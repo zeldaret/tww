@@ -1,6 +1,8 @@
 #ifndef RES_KNOB_H
 #define RES_KNOB_H
 
+#include "global.h"
+
 enum KNOB_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     KNOB_BCK_DOOROPENADOOR=0x5,

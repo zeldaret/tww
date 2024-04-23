@@ -1,6 +1,8 @@
 #ifndef RES_KO_H
 #define RES_KO_H
 
+#include "global.h"
+
 enum KO_RES_FILE_ID {
     /* BCKS */
     KO_BCK_BALLOON_BANG=0x0,

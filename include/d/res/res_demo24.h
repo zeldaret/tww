@@ -1,6 +1,8 @@
 #ifndef RES_DEMO24_H
 #define RES_DEMO24_H
 
+#include "global.h"
+
 enum DEMO24_RES_FILE_ID {
     /* BCKS */
     DEMO24_BCK_24_BM_CUT27_FLY_L=0x0,

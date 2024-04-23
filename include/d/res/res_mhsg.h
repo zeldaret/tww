@@ -1,6 +1,8 @@
 #ifndef RES_MHSG_H
 #define RES_MHSG_H
 
+#include "global.h"
+
 enum MHSG_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     MHSG_BDL_MHSG12=0x4,

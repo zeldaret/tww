@@ -1,6 +1,8 @@
 #ifndef RES_WBIRD_H
 #define RES_WBIRD_H
 
+#include "global.h"
+
 enum WBIRD_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     WBIRD_BAS_KA_WAIT1=0x5,

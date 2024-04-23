@@ -1,6 +1,8 @@
 #ifndef RES_BMDHAND_H
 #define RES_BMDHAND_H
 
+#include "global.h"
+
 enum BMDHAND_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BMDHAND_BCK_FOOK_HIRAKU=0x5,

@@ -1,6 +1,8 @@
 #ifndef RES_HMOS_H
 #define RES_HMOS_H
 
+#include "global.h"
+
 enum HMOS_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     HMOS_BDL_HMOS1=0x5,

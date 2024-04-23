@@ -1,6 +1,8 @@
 #ifndef RES_RSH_H
 #define RES_RSH_H
 
+#include "global.h"
+
 enum RSH_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     RSH_BAS_RS_JAMP=0x8,

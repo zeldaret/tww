@@ -1,6 +1,8 @@
 #ifndef RES_SHINJU_D_H
 #define RES_SHINJU_D_H
 
+#include "global.h"
+
 enum SHINJU_D_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     SHINJU_D_BDL_VPEAD=0x4,

@@ -1,6 +1,8 @@
 #ifndef RES_DS_H
 #define RES_DS_H
 
+#include "global.h"
+
 enum DS_RES_FILE_ID {
     /* BMDM */
     DS_BMD_SHOP_CURSOR01=0x3,

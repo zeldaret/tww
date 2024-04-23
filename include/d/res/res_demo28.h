@@ -1,6 +1,8 @@
 #ifndef RES_DEMO28_H
 #define RES_DEMO28_H
 
+#include "global.h"
+
 enum DEMO28_RES_FILE_ID {
     /* STB */
     DEMO28_STB_AWAKE_ZOLA=0x0,

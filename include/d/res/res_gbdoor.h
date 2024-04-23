@@ -1,6 +1,8 @@
 #ifndef RES_GBDOOR_H
 #define RES_GBDOOR_H
 
+#include "global.h"
+
 enum GBDOOR_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     GBDOOR_BDL_V_GBD_L=0x4,

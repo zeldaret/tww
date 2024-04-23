@@ -1,6 +1,8 @@
 #ifndef RES_MMIRROR_H
 #define RES_MMIRROR_H
 
+#include "global.h"
+
 enum MMIRROR_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     MMIRROR_BCK_MSUSW=0x6,

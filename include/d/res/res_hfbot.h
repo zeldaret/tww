@@ -1,6 +1,8 @@
 #ifndef RES_HFBOT_H
 #define RES_HFBOT_H
 
+#include "global.h"
+
 enum HFBOT_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     HFBOT_BDL_HFBOT1=0x5,

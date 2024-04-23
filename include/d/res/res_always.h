@@ -1,6 +1,8 @@
 #ifndef RES_ALWAYS_H
 #define RES_ALWAYS_H
 
+#include "global.h"
+
 enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     ALWAYS_BCK_FA=0xC,

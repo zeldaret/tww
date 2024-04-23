@@ -1,6 +1,8 @@
 #ifndef RES_BDKOBJ_H
 #define RES_BDKOBJ_H
 
+#include "global.h"
+
 enum BDKOBJ_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     BDKOBJ_BDL_GWOOD00=0x4,

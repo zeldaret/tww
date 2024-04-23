@@ -1,6 +1,8 @@
 #ifndef RES_GTFGLOW_H
 #define RES_GTFGLOW_H
 
+#include "global.h"
+
 enum GTFGLOW_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */
     GTFGLOW_BDL_GDEMO29_A00=0x5,

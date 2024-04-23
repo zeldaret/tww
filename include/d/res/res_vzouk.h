@@ -1,6 +1,8 @@
 #ifndef RES_VZOUK_H
 #define RES_VZOUK_H
 
+#include "global.h"
+
 enum VZOUK_RES_FILE_ID {
     /* BCK */
     VZOUK_BCK_VZOUK=0x4,

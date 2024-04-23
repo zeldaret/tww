@@ -1,6 +1,8 @@
 #ifndef RES_FOREST_H
 #define RES_FOREST_H
 
+#include "global.h"
+
 enum FOREST_RES_FILE_ID {
     /* BMD */
     FOREST_BMD_S_FOREST=0x8000,

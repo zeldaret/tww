@@ -1,6 +1,8 @@
 #ifndef RES_BOMBER_H
 #define RES_BOMBER_H
 
+#include "global.h"
+
 enum BOMBER_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     BOMBER_BDL_VCANK=0x5,

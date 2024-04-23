@@ -1,6 +1,8 @@
 #ifndef RES_DEMO15_H
 #define RES_DEMO15_H
 
+#include "global.h"
+
 enum DEMO15_RES_FILE_ID {
     /* BDLM */
     DEMO15_BDL_SEED=0xB,
