@@ -192,7 +192,7 @@ void daToge_c::set_collision() {
         center.y = current.pos.y;
         center.z = current.pos.z;
 
-        center.y += (unk470 - 1.03398e-25f);  // TODO: Find out where 1.03398e-25 comes from
+        center.y += (unk470 - 10.0f);
 
         mCyl.SetC(center);
         dComIfG_Ccsp()->Set(&mCyl);
