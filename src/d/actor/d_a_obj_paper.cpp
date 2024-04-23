@@ -213,7 +213,7 @@ namespace daObjPaper {
     void daObjPaper::Act_c::mode_talk2() {
         if (mpMsg->mStatus == fopMsgStts_BOX_CLOSED_e) {
             mpMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
-            mpMsg = 0;
+            mpMsg = NULL;
             mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
             dComIfGp_event_reset();

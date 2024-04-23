@@ -32,7 +32,7 @@ BOOL daArrow_Iceeff_c::CreateHeap() {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER01));
         JUT_ASSERT(98, modelData != 0);
         mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-        if(mpModel == 0) {
+        if(mpModel == NULL) {
             return false;
         }
         

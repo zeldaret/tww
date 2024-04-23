@@ -92,7 +92,7 @@ BOOL daObjTpost_c::_createHeap() {
 
     mMorf = new mDoExt_McaMorf(modelData, 0, 0, 0, -1, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000022);
 
-    if(mMorf == 0 || mMorf->getModel() == 0) {
+    if(mMorf == NULL || mMorf->getModel() == NULL) {
         return FALSE;
     }
     else {
@@ -914,7 +914,7 @@ void daObjTpost_c::createInit() {
 
     field_0x8F0 = 1;
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-    mpCurrMsg = 0;
+    mpCurrMsg = NULL;
 
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 5;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 6;

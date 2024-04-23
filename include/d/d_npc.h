@@ -134,9 +134,9 @@ private:
 
 public:
     dNpc_EventCut_c() {
-        mpActor = 0;
-        mpTalkActor = 0;
-        mpJntCtrl = 0;
+        mpActor = NULL;
+        mpTalkActor = NULL;
+        mpJntCtrl = NULL;
     }
 
     void setActorInfo(char*, fopAc_ac_c*);
@@ -241,7 +241,7 @@ class fopNpc_npc_c : public fopAc_ac_c {
 public:
     fopNpc_npc_c() {
         mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-        mpCurrMsg = 0;
+        mpCurrMsg = NULL;
     }
     /* 0x290 */ dNpc_JntCtrl_c m_jnt;
     /* 0x2C4 */ dNpc_EventCut_c mEventCut;

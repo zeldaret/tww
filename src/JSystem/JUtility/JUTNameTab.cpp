@@ -23,7 +23,7 @@ void JUTNameTab::setResource(const ResNTAB* pNameTable) {
         mpStrData = (const char*)(pNameTable->mEntries + mNameNum);
     } else {
         mNameNum = 0;
-        mpStrData = 0;
+        mpStrData = NULL;
     }
 }
 

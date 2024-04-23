@@ -1404,9 +1404,9 @@ void daPy_lk_c::deleteEquipItem(BOOL param_1) {
     mpSwordModel1 = NULL;
     m3454.end();
     mpSwordTipStabModel = NULL;
-    mpCutfBrk = 0;
-    mpCutfBtk = 0;
-    mpCutfBpk = 0;
+    mpCutfBrk = NULL;
+    mpCutfBtk = NULL;
+    mpCutfBpk = NULL;
     offNoResetFlg1(daPyFlg1_UNK200000);
 }
 

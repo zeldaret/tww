@@ -2771,7 +2771,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         0x11020203
     );
 
-    if(field_0x330 == 0 || field_0x330->getModel() == 0) {
+    if(field_0x330 == NULL || field_0x330->getModel() == NULL) {
         return false;
     }
 
@@ -2805,7 +2805,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     );
 
 
-    if(mpMorf == 0 || mpMorf->getModel() == 0) {
+    if(mpMorf == NULL || mpMorf->getModel() == NULL) {
         return false;
     }
 

@@ -2399,7 +2399,7 @@ static BOOL daNpc_Os_IsDelete(daNpc_Os_c* i_this) {
 void daNpc_Os_infiniteEcallBack_c::end() {
     if(mpBaseEmitter) {
         mpBaseEmitter->becomeInvalidEmitter();
-        mpBaseEmitter->setEmitterCallBackPtr(0);
+        mpBaseEmitter->setEmitterCallBackPtr(NULL);
         mpBaseEmitter = NULL;
     }
 }

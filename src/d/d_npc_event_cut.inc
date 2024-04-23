@@ -18,7 +18,7 @@ bool dNpc_EventCut_c::cutProc() {
         "CONTINUE_TALK"
     };
 
-    if(mpEvtStaffName == 0 || mpActor == 0) {
+    if(mpEvtStaffName == NULL || mpActor == NULL) {
         return false;
     }
     else {
@@ -177,7 +177,7 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
     else {
-        if(mpActorName == 0 || strcmp(mpActorName, "Player") == 0) {
+        if(mpActorName == NULL || strcmp(mpActorName, "Player") == 0) {
             mpTargetActor = dComIfGp_getPlayer(0);
         }
         else {
@@ -202,10 +202,10 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         }
     }
 
-    if(mpTargetActor == 0) {
+    if(mpTargetActor == NULL) {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
-    if(mpActorName == 0 || strcmp(mpActorName, "Player") == 0) {
+    if(mpActorName == NULL || strcmp(mpActorName, "Player") == 0) {
         mPos = dNpc_playerEyePos(0.0f) + mOffsetPos;
     }
     else {
@@ -305,7 +305,7 @@ void dNpc_EventCut_c::cutMoveToActorProc() {
         fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
     else {
-        if(mpActorName == 0 || strcmp(mpActorName, "Player") == 0) {
+        if(mpActorName == NULL || strcmp(mpActorName, "Player") == 0) {
             mpTargetActor = dComIfGp_getPlayer(0);
         }
         else {
@@ -314,7 +314,7 @@ void dNpc_EventCut_c::cutMoveToActorProc() {
         }
     }
 
-    if(mpTargetActor == 0) {
+    if(mpTargetActor == NULL) {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
 
@@ -357,7 +357,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
         return pActor;
     }
     else {
-        if(cut->mpActorName == 0) {
+        if(cut->mpActorName == NULL) {
             return 0;
         }
         else {
@@ -598,7 +598,7 @@ void dNpc_EventCut_c::cutContinueTalkStart() {
 
 /* 8021E338-8021E444       .text cutTalkMsgStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgProc() {
-    if(mpTalkActor == 0 || field_0x52 == 0) {
+    if(mpTalkActor == NULL || field_0x52 == 0) {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
     else {

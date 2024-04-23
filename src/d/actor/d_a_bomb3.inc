@@ -783,16 +783,16 @@ int daBomb_c::procExplode_init() {
     }
 
     if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->mpEmitterCallBack = 0;
+        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
         mSmoke.mpEmitter->becomeInvalidEmitter();
     }
-    mSmoke.mpEmitter = 0;
+    mSmoke.mpEmitter = NULL;
 
     if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->mpEmitterCallBack = 0;
+        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
         mSparks.mpEmitter->becomeInvalidEmitter();
     }
-    mSparks.mpEmitter = 0;
+    mSparks.mpEmitter = NULL;
 
     mPntLight.mPos = current.pos;
     mPntLight.mPos.y += 100.0f;
@@ -1235,16 +1235,16 @@ static BOOL daBomb_IsDelete(daBomb_c*) {
 /* 800DC570-800DC67C       .text bombDelete__8daBomb_cFv */
 bool daBomb_c::bombDelete() {
     if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->mpEmitterCallBack = 0;
+        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
         mSmoke.mpEmitter->becomeInvalidEmitter();
     }
-    mSmoke.mpEmitter = 0;
+    mSmoke.mpEmitter = NULL;
 
     if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->mpEmitterCallBack = 0;
+        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
         mSparks.mpEmitter->becomeInvalidEmitter();
     }
-    mSparks.mpEmitter = 0;
+    mSparks.mpEmitter = NULL;
 
     if(field_0x6F0) {
         daPy_getPlayerLinkActorClass()->decrementBombCnt();

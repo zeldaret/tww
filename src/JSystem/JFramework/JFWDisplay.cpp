@@ -45,7 +45,7 @@ void JFWDisplay::ctor_subroutine(const _GXRenderModeObj* mode, bool enableAlpha)
     mpRenderMode = mode != 0 ? mode : JUTVideo::getManager()->getRenderMode();
 
     mGamma = 0;
-    mpFader = 0;
+    mpFader = NULL;
     mFrameRate = 1;
     mTickRate = 0;
     mCombinationRatio = 0.0f;
