@@ -4,83 +4,128 @@
 //
 
 #include "d/actor/d_a_obj_xfuta.h"
+#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_item.h"
 #include "d/d_procname.h"
 
+const char daObjXfuta::Act_c::M_arcname[] = "X_futa";
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjXfuta5Act_cFP10fopAc_ac_c */
-void daObjXfuta::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjXfuta::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+	return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-0000015C       .text create_heap__Q210daObjXfuta5Act_cFv */
-void daObjXfuta::Act_c::create_heap() {
-    /* Nonmatching */
+bool daObjXfuta::Act_c::create_heap() {
+	J3DModelData* mdl_data;
+
+    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x03));
+
+	JUT_ASSERT(0x105, mdl_data != 0);
+
+	mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
+
+    bool ret = FALSE;
+    if (mdl_data != NULL && this->mpModel != NULL) {
+        ret = TRUE;
+    }
+    return ret;
 }
 
 /* 0000015C-00000214       .text _create__Q210daObjXfuta5Act_cFv */
 s32 daObjXfuta::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+    int phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
+			set_mtx();
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+        } else {
+			
+            phase_state = cPhs_ERROR_e;
+        }
+    }
+    return phase_state;
 }
 
 /* 00000214-00000244       .text _delete__Q210daObjXfuta5Act_cFv */
-BOOL daObjXfuta::Act_c::_delete() {
-    /* Nonmatching */
+bool daObjXfuta::Act_c::_delete() {
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 00000244-000002F0       .text set_mtx__Q210daObjXfuta5Act_cFv */
 void daObjXfuta::Act_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+	MTXCopy(mDoMtx_stack_c::get(), mMtx);
+	mpModel->calc();
 }
 
 /* 000002F0-00000338       .text _execute__Q210daObjXfuta5Act_cFv */
-BOOL daObjXfuta::Act_c::_execute() {
-    /* Nonmatching */
+bool daObjXfuta::Act_c::_execute() {
+	current.pos = cXyz(home.pos.x, home.pos.y, home.pos.z);
+    set_mtx();
+    return TRUE;
 }
 
 /* 00000338-0000040C       .text _draw__Q210daObjXfuta5Act_cFv */
-BOOL daObjXfuta::Act_c::_draw() {
-    /* Nonmatching */
+bool daObjXfuta::Act_c::_draw() {
+	cXyz pos;
+    dDemo_manager_c* demo = dComIfGp_demo_get();
+    if (demo->getMode() != 1) {
+		pos.x = 0.0;
+		pos.y = 0.0;
+		pos.z = 0.0;
+		g_env_light.settingTevStruct(tev_mode[1], &pos, &tevStr);
+		dComIfGd_setListBG();
+		g_env_light.setLightTevColorType(mpModel, &tevStr);
+		J3DModelData* mdl_data= mpModel->getModelData();
+		mDoExt_modelUpdateDL(mpModel);
+		dComIfGd_setList();
+	}
+	return TRUE;
 }
-
 namespace daObjXfuta {
-namespace {
-/* 0000040C-0000042C       .text Mthd_Create__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+    namespace {
+        
+        s32 Mthd_Create(void* i_this) {
+            return static_cast<Act_c*>(i_this)->_create();
+        }
+
+        
+        s32 Mthd_Delete(void* i_this) {
+            return static_cast<Act_c*>(i_this)->_delete();
+        }
+
+        s32 Mthd_Execute(void* i_this) {
+            return static_cast<Act_c*>(i_this)->_execute();
+        }
+
+       
+        s32 Mthd_Draw(void* i_this) {
+            return static_cast<Act_c*>(i_this)->_draw();
+        }
+
+        
+        s32 Mthd_IsDelete(void* i_this) {
+            return TRUE;
+        }
+
+        static actor_method_class Mthd_Table = {
+            (process_method_func)Mthd_Create,
+            (process_method_func)Mthd_Delete,
+            (process_method_func)Mthd_Execute,
+            (process_method_func)Mthd_IsDelete,
+            (process_method_func)Mthd_Draw,
+        };
+    }
 }
-
-/* 0000042C-00000450       .text Mthd_Delete__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
-}
-
-/* 00000450-00000474       .text Mthd_Execute__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
-}
-
-/* 00000474-00000498       .text Mthd_Draw__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
-}
-
-/* 00000498-000004A0       .text Mthd_IsDelete__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-static actor_method_class Mthd_Table = {
-    (process_method_func)Mthd_Create,
-    (process_method_func)Mthd_Delete,
-    (process_method_func)Mthd_Execute,
-    (process_method_func)Mthd_IsDelete,
-    (process_method_func)Mthd_Draw,
-};
-}; // namespace
-}; // namespace daObjXfuta
-
 actor_process_profile_definition g_profile_Obj_Xfuta = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
+    /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Xfuta,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -90,7 +135,5 @@ actor_process_profile_definition g_profile_Obj_Xfuta = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x003D,
     /* Actor SubMtd */ &daObjXfuta::Mthd_Table,
-    /* Status       */ fopAcStts_UNK40000_e,
-    /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Status       */ fopAcStts_UNK40000_e
 };
