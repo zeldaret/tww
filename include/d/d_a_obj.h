@@ -1,34 +1,47 @@
-#ifndef D_A_OBJ
-#define D_A_OBJ
+#ifndef D_A_OBJ_XFUTA_H
+#define D_A_OBJ_XFUTA_H
 
-#include "f_op/f_op_actor_mng.h"
-#include "d/d_cc_d.h"
+#include "SSystem/SComponent/c_phase.h"
+#include "d/d_bg_w.h"
+#include "f_op/f_op_actor.h"
 
-class dBgS_GndChk;
-class cBgS_PolyInfo;
+namespace daObjXfuta {
+static int tev_mode[] = {TEV_TYPE_ACTOR,
+                         TEV_TYPE_BG0,
+                         TEV_TYPE_BG1,
+                         TEV_TYPE_BG2,
+                         TEV_TYPE_BG3,
+                         TEV_TYPE_BG0_FULL,
+                         TEV_TYPE_BG1_FULL,
+                         TEV_TYPE_BG2_FULL,
+                         TEV_TYPE_BG3_FULL,
+                         TEV_TYPE_PLAYER,
+                         0x5B,
+                         0x5C,
+                         0x5D,
+                         0x5E};
+class Act_c : public fopAc_ac_c {
+public:
+    virtual ~Act_c() {}
+    static BOOL solidHeapCB(fopAc_ac_c*);
+    bool create_heap();
+    s32 _create();
+    bool _delete();
+    void set_mtx();
+    bool _execute();
+    bool _draw();
+    s32 Mthd_Delete();
+    s32 Mthd_Create();
+    s32 Mthd_Execute();
+    s32 Mthd_Draw();
+    s32 Mthd_IsDelete();
+    static const char M_arcname[];
 
-namespace daObj {
-    template <typename T>
-    int PrmAbstract(const fopAc_ac_c* actor, T width, T shift) {
-        u32 param = fopAcM_GetParam((fopAc_ac_c*)actor);
-        return ((1 << width) - 1) & (param >> shift);
-    }
-    
-    void make_land_effect(fopAc_ac_c*, dBgS_GndChk*, float);
-    void get_wind_spd(fopAc_ac_c*, float);
-    void get_path_spd(cBgS_PolyInfo&, float);
-    void posMoveF_stream(fopAc_ac_c*, const cXyz*, const cXyz*, float, float);
-    void posMoveF_grade(fopAc_ac_c*, const cXyz*, const cXyz*, float, float, const cXyz*, float, float, const cXyz*);
-    void quat_rotBaseY(Quaternion*, const cXyz&);
-    void quat_rotBaseY2(Quaternion*, const cXyz&);
-    void quat_rotBaseZ(Quaternion*, const cXyz&);
-    void quat_rotVec(Quaternion*, const cXyz&, const cXyz&);
-    void SetCurrentRoomNo(fopAc_ac_c*, dBgS_GndChk*);
-    void HitSeStart(const cXyz*, int, const dCcD_GObjInf*, unsigned long);
-    void HitEff_sub_kikuzu(const cXyz*, const cXyz*, const dKy_tevstr_c*);
-    void HitEff_kikuzu(const fopAc_ac_c*, const dCcD_Cyl*);
-    void HitEff_hibana(const cXyz*, const cXyz*);
-    void HitEff_hibana(const fopAc_ac_c*, const dCcD_Cyl*);
+public:
+    /* 0x290 */  // void* vtbl;
+    /* 0x294 */ request_of_phase_process_class mPhs;
+    /* 0x29C */ J3DModel* mpModel;
+    /* 0x2A0 */ Mtx mMtx;
 };
-
-#endif /* D_A_OBJ */
+};     // namespace daObjXfuta
+#endif /* D_A_OBJ_XFUTA_H */
