@@ -1,6 +1,7 @@
 #ifndef RES_TLOGO_H
 #define RES_TLOGO_H
 
+#if VERSION != VERSION_PAL
 enum TLOGO_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     TLOGO_BCK_TITLE_SHIP=0x8,
@@ -27,5 +28,6 @@ enum TLOGO_RES_FILE_ID { // IDs and indexes are synced
     TLOGO_BTI_LOGO_ZELDA_MAIN=0x1D,
     TLOGO_BTI_PRESS_START=0x1E,
 };
+#endif
 
 #endif /* RES_TLOGO_H */

@@ -1,6 +1,7 @@
 #ifndef RES_TLOGOE_H
 #define RES_TLOGOE_H
 
+#if VERSION == VERSION_USA
 enum TLOGOE_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     TLOGOE_BCK_TITLE_SHIP=0x8,
@@ -27,5 +28,6 @@ enum TLOGOE_RES_FILE_ID { // IDs and indexes are synced
     TLOGOE_BTI_LOGO_ZELDA_MAIN=0x1D,
     TLOGOE_BTI_PRESS_START=0x1E,
 };
+#endif
 
 #endif /* RES_TLOGOE_H */
