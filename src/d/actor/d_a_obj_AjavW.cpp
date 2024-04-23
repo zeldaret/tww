@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_AjavW.h"
+#include "d/res/res_ajavw.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -11,17 +12,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-enum AJAVW_RES_FILE_ID { // IDs and indexes are synced
-    /* BDLM */
-    AJAVW_BDL_AJAVW=0x5,
-    
-    /* BTK */
-    AJAVW_BTK_AJAVW=0x8,
-    
-    /* DZB */
-    AJAVW_DZB_AJAVW=0xB,
-};
 
 namespace {
     static const char l_arcname[] = "AjavW";

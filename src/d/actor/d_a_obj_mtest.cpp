@@ -4,6 +4,9 @@
 //
 
 #include "d/actor/d_a_obj_mtest.h"
+#include "d/res/res_mtest.h"
+#include "d/res/res_owater.h"
+#include "d/res/res_astop.h"
 #include "d/d_procname.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/d_com_inf_game.h"
@@ -25,37 +28,6 @@ char* daObjMtest::Act_c::M_arcname[Type_Max] = {
     "Mtest",
     "Owater",
     "Astop",
-};
-
-enum MTEST_RES_FILE_ID { // IDs and indexes are synced
-    /* BMDC */
-    MTEST_BMD_MCUBE=0x4,
-    MTEST_BMD_MCYLN=0x5,
-    
-    /* DZB */
-    MTEST_DZB_MCUBE=0x8,
-    MTEST_DZB_MCUBEHG=0x9,
-    MTEST_DZB_MCUBELK=0xA,
-    MTEST_DZB_MCUBENC=0xB,
-    MTEST_DZB_MCYLN=0xC,
-    MTEST_DZB_MCYLNHG=0xD,
-    MTEST_DZB_MCYLNNC=0xE,
-    MTEST_DZB_MWTRSB=0xF,
-    MTEST_DZB_MYGNSB=0x10,
-};
-
-enum OWATER_RES_FILE_ID { // IDs and indexes are synced
-    /* DZB */
-    OWATER_DZB_OWATER=0x3,
-};
-
-enum ASTOP_RES_FILE_ID { // IDs and indexes are synced
-    /* DZB */
-    ASTOP_DZB_A00=0x3,
-    ASTOP_DZB_ASLOW=0x4,
-    ASTOP_DZB_ASLOW00=0x5,
-    ASTOP_DZB_ASTOP=0x6,
-    ASTOP_DZB_ASTOP00=0x7,
 };
 
 cXyz daObjMtest::Act_c::M_scl_mult[Type_Max] = {

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_eayogn.h"
+#include "d/res/res_eayogn.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -11,14 +12,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-enum EAYOGN_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    EAYOGN_BDL_EAYOGN=0x4,
-    
-    /* DZB */
-    EAYOGN_DZB_EAYOGN=0x7,
-};
 
 const char daObjEayogn_c::M_arcname[7] = "Eayogn";
 

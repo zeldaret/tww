@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_branch.h"
+#include "d/res/res_kwood_00.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
@@ -11,22 +12,6 @@
 #include "d/d_kankyo.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "dolphin/mtx/mtx.h"
-
-enum KWOOD_00_RES_FILE_ID {
-    /* BAS */
-    KWOOD_00_BAS_BREAK=0x0,
-    KWOOD_00_BAS_SWING=0x1,
-    KWOOD_00_BAS_SWING02=0x8,
-    
-    /* BCK */
-    KWOOD_00_BCK_BREAK=0x2,
-    KWOOD_00_BCK_SWING=0x3,
-    KWOOD_00_BCK_SWING02=0x7,
-    
-    /* BMDC */
-    KWOOD_00_BMD_WB=0x5,
-    KWOOD_00_BMD_WS=0x6,
-};
 
 static u16 anim_table[] = {
     KWOOD_00_BCK_SWING02, KWOOD_00_BAS_SWING02,

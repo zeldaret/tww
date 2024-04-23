@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_bita.h"
+#include "d/res/res_bita.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -30,22 +31,6 @@ struct _dummy {
 } dummy3 = {
     0x02, 0x00, 0x02, 0x01,
     0.0f, 2.125f, 0.0f, 1.75f, 0.0f,
-};
-
-enum BITA_RES_FILE_ID { // IDs and indexes are synced
-    /* BDLM */
-    BITA_BDL_EF_BTDITA0=0x5,
-    BITA_BDL_EF_BTDITA1=0x6,
-    BITA_BDL_MBIT1=0x7,
-    BITA_BDL_MBIT2=0x8,
-    
-    /* BRK */
-    BITA_BRK_EF_BTDITA0=0xB,
-    BITA_BRK_EF_BTDITA1=0xC,
-    
-    /* DZB */
-    BITA_DZB_MBIT1=0xF,
-    BITA_DZB_MBIT2=0x10,
 };
 
 static btd_class* btd = NULL;

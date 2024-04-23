@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_agb.h"
+#include "d/res/res_agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTGba.h"
@@ -28,14 +29,6 @@ static u8 dummy_3569[0xC];
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
-
-enum AGB_RES_FILE_ID { // IDs and indexes are synced
-    /* BDLM */
-    AGB_BDL_AGBCURSOR=0x4,
-    
-    /* BRK */
-    AGB_BRK_AGBCURSOR=0x7,
-};
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 

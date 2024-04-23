@@ -4,20 +4,13 @@
 //
 
 #include "d/actor/d_a_obj_kanat.h"
+#include "d/res/res_kanat.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 
 Mtx daObjKanat::Act_c::M_tmp_mtx;
 const char daObjKanat::Act_c::M_arcname[] = "Kanat";
-
-enum KANAT_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    KANAT_BDL_KANAT=0x4,
-    
-    /* DZB */
-    KANAT_DZB_KANAT=0x7,
-};
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjKanat5Act_cFv */
 int daObjKanat::Act_c::CreateHeap() {

@@ -4,34 +4,14 @@
 //
 
 #include "d/actor/d_a_mbdoor.h"
+#include "d/res/res_mbdoor.h"
+#include "d/res/res_gbdoor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/actor/d_a_player.h"
-
-enum MBDOOR_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    MBDOOR_BDL_S_MBD_L=0x4,
-    MBDOOR_BDL_S_MBD_R=0x5,
-    MBDOOR_BDL_S_MBDFU=0x6,
-    MBDOOR_BDL_S_MBDTO=0x7,
-    
-    /* DZB */
-    MBDOOR_DZB_S_MBDFU=0xA,
-};
-
-enum GBDOOR_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    GBDOOR_BDL_V_GBD_L=0x4,
-    GBDOOR_BDL_V_GBD_R=0x5,
-    GBDOOR_BDL_V_GBDFU=0x6,
-    GBDOOR_BDL_V_GBDTO=0x7,
-    
-    /* DZB */
-    GBDOOR_DZB_GBD=0xA,
-};
 
 /* 00000078-00000084       .text getSwbit__10daMbdoor_cFv */
 u8 daMbdoor_c::getSwbit() {
