@@ -72,16 +72,11 @@ bool daObjXfuta::Act_c::_execute() {
 
 /* 00000338-0000040C       .text _draw__Q210daObjXfuta5Act_cFv */
 bool daObjXfuta::Act_c::_draw() {
-    cXyz pos;
-    dDemo_manager_c* demo = dComIfGp_demo_get();
-    if (demo->getMode() != 1) {
-        pos.x = 0.0;
-        pos.y = 0.0;
-        pos.z = 0.0;
+    if (dComIfGp_demo_mode() != 1) {
+        cXyz pos(0.0f, 0.0f, 0.0f);
         g_env_light.settingTevStruct(tev_mode[1], &pos, &tevStr);
         dComIfGd_setListBG();
         g_env_light.setLightTevColorType(mpModel, &tevStr);
-        J3DModelData* mdl_data = mpModel->getModelData();
         mDoExt_modelUpdateDL(mpModel);
         dComIfGd_setList();
     }
