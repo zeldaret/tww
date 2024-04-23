@@ -752,7 +752,7 @@ config.libs = [
             Object(NonMatching, "JAZelAudio/JAIZelInst.cpp"),
             Object(Matching,    "JAZelAudio/JAIZelParam.cpp"),
             Object(NonMatching, "JAZelAudio/JAIZelCharVoiceTable.cpp"),
-            Object(NonMatching, "JAZelAudio/JAIZelScene.cpp"),
+            Object(Matching,    "JAZelAudio/JAIZelScene.cpp"),
             Object(NonMatching, "JAZelAudio/JAIZelSound.cpp"),
         ],
     ),
