@@ -4,26 +4,26 @@
 //
 
 #include "d/actor/d_a_obj_xfuta.h"
-#include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_procname.h"
+#include "dolphin/types.h"
 
 const char daObjXfuta::Act_c::M_arcname[] = "X_futa";
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjXfuta5Act_cFP10fopAc_ac_c */
 BOOL daObjXfuta::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
-	return ((Act_c*)i_this)->create_heap();
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-0000015C       .text create_heap__Q210daObjXfuta5Act_cFv */
 bool daObjXfuta::Act_c::create_heap() {
-	J3DModelData* mdl_data;
+    J3DModelData* mdl_data;
 
     mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x03));
 
-	JUT_ASSERT(0x105, mdl_data != 0);
+    JUT_ASSERT(0x105, mdl_data != 0);
 
-	mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
+    mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
 
     bool ret = FALSE;
     if (mdl_data != NULL && this->mpModel != NULL) {
@@ -38,10 +38,9 @@ s32 daObjXfuta::Act_c::_create() {
     int phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
-			set_mtx();
+            set_mtx();
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
         } else {
-			
             phase_state = cPhs_ERROR_e;
         }
     }
@@ -60,69 +59,65 @@ void daObjXfuta::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-	MTXCopy(mDoMtx_stack_c::get(), mMtx);
-	mpModel->calc();
+    MTXCopy(mDoMtx_stack_c::get(), mMtx);
+    mpModel->calc();
 }
 
 /* 000002F0-00000338       .text _execute__Q210daObjXfuta5Act_cFv */
 bool daObjXfuta::Act_c::_execute() {
-	current.pos = cXyz(home.pos.x, home.pos.y, home.pos.z);
+    current.pos = cXyz(home.pos.x, home.pos.y, home.pos.z);
     set_mtx();
     return TRUE;
 }
 
 /* 00000338-0000040C       .text _draw__Q210daObjXfuta5Act_cFv */
 bool daObjXfuta::Act_c::_draw() {
-	cXyz pos;
+    cXyz pos;
     dDemo_manager_c* demo = dComIfGp_demo_get();
     if (demo->getMode() != 1) {
-		pos.x = 0.0;
-		pos.y = 0.0;
-		pos.z = 0.0;
-		g_env_light.settingTevStruct(tev_mode[1], &pos, &tevStr);
-		dComIfGd_setListBG();
-		g_env_light.setLightTevColorType(mpModel, &tevStr);
-		J3DModelData* mdl_data= mpModel->getModelData();
-		mDoExt_modelUpdateDL(mpModel);
-		dComIfGd_setList();
-	}
-	return TRUE;
+        pos.x = 0.0;
+        pos.y = 0.0;
+        pos.z = 0.0;
+        g_env_light.settingTevStruct(tev_mode[1], &pos, &tevStr);
+        dComIfGd_setListBG();
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
+        J3DModelData* mdl_data = mpModel->getModelData();
+        mDoExt_modelUpdateDL(mpModel);
+        dComIfGd_setList();
+    }
+    return TRUE;
 }
 namespace daObjXfuta {
-    namespace {
-        
-        s32 Mthd_Create(void* i_this) {
-            return static_cast<Act_c*>(i_this)->_create();
-        }
+namespace {
 
-        
-        s32 Mthd_Delete(void* i_this) {
-            return static_cast<Act_c*>(i_this)->_delete();
-        }
-
-        s32 Mthd_Execute(void* i_this) {
-            return static_cast<Act_c*>(i_this)->_execute();
-        }
-
-       
-        s32 Mthd_Draw(void* i_this) {
-            return static_cast<Act_c*>(i_this)->_draw();
-        }
-
-        
-        s32 Mthd_IsDelete(void* i_this) {
-            return TRUE;
-        }
-
-        static actor_method_class Mthd_Table = {
-            (process_method_func)Mthd_Create,
-            (process_method_func)Mthd_Delete,
-            (process_method_func)Mthd_Execute,
-            (process_method_func)Mthd_IsDelete,
-            (process_method_func)Mthd_Draw,
-        };
-    }
+s32 Mthd_Create(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_create();
 }
+
+s32 Mthd_Delete(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_delete();
+}
+
+s32 Mthd_Execute(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_execute();
+}
+
+s32 Mthd_Draw(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_draw();
+}
+
+s32 Mthd_IsDelete(void* i_this) {
+    return TRUE;
+}
+
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,  (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute, (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}  // namespace
+}  // namespace daObjXfuta
+
 actor_process_profile_definition g_profile_Obj_Xfuta = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
