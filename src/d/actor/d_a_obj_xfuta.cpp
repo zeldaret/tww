@@ -125,7 +125,7 @@ namespace daObjXfuta {
 }
 actor_process_profile_definition g_profile_Obj_Xfuta = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Xfuta,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -135,5 +135,7 @@ actor_process_profile_definition g_profile_Obj_Xfuta = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x003D,
     /* Actor SubMtd */ &daObjXfuta::Mthd_Table,
-    /* Status       */ fopAcStts_UNK40000_e
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };
