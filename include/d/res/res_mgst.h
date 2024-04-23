@@ -1,0 +1,20 @@
+#ifndef RES_MGST_H
+#define RES_MGST_H
+
+enum MGST_RES_FILE_ID { // IDs and indexes are synced
+    /* SCRN */
+    MGST_BLO_SHIP_RACE1=0x4,
+    
+    /* TIMG */
+    MGST_BTI_MS_SHIPFONT_1=0x7,
+    MGST_BTI_MS_SHIPFONT_1_2=0x8,
+    MGST_BTI_MS_SHIPFONT_2=0x9,
+    MGST_BTI_MS_SHIPFONT_2_2=0xA,
+    MGST_BTI_MS_SHIPFONT_3=0xB,
+    MGST_BTI_MS_SHIPFONT_3_2=0xC,
+    MGST_BTI_MS_SHIPFONT_EX=0xD,
+    MGST_BTI_MS_SHIPFONT_G_BIG=0xE,
+    MGST_BTI_MS_SHIPFONT_O=0xF,
+};
+
+#endif /* RES_MGST_H */

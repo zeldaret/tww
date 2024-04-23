@@ -1,0 +1,64 @@
+#ifndef RES_UB_H
+#define RES_UB_H
+
+enum UB_RES_FILE_ID {
+    /* BCKS */
+    UB_BCK_UB_TALK01=0xD,
+    UB_BCK_UB_WAIT01=0xE,
+    UB_BCK_UB_WAIT02=0xF,
+    UB_BCK_UB_YADA=0x10,
+    UB_BCK_UB_LOOK=0x11,
+    UB_BCK_UB_KUYASI=0x12,
+    
+    /* BDL */
+    UB_BDL_UB=0x1,
+    
+    /* BDLM */
+    UB_BDL_UB01_HEAD=0x2,
+    UB_BDL_UB02_HEAD=0x3,
+    UB_BDL_UB03_HEAD=0x4,
+    UB_BDL_UB04_HEAD=0x5,
+    
+    /* BMT */
+    UB_BMT_UB02=0x6,
+    UB_BMT_UB03=0x7,
+    UB_BMT_UB04=0x8,
+    
+    /* BTP */
+    UB_BTP_UB01_MABA=0x9,
+    UB_BTP_UB02_MABA=0xA,
+    UB_BTP_UB03_MABA=0xB,
+    UB_BTP_UB04_MABA=0xC,
+};
+
+enum UB_RES_FILE_INDEX {
+    /* BCKS */
+    UB_INDEX_BCK_UB_TALK01=0x7,
+    UB_INDEX_BCK_UB_WAIT01=0x8,
+    UB_INDEX_BCK_UB_WAIT02=0x9,
+    UB_INDEX_BCK_UB_YADA=0xA,
+    UB_INDEX_BCK_UB_LOOK=0xB,
+    UB_INDEX_BCK_UB_KUYASI=0xC,
+    
+    /* BDL */
+    UB_INDEX_BDL_UB=0xF,
+    
+    /* BDLM */
+    UB_INDEX_BDL_UB01_HEAD=0x12,
+    UB_INDEX_BDL_UB02_HEAD=0x13,
+    UB_INDEX_BDL_UB03_HEAD=0x14,
+    UB_INDEX_BDL_UB04_HEAD=0x15,
+    
+    /* BMT */
+    UB_INDEX_BMT_UB02=0x18,
+    UB_INDEX_BMT_UB03=0x19,
+    UB_INDEX_BMT_UB04=0x1A,
+    
+    /* BTP */
+    UB_INDEX_BTP_UB01_MABA=0x1D,
+    UB_INDEX_BTP_UB02_MABA=0x1E,
+    UB_INDEX_BTP_UB03_MABA=0x1F,
+    UB_INDEX_BTP_UB04_MABA=0x20,
+};
+
+#endif /* RES_UB_H */

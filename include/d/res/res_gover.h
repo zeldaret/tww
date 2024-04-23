@@ -1,0 +1,19 @@
+#ifndef RES_GOVER_H
+#define RES_GOVER_H
+
+enum GOVER_RES_FILE_ID { // IDs and indexes are synced
+    /* SCRN */
+    GOVER_BLO_GAMEOVER=0x4,
+    
+    /* TIMG */
+    GOVER_BTI_G_SHIPFONT_A_BIG=0x7,
+    GOVER_BTI_G_SHIPFONT_E_BIG=0x8,
+    GOVER_BTI_G_SHIPFONT_G_BIG=0x9,
+    GOVER_BTI_G_SHIPFONT_M_BIG=0xA,
+    GOVER_BTI_G_SHIPFONT_O_BIG=0xB,
+    GOVER_BTI_G_SHIPFONT_R_BIG=0xC,
+    GOVER_BTI_G_SHIPFONT_V_BIG=0xD,
+    GOVER_BTI_G_SMOKE=0xE,
+};
+
+#endif /* RES_GOVER_H */

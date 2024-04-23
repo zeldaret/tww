@@ -1,0 +1,66 @@
+#ifndef RES_UO_H
+#define RES_UO_H
+
+enum UO_RES_FILE_ID {
+    /* BCKS */
+    UO_BCK_UO_BIKURI=0x0,
+    UO_BCK_UO_FURUE=0x1,
+    UO_BCK_UO_TALK01=0x2,
+    UO_BCK_UO_TALK02=0x3,
+    UO_BCK_UO_WAIT01=0x4,
+    UO_BCK_UO_WAIT02=0x5,
+    UO_BCK_UO_KYORO=0x12,
+    UO_BCK_UO_LETTER=0x13,
+    UO_BCK_UO_WALK=0x14,
+    
+    /* BDL */
+    UO_BDL_UO=0x6,
+    UO_BDL_UO_LETTER=0x15,
+    
+    /* BDLM */
+    UO_BDL_UO01_HEAD=0x7,
+    UO_BDL_UO02_HEAD=0x8,
+    UO_BDL_UO03_HEAD=0x9,
+    
+    /* BMT */
+    UO_BMT_UO02=0xA,
+    UO_BMT_UO03=0xB,
+    
+    /* BTP */
+    UO_BTP_UO01_MABA=0xC,
+    UO_BTP_UO02_MABA=0xD,
+    UO_BTP_UO03_MABA=0xE,
+};
+
+enum UO_RES_FILE_INDEX {
+    /* BCKS */
+    UO_INDEX_BCK_UO_BIKURI=0x7,
+    UO_INDEX_BCK_UO_FURUE=0x8,
+    UO_INDEX_BCK_UO_TALK01=0x9,
+    UO_INDEX_BCK_UO_TALK02=0xA,
+    UO_INDEX_BCK_UO_WAIT01=0xB,
+    UO_INDEX_BCK_UO_WAIT02=0xC,
+    UO_INDEX_BCK_UO_KYORO=0xD,
+    UO_INDEX_BCK_UO_LETTER=0xE,
+    UO_INDEX_BCK_UO_WALK=0xF,
+    
+    /* BDL */
+    UO_INDEX_BDL_UO=0x12,
+    UO_INDEX_BDL_UO_LETTER=0x13,
+    
+    /* BDLM */
+    UO_INDEX_BDL_UO01_HEAD=0x16,
+    UO_INDEX_BDL_UO02_HEAD=0x17,
+    UO_INDEX_BDL_UO03_HEAD=0x18,
+    
+    /* BMT */
+    UO_INDEX_BMT_UO02=0x1B,
+    UO_INDEX_BMT_UO03=0x1C,
+    
+    /* BTP */
+    UO_INDEX_BTP_UO01_MABA=0x1F,
+    UO_INDEX_BTP_UO02_MABA=0x20,
+    UO_INDEX_BTP_UO03_MABA=0x21,
+};
+
+#endif /* RES_UO_H */

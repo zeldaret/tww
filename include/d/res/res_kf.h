@@ -1,0 +1,52 @@
+#ifndef RES_KF_H
+#define RES_KF_H
+
+enum KF_RES_FILE_ID {
+    /* BDL */
+    KF_BDL_KF_HAIR=0x0,
+    
+    /* BDLM */
+    KF_BDL_KF=0x1,
+    
+    /* BTP */
+    KF_BTP_KF=0x2,
+    KF_BTP_CLOSE=0xD,
+    
+    /* BCKS */
+    KF_BCK_KF_BAKUHATU=0x3,
+    KF_BCK_KF_BARAMAKU=0x4,
+    KF_BCK_KF_OKORU=0x5,
+    KF_BCK_KF_TALK01=0x6,
+    KF_BCK_KF_TALK02=0x7,
+    KF_BCK_KF_TALK03=0x8,
+    KF_BCK_KF_TALK04=0x9,
+    KF_BCK_KF_WAIT01=0xA,
+    KF_BCK_KF_WAIT02=0xB,
+    KF_BCK_KF_WALK=0xC,
+};
+
+enum KF_RES_FILE_INDEX {
+    /* BDL */
+    KF_INDEX_BDL_KF_HAIR=0x6,
+    
+    /* BDLM */
+    KF_INDEX_BDL_KF=0x9,
+    
+    /* BTP */
+    KF_INDEX_BTP_KF=0xC,
+    KF_INDEX_BTP_CLOSE=0xD,
+    
+    /* BCKS */
+    KF_INDEX_BCK_KF_BAKUHATU=0x10,
+    KF_INDEX_BCK_KF_BARAMAKU=0x11,
+    KF_INDEX_BCK_KF_OKORU=0x12,
+    KF_INDEX_BCK_KF_TALK01=0x13,
+    KF_INDEX_BCK_KF_TALK02=0x14,
+    KF_INDEX_BCK_KF_TALK03=0x15,
+    KF_INDEX_BCK_KF_TALK04=0x16,
+    KF_INDEX_BCK_KF_WAIT01=0x17,
+    KF_INDEX_BCK_KF_WAIT02=0x18,
+    KF_INDEX_BCK_KF_WALK=0x19,
+};
+
+#endif /* RES_KF_H */
