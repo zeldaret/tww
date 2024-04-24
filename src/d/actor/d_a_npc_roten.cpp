@@ -2211,9 +2211,7 @@ void daNpcRoten_c::privateCut() {
                 cMtx_concat(*calc_mtx, mDoMtx_stack_c::get(), *calc_mtx);
 
                 cXyz offset;
-                offset.x = (*calc_mtx)[0][3];
-                offset.y = (*calc_mtx)[1][3];
-                offset.z = (*calc_mtx)[2][3];
+                mDoMtx_multVecZero(*calc_mtx, &offset);
                 pItem->setOffsetPos(offset);
                 pItem->show();
                 field_0x714 = offset;
@@ -2291,7 +2289,11 @@ void daNpcRoten_c::eventSetItemInit() {
 bool daNpcRoten_c::eventSetItem() {
     fopAc_ac_c* pActor;
     if(fopAcM_SearchByID(field_0x6F8, &pActor)) {
-        return pActor; // != NULL gets rid of the clrlwi
+        if(pActor) {
+            return true;
+        }
+
+        return false;
     }
 
     return true;
@@ -2541,7 +2543,7 @@ u8 daNpcRoten_c::getPrmNpcNo() {
 
 /* 000031C4-000031F0       .text getPrmRailID__12daNpcRoten_cFv */
 u8 daNpcRoten_c::getPrmRailID() {
-    return daObj::PrmAbstract(this, PRM_RAIL_ID_W, PRM_RAIL_ID_S); // fakematch?
+    return daObj::PrmAbstract(this, PRM_RAIL_ID_W, PRM_RAIL_ID_S);
 }
 
 /* 000031F0-00003278       .text setMtx__12daNpcRoten_cFv */
@@ -2823,9 +2825,7 @@ void daNpcRoten_c::setCollisionB() {
     MtxP pMtx = mpMorf->getModel()->getAnmMtx(m_bag_jnt_num);
 
     cXyz temp;
-    temp.x = pMtx[0][3];
-    temp.y = pMtx[1][3];
-    temp.z = pMtx[2][3];
+    mDoMtx_multVecZero(pMtx, &temp);
     s16 angle;
     dNpc_calc_DisXZ_AngY(current.pos, temp, NULL, &angle);
 
@@ -2846,9 +2846,7 @@ void daNpcRoten_c::setCollisionH() {
     cMtx_concat(*calc_mtx, mDoMtx_stack_c::get(), *calc_mtx);
 
     cXyz temp;
-    temp.x = (*calc_mtx)[0][3];
-    temp.y = (*calc_mtx)[1][3];
-    temp.z = (*calc_mtx)[2][3];
+    mDoMtx_multVecZero(*calc_mtx, &temp);
 
     mSph.SetC(temp);
     mSph.SetR(l_npc_dat[mNpcNo].field_0x38);
