@@ -127,7 +127,7 @@ s32 daToge_c::Create() {
 
     if (dComIfGs_isSwitch(this->mSwitchNo, fopAcM_GetHomeRoomNo(this))) {
         this->unk470 = m_y_min;
-        this->unk484 = 2;
+        this->mEventState = 2;
     }
 
     set_mtx();
@@ -186,7 +186,7 @@ BOOL daToge_c::_execute() {
 
 /* 000009F4-00000A78       .text set_collision__8daToge_cFv */
 void daToge_c::set_collision() {
-    if ((u8)this->unk484 != 2) {
+    if ((u8)this->mEventState != 2) {
         cXyz center;
         center.x = current.pos.x;
         center.y = current.pos.y;
@@ -228,7 +228,40 @@ void daToge_c::search_wind() {
 
 /* 00000AE0-00000C1C       .text toge_move__8daToge_cFv */
 void daToge_c::toge_move() {
-    /* Nonmatching */
+    u8 r30 = 1;
+    switch (mEventState) {
+    case 1:
+        if (cLib_calcTimer(&unk486) == 0) {
+            toge_seStart(JA_SE_OBJ_TOGETOGE_IN);
+            mEventState = 2;
+
+        case 2:
+            cLib_addCalc(&unk470, -150.0f, 0.1f, 30.0f, 15.0f);
+        }
+    case 0:
+        // ...
+        break;
+    case 3:
+        toge_seStart(JA_SE_OBJ_TOGETOGE_OUT);
+        mEventState = 4;
+        r30 = 0;
+    case 4:
+        if (cLib_addCalc(&unk470, unk474, 0.1f, 30.0f, 15.0f) == 0) {
+            if (unk470 < 0) {
+                unk474 = 0;
+            } else if (unk485 != 0) {
+                unk486 = 0xA;
+                mEventState = 1;
+                unk485 = 0;
+            } else {
+                if (r30 != 0) {
+                    toge_seStart(JA_SE_OBJ_TOGETOGE_MOVE);
+                }
+                unk474 = -60.0f;
+            }
+        }
+        break;
+    }
 }
 
 /* 00000C1C-00000CA4       .text toge_seStart__8daToge_cFUl */

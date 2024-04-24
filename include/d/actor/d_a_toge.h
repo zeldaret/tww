@@ -1,10 +1,9 @@
 #ifndef D_A_TOGE_H
 #define D_A_TOGE_H
 
+#include "d/d_cc_d.h"
 #include "d/d_stage.h"
 #include "f_op/f_op_actor.h"
-#include "d/d_cc_d.h"
-
 
 class daToge_c : public fopAc_ac_c {
 public:
@@ -26,9 +25,6 @@ public:
     static const s16 m_dzbidx;
     static const u32 m_heapsize;
     static const f32 m_y_min;
-    //static const Vec m_cull_min;
-    //static const Vec m_cull_max;
-
 
 public:
     /* Place member variables here */
@@ -37,16 +33,18 @@ public:
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ dCcD_Stts mStts;
     /* 0x2D8 */ dCcD_Cyl mCyl; /* inferred */
-    /* 0x408 */ dBgW* mpBgW1;      /* inferred */
-    /* 0x40C */ Mtx mtx1;          /* maybe part of unk408[0xD]? */
-    /* 0x43C */ dBgW* mpBgW2;      /* inferred */
-    /* 0x440 */ Mtx mtx2;          /* inferred */
-    /* 0x470 */ f32 unk470;        /* inferred */
-    /* 0x474 */ char pad474[4];
-    /* 0x478 */ u32 mSwitchNo;                         /* inferred */
-    /* 0x47C */ char pad47C[4];                     /* maybe part of unk478[3]? */
-    /* 0x480 */ s32 unk480;                         /* inferred */
-    /* 0x484 */ s8 unk484;                          /* inferred */
+    /* 0x408 */ dBgW* mpBgW1;  /* inferred */
+    /* 0x40C */ Mtx mtx1;      /* maybe part of unk408[0xD]? */
+    /* 0x43C */ dBgW* mpBgW2;  /* inferred */
+    /* 0x440 */ Mtx mtx2;      /* inferred */
+    /* 0x470 */ f32 unk470;    /* inferred */
+    /* 0x474 */ f32 unk474;
+    /* 0x478 */ u32 mSwitchNo;  /* inferred */
+    /* 0x47C */ char pad47C[4]; /* maybe part of unk478[3]? */
+    /* 0x480 */ s32 unk480;     /* inferred */
+    /* 0x484 */ u8 mEventState; /* inferred */
+    /* 0x485 */ u8 unk485;
+    /* 0x486 */ u8 unk486;
 };
 
 namespace daToge_prm {
