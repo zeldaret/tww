@@ -4,6 +4,7 @@
 //
 
 #include "d/res/res_logo.h"
+#include "d/res/res_system.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_mng.h"
 #include "c/c_dylink.h"
@@ -675,12 +676,12 @@ s32 phase_1(dScnLogo_c* i_this) {
 
     ResTIMG * toonImage;
 
-    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", 3);
+    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOON);
 
     JUT_ASSERT(VERSION_SELECT(1208, 1426, 1466), toonImage != 0);
     dDlst_list_c::setToonImage(toonImage);
 
-    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", 4);
+    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOONEX);
     JUT_ASSERT(VERSION_SELECT(1213, 1431, 1471), toonImage != 0);
     dDlst_list_c::setToonExImage(toonImage);
 

@@ -70,7 +70,15 @@ bool daObjZouk::Act_c::create_heap() {
     M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, 0x05);
     JUT_ASSERT(0x175, M_bck_data != 0);
     if (mdl_data != NULL && M_bck_data != NULL) {
-        M_anm = new mDoExt_McaMorf(mdl_data, NULL, NULL, M_bck_data, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
+        M_anm = new mDoExt_McaMorf(
+            mdl_data,
+            NULL, NULL,
+            M_bck_data,
+            J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, 1,
+            NULL,
+            0x00000000,
+            0x11020203
+        );
     }
     JUT_ASSERT(0x183, M_anm != 0);
     if (M_anm != NULL) {

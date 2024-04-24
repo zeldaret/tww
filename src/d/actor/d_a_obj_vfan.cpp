@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_vfan.h"
+#include "d/res/res_vfan.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
@@ -47,7 +48,7 @@ static dCcD_SrcCyl cyl_check_src = {
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */
 int daObjVfan::Act_c::CreateHeap() {
-    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 4));
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VFAN_BDL_V_FAN_00));
 
     JUT_ASSERT(0x8c, model_data != 0);
 

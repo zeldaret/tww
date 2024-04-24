@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_kt.h"
+#include "d/res/res_kt.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -299,10 +300,10 @@ static BOOL daKt_Delete(kt_class* i_this) {
 static BOOL daKt_solidHeapCB(fopAc_ac_c* i_ac) {
     kt_class* i_this = (kt_class*)i_ac;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kt", 0x0B);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kt", KT_INDEX_BMD_KT_MODEL);
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x10000, 0x11020203);
 
-    J3DModelData* modelDataWing = (J3DModelData*)dComIfG_getObjectRes("Kt", 0x0A);
+    J3DModelData* modelDataWing = (J3DModelData*)dComIfG_getObjectRes("Kt", KT_INDEX_BMD_KT_HANE);
     i_this->mpModelWing = mDoExt_J3DModel__create(modelDataWing, 0x10000, 0x11020203);
 
     return modelData != NULL && modelDataWing != NULL && i_this->mpModel != NULL && i_this->mpModelWing != NULL;

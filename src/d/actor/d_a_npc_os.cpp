@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_npc_os.h"
+#include "d/res/res_os.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
@@ -235,13 +236,13 @@ static BOOL tunoNodeCallBack(J3DNode* node, int param_1) {
 
 /* 00000988-00000C94       .text createHeap__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", 9));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", OS_BDL_OS));
     JUT_ASSERT(0x2F9, modelData != 0);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", 6)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", OS_BCK_OS_MOVE01)),
         J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,

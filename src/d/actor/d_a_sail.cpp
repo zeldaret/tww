@@ -4,10 +4,11 @@
 //
 
 #include "d/actor/d_a_sail.h"
+#include "d/res/res_kaizokusen.h"
+#include "d/res/res_cloth.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_pirateship.h"
-#include "d/res/res_cloth.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_lib.h"
@@ -459,7 +460,7 @@ void daSail_packet_c::setNrmVtx(cXyz*, int, int) {
 /* 00000870-000010D8       .text draw__15daSail_packet_cFv */
 void daSail_packet_c::draw() {
     /* Nonmatching */
-    dComIfG_getObjectRes("Kaizokusen", 0xA);
+    dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BTI_TXA_KAIZOKU_HO);
     dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
 }
 
@@ -513,7 +514,7 @@ static BOOL daSail_Delete(sail_class* i_this) {
 /* 000021D8-00002254       .text daSail_checkCreateHeap__FP10fopAc_ac_c */
 static BOOL daSail_checkCreateHeap(fopAc_ac_c* i_actor) {
     sail_class* i_this = (sail_class*)i_actor;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kaizokusen", 0xD);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BDL_AMAST);
     if (modelData == NULL) {
         return FALSE;
     }

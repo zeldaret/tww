@@ -4,6 +4,8 @@
 //
 
 #include "d/actor/d_a_npc_nz.h"
+#include "d/res/res_nz.h"
+#include "d/res/res_npcnz.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
@@ -145,7 +147,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 00000D18-00000F98       .text _createHeap__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, 3));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, NPCNZ_BDL_NZ));
     JUT_ASSERT(0xD0, modelData != 0);
 
     mpMorf = new mDoExt_McaMorf(
@@ -179,7 +181,7 @@ BOOL daNpc_Nz_c::_createHeap() {
         }
     }
 
-    if (field_0x934.init(1, 10, static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, 0x2E)), 0)) {
+    if (field_0x934.init(1, 10, static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO)), 0)) {
         return TRUE;
     } else {
         return FALSE;

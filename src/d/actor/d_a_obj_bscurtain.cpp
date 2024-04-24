@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_bscurtain.h"
+#include "d/res/res_ptc.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -43,9 +44,9 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daObj_Bscurtain_c::CreateHeap() {
     J3DModelData* modelData;
     if ((fpcM_GetParam(this) & 0xFF) != 1 || dComIfGs_isEventBit(0x1F08) != 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x03);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCO);
     } else {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x04);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCU);
     }
 
     JUT_ASSERT(0xa9, modelData != 0);

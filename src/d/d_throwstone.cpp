@@ -4,6 +4,7 @@
 //
 
 #include "d/d_throwstone.h"
+#include "d/res/res_aisi.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -21,7 +22,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 8023B564-8023B5DC       .text CreateHeap__14daThrowstone_cFv */
 BOOL daThrowstone_c::CreateHeap() {
-    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x03);
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, AISI_INDEX_BDL_AISI);
     if (pModelData == NULL)
         return FALSE;
 
@@ -117,18 +118,18 @@ static actor_method_class daThrowstoneMethodTable = {
 };
 
 actor_process_profile_definition g_profile_THROWSTONE = {
-    fpcLy_CURRENT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_THROWSTONE,
-    &g_fpcLf_Method.base,
-    sizeof(daThrowstone_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01CE,
-    &daThrowstoneMethodTable,
-    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_THROWSTONE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daThrowstone_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01CE,
+    /* Actor SubMtd */ &daThrowstoneMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

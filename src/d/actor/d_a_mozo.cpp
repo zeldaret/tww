@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_mozo.h"
+#include "d/res/res_mozo.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
@@ -54,13 +55,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000007AC-00000A24       .text CreateHeap__8daMozo_cFv */
 BOOL daMozo_c::CreateHeap() {
-    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", 9);
+    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", MOZO_BDL_MOZ);
     
     mDoExt_McaMorf* newMorf =  new mDoExt_McaMorf(
         mdlData,
         0,
         0,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", 6)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_BCK_MOZ)),
         J3DFrameCtrl::LOOP_REPEAT_e,
         1.0f,
         0,
@@ -73,10 +74,10 @@ BOOL daMozo_c::CreateHeap() {
     
     mAnimMorf = newMorf;
 
-    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", 0x0C);
+    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", MOZO_BRK_MOZ);
     JUT_ASSERT(0x16A, m_brk != 0);
 
-    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", 0x0F);
+    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_BTK_MOZ);
     JUT_ASSERT(0x16D, m_btk != 0);
 
     int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, 0, 1.0f, 0, -1, false, 0);
