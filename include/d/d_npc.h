@@ -126,7 +126,7 @@ private:
     /* 0x50 */ s16 mAddAngle;
     /* 0x52 */ u8 field_0x52;
     /* 0x54 */ cXyz mPos;
-    /* 0x60 */ u8 mbAttention;
+    /* 0x60 */ bool mbAttention;
     /* 0x61 */ u8 mbNoTurn;
     /* 0x62 */ s16 mTurnSpeed;
     /* 0x64 */ u32 mTurnType;
@@ -164,8 +164,17 @@ public:
     bool getAttnFlag() {
         return mbAttention;
     }
+
+    void setAttnFlag(bool flag) {
+        mbAttention = flag;
+    }
+
     cXyz getAttnPos() {
         return mPos;
+    }
+
+    s16 getTurnSpeed() {
+        return mTurnSpeed;
     }
 
     void setJntCtrlPtr(dNpc_JntCtrl_c* ctrl) {

@@ -70,7 +70,7 @@ bool dNpc_EventCut_c::cutProc() {
             }
             else {
                 if(dComIfGp_evmng_getIsAddvance(mEvtStaffId)) {
-                    mbAttention = 0;
+                    mbAttention = false;
                     (this->*cut_tbl[mCurActIdx].start)();
                 }
                 
@@ -220,7 +220,7 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         }
     }
 
-    mbAttention = 1;
+    mbAttention = true;
 
     s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
     int temp2 = tAngle - mpActor->current.angle.y;
@@ -256,10 +256,10 @@ void dNpc_EventCut_c::cutMoveToActorStart() {
     }
 
     if(attn == 0) {
-        mbAttention = 0;
+        mbAttention = false;
     }
     else {
-        mbAttention = 1;
+        mbAttention = true;
     }
 
     if(offs == 0) {
@@ -443,7 +443,7 @@ void dNpc_EventCut_c::cutTurnToPosStart() {
 /* 8021DE2C-8021DFB0       .text cutTurnToPosProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToPosProc() {
     s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
-    mbAttention = 1;
+    mbAttention = true;
 
     if(mpJntCtrl) {
         switch(mTurnType) {
@@ -499,10 +499,10 @@ void dNpc_EventCut_c::cutMoveToPosStart() {
     }
     
     if(attn == 0) {
-        mbAttention = 0;
+        mbAttention = false;
     }
     else {
-        mbAttention = 1;
+        mbAttention = true;
     }
 
     if(speed == 0) {
@@ -558,10 +558,10 @@ void dNpc_EventCut_c::cutTalkMsgStart() {
     if(mpTalkActor != 0) {
         u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
         if(attn == 0) {
-            mbAttention = 0;
+            mbAttention = false;
         }
         else {
-            mbAttention = 1;
+            mbAttention = true;
         }
 
         u32* firstMsgNo = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "msg_num");
