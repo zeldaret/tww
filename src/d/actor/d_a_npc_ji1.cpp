@@ -330,7 +330,11 @@ BOOL daNpc_Ji1_c::isClearRecord(s16 param_1) {
     }
 
     u8 level = dComIfGs_getEventReg(0xD003);
-    return param_1 >= l_HIO.field_0x60[level] ? TRUE : FALSE; // has a clrlwi without the ternary + TRUE/FALSE macros
+    if (param_1 >= l_HIO.field_0x60[level]) {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000630-000006F8       .text setClearRecord__11daNpc_Ji1_cFs */

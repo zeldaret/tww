@@ -1348,7 +1348,7 @@ static u32 l_msg_try_force[] = {
 };
 
 static u32 l_get_item_no[] = {
-    0x7,
+    KAKERA_HEART,
 };
 
 static dCcD_SrcSph l_sph_src = {
@@ -1631,13 +1631,11 @@ s32 daNpcRoten_c::_create() {
 
 /* 00000A24-00000E88       .text createHeap__12daNpcRoten_cFv */
 BOOL daNpcRoten_c::createHeap() {
-    /* Nonmatching - regalloc */
-
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bmd_ix_tbl[mNpcNo]));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bmd_ix_tbl[mNpcNo]));
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[mNpcNo][field_0x9C0])),
+        (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[mNpcNo][field_0x9C0])),
         J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -1648,11 +1646,11 @@ BOOL daNpcRoten_c::createHeap() {
         return false;
     }
     
-    J3DModelData* headModelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bmd_ix_tbl[mNpcNo]));
+    J3DModelData* headModelData = (J3DModelData*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bmd_ix_tbl[mNpcNo]));
     field_0x6D8 = new mDoExt_McaMorf(
         headModelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bck_ix_tbl[mNpcNo])),
+        (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bck_ix_tbl[mNpcNo])),
         J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -1699,7 +1697,6 @@ static s16 daNpcRoten_XyEventCB(void* i_this, int param_1) {
 
 /* 00000EA8-000011C8       .text createInit__12daNpcRoten_cFv */
 s32 daNpcRoten_c::createInit() {
-    /* Nonmatching */
     int weight = 0xFF;
     if(getPrmRailID() != 0xFF) {
         mPathRun.setInf(getPrmRailID(), fopAcM_GetRoomNo(this), true);
@@ -2282,7 +2279,8 @@ bool daNpcRoten_c::eventMesSet() {
 void daNpcRoten_c::eventSetItemInit() {
     u8 itemIdx = l_item_dat[mNpcNo][field_0x9BE];
     cXyz pos(0.0f, 0.0f, 0.0f);
-    field_0x6F8 = fopAcM_createItemForPresentDemo(&pos, (u8)(itemIdx + FLOWER_1), 9, -1, fopAcM_GetRoomNo(this)); // fakematch with the cast?
+    u8 itemNo = itemIdx + FLOWER_1;
+    field_0x6F8 = fopAcM_createItemForPresentDemo(&pos, itemNo, 9, -1, fopAcM_GetRoomNo(this));
 }
 
 /* 000028C4-0000290C       .text eventSetItem__12daNpcRoten_cFv */
@@ -2313,20 +2311,22 @@ void daNpcRoten_c::eventClrItemInit() {
 
 /* 00002978-00002A70       .text eventGetItemInit__12daNpcRoten_cFi */
 void daNpcRoten_c::eventGetItemInit(int staffIdx) {
-    /* Nonmatching */
-
     uint pcId;
 
     u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
     if(pData != NULL) {
-        pcId = fopAcM_createItemForPresentDemo(&current.pos, l_get_item_no[*pData], 0, -1, current.roomNo);
+        u32 itemNo = *pData; // fakematch?
+        itemNo = l_get_item_no[itemNo];
+        pcId = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, fopAcM_GetRoomNo(this));
     }
     else {
-        u8 itemIdx = l_item_dat[mNpcNo][field_0x9BE];
-        dComIfGs_onGetItemReserve(itemIdx);
+        u8 temp = l_item_dat[mNpcNo][field_0x9BE];
+        u32 itemIdx = temp; // fakematch?
+        dComIfGs_onGetItemReserve(temp);
 
-        u8 itemNo = itemIdx + FLOWER_1;
-        pcId = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 1, -1, current.roomNo);
+        u8 itemNo = FLOWER_1;
+        itemNo += itemIdx; // fakematch?
+        pcId = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 1, -1, fopAcM_GetRoomNo(this));
     }
 
     if(pcId != fpcM_ERROR_PROCESS_ID_e) {
@@ -2645,8 +2645,6 @@ void daNpcRoten_c::chkAttention() {
 
 /* 00003558-000036A4       .text lookBack__12daNpcRoten_cFv */
 void daNpcRoten_c::lookBack() {
-    /* Nonmatching */
-
     cXyz temp4;
     s16 temp1 = field_0x9AC;
     s16 targetY = current.angle.y;
@@ -2655,6 +2653,8 @@ void daNpcRoten_c::lookBack() {
     bool temp3 = field_0x99C;
 
     switch(field_0x9C4) {
+        case 0:
+            break;
         case 1:
             temp4 = field_0x708;
             dstPos = &temp4;
