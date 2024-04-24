@@ -967,6 +967,10 @@ inline void dComIfGs_setReserveNum(int i_idx, u8 num) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().setReserveNum(i_idx, num);
 }
 
+inline void dComIfGs_setReserveItemChange(u8 idx, u8 no) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemChange(idx, no);
+}
+
 inline u8 dComIfGs_checkReserveItemEmpty() {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().checkReserveItemEmpty();
 }
