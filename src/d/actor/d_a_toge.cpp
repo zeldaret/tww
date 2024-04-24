@@ -13,8 +13,6 @@ const s16 daToge_c::m_bdlidx = 0x07;
 const s16 daToge_c::m_dzbidx = 0x04;
 const u32 daToge_c::m_heapsize = 0x5000;
 const f32 daToge_c::m_y_min = -150;
-// const Vec daToge_c::m_cull_min = { -200.0f, -200.0f, -50.0f, };
-// const Vec daToge_c::m_cull_max = { 200.0f, 200.0f, 1600.0f, };
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -72,7 +70,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 0000015C-00000290       .text CreateHeap__8daToge_cFv */
 BOOL daToge_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x4);
-    // static void* i = resInfo->getRes(4);
     JUT_ASSERT(0x11A, modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000002U);
@@ -214,16 +211,6 @@ void daToge_c::search_wind() {
     } else {
         this->unk480 = -1;
     }
-    /*temp_cr0_eq = temp_r3 == NULL;
-    if (temp_cr0_eq == 0) {
-        if (temp_cr0_eq == 0) {
-            var_r0 = temp_r3->mBsPcId;
-        } else {
-            var_r0 = -1;
-        }
-        this->unk480 = var_r0;
-        return;
-    }*/
 }
 
 /* 00000AE0-00000C1C       .text toge_move__8daToge_cFv */
