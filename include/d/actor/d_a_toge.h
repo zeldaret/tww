@@ -41,7 +41,7 @@ public:
     /* 0x474 */ f32 unk474;
     /* 0x478 */ u32 mSwitchNo;  /* inferred */
     /* 0x47C */ char pad47C[4]; /* maybe part of unk478[3]? */
-    /* 0x480 */ s32 unk480;     /* inferred */
+    /* 0x480 */ s32 mWindTagId; /* inferred */
     /* 0x484 */ u8 mEventState; /* inferred */
     /* 0x485 */ u8 unk485;
     /* 0x486 */ u8 unk486;

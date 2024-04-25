@@ -198,18 +198,12 @@ void daToge_c::set_collision() {
 
 /* 00000A78-00000AE0       .text search_wind__8daToge_cFv */
 void daToge_c::search_wind() {
-    s16 sp8;
-    s32 temp_cr0_eq;
-    s32 var_r0;
-    fopAc_ac_c* temp_r3;
+    fopAc_ac_c* pActor = fopAcM_SearchByName(PROC_WindTag);
 
-    sp8 = 0x189;
-    temp_r3 = fopAcM_Search((fopAcIt_JudgeFunc)&fpcSch_JudgeForPName, &sp8);
-
-    if (temp_r3 != NULL) {
-        this->unk480 = fopAcM_GetID(temp_r3);
+    if (pActor != NULL) {
+        this->mWindTagId = fopAcM_GetID(pActor);
     } else {
-        this->unk480 = -1;
+        this->mWindTagId = fpcM_ERROR_PROCESS_ID_e;
     }
 }
 
