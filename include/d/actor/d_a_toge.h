@@ -11,8 +11,8 @@ public:
 
     BOOL _delete();
     BOOL CreateHeap();
-    s32 Create();
-    s32 _create();
+    BOOL Create();
+    BOOL _create();
     BOOL _execute();
     void set_collision();
     void search_wind();
@@ -27,8 +27,6 @@ public:
     static const f32 m_y_min;
 
 public:
-    /* Place member variables here */
-
     /* 0x290 */ request_of_phase_process_class m_Phs; /* inferred */
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ dCcD_Stts mStts;

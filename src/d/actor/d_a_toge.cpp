@@ -76,18 +76,18 @@ BOOL daToge_c::CreateHeap() {
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000002U);
 
     if (!mpModel) {
-        return false;
+        return FALSE;
     }
 
     mpModel->setUserArea((u32)this);
 
-    this->mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, 7), cBgW::MOVE_BG_e, &mtx1);
-    this->mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, 8), cBgW::MOVE_BG_e, &mtx2);
+    mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, 7), cBgW::MOVE_BG_e, &mtx1);
+    mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, 8), cBgW::MOVE_BG_e, &mtx2);
 
-    if (((cBgW*)this->mpBgW1 == NULL) || ((cBgW*)this->mpBgW2 == NULL)) {
-        return 0;
+    if (mpBgW1 == NULL || mpBgW2 == NULL) {
+        return FALSE;
     }
-    return 1;
+    return TRUE;
 }
 
 /* 00000290-00000348       .text nodeCallBack__FP7J3DNodei */
@@ -111,7 +111,7 @@ static BOOL nodeCallBack(J3DNode* node, int timing) {
 }
 
 /* 00000348-000004F4       .text Create__8daToge_cFv */
-s32 daToge_c::Create() {
+BOOL daToge_c::Create() {
     cullMtx = mpModel->mBaseTransformMtx;
     f32 scaleZ = scale.z;
     f32 scaleX = scale.x;
@@ -121,11 +121,11 @@ s32 daToge_c::Create() {
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
 
-    this->mSwitchNo = daToge_prm::getSwitchNo(this);
+    mSwitchNo = daToge_prm::getSwitchNo(this);
 
-    if (dComIfGs_isSwitch(this->mSwitchNo, fopAcM_GetHomeRoomNo(this))) {
+    if (dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this))) {
         this->unk470 = m_y_min;
-        this->mEventState = 2;
+        mEventState = 2;
     }
 
     set_mtx();
@@ -147,11 +147,11 @@ s32 daToge_c::Create() {
     mpBgW1->Move();
     mpBgW2->Move();
 
-    return 1;
+    return TRUE;
 }
 
 /* 000004F4-00000620       .text _create__8daToge_cFv */
-s32 daToge_c::_create() {
+BOOL daToge_c::_create() {
     fopAcM_SetupActor(this, daToge_c);
 
     s32 ret = dComIfG_resLoad(&m_Phs, m_arcname);
@@ -181,24 +181,23 @@ void daToge_c::set_mtx() {
 BOOL daToge_c::_execute() {
     if (mSwitchNo != 0xFF) {
         if (fopAcM_isSwitch(this, mSwitchNo) != 0) {
-            if (this->mEventState != 1) {
+            if (mEventState != 1) {
                 this->unk485 = 1;
             }
-        } else if (fopAcM_isSwitch(this, mSwitchNo) == 0 && this->mEventState != 4) {
-            this->mEventState = 3;
+        } else if (fopAcM_isSwitch(this, mSwitchNo) == 0 && mEventState != 4) {
+            mEventState = 3;
         }
     } else if (mSwitchNo == 0xFF) {  // Redundant condition (necessary for matching)
         search_wind();
 
-        daWindTag::daWindTag_c* pActor =
-            (daWindTag::daWindTag_c*)fopAcM_SearchByID(this->mWindTagId);
+        daWindTag::daWindTag_c* pActor = (daWindTag::daWindTag_c*)fopAcM_SearchByID(mWindTagId);
 
         if (pActor != NULL) {
             if (pActor->unk498 > 0.0f) {
-                if (this->mEventState != 4) {
-                    this->mEventState = 3;
+                if (mEventState != 4) {
+                    mEventState = 3;
                 }
-            } else if (this->mEventState != 1) {
+            } else if (mEventState != 1) {
                 this->unk485 = 1;
             }
         }
@@ -221,13 +220,13 @@ BOOL daToge_c::_execute() {
 
 /* 000009F4-00000A78       .text set_collision__8daToge_cFv */
 void daToge_c::set_collision() {
-    if ((u8)this->mEventState != 2) {
+    if ((u8)mEventState != 2) {
         cXyz center;
         center.x = current.pos.x;
         center.y = current.pos.y;
         center.z = current.pos.z;
 
-        center.y += (unk470 - 10.0f);
+        center.y += (this->unk470 - 10.0f);
 
         mCyl.SetC(center);
         dComIfG_Ccsp()->Set(&mCyl);
@@ -239,9 +238,9 @@ void daToge_c::search_wind() {
     fopAc_ac_c* pActor = fopAcM_SearchByName(PROC_WindTag);
 
     if (pActor != NULL) {
-        this->mWindTagId = fopAcM_GetID(pActor);
+        mWindTagId = fopAcM_GetID(pActor);
     } else {
-        this->mWindTagId = fpcM_ERROR_PROCESS_ID_e;
+        mWindTagId = fpcM_ERROR_PROCESS_ID_e;
     }
 }
 
@@ -251,14 +250,14 @@ void daToge_c::toge_move() {
     switch (mEventState)  // Irregular switch
     {
     case 1:
-        if (cLib_calcTimer(&unk486) != 0)
+        if (cLib_calcTimer(&this->unk486) != 0)
             break;
         toge_seStart(JA_SE_OBJ_TOGETOGE_IN);
         mEventState = 2;
         // Fallthrough
     case 2:
         // m_y_min is also -150.0f, so that might be related
-        cLib_addCalc(&unk470, -150.0f, 0.1f, 30.0f, 15);
+        cLib_addCalc(&this->unk470, -150.0f, 0.1f, 30.0f, 15);
         break;
     case 0:
         // ...
@@ -268,18 +267,18 @@ void daToge_c::toge_move() {
         mEventState = 4;
         r30 = 0;
     case 4:
-        if (cLib_addCalc(&unk470, unk474, 0.1f, 30.0f, 15.0f) == 0) {
-            if (unk470 < 0) {
-                unk474 = 0;
-            } else if (unk485 != 0) {
-                unk486 = 0xA;
+        if (cLib_addCalc(&this->unk470, this->unk474, 0.1f, 30.0f, 15.0f) == 0) {
+            if (this->unk470 < 0) {
+                this->unk474 = 0;
+            } else if (this->unk485 != 0) {
+                this->unk486 = 0xA;
                 mEventState = 1;
-                unk485 = 0;
+                this->unk485 = 0;
             } else {
                 if (r30 != 0) {
                     toge_seStart(JA_SE_OBJ_TOGETOGE_MOVE);
                 }
-                unk474 = -60.0f;
+                this->unk474 = -60.0f;
             }
         }
         break;
@@ -306,7 +305,7 @@ BOOL daToge_c::_draw() {
 }
 
 /* 00000D44-00000D64       .text daToge_Create__FPv */
-static s32 daToge_Create(void* i_this) {
+static BOOL daToge_Create(void* i_this) {
     return static_cast<daToge_c*>(i_this)->_create();
 }
 
