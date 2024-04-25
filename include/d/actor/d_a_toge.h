@@ -11,8 +11,8 @@ public:
 
     BOOL _delete();
     BOOL CreateHeap();
-    BOOL Create();
-    BOOL _create();
+    s32 Create();
+    s32 _create();
     BOOL _execute();
     void set_collision();
     void search_wind();
@@ -27,20 +27,20 @@ public:
     static const f32 m_y_min;
 
 public:
-    /* 0x290 */ request_of_phase_process_class m_Phs; /* inferred */
+    /* 0x290 */ request_of_phase_process_class m_Phs;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ dCcD_Stts mStts;
-    /* 0x2D8 */ dCcD_Cyl mCyl; /* inferred */
-    /* 0x408 */ dBgW* mpBgW1;  /* inferred */
-    /* 0x40C */ Mtx mtx1;      /* maybe part of unk408[0xD]? */
-    /* 0x43C */ dBgW* mpBgW2;  /* inferred */
-    /* 0x440 */ Mtx mtx2;      /* inferred */
-    /* 0x470 */ f32 unk470;    /* inferred */
+    /* 0x2D8 */ dCcD_Cyl mCyl;
+    /* 0x408 */ dBgW* mpBgW1;
+    /* 0x40C */ Mtx mtx1;
+    /* 0x43C */ dBgW* mpBgW2;
+    /* 0x440 */ Mtx mtx2;
+    /* 0x470 */ f32 unk470;
     /* 0x474 */ f32 unk474;
-    /* 0x478 */ s32 mSwitchNo;  /* inferred */
-    /* 0x47C */ char pad47C[4]; /* maybe part of unk478[3]? */
-    /* 0x480 */ s32 mWindTagId; /* inferred */
-    /* 0x484 */ u8 mEventState; /* inferred */
+    /* 0x478 */ s32 mSwitchNo;
+    /* 0x47C */ char pad47C[4];
+    /* 0x480 */ s32 mWindTagId;
+    /* 0x484 */ u8 mEventState;
     /* 0x485 */ u8 unk485;
     /* 0x486 */ u8 unk486;
 };
