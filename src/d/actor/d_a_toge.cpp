@@ -4,10 +4,10 @@
 //
 
 #include "d/actor/d_a_toge.h"
+#include "d/actor/d_a_wind_tag.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
-
 
 const char daToge_c::m_arcname[] = "Htoge1";
 const s16 daToge_c::m_bdlidx = 0x07;
@@ -179,7 +179,45 @@ void daToge_c::set_mtx() {
 
 /* 00000868-000009F4       .text _execute__8daToge_cFv */
 BOOL daToge_c::_execute() {
-    /* Nonmatching */
+    if (mSwitchNo != 0xFF) {
+        if (fopAcM_isSwitch(this, mSwitchNo) != 0) {
+            if (this->mEventState != 1) {
+                this->unk485 = 1;
+            }
+        } else if (fopAcM_isSwitch(this, mSwitchNo) == 0 && this->mEventState != 4) {
+            this->mEventState = 3;
+        }
+    } else if (mSwitchNo == 0xFF) {  // Redundant condition (necessary for matching)
+        search_wind();
+
+        daWindTag::daWindTag_c* pActor =
+            (daWindTag::daWindTag_c*)fopAcM_SearchByID(this->mWindTagId);
+
+        if (pActor != NULL) {
+            if (pActor->unk498 > 0.0f) {
+                if (this->mEventState != 4) {
+                    this->mEventState = 3;
+                }
+            } else if (this->mEventState != 1) {
+                this->unk485 = 1;
+            }
+        }
+    }
+
+    toge_move();
+    mpModel->setBaseScale(scale);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mDoMtx_copy(mDoMtx_stack_c::get(), mtx1);
+
+    mpBgW2->Move();
+
+    set_collision();
+
+    return TRUE;
 }
 
 /* 000009F4-00000A78       .text set_collision__8daToge_cFv */
@@ -218,7 +256,7 @@ void daToge_c::toge_move() {
             break;
         toge_seStart(JA_SE_OBJ_TOGETOGE_IN);
         mEventState = 2;
-    // Fallthrough
+        // Fallthrough
     case 2:
         // m_y_min is also -150.0f, so that might be related
         cLib_addCalc(&unk470, -150.0f, 0.1f, 30.0f, 15);

@@ -39,7 +39,7 @@ public:
     /* 0x440 */ Mtx mtx2;      /* inferred */
     /* 0x470 */ f32 unk470;    /* inferred */
     /* 0x474 */ f32 unk474;
-    /* 0x478 */ u32 mSwitchNo;  /* inferred */
+    /* 0x478 */ s32 mSwitchNo;  /* inferred */
     /* 0x47C */ char pad47C[4]; /* maybe part of unk478[3]? */
     /* 0x480 */ s32 mWindTagId; /* inferred */
     /* 0x484 */ u8 mEventState; /* inferred */
