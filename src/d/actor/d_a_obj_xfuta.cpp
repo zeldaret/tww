@@ -10,6 +10,23 @@
 #include "dolphin/types.h"
 
 const char daObjXfuta::Act_c::M_arcname[] = "X_futa";
+namespace daObjXfuta {
+static int tev_mode[] = {TEV_TYPE_ACTOR,
+                         TEV_TYPE_BG0,
+                         TEV_TYPE_BG1,
+                         TEV_TYPE_BG2,
+                         TEV_TYPE_BG3,
+                         TEV_TYPE_BG0_FULL,
+                         TEV_TYPE_BG1_FULL,
+                         TEV_TYPE_BG2_FULL,
+                         TEV_TYPE_BG3_FULL,
+                         TEV_TYPE_PLAYER,
+                         0x5B,
+                         0x5C,
+                         0x5D,
+                         0x5E};
+}
+
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjXfuta5Act_cFP10fopAc_ac_c */
 BOOL daObjXfuta::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
     return ((Act_c*)i_this)->create_heap();
@@ -82,6 +99,7 @@ bool daObjXfuta::Act_c::_draw() {
     }
     return TRUE;
 }
+
 namespace daObjXfuta {
 namespace {
 
