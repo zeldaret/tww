@@ -11,7 +11,7 @@ public:
 
     BOOL _delete();
     BOOL CreateHeap();
-    s32 Create();
+    BOOL Create();
     s32 _create();
     BOOL _execute();
     void set_collision();

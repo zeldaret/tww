@@ -111,7 +111,7 @@ static BOOL nodeCallBack(J3DNode* node, int timing) {
 }
 
 /* 00000348-000004F4       .text Create__8daToge_cFv */
-s32 daToge_c::Create() {
+BOOL daToge_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
     fopAcM_setCullSizeBox(this, -80.0f, 0.0f, -80.0f, 80.0f, 120.0f, 80.0f);
