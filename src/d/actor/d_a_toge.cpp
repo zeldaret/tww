@@ -13,7 +13,7 @@ const char daToge_c::m_arcname[] = "Htoge1";
 const s16 daToge_c::m_bdlidx = 0x07;
 const s16 daToge_c::m_dzbidx = 0x04;
 const u32 daToge_c::m_heapsize = 0x5000;
-const f32 daToge_c::m_y_min = -150;
+const f32 daToge_c::m_y_min = -150.0f;
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
