@@ -170,11 +170,11 @@ s32 daToge_c::_create() {
 /* 000007D8-00000868       .text set_mtx__8daToge_cFv */
 void daToge_c::set_mtx() {
     mpModel->setBaseScale(scale);
-    MTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
 
-    MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
-    MTXCopy(mDoMtx_stack_c::get(), mtx1);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_copy(mDoMtx_stack_c::get(), mtx1);
 }
 
 /* 00000868-000009F4       .text _execute__8daToge_cFv */
@@ -205,12 +205,11 @@ BOOL daToge_c::_execute() {
     }
 
     toge_move();
-    mpModel->setBaseScale(scale);
 
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-
     mDoMtx_copy(mDoMtx_stack_c::get(), mtx1);
 
     mpBgW2->Move();
