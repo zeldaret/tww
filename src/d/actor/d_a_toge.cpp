@@ -216,15 +216,18 @@ void daToge_c::search_wind() {
 /* 00000AE0-00000C1C       .text toge_move__8daToge_cFv */
 void daToge_c::toge_move() {
     u8 r30 = 1;
-    switch (mEventState) {
+    switch (mEventState)  // Irregular switch
+    {
     case 1:
-        if (cLib_calcTimer(&unk486) == 0) {
+        if (cLib_calcTimer(&unk486) != 0)
+            break;
             toge_seStart(JA_SE_OBJ_TOGETOGE_IN);
             mEventState = 2;
-
+        // Fallthrough
         case 2:
-            cLib_addCalc(&unk470, -150.0f, 0.1f, 30.0f, 15.0f);
-        }
+        // m_y_min is also -150.0f, so that might be related
+        cLib_addCalc(&unk470, -150.0f, 0.1f, 30.0f, 15);
+        break;
     case 0:
         // ...
         break;
