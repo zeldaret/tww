@@ -7,7 +7,112 @@
 #include "d/d_particle_name.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/res/res_always.h"
+#include "d/res/res_vhutu.h"
+#include "d/res/res_vhkak.h"
+#include "d/res/res_vkeyn.h"
+#include "d/res/res_key_01.h"
+#include "d/res/res_tele_00.h"
+#include "d/res/res_bomb_00.h"
 #include "d/res/res_link.h"
+#include "d/res/res_vhane.h"
+#include "d/res/res_vboko.h"
+#include "d/res/res_vchuj.h"
+#include "d/res/res_vmapc.h"
+#include "d/res/res_vsaim.h"
+#include "d/res/res_vsail.h"
+#include "d/res/res_vyatm.h"
+#include "d/res/res_vyatl.h"
+// #include "d/res/res_ball.h"
+#include "d/res/res_bin.h"
+#include "d/res/res_vbomm.h"
+#include "d/res/res_boom.h"
+#include "d/res/res_vboot.h"
+#include "d/res/res_vboml.h"
+// #include "d/res/res_bottle.h"
+// #include "d/res/res_bottle_e.h"
+#include "d/res/res_vboxn.h"
+#include "d/res/res_vdunc.h"
+#include "d/res/res_vdunm.h"
+#include "d/res/res_vleaf.h"
+#include "d/res/res_vbagh.h"
+#include "d/res/res_vbage.h"
+#include "d/res/res_vbagf.h"
+#include "d/res/res_vhyoi.h"
+#include "d/res/res_vesa.h"
+#include "d/res/res_vobj07.h"
+#include "d/res/res_vobj06.h"
+#include "d/res/res_vobj05.h"
+#include "d/res/res_vobj04.h"
+#include "d/res/res_vobj03.h"
+#include "d/res/res_vobj00.h"
+#include "d/res/res_vobj01.h"
+#include "d/res/res_vobj02.h"
+#include "d/res/res_vhook.h"
+#include "d/res/res_vpowr.h"
+#include "d/res/res_vho.h"
+#include "d/res/res_vmant.h"
+#include "d/res/res_vohom.h"
+#include "d/res/res_vchin.h"
+#include "d/res/res_vhamm.h"
+#include "d/res/res_vamuk.h"
+#include "d/res/res_vamuy.h"
+#include "d/res/res_med_b.h"
+#include "d/res/res_med_g.h"
+#include "d/res/res_med_r.h"
+#include "d/res/res_vobj08.h"
+#include "d/res/res_vobj09.h"
+#include "d/res/res_vobj11.h"
+#include "d/res/res_vobj10.h"
+#include "d/res/res_vhapp.h"
+#include "d/res/res_vrope.h"
+#include "d/res/res_vmags.h"
+#include "d/res/res_shinju_n.h"
+// #include "d/res/res_sord_m.h"
+// #include "d/res/res_sord_mvu.h"
+#include "d/res/res_vswon.h"
+#include "d/res/res_vshim.h"
+#include "d/res/res_vshin.h"
+#include "d/res/res_vtri1.h"
+#include "d/res/res_vtact.h"
+#include "d/res/res_varfi.h"
+#include "d/res/res_vmapq.h"
+#include "d/res/res_varrl.h"
+#include "d/res/res_vbow.h"
+#include "d/res/res_fa.h"
+#include "d/res/res_shinju_d.h"
+#include "d/res/res_shinju_f.h"
+#include "d/res/res_fwbin.h"
+#include "d/res/res_vbiny.h"
+#include "d/res/res_vbinh.h"
+#include "d/res/res_vbins.h"
+#include "d/res/res_vbinw.h"
+#include "d/res/res_vfuku.h"
+#include "d/res/res_vdoku.h"
+#include "d/res/res_vbelt.h"
+#include "d/res/res_vlupy.h"
+#include "d/res/res_vlett.h"
+#include "d/res/res_vleof.h"
+#include "d/res/res_vlemg.h"
+#include "d/res/res_vlemo.h"
+#include "d/res/res_fdai.h"
+#include "d/res/res_vtri2.h"
+#include "d/res/res_vtri3.h"
+#include "d/res/res_vtri4.h"
+#include "d/res/res_vtri5.h"
+#include "d/res/res_vtri6.h"
+#include "d/res/res_vtri7.h"
+#include "d/res/res_vtri8.h"
+#include "d/res/res_vmapt.h"
+#include "d/res/res_vmapr.h"
+#include "d/res/res_vmaph.h"
+#include "d/res/res_vmapg.h"
+#include "d/res/res_vboxa.h"
+#include "d/res/res_vtin1.h"
+#include "d/res/res_vtin2.h"
+#include "d/res/res_vtin3.h"
+#include "d/res/res_vtin4.h"
+#include "d/res/res_vtin5.h"
+#include "d/res/res_vbeso.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -31,14 +136,14 @@ char* dItem_data::item_arcname_tbl[0x70] = {
     "VsaiL",
     "VyatM",
     "VyatL",
-    "Ball",
+    "Ball", // Doesn't exist, unused
     "Bin",
     "VbomM",
     "Boom",
     "Vboot",
     "VbomL",
-    "Bottle",
-    "Bottle_e",
+    "Bottle", // Doesn't exist, unused
+    "Bottle_e", // Doesn't exist, unused
     "VboxN",
     "VdunC",
     "VdunM",
@@ -76,8 +181,8 @@ char* dItem_data::item_arcname_tbl[0x70] = {
     "Vrope",
     "VmagS",
     "Shinju_n",
-    "Sord_m",
-    "Sord_mvu",
+    "Sord_m", // Doesn't exist, unused
+    "Sord_mvu", // Doesn't exist, unused
     "VswoN",
     "VshiM",
     "VshiN",
@@ -505,10 +610,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x01: dItem_GREEN_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -521,10 +626,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x02: dItem_BLUE_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x01,
@@ -537,10 +642,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x03: dItem_YELLOW_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x02,
@@ -553,10 +658,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x04: dItem_RED_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x03,
@@ -569,10 +674,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x05: dItem_PURPLE_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -585,10 +690,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x06: dItem_ORANGE_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x05,
@@ -601,8 +706,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x07: KAKERA_HEART
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHKAK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VHKAK_BDL_VHKAK,
+        /* mSrtIdx      */ VHKAK_BTK_VHKAK,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -617,8 +722,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x08: UTUWA_HEART
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHUTU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_01],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VHUTU_BDL_VHUTU,
+        /* mSrtIdx      */ VHUTU_BTK_VHUTU,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -665,7 +770,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0B: BOMB_5
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -681,7 +786,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0C: BOMB_10
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -697,7 +802,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0D: BOMB_20
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -713,7 +818,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0E: BOMB_30
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -729,10 +834,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x0F: dItem_SILVER_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x06,
@@ -825,7 +930,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x15: dItem_SMALL_KEY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VKEYN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_KEY],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VKEYN_BDL_VKEYN,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -841,12 +946,12 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x16: RECOVER_FAIRY
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_FA],
         /* mTexture     */ NULL,
-        /* mBmdIdx      */ 0x001F,
+        /* mBmdIdx      */ ALWAYS_BDL_FA, // Note: This file index is for the wrong RARC.
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
-        /* mBckIdx      */ 0x000C,
+        /* mBckIdx      */ ALWAYS_BCK_FA, // Note: This file index is for the wrong RARC.
         /* mTevFrm      */ -1,
         /* mItemMesgNum */ 0x0000,
         /* mUnused      */ 0x00000000,
@@ -905,10 +1010,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x1A: SUB_DUN_RUPEE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x02,
@@ -985,7 +1090,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x1F: dItem_JOY_PENDANT_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHAPP],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_08],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VHAPP_BDL_VHAPP,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1001,8 +1106,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x20: dItem_TELESCOPE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_TELE_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TELESCOPE],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ TELE_00_BDL_VTELE,
+        /* mSrtIdx      */ TELE_00_BTK_VTELE,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1017,7 +1122,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x21: dItem_TINGLE_TUNER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_WHISTLE],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VCHIN_BDL_VCHIN,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1033,7 +1138,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x22: dItem_WIND_WAKER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTACT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VTACT_BDL_VTACT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1049,8 +1154,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x23: CAMERA
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOXN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CAMERA],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBOXN_BDL_VBOXN,
+        /* mSrtIdx      */ VBOXN_BTK_VBOXN,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1065,7 +1170,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x24: EMONO_BAG
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGE],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COVEROFBEAST],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VBAGE_BDL_VBAGE,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1081,8 +1186,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x25: dItem_GRAPPLING_HOOK_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VROPE],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ROPE],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VROPE_BDL_VROPE,
+        /* mSrtIdx      */ VROPE_BTK_VROPE,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1097,8 +1202,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x26: CAMERA2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOXA],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CAMERA_2],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBOXA_BDL_VBOXP,
+        /* mSrtIdx      */ VBOXA_BTK_VBOXA,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1113,8 +1218,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x27: dItem_BOW_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOW],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBOW_BDL_VBOW,
+        /* mSrtIdx      */ VBOW_BTK_VBOW,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1129,8 +1234,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x28: PWR_GROOVE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VPOWR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GLOVES_00_0x35],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VPOWR_BDL_VPOWR,
+        /* mSrtIdx      */ VPOWR_BTK_VPOWR,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1145,8 +1250,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x29: dItem_IRON_BOOTS_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOOT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOOTS_00],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBOOT_BDL_VBOOT,
+        /* mSrtIdx      */ VBOOT_BTK_VBOOT,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1161,10 +1266,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2A: dItem_MAGIC_ARMOR_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAGS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_02],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VMAGS_BDL_VMAGS,
+        /* mSrtIdx      */ VMAGS_BTK_VMAGS,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VMAGS_BRK_VMAGS,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ -1,
@@ -1193,7 +1298,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2C: ESA_BAG
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGF],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COVEROFBAIT],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VBAGF_BDL_VBAGF,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1209,7 +1314,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2D: dItem_BOOMERANG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOOM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOOMERANG],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ BOOM_BDL_VBOOM,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1225,7 +1330,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2E: BARE_HAND
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VFUKU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GLOVES_00_0x34],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VFUKU_BDL_VFUKU,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1241,8 +1346,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x2F: dItem_HOOKSHOT_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHOOK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HOOKSHOT],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VHOOK_BDL_VHOOK,
+        /* mSrtIdx      */ VHOOK_BTK_VHOOK,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1257,7 +1362,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x30: dItem_DELIVERY_BAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VBAGH_BDL_VBAGH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1273,7 +1378,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x31: BOMB_BAG
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1289,7 +1394,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x32: dItem_FUKU_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VFUKU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CLOTHES],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VFUKU_BDL_VFUKU,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1305,7 +1410,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x33: dItem_SKULL_HAMMER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHAMM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HAMMER_01],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VHAMM_BDL_VHAMM,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1321,7 +1426,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x34: dItem_DEKU_LEAF_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEAF],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_FAN],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VLEAF_BDL_VLEAF,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1337,8 +1442,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x35: dItem_MAGIC_ARROW_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VARFI],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROW_POWER_01],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VARFI_BDL_VARFI,
+        /* mSrtIdx      */ VARFI_BTK_VARFI,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1353,8 +1458,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x36: dItem_LIGHT_ARROW_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VARRL],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROW_POWER_02],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VARRL_BDL_VARRL,
+        /* mSrtIdx      */ VARRL_BTK_VARRL,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1385,7 +1490,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x38: SWORD
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_00],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VSWON_BDL_VSWON,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1433,7 +1538,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x3B: SHIELD
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSHIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_00],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VSHIN_BDL_VSHIN,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1449,8 +1554,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x3C: MIRROR_SHIELD
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSHIM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_01],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VSHIM_BDL_VSHIM,
+        /* mSrtIdx      */ VSHIM_BTK_VSHIM,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1465,7 +1570,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x3D: DROPPED_SWORD
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_00],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VSWON_BDL_VSWON,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1497,8 +1602,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x3F: KAKERA_HEART2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHKAK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VHKAK_BDL_VHKAK,
+        /* mSrtIdx      */ VHKAK_BTK_VHKAK,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1545,8 +1650,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x42: PIRATES_OMAMORI
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
+        /* mSrtIdx      */ VAMUK_BTK_VAMUK,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1561,8 +1666,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x43: HEROS_OMAMORI
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_01],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VAMUY_BDL_VAMUY,
+        /* mSrtIdx      */ VAMUY_BTK_VAMUY,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1593,8 +1698,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x45: SKULL_NECKLACE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDOKU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_01],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VDOKU_BDL_VDOKU,
+        /* mSrtIdx      */ VDOKU_BTK_VDOKU,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1609,7 +1714,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x46: BOKOBABA_SEED
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOKO],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_02],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VBOKO_BDL_VBOKO,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1625,10 +1730,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x47: GOLDEN_FEATHER
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHANE],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_03],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VHANE_BDL_VHANE,
+        /* mSrtIdx      */ VHANE_BTK_VHANE,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VHANE_BRK_VHANE,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ -1,
@@ -1641,8 +1746,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x48: BOKO_BELT
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBELT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_04],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBELT_BDL_VBELT,
+        /* mSrtIdx      */ VBELT_BTK_VBELT,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1657,10 +1762,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x49: RED_JELLY
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_05],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VCHUJ_BDL_VCHUJ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0007,
+        /* mTevIdx      */ VCHUJ_BRK_VCHUJ,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x01,
@@ -1673,10 +1778,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4A: GREEN_JELLY
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_06],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VCHUJ_BDL_VCHUJ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0007,
+        /* mTevIdx      */ VCHUJ_BRK_VCHUJ,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -1689,10 +1794,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4B: BLUE_JELLY
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_07],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VCHUJ_BDL_VCHUJ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0007,
+        /* mTevIdx      */ VCHUJ_BRK_VCHUJ,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x02,
@@ -1705,7 +1810,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4C: dItem_MAP_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDUNM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DUNGEON_MAP],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VDUNM_BDL_VDUNM,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -1721,8 +1826,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4D: dItem_COMPASS_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDUNC],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COMPASS],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VDUNC_BDL_VDUNC,
+        /* mSrtIdx      */ VDUNC_BTK_VDUNC,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1737,8 +1842,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x4E: dItem_BOSS_KEY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_KEY_01],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOSS_KEY],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ KEY_01_BDL_VKEYB,
+        /* mSrtIdx      */ KEY_01_BTK_VKEYB,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1769,8 +1874,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x50: EMPTY_BOTTLE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ BIN_BDL_VBINX,
+        /* mSrtIdx      */ BIN_BTK_VBINA_X,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1785,8 +1890,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x51: RED_BOTTLE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_R],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_01],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ MED_R_BDL_VBINR,
+        /* mSrtIdx      */ MED_R_BTK_VBINA_R,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1801,8 +1906,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x52: GREEN_BOTTLE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_G],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_02],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ MED_G_BDL_VBING,
+        /* mSrtIdx      */ MED_G_BTK_VBINA_G,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1817,8 +1922,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x53: BLUE_BOTTLE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_B],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_03],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ MED_B_BDL_VBINB,
+        /* mSrtIdx      */ MED_B_BTK_VBINA_B,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1833,8 +1938,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x54: dItem_HALF_SOUP_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_09],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBINS_BDL_VBINS,
+        /* mSrtIdx      */ VBINS_BTK_VBINA_S,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1849,8 +1954,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x55: dItem_SOUP_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_04],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBINS_BDL_VBINS,
+        /* mSrtIdx      */ VBINS_BTK_VBINA_S,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1865,8 +1970,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x56: BIN_IN_WATER
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINW],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_05],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBINW_BDL_VBINW,
+        /* mSrtIdx      */ VBINW_BTK_VBINA_W,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1881,8 +1986,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x57: FAIRY_BOTTLE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_06],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBINY_BDL_VBINY,
+        /* mSrtIdx      */ VBINY_BTK_VBINA_Y,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -1897,10 +2002,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x58: FIREFLY_BOTTLE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_07],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VBINH_BDL_VBINH,
+        /* mSrtIdx      */ VBINH_BTK_VBINA_H,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VBINH_BRK_VBINH,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ -1,
@@ -1913,8 +2018,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x59: FWATER_BOTTLE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_FWBIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_08],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ FWBIN_BDL_VBINW_F,
+        /* mSrtIdx      */ FWBIN_BTK_VBINA_F,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2041,8 +2146,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x61: TRIFORCE1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI1],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_00],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VTRI1_BDL_VTRI1,
+        /* mSrtIdx      */ VTRI1_BTK_VTRI1A,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2057,8 +2162,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x62: TRIFORCE2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI2],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_01],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VTRI2_BDL_VTRI2,
+        /* mSrtIdx      */ VTRI2_BTK_VTRI2A,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2073,8 +2178,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x63: TRIFORCE3
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI3],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_02],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VTRI3_BDL_VTRI3,
+        /* mSrtIdx      */ VTRI3_BTK_VTRI3A,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2089,8 +2194,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x64: TRIFORCE4
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI4],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_03],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VTRI4_BDL_VTRI4,
+        /* mSrtIdx      */ VTRI4_BTK_VTRI4A,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2105,8 +2210,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x65: TRIFORCE5
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI5],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_04],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VTRI5_BDL_VTRI5,
+        /* mSrtIdx      */ VTRI5_BTK_VTRI5A,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2121,8 +2226,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x66: TRIFORCE6
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI6],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_05],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VTRI6_BDL_VTRI6,
+        /* mSrtIdx      */ VTRI6_BTK_VTRI6A,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2137,8 +2242,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x67: TRIFORCE7
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI7],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_06],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VTRI7_BDL_VTRI7,
+        /* mSrtIdx      */ VTRI7_BTK_VTRI7A,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2153,8 +2258,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x68: TRIFORCE8
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI8],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_07],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VTRI8_BDL_VTRI8,
+        /* mSrtIdx      */ VTRI8_BTK_VTRI8A,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2169,8 +2274,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x69: dItem_PEARL_NAYRU_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_N],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_02],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ SHINJU_N_BDL_VPEAN,
+        /* mSrtIdx      */ SHINJU_N_BTK_VPEAA_N,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2185,8 +2290,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6A: dItem_PEARL_DIN_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_D],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_00],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ SHINJU_D_BDL_VPEAD,
+        /* mSrtIdx      */ SHINJU_D_BTK_VPEAA_D,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2201,8 +2306,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6B: dItem_PEARL_FARORE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_F],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_01],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ SHINJU_F_BDL_VPEAF,
+        /* mSrtIdx      */ SHINJU_F_BTK_VPEAA_F,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -2217,7 +2322,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6C: KNOWLEDGE_TF
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2233,7 +2338,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6D: TACT_SONG1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2249,7 +2354,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6E: TACT_SONG2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2265,7 +2370,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x6F: TACT_SONG3
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2281,7 +2386,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x70: TACT_SONG4
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2297,7 +2402,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x71: TACT_SONG5
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2313,7 +2418,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x72: TACT_SONG6
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2409,7 +2514,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x78: NORMAL_SAIL
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHO],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SAIL_00],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VHO_BDL_VHO,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2425,7 +2530,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x79: TRIFORCE_MAP1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2441,7 +2546,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7A: TRIFORCE_MAP2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2457,7 +2562,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7B: TRIFORCE_MAP3
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2473,7 +2578,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7C: TRIFORCE_MAP4
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2489,7 +2594,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7D: TRIFORCE_MAP5
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2505,7 +2610,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7E: TRIFORCE_MAP6
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2521,7 +2626,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x7F: TRIFORCE_MAP7
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2537,7 +2642,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x80: TRIFORCE_MAP8
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2569,7 +2674,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x82: BIRD_ESA_5
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VESA],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BAIT_01],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VESA_BDL_VESA,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2585,7 +2690,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x83: dItem_HYOI_PEAR_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHYOI],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BAIT_02],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VHYOI_BDL_VHYOI,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2729,7 +2834,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x8C: FLOWER_1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_01],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ00_BDL_VOBJ00,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2745,7 +2850,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x8D: FLOWER_2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ01],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_02],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ01_BDL_VOBJ01,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2761,7 +2866,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x8E: FLOWER_3
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ02],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_03],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ02_BDL_VOBJ02,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2777,7 +2882,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x8F: HEROS_FLAG
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ03],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_04],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ03_BDL_VOBJ03,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2793,7 +2898,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x90: TAIRYO_FLAG
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ04],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_05],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ04_BDL_VOBJ04,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2809,7 +2914,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x91: SALES_FLAG
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ05],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_06],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ05_BDL_VOBJ05,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2825,7 +2930,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x92: WIND_FLAG
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ06],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_07],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ06_BDL_VOBJ06,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2841,7 +2946,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x93: RED_FLAG
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ07],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_08],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ07_BDL_VOBJ07,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2857,7 +2962,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x94: FOSSIL_HEAD
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ08],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_09],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ08_BDL_VOBJ08,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2873,7 +2978,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x95: WATER_STATUE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ09],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_10],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ09_BDL_VOBJ09,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2889,7 +2994,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x96: POSTMAN_STATUE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ10],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_11],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ10_BDL_VOBJ10,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2905,7 +3010,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x97: PRESIDENT_STATUE
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ11],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_12],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOBJ11_BDL_VOBJ11,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2921,7 +3026,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x98: dItem_FATHER_LETTER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLETT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_13],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VLETT_BDL_VLETT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2937,7 +3042,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x99: dItem_NOTE_TO_MOM_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEOF],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_14],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VLEOF_BDL_VLEOF,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2953,7 +3058,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9A: MAGYS_LETTER
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEMG],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_15],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VLEMG_BDL_VLEMG,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2969,7 +3074,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9B: MO_LETTER
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEMO],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_16],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VLEMO_BDL_VLEMO,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -2985,7 +3090,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9C: COTTAGE_PAPER
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBESO],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_17],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VBESO_BDL_VBESO,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3001,7 +3106,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9D: KAISEN_PRESENT1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOHOM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_18],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VOHOM_BDL_VOHOM,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3017,7 +3122,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9E: KAISEN_PRESENT2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMANT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_19],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMANT_BDL_VMANT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3033,8 +3138,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0x9F: SALVAGE_ITEM1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOXA],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CAMERA],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBOXA_BDL_VBOXP,
+        /* mSrtIdx      */ VBOXA_BTK_VBOXA,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3049,7 +3154,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA0: SALVAGE_ITEM2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3065,7 +3170,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA1: SALVAGE_ITEM3
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3081,7 +3186,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA2: XXX_039
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
-        /* mBmdIdx      */ 0x0004,
+        /* mBmdIdx      */ VAMUK_BDL_VAMUK,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3097,7 +3202,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA3: TINGLE_STATUE1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN1],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VTIN1_BDL_VTIN1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3113,7 +3218,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA4: TINGLE_STATUE2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN2],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VTIN2_BDL_VTIN2,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3129,7 +3234,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA5: TINGLE_STATUE3
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN3],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VTIN3_BDL_VTIN3,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3145,7 +3250,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA6: TINGLE_STATUE4
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN4],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VTIN4_BDL_VTIN4,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3161,7 +3266,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xA7: TINGLE_STATUE5
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN5],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VTIN5_BDL_VTIN5,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3209,7 +3314,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAA: dItem_HURRICANE_SPIN_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ NULL,
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VSWON_BDL_VSWON,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3225,8 +3330,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAB: MAX_RUPEE_UP1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSAIM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BIG_PURSE],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VSAIM_BDL_VSAIM,
+        /* mSrtIdx      */ VSAIM_BTK_VSAIM,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3241,8 +3346,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAC: MAX_RUPEE_UP2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSAIL],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_MAX_PURSE],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VSAIL_BDL_VSAIL,
+        /* mSrtIdx      */ VSAIL_BTK_VSAIL,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3257,8 +3362,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAD: MAX_BOMB_UP1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOMM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMBPOUCH_1],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBOMM_BDL_VBOMM,
+        /* mSrtIdx      */ VBOMM_BTK_VBOMM,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3273,8 +3378,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAE: MAX_BOMB_UP2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOML],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMBPOUCH_2],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VBOML_BDL_VBOML,
+        /* mSrtIdx      */ VBOML_BTK_VBOML,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3289,8 +3394,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xAF: MAX_ARROW_UP1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VYATM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROWCASE_1],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VYATM_BDL_VYATM,
+        /* mSrtIdx      */ VYATM_BTK_VYATM,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3305,8 +3410,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB0: MAX_ARROW_UP2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VYATL],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROWCASE_2],
-        /* mBmdIdx      */ 0x0004,
-        /* mSrtIdx      */ 0x0007,
+        /* mBmdIdx      */ VYATL_BDL_VYATL,
+        /* mSrtIdx      */ VYATL_BTK_VYATL,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
         /* mTevIdx2     */ -1,
@@ -3353,10 +3458,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB3: TINCLE_RUPEE1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3369,10 +3474,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB4: TINCLE_RUPEE2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3385,10 +3490,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB5: TINCLE_RUPEE3
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3401,10 +3506,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB6: TINCLE_RUPEE4
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3417,10 +3522,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB7: TINCLE_RUPEE5
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x04,
@@ -3433,10 +3538,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB8: TINCLE_RUPEE6
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x05,
@@ -3449,10 +3554,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xB9: LITHOGRAPH1
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3465,10 +3570,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBA: LITHOGRAPH2
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3481,10 +3586,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBB: LITHOGRAPH3
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3497,10 +3602,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBC: LITHOGRAPH4
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3513,10 +3618,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBD: LITHOGRAPH5
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3529,10 +3634,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBE: LITHOGRAPH6
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3545,10 +3650,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xBF: COLLECT_MAP_64
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3561,10 +3666,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC0: COLLECT_MAP_63
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3577,10 +3682,10 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC1: COLLECT_MAP_62
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
-        /* mBmdIdx      */ 0x0005,
-        /* mSrtIdx      */ 0x000B,
+        /* mBmdIdx      */ VLUPY_BDL_VLUPY,
+        /* mSrtIdx      */ VLUPY_BTK_VLUPY,
         /* mSrtIdx2     */ -1,
-        /* mTevIdx      */ 0x0008,
+        /* mTevIdx      */ VLUPY_BRK_VLUPY,
         /* mTevIdx2     */ -1,
         /* mBckIdx      */ -1,
         /* mTevFrm      */ 0x00,
@@ -3593,7 +3698,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC2: COLLECT_MAP_61
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3609,7 +3714,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC3: COLLECT_MAP_60
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3625,7 +3730,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC4: COLLECT_MAP_59
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3641,7 +3746,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC5: COLLECT_MAP_58
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3657,7 +3762,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC6: COLLECT_MAP_57
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3673,7 +3778,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC7: COLLECT_MAP_56
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3689,7 +3794,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC8: COLLECT_MAP_55
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3705,7 +3810,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xC9: COLLECT_MAP_54
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3721,7 +3826,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCA: COLLECT_MAP_53
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3737,7 +3842,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCB: COLLECT_MAP_52
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPC],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TINGLE2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPC_BDL_VMAPC,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3753,7 +3858,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCC: COLLECT_MAP_51
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3769,7 +3874,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCD: COLLECT_MAP_50
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3785,7 +3890,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCE: COLLECT_MAP_49
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3801,7 +3906,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xCF: COLLECT_MAP_48
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3817,7 +3922,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD0: COLLECT_MAP_47
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3833,7 +3938,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD1: COLLECT_MAP_46
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3849,7 +3954,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD2: COLLECT_MAP_45
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3865,7 +3970,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD3: COLLECT_MAP_44
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3881,7 +3986,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD4: COLLECT_MAP_43
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3897,7 +4002,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD5: COLLECT_MAP_42
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3913,7 +4018,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD6: COLLECT_MAP_41
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3929,7 +4034,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD7: COLLECT_MAP_40
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3945,7 +4050,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD8: COLLECT_MAP_39
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3961,7 +4066,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xD9: COLLECT_MAP_38
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3977,7 +4082,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDA: COLLECT_MAP_37
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -3993,7 +4098,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDB: COLLECT_MAP_36
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPG],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_PHANTOMSHIP2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPG_BDL_VMAPG,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4009,7 +4114,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDC: COLLECT_MAP_35
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPC],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TINGLE2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPC_BDL_VMAPC,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4025,7 +4130,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDD: COLLECT_MAP_34
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4041,7 +4146,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDE: COLLECT_MAP_33
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4057,7 +4162,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xDF: COLLECT_MAP_32
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4073,7 +4178,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE0: COLLECT_MAP_31
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4089,7 +4194,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE1: COLLECT_MAP_30
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4105,7 +4210,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE2: COLLECT_MAP_29
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4121,7 +4226,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE3: COLLECT_MAP_28
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4137,7 +4242,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE4: COLLECT_MAP_27
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4153,7 +4258,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE5: COLLECT_MAP_26
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4169,7 +4274,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE6: COLLECT_MAP_25
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4185,7 +4290,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE7: COLLECT_MAP_24
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4201,7 +4306,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE8: COLLECT_MAP_23
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4217,7 +4322,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xE9: COLLECT_MAP_22
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4233,7 +4338,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEA: COLLECT_MAP_21
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4249,7 +4354,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEB: COLLECT_MAP_20
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4265,7 +4370,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEC: COLLECT_MAP_19
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPR_BDL_VMAPL,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4281,7 +4386,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xED: COLLECT_MAP_18
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4297,7 +4402,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEE: COLLECT_MAP_17
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4313,7 +4418,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xEF: COLLECT_MAP_16
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4329,7 +4434,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF0: COLLECT_MAP_15
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4345,7 +4450,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF1: COLLECT_MAP_14
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4361,7 +4466,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF2: COLLECT_MAP_13
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4377,7 +4482,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF3: COLLECT_MAP_12
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4393,7 +4498,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF4: COLLECT_MAP_11
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4409,7 +4514,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF5: COLLECT_MAP_10
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4425,7 +4530,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF6: COLLECT_MAP_09
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPH_BDL_VMAPH,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4441,7 +4546,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF7: COLLECT_MAP_08
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4457,7 +4562,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF8: COLLECT_MAP_07
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4473,7 +4578,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xF9: COLLECT_MAP_06
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4489,7 +4594,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFA: COLLECT_MAP_05
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4505,7 +4610,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFB: COLLECT_MAP_04
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4521,7 +4626,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFC: COLLECT_MAP_03
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4537,7 +4642,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFD: COLLECT_MAP_02
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -4553,7 +4658,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         // 0xFE: COLLECT_MAP_01
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
-        /* mBmdIdx      */ 0x0003,
+        /* mBmdIdx      */ VMAPT_BDL_VMAPT,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
         /* mTevIdx      */ -1,
@@ -5264,7 +5369,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x34: dItem_DEKU_LEAF_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VLEAF],
-        /* mBmdIdx   */ 0x0003,
+        /* mBmdIdx   */ VLEAF_BDL_VLEAF,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5316,7 +5421,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x38: SWORD
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSWON],
-        /* mBmdIdx   */ 0x0003,
+        /* mBmdIdx   */ VSWON_BDL_VSWON,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5355,7 +5460,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x3B: SHIELD
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSHIN],
-        /* mBmdIdx   */ 0x0003,
+        /* mBmdIdx   */ VSHIN_BDL_VSHIN,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -5381,7 +5486,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x3D: DROPPED_SWORD
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSWON],
-        /* mBmdIdx   */ 0x0003,
+        /* mBmdIdx   */ VSWON_BDL_VSWON,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6291,7 +6396,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x83: dItem_HYOI_PEAR_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VHYOI],
-        /* mBmdIdx   */ 0x0003,
+        /* mBmdIdx   */ VHYOI_BDL_VHYOI,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6408,12 +6513,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x8C: FLOWER_1
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x58],
-        /* mBmdIdx   */ 0x0012,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ00,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0005,
+        /* mBckIdx   */ FDAI_BCK_FOBJ00,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x08E0
@@ -6421,12 +6526,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x8D: FLOWER_2
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x59],
-        /* mBmdIdx   */ 0x0013,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ01,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0006,
+        /* mBckIdx   */ FDAI_BCK_FOBJ01,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x0860
@@ -6434,12 +6539,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x8E: FLOWER_3
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ 0x0014,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ02,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0007,
+        /* mBckIdx   */ FDAI_BCK_FOBJ02,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x0880
@@ -6447,7 +6552,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x8F: HEROS_FLAG
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ 0x0015,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ03,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6460,7 +6565,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x90: TAIRYO_FLAG
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ 0x0016,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ04,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6473,12 +6578,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x91: SALES_FLAG
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ 0x0017,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ05,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0008,
+        /* mBckIdx   */ FDAI_BCK_FOBJ05,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x1200
@@ -6486,12 +6591,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x92: WIND_FLAG
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5A],
-        /* mBmdIdx   */ 0x0018,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ06,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x0009,
+        /* mBckIdx   */ FDAI_BCK_FOBJ06,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x0760
@@ -6499,12 +6604,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x93: RED_FLAG
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
-        /* mBmdIdx   */ 0x0019,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ07,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x000A,
+        /* mBckIdx   */ FDAI_BCK_FOBJ07,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x1200
@@ -6512,12 +6617,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x94: FOSSIL_HEAD
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5C],
-        /* mBmdIdx   */ 0x001A,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ08,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x000B,
+        /* mBckIdx   */ FDAI_BCK_FOBJ08,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x1000
@@ -6525,7 +6630,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x95: WATER_STATUE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x64],
-        /* mBmdIdx   */ 0x001B,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ09,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6538,7 +6643,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x96: POSTMAN_STATUE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5A],
-        /* mBmdIdx   */ 0x001C,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ10,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
@@ -6551,12 +6656,12 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x97: PRESIDENT_STATUE
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5A],
-        /* mBmdIdx   */ 0x001D,
+        /* mBmdIdx   */ FDAI_BDL_FOBJ11,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
         /* mTevIdx   */ -1,
         /* mTevIdx2  */ -1,
-        /* mBckIdx   */ 0x000E,
+        /* mBckIdx   */ FDAI_BCK_FOBJ11,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
         /* mHeapSize */ 0x1000

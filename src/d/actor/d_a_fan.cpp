@@ -4,6 +4,8 @@
 //
 
 #include "d/actor/d_a_fan.h"
+#include "d/res/res_hsen1.h"
+#include "d/res/res_hsen3.h"
 #include "d/res/res_yaflw00.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_com_inf_game.h"
@@ -14,8 +16,8 @@
 
 const char* daFan_c::m_arcname[3] = { "Hsen1", "Hsen1", "Hsen3", };
 const char daFan_c::m_arcname2[8] = "Yaflw00";
-const s16 daFan_c::m_bdlidx[3] = { 0x05, 0x05, 0x04, };
-const s16 daFan_c::m_dzbidx[3] = { 0x0C, 0x0C, 0x07, };
+const s16 daFan_c::m_bdlidx[3] = { HSEN1_BDL_HSEN1, HSEN1_BDL_HSEN1, HSEN3_BDL_HSEN3, };
+const s16 daFan_c::m_dzbidx[3] = { HSEN1_DZB_HSEN1, HSEN1_DZB_HSEN1, HSEN3_DZB_HSEN3, };
 const f32 daFan_c::m_wind_length[3] = { 1600.0f, 1600.0f, 1220.0f, };
 const f32 daFan_c::m_wind_r[3] = { 120.0f, 120.0f, 780.0f, };
 const Vec daFan_c::m_wind_model_scale[3] = { { 1.0f, 1.6f, 1.0f, }, { 1.0f, 1.6f, 1.0f, }, { 3.0f, 2.9f, 3.0f, }, };

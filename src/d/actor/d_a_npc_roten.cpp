@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_roten.h"
+#include "d/res/res_ro.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_demo_item.h"
@@ -1389,72 +1390,72 @@ static char* l_npc_staff_id[] = {
 const char daNpcRoten_c::m_arcname[] = "Ro";
 
 static const int l_bmd_ix_tbl[] = {
-    0x02,
-    0x02,
-    0x02,
+    RO_BDL_RO,
+    RO_BDL_RO,
+    RO_BDL_RO,
 };
 
 static const int l_bck_ix_tbl[][10] = {
     {
-        0x00,
-        0x04,
-        0x07,
-        0x05,
-        0x06,
-        0x0A,
-        0x0B,
-        0x08,
-        0x09,
-        0x13,
+        RO_BCK_RO_WAIT01,
+        RO_BCK_RO_TALK01,
+        RO_BCK_RO_WALK,
+        RO_BCK_RO_TALK02,
+        RO_BCK_RO_TALK03,
+        RO_BCK_RO_TALK04,
+        RO_BCK_RO_TALK05,
+        RO_BCK_RO_WATASU,
+        RO_BCK_RO_ITEMWAIT,
+        RO_BCK_RO_WIND,
     },
     {
-        0x00,
-        0x04,
-        0x07,
-        0x05,
-        0x06,
-        0x0A,
-        0x0B,
-        0x08,
-        0x09,
-        0x13,
+        RO_BCK_RO_WAIT01,
+        RO_BCK_RO_TALK01,
+        RO_BCK_RO_WALK,
+        RO_BCK_RO_TALK02,
+        RO_BCK_RO_TALK03,
+        RO_BCK_RO_TALK04,
+        RO_BCK_RO_TALK05,
+        RO_BCK_RO_WATASU,
+        RO_BCK_RO_ITEMWAIT,
+        RO_BCK_RO_WIND,
     },
     {
-        0x00,
-        0x04,
-        0x07,
-        0x05,
-        0x06,
-        0x0A,
-        0x0B,
-        0x08,
-        0x09,
-        0x13,
+        RO_BCK_RO_WAIT01,
+        RO_BCK_RO_TALK01,
+        RO_BCK_RO_WALK,
+        RO_BCK_RO_TALK02,
+        RO_BCK_RO_TALK03,
+        RO_BCK_RO_TALK04,
+        RO_BCK_RO_TALK05,
+        RO_BCK_RO_WATASU,
+        RO_BCK_RO_ITEMWAIT,
+        RO_BCK_RO_WIND,
     },
 };
 
 static const int l_head_bmd_ix_tbl[] = {
-    0x17,
-    0x18,
-    0x19,
+    RO_BDL_RO_HAT,
+    RO_BDL_RO_HAT2,
+    RO_BDL_RO_HAT3,
 };
 
 static const int l_head_bck_ix_tbl[] = {
-    0x12,
-    0x10,
-    0x11,
+    RO_BCK_HAT_WID,
+    RO_BCK_HAT2_WIND,
+    RO_BCK_HAT3_WID,
 };
 
 static const int l_btp_ix_tbl[] = {
-    0x03,
-    0x03,
-    0x03,
+    RO_BTP_RO,
+    RO_BTP_RO,
+    RO_BTP_RO,
 };
 
 static const int l_bmt_ix_tbl[] = {
     -1,
-    0x0E,
-    0x0F,
+    RO_BMT_RO2,
+    RO_BMT_RO3,
 };
 
 static const int l_diff_flag_tbl[] = {

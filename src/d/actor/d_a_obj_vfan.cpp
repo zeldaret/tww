@@ -93,7 +93,7 @@ s32 daObjVfan::Act_c::Mthd_Create() {
     } else {
         phase_state = dComIfG_resLoad(&mPhs, M_arcname);
         if (phase_state == cPhs_COMPLEATE_e) {
-            phase_state = MoveBGCreate(M_arcname, 7, NULL, 0xa60);
+            phase_state = MoveBGCreate(M_arcname, VFAN_DZB_V_FAN_00, NULL, 0xa60);
 
             JUT_ASSERT(0xc6, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
         }

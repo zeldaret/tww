@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_monument.h"
+#include "d/res/res_esekh.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_a_obj.h"
@@ -16,8 +17,8 @@
 namespace daObjMonument {
     namespace {
         static Attr_c L_attr[2] = {
-            { 0x04, 0x08 },
-            { 0x05, 0x09 },
+            { ESEKH_BDL_ESEKH,  ESEKH_DZB_ESEKH },
+            { ESEKH_BDL_ESEKH2, ESEKH_DZB_ESEKH2 },
         };
 
         inline const Attr_c & attr(Type_e type) { return L_attr[type]; }

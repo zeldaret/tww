@@ -62,7 +62,7 @@ s32 daFloor_c::_create() {
 
     s32 rt = dComIfG_resLoad(&mPhs, m_arcname);
     if (rt == cPhs_COMPLEATE_e) {
-        if (!MoveBGCreate(m_arcname, 0x07, NULL, 0x8A0))
+        if (!MoveBGCreate(m_arcname, HHYU1_DZB_HHYU1, NULL, 0x8A0))
             return cPhs_ERROR_e;
     }
     return rt;

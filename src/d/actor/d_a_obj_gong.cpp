@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_gong.h"
+#include "d/res/res_vdora.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_a_obj.h"
@@ -38,8 +39,8 @@ BOOL daObjGong::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-0000028C       .text create_heap__Q29daObjGong5Act_cFv */
 bool daObjGong::Act_c::create_heap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 0x04));
-    J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, 0x07));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VDORA_INDEX_BDL_VDORA));
+    J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, VDORA_INDEX_BCK_05_VDORA_CUT02_HIT));
     JUT_ASSERT(0xbd, (modelData != 0) && (bck != 0));
 
     mpMorf = new mDoExt_McaMorf(

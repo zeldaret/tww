@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_ikari.h"
+#include "d/res/res_ikari.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
@@ -33,7 +34,13 @@ void daIkari_c::setMtx() {
 
 /* 000001C4-00000290       .text _createHeap__9daIkari_cFv */
 BOOL daIkari_c::_createHeap() {
-    static int ikari_bdl[5] = {0x03, 0x03, 0x03, 0x04, 0x05};
+    static int ikari_bdl[5] = {
+        IKARI_BDL_S_IKARI2,
+        IKARI_BDL_S_IKARI2,
+        IKARI_BDL_S_IKARI2,
+        IKARI_BDL_S_IKARI3,
+        IKARI_BDL_S_IKARI4,
+    };
 
     J3DModelData* modelData =
         static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ikari_bdl[mModelType]));

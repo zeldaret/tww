@@ -571,9 +571,9 @@ void daObjTpost_c::setAttention() {
 /* 00000EA4-0000100C       .text setAnm__12daObjTpost_cFScb */
 void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
-        0x04,
-        0x05,
-        0x06,
+        TORIPOST_BCK_POST_GET,
+        TORIPOST_BCK_POST_PUTOUT,
+        TORIPOST_BCK_POST_WAIT,
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {

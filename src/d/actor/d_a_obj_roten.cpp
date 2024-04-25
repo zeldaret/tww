@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_roten.h"
+#include "d/res/res_roten.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -35,14 +36,14 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000001A8-000002E4       .text CreateHeap__13daObj_Roten_cFv */
 BOOL daObj_Roten_c::CreateHeap() {
     static u32 bdl_arc_idx[] = {
-        0x04,
-        0x05,
-        0x06
+        ROTEN_BDL_ROTEN02,
+        ROTEN_BDL_ROTEN03,
+        ROTEN_BDL_ROTEN04
     };
     static u32 dzb_arc_idx[] = {
-        0x09,
-        0x0A,
-        0x0B
+        ROTEN_DZB_ROTEN02,
+        ROTEN_DZB_ROTEN03,
+        ROTEN_DZB_ROTEN04
     };
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, bdl_arc_idx[mType]));

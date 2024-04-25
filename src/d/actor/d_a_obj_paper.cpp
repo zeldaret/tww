@@ -4,6 +4,9 @@
 //
 
 #include "d/actor/d_a_obj_paper.h"
+#include "d/res/res_opaper.h"
+#include "d/res/res_ppos.h"
+#include "d/res/res_piwa.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -34,19 +37,56 @@ namespace daObjPaper {
             /* 0x0A */ s16 mAttentionOffset;
             /* 0x0C */ s16 mCullSphereRadius;
             /* 0x0E */ s16 mCullSphereYOffset;
-
             /* 0x10 */ s8 mAttentionDist1;
             /* 0x11 */ s8 mAttentionDist2;
             /* 0x12 */ u8 mTevType;
-
             /* 0x14 */ s16 mColCylinderRadius;
             /* 0x16 */ s16 mColCylinderHeight;
         };
 
         static const Attr_c L_attr[3] = {
-            { "Opaper", 0x04C0, 3, 0x00, 0x28, 0x28, 0x00, 0x1D, 0x1E, 0x01, 0x00, 0x00 },
-            { "Ppos",   0x04C0, 3, 0x00, 0x32, 0x3C, 0x00, 0x1F, 0x20, 0x00, 0x00, 0x00 },
-            { "Piwa",   0x04C0, 3, 0x3C, 0x82, 0x50, 0x3C, 0x1D, 0x1E, 0x00, 0x37, 0x73 }
+            {
+                /* mResName           */ "Opaper",
+                /* mHeapSize          */ 0x04C0,
+                /* mModelId           */ OPAPER_BDL_OPAPER,
+                /* mEyeOffset         */ 0x00,
+                /* mAttentionOffset   */ 0x28,
+                /* mCullSphereRadius  */ 0x28,
+                /* mCullSphereYOffset */ 0x00,
+                /* mAttentionDist1    */ 0x1D,
+                /* mAttentionDist2    */ 0x1E,
+                /* mTevType           */ 0x01,
+                /* mColCylinderRadius */ 0x00,
+                /* mColCylinderHeight */ 0x00,
+            },
+            {
+                /* mResName           */ "Ppos",
+                /* mHeapSize          */ 0x04C0,
+                /* mModelId           */ PPOS_BDL_PPOS,
+                /* mEyeOffset         */ 0x00,
+                /* mAttentionOffset   */ 0x32,
+                /* mCullSphereRadius  */ 0x3C,
+                /* mCullSphereYOffset */ 0x00,
+                /* mAttentionDist1    */ 0x1F,
+                /* mAttentionDist2    */ 0x20,
+                /* mTevType           */ 0x00,
+                /* mColCylinderRadius */ 0x00,
+                /* mColCylinderHeight */ 0x00,
+            },
+            {
+                /* mResName           */ "Piwa",
+                /* mHeapSize          */ 0x04C0,
+                /* mModelId           */ PIWA_BDL_PIWA,
+                /* mEyeOffset         */ 0x3C,
+                /* mAttentionOffset   */ 0x82,
+                /* mCullSphereRadius  */ 0x50,
+                /* mCullSphereYOffset */ 0x3C,
+                /* mAttentionDist1    */ 0x1D,
+                /* mAttentionDist2    */ 0x1E,
+                /* mTevType           */ 0x00,
+                /* mColCylinderRadius */ 0x37,
+                /* mColCylinderHeight */ 0x73,
+            }
         };
 
         inline const Attr_c & attr(Type_e type) { return L_attr[type]; }

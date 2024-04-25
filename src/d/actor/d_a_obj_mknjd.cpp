@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_mknjd.h"
+#include "d/res/res_mknjd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_op/f_op_msg.h"
@@ -36,11 +37,6 @@
 #define ACT_DISP_LINK 6
 #define ACT_LESSON 7
 #define ACT_TACT 8
-
-#define ID_EARTH_MDL 4
-#define ID_BREAK_MDL 5
-#define ID_WIND_MDL 6
-#define ID_COL_DZB 9
 
 static const char* daObjMknjD_jointName[] = {
     "Hahen1",
@@ -171,14 +167,14 @@ s16 daObjMknjD::Act_c::XyEventCB(int) {
 int daObjMknjD::Act_c::CreateHeap() {
     const void* temp_r26; // Fakematch to get it to use the same register for model_data_d and jntName
     if (m043E == true) {
-        temp_r26 = dComIfG_getObjectRes(M_arcname, ID_WIND_MDL);
+        temp_r26 = dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJK);
     }
     else {
-        temp_r26 = dComIfG_getObjectRes(M_arcname, ID_EARTH_MDL);
+        temp_r26 = dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJD);
     }
 
     J3DModelData* model_data_d = (J3DModelData*)temp_r26;
-    J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ID_BREAK_MDL);
+    J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJH);
 
     JUT_ASSERT(0x123, model_data_d != 0)
     JUT_ASSERT(0x124, model_data_h != 0)
@@ -313,7 +309,7 @@ s32 daObjMknjD::Act_c::Mthd_Create() {
     else {
         phase_state = dComIfG_resLoad(&mPhs, M_arcname);
         if (phase_state == cPhs_COMPLEATE_e) {
-            phase_state = MoveBGCreate(M_arcname, ID_COL_DZB, NULL, 0x65A0);
+            phase_state = MoveBGCreate(M_arcname, MKNJD_DZB_MKNJD, NULL, 0x65A0);
 
             JUT_ASSERT(0x1CA, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e))
         }

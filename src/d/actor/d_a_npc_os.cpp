@@ -1604,10 +1604,9 @@ void daNpc_Os_c::setAnm(int param_1) {
     };
 
     static s8 l_anmTbl[] = {
-        6,
-        6,
-        5,
-        0
+        OS_BCK_OS_MOVE01,
+        OS_BCK_OS_MOVE01,
+        OS_BCK_OS_AWAKE,
     };
 
     static anmPrm_c l_anmPrm[] = {
@@ -1680,32 +1679,32 @@ BOOL daNpc_Os_c::dNpc_Os_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f
 /* 00004DD4-00004F48       .text initBrkAnm__10daNpc_Os_cFUcb */
 BOOL daNpc_Os_c::initBrkAnm(u8 param_1, bool param_2) {
     struct AnmTableEntry {
-        u8 unk_1;
-        u32 unk_2;
-        f32 unk_3;
-        s32 unk_4;
-    };
+        /* 0x00 */ u8 brkFileIndex;
+        /* 0x04 */ int loopMode;
+        /* 0x08 */ f32 speed;
+        /* 0x0C */ s32 unk_4;
+    };  // Size: 0x10
 
     static AnmTableEntry brkAnmTbl[] = {
-        {0x0F, 0x00, 1.0f, 0},
-        {0x0F, 0x00, 1.0f, -1},
-        {0x0D, 0x00, 1.0f, 0},
-        {0x0D, 0x00, -1.0f, 0},
-        {0x10, 0x00, 1.0f, 0},
-        {0x10, 0x00, 0.0f, 0},
-        {0x0E, 0x02, 1.0f, 0},
-        {0x0D, 0x00, 0.0f, -1},
-        {0x0C, 0x02, 1.0f, 0},
+        {OS_BRK_TURN_OFF, J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  0},
+        {OS_BRK_TURN_OFF, J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  -1},
+        {OS_BRK_OS_AWAKE, J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  0},
+        {OS_BRK_OS_AWAKE, J3DFrameCtrl::LOOP_ONCE_e,   -1.0f, 0},
+        {OS_BRK_TURN_ON,  J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  0},
+        {OS_BRK_TURN_ON,  J3DFrameCtrl::LOOP_ONCE_e,   0.0f,  0},
+        {OS_BRK_TENMETU,  J3DFrameCtrl::LOOP_REPEAT_e, 1.0f,  0},
+        {OS_BRK_OS_AWAKE, J3DFrameCtrl::LOOP_ONCE_e,   0.0f,  -1},
+        {OS_BRK_LINK,     J3DFrameCtrl::LOOP_REPEAT_e, 1.0f,  0},
     };
 
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
 
     bool ret = false;
     if(field_0x7A2 != param_1) {
-        J3DAnmTevRegKey* a_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Os", brkAnmTbl[param_1].unk_1));
+        J3DAnmTevRegKey* a_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Os", brkAnmTbl[param_1].brkFileIndex));
         JUT_ASSERT(0xBB9, a_brk != 0);
 
-        if(mBrkAnm.init(modelData, a_brk, true, brkAnmTbl[param_1].unk_2, brkAnmTbl[param_1].unk_3, 0, -1, param_2, 0)) {
+        if(mBrkAnm.init(modelData, a_brk, TRUE, brkAnmTbl[param_1].loopMode, brkAnmTbl[param_1].speed, 0, -1, param_2, 0)) {
             field_0x7A2 = param_1;
             if(brkAnmTbl[param_1].unk_4 < 0) {
                 mBrkAnm.setFrame(mBrkAnm.getEndFrame());
