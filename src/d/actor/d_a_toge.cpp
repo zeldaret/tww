@@ -220,7 +220,7 @@ BOOL daToge_c::_execute() {
 
 /* 000009F4-00000A78       .text set_collision__8daToge_cFv */
 void daToge_c::set_collision() {
-    if ((u8)mEventState != 2) {
+    if (mEventState != 2) {
         cXyz center;
         center.x = current.pos.x;
         center.y = current.pos.y;
