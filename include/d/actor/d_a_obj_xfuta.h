@@ -6,20 +6,6 @@
 #include "f_op/f_op_actor.h"
 
 namespace daObjXfuta {
-static int tev_mode[] = {TEV_TYPE_ACTOR,
-                         TEV_TYPE_BG0,
-                         TEV_TYPE_BG1,
-                         TEV_TYPE_BG2,
-                         TEV_TYPE_BG3,
-                         TEV_TYPE_BG0_FULL,
-                         TEV_TYPE_BG1_FULL,
-                         TEV_TYPE_BG2_FULL,
-                         TEV_TYPE_BG3_FULL,
-                         TEV_TYPE_PLAYER,
-                         0x5B,
-                         0x5C,
-                         0x5D,
-                         0x5E};
 class Act_c : public fopAc_ac_c {
 public:
     virtual ~Act_c() {}
