@@ -1612,7 +1612,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tag_volcano"),
     ActorRel(NonMatching, "d_a_title"),
     ActorRel(NonMatching, "d_a_tn"),
-    ActorRel(NonMatching, "d_a_toge"),
+    ActorRel(Matching,    "d_a_toge", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_tori_flag"),
     ActorRel(Matching,    "d_a_wall", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_warpfout"),
