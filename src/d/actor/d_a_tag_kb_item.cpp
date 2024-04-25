@@ -6,7 +6,6 @@
 #include "d/actor/d_a_tag_kb_item.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 
 /* 00000078-000000C8       .text _delete__13daTagKbItem_cFv */
 bool daTagKbItem_c::_delete() {
@@ -86,24 +85,26 @@ static int daTagKbItem_IsDelete(void* i_this) {
 }
 
 static actor_method_class daTagKbItemMethodTable = {
-    (process_method_func)daTagKbItem_Create,  (process_method_func)daTagKbItem_Delete,
-    (process_method_func)daTagKbItem_Execute, (process_method_func)daTagKbItem_IsDelete,
+    (process_method_func)daTagKbItem_Create,
+    (process_method_func)daTagKbItem_Delete,
+    (process_method_func)daTagKbItem_Execute,
+    (process_method_func)daTagKbItem_IsDelete,
     (process_method_func)daTagKbItem_Draw,
 };
 
 actor_process_profile_definition g_profile_TAG_KB_ITEM = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcLy_CURRENT_e,
-    PROC_TAG_KB_ITEM,
-    &g_fpcLf_Method.base,
-    sizeof(daTagKbItem_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0127,
-    &daTagKbItemMethodTable,
-    fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TAG_KB_ITEM,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagKbItem_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0127,
+    /* Actor SubMtd */ &daTagKbItemMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

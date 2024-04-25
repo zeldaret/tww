@@ -1,6 +1,8 @@
 #ifndef RES_ALWAYS_H
 #define RES_ALWAYS_H
 
+#include "global.h"
+
 enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     ALWAYS_BCK_FA=0xC,
@@ -19,7 +21,7 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BCK_YJ_LOOP=0x19,
     ALWAYS_BCK_YJ_OUT=0x1A,
     ALWAYS_BCK_YJ_SCALE=0x1B,
-
+    
     /* BDL */
     ALWAYS_BDL_ARROWITEM=0x1E,
     ALWAYS_BDL_FA=0x1F,
@@ -35,7 +37,7 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BDL_VHAPL=0x29,
     ALWAYS_BDL_VHRTL=0x2A,
     ALWAYS_BDL_VKEYL=0x2B,
-
+    
     /* BDLM */
     ALWAYS_BDL_IB=0x2E,
     ALWAYS_BDL_MPA_SIMI=0x2F,
@@ -54,17 +56,17 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BDL_YA=0x3C,
     ALWAYS_BDL_YAZIRUSHI_01=0x3D,
     ALWAYS_BDL_YTHDR00=0x3E,
-
+    
     /* BMTM */
     ALWAYS_BMT_ICE=0x41,
-
+    
     /* BPK */
     ALWAYS_BPK_YJ_DELETE=0x44,
     ALWAYS_BPK_YJ_IN=0x45,
     ALWAYS_BPK_YJ_LOOP=0x46,
     ALWAYS_BPK_YJ_OUT=0x47,
     ALWAYS_BPK_YJ_SCALE=0x48,
-
+    
     /* BRK */
     ALWAYS_BRK_IB_01=0x4B,
     ALWAYS_BRK_IB_02=0x4C,
@@ -74,7 +76,7 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BRK_VHANL=0x50,
     ALWAYS_BRK_VLUPL=0x51,
     ALWAYS_BRK_YTHDR00=0x52,
-
+    
     /* BTK */
     ALWAYS_BTK_EFA_USONAMI_01=0x55,
     ALWAYS_BTK_IB=0x56,
@@ -88,17 +90,17 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BTK_W_PILLAR_A=0x5E,
     ALWAYS_BTK_YA=0x5F,
     ALWAYS_BTK_YTHDR00=0x60,
-
+    
     /* BTP */
     ALWAYS_BTP_MPA_SIMI=0x63,
     ALWAYS_BTP_MPI_KIBAKO_TARU=0x64,
     ALWAYS_BTP_MPI_KINOHAHEN=0x65,
     ALWAYS_BTP_MPI_KOISHI=0x66,
     ALWAYS_BTP_MPM_TUBO=0x67,
-
+    
     /* DAT */
     ALWAYS_BIN_ITEM_TABLE=0x6A,
-
+    
     /* TEX */
     ALWAYS_BTI_AK_HOUSHI00=0x6D,
     ALWAYS_BTI_AK_SMOKE01=0x6E,

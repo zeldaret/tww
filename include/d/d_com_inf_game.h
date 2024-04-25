@@ -38,6 +38,7 @@ class J2DOrthoGraph;
 enum daPy__PlayerStatus0 {
     daPyStts0_UNK1_e           = 0x00000001,
     daPyStts0_UNK10_e          = 0x00000010,
+    daPyStts0_UNK80_e          = 0x00000080,
     daPyStts0_UNK100_e         = 0x00000100,
     daPyStts0_BOW_AIM_e        = 0x00001000,
     daPyStts0_SWORD_SWING_e    = 0x00008000,
@@ -404,6 +405,7 @@ public:
     void setCurrentGrafPort(J2DOrthoGraph* i_graf) { mCurrentGrafPort = i_graf; }
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
+    view_port_class* getCurrentViewport() { return mCurrentViewport; }
     void setCurrentViewport(view_port_class* i_viewport) { mCurrentViewport = i_viewport; }
     s32 getWindowNum() { return mDlstWindowNum; }
     void setWindowNum(u8 num) { mDlstWindowNum = num; }
@@ -497,6 +499,8 @@ public:
 
     u8 getButtonMode() { return mButtonMode; }
     void setButtonMode(u8 mode) { mButtonMode = mode; }
+
+    void setInputPassword(const char* password) { strcpy(mInputPassword, password); }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -645,8 +649,7 @@ public:
     /* 0x4964 */ u8 mGameLanguage;
 #endif
     /* 0x4965 */ u8 field_0x4965;
-    /* 0x4966 */ char field_0x4966[1];
-    /* 0x4967 */ u8 field_0x4967[0x4977 - 0x4967];
+    /* 0x4966 */ char mInputPassword[0x11];
     /* 0x4977 */ u8 field_0x4977;
     /* 0x4978 */ u8 field_0x4978;
     /* 0x4979 */ u8 m2dShow;
@@ -962,6 +965,10 @@ inline u8 dComIfGs_getReserveNum(int i_idx) {
 
 inline void dComIfGs_setReserveNum(int i_idx, u8 num) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().setReserveNum(i_idx, num);
+}
+
+inline void dComIfGs_setReserveItemChange(u8 idx, u8 no) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemChange(idx, no);
 }
 
 inline u8 dComIfGs_checkReserveItemEmpty() {
@@ -2369,6 +2376,7 @@ inline void dComIfGp_setWindow(int idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f
 inline J2DOrthoGraph* dComIfGp_getCurrentGrafPort() { return g_dComIfG_gameInfo.play.getCurrentGrafPort(); }
 inline void dComIfGp_setCurrentWindow(dDlst_window_c* window) { return g_dComIfG_gameInfo.play.setCurrentWindow(window); }
 inline void dComIfGp_setCurrentView(view_class* view) { return g_dComIfG_gameInfo.play.setCurrentView(view); }
+inline view_port_class* dComIfGp_getCurrentViewport() { return g_dComIfG_gameInfo.play.getCurrentViewport(); }
 inline void dComIfGp_setCurrentViewport(view_port_class* viewport) { return g_dComIfG_gameInfo.play.setCurrentViewport(viewport); }
 
 inline dADM_CharTbl* dComIfGp_CharTbl() {
@@ -2446,6 +2454,10 @@ inline void dComIfGp_setButtonActionMode(u8 mode) {
     g_dComIfG_gameInfo.play.setButtonMode(mode);
 }
 
+inline void dComIfGp_setInputPassword(const char* password) {
+    g_dComIfG_gameInfo.play.setInputPassword(password);
+}
+
 /**
  * === EVENT ===
  */
@@ -2502,7 +2514,8 @@ inline BOOL dComIfGp_event_compulsory(void* param_1, const char* param_2 = NULL,
     return g_dComIfG_gameInfo.play.getEvent().compulsory(param_1, param_2, param_3);
 }
 
-inline s32 dComIfGp_event_order(u16 eventType, u16 priority, u16 flag, u16 hind, void* pActor1, void* pActor2, s16 eventID, u8 infoIdx) {
+inline s32 dComIfGp_event_order(u16 eventType, u16 priority, u16 flag, u16 hind, void* pActor1,
+                                void* pActor2, s16 eventID = -1, u8 infoIdx = -1) {
     return g_dComIfG_gameInfo.play.getEvent().order(eventType, priority, flag, hind, pActor1, pActor2, eventID, infoIdx);
 }
 
@@ -2565,7 +2578,7 @@ inline u32 dComIfGp_evmng_getEventPrio(s16 eventIdx) {
     return g_dComIfG_gameInfo.play.getEvtManager().getEventPrio(eventIdx);
 }
 
-inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo) {
+inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo = -1) {
     return g_dComIfG_gameInfo.play.getEvtManager().getEventIdx(pName, evNo);
 }
 
@@ -2577,8 +2590,8 @@ inline int dComIfGp_evmng_getMyStaffId(const char* pName, fopAc_ac_c* pActor = N
     return dComIfGp_getPEvtManager()->getMyStaffId(pName, pActor, staffType);
 }
 
-inline int dComIfGp_evmng_getMyActIdx(int staffIdx, char** pActions, int actionCount, int force, int param_5) {
-    return dComIfGp_getPEvtManager()->getMyActIdx(staffIdx, pActions, actionCount, force, param_5);
+inline int dComIfGp_evmng_getMyActIdx(int staffIdx, char** pActions, int actionCount, BOOL force, int nameType) {
+    return dComIfGp_getPEvtManager()->getMyActIdx(staffIdx, pActions, actionCount, force, nameType);
 }
 
 inline char* dComIfGp_evmng_getMyActName(int staffIdx) {
@@ -2670,7 +2683,7 @@ inline void dComIfGp_evmng_cancelStartDemo() {
 }
 
 inline BOOL dComIfGp_evmng_existence(const char* pName) {
-    s16 eventIdx = dComIfGp_evmng_getEventIdx(pName, 0xFF);
+    s16 eventIdx = dComIfGp_evmng_getEventIdx(pName);
     return g_dComIfG_gameInfo.play.getEvtManager().getEventData(eventIdx) != NULL;
 }
 
@@ -2692,16 +2705,19 @@ inline u8 dComIfGp_evmng_getEventEndSound(s16 eventIdx) {
 
 int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
                        f32 y, f32 param_8, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
-                       s16 rotY, f32 param_12, GXTexObj* pTexObj);
+                       s16 rotY = 0, f32 param_12 = 1.0f,
+                       GXTexObj* pTexObj = dDlst_shadowControl_c::getSimpleTex());
 
-inline int dComIfGd_setSimpleShadow(cXyz* pPos, f32 param_1, f32 param_2, cXyz* param_3, s16 angle,
-                                    f32 param_5, GXTexObj* pTex) {
-    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(pPos, param_1, param_2, param_3, angle,
-                                                       param_5, pTex);
+inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 param_1, f32 param_2, cXyz* param_3,
+                                    s16 i_angle = 0, f32 param_5 = 1.0f,
+                                    GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex()) {
+    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, param_1, param_2, param_3, i_angle,
+                                                       param_5, i_tex);
 }
 
-int dComIfGd_setSimpleShadow2(cXyz* pPos, f32 param_1, f32 param_2, cBgS_PolyInfo& pPolyInfo,
-                              s16 param_4, f32 param_5, GXTexObj* pTex);
+int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly,
+                              s16 i_angle = 0, f32 param_5 = 1.0f,
+                              GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex());
 
 inline int dComIfGd_setRealShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5,
                                    f32 param_6, dKy_tevstr_c* pTevStr) {
@@ -2722,8 +2738,6 @@ inline bool dComIfGd_addRealShadow(u32 id, J3DModel* pModel) {
 inline void dComIfGd_imageDrawShadow(Mtx mtx) {
     g_dComIfG_gameInfo.drawlist.imageDrawShadow(mtx);
 }
-
-int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly, s16 i_angle, f32 param_5, GXTexObj* i_tex);
 
 inline void dComIfGd_set3DlineMat(mDoExt_3DlineMat_c* mat) {
     g_dComIfG_gameInfo.drawlist.set3DlineMat(mat);

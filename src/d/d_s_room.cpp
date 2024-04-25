@@ -67,7 +67,7 @@ char* setArcName(room_of_scene_class* i_this) {
 }
 
 /* 80236A0C-80236A14       .text dScnRoom_Draw__FP19room_of_scene_class */
-BOOL dScnRoom_Draw(room_of_scene_class* i_this) {
+static BOOL dScnRoom_Draw(room_of_scene_class* i_this) {
     return TRUE;
 }
 
@@ -99,7 +99,7 @@ void objectSetCheck(room_of_scene_class* i_this) {
 }
 
 /* 80236B1C-80236BAC       .text dScnRoom_Execute__FP19room_of_scene_class */
-BOOL dScnRoom_Execute(room_of_scene_class* i_this) {
+static BOOL dScnRoom_Execute(room_of_scene_class* i_this) {
     u32 roomNo = fopScnM_GetParam(i_this);
     setMapImage(i_this);
 
@@ -119,12 +119,12 @@ BOOL dScnRoom_Execute(room_of_scene_class* i_this) {
 }
 
 /* 80236BAC-80236BB4       .text dScnRoom_IsDelete__FP19room_of_scene_class */
-BOOL dScnRoom_IsDelete(room_of_scene_class* i_this) {
+static BOOL dScnRoom_IsDelete(room_of_scene_class* i_this) {
     return TRUE;
 }
 
 /* 80236BB4-80236D24       .text dScnRoom_Delete__FP19room_of_scene_class */
-BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
+static BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
     int roomNo = fopScnM_GetParam(i_this);
     deleteMapImage(i_this);
     const char * arcName = setArcName(i_this);
@@ -285,7 +285,7 @@ s32 phase_4(room_of_scene_class* i_this) {
 }
 
 /* 802372C4-802372F4       .text dScnRoom_Create__FP11scene_class */
-s32 dScnRoom_Create(scene_class* i_scn) {
+static s32 dScnRoom_Create(scene_class* i_scn) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_0,
         (cPhs__Handler)phase_1,

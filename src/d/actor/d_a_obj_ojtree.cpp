@@ -4,23 +4,14 @@
 //
 
 #include "SSystem/SComponent/c_bg_w.h"
+#include "d/res/res_ojtree.h"
 #include "d/actor/d_a_obj_ojtree.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
 
-
-
 Mtx daObjOjtree::Act_c::M_tmp_mtx;
 const char daObjOjtree::Act_c::M_arcname[] = "Ojtree";
-
-enum OJTREE_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    OJTREE_BDL_OJTREE=0x4,
-    
-    /* DZB */
-    OJTREE_DZB_OJTREE=0x7,
-};
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjOjtree5Act_cFv */
 int daObjOjtree::Act_c::CreateHeap() {
@@ -141,8 +132,8 @@ namespace daObjOjtree {
 
 actor_process_profile_definition g_profile_Obj_Ojtree = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Ojtree,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjOjtree::Act_c),
@@ -151,7 +142,7 @@ actor_process_profile_definition g_profile_Obj_Ojtree = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x002D,
     /* Actor SubMtd */ &daObjOjtree::Mthd_Table,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

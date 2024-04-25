@@ -673,7 +673,7 @@ u16 fopNpc_npc_c::talk(int param_1) {
         }
 
         mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgNo, this);
-        mpCurrMsg = 0;
+        mpCurrMsg = NULL;
     }
     else {
         if(mpCurrMsg) {

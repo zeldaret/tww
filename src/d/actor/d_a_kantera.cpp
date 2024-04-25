@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_kantera.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001E8       .text kantera_nodeCallBack__FP7J3DNodei */
 static BOOL kantera_nodeCallBack(J3DNode*, int) {
@@ -61,3 +61,27 @@ static s32 daKantera_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daKantera_Method = {
+    (process_method_func)daKantera_Create,
+    (process_method_func)daKantera_Delete,
+    (process_method_func)daKantera_Execute,
+    (process_method_func)daKantera_IsDelete,
+    (process_method_func)daKantera_Draw,
+};
+
+actor_process_profile_definition g_profile_KANTERA = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KANTERA,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kantera_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00B4,
+    /* Actor SubMtd */ &l_daKantera_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

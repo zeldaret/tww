@@ -92,8 +92,8 @@ public:
     void setLinkGroupInfo(u8);
     void setScene(s32, s32, s32, s32);
     u32 expandSceneBgmNum(u32);
-    void checkLinkOnSea();
-    void checkLinkOnBoardSea();
+    BOOL checkLinkOnSea();
+    BOOL checkLinkOnBoardSea();
     void setSceneName(char*, s32, s32);
     int spotNameToId(char*);
     void sceneChange(u32, u32, u32, s32);
@@ -153,13 +153,12 @@ public:
     void setMinute(s32 i_minute) { mMinute = i_minute; }
     void setWeekday(s32 i_weekday) { mWeekday = i_weekday; }
 
-    static JAIZelBasic* getInterface() { return zel_basic; }
+    f32 calcMainBgmVol() { return field_0x0080 * field_0x0084 * field_0x0088 * field_0x008c * field_0x0090 * field_0x0094 * field_0x0098 * field_0x009c * field_0x00ac; }
+    f32 calcSubBgmVol() { return field_0x00a0 * field_0x00a4 * field_0x00a8; }
 
     // TODO
     void bstHoriOff() {}
     void bstHoriOn() {}
-    f32 calcMainBgmVol() { return field_0x0080 * field_0x0084 * field_0x0088 * field_0x008c * field_0x0090 * field_0x0094 * field_0x0098 * field_0x009c * field_0x00ac; }
-    f32 calcSubBgmVol() { return field_0x00a0 * field_0x00a4 * field_0x00a8; }
     void checkSeMute() {}
     void checkTBoxDemo() {}
     void getCurCamera(u32) {}
@@ -167,10 +166,18 @@ public:
     void getLinkSwShieldBeat() {}
     void isTaktUsing() {}
 
+    static JAIZelBasic* getInterface() { return zel_basic; }
+
     struct scene_info_s {
         u16 bgmNum;
         u8 field_0x2;
         u8 field_0x3;
+    };
+    struct isle_area_s {
+        f32 field_0x0;
+        f32 field_0x4;
+        f32 field_0x8;
+        f32 field_0xC;
     };
 
     static JAIZelBasic* zel_basic;
@@ -186,7 +193,7 @@ public:
     static scene_info_s m_scene_info[];
     static scene_info_s m_isle_info[];
     static const char* spot_dir_name[];
-    // static mIsleArea;
+    static isle_area_s mIsleArea[];
 
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
@@ -229,9 +236,9 @@ public:
     /* 0x0068 */ JAISound* mpMainBgmSound;
     /* 0x006C */ JAISound* mpSubBgmSound;
     /* 0x0070 */ JAISound* mpStreamBgmSound;
-    /* 0x0074 */ int field_0x0074;
-    /* 0x0078 */ u32 field_0x0078;
-    /* 0x007C */ s32 field_0x007c;
+    /* 0x0074 */ u32 mSubBgmNum;
+    /* 0x0078 */ u32 mMainBgmNum;
+    /* 0x007C */ u32 mStreamBgmNum;
     /* 0x0080 */ f32 field_0x0080;
     /* 0x0084 */ f32 field_0x0084;
     /* 0x0088 */ f32 field_0x0088;
@@ -294,12 +301,12 @@ public:
     /* 0x020C */ int field_0x020c;
     /* 0x0210 */ int field_0x0210;
     /* 0x0214 */ int field_0x0214;
-    /* 0x0218 */ int field_0x0218;
+    /* 0x0218 */ u32 field_0x0218;
     /* 0x021C */ u8 mCameraSeaFloorGroupInfo;
     /* 0x021D */ u8 mLinkSeaFloorGroupInfo;
     /* 0x021E */ u8 field_0x021e;
     /* 0x021F */ u8 field_0x021F[0x0220 - 0x021F];
-    /* 0x0220 */ int field_0x0220;
+    /* 0x0220 */ s32 field_0x0220;
     /* 0x0224 */ int field_0x0224;
     /* 0x0228 */ u32 mNextSceneBgmId;
     /* 0x022C */ u8 field_0x022c;
@@ -339,8 +346,10 @@ public:
     /* 0x1F40 */ f32 field_0x1f40;
     /* 0x1F44 */ int field_0x1f44;
     /* 0x1F48 */ int field_0x1f48;
-    /* 0x1F4C */ int field_0x1f4c;
-    /* 0x1F50 */ u8 field_0x1F50[0x203C - 0x1F50];
+    /* 0x1F4C */ struct {
+        int field_0x00;
+        int field_0x04;
+     } field_0x1f4c[0x1E];
     /* 0x203C */ u8 field_0x203c;
     /* 0x203D */ u8 field_0x203d;
     /* 0x2040 */ int field_0x2040[4];

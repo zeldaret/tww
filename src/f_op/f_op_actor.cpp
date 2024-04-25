@@ -172,14 +172,14 @@ s32 fopAc_Create(void* pProc) {
         actor->current = actor->home;
         actor->eyePos = actor->home.pos;
         actor->maxFallSpeed = -100.0f;
-        actor->attention_info.distances[0] = 1;
-        actor->attention_info.distances[1] = 2;
-        actor->attention_info.distances[2] = 3;
-        actor->attention_info.distances[3] = 7;
-        actor->attention_info.distances[4] = 8;
-        actor->attention_info.distances[7] = 15;
-        actor->attention_info.distances[5] = 16;
-        actor->attention_info.distances[6] = 16;
+        actor->attention_info.distances[fopAc_Attn_TYPE_MISC_e] = 1;
+        actor->attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 2;
+        actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 3;
+        actor->attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 7;
+        actor->attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 8;
+        actor->attention_info.distances[fopAc_Attn_TYPE_SHIP_e] = 15;
+        actor->attention_info.distances[fopAc_Attn_TYPE_DOOR_e] = 16;
+        actor->attention_info.distances[fopAc_Attn_TYPE_TREASURE_e] = 16;
         actor->attention_info.position = actor->home.pos;
         dKy_tevstr_init(&actor->tevStr, actor->home.roomNo, 0xFF);
     }

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_ghostship.h"
+#include "d/res/res_ayush.h"
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
@@ -11,18 +12,6 @@
 #include "d/d_s_play.h"
 #include "d/d_kankyo_wether.h"
 #include "d/res/res_cloth.h"
-
-enum AYUSH_RES_FILE_ID { // IDs and indexes are synced
-    /* BDLM */
-    AYUSH_BDL_AYUSH=0x5,
-    
-    /* BTK */
-    AYUSH_BTK_AYUSH=0x8,
-    
-    /* TEX */
-    AYUSH_BTI_B_GSHIP_HATA=0xB,
-    AYUSH_BTI_B_GSHIP_HO=0xC,
-};
 
 // Needed for .data to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -462,18 +451,18 @@ static actor_method_class daGhostshipMethodTable = {
 };
 
 actor_process_profile_definition g_profile_AYUSH = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_AYUSH,
-    &g_fpcLf_Method.base,
-    sizeof(daGhostship_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x009E,
-    &daGhostshipMethodTable,
-    fopAcStts_UNK40000_e | fopAcStts_SHOWMAP_e | 0x3,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_4_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_AYUSH,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daGhostship_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x009E,
+    /* Actor SubMtd */ &daGhostshipMethodTable,
+    /* Status       */ 0x03 | fopAcStts_SHOWMAP_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
 };

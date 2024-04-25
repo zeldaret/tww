@@ -9,6 +9,7 @@
 // the DOL, even though this is an ugly hack and they're now in the wrong translation unit instead.
 #include "d/actor/d_a_player.h"
 u32 daPy_py_c::checkPlayerFly() const { return 0; }
+#include "d/d_procname.h"
 
 #include "d/actor/d_a_arrow.h"
 #include "m_Do/m_Do_mtx.h"
@@ -844,7 +845,7 @@ BOOL daArrow_c::procMove() {
                 current.pos = old.pos;
                 field_0x69c = 0x2C00;
                 csXyz temp9;
-                cM3d_CalcVecZAngle(triPla->mNormal, &temp9);
+                cM3d_CalcVecZAngle(*triPla->GetNP(), &temp9);
                 
                 dComIfGp_particle_setP1(dPa_name::ID_COMMON_PURPLE_HIT, &field_0x6a8, &temp9);
                 fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_REBOUND, mtrlSndId);
@@ -910,7 +911,7 @@ BOOL daArrow_c::procReturn() {
         cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinChk);
         f32 temp2 = speed.abs();
         cXyz temp1;
-        C_VECReflect(&speed, &triPla->mNormal, &temp1);
+        C_VECReflect(&speed, triPla->GetNP(), &temp1);
         speed.x = temp1.x*temp2*0.5f;
         speed.y = temp1.y*temp2*0.5f;
         speed.z = temp1.z*temp2*0.5f;
@@ -1294,7 +1295,7 @@ static BOOL daArrowIsDelete(void* i_this) {
     return TRUE;
 }
 
-actor_method_class daArrowMethodTable = {
+static actor_method_class daArrowMethodTable = {
     (process_method_func)daArrowCreate,
     (process_method_func)daArrowDelete,
     (process_method_func)daArrowExecute,
@@ -1304,8 +1305,8 @@ actor_method_class daArrowMethodTable = {
 
 actor_process_profile_definition g_profile_ARROW = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 9,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0009,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_ARROW,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daArrow_c),

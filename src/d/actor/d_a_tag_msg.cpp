@@ -265,7 +265,7 @@ s32 daTag_Msg_c::create() {
     shape_angle.x = 0;
     current.angle.z = 0;
     current.angle.x = 0;
-    attention_info.flags = fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e;
     if (getMessage() != 0x836) {
         attention_info.position.y += 150;
         eyePos.y += 150.0f;
@@ -305,7 +305,7 @@ static actor_method_class l_daTag_Msg_Method = {
 
 actor_process_profile_definition g_profile_TAG_MSG = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_TAG_MSG,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

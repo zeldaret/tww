@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_vmc.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q28daObjVmc5Act_cFP10fopAc_ac_c */
 void daObjVmc::Act_c::solidHeapCB(fopAc_ac_c*) {
@@ -70,3 +70,57 @@ BOOL daObjVmc::Act_c::_execute() {
 BOOL daObjVmc::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daObjVmc {
+namespace {
+/* 000012CC-000012EC       .text Mthd_Create__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000012EC-00001310       .text Mthd_Delete__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001310-00001334       .text Mthd_Execute__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001334-00001358       .text Mthd_Draw__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001358-00001360       .text Mthd_IsDelete__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjVmc
+
+actor_process_profile_definition g_profile_Obj_Vmc = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Vmc,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjVmc::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0022,
+    /* Actor SubMtd */ &daObjVmc::Mthd_Table,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

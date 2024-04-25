@@ -14,7 +14,6 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/types.h"
 
 
 // Needed for the .data section to match.
@@ -140,7 +139,7 @@ void daObj_Hole_c::modeEvent() {
         }
     }
     else {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_PITFALL", 1);
+        fopAcM_orderOtherEvent(this, "DEFAULT_PITFALL");
     }
 }
 
@@ -315,18 +314,18 @@ static actor_method_class daObj_HoleMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_HOLE = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_OBJ_HOLE,
-    &g_fpcLf_Method.base,
-    sizeof(daObj_Hole_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01B7,
-    &daObj_HoleMethodTable,
-    fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_4_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OBJ_HOLE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Hole_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01B7,
+    /* Actor SubMtd */ &daObj_HoleMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
 };

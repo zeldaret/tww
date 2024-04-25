@@ -6,7 +6,6 @@
 #include "d/actor/d_a_obj_gaship2.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "dolphin/types.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
@@ -118,7 +117,7 @@ namespace daObjGaship2 {
             return TRUE;
         }
 
-        actor_method_class Mthd_Table = {
+        static actor_method_class Mthd_Table = {
             (process_method_func) Mthd_Create,
             (process_method_func) Mthd_Delete,
             (process_method_func) Mthd_Execute,
@@ -130,7 +129,7 @@ namespace daObjGaship2 {
 
 actor_process_profile_definition g_profile_Obj_Gaship2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Gaship2,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -142,5 +141,5 @@ actor_process_profile_definition g_profile_Obj_Gaship2 = {
     /* Actor SubMtd */ &daObjGaship2::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* Cull Type    */ fopAc_CULLBOX_0_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

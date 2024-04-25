@@ -4,10 +4,12 @@
 //
 
 #include "d/actor/d_a_wall.h"
+#include "d/res/res_hbw1.h"
+#include "d/res/res_htw1.h"
+#include "d/res/res_hbw2.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -16,30 +18,6 @@ static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
-
-enum HBW1_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    HBW1_BDL_HBW1=0x4,
-    
-    /* DZB */
-    HBW1_DZB_HBW1=0x7,
-};
-
-enum HTW1_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    HTW1_BDL_HTW1=0x4,
-    
-    /* DZB */
-    HTW1_DZB_HTW1=0x7,
-};
-
-enum HBW2_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    HBW2_BDL_HBW2=0x4,
-    
-    /* DZB */
-    HBW2_DZB_HBW2=0x7,
-};
 
 const s16 daWall_c::m_heapsize[3] = {
     0x1160,
@@ -361,14 +339,16 @@ static BOOL daWall_IsDelete(void*) {
 }
 
 static actor_method_class daWallMethodTable = {
-    (process_method_func)daWall_Create,  (process_method_func)daWall_Delete,
-    (process_method_func)daWall_Execute, (process_method_func)daWall_IsDelete,
+    (process_method_func)daWall_Create,
+    (process_method_func)daWall_Delete,
+    (process_method_func)daWall_Execute,
+    (process_method_func)daWall_IsDelete,
     (process_method_func)daWall_Draw,
 };
 
 actor_process_profile_definition g_profile_WALL = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_WALL,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -376,7 +356,7 @@ actor_process_profile_definition g_profile_WALL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x198,
+    /* Priority     */ 0x0198,
     /* Actor SubMtd */ &daWallMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

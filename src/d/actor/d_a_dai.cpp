@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_dai.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000C4       .text _delete__7daDai_cFv */
 BOOL daDai_c::_delete() {
@@ -115,3 +115,28 @@ static BOOL daDai_Execute(void*) {
 static BOOL daDai_IsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daDaiMethodTable = {
+    (process_method_func)daDai_Create,
+    (process_method_func)daDai_Delete,
+    (process_method_func)daDai_Execute,
+    (process_method_func)daDai_IsDelete,
+    (process_method_func)daDai_Draw,
+};
+
+actor_process_profile_definition g_profile_DAI = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_DAI,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daDai_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0138,
+    /* Actor SubMtd */ &daDaiMethodTable,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

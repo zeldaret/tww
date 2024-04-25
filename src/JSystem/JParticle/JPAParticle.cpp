@@ -10,16 +10,79 @@
 
 /* 8025DEF4-8025E62C       .text initParticle__15JPABaseParticleFv */
 void JPABaseParticle::initParticle() {
-    JPABaseEmitter * emtr = JPABaseEmitter::emtrInfo.mpCurEmitter;
+    JPAEmitterInfo & emtrInfo = JPABaseEmitter::emtrInfo;
+    JPABaseEmitter * emtr = emtrInfo.mpCurEmitter;
+
+    JGeometry::TVec3<f32> velOmni;
+    JGeometry::TVec3<f32> velAxis;
+    JGeometry::TVec3<f32> velDir;
+    JGeometry::TVec3<f32> velRndm;
+
     mStatus = 0x01;
-    mFieldAccel.set(1.0f, 1.0f, 1.0f);
+    mFieldAccel.zero();
     mFieldDrag = 1.0f;
     mDrag = 1.0f;
-    MTXMultVec(JPABaseEmitter::emtrInfo.mEmitterGlobalSR, JPABaseEmitter::emtrInfo.mVolumePos, mLocalPosition);
+    MTXMultVec(emtrInfo.mEmitterGlobalSR, emtrInfo.mVolumePos, mLocalPosition);
     if ((emtr->mDataFlag & 0x08) != 0)
         mStatus |= 0x20;
-    mGlobalPosition = JPABaseEmitter::emtrInfo.mEmitterGlobalCenter;
-    // TODO: calculate vel/pos
+
+    mGlobalPosition.set(emtrInfo.mEmitterGlobalCenter);
+
+    if (emtr->mInitialVelOmni)
+        velOmni.setLength(emtrInfo.mVelOmni, emtr->mInitialVelOmni);
+    else
+        velOmni.zero();
+
+    if (emtr->mInitialVelAxis)
+        velAxis.setLength(emtrInfo.mVelAxis, emtr->mInitialVelAxis);
+    else
+        velAxis.zero();
+
+    velDir.zero();
+    if (emtr->mInitialVelDir != 0.0f) {
+        Mtx mtx;
+        JPAGetYZRotateMtx(emtr->mSpread * emtr->getRandomSS(), emtr->getRandomSS(), mtx);
+        MTXConcat(emtrInfo.mEmitterDirMtx, mtx, mtx);
+        velDir.set(mtx[0][2], mtx[1][2], mtx[2][2]);
+        velDir.scale(emtr->mInitialVelDir);
+    }
+
+    velRndm.zero();
+    if (emtr->mInitialVelRndm != 0.0f) {
+        velRndm.set(emtr->getRandomSF(), emtr->getRandomSF(), emtr->getRandomSF());
+        velRndm.scale(emtr->mInitialVelRndm);
+    }
+
+    f32 velRatio = 1.0f + emtr->getRandomRF() * emtr->mInitialVelRatio;
+    mBaseVel.set(
+        velRatio * (velOmni.x + velAxis.x + velDir.x + velRndm.x),
+        velRatio * (velOmni.y + velAxis.y + velDir.y + velRndm.y),
+        velRatio * (velOmni.z + velAxis.z + velDir.z + velRndm.z)
+    );
+
+    if (emtr->checkEmDataFlag(0x04))
+        mBaseVel.mul(emtr->mEmitterScale);
+
+    MTXMultVec(emtrInfo.mEmitterGlobalRot, mBaseVel, mBaseVel);
+
+    f32 accel = emtr->mAccel * (1.0f + emtr->getRandomRF() * emtr->mAccelRndm);
+    mAccel.setLength(mBaseVel, accel);
+
+    mAirResist = emtr->mAirResist + emtr->mAirResistRndm * emtr->getRandomSF();
+    if (mAirResist > 1.0f)
+        mAirResist = 1.0f;
+
+    mMoment = emtr->mMoment * (1.0f - emtr->mMomentRndm * emtr->getRandomF());
+    mCurFrame = -1.0f;
+    mLifeTime = emtr->mLifeTime * (1.0f - emtr->mLifeTimeRndm * emtr->getRandomF());
+    mCurNormTime = 0.0f;
+
+    mPosition.set(
+        mGlobalPosition.x + mLocalPosition.x * emtrInfo.mPublicScale.x,
+        mGlobalPosition.y + mLocalPosition.y * emtrInfo.mPublicScale.y,
+        mGlobalPosition.z + mLocalPosition.z * emtrInfo.mPublicScale.z
+    );
+
     mpCallBack2 = emtr->mpParticleCallBack;
     emtr->mFieldManager.init(this);
     field_0xd0 = 0;
@@ -28,6 +91,63 @@ void JPABaseParticle::initParticle() {
 /* 8025E62C-8025EB28       .text initChild__15JPABaseParticleFP15JPABaseParticle */
 void JPABaseParticle::initChild(JPABaseParticle* parent) {
     /* Nonmatching */
+    JPAEmitterInfo & emtrInfo = JPABaseEmitter::emtrInfo;
+    JPABaseEmitter * emtr = emtrInfo.mpCurEmitter;
+    JPASweepShape * sweep = emtr->mpDataLinkInfo->getSweepShape();
+
+    mStatus = 0x04 | 0x01;
+
+    if (!sweep->isEnableField()) {
+        mStatus |= 0x40;
+        mFieldDrag = 1.0f;
+        mDrag = 1.0f;
+    } else {
+        mDrag = parent->mDrag;
+        mFieldDrag = parent->mFieldDrag;
+    }
+
+    f32 baseVel = sweep->getBaseVel() * (1.0f + sweep->getBaseVelRndm() * emtr->getRandomRF());
+    JGeometry::TVec3<f32> rndmVel(emtr->getRandomRF(), emtr->getRandomRF(), emtr->getRandomRF());
+    rndmVel.setLength(baseVel);
+
+    f32 baseVelInf = sweep->getVelInfRate();
+    mBaseVel.x = rndmVel.x + parent->mBaseVel.x * baseVelInf;
+    mBaseVel.y = rndmVel.y + parent->mBaseVel.y * baseVelInf;
+    mBaseVel.z = rndmVel.z + parent->mBaseVel.z * baseVelInf;
+
+    mFieldAccel.scale(sweep->getVelInfRate(), parent->mFieldVel);
+    mAccel.set(0.0f, -sweep->getGravity(), 0.0f);
+    mAirResist = parent->mAirResist;
+    mMoment = parent->mMoment;
+    mCurFrame = -1.0f;
+    mLifeTime = sweep->getLife();
+    mCurNormTime = 0.0f;
+    mFieldVel.set(mFieldAccel);
+
+    f32 velScale = mMoment * mDrag;
+    JGeometry::TVec3<f32> vel;
+    vel.x = (mBaseVel.x + mFieldVel.x) * velScale;
+    vel.y = (mBaseVel.y + mFieldVel.y) * velScale;
+    vel.z = (mBaseVel.z + mFieldVel.z) * velScale;
+    mVelocity = vel;
+
+    if (emtr->checkEmDataFlag(0x10))
+        mStatus |= 0x20;
+
+    mGlobalPosition.set(parent->mGlobalPosition);
+    mLocalPosition.set(parent->mLocalPosition);
+
+    f32 posRndm = sweep->getPosRndm();
+    if (posRndm != 0.0f) {
+        JGeometry::TVec3<f32> unit;
+        JPAGetUnitVec(emtr->getRandomSS(), emtr->getRandomSS(), unit);
+        f32 rndm = posRndm * emtr->getRandomF();
+        unit.scale(rndm);
+        mLocalPosition.add(unit);
+    }
+
+    mpCallBack2 = emtr->mpParticleCallBack;
+    field_0xd0 = parent->field_0xd0;
 }
 
 /* 8025EB28-8025EB90       .text incFrame__15JPABaseParticleFv */
@@ -49,21 +169,14 @@ void JPABaseParticle::incFrame() {
 /* 8025EB90-8025ECE8       .text calcVelocity__15JPABaseParticleFv */
 void JPABaseParticle::calcVelocity() {
     mFieldVel.zero();
-    if (mStatus & 0x20)
+    if (checkStatus(0x20))
         mGlobalPosition.set(JPABaseEmitter::emtrInfo.mEmitterGlobalCenter);
-    mBaseVel.x += mAccel.x;
-    mBaseVel.y += mAccel.y;
-    mBaseVel.z += mAccel.z;
-    if (!(mStatus & 0x40))
+    mBaseVel.add(mAccel);
+    if (!checkStatus(0x40))
         JPABaseEmitter::emtrInfo.mpCurEmitter->mFieldManager.calc(this);
-    mFieldVel.x += mFieldAccel.x;
-    mFieldVel.y += mFieldAccel.y;
-    mFieldVel.z += mFieldAccel.z;
+    mFieldVel.add(mFieldAccel);
 
-    f32 airResist = mAirResist;
-    mBaseVel.x *= airResist;
-    mBaseVel.y *= airResist;
-    mBaseVel.z *= airResist;
+    mBaseVel.scale(mAirResist);
 
     f32 velScale = mMoment * mDrag;
     JGeometry::TVec3<f32> vel;
@@ -76,9 +189,7 @@ void JPABaseParticle::calcVelocity() {
 
 /* 8025ECE8-8025ED6C       .text calcPosition__15JPABaseParticleFv */
 void JPABaseParticle::calcPosition() {
-    mLocalPosition.x += mVelocity.x;
-    mLocalPosition.y += mVelocity.y;
-    mLocalPosition.z += mVelocity.z;
+    mLocalPosition.add(mVelocity);
 
     mPosition.set(
         mLocalPosition.x * JPABaseEmitter::emtrInfo.mPublicScale.x + mGlobalPosition.x,

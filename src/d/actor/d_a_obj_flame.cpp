@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_flame.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000110       .text set_switch__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::set_switch() {
@@ -160,3 +160,28 @@ BOOL daObjFlame::Method::Draw(void*) {
 BOOL daObjFlame::Method::IsDelete(void*) {
     /* Nonmatching */
 }
+
+actor_method_class daObjFlame::Method::Table = {
+    (process_method_func)daObjFlame::Method::Create,
+    (process_method_func)daObjFlame::Method::Delete,
+    (process_method_func)daObjFlame::Method::Execute,
+    (process_method_func)daObjFlame::Method::IsDelete,
+    (process_method_func)daObjFlame::Method::Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Flame = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Flame,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjFlame::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0111,
+    /* Actor SubMtd */ &daObjFlame::Method::Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

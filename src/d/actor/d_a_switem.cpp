@@ -212,8 +212,8 @@ static actor_method_class daSwItemMethodTable = {
 
 actor_process_profile_definition g_profile_SW_ITEM = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_SW_ITEM,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSwItem_c),

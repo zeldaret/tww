@@ -8,7 +8,6 @@
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_magma.h"
-#include "dolphin/types.h"
 
 daMagma_c::~daMagma_c() {
     dComIfG_resDelete(&mPhs, "Magma");
@@ -53,24 +52,24 @@ static s32 daMagma_Create(fopAc_ac_c* i_this) {
 static actor_method_class l_daMagma_Method = {
     (process_method_func)daMagma_Create,
     (process_method_func)daMagma_Delete,
-    (process_method_func)0,
+    (process_method_func)NULL,
     (process_method_func)daMagma_IsDelete,
-    (process_method_func)0,
+    (process_method_func)NULL,
 };
 
 actor_process_profile_definition g_profile_MAGMA = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_MAGMA,
-    &g_fpcLf_Method.base,
-    sizeof(daMagma_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01BC,
-    &l_daMagma_Method,
-    fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_MAGMA,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daMagma_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01BC,
+    /* Actor SubMtd */ &l_daMagma_Method,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

@@ -142,8 +142,8 @@ void JPABaseEmitter::create(JPADataBlockLinkInfo* info) {
     mGlobalPrmColor.r = mGlobalPrmColor.g = mGlobalPrmColor.b = mGlobalPrmColor.a = 0xFF;
     mEmitCount = 0.0f;
     mRateStepTimer = 0.0f;
-    mTick = 0.0f;
-    mTime = 0.0f;
+    mTick.setFrame(0.0f);
+    mTime.setFrame(0.0f);
     mUserData = 0;
     mRandomSeed.setSeed(emtrInfo.mRandom.get());
     mFieldManager.initField(info, &emtrInfo);
@@ -162,7 +162,6 @@ void JPABaseEmitter::create(JPADataBlockLinkInfo* info) {
 
 /* 8025D0B0-8025D294       .text calcEmitterInfo__14JPABaseEmitterFv */
 void JPABaseEmitter::calcEmitterInfo() {
-    /* Nonmatching */
     emtrInfo.mpCurEmitter = this;
     emtrInfo.mVolumeEmitXCount = 0;
     emtrInfo.mVolumeEmitAngleCount = 0;
@@ -205,9 +204,7 @@ void JPABaseEmitter::calc() {
         calcAfterCB();
         calcParticle();
         calcChild();
-        mTick += 1.0f;
-        if (mTick < 0.0f)
-            mTick = 0.0f;
+        mTick.incFrame();
     } else {
         calcBeforeCB();
         calcAfterCB();
@@ -216,7 +213,6 @@ void JPABaseEmitter::calc() {
 
 /* 8025D3C0-8025D5D4       .text calcCreatePtcls__14JPABaseEmitterFv */
 void JPABaseEmitter::calcCreatePtcls() {
-    /* Nonmatching */
     if (checkStatus(JPAEmtrStts_RateStepEmit)) {
         s32 emitCount = 0;
         if (checkEmDataFlag(0x02)) { // Fixed interval
@@ -226,12 +222,13 @@ void JPABaseEmitter::calcCreatePtcls() {
             emtrInfo.mVolumeEmitIdx = 0;
         } else {
             f32 incr = mRate * (1.0f + mRateRndm * getRandomRF());
-            mEmitCount += incr;
+            f32 newCounter = mEmitCount + incr;
+            mEmitCount = newCounter;
 
-            if (mEmitCount >= 1) {
+            if (newCounter >= 1) {
                 emitCount = mEmitCount;
                 mEmitCount -= emitCount;
-            } else if (mEmitCount > 0 && checkStatus(JPAEmtrStts_FirstEmit)) {
+            } else if (incr > 0 && checkStatus(JPAEmtrStts_FirstEmit)) {
                 emitCount = 1;
             }
         }
@@ -248,7 +245,7 @@ void JPABaseEmitter::calcCreatePtcls() {
         }
     }
 
-    if (mRateStepTimer++ >= mRateStep + 1) {
+    if (++mRateStepTimer >= mRateStep + 1) {
         mRateStepTimer -= mRateStep + 1;
         setStatus(JPAEmtrStts_RateStepEmit);
     } else {
@@ -339,7 +336,7 @@ void JPABaseEmitter::calcChild() {
 void JPABaseEmitter::calcKey() {
     for (s32 i = 0; i < getEmitterDataBlockInfoPtr()->getKeyNum(); i++) {
         JPAKeyBlock* key = getEmitterDataBlockInfoPtr()->getKey()[i];
-        f32 tick = mTick;
+        f32 tick = mTick.getFrame();
         const f32* dataPtr = key->getKeyDataPtr();
         u32 dataNum = key->getNumber();
         if (key->isLoopEnable()) {
@@ -402,13 +399,11 @@ JPABaseParticle * JPABaseEmitter::getPtclFromVacList() {
 /* 8025DBB4-8025DC2C       .text doStartFrameProcess__14JPABaseEmitterFv */
 bool JPABaseEmitter::doStartFrameProcess() {
     /* Nonmatching */
-    if (mTime >= mStartFrame)
+    if (mTime.getFrame() >= mStartFrame)
         return true;
 
     if (!checkStatus(JPAEmtrStts_StopCalc)) {
-        mTime++;
-        if (mTime < 0.0f)
-            mTime = 0.0f;
+        mTime.incFrame();
     }
 
     return false;
@@ -421,7 +416,7 @@ bool JPABaseEmitter::doTerminationProcess() {
     } else if (mMaxFrame < 0) {
         mFlags |= JPAEmtrStts_EnableDeleteEmitter;
         return getParticleNumber() == 0;
-    } else if (mTick >= mMaxFrame) {
+    } else if (mTick.getFrame() >= mMaxFrame) {
         mFlags |= JPAEmtrStts_EnableDeleteEmitter;
         if (mFlags & JPAEmtrStts_Immortal)
             return false;

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_saku.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 class J3DModelData;
 class J3DMaterial;
@@ -154,3 +154,27 @@ static BOOL daSaku_Execute(daSaku_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daSaku_Method = {
+    (process_method_func)daSaku_Create,
+    (process_method_func)daSaku_Delete,
+    (process_method_func)daSaku_Execute,
+    (process_method_func)daSaku_IsDelete,
+    (process_method_func)daSaku_Draw,
+};
+
+actor_process_profile_definition g_profile_SAKU = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SAKU,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSaku_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0186,
+    /* Actor SubMtd */ &l_daSaku_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_9_e,
+};

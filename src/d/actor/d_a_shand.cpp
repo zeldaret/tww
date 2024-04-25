@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_shand.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000114       .text __ct__13daShand_HIO_cFv */
 daShand_HIO_c::daShand_HIO_c() {
@@ -91,3 +91,27 @@ static s32 daShand_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daShand_Method = {
+    (process_method_func)daShand_Create,
+    (process_method_func)daShand_Delete,
+    (process_method_func)daShand_Execute,
+    (process_method_func)daShand_IsDelete,
+    (process_method_func)daShand_Draw,
+};
+
+actor_process_profile_definition g_profile_SHAND = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SHAND,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(shand_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0095,
+    /* Actor SubMtd */ &l_daShand_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

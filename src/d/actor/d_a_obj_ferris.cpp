@@ -168,8 +168,8 @@ s32 daObjFerris::Act_c::_create() {
                 mRotState = 0;
             }
 
-            mEventIdx_kanban_vive = dComIfGp_evmng_getEventIdx("kanran_vive", 0xFF);
-            mEventIdx_kanban_start = dComIfGp_evmng_getEventIdx("kanran_start", 0xFF);
+            mEventIdx_kanban_vive = dComIfGp_evmng_getEventIdx("kanran_vive");
+            mEventIdx_kanban_start = dComIfGp_evmng_getEventIdx("kanran_start");
             mRotAngle = 0x1800;
             mGondolaWaveAngle = 0;
 
@@ -558,7 +558,7 @@ namespace daObjFerris {
 
 actor_process_profile_definition g_profile_Obj_Ferris = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Ferris,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -568,7 +568,7 @@ actor_process_profile_definition g_profile_Obj_Ferris = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x003C,
     /* Actor SubMtd */ &daObjFerris::Mthd_Table,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

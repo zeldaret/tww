@@ -120,7 +120,7 @@ static BOOL daHot_FloorIsDelete(void* i_this) {
     return TRUE;
 }
 
-static actor_method_class l_daHot_Floor_Method = {
+static actor_method_class daHot_FloorMethodTable = {
     (process_method_func)daHot_FloorCreate,
     (process_method_func)daHot_FloorDelete,
     (process_method_func)daHot_FloorExecute,
@@ -130,7 +130,7 @@ static actor_method_class l_daHot_Floor_Method = {
 
 actor_process_profile_definition g_profile_Hot_Floor = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Hot_Floor,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -139,8 +139,8 @@ actor_process_profile_definition g_profile_Hot_Floor = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x00DB,
-    /* Actor SubMtd */ &l_daHot_Floor_Method,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Actor SubMtd */ &daHot_FloorMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_0_e,
 };

@@ -4,34 +4,14 @@
 //
 
 #include "d/actor/d_a_mbdoor.h"
+#include "d/res/res_mbdoor.h"
+#include "d/res/res_gbdoor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/actor/d_a_player.h"
-
-enum MBDOOR_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    MBDOOR_BDL_S_MBD_L=0x4,
-    MBDOOR_BDL_S_MBD_R=0x5,
-    MBDOOR_BDL_S_MBDFU=0x6,
-    MBDOOR_BDL_S_MBDTO=0x7,
-    
-    /* DZB */
-    MBDOOR_DZB_S_MBDFU=0xA,
-};
-
-enum GBDOOR_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    GBDOOR_BDL_V_GBD_L=0x4,
-    GBDOOR_BDL_V_GBD_R=0x5,
-    GBDOOR_BDL_V_GBDFU=0x6,
-    GBDOOR_BDL_V_GBDTO=0x7,
-    
-    /* DZB */
-    GBDOOR_DZB_GBD=0xA,
-};
 
 /* 00000078-00000084       .text getSwbit__10daMbdoor_cFv */
 u8 daMbdoor_c::getSwbit() {
@@ -292,7 +272,7 @@ s32 daMbdoor_c::getDemoAction() {
         "ADJUSTMENT",
     };
     
-    return dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
+    return dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 }
 
 /* 00000B3C-00000F78       .text demoProc__10daMbdoor_cFv */
@@ -460,7 +440,7 @@ BOOL daMbdoor_actionWait(daMbdoor_c* i_this) {
 BOOL daMbdoor_actionLockWait(daMbdoor_c* i_this) {
     if (i_this->checkUnlock()) {
         i_this->setAction(2);
-        fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1);
+        fopAcM_orderOtherEvent(i_this, "MBDOOR_STOP_OPEN");
     }
     return TRUE;
 }
@@ -472,7 +452,7 @@ BOOL daMbdoor_actionLockOff(daMbdoor_c* i_this) {
         i_this->demoProc();
         i_this->setAction(3);
     } else {
-        fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1);
+        fopAcM_orderOtherEvent(i_this, "MBDOOR_STOP_OPEN");
     }
     return TRUE;
 }
@@ -593,7 +573,7 @@ static actor_method_class l_daMbdoor_Method = {
 
 actor_process_profile_definition g_profile_MBDOOR = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_MBDOOR,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

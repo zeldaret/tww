@@ -168,24 +168,26 @@ static BOOL daIkariIsDelete(void* i_this) {
 }
 
 static actor_method_class daIkariMethodTable = {
-    (process_method_func)daIkariCreate,  (process_method_func)daIkariDelete,
-    (process_method_func)daIkariExecute, (process_method_func)daIkariIsDelete,
+    (process_method_func)daIkariCreate,
+    (process_method_func)daIkariDelete,
+    (process_method_func)daIkariExecute,
+    (process_method_func)daIkariIsDelete,
     (process_method_func)daIkariDraw,
 };
 
 actor_process_profile_definition g_profile_IKARI = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_IKARI,
-    &g_fpcLf_Method.base,
-    sizeof(daIkari_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x019d,
-    &daIkariMethodTable,
-    fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_IKARI,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daIkari_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x019D,
+    /* Actor SubMtd */ &daIkariMethodTable,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

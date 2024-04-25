@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_mt.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000228       .text __ct__9daNpcMt_cFv */
 daNpcMt_c::daNpcMt_c() {
@@ -270,3 +270,28 @@ static BOOL daNpc_MtDraw(void*) {
 static BOOL daNpc_MtIsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daNpc_MtMethodTable = {
+    (process_method_func)daNpc_MtCreate,
+    (process_method_func)daNpc_MtDelete,
+    (process_method_func)daNpc_MtExecute,
+    (process_method_func)daNpc_MtIsDelete,
+    (process_method_func)daNpc_MtDraw,
+};
+
+actor_process_profile_definition g_profile_NPC_MT = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_MT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcMt_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0181,
+    /* Actor SubMtd */ &daNpc_MtMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

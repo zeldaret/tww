@@ -23,7 +23,7 @@ public:
     /* 0x08 */ f32 mGlobalScaleY;
     /* 0x0C */ f32 mPivotX;
     /* 0x10 */ f32 mPivotY;
-    /* 0x14 */ JGeometry::TVec2<f32> field_0x14[4];
+    /* 0x14 */ JGeometry::TVec2<f32> mTexCoordPt[4];
     /* 0x34 */ MtxP mDrawMtxPtr;
     /* 0x34 */ Mtx mDrawYBBMtx;
     /* 0x68 */ Mtx mDrawMtx;

@@ -10,7 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
-#include "dolphin/types.h"
 
 /* 800E79C0-800E79C8       .text daDisappear_Draw__FP15disappear_class */
 static BOOL daDisappear_Draw(disappear_class*) {
@@ -115,7 +114,7 @@ static s32 daDisappear_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daDisappear_Method = {
+static actor_method_class l_daDisappear_Method = {
     (process_method_func)daDisappear_Create,
     (process_method_func)daDisappear_Delete,
     (process_method_func)daDisappear_Execute,
@@ -124,18 +123,18 @@ actor_method_class l_daDisappear_Method = {
 };
 
 actor_process_profile_definition g_profile_DISAPPEAR = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcLy_CURRENT_e,
-    PROC_DISAPPEAR,
-    &g_fpcLf_Method.base,
-    sizeof(disappear_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0188,
-    &l_daDisappear_Method,
-    fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_DISAPPEAR,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(disappear_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0188,
+    /* Actor SubMtd */ &l_daDisappear_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

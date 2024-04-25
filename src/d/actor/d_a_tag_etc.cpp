@@ -7,7 +7,6 @@
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 
 enum Action {
     ACT_WAIT,
@@ -125,7 +124,7 @@ s32 daTag_Etc_c::create() {
     shape_angle.x = 0;
     current.angle.z = 0;
     current.angle.x = 0;
-    attention_info.flags = fopAc_Attn_ACTION_TALK_e;
+    attention_info.flags = fopAc_Attn_ACTION_SPEAK_e;
     attention_info.position.y += 150.0f;
     eyePos.y += 150.0f;
     return cPhs_COMPLEATE_e;
@@ -253,7 +252,7 @@ static actor_method_class l_daTag_Etc_Method = {
 
 actor_process_profile_definition g_profile_TAG_ETC = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_TAG_ETC,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -263,7 +262,7 @@ actor_process_profile_definition g_profile_TAG_ETC = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0122,
     /* Actor SubMtd */ &l_daTag_Etc_Method,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_UNK4000_e,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_6_e,
 };

@@ -53,7 +53,7 @@ public:
     /* 0x2C8 */ int mStaffId;
     /* 0x2CC */ s8 mRoomNo;
     /* 0x2CD */ u8 m2CD[0x2D0 - 0x2CD];
-};
+};  // Size: 0x2D0
 
 class dDoor_smoke_c {
 public:

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_stone.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000110       .text CreateHeapCB__7daStoneFP10fopAc_ac_c */
 BOOL daStone::CreateHeapCB(fopAc_ac_c*) {
@@ -235,3 +235,28 @@ BOOL daStone::Method::Draw(void*) {
 BOOL daStone::Method::IsDelete(void*) {
     /* Nonmatching */
 }
+
+actor_method_class daStone::Method::Table = {
+    (process_method_func)daStone::Method::Create,
+    (process_method_func)daStone::Method::Delete,
+    (process_method_func)daStone::Method::Execute,
+    (process_method_func)daStone::Method::IsDelete,
+    (process_method_func)daStone::Method::Draw,
+};
+
+actor_process_profile_definition g_profile_STONE = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0008,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_STONE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daStone::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0104,
+    /* Actor SubMtd */ &daStone::Method::Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+};

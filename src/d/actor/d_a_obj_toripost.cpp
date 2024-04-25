@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_obj_toripost.h"
+#include "d/res/res_toripost.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_player.h"
@@ -87,12 +88,20 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 0000010C-0000022C       .text _createHeap__12daObjTpost_cFv */
 BOOL daObjTpost_c::_createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 9);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, TORIPOST_BDL_VPOST);
     JUT_ASSERT(132, modelData != 0);
 
-    mMorf = new mDoExt_McaMorf(modelData, 0, 0, 0, -1, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000022);
+    mMorf = new mDoExt_McaMorf(
+        modelData,
+        NULL, NULL,
+        NULL,
+        -1, 1.0f, 0, -1, 1,
+        NULL,
+        0x00080000,
+        0x11000022
+    );
 
-    if(mMorf == 0 || mMorf->getModel() == 0) {
+    if(mMorf == NULL || mMorf->getModel() == NULL) {
         return FALSE;
     }
     else {
@@ -125,7 +134,7 @@ void daObjTpost_c::cutProc() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Tpost");
     if(staffIdx != -1) {
-        int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 1, 0);
+        int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), TRUE, 0);
         if(actIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
         }
@@ -525,7 +534,7 @@ void daObjTpost_c::eventOrder() {
         }
     }
     else if(field_0x8F7 >= 3) {
-        fopAcM_orderOtherEvent2(this, a_demo_name_tbl[field_0x8F7 - 3], 1, 0x14F);
+        fopAcM_orderOtherEvent(this, a_demo_name_tbl[field_0x8F7 - 3], 0x14F);
     }
 }
 
@@ -914,11 +923,11 @@ void daObjTpost_c::createInit() {
 
     field_0x8F0 = 1;
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-    mpCurrMsg = 0;
+    mpCurrMsg = NULL;
 
-    attention_info.distances[1] = 5;
-    attention_info.distances[3] = 6;
-    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 5;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 6;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
     setAnm(1, false);
     setMtx();
@@ -996,7 +1005,6 @@ static BOOL daObjTpostIsDelete(void*) {
     return TRUE;
 }
 
-
 static actor_method_class daObjTpostMethodTable = {
     (process_method_func)daObjTpostCreate,
     (process_method_func)daObjTpostDelete,
@@ -1006,18 +1014,18 @@ static actor_method_class daObjTpostMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_TORIPOST = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_OBJ_TORIPOST,
-    &g_fpcLf_Method.base,
-    sizeof(daObjTpost_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01B3,
-    &daObjTpostMethodTable,
-    0x18 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_4_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OBJ_TORIPOST,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTpost_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01B3,
+    /* Actor SubMtd */ &daObjTpostMethodTable,
+    /* Status       */ 0x18 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
 };

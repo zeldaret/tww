@@ -130,9 +130,25 @@ public:
     /* 0x148 */ u32 mDivNumber;
 };
 
+struct JPAFrameManager {
+public:
+    JPAFrameManager() : mFrame(0.0f) {}
+
+    f32 getFrame() const { return mFrame; }
+    void setFrame(f32 frame) { mFrame = frame; }
+    void incFrame() {
+        mFrame++;
+        if (mFrame < 0.0f)
+            mFrame = 0.0f;
+    }
+
+private:
+    /* 0x00 */ f32 mFrame;
+};
+
 class JPABaseEmitter {
 public:
-    JPABaseEmitter() : mLink(this), mRandomSeed(0), mTick(0.0f), mTime(0.0f) {}
+    JPABaseEmitter() : mLink(this), mRandomSeed(0) {}
     ~JPABaseEmitter() {}
 
     typedef void (JPABaseEmitter::*VolumeFunc)();
@@ -351,8 +367,8 @@ public:
     /* 0x08C */ s32 mUseKeyFlag;
     /* 0x090 */ JSULink<JPABaseEmitter> mLink;
     /* 0x0A0 */ JPADraw mDraw;
-    /* 0x164 */ f32 mTick;
-    /* 0x168 */ f32 mTime;
+    /* 0x164 */ JPAFrameManager mTick;
+    /* 0x168 */ JPAFrameManager mTime;
     /* 0x16C */ JPAFieldManager mFieldManager;
     /* 0x17C */ JSUList<JPABaseParticle> mActiveParticles;
     /* 0x188 */ JSUList<JPABaseParticle> mChildParticles;

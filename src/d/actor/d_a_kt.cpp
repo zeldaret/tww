@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_kt.h"
+#include "d/res/res_kt.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -299,10 +300,10 @@ static BOOL daKt_Delete(kt_class* i_this) {
 static BOOL daKt_solidHeapCB(fopAc_ac_c* i_ac) {
     kt_class* i_this = (kt_class*)i_ac;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kt", 0x0B);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kt", KT_INDEX_BMD_KT_MODEL);
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x10000, 0x11020203);
 
-    J3DModelData* modelDataWing = (J3DModelData*)dComIfG_getObjectRes("Kt", 0x0A);
+    J3DModelData* modelDataWing = (J3DModelData*)dComIfG_getObjectRes("Kt", KT_INDEX_BMD_KT_HANE);
     i_this->mpModelWing = mDoExt_J3DModel__create(modelDataWing, 0x10000, 0x11020203);
 
     return modelData != NULL && modelDataWing != NULL && i_this->mpModel != NULL && i_this->mpModelWing != NULL;
@@ -342,3 +343,28 @@ static s32 daKt_Create(fopAc_ac_c* i_ac) {
 
     return rt;
 }
+
+static actor_method_class l_daKt_Method = {
+    (process_method_func)daKt_Create,
+    (process_method_func)daKt_Delete,
+    (process_method_func)daKt_Execute,
+    (process_method_func)daKt_IsDelete,
+    (process_method_func)daKt_Draw,
+};
+
+actor_process_profile_definition g_profile_KT = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kt_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00AC,
+    /* Actor SubMtd */ &l_daKt_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

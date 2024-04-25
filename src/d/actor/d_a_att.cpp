@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_att.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000000F4       .text daAtt_Draw__FP9att_class */
 static BOOL daAtt_Draw(att_class*) {
@@ -35,3 +35,28 @@ static BOOL daAtt_Delete(att_class*) {
 static s32 daAtt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daAtt_Method = {
+    (process_method_func)daAtt_Create,
+    (process_method_func)daAtt_Delete,
+    (process_method_func)daAtt_Execute,
+    (process_method_func)daAtt_IsDelete,
+    (process_method_func)daAtt_Draw,
+};
+
+actor_process_profile_definition g_profile_ATT = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0008,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ATT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(att_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x019C,
+    /* Actor SubMtd */ &l_daAtt_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

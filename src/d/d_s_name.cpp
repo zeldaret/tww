@@ -22,6 +22,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_machine.h"
+#include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_Reset.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
@@ -95,7 +96,6 @@ s32 resLoad(request_of_phase_process_class* phase, char* resName) {
 
 /* 8022F9FC-802301C8       .text create__10dScnName_cFv */
 s32 dScnName_c::create() {
-    /* Nonmatching */
     dComIfGp_offEnableNextStage();
     dComIfGp_setNextStage("Name", 0, 0);
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
@@ -146,7 +146,8 @@ s32 dScnName_c::create() {
         field_0x29c = 5.0f;
         field_0x2a0 = 160000.0f;
         field_0x2a4 = 60.0f;
-        field_0x2a8 = (g_dComIfG_gameInfo.play.mDlstWindow[0].getViewPort()->mWidth / g_dComIfG_gameInfo.play.mDlstWindow[0].getViewPort()->mHeight) * g_HIO.field_0x0c;
+        f32 aspect = dComIfGp_getWindow(0)->getViewPort()->mWidth / dComIfGp_getWindow(0)->getViewPort()->mHeight;
+        field_0x2a8 = aspect * g_HIO.field_0x0c;
         field_0x2ac.x = 9377.0f;
         field_0x2ac.y = 0.0;
         field_0x2ac.z = 7644.0;
@@ -238,14 +239,14 @@ void dScnName_c::buttonIconCreate() {
 
 /* 80230500-802305E0       .text paneTransButtonIcon__10dScnName_cFsUcffUc */
 BOOL dScnName_c::paneTransButtonIcon(s16 param_1, u8 param_2, f32 param_3, f32 param_4, u8 param_5) {
-    /* Nonmatching */
     if (param_1 < 0) {
         return false;
     }
     if (param_1 > param_2) {
         return true;
     }
-    f32 tmp = fopMsgM_valueIncrease(param_2, param_1, param_5) * (param_4 - param_3);
+    f32 tmp = fopMsgM_valueIncrease(param_2, param_1, param_5);
+    tmp *= (param_4 - param_3);
     fopMsgM_paneTrans(&field_0x43c, 0.0f, param_3 + tmp);
     fopMsgM_paneTrans(&field_0x474, 0.0f, param_3 + tmp);
     fopMsgM_paneTrans(&field_0x4ac, 0.0f, param_3 + tmp);
@@ -416,7 +417,7 @@ void dScnName_c::MemCardGotoIPLSelect() {
 
 /* 80230E50-80230E7C       .text MemCardGotoIPL__10dScnName_cFv */
 void dScnName_c::MemCardGotoIPL() {
-    /* Nonmatching */
+    OSResetSystem(1, 1, TRUE);
 }
 
 /* 80230E7C-80230F4C       .text MemCardErrMsgWaitNoSaveSel__10dScnName_cFv */
@@ -437,6 +438,11 @@ void dScnName_c::MemCardErrMsgWaitFormatSel2() {
 /* 8023106C-802310C0       .text MemCardFormat__10dScnName_cFv */
 void dScnName_c::MemCardFormat() {
     /* Nonmatching */
+    field_0x1bbc = g_mDoMemCd_control.FormatSync();
+    if (field_0x1bbc != 0) {
+        dFe_c->closeMessage();
+        field_0x556 = 8;
+    }
 }
 
 /* 802310C0-8023117C       .text MemCardFormatCheck__10dScnName_cFv */
@@ -451,7 +457,11 @@ void dScnName_c::MemCardMakeGameFileSel() {
 
 /* 80231284-802312D8       .text MemCardMakeGameFile__10dScnName_cFv */
 void dScnName_c::MemCardMakeGameFile() {
-    /* Nonmatching */
+    field_0x1bbc = g_mDoMemCd_control.SaveSync();
+    if (field_0x1bbc != 0) {
+        dFe_c->closeMessage();
+        field_0x556 = 11;
+    }
 }
 
 /* 802312D8-80231398       .text MemCardMakeGameFileCheck__10dScnName_cFv */
@@ -461,7 +471,8 @@ void dScnName_c::MemCardMakeGameFileCheck() {
 
 /* 80231398-802313AC       .text MemCardGotoFileSelect__10dScnName_cFv */
 void dScnName_c::MemCardGotoFileSelect() {
-    /* Nonmatching */
+    mMainProc = 1;
+    mDrawProc = 4;
 }
 
 /* 802313AC-802313B0       .text MemCardCheckDbg__10dScnName_cFv */
@@ -522,6 +533,94 @@ void dScnName_c::FileSelectOpen() {
 /* 802315E0-802319B4       .text buttonIconProc__10dScnName_cFv */
 void dScnName_c::buttonIconProc() {
     /* Nonmatching */
+    switch (field_0x1bb6) {
+    case 0:
+        {
+            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 1);
+            field_0x1bb4++;
+            if (ret == 1) {
+                field_0x1bb4 = 0;
+                field_0x1bb6 = 6;
+                dFs_c->field_0x3936 = field_0x1bb6;
+            }
+        }
+        break;
+    case 1:
+        {
+            if (field_0x51c.pane->isVisible()) {
+                field_0x51c.pane->hide();
+                field_0x474.pane->hide();
+                field_0x4ac.pane->hide();
+            }
+            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 1);
+            field_0x1bb4++;
+            if (ret == 1) {
+                field_0x1bb4 = 0;
+                field_0x1bb6 = 6;
+                dFs_c->field_0x3936 = field_0x1bb6;
+            }
+        }
+        break;
+    case 2:
+        {
+            if (!field_0x51c.pane->isVisible()) {
+                field_0x51c.pane->show();
+                field_0x474.pane->show();
+                field_0x4ac.pane->show();
+            }
+            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 1);
+            field_0x1bb4++;
+            if (ret == 1) {
+                field_0x1bb4 = 0;
+                field_0x1bb6 = 6;
+                dFs_c->field_0x3936 = field_0x1bb6;
+            }
+        }
+        break;
+    case 3:
+        {
+            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 1);
+            field_0x1bb4++;
+            if (ret == 1) {
+                field_0x1bb4 = 0;
+                field_0x1bb6 = 6;
+                dFs_c->field_0x3936 = field_0x1bb6;
+            }
+        }
+        break;
+    case 4:
+        {
+            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 1);
+            field_0x1bb4++;
+            if (ret == 1) {
+                field_0x1bb4 = 0;
+                if (!field_0x51c.pane->isVisible()) {
+                    field_0x51c.pane->show();
+                    field_0x474.pane->show();
+                    field_0x4ac.pane->show();
+                }
+                field_0x1bb6 = 0;
+                dFs_c->field_0x3936 = field_0x1bb6;
+            }
+        }
+        break;
+    case 5:
+        {
+            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 1);
+            field_0x1bb4++;
+            if (ret == 1) {
+                field_0x1bb4 = 0;
+                if (field_0x51c.pane->isVisible()) {
+                    field_0x51c.pane->hide();
+                    field_0x474.pane->hide();
+                    field_0x4ac.pane->hide();
+                }
+                field_0x1bb6 = 0;
+                dFs_c->field_0x3936 = field_0x1bb6;
+            }
+        }
+        break;
+    }
 }
 
 /* 802319B4-80231A24       .text FileSelOpenMain__10dScnName_cFv */
@@ -657,8 +756,7 @@ void dScnName_c::NameInMain() {
 
 /* 80231FF4-80232050       .text NameInClose__10dScnName_cFv */
 void dScnName_c::NameInClose() {
-    /* Nonmatching */
-    if (dNm_c->_close() == 1) {
+    if ((BOOL)dNm_c->_close() == TRUE) {
         dFs_c->initial();
         mMainProc = 3;
         field_0x555 = 0;
@@ -750,28 +848,28 @@ void dScnName_c::changeGameScene() {
 }
 
 /* 80232338-80232358       .text dScnName_Draw__FP10dScnName_c */
-s32 dScnName_Draw(dScnName_c* i_this) {
+static s32 dScnName_Draw(dScnName_c* i_this) {
     return i_this->draw();
 }
 
 /* 80232358-80232378       .text dScnName_Execute__FP10dScnName_c */
-s32 dScnName_Execute(dScnName_c* i_this) {
+static s32 dScnName_Execute(dScnName_c* i_this) {
     return i_this->execute();
 }
 
 /* 80232378-80232380       .text dScnName_IsDelete__FP10dScnName_c */
-s32 dScnName_IsDelete(dScnName_c*) {
+static s32 dScnName_IsDelete(dScnName_c*) {
     return 1;
 }
 
 /* 80232380-802323A8       .text dScnName_Delete__FP10dScnName_c */
-s32 dScnName_Delete(dScnName_c* i_this) {
+static s32 dScnName_Delete(dScnName_c* i_this) {
     i_this->~dScnName_c();
     return 1;
 }
 
 /* 802323A8-802323F8       .text dScnName_Create__FP11scene_class */
-s32 dScnName_Create(scene_class* i_scn) {
+static s32 dScnName_Create(scene_class* i_scn) {
     dScnName_c* i_this = new (i_scn) dScnName_c();
     return i_this->create();
 }
@@ -785,12 +883,12 @@ void dDlst_BTICN_c::draw() {
 
 /* 8023245C-80232518       .text draw__19dDlst_FLSEL_CLOTH_cFv */
 void dDlst_FLSEL_CLOTH_c::draw() {
-    /* Nonmatching */
     Mtx44 mtx;
-    view_port_class* viewport = g_dComIfG_gameInfo.play.mCurrentViewport;
-    C_MTXPerspective(mtx, 30.0f, (viewport->mWidth / viewport->mHeight) * g_HIO.field_0x0c, 1.0f, 100000.0f);
+    view_port_class* viewport = dComIfGp_getCurrentViewport();
+    f32 aspect = viewport->mWidth / viewport->mHeight;
+    C_MTXPerspective(mtx, 30.0f, aspect * g_HIO.field_0x0c, 1.0f, 100000.0f);
     GXSetProjection(mtx, GX_PERSPECTIVE);
-    cloth_c->draw(0.0f, (GXColor){0xe3, 0xff, 0xb3, 0xff}, GXColor(), 0);
+    cloth_c->draw(0.0f, (GXColor){0xe3, 0xff, 0xb3, 0xff}, (GXColor){0x00, 0x00, 0x00, 0x00}, 0);
     dComIfGp_getCurrentGrafPort()->setPort();
 }
 

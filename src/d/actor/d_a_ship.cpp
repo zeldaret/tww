@@ -4,7 +4,7 @@
  */
 
 #include "d/actor/d_a_ship.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-0000023C       .text bodyJointCallBack__8daShip_cFi */
 void daShip_c::bodyJointCallBack(int) {
@@ -460,3 +460,28 @@ s32 daShip_c::create() {
 static s32 daShip_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daShip_Method = {
+    (process_method_func)daShip_Create,
+    (process_method_func)daShip_Delete,
+    (process_method_func)daShip_Execute,
+    (process_method_func)daShip_IsDelete,
+    (process_method_func)daShip_Draw,
+};
+
+actor_process_profile_definition g_profile_SHIP = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0004,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SHIP,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daShip_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x009C,
+    /* Actor SubMtd */ &l_daShip_Method,
+    /* Status       */ 0x02 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

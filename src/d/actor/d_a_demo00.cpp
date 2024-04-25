@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_demo00.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 800E595C-800E598C       .text reset__16daDemo00_resID_cFv */
 void daDemo00_resID_c::reset() {
@@ -91,3 +91,27 @@ static s32 daDemo00_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daDemo00_Method = {
+    (process_method_func)daDemo00_Create,
+    (process_method_func)daDemo00_Delete,
+    (process_method_func)daDemo00_Execute,
+    (process_method_func)daDemo00_IsDelete,
+    (process_method_func)daDemo00_Draw,
+};
+
+actor_process_profile_definition g_profile_DEMO00 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_DEMO00,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daDemo00_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x018D,
+    /* Actor SubMtd */ &l_daDemo00_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

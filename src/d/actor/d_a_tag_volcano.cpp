@@ -152,14 +152,14 @@ bool daTagvolcano::Act_c::_execute() {
                     dComIfG_TimerDeleteRequest();
 
                 field_0x2a4 = 1;
-                fopAcM_orderOtherEvent(this, "TAG_VOLCANO", dEvtFlag_NOPARTNER_e);
+                fopAcM_orderOtherEvent(this, "TAG_VOLCANO");
             }
 #if VERSION != VERSION_JPN
         } else {
             mDoAud_seStart(JA_SE_ISLE_TIMER_0);
             dComIfGp_getVibration().StartShock(6, -33, cXyz(0.0f, 1.0f, 0.0f));
             field_0x2a4 = 1;
-            fopAcM_orderOtherEvent(this, "TAG_VOLCANO", dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, "TAG_VOLCANO");
 #endif
         }
 
@@ -171,7 +171,7 @@ bool daTagvolcano::Act_c::_execute() {
                     dComIfGp_setNextStage("sea", 2, 40);
                 }
             } else {
-                fopAcM_orderOtherEvent(this, "TAG_VOLCANO", dEvtFlag_NOPARTNER_e);
+                fopAcM_orderOtherEvent(this, "TAG_VOLCANO");
             }
         }
     }
@@ -218,7 +218,7 @@ namespace daTagvolcano {
 
 actor_process_profile_definition g_profile_Tag_Volcano = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 2,
+    /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Tag_Volcano,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -228,7 +228,7 @@ actor_process_profile_definition g_profile_Tag_Volcano = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0061,
     /* Actor SubMtd */ &daTagvolcano::Mthd_Table,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_UNK4000_e,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_0_e,
 };

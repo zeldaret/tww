@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_ah.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000210       .text __ct__9daNpcAh_cFv */
 daNpcAh_c::daNpcAh_c() {
@@ -240,3 +241,28 @@ static BOOL daNpc_AhDraw(void*) {
 static BOOL daNpc_AhIsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daNpc_AhMethodTable = {
+    (process_method_func)daNpc_AhCreate,
+    (process_method_func)daNpc_AhDelete,
+    (process_method_func)daNpc_AhExecute,
+    (process_method_func)daNpc_AhIsDelete,
+    (process_method_func)daNpc_AhDraw,
+};
+
+actor_process_profile_definition g_profile_NPC_AH = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_AH,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcAh_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0183,
+    /* Actor SubMtd */ &daNpc_AhMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

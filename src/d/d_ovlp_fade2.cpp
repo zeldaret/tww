@@ -42,28 +42,28 @@ void dOvlpFd2_c::execFadeIn() {
 }
 
 /* 802240F4-80224200       .text dOvlpFd2_Draw__FP10dOvlpFd2_c */
-void dOvlpFd2_Draw(dOvlpFd2_c*) {
+static void dOvlpFd2_Draw(dOvlpFd2_c*) {
     /* Nonmatching */
 }
 
 /* 80224200-8022422C       .text dOvlpFd2_Execute__FP10dOvlpFd2_c */
-s32 dOvlpFd2_Execute(dOvlpFd2_c* i_this) {
+static s32 dOvlpFd2_Execute(dOvlpFd2_c* i_this) {
     (i_this->*i_this->field_0xcc)();
     return 1;
 }
 
 /* 8022422C-80224234       .text dOvlpFd2_IsDelete__FP10dOvlpFd2_c */
-s32 dOvlpFd2_IsDelete(dOvlpFd2_c*) {
+static s32 dOvlpFd2_IsDelete(dOvlpFd2_c*) {
     return 1;
 }
 
 /* 80224234-8022423C       .text dOvlpFd2_Delete__FP10dOvlpFd2_c */
-s32 dOvlpFd2_Delete(dOvlpFd2_c*) {
+static s32 dOvlpFd2_Delete(dOvlpFd2_c*) {
     return 1;
 }
 
 /* 8022423C-80224268       .text dOvlpFd2_Create__FPv */
-s32 dOvlpFd2_Create(void* i_this) {
+static s32 dOvlpFd2_Create(void* i_this) {
     new (i_this) dOvlpFd2_c();
     return cPhs_COMPLEATE_e;
 }

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_swtact.h"
+#include "d/res/res_itact.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -30,7 +31,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 
 /* 000000CC-00000194       .text CreateHeap__10daSwTact_cFv */
 BOOL daSwTact_c::CreateHeap() {
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, 3);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, ITACT_BDL_ITACT);
     JUT_ASSERT(0xe1, modelData != 0);
     model = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (model == NULL)
@@ -203,7 +204,7 @@ static BOOL daSwTact_IsDelete(void* i_ac) {
     return TRUE;
 }
 
-actor_method_class daSwTactMethodTable = {
+static actor_method_class daSwTactMethodTable = {
     (process_method_func)daSwTact_Create,
     (process_method_func)daSwTact_Delete,
     (process_method_func)daSwTact_Execute,
@@ -213,7 +214,7 @@ actor_method_class daSwTactMethodTable = {
 
 actor_process_profile_definition g_profile_SW_TACT = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_SW_TACT,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

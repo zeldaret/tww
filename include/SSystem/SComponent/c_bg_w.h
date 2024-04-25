@@ -223,6 +223,7 @@ public:
     }
     int GetVtxNum() const { return pm_bgd->m_v_num; }
     Vec* GetVtxTbl() const { return pm_vtx_tbl; }
+    void SetVtxTbl(Vec* v) { pm_vtx_tbl = v; }
     bool GroundCross(cBgS_GndChk* chk) {
         return GroundCrossGrpRp(chk, m_rootGrpIdx, 1);
     }
@@ -238,7 +239,6 @@ public:
     void ChkWallRegist() {}
     void OffRoofRegist() {}
     void SetBaseMtxP(Mtx* mtx_p) { pm_base = mtx_p; }
-    void SetVtxTbl(Vec* v) { pm_vtx_tbl = v; }
     void ShdwDraw(cBgS_ShdwDraw* shdw) {
         ShdwDrawGrpRp(shdw, m_rootGrpIdx);
     }

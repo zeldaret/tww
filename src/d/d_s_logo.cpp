@@ -3,6 +3,8 @@
 // Translation Unit: d_s_logo.cpp
 //
 
+#include "d/res/res_logo.h"
+#include "d/res/res_system.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_mng.h"
 #include "c/c_dylink.h"
@@ -49,50 +51,6 @@ public:
     /* 0x1F8 */ void * field_0x1f8;
     /* 0x1FC */ u32 field_0x1fc;
 };
-
-#if VERSION == VERSION_PAL
-enum LOGO_RES_FILE_ID { // IDs and indexes are synced
-    /* DAT */
-    LOGO_BTI_NINTENDO_376X104=0x3,
-    LOGO_BTI_PROGRESSIVE_CHOICE=0x4,
-    LOGO_BTI_PROGRESSIVE_CHOICE_FR=0x5,
-    LOGO_BTI_PROGRESSIVE_CHOICE_GM=0x6,
-    LOGO_BTI_PROGRESSIVE_CHOICE_IT=0x7,
-    LOGO_BTI_PROGRESSIVE_CHOICE_SP=0x8,
-    LOGO_BTI_PROGRESSIVE_INTER=0x9,
-    LOGO_BTI_PROGRESSIVE_INTER_FR=0xA,
-    LOGO_BTI_PROGRESSIVE_INTER_GM=0xB,
-    LOGO_BTI_PROGRESSIVE_INTER_IT=0xC,
-    LOGO_BTI_PROGRESSIVE_INTER_SP=0xD,
-    LOGO_BTI_PROGRESSIVE_NO=0xE,
-    LOGO_BTI_PROGRESSIVE_NO_FR=0xF,
-    LOGO_BTI_PROGRESSIVE_NO_GM=0x10,
-    LOGO_BTI_PROGRESSIVE_NO_IT=0x11,
-    LOGO_BTI_PROGRESSIVE_NO_SP=0x12,
-    LOGO_BTI_PROGRESSIVE_PRO=0x13,
-    LOGO_BTI_PROGRESSIVE_PRO_FR=0x14,
-    LOGO_BTI_PROGRESSIVE_PRO_GM=0x15,
-    LOGO_BTI_PROGRESSIVE_PRO_IT=0x16,
-    LOGO_BTI_PROGRESSIVE_PRO_SP=0x17,
-    LOGO_BTI_PROGRESSIVE_YES=0x18,
-    LOGO_BTI_PROGRESSIVE_YES_FR=0x19,
-    LOGO_BTI_PROGRESSIVE_YES_GM=0x1A,
-    LOGO_BTI_PROGRESSIVE_YES_IT=0x1B,
-    LOGO_BTI_PROGRESSIVE_YES_SP=0x1C,
-    LOGO_BTI_TITLE_DOLBY_MARK=0x1D,
-};
-#else
-enum LOGO_RES_FILE_ID { // IDs and indexes are synced
-    /* DAT */
-    LOGO_BTI_NINTENDO_376X104=0x3,
-    LOGO_BTI_PROGRESSIVE_CHOICE=0x4,
-    LOGO_BTI_PROGRESSIVE_INTER=0x5,
-    LOGO_BTI_PROGRESSIVE_NO=0x6,
-    LOGO_BTI_PROGRESSIVE_PRO=0x7,
-    LOGO_BTI_PROGRESSIVE_YES=0x8,
-    LOGO_BTI_TITLE_DOLBY_MARK=0x9,
-};
-#endif
 
 mDoDvdThd_mountXArchive_c * l_anmCommand;
 mDoDvdThd_mountXArchive_c * l_fmapCommand;
@@ -502,7 +460,7 @@ BOOL dvdWaitDraw(dScnLogo_c* i_this) {
 typedef BOOL(*drawFunc)(dScnLogo_c* i_this);
 
 /* 8022D18C-8022D1DC       .text dScnLogo_Draw__FP10dScnLogo_c */
-BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
+static BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
     static drawFunc l_execFunc[] = {
         nintendoInDraw,
         nintendoOutDraw,
@@ -522,19 +480,19 @@ BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
 }
 
 /* 8022D1DC-8022D21C       .text dScnLogo_Execute__FP10dScnLogo_c */
-BOOL dScnLogo_Execute(dScnLogo_c* i_this) {
+static BOOL dScnLogo_Execute(dScnLogo_c* i_this) {
     if (mDoRst::isReset())
         fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, 0, 5);
     return TRUE;
 }
 
 /* 8022D21C-8022D224       .text dScnLogo_IsDelete__FP10dScnLogo_c */
-BOOL dScnLogo_IsDelete(dScnLogo_c* i_this) {
+static BOOL dScnLogo_IsDelete(dScnLogo_c* i_this) {
     return TRUE;
 }
 
 /* 8022D224-8022D984       .text dScnLogo_Delete__FP10dScnLogo_c */
-BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
+static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     if (mDoRst::isReset())
         mDoRst_reset(0, 0x80000000, 0);
 
@@ -718,12 +676,12 @@ s32 phase_1(dScnLogo_c* i_this) {
 
     ResTIMG * toonImage;
 
-    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", 3);
+    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOON);
 
     JUT_ASSERT(VERSION_SELECT(1208, 1426, 1466), toonImage != 0);
     dDlst_list_c::setToonImage(toonImage);
 
-    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", 4);
+    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOONEX);
     JUT_ASSERT(VERSION_SELECT(1213, 1431, 1471), toonImage != 0);
     dDlst_list_c::setToonExImage(toonImage);
 
@@ -952,7 +910,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 }
 
 /* 8022E9B4-8022E9F4       .text dScnLogo_Create__FP11scene_class */
-s32 dScnLogo_Create(scene_class* i_scn) {
+static s32 dScnLogo_Create(scene_class* i_scn) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_0,
         (cPhs__Handler)phase_1,

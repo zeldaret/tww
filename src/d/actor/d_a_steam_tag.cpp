@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_steam_tag.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000084       .text getData__12daSteamTag_cFv */
 void daSteamTag_c::getData() {
@@ -55,3 +55,28 @@ static BOOL daSteamTag_Delete(daSteamTag_c*) {
 static s32 daSteamTag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daSteamTag_Method = {
+    (process_method_func)daSteamTag_Create,
+    (process_method_func)daSteamTag_Delete,
+    (process_method_func)daSteamTag_Execute,
+    (process_method_func)daSteamTag_IsDelete,
+    (process_method_func)daSteamTag_Draw,
+};
+
+actor_process_profile_definition g_profile_SteamTag = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SteamTag,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSteamTag_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0191,
+    /* Actor SubMtd */ &l_daSteamTag_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bmdfoot.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000114       .text __ct__15daBmdfoot_HIO_cFv */
 daBmdfoot_HIO_c::daBmdfoot_HIO_c() {
@@ -106,3 +107,27 @@ static s32 daBmdfoot_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daBmdfoot_Method = {
+    (process_method_func)daBmdfoot_Create,
+    (process_method_func)daBmdfoot_Delete,
+    (process_method_func)daBmdfoot_Execute,
+    (process_method_func)daBmdfoot_IsDelete,
+    (process_method_func)daBmdfoot_Draw,
+};
+
+actor_process_profile_definition g_profile_BMDFOOT = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BMDFOOT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bmdfoot_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00E1,
+    /* Actor SubMtd */ &l_daBmdfoot_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

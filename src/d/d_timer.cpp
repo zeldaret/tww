@@ -685,27 +685,27 @@ void dDlst_TimerScrnDraw_c::draw() {
 }
 
 /* 8023D9A0-8023D9C0       .text dTimer_Draw__FP8dTimer_c */
-BOOL dTimer_Draw(dTimer_c* i_this) {
+static BOOL dTimer_Draw(dTimer_c* i_this) {
     return i_this->_draw();
 }
 
 /* 8023D9C0-8023D9E0       .text dTimer_Execute__FP8dTimer_c */
-BOOL dTimer_Execute(dTimer_c* i_this) {
+static BOOL dTimer_Execute(dTimer_c* i_this) {
     return i_this->_execute();
 }
 
 /* 8023D9E0-8023D9E8       .text dTimer_IsDelete__FP8dTimer_c */
-BOOL dTimer_IsDelete(dTimer_c* i_this) {
+static BOOL dTimer_IsDelete(dTimer_c* i_this) {
     return TRUE;
 }
 
 /* 8023D9E8-8023DA08       .text dTimer_Delete__FP8dTimer_c */
-BOOL dTimer_Delete(dTimer_c* i_this) {
+static BOOL dTimer_Delete(dTimer_c* i_this) {
     return i_this->_delete();
 }
 
 /* 8023DA08-8023DA28       .text dTimer_Create__FP9msg_class */
-s32 dTimer_Create(msg_class* i_this) {
+static s32 dTimer_Create(msg_class* i_this) {
     return ((dTimer_c*)i_this)->_create();
 }
 

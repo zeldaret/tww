@@ -113,7 +113,7 @@ void cBgW::CalcPlane() {
     } else {
         for (s32 i = 0; i < pm_bgd->m_t_num; i++) {
             cBgW_TriElm* tri_elm = &pm_tri[i];
-            cM3d_CalcPla(&pm_vtx_tbl[t_tbl[i].vtx0], &pm_vtx_tbl[t_tbl[i].vtx1], &pm_vtx_tbl[t_tbl[i].vtx2], &tri_elm->m_plane.mNormal, &tri_elm->m_plane.mD);
+            cM3d_CalcPla(&pm_vtx_tbl[t_tbl[i].vtx0], &pm_vtx_tbl[t_tbl[i].vtx1], &pm_vtx_tbl[t_tbl[i].vtx2], tri_elm->m_plane.GetNP(), &tri_elm->m_plane.mD);
         }
     }
 }

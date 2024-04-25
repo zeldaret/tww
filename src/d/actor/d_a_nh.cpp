@@ -498,7 +498,7 @@ static s32 daNh_Create(fopAc_ac_c* i_this) {
     return ((daNh_c*)i_this)->create();
 }
 
-actor_method_class l_daNh_Method = {
+static actor_method_class l_daNh_Method = {
     (process_method_func)daNh_Create,
     (process_method_func)daNh_Delete,
     (process_method_func)daNh_Execute,
@@ -508,8 +508,8 @@ actor_method_class l_daNh_Method = {
 
 actor_process_profile_definition g_profile_NH = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_NH,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNh_c),

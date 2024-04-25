@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_btsw2.h"
+#include "d/res/res_btsw.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_procname.h"
@@ -11,72 +12,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-enum BTSW_RES_FILE_ID {
-    /* BCKS */
-    BTSW_BCK_BN_KASIGE=0xF,
-    BTSW_BCK_BN_ONEGAI=0x10,
-    BTSW_BCK_BN_SIWAKE01=0x11,
-    BTSW_BCK_BN_SIWAKE02=0x12,
-    BTSW_BCK_BN_SUGOI=0x13,
-    BTSW_BCK_BN_TALK01=0x14,
-    BTSW_BCK_BN_TALK02=0x15,
-    BTSW_BCK_BN_WAIT01=0x16,
-    BTSW_BCK_BN_WAIT02=0x17,
-    BTSW_BCK_BN_WALK=0x18,
-    
-    /* BDL */
-    BTSW_BDL_BN_KABAN=0xC,
-    BTSW_BDL_BM_LETTER=0x19,
-    BTSW_BDL_BN_TIRASI=0x1A,
-    
-    /* BDLM */
-    BTSW_BDL_QMAIL=0x4,
-    BTSW_BDL_BN=0xD,
-    
-    /* BMDM */
-    BTSW_BMD_SHOP_CURSOR01=0x5,
-    
-    /* BRK */
-    BTSW_BRK_SHOP_CURSOR01=0x8,
-    
-    /* BTP */
-    BTSW_BTP_QMAIL=0xA,
-    BTSW_BTP_BN_MABA=0xE,
-};
-
-enum BTSW_RES_FILE_INDEX {
-    /* BCKS */
-    BTSW_INDEX_BCK_BN_KASIGE=0x8,
-    BTSW_INDEX_BCK_BN_ONEGAI=0x9,
-    BTSW_INDEX_BCK_BN_SIWAKE01=0xA,
-    BTSW_INDEX_BCK_BN_SIWAKE02=0xB,
-    BTSW_INDEX_BCK_BN_SUGOI=0xC,
-    BTSW_INDEX_BCK_BN_TALK01=0xD,
-    BTSW_INDEX_BCK_BN_TALK02=0xE,
-    BTSW_INDEX_BCK_BN_WAIT01=0xF,
-    BTSW_INDEX_BCK_BN_WAIT02=0x10,
-    BTSW_INDEX_BCK_BN_WALK=0x11,
-    
-    /* BDL */
-    BTSW_INDEX_BDL_BN_KABAN=0x14,
-    BTSW_INDEX_BDL_BM_LETTER=0x15,
-    BTSW_INDEX_BDL_BN_TIRASI=0x16,
-    
-    /* BDLM */
-    BTSW_INDEX_BDL_QMAIL=0x19,
-    BTSW_INDEX_BDL_BN=0x1A,
-    
-    /* BMDM */
-    BTSW_INDEX_BMD_SHOP_CURSOR01=0x1D,
-    
-    /* BRK */
-    BTSW_INDEX_BRK_SHOP_CURSOR01=0x20,
-    
-    /* BTP */
-    BTSW_INDEX_BTP_QMAIL=0x23,
-    BTSW_INDEX_BTP_BN_MABA=0x24,
-};
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -458,7 +393,7 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
 /* 00000EFC-000010F8       .text CreateInit__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::CreateInit() {
     m714 = current.angle;
-    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     gravity = -30.0f;
     setAction(&daNpc_Btsw2_c::wait_action, NULL);
     mAttPos = current.pos;
@@ -476,8 +411,8 @@ BOOL daNpc_Btsw2_c::CreateInit() {
     m736 = 0;
     mPathPntIdx = 0;
     mEventCut.setActorInfo2("Btsw2", this);
-    attention_info.distances[1] = 0xAB;
-    attention_info.distances[3] = 0xAB;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
     return TRUE;
 }
 
@@ -678,8 +613,7 @@ BOOL daNpc_Btsw2_c::_draw() {
     cXyz shadowPos(current.pos.x, current.pos.y + 130.0f, current.pos.z);
     mShadowId = dComIfGd_setShadow(
         mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
-        current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr,
-        0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+        current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
     
     dSnap_RegistFig(DSNAP_TYPE_BTSW, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
@@ -712,7 +646,7 @@ static BOOL daNpc_Btsw2_IsDelete(daNpc_Btsw2_c* i_this) {
     return TRUE;
 }
 
-actor_method_class l_daNpc_Btsw2_Method = {
+static actor_method_class l_daNpc_Btsw2_Method = {
     (process_method_func)daNpc_Btsw2_Create,
     (process_method_func)daNpc_Btsw2_Delete,
     (process_method_func)daNpc_Btsw2_Execute,
@@ -722,8 +656,8 @@ actor_method_class l_daNpc_Btsw2_Method = {
 
 actor_process_profile_definition g_profile_NPC_BTSW2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_NPC_BTSW2,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Btsw2_c),

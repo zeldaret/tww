@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_bemos.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000194       .text __ct__13daBemos_HIO_cFv */
 daBemos_HIO_c::daBemos_HIO_c() {
@@ -216,3 +216,27 @@ static BOOL daBemosIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daBemosMethodTable = {
+    (process_method_func)daBemosCreate,
+    (process_method_func)daBemosDelete,
+    (process_method_func)daBemosExecute,
+    (process_method_func)daBemosIsDelete,
+    (process_method_func)daBemosDraw,
+};
+
+actor_process_profile_definition g_profile_Bemos = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Bemos,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBemos_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00DD,
+    /* Actor SubMtd */ &daBemosMethodTable,
+    /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
+};

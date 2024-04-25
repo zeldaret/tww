@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_pz.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000310       .text __ct__10daPz_HIO_cFv */
 daPz_HIO_c::daPz_HIO_c() {
@@ -97,12 +97,12 @@ void daPz_c::checkEyeArea(cXyz&) {
 }
 
 /* 0000114C-00001194       .text getMsg__6daPz_cFv */
-void daPz_c::getMsg() {
+u32 daPz_c::getMsg() {
     /* Nonmatching */
 }
 
 /* 00001194-00001208       .text next_msgStatus__6daPz_cFPUl */
-void daPz_c::next_msgStatus(unsigned long*) {
+u16 daPz_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
@@ -396,3 +396,27 @@ static BOOL daPzIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daPzMethodTable = {
+    (process_method_func)daPzCreate,
+    (process_method_func)daPzDelete,
+    (process_method_func)daPzExecute,
+    (process_method_func)daPzIsDelete,
+    (process_method_func)daPzDraw,
+};
+
+actor_process_profile_definition g_profile_PZ = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_PZ,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daPz_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00C5,
+    /* Actor SubMtd */ &daPzMethodTable,
+    /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

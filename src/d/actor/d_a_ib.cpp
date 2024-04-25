@@ -513,7 +513,7 @@ dCcD_SrcCyl daIball_c::m_cyl_src = {
     },
 };
 
-actor_method_class l_daIball_Method = {
+static actor_method_class l_daIball_Method = {
     (process_method_func)daIball_Create,
     (process_method_func)daIball_Delete,
     (process_method_func)daIball_Execute,
@@ -523,8 +523,8 @@ actor_method_class l_daIball_Method = {
 
 actor_process_profile_definition g_profile_Iball = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Iball,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daIball_c),

@@ -186,8 +186,8 @@ namespace daObjAkabe {
 
 actor_process_profile_definition g_profile_Obj_Akabe = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Akabe,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjAkabe::Act_c),
@@ -196,7 +196,7 @@ actor_process_profile_definition g_profile_Obj_Akabe = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0033,
     /* Actor SubMtd */ &daObjAkabe::Mthd_Table,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

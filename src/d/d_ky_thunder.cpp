@@ -98,22 +98,22 @@ void dThunder_c::adjustHeap() {
 }
 
 /* 801988B8-80198A38       .text dThunder_Draw__FP10dThunder_c */
-BOOL dThunder_Draw(dThunder_c* i_this) {
+static BOOL dThunder_Draw(dThunder_c* i_this) {
     return i_this->draw();
 }
 
 /* 80198A38-80198AB4       .text dThunder_Execute__FP10dThunder_c */
-BOOL dThunder_Execute(dThunder_c* i_this) {
+static BOOL dThunder_Execute(dThunder_c* i_this) {
     return i_this->execute();
 }
 
 /* 80198AB4-80198ABC       .text dThunder_IsDelete__FP10dThunder_c */
-BOOL dThunder_IsDelete(dThunder_c* i_this) {
+static BOOL dThunder_IsDelete(dThunder_c* i_this) {
     return TRUE;
 }
 
 /* 80198ABC-80198B68       .text dThunder_Delete__FP10dThunder_c */
-BOOL dThunder_Delete(dThunder_c* i_this) {
+static BOOL dThunder_Delete(dThunder_c* i_this) {
     mDoAud_seDeleteObject(&i_this->mPos);
     mDoAud_seDeleteObject(&i_this->mPosNeg);
     i_this->~dThunder_c();
@@ -121,7 +121,7 @@ BOOL dThunder_Delete(dThunder_c* i_this) {
 }
 
 /* 80198B68-80198BC4       .text dThunder_Create__FP12kankyo_class */
-s32 dThunder_Create(kankyo_class* i_ky) {
+static s32 dThunder_Create(kankyo_class* i_ky) {
     dThunder_c * i_this = (dThunder_c *)i_ky;
     if (!i_this->createHeap())
         return cPhs_ERROR_e;

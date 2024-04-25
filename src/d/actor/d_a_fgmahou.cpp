@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_fgmahou.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000E4       .text daFgmahou_Draw__FP13fgmahou_class */
 static BOOL daFgmahou_Draw(fgmahou_class*) {
@@ -45,3 +45,28 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 static s32 daFgmahou_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daFgmahou_Method = {
+    (process_method_func)daFgmahou_Create,
+    (process_method_func)daFgmahou_Delete,
+    (process_method_func)daFgmahou_Execute,
+    (process_method_func)daFgmahou_IsDelete,
+    (process_method_func)daFgmahou_Draw,
+};
+
+actor_process_profile_definition g_profile_FGMAHOU = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_FGMAHOU,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(fgmahou_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00E7,
+    /* Actor SubMtd */ &l_daFgmahou_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

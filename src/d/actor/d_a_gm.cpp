@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_gm.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-0000032C       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -131,3 +132,27 @@ static s32 daGM_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daGM_Method = {
+    (process_method_func)daGM_Create,
+    (process_method_func)daGM_Delete,
+    (process_method_func)daGM_Execute,
+    (process_method_func)daGM_IsDelete,
+    (process_method_func)daGM_Draw,
+};
+
+actor_process_profile_definition g_profile_GM = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_GM,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(gm_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00BF,
+    /* Actor SubMtd */ &l_daGM_Method,
+    /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -70,7 +70,15 @@ bool daObjZouk::Act_c::create_heap() {
     M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, 0x05);
     JUT_ASSERT(0x175, M_bck_data != 0);
     if (mdl_data != NULL && M_bck_data != NULL) {
-        M_anm = new mDoExt_McaMorf(mdl_data, NULL, NULL, M_bck_data, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
+        M_anm = new mDoExt_McaMorf(
+            mdl_data,
+            NULL, NULL,
+            M_bck_data,
+            J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, 1,
+            NULL,
+            0x00000000,
+            0x11020203
+        );
     }
     JUT_ASSERT(0x183, M_anm != 0);
     if (M_anm != NULL) {
@@ -347,7 +355,7 @@ namespace daObjZouk {
 
 actor_process_profile_definition g_profile_Obj_Zouk = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Zouk,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -357,7 +365,7 @@ actor_process_profile_definition g_profile_Obj_Zouk = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x00FA,
     /* Actor SubMtd */ &daObjZouk::Mthd_Table,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_ebomzo.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjEbomzo5Act_cFv */
 void daObjEbomzo::Act_c::CreateHeap() {
@@ -65,3 +65,57 @@ void daObjEbomzo::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjEbomzo::Act_c::Draw() {
     /* Nonmatching */
 }
+
+namespace daObjEbomzo {
+namespace {
+/* 00000B9C-00000BBC       .text Mthd_Create__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000BBC-00000BDC       .text Mthd_Delete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000BDC-00000BFC       .text Mthd_Execute__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000BFC-00000C28       .text Mthd_Draw__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000C28-00000C54       .text Mthd_IsDelete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Mthd_Ebomzo = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjEbomzo
+
+actor_process_profile_definition g_profile_Obj_Ebomzo = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Ebomzo,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjEbomzo::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x007C,
+    /* Actor SubMtd */ &daObjEbomzo::Mthd_Ebomzo,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

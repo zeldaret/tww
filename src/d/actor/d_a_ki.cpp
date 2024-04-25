@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_ki.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001B4       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -116,3 +117,27 @@ static s32 daKi_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daKi_Method = {
+    (process_method_func)daKi_Create,
+    (process_method_func)daKi_Delete,
+    (process_method_func)daKi_Execute,
+    (process_method_func)daKi_IsDelete,
+    (process_method_func)daKi_Draw,
+};
+
+actor_process_profile_definition g_profile_KI = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KI,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(ki_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00CA,
+    /* Actor SubMtd */ &l_daKi_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

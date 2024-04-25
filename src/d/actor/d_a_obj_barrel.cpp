@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_barrel.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q211daObjBarrel5Act_cFP10fopAc_ac_c */
 void daObjBarrel::Act_c::solidHeapCB(fopAc_ac_c*) {
@@ -225,3 +225,28 @@ BOOL daObjBarrel::Method::Draw(void*) {
 BOOL daObjBarrel::Method::IsDelete(void*) {
     /* Nonmatching */
 }
+
+actor_method_class daObjBarrel::Method::Table = {
+    (process_method_func)daObjBarrel::Method::Create,
+    (process_method_func)daObjBarrel::Method::Delete,
+    (process_method_func)daObjBarrel::Method::Execute,
+    (process_method_func)daObjBarrel::Method::IsDelete,
+    (process_method_func)daObjBarrel::Method::Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Barrel = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0008,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Barrel,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjBarrel::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0109,
+    /* Actor SubMtd */ &daObjBarrel::Method::Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e | fopAcStts_UNK8000000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+};

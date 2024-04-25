@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_branch.h"
+#include "d/res/res_kwood_00.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
@@ -11,22 +12,6 @@
 #include "d/d_kankyo.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "dolphin/mtx/mtx.h"
-
-enum KWOOD_00_RES_FILE_ID {
-    /* BAS */
-    KWOOD_00_BAS_BREAK=0x0,
-    KWOOD_00_BAS_SWING=0x1,
-    KWOOD_00_BAS_SWING02=0x8,
-    
-    /* BCK */
-    KWOOD_00_BCK_BREAK=0x2,
-    KWOOD_00_BCK_SWING=0x3,
-    KWOOD_00_BCK_SWING02=0x7,
-    
-    /* BMDC */
-    KWOOD_00_BMD_WB=0x5,
-    KWOOD_00_BMD_WS=0x6,
-};
 
 static u16 anim_table[] = {
     KWOOD_00_BCK_SWING02, KWOOD_00_BAS_SWING02,
@@ -242,18 +227,18 @@ static actor_method_class l_daBranch_Method = {
 };
 
 actor_process_profile_definition g_profile_BRANCH = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcLy_CURRENT_e,
-    PROC_BRANCH,
-    &g_fpcLf_Method.base,
-    sizeof(daBranch_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0193,
-    &l_daBranch_Method,
-    fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BRANCH,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBranch_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0193,
+    /* Actor SubMtd */ &l_daBranch_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

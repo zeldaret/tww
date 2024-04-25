@@ -4,7 +4,7 @@
  */
 
 #include "d/actor/d_a_bl.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000178       .text draw_SUB__FP8bl_class */
 void draw_SUB(bl_class*) {
@@ -156,3 +156,27 @@ static s32 daBL_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daBL_Method = {
+    (process_method_func)daBL_Create,
+    (process_method_func)daBL_Delete,
+    (process_method_func)daBL_Execute,
+    (process_method_func)daBL_IsDelete,
+    (process_method_func)daBL_Draw,
+};
+
+actor_process_profile_definition g_profile_BL = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BL,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bl_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00C2,
+    /* Actor SubMtd */ &l_daBL_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

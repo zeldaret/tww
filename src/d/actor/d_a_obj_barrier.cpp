@@ -243,7 +243,7 @@ void daObjBarrier_c::break_start_wait_proc() {
             case 9:
             case 10:
                 dComIfGs_onEventBit(dSv_evtBit_c::BARRIER_BREAK);
-                mEventID = dComIfGp_evmng_getEventIdx("seal", 0xFF);
+                mEventID = dComIfGp_evmng_getEventIdx("seal");
                 mBarrierProc = PROC_BREAK_ORDER;
                 break;
             }
@@ -609,14 +609,16 @@ static int daObjBarrier_IsDelete(daObjBarrier_c* i_this) {
 }
 
 static actor_method_class l_daObjBarrier_Method = {
-    (process_method_func)daObjBarrier_Create,  (process_method_func)daObjBarrier_Delete,
-    (process_method_func)daObjBarrier_Execute, (process_method_func)daObjBarrier_IsDelete,
+    (process_method_func)daObjBarrier_Create,
+    (process_method_func)daObjBarrier_Delete,
+    (process_method_func)daObjBarrier_Execute,
+    (process_method_func)daObjBarrier_IsDelete,
     (process_method_func)daObjBarrier_Draw,
 };
 
 actor_process_profile_definition g_profile_Obj_Barrier = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Barrier,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -624,7 +626,7 @@ actor_process_profile_definition g_profile_Obj_Barrier = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 131,
+    /* Priority     */ 0x0083,
     /* Actor SubMtd */ &l_daObjBarrier_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

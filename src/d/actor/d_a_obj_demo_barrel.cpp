@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_demo_barrel.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000144       .text setParticleHahen__19daObj_Demo_Barrel_cFv */
 void daObj_Demo_Barrel_c::setParticleHahen() {
@@ -51,3 +51,27 @@ static BOOL daObj_Demo_BarrelIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daObj_Demo_BarrelMethodTable = {
+    (process_method_func)daObj_Demo_BarrelCreate,
+    (process_method_func)daObj_Demo_BarrelDelete,
+    (process_method_func)daObj_Demo_BarrelExecute,
+    (process_method_func)daObj_Demo_BarrelIsDelete,
+    (process_method_func)daObj_Demo_BarrelDraw,
+};
+
+actor_process_profile_definition g_profile_Obj_Demo_Barrel = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Demo_Barrel,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Demo_Barrel_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x010F,
+    /* Actor SubMtd */ &daObj_Demo_BarrelMethodTable,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

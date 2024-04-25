@@ -446,7 +446,7 @@ int dEvmng_strcmp(const char* s1, char* s2) {
 }
 
 /* 80074824-80074964       .text getMyActIdx__16dEvent_manager_cFiPCPCciii */
-int dEvent_manager_c::getMyActIdx(int staffIdx, const char* const* action, int actionNum, int force, int nameType) {
+int dEvent_manager_c::getMyActIdx(int staffIdx, const char* const* action, int actionNum, BOOL force, int nameType) {
     if (staffIdx == -1)
         return -1;
 
@@ -593,7 +593,7 @@ void dEvent_manager_c::exceptionProc() {
             if (strcmp(eventName, "look_tetra") == 0)
                 dComIfGs_onEventBit(0x0280);
         } else {
-            fopAcM_orderOtherEvent2(NULL, (char*)eventName, dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(NULL, (char*)eventName);
         }
         break;
     case 2:
@@ -780,7 +780,7 @@ static int dEv_talkman_get_action(int param_0) {
     if (staffId == -1) {
         return -1;
     }
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, action_table, ARRAY_SIZE(action_table), 0, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
     if (actIdx == param_0) {
         dComIfGp_evmng_cutEnd(staffId);
     }

@@ -162,7 +162,7 @@ static actor_method_class daSwAtMethodTable = {
 
 actor_process_profile_definition g_profile_SW_ATTACK = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_SW_ATTACK,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -172,7 +172,7 @@ actor_process_profile_definition g_profile_SW_ATTACK = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0139,
     /* Actor SubMtd */ &daSwAtMethodTable,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

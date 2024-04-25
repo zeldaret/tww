@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bst.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000110       .text __ct__11daBst_HIO_cFv */
 daBst_HIO_c::daBst_HIO_c() {
@@ -211,3 +212,27 @@ static s32 daBst_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daBst_Method = {
+    (process_method_func)daBst_Create,
+    (process_method_func)daBst_Delete,
+    (process_method_func)daBst_Execute,
+    (process_method_func)daBst_IsDelete,
+    (process_method_func)daBst_Draw,
+};
+
+actor_process_profile_definition g_profile_BST = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BST,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bst_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00E5,
+    /* Actor SubMtd */ &l_daBst_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

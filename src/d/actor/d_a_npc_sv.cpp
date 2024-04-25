@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_sv.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_obj_ikada.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000021C       .text __ct__9daNpcSv_cFv */
 daNpcSv_c::daNpcSv_c() {
@@ -251,3 +252,28 @@ static BOOL daNpc_PeopleDraw(void*) {
 static BOOL daNpc_PeopleIsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daNpc_PeopleMethodTable = {
+    (process_method_func)daNpc_PeopleCreate,
+    (process_method_func)daNpc_PeopleDelete,
+    (process_method_func)daNpc_PeopleExecute,
+    (process_method_func)daNpc_PeopleIsDelete,
+    (process_method_func)daNpc_PeopleDraw,
+};
+
+actor_process_profile_definition g_profile_NPC_SV = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_SV,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcSv_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0180,
+    /* Actor SubMtd */ &daNpc_PeopleMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

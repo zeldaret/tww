@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_coming3.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000404       .text get_water_height__Q29daComing35Act_cFPfPiPC4cXyz */
 void daComing3::Act_c::get_water_height(float*, int*, const cXyz*) {
@@ -120,3 +120,57 @@ BOOL daComing3::Act_c::_execute() {
 BOOL daComing3::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daComing3 {
+namespace {
+/* 00001D14-00001D34       .text Mthd_Create__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001D34-00001D58       .text Mthd_Delete__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001D58-00001D7C       .text Mthd_Execute__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001D7C-00001DA0       .text Mthd_Draw__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001DA0-00001DA8       .text Mthd_IsDelete__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daComing3
+
+actor_process_profile_definition g_profile_Coming3 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Coming3,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daComing3::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0029,
+    /* Actor SubMtd */ &daComing3::Mthd_Table,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

@@ -13,6 +13,8 @@ class cM3dGTri;
 class dBgS_CrrPos;
 class cBgS_PolyInfo;
 class fopAc_ac_c;
+class dBgS_CaptPoly;
+typedef struct _GXColor GXColor;
 
 class dBgW : public cBgW {
 public:
@@ -56,11 +58,50 @@ public:
     virtual bool ChkGrpThrough(int, cBgS_GrpPassChk*, int);
     virtual void CrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);
     virtual void TransPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);
-    virtual void MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);
+    virtual void MatrixCrrPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
+        CrrPos(poly, user, accept, pos, angle, shape_angle);
+    }
 
     void SetCrrFunc(dBgW_CrrFunc func) { m_crr_func = func; }
     void SetRideCallback(dBgW_RideCallBack func) { mpRideCb = func; }
     void SetPushPullCallback(dBgW_PPCallBack func) { mpPushPullCb = func; }
+
+    void CalcDiffShapeAngleY(s16) {}
+    void CaptPoly(dBgS_CaptPoly&) {}
+    void CaptPolyGrpRp(dBgS_CaptPoly&, int) {}
+    void CaptPolyRp(dBgS_CaptPoly&, int) {}
+    void ChkMoveFlag() {}
+    void ClrGrpRoomInf() {}
+    void ClrRoomId() {}
+    void DebugDraw() {}
+    void DrawBox() {}
+    void DrawPoly(cBgS_PolyInfo&, GXColor&) {}
+    void GetDiffShapeAngleY() {}
+    void GetGrpRoomInf() {}
+    void GetMaskPolyInfo0(int, u32, u32) {}
+    void GetMaskPolyInfo3_NoShift(int, u32) {}
+    void GetPolyArrowThrough(int) {}
+    void GetPolyBombThrough(int) {}
+    void GetPolyBoomerangThrough(int) {}
+    void GetPolyCamThrough(int) {}
+    void GetPolyHSStick(int) {}
+    void GetPolyLinkThrough(int) {}
+    void GetPolyObjThrough(int) {}
+    void GetPolyRopeThrough(int) {}
+    void GetPushPullCallback() {}
+    void GetRideCallback() {}
+    void GetRoomId() {}
+    void GetShdwThrough(int) {}
+    void OffMoveFlag() {}
+    void OnMoveFlag() {}
+    void RoofChk(dBgS_RoofChk*) {}
+    void RwgCaptPoly(int, dBgS_CaptPoly&) {}
+    void SetGrpRoomInf(int) {}
+    void SetOldShapeAngleY(s16) {}
+    void SetRoomId(u16) {}
+    void SphChk(dBgS_SphChk*, void*) {}
+    void SplGrpChk(dBgS_SplGrpChk*) {}
+    void WallCorrect(dBgS_Acch*) {}
 
     /* 0xA8 */ dBgW_CrrFunc m_crr_func;
     /* 0xAC */ s16 mOldRotY;
@@ -72,6 +113,6 @@ public:
     /* 0xBB */ u8 mRoomNo2;
 };  // Size: 0xBC
 
-dBgW* dBgW_NewSet(cBgD_t*, unsigned long, float(*)[3][4]);
+dBgW* dBgW_NewSet(cBgD_t*, u32, Mtx*);
 
 #endif /* D_BG_W_H */

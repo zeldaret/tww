@@ -13,7 +13,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "dolphin/types.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -1103,7 +1102,7 @@ void daItem_c::checkWall() {
     }
     
     cM3dGPla* wallPlane = dComIfG_Bgsp()->GetTriPla(mAcchCir);
-    cXyz wallNorm = wallPlane->mNormal;
+    cXyz wallNorm = *wallPlane->GetNP();
     
     cXyz vel;
     vel.x = speedF * cM_ssin(current.angle.y);
@@ -1235,13 +1234,13 @@ void daItem_c::mode_water_init() {
     clrFlag(FLAG_UNK04);
     scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     
-    cXyz scale;
+    cXyz particleScale;
     f32 temp = dItem_data::getShadowSize(m_itemNo);
     f32 temp3 = temp / dItem_data::getShadowSize(dItem_GREEN_RUPEE_e);
     temp3 *= scale.x;
-    scale.setall(temp3);
+    particleScale.setall(temp3);
     
-    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &scale, 0xFF, &mPtclRippleCb);
+    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
     mPtclRippleCb.mRate = 0.0f;
 }
 
@@ -1509,7 +1508,7 @@ static actor_method_class l_daItem_Method = {
 
 actor_process_profile_definition g_profile_ITEM = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_ITEM,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

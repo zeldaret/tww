@@ -64,7 +64,7 @@ void daWarpfout_c::demo_proc() {
 
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mStaffId != -1) {
         int actIdx =
-            dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
+            dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 
         if (actIdx == -1) {
             dComIfGp_evmng_cutEnd(mStaffId);
@@ -212,24 +212,26 @@ static BOOL daWarpfout_IsDelete(void*) {
 }
 
 static actor_method_class daWarpfoutMethodTable = {
-    (process_method_func)daWarpfout_Create,  (process_method_func)daWarpfout_Delete,
-    (process_method_func)daWarpfout_Execute, (process_method_func)daWarpfout_IsDelete,
+    (process_method_func)daWarpfout_Create,
+    (process_method_func)daWarpfout_Delete,
+    (process_method_func)daWarpfout_Execute,
+    (process_method_func)daWarpfout_IsDelete,
     (process_method_func)daWarpfout_Draw,
 };
 
 actor_process_profile_definition g_profile_WARPFOUT = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_WARPFOUT,
-    &g_fpcLf_Method.base,
-    sizeof(daWarpfout_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01a3,
-    &daWarpfoutMethodTable,
-    fopAcStts_UNK40000_e | fopAcStts_CULL_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_WARPFOUT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daWarpfout_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01A3,
+    /* Actor SubMtd */ &daWarpfoutMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

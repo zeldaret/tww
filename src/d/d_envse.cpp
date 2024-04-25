@@ -21,7 +21,7 @@ public:
 };
 
 /* 8017D4C0-8017D4C8       .text dEnvSe_Draw__FP8dEnvSe_c */
-BOOL dEnvSe_Draw(dEnvSe_c* i_this) {
+static BOOL dEnvSe_Draw(dEnvSe_c* i_this) {
     return TRUE;
 }
 
@@ -167,23 +167,23 @@ BOOL dEnvSe_c::execute() {
 }
 
 /* 8017DAE0-8017DB00       .text dEnvSe_Execute__FP8dEnvSe_c */
-BOOL dEnvSe_Execute(dEnvSe_c* i_this) {
+static BOOL dEnvSe_Execute(dEnvSe_c* i_this) {
     return i_this->execute();
 }
 
 /* 8017DB00-8017DB08       .text dEnvSe_IsDelete__FP8dEnvSe_c */
-BOOL dEnvSe_IsDelete(dEnvSe_c* i_this) {
+static BOOL dEnvSe_IsDelete(dEnvSe_c* i_this) {
     return TRUE;
 }
 
 /* 8017DB08-8017DB38       .text dEnvSe_Delete__FP8dEnvSe_c */
-BOOL dEnvSe_Delete(dEnvSe_c* i_this) {
+static BOOL dEnvSe_Delete(dEnvSe_c* i_this) {
     mDoAud_seDeleteObject(&i_this->mPos);
     return TRUE;
 }
 
 /* 8017DB38-8017DB40       .text dEnvSe_Create__FP12kankyo_class */
-s32 dEnvSe_Create(kankyo_class*) {
+static s32 dEnvSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 

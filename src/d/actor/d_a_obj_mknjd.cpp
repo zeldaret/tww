@@ -25,7 +25,6 @@
 #include "d/d_a_obj.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/types.h"
 
 
 #define ACT_SETGOAL 0
@@ -255,10 +254,10 @@ int daObjMknjD::Act_c::Create() {
     }
 
     if (m043E == true) {
-        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[3], 0xFF);
-        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[1], 0xFF);
-        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[5], 0xFF);
-        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7], 0xFF);
+        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[3]);
+        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[1]);
+        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[5]);
+        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
         mTactMode = 4;
         mGiveItemNo = TACT_SONG5;
@@ -266,10 +265,10 @@ int daObjMknjD::Act_c::Create() {
         m0430 = 0x2910;
     }
     else {
-        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[2], 0xFF);
-        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[0], 0xFF);
-        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[4], 0xFF);
-        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6], 0xFF);
+        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[2]);
+        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[0]);
+        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[4]);
+        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
         mTactMode = 3;
         mGiveItemNo = TACT_SONG4;
@@ -277,9 +276,9 @@ int daObjMknjD::Act_c::Create() {
         m0430 = 0x2920;
     }
 
-    attention_info.distances[1] = 0x3D;
-    attention_info.distances[3] = 0x3D;
-    attention_info.flags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x3D;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x3D;
+    attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
     if (!checkItemGet(mGiveItemNo, 1)) {
         m043F = 8;
@@ -445,7 +444,7 @@ void daObjMknjD::Act_c::privateCut() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("MknjD");
     if (staffIdx != -1) {
-        mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_table, ARRAY_SIZE(cut_name_table), 1, 0);
+        mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_table, ARRAY_SIZE(cut_name_table), TRUE, 0);
 
         if (mActionIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
@@ -1015,18 +1014,18 @@ namespace daObjMknjD {
 }
 
 actor_process_profile_definition g_profile_Obj_MknjD = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_MknjD,
-    &g_fpcLf_Method.base,
-    sizeof(daObjMknjD::Act_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01C6,
-    &daObjMknjD::Mthd_Table,
-    fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_MknjD,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMknjD::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01C6,
+    /* Actor SubMtd */ &daObjMknjD::Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

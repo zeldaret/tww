@@ -330,7 +330,11 @@ BOOL daNpc_Ji1_c::isClearRecord(s16 param_1) {
     }
 
     u8 level = dComIfGs_getEventReg(0xD003);
-    return param_1 >= l_HIO.field_0x60[level] ? TRUE : FALSE; // has a clrlwi without the ternary + TRUE/FALSE macros
+    if (param_1 >= l_HIO.field_0x60[level]) {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000630-000006F8       .text setClearRecord__11daNpc_Ji1_cFs */
@@ -1018,7 +1022,7 @@ s32 daNpc_Ji1_c::getEventActionNo(int staffIdx) {
         "06_dummy"
     };
 
-    return dComIfGp_evmng_getMyActIdx(staffIdx, ActionNames, 7, 0, 0);
+    return dComIfGp_evmng_getMyActIdx(staffIdx, ActionNames, ARRAY_SIZE(ActionNames), FALSE, 0);
 }
 
 /* 00004488-00004714       .text eventAction__11daNpc_Ji1_cFPv */
@@ -2210,8 +2214,8 @@ u32 daNpc_Ji1_c::battleAction(void*) {
         field_0xC3C = 0;
         setAnm(5, 0.0f, 0);
         attention_info.flags |= fopAc_Attn_LOCKON_MISC_e;
-        attention_info.flags |= fopAc_Attn_LOCKON_ENEMY_e;
-        attention_info.distances[2] = 3;
+        attention_info.flags |= fopAc_Attn_LOCKON_BATTLE_e;
+        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 3;
         field_0xC30 = (s16)cM_rndF(150.0f) + 30;
         field_0xD70 = 0;
         field_0xD6C = 0;
@@ -2220,8 +2224,8 @@ u32 daNpc_Ji1_c::battleAction(void*) {
         field_0xC78++;
     }
     else if(field_0xC78 == -1) {
-        attention_info.flags &= ~fopAc_Attn_LOCKON_ENEMY_e;
-        attention_info.distances[2] = 0xB5;
+        attention_info.flags &= ~fopAc_Attn_LOCKON_BATTLE_e;
+        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0xB5;
     }
     else {
         cXyz temp = player->current.pos - current.pos;
@@ -2771,7 +2775,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         0x11020203
     );
 
-    if(field_0x330 == 0 || field_0x330->getModel() == 0) {
+    if(field_0x330 == NULL || field_0x330->getModel() == NULL) {
         return false;
     }
 
@@ -2805,7 +2809,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     );
 
 
-    if(mpMorf == 0 || mpMorf->getModel() == 0) {
+    if(mpMorf == NULL || mpMorf->getModel() == NULL) {
         return false;
     }
 
@@ -2856,27 +2860,27 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     field_0x330->getModel()->setUserArea((u32)this);
 
     field_0x5F8.SetWall(60.0f, 50.0f);
-    field_0x434.Set(&current.pos, &old.pos, this, 1, &field_0x5F8, &speed, 0, 0);
+    field_0x434.Set(&current.pos, &old.pos, this, 1, &field_0x5F8, &speed);
     field_0x434.OnLineCheck();
 
-    field_0xC54 = dComIfGp_evmng_getEventIdx("Ji1_StartSpeak", 0xFF);
-    field_0xC56 = dComIfGp_evmng_getEventIdx("Ji1_Speak", 0xFF);
-    field_0xC58 = dComIfGp_evmng_getEventIdx("Ji1_EndSpeak", 0xFF);
-    field_0xC5A = dComIfGp_evmng_getEventIdx("Ji1_BadSpeak", 0xFF);
-    field_0xC5C = dComIfGp_evmng_getEventIdx("Ji1_linkmove", 0xFF);
-    field_0xC5E = dComIfGp_evmng_getEventIdx("Ji1_kaiten", 0xFF);
-    field_0xC60 = dComIfGp_evmng_getEventIdx("Ji1_kaiten_exp", 0xFF);
-    field_0xC62 = dComIfGp_evmng_getEventIdx("Ji1_ItemGetEnd", 0xFF);
-    field_0xC64 = dComIfGp_evmng_getEventIdx("Ji1_ItemGetTalkEnd", 0xFF);
-    field_0xC66 = dComIfGp_evmng_getEventIdx("Ji1_pl_backroom", 0xFF);
-    field_0xC68 = dComIfGp_evmng_getEventIdx("Ji1_TeachSpRollCut", 0xFF);
-    field_0xC6A = dComIfGp_evmng_getEventIdx("Ji1_SpRollFail", 0xFF);
-    field_0xC6C = dComIfGp_evmng_getEventIdx("Ji1_NormAng", 0xFF);
-    field_0xC6E = dComIfGp_evmng_getEventIdx("Ji1_NormAng2", 0xFF);
-    field_0xC70 = dComIfGp_evmng_getEventIdx("Ji1_NormAngFin", 0xFF);
-    field_0xC72 = dComIfGp_evmng_getEventIdx("Ji1_SwordGetTalkEnd", 0xFF);
-    field_0xC74 = dComIfGp_evmng_getEventIdx("Ji1_KmonTalk", 0xFF);
-    field_0xC76 = dComIfGp_evmng_getEventIdx("Ji1_EquipTalk", 0xFF);
+    field_0xC54 = dComIfGp_evmng_getEventIdx("Ji1_StartSpeak");
+    field_0xC56 = dComIfGp_evmng_getEventIdx("Ji1_Speak");
+    field_0xC58 = dComIfGp_evmng_getEventIdx("Ji1_EndSpeak");
+    field_0xC5A = dComIfGp_evmng_getEventIdx("Ji1_BadSpeak");
+    field_0xC5C = dComIfGp_evmng_getEventIdx("Ji1_linkmove");
+    field_0xC5E = dComIfGp_evmng_getEventIdx("Ji1_kaiten");
+    field_0xC60 = dComIfGp_evmng_getEventIdx("Ji1_kaiten_exp");
+    field_0xC62 = dComIfGp_evmng_getEventIdx("Ji1_ItemGetEnd");
+    field_0xC64 = dComIfGp_evmng_getEventIdx("Ji1_ItemGetTalkEnd");
+    field_0xC66 = dComIfGp_evmng_getEventIdx("Ji1_pl_backroom");
+    field_0xC68 = dComIfGp_evmng_getEventIdx("Ji1_TeachSpRollCut");
+    field_0xC6A = dComIfGp_evmng_getEventIdx("Ji1_SpRollFail");
+    field_0xC6C = dComIfGp_evmng_getEventIdx("Ji1_NormAng");
+    field_0xC6E = dComIfGp_evmng_getEventIdx("Ji1_NormAng2");
+    field_0xC70 = dComIfGp_evmng_getEventIdx("Ji1_NormAngFin");
+    field_0xC72 = dComIfGp_evmng_getEventIdx("Ji1_SwordGetTalkEnd");
+    field_0xC74 = dComIfGp_evmng_getEventIdx("Ji1_KmonTalk");
+    field_0xC76 = dComIfGp_evmng_getEventIdx("Ji1_EquipTalk");
 
     if(dComIfGs_isEventBit(0x1) && !dComIfGs_isEventBit(0x108)) {
         eventInfo.setEventId(field_0xC76);
@@ -2896,7 +2900,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
     fopAcM_SetMtx(this, field_0x330->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
     gravity = -30.0f;
-    attention_info.flags = fopAc_Attn_LOCKON_MISC_e | fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e;
+    attention_info.flags = fopAc_Attn_LOCKON_MISC_e | fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
 
     field_0x638.Init(0xFF, 0xFF, this);
     field_0x674.Init(0xFF, 0xFF, this);
@@ -3062,9 +3066,9 @@ BOOL daNpc_Ji1_c::CreateInit() {
     field_0xD7E = 0;
     
     attention_info.flags |= fopAc_Attn_LOCKON_MISC_e;
-    attention_info.distances[1] = 0xA9;
-    attention_info.distances[3] = 0xA9;
-    attention_info.distances[2] = 0xB5;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
+    attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0xB5;
     field_0x414 = 0.0f;
     field_0x42C = 0.0f;
     field_0x430 = 0;
@@ -3225,7 +3229,10 @@ BOOL daNpc_Ji1_c::_draw() {
         field_0x3FC.entry(field_0x3F8->getModelData(), (s16)field_0x414);
         mDoExt_modelUpdateDL(field_0x3F8);
         cXyz temp(current.pos.x, current.pos.y + 150.0f, current.pos.z);
-        field_0x3F0 = dComIfGd_setShadow(field_0x3F0, 1, field_0x330->getModel(), &temp, 800.0f, 20.0f, current.pos.y, field_0x434.GetGroundH(), field_0x434.m_gnd, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+        field_0x3F0 = dComIfGd_setShadow(
+            field_0x3F0, 1, field_0x330->getModel(), &temp, 800.0f, 20.0f,
+            current.pos.y, field_0x434.GetGroundH(), field_0x434.m_gnd, &tevStr
+        );
         if(field_0x3F0 != 0 && field_0xD84 != 0) {
             dComIfGd_addRealShadow(field_0x3F0, mpMorf->getModel());
         }
@@ -3450,8 +3457,8 @@ static actor_method_class l_daNpc_Ji1_Method = {
 
 actor_process_profile_definition g_profile_NPC_JI1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_NPC_JI1,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Ji1_c),
@@ -3464,4 +3471,3 @@ actor_process_profile_definition g_profile_NPC_JI1 = {
     /* Group        */ fopAc_ENEMY_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
-

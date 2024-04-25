@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_jb1.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000144       .text __ct__15daNpc_Jb1_HIO_cFv */
 daNpc_Jb1_HIO_c::daNpc_Jb1_HIO_c() {
@@ -231,3 +231,27 @@ static BOOL daNpc_Jb1_IsDelete(daNpc_Jb1_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daNpc_Jb1_Method = {
+    (process_method_func)daNpc_Jb1_Create,
+    (process_method_func)daNpc_Jb1_Delete,
+    (process_method_func)daNpc_Jb1_Execute,
+    (process_method_func)daNpc_Jb1_IsDelete,
+    (process_method_func)daNpc_Jb1_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_JB1 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_JB1,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Jb1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x016B,
+    /* Actor SubMtd */ &l_daNpc_Jb1_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

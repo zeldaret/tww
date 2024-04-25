@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_npc_kamome.h"
+#include "d/res/res_kamome.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -35,30 +36,6 @@ static cXyz l_ms_at_local_start(100.0f, 20.0f, 0.0f);
 static cXyz l_ms_at_local_end(-100.0f, 20.0f, 0.0f);
 static cXyz l_line_bg_local_end(0.0f, 0.0f, 500.0f);
 static cXyz l_call_local_kyori(0.0f, 0.0f, 500.0f);
-
-enum KAMOME_RES_FILE_ID { // IDs and indexes are synced
-    /* BAS */
-    KAMOME_BAS_KA_FLY1=0x5,
-    KAMOME_BAS_KA_LAND1=0x6,
-    KAMOME_BAS_KA_MOVE1=0x7,
-    KAMOME_BAS_KA_WAIT1=0x8,
-    KAMOME_BAS_KA_WAIT2=0x9,
-    
-    /* BCK */
-    KAMOME_BCK_KA_EAT1=0xC,
-    KAMOME_BCK_KA_FLY1=0xD,
-    KAMOME_BCK_KA_LAND1=0xE,
-    KAMOME_BCK_KA_MOVE1=0xF,
-    KAMOME_BCK_KA_SING1=0x10,
-    KAMOME_BCK_KA_SING2=0x11,
-    KAMOME_BCK_KA_WAIT1=0x12,
-    KAMOME_BCK_KA_WAIT2=0x13,
-    KAMOME_BCK_KA_WAIT3=0x14,
-    
-    /* BDL */
-    KAMOME_BDL_KA=0x17,
-    KAMOME_BDL_KA_HYOI=0x18,
-};
 
 /* 000000EC-00000174       .text __ct__16daNpc_kam_HIO1_cFv */
 daNpc_kam_HIO1_c::daNpc_kam_HIO1_c() {
@@ -438,11 +415,11 @@ BOOL daNpc_kam_c::init() {
     setBaseMtx();
     
     attention_info.flags = 0;
-    attention_info.distances[1] = 38;
-    attention_info.distances[3] = 38;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 38;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 38;
     
     for (int i = 0; i < 3; i++) {
-        mEventIdxs[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xFF);
+        mEventIdxs[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i]);
     }
     
     eventInfo.setXyCheckCB(daNpc_kam_XyCheckCB);
@@ -650,10 +627,10 @@ int daNpc_kam_c::waitNpcAction(void*) {
         mC0C = cLib_getRndValue(10, 80);
     } else if (mActionStatus != ACTION_ENDING) {
         if (changeAreaCheck()) {
-            attention_info.flags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
+            attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
             mEventState = 6;
         } else {
-            attention_info.flags &= ~(fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
+            attention_info.flags &= ~(fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
             mEventState = -1;
         }
         
@@ -963,7 +940,7 @@ BOOL daNpc_kam_c::eventProc() {
     int staffId = dComIfGp_evmng_getMyStaffId(l_staff_name);
     if (dComIfGp_event_runCheck() && !checkCommandTalk()) {
         if (staffId != -1) {
-            int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+            int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
             if (actIdx == -1) {
                 dComIfGp_evmng_cutEnd(staffId);
             } else {
@@ -1401,8 +1378,7 @@ BOOL daNpc_kam_c::draw() {
     cXyz shadowPos(current.pos.x, current.pos.y, current.pos.z);
     mShadowId = dComIfGd_setShadow(
         mShadowId, 1, model, &shadowPos, 800.0f, 20.0f,
-        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
-        0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
     );
     
     dSnap_RegistFig(DSNAP_TYPE_KAMOME, this, 1.0f, 1.0f, 1.0f);
@@ -1446,8 +1422,8 @@ static actor_method_class l_daNpc_kam_Method = {
 
 actor_process_profile_definition g_profile_NPC_KAM = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_NPC_KAM,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_kam_c),

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_floor.h"
+#include "d/res/res_hhyu1.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
@@ -34,7 +35,7 @@ BOOL daFloor_c::Delete() {
 
 /* 0000012C-000001E8       .text CreateHeap__9daFloor_cFv */
 int daFloor_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x04);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HHYU1_BDL_HHYU1);
     JUT_ASSERT(0xc1, modelData != 0);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL)
@@ -150,7 +151,7 @@ static actor_method_class daFloorMethodTable = {
 
 actor_process_profile_definition g_profile_FLOOR = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_FLOOR,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -160,7 +161,7 @@ actor_process_profile_definition g_profile_FLOOR = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0092,
     /* Actor SubMtd */ &daFloorMethodTable,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

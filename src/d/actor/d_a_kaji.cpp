@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_kaji.h"
+#include "d/res/res_kaji.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_mtx.h"
@@ -11,7 +12,6 @@
 #include "d/d_s_play.h"
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 
 static daObjPirateship::Act_c* l_p_ship;
 
@@ -24,15 +24,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-000001F4       .text CreateHeap__8daKaji_cFv */
 BOOL daKaji_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x11); // asoda.bdl
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KAJI_INDEX_BDL_ASODA);
     JUT_ASSERT(0x55, modelData != 0);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", 0xE), // kj_wait.bck
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", KAJI_INDEX_BCK_KJ_WAIT),
         J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Kaji", 0x8), // kj_wait.bas
+        dComIfG_getObjectRes("Kaji", KAJI_INDEX_BAS_KJ_WAIT),
         0x00080000,
         0x11000002
     );
@@ -132,18 +132,18 @@ static actor_method_class daKajiMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Kaji = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcLy_CURRENT_e,
-    PROC_Kaji,
-    &g_fpcLf_Method.base,
-    sizeof(daKaji_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01AC,
-    &daKajiMethodTable,
-    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Kaji,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daKaji_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01AC,
+    /* Actor SubMtd */ &daKajiMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

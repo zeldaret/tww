@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_tntrap.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
 void daObjTnTrap_c::chk_appear() {
@@ -170,3 +170,28 @@ static BOOL daObjTnTrap_Draw(daObjTnTrap_c*) {
 static BOOL daObjTnTrap_IsDelete(daObjTnTrap_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daObjTnTrap_Method = {
+    (process_method_func)daObjTnTrap_Create,
+    (process_method_func)daObjTnTrap_Delete,
+    (process_method_func)daObjTnTrap_Execute,
+    (process_method_func)daObjTnTrap_IsDelete,
+    (process_method_func)daObjTnTrap_Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_TnTrap = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_TnTrap,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTnTrap_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0085,
+    /* Actor SubMtd */ &l_daObjTnTrap_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

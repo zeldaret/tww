@@ -388,7 +388,7 @@ static s32 daSea_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daSea_Method = {
+static actor_method_class l_daSea_Method = {
     (process_method_func)daSea_Create,
     (process_method_func)daSea_Delete,
     (process_method_func)daSea_Execute,
@@ -398,7 +398,7 @@ actor_method_class l_daSea_Method = {
 
 actor_process_profile_definition g_profile_SEA = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 2,
+    /* ListID       */ 0x0002,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_SEA,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -406,7 +406,7 @@ actor_process_profile_definition g_profile_SEA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0077,
+    /* Priority     */ 0x009A,
     /* Actor SubMtd */ &l_daSea_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

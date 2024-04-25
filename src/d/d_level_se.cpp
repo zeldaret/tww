@@ -10,7 +10,7 @@
 #include "m_Do/m_Do_audio.h"
 
 /* 80199308-801993CC       .text dLevelSe_Execute__FP10dLevelSe_c */
-BOOL dLevelSe_Execute(dLevelSe_c* i_this) {
+static BOOL dLevelSe_Execute(dLevelSe_c* i_this) {
     s32 soundId = i_this->mParam;
 
     if (i_this->mFlag & 0x08) {
@@ -26,18 +26,18 @@ BOOL dLevelSe_Execute(dLevelSe_c* i_this) {
 }
 
 /* 801993CC-801993D4       .text dLevelSe_IsDelete__FP10dLevelSe_c */
-BOOL dLevelSe_IsDelete(dLevelSe_c*) {
+static BOOL dLevelSe_IsDelete(dLevelSe_c*) {
     return TRUE;
 }
 
 /* 801993D4-80199404       .text dLevelSe_Delete__FP10dLevelSe_c */
-BOOL dLevelSe_Delete(dLevelSe_c* i_this) {
+static BOOL dLevelSe_Delete(dLevelSe_c* i_this) {
     mDoAud_seDeleteObject(&i_this->mPos);
     return TRUE;
 }
 
 /* 80199404-8019940C       .text dLevelSe_Create__FP12kankyo_class */
-s32 dLevelSe_Create(kankyo_class*) {
+static s32 dLevelSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 

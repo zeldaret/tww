@@ -70,8 +70,8 @@ public:
     static u16 sWorkArea_MtxReg[1024 + 4 /* padding */];
 
 private:
-    /* 0x04 */ u16* mPosData;
-    /* 0x08 */ u16* mNrmData;
+    /* 0x04 */ u16* mPosUseMtx;
+    /* 0x08 */ u16* mNrmUseMtx;
     /* 0x0C */ Mtx33* mNrmMtx;
     /* 0x10 */ u32 mFlags;
     /* 0x14 */ u8 field_0x14;
@@ -102,7 +102,7 @@ private:
     /* 0x00 */ J3DDeformData* mDeformData;
     /* 0x04 */ J3DAnmCluster* mAnmCluster;
     /* 0x08 */ f32* mWeightList;
-    /* 0x0C */ f32* field_0xc;
+    /* 0x0C */ f32* field_0x0c;
     /* 0x10 */ u32 mFlags;
 };  // Size: 0x14
 

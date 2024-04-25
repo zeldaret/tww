@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_rforce.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q211daObjRforce5Act_cFP10fopAc_ac_c */
 void daObjRforce::Act_c::solidHeapCB(fopAc_ac_c*) {
@@ -40,3 +40,57 @@ BOOL daObjRforce::Act_c::_execute() {
 BOOL daObjRforce::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daObjRforce {
+namespace {
+/* 00000508-00000528       .text Mthd_Create__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000528-0000054C       .text Mthd_Delete__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 0000054C-00000570       .text Mthd_Execute__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000570-00000594       .text Mthd_Draw__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000594-0000059C       .text Mthd_IsDelete__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjRforce
+
+actor_process_profile_definition g_profile_Obj_Rforce = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Rforce,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjRforce::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x003E,
+    /* Actor SubMtd */ &daObjRforce::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

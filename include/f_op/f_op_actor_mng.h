@@ -9,6 +9,7 @@
 #include "m_Do/m_Do_audio.h"
 #include "d/d_item_data.h"
 #include "d/d_save.h"
+#include "d/d_event.h"
 
 #define fopAcM_SetupActor(ptr,ClassName) \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) { \
@@ -635,8 +636,8 @@ inline void fopAcM_offDraw(fopAc_ac_c* actor) {
     fopDwTg_DrawQTo(&actor->draw_tag);
 }
 
-inline void fopAcM_orderOtherEvent(fopAc_ac_c* ac, char* event, u16 flag) {
-    fopAcM_orderOtherEvent2(ac, event, flag);
+inline void fopAcM_orderOtherEvent(fopAc_ac_c* ac, char* event, u16 hind = -1) {
+    fopAcM_orderOtherEvent2(ac, event, dEvtFlag_NOPARTNER_e, hind);
 }
 
 #endif

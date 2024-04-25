@@ -1,0 +1,58 @@
+#ifndef RES_AC_H
+#define RES_AC_H
+
+#include "global.h"
+
+enum AC_RES_FILE_ID {
+    /* BCKS */
+    AC_BCK_ACARM_WAIT01=0x0,
+    AC_BCK_AC_WAIT01=0x1,
+    AC_BCK_ACARM_TALK01=0x9,
+    AC_BCK_ACARM_TALK02=0xA,
+    AC_BCK_ACARM_WAIT02=0xB,
+    AC_BCK_AC_TALK01=0xC,
+    AC_BCK_AC_TALK02=0xD,
+    AC_BCK_AC_WAIT02=0xE,
+    
+    /* BDL */
+    AC_BDL_ACARM=0x2,
+    AC_BDL_ACWING=0x3,
+    AC_BDL_AC_FLOWER=0x4,
+    AC_BDL_AC_FLOWER02=0xF,
+    
+    /* BDLM */
+    AC_BDL_AC=0x5,
+    
+    /* BTP */
+    AC_BTP_KOMARI=0x6,
+    AC_BTP_MABA=0x7,
+    AC_BTP_WARAI=0x8,
+};
+
+enum AC_RES_FILE_INDEX {
+    /* BCKS */
+    AC_INDEX_BCK_ACARM_WAIT01=0x6,
+    AC_INDEX_BCK_AC_WAIT01=0x7,
+    AC_INDEX_BCK_ACARM_TALK01=0x8,
+    AC_INDEX_BCK_ACARM_TALK02=0x9,
+    AC_INDEX_BCK_ACARM_WAIT02=0xA,
+    AC_INDEX_BCK_AC_TALK01=0xB,
+    AC_INDEX_BCK_AC_TALK02=0xC,
+    AC_INDEX_BCK_AC_WAIT02=0xD,
+    
+    /* BDL */
+    AC_INDEX_BDL_ACARM=0x10,
+    AC_INDEX_BDL_ACWING=0x11,
+    AC_INDEX_BDL_AC_FLOWER=0x12,
+    AC_INDEX_BDL_AC_FLOWER02=0x13,
+    
+    /* BDLM */
+    AC_INDEX_BDL_AC=0x16,
+    
+    /* BTP */
+    AC_INDEX_BTP_KOMARI=0x19,
+    AC_INDEX_BTP_MABA=0x1A,
+    AC_INDEX_BTP_WARAI=0x1B,
+};
+
+#endif /* RES_AC_H */

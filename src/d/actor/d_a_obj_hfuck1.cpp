@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_hfuck1.h"
+#include "d/res/res_hfuck1.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_cc_d.h"
@@ -12,14 +13,6 @@
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-enum HFUCK1_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    HFUCK1_BDL_HFUCK1=0x4,
-    
-    /* DZB */
-    HFUCK1_DZB_HFUCK1=0x7,
-};
 
 namespace {
     static const char l_arcname[] = "Hfuck1";
@@ -213,7 +206,7 @@ static actor_method_class l_daObjHfuck1_Method = {
 
 actor_process_profile_definition g_profile_Obj_Hfuck1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Hfuck1,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -223,7 +216,7 @@ actor_process_profile_definition g_profile_Obj_Hfuck1 = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x005B,
     /* Actor SubMtd */ &l_daObjHfuck1_Method,
-    /* Status       */ fopAcStts_UNK200000_e | fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_3_e,
 };

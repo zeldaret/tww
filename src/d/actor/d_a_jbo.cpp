@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_jbo.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000108       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -50,3 +51,28 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 static s32 daJBO_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
+
+static actor_method_class l_daJBO_Method = {
+    (process_method_func)daJBO_Create,
+    (process_method_func)daJBO_Delete,
+    (process_method_func)daJBO_Execute,
+    (process_method_func)daJBO_IsDelete,
+    (process_method_func)daJBO_Draw,
+};
+
+actor_process_profile_definition g_profile_JBO = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_JBO,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(jbo_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00C8,
+    /* Actor SubMtd */ &l_daJBO_Method,
+    /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENV_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

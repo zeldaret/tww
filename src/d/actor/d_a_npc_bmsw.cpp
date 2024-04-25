@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_bmsw.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001E4       .text __ct__16daNpc_Bmsw_HIO_cFv */
 daNpc_Bmsw_HIO_c::daNpc_Bmsw_HIO_c() {
@@ -276,3 +276,27 @@ static BOOL daNpc_Bmsw_IsDelete(daNpc_Bmsw_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daNpc_Bmsw_Method = {
+    (process_method_func)daNpc_Bmsw_Create,
+    (process_method_func)daNpc_Bmsw_Delete,
+    (process_method_func)daNpc_Bmsw_Execute,
+    (process_method_func)daNpc_Bmsw_IsDelete,
+    (process_method_func)daNpc_Bmsw_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_BMSW = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_BMSW,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Bmsw_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0161,
+    /* Actor SubMtd */ &l_daNpc_Bmsw_Method,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_12_e,
+};

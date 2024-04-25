@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_st.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000005B4       .text smoke_set_s__FP8st_classf */
 void smoke_set_s(st_class*, float) {
@@ -201,3 +201,27 @@ static s32 daSt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daSt_Method = {
+    (process_method_func)daSt_Create,
+    (process_method_func)daSt_Delete,
+    (process_method_func)daSt_Execute,
+    (process_method_func)daSt_IsDelete,
+    (process_method_func)daSt_Draw,
+};
+
+actor_process_profile_definition g_profile_ST = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ST,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(st_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00B1,
+    /* Actor SubMtd */ &l_daSt_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

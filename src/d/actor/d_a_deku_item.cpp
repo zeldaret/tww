@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_deku_item.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000D0       .text _delete__12daDekuItem_cFv */
 BOOL daDekuItem_c::_delete() {
@@ -105,3 +105,28 @@ static BOOL daDekuItem_Execute(void*) {
 static BOOL daDekuItem_IsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daDekuItemMethodTable = {
+    (process_method_func)daDekuItem_Create,
+    (process_method_func)daDekuItem_Delete,
+    (process_method_func)daDekuItem_Execute,
+    (process_method_func)daDekuItem_IsDelete,
+    (process_method_func)daDekuItem_Draw,
+};
+
+actor_process_profile_definition g_profile_DEKU_ITEM = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_DEKU_ITEM,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daDekuItem_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00FF,
+    /* Actor SubMtd */ &daDekuItemMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

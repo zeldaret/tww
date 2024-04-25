@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_mo2.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001E8       .text tex_anm_set__FP9mo2_classUs */
 void tex_anm_set(mo2_class*, unsigned short) {
@@ -341,3 +341,27 @@ static s32 daMo2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daMo2_Method = {
+    (process_method_func)daMo2_Create,
+    (process_method_func)daMo2_Delete,
+    (process_method_func)daMo2_Execute,
+    (process_method_func)daMo2_IsDelete,
+    (process_method_func)daMo2_Draw,
+};
+
+actor_process_profile_definition g_profile_MO2 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_MO2,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(mo2_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00AF,
+    /* Actor SubMtd */ &l_daMo2_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

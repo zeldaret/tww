@@ -42,7 +42,15 @@ bool daObjGong::Act_c::create_heap() {
     J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, 0x07));
     JUT_ASSERT(0xbd, (modelData != 0) && (bck != 0));
 
-    mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL, bck, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
+    mpMorf = new mDoExt_McaMorf(
+        modelData,
+        NULL, NULL,
+        bck,
+        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 0,
+        NULL,
+        0x00000000,
+        0x11020203
+    );
     J3DModel * model = mpMorf != NULL ? mpMorf->getModel() : NULL;
 
     bool ret = false;
@@ -161,7 +169,7 @@ namespace daObjGong {
 
 actor_process_profile_definition g_profile_Obj_Gong = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Gong,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -171,7 +179,7 @@ actor_process_profile_definition g_profile_Obj_Gong = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0081,
     /* Actor SubMtd */ &daObjGong::Mthd_Table,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

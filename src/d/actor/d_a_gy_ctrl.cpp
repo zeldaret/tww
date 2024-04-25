@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_gy_ctrl.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000170       .text __ct__15daGy_Ctrl_HIO_cFv */
 daGy_Ctrl_HIO_c::daGy_Ctrl_HIO_c() {
@@ -171,3 +171,44 @@ static BOOL daGy_CtrlIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daGy_CtrlMethodTable = {
+    (process_method_func)daGy_CtrlCreate,
+    (process_method_func)daGy_CtrlDelete,
+    (process_method_func)daGy_CtrlExecute,
+    (process_method_func)daGy_CtrlIsDelete,
+    (process_method_func)daGy_CtrlDraw,
+};
+
+actor_process_profile_definition g_profile_GY_CTRL = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_GY_CTRL,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daGy_Ctrl_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00D9,
+    /* Actor SubMtd */ &daGy_CtrlMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
+};
+
+actor_process_profile_definition g_profile_GY_CTRLB = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_GY_CTRLB,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daGy_Ctrl_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00DA,
+    /* Actor SubMtd */ &daGy_CtrlMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
+};

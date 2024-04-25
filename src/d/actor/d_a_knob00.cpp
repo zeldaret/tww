@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_knob00.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000B4       .text daKnob00_charactorExchange__FPc */
 void daKnob00_charactorExchange(char*) {
@@ -186,3 +186,27 @@ static s32 daKnob00_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daKnob00_Method = {
+    (process_method_func)daKnob00_Create,
+    (process_method_func)daKnob00_Delete,
+    (process_method_func)daKnob00_Execute,
+    (process_method_func)daKnob00_IsDelete,
+    (process_method_func)daKnob00_Draw,
+};
+
+actor_process_profile_definition g_profile_KNOB00 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KNOB00,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daKnob00_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0133,
+    /* Actor SubMtd */ &l_daKnob00_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_6_e,
+};

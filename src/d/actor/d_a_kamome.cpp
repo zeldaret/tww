@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_kamome.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000001E4       .text anm_init__FP12kamome_classifUcfi */
 void anm_init(kamome_class*, int, float, unsigned char, float, int) {
@@ -136,3 +137,27 @@ static s32 daKamome_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daKamome_Method = {
+    (process_method_func)daKamome_Create,
+    (process_method_func)daKamome_Delete,
+    (process_method_func)daKamome_Execute,
+    (process_method_func)daKamome_IsDelete,
+    (process_method_func)daKamome_Draw,
+};
+
+actor_process_profile_definition g_profile_KAMOME = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KAMOME,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kamome_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00B5,
+    /* Actor SubMtd */ &l_daKamome_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

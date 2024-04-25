@@ -11,10 +11,10 @@ public:
     void daMP_c_Finish();
     void daMP_c_Main();
     void daMP_c_Draw();
-    void daMP_c_Callback_Init(fopAc_ac_c*);
-    void daMP_c_Callback_Finish(daMP_c*);
-    void daMP_c_Callback_Main(daMP_c*);
-    void daMP_c_Callback_Draw(daMP_c*);
+    static int daMP_c_Callback_Init(fopAc_ac_c*);
+    static int daMP_c_Callback_Finish(daMP_c*);
+    static int daMP_c_Callback_Main(daMP_c*);
+    static int daMP_c_Callback_Draw(daMP_c*);
 
 public:
     /* 0x290 */ u32 (*mpCallBack1)();

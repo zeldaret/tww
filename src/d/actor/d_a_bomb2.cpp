@@ -162,10 +162,10 @@ namespace daBomb2 {
 
     void FuseSmokeCB_c::deleteCallBack() {
         if(mpEmitter) {
-            mpEmitter->mpEmitterCallBack = 0;
+            mpEmitter->setEmitterCallBackPtr(NULL);
             mpEmitter->becomeInvalidEmitter();
         }
-        mpEmitter = 0;
+        mpEmitter = NULL;
     }
 
     /* 800DD6BC-800DD6C0       .text execute__Q27daBomb213FuseSmokeCB_cFP14JPABaseEmitter */
@@ -228,10 +228,10 @@ namespace daBomb2 {
 
     void FuseSparksCB_c::deleteCallBack() {
         if(mpEmitter) {
-            mpEmitter->mpEmitterCallBack = 0;
+            mpEmitter->setEmitterCallBackPtr(NULL);
             mpEmitter->becomeInvalidEmitter();
         }
-        mpEmitter = 0;
+        mpEmitter = NULL;
     }
 
     void FuseSparksCB_c::execute(JPABaseEmitter* emitter) {
@@ -1333,8 +1333,7 @@ namespace daBomb2 {
             return true;
         }
         
-        //global visibility according to objdiff
-        actor_method_class Mthd_Table = {
+        static actor_method_class Mthd_Table = {
             (process_method_func)Mthd_Create,
             (process_method_func)Mthd_Delete,
             (process_method_func)Mthd_Execute,
@@ -1345,18 +1344,18 @@ namespace daBomb2 {
 }
 
 actor_process_profile_definition g_profile_Bomb2 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Bomb2,
-    &g_fpcLf_Method.base,
-    sizeof(daBomb2::Act_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0116,
-    &daBomb2::Mthd_Table,
-    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Bomb2,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBomb2::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0116,
+    /* Actor SubMtd */ &daBomb2::Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -204,8 +204,8 @@ static actor_method_class daObj_YboilMethodTable = {
 
 actor_process_profile_definition g_profile_Obj_Yboil = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Yboil,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjYboil_c),

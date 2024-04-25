@@ -70,7 +70,15 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
     }
 
     for (s32 i = 0; i < (s32)ARRAY_SIZE(draw); i++) {
-        draw[i].anm = new mDoExt_McaMorf(modelData, &mCallBack, NULL, (J3DAnmTransformKey*)dComIfG_getObjectRes("Always", ALWAYS_BCK_YJ_LOOP), J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x1000003);
+        draw[i].anm = new mDoExt_McaMorf(
+            modelData,
+            &mCallBack, NULL,
+            (J3DAnmTransformKey*)dComIfG_getObjectRes("Always", ALWAYS_BCK_YJ_LOOP),
+            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+            NULL,
+            0x00080000,
+            0x01000003
+        );
         JUT_ASSERT(0xe3, draw[i].anm != 0 && draw[i].anm->getModel() != 0);
         draw[i].mpAnmClr = NULL;
         draw[i].mpAnmMatClr = new J3DMatColorAnm[anmColNum];
@@ -422,7 +430,7 @@ f32 dAttention_c::EnemyDistance(fopAc_ac_c* actor) {
         return -1.0f;
 
     f32 dist = fopAcM_searchActorDistance(actor, mpPlayer);
-    if (dist < (dist_table[actor->attention_info.distances[2]].mDistXZMax + dist_table[actor->attention_info.distances[2]].mDistXZAngleAdjust))
+    if (dist < (dist_table[actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e]].mDistXZMax + dist_table[actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e]].mDistXZAngleAdjust))
         return dist;
     return -1.0f;
 }

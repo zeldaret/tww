@@ -195,7 +195,7 @@ static s32 daGrass_Create(fopAc_ac_c* i_ac) {
     return cPhs_ERROR_e;
 }
 
-actor_method_class daGrass_METHODS = {
+static actor_method_class daGrass_METHODS = {
     (process_method_func)daGrass_Create,
     (process_method_func)daGrass_Delete,
     (process_method_func)NULL,
@@ -204,18 +204,18 @@ actor_method_class daGrass_METHODS = {
 };
 
 actor_process_profile_definition g_profile_GRASS = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_GRASS,
-    &g_fpcLf_Method.base,
-    sizeof(grass_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01BD,
-    &daGrass_METHODS,
-    fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_GRASS,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(grass_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01BD,
+    /* Actor SubMtd */ &daGrass_METHODS,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

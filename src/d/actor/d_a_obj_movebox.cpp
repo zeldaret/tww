@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "d/d_procname.h"
 
 // Needed for the .data and .bss sections to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -13,91 +14,23 @@ static f64 dummy4[2] = {3.0, 0.5};
 static u8 dummy5[0x4C];
 
 #include "d/actor/d_a_obj_movebox.h"
+#include "d/res/res_ecube.h"
+#include "d/res/res_hbox2.h"
+#include "d/res/res_hjump.h"
+#include "d/res/res_kkiba_00.h"
+#include "d/res/res_mmirror.h"
+#include "d/res/res_mpwrb.h"
+#include "d/res/res_osiblk.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/types.h"
 #include "d/actor/d_a_obj_buoyflag.h"
 #include "d/actor/d_a_obj_jump.h"
 #include "d/actor/d_a_obj_mmrr.h"
 #include "d/actor/d_a_obj_mkie.h"
 #include "d/actor/d_a_player.h"
-
-enum ECUBE_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    ECUBE_BDL_ECUBE=0x4,
-    
-    /* DZB */
-    ECUBE_DZB_ECUBE=0x7,
-};
-
-enum HBOX2_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    HBOX2_BDL_HBOX2=0x4,
-    
-    /* DZB */
-    HBOX2_DZB_HBOX2=0x7,
-};
-
-enum HJUMP_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    HJUMP_BDL_HBOX1=0x4,
-    HJUMP_BDL_HJUMP1=0x5,
-    HJUMP_BDL_HJUMP2=0x6,
-    
-    /* DZB */
-    HJUMP_DZB_HBOX1=0x9,
-    HJUMP_DZB_HJUMP1A=0xA,
-    HJUMP_DZB_HJUMP1B=0xB,
-    HJUMP_DZB_HJUMP2=0xC,
-};
-
-enum KKIBA_00_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    KKIBA_00_BDL_KKIBA_00=0x4,
-    
-    /* DZB */
-    KKIBA_00_DZB_KKIBA_00=0x7,
-};
-
-enum MMIRROR_RES_FILE_ID { // IDs and indexes are synced
-    /* BCK */
-    MMIRROR_BCK_MSUSW=0x6,
-    
-    /* BDLM */
-    MMIRROR_BDL_MMRR=0x9,
-    MMIRROR_BDL_MSUSW=0xA,
-    MMIRROR_BDL_YSSMR00=0xB,
-    
-    /* BTK */
-    MMIRROR_BTK_MMRR=0xE,
-    MMIRROR_BTK_MSUSW=0xF,
-    MMIRROR_BTK_YSSMR00=0x10,
-    
-    /* DZB */
-    MMIRROR_DZB_MMRR=0x13,
-    MMIRROR_DZB_MSUSW=0x14,
-};
-
-enum MPWRB_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    MPWRB_BDL_MPWRB=0x4,
-    
-    /* DZB */
-    MPWRB_DZB_MPWRB=0x7,
-};
-
-enum OSIBLK_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    OSIBLK_BDL_OBM_OSIHIKIBLK1=0x4,
-    OSIBLK_BDL_OBM_OSIHIKIBLK2=0x5,
-    
-    /* DZB */
-    OSIBLK_DZB_OBM_OSIHIKIBLK1=0x8,
-    OSIBLK_DZB_OBM_OSIHIKIBLK2=0x9,
-};
 
 namespace daObjMovebox {
     dBgS_ObjGndChk Bgc_c::M_gnd_work[23];
@@ -1940,7 +1873,7 @@ namespace daObjMovebox {
             f32 groundH = mBgc.mGroundY[temp];
             cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(Bgc_c::M_gnd_work[temp]);
             if (triPla && groundH != -1000000000.0f) {
-                dComIfGd_setSimpleShadow(&current.pos, groundH, i_attr()->m10, &triPla->mNormal, shape_angle.y, 1.0f, NULL);
+                dComIfGd_setSimpleShadow(&current.pos, groundH, i_attr()->m10, triPla->GetNP(), shape_angle.y, 1.0f, NULL);
             }
         }
         
@@ -1995,8 +1928,8 @@ namespace daObjMovebox {
 
 actor_process_profile_definition g_profile_Obj_Movebox = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Movebox,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMovebox::Act_c),

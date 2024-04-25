@@ -4,7 +4,7 @@
  */
 
 #include "d/actor/d_a_fm.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000003EC       .text __ct__10daFm_HIO_cFv */
 daFm_HIO_c::daFm_HIO_c() {
@@ -566,3 +566,27 @@ static BOOL daFmIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daFmMethodTable = {
+    (process_method_func)daFmCreate,
+    (process_method_func)daFmDelete,
+    (process_method_func)daFmExecute,
+    (process_method_func)daFmIsDelete,
+    (process_method_func)daFmDraw,
+};
+
+actor_process_profile_definition g_profile_FM = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_FM,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daFm_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0067,
+    /* Actor SubMtd */ &daFmMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

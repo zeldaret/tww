@@ -17,7 +17,7 @@ void dWindArrow_c::adjustHeap() {
 }
 
 /* 8023E46C-8023E48C       .text dWindArrow_Draw__FP12dWindArrow_c */
-void dWindArrow_Draw(dWindArrow_c*) {
+static void dWindArrow_Draw(dWindArrow_c*) {
     /* Nonmatching */
 }
 
@@ -27,21 +27,21 @@ BOOL dWindArrow_c::draw() {
 }
 
 /* 8023E6F4-8023E738       .text dWindArrow_Execute__FP12dWindArrow_c */
-void dWindArrow_Execute(dWindArrow_c*) {
+static void dWindArrow_Execute(dWindArrow_c*) {
     /* Nonmatching */
 }
 
 /* 8023E738-8023E740       .text dWindArrow_IsDelete__FP12dWindArrow_c */
-void dWindArrow_IsDelete(dWindArrow_c*) {
+static void dWindArrow_IsDelete(dWindArrow_c*) {
     /* Nonmatching */
 }
 
 /* 8023E740-8023E7A8       .text dWindArrow_Delete__FP12dWindArrow_c */
-void dWindArrow_Delete(dWindArrow_c*) {
+static void dWindArrow_Delete(dWindArrow_c*) {
     /* Nonmatching */
 }
 
 /* 8023E7A8-8023E968       .text dWindArrow_Create__FP12kankyo_class */
-void dWindArrow_Create(kankyo_class*) {
+static void dWindArrow_Create(kankyo_class*) {
     /* Nonmatching */
 }

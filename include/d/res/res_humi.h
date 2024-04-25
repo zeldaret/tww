@@ -1,0 +1,41 @@
+#ifndef RES_HUMI_H
+#define RES_HUMI_H
+
+#include "global.h"
+
+enum HUMI_RES_FILE_ID { // IDs and indexes are synced
+    /* BDLM */
+    HUMI_BDL_HNURE0=0x6,
+    HUMI_BDL_HNURE2=0x7,
+    HUMI_BDL_HNURE3=0x8,
+    HUMI_BDL_HNURE4=0x9,
+    HUMI_BDL_HNURE5=0xA,
+    HUMI_BDL_HUMI0=0xB,
+    HUMI_BDL_HUMI2=0xC,
+    HUMI_BDL_HUMI3=0xD,
+    HUMI_BDL_HUMI4=0xE,
+    HUMI_BDL_HUMI5=0xF,
+    
+    /* BRK */
+    HUMI_BRK_HNURE0=0x12,
+    HUMI_BRK_HNURE2=0x13,
+    HUMI_BRK_HNURE3=0x14,
+    HUMI_BRK_HNURE4=0x15,
+    HUMI_BRK_HNURE5=0x16,
+    
+    /* BTK */
+    HUMI_BTK_HUMI0=0x19,
+    HUMI_BTK_HUMI2=0x1A,
+    HUMI_BTK_HUMI3=0x1B,
+    HUMI_BTK_HUMI4=0x1C,
+    HUMI_BTK_HUMI5=0x1D,
+    
+    /* DZB */
+    HUMI_DZB_HUMI0=0x20,
+    HUMI_DZB_HUMI2=0x21,
+    HUMI_DZB_HUMI3=0x22,
+    HUMI_DZB_HUMI4=0x23,
+    HUMI_DZB_HUMI5=0x24,
+};
+
+#endif /* RES_HUMI_H */

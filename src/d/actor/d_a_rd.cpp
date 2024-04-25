@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_rd.h"
+#include "d/res/res_rd.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -58,40 +59,6 @@ const dCcD_SrcCyl daRd_c::m_cyl_src = {
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
     },
-};
-
-enum RD_RES_FILE_ID { // IDs and indexes are synced
-    /* BCKS */
-    RD_BCK_ATACK=0x6,
-    RD_BCK_ATACK2WALK=0x7,
-    RD_BCK_BEAM=0x8,
-    RD_BCK_BEAM_END=0x9,
-    RD_BCK_BEAM_HIT=0xA,
-    RD_BCK_DAMAGE=0xB,
-    RD_BCK_DEAD=0xC,
-    RD_BCK_IKARI_SAMPLE=0xD,
-    RD_BCK_KANOKEP=0xE,
-    RD_BCK_SUWARIP=0xF,
-    RD_BCK_SUWARU=0x10,
-    RD_BCK_TACHIP=0x11,
-    RD_BCK_TATSU=0x12,
-    RD_BCK_WALK=0x13,
-    RD_BCK_WALK2ATACK=0x14,
-    
-    /* BDLM */
-    RD_BDL_RD=0x17,
-    
-    /* BRK */
-    RD_BRK_BEAM=0x1A,
-    RD_BRK_BEAM_END=0x1B,
-    RD_BRK_BEAM_HIT=0x1C,
-    RD_BRK_NML=0x1D,
-    
-    /* BTK */
-    RD_BTK_RD_CLOSE=0x20,
-    RD_BTK_RD_IKARI=0x21,
-    RD_BTK_RD_NML=0x22,
-    RD_BTK_RD_OPEN=0x23,
 };
 
 /* 000000EC-0000027C       .text __ct__10daRd_HIO_cFv */
@@ -179,15 +146,15 @@ BOOL daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
         static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
         static cXyz l_offsetEyePos(24.0f, -16.0f, 0.0f);
         mDoMtx_stack_c::multVec(&l_offsetAttPos, &mTargetPos);
-        mDoMtx_stack_c::XrotM(mJntCtrl.getHead_y());
-        mDoMtx_stack_c::ZrotM(mJntCtrl.getHead_x());
+        mDoMtx_stack_c::XrotM((int)mJntCtrl.getHead_y());
+        mDoMtx_stack_c::ZrotM((int)mJntCtrl.getHead_x());
         mDoMtx_stack_c::multVec(&l_offsetEyePos, &mRdEyePos);
         mDoMtx_stack_c::XrotM(mD1A);
         mDoMtx_stack_c::ZrotM(mD1C);
         mDoMtx_stack_c::YrotM(mD1E);
     } else if (mJntCtrl.getBackboneJntNum() == jntNo) {
-        mDoMtx_stack_c::XrotM(mJntCtrl.getBackbone_y());
-        mDoMtx_stack_c::ZrotM(mJntCtrl.getBackbone_x());
+        mDoMtx_stack_c::XrotM((int)mJntCtrl.getBackbone_y());
+        mDoMtx_stack_c::ZrotM((int)mJntCtrl.getBackbone_x());
     }
     
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -732,11 +699,11 @@ void daRd_c::setIceCollision() {
 /* 0000180C-00001970       .text setAttention__6daRd_cFv */
 void daRd_c::setAttention() {
     cXyz attnPos(60.0f, 0.0f, 0.0f);
-    cXyz eyePos(60.0f, 0.0f, 0.0f);
+    cXyz eyeballPos(60.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0x0C)); // ree_atama_1 joint
     mDoMtx_stack_c::multVec(&attnPos, &attention_info.position);
-    mDoMtx_stack_c::multVecZero(&eyePos);
-    eyePos = eyePos;
+    mDoMtx_stack_c::multVecZero(&eyeballPos);
+    eyePos = eyeballPos;
     attention_info.position.y += l_HIO.m58;
     eyePos.y += l_HIO.m5C;
     
@@ -951,7 +918,7 @@ void daRd_c::modeCryInit() {
     if (dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         dComIfGp_event_reset();
     }
-    fopAcM_orderOtherEvent2(this, "DEFAULT_RD_CRY", 1);
+    fopAcM_orderOtherEvent(this, "DEFAULT_RD_CRY");
     fopAcM_monsSeStart(this, JA_SE_CV_RD_SCREAM, 0);
     mTimer1 = l_HIO.m54;
     mBreakFreeCounter = l_HIO.m78;
@@ -1142,7 +1109,7 @@ void daRd_c::modeAttack() {
             modeProcInit(MODE_CRY_WAIT);
         }
     } else if (!checkTgHit()) {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_RD_ATTACK", 1, 0x1CF);
+        fopAcM_orderOtherEvent(this, "DEFAULT_RD_ATTACK", 0x1CF);
     }
 }
 
@@ -1344,10 +1311,10 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
         
         if (newMode == MODE_DEATH || newMode == MODE_SW_WAIT) {
             fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
-            cLib_offBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_ENEMY_e);
+            cLib_offBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         } else {
             fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
-            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_ENEMY_e);
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         }
         
         mMode = newMode;
@@ -1740,8 +1707,7 @@ bool daRd_c::_draw() {
     cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     mShadowId = dComIfGd_setShadow(
         mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 40.0f,
-        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
-        0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
     );
     
     dSnap_RegistFig(DSNAP_TYPE_RD, this, 1.0f, 1.0f, 1.0f);
@@ -1913,8 +1879,8 @@ static actor_method_class daRdMethodTable = {
 
 actor_process_profile_definition g_profile_RD = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_RD,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daRd_c),

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_ganonbed.h"
+#include "d/res/res_gbed.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -11,15 +12,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-enum GBED_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    GBED_BDL_K_GBED=0x4,
-    
-    /* DZB */
-    GBED_DZB_K_GBED=0x7,
-    GBED_DZB_VTENG=0x8,
-};
 
 namespace {
     static const char l_arcname[] = "Gbed";
@@ -145,7 +137,7 @@ static actor_method_class l_daObjGbed_Method = {
 
 actor_process_profile_definition g_profile_Obj_Gbed = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Gbed,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

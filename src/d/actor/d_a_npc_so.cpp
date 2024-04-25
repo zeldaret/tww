@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_so.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000002A4       .text __ct__14daNpc_So_HIO_cFv */
 daNpc_So_HIO_c::daNpc_So_HIO_c() {
@@ -392,3 +392,28 @@ static BOOL daNpc_SoIsDelete(void*) {
 }
 
 #include "d/actor/d_a_npc_so_cut.inc"
+
+static actor_method_class daNpc_SoMethodTable = {
+    (process_method_func)daNpc_SoCreate,
+    (process_method_func)daNpc_SoDelete,
+    (process_method_func)daNpc_SoExecute,
+    (process_method_func)daNpc_SoIsDelete,
+    (process_method_func)daNpc_SoDraw,
+};
+
+actor_process_profile_definition g_profile_NPC_SO = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_SO,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_So_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0149,
+    /* Actor SubMtd */ &daNpc_SoMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

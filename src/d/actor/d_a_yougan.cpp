@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_yougan.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000158       .text __ct__14daYOUGAN_HIO_cFv */
 daYOUGAN_HIO_c::daYOUGAN_HIO_c() {
@@ -71,3 +71,27 @@ void daYougan_c::_daYougan_create() {
     /* Nonmatching */
 }
 
+static actor_method_class l_daYougan_Method = {
+    (process_method_func)daYougan_Create,
+    (process_method_func)daYougan_Delete,
+    (process_method_func)daYougan_Execute,
+    (process_method_func)daYougan_IsDelete,
+    (process_method_func)daYougan_Draw,
+};
+
+actor_process_profile_definition g_profile_YOUGAN = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_YOUGAN,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daYougan_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0184,
+    /* Actor SubMtd */ &l_daYougan_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

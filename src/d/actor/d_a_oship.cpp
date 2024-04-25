@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_oship.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000234       .text __ct__13daOship_HIO_cFv */
 daOship_HIO_c::daOship_HIO_c() {
@@ -236,3 +236,27 @@ static BOOL daOshipIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daOshipMethodTable = {
+    (process_method_func)daOshipCreate,
+    (process_method_func)daOshipDelete,
+    (process_method_func)daOshipExecute,
+    (process_method_func)daOshipIsDelete,
+    (process_method_func)daOshipDraw,
+};
+
+actor_process_profile_definition g_profile_OSHIP = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OSHIP,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daOship_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x009D,
+    /* Actor SubMtd */ &daOshipMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

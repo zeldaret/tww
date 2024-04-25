@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_tag_photo.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000D0       .text __ct__12daTagPhoto_cFv */
 daTagPhoto_c::daTagPhoto_c() {
@@ -151,3 +151,27 @@ static BOOL daTagPhotoIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daTagPhotoMethodTable = {
+    (process_method_func)daTagPhotoCreate,
+    (process_method_func)daTagPhotoDelete,
+    (process_method_func)daTagPhotoExecute,
+    (process_method_func)daTagPhotoIsDelete,
+    (process_method_func)daTagPhotoDraw,
+};
+
+actor_process_profile_definition g_profile_TAG_PHOTO = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TAG_PHOTO,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagPhoto_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0126,
+    /* Actor SubMtd */ &daTagPhotoMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

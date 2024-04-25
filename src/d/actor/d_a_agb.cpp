@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_agb.h"
+#include "d/res/res_agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTGba.h"
@@ -28,14 +29,6 @@ static u8 dummy_3569[0xC];
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
-
-enum AGB_RES_FILE_ID { // IDs and indexes are synced
-    /* BDLM */
-    AGB_BDL_AGBCURSOR=0x4,
-    
-    /* BRK */
-    AGB_BRK_AGBCURSOR=0x7,
-};
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 
@@ -626,7 +619,7 @@ void daAgb_c::modeLookAttention() {
             }
         }
     } else {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", 4);
+        fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", dEvtFlag_TALK_e);
     }
 }
 
@@ -1794,7 +1787,7 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-actor_method_class l_daAgb_Method = {
+static actor_method_class l_daAgb_Method = {
     (process_method_func)daAgb_Create,
     (process_method_func)daAgb_Delete,
     (process_method_func)daAgb_Execute,
@@ -1804,8 +1797,8 @@ actor_method_class l_daAgb_Method = {
 
 actor_process_profile_definition g_profile_AGB = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_AGB,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAgb_c),

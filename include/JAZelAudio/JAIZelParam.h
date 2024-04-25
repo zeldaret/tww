@@ -75,6 +75,8 @@ namespace JAIZelParam {
     extern int DRAM_HEAP_SIZE;
     extern f32 MIN_DISTANCE_VOLUME;
     extern u8 SWORD_USING_TRACK;
+
+    extern int SEA_START_VS_ROOM_TBL_SIZE; // Unused but appears in an assert string
 };
 
 #endif /* JAIZELPARAM_H */

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_vfan.h"
+#include "d/res/res_vfan.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
@@ -47,7 +48,7 @@ static dCcD_SrcCyl cyl_check_src = {
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */
 int daObjVfan::Act_c::CreateHeap() {
-    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 4));
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VFAN_BDL_V_FAN_00));
 
     JUT_ASSERT(0x8c, model_data != 0);
 
@@ -76,7 +77,7 @@ int daObjVfan::Act_c::Create() {
     mBreakTimer = 0;
     mState = 0;
 
-    m_evid = dComIfGp_evmng_getEventIdx("Vfan", 0xff);
+    m_evid = dComIfGp_evmng_getEventIdx("Vfan");
 
     return TRUE;
 }
@@ -235,16 +236,18 @@ static int Mthd_IsDelete(void* i_this) {
 }
 
 static actor_method_class Mthd_Vfan = {
-    (process_method_func)Mthd_Create,  (process_method_func)Mthd_Delete,
-    (process_method_func)Mthd_Execute, (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
     (process_method_func)Mthd_Draw,
 };
-};  // namespace
-};  // namespace daObjVfan
+}; // namespace
+}; // namespace daObjVfan
 
 actor_process_profile_definition g_profile_Obj_Vfan = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Vfan,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -254,7 +257,7 @@ actor_process_profile_definition g_profile_Obj_Vfan = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0020,
     /* Actor SubMtd */ &daObjVfan::Mthd_Vfan,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

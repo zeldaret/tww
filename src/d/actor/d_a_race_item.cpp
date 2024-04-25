@@ -263,7 +263,6 @@ static int daRaceItem_Create(fopAc_ac_c* i_this) {
     return static_cast<daRaceItem_c*>(i_this)->create();
 }
 
-
 static actor_method_class l_daRaceItem_Method = {
     (process_method_func)daRaceItem_Create,
     (process_method_func)daRaceItem_Delete,
@@ -272,19 +271,19 @@ static actor_method_class l_daRaceItem_Method = {
     (process_method_func)daRaceItem_Draw,
 };
 
-extern actor_process_profile_definition g_profile_RACEITEM = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_RACEITEM,
-    &g_fpcLf_Method.base,
-    sizeof(daRaceItem_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x00FD,
-    &l_daRaceItem_Method,
-    0x000C4100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+actor_process_profile_definition g_profile_RACEITEM = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_RACEITEM,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daRaceItem_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00FD,
+    /* Actor SubMtd */ &l_daRaceItem_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

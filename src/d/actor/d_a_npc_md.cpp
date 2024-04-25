@@ -1805,7 +1805,7 @@ BOOL daNpc_Md_c::eventProc() {
     int staffIdx = dComIfGp_evmng_getMyStaffId(l_staff_name);
     if (dComIfGp_event_runCheck() && !checkCommandTalk()) {
         if (staffIdx != -1) {
-            int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+            int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
             if (actIdx == -1) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             } else {
@@ -2967,8 +2967,7 @@ BOOL daNpc_Md_c::draw() {
         cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
         mShadowId = dComIfGd_setShadow(
             mShadowId, 0, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
-            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
-            0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
         );
         
         if (mShadowId != 0) {
@@ -3123,8 +3122,8 @@ static actor_method_class l_daNpc_Md_Method = {
 
 actor_process_profile_definition g_profile_NPC_MD = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_NPC_MD,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Md_c),

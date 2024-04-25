@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_ep.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000158       .text ga_draw__FP8ep_class */
 void ga_draw(ep_class*) {
@@ -81,3 +81,27 @@ static s32 daEp_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daEp_Method = {
+    (process_method_func)daEp_Create,
+    (process_method_func)daEp_Delete,
+    (process_method_func)daEp_Execute,
+    (process_method_func)daEp_IsDelete,
+    (process_method_func)daEp_Draw,
+};
+
+actor_process_profile_definition g_profile_EP = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_EP,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(ep_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00AD,
+    /* Actor SubMtd */ &l_daEp_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

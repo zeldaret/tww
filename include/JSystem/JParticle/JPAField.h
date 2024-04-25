@@ -37,7 +37,9 @@ public:
     /* 0x04 */ JPABaseField * mpBaseField;
     /* 0x08 */ JSULink<JPAFieldData> mLink;
     /* 0x18 */ JGeometry::TVec3<f32> mVel;
-    /* 0x24 */ JGeometry::TVec3<f32> mWork[3];
+    /* 0x24 */ JGeometry::TVec3<f32> mWork0;
+    /* 0x28 */ JGeometry::TVec3<f32> mWork1;
+    /* 0x2C */ JGeometry::TVec3<f32> mWork2;
     /* 0x48 */ f32 mMaxDistSq;
     /* 0x4C */ f32 mFadeOutRate;
     /* 0x50 */ f32 mFadeInRate;
@@ -148,9 +150,9 @@ public:
     /* 0x08 */ JPAMagnetField mMagnet;
     /* 0x0C */ JPANewtonField mNewton;
     /* 0x10 */ JPAVortexField mVortex;
-    /* 0x14 */ JPAConvectionField mConvection;
-    /* 0x18 */ JPARandomField mRandom;
-    /* 0x1C */ JPADragField mDrag;
+    /* 0x14 */ JPARandomField mRandom;
+    /* 0x18 */ JPADragField mDrag;
+    /* 0x1C */ JPAConvectionField mConvection;
     /* 0x20 */ JPASpinField mSpin;
 };
 

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_msdan.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000003D4       .text Mthd_Create__Q210daObjMsdan5Act_cFv */
 void daObjMsdan::Act_c::Mthd_Create() {
@@ -20,3 +20,57 @@ void daObjMsdan::Act_c::Mthd_Execute() {
 void daObjMsdan::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
+
+namespace daObjMsdan {
+namespace {
+/* 000005F0-00000610       .text Mthd_Create__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00000610-00000630       .text Mthd_Delete__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00000630-00000650       .text Mthd_Execute__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00000650-00000658       .text Mthd_Draw__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000658-00000660       .text Mthd_IsDelete__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Mthd_Msdan = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjMsdan
+
+actor_process_profile_definition g_profile_Obj_Msdan = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Msdan,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMsdan::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0038,
+    /* Actor SubMtd */ &daObjMsdan::Mthd_Msdan,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

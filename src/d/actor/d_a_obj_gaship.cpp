@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_gaship.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000002DC       .text birth_flag__Q211daObjGaship5Act_cFv */
 void daObjGaship::Act_c::birth_flag() {
@@ -45,3 +45,57 @@ BOOL daObjGaship::Act_c::_execute() {
 BOOL daObjGaship::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daObjGaship {
+namespace {
+/* 0000066C-0000068C       .text Mthd_Create__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 0000068C-000006B0       .text Mthd_Delete__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000006B0-000006D4       .text Mthd_Execute__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000006D4-000006F8       .text Mthd_Draw__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 000006F8-00000700       .text Mthd_IsDelete__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daObjGaship
+
+actor_process_profile_definition g_profile_Obj_Gaship = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Gaship,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjGaship::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x003F,
+    /* Actor SubMtd */ &daObjGaship::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

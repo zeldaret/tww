@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_shmrgrd.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000358       .text __ct__14daObjShmrgrd_cFv */
 daObjShmrgrd_c::daObjShmrgrd_c() {
@@ -155,3 +155,55 @@ BOOL daObjShmrgrd_c::_execute() {
 BOOL daObjShmrgrd_c::_draw() {
     /* Nonmatching */
 }
+
+namespace {
+/* 00001A74-00001A94       .text Mthd_Create__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001A94-00001AB8       .text Mthd_Delete__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001AB8-00001ADC       .text Mthd_Execute__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001ADC-00001B00       .text Mthd_Draw__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001B00-00001B08       .text Mthd_IsDelete__29@unnamed@d_a_obj_shmrgrd_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Shmrgrd_Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+
+actor_process_profile_definition g_profile_Obj_Shmrgrd = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Shmrgrd,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjShmrgrd_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x004B,
+    /* Actor SubMtd */ &Shmrgrd_Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

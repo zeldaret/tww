@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_rcloud.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000E8       .text init_mtx__13daObjRcloud_cFv */
 void daObjRcloud_c::init_mtx() {
@@ -91,3 +91,27 @@ static BOOL daObjRcloud_IsDelete(daObjRcloud_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daObjRcloud_Method = {
+    (process_method_func)daObjRcloud_Create,
+    (process_method_func)daObjRcloud_Delete,
+    (process_method_func)daObjRcloud_Execute,
+    (process_method_func)daObjRcloud_IsDelete,
+    (process_method_func)daObjRcloud_Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Rcloud = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Rcloud,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjRcloud_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0054,
+    /* Actor SubMtd */ &l_daObjRcloud_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

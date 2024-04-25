@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_tag_so.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-0000010C       .text __ct__14daTag_So_HIO_cFv */
 daTag_So_HIO_c::daTag_So_HIO_c() {
@@ -66,3 +66,27 @@ static BOOL daTag_SoIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daTag_SoMethodTable = {
+    (process_method_func)daTag_SoCreate,
+    (process_method_func)daTag_SoDelete,
+    (process_method_func)daTag_SoExecute,
+    (process_method_func)daTag_SoIsDelete,
+    (process_method_func)daTag_SoDraw,
+};
+
+actor_process_profile_definition g_profile_TAG_SO = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TAG_SO,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_So_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0065,
+    /* Actor SubMtd */ &daTag_SoMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
+};

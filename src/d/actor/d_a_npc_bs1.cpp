@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_bs1.h"
+#include "d/res/res_bs.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/actor/d_a_player.h"
@@ -14,7 +15,6 @@
 #include "d/d_snap.h"
 #include "d/d_letter.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -59,70 +59,6 @@ static dCcD_SrcCyl l_cyl_src = {
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
     },
-};
-
-enum BS_RES_FILE_ID {
-    /* BCKS */
-    BS_BCK_BS_TALK01 = 0x0,
-    BS_BCK_BS_TALK02 = 0x1,
-    BS_BCK_BS_TALK03 = 0x2,
-    BS_BCK_BS_TALK04 = 0x3,
-    BS_BCK_BS_WAIT01 = 0x4,
-    BS_BCK_BS_LAUGH = 0xC,
-    BS_BCK_BS_PRAISE = 0xD,
-    BS_BCK_BS_ANGRY = 0xF,
-    BS_BCK_BS_MANTAN = 0x10,
-
-    /* BDLM */
-    BS_BDL_BS = 0x5,
-    BS_BDL_BS_MET = 0x6,
-
-    /* BMDM */
-    BS_BMD_SHOP_CURSOR01 = 0x7,
-
-    /* BRK */
-    BS_BRK_SHOP_CURSOR01 = 0x8,
-
-    /* BTP */
-    BS_BTP_BS = 0x9,
-    BS_BTP_LOOK = 0xA,
-    BS_BTP_MABA = 0xB,
-    BS_BTP_BS_PRAISE = 0xE,
-
-    /* BDL */
-    BS_BDL_VSOLD = 0x11,
-};
-
-enum BS_RES_FILE_INDEX {
-    /* BCKS */
-    BS_INDEX_BCK_BS_TALK01 = 0x8,
-    BS_INDEX_BCK_BS_TALK02 = 0x9,
-    BS_INDEX_BCK_BS_TALK03 = 0xA,
-    BS_INDEX_BCK_BS_TALK04 = 0xB,
-    BS_INDEX_BCK_BS_WAIT01 = 0xC,
-    BS_INDEX_BCK_BS_LAUGH = 0xD,
-    BS_INDEX_BCK_BS_PRAISE = 0xE,
-    BS_INDEX_BCK_BS_ANGRY = 0xF,
-    BS_INDEX_BCK_BS_MANTAN = 0x10,
-
-    /* BDLM */
-    BS_INDEX_BDL_BS = 0x13,
-    BS_INDEX_BDL_BS_MET = 0x14,
-
-    /* BMDM */
-    BS_INDEX_BMD_SHOP_CURSOR01 = 0x17,
-
-    /* BRK */
-    BS_INDEX_BRK_SHOP_CURSOR01 = 0x1A,
-
-    /* BTP */
-    BS_INDEX_BTP_BS = 0x1D,
-    BS_INDEX_BTP_LOOK = 0x1E,
-    BS_INDEX_BTP_MABA = 0x1F,
-    BS_INDEX_BTP_BS_PRAISE = 0x20,
-
-    /* BDL */
-    BS_INDEX_BDL_VSOLD = 0x23,
 };
 
 /* 000000EC-00000108       .text __ct__20daNpc_Bs1_childHIO_cFv */
@@ -1620,22 +1556,22 @@ BOOL daNpc_Bs1_c::CreateInit() {
     m726.y = current.angle.y;
     m726.z = current.angle.z;
 
-    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e;
-    attention_info.distances[1] = 0xAA;
-    attention_info.distances[3] = 0xAA;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
 
     gravity = -30.0f;
 
     switch(mType) {
         case 0:
             setAction(&wait_action, 0);
-            m83A = dComIfGp_evmng_getEventIdx("BS1_GETDEMO", 0xFF);
+            m83A = dComIfGp_evmng_getEventIdx("BS1_GETDEMO");
             mEventCut.setActorInfo("Bs1", this);
             mEventCut.setJntCtrlPtr(&mJntCtrl);
             break;
         case 1:
             setAction(&wait_action, 0);
-            m83A = dComIfGp_evmng_getEventIdx("BS2_GETDEMO", 0xFF);
+            m83A = dComIfGp_evmng_getEventIdx("BS2_GETDEMO");
             mEventCut.setActorInfo("Bs2", this);
             mEventCut.setJntCtrlPtr(&mJntCtrl);
             break;
@@ -1674,8 +1610,8 @@ BOOL daNpc_Bs1_c::CreateInit() {
 
     createShopList();
     m82B = 2;
-    mEventIdxs[0] = dComIfGp_evmng_getEventIdx("PUT_PRAICE_TICKET", 0xFF);
-    mEventIdxs[1] = dComIfGp_evmng_getEventIdx("PUT_FULL_TICKET", 0xFF);
+    mEventIdxs[0] = dComIfGp_evmng_getEventIdx("PUT_PRAICE_TICKET");
+    mEventIdxs[1] = dComIfGp_evmng_getEventIdx("PUT_FULL_TICKET");
     
     return TRUE;
 }
@@ -1819,7 +1755,7 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
     };
     
     u32 staffIdx = dComIfGp_evmng_getMyStaffId(a_name[mType]);
-    u32 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, a_cut_name, 2, 0, 0);
+    u32 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, a_cut_name, ARRAY_SIZE(a_cut_name), FALSE, 0);
     if (mActionStatus == ACTION_STARTING) {
         daPy_getPlayerActorClass()->offPlayerNoDraw();
         m830 = m831;
@@ -1895,14 +1831,14 @@ BOOL daNpc_Bs1_c::evn_talk() {
     } else {
         setAnmFromMsgTag();
         u16 msgStatus = l_msg->mStatus;
-        if (msgStatus == 0xE) {
+        if (msgStatus == fopMsgStts_MSG_DISPLAYED_e) {
             l_msg->mStatus = next_msgStatus(&m738);
-            if (l_msg->mStatus == 0xF) {
+            if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
                 fopMsgM_messageSet(m738);
             }
         } else {
-            if (msgStatus == 0x12) {
-                l_msg->mStatus = 0x13;
+            if (msgStatus == fopMsgStts_BOX_CLOSED_e) {
+                l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                 l_msg = NULL;
                 l_msgId = fpcM_ERROR_PROCESS_ID_e;
                 return TRUE;
@@ -2012,7 +1948,7 @@ BOOL daNpc_Bs1_c::privateCut() {
     if (staffId == -1) {
         return FALSE;
     }
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, 8, 1, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
     if (actIdx == -1) {
         dComIfGp_evmng_cutEnd(staffId);
     } else {
@@ -2076,7 +2012,7 @@ BOOL daNpc_Bs1_c::event_action(void*) {
         if (dComIfGp_evmng_endCheck(mEventIdxs[m82B])) {
             m82A = 0;
             m82B = 2;
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
             setAction(&daNpc_Bs1_c::wait_action, NULL);
         }
         lookBack();
@@ -2103,9 +2039,10 @@ BOOL daNpc_Bs1_c::_draw() {
     mBtpAnm.remove(pModelData);
     
     cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
-    m29C = dComIfGd_setShadow(m29C, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f, current.pos.y,
-                              mAcch.GetGroundH(), mAcch.m_gnd, &tevStr, 0, 1.0f,
-                              &dDlst_shadowControl_c::mSimpleTexObj);
+    m29C = dComIfGd_setShadow(
+        m29C, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
+    );
     
     if (mShopItems.mSelectedItemIdx >= 0) {
         mpShopCursor->draw();
@@ -2268,7 +2205,7 @@ BOOL daNpc_Bs1_c::CreateHeap() {
     }
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     mpShopCursor = ShopCursor_create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BMD_SHOP_CURSOR01),
                                      (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", BS_INDEX_BRK_SHOP_CURSOR01),
                                      l_HIO.mChild[mType].m30);
@@ -2315,7 +2252,7 @@ static actor_method_class l_daNpc_Bs1_Method = {
 
 actor_process_profile_definition g_profile_NPC_BS1 = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_NPC_BS1,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

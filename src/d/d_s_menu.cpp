@@ -26,7 +26,7 @@ s8* l_groupPoint;
 u8 l_languageType;
 
 /* 8022E9F4-8022ED50       .text dScnMenu_Draw__FP19menu_of_scene_class */
-BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
+static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
     /* Nonmatching - regalloc */
     JUTReport(300, 50, "メニュー");
     if (i_this->field_0x1e0) {
@@ -84,17 +84,17 @@ BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
 }
 
 /* 8022ED50-8022F318       .text dScnMenu_Execute__FP19menu_of_scene_class */
-void dScnMenu_Execute(menu_of_scene_class*) {
+static void dScnMenu_Execute(menu_of_scene_class*) {
     /* Nonmatching */
 }
 
 /* 8022F318-8022F320       .text dScnMenu_IsDelete__FP19menu_of_scene_class */
-BOOL dScnMenu_IsDelete(menu_of_scene_class*) {
+static BOOL dScnMenu_IsDelete(menu_of_scene_class*) {
     return true;
 }
 
 /* 8022F320-8022F3C4       .text dScnMenu_Delete__FP19menu_of_scene_class */
-BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
+static BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
     JUTDbPrint::getManager()->changeFont(JFWSystem::systemFont);
     delete i_this->field_0x1dc;
     JKRFree(i_this->info);
@@ -151,7 +151,7 @@ s32 phase_2(menu_of_scene_class* i_this) {
 }
 
 /* 8022F70C-8022F748       .text dScnMenu_Create__FP11scene_class */
-s32 dScnMenu_Create(scene_class* i_scn) {
+static s32 dScnMenu_Create(scene_class* i_scn) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,

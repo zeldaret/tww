@@ -213,10 +213,10 @@ void dEvDtStaff_c::specialProcLight() {
         "CHANGE",
         "ADD_TIME",
     };
-    int act = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 0, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
-        switch (act) {
+        switch (actIdx) {
         case 1: // CHANGE
             {
                 f32 * pHour = dComIfGp_evmng_getMyFloatP(staffIdx, "Hour");
@@ -274,7 +274,7 @@ void dEvDtStaff_c::specialProcMessage() {
     static msg_class* l_msg;
     static int l_msgNo;
 
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 0, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (actIdx) {
         case 0: // WAIT
@@ -395,7 +395,7 @@ void dEvDtStaff_c::specialProcSound() {
         "BGMSTOP",
     };
 
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 0, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (actIdx) {
             case 0: // WAIT
@@ -474,7 +474,7 @@ void dEvDtStaff_c::specialProcCreate() {
         "CREATE",
     };
 
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 0, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (actIdx) {
             case 0: // WAIT
@@ -552,7 +552,7 @@ void dEvDtStaff_c::specialProcDirector() {
         "PLAYER_NODRAW",
     };
 
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 0, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (actIdx) {
             case 0: // WAIT
@@ -721,7 +721,7 @@ void dEvDtStaff_c::specialProcPackage() {
         "PLAY2",
     };
 
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 0, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (actIdx) {
         case 0: // WAIT
@@ -798,7 +798,7 @@ void dEvDtStaff_c::specialProcTimekeeper() {
         "WAIT",
     };
 
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 0, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (actIdx) {
         case 0: // COUNTDOWN

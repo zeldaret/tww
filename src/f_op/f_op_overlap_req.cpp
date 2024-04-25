@@ -13,7 +13,7 @@ void fopOvlpReq_SetPeektime(overlap_request_class*, u16);
 
 static int fopOvlpReq_phase_Done(overlap_request_class* i_this) {
     if (fpcM_Delete(i_this->mpTask) == 1) {
-        i_this->mpTask = 0;
+        i_this->mpTask = NULL;
         i_this->field_0x4 = 0;
         i_this->mPeektime = 0;
         i_this->mIsPeek = 0;

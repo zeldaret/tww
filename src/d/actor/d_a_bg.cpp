@@ -393,7 +393,7 @@ s32 daBg_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daBg_Method = {
+static actor_method_class l_daBg_Method = {
     (process_method_func)daBg_Create,
     (process_method_func)daBg_Delete,
     (process_method_func)daBg_Execute,

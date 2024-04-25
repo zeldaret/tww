@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_tbox.h"
+#include "d/res/res_dalways.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_w.h"
@@ -17,7 +18,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_do/m_Do_mtx.h"
-#include "dolphin/types.h"
 
 
 #define DEMO_PROC_WAIT 0
@@ -34,49 +34,6 @@
 #define FUNC_TYPE_TACT 6
 #define FUNC_TYPE_EXTRA_SAVE_INFO 7
 #define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
-
-enum DALWAYS_RES_FILE_ID { // IDs and indexes are synced
-    /* BCK */
-    DALWAYS_BCK_BOXOPENBOX=0x8,
-    DALWAYS_BCK_BOXOPENSHORTBOX=0x9,
-    DALWAYS_BCK_IT_TAKARA_FLASH=0xA,
-    DALWAYS_BCK_IT_TAKARA_FLASH2=0xB,
-
-    /* BDLI */
-    DALWAYS_BDL_BOXA=0xE,
-    DALWAYS_BDL_BOXB=0xF,
-    DALWAYS_BDL_BOXC=0x10,
-
-    /* BDLM */
-    DALWAYS_BDL_BOX_SHADOW=0x13,
-    DALWAYS_BDL_BOXD=0x14,
-    DALWAYS_BDL_BOXSEA=0x15,
-    DALWAYS_BDL_IT_TAKARA_FLASH=0x16,
-    DALWAYS_BDL_YTRIF00=0x17,
-
-    /* BRK */
-    DALWAYS_BRK_BOX_SHADOW=0x1A,
-    DALWAYS_BRK_BOXA=0x1B,
-    DALWAYS_BRK_BOXB=0x1C,
-    DALWAYS_BRK_BOXC=0x1D,
-    DALWAYS_BRK_IT_TAKARA_FLASH=0x1E,
-    DALWAYS_BRK_YTRIF00=0x1F,
-
-    /* BTK */
-    DALWAYS_BTK_BOXA=0x22,
-    DALWAYS_BTK_BOXB=0x23,
-    DALWAYS_BTK_BOXC=0x24,
-    DALWAYS_BTK_IT_TAKARA_FLASH=0x25,
-
-    /* DZB */
-    DALWAYS_DZB_BOXA_00=0x28,
-    DALWAYS_DZB_BOXA_01=0x29,
-    DALWAYS_DZB_BOXB_00=0x2A,
-    DALWAYS_DZB_BOXB_01=0x2B,
-    DALWAYS_DZB_BOXD_00=0x2C,
-    DALWAYS_DZB_BOXD_01=0x2D,
-    DALWAYS_DZB_KINB_00=0x2E,
-};
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 
@@ -815,7 +772,7 @@ s32 daTbox_c::demoProc() {
         "OPEN_SHORT"
     };
 
-    s32 actionIdx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
+    s32 actionIdx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
     bool bIsAdvance = dComIfGp_evmng_getIsAddvance(mStaffId);
 
     if (bIsAdvance) {
@@ -1066,7 +1023,7 @@ BOOL daTbox_c::actionSwOnWait() {
     }
     else {
         if (dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
-            fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
+            fopAcM_orderOtherEvent(this, "DEFAULT_TREASURE_APPEAR");
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
     }
@@ -1098,7 +1055,7 @@ BOOL daTbox_c::actionGenocide() {
                 mGenocideDelayTimer--;
             }
             else {
-                fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
+                fopAcM_orderOtherEvent(this, "DEFAULT_TREASURE_APPEAR");
                 eventInfo.onCondition(dEvtCnd_UNK2_e);
 
                 dComIfGs_onSwitch(getSwNo(), mRoomNo);
@@ -1336,18 +1293,18 @@ static actor_method_class l_daTbox_Method = {
 };
 
 actor_process_profile_definition g_profile_TBOX = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_TBOX,
-    &g_fpcLf_Method.base,
-    sizeof(daTbox_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0113,
-    &l_daTbox_Method,
-    fopAcStts_UNK40000_e | fopAcStts_UNK4000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TBOX,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTbox_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0113,
+    /* Actor SubMtd */ &l_daTbox_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -203,7 +203,7 @@ BOOL daBomb_c::draw() {
     if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != -1.0e9f) {
         cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         if(pNormal) {
-            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, &pNormal->mNormal, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, pNormal->GetNP());
         }
     }
 
@@ -472,17 +472,17 @@ void daBomb_c::posMoveF() {
             f32 temp2;
             cXyz* norm;
             if(tri) {
-                norm = &tri->mNormal;
+                norm = tri->GetNP();
                 mag = 0.06f;
                 temp2 = cM_scos(0xA4F);
             }
             else {
-                norm = 0;
+                norm = NULL;
                 mag = 0.0f;
                 temp2 = 0.0f;
             }
 
-            daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &mWindVec, 0.002f, 0.0005f, norm, mag, temp2, 0);
+            daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &mWindVec, 0.002f, 0.0005f, norm, mag, temp2, NULL);
         }
         else {
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
@@ -783,16 +783,16 @@ int daBomb_c::procExplode_init() {
     }
 
     if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->mpEmitterCallBack = 0;
+        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
         mSmoke.mpEmitter->becomeInvalidEmitter();
     }
-    mSmoke.mpEmitter = 0;
+    mSmoke.mpEmitter = NULL;
 
     if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->mpEmitterCallBack = 0;
+        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
         mSparks.mpEmitter->becomeInvalidEmitter();
     }
-    mSparks.mpEmitter = 0;
+    mSparks.mpEmitter = NULL;
 
     mPntLight.mPos = current.pos;
     mPntLight.mPos.y += 100.0f;
@@ -1235,16 +1235,16 @@ static BOOL daBomb_IsDelete(daBomb_c*) {
 /* 800DC570-800DC67C       .text bombDelete__8daBomb_cFv */
 bool daBomb_c::bombDelete() {
     if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->mpEmitterCallBack = 0;
+        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
         mSmoke.mpEmitter->becomeInvalidEmitter();
     }
-    mSmoke.mpEmitter = 0;
+    mSmoke.mpEmitter = NULL;
 
     if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->mpEmitterCallBack = 0;
+        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
         mSparks.mpEmitter->becomeInvalidEmitter();
     }
-    mSparks.mpEmitter = 0;
+    mSparks.mpEmitter = NULL;
 
     if(field_0x6F0) {
         daPy_getPlayerLinkActorClass()->decrementBombCnt();
@@ -1467,7 +1467,7 @@ void daBomb_c::create_init() {
     init_mtx();
 }
 
-actor_method_class l_daBomb_Method = {
+static actor_method_class l_daBomb_Method = {
     (process_method_func)daBomb_Create,
     (process_method_func)daBomb_Delete,
     (process_method_func)daBomb_Execute,
@@ -1476,18 +1476,18 @@ actor_method_class l_daBomb_Method = {
 };
 
 actor_process_profile_definition g_profile_BOMB = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_BOMB,
-    &g_fpcLf_Method.base,
-    sizeof(daBomb_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0115,
-    &l_daBomb_Method,
-    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BOMB,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBomb_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0115,
+    /* Actor SubMtd */ &l_daBomb_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -10,7 +10,6 @@
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 
 /* 00000078-00000080       .text daKytag06_Draw__FP13kytag06_class */
 static BOOL daKytag06_Draw(kytag06_class*) {
@@ -83,18 +82,18 @@ static actor_method_class l_daKytag06_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG06 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcLy_CURRENT_e,
-    PROC_KYTAG06,
-    &g_fpcLf_Method.base,
-    sizeof(kytag06_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0xA6,
-    &l_daKytag06_Method,
-    fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KYTAG06,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kytag06_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00A6,
+    /* Actor SubMtd */ &l_daKytag06_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

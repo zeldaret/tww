@@ -375,27 +375,27 @@ void dDlst_GameOverScrnDraw_c::draw() {
 }
 
 /* 8018F5EC-8018F60C       .text dGameover_Draw__FP11dGameover_c */
-BOOL dGameover_Draw(dGameover_c* i_this) {
+static BOOL dGameover_Draw(dGameover_c* i_this) {
     return i_this->_draw();
 }
 
 /* 8018F60C-8018F62C       .text dGameover_Execute__FP11dGameover_c */
-BOOL dGameover_Execute(dGameover_c* i_this) {
+static BOOL dGameover_Execute(dGameover_c* i_this) {
     return i_this->_execute();
 }
 
 /* 8018F62C-8018F634       .text dGameover_IsDelete__FP11dGameover_c */
-BOOL dGameover_IsDelete(dGameover_c* i_this) {
+static BOOL dGameover_IsDelete(dGameover_c* i_this) {
     return TRUE;
 }
 
 /* 8018F634-8018F654       .text dGameover_Delete__FP11dGameover_c */
-BOOL dGameover_Delete(dGameover_c* i_this) {
+static BOOL dGameover_Delete(dGameover_c* i_this) {
     return i_this->_delete();
 }
 
 /* 8018F654-8018F674       .text dGameover_Create__FP9msg_class */
-s32 dGameover_Create(msg_class* i_this) {
+static s32 dGameover_Create(msg_class* i_this) {
     return ((dGameover_c*)i_this)->_create();
 }
 

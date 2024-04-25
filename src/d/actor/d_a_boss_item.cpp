@@ -7,7 +7,6 @@
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 
 /* 00000078-00000080       .text daBossItem_IsDelete__FP14bossitem_class */
@@ -42,24 +41,24 @@ static s32 daBossItem_Create(fopAc_ac_c* i_this) {
 static actor_method_class daBossItem_METHODS = {
     (process_method_func)daBossItem_Create,
     (process_method_func)daBossItem_Delete,
-    (process_method_func)0,
+    (process_method_func)NULL,
     (process_method_func)daBossItem_IsDelete,
-    (process_method_func)0,
+    (process_method_func)NULL,
 };
 
 actor_process_profile_definition g_profile_BOSSITEM = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcLy_CURRENT_e,
-    PROC_BOSSITEM,
-    &g_fpcLf_Method.base,
-    sizeof(bossitem_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x00FB,
-    &daBossItem_METHODS,
-    fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BOSSITEM,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bossitem_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00FB,
+    /* Actor SubMtd */ &daBossItem_METHODS,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

@@ -4,12 +4,24 @@
 //
 
 #include "d/actor/d_a_boko.h"
-#include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "d/d_bg_s_lin_chk.h"
+
+static u8 dummy_bss[0x4C];
+
+static cXyz l_break_particle_offset(0.0f, 0.0f, 30.0f);
+dBgS_ObjGndChk daBoko_c::m_ground_check;
+dBgS_ObjLinChk daBoko_c::m_line_check;
+
+const s16 daBoko_HIO_c0::throw_timer = 2;
+const f32 daBoko_HIO_c0::throw_speed = 70.0f;
+
+static u8 l_HIO;
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {
-    /* Nonmatching */
+    mpLineMat->update(0xA, 1.25f, (GXColor){0xFF, 0x64, 0x00, 0xFF}, 2, &tevStr);
     dComIfGd_set3DlineMat(mpLineMat);
 }
 
@@ -29,8 +41,8 @@ BOOL daBoko_c::draw() {
 }
 
 /* 00000DC4-00000DE4       .text daBoko_Draw__FP8daBoko_c */
-static BOOL daBoko_Draw(daBoko_c*) {
-    /* Nonmatching */
+static BOOL daBoko_Draw(daBoko_c* i_this) {
+    return i_this->draw();
 }
 
 /* 00000DE4-00000EB0       .text setTopRootPos__8daBoko_cFi */
@@ -44,8 +56,8 @@ void daBoko_c::setBaseMatrix() {
 }
 
 /* 00000F60-00000FA4       .text checkNoDraw__8daBoko_cFv */
-void daBoko_c::checkNoDraw() {
-    /* Nonmatching */
+BOOL daBoko_c::checkNoDraw() {
+    return m2B9 || mCurrentAction == 4 || (mCurrentAction == 3 && dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80_e));
 }
 
 /* 00000FA4-00001340       .text setFlameEffect__8daBoko_cFv */
@@ -55,42 +67,150 @@ void daBoko_c::setFlameEffect() {
 
 /* 00001340-000013CC       .text setRoomInfo__8daBoko_cFv */
 void daBoko_c::setRoomInfo() {
-    /* Nonmatching */
+    int roomNo;
+    if (mAcch.GetGroundH() != -1e9f) {
+        roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
+    } else {
+        roomNo = dComIfGp_roomControl_getStayNo();
+    }
+    current.roomNo = tevStr.mRoomNo = roomNo;
+    mStts.SetRoomId(roomNo);
 }
 
 /* 000013CC-0000155C       .text setThrowReverse__8daBoko_cFs */
-void daBoko_c::setThrowReverse(short) {
+void daBoko_c::setThrowReverse(s16) {
     /* Nonmatching */
 }
 
 /* 0000155C-000015E0       .text procWait_init__8daBoko_cFv */
-void daBoko_c::procWait_init() {
-    /* Nonmatching */
+BOOL daBoko_c::procWait_init() {
+    speedF = 0.0f;
+    m2C0 = 0;
+    m2C2 = 0;
+    mCurrentProc = &daBoko_c::procWait;
+    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+    mCurrentAction = 0;
+    fopAcM_cancelCarryNow(this);
+    gravity = -3.0f;
+    return TRUE;
 }
 
 /* 000015E0-000016E4       .text procWait__8daBoko_cFv */
-void daBoko_c::procWait() {
-    /* Nonmatching */
+BOOL daBoko_c::procWait() {
+    if (fopAcM_checkCarryNow(this)) {
+        gravity = 0.0f;
+        mCurrentProc = &daBoko_c::procCarry;
+        speedF = 0.0f;
+        speed = cXyz::Zero;
+        if (mCurrentAction != 3) {
+            mCurrentAction = 2;
+        }
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+        m2BC = 0;
+        procCarry();
+    } else if (m2BC == 0) {
+        fopAcM_posMoveF(this, NULL);
+        mAcch.CrrPos(*dComIfG_Bgsp());
+        if (!mAcch.ChkGroundHit()) {
+            procMove_init();
+        }
+        setRoomInfo();
+        setBaseMatrix();
+    }
+    return TRUE;
 }
 
 /* 000016E4-0000175C       .text procMove_init__8daBoko_cFv */
-void daBoko_c::procMove_init() {
-    /* Nonmatching */
+BOOL daBoko_c::procMove_init() {
+    mCurrentProc = &daBoko_c::procMove;
+    mCurrentAction = 1;
+    fopAcM_setCarryNow(this, FALSE);
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+    m2BB = 0x14;
+    m2BC = 0;
+    return TRUE;
 }
 
 /* 0000175C-00001E94       .text procMove__8daBoko_cFv */
-void daBoko_c::procMove() {
+BOOL daBoko_c::procMove() {
     /* Nonmatching */
 }
 
 /* 00001E94-000021B8       .text procThrow__8daBoko_cFv */
-void daBoko_c::procThrow() {
+BOOL daBoko_c::procThrow() {
     /* Nonmatching */
 }
 
 /* 000021B8-00002624       .text procCarry__8daBoko_cFv */
-void daBoko_c::procCarry() {
-    /* Nonmatching */
+BOOL daBoko_c::procCarry() {
+    if (fopAcM_checkCarryNow(this) || m2BA == 0) {
+        mDoMtx_multVecZero(mpModel->getBaseTRMtx(), &current.pos);
+        mDoMtx_MtxToRot(mpModel->getBaseTRMtx(), &shape_angle);
+    }
+    fopAc_ac_c* link = dComIfGp_getLinkPlayer();
+    cXyz linkFootPos(link->current.pos.x, link->current.pos.y + 5.0f, link->current.pos.z);
+    if (!fopAcM_checkCarryNow(this)) {
+        fopAcM_setCarryNow(this, FALSE);
+        setTopRootPos(1);
+        if (m2BA != 0) {
+            mCurrentProc = &daBoko_c::procThrow;
+            mCurrentAction = 6;
+            gravity = 0.0f;
+            shape_angle.x = m2CA;
+            shape_angle.y = link->shape_angle.y;
+            current.angle.y = shape_angle.y;
+            speedF = 70.0f * cM_scos(shape_angle.x);
+            speed.y = -70.0f * cM_ssin(shape_angle.x);
+            m2C8 = 2;
+            m2BA = 0;
+            mCps.ResetAtHit();
+            m_line_check.Set(&linkFootPos, &current.pos, this);
+            if (dComIfG_Bgsp()->LineCross(&m_line_check)) {
+                current.pos = m_line_check.GetCross();
+                cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(m_line_check);
+                current.pos += *triPla->GetNP() * 10.0f;
+                setThrowReverse(cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z));
+            } else {
+                procThrow();
+            }
+        } else if (m2BC != 0) {
+            if (shape_angle.z >= 0x4000) {
+                shape_angle.z = 0;
+                shape_angle.x += 0x8000;
+                shape_angle.y += 0x8000;
+            }
+            procWait_init();
+        } else {
+            current.angle.y = shape_angle.y + 0x8000;
+            if (mCurrentAction == 3) {
+                m_line_check.Set(&linkFootPos, &current.pos, this);
+                if (dComIfG_Bgsp()->LineCross(&m_line_check)) {
+                    current.pos = m_line_check.GetCross();
+                }
+            }
+            procMove_init();
+            int i;
+            for (i = 0; i < 3; i++) {
+                m_ground_check.SetPos(&current.pos);
+                if (dComIfG_Bgsp()->GroundCross(&m_ground_check) != -1e9f) {
+                    break;
+                }
+                current.pos.x -= 50.0f * cM_ssin(shape_angle.y);
+                current.pos.z -= 50.0f * cM_scos(shape_angle.y);
+            }
+            if (i == 3) {
+                current.pos = linkFootPos;
+                current.pos.y = 50.0f;
+            }
+            old.pos = current.pos;
+            current.pos.y -= 5.0f;
+            m2C0 = 0;
+            gravity = -3.0f;
+            procMove();
+        }
+    }
+    return TRUE;
 }
 
 /* 00002624-00002A04       .text execute__8daBoko_cFv */
@@ -99,13 +219,13 @@ BOOL daBoko_c::execute() {
 }
 
 /* 00002A04-00002A24       .text daBoko_Execute__FP8daBoko_c */
-static BOOL daBoko_Execute(daBoko_c*) {
-    /* Nonmatching */
+static BOOL daBoko_Execute(daBoko_c* i_this) {
+    return i_this->execute();
 }
 
 /* 00002A24-00002A2C       .text daBoko_IsDelete__FP8daBoko_c */
-static BOOL daBoko_IsDelete(daBoko_c*) {
-    /* Nonmatching */
+static BOOL daBoko_IsDelete(daBoko_c* i_this) {
+    return TRUE;
 }
 
 /* 00002A2C-00002AA4       .text bokoDelete__8daBoko_cFv */
@@ -114,26 +234,57 @@ void daBoko_c::bokoDelete() {
 }
 
 /* 00002AA4-00002AC8       .text daBoko_Delete__FP8daBoko_c */
-static BOOL daBoko_Delete(daBoko_c*) {
-    /* Nonmatching */
+static BOOL daBoko_Delete(daBoko_c* i_this) {
+    i_this->bokoDelete();
+    return TRUE;
 }
 
 /* 00002AC8-00002AE8       .text daBoko_createHeap__FP10fopAc_ac_c */
-static BOOL daBoko_createHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL daBoko_createHeap(fopAc_ac_c* i_this) {
+    return static_cast<daBoko_c*>(i_this)->createHeap();
 }
 
 /* 00002AE8-00002CFC       .text createHeap__8daBoko_cFv */
-void daBoko_c::createHeap() {
+BOOL daBoko_c::createHeap() {
     /* Nonmatching */
 }
 
 /* 00002DE4-00003154       .text create__8daBoko_cFv */
 s32 daBoko_c::create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, daBoko_c);
+}
+
+/* 00003154-000032F0       .text __ct__8daBoko_cFv */
+daBoko_c::daBoko_c() {
 }
 
 /* 00003824-00003844       .text daBoko_Create__FP10fopAc_ac_c */
-static s32 daBoko_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daBoko_Create(fopAc_ac_c* i_this) {
+    return static_cast<daBoko_c*>(i_this)->create();
 }
+
+static actor_method_class l_daBoko_Method = {
+    (process_method_func)daBoko_Create,
+    (process_method_func)daBoko_Delete,
+    (process_method_func)daBoko_Execute,
+    (process_method_func)daBoko_IsDelete,
+    (process_method_func)daBoko_Draw,
+};
+
+actor_process_profile_definition g_profile_BOKO = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0009,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BOKO,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBoko_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01A0,
+    /* Actor SubMtd */ &l_daBoko_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

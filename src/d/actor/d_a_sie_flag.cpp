@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_sie_flag.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000118       .text __ct__16daSie_Flag_HIO_cFv */
 daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
@@ -76,3 +76,27 @@ static BOOL daSie_FlagIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daSie_FlagMethodTable = {
+    (process_method_func)daSie_FlagCreate,
+    (process_method_func)daSie_FlagDelete,
+    (process_method_func)daSie_FlagExecute,
+    (process_method_func)daSie_FlagIsDelete,
+    (process_method_func)daSie_FlagDraw,
+};
+
+actor_process_profile_definition g_profile_Sie_Flag = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Sie_Flag,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSie_Flag_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x006D,
+    /* Actor SubMtd */ &daSie_FlagMethodTable,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

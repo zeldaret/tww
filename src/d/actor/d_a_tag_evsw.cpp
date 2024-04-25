@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_tag_evsw.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000001F8       .text _create__Q29daTagEvsw5Act_cFv */
 s32 daTagEvsw::Act_c::_create() {
@@ -25,3 +25,57 @@ BOOL daTagEvsw::Act_c::_execute() {
 BOOL daTagEvsw::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daTagEvsw {
+namespace {
+/* 00000484-000004A4       .text Mthd_Create__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 000004A4-000004C8       .text Mthd_Delete__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 000004C8-000004EC       .text Mthd_Execute__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 000004EC-00000510       .text Mthd_Draw__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00000510-00000518       .text Mthd_IsDelete__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daTagEvsw
+
+actor_process_profile_definition g_profile_TAG_EVSW = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TAG_EVSW,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagEvsw::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0062,
+    /* Actor SubMtd */ &daTagEvsw::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

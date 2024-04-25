@@ -117,6 +117,10 @@ public:
     void setScaleFlag(int idx, u8 param_1) { mpScaleFlagArr[idx] = param_1; }
     u8 getEnvScaleFlag(int idx) const { return mpEvlpScaleFlagArr[idx]; }
     J3DVertexBuffer* getVertexBuffer() { return (J3DVertexBuffer*)&mVertexBuffer; }
+    void* getCurrentVtxPos() { return mVertexBuffer.getCurrentVtxPos(); }
+    void setCurrentVtxPos(void* v) { mVertexBuffer.setCurrentVtxPos(v); }
+    void* getCurrentVtxNrm() { return mVertexBuffer.getCurrentVtxNrm(); }
+    void setCurrentVtxNrm(void* v) { mVertexBuffer.setCurrentVtxNrm(v); }
     J3DMatPacket* getMatPacket(u16 idx) { return &mpMatPacket[idx]; }
     J3DMatPacket* getMatPacketArray() { return mpMatPacket; }
     J3DShapePacket* getShapePacket(u16 idx) { return &mpShapePacket[idx]; }
@@ -132,10 +136,6 @@ public:
     void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
 
     // TODO
-    void getCurrentVtxNrm() {}
-    void setCurrentVtxNrm(void*) {}
-    void getCurrentVtxPos() {}
-    void setCurrentVtxPos(void*) {}
     void setModelData(J3DModelData*) {}
     void setNrmMtx(int, Mtx) {}
 

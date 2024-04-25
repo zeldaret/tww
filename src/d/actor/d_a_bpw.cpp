@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_bpw.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000258       .text body_nodeCallBack__FP7J3DNodei */
 static BOOL body_nodeCallBack(J3DNode*, int) {
@@ -286,3 +286,27 @@ static s32 daBPW_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daBPW_Method = {
+    (process_method_func)daBPW_Create,
+    (process_method_func)daBPW_Delete,
+    (process_method_func)daBPW_Execute,
+    (process_method_func)daBPW_IsDelete,
+    (process_method_func)daBPW_Draw,
+};
+
+actor_process_profile_definition g_profile_BPW = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BPW,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bpw_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00C6,
+    /* Actor SubMtd */ &l_daBPW_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

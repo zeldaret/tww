@@ -74,11 +74,9 @@ struct TVec3<s16> : public SVec {
 
 template <>
 struct TVec3<f32> : public Vec {
-    inline TVec3(const Vec& i_vec) {
-        set(i_vec);
-    }
     TVec3() {}
     TVec3(f32 x, f32 y, f32 z) { set(x, y, z); }
+    TVec3(const Vec& b) { set(b); }
 
     operator Vec*() { return (Vec*)&x; }
     operator const Vec*() const { return (Vec*)&x; }
@@ -202,13 +200,32 @@ struct TVec3<f32> : public Vec {
         );
     }
 
-    void setLength(f32 len) {
+    void cross_hack(const TVec3<f32>& a, const TVec3<f32>& b) {
+        // obviously fake
+        x = a.y * b.z - a.z * b.y;
+        y = a.z * b.x - a.x * b.z;
+        z = a.x * b.y - a.y * b.x;
+    }
+
+    f32 setLength(f32 len) {
         f32 sq = squared();
         if (sq <= TUtil<f32>::epsilon()) {
-            return;
+            return 0.0f;
         }
         f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(norm * len);
+        return sq * norm;
+    }
+
+    f32 setLength(const TVec3<f32>& b, f32 len) {
+        f32 sq = b.squared();
+        if (sq <= TUtil<f32>::epsilon()) {
+            zero();
+            return 0.0f;
+        }
+        f32 norm = TUtil<f32>::inv_sqrt(sq);
+        scale(norm * len, b);
+        return sq * norm;
     }
 
     template<typename S>
@@ -256,19 +273,19 @@ struct TVec2 {
         this->y = y;
     }
 
-    void set(const TVec2& other) {
+    void set(const TVec2<T>& other) {
         x = other.x;
         y = other.y;
     }
 
-    void setMin(const TVec2<f32>& min) {
+    void setMin(const TVec2<T>& min) {
         if (x >= min.x)
             x = min.x;
         if (y >= min.y)
             y = min.y;
     }
 
-    void setMax(const TVec2<f32>& max) {
+    void setMax(const TVec2<T>& max) {
         if (x <= max.x)
             x = max.x;
         if (y <= max.y)
@@ -284,17 +301,17 @@ struct TVec2 {
         return (x >= other.x) && (y >= other.y) ? true : false;
     }
 
-    f32 dot(const TVec2<T>& other) {
+    T dot(const TVec2<T>& other) {
         return x * other.x + y * other.y;
     }
 
-    f32 squared() {
+    T squared() {
         return dot(*this);
     }
 
-    f32 length() {
-        f32 sqr = squared();
-        return TUtil<f32>::sqrt(sqr);
+    T length() {
+        T sqr = squared();
+        return TUtil<T>::sqrt(sqr);
     }
 
     T x;

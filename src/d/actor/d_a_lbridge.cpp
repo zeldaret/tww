@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_lbridge.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c*) {
@@ -101,3 +101,27 @@ static BOOL daLbridge_IsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daLbridgeMethodTable = {
+    (process_method_func)daLbridge_Create,
+    (process_method_func)daLbridge_Delete,
+    (process_method_func)daLbridge_Execute,
+    (process_method_func)daLbridge_IsDelete,
+    (process_method_func)daLbridge_Draw,
+};
+
+actor_process_profile_definition g_profile_LIGHTBRIDGE = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_LIGHTBRIDGE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daLbridge_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0196,
+    /* Actor SubMtd */ &daLbridgeMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

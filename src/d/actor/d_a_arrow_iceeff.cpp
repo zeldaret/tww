@@ -32,7 +32,7 @@ BOOL daArrow_Iceeff_c::CreateHeap() {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER01));
         JUT_ASSERT(98, modelData != 0);
         mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-        if(mpModel == 0) {
+        if(mpModel == NULL) {
             return false;
         }
         
@@ -302,18 +302,18 @@ static actor_method_class daArrow_IceeffMethodTable = {
 };
 
 actor_process_profile_definition g_profile_ARROW_ICEEFF = {
-    fpcLy_CURRENT_e,
-    9,
-    fpcPi_CURRENT_e,
-    PROC_ARROW_ICEEFF,
-    &g_fpcLf_Method.base,
-    sizeof(daArrow_Iceeff_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01C0,
-    &daArrow_IceeffMethodTable,
-    fopAcStts_UNK40000_e | fopAcStts_UNK4000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0009,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ARROW_ICEEFF,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daArrow_Iceeff_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01C0,
+    /* Actor SubMtd */ &daArrow_IceeffMethodTable,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_npc_os.h"
+#include "d/res/res_os.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
@@ -235,13 +236,13 @@ static BOOL tunoNodeCallBack(J3DNode* node, int param_1) {
 
 /* 00000988-00000C94       .text createHeap__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", 9));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", OS_BDL_OS));
     JUT_ASSERT(0x2F9, modelData != 0);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", 6)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", OS_BCK_OS_MOVE01)),
         J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -292,7 +293,7 @@ BOOL daNpc_Os_c::createHeap() {
 
     mAcchCir[0].SetWall(20.0f, 40.0f);
     mAcchCir[1].SetWall(60.0f, 40.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 2, &mAcchCir[0], &speed, 0, 0);
+    mAcch.Set(&current.pos, &old.pos, this, 2, &mAcchCir[0], &speed);
     mAcch.OnLineCheck();
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(120.0f);
@@ -713,7 +714,7 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
             }
         }
 
-        attention_info.flags &= ~(fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e);
+        attention_info.flags &= ~(fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e);
 
         f32 dist = fopAcM_searchPlayerDistance2(this);
         if(!checkNpcCallCommand()) {
@@ -1292,7 +1293,7 @@ BOOL daNpc_Os_c::eventProc() {
     int staffIdx = getMyStaffId();
     if(dComIfGp_event_runCheck() && !checkCommandTalk()) {
         if(staffIdx != -1) {
-            int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+            int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
             if(actIdx == -1) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
@@ -1961,7 +1962,7 @@ BOOL daNpc_Os_c::init() {
     cXyz dummy(0.0f, 0.0f, 0.0f);
 
     field_0x794 = fopAcM_GetParam(this) >> 0x10 & 0xFF;
-    attention_info.distances[4] = 0x27;
+    attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 0x27;
     // Fakematch, the next two lines get optimized out, but they affect the regalloc when copying the tevstr.
     speedF = speedF;
     speedF = speedF;
@@ -1998,7 +1999,7 @@ BOOL daNpc_Os_c::init() {
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
     for(int i = 0; i < 0x10; i++) {
-        field_0x7C4[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], -1);
+        field_0x7C4[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i]);
     }
 
     return true;
@@ -2031,8 +2032,7 @@ BOOL daNpc_Os_c::draw() {
 
         mShadowId = dComIfGd_setShadow(
             mShadowId, 0, pModel, &shadowPos, 800.0f, 20.0f,
-            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
-            0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
         );
     }
 
@@ -2400,7 +2400,7 @@ static BOOL daNpc_Os_IsDelete(daNpc_Os_c* i_this) {
 void daNpc_Os_infiniteEcallBack_c::end() {
     if(mpBaseEmitter) {
         mpBaseEmitter->becomeInvalidEmitter();
-        mpBaseEmitter->setEmitterCallBackPtr(0);
+        mpBaseEmitter->setEmitterCallBackPtr(NULL);
         mpBaseEmitter = NULL;
     }
 }
@@ -2430,18 +2430,18 @@ static actor_method_class l_daNpc_Os_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_OS = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_NPC_OS,
-    &g_fpcLf_Method.base,
-    sizeof(daNpc_Os_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x013D,
-    &l_daNpc_Os_Method,
-    fopAcStts_UNK8000000_e | fopAcStts_UNK2000000_e | fopAcStts_UNK40000_e | fopAcStts_UNK4000_e | fopAcStts_FREEZE_e | fopAcStts_CULL_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NPC_OS,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Os_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x013D,
+    /* Actor SubMtd */ &l_daNpc_Os_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e | fopAcStts_UNK8000000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

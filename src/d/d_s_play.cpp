@@ -285,7 +285,7 @@ static request_of_phase_process_class dylPhase[PRELOAD_DYL_MAX];
 static dScnPly_preLoad_HIO_c g_preLoadHIO;
 
 /* 80234B9C-80234FD0       .text dScnPly_Draw__FP13dScnPly_ply_c */
-int dScnPly_Draw(dScnPly_ply_c* i_this) {
+static int dScnPly_Draw(dScnPly_ply_c* i_this) {
     dComIfG_Ccsp()->Move();
     dComIfG_Bgsp()->ClrMoveFlag();
 
@@ -1023,7 +1023,7 @@ const PreLoadInfoT_s PreLoadInfoT[] = {
 };
 
 /* 80234FD0-802350B4       .text dScnPly_Execute__FP13dScnPly_ply_c */
-int dScnPly_Execute(dScnPly_ply_c* i_this) {
+static int dScnPly_Execute(dScnPly_ply_c* i_this) {
     if (!fopOvlpM_IsPeek()) {
         if (mDoAud_zelAudio_c::isBgmSet()) {
             mDoAud_sceneBgmStart();
@@ -1054,7 +1054,7 @@ int dScnPly_Execute(dScnPly_ply_c* i_this) {
 }
 
 /* 802350B4-802350BC       .text dScnPly_IsDelete__FP13dScnPly_ply_c */
-int dScnPly_IsDelete(dScnPly_ply_c* i_this) {
+static int dScnPly_IsDelete(dScnPly_ply_c* i_this) {
     return 1;
 }
 
@@ -1062,7 +1062,7 @@ static s8 preLoadNo = 0xFF;
 static bool doPreLoad = true;
 
 /* 802350BC-80235364       .text dScnPly_Delete__FP13dScnPly_ply_c */
-BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
+static BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     dComIfGp_getAttention().~dAttention_c();
     dComIfGp_getVibration().dVibration_c::~dVibration_c();
     dComIfG_Bgsp()->Dt();
@@ -1474,7 +1474,7 @@ int phase_compleate(void* i_this) {
 }
 
 /* 8023655C-8023658C       .text dScnPly_Create__FP11scene_class */
-int dScnPly_Create(scene_class* i_this) {
+static int dScnPly_Create(scene_class* i_this) {
     static request_of_phase_process_fn l_method[] = {
         (request_of_phase_process_fn)phase_00, (request_of_phase_process_fn)phase_01,
         (request_of_phase_process_fn)phase_0,  (request_of_phase_process_fn)phase_1,

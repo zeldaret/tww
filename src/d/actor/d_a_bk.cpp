@@ -494,8 +494,7 @@ static void daBk_shadowDraw(bk_class* i_this) {
         i_this->mShadowId = dComIfGd_setShadow(
             i_this->mShadowId, 1, model, &shadowPos, temp, shadowSize,
             i_this->current.pos.y, i_this->dr.mAcch.GetGroundH(),
-            i_this->dr.mAcch.m_gnd, &i_this->tevStr,
-            0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+            i_this->dr.mAcch.m_gnd, &i_this->tevStr
         );
     }
     
@@ -1954,7 +1953,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
             }
         }
         
-        i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+        i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
         fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
         i_this->m02F0 = 0;
         i_this->m02F4 = 0;
@@ -2785,7 +2784,7 @@ static actor_method_class l_daBk_Method = {
 
 actor_process_profile_definition g_profile_BK = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_BK,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

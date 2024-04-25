@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_bscurtain.h"
+#include "d/res/res_ptc.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -43,9 +44,9 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daObj_Bscurtain_c::CreateHeap() {
     J3DModelData* modelData;
     if ((fpcM_GetParam(this) & 0xFF) != 1 || dComIfGs_isEventBit(0x1F08) != 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x03);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCO);
     } else {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x04);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCU);
     }
 
     JUT_ASSERT(0xa9, modelData != 0);
@@ -131,7 +132,7 @@ static actor_method_class daObj_BscurtainMethodTable = {
 
 actor_process_profile_definition g_profile_Obj_Bscurtain = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Bscurtain,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -141,7 +142,7 @@ actor_process_profile_definition g_profile_Obj_Bscurtain = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x01BE,
     /* Actor SubMtd */ &daObj_BscurtainMethodTable,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_NOCULLEXEC_e,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_4_e,
 };

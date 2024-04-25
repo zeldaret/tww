@@ -44,8 +44,6 @@ typedef union {
 
 volatile PPCWGPipe GXFIFO : 0xCC008000;
 
-#define GFX_FIFO(T) (*(volatile T*)0xCC008000)
-
 inline void GXPosition3f32(f32 x, f32 y, f32 z) {
     GXFIFO.f32 = x;
     GXFIFO.f32 = y;
@@ -64,66 +62,66 @@ inline void GXPosition2f32(f32 x, f32 z) {
 }
 
 inline void GXColor1u32(u32 c) {
-    GFX_FIFO(u32) = c;
+    GXFIFO.u32 = c;
 }
 
 inline void GXTexCoord2f32(f32 s, f32 t) {
-    GFX_FIFO(f32) = s;
-    GFX_FIFO(f32) = t;
+    GXFIFO.f32 = s;
+    GXFIFO.f32 = t;
 }
 
 inline void GXTexCoord2u8(u8 s, u8 t) {
-    GFX_FIFO(u8) = s;
-    GFX_FIFO(u8) = t;
+    GXFIFO.u8 = s;
+    GXFIFO.u8 = t;
 }
 
 inline void GXTexCoord1x8(u8 s) {
-    GFX_FIFO(u8) = s;
+    GXFIFO.u8 = s;
 }
 
 inline void GXPosition2u16(u16 x, u16 y) {
-    GFX_FIFO(u16) = x;
-    GFX_FIFO(u16) = y;
+    GXFIFO.u16 = x;
+    GXFIFO.u16 = y;
 }
 
 inline void GXPosition1x16(u16 x) {
-    GFX_FIFO(u16) = x;
+    GXFIFO.u16 = x;
 }
 
 inline void GXPosition1x8(u8 x) {
-    GFX_FIFO(u8) = x;
+    GXFIFO.u8 = x;
 }
 
 inline void GXPosition3s8(s8 x, s8 y, s8 z) {
-    GFX_FIFO(s8) = x;
-    GFX_FIFO(s8) = y;
-    GFX_FIFO(s8) = z;
+    GXFIFO.s8 = x;
+    GXFIFO.s8 = y;
+    GXFIFO.s8 = z;
 }
 
 inline void GXPosition2s8(s8 x, s8 y) {
-    GFX_FIFO(s8) = x;
-    GFX_FIFO(s8) = y;
+    GXFIFO.s8 = x;
+    GXFIFO.s8 = y;
 }
 
 inline void GXPosition3s16(s16 x, s16 y, s16 z) {
-    GFX_FIFO(s16) = x;
-    GFX_FIFO(s16) = y;
-    GFX_FIFO(s16) = z;
+    GXFIFO.s16 = x;
+    GXFIFO.s16 = y;
+    GXFIFO.s16 = z;
 }
 
 inline void GXTexCoord2s8(s8 x, s8 y) {
-    GFX_FIFO(s8) = x;
-    GFX_FIFO(s8) = y;
+    GXFIFO.s8 = x;
+    GXFIFO.s8 = y;
 }
 
 inline void GXTexCoord2u16(u16 x, u16 y) {
-    GFX_FIFO(u16) = x;
-    GFX_FIFO(u16) = y;
+    GXFIFO.u16 = x;
+    GXFIFO.u16 = y;
 }
 
 inline void GXTexCoord2s16(const s16 u, const s16 v) {
-	GFX_FIFO(s16) = u;
-	GFX_FIFO(s16) = v;
+	GXFIFO.s16 = u;
+	GXFIFO.s16 = v;
 }
 
 inline void GFWriteBPCmd(u32 param_1) {

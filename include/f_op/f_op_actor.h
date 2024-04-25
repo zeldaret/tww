@@ -58,14 +58,25 @@ enum fopAc_Group_e {
     fopAc_NPC_e,
 };
 
+enum fopAc_AttentionType_e {
+    fopAc_Attn_TYPE_MISC_e     = 0x0, // "LOCK"
+    fopAc_Attn_TYPE_TALK_e     = 0x1, // "TALK"
+    fopAc_Attn_TYPE_BATTLE_e   = 0x2, // "BATL"
+    fopAc_Attn_TYPE_SPEAK_e    = 0x3, // "SPEK"
+    fopAc_Attn_TYPE_CARRY_e    = 0x4, // "CARY"
+    fopAc_Attn_TYPE_DOOR_e     = 0x5, // "DOOR"
+    fopAc_Attn_TYPE_TREASURE_e = 0x6, // "JUEL"
+    fopAc_Attn_TYPE_SHIP_e     = 0x7,
+};
+
 enum fopAc_AttentionFlag_e {
-    fopAc_Attn_LOCKON_MISC_e        = 0x00000001,
-    fopAc_Attn_LOCKON_TALK_e        = 0x00000002,
-    fopAc_Attn_LOCKON_ENEMY_e       = 0x00000004,
-    fopAc_Attn_ACTION_TALK_e        = 0x00000008,
-    fopAc_Attn_ACTION_CARRY_e       = 0x00000010,
-    fopAc_Attn_ACTION_DOOR_e        = 0x00000020,
-    fopAc_Attn_ACTION_TREASURE_e    = 0x00000040,
+    fopAc_Attn_LOCKON_MISC_e        = 0x00000001, // "LOCK"
+    fopAc_Attn_LOCKON_TALK_e        = 0x00000002, // "TALK"
+    fopAc_Attn_LOCKON_BATTLE_e      = 0x00000004, // "BATL"
+    fopAc_Attn_ACTION_SPEAK_e       = 0x00000008, // "SPEK"
+    fopAc_Attn_ACTION_CARRY_e       = 0x00000010, // "CARY"
+    fopAc_Attn_ACTION_DOOR_e        = 0x00000020, // "DOOR"
+    fopAc_Attn_ACTION_TREASURE_e    = 0x00000040, // "JUEL"
     fopAc_Attn_ACTION_SHIP_e        = 0x00000080,
     fopAc_Attn_UNK1000000_e         = 0x01000000,
     fopAc_Attn_TALKFLAG_NOTALK_e    = 0x02000000,

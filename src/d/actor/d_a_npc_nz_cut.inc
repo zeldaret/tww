@@ -162,7 +162,7 @@ void daNpc_Nz_c::cutProc() {
         "DEFAULT_NPC_NZ_ESA",
     };
 
-    int actIdx = dComIfGp_evmng_getMyActIdx(field_0x8F4, action_table, ARRAY_SIZE(action_table), 1, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(field_0x8F4, action_table, ARRAY_SIZE(action_table), TRUE, 0);
     if(actIdx == -1) {
         dComIfGp_evmng_cutEnd(field_0x8F4);
         return;
@@ -191,7 +191,7 @@ void daNpc_Nz_c::cutEatesaProc() {
 
     if(pBait) {
         fopAcM_delete(pBait);
-        mpBait = 0;
+        mpBait = NULL;
         field_0x910 = FLOAT_MAX;
     }
     else {
@@ -234,7 +234,7 @@ void daNpc_Nz_c::cutEatesaFirstProc() {
     if(pBait) {
         if(mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f) && cLib_calcTimer(&field_0x906) == 0) {
             fopAcM_delete(pBait);
-            mpBait = 0;
+            mpBait = NULL;
             dComIfGp_evmng_cutEnd(field_0x8F4);
         }
     }
@@ -245,17 +245,16 @@ void daNpc_Nz_c::cutEatesaFirstProc() {
 
 /* 00003F54-0000404C       .text cutKillAllStart__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutKillAllStart() {
-    /* Nonmatching */
-
     fopAcM_Search((fopAcIt_JudgeFunc)&searchNzAndBomb_CB, this);
     fopAcM_Search((fopAcIt_JudgeFunc)&searchTsuboAndBarrel_CB, this);
     fopAcM_Search((fopAcIt_JudgeFunc)&searchEsaInit_CB, this);
     
     cXyz pos = field_0x6C4;
-    pos.x += cM_ssin(home.angle.y + 0x8000) * 250.0f;
-    pos.z += cM_scos(home.angle.y + 0x8000) * 250.0f;
+    s16 r5 = home.angle.y + 0x8000;
+    pos.x += cM_ssin(home.angle.y) * 250.0f;
+    pos.z += cM_scos(home.angle.y) * 250.0f;
 
-    daPy_getPlayerActorClass()->setPlayerPosAndAngle(&pos, home.angle.y + 0x8000);
+    daPy_getPlayerActorClass()->setPlayerPosAndAngle(&pos, r5);
 }
 
 /* 0000404C-00004080       .text cutKillAllProc__10daNpc_Nz_cFv */

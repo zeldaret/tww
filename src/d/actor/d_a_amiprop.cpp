@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_amiprop.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000D4       .text _delete__11daAmiProp_cFv */
 BOOL daAmiProp_c::_delete() {
@@ -75,3 +75,28 @@ static BOOL daAmiProp_Execute(void*) {
 static BOOL daAmiProp_IsDelete(void*) {
     /* Nonmatching */
 }
+
+static actor_method_class daAmiPropMethodTable = {
+    (process_method_func)daAmiProp_Create,
+    (process_method_func)daAmiProp_Delete,
+    (process_method_func)daAmiProp_Execute,
+    (process_method_func)daAmiProp_IsDelete,
+    (process_method_func)daAmiProp_Draw,
+};
+
+actor_process_profile_definition g_profile_AMI_PROP = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_AMI_PROP,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daAmiProp_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0090,
+    /* Actor SubMtd */ &daAmiPropMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

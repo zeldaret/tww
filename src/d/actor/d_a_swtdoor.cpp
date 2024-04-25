@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_swtdoor.h"
+#include "d/res/res_swtdoor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -49,7 +50,7 @@ static BOOL daSwtdoor_Delete(swtdoor_class* i_this) {
 /* 000001F4-00000260       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     swtdoor_class * i_this = (swtdoor_class *)i_ac;
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Swtdoor", 3);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Swtdoor", SWTDOOR_BMD_SWTDOOR);
     i_this->model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->model == NULL)
         return FALSE;
@@ -85,7 +86,7 @@ static s32 daSwtdoor_Create(fopAc_ac_c* i_ac) {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daSwtdoor_Method = {
+static actor_method_class l_daSwtdoor_Method = {
     (process_method_func)daSwtdoor_Create,
     (process_method_func)daSwtdoor_Delete,
     (process_method_func)daSwtdoor_Execute,
@@ -94,18 +95,18 @@ actor_method_class l_daSwtdoor_Method = {
 };
 
 actor_process_profile_definition g_profile_SWTDOOR = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_SWTDOOR,
-    &g_fpcLf_Method.base,
-    sizeof(swtdoor_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x00ED,
-    &l_daSwtdoor_Method,
-    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SWTDOOR,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(swtdoor_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00ED,
+    /* Actor SubMtd */ &l_daSwtdoor_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

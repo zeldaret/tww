@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_vgnfd.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVgnfd_cFP10fopAc_ac_c */
 void daObjVgnfd_c::solidHeapCB(fopAc_ac_c*) {
@@ -70,3 +70,55 @@ BOOL daObjVgnfd_c::_execute() {
 BOOL daObjVgnfd_c::_draw() {
     /* Nonmatching */
 }
+
+namespace {
+/* 000013F0-00001410       .text Mthd_Create__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001410-00001434       .text Mthd_Delete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001434-00001458       .text Mthd_Execute__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001458-0000147C       .text Mthd_Draw__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 0000147C-00001484       .text Mthd_IsDelete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Vgnfd_Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+
+actor_process_profile_definition g_profile_Obj_Vgnfd = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Vgnfd,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjVgnfd_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0050,
+    /* Actor SubMtd */ &Vgnfd_Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

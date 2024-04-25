@@ -12,16 +12,16 @@ public:
     /* 0x04 */ u32 mMtxIdxRegB;
 };
 
-static inline void J3DFifoWriteCPCmd(u8 cmd, u32 param) {
-    GFX_FIFO(u8) = GX_CMD_LOAD_CP_REG;
-    GFX_FIFO(u8) = cmd;
-    GFX_FIFO(u32) = param;
+static inline void JRNLoadCPCmd(u8 cmd, u32 param) {
+    GXFIFO.u8 = GX_CMD_LOAD_CP_REG;
+    GXFIFO.u8 = cmd;
+    GXFIFO.u32 = param;
 }
 
-static inline void J3DFifoWriteXFCmd(u16 cmd, u16 len) {
-    GFX_FIFO(u8) = GX_CMD_LOAD_XF_REG;
-    GFX_FIFO(u16) = (len - 1);
-    GFX_FIFO(u16) = cmd;
+inline void JRNLoadXFCmdHdr(u16 cmd, u8 len) {
+    GXFIFO.u8 = GX_CMD_LOAD_XF_REG;
+    GXFIFO.u16 = len - 1;
+    GXFIFO.u16 = cmd;
 }
 
 class J3DCurrentMtx : public J3DCurrentMtxInfo {
@@ -40,11 +40,11 @@ public:
     u32 getMtxIdxRegB() const { return mMtxIdxRegB; }
 
     inline void load() const {
-        J3DFifoWriteCPCmd(0x30, getMtxIdxRegA());  // CP_MATINDEX_A
-        J3DFifoWriteCPCmd(0x40, getMtxIdxRegB());  // CP_MATINDEX_B
-        J3DFifoWriteXFCmd(0x1018, 2);
-        GFX_FIFO(u32) = getMtxIdxRegA();
-        GFX_FIFO(u32) = getMtxIdxRegB();
+        JRNLoadCPCmd(0x30, getMtxIdxRegA());  // CP_MATINDEX_A
+        JRNLoadCPCmd(0x40, getMtxIdxRegB());  // CP_MATINDEX_B
+        JRNLoadXFCmdHdr(0x1018, 2);
+        GXFIFO.u32 = getMtxIdxRegA();
+        GXFIFO.u32 = getMtxIdxRegB();
     }
 
     void setCurrentTexMtx(u8 t0, u8 t1, u8 t2, u8 t3, u8 t4, u8 t5, u8 t6, u8 t7) {
@@ -118,8 +118,8 @@ public:
     u32 getPipeline() const { return (mFlags >> 2) & 0x07; }
     u32 getTexMtxLoadType() const { return mFlags & 0xF000; }
     u32 getMtxGroupNum() const { return mMtxGroupNum; }
-    J3DShapeDraw* getShapeDraw(u32 idx) const { return mShapeDraw[idx]; }
-    J3DShapeMtx* getShapeMtx(u32 idx) const { return mShapeMtx[idx]; }
+    J3DShapeDraw* getShapeDraw(u16 idx) const { return mShapeDraw[idx]; }
+    J3DShapeMtx* getShapeMtx(u16 idx) const { return mShapeMtx[idx]; }
     Vec* getMin() { return &mMin; }
     Vec* getMax() { return &mMax; }
 

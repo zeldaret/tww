@@ -315,7 +315,7 @@ s32 dDoor_info_c::getDemoAction() {
         "DROP_AF",
     };
 
-    return dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
+    return dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 }
 
 /* 8006C0EC-8006C1D8       .text setGoal__12dDoor_info_cFv */

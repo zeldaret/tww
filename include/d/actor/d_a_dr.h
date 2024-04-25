@@ -10,7 +10,7 @@ class mDoExt_McaMorf;
 
 class dr_class : public fopAc_ac_c {
 public:
-    void setQuakeInfo() {}
+    void setQuakeInfo() { m2C8 = 1; }
 
 public:
     /* 0x290 */ u8 m290[0x2AC - 0x290];

@@ -615,8 +615,3 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
         }
     }
 }
-
-/* 800A2550-800A257C       .text MatrixCrrPos__4dBgWFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgW::MatrixCrrPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csXyz* angle, csXyz* shape_angle) {
-    CrrPos(poly, user, accept, pos, angle, shape_angle);
-}

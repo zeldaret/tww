@@ -187,26 +187,26 @@ void dScp_closeDemoProc(sub_scp_class*) {
 }
 
 /* 8023AD20-8023AD60       .text dScp_Draw__FP13sub_scp_class */
-void dScp_Draw(sub_scp_class*) {
+static void dScp_Draw(sub_scp_class*) {
     /* Nonmatching */
 }
 
 /* 8023AD60-8023AEF4       .text dScp_Execute__FP13sub_scp_class */
-void dScp_Execute(sub_scp_class*) {
+static void dScp_Execute(sub_scp_class*) {
     /* Nonmatching */
 }
 
 /* 8023AEF4-8023AEFC       .text dScp_IsDelete__FP13sub_scp_class */
-void dScp_IsDelete(sub_scp_class*) {
+static void dScp_IsDelete(sub_scp_class*) {
     /* Nonmatching */
 }
 
 /* 8023AEFC-8023B094       .text dScp_Delete__FP13sub_scp_class */
-void dScp_Delete(sub_scp_class*) {
+static void dScp_Delete(sub_scp_class*) {
     /* Nonmatching */
 }
 
 /* 8023B094-8023B49C       .text dScp_Create__FP9msg_class */
-void dScp_Create(msg_class*) {
+static void dScp_Create(msg_class*) {
     /* Nonmatching */
 }

@@ -401,7 +401,7 @@ static s32 daKytag00_Create(fopAc_ac_c* i_ac) {
     return cPhs_COMPLEATE_e;
 }
 
-actor_method_class l_daKytag00_Method = {
+static actor_method_class l_daKytag00_Method = {
     (process_method_func)daKytag00_Create,
     (process_method_func)daKytag00_Delete,
     (process_method_func)daKytag00_Execute,
@@ -410,18 +410,18 @@ actor_method_class l_daKytag00_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG00 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_KYTAG00,
-    &g_fpcLf_Method.base,
-    sizeof(kytag00_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0xA0,
-    &l_daKytag00_Method,
-    fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KYTAG00,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kytag00_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00A0,
+    /* Actor SubMtd */ &l_daKytag00_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };

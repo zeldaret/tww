@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_tag_light.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 00000078-000000D0       .text get_cc_r__Q210daTagLight5Act_cCFv */
 void daTagLight::Act_c::get_cc_r() const {
@@ -95,3 +95,57 @@ void daTagLight::Act_c::set_material(J3DMaterial*, unsigned char) {
 BOOL daTagLight::Act_c::_draw() {
     /* Nonmatching */
 }
+
+namespace daTagLight {
+namespace {
+/* 00001EAC-00001ECC       .text Mthd_Create__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_Create(void*) {
+    /* Nonmatching */
+}
+
+/* 00001ECC-00001EF0       .text Mthd_Delete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_Delete(void*) {
+    /* Nonmatching */
+}
+
+/* 00001EF0-00001F14       .text Mthd_Execute__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_Execute(void*) {
+    /* Nonmatching */
+}
+
+/* 00001F14-00001F38       .text Mthd_Draw__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_Draw(void*) {
+    /* Nonmatching */
+}
+
+/* 00001F38-00001F40       .text Mthd_IsDelete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
+void Mthd_IsDelete(void*) {
+    /* Nonmatching */
+}
+
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+}; // namespace daTagLight
+
+actor_process_profile_definition g_profile_Tag_Light = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0009,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Tag_Light,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagLight::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0063,
+    /* Actor SubMtd */ &daTagLight::Mthd_Table,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

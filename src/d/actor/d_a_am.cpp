@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_am.h"
+#include "d/res/res_am.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/J3DGraphAnimator/J3DNode.h"
 #include "SSystem/SComponent/c_xyz.h"
@@ -35,40 +36,6 @@ enum Action {
     ACTION_MODORU_MOVE = 0x1,
     ACTION_HANDOU_MOVE = 0x2,
     ACTION_ITAI_MOVE   = 0x3,
-};
-
-enum AM_RES_FILE_ID { // IDs and indexes are synced
-    /* BAS */
-    AM_BAS_BOM_NOMI=0x5,
-    AM_BAS_BOM_NOMI2=0x6,
-    AM_BAS_CLOSE=0x7,
-    AM_BAS_CLOSE_LOOP=0x8,
-    AM_BAS_DAMAGE=0x9,
-    AM_BAS_DAMAGE_END=0xA,
-    AM_BAS_DAMAGE_LOOP=0xB,
-    AM_BAS_DEAD=0xC,
-    AM_BAS_OKIRU=0xD,
-    AM_BAS_OPEN=0xE,
-    AM_BAS_OPEN_LOOP=0xF,
-    AM_BAS_SLEEP=0x10,
-    AM_BAS_SLEEP_LOOP=0x11,
-
-    /* BCK */
-    AM_BCK_BOM_NOMI=0x14,
-    AM_BCK_CLOSE=0x15,
-    AM_BCK_CLOSE_LOOP=0x16,
-    AM_BCK_DAMAGE=0x17,
-    AM_BCK_DAMAGE_END=0x18,
-    AM_BCK_DAMAGE_LOOP=0x19,
-    AM_BCK_DEAD=0x1A,
-    AM_BCK_OKIRU=0x1B,
-    AM_BCK_OPEN=0x1C,
-    AM_BCK_OPEN_LOOP=0x1D,
-    AM_BCK_SLEEP=0x1E,
-    AM_BCK_SLEEP_LOOP=0x1F,
-
-    /* BDL */
-    AM_BDL_AM=0x22,
 };
 
 /* 00000078-0000021C       .text nodeCallBack__FP7J3DNodei */
@@ -304,7 +271,7 @@ static BOOL medama_atari_check(am_class* i_this) {
         ret = true;
         if (i_this->mCurrBckIdx == AM_BCK_SLEEP || i_this->mCurrBckIdx == AM_BCK_SLEEP_LOOP) {
             anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-            i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+            i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
             i_this->mNeedleCyl.OnAtSPrmBit(AT_SPRM_SET);
             i_this->mNeedleCyl.OnAtHitBit();
             i_this->mAction = ACTION_DOUSA;
@@ -527,7 +494,7 @@ static void action_dousa(am_class* i_this) {
             if (Line_check(i_this, player->current.pos)) {
                 anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 fopAcM_monsSeStart(i_this, JA_SE_CV_AM_AWAKE, 0);
-                i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+                i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                 i_this->mNeedleCyl.OnAtSetBit();
                 i_this->mNeedleCyl.OnAtHitBit();
                 i_this->mState += 1;
@@ -1356,7 +1323,7 @@ static actor_method_class l_daAM_Method = {
 
 actor_process_profile_definition g_profile_AM = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_AM,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

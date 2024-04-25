@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_himo3.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000C58       .text himo3_control__FP11himo3_classP7himo3_s */
 void himo3_control(himo3_class*, himo3_s*) {
@@ -61,3 +61,27 @@ static s32 daHimo3_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static actor_method_class l_daHimo3_Method = {
+    (process_method_func)daHimo3_Create,
+    (process_method_func)daHimo3_Delete,
+    (process_method_func)daHimo3_Execute,
+    (process_method_func)daHimo3_IsDelete,
+    (process_method_func)daHimo3_Draw,
+};
+
+actor_process_profile_definition g_profile_HIMO3 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0008,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_HIMO3,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(himo3_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x019B,
+    /* Actor SubMtd */ &l_daHimo3_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

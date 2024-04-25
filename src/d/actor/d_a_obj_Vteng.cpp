@@ -42,7 +42,15 @@ bool daObjVteng_c::create_heap() {
         JUT_ASSERT(0xb7, 0);
         ret = false;
     } else {
-        mpMorf = new mDoExt_McaMorf(pModelData, NULL, NULL, pAnm, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0x3B, -1, 0, NULL, 0x00, 0x11020203);
+        mpMorf = new mDoExt_McaMorf(
+            pModelData,
+            NULL, NULL,
+            pAnm,
+            J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0x3B, -1, 0,
+            NULL,
+            0x00000000,
+            0x11020203
+        );
         if (!mpMorf) {
             ret = false;
         } else {
@@ -156,7 +164,7 @@ static actor_method_class l_daObjVteng_Method = {
 
 actor_process_profile_definition g_profile_Obj_Vteng = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Vteng,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

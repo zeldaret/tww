@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_gy.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-000003CC       .text __ct__10daGy_HIO_cFv */
 daGy_HIO_c::daGy_HIO_c() {
@@ -241,3 +241,27 @@ static BOOL daGyIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daGyMethodTable = {
+    (process_method_func)daGyCreate,
+    (process_method_func)daGyDelete,
+    (process_method_func)daGyExecute,
+    (process_method_func)daGyIsDelete,
+    (process_method_func)daGyDraw,
+};
+
+actor_process_profile_definition g_profile_GY = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_GY,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daGy_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00D8,
+    /* Actor SubMtd */ &daGyMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
+};

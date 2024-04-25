@@ -17,7 +17,6 @@
 #include "d/d_npc.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/types.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -117,9 +116,9 @@ namespace daObjPaper {
                 eyePos.y += attr(mType).mEyeOffset;
 
                 attention_info.position.y += attr(mType).mAttentionOffset;
-                attention_info.distances[1] = attr(mType).mAttentionDist1;
-                attention_info.distances[3] = attr(mType).mAttentionDist2;
-                attention_info.flags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_READ_e;
+                attention_info.distances[fopAc_Attn_TYPE_TALK_e] = attr(mType).mAttentionDist1;
+                attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = attr(mType).mAttentionDist2;
+                attention_info.flags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_READ_e;
 
                 mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
@@ -214,7 +213,7 @@ namespace daObjPaper {
     void daObjPaper::Act_c::mode_talk2() {
         if (mpMsg->mStatus == fopMsgStts_BOX_CLOSED_e) {
             mpMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
-            mpMsg = 0;
+            mpMsg = NULL;
             mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
             dComIfGp_event_reset();
@@ -324,18 +323,18 @@ namespace daObjPaper {
 }
 
 actor_process_profile_definition g_profile_Obj_Paper = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcLy_CURRENT_e,
-    PROC_Obj_Paper,
-    &g_fpcLf_Method.base,
-    sizeof(daObjPaper::Act_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0108,
-    &daObjPaper::Mthd_Table,
-    fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLSPHERE_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Paper,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjPaper::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0108,
+    /* Actor SubMtd */ &daObjPaper::Mthd_Table,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
 };

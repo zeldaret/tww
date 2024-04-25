@@ -683,14 +683,14 @@ void JPADraw::setParticleClipBoard() {
     f32 tilingX = dc.pbsp->getTilingX();
     f32 tilingY = dc.pbsp->getTilingY();
 
-    cb.field_0x14[0].x = 0.0f;
-    cb.field_0x14[0].y = 0.0f;
-    cb.field_0x14[1].x = tilingX;
-    cb.field_0x14[1].y = 0.0f;
-    cb.field_0x14[2].x = tilingX;
-    cb.field_0x14[2].y = tilingY;
-    cb.field_0x14[3].x = 0.0f;
-    cb.field_0x14[3].y = tilingY;
+    cb.mTexCoordPt[0].x = 0.0f;
+    cb.mTexCoordPt[0].y = 0.0f;
+    cb.mTexCoordPt[1].x = tilingX;
+    cb.mTexCoordPt[1].y = 0.0f;
+    cb.mTexCoordPt[2].x = tilingX;
+    cb.mTexCoordPt[2].y = tilingY;
+    cb.mTexCoordPt[3].x = 0.0f;
+    cb.mTexCoordPt[3].y = tilingY;
 
     if (!dc.pbsp->textureIsEmpty() && !dc.pbsp->isEnableTextureAnm())
         mTexIdx = dc.pTexIdx[dc.pbsp->getTextureIndex()], GX_TEXMAP0;
@@ -766,14 +766,14 @@ void JPADraw::setChildClipBoard() {
 
     cb.mPivotX = cb.mPivotY = 0.0f;
 
-    cb.field_0x14[1].y = 0.0f;
-    cb.field_0x14[0].y = 0.0f;
-    cb.field_0x14[3].x = 0.0f;
-    cb.field_0x14[0].x = 0.0f;
-    cb.field_0x14[3].y = 1.0f;
-    cb.field_0x14[2].y = 1.0f;
-    cb.field_0x14[2].x = 1.0f;
-    cb.field_0x14[1].x = 1.0f;
+    cb.mTexCoordPt[1].y = 0.0f;
+    cb.mTexCoordPt[0].y = 0.0f;
+    cb.mTexCoordPt[3].x = 0.0f;
+    cb.mTexCoordPt[0].x = 0.0f;
+    cb.mTexCoordPt[3].y = 1.0f;
+    cb.mTexCoordPt[2].y = 1.0f;
+    cb.mTexCoordPt[2].x = 1.0f;
+    cb.mTexCoordPt[1].x = 1.0f;
 
     cb.mDirTypeFunc = NULL;
     cb.mRotTypeFunc = NULL;
@@ -809,7 +809,6 @@ void JPADraw::setChildClipBoard() {
 
 /* 8026B938-8026BC2C       .text drawParticle__7JPADrawFv */
 void JPADraw::drawParticle() {
-    /* Nonmatching - regalloc */
     field_0xc2 &= ~0x02;
     setParticleClipBoard();
     dc.mpActiveParticles = &dc.pbe->mActiveParticles;
@@ -831,15 +830,15 @@ void JPADraw::drawParticle() {
     for (s32 i = 0; i < execEmtrPVisNum; i++)
         mpExecEmtrPVis[i]->exec(&dc);
 
-    JPABaseEmitter * emtr = dc.pbe;
+    JSUList<JPABaseParticle> * activeParticles = &dc.pbe->mActiveParticles;
     if (dc.pbsp->getListOrder() == 0) {
-        for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getFirst(); link != NULL; link = link->getNext()) {
+        for (JSULink<JPABaseParticle> * link = activeParticles->getFirst(); link != NULL; link = link->getNext()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execPtclVisNum; i++)
                 mpExecPtclVis[i]->exec(&dc, ptcl);
         }
     } else {
-        for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getLast(); link != NULL; link = link->getPrev()) {
+        for (JSULink<JPABaseParticle> * link = activeParticles->getLast(); link != NULL; link = link->getPrev()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execPtclVisNum; i++)
                 mpExecPtclVis[i]->exec(&dc, ptcl);
@@ -851,7 +850,6 @@ void JPADraw::drawParticle() {
 
 /* 8026BC2C-8026BF88       .text drawChild__7JPADrawFv */
 void JPADraw::drawChild() {
-    /* Nonmatching - regalloc */
     field_0xc2 |= 0x02;
     setChildClipBoard();
     dc.mpActiveParticles = &dc.pbe->mChildParticles;
@@ -881,16 +879,16 @@ void JPADraw::drawChild() {
     for (s32 i = 0; i < execEmtrCVisNum; i++)
         mpExecEmtrCVis[i]->exec(&dc);
 
-    JPABaseEmitter * emtr = dc.pbe;
+    JSUList<JPABaseParticle> * childParticles = &dc.pbe->mChildParticles;
     if (dc.pbsp->getListOrder() == 0) {
-        for (JSULink<JPABaseParticle> * link = emtr->mChildParticles.getFirst(); link != NULL; link = link->getNext()) {
-            JPABaseParticle * ptcl = link->getObject();
+        for (JSULink<JPABaseParticle> * link = childParticles->getFirst(); link != NULL; link = link->getNext()) {
+            JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execChldVisNum; i++)
                 mpExecChldVis[i]->exec(&dc, ptcl);
         }
     } else {
-        for (JSULink<JPABaseParticle> * link = emtr->mChildParticles.getLast(); link != NULL; link = link->getPrev()) {
-            JPABaseParticle * ptcl = link->getObject();
+        for (JSULink<JPABaseParticle> * link = childParticles->getLast(); link != NULL; link = link->getPrev()) {
+            JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execChldVisNum; i++)
                 mpExecChldVis[i]->exec(&dc, ptcl);
         }
@@ -911,7 +909,6 @@ void JPADraw::zDraw() {
 
 /* 8026C024-8026C24C       .text zDrawParticle__7JPADrawFv */
 void JPADraw::zDrawParticle() {
-    /* Nonmatching - regalloc */
     field_0xc2 &= ~0x02;
     setParticleClipBoard();
     dc.mpActiveParticles = &dc.pbe->mActiveParticles;
@@ -933,15 +930,15 @@ void JPADraw::zDrawParticle() {
     for (s32 i = 0; i < execEmtrPVisNum; i++)
         mpExecEmtrPVis[i]->exec(&dc);
 
-    JPABaseEmitter * emtr = dc.pbe;
+    JSUList<JPABaseParticle> * activeParticles = &dc.pbe->mActiveParticles;
     if (dc.pbsp->getListOrder() == 0) {
-        for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getFirst(); link != NULL; link = link->getNext()) {
+        for (JSULink<JPABaseParticle> * link = activeParticles->getFirst(); link != NULL; link = link->getNext()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execPtclVisNum; i++)
                 mpExecPtclVis[i]->exec(&dc, ptcl);
         }
     } else {
-        for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getLast(); link != NULL; link = link->getPrev()) {
+        for (JSULink<JPABaseParticle> * link = activeParticles->getLast(); link != NULL; link = link->getPrev()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execPtclVisNum; i++)
                 mpExecPtclVis[i]->exec(&dc, ptcl);
@@ -953,7 +950,6 @@ void JPADraw::zDrawParticle() {
 
 /* 8026C24C-8026C4DC       .text zDrawChild__7JPADrawFv */
 void JPADraw::zDrawChild() {
-    /* Nonmatching - regalloc */
     field_0xc2 |= 0x02;
     setChildClipBoard();
     dc.mpActiveParticles = &dc.pbe->mChildParticles;
@@ -983,15 +979,15 @@ void JPADraw::zDrawChild() {
     for (s32 i = 0; i < execEmtrCVisNum; i++)
         mpExecEmtrCVis[i]->exec(&dc);
 
-    JPABaseEmitter * emtr = dc.pbe;
+    JSUList<JPABaseParticle> * childParticles = &dc.pbe->mChildParticles;
     if (dc.pbsp->getListOrder() == 0) {
-        for (JSULink<JPABaseParticle> * link = emtr->mChildParticles.getFirst(); link != NULL; link = link->getNext()) {
+        for (JSULink<JPABaseParticle> * link = childParticles->getFirst(); link != NULL; link = link->getNext()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execChldVisNum; i++)
                 mpExecChldVis[i]->exec(&dc, ptcl);
         }
     } else {
-        for (JSULink<JPABaseParticle> * link = emtr->mChildParticles.getLast(); link != NULL; link = link->getPrev()) {
+        for (JSULink<JPABaseParticle> * link = childParticles->getLast(); link != NULL; link = link->getPrev()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execChldVisNum; i++)
                 mpExecChldVis[i]->exec(&dc, ptcl);
@@ -1003,8 +999,10 @@ void JPADraw::zDrawChild() {
 
 /* 8026C4DC-8026C640       .text loadYBBMtx__7JPADrawFPA4_f */
 void JPADraw::loadYBBMtx(MtxP mtx) {
-    /* Nonmatching */
-    JGeometry::TVec3<f32> v(0.0f, mtx[1][1], mtx[2][1]);
+    JGeometry::TVec3<f32> v;
+    v.x = 0.0f;
+    v.y = mtx[1][1];
+    v.z = mtx[2][1];
     JUT_ASSERT(0x596, !v.isZero());
     v.normalize();
 
@@ -1018,7 +1016,7 @@ void JPADraw::loadYBBMtx(MtxP mtx) {
     cb.mDrawYBBMtx[1][2] = -v.z;
     cb.mDrawYBBMtx[1][3] = mtx[1][3];
 
-    cb.mDrawYBBMtx[2][0] = 1.0f;
+    cb.mDrawYBBMtx[2][0] = 0.0f;
     cb.mDrawYBBMtx[2][1] = v.z;
     cb.mDrawYBBMtx[2][2] = v.y;
     cb.mDrawYBBMtx[2][3] = mtx[2][3];

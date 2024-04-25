@@ -7,7 +7,7 @@
 #include "f_op/f_op_kankyo.h"
 
 /* 8023DB48-8023DBF8       .text dWaterMark_Draw__FP12dWaterMark_c */
-void dWaterMark_Draw(dWaterMark_c*) {
+static void dWaterMark_Draw(dWaterMark_c*) {
     /* Nonmatching */
 }
 
@@ -17,22 +17,22 @@ void dWaterMark_c::setMatrix() {
 }
 
 /* 8023DE2C-8023DF24       .text dWaterMark_Execute__FP12dWaterMark_c */
-void dWaterMark_Execute(dWaterMark_c*) {
+static void dWaterMark_Execute(dWaterMark_c*) {
     /* Nonmatching */
 }
 
 /* 8023DF24-8023DF2C       .text dWaterMark_IsDelete__FP12dWaterMark_c */
-void dWaterMark_IsDelete(dWaterMark_c*) {
+static void dWaterMark_IsDelete(dWaterMark_c*) {
     /* Nonmatching */
 }
 
 /* 8023DF2C-8023DF80       .text dWaterMark_Delete__FP12dWaterMark_c */
-void dWaterMark_Delete(dWaterMark_c*) {
+static void dWaterMark_Delete(dWaterMark_c*) {
     /* Nonmatching */
 }
 
 /* 8023DF80-8023DFA0       .text dWaterMark_Create__FP12kankyo_class */
-void dWaterMark_Create(kankyo_class*) {
+static void dWaterMark_Create(kankyo_class*) {
     /* Nonmatching */
 }
 

@@ -8,6 +8,7 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 
+
 const char daToge_c::m_arcname[] = "Htoge1";
 const s16 daToge_c::m_bdlidx = 0x07;
 const s16 daToge_c::m_dzbidx = 0x04;
@@ -215,10 +216,10 @@ void daToge_c::toge_move() {
     case 1:
         if (cLib_calcTimer(&unk486) != 0)
             break;
-            toge_seStart(JA_SE_OBJ_TOGETOGE_IN);
-            mEventState = 2;
-        // Fallthrough
-        case 2:
+        toge_seStart(JA_SE_OBJ_TOGETOGE_IN);
+        mEventState = 2;
+    // Fallthrough
+    case 2:
         // m_y_min is also -150.0f, so that might be related
         cLib_addCalc(&unk470, -150.0f, 0.1f, 30.0f, 15);
         break;
@@ -300,7 +301,7 @@ static actor_method_class daTogeMethodTable = {
 
 actor_process_profile_definition g_profile_TOGE = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_TOGE,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
@@ -308,9 +309,9 @@ actor_process_profile_definition g_profile_TOGE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0018C,
+    /* Priority     */ 0x018C,
     /* Actor SubMtd */ &daTogeMethodTable,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_lamp.h"
+#include "d/res/res_lamp.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
@@ -159,7 +160,7 @@ static BOOL daLamp_Delete(lamp_class* i_this) {
 
 /* 00000678-0000073C       .text useHeapInit__FP10lamp_class */
 static BOOL useHeapInit(lamp_class* i_this) {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Lamp", 3));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Lamp", LAMP_BMD_LAMP_00));
     JUT_ASSERT(0x170, modelData != 0);
 
     i_this->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -216,8 +217,8 @@ static actor_method_class l_daLamp_Method = {
 
 actor_process_profile_definition g_profile_LAMP = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_LAMP,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(lamp_class),

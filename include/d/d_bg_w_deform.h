@@ -6,6 +6,9 @@
 
 class dBgWDeform : public dBgWSv, public J3DSkinDeform {
 public:
+    void MoveAfterAnmCalc(J3DModel*) {}
+    void SetVtx(Vec*) {}
+
     bool Set(cBgD_t*, J3DModel*, u32);
 
 public:

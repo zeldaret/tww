@@ -188,14 +188,12 @@ void daItemBase_c::setShadow() {
     f32 shadowSize = scale.x * dItem_data::getShadowSize(m_itemNo);
     if (!dItem_data::chkFlag(m_itemNo, 0x10)) {
         dComIfGd_setSimpleShadow2(
-            &current.pos, mAcch.GetGroundH(), shadowSize, mAcch.m_gnd,
-            0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+            &current.pos, mAcch.GetGroundH(), shadowSize, mAcch.m_gnd
         );
     } else {
         mShadowId = dComIfGd_setShadow(
             mShadowId, 1, mpModel, &current.pos, 80.0f, shadowSize,
-            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr,
-            0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
         );
     }
 }

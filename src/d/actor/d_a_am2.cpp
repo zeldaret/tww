@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_am2.h"
+#include "d/res/res_am2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -33,29 +34,6 @@ enum Action {
     ACTION_ITAI        = 0x2,
     ACTION_HANDOU_MOVE = 0x3,
     ACTION_MODORU_MOVE = 0x4,
-};
-
-enum AM2_RES_FILE_ID { // IDs and indexes are synced
-    /* BCK */
-    AM2_BCK_BURUBURU=0x6,
-    AM2_BCK_DAMAGE=0x7,
-    AM2_BCK_DEAD1=0x8,
-    AM2_BCK_DEAD2=0x9,
-    AM2_BCK_DEAD3=0xA,
-    AM2_BCK_JUMP=0xB,
-    AM2_BCK_MAHI=0xC,
-    AM2_BCK_SLEEP=0xD,
-    AM2_BCK_START=0xE,
-    AM2_BCK_WAIT=0xF,
-    
-    /* BDLM */
-    AM2_BDL_AM2=0x12,
-    
-    /* BRK */
-    AM2_BRK_AM2=0x15,
-    
-    /* BTK */
-    AM2_BTK_AM2=0x18,
 };
 
 /* 00000078-000001B0       .text nodeCallBack__FP7J3DNodei */
@@ -197,7 +175,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                 ret = true;
                 if (i_this->mCurrBckIdx == AM2_BCK_SLEEP) {
                     anm_init(i_this, AM2_BCK_WAIT, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-                    i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+                    i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                     fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
                     i_this->mNeedleCyl.OnAtSetBit();
                     i_this->mNeedleCyl.OnAtHitBit();
@@ -499,7 +477,7 @@ static void action_dousa(am2_class* i_this) {
             cXyz centerPos = player->current.pos;
             centerPos.y += 100.0f + g_regHIO.mChild[12].mFloatRegs[19];
             if (Line_check(i_this, centerPos)) {
-                i_this->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+                i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                 fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
                 anm_init(i_this, AM2_BCK_START, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 fopAcM_monsSeStart(i_this, JA_SE_CV_AM2_AWAKE, 0);
@@ -785,7 +763,7 @@ static void action_mahi(am2_class* i_this) {
         actor->shape_angle.y += 0x1000;
         if (i_this->mAcch.ChkGroundHit()) {
             actor->gravity = -3.0f;
-            actor->attention_info.flags = fopAc_Attn_LOCKON_ENEMY_e;
+            actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
             fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
             i_this->mAction = ACTION_DOUSA;
             i_this->mState = 3;
@@ -1329,7 +1307,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
         i_this->mEnemyIce.mpActor = i_this;
         i_this->mEnemyIce.mWallRadius = 50.0f;
         i_this->mEnemyIce.mCylHeight = 100.0f;
-        i_this->attention_info.distances[4] = 9;
+        i_this->attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 9;
         
         fopAcM_OnStatus(i_this, fopAcStts_UNK8000000_e);
 
@@ -1497,7 +1475,7 @@ static actor_method_class l_daAM2_Method = {
 
 actor_process_profile_definition g_profile_AM2 = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 7,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_AM2,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,

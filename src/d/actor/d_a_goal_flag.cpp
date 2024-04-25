@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_goal_flag.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
 
 /* 000000EC-00000210       .text setTexObj__16daGFlag_packet_cFUc */
 void daGFlag_packet_c::setTexObj(unsigned char) {
@@ -126,3 +126,27 @@ static BOOL daGoal_FlagIsDelete(void*) {
     /* Nonmatching */
 }
 
+static actor_method_class daGoal_FlagMethodTable = {
+    (process_method_func)daGoal_FlagCreate,
+    (process_method_func)daGoal_FlagDelete,
+    (process_method_func)daGoal_FlagExecute,
+    (process_method_func)daGoal_FlagIsDelete,
+    (process_method_func)daGoal_FlagDraw,
+};
+
+actor_process_profile_definition g_profile_Goal_Flag = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Goal_Flag,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daGoal_Flag_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x010E,
+    /* Actor SubMtd */ &daGoal_FlagMethodTable,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};
