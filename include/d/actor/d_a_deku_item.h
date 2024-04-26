@@ -20,6 +20,8 @@ public:
     void checkOrder();
     BOOL _draw();
 
+    static const char m_arcname[];
+
 public:
     /* Place member variables here */
 };
