@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_deku_item.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
 const char daDekuItem_c::m_arcname[] = "Deku";
@@ -35,7 +36,11 @@ s32 daDekuItem_c::_create() {
 
 /* 00000948-000009C8       .text set_mtx__12daDekuItem_cFv */
 void daDekuItem_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000009C8-00000A74       .text _execute__12daDekuItem_cFv */

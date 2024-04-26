@@ -24,6 +24,8 @@ public:
 
 public:
     /* Place member variables here */
+    /* 0x290 */ u8 pad290[8];
+    /* 0x298 */ J3DModel* mpModel;
 };
 
 #endif /* D_A_DEKU_ITEM_H */
