@@ -4,14 +4,15 @@
 //
 
 #include "d/actor/d_a_toge.h"
+#include "d/res/res_htoge1.h"
 #include "d/actor/d_a_wind_tag.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 
 const char daToge_c::m_arcname[] = "Htoge1";
-const s16 daToge_c::m_bdlidx = 0x07;
-const s16 daToge_c::m_dzbidx = 0x04;
+const s16 daToge_c::m_dzbidx = HTOGE1_DZB_HTOGE1A;
+const s16 daToge_c::m_bdlidx = HTOGE1_BDL_HTOGE1;
 const u32 daToge_c::m_heapsize = 0x5000;
 const f32 daToge_c::m_y_min = -150.0f;
 
@@ -24,8 +25,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_PLAYER,
         /* SrcObjTg  Type    */ AT_TYPE_ALL,
         /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2 | CO_SPRM_VS_UNK4 |
-            CO_SPRM_VS_UNK8,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2 | CO_SPRM_VS_UNK4 | CO_SPRM_VS_UNK8,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
@@ -38,12 +38,9 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_HIT_MARK,
         /* SrcGObjCo SPrm    */ 0,
     },
-
     // cCcD_SrcCylAttr
     {
-        /* Center */ 0.0f,
-        0.0f,
-        0.0f,
+        /* Center */ 0.0f, 0.0f, 0.0f,
         /* Radius */ 55.0f,
         /* Height */ 150.0f,
     }};
@@ -70,7 +67,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000015C-00000290       .text CreateHeap__8daToge_cFv */
 BOOL daToge_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x4);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HTOGE1_BDL_HTOGE1);
     JUT_ASSERT(0x11A, modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000002U);
@@ -81,8 +78,8 @@ BOOL daToge_c::CreateHeap() {
 
     mpModel->setUserArea((u32)this);
 
-    mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, 7), cBgW::MOVE_BG_e, &mtx1);
-    mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, 8), cBgW::MOVE_BG_e, &mtx2);
+    mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, HTOGE1_DZB_HTOGE1A), cBgW::MOVE_BG_e, &mtx1);
+    mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, HTOGE1_DZB_HTOGE1B), cBgW::MOVE_BG_e, &mtx2);
 
     if (mpBgW1 == NULL || mpBgW2 == NULL) {
         return FALSE;
@@ -153,9 +150,9 @@ BOOL daToge_c::Create() {
 s32 daToge_c::_create() {
     fopAcM_SetupActor(this, daToge_c);
 
-    s32 ret = dComIfG_resLoad(&m_Phs, m_arcname);
+    s32 phase_state = dComIfG_resLoad(&m_Phs, m_arcname);
 
-    if (ret == cPhs_COMPLEATE_e) {
+    if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1400)) {
             return cPhs_ERROR_e;
         }
@@ -163,7 +160,7 @@ s32 daToge_c::_create() {
         Create();
     }
 
-    return ret;
+    return phase_state;
 }
 
 /* 000007D8-00000868       .text set_mtx__8daToge_cFv */
@@ -183,7 +180,7 @@ BOOL daToge_c::_execute() {
             if (mEventState != 1) {
                 unk485 = 1;
             }
-        } else if (fopAcM_isSwitch(this, mSwitchNo) == 0 && mEventState != 4) {
+        } else if (!fopAcM_isSwitch(this, mSwitchNo) && mEventState != 4) {
             mEventState = 3;
         }
     } else if (mSwitchNo == 0xFF) {  // Redundant condition (necessary for matching)
@@ -242,8 +239,10 @@ void daToge_c::search_wind() {
 
 /* 00000AE0-00000C1C       .text toge_move__8daToge_cFv */
 void daToge_c::toge_move() {
-    u8 r30 = 1;
+    bool r30 = true;
     switch (mEventState) {
+    case 0:
+        break;
     case 1:
         if (cLib_calcTimer(&unk486) != 0)
             break;
@@ -254,13 +253,11 @@ void daToge_c::toge_move() {
         // m_y_min is also -150.0f, so that might be related
         cLib_addCalc(&unk470, -150.0f, 0.1f, 30.0f, 15);
         break;
-    case 0:
-        // ...
-        break;
     case 3:
         toge_seStart(JA_SE_OBJ_TOGETOGE_OUT);
         mEventState = 4;
-        r30 = 0;
+        r30 = false;
+        // Fallthrough
     case 4:
         if (cLib_addCalc(&unk470, unk474, 0.1f, 30.0f, 15.0f) == 0) {
             if (unk470 < 0) {
@@ -270,7 +267,7 @@ void daToge_c::toge_move() {
                 mEventState = 1;
                 unk485 = 0;
             } else {
-                if (r30 != 0) {
+                if (r30) {
                     toge_seStart(JA_SE_OBJ_TOGETOGE_MOVE);
                 }
                 unk474 = -60.0f;
@@ -325,8 +322,10 @@ static BOOL daToge_IsDelete(void*) {
 }
 
 static actor_method_class daTogeMethodTable = {
-    (process_method_func)daToge_Create,  (process_method_func)daToge_Delete,
-    (process_method_func)daToge_Execute, (process_method_func)daToge_IsDelete,
+    (process_method_func)daToge_Create,
+    (process_method_func)daToge_Delete,
+    (process_method_func)daToge_Execute,
+    (process_method_func)daToge_IsDelete,
     (process_method_func)daToge_Draw,
 };
 

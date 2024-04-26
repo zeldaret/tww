@@ -7,7 +7,7 @@
 
 class daToge_c : public fopAc_ac_c {
 public:
-    void set_mtx();  // weak but not inlined?
+    inline void set_mtx();  // weak but not inlined?
 
     BOOL _delete();
     BOOL CreateHeap();
@@ -21,8 +21,8 @@ public:
     BOOL _draw();
 
     static const char m_arcname[];
-    static const s16 m_bdlidx;
     static const s16 m_dzbidx;
+    static const s16 m_bdlidx;
     static const u32 m_heapsize;
     static const f32 m_y_min;
 
@@ -38,8 +38,8 @@ public:
     /* 0x470 */ f32 unk470;
     /* 0x474 */ f32 unk474;
     /* 0x478 */ s32 mSwitchNo;
-    /* 0x47C */ char pad47C[4];
-    /* 0x480 */ s32 mWindTagId;
+    /* 0x47C */ u8 pad47C[4];
+    /* 0x480 */ uint mWindTagId;
     /* 0x484 */ u8 mEventState;
     /* 0x485 */ u8 unk485;
     /* 0x486 */ u8 unk486;
