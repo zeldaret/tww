@@ -55,10 +55,12 @@ BOOL daMtoge_actionWait(daMtoge_c*) {
 
 /* 00000424-000004D4       .text daMtoge_actionHind__FP9daMtoge_c */
 BOOL daMtoge_actionHind(daMtoge_c* i_this) {
-    if (dComIfGs_isSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this)) != 0) {
+    s32 swbit = i_this->getSwbit();
+
+    if (dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(i_this)) != 0) {
         i_this->setAction(ACT_UP);
         fopAcM_SetSpeedF(i_this, 0.0f);
-        
+
         fopAcM_seStart(i_this, 0x6976U, 0);
     }
 
@@ -66,18 +68,45 @@ BOOL daMtoge_actionHind(daMtoge_c* i_this) {
 }
 
 /* 000004D4-00000550       .text daMtoge_actionUp__FP9daMtoge_c */
-BOOL daMtoge_actionUp(daMtoge_c*) {
-    /* Nonmatching */
+BOOL daMtoge_actionUp(daMtoge_c* i_this) {
+    cLib_chaseF(&i_this->speedF, 30.0f, 4.0f);
+
+    if (cLib_chaseF(&i_this->mHeightOffset, 0.0f, fopAcM_GetSpeedF(i_this))) {
+        i_this->setAction(ACT_ARRIVAL);
+    }
+
+    i_this->calcMtx();
+    i_this->mpBgW->Move();
+
+    return TRUE;
 }
 
 /* 00000550-00000600       .text daMtoge_actionArrival__FP9daMtoge_c */
-BOOL daMtoge_actionArrival(daMtoge_c*) {
-    /* Nonmatching */
+BOOL daMtoge_actionArrival(daMtoge_c* i_this) {
+    s32 swbit = i_this->getSwbit();
+
+    if (dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(i_this)) == 0) {
+        i_this->setAction(ACT_DOWN);
+        fopAcM_SetSpeedF(i_this, 0.0f);
+
+        fopAcM_seStart(i_this, 0x6977U, 0);
+    }
+
+    return TRUE;
 }
 
 /* 00000600-0000067C       .text daMtoge_actionDown__FP9daMtoge_c */
-BOOL daMtoge_actionDown(daMtoge_c*) {
-    /* Nonmatching */
+BOOL daMtoge_actionDown(daMtoge_c* i_this) {
+    cLib_chaseF(&i_this->speedF, 30.0f, 4.0f);
+
+    if (cLib_chaseF(&i_this->mHeightOffset, -300.0f, fopAcM_GetSpeedF(i_this)) != 0) {
+        i_this->setAction(ACT_HIND);
+    }
+
+    i_this->calcMtx();
+    i_this->mpBgW->Move();
+
+    return TRUE;
 }
 
 BOOL daMtoge_c::execute() {
