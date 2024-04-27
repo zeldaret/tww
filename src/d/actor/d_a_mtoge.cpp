@@ -6,6 +6,17 @@
 #include "d/actor/d_a_mtoge.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
+#include "d/d_com_inf_game.h"
+
+const char daMtoge_c::M_arcname[] = "Mtoge";
+
+enum Action {
+    ACT_WAIT,
+    ACT_HIND,
+    ACT_UP,
+    ACT_ARRIVAL,
+    ACT_DOWN,
+};
 
 /* 00000078-00000084       .text getSwbit__9daMtoge_cFv */
 u8 daMtoge_c::getSwbit() {
@@ -39,12 +50,19 @@ s32 daMtoge_c::create() {
 
 /* 0000041C-00000424       .text daMtoge_actionWait__FP9daMtoge_c */
 BOOL daMtoge_actionWait(daMtoge_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000424-000004D4       .text daMtoge_actionHind__FP9daMtoge_c */
-BOOL daMtoge_actionHind(daMtoge_c*) {
-    /* Nonmatching */
+BOOL daMtoge_actionHind(daMtoge_c* i_this) {
+    if (dComIfGs_isSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this)) != 0) {
+        i_this->setAction(ACT_UP);
+        fopAcM_SetSpeedF(i_this, 0.0f);
+        
+        fopAcM_seStart(i_this, 0x6976U, 0);
+    }
+
+    return TRUE;
 }
 
 /* 000004D4-00000550       .text daMtoge_actionUp__FP9daMtoge_c */
@@ -70,6 +88,11 @@ BOOL daMtoge_c::execute() {
         daMtoge_actionArrival,
         daMtoge_actionDown,
     };
+
+
+    l_action[mState](this);
+
+    return TRUE;
 }
 
 /* 0000067C-000006DC       .text daMtoge_Draw__FP9daMtoge_c */
