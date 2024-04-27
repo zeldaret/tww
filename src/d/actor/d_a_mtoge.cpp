@@ -5,19 +5,20 @@
 
 #include "d/actor/d_a_mtoge.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
 
 /* 00000078-00000084       .text getSwbit__9daMtoge_cFv */
-void daMtoge_c::getSwbit() {
-    /* Nonmatching */
+u8 daMtoge_c::getSwbit() {
+    return fopAcM_GetParam(this) & 0xFF;
 }
 
 /* 00000084-000000A4       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daMtoge_c*>(i_this)->CreateHeap();
 }
 
 /* 000000A4-000001E8       .text CreateHeap__9daMtoge_cFv */
-void daMtoge_c::CreateHeap() {
+BOOL daMtoge_c::CreateHeap() {
     /* Nonmatching */
 }
 
@@ -27,7 +28,7 @@ void daMtoge_c::calcMtx() {
 }
 
 /* 00000254-00000384       .text CreateInit__9daMtoge_cFv */
-void daMtoge_c::CreateInit() {
+BOOL daMtoge_c::CreateInit() {
     /* Nonmatching */
 }
 
@@ -37,28 +38,38 @@ s32 daMtoge_c::create() {
 }
 
 /* 0000041C-00000424       .text daMtoge_actionWait__FP9daMtoge_c */
-void daMtoge_actionWait(daMtoge_c*) {
+BOOL daMtoge_actionWait(daMtoge_c*) {
     /* Nonmatching */
 }
 
 /* 00000424-000004D4       .text daMtoge_actionHind__FP9daMtoge_c */
-void daMtoge_actionHind(daMtoge_c*) {
+BOOL daMtoge_actionHind(daMtoge_c*) {
     /* Nonmatching */
 }
 
 /* 000004D4-00000550       .text daMtoge_actionUp__FP9daMtoge_c */
-void daMtoge_actionUp(daMtoge_c*) {
+BOOL daMtoge_actionUp(daMtoge_c*) {
     /* Nonmatching */
 }
 
 /* 00000550-00000600       .text daMtoge_actionArrival__FP9daMtoge_c */
-void daMtoge_actionArrival(daMtoge_c*) {
+BOOL daMtoge_actionArrival(daMtoge_c*) {
     /* Nonmatching */
 }
 
 /* 00000600-0000067C       .text daMtoge_actionDown__FP9daMtoge_c */
-void daMtoge_actionDown(daMtoge_c*) {
+BOOL daMtoge_actionDown(daMtoge_c*) {
     /* Nonmatching */
+}
+
+BOOL daMtoge_c::execute() {
+    static BOOL (*l_action[])(daMtoge_c*) = {
+        daMtoge_actionWait,
+        daMtoge_actionHind,
+        daMtoge_actionUp,
+        daMtoge_actionArrival,
+        daMtoge_actionDown,
+    };
 }
 
 /* 0000067C-000006DC       .text daMtoge_Draw__FP9daMtoge_c */
@@ -67,23 +78,23 @@ static BOOL daMtoge_Draw(daMtoge_c*) {
 }
 
 /* 000006DC-00000718       .text daMtoge_Execute__FP9daMtoge_c */
-static BOOL daMtoge_Execute(daMtoge_c*) {
-    /* Nonmatching */
+static BOOL daMtoge_Execute(daMtoge_c* i_this) {
+    return i_this->execute();
 }
 
 /* 00000718-00000720       .text daMtoge_IsDelete__FP9daMtoge_c */
 static BOOL daMtoge_IsDelete(daMtoge_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000720-00000790       .text daMtoge_Delete__FP9daMtoge_c */
-static BOOL daMtoge_Delete(daMtoge_c*) {
+static BOOL daMtoge_Delete(daMtoge_c* i_this) {
     /* Nonmatching */
 }
 
 /* 00000790-000007B0       .text daMtoge_Create__FP10fopAc_ac_c */
-static s32 daMtoge_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daMtoge_Create(fopAc_ac_c* i_this) {
+    return static_cast<daMtoge_c*>(i_this)->create();
 }
 
 static actor_method_class l_daMtoge_Method = {

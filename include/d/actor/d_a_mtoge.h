@@ -11,10 +11,10 @@ public:
     inline BOOL execute();
     void setAction(unsigned char) {}
 
-    void getSwbit();
-    void CreateHeap();
+    u8 getSwbit();
+    BOOL CreateHeap();
     void calcMtx();
-    void CreateInit();
+    BOOL CreateInit();
     s32 create();
 
 public:
