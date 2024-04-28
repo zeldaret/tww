@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_doguu_demo.h"
+#include "d/res/res_doguud.h"
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
@@ -21,7 +22,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daObjDoguuD_c::CreateHeap() {
     mUnusedParam = fopAcM_GetParam(this) & 0xFF;
 
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("DoguuD", 0x04));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("DoguuD", DOGUUD_BDL_ESKZTO));
     JUT_ASSERT(0x65, modelData != 0);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (mpModel == NULL)
@@ -38,7 +39,7 @@ BOOL daObjDoguuD_c::CreateHeap() {
         return FALSE;
     }
 
-    if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("DoguuD", 0x07), cBgW::MOVE_BG_e, &mMtx))
+    if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("DoguuD", DOGUUD_DZB_ESKZTO), cBgW::MOVE_BG_e, &mMtx))
         return FALSE;
 
     return TRUE;

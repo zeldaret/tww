@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_floor.h"
+#include "d/res/res_hhyu1.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
@@ -34,7 +35,7 @@ BOOL daFloor_c::Delete() {
 
 /* 0000012C-000001E8       .text CreateHeap__9daFloor_cFv */
 int daFloor_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x04);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HHYU1_BDL_HHYU1);
     JUT_ASSERT(0xc1, modelData != 0);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL)
@@ -61,7 +62,7 @@ s32 daFloor_c::_create() {
 
     s32 rt = dComIfG_resLoad(&mPhs, m_arcname);
     if (rt == cPhs_COMPLEATE_e) {
-        if (!MoveBGCreate(m_arcname, 0x07, NULL, 0x8A0))
+        if (!MoveBGCreate(m_arcname, HHYU1_DZB_HHYU1, NULL, 0x8A0))
             return cPhs_ERROR_e;
     }
     return rt;

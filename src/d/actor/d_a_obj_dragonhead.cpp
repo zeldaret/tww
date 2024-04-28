@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_dragonhead.h"
+#include "d/res/res_qdghd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -53,7 +54,7 @@ namespace daObjDragonhead_prm {
 
 /* 00000098-00000228       .text CreateHeap__17daObjDragonhead_cFv */
 BOOL daObjDragonhead_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("Qdghd", 0x04));
+    J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("Qdghd", QDGHD_BDL_QDGHD));
     JUT_ASSERT(0xA0, model_data != 0);
     mpModel = mDoExt_J3DModel__create(model_data, 0x00, 0x11020203);
     if (!mpModel)
@@ -67,7 +68,7 @@ BOOL daObjDragonhead_c::CreateHeap() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
 
     mpBgW = new dBgW();
-    if (!mpBgW || mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("Qdghd", 0x07), cBgW::MOVE_BG_e, &mtx))
+    if (!mpBgW || mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("Qdghd", QDGHD_DZB_QDGHD), cBgW::MOVE_BG_e, &mtx))
         ret = 0;
 
     if (ret != 1)

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_adnno.h"
+#include "d/res/res_adnno.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
@@ -13,7 +14,22 @@
 #include "m_Do/m_Do_mtx.h"
 
 static const u32 daObjAdnno_bmt_table[16] = {
-    0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16,
+    ADNNO_BMT_ADNNO_00,
+    ADNNO_BMT_ADNNO_01,
+    ADNNO_BMT_ADNNO_02,
+    ADNNO_BMT_ADNNO_03,
+    ADNNO_BMT_ADNNO_04,
+    ADNNO_BMT_ADNNO_05,
+    ADNNO_BMT_ADNNO_06,
+    ADNNO_BMT_ADNNO_07,
+    ADNNO_BMT_ADNNO_08,
+    ADNNO_BMT_ADNNO_09,
+    ADNNO_BMT_ADNNO_10,
+    ADNNO_BMT_ADNNO_11,
+    ADNNO_BMT_ADNNO_12,
+    ADNNO_BMT_ADNNO_13,
+    ADNNO_BMT_ADNNO_14,
+    ADNNO_BMT_ADNNO_15,
 };
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -23,7 +39,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000178       .text CreateHeap__12daObjAdnno_cFv */
 BOOL daObjAdnno_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Adnno", 0x04));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Adnno", ADNNO_BDL_ADNNO));
     JUT_ASSERT(0x5c, modelData != 0);
     for (s32 i = 0; i < 16; i++) {
         mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);

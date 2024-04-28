@@ -28,7 +28,7 @@ BOOL daItemBase_c::clothCreate() {
 }
 
 /* 800F8A44-800F9074       .text CreateItemHeap__12daItemBase_cFPCcsssssss */
-BOOL daItemBase_c::CreateItemHeap(const char* resName, short resIdx, short btkAnm1, short btkAnm2, short brkAnm1, short brkAnm2, short bckAnm, short) {
+BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, s16 btkAnm2, s16 brkAnm1, s16 brkAnm2, s16 bckAnm, s16) {
     JUT_ASSERT(78, 0 <= m_itemNo && m_itemNo <= 255);
     
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(resName, resIdx);

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_hole.h"
+#include "d/res/res_aana.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_com_inf_game.h"
@@ -222,7 +223,7 @@ void daObj_Hole_c::createInit() {
 
 /* 00000864-00000928       .text _createHeap__12daObj_Hole_cFv */
 BOOL daObj_Hole_c::_createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 3);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, AANA_BDL_AANA);
 
     JUT_ASSERT(0x13D, modelData != 0);
 

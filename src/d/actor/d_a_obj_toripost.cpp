@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_obj_toripost.h"
+#include "d/res/res_toripost.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_player.h"
@@ -87,12 +88,20 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 0000010C-0000022C       .text _createHeap__12daObjTpost_cFv */
 BOOL daObjTpost_c::_createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 9);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, TORIPOST_BDL_VPOST);
     JUT_ASSERT(132, modelData != 0);
 
-    mMorf = new mDoExt_McaMorf(modelData, 0, 0, 0, -1, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000022);
+    mMorf = new mDoExt_McaMorf(
+        modelData,
+        NULL, NULL,
+        NULL,
+        -1, 1.0f, 0, -1, 1,
+        NULL,
+        0x00080000,
+        0x11000022
+    );
 
-    if(mMorf == 0 || mMorf->getModel() == 0) {
+    if(mMorf == NULL || mMorf->getModel() == NULL) {
         return FALSE;
     }
     else {
@@ -562,9 +571,9 @@ void daObjTpost_c::setAttention() {
 /* 00000EA4-0000100C       .text setAnm__12daObjTpost_cFScb */
 void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
-        0x04,
-        0x05,
-        0x06,
+        TORIPOST_BCK_POST_GET,
+        TORIPOST_BCK_POST_PUTOUT,
+        TORIPOST_BCK_POST_WAIT,
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {
@@ -914,7 +923,7 @@ void daObjTpost_c::createInit() {
 
     field_0x8F0 = 1;
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-    mpCurrMsg = 0;
+    mpCurrMsg = NULL;
 
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 5;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 6;

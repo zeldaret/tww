@@ -191,7 +191,7 @@ void daNpc_Nz_c::cutEatesaProc() {
 
     if(pBait) {
         fopAcM_delete(pBait);
-        mpBait = 0;
+        mpBait = NULL;
         field_0x910 = FLOAT_MAX;
     }
     else {
@@ -234,7 +234,7 @@ void daNpc_Nz_c::cutEatesaFirstProc() {
     if(pBait) {
         if(mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f) && cLib_calcTimer(&field_0x906) == 0) {
             fopAcM_delete(pBait);
-            mpBait = 0;
+            mpBait = NULL;
             dComIfGp_evmng_cutEnd(field_0x8F4);
         }
     }

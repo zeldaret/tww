@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_hfuck1.h"
+#include "d/res/res_hfuck1.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_cc_d.h"
@@ -12,14 +13,6 @@
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-enum HFUCK1_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    HFUCK1_BDL_HFUCK1=0x4,
-    
-    /* DZB */
-    HFUCK1_DZB_HFUCK1=0x7,
-};
 
 namespace {
     static const char l_arcname[] = "Hfuck1";

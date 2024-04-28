@@ -4,6 +4,9 @@
 //
 
 #include "d/actor/d_a_fan.h"
+#include "d/res/res_hsen1.h"
+#include "d/res/res_hsen3.h"
+#include "d/res/res_yaflw00.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_level_se.h"
@@ -13,8 +16,8 @@
 
 const char* daFan_c::m_arcname[3] = { "Hsen1", "Hsen1", "Hsen3", };
 const char daFan_c::m_arcname2[8] = "Yaflw00";
-const s16 daFan_c::m_bdlidx[3] = { 0x05, 0x05, 0x04, };
-const s16 daFan_c::m_dzbidx[3] = { 0x0C, 0x0C, 0x07, };
+const s16 daFan_c::m_bdlidx[3] = { HSEN1_BDL_HSEN1, HSEN1_BDL_HSEN1, HSEN3_BDL_HSEN3, };
+const s16 daFan_c::m_dzbidx[3] = { HSEN1_DZB_HSEN1, HSEN1_DZB_HSEN1, HSEN3_DZB_HSEN3, };
 const f32 daFan_c::m_wind_length[3] = { 1600.0f, 1600.0f, 1220.0f, };
 const f32 daFan_c::m_wind_r[3] = { 120.0f, 120.0f, 780.0f, };
 const Vec daFan_c::m_wind_model_scale[3] = { { 1.0f, 1.6f, 1.0f, }, { 1.0f, 1.6f, 1.0f, }, { 3.0f, 2.9f, 3.0f, }, };
@@ -75,23 +78,23 @@ int daFan_c::CreateHeap() {
         return FALSE;
     mModel->setUserArea((u32)this);
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname2, 0x08);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BDL_YAFLW00);
     JUT_ASSERT(0x17f, modelData != 0);
     mWindModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if (mWindModel == NULL)
         return FALSE;
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, 0x0B);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BTK_YAFLW00_01);
     JUT_ASSERT(400, pbtk != 0);
     if (!mWindBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0,-1, false, 0))
         return FALSE;
 
-    pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, 0x0C);
+    pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BTK_YAFLW00_02);
     JUT_ASSERT(0x19c, pbtk != 0);
     if (!mWindBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0,-1, false, 0))
         return FALSE;
 
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname2, 0x05);
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BCK_YAFLW00);
     JUT_ASSERT(0x1a9, pbck != 0);
     if (!mWindBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0,-1, false))
         return FALSE;

@@ -1,6 +1,8 @@
 #ifndef RES_VBAKH_H
 #define RES_VBAKH_H
 
+#include "global.h"
+
 enum VBAKH_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     VBAKH_BCK_VBAHX=0x5,

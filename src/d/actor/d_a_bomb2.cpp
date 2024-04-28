@@ -162,10 +162,10 @@ namespace daBomb2 {
 
     void FuseSmokeCB_c::deleteCallBack() {
         if(mpEmitter) {
-            mpEmitter->mpEmitterCallBack = 0;
+            mpEmitter->setEmitterCallBackPtr(NULL);
             mpEmitter->becomeInvalidEmitter();
         }
-        mpEmitter = 0;
+        mpEmitter = NULL;
     }
 
     /* 800DD6BC-800DD6C0       .text execute__Q27daBomb213FuseSmokeCB_cFP14JPABaseEmitter */
@@ -228,10 +228,10 @@ namespace daBomb2 {
 
     void FuseSparksCB_c::deleteCallBack() {
         if(mpEmitter) {
-            mpEmitter->mpEmitterCallBack = 0;
+            mpEmitter->setEmitterCallBackPtr(NULL);
             mpEmitter->becomeInvalidEmitter();
         }
-        mpEmitter = 0;
+        mpEmitter = NULL;
     }
 
     void FuseSparksCB_c::execute(JPABaseEmitter* emitter) {

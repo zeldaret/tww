@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_kaji.h"
+#include "d/res/res_kaji.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_mtx.h"
@@ -23,15 +24,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-000001F4       .text CreateHeap__8daKaji_cFv */
 BOOL daKaji_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x11); // asoda.bdl
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KAJI_INDEX_BDL_ASODA);
     JUT_ASSERT(0x55, modelData != 0);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", 0xE), // kj_wait.bck
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", KAJI_INDEX_BCK_KJ_WAIT),
         J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Kaji", 0x8), // kj_wait.bas
+        dComIfG_getObjectRes("Kaji", KAJI_INDEX_BAS_KJ_WAIT),
         0x00080000,
         0x11000002
     );

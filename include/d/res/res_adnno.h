@@ -1,0 +1,29 @@
+#ifndef RES_ADNNO_H
+#define RES_ADNNO_H
+
+#include "global.h"
+
+enum ADNNO_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    ADNNO_BDL_ADNNO=0x4,
+    
+    /* BMT */
+    ADNNO_BMT_ADNNO_00=0x7,
+    ADNNO_BMT_ADNNO_01=0x8,
+    ADNNO_BMT_ADNNO_02=0x9,
+    ADNNO_BMT_ADNNO_03=0xA,
+    ADNNO_BMT_ADNNO_04=0xB,
+    ADNNO_BMT_ADNNO_05=0xC,
+    ADNNO_BMT_ADNNO_06=0xD,
+    ADNNO_BMT_ADNNO_07=0xE,
+    ADNNO_BMT_ADNNO_08=0xF,
+    ADNNO_BMT_ADNNO_09=0x10,
+    ADNNO_BMT_ADNNO_10=0x11,
+    ADNNO_BMT_ADNNO_11=0x12,
+    ADNNO_BMT_ADNNO_12=0x13,
+    ADNNO_BMT_ADNNO_13=0x14,
+    ADNNO_BMT_ADNNO_14=0x15,
+    ADNNO_BMT_ADNNO_15=0x16,
+};
+
+#endif /* RES_ADNNO_H */

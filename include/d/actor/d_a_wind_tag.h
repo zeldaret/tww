@@ -30,7 +30,9 @@ namespace daWindTag {
     
     public:
         /* Place member variables here */
-    };
+    /* 0x290 */ char pad290[0x208]; /* Placeholder padding */
+    /* 0x498 */ f32 unk498;
 };
+};  // namespace daWindTag
 
 #endif /* D_A_WIND_TAG_H */

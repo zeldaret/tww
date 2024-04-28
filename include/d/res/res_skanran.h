@@ -1,6 +1,8 @@
 #ifndef RES_SKANRAN_H
 #define RES_SKANRAN_H
 
+#include "global.h"
+
 enum SKANRAN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     SKANRAN_BDL_SGONDOR=0x4,

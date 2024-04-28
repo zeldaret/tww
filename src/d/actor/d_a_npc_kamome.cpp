@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_npc_kamome.h"
+#include "d/res/res_kamome.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -35,30 +36,6 @@ static cXyz l_ms_at_local_start(100.0f, 20.0f, 0.0f);
 static cXyz l_ms_at_local_end(-100.0f, 20.0f, 0.0f);
 static cXyz l_line_bg_local_end(0.0f, 0.0f, 500.0f);
 static cXyz l_call_local_kyori(0.0f, 0.0f, 500.0f);
-
-enum KAMOME_RES_FILE_ID { // IDs and indexes are synced
-    /* BAS */
-    KAMOME_BAS_KA_FLY1=0x5,
-    KAMOME_BAS_KA_LAND1=0x6,
-    KAMOME_BAS_KA_MOVE1=0x7,
-    KAMOME_BAS_KA_WAIT1=0x8,
-    KAMOME_BAS_KA_WAIT2=0x9,
-    
-    /* BCK */
-    KAMOME_BCK_KA_EAT1=0xC,
-    KAMOME_BCK_KA_FLY1=0xD,
-    KAMOME_BCK_KA_LAND1=0xE,
-    KAMOME_BCK_KA_MOVE1=0xF,
-    KAMOME_BCK_KA_SING1=0x10,
-    KAMOME_BCK_KA_SING2=0x11,
-    KAMOME_BCK_KA_WAIT1=0x12,
-    KAMOME_BCK_KA_WAIT2=0x13,
-    KAMOME_BCK_KA_WAIT3=0x14,
-    
-    /* BDL */
-    KAMOME_BDL_KA=0x17,
-    KAMOME_BDL_KA_HYOI=0x18,
-};
 
 /* 000000EC-00000174       .text __ct__16daNpc_kam_HIO1_cFv */
 daNpc_kam_HIO1_c::daNpc_kam_HIO1_c() {

@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_tower.h"
+#include "d/res/res_x_tower.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "dolphin/mtx/mtx.h"
@@ -17,7 +18,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-0000020C       .text CreateHeap__12daObjTower_cFv */
 BOOL daObjTower_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("X_tower", 4);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("X_tower", X_TOWER_BDL_X_TOWER);
 
     JUT_ASSERT(0x56, modelData != 0);
 
@@ -36,7 +37,7 @@ BOOL daObjTower_c::CreateHeap() {
     if (mpBgW == NULL)
         return FALSE;
 
-    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("X_tower", 7);
+    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("X_tower", X_TOWER_DZB_X_TOWER);
 
     return mpBgW->Set(pData, cBgW::MOVE_BG_e, &mMtx) ? FALSE : TRUE;
 }

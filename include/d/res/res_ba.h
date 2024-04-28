@@ -1,0 +1,74 @@
+#ifndef RES_BA_H
+#define RES_BA_H
+
+#include "global.h"
+
+enum BA_RES_FILE_ID {
+    /* BCKS */
+    BA_BCK_05_BA_CUT8_WAIT=0x0,
+    BA_BCK_HOLD=0x1,
+    BA_BCK_SLEEP=0x2,
+    BA_BCK_TALK01=0x3,
+    BA_BCK_TALK02=0x4,
+    BA_BCK_TALK03=0x5,
+    BA_BCK_TALK04=0x6,
+    BA_BCK_WAIT01=0x7,
+    BA_BCK_WAIT02=0x8,
+    BA_BCK_GETUP=0x17,
+    
+    /* BDL */
+    BA_BDL_BA_CLOTH=0x9,
+    
+    /* BDLM */
+    BA_BDL_BA=0xA,
+    
+    /* BTP */
+    BA_BTP_BA_T01=0xB,
+    BA_BTP_BA_T02=0xC,
+    BA_BTP_BA_T03=0xD,
+    BA_BTP_BA_T04=0xE,
+    BA_BTP_BA_T05=0xF,
+    BA_BTP_BA_T06=0x10,
+    BA_BTP_BA_T07=0x11,
+    BA_BTP_BA_T08=0x12,
+    BA_BTP_BA_T09=0x13,
+    BA_BTP_BA_T10=0x14,
+    BA_BTP_BA_WAKE=0x15,
+    BA_BTP_MABA01=0x16,
+};
+
+enum BA_RES_FILE_INDEX {
+    /* BCKS */
+    BA_INDEX_BCK_05_BA_CUT8_WAIT=0x6,
+    BA_INDEX_BCK_HOLD=0x7,
+    BA_INDEX_BCK_SLEEP=0x8,
+    BA_INDEX_BCK_TALK01=0x9,
+    BA_INDEX_BCK_TALK02=0xA,
+    BA_INDEX_BCK_TALK03=0xB,
+    BA_INDEX_BCK_TALK04=0xC,
+    BA_INDEX_BCK_WAIT01=0xD,
+    BA_INDEX_BCK_WAIT02=0xE,
+    BA_INDEX_BCK_GETUP=0xF,
+    
+    /* BDL */
+    BA_INDEX_BDL_BA_CLOTH=0x12,
+    
+    /* BDLM */
+    BA_INDEX_BDL_BA=0x15,
+    
+    /* BTP */
+    BA_INDEX_BTP_BA_T01=0x18,
+    BA_INDEX_BTP_BA_T02=0x19,
+    BA_INDEX_BTP_BA_T03=0x1A,
+    BA_INDEX_BTP_BA_T04=0x1B,
+    BA_INDEX_BTP_BA_T05=0x1C,
+    BA_INDEX_BTP_BA_T06=0x1D,
+    BA_INDEX_BTP_BA_T07=0x1E,
+    BA_INDEX_BTP_BA_T08=0x1F,
+    BA_INDEX_BTP_BA_T09=0x20,
+    BA_INDEX_BTP_BA_T10=0x21,
+    BA_INDEX_BTP_BA_WAKE=0x22,
+    BA_INDEX_BTP_MABA01=0x23,
+};
+
+#endif /* RES_BA_H */

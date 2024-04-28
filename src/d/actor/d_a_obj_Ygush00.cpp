@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_Ygush00.h"
+#include "d/res/res_ygush00.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_a_obj.h"
@@ -31,9 +32,9 @@ BOOL daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
 
 /* 0000009C-00000250       .text create_heap__14daObjYgush00_cFv */
 bool daObjYgush00_c::create_heap() {
-    static u32 mdl_table[] = { 0x0A, 0x09, 0x09, 0x09 };
-    static u32 btk_table[] = { 0x0E, 0x0D, 0x0D, 0x0D };
-    static u32 bck_table[] = { 0x06, 0x05, 0x05, 0x05 };
+    static u32 mdl_table[] = { YGUSH00_BDL_YGUSH00, YGUSH00_BDL_YGSTP00, YGUSH00_BDL_YGSTP00, YGUSH00_BDL_YGSTP00 };
+    static u32 btk_table[] = { YGUSH00_BTK_YGUSH00, YGUSH00_BTK_YGSTP00, YGUSH00_BTK_YGSTP00, YGUSH00_BTK_YGSTP00 };
+    static u32 bck_table[] = { YGUSH00_BCK_YGUSH00, YGUSH00_BCK_YGSTP00, YGUSH00_BCK_YGSTP00, YGUSH00_BCK_YGSTP00 };
 
     bool ret = true;
 

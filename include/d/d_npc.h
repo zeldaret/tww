@@ -126,7 +126,7 @@ private:
     /* 0x50 */ s16 mAddAngle;
     /* 0x52 */ u8 field_0x52;
     /* 0x54 */ cXyz mPos;
-    /* 0x60 */ u8 mbAttention;
+    /* 0x60 */ bool mbAttention;
     /* 0x61 */ u8 mbNoTurn;
     /* 0x62 */ s16 mTurnSpeed;
     /* 0x64 */ u32 mTurnType;
@@ -134,9 +134,9 @@ private:
 
 public:
     dNpc_EventCut_c() {
-        mpActor = 0;
-        mpTalkActor = 0;
-        mpJntCtrl = 0;
+        mpActor = NULL;
+        mpTalkActor = NULL;
+        mpJntCtrl = NULL;
     }
 
     void setActorInfo(char*, fopAc_ac_c*);
@@ -164,8 +164,17 @@ public:
     bool getAttnFlag() {
         return mbAttention;
     }
+
+    void setAttnFlag(bool flag) {
+        mbAttention = flag;
+    }
+
     cXyz getAttnPos() {
         return mPos;
+    }
+
+    s16 getTurnSpeed() {
+        return mTurnSpeed;
     }
 
     void setJntCtrlPtr(dNpc_JntCtrl_c* ctrl) {
@@ -241,7 +250,7 @@ class fopNpc_npc_c : public fopAc_ac_c {
 public:
     fopNpc_npc_c() {
         mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-        mpCurrMsg = 0;
+        mpCurrMsg = NULL;
     }
     /* 0x290 */ dNpc_JntCtrl_c m_jnt;
     /* 0x2C4 */ dNpc_EventCut_c mEventCut;

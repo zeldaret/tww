@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_shop_item.h"
+#include "d/res/res_fdai.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
@@ -14,41 +15,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/res/res_cloth.h"
-
-enum FDAI_RES_FILE_ID { // IDs and indexes are synced
-    /* BCK */
-    FDAI_BCK_FOBJ00=0x5,
-    FDAI_BCK_FOBJ01=0x6,
-    FDAI_BCK_FOBJ02=0x7,
-    FDAI_BCK_FOBJ05=0x8,
-    FDAI_BCK_FOBJ06=0x9,
-    FDAI_BCK_FOBJ07=0xA,
-    FDAI_BCK_FOBJ08=0xB,
-    FDAI_BCK_FOBJ09=0xC,
-    FDAI_BCK_FOBJ10=0xD,
-    FDAI_BCK_FOBJ11=0xE,
-    
-    /* BDL */
-    FDAI_BDL_FDAI=0x11,
-    FDAI_BDL_FOBJ00=0x12,
-    FDAI_BDL_FOBJ01=0x13,
-    FDAI_BDL_FOBJ02=0x14,
-    FDAI_BDL_FOBJ03=0x15,
-    FDAI_BDL_FOBJ04=0x16,
-    FDAI_BDL_FOBJ05=0x17,
-    FDAI_BDL_FOBJ06=0x18,
-    FDAI_BDL_FOBJ07=0x19,
-    FDAI_BDL_FOBJ08=0x1A,
-    FDAI_BDL_FOBJ09=0x1B,
-    FDAI_BDL_FOBJ10=0x1C,
-    FDAI_BDL_FOBJ11=0x1D,
-    
-    /* TEX */
-    FDAI_BTI_FTEX03=0x20,
-    FDAI_BTI_FTEX04=0x21,
-    FDAI_BTI_FTEX05=0x22,
-    FDAI_BTI_FTEX07=0x23,
-};
 
 const char daShopItem_c::m_cloth_arcname[] = "Cloth";
 const f32 daShopItem_c::m_cullfar_max = 5000.0f;

@@ -4,23 +4,14 @@
 //
 
 #include "SSystem/SComponent/c_bg_w.h"
+#include "d/res/res_ojtree.h"
 #include "d/actor/d_a_obj_ojtree.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
 
-
-
 Mtx daObjOjtree::Act_c::M_tmp_mtx;
 const char daObjOjtree::Act_c::M_arcname[] = "Ojtree";
-
-enum OJTREE_RES_FILE_ID { // IDs and indexes are synced
-    /* BDL */
-    OJTREE_BDL_OJTREE=0x4,
-    
-    /* DZB */
-    OJTREE_DZB_OJTREE=0x7,
-};
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjOjtree5Act_cFv */
 int daObjOjtree::Act_c::CreateHeap() {

@@ -18,14 +18,15 @@ namespace JAInter {
     class Actor;
     struct streamUpdate_t {
         streamUpdate_t() { field_0x14 = 0; }
-        u8 field_0x0;
-        u8 field_0x1;
-        u8 field_0x2;
-        f32 field_0x4;
-        f32 field_0x8;
-        f32 field_0xc;
-        int field_0x10;
-        JAISound* field_0x14;
+        
+        /* 0x00 */ u8 field_0x0;
+        /* 0x01 */ u8 field_0x1;
+        /* 0x02 */ u8 field_0x2;
+        /* 0x04 */ f32 field_0x4;
+        /* 0x08 */ f32 field_0x8;
+        /* 0x0C */ f32 field_0xc;
+        /* 0x10 */ int field_0x10;
+        /* 0x14 */ JAISound* field_0x14;
     };
 
     class StreamParameter {

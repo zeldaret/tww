@@ -68,16 +68,16 @@ void daBomb_c::setBombNoEff() {
     _prm_chk_version();
 
     if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->mpEmitterCallBack = 0;
+        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
         mSmoke.mpEmitter->becomeInvalidEmitter();
     }
-    mSmoke.mpEmitter = 0;
+    mSmoke.mpEmitter = NULL;
 
     if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->mpEmitterCallBack = 0;
+        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
         mSparks.mpEmitter->becomeInvalidEmitter();
     }
-    mSparks.mpEmitter = 0;
+    mSparks.mpEmitter = NULL;
 }
 
 /* 800681CC-80068208       .text setBombRestTime__8daBomb_cFs */

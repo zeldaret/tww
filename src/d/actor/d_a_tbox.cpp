@@ -4,6 +4,7 @@
  */
 
 #include "d/actor/d_a_tbox.h"
+#include "d/res/res_dalways.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_w.h"
@@ -33,49 +34,6 @@
 #define FUNC_TYPE_TACT 6
 #define FUNC_TYPE_EXTRA_SAVE_INFO 7
 #define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
-
-enum DALWAYS_RES_FILE_ID { // IDs and indexes are synced
-    /* BCK */
-    DALWAYS_BCK_BOXOPENBOX=0x8,
-    DALWAYS_BCK_BOXOPENSHORTBOX=0x9,
-    DALWAYS_BCK_IT_TAKARA_FLASH=0xA,
-    DALWAYS_BCK_IT_TAKARA_FLASH2=0xB,
-
-    /* BDLI */
-    DALWAYS_BDL_BOXA=0xE,
-    DALWAYS_BDL_BOXB=0xF,
-    DALWAYS_BDL_BOXC=0x10,
-
-    /* BDLM */
-    DALWAYS_BDL_BOX_SHADOW=0x13,
-    DALWAYS_BDL_BOXD=0x14,
-    DALWAYS_BDL_BOXSEA=0x15,
-    DALWAYS_BDL_IT_TAKARA_FLASH=0x16,
-    DALWAYS_BDL_YTRIF00=0x17,
-
-    /* BRK */
-    DALWAYS_BRK_BOX_SHADOW=0x1A,
-    DALWAYS_BRK_BOXA=0x1B,
-    DALWAYS_BRK_BOXB=0x1C,
-    DALWAYS_BRK_BOXC=0x1D,
-    DALWAYS_BRK_IT_TAKARA_FLASH=0x1E,
-    DALWAYS_BRK_YTRIF00=0x1F,
-
-    /* BTK */
-    DALWAYS_BTK_BOXA=0x22,
-    DALWAYS_BTK_BOXB=0x23,
-    DALWAYS_BTK_BOXC=0x24,
-    DALWAYS_BTK_IT_TAKARA_FLASH=0x25,
-
-    /* DZB */
-    DALWAYS_DZB_BOXA_00=0x28,
-    DALWAYS_DZB_BOXA_01=0x29,
-    DALWAYS_DZB_BOXB_00=0x2A,
-    DALWAYS_DZB_BOXB_01=0x2B,
-    DALWAYS_DZB_BOXD_00=0x2C,
-    DALWAYS_DZB_BOXD_01=0x2D,
-    DALWAYS_DZB_KINB_00=0x2E,
-};
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 

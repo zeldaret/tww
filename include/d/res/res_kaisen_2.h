@@ -1,0 +1,28 @@
+#ifndef RES_KAISEN_2_H
+#define RES_KAISEN_2_H
+
+#include "global.h"
+
+#if VERSION == VERSION_PAL
+enum KAISEN_2_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    KAISEN_2_BDL_AK2SH=0x4,
+    KAISEN_2_BDL_AK3SH=0x5,
+    KAISEN_2_BDL_AK4SH=0x6,
+    KAISEN_2_BDL_AKATR=0x7,
+    KAISEN_2_BDL_AKBOD=0x8,
+    KAISEN_2_BDL_AKCSR=0x9,
+    KAISEN_2_BDL_AKHZR=0xA,
+    KAISEN_2_BDL_AKKSL=0xB,
+    
+    /* TEX */
+    KAISEN_2_BTI_GAME_BEST_RECORD=0xE,
+    KAISEN_2_BTI_GAME_BOMB_01=0xF,
+    KAISEN_2_BTI_GAME_BOMB_02=0x10,
+    KAISEN_2_BTI_GAME_PAPER=0x11,
+    KAISEN_2_BTI_KAISEN_IKA_01=0x12,
+    KAISEN_2_BTI_KAISEN_IKA_02=0x13,
+};
+#endif
+
+#endif /* RES_KAISEN_2_H */

@@ -783,16 +783,16 @@ int daBomb_c::procExplode_init() {
     }
 
     if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->mpEmitterCallBack = 0;
+        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
         mSmoke.mpEmitter->becomeInvalidEmitter();
     }
-    mSmoke.mpEmitter = 0;
+    mSmoke.mpEmitter = NULL;
 
     if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->mpEmitterCallBack = 0;
+        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
         mSparks.mpEmitter->becomeInvalidEmitter();
     }
-    mSparks.mpEmitter = 0;
+    mSparks.mpEmitter = NULL;
 
     mPntLight.mPos = current.pos;
     mPntLight.mPos.y += 100.0f;
@@ -1235,16 +1235,16 @@ static BOOL daBomb_IsDelete(daBomb_c*) {
 /* 800DC570-800DC67C       .text bombDelete__8daBomb_cFv */
 bool daBomb_c::bombDelete() {
     if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->mpEmitterCallBack = 0;
+        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
         mSmoke.mpEmitter->becomeInvalidEmitter();
     }
-    mSmoke.mpEmitter = 0;
+    mSmoke.mpEmitter = NULL;
 
     if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->mpEmitterCallBack = 0;
+        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
         mSparks.mpEmitter->becomeInvalidEmitter();
     }
-    mSparks.mpEmitter = 0;
+    mSparks.mpEmitter = NULL;
 
     if(field_0x6F0) {
         daPy_getPlayerLinkActorClass()->decrementBombCnt();
@@ -1476,18 +1476,18 @@ static actor_method_class l_daBomb_Method = {
 };
 
 actor_process_profile_definition g_profile_BOMB = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_BOMB,
-    &g_fpcLf_Method.base,
-    sizeof(daBomb_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0115,
-    &l_daBomb_Method,
-    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BOMB,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBomb_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0115,
+    /* Actor SubMtd */ &l_daBomb_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -1,0 +1,62 @@
+#ifndef RES_DEMO20_H
+#define RES_DEMO20_H
+
+#include "global.h"
+
+enum DEMO20_RES_FILE_ID {
+    /* STB */
+    DEMO20_STB_WARP_IN=0x0,
+    
+    /* BCKS */
+    DEMO20_BCK_20_FN_IKITOME_O=0x1,
+    DEMO20_BCK_FN_SET=0x3,
+    DEMO20_BCK_05_OB_CUT4_BYEBYE=0x4,
+    DEMO20_BCK_18_FN_CUT17_TALK_L=0x7,
+    DEMO20_BCK_GDEMO20_1=0x8,
+    
+    /* BDL */
+    DEMO20_BDL_FN_COMP=0x2,
+    
+    /* BTP */
+    DEMO20_BTP_05_OB_CUT4_BYEBYE_HEAD=0x5,
+    
+    /* BDLM */
+    DEMO20_BDL_OB_COMP=0x6,
+    DEMO20_BDL_GDEMO20_1=0x9,
+    
+    /* BRK */
+    DEMO20_BRK_GDEMO20_1=0xA,
+    
+    /* BTK */
+    DEMO20_BTK_GDEMO20_1=0xB,
+};
+
+enum DEMO20_RES_FILE_INDEX {
+    /* STB */
+    DEMO20_INDEX_STB_WARP_IN=0x9,
+    
+    /* BCKS */
+    DEMO20_INDEX_BCK_20_FN_IKITOME_O=0xC,
+    DEMO20_INDEX_BCK_FN_SET=0xD,
+    DEMO20_INDEX_BCK_05_OB_CUT4_BYEBYE=0xE,
+    DEMO20_INDEX_BCK_18_FN_CUT17_TALK_L=0xF,
+    DEMO20_INDEX_BCK_GDEMO20_1=0x10,
+    
+    /* BDL */
+    DEMO20_INDEX_BDL_FN_COMP=0x13,
+    
+    /* BTP */
+    DEMO20_INDEX_BTP_05_OB_CUT4_BYEBYE_HEAD=0x16,
+    
+    /* BDLM */
+    DEMO20_INDEX_BDL_OB_COMP=0x19,
+    DEMO20_INDEX_BDL_GDEMO20_1=0x1A,
+    
+    /* BRK */
+    DEMO20_INDEX_BRK_GDEMO20_1=0x1D,
+    
+    /* BTK */
+    DEMO20_INDEX_BTK_GDEMO20_1=0x20,
+};
+
+#endif /* RES_DEMO20_H */

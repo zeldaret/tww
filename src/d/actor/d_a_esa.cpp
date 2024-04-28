@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_esa.h"
+#include "d/res/res_link.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_s_play.h"
@@ -226,7 +227,7 @@ static BOOL daEsa_Delete(esa_class* i_this) {
 static BOOL daEsa_CreateHeap(fopAc_ac_c* i_actor) {
     esa_class* i_this = static_cast<esa_class*>(i_actor);
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", 0x2C));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_ESA));
     JUT_ASSERT(0x1E8, modelData != 0);
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
 

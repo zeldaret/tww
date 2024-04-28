@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_swtdoor.h"
+#include "d/res/res_swtdoor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -49,7 +50,7 @@ static BOOL daSwtdoor_Delete(swtdoor_class* i_this) {
 /* 000001F4-00000260       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     swtdoor_class * i_this = (swtdoor_class *)i_ac;
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Swtdoor", 3);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Swtdoor", SWTDOOR_BMD_SWTDOOR);
     i_this->model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->model == NULL)
         return FALSE;

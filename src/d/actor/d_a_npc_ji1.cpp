@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_ji1.h"
+#include "d/res/res_ji.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_snap.h"
@@ -330,7 +331,11 @@ BOOL daNpc_Ji1_c::isClearRecord(s16 param_1) {
     }
 
     u8 level = dComIfGs_getEventReg(0xD003);
-    return param_1 >= l_HIO.field_0x60[level] ? TRUE : FALSE; // has a clrlwi without the ternary + TRUE/FALSE macros
+    if (param_1 >= l_HIO.field_0x60[level]) {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000630-000006F8       .text setClearRecord__11daNpc_Ji1_cFs */
@@ -2453,146 +2458,146 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
         switch(param_1) {
             case 0:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x38));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_WAIT01));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x1C);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_WAIT01);
 
                 break;
             case 1:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x39));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_WAIT02));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x1D);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_WAIT02);
 
                 break;
             case 2:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x32));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TALK01));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x16);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TALK01);
 
                 break;
             case 3:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x33));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TALK02));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x17);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TALK02);
 
                 break;
             case 4:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x24));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_AKIRE));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x8);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_AKIRE);
 
                 break;
             case 5:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x2C));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_KAMAE));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x10);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_KAMAE);
 
                 break;
             case 6:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x2D));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_KROT));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x11);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_KROT);
                 speed = l_HIO.field_0x48;
 
                 break;
             case 7:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x2A));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_INASI));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0xE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_INASI);
                 speed = l_HIO.field_0x44;
 
                 break;
             case 8:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x35));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TATEGUARD));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x19);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TATEGUARD);
 
                 break;
             case 9:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x3B));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_YKGUARD));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x1F);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_YKGUARD);
 
                 break;
             case 10:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x2B));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_JPGUARD));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0xF);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_JPGUARD);
 
                 break;
             case 11:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x36));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TOKAMAE));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x1A);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TOKAMAE);
 
                 break;
             case 12:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x31));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_REI));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x15);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_REI);
 
                 break;
             case 13:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x3A));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_WARAI));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x1E);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_WARAI);
                 speed = l_HIO.field_0x4C;
 
                 break;
             case 14:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x2B));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_JPGUARD));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0xF);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_JPGUARD);
                 speed = 2.0f;
 
                 break;
             case 15:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x29));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_GUARD));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0xD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_GUARD);
                 speed = 2.0f;
 
                 break;
             case 16:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x27));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_BTKAMASI));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0xB);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_BTKAMASI);
 
                 break;
             case 17:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x26));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_BTKAMAE));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0xA);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_BTKAMAE);
 
                 break;
             case 18:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x37));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_UDEGUMI));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x1B);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_UDEGUMI);
 
                 break;
             case 19:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x34));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TATEATTACK));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x18);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TATEATTACK);
 
                 break;
             case 20:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x3C));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_YOKOATTACK));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x20);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_YOKOATTACK);
 
                 break;
             case 21:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x30));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_ODOROKU));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x14);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_ODOROKU);
 
                 break;
             case 22:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x25));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_BIBIRI));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x9);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_BIBIRI);
 
                 BackSlideInit();
                 if(field_0xD84 == 1) {
@@ -2601,9 +2606,9 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
                 break;
             case 23:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x2E));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_NAKU));
                 temp2 = 2;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x12);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NAKU);
 
                 if(field_0x430 == 0) {
                     field_0x430 = dComIfGp_particle_set(0x81A4, &current.pos);
@@ -2612,15 +2617,15 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
                 break;
             case 24:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x2F));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_NUGUI));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0x13);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NUGUI);
 
                 break;
             case 25:
-                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", 0x28));
+                temp1 = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_DAMAGE));
                 temp2 = 0;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", 0xC);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_DAMAGE);
 
                 break;
             default:
@@ -2629,10 +2634,10 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
         field_0x330->setAnm(temp1, temp2, param_2, speed, 0.0f, -1.0f, pSoundAnimRes);
         if(field_0xD64 == 0x13) {
-            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", 0x3D), 2, 0.0f, 1.0f, 0.0f, -1.0f, 0);
+            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK), 2, 0.0f, 1.0f, 0.0f, -1.0f, 0);
         }
         else if(field_0xD64 == 0x14) {
-            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", 0x3E), 2, 0.0f, 1.0f, 0.0f, -1.0f, 0);
+            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_YOKOATTACK), 2, 0.0f, 1.0f, 0.0f, -1.0f, 0);
         }
 
         return true;
@@ -2760,18 +2765,18 @@ s32 daNpc_Ji1_c::_create() {
 BOOL daNpc_Ji1_c::CreateHeap() {
     /* Nonmatching */
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", 0x42));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", JI_BDL_JI));
     field_0x330 = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", 0x3F)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", JI_BCK_WAIT01)),
         J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Ji", 0x21),
+        dComIfG_getObjectRes("Ji", JI_BAS_WAIT01),
         0x00000000,
         0x11020203
     );
 
-    if(field_0x330 == 0 || field_0x330->getModel() == 0) {
+    if(field_0x330 == NULL || field_0x330->getModel() == NULL) {
         return false;
     }
 
@@ -2795,9 +2800,9 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     JUT_ASSERT(0x15BA, handRJointNo >= 0);
 
     mpMorf = new mDoExt_McaMorf(
-        static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", 0x43)),
+        static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", JI_BDL_JI_YARI)),
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", 0x3D)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK)),
         J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, 1,
         0,
         0x00000000,
@@ -2805,17 +2810,17 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     );
 
 
-    if(mpMorf == 0 || mpMorf->getModel() == 0) {
+    if(mpMorf == NULL || mpMorf->getModel() == NULL) {
         return false;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", 0x44));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", JI_BDL_YJITR00));
     field_0x3F8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
-    J3DAnmTevRegKey* a_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Ji", 0x47));
+    J3DAnmTevRegKey* a_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Ji", JI_BRK_YJITR00));
     JUT_ASSERT(0x15CD, a_brk != 0);
 
-    J3DAnmTextureSRTKey* a_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Ji", 0x4A));
+    J3DAnmTextureSRTKey* a_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
     JUT_ASSERT(0x15D0, a_btk != 0);
 
     int temp1 = field_0x3FC.init(modelData, a_brk, false, 2, 1.0f, 0, -1, false, 0);
@@ -2825,7 +2830,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         return false;
     }
 
-    headTexPattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Ji", 0x4D));
+    headTexPattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Ji", JI_BTP_JI));
     JUT_ASSERT(0x15D8, headTexPattern != 0);
 
     if(field_0x3D8.init(modelData, headTexPattern, 1, 2, 1.0f, 0, -1, false, 0) == 0) {

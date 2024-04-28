@@ -4,6 +4,10 @@
 //
 
 #include "d/actor/d_a_obj_akabe.h"
+#include "d/res/res_akabe.h"
+#include "d/res/res_akabed.h"
+#include "d/res/res_akabek.h"
+#include "d/res/res_nbox.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/d_cc_d.h"
@@ -30,7 +34,7 @@ namespace daObjAkabe {
 
         mpBgW = new dBgW();
         if (mpBgW != NULL) {
-            static const s16 dzb[4] = { 3, 3, 3, 3, };
+            static const s16 dzb[4] = { AKABE_DZB_AKABE, AKABED_DZB_AKABED, AKABEK_DZB_AKABEK, NBOX_DZB_NBOX, };
             cBgD_t * bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname[mType], dzb[mType]);
             JUT_ASSERT(0x82, bgw_data != 0);
             if (!mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx))

@@ -1,6 +1,8 @@
 #ifndef RES_LKANM_H
 #define RES_LKANM_H
 
+#include "global.h"
+
 enum LKANM_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */
     LKANM_BCK_ACTIONTAKTRDW=0x8,

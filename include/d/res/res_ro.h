@@ -1,0 +1,70 @@
+#ifndef RES_RO_H
+#define RES_RO_H
+
+#include "global.h"
+
+enum RO_RES_FILE_ID {
+    /* BCKS */
+    RO_BCK_RO_WAIT01=0x0,
+    RO_BCK_RO_TALK01=0x4,
+    RO_BCK_RO_TALK02=0x5,
+    RO_BCK_RO_TALK03=0x6,
+    RO_BCK_RO_WALK=0x7,
+    RO_BCK_RO_WATASU=0x8,
+    RO_BCK_RO_ITEMWAIT=0x9,
+    RO_BCK_RO_TALK04=0xA,
+    RO_BCK_RO_TALK05=0xB,
+    RO_BCK_HAT2_WIND=0x10,
+    RO_BCK_HAT3_WID=0x11,
+    RO_BCK_HAT_WID=0x12,
+    RO_BCK_RO_WIND=0x13,
+    
+    /* BDLM */
+    RO_BDL_RO=0x2,
+    
+    /* BTP */
+    RO_BTP_RO=0x3,
+    
+    /* BMT */
+    RO_BMT_RO2=0xE,
+    RO_BMT_RO3=0xF,
+    
+    /* BDL */
+    RO_BDL_RO_HAT=0x17,
+    RO_BDL_RO_HAT2=0x18,
+    RO_BDL_RO_HAT3=0x19,
+};
+
+enum RO_RES_FILE_INDEX {
+    /* BCKS */
+    RO_INDEX_BCK_RO_WAIT01=0x7,
+    RO_INDEX_BCK_RO_TALK01=0x8,
+    RO_INDEX_BCK_RO_TALK02=0x9,
+    RO_INDEX_BCK_RO_TALK03=0xA,
+    RO_INDEX_BCK_RO_WALK=0xB,
+    RO_INDEX_BCK_RO_WATASU=0xC,
+    RO_INDEX_BCK_RO_ITEMWAIT=0xD,
+    RO_INDEX_BCK_RO_TALK04=0xE,
+    RO_INDEX_BCK_RO_TALK05=0xF,
+    RO_INDEX_BCK_HAT2_WIND=0x10,
+    RO_INDEX_BCK_HAT3_WID=0x11,
+    RO_INDEX_BCK_HAT_WID=0x12,
+    RO_INDEX_BCK_RO_WIND=0x13,
+    
+    /* BDLM */
+    RO_INDEX_BDL_RO=0x16,
+    
+    /* BTP */
+    RO_INDEX_BTP_RO=0x19,
+    
+    /* BMT */
+    RO_INDEX_BMT_RO2=0x1C,
+    RO_INDEX_BMT_RO3=0x1D,
+    
+    /* BDL */
+    RO_INDEX_BDL_RO_HAT=0x20,
+    RO_INDEX_BDL_RO_HAT2=0x21,
+    RO_INDEX_BDL_RO_HAT3=0x22,
+};
+
+#endif /* RES_RO_H */

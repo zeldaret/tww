@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_ghostship.h"
+#include "d/res/res_ayush.h"
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
@@ -11,18 +12,6 @@
 #include "d/d_s_play.h"
 #include "d/d_kankyo_wether.h"
 #include "d/res/res_cloth.h"
-
-enum AYUSH_RES_FILE_ID { // IDs and indexes are synced
-    /* BDLM */
-    AYUSH_BDL_AYUSH=0x5,
-    
-    /* BTK */
-    AYUSH_BTK_AYUSH=0x8,
-    
-    /* TEX */
-    AYUSH_BTI_B_GSHIP_HATA=0xB,
-    AYUSH_BTI_B_GSHIP_HO=0xC,
-};
 
 // Needed for .data to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};

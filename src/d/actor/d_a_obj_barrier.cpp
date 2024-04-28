@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_barrier.h"
+#include "d/res/res_ycage.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
@@ -98,9 +99,9 @@ int daObjBarrier_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 000001B0-00000340       .text init__18daObjBarrier_anm_cFv */
 bool daObjBarrier_anm_c::init() {
     bool rt = true;
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 10));
-    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, 18));
-    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, 14));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, YCAGE_BDL_YCAGE00));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BTK_YCAGE00));
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YCAGE00));
 
     if (modelData == NULL || pbtk == NULL || pbrk == NULL) {
         JUT_PANIC(407);
@@ -129,7 +130,7 @@ bool daObjBarrier_c::create_heap() {
     if (!anm_init || !eff_init) {
         rt = false;
     } else {
-        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(l_arcname, 22);
+        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(l_arcname, YCAGE_DZB_KEKKAI);
         mpBgW = dBgW_NewSet(dzb, cBgW::MOVE_BG_e, &mBgMtx);
         if (mpBgW == NULL) {
             rt = false;
@@ -373,13 +374,13 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 
         J3DModelData* modelData = mpModel[effect_idx]->getModelData();
 
-        J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, 19));
+        J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BTK_YHRBR00));
         JUT_ASSERT(937, btk_anm_p != 0);
 
-        J3DAnmTransform* bck_anm_p = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, 7));
+        J3DAnmTransform* bck_anm_p = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, YCAGE_BCK_YHRBR00));
         JUT_ASSERT(942, bck_anm_p != 0);
 
-        J3DAnmTevRegKey* brk_anm_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, 15));
+        J3DAnmTevRegKey* brk_anm_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YHRBR00));
         JUT_ASSERT(947, brk_anm_p != 0);
 
         mBtk[effect_idx].init(modelData, btk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1,
@@ -400,10 +401,10 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 /* 000011B8-000013E0       .text init__17daObjBarrier_ef_cFv */
 bool daObjBarrier_ef_c::init() {
     bool rt = true;
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 11));
-    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, 19));
-    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, 7));
-    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, 15));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, YCAGE_BDL_YHRBR00));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BTK_YHRBR00));
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, YCAGE_BCK_YHRBR00));
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YHRBR00));
 
     if (modelData == NULL || pbtk == NULL || pbck == NULL || pbrk == NULL) {
         JUT_PANIC(1016);

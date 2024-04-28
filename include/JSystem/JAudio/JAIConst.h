@@ -34,9 +34,9 @@ namespace JAInter {
             field_0x4 = p2;
             field_0x8 = p3;
         }
-        Vec* field_0x0;
-        Vec* field_0x4;
-        MtxP field_0x8;
+        /* 0x00 */ Vec* field_0x0;
+        /* 0x04 */ Vec* field_0x4;
+        /* 0x08 */ MtxP field_0x8;
     };
 
     namespace Const {
