@@ -9,7 +9,6 @@
 #include "d/res/res_mtoge.h"
 #include "f_op/f_op_actor_mng.h"
 
-
 const char daMtoge_c::M_arcname[] = "Mtoge";
 
 enum Action {
@@ -47,7 +46,7 @@ BOOL daMtoge_c::CreateHeap() {
         return FALSE;
 
     cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes(M_arcname, MTOGE_DZB_S_MTOGE);
-    
+
     if (!pData) {
         return FALSE;
     }
@@ -67,12 +66,12 @@ void daMtoge_c::calcMtx() {
 /* 00000254-00000384       .text CreateInit__9daMtoge_cFv */
 BOOL daMtoge_c::CreateInit() {
     s32 sw = getSwbit();
-    
-    bool rt = dComIfG_Bgsp()->Regist(mpBgW, this);
-    JUT_ASSERT(0xA8, !rt);
+
+    if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
+        JUT_PANIC(0xA8);
+    }
 
     tevStr.mRoomNo = fopAcM_GetRoomNo(this);
-
 
     if (sw == 0xFF) {
         mState = ACT_WAIT;
@@ -104,7 +103,7 @@ s32 daMtoge_c::create() {
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x15C0U)) {
         return cPhs_ERROR_e;
     }
-    
+
     CreateInit();
 
     return cPhs_COMPLEATE_e;
@@ -179,7 +178,6 @@ BOOL daMtoge_c::execute() {
         daMtoge_actionArrival,
         daMtoge_actionDown,
     };
-
 
     l_action[mState](this);
 
