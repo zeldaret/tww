@@ -59,7 +59,9 @@ BOOL daMtoge_c::CreateHeap() {
 
 /* 000001E8-00000254       .text calcMtx__9daMtoge_cFv */
 void daMtoge_c::calcMtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mHeightOffset, current.pos.z);
+    mDoMtx_stack_c::YrotM(home.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000254-00000384       .text CreateInit__9daMtoge_cFv */
