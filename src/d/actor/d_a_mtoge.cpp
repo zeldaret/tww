@@ -150,7 +150,15 @@ static BOOL daMtoge_IsDelete(daMtoge_c*) {
 
 /* 00000720-00000790       .text daMtoge_Delete__FP9daMtoge_c */
 static BOOL daMtoge_Delete(daMtoge_c* i_this) {
-    /* Nonmatching */
+    if (i_this->heap != NULL) {
+        dComIfG_Bgsp()->Release(i_this->mpBgW);
+    }
+
+    dComIfG_resDelete(&i_this->mPhaseProcReq, i_this->M_arcname);
+
+    i_this->~daMtoge_c();
+
+    return TRUE;
 }
 
 /* 00000790-000007B0       .text daMtoge_Create__FP10fopAc_ac_c */
