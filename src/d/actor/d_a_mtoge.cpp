@@ -4,9 +4,11 @@
 //
 
 #include "d/actor/d_a_mtoge.h"
-#include "d/d_procname.h"
-#include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "d/res/res_mtoge.h"
+#include "f_op/f_op_actor_mng.h"
+
 
 const char daMtoge_c::M_arcname[] = "Mtoge";
 
@@ -96,7 +98,7 @@ BOOL daMtoge_actionHind(daMtoge_c* i_this) {
         i_this->setAction(ACT_UP);
         fopAcM_SetSpeedF(i_this, 0.0f);
 
-        fopAcM_seStart(i_this, 0x6976U, 0);
+        fopAcM_seStart(i_this, JA_SE_OBJ_TOGE_OUT, 0);
     }
 
     return TRUE;
@@ -124,7 +126,7 @@ BOOL daMtoge_actionArrival(daMtoge_c* i_this) {
         i_this->setAction(ACT_DOWN);
         fopAcM_SetSpeedF(i_this, 0.0f);
 
-        fopAcM_seStart(i_this, 0x6977U, 0);
+        fopAcM_seStart(i_this, JA_SE_OBJ_TOGE_IN, 0);
     }
 
     return TRUE;
