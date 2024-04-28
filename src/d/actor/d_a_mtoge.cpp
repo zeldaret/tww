@@ -67,7 +67,20 @@ BOOL daMtoge_c::CreateInit() {
 
 /* 00000384-0000041C       .text create__9daMtoge_cFv */
 s32 daMtoge_c::create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daMtoge_c);
+
+    cPhs__Step phase_state = (cPhs__Step)dComIfG_resLoad(&mPhaseProcReq, M_arcname);
+    if (phase_state != cPhs_COMPLEATE_e) {
+        return phase_state;
+    }
+
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x15C0U)) {
+        return cPhs_ERROR_e;
+    }
+    
+    CreateInit();
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 0000041C-00000424       .text daMtoge_actionWait__FP9daMtoge_c */
