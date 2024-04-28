@@ -30,7 +30,29 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000A4-000001E8       .text CreateHeap__9daMtoge_cFv */
 BOOL daMtoge_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MTOGE_BMD_S_MTOGE);
+    JUT_ASSERT(0x70, modelData != 0);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
+
+    if (!mpModel) {
+        return FALSE;
+    }
+
+    mpBgW = new dBgW();
+
+    if (!mpBgW)
+        return FALSE;
+
+    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes(M_arcname, MTOGE_DZB_S_MTOGE);
+    
+    if (!pData) {
+        return FALSE;
+    }
+
+    calcMtx();
+
+    return mpBgW->Set(pData, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx()) == true ? FALSE : TRUE;
 }
 
 /* 000001E8-00000254       .text calcMtx__9daMtoge_cFv */
