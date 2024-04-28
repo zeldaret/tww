@@ -124,9 +124,18 @@ BOOL daMtoge_c::execute() {
     return TRUE;
 }
 
+BOOL daMtoge_c::draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    mDoExt_modelUpdateDL(mpModel);
+
+    return TRUE;
+}
+
 /* 0000067C-000006DC       .text daMtoge_Draw__FP9daMtoge_c */
-static BOOL daMtoge_Draw(daMtoge_c*) {
-    /* Nonmatching */
+static BOOL daMtoge_Draw(daMtoge_c* i_this) {
+    return i_this->draw();
 }
 
 /* 000006DC-00000718       .text daMtoge_Execute__FP9daMtoge_c */
