@@ -66,7 +66,30 @@ void daMtoge_c::calcMtx() {
 
 /* 00000254-00000384       .text CreateInit__9daMtoge_cFv */
 BOOL daMtoge_c::CreateInit() {
-    /* Nonmatching */
+    s32 sw = getSwbit();
+    
+    bool rt = dComIfG_Bgsp()->Regist(mpBgW, this);
+    JUT_ASSERT(0xA8, !rt);
+
+    tevStr.mRoomNo = fopAcM_GetRoomNo(this);
+
+
+    if (sw == 0xFF) {
+        mState = ACT_WAIT;
+    } else if (dComIfGs_isSwitch(sw + 1, fopAcM_GetRoomNo(this))) {
+        mState = ACT_WAIT;
+        mHeightOffset = -300.0f;
+    } else if (!dComIfGs_isSwitch(sw, fopAcM_GetRoomNo(this))) {
+        mState = ACT_HIND;
+        mHeightOffset = -300.0f;
+    } else {
+        mState = ACT_ARRIVAL;
+    }
+
+    calcMtx();
+    mpBgW->Move();
+
+    return TRUE;
 }
 
 /* 00000384-0000041C       .text create__9daMtoge_cFv */
