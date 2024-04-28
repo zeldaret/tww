@@ -1435,7 +1435,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_kita"),
     ActorRel(NonMatching, "d_a_klft"),
     ActorRel(NonMatching, "d_a_kmon"),
-    ActorRel(NonMatching, "d_a_komore"),
+    ActorRel(Matching,    "d_a_komore", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_lbridge"),
     ActorRel(NonMatching, "d_a_leaflift"),
     ActorRel(NonMatching, "d_a_lstair"),
