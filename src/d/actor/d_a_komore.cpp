@@ -4,79 +4,125 @@
 //
 
 #include "d/actor/d_a_komore.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
+const char daKomore::Act_c::M_arcname[] = "frLt";
+
 /* 00000078-0000009C       .text solidHeapCB__Q28daKomore5Act_cFP10fopAc_ac_c */
-void daKomore::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daKomore::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-000001F8       .text create_heap__Q28daKomore5Act_cFv */
-void daKomore::Act_c::create_heap() {
-    /* Nonmatching */
+bool daKomore::Act_c::create_heap() {
+    J3DModelData* mdl_data;
+    J3DAnmTextureSRTKey* btk_data;
+
+    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x04));
+
+    JUT_ASSERT(0x66, mdl_data != 0);
+
+    if (mdl_data != NULL) {
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
+    }
+
+    btk_data = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes(M_arcname, 0x07));
+
+    JUT_ASSERT(0x6d, btk_data != 0);
+
+    s32 btkRet =
+        mBtkAnm.init(mdl_data, btk_data, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+
+    bool ret = FALSE;
+    if (mdl_data != NULL && this->mpModel != NULL && btkRet != NULL) {
+        ret = TRUE;
+    }
+    return ret;
 }
 
 /* 000001F8-000002F8       .text _create__Q28daKomore5Act_cFv */
 s32 daKomore::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+    int phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
+            set_mtx();
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+            fopAcM_setCullSizeBox(this, -100.f, -1000.f, -100.f, 100.0f, 100.0f, 100.0f);
+        } else {
+            phase_state = cPhs_ERROR_e;
+        }
+    }
+    return phase_state;
 }
 
 /* 0000039C-000003CC       .text _delete__Q28daKomore5Act_cFv */
-BOOL daKomore::Act_c::_delete() {
-    /* Nonmatching */
+bool daKomore::Act_c::_delete() {
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 000003CC-00000478       .text set_mtx__Q28daKomore5Act_cFv */
 void daKomore::Act_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    MTXCopy(mDoMtx_stack_c::get(), mMtx);
+    mpModel->calc();
 }
 
 /* 00000478-000004A0       .text _execute__Q28daKomore5Act_cFv */
-BOOL daKomore::Act_c::_execute() {
-    /* Nonmatching */
+bool daKomore::Act_c::_execute() {
+    mBtkAnm.play();
+    return true;
 }
 
 /* 000004A0-00000518       .text _draw__Q28daKomore5Act_cFv */
-BOOL daKomore::Act_c::_draw() {
-    /* Nonmatching */
+bool daKomore::Act_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG2, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mBtkAnm.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+    return true;
 }
-
 namespace daKomore {
 namespace {
 /* 00000518-00000538       .text Mthd_Create__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_create();
 }
 
 /* 00000538-0000055C       .text Mthd_Delete__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+s32 Mthd_Delete(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_delete();
 }
 
 /* 0000055C-00000580       .text Mthd_Execute__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+s32 Mthd_Execute(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_execute();
 }
 
 /* 00000580-000005A4       .text Mthd_Draw__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+s32 Mthd_Draw(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_draw();
 }
 
 /* 000005A4-000005AC       .text Mthd_IsDelete__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+s32 Mthd_IsDelete(void* i_this) {
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
-    (process_method_func)Mthd_Create,
-    (process_method_func)Mthd_Delete,
-    (process_method_func)Mthd_Execute,
-    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Create,  (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute, (process_method_func)Mthd_IsDelete,
     (process_method_func)Mthd_Draw,
 };
-}; // namespace
-}; // namespace daKomore
+};  // namespace
+};  // namespace daKomore
 
 actor_process_profile_definition g_profile_Komore = {
     /* LayerID      */ fpcLy_CURRENT_e,
