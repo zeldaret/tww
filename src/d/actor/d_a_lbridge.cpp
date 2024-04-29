@@ -6,6 +6,8 @@
 #include "d/actor/d_a_lbridge.h"
 #include "d/d_procname.h"
 
+const char daLbridge_c::m_arcname[] = "Gbrg00";
+
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
@@ -76,29 +78,33 @@ BOOL daLbridge_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00000FF8-00001018       .text daLbridge_Create__FPv */
-static s32 daLbridge_Create(void*) {
+BOOL daLbridge_c::_delete() {
     /* Nonmatching */
+}
+
+/* 00000FF8-00001018       .text daLbridge_Create__FPv */
+static s32 daLbridge_Create(void* i_this) {
+    return static_cast<daLbridge_c*>(i_this)->_create();
 }
 
 /* 00001018-000010D4       .text daLbridge_Delete__FPv */
-static BOOL daLbridge_Delete(void*) {
-    /* Nonmatching */
+static BOOL daLbridge_Delete(void* i_this) {
+    return static_cast<daLbridge_c*>(i_this)->_delete();
 }
 
 /* 000010D4-000010F8       .text daLbridge_Draw__FPv */
-static BOOL daLbridge_Draw(void*) {
-    /* Nonmatching */
+static BOOL daLbridge_Draw(void* i_this) {
+    return (u8)static_cast<daLbridge_c*>(i_this)->_draw();
 }
 
 /* 000010F8-0000111C       .text daLbridge_Execute__FPv */
-static BOOL daLbridge_Execute(void*) {
-    /* Nonmatching */
+static BOOL daLbridge_Execute(void* i_this) {
+    return (u8)static_cast<daLbridge_c*>(i_this)->_execute();
 }
 
 /* 0000111C-00001124       .text daLbridge_IsDelete__FPv */
 static BOOL daLbridge_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daLbridgeMethodTable = {

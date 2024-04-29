@@ -21,6 +21,8 @@ public:
     void set_off_se();
     BOOL _draw();
 
+    static const char m_arcname[];
+
 public:
     /* Place member variables here */
 };
