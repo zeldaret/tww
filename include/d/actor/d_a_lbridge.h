@@ -7,7 +7,7 @@ class daLbridge_c : public fopAc_ac_c {
 public:
     inline BOOL _delete();
 
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     s32 _create();
     void set_mtx();

@@ -9,12 +9,12 @@
 const char daLbridge_c::m_arcname[] = "Gbrg00";
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daLbridge_c*>(i_this)->CreateHeap();
 }
 
 /* 00000098-00000384       .text CreateHeap__11daLbridge_cFv */
-void daLbridge_c::CreateHeap() {
+BOOL daLbridge_c::CreateHeap() {
     /* Nonmatching */
 }
 
