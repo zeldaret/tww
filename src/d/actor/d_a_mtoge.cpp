@@ -53,7 +53,11 @@ BOOL daMtoge_c::CreateHeap() {
 
     calcMtx();
 
-    return mpBgW->Set(pData, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx()) == true ? FALSE : TRUE;
+    if (mpBgW->Set(pData, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx()) == true) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 000001E8-00000254       .text calcMtx__9daMtoge_cFv */
