@@ -38,7 +38,10 @@ void daLbridge_c::set_mtx() {
 
 /* 00000818-00000888       .text setMoveBGMtx__11daLbridge_cFv */
 void daLbridge_c::setMoveBGMtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::scaleM(scale);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 }
 
 /* 00000888-00000914       .text _execute__11daLbridge_cFv */
