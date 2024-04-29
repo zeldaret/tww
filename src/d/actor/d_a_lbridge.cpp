@@ -71,12 +71,12 @@ void daLbridge_c::disappear_bridge() {
 
 /* 00000E30-00000EA0       .text set_on_se__11daLbridge_cFv */
 void daLbridge_c::set_on_se() {
-    /* Nonmatching */
+    fopAcM_seStart(this, JA_SE_OBJ_L_BRIDGE_ON, 0);
 }
 
 /* 00000EA0-00000F10       .text set_off_se__11daLbridge_cFv */
 void daLbridge_c::set_off_se() {
-    /* Nonmatching */
+    fopAcM_seStart(this, JA_SE_OBJ_L_BRIDGE_OFF, 0);
 }
 
 /* 00000F10-00000FF8       .text _draw__11daLbridge_cFv */
