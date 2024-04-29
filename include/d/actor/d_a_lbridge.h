@@ -26,7 +26,8 @@ public:
     static const char m_arcname[];
 
 public:
-    /* 0x298 */ J3DModel *unk298;                   /* inferred */
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel *mpModel;                  /* inferred */
     /* 0x29C */ dBgW *mpBgW;                        /* inferred */
     /* 0x2A0 */ Mtx mMtx;                           /* inferred */
     /* 0x2D0 */ mDoExt_btkAnm unk2D0;               /* inferred */

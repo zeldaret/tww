@@ -30,7 +30,10 @@ s32 daLbridge_c::_create() {
 
 /* 00000798-00000818       .text set_mtx__11daLbridge_cFv */
 void daLbridge_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000818-00000888       .text setMoveBGMtx__11daLbridge_cFv */
