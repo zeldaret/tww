@@ -252,28 +252,28 @@ void daAuction_c::getRand(int) {
 }
 
 /* 00003C08-00003C28       .text daAuctionCreate__FPv */
-static s32 daAuctionCreate(void*) {
-    /* Nonmatching */
+static s32 daAuctionCreate(void* i_this) {
+    return static_cast<daAuction_c*>(i_this)->_create();
 }
 
 /* 00003C28-00003C48       .text daAuctionDelete__FPv */
-static BOOL daAuctionDelete(void*) {
-    /* Nonmatching */
+static BOOL daAuctionDelete(void* i_this) {
+    return static_cast<daAuction_c*>(i_this)->_delete();
 }
 
 /* 00003C48-00003C68       .text daAuctionExecute__FPv */
-static BOOL daAuctionExecute(void*) {
-    /* Nonmatching */
+static BOOL daAuctionExecute(void* i_this) {
+    return static_cast<daAuction_c*>(i_this)->_execute();
 }
 
 /* 00003C68-00003C88       .text daAuctionDraw__FPv */
-static BOOL daAuctionDraw(void*) {
-    /* Nonmatching */
+static BOOL daAuctionDraw(void* i_this) {
+    return static_cast<daAuction_c*>(i_this)->_draw();
 }
 
 /* 00003C88-00003C90       .text daAuctionIsDelete__FPv */
 static BOOL daAuctionIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daAuctionMethodTable = {
