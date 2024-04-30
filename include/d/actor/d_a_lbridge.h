@@ -27,19 +27,25 @@ public:
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel *mpModel;                  /* inferred */
-    /* 0x29C */ dBgW *mpBgW;                        /* inferred */
-    /* 0x2A0 */ Mtx mMtx;                           /* inferred */
-    /* 0x2D0 */ mDoExt_btkAnm mBtkAnm;              /* inferred */
-    /* 0x2E4 */ mDoExt_bpkAnm mBpkAnm;              /* inferred: Might be wrong (doesn't match) */
-    /* 0x2F8 */ mDoExt_brkAnm mBrkAnm;              /* inferred */
-    /* 0x310 */ void *unk310;                       /* inferred */
-    /* 0x314 */ s32 mSwitchNo;                      /* inferred */
-    /* 0x318 */ s16 unk318;                         /* inferred */
-    /* 0x31A */ s16 unk31A;                         /* inferred */
-    /* 0x31C */ s16 unk31C;                         /* inferred */
-    /* 0x31E */ u8 unk31E;                          /* inferred */
-    /* 0x31F */ u8 unk31F;                          /* inferred */
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x29C */ dBgW* mpBgW;
+    /* 0x2A0 */ Mtx mMtx;
+    /* 0x2D0 */ mDoExt_btkAnm mBtkAnm;
+    /* 0x2E4 */ mDoExt_bpkAnm mBpkAnm;
+    /* 0x2F8 */ mDoExt_brkAnm mBrkAnm;
+    /* 0x310 */ JPABaseEmitter* mpEmitter;
+    /* 0x314 */ s32 mSwitchNo;
+    /* 0x318 */ s16 mAppearEventIdx;
+    /* 0x31A */ s16 mDisappearEventIdx;
+    /* 0x31C */ s16 unk31C; /* inferred */
+    /* 0x31E */ u8 unk31E;  /* inferred */
+    /* 0x31F */ u8 unk31F;  /* inferred */
 };
+
+namespace daLbridge_prm {
+inline u8 getSwitchNo(daLbridge_c* ac) {
+    return (fopAcM_GetParam(ac) >> 0) & 0xFF;
+}
+};  // namespace daLbridge_prm
 
 #endif /* D_A_LBRIDGE_H */

@@ -20,7 +20,36 @@ BOOL daLbridge_c::CreateHeap() {
 
 /* 00000384-00000544       .text CreateInit__11daLbridge_cFv */
 void daLbridge_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+
+    fopAcM_setCullSizeBox(this, -600.0f, -100.0f, -150.0f, 600.0f, 100.0f, 150.0f);
+    fopAcM_setCullSizeFar(this, 1.5f);
+
+    mpEmitter = dComIfGp_particle_set(0x810FU, &current.pos, &current.angle);
+
+    if (mpEmitter != NULL) {
+        mpEmitter->stopDrawParticle();
+        mpEmitter->setGlobalAlpha(0);
+    }
+
+    mSwitchNo = daLbridge_prm::getSwitchNo(this);
+
+    unk31F = (bool)fopAcM_isSwitch(this, mSwitchNo);
+
+    mAppearEventIdx = dComIfGp_evmng_getEventIdx("EFFAPPEAR");
+    mDisappearEventIdx = dComIfGp_evmng_getEventIdx("BRIDGE_DISAPPEAR");
+
+    if (fopAcM_isSwitch(this, mSwitchNo) != FALSE || mSwitchNo == 0xFF) {
+        dComIfG_Bgsp()->Regist(mpBgW, this);
+        set_mtx();
+
+        mpBgW->Move();
+
+        if (mpEmitter != NULL) {
+            mpEmitter->playDrawParticle();
+            mpEmitter->setGlobalAlpha(0xFF);
+        }
+    }
 }
 
 /* 00000544-0000063C       .text _create__11daLbridge_cFv */
@@ -80,30 +109,29 @@ void daLbridge_c::sw_check() {
 /* 00000A6C-00000C18       .text demo__11daLbridge_cFv */
 void daLbridge_c::demo() {
     if (eventInfo.checkCommandDemoAccrpt()) {
-        if (dComIfGp_evmng_startCheck(unk318) != FALSE && unk31C == 1) {
+        if (dComIfGp_evmng_startCheck(mAppearEventIdx) != FALSE && unk31C == 1) {
             unk31C = 0;
         }
         
-        if (dComIfGp_evmng_startCheck(unk31A) != FALSE && unk31C == 2) {
+        if (dComIfGp_evmng_startCheck(mDisappearEventIdx) != FALSE && unk31C == 2) {
             unk31C = 0;
         }
 
-        if (dComIfGp_evmng_endCheck(unk318) != FALSE) {
+        if (dComIfGp_evmng_endCheck(mAppearEventIdx) != FALSE) {
             dComIfGp_event_reset();
             dComIfGs_onEventBit(0xE01U);
         }
 
-        if (dComIfGp_evmng_endCheck(unk31A) != FALSE) {
+        if (dComIfGp_evmng_endCheck(mDisappearEventIdx) != FALSE) {
             dComIfGp_event_reset();
             dComIfGs_onEventBit(0xF40U);
         }
     } else {
         if (dComIfGs_isEventBit(0xE01U) == FALSE && this->unk31C == 1) {
-            const int i = sizeof(daLbridge_c);
-            fopAcM_orderOtherEventId(this, unk318);
+            fopAcM_orderOtherEventId(this, mAppearEventIdx);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         } else if (dComIfGs_isEventBit(0xF40U) == FALSE && this->unk31C == 2) {
-            fopAcM_orderOtherEventId(this, unk31A);
+            fopAcM_orderOtherEventId(this, mDisappearEventIdx);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
     }
