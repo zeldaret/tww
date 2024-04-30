@@ -25,7 +25,20 @@ void daLbridge_c::CreateInit() {
 
 /* 00000544-0000063C       .text _create__11daLbridge_cFv */
 s32 daLbridge_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daLbridge_c);
+
+    s32 ret = dComIfG_resLoad(&mPhs, m_arcname);
+
+    if (ret == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2E10U) == 0) {
+            ret = cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+
+
+    return ret;
 }
 
 /* 00000798-00000818       .text set_mtx__11daLbridge_cFv */
