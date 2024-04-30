@@ -30,11 +30,10 @@ s32 daLbridge_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, m_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2E10U) == 0) {
-            ret = cPhs_ERROR_e;
-        } else {
-            CreateInit();
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2E10U)) {
+            return cPhs_ERROR_e;
         }
+        CreateInit();
     }
 
 
