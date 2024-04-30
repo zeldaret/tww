@@ -161,6 +161,8 @@ public:
     void entry(J3DModelData*, f32);
     void entry(J3DMaterialTable*, f32);
 
+    void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
+
 private:
     /* 0x08 */ J3DAnmColor* mpAnm;
     /* 0x0C */ J3DMatColorAnm* field_0xc;

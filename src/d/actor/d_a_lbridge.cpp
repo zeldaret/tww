@@ -120,7 +120,18 @@ void daLbridge_c::set_off_se() {
 
 /* 00000F10-00000FF8       .text _draw__11daLbridge_cFv */
 BOOL daLbridge_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    mBtkAnm.entry(mpModel->getModelData());
+    mBpkAnm.entry(mpModel->getModelData());
+    mBrkAnm.entry(mpModel->getModelData());
+
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+
+    return TRUE;
 }
 
 BOOL daLbridge_c::_delete() {
