@@ -34,7 +34,7 @@ public:
     /* 0x2E4 */ mDoExt_bpkAnm mBpkAnm;              /* inferred: Might be wrong (doesn't match) */
     /* 0x2F8 */ mDoExt_brkAnm mBrkAnm;              /* inferred */
     /* 0x310 */ void *unk310;                       /* inferred */
-    /* 0x314 */ s32 unk314;                         /* inferred */
+    /* 0x314 */ s32 mSwitchNo;                      /* inferred */
     /* 0x318 */ s16 unk318;                         /* inferred */
     /* 0x31A */ s16 unk31A;                         /* inferred */
     /* 0x31C */ s16 unk31C;                         /* inferred */

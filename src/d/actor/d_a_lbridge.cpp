@@ -58,7 +58,18 @@ void daLbridge_c::setMoveBGMtx() {
 
 /* 00000888-00000914       .text _execute__11daLbridge_cFv */
 BOOL daLbridge_c::_execute() {
-    /* Nonmatching */
+    bool sw = fopAcM_isSwitch(this, mSwitchNo);
+
+    sw_check();
+    demo();
+    mBtkAnm.play();
+    mBpkAnm.play();
+    mBrkAnm.play();
+    set_mtx();
+
+    unk31F = sw;
+
+    return TRUE;
 }
 
 /* 00000914-00000A6C       .text sw_check__11daLbridge_cFv */
