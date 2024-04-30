@@ -56,7 +56,34 @@ void daLbridge_c::sw_check() {
 
 /* 00000A6C-00000C18       .text demo__11daLbridge_cFv */
 void daLbridge_c::demo() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if (dComIfGp_evmng_startCheck(unk318) != FALSE && unk31C == 1) {
+            unk31C = 0;
+        }
+        
+        if (dComIfGp_evmng_startCheck(unk31A) != FALSE && unk31C == 2) {
+            unk31C = 0;
+        }
+
+        if (dComIfGp_evmng_endCheck(unk318) != FALSE) {
+            dComIfGp_event_reset();
+            dComIfGs_onEventBit(0xE01U);
+        }
+
+        if (dComIfGp_evmng_endCheck(unk31A) != FALSE) {
+            dComIfGp_event_reset();
+            dComIfGs_onEventBit(0xF40U);
+        }
+    } else {
+        if (dComIfGs_isEventBit(0xE01U) == FALSE && this->unk31C == 1) {
+            const int i = sizeof(daLbridge_c);
+            fopAcM_orderOtherEventId(this, unk318);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        } else if (dComIfGs_isEventBit(0xF40U) == FALSE && this->unk31C == 2) {
+            fopAcM_orderOtherEventId(this, unk31A);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+    }
 }
 
 /* 00000C18-00000D90       .text appear_bridge__11daLbridge_cFv */
