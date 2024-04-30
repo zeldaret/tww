@@ -154,6 +154,7 @@ private:
 
 class mDoExt_bpkAnm : public mDoExt_baseAnm {
 public:
+    mDoExt_bpkAnm() { field_0xc = NULL; }
     int init(J3DModelData*, J3DAnmColor*, int, int, f32, s16, s16, bool, int);
     int init(J3DMaterialTable*, J3DAnmColor*, int, int, f32, s16, s16, bool, int);
 
