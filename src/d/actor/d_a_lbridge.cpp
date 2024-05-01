@@ -17,7 +17,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daLbridge_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 7);
     JUT_ASSERT(0xD6, modelData != 0);
-    
+
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000223U);
 
     if (!mpModel) {
@@ -27,14 +27,14 @@ BOOL daLbridge_c::CreateHeap() {
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, 0x10);
     JUT_ASSERT(0xE8, pbtk != 0);
 
-    if (!mBtkAnm.init(modelData, pbtk, TRUE, 2, 0.0f, 0, -1, false, 0)) {
+    if (!mBtkAnm.init(modelData, pbtk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
     J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, 0xA);
-    JUT_ASSERT(0xF8, pbpk != 0);
+    JUT_ASSERT(0xF6, pbpk != 0);
 
-    if (!mBpkAnm.init(modelData, pbpk, TRUE, 0, 0.0f, 0, -1, false, 0)) {
+    if (!mBpkAnm.init(modelData, pbpk, TRUE, 0, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
@@ -44,17 +44,19 @@ BOOL daLbridge_c::CreateHeap() {
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, 0xD);
     JUT_ASSERT(0x106, pbrk != 0);
 
-    if (!mBrkAnm.init(modelData, pbrk, TRUE, 2, 0.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, pbrk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
-
 
     setMoveBGMtx();
 
     mpBgW = new dBgW();
-    
+
     if (mpBgW != NULL) {
-        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, 0x13), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
+        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, 0x13), cBgW::MOVE_BG_e, &mMtx) ==
+                       true ?
+                   FALSE :
+                   TRUE;
     }
 
     return FALSE;
@@ -107,7 +109,6 @@ s32 daLbridge_c::_create() {
         CreateInit();
     }
 
-
     return ret;
 }
 
@@ -145,13 +146,12 @@ BOOL daLbridge_c::_execute() {
 
 /* 00000914-00000A6C       .text sw_check__11daLbridge_cFv */
 void daLbridge_c::sw_check() {
-
     bool isSw = fopAcM_isSwitch(this, mSwitchNo);
 
-    if (mSwitchNo == 0xFF){
+    if (mSwitchNo == 0xFF) {
         return;
     }
-    
+
     if (isSw != unk31F) {
         if (isSw) {
             appear_bridge();
@@ -163,7 +163,7 @@ void daLbridge_c::sw_check() {
     u8 alpha;
 
     if (!isSw) {
-        if (mBpkAnm.getFrame() == mBpkAnm.getFrameCtrl()->getStart()) {
+        if (mBpkAnm.getFrame() == (f32)mBpkAnm.getFrameCtrl()->getStart()) {
             fopDwTg_DrawQTo(&draw_tag);
         }
 
@@ -191,7 +191,7 @@ void daLbridge_c::demo() {
         if (dComIfGp_evmng_startCheck(mAppearEventIdx) != FALSE && unk31C == 1) {
             unk31C = 0;
         }
-        
+
         if (dComIfGp_evmng_startCheck(mDisappearEventIdx) != FALSE && unk31C == 2) {
             unk31C = 0;
         }
@@ -225,14 +225,14 @@ void daLbridge_c::appear_bridge() {
     cXyz pos1 = current.pos;
     cXyz pos2 = current.pos;
 
-    pos2.z += 100.0f;
-    pos1.z -= 100.0f;
+    pos1.z += 100.0f;
+    pos2.z -= 100.0f;
 
     dComIfGp_particle_setProjection(0x8119U, &pos1, &current.angle);
     dComIfGp_particle_setProjection(0x8119U, &pos2, &current.angle);
 
     set_on_se();
-    
+
     mBpkAnm.setFrame(0.0f);
     mBpkAnm.setPlaySpeed(1.0f);
 
@@ -257,7 +257,7 @@ void daLbridge_c::disappear_bridge() {
 
     mBpkAnm.setFrame(mBpkAnm.getEndFrame());
     mBpkAnm.setPlaySpeed(-1.0f);
-    
+
     unk31C = 2;
 }
 
@@ -316,12 +316,12 @@ static BOOL daLbridge_Delete(void* i_this) {
 
 /* 000010D4-000010F8       .text daLbridge_Draw__FPv */
 static BOOL daLbridge_Draw(void* i_this) {
-    return (u8)static_cast<daLbridge_c*>(i_this)->_draw();
+    return (u8) static_cast<daLbridge_c*>(i_this)->_draw();
 }
 
 /* 000010F8-0000111C       .text daLbridge_Execute__FPv */
 static BOOL daLbridge_Execute(void* i_this) {
-    return (u8)static_cast<daLbridge_c*>(i_this)->_execute();
+    return (u8) static_cast<daLbridge_c*>(i_this)->_execute();
 }
 
 /* 0000111C-00001124       .text daLbridge_IsDelete__FPv */
