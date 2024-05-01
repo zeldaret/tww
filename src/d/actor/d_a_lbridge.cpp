@@ -15,7 +15,49 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000384       .text CreateHeap__11daLbridge_cFv */
 BOOL daLbridge_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 7);
+    JUT_ASSERT(0xD6, modelData != 0);
+    
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000223U);
+
+    if (!mpModel) {
+        return FALSE;
+    }
+
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, 0x10);
+    JUT_ASSERT(0xE8, pbtk != 0);
+
+    if (!mBtkAnm.init(modelData, pbtk, TRUE, 2, 0.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+
+    J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, 0xA);
+    JUT_ASSERT(0xF8, pbpk != 0);
+
+    if (!mBpkAnm.init(modelData, pbpk, TRUE, 0, 0.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+
+    mBpkAnm.setFrame(0.0f);
+    mBpkAnm.setPlaySpeed(1.0f);
+
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, 0xD);
+    JUT_ASSERT(0x106, pbrk != 0);
+
+    if (!mBrkAnm.init(modelData, pbrk, TRUE, 2, 0.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+
+
+    setMoveBGMtx();
+
+    mpBgW = new dBgW();
+    
+    if (mpBgW != NULL) {
+        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, 0x13), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000384-00000544       .text CreateInit__11daLbridge_cFv */
