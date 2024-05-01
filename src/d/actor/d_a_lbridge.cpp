@@ -247,7 +247,18 @@ void daLbridge_c::appear_bridge() {
 
 /* 00000D90-00000E30       .text disappear_bridge__11daLbridge_cFv */
 void daLbridge_c::disappear_bridge() {
-    /* Nonmatching */
+    dComIfG_Bgsp()->Release(mpBgW);
+
+    if (mpEmitter != NULL) {
+        mpEmitter->stopDrawParticle();
+    }
+
+    set_off_se();
+
+    mBpkAnm.setFrame(mBpkAnm.getEndFrame());
+    mBpkAnm.setPlaySpeed(-1.0f);
+    
+    unk31C = 2;
 }
 
 /* 00000E30-00000EA0       .text set_on_se__11daLbridge_cFv */
