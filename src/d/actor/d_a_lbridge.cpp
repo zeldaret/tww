@@ -78,7 +78,7 @@ void daLbridge_c::CreateInit() {
 
     mSwitchNo = daLbridge_prm::getSwitchNo(this);
 
-    unk31F = (bool)fopAcM_isSwitch(this, mSwitchNo);
+    mIsSw = (bool)fopAcM_isSwitch(this, mSwitchNo);
 
     mAppearEventIdx = dComIfGp_evmng_getEventIdx("EFFAPPEAR");
     mDisappearEventIdx = dComIfGp_evmng_getEventIdx("BRIDGE_DISAPPEAR");
@@ -130,7 +130,7 @@ void daLbridge_c::setMoveBGMtx() {
 
 /* 00000888-00000914       .text _execute__11daLbridge_cFv */
 BOOL daLbridge_c::_execute() {
-    bool sw = fopAcM_isSwitch(this, mSwitchNo);
+    bool isSw = fopAcM_isSwitch(this, mSwitchNo);
 
     sw_check();
     demo();
@@ -139,7 +139,7 @@ BOOL daLbridge_c::_execute() {
     mBrkAnm.play();
     set_mtx();
 
-    unk31F = sw;
+    mIsSw = isSw;
 
     return TRUE;
 }
@@ -152,7 +152,7 @@ void daLbridge_c::sw_check() {
         return;
     }
 
-    if (isSw != unk31F) {
+    if (isSw != mIsSw) {
         if (isSw) {
             appear_bridge();
         } else {

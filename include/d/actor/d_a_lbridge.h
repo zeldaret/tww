@@ -38,7 +38,7 @@ public:
     /* 0x31A */ s16 mDisappearEventIdx;
     /* 0x31C */ s16 unk31C;
     /* 0x31E */ u8 mTimer;
-    /* 0x31F */ u8 unk31F;
+    /* 0x31F */ u8 mIsSw;
 };
 
 namespace daLbridge_prm {
