@@ -5,100 +5,326 @@
 
 #include "d/actor/d_a_lbridge.h"
 #include "d/d_procname.h"
+#include "d/res/res_gbrg00.h"
+
+const char daLbridge_c::m_arcname[] = "Gbrg00";
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daLbridge_c*>(i_this)->CreateHeap();
 }
 
 /* 00000098-00000384       .text CreateHeap__11daLbridge_cFv */
-void daLbridge_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daLbridge_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GBRG00_BDL_GBRG00);
+    JUT_ASSERT(0xD6, modelData != 0);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000223U);
+
+    if (!mpModel) {
+        return FALSE;
+    }
+
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BTK_GBRG00);
+    JUT_ASSERT(0xE8, pbtk != 0);
+
+    if (!mBtkAnm.init(modelData, pbtk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+
+    J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, GBRG00_BPK_GBRG00);
+    JUT_ASSERT(0xF6, pbpk != 0);
+
+    if (!mBpkAnm.init(modelData, pbpk, TRUE, 0, 1.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+
+    mBpkAnm.setFrame(0.0f);
+    mBpkAnm.setPlaySpeed(1.0f);
+
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BRK_GBRG00);
+    JUT_ASSERT(0x106, pbrk != 0);
+
+    if (!mBrkAnm.init(modelData, pbrk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+
+    setMoveBGMtx();
+
+    mpBgW = new dBgW();
+
+    if (mpBgW != NULL) {
+        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, GBRG00_DZB_HHASHI1), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000384-00000544       .text CreateInit__11daLbridge_cFv */
 void daLbridge_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+
+    fopAcM_setCullSizeBox(this, -600.0f, -100.0f, -150.0f, 600.0f, 100.0f, 150.0f);
+    fopAcM_setCullSizeFar(this, 1.5f);
+
+    mpEmitter = dComIfGp_particle_set(0x810FU, &current.pos, &current.angle);
+
+    if (mpEmitter != NULL) {
+        mpEmitter->stopDrawParticle();
+        mpEmitter->setGlobalAlpha(0);
+    }
+
+    mSwitchNo = daLbridge_prm::getSwitchNo(this);
+
+    mIsSw = (bool)fopAcM_isSwitch(this, mSwitchNo);
+
+    mAppearEventIdx = dComIfGp_evmng_getEventIdx("EFFAPPEAR");
+    mDisappearEventIdx = dComIfGp_evmng_getEventIdx("BRIDGE_DISAPPEAR");
+
+    if (fopAcM_isSwitch(this, mSwitchNo) != FALSE || mSwitchNo == 0xFF) {
+        dComIfG_Bgsp()->Regist(mpBgW, this);
+        set_mtx();
+
+        mpBgW->Move();
+
+        if (mpEmitter != NULL) {
+            mpEmitter->playDrawParticle();
+            mpEmitter->setGlobalAlpha(0xFF);
+        }
+    }
 }
 
 /* 00000544-0000063C       .text _create__11daLbridge_cFv */
 s32 daLbridge_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daLbridge_c);
+
+    s32 ret = dComIfG_resLoad(&mPhs, m_arcname);
+
+    if (ret == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2E10U)) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+
+    return ret;
 }
 
 /* 00000798-00000818       .text set_mtx__11daLbridge_cFv */
 void daLbridge_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000818-00000888       .text setMoveBGMtx__11daLbridge_cFv */
 void daLbridge_c::setMoveBGMtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::scaleM(scale);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 }
 
 /* 00000888-00000914       .text _execute__11daLbridge_cFv */
 BOOL daLbridge_c::_execute() {
-    /* Nonmatching */
+    bool isSw = fopAcM_isSwitch(this, mSwitchNo);
+
+    sw_check();
+    demo();
+    mBtkAnm.play();
+    mBpkAnm.play();
+    mBrkAnm.play();
+    set_mtx();
+
+    mIsSw = isSw;
+
+    return TRUE;
 }
 
 /* 00000914-00000A6C       .text sw_check__11daLbridge_cFv */
 void daLbridge_c::sw_check() {
-    /* Nonmatching */
+    bool isSw = fopAcM_isSwitch(this, mSwitchNo);
+
+    if (mSwitchNo == 0xFF) {
+        return;
+    }
+
+    if (isSw != mIsSw) {
+        if (isSw) {
+            appear_bridge();
+        } else {
+            disappear_bridge();
+        }
+    }
+
+    u8 alpha;
+
+    if (!isSw) {
+        if (mBpkAnm.getFrame() == (f32)mBpkAnm.getFrameCtrl()->getStart()) {
+            fopAcM_offDraw(this);
+        }
+
+        if (mpEmitter != NULL) {
+            alpha = mpEmitter->getGlobalAlpha();
+            cLib_chaseUC(&alpha, 0x0, 0x8);
+            mpEmitter->setGlobalAlpha(alpha);
+        }
+    } else {
+        fopAcM_onDraw(this);
+
+        cLib_calcTimer(&mTimer);
+
+        if (mTimer == 0 && mpEmitter != NULL) {
+            alpha = mpEmitter->getGlobalAlpha();
+            cLib_chaseUC(&alpha, 0xFF, 0x8);
+            mpEmitter->setGlobalAlpha(alpha);
+        }
+    }
 }
 
 /* 00000A6C-00000C18       .text demo__11daLbridge_cFv */
 void daLbridge_c::demo() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if (dComIfGp_evmng_startCheck(mAppearEventIdx) != FALSE && unk31C == 1) {
+            unk31C = 0;
+        }
+
+        if (dComIfGp_evmng_startCheck(mDisappearEventIdx) != FALSE && unk31C == 2) {
+            unk31C = 0;
+        }
+
+        if (dComIfGp_evmng_endCheck(mAppearEventIdx) != FALSE) {
+            dComIfGp_event_reset();
+            dComIfGs_onEventBit(0xE01U);
+        }
+
+        if (dComIfGp_evmng_endCheck(mDisappearEventIdx) != FALSE) {
+            dComIfGp_event_reset();
+            dComIfGs_onEventBit(0xF40U);
+        }
+    } else {
+        if (dComIfGs_isEventBit(0xE01U) == FALSE && this->unk31C == 1) {
+            fopAcM_orderOtherEventId(this, mAppearEventIdx);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        } else if (dComIfGs_isEventBit(0xF40U) == FALSE && this->unk31C == 2) {
+            fopAcM_orderOtherEventId(this, mDisappearEventIdx);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+    }
 }
 
 /* 00000C18-00000D90       .text appear_bridge__11daLbridge_cFv */
 void daLbridge_c::appear_bridge() {
-    /* Nonmatching */
+    dComIfG_Bgsp()->Regist(mpBgW, this);
+    set_mtx();
+    mpBgW->Move();
+
+    cXyz pos1 = current.pos;
+    cXyz pos2 = current.pos;
+
+    pos1.z += 100.0f;
+    pos2.z -= 100.0f;
+
+    dComIfGp_particle_setProjection(0x8119U, &pos1, &current.angle);
+    dComIfGp_particle_setProjection(0x8119U, &pos2, &current.angle);
+
+    set_on_se();
+
+    mBpkAnm.setFrame(0.0f);
+    mBpkAnm.setPlaySpeed(1.0f);
+
+    if (mpEmitter != NULL) {
+        mpEmitter->playCreateParticle();
+        mpEmitter->playDrawParticle();
+    }
+
+    mTimer = 0x1F;
+    unk31C = 1;
 }
 
 /* 00000D90-00000E30       .text disappear_bridge__11daLbridge_cFv */
 void daLbridge_c::disappear_bridge() {
-    /* Nonmatching */
+    dComIfG_Bgsp()->Release(mpBgW);
+
+    if (mpEmitter != NULL) {
+        mpEmitter->stopDrawParticle();
+    }
+
+    set_off_se();
+
+    mBpkAnm.setFrame(mBpkAnm.getEndFrame());
+    mBpkAnm.setPlaySpeed(-1.0f);
+
+    unk31C = 2;
 }
 
 /* 00000E30-00000EA0       .text set_on_se__11daLbridge_cFv */
 void daLbridge_c::set_on_se() {
-    /* Nonmatching */
+    fopAcM_seStart(this, JA_SE_OBJ_L_BRIDGE_ON, 0);
 }
 
 /* 00000EA0-00000F10       .text set_off_se__11daLbridge_cFv */
 void daLbridge_c::set_off_se() {
-    /* Nonmatching */
+    fopAcM_seStart(this, JA_SE_OBJ_L_BRIDGE_OFF, 0);
 }
 
 /* 00000F10-00000FF8       .text _draw__11daLbridge_cFv */
 BOOL daLbridge_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    mBtkAnm.entry(mpModel->getModelData());
+    mBpkAnm.entry(mpModel->getModelData());
+    mBrkAnm.entry(mpModel->getModelData());
+
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+
+    return TRUE;
+}
+
+BOOL daLbridge_c::_delete() {
+    if (mpEmitter != NULL) {
+        mpEmitter->becomeInvalidEmitter();
+        mpEmitter = NULL;
+    }
+
+    bool isSw = fopAcM_isSwitch(this, mSwitchNo);
+
+    if ((mSwitchNo == 0xFF || isSw == true) && heap != NULL) {
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
+
+    dComIfG_resDelete(&mPhs, m_arcname);
+
+    return TRUE;
 }
 
 /* 00000FF8-00001018       .text daLbridge_Create__FPv */
-static s32 daLbridge_Create(void*) {
-    /* Nonmatching */
+static s32 daLbridge_Create(void* i_this) {
+    return static_cast<daLbridge_c*>(i_this)->_create();
 }
 
 /* 00001018-000010D4       .text daLbridge_Delete__FPv */
-static BOOL daLbridge_Delete(void*) {
-    /* Nonmatching */
+static BOOL daLbridge_Delete(void* i_this) {
+    return static_cast<daLbridge_c*>(i_this)->_delete();
 }
 
 /* 000010D4-000010F8       .text daLbridge_Draw__FPv */
-static BOOL daLbridge_Draw(void*) {
-    /* Nonmatching */
+static BOOL daLbridge_Draw(void* i_this) {
+    return (u8) static_cast<daLbridge_c*>(i_this)->_draw();
 }
 
 /* 000010F8-0000111C       .text daLbridge_Execute__FPv */
-static BOOL daLbridge_Execute(void*) {
-    /* Nonmatching */
+static BOOL daLbridge_Execute(void* i_this) {
+    return (u8) static_cast<daLbridge_c*>(i_this)->_execute();
 }
 
 /* 0000111C-00001124       .text daLbridge_IsDelete__FPv */
 static BOOL daLbridge_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daLbridgeMethodTable = {
