@@ -176,7 +176,31 @@ void daLbridge_c::demo() {
 
 /* 00000C18-00000D90       .text appear_bridge__11daLbridge_cFv */
 void daLbridge_c::appear_bridge() {
-    /* Nonmatching */
+    dComIfG_Bgsp()->Regist(mpBgW, this);
+    set_mtx();
+    mpBgW->Move();
+
+    cXyz pos1 = current.pos;
+    cXyz pos2 = current.pos;
+
+    pos2.z += 100.0f;
+    pos1.z -= 100.0f;
+
+    dComIfGp_particle_setProjection(0x8119U, &pos1, &current.angle);
+    dComIfGp_particle_setProjection(0x8119U, &pos2, &current.angle);
+
+    set_on_se();
+    
+    mBpkAnm.setFrame(0.0f);
+    mBpkAnm.setPlaySpeed(1.0f);
+
+    if (mpEmitter != NULL) {
+        mpEmitter->playCreateParticle();
+        mpEmitter->playDrawParticle();
+    }
+
+    mTimer = 0x1F;
+    unk31C = 1;
 }
 
 /* 00000D90-00000E30       .text disappear_bridge__11daLbridge_cFv */
