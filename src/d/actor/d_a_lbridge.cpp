@@ -277,7 +277,20 @@ BOOL daLbridge_c::_draw() {
 }
 
 BOOL daLbridge_c::_delete() {
-    /* Nonmatching */
+    if (mpEmitter != NULL) {
+        mpEmitter->becomeInvalidEmitter();
+        mpEmitter = NULL;
+    }
+
+    bool isSw = fopAcM_isSwitch(this, mSwitchNo);
+
+    if ((mSwitchNo == 0xFF || isSw == true) && heap != NULL) {
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
+
+    dComIfG_resDelete(&mPhs, m_arcname);
+
+    return TRUE;
 }
 
 /* 00000FF8-00001018       .text daLbridge_Create__FPv */
