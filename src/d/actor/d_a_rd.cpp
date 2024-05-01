@@ -1662,7 +1662,7 @@ bool daRd_c::_execute() {
     modeProc(PROC_EXEC, MODE_NULL);
     setAnm(AnmPrm_NULL, false);
     setBtkAnm(0x5);
-    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     
     return false;
 }
@@ -1760,7 +1760,7 @@ void daRd_c::createInit() {
     mpMorf->play(&current.pos, 0, 0);
     mBrkAnm.setFrame(0.0f);
     mpMorf->calc();
-    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -100.0f, -10.0f, -100.0f, 100.0f, 250.0f, 150.0f);
     

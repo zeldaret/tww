@@ -1534,7 +1534,7 @@ dKy_setLight__Status lightStatusData[8];
 void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_tevstr_c* i_tevstr) {
     int var_r31 = -1;
     u8 var_r30 = i_tevstr->mInitTimer;
-    u8 var_r29 = 0;
+    bool var_r29 = false;
 
     GXColorS10 sp98;
     GXColorS10 sp90;
@@ -1562,7 +1562,7 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
     mActorC0.a = 255;
     mActorK0.a = 255;
 
-    if (i_lightType == 0 || i_lightType == 9 || i_lightType == 99) {
+    if (i_lightType == TEV_TYPE_ACTOR || i_lightType == TEV_TYPE_PLAYER || i_lightType == TEV_TYPE_UNK99) {
         i_tevstr->mLightMode = 1;
 
         sp98 = mActorC0;
@@ -1572,9 +1572,9 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
         fog_z_start = mFogStartZ__setLight;
         fog_z_end = mFogEndZ__setLight;
 
-        if (i_lightType == 0 || i_lightType == 99) {
+        if (i_lightType == TEV_TYPE_ACTOR || i_lightType == TEV_TYPE_UNK99) {
             settingTevStruct_colget_actor(param_1, i_tevstr, &sp98, &sp90, &sp88, &fog_z_start, &fog_z_end);
-        } else if (i_lightType == 9) {
+        } else if (i_lightType == TEV_TYPE_PLAYER) {
             var_r30 = g_env_light.mInitAnimTimer;
             settingTevStruct_colget_player(i_tevstr);
             settingTevStruct_colget_actor(param_1, i_tevstr, &sp98, &sp90, &sp88, &fog_z_start, &fog_z_end);
@@ -1590,12 +1590,12 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
         mK0.b = sp90.b;
         mK0.a = 255;
 
-        if (i_lightType != 99) {
+        if (i_lightType != TEV_TYPE_UNK99) {
             settingTevStruct_plightcol_plus(param_1, i_tevstr, sp98, sp90, var_r30);
             settingTevStruct_eflightcol_plus(param_1, i_tevstr);
         }
 
-        if (i_lightType == 9) {
+        if (i_lightType == TEV_TYPE_PLAYER) {
             g_env_light.mPLightNearPlayer = i_tevstr->mLightPosWorld;
         }
     } else {
@@ -1610,15 +1610,15 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
         setLight_bg(i_tevstr, &sp80, &sp78, &sp70, &sp68, &sp60, &sp58, &sp50, &sp48, &sp88,
                     &fog_z_start, &fog_z_end);
 
-        if (i_lightType >= 5 && i_lightType <= 8) {
-            var_r29 = 1;
-            i_lightType -= 4;
+        if (i_lightType >= TEV_TYPE_BG0_FULL && i_lightType <= TEV_TYPE_BG3_FULL) {
+            var_r29 = true;
+            i_lightType = TEV_TYPE_BG0 + (i_lightType - TEV_TYPE_BG0_FULL);
         }
 
-        if (i_lightType >= 91 && i_lightType <= 94) {
-            var_r31 = i_lightType - 91;
+        if (i_lightType >= TEV_TYPE_BG0_PLIGHT && i_lightType <= TEV_TYPE_ACTOR_NOLIGHT) {
+            var_r31 = i_lightType - TEV_TYPE_BG0_PLIGHT;
         } else {
-            var_r31 = i_lightType - 1;
+            var_r31 = i_lightType - TEV_TYPE_BG0;
         }
 
         switch (var_r31) {
@@ -1641,7 +1641,7 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
             break;
         }
 
-        if (i_lightType >= 91 && i_lightType < 94) {
+        if (i_lightType >= TEV_TYPE_BG0_PLIGHT && i_lightType < TEV_TYPE_ACTOR_NOLIGHT) {
             sp98.r = (u8)mC0.r;
             sp98.g = (u8)mC0.g;
             sp98.b = (u8)mC0.b;
@@ -1799,7 +1799,7 @@ void dScnKy_env_light_c::setLightTevColorType(J3DModel* i_model, dKy_tevstr_c* i
             dKy_tevstr_init(i_tevstr, dComIfGp_roomControl_getStayNo(), 0xFF);
         }
 
-        settingTevStruct(99, NULL, i_tevstr);
+        settingTevStruct(TEV_TYPE_UNK99, NULL, i_tevstr);
     }
 
     int mat_num = i_model->getModelData()->getMaterialNum() - 1;

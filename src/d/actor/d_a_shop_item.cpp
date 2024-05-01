@@ -55,10 +55,10 @@ void daShopItem_c::CreateInit() {
     set_mtx();
 
     if(isDaizaItem(m_itemNo)) {
-        tevType = TEV_TYPE_ACTOR;
+        mTevType = TEV_TYPE_ACTOR;
     }
     else {
-        tevType = (TevType)0x5C;
+        mTevType = TEV_TYPE_BG1_PLIGHT;
     }
 
     mpModel->setUserArea(0);
@@ -175,7 +175,7 @@ void daShopItem_c::settingBeforeDraw() {
 
 /* 0000070C-000007A4       .text setTevStr__12daShopItem_cFv */
 void daShopItem_c::setTevStr() {
-    g_env_light.settingTevStruct(tevType, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(mTevType, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     for(int i = 0; i < 2; i++) {
         if(mpModelArrow[i] != 0) {
@@ -209,7 +209,7 @@ int daShopItem_c::_create() {
     else {
         int result2 = cPhs_COMPLEATE_e;
         if(isUseClothPacket(m_itemNo)) {
-            result2 = dComIfG_resLoad(&field_0x63C, m_cloth_arcname);
+            result2 = dComIfG_resLoad(&mPhase, m_cloth_arcname);
         }
 
         if(result2 != cPhs_COMPLEATE_e) {
@@ -245,7 +245,7 @@ static BOOL daShopItem_Delete(void* i_this) {
     daShopItem_c* inst = static_cast<daShopItem_c*>(i_this);
 
     if(isUseClothPacket(inst->m_itemNo)) {
-        dComIfG_resDelete(&inst->field_0x63C, daShopItem_c::m_cloth_arcname);
+        dComIfG_resDelete(&inst->mPhase, daShopItem_c::m_cloth_arcname);
     }
     inst->DeleteBase(inst->getShopArcname());
 

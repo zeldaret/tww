@@ -531,7 +531,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
 static int daNpc_Nz_ShopItemCreateCB(void* i_item) {
     daShopItem_c* i_this = static_cast<daShopItem_c*>(i_item);
     i_this->hide();
-    i_this->tevType = TEV_TYPE_ACTOR;
+    i_this->setTevType(TEV_TYPE_ACTOR);
 
     return cPhs_COMPLEATE_e;
 }

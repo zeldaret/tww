@@ -13,7 +13,7 @@
 #include "dolphin/os/OS.h"
 #include "global.h"
 
-JFWDisplay* JFWDisplay::sManager = 0;
+JFWDisplay* JFWDisplay::sManager = NULL;
 
 bool JFWAutoAbortGfx = true;
 Mtx e_mtx = {

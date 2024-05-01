@@ -173,7 +173,7 @@ bool dNpc_PathRun_c::setInf(u8 pathIdx, s8 roomNo, u8 forwards) {
 
 /* 8021AD1C-8021AD58       .text nextPath__14dNpc_PathRun_cFSc */
 dPath* dNpc_PathRun_c::nextPath(s8 roomNo) {
-    dPath* pPath = 0;
+    dPath* pPath = NULL;
 
     if(mPath != 0) {
         pPath = dPath_GetNextRoomPath(mPath, roomNo);
@@ -543,7 +543,7 @@ void dNpc_EventCut_c::setActorInfo2(char* staffName, fopNpc_npc_c* pActor) {
 
 /* 8021B9D8-8021BABC       .text dNpc_setAnmIDRes__FP14mDoExt_McaMorfiffiiPCc */
 bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float speed, int animResId, int soundResId, const char* arcName) {
-    void* pSoundAnimRes = 0;
+    void* pSoundAnimRes = NULL;
     bool ret = false;
 
     if(pMorf != 0) {
@@ -567,7 +567,7 @@ bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 spee
     if(pMorf != 0 && animFilename != 0 && arcName != 0) {
         J3DAnmTransform* pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes(arcName, animFilename);
 
-        void* pSoundAnimRes = 0;
+        void* pSoundAnimRes = NULL;
         if(soundFilename != 0) {
             pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFilename);
         }
@@ -582,7 +582,7 @@ bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 spee
 
 /* 8021BBA8-8021BC8C       .text dNpc_setAnm__FP14mDoExt_McaMorfiffiiPCc */
 bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName) {
-    void* pSoundAnimRes = 0;
+    void* pSoundAnimRes = NULL;
     bool ret = false;
 
     if(pMorf != 0) {

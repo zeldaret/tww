@@ -33,13 +33,13 @@ ResFONT* JFWSystem::CSetUpParam::systemFontRes = (ResFONT*)JUTResFONT_Ascfont_fi
 GXRenderModeObj* JFWSystem::CSetUpParam::renderMode = &GXNtsc480IntDf;
 u32 JFWSystem::CSetUpParam::exConsoleBufferSize = 0x24F8;
 
-JKRExpHeap* JFWSystem::rootHeap = 0;
-JKRExpHeap* JFWSystem::systemHeap = 0;
-JKRThread* JFWSystem::mainThread = 0;
-JUTDbPrint* JFWSystem::debugPrint = 0;
-JUTResFont* JFWSystem::systemFont = 0;
-JUTConsoleManager* JFWSystem::systemConsoleManager = 0;
-JUTConsole* JFWSystem::systemConsole = 0;
+JKRExpHeap* JFWSystem::rootHeap = NULL;
+JKRExpHeap* JFWSystem::systemHeap = NULL;
+JKRThread* JFWSystem::mainThread = NULL;
+JUTDbPrint* JFWSystem::debugPrint = NULL;
+JUTResFont* JFWSystem::systemFont = NULL;
+JUTConsoleManager* JFWSystem::systemConsoleManager = NULL;
+JUTConsole* JFWSystem::systemConsole = NULL;
 bool JFWSystem::sInitCalled = false;
 
 /* 80254DD0-80254E54       .text firstInit__9JFWSystemFv */
