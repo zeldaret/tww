@@ -4,7 +4,6 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor.h"
 
-
 class daLbridge_c : public fopAc_ac_c {
 public:
     inline BOOL _delete();
@@ -37,9 +36,9 @@ public:
     /* 0x314 */ s32 mSwitchNo;
     /* 0x318 */ s16 mAppearEventIdx;
     /* 0x31A */ s16 mDisappearEventIdx;
-    /* 0x31C */ s16 unk31C; /* inferred */
-    /* 0x31E */ u8 mTimer;  /* inferred */
-    /* 0x31F */ u8 unk31F;  /* inferred */
+    /* 0x31C */ s16 unk31C;
+    /* 0x31E */ u8 mTimer;
+    /* 0x31F */ u8 unk31F;
 };
 
 namespace daLbridge_prm {
