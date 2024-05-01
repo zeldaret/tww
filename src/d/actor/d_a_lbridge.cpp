@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_lbridge.h"
 #include "d/d_procname.h"
+#include "d/res/res_gbrg00.h"
 
 const char daLbridge_c::m_arcname[] = "Gbrg00";
 
@@ -15,7 +16,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000384       .text CreateHeap__11daLbridge_cFv */
 BOOL daLbridge_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 7);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GBRG00_BDL_GBRG00);
     JUT_ASSERT(0xD6, modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000223U);
@@ -24,14 +25,14 @@ BOOL daLbridge_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, 0x10);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BTK_GBRG00);
     JUT_ASSERT(0xE8, pbtk != 0);
 
     if (!mBtkAnm.init(modelData, pbtk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
-    J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, 0xA);
+    J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, GBRG00_BPK_GBRG00);
     JUT_ASSERT(0xF6, pbpk != 0);
 
     if (!mBpkAnm.init(modelData, pbpk, TRUE, 0, 1.0f, 0, -1, false, 0)) {
@@ -41,7 +42,7 @@ BOOL daLbridge_c::CreateHeap() {
     mBpkAnm.setFrame(0.0f);
     mBpkAnm.setPlaySpeed(1.0f);
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, 0xD);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BRK_GBRG00);
     JUT_ASSERT(0x106, pbrk != 0);
 
     if (!mBrkAnm.init(modelData, pbrk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
@@ -53,10 +54,7 @@ BOOL daLbridge_c::CreateHeap() {
     mpBgW = new dBgW();
 
     if (mpBgW != NULL) {
-        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, 0x13), cBgW::MOVE_BG_e, &mMtx) ==
-                       true ?
-                   FALSE :
-                   TRUE;
+        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, GBRG00_DZB_HHASHI1), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
     }
 
     return FALSE;
@@ -164,7 +162,7 @@ void daLbridge_c::sw_check() {
 
     if (!isSw) {
         if (mBpkAnm.getFrame() == (f32)mBpkAnm.getFrameCtrl()->getStart()) {
-            fopDwTg_DrawQTo(&draw_tag);
+            fopAcM_offDraw(this);
         }
 
         if (mpEmitter != NULL) {
@@ -173,7 +171,7 @@ void daLbridge_c::sw_check() {
             mpEmitter->setGlobalAlpha(alpha);
         }
     } else {
-        fopDwTg_ToDrawQ(&draw_tag, fpcLf_GetPriority(this));
+        fopAcM_onDraw(this);
 
         cLib_calcTimer(&mTimer);
 
