@@ -38,7 +38,7 @@ public:
     /* 0x318 */ s16 mAppearEventIdx;
     /* 0x31A */ s16 mDisappearEventIdx;
     /* 0x31C */ s16 unk31C; /* inferred */
-    /* 0x31E */ u8 unk31E;  /* inferred */
+    /* 0x31E */ u8 mTimer;  /* inferred */
     /* 0x31F */ u8 unk31F;  /* inferred */
 };
 

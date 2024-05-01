@@ -103,7 +103,44 @@ BOOL daLbridge_c::_execute() {
 
 /* 00000914-00000A6C       .text sw_check__11daLbridge_cFv */
 void daLbridge_c::sw_check() {
-    /* Nonmatching */
+
+    bool isSw = fopAcM_isSwitch(this, mSwitchNo);
+
+    if (mSwitchNo == 0xFF){
+        return;
+    }
+    
+    if (isSw != unk31F) {
+        if (isSw) {
+            appear_bridge();
+        } else {
+            disappear_bridge();
+        }
+    }
+
+    u8 alpha;
+
+    if (!isSw) {
+        if (mBpkAnm.getFrame() == mBpkAnm.getFrameCtrl()->getStart()) {
+            fopDwTg_DrawQTo(&draw_tag);
+        }
+
+        if (mpEmitter != NULL) {
+            alpha = mpEmitter->getGlobalAlpha();
+            cLib_chaseUC(&alpha, 0x0, 0x8);
+            mpEmitter->setGlobalAlpha(alpha);
+        }
+    } else {
+        fopDwTg_ToDrawQ(&draw_tag, fpcLf_GetPriority(this));
+
+        cLib_calcTimer(&mTimer);
+
+        if (mTimer == 0 && mpEmitter != NULL) {
+            alpha = mpEmitter->getGlobalAlpha();
+            cLib_chaseUC(&alpha, 0xFF, 0x8);
+            mpEmitter->setGlobalAlpha(alpha);
+        }
+    }
 }
 
 /* 00000A6C-00000C18       .text demo__11daLbridge_cFv */
