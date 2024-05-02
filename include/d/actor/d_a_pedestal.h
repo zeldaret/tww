@@ -38,7 +38,9 @@ namespace daPedestal {
         void playBrkAnm();
         BOOL _execute();
         BOOL _draw();
-    
+
+        static const char m_arcname[];
+
     public:
         /* 0x290 */ u8 m290[0x298 - 0x290];
         /* 0x298 */ J3DModel* mpModel;
