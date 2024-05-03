@@ -32,7 +32,7 @@ namespace daPedestal {
     class daPds_c : public fopAc_ac_c {
     public:
         BOOL _delete();
-        void CreateHeap();
+        BOOL CreateHeap();
         void CreateInit();
         s32 _create();
         void getMyStaffId();

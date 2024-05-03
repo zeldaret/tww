@@ -23,12 +23,12 @@ BOOL daPds_c::_delete() {
 }
 
 /* 000000DC-000000FC       .text CheckCreateHeap__10daPedestalFP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daPds_c*>(i_this)->CreateHeap();
 }
 
 /* 000000FC-00000244       .text CreateHeap__Q210daPedestal7daPds_cFv */
-void daPds_c::CreateHeap() {
+BOOL daPds_c::CreateHeap() {
     /* Nonmatching */
 }
 
