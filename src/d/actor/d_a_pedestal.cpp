@@ -12,7 +12,14 @@ const char daPds_c::m_arcname[] = "Hdai1";
 
 /* 00000078-000000DC       .text _delete__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::_delete() {
-    /* Nonmatching */
+    if (heap != NULL) {
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
+
+    mInfiniteEcallBack.end();
+    dComIfG_resDelete(&mPhs, m_arcname);
+
+    return TRUE;
 }
 
 /* 000000DC-000000FC       .text CheckCreateHeap__10daPedestalFP10fopAc_ac_c */

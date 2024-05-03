@@ -9,12 +9,32 @@
 #include "m_Do/m_Do_ext.h"
 
 namespace daPedestal {
+
     static BOOL CheckCreateHeap(fopAc_ac_c*);
     static s32 daPds_Create(void*);
     static BOOL daPds_Delete(void*);
     static BOOL daPds_Draw(void*);
     static BOOL daPds_Execute(void*);
     static BOOL daPds_IsDelete(void*);
+
+    class daPds_infiniteEcallBack_c : public dPa_levelEcallBack {
+    public:
+        void execute(JPABaseEmitter*);
+        void end();
+        void makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*);
+
+        void getEmitter() {}
+        void setAngle(const csXyz*) {}
+        void setPos(const cXyz*) {}
+        void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, signed char) {
+            mpEmitter = emitter;
+        }
+
+    public:
+        /* 0x04 */ JPABaseEmitter* mpEmitter;
+        /* 0x08 */ const cXyz* mpPos;
+        /* 0x08 */ const csXyz* mpAngle;
+    };
 
     class daPds_c : public fopAc_ac_c {
     public:
@@ -44,30 +64,13 @@ namespace daPedestal {
         static const char m_arcname[];
 
     public:
-        /* 0x290 */ u8 m290[0x298 - 0x290];
+        /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ J3DModel* mpModel;
         /* 0x29C */ mDoExt_brkAnm mBrk;
         /* 0x2B4 */ u8 m2B4[0x2E4 - 0x2B4];
         /* 0x2E4 */ dBgW* mpBgW;
-        /* 0x2E8 */ u8 m2E8[0x324 - 0x2E8];
-    };
-
-    class daPds_infiniteEcallBack_c : public dPa_levelEcallBack {
-        void execute(JPABaseEmitter*);
-        void end();
-        void makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*);
-
-        void getEmitter() {}
-        void setAngle(const csXyz*) {}
-        void setPos(const cXyz*) {}
-        void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, signed char) {
-            mpEmitter = emitter;
-        }
-
-    public:
-        /* 0x04 */ JPABaseEmitter* mpEmitter;
-        /* 0x08 */ const cXyz* mpPos;
-        /* 0x08 */ const csXyz* mpAngle;
+        /* 0x2E8 */ daPds_infiniteEcallBack_c mInfiniteEcallBack;
+        /* 0x2F4 */ u8 m2F4[0x324 - 0x2F4];
     };
 };
 
