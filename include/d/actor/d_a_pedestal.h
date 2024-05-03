@@ -1,8 +1,10 @@
 #ifndef D_A_PEDESTAL_H
 #define D_A_PEDESTAL_H
 
-#include "f_op/f_op_actor.h"
 #include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor.h"
+
 #include "d/d_particle.h"
 #include "m_Do/m_Do_ext.h"
 
@@ -58,7 +60,14 @@ namespace daPedestal {
         void getEmitter() {}
         void setAngle(const csXyz*) {}
         void setPos(const cXyz*) {}
-        void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {}
+        void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, signed char) {
+            mpEmitter = emitter;
+        }
+
+    public:
+        /* 0x04 */ JPABaseEmitter* mpEmitter;
+        /* 0x08 */ const cXyz* mpPos;
+        /* 0x08 */ const csXyz* mpAngle;
     };
 };
 

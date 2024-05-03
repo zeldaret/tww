@@ -151,18 +151,41 @@ BOOL daPds_IsDelete(void*) {
 }
 
 /* 00000FA4-00001008       .text execute__Q210daPedestal25daPds_infiniteEcallBack_cFP14JPABaseEmitter */
-void daPds_infiniteEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPds_infiniteEcallBack_c::execute(JPABaseEmitter* emitter) {
+    if (mpPos != NULL) {
+        emitter->setGlobalTranslation(mpPos->x, mpPos->y, mpPos->z);
+    }
+
+    if (mpAngle != NULL) {
+        JGeometry::TVec3<s16> rot;
+
+        rot.x = mpAngle->x;
+        rot.y = mpAngle->y;
+        rot.z = mpAngle->z;
+
+        emitter->setGlobalRotation(rot);
+    }
 }
 
 /* 00001008-00001044       .text end__Q210daPedestal25daPds_infiniteEcallBack_cFv */
 void daPds_infiniteEcallBack_c::end() {
-    /* Nonmatching */
+    if (mpEmitter != NULL) {
+        mpEmitter->becomeInvalidEmitter();
+        mpEmitter->setEmitterCallBackPtr(NULL);
+
+        mpEmitter = NULL;
+        mpPos = NULL;
+        mpAngle = NULL;
+    }
 }
 
 /* 00001044-000010D4       .text makeEmitter__Q210daPedestal25daPds_infiniteEcallBack_cFUsPC4cXyzPC5csXyzPC4cXyz */
-void daPds_infiniteEcallBack_c::makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*) {
-    /* Nonmatching */
+void daPds_infiniteEcallBack_c::makeEmitter(unsigned short particleID, const cXyz* pos, const csXyz* angle, const cXyz* scale) {
+    end();
+    dComIfGp_particle_set(particleID, pos, angle, scale, 0xFF, this);
+
+    mpPos = pos;
+    mpAngle = angle;
 }
 
 static actor_method_class daActMethodTable = {
