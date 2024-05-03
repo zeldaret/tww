@@ -8,6 +8,12 @@
 
 namespace daPedestal {
 
+static const char* l_os_name[] = {
+    "Os",
+    "Os1",
+    "Os2"
+};
+
 const char daPds_c::m_arcname[] = "Hdai1";
 
 /* 00000078-000000DC       .text _delete__Q210daPedestal7daPds_cFv */
@@ -43,8 +49,16 @@ s32 daPds_c::_create() {
 }
 
 /* 00000474-0000052C       .text getMyStaffId__Q210daPedestal7daPds_cFv */
-void daPds_c::getMyStaffId() {
-    /* Nonmatching */
+int daPds_c::getMyStaffId() {
+    if (subtype == 0) {
+        return dComIfGp_evmng_getMyStaffId("Hdai1");
+    } else if (subtype == 1) {
+        return dComIfGp_evmng_getMyStaffId("Hdai2");
+    } else if (subtype == 2) {
+        return dComIfGp_evmng_getMyStaffId("Hdai3");
+    }
+
+    return -1;
 }
 
 /* 0000052C-000005D8       .text wakeupCheck__Q210daPedestal7daPds_cFv */

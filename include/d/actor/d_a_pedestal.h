@@ -35,7 +35,7 @@ namespace daPedestal {
         BOOL CreateHeap();
         void CreateInit();
         s32 _create();
-        void getMyStaffId();
+        int getMyStaffId();
         void wakeupCheck();
         void finishCheck();
         void setAction(int (daPedestal::daPds_c::*)(void*), void*);
