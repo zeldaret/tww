@@ -10,13 +10,6 @@
 
 namespace daPedestal {
 
-    static BOOL CheckCreateHeap(fopAc_ac_c*);
-    static s32 daPds_Create(void*);
-    static BOOL daPds_Delete(void*);
-    static BOOL daPds_Draw(void*);
-    static BOOL daPds_Execute(void*);
-    static BOOL daPds_IsDelete(void*);
-
     class daPds_infiniteEcallBack_c : public dPa_levelEcallBack {
     public:
         void execute(JPABaseEmitter*);

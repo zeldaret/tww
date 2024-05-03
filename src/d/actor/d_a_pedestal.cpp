@@ -23,7 +23,7 @@ BOOL daPds_c::_delete() {
 }
 
 /* 000000DC-000000FC       .text CheckCreateHeap__10daPedestalFP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -133,27 +133,27 @@ BOOL daPds_c::_draw() {
 }
 
 /* 00000F10-00000F30       .text daPds_Create__10daPedestalFPv */
-s32 daPds_Create(void* i_this) {
+static s32 daPds_Create(void* i_this) {
     return static_cast<daPds_c*>(i_this)->_create();
 }
 
 /* 00000F30-00000F54       .text daPds_Delete__10daPedestalFPv */
-BOOL daPds_Delete(void* i_this) {
+static BOOL daPds_Delete(void* i_this) {
     return (u8) static_cast<daPds_c*>(i_this)->_delete();
 }
 
 /* 00000F54-00000F78       .text daPds_Draw__10daPedestalFPv */
-BOOL daPds_Draw(void* i_this) {
+static BOOL daPds_Draw(void* i_this) {
     return (u8) static_cast<daPds_c*>(i_this)->_draw();
 }
 
 /* 00000F78-00000F9C       .text daPds_Execute__10daPedestalFPv */
-BOOL daPds_Execute(void* i_this) {
+static BOOL daPds_Execute(void* i_this) {
     return (u8) static_cast<daPds_c*>(i_this)->_execute();
 }
 
 /* 00000F9C-00000FA4       .text daPds_IsDelete__10daPedestalFPv */
-BOOL daPds_IsDelete(void*) {
+static BOOL daPds_IsDelete(void*) {
     return TRUE;
 }
 
