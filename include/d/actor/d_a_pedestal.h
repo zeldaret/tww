@@ -19,9 +19,7 @@ namespace daPedestal {
         JPABaseEmitter* getEmitter() { return mpEmitter; }
         void setAngle(const csXyz*) {}
         void setPos(const cXyz*) {}
-        void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, signed char) {
-            mpEmitter = emitter;
-        }
+        void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, signed char);
 
     public:
         /* 0x04 */ JPABaseEmitter* mpEmitter;

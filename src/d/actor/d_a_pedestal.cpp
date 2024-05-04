@@ -7,18 +7,10 @@
 #include "d/d_procname.h"
 #include "d/res/res_hdai1.h"
 
-static char* l_os_name[] = {
-    "Os",
-    "Os1",
-    "Os2"
-};
-
-namespace daPedestal {
-
-const char daPds_c::m_arcname[] = "Hdai1";
+const char daPedestal::daPds_c::m_arcname[] = "Hdai1";
 
 /* 00000078-000000DC       .text _delete__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::_delete() {
+BOOL daPedestal::daPds_c::_delete() {
     if (heap != NULL) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
@@ -31,11 +23,11 @@ BOOL daPds_c::_delete() {
 
 /* 000000DC-000000FC       .text CheckCreateHeap__10daPedestalFP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
-    return static_cast<daPds_c*>(i_this)->CreateHeap();
+    return static_cast<daPedestal::daPds_c*>(i_this)->CreateHeap();
 }
 
 /* 000000FC-00000244       .text CreateHeap__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::CreateHeap() {
+BOOL daPedestal::daPds_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, HDAI1_BDL_HDAI1));
     JUT_ASSERT(0xC1, modelData != 0);
 
@@ -57,8 +49,14 @@ BOOL daPds_c::CreateHeap() {
     return FALSE;
 }
 
+static char* l_os_name[] = {
+    "Os",
+    "Os1",
+    "Os2"
+};
+
 /* 00000244-00000380       .text CreateInit__Q210daPedestal7daPds_cFv */
-void daPds_c::CreateInit() {
+void daPedestal::daPds_c::CreateInit() {
     mParam = daPds__prm::getParam(this);
 
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -86,8 +84,8 @@ void daPds_c::CreateInit() {
 }
 
 /* 00000380-00000474       .text _create__Q210daPedestal7daPds_cFv */
-s32 daPds_c::_create() {
-    fopAcM_SetupActor(this, daPds_c);
+s32 daPedestal::daPds_c::_create() {
+    fopAcM_SetupActor(this, daPedestal::daPds_c);
 
     s32 phase_state = dComIfG_resLoad(&mPhs, m_arcname);
 
@@ -104,7 +102,7 @@ s32 daPds_c::_create() {
 }
 
 /* 00000474-0000052C       .text getMyStaffId__Q210daPedestal7daPds_cFv */
-int daPds_c::getMyStaffId() {
+int daPedestal::daPds_c::getMyStaffId() {
     if (subtype == 0) {
         return dComIfGp_evmng_getMyStaffId("Hdai1");
     } else if (subtype == 1) {
@@ -117,7 +115,7 @@ int daPds_c::getMyStaffId() {
 }
 
 /* 0000052C-000005D8       .text wakeupCheck__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::wakeupCheck() {
+BOOL daPedestal::daPds_c::wakeupCheck() {
     if (subtype == 0) {
         if (dComIfGs_isEventBit(0x1780)) {
             return TRUE;
@@ -136,7 +134,7 @@ BOOL daPds_c::wakeupCheck() {
 }
 
 /* 000005D8-00000684       .text finishCheck__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::finishCheck() {
+BOOL daPedestal::daPds_c::finishCheck() {
     if (subtype == 0) {
         if (dComIfGs_isEventBit(0x1710)) {
             return TRUE;
@@ -155,7 +153,7 @@ BOOL daPds_c::finishCheck() {
 }
 
 /* 00000684-0000073C       .text setAction__Q210daPedestal7daPds_cFMQ210daPedestal7daPds_cFPCvPvPv_iPv */
-BOOL daPds_c::setAction(ActionFunc_t action, void* param_1) {
+BOOL daPedestal::daPds_c::setAction(ActionFunc_t action, void* param_1) {
     if (mAction != NULL) {
         unk30C = 0xFF;
         (this->*mAction)(param_1);
@@ -174,29 +172,29 @@ BOOL daPds_c::setAction(ActionFunc_t action, void* param_1) {
 }
 
 /* 0000073C-000007C4       .text action__Q210daPedestal7daPds_cFPv */
-void daPds_c::action(void*) {
+void daPedestal::daPds_c::action(void*) {
     /* Nonmatching */
 }
 
 /* 000007C4-000007E0       .text waitAction__Q210daPedestal7daPds_cFPv */
-BOOL daPds_c::waitAction(void*) {
+BOOL daPedestal::daPds_c::waitAction(void*) {
     /* Nonmatching */
 }
 
-typedef void (daPds_c::* eventInitFunc)(int);
+typedef void (daPedestal::daPds_c::* eventInitFunc)(int);
 static eventInitFunc event_init_tbl[] = {
-    &daPds_c::initialDefault,
-    &daPds_c::initialMoveEvent,
-    &daPds_c::initialEffectSet,
-    &daPds_c::initialEffectEnd,
+    &daPedestal::daPds_c::initialDefault,
+    &daPedestal::daPds_c::initialMoveEvent,
+    &daPedestal::daPds_c::initialEffectSet,
+    &daPedestal::daPds_c::initialEffectEnd,
 };
 
-typedef BOOL (daPds_c::* eventActionFunc)(int);
+typedef BOOL (daPedestal::daPds_c::* eventActionFunc)(int);
 static eventActionFunc event_action_tbl[] = {
-    &daPds_c::actionDefault,
-    &daPds_c::actionMoveEvent,
-    &daPds_c::actionDefault,
-    &daPds_c::actionDefault,
+    &daPedestal::daPds_c::actionDefault,
+    &daPedestal::daPds_c::actionMoveEvent,
+    &daPedestal::daPds_c::actionDefault,
+    &daPedestal::daPds_c::actionDefault,
 };
 
 static char* cut_name_tbl[] = {
@@ -207,42 +205,42 @@ static char* cut_name_tbl[] = {
 };
 
 /* 000007E0-000008E4       .text eventProc__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::eventProc() {
+BOOL daPedestal::daPds_c::eventProc() {
     /* Nonmatching */
 }
 
 /* 000008E4-000008E8       .text initialDefault__Q210daPedestal7daPds_cFi */
-void daPds_c::initialDefault(int) {
+void daPedestal::daPds_c::initialDefault(int) {
     /* Nonmatching */
 }
 
 /* 000008E8-000008F0       .text actionDefault__Q210daPedestal7daPds_cFi */
-BOOL daPds_c::actionDefault(int) {
+BOOL daPedestal::daPds_c::actionDefault(int) {
     return TRUE;
 }
 
 /* 000008F0-000009A8       .text initialMoveEvent__Q210daPedestal7daPds_cFi */
-void daPds_c::initialMoveEvent(int) {
+void daPedestal::daPds_c::initialMoveEvent(int) {
     /* Nonmatching */
 }
 
 /* 000009A8-00000AEC       .text actionMoveEvent__Q210daPedestal7daPds_cFi */
-BOOL daPds_c::actionMoveEvent(int) {
+BOOL daPedestal::daPds_c::actionMoveEvent(int) {
     /* Nonmatching */
 }
 
 /* 00000AEC-00000B40       .text initialEffectSet__Q210daPedestal7daPds_cFi */
-void daPds_c::initialEffectSet(int) {
+void daPedestal::daPds_c::initialEffectSet(int) {
     /* Nonmatching */
 }
 
 /* 00000B40-00000B80       .text initialEffectEnd__Q210daPedestal7daPds_cFi */
-void daPds_c::initialEffectEnd(int) {
+void daPedestal::daPds_c::initialEffectEnd(int) {
     /* Nonmatching */
 }
 
 /* 00000B80-00000C10       .text set_mtx__Q210daPedestal7daPds_cFv */
-void daPds_c::set_mtx() {
+void daPedestal::daPds_c::set_mtx() {
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -251,17 +249,17 @@ void daPds_c::set_mtx() {
 }
 
 /* 00000C10-00000D58       .text initBrkAnm__Q210daPedestal7daPds_cFUcb */
-BOOL daPds_c::initBrkAnm(u8 param_1, bool param_2) {
+BOOL daPedestal::daPds_c::initBrkAnm(u8 param_1, bool param_2) {
     /* Nonmatching */
 }
 
 /* 00000D58-00000D98       .text playBrkAnm__Q210daPedestal7daPds_cFv */
-void daPds_c::playBrkAnm() {
+void daPedestal::daPds_c::playBrkAnm() {
     /* Nonmatching */
 }
 
 /* 00000D98-00000E48       .text _execute__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::_execute() {
+BOOL daPedestal::daPds_c::_execute() {
     playBrkAnm();
 
     if (!eventProc()) {
@@ -279,11 +277,13 @@ BOOL daPds_c::_execute() {
 }
 
 /* 00000E48-00000F10       .text _draw__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::_draw() {
+BOOL daPedestal::daPds_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00000F10-00000F30       .text daPds_Create__10daPedestalFPv */
+namespace daPedestal {
+
+/* 00000F10-00000F30       .text daPedestal::daPds_create__10daPedestalFPv */
 static s32 daPds_Create(void* i_this) {
     return static_cast<daPds_c*>(i_this)->_create();
 }
@@ -344,6 +344,10 @@ void daPds_infiniteEcallBack_c::makeEmitter(unsigned short particleID, const cXy
 
     mpPos = pos;
     mpAngle = angle;
+}
+
+void daPds_infiniteEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, signed char) {
+    mpEmitter = emitter;
 }
 
 static actor_method_class daActMethodTable = {
