@@ -206,7 +206,11 @@ void daPds_c::initialEffectEnd(int) {
 
 /* 00000B80-00000C10       .text set_mtx__Q210daPedestal7daPds_cFv */
 void daPds_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 }
 
 /* 00000C10-00000D58       .text initBrkAnm__Q210daPedestal7daPds_cFUcb */
