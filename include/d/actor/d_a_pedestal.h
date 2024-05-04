@@ -31,6 +31,8 @@ namespace daPedestal {
 
     class daPds_c : public fopAc_ac_c {
     public:
+        typedef int (daPds_c::* ActionFunc_t)(void*);
+
         BOOL _delete();
         BOOL CreateHeap();
         void CreateInit();
@@ -38,7 +40,7 @@ namespace daPedestal {
         int getMyStaffId();
         BOOL wakeupCheck();
         BOOL finishCheck();
-        void setAction(int (daPedestal::daPds_c::*)(void*), void*);
+        BOOL setAction(ActionFunc_t, void*);
         void action(void*);
         BOOL waitAction(void*);
         BOOL eventProc();
@@ -63,13 +65,10 @@ namespace daPedestal {
         /* 0x2B4 */ Mtx mMtx;
         /* 0x2E4 */ dBgW* mpBgW;
         /* 0x2E8 */ daPds_infiniteEcallBack_c mInfiniteEcallBack;
-        //    /* 0x2F8 */ ? unk2F8;                           /* inferred */
-        /* 0x2F8 */ char pad2F8[4];
-        /* 0x2FC */ s32 unk2FC;     /* inferred */
-        /* 0x300 */ s32 unk300;     /* inferred */
+        /* 0x2F8 */ ActionFunc_t mAction;
         /* 0x304 */ f32 unk304;     /* inferred */
         /* 0x308 */ f32 unk308;     /* inferred */
-        /* 0x30C */ u8 unk30C;      /* inferred */
+        /* 0x30C */ s8 unk30C;      /* inferred */
         /* 0x30D */ u8 mParam;      /* inferred */
         /* 0x30E */ u8 unk30E;      /* inferred */
         /* 0x30F */ s8 unk30F;      /* inferred */

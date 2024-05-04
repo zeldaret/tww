@@ -155,8 +155,22 @@ BOOL daPds_c::finishCheck() {
 }
 
 /* 00000684-0000073C       .text setAction__Q210daPedestal7daPds_cFMQ210daPedestal7daPds_cFPCvPvPv_iPv */
-void daPds_c::setAction(int (daPds_c::*)(void*), void*) {
-    /* Nonmatching */
+BOOL daPds_c::setAction(ActionFunc_t action, void* param_1) {
+    if (mAction != NULL) {
+        unk30C = 0xFF;
+        (this->*mAction)(param_1);
+    }
+
+    mAction = action;
+    unk30C = 0;
+    unk310 = 0;
+    unk312 = 0;
+    unk314 = 0;
+    unk316 = 0;
+    unk31C = 0.0f;
+    (this->*mAction)(param_1);
+
+    return TRUE;
 }
 
 /* 0000073C-000007C4       .text action__Q210daPedestal7daPds_cFPv */
