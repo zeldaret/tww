@@ -170,7 +170,7 @@ void daPds_c::waitAction(void*) {
 }
 
 /* 000007E0-000008E4       .text eventProc__Q210daPedestal7daPds_cFv */
-void daPds_c::eventProc() {
+BOOL daPds_c::eventProc() {
     /* Nonmatching */
 }
 
@@ -225,7 +225,20 @@ void daPds_c::playBrkAnm() {
 
 /* 00000D98-00000E48       .text _execute__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::_execute() {
-    /* Nonmatching */
+    playBrkAnm();
+
+    if (!eventProc()) {
+        action(NULL);
+    }
+
+    set_mtx();
+    mpBgW->Move();
+
+    if (mInfiniteEcallBack.getEmitter() != NULL) {
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_ST_DAI_LIGHT, 0);
+    }
+
+    return TRUE;
 }
 
 /* 00000E48-00000F10       .text _draw__Q210daPedestal7daPds_cFv */

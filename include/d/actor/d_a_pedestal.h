@@ -16,7 +16,7 @@ namespace daPedestal {
         void end();
         void makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*);
 
-        void getEmitter() {}
+        JPABaseEmitter* getEmitter() { return mpEmitter; }
         void setAngle(const csXyz*) {}
         void setPos(const cXyz*) {}
         void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, signed char) {
@@ -41,7 +41,7 @@ namespace daPedestal {
         void setAction(int (daPedestal::daPds_c::*)(void*), void*);
         void action(void*);
         void waitAction(void*);
-        void eventProc();
+        BOOL eventProc();
         void initialDefault(int);
         void actionDefault(int);
         void initialMoveEvent(int);
