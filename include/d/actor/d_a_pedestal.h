@@ -49,7 +49,7 @@ namespace daPedestal {
         void initialEffectSet(int);
         void initialEffectEnd(int);
         void set_mtx();
-        void initBrkAnm(unsigned char, bool);
+        BOOL initBrkAnm(u8, bool);
         void playBrkAnm();
         BOOL _execute();
         BOOL _draw();
@@ -60,7 +60,7 @@ namespace daPedestal {
         /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ J3DModel* mpModel;
         /* 0x29C */ mDoExt_brkAnm mBrk;
-        /* 0x2B4 */ u8 m2B4[0x2E4 - 0x2B4];
+        /* 0x2B4 */ Mtx mMtx;
         /* 0x2E4 */ dBgW* mpBgW;
         /* 0x2E8 */ daPds_infiniteEcallBack_c mInfiniteEcallBack;
         //    /* 0x2F8 */ ? unk2F8;                           /* inferred */

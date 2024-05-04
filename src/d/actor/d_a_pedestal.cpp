@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_pedestal.h"
 #include "d/d_procname.h"
+#include "d/res/res_hdai1.h"
 
 static char* l_os_name[] = {
     "Os",
@@ -35,7 +36,25 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000FC-00000244       .text CreateHeap__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, HDAI1_BDL_HDAI1));
+    JUT_ASSERT(0xC1, modelData != 0);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
+
+    if (!mpModel) {
+        return FALSE;
+    }
+    if(!initBrkAnm(3, false)) {
+        return FALSE;
+    }
+
+    mpBgW = new dBgW();
+
+   if (mpBgW != NULL) {
+        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, HDAI1_DZB_HDAI), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000244-00000380       .text CreateInit__Q210daPedestal7daPds_cFv */
@@ -178,7 +197,7 @@ void daPds_c::set_mtx() {
 }
 
 /* 00000C10-00000D58       .text initBrkAnm__Q210daPedestal7daPds_cFUcb */
-void daPds_c::initBrkAnm(unsigned char, bool) {
+BOOL daPds_c::initBrkAnm(u8 param_1, bool param_2) {
     /* Nonmatching */
 }
 
