@@ -107,19 +107,19 @@ BOOL daPds_c::wakeupCheck() {
 BOOL daPds_c::finishCheck() {
     if (subtype == 0) {
         if (dComIfGs_isEventBit(0x1710)) {
-            return true;
+            return TRUE;
         }
     } else if (subtype == 1) {
         if (dComIfGs_isEventBit(0x1704)) {
-            return true;
+            return TRUE;
         }
     } else if (subtype == 2) {
         if (dComIfGs_isEventBit(0x1B01)) {
-            return true;
+            return TRUE;
         }
     }
 
-    return false;
+    return FALSE;
 }
 
 /* 00000684-0000073C       .text setAction__Q210daPedestal7daPds_cFMQ210daPedestal7daPds_cFPCvPvPv_iPv */
