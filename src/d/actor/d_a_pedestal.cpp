@@ -278,7 +278,20 @@ BOOL daPedestal::daPds_c::_execute() {
 
 /* 00000E48-00000F10       .text _draw__Q210daPedestal7daPds_cFv */
 BOOL daPedestal::daPds_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    dComIfGd_setListBG();
+
+    J3DModelData* modelData = mpModel->getModelData();
+
+    mBrk.entry(modelData);
+    mDoExt_modelUpdateDL(mpModel);
+    modelData->getMaterialTable().removeTevRegAnimator(mBrk.getBrkAnm());
+
+    dComIfGd_setList();
+
+    return TRUE;
 }
 
 namespace daPedestal {
