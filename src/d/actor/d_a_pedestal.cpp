@@ -165,9 +165,32 @@ void daPds_c::action(void*) {
 }
 
 /* 000007C4-000007E0       .text waitAction__Q210daPedestal7daPds_cFPv */
-void daPds_c::waitAction(void*) {
+BOOL daPds_c::waitAction(void*) {
     /* Nonmatching */
 }
+
+typedef void (daPds_c::* eventInitFunc)(int);
+static eventInitFunc event_init_tbl[] = {
+    &daPds_c::initialDefault,
+    &daPds_c::initialMoveEvent,
+    &daPds_c::initialEffectSet,
+    &daPds_c::initialEffectEnd,
+};
+
+typedef BOOL (daPds_c::* eventActionFunc)(int);
+static eventActionFunc event_action_tbl[] = {
+    &daPds_c::actionDefault,
+    &daPds_c::actionMoveEvent,
+    &daPds_c::actionDefault,
+    &daPds_c::actionDefault,
+};
+
+static char* cut_name_tbl[] = {
+    "WAIT",
+    "MOVE",
+    "EFFSET",
+    "EFFEND"
+};
 
 /* 000007E0-000008E4       .text eventProc__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::eventProc() {
@@ -180,8 +203,8 @@ void daPds_c::initialDefault(int) {
 }
 
 /* 000008E8-000008F0       .text actionDefault__Q210daPedestal7daPds_cFi */
-void daPds_c::actionDefault(int) {
-    /* Nonmatching */
+BOOL daPds_c::actionDefault(int) {
+    return TRUE;
 }
 
 /* 000008F0-000009A8       .text initialMoveEvent__Q210daPedestal7daPds_cFi */
@@ -190,7 +213,7 @@ void daPds_c::initialMoveEvent(int) {
 }
 
 /* 000009A8-00000AEC       .text actionMoveEvent__Q210daPedestal7daPds_cFi */
-void daPds_c::actionMoveEvent(int) {
+BOOL daPds_c::actionMoveEvent(int) {
     /* Nonmatching */
 }
 

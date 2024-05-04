@@ -40,12 +40,12 @@ namespace daPedestal {
         BOOL finishCheck();
         void setAction(int (daPedestal::daPds_c::*)(void*), void*);
         void action(void*);
-        void waitAction(void*);
+        BOOL waitAction(void*);
         BOOL eventProc();
         void initialDefault(int);
-        void actionDefault(int);
+        BOOL actionDefault(int);
         void initialMoveEvent(int);
-        void actionMoveEvent(int);
+        BOOL actionMoveEvent(int);
         void initialEffectSet(int);
         void initialEffectEnd(int);
         void set_mtx();
