@@ -6,13 +6,13 @@
 #include "d/actor/d_a_pedestal.h"
 #include "d/d_procname.h"
 
-namespace daPedestal {
-
-static const char* l_os_name[] = {
+static char* l_os_name[] = {
     "Os",
     "Os1",
     "Os2"
 };
+
+namespace daPedestal {
 
 const char daPds_c::m_arcname[] = "Hdai1";
 
@@ -40,7 +40,30 @@ BOOL daPds_c::CreateHeap() {
 
 /* 00000244-00000380       .text CreateInit__Q210daPedestal7daPds_cFv */
 void daPds_c::CreateInit() {
-    /* Nonmatching */
+    mParam = daPds__prm::getParam(this);
+
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -150.0f, -20.0f, -150.0f, 150.0f, 250.0f, 150.0f);
+
+    if (!mParam) {
+        if (wakeupCheck()) {
+            if (subtype <= 2) {
+                fopAc_ac_c* pActor = fopAcM_searchFromName(l_os_name[subtype], 0, 0);
+
+                if (pActor != NULL && fopAcM_searchActorDistanceXZ(this, pActor) < 100.0f) {
+                    pActor->current.pos.y = current.pos.y;
+                }
+            }
+
+            current.pos.y -= 240.0f;
+        }
+    } else if (mParam == 1 && finishCheck()) {
+        current.pos.y += 240.0f;
+    }
+
+    set_mtx();
+    dComIfG_Bgsp()->Regist(mpBgW, this);
+    mpBgW->Move();
 }
 
 /* 00000380-00000474       .text _create__Q210daPedestal7daPds_cFv */
@@ -62,13 +85,41 @@ int daPds_c::getMyStaffId() {
 }
 
 /* 0000052C-000005D8       .text wakeupCheck__Q210daPedestal7daPds_cFv */
-void daPds_c::wakeupCheck() {
-    /* Nonmatching */
+BOOL daPds_c::wakeupCheck() {
+    if (subtype == 0) {
+        if (dComIfGs_isEventBit(0x1780)) {
+            return TRUE;
+        }
+    } else if (subtype == 1) {
+        if (dComIfGs_isEventBit(0x1740)) {
+            return TRUE;
+        }
+    } else if (subtype == 2) {
+        if (dComIfGs_isEventBit(0x1720)) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 /* 000005D8-00000684       .text finishCheck__Q210daPedestal7daPds_cFv */
-void daPds_c::finishCheck() {
-    /* Nonmatching */
+BOOL daPds_c::finishCheck() {
+    if (subtype == 0) {
+        if (dComIfGs_isEventBit(0x1710)) {
+            return true;
+        }
+    } else if (subtype == 1) {
+        if (dComIfGs_isEventBit(0x1704)) {
+            return true;
+        }
+    } else if (subtype == 2) {
+        if (dComIfGs_isEventBit(0x1B01)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* 00000684-0000073C       .text setAction__Q210daPedestal7daPds_cFMQ210daPedestal7daPds_cFPCvPvPv_iPv */
