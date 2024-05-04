@@ -87,7 +87,20 @@ void daPds_c::CreateInit() {
 
 /* 00000380-00000474       .text _create__Q210daPedestal7daPds_cFv */
 s32 daPds_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daPds_c);
+
+    s32 phase_state = dComIfG_resLoad(&mPhs, m_arcname);
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2000)) {
+            mpBgW = NULL;
+            return cPhs_ERROR_e;
+        }
+
+        CreateInit();
+    }
+
+    return phase_state;
 }
 
 /* 00000474-0000052C       .text getMyStaffId__Q210daPedestal7daPds_cFv */
