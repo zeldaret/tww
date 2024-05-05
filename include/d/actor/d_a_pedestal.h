@@ -77,12 +77,6 @@ namespace daPedestal {
         /* 0x318 */ char pad318[4];
         /* 0x31C */ f32 unk31C;
     };
-
-    namespace daPds__prm {
-    inline u8 getParam(daPds_c* ac) { // TODO: Rename this
-        return (fopAcM_GetParam(ac) >> 0) & 0xFF;
-    }
-    }  // namespace daPds__prm
 };  // namespace daPedestal
 
 #endif /* D_A_PEDESTAL_H */

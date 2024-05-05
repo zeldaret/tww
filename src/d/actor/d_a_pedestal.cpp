@@ -66,7 +66,7 @@ static char* l_os_name[] = {
 
 /* 00000244-00000380       .text CreateInit__Q210daPedestal7daPds_cFv */
 void daPedestal::daPds_c::CreateInit() {
-    mParam = daPds__prm::getParam(this);
+    mParam = fopAcM_GetParam(this) & 0xFF;
 
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -150.0f, -20.0f, -150.0f, 150.0f, 250.0f, 150.0f);
