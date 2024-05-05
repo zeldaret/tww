@@ -323,7 +323,38 @@ void daPedestal::daPds_c::set_mtx() {
 
 /* 00000C10-00000D58       .text initBrkAnm__Q210daPedestal7daPds_cFUcb */
 BOOL daPedestal::daPds_c::initBrkAnm(u8 param_1, bool param_2) {
-    /* Nonmatching */
+    struct AnmTableEntry {
+        /* 0x00 */ int loopMode;
+        /* 0x04 */ f32 speed;
+        /* 0x08 */ s32 unk_4;
+    };  // Size: 0x0C
+
+    static AnmTableEntry brkAnmTbl[] = {
+        {J3DFrameCtrl::LOOP_REPEAT_e,   1.0f,  0},
+        {J3DFrameCtrl::LOOP_ONCE_e,     0.0f,  0},
+        {J3DFrameCtrl::LOOP_ONCE_e,     0.0f,  0},
+        {J3DFrameCtrl::LOOP_ONCE_e,     0.0f, -1},
+    };
+
+    J3DModelData* modelData = mpModel->getModelData();
+    bool ret = false;
+
+    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes(m_arcname, HDAI1_BRK_HDAI1));
+    JUT_ASSERT(0x28C, a_brk != 0);
+
+
+    if (mBrk.init(modelData, a_brk, TRUE, brkAnmTbl[param_1].loopMode, brkAnmTbl[param_1].speed, 0, -1, param_2, 0)) {
+        unk30E = param_1;
+        if (brkAnmTbl[param_1].unk_4 < 0) {
+            mBrk.setFrame(mBrk.getEndFrame());
+        }
+
+        unk308 = mBrk.getFrame();
+
+        ret = true;
+    }
+
+    return ret;
 }
 
 /* 00000D58-00000D98       .text playBrkAnm__Q210daPedestal7daPds_cFv */
