@@ -37,7 +37,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000FC-00000244       .text CreateHeap__Q210daPedestal7daPds_cFv */
 BOOL daPedestal::daPds_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, HDAI1_BDL_HDAI1));
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HDAI1_BDL_HDAI1);
     JUT_ASSERT(0xC1, modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
