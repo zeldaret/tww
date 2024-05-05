@@ -243,9 +243,7 @@ BOOL daPedestal::daPds_c::eventProc() {
 }
 
 /* 000008E4-000008E8       .text initialDefault__Q210daPedestal7daPds_cFi */
-void daPedestal::daPds_c::initialDefault(int) {
-    /* Nonmatching */
-}
+void daPedestal::daPds_c::initialDefault(int) {}
 
 /* 000008E8-000008F0       .text actionDefault__Q210daPedestal7daPds_cFi */
 BOOL daPedestal::daPds_c::actionDefault(int) {
