@@ -182,7 +182,11 @@ void daPedestal::daPds_c::action(void* param_1) {
 
 /* 000007C4-000007E0       .text waitAction__Q210daPedestal7daPds_cFPv */
 BOOL daPedestal::daPds_c::waitAction(void*) {
-    /* Nonmatching */
+    if (unk30C == 0) {
+        unk30C += 1;
+    }
+
+    return TRUE;
 }
 
 typedef void (daPedestal::daPds_c::* eventInitFunc)(int);
