@@ -328,7 +328,8 @@ BOOL daPedestal::daPds_c::initBrkAnm(u8 param_1, bool param_2) {
 
 /* 00000D58-00000D98       .text playBrkAnm__Q210daPedestal7daPds_cFv */
 void daPedestal::daPds_c::playBrkAnm() {
-    /* Nonmatching */
+    unk30F = mBrk.play();
+    unk308 = mBrk.getFrame();
 }
 
 /* 00000D98-00000E48       .text _execute__Q210daPedestal7daPds_cFv */
