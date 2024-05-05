@@ -250,8 +250,21 @@ BOOL daPedestal::daPds_c::actionDefault(int) {
 }
 
 /* 000008F0-000009A8       .text initialMoveEvent__Q210daPedestal7daPds_cFi */
-void daPedestal::daPds_c::initialMoveEvent(int) {
-    /* Nonmatching */
+void daPedestal::daPds_c::initialMoveEvent(int staffIdx) {
+    f32* pSpeed = dComIfGp_evmng_getMyFloatP(staffIdx, "Speed");
+
+    if (pSpeed) {
+        speed.y = *pSpeed;
+    } else {
+        speed.y = 1.0f;
+    }
+
+    f32* pDist = dComIfGp_evmng_getMyFloatP(staffIdx, "Dist");
+    if (pDist) {
+        unk304 = current.pos.y + *pDist;
+    } else {
+        unk304 = current.pos.y;
+    }
 }
 
 /* 000009A8-00000AEC       .text actionMoveEvent__Q210daPedestal7daPds_cFi */
