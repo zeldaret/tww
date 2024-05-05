@@ -58,14 +58,16 @@ BOOL daPedestal::daPds_c::CreateHeap() {
     return FALSE;
 }
 
-static char* l_os_name[] = {
-    "Os",
-    "Os1",
-    "Os2"
-};
+
 
 /* 00000244-00000380       .text CreateInit__Q210daPedestal7daPds_cFv */
 void daPedestal::daPds_c::CreateInit() {
+    static char* l_os_name[] = {
+        "Os",
+        "Os1",
+        "Os2"
+    };
+
     mParam = fopAcM_GetParam(this) & 0xFF;
 
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -349,7 +351,7 @@ BOOL daPedestal::daPds_c::initBrkAnm(u8 param_1, bool param_2) {
     J3DModelData* modelData = mpModel->getModelData();
     bool ret = false;
 
-    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes(m_arcname, HDAI1_BRK_HDAI1));
+    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, HDAI1_BRK_HDAI1);
     JUT_ASSERT(0x28C, a_brk != 0);
 
 
@@ -470,8 +472,8 @@ void daPds_infiniteEcallBack_c::makeEmitter(unsigned short particleID, const cXy
     end();
     dComIfGp_particle_set(particleID, pos, angle, scale, 0xFF, this);
 
-    mpPos = pos;
-    mpAngle = angle;
+    setPos(pos);
+    setAngle(angle);
 }
 
 /* 00001288-0000128C       .text setup__Q210daPedestal25daPds_infiniteEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
