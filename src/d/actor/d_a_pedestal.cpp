@@ -302,7 +302,8 @@ BOOL daPedestal::daPds_c::actionMoveEvent(int) {
 
 /* 00000AEC-00000B40       .text initialEffectSet__Q210daPedestal7daPds_cFi */
 void daPedestal::daPds_c::initialEffectSet(int) {
-    /* Nonmatching */
+    mInfiniteEcallBack.makeEmitter(0x826DU, &current.pos, &shape_angle, NULL);
+    initBrkAnm(0, true);
 }
 
 /* 00000B40-00000B80       .text initialEffectEnd__Q210daPedestal7daPds_cFi */
