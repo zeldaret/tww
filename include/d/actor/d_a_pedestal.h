@@ -74,8 +74,9 @@ namespace daPedestal {
         /* 0x312 */ s16 unk312;
         /* 0x314 */ s16 unk314;
         /* 0x316 */ s16 unk316;
-        /* 0x318 */ char pad318[4];
+        /* 0x318 */ u8 pad318[4];
         /* 0x31C */ f32 unk31C;
+        /* 0x320 */ u8 pad320[4];
     };
 };  // namespace daPedestal
 
