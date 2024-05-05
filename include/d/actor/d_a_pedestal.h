@@ -64,18 +64,18 @@ namespace daPedestal {
         /* 0x2E4 */ dBgW* mpBgW;
         /* 0x2E8 */ daPds_infiniteEcallBack_c mInfiniteEcallBack;
         /* 0x2F8 */ ActionFunc_t mAction;
-        /* 0x304 */ f32 unk304;     /* inferred */
-        /* 0x308 */ f32 unk308;     /* inferred */
-        /* 0x30C */ s8 unk30C;      /* inferred */
-        /* 0x30D */ u8 mParam;      /* inferred */
-        /* 0x30E */ u8 unk30E;      /* inferred */
-        /* 0x30F */ s8 unk30F;      /* inferred */
-        /* 0x310 */ s16 unk310;     /* inferred */
-        /* 0x312 */ s16 unk312;     /* inferred */
-        /* 0x314 */ s16 unk314;     /* inferred */
-        /* 0x316 */ s16 unk316;     /* inferred */
-        /* 0x318 */ char pad318[4]; /* maybe part of unk316[3]? */
-        /* 0x31C */ f32 unk31C;     /* inferred */
+        /* 0x304 */ f32 unk304;
+        /* 0x308 */ f32 unk308;
+        /* 0x30C */ s8 unk30C;
+        /* 0x30D */ u8 mParam;
+        /* 0x30E */ u8 unk30E;
+        /* 0x30F */ s8 unk30F;
+        /* 0x310 */ s16 unk310;
+        /* 0x312 */ s16 unk312;
+        /* 0x314 */ s16 unk314;
+        /* 0x316 */ s16 unk316;
+        /* 0x318 */ char pad318[4];
+        /* 0x31C */ f32 unk31C;
     };
 
     namespace daPds__prm {
