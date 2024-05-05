@@ -7,6 +7,12 @@
 #include "d/d_procname.h"
 #include "d/res/res_hdai1.h"
 
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+
 const char daPedestal::daPds_c::m_arcname[] = "Hdai1";
 
 /* 00000078-000000DC       .text _delete__Q210daPedestal7daPds_cFv */
