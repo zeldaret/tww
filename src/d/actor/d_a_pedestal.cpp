@@ -214,7 +214,29 @@ static char* cut_name_tbl[] = {
 
 /* 000007E0-000008E4       .text eventProc__Q210daPedestal7daPds_cFv */
 BOOL daPedestal::daPds_c::eventProc() {
-    /* Nonmatching */
+    int staffIdx = getMyStaffId();
+
+    if (dComIfGp_event_runCheck()) {
+        if (staffIdx != -1) {
+            int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+
+            if (actIdx == -1) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            } else {
+                if(dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                    (this->*event_init_tbl[actIdx])(staffIdx);
+                }
+
+                if((this->*event_action_tbl[actIdx])(staffIdx)) {
+                    dComIfGp_evmng_cutEnd(staffIdx);
+                }
+            }
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 000008E4-000008E8       .text initialDefault__Q210daPedestal7daPds_cFi */
