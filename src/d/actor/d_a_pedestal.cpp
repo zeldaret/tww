@@ -308,7 +308,8 @@ void daPedestal::daPds_c::initialEffectSet(int) {
 
 /* 00000B40-00000B80       .text initialEffectEnd__Q210daPedestal7daPds_cFi */
 void daPedestal::daPds_c::initialEffectEnd(int) {
-    /* Nonmatching */
+    mInfiniteEcallBack.end();
+    initBrkAnm(2, true);
 }
 
 /* 00000B80-00000C10       .text set_mtx__Q210daPedestal7daPds_cFv */
