@@ -269,7 +269,34 @@ void daPedestal::daPds_c::initialMoveEvent(int staffIdx) {
 
 /* 000009A8-00000AEC       .text actionMoveEvent__Q210daPedestal7daPds_cFi */
 BOOL daPedestal::daPds_c::actionMoveEvent(int) {
-    /* Nonmatching */
+    current.pos.y += speed.y;
+
+    BOOL ret = FALSE;
+
+    if (speed.y < 0.0f) {
+        if (current.pos.y <= unk304) {
+            current.pos.y = unk304;
+            speed.y = 0.0f;
+            ret = TRUE;
+        }
+    } else if (speed.y > 0.0f) {
+        if (current.pos.y >= unk304) {
+            current.pos.y = unk304;
+            speed.y = 0.0f;
+            ret = TRUE;
+        }
+    } else {
+        current.pos.y = unk304;
+        ret = TRUE;
+    }
+
+    if (ret) {
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_ST_DAI_STOP, 0);
+    } else {
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_ST_DAI_MOVE, 0);
+    }
+
+    return ret;
 }
 
 /* 00000AEC-00000B40       .text initialEffectSet__Q210daPedestal7daPds_cFi */
