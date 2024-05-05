@@ -198,20 +198,22 @@ BOOL daPedestal::daPds_c::waitAction(void*) {
     return TRUE;
 }
 
-typedef void (daPedestal::daPds_c::* eventInitFunc)(int);
+namespace daPedestal {
+
+typedef void (daPds_c::* eventInitFunc)(int);
 static eventInitFunc event_init_tbl[] = {
-    &daPedestal::daPds_c::initialDefault,
-    &daPedestal::daPds_c::initialMoveEvent,
-    &daPedestal::daPds_c::initialEffectSet,
-    &daPedestal::daPds_c::initialEffectEnd,
+    daPds_c::initialDefault,
+    daPds_c::initialMoveEvent,
+    daPds_c::initialEffectSet,
+    daPds_c::initialEffectEnd,
 };
 
-typedef BOOL (daPedestal::daPds_c::* eventActionFunc)(int);
+typedef BOOL (daPds_c::* eventActionFunc)(int);
 static eventActionFunc event_action_tbl[] = {
-    &daPedestal::daPds_c::actionDefault,
-    &daPedestal::daPds_c::actionMoveEvent,
-    &daPedestal::daPds_c::actionDefault,
-    &daPedestal::daPds_c::actionDefault,
+    &daPds_c::actionDefault,
+    &daPds_c::actionMoveEvent,
+    &daPds_c::actionDefault,
+    &daPds_c::actionDefault,
 };
 
 static char* cut_name_tbl[] = {
@@ -220,6 +222,8 @@ static char* cut_name_tbl[] = {
     "EFFSET",
     "EFFEND"
 };
+
+};  // namespace daPedestal
 
 /* 000007E0-000008E4       .text eventProc__Q210daPedestal7daPds_cFv */
 BOOL daPedestal::daPds_c::eventProc() {
