@@ -12,6 +12,8 @@ namespace daPedestal {
 
     class daPds_infiniteEcallBack_c : public dPa_levelEcallBack {
     public:
+        virtual ~daPds_infiniteEcallBack_c() {}
+
         void execute(JPABaseEmitter*);
         void end();
         void makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*);
