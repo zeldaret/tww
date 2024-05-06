@@ -476,11 +476,6 @@ void daPds_infiniteEcallBack_c::makeEmitter(unsigned short particleID, const cXy
     setAngle(angle);
 }
 
-/* 00001288-0000128C       .text setup__Q210daPedestal25daPds_infiniteEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daPds_infiniteEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, signed char) {
-    mpEmitter = emitter;
-}
-
 static actor_method_class daActMethodTable = {
     (process_method_func)daPds_Create,
     (process_method_func)daPds_Delete,
