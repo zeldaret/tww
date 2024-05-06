@@ -16,14 +16,12 @@ namespace daPedestal {
 
         void execute(JPABaseEmitter*);
         void end();
-        void makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*);
+        void makeEmitter(u16, const cXyz*, const csXyz*, const cXyz*);
 
         JPABaseEmitter* getEmitter() { return mpEmitter; }
         void setAngle(const csXyz* angle) { mpAngle = angle; }
         void setPos(const cXyz* pos) { mpPos = pos; }
-        void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, signed char) {
-            mpEmitter = emitter;
-        }
+        void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) { mpEmitter = emitter; }
 
     private:
         /* 0x04 */ JPABaseEmitter* mpEmitter;
@@ -33,6 +31,12 @@ namespace daPedestal {
 
     class daPds_c : public fopAc_ac_c {
     public:
+        enum ActionStatus {
+            ACTION_STARTING = 0,
+            ACTION_ONGOING  = 1,
+            ACTION_ENDING   = -1,
+        };
+
         typedef int (daPds_c::* ActionFunc_t)(void*);
 
         BOOL _delete();
@@ -61,17 +65,17 @@ namespace daPedestal {
         static const char m_arcname[];
 
     public:
-        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x290 */ request_of_phase_process_class mPhase;
         /* 0x298 */ J3DModel* mpModel;
         /* 0x29C */ mDoExt_brkAnm mBrk;
         /* 0x2B4 */ Mtx mMtx;
         /* 0x2E4 */ dBgW* mpBgW;
-        /* 0x2E8 */ daPds_infiniteEcallBack_c mInfiniteEcallBack;
+        /* 0x2E8 */ daPds_infiniteEcallBack_c mOctagonGlowCb;
         /* 0x2F8 */ ActionFunc_t mAction;
-        /* 0x304 */ f32 unk304;
+        /* 0x304 */ f32 mTargetYPos;
         /* 0x308 */ f32 unk308;
-        /* 0x30C */ s8 unk30C;
-        /* 0x30D */ u8 mParam;
+        /* 0x30C */ s8 mActionStatus;
+        /* 0x30D */ u8 mType;
         /* 0x30E */ u8 unk30E;
         /* 0x30F */ s8 unk30F;
         /* 0x310 */ s16 unk310;
