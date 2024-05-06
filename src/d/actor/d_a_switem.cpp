@@ -62,7 +62,7 @@ BOOL daSwItem_c::CreateInit() {
         return FALSE;
     }
 
-    fopDwTg_DrawQTo(&draw_tag);
+    fopAcM_offDraw(this);
     return TRUE;
 }
 
