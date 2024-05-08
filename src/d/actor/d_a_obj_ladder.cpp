@@ -55,12 +55,14 @@ void daObjLadder::Act_c::demo_end_reset() {
 
 /* 00000A78-00000A84       .text mode_wait_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_wait_init() {
-    /* Nonmatching */
+    unk2D8 = 0;
 }
 
 /* 00000A84-00000AE0       .text mode_wait__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_wait() {
-    /* Nonmatching */
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        mode_demoreq_init();
+    }
 }
 
 /* 00000AE0-00000AF4       .text mode_demoreq_init__Q211daObjLadder5Act_cFv */

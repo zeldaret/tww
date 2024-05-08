@@ -12,10 +12,14 @@ namespace daObjLadder {
         enum Prm_e {
             PRM_EV_ID_W = 0x08,
             PRM_EV_ID_S = 0x10,
+
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x08,
+
         };
 
         u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EV_ID_W, PRM_EV_ID_S); }
-        void prm_get_swSave() const {}
+        s32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         void prm_get_type() const {}
 
         BOOL CreateHeap();
