@@ -4,11 +4,21 @@
 //
 
 #include "d/actor/d_a_obj_ladder.h"
+#include "d/res/res_mhsg.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+
+Mtx daObjLadder::Act_c::M_tmp_mtx;
+const char daObjLadder::Act_c::M_arcname[] = "Mhsg";
 
 /* 00000078-0000013C       .text CreateHeap__Q211daObjLadder5Act_cFv */
 BOOL daObjLadder::Act_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, MHSG_BDL_MHSG12));
+    JUT_ASSERT(0x17E, model_data != 0);
+
+    mpModel = mDoExt_J3DModel__create(model_data, 0x80000U, 0x11000022U);
+
+    return mpModel != NULL;
 }
 
 /* 0000013C-000002F0       .text Create__Q211daObjLadder5Act_cFv */
@@ -103,7 +113,14 @@ int daObjLadder::Act_c::Execute(Mtx** ppMtx) {
 
 /* 000010A0-00001140       .text Draw__Q211daObjLadder5Act_cFv */
 BOOL daObjLadder::Act_c::Draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+
+    return TRUE;
 }
 
 namespace daObjLadder {
