@@ -62,12 +62,28 @@ void daObjLadder::Act_c::mode_wait() {
 
 /* 00000AE0-00000AF4       .text mode_demoreq_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_demoreq_init() {
-    /* Nonmatching */
+    unk2D8 = 1;
+    unk346 = 0;
 }
 
 /* 00000AF4-00000BB4       .text mode_demoreq__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_demoreq() {
-    /* Nonmatching */
+    bool ret = false;
+    if (dComIfGp_evmng_existence(mEventIdx)) {
+        if (eventInfo.checkCommandDemoAccrpt()) {
+            ret = true;
+            unk346 = 1;
+        } else {
+            fopAcM_orderOtherEventId(this, mEventIdx, prm_get_evId());
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+    } else {
+        ret = true;
+    }
+
+    if (ret) {
+        mode_vib_init();
+    }
 }
 
 /* 00000BB4-00000BDC       .text mode_vib_init__Q211daObjLadder5Act_cFv */

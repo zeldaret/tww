@@ -1,13 +1,20 @@
 #ifndef D_A_OBJ_LADDER_H
 #define D_A_OBJ_LADDER_H
 
+#include "d/d_a_obj.h"
+#include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "f_op/f_op_actor.h"
 
 namespace daObjLadder {
     class Act_c : public dBgS_MoveBgActor {
     public:
-        void prm_get_evId() const {}
+        enum Prm_e {
+            PRM_EV_ID_W = 0x08,
+            PRM_EV_ID_S = 0x10,
+        };
+
+        u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EV_ID_W, PRM_EV_ID_S); }
         void prm_get_swSave() const {}
         void prm_get_type() const {}
 
@@ -57,7 +64,7 @@ namespace daObjLadder {
         /* 0x33A */ s16 unk33A;        /* inferred */
         /* 0x33C */ f32 unk33C;        /* inferred */
         /* 0x340 */ f32 unk340;        /* inferred */
-        /* 0x344 */ s16 unk344;        /* inferred */
+        /* 0x344 */ s16 mEventIdx;        /* inferred */
         /* 0x346 */ u8 unk346;         /* inferred */
     };
 };
