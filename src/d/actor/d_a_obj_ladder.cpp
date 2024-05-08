@@ -47,7 +47,10 @@ BOOL daObjLadder::Act_c::Mthd_Delete() {
 
 /* 00000A0C-00000A78       .text demo_end_reset__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::demo_end_reset() {
-    /* Nonmatching */
+    if (unk346 && dComIfGp_evmng_endCheck(mEventIdx)) {
+        dComIfGp_event_reset();
+        unk346 = 0;
+    }
 }
 
 /* 00000A78-00000A84       .text mode_wait_init__Q211daObjLadder5Act_cFv */
