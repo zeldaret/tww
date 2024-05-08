@@ -395,7 +395,7 @@ void daDitem_c::anim_control() {
     case UNK_BOTTLE_5E:
     case UNK_BOTTLE_5F:
     case UNK_BOTTLE_60:
-        if (field_0x634 > 30) {
+        if (m_timer > 30) {
             animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
         }
         break;
@@ -479,7 +479,7 @@ BOOL daDitem_c::draw() {
 }
 
 BOOL daDitem_c::execute() {
-    field_0x634++;
+    m_timer++;
     
     if (chkDraw()) {
         setParticle();

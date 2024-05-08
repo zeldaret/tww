@@ -134,19 +134,20 @@ void itemGetCallBack(fopAc_ac_c* item_actor, dCcD_GObjInf*, fopAc_ac_c* collided
 void daItem_c::CreateInit() {
     mAcchCir.SetWall(30.0f, 30.0f);
     mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
-    mAcch.m_flags &= ~0x400;
-    mAcch.m_flags &= ~0x8;
+    mAcch.ClrWaterNone();
+    mAcch.ClrRoofNone();
+
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+
     mStts.Init(0, 0xFF, this);
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
     mCyl.SetCoHitCallback(&itemGetCallBack);
     
-    // Regswaps if the inlines are used.
-    // f32 height = dItem_data::getH(m_itemNo);
-    // f32 radius = dItem_data::getR(m_itemNo);
-    f32 height = dItem_data::item_info[m_itemNo].mCollisionH;
-    f32 radius = dItem_data::item_info[m_itemNo].mCollisionR;
+
+    f32 height = dItem_data::getH(m_itemNo);
+    f32 radius = dItem_data::getR(m_itemNo);
+
     if (scale.x > 1.0f) {
         height *= scale.x;
         radius *= scale.x;
@@ -154,8 +155,8 @@ void daItem_c::CreateInit() {
     mCyl.SetR(radius);
     mCyl.SetH(height);
     
-    mDisappearTimer = getData()->mDuration;
-    field_0x65a = getData()->field_0x18;
+    mWaitTimer = getData()->mWaitTime;
+    mDisappearTimer = getData()->mDisappearTime;
     field_0x650 = fopAcM_GetSpeed(this).y;
     mItemStatus = STATUS_UNK0;
     
@@ -259,7 +260,7 @@ BOOL daItem_c::_daItem_execute() {
     timeCount();
     
     eyePos = current.pos;
-    eyePos.y += dItem_data::getH(m_itemNo)/2.0f;
+    eyePos.y += dItem_data::getH(m_itemNo) / 2.0f;
     attention_info.position = current.pos;
     
     switch (mItemStatus) {
@@ -350,10 +351,9 @@ void daItem_c::execInitNormalDirection() {
     scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     mExtraZRot = 0;
     
-    field_0x65c = getData()->field_0x40;
-    f32 speedY = getData()->mPickedUpInitialSpeedY;
-    speed.set(0.0f, speedY, 0.0f);
-    gravity = getData()->mPickedUpGravity;
+    mSimpleExistTimer = getData()->mSimpleExistTime;
+    fopAcM_SetSpeed(this, 0, getData()->mGetDemoLaunchSpeed, 0);
+    fopAcM_SetGravity(this, getData()->mGetDemoGravity);
     
     show();
     
@@ -383,8 +383,8 @@ void daItem_c::execMainNormalDirection() {
     
     current.angle = dComIfGp_getCamera(0)->mAngle;
     
-    field_0x65c--;
-    if (field_0x65c < 0) {
+    mSimpleExistTimer--;
+    if (mSimpleExistTimer < 0) {
         fopAcM_delete(this);
     }
 }
@@ -455,13 +455,12 @@ void daItem_c::execWaitMain() {
         cLib_chaseF(&scale.z, mScaleTarget.z, scaleStepZ);
     }
     
-    if (checkItemDisappear() && mDisappearTimer == 0) {
-        if (field_0x65a == 0) {
+    if (checkItemDisappear() && mWaitTimer == 0) {
+        if (mDisappearTimer == 0) {
             fopAcM_delete(this);
         }
-        s32 temp1 = getData()->field_0x14;
-        s32 temp2 = field_0x634 / temp1;
-        if (!(field_0x634 - temp2 * temp1)) {
+
+        if (m_timer % getData()->mFlashCycleTime == 0) {
             changeDraw();
         }
     }
@@ -492,15 +491,15 @@ void daItem_c::execWaitMainFromBoss() {
 
 /* 800F5FC0-800F60C0       .text scaleAnimFromBossItem__8daItem_cFv */
 void daItem_c::scaleAnimFromBossItem() {
-    if (field_0x638 < 30) {
-        scale.x = cM_ssin(field_0x634*0x2000 - 0x4000)*2.0f / field_0x634+1.0f;
+    if (m_get_timer < 30) {
+        scale.x = cM_ssin(m_timer*0x2000 - 0x4000)*2.0f / m_timer+1.0f;
         if (scale.x < 0.0f) {
             scale.x = 0.0f;
         }
         scale.y = scale.x;
         scale.z = scale.x;
     } else {
-        if (field_0x638 == 30) {
+        if (m_get_timer == 30) {
             fopAcM_seStart(this, JA_SE_CM_BOSS_HEART_APPEAR, 0);
         }
         scale.setall(1.0f);
@@ -771,7 +770,7 @@ void daItem_c::itemGetExecute() {
 /* 800F6D24-800F6D78       .text itemDefaultRotateY__8daItem_cFv */
 void daItem_c::itemDefaultRotateY() {
     // Rotates at a fixed speed.
-    s16 rotationSpeed = 0xFFFF / getData()->mNumFramesPerFullSpin;
+    s16 rotationSpeed = 0xFFFF / getData()->mRotateYSpeed;
     fopAcM_addAngleY(this, current.angle.y + rotationSpeed, rotationSpeed);
 }
 
@@ -810,12 +809,12 @@ void daItem_c::setItemTimer(int timer) {
         setFlag(FLAG_UNK10);
         return;
     }
-    mDisappearTimer = timer;
+    mWaitTimer = timer;
 }
 
 /* 800F6E74-800F6EC8       .text checkPlayerGet__8daItem_cFv */
 BOOL daItem_c::checkPlayerGet() {
-    if (field_0x638 < getData()->field_0x42) {
+    if (m_get_timer < getData()->mNoGetTime) {
         return FALSE;
     }
     if (mItemStatus == STATUS_BRING_NEZUMI) {
@@ -830,7 +829,7 @@ BOOL daItem_c::itemActionForRupee() {
     checkWall();
     
     if (mAcch.ChkGroundLanding()) {
-        f32 temp2 = field_0x650 * getData()->field_0x04;
+        f32 temp2 = field_0x650 * getData()->mGroundReflect;
         if (temp2 > gravity - 0.5f) {
             speedF = 0.0f;
         } else {
@@ -854,7 +853,7 @@ BOOL daItem_c::itemActionForRupee() {
         field_0x650 = speed.y;
     }
     
-    field_0x654 = getData()->field_0x1A;
+    field_0x654 = getData()->mRotateXSpeed;
     
     if (mOnGroundTimer == 0) {
         mTargetAngleX = current.angle.x + field_0x654;
@@ -871,10 +870,10 @@ BOOL daItem_c::itemActionForRupee() {
 
 /* 800F7028-800F713C       .text itemActionForHeart__8daItem_cFv */
 BOOL daItem_c::itemActionForHeart() {
-    f32 origSpeedY = speed.y;
+    f32 origSpeedY = fopAcM_GetSpeed(this).y;
     if (origSpeedY < 0.0f) {
-        gravity = 0.0f;
-        speed.set(0.0f, getData()->field_0x20, 0.0f);
+        fopAcM_SetGravity(this, 0.0f);
+        fopAcM_SetSpeed(this, 0.0f, getData()->mHeartFallSpeed, 0.0f);
     }
     
     mAcch.CrrPos(*dComIfG_Bgsp());
@@ -882,13 +881,12 @@ BOOL daItem_c::itemActionForHeart() {
     if (mAcch.ChkGroundLanding() || mAcch.ChkGroundHit()) {
         clrFlag(FLAG_UNK04);
         mExtraZRot = 0;
-        speed.set(0.0f, -1.0f, 0.0f);
-        speedF = 0.0f;
+        fopAcM_SetSpeed(this, 0.0f, -1.0f, 0.0f);
+        fopAcM_SetSpeedF(this, 0.0f);
         itemDefaultRotateY();
     } else if (origSpeedY < 0.0f) {
-        f32 temp2 = getData()->field_0x24;
-        int temp = field_0x634 * getData()->field_0x28;
-        speedF = temp2 * cM_ssin(temp);
+        origSpeedY = getData()->mHeartAmplitude;
+        fopAcM_SetSpeedF(this, origSpeedY * cM_ssin(m_timer * getData()->mHeartFallCycleTime));
     }
     
     return TRUE;
@@ -900,7 +898,7 @@ BOOL daItem_c::itemActionForKey() {
     checkWall();
     
     if (mAcch.ChkGroundLanding()) {
-        f32 temp2 = field_0x650 * getData()->field_0x04;
+        f32 temp2 = field_0x650 * getData()->mGroundReflect;
         if (temp2 > gravity - 0.5f) {
             speedF = 0.0f;
             current.angle.x = 0x4000;
@@ -926,7 +924,7 @@ BOOL daItem_c::itemActionForKey() {
         field_0x650 = speed.y;
     }
     
-    field_0x654 = getData()->field_0x1A;
+    field_0x654 = getData()->mRotateXSpeed;
     
     if (mOnGroundTimer == 0) {
         mTargetAngleX = current.angle.x + field_0x654;
@@ -944,7 +942,7 @@ BOOL daItem_c::itemActionForEmono() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     if (mAcch.ChkGroundLanding()) {
-        f32 temp2 = field_0x650 * getData()->field_0x04;
+        f32 temp2 = field_0x650 * getData()->mGroundReflect;
         if (temp2 > gravity - 0.5f) {
             speedF = 0.0f;
         } else {
@@ -953,7 +951,7 @@ BOOL daItem_c::itemActionForEmono() {
         
         set_bound_se();
     } else if (mAcch.ChkGroundHit()) {
-        s16 rotationSpeed = 0xFFFF / getData()->mNumFramesPerFullSpin;
+        s16 rotationSpeed = 0xFFFF / getData()->mRotateYSpeed;
         rotationSpeed = rotationSpeed / 2;
         fopAcM_addAngleY(this, current.angle.y + rotationSpeed, rotationSpeed);
         speedF = 0.0f;
@@ -973,20 +971,20 @@ BOOL daItem_c::itemActionForSword() {
     
     bool isQuake = dComIfGp_getDetect().chk_quake(&current.pos);
     if (isQuake && !checkFlag(FLAG_QUAKE) && mAcch.ChkGroundHit()) {
-        speed.set(0.0f, 21.0f, 0.0f);
-        gravity = -3.5f;
+        fopAcM_SetSpeed(this, 0.0f, 21.0f, 0.0f);
+        fopAcM_SetGravity(this, -3.5f);
     }
     
     if (mAcch.ChkGroundLanding()) {
         f32 temp = field_0x650 * 0.9f;
-        speed.set(0.0f, -temp, 0.0f);
+        fopAcM_SetSpeed(this, 0.0f, -temp, 0.0f);
         
         if (m_itemNo == SWORD) {
-            if (field_0x638 > 15) {
+            if (m_get_timer > 15) {
                 fopAcM_seStart(this, JA_SE_OBJ_LNK_SWORD_FALL, 0);
             }
         } else if (m_itemNo == SHIELD) {
-            if (field_0x638 > 15) {
+            if (m_get_timer > 15) {
                 fopAcM_seStart(this, JA_SE_OBJ_LNK_SHIELD_FALL, 0);
             }
         }
@@ -1046,7 +1044,7 @@ BOOL daItem_c::itemActionForArrow() {
     }
     
     if (mAcch.ChkGroundLanding()) {
-        f32 temp_f3 = field_0x650 * getData()->field_0x04;
+        f32 temp_f3 = field_0x650 * getData()->mGroundReflect;
         if (temp_f3 > gravity - 0.5f) {
             speedF = 0.0f;
         } else {
@@ -1080,7 +1078,7 @@ BOOL daItem_c::itemActionForArrow() {
     if (m_itemNo == UTUWA_HEART) {
         if (mOnGroundTimer != 0) {
             getData();
-            s16 rotationSpeed = 0xFFFF / getData()->mNumFramesPerFullSpin;
+            s16 rotationSpeed = 0xFFFF / getData()->mRotateYSpeed;
             cLib_addCalcAngleS(&field_0x654, rotationSpeed, 10, 0x400, 0x100);
         }
         
@@ -1119,13 +1117,11 @@ void daItem_c::checkWall() {
 
 /* 800F7BF8-800F7DDC       .text set_bound_se__8daItem_cFv */
 void daItem_c::set_bound_se() {
-    if (field_0x638 < 10) {
+    if (m_get_timer < 10) {
         return;
     }
     
-    f32 temp2 = fabs(field_0x650);
-    temp2 = 2.0f * temp2;
-    u32 temp = temp2;
+    u32 temp = fabsf(field_0x650) * 2.0f;
     if (temp > 100) {
         temp = 100;
     }
@@ -1186,16 +1182,16 @@ BOOL daItem_c::checkGetItem() {
 
 /* 800F7E6C-800F7F0C       .text timeCount__8daItem_cFv */
 BOOL daItem_c::timeCount() {
-    field_0x634++;
-    if (field_0x638 < m_timer_max) {
-        field_0x638++;
+    m_timer++;
+    if (m_get_timer < m_timer_max) {
+        m_get_timer++;
     }
     
     if (checkPlayerGet() && !dComIfGp_event_runCheck()) {
-        if (mDisappearTimer > 0) {
+        if (mWaitTimer > 0) {
+            mWaitTimer--;
+        } else if (mDisappearTimer > 0) {
             mDisappearTimer--;
-        } else if (field_0x65a > 0) {
-            field_0x65a--;
         }
     }
     
@@ -1205,7 +1201,7 @@ BOOL daItem_c::timeCount() {
 /* 800F7F0C-800F7F50       .text mode_wait_init__8daItem_cFv */
 void daItem_c::mode_wait_init() {
     mMode = 0;
-    gravity = getData()->mFieldItemGravity;
+    gravity = getData()->mGravity;
     mPtclRippleCb.end();
 }
 
@@ -1225,8 +1221,8 @@ void daItem_c::mode_water_init() {
         current.pos.y = mAcch.m_wtr.GetHeight();
     }
     
-    speed.setall(0.0f);
-    speedF = 0.0f;
+    fopAcM_SetSpeed(this, 0.0f, 0.0f, 0.0f);
+    fopAcM_SetSpeedF(this, 0.0f);
     current.angle.z = 0;
     current.angle.x = 0;
     mExtraZRot = 0;
@@ -1327,7 +1323,7 @@ void daItem_c::mode_water() {
         current.pos.y = mAcch.m_wtr.GetHeight();
     }
     
-    s16 rotationSpeed = 0xFFFF / daItemBase_c::m_data.mNumFramesPerFullSpin;
+    s16 rotationSpeed = 0xFFFF / daItemBase_c::m_data.mRotateYSpeed;
     fopAcM_addAngleY(this, current.angle.y + rotationSpeed, rotationSpeed);
 }
 
@@ -1359,7 +1355,7 @@ BOOL daItem_c::initAction() {
             break;
         }
         
-        gravity = getData()->mFieldItemGravity;
+        gravity = getData()->mGravity;
         clrFlag(FLAG_UNK04);
         mMode = 0;
         
@@ -1367,50 +1363,50 @@ BOOL daItem_c::initAction() {
     }
     
     // TODO: bug? usage of uninitialized register f31 in some cases
-    f32 temp_f31;
+    f32 y_speed;
     switch (mAction) {
     case 1:
-        temp_f31 = getData()->field_0x08 + cM_rndFX(5.0f);
-        speedF = getData()->field_0x10 / 10.0f;
+        y_speed = getData()->mLaunchSpeed + cM_rndFX(5.0f);
+        speedF = getData()->mSpeedH / 10.0f;
         if (g_mDoCPd_cpadInfo[0].mMainStickValue) {
-            speedF = getData()->field_0x10;
+            speedF = getData()->mSpeedH;
         }
         current.angle.y = cM_rndF((f32)0xFFFF);
         break;
     case 3:
-        temp_f31 = 25.0f;
+        y_speed = 25.0f;
         current.angle.y = cM_rndF((f32)0xFFFF);
         speedF = getData()->mVelocityScale;
         break;
     case 7:
         speedF = getData()->mVelocityScale * 1.5f;
         current.angle.y = cM_rndF((f32)0xFFFF);
-        temp_f31 = getData()->field_0x08 + cM_rndFX(5.0f);
+        y_speed = getData()->mLaunchSpeed + cM_rndFX(5.0f);
         break;
     case 2:
     case 4:
     case 9:
         speedF = 0.0f;
         current.angle.y = cM_rndF((f32)0xFFFF);
-        temp_f31 = getData()->field_0x08 + cM_rndFX(5.0f);
+        y_speed = getData()->mLaunchSpeed + cM_rndFX(5.0f);
         break;
     case 8:
         current.angle.y = cM_rndF((f32)0xFFFF);
-        temp_f31 = getData()->field_0x44 + cM_rndFX(5.0f);
+        y_speed = getData()->field_0x44 + cM_rndFX(5.0f);
         speedF = getData()->mVelocityScale;
         break;
     case 0xA:
-        gravity = getData()->mFieldItemGravity;
+        gravity = getData()->mGravity;
         scale.setall(0.0f);
         mMode = 0;
         break;
     case 0xB:
         current.angle.y = cM_rndF((f32)0xFFFF);
-        temp_f31 = 0.0f;
+        y_speed = 0.0f;
         speedF = 0.0f;
         break;
     case 6:
-        temp_f31 = getData()->field_0x08 + cM_rndFX(5.0f);
+        y_speed = getData()->mLaunchSpeed + cM_rndFX(5.0f);
         break;
     case 0:
     case 5:
@@ -1421,14 +1417,13 @@ BOOL daItem_c::initAction() {
     
     if (isHeart(m_itemNo)) {
         speedF = 2.0f * speedF;
-        mExtraZRot = cM_rndFX(getData()->mHeartMaxRandomZRot);
+        mExtraZRot = cM_rndFX(getData()->mHeartTilt);
     }
-    
-    gravity = getData()->mFieldItemGravity;
-    speed.set(0.0f, temp_f31, 0.0f);
+
+    fopAcM_SetGravity(this, getData()->mGravity);
+    fopAcM_SetSpeed(this, 0.0f, y_speed, 0.0f);
     // This line setting speedF to itself gets optimized out and produces no code, but affects regalloc.
-    // It's not known what the original code that got optimized out here was, it could be speedF or something else.
-    speedF = speedF;
+    fopAcM_SetSpeedF(this, speedF);
     scale.setall(0.0f);
     
     mMode = 0;
