@@ -10,7 +10,7 @@ namespace daObjLadder {
         void prm_get_evId() const {}
         void prm_get_swSave() const {}
         void prm_get_type() const {}
-    
+
         BOOL CreateHeap();
         int Create();
         s32 Mthd_Create();
@@ -31,9 +31,13 @@ namespace daObjLadder {
         void init_mtx();
         int Execute(Mtx**);
         BOOL Draw();
-    
+
+        static Mtx M_tmp_mtx;
+        static const char M_arcname[];
+
     public:
-        /* Place member variables here */
+        /* 0x2C8 */ request_of_phase_process_class mPhs;
+        /* 0x2D0 */ J3DModel* mpModel;
     };
 };
 
