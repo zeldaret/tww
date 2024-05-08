@@ -7,27 +7,27 @@
 #include "d/d_procname.h"
 
 /* 00000078-0000013C       .text CreateHeap__Q211daObjLadder5Act_cFv */
-void daObjLadder::Act_c::CreateHeap() {
+BOOL daObjLadder::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 0000013C-000002F0       .text Create__Q211daObjLadder5Act_cFv */
-s32 daObjLadder::Act_c::Create() {
+int daObjLadder::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 000002F0-000004F8       .text Mthd_Create__Q211daObjLadder5Act_cFv */
-void daObjLadder::Act_c::Mthd_Create() {
+s32 daObjLadder::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
 /* 000009B8-000009C0       .text Delete__Q211daObjLadder5Act_cFv */
 BOOL daObjLadder::Act_c::Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000009C0-00000A0C       .text Mthd_Delete__Q211daObjLadder5Act_cFv */
-void daObjLadder::Act_c::Mthd_Delete() {
+BOOL daObjLadder::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -97,7 +97,7 @@ void daObjLadder::Act_c::init_mtx() {
 }
 
 /* 00000F88-000010A0       .text Execute__Q211daObjLadder5Act_cFPPA3_A4_f */
-void daObjLadder::Act_c::Execute(float(**)[3][4]) {
+int daObjLadder::Act_c::Execute(Mtx** ppMtx) {
     /* Nonmatching */
 }
 
@@ -109,28 +109,28 @@ BOOL daObjLadder::Act_c::Draw() {
 namespace daObjLadder {
 namespace {
 /* 00001140-00001160       .text Mthd_Create__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+static s32 Mthd_Create(void* i_this) {
+    return static_cast<Act_c*>(i_this)->Mthd_Create();
 }
 
 /* 00001160-00001180       .text Mthd_Delete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+static BOOL Mthd_Delete(void* i_this) {
+    return static_cast<Act_c*>(i_this)->Mthd_Delete();
 }
 
 /* 00001180-000011A0       .text Mthd_Execute__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+static BOOL Mthd_Execute(void* i_this) {
+    return static_cast<Act_c*>(i_this)->MoveBGExecute();
 }
 
 /* 000011A0-000011CC       .text Mthd_Draw__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+static BOOL Mthd_Draw(void* i_this) {
+    return static_cast<Act_c*>(i_this)->MoveBGDraw();
 }
 
 /* 000011CC-000011F8       .text Mthd_IsDelete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+static BOOL Mthd_IsDelete(void* i_this) {
+    return static_cast<Act_c*>(i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Table = {

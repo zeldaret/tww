@@ -1,20 +1,21 @@
 #ifndef D_A_OBJ_LADDER_H
 #define D_A_OBJ_LADDER_H
 
+#include "d/d_bg_s_movebg_actor.h"
 #include "f_op/f_op_actor.h"
 
 namespace daObjLadder {
-    class Act_c : public fopAc_ac_c {
+    class Act_c : public dBgS_MoveBgActor {
     public:
         void prm_get_evId() const {}
         void prm_get_swSave() const {}
         void prm_get_type() const {}
     
-        void CreateHeap();
-        s32 Create();
-        void Mthd_Create();
+        BOOL CreateHeap();
+        int Create();
+        s32 Mthd_Create();
         BOOL Delete();
-        void Mthd_Delete();
+        BOOL Mthd_Delete();
         void demo_end_reset();
         void mode_wait_init();
         void mode_wait();
@@ -28,7 +29,7 @@ namespace daObjLadder {
         void mode_fell();
         void set_mtx();
         void init_mtx();
-        void Execute(float(**)[3][4]);
+        int Execute(Mtx**);
         BOOL Draw();
     
     public:
