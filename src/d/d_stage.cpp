@@ -1842,18 +1842,13 @@ bool dStage_setShipPos(int param_0, int i_roomNo) {
         dComIfGp_setShipRoomId(0xFF);
     }
 
-    // g_dComIfG_gameInfo.save.getTurnRestart().field_0x34 probably an inline, idk which though
-    dComIfG_inf_c& gameinfo = g_dComIfG_gameInfo; // fakematch
-    if (dComIfGp_getStartStagePoint() == -3 &&
-        g_dComIfG_gameInfo.save.getTurnRestart().field_0x34 != 0)
-    {
+    if (dComIfGp_getStartStagePoint() == -3 && dComIfGs_getTurnRestartHasShip()) {
         daShip_c* ship_p = (daShip_c*)fopAcM_SearchByName(PROC_SHIP);
         if (ship_p != NULL) {
-            ship_p->initStartPos(&gameinfo.save.getTurnRestart().getShipPos(),
-                                 dComIfGs_getTurnRestartShipAngleY());
+            ship_p->initStartPos(&dComIfGs_getTurnRestartShipPos(), dComIfGs_getTurnRestartShipAngleY());
         }
 
-        g_dComIfG_gameInfo.save.getTurnRestart().field_0x34 = 0;
+        dComIfGs_setTurnRestartHasShip(FALSE);
     }
 
     if (param_0 != 0xFF) {

@@ -1495,8 +1495,8 @@ public:
     u32 getDayNightParamData();
     void setTactModel();
     BOOL checkNpcStatus();
-    int getTactPlayRightArmAnm(s32);
-    int getTactPlayLeftArmAnm(s32);
+    u16 getTactPlayRightArmAnm(s32);
+    u16 getTactPlayLeftArmAnm(s32);
     BOOL checkEndTactMusic() const;
     f32 getTactMetronomeRate();
     BOOL checkTactLastInput();

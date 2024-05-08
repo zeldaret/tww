@@ -18,6 +18,11 @@ public:
     bool checkStateFlg(daSHIP_SFLG flag) const { return m0358 & flag; }
     bool checkHeadNoDraw() const { return checkStateFlg(daSFLG_HEAD_NO_DRAW_e); }
     
+    int getTactWarpPosNum() const { return mTactWarpPosNum; }
+    void setTactWarpPosNum(int num) { mTactWarpPosNum = num; }
+    u32 getTactWarpID() { return mTactWarpID; }
+    void setTactWarpID(u32 warpID) { mTactWarpID = warpID; }
+    
     bool unknown_inline_TODO() const { return m041C || m0424; }
     
     void checkCraneMode() const {}
@@ -51,8 +56,6 @@ public:
     void getSailAngle() {}
     void getSailOn() {}
     void getTactJntMtx() {}
-    void getTactWarpID() {}
-    void getTactWarpPosNum() const {}
     void getTillerAngleRate() {}
     void getTillerTopPosP() {}
     void getTornadoActor() {}
@@ -86,8 +89,6 @@ public:
     void setStartModeWarp() {}
     void setSteerMove() {}
     void setTactWarp() {}
-    void setTactWarpID(u32 warpID) { m042C = warpID; }
-    void setTactWarpPosNum(int) {}
 
     void bodyJointCallBack(int);
     void cannonJointCallBack(int);
@@ -219,7 +220,8 @@ public:
     /* 0x03B4 */ s16 m03B4;
     /* 0x03B6 */ u8 m03B6[0x03B8 - 0x03B6];
     /* 0x03B8 */ s16 m03B8;
-    /* 0x03BA */ u8 m03BA[0x03CC - 0x03BA];
+    /* 0x03BA */ u8 m03BA[0x03C8 - 0x03BA];
+    /* 0x03C8 */ int mTactWarpPosNum;
     /* 0x03CC */ int m03CC;
     /* 0x03D0 */ u8 m03D0[0x03D8 - 0x03D0];
     /* 0x03D8 */ f32 m03D8;
@@ -241,7 +243,7 @@ public:
     /* 0x0420 */ u32 m0420;
     /* 0x0424 */ fopAc_ac_c* m0424;
     /* 0x0428 */ u8 m0428[0x042C - 0x0428];
-    /* 0x042C */ u32 m042C;
+    /* 0x042C */ u32 mTactWarpID;
     /* 0x0430 */ u8 m0430[0x0434 - 0x0430];
     /* 0x0434 */ cXyz* m0434;
     /* 0x0438 */ cXyz m0438;

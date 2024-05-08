@@ -60,7 +60,7 @@ BOOL daPy_lk_c::checkNpcStatus() {
 }
 
 /* 8014D8F4-8014D938       .text getTactPlayRightArmAnm__9daPy_lk_cFl */
-int daPy_lk_c::getTactPlayRightArmAnm(s32 r4) {
+u16 daPy_lk_c::getTactPlayRightArmAnm(s32 r4) {
     if (r4 == 1)
         return LKANM_BCK_ACTIONTAKTRUP;
     else if (r4 == 3)
@@ -74,7 +74,7 @@ int daPy_lk_c::getTactPlayRightArmAnm(s32 r4) {
 }
 
 /* 8014D938-8014D97C       .text getTactPlayLeftArmAnm__9daPy_lk_cFl */
-int daPy_lk_c::getTactPlayLeftArmAnm(s32 r4) {
+u16 daPy_lk_c::getTactPlayLeftArmAnm(s32 r4) {
     if (r4 == 1)
         return LKANM_BCK_WAITTAKTLHANDU;
     else if (r4 == 3)
@@ -363,21 +363,177 @@ BOOL daPy_lk_c::procTactPlay() {
 }
 
 /* 8014EFD4-8014F210       .text procTactPlayEnd_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procTactPlayEnd_init(int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
+    int r28 = checkShipRideUseItem(0);
+    commonProcInit(daPyProc_TACT_PLAY_END_e);
+    dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
+    initShipRideUseItem(r28, 2);
+    m3570 = r30;
+    mVelocity = 0.0f;
+    setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    
+    if (r30 == -1) {
+        dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+        fopAcM_orderChangeEvent(this, fopAcM_SearchByID(mTactZevPartnerPID), m3494, 0, -1);
+        mDemo.setDemoType(2);
+    } else if (r30 == 0) {
+        dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+        fopAcM_create(PROC_WBIRD, NULL, &current.pos, dComIfGp_roomControl_getStayNo());
+    } else if (r30 == 2) {
+        dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+        dComIfGp_event_setTalkPartner(dComIfGp_getCb1Player());
+        fopAcM_orderChangeEvent(this, dComIfGp_getCb1Player(), l_tact_event_label, 0, -1);
+        mDoAud_seStart(JA_SE_CTRL_LINK_TO_NPC, 0);
+    } else if (r30 == 5) {
+        dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+        fopAcM_orderChangeEvent(this, l_tact_night_event_label, 0, -1);
+    }
+    
+    m3574 = 0;
+    m34D6 = shape_angle.y + 0x4000;
+    
+    return TRUE;
 }
 
 /* 8014F210-8014F4DC       .text procTactPlayEnd__9daPy_lk_cFv */
 BOOL daPy_lk_c::procTactPlayEnd() {
-    /* Nonmatching */
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts1_UNK10000_e)) {
+        setShipRidePos(0);
+        if (m3570 == 0 && !dComIfGp_evmng_startCheck(l_tact_wind_change_event_label) && !dComIfGp_evmng_startCheck(l_tact_wind_change_event_label2)) {
+            cLib_addCalcAngleS(&shape_angle.y, m34D6, 5, 0x1000, 0x100);
+        }
+    }
+    
+    if (m3570 == 0) {
+        dComIfGp_setAStatus(0x07);
+    } else if (m3570 == 5) {
+        if (dComIfGp_evmng_endCheck(l_tact_night_event_label) && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
+            onNoResetFlg0(daPyFlg0_UNK4000);
+            fopAc_ac_c* ship;
+            BOOL hasShip;
+            if (dComIfGp_getShipActor() != NULL) {
+                ship = dComIfGp_getShipActor();
+                hasShip = TRUE;
+            } else {
+                ship = this; // Use Link's position and angle for the ship if it doesn't exist.
+                hasShip = FALSE;
+            }
+            dComIfGs_setTurnRestart(
+                current.pos, shape_angle.y, fopAcM_GetRoomNo(this), getDayNightParamData(),
+                ship->current.pos, ship->shape_angle.y, hasShip
+            );
+            if (dComIfG_getTimerMode() == 3 && dComIfG_getTimerPtr() != NULL) {
+                dComIfG_getTimerPtr()->deleteRequest();
+            }
+            dStage_turnRestart();
+            mDoAud_taktModeMuteOff();
+        }
+    } else if (m3570 == 2) {
+        if (dComIfGp_evmng_endCheck(l_tact_event_label)) {
+            dComIfGp_event_reset();
+            changePlayer(dComIfGp_getCb1Player());
+            endDemoMode();
+        }
+    } else if (m3570 == 1) {
+        if (m3574 == 0) {
+            if (dComIfGp_getMesgStatus() == 0) {
+                dComIfGp_fmapOpenOn();
+                m3574 = 1;
+            }
+        } else {
+            dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+            daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+            if (ship == NULL || ship->getTactWarpPosNum() < 0) {
+                dComIfGp_event_reset();
+                endDemoMode();
+                if (ship != NULL) {
+                    fopAcM_delete(ship->getTactWarpID());
+                    ship->setTactWarpID(fpcM_ERROR_PROCESS_ID_e);
+                }
+            } else {
+                if (dComIfG_getTimerMode() == 3 && dComIfG_getTimerPtr() != NULL) {
+                    dComIfG_getTimerPtr()->deleteRequest();
+                }
+                procShipPaddle_init();
+                ship->m034D = 0xE; // TODO inline
+            }
+        }
+    }
+    
+    return TRUE;
 }
 
 /* 8014F4DC-8014F690       .text procTactPlayOriginal_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procTactPlayOriginal_init() {
-    /* Nonmatching */
+    if (mCurProc == daPyProc_TACT_PLAY_ORIGINAL_e) {
+        return TRUE;
+    }
+    commonProcInit(daPyProc_TACT_PLAY_ORIGINAL_e);
+    dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
+    m34D0 = 0;
+    daPy_matAnm_c::offMabaFlg();
+    daPy_matAnm_c::setMabaTimer(1);
+    setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, daPy_HIO_tact_c0::m.field_0x4);
+    
+    m3570 = dComIfGp_event_getTactFreeMStick(m34D0);
+    setActAnimeUpper(getTactPlayRightArmAnm(m3570), UPPER_MOVE1_e, 0.0f, 0.0f, -1, -1.0f);
+    mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
+    
+    m3574 = dComIfGp_event_getTactFreeCStick(m34D0);
+    setActAnimeUpper(getTactPlayLeftArmAnm(m3574), UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
+    
+    setTextureAnime(0, 0);
+    m3530 = 3;
+    mDoAud_tact_setStickPos(m3570, m3574);
+    mDoAud_tact_playArmSwing(m3570, m3574);
+    setTactModel();
+    m32E4.makeEmitter(0x51, mpHeldItemModel->getBaseTRMtx(), &current.pos, NULL);
+    m34D6 = 0xF;
+    m34DA = 0;
+    mDoAud_taktModeMute();
+    
+    return TRUE;
 }
 
 /* 8014F690-8014F8A0       .text procTactPlayOriginal__9daPy_lk_cFv */
 BOOL daPy_lk_c::procTactPlayOriginal() {
-    /* Nonmatching */
+    mDoAud_seStart(JA_SE_LK_WTAKT_USING, 0);
+    
+    if (m_old_fdata->getOldFrameRate() < 0.01f) {
+        if (m34D6 > 0) {
+            m34D6--;
+            if (m34D6 == 0) {
+                m34D0++;
+            }
+        } else if (m34D0 == 5) {
+            dComIfGp_evmng_cutEnd(mStaffIdx);
+            mDoAud_tact_stopArmSwing();
+        } else {
+            m34D6 = 0xF;
+            
+            m3570 = dComIfGp_event_getTactFreeMStick(m34D0);
+            setActAnimeUpper(getTactPlayRightArmAnm(m3570), UPPER_MOVE1_e, daPy_HIO_tact_c0::m.field_0x8, 0.0f, -1, 5.0f);
+            mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
+            if (m3570 == 0 || m3570 == 2 || m3570 == 4) {
+                mFrameCtrlUpper[UPPER_MOVE1_e].setRate(daPy_HIO_tact_c0::m.field_0x0);
+                mFrameCtrlUpper[UPPER_MOVE1_e].setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
+            }
+            
+            m3574 = dComIfGp_event_getTactFreeCStick(m34D0);
+            setActAnimeUpper(getTactPlayLeftArmAnm(m3574), UPPER_MOVE2_e, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, 5.0f);
+            mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
+            mFrameCtrlUpper[UPPER_MOVE2_e].setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
+            
+            mDoAud_tact_setStickPos(m3570, m3574);
+            mDoAud_tact_playArmSwing(m3570, m3574);
+        }
+    }
+    
+    if (m34D6 != 0 && m34DA != 0) {
+        mDoAud_tact_play();
+    }
+    m34DA = 1;
+    
+    return TRUE;
 }

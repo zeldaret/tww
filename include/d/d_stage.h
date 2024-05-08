@@ -1080,6 +1080,7 @@ inline u32 dStage_FileList_dt_GetParticleNo(dStage_FileList_dt_c* i_fili) {
 bool dStage_chkPlayerId(int playerId, int room_no);
 int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
 void dStage_restartRoom(u32 roomParam, u32 mode);
+void dStage_turnRestart();
 bool dStage_setShipPos(int param_0, int i_roomNo);
 BOOL dStage_checkRestart();
 void dStage_Create();

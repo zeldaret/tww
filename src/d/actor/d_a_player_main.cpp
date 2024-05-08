@@ -2260,7 +2260,7 @@ BOOL daPy_lk_c::procCall() {
         current.angle.y = shape_angle.y;
     }
     
-    if (mFrameCtrlUnder[0].getRate() < 0.01f) {
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         if (dComIfGp_getCb1Player()) {
             daPy_py_c* partner = (daPy_py_c*)dComIfGp_getCb1Player();
             partner->onNpcCallCommand();
