@@ -38,7 +38,11 @@ BOOL daObjLadder::Act_c::Delete() {
 
 /* 000009C0-00000A0C       .text Mthd_Delete__Q211daObjLadder5Act_cFv */
 BOOL daObjLadder::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+    BOOL res = MoveBGDelete();
+
+    dComIfG_resDelete(&mPhs, M_arcname);
+
+    return res;
 }
 
 /* 00000A0C-00000A78       .text demo_end_reset__Q211daObjLadder5Act_cFv */
