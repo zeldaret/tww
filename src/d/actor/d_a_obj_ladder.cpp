@@ -98,12 +98,18 @@ void daObjLadder::Act_c::mode_fell() {
 
 /* 00000EB8-00000F4C       .text set_mtx__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
+
+    mDoMtx_stack_c::transM(unk33C, unk340, 0.0f);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000F4C-00000F88       .text init_mtx__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    set_mtx();
 }
 
 /* 00000F88-000010A0       .text Execute__Q211daObjLadder5Act_cFPPA3_A4_f */
