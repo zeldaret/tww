@@ -58,8 +58,7 @@ namespace daObjLadder {
         /* 0x2E4 */ char pad2E4[8];
         /* 0x2EC */ s32 unk2EC;           /* inferred */
         /* 0x2F0 */ char pad2F0[8];       /* maybe part of unk2EC[3]? */
-        ///* 0x2F8 */ cBgS_PolyInfo unk2F8; /* inferred */
-        /* 0x2F8 */ char pad2F8[0x10];
+        /* 0x2F8 */ cBgS_PolyInfo mPolyInfo; /* inferred */
         /* 0x308 */ f32 unk308;        /* inferred */
         /* 0x30C */ f32 unk30C;        /* inferred */
         /* 0x310 */ f32 unk310;        /* inferred */

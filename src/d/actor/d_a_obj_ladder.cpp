@@ -145,12 +145,49 @@ void daObjLadder::Act_c::mode_vib() {
 
 /* 00000C98-00000CDC       .text mode_drop_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_drop_init() {
-    /* Nonmatching */
+    gravity = -5.0f;
+    speed.set(cXyz::Zero);
+    unk2DE = attr().field_0x10;
+    unk2D8 = 3;
 }
 
 /* 00000CDC-00000EA8       .text mode_drop__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_drop() {
-    /* Nonmatching */
+    daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().field_0x04, attr().field_0x08);
+
+    if (current.pos.y < unk2E0) {
+        if (unk2DE == attr().field_0x10) {
+            u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mPolyInfo);
+            fopAcM_seStart(this, JA_SE_OBJ_LADDER_FALL_1, mtrlSndId);
+
+            dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+        } else {
+            s32 tmp = attr().field_0x10 - unk2DE;
+            s32 param_2;
+
+            if (tmp == 1) {
+                param_2 = attr().field_0x11;
+            } else if (tmp == 2) {
+                param_2 = attr().field_0x12;
+            } else if (tmp == 3) {
+                param_2 = attr().field_0x13;
+            } else {
+                param_2 = attr().field_0x14;
+            }
+
+            fopAcM_seStart(this, JA_SE_OBJ_LADDER_FALL_2, param_2);
+        }
+
+        if (unk2DE >= 0) {
+            unk2DE--;
+
+            current.pos.y = unk2E0 - (current.pos.y - unk2E0) * 0.5f;
+            speed.y *= -0.5f;
+        } else {
+            current.pos.y = unk2E0;
+            mode_fell_init();
+        }
+    }
 }
 
 /* 00000EA8-00000EB4       .text mode_fell_init__Q211daObjLadder5Act_cFv */
