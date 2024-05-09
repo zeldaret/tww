@@ -9,6 +9,37 @@
 #include "d/d_procname.h"
 
 Mtx daObjLadder::Act_c::M_tmp_mtx;
+
+namespace daObjLadder {
+    namespace {
+        struct Attr_c {
+            /* 0x00 */ f32 field_0x00;
+            /* 0x04 */ f32 field_0x04;
+            /* 0x08 */ f32 field_0x08;
+            /* 0x0C */ f32 field_0x0C;
+            /* 0x10 */ u8 field_0x10;
+            /* 0x11 */ u8 field_0x11;
+            /* 0x12 */ u8 field_0x12;
+            /* 0x13 */ u8 field_0x13;
+            /* 0x14 */ u8 field_0x14;
+            /* 0x16 */ s16 field_0x16;
+            /* 0x18 */ s16 field_0x18;
+            /* 0x1A */ s16 field_0x1A;
+            /* 0x1C */ f32 field_0x1C;
+            /* 0x20 */ f32 field_0x20;
+        };
+
+        static const Attr_c L_attr = { // TODO: Figure out what these are
+            -3.0f, 0.005f, 0.0005f, 0.5f,
+            3, 75, 50, 45, 40,
+            20000, 0x3CC3,0x000F,
+            2.0f, 1.0f,
+        };
+
+        inline const Attr_c & attr() { return L_attr; }
+    }
+}
+
 const char daObjLadder::Act_c::M_arcname[] = "Mhsg";
 
 /* 00000078-0000013C       .text CreateHeap__Q211daObjLadder5Act_cFv */
