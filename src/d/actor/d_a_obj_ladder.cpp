@@ -218,13 +218,11 @@ void daObjLadder::Act_c::mode_drop() {
 
 /* 00000EA8-00000EB4       .text mode_fell_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_fell_init() {
-    /* Nonmatching */
+    unk2D8 = 4;
 }
 
 /* 00000EB4-00000EB8       .text mode_fell__Q211daObjLadder5Act_cFv */
-void daObjLadder::Act_c::mode_fell() {
-    /* Nonmatching */
-}
+void daObjLadder::Act_c::mode_fell() {}
 
 /* 00000EB8-00000F4C       .text set_mtx__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::set_mtx() {
