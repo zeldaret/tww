@@ -39,7 +39,7 @@ namespace daObjLadder {
         inline const Attr_c & attr() { return L_attr; }
 
         struct AttrType {
-            u16 field_0x00;
+            s16 field_0x00;
             s16 field_0x02;
             f32 field_0x04;
         };
@@ -60,7 +60,7 @@ const char daObjLadder::Act_c::M_arcname[] = "Mhsg";
 
 /* 00000078-0000013C       .text CreateHeap__Q211daObjLadder5Act_cFv */
 BOOL daObjLadder::Act_c::CreateHeap() {
-    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, MHSG_BDL_MHSG12));
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, attrType(mType).field_0x00));
     JUT_ASSERT(0x17E, model_data != 0);
 
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000U, 0x11000022U);
