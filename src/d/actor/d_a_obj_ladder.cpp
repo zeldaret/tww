@@ -37,6 +37,22 @@ namespace daObjLadder {
         };
 
         inline const Attr_c & attr() { return L_attr; }
+
+        struct AttrType {
+            u16 field_0x00;
+            s16 field_0x02;
+            f32 field_0x04;
+        };
+
+        static AttrType L_attr_type[] = {
+            {0x7, MHSG_DZB_MHSG6, 600.0f},
+            {0x8, MHSG_DZB_MHSG9, 900.0f},
+            {0x4, MHSG_DZB_MHSG12, 1200.0f},
+            {0x5, MHSG_DZB_MHSG15, 1500.0f},
+            {0x6, MHSG_DZB_MHSG4H, 450.0f},
+        };
+
+        inline const AttrType& attrType(s32 type) { return L_attr_type[type]; }
     }
 }
 
@@ -59,7 +75,17 @@ int daObjLadder::Act_c::Create() {
 
 /* 000002F0-000004F8       .text Mthd_Create__Q211daObjLadder5Act_cFv */
 s32 daObjLadder::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        mType = prm_get_type();
+        phase_state = MoveBGCreate(M_arcname, attrType(mType).field_0x02, dBgS_MoveBGProc_Trans, 0x900);
+
+        JUT_ASSERT(0x1DE, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+    }
+
+    return phase_state;
 }
 
 /* 000009B8-000009C0       .text Delete__Q211daObjLadder5Act_cFv */
@@ -157,7 +183,7 @@ void daObjLadder::Act_c::mode_drop() {
 
     if (current.pos.y < unk2E0) {
         if (unk2DE == attr().field_0x10) {
-            u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mPolyInfo);
+            u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mGndChk);
             fopAcM_seStart(this, JA_SE_OBJ_LADDER_FALL_1, mtrlSndId);
 
             dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
