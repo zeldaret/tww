@@ -124,12 +124,23 @@ void daObjLadder::Act_c::mode_demoreq() {
 
 /* 00000BB4-00000BDC       .text mode_vib_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_vib_init() {
-    /* Nonmatching */
+    unk2DC = attr().field_0x1A;
+    unk338 = 0;
+    unk33A = 0;
+    unk2D8 = 2;
 }
 
 /* 00000BDC-00000C98       .text mode_vib__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_vib() {
-    /* Nonmatching */
+    unk338 += attr().field_0x16;
+    unk33A += attr().field_0x18;
+
+    unk33C = cM_scos(unk338) * attr().field_0x1C;
+    unk340 = cM_scos(unk33A) * attr().field_0x20;
+
+    if (--unk2DC <= 0) {
+        mode_drop_init();
+    }
 }
 
 /* 00000C98-00000CDC       .text mode_drop_init__Q211daObjLadder5Act_cFv */
