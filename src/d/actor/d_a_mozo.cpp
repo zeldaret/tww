@@ -80,8 +80,8 @@ BOOL daMozo_c::CreateHeap() {
     m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_BTK_MOZ);
     JUT_ASSERT(0x16D, m_btk != 0);
 
-    int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, 0, 1.0f, 0, -1, false, 0);
-    int btkInitResult = mBtkAnm.init(mdlData, m_btk, true, 0, 1.0f, 0, -1, false, 0);
+    int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+    int btkInitResult = mBtkAnm.init(mdlData, m_btk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
 
     return mdlData != 0 && mAnimMorf != 0 && mAnimMorf->getModel() != 0 && brkInitResult != 0 && btkInitResult != 0;
 }

@@ -446,7 +446,7 @@ BOOL daIball_c::CreateHeap() {
     for (int i = 0; i < (int)ARRAY_SIZE(mBrkAnm); i++) {
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, brkIds[i]);
         JUT_ASSERT(1182, pbrk != 0);
-        ret = mBrkAnm[i].init(modelData, pbrk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        ret = mBrkAnm[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
         if (!ret) { return FALSE; }
     }
     

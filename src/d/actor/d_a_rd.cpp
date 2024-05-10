@@ -225,7 +225,7 @@ BOOL daRd_c::_createHeap() {
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
     JUT_ASSERT(525, btk != 0);
-    if (!mBtkAnm.init(modelData, btk, true, 0, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     
@@ -233,7 +233,7 @@ BOOL daRd_c::_createHeap() {
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
     JUT_ASSERT(550, brk != 0);
-    if (!mBrkAnm.init(modelData, brk, true, 0, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     
@@ -1333,7 +1333,10 @@ void daRd_c::setBrkAnm(s8 idx) {
         RD_BRK_BEAM_END,
     };
     static const int a_play_mod_tbl[] = {
-        0, 0, 2, 0,
+        J3DFrameCtrl::LOOP_ONCE_e,
+        J3DFrameCtrl::LOOP_ONCE_e,
+        J3DFrameCtrl::LOOP_REPEAT_e,
+        J3DFrameCtrl::LOOP_ONCE_e,
     };
     
     J3DModel* model = mpMorf->getModel();

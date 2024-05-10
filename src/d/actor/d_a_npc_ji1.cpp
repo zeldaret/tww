@@ -2634,10 +2634,10 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
         field_0x330->setAnm(temp1, temp2, param_2, speed, 0.0f, -1.0f, pSoundAnimRes);
         if(field_0xD64 == 0x13) {
-            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK), 2, 0.0f, 1.0f, 0.0f, -1.0f, 0);
+            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK), J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
         else if(field_0xD64 == 0x14) {
-            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_YOKOATTACK), 2, 0.0f, 1.0f, 0.0f, -1.0f, 0);
+            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_YOKOATTACK), J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
 
         return true;
@@ -2823,8 +2823,8 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     J3DAnmTextureSRTKey* a_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
     JUT_ASSERT(0x15D0, a_btk != 0);
 
-    int temp1 = field_0x3FC.init(modelData, a_brk, false, 2, 1.0f, 0, -1, false, 0);
-    int temp2 = field_0x418.init(modelData, a_btk, false, 2, 1.0f, 0, -1, false, 0);
+    int temp1 = field_0x3FC.init(modelData, a_brk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+    int temp2 = field_0x418.init(modelData, a_btk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
 
     if(field_0x3F8 == 0 || temp1 == 0 || temp2 == 0) {
         return false;
@@ -2833,7 +2833,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     headTexPattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Ji", JI_BTP_JI));
     JUT_ASSERT(0x15D8, headTexPattern != 0);
 
-    if(field_0x3D8.init(modelData, headTexPattern, 1, 2, 1.0f, 0, -1, false, 0) == 0) {
+    if(field_0x3D8.init(modelData, headTexPattern, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0) == 0) {
         return false;
     }
 

@@ -153,7 +153,7 @@ BOOL daNpc_Nz_c::_createHeap() {
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        0,
+        NULL,
         -1, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,

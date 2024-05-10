@@ -1669,7 +1669,7 @@ BOOL daNpc_Os_c::dNpc_Os_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f
 
     if(pMorf) {
         J3DAnmTransform* pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes(arcName, idx);
-        pMorf->setAnm(pAnimRes, loopMode, morf, playSpeed, 0.0f, -1.0f, 0);
+        pMorf->setAnm(pAnimRes, loopMode, morf, playSpeed, 0.0f, -1.0f, NULL);
         ret = true;
     }
 

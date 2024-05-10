@@ -203,7 +203,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     if (i_this->mpBrkAnm == NULL)
         return FALSE;
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bita", ita_Ef[type]);
-    if (!i_this->mpBrkAnm->init(i_this->mpModelEf->getModelData(), brk, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+    if (!i_this->mpBrkAnm->init(i_this->mpModelEf->getModelData(), brk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
         return FALSE;
 
     i_this->mpBgW = new dBgW();

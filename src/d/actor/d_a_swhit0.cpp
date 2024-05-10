@@ -111,12 +111,12 @@ BOOL daSwhit0_c::CreateHeap() {
     }
 
     J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("Always", ALWAYS_BCK_OBM_SYOUGEKISW);
-    if (mAnm.init(modelData, anm, true, 0x02, 1.0f, 0, -1, false) == 0) {
+    if (mAnm.init(modelData, anm, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false) == 0) {
         return FALSE;
     }
 
     J3DAnmTextureSRTKey* texAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_OBM_SYOUGEKISW);
-    if (mTexAnm.init(modelData, texAnm, true, 0x02, 1.0f, 0, -1, false, 0) == 0) {
+    if (mTexAnm.init(modelData, texAnm, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0) == 0) {
         return FALSE;
     }
 
