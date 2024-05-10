@@ -60,7 +60,7 @@ namespace daObjLadder {
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ Type_e mType;
-        /* 0x2D8 */ s32 unk2D8;         /* inferred */
+        /* 0x2D8 */ s32 mMode;  // TODO: Convert to enum
         /* 0x2DC */ s16 unk2DC;         /* inferred */
         /* 0x2DE */ s16 unk2DE;         /* inferred */
         /* 0x2E0 */ f32 mGndY;
