@@ -506,7 +506,7 @@ int dComIfG_resetToOpening(scene_class* i_scene) {
 
 /* 800532D8-80053330       .text phase_1__FPc */
 static int phase_1(char* i_arcName) {
-    return !dComIfG_setObjectRes(i_arcName, (u8)0, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
+    return !dComIfG_setObjectRes(i_arcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
 }
 
 /* 80053330-80053388       .text phase_2__FPc */

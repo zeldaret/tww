@@ -89,7 +89,7 @@ public:
     };
 
     enum EMountDirection {
-        UNKNOWN_MOUNT_DIRECTION = 0,
+        DEFAULT_MOUNT_DIRECTION = 0,
         MOUNT_DIRECTION_HEAD = 1,
         MOUNT_DIRECTION_TAIL = 2,
     };

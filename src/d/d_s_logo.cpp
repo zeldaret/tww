@@ -634,7 +634,7 @@ s32 phase_0(dScnLogo_c* i_this) {
 
     s32 rt;
     
-    rt = dComIfG_setObjectRes("System", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);
+    rt = dComIfG_setObjectRes("System", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 
     JUT_ASSERT(VERSION_SELECT(1169, 1350, 1378), rt == 1);
 
@@ -691,12 +691,12 @@ s32 phase_1(dScnLogo_c* i_this) {
 
 /* 8022DC58-8022DC80       .text aramMount__FPCc */
 mDoDvdThd_mountXArchive_c * aramMount(const char* pArc) {
-    return mDoDvdThd_mountXArchive_c::create(pArc, JKRArchive::UNKNOWN_MOUNT_DIRECTION, JKRArchive::MOUNT_ARAM);
+    return mDoDvdThd_mountXArchive_c::create(pArc, JKRArchive::DEFAULT_MOUNT_DIRECTION, JKRArchive::MOUNT_ARAM);
 }
 
 /* 8022DC80-8022DCA8       .text onMemMount__FPCc */
 mDoDvdThd_mountXArchive_c * onMemMount(const char* pArc) {
-    return mDoDvdThd_mountXArchive_c::create(pArc, JKRArchive::UNKNOWN_MOUNT_DIRECTION, JKRArchive::MOUNT_MEM);
+    return mDoDvdThd_mountXArchive_c::create(pArc, JKRArchive::DEFAULT_MOUNT_DIRECTION, JKRArchive::MOUNT_MEM);
 }
 
 /* 8022DCA8-8022E9B4       .text phase_2__FP10dScnLogo_c */
@@ -827,15 +827,15 @@ s32 phase_2(dScnLogo_c* i_this) {
     l_lodCommand = aramMount("/res/Stage/sea/LODALL.arc");
     JUT_ASSERT(VERSION_SELECT(1346, 1645, 1685), l_lodCommand != 0);
     
-    rt = dComIfG_setObjectRes("Always", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);
+    rt = dComIfG_setObjectRes("Always", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1351, 1650, 1690), rt == 1);
 
     archiveHeap->dump_sort();
 
-    rt = dComIfG_setObjectRes("Link", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);
+    rt = dComIfG_setObjectRes("Link", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1356, 1655, 1695), rt == 1);
 
-    rt = dComIfG_setObjectRes("Agb", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);
+    rt = dComIfG_setObjectRes("Agb", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1360, 1659, 1699), rt == 1);
 
     l_anmCommand = aramMount("/res/Object/LkAnm.arc");
@@ -885,12 +885,12 @@ s32 phase_2(dScnLogo_c* i_this) {
     l_fontCommand = onMemMount("/res/Msg/fontres.arc");
 #endif
     l_rubyCommand = onMemMount("/res/Msg/rubyres.arc");
-    l_particleCommand = mDoDvdThd_toMainRam_c::create("/res/Particle/common.jpc", JKRArchive::UNKNOWN_MOUNT_DIRECTION, dComIfGp_particle_getCommonHeap());
-    l_itemTableCommand = mDoDvdThd_toMainRam_c::create("/res/ItemTable/item_table.bin", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);
+    l_particleCommand = mDoDvdThd_toMainRam_c::create("/res/Particle/common.jpc", JKRArchive::DEFAULT_MOUNT_DIRECTION, dComIfGp_particle_getCommonHeap());
+    l_itemTableCommand = mDoDvdThd_toMainRam_c::create("/res/ItemTable/item_table.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1418, 1743, 1783), l_itemTableCommand != 0);
-    l_ActorDataCommand = mDoDvdThd_toMainRam_c::create("/res/ActorDat/ActorDat.bin", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);
+    l_ActorDataCommand = mDoDvdThd_toMainRam_c::create("/res/ActorDat/ActorDat.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1422, 1747, 1787), l_ActorDataCommand != 0);
-    l_FmapDataCommand = mDoDvdThd_toMainRam_c::create("/res/FmapDat/FmapDat.bin", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);
+    l_FmapDataCommand = mDoDvdThd_toMainRam_c::create("/res/FmapDat/FmapDat.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1426, 1751, 1791), l_FmapDataCommand != 0);
 
     JAIZelBasic::getInterface()->loadStaticWaves();
