@@ -211,8 +211,7 @@ void daObjLadder::Act_c::mode_drop() {
 
     if (current.pos.y < mGndY) {
         if (unk2DE == attr().field_0x10) {
-            u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mGndChk);
-            fopAcM_seStart(this, JA_SE_OBJ_LADDER_FALL_1, mtrlSndId);
+            fopAcM_seStart(this, JA_SE_OBJ_LADDER_FALL_1, dComIfG_Bgsp()->GetMtrlSndId(mGndChk));
 
             dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
         } else {
