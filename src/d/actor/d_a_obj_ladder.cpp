@@ -39,20 +39,20 @@ namespace daObjLadder {
         inline const Attr_c & attr() { return L_attr; }
 
         struct AttrType {
-            s16 field_0x00;
-            s16 field_0x02;
+            s16 modelId;
+            s16 dzbId;
             f32 field_0x04;
         };
 
         static AttrType L_attr_type[] = {
-            {0x7, MHSG_DZB_MHSG6, 600.0f},
-            {0x8, MHSG_DZB_MHSG9, 900.0f},
-            {0x4, MHSG_DZB_MHSG12, 1200.0f},
-            {0x5, MHSG_DZB_MHSG15, 1500.0f},
-            {0x6, MHSG_DZB_MHSG4H, 450.0f},
+            {MHSG_BDL_MHSG6, MHSG_DZB_MHSG6, 600.0f},
+            {MHSG_BDL_MHSG9, MHSG_DZB_MHSG9, 900.0f},
+            {MHSG_BDL_MHSG12, MHSG_DZB_MHSG12, 1200.0f},
+            {MHSG_BDL_MHSG15, MHSG_DZB_MHSG15, 1500.0f},
+            {MHSG_BDL_MHSG4H, MHSG_DZB_MHSG4H, 450.0f},
         };
 
-        inline const AttrType& attrType(s32 type) { return L_attr_type[type]; }
+        inline const AttrType& attr_type(Type_e type) { return L_attr_type[type]; }
     }
 }
 
@@ -60,7 +60,7 @@ const char daObjLadder::Act_c::M_arcname[] = "Mhsg";
 
 /* 00000078-0000013C       .text CreateHeap__Q211daObjLadder5Act_cFv */
 BOOL daObjLadder::Act_c::CreateHeap() {
-    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, attrType(mType).field_0x00));
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, attr_type(mType).modelId));
     JUT_ASSERT(0x17E, model_data != 0);
 
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000U, 0x11000022U);
@@ -80,7 +80,7 @@ s32 daObjLadder::Act_c::Mthd_Create() {
 
     if (phase_state == cPhs_COMPLEATE_e) {
         mType = prm_get_type();
-        phase_state = MoveBGCreate(M_arcname, attrType(mType).field_0x02, dBgS_MoveBGProc_Trans, 0x900);
+        phase_state = MoveBGCreate(M_arcname, attr_type(mType).dzbId, dBgS_MoveBGProc_Trans, 0x900);
 
         JUT_ASSERT(0x1DE, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }

@@ -7,6 +7,14 @@
 #include "f_op/f_op_actor.h"
 
 namespace daObjLadder {
+    enum Type_e {
+        MHSG6_e,
+        MHSG9_e,
+        MHSG12_e,
+        MHSG15_e,
+        MHSG4H_e,
+    };
+
     class Act_c : public dBgS_MoveBgActor {
     public:
         enum Prm_e {
@@ -22,7 +30,7 @@ namespace daObjLadder {
 
         u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EV_ID_W, PRM_EV_ID_S); }
         s32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-        s32 prm_get_type() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
+        Type_e prm_get_type() const { return (Type_e)daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
 
         BOOL CreateHeap();
         int Create();
@@ -51,7 +59,7 @@ namespace daObjLadder {
     public:
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
-        /* 0x2D4 */ s32 mType;         /* inferred */
+        /* 0x2D4 */ Type_e mType;
         /* 0x2D8 */ s32 unk2D8;         /* inferred */
         /* 0x2DC */ s16 unk2DC;         /* inferred */
         /* 0x2DE */ s16 unk2DE;         /* inferred */
