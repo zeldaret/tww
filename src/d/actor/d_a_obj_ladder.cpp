@@ -70,7 +70,35 @@ BOOL daObjLadder::Act_c::CreateHeap() {
 
 /* 0000013C-000002F0       .text Create__Q211daObjLadder5Act_cFv */
 int daObjLadder::Act_c::Create() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    init_mtx();
+
+    fopAcM_setCullSizeBox(this, -55.0f, -1.0f, -10.0f, 55.0f, attr_type(mType).field_0x04 + 41.0f, 10.0f);
+
+    cXyz pos;
+    mDoMtx_stack_c::push();
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::transM(0.0f, 10.0f, 5.0f);
+    mDoMtx_stack_c::multVec(&cXyz::Zero, &pos);
+    mDoMtx_stack_c::pop();
+
+    mGndChk.SetPos(&pos);
+    mGndChk.SetActorPid(base.mBsPcId);
+    mGndY = dComIfG_Bgsp()->GroundCross(&mGndChk);
+    unk346 = 0;
+
+    mEventIdx = dComIfGp_evmng_getEventIdx(NULL, prm_get_evId());
+
+    if (prm_get_swSave() == 0xFF || fopAcM_isSwitch(this, prm_get_swSave())) {
+        current.pos.y = mGndY;
+        set_mtx();
+        mode_fell_init();
+    } else {
+        mode_wait_init();
+    }
+
+    return TRUE;
 }
 
 /* 000002F0-000004F8       .text Mthd_Create__Q211daObjLadder5Act_cFv */
@@ -181,7 +209,7 @@ void daObjLadder::Act_c::mode_drop_init() {
 void daObjLadder::Act_c::mode_drop() {
     daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().field_0x04, attr().field_0x08);
 
-    if (current.pos.y < unk2E0) {
+    if (current.pos.y < mGndY) {
         if (unk2DE == attr().field_0x10) {
             u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mGndChk);
             fopAcM_seStart(this, JA_SE_OBJ_LADDER_FALL_1, mtrlSndId);
@@ -207,10 +235,10 @@ void daObjLadder::Act_c::mode_drop() {
         if (unk2DE >= 0) {
             unk2DE--;
 
-            current.pos.y = unk2E0 - (current.pos.y - unk2E0) * 0.5f;
+            current.pos.y = mGndY - (current.pos.y - mGndY) * 0.5f;
             speed.y *= -0.5f;
         } else {
-            current.pos.y = unk2E0;
+            current.pos.y = mGndY;
             mode_fell_init();
         }
     }

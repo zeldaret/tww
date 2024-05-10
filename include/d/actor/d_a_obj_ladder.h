@@ -63,7 +63,7 @@ namespace daObjLadder {
         /* 0x2D8 */ s32 unk2D8;         /* inferred */
         /* 0x2DC */ s16 unk2DC;         /* inferred */
         /* 0x2DE */ s16 unk2DE;         /* inferred */
-        /* 0x2E0 */ f32 unk2E0;         /* inferred */
+        /* 0x2E0 */ f32 mGndY;
         /* 0x2E4 */ dBgS_ObjGndChk mGndChk;
         /* 0x338 */ s16 unk338;        /* inferred */
         /* 0x33A */ s16 unk33A;        /* inferred */
