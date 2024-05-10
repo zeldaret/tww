@@ -802,6 +802,21 @@ public:
         ModeFlg_PARRY = 0x80000000,
     };
     
+    enum {
+        daPyItem_NONE_e = 0x100,
+        daPyItem_BOKO_e = 0x101,
+        daPyItem_UNK102_e = 0x102,
+        daPyItem_SWORD_e = 0x103,
+        daPyItem_UNK104_e = 0x104,
+        daPyItem_DRINK_BOTTLE_e = 0x105,
+        daPyItem_OPEN_BOTTLE_e = 0x106,
+        daPyItem_ESA_e = 0x107,
+        daPyItem_BOW_e = 0x108,
+        daPyItem_PHOTOBOX_e = 0x109,
+        daPyItem_UNK10A_e = 0x10A,
+        daPyItem_UNK10B_e = 0x10B,
+    };
+    
     typedef BOOL (daPy_lk_c::*ProcFunc)();
     
     void seStartOnlyReverb(u32);
@@ -1846,7 +1861,7 @@ public:
     /* 0x2E84 */ J3DModel* mpHbootsModels[2];
     /* 0x2E8C */ J3DModel* mpPringModel;
     /* 0x2E90 */ JKRSolidHeap* mpItemHeaps[2];
-    /* 0x2E98 */ J3DModel* mpHeldItemModel;
+    /* 0x2E98 */ J3DModel* mpEquipItemModel;
     /* 0x2E9C */ mDoExt_bckAnm mSwordAnim;
     /* 0x2EAC */ mDoExt_McaMorf* mpParachuteFanMorf;
     /* 0x2EB0 */ J3DAnmTevRegKey* mpBombBrk;
@@ -1858,9 +1873,9 @@ public:
     /* 0x2EC8 */ J3DAnmTextureSRTKey* mpGicer01Btk;
     /* 0x2ECC */ JKRSolidHeap* mpItemAnimeHeap;
     /* 0x2ED0 */ void* m_item_bck_buffer;
-    /* 0x2ED4 */ J3DAnmTextureSRTKey* mpHeldItemBtk;
+    /* 0x2ED4 */ J3DAnmTextureSRTKey* mpEquipItemBtk;
     /* 0x2ED8 */ J3DAnmTextureSRTKey* mpSwordBtk;
-    /* 0x2EDC */ J3DAnmTevRegKey* mpHeldItemBrk;
+    /* 0x2EDC */ J3DAnmTevRegKey* mpEquipItemBrk;
     /* 0x2EE0 */ J3DModel* mpBottleContentsModel;
     /* 0x2EE4 */ J3DModel* mpBottleCapModel;
     /* 0x2EE8 */ J3DModel* mpSwordModel1;
@@ -1942,7 +1957,7 @@ public:
     /* 0x34BA */ u8 m34BA;
     /* 0x34BB */ u8 mCurrItemHeapIdx;
     /* 0x34BC */ u8 m34BC;
-    /* 0x34BD */ u8 mLastUsedItemButtonIdx;
+    /* 0x34BD */ u8 mReadyItemIdx; // Which of the three item buttons the player last used.
     /* 0x34BE */ u8 m34BE;
     /* 0x34BF */ s8 mReverb;
     /* 0x34C0 */ u8 mLeftHandIdx;
@@ -2025,14 +2040,14 @@ public:
     /* 0x354C */ s16 mTinkleHoverTimer;
     /* 0x354E */ s16 mTinkleShieldTimer;
     /* 0x3550 */ s16 m3550;
-    /* 0x3552 */ u16 mKeepItemType;
+    /* 0x3552 */ u16 mKeepItem; // The item Link was previously holding in his hand, and is now temporarily put away.
     /* 0x3554 */ s16 m3554;
     /* 0x3556 */ u8 m3556[0x3558 - 0x3556];
     /* 0x3558 */ s16 m3558;
     /* 0x355A */ s16 m355A;
     /* 0x355C */ s16 m355C;
     /* 0x355E */ s16 m355E;
-    /* 0x3560 */ u16 mHeldItemType;
+    /* 0x3560 */ u16 mEquipItem; // The item Link is currently holding in his hand.
     /* 0x3562 */ u16 m3562;
     /* 0x3564 */ s16 m3564;
     /* 0x3566 */ s16 m3566;

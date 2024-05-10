@@ -30,20 +30,20 @@ u32 daPy_lk_c::getDayNightParamData() {
 
 /* 8014D7D4-8014D8AC       .text setTactModel__9daPy_lk_cFv */
 void daPy_lk_c::setTactModel() {
-    if (mHeldItemType == dItem_WIND_WAKER_e)
+    if (mEquipItem == dItem_WIND_WAKER_e)
         return;
     
     deleteEquipItem(FALSE);
-    mHeldItemType = dItem_WIND_WAKER_e;
+    mEquipItem = dItem_WIND_WAKER_e;
     JKRHeap* oldHeap = setItemHeap();
     
-    J3DModelData* modelData = initModel(&mpHeldItemModel, LINK_BDL_TAKT, 0x37221222);
+    J3DModelData* modelData = initModel(&mpEquipItemModel, LINK_BDL_TAKT, 0x37221222);
     u8* buffer = new(0x20) u8[0x400];
     dComIfGp_getAnmArchive()->readIdxResource(buffer, 0x400, LKANM_BRK_TTAKT);
-    mpHeldItemBrk = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(buffer);
-    mpHeldItemBrk->setFrame(0.0f);
-    mpHeldItemBrk->searchUpdateMaterialID(modelData);
-    modelData->entryTevRegAnimator(mpHeldItemBrk);
+    mpEquipItemBrk = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(buffer);
+    mpEquipItemBrk->setFrame(0.0f);
+    mpEquipItemBrk->searchUpdateMaterialID(modelData);
+    modelData->entryTevRegAnimator(mpEquipItemBrk);
     
     mDoExt_setCurrentHeap(oldHeap);
 }
@@ -124,10 +124,10 @@ void daPy_lk_c::setTactZev(uint tactZevPartnerPID, int r30, char* r31) {
 
 /* 8014DA78-8014DACC       .text getTactTopPos__9daPy_lk_cFP4cXyz */
 BOOL daPy_lk_c::getTactTopPos(cXyz* out) {
-    if (mHeldItemType != dItem_WIND_WAKER_e || mpHeldItemModel == NULL) {
+    if (mEquipItem != dItem_WIND_WAKER_e || mpEquipItemModel == NULL) {
         return FALSE;
     } else {
-        MTXMultVec(mpHeldItemModel->getBaseTRMtx(), &l_tact_top, out);
+        MTXMultVec(mpEquipItemModel->getBaseTRMtx(), &l_tact_top, out);
         return TRUE;
     }
 }
@@ -275,7 +275,7 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     initShipRideUseItem(r31, 2);
     
     m34D2 = -1;
-    m32E4.makeEmitter(0x50, mpHeldItemModel->getBaseTRMtx(), &current.pos, NULL);
+    m32E4.makeEmitter(0x50, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     m3570 = r30;
     m34D8 = 0;
     m3574 = -1;
@@ -348,7 +348,7 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
         }
     }
     
-    m32E4.makeEmitter(0x51, mpHeldItemModel->getBaseTRMtx(), &current.pos, NULL);
+    m32E4.makeEmitter(0x51, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     m34D0 = 0;
     m3574 = r30;
     m3624 = 0;
@@ -488,7 +488,7 @@ BOOL daPy_lk_c::procTactPlayOriginal_init() {
     mDoAud_tact_setStickPos(m3570, m3574);
     mDoAud_tact_playArmSwing(m3570, m3574);
     setTactModel();
-    m32E4.makeEmitter(0x51, mpHeldItemModel->getBaseTRMtx(), &current.pos, NULL);
+    m32E4.makeEmitter(0x51, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     m34D6 = 0xF;
     m34DA = 0;
     mDoAud_taktModeMute();

@@ -54,21 +54,21 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
     
     J3DAnmTransform* bck = checkNormalSwordEquip() ? getItemAnimeResource(LKANM_BCK_CUTAA) : getItemAnimeResource(LKANM_BCK_CUTAMS);
     
-    mHeldItemType = 0x103;
+    mEquipItem = daPyItem_SWORD_e;
     JKRHeap* oldHeap = setItemHeap();
     
     const sword_model_tbl_s& model_tbl = checkNormalSwordEquip() ? sword_model_tbl[0] : sword_model_tbl[1];
-    J3DModelData* modelData = initModel(&mpHeldItemModel, model_tbl.bladeModel, 0x37221222);
+    J3DModelData* modelData = initModel(&mpEquipItemModel, model_tbl.bladeModel, 0x37221222);
     BOOL ret = mSwordAnim.init(modelData, bck, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
     if (!ret) { JUT_ASSERT(86, 0); }
     
     if (!checkNormalSwordEquip()) {
         buffer = new(0x20) u8[0x400];
         JKRReadIdxResource(buffer, 0x400, LKANM_BTK_TSWMS, dComIfGp_getAnmArchive());
-        mpHeldItemBtk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(buffer));
-        mpHeldItemBtk->setFrame(0.0f);
-        mpHeldItemBtk->searchUpdateMaterialID(modelData);
-        modelData->entryTexMtxAnimator(mpHeldItemBtk);
+        mpEquipItemBtk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(buffer));
+        mpEquipItemBtk->setFrame(0.0f);
+        mpEquipItemBtk->searchUpdateMaterialID(modelData);
+        modelData->entryTexMtxAnimator(mpEquipItemBtk);
     }
     
     mSwBlur.mpPosBuffer = new(0x20) u8[0x4800];
@@ -83,10 +83,10 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
     
     buffer = new(0x20) u8[0x400];
     JKRReadIdxResource(buffer, 0x400, model_tbl.glowBrk, dComIfGp_getAnmArchive());
-    mpHeldItemBrk = static_cast<J3DAnmTevRegKey*>(J3DAnmLoaderDataBase::load(buffer));
-    mpHeldItemBrk->setFrame(0.0f);
-    mpHeldItemBrk->searchUpdateMaterialID(modelData);
-    modelData->entryTevRegAnimator(mpHeldItemBrk);
+    mpEquipItemBrk = static_cast<J3DAnmTevRegKey*>(J3DAnmLoaderDataBase::load(buffer));
+    mpEquipItemBrk->setFrame(0.0f);
+    mpEquipItemBrk->searchUpdateMaterialID(modelData);
+    modelData->entryTevRegAnimator(mpEquipItemBrk);
     
     modelData = initModel(&mpSwordTipStabModel, model_tbl.tipStabModel, 0x13000223);
     
@@ -220,7 +220,7 @@ void daPy_lk_c::setExtraFinishCutAtParam(u8 cutType) {
 /* 8015585C-80155970       .text setJumpCutAtParam__9daPy_lk_cFv */
 void daPy_lk_c::setJumpCutAtParam() {
     mCutCount = 0;
-    if (mHeldItemType == 0x103) {
+    if (mEquipItem == daPyItem_SWORD_e) {
         int atp;
         f32 radius;
         if (checkNormalSwordEquip()) {
@@ -233,7 +233,7 @@ void daPy_lk_c::setJumpCutAtParam() {
             m35FC = daPy_HIO_cut_c0::m.field_0x58;
         }
         setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, 0xA, radius);
-    } else if (mHeldItemType == dItem_SKULL_HAMMER_e) {
+    } else if (mEquipItem == dItem_SKULL_HAMMER_e) {
         setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK1, dCcD_SE_UNK5, G_AT_MARK_NORMAL_HIT, 0x13, 50.0f);
     } else if (mActorKeepEquip.getActor()) {
         setEnemyWeaponAtParam(TRUE);
