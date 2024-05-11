@@ -297,7 +297,7 @@ int daObjLadder::Act_c::Execute(Mtx** ppMtx) {
 BOOL daObjLadder::Act_c::Draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
-    
+
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
