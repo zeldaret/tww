@@ -17,6 +17,14 @@ namespace daObjLadder {
 
     class Act_c : public dBgS_MoveBgActor {
     public:
+        enum Mode_e {
+            Mode_WAIT_e,
+            Mode_DEMOREQ_e,
+            Mode_VIB_e,
+            Mode_DROP_e,
+            Mode_FELL_e,
+        };
+
         enum Prm_e {
             PRM_EV_ID_W = 0x08,
             PRM_EV_ID_S = 0x10,
@@ -60,17 +68,17 @@ namespace daObjLadder {
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ Type_e mType;
-        /* 0x2D8 */ s32 mMode;  // TODO: Convert to enum
-        /* 0x2DC */ s16 unk2DC;         /* inferred */
-        /* 0x2DE */ s16 unk2DE;         /* inferred */
+        /* 0x2D8 */ Mode_e mMode;
+        /* 0x2DC */ s16 unk2DC;
+        /* 0x2DE */ s16 unk2DE;
         /* 0x2E0 */ f32 mGndY;
         /* 0x2E4 */ dBgS_ObjGndChk mGndChk;
-        /* 0x338 */ s16 unk338;        /* inferred */
-        /* 0x33A */ s16 unk33A;        /* inferred */
-        /* 0x33C */ f32 unk33C;        /* inferred */
-        /* 0x340 */ f32 unk340;        /* inferred */
-        /* 0x344 */ s16 mEventIdx;        /* inferred */
-        /* 0x346 */ u8 unk346;         /* inferred */
+        /* 0x338 */ s16 unk338;
+        /* 0x33A */ s16 unk33A;
+        /* 0x33C */ f32 unk33C;
+        /* 0x340 */ f32 unk340;
+        /* 0x344 */ s16 mEventIdx;
+        /* 0x346 */ u8 unk346;
     };
 };
 

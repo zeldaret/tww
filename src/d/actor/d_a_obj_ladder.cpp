@@ -38,7 +38,7 @@ namespace daObjLadder {
         static const Attr_c L_attr = { // TODO: Figure out what these are
             -3.0f, 0.005f, 0.0005f, 0.5f,
             3, 75, 50, 45, 40,
-            20000, 0x3CC3,0x000F,
+            20000, 0x3CC3, 0x000F,
             2.0f, 1.0f,
         };
 
@@ -146,7 +146,7 @@ void daObjLadder::Act_c::demo_end_reset() {
 
 /* 00000A78-00000A84       .text mode_wait_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_wait_init() {
-    mMode = 0;
+    mMode = Mode_WAIT_e;
 }
 
 /* 00000A84-00000AE0       .text mode_wait__Q211daObjLadder5Act_cFv */
@@ -158,7 +158,7 @@ void daObjLadder::Act_c::mode_wait() {
 
 /* 00000AE0-00000AF4       .text mode_demoreq_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_demoreq_init() {
-    mMode = 1;
+    mMode = Mode_DEMOREQ_e;
     unk346 = 0;
 }
 
@@ -187,7 +187,7 @@ void daObjLadder::Act_c::mode_vib_init() {
     unk2DC = attr().field_0x1A;
     unk338 = 0;
     unk33A = 0;
-    mMode = 2;
+    mMode = Mode_VIB_e;
 }
 
 /* 00000BDC-00000C98       .text mode_vib__Q211daObjLadder5Act_cFv */
@@ -208,7 +208,7 @@ void daObjLadder::Act_c::mode_drop_init() {
     gravity = -5.0f;
     speed.set(cXyz::Zero);
     unk2DE = attr().field_0x10;
-    mMode = 3;
+    mMode = Mode_DROP_e;
 }
 
 /* 00000CDC-00000EA8       .text mode_drop__Q211daObjLadder5Act_cFv */
@@ -251,7 +251,7 @@ void daObjLadder::Act_c::mode_drop() {
 
 /* 00000EA8-00000EB4       .text mode_fell_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_fell_init() {
-    mMode = 4;
+    mMode = Mode_FELL_e;
 }
 
 /* 00000EB4-00000EB8       .text mode_fell__Q211daObjLadder5Act_cFv */
