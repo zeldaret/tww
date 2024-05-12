@@ -1551,7 +1551,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_iceisland"),
     ActorRel(NonMatching, "d_a_obj_jump"),
     ActorRel(NonMatching, "d_a_obj_kanoke"),
-    ActorRel(NonMatching, "d_a_obj_ladder"),
+    ActorRel(NonMatching, "d_a_obj_ladder", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_light"),
     ActorRel(NonMatching, "d_a_obj_mkie"),
     ActorRel(NonMatching, "d_a_obj_mkiek"),
