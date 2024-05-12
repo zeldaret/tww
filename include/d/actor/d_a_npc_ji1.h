@@ -14,11 +14,36 @@ class mDoExt_McaMorf;
 
 class daNpc_Ji1_c : public fopAc_ac_c {
 public:
+    typedef int (daNpc_Ji1_c::*Action_t)(void*);
+    typedef int (daNpc_Ji1_c::*SubAction_t)();
+
     void SpRollCutChcek() {}
-    void checkAction(int (daNpc_Ji1_c::*)(void*)) {}
-    void checkSubAction(int (daNpc_Ji1_c::*)()) {}
-    void setAction(int (daNpc_Ji1_c::*)(void*), void*) {}
-    void setSubAction(int (daNpc_Ji1_c::*)()) {}
+
+    bool checkAction(Action_t action) {
+        return field_0x2B0 == action;
+    }
+
+    bool checkSubAction(SubAction_t subAction) {
+        return field_0x2D4 == subAction;
+    }
+
+    void setAction(Action_t action, void* arg) {
+        if(field_0x2B0 != action) {
+            if(field_0x2B0) {
+                field_0xC78 = 0xFF;
+                (this->*field_0x2B0)(arg);
+            }
+
+            field_0x2BC = field_0x2B0;
+            field_0x2B0 = action;
+            field_0xC78 = 0;
+            (this->*field_0x2B0)(arg);
+        }
+    }
+
+    void setSubAction(SubAction_t subAction) {
+        field_0x2D4 = subAction;
+    }
 
     BOOL isGuardAnim();
     BOOL isAttackAnim();
@@ -26,26 +51,26 @@ public:
     BOOL isItemWaitAnim();
     BOOL isClearRecord(short);
     void setClearRecord(short);
-    u32 normalSubActionHarpoonGuard(short);
-    u32 normalSubActionGuard(short);
-    u32 normalAction(void*);
-    u32 kaitenExpAction(void*);
-    u32 kaitenspeakAction(void*);
-    u32 kaitenwaitAction(void*);
-    u32 kaitenAction(void*);
+    BOOL normalSubActionHarpoonGuard(short);
+    BOOL normalSubActionGuard(short);
+    BOOL normalAction(void*);
+    BOOL kaitenExpAction(void*);
+    BOOL kaitenspeakAction(void*);
+    BOOL kaitenwaitAction(void*);
+    BOOL kaitenAction(void*);
     u32 getMsg1stType();
     u32 getMsg2ndType();
     u32 getMsg();
-    u16 next_msgStatus(u32* pMsgNo);
-    u32 talkAction(void*);
-    u32 speakAction(void*);
-    u32 speakBadAction(void*);
+    u16 next_msgStatus(u32* msgId);
+    BOOL talkAction(void*);
+    BOOL speakAction(void*);
+    BOOL speakBadAction(void*);
     static void* initPosObject(void*, void*);
     void initPos(int);
     void createItem();
     void set_mtx();
     s32 getEventActionNo(int);
-    u32 eventAction(void*);
+    BOOL eventAction(void*);
     u32 evn_init_pos_init(int);
     u32 evn_setAnm_init(int);
     u32 evn_talk_init(int);
@@ -63,70 +88,67 @@ public:
     u32 evn_hide_init(int);
     void AnimeControlToWait();
     u32 privateCut();
-    u32 setParticle(int, float, float);
+    u32 setParticle(int, f32, f32);
     void dtParticle();
-    u32 setParticleAT(int, float, float);
+    u32 setParticleAT(int, f32, f32);
     void dtParticleAT();
-    void startspeakAction(void*);
-    u32 endspeakAction(void*);
-    void reiAction(void*);
-    void plmoveAction(void*);
-    void teachMove(float);
-    BOOL teachSpRollCutMove(float);
+    BOOL startspeakAction(void*);
+    BOOL endspeakAction(void*);
+    BOOL reiAction(void*);
+    BOOL plmoveAction(void*);
+    void teachMove(f32);
+    BOOL teachSpRollCutMove(f32);
     void calcCoCorrectValue();
     void calcBgCorrectValue();
-    void MoveToPlayer(float, unsigned char);
+    BOOL MoveToPlayer(f32, u8);
     void teachSubActionAttackInit();
-    void teachSubActionAttack();
+    BOOL teachSubActionAttack();
     void teachSubActionJumpInit();
-    void teachSubActionJump();
-    u32 teachAction(void*);
-    u32 teachSPRollCutAction(void*);
+    BOOL teachSubActionJump();
+    BOOL teachAction(void*);
+    BOOL teachSPRollCutAction(void*);
     void battleGameSetTimer();
-    void battleMove(float);
+    void battleMove(f32);
     void battleSubActionWaitInit();
-    void battleSubActionWait();
+    BOOL battleSubActionWait();
     void battleSubActionNockBackInit(int);
-    u32 battleSubActionNockBack();
+    BOOL battleSubActionNockBack();
     void battleSubActionAttackInit();
-    void battleSubActionAttack();
+    BOOL battleSubActionAttack();
     void battleSubActionTateAttackInit();
-    void battleSubActionTateAttack();
+    BOOL battleSubActionTateAttack();
     void battleSubActionYokoAttackInit();
-    void battleSubActionYokoAttack();
+    BOOL battleSubActionYokoAttack();
     void battleSubActionJumpInit();
-    void battleSubActionJump();
+    BOOL battleSubActionJump();
     void battleSubActionDamageInit();
-    void battleSubActionDamage();
+    BOOL battleSubActionDamage();
     void battleSubActionJpGuardInit();
-    void battleSubActionJpGuard();
+    BOOL battleSubActionJpGuard();
     void battleSubActionGuardInit();
-    void battleSubActionGuard();
+    BOOL battleSubActionGuard();
     void battleAtSet();
     BOOL battleGuardCheck();
-    u32 battleAction(void*);
+    BOOL battleAction(void*);
     BOOL checkCutType(int, int);
-    void setAnimFromMsgNo(unsigned long);
-    BOOL setAnm(int, float, int);
+    void setAnimFromMsgNo(u32);
+    BOOL setAnm(int, f32, int);
     s32 _create();
     BOOL CreateHeap();
     BOOL CreateInit();
     BOOL _delete();
     BOOL _execute();
     BOOL _draw();
-    BOOL chkAttention(cXyz, short);
+    BOOL chkAttention(cXyz, s16);
     BOOL lookBack();
-    void setHitParticle(cXyz*, unsigned long);
+    void setHitParticle(cXyz*, u32);
     void setGuardParticle();
     void BackSlideInit();
-    void BackSlide(float, float);
+    void BackSlide(f32, f32);
     void harpoonRelease(cXyz*);
     void harpoonMove();
 
 public:
-    typedef u32 (daNpc_Ji1_c::*Func_t)(void*);
-    typedef u32 (daNpc_Ji1_c::*Func2_t)();
-
     /* 0x290 */ f32 field_0x290;
     /* 0x294 */ f32 field_0x294;
     /* 0x298 */ f32 field_0x298;
@@ -135,10 +157,10 @@ public:
     /* 0x2A4 */ f32 field_0x2A4;
     /* 0x2A8 */ u8 field_0x2A8;
     /* 0x2AC */ u32 field_0x2AC;
-    /* 0x2B0 */ Func_t field_0x2B0;
-    /* 0x2BC */ Func_t field_0x2BC;
-    /* 0x2C8 */ Func_t field_0x2C8;
-    /* 0x2D4 */ Func2_t field_0x2D4;
+    /* 0x2B0 */ Action_t field_0x2B0;
+    /* 0x2BC */ Action_t field_0x2BC;
+    /* 0x2C8 */ Action_t field_0x2C8;
+    /* 0x2D4 */ SubAction_t field_0x2D4;
     /* 0x2E0 */ dPa_smokeEcallBack field_0x2E0;
     /* 0x300 */ dPa_smokeEcallBack field_0x300;
     /* 0x320 */ cXyz field_0x320;
@@ -215,24 +237,7 @@ public:
     /* 0xC40 */ cXyz field_0xC40;
     /* 0xC4C */ f32 field_0xC4C;
     /* 0xC50 */ f32 field_0xC50;
-    /* 0xC54 */ s16 field_0xC54;
-    /* 0xC56 */ s16 field_0xC56;
-    /* 0xC58 */ s16 field_0xC58;
-    /* 0xC5A */ s16 field_0xC5A;
-    /* 0xC5C */ s16 field_0xC5C;
-    /* 0xC5E */ s16 field_0xC5E;
-    /* 0xC60 */ s16 field_0xC60;
-    /* 0xC62 */ s16 field_0xC62;
-    /* 0xC64 */ s16 field_0xC64;
-    /* 0xC66 */ s16 field_0xC66;
-    /* 0xC68 */ s16 field_0xC68;
-    /* 0xC6A */ s16 field_0xC6A;
-    /* 0xC6C */ s16 field_0xC6C;
-    /* 0xC6E */ s16 field_0xC6E;
-    /* 0xC70 */ s16 field_0xC70;
-    /* 0xC72 */ s16 field_0xC72;
-    /* 0xC74 */ s16 field_0xC74;
-    /* 0xC76 */ s16 field_0xC76;
+    /* 0xC54 */ s16 field_0xC54[0x12];
     /* 0xC78 */ s8 field_0xC78;
     /* 0xC7C */ request_of_phase_process_class field_0xC7C;
     /* 0xC84 */ u32 field_0xC84;
