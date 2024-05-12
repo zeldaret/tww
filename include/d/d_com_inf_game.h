@@ -480,10 +480,13 @@ public:
     u8 checkFwaterTimer() { return mFwaterTimer; }
 
     u8 getMiniGameType() { return mMiniGameType; }
-
-    void endMiniGame(u16 param_1) {
+    void startMiniGame(u8 i_gameType) {
+        mMiniGameType = i_gameType;
+        mMinigameFlags |= 1 << (i_gameType - 1); // set Nth bit
+    }
+    void endMiniGame(u16 i_gameType) {
         mMiniGameType = 0;
-        field_0x4A38 ^= 1 << (param_1 - 1); // toggle Nth bit
+        mMinigameFlags ^= 1 << (i_gameType - 1); // toggle Nth bit
         field_0x4A3E = 0;
     }
 
@@ -666,7 +669,7 @@ public:
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
     /* 0x4A28 */ u32 mPlayerStatus[2][2];
-    /* 0x4A38 */ u16 field_0x4A38;
+    /* 0x4A38 */ u16 mMinigameFlags;
     /* 0x4A3A */ u8 mMiniGameType;
     /* 0x4A3C */ s16 mMiniGameRupee;
     /* 0x4A3E */ u8 field_0x4A3E;
@@ -2329,8 +2332,12 @@ inline u8 dComIfGp_getMiniGameType() {
     return g_dComIfG_gameInfo.play.getMiniGameType();
 }
 
-inline void dComIfGp_endMiniGame(u16 param_1) {
-    g_dComIfG_gameInfo.play.endMiniGame(param_1);
+inline void dComIfGp_startMiniGame(u8 i_gameType) {
+    g_dComIfG_gameInfo.play.startMiniGame(i_gameType);
+}
+
+inline void dComIfGp_endMiniGame(u16 i_gameType) {
+    g_dComIfG_gameInfo.play.endMiniGame(i_gameType);
 }
 
 inline u8 dComIfGp_getAStatus() {
@@ -2951,12 +2958,8 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* arc_nam
 int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* resName, JKRHeap* heap);
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* resName);
 
-inline int dComIfG_setObjectRes(const char* name, u8 param_1, JKRHeap* heap) {
-    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, param_1, heap);
-}
-
-inline int dComIfG_setObjectRes(const char* name, void* param_1, u32 param_2) {
-    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, param_1, param_2, NULL);
+inline int dComIfG_setObjectRes(const char* name, u8 direction, JKRHeap* heap) {
+    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, direction, heap);
 }
 
 inline int dComIfG_setStageRes(const char* name, JKRHeap* heap) {

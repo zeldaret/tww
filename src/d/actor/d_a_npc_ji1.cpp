@@ -370,7 +370,7 @@ static BOOL daNpc_Ji1_plRoomOutCheck() {
 
 /* 00000864-00000E98       .text normalSubActionHarpoonGuard__11daNpc_Ji1_cFs */
 BOOL daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
 
     if(field_0xD6C == 0) {
         if(field_0x7E0.ChkTgHit()) {
@@ -446,7 +446,7 @@ BOOL daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
 
 /* 00000E98-00001294       .text normalSubActionGuard__11daNpc_Ji1_cFs */
 BOOL daNpc_Ji1_c::normalSubActionGuard(s16 param_1) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
 
     if(field_0xD6C == 0) {
         if(field_0x7E0.ChkTgHit()) {
@@ -544,8 +544,6 @@ BOOL daNpc_Ji1_c::normalAction(void*) {
 
 /* 000015E4-000019B0       .text kaitenExpAction__11daNpc_Ji1_cFPv */
 BOOL daNpc_Ji1_c::kaitenExpAction(void*) {
-    /* Nonmatching */
-
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz delta = player->current.pos - current.pos;
     f32 temp = delta.absXZ();
@@ -597,8 +595,6 @@ BOOL daNpc_Ji1_c::kaitenExpAction(void*) {
 
 /* 000019B0-00001B9C       .text kaitenspeakAction__11daNpc_Ji1_cFPv */
 BOOL daNpc_Ji1_c::kaitenspeakAction(void*) {
-    /* Nonmatching */
-
     if(field_0xC78 == 0) {
         setAnm(1, 8.0f, 0);
         field_0xC78++;
@@ -629,8 +625,7 @@ BOOL daNpc_Ji1_c::kaitenspeakAction(void*) {
 
 /* 00001B9C-0000214C       .text kaitenwaitAction__11daNpc_Ji1_cFPv */
 BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
-    /* Nonmatching */
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     cXyz delta = player->current.pos - current.pos;
     f32 temp = delta.absXZ();
     
@@ -653,15 +648,15 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
             return true;
         }
 
-        player = daPy_getPlayerActorClass();
+        daPy_py_c* r27 = (daPy_py_c*)daPy_getPlayerActorClass();
         cXyz delta2 = player->current.pos - current.pos;
         s16 temp2 = cM_atan2s(delta2.x, delta2.z);
 
         if(!dComIfGs_isEventBit(0x501) && isGuardAnim() == 0) {
-            cXyz delta3 = player->current.pos - current.pos;
+            cXyz delta3 = r27->current.pos - current.pos;
             s16 temp3 = cM_atan2s(delta3.x, delta3.z);
             cLib_addCalcAngleS2(&current.angle.y, temp3, 0x10, 0x800);
-            if(player->checkFrontRoll()) {
+            if(r27->checkFrontRoll()) {
                 setAnm(1, 6.0f, 0);
             }
             else {
@@ -679,7 +674,7 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
             }
         }
 
-        if(temp < l_HIO.field_0x2C && isGuardAnim() == 0 && field_0xD64 != 0xD && speedF < 1.0f) {
+        if(temp < l_HIO.field_0x2C && isGuardAnim() == 0 && field_0xD64 != 0xD && r27->speedF < 1.0f) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
 
@@ -703,7 +698,6 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
 
 /* 0000214C-00002738       .text kaitenAction__11daNpc_Ji1_cFPv */
 BOOL daNpc_Ji1_c::kaitenAction(void*) {
-    /* Nonmatching */
     if(field_0xC78 == 0) {
         if(!eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderOtherEventId(this, field_0xC54[5]);
@@ -907,8 +901,6 @@ u32 daNpc_Ji1_c::getMsg() {
 
 /* 00002A60-00002C64       .text next_msgStatus__11daNpc_Ji1_cFPUl */
 u16 daNpc_Ji1_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching */
-
     u16 status = fopMsgStts_MSG_CONTINUES_e;
     switch(field_0x2AC) {
         case 0x951:
@@ -1321,8 +1313,6 @@ void daNpc_Ji1_c::set_mtx() {
 
 /* 00004448-00004488       .text getEventActionNo__11daNpc_Ji1_cFi */
 s32 daNpc_Ji1_c::getEventActionNo(int staffIdx) {
-    /* Nonmatching */
-
     static char* ActionNames[] = {
         "00_dummy",
         "01_dummy",
@@ -1406,8 +1396,6 @@ u32 daNpc_Ji1_c::evn_setAnm_init(int staffIdx) {
 
 /* 00004838-000049AC       .text evn_talk_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_talk_init(int staffIdx) {
-    /* Nonmatching */
-
     u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     u32* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
 
@@ -1732,7 +1720,11 @@ u32 daNpc_Ji1_c::evn_game_mode_init(int staffIdx) {
 u32 daNpc_Ji1_c::evn_turn_to_player() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     s16 target = cLib_targetAngleY(&current.pos, &player->current.pos);
-    return cLib_addCalcAngleS(&current.angle.y, target, 4, 0x1000, 0x100) == 0;
+    if (cLib_addCalcAngleS(&current.angle.y, target, 4, 0x1000, 0x100) == 0) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 /* 0000545C-00005508       .text evn_hide_init__11daNpc_Ji1_cFi */
@@ -1780,8 +1772,6 @@ void daNpc_Ji1_c::AnimeControlToWait() {
 
 /* 000055E4-000057DC       .text privateCut__11daNpc_Ji1_cFv */
 u32 daNpc_Ji1_c::privateCut() {
-    /* Nonmatching */
-
     int staffIdx = dComIfGp_evmng_getMyStaffId(mEventCut.getActorName());
     if(staffIdx == -1) {
         return false;
@@ -1901,8 +1891,6 @@ void daNpc_Ji1_c::dtParticle() {
 
 /* 000058F0-000059E8       .text setParticleAT__11daNpc_Ji1_cFiff */
 u32 daNpc_Ji1_c::setParticleAT(int max, f32 rate, f32 spread) {
-    /* Nonmatching */
-
     if(field_0x300.getEmitter() == 0) {
         JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
         if(field_0x300.getEmitter()) {
@@ -2077,7 +2065,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
     if(field_0xC78 == 0) {
         dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
         setAnm(5, 0.0f, 0);
-        attention_info.flags |= fopAc_Attn_LOCKON_MISC_e;
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_MISC_e);
         field_0xC90 = 0;
         field_0xD34 = 0;
         field_0xC30 = 0;
@@ -2621,8 +2609,8 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
         dComIfGp_setMiniGameRupee(0);
         field_0xC3C = 0;
         setAnm(5, 0.0f, 0);
-        attention_info.flags |= fopAc_Attn_LOCKON_MISC_e;
-        attention_info.flags |= fopAc_Attn_LOCKON_BATTLE_e;
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_MISC_e);
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 3;
         field_0xC30 = (s16)cM_rndF(150.0f) + 30;
         field_0xD70 = 0;
@@ -2632,7 +2620,7 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
         field_0xC78++;
     }
     else if(field_0xC78 == -1) {
-        attention_info.flags &= ~fopAc_Attn_LOCKON_BATTLE_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0xB5;
     }
     else {
@@ -2651,7 +2639,7 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
             dtParticleAT();
         }
 
-        game_life_point = (3 - field_0xC3C) & ~(3 - field_0xC3C >> 31);
+        game_life_point = cLib_minLimit<int>(3 - field_0xC3C, 0);
     }
 
     return true;
@@ -3415,7 +3403,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
     field_0xD7C = 0;
     field_0xD7E = 0;
     
-    attention_info.flags |= fopAc_Attn_LOCKON_MISC_e;
+    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_MISC_e);
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
     attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0xB5;

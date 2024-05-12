@@ -11,6 +11,7 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_main_data.h"
 #include "f_op/f_op_camera.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 #include "d/d_procname.h"

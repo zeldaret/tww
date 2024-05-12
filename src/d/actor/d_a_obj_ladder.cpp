@@ -30,7 +30,7 @@ namespace daObjLadder {
             /* 0x14 */ u8 field_0x14;
             /* 0x16 */ s16 field_0x16;
             /* 0x18 */ s16 field_0x18;
-            /* 0x1A */ s16 field_0x1A;
+            /* 0x1A */ s16 mVibDuration;
             /* 0x1C */ f32 field_0x1C;
             /* 0x20 */ f32 field_0x20;
         };
@@ -184,7 +184,7 @@ void daObjLadder::Act_c::mode_demoreq() {
 
 /* 00000BB4-00000BDC       .text mode_vib_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_vib_init() {
-    unk2DC = attr().field_0x1A;
+    mVibTimer = attr().mVibDuration;
     unk338 = 0;
     unk33A = 0;
     mMode = Mode_VIB_e;
@@ -195,10 +195,10 @@ void daObjLadder::Act_c::mode_vib() {
     unk338 += attr().field_0x16;
     unk33A += attr().field_0x18;
 
-    unk33C = cM_scos(unk338) * attr().field_0x1C;
-    unk340 = cM_scos(unk33A) * attr().field_0x20;
+    mVibXOffset = cM_scos(unk338) * attr().field_0x1C;
+    mVibYOffset = cM_scos(unk33A) * attr().field_0x20;
 
-    if (--unk2DC <= 0) {
+    if (--mVibTimer <= 0) {
         mode_drop_init();
     }
 }
@@ -263,7 +263,7 @@ void daObjLadder::Act_c::set_mtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 
-    mDoMtx_stack_c::transM(unk33C, unk340, 0.0f);
+    mDoMtx_stack_c::transM(mVibXOffset, mVibYOffset, 0.0f);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 

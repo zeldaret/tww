@@ -8,11 +8,11 @@
 
 namespace daObjLadder {
     enum Type_e {
-        MHSG6_e,
-        MHSG9_e,
-        MHSG12_e,
-        MHSG15_e,
-        MHSG4H_e,
+        Type_MHSG6_e,
+        Type_MHSG9_e,
+        Type_MHSG12_e,
+        Type_MHSG15_e,
+        Type_MHSG4H_e,
     };
 
     class Act_c : public dBgS_MoveBgActor {
@@ -26,19 +26,19 @@ namespace daObjLadder {
         };
 
         enum Prm_e {
-            PRM_EV_ID_W = 0x08,
-            PRM_EV_ID_S = 0x10,
-
-            PRM_SWSAVE_W = 0x08,
-            PRM_SWSAVE_S = 0x08,
-
             PRM_TYPE_W = 0x03,
             PRM_TYPE_S = 0x00,
+            
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x08,
+            
+            PRM_EV_ID_W = 0x08,
+            PRM_EV_ID_S = 0x10,
         };
 
-        u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EV_ID_W, PRM_EV_ID_S); }
-        s32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         Type_e prm_get_type() const { return (Type_e)daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
+        s32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EV_ID_W, PRM_EV_ID_S); }
 
         BOOL CreateHeap();
         int Create();
@@ -69,14 +69,14 @@ namespace daObjLadder {
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ Type_e mType;
         /* 0x2D8 */ Mode_e mMode;
-        /* 0x2DC */ s16 unk2DC;
+        /* 0x2DC */ s16 mVibTimer;
         /* 0x2DE */ s16 unk2DE;
         /* 0x2E0 */ f32 mGndY;
         /* 0x2E4 */ dBgS_ObjGndChk mGndChk;
         /* 0x338 */ s16 unk338;
         /* 0x33A */ s16 unk33A;
-        /* 0x33C */ f32 unk33C;
-        /* 0x340 */ f32 unk340;
+        /* 0x33C */ f32 mVibXOffset;
+        /* 0x340 */ f32 mVibYOffset;
         /* 0x344 */ s16 mEventIdx;
         /* 0x346 */ u8 unk346;
     };
