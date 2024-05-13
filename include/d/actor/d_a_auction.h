@@ -79,7 +79,28 @@ public:
     void getRand(int);
 
 public:
-    /* 0x290 */ u8 m290[0x6C4 - 0x290];
+    /* 0x290 */ u8 pad290[0x0B];
+    /* 0x29B */ s8 unk29B;                          /* inferred */
+    /* 0x29C */ s8 unk29C;                          /* inferred */
+    /* 0x29D */ char pad29D[0x2F];                  /* maybe part of unk29C[0x30]? */
+    /* 0x2CC */ s32 unk2CC;                         /* inferred */
+    /* 0x2D0 */ s32 unk2D0;                         /* inferred */
+    /* 0x2D4 */ char pad2D4[0x58];                  /* maybe part of unk2D0[0x17]? */
+    /* 0x32C */ s32 unk32C;                         /* inferred */
+    /* 0x330 */ char pad330[4];
+    /* 0x334 */ dBgS_Acch unk334;                   /* inferred */
+    /* 0x4F8 */ dBgS_AcchCir unk4F8;                /* inferred */
+    /* 0x550 */ void *unk550;                          /* inferred */
+    /* 0x554 */ dCcD_GStts unk554;                  /* inferred */
+    /* 0x554 */ char pad554[0x20];
+    /* 0x574 */ dCcD_GObjInf unk574;                /* inferred */
+    /* 0x574 */ char pad574[0x130];
+    /* 0x6A4 */ u32 unk6A4;                         /* inferred */
+    /* 0x6A8 */ char pad6A8[4];
+    /* 0x6AC */ s32 unk6AC;                         /* inferred */
+    /* 0x6B0 */ void *unk6B0;                       /* inferred */
+    /* 0x6B4 */ char pad6B4[0xC];                   /* maybe part of unk6B0[4]? */
+    /* 0x6C0 */ void *unk6C0;                          /* inferred */
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ dNpc_EventCut_c mNpcEvtInfo;
     /* 0x730 */ u8 m730[0x788 - 0x730];
