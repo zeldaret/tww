@@ -66,7 +66,29 @@ void daDekuItem_c::CreateInit() {
 
 /* 000003A8-00000598       .text _create__12daDekuItem_cFv */
 s32 daDekuItem_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daDekuItem_c);
+
+    mItemBitNo = daDekuItem_prm::getItemBitNo(this);
+
+    if (fopAcM_isItem(this, mItemBitNo)) {
+        return cPhs_ERROR_e;
+    }
+
+    if (!dComIfGs_isEventBit(0x1801U)) {
+        return cPhs_ERROR_e;
+    }
+
+    s32 phase_state = dComIfG_resLoad(&mPhs, m_arcname);
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x5000)) {
+            return cPhs_ERROR_e;
+        }
+
+        CreateInit();
+    }
+
+    return phase_state;
 }
 
 /* 00000948-000009C8       .text set_mtx__12daDekuItem_cFv */
