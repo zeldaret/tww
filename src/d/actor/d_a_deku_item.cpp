@@ -68,7 +68,20 @@ void daDekuItem_c::CreateHeap() {
 
 /* 000002C8-000003A8       .text CreateInit__12daDekuItem_cFv */
 void daDekuItem_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+
+    fopAcM_setCullSizeBox(this, -50.0f, 0.0f, -50.0f, 50.0f, 100.0f, 50.0f);
+    mStts.Init(0xFF, 0xFF, this);
+
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    mAcchCir.SetWall(50.0f, 50.0f);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
+
+    set_mtx();
+
+    unk62C = 0;
+    fopAcM_SetGravity(this, -3.0f);
 }
 
 /* 000003A8-00000598       .text _create__12daDekuItem_cFv */
