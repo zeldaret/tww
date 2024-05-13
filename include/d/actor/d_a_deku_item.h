@@ -1,9 +1,10 @@
 #ifndef D_A_DEKU_ITEM_H
 #define D_A_DEKU_ITEM_H
 
-#include "d/d_cc_d.h"
-#include "f_op/f_op_actor_mng.h"
 #include "d/d_bg_s_acch.h"
+#include "d/d_cc_d.h"
+#include "d/d_particle.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 
 class daDekuItem_c : public fopAc_ac_c {
@@ -38,7 +39,7 @@ public:
     /* 0x630 */ s32 unk630;                         /* inferred */
     /* 0x634 */ s32 mItemBitNo;                         /* inferred */
     /* 0x638 */ s32 unk638;                         /* inferred */
-    /* 0x63C */ void *unk63C;                       /* inferred */
+    /* 0x63C */ JPABaseEmitter* mpEmitter;                       /* inferred */
 };
 
 namespace daDekuItem_prm {

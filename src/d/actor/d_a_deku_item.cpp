@@ -46,7 +46,14 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 00000078-000000D0       .text _delete__12daDekuItem_cFv */
 BOOL daDekuItem_c::_delete() {
-    /* Nonmatching */
+    if (mpEmitter != NULL) {
+        mpEmitter->becomeInvalidEmitter();
+        mpEmitter = NULL;
+    }
+
+    dComIfG_resDelete(&mPhs, m_arcname);
+
+    return TRUE;
 }
 
 /* 000000D0-000000F0       .text CheckCreateHeap__FP10fopAc_ac_c */
