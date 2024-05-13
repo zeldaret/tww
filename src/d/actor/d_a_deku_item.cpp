@@ -179,12 +179,28 @@ void daDekuItem_c::mode_wait() {
 
 /* 00000C50-00000CB8       .text mode_getdemo_init__12daDekuItem_cFv */
 void daDekuItem_c::mode_getdemo_init() {
-    /* Nonmatching */
+    fopAcM_offDraw(this);
+
+    if (mpEmitter != NULL) {
+        mpEmitter->becomeInvalidEmitter();
+        mpEmitter = NULL;
+    }
+
+    mMode = 2;
+    unk630 = 1;
 }
 
 /* 00000CB8-00000D34       .text mode_getdemo_wait__12daDekuItem_cFv */
 void daDekuItem_c::mode_getdemo_wait() {
-    /* Nonmatching */
+    if (unk630 == 0) {
+        mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, dItem_DEKU_LEAF_e, -1, fopAcM_GetRoomNo(this));
+
+        if (mItemPID != fpcM_ERROR_PROCESS_ID_e) {
+            dComIfGp_event_setItemPartnerId(mItemPID);
+        }
+
+        mMode = 3;
+    }
 }
 
 /* 00000D34-00000D38       .text mode_getdemo__12daDekuItem_cFv */

@@ -40,7 +40,7 @@ public:
     /* 0x62C */ s32 mMode;                         /* inferred */
     /* 0x630 */ s32 unk630;                         /* inferred */
     /* 0x634 */ s32 mItemBitNo;                         /* inferred */
-    /* 0x638 */ s32 unk638;                         /* inferred */
+    /* 0x638 */ u32 mItemPID;                         /* inferred */
     /* 0x63C */ JPABaseEmitter* mpEmitter;                       /* inferred */
 };
 
