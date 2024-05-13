@@ -181,13 +181,14 @@ void daDekuItem_c::mode_getdemo_wait() {
 }
 
 /* 00000D34-00000D38       .text mode_getdemo__12daDekuItem_cFv */
-void daDekuItem_c::mode_getdemo() {
-    /* Nonmatching */
-}
+void daDekuItem_c::mode_getdemo() {}
 
 /* 00000D38-00000D94       .text eventOrder__12daDekuItem_cFv */
 void daDekuItem_c::eventOrder() {
-    /* Nonmatching */
+    if (unk630 == 1) {
+        fopAcM_orderOtherEvent(this, "DEFAULT_GETITEM");
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
+    }
 }
 
 /* 00000D94-00000E54       .text checkOrder__12daDekuItem_cFv */
