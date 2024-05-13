@@ -174,7 +174,19 @@ void daDekuItem_c::mode_proc_call() {
 
 /* 00000B30-00000C50       .text mode_wait__12daDekuItem_cFv */
 void daDekuItem_c::mode_wait() {
-    /* Nonmatching */
+    if (mCyl.ChkCoHit()) {
+        mMode = 1;
+    }
+
+    if (mpEmitter == NULL) {
+        mpEmitter = dComIfGp_particle_set(0x820F, &current.pos);
+    } else if (mpEmitter != NULL) {
+        mpEmitter->setGlobalTranslation(current.pos);
+    }
+
+    fopAcM_seStart(this, JA_SE_OBJ_DEKU_HA_LIGHT, 0);
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
 }
 
 /* 00000C50-00000CB8       .text mode_getdemo_init__12daDekuItem_cFv */
