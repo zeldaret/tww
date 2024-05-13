@@ -192,7 +192,17 @@ void daDekuItem_c::eventOrder() {
 
 /* 00000D94-00000E54       .text checkOrder__12daDekuItem_cFv */
 void daDekuItem_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if (dComIfGp_evmng_startCheck("DEFAULT_GETITEM") && unk630 != 0) {
+            unk630 = 0;
+        }
+
+        if (dComIfGp_evmng_endCheck("DEFAULT_GETITEM")) {
+            dComIfGp_event_reset();
+            fopAcM_delete(this);
+            fopAcM_onItem(this, mItemBitNo);
+        }
+    }
 }
 
 /* 00000E54-00000ECC       .text _draw__12daDekuItem_cFv */
