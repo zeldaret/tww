@@ -9,6 +9,8 @@
 
 class daDekuItem_c : public fopAc_ac_c {
 public:
+    typedef void (daDekuItem_c::*ModeFunc)();
+
     BOOL _delete();
     BOOL CreateHeap();
     void CreateInit();
@@ -35,7 +37,7 @@ public:
     /* 0x480 */ dBgS_AcchCir mAcchCir;                /* inferred */
     /* 0x4C0 */ dCcD_Stts mStts;                   /* inferred */
     /* 0x4FC */ dCcD_Cyl mCyl;                    /* inferred */
-    /* 0x62C */ s32 unk62C;                         /* inferred */
+    /* 0x62C */ s32 mMode;                         /* inferred */
     /* 0x630 */ s32 unk630;                         /* inferred */
     /* 0x634 */ s32 mItemBitNo;                         /* inferred */
     /* 0x638 */ s32 unk638;                         /* inferred */

@@ -104,7 +104,7 @@ void daDekuItem_c::CreateInit() {
 
     set_mtx();
 
-    unk62C = 0;
+    mMode = 0;
     fopAcM_SetGravity(this, -3.0f);
 }
 
@@ -162,7 +162,14 @@ BOOL daDekuItem_c::_execute() {
 
 /* 00000A74-00000B30       .text mode_proc_call__12daDekuItem_cFv */
 void daDekuItem_c::mode_proc_call() {
-    /* Nonmatching */
+    static ModeFunc mode_proc[] = {
+        &mode_wait,
+        &mode_getdemo,
+        &mode_getdemo_init,
+        &mode_getdemo_wait,
+    };
+
+    (this->*mode_proc[mMode])();
 }
 
 /* 00000B30-00000C50       .text mode_wait__12daDekuItem_cFv */
