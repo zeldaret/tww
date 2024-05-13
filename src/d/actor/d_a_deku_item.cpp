@@ -197,7 +197,13 @@ void daDekuItem_c::checkOrder() {
 
 /* 00000E54-00000ECC       .text _draw__12daDekuItem_cFv */
 BOOL daDekuItem_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    mBck1.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+
+    return TRUE;
 }
 
 /* 00000ECC-00000EEC       .text daDekuItem_Create__FPv */
