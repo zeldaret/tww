@@ -146,7 +146,18 @@ void daDekuItem_c::set_mtx() {
 
 /* 000009C8-00000A74       .text _execute__12daDekuItem_cFv */
 BOOL daDekuItem_c::_execute() {
-    /* Nonmatching */
+    eyePos = current.pos;
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
+    mAcch.CrrPos(*dComIfG_Bgsp());
+
+    checkOrder();
+    mode_proc_call();
+    eventOrder();
+
+    set_mtx();
+    mBck1.setFrame(mBck1.getEndFrame());
+
+    return TRUE;
 }
 
 /* 00000A74-00000B30       .text mode_proc_call__12daDekuItem_cFv */
