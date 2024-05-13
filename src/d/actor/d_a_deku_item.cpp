@@ -196,17 +196,17 @@ static s32 daDekuItem_Create(void* i_this) {
 
 /* 00000EEC-00000F10       .text daDekuItem_Delete__FPv */
 static BOOL daDekuItem_Delete(void* i_this) {
-    return static_cast<daDekuItem_c*>(i_this)->_delete();
+    return (u8) static_cast<daDekuItem_c*>(i_this)->_delete();
 }
 
 /* 00000F10-00000F34       .text daDekuItem_Draw__FPv */
 static BOOL daDekuItem_Draw(void* i_this) {
-    return static_cast<daDekuItem_c*>(i_this)->_draw();
+    return (u8) static_cast<daDekuItem_c*>(i_this)->_draw();
 }
 
 /* 00000F34-00000F58       .text daDekuItem_Execute__FPv */
 static BOOL daDekuItem_Execute(void* i_this) {
-    return static_cast<daDekuItem_c*>(i_this)->_execute();
+    return (u8) static_cast<daDekuItem_c*>(i_this)->_execute();
 }
 
 /* 00000F58-00000F60       .text daDekuItem_IsDelete__FPv */
