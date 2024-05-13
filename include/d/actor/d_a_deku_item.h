@@ -1,6 +1,7 @@
 #ifndef D_A_DEKU_ITEM_H
 #define D_A_DEKU_ITEM_H
 
+#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 
 class daDekuItem_c : public fopAc_ac_c {
