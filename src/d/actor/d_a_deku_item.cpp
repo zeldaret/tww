@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_deku_item.h"
+#include "d/res/res_deku.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
@@ -57,13 +58,36 @@ BOOL daDekuItem_c::_delete() {
 }
 
 /* 000000D0-000000F0       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daDekuItem_c*>(i_this)->CreateHeap();
 }
 
 /* 000000F0-000002C8       .text CreateHeap__12daDekuItem_cFv */
-void daDekuItem_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daDekuItem_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, DEKU_BDL_VLFDM);
+    JUT_ASSERT(0xF4, modelData != 0);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
+
+    if (!mpModel) {
+        return FALSE;
+    }
+
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDK);
+    JUT_ASSERT(0x103, pbck != 0);
+
+    if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false)) {
+        return FALSE;
+    }
+
+    pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDM);
+    JUT_ASSERT(0x110, pbck != 0);
+
+    if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false)) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 000002C8-000003A8       .text CreateInit__12daDekuItem_cFv */

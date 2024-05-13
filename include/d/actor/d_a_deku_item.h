@@ -10,7 +10,7 @@
 class daDekuItem_c : public fopAc_ac_c {
 public:
     BOOL _delete();
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     s32 _create();
     void set_mtx();
