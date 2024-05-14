@@ -104,7 +104,7 @@ void daDekuItem_c::CreateInit() {
 
     set_mtx();
 
-    mMode = 0;
+    mMode = Mode_WAIT_e;
     fopAcM_SetGravity(this, -3.0f);
 }
 
@@ -175,7 +175,7 @@ void daDekuItem_c::mode_proc_call() {
 /* 00000B30-00000C50       .text mode_wait__12daDekuItem_cFv */
 void daDekuItem_c::mode_wait() {
     if (mCyl.ChkCoHit()) {
-        mMode = 1;
+        mMode = Mode_GETDEMO_e;
     }
 
     if (mpEmitter == NULL) {
@@ -198,20 +198,20 @@ void daDekuItem_c::mode_getdemo_init() {
         mpEmitter = NULL;
     }
 
-    mMode = 2;
-    unk630 = 1;
+    mMode = Mode_GETDEMO_INIT_e;
+    unk630 = TRUE;
 }
 
 /* 00000CB8-00000D34       .text mode_getdemo_wait__12daDekuItem_cFv */
 void daDekuItem_c::mode_getdemo_wait() {
-    if (unk630 == 0) {
+    if (!unk630) {
         mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, dItem_DEKU_LEAF_e, -1, fopAcM_GetRoomNo(this));
 
         if (mItemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(mItemPID);
         }
 
-        mMode = 3;
+        mMode = Mode_GETDEMO_WAIT_e;
     }
 }
 
@@ -220,7 +220,7 @@ void daDekuItem_c::mode_getdemo() {}
 
 /* 00000D38-00000D94       .text eventOrder__12daDekuItem_cFv */
 void daDekuItem_c::eventOrder() {
-    if (unk630 == 1) {
+    if (unk630 == TRUE) {
         fopAcM_orderOtherEvent(this, "DEFAULT_GETITEM");
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
@@ -229,8 +229,8 @@ void daDekuItem_c::eventOrder() {
 /* 00000D94-00000E54       .text checkOrder__12daDekuItem_cFv */
 void daDekuItem_c::checkOrder() {
     if (eventInfo.checkCommandDemoAccrpt()) {
-        if (dComIfGp_evmng_startCheck("DEFAULT_GETITEM") && unk630 != 0) {
-            unk630 = 0;
+        if (dComIfGp_evmng_startCheck("DEFAULT_GETITEM") && unk630) {
+            unk630 = FALSE;
         }
 
         if (dComIfGp_evmng_endCheck("DEFAULT_GETITEM")) {
