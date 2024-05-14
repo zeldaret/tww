@@ -164,9 +164,9 @@ BOOL daDekuItem_c::_execute() {
 void daDekuItem_c::mode_proc_call() {
     static ModeFunc mode_proc[] = {
         &mode_wait,
-        &mode_getdemo,
         &mode_getdemo_init,
         &mode_getdemo_wait,
+        &mode_getdemo,
     };
 
     (this->*mode_proc[mMode])();
@@ -175,7 +175,7 @@ void daDekuItem_c::mode_proc_call() {
 /* 00000B30-00000C50       .text mode_wait__12daDekuItem_cFv */
 void daDekuItem_c::mode_wait() {
     if (mCyl.ChkCoHit()) {
-        mMode = Mode_GETDEMO_e;
+        mMode = Mode_GETDEMO_INIT_e;
     }
 
     if (mpEmitter == NULL) {
@@ -198,7 +198,7 @@ void daDekuItem_c::mode_getdemo_init() {
         mpEmitter = NULL;
     }
 
-    mMode = Mode_GETDEMO_INIT_e;
+    mMode = Mode_GETDEMO_WAIT_e;
     unk630 = TRUE;
 }
 
@@ -211,7 +211,7 @@ void daDekuItem_c::mode_getdemo_wait() {
             dComIfGp_event_setItemPartnerId(mItemPID);
         }
 
-        mMode = Mode_GETDEMO_WAIT_e;
+        mMode = Mode_GETDEMO_e;
     }
 }
 

@@ -13,9 +13,9 @@ public:
 
     enum Mode_e {
         Mode_WAIT_e,
-        Mode_GETDEMO_e,
         Mode_GETDEMO_INIT_e,
         Mode_GETDEMO_WAIT_e,
+        Mode_GETDEMO_e,
     };
 
     BOOL _delete();
