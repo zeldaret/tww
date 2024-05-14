@@ -36,19 +36,19 @@ public:
     static const char m_arcname[];
 
 public:
-    /* 0x290 */ request_of_phase_process_class mPhs; /* inferred */
-    /* 0x298 */ J3DModel* mpModel;                   /* inferred */
-    /* 0x29C */ mDoExt_bckAnm mBck1;               /* inferred */
-    /* 0x2AC */ mDoExt_bckAnm mBck2;               /* inferred */
-    /* 0x2BC */ dBgS_ObjAcch mAcch;                   /* inferred */
-    /* 0x480 */ dBgS_AcchCir mAcchCir;                /* inferred */
-    /* 0x4C0 */ dCcD_Stts mStts;                   /* inferred */
-    /* 0x4FC */ dCcD_Cyl mCyl;                    /* inferred */
-    /* 0x62C */ Mode_e mMode;                         /* inferred */
-    /* 0x630 */ BOOL unk630;                         /* inferred */
-    /* 0x634 */ s32 mItemBitNo;                         /* inferred */
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x29C */ mDoExt_bckAnm mBck1;
+    /* 0x2AC */ mDoExt_bckAnm mBck2;
+    /* 0x2BC */ dBgS_ObjAcch mAcch;
+    /* 0x480 */ dBgS_AcchCir mAcchCir;
+    /* 0x4C0 */ dCcD_Stts mStts;
+    /* 0x4FC */ dCcD_Cyl mCyl;
+    /* 0x62C */ Mode_e mMode;
+    /* 0x630 */ BOOL unk630;
+    /* 0x634 */ s32 mItemBitNo;
     /* 0x638 */ uint mItemPID;
-    /* 0x63C */ JPABaseEmitter* mpEmitter;                       /* inferred */
+    /* 0x63C */ JPABaseEmitter* mpEmitter;
 };
 
 namespace daDekuItem_prm {
