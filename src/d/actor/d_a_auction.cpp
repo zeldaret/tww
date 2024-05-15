@@ -40,8 +40,8 @@ daAuction_c::daAuction_c() {
 }
 
 /* 00000644-00000664       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daAuction_c*>(i_this)->createHeap();
 }
 
 /* 00000664-000006F4       .text _create__11daAuction_cFv */
@@ -50,7 +50,7 @@ s32 daAuction_c::_create() {
 }
 
 /* 000006F4-00000770       .text createHeap__11daAuction_cFv */
-void daAuction_c::createHeap() {
+BOOL daAuction_c::createHeap() {
     /* Nonmatching */
 }
 

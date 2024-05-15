@@ -32,7 +32,7 @@ public:
     void setStart(unsigned char) {}
 
     s32 _create();
-    void createHeap();
+    BOOL createHeap();
     void createInit();
     BOOL _delete();
     BOOL _draw();
