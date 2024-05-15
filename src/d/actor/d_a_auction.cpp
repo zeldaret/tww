@@ -197,7 +197,7 @@ void daAuction_c::eventCameraTest() {
 }
 
 /* 00002F6C-0000369C       .text next_msgStatus__11daAuction_cFPUl */
-void daAuction_c::next_msgStatus(unsigned long*) {
+u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
     /* Nonmatching */
 }
 

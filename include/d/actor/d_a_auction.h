@@ -3,9 +3,10 @@
 
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_npc.h"
 
-class daAuction_c : public fopAc_ac_c {
+class daAuction_c : public fopNpc_npc_c {
 public:
     daAuction_c();
 
@@ -66,7 +67,7 @@ public:
     void eventEnd();
     void eventCameraTestInit();
     void eventCameraTest();
-    void next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32* pMsgNo);
     void setMessage(unsigned long);
     void setMessage2(unsigned long);
     void setMtx();
@@ -79,35 +80,20 @@ public:
     void getRand(int);
 
 public:
-    /* 0x290 */ u8 pad290[0x0B];
-    /* 0x29B */ s8 unk29B;                          /* inferred */
-    /* 0x29C */ s8 unk29C;                          /* inferred */
-    /* 0x29D */ char pad29D[0x2F];                  /* maybe part of unk29C[0x30]? */
-    /* 0x2CC */ s32 unk2CC;                         /* inferred */
-    /* 0x2D0 */ s32 unk2D0;                         /* inferred */
-    /* 0x2D4 */ char pad2D4[0x58];                  /* maybe part of unk2D0[0x17]? */
-    /* 0x32C */ s32 unk32C;                         /* inferred */
-    /* 0x330 */ char pad330[4];
-    /* 0x334 */ dBgS_Acch unk334;                   /* inferred */
-    /* 0x4F8 */ dBgS_AcchCir unk4F8;                /* inferred */
-    /* 0x550 */ void *unk550;                          /* inferred */
-    /* 0x554 */ dCcD_GStts unk554;                  /* inferred */
-    /* 0x554 */ char pad554[0x20];
-    /* 0x574 */ dCcD_GObjInf unk574;                /* inferred */
-    /* 0x574 */ char pad574[0x130];
-    /* 0x6A4 */ u32 unk6A4;                         /* inferred */
-    /* 0x6A8 */ char pad6A8[4];
-    /* 0x6AC */ s32 unk6AC;                         /* inferred */
-    /* 0x6B0 */ void *unk6B0;                       /* inferred */
-    /* 0x6B4 */ char pad6B4[0xC];                   /* maybe part of unk6B0[4]? */
-    /* 0x6C0 */ void *unk6C0;                          /* inferred */
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ dNpc_EventCut_c mNpcEvtInfo;
-    /* 0x730 */ u8 m730[0x788 - 0x730];
+    /* 0x730 */ u8 m730[0x764 - 0x730];
+    /* 0x764 */ dTimer_c* mpTimer;
+    /* 0x768 */ LIGHT_INFLUENCE mLight;
     /* 0x788 */ J3DModel* mpModel;
-    /* 0x78C */ u8 m78C[0x7A4 - 0x78C];
+    /* 0x78C */ cXyz m78C;
+    /* 0x798 */ cXyz m798;
     /* 0x7A4 */ int m7A4;
-    /* 0x7A8 */ u8 m7A8[0x7EC - 0x7A8];
+    /* 0x7A8 */ u8 m7A8[0x7BC - 0x7A8];
+    /* 0x7BC */ f32 m7BC;
+    /* 0x7C0 */ f32 mBlend;
+    /* 0x7C4 */ f32 m7C4;
+    /* 0x7C8 */ u8 m7C8[0x7EC - 0x7C8];
     /* 0x7EC */ int m7EC;
     /* 0x7F0 */ int m7F0;
     /* 0x7F4 */ u16 mEvtStartIdx;
@@ -116,7 +102,11 @@ public:
     /* 0x7FA */ u16 mEvtStart2Idx;
     /* 0x7FC */ u16 mEvtEnd2Idx;
     /* 0x7FE */ u16 mCurrItemNameMsgNo;
-    /* 0x800 */ u8 m800[0x81C - 0x800];
+    /* 0x800 */ u8 m800[0x802 - 0x800];
+    /* 0x802 */ s16 mTimer;
+    /* 0x804 */ u8 m804[0x808 - 0x804];
+    /* 0x808 */ u16 m808;
+    /* 0x80A */ u8 m80A[0x81C - 0x80A];
     /* 0x81C */ u8 m81C;
     /* 0x81D */ u8 m81D;
     /* 0x81E */ u8 m81E;
@@ -128,7 +118,10 @@ public:
     /* 0x824 */ u8 m824;
     /* 0x825 */ u8 m825[0x826 - 0x825];
     /* 0x826 */ u8 m826;
-    /* 0x827 */ u8 m827[0x82D - 0x827];
+    /* 0x827 */ u8 m827[0x82A - 0x827];
+    /* 0x82A */ u8 m82A;
+    /* 0x82B */ u8 m82B[0x82C - 0x82B];
+    /* 0x82C */ u8 m82C;
     /* 0x82D */ u8 mCurLinkAnm;
     /* 0x82E */ u8 m82E[0x832 - 0x82E];
     /* 0x832 */ u8 m832;
@@ -136,7 +129,8 @@ public:
     /* 0x836 */ u8 m836;
     /* 0x837 */ u8 m837[0x838 - 0x837];
     /* 0x838 */ u8 m838;
-    /* 0x839 */ u8 m839[0x83C - 0x839];
+    /* 0x839 */ u8 mAction;
+    /* 0x83A */ u8 field_83A[0x83C - 0x83A];
 };
 
 #endif /* D_A_AUCTION_H */
