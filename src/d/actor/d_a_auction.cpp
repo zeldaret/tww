@@ -8,7 +8,35 @@
 
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
-    /* Nonmatching */
+    // TODO: Refactor this
+    for (int i = 0; i < 8; i++) {
+        m738[i] = -1;
+        m80C[i] = i;
+        m814[i] = 0xFF;
+    }
+
+    // Shuffles lists randomly (I think)
+    for (int i = 0; i < 100; i++) {
+        int rnd1 = getRand(6);
+        int rnd2 = getRand(6);
+
+        u8 tmp = m80C[rnd1 + 1];
+        m80C[rnd1 + 1] = m80C[rnd2 + 1];
+        m80C[rnd2 + 1] = tmp;
+    }
+
+    m81E = 0;
+    m820 = 1;
+    m821 = 0;
+    m7EC = 0;
+    m7F0 = 0;
+    m81C = 0xFF;
+    m81D = 0xFF;
+    m7A4 = 0;
+    m836 = 0;
+
+    eyePos = current.pos;
+    m832 = 0;
 }
 
 /* 00000644-00000664       .text CheckCreateHeap__FP10fopAc_ac_c */

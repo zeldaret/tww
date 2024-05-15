@@ -82,7 +82,9 @@ public:
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ dNpc_EventCut_c mNpcEvtInfo;
-    /* 0x730 */ u8 m730[0x764 - 0x730];
+    //* 0x730 */ u8 m730[0x738 - 0x730];
+    /* 0x738 */ int m738[8];
+    /* 0x758 */ u8 m758[0x764 - 0x758];
     /* 0x764 */ dTimer_c* mpTimer;
     /* 0x768 */ LIGHT_INFLUENCE mLight;
     /* 0x788 */ J3DModel* mpModel;
@@ -106,7 +108,9 @@ public:
     /* 0x802 */ s16 mTimer;
     /* 0x804 */ u8 m804[0x808 - 0x804];
     /* 0x808 */ u16 m808;
-    /* 0x80A */ u8 m80A[0x81C - 0x80A];
+    /* 0x80A */ u8 m80A[0x80C - 0x80A];
+    /* 0x80C */ u8 m80C[8];
+    /* 0x814 */ u8 m814[8];
     /* 0x81C */ u8 m81C;
     /* 0x81D */ u8 m81D;
     /* 0x81E */ u8 m81E;
@@ -124,7 +128,7 @@ public:
     /* 0x82C */ u8 m82C;
     /* 0x82D */ u8 mCurLinkAnm;
     /* 0x82E */ u8 m82E[0x832 - 0x82E];
-    /* 0x832 */ u8 m832;
+    /* 0x832 */ u8 m832;    /* Might be mode index */
     /* 0x833 */ u8 m833[0x836 - 0x833];
     /* 0x836 */ u8 m836;
     /* 0x837 */ u8 m837[0x838 - 0x837];
