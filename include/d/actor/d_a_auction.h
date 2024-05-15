@@ -33,7 +33,7 @@ public:
 
     s32 _create();
     BOOL createHeap();
-    void createInit();
+    s32 createInit();
     BOOL _delete();
     BOOL _draw();
     BOOL _execute();

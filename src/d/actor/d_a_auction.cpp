@@ -46,7 +46,19 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000664-000006F4       .text _create__11daAuction_cFv */
 s32 daAuction_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daAuction_c);
+
+    s32 phase_state = dComIfG_resLoad(&mPhs, "Pspl");
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2400)) {
+            return cPhs_ERROR_e;
+        }
+
+        return createInit();
+    }
+
+    return phase_state;
 }
 
 /* 000006F4-00000770       .text createHeap__11daAuction_cFv */
@@ -55,7 +67,7 @@ BOOL daAuction_c::createHeap() {
 }
 
 /* 00000770-000008C4       .text createInit__11daAuction_cFv */
-void daAuction_c::createInit() {
+s32 daAuction_c::createInit() {
     /* Nonmatching */
 }
 
