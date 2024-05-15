@@ -77,7 +77,7 @@ public:
     void setLinkAnm(unsigned char);
     void getPiconDispOfs(unsigned char);
     void nextBet();
-    void getRand(int);
+    int getRand(int);
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;

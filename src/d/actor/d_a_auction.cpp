@@ -247,8 +247,14 @@ void daAuction_c::nextBet() {
 }
 
 /* 00003BA4-00003C08       .text getRand__11daAuction_cFi */
-void daAuction_c::getRand(int) {
-    /* Nonmatching */
+int daAuction_c::getRand(int max) {
+    int rnd = (int)cM_rndF(max);
+
+    if (rnd == max) {
+        rnd = 0;
+    }
+
+    return rnd;
 }
 
 /* 00003C08-00003C28       .text daAuctionCreate__FPv */
