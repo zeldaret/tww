@@ -5,6 +5,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_npc.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daAuction_c : public fopNpc_npc_c {
 public:
@@ -142,6 +143,24 @@ public:
     /* 0x838 */ u8 m838;
     /* 0x839 */ u8 mAction;
     /* 0x83A */ u8 field_83A[0x83C - 0x83A];
+};
+
+/* Inferred from debug map */
+class daAuction_HIO_c : public JORReflexible  {
+public:
+    daAuction_HIO_c() {}
+
+public:
+    /* Place member variables here */
+};
+
+/* Inferred from debug map */
+class daAuction_Npc_HIO_c {
+public:
+    daAuction_Npc_HIO_c() {}
+
+public:
+    /* Place member variables here */
 };
 
 #endif /* D_A_AUCTION_H */
