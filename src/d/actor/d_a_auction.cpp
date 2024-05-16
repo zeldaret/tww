@@ -6,6 +6,28 @@
 #include "d/actor/d_a_auction.h"
 #include "d/d_procname.h"
 
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0f, 0.5f};
+
+static daAuction_c::ItemData l_item_dat[] = {
+    {dItem_JOY_PENDANT_e, 0x1D10, 40, 0x0F01},
+    {COLLECT_MAP_27, 0x1D11, 5, 0x1080},
+    {COLLECT_MAP_18, 0x1D12, 60, 0x1040},
+    {KAKERA_HEART, 0x1D13, 80, 0x1020},
+};
+
+// Items obtained through the auction at some point during dev?
+static daAuction_c::ItemData l_item_dat2[] = {
+    {POSTMAN_STATUE, 0x1D14, 30, 0x1008},
+    {PRESIDENT_STATUE, 0x1D15, 40, 0x1004},
+};
+
+// TODO: Figure out what these are
+static char l_item_dat22[] = {0x00, 0x2A, 0x00, 0xF9};
+
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
     // TODO: Refactor this
