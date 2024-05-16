@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_auction.h"
 #include "d/d_procname.h"
+#include "d/res/res_auction.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -85,7 +86,19 @@ s32 daAuction_c::_create() {
 
 /* 000006F4-00000770       .text createHeap__11daAuction_cFv */
 BOOL daAuction_c::createHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Pspl", 0));
+
+    if (modelData == NULL) {
+        return FALSE;
+    }
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 00000770-000008C4       .text createInit__11daAuction_cFv */
