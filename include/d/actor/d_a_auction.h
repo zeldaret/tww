@@ -98,7 +98,7 @@ public:
     /* 0x788 */ J3DModel* mpModel;
     /* 0x78C */ cXyz m78C;
     /* 0x798 */ cXyz m798;
-    /* 0x7A4 */ int m7A4;
+    /* 0x7A4 */ JPABaseEmitter* mpEmitter;
     /* 0x7A8 */ u8 m7A8[0x7BC - 0x7A8];
     /* 0x7BC */ f32 m7BC;
     /* 0x7C0 */ f32 mBlend;

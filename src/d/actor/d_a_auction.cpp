@@ -81,7 +81,7 @@ daAuction_c::daAuction_c() {
     m7F0 = 0;
     m81C = 0xFF;
     m81D = 0xFF;
-    m7A4 = 0;
+    mpEmitter = NULL;
     m836 = 0;
 
     eyePos = current.pos;
@@ -154,7 +154,13 @@ s32 daAuction_c::createInit() {
 
 /* 000008C4-0000092C       .text _delete__11daAuction_cFv */
 BOOL daAuction_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, "Pspl");
+
+    if (heap != NULL && mpEmitter != NULL) {
+        mpEmitter->becomeInvalidEmitter();
+    }
+
+    return TRUE;
 }
 
 /* 0000092C-00000998       .text _draw__11daAuction_cFv */
