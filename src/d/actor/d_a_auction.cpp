@@ -7,6 +7,23 @@
 #include "d/d_procname.h"
 #include "d/res/res_auction.h"
 
+/* Structs are almost definitely not accurate */
+struct NpcDatStruct {
+    /* 0x00 */ s32 field_0x00;
+    /* 0x04 */ s32 field_0x04;
+    /* 0x08 */ s16 field_0x08;
+    /* 0x0A */ s16 field_0x0A;
+    /* 0x0C */ s16 field_0x0C;
+};
+
+struct NpcMsgDatStruct {
+    /* 0x00 */ s16 field_0x00;
+    /* 0x02 */ s16 field_0x02;
+    /* 0x04 */ s16 field_0x04;
+    /* 0x06 */ s16 field_0x06;
+    /* 0x08 */ s16 field_0x08;
+};
+
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
 static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
@@ -25,9 +42,18 @@ static daAuction_c::ItemData l_item_dat2[] = {
     {POSTMAN_STATUE, 0x1D14, 30, 0x1008},
     {PRESIDENT_STATUE, 0x1D15, 40, 0x1004},
 };
+static char l_item_dat22[] = {0x00, 0x2A, 0x00, 0xF9};
+
+static NpcDatStruct l_npc_dat[7] = {
+    NULL,
+};
+
+static NpcMsgDatStruct l_npc_msg_dat[12] = {
+    NULL,
+};
 
 // TODO: Figure out what these are
-static char l_item_dat22[] = {0x00, 0x2A, 0x00, 0xF9};
+static daAuction_HIO_c l_HIO;
 
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
@@ -103,7 +129,27 @@ BOOL daAuction_c::createHeap() {
 
 /* 00000770-000008C4       .text createInit__11daAuction_cFv */
 s32 daAuction_c::createInit() {
-    /* Nonmatching */
+
+    mEvtStartIdx = dComIfGp_evmng_getEventIdx("AUCTION_START");
+    mEvtGetItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_GET_ITEM");
+    mEvtNoItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_NO_ITEM");
+    mEvtStart2Idx = dComIfGp_evmng_getEventIdx("AUCTION_START2");
+    mEvtEnd2Idx = dComIfGp_evmng_getEventIdx("AUCTION_END2");
+
+    mNpcEvtInfo.setActorInfo("Auction", this);
+    m824 = 0;
+    m826 = 0xFF;
+    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
+
+    mCurrAuctionItemIndex = 0;
+
+    dComIfGp_setItemNameMessageID(l_item_dat[mCurrAuctionItemIndex].mItemID);
+    mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mNameMsgID;
+
+    dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
+    setMtx();
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000008C4-0000092C       .text _delete__11daAuction_cFv */

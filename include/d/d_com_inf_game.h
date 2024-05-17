@@ -352,6 +352,9 @@ public:
     s16 getItemArrowNumCount() { return mItemArrowNumCount; }
     void setItemArrowNumCount(s16 num) { mItemArrowNumCount += num; }
 
+    void setNpcNameMessageID(u32 id) { mNpcNameMessageID = id; }
+    void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
+
     void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
 
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
@@ -574,8 +577,8 @@ public:
     /* 0x48C0 */ int mItemRupeeCount;
     /* 0x48C4 */ int mAirMeter;
     /* 0x48C8 */ int field_0x48c8;
-    /* 0x48CC */ int mNpcNameMessageID;
-    /* 0x48D0 */ int mItemNameMessageID;
+    /* 0x48CC */ u32 mNpcNameMessageID;
+    /* 0x48D0 */ u32 mItemNameMessageID;
     /* 0x48D4 */ s16 mItemKeyNumCount;
     /* 0x48D6 */ s16 mItemMaxLifeCount;
     /* 0x48D8 */ s16 mItemMagicCount;
@@ -2165,6 +2168,14 @@ inline s16 dComIfGp_getItemMaxLifeCount() {
 
 inline void dComIfGp_setItemMaxLifeCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemMaxLifeCount(num);
+}
+
+inline void dComIfGp_setNpcNameMessageID(u32 id) {
+    g_dComIfG_gameInfo.play.setNpcNameMessageID(id);
+}
+
+inline void dComIfGp_setItemNameMessageID(u32 id) {
+    g_dComIfG_gameInfo.play.setItemNameMessageID(id);
 }
 
 inline void dComIfGp_setItemKeyNumCount(s16 num) {
