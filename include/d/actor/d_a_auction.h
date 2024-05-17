@@ -139,7 +139,7 @@ public:
     /* 0x832 */ u8 m832;    /* Might be mode index */
     /* 0x833 */ u8 m833[0x836 - 0x833];
     /* 0x836 */ u8 m836;
-    /* 0x837 */ u8 m837[0x838 - 0x837];
+    /* 0x837 */ u8 mFlags;  /* Just a guess */
     /* 0x838 */ u8 m838;
     /* 0x839 */ u8 mAction;
     /* 0x83A */ u8 field_83A[0x83C - 0x83A];

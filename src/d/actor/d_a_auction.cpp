@@ -165,7 +165,14 @@ BOOL daAuction_c::_delete() {
 
 /* 0000092C-00000998       .text _draw__11daAuction_cFv */
 BOOL daAuction_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG2, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    if (mFlags & 4) {
+        mDoExt_modelUpdateDL(mpModel);
+    }
+
+    return TRUE;
 }
 
 /* 00000998-00000B10       .text _execute__11daAuction_cFv */
