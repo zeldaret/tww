@@ -55,6 +55,11 @@ static NpcMsgDatStruct l_npc_msg_dat[12] = {
 // TODO: Figure out what these are
 static daAuction_HIO_c l_HIO;
 
+/* TODO: Add the rest of the functions */
+static daAuction_c::MoveFunc_t moveProc[] = {
+    daAuction_c::eventMainKai
+};
+
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
     // TODO: Refactor this
@@ -74,7 +79,7 @@ daAuction_c::daAuction_c() {
         m80C[rnd2 + 1] = tmp;
     }
 
-    m81E = 0;
+    mMoveIdx = 0;
     m820 = 1;
     m821 = 0;
     m7EC = 0;
@@ -177,7 +182,44 @@ BOOL daAuction_c::_draw() {
 
 /* 00000998-00000B10       .text _execute__11daAuction_cFv */
 BOOL daAuction_c::_execute() {
-    /* Nonmatching */
+    checkOrder();
+
+    if (!dComIfGp_event_runCheck() || eventInfo.checkCommandTalk()) {
+        (this->*moveProc[mMoveIdx])();
+    } else {
+        eventMove();
+    }
+
+    eventOrder();
+
+    if (mpEmitter != NULL) {
+        if (m836 & 1) { // Increase alpha
+            if (m80A != 0) {
+                m80A -= 1;
+            } else {
+                mAlpha += 4.0f;
+
+                if (mAlpha > 255.0f) {
+                    mAlpha = 255.0f;
+                    m836 &= ~1;
+                }
+
+                mpEmitter->setGlobalAlpha(mAlpha);
+            }
+        } else if (m836 & 2) {  // Decrease alpha
+            mAlpha -= 4.0f;
+
+            if (mAlpha < 0.0f) {
+                mpEmitter->becomeInvalidEmitter();
+                mpEmitter = NULL;
+            } else {
+                mpEmitter->setGlobalAlpha(mAlpha);
+            }
+        }
+    }
+
+    setMtx();
+    return TRUE;
 }
 
 /* 00000B10-00000B44       .text executeWait__11daAuction_cFv */

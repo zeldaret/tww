@@ -9,6 +9,8 @@
 
 class daAuction_c : public fopNpc_npc_c {
 public:
+    typedef void(daAuction_c::*MoveFunc_t)();
+
     struct ItemData {
         /* 0x00 */ u16 mItemID;
         /* 0x02 */ u16 mNameMsgID;
@@ -100,7 +102,7 @@ public:
     /* 0x798 */ cXyz m798;
     /* 0x7A4 */ JPABaseEmitter* mpEmitter;
     /* 0x7A8 */ u8 m7A8[0x7BC - 0x7A8];
-    /* 0x7BC */ f32 m7BC;
+    /* 0x7BC */ f32 mAlpha;
     /* 0x7C0 */ f32 mBlend;
     /* 0x7C4 */ f32 m7C4;
     /* 0x7C8 */ u8 m7C8[0x7EC - 0x7C8];
@@ -116,12 +118,12 @@ public:
     /* 0x802 */ s16 mTimer;
     /* 0x804 */ u8 m804[0x808 - 0x804];
     /* 0x808 */ u16 m808;
-    /* 0x80A */ u8 m80A[0x80C - 0x80A];
+    /* 0x80A */ s16 m80A;
     /* 0x80C */ u8 m80C[8];
     /* 0x814 */ u8 m814[8];
     /* 0x81C */ u8 m81C;
     /* 0x81D */ u8 m81D;
-    /* 0x81E */ u8 m81E;
+    /* 0x81E */ u8 mMoveIdx;
     /* 0x81F */ u8 m81F[0x820 - 0x81F];
     /* 0x820 */ u8 m820;
     /* 0x821 */ u8 m821;
