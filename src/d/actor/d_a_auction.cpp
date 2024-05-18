@@ -234,18 +234,20 @@ BOOL daAuction_c::_execute() {
 
 /* 00000B10-00000B44       .text executeWait__11daAuction_cFv */
 void daAuction_c::executeWait() {
-    /* Nonmatching */
+    for (int i = 0; i < 8; i++) {
+        if (m738[i] == -1) {
+            return;
+        }
+    }
+
+    mMoveState = 1;
 }
 
 /* 00000B44-00000B48       .text executeNormal__11daAuction_cFv */
-void daAuction_c::executeNormal() {
-    /* Nonmatching */
-}
+void daAuction_c::executeNormal() {}
 
 /* 00000B48-00000B4C       .text executeStart__11daAuction_cFv */
-void daAuction_c::executeStart() {
-    /* Nonmatching */
-}
+void daAuction_c::executeStart() {}
 
 /* 00000B4C-00000C68       .text checkOrder__11daAuction_cFv */
 void daAuction_c::checkOrder() {

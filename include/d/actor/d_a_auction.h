@@ -93,7 +93,7 @@ public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ dNpc_EventCut_c mNpcEvtInfo;
     //* 0x730 */ u8 m730[0x738 - 0x730];
-    /* 0x738 */ int m738[8];
+    /* 0x738 */ u32 m738[8];
     /* 0x758 */ u8 m758[0x764 - 0x758];
     /* 0x764 */ dTimer_c* mpTimer;
     /* 0x768 */ LIGHT_INFLUENCE mLight;
