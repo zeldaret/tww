@@ -251,7 +251,22 @@ void daAuction_c::executeStart() {}
 
 /* 00000B4C-00000C68       .text checkOrder__11daAuction_cFv */
 void daAuction_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        // Might be unrolled loop?
+        if (dComIfGp_evmng_startCheck(mEvtStartIdx) && m838 == 3) {
+            m838 = 0;
+        } else if (dComIfGp_evmng_startCheck(mEvtGetItemIdx) && m838 == 4) {
+            m838 = 0;
+        } else if (dComIfGp_evmng_startCheck(mEvtNoItemIdx) && m838 == 5) {
+            m838 = 0;
+        }
+
+        if (dComIfGp_evmng_startCheck(mEvtStart2Idx) && m838 == 6) {
+            m838 = 0;
+        } else if (dComIfGp_evmng_startCheck(mEvtEnd2Idx) && m838 == 7) {
+            m838 = 0;
+        }
+    }
 }
 
 /* 00000C68-00000EF8       .text eventOrder__11daAuction_cFv */

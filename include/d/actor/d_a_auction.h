@@ -108,11 +108,11 @@ public:
     /* 0x7C8 */ u8 m7C8[0x7EC - 0x7C8];
     /* 0x7EC */ int m7EC;
     /* 0x7F0 */ int m7F0;
-    /* 0x7F4 */ u16 mEvtStartIdx;
-    /* 0x7F6 */ u16 mEvtGetItemIdx;
-    /* 0x7F8 */ u16 mEvtNoItemIdx;
-    /* 0x7FA */ u16 mEvtStart2Idx;
-    /* 0x7FC */ u16 mEvtEnd2Idx;
+    /* 0x7F4 */ s16 mEvtStartIdx;
+    /* 0x7F6 */ s16 mEvtGetItemIdx;
+    /* 0x7F8 */ s16 mEvtNoItemIdx;
+    /* 0x7FA */ s16 mEvtStart2Idx;
+    /* 0x7FC */ s16 mEvtEnd2Idx;
     /* 0x7FE */ u16 mCurrItemNameMsgNo;
     /* 0x800 */ u8 m800[0x802 - 0x800];
     /* 0x802 */ s16 mTimer;
@@ -142,7 +142,7 @@ public:
     /* 0x833 */ u8 m833[0x836 - 0x833];
     /* 0x836 */ u8 m836;
     /* 0x837 */ u8 mFlags;  /* Just a guess */
-    /* 0x838 */ u8 m838;
+    /* 0x838 */ s8 m838;
     /* 0x839 */ u8 mAction;
     /* 0x83A */ u8 field_83A[0x83C - 0x83A];
 };
