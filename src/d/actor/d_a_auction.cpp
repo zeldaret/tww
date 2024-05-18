@@ -70,6 +70,8 @@ static daAuction_c::ProcFunc_t eventProc[] = {
     daAuction_c::eventMainMsgBikonW,
 };
 
+extern void dAuction_screen_delete();
+
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
     // TODO: Refactor this
@@ -320,7 +322,32 @@ void daAuction_c::eventOrder() {
 
 /* 00000EF8-0000104C       .text eventMove__11daAuction_cFv */
 void daAuction_c::eventMove() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_endCheck(mEvtStartIdx)) {
+        dComIfGp_event_reset();
+
+        if (m824 != 0) {
+            m838 = 5;
+        } else {
+            m838 = 4;
+        }
+    } else if (dComIfGp_evmng_endCheck(mEvtGetItemIdx) || dComIfGp_evmng_endCheck(mEvtNoItemIdx) || dComIfGp_evmng_endCheck(mEvtEnd2Idx)) {
+        dComIfGp_event_reset();
+        dComIfGp_endMiniGame(5);
+        fopAcM_delete((fopAc_ac_c*)mpTimer);
+        dAuction_screen_delete();
+    } else if (dComIfGp_evmng_endCheck(mEvtStart2Idx)) {
+        dComIfGp_event_reset();
+        m838 = 7;
+    } else {
+        bool attn = mNpcEvtInfo.getAttnFlag();
+        if (mNpcEvtInfo.cutProc()) {
+            if (!mNpcEvtInfo.getAttnFlag()) {
+                mNpcEvtInfo.setAttnFlag(attn);
+            }
+        } else {
+            privateCut();
+        }
+    }
 }
 
 /* 0000104C-00001300       .text privateCut__11daAuction_cFv */
