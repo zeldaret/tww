@@ -12,8 +12,8 @@ public:
     typedef void(daAuction_c::*ProcFunc_t)();
 
     struct ItemData {
-        /* 0x00 */ u16 mItemID;
-        /* 0x02 */ u16 mNameMsgID;
+        /* 0x00 */ s16 mItemID;
+        /* 0x02 */ s16 mNameMsgID;
         /* 0x04 */ u16 mStartingBid;
         /* 0x06 */ u16 mObtainedEventBit;
     };  // Size: 0x08
@@ -81,7 +81,7 @@ public:
     void setMessage(unsigned long);
     void setMessage2(unsigned long);
     void setMtx();
-    void getItemNo();
+    u8 getItemNo();
     void getNpcActorP(int);
     void setCameraNpc(int, short);
     void setLinkAnm(unsigned char);
@@ -113,7 +113,7 @@ public:
     /* 0x7F8 */ s16 mEvtNoItemIdx;
     /* 0x7FA */ s16 mEvtStart2Idx;
     /* 0x7FC */ s16 mEvtEnd2Idx;
-    /* 0x7FE */ u16 mCurrItemNameMsgNo;
+    /* 0x7FE */ s16 mCurrItemNameMsgNo;
     /* 0x800 */ u8 m800[0x802 - 0x800];
     /* 0x802 */ s16 mTimer;
     /* 0x804 */ u8 m804[0x808 - 0x804];

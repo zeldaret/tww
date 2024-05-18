@@ -271,7 +271,51 @@ void daAuction_c::checkOrder() {
 
 /* 00000C68-00000EF8       .text eventOrder__11daAuction_cFv */
 void daAuction_c::eventOrder() {
-    /* Nonmatching */
+    if (m821 == 1) {
+        mMoveState = 2;
+        m838 = 3;
+        m822 = m821;
+        m821 = 0;
+    } else if (m821 == 2) {
+        mMoveState = 2;
+        m838 = 6;
+        m822 = m821;
+        m821 = 0;
+    }
+
+    if (m838 == 1 || m838 == 2) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if (m838 == 1) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    } else if (m838 == 3) {
+        if (dComIfGs_isEventBit(0x4008)) {
+            mCurrAuctionItemIndex = dComIfGs_getEventReg(0xCD03);
+            mCurrItemNameMsgNo += 0xA;
+        } else {
+            mCurrAuctionItemIndex = getItemNo();
+        }
+
+        dComIfGp_setItemNameMessageID(l_item_dat[mCurrAuctionItemIndex].mItemID);
+        mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mNameMsgID;
+        dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
+
+        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), mEvtStartIdx, 0, 0xFF7F);
+        dComIfGp_startMiniGame(5);
+    } else if (m838 == 4) {
+        fopAcM_orderOtherEventId(this, mEvtGetItemIdx, 0xFF, 0xFF7F);
+    } else if (m838 == 5) {
+        fopAcM_orderOtherEventId(this, mEvtNoItemIdx, 0xFF, 0xFF7F);
+    } else if (m838 == 6) {
+        mCurrAuctionItemIndex &= 1;
+        mCurrItemNameMsgNo = l_item_dat2[mCurrAuctionItemIndex].mNameMsgID;
+        dComIfGp_setItemNameMessageID(l_item_dat2[mCurrAuctionItemIndex].mItemID);
+        dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
+        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), mEvtStart2Idx, 0, 0xFF7F);
+        dComIfGp_startMiniGame(5);
+    } else if (m838 == 7) {
+        fopAcM_orderOtherEventId(this, mEvtEnd2Idx, 0xFF, 0xFF7F);
+    }
 }
 
 /* 00000EF8-0000104C       .text eventMove__11daAuction_cFv */
@@ -420,7 +464,7 @@ void daAuction_c::setMtx() {
 }
 
 /* 00003754-00003828       .text getItemNo__11daAuction_cFv */
-void daAuction_c::getItemNo() {
+u8 daAuction_c::getItemNo() {
     /* Nonmatching */
 }
 

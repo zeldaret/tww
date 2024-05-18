@@ -482,6 +482,11 @@ public:
 
     u8 getMiniGameType() { return mMiniGameType; }
 
+    void startMiniGame(u8 param_1) {
+        mMiniGameType = param_1;
+        field_0x4A38 |= 1 << (param_1 - 1); // Sets Nth bit
+    }
+
     void endMiniGame(u16 param_1) {
         mMiniGameType = 0;
         field_0x4A38 ^= 1 << (param_1 - 1); // toggle Nth bit
@@ -2321,6 +2326,10 @@ inline u8 dComIfGp_getMiniGameType() {
     // TODO add enum for minigame type.
     // 0 for none, 8 for shooting the fishman, 2/6 for orca, 7 for mail sorting, etc
     return g_dComIfG_gameInfo.play.getMiniGameType();
+}
+
+inline void dComIfGp_startMiniGame(u8 param_1) {
+    g_dComIfG_gameInfo.play.startMiniGame(param_1);
 }
 
 inline void dComIfGp_endMiniGame(u16 param_1) {
