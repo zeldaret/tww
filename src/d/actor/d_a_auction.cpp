@@ -55,9 +55,19 @@ static NpcMsgDatStruct l_npc_msg_dat[12] = {
 // TODO: Figure out what these are
 static daAuction_HIO_c l_HIO;
 
-/* TODO: Add the rest of the functions */
-static daAuction_c::MoveFunc_t moveProc[] = {
-    daAuction_c::eventMainKai
+static daAuction_c::ProcFunc_t moveProc[] = {
+    daAuction_c::executeWait,
+    daAuction_c::executeNormal,
+    daAuction_c::executeStart,
+};
+
+static daAuction_c::ProcFunc_t eventProc[] = {
+    daAuction_c::eventMainKai,
+    daAuction_c::eventMainUri,
+    daAuction_c::eventMainMsgSet,
+    daAuction_c::eventMainMsgEnd,
+    daAuction_c::eventMainMsgBikonC,
+    daAuction_c::eventMainMsgBikonW,
 };
 
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
@@ -79,7 +89,7 @@ daAuction_c::daAuction_c() {
         m80C[rnd2 + 1] = tmp;
     }
 
-    mMoveIdx = 0;
+    mMoveState = 0;
     m820 = 1;
     m821 = 0;
     m7EC = 0;
@@ -185,7 +195,7 @@ BOOL daAuction_c::_execute() {
     checkOrder();
 
     if (!dComIfGp_event_runCheck() || eventInfo.checkCommandTalk()) {
-        (this->*moveProc[mMoveIdx])();
+        (this->*moveProc[mMoveState])();
     } else {
         eventMove();
     }

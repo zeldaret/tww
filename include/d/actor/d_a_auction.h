@@ -9,7 +9,7 @@
 
 class daAuction_c : public fopNpc_npc_c {
 public:
-    typedef void(daAuction_c::*MoveFunc_t)();
+    typedef void(daAuction_c::*ProcFunc_t)();
 
     struct ItemData {
         /* 0x00 */ u16 mItemID;
@@ -123,7 +123,7 @@ public:
     /* 0x814 */ u8 m814[8];
     /* 0x81C */ u8 m81C;
     /* 0x81D */ u8 m81D;
-    /* 0x81E */ u8 mMoveIdx;
+    /* 0x81E */ u8 mMoveState;
     /* 0x81F */ u8 m81F[0x820 - 0x81F];
     /* 0x820 */ u8 m820;
     /* 0x821 */ u8 m821;
