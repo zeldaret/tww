@@ -414,7 +414,7 @@ void daAuction_c::privateCut() {
         }
     }
 
-    u8 evtRes;
+    bool evtRes;
     switch (mAction) {
     case 0:
         evtRes = eventMesSet();
@@ -432,7 +432,7 @@ void daAuction_c::privateCut() {
         evtRes = eventGetItem();
         break;
     case 7:
-        evtRes = 0; // TODO: __ptmf_test
+        evtRes = false; // TODO: __ptmf_test
         break;
     case 8:
         evtRes = eventCameraOffNpc();
@@ -444,7 +444,7 @@ void daAuction_c::privateCut() {
         evtRes = eventCameraTest();
         break;
     default:
-        evtRes = 1;
+        evtRes = true;
     }
 
     if (evtRes) {
@@ -488,12 +488,14 @@ void daAuction_c::eventTalkInit(int staffIdx) {
 }
 
 /* 000013C0-00001400       .text eventMesSet__11daAuction_cFv */
-u8 daAuction_c::eventMesSet() {
-    /* Nonmatching */
+bool daAuction_c::eventMesSet() {
+    talk(0);
+
+    return mCurrMsgBsPcId != fpcM_ERROR_PROCESS_ID_e;
 }
 
 /* 00001400-00001434       .text eventMesEnd__11daAuction_cFv */
-u8 daAuction_c::eventMesEnd() {
+bool daAuction_c::eventMesEnd() {
     /* Nonmatching */
 }
 
@@ -503,7 +505,7 @@ void daAuction_c::eventStartInit() {
 }
 
 /* 00001634-000016AC       .text eventStart__11daAuction_cFv */
-u8 daAuction_c::eventStart() {
+bool daAuction_c::eventStart() {
     /* Nonmatching */
 }
 
@@ -522,7 +524,7 @@ static daAuction_c::ProcFunc_t eventProc[] = {
 };
 
 /* 0000188C-00001A98       .text eventMain__11daAuction_cFv */
-u8 daAuction_c::eventMain() {
+bool daAuction_c::eventMain() {
     /* Nonmatching */
 }
 
@@ -562,7 +564,7 @@ void daAuction_c::eventGetItemInit() {
 }
 
 /* 00002D4C-00002D54       .text eventGetItem__11daAuction_cFv */
-u8 daAuction_c::eventGetItem() {
+bool daAuction_c::eventGetItem() {
     /* Nonmatching */
 }
 
@@ -582,7 +584,7 @@ void daAuction_c::eventGetItemMesInit() {
 }
 
 /* 00002E40-00002EA0       .text eventCameraOffNpc__11daAuction_cFv */
-u8 daAuction_c::eventCameraOffNpc() {
+bool daAuction_c::eventCameraOffNpc() {
     /* Nonmatching */
 }
 
@@ -592,7 +594,7 @@ void daAuction_c::eventEndInit() {
 }
 
 /* 00002EDC-00002F60       .text eventEnd__11daAuction_cFv */
-u8 daAuction_c::eventEnd() {
+bool daAuction_c::eventEnd() {
     /* Nonmatching */
 }
 
@@ -602,7 +604,7 @@ void daAuction_c::eventCameraTestInit() {
 }
 
 /* 00002F64-00002F6C       .text eventCameraTest__11daAuction_cFv */
-u8 daAuction_c::eventCameraTest() {
+bool daAuction_c::eventCameraTest() {
     /* Nonmatching */
 }
 
