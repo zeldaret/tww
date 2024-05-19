@@ -16,7 +16,7 @@ namespace daObj {
     
     void make_land_effect(fopAc_ac_c*, dBgS_GndChk*, float);
     void get_wind_spd(fopAc_ac_c*, float);
-    void get_path_spd(cBgS_PolyInfo&, float);
+    cXyz& get_path_spd(cBgS_PolyInfo&, float);
     void posMoveF_stream(fopAc_ac_c*, const cXyz*, const cXyz*, float, float);
     void posMoveF_grade(fopAc_ac_c*, const cXyz*, const cXyz*, float, float, const cXyz*, float, float, const cXyz*);
     void quat_rotBaseY(Quaternion*, const cXyz&);

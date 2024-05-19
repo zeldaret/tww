@@ -61,7 +61,7 @@ namespace {
 
 const daBomb_c::Attr_c daBomb_c::m_attrType[] = {
     {"Link", 0x8E0},
-    {"VbakH", 0x800},
+    {"VbakH", 0x8000},
     {"Link", 0x8E0},
 };
 
@@ -1034,6 +1034,13 @@ void daBomb_c::waitState_bomtyu() {
     }
 }
 
+// assuming this was here and got stripped, given the leftover ptmf in .data and the other proc/proc_init pairs
+bool daBomb_c::procSink_init() {
+    mFunc = &daBomb_c::procSink;
+
+    return true;
+}
+
 /* 800DBC4C-800DBC5C       .text procSink__8daBomb_cFv */
 bool daBomb_c::procSink() {
     field_0x781 = 1;
@@ -1355,9 +1362,6 @@ int daBomb_c::create() {
 static int daBomb_Create(fopAc_ac_c* i_this) {
     return static_cast<daBomb_c*>(i_this)->create();
 }
-
-// TODO: not sure why this appears in data
-daBomb_c::procFunc dummy_5390 = &daBomb_c::procSink;
 
 static dCcD_SrcSph l_sph_src = {
     // dCcD_SrcGObjInf

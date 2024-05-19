@@ -9,6 +9,7 @@
 #include "d/d_item_data.h"
 #include "d/d_stage.h"
 #include "d/d_s_play.h"
+#include "d/actor/d_a_npc_sarace.h"
 #include "m_Do/m_Do_audio.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTGamePad.h"
@@ -16,11 +17,6 @@
 #include "SSystem/SComponent/c_math.h"
 #include "string.h"
 #include "stdio.h"
-
-struct daNpc_Sarace_c {
-    static int ship_race_rupee;
-    static int ship_race_result;
-};
 
 /* 800589A8-80058B54       .text init__21dSv_player_status_a_cFv */
 void dSv_player_status_a_c::init() {
