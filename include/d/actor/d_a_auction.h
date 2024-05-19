@@ -55,12 +55,12 @@ public:
     void eventMove();
     void privateCut();
     void eventTalkInit(int);
-    void eventMesSet();
-    void eventMesEnd();
+    u8 eventMesSet();
+    u8 eventMesEnd();
     void eventStartInit();
-    void eventStart();
+    u8 eventStart();
     void eventMainInit();
-    void eventMain();
+    u8 eventMain();
     void eventMainKai();
     void eventMainUri();
     void eventMainMsgSet();
@@ -68,15 +68,15 @@ public:
     void eventMainMsgBikonC();
     void eventMainMsgBikonW();
     void eventGetItemInit();
-    void eventGetItem();
+    u8 eventGetItem();
     void eventCameraOffInit();
     void eventGetItemNpcInit(int);
     void eventGetItemMesInit();
-    void eventCameraOffNpc();
+    u8 eventCameraOffNpc();
     void eventEndInit();
-    void eventEnd();
+    u8 eventEnd();
     void eventCameraTestInit();
-    void eventCameraTest();
+    u8 eventCameraTest();
     u16 next_msgStatus(u32* pMsgNo);
     void setMessage(unsigned long);
     void setMessage2(unsigned long);
@@ -139,11 +139,12 @@ public:
     /* 0x82D */ u8 mCurLinkAnm;
     /* 0x82E */ u8 m82E[0x832 - 0x82E];
     /* 0x832 */ u8 m832;    /* Might be mode index */
-    /* 0x833 */ u8 m833[0x836 - 0x833];
+    /* 0x833 */ u8 m833[0x835 - 0x833];
+    /* 0x835 */ u8 m835;
     /* 0x836 */ u8 m836;
     /* 0x837 */ u8 mFlags;  /* Just a guess */
     /* 0x838 */ s8 m838;
-    /* 0x839 */ u8 mAction;
+    /* 0x839 */ s8 mAction;
     /* 0x83A */ u8 field_83A[0x83C - 0x83A];
 };
 

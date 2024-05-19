@@ -6,6 +6,7 @@
 #include "d/actor/d_a_auction.h"
 #include "d/d_procname.h"
 #include "d/res/res_auction.h"
+#include "d/d_camera.h"
 
 /* Structs are almost definitely not accurate */
 struct NpcDatStruct {
@@ -23,12 +24,21 @@ struct NpcMsgDatStruct {
     /* 0x06 */ s16 field_0x06;
     /* 0x08 */ s16 field_0x08;
 };
+static cXyz l_camera_pos[6] = {
+    cXyz(-265.0f, 48.0f, -631.0f),
+    cXyz(332.0f, 232.0f, 286.0f),
+    cXyz(-50.0f, 202.0f, 137.0f),
+    cXyz(-87.0f, 239.0f, 330.0f),
+    cXyz(-216.0f, 205.0f, 5.0f),
+    cXyz(-379.0f, 238.0f, 115.0f),
+};
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
 static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
 static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0f, 0.5f};
+
 
 static daAuction_c::ItemData l_item_dat[] = {
     {dItem_JOY_PENDANT_e, 0x1D10, 40, 0x0F01},
@@ -52,22 +62,15 @@ static NpcMsgDatStruct l_npc_msg_dat[12] = {
     NULL,
 };
 
+#ifdef DEBUG
 // TODO: Figure out what these are
 static daAuction_HIO_c l_HIO;
+#endif
 
 static daAuction_c::ProcFunc_t moveProc[] = {
     daAuction_c::executeWait,
     daAuction_c::executeNormal,
     daAuction_c::executeStart,
-};
-
-static daAuction_c::ProcFunc_t eventProc[] = {
-    daAuction_c::eventMainKai,
-    daAuction_c::eventMainUri,
-    daAuction_c::eventMainMsgSet,
-    daAuction_c::eventMainMsgEnd,
-    daAuction_c::eventMainMsgBikonC,
-    daAuction_c::eventMainMsgBikonW,
 };
 
 extern void dAuction_screen_delete();
@@ -352,7 +355,120 @@ void daAuction_c::eventMove() {
 
 /* 0000104C-00001300       .text privateCut__11daAuction_cFv */
 void daAuction_c::privateCut() {
-    /* Nonmatching */
+    static char* cut_name_tbl[] = {
+        "MES_SET",
+        "MES_END",
+        "START",
+        "MAIN",
+        "GET_ITEM",
+        "CAMERA_OFF",
+        "GET_ITEM_NPC",
+        "GET_ITEM_MES",
+        "CAMERA_OFF_NPC",
+        "END",
+        "CAMERA_TEST",
+    };
+
+    int staffIdx = dComIfGp_evmng_getMyStaffId("Auction");
+
+    if (staffIdx == -1) {
+        return;
+    }
+
+    mAction = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+
+    if (mAction == -1) {
+        dComIfGp_evmng_cutEnd(staffIdx);
+        return;
+    }
+
+    if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+        switch (mAction) {
+        case 0:
+            eventTalkInit(staffIdx);
+            break;
+        case 2:
+            eventStartInit();
+            break;
+        case 3:
+            eventMainInit();
+            break;
+        case 4:
+            eventGetItemInit();
+            break;
+        case 5:
+            eventCameraOffInit();
+            break;
+        case 6:
+            eventGetItemNpcInit(staffIdx);
+            break;
+        case 7:
+            eventGetItemMesInit();
+            break;
+        case 9:
+            eventEndInit();
+            break;
+        case 10:
+            eventCameraTestInit();
+            break;
+        }
+    }
+
+    u8 evtRes;
+    switch (mAction) {
+    case 0:
+        evtRes = eventMesSet();
+        break;
+    case 1:
+        evtRes = eventMesEnd();
+        break;
+    case 2:
+        evtRes = eventStart();
+        break;
+    case 3:
+        evtRes = eventMain();
+        break;
+    case 4:
+        evtRes = eventGetItem();
+        break;
+    case 7:
+        evtRes = 0; // TODO: __ptmf_test
+        break;
+    case 8:
+        evtRes = eventCameraOffNpc();
+        break;
+    case 9:
+        evtRes = eventEnd();
+        break;
+    case 10:
+        evtRes = eventCameraTest();
+        break;
+    default:
+        evtRes = 1;
+    }
+
+    if (evtRes) {
+        dComIfGp_evmng_cutEnd(staffIdx);
+    }
+    
+    dCamera_c* pCam = dCam_getBody();
+
+    // This could probably be simplified
+    if (m835 & 1) {
+        pCam->Stop();
+        m835 &= ~1;
+        m835 |= 4;
+    }
+
+    if (m835 & 2) {
+        pCam->Start();
+        m835 &= ~0xE;
+    }
+
+    if (m835 & 4 && m835 & 8) {
+        pCam->Set(m78C, m798);
+    }
+
 }
 
 /* 00001300-000013C0       .text eventTalkInit__11daAuction_cFi */
@@ -361,12 +477,12 @@ void daAuction_c::eventTalkInit(int) {
 }
 
 /* 000013C0-00001400       .text eventMesSet__11daAuction_cFv */
-void daAuction_c::eventMesSet() {
+u8 daAuction_c::eventMesSet() {
     /* Nonmatching */
 }
 
 /* 00001400-00001434       .text eventMesEnd__11daAuction_cFv */
-void daAuction_c::eventMesEnd() {
+u8 daAuction_c::eventMesEnd() {
     /* Nonmatching */
 }
 
@@ -376,7 +492,7 @@ void daAuction_c::eventStartInit() {
 }
 
 /* 00001634-000016AC       .text eventStart__11daAuction_cFv */
-void daAuction_c::eventStart() {
+u8 daAuction_c::eventStart() {
     /* Nonmatching */
 }
 
@@ -385,8 +501,17 @@ void daAuction_c::eventMainInit() {
     /* Nonmatching */
 }
 
+static daAuction_c::ProcFunc_t eventProc[] = {
+    daAuction_c::eventMainKai,
+    daAuction_c::eventMainUri,
+    daAuction_c::eventMainMsgSet,
+    daAuction_c::eventMainMsgEnd,
+    daAuction_c::eventMainMsgBikonC,
+    daAuction_c::eventMainMsgBikonW,
+};
+
 /* 0000188C-00001A98       .text eventMain__11daAuction_cFv */
-void daAuction_c::eventMain() {
+u8 daAuction_c::eventMain() {
     /* Nonmatching */
 }
 
@@ -426,7 +551,7 @@ void daAuction_c::eventGetItemInit() {
 }
 
 /* 00002D4C-00002D54       .text eventGetItem__11daAuction_cFv */
-void daAuction_c::eventGetItem() {
+u8 daAuction_c::eventGetItem() {
     /* Nonmatching */
 }
 
@@ -446,7 +571,7 @@ void daAuction_c::eventGetItemMesInit() {
 }
 
 /* 00002E40-00002EA0       .text eventCameraOffNpc__11daAuction_cFv */
-void daAuction_c::eventCameraOffNpc() {
+u8 daAuction_c::eventCameraOffNpc() {
     /* Nonmatching */
 }
 
@@ -456,7 +581,7 @@ void daAuction_c::eventEndInit() {
 }
 
 /* 00002EDC-00002F60       .text eventEnd__11daAuction_cFv */
-void daAuction_c::eventEnd() {
+u8 daAuction_c::eventEnd() {
     /* Nonmatching */
 }
 
@@ -466,7 +591,7 @@ void daAuction_c::eventCameraTestInit() {
 }
 
 /* 00002F64-00002F6C       .text eventCameraTest__11daAuction_cFv */
-void daAuction_c::eventCameraTest() {
+u8 daAuction_c::eventCameraTest() {
     /* Nonmatching */
 }
 
