@@ -281,6 +281,8 @@ public:
     
     int getMessageRupee() { return mMessageRupee; }
 
+    void setAuctionRupee(s16 count) { mAuctionRupee = count; }
+
     int getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
@@ -599,7 +601,7 @@ public:
     /* 0x4918 */ u16 mMsgCountNumber;
     /* 0x491A */ s16 mMsgSetNumber;
     /* 0x491C */ s16 mMessageRupee;
-    /* 0x491E */ s16 field_0x491e;
+    /* 0x491E */ s16 mAuctionRupee;
     /* 0x4920 */ s16 field_0x4920;
     /* 0x4922 */ s16 field_0x4922;
     /* 0x4924 */ s16 mCurrHP;
@@ -763,6 +765,10 @@ inline int dComIfGs_getRupee() {
 
 inline int dComIfGp_getMessageRupee() {
     return g_dComIfG_gameInfo.play.getMessageRupee();
+}
+
+inline void dComIfGp_setAuctionRupee(s16 count) {
+    g_dComIfG_gameInfo.play.setAuctionRupee(count);
 }
 
 inline void dComIfGs_setRupee(u16 rupee) {

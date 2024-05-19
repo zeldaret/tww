@@ -74,6 +74,10 @@ static daAuction_c::ProcFunc_t moveProc[] = {
 };
 
 extern void dAuction_screen_delete();
+extern void dAuction_screen_slotHide();
+extern void dAuction_screen_gaugeHide();
+extern void dAuction_screen_talkEnd();
+extern uint dAuction_screen_create();
 
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
@@ -501,7 +505,46 @@ bool daAuction_c::eventMesEnd() {
 
 /* 00001434-00001634       .text eventStartInit__11daAuction_cFv */
 void daAuction_c::eventStartInit() {
-    /* Nonmatching */
+    m820 = ~1;
+
+    if (m822 == 2) {
+        mTimerID = dTimer_createTimer(4, 0x1E, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
+    } else {
+        mTimerID = dTimer_createTimer(4, 0x3C, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
+    }
+
+    JUT_ASSERT(0x861, mTimerID != fpcM_ERROR_PROCESS_ID_e);
+
+    mGaugeID = dAuction_screen_create();
+
+    JUT_ASSERT(0x863, mGaugeID != fpcM_ERROR_PROCESS_ID_e);
+
+    mpTimer = NULL;
+    m830 = 1;
+
+    dComIfGp_setMiniGameRupee(0);
+    dComIfGp_setAuctionRupee(0);
+
+    dAuction_screen_slotHide();
+    dAuction_screen_gaugeHide();
+    dAuction_screen_talkEnd();
+
+    mCurrAuctionItemPID = fopAcM_create(PROC_ShopItem, l_item_dat[mCurrAuctionItemIndex].mItemID, &current.pos);
+    dKy_custom_colset(0, 4, 1.0f);
+
+    mLight.mPos.x = 0.0f;
+    mLight.mPos.y = 50.0f;
+    mLight.mPos.z = -200.0f;
+    mLight.mColor.r = 0x96;
+    mLight.mColor.g = 0x64;
+    mLight.mColor.b = 0x3C;
+    mLight.mPower = 450.0f;
+    mLight.mFluctuation = 0.0f;
+
+    dKy_efplight_set(&mLight);
+    mFlags |= 4;
+
+    dAuction_screen_talkEnd();
 }
 
 /* 00001634-000016AC       .text eventStart__11daAuction_cFv */

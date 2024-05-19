@@ -94,7 +94,9 @@ public:
     /* 0x6CC */ dNpc_EventCut_c mNpcEvtInfo;
     //* 0x730 */ u8 m730[0x738 - 0x730];
     /* 0x738 */ u32 m738[8];
-    /* 0x758 */ u8 m758[0x764 - 0x758];
+    /* 0x758 */ uint mCurrAuctionItemPID;
+    /* 0x75C */ uint mTimerID;
+    /* 0x760 */ uint mGaugeID;
     /* 0x764 */ dTimer_c* mpTimer;
     /* 0x768 */ LIGHT_INFLUENCE mLight;
     /* 0x788 */ J3DModel* mpModel;
@@ -137,7 +139,9 @@ public:
     /* 0x82B */ u8 m82B[0x82C - 0x82B];
     /* 0x82C */ u8 m82C;
     /* 0x82D */ u8 mCurLinkAnm;
-    /* 0x82E */ u8 m82E[0x832 - 0x82E];
+    /* 0x82E */ u8 m82E[0x830 - 0x82E];
+    /* 0x830 */ u8 m830;
+    /* 0x831 */ u8 m831;
     /* 0x832 */ u8 m832;    /* Might be mode index */
     /* 0x833 */ u8 m833[0x835 - 0x833];
     /* 0x835 */ u8 m835;
