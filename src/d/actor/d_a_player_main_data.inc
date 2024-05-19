@@ -73,7 +73,7 @@ static dCcD_SrcCyl l_cyl_src = {
     },
 };
 
-dCcD_SrcCyl l_wind_cyl_src = {
+static dCcD_SrcCyl l_wind_cyl_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -103,7 +103,7 @@ dCcD_SrcCyl l_wind_cyl_src = {
     },
 };
 
-dCcD_SrcCyl l_at_cyl_src = {
+static dCcD_SrcCyl l_at_cyl_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -163,7 +163,7 @@ static dCcD_SrcCps l_at_cps_src = {
     },
 };
 
-dCcD_SrcCps l_fan_wind_cps_src = {
+static dCcD_SrcCps l_fan_wind_cps_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -193,7 +193,7 @@ dCcD_SrcCps l_fan_wind_cps_src = {
     },
 };
 
-dCcD_SrcSph l_fan_wind_sph_src = {
+static dCcD_SrcSph l_fan_wind_sph_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
