@@ -472,8 +472,19 @@ void daAuction_c::privateCut() {
 }
 
 /* 00001300-000013C0       .text eventTalkInit__11daAuction_cFi */
-void daAuction_c::eventTalkInit(int) {
-    /* Nonmatching */
+void daAuction_c::eventTalkInit(int staffIdx) {
+    s32* pMsg = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+
+    if (pMsg != NULL) {
+        switch (*pMsg) {
+        case 0x1CF4:
+            mDoAud_seStart(JA_SE_AUC_ITEM_SHOW);
+        default:
+            setMessage(*pMsg);
+        }
+    } else {
+        setMessage(0);
+    }
 }
 
 /* 000013C0-00001400       .text eventMesSet__11daAuction_cFv */
