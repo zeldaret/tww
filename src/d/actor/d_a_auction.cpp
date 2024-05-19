@@ -496,7 +496,7 @@ bool daAuction_c::eventMesSet() {
 
 /* 00001400-00001434       .text eventMesEnd__11daAuction_cFv */
 bool daAuction_c::eventMesEnd() {
-    /* Nonmatching */
+    return talk(0) == fopMsgStts_BOX_CLOSED_e;
 }
 
 /* 00001434-00001634       .text eventStartInit__11daAuction_cFv */
