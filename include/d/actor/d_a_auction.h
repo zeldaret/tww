@@ -106,8 +106,10 @@ public:
     /* 0x7A8 */ u8 m7A8[0x7BC - 0x7A8];
     /* 0x7BC */ f32 mAlpha;
     /* 0x7C0 */ f32 mBlend;
-    /* 0x7C4 */ f32 m7C4;
-    /* 0x7C8 */ u8 m7C8[0x7EC - 0x7C8];
+    /* 0x7C4 */ f32 m7C4[7];
+    /* 0x7E0 */ f32 m7E0;
+    /* 0x7E4 */ f32 m7E4;
+    /* 0x7E8 */ u8 m7E8[0x7EC - 0x7E8];
     /* 0x7EC */ int m7EC;
     /* 0x7F0 */ int m7F0;
     /* 0x7F4 */ s16 mEvtStartIdx;
@@ -118,7 +120,8 @@ public:
     /* 0x7FE */ s16 mCurrItemNameMsgNo;
     /* 0x800 */ u8 m800[0x802 - 0x800];
     /* 0x802 */ s16 mTimer;
-    /* 0x804 */ u8 m804[0x808 - 0x804];
+    /* 0x804 */ u16 m804;
+    /* 0x806 */ u8 m806[0x808 - 0x806];
     /* 0x808 */ u16 m808;
     /* 0x80A */ s16 m80A;
     /* 0x80C */ u8 m80C[8];
@@ -126,7 +129,7 @@ public:
     /* 0x81C */ u8 m81C;
     /* 0x81D */ u8 m81D;
     /* 0x81E */ u8 mMoveState;
-    /* 0x81F */ u8 m81F[0x820 - 0x81F];
+    /* 0x81F */ u8 m81F;
     /* 0x820 */ u8 m820;
     /* 0x821 */ u8 m821;
     /* 0x822 */ u8 m822;
@@ -136,14 +139,16 @@ public:
     /* 0x826 */ u8 m826;
     /* 0x827 */ u8 m827[0x82A - 0x827];
     /* 0x82A */ u8 m82A;
-    /* 0x82B */ u8 m82B[0x82C - 0x82B];
+    /* 0x82B */ u8 m82B;
     /* 0x82C */ u8 m82C;
     /* 0x82D */ u8 mCurLinkAnm;
-    /* 0x82E */ u8 m82E[0x830 - 0x82E];
+    /* 0x82E */ u8 m82E;
+    /* 0x82F */ u8 m82F;
     /* 0x830 */ u8 m830;
     /* 0x831 */ u8 m831;
     /* 0x832 */ u8 m832;    /* Might be mode index */
-    /* 0x833 */ u8 m833[0x835 - 0x833];
+    /* 0x833 */ u8 m833;
+    /* 0x834 */ u8 m834;
     /* 0x835 */ u8 m835;
     /* 0x836 */ u8 m836;
     /* 0x837 */ u8 mFlags;  /* Just a guess */

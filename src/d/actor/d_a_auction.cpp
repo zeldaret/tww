@@ -7,6 +7,7 @@
 #include "d/d_procname.h"
 #include "d/res/res_auction.h"
 #include "d/d_camera.h"
+#include "d/actor/d_a_player.h"
 
 /* Structs are almost definitely not accurate */
 struct NpcDatStruct {
@@ -24,11 +25,22 @@ struct NpcMsgDatStruct {
     /* 0x06 */ s16 field_0x06;
     /* 0x08 */ s16 field_0x08;
 };
-static cXyz l_camera_pos[6] = {
+
+struct NpcCameraDatStruct { // Probably wrong
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ s16 field_0x08;
+};
+
+static cXyz l_camera_pos[3][2] = {
     cXyz(-265.0f, 48.0f, -631.0f),
     cXyz(332.0f, 232.0f, 286.0f),
+
+
     cXyz(-50.0f, 202.0f, 137.0f),
     cXyz(-87.0f, 239.0f, 330.0f),
+
+
     cXyz(-216.0f, 205.0f, 5.0f),
     cXyz(-379.0f, 238.0f, 115.0f),
 };
@@ -62,6 +74,51 @@ static NpcMsgDatStruct l_npc_msg_dat[12] = {
     NULL,
 };
 
+static NpcCameraDatStruct l_npc_camera_dat[7] = {
+    { 150.0f, 70.0f, -500 },
+    { 200.0f, 100.0f, 0 },
+    { 200.0f, 100.0f, 0 },
+    { 200.0f, 100.0f, 0 },
+    { 200.0f, 100.0f, 0 },
+    { 200.0f, 100.0f, 0 },
+    { 200.0f, 150.0f, 0 },
+};
+
+static f32 l_npc_emitter_ofsy[8] = {
+    120.0f,
+    180.0f,
+    180.0f,
+    180.0f,
+    180.0f,
+    210.0f,
+    180.0f,
+};
+
+static f32 l_npc_camera_ofsy[8] = {
+    150.0f,
+    210.0f,
+    210.0f,
+    210.0f,
+    210.0f,
+    210.0f,
+    240.0f,
+    210.0f,
+};
+
+static s16 l_rest_msg_time1[4] = {
+    30000,
+    10000,
+    5000,
+    -1000,
+};
+
+static s16 l_rest_msg_time2[4] = {
+    15000,
+    10000,
+    5000,
+    -1000,
+};
+
 #ifdef DEBUG
 // TODO: Figure out what these are
 static daAuction_HIO_c l_HIO;
@@ -76,6 +133,7 @@ static daAuction_c::ProcFunc_t moveProc[] = {
 extern void dAuction_screen_delete();
 extern void dAuction_screen_slotHide();
 extern void dAuction_screen_gaugeHide();
+extern void dAuction_screen_gaugeShow();
 extern void dAuction_screen_talkEnd();
 extern uint dAuction_screen_create();
 
@@ -565,7 +623,59 @@ bool daAuction_c::eventStart() {
 
 /* 000016AC-0000188C       .text eventMainInit__11daAuction_cFv */
 void daAuction_c::eventMainInit() {
-    /* Nonmatching */
+    m804 = 0xE10;
+
+    for (int i = 0; i < 7; i++) {
+        m7C4[i] = 0.0f;
+    }
+
+    if (m822 == 2) {
+        m81F = 1;
+    } else {
+        m81F = 0;
+    }
+
+    m7E0 = 0.0f;
+    m7E4 = 1.0f;
+    m82A = 0;
+
+    for (int i = 0; i < 3; i++) {
+        s16 restMsgTime;
+        if (m822 == 2) {
+            restMsgTime = l_rest_msg_time2[i];
+        } else {
+            restMsgTime = l_rest_msg_time1[i];
+        }
+
+        if (60000 > restMsgTime) break;
+
+        m82A += 1;
+    }
+
+    m82B = 0;
+    m835 = 0;
+    m834 = 0;
+    m82E = 0;
+
+    dComIfG_TimerStart(0, 4);
+
+    if (m822 == 1) {
+        dAuction_screen_gaugeShow();
+    }
+
+    m836 |= 1;
+
+    daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
+
+    pLink->changeOriginalDemo();
+    mCurLinkAnm = 1;
+    dComIfGp_event_setTalkPartner(this);
+    m82F = 0;
+
+    m78C = l_camera_pos[m82F][0];
+    m798 = l_camera_pos[m82F][1];
+
+    dAuction_screen_talkEnd();
 }
 
 static daAuction_c::ProcFunc_t eventProc[] = {
