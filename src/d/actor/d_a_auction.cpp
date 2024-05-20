@@ -549,7 +549,18 @@ void daAuction_c::eventStartInit() {
 
 /* 00001634-000016AC       .text eventStart__11daAuction_cFv */
 bool daAuction_c::eventStart() {
-    /* Nonmatching */
+    if (mpTimer == NULL) {
+        mpTimer = (dTimer_c*)fopMsgM_SearchByID(mTimerID);
+        
+        if (mpTimer != NULL) {
+            mpTimer->mpScrnDraw->setShowType(0);
+        }
+    }
+
+    dComIfGp_setDoStatusForce(0x3E);
+    dComIfGp_setAStatusForce(0x3E);
+
+    return mpTimer != NULL;
 }
 
 /* 000016AC-0000188C       .text eventMainInit__11daAuction_cFv */
