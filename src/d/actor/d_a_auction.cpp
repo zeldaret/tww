@@ -8,6 +8,7 @@
 #include "d/res/res_auction.h"
 #include "d/d_camera.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_main.h"
 
 /* Structs are almost definitely not accurate */
 struct NpcDatStruct {
@@ -689,7 +690,56 @@ static daAuction_c::ProcFunc_t eventProc[] = {
 
 /* 0000188C-00001A98       .text eventMain__11daAuction_cFv */
 bool daAuction_c::eventMain() {
-    /* Nonmatching */
+    daPy_lk_c* pLink = (daPy_lk_c*)dComIfGp_getLinkPlayer();
+
+    if (pLink->getBaseAnimeFrameRate() == 0.0f && mCurLinkAnm != 1 && mCurLinkAnm != 0x1D && mCurLinkAnm != 0x25) {
+        setLinkAnm(1);
+    }
+
+    mFlags &= 4;
+
+    if (dComIfG_getTimerMode() == 4) {
+        dComIfG_TimerStop(2);
+    }
+
+    (this->*eventProc[m81F])();
+
+    if (m832 != 0) {
+        pLink->setFace((daPy_py_c::daPy_FACE)mFace);
+    }
+
+    if (m822 == 1) {
+        dComIfGp_setAuctionGauge((s16)m7C4[0]);
+    }
+    
+    if (m81F <= 1 && m82B != 0) {
+        dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
+
+        if (dComIfG_getTimerMode() == 4) {
+            dComIfG_TimerStop(2);
+        }
+
+        dAuction_screen_slotHide();
+        dAuction_screen_gaugeHide();
+
+        m82B = 1;
+        m834 = 0;
+        m836 |= 2;
+
+        // Might be incorrect
+        pLink->cancelOriginalDemo();
+
+        if (m835 & 4) {
+            m835 |= 2;
+            m835 &= ~1;
+        }
+
+        mDoAud_seStart(JA_SE_AUC_END);
+
+        return true;
+    }
+
+    return false;
 }
 
 /* 00001A98-000022A8       .text eventMainKai__11daAuction_cFv */
