@@ -7,7 +7,6 @@
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
 #include "m_Do/m_Do_ext.h"
-#include "m_Do/m_Do_ext.h"
 
 class daBomb_fuseSmokeEcallBack : public dPa_levelEcallBack {
 public:
@@ -99,6 +98,7 @@ public:
     bool procWait();
     bool waitState_cannon();
     void waitState_bomtyu();
+    bool procSink_init();
     bool procSink();
     BOOL execute();
     void set_wind_vec();

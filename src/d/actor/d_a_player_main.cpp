@@ -31,11 +31,8 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "m_Do/m_Do_graphic.h"
 
-cXyz l_hammer_splash_particle_scale(0.00002f, 0.00002f, 0.00002f);
-
-cXyz l_debug_keep_pos;
-csXyz l_debug_current_angle;
-csXyz l_debug_shape_angle;
+static u8 dummy[0xC];
+JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.67f, 0.67f, 0.67f);
 
 #include "d/actor/d_a_player_main_data.inc"
 
@@ -192,6 +189,10 @@ static void dummydatafunc(f32* temp, f64* temp2) {
     OSReport("Siren");
     OSReport("data_size < l_sanm_buffer_size");
 }
+
+cXyz l_debug_keep_pos;
+csXyz l_debug_current_angle;
+csXyz l_debug_shape_angle;
 
 GXColor l_freeze_fade_color = {0xFF, 0xFF, 0xFF, 0xFF};
 

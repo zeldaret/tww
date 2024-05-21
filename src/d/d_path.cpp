@@ -62,7 +62,7 @@ dPath* dPath_GetNextRoomPath(dPath* path, int room_no) {
 }
 
 /* 80080340-800804A4       .text dPath_GetPolyRoomPathVec__FR13cBgS_PolyInfoP4cXyzPi */
-int dPath_GetPolyRoomPathVec(cBgS_PolyInfo& polyInfo, cXyz* pDstPos, int* pDstArg0) {
+bool dPath_GetPolyRoomPathVec(cBgS_PolyInfo& polyInfo, cXyz* pDstPos, int* pDstArg0) {
     int room_no = dComIfG_Bgsp()->GetRoomId(polyInfo);
     int path_index = dComIfG_Bgsp()->GetRoomPathId(polyInfo);
 
