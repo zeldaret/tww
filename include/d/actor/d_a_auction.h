@@ -82,7 +82,7 @@ public:
     void setMessage2(unsigned long);
     void setMtx();
     u8 getItemNo();
-    void getNpcActorP(int);
+    fopNpc_npc_c* getNpcActorP(int);
     void setCameraNpc(int, short);
     void setLinkAnm(unsigned char);
     void getPiconDispOfs(unsigned char);
@@ -118,11 +118,11 @@ public:
     /* 0x7FA */ s16 mEvtStart2Idx;
     /* 0x7FC */ s16 mEvtEnd2Idx;
     /* 0x7FE */ s16 mCurrItemNameMsgNo;
-    /* 0x800 */ u8 m800[0x802 - 0x800];
+    /* 0x800 */ s16 m800;
     /* 0x802 */ s16 mTimer;
     /* 0x804 */ u16 m804;
-    /* 0x806 */ u8 m806[0x808 - 0x806];
-    /* 0x808 */ u16 m808;
+    /* 0x806 */ s16 m806;
+    /* 0x808 */ s16 m808;
     /* 0x80A */ s16 m80A;
     /* 0x80C */ u8 m80C[8];
     /* 0x814 */ u8 m814[8];
@@ -137,7 +137,9 @@ public:
     /* 0x824 */ u8 m824;
     /* 0x825 */ u8 m825[0x826 - 0x825];
     /* 0x826 */ u8 m826;
-    /* 0x827 */ u8 m827[0x82A - 0x827];
+    /* 0x827 */ u8 m827;
+    /* 0x828 */ u8 m828;
+    /* 0x829 */ u8 m829;
     /* 0x82A */ u8 m82A;
     /* 0x82B */ u8 m82B;
     /* 0x82C */ u8 m82C;

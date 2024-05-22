@@ -9,11 +9,12 @@
 #include "d/d_camera.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 /* Structs are almost definitely not accurate */
 struct NpcDatStruct {
-    /* 0x00 */ s32 field_0x00;
-    /* 0x04 */ s32 field_0x04;
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
     /* 0x08 */ s16 field_0x08;
     /* 0x0A */ s16 field_0x0A;
     /* 0x0C */ s16 field_0x0C;
@@ -120,6 +121,13 @@ static s16 l_rest_msg_time2[4] = {
     -1000,
 };
 
+static u32 l_msg_no[3] = {
+};
+
+static u32 l_rest_se_no[3] = {
+
+};
+
 #ifdef DEBUG
 // TODO: Figure out what these are
 static daAuction_HIO_c l_HIO;
@@ -135,6 +143,7 @@ extern void dAuction_screen_delete();
 extern void dAuction_screen_slotHide();
 extern void dAuction_screen_gaugeHide();
 extern void dAuction_screen_gaugeShow();
+extern void dAuction_screen_gaugeUp();
 extern void dAuction_screen_talkEnd();
 extern uint dAuction_screen_create();
 
@@ -744,7 +753,171 @@ bool daAuction_c::eventMain() {
 
 /* 00001A98-000022A8       .text eventMainKai__11daAuction_cFv */
 void daAuction_c::eventMainKai() {
-    /* Nonmatching */
+    if (dComIfG_getTimerMode() == 4) {
+        dComIfG_TimerReStart(2);
+    }
+
+    if (dComIfG_getTimerRestTimeMs() <= 0) {
+        m82B = 1;
+    } else {
+        if (g_mDoCPd_cpadInfo[0].mButtonTrig.b) {
+            setMessage2(0x1CFC);
+            mDoAud_seStart(JA_SE_AUC_QUIT);
+        } else {
+            // I think this uses std::abs in kiosk build?
+            m7E0 = m7E0 + m7E4;
+            if (m7E0 >= 1.0f) {
+                m7E0 = 1.0f;
+                m7E4 = -1.0f;
+            } else if (m7E0 <= -1.0f) {
+                m7E0 = -1.0f;
+                m7E4 = 1.0f;
+            }
+
+            if (m7C4[0] < 100.0f) {
+                m7C4[0] += 0.02f;
+            }
+
+            if (g_mDoCPd_cpadInfo[0].mButtonTrig.a) {
+                
+                m7C4[0] += l_npc_dat[0].field_0x00 + cM_rndF(l_npc_dat[0].field_0x04 - l_npc_dat[0].field_0x00);
+
+                mDoAud_seStart(JA_SE_AUC_BID_GAUGE, NULL, m7C4[0]);
+            }
+
+            if (m7C4[0] > 100.0f) {
+                m7C4[0] = 100.0f;
+            }
+
+            if (m806 != 0) {
+                m806 -= 1;
+
+                if (m806 == 0) {
+                    if (m834 & 2) {
+                        m82F = getRand(3);
+                        m78C = l_camera_pos[m82F][0];
+                        m798 = l_camera_pos[m82F][1];
+                    }
+
+                    m834 &= ~6;
+                }
+            } else {
+                for (int i = 1; i < 7; i++) {
+                    m7C4[i] += cM_rndF(l_npc_dat[i].field_0x04 - l_npc_dat[i].field_0x00) + l_npc_dat[i].field_0x00;
+                }
+            }
+
+            int idx;
+            int end = 7;
+
+            if ((m834 & 2)) {
+                end = 1;
+            }
+
+            for (idx = 0; idx < end; idx++) {
+                if (m7C4[idx] >= 100.0f && mCurrItemNameMsgNo < l_npc_dat[idx].field_0x0C) {
+                    break;
+                }
+            }
+
+            if (idx < end) {
+                m828 = idx;
+
+                s16 prevItemNameMsgNo = mCurrItemNameMsgNo;
+
+                if (idx != 0) {
+                    f32 f = 1.0f;
+                    if (dComIfG_getTimerRestTimeMs() < 30000) {
+                        f = 2.0f;
+                    } else if (dComIfG_getTimerRestTimeMs() < 60000) {
+                        f = 1.5f;
+                    }
+
+                    mCurrItemNameMsgNo += (s16)(f * (s16)(l_npc_dat[idx].field_0x08 + cM_rndF(l_npc_dat[idx].field_0x0A - l_npc_dat[idx].field_0x08)));
+                    m800 = mCurrItemNameMsgNo;
+
+                    end = 0x1CF9;
+
+                    m82C = 4;
+                    m7C4[idx] = 0.0f;
+
+                    nextBet();
+                } else {
+                    m800 = mCurrItemNameMsgNo + 1;
+                    dComIfGp_setMessageSetNumber(mCurrItemNameMsgNo + 1);
+                    end = 0x1CFA;
+                    setLinkAnm(0x48);
+                    mpTimer->mpScrnDraw->setShowType(1);
+
+                    dAuction_screen_gaugeUp();
+                    dComIfGp_getVibration().StartShock(5, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    dComIfGp_getVibration().StartShock(4, 0x3E, cXyz(0.0f, 1.0f, 0.0f));
+
+                }
+
+                m806 = (cM_rndF(0.0f) + 1.0f) * 60.0f;
+                m7F0 = end;
+                m81F = 4;
+
+                if (m830 != 0) {
+                    m830 = 0;
+                } else if (m826 != 0xFF && idx != 0 && dComIfG_getTimerRestTimeMs() > l_rest_msg_time1[0] && getRand(3) == 0) {
+                        u32 msgParam;
+
+                        if (mCurrItemNameMsgNo <= 0x64) {
+                            msgParam = 0x1CFD;
+                        } else if (mCurrItemNameMsgNo <= 0x96) {
+                            msgParam = 0x1CFE;
+                        } else if (mCurrItemNameMsgNo <= 0xC8) {
+                            msgParam = 0x1CFF;
+                        } else {
+                            msgParam = 0x1D00;
+                        }
+
+                        // onCameraOld might be used somewhere here?
+                        dComIfGp_setMessageCountNumber(prevItemNameMsgNo);
+                        dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
+                        setMessage2(msgParam);
+                        setCameraNpc(m824, 0);
+                        if (m824 == 0 && mCurLinkAnm != 0x1D) {
+                            setLinkAnm(0x14);
+                        }
+
+                        m834 |= 0x20;
+                        m829 = m827;
+                        m830 = 1;
+                    }
+
+                    if (m81F == 4) {
+                        u8 tmp = m828;
+                        m829 = tmp;
+                        m827 = tmp;
+                        dComIfGp_setMessageCountNumber(m800);
+                        dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m827]].field_0x00);
+                    }
+
+                    m835 |= 9;
+                    m835 &= ~2;
+                } else if (dComIfG_getTimerRestTimeMs() < l_rest_msg_time1[m82A]) {
+                    setMessage2(l_msg_no[m82A]);
+                    mDoAud_seStart(l_rest_se_no[m82A]);
+                    m82A += 1;
+                }
+            }
+            if (m834 & 2) {
+                m834 |= 4;
+                m798.set(0.0f, 50.0f, -210.0f);
+                m78C.set(getNpcActorP(0)->current.pos);
+
+                m78C.x += cM_ssin(m808) * 256.0f;
+                m78C.y += 100.0f;
+                m808 += 200;
+                mDoAud_seStart(JA_SE_CM_AUC_PARALYZED);
+            }
+        }
+
+    dComIfGp_setDoStatusForce(0x25);
+    dComIfGp_setAStatusForce(0x27);
 }
 
 /* 000022A8-00002760       .text eventMainUri__11daAuction_cFv */
@@ -848,7 +1021,7 @@ u8 daAuction_c::getItemNo() {
 }
 
 /* 00003828-0000387C       .text getNpcActorP__11daAuction_cFi */
-void daAuction_c::getNpcActorP(int) {
+fopNpc_npc_c* daAuction_c::getNpcActorP(int) {
     /* Nonmatching */
 }
 
