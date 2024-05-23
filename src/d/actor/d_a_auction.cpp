@@ -779,7 +779,6 @@ void daAuction_c::eventMainKai() {
             }
 
             if (g_mDoCPd_cpadInfo[0].mButtonTrig.a) {
-                
                 m7C4[0] += l_npc_dat[0].field_0x00 + cM_rndF(l_npc_dat[0].field_0x04 - l_npc_dat[0].field_0x00);
 
                 mDoAud_seStart(JA_SE_AUC_BID_GAUGE, NULL, m7C4[0]);
@@ -852,7 +851,6 @@ void daAuction_c::eventMainKai() {
                     dAuction_screen_gaugeUp();
                     dComIfGp_getVibration().StartShock(5, 1, cXyz(0.0f, 1.0f, 0.0f));
                     dComIfGp_getVibration().StartShock(4, 0x3E, cXyz(0.0f, 1.0f, 0.0f));
-
                 }
 
                 m806 = (cM_rndF(0.0f) + 1.0f) * 60.0f;
@@ -862,59 +860,59 @@ void daAuction_c::eventMainKai() {
                 if (m830 != 0) {
                     m830 = 0;
                 } else if (m826 != 0xFF && idx != 0 && dComIfG_getTimerRestTimeMs() > l_rest_msg_time1[0] && getRand(3) == 0) {
-                        u32 msgParam;
+                    u32 msgParam;
 
-                        if (mCurrItemNameMsgNo <= 0x64) {
-                            msgParam = 0x1CFD;
-                        } else if (mCurrItemNameMsgNo <= 0x96) {
-                            msgParam = 0x1CFE;
-                        } else if (mCurrItemNameMsgNo <= 0xC8) {
-                            msgParam = 0x1CFF;
-                        } else {
-                            msgParam = 0x1D00;
-                        }
-
-                        // onCameraOld might be used somewhere here?
-                        dComIfGp_setMessageCountNumber(prevItemNameMsgNo);
-                        dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
-                        setMessage2(msgParam);
-                        setCameraNpc(m824, 0);
-                        if (m824 == 0 && mCurLinkAnm != 0x1D) {
-                            setLinkAnm(0x14);
-                        }
-
-                        m834 |= 0x20;
-                        m829 = m827;
-                        m830 = 1;
+                    if (mCurrItemNameMsgNo <= 0x64) {
+                        msgParam = 0x1CFD;
+                    } else if (mCurrItemNameMsgNo <= 0x96) {
+                        msgParam = 0x1CFE;
+                    } else if (mCurrItemNameMsgNo <= 0xC8) {
+                        msgParam = 0x1CFF;
+                    } else {
+                        msgParam = 0x1D00;
                     }
 
-                    if (m81F == 4) {
-                        u8 tmp = m828;
-                        m829 = tmp;
-                        m827 = tmp;
-                        dComIfGp_setMessageCountNumber(m800);
-                        dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m827]].field_0x00);
+                    // onCameraOld might be used somewhere here?
+                    dComIfGp_setMessageCountNumber(prevItemNameMsgNo);
+                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
+                    setMessage2(msgParam);
+                    setCameraNpc(m824, 0);
+                    if (m824 == 0 && mCurLinkAnm != 0x1D) {
+                        setLinkAnm(0x14);
                     }
 
-                    m835 |= 9;
-                    m835 &= ~2;
-                } else if (dComIfG_getTimerRestTimeMs() < l_rest_msg_time1[m82A]) {
-                    setMessage2(l_msg_no[m82A]);
-                    mDoAud_seStart(l_rest_se_no[m82A]);
-                    m82A += 1;
+                    m834 |= 0x20;
+                    m829 = m827;
+                    m830 = 1;
                 }
-            }
-            if (m834 & 2) {
-                m834 |= 4;
-                m798.set(0.0f, 50.0f, -210.0f);
-                m78C.set(getNpcActorP(0)->current.pos);
 
-                m78C.x += cM_ssin(m808) * 256.0f;
-                m78C.y += 100.0f;
-                m808 += 200;
-                mDoAud_seStart(JA_SE_CM_AUC_PARALYZED);
+                if (m81F == 4) {
+                    u8 tmp = m828;
+                    m829 = tmp;
+                    m827 = tmp;
+                    dComIfGp_setMessageCountNumber(m800);
+                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m827]].field_0x00);
+                }
+
+                m835 |= 9;
+                m835 &= ~2;
+            } else if (dComIfG_getTimerRestTimeMs() < l_rest_msg_time1[m82A]) {
+                setMessage2(l_msg_no[m82A]);
+                mDoAud_seStart(l_rest_se_no[m82A]);
+                m82A += 1;
             }
         }
+        if (m834 & 2) {
+            m834 |= 4;
+            m798.set(0.0f, 50.0f, -210.0f);
+            m78C.set(getNpcActorP(0)->current.pos);
+
+            m78C.x += cM_ssin(m808) * 256.0f;
+            m78C.y += 100.0f;
+            m808 += 200;
+            mDoAud_seStart(JA_SE_CM_AUC_PARALYZED);
+        }
+    }
 
     dComIfGp_setDoStatusForce(0x25);
     dComIfGp_setAStatusForce(0x27);
