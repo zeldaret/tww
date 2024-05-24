@@ -1163,7 +1163,26 @@ void daAuction_c::setMtx() {
 
 /* 00003754-00003828       .text getItemNo__11daAuction_cFv */
 u8 daAuction_c::getItemNo() {
-    /* Nonmatching */
+    int i;
+    int rand_max = 0;
+
+    for (i = 0; i < 4; i++) {
+        if (!dComIfGs_isEventBit(l_item_dat[i].mObtainedEventBit)) {
+            rand_max += 1;
+        }
+    }
+
+    int rand = getRand(rand_max);
+
+    for (i = 0; i < 3; i++) {
+        if (!dComIfGs_isEventBit(l_item_dat[i].mObtainedEventBit)) {
+            if (rand == 0) break;
+
+            rand -= 1;
+        }
+    }
+
+    return i;
 }
 
 /* 00003828-0000387C       .text getNpcActorP__11daAuction_cFi */
