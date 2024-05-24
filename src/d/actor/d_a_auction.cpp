@@ -1028,7 +1028,9 @@ void daAuction_c::eventMainUri() {
 
 /* 00002760-0000279C       .text eventMainMsgSet__11daAuction_cFv */
 void daAuction_c::eventMainMsgSet() {
-    /* Nonmatching */
+    if (eventMesSet()) {
+        m81F = 3;
+    }
 }
 
 /* 0000279C-0000294C       .text eventMainMsgEnd__11daAuction_cFv */
