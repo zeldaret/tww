@@ -226,7 +226,7 @@ void daObjEskban::Act_c::eff_m_break(u16 particleID, u16 prm_b) {
     if (!pMdlEmtr) {
         return;
     }
-    cLs_Addition(g_dComIfG_gameInfo.play.getParticle()->mModelControl, pMdlEmtr);
+    dComIfGp_particle_addModelEmitter(pMdlEmtr);
 }
 
 /* 00000C80-00000D44       .text eff_b_break__Q211daObjEskban5Act_cFUs */
