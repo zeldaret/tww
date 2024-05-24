@@ -1155,7 +1155,10 @@ void daAuction_c::setMessage2(unsigned long) {
 
 /* 000036E4-00003754       .text setMtx__11daAuction_cFv */
 void daAuction_c::setMtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00003754-00003828       .text getItemNo__11daAuction_cFv */
