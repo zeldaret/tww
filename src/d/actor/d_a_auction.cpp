@@ -1196,8 +1196,16 @@ void daAuction_c::setCameraNpc(int, short) {
 }
 
 /* 000039FC-00003A3C       .text setLinkAnm__11daAuction_cFUc */
-void daAuction_c::setLinkAnm(unsigned char) {
-    /* Nonmatching */
+void daAuction_c::setLinkAnm(u8 linkAnm) {
+    if (linkAnm == 1 && m826 == 0) {
+        linkAnm = 0x1D;
+    }
+
+    daPy_lk_c* pLink = (daPy_lk_c*)dComIfGp_getLinkPlayer();
+
+    pLink->changeDemoMode(linkAnm);
+    pLink->changeDemoParam0(3);
+    mCurLinkAnm = linkAnm;
 }
 
 /* 00003A3C-00003A74       .text getPiconDispOfs__11daAuction_cFUc */

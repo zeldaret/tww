@@ -84,7 +84,7 @@ public:
     u8 getItemNo();
     fopNpc_npc_c* getNpcActorP(int);
     void setCameraNpc(int, short);
-    void setLinkAnm(unsigned char);
+    void setLinkAnm(u8 linkAnm);
     void getPiconDispOfs(unsigned char);
     void nextBet();
     int getRand(int);
