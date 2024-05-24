@@ -11,6 +11,9 @@
 #include "d/actor/d_a_player_main.h"
 #include "m_Do/m_Do_controller_pad.h"
 
+// TODO: Remove this. It's just here to make the code more readable.
+#define RAND_RANGE(a, b) (a + cM_rndF(b - a))
+
 /* Structs are almost definitely not accurate */
 struct NpcDatStruct {
     /* 0x00 */ f32 field_0x00;
@@ -121,7 +124,7 @@ static s16 l_rest_msg_time2[4] = {
     -1000,
 };
 
-static u32 l_msg_no[3] = {
+static u32 l_rest_msg_no[3] = {
 };
 
 static u32 l_rest_se_no[3] = {
@@ -897,7 +900,7 @@ void daAuction_c::eventMainKai() {
                 m835 |= 9;
                 m835 &= ~2;
             } else if (dComIfG_getTimerRestTimeMs() < l_rest_msg_time1[m82A]) {
-                setMessage2(l_msg_no[m82A]);
+                setMessage2(l_rest_msg_no[m82A]);
                 mDoAud_seStart(l_rest_se_no[m82A]);
                 m82A += 1;
             }
@@ -920,7 +923,103 @@ void daAuction_c::eventMainKai() {
 
 /* 000022A8-00002760       .text eventMainUri__11daAuction_cFv */
 void daAuction_c::eventMainUri() {
-    /* Nonmatching */
+    if (dComIfG_getTimerMode() == 4) {
+        dComIfG_TimerReStart(2);
+    }
+
+    if (dComIfG_getTimerRestTimeMs() <= 0) {
+        m82B = 1;
+    } else if (m82E != 0 && g_mDoCPd_cpadInfo[0].mButtonTrig.a) {
+        setMessage2(0x1D1A);
+    } else {
+        if (m806 != 0) {
+            m806 -= 1;
+        } else {
+            for (int i = 1; i < 7; i++) {
+                m7C4[i] += 2.0f * RAND_RANGE(l_npc_dat[i].field_0x00, l_npc_dat[i].field_0x04);
+            }
+        }
+
+        int idx;
+        for (idx = 1; idx < 7; idx++) {
+            if (m7C4[idx] >= 100.0f) {
+                m7C4[idx] = 0.0f;
+                if (mCurrItemNameMsgNo < l_npc_dat[idx].field_0x0C) {
+                    break;
+                }
+            }
+        }
+
+        if (idx < 7) {
+            m828 = idx;
+
+            if (idx != 0) {
+                float multiplier = 1.0f;
+
+                if (dComIfG_getTimerRestTimeMs() < 30000) {
+                    multiplier = 2.0f;
+                } else if (dComIfG_getTimerRestTimeMs() < 60000) {
+                    multiplier = 1.5f;
+                }
+
+                mCurrItemNameMsgNo += (s16)(multiplier * (2 * (s16)RAND_RANGE(l_npc_dat[idx].field_0x08, l_npc_dat[idx].field_0x0A)));
+                m800 = mCurrItemNameMsgNo;
+                m7F0 = 0x1CF9;
+                m82C = 4;
+                m82E = 1;
+                m806 = cM_rndF(1.0) * 60.0f;
+                m81F = 4;
+
+                // onCameraOld might be used here
+                if (m830 != 0) {
+                    m830 = 0;
+                } else if (dComIfG_getTimerRestTimeMs() > l_rest_msg_time1[0] && getRand(3) == 0) {
+                    u32 msgParam;
+
+                    if (mCurrItemNameMsgNo <= 0x64) {
+                        msgParam = 0x1CFD;
+                    } else if (mCurrItemNameMsgNo <= 0x96) {
+                        msgParam = 0x1CFE;
+                    } else if (mCurrItemNameMsgNo <= 0xC8) {
+                        msgParam = 0x1CFF;
+                    } else {
+                        msgParam = 0x1D00;
+                    }
+
+                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
+                    setMessage2(msgParam);
+                    setCameraNpc(m824, 0);
+
+                    if (m824 == 0) {
+                        setLinkAnm(0x14);
+                    }
+
+                    m834 |= 0x20;
+                    m829 = m827;
+                    m830 = 1;
+                }
+
+                if (m81F == 4) {
+                    u8 m828_val = m828;
+                    m829 = m828_val;
+                    m827 = m828_val;
+                    dComIfGp_setMessageCountNumber(m800);
+                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m827]].field_0x00);
+                }
+
+                m835 |= 9;
+                m835 &= ~2;
+            }
+        } else if (dComIfG_getTimerRestTimeMs() < l_rest_msg_time2[m82A]) {
+            setMessage2(l_rest_msg_no[m82A]);
+            mDoAud_seStart(l_rest_se_no[m82A]);
+            m82A += 1;
+        }
+    }
+
+    if (m82E != 0) {
+        dComIfGp_setDoStatusForce(0x25);
+    }
 }
 
 /* 00002760-0000279C       .text eventMainMsgSet__11daAuction_cFv */
@@ -1103,3 +1202,5 @@ actor_process_profile_definition g_profile_AUCTION = {
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
+
+#undef RAND_RANGE
