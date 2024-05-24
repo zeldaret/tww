@@ -224,7 +224,6 @@ BOOL daAuction_c::createHeap() {
 
 /* 00000770-000008C4       .text createInit__11daAuction_cFv */
 s32 daAuction_c::createInit() {
-
     mEvtStartIdx = dComIfGp_evmng_getEventIdx("AUCTION_START");
     mEvtGetItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_GET_ITEM");
     mEvtNoItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_NO_ITEM");
@@ -238,10 +237,12 @@ s32 daAuction_c::createInit() {
 
     mCurrAuctionItemIndex = 0;
 
-    dComIfGp_setItemNameMessageID(l_item_dat[mCurrAuctionItemIndex].mItemID);
-    mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mNameMsgID;
+    s16 nameMsgID = l_item_dat[mCurrAuctionItemIndex].mNameMsgID;
+    mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mStartingBid; // Not sure why this is set to the starting bid
 
+    dComIfGp_setItemNameMessageID(nameMsgID);
     dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
+
     setMtx();
 
     return cPhs_COMPLEATE_e;
@@ -376,11 +377,11 @@ void daAuction_c::eventOrder() {
             mCurrAuctionItemIndex = getItemNo();
         }
 
-        dComIfGp_setItemNameMessageID(l_item_dat[mCurrAuctionItemIndex].mItemID);
-        mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mNameMsgID;
+        dComIfGp_setItemNameMessageID(l_item_dat[mCurrAuctionItemIndex].mNameMsgID);
+        mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mStartingBid;
         dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
 
-        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), mEvtStartIdx, 0, 0xFF7F);
+        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, mEvtStartIdx, 0, 0xFF7F);
         dComIfGp_startMiniGame(5);
     } else if (m838 == 4) {
         fopAcM_orderOtherEventId(this, mEvtGetItemIdx, 0xFF, 0xFF7F);
@@ -388,10 +389,13 @@ void daAuction_c::eventOrder() {
         fopAcM_orderOtherEventId(this, mEvtNoItemIdx, 0xFF, 0xFF7F);
     } else if (m838 == 6) {
         mCurrAuctionItemIndex &= 1;
-        mCurrItemNameMsgNo = l_item_dat2[mCurrAuctionItemIndex].mNameMsgID;
-        dComIfGp_setItemNameMessageID(l_item_dat2[mCurrAuctionItemIndex].mItemID);
+
+        s16 nameMsgID = l_item_dat2[mCurrAuctionItemIndex].mNameMsgID;
+        mCurrItemNameMsgNo = l_item_dat2[mCurrAuctionItemIndex].mStartingBid;
+
+        dComIfGp_setItemNameMessageID(nameMsgID);
         dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
-        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), mEvtStart2Idx, 0, 0xFF7F);
+        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, mEvtStart2Idx, 0, 0xFF7F);
         dComIfGp_startMiniGame(5);
     } else if (m838 == 7) {
         fopAcM_orderOtherEventId(this, mEvtEnd2Idx, 0xFF, 0xFF7F);

@@ -14,8 +14,8 @@ public:
     struct ItemData {
         /* 0x00 */ s16 mItemID;
         /* 0x02 */ s16 mNameMsgID;
-        /* 0x04 */ u16 mStartingBid;
-        /* 0x06 */ u16 mObtainedEventBit;
+        /* 0x04 */ s16 mStartingBid;
+        /* 0x06 */ s16 mObtainedEventBit;
     };  // Size: 0x08
 
     daAuction_c();
