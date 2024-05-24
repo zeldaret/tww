@@ -147,6 +147,7 @@ extern void dAuction_screen_slotHide();
 extern void dAuction_screen_gaugeHide();
 extern void dAuction_screen_gaugeShow();
 extern void dAuction_screen_gaugeUp();
+extern void dAuction_screen_gaugeDown();
 extern void dAuction_screen_talkEnd();
 extern uint dAuction_screen_create();
 
@@ -1035,7 +1036,46 @@ void daAuction_c::eventMainMsgSet() {
 
 /* 0000279C-0000294C       .text eventMainMsgEnd__11daAuction_cFv */
 void daAuction_c::eventMainMsgEnd() {
-    /* Nonmatching */
+    if (eventMesEnd()) {
+        if (mCurLinkAnm != 1 && mCurLinkAnm != 0x1D) {
+            setLinkAnm(1);
+        }
+
+        if (m834 & 0x20) {
+            m81F = 4;
+        } else {
+            if (m822 == 2) {
+                m81F = 1;
+            } else {
+                m81F = 0;
+            }
+
+            eyePos = current.pos;
+            m832 = 0;
+        }
+
+        m7E0 = 0.0f;
+
+        if ((m834 & 2) == 0) {
+            m82F = getRand(3);
+            m78C = l_camera_pos[m82F][0];
+            m798 = l_camera_pos[m82F][1];
+        }
+
+        mpTimer->mpScrnDraw->setShowType(0);
+        dAuction_screen_gaugeDown();
+        m834 &= ~0x29;
+        dAuction_screen_talkEnd();
+        dAuction_screen_gaugeShow();
+
+        return;
+    }
+
+    if (dComIfGp_checkMesgSendButton() && ((m7EC >= 0x1D3AU && m7EC <= 0x1D4BU) || (m7EC >= 0x339DU && m7EC <= 0x33A8U))) {
+        setCameraNpc(m825, 0);
+        m834 |= 8;
+        m829 = m825;
+    }
 }
 
 /* 0000294C-00002B90       .text eventMainMsgBikonC__11daAuction_cFv */
