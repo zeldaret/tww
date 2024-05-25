@@ -70,7 +70,7 @@ static daAuction_c::ItemData l_item_dat2[] = {
     {POSTMAN_STATUE, 0x1D14, 30, 0x1008},
     {PRESIDENT_STATUE, 0x1D15, 40, 0x1004},
 };
-static char l_item_dat22[] = {0x00, 0x2A, 0x00, 0xF9};
+static s16 l_item_dat22[] = {0x002A, 0x00F9};
 
 static NpcDatStruct l_npc_dat[7] = {
     NULL,
@@ -1136,7 +1136,25 @@ void daAuction_c::eventMainMsgBikonW() {
 
 /* 00002C1C-00002D4C       .text eventGetItemInit__11daAuction_cFv */
 void daAuction_c::eventGetItemInit() {
-    /* Nonmatching */
+    if (m822 == 2) {
+        uint itemID = fopAcM_createItemForPresentDemo(&current.pos, l_item_dat22[mCurrAuctionItemIndex] & 0xFF);
+
+        if (itemID != fpcM_ERROR_PROCESS_ID_e) {
+            dComIfGp_event_setItemPartnerId(itemID);
+        }
+
+        dComIfGs_onEventBit(l_item_dat2[mCurrAuctionItemIndex].mObtainedEventBit);
+    } else {
+        uint itemID = fopAcM_createItemForPresentDemo(&current.pos, l_item_dat[mCurrAuctionItemIndex].mItemID & 0xFF);
+
+        if (itemID != fpcM_ERROR_PROCESS_ID_e) {
+            dComIfGp_event_setItemPartnerId(itemID);
+        }
+
+        dComIfGs_onEventBit(l_item_dat[mCurrAuctionItemIndex].mObtainedEventBit);
+    }
+
+    setCameraNpc(0, 0);
 }
 
 /* 00002D4C-00002D54       .text eventGetItem__11daAuction_cFv */
