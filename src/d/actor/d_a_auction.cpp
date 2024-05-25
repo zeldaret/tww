@@ -4,11 +4,12 @@
 //
 
 #include "d/actor/d_a_auction.h"
-#include "d/d_procname.h"
-#include "d/res/res_auction.h"
-#include "d/d_camera.h"
+#include "d/actor/d_a_npc_auction.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/d_camera.h"
+#include "d/d_procname.h"
+#include "d/res/res_auction.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 // TODO: Remove this. It's just here to make the code more readable.
@@ -239,7 +240,7 @@ s32 daAuction_c::createInit() {
     mCurrAuctionItemIndex = 0;
 
     s16 nameMsgID = l_item_dat[mCurrAuctionItemIndex].mNameMsgID;
-    mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mStartingBid; // Not sure why this is set to the starting bid
+    mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mStartingBid;
 
     dComIfGp_setItemNameMessageID(nameMsgID);
     dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
@@ -1095,12 +1096,12 @@ void daAuction_c::eventGetItemInit() {
 
 /* 00002D4C-00002D54       .text eventGetItem__11daAuction_cFv */
 bool daAuction_c::eventGetItem() {
-    /* Nonmatching */
+    return true;
 }
 
 /* 00002D54-00002D70       .text eventCameraOffInit__11daAuction_cFv */
 void daAuction_c::eventCameraOffInit() {
-    /* Nonmatching */
+    offCamera();
 }
 
 /* 00002D70-00002E00       .text eventGetItemNpcInit__11daAuction_cFi */
@@ -1135,7 +1136,7 @@ void daAuction_c::eventCameraTestInit() {
 
 /* 00002F64-00002F6C       .text eventCameraTest__11daAuction_cFv */
 bool daAuction_c::eventCameraTest() {
-    /* Nonmatching */
+    return true;
 }
 
 /* 00002F6C-0000369C       .text next_msgStatus__11daAuction_cFPUl */
@@ -1209,8 +1210,13 @@ void daAuction_c::setLinkAnm(u8 linkAnm) {
 }
 
 /* 00003A3C-00003A74       .text getPiconDispOfs__11daAuction_cFUc */
-void daAuction_c::getPiconDispOfs(unsigned char) {
-    /* Nonmatching */
+f32 daAuction_c::getPiconDispOfs(u8 param) {
+    if (param == 0) {
+        return l_npc_emitter_ofsy[0];
+    }
+
+    daNpcAuction_c* pNpcActor = (daNpcAuction_c*)getNpcActorP(param);
+    return pNpcActor->getPiconOfsY();
 }
 
 /* 00003A74-00003BA4       .text nextBet__11daAuction_cFv */

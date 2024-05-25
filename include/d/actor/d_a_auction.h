@@ -32,7 +32,10 @@ public:
     void isAucBetA() {}
     void isAucGet() {}
     void isAucJikkyou() {}
-    void offCamera() {}
+    void offCamera() { // Might be incorrect
+        m835 |= 2;
+        m835 &= 0xFE;
+    }
     void onCamera(unsigned char) {}
     void onCameraOld(unsigned char) {}
     void setAucMdlNo(unsigned char, unsigned char) {}
@@ -85,7 +88,7 @@ public:
     fopNpc_npc_c* getNpcActorP(int);
     void setCameraNpc(int, short);
     void setLinkAnm(u8 linkAnm);
-    void getPiconDispOfs(unsigned char);
+    f32 getPiconDispOfs(u8 param);
     void nextBet();
     int getRand(int);
 
