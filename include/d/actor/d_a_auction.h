@@ -81,8 +81,8 @@ public:
     void eventCameraTestInit();
     bool eventCameraTest();
     u16 next_msgStatus(u32* pMsgNo);
-    void setMessage(unsigned long);
-    void setMessage2(unsigned long);
+    void setMessage(u32);
+    void setMessage2(u32);
     void setMtx();
     u8 getItemNo();
     fopNpc_npc_c* getNpcActorP(int);

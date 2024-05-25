@@ -1145,13 +1145,16 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
 }
 
 /* 0000369C-000036AC       .text setMessage__11daAuction_cFUl */
-void daAuction_c::setMessage(unsigned long) {
-    /* Nonmatching */
+void daAuction_c::setMessage(u32 msg) {
+    mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+    mCurrMsgNo = msg;
 }
 
 /* 000036AC-000036E4       .text setMessage2__11daAuction_cFUl */
-void daAuction_c::setMessage2(unsigned long) {
-    /* Nonmatching */
+void daAuction_c::setMessage2(u32 msg) {
+    setMessage(msg);
+    m81F = 2;
+    dAuction_screen_gaugeHide();
 }
 
 /* 000036E4-00003754       .text setMtx__11daAuction_cFv */
