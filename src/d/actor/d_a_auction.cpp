@@ -1168,8 +1168,19 @@ void daAuction_c::eventCameraOffInit() {
 }
 
 /* 00002D70-00002E00       .text eventGetItemNpcInit__11daAuction_cFi */
-void daAuction_c::eventGetItemNpcInit(int) {
-    /* Nonmatching */
+void daAuction_c::eventGetItemNpcInit(int staffIdx) {
+    setCameraNpc(m824, 0);
+
+    u32* pTimerData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
+
+    if (pTimerData != NULL) {
+        mTimer = *pTimerData;
+    } else {
+        mTimer = 0;
+    }
+
+    m834 = 0x10;
+    m829 = m824;
 }
 
 /* 00002E00-00002E40       .text eventGetItemMesInit__11daAuction_cFv */

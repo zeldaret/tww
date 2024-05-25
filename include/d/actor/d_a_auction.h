@@ -73,7 +73,7 @@ public:
     void eventGetItemInit();
     bool eventGetItem();
     void eventCameraOffInit();
-    void eventGetItemNpcInit(int);
+    void eventGetItemNpcInit(int staffIdx);
     void eventGetItemMesInit();
     bool eventCameraOffNpc();
     void eventEndInit();
