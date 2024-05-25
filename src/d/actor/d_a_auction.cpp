@@ -1190,8 +1190,12 @@ u8 daAuction_c::getItemNo() {
 }
 
 /* 00003828-0000387C       .text getNpcActorP__11daAuction_cFi */
-fopNpc_npc_c* daAuction_c::getNpcActorP(int) {
-    /* Nonmatching */
+fopAc_ac_c* daAuction_c::getNpcActorP(int idx) {
+    if (idx != 0) {
+        return fopAcM_SearchByID(m738[idx]);
+    }
+
+    return dComIfGp_getPlayer(0);
 }
 
 /* 0000387C-000039FC       .text setCameraNpc__11daAuction_cFis */

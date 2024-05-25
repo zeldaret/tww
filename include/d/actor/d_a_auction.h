@@ -85,7 +85,7 @@ public:
     void setMessage2(u32);
     void setMtx();
     u8 getItemNo();
-    fopNpc_npc_c* getNpcActorP(int);
+    fopAc_ac_c* getNpcActorP(int idx);
     void setCameraNpc(int, short);
     void setLinkAnm(u8 linkAnm);
     f32 getPiconDispOfs(u8 param);
