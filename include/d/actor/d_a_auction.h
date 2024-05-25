@@ -22,7 +22,7 @@ public:
 
     void chkNpcExec(int) {}
     void getAnmNpcNo() {}
-    void getAucMdlNo(unsigned char) {}
+    u8 getAucMdlNo(u8 idx) { return mAucMdlNo[idx]; }
     void getAucNpcNo(unsigned char) {}
     void getBetNpcNo() {}
     void getKind(unsigned char) {}
@@ -38,7 +38,7 @@ public:
     }
     void onCamera(unsigned char) {}
     void onCameraOld(unsigned char) {}
-    void setAucMdlNo(unsigned char, unsigned char) {}
+    void setAucMdlNo(u8 idx, u8 mdlNo) { mAucMdlNo[idx] = mdlNo; }
     void setItemNo(unsigned char) {}
     void setKind(unsigned char, unsigned char) {}
     void setNpcID(int, uint) {}
@@ -129,7 +129,7 @@ public:
     /* 0x808 */ s16 m808;
     /* 0x80A */ s16 m80A;
     /* 0x80C */ u8 m80C[8];
-    /* 0x814 */ u8 m814[8];
+    /* 0x814 */ u8 mAucMdlNo[8];
     /* 0x81C */ u8 m81C;
     /* 0x81D */ u8 m81D;
     /* 0x81E */ u8 mMoveState;

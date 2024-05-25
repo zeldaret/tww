@@ -163,7 +163,7 @@ daAuction_c::daAuction_c() {
     for (int i = 0; i < 8; i++) {
         m738[i] = -1;
         m80C[i] = i;
-        m814[i] = 0xFF;
+        mAucMdlNo[i] = 0xFF;
     }
 
     // Shuffles lists randomly (I think)
@@ -240,7 +240,7 @@ s32 daAuction_c::createInit() {
     mNpcEvtInfo.setActorInfo("Auction", this);
     m824 = 0;
     m826 = 0xFF;
-    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
+    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m824)].field_0x00);
 
     mCurrAuctionItemIndex = 0;
 
@@ -736,7 +736,7 @@ bool daAuction_c::eventMain() {
     }
     
     if (m81F <= 1 && m82B != 0) {
-        dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
+        dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m824)].field_0x00);
 
         if (dComIfG_getTimerMode() == 4) {
             dComIfG_TimerStop(2);
@@ -888,7 +888,7 @@ void daAuction_c::eventMainKai() {
 
                     // onCameraOld might be used somewhere here?
                     dComIfGp_setMessageCountNumber(prevItemNameMsgNo);
-                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
+                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m824)].field_0x00);
                     setMessage2(msgParam);
                     setCameraNpc(m824, 0);
                     if (m824 == 0 && mCurLinkAnm != 0x1D) {
@@ -905,7 +905,7 @@ void daAuction_c::eventMainKai() {
                     m829 = tmp;
                     m827 = tmp;
                     dComIfGp_setMessageCountNumber(m800);
-                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m827]].field_0x00);
+                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
                 }
 
                 m835 |= 9;
@@ -997,7 +997,7 @@ void daAuction_c::eventMainUri() {
                         msgParam = 0x1D00;
                     }
 
-                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m824]].field_0x00);
+                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m824)].field_0x00);
                     setMessage2(msgParam);
                     setCameraNpc(m824, 0);
 
@@ -1015,7 +1015,7 @@ void daAuction_c::eventMainUri() {
                     m829 = m828_val;
                     m827 = m828_val;
                     dComIfGp_setMessageCountNumber(m800);
-                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m827]].field_0x00);
+                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
                 }
 
                 m835 |= 9;
@@ -1088,7 +1088,7 @@ void daAuction_c::eventMainMsgEnd() {
 void daAuction_c::eventMainMsgBikonC() {
     m827 = m829 = m828;
     dComIfGp_setMessageCountNumber(m800);
-    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m827]].field_0x00);
+    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
 
     cXyz npcPos = getNpcActorP(m827)->current.pos;
     npcPos.y += getPiconDispOfs(m827) + 30.0f;
@@ -1185,7 +1185,7 @@ void daAuction_c::eventGetItemNpcInit(int staffIdx) {
 
 /* 00002E00-00002E40       .text eventGetItemMesInit__11daAuction_cFv */
 void daAuction_c::eventGetItemMesInit() {
-    /* Nonmatching */
+    setMessage(l_npc_msg_dat[getAucMdlNo(m824)].field_0x08);
 }
 
 /* 00002E40-00002EA0       .text eventCameraOffNpc__11daAuction_cFv */
