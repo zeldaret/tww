@@ -132,6 +132,10 @@ static u32 l_rest_se_no[3] = {
 
 };
 
+static u32 l_link_face[8] = {
+
+};
+
 #ifdef DEBUG
 // TODO: Figure out what these are
 static daAuction_HIO_c l_HIO;
@@ -1081,7 +1085,34 @@ void daAuction_c::eventMainMsgEnd() {
 
 /* 0000294C-00002B90       .text eventMainMsgBikonC__11daAuction_cFv */
 void daAuction_c::eventMainMsgBikonC() {
-    /* Nonmatching */
+    m827 = m829 = m828;
+    dComIfGp_setMessageCountNumber(m800);
+    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[m814[m827]].field_0x00);
+
+    cXyz npcPos = getNpcActorP(m827)->current.pos;
+    npcPos.y += getPiconDispOfs(m827) + 30.0f;
+
+    if (cLib_addCalcPos(&m78C, npcPos, 0.4f, 700.0f, 0.1f) == 0.0f) {
+        m81F = 5;
+        m7A8 = getNpcActorP(m827)->current.pos;
+        m7A8.y += getPiconDispOfs(m827);
+
+        dComIfGp_particle_set(0x8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        mTimer = 0x1E;
+
+        if (m827 == 0) {
+            mDoAud_seStart(JA_SE_AUC_BID_GAUGE_MAX);
+        } else {
+            mDoAud_seStart(JA_SE_CM_AUC_CALL_BID);
+            m832 = 1;
+            mFace = l_link_face[getRand(8)];
+        }
+
+        eyePos = getNpcActorP(m827)->eyePos;
+    }
+
+    dComIfGp_setDoStatusForce(0);
+    dComIfGp_setAStatusForce(0x3E);
 }
 
 /* 00002B90-00002C1C       .text eventMainMsgBikonW__11daAuction_cFv */

@@ -106,7 +106,8 @@ public:
     /* 0x78C */ cXyz m78C;
     /* 0x798 */ cXyz m798;
     /* 0x7A4 */ JPABaseEmitter* mpEmitter;
-    /* 0x7A8 */ u8 m7A8[0x7BC - 0x7A8];
+    /* 0x7A8 */ cXyz m7A8;
+    /* 0x7B4 */ u8 m7B4[0x7BC - 0x7B4];
     /* 0x7BC */ f32 mAlpha;
     /* 0x7C0 */ f32 mBlend;
     /* 0x7C4 */ f32 m7C4[7];
