@@ -153,6 +153,7 @@ extern void dAuction_screen_gaugeHide();
 extern void dAuction_screen_gaugeShow();
 extern void dAuction_screen_gaugeUp();
 extern void dAuction_screen_gaugeDown();
+extern void dAuction_screen_talkStart();
 extern void dAuction_screen_talkEnd();
 extern uint dAuction_screen_create();
 
@@ -1117,7 +1118,20 @@ void daAuction_c::eventMainMsgBikonC() {
 
 /* 00002B90-00002C1C       .text eventMainMsgBikonW__11daAuction_cFv */
 void daAuction_c::eventMainMsgBikonW() {
-    /* Nonmatching */
+    if (mTimer != 0) {
+        mTimer -= 1;
+    } else {
+        setMessage2(m7F0);
+        setCameraNpc(m827, 0);
+        dAuction_screen_talkStart();
+
+        if (m827 != 0) {
+            m834 |= 1;
+        }
+    }
+
+    dComIfGp_setDoStatusForce(0);
+    dComIfGp_setAStatusForce(0x3E);
 }
 
 /* 00002C1C-00002D4C       .text eventGetItemInit__11daAuction_cFv */
