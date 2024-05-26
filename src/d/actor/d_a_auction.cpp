@@ -1345,7 +1345,25 @@ f32 daAuction_c::getPiconDispOfs(u8 param) {
 
 /* 00003A74-00003BA4       .text nextBet__11daAuction_cFv */
 void daAuction_c::nextBet() {
-    /* Nonmatching */
+    if (m831 != 0) {
+        m831 -= 1;
+        return;
+    }
+
+    for (int i = 1; i < 7; i++) {
+        f32 rnd = getRand(60 - (int)(dComIfG_getTimerRestTimeMs() / 1000));
+        if (rnd > 50.0f) {
+            rnd = 50.0f;
+        }
+
+        m7C4[i] += rnd;
+
+        if (m7C4[i] >= 100.0f) {
+            m831 += 1;
+        }
+    }
+
+    m831 += 2;
 }
 
 /* 00003BA4-00003C08       .text getRand__11daAuction_cFi */
