@@ -36,6 +36,7 @@ struct NpcCameraDatStruct { // Probably wrong
     /* 0x00 */ f32 field_0x00;
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ s16 field_0x08;
+    /* 0x0A */ s16 field_0x0A;
 };
 
 static cXyz l_camera_pos[3][2] = {
@@ -1290,8 +1291,33 @@ fopAc_ac_c* daAuction_c::getNpcActorP(int idx) {
 }
 
 /* 0000387C-000039FC       .text setCameraNpc__11daAuction_cFis */
-void daAuction_c::setCameraNpc(int, short) {
-    /* Nonmatching */
+void daAuction_c::setCameraNpc(int idx, s16 param_2) {
+    fopAc_ac_c* pActor = getNpcActorP(idx);
+
+    m78C = pActor->current.pos;
+    m78C.y += l_npc_camera_dat[idx].field_0x04;
+
+    m798.x = l_npc_camera_dat[idx].field_0x00 * cM_ssin(pActor->current.angle.y);
+    m798.y = 0.0f;
+    m798.z = l_npc_camera_dat[idx].field_0x00 * cM_scos(pActor->current.angle.y);
+
+    s16 yRot = l_npc_camera_dat[idx].field_0x0A;
+    if (param_2 != 0) {
+        yRot += param_2;
+    } else {
+        s16 rnd = (s16)cM_rndFX(8000.0f);
+        yRot += rnd;
+    }
+
+    mDoMtx_stack_c::YrotS(yRot);
+    mDoMtx_stack_c::XrotM(l_npc_camera_dat[idx].field_0x08);
+
+    cMtx_multVec(mDoMtx_stack_c::get(), &m798, &m798);
+    m798 += m78C;
+
+    // onCamera inline
+    m835 |= 9;
+    m835 &= ~2;
 }
 
 /* 000039FC-00003A3C       .text setLinkAnm__11daAuction_cFUc */
