@@ -1190,17 +1190,34 @@ void daAuction_c::eventGetItemMesInit() {
 
 /* 00002E40-00002EA0       .text eventCameraOffNpc__11daAuction_cFv */
 bool daAuction_c::eventCameraOffNpc() {
-    /* Nonmatching */
+    if (eventMesEnd()) {
+        m834 = 0;
+        offCamera();
+        return true;
+    }
+
+    return false;
 }
 
 /* 00002EA0-00002EDC       .text eventEndInit__11daAuction_cFv */
 void daAuction_c::eventEndInit() {
-    /* Nonmatching */
+    mBlend = 0.0f;
+    mFlags &= ~4;
+
+    dKy_efplight_cut(&mLight);
 }
 
 /* 00002EDC-00002F60       .text eventEnd__11daAuction_cFv */
 bool daAuction_c::eventEnd() {
-    /* Nonmatching */
+    mBlend += 0.05f;
+    if (mBlend > 1.0f) {
+        mBlend = 1.0f;
+    }
+
+    dKy_custom_colset(4, 0, mBlend);
+
+    // "return mBlend == 1.0f" doesn't match for some reason
+    return mBlend == 1.0f ? true : false;
 }
 
 /* 00002F60-00002F64       .text eventCameraTestInit__11daAuction_cFv */
