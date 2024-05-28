@@ -74,11 +74,30 @@ static daAuction_c::ItemData l_item_dat2[] = {
 static s16 l_item_dat22[] = {0x002A, 0x00F9};
 
 static NpcDatStruct l_npc_dat[7] = {
-    NULL,
+    {2.0f, 2.1f, 0x0, 0x0, 0x3E8},
+    {0.3f, 0.5f, 0x4, 0x6, 0x1C2},
+    {0.3f, 0.6f, 0x3, 0x7, 0x1F4},
+    {0.4f, 0.7f, 0x2, 0x4, 0x0FA},
+    {0.5f, 1.0f, 0x2, 0x3, 0x3DE},
+    {0.4f, 0.5f, 0x3, 0x4, 0x3DE},
+    {0.7f, 1.2f, 0x2, 0x2, 0x096},
 };
 
 static NpcMsgDatStruct l_npc_msg_dat[12] = {
-    NULL,
+    {0x33AC, 0x1D3A, 0x1D3B, 0x1D3C, 0x33B6},
+    {0x33AD, 0x1D3D, 0x1D3E, 0x1D3F, 0x33B7},
+    {0x33AE, 0x1D40, 0x1D41, 0x1D42, 0x33B8},
+    {0x33AF, 0x1D43, 0x1D44, 0x1D45, 0x33B9},
+    {0x33B0, 0x1D46, 0x1D47, 0x1D48, 0x33BA},
+    {0x33B1, 0x1D49, 0x1D4A, 0x1D4B, 0x33BB},
+
+    {0x33B2, 0x339D, 0x339E, 0x339F, 0x33BC},
+    {0x33B3, 0x33A0, 0x33A1, 0x33A2, 0x33BD},
+    {0x33B4, 0x33A3, 0x33A4, 0x33A5, 0x33BE},
+    {0x33B5, 0x33A6, 0x33A7, 0x33A8, 0x33BF},
+
+    {0x1CE9, 0x0000, 0x0000, 0x0000, 0x0000},
+    {0x1CE9, 0x0000, 0x0000, 0x0000, 0x0000},
 };
 
 static NpcCameraDatStruct l_npc_camera_dat[7] = {
@@ -93,6 +112,7 @@ static NpcCameraDatStruct l_npc_camera_dat[7] = {
 
 static f32 l_npc_emitter_ofsy[8] = {
     120.0f,
+    180.0f,
     180.0f,
     180.0f,
     180.0f,
@@ -127,14 +147,49 @@ static s16 l_rest_msg_time2[4] = {
 };
 
 static u32 l_rest_msg_no[3] = {
+    0x1D01,
+    0x1D02,
+    0x1D03,
 };
 
 static u32 l_rest_se_no[3] = {
-
+    JA_SE_AUC_LAST_SPURT,
+    JA_SE_AUC_FEW_TIME,
+    JA_SE_AUC_5_SEC,
 };
 
-static u32 l_link_face[8] = {
+static f32 l_after_bet_rate[4] = {2.0f, 1.5f, 1.2f, 1.1f};
 
+static s16 l_after_bet_chk[4] = {
+    0x0014,
+    0x0014,
+    0x0028,
+    0x0028,
+};
+
+static u32 l_after_bet_msg_no[4] = {
+    0x1D23,
+    0x1D22,
+    0x1D21,
+    0x1D20,
+};
+
+static s16 l_after_bet_wait[4][2] = {
+    {8, 10},
+    {7, 10},
+    {6, 9},
+    {5, 8},
+};
+
+static daPy_py_c::daPy_FACE l_link_face[8] = {
+    daPy_py_c::daPyFace_TMABAA,
+    daPy_py_c::daPyFace_TMABAC,
+    daPy_py_c::daPyFace_TMABACB,
+    daPy_py_c::daPyFace_TMABAE,
+    daPy_py_c::daPyFace_TMABAF,
+    daPy_py_c::daPyFace_TMABAG,
+    daPy_py_c::daPyFace_TMABAH,
+    daPy_py_c::daPyFace_TMABAJ_TEYORIME,
 };
 
 #ifdef DEBUG
