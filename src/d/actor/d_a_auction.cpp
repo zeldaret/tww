@@ -204,6 +204,7 @@ static daAuction_c::ProcFunc_t moveProc[] = {
 };
 
 extern void dAuction_screen_delete();
+extern void dAuction_screen_slotShow();
 extern void dAuction_screen_slotHide();
 extern void dAuction_screen_gaugeHide();
 extern void dAuction_screen_gaugeShow();
@@ -1288,7 +1289,184 @@ bool daAuction_c::eventCameraTest() {
 
 /* 00002F6C-0000369C       .text next_msgStatus__11daAuction_cFPUl */
 u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching */
+    u16 ret = 0xF;
+
+    //if (*pMsgNo != 0x1D1F) {
+    //    if (*pMsgNo < 0x1D1F) {
+            switch (*pMsgNo) {
+            case 0x1CF2:
+                *pMsgNo = 0x1CF3;
+                break;
+            case 0x1CF4:
+                if (m822 == 2) {
+                    *pMsgNo = 0x1D1B;
+                    break;
+                }
+
+                if (dComIfGs_isEventBit(0x4008)) {
+                    dComIfGp_setNpcNameMessageID(l_npc_msg_dat[dComIfGs_getEventReg(0x790F)].field_0x00);
+                    *pMsgNo = 0x1CF6;
+                } else {
+                    *pMsgNo = 0x1CF5;
+                }
+                break;
+            case 0x1CF7:
+                dComIfGp_setMiniGameRupee(mCurrItemNameMsgNo);
+                dComIfGp_setAuctionRupee(mCurrItemNameMsgNo);
+                dAuction_screen_slotShow();
+                *pMsgNo = 0x1CF8;
+                break;
+            case 0x1CF9:
+                dComIfGp_setMiniGameRupee(mCurrItemNameMsgNo);
+                dComIfGp_setAuctionRupee(mCurrItemNameMsgNo);
+                if (m82C < 4) {
+                    *pMsgNo = l_after_bet_msg_no[m82C];
+                } else if (m827 == 0 && l_npc_msg_dat[getAucMdlNo(m824)].field_0x02 != 0) {
+                    if (dComIfG_getTimerRestTimeMs() < 60000) {
+                        *pMsgNo = l_npc_msg_dat[getAucMdlNo(m824)].field_0x04;
+                    } else {
+                        *pMsgNo = l_npc_msg_dat[getAucMdlNo(m824)].field_0x02;
+                    }
+                } else {
+                    ret = 0x10;
+                }
+
+                m825 = m824;
+                u8 tmp = m827;
+                m826 = tmp;
+                m824 = tmp;
+                if (m826 != 0) {
+                    setLinkAnm(1);
+                }
+                break;
+            case 0x1CFA:
+                s16 msgSetNo = dComIfGp_getMessageSetNumber();
+
+                if (dComIfGs_getRupee() < msgSetNo) {
+                    mDoAud_seStart(JA_SE_AUC_BID_NG);
+                    setLinkAnm(0x4A);
+                    *pMsgNo = 0x1CFB;
+                    m7C4[0] = 50.0f;
+                } else if (msgSetNo <= mCurrItemNameMsgNo) {
+                    mDoAud_seStart(JA_SE_AUC_BID_NG);
+                    setLinkAnm(0x4A);
+                    *pMsgNo = 0x1D1E;
+                    m7C4[0] = 50.0f;
+                } else {
+                    mDoAud_seStart(JA_SE_AUC_BID_OK);
+
+                    m7C4[0] = 0.0f;
+                    if (msgSetNo == 999) {
+                        *pMsgNo = 0x1D24;
+                        m825 = m824;
+                        u8 tmp = m827;
+                        m826 = tmp;
+                        m824 = tmp;
+                    } else {
+                        *pMsgNo = 0x1CF9;
+                        m82C = 4;   // ?
+
+                        for (m82C = 0; m82C < 4; m82C++) {
+                            if (msgSetNo >= (s16)(mCurrItemNameMsgNo * l_after_bet_rate[m82C]) && msgSetNo >= l_after_bet_chk[m82C]) {
+                                m806 = (s16)(60.0f * (RAND_RANGE(l_after_bet_wait[m82C][0], l_after_bet_wait[m82C][1])));
+                                break;
+                            }
+                        }
+                    }
+
+                    mCurrItemNameMsgNo = msgSetNo;
+                    dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
+                }
+                break;
+            case 0x1CFC:
+                if (mpCurrMsg->mSelectNum == 0) {
+                    *pMsgNo = 0x1D1F;
+                } else {
+                    ret = 0x10;
+                }
+                break;
+            case 0x1D1A:
+                if (mpCurrMsg->mSelectNum == 0) {
+                    m82B = 1;
+                }
+
+                ret = 0x10;
+                break;
+
+        case 0x1D1F:
+            dComIfGp_setNextStage("sea", 3, 11);
+        case 0x1D24:
+            m82B = 1;
+            ret = 0x10;
+            break;
+
+        default:
+            setLinkAnm(0x14);
+            int rnd = getRand(6) + 1;
+            *pMsgNo = l_npc_msg_dat[getAucMdlNo(rnd)].field_0x06;
+            m825 = rnd;
+            break;
+
+        case 0x1D48:
+        case 0x33A2:
+        case 0x33A8:
+        case 0x33A5:
+        case 0x339F:
+        case 0x1D4B:
+        case 0x1D3F:
+        case 0x1D45:
+        case 0x1D42:
+        case 0x1D3C:
+            this->m834 |= 2;
+            this->m808 = 0;
+            ret = 0x10;
+            break;
+
+            case 0x1D05:
+                if (m822 == 2) {
+                    *pMsgNo = 0x1D1C;
+                } else {
+                    if (m824 != 0) {
+                        dComIfGs_onEventBit(0x4008);
+                        dComIfGs_setEventReg(0x790F, getAucMdlNo(m824));
+                        dComIfGs_setEventReg(0xCD03, mCurrAuctionItemIndex);
+                    } else {
+                        dComIfGs_offEventBit(0x4008);
+                    }
+
+                    fopAcM_delete(mCurrAuctionItemPID);
+                    ret = 0x10;
+                }
+                break;
+            case 0x1D1C:
+                dComIfGp_setItemRupeeCount(mCurrItemNameMsgNo);
+                ret = 0x10;
+                break;
+            case 0x1D07:
+                dComIfGp_setItemRupeeCount(-mCurrItemNameMsgNo);
+                *pMsgNo = 0x1D08;
+                break;
+            case 0x1D1D:
+            case 0x1D08:
+                *pMsgNo = 0x1D09;
+                break;
+            case 0x1CF3:
+                ret = 0x10;
+                break;
+
+        //}
+   //     } else {
+            //if (*pMsgNo == 0x1D48 || *pMsgNo == 0x33A2 || *pMsgNo == 0x33A8 || *pMsgNo == 0x33A5 ||)
+   //     }
+    }
+
+    if (ret == 0xF) {
+        m7EC = *pMsgNo;
+    } else {
+        m7EC = 0;
+    }
+
+    return ret;
 }
 
 /* 0000369C-000036AC       .text setMessage__11daAuction_cFUl */
