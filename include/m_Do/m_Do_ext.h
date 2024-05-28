@@ -28,6 +28,7 @@ public:
     J3DFrameCtrl* getFrameCtrl() { return mFrameCtrl; }
     f32 getPlaySpeed() { return mFrameCtrl->getRate(); }
     void setPlaySpeed(f32 speed) { mFrameCtrl->setRate(speed); }
+    BOOL checkFrame(f32 frame) { return mFrameCtrl->checkPass(frame); }
     f32 getFrame() { return mFrameCtrl->getFrame(); }
     f32 getEndFrame() { return mFrameCtrl->getEnd(); }
     void setFrame(f32 frame) { mFrameCtrl->setFrame(frame); }

@@ -198,14 +198,14 @@ void daObjGryw00_c::switch_wait_act_proc() {
 
 /* 00000B50-00000BB0       .text spread_water_face_act_proc__13daObjGryw00_cFv */
 void daObjGryw00_c::spread_water_face_act_proc() {
-    if (mBtk.getFrameCtrl()->checkPass(START_PHASE_ANIM_LEN)) {
+    if (mBtk.checkFrame(SPREAD_PHASE_ANIM_LEN)) {
         modeFunc = &water_level_move_wait_act_proc;
     }
 }
 
 /* 00000BB0-00000C44       .text water_level_move_wait_act_proc__13daObjGryw00_cFv */
 void daObjGryw00_c::water_level_move_wait_act_proc() {
-    if (mBtk.getFrameCtrl()->checkPass(SPREAD_PHASE_ANIM_LEN)) {
+    if (mBtk.checkFrame(RISE_PHASE_ANIM_LEN)) {
         mWaterLvIncrement = WATER_RISE_SPEED;
         mWaterMaxLv = HIGH_WATER_LEVEL;
         modeFunc = &anime_loop_start_wait_act_proc;
