@@ -519,7 +519,7 @@ void daAuction_c::privateCut() {
         evtRes = eventGetItem();
         break;
     case 7:
-        evtRes = false; // TODO: __ptmf_test
+        evtRes = &eventMesSet != NULL;
         break;
     case 8:
         evtRes = eventCameraOffNpc();
