@@ -3163,6 +3163,10 @@ inline void dComIfGp_particle_calcMenu() {
     g_dComIfG_gameInfo.play.getParticle()->calcMenu();
 }
 
+inline int dComIfGp_particle_addModelEmitter(dPa_modelEmitter_c* emitter){
+    return g_dComIfG_gameInfo.play.getParticle()->addModelEmitter(emitter);
+}
+
 inline void dComIfGp_particle_drawModelParticle() {
     g_dComIfG_gameInfo.play.getParticle()->drawModelParticle();
 }
