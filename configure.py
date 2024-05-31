@@ -1393,7 +1393,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_wind_tag"),
     ActorRel(NonMatching, "d_a_acorn_leaf"),
     ActorRel(NonMatching, "d_a_atdoor"),
-    ActorRel(Matching, "d_a_auction", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(NonMatching, "d_a_auction", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_bb"),
     ActorRel(NonMatching, "d_a_bdk"),
     ActorRel(NonMatching, "d_a_bdkobj"),
