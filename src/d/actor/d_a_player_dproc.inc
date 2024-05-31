@@ -20,7 +20,7 @@ void daPy_lk_c::getDemoLookActor() {
 /* 8012CDD4-8012CE2C       .text setTinkleCeiverModel__9daPy_lk_cFv */
 void daPy_lk_c::setTinkleCeiverModel() {
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpHeldItemModel, LINK_BDL_TCEIVER, 0x13000022);
+    initModel(&mpEquipItemModel, LINK_BDL_TCEIVER, 0x13000022);
     mDoExt_setCurrentHeap(oldHeap);
 }
 

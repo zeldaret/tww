@@ -94,9 +94,9 @@ void daPy_lk_c::setParachuteFanModel(f32 f31) {
     );
     if (mpParachuteFanMorf == NULL || mpParachuteFanMorf->getModel() == NULL) { JUT_ASSERT(323, 0); }
     
-    mpHeldItemModel = mpParachuteFanMorf->getModel();
+    mpEquipItemModel = mpParachuteFanMorf->getModel();
     mDoExt_setCurrentHeap(oldHeap);
-    mpHeldItemModel->setUserArea(reinterpret_cast<u32>(this));
+    mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
     modelData->getJointNodePointer(0x01)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_Lroot joint
     modelData->getJointNodePointer(0x07)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_Rroot joint
     modelData->getJointNodePointer(0x03)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_LarmB joint

@@ -232,7 +232,7 @@ void daWall_c::mode_break() {
             break;
         }
     }
-    fopDwTg_DrawQTo(&draw_tag);
+    fopAcM_offDraw(this);
 }
 
 /* 00000B14-00000D84       .text set_tri__8daWall_cFv */

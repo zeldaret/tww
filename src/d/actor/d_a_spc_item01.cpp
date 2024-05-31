@@ -133,7 +133,7 @@ BOOL daSpcItem01_c::CreateInit() {
 BOOL daSpcItem01_c::_execute() {
     eyePos = current.pos;
     attention_info.position = current.pos;
-    field_0x634++;
+    m_timer++;
     set_effect();
     scale_anim();
     anim_play();

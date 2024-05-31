@@ -23,7 +23,7 @@ void dMat_backup_c::restore() {
 /* 8006F69C-8006F740       .text create__10dMat_ice_cFP16J3DMaterialTableP19J3DAnmTextureSRTKey */
 void dMat_ice_c::create(J3DMaterialTable* param_1, J3DAnmTextureSRTKey* param_2) {
     mMaterialTable = param_1;
-    int rt = mBtkAnm.init(mMaterialTable, param_2, 1, 2, 1.0f, 0, -1, false, 0);
+    int rt = mBtkAnm.init(mMaterialTable, param_2, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
     JUT_ASSERT(98, rt != 0);
     mBtkAnm.entry(mMaterialTable, mBtkAnm.getFrameCtrl()->getFrame());
 }

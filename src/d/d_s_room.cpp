@@ -218,7 +218,7 @@ s32 phase_2(room_of_scene_class* i_this) {
                     if (bank != 0xFF) {
                         JUT_ASSERT(0x1db, 0 <= bank && bank < 100);
                         sprintf(dStage_roomControl_c::mDemoArcName, "Demo%02d", bank);
-                        if (!dComIfG_setObjectRes(dStage_roomControl_c::mDemoArcName, JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL))
+                        if (!dComIfG_setObjectRes(dStage_roomControl_c::mDemoArcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL))
                             dStage_roomControl_c::mDemoArcName[0] = '\0';
                     }
                 }

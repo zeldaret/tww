@@ -1,5 +1,6 @@
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_main_data.h"
 
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};

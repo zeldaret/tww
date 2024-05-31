@@ -238,14 +238,23 @@ inline void mDoAud_tact_ambientPlay() {
     mDoAud_zelAudio_c::getTact().ambientPlay();
 }
 
+inline void mDoAud_tact_setStickPos(s32 mainStick, s32 cStick) {
+    mDoAud_zelAudio_c::getTact().setStickPos(mainStick, cStick);
+}
+
+inline void mDoAud_tact_playArmSwing(s32 mainStick, s32 cStick) {
+    mDoAud_zelAudio_c::getTact().playArmSwing(mainStick, cStick);
+}
+
+inline void mDoAud_tact_stopArmSwing() {
+    mDoAud_zelAudio_c::getTact().stopArmSwing();
+}
+
 inline void mDoAud_tact_armSoundPlay(s32) {}
 inline void mDoAud_tact_judge(s32, s32) {}
 inline void mDoAud_tact_melodyPlay(s32) {}
 inline void mDoAud_tact_melodyStop() {}
 inline void mDoAud_tact_metronomePlay(s32, s32) {}
-inline void mDoAud_tact_playArmSwing(s32, s32) {}
-inline void mDoAud_tact_setStickPos(s32, s32) {}
-inline void mDoAud_tact_stopArmSwing() {}
 
 inline BOOL mDoAud_checkCbPracticePlay() {
     return mDoAud_zelAudio_c::getInterface()->checkCbPracticePlay();

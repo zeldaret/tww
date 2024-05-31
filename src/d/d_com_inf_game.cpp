@@ -100,7 +100,7 @@ void dComIfG_play_c::itemInit() {
     mRupyCountDisplay = 0;
     field_0x4928 = 0;
     field_0x4929 = 0;
-    field_0x492a = 0;
+    mMesgStatus = 0;
     mbCamOverrideFarPlane = 0;
     field_0x492c = 0;
     field_0x492d = 0;
@@ -142,7 +142,7 @@ void dComIfG_play_c::itemInit() {
     }
 
     mMelodyNum = 0;
-    field_0x4951 = 0;
+    mFmapOpen = false;
     field_0x4952 = 0;
     field_0x4953 = 0;
     field_0x4954 = 0;
@@ -506,7 +506,7 @@ int dComIfG_resetToOpening(scene_class* i_scene) {
 
 /* 800532D8-80053330       .text phase_1__FPc */
 static int phase_1(char* i_arcName) {
-    return !dComIfG_setObjectRes(i_arcName, (u8)0, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
+    return !dComIfG_setObjectRes(i_arcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
 }
 
 /* 80053330-80053388       .text phase_2__FPc */

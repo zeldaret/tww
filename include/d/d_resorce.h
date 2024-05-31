@@ -58,7 +58,6 @@ public:
     static void* getRes(char const*, s32, dRes_info_c*, int);
     static void* getIDRes(char const*, u16, dRes_info_c*, int);
     static int syncAllRes(dRes_info_c*, int);
-    int setObjectRes(char const*, void*, u32, JKRHeap*);
     int setStageRes(char const*, JKRHeap*);
     void dump();
     int getObjectResName2Index(char const*, char const*);

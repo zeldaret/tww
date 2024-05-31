@@ -143,7 +143,7 @@ void dDlst_Gameover_CAPTURE_c::draw() {
 /* 8018E4B4-8018E77C       .text _create__11dGameover_cFv */
 s32 dGameover_c::_create() {
     s32 rt = dComIfG_resLoad(&mPhs, "Gover");
-    if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 4) || g_dComIfG_gameInfo.play.field_0x492a != 0)
+    if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 4) || dComIfGp_getMesgStatus() != 0)
         return cPhs_INIT_e;
 
     if (rt == cPhs_COMPLEATE_e) {

@@ -118,12 +118,13 @@ public:
     /* 0x1218 */ dPath* ppd;
     /* 0x121C */ s8 m121C;
     /* 0x121D */ u8 m121D;
-    /* 0x121E */ u8 m121E[0x121F - 0x121E];
+    /* 0x121E */ s8 m121E;
     /* 0x121F */ s8 m121F;
     /* 0x1220 */ daObj_Search::Act_c* m1220;
     /* 0x1224 */ u8 m1224[0x1230 - 0x1224];
     /* 0x1230 */ J3DMaterialTable* m1230;
-    /* 0x1234 */ u8 m1234[0x1264 - 0x1234];
+    /* 0x1234 */ s8 m1234;
+    /* 0x1235 */ u8 m1235[0x1264 - 0x1235];
     /* 0x1264 */ enemyice mEnemyIce;
     /* 0x161C */ enemyfire mEnemyFire;
     /* 0x1844 */ JntHit_c* mpJntHit;

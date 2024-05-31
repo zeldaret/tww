@@ -60,6 +60,7 @@ enum daPy__PlayerStatus1 {
     daPyStts1_DEKU_LEAF_FAN_e      = 0x00000040,
     daPyStts1_SAIL_e               = 0x00000400,
     daPyStts1_UNK8000_e            = 0x00008000,
+    daPyStts1_UNK10000_e           = 0x00010000,
     daPyStts1_UNK40000_e           = 0x00040000,
 };
 
@@ -338,6 +339,7 @@ public:
     int getTimerLimitTimeMs() { return mTimerInfo.mTimerLimitTimeMs; }
     void setWaveFrame(u16 frame) { mTimerInfo.mWaveFrame = frame; }
     u16 getWaveFrame() { return mTimerInfo.mWaveFrame; }
+    void fmapOpenOn() { mFmapOpen = true; }
 
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
@@ -484,15 +486,13 @@ public:
     u8 checkFwaterTimer() { return mFwaterTimer; }
 
     u8 getMiniGameType() { return mMiniGameType; }
-
-    void startMiniGame(u8 param_1) {
-        mMiniGameType = param_1;
-        field_0x4A38 |= 1 << (param_1 - 1); // Sets Nth bit
+    void startMiniGame(u8 i_gameType) {
+        mMiniGameType = i_gameType;
+        mMinigameFlags |= 1 << (i_gameType - 1); // set Nth bit
     }
-
-    void endMiniGame(u16 param_1) {
+    void endMiniGame(u16 i_gameType) {
         mMiniGameType = 0;
-        field_0x4A38 ^= 1 << (param_1 - 1); // toggle Nth bit
+        mMinigameFlags ^= 1 << (i_gameType - 1); // toggle Nth bit
         field_0x4A3E = 0;
     }
 
@@ -507,6 +507,7 @@ public:
     void clearBaseAnimeID() { mMesgAnime = 0xFF; }
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
+    u8 getMesgStatus() { return mMesgStatus; }
 
     u8 getButtonMode() { return mButtonMode; }
     void setButtonMode(u8 mode) { mButtonMode = mode; }
@@ -609,7 +610,7 @@ public:
     /* 0x4926 */ s16 mRupyCountDisplay;
     /* 0x4928 */ u8 field_0x4928;
     /* 0x4929 */ u8 field_0x4929;
-    /* 0x492A */ u8 field_0x492a;
+    /* 0x492A */ u8 mMesgStatus;
     /* 0x492B */ u8 mbCamOverrideFarPlane;
     /* 0x492C */ u8 field_0x492c;
     /* 0x492D */ u8 field_0x492d;
@@ -637,7 +638,7 @@ public:
     /* 0x4949 */ u8 mMesgCancelButton;
     /* 0x494A */ u8 field_0x494a[6];
     /* 0x4950 */ u8 mMelodyNum;
-    /* 0x4951 */ u8 field_0x4951;
+    /* 0x4951 */ bool mFmapOpen;
     /* 0x4952 */ u8 field_0x4952;
     /* 0x4953 */ u8 field_0x4953;
     /* 0x4954 */ u8 field_0x4954;
@@ -674,7 +675,7 @@ public:
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
     /* 0x4A28 */ u32 mPlayerStatus[2][2];
-    /* 0x4A38 */ u16 field_0x4A38;
+    /* 0x4A38 */ u16 mMinigameFlags;
     /* 0x4A3A */ u8 mMiniGameType;
     /* 0x4A3C */ s16 mMiniGameRupee;
     /* 0x4A3E */ u8 field_0x4A3E;
@@ -1119,8 +1120,22 @@ inline s16 dComIfGs_getTurnRestartShipAngleY() {
     return g_dComIfG_gameInfo.save.getTurnRestart().getShipAngleY();
 }
 
+// The "HasShip" name is fake. These inlines don't exist in the demo, but must exist in the final release.
+inline BOOL dComIfGs_getTurnRestartHasShip() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getHasShip();
+}
+
+inline void dComIfGs_setTurnRestartHasShip(BOOL hasShip) {
+    g_dComIfG_gameInfo.save.getTurnRestart().setHasShip(hasShip);
+}
+
 inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
-    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, 0);
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, FALSE);
+}
+
+// Note: The "BOOL i_hasShip" parameter doesn't exist in the demo, but was added for the final release.
+inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param, const cXyz& i_shipPos, s16 i_shipAngle, BOOL i_hasShip) {
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_shipPos, i_shipAngle, i_hasShip);
 }
 
 inline u8 dComIfGs_getPlayerPriestFlag() {
@@ -2339,12 +2354,12 @@ inline u8 dComIfGp_getMiniGameType() {
     return g_dComIfG_gameInfo.play.getMiniGameType();
 }
 
-inline void dComIfGp_startMiniGame(u8 param_1) {
-    g_dComIfG_gameInfo.play.startMiniGame(param_1);
+inline void dComIfGp_startMiniGame(u8 i_gameType) {
+    g_dComIfG_gameInfo.play.startMiniGame(i_gameType);
 }
 
-inline void dComIfGp_endMiniGame(u16 param_1) {
-    g_dComIfG_gameInfo.play.endMiniGame(param_1);
+inline void dComIfGp_endMiniGame(u16 i_gameType) {
+    g_dComIfG_gameInfo.play.endMiniGame(i_gameType);
 }
 
 inline u8 dComIfGp_getAStatus() {
@@ -2463,6 +2478,10 @@ inline u8 dComIfGp_getMesgAnimeTagInfo() {
 
 inline void dComIfGp_clearMesgAnimeTagInfo() {
     g_dComIfG_gameInfo.play.clearNowAnimeID();
+}
+
+inline u8 dComIfGp_getMesgStatus() {
+    return g_dComIfG_gameInfo.play.getMesgStatus();
 }
 
 inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramHeap, int i) {
@@ -2600,6 +2619,14 @@ inline dEvent_manager_c* dComIfGp_getPEvtManager() {
 
 inline u8 dComIfGp_event_getMode() {
     return g_dComIfG_gameInfo.play.getEvent().getMode();
+}
+
+inline u8 dComIfGp_event_getTactFreeMStick(int which) {
+    return g_dComIfG_gameInfo.play.getEvent().getTactFreeMStick(which);
+}
+
+inline u8 dComIfGp_event_getTactFreeCStick(int which) {
+    return g_dComIfG_gameInfo.play.getEvent().getTactFreeCStick(which);
 }
 
 // Note: Some of the below functions call g_dComIfG_gameInfo.play.getEvtManager(), while others use
@@ -2953,12 +2980,8 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* arc_nam
 int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* resName, JKRHeap* heap);
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* resName);
 
-inline int dComIfG_setObjectRes(const char* name, u8 param_1, JKRHeap* heap) {
-    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, param_1, heap);
-}
-
-inline int dComIfG_setObjectRes(const char* name, void* param_1, u32 param_2) {
-    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, param_1, param_2, NULL);
+inline int dComIfG_setObjectRes(const char* name, u8 direction, JKRHeap* heap) {
+    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, direction, heap);
 }
 
 inline int dComIfG_setStageRes(const char* name, JKRHeap* heap) {
@@ -3246,6 +3269,8 @@ inline int dComIfG_getTimerNowTimeMs() { return g_dComIfG_gameInfo.play.getTimer
 
 inline void dComIfGp_setWaveFrame(u16 frame) { g_dComIfG_gameInfo.play.setWaveFrame(frame); }
 inline u16 dComIfGp_getWaveFrame() { return g_dComIfG_gameInfo.play.getWaveFrame(); }
+
+inline void dComIfGp_fmapOpenOn() { g_dComIfG_gameInfo.play.fmapOpenOn(); }
 
 inline int dComIfG_getTimerRestTimeMs() {
     int limit = g_dComIfG_gameInfo.play.getTimerLimitTimeMs();

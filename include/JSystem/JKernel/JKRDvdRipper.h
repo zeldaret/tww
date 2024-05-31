@@ -29,7 +29,7 @@ public:
     static bool errorRetry;
 
     enum EAllocDirection {
-        UNKNOWN_EALLOC_DIRECTION = 0,
+        DEFAULT_EALLOC_DIRECTION = 0,
         ALLOC_DIRECTION_FORWARD = 1,
         ALLOC_DIRECTION_BACKWARD = 2,
     };

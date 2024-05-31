@@ -12,13 +12,13 @@ struct daShopItem_c_m_data {
 
 class daShopItem_c : public daItemBase_c {
 public:
+    inline int _create();
     inline BOOL _delete();
-    void setTevType(int) {}
+    void setTevType(int type) { mTevType = type; }
 
     char* getShopArcname();
     s16 getShopBmdIdx();
     void CreateInit();
-    inline int _create();
     bool _execute();
     void set_mtx();
     bool _draw();
@@ -42,11 +42,11 @@ public:
     static const u8 mModelType[255];
     static const daShopItem_c_m_data mData[255];
 
-    /* 0x63C */ request_of_phase_process_class field_0x63C;
+    /* 0x63C */ request_of_phase_process_class mPhase;
     /* 0x644 */ dCloth_packet_c* field_0x644;
     /* 0x648 */ u8 field_0x648;
     /* 0x64C */ Mtx field_0x64C;
-    /* 0x67C */ TevType tevType;
+    /* 0x67C */ int mTevType;
 };
 
 #endif /* D_A_SHOP_ITEM_H */

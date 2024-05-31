@@ -38,7 +38,7 @@ BOOL daArrow_Iceeff_c::CreateHeap() {
         
         J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Link", LINK_BCK_GICER01));
         JUT_ASSERT(107, bck != 0);
-        if(!mBck.init(modelData, bck, true, 0, 1.0f, 0, -1, false)) {
+        if(!mBck.init(modelData, bck, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false)) {
             return false;
         }
     }

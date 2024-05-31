@@ -9,31 +9,34 @@
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
-const char daObjXfuta::Act_c::M_arcname[] = "X_futa";
 namespace daObjXfuta {
-static int tev_mode[] = {TEV_TYPE_ACTOR,
-                         TEV_TYPE_BG0,
-                         TEV_TYPE_BG1,
-                         TEV_TYPE_BG2,
-                         TEV_TYPE_BG3,
-                         TEV_TYPE_BG0_FULL,
-                         TEV_TYPE_BG1_FULL,
-                         TEV_TYPE_BG2_FULL,
-                         TEV_TYPE_BG3_FULL,
-                         TEV_TYPE_PLAYER,
-                         0x5B,
-                         0x5C,
-                         0x5D,
-                         0x5E};
-}
+    
+const char Act_c::M_arcname[] = "X_futa";
+
+static int tev_mode[] = {
+    TEV_TYPE_ACTOR,
+    TEV_TYPE_BG0,
+    TEV_TYPE_BG1,
+    TEV_TYPE_BG2,
+    TEV_TYPE_BG3,
+    TEV_TYPE_BG0_FULL,
+    TEV_TYPE_BG1_FULL,
+    TEV_TYPE_BG2_FULL,
+    TEV_TYPE_BG3_FULL,
+    TEV_TYPE_PLAYER,
+    TEV_TYPE_BG0_PLIGHT,
+    TEV_TYPE_BG1_PLIGHT,
+    TEV_TYPE_BG2_PLIGHT,
+    TEV_TYPE_ACTOR_NOLIGHT
+};
 
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjXfuta5Act_cFP10fopAc_ac_c */
-BOOL daObjXfuta::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
     return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-0000015C       .text create_heap__Q210daObjXfuta5Act_cFv */
-bool daObjXfuta::Act_c::create_heap() {
+bool Act_c::create_heap() {
     J3DModelData* mdl_data;
 
     mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x03));
@@ -50,7 +53,7 @@ bool daObjXfuta::Act_c::create_heap() {
 }
 
 /* 0000015C-00000214       .text _create__Q210daObjXfuta5Act_cFv */
-s32 daObjXfuta::Act_c::_create() {
+s32 Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
     int phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -65,13 +68,13 @@ s32 daObjXfuta::Act_c::_create() {
 }
 
 /* 00000214-00000244       .text _delete__Q210daObjXfuta5Act_cFv */
-bool daObjXfuta::Act_c::_delete() {
+bool Act_c::_delete() {
     dComIfG_resDelete(&mPhs, M_arcname);
     return true;
 }
 
 /* 00000244-000002F0       .text set_mtx__Q210daObjXfuta5Act_cFv */
-void daObjXfuta::Act_c::set_mtx() {
+void Act_c::set_mtx() {
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -81,14 +84,14 @@ void daObjXfuta::Act_c::set_mtx() {
 }
 
 /* 000002F0-00000338       .text _execute__Q210daObjXfuta5Act_cFv */
-bool daObjXfuta::Act_c::_execute() {
+bool Act_c::_execute() {
     current.pos = cXyz(home.pos.x, home.pos.y, home.pos.z);
     set_mtx();
     return TRUE;
 }
 
 /* 00000338-0000040C       .text _draw__Q210daObjXfuta5Act_cFv */
-bool daObjXfuta::Act_c::_draw() {
+bool Act_c::_draw() {
     if (dComIfGp_demo_mode() != 1) {
         cXyz pos(0.0f, 0.0f, 0.0f);
         g_env_light.settingTevStruct(tev_mode[1], &pos, &tevStr);
@@ -100,7 +103,6 @@ bool daObjXfuta::Act_c::_draw() {
     return TRUE;
 }
 
-namespace daObjXfuta {
 namespace {
 
 s32 Mthd_Create(void* i_this) {
@@ -128,6 +130,7 @@ static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Execute, (process_method_func)Mthd_IsDelete,
     (process_method_func)Mthd_Draw,
 };
+
 }  // namespace
 }  // namespace daObjXfuta
 

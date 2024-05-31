@@ -17,8 +17,8 @@ static u8 dummy[0x0c];
 OSThread mDoDvdThd::l_thread;
 mDoDvdThdStack mDoDvdThd::l_threadStack;
 mDoDvdThd_param_c mDoDvdThd::l_param;
-bool mDoDvdThd::SyncWidthSound;
-u8 mDoDvdThd::sDefaultDirection;
+bool mDoDvdThd::SyncWidthSound = false;
+u8 mDoDvdThd::sDefaultDirection = JKRArchive::DEFAULT_MOUNT_DIRECTION;
 
 /* 80017EF8-80017F54       .text main__9mDoDvdThdFPv */
 s32 mDoDvdThd::main(void* userData) {
@@ -158,7 +158,7 @@ mDoDvdThd_mountArchive_c::mDoDvdThd_mountArchive_c(u8 direction) {
     mEntryNum = -1;
     mArchive = NULL;
     mHeap = NULL;
-    if (direction == 0)
+    if (direction == JKRArchive::DEFAULT_MOUNT_DIRECTION)
         mMountDirection = mDoDvdThd::sDefaultDirection;
 }
 
@@ -186,7 +186,7 @@ BOOL mDoDvdThd_mountArchive_c::execute() {
 
     while (true) {
         JKRMemArchive* arc;
-        if (mMountDirection == 0) {
+        if (mMountDirection == JKRArchive::DEFAULT_MOUNT_DIRECTION) {
             arc = new (heap, 0) JKRMemArchive(mEntryNum, JKRArchive::MOUNT_DIRECTION_HEAD);
         } else {
             arc = new (heap, -4) JKRMemArchive(mEntryNum, JKRArchive::MOUNT_DIRECTION_TAIL);
@@ -225,7 +225,7 @@ mDoDvdThd_mountXArchive_c::mDoDvdThd_mountXArchive_c(u8 direction, JKRArchive::E
     mEntryNum = -1;
     mArchive = NULL;
     mMountMode = mountMode;
-    if (direction == 0)
+    if (direction == JKRArchive::DEFAULT_MOUNT_DIRECTION)
         mMountDirection = mDoDvdThd::sDefaultDirection;
 }
 
@@ -248,7 +248,12 @@ mDoDvdThd_mountXArchive_c* mDoDvdThd_mountXArchive_c::create(const char* path, u
 
 /* 8001890C-80018984       .text execute__25mDoDvdThd_mountXArchive_cFv */
 BOOL mDoDvdThd_mountXArchive_c::execute() {
-    JKRArchive::EMountDirection mountDir = mMountDirection == 0 ? JKRArchive::MOUNT_DIRECTION_HEAD : JKRArchive::MOUNT_DIRECTION_TAIL;
+    JKRArchive::EMountDirection mountDir;
+    if (mMountDirection == JKRArchive::DEFAULT_MOUNT_DIRECTION) {
+        mountDir = JKRArchive::MOUNT_DIRECTION_HEAD;
+    } else {
+        mountDir = JKRArchive::MOUNT_DIRECTION_TAIL;
+    }
     mArchive = JKRArchive::mount(mEntryNum, mMountMode, mDoExt_getArchiveHeap(), mountDir);
     BOOL ret = getArchive() != NULL;
     mIsDone = true;
@@ -258,7 +263,7 @@ BOOL mDoDvdThd_mountXArchive_c::execute() {
 /* 80018984-800189E0       .text __ct__21mDoDvdThd_toMainRam_cFUc */
 mDoDvdThd_toMainRam_c::mDoDvdThd_toMainRam_c(u8 direction) {
     mAllocDirection = direction;
-    if (direction == 0)
+    if (direction == JKRArchive::DEFAULT_MOUNT_DIRECTION)
         mAllocDirection = mDoDvdThd::sDefaultDirection;
 }
 
@@ -293,7 +298,12 @@ BOOL mDoDvdThd_toMainRam_c::execute() {
         heap = mDoExt_getArchiveHeap();
     }
 
-    JKRDvdRipper::EAllocDirection allocDir = mAllocDirection == 0 ? JKRDvdRipper::ALLOC_DIRECTION_FORWARD : JKRDvdRipper::ALLOC_DIRECTION_BACKWARD;
+    JKRDvdRipper::EAllocDirection allocDir;
+    if (mAllocDirection == JKRDvdRipper::DEFAULT_EALLOC_DIRECTION) {
+        allocDir = JKRDvdRipper::ALLOC_DIRECTION_FORWARD;
+    } else {
+        allocDir = JKRDvdRipper::ALLOC_DIRECTION_BACKWARD;
+    }
     mData = JKRDvdRipper::loadToMainRAM(mEntryNum, NULL, EXPAND_SWITCH_UNKNOWN1, 0, heap, allocDir, 0, NULL);
     if (mData != NULL)
         mDataSize = heap->getSize(mData);

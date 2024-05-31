@@ -135,7 +135,7 @@ void dPlace_name_c::draw() {
 s32 dPn_c::_create() {
     s32 rt = dComIfG_resLoad(&mPhs, "PName");
 
-    if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 10) || g_dComIfG_gameInfo.play.field_0x492a != 0)
+    if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 10) || dComIfGp_getMesgStatus() != 0)
         return cPhs_INIT_e;
 
     if (mState == 0) {

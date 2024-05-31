@@ -139,7 +139,7 @@ BOOL daNpc_Btsw2_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, l_btp_ix_tbl[m744]));
     JUT_ASSERT(282, m_btp != 0);
-    if (!mBtpAnm.init(modelData, m_btp, TRUE, 2, 1.0f, 0, -1, i_modify, 0)) {
+    if (!mBtpAnm.init(modelData, m_btp, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, i_modify, 0)) {
         return FALSE;
     }
     mBtpFrame = 0;

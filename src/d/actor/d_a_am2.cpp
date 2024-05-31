@@ -1200,14 +1200,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     i_this->mpBtkAnm = new mDoExt_btkAnm();
     if (!i_this->mpBtkAnm) { return FALSE; }
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("AM2", AM2_BTK_AM2);
-    int ret = i_this->mpBtkAnm->init(model->getModelData(), pbtk, TRUE, 2, 1.0f, 0, -1, false, 0);
+    int ret = i_this->mpBtkAnm->init(model->getModelData(), pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
     if (!ret) { return FALSE; }
     if (!i_this->mpBtkAnm) { return FALSE; }
     
     i_this->mpBrkAnm = new mDoExt_brkAnm();
     if (!i_this->mpBrkAnm) { return FALSE; }
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("AM2", AM2_BRK_AM2);
-    ret = i_this->mpBrkAnm->init(model->getModelData(), pbrk, TRUE, 2, 1.0f, 0, -1, false, 0);
+    ret = i_this->mpBrkAnm->init(model->getModelData(), pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
     if (!ret) { return FALSE; }
     if (!i_this->mpBrkAnm) { return FALSE; }
     

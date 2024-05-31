@@ -127,7 +127,7 @@ static BOOL daRaceItem_Execute(daRaceItem_c* i_this) {
 
 /* 0000073C-00000C44       .text execute__12daRaceItem_cFv */
 BOOL daRaceItem_c::execute() {
-    field_0x634++;
+    m_timer++;
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     eyePos = current.pos;
     eyePos.y += scale.x * dItem_data::getH(m_itemNo) / 2.0f;

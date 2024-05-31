@@ -577,44 +577,44 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {
-            -1,
-            -1,
-            0,
-            8.0f,
-            1.0f,
-            2
+            /* mBckIdx     */ -1,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
         },
         {
-            0,
-            -1,
-            0,
-            8.0f,
-            0.0f,
-            0
+            /* mBckIdx     */ 0,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 0.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
         },
         {
-            0,
-            -1,
-            0,
-            8.0f,
-            1.0f,
-            0
+            /* mBckIdx     */ 0,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
         },
         {
-            1,
-            -1,
-            0,
-            8.0f,
-            1.0f,
-            0
+            /* mBckIdx     */ 1,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
         },
         {
-            2,
-            -1,
-            0,
-            8.0f,
-            1.0f,
-            2
+            /* mBckIdx     */ 2,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
         },
     };
 
