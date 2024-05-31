@@ -13,11 +13,11 @@
 #include "m_Do/m_Do_controller_pad.h"
 
 struct NpcDatStruct {
-    /* 0x00 */ f32 field_0x00; // Random float range min
-    /* 0x04 */ f32 field_0x04; // Random float range max
-    /* 0x08 */ s16 field_0x08; // Random short range min
-    /* 0x0A */ s16 field_0x0A; // Random short range max
-    /* 0x0C */ s16 field_0x0C; // Might be amount of rupees the npc has
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ s16 mBidIncMin; // Minimum bid increment
+    /* 0x0A */ s16 mBidIncMax; // Maximum bid increment
+    /* 0x0C */ s16 mSpendingLimit;
 };
 
 struct NpcMsgDatStruct {
@@ -66,11 +66,11 @@ static daAuction_c::ItemData l_item_dat[] = {
     {KAKERA_HEART, 0x1D13, 80, 0x1020},
 };
 
-// Items obtained through the auction at some point during dev?
 static daAuction_c::ItemData l_item_dat2[] = {
     {POSTMAN_STATUE, 0x1D14, 30, 0x1008},
     {PRESIDENT_STATUE, 0x1D15, 40, 0x1004},
 };
+
 static s16 l_item_dat22[] = {0x002A, 0x00F9};
 
 static NpcDatStruct l_npc_dat[7] = {
@@ -217,7 +217,6 @@ daAuction_c::daAuction_c() {
         mAucMdlNo[i] = 0xFF;
     }
 
-    // Shuffles item order (I think)
     for (int i = 0; i < 100; i++) {
         int rnd1 = getRand(6);
         int rnd2 = getRand(6);
@@ -296,10 +295,10 @@ s32 daAuction_c::createInit() {
     mCurrAuctionItemIndex = 0;
 
     s16 nameMsgID = l_item_dat[mCurrAuctionItemIndex].mNameMsgID;
-    mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mStartingBid;
+    mCurrBid = l_item_dat[mCurrAuctionItemIndex].mStartingBid;
 
     dComIfGp_setItemNameMessageID(nameMsgID);
-    dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
+    dComIfGp_setMessageCountNumber(mCurrBid);
 
     setMtx();
 
@@ -429,14 +428,14 @@ void daAuction_c::eventOrder() {
     } else if (m838 == 3) {
         if (dComIfGs_isEventBit(0x4008)) {
             mCurrAuctionItemIndex = dComIfGs_getEventReg(0xCD03);
-            mCurrItemNameMsgNo += 0xA;
+            mCurrBid += 10;
         } else {
             mCurrAuctionItemIndex = getItemNo();
         }
 
         dComIfGp_setItemNameMessageID(l_item_dat[mCurrAuctionItemIndex].mNameMsgID);
-        mCurrItemNameMsgNo = l_item_dat[mCurrAuctionItemIndex].mStartingBid;
-        dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
+        mCurrBid = l_item_dat[mCurrAuctionItemIndex].mStartingBid;
+        dComIfGp_setMessageCountNumber(mCurrBid);
 
         fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, mEvtStartIdx, 0, 0xFF7F);
         dComIfGp_startMiniGame(5);
@@ -448,10 +447,10 @@ void daAuction_c::eventOrder() {
         mCurrAuctionItemIndex &= 1;
 
         s16 nameMsgID = l_item_dat2[mCurrAuctionItemIndex].mNameMsgID;
-        mCurrItemNameMsgNo = l_item_dat2[mCurrAuctionItemIndex].mStartingBid;
+        mCurrBid = l_item_dat2[mCurrAuctionItemIndex].mStartingBid;
 
         dComIfGp_setItemNameMessageID(nameMsgID);
-        dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
+        dComIfGp_setMessageCountNumber(mCurrBid);
         fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, mEvtStart2Idx, 0, 0xFF7F);
         dComIfGp_startMiniGame(5);
     } else if (m838 == 7) {
@@ -878,7 +877,7 @@ void daAuction_c::eventMainKai() {
             }
 
             for (idx = 0; idx < end; idx++) {
-                if (m7C4[idx] >= 100.0f && mCurrItemNameMsgNo < l_npc_dat[idx].field_0x0C) {
+                if (m7C4[idx] >= 100.0f && mCurrBid < l_npc_dat[idx].mSpendingLimit) {
                     break;
                 }
             }
@@ -886,7 +885,7 @@ void daAuction_c::eventMainKai() {
             if (idx < end) {
                 m828 = idx;
 
-                s16 prevItemNameMsgNo = mCurrItemNameMsgNo;
+                s16 prevItemNameMsgNo = mCurrBid;
 
                 if (idx != 0) {
                     f32 f = 1.0f;
@@ -896,8 +895,8 @@ void daAuction_c::eventMainKai() {
                         f = 1.5f;
                     }
 
-                    mCurrItemNameMsgNo += (s16)(f * (s16)(l_npc_dat[idx].field_0x08 + cM_rndF(l_npc_dat[idx].field_0x0A - l_npc_dat[idx].field_0x08)));
-                    m800 = mCurrItemNameMsgNo;
+                    mCurrBid += (s16)(f * (s16)(l_npc_dat[idx].mBidIncMin + cM_rndF(l_npc_dat[idx].mBidIncMax - l_npc_dat[idx].mBidIncMin)));
+                    m800 = mCurrBid;
 
                     end = 0x1CF9;
 
@@ -906,8 +905,8 @@ void daAuction_c::eventMainKai() {
 
                     nextBet();
                 } else {
-                    m800 = mCurrItemNameMsgNo + 1;
-                    dComIfGp_setMessageSetNumber(mCurrItemNameMsgNo + 1);
+                    m800 = mCurrBid + 1;
+                    dComIfGp_setMessageSetNumber(mCurrBid + 1);
                     end = 0x1CFA;
                     setLinkAnm(0x48);
                     mpTimer->mpScrnDraw->setShowType(1);
@@ -926,11 +925,11 @@ void daAuction_c::eventMainKai() {
                 } else if (m826 != 0xFF && idx != 0 && dComIfG_getTimerRestTimeMs() > l_rest_msg_time1[0] && getRand(3) == 0) {
                     u32 msgParam;
 
-                    if (mCurrItemNameMsgNo <= 100) {
+                    if (mCurrBid <= 100) {
                         msgParam = 0x1CFD;
-                    } else if (mCurrItemNameMsgNo <= 150) {
+                    } else if (mCurrBid <= 150) {
                         msgParam = 0x1CFE;
-                    } else if (mCurrItemNameMsgNo <= 200) {
+                    } else if (mCurrBid <= 200) {
                         msgParam = 0x1CFF;
                     } else {
                         msgParam = 0x1D00;
@@ -1005,7 +1004,7 @@ void daAuction_c::eventMainUri() {
         for (idx = 1; idx < 7; idx++) {
             if (m7C4[idx] >= 100.0f) {
                 m7C4[idx] = 0.0f;
-                if (mCurrItemNameMsgNo < l_npc_dat[idx].field_0x0C) {
+                if (mCurrBid < l_npc_dat[idx].mSpendingLimit) {
                     break;
                 }
             }
@@ -1023,8 +1022,8 @@ void daAuction_c::eventMainUri() {
                     multiplier = 1.5f;
                 }
 
-                mCurrItemNameMsgNo += (s16)(multiplier * (2 * (s16)(l_npc_dat[idx].field_0x08 + cM_rndF(l_npc_dat[idx].field_0x0A - l_npc_dat[idx].field_0x08))));
-                m800 = mCurrItemNameMsgNo;
+                mCurrBid += (s16)(multiplier * (2 * (s16)(l_npc_dat[idx].mBidIncMin + cM_rndF(l_npc_dat[idx].mBidIncMax - l_npc_dat[idx].mBidIncMin))));
+                m800 = mCurrBid;
                 m7F0 = 0x1CF9;
                 m82C = 4;
                 m82E = 1;
@@ -1037,11 +1036,11 @@ void daAuction_c::eventMainUri() {
                 } else if (dComIfG_getTimerRestTimeMs() > l_rest_msg_time1[0] && getRand(3) == 0) {
                     u32 msgParam;
 
-                    if (mCurrItemNameMsgNo <= 100) {
+                    if (mCurrBid <= 100) {
                         msgParam = 0x1CFD;
-                    } else if (mCurrItemNameMsgNo <= 150) {
+                    } else if (mCurrBid <= 150) {
                         msgParam = 0x1CFE;
-                    } else if (mCurrItemNameMsgNo <= 200) {
+                    } else if (mCurrBid <= 200) {
                         msgParam = 0x1CFF;
                     } else {
                         msgParam = 0x1D00;
@@ -1300,14 +1299,14 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         }
         break;
     case 0x1CF7:
-        dComIfGp_setMiniGameRupee(mCurrItemNameMsgNo);
-        dComIfGp_setAuctionRupee(mCurrItemNameMsgNo);
+        dComIfGp_setMiniGameRupee(mCurrBid);
+        dComIfGp_setAuctionRupee(mCurrBid);
         dAuction_screen_slotShow();
         *pMsgNo = 0x1CF8;
         break;
     case 0x1CF9:
-        dComIfGp_setMiniGameRupee(mCurrItemNameMsgNo);
-        dComIfGp_setAuctionRupee(mCurrItemNameMsgNo);
+        dComIfGp_setMiniGameRupee(mCurrBid);
+        dComIfGp_setAuctionRupee(mCurrBid);
         if (m82C < 4) {
             *pMsgNo = l_after_bet_msg_no[m82C];
         } else if (m827 == 0 && l_npc_msg_dat[getAucMdlNo(m824)].field_0x02 != 0) {
@@ -1336,7 +1335,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             setLinkAnm(0x4A);
             *pMsgNo = 0x1CFB;
             m7C4[0] = 50.0f;
-        } else if (msgSetNo <= mCurrItemNameMsgNo) {
+        } else if (msgSetNo <= mCurrBid) {
             mDoAud_seStart(JA_SE_AUC_BID_NG);
             setLinkAnm(0x4A);
             *pMsgNo = 0x1D1E;
@@ -1356,8 +1355,8 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
                 m82C = 4;  // ?
 
                 for (m82C = 0; m82C < 4; m82C++) {
-                    if (msgSetNo >= (s16)(mCurrItemNameMsgNo * l_after_bet_rate[m82C]) &&
-                        mCurrItemNameMsgNo >= l_after_bet_chk[m82C])
+                    if (msgSetNo >= (s16)(mCurrBid * l_after_bet_rate[m82C]) &&
+                        mCurrBid >= l_after_bet_chk[m82C])
                     {
                         m806 = (s16)(60.0f * (l_after_bet_wait[m82C][0] + cM_rndF(l_after_bet_wait[m82C][1] - l_after_bet_wait[m82C][0])));
                         break;
@@ -1365,8 +1364,8 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
                 }
             }
 
-            mCurrItemNameMsgNo = msgSetNo;
-            dComIfGp_setMessageCountNumber(mCurrItemNameMsgNo);
+            mCurrBid = msgSetNo;
+            dComIfGp_setMessageCountNumber(mCurrBid);
         }
         break;
     case 0x1CFC:
@@ -1433,11 +1432,11 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         }
         break;
     case 0x1D1C:
-        dComIfGp_setItemRupeeCount(mCurrItemNameMsgNo);
+        dComIfGp_setItemRupeeCount(mCurrBid);
         ret = 0x10;
         break;
     case 0x1D07:
-        dComIfGp_setItemRupeeCount(-mCurrItemNameMsgNo);
+        dComIfGp_setItemRupeeCount(-mCurrBid);
         *pMsgNo = 0x1D08;
         break;
     case 0x1D1D:

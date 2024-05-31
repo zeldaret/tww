@@ -120,7 +120,7 @@ public:
     /* 0x7F8 */ s16 mEvtNoItemIdx;
     /* 0x7FA */ s16 mEvtStart2Idx;
     /* 0x7FC */ s16 mEvtEnd2Idx;
-    /* 0x7FE */ s16 mCurrItemNameMsgNo; // Current bid?
+    /* 0x7FE */ s16 mCurrBid;
     /* 0x800 */ s16 m800;
     /* 0x802 */ s16 mTimer;
     /* 0x804 */ u16 m804;
