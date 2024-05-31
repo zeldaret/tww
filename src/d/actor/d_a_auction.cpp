@@ -12,16 +12,12 @@
 #include "d/res/res_auction.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-// TODO: Remove this. It's just here to make the code more readable.
-#define RAND_RANGE(a, b) (a + cM_rndF(b - a))
-
-/* Structs are almost definitely not accurate */
 struct NpcDatStruct {
-    /* 0x00 */ f32 field_0x00;
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ s16 field_0x08;
-    /* 0x0A */ s16 field_0x0A;
-    /* 0x0C */ s16 field_0x0C;
+    /* 0x00 */ f32 field_0x00; // Random float range min
+    /* 0x04 */ f32 field_0x04; // Random float range max
+    /* 0x08 */ s16 field_0x08; // Random short range min
+    /* 0x0A */ s16 field_0x0A; // Random short range max
+    /* 0x0C */ s16 field_0x0C; // Might be amount of rupees the npc has
 };
 
 struct NpcMsgDatStruct {
@@ -32,25 +28,29 @@ struct NpcMsgDatStruct {
     /* 0x08 */ s16 field_0x08;
 };
 
-struct NpcCameraDatStruct { // Probably wrong
+struct NpcCameraDatStruct {
     /* 0x00 */ f32 field_0x00;
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ s16 field_0x08;
     /* 0x0A */ s16 field_0x0A;
 };
 
+static u8 dummy_bss[0x4C];
+
 static cXyz l_camera_pos[3][2] = {
     cXyz(-265.0f, 48.0f, -631.0f),
     cXyz(332.0f, 232.0f, 286.0f),
 
-
     cXyz(-50.0f, 202.0f, 137.0f),
     cXyz(-87.0f, 239.0f, 330.0f),
-
 
     cXyz(-216.0f, 205.0f, 5.0f),
     cXyz(-379.0f, 238.0f, 115.0f),
 };
+
+#ifdef DEBUG
+static daAuction_HIO_c l_HIO;
+#endif
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -74,13 +74,13 @@ static daAuction_c::ItemData l_item_dat2[] = {
 static s16 l_item_dat22[] = {0x002A, 0x00F9};
 
 static NpcDatStruct l_npc_dat[7] = {
-    {2.0f, 2.1f, 0x0, 0x0, 0x3E8},
-    {0.3f, 0.5f, 0x4, 0x6, 0x1C2},
-    {0.3f, 0.6f, 0x3, 0x7, 0x1F4},
-    {0.4f, 0.7f, 0x2, 0x4, 0x0FA},
-    {0.5f, 1.0f, 0x2, 0x3, 0x3DE},
-    {0.4f, 0.5f, 0x3, 0x4, 0x3DE},
-    {0.7f, 1.2f, 0x2, 0x2, 0x096},
+    {2.0f, 2.1f, 0x0, 0x0, 1000},
+    {0.3f, 0.5f, 0x4, 0x6, 450 },
+    {0.3f, 0.6f, 0x3, 0x7, 500 },
+    {0.4f, 0.7f, 0x2, 0x4, 250 },
+    {0.5f, 1.0f, 0x2, 0x3, 990 },
+    {0.4f, 0.5f, 0x3, 0x4, 990 },
+    {0.7f, 1.2f, 0x2, 0x2, 150 },
 };
 
 static NpcMsgDatStruct l_npc_msg_dat[12] = {
@@ -192,11 +192,6 @@ static daPy_py_c::daPy_FACE l_link_face[8] = {
     daPy_py_c::daPyFace_TMABAJ_TEYORIME,
 };
 
-#ifdef DEBUG
-// TODO: Figure out what these are
-static daAuction_HIO_c l_HIO;
-#endif
-
 static daAuction_c::ProcFunc_t moveProc[] = {
     daAuction_c::executeWait,
     daAuction_c::executeNormal,
@@ -216,14 +211,13 @@ extern uint dAuction_screen_create();
 
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
-    // TODO: Refactor this
     for (int i = 0; i < 8; i++) {
         m738[i] = -1;
         m80C[i] = i;
         mAucMdlNo[i] = 0xFF;
     }
 
-    // Shuffles lists randomly (I think)
+    // Shuffles item order (I think)
     for (int i = 0; i < 100; i++) {
         int rnd1 = getRand(6);
         int rnd2 = getRand(6);
@@ -397,7 +391,6 @@ void daAuction_c::executeStart() {}
 /* 00000B4C-00000C68       .text checkOrder__11daAuction_cFv */
 void daAuction_c::checkOrder() {
     if (eventInfo.checkCommandDemoAccrpt()) {
-        // Might be unrolled loop?
         if (dComIfGp_evmng_startCheck(mEvtStartIdx) && m838 == 3) {
             m838 = 0;
         } else if (dComIfGp_evmng_startCheck(mEvtGetItemIdx) && m838 == 4) {
@@ -647,9 +640,9 @@ void daAuction_c::eventStartInit() {
     m820 = ~1;
 
     if (m822 == 2) {
-        mTimerID = dTimer_createTimer(4, 0x1E, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
+        mTimerID = dTimer_createTimer(4, 30, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
     } else {
-        mTimerID = dTimer_createTimer(4, 0x3C, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
+        mTimerID = dTimer_createTimer(4, 60, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
     }
 
     JUT_ASSERT(0x861, mTimerID != fpcM_ERROR_PROCESS_ID_e);
@@ -704,7 +697,7 @@ bool daAuction_c::eventStart() {
 
 /* 000016AC-0000188C       .text eventMainInit__11daAuction_cFv */
 void daAuction_c::eventMainInit() {
-    m804 = 0xE10;
+    m804 = 3600;
 
     for (int i = 0; i < 7; i++) {
         m7C4[i] = 0.0f;
@@ -791,7 +784,7 @@ bool daAuction_c::eventMain() {
     if (m822 == 1) {
         dComIfGp_setAuctionGauge((s16)m7C4[0]);
     }
-    
+
     if (m81F <= 1 && m82B != 0) {
         dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m824)].field_0x00);
 
@@ -933,11 +926,11 @@ void daAuction_c::eventMainKai() {
                 } else if (m826 != 0xFF && idx != 0 && dComIfG_getTimerRestTimeMs() > l_rest_msg_time1[0] && getRand(3) == 0) {
                     u32 msgParam;
 
-                    if (mCurrItemNameMsgNo <= 0x64) {
+                    if (mCurrItemNameMsgNo <= 100) {
                         msgParam = 0x1CFD;
-                    } else if (mCurrItemNameMsgNo <= 0x96) {
+                    } else if (mCurrItemNameMsgNo <= 150) {
                         msgParam = 0x1CFE;
-                    } else if (mCurrItemNameMsgNo <= 0xC8) {
+                    } else if (mCurrItemNameMsgNo <= 200) {
                         msgParam = 0x1CFF;
                     } else {
                         msgParam = 0x1D00;
@@ -1004,7 +997,7 @@ void daAuction_c::eventMainUri() {
             m806 -= 1;
         } else {
             for (int i = 1; i < 7; i++) {
-                m7C4[i] += 2.0f * RAND_RANGE(l_npc_dat[i].field_0x00, l_npc_dat[i].field_0x04);
+                m7C4[i] += 2.0f * (l_npc_dat[i].field_0x00 + cM_rndF(l_npc_dat[i].field_0x04 - l_npc_dat[i].field_0x00));
             }
         }
 
@@ -1030,7 +1023,7 @@ void daAuction_c::eventMainUri() {
                     multiplier = 1.5f;
                 }
 
-                mCurrItemNameMsgNo += (s16)(multiplier * (2 * (s16)RAND_RANGE(l_npc_dat[idx].field_0x08, l_npc_dat[idx].field_0x0A)));
+                mCurrItemNameMsgNo += (s16)(multiplier * (2 * (s16)(l_npc_dat[idx].field_0x08 + cM_rndF(l_npc_dat[idx].field_0x0A - l_npc_dat[idx].field_0x08))));
                 m800 = mCurrItemNameMsgNo;
                 m7F0 = 0x1CF9;
                 m82C = 4;
@@ -1044,11 +1037,11 @@ void daAuction_c::eventMainUri() {
                 } else if (dComIfG_getTimerRestTimeMs() > l_rest_msg_time1[0] && getRand(3) == 0) {
                     u32 msgParam;
 
-                    if (mCurrItemNameMsgNo <= 0x64) {
+                    if (mCurrItemNameMsgNo <= 100) {
                         msgParam = 0x1CFD;
-                    } else if (mCurrItemNameMsgNo <= 0x96) {
+                    } else if (mCurrItemNameMsgNo <= 150) {
                         msgParam = 0x1CFE;
-                    } else if (mCurrItemNameMsgNo <= 0xC8) {
+                    } else if (mCurrItemNameMsgNo <= 200) {
                         msgParam = 0x1CFF;
                     } else {
                         msgParam = 0x1D00;
@@ -1278,9 +1271,7 @@ bool daAuction_c::eventEnd() {
 }
 
 /* 00002F60-00002F64       .text eventCameraTestInit__11daAuction_cFv */
-void daAuction_c::eventCameraTestInit() {
-    /* Nonmatching */
-}
+void daAuction_c::eventCameraTestInit() {}
 
 /* 00002F64-00002F6C       .text eventCameraTest__11daAuction_cFv */
 bool daAuction_c::eventCameraTest() {
@@ -1368,8 +1359,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
                     if (msgSetNo >= (s16)(mCurrItemNameMsgNo * l_after_bet_rate[m82C]) &&
                         mCurrItemNameMsgNo >= l_after_bet_chk[m82C])
                     {
-                        m806 = (s16)(60.0f * (RAND_RANGE(l_after_bet_wait[m82C][0],
-                                                         l_after_bet_wait[m82C][1])));
+                        m806 = (s16)(60.0f * (l_after_bet_wait[m82C][0] + cM_rndF(l_after_bet_wait[m82C][1] - l_after_bet_wait[m82C][0])));
                         break;
                     }
                 }
@@ -1584,7 +1574,7 @@ void daAuction_c::nextBet() {
     }
 
     for (int i = 1; i < 7; i++) {
-        f32 rnd = getRand(60 - (int)(dComIfG_getTimerRestTimeMs() / 1000));
+        f32 rnd = getRand(60 - (dComIfG_getTimerRestTimeMs() / 1000));
         if (rnd > 50.0f) {
             rnd = 50.0f;
         }

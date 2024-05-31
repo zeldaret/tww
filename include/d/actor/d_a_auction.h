@@ -86,7 +86,7 @@ public:
     void setMtx();
     u8 getItemNo();
     fopAc_ac_c* getNpcActorP(int idx);
-    void setCameraNpc(int, short);
+    void setCameraNpc(int, s16);
     void setLinkAnm(u8 linkAnm);
     f32 getPiconDispOfs(u8 param);
     void nextBet();
@@ -95,7 +95,6 @@ public:
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ dNpc_EventCut_c mNpcEvtInfo;
-    //* 0x730 */ u8 m730[0x738 - 0x730];
     /* 0x738 */ u32 m738[8];
     /* 0x758 */ uint mCurrAuctionItemPID;
     /* 0x75C */ uint mTimerID;
@@ -110,7 +109,7 @@ public:
     /* 0x7B4 */ u8 m7B4[0x7BC - 0x7B4];
     /* 0x7BC */ f32 mAlpha;
     /* 0x7C0 */ f32 mBlend;
-    /* 0x7C4 */ f32 m7C4[7];
+    /* 0x7C4 */ f32 m7C4[7]; // Npc wait timer?
     /* 0x7E0 */ f32 m7E0;
     /* 0x7E4 */ f32 m7E4;
     /* 0x7E8 */ u8 m7E8[0x7EC - 0x7E8];
@@ -121,7 +120,7 @@ public:
     /* 0x7F8 */ s16 mEvtNoItemIdx;
     /* 0x7FA */ s16 mEvtStart2Idx;
     /* 0x7FC */ s16 mEvtEnd2Idx;
-    /* 0x7FE */ s16 mCurrItemNameMsgNo;
+    /* 0x7FE */ s16 mCurrItemNameMsgNo; // Current bid?
     /* 0x800 */ s16 m800;
     /* 0x802 */ s16 mTimer;
     /* 0x804 */ u16 m804;
@@ -152,7 +151,7 @@ public:
     /* 0x82F */ u8 m82F;
     /* 0x830 */ u8 m830;
     /* 0x831 */ u8 m831;
-    /* 0x832 */ u8 m832;    /* Might be mode index */
+    /* 0x832 */ u8 m832;
     /* 0x833 */ u8 mFace;
     /* 0x834 */ u8 m834;
     /* 0x835 */ u8 m835;
