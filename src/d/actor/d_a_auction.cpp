@@ -1135,7 +1135,10 @@ void daAuction_c::eventMainMsgEnd() {
 
 /* 0000294C-00002B90       .text eventMainMsgBikonC__11daAuction_cFv */
 void daAuction_c::eventMainMsgBikonC() {
-    m827 = m829 = m828;
+    u8 tmp = m828;
+    m829 = tmp;
+    m827 = tmp;
+
     dComIfGp_setMessageCountNumber(m800);
     dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
 
