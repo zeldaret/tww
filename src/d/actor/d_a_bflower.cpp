@@ -11,7 +11,6 @@ static cXyz bomb_offset;
 
 const char daBFlower_c::m_arcname[] = "VbakH";
 
-
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daBFlower_c*>(i_this)->CreateHeap();
@@ -39,7 +38,13 @@ s32 daBFlower_c::_create() {
 
 /* 00000E94-00000F4C       .text set_mtx__11daBFlower_cFv */
 void daBFlower_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(current.angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mpModel2->setBaseScale(m5AC);
+    mpModel2->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000F4C-00001078       .text _execute__11daBFlower_cFv */
