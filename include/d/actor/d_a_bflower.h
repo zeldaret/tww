@@ -28,7 +28,7 @@ public:
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
-    /* 0x29C */ u8 m29C[0x2D8 - 0x29C];
+    /* 0x29C */ dCcD_Stts mStts;
     /* 0x2D8 */ dCcD_Cyl mCyl;
     /* 0x408 */ dCcD_Sph mSph;
     /* 0x534 */ mDoExt_bckAnm mBck1;
@@ -38,7 +38,9 @@ public:
     /* 0x560 */ J3DModel* mpModel2;
     /* 0x564 */ mDoExt_bckAnm mBck2;
     /* 0x574 */ mDoExt_brkAnm mBrk2;
-    /* 0x58C */ u8 m58C[0x58F - 0x58C];
+    /* 0x58C */ u8 m58C;
+    /* 0x58D */ u8 m58D;
+    /* 0x58E */ u8 m58E;
     /* 0x58F */ u8 mKind;
     /* 0x590 */ s32 mSwitchNo;
     /* 0x594 */ s32 m594;
