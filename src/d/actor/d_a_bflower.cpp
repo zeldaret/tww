@@ -285,7 +285,20 @@ void daBFlower_c::animPlay() {
 
 /* 000018A4-000019AC       .text setCollision__11daBFlower_cFv */
 void daBFlower_c::setCollision() {
-    /* Nonmatching */
+    if (mKind == 1) {
+        mCyl.SetC(current.pos);
+        dComIfG_Ccsp()->Set(&mCyl);
+        mSph.SetC(current.pos);
+        dComIfG_Ccsp()->Set(&mSph);
+    } else if (m58C != 0) {
+        cXyz center(0.0f, 30.0f, 0.0f);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::ZXYrotM(current.angle);
+        mDoMtx_stack_c::multVec(&center, &center);
+
+        mSph.SetC(center);
+        dComIfG_Ccsp()->Set(&mSph);
+    }
 }
 
 /* 000019AC-00001AC4       .text _draw__11daBFlower_cFv */
