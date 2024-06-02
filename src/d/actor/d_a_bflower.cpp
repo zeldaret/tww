@@ -290,7 +290,26 @@ void daBFlower_c::setCollision() {
 
 /* 000019AC-00001AC4       .text _draw__11daBFlower_cFv */
 BOOL daBFlower_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    mBck1.entry(mpModel->getModelData());
+    mBrk1.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+
+    mBck1.remove(mpModel->getModelData());
+
+    if (m58C != 0) {
+        g_env_light.setLightTevColorType(mpModel2, &tevStr);
+
+        mBck2.entry(mpModel2->getModelData());
+        mBrk2.entry(mpModel2->getModelData());
+        mDoExt_modelUpdateDL(mpModel2);
+
+        mBck2.remove(mpModel2->getModelData());
+    }
+
+    return TRUE;
 }
 
 BOOL daBFlower_c::_delete() {
