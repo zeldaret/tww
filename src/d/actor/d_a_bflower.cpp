@@ -24,7 +24,73 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000010C-0000058C       .text CreateHeap__11daBFlower_cFv */
 BOOL daBFlower_c::CreateHeap() {
-    /* Nonmatching */
+    mKind = daBFlower_prm::getKind(this);
+    mSwitchNo = daBFlower_prm::getSwitchNo(this);
+
+    if (fopAcM_isSwitch(this, mSwitchNo)) {
+        mKind = 0;
+    }
+
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
+    JUT_ASSERT(0x1B2, modelData != 0);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAHX));
+    JUT_ASSERT(0x1C3, pbck != 0);
+
+    if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0f, 0, -1, false)) {
+        return FALSE;
+    }
+    mBck1.setFrame(mBck1.getEndFrame());
+
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAHX));
+    JUT_ASSERT(0x1D9, pbrk != 0);
+
+    if (!mBrk1.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+    mBrk1.setPlaySpeed(0.0f);
+
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKM));
+    JUT_ASSERT(0x1E7, modelData != 0);
+
+    mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel2 == NULL) {
+        return FALSE;
+    }
+
+    pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAMX));
+    JUT_ASSERT(0x1F7, pbck != 0);
+
+    if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false)) {
+        return FALSE;
+    }
+    mBck2.setPlaySpeed(0.0f);
+
+    pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAMX));
+    JUT_ASSERT(0x208, pbrk != 0);
+
+    if (!mBrk2.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+        return FALSE;
+    }
+    mBrk2.setPlaySpeed(0.0f);
+
+    if (mKind == 0) {
+        mBrk1.setFrame(mBrk1.getEndFrame());
+        mBrk2.setFrame(mBrk2.getEndFrame());
+        mBck2.setFrame(mBck2.getEndFrame());
+
+    } else if (mKind == 1) {
+        mBrk1.setFrame(0.0f);
+        mBrk2.setFrame(0.0f);
+        mBck2.setFrame(0.0f);
+    }
+
+    return TRUE;
 }
 
 /* 0000058C-00000750       .text CreateInit__11daBFlower_cFv */
