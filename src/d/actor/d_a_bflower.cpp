@@ -5,14 +5,20 @@
 
 #include "d/actor/d_a_bflower.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+
+static cXyz bomb_offset;
+
+const char daBFlower_c::m_arcname[] = "VbakH";
+
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daBFlower_c*>(i_this)->CreateHeap();
 }
 
 /* 0000010C-0000058C       .text CreateHeap__11daBFlower_cFv */
-void daBFlower_c::CreateHeap() {
+BOOL daBFlower_c::CreateHeap() {
     /* Nonmatching */
 }
 
@@ -22,7 +28,7 @@ void daBFlower_c::CreateInit() {
 }
 
 /* 00000750-0000080C       .text init_bck_anm__11daBFlower_cFs */
-void daBFlower_c::init_bck_anm(short) {
+void daBFlower_c::init_bck_anm(s16) {
     /* Nonmatching */
 }
 
@@ -66,29 +72,34 @@ BOOL daBFlower_c::_draw() {
     /* Nonmatching */
 }
 
+BOOL daBFlower_c::_delete() {
+    dComIfG_resDelete(&mPhs, m_arcname);
+    return TRUE;
+}
+
 /* 00001AC4-00001AE4       .text daBFlower_Create__FPv */
-static s32 daBFlower_Create(void*) {
-    /* Nonmatching */
+static s32 daBFlower_Create(void* i_this) {
+    return static_cast<daBFlower_c*>(i_this)->_create();
 }
 
 /* 00001AE4-00001B14       .text daBFlower_Delete__FPv */
-static BOOL daBFlower_Delete(void*) {
-    /* Nonmatching */
+static BOOL daBFlower_Delete(void* i_this) {
+    return static_cast<daBFlower_c*>(i_this)->_delete();
 }
 
 /* 00001B14-00001B38       .text daBFlower_Draw__FPv */
-static BOOL daBFlower_Draw(void*) {
-    /* Nonmatching */
+static BOOL daBFlower_Draw(void* i_this) {
+    return (u8)static_cast<daBFlower_c*>(i_this)->_draw();
 }
 
 /* 00001B38-00001B5C       .text daBFlower_Execute__FPv */
-static BOOL daBFlower_Execute(void*) {
-    /* Nonmatching */
+static BOOL daBFlower_Execute(void* i_this) {
+    return (u8)static_cast<daBFlower_c*>(i_this)->_execute();
 }
 
 /* 00001B5C-00001B64       .text daBFlower_IsDelete__FPv */
 static BOOL daBFlower_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daBFlowerMethodTable = {
