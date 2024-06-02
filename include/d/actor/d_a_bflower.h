@@ -11,7 +11,7 @@ public:
 
     BOOL CreateHeap();
     void CreateInit();
-    void init_bck_anm(s16);
+    int init_bck_anm(s16 param);
     s32 _create();
     void set_mtx();
     BOOL _execute();
@@ -29,7 +29,7 @@ public:
     /* 0x29C */ u8 m29C[0x534 - 0x29C];
     /* 0x534 */ mDoExt_bckAnm mBck1;
     /* 0x544 */ mDoExt_brkAnm mBrk1;
-    /* 0x55C */ u8 m55C[0x560 - 0x55C];
+    /* 0x55C */ s16 m55C;
     /* 0x560 */ J3DModel* mpModel2;
     /* 0x564 */ mDoExt_bckAnm mBck2;
     /* 0x574 */ mDoExt_brkAnm mBrk2;

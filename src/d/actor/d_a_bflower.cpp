@@ -5,9 +5,15 @@
 
 #include "d/actor/d_a_bflower.h"
 #include "d/d_procname.h"
+#include "d/res/res_vbakh.h"
 #include "d/d_com_inf_game.h"
 
 static cXyz bomb_offset;
+
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0f, 0.5f};
 
 const char daBFlower_c::m_arcname[] = "VbakH";
 
@@ -27,8 +33,17 @@ void daBFlower_c::CreateInit() {
 }
 
 /* 00000750-0000080C       .text init_bck_anm__11daBFlower_cFs */
-void daBFlower_c::init_bck_anm(s16) {
-    /* Nonmatching */
+int daBFlower_c::init_bck_anm(s16 param) {
+    if (m55C != -1) {
+        return 1;
+    }
+
+    m55C = param;
+
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
+    J3DAnmTransform* pBck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, param));
+
+    return mBck1.init(pModelData, pBck, TRUE, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0f, 0, -1, true);
 }
 
 /* 0000080C-000008AC       .text _create__11daBFlower_cFv */
