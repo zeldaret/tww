@@ -280,7 +280,11 @@ void daBFlower_c::actDead() {
 
 /* 0000185C-000018A4       .text animPlay__11daBFlower_cFv */
 void daBFlower_c::animPlay() {
-    /* Nonmatching */
+    if (mBck1.play()) {
+        m55C = -1;
+    }
+
+    mBrk1.play();
 }
 
 /* 000018A4-000019AC       .text setCollision__11daBFlower_cFv */
