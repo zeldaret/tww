@@ -374,14 +374,17 @@ public:
     cXyz getRopePos() const { return mRopePos; }
     void getYPos() const {}
     
-    void changeDemoMode(u32) {}
+    void changeDemoMode(u32 mode) { mDemo.setDemoMode(mode); }
     void changeDemoMoveAngle(s16 angle) { mDemo.setMoveAngle(angle); }
-    void changeDemoParam0(int) {}
+    void changeDemoParam0(int param0) { mDemo.setParam0(param0); }
     void changeOriginalDemo() {
         mDemo.setOriginalDemoType();
         mDemo.setParam0(0);
     }
-    void cancelOriginalDemo() {}
+    void cancelOriginalDemo() {
+        mDemo.setSystemDemoType();
+        mDemo.setDemoMode(1);
+    }
 
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }
     void offNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 &= ~flag; }

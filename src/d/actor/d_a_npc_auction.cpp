@@ -118,12 +118,12 @@ void daNpcAuction_c::XyEventCB(int) {
 }
 
 /* 000019F8-00001CD4       .text next_msgStatus__14daNpcAuction_cFPUl */
-void daNpcAuction_c::next_msgStatus(unsigned long*) {
+u16 daNpcAuction_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
 /* 00001CD4-00001F04       .text getMsg__14daNpcAuction_cFv */
-void daNpcAuction_c::getMsg() {
+u32 daNpcAuction_c::getMsg() {
     /* Nonmatching */
 }
 

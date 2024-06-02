@@ -93,8 +93,8 @@ void dComIfG_play_c::itemInit() {
     mMsgCountNumber = 0;
     mMsgSetNumber = 0;
     mMessageRupee = 0;
-    field_0x491e = 0;
-    field_0x4920 = 0;
+    mAuctionRupee = 0;
+    mAuctionGauge = 0;
     field_0x4922 = 0;
     mCurrHP = 0;
     mRupyCountDisplay = 0;
