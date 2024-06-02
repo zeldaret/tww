@@ -114,7 +114,19 @@ int daBFlower_c::init_bck_anm(s16 param) {
 
 /* 0000080C-000008AC       .text _create__11daBFlower_cFv */
 s32 daBFlower_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daBFlower_c);
+
+    s32 phase_state = dComIfG_resLoad(&mPhs, m_arcname);
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xFC0)) {
+            return cPhs_ERROR_e;
+        }
+
+        CreateInit();
+    }
+
+    return phase_state;
 }
 
 /* 00000E94-00000F4C       .text set_mtx__11daBFlower_cFv */
