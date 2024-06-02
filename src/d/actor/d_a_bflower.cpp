@@ -7,8 +7,9 @@
 #include "d/d_procname.h"
 #include "d/res/res_vbakh.h"
 #include "d/d_com_inf_game.h"
+#include "d/actor/d_a_player_main.h"
 
-static cXyz bomb_offset;
+static cXyz bomb_offset(0.0f, 0.0f, 0.0f);
 
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
 static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
@@ -103,7 +104,6 @@ static dCcD_SrcSph l_sph_src2 = {
     },
 };
 
-
 const char daBFlower_c::m_arcname[] = "VbakH";
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -113,11 +113,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000010C-0000058C       .text CreateHeap__11daBFlower_cFv */
 BOOL daBFlower_c::CreateHeap() {
-    mKind = daBFlower_prm::getKind(this);
+    mAction = daBFlower_prm::getKind(this);
     mSwitchNo = daBFlower_prm::getSwitchNo(this);
 
     if (fopAcM_isSwitch(this, mSwitchNo)) {
-        mKind = 0;
+        mAction = 0;
     }
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
@@ -168,12 +168,12 @@ BOOL daBFlower_c::CreateHeap() {
     }
     mBrk2.setPlaySpeed(0.0f);
 
-    if (mKind == 0) {
+    if (mAction == 0) {
         mBrk1.setFrame(mBrk1.getEndFrame());
         mBrk2.setFrame(mBrk2.getEndFrame());
         mBck2.setFrame(mBck2.getEndFrame());
 
-    } else if (mKind == 1) {
+    } else if (mAction == 1) {
         mBrk1.setFrame(0.0f);
         mBrk2.setFrame(0.0f);
         mBck2.setFrame(0.0f);
@@ -191,7 +191,7 @@ void daBFlower_c::CreateInit() {
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
 
-    if (mKind == 0) {
+    if (mAction == 0) {
         mSph.Set(l_sph_src);
     } else {
         mSph.Set(l_sph_src2);
@@ -263,18 +263,36 @@ void daBFlower_c::set_mtx() {
     mpModel2->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
+static daBFlower_c::ActionFunc action_tbl[] = {
+    daBFlower_c::actLive,
+    daBFlower_c::actDead,
+};
+
 /* 00000F4C-00001078       .text _execute__11daBFlower_cFv */
 BOOL daBFlower_c::_execute() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+
+    (this->*action_tbl[mAction])();
+
+    animPlay();
+    set_mtx();
+    setCollision();
+
+    f32 dist = (player->current.pos - current.pos).absXZ();
+
+    m5A4 = dist;
+    m5A8 = player->getGrabActorID();
+
+    return TRUE;
 }
 
 /* 00001078-0000160C       .text actLive__11daBFlower_cFv */
-void daBFlower_c::actLive() {
+BOOL daBFlower_c::actLive() {
     /* Nonmatching */
 }
 
 /* 0000160C-0000185C       .text actDead__11daBFlower_cFv */
-void daBFlower_c::actDead() {
+BOOL daBFlower_c::actDead() {
     /* Nonmatching */
 }
 
@@ -289,7 +307,7 @@ void daBFlower_c::animPlay() {
 
 /* 000018A4-000019AC       .text setCollision__11daBFlower_cFv */
 void daBFlower_c::setCollision() {
-    if (mKind == 1) {
+    if (mAction == 1) {
         mCyl.SetC(current.pos);
         dComIfG_Ccsp()->Set(&mCyl);
         mSph.SetC(current.pos);

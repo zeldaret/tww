@@ -9,6 +9,8 @@
 
 class daBFlower_c : public fopAc_ac_c {
 public:
+    typedef BOOL (daBFlower_c::*ActionFunc)(void);
+
     inline BOOL _delete();
 
     BOOL CreateHeap();
@@ -17,8 +19,8 @@ public:
     s32 _create();
     void set_mtx();
     BOOL _execute();
-    void actLive();
-    void actDead();
+    BOOL actLive();
+    BOOL actDead();
     void animPlay();
     void setCollision();
     BOOL _draw();
@@ -41,7 +43,7 @@ public:
     /* 0x58C */ u8 m58C;
     /* 0x58D */ u8 m58D;
     /* 0x58E */ u8 m58E;
-    /* 0x58F */ u8 mKind;
+    /* 0x58F */ u8 mAction;
     /* 0x590 */ s32 mSwitchNo;
     /* 0x594 */ s32 m594;
     /* 0x598 */ s32 m598;
