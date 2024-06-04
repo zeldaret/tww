@@ -1806,19 +1806,19 @@ bool daNpcRoten_c::_draw() {
 }
 
 static daNpcRoten_c::InitFunc_t l_execute_init[] = {
-    daNpcRoten_c::executeWaitInit,
-    daNpcRoten_c::executeTalkInit,
-    daNpcRoten_c::executeWalkInit,
-    daNpcRoten_c::executeTurnInit,
-    daNpcRoten_c::executeWindInit,
+    &daNpcRoten_c::executeWaitInit,
+    &daNpcRoten_c::executeTalkInit,
+    &daNpcRoten_c::executeWalkInit,
+    &daNpcRoten_c::executeTurnInit,
+    &daNpcRoten_c::executeWindInit,
 };
 
 static daNpcRoten_c::MoveFunc_t moveProc[] = {
-    daNpcRoten_c::executeWait,
-    daNpcRoten_c::executeTalk,
-    daNpcRoten_c::executeWalk,
-    daNpcRoten_c::executeTurn,
-    daNpcRoten_c::executeWind,
+    &daNpcRoten_c::executeWait,
+    &daNpcRoten_c::executeTalk,
+    &daNpcRoten_c::executeWalk,
+    &daNpcRoten_c::executeTurn,
+    &daNpcRoten_c::executeWind,
 };
 
 /* 000013F8-00001604       .text _execute__12daNpcRoten_cFv */

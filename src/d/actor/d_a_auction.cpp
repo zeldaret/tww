@@ -193,9 +193,9 @@ static daPy_py_c::daPy_FACE l_link_face[8] = {
 };
 
 static daAuction_c::ProcFunc_t moveProc[] = {
-    daAuction_c::executeWait,
-    daAuction_c::executeNormal,
-    daAuction_c::executeStart,
+    &daAuction_c::executeWait,
+    &daAuction_c::executeNormal,
+    &daAuction_c::executeStart,
 };
 
 extern void dAuction_screen_delete();
@@ -752,12 +752,12 @@ void daAuction_c::eventMainInit() {
 }
 
 static daAuction_c::ProcFunc_t eventProc[] = {
-    daAuction_c::eventMainKai,
-    daAuction_c::eventMainUri,
-    daAuction_c::eventMainMsgSet,
-    daAuction_c::eventMainMsgEnd,
-    daAuction_c::eventMainMsgBikonC,
-    daAuction_c::eventMainMsgBikonW,
+    &daAuction_c::eventMainKai,
+    &daAuction_c::eventMainUri,
+    &daAuction_c::eventMainMsgSet,
+    &daAuction_c::eventMainMsgEnd,
+    &daAuction_c::eventMainMsgBikonC,
+    &daAuction_c::eventMainMsgBikonW,
 };
 
 /* 0000188C-00001A98       .text eventMain__11daAuction_cFv */

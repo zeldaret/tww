@@ -277,11 +277,11 @@ void daObjLadder::Act_c::init_mtx() {
 int daObjLadder::Act_c::Execute(Mtx** ppMtx) {
     typedef void (Act_c::*ModeFunc)();
     static const ModeFunc mode_proc[] = {
-        mode_wait,
-        mode_demoreq,
-        mode_vib,
-        mode_drop,
-        mode_fell,
+        &daObjLadder::Act_c::mode_wait,
+        &daObjLadder::Act_c::mode_demoreq,
+        &daObjLadder::Act_c::mode_vib,
+        &daObjLadder::Act_c::mode_drop,
+        &daObjLadder::Act_c::mode_fell,
     };
 
     demo_end_reset();

@@ -2635,7 +2635,7 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
             dtParticle();
         }
 
-        if(!isAttackAnim() || checkSubAction(battleSubActionNockBack)) {
+        if(!isAttackAnim() || checkSubAction(&daNpc_Ji1_c::battleSubActionNockBack)) {
             dtParticleAT();
         }
 

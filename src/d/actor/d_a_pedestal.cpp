@@ -201,10 +201,10 @@ BOOL daPds_c::waitAction(void*) {
 
 typedef void (daPds_c::* eventInitFunc)(int);
 static eventInitFunc event_init_tbl[] = {
-    daPds_c::initialDefault,
-    daPds_c::initialMoveEvent,
-    daPds_c::initialEffectSet,
-    daPds_c::initialEffectEnd,
+    &daPds_c::initialDefault,
+    &daPds_c::initialMoveEvent,
+    &daPds_c::initialEffectSet,
+    &daPds_c::initialEffectEnd,
 };
 
 typedef BOOL (daPds_c::* eventActionFunc)(int);
