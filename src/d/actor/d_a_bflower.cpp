@@ -114,11 +114,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000010C-0000058C       .text CreateHeap__11daBFlower_cFv */
 BOOL daBFlower_c::CreateHeap() {
-    mAction = daBFlower_prm::getKind(this);
+    mState = daBFlower_prm::getKind(this);
     mSwitchNo = daBFlower_prm::getSwitchNo(this);
 
     if (fopAcM_isSwitch(this, mSwitchNo)) {
-        mAction = 0;
+        mState = daBFlower_c::STATE_RIPE_E;
     }
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
@@ -169,12 +169,12 @@ BOOL daBFlower_c::CreateHeap() {
     }
     mBrk2.setPlaySpeed(0.0f);
 
-    if (mAction == 0) {
+    if (mState == daBFlower_c::STATE_RIPE_E) {
         mBrk1.setFrame(mBrk1.getEndFrame());
         mBrk2.setFrame(mBrk2.getEndFrame());
         mBck2.setFrame(mBck2.getEndFrame());
 
-    } else if (mAction == 1) {
+    } else if (mState == daBFlower_c::STATE_WITHERED_e) {
         mBrk1.setFrame(0.0f);
         mBrk2.setFrame(0.0f);
         mBck2.setFrame(0.0f);
@@ -192,7 +192,7 @@ void daBFlower_c::CreateInit() {
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
 
-    if (mAction == 0) {
+    if (mState == daBFlower_c::STATE_RIPE_E) {
         mSph.Set(l_sph_src);
     } else {
         mSph.Set(l_sph_src2);
@@ -209,9 +209,9 @@ void daBFlower_c::CreateInit() {
     attention_info.position = eyePos;
 
     if (current.angle.x == 0) {
-        m598 = 0;
+        m598 = FALSE;
     } else {
-        m598 = 1;
+        m598 = TRUE;
     }
 
     m59C = NULL;
@@ -273,7 +273,7 @@ static daBFlower_c::ActionFunc action_tbl[] = {
 BOOL daBFlower_c::_execute() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    (this->*action_tbl[mAction])();
+    (this->*action_tbl[mState])();
 
     animPlay();
     set_mtx();
@@ -322,7 +322,7 @@ BOOL daBFlower_c::actLive() {
         m58D = 1;
     }
 
-    if (m598 == 1) {
+    if (m598 == TRUE) {
         m58D = 0;
     }
 
@@ -352,7 +352,7 @@ BOOL daBFlower_c::actLive() {
                 } else if (tg->ChkAtType(~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT))) {
                     // TODO: simplify
                     bool b = false;
-                    if (m598 == true) {
+                    if (m598 == TRUE) {
                         b = true;
                     }
                     u32 prm = daBomb2::Act_c::prm_make(daBomb2::Start_UNK1_e, b);
@@ -415,7 +415,7 @@ BOOL daBFlower_c::actDead() {
         if (hitObj != NULL && hitObj->ChkAtType(AT_TYPE_WATER)) {
             fopAcM_seStart(this, JA_SE_OBJ_W_BOMB_F_RECOVER, 0);
             m594 = 0x46;
-            mAction = 0;
+            mState = daBFlower_c::STATE_RIPE_E;
             fopAcM_onSwitch(this, mSwitchNo);
 
             init_bck_anm(VBAKH_BCK_VBAKH);
@@ -445,7 +445,7 @@ void daBFlower_c::animPlay() {
 
 /* 000018A4-000019AC       .text setCollision__11daBFlower_cFv */
 void daBFlower_c::setCollision() {
-    if (mAction == 1) {
+    if (mState == daBFlower_c::STATE_WITHERED_e) {
         mCyl.SetC(current.pos);
         dComIfG_Ccsp()->Set(&mCyl);
         mSph.SetC(current.pos);

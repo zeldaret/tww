@@ -11,6 +11,11 @@ class daBFlower_c : public fopAc_ac_c {
 public:
     typedef BOOL (daBFlower_c::*ActionFunc)(void);
 
+    enum State_e {
+        STATE_RIPE_E,
+        STATE_WITHERED_e,
+    };
+
     inline BOOL _delete();
 
     BOOL CreateHeap();
@@ -36,22 +41,21 @@ public:
     /* 0x534 */ mDoExt_bckAnm mBck1;
     /* 0x544 */ mDoExt_brkAnm mBrk1;
     /* 0x55C */ s16 m55C;
-    /* 0x55E */ u8 m55E[0x560 - 0x55E];
     /* 0x560 */ J3DModel* mpModel2;
     /* 0x564 */ mDoExt_bckAnm mBck2;
     /* 0x574 */ mDoExt_brkAnm mBrk2;
     /* 0x58C */ u8 m58C;
     /* 0x58D */ u8 m58D;
-    /* 0x58E */ u8 m58E;
-    /* 0x58F */ u8 mAction;
+    /* 0x58E */ u8 m58E; // Padding
+    /* 0x58F */ u8 mState;
     /* 0x590 */ s32 mSwitchNo;
     /* 0x594 */ s32 m594;
-    /* 0x598 */ BOOL m598;   // BOOL?
+    /* 0x598 */ BOOL m598;
     /* 0x59C */ fopAc_ac_c* m59C; // Bomb2 actor
     /* 0x5A0 */ s32 m5A0;
     /* 0x5A4 */ f32 m5A4;
     /* 0x5A8 */ u32 m5A8;
-    /* 0x5AC */ cXyz m5AC; // scale?
+    /* 0x5AC */ cXyz m5AC; // Bomb flower scale?
     /* 0x5B8 */ u8 m5B8;
 };
 
