@@ -118,7 +118,7 @@ BOOL daBFlower_c::CreateHeap() {
     mSwitchNo = daBFlower_prm::getSwitchNo(this);
 
     if (fopAcM_isSwitch(this, mSwitchNo)) {
-        mState = daBFlower_c::STATE_RIPE_E;
+        mState = daBFlower_c::STATE_LIVE_E;
     }
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
@@ -169,12 +169,12 @@ BOOL daBFlower_c::CreateHeap() {
     }
     mBrk2.setPlaySpeed(0.0f);
 
-    if (mState == daBFlower_c::STATE_RIPE_E) {
+    if (mState == daBFlower_c::STATE_LIVE_E) {
         mBrk1.setFrame(mBrk1.getEndFrame());
         mBrk2.setFrame(mBrk2.getEndFrame());
         mBck2.setFrame(mBck2.getEndFrame());
 
-    } else if (mState == daBFlower_c::STATE_WITHERED_e) {
+    } else if (mState == daBFlower_c::STATE_DEAD_e) {
         mBrk1.setFrame(0.0f);
         mBrk2.setFrame(0.0f);
         mBck2.setFrame(0.0f);
@@ -192,7 +192,7 @@ void daBFlower_c::CreateInit() {
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
 
-    if (mState == daBFlower_c::STATE_RIPE_E) {
+    if (mState == daBFlower_c::STATE_LIVE_E) {
         mSph.Set(l_sph_src);
     } else {
         mSph.Set(l_sph_src2);
@@ -209,16 +209,16 @@ void daBFlower_c::CreateInit() {
     attention_info.position = eyePos;
 
     if (current.angle.x == 0) {
-        m598 = FALSE;
+        mGrabbable = FALSE;
     } else {
-        m598 = TRUE;
+        mGrabbable = TRUE;
     }
 
-    m59C = NULL;
+    mpBombActor = NULL;
     m58C = 1;
     m5B8 = 0;
-    m5AC = scale;
-    m5A0 = cM_rndF(150.0f) + 60.0f;
+    mBombScale = scale;
+    mAnimTimer = cM_rndF(150.0f) + 60.0f;
     m55C = -1;
 }
 
@@ -260,7 +260,7 @@ void daBFlower_c::set_mtx() {
     mDoMtx_stack_c::ZXYrotM(current.angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    mpModel2->setBaseScale(m5AC);
+    mpModel2->setBaseScale(mBombScale);
     mpModel2->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
@@ -281,8 +281,8 @@ BOOL daBFlower_c::_execute() {
 
     f32 dist = (player->current.pos - current.pos).absXZ();
 
-    m5A4 = dist;
-    m5A8 = player->getGrabActorID();
+    mPrevPlayerDist = dist;
+    mPrevGrabActorID = player->getGrabActorID();
 
     return TRUE;
 }
@@ -293,21 +293,23 @@ BOOL daBFlower_c::actLive() {
 
     f32 dist = (player->current.pos - current.pos).absXZ();
 
-    cLib_addCalc(&m5AC.x, 1.0f, 0.05f, 0.1f, 0.05f);
-    cLib_addCalc(&m5AC.y, 1.0f, 0.05f, 0.1f, 0.05f);
-    f32 tmp = cLib_addCalc(&m5AC.z, 1.0f, 0.05f, 0.1f, 0.05f);
+    cLib_addCalc(&mBombScale.x, 1.0f, 0.05f, 0.1f, 0.05f);
+    cLib_addCalc(&mBombScale.y, 1.0f, 0.05f, 0.1f, 0.05f);
+    f32 tmp = cLib_addCalc(&mBombScale.z, 1.0f, 0.05f, 0.1f, 0.05f);
 
     if (m5B8 != 0 && tmp == 0.0f) {
         init_bck_anm(VBAKH_BCK_VBAKH);
     }
 
     // TODO: std::abs
-    if (dist < 50.0f && fabsf(m5A4 - dist) > 2.0f && fabsf(player->current.pos.y - current.pos.y) < 10.0f) {
+    // Play animation if player walks by bomb flower
+    if (dist < 50.0f && fabsf(mPrevPlayerDist - dist) > 2.0f && fabsf(player->current.pos.y - current.pos.y) < 10.0f) {
         init_bck_anm(VBAKH_BCK_VBAKH);
     }
 
-    if (dist < 200.0f && m5A8 != player->getGrabActorID() && player->getGrabActorID() == fpcM_ERROR_PROCESS_ID_e) {
-        fopAc_ac_c* pActor = fopAcM_SearchByID(m5A8);
+    // Play animation if player dropped held actor near bomb flower?
+    if (dist < 200.0f && mPrevGrabActorID != player->getGrabActorID() && player->getGrabActorID() == fpcM_ERROR_PROCESS_ID_e) {
+        fopAc_ac_c* pActor = fopAcM_SearchByID(mPrevGrabActorID);
 
         if (pActor != NULL) {
             if ((pActor->current.pos - current.pos).absXZ() < 70.0f) {
@@ -322,15 +324,15 @@ BOOL daBFlower_c::actLive() {
         m58D = 1;
     }
 
-    if (m598 == TRUE) {
+    if (mGrabbable == TRUE) {
         m58D = 0;
     }
 
-    if (fopAcM_IsExecuting(fopAcM_GetID(m59C))) {
+    if (fopAcM_IsExecuting(fopAcM_GetID(mpBombActor))) {
         m58D = 0;
     } else {
         if (m58C == 0) {
-            m5AC.setall(0.0f);
+            mBombScale.setall(0.0f);
             fopAcM_seStart(this, JA_SE_OBJ_BAKURETU_RECOVER, 0);
         }
         m58C = 1;
@@ -347,17 +349,17 @@ BOOL daBFlower_c::actLive() {
             cCcD_Obj* tg = mSph.GetTgHitObj();
             if (tg != NULL) {
                 if (tg->ChkAtType(AT_TYPE_BOMB)) {
-                    m59C = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK0_e, true), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK0_e, true), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
                     m58C = 0;
                 } else if (tg->ChkAtType(~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT))) {
                     // TODO: simplify
                     bool b = false;
-                    if (m598 == TRUE) {
+                    if (mGrabbable == TRUE) {
                         b = true;
                     }
                     u32 prm = daBomb2::Act_c::prm_make(daBomb2::Start_UNK1_e, b);
 
-                    m59C = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle));
                     m58C = 0;
                 }
             }
@@ -368,12 +370,12 @@ BOOL daBFlower_c::actLive() {
 
     if (fopAcM_checkCarryNow(this) && m58D != 0) {
         m58C = 0;
-        m59C = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK2_e, false), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+        mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK2_e, false), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
 
         fopAcM_cancelCarryNow(this);
-        if (m59C != NULL) {
-            fopAcM_setCarryNow(m59C, FALSE);
-            daPy_getPlayerLinkActorClass()->exchangeGrabActor(m59C);
+        if (mpBombActor != NULL) {
+            fopAcM_setCarryNow(mpBombActor, FALSE);
+            daPy_getPlayerLinkActorClass()->exchangeGrabActor(mpBombActor);
         }
 
         init_bck_anm(VBAKH_BCK_VBAKH);
@@ -394,17 +396,18 @@ BOOL daBFlower_c::actDead() {
 
     f32 dist = (player->current.pos - current.pos).absXZ();
 
-    if (m5A0 > 0) {
-        m5A0 -= 1;
+    if (mAnimTimer > 0) {
+        mAnimTimer -= 1;
     }
 
     // TODO: std::abs
-    if (dist < 50.0f && fabsf(m5A4 - dist) > 2.0f) {
+    // Play animation if player walks by bomb flower
+    if (dist < 50.0f && fabsf(mPrevPlayerDist - dist) > 2.0f) {
         init_bck_anm(VBAKH_BCK_VBAHX);
     }
 
-    if (m5A0 == 0) {
-        m5A0 = (s32)(cM_rndF(100.0f) + 100.0f);
+    if (mAnimTimer == 0) {
+        mAnimTimer = cM_rndF(100.0f) + 100.0f;
         init_bck_anm(VBAKH_BCK_VBAHX);
     }
 
@@ -415,7 +418,7 @@ BOOL daBFlower_c::actDead() {
         if (hitObj != NULL && hitObj->ChkAtType(AT_TYPE_WATER)) {
             fopAcM_seStart(this, JA_SE_OBJ_W_BOMB_F_RECOVER, 0);
             m594 = 0x46;
-            mState = daBFlower_c::STATE_RIPE_E;
+            mState = daBFlower_c::STATE_LIVE_E;
             fopAcM_onSwitch(this, mSwitchNo);
 
             init_bck_anm(VBAKH_BCK_VBAKH);
@@ -445,7 +448,7 @@ void daBFlower_c::animPlay() {
 
 /* 000018A4-000019AC       .text setCollision__11daBFlower_cFv */
 void daBFlower_c::setCollision() {
-    if (mState == daBFlower_c::STATE_WITHERED_e) {
+    if (mState == daBFlower_c::STATE_DEAD_e) {
         mCyl.SetC(current.pos);
         dComIfG_Ccsp()->Set(&mCyl);
         mSph.SetC(current.pos);
