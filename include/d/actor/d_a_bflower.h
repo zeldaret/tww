@@ -46,12 +46,12 @@ public:
     /* 0x58F */ u8 mAction;
     /* 0x590 */ s32 mSwitchNo;
     /* 0x594 */ s32 m594;
-    /* 0x598 */ s32 m598;
-    /* 0x59C */ fopAc_ac_c* m59C;
+    /* 0x598 */ BOOL m598;   // BOOL?
+    /* 0x59C */ fopAc_ac_c* m59C; // Bomb2 actor
     /* 0x5A0 */ s32 m5A0;
     /* 0x5A4 */ f32 m5A4;
     /* 0x5A8 */ u32 m5A8;
-    /* 0x5AC */ cXyz m5AC;
+    /* 0x5AC */ cXyz m5AC; // scale?
     /* 0x5B8 */ u8 m5B8;
 };
 

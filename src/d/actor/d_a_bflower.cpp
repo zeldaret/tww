@@ -8,6 +8,7 @@
 #include "d/res/res_vbakh.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_bomb2.h"
 
 static cXyz bomb_offset(0.0f, 0.0f, 0.0f);
 
@@ -264,8 +265,8 @@ void daBFlower_c::set_mtx() {
 }
 
 static daBFlower_c::ActionFunc action_tbl[] = {
-    daBFlower_c::actLive,
-    daBFlower_c::actDead,
+    &daBFlower_c::actLive,
+    &daBFlower_c::actDead,
 };
 
 /* 00000F4C-00001078       .text _execute__11daBFlower_cFv */
@@ -288,7 +289,102 @@ BOOL daBFlower_c::_execute() {
 
 /* 00001078-0000160C       .text actLive__11daBFlower_cFv */
 BOOL daBFlower_c::actLive() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+
+    f32 dist = (player->current.pos - current.pos).absXZ();
+
+    cLib_addCalc(&m5AC.x, 1.0f, 0.05f, 0.1f, 0.05f);
+    cLib_addCalc(&m5AC.y, 1.0f, 0.05f, 0.1f, 0.05f);
+    f32 tmp = cLib_addCalc(&m5AC.z, 1.0f, 0.05f, 0.1f, 0.05f);
+
+    if (m5B8 != 0 && tmp == 0.0f) {
+        init_bck_anm(VBAKH_BCK_VBAKH);
+    }
+
+    if (dist < 50.0f && fabsf(m5A4 - dist) > 2.0f && fabsf(player->current.pos.y - current.pos.y) < 10.0f) {
+        init_bck_anm(VBAKH_BCK_VBAKH);
+    }
+
+    if (dist < 200.0f && m5A8 != player->getGrabActorID() && player->getGrabActorID() == fpcM_ERROR_PROCESS_ID_e) {
+        fopAc_ac_c* pActor = fopAcM_SearchByID(m5A8);
+
+        if (pActor != NULL) {
+            if ((pActor->current.pos - current.pos).absXZ() < 70.0f) {
+                init_bck_anm(VBAKH_BCK_VBAKH);
+            }
+        }
+    }
+
+    mBrk2.play();
+
+    if (mBck2.play()) {
+        m58D = 1;
+    }
+
+    if (m598 == 1) {
+        m58D = 0;
+    }
+
+    if (fopAcM_IsExecuting(fopAcM_GetID(m59C))) {
+        m58D = 0;
+    } else {
+        if (m58C == 0) {
+            m5AC.setall(0.0f);
+            fopAcM_seStart(this, JA_SE_OBJ_BAKURETU_RECOVER, 0);
+        }
+        m58C = 1;
+    }
+
+    if (m58D != 0) {
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+    } else {
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+    }
+
+    if (m58C != 0 && tmp == 0.0f) {
+        if (mSph.ChkTgHit()) {
+            cCcD_Obj* tg = mSph.GetTgHitObj();
+            if (tg != NULL) {
+                if (tg->ChkAtType(AT_TYPE_BOMB)) {
+                    m59C = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK0_e, true), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    m58C = 0;
+                } else if (tg->ChkAtType(~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT))) {
+                    // TODO: simplify
+                    bool b = false;
+                    if (m598 == true) {
+                        b = true;
+                    }
+                    u32 prm = daBomb2::Act_c::prm_make(daBomb2::Start_UNK1_e, b);
+
+                    m59C = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    m58C = 0;
+                }
+            }
+        }
+
+        mSph.ClrTgHit();
+    }
+
+    if (fopAcM_checkCarryNow(this) && m58D != 0) {
+        m58C = 0;
+        m59C = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK2_e, false), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+
+        fopAcM_cancelCarryNow(this);
+        if (m59C != NULL) {
+            fopAcM_setCarryNow(m59C, FALSE);
+            daPy_getPlayerLinkActorClass()->exchangeGrabActor(m59C);
+        }
+
+        init_bck_anm(VBAKH_BCK_VBAKH);
+    }
+
+    if (m58C != 0 && tmp > 0.0f) {
+        m5B8 = 1;
+    } else {
+        m5B8 = 0;
+    }
+
+    return TRUE;
 }
 
 /* 0000160C-0000185C       .text actDead__11daBFlower_cFv */
