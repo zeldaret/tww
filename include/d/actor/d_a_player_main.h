@@ -1678,7 +1678,7 @@ public:
     }
     bool checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void clearDamageWait() {}
-    void exchangeGrabActor(fopAc_ac_c*) {}
+    void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
     void getBoomerangCatchPos() const {}
     void getLineTopPos() {}

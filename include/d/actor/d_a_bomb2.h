@@ -64,17 +64,21 @@ namespace daBomb2 {
     }; // Size 0x54
 
     enum Start_e {
-        
+        Start_UNK0_e,
+        Start_UNK1_e,
+        Start_UNK2_e,
     };
 
     class Act_c : public fopAc_ac_c {
     public:
         void prm_get_start() const {}
         void prm_get_stick() const {}
-        void prm_make(Start_e, bool) {}
-    
+        static u32 prm_make(Start_e start, bool param) { // Might be wrong
+            return start | ((param ? 1 : 0) << 8);
+        }
+
         Act_c();
-        
+
         //d_a_bomb_static functions
         void remove_fuse_effect();
         void set_time(int);
