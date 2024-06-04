@@ -301,6 +301,7 @@ BOOL daBFlower_c::actLive() {
         init_bck_anm(VBAKH_BCK_VBAKH);
     }
 
+    // TODO: std::abs
     if (dist < 50.0f && fabsf(m5A4 - dist) > 2.0f && fabsf(player->current.pos.y - current.pos.y) < 10.0f) {
         init_bck_anm(VBAKH_BCK_VBAKH);
     }
@@ -389,7 +390,48 @@ BOOL daBFlower_c::actLive() {
 
 /* 0000160C-0000185C       .text actDead__11daBFlower_cFv */
 BOOL daBFlower_c::actDead() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+
+    f32 dist = (player->current.pos - current.pos).absXZ();
+
+    if (m5A0 > 0) {
+        m5A0 -= 1;
+    }
+
+    // TODO: std::abs
+    if (dist < 50.0f && fabsf(m5A4 - dist) > 2.0f) {
+        init_bck_anm(VBAKH_BCK_VBAHX);
+    }
+
+    if (m5A0 == 0) {
+        m5A0 = (s32)(cM_rndF(100.0f) + 100.0f);
+        init_bck_anm(VBAKH_BCK_VBAHX);
+    }
+
+    mBrk1.setPlaySpeed(0.0f);
+
+    if (mCyl.ChkTgHit()) {
+        cCcD_Obj* hitObj = mCyl.GetTgHitObj();
+        if (hitObj != NULL && hitObj->ChkAtType(AT_TYPE_WATER)) {
+            fopAcM_seStart(this, JA_SE_OBJ_W_BOMB_F_RECOVER, 0);
+            m594 = 0x46;
+            mAction = 0;
+            fopAcM_onSwitch(this, mSwitchNo);
+
+            init_bck_anm(VBAKH_BCK_VBAKH);
+            mBrk1.setPlaySpeed(1.0f);
+            mBrk2.setPlaySpeed(1.0f);
+            mBck2.setPlaySpeed(1.0f);
+
+            mSph.Set(l_sph_src);
+        }
+    }
+
+    m58D = 0;
+    m58C = 1;
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+
+    return TRUE;
 }
 
 /* 0000185C-000018A4       .text animPlay__11daBFlower_cFv */
