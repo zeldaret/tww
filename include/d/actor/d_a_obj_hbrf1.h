@@ -63,7 +63,6 @@ namespace daObjHbrf1 {
         /* 0x2D4 */ J3DModel* mpModel;
         /* 0x2D8 */ Mode_e mMode;
         /* 0x2DC */ s16 mEventIdx;
-        /* 0x2DE */ u8 m2DE[2]; // Padding?
         /* 0x2E0 */ s32 mTimer;
         /* 0x2E4 */ u8 m2E4;
     };
