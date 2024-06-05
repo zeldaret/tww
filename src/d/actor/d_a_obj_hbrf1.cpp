@@ -6,18 +6,21 @@
 #include "d/actor/d_a_obj_hbrf1.h"
 #include "d/d_procname.h"
 
+const char daObjHbrf1::Act_c::M_arcname[] = "Hbrf1";
+const char daObjHbrf1::Act_c::M_evname[] = "ami_cam";
+
 /* 00000078-0000012C       .text CreateHeap__Q210daObjHbrf15Act_cFv */
-void daObjHbrf1::Act_c::CreateHeap() {
+BOOL daObjHbrf1::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 0000012C-000002B4       .text Create__Q210daObjHbrf15Act_cFv */
-s32 daObjHbrf1::Act_c::Create() {
+int daObjHbrf1::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 000002B4-000003B0       .text Mthd_Create__Q210daObjHbrf15Act_cFv */
-void daObjHbrf1::Act_c::Mthd_Create() {
+s32 daObjHbrf1::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +30,7 @@ BOOL daObjHbrf1::Act_c::Delete() {
 }
 
 /* 000003B8-00000404       .text Mthd_Delete__Q210daObjHbrf15Act_cFv */
-void daObjHbrf1::Act_c::Mthd_Delete() {
+BOOL daObjHbrf1::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -82,7 +85,7 @@ void daObjHbrf1::Act_c::daObjHbrf1_down_demo() {
 }
 
 /* 00000B70-00000C1C       .text Execute__Q210daObjHbrf15Act_cFPPA3_A4_f */
-void daObjHbrf1::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjHbrf1::Act_c::Execute(Mtx** mtx) {
     /* Nonmatching */
 }
 
@@ -94,28 +97,28 @@ BOOL daObjHbrf1::Act_c::Draw() {
 namespace daObjHbrf1 {
 namespace {
 /* 00000CBC-00000CDC       .text Mthd_Create__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* i_this) {
+    return static_cast<daObjHbrf1::Act_c*>(i_this)->Mthd_Create();
 }
 
 /* 00000CDC-00000CFC       .text Mthd_Delete__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return static_cast<daObjHbrf1::Act_c*>(i_this)->Mthd_Delete();
 }
 
 /* 00000CFC-00000D1C       .text Mthd_Execute__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return static_cast<daObjHbrf1::Act_c*>(i_this)->MoveBGExecute();
 }
 
 /* 00000D1C-00000D48       .text Mthd_Draw__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return static_cast<daObjHbrf1::Act_c*>(i_this)->MoveBGDraw();
 }
 
 /* 00000D48-00000D74       .text Mthd_IsDelete__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return static_cast<daObjHbrf1::Act_c*>(i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Hbrf1 = {

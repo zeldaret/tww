@@ -2,19 +2,20 @@
 #define D_A_OBJ_HBRF1_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_bg_s_movebg_actor.h"
 
 namespace daObjHbrf1 {
-    class Act_c : public fopAc_ac_c {
+    class Act_c : public dBgS_MoveBgActor {
     public:
         void prm_get_Event() const {}
         void prm_get_Type() const {}
         void prm_get_swSave() const {}
-    
-        void CreateHeap();
-        s32 Create();
-        void Mthd_Create();
+
+        BOOL CreateHeap();
+        int Create();
+        s32 Mthd_Create();
         BOOL Delete();
-        void Mthd_Delete();
+        BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void daObjHbrf1_down_stop();
@@ -25,11 +26,21 @@ namespace daObjHbrf1 {
         void daObjHbrf1_down_demo_wait();
         void daObjHbrf1_down_demo_timer();
         void daObjHbrf1_down_demo();
-        void Execute(float(**)[3][4]);
+        BOOL Execute(Mtx** mtx);
         BOOL Draw();
-    
+
+        static const char M_arcname[];
+        static const char M_evname[];
+
     public:
-        /* Place member variables here */
+        /* 0x2C8 */ f32 m2C8;
+        /* 0x2CC */ request_of_phase_process_class mPhs;
+        /* 0x2D4 */ J3DModel* mpModel;
+        /* 0x2D8 */ u32 m2D8; // State idx?
+        /* 0x2DC */ s16 mEventIdx;
+        /* 0x2DE */ u8 m2DE[2]; // Padding?
+        /* 0x2E0 */ s32 m2E0;
+        /* 0x2E4 */ u8 m2E4;
     };
 };
 
