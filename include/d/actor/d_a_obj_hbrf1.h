@@ -32,7 +32,7 @@ namespace daObjHbrf1 {
 
         s32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         s32 prm_get_Type() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
-        u8 prm_get_Event() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EVENT_W, PRM_EVENT_S); }
+        s32 prm_get_Event() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EVENT_W, PRM_EVENT_S); }
 
         BOOL CreateHeap();
         int Create();
