@@ -112,7 +112,16 @@ BOOL daObjHbrf1::Act_c::Execute(Mtx** mtx) {
 
 /* 00000C1C-00000CBC       .text Draw__Q210daObjHbrf15Act_cFv */
 BOOL daObjHbrf1::Act_c::Draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+
+    // Debug polygons get drawn here?
+
+    return TRUE;
 }
 
 namespace daObjHbrf1 {
