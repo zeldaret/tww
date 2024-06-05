@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_hbrf1.h"
+#include "d/res/res_hbrf1.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 
@@ -12,7 +13,12 @@ const char daObjHbrf1::Act_c::M_evname[] = "ami_cam";
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjHbrf15Act_cFv */
 BOOL daObjHbrf1::Act_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, HBRF1_BDL_HBRF1);
+    JUT_ASSERT(0x5E, model_data != 0);
+
+    mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
+
+    return mpModel != NULL;
 }
 
 /* 0000012C-000002B4       .text Create__Q210daObjHbrf15Act_cFv */
@@ -22,7 +28,16 @@ int daObjHbrf1::Act_c::Create() {
 
 /* 000002B4-000003B0       .text Mthd_Create__Q210daObjHbrf15Act_cFv */
 s32 daObjHbrf1::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjHbrf1::Act_c);
+
+    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        phase_state = MoveBGCreate(M_arcname, HBRF1_DZB_HBRF1, dBgS_MoveBGProc_Trans, 0);
+        JUT_ASSERT(0x94, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+    }
+
+    return phase_state;
 }
 
 /* 000003B0-000003B8       .text Delete__Q210daObjHbrf15Act_cFv */
