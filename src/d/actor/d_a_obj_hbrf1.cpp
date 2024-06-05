@@ -115,7 +115,23 @@ void daObjHbrf1::Act_c::daObjHbrf1_up_demo_timer() {
 
 /* 000006B0-000007FC       .text daObjHbrf1_up_demo__Q210daObjHbrf15Act_cFv */
 void daObjHbrf1::Act_c::daObjHbrf1_up_demo() {
-    /* Nonmatching */
+    current.pos.y += mYOffset;
+
+    if (current.pos.y >= home.pos.y + 750.0f) {
+        current.pos.y = home.pos.y + 750.0f;
+
+        if (m2E4 == 1) {
+            dComIfGp_event_reset();
+            m2E4 = 0;
+        }
+
+        mMode = Mode_UP_STOP_e;
+        fopAcM_seStart(this, JA_SE_OBJ_B_LIFT_STOP, 0);
+        dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+        return;
+    }
+
+    fopAcM_seStart(this, JA_SE_OBJ_B_LIFT_MOVE, 0);
 }
 
 /* 000007FC-000009B0       .text daObjHbrf1_up_stop__Q210daObjHbrf15Act_cFv */
