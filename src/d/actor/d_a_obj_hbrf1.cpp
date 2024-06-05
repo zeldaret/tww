@@ -44,7 +44,7 @@ s32 daObjHbrf1::Act_c::Mthd_Create() {
 
 /* 000003B0-000003B8       .text Delete__Q210daObjHbrf15Act_cFv */
 BOOL daObjHbrf1::Act_c::Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000003B8-00000404       .text Mthd_Delete__Q210daObjHbrf15Act_cFv */
@@ -59,12 +59,17 @@ BOOL daObjHbrf1::Act_c::Mthd_Delete() {
 
 /* 00000404-00000484       .text set_mtx__Q210daObjHbrf15Act_cFv */
 void daObjHbrf1::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 00000484-000004C0       .text init_mtx__Q210daObjHbrf15Act_cFv */
 void daObjHbrf1::Act_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    set_mtx();
 }
 
 /* 000004C0-0000066C       .text daObjHbrf1_down_stop__Q210daObjHbrf15Act_cFv */

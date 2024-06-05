@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_HBRF1_H
 #define D_A_OBJ_HBRF1_H
 
+#include "d/d_a_obj.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_movebg_actor.h"
 
@@ -18,9 +19,20 @@ namespace daObjHbrf1 {
             Mode_DOWN_DEMO_e,
         };
 
-        void prm_get_Event() const {}
-        void prm_get_Type() const {}
-        void prm_get_swSave() const {}
+        enum Prm_e {
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x00,
+
+            PRM_TYPE_W   = 0x01,
+            PRM_TYPE_S   = 0x08,
+
+            PRM_EVENT_W  = 0x08,
+            PRM_EVENT_S  = 0x10,
+        };
+
+        s32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        bool prm_get_Type() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
+        u8 prm_get_Event() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EVENT_W, PRM_EVENT_S); }
 
         BOOL CreateHeap();
         int Create();
