@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_hbrf1.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
 
 const char daObjHbrf1::Act_c::M_arcname[] = "Hbrf1";
 const char daObjHbrf1::Act_c::M_evname[] = "ami_cam";
@@ -31,7 +32,12 @@ BOOL daObjHbrf1::Act_c::Delete() {
 
 /* 000003B8-00000404       .text Mthd_Delete__Q210daObjHbrf15Act_cFv */
 BOOL daObjHbrf1::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+    BOOL ret = MoveBGDelete();
+
+    // Debug map shows dComIfG_deleteObjectRes here?
+    dComIfG_resDelete(&mPhs, M_arcname);
+
+    return ret;
 }
 
 /* 00000404-00000484       .text set_mtx__Q210daObjHbrf15Act_cFv */
