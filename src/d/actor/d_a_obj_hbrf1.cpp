@@ -25,7 +25,26 @@ BOOL daObjHbrf1::Act_c::CreateHeap() {
 
 /* 0000012C-000002B4       .text Create__Q210daObjHbrf15Act_cFv */
 int daObjHbrf1::Act_c::Create() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+
+    if (prm_get_Type() == 0 && !fopAcM_isSwitch(this, prm_get_swSave())) {
+        current.pos.y += 750.0f;
+        mMode = Mode_UP_STOP_e;
+    } else if (prm_get_Type() == 1 && fopAcM_isSwitch(this, prm_get_swSave())) {
+        current.pos.y += 750.0f;
+        mMode = Mode_UP_STOP_e;
+    } else {
+        mMode = Mode_DOWN_STOP_e;
+    }
+
+    init_mtx();
+    fopAcM_setCullSizeBox(this, -800.0f, -1000.0f, -800.0f, 800.0f, 1000.0f, 800.0f);
+    m2C8 = 10.0f;
+    mEventIdx = dComIfGp_evmng_getEventIdx("LiftMove");
+    m2E4 = 0;
+    eyePos = home.pos;
+
+    return TRUE;
 }
 
 /* 000002B4-000003B0       .text Mthd_Create__Q210daObjHbrf15Act_cFv */
