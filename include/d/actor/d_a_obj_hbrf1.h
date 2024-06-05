@@ -7,6 +7,17 @@
 namespace daObjHbrf1 {
     class Act_c : public dBgS_MoveBgActor {
     public:
+        enum Mode_e {
+            Mode_DOWN_STOP_e,
+            Mode_UP_DEMO_WAIT_e,
+            Mode_UP_DEMO_TIMER_e,
+            Mode_UP_DEMO_e,
+            Mode_UP_STOP_e,
+            Mode_DOWN_DEMO_WAIT_e,
+            Mode_DOWN_DEMO_TIMER_e,
+            Mode_DOWN_DEMO_e,
+        };
+
         void prm_get_Event() const {}
         void prm_get_Type() const {}
         void prm_get_swSave() const {}
@@ -29,6 +40,8 @@ namespace daObjHbrf1 {
         BOOL Execute(Mtx** mtx);
         BOOL Draw();
 
+        static Mtx M_tmp_mtx;
+
         static const char M_arcname[];
         static const char M_evname[];
 
@@ -36,7 +49,7 @@ namespace daObjHbrf1 {
         /* 0x2C8 */ f32 m2C8;
         /* 0x2CC */ request_of_phase_process_class mPhs;
         /* 0x2D4 */ J3DModel* mpModel;
-        /* 0x2D8 */ u32 m2D8; // State idx?
+        /* 0x2D8 */ Mode_e mMode;
         /* 0x2DC */ s16 mEventIdx;
         /* 0x2DE */ u8 m2DE[2]; // Padding?
         /* 0x2E0 */ s32 m2E0;

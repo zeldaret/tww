@@ -8,6 +8,8 @@
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 
+Mtx daObjHbrf1::Act_c::M_tmp_mtx;
+
 const char daObjHbrf1::Act_c::M_arcname[] = "Hbrf1";
 const char daObjHbrf1::Act_c::M_evname[] = "ami_cam";
 
@@ -107,7 +109,37 @@ void daObjHbrf1::Act_c::daObjHbrf1_down_demo() {
 
 /* 00000B70-00000C1C       .text Execute__Q210daObjHbrf15Act_cFPPA3_A4_f */
 BOOL daObjHbrf1::Act_c::Execute(Mtx** mtx) {
-    /* Nonmatching */
+    switch (mMode) {
+    case Mode_DOWN_STOP_e:
+        daObjHbrf1_down_stop();
+        break;
+    case Mode_UP_DEMO_WAIT_e:
+        daObjHbrf1_up_demo_wait();
+        break;
+    case Mode_UP_DEMO_TIMER_e:
+        daObjHbrf1_up_demo_timer();
+        break;
+    case Mode_UP_DEMO_e:
+        daObjHbrf1_up_demo();
+        break;
+    case Mode_UP_STOP_e:
+        daObjHbrf1_up_stop();
+        break;
+    case Mode_DOWN_DEMO_WAIT_e:
+        daObjHbrf1_down_demo_wait();
+        break;
+    case Mode_DOWN_DEMO_TIMER_e:
+        daObjHbrf1_down_demo_timer();
+        break;
+    case Mode_DOWN_DEMO_e:
+        daObjHbrf1_down_demo();
+        break;
+    }
+
+    set_mtx();
+
+    *mtx = &M_tmp_mtx;
+    return TRUE;
 }
 
 /* 00000C1C-00000CBC       .text Draw__Q210daObjHbrf15Act_cFv */
