@@ -161,7 +161,23 @@ void daObjHbrf1::Act_c::daObjHbrf1_down_demo_timer() {
 
 /* 00000A2C-00000B70       .text daObjHbrf1_down_demo__Q210daObjHbrf15Act_cFv */
 void daObjHbrf1::Act_c::daObjHbrf1_down_demo() {
-    /* Nonmatching */
+    current.pos.y -= mYOffset;
+
+    if (current.pos.y <= home.pos.y) {
+        current.pos.y = home.pos.y;
+
+        if (m2E4 == 1) {
+            dComIfGp_event_reset();
+            m2E4 = 0;
+        }
+
+        mMode = Mode_DOWN_STOP_e;
+        fopAcM_seStart(this, JA_SE_OBJ_B_LIFT_STOP, 0);
+        dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+        return;
+    }
+
+    fopAcM_seStart(this, JA_SE_OBJ_B_LIFT_MOVE, 0);
 }
 
 /* 00000B70-00000C1C       .text Execute__Q210daObjHbrf15Act_cFPPA3_A4_f */
