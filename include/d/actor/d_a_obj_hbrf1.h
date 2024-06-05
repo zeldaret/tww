@@ -58,13 +58,13 @@ namespace daObjHbrf1 {
         static const char M_evname[];
 
     public:
-        /* 0x2C8 */ f32 m2C8;
+        /* 0x2C8 */ f32 mYOffset;
         /* 0x2CC */ request_of_phase_process_class mPhs;
         /* 0x2D4 */ J3DModel* mpModel;
         /* 0x2D8 */ Mode_e mMode;
         /* 0x2DC */ s16 mEventIdx;
         /* 0x2DE */ u8 m2DE[2]; // Padding?
-        /* 0x2E0 */ s32 m2E0;
+        /* 0x2E0 */ s32 mTimer;
         /* 0x2E4 */ u8 m2E4;
     };
 };
