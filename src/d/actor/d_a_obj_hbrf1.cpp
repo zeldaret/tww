@@ -150,7 +150,21 @@ void daObjHbrf1::Act_c::daObjHbrf1_up_demo() {
 
 /* 000007FC-000009B0       .text daObjHbrf1_up_stop__Q210daObjHbrf15Act_cFv */
 void daObjHbrf1::Act_c::daObjHbrf1_up_stop() {
-    /* Nonmatching */
+    if ((prm_get_Type() == 0 && fopAcM_isSwitch(this, prm_get_swSave())) || (prm_get_Type() != 0 && !fopAcM_isSwitch(this, prm_get_swSave()))) {
+        if (prm_get_Event() == 0 && !dComIfGs_isEventBit(0x1520)) {
+            dComIfGs_onEventBit(0x1520);
+            fopAcM_orderOtherEventId(this, mEventIdx);
+            m2E4 = 1;
+            mMode = Mode_DOWN_DEMO_WAIT_e;
+        } else if (prm_get_Event() == 1 && !dComIfGs_isEventBit(0x1508)) {
+            dComIfGs_onEventBit(0x1508);
+            fopAcM_orderOtherEventId(this, mEventIdx);
+            m2E4 = 1;
+            mMode = Mode_DOWN_DEMO_WAIT_e;
+        } else {
+            mMode = Mode_DOWN_DEMO_e;
+        }
+    }
 }
 
 /* 000009B0-00000A08       .text daObjHbrf1_down_demo_wait__Q210daObjHbrf15Act_cFv */
