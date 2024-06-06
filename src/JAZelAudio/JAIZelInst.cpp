@@ -64,7 +64,7 @@ void JAIZelInst::metronomePlay(s32, s32) {
 }
 
 /* 802AE864-802AEB5C       .text judge__10JAIZelInstFll */
-void JAIZelInst::judge(s32, s32) {
+s32 JAIZelInst::judge(s32, s32) {
     /* Nonmatching */
 }
 

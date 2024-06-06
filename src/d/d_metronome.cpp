@@ -317,7 +317,7 @@ void dMetronome_c::melodyGuideShow(s32 note, s16 no) {
 /* 80222854-80222C4C       .text melodyShow__12dMetronome_cFv */
 void dMetronome_c::melodyShow() {
     cXyz tactTop, sparklePos;
-    if (daPy_getPlayerActorClass()->checkTactUse()) {
+    if (daPy_getPlayerActorClass()->checkTactInput()) {
         cXyz pos;
         pos.x = 0.0f;
         pos.y = 0.0f;

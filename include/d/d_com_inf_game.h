@@ -2456,7 +2456,7 @@ inline bool dComIfGp_2dShowCheck() {
     return g_dComIfG_gameInfo.play.show2dCheck();
 }
 
-inline u8 dComIfGp_setMelodyNum() {
+inline u8 dComIfGp_getMelodyNum() {
     return g_dComIfG_gameInfo.play.getMelodyNum();
 }
 

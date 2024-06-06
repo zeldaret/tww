@@ -15,7 +15,7 @@ public:
     void setBeat(s32);
     void setVolume(f32);
     void metronomePlay(s32, s32);
-    void judge(s32, s32);
+    s32 judge(s32, s32);
     void ambientPlay();
     void armSoundPlay(s32);
     f32 getMelodyPattern(s32, s32, s32*);
@@ -24,9 +24,8 @@ public:
     void melodyPlay(s32);
     void melodyStop();
 
-    // one of these inlines returns field_0x30, not sure which
-    void getBeat() {}
-    void getBeatFrames() {}
+    u8 getBeat() { return mMelodyNum; }
+    f32 getBeatFrames() { return field_0x30; }
 
 public:
     /* 0x00 */ int field_0x0;

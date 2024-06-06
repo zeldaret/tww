@@ -148,7 +148,7 @@ public:
         daPyRFlg0_UNK80000              = 0x00080000,
         daPyRFlg0_POISON_CURSE          = 0x00100000,
         daPyRFlg0_GRAB_PUT_START        = 0x00400000,
-        daPyRFlg0_TACT_USE              = 0x01000000,
+        daPyRFlg0_TACT_INPUT              = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
         daPyRFlg0_UNK8000000            = 0x08000000,
         daPyRFlg0_UNK10000000           = 0x10000000,
@@ -445,7 +445,7 @@ public:
     void onPoisonCurse() { onResetFlg0(daPyRFlg0_POISON_CURSE); }
     bool getGrabPutStart() const { return checkResetFlg0(daPyRFlg0_GRAB_PUT_START); }
     bool checkFairyUse() const { return checkResetFlg0(daPyRFlg0_FAIRY_USE); }
-    bool checkTactUse() const { return checkResetFlg0(daPyRFlg0_TACT_USE); }
+    bool checkTactInput() const { return checkResetFlg0(daPyRFlg0_TACT_INPUT); }
     bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
@@ -465,7 +465,6 @@ public:
     void checkSwordMiniGame() const {}
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
-    void checkTactInput() const {}
     void checkUseArrowEffect() const {}
     void getRopeJumpLand() const {}
     void checkRopeForceEnd() const {}

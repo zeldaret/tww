@@ -95,6 +95,9 @@ public:
     }
     
     void onAlphaOutFlg() { mAlphaOutFlg = TRUE; }
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    
+    void deleteCallBack() {}
     
     /* 0x4 */ BOOL mAlphaOutFlg;
     /* 0x8 */ JPABaseEmitter* mpEmitter;
@@ -2098,7 +2101,7 @@ public:
     /* 0x3618 */ u32 mModeFlg;
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;
-    /* 0x3624 */ int m3624;
+    /* 0x3624 */ u32 m3624;
     /* 0x3628 */ int m3628;
     /* 0x362C */ uint mTactZevPartnerPID;
     /* 0x3630 */ u32 m3630;
