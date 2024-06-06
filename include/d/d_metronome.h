@@ -62,7 +62,7 @@ public:
     /* 0xE18 */ s32 mNote[7];
     /* 0xE34 */ s32 mCurTimer;
     /* 0xE38 */ u8 field_0xE38;
-    /* 0xE39 */ u8 mMelodyNum;
+    /* 0xE39 */ u8 mBeat;
     /* 0xE3A */ u8 mAction;
     /* 0xE3B */ u8 mbOpen;
 };

@@ -27,7 +27,7 @@ namespace daObjMknjD {
         void anmAtr(u16) {}
         u32 getMsg() {
             if (m0500 == 0) {
-                dComIfGp_setMelodyNum(mTactMode);
+                dComIfGp_setMelodyNum(mMelodyNum);
                 return 0x05B3;
             }
             else {
@@ -84,7 +84,7 @@ namespace daObjMknjD {
         /* 0x04E0 */ s16 mErrorEventIdx;
         /* 0x04E2 */ s16 mLessonEventIdx;
         /* 0x04E4 */ s8 mActionIdx;
-        /* 0x04E5 */ u8 mTactMode;
+        /* 0x04E5 */ u8 mMelodyNum;
         /* 0x04E6 */ u8 mGiveItemNo;
         /* 0x04E8 */ cXyz mGoalPos;
         /* 0x04F4 */ u32 mMsgNo;

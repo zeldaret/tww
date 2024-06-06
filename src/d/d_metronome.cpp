@@ -192,7 +192,7 @@ void dMetronome_c::metronomeMove() {
 }
 
 /* 802222D8-802224E4       .text melodyInit__12dMetronome_cFUc */
-void dMetronome_c::melodyInit(u8 melodyNum) {
+void dMetronome_c::melodyInit(u8 beat) {
     pane_wn[2].mUserArea = 0;
     pane_wn[3].mUserArea = 0;
     pane_wn[4].mUserArea = 0;
@@ -208,7 +208,7 @@ void dMetronome_c::melodyInit(u8 melodyNum) {
     for (u32 i = 0; i < 21; i++)
         pane_timing[i].mUserArea = 0;
 
-    switch (melodyNum) {
+    switch (beat) {
     case 3:
         mPosX = (pane_bs[1].mPosCenterOrig.x + pane_bs[2].mPosCenterOrig.x) / 2.0f;
         break;
@@ -237,7 +237,7 @@ void dMetronome_c::melodyInit(u8 melodyNum) {
         fopMsgM_cposMove(&pane_i12[i]);
         fopMsgM_cposMove(&pane_bs[i]);
 
-        if (i < melodyNum) {
+        if (i < beat) {
             fopMsgM_setInitAlpha(&pane_wn[i]);
             fopMsgM_setInitAlpha(&pane_bs[i]);
         } else {
@@ -324,7 +324,7 @@ void dMetronome_c::melodyShow() {
         pos.z = 0.0f;
 
         s32 note = daPy_getPlayerLinkActorClass()->m34D6;
-        if (pane_wn[0].mUserArea < mMelodyNum) {
+        if (pane_wn[0].mUserArea < mBeat) {
             mNote[pane_wn[0].mUserArea] = note;
             melodyGuideShow(note, pane_wn[0].mUserArea);
             pane_bs[pane_wn[0].mUserArea].mUserArea = 1;
@@ -332,11 +332,11 @@ void dMetronome_c::melodyShow() {
             pos.y = pane_wn[pane_wn[0].mUserArea].mPosCenter.y - 240.0f;
             pane_wn[0].mUserArea++;
         } else {
-            mNote[mMelodyNum - 1] = note;
-            melodyGuideShow(note, mMelodyNum - 1);
-            pane_bs[mMelodyNum - 1].mUserArea = 1;
-            pos.x = pane_wn[mMelodyNum - 1].mPosCenter.x - 320.0f;
-            pos.y = pane_wn[mMelodyNum - 1].mPosCenter.y - 240.0f;
+            mNote[mBeat - 1] = note;
+            melodyGuideShow(note, mBeat - 1);
+            pane_bs[mBeat - 1].mUserArea = 1;
+            pos.x = pane_wn[mBeat - 1].mPosCenter.x - 320.0f;
+            pos.y = pane_wn[mBeat - 1].mPosCenter.y - 240.0f;
         }
 
         dComIfGp_particle_set2Dfore(0x23e, &pos);
@@ -374,7 +374,7 @@ void dMetronome_c::melodyShow() {
     for (s32 i = 0; i < 7; i++) {
         if (pane_bs[i].mUserArea != 0) {
             f32 alpha = fopMsgM_valueIncrease(5, pane_bs[i].mUserArea, 0);
-            if (i == mMelodyNum) {
+            if (i == mBeat) {
                 fopMsgM_setNowAlpha(&pane_wn[i], alpha);
                 fopMsgM_setNowAlpha(&pane_bs[i], alpha);
                 fopMsgM_setNowAlphaZero(&pane_cn[i]);
@@ -393,7 +393,7 @@ void dMetronome_c::melodyShow() {
                 pane_bs[i].mUserArea = 0;
             }
 
-            if (pane_wn[0].mUserArea >= mMelodyNum && pane_wn[3].mUserArea == 0 && pane_bs[mMelodyNum - 1].mUserArea == 5) {
+            if (pane_wn[0].mUserArea >= mBeat && pane_wn[3].mUserArea == 0 && pane_bs[mBeat - 1].mUserArea == 5) {
                 pane_wn[2].mUserArea = 5;
                 pane_wn[0].mUserArea = 0;
                 pane_wn[6].mUserArea = 0;
@@ -412,11 +412,11 @@ void dMetronome_c::melodyDemo() {
         u32 melody_no = daPy_getPlayerLinkActorClass()->getTactMusic();
 
         frames[0] = 1;
-        for (s32 i = 0; i < mMelodyNum; i++) {
+        for (s32 i = 0; i < mBeat; i++) {
             frames[i + 1] = frames[i] + mDoAud_tact_getMelodyPattern(melody_no, i, &note[i]);
         }
 
-        if (mMelodyNum > pane_wn[5].mUserArea) {
+        if (mBeat > pane_wn[5].mUserArea) {
             if (pane_wn[4].mUserArea == frames[pane_wn[5].mUserArea]) {
                 pane_bs[pane_wn[5].mUserArea].mUserArea = 1;
                 pane_wn[5].mUserArea++;
@@ -440,7 +440,7 @@ void dMetronome_c::melodyFlash() {
         pane_pk[0].mUserArea++;
         if (pane_pk[0].mUserArea >= 3) {
             pane_pk[0].mUserArea = 0;
-            for (s32 i = 0; i < mMelodyNum; i++) {
+            for (s32 i = 0; i < mBeat; i++) {
                 fopMsgM_setNowAlphaZero(&pane_cn[i]);
                 fopMsgM_setNowAlphaZero(&pane_i11[i]);
                 fopMsgM_setNowAlphaZero(&pane_i12[i]);
@@ -451,7 +451,7 @@ void dMetronome_c::melodyFlash() {
         alpha = fopMsgM_valueIncrease(g_mnHIO.mFlashTiming, g_mnHIO.mFlashTiming * 2 - pane_pk[1].mUserArea, 0);
     }
 
-    for (s32 i = 0; i < mMelodyNum; i++) {
+    for (s32 i = 0; i < mBeat; i++) {
         pane_pk[i].mInitAlpha = g_mnHIO.mAlphaOrig;
         fopMsgM_setNowAlpha(&pane_pk[i], alpha);
     }
@@ -462,7 +462,7 @@ void dMetronome_c::melodyShift() {
     if (pane_wn[6].mUserArea < g_mnHIO.mShiftTiming) {
         pane_wn[6].mUserArea++;
     } else {
-        melodyInit(mMelodyNum);
+        melodyInit(mBeat);
 
         f32 sepX = pane_bs[2].mPosCenterOrig.x - pane_bs[1].mPosCenterOrig.x;
 
@@ -492,7 +492,7 @@ void dMetronome_c::initialize() {
     mCurRate = daPy_getPlayerLinkActorClass()->getTactMetronomeRate();
     mPosX = 0.0f;
     field_0xE38 = 0;
-    mMelodyNum = mDoAud_zelAudio_c::mTact.mMelodyNum;
+    mBeat = mDoAud_tact_getBeat();
     mAction = ACT_INIT;
     field_0xE14 = 0;
 
@@ -522,8 +522,8 @@ void dMetronome_c::_delete() {
 /* 802231F4-80223314       .text _move__12dMetronome_cFv */
 void dMetronome_c::_move() {
     metronomeMove();
-    if (pane_wn[3].mUserArea == 0 && mMelodyNum != mDoAud_zelAudio_c::mTact.mMelodyNum) {
-        mMelodyNum = mDoAud_zelAudio_c::mTact.mMelodyNum;
+    if (pane_wn[3].mUserArea == 0 && mBeat != mDoAud_tact_getBeat()) {
+        mBeat = mDoAud_tact_getBeat();
         pane_wn[0].mUserArea = 0;
         mAction = ACT_SHRINK;
     }
@@ -532,7 +532,7 @@ void dMetronome_c::_move() {
         mAction = ACT_GROW;
         pane_wn[1].mUserArea = 0;
         pane_wn[0].mUserArea = 0;
-        melodyInit(mMelodyNum);
+        melodyInit(mBeat);
     } else if (mAction == ACT_GROW) {
         pane_wn[1].mUserArea++;
         melodyMove();
@@ -579,12 +579,12 @@ BOOL dMetronome_c::_open() {
             fopMsgM_setInitAlpha(&pane_timing[i]);
         }
 
-        mMelodyNum = mDoAud_zelAudio_c::mTact.mMelodyNum;
+        mBeat = mDoAud_tact_getBeat();
 
         pane_wn[1].mUserArea = 0;
         pane_wn[0].mUserArea = 0;
 
-        melodyInit(mMelodyNum);
+        melodyInit(mBeat);
     }
     mbOpen = true;
     return TRUE;

@@ -255,7 +255,7 @@ int daObjMknjD::Act_c::Create() {
         mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[5]);
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
-        mTactMode = 4;
+        mMelodyNum = 4;
         mGiveItemNo = TACT_SONG5;
         eventInfo.setEventName("MKNJD_K_TALK");
         m0430 = 0x2910;
@@ -266,7 +266,7 @@ int daObjMknjD::Act_c::Create() {
         mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[4]);
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
-        mTactMode = 3;
+        mMelodyNum = 3;
         mGiveItemNo = TACT_SONG4;
         eventInfo.setEventName("MKNJD_D_TALK");
         m0430 = 0x2920;

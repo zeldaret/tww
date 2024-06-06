@@ -24,8 +24,8 @@ public:
     void melodyPlay(s32);
     void melodyStop();
 
-    u8 getBeat() { return mMelodyNum; }
-    f32 getBeatFrames() { return field_0x30; }
+    u8 getBeat() { return mBeat; }
+    f32 getBeatFrames() { return mBeatFrames; }
 
 public:
     /* 0x00 */ int field_0x0;
@@ -35,12 +35,12 @@ public:
     /* 0x14 */ int field_0x14;
     /* 0x18 */ u8 field_0x18[0x1e - 0x18];
     /* 0x1E */ u8 field_0x1e;
-    /* 0x1F */ u8 mMelodyNum;
+    /* 0x1F */ u8 mBeat;
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ f32 field_0x24;
     /* 0x28 */ f32 field_0x28;
     /* 0x2C */ f32 field_0x2c;
-    /* 0x30 */ f32 field_0x30;
+    /* 0x30 */ f32 mBeatFrames;
     /* 0x34 */ u8 field_0x34;
     /* 0x38 */ int field_0x38;
     /* 0x3C */ int field_0x3c;
