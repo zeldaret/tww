@@ -60,7 +60,7 @@ namespace daObjEskban {
         /* 0x320 */ dCcD_Cyl mCheckCyl;
         /* 0x450 */ dCcD_Stts mCameraStts;
         /* 0x48C */ dCcD_Cyl mCameraCyl;
-        /* 0x5BC */ u32 mActorID;
+        /* 0x5BC */ uint mActorID;
         /* 0x5C0 */ dCcD_Stts mCheckSphStts;
         /* 0x5FC */ dCcD_Sph mCheckSph;
         /* 0x728 */ s32 mActorState;

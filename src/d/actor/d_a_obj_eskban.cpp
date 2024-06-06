@@ -298,7 +298,8 @@ int daObjEskban::Act_c::Execute(Mtx** pMtx) {
             break;
         }
         cCcD_Obj* hitObj;
-        if (!(hitObj = mCameraCyl.GetCoHitObj())) {
+        hitObj = mCameraCyl.GetCoHitObj();
+        if (!hitObj) {
             break;
         }
         fopAc_ac_c* hitAct = hitObj->GetAc();

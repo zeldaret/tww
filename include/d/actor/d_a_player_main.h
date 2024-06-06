@@ -2104,7 +2104,7 @@ public:
     /* 0x3624 */ u32 m3624;
     /* 0x3628 */ int m3628;
     /* 0x362C */ uint mTactZevPartnerPID;
-    /* 0x3630 */ u32 m3630;
+    /* 0x3630 */ uint m3630;
     /* 0x3634 */ int m3634;
     /* 0x3638 */ int mMsgId;
     /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;

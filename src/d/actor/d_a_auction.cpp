@@ -212,7 +212,7 @@ extern uint dAuction_screen_create();
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
     for (int i = 0; i < 8; i++) {
-        m738[i] = -1;
+        m738[i] = fpcM_ERROR_PROCESS_ID_e;
         m80C[i] = i;
         mAucMdlNo[i] = 0xFF;
     }
@@ -373,7 +373,7 @@ BOOL daAuction_c::_execute() {
 /* 00000B10-00000B44       .text executeWait__11daAuction_cFv */
 void daAuction_c::executeWait() {
     for (int i = 0; i < 8; i++) {
-        if (m738[i] == -1) {
+        if (m738[i] == fpcM_ERROR_PROCESS_ID_e) {
             return;
         }
     }

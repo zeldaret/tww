@@ -98,7 +98,7 @@ public:
     /* 0x328 */ mDoExt_brkAnm mTactPlatformBrk;
     /* 0x340 */ ActionFunc mActionFunc;
     /* 0x34C */ f32 mInvisibleScrollVal;
-    /* 0x350 */ u32 mStaffId;
+    /* 0x350 */ int mStaffId;
     /* 0x354 */ Mtx mMtx;
     /* 0x384 */ LIGHT_INFLUENCE mPLight;
     /* 0x3A4 */ LIGHT_INFLUENCE mEfLight;

@@ -95,7 +95,7 @@ public:
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ dNpc_EventCut_c mNpcEvtInfo;
-    /* 0x738 */ u32 m738[8];
+    /* 0x738 */ uint m738[8];
     /* 0x758 */ uint mCurrAuctionItemPID;
     /* 0x75C */ uint mTimerID;
     /* 0x760 */ uint mGaugeID;

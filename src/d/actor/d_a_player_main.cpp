@@ -1130,7 +1130,7 @@ void daPy_lk_c::setActorPointer() {
     if (m3630 != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* sp8;
         if (!fopAcM_SearchByID(m3630, &sp8)) {
-            m3630 = -1;
+            m3630 = fpcM_ERROR_PROCESS_ID_e;
         }
     }
 }
