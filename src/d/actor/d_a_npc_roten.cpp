@@ -1349,7 +1349,7 @@ static u32 l_msg_try_force[] = {
 };
 
 static u32 l_get_item_no[] = {
-    KAKERA_HEART,
+    dItem_HEART_PIECE_e,
 };
 
 static dCcD_SrcSph l_sph_src = {

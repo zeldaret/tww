@@ -618,21 +618,21 @@ void item_func_bomb_5() {
 /* 800C3060-800C30B0       .text item_func_bomb_10__Fv */
 void item_func_bomb_10() {
     dComIfGs_onGetItem(0xD, 0);
-    dComIfGs_setItem(0xD, BOMB_BAG);
+    dComIfGs_setItem(0xD, dItem_BOMB_BAG_e);
     dComIfGp_setItemBombNumCount(10);
 }
 
 /* 800C30B0-800C3100       .text item_func_bomb_20__Fv */
 void item_func_bomb_20() {
     dComIfGs_onGetItem(0xD, 0);
-    dComIfGs_setItem(0xD, BOMB_BAG);
+    dComIfGs_setItem(0xD, dItem_BOMB_BAG_e);
     dComIfGp_setItemBombNumCount(20);
 }
 
 /* 800C3100-800C3150       .text item_func_bomb_30__Fv */
 void item_func_bomb_30() {
     dComIfGs_onGetItem(0xD, 0);
-    dComIfGs_setItem(0xD, BOMB_BAG);
+    dComIfGs_setItem(0xD, dItem_BOMB_BAG_e);
     dComIfGp_setItemBombNumCount(30);
 }
 
@@ -786,7 +786,7 @@ void item_func_warasibe_bag() {
 /* 800C3688-800C36D8       .text item_func_bomb_bag__Fv */
 void item_func_bomb_bag() {
     dComIfGs_onGetItem(0xD, 0);
-    dComIfGs_setItem(0xD, BOMB_BAG);
+    dComIfGs_setItem(0xD, dItem_BOMB_BAG_e);
     dComIfGs_setBombNum(30);
     dComIfGs_setBombMax(30);
 }
@@ -2712,8 +2712,8 @@ BOOL isUseClothPacket(u8 itemNo) {
 /* 800C7CDC-800C7D08       .text isTriforce__FUc */
 BOOL isTriforce(u8 itemNo) {
     BOOL isTriforce = FALSE;
-    if (itemNo == TRIFORCE1 || itemNo == TRIFORCE2 || itemNo == TRIFORCE3 || itemNo == TRIFORCE4 ||
-        itemNo == TRIFORCE5 || itemNo == TRIFORCE6 || itemNo == TRIFORCE7 || itemNo == TRIFORCE8)
+    if (itemNo == dItem_TRIFORCE1_e || itemNo == dItem_TRIFORCE2_e || itemNo == dItem_TRIFORCE3_e || itemNo == dItem_TRIFORCE4_e ||
+        itemNo == dItem_TRIFORCE5_e || itemNo == dItem_TRIFORCE6_e || itemNo == dItem_TRIFORCE7_e || itemNo == dItem_TRIFORCE8_e)
     {
         isTriforce = TRUE;
     }

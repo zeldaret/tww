@@ -63,7 +63,7 @@ static daAuction_c::ItemData l_item_dat[] = {
     {dItem_JOY_PENDANT_e, 0x1D10, 40, 0x0F01},
     {COLLECT_MAP_27, 0x1D11, 5, 0x1080},
     {COLLECT_MAP_18, 0x1D12, 60, 0x1040},
-    {KAKERA_HEART, 0x1D13, 80, 0x1020},
+    {dItem_HEART_PIECE_e, 0x1D13, 80, 0x1020},
 };
 
 static daAuction_c::ItemData l_item_dat2[] = {

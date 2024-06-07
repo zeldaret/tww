@@ -754,42 +754,42 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
             get_item = 1;
         }
         break;
-    case TRIFORCE1:
+    case dItem_TRIFORCE1_e:
         if (dComIfGs_isTriforce(0)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE2:
+    case dItem_TRIFORCE2_e:
         if (dComIfGs_isTriforce(1)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE3:
+    case dItem_TRIFORCE3_e:
         if (dComIfGs_isTriforce(2)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE4:
+    case dItem_TRIFORCE4_e:
         if (dComIfGs_isTriforce(3)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE5:
+    case dItem_TRIFORCE5_e:
         if (dComIfGs_isTriforce(4)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE6:
+    case dItem_TRIFORCE6_e:
         if (dComIfGs_isTriforce(5)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE7:
+    case dItem_TRIFORCE7_e:
         if (dComIfGs_isTriforce(6)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE8:
+    case dItem_TRIFORCE8_e:
         if (dComIfGs_isTriforce(7)) {
             get_item = 1;
         }
@@ -878,42 +878,42 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             get_item = 1;
         }
         break;
-    case TRIFORCE1:
+    case dItem_TRIFORCE1_e:
         if (dComIfGs_isTriforce(0)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE2:
+    case dItem_TRIFORCE2_e:
         if (dComIfGs_isTriforce(1)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE3:
+    case dItem_TRIFORCE3_e:
         if (dComIfGs_isTriforce(2)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE4:
+    case dItem_TRIFORCE4_e:
         if (dComIfGs_isTriforce(3)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE5:
+    case dItem_TRIFORCE5_e:
         if (dComIfGs_isTriforce(4)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE6:
+    case dItem_TRIFORCE6_e:
         if (dComIfGs_isTriforce(5)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE7:
+    case dItem_TRIFORCE7_e:
         if (dComIfGs_isTriforce(6)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE8:
+    case dItem_TRIFORCE8_e:
         if (dComIfGs_isTriforce(7)) {
             get_item = 1;
         }
@@ -948,7 +948,7 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             get_item = dComIfGs_getArrowNum();
         }
         break;
-    case BOMB_BAG:
+    case dItem_BOMB_BAG_e:
         if (dComIfGs_getItem(13) != dItem_HEART_e) { // Bug?
             get_item = dComIfGs_getBombNum();
         }

@@ -165,7 +165,7 @@ void daItemBase_c::settingBeforeDraw() {
         mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
     }
     
-    if (m_itemNo == BOMB_BAG || m_itemNo == dItem_SKULL_HAMMER_e || m_itemNo == dItem_SMALL_KEY_e) {
+    if (m_itemNo == dItem_BOMB_BAG_e || m_itemNo == dItem_SKULL_HAMMER_e || m_itemNo == dItem_SMALL_KEY_e) {
         dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }

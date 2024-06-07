@@ -23,15 +23,15 @@ extern dScnPly_reg_HIO_c g_regHIO;
 const char daObjTpost_c::m_arc_name[] = "Toripost";
 
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
-    {false, 0x1AAF, KAKERA_HEART,        dSv_evtBit_c::LETTER_BAITOS_MOM},
-    {false, 0x0CF9, KAKERA_HEART,        dSv_evtBit_c::LETTER_KOMALIS_FATHER},
+    {false, 0x1AAF, dItem_HEART_PIECE_e, dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {false, 0x0CF9, dItem_HEART_PIECE_e, dSv_evtBit_c::LETTER_KOMALIS_FATHER},
     {false, 0x0CFA, COLLECT_MAP_60,      dSv_evtBit_c::LETTER_BOMBS_AD},
     {false, 0x0CFC, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_ORCA},
     {false, 0x0805, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_GRANDMA},
     {false, 0x0CFD, dItem_GREEN_RUPEE_e, dSv_evtBit_c::LETTER_ROCK_SPIRE_SHOP_AD},
     {true,  0x0DB6, COLLECT_MAP_52,      dSv_evtBit_c::LETTER_TINGLE},
     {false, 0x1148, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_ARYLL},
-    {false, 0x1AAF, KAKERA_HEART,        dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {false, 0x1AAF, dItem_HEART_PIECE_e, dSv_evtBit_c::LETTER_BAITOS_MOM},
     {true,  0x0F76, KAISEN_PRESENT1,     dSv_evtBit_c::LETTER_SILVER_MEMBERSHIP},
     {false, 0x19A6, KAKERA_HEART2,       dSv_evtBit_c::LETTER_HOSKITS_GIRLFRIEND},
     {true,  0x0CFB, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_BAITO},
@@ -905,7 +905,7 @@ void daObjTpost_c::createInit() {
         dLetter_autoStock(0xB503);
     }
 
-    if(dComIfGs_checkGetItem(BOMB_BAG)) {
+    if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
         dLetter_autoStock(0x7D03);
     }
 

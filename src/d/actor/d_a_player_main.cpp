@@ -1463,7 +1463,7 @@ void daPy_lk_c::makeItemType() {
         fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_fastCreate(PROC_BOOMERANG, 0, &current.pos);
         mActorKeepEquip.setData(boomerang);
         return;
-    } else if (mEquipItem == BOMB_BAG) {
+    } else if (mEquipItem == dItem_BOMB_BAG_e) {
         fopAc_ac_c* bomb = (fopAc_ac_c*)fopAcM_fastCreate(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_3, false, false), &current.pos);
         mActorKeepGrab.setData(bomb);
         mEquipItem = daPyItem_NONE_e;

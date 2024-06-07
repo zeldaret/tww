@@ -57,8 +57,8 @@ float daItem_c::getYOffset() {
         return 20.0f;
     case DROPPED_SWORD:
         return 10.0f;
-    case KAKERA_HEART:
-    case UTUWA_HEART:
+    case dItem_HEART_PIECE_e:
+    case dItem_HEART_CONTAINER_e:
         return 0.0f;
     case dItem_GREEN_RUPEE_e:
     case dItem_BLUE_RUPEE_e:
@@ -79,7 +79,7 @@ float daItem_c::getYOffset() {
 void daItem_c::set_mtx() {
     cXyz pos = current.pos;
     csXyz rot = current.angle;
-    if (m_itemNo == UTUWA_HEART) {
+    if (m_itemNo == dItem_HEART_CONTAINER_e) {
         rot.y = shape_angle.y;
     }
     set_mtx_base(mpModel, pos, rot);
@@ -612,11 +612,11 @@ void daItem_c::itemGetExecute() {
         mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
-    case KAKERA_HEART:
+    case dItem_HEART_PIECE_e:
         mDoAud_seStart(JA_SE_HEART_PIECE);
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case UTUWA_HEART:
+    case dItem_HEART_CONTAINER_e:
         mDoAud_seStart(JA_SE_HEART_PIECE);
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
@@ -1070,12 +1070,12 @@ BOOL daItem_c::itemActionForArrow() {
     } else if (mAcch.ChkGroundHit()) {
         speedF = 0.0f;
         
-        if (m_itemNo != UTUWA_HEART) {
+        if (m_itemNo != dItem_HEART_CONTAINER_e) {
             itemDefaultRotateY();
         }
     }
     
-    if (m_itemNo == UTUWA_HEART) {
+    if (m_itemNo == dItem_HEART_CONTAINER_e) {
         if (mOnGroundTimer != 0) {
             getData();
             s16 rotationSpeed = 0xFFFF / getData()->mRotateYSpeed;
@@ -1146,8 +1146,8 @@ void daItem_c::set_bound_se() {
     case dItem_LIGHT_ARROW_e:
         fopAcM_seStart(this, JA_SE_CM_BST_ARROW_BOUND, temp);
         break;
-    case KAKERA_HEART:
-    case UTUWA_HEART:
+    case dItem_HEART_PIECE_e:
+    case dItem_HEART_CONTAINER_e:
         fopAcM_seStart(this, JA_SE_CM_BST_HEART_BOUND, temp);
         break;
     case BOMB_5:
@@ -1252,8 +1252,8 @@ void daItem_c::mode_wait() {
     case dItem_TRIPLE_HEART_e:
         itemActionForHeart();
         break;
-    case KAKERA_HEART:
-    case UTUWA_HEART:
+    case dItem_HEART_PIECE_e:
+    case dItem_HEART_CONTAINER_e:
     case BOMB_5:
     case BOMB_10:
     case BOMB_20:

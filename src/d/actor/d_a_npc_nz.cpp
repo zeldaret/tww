@@ -625,7 +625,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
             if(dComIfGs_checkGetBottle()) {
                 temp += 1;
             }
-            if(dComIfGs_checkGetItem(BOMB_BAG)) {
+            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
                 temp += 1;
             }
             if(dComIfGs_getItem(0xC) != dItem_NONE_e) {

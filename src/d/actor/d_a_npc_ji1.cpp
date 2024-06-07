@@ -1262,7 +1262,7 @@ void daNpc_Ji1_c::createItem() {
         itemNo = dItem_SILVER_RUPEE_e;
     }
     else {
-        itemNo = KAKERA_HEART;
+        itemNo = dItem_HEART_PIECE_e;
         dComIfGs_onEventBit(0xF10);
     }
 

@@ -893,7 +893,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 mShopItems.hideSelectItem();
                 dComIfGp_setItemRupeeCount(-rupee);
                 u8 itemNo = mShopItems.getSelectItemNo();
-                if(itemNo == EMPTY_BOTTLE || itemNo == KAKERA_HEART || itemNo == COLLECT_MAP_30) {
+                if(itemNo == EMPTY_BOTTLE || itemNo == dItem_HEART_PIECE_e || itemNo == COLLECT_MAP_30) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
 
@@ -901,7 +901,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                         case EMPTY_BOTTLE:
                             dComIfGs_onEventBit(0x2020);
                             break;
-                        case KAKERA_HEART:
+                        case dItem_HEART_PIECE_e:
                             dComIfGs_onEventBit(0x2010);
                             break;
                         case COLLECT_MAP_30:
@@ -1045,7 +1045,7 @@ u32 daNpc_Bs1_c::getMsg() {
             if(mShopItems.isSoldOutItemAll()) {
                 msgNo = 0xF3D;
             }
-            else if(dComIfGs_checkGetItem(BOMB_BAG) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
+            else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
                 dComIfGs_onEventBit(0x1F20);
                 m837 = 1;
                 msgNo = 0xF55;
@@ -1082,7 +1082,7 @@ u32 daNpc_Bs1_c::getMsg() {
         else if(mShopItems.isSoldOutItemAll()) {
             msgNo = 0x2F62;
         }
-        else if(dComIfGs_checkGetItem(BOMB_BAG) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
+        else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
             dComIfGs_onEventBit(0x1F20);
             m837 = 1;
             msgNo = 0x2F64;
@@ -1471,7 +1471,7 @@ void daNpc_Bs1_c::createShopList() {
         for(int i = 0; i < 3; i++) {
             u8 itemNo = pDataSet[i]->mpItemData->mItemNo;
             int idx = i;
-            if((itemNo == ESA_BAG && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItem_HYOI_PEAR_e && dComIfGs_checkGetItem(BOMB_BAG))) {
+            if((itemNo == ESA_BAG && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItem_HYOI_PEAR_e && dComIfGs_checkGetItem(dItem_BOMB_BAG_e))) {
                 itemNo = pDataSet[i + 3][0].mpItemData->mItemNo;
                 idx += 3;
             }
@@ -1485,7 +1485,7 @@ void daNpc_Bs1_c::createShopList() {
         __shop_items_set_data* dataSet[4];
         int index = 0;
 
-        if(dComIfGs_checkGetItem(BOMB_BAG)) {
+        if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index = 1;
         }
@@ -1495,7 +1495,7 @@ void daNpc_Bs1_c::createShopList() {
         }
         dataSet[index] = &shopItems_setData_red_bottleBs2;
         index++;
-        if(!dComIfGs_checkGetItem(BOMB_BAG)) {
+        if(!dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index++;
         }
@@ -1523,7 +1523,7 @@ void daNpc_Bs1_c::createShopList() {
     mShopItems.setItemSetDataList(mpItemSetList);
     for(int i = 0; i < 3; i++) {
         mShopItems.mSelectedItemIdx = i;
-        if((!dComIfGs_checkGetItem(BOMB_BAG) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(0xC) == dItem_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
+        if((!dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(0xC) == dItem_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
             mShopItems.SoldOutItem(i);
             m76C[i] = true;
         }

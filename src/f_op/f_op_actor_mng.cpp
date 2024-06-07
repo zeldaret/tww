@@ -940,10 +940,10 @@ uint fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot,
 uint fopAcM_createItemForBoss(cXyz* pos, int, int roomNo, csXyz* rot, cXyz* scale, int param_6) {
     switch (param_6) {
     case 1:
-        return fopAcM_createItem(pos, UTUWA_HEART, -1, roomNo, 3, rot, 0xC, scale);
+        return fopAcM_createItem(pos, dItem_HEART_CONTAINER_e, -1, roomNo, 3, rot, 0xC, scale);
     case 0:
     default:
-        return fopAcM_createItem(pos, UTUWA_HEART, -1, roomNo, 3, rot, 5, scale);
+        return fopAcM_createItem(pos, dItem_HEART_CONTAINER_e, -1, roomNo, 3, rot, 5, scale);
     }
 }
 

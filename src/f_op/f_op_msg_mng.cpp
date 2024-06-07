@@ -39,7 +39,7 @@ static struct {
     /* 0x0A */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
     /* 0x0B */ {ESA_BAG, "coverofbait.bti"},
     /* 0x0C */ {dItem_BOW_e, "bow_01.bti"},
-    /* 0x0D */ {BOMB_BAG, "bomb_00.bti"},
+    /* 0x0D */ {dItem_BOMB_BAG_e, "bomb_00.bti"},
     /* 0x0E */ {EMPTY_BOTTLE, "bottle_00.bti"},
     /* 0x0F */ {RED_BOTTLE, "bottle_01.bti"},
     /* 0x10 */ {GREEN_BOTTLE, "bottle_02.bti"},

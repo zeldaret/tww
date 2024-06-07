@@ -1002,7 +1002,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 |= 0x1000000;
             }
 
-            if (dComIfGs_checkGetItem(BOMB_BAG) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
+            if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
                 temp_r29 |= 0x10000;
             }
 
