@@ -13,8 +13,8 @@ public:
 
 public:
     int Pos2Index(f32, f32*);
-    u32 GetHeight(f32, f32);
-    u32 GetHeight(int, int);
+    int GetHeight(f32, f32);
+    int GetHeight(int, int);
     void GetArea(int, int, f32*, f32*, f32*, f32*);
     void SetInf();
     virtual ~daSea_WaterHeightInfo_Mng() {}
@@ -120,7 +120,7 @@ class sea_class : public fopAc_ac_c {
 };
 
 void daSea_Init();
-void daSea_ChkAreaBeforePos(f32, f32);
+BOOL daSea_ChkAreaBeforePos(f32, f32);
 bool daSea_ChkArea(f32, f32);
 f32 daSea_calcWave(f32, f32);
 void daSea_GetPoly(void*, void (*)(void*, cXyz&, cXyz&, cXyz&), const cXyz&, const cXyz&);

@@ -58,14 +58,15 @@ u8 pos_around[16] = {
 
 /* 8015B0A4-8015B0FC       .text Pos2Index__25daSea_WaterHeightInfo_MngFfPf */
 int daSea_WaterHeightInfo_Mng::Pos2Index(f32 v, f32* dst) {
-    int idx = (v + 450000.0f) / 100000.0f;
+    f32 f = 450000.0f;
+    int idx = (v + f) / 100000.0f;
     if (dst != NULL)
-        *dst = (v + 450000.0f) - idx * 100000.0f;
+        *dst = (v + f) - idx * 100000.0f;
     return idx;
 }
 
 /* 8015B0FC-8015B164       .text GetHeight__25daSea_WaterHeightInfo_MngFff */
-u32 daSea_WaterHeightInfo_Mng::GetHeight(f32 x, f32 z) {
+int daSea_WaterHeightInfo_Mng::GetHeight(f32 x, f32 z) {
     int xi = Pos2Index(x, NULL);
     int zi = Pos2Index(z, NULL);
     return GetHeight(xi, zi);
@@ -86,7 +87,7 @@ int get_wave_max(int roomNo) {
 }
 
 /* 8015B1E8-8015B288       .text GetHeight__25daSea_WaterHeightInfo_MngFii */
-u32 daSea_WaterHeightInfo_Mng::GetHeight(int x, int z) {
+int daSea_WaterHeightInfo_Mng::GetHeight(int x, int z) {
     if (x < 0 || 9 <= x || z < 0 || 9 <= z)
         return 10;
 
@@ -266,8 +267,16 @@ void daSea_Init() {
 }
 
 /* 8015BAF8-8015BB60       .text daSea_ChkAreaBeforePos__Fff */
-void daSea_ChkAreaBeforePos(f32, f32) {
-    /* Nonmatching */
+BOOL daSea_ChkAreaBeforePos(f32 x, f32 z) {
+    if (l_cloth.mInitFlag == 0) {
+        return FALSE;
+    }
+
+    if (l_cloth.mWaterHeightMgr.GetHeight(x, z) == 0 && l_cloth.mCullStopFlag != 0) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 8015BB60-8015BBFC       .text daSea_ChkArea__Fff */
@@ -290,25 +299,28 @@ void daSea_packet_c::SetCullStopFlag() {
     /* Nonmatching */
     if (strcmp(dComIfGp_getStartStageName(), "A_umikz") == 0) {
         mCullStopFlag = false;
-    } else {
-        s32 height = mWaterHeightMgr.GetHeight(mIdxX, mIdxZ);
-        if (height != 0) {
-            mCullStopFlag = false;
-        } else {
-            f32 minX, minZ, maxX, maxZ;
-            mWaterHeightMgr.GetArea(mIdxX, mIdxZ, &minX, &minZ, &maxX, &maxZ);
-
-            f32 gridZ1 = minZ + 25600.0f;
-            f32 gridZ0 = minZ - 25600.0f;
-            f32 gridX1 = minX + 25600.0f;
-            f32 gridX0 = minX - 25600.0f;
-
-            if ((gridX0 < mPlayerPos.x) && (mPlayerPos.x < gridX1) && (gridZ0 < mPlayerPos.z) && (mPlayerPos.z < gridZ1))
-                mCullStopFlag = true;
-            else
-                mCullStopFlag = false;
-        }
+        return;
     }
+
+    if (mWaterHeightMgr.GetHeight(mIdxX, mIdxZ) != 0) {
+        mCullStopFlag = false;
+        return;
+    }
+
+    f32 minX, minZ, maxX, maxZ;
+    mWaterHeightMgr.GetArea(mIdxX, mIdxZ, &minX, &minZ, &maxX, &maxZ);
+
+    minX += 25600.0f;
+    minZ += 25600.0f;
+    maxX -= 25600.0f;
+    maxZ -= 25600.0f;
+
+    if ((minX < mPlayerPos.x) && (mPlayerPos.x < minZ) && (minZ < mPlayerPos.z) && (mPlayerPos.z < maxZ)) {
+        mCullStopFlag = true;
+        return;
+    }
+
+    mCullStopFlag = false;
 }
 
 /* 8015C11C-8015C1DC       .text CheckRoomChange__14daSea_packet_cFv */
