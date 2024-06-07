@@ -120,7 +120,7 @@ class sea_class : public fopAc_ac_c {
 };
 
 void daSea_Init();
-BOOL daSea_ChkAreaBeforePos(f32, f32);
+bool daSea_ChkAreaBeforePos(f32, f32);
 bool daSea_ChkArea(f32, f32);
 f32 daSea_calcWave(f32, f32);
 void daSea_GetPoly(void*, void (*)(void*, cXyz&, cXyz&, cXyz&), const cXyz&, const cXyz&);

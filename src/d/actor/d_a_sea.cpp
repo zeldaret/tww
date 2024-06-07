@@ -267,21 +267,29 @@ void daSea_Init() {
 }
 
 /* 8015BAF8-8015BB60       .text daSea_ChkAreaBeforePos__Fff */
-BOOL daSea_ChkAreaBeforePos(f32 x, f32 z) {
+bool daSea_ChkAreaBeforePos(f32 x, f32 z) {
     if (l_cloth.mInitFlag == 0) {
-        return FALSE;
+        return false;
     }
 
     if (l_cloth.mWaterHeightMgr.GetHeight(x, z) == 0 && l_cloth.mCullStopFlag != 0) {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /* 8015BB60-8015BBFC       .text daSea_ChkArea__Fff */
-bool daSea_ChkArea(f32, f32) {
-    /* Nonmatching */
+bool daSea_ChkArea(f32 x, f32 z) {
+    if (!daSea_ChkAreaBeforePos(x, z)) {
+        return false;
+    }
+
+    if (l_cloth.getMinX() < x && x < l_cloth.getMaxX() && l_cloth.getMinZ() < z && z < l_cloth.getMaxZ()) {
+        return true;
+    }
+
+    return false;
 }
 
 /* 8015BBFC-8015BDB0       .text daSea_calcWave__Fff */
