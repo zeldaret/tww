@@ -18,6 +18,7 @@
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_kankyo_wether.h"
 
 extern const Vec l_tact_top;
 
@@ -559,7 +560,111 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
 
 /* 8014EBA0-8014EFD4       .text procTactPlay__9daPy_lk_cFv */
 BOOL daPy_lk_c::procTactPlay() {
-    /* Nonmatching */
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts1_UNK10000_e)) {
+        setShipRidePos(1);
+        shape_angle.y -= 0x4000;
+    }
+    
+    mDoAud_tact_ambientPlay();
+    
+    if (m3624 != 0) {
+        if (checkEndMessage(m3624)) {
+            resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
+            dComIfGp_event_reset();
+            dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+            endDemoMode();
+        }
+        return TRUE;
+    } else if (m34DA > 0) {
+        m34DA--;
+        if (m34DA == 0) {
+            mDoAud_tact_melodyPlay(m3570);
+        }
+    }
+    
+    
+    if (m34D0 != 0) {
+        if (m34D8 != 0) {
+            g_dComIfG_gameInfo.play.field_0x4947 = 0;
+            dComIfGp_evmng_cutEnd(mStaffIdx);
+            return TRUE;
+        }
+        
+        msg_class* msg_p = fopMsgM_SearchByID(m3628);
+        if (msg_p == NULL || msg_p->mStatus == fopMsgStts_BOX_CLOSED_e) {
+            fopAc_ac_c* r5 = NULL;
+            g_dComIfG_gameInfo.play.field_0x4947 = 0;
+            
+            if (msg_p != NULL) {
+                msg_p->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                m3628 = fpcM_ERROR_PROCESS_ID_e;
+            }
+            
+            if (mTactZevPartnerPID != fpcM_ERROR_PROCESS_ID_e && m34CC == m3570) {
+                r5 = fopAcM_SearchByID(mTactZevPartnerPID);
+            }
+            
+            if (m3574 == 0) {
+                dComIfGp_evmng_cutEnd(mStaffIdx);
+                return TRUE;
+            }
+            
+            if (r5 != NULL) {
+                if (m3494 == 0) {
+                    resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
+                    dComIfGp_event_reset();
+                    dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+                    endDemoMode();
+                    return TRUE;
+                } else {
+                    return procTactPlayEnd_init(-1);
+                }
+            }
+            
+            if (m3570 == 0) {
+                if (dKyw_gbwind_use_check()) {
+                    return procTactPlayEnd_init(m3570);
+                }
+                m3624 = 0x14A5;
+            } else if (m3570 == 1) {
+                daShip_c* ship = dComIfGp_getShipActor();
+                if (ship != NULL && ship->getTactWarpID() != fpcM_ERROR_PROCESS_ID_e) {
+                    return procTactPlayEnd_init(m3570);
+                }
+                m3624 = 0x14A6;
+            } else if (m3570 == 2) {
+                if (checkNpcStatus() && !dComIfGp_checkPlayerStatus0(0, daPyStts1_UNK10000_e)) {
+                    return procTactPlayEnd_init(m3570);
+                }
+                m3624 = 0x14A8;
+            } else if (m3570 == 5) {
+                if (dKy_daynighttact_stop_chk()) {
+                    m3624 = 0x14A7;
+                } else {
+                    dStage_FileList_dt_c* fili_p = dComIfGp_roomControl_getStatusRoomDt(current.roomNo)->getFileListInfo();
+                    if (dStage_FileList_dt_GetSongOk(fili_p)) {
+                        m3624 = 0x14AA;
+                    } else {
+                        return procTactPlayEnd_init(m3570);
+                    }
+                }
+            } else {
+                m3624 = 0x14A9;
+            }
+        }
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
+        mDoAud_seStart(JA_SE_TAKT_MATCHED, 0);
+        fopMsgM_messageSendOn();
+        m34D0 = 1;
+        
+        mDoAud_tact_reset();
+        setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, 10.0f);
+        setTextureAnime(6, 0);
+        onModeFlg(ModeFlg_00000100);
+        offModeFlg(ModeFlg_00000400);
+    }
+    
+    return TRUE;
 }
 
 /* 8014EFD4-8014F210       .text procTactPlayEnd_init__9daPy_lk_cFi */

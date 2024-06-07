@@ -3526,12 +3526,12 @@ u8 dKy_pship_existense_chk() {
 }
 
 /* 80197708-80197760       .text dKy_daynighttact_stop_chk__Fv */
-bool dKy_daynighttact_stop_chk() {
-    bool rt = false;
+BOOL dKy_daynighttact_stop_chk() {
+    BOOL rt = FALSE;
     if (dKy_checkEventNightStop()) {
-        rt = true;
+        rt = TRUE;
     } else if (g_env_light.mbDayNightTactStop) {
-        rt = true;
+        rt = TRUE;
     }
 
     return rt;

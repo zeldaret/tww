@@ -1065,9 +1065,9 @@ inline u8 dStage_FileList_dt_CheckAgbHover(dStage_FileList_dt_c* i_fili) {
     return i_fili->mParam & 4;
 }
 
-// inline u8 dStage_FileList_dt_GetSongOk(dStage_FileList_dt_c* i_fili) {
-    // maybe 0x40000000?
-// }
+inline u32 dStage_FileList_dt_GetSongOk(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 0x40000000;
+}
 
 // inline u8 dStage_FileList_dt_GetToonsw(dStage_FileList_dt_c* i_fili) {
     

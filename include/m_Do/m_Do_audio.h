@@ -263,7 +263,10 @@ inline void mDoAud_tact_metronomePlay(s32 param_1, s32 param_2) {
     return mDoAud_zelAudio_c::getTact().metronomePlay(param_1, param_2);
 }
 
-inline void mDoAud_tact_melodyPlay(s32) {}
+inline void mDoAud_tact_melodyPlay(s32 param_1) {
+    return mDoAud_zelAudio_c::getTact().melodyPlay(param_1);
+}
+
 inline void mDoAud_tact_melodyStop() {}
 
 inline BOOL mDoAud_checkCbPracticePlay() {
