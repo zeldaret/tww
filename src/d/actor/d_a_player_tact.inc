@@ -253,10 +253,10 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     commonProcInit(daPyProc_TACT_WAIT_e);
     daPy_matAnm_c::offMabaFlg();
     daPy_matAnm_c::setMabaTimer(1);
-    setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, daPy_HIO_tact_c0::m.field_0x4);
-    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE1_e, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, -1.0f);
+    setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.mAnmRate, 0.0f, -1, daPy_HIO_tact_c0::m.field_0x4);
+    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE1_e, daPy_HIO_tact_c0::m.mAnmRate, 0.0f, -1, -1.0f);
     mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
-    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE2_e, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, -1.0f);
+    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE2_e, daPy_HIO_tact_c0::m.mAnmRate, 0.0f, -1, -1.0f);
     mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
     mVelocity = 0.0f;
     m34D4 = 0;
@@ -362,37 +362,37 @@ BOOL daPy_lk_c::procTactWait() {
         return TRUE;
     }
     
-    int r31, r30;
+    int rightDir, leftDir;
     if (m3570 != -5) {
-        r31 = mDoAud_getTactDirection(1, m34D4);
-        r30 = mDoAud_getTactDirection(0, m34D6);
+        rightDir = mDoAud_getTactDirection(1, m34D4);
+        leftDir = mDoAud_getTactDirection(0, m34D6);
         mDoAud_tact_setVolume(m35B0 * cM_scos(m34DC));
     } else {
-        r31 = m34D4;
-        r30 = m34D6;
+        rightDir = m34D4;
+        leftDir = m34D6;
     }
     
     m35A0 += 1.0f;
     
-    if (r31 != m34D4) {
-        if (m35A4 <= 0.0f || r31 != 0) {
-            setActAnimeUpper(getTactPlayRightArmAnm(r31), UPPER_MOVE1_e, daPy_HIO_tact_c0::m.field_0x8, 0.0f, -1, daPy_HIO_tact_c0::m.field_0xC);
+    if (rightDir != m34D4) {
+        if (m35A4 <= 0.0f || rightDir != 0) {
+            setActAnimeUpper(getTactPlayRightArmAnm(rightDir), UPPER_MOVE1_e, daPy_HIO_tact_c0::m.mRightArmAnmRate, 0.0f, -1, daPy_HIO_tact_c0::m.field_0xC);
             
-            if (r31 == 0 || r31 == 2 || r31 == 4) {
-                mFrameCtrlUpper[UPPER_MOVE1_e].setRate(daPy_HIO_tact_c0::m.field_0x0);
+            if (rightDir == 0 || rightDir == 2 || rightDir == 4) {
+                mFrameCtrlUpper[UPPER_MOVE1_e].setRate(daPy_HIO_tact_c0::m.mAnmRate);
                 mFrameCtrlUpper[UPPER_MOVE1_e].setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
             }
             
-            if (m34D4 == 4 || m34D4 == 2 || r31 == 4 || r31 == 2) {
+            if (m34D4 == 4 || m34D4 == 2 || rightDir == 4 || rightDir == 2) {
                 mDoAud_tact_reset();
-                mDoAud_tact_setBeat(r31);
+                mDoAud_tact_setBeat(rightDir);
                 m35A0 = 0.0f;
                 m34DA = 0;
                 m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
                 m3624 = 0;
                 m34D0 = -1;
             }
-            m34D4 = r31;
+            m34D4 = rightDir;
             mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
             
             if (m34D4 != 0) {
@@ -405,20 +405,20 @@ BOOL daPy_lk_c::procTactWait() {
         m35A4 = 2.0f;
     }
     
-    if (r30 != m34D6) {
-        if (m35A8 <= 0.0f || r30 != 0) {
-            f32 f31;
+    if (leftDir != m34D6) {
+        if (m35A8 <= 0.0f || leftDir != 0) {
+            f32 rate;
             if (m34D4 == 4) {
-                f31 = daPy_HIO_tact_c0::m.field_0x14;
+                rate = daPy_HIO_tact_c0::m.field_0x14;
             } else if (m34D4 == 2) {
-                f31 = daPy_HIO_tact_c0::m.field_0x18;
+                rate = daPy_HIO_tact_c0::m.field_0x18;
             } else {
-                f31 = daPy_HIO_tact_c0::m.field_0x10;
+                rate = daPy_HIO_tact_c0::m.field_0x10;
             }
-            setActAnimeUpper(getTactPlayLeftArmAnm(r30), UPPER_MOVE2_e, f31, 0.0f, -1, daPy_HIO_tact_c0::m.field_0xC);
-            m34D6 = r30;
+            setActAnimeUpper(getTactPlayLeftArmAnm(leftDir), UPPER_MOVE2_e, rate, 0.0f, -1, daPy_HIO_tact_c0::m.field_0xC);
+            m34D6 = leftDir;
             mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
-            mDoAud_tact_armSoundPlay(r30);
+            mDoAud_tact_armSoundPlay(leftDir);
             if (m34D6 != 0) {
                 m35A8 = 2.0f;
             }
@@ -592,7 +592,7 @@ BOOL daPy_lk_c::procTactPlay() {
         
         msg_class* msg_p = fopMsgM_SearchByID(m3628);
         if (msg_p == NULL || msg_p->mStatus == fopMsgStts_BOX_CLOSED_e) {
-            fopAc_ac_c* r5 = NULL;
+            fopAc_ac_c* tactZevPartner = NULL;
             g_dComIfG_gameInfo.play.field_0x4947 = 0;
             
             if (msg_p != NULL) {
@@ -601,7 +601,7 @@ BOOL daPy_lk_c::procTactPlay() {
             }
             
             if (mTactZevPartnerPID != fpcM_ERROR_PROCESS_ID_e && m34CC == m3570) {
-                r5 = fopAcM_SearchByID(mTactZevPartnerPID);
+                tactZevPartner = fopAcM_SearchByID(mTactZevPartnerPID);
             }
             
             if (m3574 == 0) {
@@ -609,7 +609,7 @@ BOOL daPy_lk_c::procTactPlay() {
                 return TRUE;
             }
             
-            if (r5 != NULL) {
+            if (tactZevPartner != NULL) {
                 if (m3494 == 0) {
                     resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
                     dComIfGp_event_reset();
@@ -658,7 +658,7 @@ BOOL daPy_lk_c::procTactPlay() {
         m34D0 = 1;
         
         mDoAud_tact_reset();
-        setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, 10.0f);
+        setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.mAnmRate, 0.0f, -1, 10.0f);
         setTextureAnime(6, 0);
         onModeFlg(ModeFlg_00000100);
         offModeFlg(ModeFlg_00000400);
@@ -778,7 +778,7 @@ BOOL daPy_lk_c::procTactPlayOriginal_init() {
     m34D0 = 0;
     daPy_matAnm_c::offMabaFlg();
     daPy_matAnm_c::setMabaTimer(1);
-    setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, daPy_HIO_tact_c0::m.field_0x4);
+    setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.mAnmRate, 0.0f, -1, daPy_HIO_tact_c0::m.field_0x4);
     
     m3570 = dComIfGp_event_getTactFreeMStick(m34D0);
     setActAnimeUpper(getTactPlayRightArmAnm(m3570), UPPER_MOVE1_e, 0.0f, 0.0f, -1, -1.0f);
@@ -818,15 +818,15 @@ BOOL daPy_lk_c::procTactPlayOriginal() {
             m34D6 = 0xF;
             
             m3570 = dComIfGp_event_getTactFreeMStick(m34D0);
-            setActAnimeUpper(getTactPlayRightArmAnm(m3570), UPPER_MOVE1_e, daPy_HIO_tact_c0::m.field_0x8, 0.0f, -1, 5.0f);
+            setActAnimeUpper(getTactPlayRightArmAnm(m3570), UPPER_MOVE1_e, daPy_HIO_tact_c0::m.mRightArmAnmRate, 0.0f, -1, 5.0f);
             mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
             if (m3570 == 0 || m3570 == 2 || m3570 == 4) {
-                mFrameCtrlUpper[UPPER_MOVE1_e].setRate(daPy_HIO_tact_c0::m.field_0x0);
+                mFrameCtrlUpper[UPPER_MOVE1_e].setRate(daPy_HIO_tact_c0::m.mAnmRate);
                 mFrameCtrlUpper[UPPER_MOVE1_e].setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
             }
             
             m3574 = dComIfGp_event_getTactFreeCStick(m34D0);
-            setActAnimeUpper(getTactPlayLeftArmAnm(m3574), UPPER_MOVE2_e, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, 5.0f);
+            setActAnimeUpper(getTactPlayLeftArmAnm(m3574), UPPER_MOVE2_e, daPy_HIO_tact_c0::m.mAnmRate, 0.0f, -1, 5.0f);
             mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
             mFrameCtrlUpper[UPPER_MOVE2_e].setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
             

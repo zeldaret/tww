@@ -1746,7 +1746,7 @@ BOOL daPy_lk_c::changeDamageProc() {
     
     BOOL r30;
     int damage;
-    s32 r28 = dBgS_Attr_NORMAL_e;
+    s32 attribCode = dBgS_Attr_NORMAL_e;
     
     if (checkNoResetFlg1(daPyFlg1_UNK4) || (
         mAcch.ChkGroundHit() &&
@@ -1767,15 +1767,15 @@ BOOL daPy_lk_c::changeDamageProc() {
             mCurrAttributeCode == dBgS_Attr_DAMAGE_e ||
             mCurrAttributeCode == dBgS_Attr_ELECTRICITY_e
         )) {
-            r28 = mCurrAttributeCode;
+            attribCode = mCurrAttributeCode;
         } else {
-            for (int i = 0; r28 == dBgS_Attr_NORMAL_e && i < (s32)ARRAY_SIZE(mAcchCir); i++) {
-                r28 = checkWallAtributeDamage(&mAcchCir[i]);
+            for (int i = 0; attribCode == dBgS_Attr_NORMAL_e && i < (s32)ARRAY_SIZE(mAcchCir); i++) {
+                attribCode = checkWallAtributeDamage(&mAcchCir[i]);
             }
         }
     }
     
-    if (r28 != dBgS_Attr_NORMAL_e) {
+    if (attribCode != dBgS_Attr_NORMAL_e) {
         r30 = TRUE;
         damage = 1;
     } else {
@@ -1786,20 +1786,20 @@ BOOL daPy_lk_c::changeDamageProc() {
         }
     }
     
-    dCcG_At_Spl r27;
+    dCcG_At_Spl spl;
     if (mCyl.ChkTgHit()) {
         dCcD_GObjInf* gobj = mCyl.GetTgHitGObj();
         if (gobj) {
-            r27 = gobj->GetAtSpl();
+            spl = gobj->GetAtSpl();
         } else {
-            r27 = mStts.GetAtSpl();
+            spl = mStts.GetAtSpl();
         }
     } else {
-        r27 = dCcG_At_Spl_UNK0;
+        spl = dCcG_At_Spl_UNK0;
     }
     
     if (checkModeFlg(ModeFlg_04000000)) {
-        if (r30 || mCyl.ChkTgHit() && !checkSuccessGuard(r27)) {
+        if (r30 || mCyl.ChkTgHit() && !checkSuccessGuard(spl)) {
             setDamagePoint(-damage);
             mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x2;
             
@@ -1807,9 +1807,9 @@ BOOL daPy_lk_c::changeDamageProc() {
             
             seStartOnlyReverb(JA_SE_LK_DAMAGE_NORMAL);
             changePlayer(this);
-            if (mCyl.ChkTgHit() && !checkSuccessGuard(r27)) {
+            if (mCyl.ChkTgHit() && !checkSuccessGuard(spl)) {
                 setDamageEmitter();
-            } else if (r28 == dBgS_Attr_ELECTRICITY_e) {
+            } else if (attribCode == dBgS_Attr_ELECTRICITY_e) {
                 setDamageElecEmitter();
             }
             if (daPy_dmEcallBack_c::checkElec()) {
@@ -1853,7 +1853,7 @@ BOOL daPy_lk_c::changeDamageProc() {
             freeRopeItem();
             freeHookshotItem();
             
-            if (!checkSuccessGuard(r27)) {
+            if (!checkSuccessGuard(spl)) {
                 if (mEquipItem == daPyItem_BOKO_e) {
                     deleteEquipItem(FALSE);
                 }
@@ -1874,17 +1874,17 @@ BOOL daPy_lk_c::changeDamageProc() {
                 
                 if (checkGrabWear() &&
                     mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_NZ &&
-                    grabActor)
-                {
-                    cXyz* r3 = getDamageVec(&mCyl);
-                    grabActor->shape_angle.y = cM_atan2s(r3->x, r3->z);
+                    grabActor
+                ) {
+                    cXyz* damageVec = getDamageVec(&mCyl);
+                    grabActor->shape_angle.y = cM_atan2s(damageVec->x, damageVec->z);
                     grabActor->shape_angle.x = 0x2000;
                     return procLargeDamage_init(-4, 1, 0, 0);
                 }
-                if (r27 == 7 || r27 == 2 || r27 == 10) {
+                if (spl == 7 || spl == 2 || spl == 10) {
                     return procLargeDamage_init(-6, 0, 0, 0);
                 }
-                if (daPy_lk_c::checkPlayerFly() || r27 == 6 || r27 == 1 || r27 == 9) {
+                if (daPy_lk_c::checkPlayerFly() || spl == 6 || spl == 1 || spl == 9) {
                     return procLargeDamage_init(-1, 1, 0, 0);
                 }
                 if (checkNormalDamage(damage)) {
@@ -1916,7 +1916,7 @@ BOOL daPy_lk_c::changeDamageProc() {
             }
             setDamagePoint(-damage);
             
-            if (r28 == dBgS_Attr_ELECTRICITY_e) {
+            if (attribCode == dBgS_Attr_ELECTRICITY_e) {
                 setDamageElecEmitter();
                 if (procElecDamage_init(NULL)) {
                     return TRUE;
@@ -2951,13 +2951,13 @@ u32 daPy_lk_c::setParamData(int roomNo, int spawnType, int eventInfoIdx, int ext
 }
 
 /* 8012010C-8012024C       .text checkLavaFace__9daPy_lk_cFP4cXyzi */
-BOOL daPy_lk_c::checkLavaFace(cXyz* param_1, int attributeCode) {
+BOOL daPy_lk_c::checkLavaFace(cXyz* oldPos, int attributeCode) {
     if (mDemo.getDemoType() == 5) {
         return FALSE;
     }
     
-    if (param_1) {
-        cXyz pos(current.pos.x, param_1->y + 20.0f, current.pos.z);
+    if (oldPos != NULL) {
+        cXyz pos(current.pos.x, oldPos->y + 20.0f, current.pos.z);
         mLavaGndChk.SetPos(&pos);
         m35D4 = dComIfG_Bgsp()->GroundCross(&mLavaGndChk);
         if (mAcch.GetGroundH() > m35D4) {
@@ -2971,7 +2971,7 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* param_1, int attributeCode) {
     }
     
     if (attributeCode == dBgS_Attr_LAVA_e) {
-        if (param_1) {
+        if (oldPos != NULL) {
             current.pos.y = m35D4;
         }
         if (checkBossGomaStage()) {
@@ -2992,7 +2992,7 @@ void daPy_lk_c::checkFallCode() {
 }
 
 /* 80120724-80120BBC       .text startRestartRoom__9daPy_lk_cFUlifi */
-BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int i_point) {
+BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_point) {
     if (!checkNoResetFlg0(daPyFlg0_UNK4000) && (i_point != 0 || dComIfGp_event_compulsory(this))) {
         mDemo.setOriginalDemoType();
         if (i_point == 0) {
@@ -3015,7 +3015,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
             if (stageType == dStageType_SEA_e && !dComIfGs_isEventBit(dSv_evtBit_c::RODE_KORL) &&
                 (current.roomNo == 11 || current.roomNo == 44) && dStage_chkPlayerId(0x80, current.roomNo))
             {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, param_1);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, mode);
                 u32 roomParam = setParamData(-1, 0, eventInfoIdx, 0);
                 dComIfGs_setRestartRoomParam(roomParam);
                 mDoAud_seStart(JA_SE_FORCE_BACK);
@@ -3060,22 +3060,22 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
                     int sector_num = sector_z*7 + sector_x;
                     int scls_idx = subsector_x + (sector_num << 2) + (subsector_z << 1);
                     
-                    dStage_changeScene(scls_idx, 0.0f, param_1, -1);
+                    dStage_changeScene(scls_idx, 0.0f, mode, -1);
                 } else {
                     if (mCurProc == daPyProc_DEMO_DEAD_e) {
-                        dStage_changeScene(0, 0.0f, param_1, -1);
+                        dStage_changeScene(0, 0.0f, mode, -1);
                     } else {
                         int roomNo = dComIfGs_getRestartRoomNo();
                         u32 roomParam = setParamData(roomNo, 0, eventInfoIdx, 0);
-                        dStage_restartRoom(roomParam, param_1);
+                        dStage_restartRoom(roomParam, mode);
                         mDoAud_seStart(JA_SE_FORCE_BACK);
                     }
                     return TRUE;
                 }
             } else if (checkNoResetFlg0(daPyFlg0_DEKU_SP_RETURN_FLG)) {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, 41, -1, 0.0f, param_1);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, 41, -1, 0.0f, mode);
             } else {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, current.roomNo, -1, 0.0f, param_1);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, current.roomNo, -1, 0.0f, mode);
             }
             
             if (mCurProc != daPyProc_DEMO_DEAD_e) {
@@ -3219,7 +3219,7 @@ BOOL daPy_lk_c::execute() {
         dComIfG_Bgsp()->MoveBgCrrPos(mAcch.m_gnd, mAcch.ChkGroundHit(), &old.pos, NULL, NULL);
     }
     
-    cXyz sp20 = old.pos;
+    cXyz oldPos = old.pos;
     m34DE = shape_angle.y;
     m35B4 = m35B0;
     m34EA = m34DC;
@@ -3347,7 +3347,7 @@ BOOL daPy_lk_c::execute() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     setWaterY();
     autoGroundHit();
-    checkLavaFace(&sp20, dBgS_Attr_NORMAL_e);
+    checkLavaFace(&oldPos, dBgS_Attr_NORMAL_e);
     
     if (checkModeFlg(ModeFlg_SWIM)) {
         if (checkNoResetFlg0(daPyFlg0_UNK100) && !checkSwimFallCheck()) {
@@ -4465,18 +4465,18 @@ BOOL daPy_lk_c::setSingleMoveAnime(daPy_ANM anm, f32 rate, f32 start, s16 end, f
 }
 
 /* 80128494-801285F8       .text setActAnimeUpper__9daPy_lk_cFUsQ29daPy_lk_c10daPy_UPPERffsf */
-BOOL daPy_lk_c::setActAnimeUpper(u16 r4, daPy_UPPER r29, f32 f28, f32 f29, s16 r30, f32 f30) {
-    J3DAnmTransform* r31 = getAnimeResource(&m_anm_heap_upper[r29], r4, 0x2400);
+BOOL daPy_lk_c::setActAnimeUpper(u16 bckIdx, daPy_UPPER upperIdx, f32 rate, f32 start, s16 end, f32 f30) {
+    J3DAnmTransform* bck = getAnimeResource(&m_anm_heap_upper[upperIdx], bckIdx, 0x2400);
     resetPriTextureAnime();
-    mAnmRatioUpper[r29].setAnmTransform(r31);
-    mAnmRatioUpper[r29].setRatio(1.0f);
-    if (r30 < 0) {
-        r30 = r31->getFrameMax();
+    mAnmRatioUpper[upperIdx].setAnmTransform(bck);
+    mAnmRatioUpper[upperIdx].setRatio(1.0f);
+    if (end < 0) {
+        end = bck->getFrameMax();
     }
     
-    f32 f31 = f28 < 0.0f ? r30 - 0.001f : f29;
-    setFrameCtrl(&mFrameCtrlUpper[r29], r31->getAttribute(), f29, r30, f28, f31);
-    r31->setFrame(f31);
+    f32 frame = rate < 0.0f ? end - 0.001f : start;
+    setFrameCtrl(&mFrameCtrlUpper[upperIdx], bck->getAttribute(), start, end, rate, frame);
+    bck->setFrame(frame);
     
     if (f30 >= 0.0f) {
         m_old_fdata->initOldFrameMorf(f30, 2, 0x1D);
@@ -4486,15 +4486,15 @@ BOOL daPy_lk_c::setActAnimeUpper(u16 r4, daPy_UPPER r29, f32 f28, f32 f29, s16 r
 }
 
 /* 801285F8-801286C0       .text resetActAnimeUpper__9daPy_lk_cFQ29daPy_lk_c10daPy_UPPERf */
-BOOL daPy_lk_c::resetActAnimeUpper(daPy_UPPER r4, f32 f31) {
+BOOL daPy_lk_c::resetActAnimeUpper(daPy_UPPER upperIdx, f32 f31) {
     if (checkDashDamageAnime()) {
         mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x0;
     }
     
-    mAnmRatioUpper[r4].setAnmTransform(NULL);
-    mAnmRatioUpper[r4].setRatio(0.0f);
-    m_anm_heap_upper[r4].mIdx = -1;
-    mFrameCtrlUpper[r4].init(0);
+    mAnmRatioUpper[upperIdx].setAnmTransform(NULL);
+    mAnmRatioUpper[upperIdx].setRatio(0.0f);
+    m_anm_heap_upper[upperIdx].mIdx = -1;
+    mFrameCtrlUpper[upperIdx].init(0);
     if (f31 >= 0.0f) {
         m_old_fdata->initOldFrameMorf(f31, 2, 0x1D);
     }
