@@ -294,6 +294,7 @@ bool daSea_ChkArea(f32 x, f32 z) {
 
 /* 8015BBFC-8015BDB0       .text daSea_calcWave__Fff */
 f32 daSea_calcWave(f32 x, f32 z) {
+    /* Nonmatching */
     if (!daSea_ChkArea(x, z)) {
         return daSea_packet_c::BASE_HEIGHT;
     }
@@ -336,6 +337,7 @@ f32 daSea_calcWave(f32 x, f32 z) {
 
 /* 8015BDB0-8015C010       .text daSea_GetPoly__FPvPFPvR4cXyzR4cXyzR4cXyz_vRC4cXyzRC4cXyz */
 void daSea_GetPoly(void* param_1, void (*callback)(void*, cXyz&, cXyz&, cXyz&), const cXyz& param_3, const cXyz& param_4) {
+    /* Nonmatching */
     if (!daSea_ChkArea(param_3.x, param_3.z) || !daSea_ChkArea(param_4.x, param_4.z)) return;
     
     f32 frac = 1.0f / 800.0f;
