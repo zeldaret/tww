@@ -293,8 +293,45 @@ bool daSea_ChkArea(f32 x, f32 z) {
 }
 
 /* 8015BBFC-8015BDB0       .text daSea_calcWave__Fff */
-f32 daSea_calcWave(f32, f32) {
-    /* Nonmatching */
+f32 daSea_calcWave(f32 x, f32 z) {
+    if (!daSea_ChkArea(x, z)) {
+        return daSea_packet_c::BASE_HEIGHT;
+    }
+
+    f32 term = 1.0f / 800.0f;
+
+    int x0 = (x - l_cloth.getMinX()) * term;
+    int z0 = (z - l_cloth.getMinZ()) * term;
+
+    f32* pY = &l_cloth.mpHeightTable[x0 + (65 * z0)]; // Completely wrong
+
+    cXyz v00, v01, v10, v11;
+
+    v01.x = (x0 * 800) + l_cloth.getMinX();
+    v00.y = pY[0];
+    v10.z = (z0 * 800) + l_cloth.getMinZ();
+    v01.y = pY[65];
+
+    v11.z = v10.z + 800.0f;
+    v11.x = v01.x + 800.0f;
+    v10.y = pY[1];
+
+    v11.y = pY[66];
+    v10.x = v11.x;
+    v01.z = v11.z;
+    v00.x = v01.x;
+    v00.z = v10.z;
+
+    cXyz norm;
+    f32 baseY;
+
+    if (((x - v01.x) * term + (z - v10.z) * term) >= 1.0f) {
+        cM3d_CalcPla(&v01, &v10, &v11, &norm, &baseY);
+    } else {
+        cM3d_CalcPla(&v00, &v01, &v10, &norm, &baseY);
+    }
+
+    return -((norm.x * x) + (norm.z * z) + baseY) / norm.y;
 }
 
 /* 8015BDB0-8015C010       .text daSea_GetPoly__FPvPFPvR4cXyzR4cXyzR4cXyz_vRC4cXyzRC4cXyz */
