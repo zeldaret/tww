@@ -335,8 +335,45 @@ f32 daSea_calcWave(f32 x, f32 z) {
 }
 
 /* 8015BDB0-8015C010       .text daSea_GetPoly__FPvPFPvR4cXyzR4cXyzR4cXyz_vRC4cXyzRC4cXyz */
-void daSea_GetPoly(void*, void (*)(void*, cXyz&, cXyz&, cXyz&), const cXyz&, const cXyz&) {
-    /* Nonmatching */
+void daSea_GetPoly(void* param_1, void (*callback)(void*, cXyz&, cXyz&, cXyz&), const cXyz& param_3, const cXyz& param_4) {
+    if (!daSea_ChkArea(param_3.x, param_3.z) || !daSea_ChkArea(param_4.x, param_4.z)) return;
+    
+    f32 frac = 1.0f / 800.0f;
+    int x0 = (param_3.x - l_cloth.getMinX()) * frac;
+    int z0 = (param_3.z - l_cloth.getMinZ()) * frac;
+    int x1 = (param_4.x - l_cloth.getMinX()) * frac;
+    int z1 = (param_4.z - l_cloth.getMinZ()) * frac;
+
+    if (!(x0 >= 0 && x0 <= 0x3F && z0 >= 0 && z0 <= 0x3F && x1 >= 0 && x1 <= 0x3F && z1 >= 0 && z1 <= 0x3F)) {
+        return;
+    }
+        
+    for (int z = z0; z < z1; z++) {
+        for (int x = x0; x < x1; x++) {
+            f32* pY = &(l_cloth.mpHeightTable[(65 * z + x) * 4]);
+            cXyz local_84, local_90, local_9c, local_a8;
+
+            f32 tmpX = (x * 800) + l_cloth.getMinX();
+            local_90.x = tmpX;//(x * 800) + l_cloth.getMinX();
+            local_84.y = pY[0];
+            local_9c.z = (z * 800) + l_cloth.getMinZ();
+            local_90.y = pY[65];
+            local_a8.z = local_9c.z + 800.0f;
+            f32 maxX = tmpX + 800.0f;
+            local_a8.x = maxX;
+            local_9c.y = pY[1];
+            local_a8.y = pY[66];
+            local_9c.x = maxX;
+            local_90.z = local_a8.z;
+            local_84.x = tmpX;
+            local_84.z = local_9c.z;
+
+
+            callback(param_1, local_84, local_90, local_a8);
+            callback(param_1, local_84, local_a8, local_9c);
+        }
+    }
+
 }
 
 /* 8015C010-8015C11C       .text SetCullStopFlag__14daSea_packet_cFv */
