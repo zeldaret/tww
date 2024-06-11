@@ -439,7 +439,6 @@ void daSea_GetPoly(void* param_1, void (*callback)(void*, cXyz&, cXyz&, cXyz&), 
 
 /* 8015C010-8015C11C       .text SetCullStopFlag__14daSea_packet_cFv */
 void daSea_packet_c::SetCullStopFlag() {
-    /* Nonmatching */
     if (strcmp(dComIfGp_getStartStageName(), "A_umikz") == 0) {
         mCullStopFlag = false;
         return;
@@ -458,7 +457,7 @@ void daSea_packet_c::SetCullStopFlag() {
     maxX -= 25600.0f;
     maxZ -= 25600.0f;
 
-    if ((minX < mPlayerPos.x) && (mPlayerPos.x < minZ) && (minZ < mPlayerPos.z) && (mPlayerPos.z < maxZ)) {
+    if ((minX < mPlayerPos.x) && (mPlayerPos.x < maxX) && (minZ < mPlayerPos.z) && (mPlayerPos.z < maxZ)) {
         mCullStopFlag = true;
         return;
     }
