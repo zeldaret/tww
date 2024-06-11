@@ -396,9 +396,8 @@ f32 daSea_calcWave(f32 x, f32 z) {
 
 /* 8015BDB0-8015C010       .text daSea_GetPoly__FPvPFPvR4cXyzR4cXyzR4cXyz_vRC4cXyzRC4cXyz */
 void daSea_GetPoly(void* param_1, void (*callback)(void*, cXyz&, cXyz&, cXyz&), const cXyz& param_3, const cXyz& param_4) {
-    /* Nonmatching */
     if (!daSea_ChkArea(param_3.x, param_3.z) || !daSea_ChkArea(param_4.x, param_4.z)) return;
-    
+
     f32 frac = 1.0f / 800.0f;
     int x0 = (param_3.x - l_cloth.getMinX()) * frac;
     int z0 = (param_3.z - l_cloth.getMinZ()) * frac;
@@ -408,33 +407,34 @@ void daSea_GetPoly(void* param_1, void (*callback)(void*, cXyz&, cXyz&, cXyz&), 
     if (!(x0 >= 0 && x0 <= 0x3F && z0 >= 0 && z0 <= 0x3F && x1 >= 0 && x1 <= 0x3F && z1 >= 0 && z1 <= 0x3F)) {
         return;
     }
-        
-    for (int z = z0; z < z1; z++) {
-        for (int x = x0; x < x1; x++) {
-            f32* pY = &(l_cloth.mpHeightTable[(65 * z + x) * 4]);
-            cXyz local_84, local_90, local_9c, local_a8;
 
-            f32 tmpX = (x * 800) + l_cloth.getMinX();
-            local_90.x = tmpX;//(x * 800) + l_cloth.getMinX();
-            local_84.y = pY[0];
-            local_9c.z = (z * 800) + l_cloth.getMinZ();
-            local_90.y = pY[65];
-            local_a8.z = local_9c.z + 800.0f;
-            f32 maxX = tmpX + 800.0f;
-            local_a8.x = maxX;
-            local_9c.y = pY[1];
-            local_a8.y = pY[66];
-            local_9c.x = maxX;
-            local_90.z = local_a8.z;
-            local_84.x = tmpX;
-            local_84.z = local_9c.z;
+    for (int z = z0; z < z1 + 1; z++) {
+        for (int x = x0; x < x1 + 1; x++) {
+            f32* pY = l_cloth.mpHeightTable;
+            pY += x;
+            pY += z * 65;
+            cXyz v00, v01, v10, v11;
 
+            v00.x = (x * 800) + l_cloth.getMinX();
+            v00.y = pY[0];
+            v00.z = (z * 800) + l_cloth.getMinZ();
 
-            callback(param_1, local_84, local_90, local_a8);
-            callback(param_1, local_84, local_a8, local_9c);
+            v01.x = v00.x;
+            v01.y = pY[65];
+            v01.z = v00.z + 800.0f;
+
+            v10.x = v00.x + 800.0f;
+            v10.y = pY[1];
+            v10.z = v00.z;
+
+            v11.x = v10.x;
+            v11.y = pY[66];
+            v11.z = v01.z;
+
+            callback(param_1, v00, v01, v11);
+            callback(param_1, v00, v11, v10);
         }
     }
-
 }
 
 /* 8015C010-8015C11C       .text SetCullStopFlag__14daSea_packet_cFv */
