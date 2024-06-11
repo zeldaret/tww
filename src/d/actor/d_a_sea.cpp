@@ -9,6 +9,7 @@
 #include "d/d_stage.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/actor/d_a_daiocta.h"
+#include "SSystem/SComponent/c_m2d_g_box.h"
 
 daSea_packet_c l_cloth;
 
@@ -235,8 +236,49 @@ void daSea_packet_c::ClrFlat() {
 }
 
 /* 8015B884-8015BA18       .text CalcFlatInterTarget__14daSea_packet_cFR4cXyz */
-f32 daSea_packet_c::CalcFlatInterTarget(cXyz&) {
-    /* Nonmatching */
+f32 daSea_packet_c::CalcFlatInterTarget(cXyz& pos) {
+    cM2dGBox box;
+    cXy xzPos;
+    xzPos.x = pos.x;
+    xzPos.y = pos.z;
+
+    if (mWaterHeightMgr.GetHeight(mIdxX, mIdxZ) == 0) {
+        return 0.0f;
+    }
+
+    f32 result = 1.0f;
+
+    for (int i = 0; i < 8; i++) {
+        int ix = mIdxX + pos_around[2 * i];
+        int iz = mIdxZ + pos_around[(2 * i) + 1];
+
+        if (mWaterHeightMgr.GetHeight(ix, iz) == 0) {
+            cXy min;
+            cXy max;
+
+            mWaterHeightMgr.GetArea(ix, iz, &min.x, &min.y, &max.x, &max.y);
+
+            min.x -= 12800.0f;
+            min.y -= 12800.0f;
+            max.x += 12800.0f;
+            max.y += 12800.0f;
+
+            box.Set(min, max);
+
+            f32 len = box.GetLen(xzPos);
+
+            if (len > 12800.0f) {
+                len = 12800.0f;
+            }
+
+            len /= 12800.0f;
+            if (result > len) {
+                result = len;
+            }
+        }
+    }
+
+    return result;
 }
 
 /* 8015BA18-8015BAD8       .text CalcFlatInter__14daSea_packet_cFv */
