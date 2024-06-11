@@ -292,6 +292,8 @@ bool daSea_ChkArea(f32 x, f32 z) {
     return false;
 }
 
+// Fakematch
+#pragma opt_dead_assignments off
 /* 8015BBFC-8015BDB0       .text daSea_calcWave__Fff */
 f32 daSea_calcWave(f32 x, f32 z) {
     if (!daSea_ChkArea(x, z)) {
@@ -347,6 +349,8 @@ f32 daSea_calcWave(f32 x, f32 z) {
 
     return -((norm.x * x) + (norm.z * z) + baseY) / norm.y;
 }
+
+#pragma opt_dead_assignments on
 
 /* 8015BDB0-8015C010       .text daSea_GetPoly__FPvPFPvR4cXyzR4cXyzR4cXyz_vRC4cXyzRC4cXyz */
 void daSea_GetPoly(void* param_1, void (*callback)(void*, cXyz&, cXyz&, cXyz&), const cXyz& param_3, const cXyz& param_4) {
