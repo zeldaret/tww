@@ -50,11 +50,11 @@ daSea_WaveInfoDat wi_prm_ocean[4] = {
     },
 };
 
-u8 pos_around[16] = {
-    0xFF, 0xFF, 0x00, 0XFF,
-    0x01, 0xFF, 0x01, 0x00,
-    0x01, 0x01, 0x00, 0x01,
-    0xFF, 0x01, 0xFF, 0x00,
+s8 pos_around[16] = {
+    -1, -1,  0, -1,
+     1, -1,  1,  0,
+     1,  1,  0,  1,
+    -1,  1, -1,  0,
 };
 
 /* 8015B0A4-8015B0FC       .text Pos2Index__25daSea_WaterHeightInfo_MngFfPf */
@@ -193,7 +193,7 @@ bool daSea_packet_c::create(cXyz& pos) {
         (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
         (GXBool)(timg->mipmapCount > 1));
     GXInitTexObjLOD(&mTexSea0, (GXTexFilter)timg->minFilter, (GXTexFilter)timg->magFilter,
-        timg->minLOD * 0.125f, timg->maxLOD * 0.125f, 0.9f,
+        timg->minLOD * 0.125f, timg->maxLOD * 0.125f, -0.9f,
         (GXBool)timg->biasClamp, (GXBool)timg->doEdgeLOD,
         (GXAnisotropy)timg->maxAnisotropy);
     GXInitTexObj(&mTexSea1, (char*)timg + timg->imageOffset, timg->width, timg->height,
