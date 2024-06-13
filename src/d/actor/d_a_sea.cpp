@@ -57,6 +57,8 @@ s8 pos_around[16] = {
     -1,  1, -1,  0,
 };
 
+extern void dKy_usonami_set(f32 param_0);
+
 /* 8015B0A4-8015B0FC       .text Pos2Index__25daSea_WaterHeightInfo_MngFfPf */
 int daSea_WaterHeightInfo_Mng::Pos2Index(f32 v, f32* dst) {
     f32 f = 450000.0f;
@@ -392,7 +394,7 @@ f32 daSea_calcWave(f32 x, f32 z) {
     return -((norm.x * x) + (norm.z * z) + baseY) / norm.y;
 }
 
-#pragma opt_dead_assignments on
+#pragma opt_dead_assignments reset
 
 /* 8015BDB0-8015C010       .text daSea_GetPoly__FPvPFPvR4cXyzR4cXyzR4cXyz_vRC4cXyzRC4cXyz */
 void daSea_GetPoly(void* param_1, void (*callback)(void*, cXyz&, cXyz&, cXyz&), const cXyz& param_3, const cXyz& param_4) {
@@ -493,8 +495,147 @@ void daSea_execute(cXyz& pos) {
 }
 
 /* 8015C214-8015C75C       .text execute__14daSea_packet_cFR4cXyz */
-void daSea_packet_c::execute(cXyz&) {
-    /* Nonmatching */
+void daSea_packet_c::execute(cXyz& pos) {
+    mPlayerPos = pos;
+    mIdxX = mWaterHeightMgr.Pos2Index(mPlayerPos.x, NULL);
+    mIdxZ = mWaterHeightMgr.Pos2Index(mPlayerPos.z, NULL);
+
+    if (strcmp(dComIfGp_getStartStageName(), "ADMumi") == 0) {
+        mFlatInter = 0.0f;
+    }
+
+    if (mRoomNo != dComIfGp_roomControl_getStayNo() && dComIfGp_roomControl_getStayNo() != 0) {
+        CheckRoomChange();
+    }
+
+    CalcFlatInter();
+    dKy_usonami_set(mFlatInter);
+    mDrawMinX = pos.x - 25600.0f;
+    mDrawMaxX = pos.x + 25600.0f;
+    mDrawMinZ = pos.z - 25600.0f;
+    mDrawMaxZ = pos.z + 25600.0f;
+    SetCullStopFlag();
+
+    if (mCullStopFlag == 1) {
+        return;
+    }
+
+    int h = mWaterHeightMgr.GetHeight(pos.x, pos.z);
+
+    f32 scale = mFlatInter * mWaveInfo.GetScale(h);
+
+    // Vectorization?
+    s16 aOffsAnimTable [4];
+    f32 aThetaXTable [4];
+    f32 aThetaZTable [4];
+    f32 aHeightTable [4];
+
+    for (int i = 0; i < 4; i++) {
+        aThetaXTable[i] = mWaveInfo.GetKm(i) * mWaveInfo.GetVx(i);
+        aThetaZTable[i] = mWaveInfo.GetKm(i) * mWaveInfo.GetVz(i);
+
+        aOffsAnimTable[i] = 65536.0f * (mWaveInfo.GetRatio(i) - 0.5f);
+        aHeightTable[i] = mWaveInfo.GetBaseHeight(i) * scale;
+    }
+
+    scale = mDrawMinZ + 800.0f;
+
+    // Unrolled loops?
+
+    // Split up to prevent integer promotion
+    s16 iVar5 = cM_rad2s(aThetaZTable[0] * scale);
+    s16 iVar4 = cM_rad2s(aThetaZTable[1] * scale);
+    s16 iVar3 = cM_rad2s(aThetaZTable[2] * scale);
+    s16 iVar2 = cM_rad2s(aThetaZTable[3] * scale);
+
+    iVar5 -= aOffsAnimTable[0];
+    iVar4 -= aOffsAnimTable[1];
+    iVar3 -= aOffsAnimTable[2];
+    iVar2 -= aOffsAnimTable[3];
+
+    iVar5 += mWaveInfo.GetPhai(0);
+    iVar4 += mWaveInfo.GetPhai(1);
+    iVar3 += mWaveInfo.GetPhai(2);
+    iVar2 += mWaveInfo.GetPhai(3);
+
+    s16 waveTheta0_DeltaZ = cM_rad2s(aThetaZTable[0] * 800.0f);
+    s16 waveTheta1_DeltaZ = cM_rad2s(aThetaZTable[1] * 800.0f);
+    s16 waveTheta2_DeltaZ = cM_rad2s(aThetaZTable[2] * 800.0f);
+    s16 waveTheta3_DeltaZ = cM_rad2s(aThetaZTable[3] * 800.0f);
+
+    s16 waveTheta0_DeltaX = cM_rad2s(aThetaXTable[0] * 800.0f);
+    s16 waveTheta1_DeltaX = cM_rad2s(aThetaXTable[1] * 800.0f);
+    s16 waveTheta2_DeltaX = cM_rad2s(aThetaXTable[2] * 800.0f);
+    s16 waveTheta3_DeltaX = cM_rad2s(aThetaXTable[3] * 800.0f);
+
+    scale = mDrawMinX + 800.0f;
+
+    s16 waveTheta0_Phase = cM_rad2s(aThetaXTable[0] * scale);
+    s16 waveTheta1_Phase = cM_rad2s(aThetaXTable[1] * scale);
+    s16 waveTheta2_Phase = cM_rad2s(aThetaXTable[2] * scale);
+    s16 waveTheta3_Phase = cM_rad2s(aThetaXTable[3] * scale);
+
+    f32 aFadeTable [65];
+
+    for (int fadeZ = 0; fadeZ < 65; fadeZ++) {
+        aFadeTable[fadeZ] = 1.0f;
+    }
+
+    /*for (int i = 0; i < 6; i++) {
+        f32 f = i / 6.0f;
+        aFadeTable[64 - i] = f;
+        aFadeTable[i] = f;
+    }*/
+
+    // Probably unrolled loop
+    aFadeTable[64] = 0.0f / 6;
+    aFadeTable[0]  = 0.0f / 6;
+    aFadeTable[63] = 1.0f / 6;
+    aFadeTable[1]  = 1.0f / 6;
+    aFadeTable[62] = 2.0f / 6;
+    aFadeTable[2]  = 2.0f / 6;
+    aFadeTable[61] = 3.0f / 6;
+    aFadeTable[3]  = 3.0f / 6;
+    aFadeTable[60] = 4.0f / 6;
+    aFadeTable[4]  = 4.0f / 6;
+    aFadeTable[59] = 5.0f / 6;
+    aFadeTable[5]  = 5.0f / 6;
+
+    for (int z = 1; z < 0x40; z++) {
+        f32* pHeight = mpHeightTable + 65 * z + 1;
+        s16 waveTheta0 = waveTheta0_Phase;
+        waveTheta0 += iVar5;
+        s16 waveTheta1 = waveTheta1_Phase;
+        waveTheta1 += iVar4;
+        s16 waveTheta2 = waveTheta2_Phase;
+        waveTheta2 += iVar3;
+        s16 waveTheta3 = waveTheta3_Phase;
+        waveTheta3 += iVar2;
+
+        for (int x = 1; x < 0x40; x++) {
+            *pHeight = aHeightTable[0] * cM_scos(waveTheta0)
+                     + aHeightTable[1] * cM_scos(waveTheta1)
+                     + aHeightTable[2] * cM_scos(waveTheta2)
+                     + aHeightTable[3] * cM_scos(waveTheta3)
+                     + BASE_HEIGHT;
+
+            *pHeight *= aFadeTable[z] * aFadeTable[x];
+            waveTheta0 += waveTheta0_DeltaX;
+            waveTheta1 += waveTheta1_DeltaX;
+            waveTheta2 += waveTheta2_DeltaX;
+            waveTheta3 += waveTheta3_DeltaX;
+
+            pHeight++;
+        }
+
+        iVar5 += waveTheta0_DeltaZ;
+        iVar4 += waveTheta1_DeltaZ;
+        iVar3 += waveTheta2_DeltaZ;
+        iVar2 += waveTheta3_DeltaZ;
+    }
+
+    mWaveInfo.AddCounter();
+    mCurPos = pos;
 }
 
 /* 8015C75C-8015D80C       .text draw__14daSea_packet_cFv */
