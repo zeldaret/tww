@@ -542,38 +542,42 @@ void daSea_packet_c::execute(cXyz& pos) {
 
     // Unrolled loops?
 
+    s16 iVar[4];
     // Split up to prevent integer promotion
-    s16 iVar5 = cM_rad2s(aThetaZTable[0] * scale);
-    s16 iVar4 = cM_rad2s(aThetaZTable[1] * scale);
-    s16 iVar3 = cM_rad2s(aThetaZTable[2] * scale);
-    s16 iVar2 = cM_rad2s(aThetaZTable[3] * scale);
+    iVar[0] = cM_rad2s(aThetaZTable[0] * scale);
+    iVar[1] = cM_rad2s(aThetaZTable[1] * scale);
+    iVar[2] = cM_rad2s(aThetaZTable[2] * scale);
+    iVar[3] = cM_rad2s(aThetaZTable[3] * scale);
 
-    iVar5 -= aOffsAnimTable[0];
-    iVar4 -= aOffsAnimTable[1];
-    iVar3 -= aOffsAnimTable[2];
-    iVar2 -= aOffsAnimTable[3];
+    iVar[0] -= aOffsAnimTable[0];
+    iVar[1] -= aOffsAnimTable[1];
+    iVar[2] -= aOffsAnimTable[2];
+    iVar[3] -= aOffsAnimTable[3];
 
-    iVar5 += mWaveInfo.GetPhai(0);
-    iVar4 += mWaveInfo.GetPhai(1);
-    iVar3 += mWaveInfo.GetPhai(2);
-    iVar2 += mWaveInfo.GetPhai(3);
+    iVar[0] += mWaveInfo.GetPhai(0);
+    iVar[1] += mWaveInfo.GetPhai(1);
+    iVar[2] += mWaveInfo.GetPhai(2);
+    iVar[3] += mWaveInfo.GetPhai(3);
 
-    s16 waveTheta0_DeltaZ = cM_rad2s(aThetaZTable[0] * 800.0f);
-    s16 waveTheta1_DeltaZ = cM_rad2s(aThetaZTable[1] * 800.0f);
-    s16 waveTheta2_DeltaZ = cM_rad2s(aThetaZTable[2] * 800.0f);
-    s16 waveTheta3_DeltaZ = cM_rad2s(aThetaZTable[3] * 800.0f);
+    s16 waveTheta_DeltaZ[4];
+    waveTheta_DeltaZ[0] = cM_rad2s(aThetaZTable[0] * 800.0f);
+    waveTheta_DeltaZ[1] = cM_rad2s(aThetaZTable[1] * 800.0f);
+    waveTheta_DeltaZ[2] = cM_rad2s(aThetaZTable[2] * 800.0f);
+    waveTheta_DeltaZ[3] = cM_rad2s(aThetaZTable[3] * 800.0f);
 
-    s16 waveTheta0_DeltaX = cM_rad2s(aThetaXTable[0] * 800.0f);
-    s16 waveTheta1_DeltaX = cM_rad2s(aThetaXTable[1] * 800.0f);
-    s16 waveTheta2_DeltaX = cM_rad2s(aThetaXTable[2] * 800.0f);
-    s16 waveTheta3_DeltaX = cM_rad2s(aThetaXTable[3] * 800.0f);
+    s16 waveTheta_DeltaX[4];
+    waveTheta_DeltaX[0] = cM_rad2s(aThetaXTable[0] * 800.0f);
+    waveTheta_DeltaX[1] = cM_rad2s(aThetaXTable[1] * 800.0f);
+    waveTheta_DeltaX[2] = cM_rad2s(aThetaXTable[2] * 800.0f);
+    waveTheta_DeltaX[3] = cM_rad2s(aThetaXTable[3] * 800.0f);
 
     scale = mDrawMinX + 800.0f;
 
-    s16 waveTheta0_Phase = cM_rad2s(aThetaXTable[0] * scale);
-    s16 waveTheta1_Phase = cM_rad2s(aThetaXTable[1] * scale);
-    s16 waveTheta2_Phase = cM_rad2s(aThetaXTable[2] * scale);
-    s16 waveTheta3_Phase = cM_rad2s(aThetaXTable[3] * scale);
+    s16 waveTheta_Phase[4];
+    waveTheta_Phase[0] = cM_rad2s(aThetaXTable[0] * scale);
+    waveTheta_Phase[1] = cM_rad2s(aThetaXTable[1] * scale);
+    waveTheta_Phase[2] = cM_rad2s(aThetaXTable[2] * scale);
+    waveTheta_Phase[3] = cM_rad2s(aThetaXTable[3] * scale);
 
     f32 aFadeTable [65];
 
@@ -581,36 +585,31 @@ void daSea_packet_c::execute(cXyz& pos) {
         aFadeTable[fadeZ] = 1.0f;
     }
 
-    /*for (int i = 0; i < 6; i++) {
-        f32 f = i / 6.0f;
-        aFadeTable[64 - i] = f;
-        aFadeTable[i] = f;
-    }*/
-
     // Probably unrolled loop
-    aFadeTable[64] = 0.0f / 6;
-    aFadeTable[0]  = 0.0f / 6;
-    aFadeTable[63] = 1.0f / 6;
-    aFadeTable[1]  = 1.0f / 6;
-    aFadeTable[62] = 2.0f / 6;
-    aFadeTable[2]  = 2.0f / 6;
-    aFadeTable[61] = 3.0f / 6;
-    aFadeTable[3]  = 3.0f / 6;
-    aFadeTable[60] = 4.0f / 6;
-    aFadeTable[4]  = 4.0f / 6;
-    aFadeTable[59] = 5.0f / 6;
-    aFadeTable[5]  = 5.0f / 6;
+    f32 frac = 1.0f / 6;
+    aFadeTable[64] = frac * 0;
+    aFadeTable[0]  = frac * 0;
+    aFadeTable[63] = frac * 1;
+    aFadeTable[1]  = frac * 1;
+    aFadeTable[62] = frac * 2;
+    aFadeTable[2]  = frac * 2;
+    aFadeTable[61] = frac * 3;
+    aFadeTable[3]  = frac * 3;
+    aFadeTable[60] = frac * 4;
+    aFadeTable[4]  = frac * 4;
+    aFadeTable[59] = frac * 5;
+    aFadeTable[5]  = frac * 5;
 
     for (int z = 1; z < 0x40; z++) {
         f32* pHeight = mpHeightTable + 65 * z + 1;
-        s16 waveTheta0 = waveTheta0_Phase;
-        waveTheta0 += iVar5;
-        s16 waveTheta1 = waveTheta1_Phase;
-        waveTheta1 += iVar4;
-        s16 waveTheta2 = waveTheta2_Phase;
-        waveTheta2 += iVar3;
-        s16 waveTheta3 = waveTheta3_Phase;
-        waveTheta3 += iVar2;
+        s16 waveTheta0 = waveTheta_Phase[0];
+        waveTheta0 += iVar[0];
+        s16 waveTheta1 = waveTheta_Phase[1];
+        waveTheta1 += iVar[1];
+        s16 waveTheta2 = waveTheta_Phase[2];
+        waveTheta2 += iVar[2];
+        s16 waveTheta3 = waveTheta_Phase[3];
+        waveTheta3 += iVar[3];
 
         for (int x = 1; x < 0x40; x++) {
             *pHeight = aHeightTable[0] * cM_scos(waveTheta0)
@@ -620,18 +619,18 @@ void daSea_packet_c::execute(cXyz& pos) {
                      + BASE_HEIGHT;
 
             *pHeight *= aFadeTable[z] * aFadeTable[x];
-            waveTheta0 += waveTheta0_DeltaX;
-            waveTheta1 += waveTheta1_DeltaX;
-            waveTheta2 += waveTheta2_DeltaX;
-            waveTheta3 += waveTheta3_DeltaX;
+            waveTheta0 += waveTheta_DeltaX[0];
+            waveTheta1 += waveTheta_DeltaX[1];
+            waveTheta2 += waveTheta_DeltaX[2];
+            waveTheta3 += waveTheta_DeltaX[3];
 
             pHeight++;
         }
 
-        iVar5 += waveTheta0_DeltaZ;
-        iVar4 += waveTheta1_DeltaZ;
-        iVar3 += waveTheta2_DeltaZ;
-        iVar2 += waveTheta3_DeltaZ;
+        iVar[0] += waveTheta_DeltaZ[0];
+        iVar[1] += waveTheta_DeltaZ[1];
+        iVar[2] += waveTheta_DeltaZ[2];
+        iVar[3] += waveTheta_DeltaZ[3];
     }
 
     mWaveInfo.AddCounter();
