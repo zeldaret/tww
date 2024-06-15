@@ -173,7 +173,6 @@ f32 daSea_WaveInfo::GetScale(f32 v) {
 
 /* 8015B56C-8015B7A0       .text create__14daSea_packet_cFR4cXyz */
 bool daSea_packet_c::create(cXyz& pos) {
-    /* Nonmatching */
     BASE_HEIGHT = 1.0f;
     BASE_HEIGHT = pos.y + 1.0f;
 
@@ -191,18 +190,22 @@ bool daSea_packet_c::create(cXyz& pos) {
     mAnimCounter = 0;
 
     ResTIMG* timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_B_SEA_TEX0AND2);
+    
+    GXBool mipmap = timg->mipmapCount > 1;
     GXInitTexObj(&mTexSea0, (char*)timg + timg->imageOffset, timg->width, timg->height,
         (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
-        (GXBool)(timg->mipmapCount > 1));
+        mipmap);
     GXInitTexObjLOD(&mTexSea0, (GXTexFilter)timg->minFilter, (GXTexFilter)timg->magFilter,
         timg->minLOD * 0.125f, timg->maxLOD * 0.125f, -0.9f,
         (GXBool)timg->biasClamp, (GXBool)timg->doEdgeLOD,
         (GXAnisotropy)timg->maxAnisotropy);
+
+    mipmap = timg->mipmapCount > 1;
     GXInitTexObj(&mTexSea1, (char*)timg + timg->imageOffset, timg->width, timg->height,
         (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
-        (GXBool)(timg->mipmapCount > 1));
+        mipmap);
     GXInitTexObjLOD(&mTexSea1, (GXTexFilter)timg->minFilter, (GXTexFilter)timg->magFilter,
-        timg->minLOD * 0.125f, timg->maxLOD * 0.125f, 0.0f,
+        timg->minLOD * 0.125f, timg->maxLOD * 0.125f, 1.0f,
         (GXBool)timg->biasClamp, (GXBool)timg->doEdgeLOD,
         (GXAnisotropy)timg->maxAnisotropy);
 
