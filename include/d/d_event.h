@@ -123,7 +123,7 @@ public:
     u32 getMode() { return mMode & 0xFF; } // &0xFF added to fix dEvt_control_c::moveApproval, probably fakematch
 
     void checkHind(u16) {}
-    void chkPhoto() {}
+    BOOL chkPhoto() { return mbInPhoto; }
     void getMode() const {}
     void offHindFlag(u16) {}
     void onHindFlag(u16) {}

@@ -211,13 +211,13 @@ const u16 daDai_c::m_savelabel[] = {
 };
 
 /* 800568A8-800568B0       .text getMaxDaiza__7daDai_cFv */
-s8 daDai_c::getMaxDaiza() {
-    return mNowDaizaNum;
+int daDai_c::getMaxDaiza() {
+    return (u8)mNowDaizaNum; // cast is weird, but it's the only way I've found to match its uses in d_a_npc_people
 }
 
 /* 800568B0-800568B8       .text getDaizaSetItemNum__7daDai_cFv */
-s8 daDai_c::getDaizaSetItemNum() {
-    return mNowItemNum;
+int daDai_c::getDaizaSetItemNum() {
+    return (u8)mNowItemNum; // cast is weird, but it's the only way I've found to match its uses in d_a_npc_people
 }
 
 bool daNpc_Os_c::m_playerRoom[3] = { false, false, false };

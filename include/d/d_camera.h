@@ -356,8 +356,6 @@ public:
     void SetExtendedPosition(cXyz*);
     void ScopeViewMsgModeOff();
 
-    void setFlag(u32);
-    void chkFlag(u32);
     void Bank();
     void Up();
     void Center();
@@ -402,12 +400,14 @@ public:
     void bSplineEvCamera();
     void twoActor0EvCamera();
 
-    void CStickUse() {}
-    void CStickUseless() {}
+    void CStickUse() { clrFlag(0x800000); }
+    void CStickUseless() { setFlag(0x800000); }
     cXyz Eye() { return mEye + mEyeShake; }
-    void StickUse() {}
-    void StickUseless() {}
-    void clrFlag(u32) {}
+    void StickUse() { clrFlag(0x1000000); }
+    void StickUseless() { setFlag(0x1000000); }
+    void setFlag(u32 flag) { mEventFlags |= flag; }
+    bool chkFlag(u32 flag) { return mEventFlags & flag; }
+    void clrFlag(u32 flag) { mEventFlags &= ~flag; }
 };
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);
