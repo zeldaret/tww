@@ -146,7 +146,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4952 = 0;
     field_0x4953 = 0;
     field_0x4954 = 0;
-    mItemTimer = 0;
+    mStartItemTimer = false;
     mFwaterTimer = 0;
     mPlacenameIndex = 0;
     mPlacenameState = 0;
@@ -154,7 +154,7 @@ void dComIfG_play_c::itemInit() {
     field_0x495a = 0;
     mPictureFlag = 0;
     mPictureResult = 0;
-    field_0x495d = 0;
+    mPictureResultDetail = 0;
     mPictureStatus = 0;
     field_0x495f = 0;
     mPictureFormat = 0;
