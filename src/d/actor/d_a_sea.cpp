@@ -8,6 +8,7 @@
 #include "d/d_procname.h"
 #include "d/d_stage.h"
 #include "m_Do/m_Do_lib.h"
+#include "m_Do/m_Do_graphic.h"
 #include "d/actor/d_a_daiocta.h"
 #include "SSystem/SComponent/c_m2d_g_box.h"
 
@@ -643,6 +644,227 @@ void daSea_packet_c::execute(cXyz& pos) {
 /* 8015C75C-8015D80C       .text draw__14daSea_packet_cFv */
 void daSea_packet_c::draw() {
     /* Nonmatching */
+    if (ChkCullStop()) return;
+
+    m_draw_vtx = (cXyz*)mDoGph_gInf_c::alloc(0xC60C, 0x20);
+    if (m_draw_vtx == NULL) {
+        return;
+    }
+
+    JUT_ASSERT(0x518, m_draw_vtx != 0); // Redundant assert
+
+    j3dSys.reinitGX();
+
+
+    cXyz* vtx = m_draw_vtx;
+    f32* pY = mpHeightTable;
+
+    f32 minZ = getMinZ();
+    for (int z = 0; z < 65; z++) {
+        f32 minX = getMinX();
+        for (int x = 0; x < 65; x++) {
+            (*vtx).x = minX;
+            (*vtx).y = *pY;
+            (*vtx).z = minZ;
+            minX += 800.0f;
+            vtx++;
+            pY++;
+        }
+
+        minZ += 800.0f;
+    }
+
+    DCStoreRange(m_draw_vtx, 0xC60C);
+
+    ResTIMG* pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", ALWAYS_BTI_B_SEA_TEX0AND2));
+
+    GXBool mipmap = pResTIMG->mipmapCount > 1;
+    GXInitTexObj(&mTexSea0, (&pResTIMG->format + pResTIMG->imageOffset), pResTIMG->width, pResTIMG->height,
+                (GXTexFmt)pResTIMG->format, (GXTexWrapMode)pResTIMG->wrapS, (GXTexWrapMode)pResTIMG->wrapT,
+                mipmap);
+
+    GXInitTexObjLOD(&mTexSea0, (GXTexFilter)pResTIMG->minFilter, (GXTexFilter)pResTIMG->magFilter,
+                    pResTIMG->minLOD * 0.125f, pResTIMG->maxLOD * 0.125f, -0.9f,
+                    (GXBool)pResTIMG->biasClamp, (GXBool)pResTIMG->doEdgeLOD,
+                    (GXAnisotropy)pResTIMG->maxAnisotropy);
+
+    mipmap = pResTIMG->mipmapCount > 1;
+    GXInitTexObj(&mTexSea1, (&pResTIMG->format + pResTIMG->imageOffset), pResTIMG->width, pResTIMG->height,
+                (GXTexFmt)pResTIMG->format, (GXTexWrapMode)pResTIMG->wrapS, (GXTexWrapMode)pResTIMG->wrapT,
+                mipmap);
+
+    GXInitTexObjLOD(&mTexSea1, (GXTexFilter)pResTIMG->minFilter, (GXTexFilter)pResTIMG->magFilter,
+                    pResTIMG->minLOD * 0.125f, pResTIMG->maxLOD * 0.125f, 1.0f,
+                    (GXBool)pResTIMG->biasClamp, (GXBool)pResTIMG->doEdgeLOD,
+                    (GXAnisotropy)pResTIMG->maxAnisotropy);
+
+    pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", ALWAYS_BTI_B_WYURAYURA_TEX1));
+    mDoLib_setResTimgObj(pResTIMG, &mTexYura, 0, NULL);
+    mDoMtx_stack_c::scaleS(1.5f, 1.5f, 1.0f);
+    GXLoadTexMtxImm(mDoMtx_stack_c::get(), GX_TEXMTX0, GX_MTX2x4);
+    GXLoadTexObj(&mTexSea0, GX_TEXMAP0);
+
+    mAnimCounter += 1;
+
+    if (mAnimCounter > 300) {
+        mAnimCounter = 0;
+    }
+
+
+    mDoMtx_stack_c::transS(0.0f, mAnimCounter / 300.0f, 0.0f);
+    GXLoadTexMtxImm(mDoMtx_stack_c::get(), GX_TEXMTX1, GX_MTX2x4);
+    GXLoadTexObj(&mTexYura, GX_TEXMAP1);
+    GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD1, GX_TEXMAP1);
+
+    static f32 offset[6];
+
+    offset[0] = 0.3f;
+    offset[1] = 0.0f;
+    offset[2] = 0.0f;
+    offset[3] = 0.0f;
+    offset[4] = 0.3f;
+    offset[5] = 0.0f;
+
+
+    GXSetIndTexMtx(GX_ITM_0, (f32*) offset, -1);
+    GXSetTevIndWarp(GX_TEVSTAGE0, GX_INDTEXSTAGE0, GX_TRUE, GX_FALSE, GX_ITM_0);
+    GXSetTevIndWarp(GX_TEVSTAGE1, GX_INDTEXSTAGE0, GX_TRUE, GX_FALSE, GX_ITM_0);
+    mDoMtx_stack_c::transS(0.2f, -0.2f, 0.0f);
+    GXLoadTexMtxImm(mDoMtx_stack_c::get(), GX_TEXMTX2, GX_MTX2x4);
+    GXLoadTexObj(&mTexSea1, GX_TEXMAP2);
+    
+    GXColor colorAmb, colorDif;
+    dKy_get_seacolor(&colorAmb, &colorDif);
+
+    f32 tmp = mFlatInter * mFlatInter;
+
+    GXColor color1 = {
+        (colorDif.r + tmp * colorAmb.r),
+        (colorDif.g + tmp * colorAmb.g),
+        (colorDif.b + tmp * colorAmb.b),
+        0xFF
+    };
+
+    f32 f = 1.0f / 10;
+
+    tmp = 1.0f - tmp * f;
+    
+    f32 r = colorDif.r * tmp;
+    f32 g = colorDif.g * tmp;
+    f32 b = colorDif.b * tmp;
+
+    if (r > 255.0f) {
+        r = 255.0f;
+    }
+
+    if (g > 255.0f) {
+        g = 255.0f;
+    }
+
+    if (b > 255.0f) {
+        b = 255.0f;
+    }
+
+    GXColor color2 = {(u8) r, (u8) g, (u8) b, 0xFF};
+
+    GXSetTevColor(GX_TEVREG0, colorDif);
+    GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
+    GXSetTevKColorSel(GX_TEVSTAGE1, GX_TEV_KCSEL_K1);
+
+    GXSetTevKColor(GX_KCOLOR0, color1);
+    GXSetTevKColor(GX_KCOLOR1, color2);
+
+    GXSetNumIndStages(1);
+    GXSetNumChans(0);
+    GXSetNumTexGens(3);
+    GXSetNumTevStages(3);
+    GXSetCullMode(GX_CULL_BACK);
+    GXSetCoPlanar(GX_FALSE);
+
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX2, GX_FALSE, GX_PTIDENTITY);
+
+    GXSetTevOrder(GX_TEVSTAGE0,GX_TEXCOORD0,GX_TEXMAP0,GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0,GX_CC_C0,GX_CC_KONST,GX_CC_TEXC,GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVREG2);
+    GXSetTevAlphaIn(GX_TEVSTAGE0,GX_CA_ZERO,GX_CA_KONST,GX_CA_TEXA,GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE0,GX_TEV_SWAP0,GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1,GX_TEXCOORD2,GX_TEXMAP2,GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1,GX_CC_C0,GX_CC_KONST,GX_CC_TEXC,GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1,GX_CA_APREV,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE1,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE1,GX_TEV_SWAP0,GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE2,GX_TEXCOORD_NULL,GX_TEXMAP_NULL,GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE2,GX_CC_CPREV,GX_CC_C2,GX_CC_APREV,GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE2,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE2,GX_CA_ZERO,GX_CA_KONST,GX_CA_APREV,GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE2,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE2,GX_TEV_SWAP0,GX_TEV_SWAP0);
+    GXSetAlphaCompare(GX_ALWAYS,0,GX_AOP_OR,GX_ALWAYS,0);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetPixelFmt(GX_PF_RGBA6_Z24,GX_ZC_LINEAR);
+    GXSetZMode(true,GX_LEQUAL,true);
+    GXSetBlendMode(GX_BM_NONE,GX_BL_ZERO,GX_BL_ZERO,GX_LO_CLEAR);
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    GXSetDither(GX_TRUE);
+
+    dKy_GxFog_sea_set();
+
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS,GX_INDEX16);
+    GXSetVtxDesc(GX_VA_TEX0,GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_POS,GX_CLR_RGBA,GX_F32,0);
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_CLR_RGBA,GX_F32,0);
+    GXSetArray(GX_VA_POS, this->m_draw_vtx, 0xc);
+
+    f32 frac = 1.0f / 2000;
+
+    u16 idx1 = 0;
+    u16 idx2 = 65;
+
+    cXyz* pVtx = m_draw_vtx;
+
+    f32 curZ = (*pVtx).z * frac;
+
+    for (int z = 0; z < 65; z++) {
+        f32 nextZ = ((*pVtx).z + 800.0f) * frac;
+        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 65 * 2);
+
+        for (int x = 0; x < 65; x++) {
+            f32 f = (*pVtx).x * frac;
+            GXPosition1x16(idx2++);
+            GXTexCoord2f32(f, nextZ);
+            GXPosition1x16(idx1++);
+            GXTexCoord2f32(f, curZ);
+
+            pVtx++;
+        };
+
+        GXEnd();
+
+        curZ = nextZ;
+    }
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+
+    if (getMinZ() < -450000.0f) {
+        for (int i = 0; i < (getMinZ() + 450000.0f) / 225000.0f; i++) {
+            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
+        }
+    }
+
+    if (getMaxZ() < 450000.0f) {
+        return;
+    }
+
 }
 
 /* 8015D80C-8015D87C       .text daSea_Draw__FP9sea_class */

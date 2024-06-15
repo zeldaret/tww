@@ -78,7 +78,7 @@ public:
     GXTexObj* getYuraTexObj() { return &mTexYura; }
     void ChkNowUse() {}
     void GetSrcDataHeight(f32, f32) {}
-    void ChkCullStop() {}
+    bool ChkCullStop() { return mCullStopFlag == 1; }
     void end() {}
     void getPos() {}
     void GetCenterP() {}
@@ -101,7 +101,7 @@ public:
     /* 0x120 */ f32 mDrawMaxZ;
     /* 0x124 */ f32* mpHeightTable;
     /* 0x128 */ cXyz mCurPos;
-    /* 0x134 */ cXyz* mpDrawVtx;
+    /* 0x134 */ cXyz* m_draw_vtx;
     /* 0x138 */ u8 mInitFlag;
     /* 0x139 */ u8 mCullStopFlag;
     /* 0x13A */ u8 m13A;
