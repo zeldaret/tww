@@ -290,7 +290,7 @@ f32 daSea_packet_c::CalcFlatInterTarget(cXyz& pos) {
 void daSea_packet_c::CalcFlatInter() {
     if (mFlags & 1) {
         if (mFlatInterCounter != 0.0f) {
-            mFlatInter += (mFlatTarget - mFlatInter) / mFlatInterCounter;
+            mFlatInter = mFlatInter + (mFlatTarget - mFlatInter) / mFlatInterCounter;
             mFlatInterCounter--;
         } else {
             mFlatInter = mFlatTarget;
@@ -298,7 +298,7 @@ void daSea_packet_c::CalcFlatInter() {
     } else {
         f32 target = CalcFlatInterTarget(mPlayerPos);
         if (mFlatInterCounter != 0.0f) {
-            mFlatInter += (target - mFlatInter) / mFlatInterCounter;
+            mFlatInter = mFlatInter + (target - mFlatInter) / mFlatInterCounter;
             mFlatInterCounter--;
         } else {
             mFlatInter = target;
