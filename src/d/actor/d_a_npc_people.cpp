@@ -6261,8 +6261,6 @@ u16 daNpcPeople_c::talk3(int param_1) {
 
 /* 000057FC-00005FB8       .text next_msgStatus__13daNpcPeople_cFPUl */
 u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching - extra clrlwi */
-
     u16 status = fopMsgStts_MSG_CONTINUES_e;
 
     switch(*pMsgNo) {
@@ -6351,7 +6349,7 @@ u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
                         break;
                     case 8:
                         m734++;
-                        u8 item = (*m734 == 0) ? 0x29 : 0x28;
+                        u8 item = (*m734 == 0) ? (u8)0x29 : (u8)0x28;
                         m734++;
                         if(!dComIfGs_checkGetItem(item)) {
                             m734++;
@@ -8048,22 +8046,22 @@ static u16 l_daiza_no_tbl[] = {
 
 /* 000091E0-00009420       .text chkDaiza__13daNpcPeople_cFv */
 s32 daNpcPeople_c::chkDaiza() {
-    /* Nonmatching */
+    int i;
 
-    for(int i = 0; i < 6; i++) {
+    for(i = 0; i < 6; i++) {
         if(dComIfGs_getEventReg(l_daiza_no_tbl[i]) == 0x97) {
             return 1;
         }
     }
 
-    for(int i = 0; i < 6; i++) {
+    for(i = 0; i < 6; i++) {
         if(dComIfGs_getEventReg(l_daiza_no_tbl[i]) == 0x96) {
             return 2;
         }
     }
 
     int temp = 0;
-    for(int i = 0; i < 6; i++) {
+    for(i = 0; i < 6; i++) {
         u8 reg = dComIfGs_getEventReg(l_daiza_no_tbl[i]);
         if(reg == 0x8C || reg == 0x8D || reg == 0x8E) {
             temp++;
@@ -8074,7 +8072,7 @@ s32 daNpcPeople_c::chkDaiza() {
     }
 
     temp = 0;
-    for(int i = 0; i < 6; i++) {
+    for(i = 0; i < 6; i++) {
         u8 reg = dComIfGs_getEventReg(l_daiza_no_tbl[i]);
         if(reg == 0x8F || reg == 0x90 || reg == 0x91 || reg == 0x92 || reg == 0x93) {
             temp++;
@@ -8085,7 +8083,7 @@ s32 daNpcPeople_c::chkDaiza() {
     }
 
     temp = 0;
-    for(int i = 0; i < 6; i++) {
+    for(i = 0; i < 6; i++) {
         u8 reg = dComIfGs_getEventReg(l_daiza_no_tbl[i]);
         if(reg == 0x94 || reg == 0x95) {
             temp++;
@@ -8096,7 +8094,7 @@ s32 daNpcPeople_c::chkDaiza() {
     }
 
     temp = 0;
-    for(int i = 0; i < 6; i++) {
+    for(i = 0; i < 6; i++) {
         u8 reg = dComIfGs_getEventReg(l_daiza_no_tbl[i]);
         if(reg != 0) {
             temp++;
@@ -8105,8 +8103,11 @@ s32 daNpcPeople_c::chkDaiza() {
     if(temp >= 2) {
         return 6;
     }
-
-    return -(temp >= 1) & 0x7; // i've got no idea what's happening here
+    if (temp >= 1) {
+        return 7;
+    }
+    
+    return 0;
 }
 
 /* 00009420-000095D8       .text checkPig__13daNpcPeople_cFv */
