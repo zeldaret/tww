@@ -21,7 +21,7 @@ jobs:
       run: cp -R /orig/${{matrix.version}} orig
     - name: Build
       run: |
-        python configure.py --version ${{matrix.version}} --compilers /compilers
+        python configure.py --version ${{matrix.version}} --compilers /compilers --warn error
         ninja
     - name: Upload progress
       if: github.ref == 'refs/heads/main'
