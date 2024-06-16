@@ -312,7 +312,7 @@ void fopMsgM_getScopeMode() {
 
 /* 8002C624-8002C650       .text fopMsgM_forceSendOn__Fv */
 bool fopMsgM_forceSendOn() {
-    if (dComIfGp_getScopeType() == 10) {
+    if (dComIfGp_getScopeMesgStatus() == 10) {
         pushButton = true;
         return true;
     }
@@ -347,8 +347,8 @@ bool fopMsgM_checkMessageSend() {
 
 /* 8002C684-8002C6B0       .text fopMsgM_releaseScopeMode__Fv */
 bool fopMsgM_releaseScopeMode() {
-    if (dComIfGp_getScopeType() == 13) {
-        dComIfGp_setScopeType(11);
+    if (dComIfGp_getScopeMesgStatus() == 13) {
+        dComIfGp_setScopeMesgStatus(11);
         return true;
     }
 

@@ -279,6 +279,12 @@ public:
         mpPlayer[idx] = (daPy_py_c*)player;
         mCurCamera[idx] = cam;
     }
+
+    int getItemTimer() { return mItemTimer; }
+    void resetItemTimer(s16 timer) {
+        mItemTimer = timer;
+        mStartItemTimer = false;
+    }
     
     int getMessageRupee() { return mMessageRupee; }
 
@@ -368,6 +374,9 @@ public:
     void setItemTimeCount(s32 time) { mAirMeter = time; }
     void setItemTimeMax(s32 time) { field_0x4928 = time; }
 
+    u8 getScopeType() { return mScopeType; }
+    void setScopeType(u8 type) { mScopeType = type; }
+
     u8 checkMesgSendButton() { return mMesgSendButton; }
     u8 checkMesgCancelButton() { return mMesgCancelButton; }
 
@@ -397,9 +406,10 @@ public:
     void setDoStatusForce(u8 value) { field_0x4932 = value; }
     u8 getPictureStatus() { return mPictureStatus; }
     void setPictureStatusOn() { mPictureStatus = 2; }
+    
+    u8 getScopeMesgStatus() { return mbCamOverrideFarPlane; }
+    void setScopeMesgStatus(u8 status) { mbCamOverrideFarPlane = status; }
 
-    u8 getScopeType() { return mbCamOverrideFarPlane; }
-    void setScopeType(u8 v) { mbCamOverrideFarPlane = v; }
     void setCameraInfo(int idx, camera_class* camera_p, int dlst_window_idx, int cam_idx, int p5) {
         mCameraInfo[idx].mpCamera = camera_p;
         mCameraInfo[idx].mDlstWindowIdx = dlst_window_idx;
@@ -480,7 +490,12 @@ public:
         u8 mask = (1 << i);
         mPictureFlag &= ~mask;
     }
+    u8 getPictureFormat() { return mPictureFormat; }
+    u8 getPictureResult() { return mPictureResult; }
+    u8 getPictureResultDetail() { return mPictureResultDetail; }
     void setBossBattleData(JKRAramBlock* aramHeap, int i) { mBossBattleDataHeap[i] = aramHeap; }
+
+    void startItemTimer() { mStartItemTimer = true; }
 
     void stopFwaterTimer() { mFwaterTimer = 0; }
     u8 checkFwaterTimer() { return mFwaterTimer; }
@@ -504,6 +519,7 @@ public:
     void setMelodyNum(u8 melody) { mMelodyNum = melody; }
 
     u8 getBaseAnimeID() { return mMesgAnime; }
+    void setBaseAnimeID(u8 id) { mMesgAnime = id; }
     void clearBaseAnimeID() { mMesgAnime = 0xFF; }
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
@@ -605,7 +621,7 @@ public:
     /* 0x491C */ s16 mMessageRupee;
     /* 0x491E */ s16 mAuctionRupee;
     /* 0x4920 */ s16 mAuctionGauge;
-    /* 0x4922 */ s16 field_0x4922;
+    /* 0x4922 */ s16 mItemTimer;
     /* 0x4924 */ s16 mCurrHP;
     /* 0x4926 */ s16 mRupyCountDisplay;
     /* 0x4928 */ u8 field_0x4928;
@@ -631,7 +647,7 @@ public:
     /* 0x4942 */ u8 mButtonMode;
     /* 0x4943 */ u8 field_0x4943;
     /* 0x4944 */ u8 field_0x4944;
-    /* 0x4945 */ u8 field_0x4945;
+    /* 0x4945 */ u8 mScopeType;
     /* 0x4946 */ u8 field_0x4946;
     /* 0x4947 */ u8 field_0x4947;
     /* 0x4948 */ u8 mMesgSendButton;
@@ -642,18 +658,18 @@ public:
     /* 0x4952 */ u8 field_0x4952;
     /* 0x4953 */ u8 field_0x4953;
     /* 0x4954 */ u8 field_0x4954;
-    /* 0x4955 */ u8 field_0x4955;
+    /* 0x4955 */ bool mStartItemTimer;
     /* 0x4956 */ u8 mFwaterTimer;
     /* 0x4957 */ u8 mPlacenameIndex;
     /* 0x4958 */ u8 mPlacenameState;
     /* 0x4959 */ u8 mGameoverStatus;
     /* 0x495A */ u8 field_0x495a;
     /* 0x495B */ u8 mPictureFlag;
-    /* 0x495C */ u8 field_0x495c;
-    /* 0x495D */ u8 field_0x495d;
+    /* 0x495C */ u8 mPictureResult;
+    /* 0x495D */ u8 mPictureResultDetail;
     /* 0x495E */ u8 mPictureStatus;
     /* 0x495F */ u8 field_0x495f;
-    /* 0x4960 */ u8 field_0x4960;
+    /* 0x4960 */ u8 mPictureFormat;
     /* 0x4961 */ u8 field_0x4961;
     /* 0x4962 */ u8 mHeapLockFlag;
     /* 0x4963 */ u8 field_0x4963;
@@ -763,6 +779,14 @@ inline void dComIfGs_setWalletSize(u8 size) {
 
 inline int dComIfGs_getRupee() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupee();
+}
+
+inline int dComIfGp_getItemTimer() {
+    return g_dComIfG_gameInfo.play.getItemTimer();
+}
+
+inline void dComIfGp_resetItemTimer(s16 timer) {
+    g_dComIfG_gameInfo.play.resetItemTimer(timer);
 }
 
 inline int dComIfGp_getMessageRupee() {
@@ -1027,12 +1051,24 @@ inline void dComIfGs_offEventBit(u16 id) {
     g_dComIfG_gameInfo.save.getEvent().offEventBit(id);
 }
 
+inline BOOL dComIfGs_isTmpBit(u16 id) {
+    return g_dComIfG_gameInfo.save.getTmp().isEventBit(id);
+}
+
 inline void dComIfGs_onTmpBit(u16 id) {
     g_dComIfG_gameInfo.save.getTmp().onEventBit(id);
 }
 
 inline void dComIfGs_offTmpBit(u16 id) {
     g_dComIfG_gameInfo.save.getTmp().offEventBit(id);
+}
+
+inline void dComIfGs_setTmpReg(u16 id, u8 no) {
+    g_dComIfG_gameInfo.save.getTmp().setEventReg(id, no);
+}
+
+inline u8 dComIfGs_getTmpReg(u16 id) {
+    return g_dComIfG_gameInfo.save.getTmp().getEventReg(id);
 }
 
 inline s16 dComIfGs_getStartPoint() {
@@ -1689,6 +1725,10 @@ stage_scls_info_class* dComIfGd_getMeshSceneList(Vec& vec);
 
 BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo);
 
+inline void dComIfGp_startItemTimer() {
+    g_dComIfG_gameInfo.play.startItemTimer();
+}
+
 inline void dComIfGs_stopFwaterTimer() {
     g_dComIfG_gameInfo.play.stopFwaterTimer();
 }
@@ -2265,6 +2305,14 @@ inline s16 dComIfGp_getItemBeastNumCount(int i_idx) {
     return g_dComIfG_gameInfo.play.getItemBeastNumCount(i_idx);
 }
 
+inline u8 dComIfGp_getScopeType() {
+    return g_dComIfG_gameInfo.play.getScopeType();
+}
+
+inline void dComIfGp_setScopeType(u8 type) {
+    g_dComIfG_gameInfo.play.setScopeType(type);
+}
+
 inline u8 dComIfGp_checkMesgSendButton() {
     return g_dComIfG_gameInfo.play.checkMesgSendButton();
 }
@@ -2341,8 +2389,13 @@ inline void dComIfGp_setItem(u8 slot, u8 i_itemNo) {
     g_dComIfG_gameInfo.play.setItem(slot, i_itemNo);
 }
 
-inline u8 dComIfGp_getScopeType() { return g_dComIfG_gameInfo.play.getScopeType(); }
-inline void dComIfGp_setScopeType(u8 v) { g_dComIfG_gameInfo.play.setScopeType(v); }
+inline u8 dComIfGp_getScopeMesgStatus() {
+    return g_dComIfG_gameInfo.play.getScopeMesgStatus();
+}
+
+inline void dComIfGp_setScopeMesgStatus(u8 status) {
+    g_dComIfG_gameInfo.play.setScopeMesgStatus(status);
+}
 
 inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {
     g_dComIfG_gameInfo.play.setCurrentGrafPort(i_graf);
@@ -2468,6 +2521,10 @@ inline u8 dComIfGp_getMesgAnimeAttrInfo() {
     return g_dComIfG_gameInfo.play.getBaseAnimeID();
 }
 
+inline void dComIfGp_setMesgAnimeAttrInfo(u8 id) {
+    g_dComIfG_gameInfo.play.setBaseAnimeID(id);
+}
+
 inline void dComIfGp_clearMesgAnimeAttrInfo() {
     g_dComIfG_gameInfo.play.clearBaseAnimeID();
 }
@@ -2490,6 +2547,18 @@ inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramHeap, int i) {
 
 inline void dComIfGp_offPictureFlag(u8 i) {
     g_dComIfG_gameInfo.play.offPictureFlag(i);
+}
+
+inline u8 dComIfGp_getPictureFormat() {
+    return g_dComIfG_gameInfo.play.getPictureFormat();
+}
+
+inline u8 dComIfGp_getPictureResult() {
+    return g_dComIfG_gameInfo.play.getPictureResult();
+}
+
+inline u8 dComIfGp_getPictureResultDetail() {
+    return g_dComIfG_gameInfo.play.getPictureResultDetail();
 }
 
 inline void dComIfGp_setBossBattleData(JKRAramBlock* aramHeap, int i) {

@@ -13,7 +13,10 @@ class J3DMaterialTable;
 
 class kb_class : public fopAc_ac_c {
 public:
-    void taura_pos_set(cXyz) {}
+    void taura_pos_set(cXyz pos) {
+        m450 = pos;
+        m408 = 1;
+    }
 
 public:
     /* 0x290 */ dKy_tevstr_c mTevStr;
@@ -38,7 +41,8 @@ public:
     /* 0x42A */ s16 m42A;
     /* 0x42C */ u8 m42C[0x446 - 0x42C];
     /* 0x446 */ s16 m446;
-    /* 0x448 */ u8 m448[0x45C - 0x448];
+    /* 0x448 */ u8 m448[0x450 - 0x448];
+    /* 0x450 */ cXyz m450;
     /* 0x45C */ f32 m45C;
     /* 0x460 */ u8 m460[0x464 - 0x460];
     /* 0x464 */ f32 m464;

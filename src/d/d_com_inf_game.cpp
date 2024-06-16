@@ -95,7 +95,7 @@ void dComIfG_play_c::itemInit() {
     mMessageRupee = 0;
     mAuctionRupee = 0;
     mAuctionGauge = 0;
-    field_0x4922 = 0;
+    mItemTimer = 0;
     mCurrHP = 0;
     mRupyCountDisplay = 0;
     field_0x4928 = 0;
@@ -131,7 +131,7 @@ void dComIfG_play_c::itemInit() {
     }
 
     field_0x4944 = 7;
-    field_0x4945 = 0;
+    mScopeType = 0;
     field_0x4946 = 0;
     field_0x4947 = 0;
     mMesgSendButton = 0;
@@ -146,18 +146,18 @@ void dComIfG_play_c::itemInit() {
     field_0x4952 = 0;
     field_0x4953 = 0;
     field_0x4954 = 0;
-    field_0x4955 = 0;
+    mStartItemTimer = false;
     mFwaterTimer = 0;
     mPlacenameIndex = 0;
     mPlacenameState = 0;
     mGameoverStatus = 0;
     field_0x495a = 0;
     mPictureFlag = 0;
-    field_0x495c = 0;
-    field_0x495d = 0;
+    mPictureResult = 0;
+    mPictureResultDetail = 0;
     mPictureStatus = 0;
     field_0x495f = 0;
-    field_0x4960 = 0;
+    mPictureFormat = 0;
     field_0x4961 = 0;
     mHeapLockFlag = 0;
     field_0x4965 = 0;

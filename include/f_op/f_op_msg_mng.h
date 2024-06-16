@@ -71,6 +71,7 @@ s32 fopMsgM_setStageLayer(void*);
 uint fopMsgM_messageSet(u32 i_msgNo, fopAc_ac_c* i_actorP);
 uint fopMsgM_messageSet(u32 param_0, cXyz*);
 uint fopMsgM_messageSet(u32 param_0);
+uint fopMsgM_scopeMessageSet(u32 param_0);
 int fopMsgM_messageSetDemo(u32 param_0);
 msg_class* fopMsgM_SearchByID(uint param_0);
 char* fopMsgM_messageGet(char* msg, u32 string_id);
