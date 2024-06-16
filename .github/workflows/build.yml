@@ -23,6 +23,8 @@ jobs:
       run: |
         python configure.py --version ${{matrix.version}} --compilers /compilers --warn error
         ninja
+        python configure.py --version ${{matrix.version}} --compilers /compilers --warn off
+        ninja all_source
     - name: Upload progress
       if: github.ref == 'refs/heads/main'
       continue-on-error: true
