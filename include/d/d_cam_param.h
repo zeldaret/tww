@@ -125,8 +125,8 @@ public:
     dCamParam_c(s32);
     virtual ~dCamParam_c();
 
-    void Flag(s32, u16);
-    void Val(s32, int);
+    void Flag(s32, u16) {}
+    void Val(s32, int) {}
     void Change(s32);
     void SearchStyle(u32);
     void ratiof(f32, f32, f32, f32);

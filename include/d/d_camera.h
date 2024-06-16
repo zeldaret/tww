@@ -34,7 +34,7 @@ struct dCamera__EventParam {
 
 class d2DBSplinePath {
 public:
-    ~d2DBSplinePath();
+    ~d2DBSplinePath() {}
     /* 0x00 */ int mKeyframeCur;
     /* 0x04 */ int mTimer;
     /* 0x08 */ int mKeyframeNum;
@@ -64,8 +64,8 @@ public:
 class dCamera_c {
 public:
     struct BG {
-        BG();
-        ~BG();
+        BG() {}
+        ~BG() {}
         u8 temp[0xB0];
     };
 
@@ -356,9 +356,9 @@ public:
     void SetExtendedPosition(cXyz*);
     void ScopeViewMsgModeOff();
 
-    void Bank();
-    void Up();
-    void Center();
+    void Bank() {}
+    void Up() {}
+    void Center() {}
 
     void StartEventCamera(int, int, ...);
     void EndEventCamera(int);

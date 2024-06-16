@@ -240,7 +240,7 @@ uint fopMsgM_messageSet(u32) {
 }
 
 /* 8002B9C4-8002BA4C       .text fopMsgM_scopeMessageSet__FUl */
-void fopMsgM_scopeMessageSet(u32) {
+uint fopMsgM_scopeMessageSet(u32) {
     /* Nonmatching */
 }
 

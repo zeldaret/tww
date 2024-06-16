@@ -69,7 +69,7 @@ class dBgS_CamGndChk : public dBgS_GndChk {
 public:
     dBgS_CamGndChk() { /* SetCam(); */ }
 
-    virtual ~dBgS_CamGndChk();
+    virtual ~dBgS_CamGndChk() {}
 };
 
 class dBgS_CamGndChk_Wtr : public dBgS_CamGndChk {
