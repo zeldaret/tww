@@ -4,46 +4,321 @@
 //
 
 #include "d/d_vibration.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "SSystem/SComponent/c_math.h"
+#include "JSystem/JUtility/JUTGamePad.h"
+
+#define RESET_FRAME -99
+#define PATTERN_OFF -1
+#define MAX_MOTOR_QUAKE_FRAME 900
+
+#define MASK_CAMERA_SHAKE 0x3E
+#define FLAG_MOTOR_SHAKE  0x1
+
 
 namespace {
-    void makedata(u16*, u32, s32) {
-        /* Nonmatching */
+    u8* makedata(u16 dst[4], u32 pattern, s32 length) {
+        /* Makes a rumble pattern in the format used by startPatternedRumble */
+        dst[0] = length;
+        dst[1] = pattern >> 16;
+        dst[2] = pattern;
+        dst[3] = 0;
+        return (u8*)dst;
     }
-    void rollshift(u32, s32, s32) {
-        /* Nonmatching */
+
+    u32 rollshift(u32 pattern, s32 patt_len, s32 cur_idx) {
+        s32 loop_num = cur_idx/patt_len;
+        s32 loop_start = loop_num * patt_len;
+        s32 pos_in_loop = cur_idx - loop_start;
+
+        u32 lo = pattern >> pos_in_loop;
+        u32 hi = pattern << (patt_len - pos_in_loop);
+
+        return lo | hi;
     }
-    void makebits(u32, s32, s32) {
-        /* Nonmatching */
+
+    u32 makebits(u32 pattern, s32 patt_len, s32 numbits) {
+        /* Extends a pattern to numbits bits by looping it */
+        int i;
+        u32 masked = pattern & -1 << (0x20 - patt_len);
+        pattern = masked;
+        for (i = patt_len; i < numbits; i += patt_len){
+            pattern = masked | pattern >> patt_len;
+        }
+        return pattern;
     }
-    void randombit(s32, s32) {
-        /* Nonmatching */
+
+    u32 randombit(s32 rounds, s32 patt_len) {
+        /* Makes a random rumble pattern by enabling up to rounds random bits */
+        u32 pattern = 0;
+        s32 bit = 1 << 30;
+        for (int i = 0; i < rounds; i++){
+            pattern |= (bit >> (u32)(patt_len * cM_rnd()));
+        }
+        return pattern;
     }
 };
 
 /* 8009C73C-8009CCCC       .text Run__12dVibration_cFv */
 int dVibration_c::Run() {
-    /* Nonmatching */
+    mRumbleState = RUMBLE_STATE_RUNNING;
+    if (dComIfGs_checkOptVibration() != 1U){
+        mMotorShock.mPatternIdx = mMotorQuake.mPatternIdx = PATTERN_OFF;
+        mMotorShock.mCurrentFrame = mMotorQuake.mCurrentFrame = RESET_FRAME;
+    }
+    if (mCameraShock.mCurrentFrame == 0 || mCameraQuake.mCurrentFrame == 0){
+        u32 rumble = 0;
+        if (mCameraShock.mPatternIdx == PATTERN_OFF){
+            mCameraShock.mCurrentFrame = RESET_FRAME;
+        } else if (mCameraShock.mCurrentFrame >= 0) {
+            rumble |= RUMBLE_SHOCK;
+        }
+        if (mCameraQuake.mPatternIdx == PATTERN_OFF) {
+            mCameraQuake.mCurrentFrame = RESET_FRAME;
+        } else if (mCameraQuake.mCurrentFrame >= 0){
+            rumble |= RUMBLE_QUAKE;
+        }
+
+        s32 length, pattern, bits;
+        switch (rumble) {
+        case RUMBLE_SHOCK: /* branch e0 */
+            length = mCameraShock.mLength;
+            pattern = mCameraShock.mPattern;
+            pattern |= randombit(mCameraShock.mRounds, length);
+            dCam_getBody()->StartShake(length, (u8*)(&pattern), mCameraShock.mFlags, mCameraShock.mCoord.norm());
+            break;
+        case RUMBLE_QUAKE: /* branch 12c */
+            length = mCameraQuake.mLength;
+            pattern = rollshift(mCameraQuake.mPattern, length, mFrameIdx);
+            pattern |= randombit(mCameraQuake.mRounds, length);
+            dCam_getBody()->StartShake(length, (u8*)(&pattern), mCameraQuake.mFlags, mCameraQuake.mCoord.norm());
+            break;
+        case RUMBLE_SHOCK | RUMBLE_QUAKE: /* branch 184 */
+            pattern = mCameraShock.mPattern << mCameraShock.mCurrentFrame;
+            length = mCameraShock.mLength - mCameraShock.mCurrentFrame;
+            bits = makebits(mCameraQuake.mPattern, mCameraQuake.mLength, length);
+            pattern |= rollshift(bits, length, mFrameIdx);
+            pattern |= randombit((mCameraShock.mRounds > mCameraQuake.mRounds)? mCameraShock.mRounds : mCameraQuake.mRounds, length);
+
+            dCam_getBody()->StartShake(length, (u8*)(&pattern), mCameraShock.mFlags|mCameraQuake.mFlags,
+                                       cXyz(mCameraShock.mCoord + mCameraQuake.mCoord).norm());
+            mCameraShock.mCurrentFrame = mCameraQuake.mCurrentFrame = 0;
+            break;
+        default: /* branch 254 */
+            dCam_getBody()->StopShake();
+            break;
+        }
+    }
+    if (mMotorQuake.mCurrentFrame >= MAX_MOTOR_QUAKE_FRAME){
+        g_mDoCPd_gamePad[0]->stopMotorWave();
+        g_mDoCPd_gamePad[0]->stopMotor();
+        mMotorQuake.mCurrentFrame = -1;
+    }
+
+    if (mMotorShock.mCurrentFrame == 0 || mMotorQuake.mCurrentFrame == 0){
+        u32 rumble = 0;
+        if (mMotorShock.mPatternIdx == PATTERN_OFF){
+            mMotorShock.mCurrentFrame = RESET_FRAME;
+        } else if (mMotorShock.mCurrentFrame >= 0){
+            rumble |= RUMBLE_SHOCK;
+        }
+        if (mMotorQuake.mPatternIdx == PATTERN_OFF){
+            mMotorQuake.mCurrentFrame = RESET_FRAME;
+        } else if (mMotorQuake.mCurrentFrame >= 0){
+            rumble |= RUMBLE_QUAKE;
+        }
+
+        static u16 data[4];
+        u8* pBuf;
+        s32 pattern, loopLen, bits;
+        switch (rumble) {
+        case RUMBLE_SHOCK: /* branch 324 */
+            loopLen = mMotorShock.mLength;
+            pattern = mMotorShock.mPattern;
+            pattern |= randombit(mMotorShock.mRounds, loopLen);
+            mMotorShock.mStopFrame = loopLen;
+            pBuf = makedata(data, pattern, loopLen);
+            g_mDoCPd_gamePad[0]->startMotorWave(pBuf, JUTGamePad::CRumble::LOOP_ONCE, 60);
+            break;
+        case RUMBLE_QUAKE: /* branch 374 */
+            loopLen = mMotorQuake.mLength;
+            pattern = rollshift(mMotorQuake.mPattern, loopLen, mFrameIdx);
+            pattern |= randombit(mMotorQuake.mRounds, loopLen);
+            mMotorQuake.mStopFrame = INT32_MAX;
+            pBuf = makedata(data, pattern, loopLen);
+            g_mDoCPd_gamePad[0]->startMotorWave(pBuf, JUTGamePad::CRumble::LOOP_FOREVER, 60);
+            break;
+        case RUMBLE_SHOCK | RUMBLE_QUAKE: /* branch 3d8 */
+            pattern = mMotorShock.mPattern << mMotorShock.mCurrentFrame;
+            loopLen = mMotorShock.mLength - mMotorShock.mCurrentFrame;
+
+            bits = makebits(mMotorQuake.mPattern, mMotorQuake.mLength, loopLen);
+            pattern |= rollshift(bits, loopLen, mFrameIdx);
+            pattern |= randombit((mMotorShock.mRounds > mMotorQuake.mRounds)? mMotorShock.mRounds : mMotorQuake.mRounds, loopLen);
+
+            mMotorShock.mStopFrame = mMotorQuake.mStopFrame = loopLen;
+            mMotorShock.mCurrentFrame = mMotorQuake.mCurrentFrame = 0;
+
+            pBuf = makedata(data, pattern, loopLen);
+            g_mDoCPd_gamePad[0]->startMotorWave(pBuf, JUTGamePad::CRumble::LOOP_ONCE, 60);
+            break;
+        default: /* branch 474 */
+            g_mDoCPd_gamePad[0]->stopMotorWave();
+            g_mDoCPd_gamePad[0]->stopMotor();
+            mMotorShock.mStopFrame = mMotorQuake.mStopFrame = RESET_FRAME;
+            break;
+        }
+    }
+
+    if (mCameraShock.mCurrentFrame >= -1){
+        mCameraShock.mCurrentFrame += 1;
+        if (mCameraShock.mCurrentFrame > mCameraShock.mLength){
+            mCameraShock.mCurrentFrame = 0;
+            mCameraShock.mPatternIdx = PATTERN_OFF;
+        }
+    }
+    if (mMotorShock.mCurrentFrame >= -1){
+        mMotorShock.mCurrentFrame += 1;
+        if (mMotorShock.mCurrentFrame > mMotorShock.mStopFrame){
+            mMotorShock.mCurrentFrame = 0;
+            mMotorShock.mPatternIdx = PATTERN_OFF;
+        }
+    }
+    if (mCameraQuake.mCurrentFrame >= -1){
+        mCameraQuake.mCurrentFrame += 1;
+        if (mCameraQuake.mCurrentFrame > mCameraQuake.mLength){
+            mCameraQuake.mCurrentFrame = 0;
+        }
+    }
+    if (mMotorQuake.mCurrentFrame >= -1){
+        mMotorQuake.mCurrentFrame += 1;
+        if (mMotorQuake.mCurrentFrame > mMotorQuake.mStopFrame){
+            mMotorQuake.mCurrentFrame = 0;
+        }
+    }
+    mFrameIdx += 1;
+    return 1;
 }
 
 /* 8009CCCC-8009CD6C       .text StartShock__12dVibration_cFii4cXyz */
-bool dVibration_c::StartShock(int, int, cXyz) {
-    /* Nonmatching */
+bool dVibration_c::StartShock(int patt_idx, int flags, cXyz coord) {
+    /* Starts shock pattern from the registered [MC]S_patt global constants */
+    bool ret = false;
+
+    if (flags & MASK_CAMERA_SHAKE){
+        mCameraShock.mPatternIdx = patt_idx;
+        mCameraShock.mCurrentFrame = 0;
+        mCameraShock.mFlags = flags;
+        mCameraShock.mCoord = coord;
+
+        mCameraShock.mPattern = CS_patt[patt_idx].pattern;
+        mCameraShock.mLength = CS_patt[patt_idx].length;
+        mCameraShock.mRounds = CS_patt[patt_idx].rounds;
+        ret = true;
+    }
+
+    if (flags & FLAG_MOTOR_SHAKE){
+        mMotorShock.mPatternIdx = patt_idx;
+        mMotorShock.mCurrentFrame = 0;
+
+        mMotorShock.mPattern = MS_patt[patt_idx].pattern;
+        mMotorShock.mLength = MS_patt[patt_idx].length;
+
+        ret = true;
+    }
+
+    return ret;
 }
 
 /* 8009CD6C-8009CE1C       .text StartQuake__12dVibration_cFii4cXyz */
-bool dVibration_c::StartQuake(int, int, cXyz) {
-    /* Nonmatching */
+bool dVibration_c::StartQuake(int patt_idx, int flags, cXyz coord) {
+    /* Starts quake pattern from the registered [MC]Q_patt global constants */
+    bool ret = false;
+
+    if (flags & MASK_CAMERA_SHAKE){
+        mCameraQuake.mPatternIdx = patt_idx;
+        mCameraQuake.mCurrentFrame = 0;
+        mCameraQuake.mFlags = flags;
+        mCameraQuake.mCoord = coord;
+
+        mCameraQuake.mPattern = CQ_patt[patt_idx].pattern;
+        mCameraQuake.mLength = CQ_patt[patt_idx].length;
+        mCameraQuake.mRounds = CQ_patt[patt_idx].rounds;
+        ret = true;
+    }
+
+    if (flags & FLAG_MOTOR_SHAKE){
+        mMotorQuake.mPatternIdx = patt_idx;
+        mMotorQuake.mCurrentFrame = 0;
+
+        mMotorQuake.mPattern = MQ_patt[patt_idx].pattern;
+        mMotorQuake.mLength = MQ_patt[patt_idx].length;
+        mMotorQuake.mRounds = CQ_patt[patt_idx].rounds;
+
+        ret = true;
+    }
+
+    return ret;
 }
 
 /* 8009CE1C-8009CF84       .text StartQuake__12dVibration_cFPCUcii4cXyz */
-bool dVibration_c::StartQuake(const u8*, int, int, cXyz) {
-    /* Nonmatching */
+bool dVibration_c::StartQuake(u8 const *pattern, int rounds, int flags, cXyz coord) {
+    /* Starts quake pattern from an arbitrary bit pattern */
+    bool ret = false;
+    int pattLen = (pattern[0] << 8) | pattern[1];
+    s32 bits =
+           (pattern[pattLen >= 1  ? 2 : 0]) << 24
+         | (pattern[pattLen >= 9  ? 3 : 0]) << 16
+         | (pattern[pattLen >= 17 ? 4 : 0]) << 8
+         | (pattern[pattLen >= 25 ? 5 : 0]) << 0
+         ;
+
+
+    if (flags & MASK_CAMERA_SHAKE){
+        mCameraQuake.mPatternIdx = 0;
+        mCameraQuake.mCurrentFrame = 0;
+        mCameraQuake.mFlags = flags;
+        mCameraQuake.mCoord = coord;
+
+        mCameraQuake.mPattern = makebits(bits, pattern[1], 32);
+        mCameraQuake.mLength = 32;
+        mCameraQuake.mRounds = rounds;
+        ret = true;
+    }
+
+    if (flags & FLAG_MOTOR_SHAKE){
+        mMotorQuake.mPatternIdx = 0;
+        mMotorQuake.mCurrentFrame = 0;
+
+        mMotorQuake.mPattern = makebits(bits, pattern[1], 32);
+        mMotorQuake.mLength = 32;
+        mMotorQuake.mRounds = rounds;
+
+        ret = true;
+    }
+
+    return ret;
 }
 
 /* 8009CF84-8009CFEC       .text StopQuake__12dVibration_cFi */
-int dVibration_c::StopQuake(int) {
-    /* Nonmatching */
+int dVibration_c::StopQuake(int flags) {
+    int ret = FALSE;
+    if (flags & MASK_CAMERA_SHAKE) {
+        mCameraQuake.mFlags &= ~flags;
+        if (mCameraQuake.mFlags == 0) {
+            mCameraQuake.mPatternIdx = PATTERN_OFF;
+        }
+        mCameraQuake.mCurrentFrame = 0;
+        ret = TRUE;
+    }
+    if ((flags & FLAG_MOTOR_SHAKE) && mMotorQuake.mPatternIdx != PATTERN_OFF) {
+        mMotorQuake.mPatternIdx = PATTERN_OFF;
+        mMotorQuake.mCurrentFrame = 0;
+        ret = TRUE;
+    }
+    return ret;
 }
 
 /* 8009CFEC-8009D044       .text Kill__12dVibration_cFv */
@@ -55,23 +330,23 @@ void dVibration_c::Kill() {
 
 /* 8009D044-8009D06C       .text CheckQuake__12dVibration_cFv */
 bool dVibration_c::CheckQuake() {
-    return field_0x24 != -1 || field_0x60 != -1;
+    return mCameraQuake.mPatternIdx != PATTERN_OFF || mMotorQuake.mPatternIdx != PATTERN_OFF;
 }
 
 /* 8009D06C-8009D0AC       .text setDefault__12dVibration_cFv */
 void dVibration_c::setDefault() {
-    field_0x48 = -1;
-    field_0x0 = -1;
-    field_0x60 = -1;
-    field_0x24 = -1;
-    field_0x58 = -99;
-    field_0x20 = -99;
-    field_0x70 = -99;
-    field_0x44 = -99;
-    field_0x74 = -99;
-    field_0x5c = -99;
-    field_0x7c = 0;
-    field_0x78 = 0;
+    mMotorShock.mPatternIdx = PATTERN_OFF;
+    mCameraShock.mPatternIdx = PATTERN_OFF;
+    mMotorQuake.mPatternIdx = PATTERN_OFF;
+    mCameraQuake.mPatternIdx = PATTERN_OFF;
+    mMotorShock.mCurrentFrame = RESET_FRAME;
+    mCameraShock.mCurrentFrame = RESET_FRAME;
+    mMotorQuake.mCurrentFrame = RESET_FRAME;
+    mCameraQuake.mCurrentFrame = RESET_FRAME;
+    mMotorQuake.mStopFrame = RESET_FRAME;
+    mMotorShock.mStopFrame = RESET_FRAME;
+    mRumbleState = RUMBLE_STATE_WAITING;
+    mFrameIdx = 0;
 }
 
 /* 8009D0AC-8009D0CC       .text Init__12dVibration_cFv */
@@ -81,7 +356,22 @@ void dVibration_c::Init() {
 
 /* 8009D0CC-8009D188       .text Pause__12dVibration_cFv */
 void dVibration_c::Pause() {
-    /* Nonmatching */
+    if (mRumbleState == RUMBLE_STATE_PAUSED){
+        return;
+    }
+    if (mMotorShock.mPatternIdx != PATTERN_OFF || mMotorQuake.mPatternIdx != PATTERN_OFF){
+        g_mDoCPd_gamePad[0]->stopMotorWaveHard();
+        g_mDoCPd_gamePad[0]->stopMotorHard();
+    }
+    mCameraShock.mPatternIdx = mMotorShock.mPatternIdx = PATTERN_OFF;
+    mCameraShock.mCurrentFrame = mMotorShock.mCurrentFrame = RESET_FRAME;
+    if (mCameraQuake.mPatternIdx != PATTERN_OFF){
+        mCameraQuake.mCurrentFrame = 0;
+    }
+    if (mMotorQuake.mPatternIdx != PATTERN_OFF){
+        mMotorQuake.mCurrentFrame = 0;
+    }
+    mRumbleState = RUMBLE_STATE_PAUSED;
 }
 
 /* 8009D188-8009D1C4       .text __ct__12dVibration_cFv */
