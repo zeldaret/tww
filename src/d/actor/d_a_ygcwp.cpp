@@ -15,12 +15,12 @@ enum {
     EVENT_WARP_MAKE,
 };
 
-static const u32 M_brk_table[] = {
+const u32 daYgcwp_c::M_brk_table[] = {
     YGCWP_BRK_YGCWP00_COMMON,
     YGCWP_BRK_YGCWP00_WARP,
 };
 
-static const u32 M_brk_mode_table[] = {
+const u32 daYgcwp_c::M_brk_mode_table[] = {
     J3DFrameCtrl::LOOP_REPEAT_e,
     J3DFrameCtrl::LOOP_ONCE_e,
 };
@@ -46,9 +46,9 @@ BOOL daYgcwp_c::solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 00000098-0000023C       .text create_heap__9daYgcwp_cFv */
 BOOL daYgcwp_c::create_heap() {
-    /* Nonmatching - regalloc */
+    s32 i;
     BOOL ret = FALSE;
-    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, YGCWP_BDL_YGCWP00);
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YGCWP_BDL_YGCWP00));
     JUT_ASSERT(0xBE, mdl_data != 0);
 
     if (mdl_data != NULL) {
@@ -56,14 +56,17 @@ BOOL daYgcwp_c::create_heap() {
         if (mpModel != NULL) {
             ret = TRUE;
 
-            for (s32 i = 0; i < (s32)ARRAY_SIZE(mBrkAnm); i++) {
-                J3DAnmTevRegKey* brk_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, M_brk_table[i]);
+            for (i = 0; i < (s32)ARRAY_SIZE(mBrkAnm); i++) {
+                J3DAnmTevRegKey* brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
                 JUT_ASSERT(0xC9, brk_p != 0);
                 if (brk_p != NULL) {
-                    if (!mBrkAnm[i].init(mdl_data, brk_p, TRUE, M_brk_mode_table[i], 1.0f, 0, -1, false, 0))
-                        return FALSE;
+                    if (!mBrkAnm[i].init(mdl_data, brk_p, TRUE, M_brk_mode_table[i], 1.0f, 0, -1, false, 0)) {
+                        ret = FALSE;
+                        break;
+                    }
                 } else {
-                    return FALSE;
+                    ret = FALSE;
+                    break;
                 }
             }
         }

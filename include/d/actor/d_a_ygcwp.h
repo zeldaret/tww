@@ -21,7 +21,9 @@ public:
     bool _draw();
 
 public:
-    static const char M_arcname[6];
+    static const u32 M_brk_table[];
+    static const u32 M_brk_mode_table[];
+    static const char M_arcname[];
 
 public:
     /* 0x290 */ J3DModel* mpModel;
