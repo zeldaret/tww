@@ -3,8 +3,9 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_acch.h"
-#include "SSystem/SComponent/c_phase.h"
 #include "d/d_cloth_packet.h"
+#include "d/d_cc_d.h"
+#include "SSystem/SComponent/c_phase.h"
 
 class JPABaseEmitter;
 class mDoExt_bckAnm;
@@ -15,7 +16,7 @@ public:
     int getItemNo() const { return mItemNo; }
 
     bool _delete();
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     s32 _create();
     void set_mtx();
@@ -47,21 +48,30 @@ public:
     static BOOL daiItemNodeCallBack(J3DNode*, int);
 
 public:
+    static const char m_arcname[5];
+    static const s16 m_bmdidx[12];
+    static const s16 m_bckidx[12];
+    static const u16 m_heapsize[12];
+    static const u16 m_anim_min_time[12];
+    static const u16 m_anim_max_time[12];
+    static const u16 m_stop_min_time[12];
+    static const u16 m_stop_max_time[12];
+
+public:
     /* 0x290 */ request_of_phase_process_class mPhsDai;
     /* 0x298 */ request_of_phase_process_class mPhsCloth;
     /* 0x2A0 */ J3DModel* mpModel;
     /* 0x2A4 */ mDoExt_bckAnm* mpBckAnm;
-    /* 0x2A8 */ u8 m2A8[0x310 - 0x2A8];
-    /* 0x310 */ int m310;
-    /* 0x314 */ u8 m314[0x414 - 0x314];
-    /* 0x414 */ dBgS_Acch mAcch;
+    /* 0x2A8 */ dCcD_Stts mStts;
+    /* 0x2E4 */ dCcD_Cyl mCyl;
+    /* 0x414 */ dBgS_ObjAcch mAcch;
     /* 0x5D8 */ dBgS_AcchCir mAcchCir;
     /* 0x618 */ u8 mItemNo;
     /* 0x619 */ u8 mItemType;
     /* 0x61A */ u8 m61A[0x61C - 0x61A];
     /* 0x61C */ int mTimer;
     /* 0x620 */ int mMode;
-    /* 0x624 */ u8 m624;
+    /* 0x624 */ bool mCarry;
     /* 0x625 */ u8 m625[0x628 - 0x625];
     /* 0x628 */ s16 mBckPlayTimer;
     /* 0x62A */ s16 mBckStopTimer;
