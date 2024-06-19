@@ -274,7 +274,6 @@ BOOL daTag_Island_c::demoProcSpeak() {
 
 /* 00000B1C-00000B84       .text demoInitWait__14daTag_Island_cFv */
 void daTag_Island_c::demoInitWait() {
-    /* Nonmatching */
     s32* a_intP = (s32*)dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
     if (a_intP != NULL)
         mTimer = *a_intP;
@@ -302,7 +301,6 @@ BOOL daTag_Island_c::demoProcCom() {
 
 /* 00000BE8-00000CFC       .text demoProcCom_ikada__14daTag_Island_cFv */
 BOOL daTag_Island_c::demoProcCom_ikada() {
-    /* Nonmatching */
     daObj_Ikada_c* ikada = (daObj_Ikada_c*)fopAcM_searchFromName("ikada_h", 0, 0);
     if (ikada != NULL) {
         ikada->mCurPathP0 = ikada->mInitPos;
@@ -373,7 +371,6 @@ BOOL daTag_Island_c::actionTact() {
 
 /* 00000F4C-00001034       .text actionEvent__14daTag_Island_cFv */
 BOOL daTag_Island_c::actionEvent() {
-    /* Nonmatching */
     if (dComIfGp_evmng_endCheck(mEventId)) {
         if (getType() == 1) {
             setFlag(0x02);
