@@ -304,11 +304,11 @@ void daTag_Island_c::demoInitCom() {
 }
 
 /* 00000BE4-00000BE8       .text demoProcCom__14daTag_Island_cFv */
-BOOL daTag_Island_c::demoProcCom() {
+void daTag_Island_c::demoProcCom() {
 }
 
 /* 00000BE8-00000CFC       .text demoProcCom_ikada__14daTag_Island_cFv */
-BOOL daTag_Island_c::demoProcCom_ikada() {
+void daTag_Island_c::demoProcCom_ikada() {
     daObj_Ikada_c* ikada = (daObj_Ikada_c*)fopAcM_searchFromName("ikada_h", 0, 0);
     if (ikada != NULL) {
         ikada->mCurPathP0 = ikada->mInitPos;

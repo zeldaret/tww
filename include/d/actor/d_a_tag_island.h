@@ -38,8 +38,8 @@ public:
     void demoInitWait();
     BOOL demoProcWait();
     void demoInitCom();
-    BOOL demoProcCom();
-    BOOL demoProcCom_ikada();
+    void demoProcCom();
+    void demoProcCom_ikada();
     int getNowEventAction();
     BOOL demoProc();
     BOOL actionTact();
