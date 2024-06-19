@@ -13,9 +13,9 @@ static uint l_msgId;
 static msg_class* l_msg;
 
 enum {
-    ACT_HUNT,
-    ACT_ARRIVAL,
     ACT_WAIT,
+    ACT_ARRIVAL,
+    ACT_HUNT,
     ACT_READY,
     ACT_EVENT,
     ACT_TACT,
@@ -65,11 +65,11 @@ void daTag_Island_c::makeEvId() {
 
         switch (getType()) {
         case 1: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_DRG2"); break;
-        case 2: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_GND2"); break;
-        case 3: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_WND2"); break;
+        case 5: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_GND2"); break;
+        case 6: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_WND2"); break;
         case 4: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_TWN2"); break;
-        case 5: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_FST2"); break;
-        case 6: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_BRK2"); break;
+        case 2: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_FST2"); break;
+        case 3: idx = dComIfGp_evmng_getEventIdx("ARRIVAL_BRK2"); break;
         case 7: idx = dComIfGp_evmng_getEventIdx("PUROLO_RETURN2"); break;
         }
 
@@ -152,34 +152,36 @@ void daTag_Island_c::talkInit() {
 
 /* 0000056C-000006AC       .text talk__14daTag_Island_cFv */
 u16 daTag_Island_c::talk() {
-    /* Nonmatching */
     u16 ret = 0xFF;
-    switch (mTalkState) {
-    case 0:
+    
+    if (mTalkState == 0) {
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
         mMsg = getMsg();
         mTalkState = 1;
-        break;
-    case 1:
-        l_msg = fopMsgM_SearchByID(l_msgId);
-        if (l_msg != NULL)
-            mTalkState = 2;
-        break;
-    case 2:
-        if (l_msgId == fpcM_ERROR_PROCESS_ID_e)
+    } else if (mTalkState != -1) {
+        if (l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             l_msgId = fopMsgM_messageSet(mMsg, this);
-
-        ret = l_msg->mStatus;
-        if (ret == fopMsgStts_MSG_DISPLAYED_e) {
-            l_msg->mStatus = next_msgStatus(&mMsg);
-            if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
-                fopMsgM_messageSet(mMsg);
+        } else {
+            switch (mTalkState) {
+            case 1:
+                l_msg = fopMsgM_SearchByID(l_msgId);
+                if (l_msg != NULL)
+                    mTalkState = 2;
+                break;
+            case 2:
+                ret = l_msg->mStatus;
+                if (ret == fopMsgStts_MSG_DISPLAYED_e) {
+                    l_msg->mStatus = next_msgStatus(&mMsg);
+                    if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                        fopMsgM_messageSet(mMsg);
+                    }
+                } else if (ret == fopMsgStts_BOX_CLOSED_e) {
+                    l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                    mTalkState = -1;
+                }
+                break;
             }
-        } else if (ret == fopMsgStts_BOX_CLOSED_e) {
-            l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
-            mTalkState = -1;
         }
-        break;
     }
 
     return ret;
@@ -222,7 +224,6 @@ void daTag_Island_c::demoInitTact_Af() {
 
 /* 00000854-00000A00       .text demoProcTact_Af__14daTag_Island_cFv */
 BOOL daTag_Island_c::demoProcTact_Af() {
-    /* Nonmatching */
     u16 rt = talk();
     if (rt == fopMsgStts_BOX_CLOSED_e || rt == 0xFE) {
         if (chkFlag(0x01)) {
@@ -234,10 +235,12 @@ BOOL daTag_Island_c::demoProcTact_Af() {
                     mEventId = dComIfGp_evmng_getEventIdx("TACT_TEARCH1");
                 }
             } else {
-                if (m2A0 == 0) {
+                switch (m2A0) {
+                case 0:
                     m2A0 = 1;
                     mEventId = dComIfGp_evmng_getEventIdx("TACT_TEARCH2");
-                } else {
+                    break;
+                default:
                     mEventId = dComIfGp_evmng_getEventIdx("TACT_TEARCH3");
                 }
             }
@@ -254,14 +257,19 @@ BOOL daTag_Island_c::demoProcTact_Af() {
 
 /* 00000A00-00000AC4       .text demoInitSpeak__14daTag_Island_cFv */
 void daTag_Island_c::demoInitSpeak() {
-    /* Nonmatching */
     talkInit();
     s32* a_intP = (s32*)dComIfGp_evmng_getMyIntegerP(mStaffId, "MsgNo");
     JUT_ASSERT(0x1C2, a_intP);
 
     m2AC = *a_intP;
-    if (m2AC == 0x0638 && m2A0 != 0)
-        m2AC = 0x063A;
+    
+    switch (m2AC) {
+    case 0x0638:
+        if (m2A0 != 0) {
+            m2AC = 0x063A;
+        }
+        break;
+    }
 }
 
 /* 00000AC4-00000B1C       .text demoProcSpeak__14daTag_Island_cFv */
@@ -361,7 +369,7 @@ BOOL daTag_Island_c::demoProc() {
 /* 00000EDC-00000F4C       .text actionTact__14daTag_Island_cFv */
 BOOL daTag_Island_c::actionTact() {
     if (dComIfGp_evmng_endCheck(mEventId)) {
-        setActio(ACT_HUNT);
+        setActio(ACT_WAIT);
         dComIfGp_event_reset();
     } else {
         demoProc();
@@ -379,7 +387,7 @@ BOOL daTag_Island_c::actionEvent() {
             fopAcM_orderChangeEventId(this, daPy_getPlayerLinkActorClass(), mEventId, 0, 0xFFFF);
             m2A0 = 0;
         } else {
-            setActio(ACT_HUNT);
+            setActio(ACT_WAIT);
             dComIfGp_event_reset();
         }
     } else {
@@ -399,7 +407,7 @@ BOOL daTag_Island_c::actionReady() {
         if (swbit != 0xFF)
             dComIfGs_onSwitch(swbit, current.roomNo);
     } else if (swbit != 0xFF && dComIfGs_isSwitch(swbit, current.roomNo)) {
-        setActio(ACT_HUNT);
+        setActio(ACT_WAIT);
     } else {
         makeEvId();
         fopAcM_orderOtherEventId(this, mEventId);
@@ -411,7 +419,7 @@ BOOL daTag_Island_c::actionReady() {
 BOOL daTag_Island_c::actionHunt() {
     s32 swbit = getSwbit();
     if (swbit != 0xFF && dComIfGs_isSwitch(swbit, current.roomNo)) {
-        setActio(ACT_HUNT);
+        setActio(ACT_WAIT);
     } else {
         if (otherCheck() && checkArea()) {
             makeEvId();
@@ -425,10 +433,10 @@ BOOL daTag_Island_c::actionHunt() {
 /* 000011E4-00001238       .text actionArrival__14daTag_Island_cFv */
 BOOL daTag_Island_c::actionArrival() {
     if (arrivalTerms()) {
-        setActio(ACT_WAIT);
+        setActio(ACT_HUNT);
         actionHunt();
     } else {
-        setActio(ACT_HUNT);
+        setActio(ACT_WAIT);
     }
     return TRUE;
 }
@@ -448,7 +456,7 @@ s32 daTag_Island_c::create() {
     if (mEventId != -1 && swbit != 0xFF && !dComIfGs_isSwitch(swbit, current.roomNo)) {
         setActio(ACT_ARRIVAL);
     } else {
-        setActio(ACT_HUNT);
+        setActio(ACT_WAIT);
     }
     shape_angle.x = shape_angle.z = 0;
     current.angle.x = current.angle.z = 0;
@@ -460,13 +468,11 @@ BOOL daTag_Island_c::draw() {
 }
 
 BOOL daTag_Island_c::execute() {
-    /* Nonmatching */
     switch (mAction) {
     case ACT_ARRIVAL:
         actionArrival();
         break;
     case ACT_HUNT:
-    default:
         actionHunt();
         break;
     case ACT_READY:
@@ -479,6 +485,7 @@ BOOL daTag_Island_c::execute() {
         actionTact();
         break;
     case ACT_WAIT:
+    default:
         actionWait();
         break;
     }
