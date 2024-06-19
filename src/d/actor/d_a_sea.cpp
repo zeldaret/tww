@@ -738,16 +738,16 @@ void daSea_packet_c::draw() {
 
     f32 tmp = mFlatInter * mFlatInter;
 
-    GXColor color1 = {
-        (colorDif.r + tmp * colorAmb.r),
-        (colorDif.g + tmp * colorAmb.g),
-        (colorDif.b + tmp * colorAmb.b),
-        0xFF
-    };
+    GXColor color1;// = {
+    color1.r = colorDif.r + tmp * ((f32)colorAmb.r - (f32)colorDif.r);
+    color1.g = colorDif.g + tmp * ((f32)colorAmb.g - (f32)colorDif.g);
+    color1.b = colorDif.b + tmp * ((f32)colorAmb.b - (f32)colorDif.b);
+    color1.a = 0xFF;
+    //};
 
     f32 f = 1.0f / 10;
 
-    tmp = 1.0f - tmp * f;
+    tmp = 1.0f - f * tmp;
     
     f32 r = colorDif.r * tmp;
     f32 g = colorDif.g * tmp;
@@ -765,7 +765,11 @@ void daSea_packet_c::draw() {
         b = 255.0f;
     }
 
-    GXColor color2 = {(u8) r, (u8) g, (u8) b, 0xFF};
+    GXColor color2;// = {(u8) r, (u8) g, (u8) b};
+    color2.r = r;
+    color2.g = g;
+    color2.b = b;
+    color2.a = 0xFF;
 
     GXSetTevColor(GX_TEVREG0, colorDif);
     GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
@@ -823,46 +827,230 @@ void daSea_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_CLR_RGBA,GX_F32,0);
     GXSetArray(GX_VA_POS, this->m_draw_vtx, 0xc);
 
-    f32 frac = 1.0f / 2000;
+    // 1.0f / 2000
+    f32 frac = 0.0005000001f;   // Fakematch
 
     u16 idx1 = 0;
     u16 idx2 = 65;
 
     cXyz* pVtx = m_draw_vtx;
 
-    f32 curZ = (*pVtx).z * frac;
+    f32 cur = frac * (*pVtx).z;
 
-    for (int z = 0; z < 65; z++) {
-        f32 nextZ = ((*pVtx).z + 800.0f) * frac;
+    for (int z = 0; z < 64; z++) {
+        f32 prev = cur;
+        cur = frac * ((*pVtx).z + 800.0f);
+
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 65 * 2);
 
         for (int x = 0; x < 65; x++) {
-            f32 f = (*pVtx).x * frac;
-            GXPosition1x16(idx2++);
-            GXTexCoord2f32(f, nextZ);
-            GXPosition1x16(idx1++);
-            GXTexCoord2f32(f, curZ);
+            f32 texX = frac * (*pVtx).x;
+            GXPosition1x16(idx2);
+            GXTexCoord2f32(texX, cur);
+            GXPosition1x16(idx1);
+            GXTexCoord2f32(texX, prev);
+            idx1++;
+            idx2++;
 
             pVtx++;
         };
 
         GXEnd();
-
-        curZ = nextZ;
     }
 
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 
-    if (getMinZ() < -450000.0f) {
-        for (int i = 0; i < (getMinZ() + 450000.0f) / 225000.0f; i++) {
+    if (getMinZ() > -450000.0f) {
+        int end = (getMinZ() - (-450000.0f)) / 225000.0f;
+        f32 posZ = -450000.0f;
+        f32 dVar15 = posZ * frac;
+
+        for (int z = 0; z < end; z++) {
+            f32 dVar14 = 225000.0f + posZ;
+            f32 texZ = frac * dVar14;
+
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
+            f32 posX = -450000.0f;
+            for (int x = 0; x < 5; x++) {
+                f32 texX = posX * frac;
+                GXPosition3f32(posX, BASE_HEIGHT, dVar14);
+                GXTexCoord2f32(texX, texZ);
+
+                GXPosition3f32(posX, BASE_HEIGHT, posZ);
+                GXTexCoord2f32(texX, dVar15);
+
+                posX += 225000.0f;
+            }
+
+            GXEnd();
+
+            posZ += 225000.0f;
+            dVar15 = texZ;
+        }
+
+        if (posZ < getMinZ()) {
+            f32 dVar16 = getMinZ() * frac;
+            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
+            f32 posX = -450000.0f;
+            for (int i = 0; i < 5; i++) {
+                f32 texX = posX * frac;
+                GXPosition3f32(posX, BASE_HEIGHT, getMinZ());
+                GXTexCoord2f32(texX, dVar16);
+                GXPosition3f32(posX, BASE_HEIGHT, posZ);
+                GXTexCoord2f32(texX, dVar15);
+
+                posX += 225000.0f;
+            }
+
+            GXEnd();
         }
     }
 
     if (getMaxZ() < 450000.0f) {
-        return;
+        f32 posZ = getMaxZ();
+        int end = (450000.0f - getMaxZ()) / 225000.0f;
+        f32 prevTexZ = posZ * frac;
+
+        for (int i = 0; i < end; i++) {
+            f32 texZ = (posZ + 225000.0f) * frac;
+            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
+            f32 posX = -450000.0f;
+            for (int x = 0; x < 5; x++) {
+                f32 texX = posX * frac;
+                GXPosition3f32(posX, BASE_HEIGHT, posZ + 225000.0f);
+                GXTexCoord2f32(texX, texZ);
+
+                GXPosition3f32(posX, BASE_HEIGHT, posZ);
+                GXTexCoord2f32(texX, prevTexZ);
+
+                posX += 225000.0f;
+            }
+
+            GXEnd();
+
+            posZ += 225000.0f;
+            prevTexZ = texZ;
+        }
+
+        if (posZ < 450000.0f) {
+            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
+            f32 posX = -450000.0f;
+            for (int x = 0; x < 5; x++) {
+                f32 texX = frac * posX;
+                GXPosition3f32(posX, BASE_HEIGHT, 450000.0f);
+                GXTexCoord2f32(texX, 450000.0f * frac);
+                GXPosition3f32(posX, BASE_HEIGHT, posZ);
+                GXTexCoord2f32(texX, prevTexZ);
+
+                posX += 225000.0f;
+            }
+        }
+    }
+
+    if (getMaxZ() > getMinZ()) {
+        int end = (getMaxZ() - getMinZ()) / 225000.0f;
+        f32 posZ = getMinZ();
+        if (getMinX() > -450000.0f) {
+            f32 temp_f3 = getMinX() - (-450000.0f);
+            int temp_r26 = temp_f3 / 225000.0f;
+            int var_r28_2;
+
+            if (225000.0f * temp_r26 < temp_f3) {
+                var_r28_2 = 1;
+            } else {
+                var_r28_2 = 0;
+            }
+
+            f32 texZ = frac * posZ;
+            f32 var_f26_4 =  frac * posZ;
+            int count = temp_r26 + var_r28_2 + 1;
+
+            for (int z = 0; z < end; z++) {
+                f32 var_f29 = var_f26_4;
+                var_f26_4 = frac * 450000.0f;
+                GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, count * 2);
+
+                f32 posX = -450000.0f;
+
+                if (temp_r26 >= 0) {
+                    for (int x = 0; x < temp_r26; x++) {
+                        f32 texX = frac * posX;
+                        
+                        GXPosition3f32(posX, BASE_HEIGHT, posZ + 225000.0f);
+                        GXTexCoord2f32(texX, frac * 450000.0f);
+                        GXPosition3f32(posX, BASE_HEIGHT, posZ);
+                        GXTexCoord2f32(texX, var_f29);
+                        posX += 225000.0f;
+                    }
+                }
+
+                if (var_r28_2) {
+                    f32 texX = frac * getMinX();
+                    GXPosition3f32(getMinX(), BASE_HEIGHT, posZ + 225000.0f);
+                    GXTexCoord2f32(texX, frac * 450000.0f);
+                    GXPosition3f32(getMinX(), BASE_HEIGHT, posZ);
+                    GXTexCoord2f32(texX, var_f29);
+                }
+
+
+                GXEnd();
+
+                posZ += 225000.0f;
+            }
+
+            if (posZ < getMaxZ()) {
+                f32 var_f29 = frac * 450000.0f;
+                f32 maxTexZ = frac * getMaxZ();
+                GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, count * 2);
+
+                f32 posX = -450000.0f;
+                if (temp_r26 >= 0) {
+                    for (int x = 0; x < temp_r26; x++) {
+                        f32 texX = frac * posX;
+                        GXPosition3f32(posX, BASE_HEIGHT, getMaxZ());
+                        GXTexCoord2f32(texX, maxTexZ);
+                        GXPosition3f32(posX, BASE_HEIGHT, posZ);
+                        GXTexCoord2f32(texX, var_f29);
+                        posX += 225000.0f;
+                    }
+                }
+
+                if (var_r28_2 != 0) {
+                    f32 texX = frac * getMinX();
+                    GXPosition3f32(getMinX(), BASE_HEIGHT, getMaxZ());
+                    GXTexCoord2f32(texX, maxTexZ);
+                    GXPosition3f32(getMinX(), BASE_HEIGHT, posZ);
+                    GXTexCoord2f32(texX, var_f29);
+                }
+
+                GXEnd();
+            }
+        }
+    }
+
+    if (getMaxX() < 450000.0f) {
+        f32 temp_f3_3 = 450000.0f - getMaxX();
+        int temp_r26_2 = temp_f3_3 / 225000.0f;
+        int var_r28_3;
+
+        // Check if value gets truncated?
+        if (225000.0f * temp_r26_2 < temp_f3_3) {
+            var_r28_3 = 1;
+        } else {
+            var_r28_3 = 0;
+        }
+
+        int vertCount = temp_r26_2 + var_r28_3 + 1;
+
+        for (int z = 0; z < temp_r26_2; z++) {
+            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, vertCount * 2);
+
+            // TODO:
+
+            GXEnd();
+        }
     }
 
 }
