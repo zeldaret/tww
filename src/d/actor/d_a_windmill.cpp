@@ -5,20 +5,26 @@
 
 #include "d/actor/d_a_windmill.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+
+const char* daWindMill_c::m_arcname[] = { "Hpu1", "Hpu2" };
 
 /* 00000078-000000E8       .text _delete__12daWindMill_cFv */
 BOOL daWindMill_c::_delete() {
-    /* Nonmatching */
+    if (heap != NULL && mpBgW != NULL)
+        dComIfG_Bgsp()->Release(mpBgW);
+    dComIfG_resDelete(&mPhs, m_arcname[mType]);
+    return TRUE;
 }
 
 /* 000000E8-00000108       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
+    return ((daWindMill_c*)i_ac)->CreateHeap();
 }
 
 /* 00000108-000002A0       .text CreateHeap__12daWindMill_cFv */
-void daWindMill_c::CreateHeap() {
+BOOL daWindMill_c::CreateHeap() {
     /* Nonmatching */
 }
 
@@ -34,7 +40,11 @@ static BOOL nodeCallBack(J3DNode*, int) {
 
 /* 00000608-00000670       .text search_wind__12daWindMill_cFv */
 void daWindMill_c::search_wind() {
-    /* Nonmatching */
+    fopAc_ac_c* windTag = fopAcM_SearchByName(PROC_WindTag);
+    if (windTag != NULL)
+        mWindTagId = fopAcM_GetID(windTag);
+    else
+        mWindTagId = fpcM_ERROR_PROCESS_ID_e;
 }
 
 /* 00000670-00000804       .text _create__12daWindMill_cFv */
@@ -73,28 +83,28 @@ BOOL daWindMill_c::_draw() {
 }
 
 /* 000017A4-000017C4       .text daWindMill_Create__FPv */
-static s32 daWindMill_Create(void*) {
-    /* Nonmatching */
+static s32 daWindMill_Create(void* i_ac) {
+    return ((daWindMill_c*)i_ac)->_create();
 }
 
 /* 000017C4-000017E8       .text daWindMill_Delete__FPv */
-static BOOL daWindMill_Delete(void*) {
-    /* Nonmatching */
+static BOOL daWindMill_Delete(void* i_ac) {
+    return ((daWindMill_c*)i_ac)->_delete();
 }
 
 /* 000017E8-0000180C       .text daWindMill_Draw__FPv */
-static BOOL daWindMill_Draw(void*) {
-    /* Nonmatching */
+static BOOL daWindMill_Draw(void* i_ac) {
+    return ((daWindMill_c*)i_ac)->_draw();
 }
 
 /* 0000180C-00001830       .text daWindMill_Execute__FPv */
-static BOOL daWindMill_Execute(void*) {
-    /* Nonmatching */
+static BOOL daWindMill_Execute(void* i_ac) {
+    return ((daWindMill_c*)i_ac)->_execute();
 }
 
 /* 00001830-00001838       .text daWindMill_IsDelete__FPv */
 static BOOL daWindMill_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daWindMillMethodTable = {

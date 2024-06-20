@@ -189,7 +189,7 @@ BOOL daToge_c::_execute() {
         daWindTag::daWindTag_c* pActor = (daWindTag::daWindTag_c*)fopAcM_SearchByID(mWindTagId);
 
         if (pActor != NULL) {
-            if (pActor->unk498 > 0.0f) {
+            if (pActor->mOffsY > 0.0f) {
                 if (mEventState != 4) {
                     mEventState = 3;
                 }

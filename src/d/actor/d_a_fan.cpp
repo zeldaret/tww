@@ -52,7 +52,7 @@ static dCcD_SrcCps l_cps_src = {
     {
         /* P0 */ 0.0f, 0.0f, 0.0f,
         /* P1 */ 0.0f, 0.0f, 0.0f,
-        /* Hieght */ 100.0f,
+        /* Height */ 100.0f,
     },
 };
 
