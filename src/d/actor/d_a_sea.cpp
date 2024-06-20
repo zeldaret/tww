@@ -835,20 +835,21 @@ void daSea_packet_c::draw() {
 
     cXyz* pVtx = m_draw_vtx;
 
-    f32 cur = frac * (*pVtx).z;
-
+    //f32 cur = frac * (*pVtx).z;
+    f32 texZ = frac * (*pVtx).z;
+    f32 prevTexZ;
     for (int z = 0; z < 64; z++) {
-        f32 prev = cur;
-        cur = frac * ((*pVtx).z + 800.0f);
+        prevTexZ = texZ;
+        texZ = frac * ((*pVtx).z + 800.0f);
 
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 65 * 2);
 
         for (int x = 0; x < 65; x++) {
             f32 texX = frac * (*pVtx).x;
             GXPosition1x16(idx2);
-            GXTexCoord2f32(texX, cur);
+            GXTexCoord2f32(texX, texZ);
             GXPosition1x16(idx1);
-            GXTexCoord2f32(texX, prev);
+            GXTexCoord2f32(texX, prevTexZ);
             idx1++;
             idx2++;
 
@@ -862,24 +863,28 @@ void daSea_packet_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 
+    f32 dVar14;
+
+    f32 posZ;
     if (getMinZ() > -450000.0f) {
         int end = (getMinZ() - (-450000.0f)) / 225000.0f;
-        f32 posZ = -450000.0f;
-        f32 dVar15 = posZ * frac;
+        posZ = -450000.0f;
+        texZ = posZ * frac;
 
         for (int z = 0; z < end; z++) {
+            prevTexZ = texZ;
             f32 dVar14 = 225000.0f + posZ;
-            f32 texZ = frac * dVar14;
+            texZ = frac * dVar14;
 
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
             f32 posX = -450000.0f;
             for (int x = 0; x < 5; x++) {
-                f32 texX = posX * frac;
+                f32 texX = frac * posX;
                 GXPosition3f32(posX, BASE_HEIGHT, dVar14);
                 GXTexCoord2f32(texX, texZ);
 
                 GXPosition3f32(posX, BASE_HEIGHT, posZ);
-                GXTexCoord2f32(texX, dVar15);
+                GXTexCoord2f32(texX, prevTexZ);
 
                 posX += 225000.0f;
             }
@@ -887,19 +892,19 @@ void daSea_packet_c::draw() {
             GXEnd();
 
             posZ += 225000.0f;
-            dVar15 = texZ;
         }
 
         if (posZ < getMinZ()) {
-            f32 dVar16 = getMinZ() * frac;
+            prevTexZ = texZ;
+            texZ = getMinZ() * frac;
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
             f32 posX = -450000.0f;
             for (int i = 0; i < 5; i++) {
                 f32 texX = frac * posX;
                 GXPosition3f32(posX, BASE_HEIGHT, getMinZ());
-                GXTexCoord2f32(texX, dVar16);
+                GXTexCoord2f32(texX, texZ);
                 GXPosition3f32(posX, BASE_HEIGHT, posZ);
-                GXTexCoord2f32(texX, dVar15);
+                GXTexCoord2f32(texX, prevTexZ);
 
                 posX += 225000.0f;
             }
@@ -909,17 +914,18 @@ void daSea_packet_c::draw() {
     }
 
     if (getMaxZ() < 450000.0f) {
-        f32 posZ = getMaxZ();
+        posZ = getMaxZ();
+        int i;
         int end = (450000.0f - getMaxZ()) / 225000.0f;
-        f32 texZ = posZ * frac;
+        texZ = frac * posZ;
 
-        for (int i = 0; i < end; i++) {
-            f32 prevTexZ = texZ;
+        for (i = 0; i < end; i++) {
+            prevTexZ = texZ;
             texZ = frac * (posZ + 225000.0f);
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
             f32 posX = -450000.0f;
             for (int x = 0; x < 5; x++) {
-                f32 texX = posX * frac;
+                f32 texX = frac * posX;
                 GXPosition3f32(posX, BASE_HEIGHT, posZ + 225000.0f);
                 GXTexCoord2f32(texX, texZ);
 
@@ -935,24 +941,25 @@ void daSea_packet_c::draw() {
         }
 
         if (posZ < 450000.0f) {
+            prevTexZ = texZ;
+            texZ = 450000.0f * frac;
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
             f32 posX = -450000.0f;
             for (int x = 0; x < 5; x++) {
                 f32 texX = frac * posX;
                 GXPosition3f32(posX, BASE_HEIGHT, 450000.0f);
-                GXTexCoord2f32(texX, 450000.0f * frac);
-                GXPosition3f32(posX, BASE_HEIGHT, posZ);
                 GXTexCoord2f32(texX, texZ);
+                GXPosition3f32(posX, BASE_HEIGHT, posZ);
+                GXTexCoord2f32(texX, prevTexZ);
 
                 posX += 225000.0f;
             }
         }
     }
 
-    f32 var_f29;
     if (getMaxZ() > getMinZ()) {
         int end = (getMaxZ() - getMinZ()) / 225000.0f;
-        f32 posZ = getMinZ();
+        posZ = getMinZ();
         if (getMinX() > -450000.0f) {
             f32 temp_f3 = getMinX() - (-450000.0f);
             int temp_r26 = temp_f3 / 225000.0f;
@@ -964,13 +971,12 @@ void daSea_packet_c::draw() {
                 var_r28_2 = 0;
             }
 
-            f32 texZ = frac * posZ;
-            f32 var_f26_4 =  frac * posZ;
+            texZ = frac * posZ;
             int count = temp_r26 + var_r28_2 + 1;
 
             for (int z = 0; z < end; z++) {
-                var_f29 = var_f26_4;
-                var_f26_4 = frac * 450000.0f;
+                prevTexZ = texZ;
+                texZ = frac * 450000.0f;
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, count * 2);
 
                 f32 posX = -450000.0f;
@@ -981,7 +987,7 @@ void daSea_packet_c::draw() {
                     GXPosition3f32(posX, BASE_HEIGHT, posZ + 225000.0f);
                     GXTexCoord2f32(texX, frac * 450000.0f);
                     GXPosition3f32(posX, BASE_HEIGHT, posZ);
-                    GXTexCoord2f32(texX, var_f29);
+                    GXTexCoord2f32(texX, prevTexZ);
                     posX += 225000.0f;
                 }
 
@@ -990,7 +996,7 @@ void daSea_packet_c::draw() {
                     GXPosition3f32(getMinX(), BASE_HEIGHT, posZ + 225000.0f);
                     GXTexCoord2f32(texX, frac * 450000.0f);
                     GXPosition3f32(getMinX(), BASE_HEIGHT, posZ);
-                    GXTexCoord2f32(texX, var_f29);
+                    GXTexCoord2f32(texX, prevTexZ);
                 }
 
 
@@ -1000,17 +1006,17 @@ void daSea_packet_c::draw() {
             }
 
             if (posZ < getMaxZ()) {
-                var_f29 = frac * 450000.0f;
-                f32 maxTexZ = frac * getMaxZ();
+                prevTexZ = texZ;
+                texZ = frac * getMaxZ();
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, count * 2);
 
                 f32 posX = -450000.0f;
                 for (int x = 0; x <= temp_r26; x++) {
                     f32 texX = frac * posX;
                     GXPosition3f32(posX, BASE_HEIGHT, getMaxZ());
-                    GXTexCoord2f32(texX, maxTexZ);
+                    GXTexCoord2f32(texX, texZ);
                     GXPosition3f32(posX, BASE_HEIGHT, posZ);
-                    GXTexCoord2f32(texX, var_f29);
+                    GXTexCoord2f32(texX, prevTexZ);
                     posX += 225000.0f;
                 }
             
@@ -1018,9 +1024,9 @@ void daSea_packet_c::draw() {
                 if (var_r28_2 != 0) {
                     f32 texX = frac * getMinX();
                     GXPosition3f32(getMinX(), BASE_HEIGHT, getMaxZ());
-                    GXTexCoord2f32(texX, maxTexZ);
+                    GXTexCoord2f32(texX, texZ);
                     GXPosition3f32(getMinX(), BASE_HEIGHT, posZ);
-                    GXTexCoord2f32(texX, var_f29);
+                    GXTexCoord2f32(texX, prevTexZ);
                 }
 
                 GXEnd();
@@ -1038,31 +1044,32 @@ void daSea_packet_c::draw() {
         } else {
             var_r28_3 = 0;
         }
-        f32 posZ = getMinZ();
-        f32 minTexZ = frac * getMaxZ();
+        posZ = getMinZ();
+        texZ = frac * posZ;
 
         int count = temp_r26_2 + var_r28_3 + 1;
 
 
         for (int z = 0; z < end; z++) {
+            
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, count * 2);
 
             f32 posX = getMaxX();
             for (int x = 0; x <= temp_r26_2; x++) {
                 f32 texX = frac * posX;
                 GXPosition3f32(posX, BASE_HEIGHT, posZ + 225000.0f);
-                GXTexCoord2f32(texX, minTexZ);
+                GXTexCoord2f32(texX, texZ);
                 GXPosition3f32(posX, BASE_HEIGHT, posZ);
-                GXTexCoord2f32(texX, var_f29);
+                GXTexCoord2f32(texX, prevTexZ);
 
                 posX += 225000.0f;
             }
 
             if (var_r28_3 != 0) {
                 GXPosition3f32(450000.0f, BASE_HEIGHT, posZ + 225000.0f);
-                GXTexCoord2f32(frac * 450000.0f, minTexZ);
+                GXTexCoord2f32(frac * 450000.0f, texZ);
                 GXPosition3f32(450000.0f, BASE_HEIGHT, posZ);
-                GXTexCoord2f32(frac * 450000.0f, var_f29);
+                GXTexCoord2f32(frac * 450000.0f, prevTexZ);
             }
 
             GXEnd();
@@ -1071,7 +1078,8 @@ void daSea_packet_c::draw() {
         }
 
         if (posZ < getMaxZ()) {
-            f32 maxTexZ = frac * getMaxZ();
+            prevTexZ = texZ;
+            texZ = frac * getMaxZ();
 
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, count * 2);
 
@@ -1080,9 +1088,9 @@ void daSea_packet_c::draw() {
             for (int x = 0; x <= temp_r26_2; x++) {
                 f32 texX = frac * posX;
                 GXPosition3f32(posX, BASE_HEIGHT, getMaxZ());
-                GXTexCoord2f32(texX, maxTexZ);
+                GXTexCoord2f32(texX, texZ);
                 GXPosition3f32(posX, BASE_HEIGHT, posZ);
-                GXTexCoord2f32(texX, minTexZ);
+                GXTexCoord2f32(texX, prevTexZ);
 
                 posX += 225000.0f;
             }
@@ -1090,9 +1098,9 @@ void daSea_packet_c::draw() {
             if (var_r28_3 != 0) {
                 f32 texX = 450000.0f * frac;
                 GXPosition3f32(450000.0f, BASE_HEIGHT, getMaxZ());
-                GXTexCoord2f32(texX, maxTexZ);
+                GXTexCoord2f32(texX, texZ);
                 GXPosition3f32(450000.0f, BASE_HEIGHT, posZ);
-                GXTexCoord2f32(texX, minTexZ);
+                GXTexCoord2f32(texX, prevTexZ);
             }
 
             GXEnd();
