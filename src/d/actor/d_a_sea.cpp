@@ -143,9 +143,7 @@ daSea_WaveInfo::daSea_WaveInfo() {
 }
 
 /* 8015B43C-8015B484       .text __dt__14daSea_WaveInfoFv */
-daSea_WaveInfo::~daSea_WaveInfo() {
-    /* Nonmatching */
-}
+daSea_WaveInfo::~daSea_WaveInfo() {}
 
 /* 8015B484-8015B4D4       .text AddCounter__14daSea_WaveInfoFv */
 void daSea_WaveInfo::AddCounter() {
@@ -643,7 +641,6 @@ void daSea_packet_c::execute(cXyz& pos) {
 
 /* 8015C75C-8015D80C       .text draw__14daSea_packet_cFv */
 void daSea_packet_c::draw() {
-    /* Nonmatching */
     if (ChkCullStop()) return;
 
     m_draw_vtx = (cXyz*)mDoGph_gInf_c::alloc(0xC60C, 0x20);
@@ -710,7 +707,6 @@ void daSea_packet_c::draw() {
         mAnimCounter = 0;
     }
 
-
     mDoMtx_stack_c::transS(0.0f, mAnimCounter / 300.0f, 0.0f);
     GXLoadTexMtxImm(mDoMtx_stack_c::get(), GX_TEXMTX1, GX_MTX2x4);
     GXLoadTexObj(&mTexYura, GX_TEXMAP1);
@@ -725,7 +721,6 @@ void daSea_packet_c::draw() {
     offset[4] = 0.3f;
     offset[5] = 0.0f;
 
-
     GXSetIndTexMtx(GX_ITM_0, (f32*) offset, -1);
     GXSetTevIndWarp(GX_TEVSTAGE0, GX_INDTEXSTAGE0, GX_TRUE, GX_FALSE, GX_ITM_0);
     GXSetTevIndWarp(GX_TEVSTAGE1, GX_INDTEXSTAGE0, GX_TRUE, GX_FALSE, GX_ITM_0);
@@ -738,12 +733,11 @@ void daSea_packet_c::draw() {
 
     f32 tmp = mFlatInter * mFlatInter;
 
-    GXColor color1;// = {
+    GXColor color1;
     color1.r = colorDif.r + tmp * ((f32)colorAmb.r - (f32)colorDif.r);
     color1.g = colorDif.g + tmp * ((f32)colorAmb.g - (f32)colorDif.g);
     color1.b = colorDif.b + tmp * ((f32)colorAmb.b - (f32)colorDif.b);
     color1.a = 0xFF;
-    //};
 
     f32 f = 1.0f / 10;
 
@@ -831,6 +825,8 @@ void daSea_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_CLR_RGBA,GX_F32,0);
     GXSetArray(GX_VA_POS, this->m_draw_vtx, 0xc);
 
+    // TODO: Remove magic numbers
+
     // 1.0f / 2000
     f32 frac = 0.0005000001f;   // Fakematch
 
@@ -843,7 +839,6 @@ void daSea_packet_c::draw() {
 
     pVtx = m_draw_vtx;
 
-    //f32 cur = frac * (*pVtx).z;
     f32 prevTexZ;
     f32 texZ = frac * (*pVtx).z;
     for (z = 0; z < 64; z++) {
@@ -977,7 +972,7 @@ void daSea_packet_c::draw() {
         if (getMinX() > -450000.0f) {
             f32 temp_f3 = getMinX() - (-450000.0f);
             temp_r26 = temp_f3 / 225000.0f;
-            
+
             int var_r28_2 = 225000.0f * temp_r26 < temp_f3 ? 1 : 0;
 
             texZ = frac * posZ;
@@ -1010,7 +1005,6 @@ void daSea_packet_c::draw() {
                     GXTexCoord2f32(texX, prevTexZ);
                 }
 
-
                 GXEnd();
 
                 posZ += 225000.0f;
@@ -1031,7 +1025,6 @@ void daSea_packet_c::draw() {
                     GXTexCoord2f32(texX, prevTexZ);
                     posX += 225000.0f;
                 }
-            
 
                 if (var_r28_2 != 0) {
                     texX = frac * getMinX();
@@ -1049,20 +1042,21 @@ void daSea_packet_c::draw() {
             int z;
             f32 temp_f3_3 = 450000.0f - getMaxX();
             int temp_r26_2 = temp_f3_3 / 225000.0f;
-    
+
             // Check if value gets truncated?
             int var_r28_3 = 225000.0f * temp_r26_2 < temp_f3_3 ? 1 : 0;
-            
+
             posZ = getMinZ();
             texZ = frac * posZ;
             z = 0;
+
+            // Might be equivalent to ceil(temp_3_3 / 225000.0f)
             int count = temp_r26_2 + var_r28_3;
-    
-    
+
             for (; z < end; z++) {
-                
+
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (1+count) * 2);
-    
+
                 f32 texX;
                 f32 posX = getMaxX();
                 for (int x = 0; x <= temp_r26_2; x++) {
@@ -1071,41 +1065,41 @@ void daSea_packet_c::draw() {
                     GXTexCoord2f32(texX, texZ);
                     GXPosition3f32(posX, BASE_HEIGHT, posZ);
                     GXTexCoord2f32(texX, prevTexZ);
-    
+
                     posX += 225000.0f;
                 }
-    
+
                 if (var_r28_3 != 0) {
                     GXPosition3f32(450000.0f, BASE_HEIGHT, posZ + 225000.0f);
                     GXTexCoord2f32(frac * 450000.0f, texZ);
                     GXPosition3f32(450000.0f, BASE_HEIGHT, posZ);
                     GXTexCoord2f32(frac * 450000.0f, prevTexZ);
                 }
-    
+
                 GXEnd();
-    
+
                 posZ += 225000.0f;
             }
-    
+
             if (posZ < getMaxZ()) {
                 prevTexZ = texZ;
                 texZ = frac * getMaxZ();
-    
+
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (1+count) * 2);
-    
+
                 f32 texX;
                 f32 posX = getMaxX();
-    
+
                 for (int x = 0; x <= temp_r26_2; x++) {
                     texX = frac * posX;
                     GXPosition3f32(posX, BASE_HEIGHT, getMaxZ());
                     GXTexCoord2f32(texX, texZ);
                     GXPosition3f32(posX, BASE_HEIGHT, posZ);
                     GXTexCoord2f32(texX, prevTexZ);
-    
+
                     posX += 225000.0f;
                 }
-    
+
                 if (var_r28_3 != 0) {
                     texX = 450000.0f * frac;
                     GXPosition3f32(450000.0f, BASE_HEIGHT, getMaxZ());
@@ -1113,7 +1107,7 @@ void daSea_packet_c::draw() {
                     GXPosition3f32(450000.0f, BASE_HEIGHT, posZ);
                     GXTexCoord2f32(texX, prevTexZ);
                 }
-    
+
                 GXEnd();
             }
         }
