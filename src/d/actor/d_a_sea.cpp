@@ -973,11 +973,14 @@ void daSea_packet_c::draw() {
             f32 temp_f3 = getMinX() - (-450000.0f);
             temp_r26 = temp_f3 / 225000.0f;
 
-            int var_r28_2 = 225000.0f * temp_r26 < temp_f3 ? 1 : 0;
+            // Check if value gets truncated?
+            int trunc = 225000.0f * temp_r26 < temp_f3 ? 1 : 0;
 
             texZ = frac * posZ;
             int z = 0;
-            int count = temp_r26 + var_r28_2;
+
+            // Might be equivalent to ceil(temp_f3 / 225000.0f)
+            int count = temp_r26 + trunc;
 
             for (; z < end; z++) {
                 prevTexZ = texZ;
@@ -997,7 +1000,7 @@ void daSea_packet_c::draw() {
                     posX += 225000.0f;
                 }
 
-                if (var_r28_2) {
+                if (trunc) {
                     texX = frac * getMinX();
                     GXPosition3f32(getMinX(), BASE_HEIGHT, posZ + 225000.0f);
                     GXTexCoord2f32(texX, frac * 450000.0f);
@@ -1026,7 +1029,7 @@ void daSea_packet_c::draw() {
                     posX += 225000.0f;
                 }
 
-                if (var_r28_2 != 0) {
+                if (trunc != 0) {
                     texX = frac * getMinX();
                     GXPosition3f32(getMinX(), BASE_HEIGHT, getMaxZ());
                     GXTexCoord2f32(texX, texZ);
@@ -1044,14 +1047,14 @@ void daSea_packet_c::draw() {
             int temp_r26_2 = temp_f3_3 / 225000.0f;
 
             // Check if value gets truncated?
-            int var_r28_3 = 225000.0f * temp_r26_2 < temp_f3_3 ? 1 : 0;
+            int trunc = 225000.0f * temp_r26_2 < temp_f3_3 ? 1 : 0;
 
             posZ = getMinZ();
             texZ = frac * posZ;
             z = 0;
 
             // Might be equivalent to ceil(temp_3_3 / 225000.0f)
-            int count = temp_r26_2 + var_r28_3;
+            int count = temp_r26_2 + trunc;
 
             for (; z < end; z++) {
 
@@ -1069,7 +1072,7 @@ void daSea_packet_c::draw() {
                     posX += 225000.0f;
                 }
 
-                if (var_r28_3 != 0) {
+                if (trunc != 0) {
                     GXPosition3f32(450000.0f, BASE_HEIGHT, posZ + 225000.0f);
                     GXTexCoord2f32(frac * 450000.0f, texZ);
                     GXPosition3f32(450000.0f, BASE_HEIGHT, posZ);
@@ -1100,7 +1103,7 @@ void daSea_packet_c::draw() {
                     posX += 225000.0f;
                 }
 
-                if (var_r28_3 != 0) {
+                if (trunc != 0) {
                     texX = 450000.0f * frac;
                     GXPosition3f32(450000.0f, BASE_HEIGHT, getMaxZ());
                     GXTexCoord2f32(texX, texZ);
