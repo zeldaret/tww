@@ -15,6 +15,7 @@ void GXSetIndTexCoordScale(GXIndTexStageID texStage, GXIndTexScale scaleS, GXInd
 void GXSetIndTexOrder(GXIndTexStageID stage, GXTexCoordID coord, GXTexMapID map);
 void GXSetNumIndStages(u8 num);
 void GXSetTevDirect(GXTevStageID stage);
+void GXSetTevIndWarp(GXTevStageID tevStage, GXIndTexStageID texStage, GXBool, GXBool, GXIndTexMtxID mtxID); // Might be incorrect
 
 #ifdef __cplusplus
 };
