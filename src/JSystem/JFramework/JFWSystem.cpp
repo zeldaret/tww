@@ -44,7 +44,7 @@ bool JFWSystem::sInitCalled = false;
 
 /* 80254DD0-80254E54       .text firstInit__9JFWSystemFv */
 void JFWSystem::firstInit() {
-    JUT_ASSERT(80, rootHeap == 0);
+    JUT_ASSERT(80, rootHeap == NULL);
 
     OSInit();
     DVDInit();

@@ -236,7 +236,7 @@ bool JKRSolidHeap::dump() {
 
 /* 802B3A68-802B3B4C       .text state_register__12JKRSolidHeapCFPQ27JKRHeap6TStateUl */
 void JKRSolidHeap::state_register(JKRHeap::TState* p, u32 id) const {
-    JUT_ASSERT(VERSION_SELECT(610, 607, 607), p != 0);
+    JUT_ASSERT(VERSION_SELECT(610, 607, 607), p != NULL);
     JUT_ASSERT(VERSION_SELECT(611, 608, 608), p->getHeap() == this);
 
     getState_(p);

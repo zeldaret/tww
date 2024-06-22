@@ -237,7 +237,7 @@ static BOOL tunoNodeCallBack(J3DNode* node, int param_1) {
 /* 00000988-00000C94       .text createHeap__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", OS_BDL_OS));
-    JUT_ASSERT(0x2F9, modelData != 0);
+    JUT_ASSERT(0x2F9, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -1702,7 +1702,7 @@ BOOL daNpc_Os_c::initBrkAnm(u8 param_1, bool param_2) {
     bool ret = false;
     if(field_0x7A2 != param_1) {
         J3DAnmTevRegKey* a_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Os", brkAnmTbl[param_1].brkFileIndex));
-        JUT_ASSERT(0xBB9, a_brk != 0);
+        JUT_ASSERT(0xBB9, a_brk != NULL);
 
         if(mBrkAnm.init(modelData, a_brk, TRUE, brkAnmTbl[param_1].loopMode, brkAnmTbl[param_1].speed, 0, -1, param_2, 0)) {
             field_0x7A2 = param_1;

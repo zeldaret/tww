@@ -185,7 +185,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 /* 800E37B8-800E3AF8       .text CreateHeap__13daStandItem_cFv */
 BOOL daStandItem_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, m_bmdidx[mItemType]);
-    JUT_ASSERT(0x239, modelData != 0);
+    JUT_ASSERT(0x239, modelData != NULL);
 
     if (mItemNo == PRESIDENT_STATUE) {
         mpModel = mDoExt_J3DModel__create(modelData, 0x0, 0x11020203);
@@ -198,7 +198,7 @@ BOOL daStandItem_c::CreateHeap() {
 
     if (m_bckidx[mItemType] != -1) {
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, m_bckidx[mItemType]);
-        JUT_ASSERT(0x250, pbck != 0);
+        JUT_ASSERT(0x250, pbck != NULL);
         mpBckAnm = new mDoExt_bckAnm();
 
         static const u32 playmode[12] = {

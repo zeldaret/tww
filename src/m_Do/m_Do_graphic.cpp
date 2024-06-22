@@ -74,7 +74,7 @@ void mDoGph_gInf_c::create() {
     JFWDisplay::createManager(JKRHeap::getCurrentHeap(), JUTXfb::UNK_2, true);
     JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::UNK_METHOD_1);
     JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fb_width, JUTVideo::getManager()->getRenderMode()->efb_height, JUtility::TColor(0, 0, 0, 0));
-    JUT_ASSERT(0x1a0, faderPtr != 0);
+    JUT_ASSERT(0x1a0, faderPtr != NULL);
     setFader(faderPtr);
     JFWDisplay::getManager()->setFader(faderPtr);
     JUTProcBar::getManager()->setVisibleHeapBar(false);
@@ -111,10 +111,10 @@ void mDoGph_gInf_c::createHeap() {
     JKRHeap* parentHeap = JKRHeap::getCurrentHeap();
 
     mHeap[0] = JKRSolidHeap::create(0x10000, parentHeap, false);
-    JUT_ASSERT(0x1eb, mHeap[0] != 0);
+    JUT_ASSERT(0x1eb, mHeap[0] != NULL);
 
     mHeap[1] = JKRSolidHeap::create(0x10000, parentHeap, false);
-    JUT_ASSERT(0x1ed, mHeap[1] != 0);
+    JUT_ASSERT(0x1ed, mHeap[1] != NULL);
 
     mCurrentHeap = 0;
 }
@@ -812,7 +812,7 @@ bool mDoGph_screenCapture() {
     GXCopyTex(mCaptureCaptureBuffer, GX_FALSE);
     GXPixModeSync();
 
-    JUT_ASSERT(0xac1, mCaptureOldCB == 0);
+    JUT_ASSERT(0xac1, mCaptureOldCB == NULL);
     mCaptureOldCB = GXSetDrawSyncCallback(mCaptureGXDrawSyncCallback);
     OSCreateAlarm(&mCaptureTimeOutAlarm);
     OSSetAlarm(&mCaptureTimeOutAlarm, mCaptureTimeOutTicks, mCaptureGXDrawSyncTimeOut);

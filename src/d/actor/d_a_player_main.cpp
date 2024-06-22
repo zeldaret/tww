@@ -3745,20 +3745,20 @@ static BOOL daPy_Delete(daPy_lk_c* i_this) {
 /* 80123078-80123360       .text initTextureAnime__9daPy_lk_cFv */
 void daPy_lk_c::initTextureAnime() {
     m_tex_anm_heap.m_buffer = new(0x20) u8[0x1000];
-    JUT_ASSERT(20869, m_tex_anm_heap.m_buffer != 0);
+    JUT_ASSERT(20869, m_tex_anm_heap.m_buffer != NULL);
     
     JKRReadIdxResource(m_tex_anm_heap.m_buffer, 0x1000, LKANM_BTP_TMABAA, dComIfGp_getAnmArchive());
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(J3DAnmLoaderDataBase::load(m_tex_anm_heap.m_buffer));
     btp->searchUpdateMaterialID(mpCLModelData);
     u16 material_num = btp->getUpdateMaterialNum();
     m_texNoAnms = new J3DTexNoAnm[material_num];
-    JUT_ASSERT(20885, m_texNoAnms != 0);
+    JUT_ASSERT(20885, m_texNoAnms != NULL);
     
     for (u16 i = 0; i < material_num; i++) {
         u16 matID = btp->getUpdateMaterialID(i);
         if (matID != 0xFFFF) {
             J3DMaterialAnm* mat_anm = new J3DMaterialAnm();
-            JUT_ASSERT(20894, mat_anm != 0);
+            JUT_ASSERT(20894, mat_anm != NULL);
             
             if (matID != 1 && matID != 4) {
                 // Not eyeL or eyeR (i.e. it's mouth, mayuL, or mayuR)
@@ -3792,7 +3792,7 @@ void daPy_lk_c::initTextureAnime() {
 void daPy_lk_c::initTextureScroll() {
     /* Nonmatching - regalloc */
     m_tex_scroll_heap.m_buffer = new(0x20) u8[0x800];
-    JUT_ASSERT(20944, m_tex_scroll_heap.m_buffer != 0);
+    JUT_ASSERT(20944, m_tex_scroll_heap.m_buffer != NULL);
     
     JKRReadIdxResource(m_tex_scroll_heap.m_buffer, 0x800, LKANM_BTK_TMABA, dComIfGp_getAnmArchive());
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(m_tex_scroll_heap.m_buffer));
@@ -3801,13 +3801,13 @@ void daPy_lk_c::initTextureScroll() {
     JUT_ASSERT(20958, material_num == 2);
     
     m_texMtxAnm = new J3DTexMtxAnm[material_num];
-    JUT_ASSERT(20961, m_texMtxAnm != 0);
+    JUT_ASSERT(20961, m_texMtxAnm != NULL);
     
     for (u16 no = 0; no < material_num; no++) {
         u16 matID = btk->getUpdateMaterialID(no);
         if (matID != 0xFFFF) {
             m_tex_eye_scroll[no] = new daPy_matAnm_c();
-            JUT_ASSERT(20972, m_tex_eye_scroll[no] != 0);
+            JUT_ASSERT(20972, m_tex_eye_scroll[no] != NULL);
             
             mpCLModelData->getMaterialNodePointer(matID)->change();
             mpCLModelData->getMaterialNodePointer(matID)->setMaterialAnm(m_tex_eye_scroll[no]);
@@ -3818,7 +3818,7 @@ void daPy_lk_c::initTextureScroll() {
                 J3DTexMtx* tmtx;
                 if (mtl->getTexMtx(texMtxID) == NULL) {
                     tmtx = new J3DTexMtx();
-                    JUT_ASSERT(20984, tmtx != 0);
+                    JUT_ASSERT(20984, tmtx != NULL);
                     mtl->setTexMtx(no, tmtx);
                 }
                 if (mtl->getTexCoord(texMtxID) != NULL) {
@@ -3838,7 +3838,7 @@ void daPy_lk_c::initTextureScroll() {
                 temp = &btk->getSRTCenter(no);
                 tmtx->getTexMtxInfo().mCenter.z = temp->z;
                 
-                JUT_ASSERT(21001, mtl->getMaterialAnm() != 0);
+                JUT_ASSERT(21001, mtl->getMaterialAnm() != NULL);
                 
                 mtl->getMaterialAnm()->setTexMtxAnm(texMtxID, &m_texMtxAnm[no]);
             }
@@ -3903,11 +3903,11 @@ BOOL daPy_lk_c::createHeap() {
     mpYbafo00Btk->setFrame(mpYbafo00Btk->getFrameMax()-0.001f);
     
     tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_YAURA00));
-    JUT_ASSERT(21130, tmp_modelData != 0);
+    JUT_ASSERT(21130, tmp_modelData != NULL);
     daPy_aura_c* aura_p = mMagicArmorAuraEntries;
     for (int i = 0; i < 6; i++) {
         aura_p->setModel(mDoExt_J3DModel__create(tmp_modelData, 0x00080000, 0x11001222));
-        JUT_ASSERT(21139, aura_p->getModel() != 0);
+        JUT_ASSERT(21139, aura_p->getModel() != NULL);
         aura_p++;
     }
     mpYaura00Btk = entryBtk(tmp_modelData, LINK_BTK_YAURA00);
@@ -3924,54 +3924,54 @@ BOOL daPy_lk_c::createHeap() {
     mYmgcs00Brk.entryFrame(0.0f);
     
     tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_BOMB));
-    JUT_ASSERT(21169, tmp_modelData != 0);
+    JUT_ASSERT(21169, tmp_modelData != NULL);
     mpBombBrk = entryBrk(tmp_modelData, LINK_BRK_BOMB);
     
     tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GWP00));
-    JUT_ASSERT(21176, tmp_modelData != 0);
+    JUT_ASSERT(21176, tmp_modelData != NULL);
     mpGwp00BrkData = entryBrk(tmp_modelData, LINK_BRK_GWP00);
     mpGwp00BtkData = entryBtk(tmp_modelData, LINK_BTK_GWP00);
     
     tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROW));
-    JUT_ASSERT(21184, tmp_modelData != 0);
+    JUT_ASSERT(21184, tmp_modelData != NULL);
     mpIceArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TTIPICE);
     
     tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROWGLITTER));
-    JUT_ASSERT(21191, tmp_modelData != 0);
+    JUT_ASSERT(21191, tmp_modelData != NULL);
     mpLightArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TARROWGLITTER);
     
     tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER00));
-    JUT_ASSERT(21198, tmp_modelData != 0);
+    JUT_ASSERT(21198, tmp_modelData != NULL);
     mpGicer00Btk = entryBtk(tmp_modelData, LINK_BTK_GICER00);
     
     tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER01));
-    JUT_ASSERT(21205, tmp_modelData != 0);
+    JUT_ASSERT(21205, tmp_modelData != NULL);
     mpGicer01Btk = entryBtk(tmp_modelData, LINK_BTK_GICER01);
     
     const int numCLJoints = 0x2A;
     m_old_fdata = new mDoExt_MtxCalcOldFrame(new J3DTransformInfo[numCLJoints], new Quaternion[numCLJoints]);
-    JUT_ASSERT(21233, m_old_fdata != 0);
+    JUT_ASSERT(21233, m_old_fdata != NULL);
     
     m_pbCalc[PART_UNDER_e] = new mDoExt_MtxCalcAnmBlendTblOld(m_old_fdata, ARRAY_SIZE(mAnmRatioUnder), mAnmRatioUnder);
-    JUT_ASSERT(21239, m_pbCalc[PART_UNDER_e] != 0);
+    JUT_ASSERT(21239, m_pbCalc[PART_UNDER_e] != NULL);
     
     m_pbCalc[PART_UPPER_e] = new mDoExt_MtxCalcAnmBlendTblOld(m_old_fdata, ARRAY_SIZE(mAnmRatioUpper), mAnmRatioUpper);
-    JUT_ASSERT(21245, m_pbCalc[PART_UPPER_e] != 0);
+    JUT_ASSERT(21245, m_pbCalc[PART_UPPER_e] != NULL);
     
     initTextureScroll();
     initTextureAnime();
     
     m_HIO = new daPy_HIO_c();
-    JUT_ASSERT(21254, m_HIO != 0);
+    JUT_ASSERT(21254, m_HIO != NULL);
     
     m_anm_heap_under[UNDER_MOVE0_e].m_buffer = new(0x20) u8[0xB400];
-    JUT_ASSERT(21259, m_anm_heap_under[UNDER_MOVE0_e].m_buffer != 0);
+    JUT_ASSERT(21259, m_anm_heap_under[UNDER_MOVE0_e].m_buffer != NULL);
     
     m_sanm_buffer = new(0x20) u8[0x200];
-    JUT_ASSERT(21266, m_sanm_buffer != 0);
+    JUT_ASSERT(21266, m_sanm_buffer != NULL);
     
     m_item_bck_buffer = new(0x20) u8[0x1000];
-    JUT_ASSERT(21269, m_item_bck_buffer != 0);
+    JUT_ASSERT(21269, m_item_bck_buffer != NULL);
     
     return TRUE;
 }
@@ -3992,16 +3992,16 @@ void daPy_lk_c::createAnimeHeap(JKRSolidHeap** pHeap, daPy_HEAP_TYPE heapType) {
     
     if (heapType == HEAP_TYPE_ITEM_ANIME_e) {
         mDoExt_transAnmBas* tmp_trans_bas = new mDoExt_transAnmBas(NULL);
-        JUT_ASSERT(21307, tmp_trans_bas != 0);
+        JUT_ASSERT(21307, tmp_trans_bas != NULL);
     } else if (heapType == HEAP_TYPE_UNDER_UPPER_e) {
         J3DAnmTransformKey* tmp_trans = new J3DAnmTransformKey;
-        JUT_ASSERT(21310, tmp_trans != 0);
+        JUT_ASSERT(21310, tmp_trans != NULL);
     } else if (heapType == HEAP_TYPE_TEXTURE_ANIME_e) {
         J3DAnmTexPattern* tmp_tp = new J3DAnmTexPattern;
-        JUT_ASSERT(21313, tmp_tp != 0);
+        JUT_ASSERT(21313, tmp_tp != NULL);
     } else { // heapType == HEAP_TYPE_TEXTURE_SCROLL_e
         J3DAnmTextureSRTKey* tmp_tk = new J3DAnmTextureSRTKey;
-        JUT_ASSERT(21316, tmp_tk != 0);
+        JUT_ASSERT(21316, tmp_tk != NULL);
     }
     
     mDoExt_restoreCurrentHeap();
@@ -4012,9 +4012,9 @@ void daPy_lk_c::createAnimeHeap(JKRSolidHeap** pHeap, daPy_HEAP_TYPE heapType) {
 J3DModelData* daPy_lk_c::initModel(J3DModel** i_model, int i_fileIndex, u32 i_differedDlistFlag) {
     J3DModelData* tmp_modelData;
     tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, i_fileIndex));
-    JUT_ASSERT(21340, tmp_modelData != 0);
+    JUT_ASSERT(21340, tmp_modelData != NULL);
     *i_model = mDoExt_J3DModel__create(tmp_modelData, 0x00080000, i_differedDlistFlag);
-    JUT_ASSERT(21344, *i_model != 0);
+    JUT_ASSERT(21344, *i_model != NULL);
     return tmp_modelData;
 }
 
@@ -4181,13 +4181,13 @@ void daPy_lk_c::playerInit() {
     
     mpItemHeaps[0] = mDoExt_createSolidHeapFromGameToCurrent(0xE600, 0x20);
     u8* dummy_data = new u8[0xE600];
-    JUT_ASSERT(0x5493, dummy_data != 0);
+    JUT_ASSERT(0x5493, dummy_data != NULL);
     mDoExt_restoreCurrentHeap();
     mDoExt_adjustSolidHeap(mpItemHeaps[0]);
     
     mpItemHeaps[1] = mDoExt_createSolidHeapFromGameToCurrent(0xE600, 0x20);
     dummy_data = new u8[0xE600];
-    JUT_ASSERT(0x5499, dummy_data != 0);
+    JUT_ASSERT(0x5499, dummy_data != NULL);
     mDoExt_restoreCurrentHeap();
     mDoExt_adjustSolidHeap(mpItemHeaps[1]);
     
@@ -4212,10 +4212,10 @@ void daPy_lk_c::playerInit() {
     resetSeAnime();
     
     ResTIMG* tmp_tex = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
-    JUT_ASSERT(0x54B7, tmp_tex != 0);
+    JUT_ASSERT(0x54B7, tmp_tex != NULL);
     mSightPacket.setSightTex(tmp_tex);
     ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_ROCK_MARK);
-    JUT_ASSERT(0x54BD, tmp_img != 0);
+    JUT_ASSERT(0x54BD, tmp_img != NULL);
     void* tmp_img_data = reinterpret_cast<void*>(reinterpret_cast<u32>(tmp_img) + tmp_img->imageOffset);
     mSightPacket.setLockTex(tmp_img_data);
     mSightPacket.setImage(tmp_img);
@@ -4263,9 +4263,9 @@ void daPy_lk_c::playerInit() {
     ResTIMG* linktex_casual = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_LINKTEXBCI4);
     int num_linktex_headers_seen = 0;
     J3DTexture* texture = mpCLModelData->getTexture();
-    JUT_ASSERT(0x5504, texture != 0);
+    JUT_ASSERT(0x5504, texture != NULL);
     JUTNameTab* textureName = mpCLModelData->getTextureName();
-    JUT_ASSERT(0x5506, textureName != 0);
+    JUT_ASSERT(0x5506, textureName != NULL);
     for (u16 i = 0; i < texture->getNum(); i++) {
         const char* texName = textureName->getName(i);
         if (strcmp(texName, "linktexS3TC") != 0) {

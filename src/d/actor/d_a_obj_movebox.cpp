@@ -1219,7 +1219,7 @@ namespace daObjMovebox {
         BOOL success = TRUE;
         if (i_attr()->mModelFileIndex >= 0) {
             J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname[mType], i_attr()->mModelFileIndex);
-            JUT_ASSERT(1722, modelData != 0);
+            JUT_ASSERT(1722, modelData != NULL);
             
             mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
             success = (mpModel != 0);

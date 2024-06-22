@@ -26,7 +26,7 @@ JASystem::TSimpleWaveBank::TWaveHandle::~TWaveHandle() {}
 void JASystem::TSimpleWaveBank::setWaveTableSize(u32 size) {
     delete[] mWaveTable;
     mWaveTable = new (getCurrentHeap(), 0) TWaveHandle[size];
-    JUT_ASSERT(34, mWaveTable != 0);
+    JUT_ASSERT(34, mWaveTable != NULL);
     mWaveCount = size;
 }
 

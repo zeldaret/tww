@@ -105,7 +105,7 @@ BOOL daArrow_c::_createHeap() {
         modelFileIndex = LINK_BDL_ARROW;
     }
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, modelFileIndex);
-    JUT_ASSERT(190, modelData != 0);
+    JUT_ASSERT(190, modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
     if (!mpModel) {

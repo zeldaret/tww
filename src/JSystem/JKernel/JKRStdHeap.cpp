@@ -125,7 +125,7 @@ void* JKRStdHeap::do_getMaxFreeBlock() {
 
 /* 802B1338-802B13F0       .text state_register__10JKRStdHeapCFPQ27JKRHeap6TStateUl */
 void JKRStdHeap::state_register(JKRHeap::TState* p, u32 id) const {
-    JUT_ASSERT(370, p != 0);
+    JUT_ASSERT(370, p != NULL);
     JUT_ASSERT(371, p->getHeap() == this);
     setState_u32ID_(p, id);
     setState_uUsedSize_(p, 0);

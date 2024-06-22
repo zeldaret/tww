@@ -29,7 +29,7 @@ void* JASystem::Kernel::allocFromSysDram(u32 size) {
     void* ptr;
     BOOL enable = OSDisableInterrupts();
     ptr = new (JASDram, 0x20) u8[size];
-    JUT_ASSERT(79, ptr != 0);
+    JUT_ASSERT(79, ptr != NULL);
     OSRestoreInterrupts(enable);
     return ptr;
 }

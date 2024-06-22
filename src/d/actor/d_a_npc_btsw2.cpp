@@ -138,7 +138,7 @@ static BOOL nodeCallBack(J3DNode* node, int param_1) {
 BOOL daNpc_Btsw2_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, l_btp_ix_tbl[m744]));
-    JUT_ASSERT(282, m_btp != 0);
+    JUT_ASSERT(282, m_btp != NULL);
     if (!mBtpAnm.init(modelData, m_btp, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, i_modify, 0)) {
         return FALSE;
     }
@@ -346,7 +346,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 /* 00000BB4-00000EFC       .text CreateHeap__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, BTSW_INDEX_BDL_BN));
-    JUT_ASSERT(616, modelData != 0);
+    JUT_ASSERT(616, modelData != NULL);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,

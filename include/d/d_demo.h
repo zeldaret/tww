@@ -52,11 +52,11 @@ public:
     void JSGSetTextureAnimation(u32);
     void JSGSetTextureAnimationFrame(f32);
     s32 JSGFindNodeID(const char* name) const {
-        JUT_ASSERT(0x4d, mModel != 0);
+        JUT_ASSERT(0x4d, mModel != NULL);
         return mModel->getModelData()->getJointName()->getIndex(name);
     }
     int JSGGetNodeTransformation(u32 no, Mtx dst) const {
-        JUT_ASSERT(0x52, mModel != 0);
+        JUT_ASSERT(0x52, mModel != NULL);
         cMtx_copy(mModel->getAnmMtx((u16)no), dst);
         return 1;
     }

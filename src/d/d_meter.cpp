@@ -1838,39 +1838,39 @@ static s32 dMeter_Create(msg_class* i_this) {
 
     sub_meter_class* i_Meter = (sub_meter_class*)i_this;
     i_Meter->heap = fopMsgM_createExpHeap(0x2a819);
-    JUT_ASSERT(0x34a3, i_Meter->heap != 0);
+    JUT_ASSERT(0x34a3, i_Meter->heap != NULL);
 
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Meter->heap);
     sMainParts1 = new J2DScreen();
-    JUT_ASSERT(0x34a8, sMainParts1 != 0);
+    JUT_ASSERT(0x34a8, sMainParts1 != NULL);
     sMainParts1->set("main_parts1.blo", dComIfGp_getMenuArchive());
 
     sMainParts2 = new J2DScreen();
-    JUT_ASSERT(0x34ac, sMainParts2 != 0);
+    JUT_ASSERT(0x34ac, sMainParts2 != NULL);
     sMainParts2->set("main_parts2.blo", dComIfGp_getMenuArchive());
 
     sMainParts3 = new J2DScreen();
-    JUT_ASSERT(0x34ac, sMainParts3 != 0);
+    JUT_ASSERT(0x34ac, sMainParts3 != NULL);
     sMainParts3->set("main_parts3.blo", dComIfGp_getMenuArchive());
 
     sChoiceRoad = new J2DScreen();
-    JUT_ASSERT(0x34ac, sChoiceRoad != 0);
+    JUT_ASSERT(0x34ac, sChoiceRoad != NULL);
     sChoiceRoad->set("choice_road.blo", dComIfGp_getMenuArchive());
 
     for (s32 i = 0; i < 3; i++) {
         i_Meter->actionTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(0x34b9, i_Meter->actionTex[i] != 0);
+        JUT_ASSERT(0x34b9, i_Meter->actionTex[i] != NULL);
 
         i_Meter->xyIconTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(0x34bb, i_Meter->xyIconTex[i] != 0);
+        JUT_ASSERT(0x34bb, i_Meter->xyIconTex[i] != NULL);
     }
 
     for (s32 i = 0; i < 2; i++) {
         i_Meter->moveIconTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(0x34c2, i_Meter->moveIconTex[i] != 0);
+        JUT_ASSERT(0x34c2, i_Meter->moveIconTex[i] != NULL);
 
         i_Meter->arrowTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(0x34c5, i_Meter->arrowTex[i] != 0);
+        JUT_ASSERT(0x34c5, i_Meter->arrowTex[i] != NULL);
     }
 
     if (strcmp(dComIfGp_getStartStageName(), "sea_T") != 0) {

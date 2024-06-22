@@ -18,7 +18,7 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-0000015C       .text CreateHeap__11daObjPbka_cFv */
 BOOL daObjPbka_c::CreateHeap() {
     J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes("Pbka", PBKA_BDL_PBKA);
-    JUT_ASSERT(0x51, modelData != 0);
+    JUT_ASSERT(0x51, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData,0,0x11020203);
     if(mpModel == NULL) {
         return FALSE;

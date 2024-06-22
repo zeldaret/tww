@@ -17,7 +17,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-00000384       .text CreateHeap__11daLbridge_cFv */
 BOOL daLbridge_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GBRG00_BDL_GBRG00);
-    JUT_ASSERT(0xD6, modelData != 0);
+    JUT_ASSERT(0xD6, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000223U);
 
@@ -26,14 +26,14 @@ BOOL daLbridge_c::CreateHeap() {
     }
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BTK_GBRG00);
-    JUT_ASSERT(0xE8, pbtk != 0);
+    JUT_ASSERT(0xE8, pbtk != NULL);
 
     if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
     J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, GBRG00_BPK_GBRG00);
-    JUT_ASSERT(0xF6, pbpk != 0);
+    JUT_ASSERT(0xF6, pbpk != NULL);
 
     if (!mBpkAnm.init(modelData, pbpk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
@@ -43,7 +43,7 @@ BOOL daLbridge_c::CreateHeap() {
     mBpkAnm.setPlaySpeed(1.0f);
 
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BRK_GBRG00);
-    JUT_ASSERT(0x106, pbrk != 0);
+    JUT_ASSERT(0x106, pbrk != NULL);
 
     if (!mBrkAnm.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;

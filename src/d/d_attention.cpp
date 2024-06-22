@@ -51,10 +51,10 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
     field_0x01b = 0;
     mLockOnTargetBsPcID = fpcM_ERROR_PROCESS_ID_e;
     heap = mDoExt_createSolidHeapFromGameToCurrent(0x3600, 0);
-    JUT_ASSERT(0xb9, heap != 0);
+    JUT_ASSERT(0xb9, heap != NULL);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YAZIRUSHI_01);
-    JUT_ASSERT(0xbe, modelData != 0);
+    JUT_ASSERT(0xbe, modelData != NULL);
 
     int anmColNum = 0;
     for (u32 i = 0; i < 5; i++) {
@@ -62,7 +62,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
             ALWAYS_BPK_YJ_IN, ALWAYS_BPK_YJ_OUT, ALWAYS_BPK_YJ_SCALE, ALWAYS_BPK_YJ_LOOP, ALWAYS_BPK_YJ_DELETE,
         };
         J3DAnmColor* anmCol = (J3DAnmColor*)dComIfG_getObjectRes("Always", l_bpkIdx[i]);
-        JUT_ASSERT(0xcc, anmCol != 0);
+        JUT_ASSERT(0xcc, anmCol != NULL);
 
         anmCol->searchUpdateMaterialID(modelData);
         if (anmCol->getUpdateMaterialNum() > anmColNum)
@@ -79,7 +79,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
             0x00080000,
             0x01000003
         );
-        JUT_ASSERT(0xe3, draw[i].anm != 0 && draw[i].anm->getModel() != 0);
+        JUT_ASSERT(0xe3, draw[i].anm != NULL && draw[i].anm->getModel() != NULL);
         draw[i].mpAnmClr = NULL;
         draw[i].mpAnmMatClr = new J3DMatColorAnm[anmColNum];
     }

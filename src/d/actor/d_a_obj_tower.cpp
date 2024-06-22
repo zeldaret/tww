@@ -20,7 +20,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daObjTower_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("X_tower", X_TOWER_BDL_X_TOWER);
 
-    JUT_ASSERT(0x56, modelData != 0);
+    JUT_ASSERT(0x56, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 

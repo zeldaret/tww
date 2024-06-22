@@ -35,14 +35,14 @@ dScnOpen_message_c::~dScnOpen_message_c() {
 dScnOpen_proc_c::dScnOpen_proc_c() {
     /* Nonmatching */
     exp_heap = fopMsgM_createExpHeap(0x20000);
-    JUT_ASSERT(0xe2, exp_heap != 0);
+    JUT_ASSERT(0xe2, exp_heap != NULL);
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(exp_heap);
     m_Screen = new J2DScreen();
-    JUT_ASSERT(0xe7, m_Screen != 0);
+    JUT_ASSERT(0xe7, m_Screen != NULL);
     m_message = new dScnOpen_message_c(exp_heap);
-    JUT_ASSERT(0xe9, m_message != 0);
+    JUT_ASSERT(0xe9, m_message != NULL);
     dRes_info_c* resInfo = dComIfG_getObjectResInfo("Opening");
-    JUT_ASSERT(0xeb, resInfo != 0);
+    JUT_ASSERT(0xeb, resInfo != NULL);
     m_Screen->set("Opening.blo", resInfo->getArchive());
     d1 = m_Screen->search('\0\0d1');
     d2 = m_Screen->search('\0\0d2');

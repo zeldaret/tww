@@ -135,7 +135,7 @@ void fopMsgM_hyrule_language_check(u32) {
 /* 8002AE28-8002AED4       .text fopMsgM_setStageLayer__FPv */
 s32 fopMsgM_setStageLayer(void* proc) {
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-    JUT_ASSERT(0x189, stageProc != 0);
+    JUT_ASSERT(0x189, stageProc != NULL);
     u32 layer = fpcM_LayerID(stageProc);
     return fpcM_ChangeLayerID(proc, layer);
 }

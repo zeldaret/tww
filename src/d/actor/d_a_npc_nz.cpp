@@ -148,7 +148,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 00000D18-00000F98       .text _createHeap__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, NPCNZ_BDL_NZ));
-    JUT_ASSERT(0xD0, modelData != 0);
+    JUT_ASSERT(0xD0, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,

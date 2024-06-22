@@ -103,7 +103,7 @@ s32 daSwhit0_c::getSwNo2() {
 /* 000000C4-00000230       .text CreateHeap__10daSwhit0_cFv */
 BOOL daSwhit0_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_OBM_SYOUGEKISW);
-    JUT_ASSERT(0xD5, modelData != 0);
+    JUT_ASSERT(0xD5, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (mpModel == NULL) {

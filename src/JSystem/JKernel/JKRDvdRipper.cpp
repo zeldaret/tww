@@ -221,12 +221,12 @@ static int JKRDecompressFromDVD(JKRDvdFile* dvdFile, void* dst, u32 fileSize, u3
     OSLockMutex(&decompMutex);
     int bufSize = JKRDvdRipper::getSzpBufferSize();
     szpBuf = (u8 *)JKRAllocFromSysHeap(bufSize, -0x20);
-    JUT_ASSERT(VERSION_SELECT(913, 884, 884), szpBuf != 0);
+    JUT_ASSERT(VERSION_SELECT(913, 884, 884), szpBuf != NULL);
 
     szpEnd = szpBuf + bufSize;
     if (inFileOffset != 0) {
         refBuf = (u8 *)JKRAllocFromSysHeap(0x1120, -4);
-        JUT_ASSERT(VERSION_SELECT(922, 893, 893), refBuf != 0);
+        JUT_ASSERT(VERSION_SELECT(922, 893, 893), refBuf != NULL);
         refEnd = refBuf + 0x1120;
         refCurrent = refBuf;
     } else {

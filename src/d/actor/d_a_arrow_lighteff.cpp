@@ -89,7 +89,7 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
         modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWG00));
     }
 
-    JUT_ASSERT(187, modelData != 0);
+    JUT_ASSERT(187, modelData != NULL);
 
     field_0x298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x3F441422);
     if(field_0x298 == 0) {
@@ -111,8 +111,8 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
         brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWG00));
     }
 
-    JUT_ASSERT(216, btk != 0);
-    JUT_ASSERT(217, brk != 0);
+    JUT_ASSERT(216, btk != NULL);
+    JUT_ASSERT(217, brk != NULL);
 
     if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
         return false;

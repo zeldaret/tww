@@ -65,7 +65,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000000F0-000002C8       .text CreateHeap__12daDekuItem_cFv */
 BOOL daDekuItem_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, DEKU_BDL_VLFDM);
-    JUT_ASSERT(0xF4, modelData != 0);
+    JUT_ASSERT(0xF4, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
 
@@ -74,14 +74,14 @@ BOOL daDekuItem_c::CreateHeap() {
     }
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDK);
-    JUT_ASSERT(0x103, pbck != 0);
+    JUT_ASSERT(0x103, pbck != NULL);
 
     if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false)) {
         return FALSE;
     }
 
     pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, DEKU_BCK_VLFDM);
-    JUT_ASSERT(0x110, pbck != 0);
+    JUT_ASSERT(0x110, pbck != NULL);
 
     if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false)) {
         return FALSE;

@@ -16,7 +16,7 @@ const char daObjOjtree::Act_c::M_arcname[] = "Ojtree";
 /* 00000078-0000012C       .text CreateHeap__Q211daObjOjtree5Act_cFv */
 int daObjOjtree::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, OJTREE_BDL_OJTREE);
-    JUT_ASSERT(67, model_data != 0);
+    JUT_ASSERT(67, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     return !!mpModel;
 }

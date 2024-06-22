@@ -91,14 +91,14 @@ BOOL daObjFerris::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjFerris::Act_c::create_heap() {
     s32 i;
     J3DModelData* mdl_data_gondola = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, SKANRAN_BDL_SGONDOR));
-    JUT_ASSERT(0x183, mdl_data_gondola != 0);
+    JUT_ASSERT(0x183, mdl_data_gondola != NULL);
     if (mdl_data_gondola != NULL) {
         for (i = 0; i < 5; i++)
             mpModel[i] = mDoExt_J3DModel__create(mdl_data_gondola, 0, 0x11020203);
     }
 
     J3DModelData* mdl_data_wheelbase = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, SKANRAN_BDL_SKANRAN));
-    JUT_ASSERT(0x18c, mdl_data_wheelbase != 0);
+    JUT_ASSERT(0x18c, mdl_data_wheelbase != NULL);
     if (mdl_data_wheelbase != NULL) {
         mpModel[5] = mDoExt_J3DModel__create(mdl_data_wheelbase, 0, 0x11020203);
     }
@@ -107,7 +107,7 @@ bool daObjFerris::Act_c::create_heap() {
         init_mtx();
 
     cBgD_t* bgw_data_gondola = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, SKANRAN_DZB_SGONDOR));
-    JUT_ASSERT(0x1a0, bgw_data_gondola != 0);
+    JUT_ASSERT(0x1a0, bgw_data_gondola != NULL);
     if (bgw_data_gondola != NULL) {
         for (i = 0; i < 5; i++) {
             mpBgW[i] = new dBgW();
@@ -117,7 +117,7 @@ bool daObjFerris::Act_c::create_heap() {
     }
 
     cBgD_t* bgw_data_wheelbase = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, SKANRAN_DZB_SKANRAN));
-    JUT_ASSERT(0x1b0, bgw_data_wheelbase != 0);
+    JUT_ASSERT(0x1b0, bgw_data_wheelbase != NULL);
     if (bgw_data_wheelbase != NULL) {
         mpBgW[5] = new dBgW();
         if (mpBgW[5] != NULL && mpBgW[5]->Set(bgw_data_wheelbase, dBgW::MOVE_BG_e, &mMtx[5]) == 1)

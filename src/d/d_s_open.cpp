@@ -23,7 +23,7 @@ s32 dScnOpen_c::create() {
     s32 rt = dComIfG_resLoad(&mPhs, "Opening");
     if (rt == cPhs_COMPLEATE_e) {
         solid_heap = mDoExt_createSolidHeapFromGameToCurrent(0x20000, 0);
-        JUT_ASSERT(0x3b, solid_heap != 0);
+        JUT_ASSERT(0x3b, solid_heap != NULL);
         mpProc = new dScnOpen_proc_c();
         field_0x1d4 = NULL;
         mDoExt_restoreCurrentHeap();

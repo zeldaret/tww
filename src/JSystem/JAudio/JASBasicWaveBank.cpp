@@ -43,7 +43,7 @@ void JASystem::TBasicWaveBank::setGroupCount(u32 param_1) {
     delete[] mWaveGroupArray;
     mWaveGroupCount = param_1;
     mWaveGroupArray = new (getCurrentHeap(), 0) TWaveGroup*[param_1];
-    JUT_ASSERT(58, mWaveGroupArray != 0);
+    JUT_ASSERT(58, mWaveGroupArray != NULL);
     for (int i = 0; i < mWaveGroupCount; i++) {
         mWaveGroupArray[i] = new (getCurrentHeap(), 0) TWaveGroup(this);
     }
@@ -53,7 +53,7 @@ void JASystem::TBasicWaveBank::setGroupCount(u32 param_1) {
 void JASystem::TBasicWaveBank::setWaveTableSize(u32 param_1) {
     delete[] mWaveTable;
     mWaveTable = new (getCurrentHeap(), 0) TWaveInfo*[param_1];
-    JUT_ASSERT(70, mWaveTable != 0);
+    JUT_ASSERT(70, mWaveTable != NULL);
     Calc::bzero(mWaveTable, param_1 * 4);
     mWaveCount = param_1;
 }
@@ -112,7 +112,7 @@ void JASystem::TBasicWaveBank::TWaveGroup::setWaveCount(u32 num) {
     delete[] mCtrlWaveArray;
     mWaveCount = num;
     mCtrlWaveArray = new (getCurrentHeap(), 0) TWaveInfo[num];
-    JUT_ASSERT(180, mCtrlWaveArray != 0);
+    JUT_ASSERT(180, mCtrlWaveArray != NULL);
     for (int i = 0; i < num; i++) {
         mCtrlWaveArray[i].mWaveHandle.mHeap = &mHeap;
         mCtrlWaveArray[i].mWaveHandle.mWaveInfo.field_0x24 = &field_0x4c;

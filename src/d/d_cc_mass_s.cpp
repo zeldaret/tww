@@ -34,14 +34,14 @@ void dCcMassS_Mng::Prepare() {
     cCcD_ShapeAttr* attr;
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
         cCcD_Obj* pobj = mass->GetObj();
-        JUT_ASSERT(61, pobj != 0);
+        JUT_ASSERT(61, pobj != NULL);
         attr = pobj->GetShapeAttr();
         attr->CalcAabBox();
         area.SetMinMax(attr->GetWorkAab());
     }
     for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
         cCcD_Obj* parea = mass->GetObj();
-        JUT_ASSERT(73, parea != 0);
+        JUT_ASSERT(73, parea != NULL);
         attr = parea->GetShapeAttr();
         attr->CalcAabBox();
         area.SetMinMax(attr->GetWorkAab());
@@ -54,14 +54,14 @@ void dCcMassS_Mng::Prepare() {
     mDivideArea.SetArea(area);
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
         cCcD_Obj* pobj = mass->GetObj();
-        JUT_ASSERT(93, pobj != 0);
+        JUT_ASSERT(93, pobj != NULL);
         cCcD_ShapeAttr* shape = pobj->GetShapeAttr();
         cCcD_DivideInfo* divideInfo = mass->GetPDivideInfo();
         mDivideArea.CalcDivideInfo(divideInfo, shape->GetWorkAab(), 0);
     }
     for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
         cCcD_Obj* parea = mass->GetObj();
-        JUT_ASSERT(104, parea != 0);
+        JUT_ASSERT(104, parea != NULL);
         cCcD_ShapeAttr* shape = parea->GetShapeAttr();
         cCcD_DivideInfo* divideInfo = mass->GetPDivideInfo();
         mDivideArea.CalcDivideInfo(divideInfo, shape->GetWorkAab(), 0);
@@ -96,7 +96,7 @@ u32 dCcMassS_Mng::Chk(cXyz* r29, fopAc_ac_c** r30, dCcMassS_HitInf* r31) {
             }
             
             cCcD_Obj* pobj = mass->GetObj();
-            JUT_ASSERT(174, pobj != 0);
+            JUT_ASSERT(174, pobj != NULL);
             cCcD_ShapeAttr* shape = pobj->GetShapeAttr();
             
             f32 sp10;
@@ -121,7 +121,7 @@ u32 dCcMassS_Mng::Chk(cXyz* r29, fopAc_ac_c** r30, dCcMassS_HitInf* r31) {
         
         cCcD_Obj* pobj = mass->GetObj();
         dCcD_GObjInf* inf = (dCcD_GObjInf*)pobj->GetGObjInf();
-        JUT_ASSERT(214, pobj != 0);
+        JUT_ASSERT(214, pobj != NULL);
         cCcD_ShapeAttr* shape = pobj->GetShapeAttr();
         cXyz temp;
         if (pobj->ChkAtSet() && !inf->ChkAtNoMass() &&

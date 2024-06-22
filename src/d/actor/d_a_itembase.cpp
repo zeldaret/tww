@@ -32,7 +32,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
     JUT_ASSERT(78, 0 <= m_itemNo && m_itemNo <= 255);
     
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(resName, resIdx);
-    JUT_ASSERT(85, modelData != 0);
+    JUT_ASSERT(85, modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (!mpModel) {
@@ -60,7 +60,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
     mpBtkAnm1 = NULL;
     if (btkAnm1 != -1) {
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(resName, btkAnm1);
-        JUT_ASSERT(140, pbtk != 0);
+        JUT_ASSERT(140, pbtk != NULL);
         mpBtkAnm1 = new mDoExt_btkAnm();
         if (!mpBtkAnm1 || !mpBtkAnm1->init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
             return FALSE;
@@ -70,7 +70,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
     mpBtkAnm2 = NULL;
     if (btkAnm2 != -1) {
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(resName, btkAnm2);
-        JUT_ASSERT(156, pbtk != 0);
+        JUT_ASSERT(156, pbtk != NULL);
         mpBtkAnm2 = new mDoExt_btkAnm();
         if (!mpBtkAnm2 || !mpBtkAnm2->init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
             return FALSE;
@@ -81,7 +81,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
     mpBrkAnm1 = NULL;
     if (brkAnm1 != -1) {
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(resName, brkAnm1);
-        JUT_ASSERT(172, pbrk != 0);
+        JUT_ASSERT(172, pbrk != NULL);
         s8 tevFrm = dItem_data::getTevFrm(m_itemNo);
         BOOL shouldAnimate = TRUE;
         if (tevFrm != -1) {
@@ -96,7 +96,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
     mpBrkAnm2 = NULL;
     if (brkAnm2 != -1) {
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(resName, brkAnm2);
-        JUT_ASSERT(197, pbrk != 0);
+        JUT_ASSERT(197, pbrk != NULL);
         mpBrkAnm2 = new mDoExt_brkAnm();
         if (!mpBrkAnm2 || !mpBrkAnm2->init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, false)) {
             return FALSE;
@@ -107,7 +107,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
     mpBckAnm = NULL;
     if (bckAnm != -1) {
         pbck = (J3DAnmTransform*)dComIfG_getObjectRes(resName, bckAnm);
-        JUT_ASSERT(212, pbck != 0);
+        JUT_ASSERT(212, pbck != NULL);
         mpBckAnm = new mDoExt_bckAnm();
         if (!mpBckAnm || !mpBckAnm->init(modelData, pbck, TRUE, 2, 1.0f, 0, -1, false)) {
             return FALSE;

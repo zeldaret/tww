@@ -107,7 +107,7 @@ int JASystem::TSeqParser::cmdWritePort(TTrack* track, u32* params) {
 int JASystem::TSeqParser::cmdParentWritePort(TTrack* track, u32* params) {
     /* Nonmatching */
     TTrack* parent = track->getParent();
-    JUT_ASSERT(452, parent != 0);
+    JUT_ASSERT(452, parent != NULL);
     parent->writePortAppDirect(params[0] & 0xf, params[1]);
     return 0;
 }
@@ -118,7 +118,7 @@ int JASystem::TSeqParser::cmdChildWritePort(TTrack* track, u32* params) {
     u8 param1 = JSULoByte(params[0]);
     u8 b1 = JSUHiNibble(param1);
     TTrack* child = track->getChild(b1);
-    JUT_ASSERT(462, child != 0);
+    JUT_ASSERT(462, child != NULL);
     child->writePortAppDirect(JSULoNibble(param1), params[1]);
     return 0;
 }

@@ -122,7 +122,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
-    JUT_ASSERT(0x1B2, modelData != 0);
+    JUT_ASSERT(0x1B2, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL) {
@@ -130,7 +130,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
 
     J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAHX));
-    JUT_ASSERT(0x1C3, pbck != 0);
+    JUT_ASSERT(0x1C3, pbck != NULL);
 
     if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0f, 0, -1, false)) {
         return FALSE;
@@ -138,7 +138,7 @@ BOOL daBFlower_c::CreateHeap() {
     mBck1.setFrame(mBck1.getEndFrame());
 
     J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAHX));
-    JUT_ASSERT(0x1D9, pbrk != 0);
+    JUT_ASSERT(0x1D9, pbrk != NULL);
 
     if (!mBrk1.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
@@ -146,7 +146,7 @@ BOOL daBFlower_c::CreateHeap() {
     mBrk1.setPlaySpeed(0.0f);
 
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKM));
-    JUT_ASSERT(0x1E7, modelData != 0);
+    JUT_ASSERT(0x1E7, modelData != NULL);
 
     mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel2 == NULL) {
@@ -154,7 +154,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
 
     pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAMX));
-    JUT_ASSERT(0x1F7, pbck != 0);
+    JUT_ASSERT(0x1F7, pbck != NULL);
 
     if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false)) {
         return FALSE;
@@ -162,7 +162,7 @@ BOOL daBFlower_c::CreateHeap() {
     mBck2.setPlaySpeed(0.0f);
 
     pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAMX));
-    JUT_ASSERT(0x208, pbrk != 0);
+    JUT_ASSERT(0x208, pbrk != NULL);
 
     if (!mBrk2.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;

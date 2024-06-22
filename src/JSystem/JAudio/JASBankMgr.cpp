@@ -24,9 +24,9 @@ u16* JASystem::BankMgr::sVir2PhyTable;
 void JASystem::BankMgr::init(int param_1) {
     u32 r31 = param_1 * 4;
     sBankArray = (TBank**)new (JASDram, 0) u8[r31];
-    JUT_ASSERT(69, sBankArray != 0);
+    JUT_ASSERT(69, sBankArray != NULL);
     sVir2PhyTable = new (JASDram, 0) u16[param_1];
-    JUT_ASSERT(72, sVir2PhyTable != 0);
+    JUT_ASSERT(72, sVir2PhyTable != NULL);
     Calc::bzero(sBankArray, r31);
     for (int i = 0; i < param_1; i++) {
         sVir2PhyTable[i] = 0xffffffff;

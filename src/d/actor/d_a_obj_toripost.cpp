@@ -89,7 +89,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 0000010C-0000022C       .text _createHeap__12daObjTpost_cFv */
 BOOL daObjTpost_c::_createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, TORIPOST_BDL_VPOST);
-    JUT_ASSERT(132, modelData != 0);
+    JUT_ASSERT(132, modelData != NULL);
 
     mMorf = new mDoExt_McaMorf(
         modelData,

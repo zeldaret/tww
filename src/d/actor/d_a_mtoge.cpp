@@ -32,7 +32,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000000A4-000001E8       .text CreateHeap__9daMtoge_cFv */
 BOOL daMtoge_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, MTOGE_BMD_S_MTOGE));
-    JUT_ASSERT(0x70, modelData != 0);
+    JUT_ASSERT(0x70, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203U);
 

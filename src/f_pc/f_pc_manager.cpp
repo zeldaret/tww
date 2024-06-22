@@ -80,13 +80,13 @@ void messageSet(u32 status) {
     const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(JUTDataBlockHeader) + inf1->entries[status]);
 
     J2DTextBox * tpane = new J2DTextBox('TXT1', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(VERSION_SELECT(0x12b, 0x141, 0x141), tpane != 0);
+    JUT_ASSERT(VERSION_SELECT(0x12b, 0x141, 0x141), tpane != NULL);
 
     J2DTextBox * spane = new J2DTextBox('TXT2', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(VERSION_SELECT(0x133, 0x149, 0x149), spane != 0);
+    JUT_ASSERT(VERSION_SELECT(0x133, 0x149, 0x149), spane != NULL);
 
     J2DPicture * ppane = new J2DPicture('PIC1', JGeometry::TBox2<f32>(0.0f, 0.0f, 665.0f, 530.0f), (ResTIMG*)black_tex, NULL);
-    JUT_ASSERT(VERSION_SELECT(0x138, 0x14e, 0x14e), ppane != 0);
+    JUT_ASSERT(VERSION_SELECT(0x138, 0x14e, 0x14e), ppane != NULL);
 
     J2DTextBox::TFontSize size;
     size.mSizeX = 27.0f;

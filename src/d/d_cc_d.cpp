@@ -263,7 +263,7 @@ void dCcD_GObjInf::Set(const dCcD_SrcGObjInf& src) {
 
 /* 800ABC54-800ABCC4       .text dCcD_GetGObjInf__FP8cCcD_Obj */
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* pobj) {
-    JUT_ASSERT(VERSION_SELECT(466, 531, 531), pobj != 0);
+    JUT_ASSERT(VERSION_SELECT(466, 531, 531), pobj != NULL);
     return (dCcD_GObjInf*)pobj->GetGObjInf();
 }
 

@@ -278,7 +278,7 @@ int JASystem::TTrack::noteOn(u8 param_1, s32 param_2, s32 param_3, s32 param_4, 
         parent = parent->mParent;
     }
     if (field_0x37b == 4) {
-        JUT_ASSERT(527, mParent != 0);
+        JUT_ASSERT(527, mParent != NULL);
         if (r31 != &mParent->field_0xf8) {
             if (moveFreeChannel(r31, &mParent->field_0xf8, 1) != 1) {
                 OSReport("in Player (NOTE-MODE) ... ボイス借用に失敗しました！！ (%d)\n", r31->field_0x0);

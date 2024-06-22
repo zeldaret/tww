@@ -49,7 +49,7 @@ BOOL daObj_Bscurtain_c::CreateHeap() {
         modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCU);
     }
 
-    JUT_ASSERT(0xa9, modelData != 0);
+    JUT_ASSERT(0xa9, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x0, 0x11020203);
 
     return mpModel != NULL;

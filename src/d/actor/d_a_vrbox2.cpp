@@ -256,7 +256,7 @@ static BOOL daVrbox2_solidHeapCB(fopAc_ac_c* i_actor) {
     vrbox2_class* i_this = static_cast<vrbox2_class*>(i_actor);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_back_cloud.bdl");
-    JUT_ASSERT(0x211, modelData != 0);
+    JUT_ASSERT(0x211, modelData != NULL);
     i_this->mpBackCloud = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020202);
 
     modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_kasumi_mae.bdl");

@@ -20,13 +20,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-00000368       .text CreateHeap__12daObjYboil_cFv */
 BOOL daObjYboil_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Yboil", YBOIL_BDL_YBOIL00);
-    JUT_ASSERT(92, modelData != 0);
+    JUT_ASSERT(92, modelData != NULL);
     J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Yboil", YBOIL_BCK_YBOIL00));
-    JUT_ASSERT(96, bck != 0);
+    JUT_ASSERT(96, bck != NULL);
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Yboil", YBOIL_BTK_YBOIL00));
-    JUT_ASSERT(100, btk != 0);
+    JUT_ASSERT(100, btk != NULL);
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Yboil", YBOIL_BRK_YBOIL00));
-    JUT_ASSERT(104, brk != 0);
+    JUT_ASSERT(104, brk != NULL);
 
     for (s32 i = 0; i < 50; i++) {
         mModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);

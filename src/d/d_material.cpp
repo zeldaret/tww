@@ -16,7 +16,7 @@ dMat_ice_c* dMat_control_c::mIce;
 
 /* 8006F62C-8006F69C       .text restore__13dMat_backup_cFv */
 void dMat_backup_c::restore() {
-    JUT_ASSERT(82, mModelData != 0);
+    JUT_ASSERT(82, mModelData != NULL);
     field_0x8.restore(mModelData);
 }
 
@@ -24,7 +24,7 @@ void dMat_backup_c::restore() {
 void dMat_ice_c::create(J3DMaterialTable* param_1, J3DAnmTextureSRTKey* param_2) {
     mMaterialTable = param_1;
     int rt = mBtkAnm.init(mMaterialTable, param_2, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-    JUT_ASSERT(98, rt != 0);
+    JUT_ASSERT(98, rt != FALSE);
     mBtkAnm.entry(mMaterialTable, mBtkAnm.getFrameCtrl()->getFrame());
 }
 
@@ -141,11 +141,11 @@ void dMat_ice_c::entryDL(mDoExt_McaMorf* morf, s8 backupNo, mDoExt_invisibleMode
 /* 8006FB84-8006FCF0       .text create__14dMat_control_cFP16J3DMaterialTableP19J3DAnmTextureSRTKey */
 void dMat_control_c::create(J3DMaterialTable* param_1, J3DAnmTextureSRTKey* param_2) {
     mHeap = mDoExt_createSolidHeapFromSystem(0, 0);
-    JUT_ASSERT(308, mHeap != 0);
+    JUT_ASSERT(308, mHeap != NULL);
     JKRHeap* heap = mDoExt_setCurrentHeap(mHeap);
     mBackup = new dMat_backup_c[16];
     mIce = new dMat_ice_c();
-    JUT_ASSERT(313, mBackup != 0 && mIce != 0);
+    JUT_ASSERT(313, mBackup != NULL && mIce != NULL);
     mIce->create(param_1, param_2);
     mTempBackup.create(0x40);
     mDoExt_adjustSolidHeap(mHeap);

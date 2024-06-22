@@ -34,27 +34,27 @@ struct JFWSystem {
     static JKRExpHeap* getSystemHeap() { return systemHeap; }
     static JUTResFont* getSystemFont() { return systemFont; }
     static void setMaxStdHeap(int max) {
-        JUT_ASSERT(47, sInitCalled == 0);
+        JUT_ASSERT(47, sInitCalled == FALSE);
         CSetUpParam::maxStdHeaps = max;
     }
     static void setSysHeapSize(u32 size) {
-        JUT_ASSERT(50, sInitCalled == 0);
+        JUT_ASSERT(50, sInitCalled == FALSE);
         CSetUpParam::sysHeapSize = size;
     }
     static void setFifoBufSize(u32 size) {
-        JUT_ASSERT(53, sInitCalled == 0);
+        JUT_ASSERT(53, sInitCalled == FALSE);
         CSetUpParam::fifoBufSize = size;
     }
     static void setAramAudioBufSize(u32 size) {
-        JUT_ASSERT(58, sInitCalled == 0);
+        JUT_ASSERT(58, sInitCalled == FALSE);
         CSetUpParam::aramAudioBufSize = size;
     }
     static void setAramGraphBufSize(u32 size) {
-        JUT_ASSERT(61, sInitCalled == 0);
+        JUT_ASSERT(61, sInitCalled == FALSE);
         CSetUpParam::aramGraphBufSize = size;
     }
     static void setRenderMode(GXRenderModeObj* p_modeObj) {
-        JUT_ASSERT(80, sInitCalled == 0);
+        JUT_ASSERT(80, sInitCalled == FALSE);
         CSetUpParam::renderMode = p_modeObj;
     }
 

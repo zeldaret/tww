@@ -9,7 +9,7 @@
 
 /* 80080018-8008010C       .text dPath_GetPnt__FP5dPathi */
 dPath__Point* dPath_GetPnt(dPath* path, int pnt_index) {
-    JUT_ASSERT(30, path != 0);
+    JUT_ASSERT(30, path != NULL);
     JUT_ASSERT(31, 0 <= pnt_index && pnt_index < path->m_num);
 
     if (path == NULL || path->mpPnt == NULL || 0 > pnt_index || pnt_index >= path->m_num)

@@ -20,7 +20,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daArrow_Iceeff_c::CreateHeap() {
     if(field_0xA38 == 0) {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER00));
-        JUT_ASSERT(87, modelData != 0);
+        JUT_ASSERT(87, modelData != NULL);
         for(int i = 0; i < 30; i++) {
             field_0x298[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
             if(field_0x298[i] == 0) {
@@ -30,14 +30,14 @@ BOOL daArrow_Iceeff_c::CreateHeap() {
     }
     else {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER01));
-        JUT_ASSERT(98, modelData != 0);
+        JUT_ASSERT(98, modelData != NULL);
         mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if(mpModel == NULL) {
             return false;
         }
         
         J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Link", LINK_BCK_GICER01));
-        JUT_ASSERT(107, bck != 0);
+        JUT_ASSERT(107, bck != NULL);
         if(!mBck.init(modelData, bck, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false)) {
             return false;
         }

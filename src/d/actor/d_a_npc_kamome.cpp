@@ -217,7 +217,7 @@ static int headNodeCallBack(J3DNode* node, int param_1) {
 /* 00000CD0-00000EB8       .text createHeap__11daNpc_kam_cFv */
 BOOL daNpc_kam_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kamome", KAMOME_BDL_KA_HYOI);
-    JUT_ASSERT(763, modelData != 0);
+    JUT_ASSERT(763, modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,

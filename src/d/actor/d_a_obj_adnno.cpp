@@ -40,7 +40,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-00000178       .text CreateHeap__12daObjAdnno_cFv */
 BOOL daObjAdnno_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Adnno", ADNNO_BDL_ADNNO));
-    JUT_ASSERT(0x5c, modelData != 0);
+    JUT_ASSERT(0x5c, modelData != NULL);
     for (s32 i = 0; i < 16; i++) {
         mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
         if (!mpModel[i])

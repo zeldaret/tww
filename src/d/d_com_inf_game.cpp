@@ -269,14 +269,14 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
 void dComIfG_play_c::createParticle() {
     mParticle = new dPa_control_c();
 
-    JUT_ASSERT(VERSION_SELECT(358, 360, 360), mParticle != 0);
+    JUT_ASSERT(VERSION_SELECT(358, 360, 360), mParticle != NULL);
 }
 
 /* 800528F4-8005297C       .text createDemo__14dComIfG_play_cFv */
 void dComIfG_play_c::createDemo() {
     mDemo = new dDemo_manager_c();
 
-    JUT_ASSERT(VERSION_SELECT(388, 390, 390), mDemo != 0);
+    JUT_ASSERT(VERSION_SELECT(388, 390, 390), mDemo != NULL);
 }
 
 /* 8005297C-800529B8       .text removeDemo__14dComIfG_play_cFv */
@@ -1060,12 +1060,12 @@ static void dummy() {
 /* 8005468C-800547BC       .text getSceneList__Fi */
 stage_scls_info_class* getSceneList(int i_no) {
     stage_scls_info_dummy_class* sclsInfo = dComIfGp_getStage().getSclsInfo();
-    JUT_ASSERT(VERSION_SELECT(2129, 2132, 2132), sclsInfo != 0);
+    JUT_ASSERT(VERSION_SELECT(2129, 2132, 2132), sclsInfo != NULL);
 
     JUT_ASSERT(VERSION_SELECT(2131, 2134, 2134), 0 <= i_no && i_no < sclsInfo->num);
 
     stage_scls_info_class* sclsData = sclsInfo->m_entries;
-    JUT_ASSERT(VERSION_SELECT(2133, 2136, 2136), sclsData != 0);
+    JUT_ASSERT(VERSION_SELECT(2133, 2136, 2136), sclsData != NULL);
 
     return &sclsData[i_no];
 }
@@ -1205,7 +1205,7 @@ void dComIfGs_setGameStartStage() {
             strcpy(stage_name, "sea");
 
             stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
-            JUT_ASSERT(VERSION_SELECT(2359, 2362, 2362), mapInfo != 0);
+            JUT_ASSERT(VERSION_SELECT(2359, 2362, 2362), mapInfo != NULL);
 
             room_no = 4 + dStage_mapInfo_GetOceanX(mapInfo) + ((dStage_mapInfo_GetOceanZ(mapInfo) + 3) * 7);
             point = 0;

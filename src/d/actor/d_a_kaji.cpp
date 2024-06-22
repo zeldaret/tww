@@ -25,7 +25,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-000001F4       .text CreateHeap__8daKaji_cFv */
 BOOL daKaji_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KAJI_INDEX_BDL_ASODA);
-    JUT_ASSERT(0x55, modelData != 0);
+    JUT_ASSERT(0x55, modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,

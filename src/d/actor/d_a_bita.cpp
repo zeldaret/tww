@@ -186,14 +186,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
         type = 1;
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bita", ita_bmd[type]);
-    JUT_ASSERT(0x23b, modelData != 0);
+    JUT_ASSERT(0x23b, modelData != NULL);
     J3DModel* model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (model == NULL)
         return FALSE;
     i_this->mpModel = model;
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Bita", ita_Ef_bmd[type]);
-    JUT_ASSERT(0x247, modelData != 0);
+    JUT_ASSERT(0x247, modelData != NULL);
     model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (model == NULL)
         return FALSE;

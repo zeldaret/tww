@@ -120,10 +120,10 @@ static dCcD_SrcSph sph_check_src = {
 int daObjEskban::Act_c::CreateHeap() {
     J3DModelData* model_data =
         static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ESKBAN_BDL_ESKBAN));
-    JUT_ASSERT(261, model_data != 0);
+    JUT_ASSERT(261, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203U);
     M_smoke = new dPa_smokeEcallBack();
-    JUT_ASSERT(264, M_smoke != 0);
+    JUT_ASSERT(264, M_smoke != NULL);
     return mpModel != NULL;
 }
 

@@ -143,7 +143,7 @@ namespace daObj {
     /* 80066D6C-8006700C       .text posMoveF_grade__5daObjFP10fopAc_ac_cPC4cXyzPC4cXyzffPC4cXyzffPC4cXyz */
     void posMoveF_grade(fopAc_ac_c* pActor, const cXyz* pAddVel, const cXyz* stream_spd, f32 param_4, f32 param_5, const cXyz* pNorm, f32 friction, f32 no_grade_cos, const cXyz* pAddAccel) {
         /* Nonmatching */
-        JUT_ASSERT(0x118, stream_spd != 0)
+        JUT_ASSERT(0x118, stream_spd != NULL)
 
         cXyz resist_accel;
         posMoveF_resist_acc(&resist_accel, pActor, stream_spd, param_4, param_5);

@@ -203,7 +203,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
-    JUT_ASSERT(504, modelData != 0);
+    JUT_ASSERT(504, modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -224,7 +224,7 @@ BOOL daRd_c::_createHeap() {
     }
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
-    JUT_ASSERT(525, btk != 0);
+    JUT_ASSERT(525, btk != NULL);
     if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -232,7 +232,7 @@ BOOL daRd_c::_createHeap() {
     modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
-    JUT_ASSERT(550, brk != 0);
+    JUT_ASSERT(550, brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -1341,7 +1341,7 @@ void daRd_c::setBrkAnm(s8 idx) {
     
     J3DModel* model = mpMorf->getModel();
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, a_anm_idx_tbl[idx]));
-    JUT_ASSERT(1890, brk != 0);
+    JUT_ASSERT(1890, brk != NULL);
     mBrkAnm.init(model->getModelData(), brk, true, a_play_mod_tbl[idx], 1.0f, 0, -1, true, 0);
 }
 
@@ -1373,7 +1373,7 @@ void daRd_c::setBtkAnm(s8 idx) {
     int r5 = a_play_prm_tbl[m6DB].m00;
     if (m6DC != m6DB && r5 != -1) {
         J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, a_anm_idx_tbl[r5]));
-        JUT_ASSERT(1930, btk != 0);
+        JUT_ASSERT(1930, btk != NULL);
         J3DModelData* modelData = mpMorf->getModel()->getModelData();
         mBtkAnm.init(modelData, btk, true, a_play_prm_tbl[m6DB].m04, 1.0f, 0, -1, true, 0);
         

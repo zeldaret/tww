@@ -470,7 +470,7 @@ s32 cCc_Init() {
             continue;
 
         JUT_ASSERT(0x39, d.mKey < ARRAY_SIZE(DMC));
-        JUT_ASSERT(0x3a, DMC[d.mKey] == 0);
+        JUT_ASSERT(0x3a, DMC[d.mKey] == NULL);
 
         for (int j = 0; j < ARRAY_SIZE(DMC); j++) {
             if (DMC[j] != NULL) {
@@ -568,7 +568,7 @@ BOOL cDyl_InitCallback(void*) {
 void cDyl_InitAsync() {
     cCc_Init();
 
-    JUT_ASSERT(0x145, cDyl_DVD == 0);
+    JUT_ASSERT(0x145, cDyl_DVD == NULL);
     cDyl_DVD = mDoDvdThd_callback_c::create((mDoDvdThd_callback_func) cDyl_InitCallback, NULL);
 }
 

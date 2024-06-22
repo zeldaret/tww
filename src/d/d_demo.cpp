@@ -80,9 +80,9 @@ void dDemo_getJaiPointer(const char*, u32, int, u16*) {
 BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int, u16*, u32, s8) {
     /* Nonmatching */
     char* a_name;
-    JUT_ASSERT(0, a_name != 0);
+    JUT_ASSERT(0, a_name != NULL);
     void* i_key;
-    JUT_ASSERT(0, i_key != 0);
+    JUT_ASSERT(0, i_key != NULL);
 }
 
 /* 80069BC0-80069BDC       .text JSGSetData__13dDemo_actor_cFUlPCvUl */
@@ -496,21 +496,21 @@ dDemo_manager_c::dDemo_manager_c() {
     mFrame = 0;
     
     mMesgControl = new dMesg_tControl();
-    JUT_ASSERT(0x5b7, mMesgControl != 0);
+    JUT_ASSERT(0x5b7, mMesgControl != NULL);
     mSystem = new dDemo_system_c();
-    JUT_ASSERT(0x5ba, mSystem != 0);
+    JUT_ASSERT(0x5ba, mSystem != NULL);
     mControl = new JStudio::TControl();
-    JUT_ASSERT(0x5bc, mControl != 0);
+    JUT_ASSERT(0x5bc, mControl != NULL);
     mStage = new JStudio_JStage::TCreateObject(mSystem);
-    JUT_ASSERT(0x5be, mStage != 0);
+    JUT_ASSERT(0x5be, mStage != NULL);
     mAudio = new JStudio_JAudio::TCreateObject(mDoAud_zelAudio_c::getInterface());
-    JUT_ASSERT(0x5c0, mAudio != 0);
+    JUT_ASSERT(0x5c0, mAudio != NULL);
     mParticle = new JStudio_JParticle::TCreateObject(dPa_control_c::getEmitterManager(), mSystem);
-    JUT_ASSERT(0x5c3, mParticle != 0);
+    JUT_ASSERT(0x5c3, mParticle != NULL);
     mMessage = new JStudio_JMessage::TCreateObject(mMesgControl);
-    JUT_ASSERT(0x5c6, mMessage != 0);
+    JUT_ASSERT(0x5c6, mMessage != NULL);
     mFactory = new JStudio::TFactory();
-    JUT_ASSERT(0x5c9, mFactory != 0);
+    JUT_ASSERT(0x5c9, mFactory != NULL);
     
     // This gets compiled to a double literal, but the lack of precision indicates it was written as a float literal.
     mControl->mSecondPerFrame = 1/30.0f;

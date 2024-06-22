@@ -952,7 +952,7 @@ static void dummy2() {
 
 /* 802B30A4-802B31D4       .text state_register__10JKRExpHeapCFPQ27JKRHeap6TStateUl */
 void JKRExpHeap::state_register(TState* p, u32 param_1) const {
-    JUT_ASSERT(2423, p != 0);
+    JUT_ASSERT(2423, p != NULL);
     JUT_ASSERT(2424, p->getHeap() == this);
     p->mId = param_1;
     if (param_1 <= 0xff) {

@@ -226,7 +226,7 @@ s32 phase_2(room_of_scene_class* i_this) {
         }
 
         dStage_FileList_dt_c * fileList = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
-        JUT_ASSERT(499, fileList != 0);
+        JUT_ASSERT(499, fileList != NULL);
 
         u8 particleNo = dStage_FileList_dt_GetParticleNo(fileList);
         i_this->mbHasRoomParticle = dComIfGp_particle_readScene(particleNo, &i_this->sceneCommand);
@@ -251,7 +251,7 @@ s32 phase_3(room_of_scene_class* i_this) {
         if (i_this->sceneCommand->sync() == 0)
             return cPhs_INIT_e;
 
-        JUT_ASSERT(0x215, i_this->sceneCommand->getMemAddress() != 0);
+        JUT_ASSERT(0x215, i_this->sceneCommand->getMemAddress() != NULL);
         dComIfGp_particle_createRoomScene(i_this->sceneCommand->getMemAddress());
         delete i_this->sceneCommand;
     }

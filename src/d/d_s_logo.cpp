@@ -678,11 +678,11 @@ s32 phase_1(dScnLogo_c* i_this) {
 
     toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOON);
 
-    JUT_ASSERT(VERSION_SELECT(1208, 1426, 1466), toonImage != 0);
+    JUT_ASSERT(VERSION_SELECT(1208, 1426, 1466), toonImage != NULL);
     dDlst_list_c::setToonImage(toonImage);
 
     toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOONEX);
-    JUT_ASSERT(VERSION_SELECT(1213, 1431, 1471), toonImage != 0);
+    JUT_ASSERT(VERSION_SELECT(1213, 1431, 1471), toonImage != NULL);
     dDlst_list_c::setToonExImage(toonImage);
 
     i_this->field_0x1f8 = mDoExt_getGameHeap()->alloc(0x3c8a0, 4);
@@ -714,9 +714,9 @@ s32 phase_2(dScnLogo_c* i_this) {
     ResTIMG * timg;
     
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_NINTENDO_376X104);
-    JUT_ASSERT(VERSION_SELECT(1264, 1482, 1522), timg != 0);
+    JUT_ASSERT(VERSION_SELECT(1264, 1482, 1522), timg != NULL);
     i_this->nintendoImg = new dDlst_2D_c(timg, 133, 170, 0);
-    JUT_ASSERT(VERSION_SELECT(1267, 1485, 1525), i_this->nintendoImg != 0);
+    JUT_ASSERT(VERSION_SELECT(1267, 1485, 1525), i_this->nintendoImg != NULL);
     i_this->nintendoImg->setAlpha(0xFF);
 #if VERSION == VERSION_JPN
     // Blue Nintendo logo for JPN.
@@ -727,9 +727,9 @@ s32 phase_2(dScnLogo_c* i_this) {
 #endif
 
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_TITLE_DOLBY_MARK);
-    JUT_ASSERT(VERSION_SELECT(1276, 1498, 1538), timg != 0);
+    JUT_ASSERT(VERSION_SELECT(1276, 1498, 1538), timg != NULL);
     i_this->dolbyImg = new dDlst_2D_c(timg, 218, 166, 0);
-    JUT_ASSERT(VERSION_SELECT(1280, 1502, 1542), i_this->dolbyImg != 0);
+    JUT_ASSERT(VERSION_SELECT(1280, 1502, 1542), i_this->dolbyImg != NULL);
     i_this->dolbyImg->setAlpha(0xFF);
 
 #if VERSION == VERSION_PAL
@@ -775,9 +775,9 @@ s32 phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_CHOICE);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1286, 1565, 1605), timg != 0);
+    JUT_ASSERT(VERSION_SELECT(1286, 1565, 1605), timg != NULL);
     i_this->progchoiceImg = new dDlst_2D_c(timg, 113, 281, 0);
-    JUT_ASSERT(VERSION_SELECT(1288, 1567, 1607), i_this->progchoiceImg != 0);
+    JUT_ASSERT(VERSION_SELECT(1288, 1567, 1607), i_this->progchoiceImg != NULL);
     i_this->progchoiceImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
@@ -785,9 +785,9 @@ s32 phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_YES);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1295, 1579, 1619), timg != 0);
+    JUT_ASSERT(VERSION_SELECT(1295, 1579, 1619), timg != NULL);
     i_this->progyesImg = new dDlst_2D_c(timg, 211, 372, 0);
-    JUT_ASSERT(VERSION_SELECT(1297, 1581, 1621), i_this->progyesImg != 0);
+    JUT_ASSERT(VERSION_SELECT(1297, 1581, 1621), i_this->progyesImg != NULL);
     i_this->progyesImg->getPicture()->setWhite((GXColor){0xFF, 0xC8, 0x00, 0xFF});
     i_this->progyesImg->setAlpha(0x00);
 
@@ -796,9 +796,9 @@ s32 phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_NO);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1305, 1594, 1634), timg != 0);
+    JUT_ASSERT(VERSION_SELECT(1305, 1594, 1634), timg != NULL);
     i_this->prognoImg = new dDlst_2D_c(timg, 350, 372, 0);
-    JUT_ASSERT(VERSION_SELECT(1307, 1596, 1636), i_this->prognoImg != 0);
+    JUT_ASSERT(VERSION_SELECT(1307, 1596, 1636), i_this->prognoImg != NULL);
     i_this->prognoImg->getPicture()->setWhite((GXColor){0xA0, 0xA0, 0xA0, 0xFF});
     i_this->prognoImg->setAlpha(0x00);
 
@@ -807,9 +807,9 @@ s32 phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_PRO);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1315, 1609, 1649), timg != 0);
+    JUT_ASSERT(VERSION_SELECT(1315, 1609, 1649), timg != NULL);
     i_this->progImg = new dDlst_2D_c(timg, 153, 309, 0);
-    JUT_ASSERT(VERSION_SELECT(1317, 1611, 1651), i_this->progImg != 0);
+    JUT_ASSERT(VERSION_SELECT(1317, 1611, 1651), i_this->progImg != NULL);
     i_this->progImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
@@ -817,15 +817,15 @@ s32 phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_INTER);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1324, 1623, 1663), timg != 0);
+    JUT_ASSERT(VERSION_SELECT(1324, 1623, 1663), timg != NULL);
     i_this->interImg = new dDlst_2D_c(timg, 153, 309, 0);
-    JUT_ASSERT(VERSION_SELECT(1326, 1625, 1665), i_this->interImg != 0);
+    JUT_ASSERT(VERSION_SELECT(1326, 1625, 1665), i_this->interImg != NULL);
     i_this->interImg->setAlpha(0x00);
 
     JKRHeap::free(i_this->field_0x1f8, NULL);
 
     l_lodCommand = aramMount("/res/Stage/sea/LODALL.arc");
-    JUT_ASSERT(VERSION_SELECT(1346, 1645, 1685), l_lodCommand != 0);
+    JUT_ASSERT(VERSION_SELECT(1346, 1645, 1685), l_lodCommand != NULL);
     
     rt = dComIfG_setObjectRes("Always", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1351, 1650, 1690), rt == 1);
@@ -887,11 +887,11 @@ s32 phase_2(dScnLogo_c* i_this) {
     l_rubyCommand = onMemMount("/res/Msg/rubyres.arc");
     l_particleCommand = mDoDvdThd_toMainRam_c::create("/res/Particle/common.jpc", JKRArchive::DEFAULT_MOUNT_DIRECTION, dComIfGp_particle_getCommonHeap());
     l_itemTableCommand = mDoDvdThd_toMainRam_c::create("/res/ItemTable/item_table.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1418, 1743, 1783), l_itemTableCommand != 0);
+    JUT_ASSERT(VERSION_SELECT(1418, 1743, 1783), l_itemTableCommand != NULL);
     l_ActorDataCommand = mDoDvdThd_toMainRam_c::create("/res/ActorDat/ActorDat.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1422, 1747, 1787), l_ActorDataCommand != 0);
+    JUT_ASSERT(VERSION_SELECT(1422, 1747, 1787), l_ActorDataCommand != NULL);
     l_FmapDataCommand = mDoDvdThd_toMainRam_c::create("/res/FmapDat/FmapDat.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1426, 1751, 1791), l_FmapDataCommand != 0);
+    JUT_ASSERT(VERSION_SELECT(1426, 1751, 1791), l_FmapDataCommand != NULL);
 
     JAIZelBasic::getInterface()->loadStaticWaves();
     mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 60);

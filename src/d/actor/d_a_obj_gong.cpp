@@ -41,7 +41,7 @@ BOOL daObjGong::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjGong::Act_c::create_heap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VDORA_INDEX_BDL_VDORA));
     J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, VDORA_INDEX_BCK_05_VDORA_CUT02_HIT));
-    JUT_ASSERT(0xbd, (modelData != 0) && (bck != 0));
+    JUT_ASSERT(0xbd, (modelData != NULL) && (bck != NULL));
 
     mpMorf = new mDoExt_McaMorf(
         modelData,

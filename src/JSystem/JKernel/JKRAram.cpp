@@ -333,12 +333,12 @@ static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32
 
     u32 szsBufferSize = JKRAram::getSzpBufferSize();
     szpBuf = (u8 *)JKRAllocFromSysHeap(szsBufferSize, 32);
-    JUT_ASSERT(VERSION_SELECT(1091, 1077, 1077), szpBuf != 0);
+    JUT_ASSERT(VERSION_SELECT(1091, 1077, 1077), szpBuf != NULL);
 
     szpEnd = szpBuf + szsBufferSize;
     if (offset != 0) {
         refBuf = (u8 *)JKRAllocFromSysHeap(0x1120, 0);
-        JUT_ASSERT(VERSION_SELECT(1100, 1086, 1086), refBuf != 0);
+        JUT_ASSERT(VERSION_SELECT(1100, 1086, 1086), refBuf != NULL);
         refEnd = refBuf + 0x1120;
         refCurrent = refBuf;
     }

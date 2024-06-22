@@ -21,7 +21,7 @@ bool daKomore::Act_c::create_heap() {
 
     mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x04));
 
-    JUT_ASSERT(0x66, mdl_data != 0);
+    JUT_ASSERT(0x66, mdl_data != NULL);
 
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
@@ -29,7 +29,7 @@ bool daKomore::Act_c::create_heap() {
 
     btk_data = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes(M_arcname, 0x07));
 
-    JUT_ASSERT(0x6d, btk_data != 0);
+    JUT_ASSERT(0x6d, btk_data != NULL);
 
     s32 btkRet =
         mBtkAnm.init(mdl_data, btk_data, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);

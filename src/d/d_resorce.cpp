@@ -142,7 +142,7 @@ static void setToonTex(J3DMaterialTable* pMaterialTable) {
 
 /* 8006DFD4-8006E7A4       .text loadResource__11dRes_info_cFv */
 int dRes_info_c::loadResource() {
-    JUT_ASSERT(0x25f, mRes == 0);
+    JUT_ASSERT(0x25f, mRes == NULL);
 
     s32 fileNum = getResNum();
     mRes = new void*[fileNum];
@@ -397,7 +397,7 @@ int dRes_info_c::setRes() {
         }
         if (mpParentHeap != NULL) {
             mDataHeap = mDoExt_createSolidHeapToCurrent(0, mpParentHeap, 0x20);
-            JUT_ASSERT(0x3f5, mDataHeap != 0);
+            JUT_ASSERT(0x3f5, mDataHeap != NULL);
 
             loadResource();
             mDoExt_restoreCurrentHeap();

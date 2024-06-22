@@ -657,7 +657,7 @@ void daSea_packet_c::draw() {
         return;
     }
 
-    JUT_ASSERT(VERSION_SELECT(0x519, 0x518, 0x518), m_draw_vtx != 0); // Redundant assert
+    JUT_ASSERT(VERSION_SELECT(0x519, 0x518, 0x518), m_draw_vtx != NULL); // Redundant assert
 
 #if VERSION != VERSION_JPN
     j3dSys.reinitGX();

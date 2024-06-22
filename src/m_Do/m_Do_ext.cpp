@@ -109,7 +109,7 @@ int mDoExt_baseAnm::initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_
 
 /* 8000DF24-8000DFC4       .text play__14mDoExt_baseAnmFv */
 int mDoExt_baseAnm::play() {
-    JUT_ASSERT(462, mFrameCtrl != 0);
+    JUT_ASSERT(462, mFrameCtrl != NULL);
     mFrameCtrl->update();
     return isStop();
 }
@@ -128,7 +128,7 @@ void mDoExt_bpkAnm::entry(J3DModelData* i_modelData, f32 param_1) {
 int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
 
     JUT_ASSERT(531, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(533, i_matTable != 0 && i_bpk != 0);
+    JUT_ASSERT(533, i_matTable != NULL && i_bpk != NULL);
     mpAnm = i_bpk;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
@@ -180,7 +180,7 @@ void mDoExt_btpAnm::entry(J3DModelData* i_modelData, s16 i_frame) {
 /* 8000E37C-8000E610       .text init__13mDoExt_btpAnmFP16J3DMaterialTableP16J3DAnmTexPatterniifssbi */
 int mDoExt_btpAnm::init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btp, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
     JUT_ASSERT(648, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(650, i_matTable != 0 && i_btp != 0);
+    JUT_ASSERT(650, i_matTable != NULL && i_btp != NULL);
     mpAnm = i_btp;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
@@ -232,7 +232,7 @@ void mDoExt_btkAnm::entry(J3DModelData* i_modelData, f32 i_frame) {
 /* 8000E71C-8000EAE4       .text init__13mDoExt_btkAnmFP16J3DMaterialTableP19J3DAnmTextureSRTKeyiifssbi */
 int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
     JUT_ASSERT(781, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(783, i_matTable != 0 && i_btk != 0);
+    JUT_ASSERT(783, i_matTable != NULL && i_btk != NULL);
     mpAnm = i_btk;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
@@ -299,7 +299,7 @@ void mDoExt_brkAnm::entry(J3DModelData* i_modelData, f32 i_frame) {
 /* 8000EBC4-8000EEE8       .text init__13mDoExt_brkAnmFP16J3DMaterialTableP15J3DAnmTevRegKeyiifssbi */
 int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
     JUT_ASSERT(910, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(912, i_matTable != 0 && i_brk != 0);
+    JUT_ASSERT(912, i_matTable != NULL && i_brk != NULL);
     mpAnm = i_brk;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
@@ -356,7 +356,7 @@ void mDoExt_brkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
 /* 8000EFBC-8000F178       .text init__13mDoExt_bvaAnmFP8J3DModelP20J3DAnmVisibilityFulliifssbi */
 int mDoExt_bvaAnm::init(J3DModel* i_model, J3DAnmVisibilityFull* i_bva, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
     JUT_ASSERT(1002, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(1004, i_model != 0 && i_bva != 0);
+    JUT_ASSERT(1004, i_model != NULL && i_bva != NULL);
     mpAnm = i_bva;
     if (!i_modify) {
         field_0xc = new J3DVisibilityManager(mpAnm);
@@ -386,7 +386,7 @@ void mDoExt_bvaAnm::entry(J3DModel* i_model, s16 i_frame) {
 /* 8000F1B4-8000F408       .text init__13mDoExt_bckAnmFP12J3DModelDataP15J3DAnmTransformiifssb */
 int mDoExt_bckAnm::init(J3DModelData* i_modelData, J3DAnmTransform* i_bck, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify) {
     JUT_ASSERT(1065, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(1067, i_bck != 0);
+    JUT_ASSERT(1067, i_bck != NULL);
     mAnmTransform = i_bck;
     if (!i_modify) {
         mAnm = new J3DMtxCalcMayaAnm(mAnmTransform);
@@ -407,7 +407,7 @@ int mDoExt_bckAnm::init(J3DModelData* i_modelData, J3DAnmTransform* i_bck, BOOL 
 /* 8000F590-8000F610       .text changeBckOnly__13mDoExt_bckAnmFP15J3DAnmTransform */
 void mDoExt_bckAnm::changeBckOnly(J3DAnmTransform* i_bck) {
     mAnmTransform = i_bck;
-    JUT_ASSERT(1104, mAnm != 0);
+    JUT_ASSERT(1104, mAnm != NULL);
     mAnm->setAnmTransform(mAnmTransform);
 }
 
@@ -793,7 +793,7 @@ JKRExpHeap* gameHeap;
 
 /* 80011734-800117E4       .text mDoExt_createGameHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap) {
-    JUT_ASSERT(2050, gameHeap == 0 || heapSize == 0);
+    JUT_ASSERT(2050, gameHeap == NULL || heapSize == 0);
     gameHeap = JKRExpHeap::create(heapSize, i_heap, true);
     gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return gameHeap;
@@ -820,7 +820,7 @@ JKRExpHeap* zeldaHeap;
 
 /* 8001181C-800118C0       .text mDoExt_createZeldaHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap) {
-    JUT_ASSERT(2112, zeldaHeap == 0 || heapSize == 0);
+    JUT_ASSERT(2112, zeldaHeap == NULL || heapSize == 0);
     return zeldaHeap = JKRExpHeap::create(heapSize, i_heap, true);
 }
 
@@ -845,7 +845,7 @@ JKRExpHeap* commandHeap;
 
 /* 800118F8-8001199C       .text mDoExt_createCommandHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap) {
-    JUT_ASSERT(2173, commandHeap == 0 || heapSize == 0);
+    JUT_ASSERT(2173, commandHeap == NULL || heapSize == 0);
     return commandHeap = JKRExpHeap::create(heapSize, i_heap, true);
 }
 
@@ -870,7 +870,7 @@ JKRExpHeap* archiveHeap;
 
 /* 800119D4-80011A84       .text mDoExt_createArchiveHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap) {
-    JUT_ASSERT(2237, archiveHeap == 0 || heapSize == 0);
+    JUT_ASSERT(2237, archiveHeap == NULL || heapSize == 0);
     archiveHeap = JKRExpHeap::create(heapSize, i_heap, true);
     archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return archiveHeap;
@@ -946,7 +946,7 @@ JKRSolidHeap* mDoExt_createSolidHeapToCurrent(u32 i_size, JKRHeap* i_parent, u32
         return NULL;
     }
     JUT_ASSERT(2545, OSGetCurrentThread() == &mainThread);
-    JUT_ASSERT(2546, mDoExt_SaveCurrentHeap == 0);
+    JUT_ASSERT(2546, mDoExt_SaveCurrentHeap == NULL);
     mDoExt_SaveCurrentHeap = JKRGetCurrentHeap();
     mDoExt_setCurrentHeap(resultHeap);
 
@@ -978,7 +978,7 @@ void mDoExt_destroySolidHeap(JKRSolidHeap* i_heap) {
 
 /* 80011D68-80011DD4       .text mDoExt_setCurrentHeap__FP7JKRHeap */
 JKRHeap* mDoExt_setCurrentHeap(JKRHeap* heap) {
-    JUT_ASSERT(2684, heap != 0);
+    JUT_ASSERT(2684, heap != NULL);
     return heap->becomeCurrentHeap();
 }
 
@@ -990,7 +990,7 @@ JKRHeap* mDoExt_getCurrentHeap() {
 /* 80011DDC-80011E98       .text mDoExt_restoreCurrentHeap__Fv */
 void mDoExt_restoreCurrentHeap() {
     JUT_ASSERT(2754, OSGetCurrentThread() == &mainThread);
-    JUT_ASSERT(2755, mDoExt_SaveCurrentHeap != 0);
+    JUT_ASSERT(2755, mDoExt_SaveCurrentHeap != NULL);
     mDoExt_SaveCurrentHeap->becomeCurrentHeap();
     mDoExt_SaveCurrentHeap = NULL;
 }
@@ -1918,7 +1918,7 @@ void mDoExt_3DlineMat1_c::update(u16, f32, GXColor&, u16, dKy_tevstr_c*) {
 void mDoExt_3DlineMat1_c::update(u16, GXColor&, dKy_tevstr_c*) {
     /* Nonmatching */
     u8* size_p = mpLines->mpSize;
-    JUT_ASSERT(5243, size_p != 0);
+    JUT_ASSERT(5243, size_p != NULL);
 }
 
 /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
@@ -1945,13 +1945,13 @@ void mDoExt_3DlineMatSortPacket::draw() {
 void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_heap, const char* param_4,
                            JKRArchive* p_archive, u8 param_6, u32 param_7, u32 param_8) {
     JUTFont* mDoExt_font = *p_font;
-    JUT_ASSERT(6648, mDoExt_font == 0);
+    JUT_ASSERT(6648, mDoExt_font == NULL);
     ResFONT* mDoExt_resfont = *p_resfont;
-    JUT_ASSERT(6649, mDoExt_resfont == 0);
+    JUT_ASSERT(6649, mDoExt_resfont == NULL);
     
     *p_resfont = (ResFONT*)p_archive->getGlbResource('ROOT', param_4, p_archive);
     mDoExt_resfont = *p_resfont;
-    JUT_ASSERT(6651, mDoExt_resfont != 0);
+    JUT_ASSERT(6651, mDoExt_resfont != NULL);
     
     if (param_6 == 0) {
         u32 temp = (((param_8+0x1F) & ~0x1F) + 0x40) * param_7;
@@ -1974,7 +1974,7 @@ void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_hea
     }
     
     mDoExt_font = *p_font;
-    JUT_ASSERT(6685, mDoExt_font != 0);
+    JUT_ASSERT(6685, mDoExt_font != NULL);
 }
 
 JUTFont* mDoExt_font0;

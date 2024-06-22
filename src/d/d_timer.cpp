@@ -58,7 +58,7 @@ s32 dTimer_c::_create() {
             return cPhs_ERROR_e;
 
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("Timer");
-        JUT_ASSERT(0x44, resInfo != 0);
+        JUT_ASSERT(0x44, resInfo != NULL);
 
         if (prm->mIconType == 0) {
             mpSolidHeap = mDoExt_createSolidHeapFromGameToCurrent(0x34C0, 0x20);
@@ -71,7 +71,7 @@ s32 dTimer_c::_create() {
             mpScrnDraw->setScreen("ship_race0.blo", resInfo->getArchive());
             if (prm->mIconType != 0) {
                 iconTex = mpSolidHeap->alloc(0xC00, 0x20);
-                JUT_ASSERT(0x5a, iconTex != 0);
+                JUT_ASSERT(0x5a, iconTex != NULL);
                 mpScrnDraw->setIconType(iconTex, prm->mIconType);
             }
 

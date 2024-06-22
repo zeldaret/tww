@@ -100,7 +100,7 @@ BOOL daObjMtest::Act_c::CreateHeap() {
     s16 bmdIdx = bmd_data[M_type];
     if (bmdIdx >= 0) {
         J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname[M_type], bmdIdx);
-        JUT_ASSERT(257, model_data != 0);
+        JUT_ASSERT(257, model_data != NULL);
         
         mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
         return !!mpModel;

@@ -67,7 +67,7 @@ void JASystem::DSPInterface::setupBuffer() {
 void JASystem::DSPInterface::initBuffer() {
     CH_BUF = new(JASDram, 0x20) DSPBuffer[64];
     FX_BUF = new(JASDram, 0x20) FXBuffer[4];
-    JUT_ASSERT(163, (CH_BUF != 0) && (FX_BUF != 0));
+    JUT_ASSERT(163, (CH_BUF != NULL) && (FX_BUF != NULL));
     for (u8 i = 0; i < 4; i++) {
         FX_BUF[i].setFXLine(NULL, NULL);
     }

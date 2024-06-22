@@ -507,7 +507,7 @@ void dMetronome_c::initialize() {
 /* 8022309C-8022319C       .text _create__12dMetronome_cFv */
 void dMetronome_c::_create() {
     scrn = new J2DScreen();
-    JUT_ASSERT(0x2db, scrn != 0);
+    JUT_ASSERT(0x2db, scrn != NULL);
     scrn->set("baton_input.blo", dComIfGp_getTmsgArchive());
     screenSet();
     initialize();

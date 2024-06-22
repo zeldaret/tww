@@ -87,7 +87,7 @@ public:
 /* 80160F60-801610A8       .text setScreen__13dPlace_name_cFPCcP10JKRArchive */
 void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
     scrn = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(69, 91, 91), scrn != 0);
+    JUT_ASSERT(VERSION_SELECT(69, 91, 91), scrn != NULL);
 
     scrn->set(name, arc);
     fopMsgM_setPaneData(&pane, scrn, 0x706e);
@@ -141,13 +141,13 @@ s32 dPn_c::_create() {
     if (mState == 0) {
         if (rt == cPhs_COMPLEATE_e) {
             dRes_info_c * resInfo = dComIfG_getObjectResInfo("PName");
-            JUT_ASSERT(VERSION_SELECT(147, 169, 169), resInfo != 0);
+            JUT_ASSERT(VERSION_SELECT(147, 169, 169), resInfo != NULL);
 
             mpHeap = dComIfGp_getExpHeap2D();
             dComIfGp_setHeapLockFlag(10);
             JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
             dPn_scrn = new dPlace_name_c();
-            JUT_ASSERT(VERSION_SELECT(155, 177, 177), dPn_scrn != 0);
+            JUT_ASSERT(VERSION_SELECT(155, 177, 177), dPn_scrn != NULL);
             dPn_scrn->setScreen("place_name.blo", resInfo->getArchive());
             mpTIMG = (ResTIMG*)mpHeap->alloc(0x3c00, 0x20);
             mDoExt_setCurrentHeap(oldHeap);

@@ -2279,7 +2279,7 @@ void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
         mWipeRate = 1.0f;
     }
     ResTIMG* texture = (ResTIMG*)JKRGetResource('TIMG', "wipe_00.bti", dComIfGp_getMenuArchive());
-    JUT_ASSERT(0x1637, texture != 0);
+    JUT_ASSERT(0x1637, texture != NULL);
     mWipeDlst.init(texture, -9.0f, -21.0f, 659.0f, 524.0f, 0, 1, 1, 2.0f, 2.436f);
 }
 

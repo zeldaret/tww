@@ -9,7 +9,7 @@
 
 /* 80068510-800685F8       .text getJointMtx__10daBranch_cFPCc */
 MtxP daBranch_c::getJointMtx(const char* jointName) {
-    JUT_ASSERT(22, mModel[0] != 0);
+    JUT_ASSERT(22, mModel[0] != NULL);
     JUTNameTab* nameTable = mModel[0]->getModelData()->getJointName();
     u16 jointNum = mModel[0]->getModelData()->getJointNum();
     if (nameTable == NULL || jointNum == 0) {

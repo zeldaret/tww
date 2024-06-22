@@ -271,7 +271,7 @@ void JKRArchive::removeResourceAll() {
 
 /* 802B89B8-802B8A54       .text removeResource__10JKRArchiveFPv */
 bool JKRArchive::removeResource(void* resource) {
-    JUT_ASSERT(VERSION_SELECT(755, 687, 687), resource != 0);
+    JUT_ASSERT(VERSION_SELECT(755, 687, 687), resource != NULL);
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)
@@ -284,7 +284,7 @@ bool JKRArchive::removeResource(void* resource) {
 
 /* 802B8A54-802B8AE4       .text detachResource__10JKRArchiveFPv */
 bool JKRArchive::detachResource(void* resource) {
-    JUT_ASSERT(VERSION_SELECT(787, 719, 719), resource != 0);
+    JUT_ASSERT(VERSION_SELECT(787, 719, 719), resource != NULL);
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)
@@ -296,7 +296,7 @@ bool JKRArchive::detachResource(void* resource) {
 
 /* 802B8AE4-802B8B6C       .text getResSize__10JKRArchiveCFPCv */
 u32 JKRArchive::getResSize(const void* resource) const {
-    JUT_ASSERT(VERSION_SELECT(814, 746, 746), resource != 0);
+    JUT_ASSERT(VERSION_SELECT(814, 746, 746), resource != NULL);
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)

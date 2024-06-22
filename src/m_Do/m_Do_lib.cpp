@@ -15,7 +15,7 @@
 u8 mDoLib_setResTimgObj(ResTIMG* i_img, GXTexObj* o_texObj, u32 i_tlut_name, GXTlutObj * o_tlutObj) {
     /* Nonmatching - regalloc */
     if (i_img->indexTexture) {
-        JUT_ASSERT(0x2b, o_tlutObj != 0);
+        JUT_ASSERT(0x2b, o_tlutObj != NULL);
         GXInitTlutObj(o_tlutObj, ((char*)i_img) + i_img->paletteOffset, (GXTlutFmt)i_img->colorFormat, i_img->numColors);
         GXInitTexObjCI(o_texObj, ((char*)i_img) + i_img->imageOffset, i_img->width, i_img->height, (GXCITexFmt)i_img->format,
             (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT, (GXBool)(i_img->mipmapCount > 1), i_tlut_name);

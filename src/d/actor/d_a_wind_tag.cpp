@@ -76,7 +76,7 @@ BOOL daWindTag::CheckCreateHeap(fopAc_ac_c* i_ac) {
 BOOL daWindTag::daWindTag_c::CreateHeap() {
     /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
-    JUT_ASSERT(0x16A, modelData != 0);
+    JUT_ASSERT(0x16A, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if (mpModel == NULL)

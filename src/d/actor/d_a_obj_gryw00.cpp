@@ -32,7 +32,7 @@ f32 daObjGryw00_c::get_draw_water_lv(void* p) {
 BOOL daObjGryw00_c::setup_high_water_level_btk_anm() {
     BOOL ret = TRUE;
     J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, GRYW00_BTK_GRYW00));
-    JUT_ASSERT(223, btk_anm_p != 0);
+    JUT_ASSERT(223, btk_anm_p != NULL);
     if (!mBtk.init(mpModel->getModelData(), btk_anm_p, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0x191, -1, -1, 0)) {
         ret = FALSE;
     }

@@ -109,9 +109,9 @@ static BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
 s32 phase_1(menu_of_scene_class* i_this) {
     /* Nonmatching */
     i_this->command = mDoDvdThd_toMainRam_c::create("/res/Menu/Menu1.dat", 0, NULL);
-    JUT_ASSERT(732, i_this->command != 0);
+    JUT_ASSERT(732, i_this->command != NULL);
     i_this->fontCommand = mDoDvdThd_toMainRam_c::create("/res/Menu/kanfont_fix16.bfn", 0, NULL);
-    JUT_ASSERT(735, i_this->fontCommand != 0);
+    JUT_ASSERT(735, i_this->fontCommand != NULL);
     return cPhs_NEXT_e;
 }
 
@@ -122,7 +122,7 @@ s32 phase_2(menu_of_scene_class* i_this) {
         return cPhs_INIT_e;
     }
     i_this->info = (menu_of_scene_class::info1_s*)i_this->command->getMemAddress();
-    JUT_ASSERT(779, i_this->info != 0);
+    JUT_ASSERT(779, i_this->info != NULL);
     delete i_this->command;
     menu_of_scene_class::info1_s* info = i_this->info;
     info->field_0x4 = (menu_of_scene_class::info2_s*)(u32(info->field_0x4) + u32(info));
@@ -131,7 +131,7 @@ s32 phase_2(menu_of_scene_class* i_this) {
     }
     if (!l_groupPoint) {
         l_groupPoint = new s8[info->field_0x0];
-        JUT_ASSERT(792, l_groupPoint != 0);
+        JUT_ASSERT(792, l_groupPoint != NULL);
         for (int i = 0; i < info->field_0x0; i++) {
             l_groupPoint[i] = 0;
         }

@@ -67,7 +67,7 @@ const char daObjLadder::Act_c::M_arcname[] = "Mhsg";
 /* 00000078-0000013C       .text CreateHeap__Q211daObjLadder5Act_cFv */
 BOOL daObjLadder::Act_c::CreateHeap() {
     J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, attr_type(mType).modelId));
-    JUT_ASSERT(0x17E, model_data != 0);
+    JUT_ASSERT(0x17E, model_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000U, 0x11000022U);
 

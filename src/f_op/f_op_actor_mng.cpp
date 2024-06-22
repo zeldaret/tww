@@ -35,7 +35,7 @@ static Vec dummy_3569;
 /* 80024060-80024104       .text fopAcM_setStageLayer__FPv */
 void fopAcM_setStageLayer(void* pProc) {
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-    JUT_ASSERT(0xee, stageProc != 0);
+    JUT_ASSERT(0xee, stageProc != NULL);
     fpcM_ChangeLayerID(pProc, fopScnM_LayerID(stageProc));
 }
 
@@ -43,7 +43,7 @@ void fopAcM_setStageLayer(void* pProc) {
 void fopAcM_setRoomLayer(void* pProc, int room_no) {
     if (room_no >= 0) {
         scene_class* roomProc = fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(room_no));
-        JUT_ASSERT(0x105, roomProc != 0);
+        JUT_ASSERT(0x105, roomProc != NULL);
         fpcM_ChangeLayerID(pProc, fopScnM_LayerID(roomProc));
     }
 }
@@ -270,7 +270,7 @@ uint fopAcM_createChildFromOffset(char* pProcNameString, uint parentPcId, u32 pa
 /* 80024B78-80024CA0       .text fopAcM_createHeap__FP10fopAc_ac_cUlUl */
 s32 fopAcM_createHeap(fopAc_ac_c* i_this, u32 size, u32 align) {
     JUT_ASSERT(0x33b, i_this);
-    JUT_ASSERT(0x33c, i_this->heap == 0);
+    JUT_ASSERT(0x33c, i_this->heap == NULL);
     fopAcM_Log(i_this, "アクターのヒープの生成");
     if (align == 0)
         align = 0x20;
@@ -379,7 +379,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
                 heap = NULL;
                 bool result = createHeapCB(i_this);
                 mDoExt_restoreCurrentHeap();
-                JUT_ASSERT(0x48d, result != 0);
+                JUT_ASSERT(0x48d, result != FALSE);
                 if (result == 0) {
                     OSReport_Error("ぴったりサイズで、登録失敗？(バグ)\n");
                     mDoExt_destroySolidHeap(heap1);
@@ -1250,7 +1250,7 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
     JUT_ASSERT(0xe07, roomNo >= 0);
 
     scene_class* roomProc = fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(roomNo));
-    JUT_ASSERT(0xe0a, roomProc != 0);
+    JUT_ASSERT(0xe0a, roomProc != NULL);
 
     uint grabProcID = daPy_getPlayerActorClass()->getGrabActorID();
     fopAc_ac_c* enemy = fopAcM_SearchByID(grabProcID);

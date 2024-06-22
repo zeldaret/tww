@@ -7584,7 +7584,7 @@ BOOL daNpcPeople_c::initTexPatternAnm(bool param_1) {
         }
 
         m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcType], l_btp_ix_tbl[mNpcType]);
-        JUT_ASSERT(0x231D, m_head_tex_pattern != 0);
+        JUT_ASSERT(0x231D, m_head_tex_pattern != NULL);
 
         if(!mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0f, 0, -1, param_1, 0)) {
             return false;

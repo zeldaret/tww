@@ -3210,10 +3210,10 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     field_0x3F8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
     J3DAnmTevRegKey* a_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Ji", JI_BRK_YJITR00));
-    JUT_ASSERT(0x15CD, a_brk != 0);
+    JUT_ASSERT(0x15CD, a_brk != NULL);
 
     J3DAnmTextureSRTKey* a_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
-    JUT_ASSERT(0x15D0, a_btk != 0);
+    JUT_ASSERT(0x15D0, a_btk != NULL);
 
     int temp1 = field_0x3FC.init(modelData, a_brk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
     int temp2 = field_0x418.init(modelData, a_btk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
@@ -3223,7 +3223,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     }
 
     headTexPattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Ji", JI_BTP_JI));
-    JUT_ASSERT(0x15D8, headTexPattern != 0);
+    JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
     if(field_0x3D8.init(modelData, headTexPattern, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0) == 0) {
         return false;

@@ -281,7 +281,7 @@ u32 JKRDvdArchive::fetchResource_subroutine(s32 entryNum, u32 offset, u32 size, 
         switch (fileCompression) {
         case COMPRESSION_NONE:
             buffer = (u8*)JKRAllocFromHeap(heap, alignedSize, sizeof(SArcHeader));
-            JUT_ASSERT(VERSION_SELECT(638, 631, 631), buffer != 0);
+            JUT_ASSERT(VERSION_SELECT(638, 631, 631), buffer != NULL);
 
             JKRDvdToMainRam(entryNum, buffer, EXPAND_SWITCH_UNKNOWN0, alignedSize, NULL,
                             JKRDvdRipper::ALLOC_DIRECTION_FORWARD, offset, NULL);

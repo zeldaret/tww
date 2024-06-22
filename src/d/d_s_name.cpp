@@ -104,7 +104,7 @@ s32 dScnName_c::create() {
     s32 rt = resLoad(&mPhs, "Stage");
     if (rt == cPhs_COMPLEATE_e) {
         heap = JKRCreateExpHeap(0x68000, mDoExt_getGameHeap(), false);
-        JUT_ASSERT(0x1c8, heap != 0);
+        JUT_ASSERT(0x1c8, heap != NULL);
 
         oldHeap = mDoExt_setCurrentHeap(heap);
         mArchive = new JKRMemArchive();
@@ -112,17 +112,17 @@ s32 dScnName_c::create() {
         cloth_create();
         buttonIconCreate();
         dFs_c = new dFile_select_c();
-        JUT_ASSERT(470, dFs_c != 0);
+        JUT_ASSERT(470, dFs_c != NULL);
         dFs_c->field_0x0 = mArchive;
         savePicDatabuf = new (0x20) u8[0x12000];
-        JUT_ASSERT(476, savePicDatabuf != 0);
+        JUT_ASSERT(476, savePicDatabuf != NULL);
         if (fpcM_GetName(this) == PROC_NAME_SCENE) {
             dFs_c->field_0x3940 = 0;
             dNm_c = new dName_c();
-            JUT_ASSERT(484, dNm_c != 0);
+            JUT_ASSERT(484, dNm_c != NULL);
             dNm_c->_create();
             dFe_c = new dFile_error_c();
-            JUT_ASSERT(489, dFe_c != 0);
+            JUT_ASSERT(489, dFe_c != NULL);
             dFe_c->_create();
             dMs_c = NULL;
             g_dComIfG_gameInfo.save.field_0x1291 = 0;
@@ -132,7 +132,7 @@ s32 dScnName_c::create() {
             dComIfGs_setClearCount(1);
             dFs_c->field_0x3940 = 1;
             dMs_c = new dMenu_save_c();
-            JUT_ASSERT(511, dMs_c != 0);
+            JUT_ASSERT(511, dMs_c != NULL);
             dMs_c->field_0x0537 = 3;
             dMs_c->_create();
             dFe_c = NULL;
@@ -210,7 +210,7 @@ void dScnName_c::cloth_move() {
 void dScnName_c::cloth2D_create() {
     JKRArchive* clothRes = dComIfGp_getClothResArchive();
     cloth.cloth_c = new dMCloth_c();
-    JUT_ASSERT(801, cloth.cloth_c != 0);
+    JUT_ASSERT(801, cloth.cloth_c != NULL);
     cloth.cloth_c->setArchive(clothRes);
     cloth.cloth_c->setClothType(1); // ?
 }
@@ -225,7 +225,7 @@ static void dummy() {
 /* 802302F8-80230500       .text buttonIconCreate__10dScnName_cFv */
 void dScnName_c::buttonIconCreate() {
     btnIcon.scr = new J2DScreen();
-    JUT_ASSERT(866, btnIcon.scr != 0);
+    JUT_ASSERT(866, btnIcon.scr != NULL);
     btnIcon.scr->set("main_parts_fileselect.blo", mArchive);
     fopMsgM_setPaneData(&field_0x43c, btnIcon.scr->search('cent'));
     fopMsgM_setPaneData(&field_0x474, btnIcon.scr->search('bab'));

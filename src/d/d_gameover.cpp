@@ -149,7 +149,7 @@ s32 dGameover_c::_create() {
     if (rt == cPhs_COMPLEATE_e) {
         dComIfGs_addDeathCount();
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("Gover");
-        JUT_ASSERT(0xa0, resInfo != 0);
+        JUT_ASSERT(0xa0, resInfo != NULL);
 
         mpHeap = dComIfGp_getExpHeap2D();
         dComIfGp_setHeapLockFlag(4);
@@ -159,12 +159,12 @@ s32 dGameover_c::_create() {
         dgo_scrn_c->setScreen("gameover.blo", resInfo->getArchive());
 
         dMs_c = new dMenu_save_c();
-        JUT_ASSERT(0xb6, dMs_c != 0);
+        JUT_ASSERT(0xb6, dMs_c != NULL);
         dMs_c->field_0x0537 = 2;
         dMs_c->_create();
 
         dgo_capture_c = new dDlst_Gameover_CAPTURE_c();
-        JUT_ASSERT(0xbb, dgo_capture_c != 0);
+        JUT_ASSERT(0xbb, dgo_capture_c != NULL);
 
         mDoExt_setCurrentHeap(oldHeap);
     } else {

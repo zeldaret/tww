@@ -113,7 +113,7 @@ cXyz cXyz::normZC(void) const {
 
 /* 80245ADC-80245B80       .text normalize__4cXyzFv */
 cXyz cXyz::normalize(void) {
-    JUT_ASSERT(267, isNearZeroSquare() == 0);
+    JUT_ASSERT(267, isNearZeroSquare() == FALSE);
     VECNormalize(this, this);
     return *this;
 }

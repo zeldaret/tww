@@ -44,7 +44,7 @@ BOOL daIkari_c::_createHeap() {
 
     J3DModelData* modelData =
         static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ikari_bdl[mModelType]));
-    JUT_ASSERT(0x7e, modelData != 0);
+    JUT_ASSERT(0x7e, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
 
     if (mpModel == NULL) {

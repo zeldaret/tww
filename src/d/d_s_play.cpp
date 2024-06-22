@@ -1229,7 +1229,7 @@ s32 phase_0(dScnPly_ply_c* i_this) {
             char buf[32];
             sprintf(buf, "/res/Object/LkD%02d.arc", dComIfGp_getLkDemoAnmNo());
             l_lkDemoAnmCommand = mDoDvdThd_mountXArchive_c::create(buf, 0, JKRArchive::MOUNT_ARAM);
-            JUT_ASSERT(VERSION_SELECT(3399, 3414, 3414), l_lkDemoAnmCommand != 0);
+            JUT_ASSERT(VERSION_SELECT(3399, 3414, 3414), l_lkDemoAnmCommand != NULL);
         }
 
         return cPhs_NEXT_e;
@@ -1297,7 +1297,7 @@ int phase_3(dScnPly_ply_c* i_this) {
 /* 80235B0C-80236334       .text phase_4__FP13dScnPly_ply_c */
 s32 phase_4(dScnPly_ply_c* i_this) {
     if (i_this->sceneCommand != NULL) {
-        JUT_ASSERT(VERSION_SELECT(3552, 3567, 3567), i_this->sceneCommand->getMemAddress() != 0);
+        JUT_ASSERT(VERSION_SELECT(3552, 3567, 3567), i_this->sceneCommand->getMemAddress() != NULL);
         dComIfGp_particle_createScene(i_this->sceneCommand->getMemAddress());
         delete i_this->sceneCommand;
     } else {
@@ -1320,7 +1320,7 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dComIfGd_setView(NULL);
 
     JKRExpHeap* heap = fopMsgM_createExpHeap(VERSION_SELECT(0x736A1, 0x73EA1, 0x73EA1));
-    JUT_ASSERT(VERSION_SELECT(3633, 3653, 3653), heap != 0);
+    JUT_ASSERT(VERSION_SELECT(3633, 3653, 3653), heap != NULL);
     dComIfGp_setExpHeap2D(heap);
 
     dStage_Create();

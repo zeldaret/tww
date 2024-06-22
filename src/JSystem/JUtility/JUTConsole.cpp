@@ -18,7 +18,7 @@ JUTConsoleManager* JUTConsoleManager::sManager;
 /* 802CA2FC-802CA3CC       .text create__10JUTConsoleFUiUiP7JKRHeap */
 JUTConsole* JUTConsole::create(uint param_0, uint maxLines, JKRHeap* p_heap) {
     JUTConsoleManager* pManager = JUTConsoleManager::getManager();
-    JUT_ASSERT(33, pManager != 0);
+    JUT_ASSERT(33, pManager != NULL);
 
     void* buffer = JKRAllocFromHeap(p_heap, getObjectSizeFromBufferSize(param_0, maxLines), 0);
     u8* tmpBuf = (u8*)buffer;
@@ -34,7 +34,7 @@ JUTConsole* JUTConsole::create(uint param_0, uint maxLines, JKRHeap* p_heap) {
 /* 802CA3CC-802CA4C8       .text create__10JUTConsoleFUiPvUl */
 JUTConsole* JUTConsole::create(uint param_0, void* buffer, u32 bufferSize) {
     JUTConsoleManager* pManager = JUTConsoleManager::getManager();
-    JUT_ASSERT(59, pManager != 0);
+    JUT_ASSERT(59, pManager != NULL);
     JUT_ASSERT(62, ( (u32)buffer & 0x3 ) == 0);
     u32 maxLines = getLineFromObjectSize(bufferSize, param_0);
 
@@ -353,7 +353,7 @@ static void dummy2() {
 
 /* 802CB2E8-802CB380       .text createManager__17JUTConsoleManagerFP7JKRHeap */
 JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
-    JUT_ASSERT(922, sManager == 0);
+    JUT_ASSERT(922, sManager == NULL);
     if (pHeap == NULL) {
         pHeap = JKRHeap::sCurrentHeap;
     }
@@ -369,7 +369,7 @@ static void dummy3() {
 
 /* 802CB380-802CB4C4       .text appendConsole__17JUTConsoleManagerFP10JUTConsole */
 void JUTConsoleManager::appendConsole(JUTConsole* console) {
-    JUT_ASSERT(0x3bf, sManager != 0 && console != 0);
+    JUT_ASSERT(0x3bf, sManager != NULL && console != NULL);
 
     JUT_ASSERT(0x3c2, soLink_.Find( console ) == soLink_.end());
 
@@ -381,7 +381,7 @@ void JUTConsoleManager::appendConsole(JUTConsole* console) {
 
 /* 802CB4C4-802CB674       .text removeConsole__17JUTConsoleManagerFP10JUTConsole */
 void JUTConsoleManager::removeConsole(JUTConsole* console) {
-    JUT_ASSERT(0x3d6, sManager != 0 && console != 0);
+    JUT_ASSERT(0x3d6, sManager != NULL && console != NULL);
     JUT_ASSERT(0x3d9, soLink_.Find( console ) != soLink_.end());
 
     if (mActiveConsole == console) {

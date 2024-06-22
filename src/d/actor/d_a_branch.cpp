@@ -72,9 +72,9 @@ int daBranch_c::CreateHeap() {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, bmd[i]));
         J3DAnmTransformKey* bckData = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, bck[i]));
 
-        JUT_ASSERT(0x1CC, modelData != 0);
+        JUT_ASSERT(0x1CC, modelData != NULL);
         // Bug: They probably meant to assert that bckData isn't null, but accidentally used the array of bck file IDs.
-        JUT_ASSERT(0x1CD, bck != 0);
+        JUT_ASSERT(0x1CD, bck != NULL);
 
         mAnims[i] = new mDoExt_McaMorf(
             static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, bmd[i])),
