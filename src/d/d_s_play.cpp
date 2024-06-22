@@ -294,7 +294,7 @@ static int dScnPly_Draw(dScnPly_ply_c* i_this) {
             static s16 l_wipeType[] = {0, 0, 16, 17, 18, 1, 2, 1, 3, 3, 4, 4};
 
             JUT_ASSERT(VERSION_SELECT(997, 1001, 1001),
-                       dComIfGp_getNextStageWipe() < (sizeof(l_wipeType) / sizeof(l_wipeType[0])));
+                       dComIfGp_getNextStageWipe() < ARRAY_SIZE(l_wipeType));
 
             if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
                 fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, 0, 5);
@@ -1429,7 +1429,7 @@ s32 phase_5(dScnPly_ply_c* i_this) {
         const char** resName = PreLoadInfoT[preLoadNo].resName;
         s32 resNameNum = PreLoadInfoT[preLoadNo].resNameNum;
         if (resName != NULL && resName[0] != NULL) {
-            JUT_ASSERT(VERSION_SELECT(3804, 3824, 3824), resNameNum <= (sizeof(resPhase) / sizeof(resPhase[0])));
+            JUT_ASSERT(VERSION_SELECT(3804, 3824, 3824), resNameNum <= ARRAY_SIZE(resPhase));
             for (int i = 0; i < resNameNum; i++) {
                 if (dComIfG_resLoad(&resPhase[i], resName[i]) != cPhs_COMPLEATE_e) {
                     rt = cPhs_INIT_e;
@@ -1452,7 +1452,7 @@ s32 phase_6(dScnPly_ply_c* i_this) {
         const s16* dylKeyTbl = PreLoadInfoT[preLoadNo].dylKeyTbl;
         s32 dylKeyTblNum = PreLoadInfoT[preLoadNo].dylKeyTblNum;
         if (dylKeyTbl != NULL && dylKeyTbl[0] != NULL) {
-            JUT_ASSERT(VERSION_SELECT(3838, 3858, 3858), dylKeyTblNum <= (sizeof(dylPhase) / sizeof(dylPhase[0])));
+            JUT_ASSERT(VERSION_SELECT(3838, 3858, 3858), dylKeyTblNum <= ARRAY_SIZE(dylPhase));
             for (int i = 0; i < dylKeyTblNum; i++) {
                 if (cDylPhs::Link(&dylPhase[i], dylKeyTbl[i]) != cPhs_COMPLEATE_e) {
                     rt = cPhs_INIT_e;

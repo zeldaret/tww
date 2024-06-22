@@ -469,7 +469,7 @@ s32 cCc_Init() {
         if (d.name == NULL)
             continue;
 
-        JUT_ASSERT(0x39, d.mKey < (sizeof(DMC) / sizeof(DMC[0])));
+        JUT_ASSERT(0x39, d.mKey < ARRAY_SIZE(DMC));
         JUT_ASSERT(0x3a, DMC[d.mKey] == 0);
 
         for (int j = 0; j < ARRAY_SIZE(DMC); j++) {
@@ -504,7 +504,7 @@ s32 cDyl_IsLinked(s16 i_ProfName) {
 /* 80022A80-80022B58       .text cDyl_Unlink__Fs */
 s32 cDyl_Unlink(s16 i_ProfName) {
     JUT_ASSERT(0xc5, cDyl_Initialized);
-    JUT_ASSERT(0xc6, i_ProfName < (sizeof(DMC) / sizeof(DMC[0])));
+    JUT_ASSERT(0xc6, i_ProfName < ARRAY_SIZE(DMC));
 
     if (DMC[i_ProfName] != NULL)
         return DMC[i_ProfName]->unlink();
@@ -529,7 +529,7 @@ s32 cDyl_LinkASync(s16 i_ProfName) {
         return cPhs_ERROR_e;
     }
 
-    JUT_ASSERT(0x111, i_ProfName < (sizeof(DMC) / sizeof(DMC[0])));
+    JUT_ASSERT(0x111, i_ProfName < ARRAY_SIZE(DMC));
     DynamicModuleControlBase * d = DMC[i_ProfName];
     if (d != NULL) {
         JUT_ASSERT(0x115, cDyl_Initialized);
