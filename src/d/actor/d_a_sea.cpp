@@ -12,6 +12,12 @@
 #include "d/actor/d_a_daiocta.h"
 #include "SSystem/SComponent/c_m2d_g_box.h"
 
+// There are probably still magic numbers that depend on these,
+// so it's not recommended to modify them.
+#define GRID_SIZE 800
+#define GRID_CELLS 65
+#define GRID_INDEX(x, z) (x + GRID_CELLS * z)
+
 daSea_packet_c l_cloth;
 
 f32 daSea_packet_c::BASE_HEIGHT = 1.0f;
@@ -92,7 +98,7 @@ int get_wave_max(int roomNo) {
 
 /* 8015B1E8-8015B288       .text GetHeight__25daSea_WaterHeightInfo_MngFii */
 int daSea_WaterHeightInfo_Mng::GetHeight(int x, int z) {
-    if (x < 0 || 9 <= x || z < 0 || 9 <= z)
+    if (x < 0 || (s32)ARRAY_SIZE(mHeight[0]) <= x || z < 0 || (s32)ARRAY_SIZE(mHeight) <= z)
         return 10;
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e) {
@@ -118,14 +124,14 @@ void daSea_WaterHeightInfo_Mng::GetArea(int x, int z, f32* minX, f32* minZ, f32*
 void daSea_WaterHeightInfo_Mng::SetInf() {
     dStage_Multi_c * multi = dComIfGp_getStage().getMulti();
 
-    for (s32 i = 0; i < 9; i++)
-        for (s32 j = 0; j < 9; j++)
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mHeight); i++)
+        for (s32 j = 0; j < (s32)ARRAY_SIZE(mHeight[0]); j++)
             mHeight[i][j] = 10;
 
     if (multi != NULL) {
         s32 roomNo = 1;
-        for (s32 i = 1; i < 8; i++) {
-            for (s32 j = 1; j < 8; j++) {
+        for (s32 i = 1; i < (s32)ARRAY_SIZE(mHeight) - 1; i++) {
+            for (s32 j = 1; j < (s32)ARRAY_SIZE(mHeight[0]) - 1; j++) {
                 mHeight[i][j] = get_wave_max(roomNo);
                 roomNo++;
             }
@@ -176,7 +182,7 @@ bool daSea_packet_c::create(cXyz& pos) {
     BASE_HEIGHT = pos.y + 1.0f;
 
     mFlatInter = 0.0f;
-    mpHeightTable = new f32[65 * 65];
+    mpHeightTable = new f32[GRID_CELLS * GRID_CELLS];
     if (mpHeightTable == NULL)
         return false;
 
@@ -217,8 +223,8 @@ bool daSea_packet_c::create(cXyz& pos) {
 /* 8015B7A0-8015B7E4       .text CleanUp__14daSea_packet_cFv */
 void daSea_packet_c::CleanUp() {
     s32 idx = 0;
-    for (s32 i = 0; i < 65; i++)
-        for (s32 j = 0; j < 65; j++)
+    for (s32 z = 0; z < GRID_CELLS; z++)
+        for (s32 x = 0; x < GRID_CELLS; x++)
             mpHeightTable[idx++] = BASE_HEIGHT;
     mCurPos.zero();
 }
@@ -252,7 +258,7 @@ f32 daSea_packet_c::CalcFlatInterTarget(cXyz& pos) {
 
     f32 result = 1.0f;
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < (int)ARRAY_SIZE(pos_around); i++) {
         int ix = mIdxX + pos_around[i][0];
         int iz = mIdxZ + pos_around[i][1];
 
@@ -262,6 +268,7 @@ f32 daSea_packet_c::CalcFlatInterTarget(cXyz& pos) {
 
             mWaterHeightMgr.GetArea(ix, iz, &min.x, &min.y, &max.x, &max.y);
 
+            // 12800 = GRID_SIZE * 16?
             min.x -= 12800.0f;
             min.y -= 12800.0f;
             max.x += 12800.0f;
@@ -346,14 +353,14 @@ f32 daSea_calcWave(f32 x, f32 z) {
         return daSea_packet_c::BASE_HEIGHT;
     }
 
-    f32 frac = 1.0f / 800.0f;
+    f32 frac = 1.0f / GRID_SIZE;
 
     int x0 = (x - l_cloth.getMinX()) * frac;
     int z0 = (z - l_cloth.getMinZ()) * frac;
 
     f32* pY = l_cloth.mpHeightTable;
     pY += x0;
-    pY += z0 * 65;
+    pY += z0 * GRID_CELLS;
 
     //f32 minX = (x0 * 800) + l_cloth.getMinX();
     //f32 maxX = minX + 800.0f;
@@ -362,20 +369,20 @@ f32 daSea_calcWave(f32 x, f32 z) {
     
     Vec v00, v01, v10, v11;
 
-    v00.x = (x0 * 800) + l_cloth.getMinX();
-    v00.y = pY[0];
-    v00.z = (z0 * 800) + l_cloth.getMinZ();
+    v00.x = (x0 * GRID_SIZE) + l_cloth.getMinX();
+    v00.y = pY[GRID_INDEX(0, 0)];
+    v00.z = (z0 * GRID_SIZE) + l_cloth.getMinZ();
 
-    v01.x = (x0 * 800) + l_cloth.getMinX();
-    v01.y = pY[65];
-    v01.z = v00.z + 800.0f;
+    v01.x = (x0 * GRID_SIZE) + l_cloth.getMinX();
+    v01.y = pY[GRID_INDEX(0, 1)];
+    v01.z = v00.z + GRID_SIZE;
 
-    v10.x = v01.x + 800.0f;
-    v10.y = pY[1];
-    v10.z = (z0 * 800) + l_cloth.getMinZ();
+    v10.x = v01.x + GRID_SIZE;
+    v10.y = pY[GRID_INDEX(1, 0)];
+    v10.z = (z0 * GRID_SIZE) + l_cloth.getMinZ();
 
     v11.x = v10.x;
-    v11.y = pY[66];
+    v11.y = pY[GRID_INDEX(1, 1)];
     v11.z = v01.z;
 
     Vec norm;
@@ -402,13 +409,13 @@ f32 daSea_calcWave(f32 x, f32 z) {
 void daSea_GetPoly(void* pUserData, void (*callback)(void*, cXyz&, cXyz&, cXyz&), const cXyz& minPt, const cXyz& maxPt) {
     if (!daSea_ChkArea(minPt.x, minPt.z) || !daSea_ChkArea(maxPt.x, maxPt.z)) return;
 
-    f32 frac = 1.0f / 800.0f;
+    f32 frac = 1.0f / GRID_SIZE;
     int x0 = (minPt.x - l_cloth.getMinX()) * frac;
     int z0 = (minPt.z - l_cloth.getMinZ()) * frac;
     int x1 = (maxPt.x - l_cloth.getMinX()) * frac;
     int z1 = (maxPt.z - l_cloth.getMinZ()) * frac;
 
-    if (!(x0 >= 0 && x0 <= 0x3F && z0 >= 0 && z0 <= 0x3F && x1 >= 0 && x1 <= 0x3F && z1 >= 0 && z1 <= 0x3F)) {
+    if (!(x0 >= 0 && x0 <= GRID_CELLS - 2 && z0 >= 0 && z0 <= GRID_CELLS - 2 && x1 >= 0 && x1 <= GRID_CELLS - 2 && z1 >= 0 && z1 <= GRID_CELLS - 2)) {
         return;
     }
 
@@ -416,23 +423,23 @@ void daSea_GetPoly(void* pUserData, void (*callback)(void*, cXyz&, cXyz&, cXyz&)
         for (int x = x0; x < x1 + 1; x++) {
             f32* pY = l_cloth.mpHeightTable;
             pY += x;
-            pY += z * 65;
+            pY += z * GRID_CELLS;
             cXyz v00, v01, v10, v11;
 
-            v00.x = (x * 800) + l_cloth.getMinX();
-            v00.y = pY[0];
-            v00.z = (z * 800) + l_cloth.getMinZ();
+            v00.x = (x * GRID_SIZE) + l_cloth.getMinX();
+            v00.y = pY[GRID_INDEX(0, 0)];
+            v00.z = (z * GRID_SIZE) + l_cloth.getMinZ();
 
             v01.x = v00.x;
-            v01.y = pY[65];
-            v01.z = v00.z + 800.0f;
+            v01.y = pY[GRID_INDEX(0, 1)];
+            v01.z = v00.z + GRID_SIZE;
 
-            v10.x = v00.x + 800.0f;
-            v10.y = pY[1];
+            v10.x = v00.x + GRID_SIZE;
+            v10.y = pY[GRID_INDEX(1, 0)];
             v10.z = v00.z;
 
             v11.x = v10.x;
-            v11.y = pY[66];
+            v11.y = pY[GRID_INDEX(1, 1)];
             v11.z = v01.z;
 
             callback(pUserData, v00, v01, v11);
@@ -456,6 +463,7 @@ void daSea_packet_c::SetCullStopFlag() {
     f32 minX, minZ, maxX, maxZ;
     mWaterHeightMgr.GetArea(mIdxX, mIdxZ, &minX, &minZ, &maxX, &maxZ);
 
+    // 25600 = GRID_SIZE * 32?
     minX += 25600.0f;
     minZ += 25600.0f;
     maxX -= 25600.0f;
@@ -512,6 +520,7 @@ void daSea_packet_c::execute(cXyz& pos) {
 
     CalcFlatInter();
     dKy_usonami_set(mFlatInter);
+    // 25600 = GRID_SIZE * 32?
     mDrawMinX = pos.x - 25600.0f;
     mDrawMaxX = pos.x + 25600.0f;
     mDrawMinZ = pos.z - 25600.0f;
@@ -540,7 +549,7 @@ void daSea_packet_c::execute(cXyz& pos) {
         aHeightTable[i] = mWaveInfo.GetBaseHeight(i) * scale;
     }
 
-    scale = mDrawMinZ + 800.0f;
+    scale = mDrawMinZ + GRID_SIZE;
 
     // Unrolled loops?
 
@@ -562,18 +571,18 @@ void daSea_packet_c::execute(cXyz& pos) {
     theta[3] += mWaveInfo.GetPhai(3);
 
     s16 waveTheta_DeltaZ[4];
-    waveTheta_DeltaZ[0] = cM_rad2s(aThetaZTable[0] * 800.0f);
-    waveTheta_DeltaZ[1] = cM_rad2s(aThetaZTable[1] * 800.0f);
-    waveTheta_DeltaZ[2] = cM_rad2s(aThetaZTable[2] * 800.0f);
-    waveTheta_DeltaZ[3] = cM_rad2s(aThetaZTable[3] * 800.0f);
+    waveTheta_DeltaZ[0] = cM_rad2s(aThetaZTable[0] * GRID_SIZE);
+    waveTheta_DeltaZ[1] = cM_rad2s(aThetaZTable[1] * GRID_SIZE);
+    waveTheta_DeltaZ[2] = cM_rad2s(aThetaZTable[2] * GRID_SIZE);
+    waveTheta_DeltaZ[3] = cM_rad2s(aThetaZTable[3] * GRID_SIZE);
 
     s16 waveTheta_DeltaX[4];
-    waveTheta_DeltaX[0] = cM_rad2s(aThetaXTable[0] * 800.0f);
-    waveTheta_DeltaX[1] = cM_rad2s(aThetaXTable[1] * 800.0f);
-    waveTheta_DeltaX[2] = cM_rad2s(aThetaXTable[2] * 800.0f);
-    waveTheta_DeltaX[3] = cM_rad2s(aThetaXTable[3] * 800.0f);
+    waveTheta_DeltaX[0] = cM_rad2s(aThetaXTable[0] * GRID_SIZE);
+    waveTheta_DeltaX[1] = cM_rad2s(aThetaXTable[1] * GRID_SIZE);
+    waveTheta_DeltaX[2] = cM_rad2s(aThetaXTable[2] * GRID_SIZE);
+    waveTheta_DeltaX[3] = cM_rad2s(aThetaXTable[3] * GRID_SIZE);
 
-    scale = mDrawMinX + 800.0f;
+    scale = mDrawMinX + GRID_SIZE;
 
     s16 waveTheta_Phase[4];
     waveTheta_Phase[0] = cM_rad2s(aThetaXTable[0] * scale);
@@ -581,29 +590,29 @@ void daSea_packet_c::execute(cXyz& pos) {
     waveTheta_Phase[2] = cM_rad2s(aThetaXTable[2] * scale);
     waveTheta_Phase[3] = cM_rad2s(aThetaXTable[3] * scale);
 
-    f32 aFadeTable [65];
+    f32 aFadeTable [GRID_CELLS];
 
-    for (int fadeZ = 0; fadeZ < 65; fadeZ++) {
+    for (int fadeZ = 0; fadeZ < GRID_CELLS; fadeZ++) {
         aFadeTable[fadeZ] = 1.0f;
     }
 
     // Probably unrolled loop
     f32 frac = 1.0f / 6;
-    aFadeTable[64] = frac * 0;
+    aFadeTable[GRID_CELLS - 1] = frac * 0;
     aFadeTable[0]  = frac * 0;
-    aFadeTable[63] = frac * 1;
+    aFadeTable[GRID_CELLS - 2] = frac * 1;
     aFadeTable[1]  = frac * 1;
-    aFadeTable[62] = frac * 2;
+    aFadeTable[GRID_CELLS - 3] = frac * 2;
     aFadeTable[2]  = frac * 2;
-    aFadeTable[61] = frac * 3;
+    aFadeTable[GRID_CELLS - 4] = frac * 3;
     aFadeTable[3]  = frac * 3;
-    aFadeTable[60] = frac * 4;
+    aFadeTable[GRID_CELLS - 5] = frac * 4;
     aFadeTable[4]  = frac * 4;
-    aFadeTable[59] = frac * 5;
+    aFadeTable[GRID_CELLS - 6] = frac * 5;
     aFadeTable[5]  = frac * 5;
 
-    for (int z = 1; z < 0x40; z++) {
-        f32* pHeight = mpHeightTable + 65 * z + 1;
+    for (int z = 1; z < GRID_CELLS - 1; z++) {
+        f32* pHeight = mpHeightTable + GRID_CELLS * z + 1;
         s16 waveTheta0 = waveTheta_Phase[0];
         waveTheta0 += theta[0];
         s16 waveTheta1 = waveTheta_Phase[1];
@@ -613,7 +622,7 @@ void daSea_packet_c::execute(cXyz& pos) {
         s16 waveTheta3 = waveTheta_Phase[3];
         waveTheta3 += theta[3];
 
-        for (int x = 1; x < 0x40; x++) {
+        for (int x = 1; x < GRID_CELLS - 1; x++) {
             *pHeight = aHeightTable[0] * cM_scos(waveTheta0)
                      + aHeightTable[1] * cM_scos(waveTheta1)
                      + aHeightTable[2] * cM_scos(waveTheta2)
@@ -643,7 +652,7 @@ void daSea_packet_c::execute(cXyz& pos) {
 void daSea_packet_c::draw() {
     if (ChkCullStop()) return;
 
-    m_draw_vtx = (cXyz*)mDoGph_gInf_c::alloc(0xC60C, 0x20);
+    m_draw_vtx = (cXyz*)mDoGph_gInf_c::alloc(sizeof(cXyz) * GRID_CELLS * GRID_CELLS, 0x20);
     if (m_draw_vtx == NULL) {
         return;
     }
@@ -658,24 +667,24 @@ void daSea_packet_c::draw() {
     f32* pY = mpHeightTable;
 
     f32 minZ = getMinZ();
-    for (int z = 0; z < 65; z++) {
+    for (int z = 0; z < GRID_CELLS; z++) {
         f32 minX = getMinX();
-        for (int x = 0; x < 65; x++) {
+        for (int x = 0; x < GRID_CELLS; x++) {
             (*vtx).x = minX;
             (*vtx).y = *pY;
             (*vtx).z = minZ;
-            minX += 800.0f;
+            minX += GRID_SIZE;
             vtx++;
             pY++;
         }
 
-        minZ += 800.0f;
+        minZ += GRID_SIZE;
     }
 
 #if VERSION == VERSION_JPN
-    DCFlushRange(m_draw_vtx, 0xC60C);
+    DCFlushRange(m_draw_vtx, sizeof(cXyz) * GRID_CELLS * GRID_CELLS);
 #else
-    DCStoreRange(m_draw_vtx, 0xC60C);
+    DCStoreRange(m_draw_vtx, sizeof(cXyz) * GRID_CELLS * GRID_CELLS);
 #endif
 
     ResTIMG* pResTIMG = static_cast<ResTIMG*>(dComIfG_getObjectRes("Always", ALWAYS_BTI_B_SEA_TEX0AND2));
@@ -828,7 +837,7 @@ void daSea_packet_c::draw() {
     GXSetVtxDesc(GX_VA_TEX0,GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_POS,GX_CLR_RGBA,GX_F32,0);
     GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_CLR_RGBA,GX_F32,0);
-    GXSetArray(GX_VA_POS, this->m_draw_vtx, 0xc);
+    GXSetArray(GX_VA_POS, this->m_draw_vtx, sizeof(cXyz));
 
     // TODO: Remove magic numbers
 
@@ -840,19 +849,19 @@ void daSea_packet_c::draw() {
     int z;
     u16 idx1;
     idx1 = 0;
-    idx2 = 65;
+    idx2 = GRID_CELLS;
 
     pVtx = m_draw_vtx;
 
     f32 prevTexZ;
     f32 texZ = frac * (*pVtx).z;
-    for (z = 0; z < 64; z++) {
+    for (z = 0; z < GRID_CELLS - 1; z++) {
         prevTexZ = texZ;
-        texZ = frac * ((*pVtx).z + 800.0f);
+        texZ = frac * ((*pVtx).z + GRID_SIZE);
 
-        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 65 * 2);
+        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, GRID_CELLS * 2);
 
-        for (int x = 0; x < 65; x++) {
+        for (int x = 0; x < GRID_CELLS; x++) {
             f32 texX = frac * (*pVtx).x;
             GXPosition1x16(idx2);
             GXTexCoord2f32(texX, texZ);
@@ -967,6 +976,8 @@ void daSea_packet_c::draw() {
 
                 posX += 225000.0f;
             }
+
+            GXEnd();
         }
     }
 
