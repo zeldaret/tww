@@ -454,7 +454,7 @@ config.libs = [
             Object(Matching,    "d/actor/d_a_player.cpp"),
             Object(NonMatching, "d/actor/d_a_player_main.cpp"),
             Object(Matching,    "d/actor/d_a_player_npc.cpp"),
-            Object(NonMatching, "d/actor/d_a_sea.cpp"),
+            Object(Matching,    "d/actor/d_a_sea.cpp"),
             Object(Matching,    "d/actor/d_a_spc_item01.cpp"),
             Object(Matching,    "d/actor/d_a_vrbox.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(Matching,    "d/actor/d_a_vrbox2.cpp"),
