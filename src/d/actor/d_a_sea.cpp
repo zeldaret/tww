@@ -51,11 +51,11 @@ daSea_WaveInfoDat wi_prm_ocean[4] = {
     },
 };
 
-s8 pos_around[16] = {
-    -1, -1,  0, -1,
-     1, -1,  1,  0,
-     1,  1,  0,  1,
-    -1,  1, -1,  0,
+s8 pos_around[8][2] = {
+    {-1, -1},  { 0, -1},
+    { 1, -1},  { 1,  0},
+    { 1,  1},  { 0,  1},
+    {-1,  1},  {-1,  0},
 };
 
 extern void dKy_usonami_set(f32 param_0);
@@ -253,8 +253,8 @@ f32 daSea_packet_c::CalcFlatInterTarget(cXyz& pos) {
     f32 result = 1.0f;
 
     for (int i = 0; i < 8; i++) {
-        int ix = mIdxX + pos_around[2 * i];
-        int iz = mIdxZ + pos_around[(2 * i) + 1];
+        int ix = mIdxX + pos_around[i][0];
+        int iz = mIdxZ + pos_around[i][1];
 
         if (mWaterHeightMgr.GetHeight(ix, iz) == 0) {
             cXy min;
@@ -399,14 +399,14 @@ f32 daSea_calcWave(f32 x, f32 z) {
 #pragma opt_dead_assignments reset
 
 /* 8015BDB0-8015C010       .text daSea_GetPoly__FPvPFPvR4cXyzR4cXyzR4cXyz_vRC4cXyzRC4cXyz */
-void daSea_GetPoly(void* param_1, void (*callback)(void*, cXyz&, cXyz&, cXyz&), const cXyz& param_3, const cXyz& param_4) {
-    if (!daSea_ChkArea(param_3.x, param_3.z) || !daSea_ChkArea(param_4.x, param_4.z)) return;
+void daSea_GetPoly(void* pUserData, void (*callback)(void*, cXyz&, cXyz&, cXyz&), const cXyz& minPt, const cXyz& maxPt) {
+    if (!daSea_ChkArea(minPt.x, minPt.z) || !daSea_ChkArea(maxPt.x, maxPt.z)) return;
 
     f32 frac = 1.0f / 800.0f;
-    int x0 = (param_3.x - l_cloth.getMinX()) * frac;
-    int z0 = (param_3.z - l_cloth.getMinZ()) * frac;
-    int x1 = (param_4.x - l_cloth.getMinX()) * frac;
-    int z1 = (param_4.z - l_cloth.getMinZ()) * frac;
+    int x0 = (minPt.x - l_cloth.getMinX()) * frac;
+    int z0 = (minPt.z - l_cloth.getMinZ()) * frac;
+    int x1 = (maxPt.x - l_cloth.getMinX()) * frac;
+    int z1 = (maxPt.z - l_cloth.getMinZ()) * frac;
 
     if (!(x0 >= 0 && x0 <= 0x3F && z0 >= 0 && z0 <= 0x3F && x1 >= 0 && x1 <= 0x3F && z1 >= 0 && z1 <= 0x3F)) {
         return;
@@ -435,8 +435,8 @@ void daSea_GetPoly(void* param_1, void (*callback)(void*, cXyz&, cXyz&, cXyz&), 
             v11.y = pY[66];
             v11.z = v01.z;
 
-            callback(param_1, v00, v01, v11);
-            callback(param_1, v00, v11, v10);
+            callback(pUserData, v00, v01, v11);
+            callback(pUserData, v00, v11, v10);
         }
     }
 }
@@ -544,22 +544,22 @@ void daSea_packet_c::execute(cXyz& pos) {
 
     // Unrolled loops?
 
-    s16 iVar[4];
+    s16 theta[4];
     // Split up to prevent integer promotion
-    iVar[0] = cM_rad2s(aThetaZTable[0] * scale);
-    iVar[1] = cM_rad2s(aThetaZTable[1] * scale);
-    iVar[2] = cM_rad2s(aThetaZTable[2] * scale);
-    iVar[3] = cM_rad2s(aThetaZTable[3] * scale);
+    theta[0] = cM_rad2s(aThetaZTable[0] * scale);
+    theta[1] = cM_rad2s(aThetaZTable[1] * scale);
+    theta[2] = cM_rad2s(aThetaZTable[2] * scale);
+    theta[3] = cM_rad2s(aThetaZTable[3] * scale);
 
-    iVar[0] -= aOffsAnimTable[0];
-    iVar[1] -= aOffsAnimTable[1];
-    iVar[2] -= aOffsAnimTable[2];
-    iVar[3] -= aOffsAnimTable[3];
+    theta[0] -= aOffsAnimTable[0];
+    theta[1] -= aOffsAnimTable[1];
+    theta[2] -= aOffsAnimTable[2];
+    theta[3] -= aOffsAnimTable[3];
 
-    iVar[0] += mWaveInfo.GetPhai(0);
-    iVar[1] += mWaveInfo.GetPhai(1);
-    iVar[2] += mWaveInfo.GetPhai(2);
-    iVar[3] += mWaveInfo.GetPhai(3);
+    theta[0] += mWaveInfo.GetPhai(0);
+    theta[1] += mWaveInfo.GetPhai(1);
+    theta[2] += mWaveInfo.GetPhai(2);
+    theta[3] += mWaveInfo.GetPhai(3);
 
     s16 waveTheta_DeltaZ[4];
     waveTheta_DeltaZ[0] = cM_rad2s(aThetaZTable[0] * 800.0f);
@@ -605,13 +605,13 @@ void daSea_packet_c::execute(cXyz& pos) {
     for (int z = 1; z < 0x40; z++) {
         f32* pHeight = mpHeightTable + 65 * z + 1;
         s16 waveTheta0 = waveTheta_Phase[0];
-        waveTheta0 += iVar[0];
+        waveTheta0 += theta[0];
         s16 waveTheta1 = waveTheta_Phase[1];
-        waveTheta1 += iVar[1];
+        waveTheta1 += theta[1];
         s16 waveTheta2 = waveTheta_Phase[2];
-        waveTheta2 += iVar[2];
+        waveTheta2 += theta[2];
         s16 waveTheta3 = waveTheta_Phase[3];
-        waveTheta3 += iVar[3];
+        waveTheta3 += theta[3];
 
         for (int x = 1; x < 0x40; x++) {
             *pHeight = aHeightTable[0] * cM_scos(waveTheta0)
@@ -629,10 +629,10 @@ void daSea_packet_c::execute(cXyz& pos) {
             pHeight++;
         }
 
-        iVar[0] += waveTheta_DeltaZ[0];
-        iVar[1] += waveTheta_DeltaZ[1];
-        iVar[2] += waveTheta_DeltaZ[2];
-        iVar[3] += waveTheta_DeltaZ[3];
+        theta[0] += waveTheta_DeltaZ[0];
+        theta[1] += waveTheta_DeltaZ[1];
+        theta[2] += waveTheta_DeltaZ[2];
+        theta[3] += waveTheta_DeltaZ[3];
     }
 
     mWaveInfo.AddCounter();
