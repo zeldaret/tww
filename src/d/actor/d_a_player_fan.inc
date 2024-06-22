@@ -92,7 +92,7 @@ void daPy_lk_c::setParachuteFanModel(f32 f31) {
         0x00000000,
         0x11020203
     );
-    if (mpParachuteFanMorf == NULL || mpParachuteFanMorf->getModel() == NULL) { JUT_ASSERT(323, 0); }
+    if (mpParachuteFanMorf == NULL || mpParachuteFanMorf->getModel() == NULL) { JUT_ASSERT(323, FALSE); }
     
     mpEquipItemModel = mpParachuteFanMorf->getModel();
     mDoExt_setCurrentHeap(oldHeap);

@@ -30,7 +30,7 @@ bool daObjAjavW_c::create_heap() {
     J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, AJAVW_BTK_AJAVW);
 
     if (!pModelData || !pBtk) {
-        JUT_ASSERT(0xa7, 0);
+        JUT_ASSERT(0xa7, FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);

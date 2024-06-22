@@ -101,12 +101,12 @@ enum {
 /* 80073A4C-80073BC0       .text getSubstance__16dEvent_manager_cFP11dEvDtData_ci */
 void* dEvent_manager_c::getSubstance(dEvDtData_c* data, int type) {
     if (data->getIndex() < 0 || data->getNumber() <= 0) {
-        JUT_ASSERT(0x169, 0);
+        JUT_ASSERT(0x169, FALSE);
         return NULL;
     }
 
     if (type != -1 && type != data->getType()) {
-        JUT_ASSERT(0x16e, 0);
+        JUT_ASSERT(0x16e, FALSE);
     }
 
     s32 index;
@@ -123,7 +123,7 @@ void* dEvent_manager_c::getSubstance(dEvDtData_c* data, int type) {
         index = data->getIndex();
         return mList.getSDataP(index);
     default:
-        JUT_ASSERT(0x182, 0);
+        JUT_ASSERT(0x182, FALSE);
         return NULL;
     }
 }
@@ -269,7 +269,7 @@ void dEvent_manager_c::closeProc(dEvDtEvent_c* event) {
 void dEvent_manager_c::endProc(s16 eventIdx, int act) {
     dEvDtEvent_c* event = getEventData(eventIdx);
     if (event == NULL) {
-        JUT_ASSERT(0x2ec, 0);
+        JUT_ASSERT(0x2ec, FALSE);
         return;
     }
 
@@ -430,7 +430,7 @@ int dEvmng_strcmp(const char* s1, char* s2) {
     u32 len2 = strlen(s2);
 
     if (len1 >= 100 || len2 >= 100) {
-        JUT_ASSERT(0x44a, 0);
+        JUT_ASSERT(0x44a, FALSE);
         return -1;
     }
 
@@ -657,7 +657,7 @@ fopAc_ac_c* dEvent_manager_c::specialCast_Shutter(s16 profName, int flag) {
     param.actor = dComIfGp_getPlayer(0);
 
     if (dComIfGp_getPlayer(0) == NULL)
-        JUT_ASSERT(0x623, 0);
+        JUT_ASSERT(0x623, FALSE);
 
     fopAc_ac_c* shutter = (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)findShutterCallBack, &param);
     if (shutter != NULL && flag) {
@@ -824,7 +824,7 @@ static u8 daNpc_Tt_tact_table[] = {
 /* 800754EC-80075590       .text dEvmng_daNpc_Tt_Conv__FUc */
 u8 dEvmng_daNpc_Tt_Conv(u8 param_0) {
     if (param_0 >= ARRAY_SIZE(daNpc_Tt_tact_table)) {
-        JUT_ASSERT(1814, 0);
+        JUT_ASSERT(1814, FALSE);
     }
     for (u8 i = 0; i < ARRAY_SIZE(daNpc_Tt_tact_table); i++) {
         if (daNpc_Tt_tact_table[i] == param_0) {

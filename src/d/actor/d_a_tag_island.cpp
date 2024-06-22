@@ -247,7 +247,7 @@ BOOL daTag_Island_c::demoProcTact_Af() {
             setFlag(0x02);
             fopAcM_orderChangeEventId(this, daPy_getPlayerLinkActorClass(), mEventId, 0, 0xFFFF);
         } else {
-            JUT_ASSERT(0x1b3, 0);
+            JUT_ASSERT(0x1b3, FALSE);
             dComIfGp_evmng_cutEnd(mStaffId);
         }
     }

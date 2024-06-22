@@ -209,7 +209,7 @@ BOOL daMbdoor_c::CreateInit() {
     s32 type = getType();
     
     if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
-        JUT_ASSERT(334, 0);
+        JUT_ASSERT(334, FALSE);
     }
     field_0x2ac = true;
     tevStr.mRoomNo = current.roomNo;

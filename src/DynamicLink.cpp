@@ -407,7 +407,7 @@ BOOL DynamicModuleControl::do_link() {
                 }
             }
         } else {
-            JUT_ASSERT(724, 0);
+            JUT_ASSERT(724, FALSE);
         }
         OSGetTime();
         sAllocBytes = sAllocBytes + getModuleSize();

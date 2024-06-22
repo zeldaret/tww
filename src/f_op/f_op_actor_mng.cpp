@@ -405,7 +405,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
         }
 
         OSReport_Error("ばぐばぐです\n");
-        JUT_ASSERT(0x4b5, 0);
+        JUT_ASSERT(0x4b5, FALSE);
     }
 
     OSReport_Error("fopAcM_entrySolidHeap だめでした [%s]\n", pProcNameString);

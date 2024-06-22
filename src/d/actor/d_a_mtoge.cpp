@@ -72,7 +72,7 @@ BOOL daMtoge_c::CreateInit() {
     s32 sw = getSwbit();
 
     if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
-        JUT_PANIC(0xA8);
+        JUT_ASSERT(0xA8, FALSE);
     }
 
     tevStr.mRoomNo = fopAcM_GetRoomNo(this);

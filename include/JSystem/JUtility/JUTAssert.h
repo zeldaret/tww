@@ -18,10 +18,6 @@
         }                                                                                          \
     }
 
-#define JUT_PANIC(LINE)                                                                            \
-    JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, "0");                     \
-    OSPanic(__FILE__, LINE, "Halt");
-
 #define JUT_WARN(LINE, ...)                                                                        \
     JUTAssertion::setWarningMessage_f(JUTAssertion::getSDevice(), __FILE__, LINE, __VA_ARGS__);    \
 

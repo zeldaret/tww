@@ -55,7 +55,7 @@ bool JASystem::TDrumSet::getParam(int key, int param_2, JASystem::TInstParam* pa
                 param_3->field_0x34 += y;
                 break;
             default:
-                JUT_ASSERT(77, 0);
+                JUT_ASSERT(77, FALSE);
                 break;
             }
         }

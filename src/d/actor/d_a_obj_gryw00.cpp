@@ -97,7 +97,7 @@ int daObjGryw00_c::CreateHeap() {
     J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, GRYW00_BTK_GRYW00));
     J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, GRYW00_BCK_GRYW00));
     if (!mdlData || !pbtk || !pbck) {
-        JUT_PANIC(409);
+        JUT_ASSERT(409, FALSE);
         ret = FALSE;
     } else {
         mpModel = mDoExt_J3DModel__create(mdlData, 0x80000U, 0x11000222U);

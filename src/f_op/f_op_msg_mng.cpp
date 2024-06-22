@@ -1170,7 +1170,7 @@ void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* i_this, J2DScreen* scrn, u32 
         i_this->pane = pane;
         fopMsgM_pane_parts_set(i_this);
     } else {
-        JUT_ASSERT(0x398d, 0);
+        JUT_ASSERT(0x398d, FALSE);
     }
 }
 

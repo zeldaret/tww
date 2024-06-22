@@ -60,7 +60,7 @@ bool JASystem::TBasicInst::getParam(int key, int velo, TInstParam* param) const 
             param->field_0x34 += y;
             break;
         default:
-            JUT_ASSERT(93, 0);
+            JUT_ASSERT(93, FALSE);
         }
     }
     const TKeymap* keymap = NULL;

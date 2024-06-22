@@ -46,7 +46,7 @@ u32 fopScnM_ReRequest(s16 param_1, u32 param_2) {
 
 void fopScnM_Management() {
     if (!fopScnRq_Handler())
-        JUT_ASSERT(326, 0);
+        JUT_ASSERT(326, FALSE);
 }
 
 void fopScnM_Init() {

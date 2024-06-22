@@ -528,7 +528,7 @@ void daTbox_c::CreateInit() {
                         mpAppearRegAnm->setFrame(30.0f);
                         break;
                     default:
-                        JUT_ASSERT(0x328, 0);
+                        JUT_ASSERT(0x328, FALSE);
                         break;
                 }
 

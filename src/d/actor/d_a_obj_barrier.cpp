@@ -104,7 +104,7 @@ bool daObjBarrier_anm_c::init() {
     J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YCAGE00));
 
     if (modelData == NULL || pbtk == NULL || pbrk == NULL) {
-        JUT_PANIC(407);
+        JUT_ASSERT(407, FALSE);
         rt = false;
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x1000200);
@@ -407,7 +407,7 @@ bool daObjBarrier_ef_c::init() {
     J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YHRBR00));
 
     if (modelData == NULL || pbtk == NULL || pbck == NULL || pbrk == NULL) {
-        JUT_PANIC(1016);
+        JUT_ASSERT(1016, FALSE);
         rt = false;
     } else {
         for (int i = 0; i < 4; i++) {
