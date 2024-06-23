@@ -71,8 +71,12 @@ static BOOL daMsw_Execute(msw_class*) {
 }
 
 /* 00000AD4-00000B38       .text daMsw_IsDelete__FP9msw_class */
-static BOOL daMsw_IsDelete(msw_class*) {
-    /* Nonmatching */
+static BOOL daMsw_IsDelete(msw_class* i_this) {
+    for (int i = 0; i < 4; i++) {
+        mDoAud_seDeleteObject(&i_this->m2E0[i]);
+    }
+
+    return TRUE;
 }
 
 /* 00000B38-00000B88       .text daMsw_Delete__FP9msw_class */
