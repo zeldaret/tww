@@ -6,6 +6,8 @@
 #include "d/actor/d_a_msw.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
+#include "m_Do/m_Do_ext.h"
+#include "d/d_com_inf_game.h"
 
 /* 00000078-000002D4       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
@@ -18,8 +20,17 @@ void chain_Draw(msw_class*) {
 }
 
 /* 00000540-000005E8       .text daMsw_Draw__FP9msw_class */
-static BOOL daMsw_Draw(msw_class*) {
-    /* Nonmatching */
+static BOOL daMsw_Draw(msw_class* i_this) {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.setLightTevColorType(i_this->mpModel, &i_this->tevStr);
+    
+    mDoExt_modelUpdateDL(i_this->mpModel);
+    
+    dComIfGd_setListBG();
+    chain_Draw(i_this);
+    dComIfGd_setList();
+
+    return TRUE;
 }
 
 /* 000005E8-0000080C       .text msw_move__FP9msw_class */
