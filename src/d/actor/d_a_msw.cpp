@@ -8,6 +8,7 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
 
 /* 00000078-000002D4       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
@@ -15,17 +16,43 @@ void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 00000310-00000540       .text chain_Draw__FP9msw_class */
-void chain_Draw(msw_class*) {
-    /* Nonmatching */
+void chain_Draw(msw_class* i_this) {
+    s16 var_r4;
+    s32 var_r20;
+    for (int i = 0; i < 4; i++) {
+        cXyz tmp = (i_this->m310[i] - i_this->m2E0[i]);
+        s16 angle1 = -cM_atan2s(tmp.y, tmp.z);
+
+        // TODO: std::sqrtf(float)
+        s32 angle2 = cM_atan2s(tmp.x, sqrtf(tmp.y * tmp.y + tmp.z * tmp.z));
+
+        MtxTrans(i_this->m2E0[i].x, i_this->m2E0[i].y, i_this->m2E0[i].z, false);
+
+        if (i_this->m83C[i] != 0) {
+            var_r20 = i_this->m83C[i] * cM_ssin(i_this->m298 * 18000) * (g_regHIO.mChild[6].mFloatRegs[6] + 100.0f);
+            var_r4 = i_this->m298 * 3000;
+        } else {
+            var_r4 = 0;
+            var_r20 = 0;
+        }
+
+        cMtx_YrotM(*calc_mtx, var_r4);
+        cMtx_XrotM(*calc_mtx, angle1 + var_r20);
+        cMtx_YrotM(*calc_mtx, angle2);
+
+        i_this->m2D0[i]->setBaseTRMtx(*calc_mtx);
+        g_env_light.setLightTevColorType(i_this->m2D0[i], &i_this->tevStr);
+        mDoExt_modelUpdateDL(i_this->m2D0[i]);   
+    }
 }
 
 /* 00000540-000005E8       .text daMsw_Draw__FP9msw_class */
 static BOOL daMsw_Draw(msw_class* i_this) {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType(i_this->mpModel, &i_this->tevStr);
-    
+
     mDoExt_modelUpdateDL(i_this->mpModel);
-    
+
     dComIfGd_setListBG();
     chain_Draw(i_this);
     dComIfGd_setList();

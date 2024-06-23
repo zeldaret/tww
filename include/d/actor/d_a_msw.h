@@ -19,7 +19,8 @@ public:
     /* 0x2BC */ f32 m2BC;
     /* 0x2C0 */ u8 m2C0[0x2C4 - 0x2C0];
     /* 0x2C4 */ f32 m2C4;
-    /* 0x2C8 */ u8 m2C8[0x2E0 - 0x2C8];
+    /* 0x2C8 */ u8 m2C8[0x2D0 - 0x2C8];
+    /* 0x2D0 */ J3DModel* m2D0[4];
     /* 0x2E0 */ cXyz m2E0[4];
     /* 0x310 */ cXyz m310[4];
     /* 0x340 */ u8 m340[0x83C - 0x340];
