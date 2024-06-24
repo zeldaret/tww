@@ -11,8 +11,44 @@
 #include "d/d_s_play.h"
 
 /* 00000078-000002D4       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+    msw_class* pActor = static_cast<msw_class*>(i_ac);
+
+    cMtx_YrotS(*calc_mtx, -i_ac->current.angle.y);
+
+    cXyz tmp = i_pt->current.pos - i_ac->current.pos;
+    cXyz pos1;
+    MtxPosition(&tmp, &pos1);
+    cXyz pos2;
+    tmp = i_pt->old.pos - i_ac->current.pos;
+    MtxPosition(&tmp, &pos2);
+
+    s16 z = pos1.z * ((g_regHIO.mChild[0].mFloatRegs[0] + 20.0f) / i_ac->scale.z);
+    s16 x = -pos1.x * ((g_regHIO.mChild[0].mFloatRegs[0] + 20.0f) / i_ac->scale.x);
+
+    cLib_addCalcAngleS2(&i_ac->current.angle.x, z, 10, 0x800);
+    cLib_addCalcAngleS2(&i_ac->current.angle.z, x, 10, 0x800);
+
+    f32 dist = (g_regHIO.mChild[0].mFloatRegs[4] + 50.0f) * fabsf(pos1.z - pos2.z);
+    if (pActor->m2BC < dist) {
+        pActor->m2BC = dist;
+    }
+
+    dist = (g_regHIO.mChild[0].mFloatRegs[4] + 50.0f) * fabsf(pos1.x - pos2.x);
+    if (pActor->m2C4 < dist) {
+        pActor->m2C4 = dist;
+    }
+
+    dist = (g_regHIO.mChild[0].mFloatRegs[8] + 5.0f) * fabsf(pos1.x - pos2.x);
+    if (dist > 10.0f && pActor->m2B0 < dist) {
+        cLib_addCalc2(&pActor->m2B0, dist, 1.0f, g_regHIO.mChild[0].mFloatRegs[7] + 1.2f);
+    }
+
+    dist = (g_regHIO.mChild[0].mFloatRegs[8] + 5.0f) * fabsf(pos1.z - pos2.z);
+    if (dist > 10.0f && pActor->m2B8 < dist) {
+        cLib_addCalc2(&pActor->m2B8, dist, 1.0f, g_regHIO.mChild[0].mFloatRegs[7] + 1.2f);
+    }
+
 }
 
 /* 00000310-00000540       .text chain_Draw__FP9msw_class */
