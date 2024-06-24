@@ -121,8 +121,11 @@ static BOOL daMsw_IsDelete(msw_class* i_this) {
 }
 
 /* 00000B38-00000B88       .text daMsw_Delete__FP9msw_class */
-static BOOL daMsw_Delete(msw_class*) {
-    /* Nonmatching */
+static BOOL daMsw_Delete(msw_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhs, "Msw");
+    dComIfG_Bgsp()->Release(i_this->mpBgW);
+
+    return TRUE;
 }
 
 /* 00000B88-00000D3C       .text daMsw_CreateInit__FP10fopAc_ac_c */
