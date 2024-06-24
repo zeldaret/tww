@@ -4,7 +4,9 @@
 //
 
 #include "d/actor/d_a_msw.h"
+#include "d/res/res_msw.h"
 #include "d/d_bg_w.h"
+#include "d/d_bg_s_movebg_actor.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
@@ -129,8 +131,42 @@ static BOOL daMsw_Delete(msw_class* i_this) {
 }
 
 /* 00000B88-00000D3C       .text daMsw_CreateInit__FP10fopAc_ac_c */
-void daMsw_CreateInit(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
+    msw_class* pActor = static_cast<msw_class*>(i_this);
+
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", MSW_BDL_MSWNG));
+    pActor->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+
+    if (pActor->mpModel == NULL) {
+        return FALSE;
+    }
+
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", MSW_BDL_OBM_CHAIN1));
+    JUT_ASSERT(0x20B, modelData != NULL);
+
+    for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
+        pActor->mpChainModels[chainIdx] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (pActor->mpChainModels[chainIdx] == NULL) {
+            return FALSE;
+        }
+    }
+
+    pActor->mpBgW = new dBgW();
+
+    if (pActor->mpBgW == NULL) {
+        return FALSE;
+    }
+
+    cBgD_t* pBgd = static_cast<cBgD_t*>(dComIfG_getObjectRes("Msw", MSW_DZB_MSWING));
+
+    if ((BOOL)pActor->mpBgW->Set(pBgd, cBgW::MOVE_BG_e, &pActor->mMtx) == TRUE) {
+        return FALSE;
+    }
+
+    pActor->mpBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);
+    pActor->mpBgW->SetRideCallback(ride_call_back);
+
+    return TRUE;
 }
 
 /* 00000D3C-00000FE0       .text daMsw_Create__FP10fopAc_ac_c */
