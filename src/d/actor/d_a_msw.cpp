@@ -110,7 +110,8 @@ void msw_move(msw_class*) {
 
 /* 0000080C-00000AD4       .text daMsw_Execute__FP9msw_class */
 static BOOL daMsw_Execute(msw_class*) {
-    /* Nonmatching */
+    static f32 xd[4] = { 1.0f,  1.0f, -1.0f, -1.0f };
+    static f32 zd[4] = { 1.0f, -1.0f,  1.0f, -1.0f };
 }
 
 /* 00000AD4-00000B38       .text daMsw_IsDelete__FP9msw_class */
@@ -170,8 +171,97 @@ BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
 }
 
 /* 00000D3C-00000FE0       .text daMsw_Create__FP10fopAc_ac_c */
-static s32 daMsw_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daMsw_Create(fopAc_ac_c* i_this) {
+    static dCcD_SrcCyl himo_cyl_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+            /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
+            /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK4 | CO_SPRM_VSGRP,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ G_TG_SPRM_SHIELD,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGCylS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 10.0f,
+            /* Height */ 1000.0f,
+        },
+    };
+
+    fopAcM_SetupActor(i_this, msw_class);
+    msw_class* pActor = static_cast<msw_class*>(i_this);
+
+    s32 phase_state = dComIfG_resLoad(&pActor->mPhs, "Msw");
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        pActor->m2A0 = (fopAcM_GetParam(pActor) >> 0) & 0xFF;
+
+        if (pActor->m2A0 == 0xFF) {
+            pActor->m2A0 = 0;
+        }
+
+        if (!fopAcM_entrySolidHeap(pActor, daMsw_CreateInit, 0x10040)) {
+            return cPhs_ERROR_e;
+        }
+
+        if (pActor->mpModel == NULL) {
+            return cPhs_ERROR_e;
+        }
+
+        if (dComIfG_Bgsp()->Regist(pActor->mpBgW, pActor)) {
+            return cPhs_ERROR_e;
+        }
+
+        switch (pActor->m2A0) {
+        case 1:
+            pActor->scale.x = 1.5f;
+            pActor->scale.z = 1.5f;
+            break;
+        case 2:
+            pActor->scale.x = 2.0f;
+            pActor->scale.z = 2.0f;
+            break;
+        case 3:
+            pActor->scale.x = 3.0f;
+            pActor->scale.z = 3.0f;
+            break;
+        default:
+            pActor->scale.x = 1.0f;
+            pActor->scale.z = 1.0f;
+            break;
+        }
+
+        pActor->scale.y = 1.0f;
+        fopAcM_SetMtx(pActor, pActor->mpModel->getBaseTRMtx());
+        fopAcM_SetMin(pActor, pActor->scale.x * -200.0f, -5000.0f, pActor->scale.z * -200.0f);
+        fopAcM_SetMax(pActor, pActor->scale.x * 200.0f, 5000.0f, pActor->scale.z * 200.0f);
+
+        pActor->mStts.Init(0xFF, 0xFF, pActor);
+
+        for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
+            pActor->mChainCyls[chainIdx].Set(himo_cyl_src);
+            pActor->mChainCyls[chainIdx].SetStts(&pActor->mStts);
+        }
+
+        pActor->m844 = 10;
+        daMsw_Execute(pActor);
+    }
+
+    return phase_state;
 }
 
 static actor_method_class l_daMsw_Method = {
