@@ -1598,7 +1598,7 @@ public:
     void setExtraCutAtParam(u8);
     void setExtraFinishCutAtParam(u8);
     void setJumpCutAtParam();
-    void getCutDirection();
+    int getCutDirection();
     void changeCutProc();
     void changeCutReverseProc(daPy_ANM);
     BOOL procCutA_init(s16);
