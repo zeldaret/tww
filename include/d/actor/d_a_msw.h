@@ -10,18 +10,15 @@ class msw_class : public fopAc_ac_c {
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ s16 m298;
-    /* 0x29A */ u8 m29A[0x29C - 0x29A];
+    /* 0x29A */ s16 m29A;
     /* 0x29C */ J3DModel* mpModel;
     /* 0x2A0 */ u8 m2A0;
     /* 0x2A1 */ u8 m2A1[0x2A4 - 0x2A1];
     /* 0x2A4 */ cXyz m2A4;
-    /* 0x2B0 */ f32 m2B0;
-    /* 0x2B4 */ u8 m2B4[0x2B8 - 0x2B4];
-    /* 0x2B8 */ f32 m2B8;
-    /* 0x2BC */ f32 m2BC;
-    /* 0x2C0 */ u8 m2C0[0x2C4 - 0x2C0];
-    /* 0x2C4 */ f32 m2C4;
-    /* 0x2C8 */ u8 m2C8[0x2D0 - 0x2C8];
+    /* 0x2B0 */ cXyz m2B0;
+    /* 0x2BC */ cXyz m2BC;
+    /* 0x2C8 */ csXyz m2C8;
+    /* 0x2CE */ u8 m2CE[0x2D0 - 0x2CE];
     /* 0x2D0 */ J3DModel* mpChainModels[4];
     /* 0x2E0 */ cXyz m2E0[4];
     /* 0x310 */ cXyz m310[4];

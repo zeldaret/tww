@@ -32,23 +32,23 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     cLib_addCalcAngleS2(&i_ac->current.angle.z, x, 10, 0x800);
 
     f32 dist = (g_regHIO.mChild[0].mFloatRegs[4] + 50.0f) * fabsf(pos1.z - pos2.z);
-    if (pActor->m2BC < dist) {
-        pActor->m2BC = dist;
+    if (pActor->m2BC.x < dist) {
+        pActor->m2BC.x = dist;
     }
 
     dist = (g_regHIO.mChild[0].mFloatRegs[4] + 50.0f) * fabsf(pos1.x - pos2.x);
-    if (pActor->m2C4 < dist) {
-        pActor->m2C4 = dist;
+    if (pActor->m2BC.z < dist) {
+        pActor->m2BC.z = dist;
     }
 
     dist = (g_regHIO.mChild[0].mFloatRegs[8] + 5.0f) * fabsf(pos1.x - pos2.x);
-    if (dist > 10.0f && pActor->m2B0 < dist) {
-        cLib_addCalc2(&pActor->m2B0, dist, 1.0f, g_regHIO.mChild[0].mFloatRegs[7] + 1.2f);
+    if (dist > 10.0f && pActor->m2B0.x < dist) {
+        cLib_addCalc2(&pActor->m2B0.x, dist, 1.0f, g_regHIO.mChild[0].mFloatRegs[7] + 1.2f);
     }
 
     dist = (g_regHIO.mChild[0].mFloatRegs[8] + 5.0f) * fabsf(pos1.z - pos2.z);
-    if (dist > 10.0f && pActor->m2B8 < dist) {
-        cLib_addCalc2(&pActor->m2B8, dist, 1.0f, g_regHIO.mChild[0].mFloatRegs[7] + 1.2f);
+    if (dist > 10.0f && pActor->m2B0.z < dist) {
+        cLib_addCalc2(&pActor->m2B0.z, dist, 1.0f, g_regHIO.mChild[0].mFloatRegs[7] + 1.2f);
     }
 
 }
@@ -104,8 +104,32 @@ static BOOL daMsw_Draw(msw_class* i_this) {
 }
 
 /* 000005E8-0000080C       .text msw_move__FP9msw_class */
-void msw_move(msw_class*) {
-    /* Nonmatching */
+void msw_move(msw_class* i_this) {
+    i_this->m298 += 1;
+
+    // WTH?
+    switch (i_this->m29A) {
+        case 0:
+            break;
+    }
+
+    cLib_addCalcAngleS2(&i_this->current.angle.x, 0, 10, 0x200);
+    cLib_addCalcAngleS2(&i_this->current.angle.z, 0, 10, 0x200);
+
+    i_this->m2C8.x = i_this->m2BC.x * cM_ssin(i_this->m298 * 1500);
+    i_this->m2C8.z = i_this->m2BC.z * cM_ssin(i_this->m298 * 1300);
+
+    cLib_addCalc2(&i_this->m2BC.x, g_regHIO.mChild[0].mFloatRegs[9], 1.0f, g_regHIO.mChild[0].mFloatRegs[3] + 20.0f);
+    cLib_addCalc2(&i_this->m2BC.z, g_regHIO.mChild[0].mFloatRegs[9], 1.0f, g_regHIO.mChild[0].mFloatRegs[3] + 20.0f);
+
+    i_this->m2A4.x = i_this->m2B0.x * cM_ssin(i_this->m298 * 750);
+    i_this->m2A4.z = i_this->m2B0.z * cM_ssin(i_this->m298 * 900);
+
+    cLib_addCalc0(&i_this->m2B0.x, 1.0f, g_regHIO.mChild[0].mFloatRegs[6] + 0.25f);
+    cLib_addCalc0(&i_this->m2B0.z, 1.0f, g_regHIO.mChild[0].mFloatRegs[6] + 0.25f);
+
+    i_this->shape_angle = i_this->current.angle + i_this->m2C8;
+    i_this->current.pos = i_this->home.pos + i_this->m2A4;
 }
 
 /* 0000080C-00000AD4       .text daMsw_Execute__FP9msw_class */
