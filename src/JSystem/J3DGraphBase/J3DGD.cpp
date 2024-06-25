@@ -278,6 +278,9 @@ void J3DGDSetTexCoordGen(GXTexGenType type, GXTexGenSrc src) {
 void J3DGDSetTexCoordScale2(GXTexCoordID id, u16 scaleS, u8 biasS, u8 wrapS, u16 scaleT, u8 biasT, u8 wrapT) {
     GDOverflowCheck(15);
     J3DGDWriteBPCmd(0xFE03FFFF);
+    // Bug: When id is GX_TEXCOORD_NULL (0xFF), the calculation below winds up producing the wrong
+    // BP register ID. Instead of a SU_SSIZE and SU_TSIZE register, it effectively negatively
+    // overflows to the previous registers: RAS1_TREF6 and RAS1_TREF7, potentially corrupting them.
     J3DGDWriteBPCmd((scaleS - 1) | (biasS << 16) | (wrapS << 17) | (0x30 + id * 2) << 24);
     J3DGDWriteBPCmd((scaleT - 1) | (biasT << 16) | (wrapT << 17) | (0x31 + id * 2) << 24);
 }
