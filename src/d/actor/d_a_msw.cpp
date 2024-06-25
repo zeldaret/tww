@@ -11,6 +11,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
+#include "d/actor/d_a_player.h"
 
 /* 00000078-000002D4       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
@@ -108,6 +109,7 @@ void msw_move(msw_class* i_this) {
     i_this->m298 += 1;
 
     // WTH?
+    // Branchless comparison
     switch (i_this->m29A) {
         case 0:
             break;
@@ -133,9 +135,62 @@ void msw_move(msw_class* i_this) {
 }
 
 /* 0000080C-00000AD4       .text daMsw_Execute__FP9msw_class */
-static BOOL daMsw_Execute(msw_class*) {
+static BOOL daMsw_Execute(msw_class* i_this) {
     static f32 xd[4] = { 1.0f,  1.0f, -1.0f, -1.0f };
     static f32 zd[4] = { 1.0f, -1.0f,  1.0f, -1.0f };
+
+    daPy_py_c* pPlayer = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
+    msw_move(i_this);
+
+    MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, false);
+    cMtx_YrotM(*calc_mtx, i_this->shape_angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
+    cMtx_ZrotM(*calc_mtx, i_this->shape_angle.z);
+    MtxScale(i_this->scale.x, 1.0f, i_this->scale.z, true);
+
+    i_this->mpModel->setBaseTRMtx(*calc_mtx);
+    MtxPush();
+
+    for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
+        f32 tmp = 200.0f + g_regHIO.mChild[0].mFloatRegs[10];
+        cXyz src;
+        src.x = tmp * xd[chainIdx];
+        src.y = 0.0f;
+        src.z = tmp * zd[chainIdx];
+        MtxPosition(&src, &i_this->m2E0[chainIdx]);
+
+        if (i_this->m844 != 0) {
+            i_this->m844 -= 1;
+            i_this->m310[chainIdx] = i_this->m2E0[chainIdx];
+            i_this->m310[chainIdx].y = i_this->m2E0[chainIdx].y + 1000.0f;
+        }
+
+        if (i_this->m83C[chainIdx] != 0) {
+            i_this->m83C[chainIdx] -= 1;
+        }
+
+        if (i_this->mChainCyls[chainIdx].ChkTgHit() && i_this->m83C[chainIdx] < 10) {
+            i_this->m83C[chainIdx] = g_regHIO.mChild[6].mShortRegs[3] + 0xF;
+
+            mDoAud_seStart(JA_SE_LK_HIT_SBRIDGE_CHAIN, &i_this->m2E0[chainIdx], 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+
+            cXyz scale;
+            scale.z = 2.0f;
+            scale.y = 2.0f;
+            scale.x = 2.0f;
+
+            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, i_this->mChainCyls[chainIdx].GetTgHitPosP(), &pPlayer->shape_angle, &scale);
+        }
+        i_this->mChainCyls[chainIdx].SetC(i_this->m2E0[chainIdx]);
+
+        dComIfG_Ccsp()->Set(&i_this->mChainCyls[chainIdx]);
+    }
+
+    MtxPull();
+    MTXCopy(*calc_mtx, i_this->mMtx);
+    i_this->mpBgW->Move();
+
+    return TRUE;
 }
 
 /* 00000AD4-00000B38       .text daMsw_IsDelete__FP9msw_class */
