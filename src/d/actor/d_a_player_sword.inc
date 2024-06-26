@@ -243,8 +243,24 @@ void daPy_lk_c::setJumpCutAtParam() {
 }
 
 /* 80155970-801559F0       .text getCutDirection__9daPy_lk_cFv */
-void daPy_lk_c::getCutDirection() {
-    /* Nonmatching */
+int daPy_lk_c::getCutDirection(){
+    int iVar1;
+    s16 sVar2;
+
+    if (m35B0 <= 0.05f) {
+        iVar1 = 4;
+    }
+    else {
+        if (mpAttnActorLockOn != NULL) {
+            sVar2 = fopAcM_searchActorAngleY(this, mpAttnActorLockOn);
+            sVar2 =  m34E8 - sVar2;
+        }
+        else {
+            sVar2 = m34E8 - m34DE;
+        }
+        iVar1 = getDirectionFromAngle(sVar2);
+    }
+    return iVar1 + 1;
 }
 
 /* 801559F0-80155C3C       .text changeCutProc__9daPy_lk_cFv */
