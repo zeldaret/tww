@@ -319,8 +319,8 @@ static s32 daMsw_Create(fopAc_ac_c* i_this) {
             pActor->scale.z = 3.0f;
             break;
         default:
-            pActor->scale.x = 1.0f;
             pActor->scale.z = 1.0f;
+            pActor->scale.x = 1.0f;
             break;
         }
 
