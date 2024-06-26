@@ -16,14 +16,31 @@ import os
 import platform
 import shutil
 import stat
-import sys
 import urllib.request
 import zipfile
-
+from typing import Callable, Dict
 from pathlib import Path
 
 
-def dtk_url(tag):
+def binutils_url(tag):
+    uname = platform.uname()
+    system = uname.system.lower()
+    arch = uname.machine.lower()
+    if system == "darwin":
+        system = "macos"
+        arch = "universal"
+    elif arch == "amd64":
+        arch = "x86_64"
+
+    repo = "https://github.com/encounter/gc-wii-binutils"
+    return f"{repo}/releases/download/{tag}/{system}-{arch}.zip"
+
+
+def compilers_url(tag: str) -> str:
+    return f"https://files.decomp.dev/compilers_{tag}.zip"
+
+
+def dtk_url(tag: str) -> str:
     uname = platform.uname()
     suffix = ""
     system = uname.system.lower()
@@ -39,29 +56,26 @@ def dtk_url(tag):
     return f"{repo}/releases/download/{tag}/dtk-{system}-{arch}{suffix}"
 
 
-def sjiswrap_url(tag):
+def sjiswrap_url(tag: str) -> str:
     repo = "https://github.com/encounter/sjiswrap"
     return f"{repo}/releases/download/{tag}/sjiswrap-windows-x86.exe"
 
 
-def wibo_url(tag):
+def wibo_url(tag: str) -> str:
     repo = "https://github.com/decompals/wibo"
     return f"{repo}/releases/download/{tag}/wibo"
 
 
-def compilers_url(tag):
-    return f"https://files.decomp.dev/compilers_{tag}.zip"
-
-
-TOOLS = {
+TOOLS: Dict[str, Callable[[str], str]] = {
+    "binutils": binutils_url,
+    "compilers": compilers_url,
     "dtk": dtk_url,
     "sjiswrap": sjiswrap_url,
     "wibo": wibo_url,
-    "compilers": compilers_url,
 }
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("tool", help="Tool name")
     parser.add_argument("output", type=Path, help="output file path")
@@ -78,7 +92,11 @@ def main():
             data = io.BytesIO(response.read())
             with zipfile.ZipFile(data) as f:
                 f.extractall(output)
-            output.touch(mode=0o755)
+            # Make all files executable
+            for root, _, files in os.walk(output):
+                for name in files:
+                    os.chmod(os.path.join(root, name), 0o755)
+            output.touch(mode=0o755)  # Update dir modtime
         else:
             with open(output, "wb") as f:
                 shutil.copyfileobj(response, f)

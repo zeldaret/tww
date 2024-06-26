@@ -14,7 +14,7 @@ jobs:
         version: [GZLE01, GZLP01, GZLJ01]
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Git config
       run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
     - name: Prepare
