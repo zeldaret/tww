@@ -407,8 +407,8 @@ void J3DGDSetIndTexOrder(u32 num, GXTexCoordID tc0, GXTexMapID tm0, GXTexCoordID
 void J3DGDSetTevOrder(GXTevStageID stage, GXTexCoordID coord1, GXTexMapID map1, GXChannelID color1, GXTexCoordID coord2, GXTexMapID map2, GXChannelID color2) {
     static u8 c2r[] = {0, 1, 0, 1, 0, 1, 7, 5, 6, 0, 0, 0, 0, 0, 0, 7};
 
-    GXTexCoordID r31 = coord1 >= 8 ? GX_TEXCOORD0 : coord1;
-    GXTexCoordID r30 = coord2 >= 8 ? GX_TEXCOORD0 : coord2;
+    GXTexCoordID r31 = coord1 >= GX_MAXCOORD ? GX_TEXCOORD0 : coord1;
+    GXTexCoordID r30 = coord2 >= GX_MAXCOORD ? GX_TEXCOORD0 : coord2;
     GDOverflowCheck(5);
     J3DGDWriteBPCmd(
         ((map1 & 7) << 0) |

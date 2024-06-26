@@ -105,15 +105,15 @@ struct J3DTevStage {
     }
 
     void load(u32) const {
-        J3DGDWriteBPCmd(*(u32*)&field_0x0);
-        J3DGDWriteBPCmd(*(u32*)&field_0x4);
+        J3DGDWriteBPCmd(*(u32*)&mTevColorReg);
+        J3DGDWriteBPCmd(*(u32*)&mTevAlphaReg);
     }
 
-    /* 0x0 */ u8 field_0x0;
+    /* 0x0 */ u8 mTevColorReg;
     /* 0x1 */ u8 mTevColorOp;
-    /* 0x1 */ u8 mTevColorAB;
+    /* 0x2 */ u8 mTevColorAB;
     /* 0x3 */ u8 mTevColorCD;
-    /* 0x4 */ u8 field_0x4;
+    /* 0x4 */ u8 mTevAlphaReg;
     /* 0x5 */ u8 mTevAlphaOp;
     /* 0x6 */ u8 mTevAlphaAB;
     /* 0x7 */ u8 mTevSwapModeInfo;
