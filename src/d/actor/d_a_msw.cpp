@@ -56,12 +56,11 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
 
 /* 00000310-00000540       .text chain_Draw__FP9msw_class */
 void chain_Draw(msw_class* i_this) {
-    cXyz tmp;
     s16 angle1;
     s32 angle2;
 
     for (int i = 0; i < 4; i++) {
-        tmp = i_this->m310[i] - i_this->m2E0[i];
+        cXyz tmp = i_this->m310[i] - i_this->m2E0[i];
         angle1 = -cM_atan2s(tmp.y, tmp.z);
 
         // TODO: std::sqrtf(float)
