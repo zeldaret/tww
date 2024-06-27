@@ -776,7 +776,7 @@ static fopAc_ac_c* search_bomb(bk_class* i_this, BOOL r26) {
             sp1C.z = r24->current.pos.z - i_this->current.pos.z;
             f32 f0 = sqrtf(sp28.x*sp28.x + sp28.z*sp28.z);
             f32 f5 = sqrtf(sp1C.x*sp1C.x + sp1C.z*sp1C.z);
-            if (f0 < f29 && !(f5 > 30.0f + i_this->m031C) &&
+            if (f0 < f29 && !(f5 > 30.0f + i_this->mPlayerDistance) &&
                 !(daBk_other_bg_check(i_this, r24) && r26)
             ) {
                 if (r26) {
@@ -1156,7 +1156,7 @@ static void jyunkai(bk_class* i_this) {
     if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
         if (r3 != 0 ||
             (
-                i_this->m031C < l_bkHIO.m028 &&
+                i_this->mPlayerDistance < l_bkHIO.m028 &&
                 daBk_player_view_check(i_this, &i_this->dr.m714->current.pos, i_this->m0332, l_bkHIO.m034)
             )
         ) {
@@ -1389,7 +1389,7 @@ static void stand(bk_class* i_this) {
             f1 = 500.0f;
         }
         
-        if (i_this->m031C < f1 &&
+        if (i_this->mPlayerDistance < f1 &&
             daBk_player_view_check(i_this, &i_this->dr.m714->current.pos, i_this->m0332, l_bkHIO.m034)
         ) {
             if (i_this->dr.m004 >= 0x32) {
@@ -1430,7 +1430,179 @@ static void* s_s_sub(void* r29, void* r30) {
 
 /* 000054E0-00005D40       .text stand2__FP8bk_class */
 static void stand2(bk_class* i_this) {
-    /* Nonmatching */
+    i_this->dr.m710 = 0;
+    s32 r31 = fopAcM_otoCheck(i_this, 1000.0f);
+    
+    if (i_this->mpSearchLight == NULL) {
+        i_this->mpSearchLight = (daObj_Search::Act_c*)fpcM_Search(s_s_sub, i_this);
+        if (i_this->mpSearchLight != NULL) {
+            i_this->mpSearchLight->setChildId(fpcM_GetID(i_this));
+        } else {
+            return;
+        }
+    }
+    
+    cXyz sp24;
+    if (i_this->mpSearchLight != NULL) {
+        cMtx_YrotS(*calc_mtx, i_this->mpSearchLight->current.angle.y);
+        sp24.x = g_regHIO.mChild[8].mFloatRegs[11] + 320.0f;
+        sp24.y = g_regHIO.mChild[8].mFloatRegs[12] + 114.0f;
+        sp24.z = g_regHIO.mChild[8].mFloatRegs[13] + -55.0f;
+        MtxPosition(&sp24, &i_this->home.pos);
+        i_this->home.pos += i_this->mpSearchLight->current.pos;
+        i_this->home.angle.y = i_this->mpSearchLight->current.angle.y + g_regHIO.mChild[8].mShortRegs[4];
+    }
+    
+    switch (i_this->dr.m004) {
+    case 0x00:
+        i_this->dr.m004 = 1;
+        // Fall-through
+    case 0x01:
+        if (i_this->mpSearchLight != NULL) {
+            i_this->mpSearchLight->setBkControl(true);
+        }
+        i_this->dr.m710 = 6;
+        if (i_this->m0300[3] == 0) {
+            i_this->m0300[3] = cM_rndF(150.0f) + 80.0f;
+            i_this->m1212 = cM_rndF(30.0f);
+        } else if (i_this->m0300[3] < (s16)(i_this->m1212 + 30)) {
+            i_this->dr.m71A = 10000;
+            i_this->dr.m718 = -10000;
+        } else if (i_this->m0300[4] == 0) {
+            i_this->m0300[4] = cM_rndF(30.0f) + 10.0f;
+            i_this->dr.m71A = 3000.0f - cM_rndF(10000.0f);
+            i_this->dr.m718 = -cM_rndF(2000.0f);
+        }
+        
+        i_this->m0B7B = 1;
+        s16 r28 = i_this->m1224 - i_this->m1228;
+        if (i_this->m122A >= 0 && r28 < 0) {
+            anm_init(i_this, BK_BCK_BK_MIGIROT, 5.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        }
+        if (i_this->m122A <= 0 && r28 > 0) {
+            anm_init(i_this, BK_BCK_BK_HIDARIROT, 5.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        }
+        i_this->m122A = r28;
+        i_this->m1228 = i_this->m1224;
+        
+        cLib_addCalc2(&i_this->current.pos.x, i_this->home.pos.x, 0.5f, i_this->speed.x * 0.25f + 10.0f);
+        cLib_addCalc2(&i_this->current.pos.z, i_this->home.pos.z, 0.5f, i_this->speed.z * 0.25f + 10.0f);
+        cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->home.angle.y, 2, 0x800);
+        i_this->speedF = 0.0f;
+        break;
+    case 0x0A:
+        i_this->m0B7B = 1;
+        if (i_this->m0300[1] == 30) {
+            anm_init(i_this, BK_BCK_BK_BIKKURI, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        }
+        if (i_this->m0300[1] == 0) {
+            anm_init(i_this, BK_BCK_BK_KYORO2, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, BK_BAS_BK_KYORO2);
+            i_this->dr.m004 = 0xB;
+            i_this->m0300[3] = 30.0f + cM_rndF(30.0f);
+        }
+        break;
+    case 0x0B:
+        if (i_this->m0300[3] == 0) {
+            i_this->dr.m004 = 0;
+        }
+        break;
+    case 0x14:
+        i_this->m0B7B = 1;
+        if (i_this->m0300[1] < 10) {
+            i_this->dr.m710 = 1;
+        }
+        if (i_this->m0300[1] == 0) {
+            i_this->dr.mState = 4;
+            i_this->m0300[1] = 0;
+            i_this->dr.m004 = 0;
+            return;
+        }
+        break;
+    case 0x32:
+        anm_init(i_this, BK_BCK_BK_KYORO1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, BK_BAS_BK_KYORO1);
+        i_this->dr.m004 += 1;
+        i_this->m0300[1] = 50;
+        // Fall-through
+    case 0x33:
+        i_this->speedF = 0.0f;
+        if (i_this->m0300[1] == 0) {
+            anm_init(i_this, BK_BCK_BK_RUN, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, BK_BAS_BK_RUN);
+            i_this->dr.m004 += 1;
+            path_check(i_this, 1);
+            if (i_this->m1216 >= 4) {
+                i_this->m1217 = 1;
+            } else {
+                i_this->m1217 = -1;
+            }
+            i_this->m0300[2] = 60;
+        }
+        break;
+    case 0x34:
+        dPath__Point* pnt = &i_this->ppd->mpPnt[i_this->m1216];
+        i_this->m0320 = pnt->mPos;
+        sp24 = i_this->m0320 - i_this->current.pos;
+        goto temp_568;
+    case 0x3C:
+        sp24 = i_this->home.pos - i_this->current.pos;
+temp_568:
+        i_this->dr.m4D0 = cM_atan2s(sp24.x, sp24.z);
+        if (sqrtf(sp24.x*sp24.x + sp24.z*sp24.z) < l_bkHIO.m054 * 0.25f * 5.0f) {
+            if (i_this->dr.m004 == 0x3C) {
+                i_this->dr.m004 = 0;
+            } else if (i_this->m1216 == 0) {
+                i_this->dr.m004 = 0x3C;
+            } else {
+                i_this->m1216 += i_this->m1217;
+                if (i_this->m1216 >= (s8)i_this->ppd->m_num) {
+                    i_this->m1216 = 0;
+                } else if (i_this->m1216 < 0) {
+                    i_this->m1216 = i_this->ppd->m_num - 1;
+                }
+            }
+        }
+        cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->dr.m4D0, 4, 0x1000);
+        cLib_addCalc2(&i_this->speedF, l_bkHIO.m054, 1.0f, 5.0f);
+        break;
+    }
+    
+    if (i_this->dr.m004 < 0x0A && r31 != 0) {
+        i_this->dr.m004 = 0x0A;
+        i_this->m0300[1] = cM_rndF(10.0f) + 45.0f;
+    }
+    
+    if (i_this->m0300[2] == 0 && i_this->dr.m004 != 0x14) {
+        f32 f1;
+        if (i_this->m02B5 != 0xFF) {
+            f1 = i_this->m02B5 * 10.0f;
+        } else {
+            f1 = 500.0f;
+        }
+        
+        if (i_this->mPlayerDistance < f1 &&
+            daBk_player_view_check(i_this, &i_this->dr.m714->current.pos, i_this->m0332, l_bkHIO.m034)
+        ) {
+            if (i_this->dr.m004 >= 0x32) {
+                i_this->dr.mState = 4;
+                i_this->m0300[1] = 0;
+                i_this->dr.m004 = 0;
+            } else {
+                i_this->dr.m004 = 0x14;
+                anm_init(i_this, BK_BCK_BK_BIKKURI, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                i_this->m0300[1] = 30;
+                fopAcM_monsSeStart(i_this, JA_SE_CV_BK_FOUND_LINK, 0);
+            }
+        }
+        
+        if (daBk_bomb_view_check(i_this)) {
+            i_this->dr.mState = 9;
+            i_this->dr.m004 = 0;
+        }
+    }
+    
+    if (i_this->m0B30 == 0 && daBk_wepon_view_check(i_this)) {
+        i_this->dr.mState = 0xC;
+        i_this->dr.m004 = -1;
+    }
 }
 
 /* 00005D40-00006218       .text path_run__FP8bk_class */
@@ -1548,7 +1720,7 @@ static void fight_run(bk_class* i_this) {
                 anm_init(i_this, BK_BCK_BK_RUN, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, l_bkHIO.m070, BK_BAS_BK_RUN);
                 i_this->m120C = 0;
             }
-            if (i_this->m031C < l_bkHIO.m02C) {
+            if (i_this->mPlayerDistance < l_bkHIO.m02C) {
                 i_this->dr.m004 = 2;
                 i_this->m0300[4] = 50;
             }
@@ -1595,7 +1767,7 @@ static void fight_run(bk_class* i_this) {
             
         }
         
-        if (i_this->m031C < l_bkHIO.m030) {
+        if (i_this->mPlayerDistance < l_bkHIO.m030) {
             i_this->dr.mState = 5;
             i_this->dr.m004 = 0;
             return;
@@ -1621,7 +1793,7 @@ static void fight_run(bk_class* i_this) {
             } else {
                 i_this->dr.m004 = 6;
             }
-        } else if (i_this->m031C < l_bkHIO.m030) {
+        } else if (i_this->mPlayerDistance < l_bkHIO.m030) {
             if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
                 anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, BK_BAS_BK_WALK2);
             } else {
@@ -1709,12 +1881,12 @@ static void fight_run(bk_class* i_this) {
     }
     
     if (i_this->dr.m004 >= 3 && i_this->m0314 <= 2) {
-        if (i_this->m031C > l_bkHIO.m02C + 75.0f) {
+        if (i_this->mPlayerDistance > l_bkHIO.m02C + 75.0f) {
             i_this->dr.mState = 0;
             i_this->dr.m004 = 0;
             path_check(i_this, 0);
         }
-        if (i_this->m031C < l_bkHIO.m030 + 62.5f && i_this->m031C > l_bkHIO.m030 - 62.5f) {
+        if (i_this->mPlayerDistance < l_bkHIO.m030 + 62.5f && i_this->mPlayerDistance > l_bkHIO.m030 - 62.5f) {
             if (i_this->m0300[4] == 0) {
                 i_this->m0300[4] = l_bkHIO.m078;
                 if (cM_rndF(100.0f) < l_bkHIO.m07C) {
@@ -1771,7 +1943,7 @@ static void fight_run(bk_class* i_this) {
         }
     }    
     
-    if (i_this->m0B30 != 0 && i_this->m031C < l_bkHIO.m030 - 62.5f &&
+    if (i_this->m0B30 != 0 && i_this->mPlayerDistance < l_bkHIO.m030 - 62.5f &&
         daBk_player_view_check(i_this, &i_this->dr.m714->current.pos, i_this->m0332, l_bkHIO.m034)
     ) {
         i_this->m02FC++;
@@ -2055,8 +2227,8 @@ static void bou_mtx_set(bk_class* i_this) {
 static BOOL daBk_Execute(bk_class* i_this) {
     another_hit = 0;
     
-    if (i_this->m1220 != NULL) {
-        i_this->m1220->m664 = 0;
+    if (i_this->mpSearchLight != NULL) {
+        i_this->mpSearchLight->setBkControl(false);
     }
     
     if (i_this->m121C != 0 || i_this->home.pos.y - i_this->current.pos.y > 4000.0f) {
