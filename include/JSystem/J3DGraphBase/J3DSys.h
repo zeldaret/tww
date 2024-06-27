@@ -7,6 +7,7 @@
 // Perhaps move to a new J3DEnum.h?
 enum J3DError {
     J3DErrType_Success = 0,
+    J3DErrType_Locked = 2,
     J3DErrType_OutOfMemory = 4,
 };
 

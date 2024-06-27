@@ -6,6 +6,7 @@
 #include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
 
 /* 802F5C48-802F5C70       .text clear__16J3DMaterialTableFv */
 void J3DMaterialTable::clear() {
@@ -13,10 +14,10 @@ void J3DMaterialTable::clear() {
     mMaterialNodePointer = NULL;
     mMaterialName = NULL;
     mUniqueMatNum = 0;
-    field_0x14 = NULL;
+    mMaterialBase = NULL;
     mTexture = NULL;
     mTextureName = NULL;
-    field_0x20 = 0;
+    mbIsLocked = 0;
 }
 
 /* 802F5C70-802F5CAC       .text __ct__16J3DMaterialTableFv */
@@ -33,8 +34,8 @@ s32 J3DMaterialTable::entryMatColorAnimator(J3DAnmColor* pAnm) {
     s32 ret = 0;
     u16 materialNum = pAnm->getUpdateMaterialNum();
 
-    if (field_0x20 == 1)
-        return 2;
+    if (isLocked())
+        return J3DErrType_Locked;
 
     for (u16 i = 0; i < materialNum; i++) {
         u16 materialID = pAnm->getUpdateMaterialID(i);
@@ -56,8 +57,8 @@ s32 J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* pAnm) {
     s32 ret = 0;
     u16 materialNum = pAnm->getUpdateMaterialNum();
 
-    if (field_0x20 == 1)
-        return 2;
+    if (isLocked())
+        return J3DErrType_Locked;
 
     for (u16 i = 0; i < materialNum; i++) {
         u16 materialID = pAnm->getUpdateMaterialID(i);
@@ -106,8 +107,8 @@ s32 J3DMaterialTable::entryTevRegAnimator(J3DAnmTevRegKey* pAnm) {
     u16 cRegMaterialNum = pAnm->getCRegUpdateMaterialNum();
     u16 kRegMaterialNum = pAnm->getKRegUpdateMaterialNum();
 
-    if (field_0x20 == 1)
-        return 2;
+    if (isLocked())
+        return J3DErrType_Locked;
 
     for (u16 i = 0; i < cRegMaterialNum; i++) {
         u16 materialID = pAnm->getCRegUpdateMaterialID(i);
@@ -234,8 +235,8 @@ s32 J3DMaterialTable::setMatColorAnimator(J3DAnmColor* pAnm, J3DMatColorAnm* pAn
     s32 ret = 0;
     u16 materialNum = pAnm->getUpdateMaterialNum();
 
-    if (field_0x20 == 1)
-        return 2;
+    if (isLocked())
+        return J3DErrType_Locked;
 
     for (u16 i = 0; i < materialNum; i++) {
         u16 materialID = pAnm->getUpdateMaterialID(i);
@@ -256,8 +257,8 @@ s32 J3DMaterialTable::setTexNoAnimator(J3DAnmTexPattern* pAnm, J3DTexNoAnm* pAnm
     s32 ret = 0;
     u16 materialNum = pAnm->getUpdateMaterialNum();
 
-    if (field_0x20 == 1)
-        return 2;
+    if (isLocked())
+        return J3DErrType_Locked;
 
     for (u16 i = 0; i < materialNum; i++) {
         u16 materialID = pAnm->getUpdateMaterialID(i);
@@ -280,8 +281,8 @@ s32 J3DMaterialTable::setTexMtxAnimator(J3DAnmTextureSRTKey* pAnm, J3DTexMtxAnm*
     s32 ret = 0;
     u16 materialNum = pAnm->getUpdateMaterialNum();
 
-    if (field_0x20 == 1)
-        return 2;
+    if (isLocked())
+        return J3DErrType_Locked;
 
     for (u16 i = 0; i < materialNum; i++) {
         u16 materialID = pAnm->getUpdateMaterialID(i);
@@ -319,8 +320,8 @@ s32 J3DMaterialTable::setTevRegAnimator(J3DAnmTevRegKey* pAnm, J3DTevColorAnm* p
     u16 cRegMaterialNum = pAnm->getCRegUpdateMaterialNum();
     u16 kRegMaterialNum = pAnm->getKRegUpdateMaterialNum();
 
-    if (field_0x20 == 1)
-        return 2;
+    if (isLocked())
+        return J3DErrType_Locked;
 
     for (u16 i = 0; i < cRegMaterialNum; i++) {
         if (pAnm->getCRegUpdateMaterialID(i) != 0xFFFF) {

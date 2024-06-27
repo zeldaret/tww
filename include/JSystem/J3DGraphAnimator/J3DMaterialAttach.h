@@ -45,7 +45,7 @@ public:
     JUTNameTab* getMaterialName() const { return mMaterialName; }
 
     u16 getMaterialNum() const { return mMaterialNum; }
-    bool isLocked() { return field_0x20 == 1; }
+    bool isLocked() { return mbIsLocked == 1; }
 
 private:
     friend class J3DJointTree;
@@ -57,10 +57,10 @@ private:
     /* 0x08 */ J3DMaterial** mMaterialNodePointer;
     /* 0x0C */ JUTNameTab* mMaterialName;
     /* 0x10 */ u16 mUniqueMatNum;
-    /* 0x14 */ J3DMaterial* field_0x14;
+    /* 0x14 */ J3DMaterial* mMaterialBase;
     /* 0x18 */ J3DTexture* mTexture;
     /* 0x1C */ JUTNameTab* mTextureName;
-    /* 0x20 */ u16 field_0x20;
+    /* 0x20 */ u16 mbIsLocked;
 };  // Size: 0x24
 
 #endif /* J3DMATERIALATTACH_H */

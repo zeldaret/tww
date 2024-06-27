@@ -582,11 +582,10 @@ public:
 public:
     /* 0x08 */ GXColor mColor;
     /* 0x0C */ dKy_tevstr_c* mpTevStr;
-    /* 0x10 */ s16 mNumLines;
-    /* 0x12 */ s16 mNumSegmentsPerLine;
-    /* 0x14 */ u16 m14;
-    /* 0x16 */ u8 m16;
-    /* 0x17 */ u8 m17[0x18 - 0x17];
+    /* 0x10 */ u16 mNumLines;
+    /* 0x12 */ u16 mMaxSegments;
+    /* 0x14 */ u16 mNumSegments;
+    /* 0x16 */ u8 mCurArr;
     /* 0x18 */ mDoExt_3Dline_c* mpLines;
 };
 
@@ -604,8 +603,8 @@ public:
     /* 0x28 */ GXColor mColor;
     /* 0x2C */ dKy_tevstr_c* mpTevStr;
     /* 0x30 */ u16 mNumLines;
-    /* 0x32 */ u16 m32;
-    /* 0x34 */ u16 m34;
+    /* 0x32 */ u16 mMaxSegments;
+    /* 0x34 */ u16 mNumSegments;
     /* 0x36 */ u8 mCurArr;
     /* 0x37 */ u8 m37[0x38 - 0x37];
     /* 0x38 */ mDoExt_3Dline_c* mpLines;

@@ -392,15 +392,15 @@ void J3DModelLoader_v26::readMaterial(const J3DMaterialBlock* i_block, u32 i_fla
     }
     mpMaterialTable->mMaterialNodePointer = new J3DMaterial*[mpMaterialTable->mMaterialNum];
     if (i_flags & 0x200000) {
-        mpMaterialTable->field_0x14 = new (0x20) J3DMaterial[mpMaterialTable->mUniqueMatNum];
+        mpMaterialTable->mMaterialBase = new (0x20) J3DMaterial[mpMaterialTable->mUniqueMatNum];
     } else {
-        mpMaterialTable->field_0x14 = NULL;
+        mpMaterialTable->mMaterialBase = NULL;
     }
     if (i_flags & 0x200000) {
         for (u16 i = 0; i < mpMaterialTable->mUniqueMatNum; i++) {
-            factory.create(&mpMaterialTable->field_0x14[i],
+            factory.create(&mpMaterialTable->mMaterialBase[i],
                            J3DMaterialFactory::MATERIAL_TYPE_NORMAL, i, i_flags);
-            mpMaterialTable->field_0x14[i].mDiffFlag = (u32)&mpMaterialTable->field_0x14[i] >> 4;
+            mpMaterialTable->mMaterialBase[i].mDiffFlag = (u32)&mpMaterialTable->mMaterialBase[i] >> 4;
         }
     }
     for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
@@ -410,9 +410,9 @@ void J3DModelLoader_v26::readMaterial(const J3DMaterialBlock* i_block, u32 i_fla
     if (i_flags & 0x200000) {
         for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
             mpMaterialTable->mMaterialNodePointer[i]->mDiffFlag =
-                (u32)&mpMaterialTable->field_0x14[factory.getMaterialID(i)] >> 4;
+                (u32)&mpMaterialTable->mMaterialBase[factory.getMaterialID(i)] >> 4;
             mpMaterialTable->mMaterialNodePointer[i]->mpOrigMaterial =
-                &mpMaterialTable->field_0x14[factory.getMaterialID(i)];
+                &mpMaterialTable->mMaterialBase[factory.getMaterialID(i)];
         }
     } else {
         for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
@@ -435,14 +435,14 @@ void J3DModelLoader_v21::readMaterial_v21(const J3DMaterialBlock_v21* i_block, u
     }
     mpMaterialTable->mMaterialNodePointer = new J3DMaterial*[mpMaterialTable->mMaterialNum];
     if (i_flags & 0x200000) {
-        mpMaterialTable->field_0x14 = new (0x20) J3DMaterial[mpMaterialTable->mUniqueMatNum];
+        mpMaterialTable->mMaterialBase = new (0x20) J3DMaterial[mpMaterialTable->mUniqueMatNum];
     } else {
-        mpMaterialTable->field_0x14 = NULL;
+        mpMaterialTable->mMaterialBase = NULL;
     }
     if (i_flags & 0x200000) {
         for (u16 i = 0; i < mpMaterialTable->mUniqueMatNum; i++) {
-            factory.create(&mpMaterialTable->field_0x14[i], i, i_flags);
-            mpMaterialTable->field_0x14[i].mDiffFlag = (u32)&mpMaterialTable->field_0x14[i] >> 4;
+            factory.create(&mpMaterialTable->mMaterialBase[i], i, i_flags);
+            mpMaterialTable->mMaterialBase[i].mDiffFlag = (u32)&mpMaterialTable->mMaterialBase[i] >> 4;
         }
     }
     for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
@@ -451,9 +451,9 @@ void J3DModelLoader_v21::readMaterial_v21(const J3DMaterialBlock_v21* i_block, u
     if (i_flags & 0x200000) {
         for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
             mpMaterialTable->mMaterialNodePointer[i]->mDiffFlag =
-                (u32)&mpMaterialTable->field_0x14[factory.getMaterialID(i)] >> 4;
+                (u32)&mpMaterialTable->mMaterialBase[factory.getMaterialID(i)] >> 4;
             mpMaterialTable->mMaterialNodePointer[i]->mpOrigMaterial =
-                &mpMaterialTable->field_0x14[factory.getMaterialID(i)];
+                &mpMaterialTable->mMaterialBase[factory.getMaterialID(i)];
         }
     } else {
         for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
@@ -563,7 +563,7 @@ void J3DModelLoader::readPatchedMaterial(const J3DMaterialBlock* i_block, u32 i_
         mpMaterialTable->mMaterialName = NULL;
     }
     mpMaterialTable->mMaterialNodePointer = new J3DMaterial*[mpMaterialTable->mMaterialNum];
-    mpMaterialTable->field_0x14 = NULL;
+    mpMaterialTable->mMaterialBase = NULL;
     for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
         mpMaterialTable->mMaterialNodePointer[i] =
             factory.create(NULL, J3DMaterialFactory::MATERIAL_TYPE_PATCHED, i, i_flags);
@@ -576,7 +576,7 @@ void J3DModelLoader::readPatchedMaterial(const J3DMaterialBlock* i_block, u32 i_
 void J3DModelLoader::readMaterialDL(const J3DMaterialDLBlock* i_block, u32 i_flags) {
     J3DMaterialFactory factory(*i_block);
     if (mpMaterialTable->mMaterialNum == 0) {
-        mpMaterialTable->field_0x20 = 1;
+        mpMaterialTable->mbIsLocked = 1;
         mpMaterialTable->mMaterialNum = i_block->mMaterialNum;
         mpMaterialTable->mUniqueMatNum = i_block->mMaterialNum;
         if (i_block->mpNameTable != NULL) {
@@ -586,7 +586,7 @@ void J3DModelLoader::readMaterialDL(const J3DMaterialDLBlock* i_block, u32 i_fla
             mpMaterialTable->mMaterialName = NULL;
         }
         mpMaterialTable->mMaterialNodePointer = new J3DMaterial*[mpMaterialTable->mMaterialNum];
-        mpMaterialTable->field_0x14 = NULL;
+        mpMaterialTable->mMaterialBase = NULL;
         for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
             mpMaterialTable->mMaterialNodePointer[i] = factory.create(
                 NULL, J3DMaterialFactory::MATERIAL_TYPE_LOCKED, i, (u32)i_flags // cast fixes regalloc

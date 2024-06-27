@@ -283,15 +283,15 @@ struct J3DAnmClusterFullData {
 
 struct J3DAnmTransformKeyData {
     /* 0x00 */ JUTDataBlockHeader mHeader;
-    /* 0x08 */ u8 field_0x8;
-    /* 0x09 */ u8 field_0x9;
+    /* 0x08 */ u8 mAttribute;
+    /* 0x09 */ u8 mDecShift;
     /* 0x0A */ s16 mFrameMax;
     /* 0x0C */ u16 field_0xc;
     /* 0x10 */ int field_0x10;
     /* 0x14 */ s32 mTableOffset;
-    /* 0x18 */ s32 field_0x18;
-    /* 0x1c */ s32 field_0x1c;
-    /* 0x20 */ s32 field_0x20;
+    /* 0x18 */ s32 mScaleOffset;
+    /* 0x1c */ s32 mRotOffset;
+    /* 0x20 */ s32 mTransOffset;
 };
 
 struct J3DAnmClusterKeyData {
