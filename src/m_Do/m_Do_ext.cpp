@@ -2088,7 +2088,6 @@ void mDoExt_3DlineMat1_c::setMaterial() {
 
 /* 800155DC-80015764       .text draw__19mDoExt_3DlineMat1_cFv */
 void mDoExt_3DlineMat1_c::draw() {
-    /* Nonmatching */
     GXLoadTexObj(&mTexObj, GX_TEXMAP0);
     u16 h = GXGetTexObjHeight(&mTexObj);
     u16 w = GXGetTexObjWidth(&mTexObj);
@@ -2111,10 +2110,12 @@ void mDoExt_3DlineMat1_c::draw() {
             GXTexCoord1x16(j);
             j++;
 
-            GXPosition1x16(j);
+            u16 j2 = j; // fakematch?
+            GXPosition1x16(j2);
             GXNormal1x8(1);
-            GXTexCoord1x16(j);
-            j++;
+            GXTexCoord1x16(j2);
+            j2++;
+            j = j2;
         }
         GXEnd();
         line++;
