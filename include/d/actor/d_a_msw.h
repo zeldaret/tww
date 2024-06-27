@@ -3,8 +3,9 @@
 
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
+
+class dBgW;
 
 class msw_class : public fopAc_ac_c {
 public:

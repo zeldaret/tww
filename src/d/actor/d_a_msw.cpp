@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_msw.h"
 #include "d/res/res_msw.h"
-#include "d/d_bg_w.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
@@ -107,8 +106,8 @@ static BOOL daMsw_Draw(msw_class* i_this) {
 void msw_move(msw_class* i_this) {
     i_this->m298 += 1;
 
-    // WTH?
     // Branchless comparison
+    // Probably something #ifdef'd out for debug
     switch (i_this->m29A) {
         case 0:
             break;
