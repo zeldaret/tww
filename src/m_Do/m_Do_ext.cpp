@@ -1943,11 +1943,16 @@ void mDoExt_3DlineMat0_c::draw() {
 
 /* 800148B4-80014E04       .text update__19mDoExt_3DlineMat0_cFUsfR8_GXColorUsP12dKy_tevstr_c */
 void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 space, dKy_tevstr_c* pTevStr) {
-    /* Nonmatching */
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
     cXyz nextP1;
+
+    mDoExt_3Dline_c* line;
+    u32 posArrSize;
+    cXyz* pos;
+    cXyz* r_dstPos;
+    cXyz* dstPos;
 
     mColor = newColor;
     mpTevStr = pTevStr;
@@ -1956,7 +1961,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         mNumSegments = mMaxSegments;
 
     view_class* view = dComIfGd_getView();
-    mDoExt_3Dline_c* line = mpLines;
+    line = mpLines;
 
     f32 spacing;
     if (space != 0) {
@@ -1965,11 +1970,11 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         spacing = 0.0f;
     }
 
-    u32 posArrSize = mNumSegments * 2 * sizeof(cXyz);
+    posArrSize = mNumSegments * 2 * sizeof(cXyz);
 
     for (s32 i = 0; i < mNumLines; i++) {
-        cXyz* pos = line->mpSegments;
-        cXyz* dstPos = line->mPosArr[mCurArr];
+        pos = line->mpSegments;
+        dstPos = line->mPosArr[mCurArr];
         f32 r_size = size;
 
         delta = pos[1] - pos[0];
@@ -1977,15 +1982,18 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         eyeDelta = pos[0] - view->mLookat.mEye;
         delta = delta.outprod(eyeDelta);
         f32 scale = delta.abs();
-        if (scale != 0.0f)
+        if (scale != 0.0f) {
             scale = size / scale;
-        VECScale(&delta, &delta, scale);
+            VECScale(&delta, &delta, scale);
+        }
 
         dstPos[0] = pos[0] + delta;
         dstPos[1] = pos[0] - delta;
 
+        r_dstPos = dstPos;
+        r_dstPos += 2;
+
         pos++;
-        cXyz* r_dstPos = &dstPos[2];
         nextP0 = pos[0] + delta;
         nextP1 = pos[0] - delta;
 
@@ -2030,11 +2038,17 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 
 /* 80014E04-80015328       .text update__19mDoExt_3DlineMat0_cFUsR8_GXColorP12dKy_tevstr_c */
 void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
-    /* Nonmatching */
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
     cXyz nextP1;
+
+    mDoExt_3Dline_c* line;
+    u32 posArrSize;
+    cXyz* pos;
+    cXyz* r_dstPos;
+    cXyz* dstPos;
+    u8* size_p;
 
     mColor = newColor;
     mpTevStr = pTevStr;
@@ -2043,32 +2057,36 @@ void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
         mNumSegments = mMaxSegments;
 
     view_class* view = dComIfGd_getView();
-    mDoExt_3Dline_c* line = mpLines;
+    line = mpLines;
 
-    u32 posArrSize = mNumSegments * 2 * sizeof(cXyz);
+    posArrSize = mNumSegments * 2 * sizeof(cXyz);
 
     for (s32 i = 0; i < mNumLines; i++) {
-        cXyz* pos = line->mpSegments;
+        pos = line->mpSegments;
 
-        u8* size_p = line->mpSize;
-        JUT_ASSERT(5243, size_p != NULL);
+        size_p = line->mpSize;
+        JUT_ASSERT(4738, size_p != NULL);
 
-        cXyz* dstPos = line->mPosArr[mCurArr];
+        dstPos = line->mPosArr[mCurArr];
 
         delta = pos[1] - pos[0];
 
         eyeDelta = pos[0] - view->mLookat.mEye;
         delta = delta.outprod(eyeDelta);
         f32 scale = delta.abs();
-        if (scale != 0.0f)
+        if (scale != 0.0f) {
             scale = *size_p / scale;
-        VECScale(&delta, &delta, scale);
+            VECScale(&delta, &delta, scale);
+        }
 
         dstPos[0] = pos[0] + delta;
         dstPos[1] = pos[0] - delta;
 
+        r_dstPos = dstPos;
+        r_dstPos += 2;
+
         pos++;
-        cXyz* r_dstPos = &dstPos[2];
+        size_p++;
         nextP0 = pos[0] + delta;
         nextP1 = pos[0] - delta;
 
@@ -2198,11 +2216,19 @@ void mDoExt_3DlineMat1_c::draw() {
 
 /* 80015764-80015E54       .text update__19mDoExt_3DlineMat1_cFUsfR8_GXColorUsP12dKy_tevstr_c */
 void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 space, dKy_tevstr_c* pTevStr) {
-    /* Nonmatching */
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
     cXyz nextP1;
+
+    mDoExt_3Dline_c* line;
+    u32 posArrSize;
+    u32 texArrSize;
+    cXyz* pos;
+    cXyz* r_dstPos;
+    cXyz* dstPos;
+    cXy* r_dstTex;
+    cXy* dstTex;
 
     mColor = newColor;
     mpTevStr = pTevStr;
@@ -2211,7 +2237,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         mNumSegments = mMaxSegments;
 
     view_class* view = dComIfGd_getView();
-    mDoExt_3Dline_c* line = mpLines;
+    line = mpLines;
 
     f32 spacing;
     if (space != 0) {
@@ -2220,19 +2246,23 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         spacing = 0.0f;
     }
 
-    u32 posArrSize = mNumSegments * 2 * sizeof(cXyz);
-    u32 texArrSize = mNumSegments * 2 * sizeof(cXy);
+    posArrSize = mNumSegments * 2 * sizeof(cXyz);
+    texArrSize = mNumSegments * 2 * sizeof(cXy);
 
+    f32 r_size;
     f32 dist = 0.0f;
     for (s32 i = 0; i < mNumLines; i++) {
-        cXyz* pos = line->mpSegments;
+        pos = line->mpSegments;
 
-        cXyz* dstPos = line->mPosArr[mCurArr];
-        cXy* dstTex = line->mTexArr[mCurArr];
-        f32 r_size = size;
+        dstPos = line->mPosArr[mCurArr];
+        dstTex = line->mTexArr[mCurArr];
+        r_size = size;
 
         dstTex[0].y = dist;
         dstTex[1].y = dist;
+
+        r_dstTex = dstTex;
+        r_dstTex += 2;
 
         delta = pos[1] - pos[0];
         f32 mag = delta.abs();
@@ -2241,16 +2271,18 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         eyeDelta = pos[0] - view->mLookat.mEye;
         delta = delta.outprod(eyeDelta);
         f32 scale = delta.abs();
-        if (scale != 0.0f)
+        if (scale != 0.0f) {
             scale = size / scale;
-        VECScale(&delta, &delta, scale);
+            VECScale(&delta, &delta, scale);
+        }
 
         dstPos[0] = pos[0] + delta;
         dstPos[1] = pos[0] - delta;
 
+        r_dstPos = dstPos;
+        r_dstPos += 2;
+
         pos++;
-        cXyz* r_dstPos = &dstPos[2];
-        cXy* r_dstTex = &dstTex[1];
         nextP0 = pos[0] + delta;
         nextP1 = pos[0] - delta;
 
@@ -2311,6 +2343,16 @@ void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
     cXyz nextP0;
     cXyz nextP1;
 
+    mDoExt_3Dline_c* line;
+    u32 posArrSize;
+    u32 texArrSize;
+    cXyz* pos;
+    cXyz* r_dstPos;
+    cXyz* dstPos;
+    cXy* r_dstTex;
+    cXy* dstTex;
+    u8* size_p;
+
     mColor = newColor;
     mpTevStr = pTevStr;
     mNumSegments = segs;
@@ -2318,23 +2360,26 @@ void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
         mNumSegments = mMaxSegments;
 
     view_class* view = dComIfGd_getView();
-    mDoExt_3Dline_c* line = mpLines;
+    line = mpLines;
 
-    u32 posArrSize = mNumSegments * 2 * sizeof(cXyz);
-    u32 texArrSize = mNumSegments * 2 * sizeof(cXy);
+    posArrSize = mNumSegments * 2 * sizeof(cXyz);
+    texArrSize = mNumSegments * 2 * sizeof(cXy);
 
     f32 dist = 0.0f;
     for (s32 i = 0; i < mNumLines; i++) {
-        cXyz* pos = line->mpSegments;
+        pos = line->mpSegments;
 
-        u8* size_p = line->mpSize;
+        size_p = line->mpSize;
         JUT_ASSERT(5243, size_p != NULL);
 
-        cXyz* dstPos = line->mPosArr[mCurArr];
-        cXy* dstTex = line->mTexArr[mCurArr];
+        dstPos = line->mPosArr[mCurArr];
+        dstTex = line->mTexArr[mCurArr];
 
         dstTex[0].y = dist;
         dstTex[1].y = dist;
+
+        r_dstTex = dstTex;
+        r_dstTex += 2;
 
         delta = pos[1] - pos[0];
         f32 mag = delta.abs();
@@ -2343,16 +2388,19 @@ void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
         eyeDelta = pos[0] - view->mLookat.mEye;
         delta = delta.outprod(eyeDelta);
         f32 scale = delta.abs();
-        if (scale != 0.0f)
+        if (scale != 0.0f) {
             scale = *size_p / scale;
-        VECScale(&delta, &delta, scale);
+            VECScale(&delta, &delta, scale);
+        }
 
         dstPos[0] = pos[0] + delta;
         dstPos[1] = pos[0] - delta;
 
+        r_dstPos = dstPos;
+        r_dstPos += 2;
+        size_p++;
+
         pos++;
-        cXyz* r_dstPos = &dstPos[2];
-        cXy* r_dstTex = &dstTex[1];
         nextP0 = pos[0] + delta;
         nextP1 = pos[0] - delta;
 
