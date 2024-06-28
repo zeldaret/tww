@@ -3148,7 +3148,7 @@ BOOL daPy_lk_c::execute() {
                 onNoResetFlg1(daPyFlg1_UNK200);
                 dComIfGs_setBottleItemIn(FWATER_BOTTLE, BIN_IN_WATER);
                 mDemo.setDemoType(5);
-                m3628 = -1;
+                m3628 = fpcM_ERROR_PROCESS_ID_e;
                 if (mCurProc == daPyProc_SCOPE_e) {
                     procWait_init();
                 }

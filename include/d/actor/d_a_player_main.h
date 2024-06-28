@@ -2102,11 +2102,11 @@ public:
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;
     /* 0x3624 */ u32 m3624;
-    /* 0x3628 */ int m3628;
+    /* 0x3628 */ uint m3628;
     /* 0x362C */ uint mTactZevPartnerPID;
     /* 0x3630 */ uint m3630;
     /* 0x3634 */ int m3634;
-    /* 0x3638 */ int mMsgId;
+    /* 0x3638 */ uint mMsgId;
     /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;
     /* 0x3640 */ s16 m3640;
     /* 0x3644 */ f32 m3644;
