@@ -5,9 +5,13 @@
 
 #include "d/d_magma.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_path.h"
+#include "d/res/res_magma.h"
 #include "m_Do/m_Do_mtx.h"
+#include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
+Mtx l_kuroOrthoMtx;
 Mtx l_colOrthoMtx;
 GXTexObj dMagma_packet_c::mKuroTexObj;
 Mtx dMagma_packet_c::mKuroMtx;
@@ -27,7 +31,7 @@ void dMagma_ball_c::draw() {
 }
 
 /* 800756B8-800757D4       .text rangeCheck__13dMagma_ball_cFR4cXyzPf */
-bool dMagma_ball_c::rangeCheck(cXyz&, f32*) {
+BOOL dMagma_ball_c::rangeCheck(cXyz&, f32*) {
     /* Nonmatching */
 }
 
@@ -99,13 +103,12 @@ void dMagma_floor_c::update() {
 }
 
 /* 80075E50-80076038       .text create__14dMagma_floor_cFR4cXyzR4cXyzsUci */
-void dMagma_floor_c::create(cXyz&, cXyz&, short, unsigned char, int) {
+dMagma_ball_c** dMagma_floor_c::create(cXyz&, cXyz&, short, unsigned char, int) {
     /* Nonmatching */
 }
 
 /* 80076038-80076080       .text __dt__13dMagma_ball_cFv */
 dMagma_ball_c::~dMagma_ball_c() {
-    /* Nonmatching */
 }
 
 /* 80076080-80076100       .text remove__14dMagma_floor_cFv */
@@ -119,28 +122,42 @@ void dMagma_floor_c::remove() {
 }
 
 /* 80076100-80076110       .text newFloor__13dMagma_room_cFP14dMagma_floor_c */
-void dMagma_room_c::newFloor(dMagma_floor_c*) {
-    /* Nonmatching */
+void dMagma_room_c::newFloor(dMagma_floor_c* floor) {
+    floor->mpNext = mpFirst;
+    mpFirst = floor;
 }
 
 /* 80076110-80076158       .text deleteFloor__13dMagma_room_cFv */
 void dMagma_room_c::deleteFloor() {
-    /* Nonmatching */
+    while (mpFirst != NULL) {
+        mpFirst->remove();
+        mpFirst = mpFirst->mpNext;
+    }
 }
 
 /* 80076158-800762D0       .text __ct__15dMagma_packet_cFv */
 dMagma_packet_c::dMagma_packet_c() {
-    /* Nonmatching */
+    dComIfG_setObjectRes("Magma", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
+
+    ResTIMG* kuro = (ResTIMG*)dComIfG_getObjectRes("Magma", MAGMA_BTI_MAG_KURO);
+    mDoLib_setResTimgObj(kuro, &mKuroTexObj, 0, NULL);
+
+    C_MTXLightOrtho(l_kuroOrthoMtx, 1.0f, -1.0f, -1.0f, 1.0f, 0.5f, -0.5f, 0.5f, 0.5f);
+    mDoMtx_copy(l_kuroOrthoMtx, l_colOrthoMtx);
+
+    ResTIMG* col = (ResTIMG*)dComIfG_getObjectRes("Magma", MAGMA_BTI_MAG_COL);
+    mDoLib_setResTimgObj(col, &mColTexObj, 0, NULL);
+    mDoMtx_identity(mFloorMtx);
+    mDoMtx_identity(mBallMtx);
+    mTimer = 0.0f;
 }
 
 /* 800762D0-800762DC       .text __ct__13dMagma_room_cFv */
-dMagma_room_c::dMagma_room_c() {
-    /* Nonmatching */
+dMagma_room_c::dMagma_room_c() : mpFirst() {
 }
 
 /* 800762DC-80076318       .text __dt__14dMagma_floor_cFv */
 dMagma_floor_c::~dMagma_floor_c() {
-    /* Nonmatching */
 }
 
 /* 80076318-80076324       .text __ct__14dMagma_floor_cFv */
@@ -150,7 +167,7 @@ dMagma_floor_c::dMagma_floor_c() {
 
 /* 80076324-800763CC       .text __dt__15dMagma_packet_cFv */
 dMagma_packet_c::~dMagma_packet_c() {
-    /* Nonmatching */
+    dComIfG_deleteObjectRes("Magma");
 }
 
 /* 800763CC-800764EC       .text draw__15dMagma_packet_cFv */
@@ -179,13 +196,51 @@ void dMagma_packet_c::draw() {
 }
 
 /* 800764EC-800764FC       .text morfCalc__Ffff */
-void morfCalc(float, float, float) {
-    /* Nonmatching */
+f32 morfCalc(f32 min, f32 max, f32 v) {
+    return (max - min) * v + min;
 }
 
 /* 800764FC-80076770       .text calc__15dMagma_packet_cFv */
 void dMagma_packet_c::calc() {
     /* Nonmatching */
+    l_kuroOrthoMtx[0][3] += 0.001f;
+    if (l_kuroOrthoMtx[0][3] >= 1.5f)
+        l_kuroOrthoMtx[0][3] -= 1.0f;
+    l_kuroOrthoMtx[1][3] = l_kuroOrthoMtx[0][3];
+
+    mDoMtx_stack_c::scaleS(0.0022f, 0.0018f, 0.0017f);
+    mDoMtx_stack_c::XrotM(0x4000);
+    mDoMtx_concat(l_kuroOrthoMtx, mDoMtx_stack_c::get(), mKuroMtx);
+
+    dMagma_room_c* room = mRoom;
+    for (s32 i = 0; i < ARRAY_SIZE(mRoom); i++, room++)
+        for (dMagma_floor_c* floor = room->mpFirst; floor != NULL; floor = floor->mpNext)
+            if (floor->mpBalls != NULL)
+                floor->calc(i);
+
+    mTimer += 1.0f;
+    if (mTimer >= 119.0f)
+        mTimer -= 119.0f;
+
+    static GXColor l_keyColor[] = {
+        { 0x00, 0x00, 0x00, 0x00 },
+        { 0xFF, 0x96, 0x00, 0x3C },
+        { 0x00, 0x00, 0x00, 0x77 },
+    };
+
+    GXColor* color = &l_keyColor[1];
+    for (s32 i = 1; i < ARRAY_SIZE(l_keyColor); i++, color++) {
+        if (mTimer < color->a)
+            break;
+    }
+
+    GXColor* color0 = &color[0];
+    GXColor* color1 = &color[1];
+
+    f32 t = (mTimer - color0->a) / (color1->a - color0->a);
+    mColor1.r = morfCalc(color0->r, color1->r, t);
+    mColor1.g = morfCalc(color0->g, color1->g, t);
+    mColor1.b = morfCalc(color0->b, color1->b, t);
 }
 
 /* 80076770-800767E4       .text update__15dMagma_packet_cFv */
@@ -199,13 +254,62 @@ void dMagma_packet_c::update() {
 }
 
 /* 800767E4-80076924       .text checkYpos__15dMagma_packet_cFR4cXyz */
-void dMagma_packet_c::checkYpos(cXyz&) {
+f32 dMagma_packet_c::checkYpos(cXyz& pos) {
     /* Nonmatching */
+    f32 ret = -100000000.0f;
+    dMagma_floor_c* floor = mFloor;
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mFloor); floor++, i++) {
+        dMagma_ball_c** ball = floor->mpBalls;
+        if (ball == NULL)
+            continue;
+
+        if (fabsf(pos.y - floor->mBallPos.y) <= 236.8309f && fabsf(pos.x - floor->mBallPos.x) <= floor->mDistX * 500.0f && fabsf(pos.z - floor->mBallPos.z) <= floor->mDistZ * 500.0f) {
+            for (s32 j = 0; j < floor->mBallNum; ball++, j++) {
+                f32 y;
+                if ((*ball)->rangeCheck(pos, &y)) {
+                    if (y < floor->mBallPos.y)
+                        y = floor->mBallPos.y;
+
+                    if (y > ret)
+                        ret = y;
+                }
+            }
+        }
+    }
+
+    return ret;
 }
 
 /* 80076924-80076AA4       .text newFloor__15dMagma_packet_cFR4cXyzR4cXyzis */
-void dMagma_packet_c::newFloor(cXyz&, cXyz&, int i_roomNo, s16 i_pathNo) {
-    /* Nonmatching */
+dMagma_floor_c* dMagma_packet_c::newFloor(cXyz& p0, cXyz& p1, int i_roomNo, s16 i_pathNo) {
+    JUT_ASSERT(0x36e, 0 <= i_roomNo && i_roomNo < 64);
+
+    dMagma_floor_c* floor = mFloor;
+    for (s32 i = 0; i < ARRAY_SIZE(mFloor); i++, floor++) {
+        if (floor->mpBalls == NULL) {
+            s32 param = 0;
+            if (i_pathNo < 0) {
+                param = -i_pathNo;
+            } else {
+                dPath* path = dPath_GetRoomPath(i_pathNo, i_roomNo);
+                if (path == NULL)
+                    return NULL;
+
+                dPath__Point* pnt = path->mpPnt;
+                for (s32 j = 0; j < path->m_num; j++)
+                    param += (s32)(pnt->mArg3 * 4.0f); // bug? forgot to increment pnt
+            }
+
+            dMagma_ball_c** balls = floor->create(p0, p1, i_pathNo, param, i_roomNo);
+            if (balls == NULL)
+                return NULL;
+
+            mRoom[i_roomNo].newFloor(floor);
+            return floor;
+        }
+    }
+
+    return NULL;
 }
 
 /* 80076AA4-80076B00       .text __dt__17dMagma_ballPath_cFv */
