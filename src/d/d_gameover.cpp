@@ -58,7 +58,7 @@ public:
     /* 0x324 */ JPABaseEmitter* mpEmitter1;
     /* 0x328 */ f32 mAlpha;
     /* 0x32C */ s32 field_0x32c;
-    /* 0x330 */ u32 field_0x330;
+    /* 0x330 */ s32 field_0x330;
     /* 0x334 */ u32 field_0x334;
     /* 0x338 */ u32 field_0x338;
     /* 0x33C */ u16 field_0x33c;
@@ -299,7 +299,56 @@ void dDlst_GameOverScrnDraw_c::valueInit() {
 
 /* 8018ECD8-8018EEC8       .text animeOpen__24dDlst_GameOverScrnDraw_cFv */
 BOOL dDlst_GameOverScrnDraw_c::animeOpen() {
-    /* Nonmatching */
+    const static f32 x[8] = {
+        -175.0f, -130.0f, -80.0f, -30.0f,
+        32.0f, 75.0f, 120.0f, 160.0f
+    };
+    
+    u8 var_r31 = 0;
+    s16 var_r30 = -1;
+    if (field_0x32c >= 0) {
+        if (field_0x330 != 0) {
+            field_0x330 -= 1;
+        } else {
+            s32 rand = cM_rndF(field_0x32c);
+            if (rand >= field_0x32c - 1) {
+                rand = field_0x32c - 1;
+            }
+
+            for (int i = 0; i < dGover_tex_number; i++) {
+                if (letter[i].mUserArea == 0) {
+                    if (rand == 0) {
+                        anime1(i);
+                        var_r30 = i;
+                        break;
+                    } else {
+                        rand -= 1;
+                    }
+                }
+            }
+
+            field_0x32c -= 1;
+            field_0x330 = (field_0x32c * field_0x32c) / 5;
+        }
+    }
+
+
+    for (int i = 0; i < dGover_tex_number; i++) {
+        s16 userArea = letter[i].mUserArea;
+
+        if (userArea >= 0 && userArea < 9) {
+            if (userArea >= 1 && var_r30 != i) {
+                anime1(i);
+                if (letter[i].mUserArea == 5) {
+                    dComIfGp_particle_set2Dfore(0x2E, &cXyz(x[i], 50.0f, 0.0f));
+                }
+            }
+
+            var_r31 = 1;
+        }
+    }
+
+    return var_r31 == 0 ? TRUE : FALSE;
 }
 
 /* 8018EEC8-8018F05C       .text animeClose__24dDlst_GameOverScrnDraw_cFv */
