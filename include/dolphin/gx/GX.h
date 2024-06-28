@@ -26,7 +26,6 @@ extern "C" {
     (reg) = ((u32) (reg) & ~(((1 << (nbits)) - 1) << (shift))) |               \
             ((u32) (value) << (shift));
 
-#define GX_LOAD_BP_REG 0x61
 #define GX_NOP 0
 
 typedef union {
@@ -138,16 +137,9 @@ inline void GXTexCoord1x16(u16 x) {
     GXFIFO.u16 = x;
 }
 
-inline void GFWriteBPCmd(u32 param_1) {
-    GXFIFO.u8 = 0x61;
-    GXFIFO.u32 = param_1;
-}
-
-inline void GFFill(u16 param_1, u32 param_2) {
-    GXFIFO.u8 = 0x10;
-    GXFIFO.u16 = 0;
-    GXFIFO.u16 = param_1;
-    GXFIFO.u32 = param_2;
+inline void GFWriteBPCmd(u32 x) {
+    GXFIFO.u8 = GX_CMD_LOAD_BP_REG;
+    GXFIFO.u32 = x;
 }
 
 inline void GXEnd() {}
