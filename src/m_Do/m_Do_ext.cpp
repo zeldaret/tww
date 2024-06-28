@@ -1989,7 +1989,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         nextP0 = pos[0] + delta;
         nextP1 = pos[0] - delta;
 
-        for (s32 j = mNumSegments - 2; j > 0;) {
+        for (s32 j = mNumSegments - 2; j > 0; j--) {
             if (j < space)
                 r_size -= spacing;
 
@@ -2010,9 +2010,9 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
             r_dstPos += 2;
 
             pos++;
+
             nextP0 = pos[0] + delta;
             nextP1 = pos[0] - delta;
-            j--;
         }
 
         if (space != 0) {
@@ -2029,8 +2029,79 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 }
 
 /* 80014E04-80015328       .text update__19mDoExt_3DlineMat0_cFUsR8_GXColorP12dKy_tevstr_c */
-void mDoExt_3DlineMat0_c::update(u16, GXColor&, dKy_tevstr_c*) {
+void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
     /* Nonmatching */
+    cXyz eyeDelta;
+    cXyz delta;
+    cXyz nextP0;
+    cXyz nextP1;
+
+    mColor = newColor;
+    mpTevStr = pTevStr;
+    mNumSegments = segs;
+    if (mNumSegments > mMaxSegments)
+        mNumSegments = mMaxSegments;
+
+    view_class* view = dComIfGd_getView();
+    mDoExt_3Dline_c* line = mpLines;
+
+    u32 posArrSize = mNumSegments * 2 * sizeof(cXyz);
+
+    for (s32 i = 0; i < mNumLines; i++) {
+        cXyz* pos = line->mpSegments;
+
+        u8* size_p = line->mpSize;
+        JUT_ASSERT(5243, size_p != NULL);
+
+        cXyz* dstPos = line->mPosArr[mCurArr];
+
+        delta = pos[1] - pos[0];
+
+        eyeDelta = pos[0] - view->mLookat.mEye;
+        delta = delta.outprod(eyeDelta);
+        f32 scale = delta.abs();
+        if (scale != 0.0f)
+            scale = *size_p / scale;
+        VECScale(&delta, &delta, scale);
+
+        dstPos[0] = pos[0] + delta;
+        dstPos[1] = pos[0] - delta;
+
+        pos++;
+        cXyz* r_dstPos = &dstPos[2];
+        nextP0 = pos[0] + delta;
+        nextP1 = pos[0] - delta;
+
+        for (s32 j = mNumSegments - 2; j > 0; j--) {
+            delta = pos[1] - pos[0];
+
+            eyeDelta = pos[0] - view->mLookat.mEye;
+            delta = delta.outprod(eyeDelta);
+            scale = delta.abs();
+            if (scale != 0.0f)
+                scale = *size_p / scale;
+
+            VECScale(&delta, &delta, scale);
+            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
+            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+
+            r_dstPos[0] = nextP0 * 0.5f;
+            r_dstPos[1] = nextP1 * 0.5f;
+            r_dstPos += 2;
+
+            pos++;
+            size_p++;
+
+            nextP0 = pos[0] + delta;
+            nextP1 = pos[0] - delta;
+        }
+
+        r_dstPos[0] = nextP0;
+        r_dstPos[1] = nextP1;
+
+        DCStoreRangeNoSync(dstPos, posArrSize);
+        line++;
+    }
 }
 
 /* 80015328-800154C4       .text init__19mDoExt_3DlineMat1_cFUsUsP7ResTIMGi */
@@ -2183,12 +2254,13 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         nextP0 = pos[0] + delta;
         nextP1 = pos[0] - delta;
 
-        for (s32 j = mNumSegments - 2; j > 0;) {
+        for (s32 j = mNumSegments - 2; j > 0; j--) {
             if (j < space)
                 r_size -= spacing;
 
-            dstTex[2].y = dist;
-            dstTex[3].y = dist;
+            r_dstTex[0].y = dist;
+            r_dstTex[1].y = dist;
+            r_dstTex += 2;
 
             delta = pos[1] - pos[0];
             f32 mag = delta.abs();
@@ -2204,16 +2276,14 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
             VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
             VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
 
-            r_dstPos[2] = nextP0 * 0.5f;
-            r_dstPos[3] = nextP1 * 0.5f;
+            r_dstPos[0] = nextP0 * 0.5f;
+            r_dstPos[1] = nextP1 * 0.5f;
+            r_dstPos += 2;
 
             pos++;
+
             nextP0 = pos[0] + delta;
             nextP1 = pos[0] - delta;
-
-            j--;
-            r_dstTex++;
-            r_dstPos += 2;
         }
 
         r_dstTex[0].y = dist;
@@ -2234,10 +2304,98 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 }
 
 /* 80015E54-80016518       .text update__19mDoExt_3DlineMat1_cFUsR8_GXColorP12dKy_tevstr_c */
-void mDoExt_3DlineMat1_c::update(u16, GXColor&, dKy_tevstr_c*) {
+void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
     /* Nonmatching */
-    u8* size_p = mpLines->mpSize;
-    JUT_ASSERT(5243, size_p != NULL);
+    cXyz eyeDelta;
+    cXyz delta;
+    cXyz nextP0;
+    cXyz nextP1;
+
+    mColor = newColor;
+    mpTevStr = pTevStr;
+    mNumSegments = segs;
+    if (mNumSegments > mMaxSegments)
+        mNumSegments = mMaxSegments;
+
+    view_class* view = dComIfGd_getView();
+    mDoExt_3Dline_c* line = mpLines;
+
+    u32 posArrSize = mNumSegments * 2 * sizeof(cXyz);
+    u32 texArrSize = mNumSegments * 2 * sizeof(cXy);
+
+    f32 dist = 0.0f;
+    for (s32 i = 0; i < mNumLines; i++) {
+        cXyz* pos = line->mpSegments;
+
+        u8* size_p = line->mpSize;
+        JUT_ASSERT(5243, size_p != NULL);
+
+        cXyz* dstPos = line->mPosArr[mCurArr];
+        cXy* dstTex = line->mTexArr[mCurArr];
+
+        dstTex[0].y = dist;
+        dstTex[1].y = dist;
+
+        delta = pos[1] - pos[0];
+        f32 mag = delta.abs();
+
+        dist += mag * 0.1f;
+        eyeDelta = pos[0] - view->mLookat.mEye;
+        delta = delta.outprod(eyeDelta);
+        f32 scale = delta.abs();
+        if (scale != 0.0f)
+            scale = *size_p / scale;
+        VECScale(&delta, &delta, scale);
+
+        dstPos[0] = pos[0] + delta;
+        dstPos[1] = pos[0] - delta;
+
+        pos++;
+        cXyz* r_dstPos = &dstPos[2];
+        cXy* r_dstTex = &dstTex[1];
+        nextP0 = pos[0] + delta;
+        nextP1 = pos[0] - delta;
+
+        for (s32 j = mNumSegments - 2; j > 0; j--) {
+            r_dstTex[0].y = dist;
+            r_dstTex[1].y = dist;
+            r_dstTex += 2;
+
+            delta = pos[1] - pos[0];
+            f32 mag = delta.abs();
+
+            dist += mag * 0.1f;
+            eyeDelta = pos[0] - view->mLookat.mEye;
+            delta = delta.outprod(eyeDelta);
+            scale = delta.abs();
+            if (scale != 0.0f)
+                scale = *size_p / scale;
+
+            VECScale(&delta, &delta, scale);
+            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
+            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+
+            r_dstPos[0] = nextP0 * 0.5f;
+            r_dstPos[1] = nextP1 * 0.5f;
+            r_dstPos += 2;
+
+            pos++;
+            size_p++;
+
+            nextP0 = pos[0] + delta;
+            nextP1 = pos[0] - delta;
+        }
+
+        r_dstTex[0].y = dist;
+        r_dstTex[1].y = dist;
+
+        r_dstPos[0] = nextP0;
+        r_dstPos[1] = nextP1;
+
+        DCStoreRangeNoSync(dstPos, posArrSize);
+        DCStoreRangeNoSync(dstTex, texArrSize);
+        line++;
+    }
 }
 
 /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
