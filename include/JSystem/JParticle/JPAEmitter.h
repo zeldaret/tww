@@ -302,7 +302,7 @@ public:
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void isChildDraw() {}
     void isContinuousParticle() {}
-    void isZDraw() {}
+    bool isZDraw() { return mDraw.isZDraw(); }
     void loadTexture(u8, GXTexMapID) {}
     void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
     void setGlobalParticleHeightScale(f32) {}

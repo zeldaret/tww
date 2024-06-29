@@ -67,6 +67,7 @@ public:
     void zDrawParticle();
     void zDrawChild();
     void loadYBBMtx(MtxP);
+    bool isZDraw() { return field_0xc2 & 1; }
 
     static JPADrawVisitorContainer vc;
     static JPADrawClipBoard cb;
