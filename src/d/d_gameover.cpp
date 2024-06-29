@@ -412,9 +412,15 @@ void dDlst_GameOverScrnDraw_c::setEmitter1(cXyz pos) {
     mpEmitter1 = dComIfGp_particle_set2DmenuFore(0x30, &pos);
 }
 
+// Fake inline
+inline f32 temp(s16 y, f32 div) {
+    return (f32)y * (f32)y / div;
+}
+
 /* 8018F13C-8018F334       .text anime1__24dDlst_GameOverScrnDraw_cFi */
 BOOL dDlst_GameOverScrnDraw_c::anime1(int idx) {
-    /* Nonmatching */
+    /* Fakematch */
+
     BOOL ret = FALSE;
 
     if (letter[idx].mUserArea < 5) {
@@ -422,16 +428,14 @@ BOOL dDlst_GameOverScrnDraw_c::anime1(int idx) {
             fopMsgM_setInitAlpha(&letter[idx]);
 
         letter[idx].mUserArea++;
-        f32 y = letter[idx].mUserArea;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - (y * y) / 25.0f) * -288.0f);
+        s16 userArea = letter[idx].mUserArea;
+        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - temp(letter[idx].mUserArea, 25.0f)) * -288.0f);
     } else if (letter[idx].mUserArea < 7) {
         letter[idx].mUserArea++;
-        f32 y = letter[idx].mUserArea - 5;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, ((y * y) / 4.0f) * -9.0f);
+        fopMsgM_paneTrans(&letter[idx], 0.0f, (temp(letter[idx].mUserArea - 5, 4.0f)) * -9.0f);
     } else if (letter[idx].mUserArea < 9) {
         letter[idx].mUserArea++;
-        f32 y = letter[idx].mUserArea - 7;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - (y * y) / 4.0f) * -9.0f);
+        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - temp(letter[idx].mUserArea - 7, 4.0f)) * -9.0f);
         if (letter[idx].mUserArea == 9)
             mDoAud_seStart(JA_SE_EXIT_GAME_OVER);
     }
