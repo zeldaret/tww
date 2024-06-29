@@ -44,7 +44,7 @@ public:
     void setEmitter0(cXyz);
     void setEmitter1(cXyz);
     BOOL anime1(int);
-    void anime2(int);
+    BOOL anime2(int);
     void setRotate(fopMsgM_pane_class*, f32);
 
     virtual void draw();
@@ -447,8 +447,39 @@ BOOL dDlst_GameOverScrnDraw_c::anime1(int idx) {
 }
 
 /* 8018F334-8018F4A8       .text anime2__24dDlst_GameOverScrnDraw_cFi */
-void dDlst_GameOverScrnDraw_c::anime2(int) {
-    /* Nonmatching */
+BOOL dDlst_GameOverScrnDraw_c::anime2(int idx) {
+    static const s16 rot[6] = {
+        40, 30, 20,
+        -20, -30, -40
+    };
+
+    BOOL ret = FALSE;
+
+    if (letter[idx].mUserArea < 7) {
+        if (letter[idx].mUserArea == 0) {
+            s32 rand = cM_rndF(6.0f);
+
+            if (rand > 5) {
+                rand = 5;
+            }
+
+            mRotate[idx] = rot[rand];
+        }
+
+        letter[idx].mUserArea += 1;
+
+        f32 y = letter[idx].mUserArea / 7.0f;
+        f32 y2 = (f32)letter[idx].mUserArea * (f32)letter[idx].mUserArea / 49.0f;
+        setRotate(&letter[idx], (f32)mRotate[idx] * (1.0f - y));
+        fopMsgM_paneTrans(&letter[idx], 0.0f, y2 * 244.0f);
+    }
+    
+    if (letter[idx].mUserArea == 7) {
+        fopMsgM_setNowAlphaZero(&letter[idx]);
+        ret = TRUE;
+    }
+
+    return ret;
 }
 
 /* 8018F4A8-8018F548       .text setRotate__24dDlst_GameOverScrnDraw_cFP18fopMsgM_pane_classf */
