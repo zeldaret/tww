@@ -5,6 +5,7 @@
 
 #include "d/d_door.h"
 #include "d/d_com_inf_game.h"
+#include "d/res/res_key.h"
 #include "d/actor/d_a_player.h"
 
 /* 8006B39C-8006B3A8       .text getSwbit__12dDoor_info_cFv */
@@ -282,9 +283,9 @@ void dDoor_info_c::closeEndCom() {
     else
         rad = -180.0f;
 
-    cXyz pos(player->current.pos.x - rad * mAngleVec.x, player->current.pos.y, player->current.pos.z - rad * mAngleVec.z);
+    cXyz pos(current.pos.x - rad * mAngleVec.x, current.pos.y, current.pos.z - rad * mAngleVec.z);
     g_dComIfG_gameInfo.save.getRestart().setRoom(pos,
-        dot > 0.0f ? player->current.angle.y : (s16)(player->current.angle.y + 0x8000),
+        dot > 0.0f ? current.angle.y : (s16)(current.angle.y + 0x8000),
         fopAcM_GetRoomNo(player));
 }
 
@@ -359,13 +360,37 @@ void dDoor_info_c::setPosAndAngle(cXyz* pPos, s16 angle) {
 }
 
 /* 8006C2BC-8006C388       .text smokeInit__13dDoor_smoke_cFP12dDoor_info_c */
-void dDoor_smoke_c::smokeInit(dDoor_info_c*) {
+void dDoor_smoke_c::smokeInit(dDoor_info_c* door) {
     /* Nonmatching */
+    mPos = door->current.pos;
+    mRot.y = door->shape_angle.y;
+    JPABaseEmitter* emtr = dComIfGp_particle_set(0x2022, &mPos, &mRot, NULL, 0xAA, &mSmokeCb, door->current.roomNo);
+    m34 = 0;
+    m35 = 0;
+    if (emtr != NULL) {
+        emtr->setRate(16.0f);
+        emtr->setSpread(0.35f);
+        emtr->mGlobalDynamicsScale.x = 2.0f;
+        emtr->mGlobalDynamicsScale.y = 2.0f;
+        emtr->mGlobalDynamicsScale.z = 2.0f;
+        emtr->mGlobalParticleScale.x = 2.0f;
+        emtr->mGlobalParticleScale.y = 2.0f;
+        emtr->mGlobalParticleScale.z = 2.0f;
+    }
 }
 
 /* 8006C388-8006C41C       .text smokeProc__13dDoor_smoke_cFP12dDoor_info_c */
-void dDoor_smoke_c::smokeProc(dDoor_info_c*) {
+void dDoor_smoke_c::smokeProc(dDoor_info_c* door) {
     /* Nonmatching */
+    if (m35 != 0) {
+        f32 sign = (m34 & 1) ? 1.0f : -1.0f;
+        f32 wave = (m34 * 20) * sign;
+        m34++;
+        mPos.x += wave * door->mAngleVec.z;
+        mPos.z += wave * door->mAngleVec.x;
+    } else {
+        m35 = 1;
+    }
 }
 
 /* 8006C41C-8006C448       .text smokeEnd__13dDoor_smoke_cFv */
@@ -384,28 +409,89 @@ void dDoor_key2_c::keyResDelete() {
 }
 
 /* 8006C4A8-8006C5E8       .text keyInit__12dDoor_key2_cFP12dDoor_info_c */
-void dDoor_key2_c::keyInit(dDoor_info_c*) {
+void dDoor_key2_c::keyInit(dDoor_info_c* door) {
     /* Nonmatching */
+    if (mpModel != NULL && mbEnabled && !door->mFrontCheck) {
+        if (door->getSwbit() < 0x80)
+            dComIfGs_onSwitch(door->getSwbit(), -1);
+        if (!mbIsBossDoor)
+            dComIfGp_setItemKeyNumCount(dComIfGp_getItemKeyNumCount() - 1);
+        switch (mbIsBossDoor) {
+        case 1: fopAcM_seStart(door, JA_SE_OBJ_BOSS_LOCK_OPEN, 0); break;
+        default: fopAcM_seStart(door, JA_SE_OBJ_DOOR_CHAIN_OPEN, 0); break;
+        }
+        m20 = 1;
+    } else {
+        m20 = 0;
+    }
 }
 
 /* 8006C5E8-8006C650       .text keyProc__12dDoor_key2_cFv */
-void dDoor_key2_c::keyProc() {
-    /* Nonmatching */
+BOOL dDoor_key2_c::keyProc() {
+    if (m20) {
+        if (mBckAnim.play()) {
+            keyOff();
+            m20 = 0;
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    } else {
+        return TRUE;
+    }
 }
 
 /* 8006C650-8006C764       .text keyCreate_Nkey__12dDoor_key2_cFv */
-void dDoor_key2_c::keyCreate_Nkey() {
-    /* Nonmatching */
+BOOL dDoor_key2_c::keyCreate_Nkey() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", KEY_BDL_VLOCN);
+    JUT_ASSERT(0x2cc, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpModel == NULL)
+        return FALSE;
+
+    J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCN);
+    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+        return FALSE;
+
+    return TRUE;
 }
 
 /* 8006C764-8006C910       .text keyCreate_Bkey__12dDoor_key2_cFv */
-void dDoor_key2_c::keyCreate_Bkey() {
-    /* Nonmatching */
+BOOL dDoor_key2_c::keyCreate_Bkey() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", KEY_BDL_VLOCB);
+    JUT_ASSERT(0x2e4, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpModel == NULL)
+        return FALSE;
+
+    J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCB);
+    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+        return FALSE;
+
+    J3DSkinDeform* deform = new J3DSkinDeform();
+    if (deform == NULL)
+        return FALSE;
+
+    switch (mpModel->setSkinDeform(deform, 1)) {
+    case J3DErrType_OutOfMemory:
+        return FALSE;
+    default:
+        JUT_ASSERT(0x306, FALSE);
+    case J3DErrType_Success:
+        return TRUE;
+    }
 }
 
 /* 8006C910-8006C948       .text keyCreate__12dDoor_key2_cFi */
-void dDoor_key2_c::keyCreate(int) {
+BOOL dDoor_key2_c::keyCreate(int type) {
     /* Nonmatching */
+    mbIsBossDoor = type;
+    switch (type) {
+    case 1: return keyCreate_Bkey();
+    default: return keyCreate_Nkey();
+    }
 }
 
 /* 8006C948-8006C954       .text keyOn__12dDoor_key2_cFv */
@@ -419,17 +505,28 @@ void dDoor_key2_c::keyOff() {
 }
 
 /* 8006C960-8006CA10       .text calcMtx__12dDoor_key2_cFP12dDoor_info_c */
-void dDoor_key2_c::calcMtx(dDoor_info_c*) {
-    /* Nonmatching */
+void dDoor_key2_c::calcMtx(dDoor_info_c* door) {
+    if (mbEnabled) {
+        mDoMtx_stack_c::transS(door->current.pos);
+        mDoMtx_stack_c::YrotM(door->current.angle.y);
+        switch (mbIsBossDoor) {
+        case 1: mDoMtx_stack_c::transM(0.0f, 230.0f, 20.0f); break;
+        default: mDoMtx_stack_c::transM(0.0f, 150.0f, 20.0f); break;
+        }
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
 }
 
 /* 8006CA10-8006CA78       .text draw__12dDoor_key2_cFP12dDoor_info_c */
-void dDoor_key2_c::draw(dDoor_info_c*) {
-    /* Nonmatching */
+void dDoor_key2_c::draw(dDoor_info_c* door) {
+    J3DModelData* modelData = mpModel->getModelData();
+    g_env_light.setLightTevColorType(mpModel, &door->tevStr);
+    mBckAnim.entry(modelData);
+    mDoExt_modelUpdateDL(mpModel);
 }
 
 /* 8006CA78-8006CB28       .text calcMtx__12dDoor_stop_cFP12dDoor_info_c */
-void dDoor_stop_c::calcMtx(dDoor_info_c*) {
+void dDoor_stop_c::calcMtx(dDoor_info_c* door) {
     /* Nonmatching */
 }
 

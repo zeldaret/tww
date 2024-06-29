@@ -366,6 +366,7 @@ public:
     void setNpcNameMessageID(u32 id) { mNpcNameMessageID = id; }
     void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
 
+    s16 getItemKeyNumCount() { return mItemKeyNumCount; }
     void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
 
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
@@ -2247,6 +2248,10 @@ inline void dComIfGp_setNpcNameMessageID(u32 id) {
 
 inline void dComIfGp_setItemNameMessageID(u32 id) {
     g_dComIfG_gameInfo.play.setItemNameMessageID(id);
+}
+
+inline s16 dComIfGp_getItemKeyNumCount() {
+    return g_dComIfG_gameInfo.play.getItemKeyNumCount();
 }
 
 inline void dComIfGp_setItemKeyNumCount(s16 num) {

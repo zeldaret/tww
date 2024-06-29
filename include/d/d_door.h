@@ -63,13 +63,9 @@ public:
 
 public:
     /* 0x00 */ dPa_smokeEcallBack mSmokeCb;
-    /* 0x04 */ u8 m04[0x22 - 0x04];
-    /* 0x22 */ s16 m22;
-    /* 0x24 */ u8 m24[0x28 - 0x24];
-    /* 0x28 */ f32 m28;
-    /* 0x2C */ f32 m2C;
-    /* 0x30 */ f32 m30;
-    /* 0x34 */ s8 m34;
+    /* 0x22 */ csXyz mRot;
+    /* 0x28 */ cXyz mPos;
+    /* 0x34 */ u8 m34;
     /* 0x35 */ u8 m35;
 };
 
@@ -78,10 +74,10 @@ public:
     void keyResLoad();
     void keyResDelete();
     void keyInit(dDoor_info_c*);
-    void keyProc();
-    void keyCreate_Nkey();
-    void keyCreate_Bkey();
-    void keyCreate(int);
+    BOOL keyProc();
+    BOOL keyCreate_Nkey();
+    BOOL keyCreate_Bkey();
+    BOOL keyCreate(int);
     void keyOn();
     void keyOff();
     void calcMtx(dDoor_info_c*);
