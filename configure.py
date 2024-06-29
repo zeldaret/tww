@@ -495,7 +495,7 @@ config.libs = [
             Object(Matching,    "d/d_envse.cpp"),
             Object(NonMatching, "d/d_file_error.cpp"),
             Object(NonMatching, "d/d_file_select.cpp"),
-            Object(Matching,    "d/d_gameover.cpp"),
+            Object(NonMatching, "d/d_gameover.cpp"),
             Object(NonMatching, "d/d_kankyo.cpp"),
             Object(Matching,    "d/d_kyeff.cpp"),
             Object(Matching,    "d/d_kyeff2.cpp"),
