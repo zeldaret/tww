@@ -90,7 +90,13 @@ public:
     void getRotate() const {}
     void place(const JGeometry::TBox2<f32>&) {}
     void rotate(f32) {}
-    void rotate(f32, f32, J2DRotateAxis, f32) {}
+    void rotate(f32 offsetX, f32 offsetY, J2DRotateAxis axis, f32 angle) {
+        mBasePosition.x = offsetX;
+        mBasePosition.y = offsetY;
+        mRotationAxis = axis;
+        mRotation = angle;
+        calcMtx();
+    }
     void setInfluencedAlpha(bool) {}
 
 public:

@@ -10,7 +10,6 @@
 #include "SSystem/SComponent/c_phase.h"
 
 
-// Should be in header file?
 class dDlst_Gameover_CAPTURE_c : public dDlst_base_c {
 public:
     virtual ~dDlst_Gameover_CAPTURE_c() {}
