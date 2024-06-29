@@ -134,6 +134,7 @@ void msw_move(msw_class* i_this) {
 
 /* 0000080C-00000AD4       .text daMsw_Execute__FP9msw_class */
 static BOOL daMsw_Execute(msw_class* i_this) {
+    /* Nonmatching */
     static f32 xd[4] = { 1.0f,  1.0f, -1.0f, -1.0f };
     static f32 zd[4] = { 1.0f, -1.0f,  1.0f, -1.0f };
 
@@ -150,11 +151,10 @@ static BOOL daMsw_Execute(msw_class* i_this) {
     MtxPush();
 
     for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
-        f32 tmp = 200.0f + g_regHIO.mChild[0].mFloatRegs[10];
         cXyz src;
-        src.x = tmp * xd[chainIdx];
+        src.x = (200.0f + g_regHIO.mChild[0].mFloatRegs[10]) * xd[chainIdx];
         src.y = 0.0f;
-        src.z = tmp * zd[chainIdx];
+        src.z = (200.0f + g_regHIO.mChild[0].mFloatRegs[10]) * zd[chainIdx];
         MtxPosition(&src, &i_this->m2E0[chainIdx]);
 
         if (i_this->m844 != 0) {

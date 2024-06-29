@@ -11,6 +11,8 @@
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
+// #pragma sym on
+
 static Vec dummy_3569;
 Mtx l_kuroOrthoMtx;
 Mtx l_colOrthoMtx;
@@ -115,13 +117,14 @@ void dMagma_ball_c::draw() {
 
 /* 800756B8-800757D4       .text rangeCheck__13dMagma_ball_cFR4cXyzPf */
 BOOL dMagma_ball_c::rangeCheck(cXyz& pos, f32* dst) {
-    /* Nonmatching */
     f32 distSq = mPos.abs2XZ(pos);
-    f32 radSq = mScale * mScale * 243.6414f;
-    if (distSq < radSq) {
-        f32 rad = mScale * 800.0f;
-        f32 dist = sqrtf(rad * rad - distSq);
-        *dst = (mPos.y - (rad - 47.99915f)) + dist;
+    f32 rad1 = mScale * 243.6414f;
+    if (distSq < rad1*rad1) {
+        f32 rad2 = mScale * 800.0f;
+        f32 dist = sqrtf(rad2 * rad2 - distSq);
+        f32 temp = (mPos.y - (rad2 - 47.999146f));
+        temp += dist;
+        *dst = temp;
         return TRUE;
     } else {
         return FALSE;
@@ -220,9 +223,7 @@ void dMagma_floor_c::update() {
 
 /* 80075E50-80076038       .text create__14dMagma_floor_cFR4cXyzR4cXyzsUci */
 dMagma_ball_c** dMagma_floor_c::create(cXyz& pos, cXyz& scale, s16 pathNo, u8 ballNum, int roomNo) {
-    /* Nonmatching */
-    mPos = pos;
-    mPos.y += 5.0f;
+    mPos.set(pos.x, pos.y + 5.0f, pos.z);
 
     mpBalls = new dMagma_ball_c*[ballNum];
     if (mpBalls == NULL)
@@ -237,7 +238,7 @@ dMagma_ball_c** dMagma_floor_c::create(cXyz& pos, cXyz& scale, s16 pathNo, u8 ba
             if (*ball == NULL) {
                 mBallNum = i;
             } else {
-                (*ball)->setup(mPos.y, i, roomNo);
+                (*ball)->setup(mPos.y, (int)i, roomNo);
                 ball++;
             }
         }
@@ -355,11 +356,13 @@ f32 morfCalc(f32 min, f32 max, f32 v) {
 
 /* 800764FC-80076770       .text calc__15dMagma_packet_cFv */
 void dMagma_packet_c::calc() {
-    /* Nonmatching */
-    l_kuroOrthoMtx[0][3] += 0.001f;
-    if (l_kuroOrthoMtx[0][3] >= 1.5f)
-        l_kuroOrthoMtx[0][3] -= 1.0f;
-    l_kuroOrthoMtx[1][3] = l_kuroOrthoMtx[0][3];
+    /* Nonmatching - regalloc */
+    f32 f1 = l_kuroOrthoMtx[0][3];
+    f1 += 0.001f;
+    if (f1 >= 1.5f)
+        f1 -= 1.0f;
+    l_kuroOrthoMtx[0][3] = f1;
+    l_kuroOrthoMtx[1][3] = f1;
 
     mDoMtx_stack_c::scaleS(0.0022f, 0.0018f, 0.0017f);
     mDoMtx_stack_c::XrotM(0x4000);
@@ -382,15 +385,18 @@ void dMagma_packet_c::calc() {
     };
 
     GXColor* color = &l_keyColor[1];
+    f32 f3;
     for (s32 i = 1; i < ARRAY_SIZE(l_keyColor); i++, color++) {
-        if (mTimer < color->a)
+        f3 = color->a;
+        if (mTimer < f3)
             break;
     }
 
-    GXColor* color0 = &color[0];
-    GXColor* color1 = &color[1];
+    GXColor* color0 = &color[-1];
+    GXColor* color1 = &color[0];
 
-    f32 t = (mTimer - color0->a) / (color1->a - color0->a);
+    f32 f4 = color0->a;
+    f32 t = (mTimer - f4) / (f3 - f4);
     mColor1.r = morfCalc(color0->r, color1->r, t);
     mColor1.g = morfCalc(color0->g, color1->g, t);
     mColor1.b = morfCalc(color0->b, color1->b, t);
@@ -412,11 +418,11 @@ f32 dMagma_packet_c::checkYpos(cXyz& pos) {
     f32 ret = -100000000.0f;
     dMagma_floor_c* floor = mFloor;
     for (s32 i = 0; i < (s32)ARRAY_SIZE(mFloor); floor++, i++) {
-        dMagma_ball_c** ball = floor->mpBalls;
-        if (ball == NULL)
+        if (floor->mpBalls == NULL)
             continue;
 
-        if (fabsf(pos.y - floor->mPos.y) <= 236.8309f && fabsf(pos.x - floor->mPos.x) <= floor->mScaleX * 500.0f && fabsf(pos.z - floor->mPos.z) <= floor->mScaleZ * 500.0f) {
+        if (fabsf(pos.y - floor->mPos.y) <= 236.803879f && fabsf(pos.x - floor->mPos.x) <= floor->mScaleX * 500.0f && fabsf(pos.z - floor->mPos.z) <= floor->mScaleZ * 500.0f) {
+            dMagma_ball_c** ball = floor->mpBalls;
             for (s32 j = 0; j < floor->mBallNum; ball++, j++) {
                 f32 y;
                 if ((*ball)->rangeCheck(pos, &y)) {
