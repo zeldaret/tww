@@ -18,6 +18,8 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 
+// #pragma sym on
+
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 
@@ -603,6 +605,7 @@ void mDoExt_backupMatBlock_c::store(J3DMaterial* i_material) {
 
 /* 800101BC-8001084C       .text restore__23mDoExt_backupMatBlock_cFP11J3DMaterial */
 void mDoExt_backupMatBlock_c::restore(J3DMaterial* i_material) {
+    /* Nonmatching - regalloc on indBlock */
     J3DColorBlock* colorBlock = i_material->getColorBlock();
     colorBlock->setColorChanNum(mColorChanNum);
     for (u32 i = 0; i < 2; i++) {
@@ -1231,7 +1234,6 @@ ERROR_EXIT:
 
 /* 80012A2C-80012D78       .text calc__14mDoExt_McaMorfFUs */
 void mDoExt_McaMorf::calc(u16 param_0) {
-    /* Nonmatching - J3DMtxCalcBasic vtable order */
     if (!mpModel) {
         return;
     }
@@ -1520,7 +1522,7 @@ void mDoExt_McaMorf2::ERROR_EXIT() {
 
 /* 80013770-80013E50       .text calc__15mDoExt_McaMorf2FUs */
 void mDoExt_McaMorf2::calc(u16 param_0) {
-    /* Nonmatching - J3DMtxCalcBasic vtable order, instruction swap on f30 = field_0x84 */
+    /* Nonmatching - regalloc (fixing the regalloc causes an instruction swap on f30 = field_0x84) */
     if (!mpModel) {
         return;
     }
@@ -1545,6 +1547,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
         quatPtr = &mpQuat[param_0];
     }
     Mtx mtx;
+    f32 f31;
+    f32 f30;
     if (!mpAnm1) {
         *infoPtr = mpModel->getModelData()->getJointNodePointer(param_0)->getTransformInfo();
         if (mpCallback1) {
@@ -1563,8 +1567,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
             *infoPtr = spD8[0];
         } else {
             mpAnm2->getTransform(param_0, &spD8[1]);
-            f32 f30 = field_0x84;
-            f32 f31 = 1.0f - f30;
+            f31 = 1.0f - field_0x84;
+            f30 = field_0x84;
             infoPtr->mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
             infoPtr->mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
             infoPtr->mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
@@ -1579,8 +1583,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
             mDoExt_setJ3DData(mtx, infoPtr, param_0);
         }
     } else if (!mpAnm2) {
-        f32 f30 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
-        f32 f31 = 1.0f - f30;
+        f30 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
+        f31 = 1.0f - f30;
         mpAnm1->getTransform(param_0, &sp68);
         if (mpCallback1) {
             mpCallback1->execute(param_0, &sp68);
@@ -1598,8 +1602,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
     } else {
         mpAnm1->getTransform(param_0, &spD8[0]);
         mpAnm2->getTransform(param_0, &spD8[1]);
-        f32 f30 = field_0x84;
-        f32 f31 = 1.0f - f30;
+        f31 = 1.0f - field_0x84;
+        f30 = field_0x84;
         sp68.mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
         sp68.mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
         sp68.mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
@@ -1864,7 +1868,6 @@ int mDoExt_3Dline_c::init(u16 numSegments, int hasSize, int hasTex) {
 
 /* 80014584-80014664       .text init__19mDoExt_3DlineMat0_cFUsUsi */
 int mDoExt_3DlineMat0_c::init(u16 numLines, u16 numSegments, int hasSize) {
-    /* Nonmatching */
     mNumLines = numLines;
     mMaxSegments = numSegments;
     mpLines = new mDoExt_3Dline_c[numLines];
@@ -2337,7 +2340,6 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 
 /* 80015E54-80016518       .text update__19mDoExt_3DlineMat1_cFUsR8_GXColorP12dKy_tevstr_c */
 void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
-    /* Nonmatching */
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;

@@ -48,12 +48,27 @@ private:
 
 public:
     J3DMtxCalcBasic();
-    // TODO: vtable is in wrong order, but fixing it breaks J3DUMotion
+    virtual ~J3DMtxCalcBasic() {}
+    virtual void init(const Vec& vec, const Mtx& mtx) {
+        J3DSys::mCurrentS = vec;
+        // TODO: Same issue as J3DMtxCalcMaya::init.
+        // J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+        J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;
+        J3DSys::mCurrentMtx[0][1] = mtx[0][1] * J3DSys::mCurrentS.y;
+        J3DSys::mCurrentMtx[0][2] = mtx[0][2] * J3DSys::mCurrentS.z;
+        J3DSys::mCurrentMtx[0][3] = mtx[0][3];
+        J3DSys::mCurrentMtx[1][0] = mtx[1][0] * J3DSys::mCurrentS.x;
+        J3DSys::mCurrentMtx[1][1] = mtx[1][1] * J3DSys::mCurrentS.y;
+        J3DSys::mCurrentMtx[1][2] = mtx[1][2] * J3DSys::mCurrentS.z;
+        J3DSys::mCurrentMtx[1][3] = mtx[1][3];
+        J3DSys::mCurrentMtx[2][0] = mtx[2][0] * J3DSys::mCurrentS.x;
+        J3DSys::mCurrentMtx[2][1] = mtx[2][1] * J3DSys::mCurrentS.y;
+        J3DSys::mCurrentMtx[2][2] = mtx[2][2] * J3DSys::mCurrentS.z;
+        J3DSys::mCurrentMtx[2][3] = mtx[2][3];
+    }
     virtual void recursiveCalc(J3DNode*);
     virtual void calcTransform(u16, const J3DTransformInfo&);
     virtual void calc(u16);
-    virtual ~J3DMtxCalcBasic() {}
-    virtual void init(const Vec& vec, const Mtx& mtx);
 
     Mtx& getBackupMtx() { return mBackupMtx; }
     Vec& getBackupS() { return mBackupS; }
@@ -67,8 +82,11 @@ class J3DMtxCalcSoftimage : public J3DMtxCalcBasic {
 public:
     J3DMtxCalcSoftimage() : J3DMtxCalc() {}
     virtual void calcTransform(u16, const J3DTransformInfo&);
-    virtual ~J3DMtxCalcSoftimage();
-    virtual void init(const Vec& vec, const Mtx& mtx);
+    virtual ~J3DMtxCalcSoftimage() {}
+    virtual void init(const Vec& vec, const Mtx& mtx) {
+        J3DSys::mCurrentS = vec;
+        MTXCopy(mtx, J3DSys::mCurrentMtx);
+    }
 };
 
 class J3DMtxCalcMaya : public J3DMtxCalcBasic {
@@ -77,6 +95,9 @@ public:
     virtual ~J3DMtxCalcMaya() {}
     virtual void init(const Vec& vec, const Mtx& mtx) {
         // TODO: This breaks some TUs by adding extra data ({0x3F800000, 0x3F800000, 0x3F800000})
+        // This seems to be responsible for the @2100 Vec literal that gets added to most TUs.
+        // The strange part is that @2100 needs to be in the .data section, but uncommenting this
+        // will put it in the .rodata sections.
         // J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
         J3DSys::mCurrentS = vec;
         J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;
