@@ -484,9 +484,10 @@ BOOL dDlst_GameOverScrnDraw_c::anime2(int idx) {
 
 /* 8018F4A8-8018F548       .text setRotate__24dDlst_GameOverScrnDraw_cFP18fopMsgM_pane_classf */
 void dDlst_GameOverScrnDraw_c::setRotate(fopMsgM_pane_class* pane, f32 angle) {
-    /* Nonmatching */
+    // Fakematch?
+    f32 y = (s32)(pane->mSize.y / 2);
     J2DPane* j2dpane = pane->pane;
-    j2dpane->mBasePosition.set((s32)pane->mSize.x / 2.0f, (s32)pane->mSize.y / 2.0f);
+    j2dpane->mBasePosition.set((s32)(pane->mSize.x / 2), y);
     j2dpane->mRotationAxis = 'z';
     j2dpane->mRotation = angle;
     j2dpane->calcMtx();
