@@ -413,7 +413,7 @@ config.libs = [
             Object(Matching,    "d/d_event.cpp"),
             Object(Matching,    "d/d_event_data.cpp"),
             Object(Matching,    "d/d_event_manager.cpp"),
-            Object(NonMatching, "d/d_magma.cpp"),
+            Object(NonMatching, "d/d_magma.cpp", extra_cflags=['-sym off']),
             Object(NonMatching, "d/d_boss_magma.cpp"),
             Object(NonMatching, "d/d_grass.cpp"),
             Object(NonMatching, "d/d_tree.cpp"),

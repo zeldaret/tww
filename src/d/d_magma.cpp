@@ -19,35 +19,78 @@ GXTexObj dMagma_packet_c::mColTexObj;
 Mtx dMagma_packet_c::mFloorMtx;
 Mtx dMagma_packet_c::mBallMtx;
 
+Vec dummy[2] = {};
 Vec l_YfloorPos[4] = {};
-u8 l_YfloorDL[0x27] = {};
-u8 l_YfloorMatDL[0x55] = {};
+u8 l_YfloorDL[0x27] ALIGN_DECL(32) = {};
+u8 l_YfloorMatDL[0x55] ALIGN_DECL(32) = {};
 Vec l_YballPos[0x21] = {};
-u8 l_YballMatDL[0x4b] = {};
+u8 l_YballDL[0x76] ALIGN_DECL(32) = {};
+u8 l_YballMatDL[0x4b] ALIGN_DECL(32) = {};
 
 /* 800755A4-800756B8       .text draw__13dMagma_ball_cFv */
 void dMagma_ball_c::draw() {
-    /* Nonmatching */
+    GXLoadTexMtxImm(mTexProjMtx, GX_TEXMTX2, GX_MTX3x4);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX2, GX_FALSE, GX_PTTEXMTX0);
+    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_TRUE, GXGetTexObjWidth(&dMagma_packet_c::mKuroTexObj), GXGetTexObjHeight(&dMagma_packet_c::mKuroTexObj));
+    GXSetTexCoordBias(GX_TEXCOORD0, GX_FALSE, GX_FALSE);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX2, GX_FALSE, GX_PTTEXMTX1);
+    GXSetTexCoordScaleManually(GX_TEXCOORD1, GX_TRUE, GXGetTexObjWidth(&dMagma_packet_c::mColTexObj), GXGetTexObjHeight(&dMagma_packet_c::mColTexObj));
+    GXSetTexCoordBias(GX_TEXCOORD1, GX_FALSE, GX_FALSE);
+    GXLoadPosMtxImm(mPosMtx, GX_PNMTX0);
+    GXCallDisplayList(l_YballDL, 0x60);
 }
 
 /* 800756B8-800757D4       .text rangeCheck__13dMagma_ball_cFR4cXyzPf */
-BOOL dMagma_ball_c::rangeCheck(cXyz&, f32*) {
+BOOL dMagma_ball_c::rangeCheck(cXyz& pos, f32* dst) {
     /* Nonmatching */
+    f32 distSq = mPos.abs2XZ(pos);
+    f32 radSq = mScale * mScale * 243.6414f;
+    if (distSq < radSq) {
+        f32 rad = mScale * 800.0f;
+        f32 dist = sqrtf(rad * rad - distSq);
+        *dst = (mPos.y - (rad - 47.99915f)) + dist;
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 800757D4-80075878       .text calc__17dMagma_ballPath_cFfUci */
-void dMagma_ballPath_c::calc(float, unsigned char, int) {
-    /* Nonmatching */
+void dMagma_ballPath_c::calc(f32 offsY, u8 pathNo, int roomNo) {
+    if (mWave < 0) {
+        setup(offsY, pathNo, roomNo);
+        mWaveTimer = 0;
+        mWave = 0;
+    }
+
+    if (cLib_calcTimer(&mWaveTimer) == 0) {
+        mWave += 200;
+        mPos.y = mBaseY + (cM_ssin(mWave) - 1.0f) * 100.0f;
+    }
 }
 
 /* 80075878-800758B4       .text update__17dMagma_ballPath_cFv */
 void dMagma_ballPath_c::update() {
-    /* Nonmatching */
+    mTexProjMtx[1][3] = mPos.y;
+    mDoMtx_concat(j3dSys.getViewMtx(), mTexProjMtx, mPosMtx);
 }
 
 /* 800758B4-80075A6C       .text setup__17dMagma_ballPath_cFfUci */
-void dMagma_ballPath_c::setup(float, unsigned char, int) {
+void dMagma_ballPath_c::setup(f32 offsY, u8 pathNo, int roomNo) {
     /* Nonmatching */
+    dPath* path = dPath_GetRoomPath(pathNo, roomNo);
+    s32 ptNo = (s32)cM_rndF(path->m_num - 1);
+    dPath__Point* pt = &path->mpPnt[ptNo];
+    mPos.x = pt->mPos.x + cM_rndFX(pt->mArg3 * 100.0f);
+    mPos.z = pt->mPos.z + cM_rndFX(pt->mArg3 * 100.0f);
+    mScale = cM_rndF(1.0f) + 1.0f;
+    mBaseY = offsY - cM_rndF(20.0f);
+    mWave = cM_rndF(8.0f) * 4096.0f;
+    mPos.y = mBaseY + (cM_ssin(mWave) - 1.0f) * 100.0f;
+    mWaveTimer = 0;
+    mDoMtx_stack_c::transS(mPos);
+    mDoMtx_stack_c::scaleM(mScale, 1.0f, mScale);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mTexProjMtx);
 }
 
 /* 80075A6C-80075CB8       .text draw__14dMagma_floor_cFv */
@@ -74,7 +117,7 @@ void dMagma_floor_c::draw() {
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
     GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXCallDisplayList(l_YballMatDL, 0x40);
-    GXLoadTexMtxImm(mBallPostMtx0, (u32)GX_PTTEXMTX1, GX_MTX3x4);
+    GXLoadTexMtxImm(mPostMtx0, (u32)GX_PTTEXMTX1, GX_MTX3x4);
 
     dMagma_ball_c** ball = &mpBalls[0];
     for (s32 i = 0; i < mBallNum; ball++, i++)
@@ -85,13 +128,13 @@ void dMagma_floor_c::draw() {
 void dMagma_floor_c::calc(int i_roomNo) {
     mDoMtx_stack_c::scaleS(1.0f, 0.05f, 1.0f);
     if (strcmp(dComIfGp_getStartStageName(), "MDrag_B") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0)
-        mDoMtx_stack_c::transM(0.0f, -(mBallPos.y + 20.0f), 0.0f);
+        mDoMtx_stack_c::transM(0.0f, -(mPos.y + 20.0f), 0.0f);
     else
-        mDoMtx_stack_c::transM(0.0f, -(mBallPos.y + 30.0f), 0.0f);
-    mDoMtx_concat(l_colOrthoMtx, mDoMtx_stack_c::get(), mBallPostMtx0);
+        mDoMtx_stack_c::transM(0.0f, -(mPos.y + 30.0f), 0.0f);
+    mDoMtx_concat(l_colOrthoMtx, mDoMtx_stack_c::get(), mPostMtx0);
     dMagma_ball_c** ball = &mpBalls[0];
     for (s32 i = 0; i < mBallNum; ball++, i++)
-        (*ball)->calc(mBallPos.y, mPathNo, i_roomNo);
+        (*ball)->calc(mPos.y, mPathNo, i_roomNo);
 }
 
 /* 80075DD8-80075E50       .text update__14dMagma_floor_cFv */
@@ -103,12 +146,49 @@ void dMagma_floor_c::update() {
 }
 
 /* 80075E50-80076038       .text create__14dMagma_floor_cFR4cXyzR4cXyzsUci */
-dMagma_ball_c** dMagma_floor_c::create(cXyz&, cXyz&, short, unsigned char, int) {
+dMagma_ball_c** dMagma_floor_c::create(cXyz& pos, cXyz& scale, s16 pathNo, u8 ballNum, int roomNo) {
     /* Nonmatching */
-}
+    mPos = pos;
+    mPos.y += 5.0f;
 
-/* 80076038-80076080       .text __dt__13dMagma_ball_cFv */
-dMagma_ball_c::~dMagma_ball_c() {
+    mpBalls = new dMagma_ball_c*[ballNum];
+    if (mpBalls == NULL)
+        return NULL;
+
+    mBallNum = ballNum;
+
+    if (pathNo < 0) {
+        dMagma_ball_c** ball = mpBalls;
+        for (u8 i = 0; i < mBallNum; i++) {
+            *ball = new dMagma_ballBoss_c();
+            if (*ball == NULL) {
+                mBallNum = i;
+            } else {
+                (*ball)->setup(mPos.y, i, roomNo);
+                ball++;
+            }
+        }
+    } else {
+        dMagma_ball_c** ball = mpBalls;
+        for (u8 i = 0; i < mBallNum; i++) {
+            *ball = new dMagma_ballPath_c();
+            if (*ball == NULL) {
+                mBallNum = i;
+            } else {
+                (*ball)->setup(mPos.y, pathNo, roomNo);
+                ball++;
+            }
+        }
+    }
+
+    mScaleX = scale.x;
+    mScaleZ = scale.z;
+    mPathNo = pathNo;
+    mDoMtx_stack_c::transS(mPos);
+    mDoMtx_stack_c::scaleM(mScaleX, 1.0f, mScaleZ);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mTexMtx0);
+    update();
+    return mpBalls;
 }
 
 /* 80076080-80076100       .text remove__14dMagma_floor_cFv */
@@ -213,7 +293,7 @@ void dMagma_packet_c::calc() {
     mDoMtx_concat(l_kuroOrthoMtx, mDoMtx_stack_c::get(), mKuroMtx);
 
     dMagma_room_c* room = mRoom;
-    for (s32 i = 0; i < ARRAY_SIZE(mRoom); i++, room++)
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mRoom); i++, room++)
         for (dMagma_floor_c* floor = room->mpFirst; floor != NULL; floor = floor->mpNext)
             if (floor->mpBalls != NULL)
                 floor->calc(i);
@@ -263,12 +343,12 @@ f32 dMagma_packet_c::checkYpos(cXyz& pos) {
         if (ball == NULL)
             continue;
 
-        if (fabsf(pos.y - floor->mBallPos.y) <= 236.8309f && fabsf(pos.x - floor->mBallPos.x) <= floor->mDistX * 500.0f && fabsf(pos.z - floor->mBallPos.z) <= floor->mDistZ * 500.0f) {
+        if (fabsf(pos.y - floor->mPos.y) <= 236.8309f && fabsf(pos.x - floor->mPos.x) <= floor->mScaleX * 500.0f && fabsf(pos.z - floor->mPos.z) <= floor->mScaleZ * 500.0f) {
             for (s32 j = 0; j < floor->mBallNum; ball++, j++) {
                 f32 y;
                 if ((*ball)->rangeCheck(pos, &y)) {
-                    if (y < floor->mBallPos.y)
-                        y = floor->mBallPos.y;
+                    if (y < floor->mPos.y)
+                        y = floor->mPos.y;
 
                     if (y > ret)
                         ret = y;
@@ -311,9 +391,3 @@ dMagma_floor_c* dMagma_packet_c::newFloor(cXyz& p0, cXyz& p1, int i_roomNo, s16 
 
     return NULL;
 }
-
-/* 80076AA4-80076B00       .text __dt__17dMagma_ballPath_cFv */
-dMagma_ballPath_c::~dMagma_ballPath_c() {
-    /* Nonmatching */
-}
-
