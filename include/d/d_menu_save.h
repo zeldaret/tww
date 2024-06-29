@@ -8,6 +8,7 @@ class fopMsgM_pane_class;
 
 class dDlst_MenuSave_c : public dDlst_base_c {
 public:
+    ~dDlst_MenuSave_c() {}
     void draw();
 };
 
