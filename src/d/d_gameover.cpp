@@ -353,7 +353,53 @@ BOOL dDlst_GameOverScrnDraw_c::animeOpen() {
 
 /* 8018EEC8-8018F05C       .text animeClose__24dDlst_GameOverScrnDraw_cFv */
 BOOL dDlst_GameOverScrnDraw_c::animeClose() {
-    /* Nonmatching */
+    u8 var_r31 = 0;
+    s16 var_r30 = -1;
+
+    if (field_0x32c >= 0) {
+        if (field_0x330 != 0) {
+            field_0x330 = 0;
+        } else {
+            s32 rand = cM_rndF(field_0x32c);
+            if (rand >= field_0x32c - 1) {
+                rand = field_0x32c - 1;
+            }
+
+            for (int i = 0; i < dGover_tex_number; i++) {
+                if (letter[i].mUserArea == 0) {
+                    if (rand == 0) {
+                        anime2(i);
+                        var_r30 = i;
+                        break;
+                    } else {
+                        rand -= 1;
+                    }
+                }
+            }
+
+            field_0x330 = (s32)cM_rndF(3.0f) + 1;
+
+            if (field_0x330 >= 3) {
+                field_0x330 = 3;
+            }
+
+            field_0x32c -= 1;
+        }
+    }
+
+    for (int i = 0; i < dGover_tex_number; i++) {
+        s16 userArea = letter[i].mUserArea;
+
+        if (userArea >= 0 && userArea < 7) {
+            if (userArea >= 1 && var_r30 != i) {
+                anime2(i);
+            }
+
+            var_r31 = 1;
+        }
+    }
+
+    return var_r31 == 0 ? TRUE : FALSE;
 }
 
 /* 8018F05C-8018F0CC       .text setEmitter0__24dDlst_GameOverScrnDraw_cF4cXyz */
