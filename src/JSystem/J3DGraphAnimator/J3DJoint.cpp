@@ -56,15 +56,8 @@ void J3DMtxCalcBasic::calcTransform(u16 param_0, const J3DTransformInfo& info) {
     J3DSys::mCurrentS.x *= info.mScale.x;
     J3DSys::mCurrentS.y *= info.mScale.y;
     J3DSys::mCurrentS.z *= info.mScale.z;
-    Vec tmp = J3DSys::mCurrentS;
-    s32 var1;
-    if (tmp.x == 1.0f && tmp.y == 1.0f && tmp.z == 1.0f) {
-        var1 = 1;
-    } else {
-        var1 = 0;
-    }
     s32 r29;
-    if (var1) {
+    if (checkScaleOne(J3DSys::mCurrentS)) {
         j3dSys.getModel()->setScaleFlag(param_0, 1);
         r29 = 1;
     } else {
@@ -112,15 +105,8 @@ void J3DMtxCalcSoftimage::calcTransform(u16 param_0, const J3DTransformInfo& inf
     J3DSys::mCurrentS.x = J3DSys::mCurrentS.x * info.mScale.x;
     J3DSys::mCurrentS.y = J3DSys::mCurrentS.y * info.mScale.y;
     J3DSys::mCurrentS.z = J3DSys::mCurrentS.z * info.mScale.z;
-    Vec tmp = J3DSys::mCurrentS;
-    s32 var1;
-    if (tmp.x == 1.0f && tmp.y == 1.0f && tmp.z == 1.0f) {
-        var1 = 1;
-    } else {
-        var1 = 0;
-    }
     s32 var2;
-    if (var1) {
+    if (checkScaleOne(J3DSys::mCurrentS)) {
         j3dSys.getModel()->setScaleFlag(param_0, 1);
         var2 = 1;
     } else {
