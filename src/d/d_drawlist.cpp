@@ -38,12 +38,9 @@ public:
     /* 0x3C */ dDlst_shadowPoly_c* mPoly;
 };  // Size: 0x40
 
-GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
+Vec dummy0;
 
-bool dDlst_list_c::mWipe;
-f32 dDlst_list_c::mWipeRate = 0.0f;
-f32 dDlst_list_c::mWipeSpeed = 0.0f;
-dDlst_2DT2_c dDlst_list_c::mWipeDlst;
+GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 
 static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
 static Vec dummy2 = { 1.0f, 1.0f, 1.0f };
@@ -1487,6 +1484,7 @@ void dDlst_shadowReal_c::draw() {
 
     Mtx mtx;
     mDoMtx_inverse(mRenderProjMtx, mtx);
+    mtx[2][3] = 0.0f;
     mDoMtx_stack_c::concat(mtx);
     mDoMtx_stack_c::scaleM(1.0f, 1.0f, -0.003f);
     mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mtx);
@@ -1905,7 +1903,7 @@ void dDlst_shadowControl_c::draw(Mtx drawMtx) {
     static GXColor clearColor = { 0x00, 0x00, 0x00, 0x40 };
     clearColor.a = mDoGph_gInf_c::getBackColor().a;
     GXSetTevColor(GX_TEVREG1, clearColor);
-    GXSetTevColor(GX_TEVREG2, clearColor);
+    GXSetTevColor(GX_TEVREG2, g_whiteColor);
 
     dDlst_shadowReal_c* real = &mReal[0];
     for (s32 i = 0; i < 8; real++, i++)
@@ -2072,54 +2070,59 @@ void dDlst_mirrorPacket::init(ResTIMG* pImg) {
 
 /* 80085624-80085808       .text mirrorPolygonCheck__FP4cXyzP4cXyzfP18dDlst_shadowPoly_c */
 void mirrorPolygonCheck(cXyz* min_p, cXyz* max_p, f32 rad, dDlst_shadowPoly_c* poly) {
-    /* Nonmatching */
     ShdwDrawPoly_c shdwDraw;
 
-    f32 temp;
     cXyz min, max;
-    min.x = min_p->x - rad;
-    max.x = max_p->x + rad;
-    if (max.x < min.x) {
-        temp = max.x;
-        min.x = max.x;
-        max.x = temp;
+    if (min_p->x < max_p->x) {
+        min.x = min_p->x;
+        max.x = max_p->x;
+    } else {
+        min.x = max_p->x;
+        max.x = min_p->x;
     }
+    min.x -= rad;
+    max.x += rad;
 
-    min.y = min_p->y - rad;
-    max.y = max_p->y + rad;
-    if (max.y < min.y) {
-        temp = max.y;
-        min.y = max.y;
-        max.y = temp;
+    if (min_p->y < max_p->y) {
+        min.y = min_p->y;
+        max.y = max_p->y;
+    } else {
+        min.y = max_p->y;
+        max.y = min_p->y;
     }
+    min.y -= rad;
+    max.y += rad;
 
-    min.z = min_p->z - rad;
-    max.z = max_p->z + rad;
-    if (max.z < min.z) {
-        temp = max.z;
-        min.z = max.z;
-        max.z = temp;
+    if (min_p->z < max_p->z) {
+        min.z = min_p->z;
+        max.z = max_p->z;
+    } else {
+        min.z = max_p->z;
+        max.z = min_p->z;
     }
+    min.z -= rad;
+    max.z += rad;
 
     shdwDraw.Set(min, max);
     shdwDraw.SetCallback(psdRealCallBack);
+    shdwDraw.setCenter(min_p);
 
-    cXyz lightVec = max - min;
+    cXyz lightVec = *max_p - *min_p;
     shdwDraw.setLightVec(&lightVec);
+    shdwDraw.setPoly(poly);
 
     dComIfG_Bgsp()->ShdwDraw(&shdwDraw);
 }
 
 /* 80085808-800859DC       .text update__18dDlst_mirrorPacketFPA4_fUcf */
 void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad) {
-    /* Nonmatching */
     mShadowPoly.mCount = 0;
-    static cXyz l_plOffset(0.0f, 0.0f, 0.0f);
-    static cXyz l_plOffset2(0.0f, 0.0f, 10000.0f);
+    static cXyz l_p1Offset(0.0f, 0.0f, 0.0f);
+    static cXyz l_p2Offset(0.0f, 0.0f, 10000.0f);
 
     cXyz offs, offs2;
-    mDoMtx_multVec(mtx, &l_plOffset, &offs);
-    mDoMtx_multVec(mtx, &l_plOffset2, &offs2);
+    mDoMtx_multVec(mtx, &l_p1Offset, &offs);
+    mDoMtx_multVec(mtx, &l_p2Offset, &offs2);
     mirrorPolygonCheck(&offs, &offs2, rad, &mShadowPoly);
 
     Mtx viewMtx;
@@ -2378,6 +2381,11 @@ void dDlst_list_c::draw(dDlst_base_c** pList, dDlst_base_c** pEnd) {
 }
 
 GXColor dDlst_list_c::mWipeColor = { 0, 0, 0, 0 };
+
+bool dDlst_list_c::mWipe;
+f32 dDlst_list_c::mWipeRate = 0.0f;
+f32 dDlst_list_c::mWipeSpeed = 0.0f;
+dDlst_2DT2_c dDlst_list_c::mWipeDlst;
 
 /* 800865C8-800866C8       .text wipeIn__12dDlst_list_cFfR8_GXColor */
 void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
