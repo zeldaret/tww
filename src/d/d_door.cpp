@@ -438,7 +438,7 @@ void dDoor_key2_c::keyInit(dDoor_info_c* door) {
         if (door->getSwbit() < 0x80)
             dComIfGs_onSwitch(door->getSwbit(), -1);
         if (!mbIsBossDoor)
-            dComIfGp_setItemKeyNumCount(dComIfGp_getItemKeyNumCount() - 1);
+            dComIfGp_setItemKeyNumCount(-1);
         switch (mbIsBossDoor) {
         case 1: fopAcM_seStart(door, JA_SE_OBJ_BOSS_LOCK_OPEN, 0); break;
         default: fopAcM_seStart(door, JA_SE_OBJ_DOOR_CHAIN_OPEN, 0); break;
