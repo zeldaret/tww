@@ -75,7 +75,7 @@ BOOL dDoor_info_c::adjoinPlayer() {
 /* 8006B4C4-8006B554       .text getViewRoomNo__12dDoor_info_cFv */
 u8 dDoor_info_c::getViewRoomNo() {
     cXyz delta = dComIfGd_getView()->mLookat.mEye - current.pos;
-    if (delta.x * mAngleVec.x + delta.z * mAngleVec.z < 0.0f)
+    if (delta.inprodXZ(mAngleVec) < 0.0f)
         return getBRoomNo();
     else
         return getFRoomNo();
@@ -83,11 +83,10 @@ u8 dDoor_info_c::getViewRoomNo() {
 
 /* 8006B554-8006B5E4       .text frontCheckOld__12dDoor_info_cFv */
 s32 dDoor_info_c::frontCheckOld() {
-    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cSGlobe globe(player->current.pos - current.pos);
     cSAngle angle1;
-    angle1 = (globe.U() - player->current.angle.y);
+    angle1 = (globe.U() - current.angle.y);
     s16 angle = angle1.Abs();
     if (angle < 0x4000 && angle >= 0)
         return 0;
@@ -180,7 +179,6 @@ void dDoor_info_c::startDemoProc() {
 
 /* 8006BA30-8006BB5C       .text makeEventId__12dDoor_info_cFi */
 void dDoor_info_c::makeEventId(int spl) {
-    /* Nonmatching */
     static const char* table[] = {
         "DEFAULT_STOP_OPEN",
         "DEFAULT_STOP_OPEN",
@@ -242,7 +240,7 @@ BOOL dDoor_info_c::checkArea(f32 f1, f32 f2, f32 distXZSqMax) {
         return FALSE;
 
     delta.normalize();
-    f32 dot = delta.x * mAngleVec.x + delta.z * mAngleVec.z;
+    f32 dot = delta.inprodXZ(mAngleVec);
     f32 d3 = distXZSq * dot * dot;
     if (d3 > f2)
         return FALSE;
@@ -261,7 +259,6 @@ BOOL dDoor_info_c::checkArea(f32 f1, f32 f2, f32 distXZSqMax) {
 
 /* 8006BDBC-8006BE94       .text openInitCom__12dDoor_info_cFi */
 void dDoor_info_c::openInitCom(int ship) {
-    /* Nonmatching */
     if (mFrontCheck == 0) {
         mFromRoomNo = getFRoomNo();
         mToRoomNo = getBRoomNo();
@@ -273,7 +270,7 @@ void dDoor_info_c::openInitCom(int ship) {
     if (mFromRoomNo != mToRoomNo && mFromRoomNo != 0x3F && mToRoomNo != 0x3F)
         dComIfGp_roomControl_offStatusFlag(mToRoomNo, 0x08);
 
-    if (ship && getShipId() != 0x3F)
+    if (ship && valShipId())
         dStage_setShipPos(getShipId(), mToRoomNo);
 }
 
@@ -293,23 +290,23 @@ void dDoor_info_c::openProcCom() {
 
 /* 8006BF74-8006C0A4       .text closeEndCom__12dDoor_info_cFv */
 void dDoor_info_c::closeEndCom() {
-    /* Nonmatching */
     if (mFromRoomNo != mToRoomNo && mFromRoomNo != 0x3F && mToRoomNo != 0x3F)
         dComIfGp_roomControl_onStatusFlag(mFromRoomNo, 0x08);
 
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz delta = player->current.pos - current.pos;
-    f32 rad;
-    f32 dot = delta.x * mAngleVec.x + delta.z * mAngleVec.z;
-    if (dot < 0.0f)
-        rad = 180.0f;
-    else
-        rad = -180.0f;
+    f32 dot = delta.inprodXZ(mAngleVec);
+    f32 rad = dot < 0.0f ? 180.0f : -180.0f;
 
     cXyz pos(current.pos.x - rad * mAngleVec.x, current.pos.y, current.pos.z - rad * mAngleVec.z);
-    g_dComIfG_gameInfo.save.getRestart().setRoom(pos,
-        dot > 0.0f ? current.angle.y : (s16)(current.angle.y + 0x8000),
-        fopAcM_GetRoomNo(player));
+    s8 roomNo = fopAcM_GetRoomNo(player);
+    s16 angle;
+    if (dot > 0.0f) {
+        angle = current.angle.y;
+    } else {
+        angle = current.angle.y + 0x8000;
+    }
+    dComIfGs_setRestartRoom(pos, angle, roomNo);
 }
 
 /* 8006C0A4-8006C0EC       .text getDemoAction__12dDoor_info_cFv */
@@ -384,10 +381,9 @@ void dDoor_info_c::setPosAndAngle(cXyz* pPos, s16 angle) {
 
 /* 8006C2BC-8006C388       .text smokeInit__13dDoor_smoke_cFP12dDoor_info_c */
 void dDoor_smoke_c::smokeInit(dDoor_info_c* door) {
-    /* Nonmatching */
     mPos = door->current.pos;
     mRot.y = door->shape_angle.y;
-    JPABaseEmitter* emtr = dComIfGp_particle_set(0x2022, &mPos, &mRot, NULL, 0xAA, &mSmokeCb, door->current.roomNo);
+    JPABaseEmitter* emtr = dComIfGp_particle_set(0x2022, &mPos, &mRot, NULL, 0xAA, &mSmokeCb, fopAcM_GetRoomNo(door));
     m34 = 0;
     m35 = 0;
     if (emtr != NULL) {
@@ -404,10 +400,8 @@ void dDoor_smoke_c::smokeInit(dDoor_info_c* door) {
 
 /* 8006C388-8006C41C       .text smokeProc__13dDoor_smoke_cFP12dDoor_info_c */
 void dDoor_smoke_c::smokeProc(dDoor_info_c* door) {
-    /* Nonmatching */
     if (m35 != 0) {
-        f32 sign = (m34 & 1) ? 1.0f : -1.0f;
-        f32 wave = (m34 * 20) * sign;
+        f32 wave = (m34 * 20) * ((m34 & 1) ? 1.0f : -1.0f);
         m34++;
         mPos.x += wave * door->mAngleVec.z;
         mPos.z += wave * door->mAngleVec.x;
@@ -433,9 +427,8 @@ void dDoor_key2_c::keyResDelete() {
 
 /* 8006C4A8-8006C5E8       .text keyInit__12dDoor_key2_cFP12dDoor_info_c */
 void dDoor_key2_c::keyInit(dDoor_info_c* door) {
-    /* Nonmatching */
     if (mpModel != NULL && mbEnabled && !door->mFrontCheck) {
-        if (door->getSwbit() < 0x80)
+        if ((int)door->getSwbit() < 0x80)
             dComIfGs_onSwitch(door->getSwbit(), -1);
         if (!mbIsBossDoor)
             dComIfGp_setItemKeyNumCount(-1);
@@ -509,7 +502,6 @@ BOOL dDoor_key2_c::keyCreate_Bkey() {
 
 /* 8006C910-8006C948       .text keyCreate__12dDoor_key2_cFi */
 BOOL dDoor_key2_c::keyCreate(int type) {
-    /* Nonmatching */
     mbIsBossDoor = type;
     switch (type) {
     case 1: return keyCreate_Bkey();
@@ -836,7 +828,6 @@ BOOL dDoor_hkyo_c::chkFirst() {
 
 /* 8006D784-8006D7E8       .text onFirst__12dDoor_hkyo_cFv */
 void dDoor_hkyo_c::onFirst() {
-    /* Nonmatching */
     switch (mAnmIdx) {
     case 1: dComIfGs_onEventBit(0x2602); break;
     case 2: dComIfGs_onEventBit(0x2601); break;

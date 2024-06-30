@@ -1076,6 +1076,10 @@ inline s16 dComIfGs_getStartPoint() {
     return g_dComIfG_gameInfo.save.getRestart().getStartPoint();
 }
 
+inline void dComIfGs_setRestartRoom(const cXyz& i_pos, s16 i_angle, s8 i_roomNo) {
+    g_dComIfG_gameInfo.save.getRestart().setRoom(i_pos, i_angle, i_roomNo);
+}
+
 inline void dComIfGs_setRestartRoomParam(u32 i_param) {
     g_dComIfG_gameInfo.save.getRestart().setRoomParam(i_param);
 }

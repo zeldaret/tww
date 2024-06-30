@@ -9,7 +9,7 @@ class msg_class;
 
 class dDoor_info_c : public fopAc_ac_c {
 public:
-    void valShipId() {}
+    BOOL valShipId() { return getShipId() != 0x3F; }
 
     u8 getSwbit();
     u8 getSwbit2();
