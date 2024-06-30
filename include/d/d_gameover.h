@@ -44,7 +44,10 @@ public:
 public:
     /* 0x004 */ J2DScreen* scrn;
     /* 0x008 */ fopMsgM_pane_class letter[8];
+#if VERSION != VERSION_JPN
     /* 0x1C8 */ u8 field_0x1c8[0x318 - 0x1c8];
+#endif
+    /* Offsets below are for USA/PAL */
     /* 0x318 */ fopMsgM_pane_alpha_class blak;
     /* 0x320 */ JPABaseEmitter* mpEmitter0;
     /* 0x324 */ JPABaseEmitter* mpEmitter1;

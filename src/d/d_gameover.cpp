@@ -14,7 +14,6 @@
 
 /* 8018E1CC-8018E4B4       .text draw__24dDlst_Gameover_CAPTURE_cFv */
 void dDlst_Gameover_CAPTURE_c::draw() {
-    /* Nonmatching */
     GXTexObj texObj;
 
     GXSetTexCopySrc(0, 0, 640, 480);
@@ -74,7 +73,7 @@ s32 dGameover_c::_create() {
     if (rt == cPhs_COMPLEATE_e) {
         dComIfGs_addDeathCount();
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("Gover");
-        JUT_ASSERT(0xa0, resInfo != NULL);
+        JUT_ASSERT(VERSION_SELECT(0x9c, 0xa0, 0xa0), resInfo != NULL);
 
         mpHeap = dComIfGp_getExpHeap2D();
         dComIfGp_setHeapLockFlag(4);
@@ -84,12 +83,12 @@ s32 dGameover_c::_create() {
         dgo_scrn_c->setScreen("gameover.blo", resInfo->getArchive());
 
         dMs_c = new dMenu_save_c();
-        JUT_ASSERT(0xb6, dMs_c != NULL);
+        JUT_ASSERT(VERSION_SELECT(0xa7, 0xb6, 0xb6), dMs_c != NULL);
         dMs_c->field_0x0537 = 2;
         dMs_c->_create();
 
         dgo_capture_c = new dDlst_Gameover_CAPTURE_c();
-        JUT_ASSERT(0xbb, dgo_capture_c != NULL);
+        JUT_ASSERT(VERSION_SELECT(0xac, 0xbb, 0xbb), dgo_capture_c != NULL);
 
         mDoExt_setCurrentHeap(oldHeap);
     } else {
@@ -170,7 +169,6 @@ BOOL dGameover_c::_draw() {
 
 /* 8018EA58-8018EB54       .text _delete__11dGameover_cFv */
 BOOL dGameover_c::_delete() {
-    /* Nonmatching */
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(mpHeap);
 
     delete dgo_scrn_c->scrn;
@@ -190,7 +188,11 @@ BOOL dGameover_c::deleteCheck() {
     return mState == 6;
 }
 
+#if VERSION == VERSION_JPN
+static const s16 dGover_tex_number = 8;
+#else
 static s16 dGover_tex_number = 8;
+#endif
 
 /* 8018EB68-8018EC9C       .text setScreen__24dDlst_GameOverScrnDraw_cFPCcP10JKRArchive */
 void dDlst_GameOverScrnDraw_c::setScreen(const char* filename, JKRArchive* arc) {
@@ -259,10 +261,8 @@ BOOL dDlst_GameOverScrnDraw_c::animeOpen() {
 
 
     for (int i = 0; i < dGover_tex_number; i++) {
-        s16 userArea = letter[i].mUserArea;
-
-        if (userArea >= 0 && userArea < 9) {
-            if (userArea >= 1 && var_r30 != i) {
+        if (letter[i].mUserArea >= 0 && letter[i].mUserArea < 9) {
+            if (letter[i].mUserArea >= 1 && var_r30 != i) {
                 anime1(i);
                 if (letter[i].mUserArea == 5) {
                     dComIfGp_particle_set2Dfore(0x2E, &cXyz(x[i], 50.0f, 0.0f));
@@ -313,10 +313,8 @@ BOOL dDlst_GameOverScrnDraw_c::animeClose() {
     }
 
     for (int i = 0; i < dGover_tex_number; i++) {
-        s16 userArea = letter[i].mUserArea;
-
-        if (userArea >= 0 && userArea < 7) {
-            if (userArea >= 1 && var_r30 != i) {
+        if (letter[i].mUserArea >= 0 && letter[i].mUserArea < 7) {
+            if (letter[i].mUserArea >= 1 && var_r30 != i) {
                 anime2(i);
             }
 
