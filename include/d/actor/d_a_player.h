@@ -503,7 +503,7 @@ public:
     virtual MtxP getModelJointMtx(u16) { return NULL; }
     virtual f32 getOldSpeedY() { return 0.0f; }
     virtual BOOL setHookshotCarryOffset(uint, const cXyz*) { return FALSE; }
-    virtual void setPlayerPosAndAngle(cXyz*, s16) {}
+    virtual void setPlayerPosAndAngle(cXyz*, s16);// {}
     virtual void setPlayerPosAndAngle(cXyz*, csXyz*) {}
     virtual void setPlayerPosAndAngle(MtxP) {}
     virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int) { return FALSE; }
