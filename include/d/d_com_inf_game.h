@@ -367,7 +367,7 @@ public:
     void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
 
     s16 getItemKeyNumCount() { return mItemKeyNumCount; }
-    void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
+    void setItemKeyNumCount(s16 num) { mItemKeyNumCount = num; }
 
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
     s16 getItemBeastNumCount(int i_idx) { return mItemBeastNumCounts[i_idx]; }

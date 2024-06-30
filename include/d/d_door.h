@@ -5,6 +5,8 @@
 #include "d/d_particle.h"
 #include "SSystem/SComponent/c_phase.h"
 
+class msg_class;
+
 class dDoor_info_c : public fopAc_ac_c {
 public:
     void valShipId() {}
@@ -29,7 +31,7 @@ public:
     void makeEventId(int);
     void initProc(int);
     void initOpenDemo(int);
-    void checkArea(f32, f32, f32);
+    BOOL checkArea(f32, f32, f32);
     void openInitCom(int);
     void openProcCom();
     void closeEndCom();
@@ -98,14 +100,14 @@ class dDoor_stop_c {
 public:
     void calcMtx(dDoor_info_c*);
     void closeInit(dDoor_info_c*);
-    void closeProc(dDoor_info_c*);
+    s32 closeProc(dDoor_info_c*);
     void openInit(dDoor_info_c*);
-    void openProc(dDoor_info_c*);
-    void create();
+    s32 openProc(dDoor_info_c*);
+    BOOL create();
 
 public:
     /* 0x0 */ J3DModel* mpModel;
-    /* 0x4 */ f32 m4;
+    /* 0x4 */ f32 mOffsY;
     /* 0x8 */ u8 m8;
     /* 0x9 */ u8 mFrontCheck;
     /* 0xA */ u8 mA;
@@ -115,14 +117,13 @@ public:
 class dDoor_msg_c {
 public:
     void init(s16);
-    void proc(cXyz*);
+    BOOL proc(cXyz*);
 
 public:
-    /* 0x0 */ u32 m0;
-    /* 0x4 */ int mMsg;
-    /* 0x8 */ s8 m8;
-    /* 0x9 */ u8 m9[0xA - 0x9];
-    /* 0xA */ s16 mA;
+    /* 0x0 */ uint mMsgPId;
+    /* 0x4 */ msg_class* m_msg;
+    /* 0x8 */ u8 mState;
+    /* 0xA */ s16 mMsgId;
 };
 
 class dDoor_hkyo_c {
@@ -133,13 +134,13 @@ public:
 
     s32 resLoad();
     void resDelete();
-    void create();
+    BOOL create();
     void setAnm(u8);
     void init();
     void calcMtx(dDoor_info_c*, f32);
     void draw(dDoor_info_c*);
     void proc(dDoor_info_c*);
-    void chkFirst();
+    BOOL chkFirst();
     void onFirst();
     BOOL chkStart();
 
