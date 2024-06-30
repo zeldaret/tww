@@ -38,16 +38,12 @@ cXyz cXyz::operator*(f32 scale) const {
     return cXyz(ret);
 }
 
-inline void vecMul(const Vec* src1, const Vec* src2, Vec* dst) {
-    dst->x = src1->x * src2->x;
-    dst->y = src1->y * src2->y;
-    dst->z = src1->z * src2->z;
-}
-
 /* 80245760-802457A8       .text __ml__4cXyzCFRC3Vec */
 cXyz cXyz::operator*(const Vec& vec) const {
     cXyz ret;
-    vecMul(this, &vec, &ret);
+    ret.x = this->x * vec.x;
+    ret.y = this->y * vec.y;
+    ret.z = this->z * vec.z;
     return cXyz(ret);
 }
 
@@ -89,16 +85,6 @@ cXyz cXyz::normZP(void) const {
     return cXyz(vec);
 }
 
-inline void normToUpZIfNearZero(Vec& vec) {
-    if (cXyz(vec).isNearZeroSquare()) {
-        vec.x = 0.0f;
-        vec.y = 0.0f;
-        vec.z = 1.0f;
-        const Vec v = {0, 0, 1};
-        vec = v;
-    }
-}
-
 /* 802459AC-80245ADC       .text normZC__4cXyzCFv */
 cXyz cXyz::normZC(void) const {
     Vec outVec;
@@ -106,7 +92,12 @@ cXyz cXyz::normZC(void) const {
         VECNormalize(this, &outVec);
     } else {
         outVec = (*this * 1.25f * 1000000.0f).normZP();
-        normToUpZIfNearZero(outVec);
+        if (this->isNearZeroSquare(cXyz(outVec))) {
+            outVec.x = 0.0f;
+            outVec.y = 0.0f;
+            outVec.z = 1.0f;
+            outVec = (Vec){0, 0, 1};
+        }
     }
     return outVec;
 }
