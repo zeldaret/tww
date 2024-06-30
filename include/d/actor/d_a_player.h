@@ -125,6 +125,7 @@ public:
         daPyFlg1_UNK800000              = 0x00800000,
         daPyFlg1_UNK1000000             = 0x01000000,
         daPyFlg1_VINE_CATCH             = 0x02000000,
+        daPyFlg1_UNK4000000             = 0x04000000,
         daPyFlg1_UNK8000000             = 0x08000000,
         daPyFlg1_UNK10000000            = 0x10000000,
         daPyFlg1_LAST_COMBO_WAIT        = 0x20000000,

@@ -827,7 +827,7 @@ public:
     void seStartSwordCut(u32);
     BOOL itemButton() const;
     BOOL itemTrigger() const;
-    u8 getReadyItem();
+    int getReadyItem();
     BOOL checkGroupItem(int, int);
     BOOL checkSetItemTrigger(int, int);
     BOOL auraJointCB0(int);
@@ -895,7 +895,7 @@ public:
     void setBlendMoveAnime(f32);
     void setBlendAtnBackMoveAnime(f32);
     void setBlendAtnMoveAnime(f32);
-    void setAnimeEquipSword(int);
+    void setAnimeEquipSword(BOOL);
     void setAnimeEquipSingleItem(u16);
     void setAnimeEquipItem();
     void setAnimeUnequipSword();

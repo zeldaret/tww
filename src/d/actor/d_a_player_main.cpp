@@ -28,6 +28,7 @@
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_npc_sarace.h"
+#include "d/actor/d_a_boomerang.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "m_Do/m_Do_graphic.h"
 
@@ -333,7 +334,7 @@ BOOL daPy_lk_c::itemTrigger() const {
 }
 
 /* 80103214-80103258       .text getReadyItem__9daPy_lk_cFv */
-u8 daPy_lk_c::getReadyItem() {
+int daPy_lk_c::getReadyItem() {
     if (mReadyItemIdx == 0) {
         return dComIfGp_getSelectItem(0);
     } else if (mReadyItemIdx == 1) {
@@ -1302,33 +1303,131 @@ void daPy_lk_c::setBlendAtnMoveAnime(f32) {
 }
 
 /* 8010C010-8010C100       .text setAnimeEquipSword__9daPy_lk_cFi */
-void daPy_lk_c::setAnimeEquipSword(int) {
-    /* Nonmatching */
+void daPy_lk_c::setAnimeEquipSword(BOOL r4) {
+    if (!checkSwordEquip()) {
+        return;
+    }
+    m3562 = daPyItem_SWORD_e;
+    f32 rate = daPy_HIO_cut_c0::m.field_0x8;
+    f32 start = daPy_HIO_cut_c0::m.field_0xC;
+    s16 end = daPy_HIO_cut_c0::m.field_0x0;
+    f32 f3 = daPy_HIO_cut_c0::m.field_0x10;
+    setActAnimeUpper(LKANM_BCK_REST, UPPER_MOVE2_e, rate, start, end, f3);
+    setPriTextureAnime(0x72, 0);
+    dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
+    if (mActorKeepThrow.getActor() != NULL) {
+        daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+        boomerang->onCancelFlg();
+    }
+    if (!r4) {
+        onNoResetFlg1(daPyFlg1_UNK4000000);
+    } else {
+        offNoResetFlg1(daPyFlg1_UNK4000000);
+    }
 }
 
 /* 8010C100-8010C158       .text setAnimeEquipSingleItem__9daPy_lk_cFUs */
-void daPy_lk_c::setAnimeEquipSingleItem(u16) {
-    /* Nonmatching */
+void daPy_lk_c::setAnimeEquipSingleItem(u16 bckIdx) {
+    f32 rate = daPy_HIO_item_c0::m.field_0x14;
+    f32 start = daPy_HIO_item_c0::m.field_0x18;
+    s16 end = daPy_HIO_item_c0::m.field_0x2;
+    f32 f3 = daPy_HIO_item_c0::m.field_0x1C;
+    setActAnimeUpper(bckIdx, UPPER_MOVE2_e, rate, start, end, f3);
+    setPriTextureAnime(0x74, 0);
 }
 
 /* 8010C158-8010C1D4       .text setAnimeEquipItem__9daPy_lk_cFv */
 void daPy_lk_c::setAnimeEquipItem() {
-    /* Nonmatching */
+    if (mActorKeepThrow.getActor() != NULL) {
+        if (getReadyItem() == dItem_BOOMERANG_e) {
+            return;
+        }
+        daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+        boomerang->onCancelFlg();
+    }
+    u8 itemNo = getReadyItem();
+    m3562 = itemNo;
+    dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
+    setAnimeUnequipItem(m3562);
 }
 
 /* 8010C1D4-8010C284       .text setAnimeUnequipSword__9daPy_lk_cFv */
 void daPy_lk_c::setAnimeUnequipSword() {
-    /* Nonmatching */
+    f32 rate;
+    f32 start;
+    s16 end;
+    f32 f3;
+    if (checkModeFlg(
+        // These combine to: 0x01FD2810
+        ModeFlg_WHIDE |
+        ModeFlg_ROPE |
+        ModeFlg_IN_SHIP |
+        ModeFlg_CLIMB |
+        ModeFlg_SWIM |
+        ModeFlg_00080000 |
+        ModeFlg_GRAB |
+        ModeFlg_PUSHPULL |
+        ModeFlg_LADDER |
+        ModeFlg_CROUCH |
+        ModeFlg_CRAWL
+    ) || dComIfGp_event_runCheck() || mDemo.getDemoType() != 0) {
+        rate = daPy_HIO_cut_c0::m.field_0x20;
+        start = daPy_HIO_cut_c0::m.field_0x24;
+        end = daPy_HIO_cut_c0::m.field_0x4;
+        f3 = daPy_HIO_cut_c0::m.field_0x28;
+    } else {
+        rate = daPy_HIO_cut_c0::m.field_0x14;
+        start = daPy_HIO_cut_c0::m.field_0x18;
+        end = daPy_HIO_cut_c0::m.field_0x2;
+        f3 = daPy_HIO_cut_c0::m.field_0x1C;
+    }
+    
+    setActAnimeUpper(LKANM_BCK_REST, UPPER_MOVE2_e, rate, start, end, f3);
+    setPriTextureAnime(0x72, 0);
 }
 
 /* 8010C284-8010C3C0       .text setAnimeUnequipItem__9daPy_lk_cFUs */
-void daPy_lk_c::setAnimeUnequipItem(u16) {
-    /* Nonmatching */
+void daPy_lk_c::setAnimeUnequipItem(u16 i_itemNo) {
+    if (i_itemNo == dItem_BOOMERANG_e ||
+        i_itemNo == dItem_GRAPPLING_HOOK_e ||
+        i_itemNo == dItem_TELESCOPE_e ||
+        checkPhotoBoxItem(i_itemNo) ||
+        i_itemNo == dItem_HOOKSHOT_e ||
+        i_itemNo == dItem_DEKU_LEAF_e ||
+        i_itemNo == dItem_TINGLE_TUNER_e ||
+        i_itemNo == dItem_WIND_WAKER_e ||
+        checkBottleItem(i_itemNo)
+    ) {
+        setAnimeEquipSingleItem(LKANM_BCK_TAKEL);
+    } else if (checkBowItem(i_itemNo)) {
+        setAnimeEquipSingleItem(LKANM_BCK_TAKER);
+    } else if (i_itemNo == dItem_SKULL_HAMMER_e) {
+        f32 rate = daPy_HIO_item_c0::m.field_0x24;
+        f32 start = daPy_HIO_item_c0::m.field_0x28;
+        s16 end = daPy_HIO_item_c0::m.field_0x4;
+        f32 f3 = daPy_HIO_item_c0::m.field_0x2C;
+        setActAnimeUpper(LKANM_BCK_TAKEBOTH, UPPER_MOVE2_e, rate, start, end, f3);
+    } else {
+        f32 rate = daPy_HIO_item_c0::m.field_0x8;
+        f32 start = daPy_HIO_item_c0::m.field_0xC;
+        s16 end = daPy_HIO_item_c0::m.field_0x0;
+        f32 f3 = daPy_HIO_item_c0::m.field_0x10;
+        setActAnimeUpper(LKANM_BCK_TAKE, UPPER_MOVE2_e, rate, start, end, f3);
+        setPriTextureAnime(0x73, 0);
+    }
 }
 
 /* 8010C3C0-8010C430       .text setAnimeUnequip__9daPy_lk_cFv */
 void daPy_lk_c::setAnimeUnequip() {
-    /* Nonmatching */
+    if (mEquipItem == daPyItem_SWORD_e) {
+        setAnimeUnequipSword();
+    } else if (mEquipItem == daPyItem_BOKO_e) {
+        deleteEquipItem(FALSE);
+        m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
+    } else {
+        setAnimeUnequipItem(mEquipItem);
+    }
+    m3562 = daPyItem_NONE_e;
 }
 
 /* 8010C430-8010C4A4       .text checkBossGomaStage__9daPy_lk_cFv */
