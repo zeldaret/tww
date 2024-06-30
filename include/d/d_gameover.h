@@ -28,6 +28,20 @@ public:
         mAlpha = 0.0f;
     }
 
+    f32 acc(s16 param_0, s16 param_1, s16 param_2) {
+        return ((f32)(param_1 - param_2) * (f32)(param_1 - param_2)) / ((f32)(param_0 - param_2) * (f32)(param_0 - param_2));
+    }
+    void deleteScreen() { delete scrn; }
+    void setAlpha(f32 alpha) { mAlpha = alpha; }
+    void stopEmitter0() {
+        if (mpEmitter0 != NULL)
+            mpEmitter0->becomeInvalidEmitter();
+    }
+    void stopEmitter1() {
+        if (mpEmitter1 != NULL)
+            mpEmitter1->becomeInvalidEmitter();
+    }
+
     virtual ~dDlst_GameOverScrnDraw_c() {}
     void setScreen(const char*, JKRArchive*);
     void valueInit();
@@ -41,7 +55,7 @@ public:
 
     virtual void draw();
 
-public:
+private:
     /* 0x004 */ J2DScreen* scrn;
     /* 0x008 */ fopMsgM_pane_class letter[8];
 #if VERSION != VERSION_JPN
@@ -63,13 +77,16 @@ public:
 
 class dGameover_c : public msg_class {
 public:
+    void animeStart() { mAnimeStart = true; }
+    void setBackAlpha(f32 alpha) { dgo_scrn_c->setAlpha(alpha); }
+
     s32 _create();
     BOOL _execute();
     BOOL _draw();
     BOOL _delete();
     BOOL deleteCheck();
 
-public:
+private:
     /* 0x0FC */ dMenu_save_c* dMs_c;
     /* 0x100 */ dDlst_GameOverScrnDraw_c* dgo_scrn_c;
     /* 0x104 */ dDlst_Gameover_CAPTURE_c* dgo_capture_c;
@@ -78,7 +95,7 @@ public:
     /* 0x114 */ s16 field_0x114;
     /* 0x116 */ s16 field_0x116;
     /* 0x118 */ u8 mState;
-    /* 0x119 */ u8 field_0x119;
+    /* 0x119 */ bool mAnimeStart;
     /* 0x11C */ u8 field_0x11c;
 };
 

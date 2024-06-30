@@ -60,7 +60,7 @@ typedef int (*fopMsgCreateFunc)(void*);
 JKRExpHeap* fopMsgM_createExpHeap(u32, JKRHeap*);
 JKRExpHeap* fopMsgM_createExpHeap(u32);
 u32 fopMsgM_Create(s16, fopMsgCreateFunc, void*);
-s32 fopMsgM_create(s16 param_0, fopAc_ac_c* param_1 = NULL, cXyz* param_2 = NULL,
+s32 fopMsgM_create(s16 i_procName, fopAc_ac_c* param_1 = NULL, cXyz* param_2 = NULL,
                    u32* param_3 = NULL, u32* param_4 = NULL, fopMsgCreateFunc createFunc = NULL);
 void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);

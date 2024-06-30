@@ -97,7 +97,7 @@ s32 dGameover_c::_create() {
 
     field_0x114 = 90;
     field_0x116 = g_menuHIO.field_0xb6;
-    field_0x119 = 0;
+    mAnimeStart = false;
     return cPhs_COMPLEATE_e;
 }
 
@@ -125,11 +125,10 @@ BOOL dGameover_c::_execute() {
                 dMenu_flagSet(0);
             }
 
-            if (dgo_scrn_c->mpEmitter1 != NULL)
-                dgo_scrn_c->mpEmitter1->becomeInvalidEmitter();
+            dgo_scrn_c->stopEmitter1();
             mState = 6;
         }
-    } else if (mState != 6 && field_0x119) {
+    } else if (mState != 6 && mAnimeStart) {
         if (field_0x114 == 90) {
             if (dgo_scrn_c->animeOpen() == 1) {
                 cXyz zero(0.0f, 0.0f, 0.0f);
@@ -143,8 +142,7 @@ BOOL dGameover_c::_execute() {
                 dgo_scrn_c->valueInit();
         } else {
             if (dgo_scrn_c->animeClose() == 1) {
-                if (dgo_scrn_c->mpEmitter0 != NULL)
-                    dgo_scrn_c->mpEmitter0->becomeInvalidEmitter();
+                dgo_scrn_c->stopEmitter0();
                 if (field_0x116-- <= 0) {
                     mState = 3;
                     dMenu_flagSet(1);
@@ -171,7 +169,7 @@ BOOL dGameover_c::_draw() {
 BOOL dGameover_c::_delete() {
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(mpHeap);
 
-    delete dgo_scrn_c->scrn;
+    dgo_scrn_c->deleteScreen();
     delete dgo_scrn_c;
     dMs_c->_delete();
     delete dMs_c;
@@ -335,15 +333,8 @@ void dDlst_GameOverScrnDraw_c::setEmitter1(cXyz pos) {
     mpEmitter1 = dComIfGp_particle_set2DmenuFore(0x30, &pos);
 }
 
-// Fake inline
-inline f32 divSquare(s16 y, f32 div) {
-    return (f32)y * (f32)y / div;
-}
-
 /* 8018F13C-8018F334       .text anime1__24dDlst_GameOverScrnDraw_cFi */
 BOOL dDlst_GameOverScrnDraw_c::anime1(int idx) {
-    /* Fakematch */
-
     BOOL ret = FALSE;
 
     if (letter[idx].mUserArea < 5) {
@@ -351,13 +342,16 @@ BOOL dDlst_GameOverScrnDraw_c::anime1(int idx) {
             fopMsgM_setInitAlpha(&letter[idx]);
 
         letter[idx].mUserArea++;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - divSquare(letter[idx].mUserArea, 25.0f)) * -288.0f);
+        f32 y = (1.0f - acc(5, letter[idx].mUserArea, 0)) * -288.0f;
+        fopMsgM_paneTrans(&letter[idx], 0.0f, y);
     } else if (letter[idx].mUserArea < 7) {
         letter[idx].mUserArea++;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, (divSquare(letter[idx].mUserArea - 5, 4.0f)) * -9.0f);
+        f32 y = acc(2, letter[idx].mUserArea - 5, 0) * -9.0f;
+        fopMsgM_paneTrans(&letter[idx], 0.0f, y);
     } else if (letter[idx].mUserArea < 9) {
         letter[idx].mUserArea++;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - divSquare(letter[idx].mUserArea - 7, 4.0f)) * -9.0f);
+        f32 y = (1.0f - acc(2, letter[idx].mUserArea - 7, 0)) * -9.0f;
+        fopMsgM_paneTrans(&letter[idx], 0.0f, y);
         if (letter[idx].mUserArea == 9)
             mDoAud_seStart(JA_SE_EXIT_GAME_OVER);
     }
