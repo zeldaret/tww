@@ -37,15 +37,15 @@ u8* JAInter::SoundTable::getInfoPointer(u32 param_1) {
     JUT_ASSERT_MSG(52, mAddress, "getInfoPointer サウンドテーブルがありません\n");
     u8* r31 = NULL;
     u32 _category;
-    switch (param_1 & 0xC0000000) {
-    case 0:
+    switch (param_1 & JAISoundID_TypeMask) {
+    case JAISoundID_Type_Se:
         _category = param_1 >> 12 & 0xff;
         JUT_ASSERT_MSG(61, (_category<JAIGlobalParameter::getParamSeCategoryMax()), "getInfoPointer 登録されていないSEカテゴリーナンバーが指定されました。\n")
         break;
-    case 0x80000000:
+    case JAISoundID_Type_Sequence:
         _category = 16;
         break;
-    case 0xC0000000:
+    case JAISoundID_Type_Stream:
         _category = 17;
         break;
     default:
@@ -62,14 +62,14 @@ u8* JAInter::SoundTable::getInfoPointer(u32 param_1) {
 /* 8029B8CC-8029B99C       .text getInfoFormat__Q27JAInter10SoundTableFUl */
 u8 JAInter::SoundTable::getInfoFormat(u32 param_1) {
     u8 r31 = 0;
-    switch (param_1 & 0xC0000000) {
-    case 0:
+    switch (param_1 & JAISoundID_TypeMask) {
+    case JAISoundID_Type_Se:
         r31 = mAddress[0];
         break;
-    case 0x80000000:
+    case JAISoundID_Type_Sequence:
         r31 = mAddress[1];
         break;
-    case 0xC0000000:
+    case JAISoundID_Type_Stream:
         r31 =  mAddress[2];
         break;
     default:

@@ -1361,11 +1361,11 @@ u32 JAIZelBasic::expandSceneBgmNum(u32 bgmNum) {
     /* Nonmatching - regalloc */
     if ((bgmNum & 0xF000) == 0x8000) {
         u32 temp = bgmNum & 0x7FFF;
-        temp |= 0xC0000000;
+        temp |= JAISoundID_Type_Stream;
         return temp;
     } else {
         u32 temp = bgmNum & 0x7FFF;
-        temp |= 0x80000000;
+        temp |= JAISoundID_Type_Sequence;
         return temp;
     }
 }
