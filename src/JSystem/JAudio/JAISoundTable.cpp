@@ -12,20 +12,22 @@ u8 JAInter::SoundTable::mVersion;
 u8 JAInter::SoundTable::mCategotyMax;
 u16* JAInter::SoundTable::mSoundMax;
 u32 JAInter::SoundTable::mDatasize;
-u8** JAInter::SoundTable::mPointerCategory;
+SoundInfo** JAInter::SoundTable::mPointerCategory;
 u8* JAInter::SoundTable::mAddress;
 
 /* 8029B570-8029B6FC       .text init__Q27JAInter10SoundTableFPUcUl */
 void JAInter::SoundTable::init(u8* param_1, u32 param_2) {
-    /* Nonmatching */
+    /* Nonmatching - operand swap */
     mAddress = param_1;
     mDatasize = param_2;
     mVersion = param_1[3];
     mSoundMax = new (JAIBasic::getCurrentJAIHeap(), 4) u16[18];
-    mPointerCategory = new (JAIBasic::getCurrentJAIHeap(), 4) u8*[18];
+    mPointerCategory = new (JAIBasic::getCurrentJAIHeap(), 4) SoundInfo*[18];
     for (u8 i = 0; i < 18; i++) {
-        mSoundMax[i] = *(u16*)(mAddress + i * 4 + 6);
-        mPointerCategory[i] = mAddress + *(u16*)(mAddress + i * 4 + 8) * 16 + 80;
+        mSoundMax[i] = reinterpret_cast<u16*>(&mAddress[6])[i*2];
+        u32 temp = reinterpret_cast<u16*>(&mAddress[8])[i*2];
+        mPointerCategory[i] = &(reinterpret_cast<SoundInfo*>(&mAddress[0x50])[temp]);
+        
         if (i < 16 && mSoundMax[i] != 0) {
             mCategotyMax = i + 1;
         }
@@ -33,9 +35,9 @@ void JAInter::SoundTable::init(u8* param_1, u32 param_2) {
 }
 
 /* 8029B6FC-8029B8CC       .text getInfoPointer__Q27JAInter10SoundTableFUl */
-u8* JAInter::SoundTable::getInfoPointer(u32 param_1) {
+SoundInfo* JAInter::SoundTable::getInfoPointer(u32 param_1) {
     JUT_ASSERT_MSG(52, mAddress, "getInfoPointer サウンドテーブルがありません\n");
-    u8* r31 = NULL;
+    SoundInfo* r31 = NULL;
     u32 _category;
     switch (param_1 & JAISoundID_TypeMask) {
     case JAISoundID_Type_Se:
@@ -54,7 +56,7 @@ u8* JAInter::SoundTable::getInfoPointer(u32 param_1) {
     }
     u32 tmp = param_1 & 0x3ff;
     if (mAddress && tmp < mSoundMax[_category]) {
-        r31 = mPointerCategory[_category] + tmp * 16;
+        r31 = &mPointerCategory[_category][tmp];
     }
     return r31;
 }
