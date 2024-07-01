@@ -10,6 +10,24 @@
 #include "JSystem/JAudio/JASTrackPort.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
+enum JASOuterParamFlag {
+    OUTERPARAM_Volume     = 0x01,
+    OUTERPARAM_Pitch      = 0x02,
+    OUTERPARAM_Fxmix      = 0x04,
+    OUTERPARAM_Pan        = 0x08,
+    OUTERPARAM_Dolby      = 0x10,
+    OUTERPARAM_Unk6       = 0x20,
+    OUTERPARAM_Tempo      = 0x40,
+    OUTERPARAM_FIR8Filter = 0x80,
+    OUTERPARAM_IIR0       = 0x1000,
+    OUTERPARAM_IIR1       = 0x2000,
+    OUTERPARAM_IIR2       = 0x4000,
+    OUTERPARAM_IIR3       = 0x8000,
+    OUTERPARAM_Unk18      = 0x20000,
+
+    OUTERPARAM_IIRFilter = OUTERPARAM_IIR0 | OUTERPARAM_IIR1 | OUTERPARAM_IIR2 | OUTERPARAM_IIR3,
+};
+
 namespace JASystem {
     class TChannel;
 
@@ -164,6 +182,22 @@ namespace JASystem {
             return mChildren[index];
         }
 
+        TOuterParam* getOuterParam() { return mOuterParam; }
+
+        void checkExport(int) const {}
+        void checkImport(int) const {}
+        void getActivity() const {}
+        void getRoute() const {}
+        void getSeq() {}
+        // void operator delete(void*, u32) {}
+        // void* operator new(size_t) {}
+        void pauseTrackAll() {}
+        void setPanPower(int, u16) {}
+        void setPauseStatus(u8) {}
+        void setTranspose(s32) {}
+        void setVolumeMode(u8) {}
+        void unPauseTrackAll() {}
+
         /* 0x000 */ union {
             TSeqCtrl field_0x0;
             TTrack* next;
@@ -181,7 +215,7 @@ namespace JASystem {
         /* 0x304 */ short field_0x304[12];
         /* 0x31C */ TTrack* mParent;
         /* 0x320 */ TTrack* mChildren[MAX_CHILDREN];
-        /* 0x360 */ TOuterParam* field_0x360;
+        /* 0x360 */ TOuterParam* mOuterParam;
         /* 0x364 */ f32 field_0x364;
         /* 0x368 */ f32 field_0x368;
         /* 0x36C */ int field_0x36c;

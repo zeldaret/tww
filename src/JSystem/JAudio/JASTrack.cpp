@@ -61,8 +61,8 @@ void JASystem::TTrack::init() {
     for (int i = 0; i < 16; i++) {
         mChildren[i] = NULL;
     }
-    if (field_0x360) {
-        field_0x360->initExtBuffer();
+    if (mOuterParam) {
+        mOuterParam->initExtBuffer();
     }
     field_0x364 = 0.0f;
     field_0x368 = 1.0f;
@@ -183,7 +183,7 @@ bool JASystem::TTrack::tryInterrupt() {
 
 /* 80281004-8028100C       .text assignExtBuffer__Q28JASystem6TTrackFPQ38JASystem6TTrack11TOuterParam */
 void JASystem::TTrack::assignExtBuffer(TOuterParam* param_1) {
-    field_0x360 = param_1;
+    mOuterParam = param_1;
 }
 
 /* 8028100C-80281050       .text releaseChannelAll__Q28JASystem6TTrackFv */

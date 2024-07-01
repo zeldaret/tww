@@ -202,7 +202,7 @@ int JASystem::TSeqParser::cmdCloseTrack(TTrack* track, u32* params) {
 
 /* 8027EFD8-8027F02C       .text cmdOutSwitch__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdOutSwitch(TTrack* track, u32* params) {
-    TTrack::TOuterParam* outer = track->field_0x360;
+    TTrack::TOuterParam* outer = track->getOuterParam();
     if (outer) {
         outer->setOuterSwitch(params[0]);
         outer->setOuterUpdate(0xffff);

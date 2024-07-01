@@ -764,7 +764,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JAISound.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAISoundTable.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIStreamMgr.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JAISystemInterface.cpp"),
+            Object(Matching,    "JSystem/JAudio/JAISystemInterface.cpp"),
         ],
     ),
     JSystemLib(

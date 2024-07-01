@@ -419,7 +419,7 @@ void JAIZelBasic::onEnemyDamage() {
         }
     } else if (mSubBgmNum == JA_BGM_BATTLE_NORM) {
         if (mpSubBgmSound) {
-            JASystem::TTrack* track = &mpSubBgmSound->getSeqParameter()->field_0x1360;
+            JASystem::TTrack* track = mpSubBgmSound->getSeqParameter()->getRootTrackPointer();
             if (track) {
                 track->writePortApp(0x000b0000, 1);
             }
@@ -463,7 +463,7 @@ bool JAIZelBasic::checkBgmPlaying() {
 /* 802A59D8-802A59F4       .text checkPlayingMainBgmFlag__11JAIZelBasicFv */
 int JAIZelBasic::checkPlayingMainBgmFlag() {
     if (mpMainBgmSound) {
-        return mpMainBgmSound->field_0xc;
+        return mpMainBgmSound->mSoundID;
     } else {
         return -1;
     }
@@ -481,7 +481,7 @@ BOOL JAIZelBasic::checkSubBgmPlaying() {
 /* 802A5A04-802A5A20       .text checkPlayingSubBgmFlag__11JAIZelBasicFv */
 int JAIZelBasic::checkPlayingSubBgmFlag() {
     if (mpSubBgmSound) {
-        return mpSubBgmSound->field_0xc;
+        return mpSubBgmSound->mSoundID;
     } else {
         return -1;
     }
@@ -493,7 +493,7 @@ int JAIZelBasic::checkPlayingStreamBgmFlag() {
     if (temp->field_0x14 == NULL) {
         return -1;
     } else {
-        return temp->field_0x14->field_0xc;
+        return temp->field_0x14->mSoundID;
     }
 }
 
@@ -507,7 +507,7 @@ void JAIZelBasic::changeBgmStatus(s32 param_0) {
 /* 802A5A78-802A5AC0       .text changeSubBgmStatus__11JAIZelBasicFl */
 void JAIZelBasic::changeSubBgmStatus(s32 param_1) {
     if (mpSubBgmSound) {
-        JASystem::TTrack* track = &mpSubBgmSound->getSeqParameter()->field_0x1360;
+        JASystem::TTrack* track = mpSubBgmSound->getSeqParameter()->getRootTrackPointer();
         track->writePortApp(0x00090000, param_1);
     }
 }
