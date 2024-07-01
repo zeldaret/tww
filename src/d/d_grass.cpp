@@ -56,10 +56,9 @@ void dGrass_data_c::WorkCo(fopAc_ac_c* other, u32, int roomNo) {
     if (mAnimIdx < 8) {
         if (other->speedF > 16.0f) {
             cXyz ptclPos(mPos.x, mPos.y + 20.0f, mPos.z);
-            dComIfGp_particle_setSimple(dComIfGp_getGrass()->mCoParticle, &ptclPos, 0xFF,
-                dComIfGp_roomControl_getTevStr(roomNo)->mColorK0,
-                dComIfGp_roomControl_getTevStr(roomNo)->mColorK0, 1);
-            setBatta(&mPos, &dComIfGp_roomControl_getTevStr(roomNo)->mColorK0);
+            dKy_tevstr_c* tevStr = dComIfGp_roomControl_getTevStr(roomNo);
+            dComIfGp_particle_setSimple(dComIfGp_getGrass()->mCoParticle, &ptclPos, 0xFF, tevStr->mColorK0, tevStr->mColorK0, 1);
+            setBatta(&mPos, &tevStr->mColorK0);
         }
 
         s32 anmIdx = dComIfGp_getGrass()->newAnm();
@@ -111,6 +110,7 @@ dGrass_packet_c::dGrass_packet_c() {
     dGrass_data_c* data = mGrassData;
     for (s32 i = 0; i < ARRAY_SIZE(mGrassData); i++, data++)
         data->mState = 0;
+    mNextIdx = 0;
     dGrass_anm_c* anm = mGrassAnm;
     for (s32 i = 0; i < ARRAY_SIZE(mGrassAnm); i++, anm++)
         anm->mState = 0;
@@ -270,10 +270,7 @@ void dGrass_packet_c::update() {
                 numPerFrame++;
             }
 
-            cXyz pos;
-            pos.z = data->mPos.z;
-            pos.y = data->mPos.y + 260.0f;
-            pos.x = data->mPos.x;
+            cXyz pos(data->mPos.x, data->mPos.y + 260.0f, data->mPos.z);
             if (mDoLib_clipper::clip(j3dSys.getViewMtx(), pos, 260.0f)) {
                 data->mInitFlags |= 2;
             } else {
