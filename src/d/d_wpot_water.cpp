@@ -21,23 +21,30 @@ void dWpotWater_EcallBack::draw(JPABaseEmitter* emtr) {
     }
 }
 
+BOOL dWpotWater_c::draw() {
+    dComIfGd_getXluList()->entryImm(&mPacket, 0);
+    return TRUE;
+}
+
 /* 8023F64C-8023F688       .text dWpotWater_Draw__FP12dWpotWater_c */
 static BOOL dWpotWater_Draw(dWpotWater_c* i_this) {
-    dComIfGd_getXluList()->entryImm(&i_this->mPacket, 0);
+    return i_this->draw();
+}
+
+BOOL dWpotWater_c::execute() {
+    mDoMtx_stack_c::transS(mPos.x, mPos.y + 50.0f, mPos.z);
+    mDoMtx_stack_c::scaleM(220.0f, 100.0f, 220.0f);
+    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mPacket.getMtx());
+    if (emtr->isEnableDeleteEmitter()) {
+        emtr->quitImmortalEmitter();
+        fopKyM_Delete(this);
+    }
     return TRUE;
 }
 
 /* 8023F688-8023F740       .text dWpotWater_Execute__FP12dWpotWater_c */
 static BOOL dWpotWater_Execute(dWpotWater_c* i_this) {
-    /* Nonmatching */
-    mDoMtx_stack_c::transS(i_this->mPos.x, i_this->mPos.y + 50.0f, i_this->mPos.z);
-    mDoMtx_stack_c::scaleM(220.0f, 100.0f, 220.0f);
-    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), i_this->mPacket.mtx);
-    if (i_this->emtr->isEnableDeleteEmitter()) {
-        i_this->emtr->quitImmortalEmitter();
-        fopKyM_Delete(i_this);
-    }
-    return TRUE;
+    return i_this->execute();
 }
 
 /* 8023F740-8023F748       .text dWpotWater_IsDelete__FP12dWpotWater_c */
@@ -50,17 +57,13 @@ static BOOL dWpotWater_Delete(dWpotWater_c* i_this) {
     return TRUE;
 }
 
-/* 8023F750-8023FFCC       .text dWpotWater_Create__FP12kankyo_class */
-static s32 dWpotWater_Create(kankyo_class* i_k) {
-    /* Nonmatching */
-    dWpotWater_c* i_this = (dWpotWater_c*)i_k;
-
+s32 dWpotWater_c::create() {
     dBgS_GndChk chk2;
     dBgS_ObjGndChk_Yogan chk;
 
     s16 angle = 0;
     for (s32 i = 0; i < 50; i++, angle += 10000) {
-        cXyz pos = i_this->mPos;
+        cXyz pos = mPos;
         pos.x += 2.040816f * cM_ssin(angle);
         pos.y += 100.0f;
         pos.z += 2.040816f * cM_scos(angle);
@@ -72,30 +75,35 @@ static s32 dWpotWater_Create(kankyo_class* i_k) {
             if (chk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(chk) && ret2 < ret) {
                 cXyz spawnPos = pos;
                 spawnPos.y = ret + 25.0f;
-                fopAcM_create(PROC_Obj_Magmarock, 0, &spawnPos, i_this->mParam);
+                fopAcM_create(PROC_Obj_Magmarock, 0, &spawnPos, mParam);
                 break;
             }
         }
     }
 
-    cXyz pos = i_this->mPos;
+    cXyz pos = mPos;
     pos.y += 100.0f;
     chk2.SetPos(&pos);
     f32 ret = dComIfG_Bgsp()->GroundCross(&chk2);
-    i_this->mPos.y = ret;
-    if (ret != -1000000000.0f)
-        return cPhs_ERROR_e;
+    mPos.y = ret;
+    if (ret != -1000000000.0f) {
+        fopAcM_create(PROC_HITOBJ, 0, &mPos, mParam);
+        new(this) dWpotWater_c();
+        dComIfGp_particle_set(0x8083, &mPos);
+        dComIfGp_particle_set(0x8084, &mPos);
+        emtr = dComIfGp_particle_set(0x8086, &mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
+        if (emtr != NULL) {
+            emtr->becomeImmortalEmitter();
+            return cPhs_NEXT_e;
+        }
+    }
 
-    fopAcM_create(PROC_HITOBJ, 0, &i_this->mPos, i_this->mParam);
-    new(&i_this) dWpotWater_c();
-    dComIfGp_particle_set(0x8083, &i_this->mPos);
-    dComIfGp_particle_set(0x8084, &i_this->mPos);
-    i_this->emtr = dComIfGp_particle_set(0x8086, &i_this->mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
-    if (i_this->emtr == NULL)
-        return cPhs_ERROR_e;
+    return cPhs_ERROR_e;
+}
 
-    i_this->emtr->becomeImmortalEmitter();
-    return cPhs_NEXT_e;
+/* 8023F750-8023FFCC       .text dWpotWater_Create__FP12kankyo_class */
+static s32 dWpotWater_Create(kankyo_class* i_k) {
+    return ((dWpotWater_c*)i_k)->create();
 }
 
 kankyo_method_class l_dWpotWater_Method = {
