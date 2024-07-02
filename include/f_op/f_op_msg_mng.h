@@ -11,6 +11,7 @@ class fopAc_ac_c;
 class msg_class;
 class J2DPane;
 class J2DScreen;
+class J2DPicture;
 
 struct msg_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
