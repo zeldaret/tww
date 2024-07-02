@@ -541,7 +541,7 @@ config.libs = [
             Object(NonMatching, "d/d_water_mark.cpp"),
             Object(NonMatching, "d/d_wind_arrow.cpp"),
             Object(NonMatching, "d/d_wpillar.cpp"),
-            Object(NonMatching, "d/d_wpot_water.cpp"),
+            Object(Matching,    "d/d_wpot_water.cpp"),
 
             Object(Matching,    "DynamicLink.cpp"),
         ],

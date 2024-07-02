@@ -9,6 +9,8 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_kankyo_mng.h"
 
+dWpotWater_EcallBack dWpotWater_c::mEcallback;
+
 /* 8023F5D0-8023F64C       .text draw__20dWpotWater_EcallBackFP14JPABaseEmitter */
 void dWpotWater_EcallBack::draw(JPABaseEmitter* emtr) {
     if (emtr->isZDraw()) {
@@ -58,52 +60,62 @@ static BOOL dWpotWater_Delete(dWpotWater_c* i_this) {
 }
 
 s32 dWpotWater_c::create() {
+    new(this) dWpotWater_c();
+    dComIfGp_particle_set(0x8083, &mPos);
+    dComIfGp_particle_set(0x8084, &mPos);
+    emtr = dComIfGp_particle_set(0x8086, &mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
+    if (emtr == NULL) {
+        return cPhs_ERROR_e;
+    } else {
+        emtr->becomeImmortalEmitter();
+        return cPhs_COMPLEATE_e;
+    }
+}
+
+/* 8023F750-8023FFCC       .text dWpotWater_Create__FP12kankyo_class */
+static s32 dWpotWater_Create(kankyo_class* i_k) {
+    dWpotWater_c* i_this = (dWpotWater_c*)i_k;
+    
     dBgS_GndChk chk2;
     dBgS_ObjGndChk_Yogan chk;
-
+    cXyz pos;
+    
     s16 angle = 0;
     for (s32 i = 0; i < 50; i++, angle += 10000) {
-        cXyz pos = mPos;
-        pos.x += 2.040816f * cM_ssin(angle);
-        pos.y += 100.0f;
-        pos.z += 2.040816f * cM_scos(angle);
+        f32 f4 = i * 2.0408163f;
+        pos.set(
+            i_this->mPos.x + f4 * cM_scos(angle),
+            i_this->mPos.y + 100.0f,
+            i_this->mPos.z + f4 * cM_ssin(angle)
+        );
         chk.SetPos(&pos);
         f32 ret = dComIfG_Bgsp()->GroundCross(&chk);
         if (ret != -1000000000.0f) {
             chk2.SetPos(&pos);
             f32 ret2 = dComIfG_Bgsp()->GroundCross(&chk2);
-            if (chk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(chk) && ret2 < ret) {
-                cXyz spawnPos = pos;
-                spawnPos.y = ret + 25.0f;
-                fopAcM_create(PROC_Obj_Magmarock, 0, &spawnPos, mParam);
+            if (chk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(chk) == dBgS_Attr_LAVA_e && ret > ret2) {
+                cXyz spawnPos(pos.x, ret + 25.0f, pos.z);
+                fopAcM_create(PROC_Obj_Magmarock, 0, &spawnPos, i_this->mParam);
                 break;
             }
         }
     }
-
-    cXyz pos = mPos;
-    pos.y += 100.0f;
+    
+    pos.set(
+        i_this->mPos.x,
+        i_this->mPos.y + 100.0f,
+        i_this->mPos.z
+    );
     chk2.SetPos(&pos);
     f32 ret = dComIfG_Bgsp()->GroundCross(&chk2);
-    mPos.y = ret;
+    i_this->mPos.y = ret;
     if (ret != -1000000000.0f) {
-        fopAcM_create(PROC_HITOBJ, 0, &mPos, mParam);
-        new(this) dWpotWater_c();
-        dComIfGp_particle_set(0x8083, &mPos);
-        dComIfGp_particle_set(0x8084, &mPos);
-        emtr = dComIfGp_particle_set(0x8086, &mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
-        if (emtr != NULL) {
-            emtr->becomeImmortalEmitter();
-            return cPhs_NEXT_e;
-        }
+        cXyz sp18(i_this->mPos.x, i_this->mPos.y, i_this->mPos.z);
+        fopAcM_create(PROC_HITOBJ, 0, &sp18, i_this->mParam);
+        return i_this->create();
     }
-
+    
     return cPhs_ERROR_e;
-}
-
-/* 8023F750-8023FFCC       .text dWpotWater_Create__FP12kankyo_class */
-static s32 dWpotWater_Create(kankyo_class* i_k) {
-    return ((dWpotWater_c*)i_k)->create();
 }
 
 kankyo_method_class l_dWpotWater_Method = {
