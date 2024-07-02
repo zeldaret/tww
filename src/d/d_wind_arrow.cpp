@@ -41,54 +41,47 @@ static BOOL dWindArrow_Draw(dWindArrow_c* i_this) {
 
 /* 8023E48C-8023E6F4       .text draw__12dWindArrow_cFv */
 BOOL dWindArrow_c::draw() {
-    /* Nonmatching */
-    if (mModelInfo.mBtkAnm.getPlaySpeed() == 0.0f)
-        return;
+    if (
+        mModelInfo.mBtkAnm.getPlaySpeed() != 0.0f &&
+        dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
+        (!dComIfGp_event_runCheck() || dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e))
+    ) {
+        static cXyz l_offsetPos(0.0f, 40.0f, -250.0f);
+        static cXyz l_scale(0.85f, 0.85f, 0.85f);
 
-    if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e))
-        return;
+        Mtx mtx;
+        fopAc_ac_c* ac = (fopAc_ac_c*)mParam;
+        mDoMtx_stack_c::transS(ac->current.pos);
+        mDoMtx_stack_c::YrotM(ac->shape_angle.y);
+        mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
+        cXyz* windVec = dKyw_get_wind_vec();
+        s16 windAngle = cM_atan2s(windVec->x, windVec->z);
 
-    if (!dComIfGp_event_runCheck())
-        return;
+        Mtx rotMtx;
+        mDoMtx_stack_c::YrotS(windAngle);
+        mDoMtx_copy(mDoMtx_stack_c::get(), rotMtx);
 
-    if (!dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e))
-        return;
+        mModelInfo.mpModel->setBaseScale(l_scale);
+        cXyz offs;
+        mDoMtx_multVec(mtx, &l_offsetPos, &offs);
+        rotMtx[0][3] = offs.x;
+        rotMtx[1][3] = offs.y;
+        rotMtx[2][3] = offs.z;
+        mModelInfo.mpModel->setBaseTRMtx(rotMtx);
 
-    static cXyz l_offsetPos(0.0f, 40.0f, -250.0f);
-    static cXyz l_scale(0.85f, 0.85f, 0.85f);
+        mModelInfo.mBtkAnm.entry(mModelInfo.mpModel->getModelData());
+        if (mDoGph_gInf_c::isMonotone()) {
+            dComIfGd_setListP1();
+        } else {
+            dComIfGd_setListMaskOff();
+        }
 
-    Mtx mtx;
-    fopAc_ac_c* ac = (fopAc_ac_c*)mParam;
-    mDoMtx_stack_c::transS(ac->current.pos);
-    mDoMtx_stack_c::YrotM(ac->shape_angle.y);
-    mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
-    cXyz* windVec = dKyw_get_wind_vec();
-    s16 windAngle = cM_atan2s(windVec->x, windVec->z);
-
-    Mtx rotMtx;
-    mDoMtx_stack_c::YrotS(windAngle);
-    mDoMtx_copy(mDoMtx_stack_c::get(), rotMtx);
-
-    mModelInfo.mpModel->setBaseScale(l_scale);
-    cXyz offs;
-    mDoMtx_multVec(mtx, &l_offsetPos, &offs);
-    rotMtx[0][3] = offs.x;
-    rotMtx[1][3] = offs.y;
-    rotMtx[2][3] = offs.z;
-    mModelInfo.mpModel->setBaseTRMtx(rotMtx);
-
-    mModelInfo.mBtkAnm.entry(mModelInfo.mpModel->getModelData());
-    if (mDoGph_gInf_c::isMonotone()) {
-        dComIfGd_setListP1();
-    } else {
-        dComIfGd_setListMaskOff();
+        mDoExt_modelUpdateDL(mModelInfo.mpModel);
+        dComIfGd_setList();
+        mModelInfo.mInvisibleModel.entryMaskOff();
+        mModelInfo.mBtkAnm.remove(mModelInfo.mpModel->getModelData());
     }
-
-    mDoExt_modelUpdateDL(mModelInfo.mpModel);
-    dComIfGd_setList();
-    mModelInfo.mInvisibleModel.entryMaskOff();
-    mModelInfo.mBtkAnm.remove(mModelInfo.mpModel->getModelData());
-
+    
     return TRUE;
 }
 
@@ -115,45 +108,38 @@ static BOOL dWindArrow_Delete(dWindArrow_c* i_this) {
 }
 
 s32 dWindArrow_c::create() {
-    /* Nonmatching */
-    if (!createHeap())
-        return cPhs_ERROR_e;
-
     new(this) dWindArrow_c();
+    
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YA);
     JUT_ASSERT(0x56, modelData != NULL);
 
-    s32 ret;
-
     mModelInfo.mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x200);
     if (mModelInfo.mpModel == NULL) {
-        ret = cPhs_ERROR_e;
-        goto out;
+        return cPhs_ERROR_e;
     }
 
     if (!mModelInfo.mInvisibleModel.create(mModelInfo.mpModel)) {
-        ret = cPhs_ERROR_e;
-        goto out;
+        return cPhs_ERROR_e;
     }
 
     J3DAnmTextureSRTKey* anm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_YA);
     JUT_ASSERT(0x65, anm != NULL);
 
     if (!mModelInfo.mBtkAnm.init(modelData, anm, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
-        ret = cPhs_ERROR_e;
-        goto out;
+        return cPhs_ERROR_e;
     }
 
-    ret = cPhs_COMPLEATE_e;
-
-out:
-    adjustHeap();
-    return ret;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 8023E7A8-8023E968       .text dWindArrow_Create__FP12kankyo_class */
 static s32 dWindArrow_Create(kankyo_class* i_k) {
-    return ((dWindArrow_c*)i_k)->create();
+    dWindArrow_c* i_this = (dWindArrow_c*)i_k;
+    if (!i_this->createHeap())
+        return cPhs_ERROR_e;
+    s32 phase_state = i_this->create();
+    i_this->adjustHeap();
+    return phase_state;
 }
 
 kankyo_method_class l_dWindArrow_Method = {
@@ -174,6 +160,6 @@ kankyo_process_profile_definition g_profile_WIND_ARROW = {
     0,
     0,
     &g_fopKy_Method,
-    0x01CC,
+    0x01CB,
     &l_dWindArrow_Method,
 };

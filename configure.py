@@ -539,7 +539,7 @@ config.libs = [
             Object(Matching,    "d/d_throwstone.cpp"),
             Object(NonMatching, "d/d_timer.cpp"),
             Object(NonMatching, "d/d_water_mark.cpp"),
-            Object(NonMatching, "d/d_wind_arrow.cpp"),
+            Object(Matching,    "d/d_wind_arrow.cpp"),
             Object(NonMatching, "d/d_wpillar.cpp"),
             Object(Matching,    "d/d_wpot_water.cpp"),
 
