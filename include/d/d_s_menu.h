@@ -42,9 +42,9 @@ public:
     /* 0x1CC */ mDoDvdThd_toMainRam_c* command;
     /* 0x1D0 */ mDoDvdThd_toMainRam_c* fontCommand;
     /* 0x1D4 */ menu_inf* info;
-    /* 0x1D8 */ ResFONT* field_0x1d8;
-    /* 0x1DC */ myFontClass* field_0x1dc;
-    /* 0x1E0 */ u8 field_0x1e0;
+    /* 0x1D8 */ ResFONT* fontRes;
+    /* 0x1DC */ myFontClass* font;
+    /* 0x1E0 */ u8 startCode;
     /* 0x1E1 */ u8 field_0x1e1;
     /* 0x1E2 */ u8 field_0x1e2;
 };

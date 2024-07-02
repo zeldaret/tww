@@ -486,7 +486,8 @@ public:
     ItemTableList* getItemTable() { return mpItemTable; }
     void setFmapData(void * pData) { mpFmapData = pData; }
 
-    void setPictureBoxData(JKRAramBlock* aramHeap, int i) { mPictureBoxDataHeap[i] = aramHeap; }
+    JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
+    void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
     void offPictureFlag(u8 i) {
         u8 mask = (1 << i);
         mPictureFlag &= ~mask;
@@ -494,7 +495,7 @@ public:
     u8 getPictureFormat() { return mPictureFormat; }
     u8 getPictureResult() { return mPictureResult; }
     u8 getPictureResultDetail() { return mPictureResultDetail; }
-    void setBossBattleData(JKRAramBlock* aramHeap, int i) { mBossBattleDataHeap[i] = aramHeap; }
+    void setBossBattleData(JKRAramBlock* aramBlock, int i) { mBossBattleData[i] = aramBlock; }
 
     void startItemTimer() { mStartItemTimer = true; }
 
@@ -572,13 +573,13 @@ public:
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
 #if VERSION != VERSION_JPN
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
-    /* 0x4800 */ JKRAramBlock* mPictureBoxDataHeap[3];
-    /* 0x480C */ JKRAramBlock* mBossBattleDataHeap[4];
+    /* 0x4800 */ JKRAramBlock* mPictureBoxData[3];
+    /* 0x480C */ JKRAramBlock* mBossBattleData[4];
     /* 0x481C */ JKRAramBlock* field_0x481c;
     /* 0x4820 */ JKRAramBlock* field_0x4820;
 #else
-    /* 0x47FC */ JKRAramBlock* mPictureBoxDataHeap[3];
-    /* 0x480C */ JKRAramBlock* mBossBattleDataHeap[4];
+    /* 0x47FC */ JKRAramBlock* mPictureBoxData[3];
+    /* 0x480C */ JKRAramBlock* mBossBattleData[4];
 #endif
     /* Offsets below are for USA/PAL */
 
@@ -2550,8 +2551,12 @@ inline u8 dComIfGp_getMesgStatus() {
     return g_dComIfG_gameInfo.play.getMesgStatus();
 }
 
-inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramHeap, int i) {
-    g_dComIfG_gameInfo.play.setPictureBoxData(aramHeap, i);
+inline JKRAramBlock* dComIfGp_getPictureBoxData(int i) {
+    return g_dComIfG_gameInfo.play.getPictureBoxData(i);
+}
+
+inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramBlock, int i) {
+    g_dComIfG_gameInfo.play.setPictureBoxData(aramBlock, i);
 }
 
 inline void dComIfGp_offPictureFlag(u8 i) {
@@ -2570,8 +2575,8 @@ inline u8 dComIfGp_getPictureResultDetail() {
     return g_dComIfG_gameInfo.play.getPictureResultDetail();
 }
 
-inline void dComIfGp_setBossBattleData(JKRAramBlock* aramHeap, int i) {
-    g_dComIfG_gameInfo.play.setBossBattleData(aramHeap, i);
+inline void dComIfGp_setBossBattleData(JKRAramBlock* aramBlock, int i) {
+    g_dComIfG_gameInfo.play.setBossBattleData(aramBlock, i);
 }
 
 inline u8 dComIfGp_getButtonActionMode() {

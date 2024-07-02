@@ -86,6 +86,10 @@ inline JKRAramBlock *JKRMainRamToAram(u8 *buf, u32 bufSize, u32 alignedSize, JKR
     return JKRAram::mainRamToAram(buf, bufSize, alignedSize, expandSwitch, fileSize, heap, id);
 }
 
+inline JKRAramBlock* JKRMainRamToAram(u8* buf, JKRAramBlock* block, u32 size, JKRExpandSwitch expandSwitch, u32 fileSize, JKRHeap* heap, int id) {
+    return JKRAram::mainRamToAram(buf, block, size, expandSwitch, fileSize, heap, id);
+}
+
 // void JKRDecompressFromAramToMainRam(u32, void*, u32, u32, u32, u32*);
 
 #endif /* JKRARAM_H */

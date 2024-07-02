@@ -16,7 +16,7 @@ void mDoMemCdRWm_SetCardStat(CARDFileInfo*);
 void mDoMemCdRWm_CheckCardStat(CARDFileInfo*);
 void mDoMemCdRWm_CalcCheckSum(void*, u32);
 void mDoMemCdRWm_CalcCheckSumPictData(void*, u32);
-void mDoMemCdRWm_TestCheckSumPictData(void*);
+BOOL mDoMemCdRWm_TestCheckSumPictData(void*);
 void mDoMemCdRWm_SetCheckSumPictData(u8*);
 void mDoMemCdRWm_CalcCheckSumGameData(void*, u32);
 void mDoMemCdRWm_TestCheckSumGameData(void*);

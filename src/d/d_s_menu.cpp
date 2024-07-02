@@ -31,47 +31,45 @@ u8 l_languageType;
 static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
     /* Nonmatching - regalloc */
     JUTReport(300, 50, "メニュー");
-    if (i_this->field_0x1e0) {
-        JUTReport(400, 50,"<%d>", i_this->field_0x1e0 - 1);
+    if (i_this->startCode) {
+        JUTReport(400, 50,"<%d>", i_this->startCode - 1);
     }
-    menu_of_scene_class::menu_inf* r30 = i_this->info;
-    int r29 = 70;
-    u8 r3;
-    int r4 = l_cursolID - l_startID;
-    r3 = r30->num;
-    int r31 = r3 < 20 ? r3 : 20;
-    if (r4 < 5) {
-        l_startID += r4 - 5;
+    menu_of_scene_class::menu_inf* info = i_this->info;
+    s32 y = 70;
+    u8 num;
+    s32 scroll = l_cursolID - l_startID;
+    num = info->num;
+    s32 lineNum = num < 20 ? num : 20;
+    if (scroll < 5) {
+        l_startID += scroll - 5;
         if (l_startID < 0) {
             l_startID = 0;
         }
-    } else if (r4 > 15) {
-        int r5 = r3 - 20;
+    } else if (scroll > 15) {
+        int r5 = num - 20;
         if (r5 < 0) {
             r5 = 0;
         }
-        l_startID += r4 - 15;
+        l_startID += scroll - 15;
         if (l_startID > r5) {
             l_startID = r5;
         }
     }
-    int i, id;
-    id = l_startID;
-    for (i = 0; i < r31; id++, r29 += 16, i++) {
-        s8 r6 = l_cursolID == id ? 79 : 32;
-        menu_of_scene_class::stage_inf* stage = &r30->stage[id];
-        JUTReport(20, r29, "%c %2d %s　＜%s＞", r6, id, stage->name, stage->roomPtr[l_groupPoint[id]].name);
+    for (s32 id = l_startID, i = 0; i < lineNum; id++, y += 16, i++) {
+        char selectChar = l_cursolID == id ? 79 : 32;
+        menu_of_scene_class::stage_inf* stage = &info->stage[id];
+        JUTReport(20, y, "%c %2d %s　＜%s＞", selectChar, id, stage->name, stage->roomPtr[l_groupPoint[id]].name);
     }
     JUTReport(280,400,"Ｘ：進む　Ｙ：戻る");
-    char* local_3c[] = {"通常", "高速経過", "朝（あさ）に固定", "昼（ひる）に固定", "夕方（ゆうがた）に固定", "夜（よる）に固定", "時に固定"};
-    char* local_58[] = {"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"};
+    char* timepat_str[] = {"通常", "高速経過", "朝（あさ）に固定", "昼（ひる）に固定", "夕方（ゆうがた）に固定", "夜（よる）に固定", "時に固定"};
+    char* weekpat_str[] = {"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"};
     if (l_timepat >= 6) {
-        JUTReport(280, 420, "時刻：%d%s", l_timepat + -6, local_3c[6]);
+        JUTReport(280, 420, "時刻：%d%s", l_timepat - 6, timepat_str[6]);
     } else {
-        JUTReport(280, 420, "時刻：%s", local_3c[l_timepat]);
+        JUTReport(280, 420, "時刻：%s", timepat_str[l_timepat]);
     }
     JUTReport(40, 420, "十字右：進む　十字左：戻る");
-    JUTReport(200, 400, "曜日：%s", local_58[l_weekpat]);
+    JUTReport(200, 400, "曜日：%s", weekpat_str[l_weekpat]);
 #if VERSION != VERSION_JPN
     static const char* language[] = {"ENGLISH", "GERMAN", "FRENCH", "SPANISH", "ITALIAN"};
     JUTReport(40, 440, "%s", language[g_dComIfG_gameInfo.play.mGameLanguage]);
@@ -134,17 +132,17 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
     }
 
     if (CPad_CHECK_TRIG_R(0)) {
-        if (++i_this->field_0x1e0 == 0)
-            i_this->field_0x1e0++;
+        if (++i_this->startCode == 0)
+            i_this->startCode++;
     } else if (CPad_CHECK_TRIG_L(0)) {
-        if (--i_this->field_0x1e0 == 0)
-            i_this->field_0x1e0--;
+        if (--i_this->startCode == 0)
+            i_this->startCode--;
     }
 
     if (CPad_CHECK_TRIG_START(0)) {
         menu_of_scene_class::room_inf* room = &info->stage[l_cursolID].roomPtr[l_groupPoint[l_cursolID]];
         dComIfGp_offEnableNextStage();
-        s16 startCode = (i_this->field_0x1e0 != 0) ? i_this->field_0x1e0 - 1 : room->startCode;
+        s16 startCode = (i_this->startCode != 0) ? i_this->startCode - 1 : room->startCode;
         dComIfGp_setNextStage(room->stageName, startCode, room->roomNo, room->layerNo);
         if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
             fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, 0, 5);
@@ -238,9 +236,9 @@ static BOOL dScnMenu_IsDelete(menu_of_scene_class*) {
 /* 8022F320-8022F3C4       .text dScnMenu_Delete__FP19menu_of_scene_class */
 static BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
     JUTDbPrint::getManager()->changeFont(JFWSystem::systemFont);
-    delete i_this->field_0x1dc;
+    delete i_this->font;
     JKRFree(i_this->info);
-    JKRFree(i_this->field_0x1d8);
+    JKRFree(i_this->fontRes);
     g_HIO.mDisplayFlag &= ~2;
     g_HIO.mDisplayFlag &= ~2;
     dComIfGs_setRestartOption(0);
@@ -278,12 +276,12 @@ s32 phase_2(menu_of_scene_class* i_this) {
             l_groupPoint[i] = 0;
         }
     }
-    i_this->field_0x1d8 = (ResFONT*)i_this->fontCommand->getMemAddress();
+    i_this->fontRes = (ResFONT*)i_this->fontCommand->getMemAddress();
     delete i_this->fontCommand;
-    if (i_this->field_0x1d8) {
-        i_this->field_0x1dc = new myFontClass(i_this->field_0x1d8, NULL);
-        if (i_this->field_0x1dc) {
-            JUTDbPrint::getManager()->changeFont(i_this->field_0x1dc);
+    if (i_this->fontRes) {
+        i_this->font = new myFontClass(i_this->fontRes, NULL);
+        if (i_this->font) {
+            JUTDbPrint::getManager()->changeFont(i_this->font);
         }
     }
     JFWDisplay::getManager()->setTickRate(OS_TIMER_CLOCK / 60);
