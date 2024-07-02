@@ -41,7 +41,7 @@ s32 dScnOpen_c::create() {
 /* 80232BC4-80232CAC       .text execute__10dScnOpen_cFv */
 BOOL dScnOpen_c::execute() {
 #if VERSION != VERSION_JPN
-    if (mpProc->field_0x2b0 >= 5 && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
+    if (mpProc->mState >= 5 && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
 #else
     if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
 #endif
@@ -55,7 +55,7 @@ BOOL dScnOpen_c::execute() {
     }
 
     mpProc->proc_execute();
-    if (mpProc->field_0x2b0 == 44)
+    if (mpProc->mState == 44)
         changeGameScene();
 
     return TRUE;

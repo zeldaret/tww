@@ -62,7 +62,7 @@ public:
     /* 0x2AC */ s32 mTimer;
     /* 0x2B0 */ s32 mState;
     /* 0x2B4 */ f32 mScale;
-    /* 0x010 */ u8 pad2[0x014];
+    /* 0x2B8 */ u8 pad2[0x010];
 };
 
 class dScnOpen_c : public scene_class {
