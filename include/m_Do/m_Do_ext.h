@@ -651,6 +651,9 @@ JKRHeap* mDoExt_setCurrentHeap(JKRHeap* pHeap);
 JUTFont* mDoExt_getMesgFont();
 JUTFont* mDoExt_getRubyFont();
 
+void mDoExt_removeMesgFont();
+void mDoExt_removeRubyFont();
+
 extern JKRExpHeap* zeldaHeap;
 extern JKRExpHeap* gameHeap;
 extern JKRExpHeap* commandHeap;

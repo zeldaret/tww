@@ -2,6 +2,7 @@
 #define D_S_OPEN
 
 #include "d/d_drawlist.h"
+#include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_scene.h"
 
 class J2DScreen;
@@ -13,6 +14,24 @@ public:
     virtual ~dScnOpen_message_c();
     void set_message(u32, int);
     void exec();
+
+public:
+    /* 0x0000 */ u8 field_0x00[0x2000];
+    /* 0x2004 */ fopMsgM_msgDataProc_c mMsgDataProc;
+    /* 0x22A4 */ u8 field_0x22a4[0x22c0 - 0x22a4];
+    /* 0x22C0 */ u32 field_0x22c0;
+    /* 0x22C4 */ J2DTextBox* field_0x22c4;
+    /* 0x22C8 */ J2DTextBox* field_0x22c8;
+    /* 0x22CC */ JUTFont* tFont;
+    /* 0x22D0 */ JUTFont* rFont;
+    /* 0x22D4 */ JKRExpHeap* exp_heap;
+    /* 0x22D8 */ f32 field_0x22d8;
+    /* 0x22DC */ u32 field_0x22dc;
+    /* 0x22E0 */ u32 field_0x22e0;
+    /* 0x22E4 */ u32 field_0x22e4;
+    /* 0x22E8 */ u8 field_0x22e8;
+    /* 0x22EC */ u32 field_0x22ec;
+    /* 0x22F0 */ u32 field_0x22f0;
 };
 
 class dScnOpen_proc_c : public dDlst_base_c {
@@ -37,8 +56,12 @@ public:
     /* 0x030 */ J2DPane* mak2;
     /* 0x034 */ J2DTextBox* tx1;
     /* 0x038 */ J2DTextBox* tx2;
-    /* 0x03C */ u8 pad[0x2B0 - 0x03C];
-    /* 0x2B0 */ s32 field_0x2b0;
+    /* 0x03C */ fopMsgM_pane_class pane[11];
+    /* 0x2A4 */ f32 mPosX;
+    /* 0x2A8 */ f32 mAlpha;
+    /* 0x2AC */ s32 mTimer;
+    /* 0x2B0 */ s32 mState;
+    /* 0x2B4 */ f32 mScale;
     /* 0x010 */ u8 pad2[0x014];
 };
 
