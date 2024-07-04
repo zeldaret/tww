@@ -449,10 +449,12 @@ public:
     inline u8 getNowVibration() { return mNowVibration; }
     inline void setNowVibration(u8 vibration) { mNowVibration = vibration; }
 
+#if VERSION != VERSION_JPN
     // Inline name is fake (not present in JP debug maps), but was guessed based on the similar
     // dSv_player_config_c::getPalLanguage() const inline in TP debug.
     inline u8 getPalLanguage() { return mPalLanguage; }
     inline void setPalLanguage(u8 lang) { mPalLanguage = lang; }
+#endif
 
     void setMsgArchive(JKRArchive * pArc) { mpMsgArchive = pArc; }
     void setDmsgArchive(JKRArchive * pArc) { mpDmsgArchive = pArc; }
@@ -2529,16 +2531,17 @@ inline void dComIfGp_setNowVibration(u8 vibration) {
     g_dComIfG_gameInfo.play.setNowVibration(vibration);
 }
 
+#if VERSION != VERSION_JPN
 // Inline name is fake (not present in JP debug maps), but was guessed based on the similar
 // dComIfGs_getPalLanguage inline in TP debug.
 inline u8 dComIfGp_getPalLanguage() {
     return g_dComIfG_gameInfo.play.getPalLanguage();
 }
-
 // Inline name is fake (not present in JP debug maps).
 inline void dComIfGp_setPalLanguage(u8 lang) {
     g_dComIfG_gameInfo.play.setPalLanguage(lang);
 }
+#endif
 
 inline void dComIfGp_2dShowOn() {
     g_dComIfG_gameInfo.play.show2dOn();
