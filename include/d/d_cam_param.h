@@ -4,7 +4,10 @@
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_angle.h"
 
-struct dCamera__Style;
+struct dCamera__Style {
+    /* 0x00 */ u32 m00;
+    /* 0x04 */ u8 m04[0x84 - 0x04];
+};  // Size: 0x84
 
 class dCstick_c {
 public:
@@ -119,7 +122,10 @@ public:
 class dCamParam_c {
 public:
     /* 0x0 */ dCamera__Style* mpStyle;
-    /* 0x4 */ int mStyleIdx;
+    /* 0x4 */ s32 mStyleIdx;
+
+    static dCamera__Style styles[];
+    static s32 style_num;
 
 public:
     dCamParam_c(s32);
@@ -127,8 +133,8 @@ public:
 
     void Flag(s32, u16) {}
     void Val(s32, int) {}
-    void Change(s32);
-    void SearchStyle(u32);
+    BOOL Change(s32);
+    s32 SearchStyle(u32);
     void ratiof(f32, f32, f32, f32);
     void DefaultRadius(f32*);
     void RadiusRatio(f32);

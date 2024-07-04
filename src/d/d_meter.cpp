@@ -1774,7 +1774,7 @@ static BOOL dMeter_Execute(sub_meter_class* i_this) {
         dMeter_childPaneTrans(i_this->field_0x2438 + 0x09 + i, i_this->field_0x2438 + 0x16, f31);
     }
     
-    dMeter_childPaneTransOnly(i_this->field_0x1638 + 0x1E, i_this->field_0x2438 + 0x16, f31, f29);
+    dMeter_childPaneTransOnly(i_this->field_0x1638 + 0x1E, i_this->field_0x2438 + 0x16, f31, f30);
     dMeter_childPaneTrans(i_this->field_0x2438 + 0x0C, i_this->field_0x2438 + 0x16, f31);
     dMeter_childPaneTrans(i_this->field_0x2438 + 0x0B, i_this->field_0x2438 + 0x16, f31);
 
