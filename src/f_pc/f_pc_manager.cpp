@@ -60,7 +60,7 @@ struct BMG_INF1 : JUTDataBlockHeader {
 
 /* 8003E3D0-8003E9F0       .text messageSet__FUl */
 void messageSet(u32 status) {
-    /* Nonmatching - PAL-only regswap between msg and tpane */
+    /* Nonmatching - regswap on msg[0] for USA and PAL (JPN already matches) */
 #if VERSION == VERSION_PAL
     BMG_INF1* inf1;
     if (g_dComIfG_gameInfo.play.mGameLanguage == 1) {
@@ -111,7 +111,6 @@ void messageSet(u32 status) {
 #endif
 
     s16 height = 27;
-    s32 ch;
 #if VERSION != VERSION_JPN
     f32 maxWidth = 0.0f;
     s32 curLine = 0;
@@ -120,8 +119,8 @@ void messageSet(u32 status) {
         lineWidth[i] = 0.0f;
     }
 #endif
-    for (; ch = (u8)*msg, (s8)ch != '\0'; msg++) {
-        if ((s8)ch == '\n') {
+    for (; msg[0] != '\0'; msg++) {
+        if (msg[0] == '\n') {
             height += 27;
 #if VERSION != VERSION_JPN
             curLine++;
@@ -130,7 +129,7 @@ void messageSet(u32 status) {
         }
 
 #if VERSION != VERSION_JPN
-        lineWidth[curLine] += font->JUTFont::getWidth(ch);
+        lineWidth[curLine] += font->JUTFont::getWidth(msg[0]);
 #endif
     }
 
