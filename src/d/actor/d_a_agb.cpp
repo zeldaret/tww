@@ -375,7 +375,7 @@ int daAgb_c::uploadSelect() {
             char path[28];
             char pathNum[4];
             strcpy(path, "/res/Gba/client_");
-            sprintf(pathNum, "%d", g_dComIfG_gameInfo.play.mGameLanguage);
+            sprintf(pathNum, "%d", dComIfGp_getPalLanguage());
             strcat(path, pathNum);
             strcat(path, ".bin");
             l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, dMsg_getAgbWorkArea());
@@ -451,7 +451,7 @@ int daAgb_c::uploadMessageLoad() {
         char path[28];
         char pathNum[4];
         strcpy(path, "/res/Gba/msg_LZ");
-        sprintf(pathNum, "%d", g_dComIfG_gameInfo.play.mGameLanguage);
+        sprintf(pathNum, "%d", dComIfGp_getPalLanguage());
         strcat(path, pathNum);
         strcat(path, ".bin");
         l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, NULL);

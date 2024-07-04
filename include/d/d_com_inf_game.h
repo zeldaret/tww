@@ -445,6 +445,15 @@ public:
     inline void setHeapLockFlag(u8 flag) { mHeapLockFlag = flag; }
     inline void offHeapLockFlag() { mHeapLockFlag = 0; }
 
+    // These inlines aren't present in WW JP debug maps, but are present in TP debug.
+    inline u8 getNowVibration() { return mNowVibration; }
+    inline void setNowVibration(u8 vibration) { mNowVibration = vibration; }
+
+    // Inline name is fake (not present in JP debug maps), but was guessed based on the similar
+    // dSv_player_config_c::getPalLanguage() const inline in TP debug.
+    inline u8 getPalLanguage() { return mPalLanguage; }
+    inline void setPalLanguage(u8 lang) { mPalLanguage = lang; }
+
     void setMsgArchive(JKRArchive * pArc) { mpMsgArchive = pArc; }
     void setDmsgArchive(JKRArchive * pArc) { mpDmsgArchive = pArc; }
     void setTmsgArchive(JKRArchive * pArc) { mpTmsgArchive = pArc; }
@@ -531,6 +540,9 @@ public:
     void setButtonMode(u8 mode) { mButtonMode = mode; }
 
     void setInputPassword(const char* password) { strcpy(mInputPassword, password); }
+
+    u8 getDirection() { return mDirection; }
+    void setDirection(u8 direction) { mDirection = direction; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -624,8 +636,8 @@ public:
     /* 0x491E */ s16 mAuctionRupee;
     /* 0x4920 */ s16 mAuctionGauge;
     /* 0x4922 */ s16 mItemTimer;
-    /* 0x4924 */ s16 mCurrHP;
-    /* 0x4926 */ s16 mRupyCountDisplay;
+    /* 0x4924 */ s16 mItemNowLife;
+    /* 0x4926 */ s16 mItemNowRupee;
     /* 0x4928 */ u8 field_0x4928;
     /* 0x4929 */ u8 field_0x4929;
     /* 0x492A */ u8 mMesgStatus;
@@ -645,7 +657,7 @@ public:
     /* 0x493E */ u8 mItemNo;
     /* 0x493F */ u8 field_0x493f;
     /* 0x4940 */ u8 field_0x4940;
-    /* 0x4941 */ u8 field_0x4941;
+    /* 0x4941 */ u8 mDirection;
     /* 0x4942 */ u8 mButtonMode;
     /* 0x4943 */ u8 field_0x4943;
     /* 0x4944 */ u8 field_0x4944;
@@ -674,9 +686,9 @@ public:
     /* 0x4960 */ u8 mPictureFormat;
     /* 0x4961 */ u8 field_0x4961;
     /* 0x4962 */ u8 mHeapLockFlag;
-    /* 0x4963 */ u8 field_0x4963;
+    /* 0x4963 */ u8 mNowVibration;
 #if VERSION != VERSION_JPN
-    /* 0x4964 */ u8 mGameLanguage;
+    /* 0x4964 */ u8 mPalLanguage;
 #endif
     /* 0x4965 */ u8 field_0x4965;
     /* 0x4966 */ char mInputPassword[0x11];
@@ -2507,6 +2519,27 @@ inline void dComIfGp_offHeapLockFlag() {
     g_dComIfG_gameInfo.play.offHeapLockFlag();
 }
 
+// Inline name from TP debug.
+inline u8 dComIfGp_getNowVibration() {
+    return g_dComIfG_gameInfo.play.getNowVibration();
+}
+
+// Inline name from TP debug.
+inline void dComIfGp_setNowVibration(u8 vibration) {
+    g_dComIfG_gameInfo.play.setNowVibration(vibration);
+}
+
+// Inline name is fake (not present in JP debug maps), but was guessed based on the similar
+// dComIfGs_getPalLanguage inline in TP debug.
+inline u8 dComIfGp_getPalLanguage() {
+    return g_dComIfG_gameInfo.play.getPalLanguage();
+}
+
+// Inline name is fake (not present in JP debug maps).
+inline void dComIfGp_setPalLanguage(u8 lang) {
+    g_dComIfG_gameInfo.play.setPalLanguage(lang);
+}
+
 inline void dComIfGp_2dShowOn() {
     g_dComIfG_gameInfo.play.show2dOn();
 }
@@ -2589,6 +2622,14 @@ inline void dComIfGp_setButtonActionMode(u8 mode) {
 
 inline void dComIfGp_setInputPassword(const char* password) {
     g_dComIfG_gameInfo.play.setInputPassword(password);
+}
+
+inline u8 dComIfGp_getAdvanceDirection() {
+    return g_dComIfG_gameInfo.play.getDirection();
+}
+
+inline void dComIfGp_setAdvanceDirection(u8 direction) {
+    return g_dComIfG_gameInfo.play.setDirection(direction);
 }
 
 /**

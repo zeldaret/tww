@@ -96,8 +96,8 @@ void dComIfG_play_c::itemInit() {
     mAuctionRupee = 0;
     mAuctionGauge = 0;
     mItemTimer = 0;
-    mCurrHP = 0;
-    mRupyCountDisplay = 0;
+    mItemNowLife = 0;
+    mItemNowRupee = 0;
     field_0x4928 = 0;
     field_0x4929 = 0;
     mMesgStatus = 0;
@@ -121,7 +121,7 @@ void dComIfG_play_c::itemInit() {
     mItemNo = 0;
     field_0x493f = 0;
     field_0x4940 = 0;
-    field_0x4941 = 0;
+    mDirection = 0;
     mButtonMode = 0;
 
     if (dComIfGs_checkGetItem(dItem_TELESCOPE_e)) {
@@ -168,7 +168,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4978 = 0;
     m2dShow = 0;
     field_0x497a = 0;
-    field_0x4963 = dComIfGs_getOptVibration();
+    mNowVibration = dComIfGs_getOptVibration();
     daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
     mMesgCameraTagInfo = 0;
     field_0x4984 = 0;

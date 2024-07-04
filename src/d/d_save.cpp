@@ -972,7 +972,7 @@ void dSv_player_config_c::init() {
 /* 8005BFA4-8005BFC8       .text checkVibration__19dSv_player_config_cFv */
 s32 dSv_player_config_c::checkVibration() {
     if (JUTGamePad::sRumbleSupported & 0x80000000)
-        return g_dComIfG_gameInfo.play.field_0x4963;
+        return dComIfGp_getNowVibration();
 
     return 0;
 }

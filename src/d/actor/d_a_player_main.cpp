@@ -2310,7 +2310,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
         swimOutAfter(0);
     }
     
-    g_dComIfG_gameInfo.play.field_0x4941 = 0; // is this dComIfGp_setAdvanceDirection__FUc?
+    dComIfGp_setAdvanceDirection(0);
     
     setBgCheckParam();
     
