@@ -86,7 +86,7 @@ daGhostship_HIO_c::daGhostship_HIO_c() {
 void daGhostship_c::pathMove() {
     cLib_addCalc2(&speedF, mPathSpeed, 0.1f, 2.0f);
     dLib_pathMove(&mPathPos, &mPathPntNo, mPath, speedF, &pathMove_CB, this);
-    cLib_addCalcPosXZ2(&current.pos, mPathPos, g_regHIO.mChild[12].mFloatRegs[0] + 0.01f, speedF);
+    cLib_addCalcPosXZ2(&current.pos, mPathPos, REG12_F(0) + 0.01f, speedF);
     if(speedF != 0.0f && mPathSpeed != 0.0f) {
         cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &mPathPos), 8, 0x100);
     }
@@ -123,7 +123,7 @@ BOOL daGhostship_c::_pathMove(cXyz* curPos, cXyz* p_curPntPos, cXyz* p_nextPntPo
     s16 angleLeftToTarget = cLib_addCalcAngleS(&current.angle.y, targetAngleY, 8, 0x200, 8);
     f32 step = speedF * fabsf(cM_scos(angleLeftToTarget));
     cLib_chasePosXZ(curPos, mNextPntPos, step);
-    if((*curPos - mNextPntPos).absXZ() < step * (g_regHIO.mChild[12].mFloatRegs[5] + 1.0f) || (*curPos - mNextPntPos).absXZ() == 0.0f) {
+    if((*curPos - mNextPntPos).absXZ() < step * (REG12_F(5) + 1.0f) || (*curPos - mNextPntPos).absXZ() == 0.0f) {
         return TRUE;
     }
 
@@ -188,9 +188,9 @@ void daGhostship_c::createInit() {
 
         mPaths[i].mRadius = 100.0f * i;
 
-        f32 temp4 = 500.0f + g_regHIO.mChild[12].mFloatRegs[10];
-        mPaths[i].mWobbleAmplitude = 300.0f + g_regHIO.mChild[12].mFloatRegs[1];
-        mPaths[i].mAngleSpeed = temp2 * (0x100 + g_regHIO.mChild[12].mShortRegs[0] + 0x10 * i + cM_rndF(100.0f));
+        f32 temp4 = 500.0f + REG12_F(10);
+        mPaths[i].mWobbleAmplitude = 300.0f + REG12_F(1);
+        mPaths[i].mAngleSpeed = temp2 * (0x100 + REG12_S(0) + 0x10 * i + cM_rndF(100.0f));
         mPaths[i].mTranslation.x = current.pos.x + temp4 * cM_ssin(shape_angle.y);
         mPaths[i].mTranslation.y = 600.0f + current.pos.y + temp3 + cM_rndF(100.0f);
         mPaths[i].mTranslation.z = current.pos.z + temp4 * cM_scos(shape_angle.y);
@@ -338,10 +338,10 @@ bool daGhostship_c::_execute() {
 
         cLib_addCalc2(&mPaths[i].mRadius, field_0x6C4[i], 0.1f, 10.0f);
 
-        f32 temp = (500.0f + g_regHIO.mChild[12].mFloatRegs[10]);
+        f32 temp = (500.0f + REG12_F(10));
 
-        mPaths[i].mWobbleAmplitude = 300.0f + g_regHIO.mChild[12].mFloatRegs[1];
-        mPaths[i].mAngleSpeed = (5 + g_regHIO.mChild[12].mShortRegs[0] + i * 2 + cM_rndF(20.0f)) * temp2;
+        mPaths[i].mWobbleAmplitude = 300.0f + REG12_F(1);
+        mPaths[i].mAngleSpeed = (5 + REG12_S(0) + i * 2 + cM_rndF(20.0f)) * temp2;
 
         mPaths[i].mTranslation.x = current.pos.x + temp * cM_ssin(shape_angle.y);
         mPaths[i].mTranslation.y = 600.0f + current.pos.y + temp3;

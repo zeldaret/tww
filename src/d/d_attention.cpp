@@ -33,7 +33,7 @@ dAttParam_c::~dAttParam_c() {
 /* 8009D2B0-8009D2E0       .text execute__19dAttDraw_CallBack_cFUsP16J3DTransformInfo */
 bool dAttDraw_CallBack_c::execute(u16 timing, J3DTransformInfo* xform) {
     if (timing == 0) {
-        xform->mTranslate.y *= g_regHIO.mChild[6].mFloatRegs[17] + 0.6f;
+        xform->mTranslate.y *= REG6_F(17) + 0.6f;
     }
     return true;
 }

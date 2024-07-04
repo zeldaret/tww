@@ -178,7 +178,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
             JGeometry::TVec3<f32> scale;
             scale.x = scale.y = scale.z = 1.2f;
             emitter1->setGlobalScale(scale);
-            scale.x = scale.y = scale.z = 1.5f + g_regHIO.mChild[0].mFloatRegs[16];
+            scale.x = scale.y = scale.z = 1.5f + REG0_F(16);
             emitter1->setGlobalParticleScale(scale);
         }
         break;
@@ -213,7 +213,7 @@ static void ground_smoke_set(bk_class* i_this) {
             MtxPosition(&sp8, &i_this->m0338);
             i_this->m0344.y = i_this->m034A;
             smoke_set_s(i_this, 6.0f);
-            i_this->m034A = i_this->m034A + 2000 + g_regHIO.mChild[0].mShortRegs[7];
+            i_this->m034A = i_this->m034A + 2000 + REG0_S(7);
         } else if (i_this->m034E == 1) {
             cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
             cMtx_YrotM(*calc_mtx, i_this->m034A);
@@ -441,7 +441,7 @@ static void br_draw(bk_class* i_this) {
     if (i_this->m02F0 == 0) {
         return;
     }
-    if (g_regHIO.mChild[6].mShortRegs[3] != 0) {
+    if (REG6_S(3) != 0) {
         return;
     }
     
@@ -468,10 +468,10 @@ static void br_draw(bk_class* i_this) {
     }
     
     MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x2C), *calc_mtx);
-    MtxTrans(150.0f + l_bkHIO.m100, g_regHIO.mChild[8].mFloatRegs[1], g_regHIO.mChild[8].mFloatRegs[2], 1);
-    s16 angleX = g_regHIO.mChild[8].mShortRegs[6] + 0x4000;
+    MtxTrans(150.0f + l_bkHIO.m100, REG8_F(1), REG8_F(2), 1);
+    s16 angleX = REG8_S(6) + 0x4000;
     cMtx_XrotM(*calc_mtx, angleX);
-    s16 angleZ = g_regHIO.mChild[8].mShortRegs[7] + 0x4000;
+    s16 angleZ = REG8_S(7) + 0x4000;
     cMtx_ZrotM(*calc_mtx, angleZ);
     MtxScale(l_bkHIO.m018 * i_this->m02EC, l_bkHIO.m018, l_bkHIO.m018, 1);
     model->setBaseTRMtx(*calc_mtx);
@@ -486,11 +486,11 @@ static void daBk_shadowDraw(bk_class* i_this) {
     if (!fopAcM_checkCarryNow(i_this)) {
         cXyz shadowPos(
             i_this->current.pos.x,
-            i_this->current.pos.y + 150.0f + g_regHIO.mChild[8].mFloatRegs[18],
+            i_this->current.pos.y + 150.0f + REG8_F(18),
             i_this->current.pos.z
         );
-        f32 temp = 800.0f + g_regHIO.mChild[8].mFloatRegs[19];
-        f32 shadowSize = 40.0f + g_regHIO.mChild[8].mFloatRegs[17];
+        f32 temp = 800.0f + REG8_F(19);
+        f32 shadowSize = 40.0f + REG8_F(17);
         i_this->mShadowId = dComIfGd_setShadow(
             i_this->mShadowId, 1, model, &shadowPos, temp, shadowSize,
             i_this->current.pos.y, i_this->dr.mAcch.GetGroundH(),
@@ -1344,7 +1344,7 @@ static void stand(bk_class* i_this) {
                 break;
             }
             
-            i_this->speed.y = 100.0f + g_regHIO.mChild[0].mFloatRegs[16];
+            i_this->speed.y = 100.0f + REG0_F(16);
             anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, BK_BAS_BK_JUMP1);
             fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
             i_this->dr.m004 = 0x35;
@@ -1445,12 +1445,12 @@ static void stand2(bk_class* i_this) {
     cXyz sp24;
     if (i_this->mpSearchLight != NULL) {
         cMtx_YrotS(*calc_mtx, i_this->mpSearchLight->current.angle.y);
-        sp24.x = g_regHIO.mChild[8].mFloatRegs[11] + 320.0f;
-        sp24.y = g_regHIO.mChild[8].mFloatRegs[12] + 114.0f;
-        sp24.z = g_regHIO.mChild[8].mFloatRegs[13] + -55.0f;
+        sp24.x = REG8_F(11) + 320.0f;
+        sp24.y = REG8_F(12) + 114.0f;
+        sp24.z = REG8_F(13) + -55.0f;
         MtxPosition(&sp24, &i_this->home.pos);
         i_this->home.pos += i_this->mpSearchLight->current.pos;
-        i_this->home.angle.y = i_this->mpSearchLight->current.angle.y + g_regHIO.mChild[8].mShortRegs[4];
+        i_this->home.angle.y = i_this->mpSearchLight->current.angle.y + REG8_S(4);
     }
     
     switch (i_this->dr.m004) {
@@ -1619,7 +1619,7 @@ static void attack_set(bk_class* i_this, u8 r28) {
     i_this->m0B64 = 0.0f;
     i_this->m0300[4] = 0;
     cM_rndF(100.0f);
-    i_this->m1040.SetR(60.0f + g_regHIO.mChild[8].mFloatRegs[3]);
+    i_this->m1040.SetR(60.0f + REG8_F(3));
     
     if (r28 == 2) {
         i_this->m1040.SetAtType(AT_TYPE_UNK2000);
@@ -1634,23 +1634,23 @@ static void attack_set(bk_class* i_this, u8 r28) {
     
     if (r28 == 0) {
         i_this->m0B5C = 0;
-        i_this->m0B68 = 23.0f + g_regHIO.mChild[6].mFloatRegs[4];
-        i_this->m0B6C = 26.0f + g_regHIO.mChild[6].mFloatRegs[5];
+        i_this->m0B68 = 23.0f + REG6_F(4);
+        i_this->m0B6C = 26.0f + REG6_F(5);
         i_this->m0B70 = 45.0f;
         i_this->m0B74 = l_bkHIO.m09C;
     } else if (r28 == 1) {
         i_this->m0B5C = 1;
-        i_this->m0B68 = 3.0f + g_regHIO.mChild[6].mFloatRegs[8];
-        i_this->m0B6C = 9.0f + g_regHIO.mChild[6].mFloatRegs[9];
+        i_this->m0B68 = 3.0f + REG6_F(8);
+        i_this->m0B6C = 9.0f + REG6_F(9);
         i_this->m0B70 = 45.0f;
         i_this->m0B74 = 0.0f;
     } else if (r28 == 2) {
         i_this->m0B5C = 2;
-        i_this->m0B68 = g_regHIO.mChild[6].mFloatRegs[4];
-        i_this->m0B6C = 20.0f + g_regHIO.mChild[6].mFloatRegs[5];
+        i_this->m0B68 = REG6_F(4);
+        i_this->m0B6C = 20.0f + REG6_F(5);
         i_this->m0B70 = 45.0f;
         i_this->m0B74 = 0.0f;
-        i_this->m1040.SetR(25.0f + g_regHIO.mChild[8].mFloatRegs[3]);
+        i_this->m1040.SetR(25.0f + REG8_F(3));
     }
     
     i_this->m0B7A = 1;
@@ -1755,9 +1755,9 @@ static void fight_run(bk_class* i_this) {
                 if (i_this->dr.mAcch.ChkGroundHit() && i_this->mpMorf->isStop()) {
                     i_this->m1210 = 1;
                     anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, BK_BAS_BK_JUMP1);
-                    i_this->speed.y = 65.0f + cM_rndF(10.0f + g_regHIO.mChild[8].mFloatRegs[7]) + g_regHIO.mChild[8].mFloatRegs[8];
+                    i_this->speed.y = 65.0f + cM_rndF(10.0f + REG8_F(7)) + REG8_F(8);
                     if ((i_this->m02DD & 0xC) == 0) {
-                        s16 temp = cM_rndFX(3000.0f + g_regHIO.mChild[6].mFloatRegs[13]);;
+                        s16 temp = cM_rndFX(3000.0f + REG6_F(13));;
                         i_this->current.angle.y += temp;
                     }
                     fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
@@ -1813,7 +1813,7 @@ static void fight_run(bk_class* i_this) {
     case 0x03:
         cLib_addCalc2(&i_this->speedF, l_bkHIO.m060, 1.0f, 20.0f);
         if (r29) {
-            i_this->speed.y = 100.0f + g_regHIO.mChild[0].mFloatRegs[16];
+            i_this->speed.y = 100.0f + REG0_F(16);
             anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, BK_BAS_BK_JUMP1);
             fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
             i_this->dr.m004 = 0x21;
@@ -1934,8 +1934,8 @@ static void fight_run(bk_class* i_this) {
                         attack_set(i_this, 1);
                         anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, BK_BAS_BK_JUMP1);
                         i_this->dr.m004 = -0xA;
-                        i_this->speedF = -60.0f + g_regHIO.mChild[0].mFloatRegs[3];
-                        i_this->speed.y = 80.0f + g_regHIO.mChild[0].mFloatRegs[4];
+                        i_this->speedF = -60.0f + REG0_F(3);
+                        i_this->speed.y = 80.0f + REG0_F(4);
                         fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
                     }
                 }
@@ -1947,9 +1947,9 @@ static void fight_run(bk_class* i_this) {
         daBk_player_view_check(i_this, &i_this->dr.m714->current.pos, i_this->m0332, l_bkHIO.m034)
     ) {
         i_this->m02FC++;
-        s16 temp = 0x19 + g_regHIO.mChild[0].mShortRegs[0];
+        s16 temp = 0x19 + REG0_S(0);
         if (i_this->m02FC >= temp) {
-            if (cM_rndF(1.0f) < 0.5f + g_regHIO.mChild[0].mFloatRegs[0] &&
+            if (cM_rndF(1.0f) < 0.5f + REG0_F(0) &&
                 (ground_4_check(i_this, 4, i_this->current.angle.y, 200.0f) & 0xD) == 0
             ) {
                 i_this->dr.mState = 7;
@@ -1973,7 +1973,7 @@ static void fight_run(bk_class* i_this) {
         i_this->dr.mState = 9;
         i_this->dr.m004 = 0;
     }
-    i_this->m02DD = ground_4_check(i_this, 4, i_this->current.angle.y, 90.0f + g_regHIO.mChild[6].mFloatRegs[7]);
+    i_this->m02DD = ground_4_check(i_this, 4, i_this->current.angle.y, 90.0f + REG6_F(7));
     if (i_this->m0314 != 0) {
         if (fabsf(i_this->speedF) < 30.0f) {
             if (i_this->m0318 == 0) {
@@ -2038,8 +2038,8 @@ static void oshi(bk_class* i_this) {
     attack_set(i_this, 1);
     anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, BK_BAS_BK_JUMP1);
     i_this->dr.m004 = -0xA;
-    i_this->speedF = -90.0f + g_regHIO.mChild[6].mFloatRegs[10];
-    i_this->speed.y = 85.0f + g_regHIO.mChild[6].mFloatRegs[11];
+    i_this->speedF = -90.0f + REG6_F(10);
+    i_this->speed.y = 85.0f + REG6_F(11);
     fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
 }
 
@@ -2052,7 +2052,7 @@ static void hukki(bk_class* i_this) {
 static void aite_miru(bk_class* i_this) {
     switch (i_this->dr.m004) {
     case 0:
-        i_this->m0300[1] = 20 + g_regHIO.mChild[0].mShortRegs[8];
+        i_this->m0300[1] = 20 + REG0_S(8);
         i_this->speedF = 0.0f;
         i_this->dr.m004 = 1;
         // Fall-through
@@ -2195,9 +2195,9 @@ static void tate_mtx_set(bk_class* i_this) {
         MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIdx), *calc_mtx);
         i_this->m02D0->setBaseTRMtx(*calc_mtx);
         cXyz sp08;
-        sp08.x = g_regHIO.mChild[8].mFloatRegs[12];
-        sp08.y = g_regHIO.mChild[8].mFloatRegs[13];
-        sp08.z = g_regHIO.mChild[8].mFloatRegs[14];
+        sp08.x = REG8_F(12);
+        sp08.y = REG8_F(13);
+        sp08.z = REG8_F(14);
         MtxPosition(&sp08, &i_this->m11CC);
     }
 }
@@ -2205,18 +2205,18 @@ static void tate_mtx_set(bk_class* i_this) {
 /* 0000CD00-0000CE18       .text bou_mtx_set__FP8bk_class */
 static void bou_mtx_set(bk_class* i_this) {
     if (i_this->m02DC != 0) {
-        int jointIdx = 0x2C + g_regHIO.mChild[7].mShortRegs[4]; // buki joint
+        int jointIdx = 0x2C + REG7_S(4); // buki joint
         MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIdx), *calc_mtx);
-        s16 angleY = 0x4000 + g_regHIO.mChild[7].mShortRegs[0];
+        s16 angleY = 0x4000 + REG7_S(0);
         cMtx_YrotM(*calc_mtx, angleY);
-        s16 angleX = g_regHIO.mChild[7].mShortRegs[1];
+        s16 angleX = REG7_S(1);
         cMtx_XrotM(*calc_mtx, angleX);
-        s16 angleZ = g_regHIO.mChild[7].mShortRegs[2];
+        s16 angleZ = REG7_S(2);
         cMtx_ZrotM(*calc_mtx, angleZ);
         MtxTrans(
-            0.01f * g_regHIO.mChild[7].mFloatRegs[9],
-            0.01f * g_regHIO.mChild[7].mFloatRegs[10],
-            0.01f * g_regHIO.mChild[7].mFloatRegs[11] + 50.0f,
+            0.01f * REG7_F(9),
+            0.01f * REG7_F(10),
+            0.01f * REG7_F(11) + 50.0f,
             1
         );
         i_this->m02D8->setBaseTRMtx(*calc_mtx);
@@ -2460,16 +2460,16 @@ static BOOL daBk_Execute(bk_class* i_this) {
                 if (i_this->m0B7B == 0) {
                     int jointIdx = 0x2C; // buki joint
                     MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIdx), *calc_mtx);
-                    s16 angleY = 0x3E80 + g_regHIO.mChild[8].mShortRegs[1];
+                    s16 angleY = 0x3E80 + REG8_S(1);
                     cMtx_YrotM(*calc_mtx, angleY);
-                    s16 angleX = g_regHIO.mChild[8].mShortRegs[2];
+                    s16 angleX = REG8_S(2);
                     cMtx_XrotM(*calc_mtx, angleX);
-                    s16 angleZ = g_regHIO.mChild[8].mShortRegs[3];
+                    s16 angleZ = REG8_S(3);
                     cMtx_ZrotM(*calc_mtx, angleZ);
                     MtxTrans(
-                        g_regHIO.mChild[8].mFloatRegs[9],
-                        g_regHIO.mChild[8].mFloatRegs[10],
-                        g_regHIO.mChild[8].mFloatRegs[11] + 65.0f,
+                        REG8_F(9),
+                        REG8_F(10),
+                        REG8_F(11) + 65.0f,
                         1
                     );
                 } else {
@@ -2481,19 +2481,19 @@ static BOOL daBk_Execute(bk_class* i_this) {
                     );
                     cMtx_YrotM(*calc_mtx, i_this->shape_angle.y);
                     MtxTrans(
-                        g_regHIO.mChild[6].mFloatRegs[7] - 40.0f,
-                        g_regHIO.mChild[6].mFloatRegs[8] + 68.0f,
-                        g_regHIO.mChild[6].mFloatRegs[9] + 82.0f,
+                        REG6_F(7) - 40.0f,
+                        REG6_F(8) + 68.0f,
+                        REG6_F(9) + 82.0f,
                         1
                     );
-                    s16 angleX = 0x5B1B + g_regHIO.mChild[8].mShortRegs[5];
+                    s16 angleX = 0x5B1B + REG8_S(5);
                     cMtx_XrotM(*calc_mtx, angleX);
                 }
                 r29->setMatrix(*calc_mtx);
                 cXyz sp64;
-                sp64.x = g_regHIO.mChild[8].mFloatRegs[12];
-                sp64.y = g_regHIO.mChild[8].mFloatRegs[13];
-                sp64.z = g_regHIO.mChild[8].mFloatRegs[14];
+                sp64.x = REG8_F(12);
+                sp64.y = REG8_F(13);
+                sp64.z = REG8_F(14);
                 MtxPosition(&sp64, &i_this->m1178);
             }
         } else {
@@ -2975,7 +2975,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
         );
         i_this->dr.mAcchCir.SetWall(40.0f, 40.0f);
         i_this->dr.mAcch.ClrRoofNone();
-        i_this->dr.mAcch.SetRoofCrrHeight(80.0f + g_regHIO.mChild[0].mFloatRegs[7]);
+        i_this->dr.mAcch.SetRoofCrrHeight(80.0f + REG0_F(7));
         i_this->dr.mAcch.OnLineCheck();
         i_this->dr.mInvincibleTimer = 5;
         
@@ -3143,8 +3143,8 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
         i_this->model = i_this->mpMorf->getModel();
         
         i_this->mEnemyIce.mpActor = i_this;
-        i_this->mEnemyIce.mWallRadius = 50.0f + g_regHIO.mChild[0].mFloatRegs[4];
-        i_this->mEnemyIce.mCylHeight = 180.0f + g_regHIO.mChild[0].mFloatRegs[5];
+        i_this->mEnemyIce.mWallRadius = 50.0f + REG0_F(4);
+        i_this->mEnemyIce.mCylHeight = 180.0f + REG0_F(5);
         i_this->mEnemyIce.mDeathSwitch = i_this->m02B8;
         
         i_this->mEnemyFire.mpMcaMorf = i_this->mpMorf;

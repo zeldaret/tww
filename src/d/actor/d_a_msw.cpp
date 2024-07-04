@@ -25,30 +25,30 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     tmp = i_pt->old.pos - i_ac->current.pos;
     MtxPosition(&tmp, &pos2);
 
-    s16 z = pos1.z * ((g_regHIO.mChild[0].mFloatRegs[0] + 20.0f) / i_ac->scale.z);
-    s16 x = -pos1.x * ((g_regHIO.mChild[0].mFloatRegs[0] + 20.0f) / i_ac->scale.x);
+    s16 z = pos1.z * ((REG0_F(0) + 20.0f) / i_ac->scale.z);
+    s16 x = -pos1.x * ((REG0_F(0) + 20.0f) / i_ac->scale.x);
 
     cLib_addCalcAngleS2(&i_ac->current.angle.x, z, 10, 0x800);
     cLib_addCalcAngleS2(&i_ac->current.angle.z, x, 10, 0x800);
 
-    f32 dist = (g_regHIO.mChild[0].mFloatRegs[4] + 50.0f) * fabsf(pos1.z - pos2.z);
+    f32 dist = (REG0_F(4) + 50.0f) * fabsf(pos1.z - pos2.z);
     if (pActor->m2BC.x < dist) {
         pActor->m2BC.x = dist;
     }
 
-    dist = (g_regHIO.mChild[0].mFloatRegs[4] + 50.0f) * fabsf(pos1.x - pos2.x);
+    dist = (REG0_F(4) + 50.0f) * fabsf(pos1.x - pos2.x);
     if (pActor->m2BC.z < dist) {
         pActor->m2BC.z = dist;
     }
 
-    dist = (g_regHIO.mChild[0].mFloatRegs[8] + 5.0f) * fabsf(pos1.x - pos2.x);
+    dist = (REG0_F(8) + 5.0f) * fabsf(pos1.x - pos2.x);
     if (dist > 10.0f && pActor->m2B0.x < dist) {
-        cLib_addCalc2(&pActor->m2B0.x, dist, 1.0f, g_regHIO.mChild[0].mFloatRegs[7] + 1.2f);
+        cLib_addCalc2(&pActor->m2B0.x, dist, 1.0f, REG0_F(7) + 1.2f);
     }
 
-    dist = (g_regHIO.mChild[0].mFloatRegs[8] + 5.0f) * fabsf(pos1.z - pos2.z);
+    dist = (REG0_F(8) + 5.0f) * fabsf(pos1.z - pos2.z);
     if (dist > 10.0f && pActor->m2B0.z < dist) {
-        cLib_addCalc2(&pActor->m2B0.z, dist, 1.0f, g_regHIO.mChild[0].mFloatRegs[7] + 1.2f);
+        cLib_addCalc2(&pActor->m2B0.z, dist, 1.0f, REG0_F(7) + 1.2f);
     }
 
 }
@@ -71,7 +71,7 @@ void chain_Draw(msw_class* i_this) {
         s32 var_r20;
 
         if (i_this->m83C[i] != 0) {
-            var_r20 = i_this->m83C[i] * cM_ssin(i_this->m298 * 18000) * (g_regHIO.mChild[6].mFloatRegs[6] + 100.0f);
+            var_r20 = i_this->m83C[i] * cM_ssin(i_this->m298 * 18000) * (REG6_F(6) + 100.0f);
             var_r4 = i_this->m298 * 3000;
         } else {
             var_r4 = 0;
@@ -119,14 +119,14 @@ void msw_move(msw_class* i_this) {
     i_this->m2C8.x = i_this->m2BC.x * cM_ssin(i_this->m298 * 1500);
     i_this->m2C8.z = i_this->m2BC.z * cM_ssin(i_this->m298 * 1300);
 
-    cLib_addCalc2(&i_this->m2BC.x, g_regHIO.mChild[0].mFloatRegs[9], 1.0f, g_regHIO.mChild[0].mFloatRegs[3] + 20.0f);
-    cLib_addCalc2(&i_this->m2BC.z, g_regHIO.mChild[0].mFloatRegs[9], 1.0f, g_regHIO.mChild[0].mFloatRegs[3] + 20.0f);
+    cLib_addCalc2(&i_this->m2BC.x, REG0_F(9), 1.0f, REG0_F(3) + 20.0f);
+    cLib_addCalc2(&i_this->m2BC.z, REG0_F(9), 1.0f, REG0_F(3) + 20.0f);
 
     i_this->m2A4.x = i_this->m2B0.x * cM_ssin(i_this->m298 * 750);
     i_this->m2A4.z = i_this->m2B0.z * cM_ssin(i_this->m298 * 900);
 
-    cLib_addCalc0(&i_this->m2B0.x, 1.0f, g_regHIO.mChild[0].mFloatRegs[6] + 0.25f);
-    cLib_addCalc0(&i_this->m2B0.z, 1.0f, g_regHIO.mChild[0].mFloatRegs[6] + 0.25f);
+    cLib_addCalc0(&i_this->m2B0.x, 1.0f, REG0_F(6) + 0.25f);
+    cLib_addCalc0(&i_this->m2B0.z, 1.0f, REG0_F(6) + 0.25f);
 
     i_this->shape_angle = i_this->current.angle + i_this->m2C8;
     i_this->current.pos = i_this->home.pos + i_this->m2A4;
@@ -152,9 +152,9 @@ static BOOL daMsw_Execute(msw_class* i_this) {
 
     for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
         cXyz src;
-        src.x = (200.0f + g_regHIO.mChild[0].mFloatRegs[10]) * xd[chainIdx];
+        src.x = (200.0f + REG0_F(10)) * xd[chainIdx];
         src.y = 0.0f;
-        src.z = (200.0f + g_regHIO.mChild[0].mFloatRegs[10]) * zd[chainIdx];
+        src.z = (200.0f + REG0_F(10)) * zd[chainIdx];
         MtxPosition(&src, &i_this->m2E0[chainIdx]);
 
         if (i_this->m844 != 0) {
@@ -168,7 +168,7 @@ static BOOL daMsw_Execute(msw_class* i_this) {
         }
 
         if (i_this->mChainCyls[chainIdx].ChkTgHit() && i_this->m83C[chainIdx] < 10) {
-            i_this->m83C[chainIdx] = g_regHIO.mChild[6].mShortRegs[3] + 0xF;
+            i_this->m83C[chainIdx] = REG6_S(3) + 0xF;
 
             mDoAud_seStart(JA_SE_LK_HIT_SBRIDGE_CHAIN, &i_this->m2E0[chainIdx], 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
 

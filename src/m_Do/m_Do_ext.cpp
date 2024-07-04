@@ -483,7 +483,7 @@ void mDoExt_modelUpdateDL(J3DModel* i_model) {
         i_model->calc();
         mDoExt_modelDiff(i_model);
     } else {
-        if (g_regHIO.mChild[2].mShortRegs[9] == 0) {
+        if (REG2_S(9) == 0) {
             i_model->unlock();
         }
         i_model->update();
@@ -514,7 +514,7 @@ void mDoExt_modelEntryDL(J3DModel* i_model) {
     if (model_data->getModelDataType() == 1 && !model_data->isLocked()) {
         mDoExt_modelDiff(i_model);
     } else {
-        if (g_regHIO.mChild[2].mShortRegs[9] == 0) {
+        if (REG2_S(9) == 0) {
             i_model->unlock();
         }
         i_model->entry();

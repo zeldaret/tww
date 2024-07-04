@@ -329,16 +329,16 @@ u8 daObjTpost_c::checkSendPrice() {
 int daObjTpost_c::getMsgXY() {
     s32 msgId;
     GXColor col = {0x00, 0x00, 0x00, 0x80};
-    cXyz pos(g_regHIO.mChild[12].mFloatRegs[0], g_regHIO.mChild[12].mFloatRegs[1], g_regHIO.mChild[12].mFloatRegs[2]);
+    cXyz pos(REG12_F(0), REG12_F(1), REG12_F(2));
     cXyz scale(2.0f, 2.0f, 2.0f);
 
     switch(mPreItemNo) {
         case dItem_NOTE_TO_MOM_e:
         case MAGYS_LETTER:
             msgId = 0xCE8;
-            col.r = g_regHIO.mChild[12].mShortRegs[0] + 0x80;
-            col.g = g_regHIO.mChild[12].mShortRegs[1] + 0x80;
-            col.b = g_regHIO.mChild[12].mShortRegs[2] + 0x80;
+            col.r = REG12_S(0) + 0x80;
+            col.g = REG12_S(1) + 0x80;
+            col.b = REG12_S(2) + 0x80;
             mDoMtx_stack_c::copy(mMorf->getModel()->mpNodeMtx[2]);
             mDoMtx_stack_c::multVec(&pos, &pos);
             dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);

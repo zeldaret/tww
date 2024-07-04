@@ -127,7 +127,7 @@ void dChain_packet_c::draw() {
     GXSetCurrentMtx(GX_PNMTX0);
 
     cXyz* points = mPt;
-    f32 segmentLen = (g_regHIO.mChild[10].mFloatRegs[11] + 6.75f) * mScale.z;
+    f32 segmentLen = (REG10_F(11) + 6.75f) * mScale.z;
     s16 angle = 0;
     cXyz pos = *points;
     for (s32 i = 0; i < mNum - 1; i++) {

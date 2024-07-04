@@ -376,7 +376,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
                 if (fpcM_GetName(hitActor) == PROC_BOMB) {
                     daBomb_c* bomb = (daBomb_c*)hitActor;
                     if (!bomb->getBombCheck_Flag() && bomb->getBombRestTime() > 1) {
-                        f32 offsetY = 20.0f + g_regHIO.mChild[8].mFloatRegs[1];
+                        f32 offsetY = 20.0f + REG8_F(1);
                         if (i_this->mMouthPos.y - offsetY < bomb->current.pos.y) {
                             // Swallow the bomb.
                             bomb->setBombCheck_Flag();
@@ -392,7 +392,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
                 } else if (fpcM_GetName(hitActor) == PROC_Bomb2) {
                     daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)hitActor;
                     if (!bomb2->chk_eat() && bomb2->get_time() > 1) {
-                        f32 offsetY = 20.0f + g_regHIO.mChild[8].mFloatRegs[1];
+                        f32 offsetY = 20.0f + REG8_F(1);
                         if (i_this->mMouthPos.y - offsetY < bomb2->current.pos.y) {
                             // Swallow the bomb.
                             bomb2->set_eat();
@@ -414,8 +414,8 @@ static BOOL bomb_nomi_check(am_class* i_this) {
 
 /* 00001138-000011E4       .text BG_check__FP8am_class */
 static void BG_check(am_class* i_this) {
-    f32 halfHeight = 30.0f + g_regHIO.mChild[12].mFloatRegs[3];
-    f32 radius = 150.0f + g_regHIO.mChild[12].mFloatRegs[4];
+    f32 halfHeight = 30.0f + REG12_F(3);
+    f32 radius = 150.0f + REG12_F(4);
     i_this->mAcchCir.SetWall(halfHeight, radius);
 
     i_this->current.pos.y -= i_this->mCorrectionOffsetY;
@@ -1131,7 +1131,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
         if (i_this->mStartsInactive == 0xFF) {
             i_this->mStartsInactive = 0;
         }
-        if (g_regHIO.mChild[8].mShortRegs[9] != 0) {
+        if (REG8_S(9) != 0) {
             i_this->mType = 1;
         }
         if (i_this->mPrmAreaRadius == 0xFF || i_this->mPrmAreaRadius == 0) {

@@ -352,10 +352,10 @@ void daStandItem_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     if (mpCloth != NULL) {
         cXyz offs[4];
-        offs[0] = cXyz(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 180.0f, 0.0f);
-        offs[1] = cXyz(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 180.0f, 0.0f);
-        offs[2] = cXyz(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 195.0f, 0.0f);
-        offs[3] = cXyz(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 180.0f, 0.0f);
+        offs[0] = cXyz(0.0f, REG10_F(15) + 180.0f, 0.0f);
+        offs[1] = cXyz(0.0f, REG10_F(15) + 180.0f, 0.0f);
+        offs[2] = cXyz(0.0f, REG10_F(15) + 195.0f, 0.0f);
+        offs[3] = cXyz(0.0f, REG10_F(15) + 180.0f, 0.0f);
 
         cXyz wind;
         cXyz pt = current.pos + offs[mClothType];

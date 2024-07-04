@@ -77,7 +77,7 @@ void daIball_c::setPointLight() {
     mLight.mColor.r = light_color[color_idx][0];
     mLight.mColor.g = light_color[color_idx][1];
     mLight.mColor.b = light_color[color_idx][2];
-    s16 power = (80.0f + g_regHIO.mChild[12].mFloatRegs[0]) * mLightFlickerMult;
+    s16 power = (80.0f + REG12_F(0)) * mLightFlickerMult;
     mLight.mPower = power;
     mLight.mFluctuation = 250.0f;
 }

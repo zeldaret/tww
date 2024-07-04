@@ -128,14 +128,14 @@ void daShopItem_c::set_mtx() {
         cXyz local[4];
         cXyz local2[4];
 
-        local2[3].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local[0].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local2[2].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local[1].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local2[1].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 97.5f, 0.0f);
-        local[2].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 97.5f, 0.0f);
-        local2[0].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local[3].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
+        local2[3].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local[0].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local2[2].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local[1].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local2[1].set(0.0f, REG10_F(15) + 97.5f, 0.0f);
+        local[2].set(0.0f, REG10_F(15) + 97.5f, 0.0f);
+        local2[0].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local[3].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
 
         mDoMtx_stack_c::transM(local[field_0x648]);
         mDoMtx_stack_c::YrotM(0x4000);

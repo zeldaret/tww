@@ -88,7 +88,7 @@ bool daIkari_c::_execute() {
     f32 rotX = *windPow * 10000.0f * l_HIO.mWindPowerScale;
 
     current.angle.x =
-        rotX + rotX * JMASSin(mTimer * (g_regHIO.mChild[0].mShortRegs[5] + 500) & 0xffff);
+        rotX + rotX * JMASSin(mTimer * (REG0_S(5) + 500) & 0xffff);
 
     setMtx();
 
