@@ -60,7 +60,6 @@ struct BMG_INF1 : JUTDataBlockHeader {
 
 /* 8003E3D0-8003E9F0       .text messageSet__FUl */
 void messageSet(u32 status) {
-    /* Nonmatching - regswap on msg[0] for USA and PAL (JPN already matches) */
 #if VERSION == VERSION_PAL
     BMG_INF1* inf1;
     if (dComIfGp_getPalLanguage() == 1) {
@@ -119,8 +118,8 @@ void messageSet(u32 status) {
         lineWidth[i] = 0.0f;
     }
 #endif
-    for (; msg[0] != '\0'; msg++) {
-        if (msg[0] == '\n') {
+    for (; *msg != '\0'; msg++) {
+        if (*msg == '\n') {
             height += 27;
 #if VERSION != VERSION_JPN
             curLine++;
@@ -129,7 +128,7 @@ void messageSet(u32 status) {
         }
 
 #if VERSION != VERSION_JPN
-        lineWidth[curLine] += font->JUTFont::getWidth(msg[0]);
+        lineWidth[curLine] += font->JUTFont::getWidth((u8)*msg);
 #endif
     }
 
