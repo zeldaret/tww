@@ -2,7 +2,7 @@
 #include "critical_regions.h"
 #include "stddef.h"
 
-extern void (*__destroy_global_chain_reference[])(void);
+extern void (*_dtors[])(void);
 
 static void (*__atexit_funcs[64])(void);
 
@@ -21,7 +21,7 @@ void exit(int status) {
     if (!__aborting) {
         __destroy_global_chain();
 
-        dtor = __destroy_global_chain_reference;
+        dtor = _dtors;
         while (*dtor != NULL) {
             (*dtor)();
             dtor++;
