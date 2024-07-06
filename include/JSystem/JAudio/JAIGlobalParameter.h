@@ -4,6 +4,13 @@
 #include "dolphin/types.h"
 
 namespace JAIGlobalParameter {
+    inline void getPointerDistanceMax() {}
+    inline void getPointerMaxVolumeDistance() {}
+    inline void getPointerMinDistanceVolume() {}
+    inline void getPointerSeDolbyBehindDistanceMax() {}
+    inline void getPointerSeDolbyCenterValue() {}
+    inline void getPointerSeDolbyFrontDistanceMax() {}
+
     void setParamInitDataPointer(void*);
     void setParamInterfaceHeapSize(u32);
     void setParamSoundSceneMax(u32);

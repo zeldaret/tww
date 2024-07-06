@@ -4,26 +4,111 @@
 //
 
 #include "JAZelAudio/JAIZelSound.h"
+#include "JSystem/JAudio/JAIGlobalParameter.h"
 
 /* 802AEF64-802AEFA0       .text __ct__11JAIZelSoundFv */
 JAIZelSound::JAIZelSound() {}
 
 /* 802AEFA0-802AF19C       .text setDistanceVolumeCommon__11JAIZelSoundFfUc */
-f32 JAIZelSound::setDistanceVolumeCommon(f32, u8) {
-    /* Nonmatching */
+f32 JAIZelSound::setDistanceVolumeCommon(f32 f30, u8 r31) {
+    f32 f31;
+    if (field_0x8 != 4) {
+        f31 = getPositionInfo()[field_0x8].field_0x18;
+    } else {
+        f31 = getPositionInfo()[0].field_0x18;
+        for (u8 i = 1; i < JAIGlobalParameter::getParamAudioCameraMax(); i++) {
+            if (getPositionInfo()[i].field_0x18 < f31) {
+                f31 = getPositionInfo()[i].field_0x18;
+            }
+        }
+    }
+    
+    if (f31 < JAIGlobalParameter::getParamMaxVolumeDistance()) {
+        return 1.0f;
+    }
+    
+    f31 -= JAIGlobalParameter::getParamMaxVolumeDistance();
+    f30 -= JAIGlobalParameter::getParamMaxVolumeDistance();
+    
+    if (r31 > 7) {
+        f30 *= (1 << (r31 - 4));
+    } else if (r31 > 3) {
+        f30 /= (1 << ((r31 & 3) + 1));
+    } else if (r31 != 0) {
+        f30 *= (1 << (r31 & 3));
+    }
+    if (f31 < f30) {
+        if (r31 > 3 && r31 <= 7) {
+            return 1.0f - (f31 / f30);
+        }
+        return (
+            JAIGlobalParameter::getParamMinDistanceVolume() +
+            (1.0f - (f31 / f30)) *
+            (1.0f - JAIGlobalParameter::getParamMinDistanceVolume())
+        );
+    }
+    
+    if (r31 > 3 && r31 <= 7) {
+        return 0.0f;
+    }
+    return JAIGlobalParameter::getParamMinDistanceVolume();
 }
 
 /* 802AF19C-802AF2A0       .text setSeDistanceVolume__11JAIZelSoundFUc */
-void JAIZelSound::setSeDistanceVolume(u8) {
-    /* Nonmatching */
+void JAIZelSound::setSeDistanceVolume(u8 r30) {
+    if ((getSwBit() & 0x00400000) && field_0x18 > 1) {
+        return;
+    }
+    f32 f31;
+    if ((getSwBit() & 0x00000002) == 0) {
+        u8 r31;
+        if ((getSwBit() & 0x00300000)) {
+            r31 = ((getSwBit() >> 20) & 3) + 7;
+        } else {
+            r31 = ((getSwBit() >> 16) & 7);
+        }
+        f31 = setDistanceVolumeCommon(JAIGlobalParameter::getParamDistanceMax(), r31);
+        if ((getSwBit() & 0x01000000) && f31 <= 0.3333f) {
+            f31 = 0.3333f;
+        }
+    } else {
+        f31 = 1.0f;
+    }
+    setSeInterVolume(4, f31, r30, 0);
 }
 
 /* 802AF2A0-802AF314       .text setSeDistancePan__11JAIZelSoundFUc */
-void JAIZelSound::setSeDistancePan(u8) {
-    /* Nonmatching */
+void JAIZelSound::setSeDistancePan(u8 r31) {
+    if ((getSwBit() & 0x00800000) && field_0x18 > 1) {
+        return;
+    }
+    setSeInterPan(4, setDistancePanCommon(), r31, 0);
 }
 
 /* 802AF314-802AF458       .text setSeDistanceDolby__11JAIZelSoundFUc */
-void JAIZelSound::setSeDistanceDolby(u8) {
-    /* Nonmatching */
+void JAIZelSound::setSeDistanceDolby(u8 r30) {
+    if ((getSwBit() & 0x00800000) && field_0x18 > 1) {
+        return;
+    }
+    
+    PositionInfo_t* posInf = &getPositionInfo()[0];
+    f32 f0;
+    if (field_0x28 == 0 || posInf->field_0x8 < JAIGlobalParameter::getParamSeDolbyFrontDistanceMax()) {
+        f0 = 0.0f;
+    } else if (posInf->field_0x8 < 0.0f) {
+        f0 = (
+            JAIGlobalParameter::getParamSeDolbyCenterValue() *
+            (JAIGlobalParameter::getParamSeDolbyFrontDistanceMax() - posInf->field_0x8)
+        ) / JAIGlobalParameter::getParamSeDolbyFrontDistanceMax();
+    } else if (posInf->field_0x8 < JAIGlobalParameter::getParamSeDolbyBehindDistanceMax()) {
+        f0 = JAIGlobalParameter::getParamSeDolbyCenterValue() + (
+            (127.0f - JAIGlobalParameter::getParamSeDolbyCenterValue()) *
+            (posInf->field_0x8 / JAIGlobalParameter::getParamSeDolbyBehindDistanceMax())
+        );
+    } else {
+        f0 = 127.0f;
+    }
+    
+    u8 r0 = f0;
+    setSeInterDolby(4, r0 / 127.0f, r30, 0);
 }

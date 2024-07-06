@@ -797,7 +797,7 @@ config.libs = [
             Object(Matching,    "JAZelAudio/JAIZelParam.cpp"),
             Object(NonMatching, "JAZelAudio/JAIZelCharVoiceTable.cpp"),
             Object(Matching,    "JAZelAudio/JAIZelScene.cpp"),
-            Object(NonMatching, "JAZelAudio/JAIZelSound.cpp"),
+            Object(Matching,    "JAZelAudio/JAIZelSound.cpp"),
         ],
     ),
     DolphinLib(
