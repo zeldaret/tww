@@ -17,7 +17,7 @@ public:
         /* 0x04 */ u8 field_0x4[0x8 - 0x4];
         /* 0x08 */ f32 field_0x8;
         /* 0x0C */ u8 field_0xc[0x18 - 0xc];
-        /* 0x10 */ f32 field_0x18;
+        /* 0x18 */ f32 field_0x18;
     };
 
     JAISound();
@@ -85,7 +85,7 @@ public:
     void getAct() {}
     void getAdjustPriority() {}
     void getFadetime() {}
-    void getID() {}
+    u32 getID() { return mSoundID; }
     void getInfoPointer() {}
     void getMapInfo() {}
     void getNextSound() {}

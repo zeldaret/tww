@@ -37,7 +37,7 @@ int JAInter::SystemInterface::checkSeqActiveFlag(JASystem::TTrack* param_1) {
 /* 8029E2A0-8029E478       .text trackToSeqp__Q27JAInter15SystemInterfaceFP8JAISoundUc */
 JASystem::TTrack* JAInter::SystemInterface::trackToSeqp(JAISound* seq, u8 trackNo) {
     JASystem::TTrack* result = NULL;
-    if (!IsJAISoundIDInUse(seq->mSoundID)) {
+    if (!IsJAISoundIDInUse(seq->getID())) {
         JASystem::TTrack* rootTrack = seq->getSeqParameter()->getRootTrackPointer();
         JASystem::TTrack* childTrack = rootTrack->getChild(trackNo >> 4);
         if (childTrack != NULL) {
@@ -71,7 +71,7 @@ void JAInter::SystemInterface::rootInit(JAInter::SeqUpdateData* updateData) {
 void JAInter::SystemInterface::trackInit(JAInter::SeqUpdateData* updateData) {
     JAISound* seq = updateData->field_0x48;
     u32 max = 16;
-    if (!IsJAISoundIDInUse(seq->mSoundID)) {
+    if (!IsJAISoundIDInUse(seq->getID())) {
         max = JAIGlobalParameter::getParamSeqTrackMax();
     }
     for (u32 i = 0; i < max; i++) {

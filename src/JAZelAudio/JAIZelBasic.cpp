@@ -200,8 +200,8 @@ void JAIZelBasic::resetProcess() {
             data->field_0x48->setSeqInterVolume(6, 0.0f, 1);
         }
     }
-    if (JAInter::StreamMgr::getUpdateInfo()->field_0x14) {
-        JAInter::StreamMgr::getUpdateInfo()->field_0x14->stop(1);
+    if (JAInter::StreamMgr::getUpdateInfo()->mpSound) {
+        JAInter::StreamMgr::getUpdateInfo()->mpSound->stop(1);
     }
     if (JAInter::SeMgr::seHandle) {
         JAInter::SeMgr::seHandle->setSeqInterVolume(6, 0.0f, 1);
@@ -463,7 +463,7 @@ bool JAIZelBasic::checkBgmPlaying() {
 /* 802A59D8-802A59F4       .text checkPlayingMainBgmFlag__11JAIZelBasicFv */
 int JAIZelBasic::checkPlayingMainBgmFlag() {
     if (mpMainBgmSound) {
-        return mpMainBgmSound->mSoundID;
+        return mpMainBgmSound->getID();
     } else {
         return -1;
     }
@@ -481,7 +481,7 @@ BOOL JAIZelBasic::checkSubBgmPlaying() {
 /* 802A5A04-802A5A20       .text checkPlayingSubBgmFlag__11JAIZelBasicFv */
 int JAIZelBasic::checkPlayingSubBgmFlag() {
     if (mpSubBgmSound) {
-        return mpSubBgmSound->mSoundID;
+        return mpSubBgmSound->getID();
     } else {
         return -1;
     }
@@ -489,11 +489,10 @@ int JAIZelBasic::checkPlayingSubBgmFlag() {
 
 /* 802A5A20-802A5A40       .text checkPlayingStreamBgmFlag__11JAIZelBasicFv */
 int JAIZelBasic::checkPlayingStreamBgmFlag() {
-    JAInter::streamUpdate_t* temp = JAInter::StreamMgr::getUpdateInfo();
-    if (temp->field_0x14 == NULL) {
+    if (JAInter::StreamMgr::getUpdateInfo()->mpSound == NULL) {
         return -1;
     } else {
-        return temp->field_0x14->mSoundID;
+        return JAInter::StreamMgr::getUpdateInfo()->mpSound->getID();
     }
 }
 

@@ -44,8 +44,8 @@ int JAInter::StreamLib::LOOP_SAMPLESIZE = 0xF000;
 int JAInter::StreamLib::outputmode = 1;
 JAInter::StreamMgr::flags_t JAInter::StreamMgr::flags;
 JAInter::streamUpdate_t* JAInter::StreamMgr::streamUpdate;
-u8* JAInter::StreamMgr::streamList;
-u8* JAInter::StreamMgr::initOnCodeStrm;
+JAInter::streamList_t* JAInter::StreamMgr::streamList;
+JAInter::streamList_t* JAInter::StreamMgr::initOnCodeStrm;
 u32 JAInter::StreamLib::adpcm_remain;
 u32 JAInter::StreamLib::adpcm_loadpoint;
 u32 JAInter::StreamLib::loadsize;
@@ -115,7 +115,7 @@ void JAInter::StreamMgr::init() {
     tmp->field_0x8 = 1.0f;
     tmp->field_0xc = 0.5f;
     tmp->field_0x10 = 0;
-    tmp->field_0x14 = 0;
+    tmp->mpSound = 0;
 }
 
 /* 8029BEB4-8029C04C       .text storeStreamBuffer__Q27JAInter9StreamMgrFPP8JAISoundPQ27JAInter5ActorUlUlUcPv */
@@ -153,7 +153,7 @@ void JAInter::StreamMgr::releaseStreamBuffer(JAISound* param_1, u32 param_2) {
     if (param_2 == 0 || param_1->field_0x5 < 4) {
         StreamLib::stop();
         param_1->field_0x5 = 0;
-        streamUpdate->field_0x14 = 0;
+        streamUpdate->mpSound = 0;
         param_1->clearMainSoundPPointer();
         streamControl.releaseSound(param_1);
         JASystem::Dvd::unpauseDvdT();
@@ -190,15 +190,14 @@ void JAInter::StreamMgr::checkEntriedStream() {
         tmp->field_0x8 = 1.0f;
         tmp->field_0xc = 0.5f;
         tmp->field_0x10 = 0;
-        tmp->field_0x14 = 0;
-        streamUpdate->field_0x14 = sound;
+        tmp->mpSound = 0;
+        streamUpdate->mpSound = sound;
     }
 }
 
 /* 8029C1D8-8029C2AC       .text checkWaitStream__Q27JAInter9StreamMgrFv */
 void JAInter::StreamMgr::checkWaitStream() {
-    /* Nonmatching */
-    JAISound* sound = streamUpdate->field_0x14;
+    JAISound* sound = streamUpdate->mpSound;
     if (!sound) {
         return;
     }
@@ -207,17 +206,17 @@ void JAInter::StreamMgr::checkWaitStream() {
     }
     char buffer[64];
     strcpy(buffer, JAIGlobalParameter::getParamStreamPath());
-    //strcat(buffer, streamList[JAIBasic::getInterface()->getSoundOffsetNumberFromID(sound->field_0xc)].field_0x10);
+    strcat(buffer, streamList[JAIBasic::getInterface()->getSoundOffsetNumberFromID(sound->getID())].field_0x10);
     JAIBasic::getInterface()->setSeExtParameter(sound);
     sound->field_0x5 = 3;
     checkPlayingStream();
-    //StreamLib::start(buffer, sound->getStreamParameter()->field_0x4, streamList[sound->field_0xc]->field_0x20);
+    StreamLib::start(buffer, sound->getStreamParameter()->field_0x4, streamList[sound->getID() & 0x3FF].field_0x20);
     StreamLib::setPrepareFlag(1);
 }
 
 /* 8029C2AC-8029C344       .text checkRequestStream__Q27JAInter9StreamMgrFv */
 void JAInter::StreamMgr::checkRequestStream() {
-    JAISound* sound = streamUpdate->field_0x14;
+    JAISound* sound = streamUpdate->mpSound;
     if (!sound) {
         return;
     }
@@ -326,10 +325,12 @@ bool JAInter::StreamLib::deallocBuffer() {
 
 /* 8029CC50-8029CCA4       .text getNeedBufferSize__Q27JAInter9StreamLibFv */
 u32 JAInter::StreamLib::getNeedBufferSize() {
-    /* Nonmatching */
-    u32 size = 0x20;
-    for (u32 i = 0; i < 2; i++) {
-        size += ((LOOP_BLOCKS << 2) & ~0x1F) + 0x20;
+    /* Nonmatching - regalloc */
+    u32 i = 0;
+    u32 size;
+    u32 r0 = ((LOOP_BLOCKS << 2) & ~0x1F) + 0x20;
+    for (size = 0x20; i < 2; i++) {
+        size += r0;
         for (u32 j = 0; j < LOOP_BLOCKS; j++) {
             size += 0x2820;
         }
@@ -361,10 +362,11 @@ void JAInter::StreamLib::sync(s32 param_1) {
 /* 8029CCD0-8029CD8C       .text __DecodePCM__Q27JAInter9StreamLibFv */
 void JAInter::StreamLib::__DecodePCM() {
     /* Nonmatching */
+    int i;
     s16* dst1 = loop_buffer[0][playside];
     s16* dst2 = loop_buffer[1][playside];
     s16* src = adpcm_buffer;
-    for (int i = 0; i < loadsize >> 2; dst2++, i++, dst1++, src += 2) {
+    for (i = 0; i < loadsize >> 2; dst2++, i++, dst1++, src += 2) {
         dst1[0] = src[0];
         dst2[0] = src[1];
     }
