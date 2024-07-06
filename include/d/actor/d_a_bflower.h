@@ -23,12 +23,12 @@ public:
     int init_bck_anm(s16 param);
     s32 _create();
     void set_mtx();
-    BOOL _execute();
+    bool _execute();
     BOOL actLive();
     BOOL actDead();
     void animPlay();
     void setCollision();
-    BOOL _draw();
+    bool _draw();
 
     static const char m_arcname[];
 

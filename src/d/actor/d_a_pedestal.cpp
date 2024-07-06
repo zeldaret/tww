@@ -18,7 +18,7 @@ namespace daPedestal {
 const char daPds_c::m_arcname[] = "Hdai1";
 
 /* 00000078-000000DC       .text _delete__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::_delete() {
+bool daPds_c::_delete() {
     if (heap != NULL) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
@@ -370,7 +370,7 @@ void daPds_c::playBrkAnm() {
 }
 
 /* 00000D98-00000E48       .text _execute__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::_execute() {
+bool daPds_c::_execute() {
     playBrkAnm();
 
     if (!eventProc()) {
@@ -388,7 +388,7 @@ BOOL daPds_c::_execute() {
 }
 
 /* 00000E48-00000F10       .text _draw__Q210daPedestal7daPds_cFv */
-BOOL daPds_c::_draw() {
+bool daPds_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
@@ -412,17 +412,17 @@ static s32 daPds_Create(void* i_this) {
 
 /* 00000F30-00000F54       .text daPds_Delete__10daPedestalFPv */
 static BOOL daPds_Delete(void* i_this) {
-    return (u8) static_cast<daPds_c*>(i_this)->_delete();
+    return static_cast<daPds_c*>(i_this)->_delete();
 }
 
 /* 00000F54-00000F78       .text daPds_Draw__10daPedestalFPv */
 static BOOL daPds_Draw(void* i_this) {
-    return (u8) static_cast<daPds_c*>(i_this)->_draw();
+    return static_cast<daPds_c*>(i_this)->_draw();
 }
 
 /* 00000F78-00000F9C       .text daPds_Execute__10daPedestalFPv */
 static BOOL daPds_Execute(void* i_this) {
-    return (u8) static_cast<daPds_c*>(i_this)->_execute();
+    return static_cast<daPds_c*>(i_this)->_execute();
 }
 
 /* 00000F9C-00000FA4       .text daPds_IsDelete__10daPedestalFPv */

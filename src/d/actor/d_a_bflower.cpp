@@ -270,7 +270,7 @@ static daBFlower_c::ActionFunc action_tbl[] = {
 };
 
 /* 00000F4C-00001078       .text _execute__11daBFlower_cFv */
-BOOL daBFlower_c::_execute() {
+bool daBFlower_c::_execute() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     (this->*action_tbl[mState])();
@@ -465,7 +465,7 @@ void daBFlower_c::setCollision() {
 }
 
 /* 000019AC-00001AC4       .text _draw__11daBFlower_cFv */
-BOOL daBFlower_c::_draw() {
+bool daBFlower_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
@@ -505,12 +505,12 @@ static BOOL daBFlower_Delete(void* i_this) {
 
 /* 00001B14-00001B38       .text daBFlower_Draw__FPv */
 static BOOL daBFlower_Draw(void* i_this) {
-    return (u8)static_cast<daBFlower_c*>(i_this)->_draw();
+    return static_cast<daBFlower_c*>(i_this)->_draw();
 }
 
 /* 00001B38-00001B5C       .text daBFlower_Execute__FPv */
 static BOOL daBFlower_Execute(void* i_this) {
-    return (u8)static_cast<daBFlower_c*>(i_this)->_execute();
+    return static_cast<daBFlower_c*>(i_this)->_execute();
 }
 
 /* 00001B5C-00001B64       .text daBFlower_IsDelete__FPv */
