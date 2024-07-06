@@ -46,7 +46,7 @@ static dCcD_SrcCyl l_cyl_src = {
     }};
 
 /* 00000078-000000D0       .text _delete__12daDekuItem_cFv */
-BOOL daDekuItem_c::_delete() {
+bool daDekuItem_c::_delete() {
     if (mpEmitter != NULL) {
         mpEmitter->becomeInvalidEmitter();
         mpEmitter = NULL;
@@ -145,7 +145,7 @@ void daDekuItem_c::set_mtx() {
 }
 
 /* 000009C8-00000A74       .text _execute__12daDekuItem_cFv */
-BOOL daDekuItem_c::_execute() {
+bool daDekuItem_c::_execute() {
     eyePos = current.pos;
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     mAcch.CrrPos(*dComIfG_Bgsp());
@@ -242,7 +242,7 @@ void daDekuItem_c::checkOrder() {
 }
 
 /* 00000E54-00000ECC       .text _draw__12daDekuItem_cFv */
-BOOL daDekuItem_c::_draw() {
+bool daDekuItem_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
@@ -259,17 +259,17 @@ static s32 daDekuItem_Create(void* i_this) {
 
 /* 00000EEC-00000F10       .text daDekuItem_Delete__FPv */
 static BOOL daDekuItem_Delete(void* i_this) {
-    return (u8) static_cast<daDekuItem_c*>(i_this)->_delete();
+    return static_cast<daDekuItem_c*>(i_this)->_delete();
 }
 
 /* 00000F10-00000F34       .text daDekuItem_Draw__FPv */
 static BOOL daDekuItem_Draw(void* i_this) {
-    return (u8) static_cast<daDekuItem_c*>(i_this)->_draw();
+    return static_cast<daDekuItem_c*>(i_this)->_draw();
 }
 
 /* 00000F34-00000F58       .text daDekuItem_Execute__FPv */
 static BOOL daDekuItem_Execute(void* i_this) {
-    return (u8) static_cast<daDekuItem_c*>(i_this)->_execute();
+    return static_cast<daDekuItem_c*>(i_this)->_execute();
 }
 
 /* 00000F58-00000F60       .text daDekuItem_IsDelete__FPv */

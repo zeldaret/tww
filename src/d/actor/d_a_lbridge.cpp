@@ -127,7 +127,7 @@ void daLbridge_c::setMoveBGMtx() {
 }
 
 /* 00000888-00000914       .text _execute__11daLbridge_cFv */
-BOOL daLbridge_c::_execute() {
+bool daLbridge_c::_execute() {
     bool isSw = fopAcM_isSwitch(this, mSwitchNo);
 
     sw_check();
@@ -270,7 +270,7 @@ void daLbridge_c::set_off_se() {
 }
 
 /* 00000F10-00000FF8       .text _draw__11daLbridge_cFv */
-BOOL daLbridge_c::_draw() {
+bool daLbridge_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
@@ -314,12 +314,12 @@ static BOOL daLbridge_Delete(void* i_this) {
 
 /* 000010D4-000010F8       .text daLbridge_Draw__FPv */
 static BOOL daLbridge_Draw(void* i_this) {
-    return (u8) static_cast<daLbridge_c*>(i_this)->_draw();
+    return static_cast<daLbridge_c*>(i_this)->_draw();
 }
 
 /* 000010F8-0000111C       .text daLbridge_Execute__FPv */
 static BOOL daLbridge_Execute(void* i_this) {
-    return (u8) static_cast<daLbridge_c*>(i_this)->_execute();
+    return static_cast<daLbridge_c*>(i_this)->_execute();
 }
 
 /* 0000111C-00001124       .text daLbridge_IsDelete__FPv */

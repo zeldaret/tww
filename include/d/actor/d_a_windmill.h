@@ -13,17 +13,17 @@ public:
     void getRotSpeed() const {}
     void getType() const {}
 
-    BOOL _delete();
+    bool _delete();
     BOOL CreateHeap();
     void CreateInit();
     void search_wind();
     s32 _create();
     void set_mtx();
-    BOOL _execute();
+    bool _execute();
     void hane_move();
     void set_at();
     void set_co();
-    BOOL _draw();
+    bool _draw();
     
     static const s16 m_max_rot_speed[];
     static const char* m_arcname[];

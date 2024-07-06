@@ -39,7 +39,7 @@ namespace daPedestal {
 
         typedef int (daPds_c::* ActionFunc_t)(void*);
 
-        BOOL _delete();
+        bool _delete();
         BOOL CreateHeap();
         void CreateInit();
         s32 _create();
@@ -59,8 +59,8 @@ namespace daPedestal {
         void set_mtx();
         BOOL initBrkAnm(u8, bool);
         void playBrkAnm();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
 
         static const char m_arcname[];
 

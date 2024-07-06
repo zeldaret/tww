@@ -18,12 +18,12 @@ public:
         Mode_GETDEMO_e,
     };
 
-    BOOL _delete();
+    bool _delete();
     BOOL CreateHeap();
     void CreateInit();
     s32 _create();
     void set_mtx();
-    BOOL _execute();
+    bool _execute();
     void mode_proc_call();
     void mode_wait();
     void mode_getdemo_init();
@@ -31,7 +31,7 @@ public:
     void mode_getdemo();
     void eventOrder();
     void checkOrder();
-    BOOL _draw();
+    bool _draw();
 
     static const char m_arcname[];
 

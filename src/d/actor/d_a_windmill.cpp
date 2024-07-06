@@ -11,7 +11,7 @@
 const char* daWindMill_c::m_arcname[] = { "Hpu1", "Hpu2" };
 
 /* 00000078-000000E8       .text _delete__12daWindMill_cFv */
-BOOL daWindMill_c::_delete() {
+bool daWindMill_c::_delete() {
     if (heap != NULL && mpBgW != NULL)
         dComIfG_Bgsp()->Release(mpBgW);
     dComIfG_resDelete(&mPhs, m_arcname[mType]);
@@ -58,7 +58,7 @@ void daWindMill_c::set_mtx() {
 }
 
 /* 00000E4C-00000ECC       .text _execute__12daWindMill_cFv */
-BOOL daWindMill_c::_execute() {
+bool daWindMill_c::_execute() {
     /* Nonmatching */
 }
 
@@ -78,7 +78,7 @@ void daWindMill_c::set_co() {
 }
 
 /* 000016DC-000017A4       .text _draw__12daWindMill_cFv */
-BOOL daWindMill_c::_draw() {
+bool daWindMill_c::_draw() {
     /* Nonmatching */
 }
 
