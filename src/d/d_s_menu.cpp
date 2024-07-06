@@ -72,7 +72,7 @@ static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
     JUTReport(200, 400, "曜日：%s", weekpat_str[l_weekpat]);
 #if VERSION != VERSION_JPN
     static const char* language[] = {"ENGLISH", "GERMAN", "FRENCH", "SPANISH", "ITALIAN"};
-    JUTReport(40, 440, "%s", language[dComIfGp_getPalLanguage()]);
+    JUTReport(40, 440, "%s", language[dComIfGs_getPalLanguage()]);
 #endif
     if (dComIfGs_isEventBit(0x2d01)) {
         JUTReport(400, 420, "３コン（Ａ）:デモ２３　ＯＮ");
@@ -176,7 +176,7 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
     if (CPad_CHECK_TRIG_Z(3)) {
         if (++l_languageType > 4)
             l_languageType = 0;
-        dComIfGp_setPalLanguage(language[l_languageType]);
+        dComIfGs_setPalLanguage(language[l_languageType]);
     }
 #endif
 
@@ -298,7 +298,7 @@ static s32 dScnMenu_Create(scene_class* i_scn) {
     };
     menu_of_scene_class* i_this = (menu_of_scene_class *)i_scn;
 #if VERSION != VERSION_JPN
-    l_languageType = dComIfGp_getPalLanguage();
+    l_languageType = dComIfGs_getPalLanguage();
 #endif
     return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }

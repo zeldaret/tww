@@ -62,13 +62,13 @@ struct BMG_INF1 : JUTDataBlockHeader {
 void messageSet(u32 status) {
 #if VERSION == VERSION_PAL
     BMG_INF1* inf1;
-    if (dComIfGp_getPalLanguage() == 1) {
+    if (dComIfGs_getPalLanguage() == 1) {
         inf1 = (BMG_INF1*)&msg_data_ge[0x20];
-    } else if (dComIfGp_getPalLanguage() == 2) {
+    } else if (dComIfGs_getPalLanguage() == 2) {
         inf1 = (BMG_INF1*)&msg_data_fr[0x20];
-    } else if (dComIfGp_getPalLanguage() == 3) {
+    } else if (dComIfGs_getPalLanguage() == 3) {
         inf1 = (BMG_INF1*)&msg_data_sp[0x20];
-    } else if (dComIfGp_getPalLanguage() == 4) {
+    } else if (dComIfGs_getPalLanguage() == 4) {
         inf1 = (BMG_INF1*)&msg_data_it[0x20];
     } else {
         inf1 = (BMG_INF1*)&msg_data[0x20]; // English
@@ -149,7 +149,7 @@ void messageSet(u32 status) {
 
     ppane->draw(-12.0f, -24.0f, 665.0f, 530.0f, false, false, false);
 #if VERSION == VERSION_PAL
-    if (dComIfGp_getPalLanguage() == 0) {
+    if (dComIfGs_getPalLanguage() == 0) {
         spane->draw(x + 2.0f, y + 10.0f + 2.0f, 660.0f, HBIND_LEFT);
         tpane->draw(x, y + 10.0f, 660.0f, HBIND_LEFT);
     } else {

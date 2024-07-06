@@ -2532,13 +2532,14 @@ inline void dComIfGp_setNowVibration(u8 vibration) {
 }
 
 #if VERSION != VERSION_JPN
-// Inline name is fake (not present in JP debug maps), but was guessed based on the similar
-// dComIfGs_getPalLanguage inline in TP debug.
-inline u8 dComIfGp_getPalLanguage() {
+// Inline name is official because while it's not present in the JPN debug maps, it is present in
+// the USA release maps because there was one TU where it failed to get inlined (f_op_msg_mng).
+inline u8 dComIfGs_getPalLanguage() {
     return g_dComIfG_gameInfo.play.getPalLanguage();
 }
-// Inline name is fake (not present in JP debug maps).
-inline void dComIfGp_setPalLanguage(u8 lang) {
+
+// Inline name is fake, but guessed based on the above inline.
+inline void dComIfGs_setPalLanguage(u8 lang) {
     g_dComIfG_gameInfo.play.setPalLanguage(lang);
 }
 #endif

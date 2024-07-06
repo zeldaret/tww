@@ -663,13 +663,13 @@ s32 phase_1(dScnLogo_c* i_this) {
         if (g_mDoMemCd_control.field_0x165B >= 5) {
             g_mDoMemCd_control.field_0x165B = 0;
         }
-        dComIfGp_setPalLanguage(g_mDoMemCd_control.field_0x165B);
+        dComIfGs_setPalLanguage(g_mDoMemCd_control.field_0x165B);
     } else {
         u8 language = OSGetLanguage();
         if (language >= 5) {
             language = 0;
         }
-        dComIfGp_setPalLanguage(language);
+        dComIfGs_setPalLanguage(language);
         g_mDoMemCd_control.field_0x165B = language;
     }
 #endif
@@ -771,7 +771,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 #endif
 
 #if VERSION == VERSION_PAL
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", choice[dComIfGp_getPalLanguage()]);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", choice[dComIfGs_getPalLanguage()]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_CHOICE);
 #endif
@@ -781,7 +781,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     i_this->progchoiceImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", yes[dComIfGp_getPalLanguage()]);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", yes[dComIfGs_getPalLanguage()]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_YES);
 #endif
@@ -792,7 +792,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     i_this->progyesImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", no[dComIfGp_getPalLanguage()]);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", no[dComIfGs_getPalLanguage()]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_NO);
 #endif
@@ -803,7 +803,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     i_this->prognoImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", prog[dComIfGp_getPalLanguage()]);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", prog[dComIfGs_getPalLanguage()]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_PRO);
 #endif
@@ -813,7 +813,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     i_this->progImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", intr[dComIfGp_getPalLanguage()]);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", intr[dComIfGs_getPalLanguage()]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_INTER);
 #endif
@@ -851,7 +851,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 #if VERSION == VERSION_PAL
     delete g_dComIfG_gameInfo.play.field_0x4820;
     char buf[40];
-    sprintf(buf, "/res/Msg/data%d/acticon.arc", dComIfGp_getPalLanguage());
+    sprintf(buf, "/res/Msg/data%d/acticon.arc", dComIfGs_getPalLanguage());
     l_actioniconCommand = aramMount(buf);
 #else
     l_actioniconCommand = aramMount("/res/Msg/acticon.arc");
@@ -868,7 +868,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     l_saveResCommand = aramMount("/res/Msg/saveres.arc");
 
 #if VERSION == VERSION_PAL
-    sprintf(buf, "/res/Msg/data%d/bmgres.arc", dComIfGp_getPalLanguage());
+    sprintf(buf, "/res/Msg/data%d/bmgres.arc", dComIfGs_getPalLanguage());
     l_msgDtCommand = onMemMount(buf);
 #else
     l_msgDtCommand = onMemMount("/res/Msg/bmgres.arc");

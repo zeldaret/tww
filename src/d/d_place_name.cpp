@@ -168,7 +168,7 @@ s32 dPn_c::_create() {
         JUT_ASSERT(VERSION_SELECT(175, 201, 201), dComIfGp_getNowStageNum() < dPn_stage_max_e);
 
 #if VERSION == VERSION_PAL
-        u32 lang = dComIfGp_getPalLanguage();
+        u32 lang = dComIfGs_getPalLanguage();
         char buf[32];
         sprintf(buf, "/res/placename/PN%d/pn_%02d_%d.bti", lang, dComIfGp_getNowStageNum() + 1, lang);
         dvd = mDoDvdThd_toMainRam_c::create(buf, 0, mpHeap);
