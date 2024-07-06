@@ -133,7 +133,6 @@ static JKRExpHeap::CMemBlock* DBnewUsedBlock;
 /* 802B192C-802B1B88       .text allocFromHead__10JKRExpHeapFUli */
 // wrong register at end
 void* JKRExpHeap::allocFromHead(u32 size, int align) {
-    /* Nonmatching */
     u32 foundOffset;
     int foundSize;
     CMemBlock* newFreeBlock;
@@ -216,17 +215,22 @@ void* JKRExpHeap::allocFromHead(u32 size, int align) {
             } else {
                 CMemBlock* prev = foundBlock->mPrev;
                 CMemBlock* next = foundBlock->mNext;
-                // Works but very fake match
-                /*size = (u32)foundBlock->allocFore(size, mCurrentGroupId, 0, 0, 0);
-                removeFreeBlock(foundBlock);
-                if (size) {
-                    setFreeBlock((CMemBlock*)size, prev, next);
-                }*/
+                // Regalloc doesn't match
+                /*
                 newFreeBlock = foundBlock->allocFore(size, mCurrentGroupId, 0, 0, 0);
                 removeFreeBlock(foundBlock);
                 if (newFreeBlock) {
                     setFreeBlock(newFreeBlock, prev, next);
                 }
+                */
+                // Works but very fake match
+                // /*
+                size = (u32)foundBlock->allocFore(size, mCurrentGroupId, 0, 0, 0);
+                removeFreeBlock(foundBlock);
+                if (size) {
+                    setFreeBlock((CMemBlock*)size, prev, next);
+                }
+                // */
                 appendUsedList(foundBlock);
                 return foundBlock->getContent();
             }
@@ -675,15 +679,14 @@ void JKRExpHeap::recycleFreeBlock(CMemBlock* block) {
 }
 
 /* 802B27D0-802B291C       .text joinTwoBlocks__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock */
-// regalloc
 void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
-    /* Nonmatching */
+    u32 curBlock = (u32)block; // Fakematch?
     u32 endAddr = (u32)(block + 1) + block->size;
     CMemBlock* next = block->mNext;
     u32 nextAddr = (u32)next - (next->mFlags & 0x7f);
     if (endAddr > nextAddr) {
         JUTWarningConsole_f(":::Heap may be broken. (block = %x)", block);
-        OSReport(":::block = %x\n", block);
+        OSReport(":::block = %x\n", curBlock);
         OSReport(":::joinTwoBlocks [%x %x %x][%x %x %x]\n", block, block->mFlags, block->size, block->mNext, block->mNext->mFlags, block->mNext->size);
         OSReport(":::: endAddr = %x\n", endAddr);
         OSReport(":::: nextAddr = %x\n", nextAddr);
