@@ -322,21 +322,5 @@ static inline void __pool_free(__mem_pool* pool, void* ptr) {
 }
 
 void free(void* ptr) {
-    //__pool_free(get_malloc_pool(), ptr);
-
-    __mem_pool_obj* pool_obj;
-    unsigned long size;
-
-    if (ptr == 0) {
-        return;
-    }
-
-    pool_obj = (__mem_pool_obj*)get_malloc_pool();
-    size = __msize_inline(ptr);
-
-    if (size <= 68) {
-        deallocate_from_fixed_pools(pool_obj, ptr, size);
-    } else {
-        deallocate_from_var_pools(pool_obj, ptr);
-    }
+    __pool_free(get_malloc_pool(), ptr);
 }
