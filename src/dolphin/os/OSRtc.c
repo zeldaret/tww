@@ -164,6 +164,44 @@ void OSSetSoundMode(u32 mode) {
     __OSUnlockSram(TRUE);
 }
 
+u8 OSGetLanguage() {
+    OSSram* sram;
+    u8 language;
+
+    sram = __OSLockSram();
+    language = sram->language;
+    __OSUnlockSram(FALSE);
+    return language;
+}
+
+u32 OSGetEuRgb60Mode() {
+    OSSram* sram;
+    u32 on;
+
+    sram = __OSLockSram();
+    on = (sram->ntd >> 6) & 0x1;
+    __OSUnlockSram(FALSE);
+    return on;
+}
+
+void OSSetEuRgb60Mode(u32 mode) {
+  OSSram *sram;
+
+  mode <<= 6;
+  mode &= 0x40;
+
+  sram = __OSLockSram();
+  if (mode == (sram->ntd & 0x40))
+  {
+    __OSUnlockSram(FALSE);
+    return;
+  }
+
+  sram->ntd &= ~0x40;
+  sram->ntd |= mode;
+  __OSUnlockSram(TRUE);
+}
+
 u32 OSGetProgressiveMode() {
     OSSram* sram;
     u32 mode;
