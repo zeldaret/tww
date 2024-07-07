@@ -23,7 +23,8 @@ public:
     static bool daTitle_Kirakira_Sound_flag;
 public:
     /* 0x004 */ JPABaseEmitter* mpEmitter;
-    /* 0x008 */ u8 m008[0x018 - 0x008];
+    /* 0x008 */ s32 m008;
+    /* 0x00C */ u8 m00C[0x018 - 0x00C];
     /* 0x018 */ int m018;
     /* 0x01C */ int m01C;
     /* 0x020 */ int m020;
@@ -39,7 +40,7 @@ public:
     /* 0x054 */ mDoExt_bpkAnm m054;
     /* 0x068 */ mDoExt_btkAnm m068;
     /* 0x07C */ mDoExt_btkAnm m07C;
-    /* 0x090 */ u8 m090[0x094 - 0x090];
+    /* 0x090 */ u8 m090;
     /* 0x094 */ f32 m094;
     /* 0x098 */ int m098;
     /* 0x09C */ J2DScreen* m_Screen;

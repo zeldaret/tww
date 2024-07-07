@@ -9,6 +9,34 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 
+namespace {
+    struct Attr_c {
+        /* 0x00 */ f32 field_0x00;
+        /* 0x04 */ f32 field_0x04;
+        /* 0x08 */ f32 field_0x08;
+        /* 0x0C */ f32 field_0x0C;
+        /* 0x10 */ f32 field_0x10;
+        /* 0x14 */ f32 field_0x14;
+        /* 0x18 */ f32 field_0x18;
+        /* 0x1C */ f32 field_0x1C;
+        /* 0x20 */ f32 field_0x20;
+        /* 0x24 */ f32 field_0x24;
+        /* 0x28 */ f32 field_0x28;
+        /* 0x2C */ f32 field_0x2C;
+        /* 0x30 */ f32 field_0x30;
+        /* 0x34 */ f32 field_0x34;
+    };
+
+    static const Attr_c L_attr = {
+        0.0f, 0.0f, 0.9f, 0.1f,
+        -57.0f, -3.0f, 1.0f, 1.0f,
+        120.0f, 10.0f, 120.0f, 10.0f,
+        85.0f, 5.0f,
+    };
+
+    inline const Attr_c & attr() { return L_attr; }
+}
+
 /* 00000078-00000638       .text proc_init3D__14daTitle_proc_cFv */
 void daTitle_proc_c::proc_init3D() {
     /* Nonmatching */
@@ -21,7 +49,21 @@ void daTitle_proc_c::proc_init2D() {
 
 /* 00000900-00000A78       .text __ct__14daTitle_proc_cFv */
 daTitle_proc_c::daTitle_proc_c() {
-    /* Nonmatching */
+    m20C = NULL;
+    m_exp_heap = NULL;
+    m01C = 120;
+    m030 = 0;
+    m098 = -50;
+
+    m094 = (f32)(m098 * m098) * -attr().field_0x0C;
+    m020 = (int)(cM_rndF(attr().field_0x28) + attr().field_0x2C);
+    m024 = (int)(cM_rndF(attr().field_0x20) + attr().field_0x24 + 130.0f);
+
+    m02C = 0;
+    m018 = 0;
+    m090 = 0;
+    m008 = 0;
+    mpEmitter = NULL;
 }
 
 /* 00000C1C-00000D7C       .text __dt__14daTitle_proc_cFv */
