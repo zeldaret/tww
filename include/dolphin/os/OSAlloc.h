@@ -9,16 +9,16 @@ extern "C" {
 
 typedef struct OSHeapDescriptor {
     /* 0x0 */ s32 size;
-    /* 0x4 */ struct OSHeapCell* freeList;
-    /* 0x8 */ struct OSHeapCell* usedList;
+    /* 0x4 */ struct OSHeapCell* free;
+    /* 0x8 */ struct OSHeapCell* allocated;
 } OSHeapDescriptor;
 
 typedef struct OSHeapCell {
     /* 0x00 */ struct OSHeapCell* prev;
     /* 0x04 */ struct OSHeapCell* next;
-    /* 0x08 */ s32 size;
+    /* 0x08 */ u32 size;
     /* 0x0C */ struct OSHeapDescriptor* hd;
-    /* 0x10 */ s32 usedSize;
+    /* 0x10 */ u32 usedSize;
     /* 0x14 */ char field_0x14[0x20 - 0x14];
 } OSHeapCell;
 

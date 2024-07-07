@@ -18,9 +18,9 @@ typedef struct {
 } OSExecParams;
 
 static s32 PackArgs(void* param_0, u32 param_1, void* param_2);
-static void Run(int param_0);
+static void Run(u32 param_0);
 static void ReadDisc(void* param_0, s32 param_1, s32 param_2);
-static void Callback(void);
+static void Callback(s32 result, struct DVDCommandBlock* block);
 void __OSGetExecParams(OSExecParams* param_0);
 void __OSBootDolSimple(u32 param_0, u32 param_1, void* param_2, void* param_3, s32 param_4, u32 param_5, void* param_6);
 void __OSBootDol(s32 param_0, u32 param_1, char** param_2);
