@@ -57,32 +57,34 @@ void daTitle_proc_c::proc_draw() {
 }
 
 /* 00001A5C-00001AAC       .text daTitle_Draw__FP9daTitle_c */
-static BOOL daTitle_Draw(daTitle_c*) {
-    /* Nonmatching */
+static BOOL daTitle_Draw(daTitle_c* i_this) {
+    return i_this->draw();
 }
 
 /* 00001AAC-00001CF8       .text daTitle_Execute__FP9daTitle_c */
-static BOOL daTitle_Execute(daTitle_c*) {
-    /* Nonmatching */
+static BOOL daTitle_Execute(daTitle_c* i_this) {
+    return i_this->execute();
 }
 
 /* 00001CF8-00001D00       .text daTitle_IsDelete__FP9daTitle_c */
-static BOOL daTitle_IsDelete(daTitle_c*) {
-    /* Nonmatching */
+static BOOL daTitle_IsDelete(daTitle_c* i_this) {
+    return TRUE;
 }
 
 /* 00001D00-00001D70       .text daTitle_Delete__FP9daTitle_c */
-static BOOL daTitle_Delete(daTitle_c*) {
-    /* Nonmatching */
+static BOOL daTitle_Delete(daTitle_c* i_this) {
+    i_this->~daTitle_c();
+
+    return TRUE;
 }
 
 /* 00001D70-00001E28       .text daTitle_Create__FP10fopAc_ac_c */
-static s32 daTitle_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daTitle_Create(fopAc_ac_c* i_this) {
+    return static_cast<daTitle_c*>(i_this)->create();
 }
 
 /* 00001E28-00001E48       .text draw__14daTitle_proc_cFv */
-BOOL daTitle_proc_c::draw() {
+void daTitle_proc_c::draw() {
     /* Nonmatching */
 }
 
