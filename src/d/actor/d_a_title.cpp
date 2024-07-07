@@ -26,7 +26,13 @@ daTitle_proc_c::daTitle_proc_c() {
 
 /* 00000C1C-00000D7C       .text __dt__14daTitle_proc_cFv */
 daTitle_proc_c::~daTitle_proc_c() {
-    /* Nonmatching */
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(m_exp_heap);
+    delete m_Screen;
+    m_Screen = NULL;
+    mDoExt_destroySolidHeap(m20C);
+    m20C = NULL;
+    mDoExt_setCurrentHeap(oldHeap);
+    fopMsgM_destroyExpHeap(m_exp_heap);
 }
 
 /* 00000D7C-00000D94       .text setEnterMode__14daTitle_proc_cFv */
