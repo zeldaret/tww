@@ -10,9 +10,9 @@ extern "C" {
 #define DTORCALL(dtor, objptr) (((void (*)(void*, int))dtor)(objptr, -1))
 
 typedef struct DestructorChain {
-  struct DestructorChain* next;
-  void* destructor;
-  void* object;
+    struct DestructorChain* next;
+    void* destructor;
+    void* object;
 } DestructorChain;
 
 void __unregister_fragment(int fragmentID);

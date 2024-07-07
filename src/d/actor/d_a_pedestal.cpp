@@ -50,7 +50,7 @@ BOOL daPds_c::CreateHeap() {
 
     mpBgW = new dBgW();
 
-   if (mpBgW != NULL) {
+    if (mpBgW != NULL) {
         return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, HDAI1_DZB_HDAI), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
     }
 

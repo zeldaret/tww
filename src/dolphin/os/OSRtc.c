@@ -185,21 +185,21 @@ u32 OSGetEuRgb60Mode() {
 }
 
 void OSSetEuRgb60Mode(u32 mode) {
-  OSSram *sram;
+    OSSram *sram;
 
-  mode <<= 6;
-  mode &= 0x40;
+    mode <<= 6;
+    mode &= 0x40;
 
-  sram = __OSLockSram();
-  if (mode == (sram->ntd & 0x40))
-  {
-    __OSUnlockSram(FALSE);
-    return;
-  }
+    sram = __OSLockSram();
+    if (mode == (sram->ntd & 0x40))
+    {
+        __OSUnlockSram(FALSE);
+        return;
+    }
 
-  sram->ntd &= ~0x40;
-  sram->ntd |= mode;
-  __OSUnlockSram(TRUE);
+    sram->ntd &= ~0x40;
+    sram->ntd |= mode;
+    __OSUnlockSram(TRUE);
 }
 
 u32 OSGetProgressiveMode() {

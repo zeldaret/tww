@@ -21,9 +21,9 @@ static int fragmentID = -2;
 
 /* clang-format off */
 static asm char* GetR2() {
-  nofralloc;
-  mr r3, r2
-  blr
+    nofralloc;
+    mr r3, r2
+    blr
 }
 /* clang-format on */
 

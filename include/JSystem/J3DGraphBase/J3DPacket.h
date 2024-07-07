@@ -27,7 +27,7 @@ inline u32 getDiffFlag_TexGenNum(u32 param_1) {
 }
 
 inline int calcDifferedBufferSize_TexMtxSize(int param_1) {
-  return param_1 * 0x35;
+    return param_1 * 0x35;
 }
 
 inline int calcDifferedBufferSize_TexGenSize(int param_1) {
