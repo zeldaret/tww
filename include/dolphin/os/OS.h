@@ -88,11 +88,16 @@ extern u8 __OSReport_Warning_disable;
 extern u8 __OSReport_System_disable;
 extern u8 __OSReport_enable;
 
+extern BOOL __OSIsGcam;
+
+extern u32 BOOT_REGION_START : 0x8044babc;
+extern u32 BOOT_REGION_END : 0x812FDFEC;
+
 void OSReportInit__Fv(void);  // needed for inline asm
 
 u8* OSGetStackPointer(void);
 void __OSFPRInit(void);
-static void InquiryCallback(u32 param_0, DVDCommandBlock* param_1);
+static void InquiryCallback(s32 param_0, DVDCommandBlock* param_1);
 void OSInit(void);
 static void OSExceptionInit(void);
 void __OSDBIntegrator(void);
@@ -147,7 +152,7 @@ inline void OSf32tou8(f32* f, u8* out) {
     *out = __OSf32tou8(*f);
 }
 
-inline void OSInitFastCast(void) {
+static inline void OSInitFastCast(void) {
     // clang-format off
     asm {
         li r3, 4
@@ -177,16 +182,6 @@ typedef struct OSBootInfo {
     /* 0x38 */ void* fst_location;
     /* 0x3C */ u32 fst_max_length;
 } OSBootInfo;
-
-typedef struct {
-    BOOL valid;
-    u32 restartCode;
-    u32 bootDol;
-    void* regionStart;
-    void* regionEnd;
-    BOOL argsUseDefault;
-    void* argsAddr;  // valid only when argsUseDefault = FALSE
-} OSExecParams;
 
 typedef struct BI2Debug {
     /* 0x00 */ s32 debugMonSize;
@@ -234,7 +229,7 @@ struct GLOBAL_MEMORY {
     u8 padding_0x30e0[4];
     u32 field_0x30e4; /* __OSPADButton */
     u8 padding_0x30ec[8];
-    u32 field_0x30f0; /* DOL Execute Parameters */
+    OSExecParams* field_0x30f0; /* DOL Execute Parameters */
     u8 padding_0x30f4[12];
     u32 field_0x3100; /* Physical MEM1 size */
     u32 field_0x3104; /* Simulated MEM1 size */
@@ -292,6 +287,7 @@ struct GLOBAL_MEMORY {
 #define OSUncachedToCached(ucaddr) ((void*)((u8*)(ucaddr) - (OS_BASE_UNCACHED - OS_BASE_CACHED)))
 
 extern OSTime __OSStartTime;
+extern BOOL __OSInIPL;
 
 #ifdef __cplusplus
 };

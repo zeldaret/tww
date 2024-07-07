@@ -18,7 +18,7 @@ extern "C" {
 #define OS_PROTECT_CONTROL_RDWR (OS_PROTECT_CONTROL_READ | OS_PROTECT_CONTROL_WRITE)
 
 u32 OSGetConsoleSimulatedMemSize();
-static void MEMIntrruptHandler(OSInterrupt interrupt, struct OSContext* context);
+static void MEMIntrruptHandler(__OSInterrupt interrupt, struct OSContext* context);
 void OSProtectRange(u32 channel, void* address, u32 nBytes, u32 control);
 static void Config24MB(void);
 static void Config48MB(void);
