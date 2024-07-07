@@ -1,7 +1,7 @@
 #ifndef DVD_H
 #define DVD_H
 
-#include "dolphin/types.h"
+#include "global.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,7 +84,7 @@ typedef struct DVDDriveInfo {
     /* 0x02 */ u16 device_code;
     /* 0x04 */ u32 release_date;
     /* 0x08 */ u8 padding[24];
-} DVDDriveInfo;
+} DVDDriveInfo ALIGN_DECL(32);
 
 typedef struct DVDBB1 {
   u32 appLoaderLength;
@@ -142,8 +142,10 @@ BOOL DVDSetAutoInvalidation(BOOL autoInval);
 void DVDResume(void);
 static BOOL DVDCancelAsync(DVDCommandBlock* block, DVDCBCallback callback);
 s32 DVDCancel(DVDCommandBlock* block);
-
+void __DVDPrepareResetAsync(DVDCBCallback callbac);
 BOOL DVDCompareDiskID(DVDDiskID* id1, DVDDiskID* id2);
+
+DVDCommandBlock* __DVDPopWaitingQueue(void);
 
 #ifdef __cplusplus
 };

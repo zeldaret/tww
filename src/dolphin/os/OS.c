@@ -4,7 +4,7 @@
 
 #include "dolphin/os/OS.h"
 #include "dolphin/base/PPCArch.h"
-// #include "dolphin/db.h"
+#include "dolphin/db/db.h"
 #include "dolphin/pad/Pad.h"
 #include "dolphin/dvd/dvdfs.h"
 // #include "TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk.h"
@@ -38,19 +38,11 @@ OSTime __OSStartTime;
 
 BOOL __OSInIPL;
 
-extern OSExceptionHandler* OSExceptionTable;
-OSExceptionHandler* OSExceptionTable;
-
-extern BOOL AreWeInitialized;
-BOOL AreWeInitialized;
-
 extern f64 ZeroPS;
 f64 ZeroPS;
 
 extern f64 ZeroF;
 f64 ZeroF;
-
-BOOL __OSIsGcam;
 
 asm void __OSFPRInit(void) {
     // clang-format off
@@ -138,6 +130,11 @@ skip_ps_init:
     // clang-format on
 }
 
+static void DisableWriteGatherPipe(void)
+{
+    PPCMthid2(PPCMfhid2() & ~0x40000000);
+}
+
 u32 OSGetConsoleType(void) {
     if (BootInfo == NULL || BootInfo->console_type == 0) {
         return OS_CONSOLE_ARTHUR;
@@ -151,37 +148,40 @@ static DVDDriveInfo DriveInfo;
 void* __OSSavedRegionStart;
 void* __OSSavedRegionEnd;
 
-extern OSExecParams __OSRebootParams;
+extern OSExceptionHandler* OSExceptionTable;
+OSExceptionHandler* OSExceptionTable;
 
-static inline void ClearArena(void) {
-    BOOL var_r0;
-    if (OSGetResetCode() & 0x80000000) {
-        var_r0 = TRUE;
-    } else {
-        var_r0 = FALSE;
-    }
+extern BOOL AreWeInitialized;
+BOOL AreWeInitialized;
 
-    if (!var_r0) {
+BOOL __OSIsGcam;
+
+static void ClearArena(void) {
+    if (OSGetResetCode() != 0x80000000) {
+        __OSSavedRegionStart = 0;
+        __OSSavedRegionEnd = 0;
         memset(OSGetArenaLo(), 0U, (u32)OSGetArenaHi() - (u32)OSGetArenaLo());
         return;
     }
 
-    if (*(u32*)&__OSRebootParams.regionStart == 0U) {
+    __OSSavedRegionStart = (void*)BOOT_REGION_START;
+    __OSSavedRegionEnd = (void*)BOOT_REGION_END;
+    if (*(u32*)&BOOT_REGION_START == 0U) {
         memset(OSGetArenaLo(), 0U, (u32)OSGetArenaHi() - (u32)OSGetArenaLo());
         return;
     }
 
-    if ((u32)OSGetArenaLo() < *(u32*)&__OSRebootParams.regionStart) {
-        if ((u32)OSGetArenaHi() <= *(u32*)&__OSRebootParams.regionStart) {
+    if ((u32)OSGetArenaLo() < *(u32*)&__OSSavedRegionStart) {
+        if ((u32)OSGetArenaHi() <= *(u32*)&__OSSavedRegionStart) {
             memset((u32)OSGetArenaLo(), 0U, (u32)OSGetArenaHi() - (u32)OSGetArenaLo());
             return;
         }
 
-        memset(OSGetArenaLo(), 0U, *(u32*)&__OSRebootParams.regionStart - (u32)OSGetArenaLo());
+        memset(OSGetArenaLo(), 0U, *(u32*)&__OSSavedRegionStart - (u32)OSGetArenaLo());
 
-        if ((u32)OSGetArenaHi() > *(u32*)&__OSRebootParams.regionEnd) {
-            memset(*(u32*)&__OSRebootParams.regionEnd, 0,
-                   (u32)OSGetArenaHi() - *(u32*)&__OSRebootParams.regionEnd);
+        if ((u32)OSGetArenaHi() > *(u32*)&__OSSavedRegionEnd) {
+            memset(*(u32*)&__OSSavedRegionEnd, 0,
+                   (u32)OSGetArenaHi() - *(u32*)&__OSSavedRegionEnd);
         }
     }
 }
@@ -199,9 +199,7 @@ static void InquiryCallback(s32 result, DVDCommandBlock* block) {
 
 static u8 DriveBlock[48];
 
-OSExecParams __OSRebootParams;
-
-static const char* __OSVersion = "<< Dolphin SDK - OS	release build: Nov 10 2004 06:26:41 (0x2301) >>";
+static const char* __OSVersion = "<< Dolphin SDK - OS	release build: Sep 27 2002 14:02:03 (0x2301) >>";
 
 extern u8 __ArenaHi[];
 extern u8 __ArenaLo[];
@@ -228,13 +226,6 @@ void OSInit(void) {
         __OSStartTime = __OSGetSystemTime();
         OSDisableInterrupts();
 
-        __OSGetExecParams(&__OSRebootParams);
-        PPCMtmmcr0(0);
-        PPCMtmmcr1(0);
-        PPCMtpmc1(0);
-        PPCMtpmc2(0);
-        PPCMtpmc3(0);
-        PPCMtpmc4(0);
         PPCDisableSpeculation();
         PPCSetFpNonIEEEMode();
 
@@ -289,13 +280,13 @@ void OSInit(void) {
         __OSInitSram();
         __OSThreadInit();
         __OSInitAudioSystem();
-        PPCMthid2(PPCMfhid2() & 0xBFFFFFFF);
+        DisableWriteGatherPipe();
         if ((BOOL)__OSInIPL == FALSE) {
             __OSInitMemoryProtection();
         }
 
-        OSReport("\nDolphin OS\n");
-        OSReport("Kernel built : %s %s\n", "Nov 10 2004", "06:26:41");
+        OSReport("\nDolphin OS $Revision: 58 $.\n");
+        OSReport("Kernel built : %s %s\n", "Sep 27 2002", "14:02:03");
         OSReport("Console Type : ");
 
         if (BootInfo == NULL || (inputConsoleType = BootInfo->console_type) == 0) {
@@ -304,13 +295,12 @@ void OSInit(void) {
             inputConsoleType = BootInfo->console_type;
         }
 
-        switch (inputConsoleType & 0xF0000000) {
+        switch (inputConsoleType & 0xFFFF0000) {
         case OS_CONSOLE_RETAIL:
             OSReport("Retail %d\n", inputConsoleType);
             break;
-        case OS_CONSOLE_DEVELOPMENT:
-        case OS_CONSOLE_TDEV:
-            switch (inputConsoleType & 0x0FFFFFFF) {
+        default:
+            switch (inputConsoleType & 0x0000FFFF) {
             case OS_CONSOLE_EMULATOR:
                 OSReport("Mac Emulator\n");
                 break;
@@ -324,13 +314,10 @@ void OSInit(void) {
                 OSReport("EPPC Minnow\n");
                 break;
             default:
-                tdev = (u32)inputConsoleType & 0x0FFFFFFF;
+                tdev = (u32)inputConsoleType & 0x0000FFFF;
                 OSReport("Development HW%d (%08x)\n", tdev - 3, inputConsoleType);
                 break;
             }
-            break;
-        default:
-            OSReport("%08x\n", inputConsoleType);
             break;
         }
 
@@ -632,14 +619,7 @@ asm void __OSPSInit(void){
     sync
 
     li r3, 0
-    mtspr 0x390, r3
-    mtspr 0x391, r3
-    mtspr 0x392, r3
-    mtspr 0x393, r3
-    mtspr 0x394, r3
-    mtspr 0x395, r3
-    mtspr 0x396, r3
-    mtspr 0x397, r3
+    mtspr GQR0, r3
 
     lwz r0, 0xc(r1)
     addi r1, r1, 8

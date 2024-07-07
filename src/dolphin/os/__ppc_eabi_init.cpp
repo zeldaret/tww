@@ -22,7 +22,7 @@ void _ExitProcess();
 //
 
 typedef void (*voidfunctionptr)(); // pointer to function returning void
-extern voidfunctionptr __init_cpp_exceptions_reference[];
+extern voidfunctionptr _ctors[];
 
 void __init_user(void) {
     __init_cpp();
@@ -34,7 +34,7 @@ void __init_cpp(void) {
      *	call static initializers
      */
     voidfunctionptr* constructor;
-    for (constructor = __init_cpp_exceptions_reference; *constructor; constructor++) {
+    for (constructor = _ctors; *constructor; constructor++) {
         (*constructor)();
     }
 }

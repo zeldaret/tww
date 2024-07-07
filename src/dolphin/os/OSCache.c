@@ -1,6 +1,6 @@
 #include "dolphin/os/OSCache.h"
 #include "dolphin/base/PPCArch.h"
-// #include "dolphin/db.h"
+#include "dolphin/db/db.h"
 #include "dolphin/os/OS.h"
 
 static asm void DCEnable(void) {
@@ -335,10 +335,12 @@ asm void LCQueueWait(register u32 len) {
     // clang-format off
     nofralloc
 
-    mfspr r4, 0x398
+    addi len, len, 1
+LCQueueWait_04:
+    mfspr r4, HID2
     rlwinm r4, r4, 8, 28, 31
-    cmpw r4, len
-    bgt LCQueueWait
+    cmpw cr2, r4, len
+    bge cr2, LCQueueWait_04
 
     blr
     // clang-format on

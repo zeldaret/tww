@@ -8,6 +8,10 @@ vu16 __MEMRegs[64] : 0xCC004000;
 
 extern OSErrorHandlerEx __OSErrorTable[16];
 
+u32 OSGetConsoleSimulatedMemSize() {
+    return *(u32*)(OSPhysicalToCached(0x00F0));
+}
+
 static BOOL OnReset(BOOL final) {
     if (final != FALSE) {
         __MEMRegs[8] = 0xFF;
@@ -169,16 +173,18 @@ inline u32 OSGetPhysicalMemSize() {
     return *(u32*)(OSPhysicalToCached(0x0028));
 }
 
-inline u32 OSGetConsoleSimulatedMemSize() {
-    return *(u32*)(OSPhysicalToCached(0x00F0));
-}
-
 void __OSInitMemoryProtection() {
     u32 padding[8];
     u32 simulatedSize;
     BOOL enabled;
     simulatedSize = OSGetConsoleSimulatedMemSize();
     enabled = OSDisableInterrupts();
+
+    if (simulatedSize <= 0x1800000) {
+        RealMode((u32)&Config24MB);
+    } else if (simulatedSize <= 0x3000000) {
+        RealMode((u32)&Config48MB);
+    }
 
     __MEMRegs[16] = 0;
     __MEMRegs[8] = 0xFF;
@@ -195,14 +201,7 @@ void __OSInitMemoryProtection() {
     if (OSGetConsoleSimulatedMemSize() < OSGetPhysicalMemSize() &&
         OSGetConsoleSimulatedMemSize() == 0x1800000)
     {
-        DCInvalidateRange((void*)0x81800000, 0x1800000);
         __MEMRegs[20] = 2;
-    }
-
-    if (simulatedSize <= 0x1800000) {
-        RealMode((u32)&Config24MB);
-    } else if (simulatedSize <= 0x3000000) {
-        RealMode((u32)&Config48MB);
     }
 
     __OSUnmaskInterrupts(OS_INTERRUPTMASK_MEM_ADDRESS);

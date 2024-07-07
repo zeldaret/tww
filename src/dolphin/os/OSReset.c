@@ -4,8 +4,6 @@
 vu16 __VIRegs[59] : 0xCC002000;
 OSThreadQueue __OSActiveThreadQueue : (OS_BASE_CACHED | 0x00DC);
 
-extern OSExecParams __OSRebootParams;
-
 static OSResetQueue ResetFunctionQueue;
 
 void OSRegisterResetFunction(OSResetFunctionInfo* func) {
@@ -40,17 +38,13 @@ void OSRegisterResetFunction(OSResetFunctionInfo* func) {
     tmp->next = func;
 }
 
-BOOL __OSCallResetFunctions(u32 arg0) {
+inline BOOL __OSCallResetFunctions(u32 arg0) {
     OSResetFunctionInfo* iter;
     s32 retCode = 0;
-    u32 priority = 0;
     s32 temp;
 
     for (iter = ResetFunctionQueue.first; iter != NULL;) {
-        if (retCode != 0 && priority != iter->priority)
-            break;
         temp = !iter->func(arg0);
-        priority = iter->priority;
         iter = iter->next;
         retCode |= temp;
     }
@@ -114,8 +108,7 @@ lbl_8033F7F8:
     // clang-format on
 }
 
-#pragma dont_inline on
-static void KillThreads(void) {
+inline static void KillThreads(void) {
     OSThread* thread;
     OSThread* next;
 
@@ -131,7 +124,6 @@ static void KillThreads(void) {
         }
     }
 }
-#pragma dont_inline reset
 
 void __OSDoHotReset(s32 arg0) {
     OSDisableInterrupts();
@@ -140,13 +132,21 @@ void __OSDoHotReset(s32 arg0) {
     Reset(arg0 * 8);
 }
 
-static u32 bootThisDol;
-
 void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu) {
     BOOL rc;
     BOOL disableRecalibration;
-    u32 unk;
+    u32 unk[3]; // dumb compiler
+
     OSDisableScheduler();
+    __OSStopAudioSystem();
+
+    if (reset == OS_RESET_SHUTDOWN) {
+        disableRecalibration = __PADDisableRecalibration(TRUE);
+    }
+
+    while (!__OSCallResetFunctions(FALSE)) {
+        ;
+    }
 
     if (reset == OS_RESET_HOTRESET && forceMenu) {
         OSSram* sram;
@@ -155,56 +155,36 @@ void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu) {
         sram->flags |= 0x40;
         __OSUnlockSram(TRUE);
 
-        resetCode = 0;
+        while (!__OSSyncSram()) {
+            ;
+        }
     }
 
-    if (reset == OS_RESET_SHUTDOWN ||
-        (reset == OS_RESET_RESTART && (bootThisDol || resetCode + 0x3fff0000 == 0)))
-    {
-        __OSStopAudioSystem();
-        disableRecalibration = __PADDisableRecalibration(TRUE);
-        while (!__OSCallResetFunctions(FALSE))
-            ;
-        while (!__OSSyncSram())
-            ;
-        OSDisableInterrupts();
-        __OSCallResetFunctions(TRUE);
-        LCDisable();
-        __PADDisableRecalibration(disableRecalibration);
-        KillThreads();
-    } else {
-        __OSStopAudioSystem();
-        while (!__OSCallResetFunctions(FALSE))
-            ;
-        while (!__OSSyncSram())
-            ;
-        OSDisableInterrupts();
-        __OSCallResetFunctions(TRUE);
-        LCDisable();
-        KillThreads();
-    }
-
+    OSDisableInterrupts();
+    __OSCallResetFunctions(TRUE);
+    LCDisable();
     if (reset == OS_RESET_HOTRESET) {
         __OSDoHotReset(resetCode);
     } else if (reset == OS_RESET_RESTART) {
-        if (forceMenu == TRUE) {
-            OSReport(
-                "OSResetSystem(): You can't specify TRUE to forceMenu if you restart. Ignored\n");
-        }
+        KillThreads();
         OSEnableScheduler();
-        __OSReboot(resetCode, bootThisDol);
+        __OSReboot(resetCode, forceMenu);
     }
-    memset(OSPhysicalToCached(0x40), 0, 0xcc - 0x40);
-    memset(OSPhysicalToCached(0xd4), 0, 0xe8 - 0xd4);
-    memset(OSPhysicalToCached(0xf4), 0, 0xf8 - 0xf4);
-    memset(OSPhysicalToCached(0x3000), 0, 0xc0);
-    memset(OSPhysicalToCached(0x30c8), 0, 0xd4 - 0xc8);
-    memset(OSPhysicalToCached(0x30e2), 0, 1);
+
+    KillThreads();
+    memset(OSPhysicalToCached(0x40), 0, 0xCC - 0x40);
+    memset(OSPhysicalToCached(0xD4), 0, 0xE8 - 0xD4);
+    memset(OSPhysicalToCached(0xF4), 0, 0xF8 - 0xF4);
+    memset(OSPhysicalToCached(0x3000), 0, 0xC0);
+    memset(OSPhysicalToCached(0x30C8), 0, 0xD4 - 0xC8);
+    memset(OSPhysicalToCached(0x30E2), 0, 1);
+
+    __PADDisableRecalibration(disableRecalibration);
 }
 
 u32 OSGetResetCode(void) {
-    if (__OSRebootParams.valid)
-        return 0x80000000 | __OSRebootParams.restartCode;
+    if (*(u8*)OSPhysicalToCached(0x30E2) != 0)
+        return 0x80000000;
 
     return ((__PIRegs[9] & ~7) >> 3);
 }

@@ -90,7 +90,7 @@ extern u8 __OSReport_enable;
 
 extern BOOL __OSIsGcam;
 
-extern u32 BOOT_REGION_START : 0x8044babc;
+extern u32 BOOT_REGION_START : 0x812FDFF0;
 extern u32 BOOT_REGION_END : 0x812FDFEC;
 
 void OSReportInit__Fv(void);  // needed for inline asm

@@ -15,7 +15,6 @@ void OSInitAlarm(void) {
     if (__OSGetExceptionHandler(8) != DecrementerExceptionHandler) {
         AlarmQueue.head = AlarmQueue.tail = NULL;
         __OSSetExceptionHandler(8, DecrementerExceptionHandler);
-        OSRegisterResetFunction(&ResetFunctionInfo);
     }
 }
 

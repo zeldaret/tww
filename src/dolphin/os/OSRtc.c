@@ -69,7 +69,6 @@ void __OSInitSram(void) {
     Scb.locked = Scb.enabled = FALSE;
     Scb.sync = ReadSram(Scb.sram);
     Scb.offset = RTC_SRAM_SIZE;
-    OSSetGbsMode(OSGetGbsMode());
 }
 
 static void* LockSram(u32 offset) {
@@ -115,13 +114,6 @@ static BOOL UnlockSram(BOOL commit, u32 offset) {
 
         if (offset < Scb.offset) {
             Scb.offset = offset;
-        }
-
-        if (Scb.offset <= 0x14) {
-            OSSramEx* sram = (OSSramEx*)(Scb.sram + sizeof(OSSram));
-            if (((u32)sram->gbs & 0x7c00) == 0x5000 || ((u32)sram->gbs & 0xc0) == 0xc0) {
-                sram->gbs = 0;
-            }
         }
 
         Scb.sync = WriteSram(Scb.sram + Scb.offset, Scb.offset, RTC_SRAM_SIZE - Scb.offset);
@@ -220,32 +212,4 @@ void OSSetWirelessID(s32 channel, u16 id) {
     }
 
     __OSUnlockSramEx(FALSE);
-}
-
-u16 OSGetGbsMode() {
-    OSSramEx* sram;
-    u16 gbs;
-
-    sram = __OSLockSramEx();
-    gbs = sram->gbs;
-    __OSUnlockSramEx(FALSE);
-    return gbs;
-}
-
-void OSSetGbsMode(u16 mode) {
-    OSSramEx* sram;
-
-    if (((u32)mode & 0x7c00) == 0x5000 || ((u32)mode & 0xc0) == 0xc0) {
-        mode = 0;
-    }
-
-    sram = __OSLockSramEx();
-
-    if (mode == sram->gbs) {
-        __OSUnlockSramEx(FALSE);
-        return;
-    }
-    sram->gbs = mode;
-
-    __OSUnlockSramEx(TRUE);
 }
