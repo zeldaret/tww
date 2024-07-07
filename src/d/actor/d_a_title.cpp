@@ -5,6 +5,9 @@
 
 #include "d/actor/d_a_title.h"
 #include "d/d_procname.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
 
 /* 00000078-00000638       .text proc_init3D__14daTitle_proc_cFv */
 void daTitle_proc_c::proc_init3D() {
@@ -53,7 +56,13 @@ void daTitle_proc_c::model_draw() {
 
 /* 000019E0-00001A5C       .text proc_draw__14daTitle_proc_cFv */
 void daTitle_proc_c::proc_draw() {
-    /* Nonmatching */
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(m_exp_heap);
+
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+    m_Screen->draw(0.0f, 0.0f, graf);
+
+    mDoExt_setCurrentHeap(oldHeap);
 }
 
 /* 00001A5C-00001AAC       .text daTitle_Draw__FP9daTitle_c */
