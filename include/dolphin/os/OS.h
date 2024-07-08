@@ -11,7 +11,6 @@
 #include "dolphin/os/OSCache.h"
 #include "dolphin/os/OSContext.h"
 #include "dolphin/os/OSError.h"
-#include "dolphin/os/OSExec.h"
 #include "dolphin/os/OSFont.h"
 #include "dolphin/os/OSInterrupt.h"
 #include "dolphin/os/OSLink.h"
@@ -229,7 +228,7 @@ struct GLOBAL_MEMORY {
     u8 padding_0x30e0[4];
     u32 field_0x30e4; /* __OSPADButton */
     u8 padding_0x30ec[8];
-    OSExecParams* field_0x30f0; /* DOL Execute Parameters */
+    u32 field_0x30f0; /* DOL Execute Parameters */
     u8 padding_0x30f4[12];
     u32 field_0x3100; /* Physical MEM1 size */
     u32 field_0x3104; /* Simulated MEM1 size */
