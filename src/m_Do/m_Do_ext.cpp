@@ -2641,12 +2641,6 @@ int mDoExt_3DlineMat0_c::getMaterialID() {
     return 0;
 }
 
-/* 80016D88-80016DE4       .text __dt__24mDoExt_onCupOffAupPacketFv */
-mDoExt_onCupOffAupPacket::~mDoExt_onCupOffAupPacket() {}
-
-/* 80016DE4-80016E40       .text __dt__24mDoExt_offCupOnAupPacketFv */
-mDoExt_offCupOnAupPacket::~mDoExt_offCupOnAupPacket() {}
-
 /* 80016E40-80016F14       .text __dt__15mDoExt_McaMorf2Fv */
 mDoExt_McaMorf2::~mDoExt_McaMorf2() {}
 
