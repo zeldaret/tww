@@ -320,7 +320,7 @@ public:
 };
 
 int dSnap_PhotoIndex2TableIndex(int);
-u8 dSnap_GetFigRoomId(int);
+int dSnap_GetFigRoomId(int);
 void dSnap_MatDl();
 void dSnap_AlphaClearDL();
 void dSnap_Create();

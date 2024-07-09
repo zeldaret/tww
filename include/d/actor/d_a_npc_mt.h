@@ -11,13 +11,13 @@ struct sMtAnmDat {
     
 };
 
-class daNpcMt_c : public fopAc_ac_c {
+class daNpcMt_c : public fopNpc_npc_c {
 public:
     void attnOff() {}
     void attnOn() {}
     void getNpcNo() {}
     void getPhaseP() {}
-    void setResFlag(unsigned char) {}
+    void setResFlag(u8) {}
 
     daNpcMt_c();
     s32 _create();
@@ -27,7 +27,7 @@ public:
     BOOL _draw();
     BOOL _execute();
     void executeCommon();
-    void executeSetMode(unsigned char);
+    void executeSetMode(u8);
     void executeWaitInit();
     void executeWait();
     void executeTalkInit();
@@ -40,10 +40,10 @@ public:
     void eventMesSet();
     void eventGetItemInit();
     void talk2(int);
-    void next_msgStatus(unsigned long*);
-    void getMsg();
+    u16 next_msgStatus(u32*);
+    u32 getMsg();
     void chkMsg();
-    void setMessage(unsigned long);
+    void setMessage(u32);
     void setAnmFromMsgTag();
     void getPrmNpcNo();
     void setMtx();
@@ -52,27 +52,18 @@ public:
     void initTexPatternAnm(bool);
     void playTexPatternAnm();
     void playAnm();
-    void setAnm(unsigned char, int, float);
+    void setAnm(u8, int, f32);
     void setAnmTbl(sMtAnmDat*);
     void XyCheckCB(int);
-    void setCollision(dCcD_Cyl*, cXyz, float, float);
+    void setCollision(dCcD_Cyl*, cXyz, f32, f32);
     void chkEndEvent();
-    void isFigureGet(unsigned char);
-    void setFigure(unsigned char);
-    void getFigureMakeNum();
-    void isComp();
-    void changePhotoNo(unsigned char);
+    bool isFigureGet(u8);
+    void setFigure(u8);
+    int getFigureMakeNum();
+    bool isComp();
+    void changePhotoNo(u8);
 
 public:
-    /* 0x290 */ dNpc_JntCtrl_c mJnt;
-    /* 0x2C4 */ dNpc_EventCut_c mEventCut;
-    /* 0x328 */ u8 m328[0x330 - 0x328];
-    /* 0x330 */ mDoExt_McaMorf* mpMorf;
-    /* 0x334 */ dBgS_Acch mAcch;
-    /* 0x4F8 */ dBgS_AcchCir mAcchCir;
-    /* 0x538 */ dCcD_Stts mStts;
-    /* 0x574 */ dCcD_GObjInf mGObjInf;
-    /* 0x66C */ u8 m66C[0x6C4 - 0x66C];
     /* 0x6C4 */ request_of_phase_process_class mPhsArcname;
     /* 0x6CC */ request_of_phase_process_class mPhs;
     /* 0x6D4 */ u8 m6D4[0x6D8 - 0x6D4];

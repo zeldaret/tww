@@ -10,15 +10,15 @@ class daObjFigure_c : public fopAc_ac_c {
 public:
     daObjFigure_c();
 
-    void getFigureNo() {}
-    void getPhase1P() {}
-    void getPhase2P() {}
-    void isDispFigure() {}
-    void setResFlag(unsigned char) {}
+    u8 getFigureNo() { return mFigureNo; }
+    request_of_phase_process_class* getPhase1P() { return &mPhsFigure; }
+    request_of_phase_process_class* getPhase2P() { return &mPhsRoomArc; }
+    bool isDispFigure() { return mbDisplay; }
+    void setResFlag(u8 flag) { mLoadFlags |= flag; }
 
     s32 _create();
-    void createHeap();
-    void createInit();
+    BOOL createHeap();
+    s32 createInit();
     BOOL _delete();
     BOOL _draw();
     BOOL _execute();
@@ -26,17 +26,22 @@ public:
     void eventMove();
     void privateCut();
     void eventMesSetInit(int);
-    void eventMesSet();
+    bool eventMesSet();
     void eventOnPlrInit();
     void eventOffPlrInit();
-    void talk(int);
-    void next_msgStatus(unsigned long*);
-    void getMsg();
-    void setMessage(unsigned long);
-    void getPrmFigureNo();
+    u16 talk(int);
+    u16 next_msgStatus(u32*);
+    u32 getMsg();
+    void setMessage(u32);
+    u8 getPrmFigureNo();
     void setMtx();
-    void isFigureGet(unsigned char);
-    void getFigureBmd(unsigned char);
+    BOOL isFigureGet(u8);
+    int getFigureBmd(u8);
+    
+    enum Prm_e {
+        PRM_FIGURE_NO_W = 8,
+        PRM_FIGURE_NO_S = 0,
+    };
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsLoad;
@@ -56,22 +61,27 @@ public:
     /* 0x3F8 */ dCcD_Stts mStts;
     /* 0x434 */ dCcD_Cyl mCyl1;
     /* 0x564 */ dCcD_Cyl mCyl2;
-    /* 0x694 */ int m694;
-    /* 0x698 */ u8 m698[0x69C - 0x698];
-    /* 0x69C */ int m69C;
+    /* 0x694 */ uint m694;
+    /* 0x698 */ msg_class* mpCurrMsg;
+    /* 0x69C */ u32 m69C;
     /* 0x6A0 */ dNpc_EventCut_c mEventCut;
-    /* 0x704 */ u8 m704[0x72C - 0x704];
-    /* 0x72C */ int m72C;
+    /* 0x70C */ cXyz m70C;
+    /* 0x718 */ cXyz m718;
+    /* 0x724 */ f32 m724;
+    /* 0x728 */ f32 m728;
+    /* 0x72C */ u32* m72C;
     /* 0x730 */ s16 mFigureCheckEvtIdx;
     /* 0x732 */ s16 m732;
     /* 0x734 */ s16 m734;
     /* 0x736 */ s16 m736;
-    /* 0x738 */ u8 m738[0x73C - 0x738];
+    /* 0x738 */ s16 m738;
+    /* 0x73A */ s16 m73A;
     /* 0x73C */ u8 m73C;
-    /* 0x73D */ u8 mPrmFigureNo;
-    /* 0x73E */ u8 mbIsFigureGet;
-    /* 0x73F */ u8 m73F[0x741 - 0x73F];
-    /* 0x741 */ u8 m741;
+    /* 0x73D */ u8 mFigureNo;
+    /* 0x73E */ u8 mbDisplay;
+    /* 0x73F */ u8 m73F;
+    /* 0x740 */ u8 m740;
+    /* 0x741 */ s8 m741;
     /* 0x742 */ u8 mLoadFlags;
     /* 0x743 */ u8 m743[0x744 - 0x743];
 };
