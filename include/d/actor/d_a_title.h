@@ -2,6 +2,7 @@
 #define D_A_TITLE_H
 
 #include "d/d_com_inf_game.h"
+#include "d/d_drawlist.h"
 #include "f_op/f_op_actor.h"
 
 class daTitle_proc_c : public dDlst_base_c {
@@ -16,7 +17,8 @@ public:
     void proc_execute();
     void model_draw();
     void proc_draw();
-    void draw();
+    inline void draw();
+    s32 getEnterMode() { return mEnterMode; }
 
     static void daTitle_Kirakira_Sound_flag_on();
 
@@ -31,15 +33,15 @@ public:
     /* 0x024 */ int m024;
     /* 0x028 */ u8 m028[0x02C - 0x028];
     /* 0x02C */ int m02C;
-    /* 0x030 */ int m030;
+    /* 0x030 */ s32 mEnterMode;
     /* 0x034 */ u8 m034[0x038 - 0x034];
     /* 0x038 */ J3DModel* mModel_ship;
     /* 0x03C */ J3DModel* mModel_subtitle;
     /* 0x040 */ J3DModel* mModel_kirari;
-    /* 0x044 */ mDoExt_bckAnm m044;
-    /* 0x054 */ mDoExt_bpkAnm m054;
-    /* 0x068 */ mDoExt_btkAnm m068;
-    /* 0x07C */ mDoExt_btkAnm m07C;
+    /* 0x044 */ mDoExt_bckAnm mBckShip;
+    /* 0x054 */ mDoExt_bpkAnm mBpkShip;
+    /* 0x068 */ mDoExt_btkAnm mBtkSub;
+    /* 0x07C */ mDoExt_btkAnm mBtkKirari;
     /* 0x090 */ u8 m090;
     /* 0x094 */ f32 m094;
     /* 0x098 */ int m098;
@@ -47,7 +49,7 @@ public:
     /* 0x0A0 */ J2DPane* m0A0[6];
     /* 0x0B8 */ fopMsgM_pane_class pane[6];
     /* 0x208 */ JKRExpHeap* m_exp_heap;
-    /* 0x20C */ JKRSolidHeap* m20C;
+    /* 0x20C */ JKRSolidHeap* m_solid_heap;
 };
 
 class daTitle_c : public fopAc_ac_c {
@@ -60,7 +62,12 @@ public:
     }
 
     inline s32 create();
-    inline BOOL draw();
+    inline BOOL draw() {
+        mpTitleProc->model_draw();
+        dComIfGd_set2DOpa(mpTitleProc);
+
+        return TRUE;
+    }
     inline BOOL execute();
 
 public:
