@@ -11,6 +11,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 #define ARCNAME VERSION_SELECT("Tlogo", "TlogoE", "TlogoE0")
 
@@ -196,7 +197,37 @@ void daTitle_proc_c::calc_2d_alpha() {
 
 /* 0000172C-00001880       .text proc_execute__14daTitle_proc_cFv */
 void daTitle_proc_c::proc_execute() {
-    /* Nonmatching */
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(m_exp_heap);
+    if (m01C > 0) {
+        m01C -= 1;
+
+        if (m01C == 0) {
+            mDoAud_seStart(JA_SE_TITLE_WIND);
+        }
+    } else {
+        calc_2d_alpha();
+    }
+
+    if ((CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) && mEnterMode == 0) {
+        mEnterMode = 1;
+        m01C = 0;
+        m098 = 0;
+    }
+
+    for (int paneIdx = 0; paneIdx < 4; paneIdx++) {
+        fopMsgM_setAlpha(&pane[paneIdx]);
+    }
+
+    mDoExt_setCurrentHeap(oldHeap);
+
+    if (mEnterMode == 2) {
+        mEnterMode = 3;
+    } else if (mEnterMode == 3) {
+        m098 += 1;
+    }
+
+    mBckShip.play();
+    set_mtx();
 }
 
 /* 00001880-000019E0       .text model_draw__14daTitle_proc_cFv */
