@@ -232,7 +232,27 @@ void daTitle_proc_c::proc_execute() {
 
 /* 00001880-000019E0       .text model_draw__14daTitle_proc_cFv */
 void daTitle_proc_c::model_draw() {
-    /* Nonmatching */
+    dComIfGd_setList2D();
+
+    if (mBtkSub.getFrame() != 0.0f) {
+        mBtkKirari.entry(mModel_kirari->getModelData());
+        mDoExt_modelUpdateDL(mModel_kirari);
+        mBtkKirari.remove(mModel_kirari->getModelData());
+
+        mBtkSub.entry(mModel_subtitle->getModelData());
+        mDoExt_modelUpdateDL(mModel_subtitle);
+        mBtkSub.remove(mModel_subtitle->getModelData());
+    }
+
+    if (mBpkShip.getFrame() != 0.0f) {
+        mBckShip.entry(mModel_ship->getModelData());
+        mBpkShip.entry(mModel_ship->getModelData());
+        mDoExt_modelUpdateDL(mModel_ship);
+        mBpkShip.remove(mModel_ship->getModelData());
+        mBckShip.remove(mModel_ship->getModelData());
+    }
+
+    dComIfGd_setList();
 }
 
 /* 000019E0-00001A5C       .text proc_draw__14daTitle_proc_cFv */
