@@ -785,7 +785,7 @@ void daPy_lk_c::onBodyEffect() {
 
 /* 80107308-80108204       .text draw__9daPy_lk_cFv */
 BOOL daPy_lk_c::draw() {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - regalloc (maybe the same issue as linkDraw in d_a_obj_figure.cpp?) */
     if (mSightPacket.getDrawFlg()) {
         mSightPacket.setSight();
     }
@@ -1622,9 +1622,9 @@ void daPy_lk_c::setPhotoBoxModel() {
     initModel(&mpEquipItemModel, LINK_BDL_CAMERA, 0x37221222);
     mDoExt_setCurrentHeap(oldHeap);
     if (mEquipItem == CAMERA) {
-        mpEquipItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->hide();
+        mpEquipItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->hide(); // frash joint
     } else {
-        mpEquipItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->show();
+        mpEquipItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->show(); // frash joint
     }
 }
 
@@ -3606,9 +3606,9 @@ BOOL daPy_lk_c::execute() {
     setNeckAngle();
     setHatAngle();
     
-    mpCLModelData->getJointNodePointer(0x00)->setMtxCalc(m_pbCalc[PART_UNDER_e]);
-    mpCLModelData->getJointNodePointer(0x02)->setMtxCalc(m_pbCalc[PART_UPPER_e]);
-    mpCLModelData->getJointNodePointer(0x1D)->setMtxCalc(m_pbCalc[PART_UNDER_e]);
+    mpCLModelData->getJointNodePointer(0x00)->setMtxCalc(m_pbCalc[PART_UNDER_e]); // link_root joint
+    mpCLModelData->getJointNodePointer(0x02)->setMtxCalc(m_pbCalc[PART_UPPER_e]); // body_chn joint
+    mpCLModelData->getJointNodePointer(0x1D)->setMtxCalc(m_pbCalc[PART_UNDER_e]); // wash_chn joint
     
     checkOriginalHatAnimation();
     
@@ -4141,15 +4141,15 @@ void daPy_lk_c::playerInit() {
         mpYmgcs00Model->getModelData()->getJointNodePointer(i)->setCallBack(daPy_auraCallback);
     }
     
-    mpCLModelData->getJointNodePointer(0x01)->setCallBack(daPy_jointCallback0);
-    mpCLModelData->getJointNodePointer(0x0D)->setCallBack(daPy_jointCallback0);
-    mpCLModelData->getJointNodePointer(0x04)->setCallBack(daPy_jointCallback0);
-    mpCLModelData->getJointNodePointer(0x08)->setCallBack(daPy_jointCallback0);
-    mpCLModelData->getJointNodePointer(0x0C)->setCallBack(daPy_jointCallback0);
-    mpCLModelData->getJointNodePointer(0x1C)->setCallBack(daPy_jointCallback0);
-    mpCLModelData->getJointNodePointer(0x0F)->setCallBack(daPy_jointCallback0);
-    mpCLModelData->getJointNodePointer(0x00)->setCallBack(daPy_jointCallback0);
-    mpCLModelData->getJointNodePointer(0x28)->setCallBack(daPy_jointCallback1);
+    mpCLModelData->getJointNodePointer(0x01)->setCallBack(daPy_jointCallback0); // center joint
+    mpCLModelData->getJointNodePointer(0x0D)->setCallBack(daPy_jointCallback0); // cl_podA joint
+    mpCLModelData->getJointNodePointer(0x04)->setCallBack(daPy_jointCallback0); // chest_jnt joint
+    mpCLModelData->getJointNodePointer(0x08)->setCallBack(daPy_jointCallback0); // cl_LhandA joint
+    mpCLModelData->getJointNodePointer(0x0C)->setCallBack(daPy_jointCallback0); // cl_RhandA joint
+    mpCLModelData->getJointNodePointer(0x1C)->setCallBack(daPy_jointCallback0); // hatC_jnt
+    mpCLModelData->getJointNodePointer(0x0F)->setCallBack(daPy_jointCallback0); // head_jnt
+    mpCLModelData->getJointNodePointer(0x00)->setCallBack(daPy_jointCallback0); // link_root joint
+    mpCLModelData->getJointNodePointer(0x28)->setCallBack(daPy_jointCallback1); // cl_back joint
     
     m_pbCalc[PART_UNDER_e]->setUserArea(reinterpret_cast<u32>(this));
     m_pbCalc[PART_UNDER_e]->setBeforeCalc(daPy_jointBeforeCallback);
@@ -4159,31 +4159,32 @@ void daPy_lk_c::playerInit() {
     m_pbCalc[PART_UPPER_e]->setAfterCalc(daPy_jointAfterCallback);
     
     int i;
-    J3DMaterial* mat = mpCLModelData->getJointNodePointer(0x13)->getMesh();
+    J3DMaterial* mtl = mpCLModelData->getJointNodePointer(0x13)->getMesh(); // cl_eye joint
     int zoff_blend_cnt = 0;
     int zoff_none_cnt = 0;
     int zon_cnt = 0;
     for (i = 0; i < 2; i++) {
-        while (mat) {
-            mat->setMaterialMode(1);
-            if (mat->getZMode()->getCompareEnable() == 0) {
-                if (mat->getBlend()->mBlendMode == 1) {
-                    mpZOffBlendShape[zoff_blend_cnt] = mat->getShape();
+        while (mtl) {
+            mtl->setMaterialMode(1);
+            if (mtl->getZMode()->getCompareEnable() == 0) {
+                // TODO: debug map indicates J3DBlend::getType inline was used
+                if (mtl->getBlend()->mBlendMode == GX_BM_BLEND) {
+                    mpZOffBlendShape[zoff_blend_cnt] = mtl->getShape();
                     zoff_blend_cnt++;
                     JUT_ASSERT(0x53EE, zoff_blend_cnt <= 4);
                 } else {
-                    mpZOffNoneShape[zoff_none_cnt] = mat->getShape();
+                    mpZOffNoneShape[zoff_none_cnt] = mtl->getShape();
                     zoff_none_cnt++;
                     JUT_ASSERT(0x53F2, zoff_none_cnt <= 4);
                 }
             } else {
-                mpZOnShape[zon_cnt] = mat->getShape();
+                mpZOnShape[zon_cnt] = mtl->getShape();
                 zon_cnt++;
                 JUT_ASSERT(0x53F6, zon_cnt <= 4);
             }
-            mat = mat->getNext();
+            mtl = mtl->getNext();
         }
-        mat = mpCLModelData->getJointNodePointer(0x15)->getMesh();
+        mtl = mpCLModelData->getJointNodePointer(0x15)->getMesh(); // cl_mayu joint
     }
     JUT_ASSERT(0x53FD, zon_cnt == 4);
     JUT_ASSERT(0x53FE, zoff_none_cnt == 4);

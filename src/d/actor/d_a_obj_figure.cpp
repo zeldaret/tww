@@ -16,6 +16,8 @@
 
 static u8 dummy_bss[0x4C];
 
+#define TOTAL_FIGURE_COUNT 0x86
+
 static const char* l_arcname_tbl[] = {
     "Figure",
     "Figure2",
@@ -88,7 +90,7 @@ struct FigureData {
     /* 0x08 */ int mRoomId;
 }; // Size: 0x0C
 
-static const FigureData l_figure_dat_tbl[] = {
+static const FigureData l_figure_dat_tbl[TOTAL_FIGURE_COUNT] = {
     {
         0,
         0x37441422,
@@ -861,7 +863,7 @@ daObjFigure_c::daObjFigure_c() {
     if(mFigureNo == 0xFF) {
         mFigureNo = 0;
     }
-    if(mFigureNo >= 0x86) {
+    if(mFigureNo >= TOTAL_FIGURE_COUNT) {
         mFigureNo = 0;
     }
 
@@ -927,15 +929,14 @@ s32 daObjFigure_c::_create() {
 
 /* 00000720-00000A90       .text createHeap__13daObjFigure_cFv */
 BOOL daObjFigure_c::createHeap() {
-    /* Nonmatching */
-
     int id = dSnap_GetFigRoomId(getFigureNo());
     if(l_figure_dat_tbl[getFigureNo()].mRoomId >= 0) {
         id = l_figure_dat_tbl[getFigureNo()].mRoomId;
     }
 
+    J3DModelData* pModelData;
     const char* arcname = l_arcname_tbl[id];
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(arcname, getFigureBmd(mFigureNo)));
+    pModelData = (J3DModelData*)(dComIfG_getObjectIDRes(arcname, getFigureBmd(mFigureNo)));
     if(pModelData == NULL) {
         return false;
     }
@@ -1235,8 +1236,6 @@ void daObjFigure_c::eventMesSetInit(int staffIdx) {
 
 /* 00001294-00001600       .text eventMesSet__13daObjFigure_cFv */
 bool daObjFigure_c::eventMesSet() {
-    /* Nonmatching */
-
     switch(m73F) {
         case 0:
             if(m73A != 0) {
@@ -1245,7 +1244,7 @@ bool daObjFigure_c::eventMesSet() {
             else {
                 dComIfGp_setDoStatusForce(0x21);
                 dComIfGp_setAStatusForce(0x27);
-                if(g_mDoCPd_cpadInfo[0].mMainStickPosX != 0.0f || g_mDoCPd_cpadInfo[0].mMainStickPosY != 0.0f || g_mDoCPd_cpadInfo[0].mCStickPosY != 0.0f) {
+                if(g_mDoCPd_cpadInfo[0].mMainStickPosX || g_mDoCPd_cpadInfo[0].mMainStickPosY || g_mDoCPd_cpadInfo[0].mCStickPosY) {
                     m738 = l_figure_check_tbl[0].field_0x32;
                     m734 += (s16)(g_mDoCPd_cpadInfo[0].mMainStickPosX * l_figure_check_tbl[0].field_0x2C);
                     m728 += (s16)(g_mDoCPd_cpadInfo[0].mMainStickPosY * l_figure_check_tbl[0].field_0x04);
@@ -1432,10 +1431,10 @@ void daObjFigure_c::setMtx() {
 
 /* 00001954-000019DC       .text isFigureGet__13daObjFigure_cFUc */
 BOOL daObjFigure_c::isFigureGet(u8 figureNo) {
-    /* Nonmatching */
-
     if(figureNo / 8 < 0x11) {
-        return dComIfGs_getEventReg(l_figure_comp[figureNo / 8]) & (1 << (figureNo & 7));
+        u8 reg = dComIfGs_getEventReg(l_figure_comp[figureNo / 8]);
+        u32 ret = reg & (1 << figureNo % 8);
+        return (u8)ret; // Fakematch for the clrlwi
     }
 
     return false;
@@ -1491,12 +1490,14 @@ static BOOL daSampleIsDelete(void*) {
 
 /* 00001B08-00002148       .text linkDraw__FP14mDoExt_McaMorf */
 void linkDraw(mDoExt_McaMorf* pMorf) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc (maybe the same issue as daPy_lk_c::draw?) */
 
     pMorf->calc();
-    j3dSys.setModel(pMorf->getModel());
-    j3dSys.setTexture(j3dSys.getModel()->getModelData()->getTexture());
-    j3dSys.getModel()->unlock();
+    J3DModel* model = pMorf->getModel();
+    J3DModelData* modelData = model->getModelData();
+    j3dSys.setModel(model);
+    j3dSys.setTexture(modelData->getTexture());
+    model->unlock();
 
     static mDoExt_offCupOnAupPacket l_offCupOnAupPacket1;
     static mDoExt_offCupOnAupPacket l_offCupOnAupPacket2;
@@ -1507,102 +1508,105 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
     J3DShape* ZOffNoneShape[4];
     J3DShape* ZOnShape[4];
 
-    int i;
-    J3DMaterial* mat = j3dSys.getModel()->getModelData()->getJointNodePointer(0x13)->getMesh();
+    J3DJoint* link_root_joint = modelData->getJointNodePointer(0x00); // link_root joint
+    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(0x13); // cl_eye joint
+    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(0x15); // cl_mayu joint
+    
+    J3DMaterial* mtl;
+    mtl = modelData->getJointNodePointer(0x13)->getMesh(); // cl_eye joint
     int zoff_blend_cnt = 0;
     int zoff_none_cnt = 0;
     int zon_cnt = 0;
+    int i;
     for (i = 0; i < 2; i++) {
-        while (mat) {
-            mat->setMaterialMode(1);
-            if (mat->getZMode()->getCompareEnable() == 0) {
-                if (mat->getBlend()->mBlendMode == 1) {
-                    ZOffBlendShape[zoff_blend_cnt] = mat->getShape();
+        while (mtl) {
+            mtl->setMaterialMode(1);
+            if (mtl->getZMode()->getCompareEnable() == 0) {
+                // TODO: debug map indicates J3DBlend::getType inline was used
+                if (mtl->getBlend()->mBlendMode == GX_BM_BLEND) {
+                    ZOffBlendShape[zoff_blend_cnt] = mtl->getShape();
                     zoff_blend_cnt++;
                     JUT_ASSERT(0x6E7, zoff_blend_cnt <= 4);
                 } else {
-                    ZOffNoneShape[zoff_none_cnt] = mat->getShape();
+                    ZOffNoneShape[zoff_none_cnt] = mtl->getShape();
                     zoff_none_cnt++;
                     JUT_ASSERT(0x6EA, zoff_none_cnt <= 4);
                 }
             } else {
-                ZOnShape[zon_cnt] = mat->getShape();
+                ZOnShape[zon_cnt] = mtl->getShape();
                 zon_cnt++;
                 JUT_ASSERT(0x6EE, zon_cnt <= 4);
             }
-            mat = mat->getNext();
+            mtl = mtl->getNext();
         }
-        mat = j3dSys.getModel()->getModelData()->getJointNodePointer(0x15)->getMesh();
+        mtl = modelData->getJointNodePointer(0x15)->getMesh(); // cl_mayu joint
     }
 
     dComIfGd_setListP0();
     l_onCupOffAupPacket2.entryOpa();
 
-    for(int i = 0; i < 4; i++) {
+    for(i = 0; i < 4; i++) {
         ZOffBlendShape[i]->hide();
         ZOnShape[i]->hide();
         ZOffNoneShape[i]->show();
     }
 
-    j3dSys.getModel()->getModelData()->getJointNodePointer(0x13)->entryIn();
-    j3dSys.getModel()->getModelData()->getJointNodePointer(0x15)->entryIn();
+    cl_eye_joint->entryIn();
+    cl_mayu_joint->entryIn();
     l_offCupOnAupPacket2.entryOpa();
 
-    for(int i = 0; i < 4; i++) {
+    for(i = 0; i < 4; i++) {
         ZOffBlendShape[i]->show();
         ZOffNoneShape[i]->hide();
     }
 
-    j3dSys.getModel()->getModelData()->getJointNodePointer(0x13)->entryIn();
-    j3dSys.getModel()->getModelData()->getJointNodePointer(0x15)->entryIn();
+    cl_eye_joint->entryIn();
+    cl_mayu_joint->entryIn();
 
-    i = 0;
-    for (J3DMaterial* pMaterial = j3dSys.getModel()->getModelData()->getJointNodePointer(0)->getMesh(); pMaterial != NULL; pMaterial = pMaterial->getNext()) {
+    mtl = link_root_joint->getMesh();
+    for (i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
         if(i != 2 && i != 5) {
-            pMaterial->getShape()->hide();
+            mtl->getShape()->hide();
         }
-        i++;
     }
 
-    j3dSys.getModel()->getModelData()->getJointNodePointer(0)->entryIn();
+    link_root_joint->entryIn();
     
-    i = 0;
-    for (J3DMaterial* pMaterial = j3dSys.getModel()->getModelData()->getJointNodePointer(0)->getMesh(); pMaterial != NULL; pMaterial = pMaterial->getNext()) {
+    for (i = 0, mtl = link_root_joint->getMesh(); mtl != NULL; i++, mtl = mtl->getNext()) {
         if(i != 2 && i != 5) {
-            pMaterial->getShape()->show();
+            mtl->getShape()->show();
         }
         else {
-            pMaterial->getShape()->hide();
+            mtl->getShape()->hide();
         }
-        i++;
     }
 
     l_onCupOffAupPacket1.entryOpa();
 
-    for(int i = 0; i < 4; i++) {
+    for(i = 0; i < 4; i++) {
         ZOffBlendShape[i]->hide();
         ZOnShape[i]->show();
         ZOffNoneShape[i]->hide();
     }
 
-    j3dSys.getModel()->getModelData()->getJointNodePointer(0x13)->entryIn();
-    j3dSys.getModel()->getModelData()->getJointNodePointer(0x15)->entryIn();
+    cl_eye_joint->entryIn();
+    cl_mayu_joint->entryIn();
     
     l_offCupOnAupPacket1.entryOpa();
 
-    for(int i = 0; i < 4; i++) {
+    for(i = 0; i < 4; i++) {
         ZOnShape[i]->hide();
     }
 
-    dComIfGd_setListInvisisble();
+    dComIfGd_setList();
     mDoExt_modelEntryDL(pMorf->getModel());
 
-    for (J3DMaterial* pMaterial = j3dSys.getModel()->getModelData()->getJointNodePointer(0)->getMesh(); pMaterial != NULL; pMaterial = pMaterial->getNext()) {
-        pMaterial->getShape()->hide();
+    for (mtl = link_root_joint->getMesh(); mtl != NULL; mtl = mtl->getNext()) {
+        mtl->getShape()->show();
     }
 
-    j3dSys.getModel()->getModelData()->getJointNodePointer(0x13)->getMesh()->getShape()->show();
-    j3dSys.getModel()->getModelData()->getJointNodePointer(0x15)->getMesh()->getShape()->show();
+    modelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
+    modelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
 }
 
 static actor_method_class daSampleMethodTable = {

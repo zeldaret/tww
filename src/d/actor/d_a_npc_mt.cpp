@@ -7,6 +7,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
+#define TOTAL_FIGURE_COUNT 0x86
+
 static u16 l_figure_comp[] = {
     0x95FF,
     0x94FF,
@@ -249,11 +251,9 @@ bool daNpcMt_c::isFigureGet(u8) {
 
 /* 00002B98-00002C38       .text setFigure__9daNpcMt_cFUc */
 void daNpcMt_c::setFigure(u8 figure) {
-    /* Nonmatching */
-
-    if(figure < 0x86) {
+    if(figure < TOTAL_FIGURE_COUNT) {
         u8 reg = dComIfGs_getEventReg(l_figure_comp[figure / 8]);
-        reg |= 1 << (figure & 7);
+        reg |= 1 << (figure % 8);
         dComIfGs_setEventReg(l_figure_comp[figure / 8], reg);
         dComIfGs_onEventBit(0x3A01);
     }
@@ -263,7 +263,7 @@ void daNpcMt_c::setFigure(u8 figure) {
 int daNpcMt_c::getFigureMakeNum() {
     int num = 0;
 
-    for(u8 i = 0; i < 0x86; i++) {
+    for(u8 i = 0; i < TOTAL_FIGURE_COUNT; i++) {
         if(isFigureGet(i)) {
             num++;
         }
