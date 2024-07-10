@@ -540,7 +540,7 @@ public:
 
 class mDoExt_offCupOnAupPacket : public J3DPacket {
 public:
-    ~mDoExt_offCupOnAupPacket();
+    ~mDoExt_offCupOnAupPacket() {}
 
     void draw();
     
@@ -549,7 +549,7 @@ public:
 
 class mDoExt_onCupOffAupPacket : public J3DPacket {
 public:
-    ~mDoExt_onCupOffAupPacket();
+    ~mDoExt_onCupOffAupPacket() {}
 
     void draw();
     
