@@ -460,6 +460,6 @@ f32 dBgS_Acch::GetWallAddY(Vec& vec, int) {
 }
 
 static void dummy2() {
-    OSReport("\033[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
+    OSReport("\x1B[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
     dBgS_ObjAcch acch; // fakematch to get dBgS_ObjAcch's vtable and destructor to show up in this TU
 }

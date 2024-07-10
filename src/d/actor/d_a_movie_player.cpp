@@ -3,8 +3,92 @@
 // Translation Unit: d_a_movie_player.cpp
 //
 
+// This TU seems to disable inlining entirely, as there are several weak functions that get inlined
+// in other TUs, but not here.
+#pragma dont_inline on
+
 #include "d/actor/d_a_movie_player.h"
+#include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_graphic.h"
+#include "dolphin/os/OSMessage.h"
+
+static Vec bss_3569;
+// Not sure what these are, but they have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.
+static u8 bss_1036 ALIGN_DECL(4);
+static u8 bss_1034 ALIGN_DECL(4);
+static u8 bss_1032 ALIGN_DECL(4);
+static u8 bss_1031 ALIGN_DECL(4);
+static u8 bss_1026 ALIGN_DECL(4);
+static u8 bss_1024 ALIGN_DECL(4);
+static u8 bss_1022 ALIGN_DECL(4);
+static u8 bss_1021 ALIGN_DECL(4);
+static u8 bss_984 ALIGN_DECL(4);
+static u8 bss_982 ALIGN_DECL(4);
+static u8 bss_980 ALIGN_DECL(4);
+static u8 bss_979 ALIGN_DECL(4);
+static u8 bss_941 ALIGN_DECL(4);
+static u8 bss_939 ALIGN_DECL(4);
+static u8 bss_937 ALIGN_DECL(4);
+static u8 bss_936 ALIGN_DECL(4);
+
+u8 THPStatistics[0x460];
+
+daMP_Player_c daMP_ActivePlayer;
+
+BOOL daMP_ReadThreadCreated;
+OSMessageQueue daMP_FreeReadBufferQueue;
+OSMessageQueue daMP_ReadedBufferQueue;
+OSMessageQueue daMP_ReadedBufferQueue2;
+OSMessage daMP_FreeReadBufferMessage[10];
+OSMessage daMP_ReadedBufferMessage[10];
+OSMessage daMP_ReadedBufferMessage2[10];
+OSThread daMP_ReadThread;
+u8 daMP_ReadThreadStack[0x1000];
+
+BOOL daMP_VideoDecodeThreadCreated;
+OSThread daMP_VideoDecodeThread;
+u8 daMP_VideoDecodeThreadStack[0x64000];
+
+OSMessageQueue daMP_FreeTextureSetQueue;
+OSMessageQueue daMP_DecodedTextureSetQueue;
+OSMessage daMP_FreeTextureSetMessage[3];
+OSMessage daMP_DecodedTextureSetMessage[3];
+
+BOOL daMP_First;
+
+BOOL daMP_AudioDecodeThreadCreated;
+OSThread daMP_AudioDecodeThread;
+u8 daMP_AudioDecodeThreadStack[0x64000];
+OSMessageQueue daMP_FreeAudioBufferQueue;
+OSMessageQueue daMP_DecodedAudioBufferQueue;
+OSMessage daMP_FreeAudioBufferMessage[3];
+OSMessage daMP_DecodedAudioBufferMessage[3];
+
+BOOL daMP_Initialized;
+u8 daMP_WorkBuffer[0x40];
+OSMessageQueue daMP_PrepareReadyQueue;
+OSMessageQueue daMP_UsedTextureSetQueue;
+OSMessage daMP_PrepareReadyMessage;
+OSMessage daMP_UsedTextureSetMessage[3];
+VIRetraceCallback daMP_OldVIPostCallback;
+
+u32 daMP_SoundBufferIndex;
+u32 daMP_OldAIDCallback;
+
+s16 daMP_SoundBuffer[0x460][2];
+
+u32 daMP_DrawPosX;
+u32 daMP_DrawPosY;
+THPVideoInfo daMP_videoInfo;
+THPAudioInfo daMP_audioInfo;
+
+BOOL daMP_Fail_alloc;
+u16 daMP_backup_FrameRate;
+u8 daMP_backup_vfilter[7];
+
+daMP_Dlst_base_c daMP_c_Dlst_base;
 
 extern "C" {
 
@@ -143,56 +227,99 @@ void THPInit() {
     /* Nonmatching */
 }
 
-/* 000031D4-00003208       .text OSInitFastCast */
-void OSInitFastCast() {
-    /* Nonmatching */
-}
+// /* 000031D4-00003208       .text OSInitFastCast */
+// void OSInitFastCast() {
+//     /* Nonmatching */
+// }
 
 };
 
 /* 00003208-0000323C       .text daMP_PopReadedBuffer__Fv */
-void daMP_PopReadedBuffer() {
-    /* Nonmatching */
+void* daMP_PopReadedBuffer() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_ReadedBufferQueue, &msg, 1);
+    return msg;
 }
 
 /* 0000323C-0000326C       .text daMP_PushReadedBuffer__FPv */
-void daMP_PushReadedBuffer(void*) {
-    /* Nonmatching */
+void daMP_PushReadedBuffer(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_ReadedBufferQueue, msg, 1);
 }
 
 /* 0000326C-000032A0       .text daMP_PopFreeReadBuffer__Fv */
-void daMP_PopFreeReadBuffer() {
-    /* Nonmatching */
+daMP_THPReadBuffer* daMP_PopFreeReadBuffer() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_FreeReadBufferQueue, &msg, 1);
+    return (daMP_THPReadBuffer*)msg;
 }
 
 /* 000032A0-000032D0       .text daMP_PushFreeReadBuffer__FPv */
-void daMP_PushFreeReadBuffer(void*) {
-    /* Nonmatching */
+void daMP_PushFreeReadBuffer(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_FreeReadBufferQueue, msg, 1);
 }
 
 /* 000032D0-00003304       .text daMP_PopReadedBuffer2__Fv */
-void daMP_PopReadedBuffer2() {
-    /* Nonmatching */
+void* daMP_PopReadedBuffer2() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_ReadedBufferQueue2, &msg, 1);
+    return msg;
 }
 
 /* 00003304-00003334       .text daMP_PushReadedBuffer2__FPv */
-void daMP_PushReadedBuffer2(void*) {
-    /* Nonmatching */
+void daMP_PushReadedBuffer2(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_ReadedBufferQueue2, msg, 1);
 }
 
 /* 00003334-0000336C       .text daMP_ReadThreadStart__Fv */
 void daMP_ReadThreadStart() {
-    /* Nonmatching */
+    if (daMP_ReadThreadCreated) {
+        OSResumeThread(&daMP_ReadThread);
+    }
 }
 
 /* 0000336C-000033B0       .text daMP_ReadThreadCancel__Fv */
 void daMP_ReadThreadCancel() {
-    /* Nonmatching */
+    if (daMP_ReadThreadCreated) {
+        OSCancelThread(&daMP_ReadThread);
+        daMP_ReadThreadCreated = FALSE;
+    }
 }
 
 /* 000033B0-00003494       .text daMP_Reader__FPv */
 void daMP_Reader(void*) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    s32 r28 = 0;
+    s32 r30 = daMP_ActivePlayer.mB8;
+    s32 r29 = daMP_ActivePlayer.mBC;
+    while (true) {
+        daMP_THPReadBuffer* readBuf = daMP_PopFreeReadBuffer();
+        int readBytes = DVDReadPrio(&daMP_ActivePlayer.mFileInfo, readBuf->m00, r29, r30, 2);
+        if (readBytes != r29) {
+            if (readBytes == -1) {
+                daMP_ActivePlayer.mA8 = -1;
+            }
+            if (r28 == 0) {
+                daMP_PrepareReady(0);
+            }
+            OSSuspendThread(&daMP_ReadThread);
+        }
+        readBuf->m04 = r28;
+        daMP_PushReadedBuffer(readBuf);
+        r30 += r29;
+        r29 = daMP_NEXT_READ_SIZE(readBuf);
+        u32 r0 = (r28 + daMP_ActivePlayer.mC0) % daMP_ActivePlayer.m50;
+        if (r0 == daMP_ActivePlayer.m50 - 1) {
+            if (daMP_ActivePlayer.mA6 & 0x01) {
+                r30 = daMP_ActivePlayer.m64;
+            } else {
+                OSSuspendThread(&daMP_ReadThread);
+            }
+        }
+        r28++;
+    }
 }
 
 /* 000034A0-00003550       .text daMP_CreateReadThread__Fl */
@@ -201,23 +328,32 @@ void daMP_CreateReadThread(s32) {
 }
 
 /* 00003550-00003584       .text daMP_PopFreeTextureSet__Fv */
-void daMP_PopFreeTextureSet() {
-    /* Nonmatching */
+OSMessage daMP_PopFreeTextureSet() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_FreeTextureSetQueue, &msg, 1);
+    return msg;
 }
 
 /* 00003584-000035B4       .text daMP_PushFreeTextureSet__FPv */
-void daMP_PushFreeTextureSet(void*) {
-    /* Nonmatching */
+void daMP_PushFreeTextureSet(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_FreeTextureSetQueue, msg, 0);
 }
 
 /* 000035B4-000035F8       .text daMP_PopDecodedTextureSet__Fl */
-void daMP_PopDecodedTextureSet(s32) {
-    /* Nonmatching */
+void* daMP_PopDecodedTextureSet(s32 r3) {
+    OSMessage msg;
+    if (OSReceiveMessage(&daMP_DecodedTextureSetQueue, &msg, r3) == TRUE) {
+        return msg;
+    } else {
+        return NULL;
+    }
 }
 
 /* 000035F8-00003628       .text daMP_PushDecodedTextureSet__FPv */
-void daMP_PushDecodedTextureSet(void*) {
-    /* Nonmatching */
+void daMP_PushDecodedTextureSet(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_DecodedTextureSetQueue, msg, 1);
 }
 
 /* 00003628-00003760       .text daMP_VideoDecode__FP18daMP_THPReadBuffer */
@@ -242,12 +378,17 @@ void daMP_CreateVideoDecodeThread(s32, u8*) {
 
 /* 00003A74-00003AAC       .text daMP_VideoDecodeThreadStart__Fv */
 void daMP_VideoDecodeThreadStart() {
-    /* Nonmatching */
+    if (daMP_VideoDecodeThreadCreated) {
+        OSResumeThread(&daMP_VideoDecodeThread);
+    }
 }
 
 /* 00003AAC-00003AF0       .text daMP_VideoDecodeThreadCancel__Fv */
 void daMP_VideoDecodeThreadCancel() {
-    /* Nonmatching */
+    if (daMP_VideoDecodeThreadCreated) {
+        OSCancelThread(&daMP_VideoDecodeThread);
+        daMP_VideoDecodeThreadCreated = FALSE;
+    }
 }
 
 /* 00003AF0-00003B24       .text daMP_PopFreeAudioBuffer__Fv */
@@ -292,12 +433,17 @@ void daMP_CreateAudioDecodeThread(s32, u8*) {
 
 /* 00003E70-00003EA8       .text daMP_AudioDecodeThreadStart__Fv */
 void daMP_AudioDecodeThreadStart() {
-    /* Nonmatching */
+    if (daMP_AudioDecodeThreadCreated) {
+        OSResumeThread(&daMP_AudioDecodeThread);
+    }
 }
 
 /* 00003EA8-00003EEC       .text daMP_AudioDecodeThreadCancel__Fv */
 void daMP_AudioDecodeThreadCancel() {
-    /* Nonmatching */
+    if (daMP_AudioDecodeThreadCreated) {
+        OSCancelThread(&daMP_AudioDecodeThread);
+        daMP_AudioDecodeThreadCreated = FALSE;
+    }
 }
 
 /* 00003EEC-00004004       .text daMP_THPGXRestore__Fv */
@@ -396,13 +542,17 @@ void daMP_PlayControl(u32) {
 }
 
 /* 00005810-00005850       .text daMP_WaitUntilPrepare__Fv */
-void daMP_WaitUntilPrepare() {
-    /* Nonmatching */
+s32 daMP_WaitUntilPrepare() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_PrepareReadyQueue, &msg, 1);
+    u32 temp = (s32)msg;
+    return (-temp | temp) >> 31; // fakematch? should be temp != 0;
 }
 
 /* 00005850-00005880       .text daMP_PrepareReady__Fi */
-void daMP_PrepareReady(int) {
-    /* Nonmatching */
+void daMP_PrepareReady(int r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_PrepareReadyQueue, msg, 1);
 }
 
 /* 00005880-00005B68       .text daMP_THPPlayerPrepare__Flll */
@@ -456,7 +606,7 @@ void daMP_THPPlayerSetVolume(s32, s32) {
 }
 
 /* 00005F9C-00006104       .text daMP_ActivePlayer_Init__FPCc */
-void daMP_ActivePlayer_Init(const char*) {
+BOOL daMP_ActivePlayer_Init(const char*) {
     /* Nonmatching */
 }
 
@@ -476,68 +626,107 @@ void daMP_ActivePlayer_Draw() {
 }
 
 /* 00006230-000062F0       .text daMP_Get_MovieRestFrame__Fv */
-void daMP_Get_MovieRestFrame() {
+u32 daMP_Get_MovieRestFrame() {
     /* Nonmatching */
 }
 
 /* 000062F0-00006370       .text daMP_Set_PercentMovieVolume__Ff */
-void daMP_Set_PercentMovieVolume(float) {
+u32 daMP_Set_PercentMovieVolume(f32) {
     /* Nonmatching */
 }
 
 /* 00006370-00006390       .text daMP_c_Get_arg_data__6daMP_cFv */
-void daMP_c::daMP_c_Get_arg_data() {
-    /* Nonmatching */
+u32 daMP_c::daMP_c_Get_arg_data() {
+    return fopAcM_GetParam(this);
 }
 
 /* 00006390-00006500       .text daMP_c_Init__6daMP_cFv */
-void daMP_c::daMP_c_Init() {
+int daMP_c::daMP_c_Init() {
     /* Nonmatching */
+    static u8 set_vfilter[7] = {
+        0x00, 0x00, 0x15, 0x16, 0x15, 0x00, 0x00,
+    };
+    static const char* filename_table[2] = {
+        "/thpdemo/title_loop.thp",
+        "/thpdemo/end_st_epilogue.thp",
+    };
+    
+    daMP_backup_FrameRate = mDoGph_gInf_c::getFrameRate();
+    mDoGph_gInf_c::setFrameRate(1);
+    GXRenderModeObj* renderMode = JUTVideo::getManager()->getRenderMode();
+    // daMP_backup_vfilter = renderMode->vfilter;
+    // renderMode->vfilter = set_vfilter;
+    daMP_Fail_alloc = FALSE;
+    mpCallBack1 = daMP_Get_MovieRestFrame;
+    mpCallBack2 = daMP_Set_PercentMovieVolume;
+    int r4 = daMP_c_Get_arg_data();
+    if (r4 >= 0 && r4 < 2) {
+        if (filename_table[r4] == NULL || !daMP_ActivePlayer_Init(filename_table[r4])) {
+            daMP_Fail_alloc = TRUE;
+            return cPhs_COMPLEATE_e;
+        }
+    } else {
+        OSReport("\x1B[43;30mムービーの番号がおかしい %d %d\n\x1B[m", r4, 2);
+        if (!daMP_ActivePlayer_Init(filename_table[0])) {
+            daMP_Fail_alloc = TRUE;
+        }
+    }
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00006580-000065F8       .text daMP_c_Finish__6daMP_cFv */
-void daMP_c::daMP_c_Finish() {
+BOOL daMP_c::daMP_c_Finish() {
     /* Nonmatching */
 }
 
 /* 000065F8-0000661C       .text daMP_c_Main__6daMP_cFv */
-void daMP_c::daMP_c_Main() {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Main() {
+    daMP_ActivePlayer_Main();
+    return TRUE;
 }
 
 /* 0000661C-0000663C       .text draw__16daMP_Dlst_base_cFv */
 void daMP_Dlst_base_c::draw() {
-    /* Nonmatching */
+    daMP_ActivePlayer_Draw();
 }
 
 /* 0000663C-00006668       .text daMP_c_Draw__6daMP_cFv */
-void daMP_c::daMP_c_Draw() {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Draw() {
+    dComIfGd_set2DOpa(&daMP_c_Dlst_base);
+    return TRUE;
 }
 
 /* 000066C4-00006728       .text daMP_c_Callback_Init__6daMP_cFP10fopAc_ac_c */
-int daMP_c::daMP_c_Callback_Init(fopAc_ac_c*) {
-    /* Nonmatching */
+int daMP_c::daMP_c_Callback_Init(fopAc_ac_c* i_this) {
+    fopAcM_SetupActor(i_this, daMP_c);
+    daMP_c* a_this = (daMP_c*)i_this;
+    return a_this->daMP_c_Init();
 }
 
 /* 00006728-00006748       .text daMP_c_Callback_Finish__6daMP_cFP6daMP_c */
-int daMP_c::daMP_c_Callback_Finish(daMP_c*) {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Callback_Finish(daMP_c* i_this) {
+    return i_this->daMP_c_Finish();
 }
 
 /* 00006748-00006780       .text daMP_c_Callback_Main__6daMP_cFP6daMP_c */
-int daMP_c::daMP_c_Callback_Main(daMP_c*) {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Callback_Main(daMP_c* i_this) {
+    if (daMP_Fail_alloc) {
+        return TRUE;
+    }
+    return i_this->daMP_c_Main();
 }
 
 /* 00006780-000067B8       .text daMP_c_Callback_Draw__6daMP_cFP6daMP_c */
-int daMP_c::daMP_c_Callback_Draw(daMP_c*) {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Callback_Draw(daMP_c* i_this) {
+    if (daMP_Fail_alloc) {
+        return TRUE;
+    }
+    return i_this->daMP_c_Draw();
 }
 
 /* 000067B8-000067C0       .text daMP_Callback_Dummy__FP6daMP_c */
-static int daMP_Callback_Dummy(daMP_c*) {
-    /* Nonmatching */
+static BOOL daMP_Callback_Dummy(daMP_c* i_this) {
+    return TRUE;
 }
 
 static actor_method_class daMP_METHODS = {

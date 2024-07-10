@@ -115,7 +115,7 @@ typedef void (*DVDOptionalCommandChecker)(DVDCommandBlock* block, void (*cb)(u32
 void DVDInit(void);
 BOOL DVDOpen(const char* filename, DVDFileInfo* fileinfo);
 BOOL DVDClose(DVDFileInfo* fileinfo);
-BOOL DVDReadPrio(DVDFileInfo* fileinfo, void*, s32, s32, s32);
+int DVDReadPrio(DVDFileInfo* fileinfo, void*, s32, s32, s32);
 DVDDiskID* DVDGetCurrentDiskID(void);
 BOOL DVDFastOpen(long, DVDFileInfo* fileinfo);
 s32 DVDGetCommandBlockStatus(const DVDCommandBlock* block);
