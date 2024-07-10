@@ -165,8 +165,29 @@ void daTitle_proc_c::setEnterMode() {
 
 /* 00000D94-00000F20       .text set_mtx__14daTitle_proc_cFv */
 void daTitle_proc_c::set_mtx() {
-    /* Nonmatching */
+    cXyz pos;
+    cXyz scale(attr().field_0x08, attr().field_0x08, attr().field_0x08);
+    mModel_ship->setBaseScale(scale);
+
+    pos.set(m094 + attr().field_0x00, attr().field_0x04, 0.0f);
+    mDoMtx_stack_c::transS(pos.x, pos.y, 1000.0f);
+    mDoMtx_stack_c::ZXYrotM(0, 0x4000, 0);
+    mModel_ship->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    scale.set(attr().field_0x18, attr().field_0x1C, 1.0f);
+    mModel_subtitle->setBaseScale(scale);
+    mModel_kirari->setBaseScale(scale);
+
+    pos.set(attr().field_0x10, attr().field_0x14, 0.0f);
+    mDoMtx_stack_c::transS(pos.x, pos.y, -10000.0f);
+    mDoMtx_stack_c::ZXYrotM(0, -0x8000, 0);
+    mModel_subtitle->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mDoMtx_stack_c::transS(pos.x, pos.y, -10010.0f);
+    mDoMtx_stack_c::ZXYrotM(0, -0x8000, 0);
+    mModel_kirari->setBaseTRMtx(mDoMtx_stack_c::get());
 }
+
 
 /* 00000F20-0000172C       .text calc_2d_alpha__14daTitle_proc_cFv */
 void daTitle_proc_c::calc_2d_alpha() {
