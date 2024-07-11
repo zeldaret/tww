@@ -15,7 +15,7 @@ public:
     void draw();
 
 private:
-    /* 0x04 */ J2DPicture* mPicture[4];
+    /* 0x04 */ J2DPicture* mNum[4];
     /* 0x14 */ cXy mPos[4];
     /* 0x34 */ f32 mWidth;
     /* 0x38 */ f32 mHeight;
@@ -29,12 +29,19 @@ public:
     bool init(ResTIMG* img1, ResTIMG* img2);
     void draw();
 
+    void setTitlePos(f32 x, f32 y) { mTitlePos.x = x; mTitlePos.y = y; }
+    void setScorePos(f32 x, f32 y) { mScorePos.x = x; mScorePos.y = y; }
+    void setTitleAlpha(u8 alpha) { mTitle->setAlpha(alpha); }
+    void setScoreAlpha(u8 alpha) { mScore->setAlpha(0xFF); mScoreShadow->setAlpha(alpha); } // ???
+
 public:
-    /* 0x04 */ J2DPicture* mPicture[3];
-    /* 0x10 */ cXy mPos1;
-    /* 0x18 */ cXy mSize1;
-    /* 0x20 */ cXy mPos2;
-    /* 0x28 */ cXy mSize2;
+    /* 0x04 */ J2DPicture* mTitle;
+    /* 0x08 */ J2DPicture* mScore;
+    /* 0x0C */ J2DPicture* mScoreShadow;
+    /* 0x10 */ cXy mTitlePos;
+    /* 0x18 */ cXy mTitleSize;
+    /* 0x20 */ cXy mScorePos;
+    /* 0x28 */ cXy mScoreSize;
 };
 
 class dDlst_2DBattery_c : public dDlst_base_c {
@@ -44,9 +51,18 @@ public:
     void draw();
 
 public:
-    /* 0x04 */ J2DPicture* mPicture[3];
-    /* 0x10 */ J2DPicture* mNum[3][2];
-    /* 0x28 */ f32 field_0x28[14];
+    /* 0x04 */ J2DPicture* mRule;
+    /* 0x08 */ J2DPicture* mBattery;
+    /* 0x0C */ J2DPicture* mBatteryBase;
+    /* 0x10 */ J2DPicture* mNum[3][2]; /* [tens, ones, degree][no shadow, shadow] */
+    /* 0x28 */ cXy mPicturePos;
+    /* 0x28 */ cXy mNumPos;
+    /* 0x38 */ cXy mRuleSize;
+    /* 0x40 */ cXy mBatterySize;
+    /* 0x48 */ cXy mBatteryBaseSize;
+    /* 0x50 */ cXy mNumSize;
+    /* 0x58 */ f32 mRotation;
+    /* 0x5C */ f32 field_0x5c;
 };
 
 class dDlst_2DObject_c : public dDlst_base_c {
