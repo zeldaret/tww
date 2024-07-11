@@ -62,18 +62,13 @@ public:
     }
 
     inline s32 create();
-    inline BOOL draw() {
-        mpTitleProc->model_draw();
-        dComIfGd_set2DOpa(mpTitleProc);
-
-        return TRUE;
-    }
+    inline BOOL draw();
     inline BOOL execute();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ daTitle_proc_c* mpTitleProc;
-    /* 0x29C */ u8 m29C;
+    /* 0x29C */ u8 m29C;    // bool?
 };
 
 #endif /* D_A_TITLE_H */

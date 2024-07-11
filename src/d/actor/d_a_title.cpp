@@ -8,10 +8,14 @@
 #include "d/res/res_tlogoe.h"
 #include "d/res/res_tlogoe0.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "f_op/f_op_scene_mng.h"
+#include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_graphic.h"
+#include "m_Do/m_Do_Reset.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
-#include "m_Do/m_Do_controller_pad.h"
 
 #define ARCNAME VERSION_SELECT("Tlogo", "TlogoE", "TlogoE0")
 
@@ -264,6 +268,63 @@ void daTitle_proc_c::proc_draw() {
     m_Screen->draw(0.0f, 0.0f, graf);
 
     mDoExt_setCurrentHeap(oldHeap);
+}
+
+s32 daTitle_c::create() {
+    fopAcM_SetupActor(this, daTitle_c);
+
+    s32 phase_state = dComIfG_resLoad(&mPhs, ARCNAME);
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        mpTitleProc = new daTitle_proc_c();
+
+        if (mpTitleProc == NULL) {
+            return cPhs_ERROR_e;
+        }
+
+        mpTitleProc->proc_init2D();
+        mpTitleProc->proc_init3D();
+        m29C = 0;
+    }
+
+    return phase_state;
+}
+
+BOOL daTitle_c::draw() {
+    mpTitleProc->model_draw();
+    dComIfGd_set2DOpa(mpTitleProc);
+
+    return TRUE;
+}
+
+BOOL daTitle_c::execute() {
+    if (fopOvlpM_IsPeek() == 0) {
+        mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor); // Fakematch?
+
+        if ((CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) && mpTitleProc->getEnterMode() == 1) {
+            mpTitleProc->setEnterMode();
+        } else if(mpTitleProc->getEnterMode() == 3) {
+            scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
+            JUT_ASSERT(0x2EF, stageProc != NULL);
+
+            if (m29C == 0 && fopScnM_ChangeReq(stageProc, PROC_NAME_SCENE, 0, 5)) {
+                mDoAud_seStart(JA_SE_OP_ENTER_GAME);
+                m29C = 1;
+            }
+        } else if (!mDoRst::isReset() && dComIfGp_isEnableNextStage()) {
+            scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
+            JUT_ASSERT(0x2FC, stageProc != NULL);
+
+            if (m29C == 0) {
+                s16 procName = fpcM_GetName(stageProc) == PROC_OPENING_SCENE ? PROC_OPEN2_SCENE : PROC_TITLE_SCENE;
+                fopScnM_ChangeReq(stageProc, procName, 1, 5);
+                m29C = 1;
+            }
+        }
+    }
+
+    mpTitleProc->proc_execute();
+    return TRUE;
 }
 
 /* 00001A5C-00001AAC       .text daTitle_Draw__FP9daTitle_c */
