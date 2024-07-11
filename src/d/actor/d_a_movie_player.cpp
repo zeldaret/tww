@@ -50,7 +50,7 @@ static THPSample* Gbase ALIGN_DECL(32);
 static u32 Gwid ALIGN_DECL(32);
 static f32* Gq ALIGN_DECL(32);
 static u8* __THPLCWork512[3];
-static u8* __THPLCWork672[3];
+static u8* __THPLCWork640[3];
 static u32 __THPOldGQR5;
 static u32 __THPOldGQR6;
 static u8* __THPWorkArea;
@@ -112,12 +112,16 @@ VIRetraceCallback daMP_OldVIPostCallback;
 u32 daMP_SoundBufferIndex;
 u32 daMP_OldAIDCallback;
 
+void* daMP_LastAudioBuffer;
+void* daMP_CurAudioBuffer;
+void* daMP_AudioSystem;
 s16 daMP_SoundBuffer[0x460][2];
 
-u32 daMP_DrawPosX;
-u32 daMP_DrawPosY;
 THPVideoInfo daMP_videoInfo;
 THPAudioInfo daMP_audioInfo;
+u32 daMP_DrawPosX;
+u32 daMP_DrawPosY;
+void** daMP_buffer;
 
 BOOL daMP_Fail_alloc;
 u16 daMP_backup_FrameRate;
@@ -258,7 +262,6 @@ static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag) {
 
 /* 00000584-00000614       .text __THPAudioGetNewSample */
 static s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info) {
-    /* Nonmatching */
     s32 sample;
 
     if (!(info->offsetNibbles & 0x0f)) {
@@ -442,7 +445,6 @@ _err_exit:
 
 /* 00000894-000008DC       .text __THPSetupBuffers */
 static void __THPSetupBuffers() {
-    /* Nonmatching */
     u8 i;
     THPCoeff* buffer;
 
@@ -455,7 +457,6 @@ static void __THPSetupBuffers() {
 
 /* 000008DC-00000A1C       .text __THPReadFrameHeader */
 static u8 __THPReadFrameHeader() {
-    /* Nonmatching */
     u8 i, utmp8;
 
     __THPInfo->c += 2;
@@ -491,7 +492,6 @@ static u8 __THPReadFrameHeader() {
 
 /* 00000A1C-00000B48       .text __THPReadScaneHeader */
 static u8 __THPReadScaneHeader() {
-    /* Nonmatching */
     u8 i, utmp8;
     __THPInfo->c += 2;
 
@@ -527,41 +527,40 @@ static u8 __THPReadScaneHeader() {
 
 /* 00000B48-00000EFC       .text __THPReadQuantizationTable */
 static u8 __THPReadQuantizationTable() {
-    /* Nonmatching */
-    u16 length, id, i, row, col;
+    /* Nonmatching - regalloc */
     f32 q_temp[64];
 
-    length = (u16)((__THPInfo->c)[0] << 8 | (__THPInfo->c)[1]);
+    u16 length = (u16)((__THPInfo->c)[0] << 8 | (__THPInfo->c)[1]);
     __THPInfo->c += 2;
     length -= 2;
 
-    for (;;) {
-        id = (*(__THPInfo->c)++);
+    do {
+        u16 i;
+        u16 id = (*(__THPInfo->c)++);
 
         for (i = 0; i < 64; i++) {
             q_temp[__THPJpegNaturalOrder[i]] = (f32)(*(__THPInfo->c)++);
         }
 
-        i = 0;
+        u16 row;
+        u16 col;
+        u16 j;
+        j = 0;
         for (row = 0; row < 8; row++) {
             for (col = 0; col < 8; col++) {
-                __THPInfo->quantTabs[id][i] = (f32)((f64)q_temp[i] * __THPAANScaleFactor[row] * __THPAANScaleFactor[col]);
-                i++;
+                __THPInfo->quantTabs[id][j] = (f32)((f64)q_temp[j] * __THPAANScaleFactor[row] * __THPAANScaleFactor[col]);
+                j++;
             }
         }
 
         length -= 65;
-        if (!length) {
-            break;
-        }
-    }
+    } while (length != 0);
 
     return 0;
 }
 
 /* 00000EFC-000010E4       .text __THPReadHuffmanTableSpecification */
 static u8 __THPReadHuffmanTableSpecification() {
-    /* Nonmatching */
     u8 t_class, id, i, tab_index;
     u16 length, num_Vij;
 
@@ -601,7 +600,6 @@ static u8 __THPReadHuffmanTableSpecification() {
 
 /* 000010E4-000011C4       .text __THPHuffGenerateSizeTable */
 static void __THPHuffGenerateSizeTable() {
-    /* Nonmatching */
     s32 p, l, i;
     p = 0;
 
@@ -637,7 +635,6 @@ static void __THPHuffGenerateCodeTable() {
 
 /* 00001238-00001330       .text __THPHuffGenerateDecoderTables */
 static void __THPHuffGenerateDecoderTables(u8 tabIndex) {
-    /* Nonmatching */
     s32 p, l;
     THPHuffmanTab* h;
 
@@ -668,7 +665,6 @@ static void __THPRestartDefinition() {
 
 /* 0000138C-000015CC       .text __THPPrepBitStream */
 static void __THPPrepBitStream() {
-    /* Nonmatching */
     u32* ptr;
     u32 offset, i, j, k;
 
@@ -800,7 +796,6 @@ static void __THPGQRSetup() {
 
 /* 00001704-00001944       .text __THPDecompressiMCURow512x448 */
 static void __THPDecompressiMCURow512x448() {
-    /* Nonmatching */
     u8 cl_num;
     u32 x_pos;
     THPComponent* comp;
@@ -1497,7 +1492,7 @@ static void __THPDecompressiMCURow640x480() {
             __THPHuffDecodeDCTCompV(__THPInfo, __THPMCUBuffer[5]);
 
             comp  = &__THPInfo->components[0];
-            Gbase = __THPLCWork672[0];
+            Gbase = __THPLCWork640[0];
             Gwid  = 640;
             Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
             x_pos = (u32)(cl_num * 16);
@@ -1507,14 +1502,14 @@ static void __THPDecompressiMCURow640x480() {
             __THPInverseDCTY8(__THPMCUBuffer[3], x_pos + 8);
 
             comp  = &__THPInfo->components[1];
-            Gbase = __THPLCWork672[1];
+            Gbase = __THPLCWork640[1];
             Gwid  = 320;
             Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
             x_pos /= 2;
             __THPInverseDCTNoYPos(__THPMCUBuffer[4], x_pos);
 
             comp  = &__THPInfo->components[2];
-            Gbase = __THPLCWork672[2];
+            Gbase = __THPLCWork640[2];
             Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
             __THPInverseDCTNoYPos(__THPMCUBuffer[5], x_pos);
 
@@ -1537,9 +1532,9 @@ static void __THPDecompressiMCURow640x480() {
         }
     }
 
-    LCStoreData(__THPInfo->dLC[0], __THPLCWork672[0], 0x2800);
-    LCStoreData(__THPInfo->dLC[1], __THPLCWork672[1], 0xA00);
-    LCStoreData(__THPInfo->dLC[2], __THPLCWork672[2], 0xA00);
+    LCStoreData(__THPInfo->dLC[0], __THPLCWork640[0], 0x2800);
+    LCStoreData(__THPInfo->dLC[1], __THPLCWork640[1], 0xA00);
+    LCStoreData(__THPInfo->dLC[2], __THPLCWork640[2], 0xA00);
 
     __THPInfo->dLC[0] += 0x2800;
     __THPInfo->dLC[1] += 0xA00;
@@ -1565,7 +1560,7 @@ static void __THPDecompressiMCURowNxN() {
         __THPHuffDecodeDCTCompV(__THPInfo, __THPMCUBuffer[5]);
 
         comp  = &__THPInfo->components[0];
-        Gbase = __THPLCWork672[0];
+        Gbase = __THPLCWork640[0];
         Gwid  = x;
         Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
         x_pos = (u32)(cl_num * 16);
@@ -1575,14 +1570,14 @@ static void __THPDecompressiMCURowNxN() {
         __THPInverseDCTY8(__THPMCUBuffer[3], x_pos + 8);
 
         comp  = &__THPInfo->components[1];
-        Gbase = __THPLCWork672[1];
+        Gbase = __THPLCWork640[1];
         Gwid  = x / 2;
         Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
         x_pos /= 2;
         __THPInverseDCTNoYPos(__THPMCUBuffer[4], x_pos);
 
         comp  = &__THPInfo->components[2];
-        Gbase = __THPLCWork672[2];
+        Gbase = __THPLCWork640[2];
         Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
         __THPInverseDCTNoYPos(__THPMCUBuffer[5], x_pos);
 
@@ -1603,9 +1598,9 @@ static void __THPDecompressiMCURowNxN() {
         }
     }
 
-    LCStoreData(__THPInfo->dLC[0], __THPLCWork672[0], ((4 * sizeof(u8) * 64) * (x / 16)));
-    LCStoreData(__THPInfo->dLC[1], __THPLCWork672[1], ((sizeof(u8) * 64) * (x / 16)));
-    LCStoreData(__THPInfo->dLC[2], __THPLCWork672[2], ((sizeof(u8) * 64) * (x / 16)));
+    LCStoreData(__THPInfo->dLC[0], __THPLCWork640[0], ((4 * sizeof(u8) * 64) * (x / 16)));
+    LCStoreData(__THPInfo->dLC[1], __THPLCWork640[1], ((sizeof(u8) * 64) * (x / 16)));
+    LCStoreData(__THPInfo->dLC[2], __THPLCWork640[2], ((sizeof(u8) * 64) * (x / 16)));
     __THPInfo->dLC[0] += ((4 * sizeof(u8) * 64) * (x / 16));
     __THPInfo->dLC[1] += ((sizeof(u8) * 64) * (x / 16));
     __THPInfo->dLC[2] += ((sizeof(u8) * 64) * (x / 16));
@@ -2260,7 +2255,6 @@ _FailedCheckNoBits1 :
 
 /* 00002D98-00002F80       .text __THPHuffDecodeDCTCompU */
 static void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block) {
-    /* Nonmatching */
     register s32 t;
     register THPCoeff diff;
     THPCoeff dc;
@@ -2389,7 +2383,6 @@ static void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block)
 
 /* 00002F80-00003168       .text __THPHuffDecodeDCTCompV */
 static void __THPHuffDecodeDCTCompV(register THPFileInfo* info, THPCoeff* block) {
-    /* Nonmatching */
     register s32 t;
     register THPCoeff diff;
     THPCoeff dc;
@@ -2532,11 +2525,11 @@ static BOOL THPInit() {
     base += 0x200;
 
     base              = (u8*)(0xE000 << 16);
-    __THPLCWork672[0] = base;
+    __THPLCWork640[0] = base;
     base += 0x2800;
-    __THPLCWork672[1] = base;
+    __THPLCWork640[1] = base;
     base += 0xA00;
-    __THPLCWork672[2] = base;
+    __THPLCWork640[2] = base;
     base += 0xA00;
 
     OSInitFastCast();

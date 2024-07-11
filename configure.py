@@ -1670,7 +1670,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_ygcwp", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_yougan"),
     ActorRel(Matching,    "d_a_ghostship", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_movie_player"),
+    ActorRel(NonMatching, "d_a_movie_player", extra_cflags=["-O3,p"]),
 ]
 
 if args.mode == "configure":
