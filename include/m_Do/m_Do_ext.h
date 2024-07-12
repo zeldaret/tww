@@ -164,7 +164,7 @@ public:
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
 
-    int remove(J3DModelData* i_modelData) { i_modelData->removeMatColorAnimator(mpAnm); }
+    int remove(J3DModelData* i_modelData) { return i_modelData->removeMatColorAnimator(mpAnm); }
 
 private:
     /* 0x08 */ J3DAnmColor* mpAnm;
