@@ -1,6 +1,7 @@
 #ifndef OSLINK_H
 #define OSLINK_H
 
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,8 +19,8 @@ typedef struct OSSectionInfo OSSectionInfo;
 typedef struct OSImportInfo OSImportInfo;
 typedef struct OSRel OSRel;
 
-OSModuleQueue __OSModuleList : 0x800030C8;
-void* __OSStringTable : 0x800030D0;
+OSModuleQueue __OSModuleList AT_ADDRESS(0x800030C8);
+void* __OSStringTable AT_ADDRESS(0x800030D0);
 
 struct OSModuleQueue {
     OSModuleInfo* head;

@@ -3,9 +3,10 @@
 
 #include "dolphin/os/OS.h"
 #include "dolphin/types.h"
+#include "dolphin/os/OSUtil.h"
 
-volatile u16 __DSPRegs[32] : 0xCC005000;
-volatile u32 __AIRegs[8] : 0xCC006C00;
+volatile u16 __DSPRegs[32] AT_ADDRESS(0xCC005000);
+volatile u32 __AIRegs[8] AT_ADDRESS(0xCC006C00);
 
 #ifdef __cplusplus
 extern "C" {

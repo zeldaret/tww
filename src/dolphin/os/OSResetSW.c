@@ -2,7 +2,7 @@
 #include "dolphin/os/OS.h"
 #include "dolphin/os/OSReset.h"
 
-u8 GameChoice : (OS_BASE_CACHED | 0x30E3);
+u8 GameChoice AT_ADDRESS(OS_BASE_CACHED | 0x30E3);
 
 void __OSResetSWInterruptHandler(__OSInterrupt interrupt, OSContext* context);
 

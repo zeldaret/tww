@@ -1,9 +1,10 @@
 #include "dolphin/os/OSContext.h"
 #include "dolphin/db/db.h"
 #include "dolphin/os/OS.h"
+#include "dolphin/os/OSUtil.h"
 
-volatile OSContext* __OSCurrentContext : (OS_BASE_CACHED | 0x00D4);
-volatile OSContext* __OSFPUContext : (OS_BASE_CACHED | 0x00D8);
+volatile OSContext* __OSCurrentContext AT_ADDRESS(OS_BASE_CACHED | 0x00D4);
+volatile OSContext* __OSFPUContext AT_ADDRESS(OS_BASE_CACHED | 0x00D8);
 
 asm void __OSLoadFPUContext(void) {
     // clang-format off

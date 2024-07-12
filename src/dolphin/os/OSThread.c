@@ -7,10 +7,10 @@
 #include "dolphin/os/OSThread.h"
 #include "dolphin/os/OS.h"
 
-OSThread* __OSCurrentThread : OS_BASE_CACHED + 0x00E4;
-OSThreadQueue __OSActiveThreadQueue : OS_BASE_CACHED + 0x00DC;
-volatile OSContext __OSCurrentContext : OS_BASE_CACHED + 0x00D4;
-volatile OSContext* __OSFPUContext : OS_BASE_CACHED + 0x00D8;
+OSThread* __OSCurrentThread AT_ADDRESS(OS_BASE_CACHED + 0x00E4);
+OSThreadQueue __OSActiveThreadQueue AT_ADDRESS(OS_BASE_CACHED + 0x00DC);
+volatile OSContext __OSCurrentContext AT_ADDRESS(OS_BASE_CACHED + 0x00D4);
+volatile OSContext* __OSFPUContext AT_ADDRESS(OS_BASE_CACHED + 0x00D8);
 
 #define AddTail(queue, thread, link)                                                               \
     do {                                                                                           \

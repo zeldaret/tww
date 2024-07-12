@@ -4,9 +4,9 @@
 #include "dolphin/dvd/dvdlow.h"
 #include "dolphin/os/OS.h"
 
-OSThread* __OSCurrentThread : (OS_BASE_CACHED | 0x00E4);
-OSThreadQueue __OSActiveThreadQueue : (OS_BASE_CACHED | 0x00DC);
-volatile OSContext* __OSFPUContext : (OS_BASE_CACHED | 0x00D8);
+OSThread* __OSCurrentThread AT_ADDRESS(OS_BASE_CACHED | 0x00E4);
+OSThreadQueue __OSActiveThreadQueue AT_ADDRESS(OS_BASE_CACHED | 0x00DC);
+volatile OSContext* __OSFPUContext AT_ADDRESS(OS_BASE_CACHED | 0x00D8);
 
 extern volatile u32 __OSLastInterruptSrr0;
 extern volatile s16 __OSLastInterrupt;

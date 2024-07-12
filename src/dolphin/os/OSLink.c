@@ -107,7 +107,7 @@
             __prev->link.next = __next;                                                            \
     } while (0)
 
-OSModuleQueue __OSModuleInfoList : (OS_BASE_CACHED | 0x30C8);
+OSModuleQueue __OSModuleInfoList AT_ADDRESS(OS_BASE_CACHED | 0x30C8);
 
 #pragma dont_inline on
 

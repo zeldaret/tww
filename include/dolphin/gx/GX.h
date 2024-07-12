@@ -14,6 +14,7 @@
 #include "dolphin/gx/GXTev.h"
 #include "dolphin/gx/GXTexture.h"
 #include "dolphin/gx/GXTransform.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,7 +42,7 @@ typedef union {
 	f64 f64;
 } PPCWGPipe;
 
-volatile PPCWGPipe GXFIFO : 0xCC008000;
+volatile PPCWGPipe GXFIFO AT_ADDRESS(0xCC008000);
 
 // Direct
 inline void GXPosition2f32(f32 x, f32 z) {

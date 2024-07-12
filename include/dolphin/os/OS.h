@@ -24,6 +24,7 @@
 #include "dolphin/os/OSSync.h"
 #include "dolphin/os/OSThread.h"
 #include "dolphin/os/OSTime.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,19 +60,19 @@ extern "C" {
 #define OS_CONSOLE_PC_EMULATOR 0x10000001
 #define OS_CONSOLE_EMULATOR 0x10000000
 
-volatile u16 __OSDeviceCode : 0x800030E6;
+volatile u16 __OSDeviceCode AT_ADDRESS(0x800030E6);
 
-volatile u32 OS_PI_INTR_CAUSE : 0xCC003000;
-volatile u32 OS_PI_INTR_MASK : 0xCC003004;
+volatile u32 OS_PI_INTR_CAUSE AT_ADDRESS(0xCC003000);
+volatile u32 OS_PI_INTR_MASK AT_ADDRESS(0xCC003004);
 
-volatile u16 OS_MI_INTR_MASK : 0xCC00401C;
+volatile u16 OS_MI_INTR_MASK AT_ADDRESS(0xCC00401C);
 
-volatile u16 OS_DSP_DMA_ADDR_HI : 0xCC005030;
-volatile u16 OS_DSP_DMA_ADDR_LO : 0xCC005032;
-volatile u16 OS_DSP_INTR_MASK : 0xCC00500A;
+volatile u16 OS_DSP_DMA_ADDR_HI AT_ADDRESS(0xCC005030);
+volatile u16 OS_DSP_DMA_ADDR_LO AT_ADDRESS(0xCC005032);
+volatile u16 OS_DSP_INTR_MASK AT_ADDRESS(0xCC00500A);
 
-volatile u16 OS_ARAM_DMA_ADDR_HI : 0xCC005020;
-volatile u16 OS_ARAM_DMA_ADDR_LO : 0xCC005022;
+volatile u16 OS_ARAM_DMA_ADDR_HI AT_ADDRESS(0xCC005020);
+volatile u16 OS_ARAM_DMA_ADDR_LO AT_ADDRESS(0xCC005022);
 
 BOOL OSIsThreadSuspended(OSThread* thread);
 
@@ -89,8 +90,8 @@ extern u8 __OSReport_enable;
 
 extern BOOL __OSIsGcam;
 
-extern u32 BOOT_REGION_START : 0x812FDFF0;
-extern u32 BOOT_REGION_END : 0x812FDFEC;
+extern u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0);
+extern u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);
 
 void OSReportInit__Fv(void);  // needed for inline asm
 

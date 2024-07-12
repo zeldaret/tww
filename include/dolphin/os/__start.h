@@ -2,6 +2,7 @@
 #define __START_H
 
 #include "global.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,7 +22,7 @@ extern "C" {
 
 extern void InitMetroTRK();
 
-u16 Pad3Button : PAD3_BUTTON_ADDR;
+u16 Pad3Button AT_ADDRESS(PAD3_BUTTON_ADDR);
 
 extern int main(int argc, char* argv[]);
 extern void exit(int);

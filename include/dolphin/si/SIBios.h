@@ -3,6 +3,7 @@
 
 #include "dolphin/os/OSInterrupt.h"
 #include "dolphin/os/OSTime.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -121,7 +122,7 @@ u32 SIGetType(s32 chan);
 u32 SIGetTypeAsync(s32 chan, SITypeAndStatusCallback callback);
 u32 SIProbe(s32 chan);
 
-vu32 __SIRegs[64] : 0xCC006400;
+vu32 __SIRegs[64] AT_ADDRESS(0xCC006400);
 
 #ifdef __cplusplus
 }
