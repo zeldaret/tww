@@ -146,7 +146,7 @@ daTitle_proc_c::daTitle_proc_c() {
     m02C = 0;
     m018 = 0;
     m090 = 0;
-    m008 = 0;
+    mpEmitter2 = NULL;
     mpEmitter = NULL;
 }
 
@@ -196,7 +196,153 @@ void daTitle_proc_c::set_mtx() {
 
 /* 00000F20-0000172C       .text calc_2d_alpha__14daTitle_proc_cFv */
 void daTitle_proc_c::calc_2d_alpha() {
-    /* Nonmatching */
+    cXyz pos;
+    m018 += 1;
+    if (m018 >= 200 && getEnterMode() == 0) {
+        mEnterMode = 1;
+    }
+
+    if (getEnterMode() == 0) {
+        if (m098 < 0) {
+            m098 += 1;
+        }
+
+        if (mpEmitter == NULL) {
+            pos.set(
+                ((this->pane[4].mPosTopLeftOrig.x - 320.0f) - this->m094) + attr().field_0x30,
+                (this->pane[4].mPosTopLeftOrig.y - 240.0f) + attr().field_0x34,
+                0.0f
+            );
+
+            mpEmitter = dComIfGp_particle_set2Dback(0x83F9, &pos);
+        } else {
+            pos.set(
+                ((this->pane[4].mPosTopLeftOrig.x - 320.0f) - this->m094) + attr().field_0x30,
+                (this->pane[4].mPosTopLeftOrig.y - 240.0f) + attr().field_0x34,
+                0.0f
+            );
+
+            mpEmitter->setGlobalTranslation(pos);
+        }
+
+        // Interpolation?
+        if (m018 <= 30) {
+            fopMsgM_setNowAlpha(&pane[0], 0.0f);
+        } else if (m018 <= 80) {
+            fopMsgM_setNowAlpha(&pane[0], (f32)(m018 - 30) / 50.0f);
+        } else {
+            fopMsgM_setNowAlpha(&pane[0], 1.0f);
+        }
+        fopMsgM_setNowAlpha(&pane[1], 0.0f);
+
+        if (m018 == 80) {
+            if (daTitle_Kirakira_Sound_flag == true) {
+                mDoAud_seStart(JA_SE_TITLE_KIRA);
+                daTitle_Kirakira_Sound_flag = false;
+            }
+
+            m00C.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
+
+            mpEmitter2 = dComIfGp_particle_set2Dfore(0x83FB, &m00C);
+        } else if (m018 > 80 && m018 <= 115 && mpEmitter2 != NULL) {
+            m00C.x += (pane[5].mPosTopLeftOrig.x - pane[4].mPosTopLeftOrig.x) / 35.0f;
+
+            mpEmitter2->setGlobalTranslation(m00C.x, m00C.y, m00C.z);
+        }
+
+        if (m018 >= 80) {
+            mBtkSub.play();
+        }
+
+        // Interpolation?
+        if (m018 <= 150) {
+            fopMsgM_setNowAlpha(&pane[3], 0.0f);
+        } else if (m018 <= 170) {
+            fopMsgM_setNowAlpha(&pane[3], (m018 - 150) / 20.0f);
+        } else {
+            fopMsgM_setNowAlpha(&pane[3], 1.0f);
+        }
+
+        if (m018 <= 160) {
+            fopMsgM_setNowAlpha(&pane[2], 0.0f);
+        } else if (m018 <= 180) {
+            fopMsgM_setNowAlpha(&pane[2], (m018 - 160) / 20.0f);
+        } else {
+            fopMsgM_setNowAlpha(&pane[2], 1.0f);
+        }
+    } else {
+        if (mpEmitter == NULL) {
+            pos.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
+            mpEmitter = dComIfGp_particle_set2Dback(0x83F9, &pos);
+        } else {
+            pos.set(
+                ((pane[4].mPosTopLeftOrig.x - 320.0f) - m094) + attr().field_0x30,
+                (pane[4].mPosTopLeftOrig.y - 240.0f) + attr().field_0x34,
+                0.0f
+            );
+
+            mpEmitter->setGlobalTranslation(pos.x, pos.y, 0.0f);
+        }
+
+        fopMsgM_setNowAlpha(&pane[0], 1.0f);
+        fopMsgM_setNowAlpha(&pane[1], 0.0f);
+
+        if (mpEmitter2 != NULL) {
+            mpEmitter2->becomeInvalidEmitter();
+            mpEmitter2 = NULL;
+        }
+
+        mBtkSub.setFrame(mBtkSub.getEndFrame());
+        fopMsgM_setNowAlpha(&pane[3], 1.0f);
+        if (m028 >= 100) {
+            m028 = 0;
+        } else {
+            m028 += 1;
+        }
+
+        if (m028 >= 50) {
+            fopMsgM_setNowAlpha(&pane[2], (m028 - 50) / 50.0f);
+        } else {
+            fopMsgM_setNowAlpha(&pane[2], (50 - m028) / 50.0f);
+        }
+    }
+
+    if (m020 == 0) {
+        m020 = (int)(cM_rndF(attr().field_0x28) + attr().field_0x2C);
+        pos.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
+
+        csXyz angle;
+        angle.x = (s16)cM_rndFX(32768.0f);
+        angle.y = 0;
+        angle.z = (s16)cM_rndFX(4000.0f);
+
+        dComIfGp_particle_set2Dback(0x83FA, &pos, &angle);
+    } else {
+        m020 -= 1;
+    }
+
+    if (m024 == 0) {
+        m02C += 1;
+
+        if (m02C <= 20) {
+            mBtkKirari.setFrame((f32)m02C);
+        } else {
+            m02C = 0;
+            mBtkKirari.setFrame(0.0f);
+            m024 = cM_rndF(attr().field_0x20) + attr().field_0x24;
+        }
+    } else {
+        m024 -= 1;
+    }
+
+    if (m098 <= 0) {
+        m094 = (m098 * m098) * -attr().field_0x0C;
+        mBpkShip.setFrame(100.0f + (f32)(m098 * 2));
+    } else {
+        m094 = (m098 * m098) * attr().field_0x0C;
+        mBpkShip.setFrame(100.0f - (f32)(m098 * 2));
+    }
+
 }
 
 /* 0000172C-00001880       .text proc_execute__14daTitle_proc_cFv */

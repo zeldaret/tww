@@ -25,13 +25,13 @@ public:
     static bool daTitle_Kirakira_Sound_flag;
 public:
     /* 0x004 */ JPABaseEmitter* mpEmitter;
-    /* 0x008 */ s32 m008;
-    /* 0x00C */ u8 m00C[0x018 - 0x00C];
+    /* 0x008 */ JPABaseEmitter* mpEmitter2;
+    /* 0x00C */ cXyz m00C;
     /* 0x018 */ int m018;
     /* 0x01C */ int m01C;
     /* 0x020 */ int m020;
     /* 0x024 */ int m024;
-    /* 0x028 */ u8 m028[0x02C - 0x028];
+    /* 0x028 */ int m028;
     /* 0x02C */ int m02C;
     /* 0x030 */ s32 mEnterMode;
     /* 0x034 */ u8 m034[0x038 - 0x034];
