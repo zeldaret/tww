@@ -67,4 +67,6 @@ public:
     /* 0xE3B */ u8 mbOpen;
 };
 
+extern dMn_HIO_c g_mnHIO;
+
 #endif /* D_METRONOME_H */

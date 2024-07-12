@@ -7,6 +7,7 @@
 bool mDoMch_Create();
 void mDoMch_HeapCheckAll();
 
+extern GXRenderModeObj g_ntscZeldaIntDf;
 extern GXRenderModeObj g_ntscZeldaProg;
 
 class mDoMch_render_c {

@@ -175,4 +175,6 @@ public:
     /* 0x1BBC */ int field_0x1bbc;
 };
 
+extern dSn_HIO_c g_snHIO;
+
 #endif /* D_S_NAME */

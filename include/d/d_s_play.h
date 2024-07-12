@@ -117,8 +117,6 @@ public:
     /* 0x10 */ u32 field_0x10;
 };
 
-extern dScnPly_msg_HIO_c g_msgDHIO;
-
 class dScnPly_preLoad_HIO_c : public mDoHIO_entry_c {
 public:
     virtual ~dScnPly_preLoad_HIO_c() {}
@@ -141,8 +139,10 @@ public:
     /* 0x8 */ dScnPly_reg_childHIO_c mChild[22];
 };
 
+extern dScnPly_dark_HIO_c g_darkHIO;
 extern dScnPly_reg_HIO_c g_regHIO;
 extern dScnPly_env_HIO_c g_envHIO;
+extern dScnPly_msg_HIO_c g_msgDHIO;
 
 // Based on Twilight Princess debug, each g_envHIO child here was likely named after a specific developer.
 // However, the developer name for each child isn't known here, so the below macro names are all unofficial.

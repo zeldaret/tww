@@ -91,4 +91,6 @@ public:
     static u8 mCurrentHeap;
 };
 
+extern mDoGph_gInf_c g_mDoGph_graphicInfo;
+
 #endif /* M_DO_M_DO_GRAPHIC_H */
