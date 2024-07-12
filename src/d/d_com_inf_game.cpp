@@ -132,7 +132,7 @@ void dComIfG_play_c::itemInit() {
 
     field_0x4944 = 7;
     mScopeType = 0;
-    field_0x4946 = 0;
+    mOperateWind = 0;
     field_0x4947 = 0;
     mMesgSendButton = 0;
     mMesgCancelButton = 0;
