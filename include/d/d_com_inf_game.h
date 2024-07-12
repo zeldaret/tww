@@ -378,6 +378,11 @@ public:
     u8 getScopeType() { return mScopeType; }
     void setScopeType(u8 type) { mScopeType = type; }
 
+    u8 getOperateWind() { return mOperateWind; }
+    void setOperateWindCancelOff() { mOperateWind = 0; }
+    void setOperateWindChangeOff() { mOperateWind = 1; }
+    void setOperateWindOn() { mOperateWind = 2; }
+
     u8 checkMesgSendButton() { return mMesgSendButton; }
     u8 checkMesgCancelButton() { return mMesgCancelButton; }
 
@@ -664,7 +669,7 @@ public:
     /* 0x4943 */ u8 field_0x4943;
     /* 0x4944 */ u8 field_0x4944;
     /* 0x4945 */ u8 mScopeType;
-    /* 0x4946 */ u8 field_0x4946;
+    /* 0x4946 */ u8 mOperateWind;
     /* 0x4947 */ u8 field_0x4947;
     /* 0x4948 */ u8 mMesgSendButton;
     /* 0x4949 */ u8 mMesgCancelButton;
@@ -2335,6 +2340,22 @@ inline u8 dComIfGp_getScopeType() {
 
 inline void dComIfGp_setScopeType(u8 type) {
     g_dComIfG_gameInfo.play.setScopeType(type);
+}
+
+inline u8 dComIfGp_getOperateWind() {
+    return g_dComIfG_gameInfo.play.getOperateWind();
+}
+
+inline void dComIfGp_setOperateWindCancelOff() {
+    g_dComIfG_gameInfo.play.setOperateWindCancelOff();
+}
+
+inline void dComIfGp_setOperateWindChangeOff() {
+    g_dComIfG_gameInfo.play.setOperateWindChangeOff();
+}
+
+inline void dComIfGp_setOperateWindOn() {
+    g_dComIfG_gameInfo.play.setOperateWindOn();
 }
 
 inline u8 dComIfGp_checkMesgSendButton() {
