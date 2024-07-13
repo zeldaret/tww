@@ -67,7 +67,6 @@ void ReadApploader(DVDCommandBlock* dvdCmd, void* addr, u32 offset, u32 numBytes
 static void Callback(s32 result, struct DVDCommandBlock* block) { Prepared = TRUE; }
 
 void __OSReboot(u32 resetCode, u32 bootDol) {
-    /* Nonmatching */
     OSContext exceptionContext;
     DVDCommandBlock dvdCmd;
     DVDCommandBlock dvdCmd2;
@@ -76,9 +75,8 @@ void __OSReboot(u32 resetCode, u32 bootDol) {
 
     OSDisableInterrupts();
 
-    UNK_817FFFFC = 1;
-    UNK_817FFFF8 = 1;
-    OS_RESET_CODE = resetCode;
+    UNK_817FFFFC = 0;
+    UNK_817FFFF8 = 0;
     OS_REBOOT_BOOL = TRUE;
     BOOT_REGION_START = (u32)SaveStart;
     BOOT_REGION_END = (u32)SaveEnd;
