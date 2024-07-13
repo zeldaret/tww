@@ -9,10 +9,9 @@ class JKRHeap;
 class JUTXfb {
 public:
     enum EXfbNumber {  // TODO: placeholder
-        UNK_0 = 0,
-        UNK_1 = 1,
-        UNK_2 = 2,
-        UNK_3 = 3,
+        Single = 1,
+        Double = 2,
+        Triple = 3,
     };
 
     void clearIndex();

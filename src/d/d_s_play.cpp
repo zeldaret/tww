@@ -316,17 +316,17 @@ static int dScnPly_Draw(dScnPly_ply_c* i_this) {
                 fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, l_wipeType[dComIfGp_getNextStageWipe()], 5);
 
                 int hour = dKy_getdaytime_hour();
-                BOOL useWhiteColor = FALSE;
+                BOOL isNight = FALSE;
 
                 if (dKy_checkEventNightStop()) {
-                    useWhiteColor = TRUE;
+                    isNight = TRUE;
                 } else {
-                    useWhiteColor = (hour >= 6 && hour < 18) ? FALSE : TRUE;
+                    isNight = (hour >= 6 && hour < 18) ? FALSE : TRUE;
                 }
 
                 if (dComIfGp_getNextStageWipe() == 1 || dComIfGp_getNextStageWipe() == 2 || dComIfGp_getNextStageWipe() == 7 ||
-                    ((dComIfGp_getNextStageWipe() == 8 || dComIfGp_getNextStageWipe() == 10) && useWhiteColor) ||
-                    ((dComIfGp_getNextStageWipe() == 9 || dComIfGp_getNextStageWipe() == 11) && !useWhiteColor))
+                    ((dComIfGp_getNextStageWipe() == 8 || dComIfGp_getNextStageWipe() == 10) && isNight) ||
+                    ((dComIfGp_getNextStageWipe() == 9 || dComIfGp_getNextStageWipe() == 11) && !isNight))
                 {
                     mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_saftyWhiteColor); // Fakematch?
                 } else {

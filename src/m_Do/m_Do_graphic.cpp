@@ -71,8 +71,8 @@ GXColor mDoGph_gInf_c::mFadeColor = {};
 
 /* 80007BBC-80007DDC       .text create__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::create() {
-    JFWDisplay::createManager(JKRHeap::getCurrentHeap(), JUTXfb::UNK_2, true);
-    JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::UNK_METHOD_1);
+    JFWDisplay::createManager(JKRHeap::getCurrentHeap(), JUTXfb::Double, true);
+    JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::Async);
     JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fb_width, JUTVideo::getManager()->getRenderMode()->efb_height, JUtility::TColor(0, 0, 0, 0));
     JUT_ASSERT(0x1a0, faderPtr != NULL);
     setFader(faderPtr);
@@ -82,19 +82,19 @@ void mDoGph_gInf_c::create() {
     JUTDbPrint::getManager()->setVisible(false);
     createHeap();
 
-    u32 framebufferSize = GXGetTexBufferSize(0x140, 0xf0, GX_TF_RGBA8, GX_FALSE, GX_FALSE) + 0x20;
+    u32 framebufferSize = GXGetTexBufferSize(320, 240, GX_TF_RGBA8, GX_FALSE, GX_FALSE) + 0x20;
     mFrameBufferTimg = (ResTIMG*) JKRAllocFromHeap(NULL, framebufferSize, 0x20);
     mFrameBufferTex = (void*)(&mFrameBufferTimg[1]);
     cLib_memSet(mFrameBufferTimg, 0, framebufferSize);
     mFrameBufferTimg->format = GX_TF_RGBA8;
     mFrameBufferTimg->alphaEnabled = false;
-    mFrameBufferTimg->width = 0x140;
-    mFrameBufferTimg->height = 0xf0;
+    mFrameBufferTimg->width = 320;
+    mFrameBufferTimg->height = 240;
     mFrameBufferTimg->minFilter = GX_LINEAR;
     mFrameBufferTimg->magFilter = GX_LINEAR;
     mFrameBufferTimg->imageOffset = sizeof(ResTIMG);
 
-    u32 zbufferSize = GXGetTexBufferSize(0x140, 0xf0, GX_TF_IA8, GX_FALSE, GX_FALSE);
+    u32 zbufferSize = GXGetTexBufferSize(320, 240, GX_TF_IA8, GX_FALSE, GX_FALSE);
     mZbufferTex = JKRAllocFromHeap(NULL, zbufferSize, 0x20);
     cLib_memSet(mZbufferTex, 0, zbufferSize);
 

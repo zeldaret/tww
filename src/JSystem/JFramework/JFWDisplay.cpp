@@ -54,7 +54,7 @@ void JFWDisplay::ctor_subroutine(const _GXRenderModeObj* mode, bool enableAlpha)
     field_0x38 = 0;
     field_0x3C = 0;
     field_0x3E = 0;
-    mDrawDoneMethod = UNK_METHOD_0;
+    mDrawDoneMethod = Sync;
     clearEfb_init();
     JUTProcBar::create();
     JUTProcBar::clear();
@@ -141,15 +141,14 @@ void JFWDisplay::exchangeXfb_double() {
         if(0 <= xfbMng->getDrawingXfbIndex()) {
             prepareCopyDisp();
             GXCopyDisp(xfbMng->getDrawingXfb(), (GXBool)1);
-            if(mDrawDoneMethod == 0) {
+            if (mDrawDoneMethod == Sync) {
                 GXDrawDone();
                 JUTVideo::dummyNoDrawWait();
-            }
-            else {
+            } else {
                 JUTVideo::drawDoneStart();
             }
 
-            if(mDrawDoneMethod == 0) {
+            if (mDrawDoneMethod == Sync) {
                 callDirectDraw();
             }
         }
@@ -237,7 +236,7 @@ void JFWDisplay::endGX() {
     ortho.setPort();
     JUTProcBar::getManager()->draw();
 
-    if (mDrawDoneMethod != UNK_METHOD_0 || JUTXfb::getManager()->getBufferNum() == 1) {
+    if (mDrawDoneMethod != Sync || JUTXfb::getManager()->getBufferNum() == 1) {
         JUTAssertion::flushMessage_dbPrint();
     }
     GXFlush();

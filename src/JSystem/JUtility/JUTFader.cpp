@@ -10,41 +10,35 @@
 /* 802C8544-802C85F0       .text __ct__8JUTFaderFiiiiQ28JUtility6TColor */
 JUTFader::JUTFader(int x, int y, int width, int height, JUtility::TColor pColor) : mColor(pColor), mBox(x, y, x + width, y + height) {
     mStatus = 0;
-    field_0x8 = 0;
-    field_0xa = 0;
-    field_0x24 = 0;
-    mEStatus = UNKSTATUS_M1;
+    mFadeTime = 0;
+    mTimer = 0;
+    mDelayStatus = 0;
+    mDelayTimer = -1;
 }
 
 /* 802C85F0-802C86F0       .text control__8JUTFaderFv */
 void JUTFader::control() {
-    if (0 <= mEStatus && mEStatus-- == 0) {
-        mStatus = field_0x24;
+    if (0 <= mDelayTimer && mDelayTimer-- == 0) {
+        mStatus = mDelayStatus;
     }
 
-    if (mStatus == 1) {
+    if (mStatus == WaitIn) {
         return;
     }
 
     switch (mStatus) {
-    case 0:
+    case WaitOut:
         mColor.a = 0xFF;
         break;
-    case 2:
-        mColor.a = 0xFF - ((++field_0xa * 0xFF) / field_0x8);
-
-        if (field_0xa >= field_0x8) {
-            mStatus = 1;
-        }
-
+    case FadeIn:
+        mColor.a = 0xFF - ((++mTimer * 0xFF) / mFadeTime);
+        if (mTimer >= mFadeTime)
+            mStatus = WaitIn;
         break;
-    case 3:
-        mColor.a = ((++field_0xa * 0xFF) / field_0x8);
-
-        if (field_0xa >= field_0x8) {
-            mStatus = 0;
-        }
-
+    case FadeOut:
+        mColor.a = ((++mTimer * 0xFF) / mFadeTime);
+        if (mTimer >= mFadeTime)
+            mStatus = WaitOut;
         break;
     }
     draw();
@@ -56,32 +50,32 @@ void JUTFader::draw() {
         return;
     }
 
-    J2DOrthoGraph orthograph;
-    orthograph.setColor(mColor);
-    orthograph.fillBox(mBox);
+    J2DOrthoGraph graf;
+    graf.setColor(mColor);
+    graf.fillBox(mBox);
 }
 
 /* 802C8780-802C87B0       .text startFadeIn__8JUTFaderFi */
-bool JUTFader::startFadeIn(int param_0) {
-    bool statusCheck = mStatus == 0;
+bool JUTFader::startFadeIn(int fadeTime) {
+    bool statusCheck = mStatus == WaitOut;
 
     if (statusCheck) {
-        mStatus = 2;
-        field_0xa = 0;
-        field_0x8 = param_0;
+        mStatus = FadeIn;
+        mTimer = 0;
+        mFadeTime = fadeTime;
     }
 
     return statusCheck;
 }
 
 /* 802C87B0-802C87E4       .text startFadeOut__8JUTFaderFi */
-bool JUTFader::startFadeOut(int param_0) {
-    bool statusCheck = mStatus == 1;
+bool JUTFader::startFadeOut(int fadeTime) {
+    bool statusCheck = mStatus == WaitIn;
 
     if (statusCheck) {
-        mStatus = 3;
-        field_0xa = 0;
-        field_0x8 = param_0;
+        mStatus = FadeOut;
+        mTimer = 0;
+        mFadeTime = fadeTime;
     }
 
     return statusCheck;

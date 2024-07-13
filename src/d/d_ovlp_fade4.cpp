@@ -13,62 +13,62 @@
 /* 80224390-80224484       .text init__15dDlst_2DtEff1_cF8_GXColor */
 void dDlst_2DtEff1_c::init(GXColor color) {
     /* Nonmatching */
-    field_0xc.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
-    field_0x18.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
-    field_0x64.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
-    field_0x70.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
-    field_0xbc.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
-    field_0xc8.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, color);
+    snap_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    redraw_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
+    save_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    blur0_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
+    blur0Snap_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    composite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, color);
 }
 
 /* 80224484-802246CC       .text draw__15dDlst_2DtEff1_cFv */
 void dDlst_2DtEff1_c::draw() {
-    field_0x114 = 320 + (s16)(field_0x4 * 8.0f) * -16;
-    field_0x116 = 240 + (s16)(field_0x4 * 8.0f) * -12;
-    if (field_0x8) {
-        field_0xc.draw();
-        field_0x18.draw();
-        field_0x64.draw();
-        field_0x70.draw();
-        field_0xbc.draw();
-        field_0xc8.draw();
-        field_0x8 = false;
+    curWidth = 320 + (s16)(timer * 8.0f) * -16;
+    curHeight = 240 + (s16)(timer * 8.0f) * -12;
+    if (first) {
+        snap_dlst.draw();
+        redraw_dlst.draw();
+        save_dlst.draw();
+        blur0_dlst.draw();
+        blur0Snap_dlst.draw();
+        composite_dlst.draw();
+        first = false;
     } else {
         if (dComIfGp_getWindowNum() == 0) {
             s32 w = 320;
             s32 h = 240;
 
-            field_0x70.setImagePtr(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()));
-            field_0xc8.setImagePtr(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()));
+            blur0_dlst.setImagePtr(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()));
+            composite_dlst.setImagePtr(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()));
 
             while (true) {
                 s32 dstW = w - 16;
                 s32 dstH = h - 12;
 
-                if (dstW < field_0x114 || dstH < field_0x116)
+                if (dstW < curWidth || dstH < curHeight)
                     break;
 
-                field_0x70.setImageWidth(w / 2);
-                field_0x70.setImageHeight(h / 2);
-                field_0x70.setWidth(dstW);
-                field_0x70.setHeight(dstH);
-                field_0x70.draw();
+                blur0_dlst.setImageWidth(w / 2);
+                blur0_dlst.setImageHeight(h / 2);
+                blur0_dlst.setWidth(dstW);
+                blur0_dlst.setHeight(dstH);
+                blur0_dlst.draw();
 
-                field_0xbc.setWd(dstW);
-                field_0xbc.setHt(dstH);
-                field_0xbc.draw();
+                blur0Snap_dlst.setWd(dstW);
+                blur0Snap_dlst.setHt(dstH);
+                blur0Snap_dlst.draw();
 
                 w = dstW;
                 h = dstH;
 
-                field_0x70.setImagePtr(mDoGph_gInf_c::getFrameBufferTex());
-                field_0xc8.setImagePtr(mDoGph_gInf_c::getFrameBufferTex());
+                blur0_dlst.setImagePtr(mDoGph_gInf_c::getFrameBufferTex());
+                composite_dlst.setImagePtr(mDoGph_gInf_c::getFrameBufferTex());
             }
 
-            field_0xc8.setImageWidth(w / 2);
-            field_0xc8.setImageHeight(h / 2);
-            field_0xc8.setPos(0.0f, 0.0f);
-            field_0xc8.draw();
+            composite_dlst.setImageWidth(w / 2);
+            composite_dlst.setImageHeight(h / 2);
+            composite_dlst.setPos(0.0f, 0.0f);
+            composite_dlst.draw();
         }
     }
 }
@@ -170,11 +170,10 @@ void dDlst_2Dt_Sp_c::draw() {
 
 /* 80224CC4-80224DBC       .text init__14dDlst_2Dt_Sp_cFP7ResTIMGffff8_GXColor */
 void dDlst_2Dt_Sp_c::init(ResTIMG* timg, f32 x, f32 y, f32 w, f32 h, GXColor color) {
-    /* Nonmatching */
     setImageWidth(timg->width);
     setImageHeight(timg->height);
     mTimg = timg;
-    setImagePtr((u8*)timg + timg->imageOffset);
+    setImagePtr((u8*)mTimg + mTimg->imageOffset);
     dDlst_setResTimgObj(mTimg, &mTexObj, mImagePtr, mImageWidth, mImageHeight);
     setPos(x, y);
     setWidth(w);
@@ -185,100 +184,102 @@ void dDlst_2Dt_Sp_c::init(ResTIMG* timg, f32 x, f32 y, f32 w, f32 h, GXColor col
 
 /* 80224DBC-80224F98       .text __ct__10dOvlpFd4_cFv */
 dOvlpFd4_c::dOvlpFd4_c() {
-    field_0x2ac = 1;
+    first = true;
     setExecute(&dOvlpFd4_c::execFirstSnap);
     setDraw(&dOvlpFd4_c::drawFadeOut);
     if (base.mProcName == PROC_OVERLAP4) {
-        field_0xfc.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
+        fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
     } else {
-        field_0xfc.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0x00, 0x00, 0x00, 0x00 });
+        fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0x00, 0x00, 0x00, 0x00 });
     }
-    field_0x148.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
-    field_0xe4.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
-    field_0xf0.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
-    tEff1_dlst.init(g_saftyWhiteColor);
+    fadeOutBlur1_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
+    fadeOutBlur0_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    fadeOutSnap_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    fadeIn_dlst.init(g_saftyWhiteColor);
     dComIfGp_2dShowOff();
-    field_0x2b0 = 2;
-    field_0x2ae = 39;
-    field_0x2b4 = 0.0f;
-    field_0x2ad = 0;
+    timer = 2;
+    totalTime = 39;
+    delayPercent = 0.0f;
+    fadeOutStatus = 0;
 }
 
 /* 80224F98-80225060       .text drawFadeOut__10dOvlpFd4_cFv */
 void dOvlpFd4_c::drawFadeOut() {
-    if (field_0x2ac) {
-        dComIfGd_set2DXlu(&field_0xf0);
-        field_0x2ac = 0;
-    } else if (field_0x2ad == 1) {
-        dComIfGd_set2DXlu(&field_0x148);
-        dComIfGd_set2DXlu(&field_0xe4);
+    if (first) {
+        dComIfGd_set2DXlu(&fadeOutSnap_dlst);
+        first = false;
+    } else if (fadeOutStatus == 1) {
+        dComIfGd_set2DXlu(&fadeOutBlur1_dlst);
+        dComIfGd_set2DXlu(&fadeOutBlur0_dlst);
     }
-    dComIfGd_set2DXlu(&field_0xfc);
+    dComIfGd_set2DXlu(&fadeOutComposite_dlst);
 }
 
 /* 80225060-8022509C       .text drawFadeIn__10dOvlpFd4_cFv */
 void dOvlpFd4_c::drawFadeIn() {
-    dComIfGd_set2DXlu(&tEff1_dlst);
+    dComIfGd_set2DXlu(&fadeIn_dlst);
 }
 
 /* 8022509C-802251FC       .text execFirstSnap__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execFirstSnap() {
-    /* Nonmatching */
-    if (!field_0x2ac && cLib_calcTimer(&field_0x2b0) == 0) {
+    if (!first && cLib_calcTimer(&timer) == 0) {
         setExecute(&dOvlpFd4_c::execFadeOut);
         fopOvlpM_Done(this);
         dComIfGp_setWindowNum(0);
-        field_0x2ad = true;
-        if (field_0x2ae > 79) {
-            field_0x2bc = (f32)(field_0x2ae - 79) / 79.0f;
-            field_0x2c0 = 8;
+        fadeOutStatus = 1;
+
+        if (totalTime > 79) {
+            // this path is never used
+            field_0x2bc = (f32)(totalTime - 79) / 79.0f;
+            sizeStep = 8;
         } else {
+            f32 x = (624.0f / totalTime);
             field_0x2bc = 0.0f;
-            field_0x2c0 = (s32)((624.0f / field_0x2ae) * 0.0625f) * 16;
+            sizeStep = (s32)(x / 16) * 16;
         }
 
-        field_0x2b0 = field_0x2ae;
-        field_0x2c1 = field_0x2ae - (field_0x2ae * field_0x2b4);
+        timer = totalTime;
+        startTime = totalTime - (s32)(totalTime * delayPercent);
     }
 }
 
 /* 802251FC-802253C4       .text execFadeOut__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execFadeOut() {
     dComIfGp_setWindowNum(0);
-    if (cLib_calcTimer(&field_0x2b0) == 0 && (field_0xe4.mWidth <= field_0x2c0 || field_0xe4.mHeight <= field_0x2c0) && fopOvlpM_IsOutReq(this)) {
+    if (cLib_calcTimer(&timer) == 0 && (fadeOutBlur0_dlst.mWidth <= sizeStep || fadeOutBlur0_dlst.mHeight <= sizeStep) && fopOvlpM_IsOutReq(this)) {
         fopOvlpM_SceneIsStart();
         setExecute(&dOvlpFd4_c::execNextSnap);
-        field_0x2ad = 0;
-        field_0x2b0 = 200;
+        fadeOutStatus = 0;
+        timer = 200;
         dComIfGp_2dShowOff();
     } else {
-        u16 wd = field_0xe4.getWd();
-        u16 ht = field_0xe4.getHt();
-        field_0x148.setImageWidth(wd / 2);
-        field_0x148.setImageHeight(ht / 2);
+        u16 wd = fadeOutBlur0_dlst.getWd();
+        u16 ht = fadeOutBlur0_dlst.getHt();
+        fadeOutBlur1_dlst.setImageWidth(wd / 2);
+        fadeOutBlur1_dlst.setImageHeight(ht / 2);
 
-        if (wd > field_0x2c0 && ht > field_0x2c0) {
-            wd -= field_0x2c0;
-            ht -= field_0x2c0;
+        if (wd > sizeStep && ht > sizeStep) {
+            wd -= sizeStep;
+            ht -= sizeStep;
         }
 
         f32 percent;
-        if (field_0x2b0 > field_0x2c1) {
+        if (timer > startTime) {
             percent = 0.0f;
-        } else if (wd > field_0x2c0 || ht > field_0x2c0) {
-            percent = 1.0f - ((f32)field_0x2b0 / field_0x2c1);
+        } else if (wd > sizeStep || ht > sizeStep) {
+            percent = 1.0f - ((f32)timer / startTime);
             percent *= percent;
         } else {
             percent = 1.0f;
         }
 
-        field_0xfc.setPer(percent);
-        field_0x148.setWidth(wd);
-        field_0x148.setHeight(ht);
-        field_0xe4.setWd(wd);
-        field_0xe4.setHt(ht);
-        field_0xfc.setImageWidth(wd / 2);
-        field_0xfc.setImageHeight(ht / 2);
+        fadeOutComposite_dlst.setPer(percent);
+        fadeOutBlur1_dlst.setWidth(wd);
+        fadeOutBlur1_dlst.setHeight(ht);
+        fadeOutBlur0_dlst.setWd(wd);
+        fadeOutBlur0_dlst.setHt(ht);
+        fadeOutComposite_dlst.setImageWidth(wd / 2);
+        fadeOutComposite_dlst.setImageHeight(ht / 2);
     }
 }
 
@@ -286,37 +287,39 @@ void dOvlpFd4_c::execFadeOut() {
 void dOvlpFd4_c::execNextSnap() {
     setExecute(execFadeIn);
     setDraw(drawFadeIn);
-    tEff1_dlst.field_0x8 = true;
+    fadeIn_dlst.first = true;
     dComIfGp_setWindowNum(1);
 
-    tEff1_dlst.field_0xc.setWd(640);
-    tEff1_dlst.field_0xc.setHt(480);
-    tEff1_dlst.field_0x18.setImageWidth(320);
-    tEff1_dlst.field_0x18.setImageHeight(240);
-    tEff1_dlst.field_0x18.setWidth(320);
-    tEff1_dlst.field_0x18.setHeight(240);
+    fadeIn_dlst.snap_dlst.setWd(640);
+    fadeIn_dlst.snap_dlst.setHt(480);
+    fadeIn_dlst.redraw_dlst.setImageWidth(320);
+    fadeIn_dlst.redraw_dlst.setImageHeight(240);
+    fadeIn_dlst.redraw_dlst.setWidth(320);
+    fadeIn_dlst.redraw_dlst.setHeight(240);
 
-    tEff1_dlst.field_0x64.init(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()), 320, 240);
-    tEff1_dlst.field_0x70.setImagePtr(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()));
-    tEff1_dlst.field_0x70.setImageWidth(160);
-    tEff1_dlst.field_0x70.setImageHeight(120);
-    tEff1_dlst.field_0x70.setWidth(16.0f);
-    tEff1_dlst.field_0x70.setHeight(16.0f);
-    tEff1_dlst.field_0xbc.setWd(16);
-    tEff1_dlst.field_0xbc.setHt(16);
-    tEff1_dlst.field_0xc8.setPer(1.0f);
-    tEff1_dlst.field_0xc8.setImageWidth(8);
-    tEff1_dlst.field_0xc8.setImageHeight(8);
-    tEff1_dlst.field_0xc8.setWidth(640.0f);
-    tEff1_dlst.field_0xc8.setHeight(480.0f);
-    field_0x2b0 = field_0x2ae;
-    tEff1_dlst.field_0x4 = 1.0f;
-    field_0x2c8 = -1.0f / field_0x2b0;
+    // saves blurred frame to getZbufferTexObj after the game is finished rendering...
+    fadeIn_dlst.save_dlst.init(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()), 320, 240);
+
+    fadeIn_dlst.blur0_dlst.setImagePtr(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()));
+    fadeIn_dlst.blur0_dlst.setImageWidth(160);
+    fadeIn_dlst.blur0_dlst.setImageHeight(120);
+    fadeIn_dlst.blur0_dlst.setWidth(16.0f);
+    fadeIn_dlst.blur0_dlst.setHeight(16.0f);
+    fadeIn_dlst.blur0Snap_dlst.setWd(16);
+    fadeIn_dlst.blur0Snap_dlst.setHt(16);
+    fadeIn_dlst.composite_dlst.setPer(1.0f);
+    fadeIn_dlst.composite_dlst.setImageWidth(8);
+    fadeIn_dlst.composite_dlst.setImageHeight(8);
+    fadeIn_dlst.composite_dlst.setWidth(640.0f);
+    fadeIn_dlst.composite_dlst.setHeight(480.0f);
+    timer = totalTime;
+    fadeIn_dlst.timer = 1.0f;
+    timerStep = -1.0f / timer;
 }
 
 /* 80225528-802255F4       .text execFadeIn__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execFadeIn() {
-    if (cLib_calcTimer(&field_0x2b0) == 0 && tEff1_dlst.field_0x4 <= 0.0f) {
+    if (cLib_calcTimer(&timer) == 0 && fadeIn_dlst.timer <= 0.0f) {
         if (!field_0x2cc) {
             fopOvlpM_SceneIsStart();
             field_0x2cc = true;
@@ -328,15 +331,15 @@ void dOvlpFd4_c::execFadeIn() {
     } else {
         dComIfGp_setWindowNum(0);
         fopOvlpM_SceneIsStop();
-        tEff1_dlst.field_0xc8.setPer(tEff1_dlst.field_0x4 * tEff1_dlst.field_0x4);
-        tEff1_dlst.field_0x4 += field_0x2c8;
-        if (tEff1_dlst.field_0x4 < 0.0f)
-            tEff1_dlst.field_0x4 = 0.0f;
+        fadeIn_dlst.composite_dlst.setPer(fadeIn_dlst.timer * fadeIn_dlst.timer);
+        fadeIn_dlst.timer += timerStep;
+        if (fadeIn_dlst.timer < 0.0f)
+            fadeIn_dlst.timer = 0.0f;
     }
 }
 
 /* 802255F4-80225658       .text dOvlpFd4_Draw__FP10dOvlpFd4_c */
-static BOOL dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
+BOOL dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
     dOvlpFd4_c::DrawFunc func = i_this->mDrawFunc;
     if (func != NULL) {
         (i_this->*i_this->mDrawFunc)();
@@ -345,23 +348,23 @@ static BOOL dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
 }
 
 /* 80225658-80225684       .text dOvlpFd4_Execute__FP10dOvlpFd4_c */
-static BOOL dOvlpFd4_Execute(dOvlpFd4_c* i_this) {
+BOOL dOvlpFd4_Execute(dOvlpFd4_c* i_this) {
     (i_this->*i_this->mExecuteFunc)();
     return TRUE;
 }
 
 /* 80225684-8022568C       .text dOvlpFd4_IsDelete__FP10dOvlpFd4_c */
-static BOOL dOvlpFd4_IsDelete(dOvlpFd4_c*) {
+BOOL dOvlpFd4_IsDelete(dOvlpFd4_c*) {
     return TRUE;
 }
 
 /* 8022568C-80225694       .text dOvlpFd4_Delete__FP10dOvlpFd4_c */
-static BOOL dOvlpFd4_Delete(dOvlpFd4_c*) {
+BOOL dOvlpFd4_Delete(dOvlpFd4_c*) {
     return TRUE;
 }
 
 /* 80225694-802256C0       .text dOvlpFd4_Create__FPv */
-static s32 dOvlpFd4_Create(void* i_this) {
+s32 dOvlpFd4_Create(void* i_this) {
     new (i_this) dOvlpFd4_c();
     return cPhs_COMPLEATE_e;
 }
