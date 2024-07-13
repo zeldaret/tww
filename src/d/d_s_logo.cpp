@@ -482,7 +482,7 @@ static BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
 /* 8022D1DC-8022D21C       .text dScnLogo_Execute__FP10dScnLogo_c */
 static BOOL dScnLogo_Execute(dScnLogo_c* i_this) {
     if (mDoRst::isReset())
-        fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, 0, 5);
+        fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, PROC_OVERLAP0, 5);
     return TRUE;
 }
 

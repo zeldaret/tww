@@ -9,9 +9,9 @@
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_draw_tag.h"
 #include "f_pc/f_pc_manager.h"
-#include "SSystem/SComponent/c_counter.h"
+#include "d/d_procname.h"
 #include "m_Do/m_Do_main.h"
-#include "dolphin/types.h"
+#include "SSystem/SComponent/c_counter.h"
 
 fapGm_HIO_c g_HIO;
 
@@ -96,8 +96,8 @@ void fapGm_Create() {
     fopOvlpM_Init();
     fopCamM_Init();
     fopDwTg_CreateQueue();
-    fopScnM_CreateReq(5, 0x7FFF, 0, 0);
-    
+    fopScnM_CreateReq(PROC_LOGO_SCENE, PROC_INVALID_e, 0, 0);
+
     g_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("ゲームシステム", &g_HIO); // "Game System"
 }
 

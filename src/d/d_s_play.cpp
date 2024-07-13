@@ -291,13 +291,26 @@ static int dScnPly_Draw(dScnPly_ply_c* i_this) {
 
     if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) && fpcM_GetName(i_this) == PROC_PLAY_SCENE) {
         if (dComIfGp_isEnableNextStage()) {
-            static s16 l_wipeType[] = {0, 0, 16, 17, 18, 1, 2, 1, 3, 3, 4, 4};
+            static s16 l_wipeType[] = {
+                PROC_OVERLAP0,
+                PROC_OVERLAP0,
+                PROC_OVERLAP2,
+                PROC_OVERLAP3,
+                PROC_OVERLAP4,
+                PROC_OVERLAP1,
+                PROC_OVERLAP6,
+                PROC_OVERLAP1,
+                PROC_OVERLAP7,
+                PROC_OVERLAP7,
+                PROC_OVERLAP8,
+                PROC_OVERLAP8,
+            };
 
             JUT_ASSERT(VERSION_SELECT(997, 1001, 1001),
                        dComIfGp_getNextStageWipe() < ARRAY_SIZE(l_wipeType));
 
             if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
-                fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, 0, 5);
+                fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, PROC_OVERLAP0, 5);
                 mDoAud_bgmStop(30);
             } else {
                 fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, l_wipeType[dComIfGp_getNextStageWipe()], 5);

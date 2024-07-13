@@ -89,7 +89,7 @@ void dScnOpen_c::changeGameScene() {
     if (fpcM_GetName(this) == PROC_OPEN2_SCENE) {
         dComIfG_changeOpeningScene(this, PROC_OPENING2_SCENE);
     } else {
-        if (fopScnM_ChangeReq(this, PROC_PLAY_SCENE, 0, 5)) {
+        if (fopScnM_ChangeReq(this, PROC_PLAY_SCENE, PROC_OVERLAP0, 5)) {
             dComIfGs_setRestartRoomParam(0);
             mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
         }

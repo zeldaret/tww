@@ -145,10 +145,10 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
         s16 startCode = (i_this->startCode != 0) ? i_this->startCode - 1 : room->startCode;
         dComIfGp_setNextStage(room->stageName, startCode, room->roomNo, room->layerNo);
         if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
-            fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, 0, 5);
+            fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, PROC_OVERLAP0, 5);
             mDoAud_bgmStop(0x1E);
         } else {
-            fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, 0, 5);
+            fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, PROC_OVERLAP0, 5);
             dComIfGs_setRestartRoomParam(0);
             mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
         }

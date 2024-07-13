@@ -72,7 +72,7 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
         if (fpcM_GetName(i_this) == PROC_ENDING_SCENE) {
             if (movie->mpCallBack1() == 0) {
                 if (dComIfGs_getClearCount() == 0) {
-                    fopScnM_ChangeReq(i_this, PROC_NAMEEX_SCENE, 0, 5);
+                    fopScnM_ChangeReq(i_this, PROC_NAMEEX_SCENE, PROC_OVERLAP0, 5);
                 } else {
                     dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
                 }

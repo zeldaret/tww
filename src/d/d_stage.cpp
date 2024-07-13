@@ -201,7 +201,7 @@ int createRoomScene(int param_0) {
     }
 
     *ptr = param_0;
-    return fopScnM_CreateReq(PROC_ROOM_SCENE, 0x7FFF, 0, (u32)ptr);
+    return fopScnM_CreateReq(PROC_ROOM_SCENE, PROC_INVALID_e, 0, (u32)ptr);
 }
 
 /* 80040E38-80040E6C       .text checkRoomDisp__20dStage_roomControl_cCFi */

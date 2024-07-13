@@ -911,7 +911,7 @@ void dScnName_c::changeGameScene() {
 
     dComIfGs_gameStart();
     u32 procName = field_0x55f ? PROC_OPEN_SCENE : PROC_PLAY_SCENE;
-    if (fopScnM_ChangeReq(this, procName, 0, 5)) {
+    if (fopScnM_ChangeReq(this, procName, PROC_OVERLAP0, 5)) {
         g_dComIfG_gameInfo.save.getDan().mStageNo = -1;
         dComIfGs_setRestartRoomParam(0);
         mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());

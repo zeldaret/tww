@@ -13,7 +13,7 @@ void fopScnRq_ReRequest(void);
 class scene_request_class {
 public:
     node_create_request mCrtReq;
-    u32 mFadeRequest;  // TODO: type is wrong
+    scene_request_class* mFadeRequest;
     request_of_phase_process_class mReqPhsProcCls;
     u8 field_0x70[4];
 };

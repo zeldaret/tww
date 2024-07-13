@@ -15,6 +15,7 @@
 #include "d/d_item_data.h"
 #include "d/d_magma.h"
 #include "d/d_particle.h"
+#include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "d/d_wood.h"
 #include "f_op/f_op_scene_mng.h"
@@ -487,7 +488,7 @@ int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
                         dComIfGp_getNextStageLayer());
     dComIfGs_setRestartRoomParam(0);
 
-    fopScnM_ChangeReq(i_scene, i_procName, 0, 30);
+    fopScnM_ChangeReq(i_scene, i_procName, PROC_OVERLAP0, 30);
     fopScnM_ReRequest(i_procName, 0);
     return 1;
 }

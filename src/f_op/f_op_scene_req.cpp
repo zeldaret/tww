@@ -81,7 +81,7 @@ static scene_request_class* fopScnRq_FadeRequest(s16 procName, u16 peekTime) {
     return (scene_request_class*)req;
 }
 
-uint fopScnRq_Request(int param_1, scene_class* i_scene, s16 param_3, void* param_4, s16 param_5, u16 param_6) {
+uint fopScnRq_Request(int reqType, scene_class* i_scene, s16 procName, void* user, s16 fadeProcName, u16 fadePeekTime) {
     static node_create_request_method_class submethod = {
         (process_method_func)fopScnRq_Execute,
         (process_method_func)fopScnRq_Cancel,
@@ -112,25 +112,25 @@ uint fopScnRq_Request(int param_1, scene_class* i_scene, s16 param_3, void* para
     };
 
     uint ret;
-    int tmp = 0;
+    scene_request_class* fade = NULL;
     cPhs__Handler* phase_handler_table;
     phase_handler_table = noFadeFase;
     scene_request_class* pScnReq = (scene_request_class*)fpcNdRq_Request(
-        sizeof(scene_request_class), param_1, (process_node_class*)i_scene, param_3, param_4,
+        sizeof(scene_request_class), reqType, (process_node_class*)i_scene, procName, user,
         &submethod);
 
     if (!pScnReq) {
         ret = -1;
     } else {
-        if (param_5 != 0x7fff) {
+        if (fadeProcName != 0x7fff) {
             phase_handler_table = fadeFase;
-            tmp = (int)fopScnRq_FadeRequest(param_5, param_6);
-            if (!tmp) {
+            fade = fopScnRq_FadeRequest(fadeProcName, fadePeekTime);
+            if (!fade) {
                 fpcNdRq_Delete(&pScnReq->mCrtReq);
                 return -1;
             }
         }
-        pScnReq->mFadeRequest = tmp;
+        pScnReq->mFadeRequest = fade;
         cPhs_Set(&pScnReq->mReqPhsProcCls, phase_handler_table);
         ret = pScnReq->mCrtReq.mRequestId;
     }
