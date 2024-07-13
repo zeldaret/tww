@@ -61,7 +61,7 @@ public:
     /* 0x3F8 */ dCcD_Stts mStts;
     /* 0x434 */ dCcD_Cyl mCyl1;
     /* 0x564 */ dCcD_Cyl mCyl2;
-    /* 0x694 */ uint m694;
+    /* 0x694 */ fpc_ProcID m694;
     /* 0x698 */ msg_class* mpCurrMsg;
     /* 0x69C */ u32 m69C;
     /* 0x6A0 */ dNpc_EventCut_c mEventCut;

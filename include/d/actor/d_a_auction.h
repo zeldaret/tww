@@ -41,7 +41,7 @@ public:
     void setAucMdlNo(u8 idx, u8 mdlNo) { mAucMdlNo[idx] = mdlNo; }
     void setItemNo(unsigned char) {}
     void setKind(unsigned char, unsigned char) {}
-    void setNpcID(int, uint) {}
+    void setNpcID(int, fpc_ProcID) {}
     void setStart(unsigned char) {}
 
     s32 _create();
@@ -95,10 +95,10 @@ public:
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ dNpc_EventCut_c mNpcEvtInfo;
-    /* 0x738 */ uint m738[8];
-    /* 0x758 */ uint mCurrAuctionItemPID;
-    /* 0x75C */ uint mTimerID;
-    /* 0x760 */ uint mGaugeID;
+    /* 0x738 */ fpc_ProcID m738[8];
+    /* 0x758 */ fpc_ProcID mCurrAuctionItemPID;
+    /* 0x75C */ fpc_ProcID mTimerID;
+    /* 0x760 */ fpc_ProcID mGaugeID;
     /* 0x764 */ dTimer_c* mpTimer;
     /* 0x768 */ LIGHT_INFLUENCE mLight;
     /* 0x788 */ J3DModel* mpModel;

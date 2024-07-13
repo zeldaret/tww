@@ -141,7 +141,7 @@ s32 fopMsgM_setStageLayer(void* proc) {
 }
 
 /* 8002AED4-8002AEF4       .text fopMsgM_SearchByID__FUi */
-msg_class* fopMsgM_SearchByID(uint pid) {
+msg_class* fopMsgM_SearchByID(fpc_ProcID pid) {
     return (msg_class*)fpcEx_SearchByID(pid);
 }
 
@@ -151,7 +151,7 @@ msg_class* fopMsgM_SearchByName(s16 proc_name) {
 }
 
 /* 8002AF24-8002AF44       .text fopMsgM_IsExecuting__FUi */
-BOOL fopMsgM_IsExecuting(uint pid) {
+BOOL fopMsgM_IsExecuting(fpc_ProcID pid) {
     return fpcEx_IsExist(pid);
 }
 
@@ -200,7 +200,7 @@ void createTimerAppend(int, u16, u8, u8, f32, f32, f32, f32, uint) {
 }
 
 /* 8002B1C8-8002B23C       .text fopMsgM_create__FsP10fopAc_ac_cP4cXyzPUlPUlPFPv_i */
-s32 fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, int (*)(void*)) {
+fpc_ProcID fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, int (*)(void*)) {
     /* Nonmatching */
 }
 
@@ -210,7 +210,7 @@ void fop_MGameTerm_create(s16, s16, s16, int, int, int (*)(void*)) {
 }
 
 /* 8002B2B0-8002B324       .text fop_Timer_create__FsUcUsUcUcffffPFPv_i */
-uint fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, int (*)(void*)) {
+fpc_ProcID fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, int (*)(void*)) {
     /* Nonmatching */
 }
 
@@ -225,22 +225,22 @@ u32 fopMsgM_searchMessageNumber(u32) {
 }
 
 /* 8002B634-8002B778       .text fopMsgM_messageSet__FUlP10fopAc_ac_c */
-uint fopMsgM_messageSet(u32, fopAc_ac_c*) {
+fpc_ProcID fopMsgM_messageSet(u32, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 8002B778-8002B8A4       .text fopMsgM_messageSet__FUlP4cXyz */
-uint fopMsgM_messageSet(u32, cXyz*) {
+fpc_ProcID fopMsgM_messageSet(u32, cXyz*) {
     /* Nonmatching */
 }
 
 /* 8002B8A4-8002B9C4       .text fopMsgM_messageSet__FUl */
-uint fopMsgM_messageSet(u32) {
+fpc_ProcID fopMsgM_messageSet(u32) {
     /* Nonmatching */
 }
 
 /* 8002B9C4-8002BA4C       .text fopMsgM_scopeMessageSet__FUl */
-uint fopMsgM_scopeMessageSet(u32) {
+fpc_ProcID fopMsgM_scopeMessageSet(u32) {
     /* Nonmatching */
 }
 
@@ -490,7 +490,7 @@ void fopMsgM_outFontDraw2(J2DPicture*, J2DPicture*, int, int, int, int, s16*, u8
 }
 
 /* 8002E204-8002E254       .text fopMsgM_Create__FsPFPv_iPv */
-u32 fopMsgM_Create(s16, int (*)(void*), void*) {
+fpc_ProcID fopMsgM_Create(s16, int (*)(void*), void*) {
     /* Nonmatching */
 }
 

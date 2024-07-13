@@ -82,8 +82,8 @@ bool dCcS::ChkAtTgHitAfterCross(bool r4, bool r5, const cCcD_GObjInf* inf1_, con
     dCcD_Stts* stts2 = (dCcD_Stts*)stts2_;
     dCcD_GStts* gstts1 = (dCcD_GStts*)gstts1_;
     dCcD_GStts* gstts2 = (dCcD_GStts*)gstts2_;
-    uint r11 = stts1->GetApid();
-    uint r3 = stts2->GetApid();
+    fpc_ProcID r11 = stts1->GetApid();
+    fpc_ProcID r3 = stts2->GetApid();
     if (r4) {
         gstts1->SetAtApid(r3);
         if (inf1->ChkAtNoConHit() && gstts1->GetAtOldApid() == stts2->GetApid()) {

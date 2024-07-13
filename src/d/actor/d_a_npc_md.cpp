@@ -1291,7 +1291,7 @@ BOOL daNpc_Md_c::harpWaitNpcAction(void*) {
     /* Nonmatching */
 }
 
-static uint l_msgId;
+static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 /* 00004CFC-00004D40       .text XYTalkCheck__10daNpc_Md_cFv */

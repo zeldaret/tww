@@ -34,8 +34,8 @@ s32 fpcBs_MakeOfType(int* i_type) {
 }
 
 /* 8003C8DC-8003C904       .text fpcBs_MakeOfId__Fv */
-s32 fpcBs_MakeOfId() {
-    static s32 process_id = 1;
+fpc_ProcID fpcBs_MakeOfId() {
+    static fpc_ProcID process_id = 1;
     return process_id++;
 }
 
@@ -79,7 +79,7 @@ s32 fpcBs_Delete(base_process_class* i_proc) {
 }
 
 /* 8003CA60-8003CB5C       .text fpcBs_Create__FsUiPv */
-base_process_class* fpcBs_Create(s16 i_profName, uint i_procID, void* i_data) {
+base_process_class* fpcBs_Create(s16 i_profName, fpc_ProcID i_procID, void* i_data) {
     process_profile_definition* procProfDef;
     base_process_class* procClass;
     u32 size;

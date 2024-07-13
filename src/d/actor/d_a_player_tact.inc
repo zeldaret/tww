@@ -115,7 +115,7 @@ BOOL daPy_lk_c::checkTactLastInput() {
 }
 
 /* 8014D9F8-8014DA78       .text setTactZev__9daPy_lk_cFUiiPc */
-void daPy_lk_c::setTactZev(uint tactZevPartnerPID, int r30, char* r31) {
+void daPy_lk_c::setTactZev(fpc_ProcID tactZevPartnerPID, int r30, char* r31) {
     if (tactZevPartnerPID != fpcM_ERROR_PROCESS_ID_e) {
         mDoAud_seStart(JA_SE_PRE_TAKT);
     }
@@ -544,7 +544,7 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
         stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
         if (dStage_stagInfo_GetSTType(stag_info) == dStageType_SEA_e && m34CC != 1 && r30 != 0) {
             daShip_c* ship = dComIfGp_getShipActor();
-            uint warpID = fopAcM_create(PROC_TORNADO, 1, &current.pos, current.roomNo);
+            fpc_ProcID warpID = fopAcM_create(PROC_TORNADO, 1, &current.pos, current.roomNo);
             ship->setTactWarpID(warpID);
         }
     }

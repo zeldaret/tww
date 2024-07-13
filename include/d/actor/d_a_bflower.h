@@ -54,7 +54,7 @@ public:
     /* 0x59C */ fopAc_ac_c* mpBombActor; // Bomb2 actor
     /* 0x5A0 */ s32 mAnimTimer;
     /* 0x5A4 */ f32 mPrevPlayerDist;
-    /* 0x5A8 */ uint mPrevGrabActorID; // Actor held by player during previous frame?
+    /* 0x5A8 */ fpc_ProcID mPrevGrabActorID; // Actor held by player during previous frame?
     /* 0x5AC */ cXyz mBombScale;
     /* 0x5B8 */ u8 m5B8;
 };

@@ -22,24 +22,24 @@ public:
 class dAttHint_c {
 public:
     dAttHint_c() {}
-    uint getPId(void*);
-    fopAc_ac_c* convPId(uint);
+    fpc_ProcID getPId(void*);
+    fopAc_ac_c* convPId(fpc_ProcID);
     int request(fopAc_ac_c*, int);
     void init();
     void proc();
 
-    fopAc_ac_c* getZHintTarget() { return convPId(field_0x8); }
+    fopAc_ac_c* getZHintTarget() { return convPId(mZHintTargetID); }
 
 private:
-    /* 0x0 */ uint mHintActorID;
+    /* 0x0 */ fpc_ProcID mHintActorID;
     /* 0x4 */ int mPriority;
-    /* 0x8 */ uint field_0x8;
+    /* 0x8 */ fpc_ProcID mZHintTargetID;
 };
 
 class dAttCatch_c {
 public:
     dAttCatch_c() {}
-    fopAc_ac_c* convPId(uint);
+    fopAc_ac_c* convPId(fpc_ProcID);
     void init();
     void proc();
     void request(fopAc_ac_c*, u8, f32, f32, f32, s16, int);
@@ -48,14 +48,14 @@ public:
     u8 getChangeItem() { return mChangeItem; }
 
 private:
-    /* 0x00 */ uint field_0x0;
+    /* 0x00 */ fpc_ProcID field_0x0;
     /* 0x04 */ int field_0x4;
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ u8 field_0xc;
     /* 0x0D */ u8 field_0xd;
     /* 0x0E */ u8 field_0xe;
     /* 0x0F */ u8 field_0xf;
-    /* 0x10 */ uint mCatghTargetID;
+    /* 0x10 */ fpc_ProcID mCatghTargetID;
     /* 0x14 */ u8 mChangeItem;
 };  // Size: 0x18
 
@@ -81,19 +81,19 @@ public:
 
 class dAttLook_c {
 public:
-    fopAc_ac_c* convPId(uint);
+    fopAc_ac_c* convPId(fpc_ProcID);
     void init();
     void proc();
     void request(fopAc_ac_c*, f32, f32, f32, s16, int);
     void requestF(fopAc_ac_c*, s16, int);
 
-    uint getLookTarget() { return mLookTargetID; }
+    fpc_ProcID getLookTarget() { return mLookTargetID; }
 
 private:
-    /* 0x0 */ uint field_0x0;
+    /* 0x0 */ fpc_ProcID field_0x0;
     /* 0x4 */ u32 field_0x4;
     /* 0x8 */ f32 field_0x8;
-    /* 0xC */ uint mLookTargetID;
+    /* 0xC */ fpc_ProcID mLookTargetID;
 };  // Size: 0x10
 
 class dAttList_c {
@@ -101,12 +101,12 @@ public:
     fopAc_ac_c* getActor();
     void setActor(fopAc_ac_c*);
 
-    uint getPid() { return mActorID; }
+    fpc_ProcID getPid() { return mActorID; }
 
     /* 0x0 */ f32 mWeight;
     /* 0x4 */ f32 mDistance;
     /* 0x8 */ u32 mType;
-    /* 0xC */ uint mActorID;
+    /* 0xC */ fpc_ProcID mActorID;
 };  // Size: 0x10
 
 class dAttDraw_CallBack_c : public mDoExt_McaMorfCallBack1_c {
@@ -156,7 +156,7 @@ public:
     void Draw();
     fopAc_ac_c* LockonTarget(s32);
     void LockonReleaseDistanse();
-    uint LockonTargetPId(s32);
+    fpc_ProcID LockonTargetPId(s32);
     fopAc_ac_c* ActionTarget(s32);
     bool LockonTruth();
 

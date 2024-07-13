@@ -91,7 +91,7 @@ public:
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F4 */ u32 mShadowId;
     /* 0x6F8 */ u32 field_0x6F8;
-    /* 0x6FC */ uint field_0x6FC;
+    /* 0x6FC */ fpc_ProcID field_0x6FC;
     /* 0x700 */ dNpc_PathRun_c mPathRun;
     /* 0x708 */ cXyz field_0x708;
     /* 0x714 */ cXyz field_0x714;

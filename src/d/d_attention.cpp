@@ -538,7 +538,7 @@ void dAttention_c::LockonReleaseDistanse() {
 }
 
 /* 8009F980-8009F9B8       .text LockonTargetPId__12dAttention_cFl */
-uint dAttention_c::LockonTargetPId(s32 idx) {
+fpc_ProcID dAttention_c::LockonTargetPId(s32 idx) {
     if (idx >= mLockOnNum)
         return NULL;
 
@@ -577,12 +577,12 @@ void dAttList_c::setActor(fopAc_ac_c* i_actor) {
 }
 
 /* 8009FAB4-8009FACC       .text getPId__10dAttHint_cFPv */
-uint dAttHint_c::getPId(void* i_proc) {
+fpc_ProcID dAttHint_c::getPId(void* i_proc) {
     return fopAcM_GetID(i_proc);
 }
 
 /* 8009FACC-8009FAFC       .text convPId__10dAttHint_cFUi */
-fopAc_ac_c* dAttHint_c::convPId(uint i_procID) {
+fopAc_ac_c* dAttHint_c::convPId(fpc_ProcID i_procID) {
     return fopAcM_SearchByID(i_procID);
 }
 
@@ -602,19 +602,19 @@ int dAttHint_c::request(fopAc_ac_c* i_actor, int priority) {
 /* 8009FB58-8009FB70       .text init__10dAttHint_cFv */
 void dAttHint_c::init() {
     mHintActorID = fpcM_ERROR_PROCESS_ID_e;
-    field_0x8 = fpcM_ERROR_PROCESS_ID_e;
+    mZHintTargetID = fpcM_ERROR_PROCESS_ID_e;
     mPriority = 0x200;
 }
 
 /* 8009FB70-8009FB8C       .text proc__10dAttHint_cFv */
 void dAttHint_c::proc() {
-    field_0x8 = mHintActorID;
+    mZHintTargetID = mHintActorID;
     mHintActorID = fpcM_ERROR_PROCESS_ID_e;
     mPriority = 0x200;
 }
 
 /* 8009FB8C-8009FBBC       .text convPId__11dAttCatch_cFUi */
-fopAc_ac_c* dAttCatch_c::convPId(uint i_procID) {
+fopAc_ac_c* dAttCatch_c::convPId(fpc_ProcID i_procID) {
     return fopAcM_SearchByID(i_procID);
 }
 
@@ -641,7 +641,7 @@ void dAttCatch_c::request(fopAc_ac_c*, u8, f32, f32, f32, s16, int) {
 }
 
 /* 8009FE10-8009FE40       .text convPId__10dAttLook_cFUi */
-fopAc_ac_c* dAttLook_c::convPId(uint i_procID) {
+fopAc_ac_c* dAttLook_c::convPId(fpc_ProcID i_procID) {
     return fopAcM_SearchByID(i_procID);
 }
 

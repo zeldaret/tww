@@ -2738,7 +2738,7 @@ inline void dComIfGp_event_setItemPartner(void* pt) {
     g_dComIfG_gameInfo.play.getEvent().setPtI(pt);
 }
 
-inline void dComIfGp_event_setItemPartnerId(uint id) {
+inline void dComIfGp_event_setItemPartnerId(fpc_ProcID id) {
     g_dComIfG_gameInfo.play.getEvent().setPtI_Id(id);
 }
 

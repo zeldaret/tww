@@ -120,7 +120,7 @@ public:
     BOOL proc(cXyz*);
 
 public:
-    /* 0x0 */ uint mMsgPId;
+    /* 0x0 */ fpc_ProcID mMsgPId;
     /* 0x4 */ msg_class* m_msg;
     /* 0x8 */ u8 mState;
     /* 0xA */ s16 mMsgId;

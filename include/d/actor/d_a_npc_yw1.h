@@ -45,7 +45,7 @@ public:
     void checkOrder();
     void chk_talk();
     void chk_parts_notMov();
-    void searchByID(uint, int*);
+    void searchByID(fpc_ProcID, int*);
     void partner_search_sub(void* (*)(void*, void*));
     void partner_search();
     void lookBack();

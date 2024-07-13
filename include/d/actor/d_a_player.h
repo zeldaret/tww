@@ -486,14 +486,14 @@ public:
     virtual BOOL checkCutCharge() const { return FALSE; }
     virtual BOOL getBokoFlamePos(cXyz*);// { return FALSE; }
     virtual BOOL checkTactWait() const { return FALSE; }
-    virtual void setTactZev(uint, int, char*) {}
+    virtual void setTactZev(fpc_ProcID, int, char*) {}
     virtual void onDekuSpReturnFlg(u8) {}
     virtual BOOL checkComboCutTurn() const { return false; }
     virtual f32 getBaseAnimeFrameRate() = 0;
     virtual f32 getBaseAnimeFrame() = 0;
-    virtual uint getItemID() const { return fpcM_ERROR_PROCESS_ID_e; }
-    virtual uint getThrowBoomerangID() const { return fpcM_ERROR_PROCESS_ID_e; }
-    virtual uint getGrabActorID() const;// { return fpcM_ERROR_PROCESS_ID_e; }
+    virtual fpc_ProcID getItemID() const { return fpcM_ERROR_PROCESS_ID_e; }
+    virtual fpc_ProcID getThrowBoomerangID() const { return fpcM_ERROR_PROCESS_ID_e; }
+    virtual fpc_ProcID getGrabActorID() const;// { return fpcM_ERROR_PROCESS_ID_e; }
     virtual BOOL checkGrabBarrel() { return FALSE; }
     virtual u32 checkPlayerNoDraw() { return FALSE; }
     virtual BOOL checkRopeTag() { return FALSE; }
@@ -503,7 +503,7 @@ public:
     virtual void onFrollCrashFlg(u32);// {}
     virtual MtxP getModelJointMtx(u16) { return NULL; }
     virtual f32 getOldSpeedY() { return 0.0f; }
-    virtual BOOL setHookshotCarryOffset(uint, const cXyz*) { return FALSE; }
+    virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*) { return FALSE; }
     virtual void setPlayerPosAndAngle(cXyz*, s16);// {}
     virtual void setPlayerPosAndAngle(cXyz*, csXyz*) {}
     virtual void setPlayerPosAndAngle(MtxP) {}

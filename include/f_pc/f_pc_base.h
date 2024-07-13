@@ -8,13 +8,15 @@
 #include "f_pc/f_pc_priority.h"
 #include "f_pc/f_pc_profile.h"
 
+typedef unsigned int fpc_ProcID;
+
 typedef struct create_request create_request;
 typedef struct process_method_class process_method_class;
 typedef struct profile_method_class profile_method_class;
 
 typedef struct base_process_class {
     /* 0x00 */ u32 mBsType;
-    /* 0x04 */ uint mBsPcId;
+    /* 0x04 */ fpc_ProcID mBsPcId;
     /* 0x08 */ s16 mProcName;
     /* 0x0A */ s8 mUnk0;
     /* 0x0B */ u8 mPauseFlag;
@@ -35,12 +37,12 @@ typedef struct base_process_class {
 
 BOOL fpcBs_Is_JustOfType(int pType1, int pType2);
 s32 fpcBs_MakeOfType(int* pType);
-s32 fpcBs_MakeOfId(void);
+fpc_ProcID fpcBs_MakeOfId(void);
 s32 fpcBs_Execute(base_process_class* pProc);
 void fpcBs_DeleteAppend(base_process_class* pProc);
 s32 fpcBs_IsDelete(base_process_class* pProc);
 s32 fpcBs_Delete(base_process_class* pProc);
-base_process_class* fpcBs_Create(s16 pProcTypeID, uint pProcID, void* pData);
+base_process_class* fpcBs_Create(s16 pProcTypeID, fpc_ProcID pProcID, void* pData);
 s32 fpcBs_SubCreate(base_process_class* pProc);
 
 extern "C" {

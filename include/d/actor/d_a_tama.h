@@ -8,7 +8,7 @@
 class daTama_c : public fopAc_ac_c {
 public:
     void setDis(f32 dis) { mDis = dis; }
-    void setPartnerID(uint id) { mPartnerID = id; }
+    void setPartnerID(fpc_ProcID id) { mPartnerID = id; }
     void setSpd(f32 spd) { speedF = spd; }
 
     BOOL createInit();
@@ -18,7 +18,7 @@ public:
     s32 _create();
 
 public:
-    /* 0x290 */ uint mPartnerID;
+    /* 0x290 */ fpc_ProcID mPartnerID;
     /* 0x294 */ dBgS_ObjAcch mAcch;
     /* 0x458 */ dBgS_AcchCir mAcchCir;
     /* 0x498 */ dCcD_Stts mStts;

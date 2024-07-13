@@ -2312,7 +2312,7 @@ void daNpcRoten_c::eventClrItemInit() {
 
 /* 00002978-00002A70       .text eventGetItemInit__12daNpcRoten_cFi */
 void daNpcRoten_c::eventGetItemInit(int staffIdx) {
-    uint pcId;
+    fpc_ProcID pcId;
 
     u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
     if(pData != NULL) {

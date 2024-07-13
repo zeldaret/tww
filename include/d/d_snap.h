@@ -221,7 +221,7 @@ public:
     /* 0x00 */ cXyz mCenter;
     /* 0x0C */ f32 mRadius;
     /* 0x10 */ f32 mHeight;
-    /* 0x14 */ uint mActorPID;
+    /* 0x14 */ fpc_ProcID mActorPID;
     /* 0x18 */ u8 mPhoto;
     /* 0x19 */ u8 field_0x19;
     /* 0x1A */ u8 field_0x1a;

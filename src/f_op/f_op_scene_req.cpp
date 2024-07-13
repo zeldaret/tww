@@ -120,14 +120,14 @@ uint fopScnRq_Request(int param_1, scene_class* i_scene, s16 param_3, void* para
         &submethod);
 
     if (!pScnReq) {
-        ret = fpcM_ERROR_PROCESS_ID_e;
+        ret = -1;
     } else {
         if (param_5 != 0x7fff) {
             phase_handler_table = fadeFase;
             tmp = (int)fopScnRq_FadeRequest(param_5, param_6);
             if (!tmp) {
                 fpcNdRq_Delete(&pScnReq->mCrtReq);
-                return fpcM_ERROR_PROCESS_ID_e;
+                return -1;
             }
         }
         pScnReq->mFadeRequest = tmp;
@@ -138,8 +138,8 @@ uint fopScnRq_Request(int param_1, scene_class* i_scene, s16 param_3, void* para
     return ret;
 }
 
-s32 fopScnRq_ReRequest(uint param_1, s16 param_2, void* param_3) {
-    return fpcNdRq_ReRequest(param_1, param_2, param_3);
+s32 fopScnRq_ReRequest(uint i_requestID, s16 i_procName, void* i_data) {
+    return fpcNdRq_ReRequest(i_requestID, i_procName, i_data);
 }
 
 s32 fopScnRq_Handler() {

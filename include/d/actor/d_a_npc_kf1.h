@@ -37,7 +37,7 @@ public:
     void eventOrder();
     void checkOrder();
     void chk_talk();
-    void searchByID(uint, int*);
+    void searchByID(fpc_ProcID, int*);
     void srch_Tsubo();
     void create_rupee(cXyz, int);
     void ready_kutaniCamera(int, int);

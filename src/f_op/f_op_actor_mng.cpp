@@ -49,7 +49,7 @@ void fopAcM_setRoomLayer(void* pProc, int room_no) {
 }
 
 /* 800241C0-80024230       .text fopAcM_SearchByID__FUiPP10fopAc_ac_c */
-s32 fopAcM_SearchByID(uint actorID, fopAc_ac_c** pDstActor) {
+s32 fopAcM_SearchByID(fpc_ProcID actorID, fopAc_ac_c** pDstActor) {
     if (fpcM_IsCreating(actorID)) {
         *pDstActor = NULL;
     } else {
@@ -92,7 +92,7 @@ fopAcM_prm_class* fopAcM_CreateAppend() {
 }
 
 /* 80024320-80024474       .text createAppend__FUlP4cXyziP5csXyzP4cXyzScUi */
-fopAcM_prm_class * createAppend(u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, uint parentPcId) {
+fopAcM_prm_class * createAppend(u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, fpc_ProcID parentPcId) {
     fopAcM_prm_class * params = fopAcM_CreateAppend();
     if (params == NULL)
         return NULL;
@@ -139,7 +139,7 @@ s32 fopAcM_delete(fopAc_ac_c* pActor) {
 }
 
 /* 800244B8-8002451C       .text fopAcM_delete__FUi */
-s32 fopAcM_delete(uint actorID) {
+s32 fopAcM_delete(fpc_ProcID actorID) {
     fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcM_SearchByID(actorID);
 
     if (pActor != NULL) {
@@ -152,7 +152,7 @@ s32 fopAcM_delete(uint actorID) {
 }
 
 /* 8002451C-80024598       .text fopAcM_create__FsUlP4cXyziP5csXyzP4cXyzScPFPv_i */
-uint fopAcM_create(s16 procName, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
+fpc_ProcID fopAcM_create(s16 procName, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
     fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, fpcM_ERROR_PROCESS_ID_e);
     if (params == NULL)
         return fpcM_ERROR_PROCESS_ID_e;
@@ -161,7 +161,7 @@ uint fopAcM_create(s16 procName, u32 parameter, cXyz* pPos, int roomNo, csXyz* p
 }
 
 /* 80024598-80024614       .text fopAcM_create__FPcUlP4cXyziP5csXyzP4cXyzPFPv_i */
-uint fopAcM_create(char* pProcNameString, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
+fpc_ProcID fopAcM_create(char* pProcNameString, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
     dStage_objectNameInf * nameInf = dStage_searchName(pProcNameString);
     if (nameInf == NULL)
         return fpcM_ERROR_PROCESS_ID_e;
@@ -188,7 +188,7 @@ void* fopAcM_fastCreate(char* pProcNameString, u32 parameter, cXyz* pPos, int ro
 }
 
 /* 80024710-80024790       .text fopAcM_createChild__FsUiUlP4cXyziP5csXyzP4cXyzScPFPv_i */
-uint fopAcM_createChild(s16 procName, uint parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
+fpc_ProcID fopAcM_createChild(s16 procName, fpc_ProcID parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
     fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, parentPcId);
     if (params == NULL)
         return fpcM_ERROR_PROCESS_ID_e;
@@ -197,7 +197,7 @@ uint fopAcM_createChild(s16 procName, uint parentPcId, u32 parameter, cXyz* pPos
 }
 
 /* 80024790-80024814       .text fopAcM_createChild__FPcUiUlP4cXyziP5csXyzP4cXyzPFPv_i */
-uint fopAcM_createChild(char* pProcNameString, uint parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
+fpc_ProcID fopAcM_createChild(char* pProcNameString, fpc_ProcID parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
     dStage_objectNameInf * nameInf = dStage_searchName(pProcNameString);
     if (nameInf == NULL)
         return fpcM_ERROR_PROCESS_ID_e;
@@ -206,7 +206,7 @@ uint fopAcM_createChild(char* pProcNameString, uint parentPcId, u32 parameter, c
 }
 
 /* 80024814-800249D4       .text fopAcM_createChildFromOffset__FsUiUlP4cXyziP5csXyzP4cXyzScPFPv_i */
-uint fopAcM_createChildFromOffset(s16 procName, uint parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, s8 subtype, createFunc createFunc) {
+fpc_ProcID fopAcM_createChildFromOffset(s16 procName, fpc_ProcID parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, s8 subtype, createFunc createFunc) {
     fopAc_ac_c * pParent = fopAcM_SearchByID(parentPcId);
     s16 parentAngleY = pParent->current.angle.y;
 
@@ -239,7 +239,7 @@ uint fopAcM_createChildFromOffset(s16 procName, uint parentPcId, u32 parameter, 
 }
 
 /* 800249D4-80024B78       .text fopAcM_createChildFromOffset__FPcUiUlP4cXyziP5csXyzP4cXyzPFPv_i */
-uint fopAcM_createChildFromOffset(char* pProcNameString, uint parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, createFunc createFunc) {
+fpc_ProcID fopAcM_createChildFromOffset(char* pProcNameString, fpc_ProcID parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, createFunc createFunc) {
     fopAc_ac_c * pParent = fopAcM_SearchByID(parentPcId);
     s16 parentAngleY = pParent->current.angle.y;
 
@@ -767,7 +767,7 @@ fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c* i_this) {
 }
 
 /* 80026118-800261E8       .text fopAcM_createItemForPresentDemo__FP4cXyziUciiP5csXyzP4cXyz */
-uint fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, int roomNo, int param_5, csXyz* rot, cXyz* scale) {
+fpc_ProcID fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, int roomNo, int param_5, csXyz* rot, cXyz* scale) {
     JUT_ASSERT(2413, 0 <= i_itemNo && i_itemNo < 256);
 
     dComIfGp_event_setGtItm(i_itemNo);
@@ -780,7 +780,7 @@ uint fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, int ro
 }
 
 /* 800261E8-800262B4       .text fopAcM_createItemForTrBoxDemo__FP4cXyziiiP5csXyzP4cXyz */
-uint fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param_5, csXyz* rot, cXyz* scale) {
+fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param_5, csXyz* rot, cXyz* scale) {
     JUT_ASSERT(2458, 0 <= i_itemNo && i_itemNo < 256);
 
     dComIfGp_event_setGtItm(i_itemNo);
@@ -793,7 +793,7 @@ uint fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int para
 }
 
 /* 800262B4-80026694       .text fopAcM_createItemFromTable__FP4cXyziiiiP5csXyziP4cXyz */
-uint fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* p_angle, int action, cXyz* p_scale) {
+fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* p_angle, int action, cXyz* p_scale) {
     JUT_ASSERT(2514, 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
 
     static cXyz fairy_offset_tbl[3] = {
@@ -841,7 +841,7 @@ uint fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int 
             }
             u8* pItemTable = itemTableList->mItemTables[tableIdx];
             u32 itemNo;
-            uint lastItemPID;
+            fpc_ProcID lastItemPID;
             for (int i = 0; (itemNo = *pItemTable) != dItem_NONE_e && i < 0x10; pItemTable++, i++) {
                 if (p_pos) {
                     pos = *p_pos;
@@ -883,7 +883,7 @@ uint fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int 
 }
 
 /* 80026694-800267C8       .text fopAcM_createRaceItemFromTable__FP4cXyziiiP5csXyzP4cXyzi */
-uint fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int i_roomNo, csXyz* angle, cXyz* scale, int param_7) {
+fpc_ProcID fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int i_roomNo, csXyz* angle, cXyz* scale, int param_7) {
     JUT_ASSERT(2660, 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     
     if (i_itemNo >= 0x20 && i_itemNo <= 0x3E) {
@@ -903,7 +903,7 @@ uint fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, in
 }
 
 /* 800267C8-8002688C       .text fopAcM_createShopItem__FP4cXyziP5csXyziP4cXyzPFPv_i */
-uint fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz* scale,
+fpc_ProcID fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz* scale,
                            createFunc createFunc) {
     JUT_ASSERT(2716, 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == dItem_NONE_e) {
@@ -914,7 +914,7 @@ uint fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz
 }
 
 /* 8002688C-80026980       .text fopAcM_createRaceItem__FP4cXyziiP5csXyziP4cXyzi */
-uint fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, int param_7) {
+fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, int param_7) {
     JUT_ASSERT(2763, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
@@ -926,7 +926,7 @@ uint fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot,
 }
 
 /* 80026980-80026A68       .text fopAcM_createDemoItem__FP4cXyziiP5csXyziP4cXyzUc */
-uint fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, u8 argFlag) {
+fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, u8 argFlag) {
     JUT_ASSERT(2813, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
@@ -937,7 +937,7 @@ uint fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot,
 }
 
 /* 80026A68-80026ADC       .text fopAcM_createItemForBoss__FP4cXyziiP5csXyzP4cXyzi */
-uint fopAcM_createItemForBoss(cXyz* pos, int, int roomNo, csXyz* rot, cXyz* scale, int param_6) {
+fpc_ProcID fopAcM_createItemForBoss(cXyz* pos, int, int roomNo, csXyz* rot, cXyz* scale, int param_6) {
     switch (param_6) {
     case 1:
         return fopAcM_createItem(pos, dItem_HEART_CONTAINER_e, -1, roomNo, 3, rot, 0xC, scale);
@@ -948,7 +948,7 @@ uint fopAcM_createItemForBoss(cXyz* pos, int, int roomNo, csXyz* rot, cXyz* scal
 }
 
 /* 80026ADC-80026C90       .text fopAcM_createItem__FP4cXyziiiiP5csXyziP4cXyz */
-uint fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* rot, int action, cXyz* scale) {
+fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* rot, int action, cXyz* scale) {
     int switchNo = 0xFF;
     int switchNo2 = 0xFF;
     
@@ -1201,7 +1201,7 @@ void* fopAcM_createItemFromEnemyTable(u16 itemTableIdx, int i_itemBitNo, int i_r
 }
 
 /* 8002777C-800278D8       .text fopAcM_createIball__FP4cXyziiP5csXyzi */
-uint fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int i_roomNo, csXyz* p_angle, int i_itemBitNo) {
+fpc_ProcID fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int i_roomNo, csXyz* p_angle, int i_itemBitNo) {
     int dropChance = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetPercent(), (u16)itemTableIdx);
     int randPercent = cM_rndF(99.999f);
     
@@ -1252,7 +1252,7 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
     scene_class* roomProc = fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(roomNo));
     JUT_ASSERT(0xe0a, roomProc != NULL);
 
-    uint grabProcID = daPy_getPlayerActorClass()->getGrabActorID();
+    fpc_ProcID grabProcID = daPy_getPlayerActorClass()->getGrabActorID();
     fopAc_ac_c* enemy = fopAcM_SearchByID(grabProcID);
     if (enemy != NULL && fopAcM_GetGroup(enemy) == fopAc_ENEMY_e)
         return enemy;
@@ -1261,7 +1261,7 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
 }
 
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */
-uint fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health, u8 i_itemBitNo) {
+fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health, u8 i_itemBitNo) {
     u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | i_health & 0xFF;
     fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor), fopAcM_GetAngle_p(i_actor));
     if (disappear) {

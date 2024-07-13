@@ -48,7 +48,7 @@ namespace daObjBuoyflag {
     
     class Act_c : public fopAc_ac_c {
     public:
-        static uint make_norm(uint parentPId, cXyz* pos, int roomNo, csXyz* angle) {
+        static fpc_ProcID make_norm(fpc_ProcID parentPId, cXyz* pos, int roomNo, csXyz* angle) {
             u32 params = prm_make(static_cast<Type_e>(0), static_cast<Texture_e>(0), false); // TODO: placeholder
             return fopAcM_createChild(PROC_Obj_Buoyflag, parentPId, params, pos, roomNo, angle);
         }
@@ -63,8 +63,8 @@ namespace daObjBuoyflag {
         inline BOOL _draw();
         inline BOOL _execute();
         void jump_to_sea(float, float, short) {}
-        void make_barrel2_mine(uint, cXyz*, int, csXyz*, Texture_e, bool) {}
-        void make_barrel2_norm(uint, cXyz*, int, csXyz*, Texture_e) {}
+        void make_barrel2_mine(fpc_ProcID, cXyz*, int, csXyz*, Texture_e, bool) {}
+        void make_barrel2_norm(fpc_ProcID, cXyz*, int, csXyz*, Texture_e) {}
         void attr_type() const; // weak but not inlined?
         void prm_get_noCull() const {}
         void prm_get_texture() const; // weak but not inlined?

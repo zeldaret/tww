@@ -71,7 +71,7 @@ namespace daWindTag {
         /* 0x57D */ u8 field_0x57d;
         /* 0x57E */ bool mbDraw;
         /* 0x57F */ u8 field_0x57f;
-        /* 0x580 */ uint mLevelSeID;
+        /* 0x580 */ fpc_ProcID mLevelSeID;
     };
 };  // namespace daWindTag
 

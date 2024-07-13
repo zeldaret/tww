@@ -207,7 +207,7 @@ extern void dAuction_screen_gaugeUp();
 extern void dAuction_screen_gaugeDown();
 extern void dAuction_screen_talkStart();
 extern void dAuction_screen_talkEnd();
-extern uint dAuction_screen_create();
+extern fpc_ProcID dAuction_screen_create();
 
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
@@ -1189,7 +1189,7 @@ void daAuction_c::eventMainMsgBikonW() {
 /* 00002C1C-00002D4C       .text eventGetItemInit__11daAuction_cFv */
 void daAuction_c::eventGetItemInit() {
     if (m822 == 2) {
-        uint itemID = fopAcM_createItemForPresentDemo(&current.pos, l_item_dat22[mCurrAuctionItemIndex] & 0xFF);
+        fpc_ProcID itemID = fopAcM_createItemForPresentDemo(&current.pos, l_item_dat22[mCurrAuctionItemIndex] & 0xFF);
 
         if (itemID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(itemID);
@@ -1197,7 +1197,7 @@ void daAuction_c::eventGetItemInit() {
 
         dComIfGs_onEventBit(l_item_dat2[mCurrAuctionItemIndex].mObtainedEventBit);
     } else {
-        uint itemID = fopAcM_createItemForPresentDemo(&current.pos, l_item_dat[mCurrAuctionItemIndex].mItemID & 0xFF);
+        fpc_ProcID itemID = fopAcM_createItemForPresentDemo(&current.pos, l_item_dat[mCurrAuctionItemIndex].mItemID & 0xFF);
 
         if (itemID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(itemID);

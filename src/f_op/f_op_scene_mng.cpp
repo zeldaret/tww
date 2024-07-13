@@ -9,16 +9,16 @@
 #include "f_pc/f_pc_searcher.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-scene_class* fopScnM_SearchByID(uint id) {
+scene_class* fopScnM_SearchByID(fpc_ProcID id) {
     return (scene_class*)fopScnIt_Judge((fop_ScnItFunc)fpcSch_JudgeByID, &id);
 }
 
-static u32 l_scnRqID = fpcM_ERROR_PROCESS_ID_e;
+static uint l_scnRqID = -1;
 
 int fopScnM_ChangeReq(scene_class* i_scene, s16 procName, s16 fadeTime, u16 param_4) {
     uint sceneRequestID = fopScnRq_Request(2, i_scene, procName, 0, fadeTime, param_4);
 
-    if (sceneRequestID == fpcM_ERROR_PROCESS_ID_e) {
+    if (sceneRequestID == -1) {
         return 0;
     }
 
@@ -26,18 +26,18 @@ int fopScnM_ChangeReq(scene_class* i_scene, s16 procName, s16 fadeTime, u16 para
     return 1;
 }
 
-uint fopScnM_DeleteReq(scene_class* i_scene) {
+BOOL fopScnM_DeleteReq(scene_class* i_scene) {
     uint sceneRequestID = fopScnRq_Request(1, i_scene, 0x7FFF, 0, 0x7FFF, 0);
-    return sceneRequestID != fpcM_ERROR_PROCESS_ID_e;
+    return sceneRequestID != -1;
 }
 
-int fopScnM_CreateReq(s16 param_1, s16 param_2, u16 param_3, u32 param_4) {
+BOOL fopScnM_CreateReq(s16 param_1, s16 param_2, u16 param_3, u32 param_4) {
     uint sceneRequestID = fopScnRq_Request(0, 0, param_1, (void*)param_4, param_2, param_3);
-    return sceneRequestID != fpcM_ERROR_PROCESS_ID_e;
+    return sceneRequestID != -1;
 }
 
 u32 fopScnM_ReRequest(s16 param_1, u32 param_2) {
-    if (l_scnRqID == fpcM_ERROR_PROCESS_ID_e) {
+    if (l_scnRqID == -1) {
         return 0;
     }
 

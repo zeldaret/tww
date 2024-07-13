@@ -112,7 +112,7 @@ int dBgS::GetExitId(cBgS_PolyInfo& polyInfo) {
 
 /* 800A06A4-800A0708       .text GetPolyColor__4dBgSFR13cBgS_PolyInfo */
 int dBgS::GetPolyColor(cBgS_PolyInfo& polyInfo) {
-    if (!polyInfo.ChkSetInfo())
+    if (!polyInfo.ChkSetInf())
         return 0xFF;
 
     return GetPolyId0(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0xFF, 0x07F80000, 19);
@@ -277,7 +277,7 @@ int dBgS::GetRoomPathPntNo(cBgS_PolyInfo& polyInfo) {
 
 /* 800A0E68-800A0F88       .text GetRoomId__4dBgSFR13cBgS_PolyInfo */
 s32 dBgS::GetRoomId(cBgS_PolyInfo& polyInfo) {
-    if (!polyInfo.ChkSetInfo())
+    if (!polyInfo.ChkSetInf())
         return -1;
 
     s32 id = polyInfo.GetBgIndex();

@@ -261,7 +261,7 @@ public:
     /* 0x574 */ dCcD_Cyl mCyl;
     /* 0x6A4 */ u32 mCurrMsgNo;
     /* 0x6A8 */ u32 mEndMsgNo;
-    /* 0x6AC */ uint mCurrMsgBsPcId;
+    /* 0x6AC */ fpc_ProcID mCurrMsgBsPcId;
     /* 0x6B0 */ msg_class* mpCurrMsg;
     /* 0x6B4 */ u8 field_0x6b4[6];
     /* 0x6BA */ u16 field_0x6ba;

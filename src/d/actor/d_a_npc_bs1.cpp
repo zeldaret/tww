@@ -27,7 +27,7 @@ static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
 
-static uint l_msgId;
+static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 static daNpc_Bs1_HIO_c l_HIO;
 
@@ -1761,7 +1761,7 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
         m830 = m831;
         mShopCamAction.Reset();
         u16 itemNo = mShopItems.getSelectItemNo();
-        uint itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
+        fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
         if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(itemPID);
         }

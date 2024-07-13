@@ -5860,7 +5860,7 @@ void daNpcPeople_c::eventGetItemInit(int staffIdx) {
         itemNo = m75C;
     }
 
-    uint itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
+    fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
     if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(itemPID);
     }

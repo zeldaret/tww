@@ -16,7 +16,7 @@ void* fpcSch_JudgeForPName(void* i_proc, void* i_data) {
 
 /* 80040068-80040080       .text fpcSch_JudgeByID__FPvPv */
 void* fpcSch_JudgeByID(void* i_proc, void* i_data) {
-    s32 process_id = *(s32*)i_data;
+    fpc_ProcID process_id = *(fpc_ProcID*)i_data;
 
     if (((base_process_class*)i_proc)->mBsPcId == process_id)
         return i_proc;

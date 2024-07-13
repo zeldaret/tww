@@ -14,7 +14,7 @@ class overlap_task_class : public leafdraw_class {
 public:
     /* 0xC0 */ overlap_method_class* sub_method;
     /* 0xC4 */ request_base_class mRq;
-    /* 0xC8 */ int mScenePId;
+    /* 0xC8 */ fpc_ProcID mScenePId;
 };  // Size: 0xCC
 
 struct overlap_process_profile_definition {
@@ -27,7 +27,7 @@ int fopOvlpM_SceneIsStart();
 void fopOvlpM_Management();
 int fopOvlpM_IsOutReq(overlap_task_class* i_this);
 void fopOvlpM_Done(overlap_task_class* i_this);
-void fopOvlpM_ToldAboutID(uint pid);
+void fopOvlpM_ToldAboutID(fpc_ProcID pid);
 int fopOvlpM_IsPeek();
 int fopOvlpM_IsDone();
 int fopOvlpM_IsDoingReq();

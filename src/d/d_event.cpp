@@ -700,14 +700,14 @@ dStage_Event_dt_c* dEvt_control_c::nextStageEventDt(void* idxp) {
 }
 
 /* 800715B8-800715DC       .text getPId__14dEvt_control_cFPv */
-uint dEvt_control_c::getPId(void* ac) {
+fpc_ProcID dEvt_control_c::getPId(void* ac) {
     if (ac == NULL)
         return fpcM_ERROR_PROCESS_ID_e;
     return fopAcM_GetID(ac);
 }
 
 /* 800715DC-8007160C       .text convPId__14dEvt_control_cFUi */
-fopAc_ac_c* dEvt_control_c::convPId(uint pid) {
+fopAc_ac_c* dEvt_control_c::convPId(fpc_ProcID pid) {
     return fopAcM_SearchByID(pid);
 }
 

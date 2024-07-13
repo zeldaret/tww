@@ -677,7 +677,7 @@ static void* s_w_sub(void* param_1, void*) {
 }
 
 /* 00002CD4-00002FB0       .text search_wepon__FP8bk_class */
-static uint search_wepon(bk_class* i_this) {
+static fpc_ProcID search_wepon(bk_class* i_this) {
     target_info_count = 0;
     for (int i = 0; i < ARRAY_SIZE(target_info); i++) {
         target_info[i] = NULL;

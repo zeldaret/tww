@@ -797,7 +797,7 @@ BOOL daNpc_Os_c::finish02NpcAction(void* param_1) {
     return true;
 }
 
-static uint l_msgId;
+static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 /* 00001F48-00002118       .text talkNpcAction__10daNpc_Os_cFPv */

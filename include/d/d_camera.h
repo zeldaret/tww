@@ -5,6 +5,7 @@
 #include "SSystem/SComponent/c_rnd.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "f_pc/f_pc_base.h"
 #include "d/d_cam_param.h"
 #include "global.h"
 
@@ -351,8 +352,8 @@ public:
     void SubjectLockOn(fopAc_ac_c*);
     void SubjectLockOff();
     void GetForceLockOnActor();
-    void ForceLockOn(uint);
-    void ForceLockOff(uint);
+    void ForceLockOn(fpc_ProcID);
+    void ForceLockOff(fpc_ProcID);
     void SetExtendedPosition(cXyz*);
     void ScopeViewMsgModeOff();
 

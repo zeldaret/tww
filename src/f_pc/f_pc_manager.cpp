@@ -49,7 +49,7 @@ s32 fpcM_Delete(void* i_proc) {
 }
 
 /* 8003E3B0-8003E3D0       .text fpcM_IsCreating__FUi */
-BOOL fpcM_IsCreating(uint pID) {
+BOOL fpcM_IsCreating(fpc_ProcID pID) {
     return fpcCt_IsCreatingByID(pID);
 }
 

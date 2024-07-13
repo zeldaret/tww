@@ -94,10 +94,10 @@ public:
     f32 GetWallAllLowH_R();
     f32 GetSpeedY();
     f32 GetWallAddY(Vec&);
-    void SetNowActorInfo(int bg_index, void* bgw, uint apid) {
+    void SetNowActorInfo(int bg_index, void* bgw, fpc_ProcID apid) {
         m_bg_index = bg_index;
         field_0x78 = bgw;
-        field_0x7c = apid;
+        m_ap_id = apid;
     }
     void SetWallPolyIndex(int, int);
     void CalcMovePosWork();
@@ -185,7 +185,7 @@ public:
     /* 0x05C */ cM3dGCyl m_wall_cyl;
     /* 0x074 */ int m_bg_index;
     /* 0x078 */ void* field_0x78;
-    /* 0x07C */ u32 field_0x7c;
+    /* 0x07C */ fpc_ProcID m_ap_id;
     /* 0x080 */ fopAc_ac_c* m_my_ac;
     /* 0x084 */ int m_tbl_size;
     /* 0x088 */ dBgS_AcchCir* pm_acch_cir;

@@ -971,7 +971,7 @@ BOOL daTbox_c::actionOpenWait() {
         dComIfGp_event_onEventFlag(0x04);
 
         u8 itemNo = getItemNo();
-        uint itemPID = fopAcM_createItemForTrBoxDemo(&current.pos, itemNo);
+        fpc_ProcID itemPID = fopAcM_createItemForTrBoxDemo(&current.pos, itemNo);
 
         if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(itemPID);

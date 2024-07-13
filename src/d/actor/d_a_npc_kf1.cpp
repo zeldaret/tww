@@ -172,7 +172,7 @@ void daNpc_Kf1_c::chk_talk() {
 }
 
 /* 00001418-0000146C       .text searchByID__11daNpc_Kf1_cFUiPi */
-void daNpc_Kf1_c::searchByID(uint, int*) {
+void daNpc_Kf1_c::searchByID(fpc_ProcID, int*) {
     /* Nonmatching */
 }
 

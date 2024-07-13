@@ -47,7 +47,7 @@ public:
     /* 0x62C */ Mode_e mMode;
     /* 0x630 */ BOOL unk630;
     /* 0x634 */ s32 mItemBitNo;
-    /* 0x638 */ uint mItemPID;
+    /* 0x638 */ fpc_ProcID mItemPID;
     /* 0x63C */ JPABaseEmitter* mpEmitter;
 };
 

@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-static uint l_msgId;
+static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 enum {

@@ -155,26 +155,25 @@ typedef int (*fopMsgCreateFunc)(void*);
 
 JKRExpHeap* fopMsgM_createExpHeap(u32, JKRHeap*);
 JKRExpHeap* fopMsgM_createExpHeap(u32);
-u32 fopMsgM_Create(s16, fopMsgCreateFunc, void*);
-s32 fopMsgM_create(s16 i_procName, fopAc_ac_c* param_1 = NULL, cXyz* param_2 = NULL,
-                   u32* param_3 = NULL, u32* param_4 = NULL, fopMsgCreateFunc createFunc = NULL);
+fpc_ProcID fopMsgM_Create(s16, fopMsgCreateFunc, void*);
+fpc_ProcID fopMsgM_create(s16 i_procName, fopAc_ac_c* param_1 = NULL, cXyz* param_2 = NULL,
+                          u32* param_3 = NULL, u32* param_4 = NULL, fopMsgCreateFunc createFunc = NULL);
 void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);
-void fopMsgM_setMessageID(uint);
 void fopMsgM_destroyExpHeap(JKRExpHeap*);
 f32 fopMsgM_valueIncrease(int param_0, int param_1, u8 param_2);
 s32 fopMsgM_setStageLayer(void*);
-uint fopMsgM_messageSet(u32 i_msgNo, fopAc_ac_c* i_actorP);
-uint fopMsgM_messageSet(u32 param_0, cXyz*);
-uint fopMsgM_messageSet(u32 param_0);
-uint fopMsgM_scopeMessageSet(u32 param_0);
+fpc_ProcID fopMsgM_messageSet(u32 i_msgNo, fopAc_ac_c* i_actorP);
+fpc_ProcID fopMsgM_messageSet(u32 param_0, cXyz*);
+fpc_ProcID fopMsgM_messageSet(u32 param_0);
+fpc_ProcID fopMsgM_scopeMessageSet(u32 param_0);
 int fopMsgM_messageSetDemo(u32 param_0);
-msg_class* fopMsgM_SearchByID(uint param_0);
+msg_class* fopMsgM_SearchByID(fpc_ProcID param_0);
 char* fopMsgM_messageGet(char* msg, u32 string_id);
 void fopMsgM_passwordGet(char*, u32);
-uint fop_Timer_create(s16 param_0, u8 param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5,
+fpc_ProcID fop_Timer_create(s16 param_0, u8 param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5,
                      f32 param_6, f32 param_7, f32 param_8, fopMsgCreateFunc createFunc);
-inline uint fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3, u8 param_4,
+inline fpc_ProcID fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3, u8 param_4,
                                 f32 param_5, f32 param_6, f32 param_7, f32 param_8,
                                 fopMsgCreateFunc createFunc) {
     return fop_Timer_create(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7,
