@@ -1,6 +1,7 @@
 #ifndef D_EVENT_D_EVENT_H
 #define D_EVENT_D_EVENT_H
 
+#include "f_pc/f_pc_base.h"
 #include "global.h"
 
 class fopAc_ac_c;
@@ -90,15 +91,15 @@ public:
     void remove();
     dStage_Event_dt_c* getStageEventDt();
     dStage_Event_dt_c* nextStageEventDt(void*);
-    uint getPId(void*);
-    fopAc_ac_c* convPId(uint);
+    fpc_ProcID getPId(void*);
+    fopAc_ac_c* convPId(fpc_ProcID);
     u8 getTactFreeMStick(int);
     u8 getTactFreeCStick(int);
     bool giveItemCut(u8);
 
     u8 getTalkXYBtn() { return mTalkButton; }
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
-    void setPtI_Id(uint id) { mPtItem = id; }
+    void setPtI_Id(fpc_ProcID id) { mPtItem = id; }
     void setPtI(void* actor) { mPtItem = getPId(actor); }
     fopAc_ac_c* getPtI() { return convPId(mPtItem); }
     void setGtItm(u8 itemNo) { mGetItemNo = itemNo; }
@@ -123,7 +124,7 @@ public:
     u32 getMode() { return mMode & 0xFF; } // &0xFF added to fix dEvt_control_c::moveApproval, probably fakematch
 
     void checkHind(u16) {}
-    void chkPhoto() {}
+    BOOL chkPhoto() { return mbInPhoto; }
     void getMode() const {}
     void offHindFlag(u16) {}
     void onHindFlag(u16) {}
@@ -135,10 +136,10 @@ public:
     /* 0xC1 */ s8 mFirstOrderIdx;
     /* 0xC2 */ u8 mMode;
     /* 0xC3 */ u8 mbEndProc;
-    /* 0xC4 */ uint mPt1;
-    /* 0xC8 */ uint mPt2;
-    /* 0xCC */ uint mPtTalk;
-    /* 0xD0 */ uint mPtItem;
+    /* 0xC4 */ fpc_ProcID mPt1;
+    /* 0xC8 */ fpc_ProcID mPt2;
+    /* 0xCC */ fpc_ProcID mPtTalk;
+    /* 0xD0 */ fpc_ProcID mPtItem;
     /* 0xD4 */ u8 mGetItemNo;
     /* 0xD5 */ u8 field_0xD5[0xD6 - 0xD5];
     /* 0xD6 */ s16 mHindFlag;

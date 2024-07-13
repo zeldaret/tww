@@ -11,7 +11,6 @@
 #include "dolphin/os/OSCache.h"
 #include "dolphin/os/OSContext.h"
 #include "dolphin/os/OSError.h"
-#include "dolphin/os/OSExec.h"
 #include "dolphin/os/OSFont.h"
 #include "dolphin/os/OSInterrupt.h"
 #include "dolphin/os/OSLink.h"
@@ -25,6 +24,7 @@
 #include "dolphin/os/OSSync.h"
 #include "dolphin/os/OSThread.h"
 #include "dolphin/os/OSTime.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,19 +60,19 @@ extern "C" {
 #define OS_CONSOLE_PC_EMULATOR 0x10000001
 #define OS_CONSOLE_EMULATOR 0x10000000
 
-volatile u16 __OSDeviceCode : 0x800030E6;
+volatile u16 __OSDeviceCode AT_ADDRESS(0x800030E6);
 
-volatile u32 OS_PI_INTR_CAUSE : 0xCC003000;
-volatile u32 OS_PI_INTR_MASK : 0xCC003004;
+volatile u32 OS_PI_INTR_CAUSE AT_ADDRESS(0xCC003000);
+volatile u32 OS_PI_INTR_MASK AT_ADDRESS(0xCC003004);
 
-volatile u16 OS_MI_INTR_MASK : 0xCC00401C;
+volatile u16 OS_MI_INTR_MASK AT_ADDRESS(0xCC00401C);
 
-volatile u16 OS_DSP_DMA_ADDR_HI : 0xCC005030;
-volatile u16 OS_DSP_DMA_ADDR_LO : 0xCC005032;
-volatile u16 OS_DSP_INTR_MASK : 0xCC00500A;
+volatile u16 OS_DSP_DMA_ADDR_HI AT_ADDRESS(0xCC005030);
+volatile u16 OS_DSP_DMA_ADDR_LO AT_ADDRESS(0xCC005032);
+volatile u16 OS_DSP_INTR_MASK AT_ADDRESS(0xCC00500A);
 
-volatile u16 OS_ARAM_DMA_ADDR_HI : 0xCC005020;
-volatile u16 OS_ARAM_DMA_ADDR_LO : 0xCC005022;
+volatile u16 OS_ARAM_DMA_ADDR_HI AT_ADDRESS(0xCC005020);
+volatile u16 OS_ARAM_DMA_ADDR_LO AT_ADDRESS(0xCC005022);
 
 BOOL OSIsThreadSuspended(OSThread* thread);
 
@@ -88,11 +88,16 @@ extern u8 __OSReport_Warning_disable;
 extern u8 __OSReport_System_disable;
 extern u8 __OSReport_enable;
 
+extern BOOL __OSIsGcam;
+
+extern u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0);
+extern u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);
+
 void OSReportInit__Fv(void);  // needed for inline asm
 
 u8* OSGetStackPointer(void);
 void __OSFPRInit(void);
-static void InquiryCallback(u32 param_0, DVDCommandBlock* param_1);
+static void InquiryCallback(s32 param_0, DVDCommandBlock* param_1);
 void OSInit(void);
 static void OSExceptionInit(void);
 void __OSDBIntegrator(void);
@@ -147,7 +152,7 @@ inline void OSf32tou8(f32* f, u8* out) {
     *out = __OSf32tou8(*f);
 }
 
-inline void OSInitFastCast(void) {
+static inline void OSInitFastCast(void) {
     // clang-format off
     asm {
         li r3, 4
@@ -177,16 +182,6 @@ typedef struct OSBootInfo {
     /* 0x38 */ void* fst_location;
     /* 0x3C */ u32 fst_max_length;
 } OSBootInfo;
-
-typedef struct {
-    BOOL valid;
-    u32 restartCode;
-    u32 bootDol;
-    void* regionStart;
-    void* regionEnd;
-    BOOL argsUseDefault;
-    void* argsAddr;  // valid only when argsUseDefault = FALSE
-} OSExecParams;
 
 typedef struct BI2Debug {
     /* 0x00 */ s32 debugMonSize;
@@ -292,6 +287,7 @@ struct GLOBAL_MEMORY {
 #define OSUncachedToCached(ucaddr) ((void*)((u8*)(ucaddr) - (OS_BASE_UNCACHED - OS_BASE_CACHED)))
 
 extern OSTime __OSStartTime;
+extern BOOL __OSInIPL;
 
 #ifdef __cplusplus
 };

@@ -13,8 +13,8 @@ public:
 
 public:
     int Pos2Index(f32, f32*);
-    u32 GetHeight(f32, f32);
-    u32 GetHeight(int, int);
+    int GetHeight(f32, f32);
+    int GetHeight(int, int);
     void GetArea(int, int, f32*, f32*, f32*, f32*);
     void SetInf();
     virtual ~daSea_WaterHeightInfo_Mng() {}
@@ -78,7 +78,7 @@ public:
     GXTexObj* getYuraTexObj() { return &mTexYura; }
     void ChkNowUse() {}
     void GetSrcDataHeight(f32, f32) {}
-    void ChkCullStop() {}
+    bool ChkCullStop() { return mCullStopFlag == 1; }
     void end() {}
     void getPos() {}
     void GetCenterP() {}
@@ -101,7 +101,7 @@ public:
     /* 0x120 */ f32 mDrawMaxZ;
     /* 0x124 */ f32* mpHeightTable;
     /* 0x128 */ cXyz mCurPos;
-    /* 0x134 */ cXyz* mpDrawVtx;
+    /* 0x134 */ cXyz* m_draw_vtx;
     /* 0x138 */ u8 mInitFlag;
     /* 0x139 */ u8 mCullStopFlag;
     /* 0x13A */ u8 m13A;
@@ -120,7 +120,7 @@ class sea_class : public fopAc_ac_c {
 };
 
 void daSea_Init();
-void daSea_ChkAreaBeforePos(f32, f32);
+bool daSea_ChkAreaBeforePos(f32, f32);
 bool daSea_ChkArea(f32, f32);
 f32 daSea_calcWave(f32, f32);
 void daSea_GetPoly(void*, void (*)(void*, cXyz&, cXyz&, cXyz&), const cXyz&, const cXyz&);

@@ -142,7 +142,7 @@ static void dAs_Create(msg_class*) {
 }
 
 /* 80160D20-80160D70       .text dAuction_screen_create__Fv */
-void dAuction_screen_create() {
+fpc_ProcID dAuction_screen_create() {
     /* Nonmatching */
 }
 

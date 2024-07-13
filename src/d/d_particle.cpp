@@ -96,12 +96,12 @@ void dPa_J3DmodelEmitter_c::draw() {
 /* 8007ADC4-8007AECC       .text __ct__18dPa_modelControl_cFP12J3DModelData */
 dPa_modelControl_c::dPa_modelControl_c(J3DModelData* modelData) {
     mModel = new dPa_J3Dmodel_c[0x80];
-    JUT_ASSERT(0x10f, mModel != 0);
+    JUT_ASSERT(0x10f, mModel != NULL);
 
     dPa_J3Dmodel_c * model = mModel;
     for (s32 i = 0; i < 0x80; i++, model++) {
         model->mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x37221223);
-        JUT_ASSERT(0x120, model->mModel != 0);
+        JUT_ASSERT(0x120, model->mModel != NULL);
     }
 
     cLs_Create(this);
@@ -411,7 +411,7 @@ u8 dPa_control_c::mStatus;
 /* 8007C8E8-8007C9A4       .text __ct__13dPa_control_cFv */
 dPa_control_c::dPa_control_c() {
     mHeap = mDoExt_createSolidHeapFromSystem(0x16e800, 0);
-    JUT_ASSERT(0x4d8, mHeap != 0);
+    JUT_ASSERT(0x4d8, mHeap != NULL);
     mSceneNo = 0xFF;
     mCount = 0;
     mEmitterMng = NULL;
@@ -439,13 +439,13 @@ void dPa_control_c::swapFrameBufferTexture() {
 void dPa_control_c::createCommon(const void* param_1) {
     /* Nonmatching */
     mCommonResMng = new (mHeap, 0) JPAResourceManager(param_1, mHeap);
-    JUT_ASSERT(1313, mCommonResMng != 0);
+    JUT_ASSERT(1313, mCommonResMng != NULL);
     mCommonResMng->swapTexture(mDoGph_gInf_c::mFrameBufferTimg, "AK_kagerouSwap00");
     mEmitterMng = new(mHeap, 0) JPAEmitterManager(mCommonResMng, 3000, 150, 200, mHeap);
-    JUT_ASSERT(1324, mEmitterMng != 0);
+    JUT_ASSERT(1324, mEmitterMng != NULL);
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(mHeap);
     mModelControl = new dPa_modelControl_c((J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPODA));
-    JUT_ASSERT(1332, mModelControl != 0);
+    JUT_ASSERT(1332, mModelControl != NULL);
     for (u16 i = 0; i < 8; i++) {
         u16 var1 = dPa_name::j_o_id[i];
         if (mCommonResMng->pEmtrRes->checkUserIndexDuplication(var1)) {
@@ -461,10 +461,10 @@ void dPa_control_c::createCommon(const void* param_1) {
 void dPa_control_c::createRoomScene(const void* param_1) {
     /* Nonmatching */
     mSceneHeap = mDoExt_createSolidHeapFromGame(0, 0);
-    JUT_ASSERT(1369, mSceneHeap != 0);
+    JUT_ASSERT(1369, mSceneHeap != NULL);
     mpData = param_1;
     mSceneResMng = new (mSceneHeap, 0) JPAResourceManager(mpData, mSceneHeap);
-    JUT_ASSERT(1373, mSceneResMng != 0);
+    JUT_ASSERT(1373, mSceneResMng != NULL);
     mSceneResMng->swapTexture(mDoGph_gInf_c::mFrameBufferTimg, "AK_kagerouSwap00");
     mEmitterMng->pResMgrArray[1] = mSceneResMng;
     mDoExt_adjustSolidHeap(mSceneHeap);

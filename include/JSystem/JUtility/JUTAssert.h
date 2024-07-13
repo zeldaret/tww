@@ -4,7 +4,9 @@
 #include "dolphin/types.h"
 #include "dolphin/os/OS.h"
 
-#define JUT_ASSERT(LINE, COND) (void)((COND) || (JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND), OSPanic(__FILE__, LINE, "Halt"), 0));
+#define JUT_SHOW_ASSERT(LINE, COND) JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND)
+
+#define JUT_ASSERT(LINE, COND) (void)((COND) || (JUT_SHOW_ASSERT(LINE, COND), OSPanic(__FILE__, LINE, "Halt"), 0));
 
 // Favored by JAI (JAudio)
 #define JUT_ASSERT_MSG(LINE, COND, MSG)                                                            \
@@ -15,10 +17,6 @@
             OSPanic(__FILE__, LINE, "Halt");                                                       \
         }                                                                                          \
     }
-
-#define JUT_PANIC(LINE)                                                                            \
-    JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, "0");                     \
-    OSPanic(__FILE__, LINE, "Halt");
 
 #define JUT_WARN(LINE, ...)                                                                        \
     JUTAssertion::setWarningMessage_f(JUTAssertion::getSDevice(), __FILE__, LINE, __VA_ARGS__);    \

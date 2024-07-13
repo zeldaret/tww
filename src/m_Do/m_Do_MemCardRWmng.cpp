@@ -48,7 +48,7 @@ void mDoMemCdRWm_CalcCheckSumPictData(void*, u32) {
 }
 
 /* 8001A358-8001A39C       .text mDoMemCdRWm_TestCheckSumPictData__FPv */
-void mDoMemCdRWm_TestCheckSumPictData(void*) {
+BOOL mDoMemCdRWm_TestCheckSumPictData(void*) {
     /* Nonmatching */
 }
 

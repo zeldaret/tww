@@ -52,7 +52,7 @@ BOOL dEvDt_Next_Stage(int staffIdx, int wipePrm) {
             dKy_set_nexttime(*pHour * 15.0f);
         dComIfGp_setNextStage(pStageName, *pStartCode, roomNo, layerNo, 0.0f, mode, TRUE, wipe);
     } else {
-        JUT_ASSERT(0x88, 0);
+        JUT_ASSERT(0x88, FALSE);
     }
 
     return TRUE;
@@ -204,7 +204,7 @@ void dEvDtStaff_c::advanceCut(int cutIdx) {
 void dEvDtStaff_c::specialProcLight() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("LIGHT");
     if (staffIdx == -1) {
-        JUT_ASSERT(0x16a, 0);
+        JUT_ASSERT(0x16a, FALSE);
         return;
     }
 
@@ -255,7 +255,7 @@ void dEvDtStaff_c::specialProcLight() {
 void dEvDtStaff_c::specialProcMessage() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("MESSAGE");
     if (staffIdx == -1) {
-        JUT_ASSERT(0x1C2, 0);
+        JUT_ASSERT(0x1C2, FALSE);
         return;
     }
 
@@ -270,7 +270,7 @@ void dEvDtStaff_c::specialProcMessage() {
         "TELOP_ON",
         "TELOP_OFF",
     };
-    static uint l_msgId;
+    static fpc_ProcID l_msgId;
     static msg_class* l_msg;
     static int l_msgNo;
 
@@ -380,7 +380,7 @@ void dEvDtStaff_c::specialProcMessage() {
 void dEvDtStaff_c::specialProcSound() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("SOUND");
     if (staffIdx == -1) {
-        JUT_ASSERT(0x254, 0);
+        JUT_ASSERT(0x254, FALSE);
         return;
     }
 
@@ -424,7 +424,7 @@ void dEvDtStaff_c::specialProcSound() {
                             2, 3, 4, 5, 6, 1, 7,
                         };
                         if (*pPrepare > 6)
-                            JUT_ASSERT(0x293, 0);
+                            JUT_ASSERT(0x293, FALSE);
                         mDoAud_prepareLandingDemo(landing_table[*pPrepare]);
                     }
 
@@ -465,7 +465,7 @@ void dEvDtStaff_c::specialProcSound() {
 void dEvDtStaff_c::specialProcCreate() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("CREATER");
     if (staffIdx == -1) {
-        JUT_ASSERT(0x2d3, 0);
+        JUT_ASSERT(0x2d3, FALSE);
         return;
     }
 
@@ -536,7 +536,7 @@ void dEvDtStaff_c::specialProcDirector() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     int staffIdx = dComIfGp_evmng_getMyStaffId("DIRECTOR");
     if (staffIdx == -1) {
-        JUT_ASSERT(0x330, 0);
+        JUT_ASSERT(0x330, FALSE);
         return;
     }
 
@@ -605,12 +605,12 @@ void dEvDtStaff_c::specialProcDirector() {
                 {
                     specialProc_WaitStart(staffIdx);
                     if (mTimer == 0)
-                        JUT_ASSERT(0x36b, 0);
+                        JUT_ASSERT(0x36b, FALSE);
 
                     const u8* pattern = (const u8*)dComIfGp_evmng_getMyIntegerP(staffIdx, "Pattern");
                     const u32* type = dComIfGp_evmng_getMyIntegerP(staffIdx, "Type");
                     if (pattern == NULL || type == NULL)
-                        JUT_ASSERT(0x36f, 0);
+                        JUT_ASSERT(0x36f, FALSE);
 
                     Vec xyz;
                     xyz.x = 0.0f;
@@ -711,7 +711,7 @@ void dEvDtStaff_c::specialProcDirector() {
 void dEvDtStaff_c::specialProcPackage() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("PACKAGE");
     if (staffIdx == -1) {
-        JUT_ASSERT(0x3f2, 0);
+        JUT_ASSERT(0x3f2, FALSE);
         return;
     }
 
@@ -779,7 +779,7 @@ void dEvDtStaff_c::specialProcPackage() {
         }
         break;
     case -1:
-        JUT_ASSERT(0x45c, 0);
+        JUT_ASSERT(0x45c, FALSE);
         dComIfGp_evmng_cutEnd(staffIdx);
         break;
     }
@@ -789,7 +789,7 @@ void dEvDtStaff_c::specialProcPackage() {
 void dEvDtStaff_c::specialProcTimekeeper() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("TIMEKEEPER");
     if (staffIdx == -1) {
-        JUT_ASSERT(0x471, 0);
+        JUT_ASSERT(0x471, FALSE);
         return;
     }
 
@@ -826,7 +826,7 @@ void dEvDtStaff_c::specialProcTimekeeper() {
         dComIfGp_evmng_cutEnd(staffIdx);
         break;
     case -1:
-        JUT_ASSERT(0x49f, 0);
+        JUT_ASSERT(0x49f, FALSE);
         dComIfGp_evmng_cutEnd(staffIdx);
         break;
     }

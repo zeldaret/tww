@@ -593,14 +593,15 @@ struct J3DZMode {
 struct J3DBlend : public J3DBlendInfo {
     J3DBlend() { *(J3DBlendInfo*)this = j3dDefaultBlendInfo; }
     explicit J3DBlend(const J3DBlendInfo& info) { *(J3DBlendInfo*)this = info; }
+    void setBlendInfo(const J3DBlendInfo& info) { *(J3DBlendInfo*)this = info; }
 
-    GXBlendMode getBlendMode() const { return (GXBlendMode)mBlendMode; }
+    GXBlendMode getType() const { return (GXBlendMode)mBlendMode; }
     GXBlendFactor getSrcFactor() const { return (GXBlendFactor)mSrcFactor; }
     GXBlendFactor getDstFactor() const { return (GXBlendFactor)mDstFactor; }
-    GXLogicOp getLogicOp() const { return (GXLogicOp)mLogicOp; }
+    GXLogicOp getOp() const { return (GXLogicOp)mLogicOp; }
 
     void load(u8 ditherEnable) {
-        J3DGDSetBlendMode(getBlendMode(), getSrcFactor(), getDstFactor(), getLogicOp(), ditherEnable);
+        J3DGDSetBlendMode(getType(), getSrcFactor(), getDstFactor(), getOp(), ditherEnable);
     }
 
     void setType(u8 i_type) {
@@ -614,6 +615,9 @@ struct J3DBlend : public J3DBlendInfo {
     void setDstFactor(u8 i_dst) {
         mDstFactor = i_dst;
     }
+
+    // void operator=(const J3DBlend&) {}
+    // void operator==(J3DBlend&) {}
 };
 
 extern const J3DFogInfo j3dDefaultFogInfo;

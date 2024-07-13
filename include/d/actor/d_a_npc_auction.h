@@ -2,12 +2,13 @@
 #define D_A_NPC_AUCTION_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
 
 struct sAnmDat {
     
 };
 
-class daNpcAuction_c : public fopAc_ac_c {
+class daNpcAuction_c : public fopNpc_npc_c {
 public:
     daNpcAuction_c();
 
@@ -17,7 +18,7 @@ public:
     inline BOOL _execute();
     void getMdlNo() {}
     void getPhaseP() {}
-    void getPiconOfsY() {}
+    f32 getPiconOfsY() { return mPiconOfsY; }
     void setAction(void (daNpcAuction_c::*)()) {}
     void setBmtNo(int) {}
     void setBtpNo(int) {}
@@ -38,8 +39,8 @@ public:
     void eventMesSet();
     void XyCheckCB(int);
     void XyEventCB(int);
-    void next_msgStatus(unsigned long*);
-    void getMsg();
+    u16 next_msgStatus(u32*);
+    u32 getMsg();
     void setAnmFromMsgTag();
     void getPrmNpcNo();
     void setMtx();
@@ -55,19 +56,19 @@ public:
     void clrEmitter();
 
 public:
-    /* 0x290 */ u8 m290[0x6B0 - 0x290];
-    /* 0x6B0 */ u8 m6B0;
-    /* 0x6B1 */ u8 m6B1[0x73C - 0x6B1];
+    /* 0x6C4 */ u8 m6C4[0x724 - 0x6C4];
+    /* 0x724 */ f32 mPiconOfsY;
+    /* 0x728 */ u8 m728[0x73B - 0x728];
+    /* 0x73B */ u8 m73B;
     /* 0x73C */ u8 m73C;
     /* 0x73D */ u8 m73D;
-    /* 0x73E */ u8 m73E;
-    /* 0x73F */ u8 m73F[0x740 - 0x73F];
-    /* 0x740 */ u8 m740;
-    /* 0x741 */ u8 m741[0x743 - 0x741];
-    /* 0x743 */ u8 m743;
-    /* 0x744 */ u8 m744[0x745 - 0x744];
-    /* 0x745 */ u8 m745;
-    /* 0x746 */ u8 m746[0x74C - 0x746];
+    /* 0x73E */ u8 m73E[0x73F - 0x73E];
+    /* 0x73F */ u8 m73F;
+    /* 0x740 */ u8 m740[0x742 - 0x740];
+    /* 0x742 */ u8 m742;
+    /* 0x743 */ u8 m743[0x744 - 0x743];
+    /* 0x744 */ u8 m744;
+    /* 0x745 */ u8 field_745[0x74B - 0x745];
 };
 
 #endif /* D_A_NPC_AUCTION_H */

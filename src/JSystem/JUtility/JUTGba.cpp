@@ -24,7 +24,7 @@ JUTGba* JUTGba::sManager;
 
 /* 802CBEB4-802CC03C       .text create__6JUTGbaFv */
 JUTGba* JUTGba::create() {
-    JUT_ASSERT(61, sManager == 0);
+    JUT_ASSERT(61, sManager == NULL);
     sManager = new JUTGba();
     GBAInit();
     OSReport(":::GBA: Init()\n");
@@ -82,8 +82,8 @@ int JUTGba::resultStatus_common(int param_1, u32 param_2, u8* oStatus) {
 
 /* 802CC0E8-802CC1F8       .text doJoyBoot__6JUTGbaFillPUcUlPFP11JUTGbaParamPv_vPv */
 void JUTGba::doJoyBoot(int param_1, s32 palette_color, s32 palette_speed, u8* program, u32 length, JUTGba_Func param_6, void* param_7) {
-    JUT_ASSERT(183, sManager != 0);
-    JUT_ASSERT(184, program != 0 && length != 0);
+    JUT_ASSERT(183, sManager != NULL);
+    JUT_ASSERT(184, program != NULL && length != 0);
     JUTGbaParam* param = &sManager->mParams[param_1];
     param->program = program;
     param->length = length;
@@ -97,7 +97,7 @@ void JUTGba::doJoyBoot(int param_1, s32 palette_color, s32 palette_speed, u8* pr
 
 /* 802CC1F8-802CC308       .text resultJoyBoot__6JUTGbaFiPUc */
 int JUTGba::resultJoyBoot(int param_1, u8* param_2) {
-    JUT_ASSERT(212, sManager != 0);
+    JUT_ASSERT(212, sManager != NULL);
     JUTGbaParam* param = &sManager->mParams[param_1];
     if (param->field_0x24 != 1) {
         return -1;
@@ -124,7 +124,7 @@ int JUTGba::resultJoyBoot(int param_1, u8* param_2) {
 
 /* 802CC308-802CC3A8       .text doInitProbe__6JUTGbaFiPFP11JUTGbaParamPv_vPv */
 void JUTGba::doInitProbe(int param_1, JUTGba_Func param_2, void* param_3) {
-    JUT_ASSERT(255, sManager != 0);
+    JUT_ASSERT(255, sManager != NULL);
     JUTGbaParam* param = &sManager->mParams[param_1];
     param->field_0x4c = param_2;
     param->field_0x50 = param_3;
@@ -134,13 +134,13 @@ void JUTGba::doInitProbe(int param_1, JUTGba_Func param_2, void* param_3) {
 
 /* 802CC3A8-802CC430       .text resultInitProbe__6JUTGbaFiPUl */
 int JUTGba::resultInitProbe(int param_1, u32* param_2) {
-    JUT_ASSERT(278, sManager != 0);
+    JUT_ASSERT(278, sManager != NULL);
     return result_common(param_1, 2, param_2);
 }
 
 /* 802CC430-802CC4D0       .text doProbe__6JUTGbaFiPFP11JUTGbaParamPv_vPv */
 void JUTGba::doProbe(int param_1, JUTGba_Func param_2, void* param_3) {
-    JUT_ASSERT(287, sManager != 0);
+    JUT_ASSERT(287, sManager != NULL);
     JUTGbaParam* param = &sManager->mParams[param_1];
     param->field_0x4c = param_2;
     param->field_0x50 = param_3;
@@ -150,13 +150,13 @@ void JUTGba::doProbe(int param_1, JUTGba_Func param_2, void* param_3) {
 
 /* 802CC4D0-802CC558       .text resultProbe__6JUTGbaFiPUl */
 BOOL JUTGba::resultProbe(int param_1, u32* param_2) {
-    JUT_ASSERT(310, sManager != 0);
+    JUT_ASSERT(310, sManager != NULL);
     return result_common(param_1, 3, param_2);
 }
 
 /* 802CC558-802CC5F8       .text doReset__6JUTGbaFiPFP11JUTGbaParamPv_vPv */
 void JUTGba::doReset(int param_1, JUTGba_Func param_2, void* param_3) {
-    JUT_ASSERT(320, sManager != 0);
+    JUT_ASSERT(320, sManager != NULL);
     JUTGbaParam* param = &sManager->mParams[param_1];
     param->field_0x4c = param_2;
     param->field_0x50 = param_3;
@@ -166,13 +166,13 @@ void JUTGba::doReset(int param_1, JUTGba_Func param_2, void* param_3) {
 
 /* 802CC5F8-802CC680       .text resultReset__6JUTGbaFiPUc */
 BOOL JUTGba::resultReset(int param_1, u8* param_2) {
-    JUT_ASSERT(340, sManager != 0);
+    JUT_ASSERT(340, sManager != NULL);
     return resultStatus_common(param_1, 4, param_2);
 }
 
 /* 802CC680-802CC728       .text doRead__6JUTGbaFiPUcPFP11JUTGbaParamPv_vPv */
 void JUTGba::doRead(int param_1, u8* param_2, JUTGba_Func param_3, void* param_4) {
-    JUT_ASSERT(350, sManager != 0);
+    JUT_ASSERT(350, sManager != NULL);
     JUTGbaParam* param = &sManager->mParams[param_1];
     param->field_0x4c = param_3;
     param->field_0x50 = param_4;
@@ -183,13 +183,13 @@ void JUTGba::doRead(int param_1, u8* param_2, JUTGba_Func param_3, void* param_4
 
 /* 802CC728-802CC7B0       .text resultRead__6JUTGbaFiPUc */
 BOOL JUTGba::resultRead(int param_1, u8* param_2) {
-    JUT_ASSERT(371, sManager != 0);
+    JUT_ASSERT(371, sManager != NULL);
     return resultStatus_common(param_1, 5, param_2);
 }
 
 /* 802CC7B0-802CC858       .text doWrite__6JUTGbaFiPUcPFP11JUTGbaParamPv_vPv */
 void JUTGba::doWrite(int param_1, u8* param_2, JUTGba_Func param_3, void* param_4) {
-    JUT_ASSERT(381, sManager != 0);
+    JUT_ASSERT(381, sManager != NULL);
     JUTGbaParam* param = &sManager->mParams[param_1];
     param->field_0x4c = param_3;
     param->field_0x50 = param_4;
@@ -200,13 +200,13 @@ void JUTGba::doWrite(int param_1, u8* param_2, JUTGba_Func param_3, void* param_
 
 /* 802CC858-802CC8E0       .text resultWrite__6JUTGbaFiPUc */
 BOOL JUTGba::resultWrite(int param_1, u8* param_2) {
-    JUT_ASSERT(403, sManager != 0);
+    JUT_ASSERT(403, sManager != NULL);
     return resultStatus_common(param_1, 6, param_2);
 }
 
 /* 802CC8E0-802CC980       .text doGetStatus__6JUTGbaFiPFP11JUTGbaParamPv_vPv */
 void JUTGba::doGetStatus(int param_1, JUTGba_Func param_2, void* param_3) {
-    JUT_ASSERT(413, sManager != 0);
+    JUT_ASSERT(413, sManager != NULL);
     JUTGbaParam* param = &sManager->mParams[param_1];
     param->field_0x4c = param_2;
     param->field_0x50 = param_3;
@@ -216,7 +216,7 @@ void JUTGba::doGetStatus(int param_1, JUTGba_Func param_2, void* param_3) {
 
 /* 802CC980-802CCA08       .text resultGetStatus__6JUTGbaFiPUc */
 BOOL JUTGba::resultGetStatus(int param_1, u8* param_2) {
-    JUT_ASSERT(434, sManager != 0);
+    JUT_ASSERT(434, sManager != NULL);
     return resultStatus_common(param_1, 7, param_2);
 }
 

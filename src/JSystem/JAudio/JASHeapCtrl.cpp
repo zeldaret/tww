@@ -30,7 +30,7 @@ void JASystem::Kernel::THeap::initRootHeap(void* ptr, u32 size, Type type) {
 
 /* 8027CD38-8027CF68       .text alloc__Q38JASystem6Kernel5THeapFPQ38JASystem6Kernel5THeapUl */
 bool JASystem::Kernel::THeap::alloc(THeap* mother, u32 param_2) {
-    JUT_ASSERT(118, mother != 0);
+    JUT_ASSERT(118, mother != NULL);
     OSLockMutex(&mMutex);
     if (isAllocated()) {
         OSReport("[JASHeap::alloc] すでにヒープは確保されています。初期化してからにしてください。\n");
@@ -131,8 +131,8 @@ static void dummy(JASystem::Kernel::TDisposer* disposer) {
 
 /* 8027D088-8027D1FC       .text insertChild__Q38JASystem6Kernel5THeapFPQ38JASystem6Kernel5THeapPQ38JASystem6Kernel5THeapPvUlb */
 void JASystem::Kernel::THeap::insertChild(THeap* heap, THeap* next, void* param_3, u32 param_4, bool param_5) {
-    JUT_ASSERT(537, heap != 0);
-    JUT_ASSERT(538, next == 0 || &mTree == next->mTree.getParent());
+    JUT_ASSERT(537, heap != NULL);
+    JUT_ASSERT(538, next == NULL || &mTree == next->mTree.getParent());
     OSLockMutex(&mMutex);
     if (!param_5) {
         JSUTreeIterator<THeap> it;

@@ -45,22 +45,22 @@ extern "C" int search_partial_address(void* address, int* module_id, int* sectio
         return 0xFFFFFFFF;
 
     OSModuleInfo* module = *(OSModuleInfo**)0x800030C8;
-    for (; module != NULL; module = (OSModuleInfo*)module->mNext) {
+    for (; module != NULL; module = (OSModuleInfo*)module->link.next) {
         u32 i, addr;
-        OSSectionInfo* section = (OSSectionInfo*)module->info.sectionInfoOffset;
+        OSSectionInfo* section = (OSSectionInfo*)module->sectionInfoOffset;
 
-        for (i = 0; i < module->mNumSections; section++, i++) {
-            if (section->mSize != 0) {
-                addr = section->mOffset & ~0x01;
-                if ((addr <= (u32)address) && (u32)address < (addr + section->mSize)) {
+        for (i = 0; i < module->numSections; section++, i++) {
+            if (section->size != 0) {
+                addr = section->offset & ~0x01;
+                if ((addr <= (u32)address) && (u32)address < (addr + section->size)) {
                     if (module_id != NULL)
-                        *module_id = module->mId;
+                        *module_id = module->id;
                     if (section_id != NULL)
                         *section_id = i;
                     if (section_offset)
                         *section_offset = (u32)address - addr;
                     if (name_offset)
-                        *name_offset = module->mModuleNameOffset;
+                        *name_offset = module->nameOffset;
                     return 0;
                 }
             }

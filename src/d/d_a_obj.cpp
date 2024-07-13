@@ -7,6 +7,8 @@
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_kankyo_wether.h"
+#include "d/d_path.h"
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 
@@ -59,35 +61,118 @@ namespace daObj {
     }
 
     /* 800668BC-800669E8       .text get_wind_spd__5daObjFP10fopAc_ac_cf */
-    void get_wind_spd(fopAc_ac_c*, f32) {
-        /* Nonmatching */
+    void get_wind_spd(fopAc_ac_c* param_1, f32 param_2) {
+        static cXyz total_spd(cXyz::Zero);
+
+        cXyz wind = *dKyw_get_wind_vec() * dKyw_get_wind_pow();
+
+        cXyz pntVec;
+        f32 pntPow;
+        dKyw_pntwind_get_info(&param_1->current.pos, &pntVec, &pntPow);
+        pntVec *= pntPow;
+
+        total_spd = (wind + pntVec) * (param_2 * 0.5f);
     }
 
     /* 800669E8-80066B0C       .text get_path_spd__5daObjFR13cBgS_PolyInfof */
-    void get_path_spd(cBgS_PolyInfo&, f32) {
-        /* Nonmatching */
+    cXyz& get_path_spd(cBgS_PolyInfo& param_1, f32 param_2) {
+        static cXyz path_spd(cXyz::Zero);
+
+        int temp;
+        if(dPath_GetPolyRoomPathVec(param_1, &path_spd, &temp)) {
+            if(path_spd.normalizeRS()) {
+                path_spd *= param_2 * temp * (1.0f / 255.0f);
+            }
+            else {
+                path_spd = cXyz::Zero;
+            }
+        }
+
+        return path_spd;
     }
 
     /* 80066B0C-80066B3C       .text posMoveF_stream__5daObjFP10fopAc_ac_cPC4cXyzPC4cXyzff */
-    void posMoveF_stream(fopAc_ac_c*, const cXyz*, const cXyz*, f32, f32) {
-        /* Nonmatching */
+    void posMoveF_stream(fopAc_ac_c* param_1, const cXyz* param_2, const cXyz* param_3, f32 param_4, f32 param_5) {
+        posMoveF_grade(param_1, param_2, param_3, param_4, param_5, 0, 0.0f, 0.0f, 0);
     }
 
     namespace {
         /* 80066B3C-80066C38       .text posMoveF_resist_acc__Q25daObj21@unnamed@d_a_obj_cpp@FP4cXyzPC10fopAc_ac_cPC4cXyzff */
-        void posMoveF_resist_acc(cXyz*, const fopAc_ac_c*, const cXyz*, f32, f32) {
-            /* Nonmatching */
+        void posMoveF_resist_acc(cXyz* pDst, const fopAc_ac_c* pActor, const cXyz* pStreamSpd, f32 param_4, f32 param_5) {
+            cXyz delta = pActor->speed - *pStreamSpd;
+
+            f32 dx = delta.x;
+            f32 dy = delta.y;
+            f32 dz = delta.z;
+
+            cXyz result(dx * param_4, dy * param_4, dz * param_4);
+            result.x += fabsf(dx) * dx * param_5;
+            result.y += fabsf(dy) * dy * param_5;
+            result.z += fabsf(dz) * dz * param_5;
+
+            result *= -1.0f;
+            *pDst = result;
         }
 
         /* 80066C38-80066D6C       .text posMoveF_grade_acc__Q25daObj21@unnamed@d_a_obj_cpp@FP4cXyzPC10fopAc_ac_cPC4cXyzffPC4cXyzPC4cXyz */
-        void posMoveF_grade_acc(cXyz*, const fopAc_ac_c*, const cXyz*, f32, f32, const cXyz*, const cXyz*) {
-            /* Nonmatching */
+        void posMoveF_grade_acc(cXyz* pDst, const fopAc_ac_c* pActor, const cXyz* pNorm, f32 friction, f32 noGradeCos, const cXyz* pAccel0, const cXyz* pAccel1) {
+            *pDst = cXyz::Zero;
+
+            if(pNorm) {
+                cXyz accel = *pAccel0;
+                accel.y = pAccel0->y + pActor->gravity;
+                if(pAccel1) {
+                    accel += *pAccel1;
+                }
+
+                if(accel.getDotProduct(*pNorm) < 0.0f) {
+                    if(pNorm->y <= noGradeCos) {
+                        cXyz temp;
+                        cM3d_CrawVec(*pNorm, accel, &temp);
+                        *pDst += temp;
+                    }
+
+                    cXyz temp;
+                    cM3d_CrawVec(*pNorm, pActor->speed, &temp);
+                    *pDst -= temp * friction;
+                }
+            }
         }
     }
 
     /* 80066D6C-8006700C       .text posMoveF_grade__5daObjFP10fopAc_ac_cPC4cXyzPC4cXyzffPC4cXyzffPC4cXyz */
-    void posMoveF_grade(fopAc_ac_c*, const cXyz*, const cXyz*, f32, f32, const cXyz*, f32, f32, const cXyz*) {
+    void posMoveF_grade(fopAc_ac_c* pActor, const cXyz* pAddVel, const cXyz* stream_spd, f32 param_4, f32 param_5, const cXyz* pNorm, f32 friction, f32 no_grade_cos, const cXyz* pAddAccel) {
         /* Nonmatching */
+        JUT_ASSERT(0x118, stream_spd != NULL)
+
+        cXyz resist_accel;
+        posMoveF_resist_acc(&resist_accel, pActor, stream_spd, param_4, param_5);
+
+        JUT_ASSERT(0x121, (friction >= 0.0f) && (friction < 1.0f) && (no_grade_cos >= 0.0f) && (no_grade_cos <= 1.0f))
+
+        cXyz vel;
+        posMoveF_grade_acc(&vel, pActor, pNorm, param_5, param_4, &resist_accel, pAddAccel);
+
+        f32 spf = pActor->speedF;
+        f32 grav = pActor->gravity;
+
+        f32 x = spf * cM_ssin(pActor->current.angle.y) + resist_accel.x + vel.x;
+        f32 y = pActor->speed.y + grav + resist_accel.y + vel.y;
+        f32 z = spf * cM_scos(pActor->current.angle.y) + resist_accel.z + vel.z;
+        if(pAddAccel) {
+            x += pAddAccel->x;
+            y += pAddAccel->y;
+            z += pAddAccel->z;
+        }
+
+        if(y < pActor->maxFallSpeed) {
+            y = pActor->maxFallSpeed;
+        }
+
+        pActor->speed.set(x, y, z);
+        pActor->speedF = sqrtf(x * x + z * z);
+        pActor->current.angle.y = cM_atan2s(spf, grav);
+        fopAcM_posMove(pActor, pAddVel);
     }
 
     /* 8006700C-800671D4       .text quat_rotBaseY__5daObjFP10QuaternionRC4cXyz */

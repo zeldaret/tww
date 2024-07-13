@@ -18,6 +18,8 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 
+// #pragma sym on
+
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 
@@ -109,7 +111,7 @@ int mDoExt_baseAnm::initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_
 
 /* 8000DF24-8000DFC4       .text play__14mDoExt_baseAnmFv */
 int mDoExt_baseAnm::play() {
-    JUT_ASSERT(462, mFrameCtrl != 0);
+    JUT_ASSERT(462, mFrameCtrl != NULL);
     mFrameCtrl->update();
     return isStop();
 }
@@ -128,7 +130,7 @@ void mDoExt_bpkAnm::entry(J3DModelData* i_modelData, f32 param_1) {
 int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
 
     JUT_ASSERT(531, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(533, i_matTable != 0 && i_bpk != 0);
+    JUT_ASSERT(533, i_matTable != NULL && i_bpk != NULL);
     mpAnm = i_bpk;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
@@ -180,7 +182,7 @@ void mDoExt_btpAnm::entry(J3DModelData* i_modelData, s16 i_frame) {
 /* 8000E37C-8000E610       .text init__13mDoExt_btpAnmFP16J3DMaterialTableP16J3DAnmTexPatterniifssbi */
 int mDoExt_btpAnm::init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btp, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
     JUT_ASSERT(648, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(650, i_matTable != 0 && i_btp != 0);
+    JUT_ASSERT(650, i_matTable != NULL && i_btp != NULL);
     mpAnm = i_btp;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
@@ -232,7 +234,7 @@ void mDoExt_btkAnm::entry(J3DModelData* i_modelData, f32 i_frame) {
 /* 8000E71C-8000EAE4       .text init__13mDoExt_btkAnmFP16J3DMaterialTableP19J3DAnmTextureSRTKeyiifssbi */
 int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
     JUT_ASSERT(781, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(783, i_matTable != 0 && i_btk != 0);
+    JUT_ASSERT(783, i_matTable != NULL && i_btk != NULL);
     mpAnm = i_btk;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
@@ -299,7 +301,7 @@ void mDoExt_brkAnm::entry(J3DModelData* i_modelData, f32 i_frame) {
 /* 8000EBC4-8000EEE8       .text init__13mDoExt_brkAnmFP16J3DMaterialTableP15J3DAnmTevRegKeyiifssbi */
 int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
     JUT_ASSERT(910, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(912, i_matTable != 0 && i_brk != 0);
+    JUT_ASSERT(912, i_matTable != NULL && i_brk != NULL);
     mpAnm = i_brk;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
@@ -356,7 +358,7 @@ void mDoExt_brkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
 /* 8000EFBC-8000F178       .text init__13mDoExt_bvaAnmFP8J3DModelP20J3DAnmVisibilityFulliifssbi */
 int mDoExt_bvaAnm::init(J3DModel* i_model, J3DAnmVisibilityFull* i_bva, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
     JUT_ASSERT(1002, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(1004, i_model != 0 && i_bva != 0);
+    JUT_ASSERT(1004, i_model != NULL && i_bva != NULL);
     mpAnm = i_bva;
     if (!i_modify) {
         field_0xc = new J3DVisibilityManager(mpAnm);
@@ -386,7 +388,7 @@ void mDoExt_bvaAnm::entry(J3DModel* i_model, s16 i_frame) {
 /* 8000F1B4-8000F408       .text init__13mDoExt_bckAnmFP12J3DModelDataP15J3DAnmTransformiifssb */
 int mDoExt_bckAnm::init(J3DModelData* i_modelData, J3DAnmTransform* i_bck, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify) {
     JUT_ASSERT(1065, i_modify || isCurrentSolidHeap());
-    JUT_ASSERT(1067, i_bck != 0);
+    JUT_ASSERT(1067, i_bck != NULL);
     mAnmTransform = i_bck;
     if (!i_modify) {
         mAnm = new J3DMtxCalcMayaAnm(mAnmTransform);
@@ -407,7 +409,7 @@ int mDoExt_bckAnm::init(J3DModelData* i_modelData, J3DAnmTransform* i_bck, BOOL 
 /* 8000F590-8000F610       .text changeBckOnly__13mDoExt_bckAnmFP15J3DAnmTransform */
 void mDoExt_bckAnm::changeBckOnly(J3DAnmTransform* i_bck) {
     mAnmTransform = i_bck;
-    JUT_ASSERT(1104, mAnm != 0);
+    JUT_ASSERT(1104, mAnm != NULL);
     mAnm->setAnmTransform(mAnmTransform);
 }
 
@@ -481,7 +483,7 @@ void mDoExt_modelUpdateDL(J3DModel* i_model) {
         i_model->calc();
         mDoExt_modelDiff(i_model);
     } else {
-        if (g_regHIO.mChild[2].mShortRegs[9] == 0) {
+        if (REG2_S(9) == 0) {
             i_model->unlock();
         }
         i_model->update();
@@ -512,7 +514,7 @@ void mDoExt_modelEntryDL(J3DModel* i_model) {
     if (model_data->getModelDataType() == 1 && !model_data->isLocked()) {
         mDoExt_modelDiff(i_model);
     } else {
-        if (g_regHIO.mChild[2].mShortRegs[9] == 0) {
+        if (REG2_S(9) == 0) {
             i_model->unlock();
         }
         i_model->entry();
@@ -603,6 +605,7 @@ void mDoExt_backupMatBlock_c::store(J3DMaterial* i_material) {
 
 /* 800101BC-8001084C       .text restore__23mDoExt_backupMatBlock_cFP11J3DMaterial */
 void mDoExt_backupMatBlock_c::restore(J3DMaterial* i_material) {
+    /* Nonmatching - regalloc on indBlock */
     J3DColorBlock* colorBlock = i_material->getColorBlock();
     colorBlock->setColorChanNum(mColorChanNum);
     for (u32 i = 0; i < 2; i++) {
@@ -793,7 +796,7 @@ JKRExpHeap* gameHeap;
 
 /* 80011734-800117E4       .text mDoExt_createGameHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap) {
-    JUT_ASSERT(2050, gameHeap == 0 || heapSize == 0);
+    JUT_ASSERT(2050, gameHeap == NULL || heapSize == 0);
     gameHeap = JKRExpHeap::create(heapSize, i_heap, true);
     gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return gameHeap;
@@ -820,7 +823,7 @@ JKRExpHeap* zeldaHeap;
 
 /* 8001181C-800118C0       .text mDoExt_createZeldaHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap) {
-    JUT_ASSERT(2112, zeldaHeap == 0 || heapSize == 0);
+    JUT_ASSERT(2112, zeldaHeap == NULL || heapSize == 0);
     return zeldaHeap = JKRExpHeap::create(heapSize, i_heap, true);
 }
 
@@ -845,7 +848,7 @@ JKRExpHeap* commandHeap;
 
 /* 800118F8-8001199C       .text mDoExt_createCommandHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap) {
-    JUT_ASSERT(2173, commandHeap == 0 || heapSize == 0);
+    JUT_ASSERT(2173, commandHeap == NULL || heapSize == 0);
     return commandHeap = JKRExpHeap::create(heapSize, i_heap, true);
 }
 
@@ -870,7 +873,7 @@ JKRExpHeap* archiveHeap;
 
 /* 800119D4-80011A84       .text mDoExt_createArchiveHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap) {
-    JUT_ASSERT(2237, archiveHeap == 0 || heapSize == 0);
+    JUT_ASSERT(2237, archiveHeap == NULL || heapSize == 0);
     archiveHeap = JKRExpHeap::create(heapSize, i_heap, true);
     archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return archiveHeap;
@@ -946,7 +949,7 @@ JKRSolidHeap* mDoExt_createSolidHeapToCurrent(u32 i_size, JKRHeap* i_parent, u32
         return NULL;
     }
     JUT_ASSERT(2545, OSGetCurrentThread() == &mainThread);
-    JUT_ASSERT(2546, mDoExt_SaveCurrentHeap == 0);
+    JUT_ASSERT(2546, mDoExt_SaveCurrentHeap == NULL);
     mDoExt_SaveCurrentHeap = JKRGetCurrentHeap();
     mDoExt_setCurrentHeap(resultHeap);
 
@@ -978,7 +981,7 @@ void mDoExt_destroySolidHeap(JKRSolidHeap* i_heap) {
 
 /* 80011D68-80011DD4       .text mDoExt_setCurrentHeap__FP7JKRHeap */
 JKRHeap* mDoExt_setCurrentHeap(JKRHeap* heap) {
-    JUT_ASSERT(2684, heap != 0);
+    JUT_ASSERT(2684, heap != NULL);
     return heap->becomeCurrentHeap();
 }
 
@@ -990,7 +993,7 @@ JKRHeap* mDoExt_getCurrentHeap() {
 /* 80011DDC-80011E98       .text mDoExt_restoreCurrentHeap__Fv */
 void mDoExt_restoreCurrentHeap() {
     JUT_ASSERT(2754, OSGetCurrentThread() == &mainThread);
-    JUT_ASSERT(2755, mDoExt_SaveCurrentHeap != 0);
+    JUT_ASSERT(2755, mDoExt_SaveCurrentHeap != NULL);
     mDoExt_SaveCurrentHeap->becomeCurrentHeap();
     mDoExt_SaveCurrentHeap = NULL;
 }
@@ -1231,7 +1234,6 @@ ERROR_EXIT:
 
 /* 80012A2C-80012D78       .text calc__14mDoExt_McaMorfFUs */
 void mDoExt_McaMorf::calc(u16 param_0) {
-    /* Nonmatching - J3DMtxCalcBasic vtable order */
     if (!mpModel) {
         return;
     }
@@ -1520,7 +1522,7 @@ void mDoExt_McaMorf2::ERROR_EXIT() {
 
 /* 80013770-80013E50       .text calc__15mDoExt_McaMorf2FUs */
 void mDoExt_McaMorf2::calc(u16 param_0) {
-    /* Nonmatching - J3DMtxCalcBasic vtable order, instruction swap on f30 = field_0x84 */
+    /* Nonmatching - regalloc (fixing the regalloc causes an instruction swap on f30 = field_0x84) */
     if (!mpModel) {
         return;
     }
@@ -1545,6 +1547,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
         quatPtr = &mpQuat[param_0];
     }
     Mtx mtx;
+    f32 f31;
+    f32 f30;
     if (!mpAnm1) {
         *infoPtr = mpModel->getModelData()->getJointNodePointer(param_0)->getTransformInfo();
         if (mpCallback1) {
@@ -1563,8 +1567,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
             *infoPtr = spD8[0];
         } else {
             mpAnm2->getTransform(param_0, &spD8[1]);
-            f32 f30 = field_0x84;
-            f32 f31 = 1.0f - f30;
+            f31 = 1.0f - field_0x84;
+            f30 = field_0x84;
             infoPtr->mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
             infoPtr->mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
             infoPtr->mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
@@ -1579,8 +1583,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
             mDoExt_setJ3DData(mtx, infoPtr, param_0);
         }
     } else if (!mpAnm2) {
-        f32 f30 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
-        f32 f31 = 1.0f - f30;
+        f30 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
+        f31 = 1.0f - f30;
         mpAnm1->getTransform(param_0, &sp68);
         if (mpCallback1) {
             mpCallback1->execute(param_0, &sp68);
@@ -1598,8 +1602,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
     } else {
         mpAnm1->getTransform(param_0, &spD8[0]);
         mpAnm2->getTransform(param_0, &spD8[1]);
-        f32 f30 = field_0x84;
-        f32 f31 = 1.0f - f30;
+        f31 = 1.0f - field_0x84;
+        f30 = field_0x84;
         sp68.mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
         sp68.mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
         sp68.mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
@@ -1815,13 +1819,68 @@ u8 l_toonMat1DL[] ALIGN_DECL(32) = {
 };
 
 /* 800143B8-80014580       .text init__15mDoExt_3Dline_cFUsii */
-int mDoExt_3Dline_c::init(u16, int, int) {
-    /* Nonmatching */
+int mDoExt_3Dline_c::init(u16 numSegments, int hasSize, int hasTex) {
+    mpSegments = new cXyz[numSegments];
+    if (mpSegments == NULL)
+        return FALSE;
+
+    if (hasSize) {
+        mpSize = new u8[numSegments];
+        if (mpSize == NULL)
+            return FALSE;
+    } else {
+        mpSize = NULL;
+    }
+
+    u32 numArr = numSegments * 2;
+    mPosArr[0] = new cXyz[numArr];
+    if (mPosArr[0] == NULL)
+        return FALSE;
+
+    mPosArr[1] = new cXyz[numArr];
+    if (mPosArr[1] == NULL)
+        return FALSE;
+
+    if (hasTex) {
+        mTexArr[0] = new cXy[numArr];
+        if (mTexArr[0] == NULL)
+            return FALSE;
+
+        mTexArr[1] = new cXy[numArr];
+        if (mTexArr[1] == NULL)
+            return FALSE;
+
+        cXy* tex0 = mTexArr[0];
+        cXy* tex1 = mTexArr[1];
+        for (s32 i = 0; i < numSegments; i++) {
+            tex0[0].x = 0.0f;
+            tex1[0].x = 0.0f;
+            tex0[1].x = 1.0f;
+            tex1[1].x = 1.0f;
+
+            tex0 += 2;
+            tex1 += 2;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 80014584-80014664       .text init__19mDoExt_3DlineMat0_cFUsUsi */
-int mDoExt_3DlineMat0_c::init(u16, u16, int) {
-    /* Nonmatching */
+int mDoExt_3DlineMat0_c::init(u16 numLines, u16 numSegments, int hasSize) {
+    mNumLines = numLines;
+    mMaxSegments = numSegments;
+    mpLines = new mDoExt_3Dline_c[numLines];
+    if (mpLines == NULL)
+        return FALSE;
+
+    for (s32 i = 0; i < numLines; i++)
+        if (!mpLines[i].init(numSegments, hasSize, FALSE))
+            return FALSE;
+
+    mpNextLineMat = NULL;
+    mCurArr = 0;
+    return TRUE;
 }
 
 /* 80014664-800146A0       .text __dt__15mDoExt_3Dline_cFv */
@@ -1858,22 +1917,237 @@ void mDoExt_3DlineMat0_c::setMaterial() {
 
 /* 80014798-800148B4       .text draw__19mDoExt_3DlineMat0_cFv */
 void mDoExt_3DlineMat0_c::draw() {
-    /* Nonmatching */
+    GXSetTevColor(GX_TEVREG2, mColor);
+    if (mpTevStr != NULL) {
+        GXSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);
+        GXSetTevColor(GX_TEVREG1, mpTevStr->mColorK0);
+    }
+
+    mDoExt_3Dline_c* line = mpLines;
+    u16 numTriStrip = mNumSegments * 2;
+    for (s32 i = 0; i < mNumLines; i++) {
+        GXSetArray(GX_VA_POS, line->mPosArr[mCurArr], sizeof(cXyz));
+        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, numTriStrip);
+        for (u16 j = 0; j < numTriStrip;) {
+            GXPosition1x16(j);
+            GXNormal1x8(0);
+            j++;
+
+            GXPosition1x16(j);
+            GXNormal1x8(1);
+            j++;
+        }
+        GXEnd();
+        line++;
+    }
+
+    mCurArr ^= 1;
 }
 
 /* 800148B4-80014E04       .text update__19mDoExt_3DlineMat0_cFUsfR8_GXColorUsP12dKy_tevstr_c */
-void mDoExt_3DlineMat0_c::update(u16, f32, GXColor&, u16, dKy_tevstr_c*) {
-    /* Nonmatching */
+void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 space, dKy_tevstr_c* pTevStr) {
+    cXyz eyeDelta;
+    cXyz delta;
+    cXyz nextP0;
+    cXyz nextP1;
+
+    mDoExt_3Dline_c* line;
+    u32 posArrSize;
+    cXyz* pos;
+    cXyz* r_dstPos;
+    cXyz* dstPos;
+
+    mColor = newColor;
+    mpTevStr = pTevStr;
+    mNumSegments = segs;
+    if (mNumSegments > mMaxSegments)
+        mNumSegments = mMaxSegments;
+
+    view_class* view = dComIfGd_getView();
+    line = mpLines;
+
+    f32 spacing;
+    if (space != 0) {
+        spacing = size / space;
+    } else {
+        spacing = 0.0f;
+    }
+
+    posArrSize = mNumSegments * 2 * sizeof(cXyz);
+
+    for (s32 i = 0; i < mNumLines; i++) {
+        pos = line->mpSegments;
+        dstPos = line->mPosArr[mCurArr];
+        f32 r_size = size;
+
+        delta = pos[1] - pos[0];
+
+        eyeDelta = pos[0] - view->mLookat.mEye;
+        delta = delta.outprod(eyeDelta);
+        f32 scale = delta.abs();
+        if (scale != 0.0f) {
+            scale = size / scale;
+            VECScale(&delta, &delta, scale);
+        }
+
+        dstPos[0] = pos[0] + delta;
+        dstPos[1] = pos[0] - delta;
+
+        r_dstPos = dstPos;
+        r_dstPos += 2;
+
+        pos++;
+        nextP0 = pos[0] + delta;
+        nextP1 = pos[0] - delta;
+
+        for (s32 j = mNumSegments - 2; j > 0; j--) {
+            if (j < space)
+                r_size -= spacing;
+
+            delta = pos[1] - pos[0];
+
+            eyeDelta = pos[0] - view->mLookat.mEye;
+            delta = delta.outprod(eyeDelta);
+            scale = delta.abs();
+            if (scale != 0.0f)
+                scale = r_size / scale;
+
+            VECScale(&delta, &delta, scale);
+            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
+            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+
+            r_dstPos[0] = nextP0 * 0.5f;
+            r_dstPos[1] = nextP1 * 0.5f;
+            r_dstPos += 2;
+
+            pos++;
+
+            nextP0 = pos[0] + delta;
+            nextP1 = pos[0] - delta;
+        }
+
+        if (space != 0) {
+            r_dstPos[0] = pos[0];
+            r_dstPos[1] = pos[0];
+        } else {
+            r_dstPos[0] = nextP0;
+            r_dstPos[1] = nextP1;
+        }
+
+        DCStoreRangeNoSync(dstPos, posArrSize);
+        line++;
+    }
 }
 
 /* 80014E04-80015328       .text update__19mDoExt_3DlineMat0_cFUsR8_GXColorP12dKy_tevstr_c */
-void mDoExt_3DlineMat0_c::update(u16, GXColor&, dKy_tevstr_c*) {
-    /* Nonmatching */
+void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
+    cXyz eyeDelta;
+    cXyz delta;
+    cXyz nextP0;
+    cXyz nextP1;
+
+    mDoExt_3Dline_c* line;
+    u32 posArrSize;
+    cXyz* pos;
+    cXyz* r_dstPos;
+    cXyz* dstPos;
+    u8* size_p;
+
+    mColor = newColor;
+    mpTevStr = pTevStr;
+    mNumSegments = segs;
+    if (mNumSegments > mMaxSegments)
+        mNumSegments = mMaxSegments;
+
+    view_class* view = dComIfGd_getView();
+    line = mpLines;
+
+    posArrSize = mNumSegments * 2 * sizeof(cXyz);
+
+    for (s32 i = 0; i < mNumLines; i++) {
+        pos = line->mpSegments;
+
+        size_p = line->mpSize;
+        JUT_ASSERT(4738, size_p != NULL);
+
+        dstPos = line->mPosArr[mCurArr];
+
+        delta = pos[1] - pos[0];
+
+        eyeDelta = pos[0] - view->mLookat.mEye;
+        delta = delta.outprod(eyeDelta);
+        f32 scale = delta.abs();
+        if (scale != 0.0f) {
+            scale = *size_p / scale;
+            VECScale(&delta, &delta, scale);
+        }
+
+        dstPos[0] = pos[0] + delta;
+        dstPos[1] = pos[0] - delta;
+
+        r_dstPos = dstPos;
+        r_dstPos += 2;
+
+        pos++;
+        size_p++;
+        nextP0 = pos[0] + delta;
+        nextP1 = pos[0] - delta;
+
+        for (s32 j = mNumSegments - 2; j > 0; j--) {
+            delta = pos[1] - pos[0];
+
+            eyeDelta = pos[0] - view->mLookat.mEye;
+            delta = delta.outprod(eyeDelta);
+            scale = delta.abs();
+            if (scale != 0.0f)
+                scale = *size_p / scale;
+
+            VECScale(&delta, &delta, scale);
+            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
+            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+
+            r_dstPos[0] = nextP0 * 0.5f;
+            r_dstPos[1] = nextP1 * 0.5f;
+            r_dstPos += 2;
+
+            pos++;
+            size_p++;
+
+            nextP0 = pos[0] + delta;
+            nextP1 = pos[0] - delta;
+        }
+
+        r_dstPos[0] = nextP0;
+        r_dstPos[1] = nextP1;
+
+        DCStoreRangeNoSync(dstPos, posArrSize);
+        line++;
+    }
 }
 
 /* 80015328-800154C4       .text init__19mDoExt_3DlineMat1_cFUsUsP7ResTIMGi */
-int mDoExt_3DlineMat1_c::init(u16, u16, ResTIMG*, int) {
-    /* Nonmatching */
+int mDoExt_3DlineMat1_c::init(u16 numLines, u16 numSegments, ResTIMG* i_img, int hasSize) {
+    mNumLines = numLines;
+    mMaxSegments = numSegments;
+    mpLines = new mDoExt_3Dline_c[numLines];
+    if (mpLines == NULL)
+        return FALSE;
+
+    for (s32 i = 0; i < numLines; i++)
+        if (!mpLines[i].init(numSegments, hasSize, TRUE))
+            return FALSE;
+
+    mpNextLineMat = NULL;
+    mCurArr = 0;
+    GXInitTexObj(&mTexObj, (&i_img->format + i_img->imageOffset), i_img->width, i_img->height,
+                 (GXTexFmt)i_img->format, (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT,
+                 (GXBool)(i_img->mipmapCount > 1));
+    GXInitTexObjLOD(&mTexObj, (GXTexFilter)i_img->minFilter, (GXTexFilter)i_img->magFilter,
+                    i_img->minLOD * 0.125f, i_img->maxLOD * 0.125f, i_img->LODBias * 0.01f,
+                    (GXBool)i_img->biasClamp, (GXBool)i_img->doEdgeLOD,
+                    (GXAnisotropy)i_img->maxAnisotropy);
+
+    return TRUE;
 }
 
 /* 800154C4-800155DC       .text setMaterial__19mDoExt_3DlineMat1_cFv */
@@ -1906,19 +2180,272 @@ void mDoExt_3DlineMat1_c::setMaterial() {
 
 /* 800155DC-80015764       .text draw__19mDoExt_3DlineMat1_cFv */
 void mDoExt_3DlineMat1_c::draw() {
-    /* Nonmatching */
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    u16 h = GXGetTexObjHeight(&mTexObj);
+    u16 w = GXGetTexObjWidth(&mTexObj);
+    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_TRUE, w, h);
+    GXSetTevColor(GX_TEVREG2, mColor);
+    if (mpTevStr != NULL) {
+        GXSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);
+        GXSetTevColor(GX_TEVREG1, mpTevStr->mColorK0);
+    }
+
+    mDoExt_3Dline_c* line = mpLines;
+    u16 numTriStrip = mNumSegments * 2;
+    for (s32 i = 0; i < mNumLines; i++) {
+        GXSetArray(GX_VA_POS, line->mPosArr[mCurArr], sizeof(cXyz));
+        GXSetArray(GX_VA_TEX0, line->mTexArr[mCurArr], sizeof(cXy));
+        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, numTriStrip);
+        for (u16 j = 0; j < numTriStrip;) {
+            GXPosition1x16(j);
+            GXNormal1x8(0);
+            GXTexCoord1x16(j);
+            j++;
+
+            u16 j2 = j; // fakematch?
+            GXPosition1x16(j2);
+            GXNormal1x8(1);
+            GXTexCoord1x16(j2);
+            j2++;
+            j = j2;
+        }
+        GXEnd();
+        line++;
+    }
+
+    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_FALSE, 0, 0);
+    mCurArr ^= 1;
 }
 
 /* 80015764-80015E54       .text update__19mDoExt_3DlineMat1_cFUsfR8_GXColorUsP12dKy_tevstr_c */
-void mDoExt_3DlineMat1_c::update(u16, f32, GXColor&, u16, dKy_tevstr_c*) {
-    /* Nonmatching */
+void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 space, dKy_tevstr_c* pTevStr) {
+    cXyz eyeDelta;
+    cXyz delta;
+    cXyz nextP0;
+    cXyz nextP1;
+
+    mDoExt_3Dline_c* line;
+    u32 posArrSize;
+    u32 texArrSize;
+    cXyz* pos;
+    cXyz* r_dstPos;
+    cXyz* dstPos;
+    cXy* r_dstTex;
+    cXy* dstTex;
+
+    mColor = newColor;
+    mpTevStr = pTevStr;
+    mNumSegments = segs;
+    if (mNumSegments > mMaxSegments)
+        mNumSegments = mMaxSegments;
+
+    view_class* view = dComIfGd_getView();
+    line = mpLines;
+
+    f32 spacing;
+    if (space != 0) {
+        spacing = size / space;
+    } else {
+        spacing = 0.0f;
+    }
+
+    posArrSize = mNumSegments * 2 * sizeof(cXyz);
+    texArrSize = mNumSegments * 2 * sizeof(cXy);
+
+    f32 r_size;
+    f32 dist = 0.0f;
+    for (s32 i = 0; i < mNumLines; i++) {
+        pos = line->mpSegments;
+
+        dstPos = line->mPosArr[mCurArr];
+        dstTex = line->mTexArr[mCurArr];
+        r_size = size;
+
+        dstTex[0].y = dist;
+        dstTex[1].y = dist;
+
+        r_dstTex = dstTex;
+        r_dstTex += 2;
+
+        delta = pos[1] - pos[0];
+        f32 mag = delta.abs();
+
+        dist += mag * 0.1f;
+        eyeDelta = pos[0] - view->mLookat.mEye;
+        delta = delta.outprod(eyeDelta);
+        f32 scale = delta.abs();
+        if (scale != 0.0f) {
+            scale = size / scale;
+            VECScale(&delta, &delta, scale);
+        }
+
+        dstPos[0] = pos[0] + delta;
+        dstPos[1] = pos[0] - delta;
+
+        r_dstPos = dstPos;
+        r_dstPos += 2;
+
+        pos++;
+        nextP0 = pos[0] + delta;
+        nextP1 = pos[0] - delta;
+
+        for (s32 j = mNumSegments - 2; j > 0; j--) {
+            if (j < space)
+                r_size -= spacing;
+
+            r_dstTex[0].y = dist;
+            r_dstTex[1].y = dist;
+            r_dstTex += 2;
+
+            delta = pos[1] - pos[0];
+            f32 mag = delta.abs();
+
+            dist += mag * 0.1f;
+            eyeDelta = pos[0] - view->mLookat.mEye;
+            delta = delta.outprod(eyeDelta);
+            scale = delta.abs();
+            if (scale != 0.0f)
+                scale = r_size / scale;
+
+            VECScale(&delta, &delta, scale);
+            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
+            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+
+            r_dstPos[0] = nextP0 * 0.5f;
+            r_dstPos[1] = nextP1 * 0.5f;
+            r_dstPos += 2;
+
+            pos++;
+
+            nextP0 = pos[0] + delta;
+            nextP1 = pos[0] - delta;
+        }
+
+        r_dstTex[0].y = dist;
+        r_dstTex[1].y = dist;
+
+        if (space != 0) {
+            r_dstPos[0] = pos[0];
+            r_dstPos[1] = pos[0];
+        } else {
+            r_dstPos[0] = nextP0;
+            r_dstPos[1] = nextP1;
+        }
+
+        DCStoreRangeNoSync(dstPos, posArrSize);
+        DCStoreRangeNoSync(dstTex, texArrSize);
+        line++;
+    }
 }
 
 /* 80015E54-80016518       .text update__19mDoExt_3DlineMat1_cFUsR8_GXColorP12dKy_tevstr_c */
-void mDoExt_3DlineMat1_c::update(u16, GXColor&, dKy_tevstr_c*) {
-    /* Nonmatching */
-    u8* size_p = mpLines->mpSize;
-    JUT_ASSERT(5243, size_p != 0);
+void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
+    cXyz eyeDelta;
+    cXyz delta;
+    cXyz nextP0;
+    cXyz nextP1;
+
+    mDoExt_3Dline_c* line;
+    u32 posArrSize;
+    u32 texArrSize;
+    cXyz* pos;
+    cXyz* r_dstPos;
+    cXyz* dstPos;
+    cXy* r_dstTex;
+    cXy* dstTex;
+    u8* size_p;
+
+    mColor = newColor;
+    mpTevStr = pTevStr;
+    mNumSegments = segs;
+    if (mNumSegments > mMaxSegments)
+        mNumSegments = mMaxSegments;
+
+    view_class* view = dComIfGd_getView();
+    line = mpLines;
+
+    posArrSize = mNumSegments * 2 * sizeof(cXyz);
+    texArrSize = mNumSegments * 2 * sizeof(cXy);
+
+    f32 dist = 0.0f;
+    for (s32 i = 0; i < mNumLines; i++) {
+        pos = line->mpSegments;
+
+        size_p = line->mpSize;
+        JUT_ASSERT(5243, size_p != NULL);
+
+        dstPos = line->mPosArr[mCurArr];
+        dstTex = line->mTexArr[mCurArr];
+
+        dstTex[0].y = dist;
+        dstTex[1].y = dist;
+
+        r_dstTex = dstTex;
+        r_dstTex += 2;
+
+        delta = pos[1] - pos[0];
+        f32 mag = delta.abs();
+
+        dist += mag * 0.1f;
+        eyeDelta = pos[0] - view->mLookat.mEye;
+        delta = delta.outprod(eyeDelta);
+        f32 scale = delta.abs();
+        if (scale != 0.0f) {
+            scale = *size_p / scale;
+            VECScale(&delta, &delta, scale);
+        }
+
+        dstPos[0] = pos[0] + delta;
+        dstPos[1] = pos[0] - delta;
+
+        r_dstPos = dstPos;
+        r_dstPos += 2;
+        size_p++;
+
+        pos++;
+        nextP0 = pos[0] + delta;
+        nextP1 = pos[0] - delta;
+
+        for (s32 j = mNumSegments - 2; j > 0; j--) {
+            r_dstTex[0].y = dist;
+            r_dstTex[1].y = dist;
+            r_dstTex += 2;
+
+            delta = pos[1] - pos[0];
+            f32 mag = delta.abs();
+
+            dist += mag * 0.1f;
+            eyeDelta = pos[0] - view->mLookat.mEye;
+            delta = delta.outprod(eyeDelta);
+            scale = delta.abs();
+            if (scale != 0.0f)
+                scale = *size_p / scale;
+
+            VECScale(&delta, &delta, scale);
+            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
+            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+
+            r_dstPos[0] = nextP0 * 0.5f;
+            r_dstPos[1] = nextP1 * 0.5f;
+            r_dstPos += 2;
+
+            pos++;
+            size_p++;
+
+            nextP0 = pos[0] + delta;
+            nextP1 = pos[0] - delta;
+        }
+
+        r_dstTex[0].y = dist;
+        r_dstTex[1].y = dist;
+
+        r_dstPos[0] = nextP0;
+        r_dstPos[1] = nextP1;
+
+        DCStoreRangeNoSync(dstPos, posArrSize);
+        DCStoreRangeNoSync(dstTex, texArrSize);
+        line++;
+    }
 }
 
 /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
@@ -1945,13 +2472,13 @@ void mDoExt_3DlineMatSortPacket::draw() {
 void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_heap, const char* param_4,
                            JKRArchive* p_archive, u8 param_6, u32 param_7, u32 param_8) {
     JUTFont* mDoExt_font = *p_font;
-    JUT_ASSERT(6648, mDoExt_font == 0);
+    JUT_ASSERT(6648, mDoExt_font == NULL);
     ResFONT* mDoExt_resfont = *p_resfont;
-    JUT_ASSERT(6649, mDoExt_resfont == 0);
+    JUT_ASSERT(6649, mDoExt_resfont == NULL);
     
     *p_resfont = (ResFONT*)p_archive->getGlbResource('ROOT', param_4, p_archive);
     mDoExt_resfont = *p_resfont;
-    JUT_ASSERT(6651, mDoExt_resfont != 0);
+    JUT_ASSERT(6651, mDoExt_resfont != NULL);
     
     if (param_6 == 0) {
         u32 temp = (((param_8+0x1F) & ~0x1F) + 0x40) * param_7;
@@ -1974,7 +2501,7 @@ void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_hea
     }
     
     mDoExt_font = *p_font;
-    JUT_ASSERT(6685, mDoExt_font != 0);
+    JUT_ASSERT(6685, mDoExt_font != NULL);
 }
 
 JUTFont* mDoExt_font0;
@@ -2113,12 +2640,6 @@ int mDoExt_3DlineMat1_c::getMaterialID() {
 int mDoExt_3DlineMat0_c::getMaterialID() {
     return 0;
 }
-
-/* 80016D88-80016DE4       .text __dt__24mDoExt_onCupOffAupPacketFv */
-mDoExt_onCupOffAupPacket::~mDoExt_onCupOffAupPacket() {}
-
-/* 80016DE4-80016E40       .text __dt__24mDoExt_offCupOnAupPacketFv */
-mDoExt_offCupOnAupPacket::~mDoExt_offCupOnAupPacket() {}
 
 /* 80016E40-80016F14       .text __dt__15mDoExt_McaMorf2Fv */
 mDoExt_McaMorf2::~mDoExt_McaMorf2() {}

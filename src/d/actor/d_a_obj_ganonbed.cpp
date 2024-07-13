@@ -37,7 +37,7 @@ bool daObjGbed_c::create_heap() {
     J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, GBED_BDL_K_GBED));
 
     if (!pModelData) {
-        JUT_ASSERT(0xb1, 0);
+        JUT_ASSERT(0xb1, FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);

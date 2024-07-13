@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "f_pc/f_pc_method.h"
 #include "f_pc/f_pc_method_tag.h"
+#include "f_pc/f_pc_base.h"
 
 typedef struct layer_class layer_class;
 typedef struct process_node_class process_node_class;
@@ -17,7 +18,7 @@ typedef struct node_create_request_method_class {
 // needed to match struct copy
 typedef struct unk_process_node_class {
     process_node_class* mpNodeProc;
-    uint mProcId;
+    fpc_ProcID mProcId;
 } unk_process_node_class;
 
 typedef struct node_create_request {
@@ -27,10 +28,10 @@ typedef struct node_create_request {
     cPhs__Handler* mpPhsHandler;
     node_create_request_method_class* mpNodeCrReqMthCls;
     s32 mParameter;
-    s32 mRequestId;
+    uint mRequestId;
     unk_process_node_class mNodeProc;
     layer_class* mpLayerClass;
-    uint mCreatingID;
+    fpc_ProcID mCreatingID;
     s16 mProcName;
     void* mpUserData;
     s16 unk_0x60;
@@ -64,7 +65,7 @@ node_create_request* fpcNdRq_CreateNode(u32 pRequestSize, s16 param_2, void* par
 node_create_request*
 fpcNdRq_Request(u32 param_1, int param_2, process_node_class* param_3, s16 param_4,
                 void* param_5, node_create_request_method_class* pNodeCreateRequestMethodClass);
-s32 fpcNdRq_ReChangeNode(uint pRequestId, s16 param_2, void* param_3);
-s32 fpcNdRq_ReRequest(uint pRequestId, s16 param_2, void* param_3);
+s32 fpcNdRq_ReChangeNode(uint i_requestID, s16 i_procName, void* i_data);
+s32 fpcNdRq_ReRequest(uint i_requestID, s16 i_procName, void* i_data);
 
 #endif

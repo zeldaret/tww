@@ -4,24 +4,73 @@
 //
 
 #include "d/d_spline_path.h"
-#include "dolphin/types.h"
+#include "SSystem/SComponent/c_xyz.h"
 
 /* 800C239C-800C2430       .text Init__14d2DBSplinePathFll */
-void d2DBSplinePath::Init(s32, s32) {
-    /* Nonmatching */
+void d2DBSplinePath::Init(s32 keyNum, s32 duration) {
+    mFrame = 0;
+    mKeyNum = keyNum;
+    mState = 1;
+    mKeyNo = 0;
+    mEnd = duration;
+    mDuration = duration;
+    mStep = f32(mKeyNum < 2 ? 1 : mKeyNum - 2) / f32(mEnd != 0 ? mEnd - 1 : 1);
+    mUser = NULL;
 }
 
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
 /* 800C2430-800C25D8       .text Step__14d2DBSplinePathFv */
-void d2DBSplinePath::Step() {
-    /* Nonmatching */
+bool d2DBSplinePath::Step() {
+    if (mFrame >= mDuration)
+        mState = 0;
+
+    if (mState == 1)
+        mState = 2;
+
+    if (mState == 2) {
+        if (mFrame <= mEnd - 1) {
+            f32 inv;
+            f32 t = mStep * mFrame;
+            mKeyNo = (s32)t;
+            t = t - mKeyNo;
+
+            if (mFrame == mDuration - 1) {
+                mState = 3;
+            }
+            if (mFrame == mEnd - 1) {
+                mState = 3;
+                t = 1.0f;
+            }
+
+            mCurveKey[0] = MIN(mKeyNo + 0, mKeyNum - 1);
+            mCurveKey[1] = MIN(mKeyNo + 1, mKeyNum - 1);
+            mCurveKey[2] = MIN(mKeyNo + 2, mKeyNum - 1);
+
+            inv = 1.0f - t;
+            mCurveWeight[0] = inv * inv * 0.5f;
+            mCurveWeight[1] = t * inv + 0.5f;
+            mCurveWeight[2] = t * t * 0.5f;
+
+            mFrame++;
+        } else {
+            mState = 0;
+        }
+    }
+
+    return mState == 2 || mState == 3;
 }
 
 /* 800C25D8-800C268C       .text Calc__14d2DBSplinePathFP4cXyz */
-void d2DBSplinePath::Calc(cXyz*) {
-    /* Nonmatching */
+cXyz d2DBSplinePath::Calc(cXyz* v) {
+    cXyz ret;
+    ret.x = mCurveWeight[0] * v[mCurveKey[0]].x + mCurveWeight[1] * v[mCurveKey[1]].x + mCurveWeight[2] * v[mCurveKey[2]].x;
+    ret.y = mCurveWeight[0] * v[mCurveKey[0]].y + mCurveWeight[1] * v[mCurveKey[1]].y + mCurveWeight[2] * v[mCurveKey[2]].y;
+    ret.z = mCurveWeight[0] * v[mCurveKey[0]].z + mCurveWeight[1] * v[mCurveKey[1]].z + mCurveWeight[2] * v[mCurveKey[2]].z;
+    return ret;
 }
 
 /* 800C268C-800C26D4       .text Calc__14d2DBSplinePathFPf */
-void d2DBSplinePath::Calc(f32*) {
-    /* Nonmatching */
+f32 d2DBSplinePath::Calc(f32* v) {
+    return mCurveWeight[0] * v[mCurveKey[0]] + mCurveWeight[1] * v[mCurveKey[1]] + mCurveWeight[2] * v[mCurveKey[2]];
 }

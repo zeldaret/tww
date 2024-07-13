@@ -752,7 +752,7 @@ void cBgW::GetTrans(cXyz* dst) const {
 
 /* 80249A58-80249B64       .text GetTriPnt__4cBgWCFiP4cXyzP4cXyzP4cXyz */
 void cBgW::GetTriPnt(int i_no, cXyz* p0, cXyz* p1, cXyz* p2) const {
-    JUT_ASSERT(0xcb3, pm_bgd != 0);
+    JUT_ASSERT(0xcb3, pm_bgd != NULL);
 
     cBgD_Tri_t * tri = &pm_bgd->m_t_tbl[i_no];
     p0->set(pm_vtx_tbl[tri->vtx0]);

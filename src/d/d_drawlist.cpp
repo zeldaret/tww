@@ -38,12 +38,9 @@ public:
     /* 0x3C */ dDlst_shadowPoly_c* mPoly;
 };  // Size: 0x40
 
-GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
+Vec dummy0;
 
-bool dDlst_list_c::mWipe;
-f32 dDlst_list_c::mWipeRate = 0.0f;
-f32 dDlst_list_c::mWipeSpeed = 0.0f;
-dDlst_2DT2_c dDlst_list_c::mWipeDlst;
+GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 
 static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
 static Vec dummy2 = { 1.0f, 1.0f, 1.0f };
@@ -1487,6 +1484,7 @@ void dDlst_shadowReal_c::draw() {
 
     Mtx mtx;
     mDoMtx_inverse(mRenderProjMtx, mtx);
+    mtx[2][3] = 0.0f;
     mDoMtx_stack_c::concat(mtx);
     mDoMtx_stack_c::scaleM(1.0f, 1.0f, -0.003f);
     mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mtx);
@@ -1544,8 +1542,15 @@ int psdRealCallBack(cBgS_ShdwDraw* shdw, cBgD_Vtx_t* pVtx, int v0, int v1, int v
 }
 
 /* 80083DA0-80083E18       .text seaRealCallBack__FPvR4cXyzR4cXyzR4cXyz */
-void seaRealCallBack(void*, cXyz&, cXyz&, cXyz&) {
-    /* Nonmatching */
+void seaRealCallBack(void* user, cXyz& v0, cXyz& v1, cXyz& v2) {
+    ShdwDrawPoly_c* poly = (ShdwDrawPoly_c*)user;
+    const cXyz* min = poly->GetBndP()->GetMinP();
+    const cXyz* max = poly->GetBndP()->GetMaxP();
+    if ((v0.y < min->y && v1.y < min->y && v2.y < min->y) || (v0.y > max->y && v1.y > max->y && v2.y > max->y)) {
+        return;
+    } else {
+        poly->getPoly()->set(v0, v1, v2);
+    }
 }
 
 /* 80083E18-800840B0       .text realPolygonCheck__FP4cXyzffP4cXyzP18dDlst_shadowPoly_c */
@@ -1898,7 +1903,7 @@ void dDlst_shadowControl_c::draw(Mtx drawMtx) {
     static GXColor clearColor = { 0x00, 0x00, 0x00, 0x40 };
     clearColor.a = mDoGph_gInf_c::getBackColor().a;
     GXSetTevColor(GX_TEVREG1, clearColor);
-    GXSetTevColor(GX_TEVREG2, clearColor);
+    GXSetTevColor(GX_TEVREG2, g_whiteColor);
 
     dDlst_shadowReal_c* real = &mReal[0];
     for (s32 i = 0; i < 8; real++, i++)
@@ -2005,6 +2010,54 @@ char l_mirrorProjMat[] ALIGN_DECL(32) = {
 /* 80085348-800855B4       .text draw__18dDlst_mirrorPacketFv */
 void dDlst_mirrorPacket::draw() {
     /* Nonmatching */
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    dKy_GxFog_set();
+
+    static GXColor l_color = { 0xFF, 0xFF, 0xFF, 0xE0 };
+    l_color.a = mAlpha;
+    GXSetTevColor(GX_TEVREG0, l_color);
+
+    l_color.a = mDoGph_gInf_c::getBackColor().a;
+    GXSetTevColor(GX_TEVREG1, l_color);
+
+    GXSetTevColor(GX_TEVREG2, g_whiteColor);
+
+    GXCallDisplayList(l_shadowVolMat, 0x40);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+
+    GXClearVtxDesc();
+
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
+    GXSetArray(GX_VA_POS, l_shadowVolPos, sizeof(cXyz));
+    GXLoadPosMtxImm(mPosMtx, GX_PNMTX1);
+    GXSetCurrentMtx(GX_PNMTX1);
+    GXCallDisplayList(l_shadowVolDL, 0x40);
+    GXCallDisplayList(l_frontZMat, 0x20);
+    GXCallDisplayList(l_shadowVolDL, 0x40);
+    GXCallDisplayList(l_frontNoZSubMat, 0x20);
+    GXCallDisplayList(l_shadowVolDL, 0x40);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXCallDisplayList(l_mirrorProjMat, 0x40);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_TRUE, GXGetTexObjWidth(&mTexObj), GXGetTexObjHeight(&mTexObj));
+    GXLoadTexMtxImm(mTexMtx, GX_TEXMTX0, GX_MTX3x4);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetCurrentMtx(0);
+    mShadowPoly.draw();
+    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_FALSE, 0, 0);
+    GXCallDisplayList(l_clearMat, 0x40);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetCurrentMtx(GX_PNMTX1);
+    GXCallDisplayList(l_shadowVolDL, 0x40);
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    J3DShape::resetVcdVatCache();
 }
 
 /* 800855B4-80085624       .text init__18dDlst_mirrorPacketFP7ResTIMG */
@@ -2016,13 +2069,74 @@ void dDlst_mirrorPacket::init(ResTIMG* pImg) {
 }
 
 /* 80085624-80085808       .text mirrorPolygonCheck__FP4cXyzP4cXyzfP18dDlst_shadowPoly_c */
-void mirrorPolygonCheck(cXyz*, cXyz*, f32, dDlst_shadowPoly_c*) {
-    /* Nonmatching */
+void mirrorPolygonCheck(cXyz* min_p, cXyz* max_p, f32 rad, dDlst_shadowPoly_c* poly) {
+    ShdwDrawPoly_c shdwDraw;
+
+    cXyz min, max;
+    if (min_p->x < max_p->x) {
+        min.x = min_p->x;
+        max.x = max_p->x;
+    } else {
+        min.x = max_p->x;
+        max.x = min_p->x;
+    }
+    min.x -= rad;
+    max.x += rad;
+
+    if (min_p->y < max_p->y) {
+        min.y = min_p->y;
+        max.y = max_p->y;
+    } else {
+        min.y = max_p->y;
+        max.y = min_p->y;
+    }
+    min.y -= rad;
+    max.y += rad;
+
+    if (min_p->z < max_p->z) {
+        min.z = min_p->z;
+        max.z = max_p->z;
+    } else {
+        min.z = max_p->z;
+        max.z = min_p->z;
+    }
+    min.z -= rad;
+    max.z += rad;
+
+    shdwDraw.Set(min, max);
+    shdwDraw.SetCallback(psdRealCallBack);
+    shdwDraw.setCenter(min_p);
+
+    cXyz lightVec = *max_p - *min_p;
+    shdwDraw.setLightVec(&lightVec);
+    shdwDraw.setPoly(poly);
+
+    dComIfG_Bgsp()->ShdwDraw(&shdwDraw);
 }
 
 /* 80085808-800859DC       .text update__18dDlst_mirrorPacketFPA4_fUcf */
-void dDlst_mirrorPacket::update(Mtx, u8, f32) {
-    /* Nonmatching */
+void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad) {
+    mShadowPoly.mCount = 0;
+    static cXyz l_p1Offset(0.0f, 0.0f, 0.0f);
+    static cXyz l_p2Offset(0.0f, 0.0f, 10000.0f);
+
+    cXyz offs, offs2;
+    mDoMtx_multVec(mtx, &l_p1Offset, &offs);
+    mDoMtx_multVec(mtx, &l_p2Offset, &offs2);
+    mirrorPolygonCheck(&offs, &offs2, rad, &mShadowPoly);
+
+    Mtx viewMtx;
+    mDoMtx_lookAt(viewMtx, &offs, &offs2, 0);
+    C_MTXLightOrtho(mTexMtx, 24.0f, -24.0f, -24.0f, 24.0f, 0.5f, -0.5f, 0.5f, 0.5f);
+    mDoMtx_concat(mTexMtx, viewMtx, mTexMtx);
+    C_MTXOrtho(mPosMtx, 24.0f, -24.0f, -24.0f, 24.0f, 1.0f, 10000.0f);
+    mDoMtx_inverse(viewMtx, mDoMtx_stack_c::get());
+    mDoMtx_inverse(mPosMtx, viewMtx);
+    viewMtx[2][3] = 0.0f;
+    mDoMtx_stack_c::concat(viewMtx);
+    mDoMtx_stack_c::scaleM(1.0f, 1.0f, -0.003f);
+    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mPosMtx);
+    mAlpha = alpha;
 }
 
 /* 800859DC-80085AF4       .text draw__20dDlst_alphaVolPacketFv */
@@ -2268,6 +2382,11 @@ void dDlst_list_c::draw(dDlst_base_c** pList, dDlst_base_c** pEnd) {
 
 GXColor dDlst_list_c::mWipeColor = { 0, 0, 0, 0 };
 
+bool dDlst_list_c::mWipe;
+f32 dDlst_list_c::mWipeRate = 0.0f;
+f32 dDlst_list_c::mWipeSpeed = 0.0f;
+dDlst_2DT2_c dDlst_list_c::mWipeDlst;
+
 /* 800865C8-800866C8       .text wipeIn__12dDlst_list_cFfR8_GXColor */
 void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
     mWipe = true;
@@ -2279,7 +2398,7 @@ void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
         mWipeRate = 1.0f;
     }
     ResTIMG* texture = (ResTIMG*)JKRGetResource('TIMG', "wipe_00.bti", dComIfGp_getMenuArchive());
-    JUT_ASSERT(0x1637, texture != 0);
+    JUT_ASSERT(0x1637, texture != NULL);
     mWipeDlst.init(texture, -9.0f, -21.0f, 659.0f, 524.0f, 0, 1, 1, 2.0f, 2.436f);
 }
 

@@ -25,7 +25,7 @@ public:
     void Release();
 
     virtual ~cBgS_ChkElm() {}
-    virtual void Regist2(cBgW*, uint, void*);
+    virtual void Regist2(cBgW*, fpc_ProcID, void*);
 
     bool ChkUsed() const { return (m_flags & 1); }
 };  // Size: 0x14
@@ -44,7 +44,7 @@ public:
     cM3dGPla* GetTriPla(cBgS_PolyInfo& polyInfo) const {
         return GetTriPla(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
     }
-    bool Regist(cBgW*, uint, void*);
+    bool Regist(cBgW*, fpc_ProcID, void*);
     bool Release(cBgW*);
     bool LineCross(cBgS_LinChk*);
     f32 GroundCross(cBgS_GndChk*);

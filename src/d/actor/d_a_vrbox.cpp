@@ -165,7 +165,7 @@ static BOOL daVrbox_solidHeapCB(fopAc_ac_c* i_actor) {
     vrbox_class* i_this = static_cast<vrbox_class*>(i_actor);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_sky.bdl");
-    JUT_ASSERT(469, modelData != 0);
+    JUT_ASSERT(469, modelData != NULL);
 
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020202);
 

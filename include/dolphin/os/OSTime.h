@@ -2,6 +2,7 @@
 #define OSTIME_H
 
 #include "dolphin/types.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,7 +11,7 @@ extern "C" {
 typedef s64 OSTime;
 typedef u32 OSTick;
 
-OSTime OS_SYSTEM_TIME : 0x800030D8;
+OSTime OS_SYSTEM_TIME AT_ADDRESS(0x800030D8);
 
 typedef struct OSCalendarTime {
     /* 0x00 */ s32 seconds;
@@ -32,7 +33,7 @@ OSTime __OSTimeToSystemTime(OSTime time);
 void GetDates(s32 days, OSCalendarTime* ct);
 void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* ct);
 
-extern u32 __OSBusClock : 0x800000F8;
+extern u32 __OSBusClock AT_ADDRESS(0x800000F8);
 
 #define OS_BUS_CLOCK (__OSBusClock)
 #define OS_CORE_CLOCK (*(u32*)0x800000FC)

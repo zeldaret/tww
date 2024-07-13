@@ -67,9 +67,9 @@ BOOL daObjZouk::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 0000009C-00000468       .text create_heap__Q29daObjZouk5Act_cFv */
 bool daObjZouk::Act_c::create_heap() {
     J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_BDL_VZOUK);
-    JUT_ASSERT(0x171, mdl_data != 0);
+    JUT_ASSERT(0x171, mdl_data != NULL);
     M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_BCK_VZOUK);
-    JUT_ASSERT(0x175, M_bck_data != 0);
+    JUT_ASSERT(0x175, M_bck_data != NULL);
     if (mdl_data != NULL && M_bck_data != NULL) {
         M_anm = new mDoExt_McaMorf(
             mdl_data,
@@ -81,7 +81,7 @@ bool daObjZouk::Act_c::create_heap() {
             0x11020203
         );
     }
-    JUT_ASSERT(0x183, M_anm != 0);
+    JUT_ASSERT(0x183, M_anm != NULL);
     if (M_anm != NULL) {
         if (dComIfGs_isCollect(0, 1)) {
             M_anm->setPlaySpeed(0.0f);
@@ -94,7 +94,7 @@ bool daObjZouk::Act_c::create_heap() {
     set_mtx();
 
     cBgD_t* bgw_data_before = (cBgD_t*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_DZB_MAEKISI);
-    JUT_ASSERT(0x196, bgw_data_before != 0);
+    JUT_ASSERT(0x196, bgw_data_before != NULL);
     if (bgw_data_before != NULL) {
         mBgBefore = new dBgW();
         if (mBgBefore != NULL) {
@@ -104,7 +104,7 @@ bool daObjZouk::Act_c::create_heap() {
     }
 
     cBgD_t* bgw_data_after = (cBgD_t*)dComIfG_getObjectRes(M_arcname, VZOUK_INDEX_DZB_ATOKISI);
-    JUT_ASSERT(0x1a4, bgw_data_after != 0);
+    JUT_ASSERT(0x1a4, bgw_data_after != NULL);
     if (bgw_data_after != NULL) {
         mBgAfter = new dBgW();
         if (mBgAfter != NULL) {

@@ -49,8 +49,8 @@ public:
     /* 0x366 */ s16 mAction;
     /* 0x368 */ s16 mState;
     /* 0x36A */ u8 m36A[0x36C - 0x36A];
-    /* 0x36C */ uint mJalhallaID;
-    /* 0x370 */ uint mKanteraID;
+    /* 0x36C */ fpc_ProcID mJalhallaID;
+    /* 0x370 */ fpc_ProcID mKanteraID;
     /* 0x374 */ int mBckIdx;
     /* 0x378 */ s16 m378;
     /* 0x37A */ s16 m37A;

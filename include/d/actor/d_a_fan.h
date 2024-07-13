@@ -36,7 +36,7 @@ public:
     /* 0x4C8 */ mDoExt_btkAnm mWindBtkAnm1;
     /* 0x4C8 */ mDoExt_bckAnm mWindBckAnm;
     /* 0x500 */ cXyz mWindScale;
-    /* 0x50C */ uint mWindSePId;
+    /* 0x50C */ fpc_ProcID mWindSePId;
 
     static const char* m_arcname[3];
     static const char m_arcname2[8];

@@ -86,7 +86,7 @@ void dLib_debugDrawFan(cXyz& center, s16 angleY, s16 fanSpreadAngle, f32 radius,
 /* 80057510-800575E0       .text dLib_brkInit__FP12J3DModelDataP13mDoExt_brkAnmPCci */
 bool dLib_brkInit(J3DModelData* modelData, mDoExt_brkAnm* anm, const char* arcName, int fileno) {
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(arcName, fileno);
-    JUT_ASSERT(0xae, brk != 0);
+    JUT_ASSERT(0xae, brk != NULL);
     if (anm->init(modelData, brk, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0)
         return false;
     return true;
@@ -95,7 +95,7 @@ bool dLib_brkInit(J3DModelData* modelData, mDoExt_brkAnm* anm, const char* arcNa
 /* 800575E0-800576B0       .text dLib_btkInit__FP12J3DModelDataP13mDoExt_btkAnmPCci */
 bool dLib_btkInit(J3DModelData* modelData, mDoExt_btkAnm* anm, const char* arcName, int fileno) {
     J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(arcName, fileno);
-    JUT_ASSERT(0xbb, btk != 0);
+    JUT_ASSERT(0xbb, btk != NULL);
     if (anm->init(modelData, btk, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0)
         return false;
     return true;
@@ -196,7 +196,7 @@ void dLib_setNextStageBySclsNum(u8 i_sclsnum, s8 room_no) {
     }
     
     stage_scls_info_class* scls_data = sclsinfo->m_entries;
-    JUT_ASSERT(462, scls_data != 0);
+    JUT_ASSERT(462, scls_data != NULL);
     JUT_ASSERT(463, 0 <= i_sclsnum && i_sclsnum < sclsinfo->num);
     
     stage_scls_info_class* scls_entry = &scls_data[i_sclsnum];

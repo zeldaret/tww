@@ -20,7 +20,7 @@ void daPy_lk_c::getDemoLookActor() {
 /* 8012CDD4-8012CE2C       .text setTinkleCeiverModel__9daPy_lk_cFv */
 void daPy_lk_c::setTinkleCeiverModel() {
     JKRHeap* oldHeap = setItemHeap();
-    initModel(&mpHeldItemModel, LINK_BDL_TCEIVER, 0x13000022);
+    initModel(&mpEquipItemModel, LINK_BDL_TCEIVER, 0x13000022);
     mDoExt_setCurrentHeap(oldHeap);
 }
 
@@ -48,8 +48,23 @@ void daPy_lk_c::setShapeAngleToTalkActor() {
 }
 
 /* 8012D08C-8012D134       .text checkEndMessage__9daPy_lk_cFUl */
-BOOL daPy_lk_c::checkEndMessage(u32) {
-    /* Nonmatching */
+BOOL daPy_lk_c::checkEndMessage(u32 i_msgNo) {
+    if (m3628 == fpcM_ERROR_PROCESS_ID_e) {
+        m3628 = fopMsgM_messageSet(i_msgNo);
+    } else {
+        msg_class* msg_p = fopMsgM_SearchByID(m3628);
+        if (msg_p != NULL) {
+            if (msg_p->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
+                msg_p->mStatus = fopMsgStts_MSG_ENDS_e;
+            } else if (msg_p->mStatus == fopMsgStts_BOX_CLOSED_e) {
+                msg_p->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                return TRUE;
+            } else if (msg_p->mStatus == fopMsgStts_MSG_PREPARING_e && i_msgNo == 0x14A2) {
+                fopMsgM_demoMsgFlagOn();
+            }
+        }
+    }
+    return FALSE;
 }
 
 /* 8012D134-8012D300       .text setTalkStartBack__9daPy_lk_cFv */
@@ -114,7 +129,76 @@ void daPy_lk_c::setGetItemSound(u16, int) {
 
 /* 8012E418-8012E6B4       .text setGetDemo__9daPy_lk_cFv */
 BOOL daPy_lk_c::setGetDemo() {
-    /* Nonmatching */
+    int staffIdx = dComIfGp_evmng_getMyStaffId("Link", this);
+    if (dComIfGp_event_runCheck() && m34CE & 0x04) {
+        dComIfGp_evmng_cutEnd(staffIdx);
+        return TRUE;
+    }
+    
+    if (dComIfGp_evmng_startCheck("DEFAULT_GETITEM")) {
+        if (m34CE & 0x01 ||
+            (
+                (
+                    checkNoResetFlg0(daPy_FLG0(daPyFlg0_UNK80000000 | daPyFlg0_UNK20000000)) ||
+                    !mAcch.ChkGroundHit() ||
+                    daPy_lk_c::checkPlayerFly()
+                ) &&
+                !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)
+            )
+        ) {
+            if ((m34CE & 0x01) == 0) {
+                mMsgId = fpcM_ERROR_PROCESS_ID_e;
+            }
+            m34CE |= 0x01;
+            char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+            if (cutName != NULL) {
+                // TODO: is there an inline for parsing link's cut name -> cut index?
+                u32 r0 = (cutName[0] - '0') * 100 + (cutName[1] - '0') * 10 + (cutName[2] - '0');
+                if (r0 == 0xB) {
+                    fopAc_ac_c* itemPartner = fopAcM_getItemEventPartner(this);
+                    if (itemPartner != NULL && (fopAcM_GetName(itemPartner) == PROC_ITEM || fopAcM_GetName(itemPartner) == PROC_Demo_Item)) {
+                        daItemBase_c* item = (daItemBase_c*)itemPartner;
+                        item->hide();
+                        u32 itemNo = item->getItemNo();
+                        if ((m34CE & 0x02) == 0) {
+                            setGetItemSound(itemNo, 0);
+                            m34CE |= 0x02;
+                        }
+                        
+                        u32 itemGetMsgNo;
+                        if (itemNo == dItem_HEART_PIECE_e && dComIfGs_getMaxLife() % 4 != 0) {
+                            itemGetMsgNo = 0x7B + dComIfGs_getMaxLife() % 4;
+                        } else {
+                            itemGetMsgNo = 0x65 + itemNo;
+                        }
+                        
+                        if (mMsgId == fpcM_ERROR_PROCESS_ID_e) {
+                            mMsgId = fopMsgM_messageSet(itemGetMsgNo);
+                        } else {
+                            msg_class* msg_p = fopMsgM_SearchByID(mMsgId);
+                            if (msg_p != NULL) {
+                                if (msg_p->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
+                                    msg_p->mStatus = fopMsgStts_MSG_ENDS_e;
+                                } else if (msg_p->mStatus == fopMsgStts_BOX_CLOSED_e) {
+                                    msg_p->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                                    dComIfGp_evmng_cutEnd(staffIdx);
+                                    item->dead();
+                                    m34CE |= 0x04;
+                                } else if (msg_p->mStatus == fopMsgStts_MSG_PREPARING_e) {
+                                    fopMsgM_demoMsgFlagOn();
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    dComIfGp_evmng_cutEnd(staffIdx);
+                }
+            }
+            return TRUE;
+        }
+    }
+    m34CE = 0;
+    return FALSE;
 }
 
 /* 8012E6B4-8012E8B0       .text dProcGetItem_init__9daPy_lk_cFv */

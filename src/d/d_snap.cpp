@@ -1446,7 +1446,7 @@ int dSnap_PhotoIndex2TableIndex(int photoIndex) {
 }
 
 /* 800CCFE4-800CD00C       .text dSnap_GetFigRoomId__Fi */
-u8 dSnap_GetFigRoomId(int tableIndex) {
+int dSnap_GetFigRoomId(int tableIndex) {
     if (tableIndex >= (int)ARRAY_SIZE(l_CharaData)) {
         return 0xFF;
     }

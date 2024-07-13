@@ -3,7 +3,7 @@
 
 #include "dolphin/types.h"
 
-#define ARRAY_SIZE(o) (sizeof((o)) / sizeof(*(o)))
+#define ARRAY_SIZE(o) (sizeof(o) / sizeof(o[0]))
 
 // Align X to the previous N bytes (N must be power of two)
 #define ALIGN_PREV(X, N) ((X) & ~((N)-1))

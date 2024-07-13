@@ -3030,7 +3030,7 @@ void dKy_Sound_init() {
 }
 
 /* 801967F4-801969A8       .text dKy_Sound_set__F4cXyziUii */
-void dKy_Sound_set(cXyz pos, int p2, uint p3, int p4) {
+void dKy_Sound_set(cXyz pos, int p2, fpc_ProcID p3, int p4) {
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
 
     BOOL ret = FALSE;
@@ -3450,9 +3450,9 @@ s32 dKy_moon_type_chk() {
 }
 
 /* 80197404-80197504       .text dKy_telescope_lookin_chk__FP4cXyzff */
-bool dKy_telescope_lookin_chk(cXyz* pPos, f32 maxDist, f32 minFov) {
-    bool ret = false;
-    if (dComIfGp_getScopeType() != 0 && dComIfGd_getView()->mFovy > minFov) {
+BOOL dKy_telescope_lookin_chk(cXyz* pPos, f32 maxDist, f32 minFov) {
+    BOOL ret = false;
+    if (dComIfGp_getScopeMesgStatus() != 0 && dComIfGd_getView()->mFovy > minFov) {
         cXyz proj;
         cXyz center;
         mDoLib_project((Vec*)pPos, &proj);
@@ -3464,8 +3464,8 @@ bool dKy_telescope_lookin_chk(cXyz* pPos, f32 maxDist, f32 minFov) {
 }
 
 /* 80197504-80197558       .text dKy_moon_look_chk__Fv */
-bool dKy_moon_look_chk() {
-    bool rt = false;
+BOOL dKy_moon_look_chk() {
+    BOOL rt = false;
     if (dKyr_moon_arrival_check()) {
         rt = dKy_telescope_lookin_chk(&g_env_light.mMoonPos, 100.0f, 20.0f);
     }
@@ -3474,13 +3474,13 @@ bool dKy_moon_look_chk() {
 }
 
 /* 80197558-801975A4       .text dKy_orion_look_chk__Fv */
-bool dKy_orion_look_chk() {
+BOOL dKy_orion_look_chk() {
     cXyz pos = dKy_get_orion_pos();
     return dKy_telescope_lookin_chk(&pos, 100.0f, 20.0f);
 }
 
 /* 801975A4-801975F0       .text dKy_hokuto_look_chk__Fv */
-bool dKy_hokuto_look_chk() {
+BOOL dKy_hokuto_look_chk() {
     cXyz pos = dKy_get_hokuto_pos();
     return dKy_telescope_lookin_chk(&pos, 100.0f, 20.0f);
 }
@@ -3526,12 +3526,12 @@ u8 dKy_pship_existense_chk() {
 }
 
 /* 80197708-80197760       .text dKy_daynighttact_stop_chk__Fv */
-bool dKy_daynighttact_stop_chk() {
-    bool rt = false;
+BOOL dKy_daynighttact_stop_chk() {
+    BOOL rt = FALSE;
     if (dKy_checkEventNightStop()) {
-        rt = true;
+        rt = TRUE;
     } else if (g_env_light.mbDayNightTactStop) {
-        rt = true;
+        rt = TRUE;
     }
 
     return rt;

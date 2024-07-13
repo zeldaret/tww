@@ -32,7 +32,7 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
         TInst* instRaw = JSUConvertOffsetToPtr<TInst>(header, header->mInstOffsets[i]);
         if (instRaw != NULL) {
             TBasicInst* instp = new (heap, 0) TBasicInst();
-            JUT_ASSERT(56, instp != 0);
+            JUT_ASSERT(56, instp != NULL);
             instp->field_0x4 = instRaw->field_0x8;
             instp->field_0x8 = instRaw->field_0xC;
 
@@ -43,14 +43,14 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
                     TOscillator::Osc_* osc = findOscPtr(bank, header, oscRaw);
                     if (osc == NULL) {
                         osc = new (heap, 0) TOscillator::Osc_();
-                        JUT_ASSERT(72, osc != 0);
+                        JUT_ASSERT(72, osc != NULL);
                         osc->field_0x0 = oscRaw->field_0x0;
                         osc->field_0x4 = oscRaw->field_0x4;
                         s16* oscTable = JSUConvertOffsetToPtr<s16>(header, oscRaw->field_0x8);
                         if (oscTable != NULL) {
                             s32 tableLength = getOscTableEndPtr(oscTable) - oscTable;
                             osc->table = new (heap, 0) s16[tableLength];
-                            JUT_ASSERT(82, osc->table != 0);
+                            JUT_ASSERT(82, osc->table != NULL);
                             Calc::bcopy(oscTable, osc->table, tableLength * sizeof(s16));
                         } else {
                             osc->table = NULL;
@@ -59,7 +59,7 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
                         if (oscTable != NULL) {
                             s32 tableLength = getOscTableEndPtr(oscTable) - oscTable;
                             osc->rel_table = new (heap, 0) s16[tableLength];
-                            JUT_ASSERT(94, osc->rel_table != 0);
+                            JUT_ASSERT(94, osc->rel_table != NULL);
                             Calc::bcopy(oscTable, osc->rel_table, tableLength * sizeof(s16));
                         } else {
                             osc->rel_table = NULL;
@@ -77,7 +77,7 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
                 TRand* randRaw = JSUConvertOffsetToPtr<TRand>(header, instRaw->mRandOffsets[j]);
                 if (randRaw != NULL) {
                     TInstRand* randp = new (heap, 0) TInstRand();
-                    JUT_ASSERT(120, randp != 0);
+                    JUT_ASSERT(120, randp != NULL);
                     randp->setTarget(randRaw->field_0x0);
                     randp->field_0x8 = randRaw->field_0x4;
                     randp->field_0xc = randRaw->field_0x8;
@@ -88,7 +88,7 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
                 TSense* senseRaw = JSUConvertOffsetToPtr<TSense>(header, instRaw->mSenseOffsets[j]);
                 if (senseRaw != NULL) {
                     TInstSense* sensep = new (heap, 0) TInstSense();
-                    JUT_ASSERT(133, sensep != 0);
+                    JUT_ASSERT(133, sensep != NULL);
                     sensep->setTarget(senseRaw->field_0x0);
                     sensep->setParams(senseRaw->field_0x1, senseRaw->field_0x2, senseRaw->field_0x4, senseRaw->field_0x8);
                     instp->setEffect(j + 2, sensep);
@@ -118,7 +118,7 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
         TPerc* percRaw = JSUConvertOffsetToPtr<TPerc>(header, header->mPercOffsets[i]);
         if (percRaw != NULL) {
             TDrumSet* setp = new (heap, 0) TDrumSet();
-            JUT_ASSERT(183, setp != 0);
+            JUT_ASSERT(183, setp != NULL);
             for (int j = 0; j < 0x80; j++) {
                 TPmap* pmapRaw = JSUConvertOffsetToPtr<TPmap>(header, percRaw->mPmapOffsets[j]);
                 if (pmapRaw != NULL) {
@@ -134,7 +134,7 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
                         TRand* randRaw = JSUConvertOffsetToPtr<TRand>(header, pmapRaw->mRandOffsets[k]);
                         if (randRaw != NULL) {
                             TInstRand* randp = new (heap, 0) TInstRand();
-                            JUT_ASSERT(207, randp != 0);
+                            JUT_ASSERT(207, randp != NULL);
                             randp->setTarget(randRaw->field_0x0);
                             randp->field_0x8 = randRaw->field_0x4;
                             randp->field_0xc = randRaw->field_0x8;

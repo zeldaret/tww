@@ -63,7 +63,7 @@ void dCcD_GStts::Move() {
 
 /* 800AB3DC-800AB46C       .text Init__9dCcD_SttsFiiP10fopAc_ac_c */
 void dCcD_Stts::Init(int weight, int param_1, fopAc_ac_c* pActor) {
-    uint procId;
+    fpc_ProcID procId;
     if (pActor) {
         procId = fopAcM_GetID(pActor);
     } else {
@@ -263,7 +263,7 @@ void dCcD_GObjInf::Set(const dCcD_SrcGObjInf& src) {
 
 /* 800ABC54-800ABCC4       .text dCcD_GetGObjInf__FP8cCcD_Obj */
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* pobj) {
-    JUT_ASSERT(VERSION_SELECT(466, 531, 531), pobj != 0);
+    JUT_ASSERT(VERSION_SELECT(466, 531, 531), pobj != NULL);
     return (dCcD_GObjInf*)pobj->GetGObjInf();
 }
 

@@ -42,12 +42,12 @@ void JAInter::SequenceMgr::init() {
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         FixSeqBufPointer[i] = 0;
         SeqUpdateData* update = &seqTrackInfo[i];
-        update->field_0xc = 1.0f;
-        update->field_0x18 = 0.5f;
-        update->field_0x10 = 1.0f;
-        update->field_0x14 = 0.0f;
-        update->field_0x1c = 0.0f;
-        update->field_0x20 = 1.0f;
+        update->mSeqVolume = 1.0f;
+        update->mSeqPitch = 0.5f;
+        update->mSeqFxmix = 1.0f;
+        update->mSeqPan = 0.0f;
+        update->mSeqDolby = 0.0f;
+        update->mSeqTempo = 1.0f;
         for (int j = 0; j < JAIGlobalParameter::getParamSeqTrackMax(); j++) {
             update->trackVolume[j] = 1.0f;
             update->trackPan[j] = 64.0f;
@@ -199,9 +199,4 @@ JAInter::SeqUpdateData* JAInter::SequenceMgr::getPlayTrackInfo(u32) {
 JAInter::MuteBit::MuteBit() {
     flag1 = 0;
     flag3 = 0;
-}
-
-/* 80298334-8029859C       .text init__Q27JAInter12SeqParameterFv */
-int JAInter::SeqParameter::init() {
-    /* Nonmatching */
 }

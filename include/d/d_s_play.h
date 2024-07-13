@@ -117,8 +117,6 @@ public:
     /* 0x10 */ u32 field_0x10;
 };
 
-extern dScnPly_msg_HIO_c g_msgDHIO;
-
 class dScnPly_preLoad_HIO_c : public mDoHIO_entry_c {
 public:
     virtual ~dScnPly_preLoad_HIO_c() {}
@@ -141,7 +139,78 @@ public:
     /* 0x8 */ dScnPly_reg_childHIO_c mChild[22];
 };
 
+extern dScnPly_dark_HIO_c g_darkHIO;
 extern dScnPly_reg_HIO_c g_regHIO;
 extern dScnPly_env_HIO_c g_envHIO;
+extern dScnPly_msg_HIO_c g_msgDHIO;
+
+// Based on Twilight Princess debug, each g_envHIO child here was likely named after a specific developer.
+// However, the developer name for each child isn't known here, so the below macro names are all unofficial.
+
+#define REG0_F(i) g_regHIO.mChild[0].mFloatRegs[i]
+#define REG0_S(i) g_regHIO.mChild[0].mShortRegs[i]
+
+#define REG1_F(i) g_regHIO.mChild[1].mFloatRegs[i]
+#define REG1_S(i) g_regHIO.mChild[1].mShortRegs[i]
+
+#define REG2_F(i) g_regHIO.mChild[2].mFloatRegs[i]
+#define REG2_S(i) g_regHIO.mChild[2].mShortRegs[i]
+
+#define REG3_F(i) g_regHIO.mChild[3].mFloatRegs[i]
+#define REG3_S(i) g_regHIO.mChild[3].mShortRegs[i]
+
+#define REG4_F(i) g_regHIO.mChild[4].mFloatRegs[i]
+#define REG4_S(i) g_regHIO.mChild[4].mShortRegs[i]
+
+#define REG5_F(i) g_regHIO.mChild[5].mFloatRegs[i]
+#define REG5_S(i) g_regHIO.mChild[5].mShortRegs[i]
+
+#define REG6_F(i) g_regHIO.mChild[6].mFloatRegs[i]
+#define REG6_S(i) g_regHIO.mChild[6].mShortRegs[i]
+
+#define REG7_F(i) g_regHIO.mChild[7].mFloatRegs[i]
+#define REG7_S(i) g_regHIO.mChild[7].mShortRegs[i]
+
+#define REG8_F(i) g_regHIO.mChild[8].mFloatRegs[i]
+#define REG8_S(i) g_regHIO.mChild[8].mShortRegs[i]
+
+#define REG9_F(i) g_regHIO.mChild[9].mFloatRegs[i]
+#define REG9_S(i) g_regHIO.mChild[9].mShortRegs[i]
+
+#define REG10_F(i) g_regHIO.mChild[10].mFloatRegs[i]
+#define REG10_S(i) g_regHIO.mChild[10].mShortRegs[i]
+
+#define REG11_F(i) g_regHIO.mChild[11].mFloatRegs[i]
+#define REG11_S(i) g_regHIO.mChild[11].mShortRegs[i]
+
+#define REG12_F(i) g_regHIO.mChild[12].mFloatRegs[i]
+#define REG12_S(i) g_regHIO.mChild[12].mShortRegs[i]
+
+#define REG13_F(i) g_regHIO.mChild[13].mFloatRegs[i]
+#define REG13_S(i) g_regHIO.mChild[13].mShortRegs[i]
+
+#define REG14_F(i) g_regHIO.mChild[14].mFloatRegs[i]
+#define REG14_S(i) g_regHIO.mChild[14].mShortRegs[i]
+
+#define REG15_F(i) g_regHIO.mChild[15].mFloatRegs[i]
+#define REG15_S(i) g_regHIO.mChild[15].mShortRegs[i]
+
+#define REG16_F(i) g_regHIO.mChild[16].mFloatRegs[i]
+#define REG16_S(i) g_regHIO.mChild[16].mShortRegs[i]
+
+#define REG17_F(i) g_regHIO.mChild[17].mFloatRegs[i]
+#define REG17_S(i) g_regHIO.mChild[17].mShortRegs[i]
+
+#define REG18_F(i) g_regHIO.mChild[18].mFloatRegs[i]
+#define REG18_S(i) g_regHIO.mChild[18].mShortRegs[i]
+
+#define REG19_F(i) g_regHIO.mChild[19].mFloatRegs[i]
+#define REG19_S(i) g_regHIO.mChild[19].mShortRegs[i]
+
+#define REG20_F(i) g_regHIO.mChild[20].mFloatRegs[i]
+#define REG20_S(i) g_regHIO.mChild[20].mShortRegs[i]
+
+#define REG21_F(i) g_regHIO.mChild[21].mFloatRegs[i]
+#define REG21_S(i) g_regHIO.mChild[21].mShortRegs[i]
 
 #endif /* D_S_PLAY */

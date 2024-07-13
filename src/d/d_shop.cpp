@@ -87,21 +87,21 @@ ShopItems_c__ItemData shopItemData_green_bottle = {
 ShopItems_c__ItemData shopItemData_bomb10 = {
     /* mItemNo           */ BOMB_10,
     /* mMustNotOwnItemNo */ BOMB_10,
-    /* mMustOwnItemNo    */ BOMB_BAG,
+    /* mMustOwnItemNo    */ dItem_BOMB_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_bomb20 = {
     /* mItemNo           */ BOMB_20,
     /* mMustNotOwnItemNo */ BOMB_20,
-    /* mMustOwnItemNo    */ BOMB_BAG,
+    /* mMustOwnItemNo    */ dItem_BOMB_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_bomb30 = {
     /* mItemNo           */ BOMB_30,
     /* mMustNotOwnItemNo */ BOMB_30,
-    /* mMustOwnItemNo    */ BOMB_BAG,
+    /* mMustOwnItemNo    */ dItem_BOMB_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
@@ -113,8 +113,8 @@ ShopItems_c__ItemData shopItemData_emptybottle = {
 };
 
 ShopItems_c__ItemData shopItemData_kakera_heart = {
-    /* mItemNo           */ KAKERA_HEART,
-    /* mMustNotOwnItemNo */ KAKERA_HEART,
+    /* mItemNo           */ dItem_HEART_PIECE_e,
+    /* mMustNotOwnItemNo */ dItem_HEART_PIECE_e,
     /* mMustOwnItemNo    */ -1,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MUST_NOT_OWN_ITEM_e,
 };

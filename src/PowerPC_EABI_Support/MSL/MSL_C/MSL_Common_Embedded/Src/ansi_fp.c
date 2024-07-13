@@ -168,8 +168,6 @@ void __timesdec(decimal* result, const decimal* x, const decimal* y) {
             accumulator += *jp * *kp;
         }
 
-        // TODO: It's reusing the result of the modulo for the division, but for a match we need to disable this
-        // optimization and do the divide separately somehow.
         *--ip = (unsigned char)(accumulator % 10);
         accumulator /= 10;
     }

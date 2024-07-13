@@ -55,7 +55,7 @@ namespace daObjDragonhead_prm {
 /* 00000098-00000228       .text CreateHeap__17daObjDragonhead_cFv */
 BOOL daObjDragonhead_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("Qdghd", QDGHD_BDL_QDGHD));
-    JUT_ASSERT(0xA0, model_data != 0);
+    JUT_ASSERT(0xA0, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x00, 0x11020203);
     if (!mpModel)
         return FALSE;

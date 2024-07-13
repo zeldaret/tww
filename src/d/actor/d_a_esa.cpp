@@ -228,7 +228,7 @@ static BOOL daEsa_CreateHeap(fopAc_ac_c* i_actor) {
     esa_class* i_this = static_cast<esa_class*>(i_actor);
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_ESA));
-    JUT_ASSERT(0x1E8, modelData != 0);
+    JUT_ASSERT(0x1E8, modelData != NULL);
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
 
     if(i_this->mpModel == NULL) {

@@ -15,6 +15,7 @@
 #include "d/d_item_data.h"
 #include "d/d_magma.h"
 #include "d/d_particle.h"
+#include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "d/d_wood.h"
 #include "f_op/f_op_scene_mng.h"
@@ -93,14 +94,14 @@ void dComIfG_play_c::itemInit() {
     mMsgCountNumber = 0;
     mMsgSetNumber = 0;
     mMessageRupee = 0;
-    field_0x491e = 0;
-    field_0x4920 = 0;
-    field_0x4922 = 0;
-    mCurrHP = 0;
-    mRupyCountDisplay = 0;
+    mAuctionRupee = 0;
+    mAuctionGauge = 0;
+    mItemTimer = 0;
+    mItemNowLife = 0;
+    mItemNowRupee = 0;
     field_0x4928 = 0;
     field_0x4929 = 0;
-    field_0x492a = 0;
+    mMesgStatus = 0;
     mbCamOverrideFarPlane = 0;
     field_0x492c = 0;
     field_0x492d = 0;
@@ -121,7 +122,7 @@ void dComIfG_play_c::itemInit() {
     mItemNo = 0;
     field_0x493f = 0;
     field_0x4940 = 0;
-    field_0x4941 = 0;
+    mDirection = 0;
     mButtonMode = 0;
 
     if (dComIfGs_checkGetItem(dItem_TELESCOPE_e)) {
@@ -131,8 +132,8 @@ void dComIfG_play_c::itemInit() {
     }
 
     field_0x4944 = 7;
-    field_0x4945 = 0;
-    field_0x4946 = 0;
+    mScopeType = 0;
+    mOperateWind = 0;
     field_0x4947 = 0;
     mMesgSendButton = 0;
     mMesgCancelButton = 0;
@@ -142,22 +143,22 @@ void dComIfG_play_c::itemInit() {
     }
 
     mMelodyNum = 0;
-    field_0x4951 = 0;
+    mFmapOpen = false;
     field_0x4952 = 0;
     field_0x4953 = 0;
     field_0x4954 = 0;
-    field_0x4955 = 0;
+    mStartItemTimer = false;
     mFwaterTimer = 0;
     mPlacenameIndex = 0;
     mPlacenameState = 0;
     mGameoverStatus = 0;
     field_0x495a = 0;
     mPictureFlag = 0;
-    field_0x495c = 0;
-    field_0x495d = 0;
+    mPictureResult = 0;
+    mPictureResultDetail = 0;
     mPictureStatus = 0;
     field_0x495f = 0;
-    field_0x4960 = 0;
+    mPictureFormat = 0;
     field_0x4961 = 0;
     mHeapLockFlag = 0;
     field_0x4965 = 0;
@@ -168,7 +169,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4978 = 0;
     m2dShow = 0;
     field_0x497a = 0;
-    field_0x4963 = dComIfGs_getOptVibration();
+    mNowVibration = dComIfGs_getOptVibration();
     daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
     mMesgCameraTagInfo = 0;
     field_0x4984 = 0;
@@ -269,14 +270,14 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
 void dComIfG_play_c::createParticle() {
     mParticle = new dPa_control_c();
 
-    JUT_ASSERT(VERSION_SELECT(358, 360, 360), mParticle != 0);
+    JUT_ASSERT(VERSION_SELECT(358, 360, 360), mParticle != NULL);
 }
 
 /* 800528F4-8005297C       .text createDemo__14dComIfG_play_cFv */
 void dComIfG_play_c::createDemo() {
     mDemo = new dDemo_manager_c();
 
-    JUT_ASSERT(VERSION_SELECT(388, 390, 390), mDemo != 0);
+    JUT_ASSERT(VERSION_SELECT(388, 390, 390), mDemo != NULL);
 }
 
 /* 8005297C-800529B8       .text removeDemo__14dComIfG_play_cFv */
@@ -487,7 +488,7 @@ int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
                         dComIfGp_getNextStageLayer());
     dComIfGs_setRestartRoomParam(0);
 
-    fopScnM_ChangeReq(i_scene, i_procName, 0, 30);
+    fopScnM_ChangeReq(i_scene, i_procName, PROC_OVERLAP0, 30);
     fopScnM_ReRequest(i_procName, 0);
     return 1;
 }
@@ -506,7 +507,7 @@ int dComIfG_resetToOpening(scene_class* i_scene) {
 
 /* 800532D8-80053330       .text phase_1__FPc */
 static int phase_1(char* i_arcName) {
-    return !dComIfG_setObjectRes(i_arcName, (u8)0, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
+    return !dComIfG_setObjectRes(i_arcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
 }
 
 /* 80053330-80053388       .text phase_2__FPc */
@@ -754,42 +755,42 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
             get_item = 1;
         }
         break;
-    case TRIFORCE1:
+    case dItem_TRIFORCE1_e:
         if (dComIfGs_isTriforce(0)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE2:
+    case dItem_TRIFORCE2_e:
         if (dComIfGs_isTriforce(1)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE3:
+    case dItem_TRIFORCE3_e:
         if (dComIfGs_isTriforce(2)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE4:
+    case dItem_TRIFORCE4_e:
         if (dComIfGs_isTriforce(3)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE5:
+    case dItem_TRIFORCE5_e:
         if (dComIfGs_isTriforce(4)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE6:
+    case dItem_TRIFORCE6_e:
         if (dComIfGs_isTriforce(5)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE7:
+    case dItem_TRIFORCE7_e:
         if (dComIfGs_isTriforce(6)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE8:
+    case dItem_TRIFORCE8_e:
         if (dComIfGs_isTriforce(7)) {
             get_item = 1;
         }
@@ -878,42 +879,42 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             get_item = 1;
         }
         break;
-    case TRIFORCE1:
+    case dItem_TRIFORCE1_e:
         if (dComIfGs_isTriforce(0)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE2:
+    case dItem_TRIFORCE2_e:
         if (dComIfGs_isTriforce(1)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE3:
+    case dItem_TRIFORCE3_e:
         if (dComIfGs_isTriforce(2)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE4:
+    case dItem_TRIFORCE4_e:
         if (dComIfGs_isTriforce(3)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE5:
+    case dItem_TRIFORCE5_e:
         if (dComIfGs_isTriforce(4)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE6:
+    case dItem_TRIFORCE6_e:
         if (dComIfGs_isTriforce(5)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE7:
+    case dItem_TRIFORCE7_e:
         if (dComIfGs_isTriforce(6)) {
             get_item = 1;
         }
         break;
-    case TRIFORCE8:
+    case dItem_TRIFORCE8_e:
         if (dComIfGs_isTriforce(7)) {
             get_item = 1;
         }
@@ -948,7 +949,7 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             get_item = dComIfGs_getArrowNum();
         }
         break;
-    case BOMB_BAG:
+    case dItem_BOMB_BAG_e:
         if (dComIfGs_getItem(13) != dItem_HEART_e) { // Bug?
             get_item = dComIfGs_getBombNum();
         }
@@ -1060,12 +1061,12 @@ static void dummy() {
 /* 8005468C-800547BC       .text getSceneList__Fi */
 stage_scls_info_class* getSceneList(int i_no) {
     stage_scls_info_dummy_class* sclsInfo = dComIfGp_getStage().getSclsInfo();
-    JUT_ASSERT(VERSION_SELECT(2129, 2132, 2132), sclsInfo != 0);
+    JUT_ASSERT(VERSION_SELECT(2129, 2132, 2132), sclsInfo != NULL);
 
     JUT_ASSERT(VERSION_SELECT(2131, 2134, 2134), 0 <= i_no && i_no < sclsInfo->num);
 
     stage_scls_info_class* sclsData = sclsInfo->m_entries;
-    JUT_ASSERT(VERSION_SELECT(2133, 2136, 2136), sclsData != 0);
+    JUT_ASSERT(VERSION_SELECT(2133, 2136, 2136), sclsData != NULL);
 
     return &sclsData[i_no];
 }
@@ -1205,7 +1206,7 @@ void dComIfGs_setGameStartStage() {
             strcpy(stage_name, "sea");
 
             stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
-            JUT_ASSERT(VERSION_SELECT(2359, 2362, 2362), mapInfo != 0);
+            JUT_ASSERT(VERSION_SELECT(2359, 2362, 2362), mapInfo != NULL);
 
             room_no = 4 + dStage_mapInfo_GetOceanX(mapInfo) + ((dStage_mapInfo_GetOceanZ(mapInfo) + 3) * 7);
             point = 0;

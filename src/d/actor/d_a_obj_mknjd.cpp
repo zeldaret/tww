@@ -176,8 +176,8 @@ int daObjMknjD::Act_c::CreateHeap() {
     J3DModelData* model_data_d = (J3DModelData*)temp_r26;
     J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJH);
 
-    JUT_ASSERT(0x123, model_data_d != 0)
-    JUT_ASSERT(0x124, model_data_h != 0)
+    JUT_ASSERT(0x123, model_data_d != NULL)
+    JUT_ASSERT(0x124, model_data_h != NULL)
     
     mMainMdl = mDoExt_J3DModel__create(model_data_d, 0x80000, 0x31000002);
     mBreakMdl = mDoExt_J3DModel__create(model_data_h, 0x80000, 0x11000002);
@@ -255,7 +255,7 @@ int daObjMknjD::Act_c::Create() {
         mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[5]);
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
-        mTactMode = 4;
+        mMelodyNum = 4;
         mGiveItemNo = TACT_SONG5;
         eventInfo.setEventName("MKNJD_K_TALK");
         m0430 = 0x2910;
@@ -266,7 +266,7 @@ int daObjMknjD::Act_c::Create() {
         mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[4]);
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
-        mTactMode = 3;
+        mMelodyNum = 3;
         mGiveItemNo = TACT_SONG4;
         eventInfo.setEventName("MKNJD_D_TALK");
         m0430 = 0x2920;

@@ -12,6 +12,14 @@ namespace JAInter {
 
 class JAISound {
 public:
+    struct PositionInfo_t {
+        /* 0x00 */ f32 field_0x0;
+        /* 0x04 */ u8 field_0x4[0x8 - 0x4];
+        /* 0x08 */ f32 field_0x8;
+        /* 0x0C */ u8 field_0xc[0x18 - 0xc];
+        /* 0x18 */ f32 field_0x18;
+    };
+
     JAISound();
     virtual f32 setPositionDopplarCommon(u32);
     virtual f32 setDistanceVolumeCommon(f32, u8);
@@ -77,13 +85,13 @@ public:
     void getAct() {}
     void getAdjustPriority() {}
     void getFadetime() {}
-    void getID() {}
+    u32 getID() { return mSoundID; }
     void getInfoPointer() {}
     void getMapInfo() {}
     void getNextSound() {}
     void getPlayGameFrameCounter() {}
     void getPlayer() {}
-    void getPositionInfo() {}
+    PositionInfo_t* getPositionInfo() { return mPositionInfo; }
     void getPrevSound() {}
     void getPriority() {}
     void getStatus() {}
@@ -112,29 +120,21 @@ public:
     void setVolumeU7(u8, u32, u8) {}
     void setWait(u8) {}
 
-    struct PositionInfo_t {
-        f32 field_0x0;
-        u8 field_0x4[0x8 - 0x4];
-        f32 field_0x8;
-        u8 field_0xc[0x18 - 0xc];
-        f32 field_0x18;
-    };
-
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u8 field_0x6;
     /* 0x07 */ u8 field_0x7;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9;
-    /* 0x0a */ short field_0xa;
-    /* 0x0c */ int field_0xc;
+    /* 0x0a */ s16 field_0xa;
+    /* 0x0c */ u32 mSoundID;
     /* 0x10 */ int field_0x10;
     /* 0x14 */ u32 field_0x14;
-    /* 0x18 */ int field_0x18;
+    /* 0x18 */ u32 field_0x18;
     /* 0x1c */ int field_0x1c;
     /* 0x20 */ PositionInfo_t* mPositionInfo;
     /* 0x24 */ void* field_0x24;
-    /* 0x28 */ int field_0x28;
+    /* 0x28 */ u32 field_0x28;
     /* 0x2C */ int field_0x2c;
     /* 0x30 */ JAISound* field_0x30;
     /* 0x34 */ JAISound* field_0x34;
@@ -150,16 +150,16 @@ namespace JAInter {
         int set(f32 param_1, u32 param_2);
         bool move();
 
-        void init(f32 param_1) {
-            field_0x4 = param_1;
-            field_0x0 = param_1;
-            field_0xc = 0;
+        void init(f32 value) {
+            mCurrentValue = value;
+            mTargetValue = value;
+            mMoveCounter = 0;
         }
 
-        /* 0x00 */ f32 field_0x0;
-        /* 0x04 */ f32 field_0x4;
-        /* 0x08 */ f32 field_0x8;
-        /* 0x0C */ int field_0xc;
+        /* 0x00 */ f32 mTargetValue;
+        /* 0x04 */ f32 mCurrentValue;
+        /* 0x08 */ f32 mMoveAmount;
+        /* 0x0C */ int mMoveCounter;
     };
 
     class MoveParaSetInitHalf : public MoveParaSet {
@@ -183,5 +183,12 @@ namespace JAInter {
         /* 0x08 */ JAISound* Buffer;
     };
 }
+
+#define IsJAISoundIDInUse(id)    (((id)&0x800) == 0)
+#define IsJAISoundIDFree(id)     (((id)&0x800) == 1)
+#define JAISoundID_TypeMask      0xC0000000
+#define JAISoundID_Type_Se       0x00000000
+#define JAISoundID_Type_Sequence 0x80000000
+#define JAISoundID_Type_Stream   0xC0000000
 
 #endif /* JAISOUND_H */

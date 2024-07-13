@@ -11,60 +11,192 @@
 #include "new.h"
 
 /* 80224390-80224484       .text init__15dDlst_2DtEff1_cF8_GXColor */
-void dDlst_2DtEff1_c::init(_GXColor) {
+void dDlst_2DtEff1_c::init(GXColor color) {
     /* Nonmatching */
+    field_0xc.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    field_0x18.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
+    field_0x64.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    field_0x70.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
+    field_0xbc.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    field_0xc8.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, color);
 }
 
 /* 80224484-802246CC       .text draw__15dDlst_2DtEff1_cFv */
 void dDlst_2DtEff1_c::draw() {
-    /* Nonmatching */
+    field_0x114 = 320 + (s16)(field_0x4 * 8.0f) * -16;
+    field_0x116 = 240 + (s16)(field_0x4 * 8.0f) * -12;
+    if (field_0x8) {
+        field_0xc.draw();
+        field_0x18.draw();
+        field_0x64.draw();
+        field_0x70.draw();
+        field_0xbc.draw();
+        field_0xc8.draw();
+        field_0x8 = false;
+    } else {
+        if (dComIfGp_getWindowNum() == 0) {
+            s32 w = 320;
+            s32 h = 240;
+
+            field_0x70.setImagePtr(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()));
+            field_0xc8.setImagePtr(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()));
+
+            while (true) {
+                s32 dstW = w - 16;
+                s32 dstH = h - 12;
+
+                if (dstW < field_0x114 || dstH < field_0x116)
+                    break;
+
+                field_0x70.setImageWidth(w / 2);
+                field_0x70.setImageHeight(h / 2);
+                field_0x70.setWidth(dstW);
+                field_0x70.setHeight(dstH);
+                field_0x70.draw();
+
+                field_0xbc.setWd(dstW);
+                field_0xbc.setHt(dstH);
+                field_0xbc.draw();
+
+                w = dstW;
+                h = dstH;
+
+                field_0x70.setImagePtr(mDoGph_gInf_c::getFrameBufferTex());
+                field_0xc8.setImagePtr(mDoGph_gInf_c::getFrameBufferTex());
+            }
+
+            field_0xc8.setImageWidth(w / 2);
+            field_0xc8.setImageHeight(h / 2);
+            field_0xc8.setPos(0.0f, 0.0f);
+            field_0xc8.draw();
+        }
+    }
 }
 
 /* 802246CC-80224748       .text draw__17dDlst_snapShot2_cFv */
 void dDlst_snapShot2_c::draw() {
-    /* Nonmatching */
+    GXSetCopyFilter(GX_FALSE, NULL, GX_FALSE, NULL);
+    GXSetTexCopySrc(0, 0, mWidth, mHeight);
+    GXSetTexCopyDst(mWidth / 2, mHeight / 2, GX_TF_RGBA8, GX_TRUE);
+    GXCopyTex(mImagePtr, GX_FALSE);
+    GXPixModeSync();
 }
 
 /* 80224748-80224884       .text dDlst_setResTimgObj__FPC7ResTIMGP9_GXTexObjPvUlUl */
-void dDlst_setResTimgObj(const ResTIMG*, _GXTexObj*, void*, u32, u32) {
+bool dDlst_setResTimgObj(const ResTIMG* timg, GXTexObj* texObj, void* imagePtr, u32 w, u32 h) {
     /* Nonmatching */
+    if (timg->indexTexture) {
+        JUT_ASSERT(0xd9, FALSE);
+    } else {
+        GXInitTexObj(texObj, imagePtr, w, h, (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT, (GXBool)(timg->mipmapCount > 1));
+    }
+
+    GXInitTexObjLOD(texObj, (GXTexFilter)timg->minFilter, (GXTexFilter)timg->magFilter,
+        timg->minLOD * 0.125f, timg->maxLOD * 0.125f, timg->LODBias * 0.01f,
+        (GXBool)timg->biasClamp, (GXBool)timg->doEdgeLOD,
+        (GXAnisotropy)timg->maxAnisotropy);
+    return true;
 }
 
 /* 80224884-802249C4       .text cnvAddress__FffPfPf */
-void cnvAddress(f32, f32, f32*, f32*) {
-    /* Nonmatching */
+void cnvAddress(f32 x1, f32 y1, f32* x2, f32* y2) {
+    JUT_ASSERT(0x11a, x2 != NULL);
+    JUT_ASSERT(0x11b, y2 != NULL);
+    *x2 = 320.0f + (s32)((x1 - 320.0f) * 1.0296875f);
+    *y2 = 240.0f + (s32)((y1 - 240.0f) * 1.0926074f);
 }
 
 /* 802249C4-80224CC4       .text draw__14dDlst_2Dt_Sp_cFv */
 void dDlst_2Dt_Sp_c::draw() {
-    /* Nonmatching */
+    dDlst_setResTimgObj(mDoGph_gInf_c::getFrameBufferTimg(), &mTexObj, mImagePtr, mImageWidth, mImageHeight);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_U8, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    u8 i = mPercent * 255.0f;
+    GXColor tev1;
+    tev1.r = i;
+    tev1.g = i;
+    tev1.b = i;
+    GXSetTevColor(GX_TEVREG1, tev1);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_TEXC, GX_CC_C0, GX_CC_C1, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevKAlphaSel(GX_TEVSTAGE0, GX_TEV_KASEL_1);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetZCompLoc(GX_FALSE);
+    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(GX_FALSE);
+    GXSetClipMode(GX_CLIP_DISABLE);
+    GXLoadPosMtxImm(g_mDoMtx_identity, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    f32 x1, y1;
+    f32 x2, y2;
+    cnvAddress(mPosX, mPosY, &x1, &y1);
+
+    // lol
+    x1 = -9.0f;
+    y1 = -21.0f;
+    x2 = x1 + (mWidth * 1.0296875f);
+    y2 = y1 + (mHeight * 1.0916667f);
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition2f32(x1, y1);
+        GXTexCoord2u8(0, 0);
+
+        GXPosition2f32(x2, y1);
+        GXTexCoord2u8(1, 0);
+
+        GXPosition2f32(x2, y2);
+        GXTexCoord2u8(1, 1);
+
+        GXPosition2f32(x1, y2);
+        GXTexCoord2u8(0, 1);
+    GXEnd();
 }
 
 /* 80224CC4-80224DBC       .text init__14dDlst_2Dt_Sp_cFP7ResTIMGffff8_GXColor */
-void dDlst_2Dt_Sp_c::init(ResTIMG*, f32, f32, f32, f32, _GXColor) {
+void dDlst_2Dt_Sp_c::init(ResTIMG* timg, f32 x, f32 y, f32 w, f32 h, GXColor color) {
     /* Nonmatching */
+    setImageWidth(timg->width);
+    setImageHeight(timg->height);
+    mTimg = timg;
+    setImagePtr((u8*)timg + timg->imageOffset);
+    dDlst_setResTimgObj(mTimg, &mTexObj, mImagePtr, mImageWidth, mImageHeight);
+    setPos(x, y);
+    setWidth(w);
+    setHeight(h);
+    mColor = color;
+    mPercent = 0.0f;
 }
 
 /* 80224DBC-80224F98       .text __ct__10dOvlpFd4_cFv */
 dOvlpFd4_c::dOvlpFd4_c() {
-    /* Nonmatching */
     field_0x2ac = 1;
-    field_0xcc = &dOvlpFd4_c::execFirstSnap;
-    field_0xd8 = &dOvlpFd4_c::drawFadeOut;
+    setExecute(&dOvlpFd4_c::execFirstSnap);
+    setDraw(&dOvlpFd4_c::drawFadeOut);
     if (base.mProcName == PROC_OVERLAP4) {
-        field_0xfc.init(mDoGph_gInf_c::mFrameBufferTimg, 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
+        field_0xfc.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
     } else {
-        GXColor tmp = {0, 0, 0, 0};
-        field_0xfc.init(mDoGph_gInf_c::mFrameBufferTimg, 0.0f, 0.0f, 640.0f, 480.0f, tmp);
+        field_0xfc.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0x00, 0x00, 0x00, 0x00 });
     }
-    field_0x148.init(mDoGph_gInf_c::mFrameBufferTimg, 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
-    field_0xe4.field_0x4 = mDoGph_gInf_c::mFrameBufferTex;
-    field_0xe4.field_0x8 = 640;
-    field_0xe4.field_0xa = 480;
-    field_0xf0.field_0x4 = mDoGph_gInf_c::mFrameBufferTex;
-    field_0xf0.field_0x8 = 640;
-    field_0xf0.field_0xa = 480;
-    field_0x194.init(g_saftyWhiteColor);
+    field_0x148.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
+    field_0xe4.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    field_0xf0.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
+    tEff1_dlst.init(g_saftyWhiteColor);
     dComIfGp_2dShowOff();
     field_0x2b0 = 2;
     field_0x2ae = 39;
@@ -74,57 +206,158 @@ dOvlpFd4_c::dOvlpFd4_c() {
 
 /* 80224F98-80225060       .text drawFadeOut__10dOvlpFd4_cFv */
 void dOvlpFd4_c::drawFadeOut() {
-    /* Nonmatching */
+    if (field_0x2ac) {
+        dComIfGd_set2DXlu(&field_0xf0);
+        field_0x2ac = 0;
+    } else if (field_0x2ad == 1) {
+        dComIfGd_set2DXlu(&field_0x148);
+        dComIfGd_set2DXlu(&field_0xe4);
+    }
+    dComIfGd_set2DXlu(&field_0xfc);
 }
 
 /* 80225060-8022509C       .text drawFadeIn__10dOvlpFd4_cFv */
 void dOvlpFd4_c::drawFadeIn() {
-    /* Nonmatching */
+    dComIfGd_set2DXlu(&tEff1_dlst);
 }
 
 /* 8022509C-802251FC       .text execFirstSnap__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execFirstSnap() {
     /* Nonmatching */
+    if (!field_0x2ac && cLib_calcTimer(&field_0x2b0) == 0) {
+        setExecute(&dOvlpFd4_c::execFadeOut);
+        fopOvlpM_Done(this);
+        dComIfGp_setWindowNum(0);
+        field_0x2ad = true;
+        if (field_0x2ae > 79) {
+            field_0x2bc = (f32)(field_0x2ae - 79) / 79.0f;
+            field_0x2c0 = 8;
+        } else {
+            field_0x2bc = 0.0f;
+            field_0x2c0 = (s32)((624.0f / field_0x2ae) * 0.0625f) * 16;
+        }
+
+        field_0x2b0 = field_0x2ae;
+        field_0x2c1 = field_0x2ae - (field_0x2ae * field_0x2b4);
+    }
 }
 
 /* 802251FC-802253C4       .text execFadeOut__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execFadeOut() {
-    /* Nonmatching */
+    dComIfGp_setWindowNum(0);
+    if (cLib_calcTimer(&field_0x2b0) == 0 && (field_0xe4.mWidth <= field_0x2c0 || field_0xe4.mHeight <= field_0x2c0) && fopOvlpM_IsOutReq(this)) {
+        fopOvlpM_SceneIsStart();
+        setExecute(&dOvlpFd4_c::execNextSnap);
+        field_0x2ad = 0;
+        field_0x2b0 = 200;
+        dComIfGp_2dShowOff();
+    } else {
+        u16 wd = field_0xe4.getWd();
+        u16 ht = field_0xe4.getHt();
+        field_0x148.setImageWidth(wd / 2);
+        field_0x148.setImageHeight(ht / 2);
+
+        if (wd > field_0x2c0 && ht > field_0x2c0) {
+            wd -= field_0x2c0;
+            ht -= field_0x2c0;
+        }
+
+        f32 percent;
+        if (field_0x2b0 > field_0x2c1) {
+            percent = 0.0f;
+        } else if (wd > field_0x2c0 || ht > field_0x2c0) {
+            percent = 1.0f - ((f32)field_0x2b0 / field_0x2c1);
+            percent *= percent;
+        } else {
+            percent = 1.0f;
+        }
+
+        field_0xfc.setPer(percent);
+        field_0x148.setWidth(wd);
+        field_0x148.setHeight(ht);
+        field_0xe4.setWd(wd);
+        field_0xe4.setHt(ht);
+        field_0xfc.setImageWidth(wd / 2);
+        field_0xfc.setImageHeight(ht / 2);
+    }
 }
 
 /* 802253C4-80225528       .text execNextSnap__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execNextSnap() {
-    /* Nonmatching */
+    setExecute(execFadeIn);
+    setDraw(drawFadeIn);
+    tEff1_dlst.field_0x8 = true;
+    dComIfGp_setWindowNum(1);
+
+    tEff1_dlst.field_0xc.setWd(640);
+    tEff1_dlst.field_0xc.setHt(480);
+    tEff1_dlst.field_0x18.setImageWidth(320);
+    tEff1_dlst.field_0x18.setImageHeight(240);
+    tEff1_dlst.field_0x18.setWidth(320);
+    tEff1_dlst.field_0x18.setHeight(240);
+
+    tEff1_dlst.field_0x64.init(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()), 320, 240);
+    tEff1_dlst.field_0x70.setImagePtr(GXGetTexObjData(mDoGph_gInf_c::getZbufferTexObj()));
+    tEff1_dlst.field_0x70.setImageWidth(160);
+    tEff1_dlst.field_0x70.setImageHeight(120);
+    tEff1_dlst.field_0x70.setWidth(16.0f);
+    tEff1_dlst.field_0x70.setHeight(16.0f);
+    tEff1_dlst.field_0xbc.setWd(16);
+    tEff1_dlst.field_0xbc.setHt(16);
+    tEff1_dlst.field_0xc8.setPer(1.0f);
+    tEff1_dlst.field_0xc8.setImageWidth(8);
+    tEff1_dlst.field_0xc8.setImageHeight(8);
+    tEff1_dlst.field_0xc8.setWidth(640.0f);
+    tEff1_dlst.field_0xc8.setHeight(480.0f);
+    field_0x2b0 = field_0x2ae;
+    tEff1_dlst.field_0x4 = 1.0f;
+    field_0x2c8 = -1.0f / field_0x2b0;
 }
 
 /* 80225528-802255F4       .text execFadeIn__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execFadeIn() {
-    /* Nonmatching */
+    if (cLib_calcTimer(&field_0x2b0) == 0 && tEff1_dlst.field_0x4 <= 0.0f) {
+        if (!field_0x2cc) {
+            fopOvlpM_SceneIsStart();
+            field_0x2cc = true;
+        } else {
+            fopOvlpM_Done(this);
+            dComIfGp_setWindowNum(1);
+            dComIfGp_2dShowOn();
+        }
+    } else {
+        dComIfGp_setWindowNum(0);
+        fopOvlpM_SceneIsStop();
+        tEff1_dlst.field_0xc8.setPer(tEff1_dlst.field_0x4 * tEff1_dlst.field_0x4);
+        tEff1_dlst.field_0x4 += field_0x2c8;
+        if (tEff1_dlst.field_0x4 < 0.0f)
+            tEff1_dlst.field_0x4 = 0.0f;
+    }
 }
 
 /* 802255F4-80225658       .text dOvlpFd4_Draw__FP10dOvlpFd4_c */
-static s32 dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
-    void (dOvlpFd4_c::*tmp)() = i_this->field_0xd8;
-    if (tmp) {
-        (i_this->*i_this->field_0xd8)();
+static BOOL dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
+    dOvlpFd4_c::DrawFunc func = i_this->mDrawFunc;
+    if (func != NULL) {
+        (i_this->*i_this->mDrawFunc)();
     }
-    return 1;
+    return TRUE;
 }
 
 /* 80225658-80225684       .text dOvlpFd4_Execute__FP10dOvlpFd4_c */
-static s32 dOvlpFd4_Execute(dOvlpFd4_c* i_this) {
-    (i_this->*i_this->field_0xcc)();
-    return 1;
+static BOOL dOvlpFd4_Execute(dOvlpFd4_c* i_this) {
+    (i_this->*i_this->mExecuteFunc)();
+    return TRUE;
 }
 
 /* 80225684-8022568C       .text dOvlpFd4_IsDelete__FP10dOvlpFd4_c */
-static s32 dOvlpFd4_IsDelete(dOvlpFd4_c*) {
-    return 1;
+static BOOL dOvlpFd4_IsDelete(dOvlpFd4_c*) {
+    return TRUE;
 }
 
 /* 8022568C-80225694       .text dOvlpFd4_Delete__FP10dOvlpFd4_c */
-static s32 dOvlpFd4_Delete(dOvlpFd4_c*) {
-    return 1;
+static BOOL dOvlpFd4_Delete(dOvlpFd4_c*) {
+    return TRUE;
 }
 
 /* 80225694-802256C0       .text dOvlpFd4_Create__FPv */

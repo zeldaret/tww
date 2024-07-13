@@ -55,7 +55,7 @@ bool JASystem::TDrumSet::getParam(int key, int param_2, JASystem::TInstParam* pa
                 param_3->field_0x34 += y;
                 break;
             default:
-                JUT_ASSERT(77, 0);
+                JUT_ASSERT(77, FALSE);
                 break;
             }
         }
@@ -107,7 +107,7 @@ void JASystem::TDrumSet::TPerc::setEffectCount(u32 param_1) {
         return;
     }
     mEffect = new (TBank::getCurrentHeap(), 0) TInstEffect*[param_1];
-    JUT_ASSERT(146, mEffect != 0);
+    JUT_ASSERT(146, mEffect != NULL);
     Calc::bzero(mEffect, param_1 * 4);
 }
 
@@ -115,7 +115,7 @@ void JASystem::TDrumSet::TPerc::setEffectCount(u32 param_1) {
 void JASystem::TDrumSet::TPerc::setVeloRegionCount(u32 param_1) {
     delete[] mVelomap;
     mVelomap = new (TBank::getCurrentHeap(), 0) TBasicInst::TVeloRegion[param_1];
-    JUT_ASSERT(155, mVelomap != 0);
+    JUT_ASSERT(155, mVelomap != NULL);
     mVelomapCount = param_1;
 }
 

@@ -1,7 +1,7 @@
 #ifndef DVD_H
 #define DVD_H
 
-#include "dolphin/types.h"
+#include "global.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,25 +84,25 @@ typedef struct DVDDriveInfo {
     /* 0x02 */ u16 device_code;
     /* 0x04 */ u32 release_date;
     /* 0x08 */ u8 padding[24];
-} DVDDriveInfo;
+} DVDDriveInfo ALIGN_DECL(32);
 
 typedef struct DVDBB1 {
-  u32 appLoaderLength;
-  void* appLoaderFunc1;
-  void* appLoaderFunc2;
-  void* appLoaderFunc3;
+    u32 appLoaderLength;
+    void* appLoaderFunc1;
+    void* appLoaderFunc2;
+    void* appLoaderFunc3;
 } DVDBB1;
 
 typedef struct DVDBB2 {
-  u32 bootFilePosition;
-  u32 FSTPosition;
-  u32 FSTLength;
-  u32 FSTMaxLength;
-  void* FSTAddress;
-  u32 userPosition;
-  u32 userLength;
+    u32 bootFilePosition;
+    u32 FSTPosition;
+    u32 FSTLength;
+    u32 FSTMaxLength;
+    void* FSTAddress;
+    u32 userPosition;
+    u32 userLength;
 
-  u32 padding0;
+    u32 padding0;
 } DVDBB2;
 
 #define DVD_MIN_TRANSFER_SIZE 32
@@ -115,7 +115,7 @@ typedef void (*DVDOptionalCommandChecker)(DVDCommandBlock* block, void (*cb)(u32
 void DVDInit(void);
 BOOL DVDOpen(const char* filename, DVDFileInfo* fileinfo);
 BOOL DVDClose(DVDFileInfo* fileinfo);
-BOOL DVDReadPrio(DVDFileInfo* fileinfo, void*, s32, s32, s32);
+int DVDReadPrio(DVDFileInfo* fileinfo, void*, s32, s32, s32);
 DVDDiskID* DVDGetCurrentDiskID(void);
 BOOL DVDFastOpen(long, DVDFileInfo* fileinfo);
 s32 DVDGetCommandBlockStatus(const DVDCommandBlock* block);
@@ -142,8 +142,10 @@ BOOL DVDSetAutoInvalidation(BOOL autoInval);
 void DVDResume(void);
 static BOOL DVDCancelAsync(DVDCommandBlock* block, DVDCBCallback callback);
 s32 DVDCancel(DVDCommandBlock* block);
-
+void __DVDPrepareResetAsync(DVDCBCallback callbac);
 BOOL DVDCompareDiskID(DVDDiskID* id1, DVDDiskID* id2);
+
+DVDCommandBlock* __DVDPopWaitingQueue(void);
 
 #ifdef __cplusplus
 };

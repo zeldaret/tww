@@ -17,7 +17,7 @@ bool JASystem::Kernel::callbackInit;
 void JASystem::Kernel::resetCallback() {
     if (callbackInit != true) {
         callList = (unk_callList*)new (JASDram, 0) unk_callList[maxCallbacksUser];
-        JUT_ASSERT(58, callList != 0);
+        JUT_ASSERT(58, callList != NULL);
         BOOL enable = OSDisableInterrupts();
         for (int i = 0; i < maxCallbacksUser; i++) {
             callList[i].field_0x0 = NULL;

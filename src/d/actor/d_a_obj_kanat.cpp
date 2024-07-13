@@ -15,7 +15,7 @@ const char daObjKanat::Act_c::M_arcname[] = "Kanat";
 /* 00000078-0000012C       .text CreateHeap__Q210daObjKanat5Act_cFv */
 int daObjKanat::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KANAT_BDL_KANAT);
-    JUT_ASSERT(79, model_data != 0);
+    JUT_ASSERT(79, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
     return !!mpModel;
 }

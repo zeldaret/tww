@@ -9,7 +9,7 @@
 
 /* 80080018-8008010C       .text dPath_GetPnt__FP5dPathi */
 dPath__Point* dPath_GetPnt(dPath* path, int pnt_index) {
-    JUT_ASSERT(30, path != 0);
+    JUT_ASSERT(30, path != NULL);
     JUT_ASSERT(31, 0 <= pnt_index && pnt_index < path->m_num);
 
     if (path == NULL || path->mpPnt == NULL || 0 > pnt_index || pnt_index >= path->m_num)
@@ -62,7 +62,7 @@ dPath* dPath_GetNextRoomPath(dPath* path, int room_no) {
 }
 
 /* 80080340-800804A4       .text dPath_GetPolyRoomPathVec__FR13cBgS_PolyInfoP4cXyzPi */
-int dPath_GetPolyRoomPathVec(cBgS_PolyInfo& polyInfo, cXyz* pDstPos, int* pDstArg0) {
+bool dPath_GetPolyRoomPathVec(cBgS_PolyInfo& polyInfo, cXyz* pDstPos, int* pDstArg0) {
     int room_no = dComIfG_Bgsp()->GetRoomId(polyInfo);
     int path_index = dComIfG_Bgsp()->GetRoomPathId(polyInfo);
 

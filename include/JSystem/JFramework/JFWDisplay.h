@@ -89,6 +89,16 @@ public:
     JUTFader * getFader() { return mpFader; }
     void setClearColor(JUtility::TColor color) { mClearColor = color; }
 
+    u16 getFrameRate() const { return mFrameRate; }
+    void setFrameRate(u16 framerate) {
+        mFrameRate = framerate;
+        mTickRate = 0;
+    }
+
+    void getEfbHeight() const {}
+    void getEfbWidth() const {}
+    void getXfbManager() const {}
+
     static JFWDisplay* sManager;
 
 private:

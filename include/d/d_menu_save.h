@@ -8,6 +8,7 @@ class fopMsgM_pane_class;
 
 class dDlst_MenuSave_c : public dDlst_base_c {
 public:
+    ~dDlst_MenuSave_c() {}
     void draw();
 };
 
@@ -107,6 +108,10 @@ public:
 public:
     /* 0x0004 */ u8 field_0x0004;
     /* 0x0008 */ dDlst_MenuSave_c mDlst;
+#if VERSION == VERSION_PAL
+    // Not 100% sure where these extra bytes go, but it has to be before field_0x0537.
+    /* 0x000C */ u8 field_0x000c_pal[0x0038];
+#endif
     /* 0x000C */ u8 field_0x000c[0x0524];
     /* 0x0530 */ u8 field_0x0530;
     /* 0x0531 */ u8 field_0x0531;

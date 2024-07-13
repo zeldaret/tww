@@ -58,7 +58,7 @@ s32 dTimer_c::_create() {
             return cPhs_ERROR_e;
 
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("Timer");
-        JUT_ASSERT(0x44, resInfo != 0);
+        JUT_ASSERT(0x44, resInfo != NULL);
 
         if (prm->mIconType == 0) {
             mpSolidHeap = mDoExt_createSolidHeapFromGameToCurrent(0x34C0, 0x20);
@@ -71,7 +71,7 @@ s32 dTimer_c::_create() {
             mpScrnDraw->setScreen("ship_race0.blo", resInfo->getArchive());
             if (prm->mIconType != 0) {
                 iconTex = mpSolidHeap->alloc(0xC00, 0x20);
-                JUT_ASSERT(0x5a, iconTex != 0);
+                JUT_ASSERT(0x5a, iconTex != NULL);
                 mpScrnDraw->setIconType(iconTex, prm->mIconType);
             }
 
@@ -710,14 +710,14 @@ static s32 dTimer_Create(msg_class* i_this) {
 }
 
 /* 8023DA28-8023DA88       .text dTimer_createTimer__FiUsUcUcffff */
-uint dTimer_createTimer(int param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8) {
+fpc_ProcID dTimer_createTimer(int param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8) {
     if (dComIfG_getTimerMode() == -1)
         return fop_Timer_create(PROC_TIMER, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, NULL);
     return fpcM_ERROR_PROCESS_ID_e;
 }
 
 /* 8023DA88-8023DAEC       .text dTimer_createStockTimer__Fv */
-uint dTimer_createStockTimer() {
+fpc_ProcID dTimer_createStockTimer() {
     if (dComIfG_getTimerMode() != -1)
         return fop_Timer_create(PROC_TIMER, 7, 0, 3, 0, 221.0f, 439.0f, 32.0f, 419.0f, NULL);
     return fpcM_ERROR_PROCESS_ID_e;

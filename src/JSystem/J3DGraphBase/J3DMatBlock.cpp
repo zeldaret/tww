@@ -128,8 +128,8 @@ void J3DTevBlockPatched::initialize() {
     for (u32 i = 0; i < ARRAY_SIZE(mTexNo); i++)
         mTexNo[i] = 0xFFFF;
     for (u32 i = 0; i < ARRAY_SIZE(mTevStage); i++) {
-        mTevStage[i].field_0x0 = 0xC0 + i * 2;
-        mTevStage[i].field_0x4 = 0xC1 + i * 2;
+        mTevStage[i].mTevColorReg = 0xC0 + i * 2;
+        mTevStage[i].mTevAlphaReg = 0xC1 + i * 2;
     }
     for (u32 i = 0; i < 3; i++)
         mTevColor[i] = j3dDefaultTevColor;
@@ -145,8 +145,8 @@ void J3DTevBlockPatched::initialize() {
 /* 802DFABC-802DFAE4       .text initialize__12J3DTevBlock1Fv */
 void J3DTevBlock1::initialize() {
     mTexNo[0] = 0xFFFF;
-    mTevStage[0].field_0x0 = 0xC0;
-    mTevStage[0].field_0x4 = 0xC1;
+    mTevStage[0].mTevColorReg = 0xC0;
+    mTevStage[0].mTevAlphaReg = 0xC1;
     mTexNoOffset = 0;
 }
 
@@ -156,10 +156,10 @@ void J3DTevBlock2::initialize() {
     mTexNo[1] = 0xFFFF;
     mTevStageNum = 1;
 
-    mTevStage[0].field_0x0 = 0xC0;
-    mTevStage[0].field_0x4 = 0xC1;
-    mTevStage[1].field_0x0 = 0xC2;
-    mTevStage[1].field_0x4 = 0xC3;
+    mTevStage[0].mTevColorReg = 0xC0;
+    mTevStage[0].mTevAlphaReg = 0xC1;
+    mTevStage[1].mTevColorReg = 0xC2;
+    mTevStage[1].mTevAlphaReg = 0xC3;
     mTevKColorSel[0] = GX_TEV_KCSEL_K0;
     mTevKColorSel[1] = GX_TEV_KCSEL_K0;
     mTevKAlphaSel[0] = GX_TEV_KASEL_K0_A;
@@ -181,14 +181,14 @@ void J3DTevBlock4::initialize() {
     mTexNo[3] = 0xFFFF;
     mTevStageNum = 1;
 
-    mTevStage[0].field_0x0 = 0xC0;
-    mTevStage[0].field_0x4 = 0xC1;
-    mTevStage[1].field_0x0 = 0xC2;
-    mTevStage[1].field_0x4 = 0xC3;
-    mTevStage[2].field_0x0 = 0xC4;
-    mTevStage[2].field_0x4 = 0xC5;
-    mTevStage[3].field_0x0 = 0xC6;
-    mTevStage[3].field_0x4 = 0xC7;
+    mTevStage[0].mTevColorReg = 0xC0;
+    mTevStage[0].mTevAlphaReg = 0xC1;
+    mTevStage[1].mTevColorReg = 0xC2;
+    mTevStage[1].mTevAlphaReg = 0xC3;
+    mTevStage[2].mTevColorReg = 0xC4;
+    mTevStage[2].mTevAlphaReg = 0xC5;
+    mTevStage[3].mTevColorReg = 0xC6;
+    mTevStage[3].mTevAlphaReg = 0xC7;
     mTevKColorSel[0] = GX_TEV_KCSEL_K0;
     mTevKColorSel[1] = GX_TEV_KCSEL_K0;
     mTevKColorSel[2] = GX_TEV_KCSEL_K0;
@@ -220,8 +220,8 @@ void J3DTevBlock16::initialize() {
     for (u32 i = 0; i < ARRAY_SIZE(mTevKColorSel); i++)
         mTevKAlphaSel[i] = GX_TEV_KASEL_K0_A;
     for (u32 i = 0; i < ARRAY_SIZE(mTevStage); i++) {
-        mTevStage[i].field_0x0 = 0xC0 + i * 2;
-        mTevStage[i].field_0x4 = 0xC1 + i * 2;
+        mTevStage[i].mTevColorReg = 0xC0 + i * 2;
+        mTevStage[i].mTevAlphaReg = 0xC1 + i * 2;
     }
     mTexNoOffset = 0;
     mTevRegOffset = 0;

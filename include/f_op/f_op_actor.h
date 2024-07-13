@@ -279,7 +279,7 @@ public:
     /* 0x1C2 */ u8 gbaName;
     /* 0x1C4 */ u32 actor_status;
     /* 0x1C8 */ u32 actor_condition;
-    /* 0x1CC */ uint parentActorID;
+    /* 0x1CC */ fpc_ProcID parentActorID;
     /* 0x1D0 */ actor_place home;
     /* 0x1E4 */ actor_place old;
     /* 0x1F8 */ actor_place current;
@@ -366,6 +366,7 @@ STATIC_ASSERT(sizeof(fopEn_enemy_c) == 0x2AC);
 
 s32 fopAc_IsActor(void* actor);
 
+extern int g_fopAc_type;
 extern actor_method_class g_fopAc_Method;
 
 #endif

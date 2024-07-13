@@ -39,7 +39,7 @@ public:
     /* 0x474 */ f32 unk474;
     /* 0x478 */ s32 mSwitchNo;
     /* 0x47C */ u8 pad47C[4];
-    /* 0x480 */ uint mWindTagId;
+    /* 0x480 */ fpc_ProcID mWindTagId;
     /* 0x484 */ u8 mEventState;
     /* 0x485 */ u8 unk485;
     /* 0x486 */ u8 unk486;

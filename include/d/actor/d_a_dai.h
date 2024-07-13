@@ -30,8 +30,8 @@ public:
         mNowDaizaNum = 0;
         mNowItemNum = 0;
     }
-    static s8 getMaxDaiza();
-    static s8 getDaizaSetItemNum();
+    static int getMaxDaiza();
+    static int getDaizaSetItemNum();
 
     static s8 mNowDaizaNum;
     static s8 mNowItemNum;

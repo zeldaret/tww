@@ -2,12 +2,12 @@ __pycache__
 .idea
 .vscode
 .ninja_*
+.mypy_cache
 *.exe
 build
 build.ninja
 objdiff.json
 orig/*/*
 !orig/*/.gitkeep
-tools/mwcc_compiler
 /*.txt
 ctx.c

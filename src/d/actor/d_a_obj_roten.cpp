@@ -47,7 +47,7 @@ BOOL daObj_Roten_c::CreateHeap() {
     };
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, bdl_arc_idx[mType]));
-    JUT_ASSERT(0xB0, modelData != 0);
+    JUT_ASSERT(0xB0, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     mpBgW = new dBgW();

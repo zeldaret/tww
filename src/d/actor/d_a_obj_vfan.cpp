@@ -50,7 +50,7 @@ static dCcD_SrcCyl cyl_check_src = {
 int daObjVfan::Act_c::CreateHeap() {
     J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VFAN_BDL_V_FAN_00));
 
-    JUT_ASSERT(0x8c, model_data != 0);
+    JUT_ASSERT(0x8c, model_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
 

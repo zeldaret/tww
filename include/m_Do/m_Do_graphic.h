@@ -21,7 +21,6 @@ public:
     static void onMonotone();
     static void offMonotone();
     static void calcMonotone();
-    static void getFrameRate();
 
     static void setFader(JUTFader* fader) {
         JFWDisplay::getManager()->setFader(fader);
@@ -58,6 +57,8 @@ public:
     static GXTexObj* getZbufferTexObj() { return &mZbufferTexObj; }
     static GXTexObj* getFrameBufferTexObj() { return &mFrameBufferTexObj; }
     static void fadeIn(f32 rate, GXColor& color) { fadeOut(-rate, color); }
+    static u16 getFrameRate() { return JFWDisplay::getManager()->getFrameRate(); }
+    static void setFrameRate(u16 framerate) { JFWDisplay::getManager()->setFrameRate(framerate); }
 
     static void alloc32(u32) {}
     static void getFrameBufferMemory() {}
@@ -65,7 +66,6 @@ public:
     static void getMonotoneRate() {}
     static void setBlureMtx(const Mtx) {}
     static void setBlureRate(u8) {}
-    static void setFrameRate(u16) {}
     static void setMonotoneRate(s16 rate) { mMonotoneRate = rate; }
     static void setMonotoneRateSpeed(s16 speed) { mMonotoneRateSpeed = speed; }
 
@@ -90,5 +90,7 @@ public:
     static JKRHeap * mHeap[2];
     static u8 mCurrentHeap;
 };
+
+extern mDoGph_gInf_c g_mDoGph_graphicInfo;
 
 #endif /* M_DO_M_DO_GRAPHIC_H */

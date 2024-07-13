@@ -41,7 +41,7 @@ bool Act_c::create_heap() {
 
     mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x03));
 
-    JUT_ASSERT(0x105, mdl_data != 0);
+    JUT_ASSERT(0x105, mdl_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
 

@@ -759,7 +759,7 @@ BOOL daNpc_Md_c::createHeap() {
     }
     
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "md.bdl");
-    JUT_ASSERT(1995, modelData != 0);
+    JUT_ASSERT(1995, modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf2(
         modelData,
@@ -805,7 +805,7 @@ BOOL daNpc_Md_c::createHeap() {
     mpMorf->getModel()->setUserArea((u32)this);
     
     modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdarm.bdl");
-    JUT_ASSERT(2051, modelData != 0);
+    JUT_ASSERT(2051, modelData != NULL);
     
     mpArmMorf = new mDoExt_McaMorf2(
         modelData,
@@ -835,7 +835,7 @@ BOOL daNpc_Md_c::createHeap() {
     
     if (!isTypeShipRide()) {
         modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdwing.bdl");
-        JUT_ASSERT(2083, modelData != 0);
+        JUT_ASSERT(2083, modelData != NULL);
         
         mpWingMorf = new mDoExt_McaMorf(
             modelData,
@@ -1291,7 +1291,7 @@ BOOL daNpc_Md_c::harpWaitNpcAction(void*) {
     /* Nonmatching */
 }
 
-static uint l_msgId;
+static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 /* 00004CFC-00004D40       .text XYTalkCheck__10daNpc_Md_cFv */
@@ -2198,8 +2198,8 @@ BOOL daNpc_Md_c::initTexPatternAnm(u8 btpAnmTblIdx, bool param_2) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     bool ret = false;
     J3DAnmTexPattern* eyeTexPtrn = (J3DAnmTexPattern*)dComIfG_getObjectRes(mModelArcName, btpAnmTbl[btpAnmTblIdx].m00);
-    JUT_ASSERT(7502, eyeTexPtrn != 0);
-    if (m0520.init(modelData, eyeTexPtrn, 1, 1, 1.0f, 0, -1, param_2, 0)) {
+    JUT_ASSERT(7502, eyeTexPtrn != NULL);
+    if (m0520.init(modelData, eyeTexPtrn, TRUE, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0f, 0, -1, param_2, 0)) {
         m3112 = eyeTexPtrn->getFrameMax();
         m3133 = 0;
         m3136 = btpAnmTbl[btpAnmTblIdx].m20;

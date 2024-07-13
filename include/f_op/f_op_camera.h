@@ -33,4 +33,6 @@ struct camera_process_profile_definition {
     /* 0x3C */ leafdraw_method_class* sub_method; // Subclass methods
 };
 
+extern leafdraw_method_class g_fopCam_Method;
+
 #endif

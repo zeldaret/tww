@@ -203,7 +203,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
-    JUT_ASSERT(504, modelData != 0);
+    JUT_ASSERT(504, modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -224,16 +224,16 @@ BOOL daRd_c::_createHeap() {
     }
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
-    JUT_ASSERT(525, btk != 0);
-    if (!mBtkAnm.init(modelData, btk, true, 0, 1.0f, 0, -1, false, 0)) {
+    JUT_ASSERT(525, btk != NULL);
+    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     
     modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
-    JUT_ASSERT(550, brk != 0);
-    if (!mBrkAnm.init(modelData, brk, true, 0, 1.0f, 0, -1, false, 0)) {
+    JUT_ASSERT(550, brk != NULL);
+    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     
@@ -674,11 +674,11 @@ void daRd_c::setCollision() {
     }
     
     if (isAnm(AnmPrm_SUWARIP)) {
-        mCyl.SetR(80.0f + g_regHIO.mChild[8].mFloatRegs[1]);
-        mCyl.SetH(170.0f + g_regHIO.mChild[8].mFloatRegs[0]);
+        mCyl.SetR(80.0f + REG8_F(1));
+        mCyl.SetH(170.0f + REG8_F(0));
     } else {
-        mCyl.SetR(80.0f + g_regHIO.mChild[8].mFloatRegs[1]);
-        mCyl.SetH(250.0f + g_regHIO.mChild[8].mFloatRegs[0]);
+        mCyl.SetR(80.0f + REG8_F(1));
+        mCyl.SetH(250.0f + REG8_F(0));
     }
     
     mCyl.SetC(current.pos);
@@ -751,7 +751,7 @@ void daRd_c::modeWait() {
             // Bug: If the ReDead spawned high up in the air, its spawn point will remain there even after the ReDead
             // itself has fallen down to ground level. This means it will not be able to notice the player properly.
             if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
-                if ((dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + g_regHIO.mChild[12].mFloatRegs[4]) ||
+                if ((dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + REG12_F(4)) ||
                     isOto ||
                     dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.m40, l_HIO.m34, 100.0f)
                 ) {
@@ -883,7 +883,7 @@ void daRd_c::modeMove() {
         int angle = cLib_distanceAngleS(fopAcM_searchPlayerAngleY(this), mHeadAngle);
         if (angle < 0x50) {
             f32 dist = fopAcM_searchPlayerDistanceXZ(this);
-            f32 temp = (dist / 100.0f) + g_regHIO.mChild[12].mFloatRegs[3];
+            f32 temp = (dist / 100.0f) + REG12_F(3);
             if (temp > 1.0f) {
                 temp = 1.0f;
             }
@@ -894,9 +894,9 @@ void daRd_c::modeMove() {
             if (mEnemyFire.mState != 0) {
                 temp2 *= 2.0f;
             }
-            cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+            cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + REG12_F(0));
         } else {
-            cLib_addCalc2(&speedF, 0.0f, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+            cLib_addCalc2(&speedF, 0.0f, 0.1f, 0.1f + REG12_F(0));
         }
         if (speedF < 0.1f) {
             setAnm(AnmPrm_TACHIP1, false);
@@ -939,7 +939,7 @@ void daRd_c::modeCry() {
         } else {
             s16 targetY = fopAcM_searchPlayerAngleY(this);
             f32 dist = fopAcM_searchPlayerDistanceXZ(this);
-            f32 temp = (dist / 100.0f) + g_regHIO.mChild[12].mFloatRegs[3];
+            f32 temp = (dist / 100.0f) + REG12_F(3);
             if (temp > 1.0f) {
                 temp = 1.0f;
             }
@@ -950,7 +950,7 @@ void daRd_c::modeCry() {
             if (mEnemyFire.mState != 0) {
                 temp2 *= 2.0f;
             }
-            cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+            cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + REG12_F(0));
             
             if (mD3C > 0 && stickPosX < 0.0f) {
                 mD3C = -1;
@@ -1055,11 +1055,11 @@ void daRd_c::modeAttack() {
             return;
         }
         f32 dist = fopAcM_searchPlayerDistanceXZ(this);
-        if (dist <= 50.0f + g_regHIO.mChild[12].mFloatRegs[5] && !isAnm(AnmPrm_ATACK)) {
+        if (dist <= 50.0f + REG12_F(5) && !isAnm(AnmPrm_ATACK)) {
             offIkari();
             setAnm(AnmPrm_WALK2ATACK, false);
         }
-        if (dist <= 20.0f + g_regHIO.mChild[12].mFloatRegs[2]) {
+        if (dist <= 20.0f + REG12_F(2)) {
             cLib_addCalcPosXZ2(&current.pos, player->current.pos, 0.3f, 1.0f);
             if (cLib_calcTimer(&mTimer2) == 0) {
                 if (!daPy_getPlayerLinkActorClass()->checkNoDamageMode()) {
@@ -1134,7 +1134,7 @@ void daRd_c::modeReturn() {
             return;
         }
     } else {
-        cLib_addCalc2(&speedF, l_HIO.mReturnWalkSpeed, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+        cLib_addCalc2(&speedF, l_HIO.mReturnWalkSpeed, 0.1f, 0.1f + REG12_F(0));
     }
     
     if (dComIfGp_evmng_startCheck("DEFAULT_RD_ATTACK")) {
@@ -1146,7 +1146,7 @@ void daRd_c::modeReturn() {
     if (!isLinkControl()) {
         if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f)) {
             if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
-                if ((dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + g_regHIO.mChild[12].mFloatRegs[4]) ||
+                if ((dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + REG12_F(4)) ||
                     isOto ||
                     dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.m40, l_HIO.m34, 100.0f)
                 ) {
@@ -1178,7 +1178,7 @@ void daRd_c::modeSilentPray() {
             setAnm(AnmPrm_TACHIP1, false);
             speedF = 0.0f;
         } else {
-            cLib_addCalc2(&speedF, l_HIO.mReturnWalkSpeed, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+            cLib_addCalc2(&speedF, l_HIO.mReturnWalkSpeed, 0.1f, 0.1f + REG12_F(0));
         }
     } else if (!isLinkControl()) {
         if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
@@ -1333,12 +1333,15 @@ void daRd_c::setBrkAnm(s8 idx) {
         RD_BRK_BEAM_END,
     };
     static const int a_play_mod_tbl[] = {
-        0, 0, 2, 0,
+        J3DFrameCtrl::LOOP_ONCE_e,
+        J3DFrameCtrl::LOOP_ONCE_e,
+        J3DFrameCtrl::LOOP_REPEAT_e,
+        J3DFrameCtrl::LOOP_ONCE_e,
     };
     
     J3DModel* model = mpMorf->getModel();
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, a_anm_idx_tbl[idx]));
-    JUT_ASSERT(1890, brk != 0);
+    JUT_ASSERT(1890, brk != NULL);
     mBrkAnm.init(model->getModelData(), brk, true, a_play_mod_tbl[idx], 1.0f, 0, -1, true, 0);
 }
 
@@ -1370,7 +1373,7 @@ void daRd_c::setBtkAnm(s8 idx) {
     int r5 = a_play_prm_tbl[m6DB].m00;
     if (m6DC != m6DB && r5 != -1) {
         J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, a_anm_idx_tbl[r5]));
-        JUT_ASSERT(1930, btk != 0);
+        JUT_ASSERT(1930, btk != NULL);
         J3DModelData* modelData = mpMorf->getModel()->getModelData();
         mBtkAnm.init(modelData, btk, true, a_play_prm_tbl[m6DB].m04, 1.0f, 0, -1, true, 0);
         

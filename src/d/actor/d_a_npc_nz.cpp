@@ -148,12 +148,12 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 00000D18-00000F98       .text _createHeap__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, NPCNZ_BDL_NZ));
-    JUT_ASSERT(0xD0, modelData != 0);
+    JUT_ASSERT(0xD0, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        0,
+        NULL,
         -1, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -625,7 +625,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
             if(dComIfGs_checkGetBottle()) {
                 temp += 1;
             }
-            if(dComIfGs_checkGetItem(BOMB_BAG)) {
+            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
                 temp += 1;
             }
             if(dComIfGs_getItem(0xC) != dItem_NONE_e) {

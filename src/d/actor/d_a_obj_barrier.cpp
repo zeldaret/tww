@@ -104,7 +104,7 @@ bool daObjBarrier_anm_c::init() {
     J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YCAGE00));
 
     if (modelData == NULL || pbtk == NULL || pbrk == NULL) {
-        JUT_PANIC(407);
+        JUT_ASSERT(407, FALSE);
         rt = false;
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x1000200);
@@ -299,8 +299,8 @@ void daObjBarrier_ef_c::setDummyTexture(int i_idx) {
     J3DTexture* texture = modelData->getTexture();
     JUTNameTab* textureName = modelData->getTextureName();
 
-    JUT_ASSERT(808, texture != 0);
-    JUT_ASSERT(809, textureName != 0);
+    JUT_ASSERT(808, texture != NULL);
+    JUT_ASSERT(809, textureName != NULL);
 
     for (u16 i = 0; i < texture->getNum(); i++) {
         if (strcmp(textureName->getName(i), "__dummy") == 0) {
@@ -375,13 +375,13 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
         J3DModelData* modelData = mpModel[effect_idx]->getModelData();
 
         J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BTK_YHRBR00));
-        JUT_ASSERT(937, btk_anm_p != 0);
+        JUT_ASSERT(937, btk_anm_p != NULL);
 
         J3DAnmTransform* bck_anm_p = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, YCAGE_BCK_YHRBR00));
-        JUT_ASSERT(942, bck_anm_p != 0);
+        JUT_ASSERT(942, bck_anm_p != NULL);
 
         J3DAnmTevRegKey* brk_anm_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YHRBR00));
-        JUT_ASSERT(947, brk_anm_p != 0);
+        JUT_ASSERT(947, brk_anm_p != NULL);
 
         mBtk[effect_idx].init(modelData, btk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1,
                               true, 0);
@@ -407,7 +407,7 @@ bool daObjBarrier_ef_c::init() {
     J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YHRBR00));
 
     if (modelData == NULL || pbtk == NULL || pbck == NULL || pbrk == NULL) {
-        JUT_PANIC(1016);
+        JUT_ASSERT(1016, FALSE);
         rt = false;
     } else {
         for (int i = 0; i < 4; i++) {

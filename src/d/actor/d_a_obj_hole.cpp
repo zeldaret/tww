@@ -225,7 +225,7 @@ void daObj_Hole_c::createInit() {
 BOOL daObj_Hole_c::_createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, AANA_BDL_AANA);
 
-    JUT_ASSERT(0x13D, modelData != 0);
+    JUT_ASSERT(0x13D, modelData != NULL);
 
     mpMdl = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
 

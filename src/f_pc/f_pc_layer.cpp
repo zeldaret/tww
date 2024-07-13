@@ -100,10 +100,10 @@ layer_class* fpcLy_CurrentLayer() {
 }
 
 /* 8003D974-8003D9C4       .text fpcLy_Search__FUi */
-layer_class* fpcLy_Search(uint i_id) {
+layer_class* fpcLy_Search(uint i_layerID) {
     layer_class* layer_p = fpcLy_RootLayer();
     while (layer_p != NULL) {
-        if (layer_p->mLayerID == i_id) {
+        if (layer_p->mLayerID == i_layerID) {
             return layer_p;
         }
         layer_p = (layer_class*)layer_p->mNode.mpNextNode;
@@ -112,13 +112,13 @@ layer_class* fpcLy_Search(uint i_id) {
 }
 
 /* 8003D9C4-8003DA34       .text fpcLy_Layer__FUi */
-layer_class* fpcLy_Layer(uint i_id) {
-    if (i_id == fpcLy_ROOT_e || fpcLy_RootLayer()->mLayerID == i_id) {
+layer_class* fpcLy_Layer(uint i_layerID) {
+    if (i_layerID == fpcLy_ROOT_e || fpcLy_RootLayer()->mLayerID == i_layerID) {
         return fpcLy_RootLayer();
-    } else if (i_id == fpcLy_CURRENT_e || fpcLy_CurrentLayer()->mLayerID == i_id) {
+    } else if (i_layerID == fpcLy_CURRENT_e || fpcLy_CurrentLayer()->mLayerID == i_layerID) {
         return fpcLy_CurrentLayer();
     } else {
-        return fpcLy_Search(i_id);
+        return fpcLy_Search(i_layerID);
     }
 }
 

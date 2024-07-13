@@ -76,6 +76,8 @@ static void PADProbeCallback(s32 chan, u32 error, OSContext* context);
 static void PADTypeAndStatusCallback(s32 chan, u32 type);
 static void PADReceiveCheckCallback(s32 chan, u32 type);
 
+extern u32 __PADSpec;
+
 #ifdef __cplusplus
 };
 #endif

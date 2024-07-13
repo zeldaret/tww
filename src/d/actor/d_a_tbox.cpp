@@ -95,13 +95,13 @@ s32 daTbox_c::commonShapeSet() {
 
     // Load model
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", mdlInfo.modelId);
-    JUT_ASSERT(0xA0, modelData != 0);
+    JUT_ASSERT(0xA0, modelData != NULL);
 
     u32 modelFlags = 0x11000022;
 
     // Load open animation
     J3DAnmTransform* openAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", mdlInfo.openBckId);
-    if (mOpenAnm.init(modelData, openAnm, true, 0,  1.0f, 0, -1, false) == 0) {
+    if (mOpenAnm.init(modelData, openAnm, true, J3DFrameCtrl::LOOP_ONCE_e,  1.0f, 0, -1, false) == 0) {
         return cPhs_ERROR_e;
     }
 
@@ -128,7 +128,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* appearRegData = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", mdlInfo.brkId);
-        if (mpAppearRegAnm->init(modelData, appearRegData, true, 0, 1.0f, 0, -1, false, 0) == 0) {
+        if (mpAppearRegAnm->init(modelData, appearRegData, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
 
@@ -152,7 +152,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_YTRIF00);
-        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, 0, 1.0f, 0, -1, false, 0) == 0) {
+        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
     }
@@ -176,7 +176,7 @@ s32 daTbox_c::commonShapeSet() {
 /* 00000598-00000764       .text effectShapeSet__8daTbox_cFv */
 s32 daTbox_c::effectShapeSet() {
     J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", DALWAYS_BDL_IT_TAKARA_FLASH);
-    JUT_ASSERT(0x117, flashModelData != 0);
+    JUT_ASSERT(0x117, flashModelData != NULL);
 
     mpFlashMdl = mDoExt_J3DModel__create(flashModelData, 0x80000, 0x1000200);
     if (mpFlashMdl == NULL) {
@@ -184,17 +184,17 @@ s32 daTbox_c::effectShapeSet() {
     }
 
     J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", DALWAYS_BCK_IT_TAKARA_FLASH2);
-    if (mFlashAnm.init(flashModelData, flashAnm, true, 0, 1.0f, 0, -1, false) == 0) {
+    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BTK_IT_TAKARA_FLASH);
-    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, 0, 1.0f, 0, -1, false, 0) == 0) {
+    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH);
-    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, 0, 1.0f, 0, -1, false, 0);
+    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
 
     if (regInit) {
         return cPhs_COMPLEATE_e;
@@ -239,7 +239,7 @@ s32 daTbox_c::bgCheckSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", mdlInfo.closedColId);
-    JUT_ASSERT(0x195, bgd != 0);
+    JUT_ASSERT(0x195, bgd != NULL);
 
     mpBgWClosed = new dBgW();
     if (mpBgWClosed == NULL) {
@@ -251,7 +251,7 @@ s32 daTbox_c::bgCheckSet() {
     }
 
     bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", mdlInfo.openColId);
-    JUT_ASSERT(0x1A6, bgd != 0);
+    JUT_ASSERT(0x1A6, bgd != NULL);
 
     mpBgWOpen = new dBgW();
     if (mpBgWOpen == NULL) {
@@ -264,7 +264,7 @@ s32 daTbox_c::bgCheckSet() {
 
     if (getFuncType() == FUNC_TYPE_SWITCH_VISIBLE) {
         bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", DALWAYS_DZB_KINB_00);
-        JUT_ASSERT(0x1B9, bgd != 0);
+        JUT_ASSERT(0x1B9, bgd != NULL);
 
         mpBgWVines = new dBgW();
         if (mpBgWVines == NULL) {
@@ -528,7 +528,7 @@ void daTbox_c::CreateInit() {
                         mpAppearRegAnm->setFrame(30.0f);
                         break;
                     default:
-                        JUT_ASSERT(0x328, 0);
+                        JUT_ASSERT(0x328, FALSE);
                         break;
                 }
 
@@ -971,7 +971,7 @@ BOOL daTbox_c::actionOpenWait() {
         dComIfGp_event_onEventFlag(0x04);
 
         u8 itemNo = getItemNo();
-        uint itemPID = fopAcM_createItemForTrBoxDemo(&current.pos, itemNo);
+        fpc_ProcID itemPID = fopAcM_createItemForTrBoxDemo(&current.pos, itemNo);
 
         if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(itemPID);

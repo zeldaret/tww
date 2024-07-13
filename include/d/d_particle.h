@@ -363,6 +363,7 @@ public:
 
     static J3DModel * newModel(J3DModelData*);
     void draw();
+    int add(dPa_modelEmitter_c *emitter) { return cLs_Addition(this, emitter); }
 
     static dPa_J3Dmodel_c * mModel;
 };
@@ -469,6 +470,7 @@ public:
     u32 getParticleNum() { return mEmitterMng->getParticleNumber(); } 
     u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); } 
 
+    int addModelEmitter(dPa_modelEmitter_c *emitter) { return mModelControl->add(emitter); }
     void drawModelParticle() { mModelControl->draw(); }
     JKRHeap * getHeap() { return mHeap; }
 

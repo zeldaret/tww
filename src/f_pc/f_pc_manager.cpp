@@ -49,7 +49,7 @@ s32 fpcM_Delete(void* i_proc) {
 }
 
 /* 8003E3B0-8003E3D0       .text fpcM_IsCreating__FUi */
-BOOL fpcM_IsCreating(uint pID) {
+BOOL fpcM_IsCreating(fpc_ProcID pID) {
     return fpcCt_IsCreatingByID(pID);
 }
 
@@ -60,16 +60,15 @@ struct BMG_INF1 : JUTDataBlockHeader {
 
 /* 8003E3D0-8003E9F0       .text messageSet__FUl */
 void messageSet(u32 status) {
-    /* Nonmatching - PAL-only regswap between msg and tpane */
 #if VERSION == VERSION_PAL
     BMG_INF1* inf1;
-    if (g_dComIfG_gameInfo.play.mGameLanguage == 1) {
+    if (dComIfGs_getPalLanguage() == 1) {
         inf1 = (BMG_INF1*)&msg_data_ge[0x20];
-    } else if (g_dComIfG_gameInfo.play.mGameLanguage == 2) {
+    } else if (dComIfGs_getPalLanguage() == 2) {
         inf1 = (BMG_INF1*)&msg_data_fr[0x20];
-    } else if (g_dComIfG_gameInfo.play.mGameLanguage == 3) {
+    } else if (dComIfGs_getPalLanguage() == 3) {
         inf1 = (BMG_INF1*)&msg_data_sp[0x20];
-    } else if (g_dComIfG_gameInfo.play.mGameLanguage == 4) {
+    } else if (dComIfGs_getPalLanguage() == 4) {
         inf1 = (BMG_INF1*)&msg_data_it[0x20];
     } else {
         inf1 = (BMG_INF1*)&msg_data[0x20]; // English
@@ -80,13 +79,13 @@ void messageSet(u32 status) {
     const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(JUTDataBlockHeader) + inf1->entries[status]);
 
     J2DTextBox * tpane = new J2DTextBox('TXT1', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(VERSION_SELECT(0x12b, 0x141, 0x141), tpane != 0);
+    JUT_ASSERT(VERSION_SELECT(0x12b, 0x141, 0x141), tpane != NULL);
 
     J2DTextBox * spane = new J2DTextBox('TXT2', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(VERSION_SELECT(0x133, 0x149, 0x149), spane != 0);
+    JUT_ASSERT(VERSION_SELECT(0x133, 0x149, 0x149), spane != NULL);
 
     J2DPicture * ppane = new J2DPicture('PIC1', JGeometry::TBox2<f32>(0.0f, 0.0f, 665.0f, 530.0f), (ResTIMG*)black_tex, NULL);
-    JUT_ASSERT(VERSION_SELECT(0x138, 0x14e, 0x14e), ppane != 0);
+    JUT_ASSERT(VERSION_SELECT(0x138, 0x14e, 0x14e), ppane != NULL);
 
     J2DTextBox::TFontSize size;
     size.mSizeX = 27.0f;
@@ -111,7 +110,6 @@ void messageSet(u32 status) {
 #endif
 
     s16 height = 27;
-    s32 ch;
 #if VERSION != VERSION_JPN
     f32 maxWidth = 0.0f;
     s32 curLine = 0;
@@ -120,8 +118,8 @@ void messageSet(u32 status) {
         lineWidth[i] = 0.0f;
     }
 #endif
-    for (; ch = (u8)*msg, (s8)ch != '\0'; msg++) {
-        if ((s8)ch == '\n') {
+    for (; *msg != '\0'; msg++) {
+        if (*msg == '\n') {
             height += 27;
 #if VERSION != VERSION_JPN
             curLine++;
@@ -130,7 +128,7 @@ void messageSet(u32 status) {
         }
 
 #if VERSION != VERSION_JPN
-        lineWidth[curLine] += font->JUTFont::getWidth(ch);
+        lineWidth[curLine] += font->JUTFont::getWidth((u8)*msg);
 #endif
     }
 
@@ -151,7 +149,7 @@ void messageSet(u32 status) {
 
     ppane->draw(-12.0f, -24.0f, 665.0f, 530.0f, false, false, false);
 #if VERSION == VERSION_PAL
-    if (g_dComIfG_gameInfo.play.mGameLanguage == 0) {
+    if (dComIfGs_getPalLanguage() == 0) {
         spane->draw(x + 2.0f, y + 10.0f + 2.0f, 660.0f, HBIND_LEFT);
         tpane->draw(x, y + 10.0f, 660.0f, HBIND_LEFT);
     } else {

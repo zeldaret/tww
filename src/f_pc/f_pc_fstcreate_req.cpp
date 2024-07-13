@@ -42,7 +42,7 @@ base_process_class* fpcFCtRq_Request(layer_class* i_layer, s16 i_procTypeID,
                 proc->mpCtRq = (struct create_request*)request;
                 request->base.mpRes = proc;
                 request->base.mBsPcId = proc->mBsPcId;
-                if (fpcBs_SubCreate(proc) == 2) {
+                if (fpcBs_SubCreate(proc) == cPhs_NEXT_e) {
                     request->mpFastCreateFunc = i_createFunc;
                     request->mpFastCreateData = i_createData;
                     return proc;

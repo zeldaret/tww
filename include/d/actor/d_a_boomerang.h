@@ -6,7 +6,7 @@
 
 class daBoomerang_c : public fopAc_ac_c {
 public:
-    void onCancelFlg() {}
+    void onCancelFlg() { mCancelFlg = true; }
 
     daBoomerang_c();
     s32 create();
@@ -27,6 +27,8 @@ public:
 
 public:
     /* Place member variables here */
+    /* 0x290 */ u8 m290[0xF34 - 0x290];
+    /* 0xF34 */ bool mCancelFlg;
 };
 
 class daBoomerang_blur_c {
@@ -41,11 +43,6 @@ public:
     void draw();
     void setSight(cXyz*, int);
     void play(int);
-};
-
-class dBgS_BoomerangLinChk {
-public:
-    ~dBgS_BoomerangLinChk();
 };
 
 #endif /* D_A_BOOMERANG_H */

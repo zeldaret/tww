@@ -87,7 +87,7 @@ public:
 /* 80160F60-801610A8       .text setScreen__13dPlace_name_cFPCcP10JKRArchive */
 void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
     scrn = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(69, 91, 91), scrn != 0);
+    JUT_ASSERT(VERSION_SELECT(69, 91, 91), scrn != NULL);
 
     scrn->set(name, arc);
     fopMsgM_setPaneData(&pane, scrn, 0x706e);
@@ -135,19 +135,19 @@ void dPlace_name_c::draw() {
 s32 dPn_c::_create() {
     s32 rt = dComIfG_resLoad(&mPhs, "PName");
 
-    if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 10) || g_dComIfG_gameInfo.play.field_0x492a != 0)
+    if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 10) || dComIfGp_getMesgStatus() != 0)
         return cPhs_INIT_e;
 
     if (mState == 0) {
         if (rt == cPhs_COMPLEATE_e) {
             dRes_info_c * resInfo = dComIfG_getObjectResInfo("PName");
-            JUT_ASSERT(VERSION_SELECT(147, 169, 169), resInfo != 0);
+            JUT_ASSERT(VERSION_SELECT(147, 169, 169), resInfo != NULL);
 
             mpHeap = dComIfGp_getExpHeap2D();
             dComIfGp_setHeapLockFlag(10);
             JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
             dPn_scrn = new dPlace_name_c();
-            JUT_ASSERT(VERSION_SELECT(155, 177, 177), dPn_scrn != 0);
+            JUT_ASSERT(VERSION_SELECT(155, 177, 177), dPn_scrn != NULL);
             dPn_scrn->setScreen("place_name.blo", resInfo->getArchive());
             mpTIMG = (ResTIMG*)mpHeap->alloc(0x3c00, 0x20);
             mDoExt_setCurrentHeap(oldHeap);
@@ -168,7 +168,7 @@ s32 dPn_c::_create() {
         JUT_ASSERT(VERSION_SELECT(175, 201, 201), dComIfGp_getNowStageNum() < dPn_stage_max_e);
 
 #if VERSION == VERSION_PAL
-        u32 lang = g_dComIfG_gameInfo.play.mGameLanguage;
+        u32 lang = dComIfGs_getPalLanguage();
         char buf[32];
         sprintf(buf, "/res/placename/PN%d/pn_%02d_%d.bti", lang, dComIfGp_getNowStageNum() + 1, lang);
         dvd = mDoDvdThd_toMainRam_c::create(buf, 0, mpHeap);

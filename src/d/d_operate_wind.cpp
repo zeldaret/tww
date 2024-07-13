@@ -4,31 +4,123 @@
 //
 
 #include "d/d_operate_wind.h"
-#include "f_op/f_op_msg.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_ext.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "SSystem/SComponent/c_phase.h"
 
 /* 8021E58C-8021E5F8       .text __ct__9dOw_HIO_cFv */
-dOw_HIO_c::dOw_HIO_c() {
-    /* Nonmatching */
+dOw_HIO_c::dOw_HIO_c() {                           
+    field_0x08 = 0x1e;
+    field_0x0a = 0x5f;
+    field_0x0c = 0x9b;
+    field_0x0e = 0x10;
+    field_0x18 = 100;
+    field_0x10 = 0x78;
+    field_0x12 = 0x32;
+    field_0x04 = 7.0f;
+    field_0x14 = 0x14;
+    field_0x16 = 0x28;
+}
+
+void dDlst_Ow_main_c::drawLine(int width, f32 x1, f32 y1, f32 x2, f32 y2) {
+    J2DDrawLine(x1, y1, x2, y2, color, width);
 }
 
 /* 8021E5F8-8021E6A4       .text draw__15dDlst_Ow_main_cFv */
 void dDlst_Ow_main_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+
+    for (int i = 0; i < mLineMax; i++) {
+        // drawLine(6, mX1[i], mY1[i], mX2[i], mY2[i]);
+        J2DDrawLine(mX1[i], mY1[i], mX2[i], mY2[i], color, 6);
+    }
+
+    scrn->draw(0.0f, 0.0f, graf);
 }
 
 /* 8021E6A4-8021E708       .text draw__15dDlst_Ow_mask_cFv */
 void dDlst_Ow_mask_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+    scrn->draw(0.0f, 0.0f, graf);
 }
 
 /* 8021E708-8021E7E4       .text dOw_angleRegular__15dOperate_wind_cFf */
-void dOperate_wind_c::dOw_angleRegular(f32) {
-    /* Nonmatching */
+int dOperate_wind_c::dOw_angleRegular(f32 angle) {
+    if (angle < -247.5f)
+        return 90;
+    else if (angle < -202.5f)
+        return 135;
+    else if (angle < -157.5f)
+        return 180;
+    else if (angle < -112.5f)
+        return 225;
+    else if (angle < -67.5f)
+        return 270;
+    else if (angle < -22.5f)
+        return 315;
+    else if (angle < 22.5f)
+        return 0;
+    else if (angle < 67.5f)
+        return 45;
+    else if (angle < 112.5f)
+        return 90;
+    else if (angle < 157.5f)
+        return 135;
+    else if (angle < 202.5f)
+        return 180;
+    // missing end return
 }
 
 /* 8021E7E4-8021E974       .text dOw_stickControl__15dOperate_wind_cFis */
-void dOperate_wind_c::dOw_stickControl(int, s16) {
-    /* Nonmatching */
+int dOperate_wind_c::dOw_stickControl(int ret, s16 ang) {
+    s32 angi = abs(ang);
+    if (ret == 0) {
+        if (angi > 0x7000) {
+            return 1;
+        } else if (ang >= 0x5000) {
+            return 2;
+        } else if (ang <= -0x5000) {
+            return 8;
+        } else if (ang >= 0x3000) {
+            return 3;
+        } else if (ang <= -0x3000) {
+            return 7;
+        } else if (ang >= 0x1000) {
+            return 4;
+        } else if (ang <= -0x1000) {
+            return 6;
+        } else {
+            return 5;
+        }
+    } else {
+        if (angi > 0x7F80) {
+            return 1;
+        } else if (ang >= 0x5800 && ang <= 0x6800) {
+            return 2;
+        } else if (ang <= -0x5800 && ang >= -0x6800) {
+            return 8;
+        } else if (ang >= 0x3F80 && ang <= 0x4080) {
+            return 3;
+        } else if (ang <= -0x3F80 && ang >= -0x4080) {
+            return 7;
+        } else if (ang >= 0x1800 && ang <= 0x2800) {
+            return 4;
+        } else if (ang <= -0x1800 && ang >= -0x2800) {
+            return 6;
+        } else if (angi < 0x80) {
+            return 5;
+        }
+    }
+
+    return ret;
 }
 
 /* 8021E974-8021ED4C       .text screenSet__15dOperate_wind_cFv */
@@ -117,46 +209,96 @@ void dOperate_wind_c::_draw() {
 }
 
 /* 8022163C-802216F0       .text _open__15dOperate_wind_cFv */
-void dOperate_wind_c::_open() {
+bool dOperate_wind_c::_open() {
     /* Nonmatching */
 }
 
 /* 802216F0-80221770       .text _close__15dOperate_wind_cFv */
-void dOperate_wind_c::_close() {
+bool dOperate_wind_c::_close() {
     /* Nonmatching */
 }
 
 /* 80221770-80221830       .text _create__5dOw_cFv */
 void dOw_c::_create() {
     /* Nonmatching */
+    dOw_scrn = new dOperate_wind_c();
+    JUT_ASSERT(0x578, dOw_scrn != NULL);
+    dOw_scrn->_create();
 }
 
 /* 80221830-80221880       .text _delete__5dOw_cFv */
 void dOw_c::_delete() {
     /* Nonmatching */
+    dOw_scrn->_delete();
+    delete dOw_scrn;
+}
+
+bool dOw_c::_draw() {
+    if (field_0x104) /* getStatus? */
+        dOw_scrn->_draw();
+    return true;
 }
 
 /* 80221880-802218B4       .text dOw_Draw__FP5dOw_c */
-static void dOw_Draw(dOw_c*) {
+static BOOL dOw_Draw(dOw_c* i_this) {
     /* Nonmatching */
+    return i_this->_draw();
+}
+
+void dOw_c::_close() {
+    if (!dOw_scrn->_close()) {
+        dOw_scrn->_move();
+    } else {
+        field_0x104 = 0;
+        fopMsgM_Delete(this);
+    }
+}
+
+void dOw_c::_open() {
+    if (dOw_scrn->_open())
+        dOw_scrn->_move();
 }
 
 /* 802218B4-802219A4       .text dOw_Execute__FP5dOw_c */
-static void dOw_Execute(dOw_c*) {
+static BOOL dOw_Execute(dOw_c* i_this) {
     /* Nonmatching */
+    static u8 wind_flag = dComIfGp_getOperateWind();
+    JKRHeap* old_heap = mDoExt_setCurrentHeap(i_this->getHeap());
+    if (dComIfGp_getOperateWind() == 2) {
+        i_this->_open();
+    } else {
+        // i_this->dOw_scrn->setTimer ?
+        i_this->_close();
+    }
+    wind_flag = dComIfGp_getOperateWind();
+    mDoExt_setCurrentHeap(old_heap);
+    return TRUE;
 }
 
 /* 802219A4-802219AC       .text dOw_IsDelete__FP5dOw_c */
-static void dOw_IsDelete(dOw_c*) {
-    /* Nonmatching */
+static BOOL dOw_IsDelete(dOw_c* i_this) {
+    return TRUE;
 }
 
 /* 802219AC-80221A04       .text dOw_Delete__FP5dOw_c */
-static void dOw_Delete(dOw_c*) {
-    /* Nonmatching */
+static BOOL dOw_Delete(dOw_c* i_this) {
+    JKRHeap* old_heap = mDoExt_setCurrentHeap(i_this->getHeap());
+    i_this->_delete();
+    mDoExt_setCurrentHeap(old_heap);
+    fopMsgM_destroyExpHeap(i_this->getHeap());
+    return TRUE;
 }
 
 /* 80221A04-80221AA0       .text dOw_Create__FP9msg_class */
-static void dOw_Create(msg_class*) {
-    /* Nonmatching */
+static s32 dOw_Create(msg_class* i_msg) {
+    dOw_c* i_this = (dOw_c*)i_msg;
+
+    JKRExpHeap* heap = fopMsgM_createExpHeap(20000);
+    JUT_ASSERT(0x547, heap != NULL);
+    i_this->setHeap(heap);
+    JKRHeap* old_heap = mDoExt_setCurrentHeap(i_this->getHeap());
+    i_this->field_0x104 = 1; /* setStatus? */
+    i_this->_create();
+    mDoExt_setCurrentHeap(old_heap);
+    return cPhs_COMPLEATE_e;
 }

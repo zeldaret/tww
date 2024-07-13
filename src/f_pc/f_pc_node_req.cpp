@@ -12,6 +12,7 @@
 #include "f_pc/f_pc_layer.h"
 #include "f_pc/f_pc_node.h"
 #include "f_pc/f_pc_stdcreate_req.h"
+#include "f_pc/f_pc_manager.h"
 
 /* 8003F29C-8003F2DC       .text fpcNdRq_RequestQTo__FP19node_create_request */
 void fpcNdRq_RequestQTo(node_create_request* i_NdCtReq) {
@@ -43,7 +44,7 @@ s32 fpcNdRq_phase_Create(node_create_request* i_NdCtReq) {
     i_NdCtReq->mCreatingID = fpcSCtRq_Request(i_NdCtReq->mpLayerClass, i_NdCtReq->mProcName,
         (stdCreateFunc)i_NdCtReq->mpNodeCrReqMthCls->mpPostMethodFunc, i_NdCtReq,
         i_NdCtReq->mpUserData);
-    return i_NdCtReq->mCreatingID == -1 ? 3 : 2;
+    return i_NdCtReq->mCreatingID == fpcM_ERROR_PROCESS_ID_e ? 3 : 2;
 }
 
 /* 8003F3DC-8003F3E4       .text fpcNdRq_phase_IsDeleteTiming__FP19node_create_request */
@@ -138,7 +139,7 @@ s32 fpcNdRq_Handler() {
 
 /* 8003F6BC-8003F728       .text fpcNdRq_IsPossibleTarget__FP18process_node_class */
 s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
-    uint bsPcId = i_procNode->base.mBsPcId;
+    fpc_ProcID bsPcId = i_procNode->base.mBsPcId;
     request_node_class* currentNode;
     node_create_request* currentNdCr;
     currentNode = (request_node_class*)l_fpcNdRq_Queue.mpHead;
@@ -155,7 +156,7 @@ s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
 s32 fpcNdRq_IsIng(process_node_class* i_procNode) {
     request_node_class* currentNode;
     node_create_request* currentNodeReq;
-    uint bsPcId = i_procNode->base.mBsPcId;
+    fpc_ProcID bsPcId = i_procNode->base.mBsPcId;
     currentNode = (request_node_class*)l_fpcNdRq_Queue.mpHead;
     while (currentNode != NULL) {
         currentNodeReq = currentNode->mNodeCrReq;
@@ -176,7 +177,7 @@ node_create_request* fpcNdRq_Create(u32 i_requestSize) {
 
     node_create_request* req = (node_create_request*)cMl::memalignB(-4, i_requestSize);
     if (req != NULL) {
-        static int request_id = 0;
+        static uint request_id = 0;
         sBs_ClearArea(req, i_requestSize);
         *req = clear;
         cTg_Create(&req->mCreateTag, req);

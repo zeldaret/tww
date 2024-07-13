@@ -4,7 +4,7 @@ static GBASecParam SecParams[4];
 GBAControl __GBA[4];
 BOOL __GBAReset = FALSE;
 
-static s32 OnReset(s32);
+static BOOL OnReset(BOOL final);
 
 static OSResetFunctionInfo ResetFunctionInfo = {OnReset, 127};
 
@@ -87,7 +87,7 @@ s32 GBAReset(s32 chan, u8* status) {
     return __GBASync(chan);
 }
 
-s32 OnReset(s32) {
+BOOL OnReset(BOOL final) {
     __GBAReset = TRUE;
     return TRUE;
 }

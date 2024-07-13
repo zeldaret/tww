@@ -237,7 +237,7 @@ static BOOL tunoNodeCallBack(J3DNode* node, int param_1) {
 /* 00000988-00000C94       .text createHeap__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Os", OS_BDL_OS));
-    JUT_ASSERT(0x2F9, modelData != 0);
+    JUT_ASSERT(0x2F9, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -797,7 +797,7 @@ BOOL daNpc_Os_c::finish02NpcAction(void* param_1) {
     return true;
 }
 
-static uint l_msgId;
+static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 /* 00001F48-00002118       .text talkNpcAction__10daNpc_Os_cFPv */
@@ -1669,7 +1669,7 @@ BOOL daNpc_Os_c::dNpc_Os_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f
 
     if(pMorf) {
         J3DAnmTransform* pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes(arcName, idx);
-        pMorf->setAnm(pAnimRes, loopMode, morf, playSpeed, 0.0f, -1.0f, 0);
+        pMorf->setAnm(pAnimRes, loopMode, morf, playSpeed, 0.0f, -1.0f, NULL);
         ret = true;
     }
 
@@ -1702,7 +1702,7 @@ BOOL daNpc_Os_c::initBrkAnm(u8 param_1, bool param_2) {
     bool ret = false;
     if(field_0x7A2 != param_1) {
         J3DAnmTevRegKey* a_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Os", brkAnmTbl[param_1].brkFileIndex));
-        JUT_ASSERT(0xBB9, a_brk != 0);
+        JUT_ASSERT(0xBB9, a_brk != NULL);
 
         if(mBrkAnm.init(modelData, a_brk, TRUE, brkAnmTbl[param_1].loopMode, brkAnmTbl[param_1].speed, 0, -1, param_2, 0)) {
             field_0x7A2 = param_1;

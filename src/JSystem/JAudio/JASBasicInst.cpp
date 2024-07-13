@@ -60,7 +60,7 @@ bool JASystem::TBasicInst::getParam(int key, int velo, TInstParam* param) const 
             param->field_0x34 += y;
             break;
         default:
-            JUT_ASSERT(93, 0);
+            JUT_ASSERT(93, FALSE);
         }
     }
     const TKeymap* keymap = NULL;
@@ -95,7 +95,7 @@ int JASystem::TBasicInst::getKeymapIndex(int index) const {
 void JASystem::TBasicInst::setKeyRegionCount(u32 num) {
     delete[] mKeymap;
     mKeymap = new (TBank::getCurrentHeap(), 0) TKeymap[num];
-    JUT_ASSERT(140, mKeymap != 0);
+    JUT_ASSERT(140, mKeymap != NULL);
     mKeyRegionCount = num;
 }
 
@@ -108,7 +108,7 @@ void JASystem::TBasicInst::setEffectCount(u32 num) {
         return;
     }
     mEffect = new (TBank::getCurrentHeap(), 0) TInstEffect*[num];
-    JUT_ASSERT(157, mEffect != 0);
+    JUT_ASSERT(157, mEffect != NULL);
     Calc::bzero(mEffect, num * 4);
 }
 
@@ -128,7 +128,7 @@ void JASystem::TBasicInst::setOscCount(u32 num) {
         return;
     }
     mOsc = new (TBank::getCurrentHeap(), 0) TOscillator::Osc_*[num];
-    JUT_ASSERT(193, mOsc != 0);
+    JUT_ASSERT(193, mOsc != NULL);
     Calc::bzero(mOsc, num * 4);
 }
 
@@ -157,7 +157,7 @@ JASystem::TBasicInst::TKeymap::~TKeymap() {
 void JASystem::TBasicInst::TKeymap::setVeloRegionCount(u32 num) {
     delete[] mVelomap;
     mVelomap = new (TBank::getCurrentHeap(), 0) JASystem::TBasicInst::TVeloRegion[num];
-    JUT_ASSERT(244, mVelomap != 0);
+    JUT_ASSERT(244, mVelomap != NULL);
     mVeloRegionCount = num;
 }
 

@@ -63,11 +63,11 @@ public:
     void setData(fopAc_ac_c*);
     void clearData();
 
-    uint getID() const { return mID; }
+    fpc_ProcID getID() const { return mID; }
     fopAc_ac_c* getActor() { return mActor; }
 
 private:
-    /* 0x0 */ uint mID;
+    /* 0x0 */ fpc_ProcID mID;
     /* 0x4 */ fopAc_ac_c* mActor;
 };  // Size: 0x8
 
@@ -95,6 +95,9 @@ public:
     }
     
     void onAlphaOutFlg() { mAlphaOutFlg = TRUE; }
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    
+    void deleteCallBack() {}
     
     /* 0x4 */ BOOL mAlphaOutFlg;
     /* 0x8 */ JPABaseEmitter* mpEmitter;
@@ -802,6 +805,21 @@ public:
         ModeFlg_PARRY = 0x80000000,
     };
     
+    enum {
+        daPyItem_NONE_e = 0x100,
+        daPyItem_BOKO_e = 0x101,
+        daPyItem_UNK102_e = 0x102,
+        daPyItem_SWORD_e = 0x103,
+        daPyItem_UNK104_e = 0x104,
+        daPyItem_DRINK_BOTTLE_e = 0x105,
+        daPyItem_OPEN_BOTTLE_e = 0x106,
+        daPyItem_ESA_e = 0x107,
+        daPyItem_BOW_e = 0x108,
+        daPyItem_PHOTOBOX_e = 0x109,
+        daPyItem_UNK10A_e = 0x10A,
+        daPyItem_UNK10B_e = 0x10B,
+    };
+    
     typedef BOOL (daPy_lk_c::*ProcFunc)();
     
     void seStartOnlyReverb(u32);
@@ -809,7 +827,7 @@ public:
     void seStartSwordCut(u32);
     BOOL itemButton() const;
     BOOL itemTrigger() const;
-    u8 getReadyItem();
+    int getReadyItem();
     BOOL checkGroupItem(int, int);
     BOOL checkSetItemTrigger(int, int);
     BOOL auraJointCB0(int);
@@ -877,7 +895,7 @@ public:
     void setBlendMoveAnime(f32);
     void setBlendAtnBackMoveAnime(f32);
     void setBlendAtnMoveAnime(f32);
-    void setAnimeEquipSword(int);
+    void setAnimeEquipSword(BOOL);
     void setAnimeEquipSingleItem(u16);
     void setAnimeEquipItem();
     void setAnimeUnequipSword();
@@ -1495,8 +1513,8 @@ public:
     u32 getDayNightParamData();
     void setTactModel();
     BOOL checkNpcStatus();
-    int getTactPlayRightArmAnm(s32);
-    int getTactPlayLeftArmAnm(s32);
+    u16 getTactPlayRightArmAnm(s32);
+    u16 getTactPlayLeftArmAnm(s32);
     BOOL checkEndTactMusic() const;
     f32 getTactMetronomeRate();
     BOOL checkTactLastInput();
@@ -1580,7 +1598,7 @@ public:
     void setExtraCutAtParam(u8);
     void setExtraFinishCutAtParam(u8);
     void setJumpCutAtParam();
-    void getCutDirection();
+    int getCutDirection();
     void changeCutProc();
     void changeCutReverseProc(daPy_ANM);
     BOOL procCutA_init(s16);
@@ -1663,7 +1681,7 @@ public:
     }
     bool checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void clearDamageWait() {}
-    void exchangeGrabActor(fopAc_ac_c*) {}
+    void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
     void getBoomerangCatchPos() const {}
     void getLineTopPos() {}
@@ -1673,7 +1691,7 @@ public:
     void getShadowID() const {}
     void npcStartRestartRoom() {}
     void setDaiokutaEnd() {}
-    void setWhirlId(uint) {}
+    void setWhirlId(fpc_ProcID) {}
     void decrementBombCnt() {
         if (mActivePlayerBombs != 0) {
             mActivePlayerBombs--;
@@ -1777,14 +1795,14 @@ public:
     virtual BOOL checkCutCharge() const { return mCurProc == daPyProc_CUT_TURN_MOVE_e; }
     virtual BOOL getBokoFlamePos(cXyz*);
     virtual BOOL checkTactWait() const { return mCurProc == daPyProc_TACT_WAIT_e; }
-    virtual void setTactZev(uint, int, char*);
+    virtual void setTactZev(fpc_ProcID, int, char*);
     virtual void onDekuSpReturnFlg(u8 i_point);
     virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && m3570 != 0; }
     virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[UNDER_MOVE0_e].getRate(); }
     virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[UNDER_MOVE0_e].getFrame(); }
-    virtual uint getItemID() const { return mActorKeepEquip.getID(); }
-    virtual uint getThrowBoomerangID() const { return mActorKeepThrow.getID(); }
-    virtual uint getGrabActorID() const { return mActorKeepGrab.getID(); }
+    virtual fpc_ProcID getItemID() const { return mActorKeepEquip.getID(); }
+    virtual fpc_ProcID getThrowBoomerangID() const { return mActorKeepThrow.getID(); }
+    virtual fpc_ProcID getGrabActorID() const { return mActorKeepGrab.getID(); }
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
     virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
@@ -1794,7 +1812,7 @@ public:
     virtual void onFrollCrashFlg(u32 param_1) { m3620 = param_1; onNoResetFlg0(daPyFlg0_UNK8); }
     virtual MtxP getModelJointMtx(u16 idx) { return mpCLModel->getAnmMtx(idx); }
     virtual f32 getOldSpeedY() { return mOldSpeed.y; }
-    virtual BOOL setHookshotCarryOffset(uint, const cXyz*);
+    virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*);
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
 public:
@@ -1846,7 +1864,7 @@ public:
     /* 0x2E84 */ J3DModel* mpHbootsModels[2];
     /* 0x2E8C */ J3DModel* mpPringModel;
     /* 0x2E90 */ JKRSolidHeap* mpItemHeaps[2];
-    /* 0x2E98 */ J3DModel* mpHeldItemModel;
+    /* 0x2E98 */ J3DModel* mpEquipItemModel;
     /* 0x2E9C */ mDoExt_bckAnm mSwordAnim;
     /* 0x2EAC */ mDoExt_McaMorf* mpParachuteFanMorf;
     /* 0x2EB0 */ J3DAnmTevRegKey* mpBombBrk;
@@ -1858,9 +1876,9 @@ public:
     /* 0x2EC8 */ J3DAnmTextureSRTKey* mpGicer01Btk;
     /* 0x2ECC */ JKRSolidHeap* mpItemAnimeHeap;
     /* 0x2ED0 */ void* m_item_bck_buffer;
-    /* 0x2ED4 */ J3DAnmTextureSRTKey* mpHeldItemBtk;
+    /* 0x2ED4 */ J3DAnmTextureSRTKey* mpEquipItemBtk;
     /* 0x2ED8 */ J3DAnmTextureSRTKey* mpSwordBtk;
-    /* 0x2EDC */ J3DAnmTevRegKey* mpHeldItemBrk;
+    /* 0x2EDC */ J3DAnmTevRegKey* mpEquipItemBrk;
     /* 0x2EE0 */ J3DModel* mpBottleContentsModel;
     /* 0x2EE4 */ J3DModel* mpBottleCapModel;
     /* 0x2EE8 */ J3DModel* mpSwordModel1;
@@ -1942,7 +1960,7 @@ public:
     /* 0x34BA */ u8 m34BA;
     /* 0x34BB */ u8 mCurrItemHeapIdx;
     /* 0x34BC */ u8 m34BC;
-    /* 0x34BD */ u8 mLastUsedItemButtonIdx;
+    /* 0x34BD */ u8 mReadyItemIdx; // Which of the three item buttons the player last used.
     /* 0x34BE */ u8 m34BE;
     /* 0x34BF */ s8 mReverb;
     /* 0x34C0 */ u8 mLeftHandIdx;
@@ -2025,14 +2043,14 @@ public:
     /* 0x354C */ s16 mTinkleHoverTimer;
     /* 0x354E */ s16 mTinkleShieldTimer;
     /* 0x3550 */ s16 m3550;
-    /* 0x3552 */ u16 mKeepItemType;
+    /* 0x3552 */ u16 mKeepItem; // The item Link was previously holding in his hand, and is now temporarily put away.
     /* 0x3554 */ s16 m3554;
     /* 0x3556 */ u8 m3556[0x3558 - 0x3556];
     /* 0x3558 */ s16 m3558;
     /* 0x355A */ s16 m355A;
     /* 0x355C */ s16 m355C;
     /* 0x355E */ s16 m355E;
-    /* 0x3560 */ u16 mHeldItemType;
+    /* 0x3560 */ u16 mEquipItem; // The item Link is currently holding in his hand.
     /* 0x3562 */ u16 m3562;
     /* 0x3564 */ s16 m3564;
     /* 0x3566 */ s16 m3566;
@@ -2083,12 +2101,12 @@ public:
     /* 0x3618 */ u32 mModeFlg;
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;
-    /* 0x3624 */ int m3624;
-    /* 0x3628 */ int m3628;
-    /* 0x362C */ uint mTactZevPartnerPID;
-    /* 0x3630 */ u32 m3630;
+    /* 0x3624 */ u32 m3624;
+    /* 0x3628 */ fpc_ProcID m3628;
+    /* 0x362C */ fpc_ProcID mTactZevPartnerPID;
+    /* 0x3630 */ fpc_ProcID m3630;
     /* 0x3634 */ int m3634;
-    /* 0x3638 */ int mMsgId;
+    /* 0x3638 */ fpc_ProcID mMsgId;
     /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;
     /* 0x3640 */ s16 m3640;
     /* 0x3644 */ f32 m3644;

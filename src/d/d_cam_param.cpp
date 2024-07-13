@@ -66,13 +66,27 @@ dCamParam_c::~dCamParam_c() {
 }
 
 /* 800AF978-800AF9BC       .text Change__11dCamParam_cFl */
-void dCamParam_c::Change(s32) {
-    /* Nonmatching */
+BOOL dCamParam_c::Change(s32 i_styleIdx) {
+    mStyleIdx = i_styleIdx;
+    if (i_styleIdx < style_num) {
+        mpStyle = &styles[mStyleIdx];
+        return TRUE;
+    } else {
+        mpStyle = &styles[0];
+        return FALSE;
+    }
 }
 
 /* 800AF9BC-800AFA04       .text SearchStyle__11dCamParam_cFUl */
-void dCamParam_c::SearchStyle(u32) {
-    /* Nonmatching */
+s32 dCamParam_c::SearchStyle(u32 r4) {
+    s32 styleIndex = -1;
+    for (s32 i = 0; i < style_num; i++) {
+        if (styles[i].m00 == r4) {
+            styleIndex = i;
+            break;
+        }
+    }
+    return styleIndex;
 }
 
 /* 800AFA04-800AFAA4       .text ratiof__11dCamParam_cFffff */

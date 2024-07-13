@@ -18,7 +18,8 @@ public:
     void WorkAt_NoCutAnim(fopAc_ac_c*, u32, int, dCcMassS_HitInf*, cCcD_Obj*);
     void WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*);
     void hitCheck(int);
-    
+
+public:    
     /* 0x00 */ u8 mState;
     /* 0x01 */ u8 mInitFlags;
     /* 0x02 */ s8 mAnimIdx;
@@ -62,7 +63,7 @@ public:
     virtual void draw();
     virtual ~dGrass_packet_c();
 
-    /* 0x00010 */ s16 mNextIdx;
+    /* 0x00010 */ u16 mNextIdx;
     /* 0x00012 */ u8 field_0x00012[0x00014 - 0x00012];
     /* 0x00014 */ dGrass_data_c mGrassData[1500];
     /* 0x18E84 */ dGrass_anm_c mGrassAnm[104];

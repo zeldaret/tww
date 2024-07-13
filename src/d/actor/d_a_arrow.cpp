@@ -105,7 +105,7 @@ BOOL daArrow_c::_createHeap() {
         modelFileIndex = LINK_BDL_ARROW;
     }
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, modelFileIndex);
-    JUT_ASSERT(190, modelData != 0);
+    JUT_ASSERT(190, modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
     if (!mpModel) {
@@ -355,10 +355,10 @@ void daArrow_c::ShieldReflect() {
     fopAc_ac_c* ganondorf;
     if (fopAcM_SearchByName(PROC_GND, &ganondorf) && dComIfGp_getAttention().LockonTruth() && dComIfGp_getAttention().LockonTarget(0) == ganondorf) {
         cXyz ganondorfChestPos = ganondorf->current.pos;
-        ganondorfChestPos.y = 130.0f + g_regHIO.mChild[8].mFloatRegs[0];
+        ganondorfChestPos.y = 130.0f + REG8_F(0);
         targetAngleX = -cLib_targetAngleX(&link->current.pos, &ganondorfChestPos);
         fpcM_SetParam(ganondorf, 0x23);
-        mSparkleTimer = 15 + g_regHIO.mChild[0].mShortRegs[3];
+        mSparkleTimer = 15 + REG0_S(3);
         mpSparkleEmitter = dComIfGp_particle_set(0x3EE, &link->current.pos);
     }
     

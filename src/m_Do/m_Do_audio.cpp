@@ -52,13 +52,13 @@ JKRExpHeap* mDoAud_audioStreamHeap;
 
 /* 80006DD4-80006F88       .text mDoAud_allocStreamBuffer__Fv */
 void mDoAud_allocStreamBuffer() {
-    JUT_ASSERT(98, mDoAud_StreamBufferPointer == 0);
+    JUT_ASSERT(98, mDoAud_StreamBufferPointer == NULL);
     u32 var1 = mDoAud_StreamBufferBlocks;
     u32 size;
     while (true) {
         JAIGlobalParameter::setParamStreamDecodedBufferBlocks(var1);
         size = JAInter::StreamLib::getNeedBufferSize();
-        JUT_ASSERT(124, mDoAud_audioStreamHeap == 0);
+        JUT_ASSERT(124, mDoAud_audioStreamHeap == NULL);
         mDoAud_audioStreamHeap = archiveHeap;
         mDoAud_StreamBufferPointer = JKRAllocFromHeap(archiveHeap, size, 0);
         if (!mDoAud_StreamBufferPointer) {

@@ -130,7 +130,7 @@ void* JKRHeap::alloc(u32 size, int alignment, JKRHeap* heap) {
 }
 
 static void dummy1(JKRHeap* heap) {
-    JUT_ASSERT(0, heap != 0);
+    JUT_ASSERT(0, heap != NULL);
 }
 
 /* 802B0494-802B0518       .text alloc__7JKRHeapFUli */
@@ -420,7 +420,7 @@ static void dummy3() {
 
 /* 802B0D70-802B0E14       .text state_register__7JKRHeapCFPQ27JKRHeap6TStateUl */
 void JKRHeap::state_register(JKRHeap::TState* p, u32 id) const {
-    JUT_ASSERT(VERSION_SELECT(1034, 1090, 1090), p != 0);
+    JUT_ASSERT(VERSION_SELECT(1034, 1090, 1090), p != NULL);
     JUT_ASSERT(VERSION_SELECT(1035, 1091, 1091), p->getHeap() == this);
 }
 

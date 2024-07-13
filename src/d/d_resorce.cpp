@@ -3,6 +3,13 @@
 // Translation Unit: d_resorce.cpp
 //
 
+// Fakematch: This is supposed to be a weak function defined in d_a_player.h that wind up at the end of the
+// d_door TU. But weak function ordering is currently broken, so to get d_door to match, we define it
+// here (at the start of the *next* TU after d_door) so that it gets placed into the correct spot in
+// the DOL, even though this is an ugly hack and they're now in the wrong translation unit instead.
+#include "d/actor/d_a_player.h"
+void daPy_py_c::setPlayerPosAndAngle(cXyz*, s16) { }
+
 #include "d/d_resorce.h"
 #include "d/d_bg_s.h"
 #include "d/d_com_inf_game.h"
@@ -142,7 +149,7 @@ static void setToonTex(J3DMaterialTable* pMaterialTable) {
 
 /* 8006DFD4-8006E7A4       .text loadResource__11dRes_info_cFv */
 int dRes_info_c::loadResource() {
-    JUT_ASSERT(0x25f, mRes == 0);
+    JUT_ASSERT(0x25f, mRes == NULL);
 
     s32 fileNum = getResNum();
     mRes = new void*[fileNum];
@@ -397,7 +404,7 @@ int dRes_info_c::setRes() {
         }
         if (mpParentHeap != NULL) {
             mDataHeap = mDoExt_createSolidHeapToCurrent(0, mpParentHeap, 0x20);
-            JUT_ASSERT(0x3f5, mDataHeap != 0);
+            JUT_ASSERT(0x3f5, mDataHeap != NULL);
 
             loadResource();
             mDoExt_restoreCurrentHeap();

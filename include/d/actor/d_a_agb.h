@@ -37,7 +37,7 @@ public:
 
 public:
     /* 0x00 */ u16 field_0x0;
-    /* 0x04 */ uint mMsgID;
+    /* 0x04 */ fpc_ProcID mMsgID;
     /* 0x08 */ msg_class* mpMsg;
 };
 
@@ -110,8 +110,8 @@ public:
     BOOL isHold() { return mHold; }
     BOOL getFollowTarget() { return mFollowTarget; }
     void setFollowTarget(bool follow) { mFollowTarget = follow; }
-    uint getTargetID() { return mTargetID; }
-    void setTargetID(uint pid) { mTargetID = pid; }
+    fpc_ProcID getTargetID() { return mTargetID; }
+    void setTargetID(fpc_ProcID pid) { mTargetID = pid; }
 
     struct daAgb_ItemBuy {
         union {
@@ -247,7 +247,7 @@ public:
     /* 0x634 */ cXyz field_0x634;
     /* 0x640 */ int field_0x640;
     /* 0x648 */ u64 mPlayerName;
-    /* 0x650 */ uint mTargetID;
+    /* 0x650 */ fpc_ProcID mTargetID;
     /* 0x654 */ int field_0x654;
     /* 0x658 */ s16 field_0x658;
     /* 0x65A */ u16 mPrevButtons;

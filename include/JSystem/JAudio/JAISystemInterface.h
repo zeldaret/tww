@@ -17,7 +17,7 @@ namespace JAInter {
     namespace SystemInterface {
         BOOL checkFileExsistence(char*);
         int checkSeqActiveFlag(JASystem::TTrack*);
-        void trackToSeqp(JAISound*, u8);
+        JASystem::TTrack* trackToSeqp(JAISound*, u8);
         void setSeqPortargsF32(JAInter::SeqUpdateData*, u32, u8, f32);
         void setSeqPortargsU32(JAInter::SeqUpdateData*, u32, u8, u32);
         void rootInit(JAInter::SeqUpdateData*);

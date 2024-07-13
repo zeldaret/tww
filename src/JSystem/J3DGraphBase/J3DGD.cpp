@@ -278,6 +278,9 @@ void J3DGDSetTexCoordGen(GXTexGenType type, GXTexGenSrc src) {
 void J3DGDSetTexCoordScale2(GXTexCoordID id, u16 scaleS, u8 biasS, u8 wrapS, u16 scaleT, u8 biasT, u8 wrapT) {
     GDOverflowCheck(15);
     J3DGDWriteBPCmd(0xFE03FFFF);
+    // Bug: When id is GX_TEXCOORD_NULL (0xFF), the calculation below winds up producing the wrong
+    // BP register ID. Instead of a SU_SSIZE and SU_TSIZE register, it effectively negatively
+    // overflows to the previous registers: RAS1_TREF6 and RAS1_TREF7, potentially corrupting them.
     J3DGDWriteBPCmd((scaleS - 1) | (biasS << 16) | (wrapS << 17) | (0x30 + id * 2) << 24);
     J3DGDWriteBPCmd((scaleT - 1) | (biasT << 16) | (wrapT << 17) | (0x31 + id * 2) << 24);
 }
@@ -404,8 +407,8 @@ void J3DGDSetIndTexOrder(u32 num, GXTexCoordID tc0, GXTexMapID tm0, GXTexCoordID
 void J3DGDSetTevOrder(GXTevStageID stage, GXTexCoordID coord1, GXTexMapID map1, GXChannelID color1, GXTexCoordID coord2, GXTexMapID map2, GXChannelID color2) {
     static u8 c2r[] = {0, 1, 0, 1, 0, 1, 7, 5, 6, 0, 0, 0, 0, 0, 0, 7};
 
-    GXTexCoordID r31 = coord1 >= 8 ? GX_TEXCOORD0 : coord1;
-    GXTexCoordID r30 = coord2 >= 8 ? GX_TEXCOORD0 : coord2;
+    GXTexCoordID r31 = coord1 >= GX_MAXCOORD ? GX_TEXCOORD0 : coord1;
+    GXTexCoordID r30 = coord2 >= GX_MAXCOORD ? GX_TEXCOORD0 : coord2;
     GDOverflowCheck(5);
     J3DGDWriteBPCmd(
         ((map1 & 7) << 0) |

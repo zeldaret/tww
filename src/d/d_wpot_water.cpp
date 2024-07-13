@@ -4,34 +4,138 @@
 //
 
 #include "d/d_wpot_water.h"
-#include "f_op/f_op_kankyo.h"
+#include "d/d_bg_s_gnd_chk.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "f_op/f_op_kankyo_mng.h"
+
+dWpotWater_EcallBack dWpotWater_c::mEcallback;
 
 /* 8023F5D0-8023F64C       .text draw__20dWpotWater_EcallBackFP14JPABaseEmitter */
-void dWpotWater_EcallBack::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+void dWpotWater_EcallBack::draw(JPABaseEmitter* emtr) {
+    if (emtr->isZDraw()) {
+        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_DST_ALPHA, GX_BL_INV_DST_ALPHA, GX_LO_CLEAR);
+        GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
+        GXSetZCompLoc(GX_FALSE);
+        GXSetColorUpdate(GX_FALSE);
+        GXSetAlphaUpdate(GX_TRUE);
+    }
+}
+
+BOOL dWpotWater_c::draw() {
+    dComIfGd_getXluList()->entryImm(&mPacket, 0);
+    return TRUE;
 }
 
 /* 8023F64C-8023F688       .text dWpotWater_Draw__FP12dWpotWater_c */
-static void dWpotWater_Draw(dWpotWater_c*) {
-    /* Nonmatching */
+static BOOL dWpotWater_Draw(dWpotWater_c* i_this) {
+    return i_this->draw();
+}
+
+BOOL dWpotWater_c::execute() {
+    mDoMtx_stack_c::transS(mPos.x, mPos.y + 50.0f, mPos.z);
+    mDoMtx_stack_c::scaleM(220.0f, 100.0f, 220.0f);
+    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mPacket.getMtx());
+    if (emtr->isEnableDeleteEmitter()) {
+        emtr->quitImmortalEmitter();
+        fopKyM_Delete(this);
+    }
+    return TRUE;
 }
 
 /* 8023F688-8023F740       .text dWpotWater_Execute__FP12dWpotWater_c */
-static void dWpotWater_Execute(dWpotWater_c*) {
-    /* Nonmatching */
+static BOOL dWpotWater_Execute(dWpotWater_c* i_this) {
+    return i_this->execute();
 }
 
 /* 8023F740-8023F748       .text dWpotWater_IsDelete__FP12dWpotWater_c */
-static void dWpotWater_IsDelete(dWpotWater_c*) {
-    /* Nonmatching */
+static BOOL dWpotWater_IsDelete(dWpotWater_c* i_this) {
+    return TRUE;
 }
 
 /* 8023F748-8023F750       .text dWpotWater_Delete__FP12dWpotWater_c */
-static void dWpotWater_Delete(dWpotWater_c*) {
-    /* Nonmatching */
+static BOOL dWpotWater_Delete(dWpotWater_c* i_this) {
+    return TRUE;
+}
+
+s32 dWpotWater_c::create() {
+    new(this) dWpotWater_c();
+    dComIfGp_particle_set(0x8083, &mPos);
+    dComIfGp_particle_set(0x8084, &mPos);
+    emtr = dComIfGp_particle_set(0x8086, &mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
+    if (emtr == NULL) {
+        return cPhs_ERROR_e;
+    } else {
+        emtr->becomeImmortalEmitter();
+        return cPhs_COMPLEATE_e;
+    }
 }
 
 /* 8023F750-8023FFCC       .text dWpotWater_Create__FP12kankyo_class */
-static void dWpotWater_Create(kankyo_class*) {
-    /* Nonmatching */
+static s32 dWpotWater_Create(kankyo_class* i_k) {
+    dWpotWater_c* i_this = (dWpotWater_c*)i_k;
+    
+    dBgS_GndChk chk2;
+    dBgS_ObjGndChk_Yogan chk;
+    cXyz pos;
+    
+    s16 angle = 0;
+    for (s32 i = 0; i < 50; i++, angle += 10000) {
+        f32 f4 = i * 2.0408163f;
+        pos.set(
+            i_this->mPos.x + f4 * cM_scos(angle),
+            i_this->mPos.y + 100.0f,
+            i_this->mPos.z + f4 * cM_ssin(angle)
+        );
+        chk.SetPos(&pos);
+        f32 ret = dComIfG_Bgsp()->GroundCross(&chk);
+        if (ret != -1000000000.0f) {
+            chk2.SetPos(&pos);
+            f32 ret2 = dComIfG_Bgsp()->GroundCross(&chk2);
+            if (chk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(chk) == dBgS_Attr_LAVA_e && ret > ret2) {
+                cXyz spawnPos(pos.x, ret + 25.0f, pos.z);
+                fopAcM_create(PROC_Obj_Magmarock, 0, &spawnPos, i_this->mParam);
+                break;
+            }
+        }
+    }
+    
+    pos.set(
+        i_this->mPos.x,
+        i_this->mPos.y + 100.0f,
+        i_this->mPos.z
+    );
+    chk2.SetPos(&pos);
+    f32 ret = dComIfG_Bgsp()->GroundCross(&chk2);
+    i_this->mPos.y = ret;
+    if (ret != -1000000000.0f) {
+        cXyz sp18(i_this->mPos.x, i_this->mPos.y, i_this->mPos.z);
+        fopAcM_create(PROC_HITOBJ, 0, &sp18, i_this->mParam);
+        return i_this->create();
+    }
+    
+    return cPhs_ERROR_e;
 }
+
+kankyo_method_class l_dWpotWater_Method = {
+    (process_method_func)dWpotWater_Create,
+    (process_method_func)dWpotWater_Delete,
+    (process_method_func)dWpotWater_Execute,
+    (process_method_func)dWpotWater_IsDelete,
+    (process_method_func)dWpotWater_Draw,
+};
+
+kankyo_process_profile_definition g_profile_WPOT_WATER = {
+    fpcLy_CURRENT_e,
+    2,
+    fpcPi_CURRENT_e,
+    PROC_WPOT_WATER,
+    &g_fpcLf_Method.base,
+    sizeof(dWpotWater_c),
+    0,
+    0,
+    &g_fopKy_Method,
+    0x01CC,
+    &l_dWpotWater_Method,
+};

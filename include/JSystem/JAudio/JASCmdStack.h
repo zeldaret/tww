@@ -1,12 +1,27 @@
 #ifndef JASCMDSTACK_H
 #define JASCMDSTACK_H
 
+#include "JSystem/JAudio/JASTrack.h"
 #include "dolphin/types.h"
 
 namespace JASystem {
     namespace Kernel {
-        class TPortArgs;
+        class TPortArgs {
+        public:
+            /* 0x00 */ TTrack* mTrack;
+            /* 0x04 */ u32 mFlags;
+            /* 0x08 */ f32 mTrackVolume;
+            /* 0x0C */ f32 mTrackPitch;
+            /* 0x10 */ f32 mTrackPan;
+            /* 0x14 */ f32 mTrackFxmix;
+            /* 0x18 */ f32 mTrackDolby;
+            /* 0x1C */ f32 _1C;
+            /* 0x20 */ u32 _20;
+            /* 0x24 */ f32 mTrackTempo;
+        };
+
         class TPortCmd;
+
         class TPortHead {
         public:
             /* 0x00 */ TPortCmd* field_0x0;

@@ -23,7 +23,7 @@ s32 dScnOpen_c::create() {
     s32 rt = dComIfG_resLoad(&mPhs, "Opening");
     if (rt == cPhs_COMPLEATE_e) {
         solid_heap = mDoExt_createSolidHeapFromGameToCurrent(0x20000, 0);
-        JUT_ASSERT(0x3b, solid_heap != 0);
+        JUT_ASSERT(0x3b, solid_heap != NULL);
         mpProc = new dScnOpen_proc_c();
         field_0x1d4 = NULL;
         mDoExt_restoreCurrentHeap();
@@ -41,7 +41,7 @@ s32 dScnOpen_c::create() {
 /* 80232BC4-80232CAC       .text execute__10dScnOpen_cFv */
 BOOL dScnOpen_c::execute() {
 #if VERSION != VERSION_JPN
-    if (mpProc->field_0x2b0 >= 5 && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
+    if (mpProc->mState >= 5 && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
 #else
     if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
 #endif
@@ -55,7 +55,7 @@ BOOL dScnOpen_c::execute() {
     }
 
     mpProc->proc_execute();
-    if (mpProc->field_0x2b0 == 44)
+    if (mpProc->mState == 44)
         changeGameScene();
 
     return TRUE;
@@ -89,7 +89,7 @@ void dScnOpen_c::changeGameScene() {
     if (fpcM_GetName(this) == PROC_OPEN2_SCENE) {
         dComIfG_changeOpeningScene(this, PROC_OPENING2_SCENE);
     } else {
-        if (fopScnM_ChangeReq(this, PROC_PLAY_SCENE, 0, 5)) {
+        if (fopScnM_ChangeReq(this, PROC_PLAY_SCENE, PROC_OVERLAP0, 5)) {
             dComIfGs_setRestartRoomParam(0);
             mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
         }

@@ -5,9 +5,11 @@
 #include "d/d_particle.h"
 #include "SSystem/SComponent/c_phase.h"
 
+class msg_class;
+
 class dDoor_info_c : public fopAc_ac_c {
 public:
-    void valShipId() {}
+    BOOL valShipId() { return getShipId() != 0x3F; }
 
     u8 getSwbit();
     u8 getSwbit2();
@@ -29,7 +31,7 @@ public:
     void makeEventId(int);
     void initProc(int);
     void initOpenDemo(int);
-    void checkArea(f32, f32, f32);
+    BOOL checkArea(f32, f32, f32);
     void openInitCom(int);
     void openProcCom();
     void closeEndCom();
@@ -63,13 +65,9 @@ public:
 
 public:
     /* 0x00 */ dPa_smokeEcallBack mSmokeCb;
-    /* 0x04 */ u8 m04[0x22 - 0x04];
-    /* 0x22 */ s16 m22;
-    /* 0x24 */ u8 m24[0x28 - 0x24];
-    /* 0x28 */ f32 m28;
-    /* 0x2C */ f32 m2C;
-    /* 0x30 */ f32 m30;
-    /* 0x34 */ s8 m34;
+    /* 0x22 */ csXyz mRot;
+    /* 0x28 */ cXyz mPos;
+    /* 0x34 */ u8 m34;
     /* 0x35 */ u8 m35;
 };
 
@@ -78,10 +76,10 @@ public:
     void keyResLoad();
     void keyResDelete();
     void keyInit(dDoor_info_c*);
-    void keyProc();
-    void keyCreate_Nkey();
-    void keyCreate_Bkey();
-    void keyCreate(int);
+    BOOL keyProc();
+    BOOL keyCreate_Nkey();
+    BOOL keyCreate_Bkey();
+    BOOL keyCreate(int);
     void keyOn();
     void keyOff();
     void calcMtx(dDoor_info_c*);
@@ -102,14 +100,14 @@ class dDoor_stop_c {
 public:
     void calcMtx(dDoor_info_c*);
     void closeInit(dDoor_info_c*);
-    void closeProc(dDoor_info_c*);
+    s32 closeProc(dDoor_info_c*);
     void openInit(dDoor_info_c*);
-    void openProc(dDoor_info_c*);
-    void create();
+    s32 openProc(dDoor_info_c*);
+    BOOL create();
 
 public:
     /* 0x0 */ J3DModel* mpModel;
-    /* 0x4 */ f32 m4;
+    /* 0x4 */ f32 mOffsY;
     /* 0x8 */ u8 m8;
     /* 0x9 */ u8 mFrontCheck;
     /* 0xA */ u8 mA;
@@ -119,14 +117,13 @@ public:
 class dDoor_msg_c {
 public:
     void init(s16);
-    void proc(cXyz*);
+    BOOL proc(cXyz*);
 
 public:
-    /* 0x0 */ u32 m0;
-    /* 0x4 */ int mMsg;
-    /* 0x8 */ s8 m8;
-    /* 0x9 */ u8 m9[0xA - 0x9];
-    /* 0xA */ s16 mA;
+    /* 0x0 */ fpc_ProcID mMsgPId;
+    /* 0x4 */ msg_class* m_msg;
+    /* 0x8 */ u8 mState;
+    /* 0xA */ s16 mMsgId;
 };
 
 class dDoor_hkyo_c {
@@ -137,13 +134,13 @@ public:
 
     s32 resLoad();
     void resDelete();
-    void create();
+    BOOL create();
     void setAnm(u8);
     void init();
     void calcMtx(dDoor_info_c*, f32);
     void draw(dDoor_info_c*);
     void proc(dDoor_info_c*);
-    void chkFirst();
+    BOOL chkFirst();
     void onFirst();
     BOOL chkStart();
 

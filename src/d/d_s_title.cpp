@@ -24,8 +24,8 @@
 
 struct title_of_scene_class : public scene_class {
 public:
-    /* 0x1C4 */ u32 pad[0x97];
-    /* 0x420 */ uint mMoviePId;
+    /* 0x1C4 */ u8 m1C4[0x420 - 0x1C4];
+    /* 0x420 */ fpc_ProcID mMoviePId;
 
 #if VERSION == VERSION_PAL
     static daMP_c* mMp;
@@ -72,7 +72,7 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
         if (fpcM_GetName(i_this) == PROC_ENDING_SCENE) {
             if (movie->mpCallBack1() == 0) {
                 if (dComIfGs_getClearCount() == 0) {
-                    fopScnM_ChangeReq(i_this, PROC_NAMEEX_SCENE, 0, 5);
+                    fopScnM_ChangeReq(i_this, PROC_NAMEEX_SCENE, PROC_OVERLAP0, 5);
                 } else {
                     dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
                 }

@@ -17,7 +17,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-00000384       .text CreateHeap__11daLbridge_cFv */
 BOOL daLbridge_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GBRG00_BDL_GBRG00);
-    JUT_ASSERT(0xD6, modelData != 0);
+    JUT_ASSERT(0xD6, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000223U);
 
@@ -26,16 +26,16 @@ BOOL daLbridge_c::CreateHeap() {
     }
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BTK_GBRG00);
-    JUT_ASSERT(0xE8, pbtk != 0);
+    JUT_ASSERT(0xE8, pbtk != NULL);
 
-    if (!mBtkAnm.init(modelData, pbtk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
     J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, GBRG00_BPK_GBRG00);
-    JUT_ASSERT(0xF6, pbpk != 0);
+    JUT_ASSERT(0xF6, pbpk != NULL);
 
-    if (!mBpkAnm.init(modelData, pbpk, TRUE, 0, 1.0f, 0, -1, false, 0)) {
+    if (!mBpkAnm.init(modelData, pbpk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
@@ -43,9 +43,9 @@ BOOL daLbridge_c::CreateHeap() {
     mBpkAnm.setPlaySpeed(1.0f);
 
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BRK_GBRG00);
-    JUT_ASSERT(0x106, pbrk != 0);
+    JUT_ASSERT(0x106, pbrk != NULL);
 
-    if (!mBrkAnm.init(modelData, pbrk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
@@ -127,7 +127,7 @@ void daLbridge_c::setMoveBGMtx() {
 }
 
 /* 00000888-00000914       .text _execute__11daLbridge_cFv */
-BOOL daLbridge_c::_execute() {
+bool daLbridge_c::_execute() {
     bool isSw = fopAcM_isSwitch(this, mSwitchNo);
 
     sw_check();
@@ -270,7 +270,7 @@ void daLbridge_c::set_off_se() {
 }
 
 /* 00000F10-00000FF8       .text _draw__11daLbridge_cFv */
-BOOL daLbridge_c::_draw() {
+bool daLbridge_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
@@ -314,12 +314,12 @@ static BOOL daLbridge_Delete(void* i_this) {
 
 /* 000010D4-000010F8       .text daLbridge_Draw__FPv */
 static BOOL daLbridge_Draw(void* i_this) {
-    return (u8) static_cast<daLbridge_c*>(i_this)->_draw();
+    return static_cast<daLbridge_c*>(i_this)->_draw();
 }
 
 /* 000010F8-0000111C       .text daLbridge_Execute__FPv */
 static BOOL daLbridge_Execute(void* i_this) {
-    return (u8) static_cast<daLbridge_c*>(i_this)->_execute();
+    return static_cast<daLbridge_c*>(i_this)->_execute();
 }
 
 /* 0000111C-00001124       .text daLbridge_IsDelete__FPv */

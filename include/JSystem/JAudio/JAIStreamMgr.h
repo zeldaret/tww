@@ -16,8 +16,9 @@ namespace JASystem {
 
 namespace JAInter {
     class Actor;
+    
     struct streamUpdate_t {
-        streamUpdate_t() { field_0x14 = 0; }
+        streamUpdate_t() { mpSound = NULL; }
         
         /* 0x00 */ u8 field_0x0;
         /* 0x01 */ u8 field_0x1;
@@ -26,7 +27,13 @@ namespace JAInter {
         /* 0x08 */ f32 field_0x8;
         /* 0x0C */ f32 field_0xc;
         /* 0x10 */ int field_0x10;
-        /* 0x14 */ JAISound* field_0x14;
+        /* 0x14 */ JAISound* mpSound;
+    };
+    
+    struct streamList_t {
+        /* 0x00 */ u8 field_0x00[0x10 - 0x00];
+        /* 0x10 */ char field_0x10[0x10];
+        /* 0x20 */ u8 field_0x20[0x10];
     };
 
     class StreamParameter {
@@ -61,13 +68,14 @@ namespace JAInter {
             u8 flag6 : 1;
             u8 flag7 : 1;
             u8 flag8 : 1;
+            u8 flag9 : 1;
         };
 
         extern LinkSound streamControl;
         extern flags_t flags;
         extern streamUpdate_t* streamUpdate;
-        extern u8* streamList;
-        extern u8* initOnCodeStrm;
+        extern streamList_t* streamList;
+        extern streamList_t* initOnCodeStrm;
 
         inline streamUpdate_t* getUpdateInfo() { return streamUpdate; }
     }

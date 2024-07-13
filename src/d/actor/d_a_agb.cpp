@@ -375,12 +375,12 @@ int daAgb_c::uploadSelect() {
             char path[28];
             char pathNum[4];
             strcpy(path, "/res/Gba/client_");
-            sprintf(pathNum, "%d", g_dComIfG_gameInfo.play.mGameLanguage);
+            sprintf(pathNum, "%d", dComIfGs_getPalLanguage());
             strcat(path, pathNum);
             strcat(path, ".bin");
             l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, dMsg_getAgbWorkArea());
 #endif
-            JUT_ASSERT(VERSION_SELECT(591, 860, 861), l_gbaCommand != 0);
+            JUT_ASSERT(VERSION_SELECT(591, 860, 861), l_gbaCommand != NULL);
 
             mDoGaC_GbaReboot();
             mDoGaC_setPortNo(mPortNo);
@@ -396,7 +396,7 @@ int daAgb_c::uploadSelect() {
 int daAgb_c::uploadJoyboot1() {
     if (l_gbaCommand->sync()) {
         void* programp = l_gbaCommand->getMemAddress();
-        JUT_ASSERT(VERSION_SELECT(622, 891, 892), programp != 0);
+        JUT_ASSERT(VERSION_SELECT(622, 891, 892), programp != NULL);
 
         JUTGba::getManager()->doJoyBoot(mDoGaC_getPortNo(), 3, -1, (u8*)programp,
                                         l_gbaCommand->getMemSize() - 4, NULL, NULL);
@@ -451,12 +451,12 @@ int daAgb_c::uploadMessageLoad() {
         char path[28];
         char pathNum[4];
         strcpy(path, "/res/Gba/msg_LZ");
-        sprintf(pathNum, "%d", g_dComIfG_gameInfo.play.mGameLanguage);
+        sprintf(pathNum, "%d", dComIfGs_getPalLanguage());
         strcat(path, pathNum);
         strcat(path, ".bin");
         l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, 0, NULL);
 #endif
-        JUT_ASSERT(VERSION_SELECT(715, 1000, 1001), l_gbaCommand != 0);
+        JUT_ASSERT(VERSION_SELECT(715, 1000, 1001), l_gbaCommand != NULL);
 
         mUploadAction  = UpAct_UNK7;
         mDoGaC_onComEnable();
@@ -479,7 +479,7 @@ int daAgb_c::uploadMessageLoad2() {
 int daAgb_c::uploadConnect() {
     if (mDoGaC_getComEnable() && mDoGaC_GbaLink()) {
         void* programp = l_gbaCommand->getMemAddress();
-        JUT_ASSERT(VERSION_SELECT(760, 1045, 1046), programp != 0);
+        JUT_ASSERT(VERSION_SELECT(760, 1045, 1046), programp != NULL);
         mDoGac_SendDataSet((u32*)programp, l_gbaCommand->getMemSize(), 0, 0);
 
         mUploadAction  = UpAct_UNK8;
@@ -1002,7 +1002,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 |= 0x1000000;
             }
 
-            if (dComIfGs_checkGetItem(BOMB_BAG) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
+            if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
                 temp_r29 |= 0x10000;
             }
 
@@ -1720,7 +1720,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 800D396C-800D3B58       .text createHeap__7daAgb_cFv */
 int daAgb_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", AGB_BDL_AGBCURSOR);
-    JUT_ASSERT(VERSION_SELECT(2960, 3277, 3286), modelData != 0);
+    JUT_ASSERT(VERSION_SELECT(2960, 3277, 3286), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
     if (mpModel == NULL) {

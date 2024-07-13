@@ -37,7 +37,7 @@ bool daObjMonument::Act_c::create_heap() {
     bool ret = true;
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, attr(mType).mModelId));
-    JUT_ASSERT(0x81, modelData != 0);
+    JUT_ASSERT(0x81, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (!mpModel)

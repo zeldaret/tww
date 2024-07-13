@@ -52,7 +52,7 @@ static dCcD_SrcCps l_cps_src = {
     {
         /* P0 */ 0.0f, 0.0f, 0.0f,
         /* P1 */ 0.0f, 0.0f, 0.0f,
-        /* Hieght */ 100.0f,
+        /* Height */ 100.0f,
     },
 };
 
@@ -71,7 +71,7 @@ BOOL daFan_c::Delete() {
 /* 000000F0-0000040C       .text CreateHeap__7daFan_cFv */
 int daFan_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]));
-    JUT_ASSERT(0x15e, modelData != 0);
+    JUT_ASSERT(0x15e, modelData != NULL);
 
     mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mModel == NULL)
@@ -79,23 +79,23 @@ int daFan_c::CreateHeap() {
     mModel->setUserArea((u32)this);
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BDL_YAFLW00);
-    JUT_ASSERT(0x17f, modelData != 0);
+    JUT_ASSERT(0x17f, modelData != NULL);
     mWindModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if (mWindModel == NULL)
         return FALSE;
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BTK_YAFLW00_01);
-    JUT_ASSERT(400, pbtk != 0);
+    JUT_ASSERT(400, pbtk != NULL);
     if (!mWindBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0,-1, false, 0))
         return FALSE;
 
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BTK_YAFLW00_02);
-    JUT_ASSERT(0x19c, pbtk != 0);
+    JUT_ASSERT(0x19c, pbtk != NULL);
     if (!mWindBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0,-1, false, 0))
         return FALSE;
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BCK_YAFLW00);
-    JUT_ASSERT(0x1a9, pbck != 0);
+    JUT_ASSERT(0x1a9, pbck != NULL);
     if (!mWindBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0,-1, false))
         return FALSE;
 

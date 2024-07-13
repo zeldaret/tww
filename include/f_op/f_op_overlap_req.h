@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_phase.h"
 #include "SSystem/SComponent/c_request.h"
+#include "f_pc/f_pc_base.h"
 
 struct layer_class;
 class overlap_task_class;
@@ -18,7 +19,7 @@ public:
     /* 0x10 */ s16 mProcName;
     /* 0x12 */ u8 field_0x12;
     /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ uint mPId;
+    /* 0x14 */ fpc_ProcID mPId;
     /* 0x18 */ request_of_phase_process_class mPhs;
     /* 0x20 */ overlap_task_class * mpTask;
     /* 0x24 */ layer_class* pCurrentLayer;

@@ -59,7 +59,7 @@ s32 fpcLyTg_Move(layer_management_tag_class* i_lyTag, uint i_layerID, u16 i_list
 }
 
 /* 8003E128-8003E1DC       .text fpcLyTg_Init__FP26layer_management_tag_classUiPv */
-s32 fpcLyTg_Init(layer_management_tag_class* i_lyTag, uint i_id, void* i_data) {
+s32 fpcLyTg_Init(layer_management_tag_class* i_lyTag, uint i_layerID, void* i_data) {
     static layer_management_tag_class crear = {
         NULL, NULL, NULL, NULL, 0, NULL, 0xFFFF, 0xFFFF,
     };
@@ -67,7 +67,7 @@ s32 fpcLyTg_Init(layer_management_tag_class* i_lyTag, uint i_id, void* i_data) {
     layer_class* layer;
     *i_lyTag = crear;
     cTg_Create(&i_lyTag->mCreateTag, i_data);
-    layer = fpcLy_Layer(i_id);
+    layer = fpcLy_Layer(i_layerID);
     if (layer != NULL) {
         i_lyTag->mpLayer = layer;
         return 1;

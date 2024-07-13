@@ -201,7 +201,7 @@ int createRoomScene(int param_0) {
     }
 
     *ptr = param_0;
-    return fopScnM_CreateReq(PROC_ROOM_SCENE, 0x7FFF, 0, (u32)ptr);
+    return fopScnM_CreateReq(PROC_ROOM_SCENE, PROC_INVALID_e, 0, (u32)ptr);
 }
 
 /* 80040E38-80040E6C       .text checkRoomDisp__20dStage_roomControl_cCFi */
@@ -1377,7 +1377,7 @@ stage_actor_data_class* dStage_decodeSearchIkada(void* i_file, int ikadaShipId) 
 /* 8004184C-800419D0       .text dStage_playerInitIkada__FP16fopAcM_prm_classPv */
 void dStage_playerInitIkada(fopAcM_prm_class* player_prm, void* i_file) {
     stage_actor_data_class* ikada_data = dStage_decodeSearchIkada(i_file, dComIfGp_getIkadaShipId());
-    JUT_ASSERT(1590, ikada_data != 0);
+    JUT_ASSERT(1590, ikada_data != NULL);
     
     u8 roomNo = dComIfGp_getIkadaShipBeforeRoomId();
     player_prm->mParameter = 0xFF000000 | roomNo;
@@ -1437,7 +1437,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
     i_stage->setPlayerNum(num);
 
     fopAcM_prm_class* appen = fopAcM_CreateAppend();
-    JUT_ASSERT(1735, appen != 0);
+    JUT_ASSERT(1735, appen != NULL);
 
     int point = dComIfGp_getStartStagePoint();
     u32 roomParam = dComIfGs_getRestartRoomParam();
@@ -1484,7 +1484,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
     dStage_actorCreate(player_data, appen);
 
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-    JUT_ASSERT(1842, stageProc != 0);
+    JUT_ASSERT(1842, stageProc != NULL);
 
     if (stageProc->base.base.mProcName != PROC_PLAY_SCENE) {
         fopAcM_create(PROC_TITLE, 0);
@@ -1808,7 +1808,7 @@ int dStage_memaInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
         for (int i = 0; i < pd->num; i++) {
             JKRExpHeap* heap = dStage_roomControl_c::createMemoryBlock(i, *entry_p + 0x300);
-            JUT_ASSERT(2932, heap != 0);
+            JUT_ASSERT(2932, heap != NULL);
             entry_p++;
         }
     }
@@ -1842,18 +1842,13 @@ bool dStage_setShipPos(int param_0, int i_roomNo) {
         dComIfGp_setShipRoomId(0xFF);
     }
 
-    // g_dComIfG_gameInfo.save.getTurnRestart().field_0x34 probably an inline, idk which though
-    dComIfG_inf_c& gameinfo = g_dComIfG_gameInfo; // fakematch
-    if (dComIfGp_getStartStagePoint() == -3 &&
-        g_dComIfG_gameInfo.save.getTurnRestart().field_0x34 != 0)
-    {
+    if (dComIfGp_getStartStagePoint() == -3 && dComIfGs_getTurnRestartHasShip()) {
         daShip_c* ship_p = (daShip_c*)fopAcM_SearchByName(PROC_SHIP);
         if (ship_p != NULL) {
-            ship_p->initStartPos(&gameinfo.save.getTurnRestart().getShipPos(),
-                                 dComIfGs_getTurnRestartShipAngleY());
+            ship_p->initStartPos(&dComIfGs_getTurnRestartShipPos(), dComIfGs_getTurnRestartShipAngleY());
         }
 
-        g_dComIfG_gameInfo.save.getTurnRestart().field_0x34 = 0;
+        dComIfGs_setTurnRestartHasShip(FALSE);
     }
 
     if (param_0 != 0xFF) {
@@ -2004,8 +1999,8 @@ void dStage_dt_c_offsetToPtr(void* i_data) {
 void dStage_dt_c_stageInitLoader(void* i_data, dStage_dt_c* i_stage) {
     static FuncTable l_funcTable[] = {"STAG", dStage_stagInfoInit};
 
-    JUT_ASSERT(3557, i_data != 0);
-    JUT_ASSERT(3558, i_stage != 0);
+    JUT_ASSERT(3557, i_data != NULL);
+    JUT_ASSERT(3558, i_stage != NULL);
 
     dStage_dt_c_offsetToPtr(i_data);
     i_stage->init();
@@ -2158,7 +2153,7 @@ void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
 /* 8004324C-800432EC       .text dStage_infoCreate__Fv */
 void dStage_infoCreate() {
     void* stageRsrc = dComIfG_getStageRes("Stage", "stage.dzs");
-    JUT_ASSERT(3834, stageRsrc != 0)
+    JUT_ASSERT(3834, stageRsrc != NULL)
 
     dStage_dt_c_stageInitLoader(stageRsrc, &dComIfGp_getStage());
 }
@@ -2168,7 +2163,7 @@ void dStage_Create() {
     dKankyo_create();
 
     void* stageRsrc = dComIfG_getStageRes("Stage", "stage.dzs");
-    JUT_ASSERT(3862, stageRsrc != 0)
+    JUT_ASSERT(3862, stageRsrc != NULL)
 
     dComIfGp_roomControl_init();
     dStage_dt_c_stageLoader(stageRsrc, &dComIfGp_getStage());
@@ -2378,7 +2373,7 @@ dStage_darkStatus_c dStage_roomControl_c::mDarkStatus[8] = {
     {},
 };
 
-uint dStage_roomControl_c::mProcID;
+fpc_ProcID dStage_roomControl_c::mProcID;
 s8 dStage_roomControl_c::mStayNo;
 s8 dStage_roomControl_c::mOldStayNo;
 u8 dStage_roomControl_c::mDarkRatio;

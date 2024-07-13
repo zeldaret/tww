@@ -28,6 +28,7 @@ public:
     J3DFrameCtrl* getFrameCtrl() { return mFrameCtrl; }
     f32 getPlaySpeed() { return mFrameCtrl->getRate(); }
     void setPlaySpeed(f32 speed) { mFrameCtrl->setRate(speed); }
+    BOOL checkFrame(f32 frame) { return mFrameCtrl->checkPass(frame); }
     f32 getFrame() { return mFrameCtrl->getFrame(); }
     f32 getEndFrame() { return mFrameCtrl->getEnd(); }
     void setFrame(f32 frame) { mFrameCtrl->setFrame(frame); }
@@ -539,7 +540,7 @@ public:
 
 class mDoExt_offCupOnAupPacket : public J3DPacket {
 public:
-    ~mDoExt_offCupOnAupPacket();
+    ~mDoExt_offCupOnAupPacket() {}
 
     void draw();
     
@@ -548,7 +549,7 @@ public:
 
 class mDoExt_onCupOffAupPacket : public J3DPacket {
 public:
-    ~mDoExt_onCupOffAupPacket();
+    ~mDoExt_onCupOffAupPacket() {}
 
     void draw();
     
@@ -581,11 +582,10 @@ public:
 public:
     /* 0x08 */ GXColor mColor;
     /* 0x0C */ dKy_tevstr_c* mpTevStr;
-    /* 0x10 */ s16 mNumLines;
-    /* 0x12 */ s16 mNumSegmentsPerLine;
-    /* 0x14 */ u16 m14;
-    /* 0x16 */ u8 m16;
-    /* 0x17 */ u8 m17[0x18 - 0x17];
+    /* 0x10 */ u16 mNumLines;
+    /* 0x12 */ u16 mMaxSegments;
+    /* 0x14 */ u16 mNumSegments;
+    /* 0x16 */ u8 mCurArr;
     /* 0x18 */ mDoExt_3Dline_c* mpLines;
 };
 
@@ -603,8 +603,8 @@ public:
     /* 0x28 */ GXColor mColor;
     /* 0x2C */ dKy_tevstr_c* mpTevStr;
     /* 0x30 */ u16 mNumLines;
-    /* 0x32 */ u16 m32;
-    /* 0x34 */ u16 m34;
+    /* 0x32 */ u16 mMaxSegments;
+    /* 0x34 */ u16 mNumSegments;
     /* 0x36 */ u8 mCurArr;
     /* 0x37 */ u8 m37[0x38 - 0x37];
     /* 0x38 */ mDoExt_3Dline_c* mpLines;
@@ -650,6 +650,9 @@ JKRHeap* mDoExt_setCurrentHeap(JKRHeap* pHeap);
 
 JUTFont* mDoExt_getMesgFont();
 JUTFont* mDoExt_getRubyFont();
+
+void mDoExt_removeMesgFont();
+void mDoExt_removeRubyFont();
 
 extern JKRExpHeap* zeldaHeap;
 extern JKRExpHeap* gameHeap;

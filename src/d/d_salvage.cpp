@@ -38,7 +38,7 @@ void dSalvage_control_c::init_end() {
 
 /* 800CC7C4-800CCB70       .text entry__18dSalvage_control_cFP10fopAc_ac_cP14JPABaseEmitter */
 void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
-    JUT_ASSERT(0x8b, pact != 0);
+    JUT_ASSERT(0x8b, pact != NULL);
     s8 roomNo = fopAcM_GetRoomNo(pact);
     u32 kind = daSalvage_prm::getKind(pact);
     u32 itemNo = daSalvage_prm::getItemNo(pact);

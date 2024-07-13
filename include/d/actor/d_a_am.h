@@ -28,7 +28,7 @@ public:
     /* 0x02DC */ s16 mSpawnRotY;
     /* 0x02DE */ u8 m02DE[0x02E0 - 0x02DE];
     /* 0x02E0 */ int mCurrBckIdx;
-    /* 0x02E4 */ uint mSwallowedActorPID;
+    /* 0x02E4 */ fpc_ProcID mSwallowedActorPID;
     /* 0x02E8 */ f32 mAreaRadius;
     /* 0x02EC */ f32 mCorrectionOffsetY;
     /* 0x02F0 */ f32 mSpawnPosY;

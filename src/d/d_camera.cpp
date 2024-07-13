@@ -558,12 +558,12 @@ void dCamera_c::GetForceLockOnActor() {
 }
 
 /* 8017BCEC-8017BD2C       .text ForceLockOn__9dCamera_cFUi */
-void dCamera_c::ForceLockOn(uint) {
+void dCamera_c::ForceLockOn(fpc_ProcID) {
     /* Nonmatching */
 }
 
 /* 8017BD2C-8017BD5C       .text ForceLockOff__9dCamera_cFUi */
-void dCamera_c::ForceLockOff(uint) {
+void dCamera_c::ForceLockOff(fpc_ProcID) {
     /* Nonmatching */
 }
 
@@ -669,60 +669,5 @@ void dCamForcusLine::Draw() {
 
 /* 8017CB00-8017CB18       .text Off__14dCamForcusLineFv */
 void dCamForcusLine::Off() {
-    /* Nonmatching */
-}
-
-/* 8017CB18-8017CB60       .text __dt__14d2DBSplinePathFv */
-d2DBSplinePath::~d2DBSplinePath() {
-    /* Nonmatching */
-}
-
-/* 8017CB60-8017CDB4       .text __dt__Q29dCamera_c2BGFv */
-dCamera_c::BG::~BG() {
-    /* Nonmatching */
-}
-
-/* 8017CDB4-8017CF8C       .text __ct__Q29dCamera_c2BGFv */
-dCamera_c::BG::BG() {
-    /* Nonmatching */
-}
-
-/* 8017CF8C-8017D0CC       .text __dt__14dBgS_CamGndChkFv */
-dBgS_CamGndChk::~dBgS_CamGndChk() {
-    /* Nonmatching */
-}
-
-/* 8017D128-8017D13C       .text setFlag__9dCamera_cFUl */
-void dCamera_c::setFlag(u32) {
-    /* Nonmatching */
-}
-
-/* 8017D13C-8017D150       .text chkFlag__9dCamera_cFUl */
-void dCamera_c::chkFlag(u32) {
-    /* Nonmatching */
-}
-
-/* 8017D150-8017D184       .text Bank__9dCamera_cFv */
-void dCamera_c::Bank() {
-    /* Nonmatching */
-}
-
-/* 8017D184-8017D1A0       .text Up__9dCamera_cFv */
-void dCamera_c::Up() {
-    /* Nonmatching */
-}
-
-/* 8017D1A0-8017D1D4       .text Center__9dCamera_cFv */
-void dCamera_c::Center() {
-    /* Nonmatching */
-}
-
-/* 8017D1D4-8017D1F4       .text Flag__11dCamParam_cFlUs */
-void dCamParam_c::Flag(s32, u16) {
-    /* Nonmatching */
-}
-
-/* 8017D200-8017D220       .text Val__11dCamParam_cFli */
-void dCamParam_c::Val(s32, int) {
     /* Nonmatching */
 }

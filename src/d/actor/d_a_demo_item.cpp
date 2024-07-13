@@ -26,8 +26,8 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x03, // dItem_RED_RUPEE_e
     0x03, // dItem_PURPLE_RUPEE_e
     0x03, // dItem_ORANGE_RUPEE_e
-    0x00, // KAKERA_HEART
-    0x00, // UTUWA_HEART
+    0x00, // dItem_HEART_PIECE_e
+    0x00, // dItem_HEART_CONTAINER_e
     0x04, // S_MAGIC
     0x04, // L_MAGIC
     0x04, // BOMB_5
@@ -68,7 +68,7 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x04, // BARE_HAND
     0x00, // dItem_HOOKSHOT_e
     0x00, // dItem_DELIVERY_BAG_e
-    0x00, // BOMB_BAG
+    0x00, // dItem_BOMB_BAG_e
     0x03, // dItem_FUKU_e
     0x00, // dItem_SKULL_HAMMER_e
     0x00, // dItem_DEKU_LEAF_e
@@ -116,14 +116,14 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x04, // UNK_BOTTLE_5E
     0x04, // UNK_BOTTLE_5F
     0x04, // UNK_BOTTLE_60
-    0x00, // TRIFORCE1
-    0x00, // TRIFORCE2
-    0x00, // TRIFORCE3
-    0x00, // TRIFORCE4
-    0x00, // TRIFORCE5
-    0x00, // TRIFORCE6
-    0x00, // TRIFORCE7
-    0x00, // TRIFORCE8
+    0x00, // dItem_TRIFORCE1_e
+    0x00, // dItem_TRIFORCE2_e
+    0x00, // dItem_TRIFORCE3_e
+    0x00, // dItem_TRIFORCE4_e
+    0x00, // dItem_TRIFORCE5_e
+    0x00, // dItem_TRIFORCE6_e
+    0x00, // dItem_TRIFORCE7_e
+    0x00, // dItem_TRIFORCE8_e
     0x00, // dItem_PEARL_NAYRU_e
     0x00, // dItem_PEARL_DIN_e
     0x00, // dItem_PEARL_FARORE_e
@@ -395,7 +395,7 @@ void daDitem_c::anim_control() {
     case UNK_BOTTLE_5E:
     case UNK_BOTTLE_5F:
     case UNK_BOTTLE_60:
-        if (field_0x634 > 30) {
+        if (m_timer > 30) {
             animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
         }
         break;
@@ -427,7 +427,7 @@ void daDitem_c::set_mtx() {
 
 /* 00000880-000008F0       .text settingBeforeDraw__9daDitem_cFv */
 void daDitem_c::settingBeforeDraw() {
-    if (isBomb(m_itemNo) || m_itemNo == BOMB_BAG || m_itemNo == dItem_SKULL_HAMMER_e || m_itemNo == dItem_SMALL_KEY_e) {
+    if (isBomb(m_itemNo) || m_itemNo == dItem_BOMB_BAG_e || m_itemNo == dItem_SKULL_HAMMER_e || m_itemNo == dItem_SMALL_KEY_e) {
         dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }
@@ -479,7 +479,7 @@ BOOL daDitem_c::draw() {
 }
 
 BOOL daDitem_c::execute() {
-    field_0x634++;
+    m_timer++;
     
     if (chkDraw()) {
         setParticle();

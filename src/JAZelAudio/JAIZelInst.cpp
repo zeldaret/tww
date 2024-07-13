@@ -12,12 +12,12 @@ JAIZelInst::JAIZelInst() {
     field_0xc = 0;
     field_0x10 = -1;
     field_0x14 = 0x2f;
-    mMelodyNum = 3;
+    mBeat = 3;
     field_0x20 = 0.6f;
     field_0x24 = 3.0f;
     field_0x28 = 60.f;
     field_0x2c = 1.0f;
-    field_0x30 = field_0x2c * 30.0f;
+    mBeatFrames = field_0x2c * 30.0f;
     field_0x1e = 0;
     field_0x48 = 0;
     field_0x34 = 0x37;
@@ -64,7 +64,7 @@ void JAIZelInst::metronomePlay(s32, s32) {
 }
 
 /* 802AE864-802AEB5C       .text judge__10JAIZelInstFll */
-void JAIZelInst::judge(s32, s32) {
+s32 JAIZelInst::judge(s32, s32) {
     /* Nonmatching */
 }
 

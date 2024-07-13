@@ -5,6 +5,7 @@
 #include "SSystem/SComponent/c_rnd.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "f_pc/f_pc_base.h"
 #include "d/d_cam_param.h"
 #include "global.h"
 
@@ -34,7 +35,7 @@ struct dCamera__EventParam {
 
 class d2DBSplinePath {
 public:
-    ~d2DBSplinePath();
+    ~d2DBSplinePath() {}
     /* 0x00 */ int mKeyframeCur;
     /* 0x04 */ int mTimer;
     /* 0x08 */ int mKeyframeNum;
@@ -64,8 +65,8 @@ public:
 class dCamera_c {
 public:
     struct BG {
-        BG();
-        ~BG();
+        BG() {}
+        ~BG() {}
         u8 temp[0xB0];
     };
 
@@ -351,16 +352,14 @@ public:
     void SubjectLockOn(fopAc_ac_c*);
     void SubjectLockOff();
     void GetForceLockOnActor();
-    void ForceLockOn(uint);
-    void ForceLockOff(uint);
+    void ForceLockOn(fpc_ProcID);
+    void ForceLockOff(fpc_ProcID);
     void SetExtendedPosition(cXyz*);
     void ScopeViewMsgModeOff();
 
-    void setFlag(u32);
-    void chkFlag(u32);
-    void Bank();
-    void Up();
-    void Center();
+    void Bank() {}
+    void Up() {}
+    void Center() {}
 
     void StartEventCamera(int, int, ...);
     void EndEventCamera(int);
@@ -402,12 +401,14 @@ public:
     void bSplineEvCamera();
     void twoActor0EvCamera();
 
-    void CStickUse() {}
-    void CStickUseless() {}
+    void CStickUse() { clrFlag(0x800000); }
+    void CStickUseless() { setFlag(0x800000); }
     cXyz Eye() { return mEye + mEyeShake; }
-    void StickUse() {}
-    void StickUseless() {}
-    void clrFlag(u32) {}
+    void StickUse() { clrFlag(0x1000000); }
+    void StickUseless() { setFlag(0x1000000); }
+    void setFlag(u32 flag) { mEventFlags |= flag; }
+    bool chkFlag(u32 flag) { return mEventFlags & flag; }
+    void clrFlag(u32 flag) { mEventFlags &= ~flag; }
 };
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);

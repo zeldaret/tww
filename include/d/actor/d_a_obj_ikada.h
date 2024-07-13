@@ -89,12 +89,12 @@ public:
     /* 0x02A4 */ u8 mPathId;
     /* 0x02A5 */ u8 m02A5[0x02A8 - 0x02A5];
     /* 0x02A8 */ cXyz mCurPathP0;
-    /* 0x02B4 */ u8 mCurPathPoint;
+    /* 0x02B4 */ s8 mCurPathPoint;
     /* 0x02B5 */ u8 m02B5[0x02B8 - 0x02B5];
     /* 0x02B8 */ dPath* mpPath;
     /* 0x02BC */ u8 m02BC[0x02C0 - 0x02BC];
     /* 0x02C0 */ cXyz mCurPathP1;
-    /* 0x02CC */ u8 m02CC[0x02D8 - 0x02CC];
+    /* 0x02CC */ cXyz m02CC;
     /* 0x02D8 */ f32 mVelocityFwdTarget;
     /* 0x02DC */ cXyz mPathPosTarget;
     /* 0x02E8 */ u8 m02E8[0x02EC - 0x02E8];
@@ -144,7 +144,7 @@ public:
     /* 0x0550 */ Mtx mMtx;
     /* 0x0580 */ dBgS_ObjAcch mObjAcch;
     /* 0x0744 */ dBgS_AcchCir mAcchCir;
-    /* 0x0784 */ uint mFlagPcId;
+    /* 0x0784 */ fpc_ProcID mFlagPcId;
     /* 0x0788 */ cXyz mFlagOffset;
     /* 0x0794 */ f32 mFlagScale;
     /* 0x0798 */ J3DModel* mpRopeEnd;

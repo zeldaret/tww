@@ -11,7 +11,7 @@ s32 LOAD_COPYDATE(void*);
 
 extern OSThread mainThread;
 
-#define HeapCheckTableNum 6
+const int HeapCheckTableNum = 6;
 
 class HeapCheck {
 public:

@@ -103,8 +103,8 @@ public:
     /* 0x174 */ u32 field_0x174;
 };
 
-uint dTimer_createStockTimer();
+fpc_ProcID dTimer_createStockTimer();
 
-uint dTimer_createTimer(int, u16, u8, u8, f32, f32, f32, f32);
+fpc_ProcID dTimer_createTimer(int, u16, u8, u8, f32, f32, f32, f32);
 
 #endif /* D_TIMER_H */

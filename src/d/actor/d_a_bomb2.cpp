@@ -269,16 +269,16 @@ namespace daBomb2 {
         const char* resName = attr().resName;
 
         J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(attr().resName, VBAKH_BDL_VBAKM));
-        JUT_ASSERT(0x303, mdl_data != 0);
+        JUT_ASSERT(0x303, mdl_data != NULL);
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
 
         J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, VBAKH_BCK_VBAKM));
-        JUT_ASSERT(0x30D, bck_data != 0);
-        int temp = mBck0.init(mdl_data, bck_data, true, 0, 1.0f, 0, -1, false);
+        JUT_ASSERT(0x30D, bck_data != NULL);
+        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
 
         J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, VBAKH_BRK_VBAKM));
-        JUT_ASSERT(0x314, brk_data != 0);
-        int temp3 = mBrk0.init(mdl_data, brk_data, true, 0, 1.0f, 0, -1, false, 0);
+        JUT_ASSERT(0x314, brk_data != NULL);
+        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
 
         return mpModel && temp && temp3;
     }

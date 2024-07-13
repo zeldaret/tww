@@ -39,7 +39,7 @@ BOOL daObj_Pbco_c::CreateHeap() {
     } else {
         modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, PBCO_INDEX_BDL_PBC2));
     }
-    JUT_ASSERT(0xa9, modelData != 0);
+    JUT_ASSERT(0xa9, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (dComIfGs_isEventBit(0x0a02) && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
         mpBgW = NULL;

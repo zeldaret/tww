@@ -703,7 +703,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0x07: KAKERA_HEART
+        // 0x07: dItem_HEART_PIECE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHKAK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
         /* mBmdIdx      */ VHKAK_BDL_VHKAK,
@@ -719,7 +719,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2420
     },
     {
-        // 0x08: UTUWA_HEART
+        // 0x08: dItem_HEART_CONTAINER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHUTU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_01],
         /* mBmdIdx      */ VHUTU_BDL_VHUTU,
@@ -1375,7 +1375,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x31: BOMB_BAG
+        // 0x31: dItem_BOMB_BAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
@@ -2143,7 +2143,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0x61: TRIFORCE1
+        // 0x61: dItem_TRIFORCE1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI1],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_00],
         /* mBmdIdx      */ VTRI1_BDL_VTRI1,
@@ -2159,7 +2159,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x62: TRIFORCE2
+        // 0x62: dItem_TRIFORCE2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI2],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_01],
         /* mBmdIdx      */ VTRI2_BDL_VTRI2,
@@ -2175,7 +2175,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x63: TRIFORCE3
+        // 0x63: dItem_TRIFORCE3_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI3],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_02],
         /* mBmdIdx      */ VTRI3_BDL_VTRI3,
@@ -2191,7 +2191,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x64: TRIFORCE4
+        // 0x64: dItem_TRIFORCE4_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI4],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_03],
         /* mBmdIdx      */ VTRI4_BDL_VTRI4,
@@ -2207,7 +2207,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x65: TRIFORCE5
+        // 0x65: dItem_TRIFORCE5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI5],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_04],
         /* mBmdIdx      */ VTRI5_BDL_VTRI5,
@@ -2223,7 +2223,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x66: TRIFORCE6
+        // 0x66: dItem_TRIFORCE6_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI6],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_05],
         /* mBmdIdx      */ VTRI6_BDL_VTRI6,
@@ -2239,7 +2239,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x67: TRIFORCE7
+        // 0x67: dItem_TRIFORCE7_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI7],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_06],
         /* mBmdIdx      */ VTRI7_BDL_VTRI7,
@@ -2255,7 +2255,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x68: TRIFORCE8
+        // 0x68: dItem_TRIFORCE8_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI8],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_07],
         /* mBmdIdx      */ VTRI8_BDL_VTRI8,
@@ -4782,7 +4782,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CA0
     },
     {
-        // 0x07: KAKERA_HEART
+        // 0x07: dItem_HEART_PIECE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VHKAL,
         /* mSrtIdx   */ ALWAYS_BTK_VHKAL,
@@ -4795,7 +4795,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0C40
     },
     {
-        // 0x08: UTUWA_HEART
+        // 0x08: dItem_HEART_CONTAINER_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VHUTL,
         /* mSrtIdx   */ ALWAYS_BTK_VHUTL,
@@ -5328,7 +5328,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x31: BOMB_BAG
+        // 0x31: dItem_BOMB_BAG_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5952,7 +5952,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x61: TRIFORCE1
+        // 0x61: dItem_TRIFORCE1_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5965,7 +5965,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x62: TRIFORCE2
+        // 0x62: dItem_TRIFORCE2_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5978,7 +5978,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x63: TRIFORCE3
+        // 0x63: dItem_TRIFORCE3_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5991,7 +5991,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x64: TRIFORCE4
+        // 0x64: dItem_TRIFORCE4_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6004,7 +6004,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x65: TRIFORCE5
+        // 0x65: dItem_TRIFORCE5_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6017,7 +6017,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x66: TRIFORCE6
+        // 0x66: dItem_TRIFORCE6_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6030,7 +6030,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x67: TRIFORCE7
+        // 0x67: dItem_TRIFORCE7_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6043,7 +6043,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x68: TRIFORCE8
+        // 0x68: dItem_TRIFORCE8_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -8072,14 +8072,14 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x07: KAKERA_HEART
+        // 0x07: dItem_HEART_PIECE_e
         0x32,
         0x50,
         0x32,
         0x01,
     },
     {
-        // 0x08: UTUWA_HEART
+        // 0x08: dItem_HEART_CONTAINER_e
         0x32,
         0x50,
         0x32,
@@ -8366,7 +8366,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x31: BOMB_BAG
+        // 0x31: dItem_BOMB_BAG_e
         0x00,
         0x00,
         0x00,
@@ -8702,56 +8702,56 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x61: TRIFORCE1
+        // 0x61: dItem_TRIFORCE1_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x62: TRIFORCE2
+        // 0x62: dItem_TRIFORCE2_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x63: TRIFORCE3
+        // 0x63: dItem_TRIFORCE3_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x64: TRIFORCE4
+        // 0x64: dItem_TRIFORCE4_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x65: TRIFORCE5
+        // 0x65: dItem_TRIFORCE5_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x66: TRIFORCE6
+        // 0x66: dItem_TRIFORCE6_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x67: TRIFORCE7
+        // 0x67: dItem_TRIFORCE7_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x68: TRIFORCE8
+        // 0x68: dItem_TRIFORCE8_e
         0x00,
         0x00,
         0x00,
@@ -9854,12 +9854,12 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x07: KAKERA_HEART
+        // 0x07: dItem_HEART_PIECE_e
         dPa_name::ID_SCENE_END,
         0x0293,
     },
     {
-        // 0x08: UTUWA_HEART
+        // 0x08: dItem_HEART_CONTAINER_e
         dPa_name::ID_SCENE_END,
         0x0293,
     },
@@ -10064,7 +10064,7 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x31: BOMB_BAG
+        // 0x31: dItem_BOMB_BAG_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10304,42 +10304,42 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x61: TRIFORCE1
+        // 0x61: dItem_TRIFORCE1_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x62: TRIFORCE2
+        // 0x62: dItem_TRIFORCE2_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x63: TRIFORCE3
+        // 0x63: dItem_TRIFORCE3_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x64: TRIFORCE4
+        // 0x64: dItem_TRIFORCE4_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x65: TRIFORCE5
+        // 0x65: dItem_TRIFORCE5_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x66: TRIFORCE6
+        // 0x66: dItem_TRIFORCE6_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x67: TRIFORCE7
+        // 0x67: dItem_TRIFORCE7_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x68: TRIFORCE8
+        // 0x68: dItem_TRIFORCE8_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },

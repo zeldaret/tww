@@ -133,7 +133,6 @@ static JKRExpHeap::CMemBlock* DBnewUsedBlock;
 /* 802B192C-802B1B88       .text allocFromHead__10JKRExpHeapFUli */
 // wrong register at end
 void* JKRExpHeap::allocFromHead(u32 size, int align) {
-    /* Nonmatching */
     u32 foundOffset;
     int foundSize;
     CMemBlock* newFreeBlock;
@@ -216,17 +215,22 @@ void* JKRExpHeap::allocFromHead(u32 size, int align) {
             } else {
                 CMemBlock* prev = foundBlock->mPrev;
                 CMemBlock* next = foundBlock->mNext;
-                // Works but very fake match
-                /*size = (u32)foundBlock->allocFore(size, mCurrentGroupId, 0, 0, 0);
-                removeFreeBlock(foundBlock);
-                if (size) {
-                    setFreeBlock((CMemBlock*)size, prev, next);
-                }*/
+                // Regalloc doesn't match
+                /*
                 newFreeBlock = foundBlock->allocFore(size, mCurrentGroupId, 0, 0, 0);
                 removeFreeBlock(foundBlock);
                 if (newFreeBlock) {
                     setFreeBlock(newFreeBlock, prev, next);
                 }
+                */
+                // Works but very fake match
+                // /*
+                size = (u32)foundBlock->allocFore(size, mCurrentGroupId, 0, 0, 0);
+                removeFreeBlock(foundBlock);
+                if (size) {
+                    setFreeBlock((CMemBlock*)size, prev, next);
+                }
+                // */
                 appendUsedList(foundBlock);
                 return foundBlock->getContent();
             }
@@ -675,15 +679,14 @@ void JKRExpHeap::recycleFreeBlock(CMemBlock* block) {
 }
 
 /* 802B27D0-802B291C       .text joinTwoBlocks__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock */
-// regalloc
 void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
-    /* Nonmatching */
+    u32 curBlock = (u32)block; // Fakematch?
     u32 endAddr = (u32)(block + 1) + block->size;
     CMemBlock* next = block->mNext;
     u32 nextAddr = (u32)next - (next->mFlags & 0x7f);
     if (endAddr > nextAddr) {
         JUTWarningConsole_f(":::Heap may be broken. (block = %x)", block);
-        OSReport(":::block = %x\n", block);
+        OSReport(":::block = %x\n", curBlock);
         OSReport(":::joinTwoBlocks [%x %x %x][%x %x %x]\n", block, block->mFlags, block->size, block->mNext, block->mNext->mFlags, block->mNext->size);
         OSReport(":::: endAddr = %x\n", endAddr);
         OSReport(":::: nextAddr = %x\n", nextAddr);
@@ -952,8 +955,8 @@ static void dummy2() {
 
 /* 802B30A4-802B31D4       .text state_register__10JKRExpHeapCFPQ27JKRHeap6TStateUl */
 void JKRExpHeap::state_register(TState* p, u32 param_1) const {
-    JUT_ASSERT(2423, p != 0);
-    JUT_ASSERT(2424, p->getHeap() == this);
+    JUT_ASSERT(VERSION_SELECT(2420, 2423, 2423), p != NULL);
+    JUT_ASSERT(VERSION_SELECT(2421, 2424, 2424), p->getHeap() == this);
     p->mId = param_1;
     if (param_1 <= 0xff) {
         p->mUsedSize = getUsedSize(param_1);
@@ -978,7 +981,7 @@ void JKRExpHeap::state_register(TState* p, u32 param_1) const {
 
 /* 802B31D4-802B327C       .text state_compare__10JKRExpHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRExpHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
-    JUT_ASSERT(2471, r1.getHeap() == r2.getHeap());
+    JUT_ASSERT(VERSION_SELECT(2468, 2471, 2471), r1.getHeap() == r2.getHeap());
     bool result = true;
     if (r1.mCheckCode != r2.mCheckCode) {
         result = false;

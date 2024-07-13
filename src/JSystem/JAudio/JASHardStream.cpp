@@ -323,7 +323,7 @@ BOOL JASystem::HardStream::TControl::clearListOne() {
 
 /* 8027C67C-8027C710       .text setLastAddr__Q38JASystem10HardStream8TControlFP11DVDFileInfo */
 void JASystem::HardStream::TControl::setLastAddr(DVDFileInfo* finfo) {
-    JUT_ASSERT(906, finfo != 0);
+    JUT_ASSERT(906, finfo != NULL);
     field_0x44[field_0x4c] = finfo->start_address + finfo->length - 0x8000;
     field_0x4c ^= 1;
 }

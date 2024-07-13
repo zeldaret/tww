@@ -23,7 +23,7 @@ BOOL daObjDoguuD_c::CreateHeap() {
     mUnusedParam = fopAcM_GetParam(this) & 0xFF;
 
     J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("DoguuD", DOGUUD_BDL_ESKZTO));
-    JUT_ASSERT(0x65, modelData != 0);
+    JUT_ASSERT(0x65, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (mpModel == NULL)
         return FALSE;

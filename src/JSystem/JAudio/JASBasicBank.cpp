@@ -23,7 +23,7 @@ JASystem::TBasicBank::~TBasicBank() {
 void JASystem::TBasicBank::setInstCount(u32 param_1) {
     delete[] mInstTable;
     mInstTable = new (getCurrentHeap(), 0) TInst*[param_1];
-    JUT_ASSERT(36, mInstTable != 0);
+    JUT_ASSERT(36, mInstTable != NULL);
     Calc::bzero(mInstTable, param_1 * 4);
     mInstCount = param_1;
 }

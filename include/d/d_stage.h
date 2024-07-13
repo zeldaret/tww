@@ -454,21 +454,21 @@ public:
     /* vt[39] */ virtual void setLightVecInfo(stage_lightvec_info_class*) {
         dStage_SetErrorStage();
         OSReport("stage non LightVec data !!\n");
-        JUT_ASSERT(2380, 0);
+        JUT_ASSERT(2380, FALSE);
     }
     /* vt[40] */ virtual stage_lightvec_info_class* getLightVecInfo() const {
         OSReport("stage non LightVec data !!\n");
-        JUT_ASSERT(2384, 0);
+        JUT_ASSERT(2384, FALSE);
         return NULL;
     }
     /* vt[41] */ virtual void setLightVecInfoNum(int) {
         dStage_SetErrorStage();
         OSReport("stage non LightVecNum data !!\n");
-        JUT_ASSERT(2391, 0);
+        JUT_ASSERT(2391, FALSE);
     }
     /* vt[42] */ virtual int getLightVecInfoNum() const {
         OSReport("stage non LightVecNum data !!\n");
-        JUT_ASSERT(2395, 0);
+        JUT_ASSERT(2395, FALSE);
         return 0;
     }
     /* vt[37] */ virtual void setPlightNumInfo(int i_plightNum) { mPlightInfoNum = i_plightNum; }
@@ -492,11 +492,11 @@ public:
     /* vt[59] */ virtual void setFileListInfo(dStage_FileList_dt_c*) {
         dStage_SetErrorStage();
         OSReport("stage non filelist data!\n");
-        JUT_ASSERT(2490, 0);
+        JUT_ASSERT(2490, FALSE);
     }
     /* vt[60] */ virtual dStage_FileList_dt_c* getFileListInfo() const {
         OSReport("stage non filelist data!\n");
-        JUT_ASSERT(2494, 0);
+        JUT_ASSERT(2494, FALSE);
         return NULL;
     }
     /* vt[61] */ virtual void setFloorInfo(dStage_FloorInfo_c* i_floorInfo) { mpFloorInfo = i_floorInfo; }
@@ -508,11 +508,11 @@ public:
     /* vt[67] */ virtual void setShip(dStage_Ship_c*) {
         dStage_SetErrorStage();
         OSReport("stage non SHIP data!\n");
-        JUT_ASSERT(2561, 0);
+        JUT_ASSERT(2561, FALSE);
     }
     /* vt[68] */ virtual dStage_Ship_c* getShip() const {
         OSReport("stage non SHIP data!\n");
-        JUT_ASSERT(2565, 0);
+        JUT_ASSERT(2565, FALSE);
         return NULL;
     }
     /* vt[69] */ virtual void setMulti(dStage_Multi_c* i_multi) { mpMulti = i_multi; }
@@ -520,11 +520,11 @@ public:
     /* vt[71] */ virtual void setLbnk(dStage_Lbnk_c*) {
         dStage_SetErrorStage();
         OSReport("stage non Lbnk data!\n");
-        JUT_ASSERT(2590, 0);
+        JUT_ASSERT(2590, FALSE);
     }
     /* vt[72] */ virtual dStage_Lbnk_c* getLbnk() const {
         OSReport("stage non Lbnk data!\n");
-        JUT_ASSERT(2597, 0);
+        JUT_ASSERT(2597, FALSE);
         return NULL;
     }
     /* vt[73] */ virtual void setTresure(stage_tresure_class* i_tresure) { mpTresure = i_tresure; }
@@ -584,11 +584,11 @@ public:
     /* vt[12] */ virtual void setRoom(roomRead_class*) {
         dStage_SetErrorRoom();
         OSReport("Room non room data !!\n");
-        JUT_ASSERT(1613, 0);
+        JUT_ASSERT(1613, FALSE);
     }
     /* vt[13] */ virtual roomRead_class* getRoom() const {
         OSReport("Room non room data !!\n");
-        JUT_ASSERT(1618, 0);
+        JUT_ASSERT(1618, FALSE);
         return NULL;
     }
     /* vt[14] */ virtual void setMapInfo(stage_map_info_class* i_mapInfo) { mpMapInfo = i_mapInfo; }
@@ -599,31 +599,31 @@ public:
     /* vt[19] */ virtual void setPaletInfo(stage_palet_info_class*) {
         dStage_SetErrorRoom();
         OSReport("Room non palet data !!\n");
-        JUT_ASSERT(1644, 0);
+        JUT_ASSERT(1644, FALSE);
     }
     /* vt[20] */ virtual stage_palet_info_class* getPaletInfo() const {
         OSReport("Room non palet data !!\n");
-        JUT_ASSERT(1648, 0);
+        JUT_ASSERT(1648, FALSE);
         return NULL;
     }
     /* vt[21] */ virtual void setPselectInfo(stage_pselect_info_class*) {
         dStage_SetErrorRoom();
         OSReport("Room non pselect data !!\n");
-        JUT_ASSERT(1655, 0);
+        JUT_ASSERT(1655, FALSE);
     }
     /* vt[22] */ virtual stage_pselect_info_class* getPselectInfo() const {
         OSReport("Room non pselect data !!\n");
-        JUT_ASSERT(1659, 0);
+        JUT_ASSERT(1659, FALSE);
         return NULL;
     }
     /* vt[23] */ virtual void setEnvrInfo(stage_envr_info_class*) {
         dStage_SetErrorRoom();
         OSReport("Room non envr data !!\n");
-        JUT_ASSERT(1666, 0);
+        JUT_ASSERT(1666, FALSE);
     }
     /* vt[24] */ virtual stage_envr_info_class* getEnvrInfo() const {
         OSReport("Room non envr data !!\n");
-        JUT_ASSERT(1670, 0);
+        JUT_ASSERT(1670, FALSE);
         return NULL;
     }
     /* vt[25] */ virtual void setVrboxInfo(stage_vrbox_info_class* i_vrbox) { mpVrbox = i_vrbox; }
@@ -631,41 +631,41 @@ public:
     /* vt[27] */ virtual void setPlightInfo(stage_plight_info_class*) {
         dStage_SetErrorRoom();
         OSReport("Room non plight data !!\n");
-        JUT_ASSERT(1686, 0);
+        JUT_ASSERT(1686, FALSE);
     }
     /* vt[28] */ virtual stage_plight_info_class* getPlightInfo() const {
         OSReport("Room non plight data !!\n");
-        JUT_ASSERT(1690, 0);
+        JUT_ASSERT(1690, FALSE);
         return NULL;
     }
     /* vt[29] */ virtual void setPaletNumInfo(int) {
         dStage_SetErrorRoom();
         OSReport("Room non palet num data !!\n");
-        JUT_ASSERT(1700, 0);
+        JUT_ASSERT(1700, FALSE);
     }
     /* vt[30] */ virtual int getPaletNumInfo() const {
         OSReport("Room non palet num data !!\n");
-        JUT_ASSERT(1704, 0);
+        JUT_ASSERT(1704, FALSE);
         return 0;
     }
     /* vt[31] */ virtual void setPselectNumInfo(int) {
         dStage_SetErrorRoom();
         OSReport("Room non pselect num data !!\n");
-        JUT_ASSERT(1711, 0);
+        JUT_ASSERT(1711, FALSE);
     }
     /* vt[32] */ virtual int getPselectNumInfo() const {
         OSReport("Room non pselect num data !!\n");
-        JUT_ASSERT(1715, 0);
+        JUT_ASSERT(1715, FALSE);
         return 0;
     }
     /* vt[33] */ virtual void setEnvrNumInfo(int) {
         dStage_SetErrorRoom();
         OSReport("Room non envr num data !!\n");
-        JUT_ASSERT(1722, 0);
+        JUT_ASSERT(1722, FALSE);
     }
     /* vt[34] */ virtual int getEnvrNumInfo() const {
         OSReport("Room non envr num data !!\n");
-        JUT_ASSERT(1726, 0);
+        JUT_ASSERT(1726, FALSE);
         return 0;
     }
     /* vt[35] */ virtual void setVrboxNumInfo(int i_vrboxNum) { mVrboxNum = i_vrboxNum; }
@@ -673,11 +673,11 @@ public:
     /* vt[37] */ virtual void setPlightNumInfo(int) {
         dStage_SetErrorRoom();
         OSReport("Room non plight num data !!\n");
-        JUT_ASSERT(1735, 0);
+        JUT_ASSERT(1735, FALSE);
     }
     /* vt[38] */ virtual int getPlightNumInfo() const {
         OSReport("Room non plight num data !!\n");
-        JUT_ASSERT(1740, 0);
+        JUT_ASSERT(1740, FALSE);
         return 0;
     }
     /* vt[39] */ virtual void setLightVecInfo(stage_lightvec_info_class* i_lightvecInfo) { mpLightVecInfo = i_lightvecInfo; }
@@ -687,11 +687,11 @@ public:
     /* vt[43] */ virtual void setStagInfo(stage_stag_info_class*) {
         dStage_SetErrorRoom();
         OSReport("Room non stag data !!\n");
-        JUT_ASSERT(1769, 0);
+        JUT_ASSERT(1769, FALSE);
     }
     /* vt[44] */ virtual stage_stag_info_class* getStagInfo() const {
         OSReport("Room non stag data !!\n");
-        JUT_ASSERT(1773, 0);
+        JUT_ASSERT(1773, FALSE);
         return NULL;
     }
     /* vt[45] */ virtual void setSclsInfo(stage_scls_info_dummy_class* i_scls) { mpScls = i_scls; }
@@ -699,21 +699,21 @@ public:
     /* vt[47] */ virtual void setPntInfo(dStage_dPnt_c*) {
         dStage_SetErrorRoom();
         OSReport("Room non Pnt data !\n");
-        JUT_ASSERT(1794, 0);
+        JUT_ASSERT(1794, FALSE);
     }
     /* vt[48] */ virtual dStage_dPnt_c* getPntInf() const {
         OSReport("Room non Pnts data !\n");
-        JUT_ASSERT(1798, 0);
+        JUT_ASSERT(1798, FALSE);
         return NULL;
     }
     /* vt[49] */ virtual void setPathInfo(dStage_dPath_c*) {
         dStage_SetErrorRoom();
         OSReport("Room non Path data !\n");
-        JUT_ASSERT(1805, 0);
+        JUT_ASSERT(1805, FALSE);
     }
     /* vt[50] */ virtual dStage_dPath_c* getPathInf() const {
         OSReport("Room non Path data !\n");
-        JUT_ASSERT(1809, 0);
+        JUT_ASSERT(1809, FALSE);
         return NULL;
     }
     /* vt[51] */ virtual void setPnt2Info(dStage_dPnt_c* i_pnt) { mpPoint2 = i_pnt; }
@@ -725,11 +725,11 @@ public:
     /* vt[57] */ virtual void setEventInfo(dStage_EventInfo_c*) {
         dStage_SetErrorRoom();
         OSReport("Room non event data!\n");
-        JUT_ASSERT(1850, 0);
+        JUT_ASSERT(1850, FALSE);
     }
     /* vt[58] */ virtual dStage_EventInfo_c* getEventInfo() const {
         OSReport("Room non event data!\n");
-        JUT_ASSERT(1854, 0);
+        JUT_ASSERT(1854, FALSE);
         return NULL;
     }
     /* vt[59] */ virtual void setFileListInfo(dStage_FileList_dt_c* i_filelist) { mpFileList = i_filelist; }
@@ -738,40 +738,40 @@ public:
     /* vt[62] */ virtual dStage_FloorInfo_c* getFloorInfo() const { return mpFloor; }
     /* vt[63] */ virtual void setMemoryConfig(dStage_MemoryConfig_c*) {
         OSReport("Room non memory config data!\n");
-        JUT_ASSERT(1900, 0);
+        JUT_ASSERT(1900, FALSE);
     }
     /* vt[64] */ virtual dStage_MemoryConfig_c* getMemoryConfig() const {
         OSReport("Room non memory config data!\n");
-        JUT_ASSERT(1909, 0);
+        JUT_ASSERT(1909, FALSE);
         return NULL;
     }
     /* vt[65] */ virtual void setMemoryMap(dStage_MemoryMap_c*) {
         OSReport("Room non memory map data!\n");
-        JUT_ASSERT(1919, 0);
+        JUT_ASSERT(1919, FALSE);
     }
     /* vt[66] */ virtual dStage_MemoryMap_c* getMemoryMap() const {
         OSReport("Room non memory map data!\n");
-        JUT_ASSERT(1928, 0);
+        JUT_ASSERT(1928, FALSE);
         return NULL;
     }
     /* vt[67] */ virtual void setShip(dStage_Ship_c* i_ship) { mpShip = i_ship; }
     /* vt[68] */ virtual dStage_Ship_c* getShip() const { return mpShip; }
     /* vt[69] */ virtual void setMulti(dStage_Multi_c*) {
         OSReport("Room non multi data!\n");
-        JUT_ASSERT(1961, 0);
+        JUT_ASSERT(1961, FALSE);
     }
     /* vt[70] */ virtual dStage_Multi_c* getMulti() const {
         OSReport("Room non multi data!\n");
-        JUT_ASSERT(1966, 0);
+        JUT_ASSERT(1966, FALSE);
         return NULL;
     }
     /* vt[71] */ virtual void setLbnk(dStage_Lbnk_c* i_lbnk) { mpLbnk = i_lbnk; }
     /* vt[72] */ virtual dStage_Lbnk_c* getLbnk() const { return mpLbnk; }
     /* vt[73] */ virtual void setTresure(stage_tresure_class* i_tresure) { mpTresure = i_tresure; }
     /* vt[74] */ virtual stage_tresure_class* getTresure() const { return mpTresure; }
-    /* vt[75] */ virtual void setDMap(dStage_DMap_c*) { JUT_ASSERT(2002, 0); }
+    /* vt[75] */ virtual void setDMap(dStage_DMap_c*) { JUT_ASSERT(2002, FALSE); }
     /* vt[76] */ virtual dStage_DMap_c* getDMap() const {
-        JUT_ASSERT(2007, 0);
+        JUT_ASSERT(2007, FALSE);
         return NULL;
     }
     /* vt[77] */ virtual void setDrTg(stage_tgsc_class* i_drtg) { mpDrTg = i_drtg; }
@@ -869,10 +869,10 @@ public:
     static s8 getStayNo() { return mStayNo; }
     static s8 getMemoryBlockID(int i_roomNo) { return mStatus[i_roomNo].mMemBlockID; }
     static void onStatusDraw(int i_roomNo) { mStatus[i_roomNo].mDraw = true; }
-    static void setProcID(uint id) { mProcID = id; }
-    static uint getProcID() { return mProcID; }
-    static void setStatusProcID(int i_roomNo, uint i_id) { mStatus[i_roomNo].mProcID = i_id; }
-    static uint getStatusProcID(int i_roomNo) { return mStatus[i_roomNo].mProcID; }
+    static void setProcID(fpc_ProcID id) { mProcID = id; }
+    static fpc_ProcID getProcID() { return mProcID; }
+    static void setStatusProcID(int i_roomNo, fpc_ProcID i_id) { mStatus[i_roomNo].mProcID = i_id; }
+    static fpc_ProcID getStatusProcID(int i_roomNo) { return mStatus[i_roomNo].mProcID; }
     static dStage_darkStatus_c& getDarkStatus(int i_idx) { return mDarkStatus[i_idx]; }
     static char* getDemoArcName() { return mDemoArcName; }
     static u8 getDarkRatio() { return mDarkRatio; }
@@ -889,7 +889,7 @@ public:
     static dStage_roomStatus_c mStatus[64];
     static dStage_darkStatus_c mDarkStatus[8];
     static u8 mDarkRatio;
-    static uint mProcID;
+    static fpc_ProcID mProcID;
     static s8 mStayNo;
     static s8 mOldStayNo;
     static s8 m_time_pass;
@@ -1065,9 +1065,9 @@ inline u8 dStage_FileList_dt_CheckAgbHover(dStage_FileList_dt_c* i_fili) {
     return i_fili->mParam & 4;
 }
 
-// inline u8 dStage_FileList_dt_GetSongOk(dStage_FileList_dt_c* i_fili) {
-    // maybe 0x40000000?
-// }
+inline u32 dStage_FileList_dt_GetSongOk(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 0x40000000;
+}
 
 // inline u8 dStage_FileList_dt_GetToonsw(dStage_FileList_dt_c* i_fili) {
     
@@ -1080,6 +1080,7 @@ inline u32 dStage_FileList_dt_GetParticleNo(dStage_FileList_dt_c* i_fili) {
 bool dStage_chkPlayerId(int playerId, int room_no);
 int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
 void dStage_restartRoom(u32 roomParam, u32 mode);
+void dStage_turnRestart();
 bool dStage_setShipPos(int param_0, int i_roomNo);
 BOOL dStage_checkRestart();
 void dStage_Create();

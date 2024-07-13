@@ -119,6 +119,7 @@ struct cXyz : Vec {
     static f32 getNearZeroValue() { return 8e-11f; }
 
     bool isNearZeroSquare() const { return (this->getSquareMag() < getNearZeroValue()); }
+    bool isNearZeroSquare(const cXyz& other) const { return (VECSquareMag(&other) < getNearZeroValue()); }
     f32 abs2() const { return this->getSquareMag(); }
     f32 abs2(const Vec& other) const { return this->getSquareDistance(other); }
     f32 abs2XZ() const {
@@ -138,10 +139,9 @@ struct cXyz : Vec {
 
     f32 getDotProduct(const Vec& other) const { return VECDotProduct(this, &other); }
     f32 inprod(const Vec& other) const { return getDotProduct(other); }
+    f32 inprodXZ(const Vec& other) const { return x * other.x + z * other.z; }
 
     // TODO
-    // void inprodXZ(const Vec&) const {}
-    // void isNearZeroSquare(const cXyz&) const {}
     // void operator*=(const Vec&) {}
     // void operator/=(f32) {}
     // void operator=(const cXyz&) {}

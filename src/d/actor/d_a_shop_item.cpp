@@ -128,14 +128,14 @@ void daShopItem_c::set_mtx() {
         cXyz local[4];
         cXyz local2[4];
 
-        local2[3].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local[0].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local2[2].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local[1].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local2[1].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 97.5f, 0.0f);
-        local[2].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 97.5f, 0.0f);
-        local2[0].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
-        local[3].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
+        local2[3].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local[0].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local2[2].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local[1].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local2[1].set(0.0f, REG10_F(15) + 97.5f, 0.0f);
+        local[2].set(0.0f, REG10_F(15) + 97.5f, 0.0f);
+        local2[0].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
+        local[3].set(0.0f, REG10_F(15) + 94.0f, 0.0f);
 
         mDoMtx_stack_c::transM(local[field_0x648]);
         mDoMtx_stack_c::YrotM(0x4000);
@@ -168,7 +168,7 @@ bool daShopItem_c::_draw() {
 
 /* 00000694-0000070C       .text settingBeforeDraw__12daShopItem_cFv */
 void daShopItem_c::settingBeforeDraw() {
-    if(isBomb(m_itemNo) || (m_itemNo == BOMB_BAG) || (m_itemNo == dItem_SKULL_HAMMER_e) || m_itemNo == dItem_SMALL_KEY_e || m_itemNo == PRESIDENT_STATUE) {
+    if(isBomb(m_itemNo) || (m_itemNo == dItem_BOMB_BAG_e) || (m_itemNo == dItem_SKULL_HAMMER_e) || m_itemNo == dItem_SMALL_KEY_e || m_itemNo == PRESIDENT_STATUE) {
         dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }

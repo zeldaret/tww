@@ -125,6 +125,7 @@ public:
         daPyFlg1_UNK800000              = 0x00800000,
         daPyFlg1_UNK1000000             = 0x01000000,
         daPyFlg1_VINE_CATCH             = 0x02000000,
+        daPyFlg1_UNK4000000             = 0x04000000,
         daPyFlg1_UNK8000000             = 0x08000000,
         daPyFlg1_UNK10000000            = 0x10000000,
         daPyFlg1_LAST_COMBO_WAIT        = 0x20000000,
@@ -148,7 +149,7 @@ public:
         daPyRFlg0_UNK80000              = 0x00080000,
         daPyRFlg0_POISON_CURSE          = 0x00100000,
         daPyRFlg0_GRAB_PUT_START        = 0x00400000,
-        daPyRFlg0_TACT_USE              = 0x01000000,
+        daPyRFlg0_TACT_INPUT            = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
         daPyRFlg0_UNK8000000            = 0x08000000,
         daPyRFlg0_UNK10000000           = 0x10000000,
@@ -374,14 +375,17 @@ public:
     cXyz getRopePos() const { return mRopePos; }
     void getYPos() const {}
     
-    void changeDemoMode(u32) {}
+    void changeDemoMode(u32 mode) { mDemo.setDemoMode(mode); }
     void changeDemoMoveAngle(s16 angle) { mDemo.setMoveAngle(angle); }
-    void changeDemoParam0(int) {}
+    void changeDemoParam0(int param0) { mDemo.setParam0(param0); }
     void changeOriginalDemo() {
         mDemo.setOriginalDemoType();
         mDemo.setParam0(0);
     }
-    void cancelOriginalDemo() {}
+    void cancelOriginalDemo() {
+        mDemo.setSystemDemoType();
+        mDemo.setDemoMode(1);
+    }
 
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }
     void offNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 &= ~flag; }
@@ -442,7 +446,7 @@ public:
     void onPoisonCurse() { onResetFlg0(daPyRFlg0_POISON_CURSE); }
     bool getGrabPutStart() const { return checkResetFlg0(daPyRFlg0_GRAB_PUT_START); }
     bool checkFairyUse() const { return checkResetFlg0(daPyRFlg0_FAIRY_USE); }
-    bool checkTactUse() const { return checkResetFlg0(daPyRFlg0_TACT_USE); }
+    bool checkTactInput() const { return checkResetFlg0(daPyRFlg0_TACT_INPUT); }
     bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
@@ -462,7 +466,6 @@ public:
     void checkSwordMiniGame() const {}
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
-    void checkTactInput() const {}
     void checkUseArrowEffect() const {}
     void getRopeJumpLand() const {}
     void checkRopeForceEnd() const {}
@@ -483,14 +486,14 @@ public:
     virtual BOOL checkCutCharge() const { return FALSE; }
     virtual BOOL getBokoFlamePos(cXyz*);// { return FALSE; }
     virtual BOOL checkTactWait() const { return FALSE; }
-    virtual void setTactZev(uint, int, char*) {}
+    virtual void setTactZev(fpc_ProcID, int, char*) {}
     virtual void onDekuSpReturnFlg(u8) {}
     virtual BOOL checkComboCutTurn() const { return false; }
     virtual f32 getBaseAnimeFrameRate() = 0;
     virtual f32 getBaseAnimeFrame() = 0;
-    virtual uint getItemID() const { return fpcM_ERROR_PROCESS_ID_e; }
-    virtual uint getThrowBoomerangID() const { return fpcM_ERROR_PROCESS_ID_e; }
-    virtual uint getGrabActorID() const;// { return fpcM_ERROR_PROCESS_ID_e; }
+    virtual fpc_ProcID getItemID() const { return fpcM_ERROR_PROCESS_ID_e; }
+    virtual fpc_ProcID getThrowBoomerangID() const { return fpcM_ERROR_PROCESS_ID_e; }
+    virtual fpc_ProcID getGrabActorID() const;// { return fpcM_ERROR_PROCESS_ID_e; }
     virtual BOOL checkGrabBarrel() { return FALSE; }
     virtual u32 checkPlayerNoDraw() { return FALSE; }
     virtual BOOL checkRopeTag() { return FALSE; }
@@ -500,8 +503,8 @@ public:
     virtual void onFrollCrashFlg(u32);// {}
     virtual MtxP getModelJointMtx(u16) { return NULL; }
     virtual f32 getOldSpeedY() { return 0.0f; }
-    virtual BOOL setHookshotCarryOffset(uint, const cXyz*) { return FALSE; }
-    virtual void setPlayerPosAndAngle(cXyz*, s16) {}
+    virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*) { return FALSE; }
+    virtual void setPlayerPosAndAngle(cXyz*, s16);// {}
     virtual void setPlayerPosAndAngle(cXyz*, csXyz*) {}
     virtual void setPlayerPosAndAngle(MtxP) {}
     virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int) { return FALSE; }

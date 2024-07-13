@@ -4,87 +4,226 @@
 //
 
 #include "d/actor/d_a_ygcwp.h"
+#include "d/actor/d_a_player_main.h"
+#include "d/res/res_ygcwp.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
+enum {
+    EVENT_WARP_START,
+    EVENT_WARP_APPEAR,
+    EVENT_WARP_MAKE,
+};
+
+const u32 daYgcwp_c::M_brk_table[] = {
+    YGCWP_BRK_YGCWP00_COMMON,
+    YGCWP_BRK_YGCWP00_WARP,
+};
+
+const u32 daYgcwp_c::M_brk_mode_table[] = {
+    J3DFrameCtrl::LOOP_REPEAT_e,
+    J3DFrameCtrl::LOOP_ONCE_e,
+};
+
+const char daYgcwp_c::M_arcname[6] = "Ygcwp";
+
+static void dummy() {
+    OSReport("rtn_warp");
+    OSReport("fg_warp0");
+    OSReport("fg_warp1");
+}
+
+static const char* M_act_table[] = {
+    "warp_start",
+    "warp_appear",
+    "warp_make",
+};
+
 /* 00000078-00000098       .text solidHeapCB__9daYgcwp_cFP10fopAc_ac_c */
-void daYgcwp_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daYgcwp_c::solidHeapCB(fopAc_ac_c* i_ac) {
+    return ((daYgcwp_c*)i_ac)->create_heap();
 }
 
 /* 00000098-0000023C       .text create_heap__9daYgcwp_cFv */
-void daYgcwp_c::create_heap() {
-    /* Nonmatching */
+BOOL daYgcwp_c::create_heap() {
+    s32 i;
+    BOOL ret = FALSE;
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YGCWP_BDL_YGCWP00));
+    JUT_ASSERT(0xBE, mdl_data != NULL);
+
+    if (mdl_data != NULL) {
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
+        if (mpModel != NULL) {
+            ret = TRUE;
+
+            for (i = 0; i < (s32)ARRAY_SIZE(mBrkAnm); i++) {
+                J3DAnmTevRegKey* brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
+                JUT_ASSERT(0xC9, brk_p != NULL);
+                if (brk_p != NULL) {
+                    if (!mBrkAnm[i].init(mdl_data, brk_p, TRUE, M_brk_mode_table[i], 1.0f, 0, -1, false, 0)) {
+                        ret = FALSE;
+                        break;
+                    }
+                } else {
+                    ret = FALSE;
+                    break;
+                }
+            }
+        }
+    }
+
+    return ret;
 }
 
 /* 0000023C-000003A0       .text _create__9daYgcwp_cFv */
 s32 daYgcwp_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daYgcwp_c);
+    s32 rt = dComIfG_resLoad(&mPhs, M_arcname);
+    if (rt == cPhs_COMPLEATE_e) {
+        rt = cPhs_ERROR_e;
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+            init_mtx();
+            m2D8 = fopAcM_GetParam(this) & 0x0F;
+            if (m2D8 < 0 || m2D8 > 2)
+                m2D8 = 0;
+            mBrkAnm[1].setPlaySpeed(0.0f);
+            if (check_ev()) {
+                mBrkAnm[0].setPlaySpeed(0.0f);
+            } else {
+                mBrkAnm[0].setPlaySpeed(1.0f);
+                mCurBrk = 0;
+            }
+            off_ev();
+            fopAcM_setCullSizeBox(this, -160.0f, -10.0f, -160.0f, 160.0f, 50.0f, 160.0f);
+            rt = cPhs_COMPLEATE_e;
+        }
+    }
+    return rt;
 }
 
 /* 00000470-000004A0       .text _delete__9daYgcwp_cFv */
-BOOL daYgcwp_c::_delete() {
-    /* Nonmatching */
+bool daYgcwp_c::_delete() {
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 000004A0-000004D0       .text check_ev__9daYgcwp_cCFv */
-void daYgcwp_c::check_ev() const {
-    /* Nonmatching */
+BOOL daYgcwp_c::check_ev() const {
+    return dComIfGs_isTmpBit(0x0480);
 }
 
 /* 000004D0-00000500       .text off_ev__9daYgcwp_cCFv */
 void daYgcwp_c::off_ev() const {
-    /* Nonmatching */
+    dComIfGs_offTmpBit(0x0480);
 }
 
 /* 00000500-00000588       .text init_mtx__9daYgcwp_cFv */
 void daYgcwp_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000588-000005F0       .text make_shine__9daYgcwp_cFv */
 void daYgcwp_c::make_shine() {
-    /* Nonmatching */
+    dComIfGp_particle_set(0x8316, &current.pos, NULL, &scale);
 }
 
 /* 000005F0-00000654       .text set_timer__9daYgcwp_cFv */
 void daYgcwp_c::set_timer() {
-    /* Nonmatching */
+    s32* a_intP = (s32*)dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
+    mTimer = 0;
+    if (a_intP != NULL)
+        mTimer = *a_intP;
 }
 
 /* 00000654-00000834       .text _execute__9daYgcwp_cFv */
-BOOL daYgcwp_c::_execute() {
-    /* Nonmatching */
+bool daYgcwp_c::_execute() {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    mStaffId = dComIfGp_evmng_getMyStaffId(M_arcname);
+    if (mStaffId != -1) {
+        int actIdx = dComIfGp_evmng_getMyActIdx(mStaffId, (char**)M_act_table, ARRAY_SIZE(M_act_table), FALSE, 0);
+        if (dComIfGp_evmng_getIsAddvance(mStaffId)) {
+            switch (actIdx) {
+            case EVENT_WARP_START:
+                make_shine();
+                mBrkAnm[1].setFrame(0.0f);
+                mBrkAnm[1].setPlaySpeed(1.0f);
+                mCurBrk = 1;
+                player->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                set_timer();
+                fopAcM_seStartCurrent(this, JA_SE_LK_FG_ROOM_WARP_OUT, 0);
+                break;
+            case EVENT_WARP_APPEAR:
+                set_timer();
+                player->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                break;
+            case EVENT_WARP_MAKE:
+                mBrkAnm[0].setFrame(0.0f);
+                mBrkAnm[0].setPlaySpeed(1.0f);
+                mCurBrk = 0;
+                break;
+            }
+        }
+
+        switch (actIdx) {
+        case EVENT_WARP_START:
+        case EVENT_WARP_APPEAR:
+            mTimer--;
+            if (mTimer <= 0)
+                dComIfGp_evmng_cutEnd(mStaffId);
+            break;
+        case EVENT_WARP_MAKE:
+            break;
+        }
+    }
+    
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mBrkAnm); i++)
+        mBrkAnm[i].play();
+
+    return TRUE;
 }
 
 /* 00000834-000008DC       .text _draw__9daYgcwp_cFv */
-BOOL daYgcwp_c::_draw() {
-    /* Nonmatching */
+bool daYgcwp_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    for (s32 i = 0; i < ARRAY_SIZE(mBrkAnm); i++) {
+        if (mCurBrk == i) {
+            mBrkAnm[i].entry(mpModel->getModelData());
+            break;
+        }
+    }
+    mDoExt_modelUpdateDL(mpModel);
+    return TRUE;
 }
 
 namespace {
 /* 000008DC-000008FC       .text Mthd_Create__23@unnamed@d_a_ygcwp_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* i_ac) {
+    return ((daYgcwp_c*)i_ac)->_create();
 }
 
 /* 000008FC-00000920       .text Mthd_Delete__23@unnamed@d_a_ygcwp_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_ac) {
+    return ((daYgcwp_c*)i_ac)->_delete();
 }
 
 /* 00000920-00000944       .text Mthd_Execute__23@unnamed@d_a_ygcwp_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_ac) {
+    return ((daYgcwp_c*)i_ac)->_execute();
 }
 
 /* 00000944-00000968       .text Mthd_Draw__23@unnamed@d_a_ygcwp_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_ac) {
+    return ((daYgcwp_c*)i_ac)->_draw();
 }
 
 /* 00000968-00000970       .text Mthd_IsDelete__23@unnamed@d_a_ygcwp_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_ac) {
+    return TRUE;
 }
 
 static actor_method_class Ygcwp_Mthd_Table = {

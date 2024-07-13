@@ -60,6 +60,7 @@ enum daPy__PlayerStatus1 {
     daPyStts1_DEKU_LEAF_FAN_e      = 0x00000040,
     daPyStts1_SAIL_e               = 0x00000400,
     daPyStts1_UNK8000_e            = 0x00008000,
+    daPyStts1_UNK10000_e           = 0x00010000,
     daPyStts1_UNK40000_e           = 0x00040000,
 };
 
@@ -278,8 +279,17 @@ public:
         mpPlayer[idx] = (daPy_py_c*)player;
         mCurCamera[idx] = cam;
     }
+
+    int getItemTimer() { return mItemTimer; }
+    void resetItemTimer(s16 timer) {
+        mItemTimer = timer;
+        mStartItemTimer = false;
+    }
     
     int getMessageRupee() { return mMessageRupee; }
+
+    void setAuctionRupee(s16 count) { mAuctionRupee = count; }
+    void setAuctionGauge(s16 gauge) { mAuctionGauge = gauge; }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
@@ -335,6 +345,7 @@ public:
     int getTimerLimitTimeMs() { return mTimerInfo.mTimerLimitTimeMs; }
     void setWaveFrame(u16 frame) { mTimerInfo.mWaveFrame = frame; }
     u16 getWaveFrame() { return mTimerInfo.mWaveFrame; }
+    void fmapOpenOn() { mFmapOpen = true; }
 
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
@@ -352,6 +363,10 @@ public:
     s16 getItemArrowNumCount() { return mItemArrowNumCount; }
     void setItemArrowNumCount(s16 num) { mItemArrowNumCount += num; }
 
+    void setNpcNameMessageID(u32 id) { mNpcNameMessageID = id; }
+    void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
+
+    s16 getItemKeyNumCount() { return mItemKeyNumCount; }
     void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
 
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
@@ -359,6 +374,14 @@ public:
 
     void setItemTimeCount(s32 time) { mAirMeter = time; }
     void setItemTimeMax(s32 time) { field_0x4928 = time; }
+
+    u8 getScopeType() { return mScopeType; }
+    void setScopeType(u8 type) { mScopeType = type; }
+
+    u8 getOperateWind() { return mOperateWind; }
+    void setOperateWindCancelOff() { mOperateWind = 0; }
+    void setOperateWindChangeOff() { mOperateWind = 1; }
+    void setOperateWindOn() { mOperateWind = 2; }
 
     u8 checkMesgSendButton() { return mMesgSendButton; }
     u8 checkMesgCancelButton() { return mMesgCancelButton; }
@@ -389,9 +412,10 @@ public:
     void setDoStatusForce(u8 value) { field_0x4932 = value; }
     u8 getPictureStatus() { return mPictureStatus; }
     void setPictureStatusOn() { mPictureStatus = 2; }
+    
+    u8 getScopeMesgStatus() { return mbCamOverrideFarPlane; }
+    void setScopeMesgStatus(u8 status) { mbCamOverrideFarPlane = status; }
 
-    u8 getScopeType() { return mbCamOverrideFarPlane; }
-    void setScopeType(u8 v) { mbCamOverrideFarPlane = v; }
     void setCameraInfo(int idx, camera_class* camera_p, int dlst_window_idx, int cam_idx, int p5) {
         mCameraInfo[idx].mpCamera = camera_p;
         mCameraInfo[idx].mDlstWindowIdx = dlst_window_idx;
@@ -425,6 +449,17 @@ public:
     inline u8 isHeapLockFlag() { return mHeapLockFlag; }
     inline void setHeapLockFlag(u8 flag) { mHeapLockFlag = flag; }
     inline void offHeapLockFlag() { mHeapLockFlag = 0; }
+
+    // These inlines aren't present in WW JP debug maps, but are present in TP debug.
+    inline u8 getNowVibration() { return mNowVibration; }
+    inline void setNowVibration(u8 vibration) { mNowVibration = vibration; }
+
+#if VERSION != VERSION_JPN
+    // Inline name is fake (not present in JP debug maps), but was guessed based on the similar
+    // dSv_player_config_c::getPalLanguage() const inline in TP debug.
+    inline u8 getPalLanguage() { return mPalLanguage; }
+    inline void setPalLanguage(u8 lang) { mPalLanguage = lang; }
+#endif
 
     void setMsgArchive(JKRArchive * pArc) { mpMsgArchive = pArc; }
     void setDmsgArchive(JKRArchive * pArc) { mpDmsgArchive = pArc; }
@@ -467,21 +502,30 @@ public:
     ItemTableList* getItemTable() { return mpItemTable; }
     void setFmapData(void * pData) { mpFmapData = pData; }
 
-    void setPictureBoxData(JKRAramBlock* aramHeap, int i) { mPictureBoxDataHeap[i] = aramHeap; }
+    JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
+    void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
     void offPictureFlag(u8 i) {
         u8 mask = (1 << i);
         mPictureFlag &= ~mask;
     }
-    void setBossBattleData(JKRAramBlock* aramHeap, int i) { mBossBattleDataHeap[i] = aramHeap; }
+    u8 getPictureFormat() { return mPictureFormat; }
+    u8 getPictureResult() { return mPictureResult; }
+    u8 getPictureResultDetail() { return mPictureResultDetail; }
+    void setBossBattleData(JKRAramBlock* aramBlock, int i) { mBossBattleData[i] = aramBlock; }
+
+    void startItemTimer() { mStartItemTimer = true; }
 
     void stopFwaterTimer() { mFwaterTimer = 0; }
     u8 checkFwaterTimer() { return mFwaterTimer; }
 
     u8 getMiniGameType() { return mMiniGameType; }
-
-    void endMiniGame(u16 param_1) {
+    void startMiniGame(u8 i_gameType) {
+        mMiniGameType = i_gameType;
+        mMinigameFlags |= 1 << (i_gameType - 1); // set Nth bit
+    }
+    void endMiniGame(u16 i_gameType) {
         mMiniGameType = 0;
-        field_0x4A38 ^= 1 << (param_1 - 1); // toggle Nth bit
+        mMinigameFlags ^= 1 << (i_gameType - 1); // toggle Nth bit
         field_0x4A3E = 0;
     }
 
@@ -493,14 +537,19 @@ public:
     void setMelodyNum(u8 melody) { mMelodyNum = melody; }
 
     u8 getBaseAnimeID() { return mMesgAnime; }
+    void setBaseAnimeID(u8 id) { mMesgAnime = id; }
     void clearBaseAnimeID() { mMesgAnime = 0xFF; }
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
+    u8 getMesgStatus() { return mMesgStatus; }
 
     u8 getButtonMode() { return mButtonMode; }
     void setButtonMode(u8 mode) { mButtonMode = mode; }
 
     void setInputPassword(const char* password) { strcpy(mInputPassword, password); }
+
+    u8 getDirection() { return mDirection; }
+    void setDirection(u8 direction) { mDirection = direction; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -543,13 +592,13 @@ public:
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
 #if VERSION != VERSION_JPN
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
-    /* 0x4800 */ JKRAramBlock* mPictureBoxDataHeap[3];
-    /* 0x480C */ JKRAramBlock* mBossBattleDataHeap[4];
+    /* 0x4800 */ JKRAramBlock* mPictureBoxData[3];
+    /* 0x480C */ JKRAramBlock* mBossBattleData[4];
     /* 0x481C */ JKRAramBlock* field_0x481c;
     /* 0x4820 */ JKRAramBlock* field_0x4820;
 #else
-    /* 0x47FC */ JKRAramBlock* mPictureBoxDataHeap[3];
-    /* 0x480C */ JKRAramBlock* mBossBattleDataHeap[4];
+    /* 0x47FC */ JKRAramBlock* mPictureBoxData[3];
+    /* 0x480C */ JKRAramBlock* mBossBattleData[4];
 #endif
     /* Offsets below are for USA/PAL */
 
@@ -574,8 +623,8 @@ public:
     /* 0x48C0 */ int mItemRupeeCount;
     /* 0x48C4 */ int mAirMeter;
     /* 0x48C8 */ int field_0x48c8;
-    /* 0x48CC */ int mNpcNameMessageID;
-    /* 0x48D0 */ int mItemNameMessageID;
+    /* 0x48CC */ u32 mNpcNameMessageID;
+    /* 0x48D0 */ u32 mItemNameMessageID;
     /* 0x48D4 */ s16 mItemKeyNumCount;
     /* 0x48D6 */ s16 mItemMaxLifeCount;
     /* 0x48D8 */ s16 mItemMagicCount;
@@ -591,14 +640,14 @@ public:
     /* 0x4918 */ u16 mMsgCountNumber;
     /* 0x491A */ s16 mMsgSetNumber;
     /* 0x491C */ s16 mMessageRupee;
-    /* 0x491E */ s16 field_0x491e;
-    /* 0x4920 */ s16 field_0x4920;
-    /* 0x4922 */ s16 field_0x4922;
-    /* 0x4924 */ s16 mCurrHP;
-    /* 0x4926 */ s16 mRupyCountDisplay;
+    /* 0x491E */ s16 mAuctionRupee;
+    /* 0x4920 */ s16 mAuctionGauge;
+    /* 0x4922 */ s16 mItemTimer;
+    /* 0x4924 */ s16 mItemNowLife;
+    /* 0x4926 */ s16 mItemNowRupee;
     /* 0x4928 */ u8 field_0x4928;
     /* 0x4929 */ u8 field_0x4929;
-    /* 0x492A */ u8 field_0x492a;
+    /* 0x492A */ u8 mMesgStatus;
     /* 0x492B */ u8 mbCamOverrideFarPlane;
     /* 0x492C */ u8 field_0x492c;
     /* 0x492D */ u8 field_0x492d;
@@ -615,38 +664,38 @@ public:
     /* 0x493E */ u8 mItemNo;
     /* 0x493F */ u8 field_0x493f;
     /* 0x4940 */ u8 field_0x4940;
-    /* 0x4941 */ u8 field_0x4941;
+    /* 0x4941 */ u8 mDirection;
     /* 0x4942 */ u8 mButtonMode;
     /* 0x4943 */ u8 field_0x4943;
     /* 0x4944 */ u8 field_0x4944;
-    /* 0x4945 */ u8 field_0x4945;
-    /* 0x4946 */ u8 field_0x4946;
+    /* 0x4945 */ u8 mScopeType;
+    /* 0x4946 */ u8 mOperateWind;
     /* 0x4947 */ u8 field_0x4947;
     /* 0x4948 */ u8 mMesgSendButton;
     /* 0x4949 */ u8 mMesgCancelButton;
     /* 0x494A */ u8 field_0x494a[6];
     /* 0x4950 */ u8 mMelodyNum;
-    /* 0x4951 */ u8 field_0x4951;
+    /* 0x4951 */ bool mFmapOpen;
     /* 0x4952 */ u8 field_0x4952;
     /* 0x4953 */ u8 field_0x4953;
     /* 0x4954 */ u8 field_0x4954;
-    /* 0x4955 */ u8 field_0x4955;
+    /* 0x4955 */ bool mStartItemTimer;
     /* 0x4956 */ u8 mFwaterTimer;
     /* 0x4957 */ u8 mPlacenameIndex;
     /* 0x4958 */ u8 mPlacenameState;
     /* 0x4959 */ u8 mGameoverStatus;
     /* 0x495A */ u8 field_0x495a;
     /* 0x495B */ u8 mPictureFlag;
-    /* 0x495C */ u8 field_0x495c;
-    /* 0x495D */ u8 field_0x495d;
+    /* 0x495C */ u8 mPictureResult;
+    /* 0x495D */ u8 mPictureResultDetail;
     /* 0x495E */ u8 mPictureStatus;
     /* 0x495F */ u8 field_0x495f;
-    /* 0x4960 */ u8 field_0x4960;
+    /* 0x4960 */ u8 mPictureFormat;
     /* 0x4961 */ u8 field_0x4961;
     /* 0x4962 */ u8 mHeapLockFlag;
-    /* 0x4963 */ u8 field_0x4963;
+    /* 0x4963 */ u8 mNowVibration;
 #if VERSION != VERSION_JPN
-    /* 0x4964 */ u8 mGameLanguage;
+    /* 0x4964 */ u8 mPalLanguage;
 #endif
     /* 0x4965 */ u8 field_0x4965;
     /* 0x4966 */ char mInputPassword[0x11];
@@ -663,7 +712,7 @@ public:
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
     /* 0x4A28 */ u32 mPlayerStatus[2][2];
-    /* 0x4A38 */ u16 field_0x4A38;
+    /* 0x4A38 */ u16 mMinigameFlags;
     /* 0x4A3A */ u8 mMiniGameType;
     /* 0x4A3C */ s16 mMiniGameRupee;
     /* 0x4A3E */ u8 field_0x4A3E;
@@ -753,8 +802,24 @@ inline int dComIfGs_getRupee() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupee();
 }
 
+inline int dComIfGp_getItemTimer() {
+    return g_dComIfG_gameInfo.play.getItemTimer();
+}
+
+inline void dComIfGp_resetItemTimer(s16 timer) {
+    g_dComIfG_gameInfo.play.resetItemTimer(timer);
+}
+
 inline int dComIfGp_getMessageRupee() {
     return g_dComIfG_gameInfo.play.getMessageRupee();
+}
+
+inline void dComIfGp_setAuctionRupee(s16 count) {
+    g_dComIfG_gameInfo.play.setAuctionRupee(count);
+}
+
+inline void dComIfGp_setAuctionGauge(s16 gauge) {
+    g_dComIfG_gameInfo.play.setAuctionGauge(gauge);
 }
 
 inline void dComIfGs_setRupee(u16 rupee) {
@@ -1007,6 +1072,10 @@ inline void dComIfGs_offEventBit(u16 id) {
     g_dComIfG_gameInfo.save.getEvent().offEventBit(id);
 }
 
+inline BOOL dComIfGs_isTmpBit(u16 id) {
+    return g_dComIfG_gameInfo.save.getTmp().isEventBit(id);
+}
+
 inline void dComIfGs_onTmpBit(u16 id) {
     g_dComIfG_gameInfo.save.getTmp().onEventBit(id);
 }
@@ -1015,8 +1084,20 @@ inline void dComIfGs_offTmpBit(u16 id) {
     g_dComIfG_gameInfo.save.getTmp().offEventBit(id);
 }
 
+inline void dComIfGs_setTmpReg(u16 id, u8 no) {
+    g_dComIfG_gameInfo.save.getTmp().setEventReg(id, no);
+}
+
+inline u8 dComIfGs_getTmpReg(u16 id) {
+    return g_dComIfG_gameInfo.save.getTmp().getEventReg(id);
+}
+
 inline s16 dComIfGs_getStartPoint() {
     return g_dComIfG_gameInfo.save.getRestart().getStartPoint();
+}
+
+inline void dComIfGs_setRestartRoom(const cXyz& i_pos, s16 i_angle, s8 i_roomNo) {
+    g_dComIfG_gameInfo.save.getRestart().setRoom(i_pos, i_angle, i_roomNo);
 }
 
 inline void dComIfGs_setRestartRoomParam(u32 i_param) {
@@ -1100,8 +1181,22 @@ inline s16 dComIfGs_getTurnRestartShipAngleY() {
     return g_dComIfG_gameInfo.save.getTurnRestart().getShipAngleY();
 }
 
+// The "HasShip" name is fake. These inlines don't exist in the demo, but must exist in the final release.
+inline BOOL dComIfGs_getTurnRestartHasShip() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getHasShip();
+}
+
+inline void dComIfGs_setTurnRestartHasShip(BOOL hasShip) {
+    g_dComIfG_gameInfo.save.getTurnRestart().setHasShip(hasShip);
+}
+
 inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
-    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, 0);
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, FALSE);
+}
+
+// Note: The "BOOL i_hasShip" parameter doesn't exist in the demo, but was added for the final release.
+inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param, const cXyz& i_shipPos, s16 i_shipAngle, BOOL i_hasShip) {
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_shipPos, i_shipAngle, i_hasShip);
 }
 
 inline u8 dComIfGs_getPlayerPriestFlag() {
@@ -1655,6 +1750,10 @@ stage_scls_info_class* dComIfGd_getMeshSceneList(Vec& vec);
 
 BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo);
 
+inline void dComIfGp_startItemTimer() {
+    g_dComIfG_gameInfo.play.startItemTimer();
+}
+
 inline void dComIfGs_stopFwaterTimer() {
     g_dComIfG_gameInfo.play.stopFwaterTimer();
 }
@@ -2167,6 +2266,18 @@ inline void dComIfGp_setItemMaxLifeCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemMaxLifeCount(num);
 }
 
+inline void dComIfGp_setNpcNameMessageID(u32 id) {
+    g_dComIfG_gameInfo.play.setNpcNameMessageID(id);
+}
+
+inline void dComIfGp_setItemNameMessageID(u32 id) {
+    g_dComIfG_gameInfo.play.setItemNameMessageID(id);
+}
+
+inline s16 dComIfGp_getItemKeyNumCount() {
+    return g_dComIfG_gameInfo.play.getItemKeyNumCount();
+}
+
 inline void dComIfGp_setItemKeyNumCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemKeyNumCount(num);
 }
@@ -2221,6 +2332,30 @@ inline void dComIfGp_setItemBeastNumCount(int i_idx, s16 num) {
 
 inline s16 dComIfGp_getItemBeastNumCount(int i_idx) {
     return g_dComIfG_gameInfo.play.getItemBeastNumCount(i_idx);
+}
+
+inline u8 dComIfGp_getScopeType() {
+    return g_dComIfG_gameInfo.play.getScopeType();
+}
+
+inline void dComIfGp_setScopeType(u8 type) {
+    g_dComIfG_gameInfo.play.setScopeType(type);
+}
+
+inline u8 dComIfGp_getOperateWind() {
+    return g_dComIfG_gameInfo.play.getOperateWind();
+}
+
+inline void dComIfGp_setOperateWindCancelOff() {
+    g_dComIfG_gameInfo.play.setOperateWindCancelOff();
+}
+
+inline void dComIfGp_setOperateWindChangeOff() {
+    g_dComIfG_gameInfo.play.setOperateWindChangeOff();
+}
+
+inline void dComIfGp_setOperateWindOn() {
+    g_dComIfG_gameInfo.play.setOperateWindOn();
 }
 
 inline u8 dComIfGp_checkMesgSendButton() {
@@ -2299,8 +2434,13 @@ inline void dComIfGp_setItem(u8 slot, u8 i_itemNo) {
     g_dComIfG_gameInfo.play.setItem(slot, i_itemNo);
 }
 
-inline u8 dComIfGp_getScopeType() { return g_dComIfG_gameInfo.play.getScopeType(); }
-inline void dComIfGp_setScopeType(u8 v) { g_dComIfG_gameInfo.play.setScopeType(v); }
+inline u8 dComIfGp_getScopeMesgStatus() {
+    return g_dComIfG_gameInfo.play.getScopeMesgStatus();
+}
+
+inline void dComIfGp_setScopeMesgStatus(u8 status) {
+    g_dComIfG_gameInfo.play.setScopeMesgStatus(status);
+}
 
 inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {
     g_dComIfG_gameInfo.play.setCurrentGrafPort(i_graf);
@@ -2312,8 +2452,12 @@ inline u8 dComIfGp_getMiniGameType() {
     return g_dComIfG_gameInfo.play.getMiniGameType();
 }
 
-inline void dComIfGp_endMiniGame(u16 param_1) {
-    g_dComIfG_gameInfo.play.endMiniGame(param_1);
+inline void dComIfGp_startMiniGame(u8 i_gameType) {
+    g_dComIfG_gameInfo.play.startMiniGame(i_gameType);
+}
+
+inline void dComIfGp_endMiniGame(u16 i_gameType) {
+    g_dComIfG_gameInfo.play.endMiniGame(i_gameType);
 }
 
 inline u8 dComIfGp_getAStatus() {
@@ -2398,6 +2542,29 @@ inline void dComIfGp_offHeapLockFlag() {
     g_dComIfG_gameInfo.play.offHeapLockFlag();
 }
 
+// Inline name from TP debug.
+inline u8 dComIfGp_getNowVibration() {
+    return g_dComIfG_gameInfo.play.getNowVibration();
+}
+
+// Inline name from TP debug.
+inline void dComIfGp_setNowVibration(u8 vibration) {
+    g_dComIfG_gameInfo.play.setNowVibration(vibration);
+}
+
+#if VERSION != VERSION_JPN
+// Inline name is official because while it's not present in the JPN debug maps, it is present in
+// the USA release maps because there was one TU where it failed to get inlined (f_op_msg_mng).
+inline u8 dComIfGs_getPalLanguage() {
+    return g_dComIfG_gameInfo.play.getPalLanguage();
+}
+
+// Inline name is fake, but guessed based on the above inline.
+inline void dComIfGs_setPalLanguage(u8 lang) {
+    g_dComIfG_gameInfo.play.setPalLanguage(lang);
+}
+#endif
+
 inline void dComIfGp_2dShowOn() {
     g_dComIfG_gameInfo.play.show2dOn();
 }
@@ -2410,7 +2577,7 @@ inline bool dComIfGp_2dShowCheck() {
     return g_dComIfG_gameInfo.play.show2dCheck();
 }
 
-inline u8 dComIfGp_setMelodyNum() {
+inline u8 dComIfGp_getMelodyNum() {
     return g_dComIfG_gameInfo.play.getMelodyNum();
 }
 
@@ -2420,6 +2587,10 @@ inline void dComIfGp_setMelodyNum(u8 melody) {
 
 inline u8 dComIfGp_getMesgAnimeAttrInfo() {
     return g_dComIfG_gameInfo.play.getBaseAnimeID();
+}
+
+inline void dComIfGp_setMesgAnimeAttrInfo(u8 id) {
+    g_dComIfG_gameInfo.play.setBaseAnimeID(id);
 }
 
 inline void dComIfGp_clearMesgAnimeAttrInfo() {
@@ -2434,16 +2605,36 @@ inline void dComIfGp_clearMesgAnimeTagInfo() {
     g_dComIfG_gameInfo.play.clearNowAnimeID();
 }
 
-inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramHeap, int i) {
-    g_dComIfG_gameInfo.play.setPictureBoxData(aramHeap, i);
+inline u8 dComIfGp_getMesgStatus() {
+    return g_dComIfG_gameInfo.play.getMesgStatus();
+}
+
+inline JKRAramBlock* dComIfGp_getPictureBoxData(int i) {
+    return g_dComIfG_gameInfo.play.getPictureBoxData(i);
+}
+
+inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramBlock, int i) {
+    g_dComIfG_gameInfo.play.setPictureBoxData(aramBlock, i);
 }
 
 inline void dComIfGp_offPictureFlag(u8 i) {
     g_dComIfG_gameInfo.play.offPictureFlag(i);
 }
 
-inline void dComIfGp_setBossBattleData(JKRAramBlock* aramHeap, int i) {
-    g_dComIfG_gameInfo.play.setBossBattleData(aramHeap, i);
+inline u8 dComIfGp_getPictureFormat() {
+    return g_dComIfG_gameInfo.play.getPictureFormat();
+}
+
+inline u8 dComIfGp_getPictureResult() {
+    return g_dComIfG_gameInfo.play.getPictureResult();
+}
+
+inline u8 dComIfGp_getPictureResultDetail() {
+    return g_dComIfG_gameInfo.play.getPictureResultDetail();
+}
+
+inline void dComIfGp_setBossBattleData(JKRAramBlock* aramBlock, int i) {
+    g_dComIfG_gameInfo.play.setBossBattleData(aramBlock, i);
 }
 
 inline u8 dComIfGp_getButtonActionMode() {
@@ -2456,6 +2647,14 @@ inline void dComIfGp_setButtonActionMode(u8 mode) {
 
 inline void dComIfGp_setInputPassword(const char* password) {
     g_dComIfG_gameInfo.play.setInputPassword(password);
+}
+
+inline u8 dComIfGp_getAdvanceDirection() {
+    return g_dComIfG_gameInfo.play.getDirection();
+}
+
+inline void dComIfGp_setAdvanceDirection(u8 direction) {
+    return g_dComIfG_gameInfo.play.setDirection(direction);
 }
 
 /**
@@ -2539,7 +2738,7 @@ inline void dComIfGp_event_setItemPartner(void* pt) {
     g_dComIfG_gameInfo.play.getEvent().setPtI(pt);
 }
 
-inline void dComIfGp_event_setItemPartnerId(uint id) {
+inline void dComIfGp_event_setItemPartnerId(fpc_ProcID id) {
     g_dComIfG_gameInfo.play.getEvent().setPtI_Id(id);
 }
 
@@ -2569,6 +2768,14 @@ inline dEvent_manager_c* dComIfGp_getPEvtManager() {
 
 inline u8 dComIfGp_event_getMode() {
     return g_dComIfG_gameInfo.play.getEvent().getMode();
+}
+
+inline u8 dComIfGp_event_getTactFreeMStick(int which) {
+    return g_dComIfG_gameInfo.play.getEvent().getTactFreeMStick(which);
+}
+
+inline u8 dComIfGp_event_getTactFreeCStick(int which) {
+    return g_dComIfG_gameInfo.play.getEvent().getTactFreeCStick(which);
 }
 
 // Note: Some of the below functions call g_dComIfG_gameInfo.play.getEvtManager(), while others use
@@ -2922,12 +3129,8 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* arc_nam
 int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* resName, JKRHeap* heap);
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* resName);
 
-inline int dComIfG_setObjectRes(const char* name, u8 param_1, JKRHeap* heap) {
-    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, param_1, heap);
-}
-
-inline int dComIfG_setObjectRes(const char* name, void* param_1, u32 param_2) {
-    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, param_1, param_2, NULL);
+inline int dComIfG_setObjectRes(const char* name, u8 direction, JKRHeap* heap) {
+    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, direction, heap);
 }
 
 inline int dComIfG_setStageRes(const char* name, JKRHeap* heap) {
@@ -3131,6 +3334,10 @@ inline void dComIfGp_particle_calcMenu() {
     g_dComIfG_gameInfo.play.getParticle()->calcMenu();
 }
 
+inline int dComIfGp_particle_addModelEmitter(dPa_modelEmitter_c* emitter){
+    return g_dComIfG_gameInfo.play.getParticle()->addModelEmitter(emitter);
+}
+
 inline void dComIfGp_particle_drawModelParticle() {
     g_dComIfG_gameInfo.play.getParticle()->drawModelParticle();
 }
@@ -3215,6 +3422,8 @@ inline int dComIfG_getTimerNowTimeMs() { return g_dComIfG_gameInfo.play.getTimer
 
 inline void dComIfGp_setWaveFrame(u16 frame) { g_dComIfG_gameInfo.play.setWaveFrame(frame); }
 inline u16 dComIfGp_getWaveFrame() { return g_dComIfG_gameInfo.play.getWaveFrame(); }
+
+inline void dComIfGp_fmapOpenOn() { g_dComIfG_gameInfo.play.fmapOpenOn(); }
 
 inline int dComIfG_getTimerRestTimeMs() {
     int limit = g_dComIfG_gameInfo.play.getTimerLimitTimeMs();

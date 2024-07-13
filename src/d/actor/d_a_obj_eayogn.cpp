@@ -25,7 +25,7 @@ BOOL daObjEayogn_c::create_heap() {
     BOOL ret = FALSE;
 
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, EAYOGN_BDL_EAYOGN));
-    JUT_ASSERT(0x5c, mdl_data != 0);
+    JUT_ASSERT(0x5c, mdl_data != NULL);
 
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x00, 0x11020203);

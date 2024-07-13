@@ -38,7 +38,7 @@ BOOL ice_bg_check(enemyice* ei) {
         }
     } else if (ei->mBgAcch.ChkGroundHit()) {
         ei->mSpeedF *= 0.5f;
-        if (ac->health <= 0 || speedY < -40.0f + g_regHIO.mChild[0].mFloatRegs[14]) {
+        if (ac->health <= 0 || speedY < -40.0f + REG0_F(14)) {
             ret = TRUE;
         }
         if (speedY < -20.0f) {
@@ -141,18 +141,18 @@ BOOL enemy_ice(enemyice* ei) {
             mDoMtx_stack_c::ZrotM(ac->shape_angle.z);
             mDoMtx_stack_c::scaleM(ac->scale);
             
-            if (ei->mLightShrinkTimer < (s8)(70 + g_regHIO.mChild[14].mShortRegs[1])) {
-                cLib_addCalc0(&ei->mScaleXZ, 0.1f, 0.01f + g_regHIO.mChild[14].mFloatRegs[0]);
-                cLib_addCalc0(&ei->mScaleY, 0.1f, 0.01f + g_regHIO.mChild[14].mFloatRegs[0]);
+            if (ei->mLightShrinkTimer < (s8)(70 + REG14_S(1))) {
+                cLib_addCalc0(&ei->mScaleXZ, 0.1f, 0.01f + REG14_F(0));
+                cLib_addCalc0(&ei->mScaleY, 0.1f, 0.01f + REG14_F(0));
             } else {
-                if (ei->mLightShrinkTimer == (s8)(70 + g_regHIO.mChild[14].mShortRegs[1])) {
+                if (ei->mLightShrinkTimer == (s8)(70 + REG14_S(1))) {
                     fopAcM_seStart(ac, JA_SE_CM_L_ARROW_PASS_AWAY, 0);
                 }
                 
-                cLib_addCalc2(&ei->mScaleY, 5.0f + g_regHIO.mChild[14].mFloatRegs[1], 0.1f, 1.0f + g_regHIO.mChild[14].mFloatRegs[2]);
-                cLib_addCalc0(&ei->mScaleXZ, 0.1f + g_regHIO.mChild[14].mFloatRegs[3], 0.05f + g_regHIO.mChild[14].mFloatRegs[4]);
+                cLib_addCalc2(&ei->mScaleY, 5.0f + REG14_F(1), 0.1f, 1.0f + REG14_F(2));
+                cLib_addCalc0(&ei->mScaleXZ, 0.1f + REG14_F(3), 0.05f + REG14_F(4));
                 
-                if (ei->mLightShrinkTimer > (s8)(90 + g_regHIO.mChild[14].mShortRegs[2])) {
+                if (ei->mLightShrinkTimer > (s8)(90 + REG14_S(2))) {
                     fopAcM_delete(ac);
                     fopAcM_onActor(ac);
                     if (fopAcM_GetName(ac) != PROC_PZ) {
@@ -241,8 +241,8 @@ BOOL enemy_ice(enemyice* ei) {
         frozen = TRUE;
         if (!fopAcM_CheckStatus(ac, fopAcStts_CARRY_e)) {
             if (fopAcM_GetSpeedF(ac) > 0.0f) {
-                ei->mSpeedF = 25.0f + g_regHIO.mChild[0].mFloatRegs[5];
-                ei->mSpeed.y = 20.0f + g_regHIO.mChild[0].mFloatRegs[6];
+                ei->mSpeedF = 25.0f + REG0_F(5);
+                ei->mSpeed.y = 20.0f + REG0_F(6);
             } else {
                 ei->mSpeedF = 5.0f;
                 ei->mSpeed.y = -15.0f;
@@ -486,14 +486,14 @@ void enemy_fire(enemyfire* ef) {
         
         ef->mPrevPos = ac->current.pos;
         
-        f32 dirX = vel.x * (-0.02f + g_regHIO.mChild[0].mFloatRegs[4]);
+        f32 dirX = vel.x * (-0.02f + REG0_F(4));
         if (dirX > 1.0f) {
             dirX = 1.0f;
         } else if (dirX < -1.0f) {
             dirX = -1.0f;
         }
         
-        f32 dirZ = vel.z * (-0.02f + g_regHIO.mChild[0].mFloatRegs[4]);
+        f32 dirZ = vel.z * (-0.02f + REG0_F(4));
         if (dirZ > 1.0f) {
             dirZ = 1.0f;
         } else if (dirZ < -1.0f) {
@@ -503,12 +503,12 @@ void enemy_fire(enemyfire* ef) {
         cLib_addCalc2(&ef->mDirection.x, dirX, 0.5f, 0.05f);
         cLib_addCalc2(&ef->mDirection.z, dirZ, 0.5f, 0.05f);
         
-        ef->mDirection.y = 0.2f + g_regHIO.mChild[0].mFloatRegs[11];
+        ef->mDirection.y = 0.2f + REG0_F(11);
         
         f32 speed = sqrtf(vel.x * vel.x + vel.y * vel.y + vel.z * vel.z);
-        speed = (0.03f + g_regHIO.mChild[0].mFloatRegs[12]) * speed + 1.0f;
-        if (speed > 1.5f + g_regHIO.mChild[0].mFloatRegs[13]) {
-            speed = 1.5f + g_regHIO.mChild[0].mFloatRegs[13];
+        speed = (0.03f + REG0_F(12)) * speed + 1.0f;
+        if (speed > 1.5f + REG0_F(13)) {
+            speed = 1.5f + REG0_F(13);
         }
         
         cLib_addCalc2(&ef->mFlameScaleY, speed, 0.5f, 0.05f);

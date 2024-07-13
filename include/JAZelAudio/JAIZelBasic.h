@@ -195,6 +195,8 @@ public:
     static const char* spot_dir_name[];
     static isle_area_s mIsleArea[];
 
+    static const int MAX_CONCURRENT_SE_NUM = 24;
+
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0022 */ u8 field_0x0022[0x0024 - 0x0022];
@@ -278,9 +280,9 @@ public:
     /* 0x00CE */ u8 field_0x00ce;
     /* 0x00CF */ u8 field_0x00CF[0x00D0 - 0x00CF];
     /* 0x00D0 */ int field_0x00d0;
-    /* 0x00D4 */ JAISound* field_0x00d4[24];
-    /* 0x0134 */ u32 field_0x0134[24];
-    /* 0x0194 */ u32 field_0x0194[24];
+    /* 0x00D4 */ JAISound* mpSeSound[MAX_CONCURRENT_SE_NUM];
+    /* 0x0134 */ u32 mpSeNum[MAX_CONCURRENT_SE_NUM];
+    /* 0x0194 */ u32 field_0x0194[MAX_CONCURRENT_SE_NUM];
     /* 0x01F4 */ int field_0x01f4;
     /* 0x01F8 */ u8 field_0x01f8;
     /* 0x01F9 */ u8 field_0x01f9;

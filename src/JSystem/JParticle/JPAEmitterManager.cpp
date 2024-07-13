@@ -51,7 +51,7 @@ JPABaseEmitter* JPAEmitterManager::createSimpleEmitterID(const JGeometry::TVec3<
     /* Nonmatching - regalloc */
     JUT_ASSERT(0x56, groupID < 16);
     JUT_ASSERT(0x57, rmID < 8);
-    JUT_ASSERT(0x58, pResMgrArray[rmID] != 0);
+    JUT_ASSERT(0x58, pResMgrArray[rmID] != NULL);
 
     JPABaseEmitter* emtr;
     JPAEmitterData* emtrData;

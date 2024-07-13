@@ -7,20 +7,29 @@
 
 class dMagma_ball_c {
 public:
-    dMagma_ball_c();
-    virtual ~dMagma_ball_c();
+    dMagma_ball_c() {}
+    virtual ~dMagma_ball_c() {}
     virtual void calc(f32, u8, int) = 0;
     virtual void update() = 0;
     virtual void setup(f32, u8, int) = 0;
 
     void draw();
-    bool rangeCheck(cXyz&, f32*);
+    BOOL rangeCheck(cXyz&, f32*);
+
+public:
+    /* 0x04 */ cXyz mPos;
+    /* 0x10 */ f32 mScale;
+    /* 0x14 */ f32 mBaseY;
+    /* 0x18 */ s16 mWave;
+    /* 0x1C */ Mtx mPosMtx;
+    /* 0x4C */ Mtx mTexProjMtx;
+    /* 0x7C */ u8 mWaveTimer;
 };
 
 class dMagma_ballPath_c : public dMagma_ball_c {
 public:
-    dMagma_ballPath_c();
-    virtual ~dMagma_ballPath_c();
+    dMagma_ballPath_c() {}
+    virtual ~dMagma_ballPath_c() {}
     virtual void calc(f32, u8, int);
     virtual void update();
     virtual void setup(f32, u8, int);
@@ -28,7 +37,7 @@ public:
 
 class dMagma_ballBoss_c : public dMagma_ball_c {
 public:
-    dMagma_ballBoss_c();
+    dMagma_ballBoss_c() {}
     virtual ~dMagma_ballBoss_c();
     virtual void calc(f32, u8, int);
     virtual void update();
@@ -43,19 +52,19 @@ public:
     void draw();
     void calc(int);
     void update();
-    void create(cXyz&, cXyz&, s16, u8, int);
+    dMagma_ball_c** create(cXyz&, cXyz&, s16, u8, int);
     void remove();
 
     /* 0x00 */ dMagma_ball_c** mpBalls;
     /* 0x04 */ u8 mBallNum;
     /* 0x05 */ u8 mPathNo;
     /* 0x06 */ u8 field_0x06[0x08 - 0x06];
-    /* 0x08 */ cXyz mBallPos;
-    /* 0x14 */ f32 field_0x14;
-    /* 0x18 */ f32 field_0x18;
+    /* 0x08 */ cXyz mPos;
+    /* 0x14 */ f32 mScaleX;
+    /* 0x18 */ f32 mScaleZ;
     /* 0x1C */ Mtx mPosMtx;
     /* 0x4C */ Mtx mTexMtx0;
-    /* 0x7C */ Mtx mBallPostMtx0;
+    /* 0x7C */ Mtx mPostMtx0;
     /* 0xAC */ dMagma_floor_c* mpNext;
 };
 
@@ -74,8 +83,8 @@ public:
     dMagma_packet_c();
     void calc();
     void update();
-    void checkYpos(cXyz&);
-    void newFloor(cXyz&, cXyz&, int, s16);
+    f32 checkYpos(cXyz&);
+    dMagma_floor_c* newFloor(cXyz&, cXyz&, int, s16);
     void deleteRoom(s32 roomNo) { mRoom[roomNo].deleteFloor(); }
 
     virtual void draw();

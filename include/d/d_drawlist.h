@@ -457,6 +457,7 @@ public:
 struct dDlst_alphaVolPacket : public J3DPacket {
 public:
     virtual void draw();
+    MtxP getMtx() { return mtx; }
 
 public:
     /* 0x10 */ Mtx mtx;

@@ -21,13 +21,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-000001FC       .text CreateHeap__14daObjDmgroom_cFv */
 BOOL daObjDmgroom_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BDL_DMGROOM));
-    JUT_ASSERT(0x52, modelData != 0);
+    JUT_ASSERT(0x52, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (!mpModel)
         return FALSE;
 
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BRK_DMGROOM));
-    JUT_ASSERT(0x5c, brk != 0);
+    JUT_ASSERT(0x5c, brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
         return FALSE;
 

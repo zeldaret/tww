@@ -505,6 +505,8 @@ enum {
     PROC_PB                  = 0x01F4,
     PROC_GAMEOVER            = 0x01F5,
     PROC_COUNT_e,
+
+    PROC_INVALID_e           = 0x7FFF,
 };
 
 #endif /* D_PROCNAME_H */

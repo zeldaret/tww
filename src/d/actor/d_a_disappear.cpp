@@ -68,7 +68,7 @@ void set_disappear(disappear_class* i_this, float scale) {
     fopAcM_seStart(i_this, JA_SE_CM_MONS_EXPLODE, 0);
 
     cXyz particleScale(scale, scale, scale);
-    i_this->mTimer = 58 + g_regHIO.mChild[8].mShortRegs[0];
+    i_this->mTimer = 58 + REG8_S(0);
 
     switch (i_this->health) {
         case 0x0:

@@ -77,7 +77,7 @@ void daIball_c::setPointLight() {
     mLight.mColor.r = light_color[color_idx][0];
     mLight.mColor.g = light_color[color_idx][1];
     mLight.mColor.b = light_color[color_idx][2];
-    s16 power = (80.0f + g_regHIO.mChild[12].mFloatRegs[0]) * mLightFlickerMult;
+    s16 power = (80.0f + REG12_F(0)) * mLightFlickerMult;
     mLight.mPower = power;
     mLight.mFluctuation = 250.0f;
 }
@@ -424,17 +424,17 @@ s32 daIball_c::_daIball_create() {
 /* 800F489C-800F4B40       .text CreateHeap__9daIball_cFv */
 BOOL daIball_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, ALWAYS_BDL_IB);
-    JUT_ASSERT(1135, modelData != 0);
+    JUT_ASSERT(1135, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if (!mpModel) { return FALSE; }
     
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, ALWAYS_BCK_START);
-    JUT_ASSERT(1152, pbck != 0);
+    JUT_ASSERT(1152, pbck != NULL);
     int ret = mBckAnm.init(modelData, pbck, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
     if (!ret) { return FALSE; }
     
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, ALWAYS_BTK_IB);
-    JUT_ASSERT(1164, pbtk != 0);
+    JUT_ASSERT(1164, pbtk != NULL);
     ret = mBtkAnm.init(modelData, pbtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
     if (!ret) { return FALSE; }
     
@@ -445,8 +445,8 @@ BOOL daIball_c::CreateHeap() {
     J3DAnmTevRegKey* pbrk;
     for (int i = 0; i < (int)ARRAY_SIZE(mBrkAnm); i++) {
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, brkIds[i]);
-        JUT_ASSERT(1182, pbrk != 0);
-        ret = mBrkAnm[i].init(modelData, pbrk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        JUT_ASSERT(1182, pbrk != NULL);
+        ret = mBrkAnm[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
         if (!ret) { return FALSE; }
     }
     

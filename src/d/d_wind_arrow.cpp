@@ -4,44 +4,162 @@
 //
 
 #include "d/d_wind_arrow.h"
-#include "f_op/f_op_kankyo.h"
+#include "d/d_kankyo_wether.h"
+#include "d/d_procname.h"
+#include "d/res/res_always.h"
+#include "m_Do/m_Do_graphic.h"
+#include "f_op/f_op_kankyo_mng.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "dolphin/os/OSCache.h"
+
+dWindArrow_c::~dWindArrow_c() {
+    mDoExt_destroySolidHeap(heap);
+}
 
 /* 8023E3C4-8023E420       .text createHeap__12dWindArrow_cFv */
 BOOL dWindArrow_c::createHeap() {
-    /* Nonmatching */
+    if (heap == NULL) {
+        heap = mDoExt_createSolidHeapFromGameToCurrent(0, 0);
+        if (heap == NULL)
+            return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 8023E420-8023E46C       .text adjustHeap__12dWindArrow_cFv */
 void dWindArrow_c::adjustHeap() {
-    /* Nonmatching */
+    mDoExt_restoreCurrentHeap();
+    if (mDoExt_adjustSolidHeap(heap) >= 0)
+        DCStoreRangeNoSync(heap->getStartAddr(), heap->getSize());
 }
 
 /* 8023E46C-8023E48C       .text dWindArrow_Draw__FP12dWindArrow_c */
-static void dWindArrow_Draw(dWindArrow_c*) {
-    /* Nonmatching */
+static BOOL dWindArrow_Draw(dWindArrow_c* i_this) {
+    return i_this->draw();
 }
 
 /* 8023E48C-8023E6F4       .text draw__12dWindArrow_cFv */
 BOOL dWindArrow_c::draw() {
-    /* Nonmatching */
+    if (
+        mModelInfo.mBtkAnm.getPlaySpeed() != 0.0f &&
+        dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
+        (!dComIfGp_event_runCheck() || dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e))
+    ) {
+        static cXyz l_offsetPos(0.0f, 40.0f, -250.0f);
+        static cXyz l_scale(0.85f, 0.85f, 0.85f);
+
+        Mtx mtx;
+        fopAc_ac_c* ac = (fopAc_ac_c*)mParam;
+        mDoMtx_stack_c::transS(ac->current.pos);
+        mDoMtx_stack_c::YrotM(ac->shape_angle.y);
+        mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
+        cXyz* windVec = dKyw_get_wind_vec();
+        s16 windAngle = cM_atan2s(windVec->x, windVec->z);
+
+        Mtx rotMtx;
+        mDoMtx_stack_c::YrotS(windAngle);
+        mDoMtx_copy(mDoMtx_stack_c::get(), rotMtx);
+
+        mModelInfo.mpModel->setBaseScale(l_scale);
+        cXyz offs;
+        mDoMtx_multVec(mtx, &l_offsetPos, &offs);
+        rotMtx[0][3] = offs.x;
+        rotMtx[1][3] = offs.y;
+        rotMtx[2][3] = offs.z;
+        mModelInfo.mpModel->setBaseTRMtx(rotMtx);
+
+        mModelInfo.mBtkAnm.entry(mModelInfo.mpModel->getModelData());
+        if (mDoGph_gInf_c::isMonotone()) {
+            dComIfGd_setListP1();
+        } else {
+            dComIfGd_setListMaskOff();
+        }
+
+        mDoExt_modelUpdateDL(mModelInfo.mpModel);
+        dComIfGd_setList();
+        mModelInfo.mInvisibleModel.entryMaskOff();
+        mModelInfo.mBtkAnm.remove(mModelInfo.mpModel->getModelData());
+    }
+    
+    return TRUE;
+}
+
+BOOL dWindArrow_c::execute() {
+    mModelInfo.mBtkAnm.setPlaySpeed(*dKyw_get_wind_power());
+    mModelInfo.mBtkAnm.play();
+    return TRUE;
 }
 
 /* 8023E6F4-8023E738       .text dWindArrow_Execute__FP12dWindArrow_c */
-static void dWindArrow_Execute(dWindArrow_c*) {
-    /* Nonmatching */
+static BOOL dWindArrow_Execute(dWindArrow_c* i_this) {
+    return i_this->execute();
 }
 
 /* 8023E738-8023E740       .text dWindArrow_IsDelete__FP12dWindArrow_c */
-static void dWindArrow_IsDelete(dWindArrow_c*) {
-    /* Nonmatching */
+static BOOL dWindArrow_IsDelete(dWindArrow_c* i_this) {
+    return TRUE;
 }
 
 /* 8023E740-8023E7A8       .text dWindArrow_Delete__FP12dWindArrow_c */
-static void dWindArrow_Delete(dWindArrow_c*) {
-    /* Nonmatching */
+static BOOL dWindArrow_Delete(dWindArrow_c* i_this) {
+    i_this->~dWindArrow_c();
+    return TRUE;
+}
+
+s32 dWindArrow_c::create() {
+    new(this) dWindArrow_c();
+    
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YA);
+    JUT_ASSERT(0x56, modelData != NULL);
+
+    mModelInfo.mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x200);
+    if (mModelInfo.mpModel == NULL) {
+        return cPhs_ERROR_e;
+    }
+
+    if (!mModelInfo.mInvisibleModel.create(mModelInfo.mpModel)) {
+        return cPhs_ERROR_e;
+    }
+
+    J3DAnmTextureSRTKey* anm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_YA);
+    JUT_ASSERT(0x65, anm != NULL);
+
+    if (!mModelInfo.mBtkAnm.init(modelData, anm, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+        return cPhs_ERROR_e;
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 8023E7A8-8023E968       .text dWindArrow_Create__FP12kankyo_class */
-static void dWindArrow_Create(kankyo_class*) {
-    /* Nonmatching */
+static s32 dWindArrow_Create(kankyo_class* i_k) {
+    dWindArrow_c* i_this = (dWindArrow_c*)i_k;
+    if (!i_this->createHeap())
+        return cPhs_ERROR_e;
+    s32 phase_state = i_this->create();
+    i_this->adjustHeap();
+    return phase_state;
 }
+
+kankyo_method_class l_dWindArrow_Method = {
+    (process_method_func)dWindArrow_Create,
+    (process_method_func)dWindArrow_Delete,
+    (process_method_func)dWindArrow_Execute,
+    (process_method_func)dWindArrow_IsDelete,
+    (process_method_func)dWindArrow_Draw,
+};
+
+kankyo_process_profile_definition g_profile_WIND_ARROW = {
+    fpcLy_CURRENT_e,
+    2,
+    fpcPi_CURRENT_e,
+    PROC_WIND_ARROW,
+    &g_fpcLf_Method.base,
+    sizeof(dWindArrow_c),
+    0,
+    0,
+    &g_fopKy_Method,
+    0x01CB,
+    &l_dWindArrow_Method,
+};

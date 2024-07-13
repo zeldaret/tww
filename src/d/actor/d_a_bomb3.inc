@@ -61,7 +61,7 @@ namespace {
 
 const daBomb_c::Attr_c daBomb_c::m_attrType[] = {
     {"Link", 0x8E0},
-    {"VbakH", 0x800},
+    {"VbakH", 0x8000},
     {"Link", 0x8E0},
 };
 
@@ -1034,6 +1034,13 @@ void daBomb_c::waitState_bomtyu() {
     }
 }
 
+// assuming this was here and got stripped, given the leftover ptmf in .data and the other proc/proc_init pairs
+bool daBomb_c::procSink_init() {
+    mFunc = &daBomb_c::procSink;
+
+    return true;
+}
+
 /* 800DBC4C-800DBC5C       .text procSink__8daBomb_cFv */
 bool daBomb_c::procSink() {
     field_0x781 = 1;
@@ -1273,30 +1280,30 @@ BOOL daBomb_c::createHeap() {
     BOOL ret;
     if(mType == 1) {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BDL_VBAKM));
-        JUT_ASSERT(0x9A5, modelData != 0);
+        JUT_ASSERT(0x9A5, modelData != NULL);
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
         
         J3DAnmTransform* bck0_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BCK_VBAMX));
-        JUT_ASSERT(0x9AE, bck0_data != 0);
-        int temp = mBck0.init(modelData, bck0_data, true, 0, 1.0f, 0, -1, false);
+        JUT_ASSERT(0x9AE, bck0_data != NULL);
+        int temp = mBck0.init(modelData, bck0_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
         
         J3DAnmTransform* bck1_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BCK_VBAKM));
-        JUT_ASSERT(0x9B4, bck1_data != 0);
-        int temp2 = mBck1.init(modelData, bck1_data, true, 0, 1.0f, 0, -1, false);
+        JUT_ASSERT(0x9B4, bck1_data != NULL);
+        int temp2 = mBck1.init(modelData, bck1_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
         
         J3DAnmTevRegKey* brk0_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BRK_VBAMX));
-        JUT_ASSERT(0x9BB, brk0_data != 0);
-        int temp3 = mBrk0.init(modelData, brk0_data, true, 0, 1.0f, 0, -1, false, 0);
+        JUT_ASSERT(0x9BB, brk0_data != NULL);
+        int temp3 = mBrk0.init(modelData, brk0_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
         
         J3DAnmTevRegKey* brk1_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BRK_VBAKM));
-        JUT_ASSERT(0x9C1, brk1_data != 0);
-        int temp4 = mBrk1.init(modelData, brk1_data, true, 0, 1.0f, 0, -1, false, 0);
+        JUT_ASSERT(0x9C1, brk1_data != NULL);
+        int temp4 = mBrk1.init(modelData, brk1_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
 
         return mpModel && temp && temp2 && temp3 && temp4;
     }
     else {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_attrType[mType].resName, LINK_BDL_BOMB));
-        JUT_ASSERT(0x9CE, modelData != 0);
+        JUT_ASSERT(0x9CE, modelData != NULL);
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
 
         if(!mpModel) {
@@ -1304,7 +1311,7 @@ BOOL daBomb_c::createHeap() {
         }
         else {
             J3DAnmTransform* bck0_data = (J3DAnmTransform*)dComIfG_getObjectRes(m_attrType[mType].resName, LINK_BCK_BOMB);
-            int temp = mBck0.init(modelData, bck0_data, false, 2, 1.0f, 0, -1, false);
+            int temp = mBck0.init(modelData, bck0_data, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
 
             return temp ? TRUE : FALSE;
         }
@@ -1355,9 +1362,6 @@ int daBomb_c::create() {
 static int daBomb_Create(fopAc_ac_c* i_this) {
     return static_cast<daBomb_c*>(i_this)->create();
 }
-
-// TODO: not sure why this appears in data
-daBomb_c::procFunc dummy_5390 = &daBomb_c::procSink;
 
 static dCcD_SrcSph l_sph_src = {
     // dCcD_SrcGObjInf

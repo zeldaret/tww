@@ -36,7 +36,7 @@ namespace daObjAkabe {
         if (mpBgW != NULL) {
             static const s16 dzb[4] = { AKABE_DZB_AKABE, AKABED_DZB_AKABED, AKABEK_DZB_AKABEK, NBOX_DZB_NBOX, };
             cBgD_t * bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname[mType], dzb[mType]);
-            JUT_ASSERT(0x82, bgw_data != 0);
+            JUT_ASSERT(0x82, bgw_data != NULL);
             if (!mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx))
                 rt = true;
         }

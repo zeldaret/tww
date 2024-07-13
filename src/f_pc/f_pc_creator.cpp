@@ -8,7 +8,7 @@
 #include "f_pc/f_pc_create_req.h"
 
 /* 8003D0E8-8003D108       .text fpcCt_IsCreatingByID__FUi */
-BOOL fpcCt_IsCreatingByID(uint i_id) {
+BOOL fpcCt_IsCreatingByID(fpc_ProcID i_id) {
     return fpcCtRq_IsCreatingByID(i_id);
 }
 

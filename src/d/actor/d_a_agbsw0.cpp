@@ -1476,7 +1476,7 @@ BOOL daAgbsw0_c::ExeSubD() {
                     if(itemNo != RECOVER_FAIRY) {
                         current.pos.y += scale.y / 2;
                     }
-                    if(0 <= itemNo && itemNo < 0x1F && itemNo != KAKERA_HEART && itemNo != UTUWA_HEART && itemNo != dItem_SMALL_KEY_e) {
+                    if(0 <= itemNo && itemNo < 0x1F && itemNo != dItem_HEART_PIECE_e && itemNo != dItem_HEART_CONTAINER_e && itemNo != dItem_SMALL_KEY_e) {
                         s8 roomNo = fopAcM_GetHomeRoomNo(this);
                         f32 rnd = cM_rndF(10.0f) + 40.0f;
                         fopAcM_fastCreateItem(&current.pos, itemNo, roomNo, NULL, NULL, 0.0f, rnd, -7.0f);
@@ -1763,7 +1763,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             break;
         case 0x15:
-            if(dComIfGp_getSelectItem(0) != BOMB_BAG && dComIfGp_getSelectItem(1) != BOMB_BAG && dComIfGp_getSelectItem(2) != BOMB_BAG) {
+            if(dComIfGp_getSelectItem(0) != dItem_BOMB_BAG_e && dComIfGp_getSelectItem(1) != dItem_BOMB_BAG_e && dComIfGp_getSelectItem(2) != dItem_BOMB_BAG_e) {
                 return 0;
             }
 
@@ -1799,7 +1799,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             break;
         case 0x1B:
-            if(dComIfGs_checkGetItem(BOMB_BAG) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
+            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
                 return 0;
             }
 
@@ -1823,7 +1823,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             break;
         case 0x1F:
-            if(dComIfGs_checkGetItem(BOMB_BAG) && dComIfGs_getBombNum() == 0) {
+            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
                 return 0;
             }
 
@@ -1835,7 +1835,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             break;
         case 0x21:
-            if(dComIfGs_isEventBit(0x1708) && dComIfGs_checkGetItem(BOMB_BAG) && dComIfGs_getBombNum() == 0) {
+            if(dComIfGs_isEventBit(0x1708) && dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
                 return 0;
             }
 
@@ -1860,9 +1860,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
             break;
         case 0x25:
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
-                dComIfGp_getSelectItem(0) != BOMB_BAG &&
-                dComIfGp_getSelectItem(1) != BOMB_BAG &&
-                dComIfGp_getSelectItem(2) != BOMB_BAG)
+                dComIfGp_getSelectItem(0) != dItem_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(1) != dItem_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(2) != dItem_BOMB_BAG_e)
             {
                 return 0;
             }
@@ -1903,7 +1903,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             break;
         case 0x2B:
-            if(dComIfGs_checkGetItem(BOMB_BAG)) {
+            if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
                 return 0;
             }
 

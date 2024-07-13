@@ -23,15 +23,15 @@ extern dScnPly_reg_HIO_c g_regHIO;
 const char daObjTpost_c::m_arc_name[] = "Toripost";
 
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
-    {false, 0x1AAF, KAKERA_HEART,        dSv_evtBit_c::LETTER_BAITOS_MOM},
-    {false, 0x0CF9, KAKERA_HEART,        dSv_evtBit_c::LETTER_KOMALIS_FATHER},
+    {false, 0x1AAF, dItem_HEART_PIECE_e, dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {false, 0x0CF9, dItem_HEART_PIECE_e, dSv_evtBit_c::LETTER_KOMALIS_FATHER},
     {false, 0x0CFA, COLLECT_MAP_60,      dSv_evtBit_c::LETTER_BOMBS_AD},
     {false, 0x0CFC, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_ORCA},
     {false, 0x0805, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_GRANDMA},
     {false, 0x0CFD, dItem_GREEN_RUPEE_e, dSv_evtBit_c::LETTER_ROCK_SPIRE_SHOP_AD},
     {true,  0x0DB6, COLLECT_MAP_52,      dSv_evtBit_c::LETTER_TINGLE},
     {false, 0x1148, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_ARYLL},
-    {false, 0x1AAF, KAKERA_HEART,        dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {false, 0x1AAF, dItem_HEART_PIECE_e, dSv_evtBit_c::LETTER_BAITOS_MOM},
     {true,  0x0F76, KAISEN_PRESENT1,     dSv_evtBit_c::LETTER_SILVER_MEMBERSHIP},
     {false, 0x19A6, KAKERA_HEART2,       dSv_evtBit_c::LETTER_HOSKITS_GIRLFRIEND},
     {true,  0x0CFB, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_BAITO},
@@ -89,7 +89,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 0000010C-0000022C       .text _createHeap__12daObjTpost_cFv */
 BOOL daObjTpost_c::_createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, TORIPOST_BDL_VPOST);
-    JUT_ASSERT(132, modelData != 0);
+    JUT_ASSERT(132, modelData != NULL);
 
     mMorf = new mDoExt_McaMorf(
         modelData,
@@ -175,7 +175,7 @@ void daObjTpost_c::cutPresentStart(int staffIdx) {
 
 /* 000003D8-00000474       .text cutPresentProc__12daObjTpost_cFi */
 void daObjTpost_c::cutPresentProc(int staffIdx) {
-    uint itemPID = fopAcM_createItemForPresentDemo(&current.pos, m_letter[mNumReadable].mItemNo);
+    fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, m_letter[mNumReadable].mItemNo);
     if(itemPID != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(itemPID);
         dComIfGp_evmng_cutEnd(staffIdx);
@@ -329,16 +329,16 @@ u8 daObjTpost_c::checkSendPrice() {
 int daObjTpost_c::getMsgXY() {
     s32 msgId;
     GXColor col = {0x00, 0x00, 0x00, 0x80};
-    cXyz pos(g_regHIO.mChild[12].mFloatRegs[0], g_regHIO.mChild[12].mFloatRegs[1], g_regHIO.mChild[12].mFloatRegs[2]);
+    cXyz pos(REG12_F(0), REG12_F(1), REG12_F(2));
     cXyz scale(2.0f, 2.0f, 2.0f);
 
     switch(mPreItemNo) {
         case dItem_NOTE_TO_MOM_e:
         case MAGYS_LETTER:
             msgId = 0xCE8;
-            col.r = g_regHIO.mChild[12].mShortRegs[0] + 0x80;
-            col.g = g_regHIO.mChild[12].mShortRegs[1] + 0x80;
-            col.b = g_regHIO.mChild[12].mShortRegs[2] + 0x80;
+            col.r = REG12_S(0) + 0x80;
+            col.g = REG12_S(1) + 0x80;
+            col.b = REG12_S(2) + 0x80;
             mDoMtx_stack_c::copy(mMorf->getModel()->mpNodeMtx[2]);
             mDoMtx_stack_c::multVec(&pos, &pos);
             dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
@@ -577,44 +577,44 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {
-            -1,
-            -1,
-            0,
-            8.0f,
-            1.0f,
-            2
+            /* mBckIdx     */ -1,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
         },
         {
-            0,
-            -1,
-            0,
-            8.0f,
-            0.0f,
-            0
+            /* mBckIdx     */ 0,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 0.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
         },
         {
-            0,
-            -1,
-            0,
-            8.0f,
-            1.0f,
-            0
+            /* mBckIdx     */ 0,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
         },
         {
-            1,
-            -1,
-            0,
-            8.0f,
-            1.0f,
-            0
+            /* mBckIdx     */ 1,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
         },
         {
-            2,
-            -1,
-            0,
-            8.0f,
-            1.0f,
-            2
+            /* mBckIdx     */ 2,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
         },
     };
 
@@ -905,7 +905,7 @@ void daObjTpost_c::createInit() {
         dLetter_autoStock(0xB503);
     }
 
-    if(dComIfGs_checkGetItem(BOMB_BAG)) {
+    if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
         dLetter_autoStock(0x7D03);
     }
 

@@ -24,8 +24,8 @@ bool dDlst_2DNumber_c::init(int digitNum, s16 x, s16 y, s16 w, s16 h, u8 flag) {
     mHeight = h;
 
     for (s32 i = 0; i < mDigitNum; i++) {
-        mPicture[i] = new J2DPicture("rupy_num_00.bti");
-        if (mPicture[i] == NULL)
+        mNum[i] = new J2DPicture("rupy_num_00.bti");
+        if (mNum[i] == NULL)
             return false;
 
         mPos[i].x = x - w * i;
@@ -53,31 +53,31 @@ void dDlst_2DNumber_c::draw() {
 
         char buf[16];
         sprintf(buf, "rupy_num_%02d.bti", digit);
-        mPicture[i]->changeTexture(buf, 0);
-        mPicture[i]->draw(mPos[i].x, mPos[i].y, mWidth, mHeight, false, false, false);
+        mNum[i]->changeTexture(buf, 0);
+        mNum[i]->draw(mPos[i].x, mPos[i].y, mWidth, mHeight, false, false, false);
     }
 }
 
 /* 800C874C-800C8944       .text init__18dDlst_2DMinigame_cFP7ResTIMGP7ResTIMG */
-bool dDlst_2DMinigame_c::init(ResTIMG* img1, ResTIMG* img2) {
-    mPicture[0] = new J2DPicture(img1);
-    if (mPicture[0] == NULL)
+bool dDlst_2DMinigame_c::init(ResTIMG* title, ResTIMG* score) {
+    mTitle = new J2DPicture(title);
+    if (mTitle == NULL)
         return false;
 
-    mPicture[1] = new J2DPicture(img2);
-    if (mPicture[1] == NULL)
+    mScore = new J2DPicture(score);
+    if (mScore == NULL)
         return false;
 
-    mPicture[2] = new J2DPicture(img2);
-    if (mPicture[2] == NULL)
+    mScoreShadow = new J2DPicture(score);
+    if (mScoreShadow == NULL)
         return false;
 
-    mSize1.x = img1->width * 1.33f;
-    mSize1.y = img1->height * 1.33f;
-    mSize2.x = img2->width * 1.16f;
-    mSize2.y = img2->height * 1.16f;
+    mTitleSize.x = title->width * 1.33f;
+    mTitleSize.y = title->height * 1.33f;
+    mScoreSize.x = score->width * 1.16f;
+    mScoreSize.y = score->height * 1.16f;
 
-    mPicture[2]->setCornerColor(0x000000FF);
+    mScoreShadow->setCornerColor(0x000000FF);
     return true;
 }
 
@@ -86,24 +86,123 @@ void dDlst_2DMinigame_c::draw() {
     J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
     graf->setPort();
 
-    mPicture[2]->draw(mPos2.x + 4.0f, mPos2.y + 4.0f, mSize2.x, mSize2.y, false, false, false);
-    mPicture[1]->draw(mPos2.x, mPos2.y, mSize2.x, mSize2.y, false, false, false);
-    mPicture[0]->draw(mPos1.x, mPos1.y, mSize1.x, mSize1.y, false, false, false);
+    mScoreShadow->draw(mScorePos.x + 4.0f, mScorePos.y + 4.0f, mScoreSize.x, mScoreSize.y, false, false, false);
+    mScore->draw(mScorePos.x, mScorePos.y, mScoreSize.x, mScoreSize.y, false, false, false);
+    mTitle->draw(mTitlePos.x, mTitlePos.y, mTitleSize.x, mTitleSize.y, false, false, false);
 }
 
 /* 800C8A00-800C8FAC       .text init__17dDlst_2DBattery_cFP7ResTIMGP7ResTIMGP7ResTIMGP7ResTIMG */
-bool dDlst_2DBattery_c::init(ResTIMG*, ResTIMG*, ResTIMG*, ResTIMG*) {
-    /* Nonmatching */
+bool dDlst_2DBattery_c::init(ResTIMG* rule, ResTIMG* battery, ResTIMG* batteryBase, ResTIMG* degree) {
+    mRule = new J2DPicture(rule);
+    if (mRule == NULL)
+        return false;
+
+    mRuleSize.x = rule->width;
+    mRuleSize.y = rule->height;
+
+    mBattery = new J2DPicture(battery);
+    if (mBattery == NULL)
+        return false;
+
+    mBatterySize.x = battery->width;
+    mBatterySize.y = battery->height;
+
+    mBatteryBase = new J2DPicture(batteryBase);
+    if (mBatteryBase == NULL)
+        return false;
+
+    mBatteryBaseSize.x = batteryBase->width;
+    mBatteryBaseSize.y = batteryBase->height;
+
+    for (s32 i = 0; i < 2; i++) {
+        mNum[0][i] = new J2DPicture(degree);
+        if (mNum[0][i] == NULL)
+            return false;
+
+        mNum[1][i] = new J2DPicture("rupy_num_00.bti");
+        if (mNum[1][i] == NULL)
+            return false;
+
+        mNum[2][i] = new J2DPicture("rupy_num_00.bti");
+        if (mNum[2][i] == NULL)
+            return false;
+    }
+
+    mBattery->setAlpha(200);
+
+    mNumSize.x = degree->width;
+    mNumSize.y = degree->height;
+
+    mPicturePos.x = mPicturePos.y = 0.0f;
+    mNumPos.x = 551.0f;
+    mNumPos.y = mBatteryBaseSize.y / 2.0f + 399.0f;
+
+    mRule->setAlpha(128);
+    mRule->setWhite(0xFFFFFFFF);
+    mRule->setBlack(0xFFFFFF00);
+
+    mNum[0][0]->setWhite(0xFFC800FF);
+    mNum[0][1]->setCornerColor(0x000000FF);
+    mNum[0][1]->setAlpha(80);
+
+    mNum[1][0]->setWhite(0xFFC800FF);
+    mNum[1][1]->setCornerColor(0x000000FF);
+    mNum[1][1]->setAlpha(80);
+
+    mNum[2][0]->setWhite(0xFFC800FF);
+    mNum[2][1]->setCornerColor(0x000000FF);
+    mNum[2][1]->setAlpha(80);
+
+    mRotation = 20.0f;
+    return true;
 }
 
 /* 800C8FAC-800C90F0       .text setRotate__17dDlst_2DBattery_cFf */
-void dDlst_2DBattery_c::setRotate(float) {
+void dDlst_2DBattery_c::setRotate(f32 rot) {
     /* Nonmatching */
+
+    // calculate the angle text
+    int angle = ((rot - 22.5f) / 22.5f) * 35.0f + 15.0f + 0.5f;
+    char buf[16];
+    sprintf(buf, "rupy_num_%02d.bti", angle / 10);
+    mNum[2][0]->changeTexture(buf, 0);
+    mNum[2][1]->changeTexture(buf, 0);
+    sprintf(buf, "rupy_num_%02d.bti", angle % 10);
+    mNum[1][0]->changeTexture(buf, 0);
+    mNum[1][1]->changeTexture(buf, 0);
+
+    // calculate the visual angle
+    f32 deg;
+    if (rot < 20.0f) {
+        deg = 345.0f;
+    } else if (rot > 45.0f) {
+        deg = 310.0f;
+    } else {
+        deg = 360.0f - ((rot - 20.0f) * 1.4f + 15.0f);
+    }
+    mRotation = deg;
 }
 
 /* 800C90F0-800C9348       .text draw__17dDlst_2DBattery_cFv */
 void dDlst_2DBattery_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+
+    mBattery->rotate(mBatterySize.x, mBatterySize.y / 2.0f, ROTATE_Z, mRotation);
+
+    mRule->draw(mPicturePos.x + 519.0f, mPicturePos.y + 367.0f, mRuleSize.x, mRuleSize.y, false, false, false);
+    mBattery->draw(mPicturePos.x + 498.0f, mPicturePos.y + 397.0f, mBatterySize.x, mBatterySize.y, false, false, false);
+    mBatteryBase->draw(mPicturePos.x + 551.0f, mPicturePos.y + 399.0f, mBatteryBaseSize.x, mBatteryBaseSize.y, false, false, false);
+
+    const float shadowOffs = 4.0f;
+
+    mNum[2][1]->draw(mNumPos.x + shadowOffs + 10.0f, mNumPos.y + shadowOffs, mNumSize.x, mNumSize.y, false, false, false);
+    mNum[1][1]->draw(mNumPos.x + mNumSize.x + shadowOffs + 5.0f, mNumPos.y + shadowOffs, mNumSize.x, mNumSize.y, false, false, false);
+    mNum[0][1]->draw(mNumPos.x + mNumSize.x * 2.0f + shadowOffs, mNumPos.y + shadowOffs, mNumSize.x, mNumSize.y, false, false, false);
+
+    mNum[2][0]->draw(mNumPos.x + 10.0f, mNumPos.y, mNumSize.x, mNumSize.y, false, false, false);
+    mNum[1][0]->draw(mNumPos.x + mNumSize.x + 5.0f, mNumPos.y, mNumSize.x, mNumSize.y, false, false, false);
+    mNum[0][0]->draw(mNumPos.x + mNumSize.x * 2.0f, mNumPos.y, mNumSize.x, mNumSize.y, false, false, false);
 }
 
 /* 800C9348-800C946C       .text init__16dDlst_2DObject_cFP7ResTIMGP7ResTIMG */

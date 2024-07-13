@@ -33,7 +33,7 @@ dAttParam_c::~dAttParam_c() {
 /* 8009D2B0-8009D2E0       .text execute__19dAttDraw_CallBack_cFUsP16J3DTransformInfo */
 bool dAttDraw_CallBack_c::execute(u16 timing, J3DTransformInfo* xform) {
     if (timing == 0) {
-        xform->mTranslate.y *= g_regHIO.mChild[6].mFloatRegs[17] + 0.6f;
+        xform->mTranslate.y *= REG6_F(17) + 0.6f;
     }
     return true;
 }
@@ -51,10 +51,10 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
     field_0x01b = 0;
     mLockOnTargetBsPcID = fpcM_ERROR_PROCESS_ID_e;
     heap = mDoExt_createSolidHeapFromGameToCurrent(0x3600, 0);
-    JUT_ASSERT(0xb9, heap != 0);
+    JUT_ASSERT(0xb9, heap != NULL);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YAZIRUSHI_01);
-    JUT_ASSERT(0xbe, modelData != 0);
+    JUT_ASSERT(0xbe, modelData != NULL);
 
     int anmColNum = 0;
     for (u32 i = 0; i < 5; i++) {
@@ -62,7 +62,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
             ALWAYS_BPK_YJ_IN, ALWAYS_BPK_YJ_OUT, ALWAYS_BPK_YJ_SCALE, ALWAYS_BPK_YJ_LOOP, ALWAYS_BPK_YJ_DELETE,
         };
         J3DAnmColor* anmCol = (J3DAnmColor*)dComIfG_getObjectRes("Always", l_bpkIdx[i]);
-        JUT_ASSERT(0xcc, anmCol != 0);
+        JUT_ASSERT(0xcc, anmCol != NULL);
 
         anmCol->searchUpdateMaterialID(modelData);
         if (anmCol->getUpdateMaterialNum() > anmColNum)
@@ -79,7 +79,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
             0x00080000,
             0x01000003
         );
-        JUT_ASSERT(0xe3, draw[i].anm != 0 && draw[i].anm->getModel() != 0);
+        JUT_ASSERT(0xe3, draw[i].anm != NULL && draw[i].anm->getModel() != NULL);
         draw[i].mpAnmClr = NULL;
         draw[i].mpAnmMatClr = new J3DMatColorAnm[anmColNum];
     }
@@ -538,7 +538,7 @@ void dAttention_c::LockonReleaseDistanse() {
 }
 
 /* 8009F980-8009F9B8       .text LockonTargetPId__12dAttention_cFl */
-uint dAttention_c::LockonTargetPId(s32 idx) {
+fpc_ProcID dAttention_c::LockonTargetPId(s32 idx) {
     if (idx >= mLockOnNum)
         return NULL;
 
@@ -577,12 +577,12 @@ void dAttList_c::setActor(fopAc_ac_c* i_actor) {
 }
 
 /* 8009FAB4-8009FACC       .text getPId__10dAttHint_cFPv */
-uint dAttHint_c::getPId(void* i_proc) {
+fpc_ProcID dAttHint_c::getPId(void* i_proc) {
     return fopAcM_GetID(i_proc);
 }
 
 /* 8009FACC-8009FAFC       .text convPId__10dAttHint_cFUi */
-fopAc_ac_c* dAttHint_c::convPId(uint i_procID) {
+fopAc_ac_c* dAttHint_c::convPId(fpc_ProcID i_procID) {
     return fopAcM_SearchByID(i_procID);
 }
 
@@ -602,19 +602,19 @@ int dAttHint_c::request(fopAc_ac_c* i_actor, int priority) {
 /* 8009FB58-8009FB70       .text init__10dAttHint_cFv */
 void dAttHint_c::init() {
     mHintActorID = fpcM_ERROR_PROCESS_ID_e;
-    field_0x8 = fpcM_ERROR_PROCESS_ID_e;
+    mZHintTargetID = fpcM_ERROR_PROCESS_ID_e;
     mPriority = 0x200;
 }
 
 /* 8009FB70-8009FB8C       .text proc__10dAttHint_cFv */
 void dAttHint_c::proc() {
-    field_0x8 = mHintActorID;
+    mZHintTargetID = mHintActorID;
     mHintActorID = fpcM_ERROR_PROCESS_ID_e;
     mPriority = 0x200;
 }
 
 /* 8009FB8C-8009FBBC       .text convPId__11dAttCatch_cFUi */
-fopAc_ac_c* dAttCatch_c::convPId(uint i_procID) {
+fopAc_ac_c* dAttCatch_c::convPId(fpc_ProcID i_procID) {
     return fopAcM_SearchByID(i_procID);
 }
 
@@ -641,7 +641,7 @@ void dAttCatch_c::request(fopAc_ac_c*, u8, f32, f32, f32, s16, int) {
 }
 
 /* 8009FE10-8009FE40       .text convPId__10dAttLook_cFUi */
-fopAc_ac_c* dAttLook_c::convPId(uint i_procID) {
+fopAc_ac_c* dAttLook_c::convPId(fpc_ProcID i_procID) {
     return fopAcM_SearchByID(i_procID);
 }
 

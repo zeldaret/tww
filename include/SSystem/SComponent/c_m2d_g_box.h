@@ -7,6 +7,8 @@ class cM2dGBox {
 public:
     cXy mP0, mP1;
 
+    virtual ~cM2dGBox() {}
+
     void Set(cXy& pA, cXy& pB);
     f32 GetLen(const cXy& pXy) const;
 };

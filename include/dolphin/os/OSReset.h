@@ -2,12 +2,13 @@
 #define OSRESET_H
 
 #include "dolphin/types.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-vu32 __PIRegs[12] : 0xCC003000;
+vu32 __PIRegs[12] AT_ADDRESS(0xCC003000);
 
 #define OS_RESETCODE_RESTART 0x80000000
 #define OS_RESETCODE_SYSTEM 0x40000000
@@ -28,7 +29,7 @@ vu32 __PIRegs[12] : 0xCC003000;
 #define OS_RESET_PRIO_GX 127
 #define OS_RESET_PRIO_ALARM 4294967295
 
-typedef s32 (*OSResetFunction)(s32);
+typedef BOOL (*OSResetFunction)(BOOL final);
 
 typedef struct OSResetFunctionInfo {
     /* 0x0 */ OSResetFunction func;

@@ -49,6 +49,14 @@ inline f32 C_VECSquareMag(const Vec* v) {
     return v->x * v->x + v->y * v->y + v->z * v->z;
 }
 
+inline BOOL checkScaleOne(Vec v) {
+    if (v.x == 1.0f && v.y == 1.0f && v.z == 1.0f) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
 /* When compiling in debug mode, use C implementations */
 #if 0
 #define VECAdd C_VECAdd

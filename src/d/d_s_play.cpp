@@ -291,13 +291,26 @@ static int dScnPly_Draw(dScnPly_ply_c* i_this) {
 
     if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) && fpcM_GetName(i_this) == PROC_PLAY_SCENE) {
         if (dComIfGp_isEnableNextStage()) {
-            static s16 l_wipeType[] = {0, 0, 16, 17, 18, 1, 2, 1, 3, 3, 4, 4};
+            static s16 l_wipeType[] = {
+                PROC_OVERLAP0,
+                PROC_OVERLAP0,
+                PROC_OVERLAP2,
+                PROC_OVERLAP3,
+                PROC_OVERLAP4,
+                PROC_OVERLAP1,
+                PROC_OVERLAP6,
+                PROC_OVERLAP1,
+                PROC_OVERLAP7,
+                PROC_OVERLAP7,
+                PROC_OVERLAP8,
+                PROC_OVERLAP8,
+            };
 
             JUT_ASSERT(VERSION_SELECT(997, 1001, 1001),
-                       dComIfGp_getNextStageWipe() < (sizeof(l_wipeType) / sizeof(l_wipeType[0])));
+                       dComIfGp_getNextStageWipe() < ARRAY_SIZE(l_wipeType));
 
             if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
-                fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, 0, 5);
+                fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, PROC_OVERLAP0, 5);
                 mDoAud_bgmStop(30);
             } else {
                 fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, l_wipeType[dComIfGp_getNextStageWipe()], 5);
@@ -1229,7 +1242,7 @@ s32 phase_0(dScnPly_ply_c* i_this) {
             char buf[32];
             sprintf(buf, "/res/Object/LkD%02d.arc", dComIfGp_getLkDemoAnmNo());
             l_lkDemoAnmCommand = mDoDvdThd_mountXArchive_c::create(buf, 0, JKRArchive::MOUNT_ARAM);
-            JUT_ASSERT(VERSION_SELECT(3399, 3414, 3414), l_lkDemoAnmCommand != 0);
+            JUT_ASSERT(VERSION_SELECT(3399, 3414, 3414), l_lkDemoAnmCommand != NULL);
         }
 
         return cPhs_NEXT_e;
@@ -1249,7 +1262,7 @@ int phase_1(dScnPly_ply_c* i_this) {
         delete l_lkDemoAnmCommand;
     }
 
-    uint id = fopScnM_GetID(i_this);
+    fpc_ProcID id = fopScnM_GetID(i_this);
     dStage_roomControl_c::setProcID(id);
 
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
@@ -1297,7 +1310,7 @@ int phase_3(dScnPly_ply_c* i_this) {
 /* 80235B0C-80236334       .text phase_4__FP13dScnPly_ply_c */
 s32 phase_4(dScnPly_ply_c* i_this) {
     if (i_this->sceneCommand != NULL) {
-        JUT_ASSERT(VERSION_SELECT(3552, 3567, 3567), i_this->sceneCommand->getMemAddress() != 0);
+        JUT_ASSERT(VERSION_SELECT(3552, 3567, 3567), i_this->sceneCommand->getMemAddress() != NULL);
         dComIfGp_particle_createScene(i_this->sceneCommand->getMemAddress());
         delete i_this->sceneCommand;
     } else {
@@ -1320,7 +1333,7 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dComIfGd_setView(NULL);
 
     JKRExpHeap* heap = fopMsgM_createExpHeap(VERSION_SELECT(0x736A1, 0x73EA1, 0x73EA1));
-    JUT_ASSERT(VERSION_SELECT(3633, 3653, 3653), heap != 0);
+    JUT_ASSERT(VERSION_SELECT(3633, 3653, 3653), heap != NULL);
     dComIfGp_setExpHeap2D(heap);
 
     dStage_Create();
@@ -1429,7 +1442,7 @@ s32 phase_5(dScnPly_ply_c* i_this) {
         const char** resName = PreLoadInfoT[preLoadNo].resName;
         s32 resNameNum = PreLoadInfoT[preLoadNo].resNameNum;
         if (resName != NULL && resName[0] != NULL) {
-            JUT_ASSERT(VERSION_SELECT(3804, 3824, 3824), resNameNum <= (sizeof(resPhase) / sizeof(resPhase[0])));
+            JUT_ASSERT(VERSION_SELECT(3804, 3824, 3824), resNameNum <= ARRAY_SIZE(resPhase));
             for (int i = 0; i < resNameNum; i++) {
                 if (dComIfG_resLoad(&resPhase[i], resName[i]) != cPhs_COMPLEATE_e) {
                     rt = cPhs_INIT_e;
@@ -1452,7 +1465,7 @@ s32 phase_6(dScnPly_ply_c* i_this) {
         const s16* dylKeyTbl = PreLoadInfoT[preLoadNo].dylKeyTbl;
         s32 dylKeyTblNum = PreLoadInfoT[preLoadNo].dylKeyTblNum;
         if (dylKeyTbl != NULL && dylKeyTbl[0] != NULL) {
-            JUT_ASSERT(VERSION_SELECT(3838, 3858, 3858), dylKeyTblNum <= (sizeof(dylPhase) / sizeof(dylPhase[0])));
+            JUT_ASSERT(VERSION_SELECT(3838, 3858, 3858), dylKeyTblNum <= ARRAY_SIZE(dylPhase));
             for (int i = 0; i < dylKeyTblNum; i++) {
                 if (cDylPhs::Link(&dylPhase[i], dylKeyTbl[i]) != cPhs_COMPLEATE_e) {
                     rt = cPhs_INIT_e;

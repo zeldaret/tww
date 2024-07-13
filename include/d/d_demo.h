@@ -21,6 +21,7 @@
 #include "JSystem/JStudio/JStudio_JParticle/control.h"
 #include "JSystem/JStudio/JStudio_JStage/control.h"
 #include "m_Do/m_Do_mtx.h"
+#include "f_pc/f_pc_base.h"
 
 class fopAc_ac_c;
 
@@ -52,11 +53,11 @@ public:
     void JSGSetTextureAnimation(u32);
     void JSGSetTextureAnimationFrame(f32);
     s32 JSGFindNodeID(const char* name) const {
-        JUT_ASSERT(0x4d, mModel != 0);
+        JUT_ASSERT(0x4d, mModel != NULL);
         return mModel->getModelData()->getJointName()->getIndex(name);
     }
     int JSGGetNodeTransformation(u32 no, Mtx dst) const {
-        JUT_ASSERT(0x52, mModel != 0);
+        JUT_ASSERT(0x52, mModel != NULL);
         cMtx_copy(mModel->getAnmMtx((u16)no), dst);
         return 1;
     }
@@ -111,7 +112,7 @@ public:
     /* 0x4C */ u32 field_0x4c;
     /* 0x50 */ const void* field_0x50;
     /* 0x54 */ u32 field_0x54;
-    /* 0x58 */ uint mActorPcId;
+    /* 0x58 */ fpc_ProcID mActorPcId;
     /* 0x5C */ s32 mBckId;
     /* 0x60 */ s32 mBtpId;
     /* 0x64 */ s32 mBtkId;

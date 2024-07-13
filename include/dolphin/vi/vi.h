@@ -2,6 +2,7 @@
 #define VI_H
 
 #include "dolphin/types.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,7 +55,7 @@ void VISetBlack(BOOL);
 u32 VIGetRetraceCount();
 u32 VIGetDTVStatus();
 
-vu16 __VIRegs[59] : 0xCC002000;
+vu16 __VIRegs[59] AT_ADDRESS(0xCC002000);
 
 #ifdef __cplusplus
 };

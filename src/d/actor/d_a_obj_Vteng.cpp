@@ -40,7 +40,7 @@ bool daObjVteng_c::create_heap() {
     J3DAnmTransform * pAnm = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, VTENG_BCK_VTENG);
 
     if (!pModelData || !pAnm) {
-        JUT_ASSERT(0xb7, 0);
+        JUT_ASSERT(0xb7, FALSE);
         ret = false;
     } else {
         mpMorf = new mDoExt_McaMorf(

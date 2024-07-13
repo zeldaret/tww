@@ -85,8 +85,8 @@ public:
     
     u32 getItemNo() const { return m_itemNo; }
     void setItemTimerForIball(s16 param_1, s16 param_2) {
-        mDisappearTimer = param_1;
-        field_0x65a = param_2;
+        mWaitTimer = param_1;
+        mDisappearTimer = param_2;
     }
     void setFlag(u8 flag) { cLib_onBit(mFlag, flag); }
     void clrFlag(u8 flag) { cLib_offBit(mFlag, flag); }
@@ -104,9 +104,9 @@ public:
     /* 0x650 */ f32 field_0x650;
     /* 0x654 */ s16 field_0x654;
     /* 0x656 */ s16 mTargetAngleX;
-    /* 0x658 */ s16 mDisappearTimer;
-    /* 0x65A */ s16 field_0x65a;
-    /* 0x65C */ s16 field_0x65c;
+    /* 0x658 */ s16 mWaitTimer;
+    /* 0x65A */ s16 mDisappearTimer;
+    /* 0x65C */ s16 mSimpleExistTimer;
     /* 0x65E */ s16 mExtraZRot;
     /* 0x660 */ s16 field_0x660;
     /* 0x662 */ u8 field_0x662[0x666 - 0x662];
@@ -118,7 +118,7 @@ public:
     /* 0x66B */ u8 mItemStatus;
     /* 0x66C */ u8 mOnGroundTimer;
     /* 0x66D */ u8 field_0x66D[0x670 - 0x66D];
-    /* 0x670 */ uint mDemoItemBsPcId;
+    /* 0x670 */ fpc_ProcID mDemoItemBsPcId;
     /* 0x674 */ dPa_rippleEcallBack mPtclRippleCb;
     /* 0x688 */ dPa_followEcallBack mPtclFollowCb;
     /* 0x69C */ dPa_smokeEcallBack mPtclSmokeCb;

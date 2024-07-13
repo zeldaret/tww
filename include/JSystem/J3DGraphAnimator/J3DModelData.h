@@ -79,9 +79,9 @@ public:
     u16 checkBumpFlag() const { return mbHasBumpArray; }
     void setBumpFlag(u32 flag) { mbHasBumpArray = flag; }
     bool checkBBoardFlag() const { return mbHasBillboard == 1; }
-    void entryTexMtxAnimator(J3DAnmTextureSRTKey* anm) { mMaterialTable.entryTexMtxAnimator(anm); }
-    void entryTevRegAnimator(J3DAnmTevRegKey* anm) { mMaterialTable.entryTevRegAnimator(anm); }
-    void entryMatColorAnimator(J3DAnmColor* anm) { mMaterialTable.entryMatColorAnimator(anm); }
+    s32 entryTexMtxAnimator(J3DAnmTextureSRTKey* anm) { return mMaterialTable.entryTexMtxAnimator(anm); }
+    s32 entryTevRegAnimator(J3DAnmTevRegKey* anm) { return mMaterialTable.entryTevRegAnimator(anm); }
+    s32 entryMatColorAnimator(J3DAnmColor* anm) { return mMaterialTable.entryMatColorAnimator(anm); }
     void setTexMtxAnimator(J3DAnmTextureSRTKey* pAnm, J3DTexMtxAnm* pTexAnm, J3DTexMtxAnm* pDualAnmR) {
         mMaterialTable.setTexMtxAnimator(pAnm, pTexAnm, pDualAnmR);
     }

@@ -138,7 +138,7 @@ s32 dThunder_c::create() {
 
     new(this) dThunder_c();
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YTHDR00);
-    JUT_ASSERT(0x6e, modelData != 0);
+    JUT_ASSERT(0x6e, modelData != NULL);
 
     mModelInfo.mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x01000200);
     if (mModelInfo.mpModel == NULL)
@@ -148,12 +148,12 @@ s32 dThunder_c::create() {
         return cPhs_ERROR_e;
 
     J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", ALWAYS_BTK_YTHDR00);
-    JUT_ASSERT(0x7d, anm != 0);
+    JUT_ASSERT(0x7d, anm != NULL);
     if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 
     J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", ALWAYS_BRK_YTHDR00);
-    JUT_ASSERT(0x8c, canm != 0);
+    JUT_ASSERT(0x8c, canm != NULL);
     if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 

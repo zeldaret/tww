@@ -94,8 +94,8 @@ void dBgS_Acch::Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, d
                     csXyz* angle, csXyz* shape_angle) {
     pm_pos = pos;
     pm_old_pos = old_pos;
-    JUT_ASSERT(221, pm_pos != 0);
-    JUT_ASSERT(222, pm_old_pos != 0);
+    JUT_ASSERT(221, pm_pos != NULL);
+    JUT_ASSERT(222, pm_old_pos != NULL);
 
     m_my_ac = actor;
     SetActorPid(fopAcM_GetID(actor));
@@ -218,8 +218,8 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         return;
     }
 
-    JUT_ASSERT(494, pm_pos != 0);
-    JUT_ASSERT(495, pm_old_pos != 0);
+    JUT_ASSERT(494, pm_pos != NULL);
+    JUT_ASSERT(495, pm_old_pos != NULL);
 
     CHECK_FLOAT_CLASS(535, pm_pos->x);
     CHECK_FLOAT_CLASS(536, pm_pos->y);
@@ -460,6 +460,6 @@ f32 dBgS_Acch::GetWallAddY(Vec& vec, int) {
 }
 
 static void dummy2() {
-    OSReport("\033[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
+    OSReport("\x1B[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
     dBgS_ObjAcch acch; // fakematch to get dBgS_ObjAcch's vtable and destructor to show up in this TU
 }

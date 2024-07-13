@@ -13,14 +13,14 @@ public:
     s32 _create();
     void set_mtx();
     void setMoveBGMtx();
-    BOOL _execute();
+    bool _execute();
     void sw_check();
     void demo();
     void appear_bridge();
     void disappear_bridge();
     void set_on_se();
     void set_off_se();
-    BOOL _draw();
+    bool _draw();
 
     static const char m_arcname[];
 

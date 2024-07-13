@@ -25,7 +25,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-000001F4       .text CreateHeap__8daKaji_cFv */
 BOOL daKaji_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KAJI_INDEX_BDL_ASODA);
-    JUT_ASSERT(0x55, modelData != 0);
+    JUT_ASSERT(0x55, modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -73,8 +73,8 @@ BOOL daKaji_c::_delete() {
 BOOL daKaji_c::_execute() {
     // Copy the ship's transform (plus an offset) to the helm.
     cXyz* offset = &cXyz(0.0f, 740.0f, -858.0f);
-    offset->y += g_regHIO.mChild[10].mFloatRegs[10];
-    offset->z += g_regHIO.mChild[10].mFloatRegs[11];
+    offset->y += REG10_F(10);
+    offset->z += REG10_F(11);
     cMtx_multVec(l_p_ship->mpModel->getBaseTRMtx(), offset, &current.pos);
     
     daObjPirateship::Act_c* ship = l_p_ship;

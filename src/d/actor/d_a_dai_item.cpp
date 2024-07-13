@@ -6,40 +6,377 @@
 #include "d/actor/d_a_dai_item.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
+#include "d/d_s_play.h"
+#include "d/res/res_fdai.h"
+#include "d/res/res_cloth.h"
+
+const char daStandItem_c::m_arcname[] = "Fdai";
+const s16 daStandItem_c::m_bmdidx[12] = {
+    FDAI_BDL_FOBJ00, /* FLOWER_1 */
+    FDAI_BDL_FOBJ01, /* FLOWER_2 */
+    FDAI_BDL_FOBJ02, /* FLOWER_3 */
+    FDAI_BDL_FOBJ03, /* HEROS_FLAG */
+    FDAI_BDL_FOBJ04, /* TAIRYO_FLAG */
+    FDAI_BDL_FOBJ05, /* SALES_FLAG */
+    FDAI_BDL_FOBJ06, /* WIND_FLAG */
+    FDAI_BDL_FOBJ07, /* RED_FLAG */
+    FDAI_BDL_FOBJ08, /* FOSSIL_HEAD */
+    FDAI_BDL_FOBJ09, /* WATER_STATUE */
+    FDAI_BDL_FOBJ10, /* POSTMAN_STATUE */
+    FDAI_BDL_FOBJ11, /* PRESIDENT_STATUE */
+};
+const s16 daStandItem_c::m_bckidx[12] = {
+    FDAI_BCK_FOBJ00,  /* FLOWER_1 */
+    FDAI_BCK_FOBJ01,  /* FLOWER_2 */
+    FDAI_BCK_FOBJ02,  /* FLOWER_3 */
+    -1,               /* HEROS_FLAG */
+    -1,               /* TAIRYO_FLAG */
+    FDAI_BCK_FOBJ05,  /* SALES_FLAG */
+    -1,               /* WIND_FLAG */
+    FDAI_BCK_FOBJ07,  /* RED_FLAG */
+    FDAI_BCK_FOBJ08,  /* FOSSIL_HEAD */
+    FDAI_BCK_FOBJ09,  /* WATER_STATUE */
+    FDAI_BCK_FOBJ10,  /* POSTMAN_STATUE */
+    FDAI_BCK_FOBJ11,  /* PRESIDENT_STATUE */
+};
+const u16 daStandItem_c::m_heapsize[12] = {
+    0x2000, /* FLOWER_1 */
+    0x2000, /* FLOWER_2 */
+    0x2000, /* FLOWER_3 */
+    0x2000, /* HEROS_FLAG */
+    0x2000, /* TAIRYO_FLAG */
+    0x2000, /* SALES_FLAG */
+    0x2000, /* WIND_FLAG */
+    0x2000, /* RED_FLAG */
+    0x2000, /* FOSSIL_HEAD */
+    0x2000, /* WATER_STATUE */
+    0x2000, /* POSTMAN_STATUE */
+    0x2000, /* PRESIDENT_STATUE */
+};
+const u16 daStandItem_c::m_anim_min_time[12] = {
+    50, /* FLOWER_1 */
+    50, /* FLOWER_2 */
+    50, /* FLOWER_3 */
+    50, /* HEROS_FLAG */
+    50, /* TAIRYO_FLAG */
+    50, /* SALES_FLAG */
+    50, /* WIND_FLAG */
+    50, /* RED_FLAG */
+    30, /* FOSSIL_HEAD */
+    20, /* WATER_STATUE */
+    50, /* POSTMAN_STATUE */
+    50, /* PRESIDENT_STATUE */
+};
+const u16 daStandItem_c::m_anim_max_time[12] = {
+    100, /* FLOWER_1 */
+    100, /* FLOWER_2 */
+    100, /* FLOWER_3 */
+    100, /* HEROS_FLAG */
+    100, /* TAIRYO_FLAG */
+    100, /* SALES_FLAG */
+    100, /* WIND_FLAG */
+    100, /* RED_FLAG */
+    100, /* FOSSIL_HEAD */
+    20,  /* WATER_STATUE */
+    100, /* POSTMAN_STATUE */
+    100, /* PRESIDENT_STATUE */
+};
+const u16 daStandItem_c::m_stop_min_time[12] = {
+    50,  /* FLOWER_1 */
+    50,  /* FLOWER_2 */
+    50,  /* FLOWER_3 */
+    50,  /* HEROS_FLAG */
+    50,  /* TAIRYO_FLAG */
+    50,  /* SALES_FLAG */
+    50,  /* WIND_FLAG */
+    50,  /* RED_FLAG */
+    50,  /* FOSSIL_HEAD */
+    600, /* WATER_STATUE */
+    50,  /* POSTMAN_STATUE */
+    0,   /* PRESIDENT_STATUE */
+};
+const u16 daStandItem_c::m_stop_max_time[12] = {
+    100,  /* FLOWER_1 */
+    100,  /* FLOWER_2 */
+    100,  /* FLOWER_3 */
+    100,  /* HEROS_FLAG */
+    100,  /* TAIRYO_FLAG */
+    100,  /* SALES_FLAG */
+    100,  /* WIND_FLAG */
+    100,  /* RED_FLAG */
+    200,  /* FOSSIL_HEAD */
+    1000, /* WATER_STATUE */
+    100,  /* POSTMAN_STATUE */
+    0,    /* PRESIDENT_STATUE */
+};
+
+static cXyz Vobj03_pos0[] = {};
+static cXyz Vobj03_pos1[] = {};
+
+static cXyz Vobj04_pos0[] = {};
+static cXyz Vobj04_pos1[] = {};
+
+static cXyz Vobj05_pos0[] = {};
+static cXyz Vobj05_pos1[] = {};
+
+static cXyz Vobj07_0_pos0[] = {};
+static cXyz Vobj07_0_pos1[] = {};
+
+static cXyz* Vobj03_pos[] = { Vobj03_pos0, Vobj03_pos1, };
+static cXyz* Vobj04_pos[] = { Vobj04_pos0, Vobj04_pos1, };
+static cXyz* Vobj05_pos[] = { Vobj05_pos0, Vobj05_pos1, };
+static cXyz* Vobj07_0_pos[] = { Vobj07_0_pos0, Vobj07_0_pos1, };
+
+static cXyz** VobjFlagPosTbl[4] = {
+    Vobj03_pos,
+    Vobj04_pos,
+    Vobj05_pos,
+    Vobj07_0_pos,
+};
 
 /* 800E3638-800E36C8       .text convItemNo__FUc */
-static u32 convItemNo(u8) {
-    /* Nonmatching */
+static u32 convItemNo(u8 itemNo) {
+    switch (itemNo) {
+    case FLOWER_1: return 0;
+    case FLOWER_2: return 1;
+    case FLOWER_3: return 2;
+    case HEROS_FLAG: return 3;
+    case TAIRYO_FLAG: return 4;
+    case SALES_FLAG: return 5;
+    case WIND_FLAG: return 6;
+    case RED_FLAG: return 7;
+    case FOSSIL_HEAD: return 8;
+    case WATER_STATUE: return 9;
+    case POSTMAN_STATUE: return 10;
+    case PRESIDENT_STATUE: return 11;
+    default: return 0;
+    }
 }
 
 /* 800E36C8-800E3798       .text _delete__13daStandItem_cFv */
 bool daStandItem_c::_delete() {
     /* Nonmatching */
+    if (m694 != NULL) {
+        m694->becomeInvalidEmitter();
+        m694 = NULL;
+    }
+
+    if (m690 != NULL) {
+        m690->becomeInvalidEmitter();
+        m690 = NULL;
+    }
+
+    if (m698 != NULL) {
+        m698->quitImmortalEmitter();
+        m698->becomeInvalidEmitter();
+        m698 = NULL;
+    }
+
+    dComIfG_resDelete(&mPhsDai, m_arcname);
+    dComIfG_resDelete(&mPhsCloth, "Cloth");
+    return true;
 }
 
 /* 800E3798-800E37B8       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
+    return ((daStandItem_c*)i_ac)->CreateHeap();
 }
 
 /* 800E37B8-800E3AF8       .text CreateHeap__13daStandItem_cFv */
-void daStandItem_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daStandItem_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, m_bmdidx[mItemType]);
+    JUT_ASSERT(0x239, modelData != NULL);
+
+    if (mItemNo == PRESIDENT_STATUE) {
+        mpModel = mDoExt_J3DModel__create(modelData, 0x0, 0x11020203);
+    } else {
+        mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    }
+    
+    if (mpModel == NULL)
+        return FALSE;
+
+    if (m_bckidx[mItemType] != -1) {
+        J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, m_bckidx[mItemType]);
+        JUT_ASSERT(0x250, pbck != NULL);
+        mpBckAnm = new mDoExt_bckAnm();
+
+        static const u32 playmode[12] = {
+            J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_1 */
+            J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_2 */
+            J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_3 */
+            -1,                          /* HEROS_FLAG */
+            -1,                          /* TAIRYO_FLAG */
+            J3DFrameCtrl::LOOP_REPEAT_e, /* SALES_FLAG */
+            J3DFrameCtrl::LOOP_REPEAT_e, /* WIND_FLAG */
+            J3DFrameCtrl::LOOP_REPEAT_e, /* RED_FLAG */
+            J3DFrameCtrl::LOOP_REPEAT_e, /* FOSSIL_HEAD */
+            J3DFrameCtrl::LOOP_ONCE_e,   /* WATER_STATUE */
+            J3DFrameCtrl::LOOP_REPEAT_e, /* POSTMAN_STATUE */
+            J3DFrameCtrl::LOOP_REPEAT_e, /* PRESIDENT_STATUE */
+        };
+
+        if (mpBckAnm == NULL || !mpBckAnm->init(modelData, pbck, TRUE, playmode[mItemType], 1.0f, 0, -1, false))
+            return FALSE;
+
+        mpBckAnm->setPlaySpeed(0.0f);
+    }
+
+    if (mItemNo == HEROS_FLAG || mItemNo == TAIRYO_FLAG || mItemNo == SALES_FLAG || mItemNo == RED_FLAG) {
+        typedef dCloth_packet_c* (*ClothFunc)(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+
+        ClothFunc clothFunc[] = {
+            (ClothFunc)dClothVobj03_create,
+            (ClothFunc)dClothVobj04_create,
+            (ClothFunc)dClothVobj05_create,
+            (ClothFunc)dClothVobj07_0_create,
+        };
+
+        u32 clothTimgRes[] = {
+            FDAI_BTI_FTEX03,
+            FDAI_BTI_FTEX04,
+            FDAI_BTI_FTEX05,
+            FDAI_BTI_FTEX07,
+        };
+
+        switch (mItemNo) {
+            case HEROS_FLAG:
+                mClothType = 0;
+                break;
+            case TAIRYO_FLAG:
+                mClothType = 1;
+                break;
+            case SALES_FLAG:
+                mClothType = 2;
+                break;
+            default:
+            case RED_FLAG:
+                mClothType = 3;
+                break;
+        }
+
+        ResTIMG* clothTimg = (ResTIMG*)dComIfG_getObjectRes(m_arcname, clothTimgRes[mClothType]);
+        ResTIMG* clothToonTimg = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+        mpCloth = clothFunc[mClothType](clothTimg, clothToonTimg, &tevStr, VobjFlagPosTbl[mClothType]);
+        if (mpCloth == NULL)
+            return FALSE;
+    } else {
+        mpCloth = NULL;
+    }
+
+    return TRUE;
 }
 
 /* 800E3AF8-800E3E94       .text CreateInit__13daStandItem_cFv */
 void daStandItem_c::CreateInit() {
     /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -100.0f, -0.0f, -100.0f, 100.0f, 300.0f, 100.0f);
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    if (fopAcM_checkCarryNow(this))
+        mode_carry_init();
+    else
+        mode_wait_init();
+
+    mCarry = 0;
+    m6A4 = *dKyw_get_wind_vec();
+    m6A2 = cM_atan2s(m6A4.x, m6A4.z);
+    set_mtx();
+    mpModel->setUserArea(NULL);
+
+    switch (mItemNo) {
+    case WATER_STATUE:
+        {
+            for (u32 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+                if (strcmp(mpModel->getModelData()->getJointName()->getName(i), "tuboko_head") == 0 || strcmp(mpModel->getModelData()->getJointName()->getName(i), "tuboko_hbase") == 0)
+                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
+            }
+            mpModel->setUserArea((u32)this);
+            mpModel->calc();
+        }
+        break;
+    case WIND_FLAG:
+        {
+            for (u32 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+                if (strcmp(mpModel->getModelData()->getJointName()->getName(i), "top") == 0)
+                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
+            }
+            mpModel->setUserArea((u32)this);
+            mpModel->calc();
+        }
+        break;
+    }
+
+    m6BC = dKyw_get_wind_pow();
+
+    s16 stopMinTime = m_stop_min_time[mItemType];
+    s16 stopMaxTime = m_stop_max_time[mItemType];
+    mBckPlayTimer = 0;
+    // TODO: timer math
+
+    m690 = NULL;
+    m694 = NULL;
+    m698 = NULL;
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 }
 
 /* 800E3E94-800E4048       .text _create__13daStandItem_cFv */
 s32 daStandItem_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daStandItem_c);
+
+    mItemNo = fopAcM_GetParam(this);
+    mItemType = convItemNo(mItemNo);
+
+    s32 rt = dComIfG_resLoad(&mPhsDai, m_arcname);
+    if (rt != cPhs_COMPLEATE_e)
+        return rt;
+
+    s32 cloth_rt = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    if (cloth_rt != cPhs_COMPLEATE_e)
+        return cloth_rt;
+
+    if (rt == cPhs_COMPLEATE_e && cloth_rt == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mItemType]))
+            return cPhs_ERROR_e;
+        CreateInit();
+    }
+    return rt;
 }
 
 /* 800E4114-800E443C       .text set_mtx__13daStandItem_cFv */
 void daStandItem_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(current.angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    if (mpCloth != NULL) {
+        cXyz offs[4];
+        offs[0] = cXyz(0.0f, REG10_F(15) + 180.0f, 0.0f);
+        offs[1] = cXyz(0.0f, REG10_F(15) + 180.0f, 0.0f);
+        offs[2] = cXyz(0.0f, REG10_F(15) + 195.0f, 0.0f);
+        offs[3] = cXyz(0.0f, REG10_F(15) + 180.0f, 0.0f);
+
+        cXyz wind;
+        cXyz pt = current.pos + offs[mClothType];
+        wind = dKyw_get_AllWind_vecpow(&pt);
+        f32 windStrength = wind.abs();
+        f32 currStrength = m6A4.abs();
+
+        if (windStrength - currStrength > 0.25f) {
+            m6A4 = wind;
+            s16 windAngle = cM_atan2s(m6A4.x, m6A4.z);
+            cLib_addCalcAngleS2(&m6A2, windAngle, 4, 0x1000);
+        } else {
+            cLib_addCalcPos2(&m6A4, wind, 0.1f, 0.1f);
+            s16 windAngle = cM_atan2s(m6A4.x, m6A4.z);
+            cLib_addCalcAngleS2(&m6A2, windAngle, 16, 0x400);
+        }
+
+        mDoMtx_stack_c::transM(offs[mClothType]);
+        mDoMtx_stack_c::YrotM(m6A2 - current.angle.y);
+        mpCloth->setMtx(mDoMtx_stack_c::get());
+    }
 }
 
 /* 800E443C-800E44A4       .text _execute__13daStandItem_cFv */
@@ -53,9 +390,26 @@ bool daStandItem_c::_execute() {
     return true;
 }
 
+typedef bool (daStandItem_c::* ActionFunc)();
+static const ActionFunc item_action_tbl[] = {
+    &daStandItem_c::actionFobj00,
+    &daStandItem_c::actionFobj01,
+    &daStandItem_c::actionFobj02,
+    &daStandItem_c::actionFobj03,
+    &daStandItem_c::actionFobj04,
+    &daStandItem_c::actionFobj05,
+    &daStandItem_c::actionFobj06,
+    &daStandItem_c::actionFobj07,
+    &daStandItem_c::actionFobj08,
+    &daStandItem_c::actionFobj09,
+    &daStandItem_c::actionFobj10,
+    &daStandItem_c::actionFobj11,
+};
+
 /* 800E44A4-800E4518       .text itemProc__13daStandItem_cFv */
 void daStandItem_c::itemProc() {
-    /* Nonmatching */
+    if (mMode == 1 && item_action_tbl[mItemType] != NULL)
+        (this->*(item_action_tbl[mItemType]))();
 }
 
 /* 800E4518-800E453C       .text actionFobj00__13daStandItem_cFv */
@@ -97,6 +451,20 @@ bool daStandItem_c::actionFobj05() {
 /* 800E45E0-800E4770       .text actionFobj06__13daStandItem_cFv */
 bool daStandItem_c::actionFobj06() {
     /* Nonmatching */
+    cXyz wind = dKyw_get_AllWind_vecpow(&current.pos);
+    f32 windStrength = wind.absXZ();
+    cXyz zero(0.0f, 0.0f, 0.0f);
+    s16 angle = cLib_targetAngleY(&zero, &wind);
+    cLib_distanceAngleS(angle, current.angle.y);
+    m6C4 += fabsf(windStrength * 1.0f);
+    if (m6C4 > 4.0f) {
+        m6C4 = 4.0f;
+    }
+
+    m6B2 = m6C4 * 0x600;
+    cLib_addCalc(&m6C4, 0.0f, 0.08f, dKyw_get_wind_pow() + 0.3f, dKyw_get_wind_pow() + 0.1f);
+    m6B4 += m6B2;
+    return true;
 }
 
 /* 800E4770-800E47BC       .text actionFobj07__13daStandItem_cFv */
@@ -116,6 +484,7 @@ bool daStandItem_c::actionFobj08() {
 /* 800E47E0-800E4B94       .text actionFobj09__13daStandItem_cFv */
 bool daStandItem_c::actionFobj09() {
     /* Nonmatching */
+    return true;
 }
 
 /* 800E4B94-800E4BB8       .text actionFobj10__13daStandItem_cFv */
@@ -144,21 +513,44 @@ void daStandItem_c::animTestForOneTime() {
 /* 800E509C-800E5190       .text execAction__13daStandItem_cFv */
 void daStandItem_c::execAction() {
     /* Nonmatching */
+    typedef void (daStandItem_c::*ModeFunc)();
+    static const ModeFunc mode_func_tbl[] = {
+        &daStandItem_c::mode_carry,
+        &daStandItem_c::mode_wait,
+        &daStandItem_c::mode_drop,
+    };
+
+    bool carry = fopAcM_checkCarryNow(this);
+    if (carry && !mCarry)
+        mode_carry_init();
+    if (mCarry && !carry)
+        mode_wait_init();
+
+    (this->*(mode_func_tbl[mMode]))();
+    mCarry = carry;
 }
 
 /* 800E5190-800E51D8       .text mode_carry_init__13daStandItem_cFv */
 void daStandItem_c::mode_carry_init() {
-    /* Nonmatching */
+    fopAcM_SetSpeedF(this, 0.0f);
+    speed = cXyz::Zero;
+    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    mCyl.OffCoSetBit();
+    mMode = 0;
 }
 
 /* 800E51D8-800E5204       .text mode_carry__13daStandItem_cFv */
 void daStandItem_c::mode_carry() {
-    /* Nonmatching */
+    if (!fopAcM_checkCarryNow(this))
+        mode_drop_init();
 }
 
 /* 800E5204-800E5230       .text mode_wait_init__13daStandItem_cFv */
 void daStandItem_c::mode_wait_init() {
-    /* Nonmatching */
+    fopAcM_SetSpeedF(this, 0.0f);
+    fopAcM_SetSpeed(this, 0.0f, 0.0f, 0.0f);
+    mCyl.OnCoSetBit();
+    mMode = 1;
 }
 
 /* 800E5230-800E5234       .text mode_wait__13daStandItem_cFv */
@@ -167,17 +559,36 @@ void daStandItem_c::mode_wait() {
 
 /* 800E5234-800E5240       .text mode_drop_init__13daStandItem_cFv */
 void daStandItem_c::mode_drop_init() {
-    /* Nonmatching */
+    mMode = 2;
 }
 
 /* 800E5240-800E52D0       .text mode_drop__13daStandItem_cFv */
 void daStandItem_c::mode_drop() {
-    /* Nonmatching */
+    fopAcM_posMoveF(this, NULL);
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    if (mAcch.ChkGroundHit()) {
+        fopAcM_seStart(this, JA_SE_LK_W_DAIZA_ATTACH, 0);
+        mode_wait_init();
+    }
 }
 
 /* 800E52D0-800E53B8       .text _draw__13daStandItem_cFv */
 bool daStandItem_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    if (mItemNo == WIND_FLAG)
+        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+    else if (mpBckAnm != NULL)
+        mpBckAnm->entry(mpModel->getModelData());
+
+    if (mItemNo == PRESIDENT_STATUE)
+        dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
+
+    mDoExt_modelUpdateDL(mpModel);
+    if (mpCloth != NULL)
+        mpCloth->cloth_draw();
+
+    return true;
 }
 
 /* 800E53B8-800E53D8       .text daStandItem_Create__FPv */

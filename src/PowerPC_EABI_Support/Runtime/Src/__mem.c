@@ -65,7 +65,7 @@ void __fill_mem(void* dst, int val, u32 n)
 
 		((u8*)dst) = ((u8*)(((u32*)dst) + 1)) - 1;
 
-		n &= 3;
+		n = n & 3;
 	}
 
 	if (n)

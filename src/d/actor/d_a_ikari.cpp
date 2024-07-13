@@ -44,7 +44,7 @@ BOOL daIkari_c::_createHeap() {
 
     J3DModelData* modelData =
         static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ikari_bdl[mModelType]));
-    JUT_ASSERT(0x7e, modelData != 0);
+    JUT_ASSERT(0x7e, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
 
     if (mpModel == NULL) {
@@ -88,7 +88,7 @@ bool daIkari_c::_execute() {
     f32 rotX = *windPow * 10000.0f * l_HIO.mWindPowerScale;
 
     current.angle.x =
-        rotX + rotX * JMASSin(mTimer * (g_regHIO.mChild[0].mShortRegs[5] + 500) & 0xffff);
+        rotX + rotX * JMASSin(mTimer * (REG0_S(5) + 500) & 0xffff);
 
     setMtx();
 

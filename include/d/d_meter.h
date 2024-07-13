@@ -579,6 +579,10 @@ public:
     /* 0x3027 */ u8 field_0x3027;
 };
 
+extern dMeter_map_HIO_c g_meter_mapHIO;
+extern dMeter_HIO_c g_meterHIO;
 extern dMeter_menuHIO_c g_menuHIO;
+extern dMeter_msg_HIO_c g_msgHIO;
+extern dMeter_message_HIO_c g_messageHIO;
 
 #endif /* D_METER_H */

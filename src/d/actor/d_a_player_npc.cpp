@@ -77,13 +77,13 @@ void daPy_npc_c::setOffsetHomePos() {
 
 /* 8015A6A4-8015AA0C       .text setPointRestart__10daPy_npc_cFsSc */
 void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
-    JUT_ASSERT(157, dComIfGp_getStagePlayer() != 0);
+    JUT_ASSERT(157, dComIfGp_getStagePlayer() != NULL);
     stage_scls_info_dummy_class* sclsinfo = dComIfGp_getStageSclsInfo();
-    JUT_ASSERT(159, sclsinfo != 0);
+    JUT_ASSERT(159, sclsinfo != NULL);
     
     JUT_ASSERT(161, 0 <= i_point && i_point < sclsinfo->num);
     stage_scls_info_class* scls_data = sclsinfo->m_entries;
-    JUT_ASSERT(163, scls_data != 0);
+    JUT_ASSERT(163, scls_data != NULL);
     
     stage_actor_data_class* player_data = dComIfGp_getStagePlayer()->m_entries;
     int scls_start_code = scls_data[i_point].mStart;

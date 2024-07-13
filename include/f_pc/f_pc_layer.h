@@ -26,8 +26,8 @@ typedef struct layer_class {
 void fpcLy_SetCurrentLayer(layer_class* pLayer);
 layer_class* fpcLy_CurrentLayer(void);
 layer_class* fpcLy_RootLayer(void);
-layer_class* fpcLy_Layer(uint id);
-layer_class* fpcLy_Search(uint id);
+layer_class* fpcLy_Layer(uint i_layerID);
+layer_class* fpcLy_Search(uint i_layerIDid);
 void fpcLy_Regist(layer_class* pLayer);
 
 void fpcLy_CreatedMesg(layer_class* pLayer);

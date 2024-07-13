@@ -9,6 +9,7 @@
 #include "d/d_item_data.h"
 #include "d/d_stage.h"
 #include "d/d_s_play.h"
+#include "d/actor/d_a_npc_sarace.h"
 #include "m_Do/m_Do_audio.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTGamePad.h"
@@ -16,11 +17,6 @@
 #include "SSystem/SComponent/c_math.h"
 #include "string.h"
 #include "stdio.h"
-
-struct daNpc_Sarace_c {
-    static int ship_race_rupee;
-    static int ship_race_result;
-};
 
 /* 800589A8-80058B54       .text init__21dSv_player_status_a_cFv */
 void dSv_player_status_a_c::init() {
@@ -976,7 +972,7 @@ void dSv_player_config_c::init() {
 /* 8005BFA4-8005BFC8       .text checkVibration__19dSv_player_config_cFv */
 s32 dSv_player_config_c::checkVibration() {
     if (JUTGamePad::sRumbleSupported & 0x80000000)
-        return g_dComIfG_gameInfo.play.field_0x4963;
+        return dComIfGp_getNowVibration();
 
     return 0;
 }
@@ -1328,7 +1324,7 @@ void dSv_restart_c::setRestartOption(s8 param_0, cXyz* i_pos, s16 i_angle, s8 i_
 
 /* 8005D5B4-8005D604       .text set__17dSv_turnRestart_cFRC4cXyzsScUlRC4cXyzsi */
 void dSv_turnRestart_c::set(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param,
-                            const cXyz& i_shipPos, s16 i_shipAngle, int param_6) {
+                            const cXyz& i_shipPos, s16 i_shipAngle, BOOL i_hasShip) {
     mPosition = i_pos;
     mAngleY = i_angle;
     mRoomNo = i_roomNo;
@@ -1336,7 +1332,7 @@ void dSv_turnRestart_c::set(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_p
     field_0x13 = 0;
     mShipPos = i_shipPos;
     mShipAngleY = i_shipAngle;
-    field_0x34 = param_6;
+    mHasShip = i_hasShip;
 }
 
 /* 8005D604-8005D660       .text init__10dSv_info_cFv */

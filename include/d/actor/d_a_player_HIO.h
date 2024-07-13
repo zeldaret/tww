@@ -1460,9 +1460,9 @@ public:
 
 class daPy_HIO_tact_c1 {
 public:
-    /* 0x00 */ f32 field_0x0;
+    /* 0x00 */ f32 mAnmRate;
     /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ f32 field_0x8;
+    /* 0x08 */ f32 mRightArmAnmRate;
     /* 0x0C */ f32 field_0xC;
     /* 0x10 */ f32 field_0x10;
     /* 0x14 */ f32 field_0x14;

@@ -8,10 +8,10 @@ public:
     JAIZelSound();
     ~JAIZelSound() {}
 
-    f32 setDistanceVolumeCommon(f32, u8);
-    void setSeDistanceVolume(u8);
-    void setSeDistancePan(u8);
-    void setSeDistanceDolby(u8);
+    virtual f32 setDistanceVolumeCommon(f32, u8);
+    virtual void setSeDistanceVolume(u8);
+    virtual void setSeDistancePan(u8);
+    virtual void setSeDistanceDolby(u8);
 };
 
 #endif /* JAIZELSOUND_H */

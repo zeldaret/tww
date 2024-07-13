@@ -24,12 +24,12 @@ bool daObjGaship2::Act_c::create_heap() {
     cBgD_t *bgw_data;
 
     mdl_data = (J3DModelData *) (dComIfG_getObjectRes(M_arcname, YAKEROM_BDL_YAKEROM));
-    JUT_ASSERT(0x5A, mdl_data != 0);
+    JUT_ASSERT(0x5A, mdl_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
     set_mtx();
     bgw_data = (cBgD_t *) (dComIfG_getObjectRes(M_arcname, YAKEROM_DZB_YAKEROM));
-    JUT_ASSERT(0x67, bgw_data != 0);
+    JUT_ASSERT(0x67, bgw_data != NULL);
     if (bgw_data != NULL) {
         mpBgW = new dBgW();
         if (mpBgW != NULL && (mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx) == true)) {

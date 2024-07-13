@@ -3,196 +3,2631 @@
 // Translation Unit: d_a_movie_player.cpp
 //
 
-#include "d/actor/d_a_movie_player.h"
-#include "d/d_procname.h"
+// This TU seems to disable inlining entirely, as there are several weak functions that get inlined
+// in other TUs, but not here.
+#pragma dont_inline on
 
+#include "d/actor/d_a_movie_player.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_graphic.h"
+#include "dolphin/os/OSMessage.h"
+#include "dolphin/base/PPCArch.h"
+
+static Vec bss_3569;
+// Not sure what these are, but they have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.
+static u8 bss_1036 ALIGN_DECL(4);
+static u8 bss_1034 ALIGN_DECL(4);
+static u8 bss_1032 ALIGN_DECL(4);
+static u8 bss_1031 ALIGN_DECL(4);
+static u8 bss_1026 ALIGN_DECL(4);
+static u8 bss_1024 ALIGN_DECL(4);
+static u8 bss_1022 ALIGN_DECL(4);
+static u8 bss_1021 ALIGN_DECL(4);
+static u8 bss_984 ALIGN_DECL(4);
+static u8 bss_982 ALIGN_DECL(4);
+static u8 bss_980 ALIGN_DECL(4);
+static u8 bss_979 ALIGN_DECL(4);
+static u8 bss_941 ALIGN_DECL(4);
+static u8 bss_939 ALIGN_DECL(4);
+static u8 bss_937 ALIGN_DECL(4);
+static u8 bss_936 ALIGN_DECL(4);
+
+static u8 THPStatistics[0x460]; // TODO
+
+static THPHuffmanTab* Ydchuff ALIGN_DECL(32);
+static THPHuffmanTab* Udchuff ALIGN_DECL(32);
+static THPHuffmanTab* Vdchuff ALIGN_DECL(32);
+static THPHuffmanTab* Yachuff ALIGN_DECL(32);
+static THPHuffmanTab* Uachuff ALIGN_DECL(32);
+static THPHuffmanTab* Vachuff ALIGN_DECL(32);
+static f32 __THPIDCTWorkspace[64] ALIGN_DECL(32);
+static u8* __THPHuffmanBits;
+static u8* __THPHuffmanSizeTab;
+static u16* __THPHuffmanCodeTab;
+static THPSample* Gbase ALIGN_DECL(32);
+static u32 Gwid ALIGN_DECL(32);
+static f32* Gq ALIGN_DECL(32);
+static u8* __THPLCWork512[3];
+static u8* __THPLCWork640[3];
+static u32 __THPOldGQR5;
+static u32 __THPOldGQR6;
+static u8* __THPWorkArea;
+static THPCoeff* __THPMCUBuffer[6];
+static THPFileInfo* __THPInfo;
+static BOOL __THPInitFlag = FALSE;
+
+static const u8 __THPJpegNaturalOrder[80] = {
+    0,  1,  8,  16, 9,  2,  3,  10, 17, 24, 32, 25, 18, 11, 4,  5,  12, 19, 26, 33,
+    40, 48, 41, 34, 27, 20, 13, 6,  7,  14, 21, 28, 35, 42, 49, 56, 57, 50, 43, 36,
+    29, 22, 15, 23, 30, 37, 44, 51, 58, 59, 52, 45, 38, 31, 39, 46, 53, 60, 61, 54,
+    47, 55, 62, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63};
+
+static const f64 __THPAANScaleFactor[8] = {
+    1.0f, 1.387039845f, 1.306562965f, 1.175875602f, 1.0f, 0.785694958f, 0.541196100f, 0.275899379f,
+};
+
+#define THPROUNDUP(a, b) ((((s32)(a)) + ((s32)(b)-1L)) / ((s32)(b)))
+
+daMP_Player_c daMP_ActivePlayer;
+
+BOOL daMP_ReadThreadCreated;
+OSMessageQueue daMP_FreeReadBufferQueue;
+OSMessageQueue daMP_ReadedBufferQueue;
+OSMessageQueue daMP_ReadedBufferQueue2;
+OSMessage daMP_FreeReadBufferMessage[10];
+OSMessage daMP_ReadedBufferMessage[10];
+OSMessage daMP_ReadedBufferMessage2[10];
+OSThread daMP_ReadThread;
+u8 daMP_ReadThreadStack[0x1000];
+
+BOOL daMP_VideoDecodeThreadCreated;
+OSThread daMP_VideoDecodeThread;
+u8 daMP_VideoDecodeThreadStack[0x64000];
+
+OSMessageQueue daMP_FreeTextureSetQueue;
+OSMessageQueue daMP_DecodedTextureSetQueue;
+OSMessage daMP_FreeTextureSetMessage[3];
+OSMessage daMP_DecodedTextureSetMessage[3];
+
+BOOL daMP_First;
+
+BOOL daMP_AudioDecodeThreadCreated;
+OSThread daMP_AudioDecodeThread;
+u8 daMP_AudioDecodeThreadStack[0x64000];
+OSMessageQueue daMP_FreeAudioBufferQueue;
+OSMessageQueue daMP_DecodedAudioBufferQueue;
+OSMessage daMP_FreeAudioBufferMessage[3];
+OSMessage daMP_DecodedAudioBufferMessage[3];
+
+BOOL daMP_Initialized;
+u8 daMP_WorkBuffer[0x40];
+OSMessageQueue daMP_PrepareReadyQueue;
+OSMessageQueue daMP_UsedTextureSetQueue;
+OSMessage daMP_PrepareReadyMessage;
+OSMessage daMP_UsedTextureSetMessage[3];
+VIRetraceCallback daMP_OldVIPostCallback;
+
+u32 daMP_SoundBufferIndex;
+u32 daMP_OldAIDCallback;
+
+void* daMP_LastAudioBuffer;
+void* daMP_CurAudioBuffer;
+void* daMP_AudioSystem;
+s16 daMP_SoundBuffer[0x460][2];
+
+THPVideoInfo daMP_videoInfo;
+THPAudioInfo daMP_audioInfo;
+u32 daMP_DrawPosX;
+u32 daMP_DrawPosY;
+void** daMP_buffer;
+
+BOOL daMP_Fail_alloc;
+u16 daMP_backup_FrameRate;
+u8 daMP_backup_vfilter[7];
+
+daMP_Dlst_base_c daMP_c_Dlst_base;
+
+#ifdef __cplusplus
 extern "C" {
+#endif
 
 /* 000000EC-00000584       .text THPAudioDecode */
-void THPAudioDecode() {
+static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag) {
     /* Nonmatching */
+    THPAudioRecordHeader* header;
+    THPAudioDecodeInfo decInfo;
+    u8 *left, *right;
+    s16 *decLeftPtr, *decRightPtr;
+    s16 yn1, yn2;
+    s32 i;
+    s32 step;
+    s32 sample;
+    s64 yn;
+
+    if (audioBuffer == NULL || audioFrame == NULL) {
+        return 0;
+    }
+
+    header = (THPAudioRecordHeader*)audioFrame;
+    left = audioFrame + sizeof(THPAudioRecordHeader);
+    right = left + header->offsetNextChannel;
+
+    if (flag == 1) {
+        decRightPtr = audioBuffer;
+        decLeftPtr = audioBuffer + header->sampleSize;
+        step = 1;
+    } else {
+        decRightPtr = audioBuffer;
+        decLeftPtr = audioBuffer + 1;
+        step = 2;
+    }
+
+    if (header->offsetNextChannel == 0) {
+        __THPAudioInitialize(&decInfo, left);
+
+        yn1 = header->lYn1;
+        yn2 = header->lYn2;
+
+        for (i = 0; i < header->sampleSize; i++) {
+            sample = __THPAudioGetNewSample(&decInfo);
+            yn = header->lCoef[decInfo.predictor][1] * yn2;
+            yn += header->lCoef[decInfo.predictor][0] * yn1;
+            yn += (sample << decInfo.scale) << 11;
+            yn <<= 5;
+
+            if (sample > 0x8000) {
+                yn += 0x10000;
+            } else if ((sample == 0x8000) && ((yn & 0x10000) != 0)) {
+                yn += 0x10000;
+            }
+
+            yn += 0x8000;
+
+            if (yn > 2147483647LL) {
+                yn = 2147483647LL;
+            }
+
+            if (yn < -2147483648LL) {
+                yn = -2147483648LL;
+            }
+
+            *decLeftPtr = (s16)(yn >> 16);
+            decLeftPtr += step;
+            *decRightPtr = (s16)(yn >> 16);
+            decRightPtr += step;
+            yn2 = yn1;
+            yn1 = (s16)(yn >> 16);
+        }
+    } else {
+        __THPAudioInitialize(&decInfo, left);
+
+        yn1 = header->lYn1;
+        yn2 = header->lYn2;
+
+        for (i = 0; i < header->sampleSize; i++) {
+            sample = __THPAudioGetNewSample(&decInfo);
+            yn = header->lCoef[decInfo.predictor][1] * yn2;
+            yn += header->lCoef[decInfo.predictor][0] * yn1;
+            yn += (sample << decInfo.scale) << 11;
+            yn <<= 5;
+            yn += 0x8000;
+
+            if (yn > 2147483647LL) {
+                yn = 2147483647LL;
+            }
+
+            if (yn < -2147483648LL) {
+                yn = -2147483648LL;
+            }
+
+            *decLeftPtr = (s16)(yn >> 16);
+            decLeftPtr += step;
+            yn2 = yn1;
+            yn1 = (s16)(yn >> 16);
+        }
+
+        __THPAudioInitialize(&decInfo, right);
+
+        yn1 = header->rYn1;
+        yn2 = header->rYn2;
+
+        for (i = 0; i < header->sampleSize; i++) {
+            sample = __THPAudioGetNewSample(&decInfo);
+            yn = header->rCoef[decInfo.predictor][1] * yn2;
+            yn += header->rCoef[decInfo.predictor][0] * yn1;
+            yn += (sample << decInfo.scale) << 11;
+            yn <<= 5;
+
+            yn += 0x8000;
+
+            if (yn > 2147483647LL) {
+                yn = 2147483647LL;
+            }
+
+            if (yn < -2147483648LL) {
+                yn = -2147483648LL;
+            }
+
+            *decRightPtr = (s16)(yn >> 16);
+            decRightPtr += step;
+            yn2 = yn1;
+            yn1 = (s16)(yn >> 16);
+        }
+    }
+
+    return header->sampleSize;
 }
 
 /* 00000584-00000614       .text __THPAudioGetNewSample */
-void __THPAudioGetNewSample() {
-    /* Nonmatching */
+static s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info) {
+    s32 sample;
+
+    if (!(info->offsetNibbles & 0x0f)) {
+        info->predictor = (u8)((*(info->encodeData) & 0x70) >> 4);
+        info->scale = (u8)((*(info->encodeData) & 0xF));
+        info->encodeData++;
+        info->offsetNibbles += 2;
+    }
+
+    if (info->offsetNibbles & 0x1) {
+        sample = (s32)((*(info->encodeData) & 0xF) << 28) >> 28;
+        info->encodeData++;
+    } else {
+        sample = (s32)((*(info->encodeData) & 0xF0) << 24) >> 28;
+    }
+
+    info->offsetNibbles++;
+    return sample;
 }
 
 /* 00000614-00000650       .text __THPAudioInitialize */
-void __THPAudioInitialize() {
-    /* Nonmatching */
+static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr) {
+    info->encodeData = ptr;
+    info->offsetNibbles = 2;
+    info->predictor = (u8)((*(info->encodeData) & 0x70) >> 4);
+    info->scale = (u8)((*(info->encodeData) & 0xF));
+    info->encodeData++;
 }
 
 /* 00000650-00000894       .text THPVideoDecode */
-void THPVideoDecode() {
-    /* Nonmatching */
+static s32 THPVideoDecode(void* file, void* tileY, void* tileU, void* tileV, void* work) {
+    u8 all_done, status;
+    s32 errorCode;
+
+    if (!file) {
+        goto _err_no_input;
+    }
+
+    if (tileY == NULL || tileU == NULL || tileV == NULL) {
+        goto _err_no_output;
+    }
+
+    if (!work) {
+        goto _err_no_work;
+    }
+
+    if (!(PPCMfhid2() & 0x10000000)) {
+        goto _err_lc_not_enabled;
+    }
+
+    if (__THPInitFlag == FALSE) {
+        goto _err_not_initialized;
+    }
+
+    __THPWorkArea = (u8*)work;
+    __THPInfo     = (THPFileInfo*)OSRoundUp32B(__THPWorkArea);
+    __THPWorkArea = (u8*)OSRoundUp32B(__THPWorkArea) + sizeof(THPFileInfo);
+    DCZeroRange(__THPInfo, sizeof(THPFileInfo));
+    __THPInfo->cnt           = 33;
+    __THPInfo->decompressedY = 0;
+    __THPInfo->c             = (u8*)file;
+    all_done                 = FALSE;
+
+    for (;;) {
+        if ((*(__THPInfo->c)++) != 255) {
+            goto _err_bad_syntax;
+        }
+
+        while (*__THPInfo->c == 255) {
+            ((__THPInfo->c)++);
+        }
+
+        status = (*(__THPInfo->c)++);
+
+        if (status <= 0xD7) {
+            if (status == 196) {
+                status = __THPReadHuffmanTableSpecification();
+                if (status != 0) {
+                    goto _err_bad_status;
+                }
+            }
+
+            else if (status == 192) {
+                status = __THPReadFrameHeader();
+                if (status != 0) {
+                    goto _err_bad_status;
+                }
+            }
+
+            else {
+                goto _err_unsupported_marker;
+            }
+        }
+
+        else if (0xD8 <= status && status <= 0xDF) {
+            if (status == 221) {
+                __THPRestartDefinition();
+            }
+
+            else if (status == 219) {
+                status = __THPReadQuantizationTable();
+                if (status != 0) {
+                    goto _err_bad_status;
+                }
+            }
+
+            else if (status == 218) {
+                status = __THPReadScaneHeader();
+                if (status != 0) {
+                    goto _err_bad_status;
+                }
+
+                all_done = TRUE;
+            } else if (status == 216) {
+                // empty but required for match
+            } else {
+                goto _err_unsupported_marker;
+            }
+        }
+
+        else if (0xE0 <= status) {
+            if ((224 <= status && status <= 239) || status == 254) {
+                __THPInfo->c += (__THPInfo->c)[0] << 8 | (__THPInfo->c)[1];
+            } else {
+                goto _err_unsupported_marker;
+            }
+        }
+
+        if (all_done) {
+            break;
+        }
+    }
+
+    __THPSetupBuffers();
+    __THPDecompressYUV(tileY, tileU, tileV);
+    return 0;
+
+_err_no_input:
+    errorCode = 25;
+    goto _err_exit;
+
+_err_no_output:
+    errorCode = 27;
+    goto _err_exit;
+
+_err_no_work:
+    errorCode = 26;
+    goto _err_exit;
+
+_err_unsupported_marker:
+    errorCode = 11;
+    goto _err_exit;
+
+_err_bad_resource:
+    errorCode = 1;
+    goto _err_exit;
+
+_err_no_mem:
+    errorCode = 6;
+    goto _err_exit;
+
+_err_bad_syntax:
+    errorCode = 3;
+    goto _err_exit;
+
+_err_bad_status:
+    errorCode = status;
+    goto _err_exit;
+
+_err_lc_not_enabled:
+    errorCode = 28;
+    goto _err_exit;
+
+_err_not_initialized:
+    errorCode = 29;
+    goto _err_exit;
+
+_err_exit:
+    return errorCode;
 }
 
 /* 00000894-000008DC       .text __THPSetupBuffers */
-void __THPSetupBuffers() {
-    /* Nonmatching */
+static void __THPSetupBuffers() {
+    u8 i;
+    THPCoeff* buffer;
+
+    buffer = (THPCoeff*)OSRoundUp32B(__THPWorkArea);
+
+    for (i = 0; i < 6; i++) {
+        __THPMCUBuffer[i] = &buffer[i * 64];
+    }
 }
 
 /* 000008DC-00000A1C       .text __THPReadFrameHeader */
-void __THPReadFrameHeader() {
-    /* Nonmatching */
+static u8 __THPReadFrameHeader() {
+    u8 i, utmp8;
+
+    __THPInfo->c += 2;
+
+    utmp8 = (*(__THPInfo->c)++);
+
+    if (utmp8 != 8) {
+        return 10;
+    }
+
+    __THPInfo->yPixelSize = (u16)((__THPInfo->c)[0] << 8 | (__THPInfo->c)[1]);
+    __THPInfo->c += 2;
+    __THPInfo->xPixelSize = (u16)((__THPInfo->c)[0] << 8 | (__THPInfo->c)[1]);
+    __THPInfo->c += 2;
+
+    utmp8 = (*(__THPInfo->c)++);
+    if (utmp8 != 3) {
+        return 12;
+    }
+
+    for (i = 0; i < 3; i++) {
+        utmp8 = (*(__THPInfo->c)++);
+        utmp8 = (*(__THPInfo->c)++);
+        if ((i == 0 && utmp8 != 0x22) || (i > 0 && utmp8 != 0x11)) {
+            return 19;
+        }
+
+        __THPInfo->components[i].quantizationTableSelector = (*(__THPInfo->c)++);
+    }
+
+    return 0;
 }
 
 /* 00000A1C-00000B48       .text __THPReadScaneHeader */
-void __THPReadScaneHeader() {
-    /* Nonmatching */
+static u8 __THPReadScaneHeader() {
+    u8 i, utmp8;
+    __THPInfo->c += 2;
+
+    utmp8 = (*(__THPInfo->c)++);
+
+    if (utmp8 != 3) {
+        return 12;
+    }
+
+    for (i = 0; i < 3; i++) {
+        utmp8 = (*(__THPInfo->c)++);
+
+        utmp8                                    = (*(__THPInfo->c)++);
+        __THPInfo->components[i].DCTableSelector = (u8)(utmp8 >> 4);
+        __THPInfo->components[i].ACTableSelector = (u8)(utmp8 & 15);
+
+        if ((__THPInfo->validHuffmanTabs & (1 << ((utmp8 >> 4)))) == 0) {
+            return 15;
+        }
+
+        if ((__THPInfo->validHuffmanTabs & (1 << ((utmp8 & 15) + 1))) == 0) {
+            return 15;
+        }
+    }
+
+    __THPInfo->c += 3;
+    __THPInfo->MCUsPerRow           = (u16)THPROUNDUP(__THPInfo->xPixelSize, 16);
+    __THPInfo->components[0].predDC = 0;
+    __THPInfo->components[1].predDC = 0;
+    __THPInfo->components[2].predDC = 0;
+    return 0;
 }
 
 /* 00000B48-00000EFC       .text __THPReadQuantizationTable */
-void __THPReadQuantizationTable() {
-    /* Nonmatching */
+static u8 __THPReadQuantizationTable() {
+    /* Nonmatching - regalloc */
+    f32 q_temp[64];
+
+    u16 length = (u16)((__THPInfo->c)[0] << 8 | (__THPInfo->c)[1]);
+    __THPInfo->c += 2;
+    length -= 2;
+
+    do {
+        u16 i;
+        u16 id = (*(__THPInfo->c)++);
+
+        for (i = 0; i < 64; i++) {
+            q_temp[__THPJpegNaturalOrder[i]] = (f32)(*(__THPInfo->c)++);
+        }
+
+        u16 row;
+        u16 col;
+        u16 j;
+        j = 0;
+        for (row = 0; row < 8; row++) {
+            for (col = 0; col < 8; col++) {
+                __THPInfo->quantTabs[id][j] = (f32)((f64)q_temp[j] * __THPAANScaleFactor[row] * __THPAANScaleFactor[col]);
+                j++;
+            }
+        }
+
+        length -= 65;
+    } while (length != 0);
+
+    return 0;
 }
 
 /* 00000EFC-000010E4       .text __THPReadHuffmanTableSpecification */
-void __THPReadHuffmanTableSpecification() {
-    /* Nonmatching */
+static u8 __THPReadHuffmanTableSpecification() {
+    u8 t_class, id, i, tab_index;
+    u16 length, num_Vij;
+
+    __THPHuffmanSizeTab = __THPWorkArea;
+    __THPHuffmanCodeTab = (u16*)((u32)__THPWorkArea + 256 + 1);
+    length              = (u16)((__THPInfo->c)[0] << 8 | (__THPInfo->c)[1]);
+    __THPInfo->c += 2;
+    length -= 2;
+
+    for (;;) {
+        i                = (*(__THPInfo->c)++);
+        id               = (u8)(i & 15);
+        t_class          = (u8)(i >> 4);
+        __THPHuffmanBits = __THPInfo->c;
+        tab_index        = (u8)((id << 1) + t_class);
+        num_Vij          = 0;
+
+        for (i = 0; i < 16; i++) {
+            num_Vij += (*(__THPInfo->c)++);
+        }
+
+        __THPInfo->huffmanTabs[tab_index].Vij = __THPInfo->c;
+        __THPInfo->c += num_Vij;
+        __THPHuffGenerateSizeTable();
+        __THPHuffGenerateCodeTable();
+        __THPHuffGenerateDecoderTables(tab_index);
+        __THPInfo->validHuffmanTabs |= 1 << tab_index;
+        length -= 17 + num_Vij;
+
+        if (length == 0) {
+            break;
+        }
+    }
+
+    return 0;
 }
 
 /* 000010E4-000011C4       .text __THPHuffGenerateSizeTable */
-void __THPHuffGenerateSizeTable() {
-    /* Nonmatching */
+static void __THPHuffGenerateSizeTable() {
+    s32 p, l, i;
+    p = 0;
+
+    for (l = 1; l <= 16; l++) {
+        i = (s32)__THPHuffmanBits[l - 1];
+        while (i--) {
+            __THPHuffmanSizeTab[p++] = (u8)l;
+        }
+    }
+
+    __THPHuffmanSizeTab[p] = 0;
 }
 
 /* 000011C4-00001238       .text __THPHuffGenerateCodeTable */
-void __THPHuffGenerateCodeTable() {
-    /* Nonmatching */
+static void __THPHuffGenerateCodeTable() {
+    u8 si;
+    u16 p, code;
+
+    p    = 0;
+    code = 0;
+    si   = __THPHuffmanSizeTab[0];
+
+    while (__THPHuffmanSizeTab[p]) {
+        while (__THPHuffmanSizeTab[p] == si) {
+            __THPHuffmanCodeTab[p++] = code;
+            code++;
+        }
+
+        code <<= 1;
+        si++;
+    }
 }
 
 /* 00001238-00001330       .text __THPHuffGenerateDecoderTables */
-void __THPHuffGenerateDecoderTables() {
-    /* Nonmatching */
+static void __THPHuffGenerateDecoderTables(u8 tabIndex) {
+    s32 p, l;
+    THPHuffmanTab* h;
+
+    p = 0;
+    h = &__THPInfo->huffmanTabs[tabIndex];
+    for (l = 1; l <= 16; l++) {
+        if (__THPHuffmanBits[l - 1]) {
+            h->valPtr[l] = p - __THPHuffmanCodeTab[p];
+            p += __THPHuffmanBits[l - 1];
+            h->maxCode[l] = __THPHuffmanCodeTab[p - 1];
+        } else {
+            h->maxCode[l] = -1;
+            h->valPtr[l]  = -1;
+        }
+    }
+
+    h->maxCode[17] = 0xfffffL;
 }
 
 /* 00001330-0000138C       .text __THPRestartDefinition */
-void __THPRestartDefinition() {
-    /* Nonmatching */
+static void __THPRestartDefinition() {
+    __THPInfo->RST = TRUE;
+    __THPInfo->c += 2;
+    __THPInfo->nMCU = (u16)((__THPInfo->c)[0] << 8 | (__THPInfo->c)[1]);
+    __THPInfo->c += 2;
+    __THPInfo->currMCU = __THPInfo->nMCU;
 }
 
 /* 0000138C-000015CC       .text __THPPrepBitStream */
-void __THPPrepBitStream() {
-    /* Nonmatching */
+static void __THPPrepBitStream() {
+    u32* ptr;
+    u32 offset, i, j, k;
+
+    ptr    = (u32*)((u32)__THPInfo->c & 0xFFFFFFFC);
+    offset = (u32)__THPInfo->c & 3;
+
+    if (__THPInfo->cnt != 33) {
+        __THPInfo->cnt -= (3 - offset) * 8;
+    } else {
+        __THPInfo->cnt = (offset * 8) + 1;
+    }
+
+    __THPInfo->c        = (u8*)ptr;
+    __THPInfo->currByte = *ptr;
+
+    for (i = 0; i < 4; i++) {
+        if (__THPInfo->validHuffmanTabs & (1 << i)) {
+            for (j = 0; j < 32; j++) {
+                __THPInfo->huffmanTabs[i].quick[j] = 0xFF;
+
+                for (k = 0; k < 5; k++) {
+                    s32 code = (s32)(j >> (5 - k - 1));
+
+                    if (code <= __THPInfo->huffmanTabs[i].maxCode[k + 1]) {
+                        __THPInfo->huffmanTabs[i].quick[j]
+                            = __THPInfo->huffmanTabs[i].Vij[(s32)(code + __THPInfo->huffmanTabs[i].valPtr[k + 1])];
+                        __THPInfo->huffmanTabs[i].increment[j] = (u8)(k + 1);
+                        k                                      = 99;
+                    } else {
+                    }
+                }
+            }
+        }
+    }
+
+    {
+        s32 YdcTab, UdcTab, VdcTab, YacTab, UacTab, VacTab;
+
+        YdcTab = (__THPInfo->components[0].DCTableSelector << 1);
+        UdcTab = (__THPInfo->components[1].DCTableSelector << 1);
+        VdcTab = (__THPInfo->components[2].DCTableSelector << 1);
+
+        YacTab = (__THPInfo->components[0].ACTableSelector << 1) + 1;
+        UacTab = (__THPInfo->components[1].ACTableSelector << 1) + 1;
+        VacTab = (__THPInfo->components[2].ACTableSelector << 1) + 1;
+
+        Ydchuff = &__THPInfo->huffmanTabs[YdcTab];
+        Udchuff = &__THPInfo->huffmanTabs[UdcTab];
+        Vdchuff = &__THPInfo->huffmanTabs[VdcTab];
+
+        Yachuff = &__THPInfo->huffmanTabs[YacTab];
+        Uachuff = &__THPInfo->huffmanTabs[UacTab];
+        Vachuff = &__THPInfo->huffmanTabs[VacTab];
+    }
 }
 
 /* 000015CC-000016B0       .text __THPDecompressYUV */
-void __THPDecompressYUV() {
-    /* Nonmatching */
+static void __THPDecompressYUV(void* tileY, void* tileU, void* tileV) {
+    u16 currentY, targetY;
+    __THPInfo->dLC[0] = (u8*)tileY;
+    __THPInfo->dLC[1] = (u8*)tileU;
+    __THPInfo->dLC[2] = (u8*)tileV;
+
+    currentY = __THPInfo->decompressedY;
+    targetY  = __THPInfo->yPixelSize;
+
+    __THPGQRSetup();
+    __THPPrepBitStream();
+
+    if (__THPInfo->xPixelSize == 512 && targetY == 448) {
+        while (currentY < targetY) {
+            __THPDecompressiMCURow512x448();
+            currentY += 16;
+        }
+    } else if (__THPInfo->xPixelSize == 640 && targetY == 480) {
+        while (currentY < targetY) {
+            __THPDecompressiMCURow640x480();
+            currentY += 16;
+        }
+    } else {
+        while (currentY < targetY) {
+            __THPDecompressiMCURowNxN();
+            currentY += 16;
+        }
+    }
+
+    __THPGQRRestore();
 }
 
 /* 000016B0-000016D0       .text __THPGQRRestore */
-void __THPGQRRestore() {
-    /* Nonmatching */
+static void __THPGQRRestore() {
+    register u32 tmp1, tmp2;
+    tmp1 = __THPOldGQR5;
+    tmp2 = __THPOldGQR6;
+
+    // clang-format off
+    asm {
+        mtspr   GQR5, tmp1;
+        mtspr   GQR6, tmp2;
+    }
+    // clang-format on
 }
 
 /* 000016D0-00001704       .text __THPGQRSetup */
-void __THPGQRSetup() {
-    /* Nonmatching */
+static void __THPGQRSetup() {
+    register u32 tmp1, tmp2;
+
+    // clang-format off
+    asm {
+        mfspr   tmp1, GQR5;
+        mfspr   tmp2, GQR6;
+    }
+    // clang-format on
+
+    __THPOldGQR5 = tmp1;
+    __THPOldGQR6 = tmp2;
+
+    // clang-format off
+    asm {
+        li      r3, 0x0007
+        oris    r3, r3, 0x0007
+        mtspr   GQR5, r3
+        li      r3, 0x3D04
+        oris    r3, r3, 0x3D04
+        mtspr   GQR6, r3
+    }
+    // clang-format on
 }
 
 /* 00001704-00001944       .text __THPDecompressiMCURow512x448 */
-void __THPDecompressiMCURow512x448() {
-    /* Nonmatching */
+static void __THPDecompressiMCURow512x448() {
+    u8 cl_num;
+    u32 x_pos;
+    THPComponent* comp;
+
+    LCQueueWait(3);
+
+    for (cl_num = 0; cl_num < __THPInfo->MCUsPerRow; cl_num++) {
+        __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[0]);
+        __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[1]);
+        __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[2]);
+        __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[3]);
+        __THPHuffDecodeDCTCompU(__THPInfo, __THPMCUBuffer[4]);
+        __THPHuffDecodeDCTCompV(__THPInfo, __THPMCUBuffer[5]);
+
+        comp  = &__THPInfo->components[0];
+        Gbase = __THPLCWork512[0];
+        Gwid  = 512;
+        Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
+        x_pos = (u32)(cl_num * 16);
+        __THPInverseDCTNoYPos(__THPMCUBuffer[0], x_pos);
+        __THPInverseDCTNoYPos(__THPMCUBuffer[1], x_pos + 8);
+        __THPInverseDCTY8(__THPMCUBuffer[2], x_pos);
+        __THPInverseDCTY8(__THPMCUBuffer[3], x_pos + 8);
+
+        comp  = &__THPInfo->components[1];
+        Gbase = __THPLCWork512[1];
+        Gwid  = 256;
+        Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
+        x_pos /= 2;
+        __THPInverseDCTNoYPos(__THPMCUBuffer[4], x_pos);
+        comp  = &__THPInfo->components[2];
+        Gbase = __THPLCWork512[2];
+        Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
+        __THPInverseDCTNoYPos(__THPMCUBuffer[5], x_pos);
+
+        if (__THPInfo->RST != 0) {
+            if ((--__THPInfo->currMCU) == 0) {
+                __THPInfo->currMCU = __THPInfo->nMCU;
+                __THPInfo->cnt     = 1 + ((__THPInfo->cnt + 6) & 0xFFFFFFF8);
+
+                if (__THPInfo->cnt > 33) {
+                    __THPInfo->cnt = 33;
+                }
+
+                __THPInfo->components[0].predDC = 0;
+                __THPInfo->components[1].predDC = 0;
+                __THPInfo->components[2].predDC = 0;
+            }
+        }
+    }
+
+    LCStoreData(__THPInfo->dLC[0], __THPLCWork512[0], 0x2000);
+    LCStoreData(__THPInfo->dLC[1], __THPLCWork512[1], 0x800);
+    LCStoreData(__THPInfo->dLC[2], __THPLCWork512[2], 0x800);
+
+    __THPInfo->dLC[0] += 0x2000;
+    __THPInfo->dLC[1] += 0x800;
+    __THPInfo->dLC[2] += 0x800;
 }
 
 /* 00001944-00001DE4       .text __THPInverseDCTY8 */
-void __THPInverseDCTY8() {
-    /* Nonmatching */
+static void __THPInverseDCTY8(register THPCoeff* in, register u32 xPos) {
+    register f32 *q, *ws;
+    register f32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9;
+    register f32 tmp10, tmp11, tmp12, tmp13;
+    register f32 tmp20, tmp21, tmp22, tmp23;
+    register f32 cc4    = 1.414213562F;
+    register f32 cc2    = 1.847759065F;
+    register f32 cc2c6s = 1.082392200F;
+    register f32 cc2c6a = -2.613125930F;
+    register f32 bias   = 1024.0F;
+
+    q  = Gq;
+    ws = &__THPIDCTWorkspace[0] - 2;
+
+    {
+        register u32 itmp0, itmp1, itmp2, itmp3;
+
+        // clang-format off
+        asm {
+            li          itmp2, 8
+            mtctr       itmp2
+
+        _loopHead0:
+            psq_l       tmp10, 0(in), 0, 5
+            psq_l       tmp11, 0(q), 0, 0
+            lwz         itmp0, 12(in)
+            lwz         itmp3, 8(in)
+            ps_mul      tmp10, tmp10, tmp11
+            lwz         itmp1, 4(in)
+            lhz         itmp2, 2(in)
+            or          itmp0, itmp0, itmp3
+
+        _loopHead1:
+            cmpwi       itmp0, 0
+            bne         _regularIDCT
+            ps_merge00  tmp0, tmp10, tmp10
+            cmpwi       itmp1, 0
+            psq_st      tmp0, 8(ws), 0, 0
+            bne         _halfIDCT
+            psq_st      tmp0, 16(ws), 0, 0
+            cmpwi       itmp2, 0
+            psq_st      tmp0, 24(ws), 0, 0
+            bne         _quarterIDCT
+            addi        q, q, 8*sizeof(f32)
+            psq_stu     tmp0, 32(ws), 0, 0
+            addi        in, in, 8*sizeof(THPCoeff)
+            bdnz        _loopHead0
+            b           _loopEnd
+
+        _quarterIDCT:
+            ps_msub     tmp2, tmp10, cc2, tmp10
+            addi        in, in, 8*sizeof(THPCoeff)
+            ps_merge00  tmp9, tmp10, tmp10
+            addi        q, q, 8*sizeof(f32)
+            ps_sub      tmp1, cc2, cc2c6s
+            lwz         itmp1, 4(in)
+            ps_msub     tmp3, tmp10, cc4, tmp2
+            lhz         itmp2, 2(in)
+            ps_merge11  tmp5, tmp10, tmp2
+            psq_l       tmp11, 0(q), 0, 0
+            ps_nmsub    tmp4, tmp10, tmp1, tmp3
+            ps_add      tmp7, tmp9, tmp5
+            psq_l       tmp10, 0(in), 0, 5
+            ps_merge11  tmp6, tmp3, tmp4
+            ps_sub      tmp5, tmp9, tmp5
+            lwz         itmp0, 12(in)
+            ps_add      tmp8, tmp9, tmp6
+            lwz         itmp3, 8(in)
+            ps_sub      tmp6, tmp9, tmp6
+            psq_stu     tmp7, 8(ws), 0, 0
+            ps_merge10  tmp6, tmp6, tmp6
+            psq_stu     tmp8, 8(ws), 0, 0
+            ps_merge10  tmp5, tmp5, tmp5
+            or          itmp0, itmp0, itmp3
+            psq_stu     tmp6, 8(ws), 0, 0
+            ps_mul      tmp10, tmp10, tmp11
+            psq_stu     tmp5, 8(ws), 0, 0
+            bdnz        _loopHead1
+            b           _loopEnd
+
+        _halfIDCT:
+            psq_l       tmp1, 4(in), 0, 5
+            psq_l       tmp9, 8(q), 0, 0
+            addi        in, in, 8*sizeof(THPCoeff)
+            ps_mul      tmp1, tmp1, tmp9
+            addi        q, q, 8*sizeof(f32)
+            ps_sub      tmp3, tmp10, tmp1
+            ps_add      tmp2, tmp10, tmp1
+            lwz         itmp0, 12(in)
+            ps_madd     tmp4, tmp1, cc4, tmp3
+            ps_nmsub    tmp5, tmp1, cc4, tmp2
+            ps_mul      tmp8, tmp3, cc2
+            ps_merge00  tmp4, tmp2, tmp4
+            lwz         itmp3, 8(in)
+            ps_nmsub    tmp6, tmp1, cc2c6a, tmp8
+            ps_merge00  tmp5, tmp5, tmp3
+            lwz         itmp1, 4(in)
+            ps_sub      tmp6, tmp6, tmp2
+            ps_nmsub    tmp7, tmp10, cc2c6s, tmp8
+            lhz         itmp2, 2(in)
+            ps_merge11  tmp2, tmp2, tmp6
+            ps_msub     tmp8, tmp3, cc4, tmp6
+            psq_l       tmp10, 0(in), 0, 5
+            ps_add      tmp9, tmp4, tmp2
+            ps_sub      tmp7, tmp7, tmp8
+            psq_l       tmp11, 0(q), 0, 0
+            ps_merge11  tmp3, tmp8, tmp7
+            ps_sub      tmp4, tmp4, tmp2
+            psq_stu     tmp9, 8(ws), 0, 0
+            ps_add      tmp0, tmp5, tmp3
+            ps_sub      tmp1, tmp5, tmp3
+            or          itmp0, itmp0, itmp3
+            psq_stu     tmp0, 8(ws), 0, 0
+            ps_merge10  tmp1, tmp1, tmp1
+            ps_merge10  tmp4, tmp4, tmp4
+            psq_stu     tmp1, 8(ws), 0, 0
+            ps_mul      tmp10, tmp10, tmp11
+            psq_stu     tmp4, 8(ws), 0, 0
+            bdnz        _loopHead1
+            b           _loopEnd
+
+        _regularIDCT:
+            psq_l       tmp9, 4(in), 0, 5
+            psq_l       tmp5, 8(q), 0, 0
+            ps_mul      tmp9, tmp9, tmp5
+            psq_l       tmp2, 8(in), 0, 5
+            psq_l       tmp6, 16(q), 0, 0
+            ps_merge01  tmp0, tmp10, tmp9
+            psq_l       tmp3, 12(in), 0, 5
+            ps_merge01  tmp1, tmp9, tmp10
+            psq_l       tmp7, 24(q), 0, 0
+            addi        in, in, 8*sizeof(THPCoeff)
+            ps_madd     tmp4, tmp2, tmp6, tmp0
+            ps_nmsub    tmp5, tmp2, tmp6, tmp0
+            ps_madd     tmp6, tmp3, tmp7, tmp1
+            ps_nmsub    tmp7, tmp3, tmp7, tmp1
+            addi        q, q, 8*sizeof(f32)
+            ps_add      tmp0, tmp4, tmp6
+            ps_sub      tmp3, tmp4, tmp6
+            ps_msub     tmp2, tmp7, cc4, tmp6
+            lwz         itmp0, 12(in)
+            ps_sub      tmp8, tmp7, tmp5
+            ps_add      tmp1, tmp5, tmp2
+            ps_sub      tmp2, tmp5, tmp2
+            ps_mul      tmp8, tmp8, cc2
+            lwz         itmp3, 8(in)
+            ps_merge00  tmp1, tmp0, tmp1
+            ps_nmsub    tmp6, tmp5, cc2c6a, tmp8
+            ps_msub     tmp4, tmp7, cc2c6s, tmp8
+            lwz         itmp1, 4(in)
+            ps_sub      tmp6, tmp6, tmp0
+            ps_merge00  tmp2, tmp2, tmp3
+            lhz         itmp2, 2(in)
+            ps_madd     tmp5, tmp3, cc4, tmp6
+            ps_merge11  tmp7, tmp0, tmp6
+            psq_l       tmp10, 0(in), 0, 5
+            ps_sub      tmp4, tmp4, tmp5
+            ps_add      tmp3, tmp1, tmp7
+            psq_l       tmp11, 0(q), 0, 0
+            ps_merge11  tmp4, tmp5, tmp4
+            ps_sub      tmp0, tmp1, tmp7
+            ps_mul      tmp10, tmp10, tmp11
+            ps_add      tmp5, tmp2, tmp4
+            ps_sub      tmp6, tmp2, tmp4
+            ps_merge10  tmp5, tmp5, tmp5
+            psq_stu     tmp3, 8(ws), 0, 0
+            ps_merge10  tmp0, tmp0, tmp0
+            psq_stu     tmp6, 8(ws), 0, 0
+            psq_stu     tmp5, 8(ws), 0, 0
+            or          itmp0, itmp0, itmp3
+            psq_stu     tmp0, 8(ws), 0, 0
+            bdnz        _loopHead1
+
+        _loopEnd:
+
+        }
+        // clang-format on
+    }
+
+    ws = &__THPIDCTWorkspace[0];
+
+    {
+        register THPSample* obase = Gbase;
+        register u32 wid          = Gwid;
+
+        register u32 itmp0, off0, off1;
+        register THPSample *out0, *out1;
+
+        // clang-format off
+        asm {
+            psq_l       tmp10, 8*0*sizeof(f32)(ws), 0, 0
+            slwi off0, wid, 3;
+            psq_l       tmp11, 8*4*sizeof(f32)(ws), 0, 0
+            slwi        xPos, xPos, 2
+            psq_l       tmp12, 8*2*sizeof(f32)(ws), 0, 0
+            slwi        off1, wid, 2
+            ps_add      tmp6, tmp10, tmp11
+            add         off0, off0, xPos
+            psq_l       tmp13, 8*6*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp8, tmp10, tmp11
+            add         off1, off0, off1
+            ps_add      tmp6, tmp6, bias
+            li          itmp0, 3
+            ps_add      tmp7, tmp12, tmp13
+            add         out0, obase, off0
+            ps_sub      tmp9, tmp12, tmp13
+            ps_add      tmp0, tmp6, tmp7
+            add         out1, obase, off1
+            ps_add      tmp8, tmp8, bias
+            mtctr       itmp0
+
+        _loopHead10:
+            psq_l       tmp4, 8*1*sizeof(f32)(ws), 0, 0
+            ps_msub     tmp9, tmp9, cc4, tmp7
+            psq_l       tmp5, 8*3*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp3, tmp6, tmp7
+            ps_add      tmp1, tmp8, tmp9
+            psq_l       tmp6, 8*5*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp2, tmp8, tmp9
+            psq_l       tmp7, 8*7*sizeof(f32)(ws), 0, 0
+            ps_add      tmp8, tmp6, tmp5
+            ps_sub      tmp6, tmp6, tmp5
+            addi        ws, ws, 2*sizeof(f32)
+            ps_add      tmp9, tmp4, tmp7
+            ps_sub      tmp4, tmp4, tmp7
+            psq_l       tmp10, 8*0*sizeof(f32)(ws), 0, 0
+            ps_add      tmp7, tmp9, tmp8
+            ps_sub      tmp5, tmp9, tmp8
+            ps_add      tmp8, tmp6, tmp4
+            psq_l       tmp11, 8*4*sizeof(f32)(ws), 0, 0
+            ps_add      tmp9, tmp0, tmp7
+            ps_mul      tmp8, tmp8, cc2
+            psq_l       tmp12, 8*2*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp23, tmp0, tmp7
+            ps_madd     tmp6, tmp6, cc2c6a, tmp8
+            psq_l       tmp13, 8*6*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp6, tmp6, tmp7
+            addi        off0, off0, 2*sizeof(THPSample)
+            psq_st      tmp9, 0(out0), 0, 6
+            ps_msub     tmp4, tmp4, cc2c6s, tmp8
+            ps_add      tmp9, tmp1, tmp6
+            ps_msub     tmp5, tmp5, cc4, tmp6
+            ps_sub      tmp22, tmp1, tmp6
+            psq_st      tmp9, 8(out0), 0, 6
+            ps_add      tmp8, tmp2, tmp5
+            ps_add      tmp4, tmp4, tmp5
+            psq_st      tmp8, 16(out0), 0, 6
+            addi        off1, off1, 2*sizeof(THPSample)
+            ps_sub      tmp9, tmp3, tmp4
+            ps_add      tmp20, tmp3, tmp4
+            psq_st      tmp9, 24(out0), 0, 6
+            ps_sub      tmp21, tmp2, tmp5
+            ps_add      tmp6, tmp10, tmp11
+            psq_st      tmp20, 0(out1), 0, 6
+            ps_sub      tmp8, tmp10, tmp11
+            ps_add      tmp6, tmp6, bias
+            psq_st      tmp21, 8(out1), 0, 6
+            ps_add      tmp7, tmp12, tmp13
+            ps_sub      tmp9, tmp12, tmp13
+            psq_st      tmp22, 16(out1), 0, 6
+            add         out0, obase, off0
+            ps_add      tmp0, tmp6, tmp7
+            psq_st      tmp23, 24(out1), 0, 6
+            ps_add      tmp8, tmp8, bias
+            add         out1, obase, off1
+
+            bdnz        _loopHead10
+            psq_l       tmp4, 8*1*sizeof(f32)(ws), 0, 0
+            ps_msub     tmp9, tmp9, cc4, tmp7
+            psq_l       tmp5, 8*3*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp3, tmp6, tmp7
+            ps_add      tmp1, tmp8, tmp9
+            psq_l       tmp6, 8*5*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp2, tmp8, tmp9
+            psq_l       tmp7, 8*7*sizeof(f32)(ws), 0, 0
+            ps_add      tmp8, tmp6, tmp5
+            ps_sub      tmp6, tmp6, tmp5
+            ps_add      tmp9, tmp4, tmp7
+            ps_sub      tmp4, tmp4, tmp7
+            ps_add      tmp7, tmp9, tmp8
+            ps_sub      tmp5, tmp9, tmp8
+            ps_add      tmp8, tmp6, tmp4
+            ps_add      tmp9, tmp0, tmp7
+            ps_mul      tmp8, tmp8, cc2
+            ps_sub      tmp23, tmp0, tmp7
+            ps_madd     tmp6, tmp6, cc2c6a, tmp8
+            psq_st      tmp9, 0(out0), 0, 6
+            ps_sub      tmp6, tmp6, tmp7
+            ps_msub     tmp4, tmp4, cc2c6s, tmp8
+            psq_st      tmp23, 24(out1), 0, 6
+            ps_add      tmp9, tmp1, tmp6
+            ps_msub     tmp5, tmp5, cc4, tmp6
+            ps_sub      tmp22, tmp1, tmp6
+            psq_st      tmp9, 8(out0), 0, 6
+            ps_add      tmp8, tmp2, tmp5
+            ps_add      tmp4, tmp4, tmp5
+            psq_st      tmp8, 16(out0), 0, 6
+            ps_sub      tmp9, tmp3, tmp4
+            psq_st      tmp22, 16(out1), 0, 6
+            ps_add      tmp20, tmp3, tmp4
+            psq_st      tmp9, 24(out0), 0, 6
+            ps_sub      tmp21, tmp2, tmp5
+            psq_st      tmp20, 0(out1), 0, 6
+            psq_st      tmp21, 8(out1), 0, 6
+
+        }
+        // clang-format on
+    }
 }
 
 /* 00001DE4-0000227C       .text __THPInverseDCTNoYPos */
-void __THPInverseDCTNoYPos() {
-    /* Nonmatching */
+static void __THPInverseDCTNoYPos(register THPCoeff* in, register u32 xPos) {
+    register f32 *q, *ws;
+    register f32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9;
+    register f32 tmp10, tmp11, tmp12, tmp13;
+    register f32 tmp20, tmp21, tmp22, tmp23;
+    register f32 cc4    = 1.414213562F;
+    register f32 cc2    = 1.847759065F;
+    register f32 cc2c6s = 1.082392200F;
+    register f32 cc2c6a = -2.613125930F;
+    register f32 bias   = 1024.0F;
+    q                   = Gq;
+    ws                  = &__THPIDCTWorkspace[0] - 2;
+
+    {
+        register u32 itmp0, itmp1, itmp2, itmp3;
+        // clang-format off
+        asm {
+            li          itmp2, 8
+            mtctr       itmp2
+
+        _loopHead0:
+            psq_l       tmp10, 0(in), 0, 5
+            psq_l       tmp11, 0(q), 0, 0
+            lwz         itmp0, 12(in)
+            lwz         itmp3, 8(in)
+            ps_mul      tmp10, tmp10, tmp11
+            lwz         itmp1, 4(in)
+            lhz         itmp2, 2(in)
+            or.         itmp0, itmp0, itmp3
+
+        _loopHead1:
+            cmpwi       itmp0, 0
+            bne         _regularIDCT
+            ps_merge00  tmp0, tmp10, tmp10
+            cmpwi       itmp1, 0
+            psq_st      tmp0, 8(ws), 0, 0
+            bne         _halfIDCT
+            psq_st      tmp0, 16(ws), 0, 0
+            cmpwi       itmp2, 0
+            psq_st      tmp0, 24(ws), 0, 0
+            bne         _quarterIDCT
+            addi        q, q, 8*sizeof(f32)
+            psq_stu     tmp0, 32(ws), 0, 0
+            addi        in, in, 8*sizeof(THPCoeff)
+            bdnz        _loopHead0
+            b           _loopEnd
+
+        _quarterIDCT:
+            addi        in, in, 8*sizeof(THPCoeff)
+            ps_msub     tmp2, tmp10, cc2, tmp10
+            addi        q, q, 8*sizeof(f32)
+            ps_merge00  tmp9, tmp10, tmp10
+            lwz         itmp1, 4(in)
+            ps_sub      tmp1, cc2, cc2c6s
+            ps_msub     tmp3, tmp10, cc4, tmp2
+            lhz         itmp2, 2(in)
+            ps_merge11  tmp5, tmp10, tmp2
+            psq_l       tmp11, 0(q), 0, 0
+            ps_nmsub    tmp4, tmp10, tmp1, tmp3
+            ps_add      tmp7, tmp9, tmp5
+            psq_l       tmp10, 0(in), 0, 5
+            ps_merge11  tmp6, tmp3, tmp4
+            ps_sub      tmp5, tmp9, tmp5
+            lwz         itmp0, 12(in)
+            ps_add      tmp8, tmp9, tmp6
+            lwz         itmp3, 8(in)
+            ps_sub      tmp6, tmp9, tmp6
+            psq_stu     tmp7, 8(ws), 0, 0
+            ps_merge10  tmp6, tmp6, tmp6
+            psq_stu     tmp8, 8(ws), 0, 0
+            ps_merge10  tmp5, tmp5, tmp5
+            or          itmp0, itmp0, itmp3
+            psq_stu     tmp6, 8(ws), 0, 0
+            ps_mul      tmp10, tmp10, tmp11
+            psq_stu     tmp5, 8(ws), 0, 0
+            bdnz        _loopHead1
+            b           _loopEnd
+
+        _halfIDCT:
+            psq_l       tmp1, 4(in), 0, 5
+            psq_l       tmp9, 8(q), 0, 0
+            addi        in, in, 8*sizeof(THPCoeff)
+            ps_mul      tmp1, tmp1, tmp9
+            addi        q, q, 8*sizeof(f32)
+            ps_sub      tmp3, tmp10, tmp1
+            ps_add      tmp2, tmp10, tmp1
+            lwz         itmp0, 12(in)
+            ps_madd     tmp4, tmp1, cc4, tmp3
+            ps_nmsub    tmp5, tmp1, cc4, tmp2
+            ps_mul      tmp8, tmp3, cc2
+            ps_merge00  tmp4, tmp2, tmp4
+            lwz         itmp3, 8(in)
+            ps_nmsub    tmp6, tmp1, cc2c6a, tmp8
+            ps_merge00  tmp5, tmp5, tmp3
+            lwz         itmp1, 4(in)
+            ps_sub      tmp6, tmp6, tmp2
+            ps_nmsub    tmp7, tmp10, cc2c6s, tmp8
+            lhz         itmp2, 2(in)
+            ps_merge11  tmp2, tmp2, tmp6
+            ps_msub     tmp8, tmp3, cc4, tmp6
+            psq_l       tmp10, 0(in), 0, 5
+            ps_add      tmp9, tmp4, tmp2
+            ps_sub      tmp7, tmp7, tmp8
+            psq_l       tmp11, 0(q), 0, 0
+            ps_merge11  tmp3, tmp8, tmp7
+            ps_sub      tmp4, tmp4, tmp2
+            psq_stu     tmp9, 8(ws), 0, 0
+            ps_add      tmp0, tmp5, tmp3
+            ps_sub      tmp1, tmp5, tmp3
+            or          itmp0, itmp0, itmp3
+            psq_stu     tmp0, 8(ws), 0, 0
+            ps_merge10  tmp1, tmp1, tmp1
+            ps_merge10  tmp4, tmp4, tmp4
+            psq_stu     tmp1, 8(ws), 0, 0
+            ps_mul      tmp10, tmp10, tmp11
+            psq_stu     tmp4, 8(ws), 0, 0
+            bdnz        _loopHead1
+            b           _loopEnd
+
+        _regularIDCT:
+            psq_l       tmp9, 4(in), 0, 5
+            psq_l       tmp5, 8(q), 0, 0
+            ps_mul      tmp9, tmp9, tmp5
+            psq_l       tmp2, 8(in), 0, 5
+            psq_l       tmp6, 16(q), 0, 0
+            ps_merge01  tmp0, tmp10, tmp9
+            psq_l       tmp3, 12(in), 0, 5
+            ps_merge01  tmp1, tmp9, tmp10
+            psq_l       tmp7, 24(q), 0, 0
+            addi        in, in, 8*sizeof(THPCoeff)
+            ps_madd     tmp4, tmp2, tmp6, tmp0
+            ps_nmsub    tmp5, tmp2, tmp6, tmp0
+            ps_madd     tmp6, tmp3, tmp7, tmp1
+            ps_nmsub    tmp7, tmp3, tmp7, tmp1
+            addi        q, q, 8*sizeof(f32)
+            ps_add      tmp0, tmp4, tmp6
+            ps_sub      tmp3, tmp4, tmp6
+            ps_msub     tmp2, tmp7, cc4, tmp6
+            lwz         itmp0, 12(in)
+            ps_sub      tmp8, tmp7, tmp5
+            ps_add      tmp1, tmp5, tmp2
+            ps_sub      tmp2, tmp5, tmp2
+            ps_mul      tmp8, tmp8, cc2
+            lwz         itmp3, 8(in)
+            ps_merge00  tmp1, tmp0, tmp1
+            ps_nmsub    tmp6, tmp5, cc2c6a, tmp8
+            ps_msub     tmp4, tmp7, cc2c6s, tmp8
+            lwz         itmp1, 4(in)
+            ps_sub      tmp6, tmp6, tmp0
+            ps_merge00  tmp2, tmp2, tmp3
+            lhz         itmp2, 2(in)
+            ps_madd     tmp5, tmp3, cc4, tmp6
+            ps_merge11  tmp7, tmp0, tmp6
+            psq_l       tmp10, 0(in), 0, 5
+            ps_sub      tmp4, tmp4, tmp5
+            ps_add      tmp3, tmp1, tmp7
+            psq_l       tmp11, 0(q), 0, 0
+            ps_merge11  tmp4, tmp5, tmp4
+            ps_sub      tmp0, tmp1, tmp7
+            ps_mul      tmp10, tmp10, tmp11
+            ps_add      tmp5, tmp2, tmp4
+            ps_sub      tmp6, tmp2, tmp4
+            ps_merge10  tmp5, tmp5, tmp5
+            psq_stu     tmp3, 8(ws), 0, 0
+            ps_merge10  tmp0, tmp0, tmp0
+            psq_stu     tmp6, 8(ws), 0, 0
+            psq_stu     tmp5, 8(ws), 0, 0
+            or          itmp0, itmp0, itmp3
+            psq_stu     tmp0, 8(ws), 0, 0
+            bdnz        _loopHead1
+
+        _loopEnd:
+
+        }
+        // clang-format on
+    }
+
+    ws = &__THPIDCTWorkspace[0];
+
+    {
+        register THPSample* obase = Gbase;
+        register u32 wid          = Gwid;
+
+        register u32 itmp0, off0, off1;
+        register THPSample *out0, *out1;
+
+        // clang-format off
+        asm {
+            psq_l       tmp10, 8*0*sizeof(f32)(ws), 0, 0
+            slwi        xPos, xPos, 2
+            psq_l       tmp11, 8*4*sizeof(f32)(ws), 0, 0
+            slwi        off1, wid, 2
+            psq_l       tmp12, 8*2*sizeof(f32)(ws), 0, 0
+            mr         off0, xPos
+            ps_add      tmp6, tmp10, tmp11
+            psq_l       tmp13, 8*6*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp8, tmp10, tmp11
+            add         off1, off0, off1
+            ps_add      tmp6, tmp6, bias
+            li      itmp0, 3
+            ps_add      tmp7, tmp12, tmp13
+            add         out0, obase, off0
+            ps_sub      tmp9, tmp12, tmp13
+            ps_add      tmp0, tmp6, tmp7
+            add         out1, obase, off1
+            ps_add      tmp8, tmp8, bias
+            mtctr   itmp0
+
+        _loopHead10:
+            psq_l       tmp4, 8*1*sizeof(f32)(ws), 0, 0
+            ps_msub     tmp9, tmp9, cc4, tmp7
+            psq_l       tmp5, 8*3*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp3, tmp6, tmp7
+            ps_add      tmp1, tmp8, tmp9
+            psq_l       tmp6, 8*5*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp2, tmp8, tmp9
+            psq_l       tmp7, 8*7*sizeof(f32)(ws), 0, 0
+            ps_add      tmp8, tmp6, tmp5
+            ps_sub      tmp6, tmp6, tmp5
+            addi        ws, ws, 2*sizeof(f32)
+            ps_add      tmp9, tmp4, tmp7
+            ps_sub      tmp4, tmp4, tmp7
+            psq_l       tmp10, 8*0*sizeof(f32)(ws), 0, 0
+            ps_add      tmp7, tmp9, tmp8
+            ps_sub      tmp5, tmp9, tmp8
+            ps_add      tmp8, tmp6, tmp4
+            psq_l       tmp11, 8*4*sizeof(f32)(ws), 0, 0
+            ps_add      tmp9, tmp0, tmp7
+            ps_mul      tmp8, tmp8, cc2
+            psq_l       tmp12, 8*2*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp23, tmp0, tmp7
+            ps_madd     tmp6, tmp6, cc2c6a, tmp8
+            psq_l       tmp13, 8*6*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp6, tmp6, tmp7
+            addi        off0, off0, 2*sizeof(THPSample)
+            psq_st      tmp9, 0(out0), 0, 6
+            ps_msub     tmp4, tmp4, cc2c6s, tmp8
+            ps_add      tmp9, tmp1, tmp6
+            ps_msub     tmp5, tmp5, cc4, tmp6
+            ps_sub      tmp22, tmp1, tmp6
+            psq_st      tmp9, 8(out0), 0, 6
+            ps_add      tmp8, tmp2, tmp5
+            ps_add      tmp4, tmp4, tmp5
+            psq_st      tmp8, 16(out0), 0, 6
+            addi        off1, off1, 2*sizeof(THPSample)
+            ps_sub      tmp9, tmp3, tmp4
+            ps_add      tmp20, tmp3, tmp4
+            psq_st      tmp9, 24(out0), 0, 6
+            ps_sub      tmp21, tmp2, tmp5
+            ps_add      tmp6, tmp10, tmp11
+            psq_st      tmp20, 0(out1), 0, 6
+            ps_sub      tmp8, tmp10, tmp11
+            ps_add      tmp6, tmp6, bias
+            psq_st      tmp21, 8(out1), 0, 6
+            ps_add      tmp7, tmp12, tmp13
+            ps_sub      tmp9, tmp12, tmp13
+            psq_st      tmp22, 16(out1), 0, 6
+            add         out0, obase, off0
+            ps_add      tmp0, tmp6, tmp7
+            psq_st      tmp23, 24(out1), 0, 6
+            ps_add      tmp8, tmp8, bias
+            add         out1, obase, off1
+            bdnz        _loopHead10
+            psq_l       tmp4, 8*1*sizeof(f32)(ws), 0, 0
+            ps_msub     tmp9, tmp9, cc4, tmp7
+            psq_l       tmp5, 8*3*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp3, tmp6, tmp7
+            ps_add      tmp1, tmp8, tmp9
+            psq_l       tmp6, 8*5*sizeof(f32)(ws), 0, 0
+            ps_sub      tmp2, tmp8, tmp9
+            psq_l       tmp7, 8*7*sizeof(f32)(ws), 0, 0
+            ps_add      tmp8, tmp6, tmp5
+            ps_sub      tmp6, tmp6, tmp5
+            ps_add      tmp9, tmp4, tmp7
+            ps_sub      tmp4, tmp4, tmp7
+            ps_add      tmp7, tmp9, tmp8
+            ps_sub      tmp5, tmp9, tmp8
+            ps_add      tmp8, tmp6, tmp4
+            ps_add      tmp9, tmp0, tmp7
+            ps_mul      tmp8, tmp8, cc2
+            ps_sub      tmp23, tmp0, tmp7
+            ps_madd     tmp6, tmp6, cc2c6a, tmp8
+            psq_st      tmp9, 0(out0), 0, 6
+            ps_sub      tmp6, tmp6, tmp7
+            ps_msub     tmp4, tmp4, cc2c6s, tmp8
+            psq_st      tmp23, 24(out1), 0, 6
+            ps_add      tmp9, tmp1, tmp6
+            ps_msub     tmp5, tmp5, cc4, tmp6
+            ps_sub      tmp22, tmp1, tmp6
+            psq_st      tmp9, 8(out0), 0, 6
+            ps_add      tmp8, tmp2, tmp5
+            ps_add      tmp4, tmp4, tmp5
+            psq_st      tmp22, 16(out1), 0, 6
+            psq_st      tmp8, 16(out0), 0, 6
+            ps_sub      tmp9, tmp3, tmp4
+            ps_add      tmp20, tmp3, tmp4
+            psq_st      tmp9, 24(out0), 0, 6
+            ps_sub      tmp21, tmp2, tmp5
+            psq_st      tmp20, 0(out1), 0, 6
+            psq_st      tmp21, 8(out1), 0, 6
+        }
+        // clang-format on
+    }
 }
 
 /* 0000227C-000024C0       .text __THPDecompressiMCURow640x480 */
-void __THPDecompressiMCURow640x480() {
-    /* Nonmatching */
+static void __THPDecompressiMCURow640x480() {
+    u8 cl_num;
+    u32 x_pos;
+    THPComponent* comp;
+
+    LCQueueWait(3);
+
+    {
+        for (cl_num = 0; cl_num < __THPInfo->MCUsPerRow; cl_num++) {
+            THPFileInfo* um = __THPInfo;
+            __THPHuffDecodeDCTCompY(um, __THPMCUBuffer[0]);
+            __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[1]);
+            __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[2]);
+            __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[3]);
+            __THPHuffDecodeDCTCompU(__THPInfo, __THPMCUBuffer[4]);
+            __THPHuffDecodeDCTCompV(__THPInfo, __THPMCUBuffer[5]);
+
+            comp  = &__THPInfo->components[0];
+            Gbase = __THPLCWork640[0];
+            Gwid  = 640;
+            Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
+            x_pos = (u32)(cl_num * 16);
+            __THPInverseDCTNoYPos(__THPMCUBuffer[0], x_pos);
+            __THPInverseDCTNoYPos(__THPMCUBuffer[1], x_pos + 8);
+            __THPInverseDCTY8(__THPMCUBuffer[2], x_pos);
+            __THPInverseDCTY8(__THPMCUBuffer[3], x_pos + 8);
+
+            comp  = &__THPInfo->components[1];
+            Gbase = __THPLCWork640[1];
+            Gwid  = 320;
+            Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
+            x_pos /= 2;
+            __THPInverseDCTNoYPos(__THPMCUBuffer[4], x_pos);
+
+            comp  = &__THPInfo->components[2];
+            Gbase = __THPLCWork640[2];
+            Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
+            __THPInverseDCTNoYPos(__THPMCUBuffer[5], x_pos);
+
+            if (__THPInfo->RST != 0) {
+                __THPInfo->currMCU--;
+                if (__THPInfo->currMCU == 0) {
+                    __THPInfo->currMCU = __THPInfo->nMCU;
+
+                    __THPInfo->cnt = 1 + ((__THPInfo->cnt + 6) & 0xFFFFFFF8);
+
+                    if (__THPInfo->cnt > 32) {
+                        __THPInfo->cnt = 33;
+                    }
+
+                    __THPInfo->components[0].predDC = 0;
+                    __THPInfo->components[1].predDC = 0;
+                    __THPInfo->components[2].predDC = 0;
+                }
+            }
+        }
+    }
+
+    LCStoreData(__THPInfo->dLC[0], __THPLCWork640[0], 0x2800);
+    LCStoreData(__THPInfo->dLC[1], __THPLCWork640[1], 0xA00);
+    LCStoreData(__THPInfo->dLC[2], __THPLCWork640[2], 0xA00);
+
+    __THPInfo->dLC[0] += 0x2800;
+    __THPInfo->dLC[1] += 0xA00;
+    __THPInfo->dLC[2] += 0xA00;
 }
 
 /* 000024C0-00002714       .text __THPDecompressiMCURowNxN */
-void __THPDecompressiMCURowNxN() {
-    /* Nonmatching */
+static void __THPDecompressiMCURowNxN() {
+    u8 cl_num;
+    u32 x_pos, x;
+    THPComponent* comp;
+
+    x = __THPInfo->xPixelSize;
+
+    LCQueueWait(3);
+
+    for (cl_num = 0; cl_num < __THPInfo->MCUsPerRow; cl_num++) {
+        __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[0]);
+        __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[1]);
+        __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[2]);
+        __THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[3]);
+        __THPHuffDecodeDCTCompU(__THPInfo, __THPMCUBuffer[4]);
+        __THPHuffDecodeDCTCompV(__THPInfo, __THPMCUBuffer[5]);
+
+        comp  = &__THPInfo->components[0];
+        Gbase = __THPLCWork640[0];
+        Gwid  = x;
+        Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
+        x_pos = (u32)(cl_num * 16);
+        __THPInverseDCTNoYPos(__THPMCUBuffer[0], x_pos);
+        __THPInverseDCTNoYPos(__THPMCUBuffer[1], x_pos + 8);
+        __THPInverseDCTY8(__THPMCUBuffer[2], x_pos);
+        __THPInverseDCTY8(__THPMCUBuffer[3], x_pos + 8);
+
+        comp  = &__THPInfo->components[1];
+        Gbase = __THPLCWork640[1];
+        Gwid  = x / 2;
+        Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
+        x_pos /= 2;
+        __THPInverseDCTNoYPos(__THPMCUBuffer[4], x_pos);
+
+        comp  = &__THPInfo->components[2];
+        Gbase = __THPLCWork640[2];
+        Gq    = __THPInfo->quantTabs[comp->quantizationTableSelector];
+        __THPInverseDCTNoYPos(__THPMCUBuffer[5], x_pos);
+
+        if (__THPInfo->RST != 0) {
+            __THPInfo->currMCU--;
+            if (__THPInfo->currMCU == 0) {
+                __THPInfo->currMCU = __THPInfo->nMCU;
+                __THPInfo->cnt     = 1 + ((__THPInfo->cnt + 6) & 0xFFFFFFF8);
+
+                if (__THPInfo->cnt > 32) {
+                    __THPInfo->cnt = 33;
+                }
+
+                __THPInfo->components[0].predDC = 0;
+                __THPInfo->components[1].predDC = 0;
+                __THPInfo->components[2].predDC = 0;
+            }
+        }
+    }
+
+    LCStoreData(__THPInfo->dLC[0], __THPLCWork640[0], ((4 * sizeof(u8) * 64) * (x / 16)));
+    LCStoreData(__THPInfo->dLC[1], __THPLCWork640[1], ((sizeof(u8) * 64) * (x / 16)));
+    LCStoreData(__THPInfo->dLC[2], __THPLCWork640[2], ((sizeof(u8) * 64) * (x / 16)));
+    __THPInfo->dLC[0] += ((4 * sizeof(u8) * 64) * (x / 16));
+    __THPInfo->dLC[1] += ((sizeof(u8) * 64) * (x / 16));
+    __THPInfo->dLC[2] += ((sizeof(u8) * 64) * (x / 16));
 }
 
 /* 00002714-00002B20       .text __THPHuffDecodeDCTCompY */
-void __THPHuffDecodeDCTCompY() {
-    /* Nonmatching */
+static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block) {
+    {
+        register s32 t;
+        THPCoeff dc;
+        register THPCoeff diff;
+
+        __dcbz((void*)block, 0);
+        t = __THPHuffDecodeTab(info, Ydchuff);
+        __dcbz((void*)block, 32);
+        diff = 0;
+        __dcbz((void*)block, 64);
+
+        if (t) {
+            {
+                register s32 v;
+                register u32 cb;
+                register u32 cnt;
+                register u32 code;
+                register u32 tmp;
+                register u32 cnt1;
+                register u32 tmp1;
+                // clang-format off
+                asm {
+                        lwz      cnt,info->cnt;
+                        subfic   code,cnt,33;
+                        lwz      cb,info->currByte;
+
+                        subfc. tmp, code, t;
+                        subi     cnt1,cnt,1;
+
+                        bgt      _notEnoughBitsDIFF;
+                        add      v,cnt,t;
+
+                        slw      cnt,cb,cnt1;
+                        stw      v,info->cnt;
+                        subfic   v,t,32;
+                        srw      diff,cnt,v;
+                }
+                // clang-format on
+
+                // clang-format off
+                asm
+                {
+                    b _DoneDIFF;
+                _notEnoughBitsDIFF:
+                    lwz tmp1, info->c;
+                    slw v, cb, cnt1;
+                    lwzu cb, 4(tmp1);
+                    addi tmp, tmp, 1;
+                    stw cb, info->currByte;
+                    srw cb, cb, code;
+                    stw tmp1, info->c;
+                    add v, cb, v;
+                    stw tmp, info->cnt;
+                    subfic tmp, t, 32;
+                    srw diff, v, tmp;
+                _DoneDIFF:
+                }
+                // clang-format on
+            }
+
+            if (__cntlzw((u32)diff) > 32 - t) {
+                diff += ((0xFFFFFFFF << t) + 1);
+            }
+        };
+
+        __dcbz((void*)block, 96);
+        dc       = (s16)(info->components[0].predDC + diff);
+        block[0] = info->components[0].predDC = dc;
+    }
+
+    {
+        register s32 k;
+        register s32 code;
+        register u32 cnt;
+        register u32 cb;
+        register u32 increment;
+        register s32 tmp;
+        register THPHuffmanTab* h = Yachuff;
+
+        // clang-format off
+        asm
+        {
+            lwz     cnt, info->cnt;
+            addi    increment, h, 32;
+            lwz     cb, info->currByte;
+        }
+        // clang-format on
+
+        for (k = 1; k < 64; k++)
+        {
+            register s32 ssss;
+            register s32 rrrr;
+
+            // clang-format off
+            asm {
+                addi    code, cnt, 4;
+                cmpwi   cnt, 28;
+                rlwnm   tmp, cb, code, 27, 31;
+                bgt     _notEnoughBits;
+
+                lbzx    ssss, h, tmp;
+                lbzx    code, increment, tmp;
+                cmpwi   ssss, 0xFF;
+
+                beq     _FailedCheckEnoughBits;
+                add     cnt, cnt, code;
+                b       _DoneDecodeTab;
+            }
+            // clang-format on
+
+            {
+                register u32 maxcodebase;
+                register u32 tmp2;
+
+            _FailedCheckEnoughBits:
+                cnt += 5;
+                maxcodebase = (u32) & (h->maxCode);
+                // clang-format off
+                asm {
+                    li          tmp2, sizeof(s32)*(5);
+                    li          code, 5;
+                    add         maxcodebase, maxcodebase, tmp2;
+                  __WHILE_START:
+                    cmpwi       cnt, 33;
+                    slwi        tmp, tmp, 1
+
+                    beq         _FCEB_faster;
+                    rlwnm       ssss, cb, cnt, 31, 31;
+                    lwzu        tmp2, 4(maxcodebase);
+                    or          tmp, tmp, ssss
+                    addi        cnt, cnt, 1;
+                    b __WHILE_CHECK;
+
+                  _FCEB_faster:
+                    lwz     ssss, info->c;
+                    li      cnt, 1;
+                    lwzu    cb, 4(ssss);
+
+                    lwzu    tmp2, 4(maxcodebase);
+
+                    stw     ssss, info->c;
+                    rlwimi  tmp, cb, 1,31,31;
+                    b __FL_WHILE_CHECK;
+
+                  __FL_WHILE_START:
+                    slwi    tmp, tmp, 1;
+
+                    rlwnm   ssss, cb, cnt, 31, 31;
+                    lwzu    tmp2, 4(maxcodebase);
+                    or      tmp, tmp, ssss;
+
+                  __FL_WHILE_CHECK:
+                    cmpw    tmp,tmp2
+                    addi    cnt, cnt, 1;
+                    addi    code, code, 1
+                    bgt     __FL_WHILE_START;
+                    b _FCEB_Done;
+
+                  __WHILE_CHECK:
+                    cmpw    tmp,tmp2
+                    addi    code, code, 1
+                    bgt     __WHILE_START;
+                }
+                // clang-format on
+            }
+        _FCEB_Done:
+            ssss = (h->Vij[(s32)(tmp + h->valPtr[code])]);
+            goto _DoneDecodeTab;
+
+        _notEnoughBits:
+            // clang-format off
+            asm
+            {
+                cmpwi   cnt, 33;
+                lwz     tmp, info->c;
+                beq     _getfullword;
+
+                cmpwi   cnt, 32;
+                rlwnm   code, cb, code, 27, 31
+                beq     _1bitleft;
+
+                lbzx    ssss, h, code;
+                lbzx    rrrr, increment, code;
+                cmpwi   ssss, 0xFF;
+                add     code, cnt, rrrr;
+                beq _FailedCheckNoBits0;
+
+                cmpwi   code, 33;
+                bgt     _FailedCheckNoBits1;
+            }
+            // clang-format on
+            cnt = (u32)code;
+            goto _DoneDecodeTab;
+
+        _getfullword : {
+            // clang-format off
+            asm
+            {
+                    lwzu    cb, 4(tmp);
+                    rlwinm  code, cb, 5, 27, 31
+                    stw     tmp, info->c;
+                    lbzx    ssss, h, code;
+                    lbzx    tmp, increment, code;
+                    cmpwi   ssss, 0xFF
+                    addi    cnt, tmp, 1
+                    beq     _FailedCheckEnoughbits_Updated;
+            }
+            // clang-format on
+        }
+            goto _DoneDecodeTab;
+
+        _FailedCheckEnoughbits_Updated:
+            ssss = 5;
+            do {
+                // clang-format off
+                asm
+                {
+                    subfic  tmp, ssss, 31;
+                    addi    ssss, ssss, 1;
+                    srw     code, cb, tmp;
+                }
+                // clang-format on
+            } while (code > h->maxCode[ssss]);
+
+            cnt  = (u32)(ssss + 1);
+            ssss = (h->Vij[(s32)(code + h->valPtr[ssss])]);
+
+            goto _DoneDecodeTab;
+
+        _1bitleft:
+            // clang-format off
+            asm {
+                lwzu    cb, 4(tmp);
+
+                stw     tmp, info->c;
+                rlwimi  code, cb, 4, 28, 31;
+                lbzx    ssss, h, code;
+                lbzx    cnt, increment, code
+                cmpwi   ssss, 0xFF
+                beq     _Read4;
+
+            }
+            // clang-format on
+
+            goto _DoneDecodeTab;
+
+        _Read4 : {
+            register u32 maxcodebase = (u32) & (h->maxCode);
+            register u32 tmp2;
+
+            // clang-format off
+            asm {
+                    li  cnt, sizeof(s32)*5;
+                    add     maxcodebase, maxcodebase, cnt;
+
+                    slwi    tmp, code, 32-5;
+                    li      cnt,5;
+                    rlwimi  tmp, cb, 32-1, 1,31;
+
+                  __DR4_WHILE_START:
+
+                    subfic  ssss, cnt, 31;
+                    lwzu    tmp2, 4(maxcodebase);
+                    srw     code, tmp, ssss;
+                  __DR4_WHILE_CHECK:
+                    cmpw    code, tmp2
+                    addi    cnt, cnt, 1
+                    bgt     __DR4_WHILE_START;
+
+            }
+            // clang-format on
+        }
+            ssss = (h->Vij[(s32)(code + h->valPtr[cnt])]);
+            goto _DoneDecodeTab;
+
+        _FailedCheckNoBits0:
+        _FailedCheckNoBits1:
+        _REALFAILEDCHECKNOBITS : {
+            register u32 mask = 0xFFFFFFFF << (33 - cnt);
+            register u32 tmp2;
+            register u32 tmp3;
+            code = (s32)(cb & (~mask));
+            mask = (u32) & (h->maxCode);
+
+            // clang-format off
+            asm {
+                    lwz     tmp, info->c;
+                    subfic  tmp2, cnt, 33;
+                    addi    tmp3, tmp2, 1;
+                    slwi    tmp2, tmp2, 2;
+                    lwzu    cb, 4(tmp);
+                    add     mask,mask, tmp2;
+                    stw     tmp, info->c;
+                    slwi    code, code, 1;
+                    rlwimi  code, cb, 1, 31, 31;
+                    lwzu    tmp2, 4(mask);
+                    li      cnt, 2;
+                    b       __FCNB1_WHILE_CHECK;
+
+                  __FCNB1_WHILE_START:
+                    slwi    code, code, 1;
+
+                    addi    tmp3, tmp3, 1;
+                    lwzu    tmp2, 4(mask);
+                    add     code, code, rrrr;
+                    addi    cnt, cnt, 1;
+
+                  __FCNB1_WHILE_CHECK:
+                    cmpw    code, tmp2;
+                    rlwnm   rrrr, cb, cnt, 31, 31;
+                    bgt     __FCNB1_WHILE_START;
+
+            }
+            // clang-format on
+            ssss = (h->Vij[(s32)(code + h->valPtr[tmp3])]);
+        }
+
+            goto _DoneDecodeTab;
+
+        _DoneDecodeTab:
+            // clang-format off
+            asm {
+                andi.   rrrr, ssss, 15;
+                srawi   ssss, ssss, 4;
+                beq     _RECV_SSSS_ZERO;
+            }
+            // clang-format on
+
+            {
+                k += ssss;
+                {
+                    register s32 v;
+                    register u32 cnt1;
+                    register u32 tmp1;
+                    // clang-format off
+                    asm
+                    {
+                        subfic   code,cnt,33;
+                        subfc. tmp, code, rrrr;
+                        subi     cnt1,cnt,1;
+                        bgt      _RECVnotEnoughBits;
+                        add      cnt,cnt,rrrr;
+                        slw      tmp1,cb,cnt1;
+                        subfic   v,rrrr,32;
+                        srw      ssss,tmp1,v;
+                    }
+                    // clang-format on
+                    // clang-format off
+                    asm
+                    {
+                        b _RECVDone;
+                    _RECVnotEnoughBits:
+                        lwz tmp1, info->c;
+                        slw v, cb, cnt1;
+                        lwzu cb, 4(tmp1);
+                        addi cnt, tmp, 1;
+                        stw tmp1, info->c;
+                        srw tmp1, cb, code;
+
+                        add v, tmp1, v;
+                        subfic tmp, rrrr, 32;
+                        srw ssss, v, tmp;
+                    _RECVDone:
+                    }
+                    // clang-format on
+                }
+
+                if (__cntlzw((u32)ssss) > 32 - rrrr) {
+                    ssss += ((0xFFFFFFFF << rrrr) + 1);
+                }
+
+                block[__THPJpegNaturalOrder[k]] = (s16)ssss;
+                goto _RECV_END;
+            }
+
+            {
+            _RECV_SSSS_ZERO:
+                if (ssss != 15) {
+                    break;
+                }
+
+                k += 15;
+            };
+
+            // clang-format off
+            asm
+            {
+              _RECV_END:
+            }
+            // clang-format on
+        }
+        info->cnt      = cnt;
+        info->currByte = cb;
+    }
 }
 
 /* 00002B20-00002D98       .text __THPHuffDecodeTab */
-void __THPHuffDecodeTab() {
-    /* Nonmatching */
+static s32 __THPHuffDecodeTab(register THPFileInfo* info, register THPHuffmanTab* h) {
+    register s32 code;
+    register u32 cnt;
+    register s32 cb;
+    register u32 increment;
+    register s32 tmp;
+
+    // clang-format off
+    asm
+    {
+        lwz     cnt, info->cnt;
+        addi    increment, h, 32;
+        lwz     cb, info->currByte;
+        addi    code, cnt, 4;
+        cmpwi   cnt, 28;
+        rlwnm   tmp, cb, code, 27, 31;
+        bgt     _notEnoughBits;
+        lbzx    code, h, tmp;
+        lbzx    increment, increment, tmp;
+        cmpwi   code, 0xFF;
+        beq     _FailedCheckEnoughBits;
+        add     cnt, cnt, increment;
+        stw     cnt, info->cnt;
+    }
+    // clang-format on
+_done:
+    return code;
+
+    {
+        register u32 maxcodebase;
+        register u32 tmp2;
+
+    _FailedCheckEnoughBits:
+        maxcodebase = (u32) & (h->maxCode);
+        cnt += 5;
+
+        // clang-format off
+        asm {
+            li          tmp2, sizeof(s32)*(5);
+            li          code, 5;
+            add         maxcodebase, maxcodebase, tmp2;
+          __WHILE_START:
+            cmpwi       cnt, 33;
+            slwi        tmp, tmp, 1
+
+            beq         _FCEB_faster;
+            rlwnm       increment, cb, cnt, 31, 31;
+            lwzu        tmp2, 4(maxcodebase);
+            or          tmp, tmp, increment
+            addi        cnt, cnt, 1;
+            b __WHILE_CHECK;
+
+          _FCEB_faster:
+            lwz     increment, info->c;
+            li      cnt, 1;
+            lwzu    cb, 4(increment);
+            lwzu    tmp2, 4(maxcodebase);
+
+            stw     increment, info->c;
+            rlwimi  tmp, cb, 1,31,31;
+            stw     cb, info->currByte;
+            b __FL_WHILE_CHECK;
+
+          __FL_WHILE_START:
+            slwi    tmp, tmp, 1;
+            rlwnm   increment, cb, cnt, 31, 31;
+            lwzu    tmp2, 4(maxcodebase);
+            or      tmp, tmp, increment;
+
+          __FL_WHILE_CHECK:
+            cmpw    tmp,tmp2
+            addi    cnt, cnt, 1;
+            addi        code, code, 1
+            bgt     __FL_WHILE_START;
+            b _FCEB_Done;
+
+          __WHILE_CHECK:
+            cmpw    tmp,tmp2
+            addi        code, code, 1
+            bgt     __WHILE_START;
+        }
+        // clang-format on
+    }
+_FCEB_Done:
+    info->cnt = cnt;
+    return (h->Vij[(s32)(tmp + h->valPtr[code])]);
+
+    // clang-format off
+    asm
+    {
+      _notEnoughBits:
+        cmpwi   cnt, 33;
+        lwz     tmp, info->c;
+        beq     _getfullword; 
+
+        cmpwi   cnt, 32;
+        rlwnm   code, cb, code, 27, 31
+        beq     _1bitleft;
+
+        lbzx    tmp, h, code;
+        lbzx    increment, increment, code;
+        cmpwi   tmp, 0xFF;
+        add     code, cnt, increment;
+        beq _FailedCheckNoBits0;
+
+        cmpwi   code, 33;
+        stw     code, info->cnt;
+        bgt     _FailedCheckNoBits1;
+    }
+    // clang-format on
+    return tmp;
+
+    // clang-format off
+    asm
+    {
+      _1bitleft:
+        lwzu    cb, 4(tmp);
+
+        stw     tmp, info->c;
+        rlwimi  code, cb, 4, 28, 31;
+        lbzx    tmp, h, code;
+        lbzx    increment, increment, code
+        stw     cb, info->currByte;
+        cmpwi   tmp, 0xFF
+        stw     increment, info->cnt;
+        beq     _Read4;
+
+    }
+    // clang-format on
+    return tmp;
+
+_Read4 : {
+    register u32 maxcodebase = (u32) & (h->maxCode);
+    register u32 tmp2;
+
+    // clang-format off
+    asm
+    {
+            li      cnt, sizeof(s32)*5;
+            add     maxcodebase, maxcodebase, cnt;
+
+            slwi    tmp, code, 32-5;
+            li      cnt,5;
+            rlwimi  tmp, cb, 32-1, 1,31;
+
+          __DR4_WHILE_START:
+
+            subfic  cb, cnt, 31;
+            lwzu    tmp2, 4(maxcodebase);
+            srw     code, tmp, cb;
+          __DR4_WHILE_CHECK:
+            cmpw    code, tmp2
+            addi    cnt, cnt, 1
+            bgt     __DR4_WHILE_START;
+
+    }
+    // clang-format on
+}
+
+    info->cnt = cnt;
+__CODE_PLUS_VP_CNT:
+    return (h->Vij[(s32)(code + h->valPtr[cnt])]);
+
+_getfullword:
+    // clang-format off
+    asm
+    {
+        lwzu    cb, 4(tmp);
+
+        rlwinm  code, cb, 5, 27, 31
+        stw     tmp, info->c;
+        lbzx    cnt, h, code;
+        lbzx    increment, increment, code;
+        cmpwi   cnt, 0xFF
+        stw     cb, info->currByte;
+        addi    increment, increment, 1
+        beq     _FailedCheckEnoughbits_Updated;
+
+        stw     increment, info->cnt;
+    }
+    // clang-format on
+    return (s32)cnt;
+
+_FailedCheckEnoughbits_Updated:
+
+    cnt = 5;
+    do {
+        // clang-format off
+        asm
+        {
+            subfic  tmp, cnt, 31;
+            addi    cnt, cnt, 1;
+            srw     code, cb, tmp;
+        }
+        // clang-format on
+    } while (code > h->maxCode[cnt]);
+
+    info->cnt = cnt + 1;
+    goto __CODE_PLUS_VP_CNT;
+
+_FailedCheckNoBits0:
+_FailedCheckNoBits1 :
+
+{
+    register u32 mask = 0xFFFFFFFF << (33 - cnt);
+    register u32 tmp2;
+
+    code = (s32)(cb & (~mask));
+    mask = (u32) & (h->maxCode);
+
+    // clang-format off
+    asm
+    {
+            lwz     tmp, info->c;
+            subfic  tmp2, cnt, 33;
+            addi    cnt, tmp2, 1;
+            slwi    tmp2, tmp2, 2;
+            lwzu    cb, 4(tmp);
+            add     mask,mask, tmp2;
+            stw     tmp, info->c;
+            slwi    code, code, 1;
+            stw     cb, info->currByte;
+            rlwimi  code, cb, 1, 31, 31;
+            lwzu    tmp2, 4(mask);
+            li      tmp, 2;
+            b       __FCNB1_WHILE_CHECK;
+
+          __FCNB1_WHILE_START:
+            slwi    code, code, 1;
+
+            addi    cnt, cnt, 1;
+            lwzu    tmp2, 4(mask);
+            add     code, code, increment;
+            addi    tmp, tmp, 1;
+
+          __FCNB1_WHILE_CHECK:
+            cmpw    code, tmp2;
+            rlwnm   increment, cb, tmp, 31, 31;
+            bgt     __FCNB1_WHILE_START;
+
+    }
+    // clang-format on
+}
+
+    info->cnt = (u32)tmp;
+    return (h->Vij[(s32)(code + h->valPtr[cnt])]);
 }
 
 /* 00002D98-00002F80       .text __THPHuffDecodeDCTCompU */
-void __THPHuffDecodeDCTCompU() {
-    /* Nonmatching */
+static void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block) {
+    register s32 t;
+    register THPCoeff diff;
+    THPCoeff dc;
+    register s32 v;
+    register u32 cb;
+    register u32 cnt;
+    register u32 cnt33;
+    register u32 tmp;
+    register u32 cnt1;
+    register u32 tmp1;
+    register s32 k;
+    register s32 ssss;
+    register s32 rrrr;
+
+    __dcbz((void*)block, 0);
+    t = __THPHuffDecodeTab(info, Udchuff);
+    __dcbz((void*)block, 32);
+    diff = 0;
+    __dcbz((void*)block, 64);
+
+    if (t) {
+        // clang-format off
+        asm
+        {
+            lwz      cnt,info->cnt;
+            subfic   cnt33,cnt,33;
+            lwz      cb,info->currByte;
+            subfc. tmp, cnt33, t;
+            subi     cnt1,cnt,1;
+            bgt      _notEnoughBitsDIFF;
+            add      v,cnt,t;
+            slw      cnt,cb,cnt1;
+            stw      v,info->cnt;
+            subfic   v,t,32;
+            srw      diff,cnt,v;
+        }
+        // clang-format on
+
+        // clang-format off
+        asm
+        {
+            b _DoneDIFF;
+        _notEnoughBitsDIFF:
+            lwz tmp1, info->c;
+            slw v, cb, cnt1;
+            lwzu cb, 4(tmp1);
+            addi tmp, tmp, 1;
+            stw cb, info->currByte;
+            srw cb, cb, cnt33;
+            stw tmp1, info->c;
+            add v, cb, v;
+            stw tmp, info->cnt;
+            subfic tmp, t, 32;
+            srw diff, v, tmp;
+        _DoneDIFF:
+        }
+        // clang-format on
+
+        if (__cntlzw((u32)diff) > 32 - t) {
+            diff += ((0xFFFFFFFF << t) + 1);
+        }
+    }
+
+    __dcbz((void*)block, 96);
+    dc       = (s16)(info->components[1].predDC + diff);
+    block[0] = info->components[1].predDC = dc;
+
+    for (k = 1; k < 64; k++) {
+        ssss = __THPHuffDecodeTab(info, Uachuff);
+        rrrr = ssss >> 4;
+        ssss &= 15;
+
+        if (ssss) {
+            k += rrrr;
+            // clang-format off
+            asm
+            {
+                lwz      cnt,info->cnt;
+                subfic   cnt33,cnt,33;
+                lwz      cb,info->currByte;
+                subf. tmp, cnt33, ssss;
+                subi     cnt1,cnt,1;
+                bgt      _notEnoughBits;
+                add      v,cnt,ssss;
+                slw      cnt,cb,cnt1;
+                stw      v,info->cnt;
+                subfic   v,ssss,32;
+                srw      rrrr,cnt,v;
+            }
+            // clang-format on
+
+            // clang-format off
+            asm
+            {
+                b _Done;
+            _notEnoughBits:
+                lwz tmp1, info->c;
+                slw v, cb, cnt1;
+                lwzu cb, 4(tmp1);
+                addi tmp, tmp, 1;
+                stw cb, info->currByte;
+                srw cb, cb, cnt33;
+                stw tmp1, info->c;
+                add v, cb, v;
+                stw tmp, info->cnt;
+                subfic tmp, ssss, 32;
+                srw rrrr, v, tmp;
+            _Done:
+            }
+            // clang-format on
+
+            if (__cntlzw((u32)rrrr) > 32 - ssss) {
+                rrrr += ((0xFFFFFFFF << ssss) + 1);
+            }
+
+            block[__THPJpegNaturalOrder[k]] = (s16)rrrr;
+        }
+
+        else {
+            if (rrrr != 15)
+                break;
+            k += 15;
+        }
+    }
 }
 
 /* 00002F80-00003168       .text __THPHuffDecodeDCTCompV */
-void __THPHuffDecodeDCTCompV() {
-    /* Nonmatching */
+static void __THPHuffDecodeDCTCompV(register THPFileInfo* info, THPCoeff* block) {
+    register s32 t;
+    register THPCoeff diff;
+    THPCoeff dc;
+    register s32 v;
+    register u32 cb;
+    register u32 cnt;
+    register u32 cnt33;
+    register u32 tmp;
+    register u32 cnt1;
+    register u32 tmp1;
+    register s32 k;
+    register s32 ssss;
+    register s32 rrrr;
+
+    __dcbz((void*)block, 0);
+    t = __THPHuffDecodeTab(info, Vdchuff);
+    __dcbz((void*)block, 32);
+    diff = 0;
+    __dcbz((void*)block, 64);
+
+    if (t) {
+        // clang-format off
+        asm
+        {
+            lwz      cnt,info->cnt;
+            subfic   cnt33,cnt,33;
+            lwz      cb,info->currByte;
+            subf. tmp, cnt33, t;
+            subi     cnt1,cnt,1;
+            bgt      _notEnoughBitsDIFF;
+            add      v,cnt,t;
+            slw      cnt,cb,cnt1;
+            stw      v,info->cnt;
+            subfic   v,t,32;
+            srw      diff,cnt,v;
+        }
+        // clang-format on
+
+        // clang-format off
+        asm
+        {
+            b _DoneDIFF;
+        _notEnoughBitsDIFF:
+            lwz tmp1, info->c;
+            slw v, cb, cnt1;
+            lwzu cb, 4(tmp1);
+            addi tmp, tmp, 1;
+            stw cb, info->currByte;
+            srw cb, cb, cnt33;
+            stw tmp1, info->c;
+            add v, cb, v;
+            stw tmp, info->cnt;
+            subfic tmp, t, 32;
+            srw diff, v, tmp;
+        _DoneDIFF:
+        }
+        // clang-format on
+
+        if (__cntlzw((u32)diff) > 32 - t) {
+            diff += ((0xFFFFFFFF << t) + 1);
+        }
+    }
+
+    __dcbz((void*)block, 96);
+
+    dc       = (s16)(info->components[2].predDC + diff);
+    block[0] = info->components[2].predDC = dc;
+
+    for (k = 1; k < 64; k++) {
+        ssss = __THPHuffDecodeTab(info, Vachuff);
+        rrrr = ssss >> 4;
+        ssss &= 15;
+
+        if (ssss) {
+            k += rrrr;
+
+            // clang-format off
+            asm
+            {
+                lwz      cnt,info->cnt;
+                subfic   cnt33,cnt,33;
+                lwz      cb,info->currByte;
+
+                subf. tmp, cnt33, ssss;
+                subi     cnt1,cnt,1;
+
+                bgt      _notEnoughBits;
+                add      v,cnt,ssss;
+
+                slw      cnt,cb,cnt1;
+                stw      v,info->cnt;
+                subfic   v,ssss,32;
+                srw      rrrr,cnt,v;
+            }
+            // clang-format on
+
+            // clang-format off
+            asm
+            {
+                b _Done;
+            _notEnoughBits:
+                lwz tmp1, info->c;
+                slw v, cb, cnt1;
+                lwzu cb, 4(tmp1);
+                addi tmp, tmp, 1;
+                stw cb, info->currByte;
+                srw cb, cb, cnt33;
+                stw tmp1, info->c;
+                add v, cb, v;
+                stw tmp, info->cnt;
+                subfic tmp, ssss, 32;
+                srw rrrr, v, tmp;
+            _Done:
+            }
+            // clang-format on
+
+            if (__cntlzw((u32)rrrr) > 32 - ssss) {
+                rrrr += ((0xFFFFFFFF << ssss) + 1);
+            }
+
+            block[__THPJpegNaturalOrder[k]] = (s16)rrrr;
+        } else {
+            if (rrrr != 15)
+                break;
+            k += 15;
+        }
+    }
 }
 
 /* 00003168-000031D4       .text THPInit */
-void THPInit() {
-    /* Nonmatching */
+static BOOL THPInit() {
+    u8* base;
+    base = (u8*)(0xE000 << 16);
+
+    __THPLCWork512[0] = base;
+    base += 0x2000;
+    __THPLCWork512[1] = base;
+    base += 0x800;
+    __THPLCWork512[2] = base;
+    base += 0x200;
+
+    base              = (u8*)(0xE000 << 16);
+    __THPLCWork640[0] = base;
+    base += 0x2800;
+    __THPLCWork640[1] = base;
+    base += 0xA00;
+    __THPLCWork640[2] = base;
+    base += 0xA00;
+
+    OSInitFastCast();
+
+    __THPInitFlag = TRUE;
+    return TRUE;
 }
 
-/* 000031D4-00003208       .text OSInitFastCast */
-void OSInitFastCast() {
-    /* Nonmatching */
+#ifdef __cplusplus
 }
-
-};
+#endif
 
 /* 00003208-0000323C       .text daMP_PopReadedBuffer__Fv */
-void daMP_PopReadedBuffer() {
-    /* Nonmatching */
+void* daMP_PopReadedBuffer() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_ReadedBufferQueue, &msg, 1);
+    return msg;
 }
 
 /* 0000323C-0000326C       .text daMP_PushReadedBuffer__FPv */
-void daMP_PushReadedBuffer(void*) {
-    /* Nonmatching */
+void daMP_PushReadedBuffer(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_ReadedBufferQueue, msg, 1);
 }
 
 /* 0000326C-000032A0       .text daMP_PopFreeReadBuffer__Fv */
-void daMP_PopFreeReadBuffer() {
-    /* Nonmatching */
+daMP_THPReadBuffer* daMP_PopFreeReadBuffer() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_FreeReadBufferQueue, &msg, 1);
+    return (daMP_THPReadBuffer*)msg;
 }
 
 /* 000032A0-000032D0       .text daMP_PushFreeReadBuffer__FPv */
-void daMP_PushFreeReadBuffer(void*) {
-    /* Nonmatching */
+void daMP_PushFreeReadBuffer(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_FreeReadBufferQueue, msg, 1);
 }
 
 /* 000032D0-00003304       .text daMP_PopReadedBuffer2__Fv */
-void daMP_PopReadedBuffer2() {
-    /* Nonmatching */
+void* daMP_PopReadedBuffer2() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_ReadedBufferQueue2, &msg, 1);
+    return msg;
 }
 
 /* 00003304-00003334       .text daMP_PushReadedBuffer2__FPv */
-void daMP_PushReadedBuffer2(void*) {
-    /* Nonmatching */
+void daMP_PushReadedBuffer2(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_ReadedBufferQueue2, msg, 1);
 }
 
 /* 00003334-0000336C       .text daMP_ReadThreadStart__Fv */
 void daMP_ReadThreadStart() {
-    /* Nonmatching */
+    if (daMP_ReadThreadCreated) {
+        OSResumeThread(&daMP_ReadThread);
+    }
 }
 
 /* 0000336C-000033B0       .text daMP_ReadThreadCancel__Fv */
 void daMP_ReadThreadCancel() {
-    /* Nonmatching */
+    if (daMP_ReadThreadCreated) {
+        OSCancelThread(&daMP_ReadThread);
+        daMP_ReadThreadCreated = FALSE;
+    }
 }
 
 /* 000033B0-00003494       .text daMP_Reader__FPv */
 void daMP_Reader(void*) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    s32 r28 = 0;
+    s32 r30 = daMP_ActivePlayer.mB8;
+    s32 r29 = daMP_ActivePlayer.mBC;
+    while (true) {
+        daMP_THPReadBuffer* readBuf = daMP_PopFreeReadBuffer();
+        int readBytes = DVDReadPrio(&daMP_ActivePlayer.mFileInfo, readBuf->m00, r29, r30, 2);
+        if (readBytes != r29) {
+            if (readBytes == -1) {
+                daMP_ActivePlayer.mA8 = -1;
+            }
+            if (r28 == 0) {
+                daMP_PrepareReady(0);
+            }
+            OSSuspendThread(&daMP_ReadThread);
+        }
+        readBuf->m04 = r28;
+        daMP_PushReadedBuffer(readBuf);
+        r30 += r29;
+        r29 = daMP_NEXT_READ_SIZE(readBuf);
+        u32 r0 = (r28 + daMP_ActivePlayer.mC0) % daMP_ActivePlayer.m50;
+        if (r0 == daMP_ActivePlayer.m50 - 1) {
+            if (daMP_ActivePlayer.mA6 & 0x01) {
+                r30 = daMP_ActivePlayer.m64;
+            } else {
+                OSSuspendThread(&daMP_ReadThread);
+            }
+        }
+        r28++;
+    }
 }
 
 /* 000034A0-00003550       .text daMP_CreateReadThread__Fl */
@@ -201,23 +2636,32 @@ void daMP_CreateReadThread(s32) {
 }
 
 /* 00003550-00003584       .text daMP_PopFreeTextureSet__Fv */
-void daMP_PopFreeTextureSet() {
-    /* Nonmatching */
+OSMessage daMP_PopFreeTextureSet() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_FreeTextureSetQueue, &msg, 1);
+    return msg;
 }
 
 /* 00003584-000035B4       .text daMP_PushFreeTextureSet__FPv */
-void daMP_PushFreeTextureSet(void*) {
-    /* Nonmatching */
+void daMP_PushFreeTextureSet(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_FreeTextureSetQueue, msg, 0);
 }
 
 /* 000035B4-000035F8       .text daMP_PopDecodedTextureSet__Fl */
-void daMP_PopDecodedTextureSet(s32) {
-    /* Nonmatching */
+void* daMP_PopDecodedTextureSet(s32 r3) {
+    OSMessage msg;
+    if (OSReceiveMessage(&daMP_DecodedTextureSetQueue, &msg, r3) == TRUE) {
+        return msg;
+    } else {
+        return NULL;
+    }
 }
 
 /* 000035F8-00003628       .text daMP_PushDecodedTextureSet__FPv */
-void daMP_PushDecodedTextureSet(void*) {
-    /* Nonmatching */
+void daMP_PushDecodedTextureSet(void* r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_DecodedTextureSetQueue, msg, 1);
 }
 
 /* 00003628-00003760       .text daMP_VideoDecode__FP18daMP_THPReadBuffer */
@@ -242,12 +2686,17 @@ void daMP_CreateVideoDecodeThread(s32, u8*) {
 
 /* 00003A74-00003AAC       .text daMP_VideoDecodeThreadStart__Fv */
 void daMP_VideoDecodeThreadStart() {
-    /* Nonmatching */
+    if (daMP_VideoDecodeThreadCreated) {
+        OSResumeThread(&daMP_VideoDecodeThread);
+    }
 }
 
 /* 00003AAC-00003AF0       .text daMP_VideoDecodeThreadCancel__Fv */
 void daMP_VideoDecodeThreadCancel() {
-    /* Nonmatching */
+    if (daMP_VideoDecodeThreadCreated) {
+        OSCancelThread(&daMP_VideoDecodeThread);
+        daMP_VideoDecodeThreadCreated = FALSE;
+    }
 }
 
 /* 00003AF0-00003B24       .text daMP_PopFreeAudioBuffer__Fv */
@@ -292,12 +2741,17 @@ void daMP_CreateAudioDecodeThread(s32, u8*) {
 
 /* 00003E70-00003EA8       .text daMP_AudioDecodeThreadStart__Fv */
 void daMP_AudioDecodeThreadStart() {
-    /* Nonmatching */
+    if (daMP_AudioDecodeThreadCreated) {
+        OSResumeThread(&daMP_AudioDecodeThread);
+    }
 }
 
 /* 00003EA8-00003EEC       .text daMP_AudioDecodeThreadCancel__Fv */
 void daMP_AudioDecodeThreadCancel() {
-    /* Nonmatching */
+    if (daMP_AudioDecodeThreadCreated) {
+        OSCancelThread(&daMP_AudioDecodeThread);
+        daMP_AudioDecodeThreadCreated = FALSE;
+    }
 }
 
 /* 00003EEC-00004004       .text daMP_THPGXRestore__Fv */
@@ -396,13 +2850,17 @@ void daMP_PlayControl(u32) {
 }
 
 /* 00005810-00005850       .text daMP_WaitUntilPrepare__Fv */
-void daMP_WaitUntilPrepare() {
-    /* Nonmatching */
+s32 daMP_WaitUntilPrepare() {
+    OSMessage msg;
+    OSReceiveMessage(&daMP_PrepareReadyQueue, &msg, 1);
+    u32 temp = (s32)msg;
+    return (-temp | temp) >> 31; // fakematch? should be temp != 0;
 }
 
 /* 00005850-00005880       .text daMP_PrepareReady__Fi */
-void daMP_PrepareReady(int) {
-    /* Nonmatching */
+void daMP_PrepareReady(int r3) {
+    OSMessage msg = (OSMessage)r3;
+    OSSendMessage(&daMP_PrepareReadyQueue, msg, 1);
 }
 
 /* 00005880-00005B68       .text daMP_THPPlayerPrepare__Flll */
@@ -456,7 +2914,7 @@ void daMP_THPPlayerSetVolume(s32, s32) {
 }
 
 /* 00005F9C-00006104       .text daMP_ActivePlayer_Init__FPCc */
-void daMP_ActivePlayer_Init(const char*) {
+BOOL daMP_ActivePlayer_Init(const char*) {
     /* Nonmatching */
 }
 
@@ -476,68 +2934,107 @@ void daMP_ActivePlayer_Draw() {
 }
 
 /* 00006230-000062F0       .text daMP_Get_MovieRestFrame__Fv */
-void daMP_Get_MovieRestFrame() {
+u32 daMP_Get_MovieRestFrame() {
     /* Nonmatching */
 }
 
 /* 000062F0-00006370       .text daMP_Set_PercentMovieVolume__Ff */
-void daMP_Set_PercentMovieVolume(float) {
+u32 daMP_Set_PercentMovieVolume(f32) {
     /* Nonmatching */
 }
 
 /* 00006370-00006390       .text daMP_c_Get_arg_data__6daMP_cFv */
-void daMP_c::daMP_c_Get_arg_data() {
-    /* Nonmatching */
+u32 daMP_c::daMP_c_Get_arg_data() {
+    return fopAcM_GetParam(this);
 }
 
 /* 00006390-00006500       .text daMP_c_Init__6daMP_cFv */
-void daMP_c::daMP_c_Init() {
+int daMP_c::daMP_c_Init() {
     /* Nonmatching */
+    static u8 set_vfilter[7] = {
+        0x00, 0x00, 0x15, 0x16, 0x15, 0x00, 0x00,
+    };
+    static const char* filename_table[2] = {
+        "/thpdemo/title_loop.thp",
+        "/thpdemo/end_st_epilogue.thp",
+    };
+    
+    daMP_backup_FrameRate = mDoGph_gInf_c::getFrameRate();
+    mDoGph_gInf_c::setFrameRate(1);
+    GXRenderModeObj* renderMode = JUTVideo::getManager()->getRenderMode();
+    // daMP_backup_vfilter = renderMode->vfilter;
+    // renderMode->vfilter = set_vfilter;
+    daMP_Fail_alloc = FALSE;
+    mpCallBack1 = daMP_Get_MovieRestFrame;
+    mpCallBack2 = daMP_Set_PercentMovieVolume;
+    int r4 = daMP_c_Get_arg_data();
+    if (r4 >= 0 && r4 < 2) {
+        if (filename_table[r4] == NULL || !daMP_ActivePlayer_Init(filename_table[r4])) {
+            daMP_Fail_alloc = TRUE;
+            return cPhs_COMPLEATE_e;
+        }
+    } else {
+        OSReport("\x1B[43;30mムービーの番号がおかしい %d %d\n\x1B[m", r4, 2);
+        if (!daMP_ActivePlayer_Init(filename_table[0])) {
+            daMP_Fail_alloc = TRUE;
+        }
+    }
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00006580-000065F8       .text daMP_c_Finish__6daMP_cFv */
-void daMP_c::daMP_c_Finish() {
+BOOL daMP_c::daMP_c_Finish() {
     /* Nonmatching */
 }
 
 /* 000065F8-0000661C       .text daMP_c_Main__6daMP_cFv */
-void daMP_c::daMP_c_Main() {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Main() {
+    daMP_ActivePlayer_Main();
+    return TRUE;
 }
 
 /* 0000661C-0000663C       .text draw__16daMP_Dlst_base_cFv */
 void daMP_Dlst_base_c::draw() {
-    /* Nonmatching */
+    daMP_ActivePlayer_Draw();
 }
 
 /* 0000663C-00006668       .text daMP_c_Draw__6daMP_cFv */
-void daMP_c::daMP_c_Draw() {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Draw() {
+    dComIfGd_set2DOpa(&daMP_c_Dlst_base);
+    return TRUE;
 }
 
 /* 000066C4-00006728       .text daMP_c_Callback_Init__6daMP_cFP10fopAc_ac_c */
-int daMP_c::daMP_c_Callback_Init(fopAc_ac_c*) {
-    /* Nonmatching */
+int daMP_c::daMP_c_Callback_Init(fopAc_ac_c* i_this) {
+    fopAcM_SetupActor(i_this, daMP_c);
+    daMP_c* a_this = (daMP_c*)i_this;
+    return a_this->daMP_c_Init();
 }
 
 /* 00006728-00006748       .text daMP_c_Callback_Finish__6daMP_cFP6daMP_c */
-int daMP_c::daMP_c_Callback_Finish(daMP_c*) {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Callback_Finish(daMP_c* i_this) {
+    return i_this->daMP_c_Finish();
 }
 
 /* 00006748-00006780       .text daMP_c_Callback_Main__6daMP_cFP6daMP_c */
-int daMP_c::daMP_c_Callback_Main(daMP_c*) {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Callback_Main(daMP_c* i_this) {
+    if (daMP_Fail_alloc) {
+        return TRUE;
+    }
+    return i_this->daMP_c_Main();
 }
 
 /* 00006780-000067B8       .text daMP_c_Callback_Draw__6daMP_cFP6daMP_c */
-int daMP_c::daMP_c_Callback_Draw(daMP_c*) {
-    /* Nonmatching */
+BOOL daMP_c::daMP_c_Callback_Draw(daMP_c* i_this) {
+    if (daMP_Fail_alloc) {
+        return TRUE;
+    }
+    return i_this->daMP_c_Draw();
 }
 
 /* 000067B8-000067C0       .text daMP_Callback_Dummy__FP6daMP_c */
-static int daMP_Callback_Dummy(daMP_c*) {
-    /* Nonmatching */
+static BOOL daMP_Callback_Dummy(daMP_c* i_this) {
+    return TRUE;
 }
 
 static actor_method_class daMP_METHODS = {

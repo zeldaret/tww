@@ -26,25 +26,25 @@ inline void J3DGDWrite_f32(f32 param) {
 }
 
 inline void J3DGDWriteBPCmd(u32 cmd) {
-    J3DGDWrite_u8(0x61);
+    J3DGDWrite_u8(GX_CMD_LOAD_BP_REG);
     J3DGDWrite_u32(cmd);
 }
 
 inline void J3DGDWriteCPCmd(u8 cmd, u32 param) {
-    J3DGDWrite_u8(0x08);
+    J3DGDWrite_u8(GX_CMD_LOAD_CP_REG);
     J3DGDWrite_u8(cmd);
     J3DGDWrite_u32(param);
 }
 
 inline void J3DGDWriteXFCmd(u16 cmd, u32 param) {
-    J3DGDWrite_u8(0x10);
+    J3DGDWrite_u8(GX_CMD_LOAD_XF_REG);
     J3DGDWrite_u16(0);
     J3DGDWrite_u16(cmd);
     J3DGDWrite_u32(param);
 }
 
 inline void J3DGDWriteXFCmdHdr(u16 cmd, u8 len) {
-    J3DGDWrite_u8(0x10);
+    J3DGDWrite_u8(GX_CMD_LOAD_XF_REG);
     J3DGDWrite_u16(len - 1);
     J3DGDWrite_u16(cmd);
 }
@@ -56,7 +56,7 @@ inline void J3DGXCmd1f32ptr(f32* value) {
 void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevStageNum, u8 IndTexStageNum, _GXCullMode cullMode);
 void J3DGDSetGenMode_3Param(u8 texGenNum, u8 tevStageNum, u8 indTexStageNum);
 void J3DGDSetIndTexStageNum(u32);
-void J3DGDSetLightAttn(_GXLightID, f32, f32, f32, f32, f32, f32);
+void J3DGDSetLightAttn(GXLightID, f32, f32, f32, f32, f32, f32);
 void J3DGDSetLightColor(GXLightID, GXColor);
 void J3DGDSetLightPos(GXLightID, f32, f32, f32);
 void J3DGDSetLightDir(GXLightID, f32, f32, f32);
@@ -95,7 +95,7 @@ inline void J3DGDSetNumChans(u8 numChans) {
 }
 
 inline void J3DGDSetNumTexGens(u8 numTexGens) {
-    J3DGDWriteXFCmd(0x103f, numTexGens);
+    J3DGDWriteXFCmd(0x103F, numTexGens);
 }
 
 inline void J3DGDSetAlphaCompare(GXCompare cmp0, u8 ref0, GXAlphaOp op, GXCompare cmp1, u8 ref1) {
@@ -137,7 +137,7 @@ inline void J3DGDSetZCompLoc(u32 compLocEnable) {
 }
 
 inline void J3DGDSetTevKonstantSel_SwapModeTable(GXTevStageID stage, GXTevKColorSel colorSel1, GXTevKAlphaSel alphaSel1, GXTevKColorSel colorSel2, GXTevKAlphaSel alphaSel2, GXTevColorChan chan1, GXTevColorChan chan2) {
-    J3DGDWriteBPCmd((stage / 2 + 0xf6) << 24 | (chan1 | chan2 << 2 | colorSel1 << 4 | alphaSel1 << 9 | colorSel2 << 14 | alphaSel2 << 19) & 0x00FFFFFF);
+    J3DGDWriteBPCmd((stage / 2 + 0xF6) << 24 | (chan1 | chan2 << 2 | colorSel1 << 4 | alphaSel1 << 9 | colorSel2 << 14 | alphaSel2 << 19) & 0x00FFFFFF);
 }
 
 #endif /* J3DGD_H */

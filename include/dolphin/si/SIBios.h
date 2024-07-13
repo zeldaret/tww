@@ -3,6 +3,7 @@
 
 #include "dolphin/os/OSInterrupt.h"
 #include "dolphin/os/OSTime.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -102,10 +103,10 @@ typedef union SIComm_u {
 
 BOOL SIBusy(void);
 BOOL SIIsChanBusy(s32 chan);
-static void SIInterruptHandler(OSInterrupt interrupt, OSContext* context);
+static void SIInterruptHandler(__OSInterrupt interrupt, OSContext* context);
 static BOOL SIEnablePollingInterrupt(BOOL enable);
-BOOL SIRegisterPollingHandler(OSInterruptHandler handler);
-BOOL SIUnregisterPollingHandler(OSInterruptHandler handler);
+BOOL SIRegisterPollingHandler(__OSInterruptHandler handler);
+BOOL SIUnregisterPollingHandler(__OSInterruptHandler handler);
 void SIInit(void);
 u32 SIGetStatus(s32 chan);
 void SISetCommand(s32 chan, u32 command);
@@ -121,7 +122,7 @@ u32 SIGetType(s32 chan);
 u32 SIGetTypeAsync(s32 chan, SITypeAndStatusCallback callback);
 u32 SIProbe(s32 chan);
 
-vu32 __SIRegs[64] : 0xCC006400;
+vu32 __SIRegs[64] AT_ADDRESS(0xCC006400);
 
 #ifdef __cplusplus
 }

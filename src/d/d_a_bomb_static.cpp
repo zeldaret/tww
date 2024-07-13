@@ -7,7 +7,7 @@
 #include "d/actor/d_a_bomb2.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-#define L_daBomb_Version 1
+const int L_daBomb_Version = 1;
 
 /* 80067FA0-80067FD0       .text getBombRestTime__8daBomb_cFv */
 s16 daBomb_c::getBombRestTime() {

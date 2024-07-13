@@ -14,6 +14,7 @@
 #include "dolphin/gx/GXTev.h"
 #include "dolphin/gx/GXTexture.h"
 #include "dolphin/gx/GXTransform.h"
+#include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,7 +27,6 @@ extern "C" {
     (reg) = ((u32) (reg) & ~(((1 << (nbits)) - 1) << (shift))) |               \
             ((u32) (value) << (shift));
 
-#define GX_LOAD_BP_REG 0x61
 #define GX_NOP 0
 
 typedef union {
@@ -42,7 +42,13 @@ typedef union {
 	f64 f64;
 } PPCWGPipe;
 
-volatile PPCWGPipe GXFIFO : 0xCC008000;
+volatile PPCWGPipe GXFIFO AT_ADDRESS(0xCC008000);
+
+// Direct
+inline void GXPosition2f32(f32 x, f32 z) {
+    GXFIFO.f32 = x;
+    GXFIFO.f32 = z;
+}
 
 inline void GXPosition3f32(f32 x, f32 y, f32 z) {
     GXFIFO.f32 = x;
@@ -50,14 +56,36 @@ inline void GXPosition3f32(f32 x, f32 y, f32 z) {
     GXFIFO.f32 = z;
 }
 
+inline void GXPosition2s8(s8 x, s8 y) {
+    GXFIFO.s8 = x;
+    GXFIFO.s8 = y;
+}
+
+inline void GXPosition3s8(s8 x, s8 y, s8 z) {
+    GXFIFO.s8 = x;
+    GXFIFO.s8 = y;
+    GXFIFO.s8 = z;
+}
+
+inline void GXPosition2u16(u16 x, u16 y) {
+    GXFIFO.u16 = x;
+    GXFIFO.u16 = y;
+}
+
+inline void GXPosition2s16(s16 x, s16 y) {
+    GXFIFO.s16 = x;
+    GXFIFO.s16 = y;
+}
+
+inline void GXPosition3s16(s16 x, s16 y, s16 z) {
+    GXFIFO.s16 = x;
+    GXFIFO.s16 = y;
+    GXFIFO.s16 = z;
+}
+
 inline void GXNormal3f32(f32 x, f32 y, f32 z) {
     GXFIFO.f32 = x;
     GXFIFO.f32 = y;
-    GXFIFO.f32 = z;
-}
-
-inline void GXPosition2f32(f32 x, f32 z) {
-    GXFIFO.f32 = x;
     GXFIFO.f32 = z;
 }
 
@@ -79,36 +107,6 @@ inline void GXTexCoord1x8(u8 s) {
     GXFIFO.u8 = s;
 }
 
-inline void GXPosition2u16(u16 x, u16 y) {
-    GXFIFO.u16 = x;
-    GXFIFO.u16 = y;
-}
-
-inline void GXPosition1x16(u16 x) {
-    GXFIFO.u16 = x;
-}
-
-inline void GXPosition1x8(u8 x) {
-    GXFIFO.u8 = x;
-}
-
-inline void GXPosition3s8(s8 x, s8 y, s8 z) {
-    GXFIFO.s8 = x;
-    GXFIFO.s8 = y;
-    GXFIFO.s8 = z;
-}
-
-inline void GXPosition2s8(s8 x, s8 y) {
-    GXFIFO.s8 = x;
-    GXFIFO.s8 = y;
-}
-
-inline void GXPosition3s16(s16 x, s16 y, s16 z) {
-    GXFIFO.s16 = x;
-    GXFIFO.s16 = y;
-    GXFIFO.s16 = z;
-}
-
 inline void GXTexCoord2s8(s8 x, s8 y) {
     GXFIFO.s8 = x;
     GXFIFO.s8 = y;
@@ -124,16 +122,30 @@ inline void GXTexCoord2s16(const s16 u, const s16 v) {
 	GXFIFO.s16 = v;
 }
 
-inline void GFWriteBPCmd(u32 param_1) {
-    GXFIFO.u8 = 0x61;
-    GXFIFO.u32 = param_1;
+// Indexed
+inline void GXPosition1x8(u8 x) {
+    GXFIFO.u8 = x;
 }
 
-inline void GFFill(u16 param_1, u32 param_2) {
-    GXFIFO.u8 = 0x10;
-    GXFIFO.u16 = 0;
-    GXFIFO.u16 = param_1;
-    GXFIFO.u32 = param_2;
+inline void GXPosition1x16(u16 x) {
+    GXFIFO.u16 = x;
+}
+
+inline void GXNormal1x8(u8 x) {
+    GXFIFO.u8 = x;
+}
+
+inline void GXColor1x16(u16 x) {
+    GXFIFO.u16 = x;
+}
+
+inline void GXTexCoord1x16(u16 x) {
+    GXFIFO.u16 = x;
+}
+
+inline void GFWriteBPCmd(u32 x) {
+    GXFIFO.u8 = GX_CMD_LOAD_BP_REG;
+    GXFIFO.u32 = x;
 }
 
 inline void GXEnd() {}

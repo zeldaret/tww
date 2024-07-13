@@ -39,7 +39,7 @@ static struct {
     /* 0x0A */ {dItem_MAGIC_ARMOR_e, "shield_02.bti"},
     /* 0x0B */ {ESA_BAG, "coverofbait.bti"},
     /* 0x0C */ {dItem_BOW_e, "bow_01.bti"},
-    /* 0x0D */ {BOMB_BAG, "bomb_00.bti"},
+    /* 0x0D */ {dItem_BOMB_BAG_e, "bomb_00.bti"},
     /* 0x0E */ {EMPTY_BOTTLE, "bottle_00.bti"},
     /* 0x0F */ {RED_BOTTLE, "bottle_01.bti"},
     /* 0x10 */ {GREEN_BOTTLE, "bottle_02.bti"},
@@ -135,13 +135,13 @@ void fopMsgM_hyrule_language_check(u32) {
 /* 8002AE28-8002AED4       .text fopMsgM_setStageLayer__FPv */
 s32 fopMsgM_setStageLayer(void* proc) {
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-    JUT_ASSERT(0x189, stageProc != 0);
+    JUT_ASSERT(0x189, stageProc != NULL);
     u32 layer = fpcM_LayerID(stageProc);
     return fpcM_ChangeLayerID(proc, layer);
 }
 
 /* 8002AED4-8002AEF4       .text fopMsgM_SearchByID__FUi */
-msg_class* fopMsgM_SearchByID(uint pid) {
+msg_class* fopMsgM_SearchByID(fpc_ProcID pid) {
     return (msg_class*)fpcEx_SearchByID(pid);
 }
 
@@ -151,7 +151,7 @@ msg_class* fopMsgM_SearchByName(s16 proc_name) {
 }
 
 /* 8002AF24-8002AF44       .text fopMsgM_IsExecuting__FUi */
-BOOL fopMsgM_IsExecuting(uint pid) {
+BOOL fopMsgM_IsExecuting(fpc_ProcID pid) {
     return fpcEx_IsExist(pid);
 }
 
@@ -200,7 +200,7 @@ void createTimerAppend(int, u16, u8, u8, f32, f32, f32, f32, uint) {
 }
 
 /* 8002B1C8-8002B23C       .text fopMsgM_create__FsP10fopAc_ac_cP4cXyzPUlPUlPFPv_i */
-s32 fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, int (*)(void*)) {
+fpc_ProcID fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, int (*)(void*)) {
     /* Nonmatching */
 }
 
@@ -210,7 +210,7 @@ void fop_MGameTerm_create(s16, s16, s16, int, int, int (*)(void*)) {
 }
 
 /* 8002B2B0-8002B324       .text fop_Timer_create__FsUcUsUcUcffffPFPv_i */
-uint fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, int (*)(void*)) {
+fpc_ProcID fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, int (*)(void*)) {
     /* Nonmatching */
 }
 
@@ -225,22 +225,22 @@ u32 fopMsgM_searchMessageNumber(u32) {
 }
 
 /* 8002B634-8002B778       .text fopMsgM_messageSet__FUlP10fopAc_ac_c */
-uint fopMsgM_messageSet(u32, fopAc_ac_c*) {
+fpc_ProcID fopMsgM_messageSet(u32, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 8002B778-8002B8A4       .text fopMsgM_messageSet__FUlP4cXyz */
-uint fopMsgM_messageSet(u32, cXyz*) {
+fpc_ProcID fopMsgM_messageSet(u32, cXyz*) {
     /* Nonmatching */
 }
 
 /* 8002B8A4-8002B9C4       .text fopMsgM_messageSet__FUl */
-uint fopMsgM_messageSet(u32) {
+fpc_ProcID fopMsgM_messageSet(u32) {
     /* Nonmatching */
 }
 
 /* 8002B9C4-8002BA4C       .text fopMsgM_scopeMessageSet__FUl */
-void fopMsgM_scopeMessageSet(u32) {
+fpc_ProcID fopMsgM_scopeMessageSet(u32) {
     /* Nonmatching */
 }
 
@@ -312,7 +312,7 @@ void fopMsgM_getScopeMode() {
 
 /* 8002C624-8002C650       .text fopMsgM_forceSendOn__Fv */
 bool fopMsgM_forceSendOn() {
-    if (dComIfGp_getScopeType() == 10) {
+    if (dComIfGp_getScopeMesgStatus() == 10) {
         pushButton = true;
         return true;
     }
@@ -347,8 +347,8 @@ bool fopMsgM_checkMessageSend() {
 
 /* 8002C684-8002C6B0       .text fopMsgM_releaseScopeMode__Fv */
 bool fopMsgM_releaseScopeMode() {
-    if (dComIfGp_getScopeType() == 13) {
-        dComIfGp_setScopeType(11);
+    if (dComIfGp_getScopeMesgStatus() == 13) {
+        dComIfGp_setScopeMesgStatus(11);
         return true;
     }
 
@@ -490,7 +490,7 @@ void fopMsgM_outFontDraw2(J2DPicture*, J2DPicture*, int, int, int, int, s16*, u8
 }
 
 /* 8002E204-8002E254       .text fopMsgM_Create__FsPFPv_iPv */
-u32 fopMsgM_Create(s16, int (*)(void*), void*) {
+fpc_ProcID fopMsgM_Create(s16, int (*)(void*), void*) {
     /* Nonmatching */
 }
 
@@ -563,98 +563,6 @@ void* fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header*) {
 void* fopMsgM_itemMsgGet_c::getMessage(mesg_header*) {
     /* Nonmatching */
 }
-
-class fopMsgM_msgDataProc_c {
-public:
-    fopMsgM_msgDataProc_c() {}
-    virtual ~fopMsgM_msgDataProc_c() {};
-    void dataInit();
-    void charLength(int, int, bool);
-    void rubyLength(int, bool);
-    void stringLength();
-    void stringShift();
-    void iconSelect(int, u8);
-    void iconIdxRefresh();
-    void selectCheck2(J2DPane*, int, int, int);
-    void selectCheck3(J2DPane*, int, int, int);
-    void selectCheckYoko(J2DPane*, int, int, int);
-    void inputNumber(int);
-    void selectArrow(J2DPicture*, f32, f32, f32, f32);
-    void selectArrow(J2DPicture*, f32, f32);
-    void colorAnime(J2DPicture*);
-    void stringSet();
-    void setSelectFlagYokoOn();
-    void setSelectFlagOn();
-    void setHandSendFlagOn();
-    void setAutoSendFlagOn();
-    void getHandSendFlag();
-    void getAutoSendFlag();
-    void getString(char*, u32);
-    void getString(char*, char*, char*, char*, u32, f32*, f32*, int*);
-    void getRubyString(char*, char*, char*, char*, char*, char*, f32*, f32*, int*);
-    void tag_len_kaisen_game(int*, f32*, int*, int*, int*);
-    void tag_len_rupee(int*, f32*, int*, int*, int*);
-    void tag_len_num_input(int*, f32*, int*, int*, int*);
-    void tag_len_sword_game(int*, f32*, int*, int*, int*);
-    void tag_len_letter_game(int*, f32*, int*, int*, int*);
-    void tag_len_letter_game_max(int*, f32*, int*, int*, int*);
-    void tag_len_fish(int*, f32*, int*, int*, int*);
-    void tag_len_fish_rupee(int*, f32*, int*, int*, int*);
-    void tag_len_letter(int*, f32*, int*, int*, int*);
-    void tag_len_rescue(int*, f32*, int*, int*, int*);
-    void tag_len_forest_timer(int*, f32*, int*, int*, int*);
-    void tag_len_birdman(int*, f32*, int*, int*, int*);
-    void tag_len_point(int*, f32*, int*, int*, int*);
-    void tag_len_get_pendant(int*, f32*, int*, int*, int*);
-    void tag_len_rev_pendant(int*, f32*, int*, int*, int*);
-    void tag_len_pig_timer(int*, f32*, int*, int*, int*);
-    void tag_len_get_bomb(int*, f32*, int*, int*, int*);
-    void tag_len_get_arrow(int*, f32*, int*, int*, int*);
-    void tag_len_stock_bokobaba(int*, f32*, int*, int*, int*);
-    void tag_len_stock_dokuro(int*, f32*, int*, int*, int*);
-    void tag_len_stock_chuchu(int*, f32*, int*, int*, int*);
-    void tag_len_stock_pendant(int*, f32*, int*, int*, int*);
-    void tag_len_stock_hane(int*, f32*, int*, int*, int*);
-    void tag_len_stock_kenshi(int*, f32*, int*, int*, int*);
-    void tag_len_terry_rupee(int*, f32*, int*, int*, int*);
-    void tag_len_input_bokobaba(int*, f32*, int*, int*, int*);
-    void tag_len_input_dokuro(int*, f32*, int*, int*, int*);
-    void tag_len_input_chuchu(int*, f32*, int*, int*, int*);
-    void tag_len_input_pendant(int*, f32*, int*, int*, int*);
-    void tag_len_input_hane(int*, f32*, int*, int*, int*);
-    void tag_len_input_kenshi(int*, f32*, int*, int*, int*);
-    void tag_kaisen_game();
-    void tag_rupee();
-    void tag_num_input();
-    void tag_sword_game();
-    void tag_letter_game();
-    void tag_letter_game_max();
-    void tag_fish();
-    void tag_fish_rupee();
-    void tag_letter();
-    void tag_rescue();
-    void tag_forest_timer();
-    void tag_birdman();
-    void tag_point();
-    void tag_get_pendant();
-    void tag_rev_pendant();
-    void tag_pig_timer();
-    void tag_get_bomb();
-    void tag_get_arrow();
-    void tag_stock_bokobaba();
-    void tag_stock_dokuro();
-    void tag_stock_chuchu();
-    void tag_stock_pendant();
-    void tag_stock_hane();
-    void tag_stock_kenshi();
-    void tag_terry_rupee();
-    void tag_input_bokobaba();
-    void tag_input_dokuro();
-    void tag_input_chuchu();
-    void tag_input_pendant();
-    void tag_input_hane();
-    void tag_input_kenshi();
-};
 
 /* 8002E7DC-8002E95C       .text dataInit__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::dataInit() {
@@ -1170,7 +1078,7 @@ void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* i_this, J2DScreen* scrn, u32 
         i_this->pane = pane;
         fopMsgM_pane_parts_set(i_this);
     } else {
-        JUT_ASSERT(0x398d, 0);
+        JUT_ASSERT(0x398d, FALSE);
     }
 }
 

@@ -1349,7 +1349,7 @@ static u32 l_msg_try_force[] = {
 };
 
 static u32 l_get_item_no[] = {
-    KAKERA_HEART,
+    dItem_HEART_PIECE_e,
 };
 
 static dCcD_SrcSph l_sph_src = {
@@ -1806,19 +1806,19 @@ bool daNpcRoten_c::_draw() {
 }
 
 static daNpcRoten_c::InitFunc_t l_execute_init[] = {
-    daNpcRoten_c::executeWaitInit,
-    daNpcRoten_c::executeTalkInit,
-    daNpcRoten_c::executeWalkInit,
-    daNpcRoten_c::executeTurnInit,
-    daNpcRoten_c::executeWindInit,
+    &daNpcRoten_c::executeWaitInit,
+    &daNpcRoten_c::executeTalkInit,
+    &daNpcRoten_c::executeWalkInit,
+    &daNpcRoten_c::executeTurnInit,
+    &daNpcRoten_c::executeWindInit,
 };
 
 static daNpcRoten_c::MoveFunc_t moveProc[] = {
-    daNpcRoten_c::executeWait,
-    daNpcRoten_c::executeTalk,
-    daNpcRoten_c::executeWalk,
-    daNpcRoten_c::executeTurn,
-    daNpcRoten_c::executeWind,
+    &daNpcRoten_c::executeWait,
+    &daNpcRoten_c::executeTalk,
+    &daNpcRoten_c::executeWalk,
+    &daNpcRoten_c::executeTurn,
+    &daNpcRoten_c::executeWind,
 };
 
 /* 000013F8-00001604       .text _execute__12daNpcRoten_cFv */
@@ -2002,7 +2002,7 @@ void daNpcRoten_c::executeTurn() {
 s32 daNpcRoten_c::executeWindInit() {
     setAnmTbl(l_npc_anm_wind);
     J3DAnmTransform* pAnmRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bck_ix_tbl[mNpcNo]));
-    field_0x6D8->setAnm(pAnmRes, 0, 14.0f, 1.0f, 0.0f, 39.0f, NULL);
+    field_0x6D8->setAnm(pAnmRes, J3DFrameCtrl::LOOP_ONCE_e, 14.0f, 1.0f, 0.0f, 39.0f, NULL);
 
     return 4;
 }
@@ -2312,7 +2312,7 @@ void daNpcRoten_c::eventClrItemInit() {
 
 /* 00002978-00002A70       .text eventGetItemInit__12daNpcRoten_cFi */
 void daNpcRoten_c::eventGetItemInit(int staffIdx) {
-    uint pcId;
+    fpc_ProcID pcId;
 
     u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
     if(pData != NULL) {
@@ -2691,9 +2691,9 @@ BOOL daNpcRoten_c::initTexPatternAnm(bool modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
 
     m_head_tex_pattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_btp_ix_tbl[mNpcNo]));
-    JUT_ASSERT(0xBFF, m_head_tex_pattern != 0);
+    JUT_ASSERT(0xBFF, m_head_tex_pattern != NULL);
 
-    if(!mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0f, 0, -1, modify, 0)) {
+    if(!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::LOOP_REPEAT_e,  1.0f, 0, -1, modify, 0)) {
         return false;
     }
 

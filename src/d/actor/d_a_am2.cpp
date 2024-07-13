@@ -363,7 +363,7 @@ static BOOL body_atari_check(am2_class* i_this) {
 
 /* 00000F54-00000FF4       .text BG_check__FP9am2_class */
 static void BG_check(am2_class* i_this) {
-    f32 halfHeight = 40.0f + g_regHIO.mChild[8].mFloatRegs[12];
+    f32 halfHeight = 40.0f + REG8_F(12);
     i_this->mAcchCir.SetWall(halfHeight, i_this->mAcchRadius);
 
     i_this->current.pos.y -= i_this->mCorrectionOffsetY;
@@ -378,7 +378,7 @@ static BOOL Line_check(am2_class* i_this, cXyz destPos) {
     fopAc_ac_c* actor = i_this;
     dBgS_LinChk linChk;
     cXyz centerPos = actor->current.pos;
-    centerPos.y += 100.0f + g_regHIO.mChild[12].mFloatRegs[19];
+    centerPos.y += 100.0f + REG12_F(19);
     i_this->mLinChkCenter = centerPos;
     i_this->mLinChkDest = destPos;
     linChk.Set(&centerPos, &destPos, actor);
@@ -413,7 +413,7 @@ static BOOL naraku_check(am2_class* i_this) {
                 i_this->mCountDownTimers[4] = 1*30;
                 waterPillarPos.y = i_this->mAcch.m_wtr.GetHeight();
                 f32 centerY = i_this->current.pos.y + 80.0f;
-                f32 scaleY = (0.1f + g_regHIO.mChild[8].mFloatRegs[1]) * (waterPillarPos.y - centerY);
+                f32 scaleY = (0.1f + REG8_F(1)) * (waterPillarPos.y - centerY);
                 if (scaleY < 0.0f) {
                     scaleY = 0.3f;
                 } else if (scaleY > 1.0f) {
@@ -431,7 +431,7 @@ static BOOL naraku_check(am2_class* i_this) {
             }
         }
         
-        f32 waterSinkDepth = 80.0f + g_regHIO.mChild[12].mFloatRegs[0];
+        f32 waterSinkDepth = 80.0f + REG12_F(0);
         if (i_this->current.pos.y < i_this->mAcch.m_wtr.GetHeight() - waterSinkDepth) {
             i_this->speedF = 0.0f;
             i_this->speed.setall(0.0f);
@@ -457,7 +457,7 @@ static void action_dousa(am2_class* i_this) {
         offset.set(0.0f, 0.0f, 200.0f);
         MtxPosition(&offset, &rotOffset);
         rotOffset += i_this->current.pos;
-        rotOffset.y += 100.0f + g_regHIO.mChild[12].mFloatRegs[19];
+        rotOffset.y += 100.0f + REG12_F(19);
     }
     
     switch (i_this->mState) {
@@ -465,7 +465,7 @@ static void action_dousa(am2_class* i_this) {
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
             i_this->mCountUpTimers[i] = 0;
         }
-        i_this->mAcchRadius = 80.0f + g_regHIO.mChild[8].mFloatRegs[11];
+        i_this->mAcchRadius = 80.0f + REG8_F(11);
         if (i_this->mCurrBckIdx != AM2_BCK_WAIT) {
             anm_init(i_this, AM2_BCK_WAIT, 10.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         }
@@ -475,7 +475,7 @@ static void action_dousa(am2_class* i_this) {
         f32 playerDist = fopAcM_searchPlayerDistance(i_this);
         if (playerDist < i_this->mAreaRadius) {
             cXyz centerPos = player->current.pos;
-            centerPos.y += 100.0f + g_regHIO.mChild[12].mFloatRegs[19];
+            centerPos.y += 100.0f + REG12_F(19);
             if (Line_check(i_this, centerPos)) {
                 i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                 fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
@@ -663,7 +663,7 @@ static void action_mahi(am2_class* i_this) {
                 i_this->mCountUpTimers[1] = 0;
             }
             if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
-                i_this->mAcchRadius = 40.0f + g_regHIO.mChild[8].mFloatRegs[10];
+                i_this->mAcchRadius = 40.0f + REG8_F(10);
                 i_this->mbMadeWaterSplash = false;
                 i_this->mRippleCb.end();
                 i_this->mPickedUpYPos = actor->current.pos.y;
@@ -687,7 +687,7 @@ static void action_mahi(am2_class* i_this) {
             cLib_addCalcAngleS2(&actor->shape_angle.y, actor->current.angle.y, 1, 0x1000);
         }
         if (!fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
-            i_this->mAcchRadius = 40.0f + g_regHIO.mChild[8].mFloatRegs[10];
+            i_this->mAcchRadius = 40.0f + REG8_F(10);
             i_this->mBodyCyl.OnCoSetBit();
             if (actor->speedF > 0.0f) {
                 actor->gravity = -5.0f;
@@ -1129,7 +1129,7 @@ static BOOL daAM2_Execute(am2_class* i_this) {
     actor->attention_info.position = actor->current.pos;
     actor->attention_info.position.y += 120.0f;
     actor->eyePos = i_this->mEyeballPos;
-    actor->eyePos.y -= 15.0f + g_regHIO.mChild[8].mFloatRegs[2];
+    actor->eyePos.y -= 15.0f + REG8_F(2);
 
     i_this->mBodyCyl.SetC(i_this->current.pos);
     i_this->mBodyCyl.SetH(150.0f);
@@ -1138,7 +1138,7 @@ static BOOL daAM2_Execute(am2_class* i_this) {
 
     i_this->mNeedleCyl.SetC(i_this->mNeedlePos);
     i_this->mNeedleCyl.SetH(20.0f);
-    i_this->mNeedleCyl.SetR(55.0f + g_regHIO.mChild[8].mFloatRegs[3]);
+    i_this->mNeedleCyl.SetR(55.0f + REG8_F(3));
     dComIfG_Ccsp()->Set(&i_this->mNeedleCyl);
 
     i_this->mEyeSph.SetC(i_this->mEyeballPos);
@@ -1200,14 +1200,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     i_this->mpBtkAnm = new mDoExt_btkAnm();
     if (!i_this->mpBtkAnm) { return FALSE; }
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("AM2", AM2_BTK_AM2);
-    int ret = i_this->mpBtkAnm->init(model->getModelData(), pbtk, TRUE, 2, 1.0f, 0, -1, false, 0);
+    int ret = i_this->mpBtkAnm->init(model->getModelData(), pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
     if (!ret) { return FALSE; }
     if (!i_this->mpBtkAnm) { return FALSE; }
     
     i_this->mpBrkAnm = new mDoExt_brkAnm();
     if (!i_this->mpBrkAnm) { return FALSE; }
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("AM2", AM2_BRK_AM2);
-    ret = i_this->mpBrkAnm->init(model->getModelData(), pbrk, TRUE, 2, 1.0f, 0, -1, false, 0);
+    ret = i_this->mpBrkAnm->init(model->getModelData(), pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
     if (!ret) { return FALSE; }
     if (!i_this->mpBrkAnm) { return FALSE; }
     
@@ -1272,7 +1272,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
         if (i_this->mStartsInactive == 0xFF) {
             i_this->mStartsInactive = 0;
         }
-        if (g_regHIO.mChild[8].mShortRegs[9] != 0) {
+        if (REG8_S(9) != 0) {
             i_this->mType = 1;
         }
         if (i_this->mPrmAreaRadius == 0xFF || i_this->mPrmAreaRadius == 0) {
@@ -1459,7 +1459,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
             i_this->mState = 0xC;
         }
         
-        i_this->mAcchRadius = 40.0f + g_regHIO.mChild[8].mFloatRegs[10];
+        i_this->mAcchRadius = 40.0f + REG8_F(10);
     }
 
     return phase_state;

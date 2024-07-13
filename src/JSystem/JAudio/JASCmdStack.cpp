@@ -25,8 +25,8 @@ bool JASystem::Kernel::TPortCmd::addPortCmdOnce() {
 
 /* 8027D730-8027D7E8       .text setPortCmd__Q38JASystem6Kernel8TPortCmdFPFPQ38JASystem6Kernel9TPortArgs_vPQ38JASystem6Kernel9TPortArgs */
 bool JASystem::Kernel::TPortCmd::setPortCmd(void (*func)(JASystem::Kernel::TPortArgs*), JASystem::Kernel::TPortArgs* pargs) {
-    JUT_ASSERT(83, func != 0);
-    JUT_ASSERT(84, pargs != 0);
+    JUT_ASSERT(83, func != NULL);
+    JUT_ASSERT(84, pargs != NULL);
     field_0x8 = func;
     field_0xc = pargs;
     field_0x0 = NULL;
@@ -36,7 +36,7 @@ bool JASystem::Kernel::TPortCmd::setPortCmd(void (*func)(JASystem::Kernel::TPort
 /* 8027D7E8-8027D8A4       .text addPortCmd__Q38JASystem6Kernel8TPortCmdFPQ38JASystem6Kernel9TPortHead */
 bool JASystem::Kernel::TPortCmd::addPortCmd(JASystem::Kernel::TPortHead* phead) {
     /* Nonmatching */
-    JUT_ASSERT(105, phead != 0);
+    JUT_ASSERT(105, phead != NULL);
     BOOL enable = OSDisableInterrupts();
     if (field_0x0) {
         OSRestoreInterrupts(enable);
@@ -56,7 +56,7 @@ bool JASystem::Kernel::TPortCmd::addPortCmd(JASystem::Kernel::TPortHead* phead) 
 
 /* 8027D8A4-8027D924       .text portCmdProcOnce__Q28JASystem6KernelFPQ38JASystem6Kernel9TPortHead */
 void JASystem::Kernel::portCmdProcOnce(JASystem::Kernel::TPortHead* phead) {
-    JUT_ASSERT(223, phead != 0);
+    JUT_ASSERT(223, phead != NULL);
     while (true) {
         TPortCmd* cmd = getPortCmd(phead);
         if (!cmd) {
@@ -68,7 +68,7 @@ void JASystem::Kernel::portCmdProcOnce(JASystem::Kernel::TPortHead* phead) {
 
 /* 8027D924-8027D9A4       .text portCmdProcStay__Q28JASystem6KernelFPQ38JASystem6Kernel9TPortHead */
 void JASystem::Kernel::portCmdProcStay(JASystem::Kernel::TPortHead* phead) {
-    JUT_ASSERT(245, phead != 0);
+    JUT_ASSERT(245, phead != NULL);
     TPortCmd* cmd = phead->field_0x0;
     while (true) {
         if (!cmd) {
@@ -81,7 +81,7 @@ void JASystem::Kernel::portCmdProcStay(JASystem::Kernel::TPortHead* phead) {
 
 /* 8027D9A4-8027DA0C       .text portHeadInit__Q28JASystem6KernelFPQ38JASystem6Kernel9TPortHead */
 void JASystem::Kernel::portHeadInit(JASystem::Kernel::TPortHead* phead) {
-    JUT_ASSERT(267, phead != 0);
+    JUT_ASSERT(267, phead != NULL);
     phead->field_0x0 = NULL;
     phead->field_0x4 = NULL;
 }
@@ -99,7 +99,7 @@ void JASystem::Kernel::portCmdInit() {
 JASystem::Kernel::TPortCmd* JASystem::Kernel::getPortCmd(JASystem::Kernel::TPortHead* phead) {
     TPortCmd* r31;
     TPortCmd* r30 = NULL;
-    JUT_ASSERT(311, phead != 0);
+    JUT_ASSERT(311, phead != NULL);
     r31 = phead->field_0x0;
     if (r31) {
         r30 = r31;

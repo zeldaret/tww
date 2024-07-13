@@ -134,7 +134,7 @@ namespace daObjPaper {
 
         mdl_data = (J3DModelData*)dComIfG_getObjectRes(attr(mType).mResName, attr(mType).mModelId);
 
-        JUT_ASSERT(0x13E, mdl_data != 0);
+        JUT_ASSERT(0x13E, mdl_data != NULL);
 
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
         if (mpModel)

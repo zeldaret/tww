@@ -344,7 +344,7 @@ s32 daBg_c::create() {
     JKRExpHeap * roomHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
     if (roomHeap != NULL) {
         heap = JKRSolidHeap::create(-1, roomHeap, false);
-        JUT_ASSERT(0x2fd, heap != 0);
+        JUT_ASSERT(0x2fd, heap != NULL);
         JKRHeap * oldHeap = mDoExt_setCurrentHeap(heap);
         s32 rt = createHeap();
         JUT_ASSERT(0x302, rt == 1);

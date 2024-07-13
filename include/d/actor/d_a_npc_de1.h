@@ -28,7 +28,7 @@ public:
     void checkOrder();
     void chkAttention();
     void setAttention();
-    void searchByID(uint);
+    void searchByID(fpc_ProcID);
     void setDemoStartCenter();
     void partner_srch();
     void ccCreate();

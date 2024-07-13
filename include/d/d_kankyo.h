@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "dolphin/gx/GX.h"
+#include "f_pc/f_pc_base.h"
 #include "global.h"
 
 class J3DModel;
@@ -78,7 +79,7 @@ struct SND_INFLUENCE {
     /* 0x00 */ cXyz field_0x0;
     /* 0x0C */ int field_0xc;
     /* 0x10 */ int field_0x10;
-    /* 0x14 */ u32 field_0x14;
+    /* 0x14 */ fpc_ProcID field_0x14;
 };
 
 struct WAVECHAN {
@@ -393,7 +394,7 @@ void dKy_set_nexttime(f32);
 void dKy_instant_timechg(f32);
 void dKy_instant_rainchg();
 SND_INFLUENCE * dKy_Sound_get();
-void dKy_Sound_set(cXyz i_pos, int param_1, uint i_actorID, int param_3);
+void dKy_Sound_set(cXyz i_pos, int param_1, fpc_ProcID i_actorID, int param_3);
 void dKy_SordFlush_set(cXyz hitPos, int lightType);
 void dKy_itudemo_se();
 void dKy_actor_addcol_set(s16, s16, s16, f32);
@@ -443,11 +444,16 @@ void dKy_set_vrboxsoracol_ratio(f32 ratio);
 void dKy_set_vrboxkumocol_ratio(f32 ratio);
 void dKy_set_allcol_ratio(f32 ratio);
 void dKy_get_seacolor(GXColor* amb, GXColor* dif);
+BOOL dKy_moon_look_chk();
+BOOL dKy_orion_look_chk();
+BOOL dKy_hokuto_look_chk();
+cXyz dKy_get_moon_pos();
 cXyz dKy_get_orion_pos();
 cXyz dKy_get_hokuto_pos();
 void dKy_DayProc();
 u8 dKy_get_schbit();
 int dKy_rain_check();
 void dKy_setLight_mine(dKy_tevstr_c* pTevStr);
+BOOL dKy_daynighttact_stop_chk();
 
 #endif /* D_KANKYO_D_KANKYO_H */

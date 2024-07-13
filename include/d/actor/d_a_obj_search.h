@@ -19,8 +19,8 @@ namespace daObj_Search {
         
         void isSecond() {}
         void modeProcInit(int) {}
-        void setBkControl(bool) {}
-        void setChildId(uint) {}
+        void setBkControl(bool control) { mBkControl = control; }
+        void setChildId(fpc_ProcID id) { mChildId = id; }
         
         void _createHeap();
         void searchCreateHeap();
@@ -67,7 +67,9 @@ namespace daObj_Search {
     public:
         /* Place member variables here */
         /* 0x290 */ u8 m290[0x664 - 0x290];
-        /* 0x664 */ u8 m664;
+        /* 0x664 */ bool mBkControl;
+        /* 0x665 */ u8 m665[0x84C - 0x665];
+        /* 0x84C */ fpc_ProcID mChildId;
     };
 
     class Bgc_c {
