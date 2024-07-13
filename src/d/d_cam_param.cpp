@@ -4,50 +4,84 @@
 //
 
 #include "d/d_cam_param.h"
+#include "d/d_kankyo_wether.h"
+#include "m_Do/m_Do_mtx.h"
+#include "SSystem/SComponent/c_math.h"
 
 /* 800AF384-800AF4F4       .text rationalBezierRatio__8dCamMathFff */
-void dCamMath::rationalBezierRatio(f32, f32) {
+f32 dCamMath::rationalBezierRatio(f32 x, f32 y) {
     /* Nonmatching */
 }
 
 /* 800AF4F4-800AF544       .text customRBRatio__8dCamMathFff */
-void dCamMath::customRBRatio(f32, f32) {
+f32 dCamMath::customRBRatio(f32 x, f32 y) {
     /* Nonmatching */
+    if (x > 0.7071068f) {
+        if (x < 0.0f) {
+            return -1.0f;
+        } else {
+            return 1.0f;
+        }
+    }
+
+    return rationalBezierRatio(x * 1.414214f, y);
 }
 
 /* 800AF544-800AF5A0       .text zoomFovy__8dCamMathFff */
-void dCamMath::zoomFovy(f32, f32) {
-    /* Nonmatching */
+f32 dCamMath::zoomFovy(f32 deg, f32 y) {
+    cDegree d(deg);
+    return cAngle::r2d(cM_atan2f(d.Sin(), d.Cos() * y));
 }
 
 /* 800AF5A0-800AF608       .text xyzRotateX__8dCamMathFR4cXyz7cSAngle */
-void dCamMath::xyzRotateX(cXyz&, cSAngle) {
-    /* Nonmatching */
+cXyz dCamMath::xyzRotateX(cXyz& vec, cSAngle angle) {
+    cXyz ret;
+    Mtx mtx;
+    cMtx_XrotS(mtx, angle.Val());
+    cMtx_multVec(mtx, &vec, &ret);
+    return ret;
 }
 
 /* 800AF608-800AF670       .text xyzRotateY__8dCamMathFR4cXyz7cSAngle */
-void dCamMath::xyzRotateY(cXyz&, cSAngle) {
-    /* Nonmatching */
+cXyz dCamMath::xyzRotateY(cXyz& vec, cSAngle angle) {
+    cXyz ret;
+    Mtx mtx;
+    cMtx_YrotS(mtx, angle.Val());
+    cMtx_multVec(mtx, &vec, &ret);
+    return ret;
 }
 
 /* 800AF670-800AF734       .text xyzHorizontalDistance__8dCamMathFR4cXyzR4cXyz */
-void dCamMath::xyzHorizontalDistance(cXyz&, cXyz&) {
-    /* Nonmatching */
+f32 dCamMath::xyzHorizontalDistance(cXyz& a, cXyz& b) {
+    f64 x = a.x - b.x;
+    f64 z = a.z - b.z;
+    f64 distSq = x*x + z*z;
+    return sqrt(distSq);
 }
 
 /* 800AF734-800AF810       .text xyzProjPosOnYZ__8dCamMathF7cSAngleR4cXyzR4cXyz */
-void dCamMath::xyzProjPosOnYZ(cSAngle, cXyz&, cXyz&) {
+cXyz dCamMath::xyzProjPosOnYZ(cSAngle angle, cXyz& a, cXyz& b) {
     /* Nonmatching */
+    cXyz line;
+    cXyz rot;
+    line = b - a;
+    rot = xyzRotateY(line, -angle);
+    rot.x = 0.0f;
+    line = xyzRotateY(rot, angle);
+    return b + line;
 }
 
 /* 800AF810-800AF838       .text __ct__9dCstick_cFv */
 dCstick_c::dCstick_c() {
     /* Nonmatching */
+    m00 = 0.2f;
+    m04 = 0.95f;
+    m08 = 6;
 }
 
 /* 800AF838-800AF840       .text Shift__9dCstick_cFUl */
-void dCstick_c::Shift(u32) {
-    /* Nonmatching */
+s32 dCstick_c::Shift(u32) {
+    return 0;
 }
 
 /* 800AF840-800AF8F4       .text __ct__11dCamBGChk_cFv */
@@ -56,13 +90,12 @@ dCamBGChk_c::dCamBGChk_c() {
 }
 
 /* 800AF8F4-800AF930       .text __ct__11dCamParam_cFl */
-dCamParam_c::dCamParam_c(s32) {
-    /* Nonmatching */
+dCamParam_c::dCamParam_c(s32 styleIdx) {
+    Change(styleIdx);
 }
 
 /* 800AF930-800AF978       .text __dt__11dCamParam_cFv */
 dCamParam_c::~dCamParam_c() {
-    /* Nonmatching */
 }
 
 /* 800AF978-800AF9BC       .text Change__11dCamParam_cFl */
@@ -90,13 +123,40 @@ s32 dCamParam_c::SearchStyle(u32 r4) {
 }
 
 /* 800AFA04-800AFAA4       .text ratiof__11dCamParam_cFffff */
-void dCamParam_c::ratiof(f32, f32, f32, f32) {
-    /* Nonmatching */
+f32 dCamParam_c::ratiof(f32 t, f32 upper, f32 lower, f32 base) {
+    if (t == 0.0f)
+        return base;
+
+    f32 ret = base;
+    if (t < 0.0f) {
+        ret += (ret - lower) * dCamMath::customRBRatio(t, 0.25f);
+    } else {
+        ret += (upper - ret) * dCamMath::customRBRatio(t, 0.25f);
+    }
+    return ret;
 }
 
 /* 800AFAA4-800AFB00       .text DefaultRadius__11dCamParam_cFPf */
-void dCamParam_c::DefaultRadius(f32*) {
+BOOL dCamParam_c::DefaultRadius(f32* radius) {
     /* Nonmatching */
+    f32 min, max;
+    if (mpStyle->m3C < mpStyle->m40) {
+        min = mpStyle->m3C;
+        max = mpStyle->m40;
+    } else {
+        min = mpStyle->m40;
+        max = mpStyle->m3C;
+    }
+
+    if (*radius > max) {
+        *radius = max;
+        return FALSE;
+    } else if (*radius < min) {
+        *radius = min;
+        return FALSE;
+    } else {
+        return TRUE;
+    }
 }
 
 /* 800AFB00-800AFB88       .text RadiusRatio__11dCamParam_cFf */
@@ -105,33 +165,42 @@ void dCamParam_c::RadiusRatio(f32) {
 }
 
 /* 800AFB88-800AFBB8       .text CenterHeight__11dCamParam_cFf */
-void dCamParam_c::CenterHeight(f32) {
+f32 dCamParam_c::CenterHeight(f32 t) {
+    return ratiof(t, mpStyle->centerHeightUpper, mpStyle->centerHeightLower, mpStyle->centerHeightBase);
     /* Nonmatching */
 }
 
 /* 800AFBB8-800AFBE8       .text Fovy__11dCamParam_cFf */
-void dCamParam_c::Fovy(f32) {
-    /* Nonmatching */
+f32 dCamParam_c::Fovy(f32 t) {
+    return ratiof(t, mpStyle->fovyUpper, mpStyle->fovyLower, mpStyle->fovyBase);
 }
 
 /* 800AFBE8-800AFC74       .text LockonLongitude__11dCamParam_cFf */
-void dCamParam_c::LockonLongitude(f32) {
-    /* Nonmatching */
+s16 dCamParam_c::LockonLongitude(f32 t) {
+    cSAngle ret(mpStyle->lockonLongitudeMin);
+    ret += (cSAngle(mpStyle->lockonLongitudeMax) - ret) * t;
+    return ret.Val();
 }
 
 /* 800AFC74-800AFD00       .text LockonLatitude__11dCamParam_cFf */
-void dCamParam_c::LockonLatitude(f32) {
-    /* Nonmatching */
+s16 dCamParam_c::LockonLatitude(f32 t) {
+    cSAngle ret(mpStyle->lockonLatitudeMin);
+    ret += (cSAngle(mpStyle->lockonLatitudeMax) - ret) * t;
+    return ret.Val();
 }
 
 /* 800AFD00-800AFD20       .text LockonFovy__11dCamParam_cFf */
-void dCamParam_c::LockonFovy(f32) {
-    /* Nonmatching */
+f32 dCamParam_c::LockonFovy(f32 t) {
+    f32 ret = mpStyle->lockonFovyMin;
+    ret += t * (mpStyle->lockonFovyMax - ret);
+    return ret;
 }
 
 /* 800AFD20-800AFD40       .text LockonCenterHeight__11dCamParam_cFf */
-void dCamParam_c::LockonCenterHeight(f32) {
-    /* Nonmatching */
+f32 dCamParam_c::LockonCenterHeight(f32 t) {
+    f32 ret = mpStyle->lockonCenterHeightMin;
+    ret += t * (mpStyle->lockonCenterHeightMax - ret);
+    return ret;
 }
 
 /* 800AFD40-800AFEE0       .text __ct__11dCamSetup_cFv */
@@ -145,11 +214,24 @@ dCamSetup_c::~dCamSetup_c() {
 }
 
 /* 800AFF40-800AFFB0       .text CheckLatitudeRange__11dCamSetup_cFPs */
-void dCamSetup_c::CheckLatitudeRange(s16*) {
-    /* Nonmatching */
+bool dCamSetup_c::CheckLatitudeRange(s16* angle) {
+    s16 upper = cAngle::d2s(m060);
+    s16 lower = cAngle::d2s(m05C);
+
+    if (*angle > upper) {
+        *angle = upper;
+        return false;
+    }
+
+    if (*angle < lower) {
+        *angle = lower;
+        return false;
+    }
+
+    return true;
 }
 
 /* 800AFFB0-800B0004       .text FanBank__11dCamSetup_cFv */
-void dCamSetup_c::FanBank() {
-    /* Nonmatching */
+f32 dCamSetup_c::FanBank() {
+    return m080 + cM_rndFX(m084) * dKyw_get_wind_pow();
 }
