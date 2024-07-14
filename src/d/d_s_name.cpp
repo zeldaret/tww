@@ -696,7 +696,7 @@ void dScnName_c::FileSelectMainNormal() {
                 dComIfGs_setPictureNum(pictureNum - failed);
             }
             dComIfGs_setEventReg(0x89ff, 0);
-            g_mDoMemCd_control.mCardCommand = 0;
+            mDoMemCd_setPictDataPtr(NULL);
             g_dComIfG_gameInfo.play.itemInit();
             if (field_0x1bb9 != 0) {
                 field_0x1bb6 = 3;

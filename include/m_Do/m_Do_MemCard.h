@@ -49,6 +49,7 @@ public:
     u8 getNowSlot() { return mCardSlot; }
     u8* getPictDataPtr() { return mPictDataPtr; }
     u8* getPictWriteDataPtr() { return mPictDataWritePtr; }
+    void setPictDataPtr(u8* v) { mPictDataPtr = v; }
     void setCardSerialNo(u64 v) { mCardSerialNo = v; }
     void setDataVersion(u32 v) { mDataVersion = v; }
 
@@ -99,6 +100,10 @@ inline void mDoMemCd_setDataVersion(u32 v) {
 
 inline u8* mDoMemCd_getPictDataPtr() {
     return g_mDoMemCd_control.getPictDataPtr();
+}
+
+inline void mDoMemCd_setPictDataPtr(u8* v) {
+    g_mDoMemCd_control.setPictDataPtr(v);
 }
 
 inline u8* mDoMemCd_getPictWriteDataPtr() {
