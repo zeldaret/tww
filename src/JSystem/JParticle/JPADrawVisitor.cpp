@@ -327,13 +327,13 @@ void JPADrawExecRotBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* p
     MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, pt, &pt);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32((x0 * cos - y0 * sin) + pt.x, x0 + y0 + pt.y, pt.z);
+    GXPosition3f32((x0 * cos - y0 * sin) + pt.x, (x0 * sin + y0 * cos) + pt.y, pt.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[0].x, JPADrawContext::pcb->mTexCoordPt[0].y);
-    GXPosition3f32((x1 * cos - y0 * sin) + pt.x, y0 + x1 + pt.y, pt.z);
+    GXPosition3f32((x1 * cos - y0 * sin) + pt.x, (x1 * sin + y0 * cos) + pt.y, pt.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[1].x, JPADrawContext::pcb->mTexCoordPt[1].y);
-    GXPosition3f32((x1 * cos - y1 * sin) + pt.x, y1 + x1 + pt.y, pt.z);
+    GXPosition3f32((x1 * cos - y1 * sin) + pt.x, (x1 * sin + y1 * cos) + pt.y, pt.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[2].x, JPADrawContext::pcb->mTexCoordPt[2].y);
-    GXPosition3f32((x0 * cos - y1 * sin) + pt.x, y1 + x0 + pt.y, pt.z);
+    GXPosition3f32((x0 * cos - y1 * sin) + pt.x, (x0 * sin + y1 * cos) + pt.y, pt.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[3].x, JPADrawContext::pcb->mTexCoordPt[3].y);
     GXEnd();
 }
