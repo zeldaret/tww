@@ -49,7 +49,7 @@ public:
 
     /* 0x0000 */ u8 mData[0x1650];
     /* 0x1650 */ s32 mCardCommand;
-    /* 0x1654 */ s32 mCardState;
+    /* 0x1654 */ u8* mCardBuf;
     /* 0x1658 */ u8 mCardSlot;
     /* 0x1659 */ u8 field_0x1659;
     /* 0x165A */ u8 field_0x165A;

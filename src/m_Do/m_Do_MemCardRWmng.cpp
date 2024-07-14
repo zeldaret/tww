@@ -4,11 +4,117 @@
 //
 
 #include "m_Do/m_Do_MemCardRWmng.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_MemCard.h"
+#include "m_Do/m_Do_dvd_thread.h"
+#include "d/d_com_inf_game.h"
+#include "JSystem/JKernel/JKRAram.h"
+#include "JSystem/JUtility/JUTTexture.h"
+#include "dolphin/card.h"
+#include "dolphin/os/OS.h"
+
+#include <string.h>
+#include <printf.h>
+
+struct mDoMemCdRWm_HeaderData
+{
+    /* 0x0000 */ u8 banner[0x0e00];
+    /* 0x0e00 */ u8 icon[0x0200];
+    /* 0x1000 */ u8 field_0x1000[0x0c00];
+    /* 0x1c00 */ char comment[32];
+    /* 0x1c20 */ char info[32];
+};
+
+struct card_savedata
+{
+    u32 saveCount;
+    u32 field_0x04;
+    u8 data[0x1ff4];
+    u32 csum;
+};
+
+struct card_pictdata
+{
+    u8 data[0x1ffe];
+    u16 csum;
+};
+
+struct card_gamedata
+{
+    u8 data[0x768];
+    unsigned long long csum;
+};
+
+static u8 sTmpBuf[0x2000];
+static u32 sSaveCount;
 
 /* 80019940-80019CE8       .text mDoMemCdRWm_Store__FP12CARDFileInfoPvUl */
-s32 mDoMemCdRWm_Store(CARDFileInfo*, void*, u32) {
+s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
     /* Nonmatching */
+    s32 ret;
+    mDoMemCdRWm_BuildHeader((mDoMemCdRWm_HeaderData*)sTmpBuf);
+    ret = CARDWrite(card, sTmpBuf, 0x2000, 0x0000);
+    if (ret != CARD_ERROR_READY) return ret;
+
+    if (!mDoMemCdRWm_CheckCardStat(card)) {
+        memset(sTmpBuf, 0, 0x2000);
+        ret = CARDWrite(card, sTmpBuf, 0x2000, 0x2000);
+        if (ret != CARD_ERROR_READY) return ret;
+        ret = CARDWrite(card, sTmpBuf, 0x2000, 0x4000);
+        if (ret != CARD_ERROR_READY) return ret;
+        sSaveCount = 0;
+    }
+
+    memset(sTmpBuf, 0, 0x2000);
+    card_savedata* save = (card_savedata*)sTmpBuf;
+    save->field_0x04 = 0;
+    memcpy(save->data, data, size);
+    save->saveCount = ++sSaveCount;
+    s32 csum = mDoMemCdRWm_CalcCheckSum(data, 0x1FFC);
+    save->csum = csum;
+
+    ret = CARDWrite(card, sTmpBuf, 0x2000, 0x2000);
+    if (ret != CARD_ERROR_READY) return ret;
+    ret = CARDRead(card, sTmpBuf, 0x2000, 0x2000);
+    if (ret != CARD_ERROR_READY) return ret;
+    if (mDoMemCdRWm_CalcCheckSum(sTmpBuf, 0x1FFC) != csum) return ret;
+
+    ret = CARDWrite(card, sTmpBuf, 0x2000, 0x4000);
+    if (ret != CARD_ERROR_READY) return ret;
+    ret = CARDRead(card, sTmpBuf, 0x2000, 0x4000);
+    if (ret != CARD_ERROR_READY) return ret;
+    if (mDoMemCdRWm_CalcCheckSum(sTmpBuf, 0x1FFC) != csum) return ret;
+
+    if (g_mDoMemCd_control.mCardBuf != NULL) {
+        u32 slot = g_mDoMemCd_control.field_0x1659;
+        if (slot < 3) {
+            u8* picData = g_mDoMemCd_control.mCardBuf;
+            for (u32 i = 0; i < 3; i++, picData += 0x2000) {
+                u32 cardOffset = (slot * 3 + 3 + i) * 0x2000;
+                ret = CARDWrite(card, picData, 0x2000, cardOffset);
+                if (ret != CARD_ERROR_READY) return ret;
+                ret = CARDRead(card, picData, 0x2000, cardOffset);
+                if (ret != CARD_ERROR_READY) return ret;
+                if (!mDoMemCdRWm_TestCheckSumPictData(picData)) return CARD_ERROR_READY;
+                ret = CARD_ERROR_READY;
+            }
+        }
+    } else {
+        u8 dataNum = dComIfGs_getDataNum();
+        for (s32 i = 0; i < 3; i++) {
+            if (dComIfGp_isPictureFlag(i)) {
+                memset(sTmpBuf, 0, 0x2000);
+                JKRAramToMainRam(dComIfGp_getPictureBoxData(i), sTmpBuf, 0x2000);
+                u32 cardOffset = (dataNum * 3 + 3 + i) * 0x2000;
+                ret = CARDWrite(card, sTmpBuf, 0x2000, cardOffset);
+                if (ret != CARD_ERROR_READY) return ret;
+                ret = CARDRead(card, sTmpBuf, 0x2000, cardOffset);
+                if (ret != CARD_ERROR_READY) return ret;
+            }
+        }
+    }
+
+    mDoMemCdRWm_SetCardStat(card);
+    return ret;
 }
 
 /* 80019CE8-80019F4C       .text mDoMemCdRWm_Restore__FP12CARDFileInfoPvUl */
@@ -23,51 +129,134 @@ s32 mDoMemCdRWm_Restore2(CARDFileInfo*) {
 #endif
 
 /* 80019F4C-8001A0A8       .text mDoMemCdRWm_BuildHeader__FP22mDoMemCdRWm_HeaderData */
-void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData*) {
-    /* Nonmatching */
+void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
+    snprintf(header->comment, sizeof(header->comment), "Zelda: The Wind Waker");
+    OSTime time = OSGetTime();
+    OSCalendarTime cal;
+    OSTicksToCalendarTime(time, &cal);
+    snprintf(header->info, sizeof(header->info), "%d/%d Save Data", cal.month + 1, cal.day_of_month);
+    mDoDvdThd_mountArchive_c* cmd = mDoDvdThd_mountArchive_c::create("/res/CardIcon/cardicon.arc", 0, NULL);
+    while (!cmd->sync()) ;
+    JKRArchive* arc = cmd->getArchive();
+    ResTIMG* banner = (ResTIMG*)arc->getResource("ipl_banner.bti");
+    ResTIMG* icon = (ResTIMG*)arc->getResource("ipl_icon1.bti");
+    memcpy(header->banner, ((char*)banner) + banner->imageOffset, 0xc00 + banner->numColors * 2);
+    memcpy(header->icon, ((char*)icon) + icon->imageOffset, 0x400 + icon->numColors * 2);
+    arc->unmount();
+    delete cmd;
 }
 
 /* 8001A0A8-8001A1EC       .text mDoMemCdRWm_SetCardStat__FP12CARDFileInfo */
-void mDoMemCdRWm_SetCardStat(CARDFileInfo*) {
-    /* Nonmatching */
+void mDoMemCdRWm_SetCardStat(CARDFileInfo* card) {
+    CARDStat stat;
+    CARDGetStatus(g_mDoMemCd_control.mCardSlot, card->fileNo, &stat);
+    stat.iconAddr = 0;
+    stat.commentAddr = offsetof(mDoMemCdRWm_HeaderData, comment);
+    CARDSetBannerFormat(&stat, 1);
+    CARDSetIconAnim(&stat, 0);
+    CARDSetIconFormat(&stat, 0, 1);
+    CARDSetIconFormat(&stat, 1, 0);
+    CARDSetIconFormat(&stat, 2, 0);
+    CARDSetIconFormat(&stat, 3, 0);
+    CARDSetIconFormat(&stat, 4, 0);
+    CARDSetIconFormat(&stat, 5, 0);
+    CARDSetIconFormat(&stat, 6, 0);
+    CARDSetIconFormat(&stat, 7, 0);
+    CARDSetIconSpeed(&stat, 0, 3);
+    CARDSetIconSpeed(&stat, 1, 0);
+    CARDSetIconSpeed(&stat, 2, 0);
+    CARDSetIconSpeed(&stat, 3, 0);
+    CARDSetIconSpeed(&stat, 4, 0);
+    CARDSetIconSpeed(&stat, 5, 0);
+    CARDSetIconSpeed(&stat, 6, 0);
+    CARDSetIconSpeed(&stat, 7, 0);
+    CARDSetStatus(g_mDoMemCd_control.mCardSlot, card->fileNo, &stat);;
 }
 
 /* 8001A1EC-8001A2F0       .text mDoMemCdRWm_CheckCardStat__FP12CARDFileInfo */
-void mDoMemCdRWm_CheckCardStat(CARDFileInfo*) {
-    /* Nonmatching */
+BOOL mDoMemCdRWm_CheckCardStat(CARDFileInfo* card) {
+    CARDStat stat;
+    CARDGetStatus(g_mDoMemCd_control.mCardSlot, card->fileNo, &stat);
+    if (!(stat.iconAddr == 0 &&
+        stat.commentAddr == 0x1C00 &&
+        CARDGetBannerFormat(&stat) == 1 &&
+        CARDGetIconAnim(&stat) == 0 &&
+        CARDGetIconFormat(&stat, 0) == 1 &&
+        CARDGetIconFormat(&stat, 1) == 0 &&
+        CARDGetIconFormat(&stat, 2) == 0 &&
+        CARDGetIconFormat(&stat, 3) == 0 &&
+        CARDGetIconFormat(&stat, 4) == 0 &&
+        CARDGetIconFormat(&stat, 5) == 0 &&
+        CARDGetIconFormat(&stat, 6) == 0 &&
+        CARDGetIconFormat(&stat, 7) == 0 &&
+        CARDGetIconSpeed(&stat, 0) == 3 &&
+        CARDGetIconSpeed(&stat, 1) == 0 &&
+        CARDGetIconSpeed(&stat, 2) == 0 &&
+        CARDGetIconSpeed(&stat, 3) == 0 &&
+        CARDGetIconSpeed(&stat, 4) == 0 &&
+        CARDGetIconSpeed(&stat, 5) == 0 &&
+        CARDGetIconSpeed(&stat, 6) == 0 &&
+        CARDGetIconSpeed(&stat, 7) == 0))
+        return false;
+    return true;
 }
 
 /* 8001A2F0-8001A330       .text mDoMemCdRWm_CalcCheckSum__FPvUl */
-void mDoMemCdRWm_CalcCheckSum(void*, u32) {
+u32 mDoMemCdRWm_CalcCheckSum(void* p_, u32 size) {
     /* Nonmatching */
+    u16 c0 = 0, c1 = 0;
+    u16* p = (u16*)p_;
+    for (int i = 0; i < size >> 1; i++, p++) {
+        c0 += *p;
+        c1 += ~*p;
+    }
+    return (c0 << 16) | c1;
 }
 
 /* 8001A330-8001A358       .text mDoMemCdRWm_CalcCheckSumPictData__FPvUl */
-void mDoMemCdRWm_CalcCheckSumPictData(void*, u32) {
-    /* Nonmatching */
+u16 mDoMemCdRWm_CalcCheckSumPictData(void* p, u32 size) {
+    u16 csum = 0;
+    for (int i = 0; i < size; i++) {
+        u8 v = ((u8*)p)[i];
+        csum += v;
+    }
+    return csum;
 }
 
 /* 8001A358-8001A39C       .text mDoMemCdRWm_TestCheckSumPictData__FPv */
-BOOL mDoMemCdRWm_TestCheckSumPictData(void*) {
+BOOL mDoMemCdRWm_TestCheckSumPictData(void* p) {
     /* Nonmatching */
+    card_pictdata* save = (card_pictdata*)p;
+    return save->csum == mDoMemCdRWm_CalcCheckSumPictData(save->data, sizeof(save->data));
 }
 
 /* 8001A39C-8001A3D0       .text mDoMemCdRWm_SetCheckSumPictData__FPUc */
-void mDoMemCdRWm_SetCheckSumPictData(u8*) {
-    /* Nonmatching */
+void mDoMemCdRWm_SetCheckSumPictData(u8* p) {
+    card_pictdata* save = (card_pictdata*)p;
+    save->csum = mDoMemCdRWm_CalcCheckSumPictData(save->data, sizeof(save->data));
 }
 
 /* 8001A3D0-8001A408       .text mDoMemCdRWm_CalcCheckSumGameData__FPvUl */
-void mDoMemCdRWm_CalcCheckSumGameData(void*, u32) {
+unsigned long long mDoMemCdRWm_CalcCheckSumGameData(void* p, u32 size) {
     /* Nonmatching */
+    u32 c0 = 0, c1 = 0;
+    for (int i = 0; i < size; i++) {
+        u8 v = ((u8*)p)[i];
+        c0 += v;
+        c1 += ~v;
+    }
+    return ((unsigned long long)c0 << 32) | c1;
 }
 
 /* 8001A408-8001A454       .text mDoMemCdRWm_TestCheckSumGameData__FPv */
-void mDoMemCdRWm_TestCheckSumGameData(void*) {
+BOOL mDoMemCdRWm_TestCheckSumGameData(void *p) {
     /* Nonmatching */
+    card_gamedata* save = (card_gamedata*)p;
+    return mDoMemCdRWm_CalcCheckSumGameData(save->data, sizeof(save->data)) == save->csum;
 }
 
 /* 8001A454-8001A498       .text mDoMemCdRWm_SetCheckSumGameData__FPUcUc */
-void mDoMemCdRWm_SetCheckSumGameData(u8*, u8) {
-    /* Nonmatching */
+void mDoMemCdRWm_SetCheckSumGameData(u8* p, u8 slot) {
+    card_gamedata* save = &((card_gamedata*)p)[slot];
+    save->csum = mDoMemCdRWm_CalcCheckSumGameData(save->data, sizeof(save->data));
 }

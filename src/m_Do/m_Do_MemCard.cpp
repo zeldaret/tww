@@ -25,7 +25,7 @@ mDoMemCd_Ctrl_c::mDoMemCd_Ctrl_c() {
 void mDoMemCd_Ctrl_c::ThdInit() {
     CARDInit();
     mCardCommand = 0;
-    mCardState = 0;
+    mCardBuf = NULL;
     field_0x1659 = 0;
     field_0x165A = 2;
     field_0x1660 = CARD_NO_COMMAND;

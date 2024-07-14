@@ -13,13 +13,13 @@ s32 mDoMemCdRWm_Restore2(CARDFileInfo*);
 #endif
 void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData*);
 void mDoMemCdRWm_SetCardStat(CARDFileInfo*);
-void mDoMemCdRWm_CheckCardStat(CARDFileInfo*);
-void mDoMemCdRWm_CalcCheckSum(void*, u32);
-void mDoMemCdRWm_CalcCheckSumPictData(void*, u32);
+BOOL mDoMemCdRWm_CheckCardStat(CARDFileInfo*);
+u32 mDoMemCdRWm_CalcCheckSum(void*, u32);
+u16 mDoMemCdRWm_CalcCheckSumPictData(void*, u32);
 BOOL mDoMemCdRWm_TestCheckSumPictData(void*);
 void mDoMemCdRWm_SetCheckSumPictData(u8*);
-void mDoMemCdRWm_CalcCheckSumGameData(void*, u32);
-void mDoMemCdRWm_TestCheckSumGameData(void*);
+unsigned long long mDoMemCdRWm_CalcCheckSumGameData(void*, u32);
+BOOL mDoMemCdRWm_TestCheckSumGameData(void*);
 void mDoMemCdRWm_SetCheckSumGameData(u8*, u8);
 
 #endif /* M_DO_M_DO_MEMCARDRWMNG_H */

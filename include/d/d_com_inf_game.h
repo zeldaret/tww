@@ -504,6 +504,7 @@ public:
 
     JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
     void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
+    bool isPictureFlag(u8 i) { return mPictureFlag & (1 << i); }
     void offPictureFlag(u8 i) {
         u8 mask = (1 << i);
         mPictureFlag &= ~mask;
@@ -1197,6 +1198,10 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
 // Note: The "BOOL i_hasShip" parameter doesn't exist in the demo, but was added for the final release.
 inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param, const cXyz& i_shipPos, s16 i_shipAngle, BOOL i_hasShip) {
     g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_shipPos, i_shipAngle, i_hasShip);
+}
+
+inline u8 dComIfGs_getDataNum() {
+    g_dComIfG_gameInfo.save.getDataNum();
 }
 
 inline u8 dComIfGs_getPlayerPriestFlag() {
@@ -2615,6 +2620,10 @@ inline JKRAramBlock* dComIfGp_getPictureBoxData(int i) {
 
 inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramBlock, int i) {
     g_dComIfG_gameInfo.play.setPictureBoxData(aramBlock, i);
+}
+
+inline bool dComIfGp_isPictureFlag(u8 i) {
+    g_dComIfG_gameInfo.play.isPictureFlag(i);
 }
 
 inline void dComIfGp_offPictureFlag(u8 i) {
