@@ -21,24 +21,24 @@ struct cXyz : Vec {
     ~cXyz() {}
     /* inlined  */ cXyz() {}
     cXyz(f32 x, f32 y, f32 z) {
-        this->x = x;
-        this->y = y;
-        this->z = z;
+        x = x;
+        y = y;
+        z = z;
     }
     cXyz(const cXyz& vec) {
-        this->x = vec.x;
-        this->y = vec.y;
-        this->z = vec.z;
+        x = vec.x;
+        y = vec.y;
+        z = vec.z;
     }
     cXyz(const Vec& vec) {
-        this->x = vec.x;
-        this->y = vec.y;
-        this->z = vec.z;
+        x = vec.x;
+        y = vec.y;
+        z = vec.z;
     }
     void operator=(const Vec& vec) {
-        this->x = vec.x;
-        this->y = vec.y;
-        this->z = vec.z;
+        x = vec.x;
+        y = vec.y;
+        z = vec.z;
     }
     cXyz operator+(Vec const&) const;
     cXyz operator-(Vec const&) const;

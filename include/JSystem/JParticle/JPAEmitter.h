@@ -294,11 +294,11 @@ public:
     void getBaseEnvColor(GXColor&) {}
     void getBasePrmColor(GXColor&) {}
     void getCamMtxPtr() {}
-    void getChildParticleList() {}
+    JSUList<JPABaseParticle>* getChildParticleList() { return &mChildParticles; }
     void getCurrentCreateNumber() const {}
     void getFrame() {}
     void getGlobalParticleScale(JGeometry::TVec3<f32>&) const {}
-    void getParticleList() {}
+    JSUList<JPABaseParticle>* getParticleList() { return &mActiveParticles; }
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void isChildDraw() {}
     void isContinuousParticle() {}

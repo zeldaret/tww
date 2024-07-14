@@ -212,30 +212,12 @@ public:
 
     /* 0x10 */ JPABaseEmitter* mpBaseEmitter;
     /* 0x14 */ JKRSolidHeap* mpHeap;
-    /* 0x18 */ J3DModelData* field_0x18;
+    /* 0x18 */ J3DModelData* modelData;
     /* 0x1C */ J3DAnmTexPattern* field_0x1c;
     /* 0x20 */ J3DTexNoAnm* field_0x20;
     /* 0x24 */ u16 field_0x24;
     /* 0x26 */ u8 field_0x26;
-    /* 0x28 */ J3DLightInfo field_0x28;
-    /* 0x5C */ u8 field_0x5c[0x9c - 0x5c];
-    /* 0x9C */ cXyz field_0x9c;
-    /* 0xA8 */ GXColorS10 field_0xa8;
-    /* 0xB0 */ GXColor field_0xb0;
-    /* 0xB4 */ GXColor field_0xb4;
-    /* 0xB8 */ GXColorS10 field_0xb8;
-    /* 0xC0 */ f32 field_0xc0;
-    /* 0xC4 */ f32 field_0xc4;
-    /* 0xC8 */ f32 field_0xc8;
-    /* 0xCC */ u8 field_0xcc;
-    /* 0xCD */ u8 field_0xcd;
-    /* 0xCE */ u8 field_0xce;
-    /* 0xCF */ u8 field_0xcf;
-    /* 0xD0 */ u8 field_0xd0;
-    /* 0xD1 */ u8 field_0xd1;
-    /* 0xD2 */ u8 field_0xd2;
-    /* 0xD3 */ u8 field_0xd3;
-    /* 0xD4 */ u8 field_0xd4;
+    /* 0x5C */ dKy_tevstr_c tevStr;
 };
 
 class dPa_J3Dmodel_c {
@@ -258,13 +240,13 @@ public:
 
 class dPa_selectTexEcallBack : public dPa_levelEcallBack {
 public:
-    dPa_selectTexEcallBack(u8 param_1) { field_0x4 = param_1; }
+    dPa_selectTexEcallBack(u8 tex) { mTexNo = tex; }
     virtual ~dPa_selectTexEcallBack() {}
 
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
 
-    /* 0x04 */ u8 field_0x4;
+    /* 0x04 */ u8 mTexNo;
 };
 
 class dPa_windPcallBack : public JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*> {
@@ -378,7 +360,7 @@ public:
     void createRoomScene(void const*);
     bool readScene(u8, mDoDvdThd_toMainRam_c**);
     void createScene(void const*);
-    void removeRoomScene();
+    bool removeRoomScene();
     void removeScene();
     void calc3D();
     void calc2D();
