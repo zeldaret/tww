@@ -6,7 +6,38 @@
 
 struct dCamera__Style {
     /* 0x00 */ u32 m00;
-    /* 0x04 */ u8 m04[0x84 - 0x04];
+    /* 0x04 */ u32 m04;
+    /* 0x08 */ u32 m08;
+    /* 0x0C */ u32 m0C;
+    /* 0x10 */ u32 m10;
+    /* 0x14 */ u32 m14;
+    /* 0x18 */ u32 m18;
+    /* 0x1C */ f32 centerHeightBase;
+    /* 0x20 */ f32 centerHeightUpper;
+    /* 0x24 */ f32 centerHeightLower;
+    /* 0x28 */ f32 lockonCenterHeightMin;
+    /* 0x2C */ f32 lockonCenterHeightMax;
+    /* 0x30 */ u32 m30;
+    /* 0x34 */ u32 m34;
+    /* 0x38 */ u32 m38;
+    /* 0x3C */ f32 m3C;
+    /* 0x40 */ f32 m40;
+    /* 0x44 */ u32 m44;
+    /* 0x48 */ u32 m48;
+    /* 0x4C */ u32 m4C;
+    /* 0x50 */ f32 lockonLatitudeMin;
+    /* 0x54 */ f32 lockonLatitudeMax;
+    /* 0x58 */ u32 m58;
+    /* 0x5C */ u32 m5C;
+    /* 0x60 */ u32 m60;
+    /* 0x64 */ f32 lockonLongitudeMin;
+    /* 0x68 */ f32 lockonLongitudeMax;
+    /* 0x6C */ f32 fovyBase;
+    /* 0x70 */ f32 fovyUpper;
+    /* 0x74 */ f32 fovyLower;
+    /* 0x78 */ f32 lockonFovyMin;
+    /* 0x7C */ f32 lockonFovyMax;
+    /* 0x80 */ u16 flag;
 };  // Size: 0x84
 
 class dCstick_c {
@@ -19,7 +50,7 @@ public:
     dCstick_c();
     virtual ~dCstick_c() {}
 
-    void Shift(u32);
+    s32 Shift(u32);
 };
 
 class dCamBGChk_c {
@@ -111,8 +142,8 @@ public:
     dCamSetup_c();
     virtual ~dCamSetup_c();
 
-    void CheckLatitudeRange(s16*);
-    void FanBank();
+    bool CheckLatitudeRange(s16*);
+    f32 FanBank();
 
 public:
     /* 0x0D0 */ dCstick_c mCstick;
@@ -135,26 +166,26 @@ public:
     void Val(s32, int) {}
     BOOL Change(s32);
     s32 SearchStyle(u32);
-    void ratiof(f32, f32, f32, f32);
-    void DefaultRadius(f32*);
+    f32 ratiof(f32, f32, f32, f32);
+    BOOL DefaultRadius(f32*);
     void RadiusRatio(f32);
-    void CenterHeight(f32);
-    void Fovy(f32);
-    void LockonLongitude(f32);
-    void LockonLatitude(f32);
-    void LockonFovy(f32);
-    void LockonCenterHeight(f32);
+    f32 CenterHeight(f32);
+    f32 Fovy(f32);
+    s16 LockonLongitude(f32);
+    s16 LockonLatitude(f32);
+    f32 LockonFovy(f32);
+    f32 LockonCenterHeight(f32);
 };
 
 class dCamMath {
 public:
-    void rationalBezierRatio(f32, f32);
-    void customRBRatio(f32, f32);
-    void zoomFovy(f32, f32);
-    void xyzRotateX(cXyz&, cSAngle);
-    void xyzRotateY(cXyz&, cSAngle);
-    void xyzHorizontalDistance(cXyz&, cXyz&);
-    void xyzProjPosOnYZ(cSAngle, cXyz&, cXyz&);
+    static f32 rationalBezierRatio(f32, f32);
+    static f32 customRBRatio(f32, f32);
+    static f32 zoomFovy(f32, f32);
+    static cXyz xyzRotateX(cXyz&, cSAngle);
+    static cXyz xyzRotateY(cXyz&, cSAngle);
+    static f32 xyzHorizontalDistance(cXyz&, cXyz&);
+    static cXyz xyzProjPosOnYZ(cSAngle, cXyz&, cXyz&);
 };
 
 #endif /* D_CAM_PARAM_H */

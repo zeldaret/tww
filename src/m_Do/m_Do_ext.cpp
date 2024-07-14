@@ -1912,7 +1912,7 @@ void mDoExt_3DlineMat0_c::setMaterial() {
         GXCallDisplayList(l_matDL, 0x80);
     }
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
-    GXLoadNrmMtxImm(g_mDoMtx_identity, GX_PNMTX0);
+    GXLoadNrmMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
 }
 
 /* 80014798-800148B4       .text draw__19mDoExt_3DlineMat0_cFv */
@@ -2175,7 +2175,7 @@ void mDoExt_3DlineMat1_c::setMaterial() {
         GXCallDisplayList(l_mat1DL, 0x80);
     }
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
-    GXLoadNrmMtxImm(g_mDoMtx_identity, GX_PNMTX0);
+    GXLoadNrmMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
 }
 
 /* 800155DC-80015764       .text draw__19mDoExt_3DlineMat1_cFv */

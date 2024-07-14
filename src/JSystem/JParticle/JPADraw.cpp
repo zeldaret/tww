@@ -830,7 +830,7 @@ void JPADraw::drawParticle() {
     for (s32 i = 0; i < execEmtrPVisNum; i++)
         mpExecEmtrPVis[i]->exec(&dc);
 
-    JSUList<JPABaseParticle> * activeParticles = &dc.pbe->mActiveParticles;
+    JSUList<JPABaseParticle> * activeParticles = dc.pbe->getParticleList();
     if (dc.pbsp->getListOrder() == 0) {
         for (JSULink<JPABaseParticle> * link = activeParticles->getFirst(); link != NULL; link = link->getNext()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
@@ -879,7 +879,7 @@ void JPADraw::drawChild() {
     for (s32 i = 0; i < execEmtrCVisNum; i++)
         mpExecEmtrCVis[i]->exec(&dc);
 
-    JSUList<JPABaseParticle> * childParticles = &dc.pbe->mChildParticles;
+    JSUList<JPABaseParticle> * childParticles = dc.pbe->getChildParticleList();
     if (dc.pbsp->getListOrder() == 0) {
         for (JSULink<JPABaseParticle> * link = childParticles->getFirst(); link != NULL; link = link->getNext()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
@@ -930,7 +930,7 @@ void JPADraw::zDrawParticle() {
     for (s32 i = 0; i < execEmtrPVisNum; i++)
         mpExecEmtrPVis[i]->exec(&dc);
 
-    JSUList<JPABaseParticle> * activeParticles = &dc.pbe->mActiveParticles;
+    JSUList<JPABaseParticle> * activeParticles = dc.pbe->getParticleList();
     if (dc.pbsp->getListOrder() == 0) {
         for (JSULink<JPABaseParticle> * link = activeParticles->getFirst(); link != NULL; link = link->getNext()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
@@ -979,7 +979,7 @@ void JPADraw::zDrawChild() {
     for (s32 i = 0; i < execEmtrCVisNum; i++)
         mpExecEmtrCVis[i]->exec(&dc);
 
-    JSUList<JPABaseParticle> * childParticles = &dc.pbe->mChildParticles;
+    JSUList<JPABaseParticle> * childParticles = dc.pbe->getChildParticleList();
     if (dc.pbsp->getListOrder() == 0) {
         for (JSULink<JPABaseParticle> * link = childParticles->getFirst(); link != NULL; link = link->getNext()) {
             JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();

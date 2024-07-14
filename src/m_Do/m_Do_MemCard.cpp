@@ -24,8 +24,8 @@ mDoMemCd_Ctrl_c::mDoMemCd_Ctrl_c() {
 /* 80018D70-80018E18       .text ThdInit__15mDoMemCd_Ctrl_cFv */
 void mDoMemCd_Ctrl_c::ThdInit() {
     CARDInit();
-    mCardCommand = 0;
-    mCardState = 0;
+    mPictDataPtr = NULL;
+    mPictDataWritePtr = NULL;
     field_0x1659 = 0;
     field_0x165A = 2;
     field_0x1660 = CARD_NO_COMMAND;

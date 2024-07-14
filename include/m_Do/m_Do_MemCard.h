@@ -45,11 +45,17 @@ public:
     s32 checkspace();
     void setCardState(s32);
 
-    bool isCardCommNone() { return mCardCommand == CARD_NO_COMMAND; }
+    bool isCardCommNone() { return mCommand != CARD_NO_COMMAND; }
+    u8 getNowSlot() { return mCardSlot; }
+    u8* getPictDataPtr() { return mPictDataPtr; }
+    u8* getPictWriteDataPtr() { return mPictDataWritePtr; }
+    void setPictDataPtr(u8* v) { mPictDataPtr = v; }
+    void setCardSerialNo(u64 v) { mCardSerialNo = v; }
+    void setDataVersion(u32 v) { mDataVersion = v; }
 
     /* 0x0000 */ u8 mData[0x1650];
-    /* 0x1650 */ s32 mCardCommand;
-    /* 0x1654 */ s32 mCardState;
+    /* 0x1650 */ u8* mPictDataPtr;
+    /* 0x1654 */ u8* mPictDataWritePtr;
     /* 0x1658 */ u8 mCardSlot;
     /* 0x1659 */ u8 field_0x1659;
     /* 0x165A */ u8 field_0x165A;
@@ -58,7 +64,10 @@ public:
     /* 0x1660 */ s32 field_0x1660;
     /* 0x1664 */ OSMutex mMutex;
     /* 0x167C */ OSCond mCond;
-    /* 0x1684 */ u32 field_0x1684[5];
+    /* 0x1684 */ u32 field_0x1684;
+    /* 0x1688 */ u64 mCardSerialNo;
+    /* 0x1690 */ u32 mDataVersion;
+    /* 0x1694 */ u32 field_0x1694;
 };  // Size: 0x1698
 
 static int mDoMemCd_main(void*);
@@ -75,6 +84,30 @@ inline void mDoMemCd_ThdInit() {
 
 inline void mDoMemCd_save(void* i_data, u32 param_1, u32 param_2) {
     g_mDoMemCd_control.save(i_data,param_1,param_2);
+}
+
+inline u8 mDoMemCd_getNowSlot() {
+    return g_mDoMemCd_control.getNowSlot();
+}
+
+inline void mDoMemCd_setCardSerialNo(u64 v) {
+    g_mDoMemCd_control.setCardSerialNo(v);
+}
+
+inline void mDoMemCd_setDataVersion(u32 v) {
+    g_mDoMemCd_control.setDataVersion(v);
+}
+
+inline u8* mDoMemCd_getPictDataPtr() {
+    return g_mDoMemCd_control.getPictDataPtr();
+}
+
+inline void mDoMemCd_setPictDataPtr(u8* v) {
+    g_mDoMemCd_control.setPictDataPtr(v);
+}
+
+inline u8* mDoMemCd_getPictWriteDataPtr() {
+    return g_mDoMemCd_control.getPictWriteDataPtr();
 }
 
 #endif /* M_DO_M_DO_MEMCARD_H */

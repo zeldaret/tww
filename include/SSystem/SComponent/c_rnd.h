@@ -8,12 +8,8 @@ struct cM_rnd_c {
     /* 0x4 */ int m4;
     /* 0x8 */ int m8;
 
-    void init(int a, int b, int c) {
-        m0 = a;
-        m4 = b;
-        m8 = c;
-    }
-    int get();
+    void init(int a, int b, int c);
+    f32 get();
     f32 getF(f32);
     f32 getFX(f32);
     f32 getValue(f32 min, f32 max);

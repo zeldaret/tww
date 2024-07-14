@@ -38,19 +38,24 @@ void JPABaseParticle::initParticle() {
     else
         velAxis.zero();
 
-    velDir.zero();
     if (emtr->mInitialVelDir != 0.0f) {
         Mtx mtx;
-        JPAGetYZRotateMtx(emtr->mSpread * emtr->getRandomSS(), emtr->getRandomSS(), mtx);
+        JPAGetYZRotateMtx(emtr->mSpread * emtr->getRandomRF() * 32768.0f, emtr->getRandomSS(), mtx);
         MTXConcat(emtrInfo.mEmitterDirMtx, mtx, mtx);
         velDir.set(mtx[0][2], mtx[1][2], mtx[2][2]);
         velDir.scale(emtr->mInitialVelDir);
+    } else {
+        velDir.zero();
     }
 
-    velRndm.zero();
     if (emtr->mInitialVelRndm != 0.0f) {
-        velRndm.set(emtr->getRandomSF(), emtr->getRandomSF(), emtr->getRandomSF());
-        velRndm.scale(emtr->mInitialVelRndm);
+        velRndm.set(
+            emtr->mInitialVelRndm * emtr->getRandomSF(),
+            emtr->mInitialVelRndm * emtr->getRandomSF(),
+            emtr->mInitialVelRndm * emtr->getRandomSF()
+        );
+    } else {
+        velRndm.zero();
     }
 
     f32 velRatio = 1.0f + emtr->getRandomRF() * emtr->mInitialVelRatio;

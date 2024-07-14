@@ -54,16 +54,16 @@ public:
     void init(_GXColor);
     void draw();
 
-    /* 0x004 */ f32 field_0x4;
-    /* 0x008 */ u8 field_0x8;
-    /* 0x00C */ dDlst_snapShot2_c field_0xc;
-    /* 0x018 */ dDlst_2Dt_Sp_c field_0x18;
-    /* 0x064 */ dDlst_snapShot2_c field_0x64;
-    /* 0x070 */ dDlst_2Dt_Sp_c field_0x70;
-    /* 0x0BC */ dDlst_snapShot2_c field_0xbc;
-    /* 0x0C8 */ dDlst_2Dt_Sp_c field_0xc8;
-    /* 0x114 */ u16 field_0x114;
-    /* 0x116 */ u16 field_0x116;
+    /* 0x004 */ f32 timer;
+    /* 0x008 */ bool first;
+    /* 0x00C */ dDlst_snapShot2_c snap_dlst;
+    /* 0x018 */ dDlst_2Dt_Sp_c redraw_dlst;
+    /* 0x064 */ dDlst_snapShot2_c save_dlst;
+    /* 0x070 */ dDlst_2Dt_Sp_c blur0_dlst;
+    /* 0x0BC */ dDlst_snapShot2_c blur0Snap_dlst;
+    /* 0x0C8 */ dDlst_2Dt_Sp_c composite_dlst;
+    /* 0x114 */ u16 curWidth;
+    /* 0x116 */ u16 curHeight;
 };
 
 class dOvlpFd4_c : public overlap_task_class {
@@ -84,22 +84,22 @@ public:
 
     /* 0x0CC */ ExecuteFunc mExecuteFunc;
     /* 0x0D8 */ DrawFunc mDrawFunc;
-    /* 0x0E4 */ dDlst_snapShot2_c field_0xe4;
-    /* 0x0F0 */ dDlst_snapShot2_c field_0xf0;
-    /* 0x0FC */ dDlst_2Dt_Sp_c field_0xfc;
-    /* 0x148 */ dDlst_2Dt_Sp_c field_0x148;
-    /* 0x194 */ dDlst_2DtEff1_c tEff1_dlst;
-    /* 0x2AC */ u8 field_0x2ac;
-    /* 0x2AD */ u8 field_0x2ad;
-    /* 0x2AE */ s8 field_0x2ae;
-    /* 0x2B0 */ s16 field_0x2b0;
-    /* 0x2B4 */ f32 field_0x2b4;
+    /* 0x0E4 */ dDlst_snapShot2_c fadeOutBlur0_dlst;
+    /* 0x0F0 */ dDlst_snapShot2_c fadeOutSnap_dlst;
+    /* 0x0FC */ dDlst_2Dt_Sp_c fadeOutComposite_dlst;
+    /* 0x148 */ dDlst_2Dt_Sp_c fadeOutBlur1_dlst;
+    /* 0x194 */ dDlst_2DtEff1_c fadeIn_dlst;
+    /* 0x2AC */ u8 first;
+    /* 0x2AD */ u8 fadeOutStatus;
+    /* 0x2AE */ s8 totalTime;
+    /* 0x2B0 */ s16 timer;
+    /* 0x2B4 */ f32 delayPercent;
     /* 0x2B8 */ u8 field_0x2b8[0x2BC - 0x2B8];
     /* 0x2BC */ f32 field_0x2bc;
-    /* 0x2C0 */ u8 field_0x2c0;
-    /* 0x2C1 */ s8 field_0x2c1;
+    /* 0x2C0 */ u8 sizeStep;
+    /* 0x2C1 */ s8 startTime;
     /* 0x2C2 */ u8 field_0x2c2[0x2C8 - 0x2C2];
-    /* 0x2C8 */ f32 field_0x2c8;
+    /* 0x2C8 */ f32 timerStep;
     /* 0x2CC */ u8 field_0x2cc;
 };
 

@@ -36,8 +36,8 @@ public:
 class JFWDisplay {
 public:
     enum EDrawDone {
-        /* 0x0 */ UNK_METHOD_0 = 0,
-        /* 0x1 */ UNK_METHOD_1 = 1
+        /* 0x0 */ Sync = 0,
+        /* 0x1 */ Async = 1,
     };
 
     void ctor_subroutine(const _GXRenderModeObj*, bool enableAlpha);

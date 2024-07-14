@@ -82,6 +82,10 @@ inline u8* JKRAramToMainRam(u32 p1, u8* p2, u32 p3, JKRExpandSwitch p4, u32 p5, 
     return JKRAram::aramToMainRam(p1, p2, p3, p4, p5, p6, p7, p8);
 }
 
+inline u8* JKRAramToMainRam(JKRAramBlock* block, u8* dst, u32 size, u32 p4 = 0, JKRExpandSwitch expandSwitch = EXPAND_SWITCH_UNKNOWN0, u32 p5 = 0, JKRHeap* heap = NULL, int p6 = -1, u32* p7 = 0) {
+    return JKRAram::aramToMainRam(block, dst, size, p4, expandSwitch, p5, heap, p6, p7);
+}
+
 inline JKRAramBlock *JKRMainRamToAram(u8 *buf, u32 bufSize, u32 alignedSize, JKRExpandSwitch expandSwitch, u32 fileSize, JKRHeap *heap, int id) {
     return JKRAram::mainRamToAram(buf, bufSize, alignedSize, expandSwitch, fileSize, heap, id);
 }

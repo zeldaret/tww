@@ -813,11 +813,11 @@ public:
     void removeZone(int zoneNo) { mZone[zoneNo].reset(); }
     void initDan(s8 i_stage) { mDan.init(i_stage); }
 
-    void getDataNum() {}
+    u8 getDataNum() { return mDataNum; }
     void getMemCardCheckID() {}
     void getNewFile() {}
     void getNoFile() {}
-    void setDataNum(u8) {}
+    void setDataNum(u8 num) { mDataNum = num; }
     void setMemCardCheckID(u64) {}
     void setNewFile(u8) {}
     void setNoFile(u8) {}
@@ -838,7 +838,7 @@ public:
     /* 0x1128 */ dSv_restart_c mRestart;
     /* 0x1158 */ dSv_event_c mTmp;
     /* 0x1258 */ dSv_turnRestart_c mTurnRestart;
-    /* 0x1290 */ u8 field_0x1290;
+    /* 0x1290 */ u8 mDataNum;
     /* 0x1291 */ u8 field_0x1291;
     /* 0x1292 */ u8 field_0x1292;
     /* 0x1298 */ s64 field_0x1298;

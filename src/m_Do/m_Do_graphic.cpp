@@ -71,8 +71,8 @@ GXColor mDoGph_gInf_c::mFadeColor = {};
 
 /* 80007BBC-80007DDC       .text create__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::create() {
-    JFWDisplay::createManager(JKRHeap::getCurrentHeap(), JUTXfb::UNK_2, true);
-    JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::UNK_METHOD_1);
+    JFWDisplay::createManager(JKRHeap::getCurrentHeap(), JUTXfb::Double, true);
+    JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::Async);
     JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fb_width, JUTVideo::getManager()->getRenderMode()->efb_height, JUtility::TColor(0, 0, 0, 0));
     JUT_ASSERT(0x1a0, faderPtr != NULL);
     setFader(faderPtr);
@@ -82,19 +82,19 @@ void mDoGph_gInf_c::create() {
     JUTDbPrint::getManager()->setVisible(false);
     createHeap();
 
-    u32 framebufferSize = GXGetTexBufferSize(0x140, 0xf0, GX_TF_RGBA8, GX_FALSE, GX_FALSE) + 0x20;
+    u32 framebufferSize = GXGetTexBufferSize(320, 240, GX_TF_RGBA8, GX_FALSE, GX_FALSE) + 0x20;
     mFrameBufferTimg = (ResTIMG*) JKRAllocFromHeap(NULL, framebufferSize, 0x20);
     mFrameBufferTex = (void*)(&mFrameBufferTimg[1]);
     cLib_memSet(mFrameBufferTimg, 0, framebufferSize);
     mFrameBufferTimg->format = GX_TF_RGBA8;
     mFrameBufferTimg->alphaEnabled = false;
-    mFrameBufferTimg->width = 0x140;
-    mFrameBufferTimg->height = 0xf0;
+    mFrameBufferTimg->width = 320;
+    mFrameBufferTimg->height = 240;
     mFrameBufferTimg->minFilter = GX_LINEAR;
     mFrameBufferTimg->magFilter = GX_LINEAR;
     mFrameBufferTimg->imageOffset = sizeof(ResTIMG);
 
-    u32 zbufferSize = GXGetTexBufferSize(0x140, 0xf0, GX_TF_IA8, GX_FALSE, GX_FALSE);
+    u32 zbufferSize = GXGetTexBufferSize(320, 240, GX_TF_IA8, GX_FALSE, GX_FALSE);
     mZbufferTex = JKRAllocFromHeap(NULL, zbufferSize, 0x20);
     cLib_memSet(mZbufferTex, 0, zbufferSize);
 
@@ -456,7 +456,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
         GXGetProjectionv(projv);
         GXGetViewportv(viewv);
         GXProject(view->mLookat.mCenter.x, view->mLookat.mCenter.y, view->mLookat.mCenter.z, view->mViewMtx, projv, viewv, &x, &y, &z);
-        
+
         int temp = z * 0xFFFFFF;
         depth = (0xFF0000 - temp) >> 8;
         if (depth < -0x400) {
@@ -498,6 +498,132 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
             }
         }
     }
+
+    s16 x = (s16)viewport->mXOrig & ~0x07;
+    s16 y = (s16)viewport->mYOrig & ~0x07;
+    y = (y < 0) ? y : 0; // y = y & (y >> 31);
+    s16 w = (s16)viewport->mWidth & ~0x07;
+    s16 h = (s16)viewport->mHeight & ~0x07;
+
+    char* zbuf = (char*)mDoGph_gInf_c::getZbufferTex();
+    char* fbbuf = (char*)mDoGph_gInf_c::getFrameBufferTex();
+    if (y < 0) {
+        h += y;
+        s16 hh = -y >> 1;
+        zbuf += GXGetTexBufferSize(320, hh, GX_TF_IA8, GX_FALSE, 0);
+        fbbuf += GXGetTexBufferSize(320, hh, mDoGph_gInf_c::getFrameBufferTimg()->format, GX_FALSE, 0);
+    }
+
+    u16 hw = w >> 1, hh = h >> 1;
+    GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, JUTVideo::getManager()->getRenderMode()->vfilter);
+
+    GXSetTexCopySrc(x, y, w, h);
+    GXSetTexCopyDst(hw, hh, GX_TF_Z16, GX_TRUE);
+    GXCopyTex(zbuf, GX_FALSE);
+
+    GXSetTexCopySrc(x, y, w, h);
+    GXSetTexCopyDst(hw, hh, mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
+    GXCopyTex(fbbuf, GX_FALSE);
+
+    GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zbuf, w, h, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(mDoGph_gInf_c::getZbufferTexObj(), GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+
+    GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), fbbuf, w, h, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(mDoGph_gInf_c::getFrameBufferTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXPixModeSync();
+    GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP1);
+    GXLoadTexObj(mDoGph_gInf_c::getZbufferTexObj(), GX_TEXMAP0);
+    GXSetNumChans(0);
+    GXSetNumTexGens(2);                         
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(3);                                  
+    GXSetTevColorS10(GX_TEVREG0, l_tevColor0);
+    GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_ALPHA, GX_CH_GREEN, GX_CH_BLUE, GX_CH_RED);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP3);
+    GXSetTevKAlphaSel(GX_TEVSTAGE0, GX_TEV_KASEL_1);
+    GXSetTevKAlphaSel(GX_TEVSTAGE2, GX_TEV_KASEL_1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_KONST, GX_CA_TEXA, GX_CA_KONST, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_COMP_RGB8_EQ, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_TEXA, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_4, GX_TRUE, GX_TEVPREV);
+    GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(GX_TRUE);
+    GXSetNumIndStages(0);
+    Mtx44 mtx;
+    C_MTXOrtho(mtx, viewport->mYOrig, viewport->mYOrig + viewport->mHeight, viewport->mXOrig, viewport->mXOrig + viewport->mWidth, 0.0, 10.0f);
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3s16(x, y, -5);
+        GXTexCoord2s8(0, 0);
+
+        GXPosition3s16(w, y, -5);
+        GXTexCoord2s8(1, 0);
+
+        GXPosition3s16(w, h, -5);
+        GXTexCoord2s8(1, 1);
+
+        GXPosition3s16(x, h, -5);
+        GXTexCoord2s8(0, 1);
+    GXEnd();
+
+    GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+
+    if (y == 0 && (s16)viewport->mScissor.mYOrig != 0) {
+        s16 h = (f32)((s16)viewport->mScissor.mYOrig) + (f32)viewport->mScissor.mHeight;
+        GXSetNumChans(1);
+        GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+        GXSetNumTexGens(0);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetBlendMode(GX_BM_NONE, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 8);
+            GXPosition3s16(0, 0, -5);
+            GXPosition3s16(640, 0, -5);
+            GXPosition3s16(640, y, -5);
+            GXPosition3s16(0, y, -5);
+
+            GXPosition3s16(0, h, -5);
+            GXPosition3s16(640, h, -5);
+            GXPosition3s16(640, 480, -5);
+            GXPosition3s16(0, 480, -5);
+        GXEnd();
+    }
+
+    GXSetScissor(viewport->mScissor.mXOrig, viewport->mScissor.mYOrig, viewport->mScissor.mWidth, viewport->mScissor.mHeight);
+    GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
 }
 
 /* 80009914-80009BBC       .text motionBlure__FP10view_class */
@@ -970,7 +1096,7 @@ bool mDoGph_Painter() {
                 motionBlure(camera);
                 drawDepth(camera, viewport_p, dComIfGp_getCamZoomForcus(cameraID));
                 dComIfGp_particle_drawProjection(&jpaDrawInfo);
-            
+
                 GXSetClipMode(GX_CLIP_ENABLE);
                 dComIfGd_drawOpaListInvisible();
                 dComIfGd_drawXluListInvisible();
@@ -1000,7 +1126,7 @@ bool mDoGph_Painter() {
             }
         }
     }
-  
+
     if (mCaptureStep == 3) {
         if (mCaptureCansel) {
             if (mCaptureCaptureBuffer != NULL) {

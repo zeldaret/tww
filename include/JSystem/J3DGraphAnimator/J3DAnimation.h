@@ -143,9 +143,9 @@ struct J3DAnmColorKeyData {
     /* 0x12 */ u16 field_0x12;
     /* 0x14 */ u16 field_0x14;
     /* 0x16 */ u16 field_0x16;
-    /* 0x18 */ s32 mTableOffset; /* Created by retype action */
+    /* 0x18 */ s32 mTableOffset;
     /* 0x1C */ s32 mUpdateMaterialIDOffset;
-    /* 0x20 */ s32 mNameTabOffset; /* Created by retype action */
+    /* 0x20 */ s32 mNameTabOffset;
     /* 0x24 */ s32 mRValOffset;
     /* 0x28 */ s32 mGValOffset;
     /* 0x2C */ s32 mBValOffset;

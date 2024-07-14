@@ -690,6 +690,31 @@ void dDlst_2D_c::draw() {
     mPicture.draw(mX, mY, false, false, false);
 }
 
+void cM_rnd_c::init(int a, int b, int c) {
+    m0 = a;
+    m4 = b;
+    m8 = c;
+}
+
+f32 cM_rnd_c::get() {
+    m0 = (m0 * 171) % 30269;
+    m4 = (m4 * 172) % 30307;
+    m8 = (m8 * 170) % 30323;
+    return fabsf(fmod((m0 / 30269.0f) + (m4 / 30307.0f) + (m8 / 30323.0f), 1.0f));
+}
+
+f32 cM_rnd_c::getF(f32 m) {
+    return get() * m;
+}
+
+f32 cM_rnd_c::getFX(f32 m) {
+    return m * (get() - 0.5f) * 2.0f;
+}
+
+f32 cM_rnd_c::getValue(f32 min, f32 range) {
+    return min + getF(range);
+}
+
 /* 80082424-80082794       .text draw__18dDlst_effectLine_cFv */
 void dDlst_effectLine_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -1518,7 +1543,7 @@ int psdRealCallBack(cBgS_ShdwDraw* shdw, cBgD_Vtx_t* pVtx, int v0, int v1, int v
     const cXyz* normal = tri->GetNP();
     if (shdwDrawPoly->getLightVec()->inprod(*normal) < -0.2f) {
         cXyz* center = shdwDrawPoly->getCenter();
-        if (normal->x * center->x + normal->y * center->y + normal->z * center->z + tri->GetD() > -90.f) {
+        if (normal->x * center->x + normal->y * center->y + normal->z * center->z + tri->GetD() > -50.f) {
             const cXyz* min = shdwDrawPoly->GetBndP()->GetMinP();
             const cXyz* max = shdwDrawPoly->GetBndP()->GetMaxP();
             cBgD_Vtx_t* vert1 = pVtx + v0;

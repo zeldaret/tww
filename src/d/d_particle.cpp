@@ -3,12 +3,15 @@
 // Translation Unit: d_particle.cpp
 //
 
+#include "d/d_kankyo_wether.h"
 #include "d/d_particle.h"
+#include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
+#include "JSystem/JSupport/JSUList.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_malloc.h"
 #include "d/d_com_inf_game.h"
@@ -32,29 +35,10 @@ dPa_modelEmitter_c::dPa_modelEmitter_c() {
 
 /* 8007A514-8007A804       .text __ct__21dPa_J3DmodelEmitter_cFP14JPABaseEmitterP12J3DModelDataR12dKy_tevstr_cP16J3DAnmTexPatternUsi */
 dPa_J3DmodelEmitter_c::dPa_J3DmodelEmitter_c(JPABaseEmitter* param_1, J3DModelData* param_2, dKy_tevstr_c& param_3, J3DAnmTexPattern* param_4, u16 param_5, int param_6) {
-    /* Nonmatching */
-    field_0x28 = j3dDefaultLightInfo;
     mpBaseEmitter = param_1;
-    field_0x18 = param_2;
+    modelData = param_2;
     field_0x26 = param_6;
-    field_0x28 = param_3.mLightObj.getLightInfo();
-    field_0x9c = param_3.mLightPosWorld;
-    field_0xa8 = param_3.mColorC0;
-    field_0xb0 = param_3.mColorK0;
-    field_0xb4 = param_3.mColorK1;
-    field_0xb8 = param_3.mFogColor;
-    field_0xc0 = param_3.mFogStartZ;
-    field_0xc4 = param_3.mFogEndZ;
-    field_0xc8 = param_3.mColpatBlend;
-    field_0xcc = param_3.mInitTimer;
-    field_0xcd = param_3.mEnvrIdxCurr;
-    field_0xce = param_3.mEnvrIdxPrev;
-    field_0xcf = param_3.mColpatCurr;
-    field_0xd0 = param_3.mColpatPrev;
-    field_0xd1 = param_3.mRoomNo;
-    field_0xd2 = param_3.mEnvrIdxOverride;
-    field_0xd3 = param_3.mLightMode;
-    field_0xd4 = param_3.mInitType;
+    tevStr = param_3;
     field_0x1c = param_4;
     if (!field_0x1c) {
         mpHeap = NULL;
@@ -65,7 +49,7 @@ dPa_J3DmodelEmitter_c::dPa_J3DmodelEmitter_c(JPABaseEmitter* param_1, J3DModelDa
         if (mpHeap) {
             field_0x20 = new J3DTexNoAnm[r29];
             if (field_0x20) {
-                field_0x1c->searchUpdateMaterialID(field_0x18);
+                field_0x1c->searchUpdateMaterialID(modelData);
                 J3DTexNoAnm* tex = field_0x20;
                 for (u16 i = 0; i < r29; i++) {
                     tex->setAnmIndex(i);
@@ -91,6 +75,62 @@ dPa_J3DmodelEmitter_c::~dPa_J3DmodelEmitter_c()  {
 /* 8007A8C8-8007ADC4       .text draw__21dPa_J3DmodelEmitter_cFv */
 void dPa_J3DmodelEmitter_c::draw() {
     /* Nonmatching */
+    mpBaseEmitter->quitImmortalEmitter();
+
+    JSUList<JPABaseParticle>* list = mpBaseEmitter->getParticleList();
+    if (list != NULL) {
+        Mtx mtx1, mtx2;
+        mDoMtx_identity(mtx1);
+        mDoMtx_identity(mtx2);
+        for (JSULink<JPABaseParticle>* link = list->getFirst(); link != NULL; link = link->getNext()) {
+            JPABaseParticle* ptcl = link->getObject();
+            J3DModel* model = dPa_modelControl_c::newModel(modelData);
+            if (model == NULL)
+                return;
+
+            mtx1[0][1] = ptcl->mVelocity.x;
+            mtx1[1][1] = ptcl->mVelocity.y;
+            mtx1[2][1] = ptcl->mVelocity.z;
+            f32 sq = mtx1[0][1]*mtx1[0][1] + mtx1[1][1]*mtx1[1][1] + mtx1[2][1]*mtx1[2][1];
+            if (!cM3d_IsZero(sq)) {
+                if (!cM3d_IsZero(sq)) {
+                    f32 mag = sqrtf(sq);
+                    mtx1[0][1] *= mag;
+                    mtx1[1][1] *= mag;
+                    mtx1[2][1] *= mag;
+                }
+            } else {
+                mtx1[0][1] = 0.0f;
+                mtx1[1][1] = 1.0f;
+                mtx1[2][1] = 0.0f;
+            }
+
+            // TODO: all the math
+            mtx1[0][3] = ptcl->mPosition.x;
+            mtx1[1][3] = ptcl->mPosition.y;
+            mtx1[2][3] = ptcl->mPosition.z;
+            g_env_light.setLightTevColorType(model, &tevStr);
+
+            if (field_0x1c != NULL && field_0x20 != NULL) {
+                field_0x1c->setFrame(field_0x24);
+                modelData->getMaterialTable().setTexNoAnimator(field_0x1c, field_0x20);
+            }
+
+            cXyz scale;
+            scale.x = mpBaseEmitter->mGlobalParticleScale.x * ptcl->mScaleX;
+            scale.y = mpBaseEmitter->mGlobalParticleScale.y * ptcl->mScaleY;
+            scale.z = mpBaseEmitter->mGlobalParticleScale.z * ptcl->mScaleX;
+
+            model->setBaseScale(scale);
+            model->setBaseTRMtx(mtx1);
+            mDoExt_modelUpdate(model);
+            if (field_0x1c != NULL) {
+                modelData->getMaterialTable().removeTexNoAnimator(field_0x1c);
+            }
+        }
+    }
+
+    mpBaseEmitter->stopDrawParticle();
 }
 
 /* 8007ADC4-8007AECC       .text __ct__18dPa_modelControl_cFP12J3DModelData */
@@ -250,43 +290,112 @@ void dPa_smokeEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, con
 }
 
 /* 8007B73C-8007B804       .text initiateLighting__FR11_GXColorS10R8_GXColorR8_GXColor */
-void initiateLighting(_GXColorS10&, _GXColor&, _GXColor&) {
-    /* Nonmatching */
+void initiateLighting(GXColorS10& dif, GXColor& amb, GXColor& k1) {
+    GXSetChanCtrl(GX_COLOR0A0, GX_TRUE, GX_SRC_REG, GX_SRC_VTX, 1, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetChanAmbColor(GX_COLOR0A0, g_blackColor);
+    GXSetTevColorS10(GX_TEVREG0, dif);
+    GXSetTevKColor(GX_KCOLOR0, amb);
+    GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
+    GXSetTevKColor(GX_KCOLOR1, k1);
+    GXSetTevKColorSel(GX_TEVSTAGE2, GX_TEV_KCSEL_K1);
 }
 
 /* 8007B804-8007BB44       .text smokeEcallBack__FP14JPABaseEmitterP12dKy_tevstr_cSc8_GXColor */
-void smokeEcallBack(JPABaseEmitter*, dKy_tevstr_c*, s8, _GXColor) {
-    /* Nonmatching */
+void smokeEcallBack(JPABaseEmitter* emtr, dKy_tevstr_c* tevStr, s8, GXColor color) {
+    GXFlush();
+    GXLoadNrmMtxImm(JPADraw::cb.mDrawMtxPtr, GX_PNMTX0);
+    GXInvalidateVtxCache();
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_NRM, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    if (!(emtr->mDraw.field_0xc2 & 1)) {
+        GXSetNumChans(1);
+        if (tevStr == NULL) {
+            GXColorS10 dif;
+            dif.r = g_env_light.mActorC0.r;
+            dif.g = g_env_light.mActorC0.g;
+            dif.b = g_env_light.mActorC0.b;
+            dif.a = 0xFF;
+            GXColor amb;
+            amb.r = g_env_light.mActorK0.r;
+            amb.g = g_env_light.mActorK0.g;
+            amb.b = g_env_light.mActorK0.b;
+            amb.a = 0xFF;
+            initiateLighting(dif, amb, color);
+        } else {
+            initiateLighting(tevStr->mColorC0, tevStr->mColorK0, color);
+        }
+        color.a = emtr->mGlobalPrmColor.a;
+        GXSetNumTexGens(2);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        emtr->mDraw.loadTexture(1, GX_TEXMAP1);
+        GXSetNumTevStages(3);                             
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_KONST, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_RASA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_C0, GX_CC_CPREV, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_TEXA, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_CPREV, GX_CC_KONST, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    }
 }
 
 /* 8007BB44-8007BB80       .text draw__18dPa_smokeEcallBackFP14JPABaseEmitter */
-void dPa_smokeEcallBack::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+void dPa_smokeEcallBack::draw(JPABaseEmitter* emtr) {
+    smokeEcallBack(emtr, mTevstr, field_0x14, field_0x16);
 }
 
 /* 8007BB80-8007BBD8       .text end__18dPa_smokeEcallBackFv */
 void dPa_smokeEcallBack::end() {
-    /* Nonmatching */
+    if (mpEmitter == NULL)
+        return;
+
+    mpEmitter->becomeInvalidEmitter();
+    mpEmitter->quitImmortalEmitter();
+    mpEmitter->setEmitterCallBackPtr(&dPa_control_c::mSmokeEcallback);
+    mFlag |= 1;
+    mpEmitter = NULL;
 }
 
 /* 8007BBD8-8007BC84       .text dPa_setWindPower__FP15JPABaseParticle */
-void dPa_setWindPower(JPABaseParticle*) {
+void dPa_setWindPower(JPABaseParticle* ptcl) {
     /* Nonmatching */
+    cXyz pos(ptcl->mGlobalPosition);
+    cXyz wind;
+    f32 pow;
+    dKyw_get_AllWind_vec(&pos, &wind, &pow);
+    ptcl->mGlobalPosition.add(pos, wind * (pow * 8.0f));
 }
 
 /* 8007BC84-8007BCB4       .text execute__18dPa_smokePcallBackFP14JPABaseEmitterP15JPABaseParticle */
-void dPa_smokePcallBack::execute(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
+void dPa_smokePcallBack::execute(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
+    if (emtr->mUserData == 0)
+        dPa_setWindPower(ptcl);
 }
 
 /* 8007BCB4-8007C380       .text draw__18dPa_smokePcallBackFP14JPABaseEmitterP15JPABaseParticle */
-void dPa_smokePcallBack::draw(JPABaseEmitter*, JPABaseParticle*) {
+void dPa_smokePcallBack::draw(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8007C380-8007C3B0       .text draw__22dPa_selectTexEcallBackFP14JPABaseEmitter */
-void dPa_selectTexEcallBack::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+void dPa_selectTexEcallBack::draw(JPABaseEmitter* emtr) {
+    emtr->mDraw.loadTexture(mTexNo, GX_TEXMAP0);
 }
 
 /* 8007C3B0-8007C420       .text __ct__19dPa_simpleEcallBackFv */
@@ -334,8 +443,13 @@ void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* param_1) {
 }
 
 /* 8007C674-8007C6EC       .text draw__19dPa_simpleEcallBackFP14JPABaseEmitter */
-void dPa_simpleEcallBack::draw(JPABaseEmitter*) {
+void dPa_simpleEcallBack::draw(JPABaseEmitter* emtr) {
     /* Nonmatching */
+    if (mbIsSmoke)
+        smokeEcallBack(emtr, NULL, -1, (GXColor){ 0xA0, 0xA0, 0x80, 0xFF });
+
+    if (emtr->mGroupID == 4)
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
 }
 
 /* 8007C6EC-8007C774       .text create__19dPa_simpleEcallBackFP17JPAEmitterManagerUsUc */
@@ -375,8 +489,8 @@ bool dPa_simpleEcallBack::set(const cXyz*, u8, const _GXColor&, const _GXColor&,
 }
 
 /* 8007C8C4-8007C8E8       .text execute__17dPa_windPcallBackFP14JPABaseEmitterP15JPABaseParticle */
-void dPa_windPcallBack::execute(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
+void dPa_windPcallBack::execute(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
+    dPa_setWindPower(ptcl);
 }
 
 GXColor l_lifeBallColor[] = {
@@ -501,18 +615,32 @@ bool dPa_control_c::readScene(u8 i_no, mDoDvdThd_toMainRam_c** param_2) {
 }
 
 /* 8007CF20-8007CF98       .text createScene__13dPa_control_cFPCv */
-void dPa_control_c::createScene(const void*) {
+void dPa_control_c::createScene(const void* data) {
     /* Nonmatching */
 }
 
 /* 8007CF98-8007D028       .text removeRoomScene__13dPa_control_cFv */
-void dPa_control_c::removeRoomScene() {
-    /* Nonmatching */
+bool dPa_control_c::removeRoomScene() {
+    if (mSceneHeap != NULL && mCount != 0 && --mCount == 0) {
+        mEmitterMng->clearResourceManager(1);
+        mDoExt_destroySolidHeap(mSceneHeap);
+        mSceneHeap = NULL;
+        mSceneResMng = NULL;
+        JKRFree((void*)mpData);
+        mNumSimple = mNumSimpleCommon;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8007D028-8007D094       .text removeScene__13dPa_control_cFv */
 void dPa_control_c::removeScene() {
-    /* Nonmatching */
+    removeRoomScene();
+    for (s32 i = 0; i < mNumSimpleCommon; i++)
+        mSimpleCallbacks[i].mpBaseEmitter = NULL;
+    mEmitterMng->forceDeleteAllEmitter();
+    mModelControl->~dPa_modelControl_c();
 }
 
 /* 8007D094-8007D0DC       .text calc3D__13dPa_control_cFv */
@@ -543,8 +671,33 @@ void dPa_control_c::draw(JPADrawInfo* param_1, u8 param_2) {
 }
 
 /* 8007D1DC-8007D378       .text set__13dPa_control_cFUcUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz */
-JPABaseEmitter* dPa_control_c::set(u8, u16, const cXyz*, const csXyz*, const cXyz*, u8, dPa_levelEcallBack*, s8, const _GXColor*, const _GXColor*, const cXyz*) {
+JPABaseEmitter* dPa_control_c::set(u8 groupID, u16 userID, const cXyz* pos, const csXyz* angle, const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack, s8 setupInfo, const GXColor* prm, const GXColor* env, const cXyz* globalScale) {
     /* Nonmatching */
+    JPABaseEmitter* emtr = mEmitterMng->createSimpleEmitterID(*pos, userID, groupID, getRM_ID(userID), NULL, NULL);
+    if (emtr == NULL)
+        return NULL;
+
+    if (angle != NULL)
+        emtr->setGlobalRotation(*(JGeometry::TVec3<s16>*)angle);
+
+    if (scale != NULL)
+        emtr->setGlobalScale(*scale);
+
+    emtr->mGlobalPrmColor.a = alpha;
+    if (pCallBack != NULL) {
+        emtr->setEmitterCallBackPtr(pCallBack);
+        pCallBack->setup(emtr, pos, angle, setupInfo);
+    } else if (!!(userID & 0x4000)) {
+        emtr->setEmitterCallBackPtr(&mKagero);
+    }
+
+    if (prm != NULL)
+        emtr->setGlobalPrmColor(prm->r, prm->g, prm->b);
+    if (env != NULL)
+        emtr->setGlobalEnvColor(env->r, env->g, env->b);
+    if (globalScale != NULL)
+        emtr->setGlobalParticleScale(*globalScale);
+    return emtr;
 }
 
 /* 8007D378-8007D414       .text setBombSmoke__13dPa_control_cFUsPC4cXyzPC5csXyzPC4cXyzUc */
@@ -553,7 +706,7 @@ JPABaseEmitter* dPa_control_c::setBombSmoke(u16, const cXyz*, const csXyz*, cons
 }
 
 /* 8007D414-8007D998       .text setSimpleLand__13dPa_control_cFiPC4cXyzPC5csXyzfffP12dKy_tevstr_cPii */
-void dPa_control_c::setSimpleLand(int, const cXyz*, const csXyz*, f32, f32, f32, dKy_tevstr_c*, int*, int) {
+void dPa_control_c::setSimpleLand(int type, const cXyz* pos, const csXyz* angle, f32, f32, f32, dKy_tevstr_c*, int*, int) {
     /* Nonmatching */
 }
 

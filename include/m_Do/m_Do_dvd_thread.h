@@ -14,7 +14,7 @@ typedef void* (*mDoDvdThd_callback_func)(void*);
 
 class mDoDvdThd_command_c : public node_class {
 public:
-    /* 0x0C */ bool mIsDone;
+    /* 0x0C */ volatile bool mIsDone;
     /* 0x10  vtable*/
 public:
     virtual ~mDoDvdThd_command_c();
