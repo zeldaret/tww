@@ -264,8 +264,9 @@ BOOL mDoMemCdRWm_CheckCardStat(CARDFileInfo* card) {
 
 /* 8001A2F0-8001A330       .text mDoMemCdRWm_CalcCheckSum__FPvUl */
 u32 mDoMemCdRWm_CalcCheckSum(void* p_, u32 size) {
-    /* Nonmatching */
-    u16 c0 = 0, c1 = 0;
+    u16 c0, c1;
+
+    c0 = c1 = 0;
     u16* p = (u16*)p_;
     for (int i = 0; i < size >> 1; i++, p++) {
         c0 += *p;
@@ -286,9 +287,9 @@ u16 mDoMemCdRWm_CalcCheckSumPictData(void* p, u32 size) {
 
 /* 8001A358-8001A39C       .text mDoMemCdRWm_TestCheckSumPictData__FPv */
 BOOL mDoMemCdRWm_TestCheckSumPictData(void* p) {
-    /* Nonmatching */
     card_pictdata* save = (card_pictdata*)p;
-    return save->csum == mDoMemCdRWm_CalcCheckSumPictData(save->data, sizeof(save->data));
+    u32 csum = mDoMemCdRWm_CalcCheckSumPictData(save->data, sizeof(save->data));
+    return csum == save->csum;
 }
 
 /* 8001A39C-8001A3D0       .text mDoMemCdRWm_SetCheckSumPictData__FPUc */
@@ -299,8 +300,8 @@ void mDoMemCdRWm_SetCheckSumPictData(u8* p) {
 
 /* 8001A3D0-8001A408       .text mDoMemCdRWm_CalcCheckSumGameData__FPvUl */
 u64 mDoMemCdRWm_CalcCheckSumGameData(void* p, u32 size) {
-    /* Nonmatching */
-    u32 c0 = 0, c1 = 0;
+    u32 c0, c1;
+    c0 = c1 = 0;
     for (int i = 0; i < size; i++) {
         u8 v = ((u8*)p)[i];
         c0 += v;
@@ -311,9 +312,9 @@ u64 mDoMemCdRWm_CalcCheckSumGameData(void* p, u32 size) {
 
 /* 8001A408-8001A454       .text mDoMemCdRWm_TestCheckSumGameData__FPv */
 BOOL mDoMemCdRWm_TestCheckSumGameData(void *p) {
-    /* Nonmatching */
     card_gamedata* save = (card_gamedata*)p;
-    return mDoMemCdRWm_CalcCheckSumGameData(save->data, sizeof(save->data)) == save->csum;
+    u64 csum = mDoMemCdRWm_CalcCheckSumGameData(save->data, sizeof(save->data));
+    return csum == save->csum;
 }
 
 /* 8001A454-8001A498       .text mDoMemCdRWm_SetCheckSumGameData__FPUcUc */
