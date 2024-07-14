@@ -8,7 +8,9 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "dolphin/types.h"
 
-static const f32 dummy[1] = { 1.0f };
+static void dummy() {
+    fabsf(1.0f);
+}
 
 /* 8025991C-802599A0       .text JPAGetYZRotateMtx__FssPA4_f */
 void JPAGetYZRotateMtx(s16 y, s16 z, Mtx dst) {
@@ -62,11 +64,19 @@ void JPAGetDirMtx(const JGeometry::TVec3<f32>& dir, Mtx dst) {
     JGeometry::TVec3<f32> perp;
     perp.x = dir.y;
     perp.y = -dir.x;
+    f32 z = dir.z;
     perp.z = 0.0f;
 
-    f32 mag = perp.normalize();
+    f32 mag = perp.squared();
+    mag *= JGeometry::TUtil<f32>::inv_sqrt(mag);
+    if (mag <= JGeometry::TUtil<f32>::epsilon()) {
+        perp.x = perp.y = 0.0f;
+    } else {
+        perp.x *= (1.0f / mag);
+        perp.y *= (1.0f / mag);
+    }
 
-    f32 x = perp.x, y = perp.y, z = dir.z;
+    f32 x = perp.x, y = perp.y;
     dst[0][0] = x*x + z * (1.0f - x*x);
     dst[0][1] = (1.0f - z) * (x * y);
     dst[0][2] = -y * mag;
