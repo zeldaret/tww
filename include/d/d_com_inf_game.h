@@ -504,7 +504,7 @@ public:
 
     JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
     void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
-    bool isPictureFlag(u8 i) { return mPictureFlag & (1 << i); }
+    bool isPictureFlag(u8 i) { return mPictureFlag & (u8)(1 << i); }
     void offPictureFlag(u8 i) {
         u8 mask = (1 << i);
         mPictureFlag &= ~mask;

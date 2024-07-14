@@ -39,7 +39,7 @@ struct card_gamedata
 struct card_savedata
 {
     u32 saveCount;
-    u32 field_0x04;
+    u32 dataVersion;
     card_gamedata gamedata[3];
     u32 field_0x1658[0x269];
     u32 csum;
@@ -52,6 +52,7 @@ static u32 sSaveCount;
 /* 80019940-80019CE8       .text mDoMemCdRWm_Store__FP12CARDFileInfoPvUl */
 s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
     /* Nonmatching */
+
     s32 ret;
     mDoMemCdRWm_BuildHeader((mDoMemCdRWm_HeaderData*)sTmpBuf);
     ret = CARDWrite(card, sTmpBuf, 0x2000, 0x0000);
@@ -68,10 +69,10 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
 
     memset(sTmpBuf, 0, 0x2000);
     card_savedata* save = (card_savedata*)sTmpBuf;
-    save->field_0x04 = 0;
+    save->dataVersion = 0;
     memcpy(save->gamedata, data, size);
     save->saveCount = ++sSaveCount;
-    s32 csum = mDoMemCdRWm_CalcCheckSum(data, 0x1FFC);
+    s32 csum = mDoMemCdRWm_CalcCheckSum(save, 0x1FFC);
     save->csum = csum;
 
     ret = CARDWrite(card, sTmpBuf, 0x2000, 0x2000);
@@ -86,34 +87,32 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
     if (ret != CARD_ERROR_READY) return ret;
     if (mDoMemCdRWm_CalcCheckSum(sTmpBuf, 0x1FFC) != csum) return ret;
 
-    if (g_mDoMemCd_control.mCardBuf != NULL) {
-        u32 slot = g_mDoMemCd_control.field_0x1659;
-        if (slot < 3) {
-            u8* picData = g_mDoMemCd_control.mCardBuf;
-            for (u32 i = 0; i < 3; i++, picData += 0x2000) {
-                u32 cardOffset = (slot * 3 + 3 + i) * 0x2000;
-                ret = CARDWrite(card, picData, 0x2000, cardOffset);
+    if (mDoMemCd_getPictWriteDataPtr() != NULL) {
+        // mDoMemCd_getCopyToPos ?
+        if (g_mDoMemCd_control.field_0x1659 < 3) {
+            u32 slot = g_mDoMemCd_control.field_0x1659 * 3 + 3;
+            u8* picData = mDoMemCd_getPictWriteDataPtr();
+            for (s32 i = 0; i < 3; i++, picData += 0x2000) {
+                ret = CARDWrite(card, picData, 0x2000, (slot + i) * 0x2000);
                 if (ret != CARD_ERROR_READY) return ret;
-                ret = CARDRead(card, picData, 0x2000, cardOffset);
+                ret = CARDRead(card, sTmpBuf, 0x2000, (slot + i) * 0x2000);
                 if (ret != CARD_ERROR_READY) return ret;
-                if (!mDoMemCdRWm_TestCheckSumPictData(picData)) return CARD_ERROR_READY;
-                ret = CARD_ERROR_READY;
+                if (!mDoMemCdRWm_TestCheckSumPictData(picData)) return ret;
             }
         }
     } else {
-        u8 dataNum = dComIfGs_getDataNum();
+        u32 slot = dComIfGs_getDataNum() * 3 + 3;
         for (s32 i = 0; i < 3; i++) {
             if (dComIfGp_isPictureFlag(i)) {
                 memset(sTmpBuf, 0, 0x2000);
                 JKRAramToMainRam(dComIfGp_getPictureBoxData(i), sTmpBuf, 0x2000);
-                u32 cardOffset = (dataNum * 3 + 3 + i) * 0x2000;
-                ret = CARDWrite(card, sTmpBuf, 0x2000, cardOffset);
+                ret = CARDWrite(card, sTmpBuf, 0x2000, (slot + i) * 0x2000);
                 if (ret != CARD_ERROR_READY) return ret;
-                ret = CARDRead(card, sTmpBuf, 0x2000, cardOffset);
+                ret = CARDRead(card, sTmpBuf, 0x2000, (slot + i) * 0x2000);
                 if (ret != CARD_ERROR_READY) return ret;
             }
         }
-    }
+   }
 
     mDoMemCdRWm_SetCardStat(card);
     return ret;
@@ -171,15 +170,14 @@ s32 mDoMemCdRWm_Restore(CARDFileInfo* card, void* dst, u32 size) {
         if (ret != CARD_ERROR_READY) return ret;
         memcpy(dst, save->gamedata, size);
         sSaveCount = save->saveCount;
-        g_mDoMemCd_control.field_0x1690 = save->field_0x04;
-        if (!invalid && g_mDoMemCd_control.mCardCommand != NULL) {
-            ret = CARDRead(card, g_mDoMemCd_control.mCardCommand, 0x12000, 0x6000);
+        mDoMemCd_setDataVersion(save->dataVersion);
+        if (!invalid && mDoMemCd_getPictDataPtr() != NULL) {
+            ret = CARDRead(card, mDoMemCd_getPictDataPtr(), 0x12000, 0x6000);
             if (ret != CARD_ERROR_READY) return ret;
         }
 
-        serialNo;
-        CARDGetSerialNo(g_mDoMemCd_control.mCardSlot, &serialNo);
-        g_mDoMemCd_control.mCardSerialNo = serialNo;
+        CARDGetSerialNo(mDoMemCd_getNowSlot(), &serialNo);
+        mDoMemCd_setCardSerialNo(serialNo);
     }
 
     return CARD_ERROR_READY;
@@ -212,7 +210,7 @@ void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
 /* 8001A0A8-8001A1EC       .text mDoMemCdRWm_SetCardStat__FP12CARDFileInfo */
 void mDoMemCdRWm_SetCardStat(CARDFileInfo* card) {
     CARDStat stat;
-    CARDGetStatus(g_mDoMemCd_control.mCardSlot, card->fileNo, &stat);
+    CARDGetStatus(mDoMemCd_getNowSlot(), card->fileNo, &stat);
     stat.iconAddr = 0;
     stat.commentAddr = offsetof(mDoMemCdRWm_HeaderData, comment);
     CARDSetBannerFormat(&stat, 1);
@@ -233,13 +231,13 @@ void mDoMemCdRWm_SetCardStat(CARDFileInfo* card) {
     CARDSetIconSpeed(&stat, 5, 0);
     CARDSetIconSpeed(&stat, 6, 0);
     CARDSetIconSpeed(&stat, 7, 0);
-    CARDSetStatus(g_mDoMemCd_control.mCardSlot, card->fileNo, &stat);;
+    CARDSetStatus(mDoMemCd_getNowSlot(), card->fileNo, &stat);;
 }
 
 /* 8001A1EC-8001A2F0       .text mDoMemCdRWm_CheckCardStat__FP12CARDFileInfo */
 BOOL mDoMemCdRWm_CheckCardStat(CARDFileInfo* card) {
     CARDStat stat;
-    CARDGetStatus(g_mDoMemCd_control.mCardSlot, card->fileNo, &stat);
+    CARDGetStatus(mDoMemCd_getNowSlot(), card->fileNo, &stat);
     if (!(stat.iconAddr == 0 &&
         stat.commentAddr == 0x1C00 &&
         CARDGetBannerFormat(&stat) == 1 &&
