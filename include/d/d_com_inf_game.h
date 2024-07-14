@@ -2623,7 +2623,7 @@ inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramBlock, int i) {
 }
 
 inline bool dComIfGp_isPictureFlag(u8 i) {
-    g_dComIfG_gameInfo.play.isPictureFlag(i);
+    return g_dComIfG_gameInfo.play.isPictureFlag(i);
 }
 
 inline void dComIfGp_offPictureFlag(u8 i) {
