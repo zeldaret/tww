@@ -1201,7 +1201,7 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
 }
 
 inline u8 dComIfGs_getDataNum() {
-    g_dComIfG_gameInfo.save.getDataNum();
+    return g_dComIfG_gameInfo.save.getDataNum();
 }
 
 inline u8 dComIfGs_getPlayerPriestFlag() {
