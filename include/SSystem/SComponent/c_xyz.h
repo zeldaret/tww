@@ -20,10 +20,10 @@ struct cXyz : Vec {
     static const cXyz BaseXYZ;
     ~cXyz() {}
     /* inlined  */ cXyz() {}
-    cXyz(f32 x, f32 y, f32 z) {
-        x = x;
-        y = y;
-        z = z;
+    cXyz(f32 pX, f32 pY, f32 pZ) {
+        x = pX;
+        y = pY;
+        z = pZ;
     }
     cXyz(const cXyz& vec) {
         x = vec.x;
