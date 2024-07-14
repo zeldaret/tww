@@ -17,6 +17,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 
+// These are just guesses
 #define ARCNAME VERSION_SELECT("Tlogo", "TlogoE", "TlogoE0")
 
 namespace {
@@ -37,6 +38,7 @@ namespace {
         /* 0x34 */ f32 field_0x34;
     };
 
+    // TODO: Figure out magic numbers
     static const Attr_c L_attr = {
         0.0f, 0.0f, 0.9f, 0.1f,
         -57.0f, -3.0f, 1.0f, 1.0f,
@@ -140,8 +142,8 @@ daTitle_proc_c::daTitle_proc_c() {
     m098 = -50;
 
     m094 = (f32)(m098 * m098) * -attr().field_0x0C;
-    m020 = (int)(cM_rndF(attr().field_0x28) + attr().field_0x2C);
-    m024 = (int)(cM_rndF(attr().field_0x20) + attr().field_0x24 + 130.0f);
+    m020 = (s32)(cM_rndF(attr().field_0x28) + attr().field_0x2C);
+    m024 = (s32)(cM_rndF(attr().field_0x20) + attr().field_0x24 + 130.0f);
 
     m02C = 0;
     m018 = 0;
@@ -308,7 +310,7 @@ void daTitle_proc_c::calc_2d_alpha() {
     }
 
     if (m020 == 0) {
-        m020 = (int)(cM_rndF(attr().field_0x28) + attr().field_0x2C);
+        m020 = (s32)(cM_rndF(attr().field_0x28) + attr().field_0x2C);
         pos.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
 
         csXyz angle;
@@ -416,6 +418,14 @@ void daTitle_proc_c::proc_draw() {
     mDoExt_setCurrentHeap(oldHeap);
 }
 
+daTitle_c::~daTitle_c() {
+    if (mpTitleProc != NULL) {
+        delete mpTitleProc;
+    }
+
+    dComIfG_resDelete(&mPhs, ARCNAME);
+}
+
 s32 daTitle_c::create() {
     fopAcM_SetupActor(this, daTitle_c);
 
@@ -430,7 +440,7 @@ s32 daTitle_c::create() {
 
         mpTitleProc->proc_init2D();
         mpTitleProc->proc_init3D();
-        m29C = 0;
+        m29C = false;
     }
 
     return phase_state;
@@ -444,7 +454,7 @@ BOOL daTitle_c::draw() {
 }
 
 BOOL daTitle_c::execute() {
-    if (fopOvlpM_IsPeek() == 0) {
+    if (!fopOvlpM_IsPeek()) {
         mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor); // Fakematch?
 
         if ((CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) && mpTitleProc->getEnterMode() == 1) {
@@ -453,18 +463,18 @@ BOOL daTitle_c::execute() {
             scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
             JUT_ASSERT(0x2EF, stageProc != NULL);
 
-            if (m29C == 0 && fopScnM_ChangeReq(stageProc, PROC_NAME_SCENE, 0, 5)) {
+            if (!m29C && fopScnM_ChangeReq(stageProc, PROC_NAME_SCENE, 0, 5)) {
                 mDoAud_seStart(JA_SE_OP_ENTER_GAME);
-                m29C = 1;
+                m29C = true;
             }
         } else if (!mDoRst::isReset() && dComIfGp_isEnableNextStage()) {
             scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
             JUT_ASSERT(0x2FC, stageProc != NULL);
 
-            if (m29C == 0) {
+            if (!m29C) {
                 s16 procName = fpcM_GetName(stageProc) == PROC_OPENING_SCENE ? PROC_OPEN2_SCENE : PROC_TITLE_SCENE;
                 fopScnM_ChangeReq(stageProc, procName, 1, 5);
-                m29C = 1;
+                m29C = true;
             }
         }
     }
