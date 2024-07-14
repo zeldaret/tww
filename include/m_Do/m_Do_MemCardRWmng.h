@@ -18,7 +18,7 @@ u32 mDoMemCdRWm_CalcCheckSum(void*, u32);
 u16 mDoMemCdRWm_CalcCheckSumPictData(void*, u32);
 BOOL mDoMemCdRWm_TestCheckSumPictData(void*);
 void mDoMemCdRWm_SetCheckSumPictData(u8*);
-unsigned long long mDoMemCdRWm_CalcCheckSumGameData(void*, u32);
+u64 mDoMemCdRWm_CalcCheckSumGameData(void*, u32);
 BOOL mDoMemCdRWm_TestCheckSumGameData(void*);
 void mDoMemCdRWm_SetCheckSumGameData(u8*, u8);
 

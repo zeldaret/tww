@@ -81,6 +81,7 @@ s32 CARDCheck(s32);
 s32 CARDFreeBlocks(s32, s32*, s32*);
 s32 CARDRead(CARDFileInfo*, void*, s32, s32);
 s32 CARDWrite(CARDFileInfo*, const void*, s32, s32);
+s32 CARDGetSerialNo(s32, u64*);
 
 #ifdef __cplusplus
 }

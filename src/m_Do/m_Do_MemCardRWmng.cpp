@@ -24,14 +24,6 @@ struct mDoMemCdRWm_HeaderData
     /* 0x1c20 */ char info[32];
 };
 
-struct card_savedata
-{
-    u32 saveCount;
-    u32 field_0x04;
-    u8 data[0x1ff4];
-    u32 csum;
-};
-
 struct card_pictdata
 {
     u8 data[0x1ffe];
@@ -41,10 +33,20 @@ struct card_pictdata
 struct card_gamedata
 {
     u8 data[0x768];
-    unsigned long long csum;
+    u64 csum;
+};
+
+struct card_savedata
+{
+    u32 saveCount;
+    u32 field_0x04;
+    card_gamedata gamedata[3];
+    u32 field_0x1658[0x269];
+    u32 csum;
 };
 
 static u8 sTmpBuf[0x2000];
+static u8 sTmpBuf2[0x2000];
 static u32 sSaveCount;
 
 /* 80019940-80019CE8       .text mDoMemCdRWm_Store__FP12CARDFileInfoPvUl */
@@ -67,7 +69,7 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
     memset(sTmpBuf, 0, 0x2000);
     card_savedata* save = (card_savedata*)sTmpBuf;
     save->field_0x04 = 0;
-    memcpy(save->data, data, size);
+    memcpy(save->gamedata, data, size);
     save->saveCount = ++sSaveCount;
     s32 csum = mDoMemCdRWm_CalcCheckSum(data, 0x1FFC);
     save->csum = csum;
@@ -118,8 +120,69 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
 }
 
 /* 80019CE8-80019F4C       .text mDoMemCdRWm_Restore__FP12CARDFileInfoPvUl */
-s32 mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32) {
+s32 mDoMemCdRWm_Restore(CARDFileInfo* card, void* dst, u32 size) {
     /* Nonmatching */
+    s32 ret;
+    card_savedata* save;
+    card_savedata* save2;
+    BOOL needsWrite = FALSE;
+    BOOL invalid;
+    BOOL csum0a;
+    BOOL csum1a;
+    BOOL csum2a;
+    BOOL csum0b;
+    BOOL csum1b;
+    BOOL csum2b;
+    u64 serialNo;
+
+    save = (card_savedata*)sTmpBuf;
+    save2 = (card_savedata*)sTmpBuf2;
+    ret = CARDRead(card, save, 0x2000, 0x2000);
+    if (ret != CARD_ERROR_READY) return ret;
+    csum0a = mDoMemCdRWm_TestCheckSumGameData(&save->gamedata[0]);
+    csum1a = mDoMemCdRWm_TestCheckSumGameData(&save->gamedata[1]);
+    csum2a = mDoMemCdRWm_TestCheckSumGameData(&save->gamedata[2]);
+    ret = CARDRead(card, save2, 0x2000, 0x4000);
+    if (ret != CARD_ERROR_READY) return ret;
+    csum0b = mDoMemCdRWm_TestCheckSumGameData(&save2->gamedata[0]);
+    csum1b = mDoMemCdRWm_TestCheckSumGameData(&save2->gamedata[1]);
+    csum2b = mDoMemCdRWm_TestCheckSumGameData(&save2->gamedata[2]);
+    if (!csum0a && csum0b) {
+        memcpy(&save->gamedata[0], &save2->gamedata[0], sizeof(card_gamedata));
+        needsWrite = TRUE;
+    }
+    if (!csum1a && csum1b) {
+        memcpy(&save->gamedata[1], &save2->gamedata[1], sizeof(card_gamedata));
+        needsWrite = TRUE;
+    }
+    if (!csum2a && csum2b) {
+        memcpy(&save->gamedata[2], &save2->gamedata[2], sizeof(card_gamedata));
+        needsWrite = TRUE;
+    }
+
+    invalid = !csum0a && !csum1a && !csum2a && !csum0b && !csum1b && !csum2b;
+    if (!mDoMemCdRWm_CheckCardStat(card))
+        return CARD_ERROR_FATAL_ERROR;
+
+    if (needsWrite) {
+        ret = CARDWrite(card, save, 0x2000, 0x2000);
+        if (ret != CARD_ERROR_READY) return ret;
+        ret = CARDWrite(card, save, 0x2000, 0x4000);
+        if (ret != CARD_ERROR_READY) return ret;
+        memcpy(dst, save->gamedata, size);
+        sSaveCount = save->saveCount;
+        g_mDoMemCd_control.field_0x1690 = save->field_0x04;
+        if (!invalid && g_mDoMemCd_control.mCardCommand != NULL) {
+            ret = CARDRead(card, g_mDoMemCd_control.mCardCommand, 0x12000, 0x6000);
+            if (ret != CARD_ERROR_READY) return ret;
+        }
+
+        serialNo;
+        CARDGetSerialNo(g_mDoMemCd_control.mCardSlot, &serialNo);
+        g_mDoMemCd_control.mCardSerialNo = serialNo;
+    }
+
+    return CARD_ERROR_READY;
 }
 
 #if VERSION == VERSION_PAL
@@ -237,7 +300,7 @@ void mDoMemCdRWm_SetCheckSumPictData(u8* p) {
 }
 
 /* 8001A3D0-8001A408       .text mDoMemCdRWm_CalcCheckSumGameData__FPvUl */
-unsigned long long mDoMemCdRWm_CalcCheckSumGameData(void* p, u32 size) {
+u64 mDoMemCdRWm_CalcCheckSumGameData(void* p, u32 size) {
     /* Nonmatching */
     u32 c0 = 0, c1 = 0;
     for (int i = 0; i < size; i++) {
@@ -245,7 +308,7 @@ unsigned long long mDoMemCdRWm_CalcCheckSumGameData(void* p, u32 size) {
         c0 += v;
         c1 += ~v;
     }
-    return ((unsigned long long)c0 << 32) | c1;
+    return ((u64)c0 << 32) | c1;
 }
 
 /* 8001A408-8001A454       .text mDoMemCdRWm_TestCheckSumGameData__FPv */

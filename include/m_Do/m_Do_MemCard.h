@@ -45,10 +45,10 @@ public:
     s32 checkspace();
     void setCardState(s32);
 
-    bool isCardCommNone() { return mCardCommand == CARD_NO_COMMAND; }
+    bool isCardCommNone() { return mCardCommand != NULL; }
 
     /* 0x0000 */ u8 mData[0x1650];
-    /* 0x1650 */ s32 mCardCommand;
+    /* 0x1650 */ u8* mCardCommand;
     /* 0x1654 */ u8* mCardBuf;
     /* 0x1658 */ u8 mCardSlot;
     /* 0x1659 */ u8 field_0x1659;
@@ -58,7 +58,10 @@ public:
     /* 0x1660 */ s32 field_0x1660;
     /* 0x1664 */ OSMutex mMutex;
     /* 0x167C */ OSCond mCond;
-    /* 0x1684 */ u32 field_0x1684[5];
+    /* 0x1684 */ u32 field_0x1684;
+    /* 0x1688 */ u64 mCardSerialNo;
+    /* 0x1690 */ u32 field_0x1690;
+    /* 0x1694 */ u32 field_0x1694;
 };  // Size: 0x1698
 
 static int mDoMemCd_main(void*);
