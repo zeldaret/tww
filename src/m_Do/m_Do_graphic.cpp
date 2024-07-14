@@ -501,6 +501,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
 
     s16 x = (s16)viewport->mXOrig & ~0x07;
     s16 y = (s16)viewport->mYOrig & ~0x07;
+    y = (y < 0) ? y : 0; // y = y & (y >> 31);
     s16 w = (s16)viewport->mWidth & ~0x07;
     s16 h = (s16)viewport->mHeight & ~0x07;
 
@@ -508,18 +509,20 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     char* fbbuf = (char*)mDoGph_gInf_c::getFrameBufferTex();
     if (y < 0) {
         h += y;
-        zbuf += GXGetTexBufferSize(240, -y / 2, GX_TF_IA8, GX_FALSE, 0);
-        fbbuf += GXGetTexBufferSize(240, -y / 2, mDoGph_gInf_c::getFrameBufferTimg()->format, GX_FALSE, 0);
+        s16 hh = -y >> 1;
+        zbuf += GXGetTexBufferSize(320, hh, GX_TF_IA8, GX_FALSE, 0);
+        fbbuf += GXGetTexBufferSize(320, hh, mDoGph_gInf_c::getFrameBufferTimg()->format, GX_FALSE, 0);
     }
 
+    u16 hw = w >> 1, hh = h >> 1;
     GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, JUTVideo::getManager()->getRenderMode()->vfilter);
 
     GXSetTexCopySrc(x, y, w, h);
-    GXSetTexCopyDst(w / 2, w / 2, GX_TF_Z16, GX_TRUE);
+    GXSetTexCopyDst(hw, hh, GX_TF_Z16, GX_TRUE);
     GXCopyTex(zbuf, GX_FALSE);
 
     GXSetTexCopySrc(x, y, w, h);
-    GXSetTexCopyDst(w / 2, w / 2, mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
+    GXSetTexCopyDst(hw, hh, mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
     GXCopyTex(fbbuf, GX_FALSE);
 
     GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zbuf, w, h, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -591,9 +594,8 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
 
-    f32 sy = viewport->mScissor.mYOrig;
-    if (y == 0 && sy != 0.0f) {
-        s32 h = sy + viewport->mScissor.mHeight;
+    if (y == 0 && (s16)viewport->mScissor.mYOrig != 0) {
+        s16 h = (f32)((s16)viewport->mScissor.mYOrig) + (f32)viewport->mScissor.mHeight;
         GXSetNumChans(1);
         GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
         GXSetNumTexGens(0);
