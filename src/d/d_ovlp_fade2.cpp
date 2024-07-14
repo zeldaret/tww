@@ -129,12 +129,12 @@ void dOvlpFd2_c::execFirstSnap() {
 
 /* 80223E18-80223F8C       .text execFadeOut__10dOvlpFd2_cFv */
 void dOvlpFd2_c::execFadeOut() {
-    /* Nonmatching */
     dComIfGp_setWindowNum(0);
     cLib_chaseAngleS(&field_0x112, 2000, 100);
+    s16 r5 = ((field_0x110 + 0x4000) & 0x8000 | 0x4000) - field_0x112;
     field_0x110 += field_0x112;
-
-    if (field_0x112) { // wtf is this condition
+    s16 r0_1 = r5 - field_0x110;
+    if (field_0x112 * r0_1 < 0) {
         if (mTimer == 0) {
             if (fopOvlpM_IsOutReq(this)) {
                 fopOvlpM_SceneIsStart();
@@ -156,7 +156,8 @@ void dOvlpFd2_c::execFadeOut() {
         cLib_calcTimer(&mTimer);
     }
 
-    rotZ += REG0_S(0) + 0x800;
+    s16 r0_2 = REG0_S(0) + 0x800;
+    rotZ += r0_2;
     cLib_addCalc2(&scale, REG0_F(1) + 1.0f, 1.0f, REG0_F(2) + 0.05f);
 }
 
@@ -173,8 +174,8 @@ void dOvlpFd2_c::execNextSnap() {
 
 /* 80224034-802240F4       .text execFadeIn__10dOvlpFd2_cFv */
 void dOvlpFd2_c::execFadeIn() {
-    /* Nonmatching */
-    rotZ -= REG0_S(0) + 0x800;
+    s16 r3 = REG0_S(0) + 0x800;
+    rotZ -= r3;
     cLib_addCalc0(&scale, 1.0f, REG0_F(3) + 0.03f);
 
     if (scale < 0.001f) {
@@ -193,7 +194,6 @@ void dOvlpFd2_c::execFadeIn() {
 }
 
 void dOvlpFd2_c::draw() {
-    /* Nonmatching */
     if (!mHasSnap) {
         dComIfGd_set2DXlu(&dSnap_dlst);
         mHasSnap = true;
