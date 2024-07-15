@@ -61,7 +61,7 @@ void TAdaptor_sound::adaptor_do_update(const JStudio::TObject* object, u32) {
     adaptor_getVariableValue_Vec(r30, sauVariableValue_3_POSITION_XYZ);
     if (control->mTransformOnSet) {
         Vec temp;
-        PSMTXMultVec(control->mTransformOnSet_Matrix, r30, &temp);
+        MTXMultVec(control->mTransformOnSet_Matrix, r30, &temp);
         *r30 = temp;
     }
 }

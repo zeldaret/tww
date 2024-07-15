@@ -95,7 +95,8 @@ public:
     /* 0x1190 */ cXyz m1190;
     /* 0x119C */ cXyz m119C;
     /* 0x11A8 */ cXyz m11A8;
-    /* 0x11B4 */ u8 m11B4[0x11CC - 0x11B4];
+    /* 0x11B4 */ u8 m11B4[0x11C0 - 0x11B4];
+    /* 0x11C0 */ cXyz m11C0;
     /* 0x11CC */ cXyz m11CC;
     /* 0x11D8 */ u8 m11D8[0x11F0 - 0x11D8];
     /* 0x11F0 */ u8 m11F0;
