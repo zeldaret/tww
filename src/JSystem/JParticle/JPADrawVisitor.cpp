@@ -577,9 +577,9 @@ void JPADrawExecRotationCross::exec(const JPADrawContext* pDC, JPABaseParticle* 
     pt[2].set(x1, y1, 0.0f);
     pt[3].set(x0, y1, 0.0f);
 
-    f32 x2 = (x1 + x0) / 2.0f;
-    f32 z0 = (x1 - x0) / 2.0f;
-    f32 z1 = (x0 - x1) / 2.0f;
+    f32 x2 = (x1 + x0) * 0.5f;
+    f32 z0 = (x1 - x0) * 0.5f;
+    f32 z1 = (x0 - x1) * 0.5f;
     pt[4].set(x2, y0, z0);
     pt[5].set(x2, y0, z1);
     pt[6].set(x2, y1, z1);
@@ -748,10 +748,11 @@ void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* pDC) {
 
 /* 802648E0-8026495C       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* pDC) {
-    /* Nonmatching */
     s32 tick = pDC->pbe->mTick.getFrame();
-    s32 frame = tick / pDC->pbsp->getColorRegAnmMaxFrm();
-    JPADrawContext::pcb->mColorAnmFrame = frame;
+    s32 maxFrame = pDC->pbsp->getColorRegAnmMaxFrm();
+    s32 odd = (tick / maxFrame) & 1; // whether we're on an even or odd loop
+    s32 frame = tick % maxFrame;
+    JPADrawContext::pcb->mColorAnmFrame = frame + (odd * maxFrame) - 2 * (odd * frame);
 }
 
 /* 8026495C-8026496C       .text calc__29JPADrawCalcColorAnmFrameMergeFPC14JPADrawContext */
@@ -774,25 +775,30 @@ void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext* pDC) {
 /* 80264A34-80264AD0       .text calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* pDC) {
     /* Nonmatching */
-    f32 tick = pDC->pbe->mTick.getFrame();
+    s32 tick = pDC->pbe->mTick.getFrame();
     s32 maxFrame = pDC->pbsp->getTextureAnmKeyNum();
-    s32 idx = pDC->pbsp->getTextureIndex((s32)tick % maxFrame);
+    u8 idx = tick % maxFrame;
+    idx = pDC->pbsp->getTextureIndex(idx);
     pDC->mpDraw->mTexIdx = pDC->pTexIdx[idx];
 }
 
 /* 80264AD0-80264B80       .text calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexReverse::calc(const JPADrawContext* pDC) {
-    /* Nonmatching */
+    s32 tick = pDC->pbe->mTick.getFrame();
+    s32 maxFrame = pDC->pbsp->getTextureAnmKeyNum() - 1;
+    s32 odd = (tick / maxFrame) & 1; // whether we're on an even or odd loop
+    s32 frame = tick % maxFrame;
+    pDC->mpDraw->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(frame + (odd * maxFrame) - 2 * (odd * frame))];
 }
 
 /* 80264B80-80264BC8       .text calc__31JPADrawCalcTextureAnmIndexMergeFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexMerge::calc(const JPADrawContext* pDC) {
-    /* Nonmatching */
+    pDC->mpDraw->mTexIdx = pDC->pbsp->getTextureIndex();
 }
 
 /* 80264BC8-80264C10       .text calc__32JPADrawCalcTextureAnmIndexRandomFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext* pDC) {
-    /* Nonmatching */
+    pDC->mpDraw->mTexIdx = pDC->pbsp->getTextureIndex();
 }
 
 /* 80264C10-80264C4C       .text exec__19JPADrawExecCallBackFPC14JPADrawContext */
@@ -884,12 +890,20 @@ void JPADrawCalcScaleAnmTimingRepeatY::calc(const JPADrawContext* pDC, JPABasePa
 
 /* 80265444-80265588       .text calc__33JPADrawCalcScaleAnmTimingReverseXFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleAnmTimingReverseX::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 curFrame = ptcl->mCurFrame;
+    f32 odd = ((s32)curFrame / pDC->pesp->getAnmCycleX()) & 1; // whether we're on an even or odd loop
+    curFrame = ptcl->mCurFrame; // fakematch; probably an inline function (getAge?)
+    f32 frame = (f32)((s32)curFrame % pDC->pesp->getAnmCycleX()) / pDC->pesp->getAnmCycleX();
+    JPADrawContext::pcb->mScaleAnmTiming = odd + (frame - odd * 2.0f * frame);
 }
 
 /* 80265588-802656CC       .text calc__33JPADrawCalcScaleAnmTimingReverseYFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleAnmTimingReverseY::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 curFrame = ptcl->mCurFrame;
+    f32 odd = ((s32)curFrame / pDC->pesp->getAnmCycleY()) & 1; // whether we're on an even or odd loop
+    curFrame = ptcl->mCurFrame; // fakematch; probably an inline function (getAge?)
+    f32 frame = (f32)((s32)curFrame % pDC->pesp->getAnmCycleY()) / pDC->pesp->getAnmCycleY();
+    JPADrawContext::pcb->mScaleAnmTiming = odd + (frame - odd * 2.0f * frame);
 }
 
 /* 802656CC-80265734       .text calc__19JPADrawCalcColorPrmFPC14JPADrawContextP15JPABaseParticle */
@@ -924,7 +938,13 @@ void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* pDC, JPABasePart
 
 /* 80265918-802659C4       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 loopOffset = pDC->pbsp->getColLoopOffset();
+    loopOffset = ptcl->mLoopOffset & loopOffset;
+    s32 maxFrame = pDC->pbsp->getColorRegAnmMaxFrm();
+    s32 t = loopOffset + (s32)ptcl->mCurFrame;
+    s32 odd = (t / maxFrame) & 1;
+    s32 frame = t % maxFrame;
+    JPADrawContext::pcb->mColorAnmFrame = frame + (odd * maxFrame) - 2 * (odd * frame);
 }
 
 /* 802659C4-80265A90       .text calc__29JPADrawCalcColorAnmFrameMergeFPC14JPADrawContextP15JPABaseParticle */
@@ -970,7 +990,7 @@ void JPADrawCalcAlphaFlickAddSin::calc(const JPADrawContext* pDC, JPABaseParticl
     f32 theta = (((s32)ptcl->mCurFrame) * 16384) * ptcl->mAlphaWaveRandom;
     f32 sin2 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam2()));
     f32 sin1 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam1()));
-    ptcl->mAlphaOut *= (ptcl->mAlphaWaveRandom * (pDC->pesp->getAlphaWaveParam3() * (sin2 + sin1) - 2.0f) * 0.5f + 2.0f) * 0.5f;
+    ptcl->mAlphaOut *= (ptcl->mAlphaWaveRandom * 0.5f * (pDC->pesp->getAlphaWaveParam3() * (sin1 + sin2) - 2.0f) * 0.5f + 2.0f) * 0.5f;
     if (ptcl->mAlphaOut < 0.0f)
         ptcl->mAlphaOut = 0.0f;
 }
