@@ -65,6 +65,38 @@ void JPABaseEmitter::calcVolumeCube() {
 /* 8025C63C-8025C8A4       .text calcVolumeSphere__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeSphere() {
     /* Nonmatching */
+    s16 x;
+    s16 angle;
+    if (checkEmDataFlag(0x02)) {
+        x = (u16)(((s32)emtrInfo.mVolumeEmitXCount * 0x8000) / ((s32)(emtrInfo.mDivNumber - 1)) + 0x4000);
+        angle = mVolumeSweep * (f32)(u16)((emtrInfo.mVolumeEmitAngleCount * 0x10000) / emtrInfo.mVolumeEmitAngleMax) + 32768.0f;
+        if (++emtrInfo.mVolumeEmitAngleCount == emtrInfo.mVolumeEmitAngleMax) {
+            emtrInfo.mVolumeEmitAngleCount = 0;
+            ++emtrInfo.mVolumeEmitXCount;
+            if (emtrInfo.mVolumeEmitXCount * 2 < emtrInfo.mDivNumber) {
+                emtrInfo.mVolumeEmitAngleMax = (emtrInfo.mVolumeEmitAngleMax != 1) ? emtrInfo.mVolumeEmitAngleMax + 4 : emtrInfo.mVolumeEmitAngleMax + 3;
+            } else {
+                emtrInfo.mVolumeEmitAngleMax = (emtrInfo.mVolumeEmitAngleMax != 4) ? emtrInfo.mVolumeEmitAngleMax - 4 : 1;
+            }
+        }
+    } else {
+        x = getRandomSS() >> 1;
+        angle = mVolumeSweep * getRandomSS();
+    }
+
+    f32 rad = getRandomF();
+    if (checkEmDataFlag(0x01)) {
+        rad = 1.0f - rad * rad * rad;
+    }
+    rad = emtrInfo.mVolumeSize * (mVolumeMinRad + rad * (1.0f - mVolumeMinRad));
+
+    emtrInfo.mVolumePos.set(
+        rad * JMASCos(x) * JMASSin(angle),
+        -rad * JMASSin(x),
+        rad * JMASCos(x) * JMASCos(angle)
+    );
+    emtrInfo.mVelOmni.mul(emtrInfo.mVolumePos, emtrInfo.mEmitterGlobalScale);
+    emtrInfo.mVelAxis.set(emtrInfo.mVolumePos.x, 0.0f, emtrInfo.mVolumePos.z);
 }
 
 /* 8025C8A4-8025CA28       .text calcVolumeCylinder__14JPABaseEmitterFv */

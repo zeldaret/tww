@@ -124,10 +124,10 @@ public:
     /* 0x130 */ f32 mVolumeSize;
     /* 0x134 */ s32 mVolumeEmitCount;
     /* 0x138 */ s32 mVolumeEmitIdx;
-    /* 0x13C */ u32 mVolumeEmitAngleCount;
-    /* 0x140 */ u32 mVolumeEmitXCount;
-    /* 0x144 */ u32 mVolumeEmitAngleMax;
-    /* 0x148 */ u32 mDivNumber;
+    /* 0x13C */ s32 mVolumeEmitAngleCount;
+    /* 0x140 */ s32 mVolumeEmitXCount;
+    /* 0x144 */ s32 mVolumeEmitAngleMax;
+    /* 0x148 */ s32 mDivNumber;
 };
 
 struct JPAFrameManager {
