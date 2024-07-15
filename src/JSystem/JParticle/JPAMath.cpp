@@ -60,30 +60,32 @@ void JPAGetXYZRotateMtx(s16 x, s16 y, s16 z, Mtx dst) {
 
 /* 80259A64-80259B6C       .text JPAGetDirMtx__FRCQ29JGeometry8TVec3<f>PA4_f */
 void JPAGetDirMtx(const JGeometry::TVec3<f32>& dir, Mtx dst) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     JGeometry::TVec3<f32> perp;
     perp.x = dir.y;
     perp.y = -dir.x;
     f32 z = dir.z;
     perp.z = 0.0f;
 
-    f32 mag = perp.squared();
-    mag *= JGeometry::TUtil<f32>::inv_sqrt(mag);
+    f32 mag = perp.length();
     if (mag <= JGeometry::TUtil<f32>::epsilon()) {
-        perp.x = perp.y = 0.0f;
+        perp.zero();
     } else {
-        perp.x *= (1.0f / mag);
-        perp.y *= (1.0f / mag);
+        perp.scale(1.0f / mag);
     }
 
     f32 x = perp.x, y = perp.y;
-    dst[0][0] = x*x + z * (1.0f - x*x);
-    dst[0][1] = (1.0f - z) * (x * y);
+    f32 xx = x*x;
+    f32 yy = y*y;
+    f32 xy = x*y;
+
+    dst[0][0] = xx + z * (1.0f - xx);
+    dst[0][1] = xy * (1.0f - z);
     dst[0][2] = -y * mag;
     dst[0][3] = 0.0f;
 
-    dst[1][0] = (1.0f - z) * (x * y);
-    dst[1][1] = y*y + z * (1.0f - y*y);
+    dst[1][0] = xy * (1.0f - z);
+    dst[1][1] = yy + z * (1.0f - yy);
     dst[1][2] = x*mag;
     dst[1][3] = 0.0f;
 
