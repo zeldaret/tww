@@ -68,8 +68,9 @@ void JPABaseEmitter::calcVolumeSphere() {
     s16 x;
     s16 angle;
     if (checkEmDataFlag(0x02)) {
-        x = (u16)(((s32)emtrInfo.mVolumeEmitXCount * 0x8000) / ((s32)(emtrInfo.mDivNumber - 1)) + 0x4000);
-        angle = mVolumeSweep * (f32)(u16)((emtrInfo.mVolumeEmitAngleCount * 0x10000) / emtrInfo.mVolumeEmitAngleMax) + 32768.0f;
+        u16 angleNo = (emtrInfo.mVolumeEmitAngleCount * 0x10000) / emtrInfo.mVolumeEmitAngleMax;
+        x = (u16)((emtrInfo.mVolumeEmitXCount * 0x8000) / (emtrInfo.mDivNumber - 1) + 0x4000);
+        angle = (f32)angleNo * mVolumeSweep + 32768.0f;
         if (++emtrInfo.mVolumeEmitAngleCount == emtrInfo.mVolumeEmitAngleMax) {
             emtrInfo.mVolumeEmitAngleCount = 0;
             ++emtrInfo.mVolumeEmitXCount;
@@ -103,7 +104,6 @@ void JPABaseEmitter::calcVolumeSphere() {
 void JPABaseEmitter::calcVolumeCylinder() {
     /* Nonmatching */
     s16 angle = mVolumeSweep * getRandomSS();
-
     f32 rad = getRandomF();
     if (checkEmDataFlag(0x01))
         rad = 1.0f - rad * rad;
