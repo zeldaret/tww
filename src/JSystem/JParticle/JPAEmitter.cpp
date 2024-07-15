@@ -285,21 +285,20 @@ void JPABaseEmitter::calcParticle() {
         JSULink<JPABaseParticle> * next = link->getNext();
         JPABaseParticle * ptcl = (JPABaseParticle *) link->getObjectPtr();
         ptcl->incFrame();
-        if (!(ptcl->mStatus & 0x80)) {
+        if (!ptcl->checkStatus(0x80)) {
             ptcl->calcVelocity();
-            if (ptcl->mpCallBack2 != NULL)
-                ptcl->mpCallBack2->execute(this, ptcl);
-            if (!(ptcl->mStatus & 0x02)) {
+            ptcl->calcCB(this);
+            if (!ptcl->checkStatus(0x02)) {
                 mDraw.calcParticle(ptcl);
                 if (getEmitterDataBlockInfoPtr()->getSweepShape() != NULL && ptcl->checkCreateChild())
                     createChildren(ptcl);
                 ptcl->calcPosition();
             }
         } else {
-            ptcl->mStatus |= 0x02;
+            ptcl->setStatus(0x02);
         }
 
-        if (ptcl->mStatus & 0x02)
+        if (ptcl->checkStatus(0x02))
             deleteParticle(ptcl, &mActiveParticles);
 
         link = next;
@@ -312,20 +311,19 @@ void JPABaseEmitter::calcChild() {
         JSULink<JPABaseParticle> * next = link->getNext();
         JPABaseParticle * ptcl = (JPABaseParticle *) link->getObjectPtr();
         ptcl->incFrame();
-        if (!(ptcl->mStatus & 0x80)) {
+        if (!ptcl->checkStatus(0x80)) {
             if ((s32)ptcl->mCurFrame != 0)
                 ptcl->calcVelocity();
-            if (ptcl->mpCallBack2 != NULL)
-                ptcl->mpCallBack2->execute(this, ptcl);
-            if (!(ptcl->mStatus & 0x02)) {
+            ptcl->calcCB(this);
+            if (!ptcl->checkStatus(0x02)) {
                 mDraw.calcChild(ptcl);
                 ptcl->calcPosition();
             }
         } else {
-            ptcl->mStatus |= 0x02;
+            ptcl->setStatus(0x02);
         }
 
-        if (ptcl->mStatus & 0x02)
+        if (ptcl->checkStatus(0x02))
             deleteParticle(ptcl, &mChildParticles);
 
         link = next;

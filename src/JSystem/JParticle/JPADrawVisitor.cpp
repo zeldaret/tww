@@ -810,8 +810,7 @@ void JPADrawExecCallBack::exec(const JPADrawContext* pDC) {
 /* 80264C4C-80264C88       .text exec__19JPADrawExecCallBackFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecCallBack::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPABaseEmitter* pbe = pDC->pbe;
-    if (ptcl->mpCallBack2 != NULL)
-        ptcl->mpCallBack2->draw(pbe, ptcl);
+    ptcl->drawCB(pbe);
 }
 
 /* 80264C88-80264DB8       .text calc__17JPADrawCalcScaleXFPC14JPADrawContextP15JPABaseParticle */
@@ -890,19 +889,15 @@ void JPADrawCalcScaleAnmTimingRepeatY::calc(const JPADrawContext* pDC, JPABasePa
 
 /* 80265444-80265588       .text calc__33JPADrawCalcScaleAnmTimingReverseXFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleAnmTimingReverseX::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    s32 curFrame = ptcl->mCurFrame;
-    f32 odd = ((s32)curFrame / pDC->pesp->getAnmCycleX()) & 1; // whether we're on an even or odd loop
-    curFrame = ptcl->mCurFrame; // fakematch; probably an inline function (getAge?)
-    f32 frame = (f32)((s32)curFrame % pDC->pesp->getAnmCycleX()) / pDC->pesp->getAnmCycleX();
+    f32 odd = (ptcl->getAge() / pDC->pesp->getAnmCycleX()) & 1; // whether we're on an even or odd loop
+    f32 frame = (f32)(ptcl->getAge() % pDC->pesp->getAnmCycleX()) / pDC->pesp->getAnmCycleX();
     JPADrawContext::pcb->mScaleAnmTiming = odd + (frame - odd * 2.0f * frame);
 }
 
 /* 80265588-802656CC       .text calc__33JPADrawCalcScaleAnmTimingReverseYFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleAnmTimingReverseY::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    s32 curFrame = ptcl->mCurFrame;
-    f32 odd = ((s32)curFrame / pDC->pesp->getAnmCycleY()) & 1; // whether we're on an even or odd loop
-    curFrame = ptcl->mCurFrame; // fakematch; probably an inline function (getAge?)
-    f32 frame = (f32)((s32)curFrame % pDC->pesp->getAnmCycleY()) / pDC->pesp->getAnmCycleY();
+    f32 odd = (ptcl->getAge() / pDC->pesp->getAnmCycleY()) & 1; // whether we're on an even or odd loop
+    f32 frame = (f32)(ptcl->getAge() % pDC->pesp->getAnmCycleY()) / pDC->pesp->getAnmCycleY();
     JPADrawContext::pcb->mScaleAnmTiming = odd + (frame - odd * 2.0f * frame);
 }
 

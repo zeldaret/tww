@@ -18,13 +18,13 @@ void JPABaseParticle::initParticle() {
     JGeometry::TVec3<f32> velDir;
     JGeometry::TVec3<f32> velRndm;
 
-    mStatus = 0x01;
+    initStatus(JPAPtclStts_FirstFrame);
     mFieldAccel.zero();
     mFieldDrag = 1.0f;
     mDrag = 1.0f;
     MTXMultVec(emtrInfo.mEmitterGlobalSR, emtrInfo.mVolumePos, mLocalPosition);
     if ((emtr->mDataFlag & 0x08) != 0)
-        mStatus |= 0x20;
+        setStatus(0x20);
 
     mGlobalPosition.set(emtrInfo.mEmitterGlobalCenter);
 
@@ -88,7 +88,7 @@ void JPABaseParticle::initParticle() {
         mGlobalPosition.z + mLocalPosition.z * emtrInfo.mPublicScale.z
     );
 
-    mpCallBack2 = emtr->mpParticleCallBack;
+    setCallBackPtr(emtr->mpParticleCallBack);
     emtr->mFieldManager.init(this);
     field_0xd0 = 0;
 }
@@ -100,10 +100,10 @@ void JPABaseParticle::initChild(JPABaseParticle* parent) {
     JPABaseEmitter * emtr = emtrInfo.mpCurEmitter;
     JPASweepShape * sweep = emtr->mpDataLinkInfo->getSweepShape();
 
-    mStatus = 0x04 | 0x01;
+    initStatus(JPAPtclStts_FirstFrame | JPAPtlcStts_Child);
 
     if (!sweep->isEnableField()) {
-        mStatus |= 0x40;
+        setStatus(0x40);
         mFieldDrag = 1.0f;
         mDrag = 1.0f;
     } else {
@@ -137,7 +137,7 @@ void JPABaseParticle::initChild(JPABaseParticle* parent) {
     mVelocity = vel;
 
     if (emtr->checkEmDataFlag(0x10))
-        mStatus |= 0x20;
+        setStatus(0x20);
 
     mGlobalPosition.set(parent->mGlobalPosition);
     mLocalPosition.set(parent->mLocalPosition);
@@ -151,7 +151,7 @@ void JPABaseParticle::initChild(JPABaseParticle* parent) {
         mLocalPosition.add(unit);
     }
 
-    mpCallBack2 = emtr->mpParticleCallBack;
+    setCallBackPtr(emtr->mpParticleCallBack);
     field_0xd0 = parent->field_0xd0;
 }
 
@@ -161,11 +161,11 @@ void JPABaseParticle::incFrame() {
     if (mCurFrame < 0.0f)
         mCurFrame = 0.0f;
 
-    mStatus &= ~0x01;
+    clearStatus(JPAPtclStts_FirstFrame);
 
     if (mCurFrame >= mLifeTime) {
         mCurNormTime = 1.0f;
-        mStatus |= 0x02;
+        setStatus(0x02); // setDeleteParticleFlag
     } else {
         mCurNormTime = mCurFrame / mLifeTime;
     }

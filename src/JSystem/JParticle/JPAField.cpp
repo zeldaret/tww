@@ -288,8 +288,7 @@ void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 
 /* 8025B3CC-8025B50C       .text calc__14JPARandomFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPARandomField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching */
-    s32 frame = ptcl->mCurFrame;
+    s32 frame = ptcl->getAge();
     if (frame != 0) {
         if (data->mCycle == 0)
             return;
@@ -316,7 +315,7 @@ void JPADragField::init(JPAFieldData* data, JPABaseParticle* ptcl) {
 
 /* 8025B584-8025B5F4       .text calc__12JPADragFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPADragField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    if (ptcl->checkStatus(0x04)) {
+    if (ptcl->checkStatus(JPAPtlcStts_Child)) {
         ptcl->mDrag *= ptcl->mFieldDrag;
     } else {
         f32 affect = JPABaseField::calcFadeAffect(data, ptcl->mCurNormTime);

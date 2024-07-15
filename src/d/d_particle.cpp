@@ -431,7 +431,7 @@ void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* param_1) {
                     particle->setOffsetPosition(simpleData->mPos.x, simpleData->mPos.y, simpleData->mPos.z);
                     if (simpleData->mbAffectedByWind) {
                         static dPa_windPcallBack l_windPcallBack;
-                        particle->mpCallBack2 = &l_windPcallBack;
+                        particle->setCallBackPtr(&l_windPcallBack);
                     }
                 }
             }

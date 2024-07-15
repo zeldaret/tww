@@ -22,6 +22,8 @@ template<typename T, typename U>
 class JPACallBackBase2;
 
 enum JPAParticleStatus {
+    JPAPtclStts_FirstFrame = 0x01,
+    JPAPtlcStts_Child = 0x04,
     JPAPtclStts_Invisible = 0x08,
 };
 
@@ -40,15 +42,18 @@ public:
     void setOffsetPosition(f32 x, f32 y, f32 z) { mGlobalPosition.set(x, y, z); }
     void setOffsetPosition(const JGeometry::TVec3<f32>& pos) { mGlobalPosition.set(pos); }
     void getGlobalPosition(JGeometry::TVec3<f32>& out) const { out.set(mGlobalPosition); }
+    s32 getAge() const { return mCurFrame; } // TODO: Not sure about this one, especially the cast to s32; this could also be mCurNormTime?
+    void calcCB(JPABaseEmitter* emtr) { if (mpCallBack2 != NULL) mpCallBack2->execute(emtr, this); }
+    void drawCB(JPABaseEmitter* emtr) { if (mpCallBack2 != NULL) mpCallBack2->draw(emtr, this); }
+    void setCallBackPtr(JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* cb) { mpCallBack2 = cb; }
 
     bool checkStatus(u32 flag) { return mStatus & flag; }
+    void initStatus(u32 flag) { mStatus = flag; }
+    void setStatus(u32 flag) { mStatus |= flag; }
+    void clearStatus(u32 flag) { mStatus &= ~flag; }
     bool isInvisibleParticle() { return checkStatus(JPAPtclStts_Invisible); }
-    void setInvisibleParticleFlag() { mStatus |= JPAPtclStts_Invisible; }
+    void setInvisibleParticleFlag() { setStatus(JPAPtclStts_Invisible); }
 
-    void calcCB(JPABaseEmitter*) {}
-    void clearStatus(u32) {}
-    void drawCB(JPABaseEmitter*) {}
-    void getAge() const {}
     void getDrawParamCPtr() {}
     void getDrawParamPPtr() {}
     void getHeight() {}
@@ -57,10 +62,7 @@ public:
     void getOffsetPosition(JGeometry::TVec3<f32>&) const {}
     void getVelVec(JGeometry::TVec3<f32>&) const {}
     void getWidth() {}
-    void initStatus(u32) {}
-    void setCallBackPtr(JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>*) {}
     void setDeleteParticleFlag() {}
-    void setStatus(u32) {}
 
 public:
     /* 0x00 */ JSULink<JPABaseParticle> mLink;
@@ -91,7 +93,7 @@ public:
     /* 0xBC */ GXColor mEnvColor;
     /* 0xC0 */ u16 mRotateAngle;
     /* 0xC2 */ s16 mRotateSpeed;
-    /* 0xC4 */ u8 field_0xC4[0xC6 - 0xC4];
+    /* 0xC4 */ u16 field_0xC4;
     /* 0xC6 */ u16 mTexIdx;
     /* 0xC8 */ JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* mpCallBack2;
     /* 0xCC */ u32 mStatus;
