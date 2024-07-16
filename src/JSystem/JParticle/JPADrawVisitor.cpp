@@ -774,12 +774,8 @@ void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext* pDC) {
 
 /* 80264A34-80264AD0       .text calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* pDC) {
-    /* Nonmatching */
     s32 tick = pDC->pbe->mTick.getFrame();
-    s32 maxFrame = pDC->pbsp->getTextureAnmKeyNum();
-    u8 idx = tick % maxFrame;
-    idx = pDC->pbsp->getTextureIndex(idx);
-    pDC->mpDraw->mTexIdx = pDC->pTexIdx[idx];
+    pDC->mpDraw->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(tick % pDC->pbsp->getTextureAnmKeyNum())];
 }
 
 /* 80264AD0-80264B80       .text calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContext */
@@ -969,20 +965,19 @@ void JPADrawCalcAlpha::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
 
 /* 80265C40-80265D54       .text calc__27JPADrawCalcAlphaFlickNrmSinFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcAlphaFlickNrmSin::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
     f32 sin = JMASSin((ptcl->getAge() * 16384) * ptcl->mAlphaWaveRandom * (1.0f - pDC->pesp->getAlphaWaveParam1()));
-    ptcl->mAlphaOut *= ptcl->mAlphaWaveRandom * ((sin - 1.0f) * 0.5f) * pDC->pesp->getAlphaWaveParam3() + 1.0f;
+    ptcl->mAlphaOut *= ptcl->mAlphaWaveRandom * (((sin - 1.0f) * 0.5f) * pDC->pesp->getAlphaWaveParam3()) + 1.0f;
     if (ptcl->mAlphaOut < 0.0f)
         ptcl->mAlphaOut = 0.0f;
 }
 
 /* 80265D54-80265EC4       .text calc__27JPADrawCalcAlphaFlickAddSinFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcAlphaFlickAddSin::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    /* Nonmatching - operand swap */
     f32 theta = (ptcl->getAge() * 16384) * ptcl->mAlphaWaveRandom;
     f32 sin2 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam2()));
     f32 sin1 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam1()));
-    ptcl->mAlphaOut *= (ptcl->mAlphaWaveRandom * 0.5f * (pDC->pesp->getAlphaWaveParam3() * (sin1 + sin2) - 2.0f) * 0.5f + 2.0f) * 0.5f;
+    ptcl->mAlphaOut *= (ptcl->mAlphaWaveRandom * ((((sin1 + sin2) - 2.0f) * 0.5f) * pDC->pesp->getAlphaWaveParam3()) + 2.0f) * 0.5f;
     if (ptcl->mAlphaOut < 0.0f)
         ptcl->mAlphaOut = 0.0f;
 }
