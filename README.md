@@ -8,7 +8,7 @@ The Legend of Zelda: The Wind Waker
 [DOL Progress]: https://img.shields.io/endpoint?label=DOL&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Ftww%2FGZLE01%2Fdol%2F%3Fmode%3Dshield%26measure%3Dcode
 [RELs Progress]: https://img.shields.io/endpoint?label=RELs&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Ftww%2FGZLE01%2Fmodules%2F%3Fmode%3Dshield%26measure%3Dcode
 [Discord Badge]: https://img.shields.io/discord/688807550715560050?color=%237289DA&logo=discord&logoColor=%23FFFFFF
-[discord]: https://discord.zelda64.dev
+[discord]: https://discord.com/invite/DqwyCBYKqf/
 
 A work-in-progress decompilation of The Legend of Zelda: The Wind Waker for GameCube.
 
