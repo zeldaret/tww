@@ -38,7 +38,7 @@ void JPABaseParticle::initParticle() {
     else
         velAxis.zero();
 
-    if (emtr->mInitialVelDir != 0.0f) {
+    if (emtr->mInitialVelDir) {
         Mtx mtx;
         JPAGetYZRotateMtx(emtr->mSpread * emtr->getRandomRF() * 32768.0f, emtr->getRandomSS(), mtx);
         MTXConcat(emtrInfo.mEmitterDirMtx, mtx, mtx);
@@ -48,7 +48,7 @@ void JPABaseParticle::initParticle() {
         velDir.zero();
     }
 
-    if (emtr->mInitialVelRndm != 0.0f) {
+    if (emtr->mInitialVelRndm) {
         velRndm.set(
             emtr->mInitialVelRndm * emtr->getRandomSF(),
             emtr->mInitialVelRndm * emtr->getRandomSF(),
@@ -165,7 +165,7 @@ void JPABaseParticle::incFrame() {
 
     if (mCurFrame >= mLifeTime) {
         mCurNormTime = 1.0f;
-        setStatus(0x02); // setDeleteParticleFlag
+        setStatus(0x02); // setDeleteParticleFlag?
     } else {
         mCurNormTime = mCurFrame / mLifeTime;
     }

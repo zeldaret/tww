@@ -344,7 +344,7 @@ void JPABaseEmitter::calcChild() {
         JPABaseParticle * ptcl = (JPABaseParticle *) link->getObjectPtr();
         ptcl->incFrame();
         if (!ptcl->checkStatus(0x80)) {
-            if ((s32)ptcl->mCurFrame != 0)
+            if (ptcl->getAge() != 0)
                 ptcl->calcVelocity();
             ptcl->calcCB(this);
             if (!ptcl->checkStatus(0x02)) {
