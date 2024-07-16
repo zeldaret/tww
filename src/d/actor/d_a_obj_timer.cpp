@@ -6,14 +6,20 @@
 #include "d/actor/d_a_obj_timer.h"
 #include "d/d_procname.h"
 
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
 s32 daObjTimer::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000114-0000011C       .text _delete__Q210daObjTimer5Act_cFv */
-BOOL daObjTimer::Act_c::_delete() {
-    /* Nonmatching */
+bool daObjTimer::Act_c::_delete() {
+    return true;
 }
 
 /* 0000011C-0000012C       .text mode_wait_init__Q210daObjTimer5Act_cFv */
@@ -37,35 +43,35 @@ void daObjTimer::Act_c::mode_count() {
 }
 
 /* 00000304-00000394       .text _execute__Q210daObjTimer5Act_cFv */
-BOOL daObjTimer::Act_c::_execute() {
+bool daObjTimer::Act_c::_execute() {
     /* Nonmatching */
 }
 
 namespace daObjTimer {
 namespace {
 /* 00000394-000003B4       .text Mthd_Create__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* i_this) {
+    return static_cast<daObjTimer::Act_c*>(i_this)->_create();
 }
 
 /* 000003B4-000003D8       .text Mthd_Delete__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return static_cast<daObjTimer::Act_c*>(i_this)->_delete();
 }
 
 /* 000003D8-000003FC       .text Mthd_Execute__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return static_cast<daObjTimer::Act_c*>(i_this)->_execute();
 }
 
 /* 000003FC-00000404       .text Mthd_Draw__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void*) {
+    return TRUE;
 }
 
 /* 00000404-0000040C       .text Mthd_IsDelete__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void*) {
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
