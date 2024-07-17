@@ -5,67 +5,118 @@
 
 #include "d/actor/d_a_obj_timer.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
 s32 daObjTimer::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjTimer::Act_c);
+
+    fopAcM_offDraw(this);
+
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        mode_count_init();
+    } else {
+        mode_wait_init();
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000114-0000011C       .text _delete__Q210daObjTimer5Act_cFv */
-BOOL daObjTimer::Act_c::_delete() {
-    /* Nonmatching */
+bool daObjTimer::Act_c::_delete() {
+    return true;
 }
 
 /* 0000011C-0000012C       .text mode_wait_init__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_wait_init() {
-    /* Nonmatching */
+    m294 = 0;
+    mMode = Mode_WAIT_e;
 }
 
 /* 0000012C-00000188       .text mode_wait__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_wait() {
-    /* Nonmatching */
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        mode_count_init();
+    }
 }
 
 /* 00000188-000001CC       .text mode_count_init__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_count_init() {
-    /* Nonmatching */
+    m294 = 15 * prm_get_time();
+    mMode = Mode_COUNT_e;
 }
 
 /* 000001CC-00000304       .text mode_count__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_count() {
-    /* Nonmatching */
+    if (m298) return;
+
+    m294 -= 1;
+    if (m294 % 30 == 0) {
+        s32 time = m294 / 30;
+        if (time <= 20) {
+            u32 soundId;
+            if (time > 10) {
+                soundId = JA_SE_SYS_EV_TIMER_20;
+            } else if (time > 5) {
+                soundId = JA_SE_SYS_EV_TIMER_10;
+            } else if (time > 0) {
+                soundId = JA_SE_SYS_EV_TIMER_5;
+            } else {
+                soundId = JA_SE_SYS_EV_TIMER_0;
+            }
+
+            mDoAud_seStart(soundId);
+        }
+    }
+
+    if (m294 <= 0 || !fopAcM_isSwitch(this, prm_get_swSave())) {
+        fopAcM_offSwitch(this, prm_get_swSave());
+        mode_wait_init();
+    }
 }
 
 /* 00000304-00000394       .text _execute__Q210daObjTimer5Act_cFv */
-BOOL daObjTimer::Act_c::_execute() {
-    /* Nonmatching */
+bool daObjTimer::Act_c::_execute() {
+    static ModeFunc mode_proc[] = {
+        &mode_wait,
+        &mode_count,
+    };
+    (this->*mode_proc[mMode])();
+
+    return true;
 }
 
 namespace daObjTimer {
 namespace {
 /* 00000394-000003B4       .text Mthd_Create__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* i_this) {
+    return static_cast<daObjTimer::Act_c*>(i_this)->_create();
 }
 
 /* 000003B4-000003D8       .text Mthd_Delete__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return static_cast<daObjTimer::Act_c*>(i_this)->_delete();
 }
 
 /* 000003D8-000003FC       .text Mthd_Execute__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return static_cast<daObjTimer::Act_c*>(i_this)->_execute();
 }
 
 /* 000003FC-00000404       .text Mthd_Draw__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void*) {
+    return TRUE;
 }
 
 /* 00000404-0000040C       .text Mthd_IsDelete__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void*) {
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
