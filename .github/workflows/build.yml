@@ -19,10 +19,6 @@ jobs:
       run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
     - name: Prepare
       run: cp -R /orig/${{matrix.version}} orig
-    - name: Download objdiff CLI
-      if: github.ref == 'refs/heads/main'
-      run: |
-        python tools/download_tool.py --tag v2.0.0-alpha.5 objdiff-cli objdiff-cli
     - name: Build
       run: |
         python configure.py --version ${{matrix.version}} --compilers /compilers --warn error
@@ -40,6 +36,10 @@ jobs:
     - name: Generate objdiff progress report
       if: github.ref == 'refs/heads/main'
       run: |
+        pwd
+        python tools/download_tool.py --tag v2.0.0-alpha.5 objdiff-cli objdiff-cli
+        pwd
+        ls
         ./objdiff-cli report generate -o report.json
     - name: Save objdiff progress report artifact
       if: github.ref == 'refs/heads/main'
