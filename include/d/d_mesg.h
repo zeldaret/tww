@@ -48,6 +48,9 @@ public:
     
     dMesg_tControl();
     const char* do_word(u32);
+
+public:
+    /* 0x3C */ u8 field_0x3C[0x74 - 0x3C];
 };
 
 class dMesg_tSequenceProcessor {
