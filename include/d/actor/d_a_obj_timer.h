@@ -24,7 +24,7 @@ namespace daObjTimer {
 
         s32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         s32 prm_get_time() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TIME_W, PRM_TIME_S); }
-        void stopTimer() {}
+        void stopTimer() { mIsStop = true;}
 
         s32 _create();
         bool _delete();
@@ -36,8 +36,8 @@ namespace daObjTimer {
 
     public:
         /* 0x290 */ Mode_e mMode;
-        /* 0x294 */ s32 m294;
-        /* 0x298 */ bool m298;
+        /* 0x294 */ s32 mTimer;
+        /* 0x298 */ bool mIsStop;
     };
 };
 

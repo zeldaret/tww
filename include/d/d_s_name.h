@@ -165,8 +165,8 @@ public:
     /* 0x55E */ u8 field_0x55e;
     /* 0x55F */ u8 field_0x55f;
     /* 0x560 */ u8 saveMemory[0x1650];
-    /* 0x1BB0 */ void* savePicDatabuf;
-    /* 0x1BB4 */ short field_0x1bb4;
+    /* 0x1BB0 */ u8* savePicDatabuf;
+    /* 0x1BB4 */ s16 field_0x1bb4;
     /* 0x1BB6 */ u8 field_0x1bb6;
     /* 0x1BB7 */ u8 field_0x1bb7;
     /* 0x1BB8 */ u8 field_0x1bb8;

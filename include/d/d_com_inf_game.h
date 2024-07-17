@@ -1749,6 +1749,10 @@ inline u8* dComIfGs_getPEventBit() {
     return g_dComIfG_gameInfo.save.getEvent().getPEventBit();
 }
 
+inline void dComIfGs_setCardToMemory(u8* i_cardPtr, int i_dataNum) {
+    g_dComIfG_gameInfo.save.card_to_memory((char*)i_cardPtr, i_dataNum);
+}
+
 u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
 
 stage_scls_info_class* dComIfGd_getMeshSceneList(Vec& vec);

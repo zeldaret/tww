@@ -84,7 +84,7 @@ void J3DMtxCalcBasic::calcTransform(u16 param_0, const J3DTransformInfo& info) {
 
 /* 802F525C-802F52BC       .text calc__15J3DMtxCalcBasicFUs */
 void J3DMtxCalcBasic::calc(u16 param_0) {
-    j3dSys.mCurrentMtxCalc = this;
+    j3dSys.setCurrentMtxCalc(this);
     calcTransform(param_0, j3dSys.getModel()->getModelData()->getJointNodePointer(param_0)->getTransformInfo());
 }
 

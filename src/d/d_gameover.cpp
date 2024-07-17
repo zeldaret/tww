@@ -84,7 +84,7 @@ s32 dGameover_c::_create() {
 
         dMs_c = new dMenu_save_c();
         JUT_ASSERT(VERSION_SELECT(0xa7, 0xb6, 0xb6), dMs_c != NULL);
-        dMs_c->field_0x0537 = 2;
+        dMs_c->setUseType(2);
         dMs_c->_create();
 
         dgo_capture_c = new dDlst_Gameover_CAPTURE_c();
@@ -112,15 +112,15 @@ BOOL dGameover_c::_execute() {
         }
     } else if (mState == 4) {
         dMs_c->_move();
-        if (dMs_c->field_0x0531 == 3)
+        if (dMs_c->getSaveStatus() == 3)
             mState = 5;
     } else if (mState == 5) {
         if (dMs_c->_close()) {
-            if (dMs_c->field_0x0538 == 0) {
+            if (dMs_c->getEndStatus() == 0) {
                 dComIfGp_setGameoverStatus(3);
                 dMenu_flagSet(0);
                 mDoRst::onReset();
-            } else if (dMs_c->field_0x0538 == 1) {
+            } else if (dMs_c->getEndStatus() == 1) {
                 dComIfGp_setGameoverStatus(2);
                 dMenu_flagSet(0);
             }

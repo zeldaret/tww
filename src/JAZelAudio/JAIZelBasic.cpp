@@ -189,7 +189,7 @@ void JAIZelBasic::resetProcess() {
         if (mpSeSound[i]) {
             mpSeSound[i]->stop(1);
             mpSeSound[i] = NULL;
-            mpSeNum[i] = 0;
+            mSeNum[i] = 0;
             field_0x0194[i] = 0;
         }
     }
@@ -649,7 +649,7 @@ void JAIZelBasic::initSe() {
     field_0x01f4 = 0;
     for (int i = 0; i < MAX_CONCURRENT_SE_NUM; i++) {
         mpSeSound[i] = NULL;
-        mpSeNum[i] = 0;
+        mSeNum[i] = 0;
         field_0x0194[i] = 0;
     }
     for (int i = 0; i < 4; i++) {
@@ -702,10 +702,10 @@ void JAIZelBasic::seStop(u32 i_seNum, s32 param_2) {
         param_2 = 8;
     }
     for (int i = 0; i < MAX_CONCURRENT_SE_NUM; i++) {
-        if (mpSeNum[i] == i_seNum && mpSeSound[i]) {
+        if (mSeNum[i] == i_seNum && mpSeSound[i]) {
             mpSeSound[i]->stop(param_2);
             mpSeSound[i] = NULL;
-            mpSeNum[i] = 0;
+            mSeNum[i] = 0;
             field_0x0194[i] = 0;
         }
     }
@@ -714,7 +714,7 @@ void JAIZelBasic::seStop(u32 i_seNum, s32 param_2) {
 /* 802A85F4-802A8634       .text checkSePlaying__11JAIZelBasicFUl */
 BOOL JAIZelBasic::checkSePlaying(u32 param_1) {
     for (int i = 0; i < MAX_CONCURRENT_SE_NUM; i++) {
-        if (mpSeNum[i] == param_1 && mpSeSound[i]) {
+        if (mSeNum[i] == param_1 && mpSeSound[i]) {
             return true;
         }
     }
@@ -1398,7 +1398,7 @@ void JAIZelBasic::setSceneName(char* param_1, s32 roomNo, s32 param_3) {
             if (mpSeSound[i]) {
                 mpSeSound[i]->stop(1);
                 mpSeSound[i] = NULL;
-                mpSeNum[i] = 0;
+                mSeNum[i] = 0;
                 field_0x0194[i] = 0;
             }
         }
