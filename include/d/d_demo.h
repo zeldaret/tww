@@ -24,13 +24,7 @@
 #include "f_pc/f_pc_base.h"
 
 class fopAc_ac_c;
-
-class dMesg_tControl : public JMessage::TControl {
-public:
-    dMesg_tControl();
-
-    /* 0x3C */ u8 field_0x3C[0x74 - 0x3C];
-};  // Size: 0x74
+class dMesg_tControl;
 
 class dDemo_actor_c : public JStage::TActor {
 public:

@@ -2,8 +2,8 @@
 #define D_MESG_H
 
 #include "dolphin/types.h"
+#include "JSystem/JMessage/control.h"
 
-namespace JMessage { class TControl; };
 class JUTFont;
 class JKRExpHeap;
 
@@ -22,7 +22,7 @@ public:
     void _setAlpha(u8);
 };
 
-class dMesg_tControl {
+class dMesg_tControl : public JMessage::TControl {
 public:
     void getCharCode() {}
     void getCharSpace() {}
@@ -47,7 +47,7 @@ public:
     void setRubyFont(JUTFont*) {}
     
     dMesg_tControl();
-    void do_word(u32);
+    const char* do_word(u32);
 };
 
 class dMesg_tSequenceProcessor {
