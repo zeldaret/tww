@@ -76,7 +76,7 @@ Building
   To use a version other than `GZLE01` (USA), specify `--version GZLJ01` (JPN) or `--version GZLP01` (PAL).
 - Build:
   ```
-  ninja
+  ninja && ninja all_source
   ```
 
 Diffing
