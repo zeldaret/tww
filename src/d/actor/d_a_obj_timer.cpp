@@ -54,7 +54,31 @@ void daObjTimer::Act_c::mode_count_init() {
 
 /* 000001CC-00000304       .text mode_count__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_count() {
-    /* Nonmatching */
+    if (m298) return;
+
+    m294 -= 1;
+    if (m294 % 30 == 0) {
+        s32 time = m294 / 30;
+        if (time <= 20) {
+            u32 soundId;
+            if (time > 10) {
+                soundId = JA_SE_SYS_EV_TIMER_20;
+            } else if (time > 5) {
+                soundId = JA_SE_SYS_EV_TIMER_10;
+            } else if (time > 0) {
+                soundId = JA_SE_SYS_EV_TIMER_5;
+            } else {
+                soundId = JA_SE_SYS_EV_TIMER_0;
+            }
+
+            mDoAud_seStart(soundId);
+        }
+    }
+
+    if (m294 <= 0 || !fopAcM_isSwitch(this, prm_get_swSave())) {
+        fopAcM_offSwitch(this, prm_get_swSave());
+        mode_wait_init();
+    }
 }
 
 /* 00000304-00000394       .text _execute__Q210daObjTimer5Act_cFv */
