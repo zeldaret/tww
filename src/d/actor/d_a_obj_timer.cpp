@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_timer.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -14,7 +15,17 @@ static f64 dummy4[2] = {3.0, 0.5};
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
 s32 daObjTimer::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjTimer::Act_c);
+
+    fopAcM_offDraw(this);
+
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        mode_count_init();
+    } else {
+        mode_wait_init();
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000114-0000011C       .text _delete__Q210daObjTimer5Act_cFv */
