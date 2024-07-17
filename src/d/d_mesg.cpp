@@ -43,7 +43,7 @@ dMesg_tControl::dMesg_tControl() {
 }
 
 /* 801E0274-801E0288       .text do_word__14dMesg_tControlFUl */
-void dMesg_tControl::do_word(u32) {
+const char* dMesg_tControl::do_word(u32) {
     /* Nonmatching */
 }
 
