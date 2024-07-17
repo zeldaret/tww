@@ -8,6 +8,20 @@ namespace JASystem {
 
     class TSeqCtrl {
     public:
+        void call(u32) {}
+        void clrIntr() {}
+        void getAddr(u32) {}
+        void getBase() {}
+        u8 getByte(u32 offset) const { return field_0x0[offset]; }
+        void getLoopCount() const {}
+        void getWait() const {}
+        void isIntr() const {}
+        void jump(u32) {}
+        void loopStart(u32) {}
+        u8 readByte() { return *field_0x4++; }
+        void ret() {}
+        void wait(s32) {}
+
         void init();
         void start(void*, u32);
         int loopEnd();

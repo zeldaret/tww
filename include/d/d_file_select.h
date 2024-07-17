@@ -29,9 +29,9 @@ public:
     void isDataNew(u8) {}
     void isSelectEnd() {}
     void setIconMode(u8) {}
-    void setSaveDataPtr(u8*) {}
-    void setSavePicDataPtr(u8*) {}
-    void setUseType(u8) {}
+    void setSaveDataPtr(u8* dataPtr) { mSaveDataPtr = dataPtr; }
+    void setSavePicDataPtr(u8* dataPtr) { mSavePicDataPtr = dataPtr; }
+    void setUseType(u8 useType) { mUseType = useType; }
 
     dFile_select_c() {}
     void _create();
@@ -243,9 +243,9 @@ public:
     /* 0x3932 */ s16 field_0x3932;
     /* 0x3934 */ u8 field_0x3934[0x3936 - 0x3934];
     /* 0x3936 */ u8 field_0x3936;
-    /* 0x3938 */ void* field_0x3938;
-    /* 0x393C */ void* field_0x393c;
-    /* 0x3940 */ u8 field_0x3940;
+    /* 0x3938 */ u8* mSaveDataPtr;
+    /* 0x393C */ u8* mSavePicDataPtr;
+    /* 0x3940 */ u8 mUseType;
     /* 0x3941 */ u8 field_0x3941;
     /* 0x3942 */ u8 field_0x3942[0x3948 - 0x3942];
     /* 0x3948 */ f32 field_0x3948;

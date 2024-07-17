@@ -281,7 +281,7 @@ public:
     /* 0x00CF */ u8 field_0x00CF[0x00D0 - 0x00CF];
     /* 0x00D0 */ int field_0x00d0;
     /* 0x00D4 */ JAISound* mpSeSound[MAX_CONCURRENT_SE_NUM];
-    /* 0x0134 */ u32 mpSeNum[MAX_CONCURRENT_SE_NUM];
+    /* 0x0134 */ u32 mSeNum[MAX_CONCURRENT_SE_NUM];
     /* 0x0194 */ u32 field_0x0194[MAX_CONCURRENT_SE_NUM];
     /* 0x01F4 */ int field_0x01f4;
     /* 0x01F8 */ u8 field_0x01f8;

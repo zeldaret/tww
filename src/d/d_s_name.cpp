@@ -119,7 +119,7 @@ s32 dScnName_c::create() {
         savePicDatabuf = new (0x20) u8[0x12000];
         JUT_ASSERT(476, savePicDatabuf != NULL);
         if (fpcM_GetName(this) == PROC_NAME_SCENE) {
-            dFs_c->field_0x3940 = 0;
+            dFs_c->setUseType(0);
             dNm_c = new dName_c();
             JUT_ASSERT(484, dNm_c != NULL);
             dNm_c->_create();
@@ -132,10 +132,10 @@ s32 dScnName_c::create() {
         }
         if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
             dComIfGs_setClearCount(1);
-            dFs_c->field_0x3940 = 1;
+            dFs_c->setUseType(1);
             dMs_c = new dMenu_save_c();
             JUT_ASSERT(511, dMs_c != NULL);
-            dMs_c->field_0x0537 = 3;
+            dMs_c->setUseType(3);
             dMs_c->_create();
             dFe_c = NULL;
             dNm_c = NULL;
@@ -512,12 +512,12 @@ void dScnName_c::NoteOpenWait() {
     }
     if (g_snHIO.field_0x8 == 0) {
         if (fpcM_GetName(this) == PROC_NAME_SCENE) {
-            dFs_c->field_0x3938 = saveMemory;
-            dFs_c->field_0x393c = savePicDatabuf;
+            dFs_c->setSaveDataPtr(saveMemory);
+            dFs_c->setSavePicDataPtr(savePicDatabuf);
         }
         if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
-            dFs_c->field_0x3938 = dMs_c->field_0x0554;
-            dFs_c->field_0x393c = savePicDatabuf;
+            dFs_c->setSaveDataPtr(dMs_c->getDataBufPtr());
+            dFs_c->setSavePicDataPtr(savePicDatabuf);
         }
         dFs_c->initial();
         mMainProc = 3;
@@ -663,7 +663,7 @@ void dScnName_c::FileSelectMainNormal() {
             field_0x1bb6 = 3;
             mMainProc = 5;
         } else {
-            g_dComIfG_gameInfo.save.card_to_memory((char *)saveMemory, dFs_c->saveSlot);
+            dComIfGs_setCardToMemory(saveMemory, dFs_c->saveSlot);
             if (dFs_c->saveStatus[dFs_c->saveSlot] != 0 && !dComIfGs_isEventBit(0x3510)) {
                 field_0x1bb9 = 1;
             }
@@ -871,10 +871,10 @@ void dScnName_c::SaveOpen() {
 
 /* 802321AC-8023222C       .text SaveMain__10dScnName_cFv */
 void dScnName_c::SaveMain() {
-    switch (dMs_c->field_0x0531) {
+    switch (dMs_c->getSaveStatus()) {
     case 2:
         dMs_c->_move();
-        if (!dMs_c->field_0x0538) {
+        if (dMs_c->getEndStatus() == 0) {
             field_0x558 = 0x2d;
             mMainProc = 13;
         }

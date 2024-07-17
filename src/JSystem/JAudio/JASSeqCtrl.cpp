@@ -28,7 +28,6 @@ void JASystem::TSeqCtrl::start(void* param_1, u32 param_2) {
 
 /* 8027E45C-8027E500       .text loopEnd__Q28JASystem8TSeqCtrlFv */
 int JASystem::TSeqCtrl::loopEnd() {
-    /* Nonmatching */
     u32 var1 = field_0xc;
     if (var1 == 0) {
         JUT_WARN(45, "%s", "cannot loopE for call-stack is NULL");
@@ -83,45 +82,43 @@ bool JASystem::TSeqCtrl::retIntr() {
 
 /* 8027E59C-8027E5B4       .text get16__Q28JASystem8TSeqCtrlCFUl */
 u16 JASystem::TSeqCtrl::get16(u32 param_1) const {
-    u16 result = field_0x0[param_1++] << 8;
-    result |= field_0x0[param_1++];
+    u16 result = getByte(param_1++) << 8;
+    result |= getByte(param_1);
     return result;
 }
 
 /* 8027E5B4-8027E5DC       .text get24__Q28JASystem8TSeqCtrlCFUl */
 u32 JASystem::TSeqCtrl::get24(u32 param_1) const {
-    /* Nonmatching */
-    u32 result = field_0x0[param_1++] << 8;
-    result |= field_0x0[param_1++];
+    u32 result = getByte(param_1++) << 8;
+    result |= getByte(param_1++);
     result <<= 8;
-    result |= field_0x0[param_1++];
+    result |= getByte(param_1);
     return result;
 }
 
 /* 8027E5DC-8027E614       .text get32__Q28JASystem8TSeqCtrlCFUl */
 u32 JASystem::TSeqCtrl::get32(u32 param_1) const {
-    /* Nonmatching */
-    u32 result = field_0x0[param_1++] << 8;
-    result |= field_0x0[param_1++];
+    u32 result = getByte(param_1++) << 8;
+    result |= getByte(param_1++);
     result <<= 8;
-    result |= field_0x0[param_1++];
+    result |= getByte(param_1++);
     result <<= 8;
-    result |= field_0x0[param_1++];
+    result |= getByte(param_1);
     return result;
 }
 
 /* 8027E614-8027E63C       .text read16__Q28JASystem8TSeqCtrlFv */
 u32 JASystem::TSeqCtrl::read16() {
-    u32 result = *(field_0x4++) << 8;
-    result |= *(field_0x4++);
+    u32 result = readByte() << 8;
+    result |= readByte();
     return result;
 }
 
 /* 8027E63C-8027E680       .text read24__Q28JASystem8TSeqCtrlFv */
 u32 JASystem::TSeqCtrl::read24() {
-    u32 result = *(field_0x4++) << 8;
-    result |= *(field_0x4++);
+    u32 result = readByte() << 8;
+    result |= readByte();
     result <<= 8;
-    result |= *(field_0x4++);
+    result |= readByte();
     return result;
 }

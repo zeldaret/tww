@@ -14,12 +14,12 @@ public:
 
 class dMenu_save_c {
 public:
-    void getDataBufPtr() {}
-    void getEndStatus() {}
-    void getSaveStatus() {}
-    void setErrorFlag(unsigned char) {}
-    void setErrorType(unsigned char) {}
-    void setUseType(unsigned char) {}
+    u8* getDataBufPtr() { return mDataBuf; }
+    u8 getEndStatus() { return mEndStatus; }
+    u8 getSaveStatus() { return mSaveStatus; }
+    void setErrorFlag(u8) {}
+    void setErrorType(u8) {}
+    void setUseType(u8 useType) { mUseType = useType; }
 
     virtual ~dMenu_save_c() {}
     void _create();
@@ -97,13 +97,13 @@ public:
     void initializeEx();
     void menuUp();
     void menuDown();
-    void PaneAlphaMsgTxt(short, unsigned char);
-    void PaneTranceBase(short, unsigned char, float, float, unsigned char, int);
-    void PaneScaleAlphaWipe(short, unsigned char, float, unsigned char, int);
-    void PaneAlphaMask(short, unsigned char, unsigned char, int);
-    void PaneTranceTitle(short, unsigned char, float, float, unsigned char, int);
-    void PaneRotate(short, unsigned char, fopMsgM_pane_class*, float, float, float, unsigned char);
-    void PaneTranceMenu(short, unsigned char, fopMsgM_pane_class*, float, float, unsigned char, int);
+    void PaneAlphaMsgTxt(s16, u8);
+    void PaneTranceBase(s16, u8, f32, f32, u8, int);
+    void PaneScaleAlphaWipe(s16, u8, f32, u8, int);
+    void PaneAlphaMask(s16, u8, u8, int);
+    void PaneTranceTitle(s16, u8, f32, f32, u8, int);
+    void PaneRotate(s16, u8, fopMsgM_pane_class*, f32, f32, f32, u8);
+    void PaneTranceMenu(s16, u8, fopMsgM_pane_class*, f32, f32, u8, int);
 
 public:
     /* 0x0004 */ u8 field_0x0004;
@@ -114,20 +114,20 @@ public:
 #endif
     /* 0x000C */ u8 field_0x000c[0x0524];
     /* 0x0530 */ u8 field_0x0530;
-    /* 0x0531 */ u8 field_0x0531;
+    /* 0x0531 */ u8 mSaveStatus;
     /* 0x0532 */ u8 field_0x0532;
     /* 0x0533 */ u8 field_0x0533;
     /* 0x0534 */ u8 field_0x0534;
     /* 0x0535 */ u8 field_0x0535;
     /* 0x0536 */ u8 field_0x0536;
-    /* 0x0537 */ u8 field_0x0537;
-    /* 0x0538 */ u8 field_0x0538;
+    /* 0x0537 */ u8 mUseType;
+    /* 0x0538 */ u8 mEndStatus;
     /* 0x0539 */ u8 field_0x0539[0x053C - 0x0539];
     /* 0x053C */ u8 field_0x053c;
     /* 0x053D */ u8 field_0x053d;
     /* 0x053E */ u8 field_0x053e[0x0554 - 0x053E];
-    /* 0x0554 */ u8 field_0x0554[0x1BA4 - 0x0554];
-};
+    /* 0x0554 */ u8 mDataBuf[0x1650];
+};  // Size: 0x1BA4
 
 class dMs_HIO_c {
 public:
