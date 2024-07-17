@@ -28,8 +28,9 @@ namespace daObjTimer {
         bool _execute();
 
     public:
-        /* 0x290 */ u32 field_0x290;
-        /* 0x294 */ s32 field_0x294;
+        /* 0x290 */ u32 m290;
+        /* 0x294 */ s32 m294;
+        /* 0x298 */ bool m298;
     };
 };
 

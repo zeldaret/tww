@@ -35,17 +35,21 @@ bool daObjTimer::Act_c::_delete() {
 
 /* 0000011C-0000012C       .text mode_wait_init__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_wait_init() {
-    /* Nonmatching */
+    m294 = 0;
+    m290 = 0;
 }
 
 /* 0000012C-00000188       .text mode_wait__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_wait() {
-    /* Nonmatching */
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        mode_count_init();
+    }
 }
 
 /* 00000188-000001CC       .text mode_count_init__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_count_init() {
-    /* Nonmatching */
+    m294 = 15 * prm_get_time();
+    m290 = 1;
 }
 
 /* 000001CC-00000304       .text mode_count__Q210daObjTimer5Act_cFv */
