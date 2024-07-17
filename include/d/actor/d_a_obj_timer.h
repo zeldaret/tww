@@ -7,6 +7,13 @@
 namespace daObjTimer {
     class Act_c : public fopAc_ac_c {
     public:
+        typedef void (Act_c::*ModeFunc)();
+
+        enum Mode_e {
+            Mode_WAIT_e,
+            Mode_COUNT_e,
+        };
+
         enum Prm_e {
             PRM_TIME_W   = 0x08,
             PRM_TIME_S   = 0x00,
@@ -28,7 +35,7 @@ namespace daObjTimer {
         bool _execute();
 
     public:
-        /* 0x290 */ u32 m290;
+        /* 0x290 */ Mode_e mMode;
         /* 0x294 */ s32 m294;
         /* 0x298 */ bool m298;
     };

@@ -1335,7 +1335,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_table"),
     ActorRel(NonMatching, "d_a_obj_tenmado"),
     ActorRel(NonMatching, "d_a_obj_tide"),
-    ActorRel(NonMatching, "d_a_obj_timer"),
+    ActorRel(Matching,    "d_a_obj_timer"),
     ActorRel(NonMatching, "d_a_obj_toripost", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_tousekiki"),
     ActorRel(NonMatching, "d_a_obj_warpt"),

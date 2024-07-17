@@ -36,7 +36,7 @@ bool daObjTimer::Act_c::_delete() {
 /* 0000011C-0000012C       .text mode_wait_init__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_wait_init() {
     m294 = 0;
-    m290 = 0;
+    mMode = Mode_WAIT_e;
 }
 
 /* 0000012C-00000188       .text mode_wait__Q210daObjTimer5Act_cFv */
@@ -49,7 +49,7 @@ void daObjTimer::Act_c::mode_wait() {
 /* 00000188-000001CC       .text mode_count_init__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_count_init() {
     m294 = 15 * prm_get_time();
-    m290 = 1;
+    mMode = Mode_COUNT_e;
 }
 
 /* 000001CC-00000304       .text mode_count__Q210daObjTimer5Act_cFv */
@@ -83,7 +83,13 @@ void daObjTimer::Act_c::mode_count() {
 
 /* 00000304-00000394       .text _execute__Q210daObjTimer5Act_cFv */
 bool daObjTimer::Act_c::_execute() {
-    /* Nonmatching */
+    static ModeFunc mode_proc[] = {
+        mode_wait,
+        mode_count,
+    };
+    (this->*mode_proc[mMode])();
+
+    return true;
 }
 
 namespace daObjTimer {
