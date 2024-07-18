@@ -47,3 +47,34 @@ jobs:
       with:
         name: ${{ matrix.version }}-report-${{ github.sha }}
         path: report.json
+
+  website:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Checkout website code
+      uses: actions/checkout@v4
+      with:
+        repository: LagoLunatic/tww-decomp-website
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: GZLE01-report-${{ github.sha }}
+        path: ./artifacts
+    - name: Rename artifact
+      run: |
+        mv ./artifacts/report.json ./artifacts/progress.json
+    - uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "8.x.x"
+    - name: Build Website
+      run: |
+        python build.py
+    - name: Deploy Website
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: dist # The folder the action should deploy.
+        clean: true
+        single-commit: true
