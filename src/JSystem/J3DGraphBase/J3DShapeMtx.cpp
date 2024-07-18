@@ -299,7 +299,6 @@ void J3DShapeMtxMultiConcatView::loadNrmMtx(int mtxNo, u16 index, Mtx mtx) const
             J3DFifoLoadNrmMtxImm3x3(mtx33, mtxNo * 3);
         }
     }
-    /* Nonmatching */
 }
 
 /* 802DC6F4-802DC7B8       .text load__20J3DShapeMtxBBoardImmCFv */
@@ -382,7 +381,6 @@ void J3DShapeMtxYBBoardImm::load() const {
             J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
         }
     }
-    /* Nonmatching */
 }
 
 /* 802DC9B8-802DCAEC       .text load__28J3DShapeMtxYBBoardConcatViewCFv */
@@ -418,8 +416,6 @@ void J3DShapeMtxYBBoardConcatView::load() const {
             J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
         }
     }
-
-    /* Nonmatching */
 }
 
 /* 802DCAEC-802DCB04       .text __ct__12J3DShapeDrawFPCUcUl */

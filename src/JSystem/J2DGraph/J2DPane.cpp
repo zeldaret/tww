@@ -256,7 +256,6 @@ void J2DPane::makeMatrix(f32 x, f32 y) {
 
 /* 802D0800-802D08D8       .text setBasePosition__7J2DPaneF15J2DBasePosition */
 void J2DPane::setBasePosition(J2DBasePosition pos) {
-    /* Nonmatching */
     m2DBasePosition = pos;
 
     if (pos % 3 == 0) {

@@ -186,7 +186,6 @@ JKRAramBlock* JKRAram::mainRamToAram(u8 *buf, u32 bufSize, u32 alignedSize, JKRE
 
 /* 802B490C-802B49DC       .text mainRamToAram__7JKRAramFPUcP12JKRAramBlockUl15JKRExpandSwitchUlP7JKRHeapi */
 JKRAramBlock* JKRAram::mainRamToAram(u8 *buf, JKRAramBlock* block, u32 alignedSize, JKRExpandSwitch expandSwitch, u32 fileSize, JKRHeap* heap, int id) {
-    /* Nonmatching */
     checkOkAddress(buf, 0, block, 0);
     if (!block) {
         return mainRamToAram(buf, u32(0), alignedSize, expandSwitch, fileSize, heap, id);
@@ -283,7 +282,6 @@ u8* JKRAram::aramToMainRam(u32 address, u8 *buf, u32 p3, JKRExpandSwitch expandS
 
 /* 802B4C54-802B4D4C       .text aramToMainRam__7JKRAramFP12JKRAramBlockPUcUlUl15JKRExpandSwitchUlP7JKRHeapiPUl */
 u8* JKRAram::aramToMainRam(JKRAramBlock* block, u8 *buf, u32 p3, u32 p4, JKRExpandSwitch expandSwitch, u32 p6, JKRHeap* heap, int id, u32 *pSize) {
-    /* Nonmatching */
     if (pSize) {
         *pSize = 0;
     }
