@@ -71,10 +71,10 @@ jobs:
     - name: Build Website
       run: |
         python build.py
-    - name: Deploy Website
-      uses: JamesIves/github-pages-deploy-action@v4
+    - name: Upload website artifact
+      uses: actions/upload-pages-artifact@v3
       with:
-        branch: gh-pages
-        folder: dist # The folder the action should deploy.
-        clean: true
-        single-commit: true
+        path: './dist'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
