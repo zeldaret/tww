@@ -1356,14 +1356,14 @@ void daRd_c::setBtkAnm(s8 idx) {
     struct play_prm_struct {
         s8 m00;
         s8 m01;
-        s32 m04;
+        int loopMode;
     };
     static const play_prm_struct a_play_prm_tbl[] = {
-        {0x01,   -1, 0x00},
-        {0x00,   -1, 0x02},
-        {0x01,   -1, 0x02},
-        {0x02, 0x01, 0x00},
-        {0x03, 0x02, 0x00},
+        {0x01,   -1, J3DFrameCtrl::LOOP_ONCE_e},
+        {0x00,   -1, J3DFrameCtrl::LOOP_REPEAT_e},
+        {0x01,   -1, J3DFrameCtrl::LOOP_REPEAT_e},
+        {0x02, 0x01, J3DFrameCtrl::LOOP_ONCE_e},
+        {0x03, 0x02, J3DFrameCtrl::LOOP_ONCE_e},
     };
     
     if (idx != 5) {
@@ -1375,10 +1375,10 @@ void daRd_c::setBtkAnm(s8 idx) {
         J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, a_anm_idx_tbl[r5]));
         JUT_ASSERT(1930, btk != NULL);
         J3DModelData* modelData = mpMorf->getModel()->getModelData();
-        mBtkAnm.init(modelData, btk, true, a_play_prm_tbl[m6DB].m04, 1.0f, 0, -1, true, 0);
+        mBtkAnm.init(modelData, btk, true, a_play_prm_tbl[m6DB].loopMode, 1.0f, 0, -1, true, 0);
         
         if (mBtkAnm.isStop()) {
-            if (a_play_prm_tbl[m6DB].m01 != -1 && a_play_prm_tbl[m6DB].m04 == 0) {
+            if (a_play_prm_tbl[m6DB].m01 != -1 && a_play_prm_tbl[m6DB].loopMode == 0) {
                 m6DB = a_play_prm_tbl[m6DB].m01;
             }
         }
