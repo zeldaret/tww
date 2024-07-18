@@ -20,25 +20,25 @@ JASystem::TTrack::TTrack() {
     field_0x364 = 0.0f;
     field_0x368 = 0.0f;
     field_0x36c = 0;
-    field_0x370 = 0;
+    mUpdateFlags = 0;
     field_0x374 = 0;
     field_0x376 = 0x78;
     field_0x378 = 0x78;
     field_0x37a = 0;
     field_0x37b = 0;
-    field_0x37c = 0;
-    field_0x37d = 0;
+    mPauseStatus = 0;
+    mVolumeMode = 0;
     field_0x37e = 0;
-    field_0x385 = 0;
+    mIsPaused = 0;
     field_0x386 = 0;
     field_0x387 = 0;
     field_0x388 = 0;
     field_0x389 = 0;
-    field_0xf8.init();
+    mChannelUpdater.init();
     for (int i = 0; i < 12; i++) {
         field_0x304[i] = Player::sAdsTable[i];
     }
-    Calc::bzero(&field_0x16c, sizeof(TimedParam_));
+    Calc::bzero(&mTimedParam, sizeof(TimedParam_));
 }
 
 /* 80280A34-80280A80       .text __ct__Q38JASystem6TTrack11TimedParam_Fv */
@@ -46,16 +46,16 @@ JASystem::TTrack::TimedParam_::TimedParam_() {}
 
 /* 80280A80-80280C10       .text init__Q28JASystem6TTrackFv */
 void JASystem::TTrack::init() {
-    field_0x0.init();
-    field_0x48.init();
+    mSeqCtrl.init();
+    mTrackPort.init();
     field_0x88.init();
-    field_0xb4.init();
-    field_0xf8.initAllocChannel(0);
+    mNoteMgr.init();
+    mChannelUpdater.initAllocChannel(0);
     initTimed();
-    field_0x28c.init();
-    field_0x2fc[0] = 0x0f;
+    mRegisterParam.init();
+    mOscRoute[0] = 0x0f;
     field_0x2cc[0] = Player::sEnvelopeDef;
-    field_0x2fc[1] = 0x0f;
+    mOscRoute[1] = 0x0f;
     field_0x2cc[1] = Player::sEnvelopeDef;
     mParent = NULL;
     for (int i = 0; i < 16; i++) {
@@ -67,23 +67,23 @@ void JASystem::TTrack::init() {
     field_0x364 = 0.0f;
     field_0x368 = 1.0f;
     field_0x36c = 0;
-    field_0xec.init();
-    field_0x370 = 0;
+    mVibrate.init();
+    mUpdateFlags = 0;
     field_0x374 = 0;
     field_0x376 = 0x78;
     field_0x378 = 0x30;
     updateTempo();
     field_0x37a = 0;
     field_0x37b = 0;
-    field_0x37c = 10;
-    field_0x37d = 0;
+    mPauseStatus = 10;
+    mVolumeMode = 0;
     field_0x37e = 0;
     for (int i = 0; i < 3; i++) {
-        field_0x37f[i] = 0;
-        field_0x382[i] = 0;
-        field_0xf8.field_0x62[i] = 0x0d;
+        mCalcTypes[i] = 0;
+        mParentCalcTypes[i] = 0;
+        mChannelUpdater.mCalcTypes[i] = 0x0d;
     }
-    field_0x385 = 0;
+    mIsPaused = 0;
     field_0x386 = 0;
     field_0x387 = 1;
     field_0x388 = 0;
@@ -99,18 +99,18 @@ void JASystem::TTrack::inherit() {
     field_0x368 = mParent->field_0x368;
     field_0x378 = mParent->field_0x378;
     field_0x387 = mParent->field_0x387;
-    field_0x385 = mParent->field_0x385;
-    field_0x37c = mParent->field_0x37c;
-    field_0x37d = mParent->field_0x37d;
+    mIsPaused = mParent->mIsPaused;
+    mPauseStatus = mParent->mPauseStatus;
+    mVolumeMode = mParent->mVolumeMode;
     field_0x386 = mParent->field_0x386;
     if (field_0x37b & 2) {
         return;
     }
-    field_0x28c.inherit(mParent->field_0x28c);
+    mRegisterParam.inherit(mParent->mRegisterParam);
     for (int i = 0; i < 3; i++) {
-        field_0x37f[i] = mParent->field_0x37f[i];
-        field_0x382[i] = mParent->field_0x382[i];
-        field_0xf8.field_0x62[i] = mParent->field_0xf8.field_0x62[i];
+        mCalcTypes[i] = mParent->mCalcTypes[i];
+        mParentCalcTypes[i] = mParent->mParentCalcTypes[i];
+        mChannelUpdater.mCalcTypes[i] = mParent->mChannelUpdater.mCalcTypes[i];
     }
 }
 
@@ -132,19 +132,19 @@ s8 JASystem::TTrack::mainProc() {
         }
         field_0x364 -= 1.0f;
     }
-    if (mParent && field_0xf8.field_0x0) {
-        TChannel* channel = field_0xf8.getListHead(0);
+    if (mParent && mChannelUpdater.field_0x0) {
+        TChannel* channel = mChannelUpdater.getListHead(0);
         if (channel) {
-            mParent->field_0xf8.addListHead(channel, 0);
-            channel->field_0x4 = &mParent->field_0xf8;
-            field_0xf8.field_0x0--;
-            mParent->field_0xf8.field_0x0++;
+            mParent->mChannelUpdater.addListHead(channel, 0);
+            channel->field_0x4 = &mParent->mChannelUpdater;
+            mChannelUpdater.field_0x0--;
+            mParent->mChannelUpdater.field_0x0++;
         }
     }
     field_0x88.request(7);
     field_0x88.timerProcess();
     tryInterrupt();
-    if (field_0x385 == 0 && (field_0x37c & 2) == 0) {
+    if (mIsPaused == 0 && (mPauseStatus & 2) == 0) {
         // TODO:
     }
     updateSeq(0, false);
@@ -171,14 +171,14 @@ void JASystem::TTrack::setInterrupt(u16 param_1) {
 
 /* 80280FA8-80281004       .text tryInterrupt__Q28JASystem6TTrackFv */
 bool JASystem::TTrack::tryInterrupt() {
-    if (field_0x0.field_0x44) {
+    if (mSeqCtrl.mPreviousFilePtr) {
         return false;
     }
     void* var1 = field_0x88.checkIntr();
     if (var1 == NULL) {
         return false;
     }
-    return field_0x0.callIntr(var1);
+    return mSeqCtrl.callIntr(var1);
 }
 
 /* 80281004-8028100C       .text assignExtBuffer__Q28JASystem6TTrackFPQ38JASystem6TTrack11TOuterParam */
@@ -189,16 +189,16 @@ void JASystem::TTrack::assignExtBuffer(TOuterParam* param_1) {
 /* 8028100C-80281050       .text releaseChannelAll__Q28JASystem6TTrackFv */
 void JASystem::TTrack::releaseChannelAll() {
     if (mParent) {
-        mParent->field_0xf8.receiveAllChannels(&field_0xf8);
+        mParent->mChannelUpdater.receiveAllChannels(&mChannelUpdater);
     } else {
-        TGlobalChannel::releaseAll(&field_0xf8);
+        TGlobalChannel::releaseAll(&mChannelUpdater);
     }
 }
 
 /* 80281050-80281088       .text flushAll__Q28JASystem6TTrackFv */
 void JASystem::TTrack::flushAll() {
-    field_0xf8.stopAll();
-    field_0xf8.stopAllRelease();
+    mChannelUpdater.stopAll();
+    mChannelUpdater.stopAllRelease();
 }
 
 /* 80281088-80281138       .text moveFreeChannel__Q28JASystem6TTrackFPQ28JASystem11TChannelMgrPQ28JASystem11TChannelMgri */
@@ -226,28 +226,28 @@ int JASystem::TTrack::moveFreeChannel(TChannelMgr* param_1, TChannelMgr* param_2
 /* 80281138-802811DC       .text initTimed__Q28JASystem6TTrackFv */
 void JASystem::TTrack::initTimed() {
     for (u8 i = 0; i < 18; i++) {
-        field_0x16c.move[i].field_0x8 = 0.0f;
-        field_0x16c.move[i].field_0x0 = 1.0f;
-        field_0x16c.move[i].field_0x4 = 1.0f;
+        mTimedParam.mMoveParams[i].mMoveTime = 0.0f;
+        mTimedParam.mMoveParams[i].mCurrentValue = 1.0f;
+        mTimedParam.mMoveParams[i].mTargetValue = 1.0f;
     }
-    field_0x16c.move[1].field_0x0 = 0.0f;
-    field_0x16c.move[1].field_0x4 = 0.0f;
-    field_0x16c.move[3].field_0x0 = 0.5f;
-    field_0x16c.move[3].field_0x4 = 0.5f;
-    field_0x16c.move[16].field_0x0 = 0.5f;
-    field_0x16c.move[16].field_0x4 = 0.5f;
-    field_0x16c.move[17].field_0x0 = 0.0f;
-    field_0x16c.move[17].field_0x4 = 0.0f;
-    field_0x16c.move[2].field_0x0 = 0.0f;
-    field_0x16c.move[2].field_0x4 = 0.0f;
-    field_0x16c.move[4].field_0x0 = 0.0f;
-    field_0x16c.move[4].field_0x4 = 0.0f;
+    mTimedParam.mMoveParams[1].mCurrentValue = 0.0f;
+    mTimedParam.mMoveParams[1].mTargetValue = 0.0f;
+    mTimedParam.mMoveParams[3].mCurrentValue = 0.5f;
+    mTimedParam.mMoveParams[3].mTargetValue = 0.5f;
+    mTimedParam.mMoveParams[16].mCurrentValue = 0.5f;
+    mTimedParam.mMoveParams[16].mTargetValue = 0.5f;
+    mTimedParam.mMoveParams[17].mCurrentValue = 0.0f;
+    mTimedParam.mMoveParams[17].mTargetValue = 0.0f;
+    mTimedParam.mMoveParams[2].mCurrentValue = 0.0f;
+    mTimedParam.mMoveParams[2].mTargetValue = 0.0f;
+    mTimedParam.mMoveParams[4].mCurrentValue = 0.0f;
+    mTimedParam.mMoveParams[4].mTargetValue = 0.0f;
     for (u8 i = 1; i < 4; i++) {
-        field_0x16c.move[i + 12].field_0x0 = 0.0f;
-        field_0x16c.move[i + 12].field_0x4 = 0.0f;
+        mTimedParam.mMoveParams[i + 12].mCurrentValue = 0.0f;
+        mTimedParam.mMoveParams[i + 12].mTargetValue = 0.0f;
     }
-    field_0x16c.move[5].field_0x0 = 0.0f;
-    field_0x16c.move[5].field_0x4 = 0.0f;
+    mTimedParam.mMoveParams[5].mCurrentValue = 0.0f;
+    mTimedParam.mMoveParams[5].mTargetValue = 0.0f;
 }
 
 static void dummy() {
@@ -258,49 +258,49 @@ static void dummy() {
 /* 802811DC-80281258       .text connectBus__Q28JASystem6TTrackFii */
 void JASystem::TTrack::connectBus(int line, int param_2) {
     JUT_ASSERT(486, line < (6));
-    field_0xf8.field_0x4e[line] = param_2;
+    mChannelUpdater.field_0x4e[line] = param_2;
 }
 
 /* 80281258-802814AC       .text noteOn__Q28JASystem6TTrackFUclllUl */
 int JASystem::TTrack::noteOn(u8 param_1, s32 param_2, s32 param_3, s32 param_4, u32 param_5) {
-    if (field_0x386 && (field_0x37c & 0x40)) {
+    if (field_0x386 && (mPauseStatus & 0x40)) {
         return -1;
     }
     noteOff(param_1, 0);
-    TChannelMgr* r31 = &field_0xf8;
+    TChannelMgr* r31 = &mChannelUpdater;
     TTrack* parent = mParent;
     while (r31->field_0x0 == 0 || r31->field_0x8 == 0) {
         if (!parent) {
-            r31 = &field_0xf8;
+            r31 = &mChannelUpdater;
             break;
         }
-        r31 = &parent->field_0xf8;
+        r31 = &parent->mChannelUpdater;
         parent = parent->mParent;
     }
     if (field_0x37b == 4) {
         JUT_ASSERT(527, mParent != NULL);
-        if (r31 != &mParent->field_0xf8) {
-            if (moveFreeChannel(r31, &mParent->field_0xf8, 1) != 1) {
+        if (r31 != &mParent->mChannelUpdater) {
+            if (moveFreeChannel(r31, &mParent->mChannelUpdater, 1) != 1) {
                 OSReport("in Player (NOTE-MODE) ... ボイス借用に失敗しました！！ (%d)\n", r31->field_0x0);
             }
-            r31 = &mParent->field_0xf8;
+            r31 = &mParent->mChannelUpdater;
         }
-    } else if (r31 != &field_0xf8) {
-        if (moveFreeChannel(r31, &field_0xf8, 1) != 1) {
+    } else if (r31 != &mChannelUpdater) {
+        if (moveFreeChannel(r31, &mChannelUpdater, 1) != 1) {
             OSReport("in Player ボイス借用に失敗しました！！ (%d)\n", r31->field_0x0);
         }
-        r31 = &field_0xf8;
+        r31 = &mChannelUpdater;
     }
-    u8 bankNum = field_0x28c.getBankNumber();
+    u8 bankNum = mRegisterParam.getBankNumber();
     u8 physNum = BankMgr::getPhysicalNumber(bankNum);
-    u8 progNum = field_0x28c.getProgramNumber();
+    u8 progNum = mRegisterParam.getProgramNumber();
     TChannel* channel = BankMgr::noteOn(r31, physNum, progNum, param_2, param_3, param_4);
     if (!channel) {
         return -1;
     }
-    field_0xb4.setChannel(param_1, channel);
+    mNoteMgr.setChannel(param_1, channel);
     channel->field_0xe8 = param_5;
-    channel->setPanPower(field_0x28c.field_0x10[0], field_0x28c.field_0x10[1], field_0x28c.field_0x10[2], 0.0f);
+    channel->setPanPower(mRegisterParam.mPanPower[0], mRegisterParam.mPanPower[1], mRegisterParam.mPanPower[2], 0.0f);
     overwriteOsc(channel);
     if (field_0x374) {
         channel->directReleaseOsc(0, field_0x374);
@@ -313,7 +313,7 @@ void JASystem::TTrack::overwriteOsc(TChannel* param_1) {
     /* Nonmatching */
     u32 r28;
     for (int i = 0; i < 2; i++) {
-        u32 var1 = field_0x2fc[i];
+        u32 var1 = mOscRoute[i];
         if (var1 == 0x0f) {
             continue;
         }
@@ -339,7 +339,7 @@ void JASystem::TTrack::overwriteOsc(TChannel* param_1) {
 
 /* 802815DC-8028165C       .text noteOff__Q28JASystem6TTrackFUcUs */
 bool JASystem::TTrack::noteOff(u8 param_1, u16 param_2) {
-    TChannel* channel = field_0xb4.getChannel(param_1);
+    TChannel* channel = mNoteMgr.getChannel(param_1);
     if (!channel) {
         return false;
     }
@@ -348,13 +348,13 @@ bool JASystem::TTrack::noteOff(u8 param_1, u16 param_2) {
     } else {
         channel->stop(param_2);
     }
-    field_0xb4.releaseChannel(param_1);
+    mNoteMgr.releaseChannel(param_1);
     return true;
 }
 
 /* 8028165C-802816C4       .text gateOn__Q28JASystem6TTrackFUclll */
 int JASystem::TTrack::gateOn(u8 param_1, s32 param_2, s32 param_3, s32 param_4) {
-    TChannel* channel = field_0xb4.getChannel(param_1);
+    TChannel* channel = mNoteMgr.getChannel(param_1);
     if (!channel) {
         return -1;
     }
@@ -364,7 +364,7 @@ int JASystem::TTrack::gateOn(u8 param_1, s32 param_2, s32 param_3, s32 param_4) 
 
 /* 802816C4-80281708       .text checkNoteStop__Q28JASystem6TTrackFl */
 int JASystem::TTrack::checkNoteStop(s32 param_1) {
-    TChannel* channel = field_0xb4.getChannel(param_1);
+    TChannel* channel = mNoteMgr.getChannel(param_1);
     if (channel == NULL) {
         return true;
     }
@@ -390,7 +390,7 @@ void JASystem::TTrack::oscSetupFull(u8 param_1, u32 param_2, u32 param_3) {
         if (param_2 == 0) {
             field_0x2cc[var1].table = NULL;
         }
-        field_0x2cc[var1].table = field_0x0.field_0x0 + param_2;
+        field_0x2cc[var1].table = mSeqCtrl.mRawFilePtr + param_2;
     }
     if (!var5) {
         return;
@@ -398,7 +398,7 @@ void JASystem::TTrack::oscSetupFull(u8 param_1, u32 param_2, u32 param_3) {
     if (param_3 == 0) {
         field_0x2cc[var1].rel_table = Player::sRelTable;
     }
-    field_0x2cc[var1].rel_table = field_0x0.field_0x0 + param_2;
+    field_0x2cc[var1].rel_table = mSeqCtrl.mRawFilePtr + param_2;
 }
 
 /* 802817E4-80281850       .text oscSetupSimpleEnv__Q28JASystem6TTrackFUcUl */
@@ -406,10 +406,10 @@ void JASystem::TTrack::oscSetupSimpleEnv(u8 param_1, u32 param_2) {
     switch (param_1) {
     case 0:
         field_0x2cc[0] = Player::sEnvelopeDef;
-        field_0x2cc[0].table = field_0x0.field_0x0 + param_2;
+        field_0x2cc[0].table = mSeqCtrl.mRawFilePtr + param_2;
         break;
     case 1:
-        field_0x2cc[0].rel_table = field_0x0.field_0x0 + param_2;
+        field_0x2cc[0].rel_table = mSeqCtrl.mRawFilePtr + param_2;
         break;
     }
 }
@@ -506,7 +506,7 @@ bool JASystem::TTrack::setSeqData(u8* param_1, s32, int) {
     /* Nonmatching */
     init();
     field_0x37b = 3;
-    field_0x0.start(param_1, 0);
+    mSeqCtrl.start(param_1, 0);
     updateTrackAll();
     field_0x37e = 2;
     return true;
@@ -546,7 +546,7 @@ void JASystem::TTrack::muteTrack(bool) {
 /* 80282B44-80282B84       .text start__Q28JASystem6TTrackFPvUl */
 bool JASystem::TTrack::start(void* param_1, u32 param_2) {
     /* Nonmatching */
-    field_0x0.start(param_1, param_2);
+    mSeqCtrl.start(param_1, param_2);
     field_0x37e = 1;
     updateTrackAll();
     return false;
@@ -562,15 +562,15 @@ int JASystem::TTrack::loadTbl(u32 param_1, u32 param_2, u32 param_3) {
     /* Nonmatching */
     switch (param_3) {
     case 4:
-        return field_0x0.field_0x0[param_1 + param_2];
+        return mSeqCtrl.mRawFilePtr[param_1 + param_2];
     case 5:
-        return field_0x0.get16(param_1 + param_2 * 2);
+        return mSeqCtrl.get16(param_1 + param_2 * 2);
     case 6:
-        return field_0x0.get24(param_1 + param_2 * 3);
+        return mSeqCtrl.get24(param_1 + param_2 * 3);
     case 7:
-        return field_0x0.get32(param_1 + param_2 * 4);
+        return mSeqCtrl.get32(param_1 + param_2 * 4);
     case 8:
-        return field_0x0.get32(param_1 + param_2);
+        return mSeqCtrl.get32(param_1 + param_2);
     }
 }
 
@@ -580,12 +580,12 @@ int JASystem::TTrack::exchangeRegisterValue(u8) {
 }
 
 /* 80282DC0-80282ED4       .text readReg32__Q28JASystem6TTrackFUc */
-void JASystem::TTrack::readReg32(u8) {
+u32 JASystem::TTrack::readReg32(u8) {
     /* Nonmatching */
 }
 
 /* 80282ED4-802830AC       .text readReg16__Q28JASystem6TTrackFUc */
-void JASystem::TTrack::readReg16(u8) {
+u16 JASystem::TTrack::readReg16(u8) {
     /* Nonmatching */
 }
 
@@ -602,13 +602,13 @@ void JASystem::TTrack::writeRegParam(u8) {
 /* 802836FC-80283720       .text readSelfPort__Q28JASystem6TTrackFi */
 u16 JASystem::TTrack::readSelfPort(int param_1) {
     /* Nonmatching */
-    return field_0x48.readImport(param_1);
+    return mTrackPort.readImport(param_1);
 }
 
 /* 80283720-80283744       .text writeSelfPort__Q28JASystem6TTrackFiUs */
 void JASystem::TTrack::writeSelfPort(int param_1, u16 param_2) {
     /* Nonmatching */
-    field_0x48.writeExport(param_1, param_2);
+    mTrackPort.writeExport(param_1, param_2);
 }
 
 /* 80283744-802837AC       .text writePortAppDirect__Q28JASystem6TTrackFUlUs */
@@ -704,15 +704,15 @@ JASystem::TVibrate::TVibrate() {
 /* 80283ECC-80283EE4       .text init__Q28JASystem8TVibrateFv */
 void JASystem::TVibrate::init() {
     /* Nonmatching */
-    field_0x8 = 1.0f / 18.0f;
-    field_0x4 = 0.0f;
+    mPitch = 1.0f / 18.0f;
+    mDepth = 0.0f;
     field_0x0 = 0.0f;
 }
 
 /* 80283EE4-80283F18       .text incCounter__Q28JASystem8TVibrateFv */
 void JASystem::TVibrate::incCounter() {
     /* Nonmatching */
-    field_0x0 += field_0x8;
+    field_0x0 += mPitch;
     if (!(field_0x0 >= 4.0)) {
         return;
     }
@@ -727,10 +727,10 @@ f32 JASystem::TVibrate::getValue() const {
 /* 80283FD0-80283FE8       .text __ct__Q38JASystem6TTrack10MoveParam_Fv */
 JASystem::TTrack::MoveParam_::MoveParam_() {
     /* Nonmatching */
-    field_0x0 = 0.0f;
-    field_0x4 = 0.0f;
-    field_0x8 = 0.0f;
-    field_0xc = 0.0f;
+    mCurrentValue = 0.0f;
+    mTargetValue = 0.0f;
+    mMoveTime = 0.0f;
+    mMoveAmount = 0.0f;
 }
 
 /* 80283FE8-80284118       .text __ct__Q38JASystem6TTrack12AInnerParam_Fv */

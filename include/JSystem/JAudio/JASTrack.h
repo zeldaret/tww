@@ -38,13 +38,38 @@ namespace JASystem {
         void incCounter();
         f32 getValue() const;
 
+        void setDepth(f32 depth) { mDepth = depth; }
+        void setPitch(f32 pitch) { mPitch = pitch; }
+
         /* 0x00 */ f32 field_0x0;
-        /* 0x04 */ f32 field_0x4;
-        /* 0x08 */ f32 field_0x8;
+        /* 0x04 */ f32 mDepth;
+        /* 0x08 */ f32 mPitch;
     };
 
     class TTrack {
     public:
+        enum TimedParamType {
+            TIMED_Volume      = 0,
+            TIMED_Pitch       = 1,
+            TIMED_Fxmix       = 2,
+            TIMED_Pan         = 3,
+            TIMED_Dolby       = 4,
+            TIMED_Unk5        = 5,
+            TIMED_Osc0_Width  = 6,
+            TIMED_Osc0_Rate   = 7,
+            TIMED_Osc0_Vertex = 8,
+            TIMED_Osc1_Width  = 9,
+            TIMED_Osc1_Rate   = 10,
+            TIMED_Osc1_Vertex = 11,
+            TIMED_IIR_Unk0    = 12,
+            TIMED_IIR_Unk1    = 13,
+            TIMED_IIR_Unk2    = 14,
+            TIMED_IIR_Unk3    = 15,
+            TIMED_Unk16       = 16,
+            TIMED_Unk17       = 17,
+            TIMED_Count, // 18
+        };
+
         class TOuterParam {
         public:
             TOuterParam();
@@ -73,17 +98,18 @@ namespace JASystem {
         public:
             MoveParam_();
 
-            /* 0x00 */ f32 field_0x0;
-            /* 0x04 */ f32 field_0x4;
-            /* 0x08 */ f32 field_0x8;
-            /* 0x0C */ f32 field_0xc;
+            /* 0x00 */ f32 mCurrentValue;
+            /* 0x04 */ f32 mTargetValue;
+            /* 0x08 */ f32 mMoveTime;
+            /* 0x0C */ f32 mMoveAmount;
         };
 
         class AInnerParam_ {
         public:
             AInnerParam_();
 
-            /* 0x000 */ f32 field_0x0[48];
+            /* 0x000 */ MoveParam_ mIIRs[4];
+            /* 0x010 */ f32 field_0x10[32];
             /* 0x0C0 */ MoveParam_ field_0xc0[4];
             /* 0x100 */ f32 field_0x100[8];
         };
@@ -93,8 +119,8 @@ namespace JASystem {
             TimedParam_();
 
             union {
-                AInnerParam_ inner;
-                MoveParam_ move[18];
+                AInnerParam_ mInnerParam;
+                MoveParam_ mMoveParams[TIMED_Count];
             };
         };
 
@@ -106,12 +132,12 @@ namespace JASystem {
             void releaseChannel(int);
             TChannel* getChannel(int);
 
-            TChannel* field_0x0[8];
-            u16 field_0x20[8];
-            int field_0x30;
-            u8 field_0x34;
-            u8 field_0x35;
-            u8 field_0x36;
+            /* 0x00 */ TChannel* field_0x0[8];
+            /* 0x20 */ u16 field_0x20[8];
+            /* 0x30 */ int field_0x30;
+            /* 0x34 */ u8 field_0x34;
+            /* 0x35 */ u8 field_0x35;
+            /* 0x36 */ u8 field_0x36;
         };
 
         static const int MAX_CHILDREN = 16;
@@ -155,8 +181,8 @@ namespace JASystem {
         TTrack* openChild(u8, u8);
         int loadTbl(u32, u32, u32);
         int exchangeRegisterValue(u8);
-        void readReg32(u8);
-        void readReg16(u8);
+        u32 readReg32(u8);
+        u16 readReg16(u8);
         void writeRegDirect(u8, u16);
         void writeRegParam(u8);
         u16 readSelfPort(int);
@@ -184,53 +210,53 @@ namespace JASystem {
 
         TOuterParam* getOuterParam() { return mOuterParam; }
 
-        void checkExport(int) const {}
-        void checkImport(int) const {}
+        bool checkImport(int i) const { return mTrackPort.checkImport(i); }
+        bool checkExport(int i) const { return mTrackPort.checkExport(i); }
         void getActivity() const {}
         void getRoute() const {}
-        void getSeq() {}
+        TSeqCtrl* getSeq() { return &mSeqCtrl; }
         // void operator delete(void*, u32) {}
         // void* operator new(size_t) {}
         void pauseTrackAll() {}
-        void setPanPower(int, u16) {}
+        void setPanPower(int i, u16 power) { mRegisterParam.setPanPower(i, power); }
         void setPauseStatus(u8) {}
-        void setTranspose(s32) {}
-        void setVolumeMode(u8) {}
+        void setTranspose(s32 transpose) { field_0x37a = transpose; }
+        void setVolumeMode(u8 mode) { mVolumeMode = mode; }
         void unPauseTrackAll() {}
 
         /* 0x000 */ union {
-            TSeqCtrl field_0x0;
+            TSeqCtrl mSeqCtrl;
             TTrack* next;
         };
-        /* 0x048 */ TTrackPort field_0x48;
+        /* 0x048 */ TTrackPort mTrackPort;
         /* 0x088 */ TIntrMgr field_0x88;
-        /* 0x0B4 */ TNoteMgr field_0xb4;
-        /* 0x0EC */ TVibrate field_0xec;
-        /* 0x0F8 */ TChannelMgr field_0xf8;
-        /* 0x16C */ TimedParam_ field_0x16c;
-        /* 0x28C */ TRegisterParam field_0x28c;
+        /* 0x0B4 */ TNoteMgr mNoteMgr;
+        /* 0x0EC */ TVibrate mVibrate;
+        /* 0x0F8 */ TChannelMgr mChannelUpdater;
+        /* 0x16C */ TimedParam_ mTimedParam;
+        /* 0x28C */ TRegisterParam mRegisterParam;
         /* 0x2BC */ u8 field_0x2bc[0x2cc - 0x2bc];
         /* 0x2CC */ TOscillator::Osc_ field_0x2cc[2];
-        /* 0x2FC */ u32 field_0x2fc[2];
-        /* 0x304 */ short field_0x304[12];
+        /* 0x2FC */ u32 mOscRoute[2];
+        /* 0x304 */ s16 field_0x304[12];
         /* 0x31C */ TTrack* mParent;
         /* 0x320 */ TTrack* mChildren[MAX_CHILDREN];
         /* 0x360 */ TOuterParam* mOuterParam;
         /* 0x364 */ f32 field_0x364;
         /* 0x368 */ f32 field_0x368;
         /* 0x36C */ int field_0x36c;
-        /* 0x370 */ int field_0x370;
+        /* 0x370 */ u32 mUpdateFlags;
         /* 0x374 */ u16 field_0x374;
         /* 0x376 */ u16 field_0x376;
         /* 0x378 */ u16 field_0x378;
-        /* 0x37a */ u8 field_0x37a;
-        /* 0x37b */ u8 field_0x37b;
-        /* 0x37c */ u8 field_0x37c;
-        /* 0x37d */ u8 field_0x37d;
-        /* 0x37e */ u8 field_0x37e;
-        /* 0x37f */ u8 field_0x37f[3];
-        /* 0x382 */ u8 field_0x382[3];
-        /* 0x385 */ u8 field_0x385;
+        /* 0x37A */ u8 field_0x37a;
+        /* 0x37B */ u8 field_0x37b;
+        /* 0x37C */ u8 mPauseStatus;
+        /* 0x37D */ u8 mVolumeMode;
+        /* 0x37E */ u8 field_0x37e;
+        /* 0x37F */ u8 mCalcTypes[3];
+        /* 0x382 */ u8 mParentCalcTypes[3];
+        /* 0x385 */ u8 mIsPaused;
         /* 0x386 */ u8 field_0x386;
         /* 0x387 */ bool field_0x387;
         /* 0x388 */ u8 field_0x388;

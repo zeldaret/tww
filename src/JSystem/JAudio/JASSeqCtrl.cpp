@@ -8,49 +8,49 @@
 
 /* 8027E3F8-8027E448       .text init__Q28JASystem8TSeqCtrlFv */
 void JASystem::TSeqCtrl::init() {
-    field_0x0 = NULL;
-    field_0x4 = NULL;
-    field_0x8 = 0;
-    field_0xc = 0;
+    mRawFilePtr = NULL;
+    mCurrentFilePtr = NULL;
+    mWaitTimer = 0;
+    mLoopIndex = 0;
     for (int i = 0; i < 8; i++) {
-        field_0x10[i] = NULL;
-        field_0x30[i] = 0;
+        mLoopStartPositions[i] = NULL;
+        mLoopTimers[i] = 0;
     }
     field_0x40 = 0;
-    field_0x44 = NULL;
+    mPreviousFilePtr = NULL;
 }
 
 /* 8027E448-8027E45C       .text start__Q28JASystem8TSeqCtrlFPvUl */
 void JASystem::TSeqCtrl::start(void* param_1, u32 param_2) {
-    field_0x0 = (u8*)param_1;
-    field_0x4 = field_0x0 + param_2;
+    mRawFilePtr = (u8*)param_1;
+    mCurrentFilePtr = mRawFilePtr + param_2;
 }
 
 /* 8027E45C-8027E500       .text loopEnd__Q28JASystem8TSeqCtrlFv */
 int JASystem::TSeqCtrl::loopEnd() {
-    u32 var1 = field_0xc;
+    u32 var1 = mLoopIndex;
     if (var1 == 0) {
         JUT_WARN(45, "%s", "cannot loopE for call-stack is NULL");
         return 0;
     }
-    u16 var3 = field_0x30[var1 - 1];
+    u16 var3 = mLoopTimers[var1 - 1];
     if (var3) {
         var3--;
     }
     if (var3 == 0) {
-        field_0xc--;
+        mLoopIndex--;
         return true;
     }
-    field_0x30[var1 - 1] = var3;
-    field_0x4 = field_0x10[field_0xc - 1];
+    mLoopTimers[var1 - 1] = var3;
+    mCurrentFilePtr = mLoopStartPositions[mLoopIndex - 1];
     return true;
 }
 
 /* 8027E500-8027E530       .text waitCountDown__Q28JASystem8TSeqCtrlFv */
 bool JASystem::TSeqCtrl::waitCountDown() {
-    if (field_0x8 > 0) {
-        field_0x8--;
-        if (field_0x8) {
+    if (mWaitTimer > 0) {
+        mWaitTimer--;
+        if (mWaitTimer) {
             return false;
         }
     }
@@ -59,24 +59,24 @@ bool JASystem::TSeqCtrl::waitCountDown() {
 
 /* 8027E530-8027E568       .text callIntr__Q28JASystem8TSeqCtrlFPv */
 bool JASystem::TSeqCtrl::callIntr(void* param_1) {
-    if (field_0x44) {
+    if (mPreviousFilePtr) {
         return false;
     }
-    field_0x44 = field_0x4;
-    field_0x4 = (u8*)param_1;
-    field_0x40 = field_0x8;
-    field_0x8 = 0;
+    mPreviousFilePtr = mCurrentFilePtr;
+    mCurrentFilePtr = (u8*)param_1;
+    field_0x40 = mWaitTimer;
+    mWaitTimer = 0;
     return true;
 }
 
 /* 8027E568-8027E59C       .text retIntr__Q28JASystem8TSeqCtrlFv */
 bool JASystem::TSeqCtrl::retIntr() {
-    if (!field_0x44) {
+    if (!mPreviousFilePtr) {
         return false;
     }
-    field_0x8 = field_0x40;
-    field_0x4 = field_0x44;
-    field_0x44 = NULL;
+    mWaitTimer = field_0x40;
+    mCurrentFilePtr = mPreviousFilePtr;
+    mPreviousFilePtr = NULL;
     return true;
 }
 

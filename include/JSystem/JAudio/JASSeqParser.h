@@ -59,17 +59,19 @@ namespace JASystem {
         int cmdOscFull(TTrack*, u32*);
         int cmdCheckWave(TTrack*, u32*);
         int cmdPrintf(TTrack*, u32*);
-        void Cmd_Process(TTrack*, u8, u16);
-        void RegCmd_Process(TTrack*, int, int);
+        int Cmd_Process(TTrack*, u8, u16);
+        int RegCmd_Process(TTrack*, int, int);
         int cmdSetParam(TTrack*, u8);
         int cmdWait(TTrack*, u8);
         int cmdNoteOff(TTrack*, u8);
         int cmdNoteOn(TTrack*, u8);
         bool conditionCheck(TTrack*, u8);
-        void parseSeq(TTrack*);
+        int parseSeq(TTrack*);
 
         static int (TSeqParser::*sCmdPList[])(TTrack*, u32*);
     };
+
+    extern const u16 Arglist[0x40][2];
 }
 
 #endif /* JASSEQPARSER_H */

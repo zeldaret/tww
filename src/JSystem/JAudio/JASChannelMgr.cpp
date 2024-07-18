@@ -45,9 +45,9 @@ void JASystem::TChannelMgr::init() {
     field_0x4e[5] = 0;
     field_0x68 = 0x20103;
     field_0x6c = 600;
-    field_0x62[0] = 13;
-    field_0x62[1] = 13;
-    field_0x62[2] = 13;
+    mCalcTypes[0] = 13;
+    mCalcTypes[1] = 13;
+    mCalcTypes[2] = 13;
 }
 
 /* 8028D4D0-8028D514       .text stopAll__Q28JASystem11TChannelMgrFv */

@@ -43,7 +43,7 @@ namespace JASystem {
         /* 0x5A */ u8 field_0x5a[6];
         /* 0x60 */ u8 field_0x60;
         /* 0x61 */ u8 field_0x61;
-        /* 0x62 */ u8 field_0x62[3];
+        /* 0x62 */ u8 mCalcTypes[3];
         /* 0x68 */ int field_0x68;
         /* 0x6C */ u16 field_0x6c;
         /* 0x70 */ int field_0x70;

@@ -3,6 +3,8 @@
 
 #include "dolphin/types.h"
 
+#define TRACKPORT_MAX (16)
+
 namespace JASystem {
     class TTrackPort {
     public:
@@ -12,9 +14,13 @@ namespace JASystem {
         void writeImport(int, u16);
         void writeExport(int, u16);
 
-        /* 0x00 */ u8 field_0x0[16];
-        /* 0x10 */ u8 field_0x10[16];
-        /* 0x20 */ u16 field_0x20[16];
+        bool checkImport(int i) const { return mImportFlag[i] != 0; }
+        bool checkExport(int i) const { return mExportFlag[i] != 0; }
+        u16 get(u32 i) { return mValue[i]; }
+
+        /* 0x00 */ u8 mImportFlag[TRACKPORT_MAX];
+        /* 0x10 */ u8 mExportFlag[TRACKPORT_MAX];
+        /* 0x20 */ u16 mValue[TRACKPORT_MAX];
     };
 }
 

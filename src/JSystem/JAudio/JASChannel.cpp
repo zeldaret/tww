@@ -42,7 +42,7 @@ void JASystem::TChannel::init() {
         field_0x48 = field_0x4->field_0x68;
         field_0x4c = field_0x4->field_0x6c;
         for (int i = 0; i < 3; i++) {
-            field_0x60[i] = field_0x4->field_0x62[i];
+            field_0x60[i] = field_0x4->mCalcTypes[i];
         }
     }
     for (u32 i = 0; i < 4; i++) {

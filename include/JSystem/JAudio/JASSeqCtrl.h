@@ -8,19 +8,32 @@ namespace JASystem {
 
     class TSeqCtrl {
     public:
-        void call(u32) {}
-        void clrIntr() {}
-        void getAddr(u32) {}
-        void getBase() {}
-        u8 getByte(u32 offset) const { return field_0x0[offset]; }
+        void call(u32 offset) {
+            mLoopStartPositions[mLoopIndex++] = mCurrentFilePtr;
+            mCurrentFilePtr = mRawFilePtr + offset;
+        }
+        void clrIntr() { mPreviousFilePtr = 0; }
+        u8* getAddr(u32 offset) { return mRawFilePtr + offset; }
+        u8* getBase() { return mRawFilePtr; }
+        u8 getByte(u32 offset) const { return mRawFilePtr[offset]; }
         void getLoopCount() const {}
         void getWait() const {}
         void isIntr() const {}
-        void jump(u32) {}
-        void loopStart(u32) {}
-        u8 readByte() { return *field_0x4++; }
-        void ret() {}
-        void wait(s32) {}
+        void jump(u32 offset) {
+            mCurrentFilePtr = mRawFilePtr + offset;
+        }
+        void loopStart(u32 timer) {
+            mLoopStartPositions[mLoopIndex] = mCurrentFilePtr;
+            mLoopTimers[mLoopIndex++] = timer;
+        }
+        u8 readByte() { return *mCurrentFilePtr++; }
+        bool ret() {
+            mCurrentFilePtr = mLoopStartPositions[--mLoopIndex];
+            return true;
+        }
+        void wait(s32 timer) {
+            mWaitTimer = timer;
+        }
 
         void init();
         void start(void*, u32);
@@ -34,14 +47,14 @@ namespace JASystem {
         u32 read16();
         u32 read24();
 
-        /* 0x00 */ u8* field_0x0;
-        /* 0x04 */ u8* field_0x4;
-        /* 0x08 */ int field_0x8;
-        /* 0x0C */ u32 field_0xc;
-        /* 0x10 */ u8* field_0x10[8];
-        /* 0x30 */ u16 field_0x30[8];
+        /* 0x00 */ u8* mRawFilePtr;
+        /* 0x04 */ u8* mCurrentFilePtr;
+        /* 0x08 */ int mWaitTimer;
+        /* 0x0C */ u32 mLoopIndex;
+        /* 0x10 */ u8* mLoopStartPositions[8];
+        /* 0x30 */ u16 mLoopTimers[8];
         /* 0x40 */ int field_0x40;
-        /* 0x44 */ u8* field_0x44;
+        /* 0x44 */ u8* mPreviousFilePtr;
     };
 }
 

@@ -12,15 +12,23 @@ namespace JASystem {
         u8 getBankNumber() const;
         u8 getProgramNumber() const;
 
-        /* 0x00 */ short field_0x0;
-        /* 0x02 */ short field_0x2;
-        /* 0x04 */ short field_0x4;
-        /* 0x06 */ short field_0x6;
-        /* 0x08 */ short field_0x8;
-        /* 0x0A */ short field_0xa;
+        void getAddress(int) const {}
+        void getBendSense() const {}
+        void getFlag() const {}
+        void getPanPowerBank() const {}
+        void getPanPowerExt() const {}
+        void getPanPowerOsc() const {}
+        void getPanPowerParent() const {}
+        void getPanPowerTrack() const {}
+        void getPriority() const {}
+        void setAddress(int, u32) {}
+        void setFlag(u16) {}
+        void setPanPower(int i, u16 power) { mPanPower[i] = power; }
+
+        /* 0x00 */ u16 field_0x0[6];
         /* 0x0C */ u16 field_0xc;
         /* 0x0E */ u16 field_0xe;
-        /* 0x10 */ u16 field_0x10[5];
+        /* 0x10 */ u16 mPanPower[5];
         /* 0x1A */ u16 field_0x1a;
         /* 0x1C */ int field_0x1c;
         /* 0x20 */ int field_0x20;
