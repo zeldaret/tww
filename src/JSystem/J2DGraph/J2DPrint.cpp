@@ -149,7 +149,6 @@ void J2DPrint::printReturn(const char* param_1, f32 param_2, f32 param_3, J2DTex
 
 /* 802CE888-802CEF9C       .text parse__8J2DPrintFPCUciiPUsRQ28J2DPrint5TSizeUcb */
 f32 J2DPrint::parse(const u8* param_1, int param_2, int param_3, u16* param_4, J2DPrint::TSize& param_5, u8 param_6, bool param_7) {
-    /* Nonmatching */
     if (mFont == NULL) {
         return 0.0f;
     }

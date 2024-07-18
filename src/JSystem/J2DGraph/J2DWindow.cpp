@@ -174,7 +174,6 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
 
 /* 802D1F5C-802D207C       .text resize__9J2DWindowFff */
 void J2DWindow::resize(f32 w, f32 h) {
-    /* Nonmatching - regalloc */
     f32 oldW = getWidth();
     f32 oldH = getHeight();
     J2DPane::resize(w, h);

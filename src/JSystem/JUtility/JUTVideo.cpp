@@ -194,6 +194,4 @@ void JUTVideo::setRenderMode(const GXRenderModeObj* pObj) {
 }
 
 /* 802C81D4-802C81D8       .text waitRetraceIfNeed__8JUTVideoFv */
-void JUTVideo::waitRetraceIfNeed() {
-    /* Nonmatching */
-}
+void JUTVideo::waitRetraceIfNeed() {}

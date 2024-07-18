@@ -823,7 +823,7 @@ void daAuction_c::eventMainKai() {
     if (dComIfG_getTimerRestTimeMs() <= 0) {
         m82B = 1;
     } else {
-        if (g_mDoCPd_cpadInfo[0].mButtonTrig.b) {
+        if (CPad_CHECK_TRIG_B(0)) {
             setMessage2(0x1CFC);
             mDoAud_seStart(JA_SE_AUC_QUIT);
         } else {
@@ -841,7 +841,7 @@ void daAuction_c::eventMainKai() {
                 m7C4[0] += 0.02f;
             }
 
-            if (g_mDoCPd_cpadInfo[0].mButtonTrig.a) {
+            if (CPad_CHECK_TRIG_A(0)) {
                 m7C4[0] += l_npc_dat[0].field_0x00 + cM_rndF(l_npc_dat[0].field_0x04 - l_npc_dat[0].field_0x00);
 
                 mDoAud_seStart(JA_SE_AUC_BID_GAUGE, NULL, m7C4[0]);
@@ -989,7 +989,7 @@ void daAuction_c::eventMainUri() {
 
     if (dComIfG_getTimerRestTimeMs() <= 0) {
         m82B = 1;
-    } else if (m82E != 0 && g_mDoCPd_cpadInfo[0].mButtonTrig.a) {
+    } else if (m82E != 0 && CPad_CHECK_TRIG_A(0)) {
         setMessage2(0x1D1A);
     } else {
         if (m806 != 0) {

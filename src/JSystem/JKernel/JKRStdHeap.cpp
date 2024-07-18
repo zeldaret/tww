@@ -11,7 +11,6 @@
 
 /* 802B0F34-802B0FE0       .text create__10JKRStdHeapFUlP7JKRHeapb */
 JKRStdHeap* JKRStdHeap::create(u32 size, JKRHeap* parent, bool errorFlag) {
-    /* Nonmatching */
     if (!parent) {
         parent = sRootHeap;
     }
@@ -74,7 +73,6 @@ void* JKRStdHeap::do_alloc(u32 size, int alignment) {
         }
     }
     return ptr;
-    /* Nonmatching */
 }
 
 /* 802B11A4-802B1228       .text do_free__10JKRStdHeapFPv */
@@ -86,12 +84,10 @@ void JKRStdHeap::do_free(void* ptr) {
             JUT_WARN(279, "free: memblock %x not in heap %x", ptr, this);
         }
     }
-    /* Nonmatching */
 }
 
 /* 802B1228-802B1278       .text do_freeAll__10JKRStdHeapFv */
 void JKRStdHeap::do_freeAll() {
-    /* Nonmatching */
     if (mHeapHandle == -1) {
         return;
     }

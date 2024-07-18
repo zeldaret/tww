@@ -353,7 +353,6 @@ JUTCacheFont::TGlyphCacheInfo* JUTCacheFont::determineBlankPage() {
 
 /* 802C0E80-802C0FE8       .text getGlyphFromAram__12JUTCacheFontFPQ212JUTCacheFont15TGlyphCacheInfoPQ212JUTCacheFont10TCachePagePiPi */
 void JUTCacheFont::getGlyphFromAram(TGlyphCacheInfo* param_0, TCachePage* pCachePage, int* param_2, int* param_3) {
-    /* Nonmatching */
     TGlyphCacheInfo* pGylphCacheInfo = pCachePage;
     memcpy(pGylphCacheInfo, param_0, sizeof(TGlyphCacheInfo));
     prepend(pGylphCacheInfo);
@@ -376,7 +375,6 @@ void JUTCacheFont::getGlyphFromAram(TGlyphCacheInfo* param_0, TCachePage* pCache
 
 /* 802C0FE8-802C109C       .text loadImage__12JUTCacheFontFi11_GXTexMapID */
 void JUTCacheFont::loadImage(int param_0, GXTexMapID texMapId) {
-    /* Nonmatching */
     TCachePage* cachePage = loadCache_char_subroutine(&param_0, false);
     if (cachePage != NULL) {
         mWidth = cachePage->field_0xc * (param_0 % int(cachePage->field_0x16));
@@ -391,7 +389,6 @@ void JUTCacheFont::loadImage(int param_0, GXTexMapID texMapId) {
 
 /* 802C109C-802C11E4       .text loadCache_char_subroutine__12JUTCacheFontFPib */
 JUTCacheFont::TCachePage* JUTCacheFont::loadCache_char_subroutine(int* param_0, bool param_1) {
-    /* Nonmatching */
     TCachePage* rv = NULL;
     for (TCachePage* pCachePage = (TCachePage*)field_0x9c; pCachePage != NULL;
          pCachePage = (TCachePage*)pCachePage->mNext)

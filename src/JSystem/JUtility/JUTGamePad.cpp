@@ -62,7 +62,6 @@ u32 JUTGamePad::sRumbleSupported;
 
 /* 802C3980-802C3C14       .text read__10JUTGamePadFv */
 u32 JUTGamePad::read() {
-    /* Nonmatching */
     sRumbleSupported = PADRead(mPadStatus);
 
     PADClamp(mPadStatus);
