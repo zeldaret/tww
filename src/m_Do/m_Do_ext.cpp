@@ -117,7 +117,7 @@ int mDoExt_baseAnm::play() {
 }
 
 /* 8000DFC4-8000DFF0       .text init__13mDoExt_bpkAnmFP12J3DModelDataP11J3DAnmColoriifssbi */
-int mDoExt_bpkAnm::init(J3DModelData* i_modelData, J3DAnmColor* i_bpk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
+int mDoExt_bpkAnm::init(J3DModelData* i_modelData, J3DAnmColor* i_bpk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
     return init(&i_modelData->getMaterialTable(), i_bpk, i_anmPlay, i_attribute, i_rate, i_startF, i_endF, i_modify, i_entry);
 }
 
@@ -127,7 +127,7 @@ void mDoExt_bpkAnm::entry(J3DModelData* i_modelData, f32 param_1) {
 }
 
 /* 8000E014-8000E2A8       .text init__13mDoExt_bpkAnmFP16J3DMaterialTableP11J3DAnmColoriifssbi */
-int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
+int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
 
     JUT_ASSERT(531, i_modify || isCurrentSolidHeap());
     JUT_ASSERT(533, i_matTable != NULL && i_bpk != NULL);
@@ -170,7 +170,7 @@ void mDoExt_bpkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
 }
 
 /* 8000E32C-8000E358       .text init__13mDoExt_btpAnmFP12J3DModelDataP16J3DAnmTexPatterniifssbi */
-int mDoExt_btpAnm::init(J3DModelData* i_modelData, J3DAnmTexPattern* i_btp, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
+int mDoExt_btpAnm::init(J3DModelData* i_modelData, J3DAnmTexPattern* i_btp, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
     return init(&i_modelData->getMaterialTable(), i_btp, i_anmPlay, i_attribute, i_rate, i_startF, i_endF, i_modify, i_entry);
 }
 
@@ -180,7 +180,7 @@ void mDoExt_btpAnm::entry(J3DModelData* i_modelData, s16 i_frame) {
 }
 
 /* 8000E37C-8000E610       .text init__13mDoExt_btpAnmFP16J3DMaterialTableP16J3DAnmTexPatterniifssbi */
-int mDoExt_btpAnm::init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btp, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
+int mDoExt_btpAnm::init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btp, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
     JUT_ASSERT(648, i_modify || isCurrentSolidHeap());
     JUT_ASSERT(650, i_matTable != NULL && i_btp != NULL);
     mpAnm = i_btp;
@@ -222,7 +222,7 @@ void mDoExt_btpAnm::entry(J3DMaterialTable* i_matTable, s16 i_frame) {
 }
 
 /* 8000E6CC-8000E6F8       .text init__13mDoExt_btkAnmFP12J3DModelDataP19J3DAnmTextureSRTKeyiifssbi */
-int mDoExt_btkAnm::init(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
+int mDoExt_btkAnm::init(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
     return init(&i_modelData->getMaterialTable(), i_btk, i_anmPlay, i_attribute, i_rate, i_startF, i_endF, i_modify, i_entry);
 }
 
@@ -232,7 +232,7 @@ void mDoExt_btkAnm::entry(J3DModelData* i_modelData, f32 i_frame) {
 }
 
 /* 8000E71C-8000EAE4       .text init__13mDoExt_btkAnmFP16J3DMaterialTableP19J3DAnmTextureSRTKeyiifssbi */
-int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
+int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
     JUT_ASSERT(781, i_modify || isCurrentSolidHeap());
     JUT_ASSERT(783, i_matTable != NULL && i_btk != NULL);
     mpAnm = i_btk;
@@ -288,7 +288,7 @@ void mDoExt_btkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
 
 /* 8000EB74-8000EBA0       .text init__13mDoExt_brkAnmFP12J3DModelDataP15J3DAnmTevRegKeyiifssbi */
 int mDoExt_brkAnm::init(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, BOOL i_anmPlay,
-                        int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry) {
+                        int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, BOOL i_entry) {
     return init(&i_modelData->getMaterialTable(), i_brk, i_anmPlay, i_attribute, i_rate,
                 i_start, i_end, i_modify, i_entry);
 }
@@ -299,7 +299,7 @@ void mDoExt_brkAnm::entry(J3DModelData* i_modelData, f32 i_frame) {
 }
 
 /* 8000EBC4-8000EEE8       .text init__13mDoExt_brkAnmFP16J3DMaterialTableP15J3DAnmTevRegKeyiifssbi */
-int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
+int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
     JUT_ASSERT(910, i_modify || isCurrentSolidHeap());
     JUT_ASSERT(912, i_matTable != NULL && i_brk != NULL);
     mpAnm = i_brk;
@@ -356,7 +356,7 @@ void mDoExt_brkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
 }
 
 /* 8000EFBC-8000F178       .text init__13mDoExt_bvaAnmFP8J3DModelP20J3DAnmVisibilityFulliifssbi */
-int mDoExt_bvaAnm::init(J3DModel* i_model, J3DAnmVisibilityFull* i_bva, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
+int mDoExt_bvaAnm::init(J3DModel* i_model, J3DAnmVisibilityFull* i_bva, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
     JUT_ASSERT(1002, i_modify || isCurrentSolidHeap());
     JUT_ASSERT(1004, i_model != NULL && i_bva != NULL);
     mpAnm = i_bva;
