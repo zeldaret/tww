@@ -244,7 +244,13 @@ void daPy_waterDropEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, 
 
 /* 8012A058-8012A0B4       .text end__25daPy_waterDropEcallBack_cFv */
 void daPy_waterDropEcallBack_c::end() {
-    /* Nonmatching */
+    if (mpEmitter != NULL) {
+        mpEmitter->quitImmortalEmitter();
+        mpEmitter->deleteAllParticle();
+        mpEmitter->setParticleCallBackPtr(NULL);
+
+        daPy_followEcallBack_c::end();
+    }
 }
 
 /* 8012A0B4-8012A0E0       .text makeEmitterColor__28daPy_mtxPosFollowEcallBack_cFUsPA4_fPC4cXyzPC5csXyzPC8_GXColorPC8_GXColor */
