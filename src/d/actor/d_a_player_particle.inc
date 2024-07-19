@@ -254,8 +254,13 @@ void daPy_mtxPosFollowEcallBack_c::makeEmitterColor(u16 particleID, MtxP mtx, co
 }
 
 /* 8012A0E0-8012A160       .text execute__28daPy_mtxPosFollowEcallBack_cFP14JPABaseEmitter */
-void daPy_mtxPosFollowEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPy_mtxPosFollowEcallBack_c::execute(JPABaseEmitter* emitter) {
+    mDoMtx_stack_c::transS(mpMtx[0][3], mpMtx[1][3], mpMtx[2][3]);
+    if (mpAngle != NULL) {
+        mDoMtx_stack_c::YrotM(mpAngle->y);
+    }
+
+    emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
 }
 
 s16 daPy_dmEcallBack_c::m_timer = 0;
