@@ -193,8 +193,22 @@ void daPy_swBlur_c::draw() {
 }
 
 /* 80129DD0-80129E9C       .text execute__24daPy_fanSwingEcallBack_cFP14JPABaseEmitter */
-void daPy_fanSwingEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPy_fanSwingEcallBack_c::execute(JPABaseEmitter* emitter) {
+    if (emitter->isEnableDeleteEmitter()) {
+        emitter->quitImmortalEmitter();
+        emitter->setEmitterCallBackPtr(NULL);
+        mpEmitter = NULL;
+    } else if (mAlphaOutFlg != FALSE) {
+        s16 alpha = emitter->getGlobalAlpha();
+        cLib_chaseS(&alpha, 0, 50);
+        emitter->setGlobalAlpha(alpha);
+
+        if (alpha == 0) {
+            emitter->quitImmortalEmitter();
+            emitter->setEmitterCallBackPtr(NULL);
+            mpEmitter = NULL;
+        }
+    }
 }
 
 /* 80129E9C-80129F48       .text execute__25daPy_waterDropPcallBack_cFP14JPABaseEmitterP15JPABaseParticle */
