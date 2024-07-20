@@ -87,9 +87,11 @@ public:
     /* 0x100 */ cXyz m100[20];
     /* 0x1F0 */ cXyz m1F0[20];
     /* 0x2E0 */ cXyz m2E0[20];
-    /* 0x3D0 */ u8 m3D0[0x410 - 0x3D0];
+    /* 0x3D0 */ int m3D0[14];
+    /* 0x408 */ int m408;
+    /* 0x40C */ int m40C;
     /* 0x410 */ int m410;
-    /* 0x414 */ u8 m414[0x418 - 0x414];
+    /* 0x414 */ int m414;
     /* 0x418 */ int m418;
     /* 0x41C */ u8 m41C[0x420 - 0x41C];
     /* 0x420 */ int m420;
@@ -101,7 +103,7 @@ public:
     /* 0x440 */ s16 m440;
     /* 0x442 */ s16 m442;
     /* 0x444 */ s16 m444;
-    /* 0x446 */ u8 m446[0x448 - 0x446];
+    /* 0x446 */ s16 m446;
     /* 0x448 */ s16 m448;
     /* 0x44A */ u8 m44A[0x44C - 0x44A];
     /* 0x44C */ cXyz m44C;
@@ -161,7 +163,7 @@ public:
     /* 0x70E */ u8 m70E;
     /* 0x70F */ u8 m70F[0x710 - 0x70F];
     /* 0x710 */ u8 m710;
-    /* 0x711 */ u8 m711[0x712 - 0x711];
+    /* 0x711 */ u8 m711;
     /* 0x712 */ u8 m712;
     /* 0x713 */ u8 m713;
     /* 0x714 */ fopAc_ac_c* m714;
@@ -182,9 +184,12 @@ public:
     /* 0x7AE */ s16 m7AE;
     /* 0x7B0 */ u8 m7B0[0x7B2 - 0x7B0];
     /* 0x7B2 */ s16 m7B2;
-    /* 0x7B4 */ u8 m7B4[0x7B8 - 0x7B4];
+    /* 0x7B4 */ u8 m7B4[0x7B6 - 0x7B4];
+    /* 0x7B6 */ u8 m7B6;
+    /* 0x7B7 */ u8 m7B7[0x7B8 - 0x7B7];
     /* 0x7B8 */ int m7B8;
-};
+};  // Size: 0x7BC
+
 // STATIC_ASSERT(sizeof(damagereaction) == 0x7BC);
 
 BOOL ice_bg_check(enemyice*);

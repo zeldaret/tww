@@ -541,7 +541,7 @@ void daTbox_c::CreateInit() {
     mAllColRatio = 1.0f;
 
     if (l_HIO.mHioId < 0) {
-        l_HIO.mHioId = mDoHIO_root.mDoHIO_createChild("宝箱", &l_HIO);
+        l_HIO.mHioId = mDoHIO_root.mDoHIO_createChild("宝箱", &l_HIO); //  "Treasure Chest"
     }
 
     shape_angle.z = 0;
