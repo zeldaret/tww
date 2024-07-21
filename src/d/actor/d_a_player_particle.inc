@@ -11,7 +11,9 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/d_procname.h"
 #include "d/actor/d_a_sea.h"
+#include "f_op/f_op_kankyo_mng.h"
 
 /* 8012901C-80129034       .text setup__24daPy_swimTailEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void daPy_swimTailEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz* angle, s8) {
@@ -212,8 +214,20 @@ void daPy_fanSwingEcallBack_c::execute(JPABaseEmitter* emitter) {
 }
 
 /* 80129E9C-80129F48       .text execute__25daPy_waterDropPcallBack_cFP14JPABaseEmitterP15JPABaseParticle */
-void daPy_waterDropPcallBack_c::execute(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
+void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle* ptcl) {
+    if (field_0x4) {
+        JGeometry::TVec3<f32> ptclPos;
+        ptcl->getOffsetPosition(ptclPos);
+
+        cXyz pos(ptclPos.x, ptclPos.y + 25.0f, ptclPos.z);
+        mGndChk.SetPos(&pos);
+
+        pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
+
+        if (pos.y > ptclPos.y) {
+            fopKyM_create(PROC_WATER_MARK, 1, &pos);
+        }
+    }
 }
 
 /* 80129F48-80129F98       .text execute__22daPy_followEcallBack_cFP14JPABaseEmitter */

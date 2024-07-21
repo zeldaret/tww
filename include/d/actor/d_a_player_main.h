@@ -108,8 +108,8 @@ public:
     void execute(JPABaseEmitter*, JPABaseParticle*);
     ~daPy_waterDropPcallBack_c() {}
     
-    /* 0x4 */ u8 field_0x4[0x4];
-    /* 0x8 */ dBgS_ObjGndChk field_0x8;
+    /* 0x4 */ BOOL field_0x4;
+    /* 0x8 */ dBgS_ObjGndChk mGndChk;
 };
 
 class daPy_swimTailEcallBack_c : public dPa_levelEcallBack {
