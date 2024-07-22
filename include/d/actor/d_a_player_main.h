@@ -40,19 +40,20 @@ public:
     void onLockFlg() { mLockFlag = true; }
     void offLockFlg() { mLockFlag = false; }
     void setPos(const cXyz* i_pos) { mPos = *i_pos; }
-    void setSightTex(void* sightTex) { mSightTex = sightTex; }
+    void setSightTex(void* sightTex) { mpSightTex = sightTex; }
     void setLockTex(void* lockTex) { mpLockTex = lockTex; }
     void setImage(ResTIMG* image) { mpImg = image; }
 
 private:
     /* 0x04 */ bool mDrawFlag;
     /* 0x05 */ bool mLockFlag;
-    /* 0x06 */ u8 field_0x6[2];
+    /* 0x06 */ u8 field_0x6;
+    /* 0x07 */ u8 mLockAlpha;
     /* 0x08 */ cXyz mPos;
-    /* 0x14 */ Mtx field_0x14;
+    /* 0x14 */ Mtx mMtx;
     /* 0x44 */ ResTIMG* mpImg;
     /* 0x48 */ void* mpLockTex;
-    /* 0x4C */ void* mSightTex;
+    /* 0x4C */ void* mpSightTex;
 };
 
 class daPy_actorKeep_c {

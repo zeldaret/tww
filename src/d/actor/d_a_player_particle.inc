@@ -15,6 +15,29 @@
 #include "d/actor/d_a_sea.h"
 #include "f_op/f_op_kankyo_mng.h"
 
+static u8 l_sightDL[] ALIGN_DECL(32) = {
+    0x10, 0x00, 0x00, 0x10, 0x40, 0xFF, 0xFF, 0x42, 0x80, 0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00,
+    0x10, 0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00,
+    0x61, 0x28, 0x38, 0x03, 0xC0,
+    0x61, 0xC0, 0x08, 0x42, 0x8F,
+    0x61, 0xC1, 0x08, 0xE6, 0x70,
+    0x61, 0x43, 0x00, 0x00, 0x01,
+    0x61, 0x40, 0x00, 0x00, 0x06,
+    0x61, 0x41, 0x00, 0x04, 0xAD,
+    0x61, 0xF3, 0x64, 0x00, 0x00,
+    0x10, 0x00, 0x00, 0x10, 0x3F, 0x00, 0x00, 0x00, 0x01,
+    0x10, 0x00, 0x00, 0x10, 0x09, 0x00, 0x00, 0x00, 0x00,
+    0x61, 0x00, 0x00, 0x00, 0x01,
+    0x98, 0x00, 0x04, 0x01, 0x01, 0x00, 0x01,
+    0x01, 0xFF, 0x01, 0x00, 0x00, 0x01, 0x01, 0xFF, 0x00, 0x01, 0x00, 0xFF, 0xFF,
+    
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00,
+};
+
 /* 8012901C-80129034       .text setup__24daPy_swimTailEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void daPy_swimTailEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz* angle, s8) {
     mpEmitter = emitter;
@@ -108,7 +131,44 @@ void daPy_swimTailEcallBack_c::draw(JPABaseEmitter*) {
 
 /* 80129348-8012952C       .text draw__18daPy_sightPacket_cFv */
 void daPy_sightPacket_c::draw() {
-    /* Nonmatching */
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_S8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_U8, 0);
+
+    GXTexObj texObj;
+    GXColor color;
+    if (mLockFlag) {
+        GXInitTexObj(&texObj, mpLockTex, mpImg->width, mpImg->height, (GXTexFmt)mpImg->format, (GXTexWrapMode)mpImg->wrapS, (GXTexWrapMode)mpImg->wrapT, (mpImg->mipmapCount > 1) ? GX_TRUE : GX_FALSE);
+
+        color.r = 0xFF;
+        color.g = 0xFF;
+        color.b = 0x32;
+        color.a = mLockAlpha;
+        GXSetTevColor(GX_TEVREG0, color);
+        GXSetTevColor(GX_TEVREG1, color);
+    } else {
+        GXInitTexObj(&texObj, mpSightTex, 0x80, 0x80, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
+
+        color.r = 0xFF;
+        color.g = 0x00;
+        color.b = 0x00;
+        color.a = 0xFF;
+        GXSetTevColor(GX_TEVREG0, color);
+        GXSetTevColor(GX_TEVREG1, color);
+    }
+
+    GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+    GXLoadPosMtxImm(mMtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXCallDisplayList(&l_sightDL, sizeof(l_sightDL) - 0x09);
+    J3DShape::resetVcdVatCache();
 }
 
 /* 8012952C-801296FC       .text setSight__18daPy_sightPacket_cFv */
