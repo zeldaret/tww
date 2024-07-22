@@ -14,6 +14,8 @@
 #include "d/d_procname.h"
 #include "d/actor/d_a_sea.h"
 #include "f_op/f_op_kankyo_mng.h"
+#include "m_Do/m_Do_lib.h"
+#include "SSystem/SComponent/c_math.h"
 
 static u8 l_sightDL[] ALIGN_DECL(32) = {
     0x10, 0x00, 0x00, 0x10, 0x40, 0xFF, 0xFF, 0x42, 0x80, 0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00,
@@ -173,7 +175,32 @@ void daPy_sightPacket_c::draw() {
 
 /* 8012952C-801296FC       .text setSight__18daPy_sightPacket_cFv */
 void daPy_sightPacket_c::setSight() {
-    /* Nonmatching */
+    cXyz proj;
+    mDoLib_project(&mPos, &proj);
+    mDoMtx_stack_c::transS(proj);
+
+    if (mLockFlag) {
+        f32 var_f2;
+        f32 var_f31;
+        if (field_0x6 < 13) {
+            var_f2 = 1.0f - ((s16)field_0x6 / 13.0f);
+            var_f31 = -var_f2;
+        } else {
+            var_f2 = (field_0x6 - 13) / 13.0f;
+            var_f31 = var_f2;
+        }
+
+        mLockAlpha = 150.0f + (30.0f * var_f2);
+        f32 temp_f3 = 0.65f + (0.35f * var_f2);
+
+        mDoMtx_stack_c::scaleM(temp_f3 * mpImg->width, temp_f3 * mpImg->height, temp_f3);
+        mDoMtx_stack_c::ZrotM(32768.0f * cM_ssin(16384.0f * var_f31));
+    } else {
+        mDoMtx_stack_c::scaleM(10.0f, 10.0f, 10.0f);
+    }
+
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    dComIfGd_set2DXlu(this);
 }
 
 /* 801296FC-801297F4       .text initSwBlur__13daPy_swBlur_cFPA4_fifi */
