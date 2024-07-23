@@ -526,8 +526,18 @@ void daPy_lk_c::setFootEffectType(int, cXyz*, int, int) {
 }
 
 /* 8012B8EC-8012B9DC       .text setFootMark__9daPy_lk_cFP4cXyz */
-void daPy_lk_c::setFootMark(cXyz*) {
-    /* Nonmatching */
+void daPy_lk_c::setFootMark(cXyz* i_pos) {
+    cXyz pos(i_pos->x, i_pos->y + 5.0f, i_pos->z);
+    mGndChk.SetPos(&pos);
+
+    pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
+    if (pos.y != -1e9f && dComIfG_Bgsp()->GetAttributeCode(mGndChk) == dBgS_Attr_SAND_e) {
+        fopKyM_create(PROC_WATER_MARK, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
+    }
+
+    if (m336C.mpEmitter != NULL) {
+        fopKyM_create(PROC_WATER_MARK, shape_angle.y << 16, i_pos, &scale);
+    }
 }
 
 /* 8012B9DC-8012C128       .text setFootEffect__9daPy_lk_cFv */
