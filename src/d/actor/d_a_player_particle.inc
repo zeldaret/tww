@@ -222,8 +222,58 @@ void daPy_swBlur_c::initSwBlur(MtxP mtx, int idx, f32 blurTopRate, int blurColor
 }
 
 /* 801297F4-80129A78       .text copySwBlur__13daPy_swBlur_cFPA4_fi */
-void daPy_swBlur_c::copySwBlur(MtxP, int) {
-    /* Nonmatching */
+void daPy_swBlur_c::copySwBlur(MtxP mtx, int param_2) {
+    int var_r31 = param_2 - field_0x018;
+    field_0x018 = param_2;
+
+    int var_r30;
+    if (var_r31 > 0) {
+        var_r30 = -2;
+
+        if (var_r31 > 60) {
+            var_r31 = 60;
+        }
+    } else if (var_r31 < 0) {
+        var_r30 = 2;
+
+        if (var_r31 < -60) {
+            var_r31 = 60;
+        } else {
+            var_r31 = -var_r31;
+        }
+    } else {
+        var_r31 = 10;
+        var_r30 = 0;
+    }
+
+    for (int i = 59 - var_r31; i >= 0; i--) {
+        field_0x034[i + var_r31] = field_0x034[i];
+        field_0x304[i + var_r31] = field_0x304[i];
+    }
+
+    // Very obvious fakematch
+    f32 var_f31 = 0.0f;
+    f32 frac = 1.0f / var_r31;
+    int i;
+    int buffIdx = field_0x018 * 2;
+    cXyz sp50(mtx[0][3], mtx[1][3], mtx[2][3]);
+    cXyz sp38 = field_0x028 - sp50;
+    field_0x028 = sp50;
+    for (i = 0; i < var_r31 && buffIdx >= 0; i++) {
+        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx, &field_0x034[i]);
+        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx + 1, &field_0x304[i]);
+
+        field_0x034[i] += (field_0x034[i] - field_0x304[i]) * mBlurTopRate;
+        field_0x034[i] += sp38 * var_f31;
+        field_0x304[i] += sp38 * var_f31;
+        var_f31 += frac;
+        buffIdx += var_r30;
+    }
+
+    field_0x014 += var_r31;
+    if (field_0x014 >= 59) {
+        field_0x014 = 58;
+    }
 }
 
 /* 80129A78-80129DD0       .text draw__13daPy_swBlur_cFv */
@@ -246,11 +296,11 @@ void daPy_swBlur_c::draw() {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetNumChans(0);
 
-    if (mBlurColorType == 0) {
+    if (mBlurColorType == NORMAL_SLASH_BLUR) {
         // Normal color.
         static GXColor n_color = {0xFF, 0xFF, 0xFF, 0x96};
         GXSetTevColor(GX_TEVREG0, n_color);
-    } else if (mBlurColorType == 1) {
+    } else if (mBlurColorType == ELIXIR_SOUP_SLASH_BLUR) {
         // Elixir Soup color.
         static GXColor y_color = {0xFF, 0xFF, 0x7B, 0x96};
         GXSetTevColor(GX_TEVREG0, y_color);

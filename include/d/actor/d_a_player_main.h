@@ -242,6 +242,12 @@ public:
 
 class daPy_swBlur_c : public J3DPacket {
 public:
+    enum BlurColorType {
+        NORMAL_SLASH_BLUR,
+        ELIXIR_SOUP_SLASH_BLUR,
+        PARRYING_SLASH_BLUR,
+    };
+public:
     void initSwBlur(MtxP, int, f32, int);
     void copySwBlur(MtxP, int);
     void draw();
