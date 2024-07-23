@@ -558,7 +558,51 @@ void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c*) {
 
 /* 8012C45C-8012C620       .text setWaterDrop__9daPy_lk_cFv */
 void daPy_lk_c::setWaterDrop() {
-    /* Nonmatching */
+    MtxP mtx = mpCLModel->getAnmMtx(0x0E);
+    cXyz tmp;
+    tmp.x = mtx[0][3];
+    tmp.y = mtx[1][3];
+    tmp.z = mtx[2][3];
+    m334C.field_0x08 = tmp;
+
+    mtx = mpCLModel->getAnmMtx(0x02);
+    tmp.x = mtx[0][3];
+    tmp.y = mtx[1][3];
+    tmp.z = mtx[2][3];
+    m336C.field_0x08 = tmp;
+
+    if (mModeFlg & ModeFlg_00000001) {
+        daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = TRUE;
+    } else {
+        daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = FALSE;
+    }
+
+    if (mDmEcallBack->m_type == 0) {
+        m334C.end();
+        m336C.end();
+        m3460[0].end();
+        m3460[1].end();
+        return;
+    }
+
+    if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != PROC_KI && mAcch.m_roof_y == 1e9f) {
+        if (m3460[0].mpEmitter == NULL) {
+            m3460[0].makeEmitter(0x432, mpCLModel->getAnmMtx(0x0E), &current.pos, NULL);
+        }
+
+        if (m3460[1].mpEmitter == NULL) {
+            m3460[1].makeEmitter(0x432, mpCLModel->getAnmMtx(0x02), &current.pos, NULL);
+        }
+
+        m334C.end();
+        m336C.end();
+        return;
+    }
+
+    m3460[0].end();
+    m3460[1].end();
+    setSwimWaterDrop(&m334C);
+    setSwimWaterDrop(&m336C);
 }
 
 /* 8012C620-8012C754       .text setDamageFlameEmitter__9daPy_lk_cFv */
