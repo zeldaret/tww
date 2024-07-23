@@ -204,8 +204,21 @@ void daPy_sightPacket_c::setSight() {
 }
 
 /* 801296FC-801297F4       .text initSwBlur__13daPy_swBlur_cFPA4_fifi */
-void daPy_swBlur_c::initSwBlur(MtxP, int, f32, int) {
-    /* Nonmatching */
+void daPy_swBlur_c::initSwBlur(MtxP mtx, int idx, f32 blurTopRate, int blurColorType) {
+    int i = idx * 2;
+
+    mBlurTopRate = blurTopRate;
+    mBlurColorType = blurColorType;
+
+    mDoMtx_multVec(mtx, mpPosBuffer + i, &field_0x034[0]);
+    mDoMtx_multVec(mtx, mpPosBuffer + i + 1, &field_0x304[0]);
+
+    field_0x034[0] += (field_0x034[0] - field_0x304[0]) * mBlurTopRate;
+    field_0x034[1] = field_0x034[0];
+    field_0x304[1] = field_0x304[0];
+    field_0x014 = 0;
+    field_0x018 = idx;
+    field_0x028.set(mtx[0][3], mtx[1][3], mtx[2][3]);
 }
 
 /* 801297F4-80129A78       .text copySwBlur__13daPy_swBlur_cFPA4_fi */

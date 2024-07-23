@@ -251,8 +251,8 @@ public:
     /* 0x014 */ int field_0x014;
     /* 0x018 */ int field_0x018;
     /* 0x01C */ int mBlurColorType;
-    /* 0x020 */ f32 field_0x020;
-    /* 0x024 */ void* mpPosBuffer;
+    /* 0x020 */ f32 mBlurTopRate;
+    /* 0x024 */ Vec* mpPosBuffer; // Pointer to tuple array? (could possibly use typedef for readability)
     /* 0x028 */ cXyz field_0x028;
     /* 0x034 */ cXyz field_0x034[60];
     /* 0x304 */ cXyz field_0x304[60];
