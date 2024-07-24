@@ -547,7 +547,17 @@ void daPy_lk_c::setFootEffect() {
 
 /* 8012C128-8012C1A8       .text resetFootEffect__9daPy_lk_cFv */
 void daPy_lk_c::resetFootEffect() {
-    /* Nonmatching */
+    // Fakematch?
+    daPy_footEffect_c* pFootEffect = m31E8;
+    for (int idx = 0; idx < (s32)ARRAY_SIZE(m31E8); idx++) {
+        pFootEffect[0].getSmokeCallBack()->end();
+        pFootEffect[0].getOtherCallBack()->end();
+        pFootEffect[0].setID(-1);
+
+        pFootEffect++;
+    }
+
+    m34BE = 0;
 }
 
 /* 8012C1A8-8012C2A4       .text setSwimTail__9daPy_lk_cFv */
