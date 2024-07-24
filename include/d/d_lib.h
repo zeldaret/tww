@@ -25,7 +25,7 @@ public:
     void Yinit();
     virtual f32 getValueStick();
     virtual s16 getAngleStick();
-    bool checkTrigger();
+    s32 checkTrigger();
     bool checkLeftTrigger();
     bool checkRightTrigger();
     bool checkUpTrigger();
@@ -58,13 +58,13 @@ public:
 
 class dLib_anm_idx_c {
 public:
-    /* 0x00 */ int field_0x00;
-    /* 0x04 */ int field_0x04;
+    /* 0x00 */ int mBckIdx;
+    /* 0x04 */ int mSndIdx;
 }; // Size: 0x08
 
 class dLib_anm_prm_c {
 public:
-    /* 0x00 */ s8 mBckIdx;
+    /* 0x00 */ s8 mAnmIdx;
     /* 0x01 */ s8 mNextPrmIdx;
     /* 0x02 */ s16 field_0x02;
     /* 0x04 */ f32 mMorf;

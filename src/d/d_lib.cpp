@@ -5,10 +5,11 @@
 
 #include "d/d_lib.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
 #include "d/actor/d_a_sea.h"
 #include "m_Do/m_Do_mtx.h"
-#include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "SSystem/SComponent/c_math.h"
 
 Quaternion ZeroQuat = {0.0f, 0.0f, 0.0f, 1.0f};
 
@@ -36,8 +37,25 @@ f32 dLib_getWaterY(cXyz& pos, dBgS_ObjAcch& acch) {
 }
 
 /* 8005716C-80057368       .text dLib_waveRot__FP3VecfP11dLib_wave_c */
-void dLib_waveRot(Vec*, f32, dLib_wave_c*) {
-    /* Nonmatching */
+void dLib_waveRot(Vec* pos, f32 sway, dLib_wave_c* inf) {
+    f32 pt_zn, pt_zp; // probably a fakematch? maybe an inline
+    f32 wave_zn = daSea_calcWave(pos->x, (pt_zn = pos->z - 300.0f));
+    f32 wave_zp = daSea_calcWave(pos->x, (pt_zp = pos->z + 300.0f));
+    s16 az = -cM_atan2s(wave_zp - wave_zn, pt_zp - pt_zn);
+
+    f32 pt_xn, pt_xp; // probably a fakematch? maybe an inline
+    f32 wave_xn = daSea_calcWave((pt_xn = pos->x - 300.0f), pos->z);
+    f32 wave_xp = daSea_calcWave((pt_xp = pos->x + 300.0f), pos->z);
+    s32 ax = cM_atan2s(wave_xp - wave_xn, pt_xp - pt_xn); // maybe a fakematch with the s32 here?
+
+    cLib_addCalcAngleS2(&inf->mAngX, az, 10, 0x200);
+    cLib_addCalcAngleS2(&inf->mAngZ, ax, 10, 0x200);
+    inf->mAnimX += 400;
+    inf->mAnimZ += 430;
+    f32 wave = sway + 150.0f + REG12_F(0);
+
+    inf->mRotX = inf->mAngX + wave * cM_ssin(inf->mAnimX);
+    inf->mRotZ = inf->mAngZ + wave * cM_scos(inf->mAnimZ);
 }
 
 /* 80057368-8005746C       .text dLib_debugDrawAxis__FRA3_A4_ff */
@@ -101,25 +119,44 @@ bool dLib_btkInit(J3DModelData* modelData, mDoExt_btkAnm* anm, const char* arcNa
     return true;
 }
 
+static void dummy() {
+    OSReport("bck != 0");
+}
+
 /* 800576B0-80057844       .text dLib_setAnm__FPCcP14mDoExt_McaMorfPScPScPScPC14dLib_anm_idx_cPC14dLib_anm_prm_cb */
-void dLib_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8*, s8*,
-                 s8*, const dLib_anm_idx_c*, const dLib_anm_prm_c* anmPrmTbl, bool param_8)
+void dLib_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8* pAnmIdx, s8* pPrmIdx,
+                 s8* pOldPrmIdx, const dLib_anm_idx_c* anmIdxTbl, const dLib_anm_prm_c* anmPrmTbl, bool force)
 {
-    /* Nonmatching */
+    if ((*pOldPrmIdx != *pPrmIdx && anmPrmTbl[*pPrmIdx].mAnmIdx != -1) || force == true) {
+        *pAnmIdx = anmPrmTbl[*pPrmIdx].mAnmIdx;
+        void* sound = NULL;
+        if (anmIdxTbl[*pAnmIdx].mSndIdx >= 0)
+            sound = dComIfG_getObjectRes(arcName, anmIdxTbl[*pAnmIdx].mSndIdx);
+        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(arcName, anmIdxTbl[*pAnmIdx].mBckIdx);
+        morf->setAnm(bck, anmPrmTbl[*pPrmIdx].mLoopMode, anmPrmTbl[*pPrmIdx].mMorf, anmPrmTbl[*pPrmIdx].mPlaySpeed, 0.0f, -1.0f, sound);
+    }
+
+    *pOldPrmIdx = *pPrmIdx;
+
+    if (morf->isStop()) {
+        if (anmPrmTbl[*pPrmIdx].mNextPrmIdx != -1 && anmPrmTbl[*pPrmIdx].mLoopMode == J3DFrameCtrl::LOOP_ONCE_e) {
+            *pPrmIdx = anmPrmTbl[*pPrmIdx].mNextPrmIdx;
+        }
+    }
 }
 
 /* 80057844-80057988       .text dLib_bcks_setAnm__FPCcP14mDoExt_McaMorfPScPScPScPCiPC14dLib_anm_prm_cb */
-void dLib_bcks_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8* pBckIdx, s8* pPrmIdx,
-                      s8* param_5, const int* bcksTbl, const dLib_anm_prm_c* anmPrmTbl, bool param_8)
+void dLib_bcks_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8* pAnmIdx, s8* pPrmIdx,
+                      s8* pOldPrmIdx, const int* bcksTbl, const dLib_anm_prm_c* anmPrmTbl, bool force)
 {
-    if ((*param_5 != *pPrmIdx && anmPrmTbl[*pPrmIdx].mBckIdx != -1) || param_8 == true) {
-        *pBckIdx = anmPrmTbl[*pPrmIdx].mBckIdx;
-        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(arcName, bcksTbl[*pBckIdx]);
+    if ((*pOldPrmIdx != *pPrmIdx && anmPrmTbl[*pPrmIdx].mAnmIdx != -1) || force == true) {
+        *pAnmIdx = anmPrmTbl[*pPrmIdx].mAnmIdx;
+        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(arcName, bcksTbl[*pAnmIdx]);
         morf->setAnm(bck, anmPrmTbl[*pPrmIdx].mLoopMode, anmPrmTbl[*pPrmIdx].mMorf, anmPrmTbl[*pPrmIdx].mPlaySpeed, 0.0f, -1.0f, NULL);
     }
     
-    *param_5 = *pPrmIdx;
-    
+    *pOldPrmIdx = *pPrmIdx;
+
     if (morf->isStop()) {
         if (anmPrmTbl[*pPrmIdx].mNextPrmIdx != -1 && anmPrmTbl[*pPrmIdx].mLoopMode == J3DFrameCtrl::LOOP_ONCE_e) {
             *pPrmIdx = anmPrmTbl[*pPrmIdx].mNextPrmIdx;
@@ -244,13 +281,21 @@ bool dLib_checkActorInFan(cXyz center, fopAc_ac_c* actor, s16 angleY, s16 fanSpr
 }
 
 /* 8005820C-80058250       .text __ct__9STControlFssssffss */
-STControl::STControl(s16, s16, s16, s16, f32, f32, s16, s16) {
-    /* Nonmatching */
+STControl::STControl(s16 a, s16 b, s16 c, s16 d, f32 e, f32 f, s16 g, s16 h) {
+    setWaitParm(a, b, c, d, e, f, g, h);
+    init();
 }
 
 /* 80058250-80058274       .text setWaitParm__9STControlFssssffss */
-void STControl::setWaitParm(s16, s16, s16, s16, f32, f32, s16, s16) {
-    /* Nonmatching */
+void STControl::setWaitParm(s16 a, s16 b, s16 c, s16 d, f32 e, f32 f, s16 g, s16 h) {
+    field_0x12 = a;
+    field_0x14 = b;
+    field_0x16 = c;
+    field_0x1c = d;
+    field_0x04 = e;
+    field_0x08 = f;
+    field_0x24 = g;
+    field_0x26 = h;
 }
 
 /* 80058274-800582B0       .text init__9STControlFv */
@@ -268,12 +313,18 @@ void STControl::init() {
 
 /* 800582B0-800582D8       .text Xinit__9STControlFv */
 void STControl::Xinit() {
-    /* Nonmatching */
+    field_0x0e = 0;
+    field_0x0c &= 0xFC;
+    field_0x18 = field_0x12;
+    field_0x1e = field_0x1c;
 }
 
 /* 800582D8-80058300       .text Yinit__9STControlFv */
 void STControl::Yinit() {
-    /* Nonmatching */
+    field_0x10 = 0;
+    field_0x0c &= ~0x0C;
+    field_0x1a = field_0x12;
+    field_0x20 = field_0x1c;
 }
 
 /* 80058300-80058310       .text getValueStick__9STControlFv */
@@ -297,28 +348,139 @@ s16 CSTControl::getAngleStick() {
 }
 
 /* 80058340-800585D0       .text checkTrigger__9STControlFv */
-bool STControl::checkTrigger() {
-    /* Nonmatching */
+s32 STControl::checkTrigger() {
+    field_0x0d = field_0x0c;
+    f32 valueStick = getValueStick();
+    s16 angleStick = getAngleStick();
+        u8 newAngle = 0;
+    s16 iVar6 = (0x2000 - field_0x26) >> 1;
+    if (!cM3d_IsZero(valueStick)) {
+
+        if (angleStick < field_0x22 + -0x7000 + iVar6) {
+            newAngle |= 4;
+        } else if (angleStick < field_0x22 + -0x5000 - iVar6) {
+            newAngle |= 5;
+        } else if (angleStick < field_0x22 + -0x3000 + iVar6) {
+            newAngle |= 1;
+        } else if (angleStick < field_0x22 + -0x1000 - iVar6) {
+            newAngle |= 9;
+        } else if (angleStick < field_0x22 + 0x1000 + iVar6) {
+            newAngle |= 8;
+        } else if (angleStick < field_0x22 + 0x3000 - iVar6) {
+            newAngle |= 10;
+        } else if (angleStick < field_0x22 + 0x5000 + iVar6) {
+            newAngle |= 2;
+        } else if (angleStick < field_0x22 + 0x7000 - iVar6) {
+            newAngle |= 6;
+        } else {
+            newAngle |= 4;
+        }
+
+        if (valueStick >= field_0x04) {
+            field_0x0c = newAngle;
+        } else if (valueStick < field_0x08) {
+            field_0x0c = 0;
+        } else {
+            field_0x0c &= ~newAngle;
+        }
+
+        if (field_0x0c != field_0x0d) {
+            if (field_0x0c == 0) {
+                field_0x22 = 0;
+            } else if ((angleStick & 0x1FFF) > 0x1000) {
+                field_0x22 = field_0x24;
+            } else {
+                field_0x22 = -field_0x24;
+            }
+        }
+
+        if (!(field_0x0c & 0x03))
+            Xinit();
+        if (!(field_0x0c & 0x0C))
+            Yinit();
+    } else {
+        field_0x0c = 0;
+        Xinit();
+        Yinit();
+    }
+
+    if ((field_0x0d & field_0x0c & 0x03) != 0 && field_0x0e > 0)
+        field_0x0e--;
+    if ((field_0x0d & field_0x0c & 0x0C) != 0 && field_0x10 > 0)
+        field_0x10--;
+    return field_0x0c;
 }
 
 /* 800585D0-8005863C       .text checkLeftTrigger__9STControlFv */
 bool STControl::checkLeftTrigger() {
-    /* Nonmatching */
+    if (field_0x0e == 0 && (field_0x0c & 1)) {
+        field_0x0e = field_0x18;
+        if (field_0x1e == 0) {
+            field_0x18 -= field_0x16;
+            if (field_0x18 < field_0x14)
+                field_0x18 = field_0x14;
+        } else {
+            field_0x1e--;
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 /* 8005863C-800586A8       .text checkRightTrigger__9STControlFv */
 bool STControl::checkRightTrigger() {
-    /* Nonmatching */
+    if (field_0x0e == 0 && (field_0x0c & 2)) {
+        field_0x0e = field_0x18;
+        if (field_0x1e == 0) {
+            field_0x18 -= field_0x16;
+            if (field_0x18 < field_0x14)
+                field_0x18 = field_0x14;
+        } else {
+            field_0x1e--;
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 /* 800586A8-80058714       .text checkUpTrigger__9STControlFv */
 bool STControl::checkUpTrigger() {
-    /* Nonmatching */
+    if (field_0x10 == 0 && (field_0x0c & 4)) {
+        field_0x10 = field_0x1a;
+        if (field_0x20 == 0) {
+            field_0x1a -= field_0x16;
+            if (field_0x1a < field_0x14)
+                field_0x1a = field_0x14;
+        } else {
+            field_0x20--;
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 /* 80058714-80058780       .text checkDownTrigger__9STControlFv */
 bool STControl::checkDownTrigger() {
-    /* Nonmatching */
+    if (field_0x10 == 0 && (field_0x0c & 8)) {
+        field_0x10 = field_0x1a;
+        if (field_0x20 == 0) {
+            field_0x1a -= field_0x16;
+            if (field_0x1a < field_0x14)
+                field_0x1a = field_0x14;
+        } else {
+            field_0x20--;
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 /* 80058780-80058834       .text dLib_getIplDaysFromSaveTime__Fv */
