@@ -79,10 +79,20 @@ public:
     
     dPa_smokeEcallBack* getSmokeCallBack() { return &mSmokeCb; }
     dPa_followEcallBack* getOtherCallBack() { return &mFollowCb; }
-    
+
+    // Might be incorrect
+    void setID(s32 id) { mId = id; }
+    s32 getID() const { return mId; }
+    void setAngle(csXyz* angle) { mAngle = *angle; }
+    csXyz getAngle() { return mAngle; }
+    void setPos(const cXyz* pos) { mPos = *pos; }
+    cXyz getPos() { return mPos; }
+
     /* 0x00 */ dPa_smokeEcallBack mSmokeCb;
     /* 0x20 */ dPa_followEcallBack mFollowCb;
-    /* 0x34 */ u8 field_0x34[0x4C - 0x34];
+    /* 0x34 */ cXyz mPos;
+    /* 0x40 */ csXyz mAngle;
+    /* 0x48 */ s32 mId;
 };
 
 class daPy_fanSwingEcallBack_c : public dPa_levelEcallBack {
