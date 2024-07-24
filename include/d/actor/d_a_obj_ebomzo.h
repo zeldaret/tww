@@ -38,7 +38,6 @@ namespace daObjEbomzo {
 
     public:
 
-        /* Place member variables here */
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ dCcD_Stts mStts;

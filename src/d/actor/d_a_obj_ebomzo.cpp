@@ -7,6 +7,7 @@
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
+#include "d/res/res_ebomzo.h"
 
 typedef enum {
     /*0*/ Ebomzo_Mode_Check = 0,
@@ -14,75 +15,43 @@ typedef enum {
     /*2*/ Ebomzo_Mode_Fall,
 } EbomzoMode;
 
-Mtx daObjEbomzo::Act_c::M_tmp_mtx; //.bss 80810060
+Mtx daObjEbomzo::Act_c::M_tmp_mtx;
 const char daObjEbomzo::Act_c::M_arcname[] = "Ebomzo";
 
 dCcD_SrcSph sph_check_src = {
-    /*0x00 mObjInf*/ {
-        /* > 0x00 mObj*/ {
-            /* >> 0x00 mFlags*/ 0x00000000,
-            /* >> 0x04 mSrcObjHitInf*/ {
-        /* >>> 0x04 mObjAt*/ {
-                    /* >>>> 0x04 mType*/ 0,
-                    /* >>>> 0x08 mAtp*/ 0,
-                    /* >>>> 0x0C mBase*/ {
-        /* >>>>> 0x0C mSPrm*/ 0
-    }
-},
-/* >>> 0x10 mObjTg*/{
-    /* >>>> 0x10 mType*/ 0x20,
-    /* >>>> 0x14 mBase*/ {
-        /* >>>>> 0x14 mSPrm*/ 9
-    }
-},
-/* >>> 0x18 mObjCo*/{
-    /* >>>> 0x18 mBase*/ {
-        /* >>>>> 0x18 mSPrm*/ 0
-     }
-}
-}
-},
+    //dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_BOMB,
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
 
-/* > 0x1C mGObjAt*/ {
-    /* >> 0x1C mSe*/ 0,
-    /* >> 0x1D mHitMark*/ 0,
-    /* >> 0x1E mSpl*/ 0,
-    /* >> 0x1F mMtrl*/ 0,
-    /* >> 0x20 mBase*/ {
-        /* >>> 0x20 mSPrm*/ 0
+    //cCcD_SrcSphAttr
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 10.0f,
     }
-},
-
-/* > 0x24 mGObjTg*/ {
-    /* >> 0x24 mSe*/ 0,
-    /* >> 0x25 mHitMark*/ 0,
-    /* >> 0x26 mSpl*/ 0,
-    /* >> 0x27 mMtrl*/ 0,
-    /* >> 0x28 mBase*/ {
-        /* >>> 0x28 mSPrm*/ 0
-    }
-},
-
-/* > 0x2C mGObjCo*/ {
-    /* >> 0x2C mBase*/ {
-        /* >>> 0x2C mSPrm*/ 0
-     }
-},
-
-},
-
-/*0x30 mSphAttr*/{
-    /* > 0x30 mSph*/{
-        /* >> 0x30 mCenter*/ {0,0,0},
-        /* >> 0x3C mRadius*/ 10.0f
-    }
-}
 };
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjEbomzo5Act_cFv */
 int daObjEbomzo::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 4);
-    JUT_ASSERT(140, model_data != 0);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, EBOMZO_BDL_EBOMZO);
+    JUT_ASSERT(140, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
     return mpModel != NULL;
 }
@@ -92,7 +61,7 @@ int daObjEbomzo::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
 
-    fopAcM_setCullSizeBox(this, -1000.0, -100.0, -1000.0, 1000.0, 1000.0, 1000.0);
+    fopAcM_setCullSizeBox(this, -1000.0f, -100.0f, -1000.0f, 1000.0f, 1000.0f, 1000.0f);
 
     mStts.Init(0xff, 0xff, this);
     mCollider.Set(sph_check_src);
@@ -118,7 +87,7 @@ int daObjEbomzo::Act_c::Mthd_Create() {
     
     phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, 7, NULL, 0x1200);
+        phase_state = MoveBGCreate(M_arcname, EBOMZO_DZB_EBOMZO, NULL, 0x1200);
         JUT_ASSERT(194, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -141,8 +110,8 @@ void daObjEbomzo::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 
-    PSMTXCopy(mDoMtx_stack_c::now, mpModel->mBaseTransformMtx);
-    PSMTXCopy(mDoMtx_stack_c::now, M_tmp_mtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    cMtx_copy(mDoMtx_stack_c::now, M_tmp_mtx);
 }
 
 /* 0000062C-00000668       .text init_mtx__Q211daObjEbomzo5Act_cFv */
@@ -167,13 +136,12 @@ void daObjEbomzo::Act_c::check() {
                 mXRotRate = 8;
                 current.angle.x += mXRotRate;
 
-                fopAcM_seStartCurrent(this, 0x69ac, 0);
+                fopAcM_seStartCurrent(this, JA_SE_OBJ_BOMB_DN_ST_S, 0);
                 mMode = Ebomzo_Mode_Demo;
 
                 fopAcM_onSwitch(this, prm_get_swSave());
                 
                 if (!mpParticleEmitter) {
-                    //color = tevStr.mColorK0;
                     r = tevStr.mColorK0.r;
                     g = tevStr.mColorK0.g;
                     b = tevStr.mColorK0.b;
@@ -194,8 +162,8 @@ void daObjEbomzo::Act_c::demo() {
         current.angle.x = 0x4000;
         mMode = Ebomzo_Mode_Fall;
 
-        dComIfGp_getVibration().StartShock(4, -33, cXyz(0.0, 1.0, 0.0));
-        fopAcM_seStartCurrent(this, 0x69ad, 0);
+        dComIfGp_getVibration().StartShock(4, -33, cXyz(0.0f, 1.0f, 0.0f));
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_BOMB_DN_ST_E, 0);
 
         if (mpParticleEmitter) {
             mpParticleEmitter->becomeInvalidEmitter();
@@ -204,20 +172,17 @@ void daObjEbomzo::Act_c::demo() {
 
         dComIfGp_particle_set(0x828f, &current.pos, &current.angle);
     }
-
 }
 
 /* 000009BC-000009C0       .text fall__Q211daObjEbomzo5Act_cFv */
-void daObjEbomzo::Act_c::fall() {
-    return;
-}
+void daObjEbomzo::Act_c::fall() {}
 
 /* 000009C0-00000AFC       .text Execute__Q211daObjEbomzo5Act_cFPPA3_A4_f */
 int daObjEbomzo::Act_c::Execute(Mtx** matrix) {
     cXyz offset;
 
     offset.x = cM_ssin(current.angle.y) * 50.0f;
-    offset.y = 320.0;
+    offset.y = 320.0f;
     offset.z = cM_scos(current.angle.y) * 50.0f;
 
     mCollider.SetC(current.pos + offset);
@@ -243,7 +208,7 @@ int daObjEbomzo::Act_c::Draw() {
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
-    dComIfG_Bgsp(); //In debug map but not used for anything??
+    dComIfG_Bgsp();
     return TRUE;
 }
 
@@ -255,22 +220,22 @@ namespace daObjEbomzo {
         }
 
         /* 00000BBC-00000BDC      .text Mthd_Delete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv  */
-        s32 Mthd_Delete(void* i_this) {
+        BOOL Mthd_Delete(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Delete();
         }
 
         /* 00000BDC-00000BFC      .text Mthd_Execute__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv  */
-        s32 Mthd_Execute(void* i_this) {
+        BOOL Mthd_Execute(void* i_this) {
             return static_cast<Act_c*>(i_this)->MoveBGExecute();
         }
 
         /* 00000BFC-00000C28      .text Mthd_Draw__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv  */
-        s32 Mthd_Draw(void* i_this) {
+        BOOL Mthd_Draw(void* i_this) {
             return static_cast<Act_c*>(i_this)->Draw();
         }
 
         /* 00000C28-00000C54      .text Mthd_IsDelete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv  */
-        s32 Mthd_IsDelete(void* i_this) {
+        BOOL Mthd_IsDelete(void* i_this) {
             return static_cast<Act_c*>(i_this)->IsDelete();
         }
 
@@ -286,17 +251,17 @@ namespace daObjEbomzo {
 
 actor_process_profile_definition g_profile_Obj_Ebomzo = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0003,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Ebomzo,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(daObjEbomzo::Act_c), //Should be 0x448
+    /* Size         */ sizeof(daObjEbomzo::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x007C,
-    /* Actor SubMtd */ &daObjEbomzo::Mthd_Ebomzo, //Mthd_Ebomzo__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@,
-    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e, //0x00040180
+    /* Actor SubMtd */ &daObjEbomzo::Mthd_Ebomzo,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
