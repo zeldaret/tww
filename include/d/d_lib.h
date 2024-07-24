@@ -121,7 +121,7 @@ bool dLib_checkActorInCircle(cXyz center, fopAc_ac_c* actor, f32 radius, f32 hal
  */
 bool dLib_checkActorInFan(cXyz center, fopAc_ac_c* actor, s16 angleY, s16 fanSpreadAngle, f32 radius, f32 halfHeight);
 u32 dLib_getIplDaysFromSaveTime();
-void dLib_get_QuatFromTriangle(cXyz*, cXyz*, cXyz*);
+Quaternion dLib_get_QuatFromTriangle(cXyz*, cXyz*, cXyz*);
 void dLib_calc_QuatFromTriangle(Quaternion*, f32, cXyz*, cXyz*, cXyz*);
 
 #endif /* D_LIB_H */
