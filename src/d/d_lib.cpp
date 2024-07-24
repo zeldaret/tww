@@ -495,7 +495,7 @@ u32 dLib_getIplDaysFromSaveTime() {
 }
 
 /* 80058834-80058910       .text dLib_get_QuatFromTriangle__FP4cXyzP4cXyzP4cXyz */
-void dLib_get_QuatFromTriangle(cXyz*, cXyz*, cXyz*) {
+Quaternion dLib_get_QuatFromTriangle(cXyz*, cXyz*, cXyz*) {
     /* Nonmatching */
 }
 

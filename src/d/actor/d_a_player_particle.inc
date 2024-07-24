@@ -146,16 +146,16 @@ void daPy_swBlur_c::draw() {
 
     if (mBlurColorType == 0) {
         // Normal color.
-        static GXColor n_color = {0xFF, 0xFF, 0xFF, 0x96};
-        GXSetTevColor(GX_TEVREG0, n_color);
+        static GXColor n_color0 = {0xFF, 0xFF, 0xFF, 0x96};
+        GXSetTevColor(GX_TEVREG0, n_color0);
     } else if (mBlurColorType == 1) {
         // Elixir Soup color.
-        static GXColor y_color = {0xFF, 0xFF, 0x7B, 0x96};
-        GXSetTevColor(GX_TEVREG0, y_color);
+        static GXColor y_color0 = {0xFF, 0xFF, 0x7B, 0x96};
+        GXSetTevColor(GX_TEVREG0, y_color0);
     } else {
         // Parrying color.
-        static GXColor g_color = {0x5A, 0xFF, 0x5A, 0x96};
-        GXSetTevColor(GX_TEVREG0, g_color);
+        static GXColor g_color0 = {0x5A, 0xFF, 0x5A, 0x96};
+        GXSetTevColor(GX_TEVREG0, g_color0);
     }
 
     GXSetNumTexGens(1);
