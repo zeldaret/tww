@@ -28,29 +28,31 @@ public:
     static const struct vib_pattern MQ_patt[12];
     static const struct vib_pattern CQ_patt[12];
 
-    struct camera_rumble{
-        int  mPatternIdx;
-        u32  mPattern;
-        s32  mLength;
-        s32  mRounds;
-        s32  mFlags;
-        cXyz mCoord;
-        s32  mCurrentFrame;
-    }; // Size: 0x24
+    struct {
+        struct {
+            /* 0x00 */ int  mPatternIdx;
+            /* 0x04 */ u32  mPattern;
+            /* 0x08 */ s32  mLength;
+            /* 0x0C */ s32  mRounds;
+            /* 0x10 */ s32  mFlags;
+            /* 0x14 */ cXyz mCoord;
+            /* 0x20 */ s32  mCurrentFrame;
+        } /* 0x00 */ mShock,
+          /* 0x24 */ mQuake;
+    } /* 0x00 */ mCamera;
 
-    struct motor_rumble{
-        int mPatternIdx;
-        u32 mPattern;
-        s32 mLength;
-        s32 mRounds;
-        s32 mCurrentFrame;
-        s32 mStopFrame; /* different from length for looping rumble */
-    }; // Size: 0x12
+    struct {
+        struct {
+            /* 0x00 */ int mPatternIdx;
+            /* 0x04 */ u32 mPattern;
+            /* 0x08 */ s32 mLength;
+            /* 0x0C */ s32 mRounds;
+            /* 0x10 */ s32 mCurrentFrame;
+            /* 0x14 */ s32 mStopFrame; /* different from length for looping rumble */
+        } /* 0x00 */ mShock,
+          /* 0x18 */ mQuake;
+    } /* 0x48 */ mMotor;
 
-    /* 0x0  */ struct camera_rumble mCameraShock;
-    /* 0x24 */ struct camera_rumble mCameraQuake;
-    /* 0x48 */ struct motor_rumble  mMotorShock;
-    /* 0x60 */ struct motor_rumble  mMotorQuake;
     /* 0x78 */ s32 mFrameIdx;
     /* 0x7C */ int mRumbleState;
     /* 0x80 */ /* vtable */
