@@ -138,12 +138,16 @@ public:
         field_0x20 = NULL;
     }
 
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    cXyz& getPos() { return mPos; }
+    void setPos(cXyz& pos) { mPos = pos; }
+
     /* 0x04 */ bool field_0x04;
     /* 0x05 */ bool field_0x05;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ f32 field_0x0C;
     /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ cXyz field_0x14;
+    /* 0x14 */ cXyz mPos;
     /* 0x20 */ const csXyz* field_0x20;
     /* 0x24 */ JPABaseEmitter* mpEmitter;
 };  // Size: 0x28

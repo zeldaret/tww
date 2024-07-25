@@ -93,7 +93,7 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
     }
 
     if (field_0x20 != NULL) {
-        emitter->setGlobalTranslation(field_0x14.x, field_0x14.y, field_0x14.z);
+        emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
         JGeometry::TVec3<s16> rot(0, 0, 0);
         rot.y = field_0x20->y;
         emitter->setGlobalRotation(rot);
@@ -562,8 +562,16 @@ void daPy_lk_c::resetFootEffect() {
 
 /* 8012C1A8-8012C2A4       .text setSwimTail__9daPy_lk_cFv */
 void daPy_lk_c::setSwimTail() {
-    /* Nonmatching */
     static JGeometry::TVec3<f32> tail_scale(1.0f, 1.0f, -1.0f);
+
+    if (mSwimTailEcallBack[0].getEmitter() == NULL) {
+        dComIfGp_particle_setShipTail(0x3A, &mSwimTailEcallBack[0].getPos(), &current.angle, &scale, 0xFF, &mSwimTailEcallBack[0]);
+        mSwimTailEcallBack[0].field_0x05 = true;
+    }
+
+    if (mSwimTailEcallBack[1].getEmitter() == NULL) {
+        dComIfGp_particle_setShipTail(0x3A, &mSwimTailEcallBack[1].getPos(), &current.angle, &scale, 0xFF, &mSwimTailEcallBack[1]);
+    }
 }
 
 /* 8012C2A4-8012C330       .text setCutWaterSplash__9daPy_lk_cFv */
