@@ -1260,6 +1260,11 @@ inline void dComIfGs_setOptVibration(u8 vib) {
     g_dComIfG_gameInfo.save.getPlayer().getConfig().setVibration(vib);
 }
 
+/* Not present in debug maps, imitates TP version */
+inline u8 dComIfGs_checkOptVibration() {
+    return g_dComIfG_gameInfo.save.getPlayer().getConfig().checkVibration();
+}
+
 inline BOOL dComIfGs_isTbox(int i_no) {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isTbox(i_no);
 }

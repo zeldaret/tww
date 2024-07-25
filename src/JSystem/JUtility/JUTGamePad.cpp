@@ -431,26 +431,26 @@ void JUTGamePad::CRumble::update(s16 portNo) {
 }
 
 /* 802C46CC-802C46F4       .text triggerPatternedRumble__Q210JUTGamePad7CRumbleFUl */
-void JUTGamePad::CRumble::triggerPatternedRumble(u32 param_0) {
+void JUTGamePad::CRumble::triggerPatternedRumble(u32 length) {
     if (mData != NULL && mFrameCount != 0) {
-        mLength = param_0;
+        mLength = length;
         mFrame = 0;
     }
 }
 
 /* 802C46F4-802C4770       .text startPatternedRumble__Q210JUTGamePad7CRumbleFPUcQ310JUTGamePad7CRumble7ERumbleUl */
-void JUTGamePad::CRumble::startPatternedRumble(u8* param_0, JUTGamePad::CRumble::ERumble param_1, u32 param_2) {
-    mFrameCount = ((*param_0) << 8) + *(param_0 + 1);
-    mData = param_0 + 2;
-    switch (param_1) {
-    case JUTGamePad::CRumble::VAL_0:
+void JUTGamePad::CRumble::startPatternedRumble(u8 *pattern, JUTGamePad::CRumble::ERumble rumbleLoopMode, u32 duration) {
+    mFrameCount = (*pattern << 8) + *(pattern + 1);
+    mData = pattern + 2;
+    switch (rumbleLoopMode) {
+    case JUTGamePad::CRumble::LOOP_ONCE:
         triggerPatternedRumble(mFrameCount);
         break;
-    case JUTGamePad::CRumble::VAL_1:
+    case JUTGamePad::CRumble::LOOP_FOREVER:
         triggerPatternedRumble(-1);
         break;
-    case JUTGamePad::CRumble::VAL_2:
-        triggerPatternedRumble(param_2);
+    case JUTGamePad::CRumble::SET_DURATION:
+        triggerPatternedRumble(duration);
         break;
     }
 }
