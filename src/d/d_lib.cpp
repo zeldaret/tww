@@ -6,6 +6,7 @@
 #include "d/d_lib.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
+#include "d/d_a_obj.h"
 #include "d/actor/d_a_sea.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -495,12 +496,19 @@ u32 dLib_getIplDaysFromSaveTime() {
 }
 
 /* 80058834-80058910       .text dLib_get_QuatFromTriangle__FP4cXyzP4cXyzP4cXyz */
-Quaternion dLib_get_QuatFromTriangle(cXyz*, cXyz*, cXyz*) {
-    /* Nonmatching */
+Quaternion dLib_get_QuatFromTriangle(cXyz* p0, cXyz* p1, cXyz* p2) {
+    Quaternion out;
+    cXyz e1 = *p1 - *p0;
+    cXyz e2 = *p2 - *p0;
+    cXyz cross = e1.outprod(e2);
+    daObj::quat_rotBaseY2(&out, cross);
+    return out;
 }
 
 /* 80058910-800589A8       .text dLib_calc_QuatFromTriangle__FP10QuaternionfP4cXyzP4cXyzP4cXyz */
-void dLib_calc_QuatFromTriangle(Quaternion*, f32, cXyz*, cXyz*, cXyz*) {
-    /* Nonmatching */
+void dLib_calc_QuatFromTriangle(Quaternion* out, f32 t, cXyz* p0, cXyz* p1, cXyz* p2) {
+    Quaternion q = dLib_get_QuatFromTriangle(p0, p1, p2);
+    Quaternion d;
+    C_QUATSlerp(out, &q, &d, t);
+    *out = d;
 }
-
