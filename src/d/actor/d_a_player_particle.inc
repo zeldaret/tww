@@ -704,7 +704,16 @@ void daPy_lk_c::setDamageElecEmitter() {
 
 /* 8012C880-8012C8F8       .text setDamageEmitter__9daPy_lk_cFv */
 void daPy_lk_c::setDamageEmitter() {
-    /* Nonmatching */
+    dCcD_GObjInf* tgHitGObj = mCyl.GetTgHitGObj();
+    if (tgHitGObj != NULL) {
+        if (tgHitGObj->GetAtSpl() == 0x3) {
+            setDamageCurseEmitter();
+        } else if (tgHitGObj->GetAtSpl() == 0xB) {
+            setDamageElecEmitter();
+        } else if (tgHitGObj->ChkAtType(AT_TYPE_FIRE)) {
+            setDamageFlameEmitter();
+        }
+    }
 }
 
 /* 8012C8F8-8012C9D8       .text endFlameDamageEmitter__9daPy_lk_cFv */
