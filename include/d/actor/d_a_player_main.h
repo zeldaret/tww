@@ -160,6 +160,10 @@ public:
     void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
     ~daPy_followEcallBack_c() {}
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    void setPos(const cXyz* pos) { field_0x08 = *pos; }
+    cXyz& getPos() { return field_0x08; }
+    void setAngle(s16 x, s16 y, s16 z) { field_0x14.set(x, y, z); }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz field_0x08;

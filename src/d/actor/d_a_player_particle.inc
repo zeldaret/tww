@@ -576,7 +576,15 @@ void daPy_lk_c::setSwimTail() {
 
 /* 8012C2A4-8012C330       .text setCutWaterSplash__9daPy_lk_cFv */
 void daPy_lk_c::setCutWaterSplash() {
-    /* Nonmatching */
+    if (m336C.getEmitter() != NULL) {
+        MtxP mtx = mpCLModel->getAnmMtx(4);
+        cXyz pos;
+        pos.x = mtx[0][3];
+        pos.y = mtx[1][3];
+        pos.z = mtx[2][3];
+
+        dComIfGp_particle_setP1(0x39, &pos);
+    }
 }
 
 /* 8012C330-8012C45C       .text setSwimWaterDrop__9daPy_lk_cFP25daPy_waterDropEcallBack_c */
