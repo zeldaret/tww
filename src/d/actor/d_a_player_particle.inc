@@ -718,7 +718,21 @@ void daPy_lk_c::setDamageEmitter() {
 
 /* 8012C8F8-8012C9D8       .text endFlameDamageEmitter__9daPy_lk_cFv */
 void daPy_lk_c::endFlameDamageEmitter() {
-    /* Nonmatching */
+    if (!daPy_dmEcallBack_c::checkFlame()) return;
+
+    if (current.pos.y < m35D0 - 10.0f) {
+        for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++) {
+            cXyz pos;
+            pos.x = mDmEcallBack[i].mpMtx[0][3];
+            pos.y = mDmEcallBack[i].mpMtx[1][3];
+            pos.z = mDmEcallBack[i].mpMtx[2][3];
+            pos.y = m35D0;
+
+            dComIfGp_particle_set(0x35A, &pos);
+        }
+    }
+
+    endDamageEmitter();
 }
 
 /* 8012C9D8-8012CA44       .text endDamageEmitter__9daPy_lk_cFv */
