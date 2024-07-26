@@ -11,6 +11,7 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_HIO.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_sea.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -691,7 +692,14 @@ void daPy_lk_c::setDamageCurseEmitter() {
 
 /* 8012C7F0-8012C880       .text setDamageElecEmitter__9daPy_lk_cFv */
 void daPy_lk_c::setDamageElecEmitter() {
-    /* Nonmatching */
+    if (!daPy_dmEcallBack_c::checkElec()) {
+        endDamageEmitter();
+
+        mDmEcallBack[0].makeEmitter(0x3ED, mpCLModel->getAnmMtx(4), &current.pos, NULL);
+        mDmEcallBack[1].makeEmitter(0x3EE, mpCLModel->getAnmMtx(4), &current.pos, NULL);
+    }
+
+    daPy_dmEcallBack_c::setElec(daPy_HIO_elecDamage_c0::m.field_0x2);
 }
 
 /* 8012C880-8012C8F8       .text setDamageEmitter__9daPy_lk_cFv */
