@@ -674,7 +674,19 @@ void daPy_lk_c::setDamageFlameEmitter() {
 
 /* 8012C754-8012C7F0       .text setDamageCurseEmitter__9daPy_lk_cFv */
 void daPy_lk_c::setDamageCurseEmitter() {
-    /* Nonmatching */
+    if (!daPy_dmEcallBack_c::checkCurse()) {
+        endDamageEmitter();
+
+        mDmEcallBack->makeEmitter(0x815B, mpCLModel->getAnmMtx(0x1E), &current.pos, NULL);
+
+        if (checkUpperReadyThrowAnime()) {
+            resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
+            freeRopeItem();
+        }
+    }
+
+    cancelNoDamageMode();
+    daPy_dmEcallBack_c::setCurse(200);
 }
 
 /* 8012C7F0-8012C880       .text setDamageElecEmitter__9daPy_lk_cFv */
