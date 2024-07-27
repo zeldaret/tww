@@ -4,46 +4,140 @@
 //
 
 #include "d/d_map.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_stage.h"
 
+enum {
+    Floor_B5F = 123,
+    Floor_B4F = 124,
+    Floor_B3F = 125,
+    Floor_B2F = 126,
+    Floor_B1F = 127,
+    Floor_1F = 128,
+    Floor_2F = 129,
+    Floor_3F = 130,
+    Floor_4F = 131,
+    Floor_5F = 132,
+
+    Floor_Base = Floor_B5F,
+};
+
+#define Floor_Num (Floor_5F - Floor_B5F + 1)
+#define Floor_Valid(no) (no >= 0) && (no < Floor_Num)
+
+static inline int gridPos2GridNo(int i_gridX, int i_gridY) {
+    JUT_ASSERT(0x4a4, (i_gridX >= -3) && (i_gridX <= 3) && (i_gridY >= -3) && (i_gridY <= 3));
+    return i_gridX + 3 + (i_gridY + 3) * 7;
+}
+
 /* 800455AC-80045660       .text onSaveArriveGridForAgbUseGridPos__Fii */
-void onSaveArriveGridForAgbUseGridPos(int, int) {
-    /* Nonmatching */
+void onSaveArriveGridForAgbUseGridPos(int i_gridX, int i_gridY) {
+    dComIfGs_onSaveArriveGridForAgb(gridPos2GridNo(i_gridX, i_gridY));
 }
 
 /* 80045660-80045714       .text isSaveArriveGridForAgbUseGridPos__Fii */
-void isSaveArriveGridForAgbUseGridPos(int, int) {
-    /* Nonmatching */
+BOOL isSaveArriveGridForAgbUseGridPos(int i_gridX, int i_gridY) {
+    dComIfGs_isSaveArriveGridForAgb(gridPos2GridNo(i_gridX, i_gridY));
 }
 
 /* 80045714-80045734       .text IsFloorNo__Fi */
-void IsFloorNo(int) {
-    /* Nonmatching */
+bool IsFloorNo(int i_no) {
+    return i_no >= Floor_B5F && i_no <= Floor_5F;
 }
 
 /* 80045734-800457B8       .text getFloorInfo_WithRoom__Fi */
-void getFloorInfo_WithRoom(int) {
-    /* Nonmatching */
+dStage_FloorInfo_c* getFloorInfo_WithRoom(int i_roomNo) {
+    dStage_FloorInfo_c* floor = NULL;
+    if (i_roomNo >= 0) {
+        dStage_roomDt_c* room = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
+        if (room != NULL)
+            floor = room->getFloorInfo();
+    }
+    if (floor == NULL)
+        floor = dComIfGp_getStage().getFloorInfo();
+    return floor;
 }
 
 /* 800457B8-800458E0       .text mapOffsetY__Fv */
-void mapOffsetY() {
-    /* Nonmatching */
+f32 mapOffsetY() {
+    f32 ret = 0.0f;
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e || dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
+        if (dComIfGp_getStage().getDMap() != NULL) {
+            dStage_DMap_c* pinf = dComIfGp_getStage().getDMap();
+            dStage_DMap_entry_c* entry = pinf->entry;
+            JUT_ASSERT(0x587, pinf->num == 1);
+            for (int i = 0; i < pinf->num; i++, entry++)
+                ret = entry->offsetY;
+        }
+    }
+    return ret;
 }
 
 /* 800458E0-800459E4       .text dMap_GetTopBottomFloorNo__FP11dStage_dt_cPUcPUc */
-void dMap_GetTopBottomFloorNo(dStage_dt_c*, u8*, u8*) {
-    /* Nonmatching */
+BOOL dMap_GetTopBottomFloorNo(dStage_dt_c* stag, u8* bottom_p, u8* top_p) {
+    if (stag == NULL)
+        return FALSE;
+
+    u8 floorNo;
+    u8 bottom;
+    u8 top;
+
+    dStage_FloorInfo_c* floor = stag->getFloorInfo();
+    dStage_FloorInfo_entry_c* entry;
+
+    if (floor != NULL && floor->num >= 1) {
+        entry = floor->entry;
+        bottom = Floor_B5F;
+        top = Floor_5F;
+        for (int i = 0; i < floor->num; i++, entry++) {
+            for (int j = 0; j < ARRAY_SIZE(entry->field_0x05); j++) {
+                if (entry->field_0x05[j] != -1) {
+                    floorNo = entry->floorNo;
+                    if (floorNo > bottom)
+                        bottom = floorNo;
+                    if (floorNo < top)
+                        top = floorNo;
+                    break;
+                }
+            }
+        }
+    } else {
+        bottom = Floor_1F;
+        top = Floor_1F;
+    }
+
+    if (bottom_p != NULL)
+        *bottom_p = bottom;
+    if (top_p != NULL)
+        *top_p = top;
+
+    return FALSE;
 }
 
 /* 800459E4-80045A98       .text dMap_GetFloorInfoDtP__FP18dStage_FloorInfo_cf */
-void dMap_GetFloorInfoDtP(dStage_FloorInfo_c*, f32) {
+void dMap_GetFloorInfoDtP(dStage_FloorInfo_c* floor, f32 ret) {
     /* Nonmatching */
 }
 
 /* 80045A98-80045AEC       .text dMap_GetFloorInfoDtPFromFloorNo__FP18dStage_FloorInfo_cUc */
-void dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c*, u8) {
+dStage_FloorInfo_entry_c* dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c* floor, u8 i_floorNo) {
     /* Nonmatching */
+    dStage_FloorInfo_entry_c* entry;
+    BOOL valid = FALSE;
+
+    if (floor != NULL) {
+        entry = floor->entry;
+        for (int i = 0; i < floor->num; i++, entry++) {
+            if (entry->floorNo == i_floorNo) {
+                valid = TRUE;
+                break;
+            }
+        }
+    }
+
+    if (!valid)
+        entry = NULL;
+    return entry;
 }
 
 /* 80045AEC-80045C24       .text dMap_GetFloorNoForDmap__FP11dStage_dt_cif */
@@ -62,13 +156,55 @@ void dMap_GetFloorNo(dStage_dt_c*, f32) {
 }
 
 /* 80045C90-80045E54       .text getRoomDspFloorNo__15dMap_RoomInfo_cFUci */
-void dMap_RoomInfo_c::getRoomDspFloorNo(u8, int) {
+u32 dMap_RoomInfo_c::getRoomDspFloorNo(u8 i_no, BOOL search) {
     /* Nonmatching */
+    s32 no = i_no - Floor_Base;
+    JUT_ASSERT(0x702, Floor_Valid(no));
+
+    s32 dspFloorNo = field_0x2[no];
+    if (search) {
+        if (!IsFloorNo(dspFloorNo)) {
+            while (!IsFloorNo(dspFloorNo) && --no >= 0) {
+                JUT_ASSERT(0x70f, Floor_Valid(no));
+                dspFloorNo = field_0x2[no];
+            }
+        }
+
+        if (!IsFloorNo(dspFloorNo)) {
+            while (!IsFloorNo(dspFloorNo) && ++no <= (Floor_Num - 1)) {
+                JUT_ASSERT(0x718, Floor_Valid(no));
+                dspFloorNo = field_0x2[no];
+            }
+        }
+
+        if (!IsFloorNo(dspFloorNo))
+            dspFloorNo = 255;
+    }
+
+    return dspFloorNo;
 }
 
 /* 80045E54-80045F40       .text init__15dMap_RoomInfo_cFP15dMap_RoomInfo_ci */
-void dMap_RoomInfo_c::init(dMap_RoomInfo_c*, int) {
+void dMap_RoomInfo_c::init(dMap_RoomInfo_c* prev, int p2) {
     /* Nonmatching */
+    m_exist = 0;
+    field_0x1 = 0;
+    for (int i = 0; i < ARRAY_SIZE(field_0x2); i++)
+        field_0x2[i] = 255;
+    field_0xc = 255;
+    m_no = -1;
+    field_0x14 = p2;
+    field_0x18 = 0.0f;
+    field_0x1c = 0.0f;
+    field_0x20 = 0.0f;
+    field_0x24 = 0.0f;
+    field_0x8c.init(NULL, NULL, 0.0f, 0.0f, 0, 0, 0, 0, 1.0f, 1.0f, 0);
+    field_0x44.field_0x0[0] = 0;
+    field_0x30.init(1, &field_0x44);
+    m_next = NULL;
+    mStageMapInfoP = NULL;
+    if (prev != NULL)
+        prev->m_next = this;
 }
 
 /* 80045F40-80046314       .text getRoomImage__15dMap_RoomInfo_cFiUciPP7ResTIMGPP7ResTIMGPP8map_dt_cPP20stage_map_info_classPUc */
@@ -82,7 +218,7 @@ void dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int) {
 }
 
 /* 80046470-80046A58       .text roomEntryRoom__15dMap_RoomInfo_cFiUciUcP15dMap_RoomInfo_cssf */
-void dMap_RoomInfo_c::roomEntryRoom(int, u8, int, u8, dMap_RoomInfo_c*, s16, s16, f32) {
+u32 dMap_RoomInfo_c::roomEntryRoom(int, u8, int, u8, dMap_RoomInfo_c*, s16, s16, f32) {
     /* Nonmatching */
 }
 
@@ -92,8 +228,25 @@ void dMap_RoomInfo_c::Changeimage(u8, u8, int, s16, s16, f32) {
 }
 
 /* 80046F08-80046FE0       .text deleteRoom__15dMap_RoomInfo_cFv */
-void dMap_RoomInfo_c::deleteRoom() {
-    /* Nonmatching */
+BOOL dMap_RoomInfo_c::deleteRoom() {
+    m_no = -1;
+    m_exist = 0;
+    mStageMapInfoP = NULL;
+    field_0x1 = 0;
+    for (int i = 0; i < ARRAY_SIZE(field_0x2); i++)
+        field_0x2[i] = 255;
+    field_0xc = 255;
+    m_no = -1;
+    field_0x18 = 0.0f;
+    field_0x1c = 0.0f;
+    field_0x20 = 0.0f;
+    field_0x24 = 0.0f;
+    field_0x28 = 0.0f;
+    field_0x2c = 0.0f;
+    field_0x8c.init(NULL, NULL, 0.0f, 0.0f, 0, 0, 0, 0, 1.0f, 1.0f, 0);
+    field_0x44.field_0x0[0] = 0;
+    field_0x30.init(1, &field_0x44);
+    return TRUE;
 }
 
 /* 80046FE0-800470CC       .text enlagementSizeTextureCordCalc__15dMap_RoomInfo_cFPfPfPfPfffffff */
@@ -112,38 +265,99 @@ void dMap_RoomInfo_c::roomDrawRoomRealSize(int, int, int, int, f32, f32, f32, f3
 }
 
 /* 80047834-8004793C       .text roomExistenceCheck__19dMap_RoomInfoCtrl_cFiPP15dMap_RoomInfo_c */
-void dMap_RoomInfoCtrl_c::roomExistenceCheck(int, dMap_RoomInfo_c**) {
+bool dMap_RoomInfoCtrl_c::roomExistenceCheck(int i_no, dMap_RoomInfo_c** roomInfoPP) {
     /* Nonmatching */
+    JUT_ASSERT(0xb83, roomInfoPP != NULL);
+    bool ret = false;
+    *roomInfoPP = NULL;
+    dMap_RoomInfo_c* roomInfoP = m_info;
+    JUT_ASSERT(0xb8b, roomInfoP != NULL);
+    for (; !ret && roomInfoP != NULL; roomInfoP = roomInfoP->m_next) {
+        if (roomInfoP->m_exist) {
+            if (i_no == roomInfoP->m_no) {
+                *roomInfoPP = roomInfoP;
+                ret = TRUE;
+            }
+        } else {
+            if (*roomInfoPP == NULL)
+                *roomInfoPP = roomInfoP;
+        }
+    }
+    return ret;
 }
 
 /* 8004793C-80047960       .text getNextRoomP__19dMap_RoomInfoCtrl_cFP15dMap_RoomInfo_c */
-void dMap_RoomInfoCtrl_c::getNextRoomP(dMap_RoomInfo_c*) {
-    /* Nonmatching */
+dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::getNextRoomP(dMap_RoomInfo_c* info) {
+    if (info == NULL) {
+        if (m_info != NULL)
+            return m_info;
+        else
+            return NULL;
+    } else {
+        return info->m_next;
+    }
 }
 
 /* 80047960-80047A8C       .text ctrlEntryRoom__19dMap_RoomInfoCtrl_cFiUciUcssf */
-void dMap_RoomInfoCtrl_c::ctrlEntryRoom(int, u8, int, u8, s16, s16, f32) {
-    /* Nonmatching */
+dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::ctrlEntryRoom(int i_no, u8 p1, int p2, u8 p3, s16 p4, s16 p5, f32 p6) {
+    dMap_RoomInfo_c* roomInfoP;
+    if (roomExistenceCheck(i_no, &roomInfoP))
+        return NULL;
+
+    dMap_RoomInfo_c* prev = NULL;
+    roomInfoP = m_info;
+    JUT_ASSERT(0xbfd, roomInfoP != NULL);
+
+    if (roomInfoP == NULL)
+        return NULL;
+
+    for (; roomInfoP != NULL && roomInfoP->m_exist; roomInfoP = roomInfoP->m_next)
+        prev = roomInfoP;
+
+    if (roomInfoP != NULL) {
+        if (roomInfoP->roomEntryRoom(i_no, p1, p2, p3, prev, p4, p5, p6))
+            return roomInfoP;
+    }
+
+    return NULL;
 }
 
 /* 80047A8C-80047AC4       .text deleteRoom__19dMap_RoomInfoCtrl_cFi */
-void dMap_RoomInfoCtrl_c::deleteRoom(int) {
-    /* Nonmatching */
+bool dMap_RoomInfoCtrl_c::deleteRoom(int i_no) {
+    dMap_RoomInfo_c* roomInfoP;
+    if (roomExistenceCheck(i_no, &roomInfoP))
+        roomInfoP->deleteRoom();
+    return FALSE;
 }
 
 /* 80047AC4-80047B8C       .text ctrlDrawRoomEnlargementSize__19dMap_RoomInfoCtrl_cFiiiiiffffUc */
-void dMap_RoomInfoCtrl_c::ctrlDrawRoomEnlargementSize(int, int, int, int, int, f32, f32, f32, f32, u8) {
-    /* Nonmatching */
+void dMap_RoomInfoCtrl_c::ctrlDrawRoomEnlargementSize(int i_no, int p1, int p2, int p3, int p4, f32 p5, f32 p6, f32 p7, f32 p8, u8 p9) {
+    dMap_RoomInfo_c* roomInfoP = NULL;
+    while ((roomInfoP = getNextRoomP(roomInfoP))) {
+        if (roomInfoP->m_exist && i_no == roomInfoP->m_no)
+            roomInfoP->roomDrawRoomEnlargementSize(p1, p2, p3, p4, p5, p6, p7, p8, p9);
+    }
 }
 
 /* 80047B8C-80047C64       .text ctrlDrawRoomRealSize__19dMap_RoomInfoCtrl_cFiiiiiffffffUc */
-void dMap_RoomInfoCtrl_c::ctrlDrawRoomRealSize(int, int, int, int, int, f32, f32, f32, f32, f32, f32, u8) {
-    /* Nonmatching */
+void dMap_RoomInfoCtrl_c::ctrlDrawRoomRealSize(int i_no, int p1, int p2, int p3, int p4, f32 p5, f32 p6, f32 p7, f32 p8, f32 p9, f32 p10, u8 p11) {
+    dMap_RoomInfo_c* roomInfoP = NULL;
+    while ((roomInfoP = getNextRoomP(roomInfoP))) {
+        if (roomInfoP->m_exist && i_no == roomInfoP->m_no)
+            roomInfoP->roomDrawRoomRealSize(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11);
+    }
 }
 
 /* 80047C64-80047CD0       .text init__19dMap_RoomInfoCtrl_cFv */
 void dMap_RoomInfoCtrl_c::init() {
     /* Nonmatching */
+    int no = 0;
+    dMap_RoomInfo_c* info = m_info;
+    dMap_RoomInfo_c* prev = NULL;
+    for (int i = 0; i < m_num; i++, no++, info++) {
+        info->init(prev, no);
+        prev = info;
+    }
 }
 
 /* 80047CD0-8004826C       .text create__6dMap_cFv */

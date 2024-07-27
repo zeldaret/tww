@@ -492,7 +492,8 @@ u32 dLib_getIplDaysFromSaveTime() {
         return 0;
 
     OSTime curTime = OSGetTime();
-    return (curTime - dateIpl);
+    u32 seconds = OSTicksToSeconds(curTime - dateIpl);
+    return seconds;
 }
 
 /* 80058834-80058910       .text dLib_get_QuatFromTriangle__FP4cXyzP4cXyzP4cXyz */

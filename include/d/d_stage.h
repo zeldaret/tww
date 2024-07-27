@@ -135,7 +135,10 @@ public:
     /* 0x1C */ f32 field_0x1C;
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ f32 field_0x24;
-    /* 0x28 */ u8 field_0x28[0x35 - 0x28];
+    /* 0x28 */ u32 field_0x28;
+    /* 0x2C */ u32 field_0x2c;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ u8 field_0x34;
     /* 0x35 */ u8 field_0x35;
     /* 0x36 */ u8 mOceanXZ;
     /* 0x37 */ u8 field_0x37[0x38 - 0x37];
@@ -276,7 +279,16 @@ struct dStage_dPnt_c {
     /* 0x4 */ cXyz m_position;
 };  // Size: 0x10
 
-struct dStage_FloorInfo_c {};
+struct dStage_FloorInfo_entry_c {
+    /* 0x00 */ int field_0x00;
+    /* 0x04 */ u8 floorNo;
+    /* 0x05 */ s8 field_0x05[14];
+}; // Size: 0x14
+
+struct dStage_FloorInfo_c {
+    /* 0x00 */ int num;
+    /* 0x04 */ dStage_FloorInfo_entry_c* entry;
+};
 
 struct dStage_Lbnk_c {
     /* 0x00 */ u32 m_num;
@@ -293,7 +305,17 @@ struct dStage_MemoryConfig_c {
     /* 0x4 */ dStage_MemoryConfig_data* m_entries;
 };
 
-struct dStage_DMap_c {};
+struct dStage_DMap_entry_c {
+    /* 0x00 */ int field_0x00;
+    /* 0x04 */ int field_0x04;
+    /* 0x08 */ int field_0x08;
+    /* 0x0C */ float offsetY;
+};
+
+struct dStage_DMap_c {
+    /* 0x00 */ int num;
+    /* 0x04 */ dStage_DMap_entry_c* entry;
+};
 
 struct dStage_Event_dt_c {
     /* 0x00 */ u8 field_0x0;
