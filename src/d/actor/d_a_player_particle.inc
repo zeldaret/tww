@@ -589,8 +589,25 @@ void daPy_lk_c::setCutWaterSplash() {
 }
 
 /* 8012C330-8012C45C       .text setSwimWaterDrop__9daPy_lk_cFP25daPy_waterDropEcallBack_c */
-void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c*) {
-    /* Nonmatching */
+void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c* callBack) {
+    f32 tmp = m35D0 + 10.0f;
+    if (checkNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP) || !checkNoResetFlg0(daPy_lk_c::daPyFlg0_UNK80) || (callBack->getPos().y > tmp && !checkModeFlg(ModeFlg_SWIM))) {
+        if (callBack->getEmitter() == NULL && (callBack->field_0x1C || checkNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP))) {
+            JPABaseEmitter* emitter = dComIfGp_particle_setP1(0x38, &callBack->getPos(), NULL, NULL, 0xFF, callBack);
+
+            if (emitter != NULL) {
+                emitter->setParticleCallBackPtr(&daPy_waterDropEcallBack_c::m_pcallback);
+            }
+        }
+
+        callBack->field_0x1C = FALSE;
+        offNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP);
+    } else if (checkNoResetFlg0(daPy_lk_c::daPyFlg0_UNK80) && callBack->getPos().y < m35D0) {
+        callBack->end();
+        if (mCurProc != daPyProc_VOMIT_WAIT_e) {
+            callBack->field_0x1C = TRUE;
+        }
+    }
 }
 
 /* 8012C45C-8012C620       .text setWaterDrop__9daPy_lk_cFv */

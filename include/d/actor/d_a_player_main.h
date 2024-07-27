@@ -181,7 +181,7 @@ public:
 
     static daPy_waterDropPcallBack_c m_pcallback;
 
-    /* 0x1C */ u8 field_0x1C[0x4];
+    /* 0x1C */ BOOL field_0x1C;
 };  // Size: 0x20
 
 class daPy_dmEcallBack_c : public daPy_mtxFollowEcallBack_c {
