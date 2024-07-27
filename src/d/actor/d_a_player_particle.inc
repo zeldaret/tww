@@ -763,9 +763,50 @@ void daPy_lk_c::endDamageEmitter() {
 }
 
 /* 8012CA44-8012CD60       .text setItemWaterEffect__9daPy_lk_cFP10fopAc_ac_cii */
-u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c*, int, int) {
-    /* Nonmatching */
+u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c* i_actor, int param_1, int param_2) {
     static cXyz eff_scale0(0.5f, 0.5f, 0.5f);
     static cXyz eff_scale2(0.13f, 0.13f, 0.13f);
     static JGeometry::TVec3<f32> direction(0.0f, 1.0f, 0.0f);
+
+    f32 waterY;
+    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) != 0 && ((param_1 != 0 && i_actor->current.pos.y > waterY) || (param_1 == 0 && waterY >= i_actor->current.pos.y))) {
+        param_1 ^= 1;
+        if (param_1 == 0 && param_2 == 0) {
+            return param_1;
+        }
+
+        f32 deltaY = fabsf(i_actor->old.pos.y - i_actor->current.pos.y);
+        f32 waterDistY = fabsf(waterY - i_actor->current.pos.y);
+        cXyz pos;
+        if (deltaY < 1.0f) {
+            pos = i_actor->current.pos;
+        } else {
+            f32 var_f31 = waterDistY / deltaY;
+
+            if (var_f31 > 1.0f) {
+                var_f31 = 1.0f;
+            }
+
+            pos = i_actor->old.pos * var_f31 + i_actor->current.pos * (1.0f - var_f31);
+        }
+
+        dComIfGp_particle_setSingleRipple(0x3D, &pos, NULL, &eff_scale0);
+        dComIfGp_particle_setSingleRipple(0x3F, &pos, NULL, &eff_scale0);
+
+        GXColor amb, dif;
+        dKy_get_seacolor(&amb, &dif);
+        JPABaseEmitter* emitter = dComIfGp_particle_setP1(0x23, &pos, NULL, &eff_scale2, 0xFF, NULL, -1, &amb);
+
+        if (emitter != NULL) {
+            emitter->setMaxFrame(1);
+            emitter->setLifeTime(20);
+            emitter->setRate(40.0f);
+            emitter->setAwayFromAxisSpeed(20.0f);
+            emitter->setDirectionalSpeed(80.0f);
+            emitter->setSpread(0.0f);
+            emitter->setDirection(direction);
+        }
+    }
+
+    return param_1;
 }
