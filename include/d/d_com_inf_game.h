@@ -986,7 +986,7 @@ inline void dComIfGs_onSaveArriveGridForAgb(int i_no) {
 }
 
 inline BOOL dComIfGs_isSaveArriveGridForAgb(int i_no) {
-    g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGridForAgb(i_no);
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGridForAgb(i_no);
 }
 
 inline u8 dComIfGs_getArrowNum() {

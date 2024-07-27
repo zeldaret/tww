@@ -121,7 +121,7 @@ public:
     /* 0x28 */ f32 field_0x28;
     /* 0x2C */ f32 field_0x2c;
     /* 0x30 */ dMap_2DMtMapSpcl_c field_0x30;
-    /* 0x44 */ dMap_2DMtMapSpcl_tex_c field_0x44;
+    /* 0x44 */ dMap_2DMtMapSpcl_tex_c field_0x44[1];
     /* 0x8C */ dMap_2DAGBScrDsp_c field_0x8c;
     /* 0xC4 */ u32 field_0xc4[0x08];
     /* 0xE4 */ dMap_RoomInfo_c* m_next;

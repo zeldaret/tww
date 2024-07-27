@@ -199,8 +199,8 @@ void dMap_RoomInfo_c::init(dMap_RoomInfo_c* prev, int p2) {
     field_0x20 = 0.0f;
     field_0x24 = 0.0f;
     field_0x8c.init(NULL, NULL, 0.0f, 0.0f, 0, 0, 0, 0, 1.0f, 1.0f, 0);
-    field_0x44.field_0x0[0] = 0;
-    field_0x30.init(1, &field_0x44);
+    field_0x44[0].field_0x0[0] = 0;
+    field_0x30.init(1, &field_0x44[0]);
     m_next = NULL;
     mStageMapInfoP = NULL;
     if (prev != NULL)
@@ -244,8 +244,8 @@ BOOL dMap_RoomInfo_c::deleteRoom() {
     field_0x28 = 0.0f;
     field_0x2c = 0.0f;
     field_0x8c.init(NULL, NULL, 0.0f, 0.0f, 0, 0, 0, 0, 1.0f, 1.0f, 0);
-    field_0x44.field_0x0[0] = 0;
-    field_0x30.init(1, &field_0x44);
+    field_0x44[0].field_0x0[0] = 0;
+    field_0x30.init(1, &field_0x44[0]);
     return TRUE;
 }
 
