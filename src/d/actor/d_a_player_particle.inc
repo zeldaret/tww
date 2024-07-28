@@ -515,15 +515,109 @@ void daPy_lk_c::setWaterRipple() {
 }
 
 /* 8012B340-8012B8EC       .text setFootEffectType__9daPy_lk_cFiP4cXyzii */
-void daPy_lk_c::setFootEffectType(int, cXyz*, int, int) {
-    /* Nonmatching */
-    static JGeometry::TVec3<f32> run_splash_scale;
+void daPy_lk_c::setFootEffectType(int param_0, cXyz* i_pos, int param_2, int param_3) {
+    static JGeometry::TVec3<f32> run_splash_scale(0.6f, 0.6f, 0.6f);
     static Vec grass_scale = {1.5f, 1.5f, 1.5f};
-    static JGeometry::TVec3<f32> run_grass_scale;
+    static JGeometry::TVec3<f32> run_grass_scale(0.65f, 0.65f, 0.65f);
     static Vec smoke_scale = {1.25f, 1.25f, 1.25f};
-    static JGeometry::TVec3<f32> heavy_emit_smoke_scale;
-    static JGeometry::TVec3<f32> heavy_dyn_smoke_scale;
-    static JGeometry::TVec3<f32> heavy_pat_smoke_scale;
+    static JGeometry::TVec3<f32> heavy_emit_smoke_scale(1.0f, 0.0f, 1.0f);
+    static JGeometry::TVec3<f32> heavy_dyn_smoke_scale(0.25f, 0.25f, 0.25f);
+    static JGeometry::TVec3<f32> heavy_pat_smoke_scale(0.75f, 0.75f, 0.75f);
+
+    JPABaseEmitter* emitter = NULL;
+
+    csXyz angle;
+    daPy_footEffect_c* footEffect = &m31E8[param_2];
+    if (mAcch.ChkGroundHit() && !checkNoResetFlg0(static_cast<daPy_lk_c::daPy_FLG0>(daPyFlg0_UNK80000000 | daPyFlg0_UNK20000000))) {
+        angle.x = getGroundAngle(&mAcch.m_gnd, current.angle.y);
+    } else {
+        angle.x = 0;
+    }
+
+    angle.y = current.angle.y;
+    angle.z = 0;
+
+    footEffect->setPos(i_pos);
+    footEffect->setAngle(&angle);
+    if (param_0 == 0x23) {
+        if (checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 10.0f + i_pos->y) {
+            footEffect->mPos.y = m35D0 - 10.0f;
+        }
+    } else if (mCurProc == daPyProc_CUT_ROLL_e && param_0 == 0x2022) {
+        param_0 = -2;
+    } else if (param_3 == 5) {
+        param_0 = 0x2027;
+    }
+
+    s32 effectId = footEffect->getID();
+    if (param_0 != effectId) {
+        if (effectId != fpcM_ERROR_PROCESS_ID_e) {
+            footEffect->getSmokeCallBack()->end();
+            footEffect->getOtherCallBack()->end();
+        }
+
+        if (param_0 == -2) {
+             emitter = dComIfGp_particle_setP1(0x2022, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
+        } else if (param_0 == 0x2022 || param_0 == 0x2027) {
+             emitter = dComIfGp_particle_setToonP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
+        } else if (param_0 == 0x24) {
+             GXColor color = {tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b, tevStr.mColorC0.a};
+             emitter = dComIfGp_particle_setP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&grass_scale, 0xFF, footEffect->getOtherCallBack(), -1, &color, &tevStr.mColorK0);
+        } else {
+            GXColor amb, dif;
+            dKy_get_seacolor(&amb, &dif);
+            emitter = dComIfGp_particle_setP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), NULL, 0xFF, footEffect->getOtherCallBack(), -1, &amb);
+        }
+
+        if (emitter != NULL) {
+            footEffect->setID(param_0);
+        }
+
+        if (param_0 == -2) {
+            param_0 = 0x2022;
+        }
+    }
+
+    if (emitter != NULL) {
+        if (param_3 == 5) {
+            if (param_0 == 0x2027) {
+                emitter->setLifeTime(40);
+                emitter->setRate(10.0f);
+                emitter->setEmitterScale(heavy_emit_smoke_scale);
+                emitter->setGlobalDynamicsScale(heavy_dyn_smoke_scale);
+                emitter->setGlobalParticleScale(heavy_pat_smoke_scale);
+            } else {
+                emitter->setRate(15.0f);
+                emitter->setSpread(1.0f);
+                if (param_0 == 0x24) {
+                    emitter->setDirectionalSpeed(12.0f);
+                }
+            }
+        } else if (param_3 == 1) {
+            emitter->setRate(16.0f);
+            emitter->setSpread(1.0f);
+        } else if (param_3 == 3) {
+            emitter->setRate(8.0f);
+            emitter->setSpread(0.3f);
+        } else if (param_3 == 2) {
+            if (param_0 == 0x24) {
+                emitter->setGlobalScale(run_grass_scale);
+                emitter->setRate(10.0f);
+                emitter->setSpread(1.0f);
+                emitter->setLifeTime(15);
+            } else {
+                emitter->setRate(18.0f);
+                emitter->setSpread(1.0f);
+                emitter->setGlobalScale(run_splash_scale);
+            }
+        } else if (param_3 == 4 && param_0 == 0x23) {
+            emitter->setRate(3.0f);
+            emitter->setSpread(0.2f);
+        } else {
+            emitter->setRate(3.0f);
+            emitter->setSpread(0.05f);
+        }
+    }
 }
 
 /* 8012B8EC-8012B9DC       .text setFootMark__9daPy_lk_cFP4cXyz */

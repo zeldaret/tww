@@ -84,9 +84,9 @@ public:
     void setID(s32 id) { mId = id; }
     s32 getID() const { return mId; }
     void setAngle(csXyz* angle) { mAngle = *angle; }
-    csXyz getAngle() { return mAngle; }
+    const csXyz& getAngle() { return mAngle; }
     void setPos(const cXyz* pos) { mPos = *pos; }
-    cXyz getPos() { return mPos; }
+    const cXyz& getPos() { return mPos; }
 
     /* 0x00 */ dPa_smokeEcallBack mSmokeCb;
     /* 0x20 */ dPa_followEcallBack mFollowCb;
