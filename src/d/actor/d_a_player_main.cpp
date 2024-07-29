@@ -3782,7 +3782,7 @@ BOOL daPy_lk_c::playerDelete() {
     dKy_plight_cut(&mLightInfluence);
     mDoAud_seDeleteObject(&mSwordTopPos);
     mDoAud_seDeleteObject(&mRopePos);
-    mDoAud_seDeleteObject(&m338C.field_0x08);
+    mDoAud_seDeleteObject(&m338C.mPos);
     mDoAud_seDeleteObject(mFanWindCps.GetEndP());
     
     for (i = 0; i < (int)ARRAY_SIZE(m_anm_heap_under); i++) {

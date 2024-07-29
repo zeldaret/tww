@@ -383,12 +383,12 @@ void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle
 
 /* 80129F48-80129F98       .text execute__22daPy_followEcallBack_cFP14JPABaseEmitter */
 void daPy_followEcallBack_c::execute(JPABaseEmitter* emitter) {
-    JGeometry::TVec3<f32> pos(field_0x08.x, field_0x08.y, field_0x08.z);
+    JGeometry::TVec3<f32> pos(mPos.x, mPos.y, mPos.z);
     emitter->setGlobalTranslation(pos);
     JGeometry::TVec3<s16> rot;
-    rot.x = field_0x14.x;
-    rot.y = field_0x14.y;
-    rot.z = field_0x14.z;
+    rot.x = mAngle.x;
+    rot.y = mAngle.y;
+    rot.z = mAngle.z;
     emitter->setGlobalRotation(rot);
 }
 
@@ -637,7 +637,171 @@ void daPy_lk_c::setFootMark(cXyz* i_pos) {
 
 /* 8012B9DC-8012C128       .text setFootEffect__9daPy_lk_cFv */
 void daPy_lk_c::setFootEffect() {
-    /* Nonmatching */
+    if (!mAcch.ChkGroundHit() || checkNoResetFlg0(daPyFlg0_UNK80000000)) {
+        resetFootEffect();
+        m3410.end();
+        return;
+    }
+
+    cXyz pos;
+    if (getFootOnGround()) {
+        if (getRightFootOnGround()) {
+            MtxP mtx = mpCLModel->getAnmMtx(0x27);
+            pos.x = mtx[0][3];
+            pos.y = mtx[1][3];
+            pos.z = mtx[2][3];
+            setFootMark(&pos);
+        }
+
+        if (getLeftFootOnGround()) {
+            MtxP mtx = mpCLModel->getAnmMtx(0x22);
+            pos.x = mtx[0][3];
+            pos.y = mtx[1][3];
+            pos.z = mtx[2][3];
+            setFootMark(&pos);
+        }
+    }
+
+    if (checkResetFlg0(daPyRFlg0_UNK10) && mCurrAttributeCode == dBgS_Attr_WATER_e && m35D0 > 25.0f + current.pos.y) {
+        cXyz& p = m3410.getPos();
+        p.x = current.pos.x + 45.0f * cM_ssin(current.angle.y);
+        p.y = m35D0;
+        p.z = current.pos.z + 45.0f * cM_scos(current.angle.y);
+
+        m3410.setAngle(0, current.angle.y + 0x8000, 0);
+
+        if (m3410.mpEmitter == NULL) {
+            GXColor amb, dif;
+            dKy_get_seacolor(&amb, &dif);
+
+            JPABaseEmitter* emitter = dComIfGp_particle_setP1(0x23, &p, NULL, NULL, 0xFF, &m3410, -1, &amb);
+            if (emitter != NULL) {
+                emitter->setLifeTime(15);
+                emitter->setRate(4.0f);
+                emitter->setSpread(0.6f);
+                emitter->setDirectionalSpeed(11.0f);
+            }
+        }
+    } else {
+        m3410.end();
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0) {
+        if (checkResetFlg0(daPyRFlg0_UNK10)) {
+            if (getFootOnGround() && m35D0 <= current.pos.y) {
+                dComIfGp_particle_setP1(0x8237, &pos, &current.angle);
+            }
+        }
+    }
+
+    s32 temp_r3_4 = dComIfGp_particle_checkAtrCodeEffect(mCurrAttributeCode);
+    if (temp_r3_4 == -1) {
+        return;
+    }
+
+    s32 var_r29;
+    if (checkResetFlg0(daPyRFlg0_UNK10) && getFootOnGround() && (checkHeavyStateOn() || temp_r3_4 == 0x23 || temp_r3_4 == 0x24)) {
+        if (getRightFootOnGround()) {
+            m34BE = 2;
+        } else {
+            m34BE = 1;
+        }
+
+        if (checkHeavyStateOn()) {
+            var_r29 = 5;
+            dComIfGp_getVibration().StartShock(2, -0x31, cXyz(0.0f, 1.0f, 0.0f));
+        } else {
+            var_r29 = 2;
+        }
+
+    } else {
+        if (mCurProc == daPyProc_JUMP_CUT_LAND_e) {
+            var_r29 = 3;
+        } else if (mCurProc == daPyProc_FRONT_ROLL_e) {
+            var_r29 = 4;
+        } else {
+            var_r29 = 0;
+        }
+    }
+
+    if (m34BE == 0) {
+        return;
+    }
+
+    if (mCurProc == daPyProc_DEMO_LAST_COMBO_e) {
+        f32 rnd = cM_rndFX(17.5f);
+        cXyz sp44 = m370C;
+        MtxP mtx = mpCLModel->getAnmMtx(0x1);
+        m370C.x = mtx[0][3];
+        m370C.y = mtx[1][3];
+        m370C.z = mtx[2][3];
+        if (m3570 != 0) {
+            current.angle.y = shape_angle.y - 0x4000;
+            m3570 = 0;
+        } else {
+            cXyz sp38 = m370C - sp44;
+            current.angle.y = cM_atan2s(sp38.x, sp38.z);
+        }
+
+        pos.x = m370C.x + rnd * cM_scos(current.angle.y);
+        pos.y = current.pos.y;
+        pos.z = m370C.z - rnd * cM_scos(current.angle.y);
+        setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+    } else {
+        if (m34BE == 4) {
+            f32 rnd = cM_rndFX(17.5f);
+            pos.x = current.pos.x + rnd * cM_scos(current.angle.y);
+            pos.y = current.pos.y;
+            pos.z = current.pos.z - rnd * cM_scos(current.angle.y);
+            setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+
+        } else if (m34BE == 3) {
+            if (mCurrAttributeCode == dBgS_Attr_GRASS_e || mCurrAttributeCode == dBgS_Attr_WATER_e) {
+                MtxP mtx = mpCLModel->getAnmMtx(0x27);
+                pos.x = mtx[0][3];
+                pos.y = mtx[1][3];
+                pos.z = mtx[2][3];
+                setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+
+                mtx = mpCLModel->getAnmMtx(0x22);
+                pos.x = mtx[0][3];
+                pos.y = mtx[1][3];
+                pos.z = mtx[2][3];
+                setFootEffectType(temp_r3_4, &pos, 1, var_r29);
+
+            } else {
+                setFootEffectType(temp_r3_4, &current.pos, 0, var_r29);
+            }
+        } else if (m34BE == 1) {
+            MtxP mtx = mpCLModel->getAnmMtx(0x22);
+            pos.x = mtx[0][3];
+            pos.y = mtx[1][3];
+            pos.z = mtx[2][3];
+            setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+        } else if (m34BE == 2) {
+            MtxP mtx = mpCLModel->getAnmMtx(0x27);
+            pos.x = mtx[0][3];
+            pos.y = mtx[1][3];
+            pos.z = mtx[2][3];
+            setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+        } else if (m34BE == 5) {
+            setFootEffectType(temp_r3_4, &current.pos, 0, 1);
+        } else if (m34BE == 6) {
+            MtxP mtx = mpCLModel->getAnmMtx(0);
+            pos.x = mtx[0][3];
+            pos.y = mtx[1][3];
+            pos.z = mtx[2][3];
+
+            mGndChk.SetPos(&pos);
+
+            f32 groundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
+            if (groundY != -1e9f) {
+                pos.y = groundY;
+            }
+
+            setFootEffectType(temp_r3_4, &pos, 0, 1);
+        }
+    }
 }
 
 /* 8012C128-8012C1A8       .text resetFootEffect__9daPy_lk_cFv */
@@ -711,13 +875,13 @@ void daPy_lk_c::setWaterDrop() {
     tmp.x = mtx[0][3];
     tmp.y = mtx[1][3];
     tmp.z = mtx[2][3];
-    m334C.field_0x08 = tmp;
+    m334C.setPos(&tmp);
 
     mtx = mpCLModel->getAnmMtx(0x02);
     tmp.x = mtx[0][3];
     tmp.y = mtx[1][3];
     tmp.z = mtx[2][3];
-    m336C.field_0x08 = tmp;
+    m336C.setPos(&tmp);
 
     if (mModeFlg & ModeFlg_00000001) {
         daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = TRUE;
