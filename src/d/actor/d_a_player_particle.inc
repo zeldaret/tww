@@ -11,9 +11,11 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_main_data.h"
 #include "d/actor/d_a_player_HIO.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_ship.h"
+#include "d/d_procname.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_lib.h"
 #include "SSystem/SComponent/c_math.h"
@@ -500,6 +502,130 @@ void daPy_lk_c::setAuraEffect() {
         0x0021,
         0x0026,
     };
+
+
+    J3DAnmTevRegKey* curYaura00Brk = mYaura00rBrk.getBrkAnm();
+    J3DAnmTevRegKey* curYmgcs00Brk = mYmgcs00Brk.getBrkAnm();
+    f32 temp_f29 = curYaura00Brk->getFrame();
+    f32 temp_f31 = curYmgcs00Brk->getFrame();
+    f32 y00BtkFrameMax = mpYaura00Btk->getFrameMax();
+
+    if (checkNoDamageMode()) {
+        J3DAnmTevRegKey* pYaura00Brk;
+        J3DAnmTevRegKey* pYmgcs00Brk;
+
+        if (checkEquipDragonShield()) {
+            if (dComIfGp_event_getMode() == 0) {
+                m3548 -= 1;
+            }
+
+            if (m3548 == 0) {
+                if (dComIfGs_getMagic() != 0) {
+                    m3548 = daPy_HIO_magicShield_c0::m.field_0x0;
+                    dComIfGp_setItemMagicCount(-1);
+                } else {
+                    offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
+                }
+            }
+
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS));
+        } else {
+            if (dComIfGp_event_getMode() == 0) {
+                mTinkleShieldTimer -= 1;
+            }
+
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_G));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_TS));
+        }
+
+        if (pYaura00Brk != curYaura00Brk) {
+            mYaura00rBrk.init(mMagicArmorAuraEntries[0].getModel()->getModelData(), pYaura00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            curYaura00Brk = pYaura00Brk;
+        }
+
+        if (pYmgcs00Brk != curYmgcs00Brk) {
+            mYmgcs00Brk.init(mpYmgcs00Model->getModelData(), pYmgcs00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            curYmgcs00Brk = pYmgcs00Brk;
+        }
+    }
+
+    f32 var_f28, var_f31;
+    if (checkNoDamageMode() && (dComIfGp_event_getMode() == 0 || (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(dEvtFlag_TALK_e))) ) {
+        if (temp_f29 < 0.01f) {
+            for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++) {
+                mMagicArmorAuraEntries[idx].setFrame(cM_rndF(y00BtkFrameMax));
+            }
+        }
+
+        var_f28 = temp_f29 + 1.0f;
+        if (var_f28 >= curYaura00Brk->getFrameMax()) {
+            var_f28 = curYaura00Brk->getFrameMax() - 0.001f;
+        }
+
+        var_f31 = temp_f31 + 1.0f;
+        if (var_f31 >= curYmgcs00Brk->getFrameMax()) {
+            var_f31 = curYmgcs00Brk->getFrameMax() - 0.001f;
+        }
+
+        seStartMapInfo(JA_SE_LK_MG_SHELD_USING);
+    } else {
+        var_f28 = temp_f29 - 1.0f;
+        if (var_f28 < 0.0f) {
+            var_f28 = 0.0f;
+        }
+
+        var_f31 = temp_f31 - 1.0f;
+        if (var_f31 < 0.0f) {
+            var_f31 = 0.0f;
+        }
+    }
+
+    mYaura00rBrk.entryFrame(var_f28);
+    mYmgcs00Brk.entryFrame(var_f31);
+    if (var_f28 > 0.0f) {
+        f32 var_f31_2, var_f28_2;
+        daPy_aura_c* auraEntry = mMagicArmorAuraEntries;
+        if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
+            var_f31_2 = 0.0f;
+            var_f28_2 = 1.0f + (fabsf(dComIfGp_getShipActor()->speedF) / 15.0f);
+            if (var_f28_2 > 1.5f) {
+                var_f28_2 = 1.5f;
+            }
+        } else {
+            var_f31_2 = fabsf(mVelocity) / daPy_HIO_move_c0::m.field_0x18;
+            if (var_f31_2 > 1.0f) {
+                var_f31_2 = 1.0f;
+            }
+            var_f28_2 = 1.0f;
+        }
+
+        cXyz localScale = scale * (var_f28_2 * cM_fcos(M_PI * (0.5f * var_f31_2)));
+
+        for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++, auraEntry++) {
+            f32 var_f0 = 1.0f + auraEntry->getFrame();
+            if (var_f0 >= y00BtkFrameMax) {
+                var_f0 -= y00BtkFrameMax;
+            }
+            auraEntry->setFrame(var_f0);
+            auraEntry->getModel()->setBaseTRMtx(mpCLModel->getAnmMtx(aura_model_joint[idx]));
+
+            if (idx == 0) {
+                auraEntry->getModel()->setBaseScale(scale * var_f31_2 * 1.2f);
+            } else if (idx != 1) {
+                auraEntry->getModel()->setBaseScale(localScale);
+            } else {
+                auraEntry->getModel()->setBaseScale((scale * (1.0f - (0.3f * var_f31_2))) * 2.0f);
+            }
+
+        }
+    }
+
+    if (checkNoDamageMode() || mYmgcs00Brk.getBrkAnm()->getFrame() > 0.0f) {
+        mpYmgcs00Model->setBaseTRMtx(mpCLModel->getBaseTRMtx());
+        mpYmgcs00Model->calc();
+        simpleAnmPlay(mpYmgcs00Btk);
+    }
 }
 
 /* 8012A8D8-8012B340       .text setWaterRipple__9daPy_lk_cFv */
