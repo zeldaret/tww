@@ -4,31 +4,89 @@
 //
 
 #include "d/actor/d_a_kytag07.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
 /* 00000078-00000080       .text daKytag07_Draw__FP13kytag07_class */
 static BOOL daKytag07_Draw(kytag07_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000080-000002A8       .text daKytag07_Execute__FP13kytag07_class */
-static BOOL daKytag07_Execute(kytag07_class*) {
+static BOOL daKytag07_Execute(kytag07_class* i_this) {
     /* Nonmatching */
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+    if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0) {
+        f32 time = dComIfGs_getTime();
+        u16 date = dComIfGs_getDate();
+        if (time >= 60.0f && time < 315.0f)
+            time += 0.4f;
+        dComIfGs_setTime(time);
+        dComIfGs_setDate(date);
+    } else {
+        u8 mode = fopAcM_GetParam(i_this) & 0xFF;
+        if (mode != 1) {
+            if (dComIfGp_event_runCheck() && dComIfGp_evmng_startCheck("g2before") && dComIfGp_demo_get() != NULL && dComIfGp_demo_get()->getFrameNoMsg() >= 4719) {
+                if (dComIfGp_demo_get()->getFrameNoMsg() == 4719)
+                    dKy_change_colpat(1);
+                if (envLight.mRainCount < 250)
+                    envLight.mRainCount++;
+                if (dKy_getEnvlight().mMoyaCount < 100) {
+                    dKy_getEnvlight().mMoyaMode = 0;
+                    dKy_getEnvlight().mMoyaCount++;
+                }
+                if (dKy_getEnvlight().mThunderEff.mMode == 0)
+                    dKy_getEnvlight().mThunderEff.mMode = 2;
+            }
+        } else {
+            if (dComIfGp_event_runCheck()) {
+                dDemo_manager_c* demo = dComIfGp_demo_get();
+                dKy_getEnvlight().mMoyaMode = 0;
+                if (demo != NULL) {
+                    if (demo->getFrameNoMsg() >= 2602) {
+                        envLight.mRainCount = 0;
+                        envLight.mMoyaCount = 0;
+                        dKy_getEnvlight().mThunderEff.mMode = 0;
+                    } else {
+                        envLight.mRainCount = 250;
+                        envLight.mMoyaCount = 100;
+                        if (dKy_getEnvlight().mThunderEff.mMode == 0)
+                            dKy_getEnvlight().mThunderEff.mMode = 2;
+                    }
+
+                    f32 blend = 0.0f;
+                    if (demo->getFrameNoMsg() >= 2601) {
+                        blend = (demo->getFrameNoMsg() - 2601) / 200.0f;
+                        if (blend > 1.0f)
+                            blend = 1.0f;
+                    }
+                    dKy_custom_colset(1, 2, blend);
+                }
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 000002A8-000002B0       .text daKytag07_IsDelete__FP13kytag07_class */
 static BOOL daKytag07_IsDelete(kytag07_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000002B0-000002C8       .text daKytag07_Delete__FP13kytag07_class */
 static BOOL daKytag07_Delete(kytag07_class*) {
-    /* Nonmatching */
+    dKy_getEnvlight().mbDayNightTactStop = false;
+    return TRUE;
 }
 
 /* 000002C8-00000350       .text daKytag07_Create__FP10fopAc_ac_c */
-static s32 daKytag07_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daKytag07_Create(fopAc_ac_c* i_ac) {
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+    kytag07_class* i_this = (kytag07_class*)i_ac;
+    fopAcM_SetupActor(i_this, kytag07_class);
+    if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0)
+        envLight.mbDayNightTactStop = true;
+    return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daKytag07_Method = {
