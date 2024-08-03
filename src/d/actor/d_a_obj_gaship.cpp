@@ -16,8 +16,6 @@ static f32 dummy[19];
 
 /* 000000EC-000002DC       .text birth_flag__Q211daObjGaship5Act_cFv */
 void daObjGaship::Act_c::birth_flag() {
-    /* Nonmatching */
-
     for (s32 i = 0; i < 2; i++) {
         if (!birthFlag[i]) {
             static cXyz flag_offset[2] = {
@@ -47,7 +45,6 @@ BOOL daObjGaship::Act_c::solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 00000378-00000448       .text create_heap__Q211daObjGaship5Act_cFv */
 bool daObjGaship::Act_c::create_heap() {
-    /* Nonmatching */
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GASHIP_BDL_GASHIP));
     JUT_ASSERT(0x8c, mdl_data != NULL);
     if (mdl_data != NULL)
@@ -60,7 +57,6 @@ bool daObjGaship::Act_c::create_heap() {
 
 /* 00000448-000004F8       .text _create__Q211daObjGaship5Act_cFv */
 s32 daObjGaship::Act_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, Act_c);
 
     s32 ret = dComIfG_resLoad(&mPhs, M_arcname);

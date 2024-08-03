@@ -4,41 +4,144 @@
 //
 
 #include "d/actor/d_a_kytag03.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
 #include "d/d_procname.h"
+#include "d/res/res_m_door.h"
 
 /* 00000078-0000015C       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* i_ac) {
+    kytag03_class* i_this = (kytag03_class*)i_ac;
+    i_this->mpModel = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("M_DOOR", M_DOOR_BDL_MYAMIF),
+        NULL, NULL, NULL, J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 0, -1, 1, NULL, 0x0, 0x11020203
+    );
+
+    if (i_this->mpModel == NULL || i_this->mpModel->getModel() == NULL)
+        return FALSE;
+
+    return TRUE;
 }
 
 /* 0000015C-000001D8       .text daKytag03_Draw__FP13kytag03_class */
-static BOOL daKytag03_Draw(kytag03_class*) {
-    /* Nonmatching */
+static BOOL daKytag03_Draw(kytag03_class* i_this) {
+    J3DModel* model = i_this->mpModel->getModel();
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    if (i_this->mbVisible)
+        i_this->mpModel->updateDL();
+    return TRUE;
 }
 
 /* 000001D8-00000280       .text draw_SUB__FP13kytag03_class */
-void draw_SUB(kytag03_class*) {
-    /* Nonmatching */
+void draw_SUB(kytag03_class* i_this) {
+    J3DModel* model = i_this->mpModel->getModel();
+    model->setBaseScale(i_this->scale);
+    mDoMtx_stack_c::transS(i_this->current.pos);
+    mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
+    mDoMtx_stack_c::XrotM(i_this->shape_angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->shape_angle.z);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000280-0000050C       .text daKytag03_Execute__FP13kytag03_class */
-static BOOL daKytag03_Execute(kytag03_class*) {
+static BOOL daKytag03_Execute(kytag03_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    if (!dComIfGp_event_runCheck() || !dComIfGp_event_chkEventFlag(dEvtFlag_STAFF_ALL_e)) {
+        if (i_this->tevStr.mRoomNo == dStage_roomControl_c::getStayNo()) {
+            i_this->mbRoomActive = true;
+            if (i_this->mSwitchID != 0xFF) {
+                if (dComIfGs_isSwitch(i_this->mSwitchID, i_this->tevStr.mRoomNo)) {
+                    if (!dKy_contrast_flg_get()) {
+                        dKy_contrast_flg_set(true);
+                        dKy_change_colpat(4);
+                    }
+
+                    i_this->mbIsActive = true;
+                } else {
+                    if (dKy_contrast_flg_get()) {
+                        dKy_contrast_flg_set(false);
+                        dKy_change_colpat(0);
+                    }
+
+                    i_this->mbIsActive = false;
+                }
+            }
+        }
+    } else if (!i_this->mbRoomActive) {
+        if (i_this->tevStr.mRoomNo != dStage_roomControl_c::getStayNo()) {
+            if (i_this->mSwitchID != 0xFF) {
+                if (dComIfGs_isSwitch(i_this->mSwitchID, i_this->tevStr.mRoomNo)) {
+                    if (!dKy_contrast_flg_get()) {
+                        dKy_contrast_flg_set(true);
+                        dKy_change_colpat(4);
+                    }
+
+                    i_this->mbIsActive = true;
+                } else {
+                    if (dKy_contrast_flg_get()) {
+                        dKy_contrast_flg_set(false);
+                        dKy_change_colpat(0);
+                    }
+
+                    i_this->mbIsActive = false;
+                }
+            }
+        }
+    } else if (i_this->tevStr.mRoomNo != dStage_roomControl_c::getStayNo()) {
+        if (!i_this->mbIsActive && dKy_contrast_flg_get()) {
+            if (!i_this->mbVisible) {
+                s16 angleY = 0;
+                cXyz pos;
+                pos.x = cM_scos(angleY) * cM_ssin(player->shape_angle.y);
+                pos.y = cM_ssin(angleY);
+                pos.z = cM_scos(angleY) * cM_scos(player->shape_angle.y);
+                i_this->current.pos = player->current.pos + pos * -100.0f;
+                i_this->current.angle.y = player->current.angle.y;
+                i_this->shape_angle.y = player->shape_angle.y;
+            }
+            i_this->mbVisible = true;
+        }
+    }
+
+    if (i_this->mbVisible) {
+        i_this->mpModel->play(NULL, 0, 0);
+        draw_SUB(i_this);
+    }
+
+    return TRUE;
 }
 
 /* 0000050C-00000514       .text daKytag03_IsDelete__FP13kytag03_class */
-static BOOL daKytag03_IsDelete(kytag03_class*) {
-    /* Nonmatching */
+static BOOL daKytag03_IsDelete(kytag03_class* i_this) {
+    return TRUE;
 }
 
 /* 00000514-00000544       .text daKytag03_Delete__FP13kytag03_class */
-static BOOL daKytag03_Delete(kytag03_class*) {
-    /* Nonmatching */
+static BOOL daKytag03_Delete(kytag03_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhs, "M_DOOR");
+    return TRUE;
 }
 
 /* 00000544-00000604       .text daKytag03_Create__FP10fopAc_ac_c */
-static s32 daKytag03_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daKytag03_Create(fopAc_ac_c* i_ac) {
+    kytag03_class* i_this = (kytag03_class*)i_ac;
+    fopAcM_SetupActor(i_this, kytag03_class);
+    s32 ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
+    if (ret == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x4c30)) {
+            return cPhs_ERROR_e;
+        }
+
+        i_this->field_0x2a0 = 0;
+        i_this->field_0x2a8 = 0.0f;
+        i_this->mSwitchID = fopAcM_GetParam(i_this);
+        i_this->mbRoomActive = false;
+        i_this->mbIsActive = false;
+        i_this->mbVisible = false;
+    }
+    return ret;
 }
 
 static actor_method_class l_daKytag03_Method = {

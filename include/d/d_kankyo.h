@@ -455,5 +455,7 @@ u8 dKy_get_schbit();
 int dKy_rain_check();
 void dKy_setLight_mine(dKy_tevstr_c* pTevStr);
 BOOL dKy_daynighttact_stop_chk();
+void dKy_contrast_flg_set(u8);
+u8 dKy_contrast_flg_get();
 
 #endif /* D_KANKYO_D_KANKYO_H */
