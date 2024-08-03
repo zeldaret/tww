@@ -8,14 +8,21 @@
 class daObjLpalm_c : public fopAc_ac_c {
 public:
     inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _draw();
-    inline BOOL _execute();
-    void attr() const {}
+    inline bool _delete();
+    inline bool _draw();
+    inline bool _execute();
     void set_mtx() {}
 
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
+
+    struct Attr_c {
+        u8 flag0;
+        u8 flag1;
+    };
+    static const Attr_c M_attr;
+    inline const Attr_c& attr() const { return M_attr; }
+    static const char M_arcname[];
 
 public:
     /* 0x290 */ u8 m290[0x294 - 0x290];
@@ -24,8 +31,8 @@ public:
     /* 0x2B4 */ Quaternion mAnmMtxQuat[2];
     /* 0x2D4 */ s16 mAnimDir[2];
     /* 0x2D8 */ s16 mAnimWave[2];
-    /* 0x2DC */ request_of_phase_process_class mpPhaseLoad;
-    /* 0x2E4 */ J3DModel* mpModel;
+    /* 0x2DC */ request_of_phase_process_class mPhs;
+    /* 0x2E4 */ J3DModel* mModel;
     /* 0x2E8 */ dBgW* mpBgW;
 };
 
