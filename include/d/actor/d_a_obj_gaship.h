@@ -2,21 +2,28 @@
 #define D_A_OBJ_GASHIP_H
 
 #include "f_op/f_op_actor.h"
+#include "SSystem/SComponent/c_phase.h"
 
 namespace daObjGaship {
     class Act_c : public fopAc_ac_c {
     public:
+        virtual ~Act_c() {}
         void birth_flag();
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        static BOOL solidHeapCB(fopAc_ac_c*);
+        bool create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void set_mtx();
-        BOOL _execute();
-        BOOL _draw();
-    
+        bool _execute();
+        bool _draw();
+
+        static const char M_arcname[];
+
     public:
-        /* Place member variables here */
+        /* 0x294 */ request_of_phase_process_class mPhs;
+        /* 0x29C */ J3DModel* mModel;
+        /* 0x2A0 */ Mtx mtx;
+        /* 0x2D0 */ bool birthFlag[2];
     };
 };
 
