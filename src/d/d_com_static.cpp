@@ -140,15 +140,15 @@ u32 daObjLight::Act_c::M_S_pre_set_frame_FRRS;
 u8 daObjLight::Act_c::M_S_lod_access;
 
 /* 80056790-800567F8       .text renew_light_angle__Q210daObjLight5Act_cFv */
-BOOL daObjLight::Act_c::renew_light_angle() {
+bool daObjLight::Act_c::renew_light_angle() {
     M_S_lod_access = 1;
     if (dKy_daynight_check() == 1) {
         if (dComIfGs_isEventBit(0x1C02) == 1) {
             set_light_dif_angle_LOD(get_light_dif_angle() + 0x80);
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 /* 800567F8-80056824       .text get_light_angle__Q210daObjLight5Act_cFv */
