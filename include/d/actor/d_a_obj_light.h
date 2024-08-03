@@ -26,7 +26,7 @@ namespace daObjLight {
         BOOL _execute();
         BOOL _draw();
         
-        static BOOL renew_light_angle();
+        static bool renew_light_angle();
         static s16 get_light_angle();
         static s16 get_light_dif_angle();
         static BOOL set_light_dif_angle_LOD(s16);

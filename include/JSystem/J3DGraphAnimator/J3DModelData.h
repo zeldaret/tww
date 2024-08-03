@@ -101,10 +101,10 @@ public:
         mJointTree.makeHierarchy(joint, hierarchy, &mMaterialTable, mShapeTable.mShapeNodePointer);
         initShapeNodes();
     }
+    const void* getBinary() { return mBinary; }
 
     // TODO
     void getBasicMtxCalc() {}
-    void getBinary() {}
     void getRootNode() {}
     void setMatColorAnimator(J3DAnmColor*, J3DMatColorAnm*) {}
     void setTexNoAnimator(J3DAnmTexPattern*, J3DTexNoAnm*) {}
@@ -112,7 +112,7 @@ public:
 private:
     friend class J3DModelLoader;
 
-    /* 0x04 */ const void* mpRawData;
+    /* 0x04 */ const void* mBinary;
     /* 0x08 */ u32 mFlags;
     /* 0x0C */ u16 mbHasBumpArray;
     /* 0x0E */ u16 mbHasBillboard;
