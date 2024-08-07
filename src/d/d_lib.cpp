@@ -262,7 +262,7 @@ bool dLib_checkPlayerInCircle(cXyz center, f32 radius, f32 halfHeight) {
 /* 80057F78-80058098       .text dLib_checkActorInCircle__F4cXyzP10fopAc_ac_cff */
 bool dLib_checkActorInCircle(cXyz center, fopAc_ac_c* actor, f32 radius, f32 halfHeight) {
     f32 distXZ = (center - actor->current.pos).absXZ();
-    f32 distY = fabsf(center.y - actor->current.pos.y);
+    f32 distY = std::fabsf(center.y - actor->current.pos.y);
     if (distXZ < radius && distY < halfHeight) {
         return true;
     }
@@ -272,7 +272,7 @@ bool dLib_checkActorInCircle(cXyz center, fopAc_ac_c* actor, f32 radius, f32 hal
 /* 80058098-8005820C       .text dLib_checkActorInFan__F4cXyzP10fopAc_ac_cssff */
 bool dLib_checkActorInFan(cXyz center, fopAc_ac_c* actor, s16 angleY, s16 fanSpreadAngle, f32 radius, f32 halfHeight) {
     f32 distXZ = (center - actor->current.pos).absXZ();
-    f32 distY = fabsf(center.y - actor->current.pos.y);
+    f32 distY = std::fabsf(center.y - actor->current.pos.y);
     s16 targetY = cLib_targetAngleY(&center, &actor->current.pos);
     int angleDistY = cLib_distanceAngleS(angleY, targetY);
     if (distXZ < radius && distY < halfHeight && angleDistY < fanSpreadAngle) {

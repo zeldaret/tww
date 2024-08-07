@@ -89,11 +89,7 @@ void cM3d_CrawVec(const Vec&, const Vec&, Vec*);
 void cM3d_UpMtx_Base(const Vec&, const Vec&, MtxP);
 
 inline bool cM3d_IsZero(f32 f) {
-    return fabsf(f) < G_CM3D_F_ABS_MIN;
-}
-// this is the inline cM3d_IsZero but inverted. Sometimes this will get a match where the regular cM3d_IsZero inline won't
-inline bool cM3d_IsZero_inverted(f32 param_0) {
-    return !(fabsf(param_0) < G_CM3D_F_ABS_MIN);
+    return std::fabsf(f) < G_CM3D_F_ABS_MIN;
 }
 
 inline void cM3d_VectorProduct(const Vec* p01, const Vec* p02, Vec* pDst) {

@@ -1336,9 +1336,9 @@ BOOL daAgbsw0_c::ExeSubB() {
                     cXyz rel;
                     fpoAcM_relativePos(this, &agb->current.pos, &rel);
                     rel.y = rel.y - scale.y / 2.0f + 5.0f;
-                    f32 x_diff = scale.x - fabsf(rel.x);
-                    f32 y_diff = (scale.y / 2.0f) - fabsf(rel.y) + 50.0f; //some register oddity here
-                    f32 z_diff = scale.z - fabsf(rel.z);
+                    f32 x_diff = scale.x - std::abs(rel.x);
+                    f32 y_diff = (scale.y / 2.0f) - std::abs(rel.y) + 50.0f; //some register oddity here
+                    f32 z_diff = scale.z - std::abs(rel.z);
                     if(y_diff < x_diff && y_diff < z_diff) {
                         if(agb->current.pos.y < current.pos.y + scale.y / 2.0f) {
                             agb->home.pos.y = current.pos.y - 6.0f;
@@ -1611,7 +1611,7 @@ BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
     if(mNonCircular == false) {
         f32 y_diff = param_1->current.pos.y - current.pos.y;
         if(-10.0f <= y_diff && y_diff <= scale.y) {
-            f32 x_diff = fabsf(param_1->current.pos.x - current.pos.x);
+            f32 x_diff = std::abs(param_1->current.pos.x - current.pos.x);
             if(x_diff < scale.x) {
                 f32 z_diff = fabs(param_1->current.pos.z - current.pos.z);
                 if(z_diff < scale.x && x_diff * x_diff + z_diff * z_diff < scale.x * scale.x) {
@@ -1623,7 +1623,7 @@ BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
     else {
         cXyz pos;
         fpoAcM_relativePos(this, &param_1->current.pos, &pos);
-        if(-10.0f <= pos.y && pos.y <= scale.y && fabsf(pos.x) < scale.x && fabsf(pos.z) < scale.z) {
+        if(-10.0f <= pos.y && pos.y <= scale.y && std::abs(pos.x) < scale.x && std::abs(pos.z) < scale.z) {
             return true;
         }
     }

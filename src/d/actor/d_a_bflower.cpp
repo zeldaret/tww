@@ -301,9 +301,8 @@ BOOL daBFlower_c::actLive() {
         init_bck_anm(VBAKH_BCK_VBAKH);
     }
 
-    // TODO: std::abs
     // Play animation if player walks by bomb flower
-    if (dist < 50.0f && fabsf(mPrevPlayerDist - dist) > 2.0f && fabsf(player->current.pos.y - current.pos.y) < 10.0f) {
+    if (dist < 50.0f && std::abs(mPrevPlayerDist - dist) > 2.0f && std::abs(player->current.pos.y - current.pos.y) < 10.0f) {
         init_bck_anm(VBAKH_BCK_VBAKH);
     }
 
@@ -400,9 +399,8 @@ BOOL daBFlower_c::actDead() {
         mAnimTimer -= 1;
     }
 
-    // TODO: std::abs
     // Play animation if player walks by bomb flower
-    if (dist < 50.0f && fabsf(mPrevPlayerDist - dist) > 2.0f) {
+    if (dist < 50.0f && std::abs(mPrevPlayerDist - dist) > 2.0f) {
         init_bck_anm(VBAKH_BCK_VBAHX);
     }
 

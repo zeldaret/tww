@@ -32,12 +32,6 @@ extern float __fabsf(float);
 inline double fabs(double f) {
     return __fabs(f);
 }
-inline double fabsf2(float f) {
-    return __fabsf(f);
-}
-inline float fabsf(float f) {
-    return fabsf2(f);
-}
 
 double floor(double);
 double fmod(double, double);
@@ -107,6 +101,12 @@ inline float i_cosf(float x) {
 
 #ifdef __cplusplus
 };
+
+
+namespace std {
+inline float fabsf(float f) { return fabs(f); }
+inline float abs(float f) { return fabsf(f); }
+}; // namespace std
 #endif
 
 #endif

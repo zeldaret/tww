@@ -2088,7 +2088,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
             f32 what = temp.absXZ();
 
             s32 cutType = player->getCutType();
-            f32 y_diff = fabsf(temp.y);
+            f32 y_diff = std::fabsf(temp.y);
             if(cutType == 9 && y_diff < 20.0f) {
                 dComIfGs_onEventBit(0xB20);
                 dComIfGs_offTmpBit(0x402);

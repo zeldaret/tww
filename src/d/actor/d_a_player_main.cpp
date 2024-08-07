@@ -814,7 +814,7 @@ BOOL daPy_lk_c::draw() {
     ) {
         cXyz sp18;
         mDoLib_pos2camera(&current.pos, &sp18);
-        f32 f2 = fabsf(cM_ssin(g_Counter.mTimer * 0x800));
+        f32 f2 = std::abs(cM_ssin(g_Counter.mTimer * 0x800));
         if (daPy_dmEcallBack_c::checkCurse() || checkConfuse()) {
             tevStr.mFogColor.r = 0x80;
             tevStr.mFogColor.g = 0x00;

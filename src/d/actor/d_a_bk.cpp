@@ -697,7 +697,7 @@ static fpc_ProcID search_wepon(bk_class* i_this) {
             sp18.z = r25->current.pos.z - i_this->eyePos.z;
             f32 f4 = sqrtf(sp18.x*sp18.x + sp18.z*sp18.z);
             if (f4 < f29 && !daBk_other_bg_check(i_this, r25)) {
-                if (fabsf(r25->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
+                if (std::fabsf(r25->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
                     s16 angleDiff = i_this->m0330 - cM_atan2s(sp18.x, sp18.z);
                     if (angleDiff < 0) {
                         angleDiff = -angleDiff;
@@ -708,8 +708,8 @@ static fpc_ProcID search_wepon(bk_class* i_this) {
                     cMtx_YrotS(*calc_mtx, -i_this->current.angle.y);
                     cXyz sp0C;
                     MtxPosition(&sp18, &sp0C);
-                    if (fabsf(sp0C.x) < l_bkHIO.m03C &&
-                        fabsf(sp0C.y) < l_bkHIO.m040 &&
+                    if (std::fabsf(sp0C.x) < l_bkHIO.m03C &&
+                        std::fabsf(sp0C.y) < l_bkHIO.m040 &&
                         sp0C.z > l_bkHIO.m048 &&
                         sp0C.z < l_bkHIO.m044
                     ) {
@@ -780,7 +780,7 @@ static fopAc_ac_c* search_bomb(bk_class* i_this, BOOL r26) {
                 !(daBk_other_bg_check(i_this, r24) && r26)
             ) {
                 if (r26) {
-                    if (fabsf(r24->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
+                    if (std::fabsf(r24->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
                         s16 angleDiff = i_this->m0330 - cM_atan2s(sp28.x, sp28.z);
                         if (angleDiff < 0) {
                             angleDiff = -angleDiff;
@@ -791,8 +791,8 @@ static fopAc_ac_c* search_bomb(bk_class* i_this, BOOL r26) {
                         cMtx_YrotS(*calc_mtx, -i_this->current.angle.y);
                         cXyz sp10;
                         MtxPosition(&sp28, &sp10);
-                        if (fabsf(sp10.x) < l_bkHIO.m03C &&
-                            fabsf(sp10.y) < l_bkHIO.m040 &&
+                        if (std::fabsf(sp10.x) < l_bkHIO.m03C &&
+                            std::fabsf(sp10.y) < l_bkHIO.m040 &&
                             sp10.z > l_bkHIO.m048 &&
                             sp10.z < l_bkHIO.m044
                         ) {
@@ -855,7 +855,7 @@ static BOOL daBk_player_bg_check(bk_class* i_this, cXyz* r22) {
     if (search_sp != 0 || i_this->mType == 0xA) {
         return FALSE;
     }
-    if (i_this->dr.m713 == 0 && fabsf(player->speedF) < 0.1f && player->checkGrabWear()) {
+    if (i_this->dr.m713 == 0 && std::fabsf(player->speedF) < 0.1f && player->checkGrabWear()) {
         return TRUE;
     }
     dBgS_LinChk linChk;
@@ -881,7 +881,7 @@ static BOOL daBk_player_view_check(bk_class* i_this, cXyz* r30, s16 r27, s16 r31
     if (daBk_player_bg_check(i_this, r30)) {
         return FALSE;
     }
-    if (fabsf(player->current.pos.y + 50.0f - i_this->eyePos.y) > l_bkHIO.m038) {
+    if (std::fabsf(player->current.pos.y + 50.0f - i_this->eyePos.y) > l_bkHIO.m038) {
         return FALSE;
     }
     s16 angleDiff = i_this->m0330 - r27;
@@ -899,8 +899,8 @@ static BOOL daBk_player_view_check(bk_class* i_this, cXyz* r30, s16 r27, s16 r31
     sp14.z = r30->z - i_this->current.pos.z;
     cXyz sp08;
     MtxPosition(& sp14, &sp08);
-    if (fabsf(sp08.x) < l_bkHIO.m03C &&
-        fabsf(sp08.y) < l_bkHIO.m040 &&
+    if (std::fabsf(sp08.x) < l_bkHIO.m03C &&
+        std::fabsf(sp08.y) < l_bkHIO.m040 &&
         sp08.z > l_bkHIO.m048 &&
         sp08.z < l_bkHIO.m044
     ) {
@@ -1870,7 +1870,7 @@ static void fight_run(bk_class* i_this) {
             i_this->m0300[1] = 20.0f + cM_rndF(20.0f);
             break;
         }
-        if ((i_this->m02DD & 0xC) == 0 && fabsf(stickPosX) > 0.1f) {
+        if ((i_this->m02DD & 0xC) == 0 && std::fabsf(stickPosX) > 0.1f) {
             if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
                 anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, BK_BAS_BK_WALK2);
             } else {
@@ -2063,7 +2063,7 @@ static void fight_run(bk_class* i_this) {
     }
     i_this->m02DD = ground_4_check(i_this, 4, i_this->current.angle.y, 90.0f + REG6_F(7));
     if (i_this->m0314 != 0) {
-        if (fabsf(i_this->speedF) < 30.0f) {
+        if (std::fabsf(i_this->speedF) < 30.0f) {
             if (i_this->m0318 == 0) {
                 i_this->dr.m710 = 3;
             } else if (i_this->m0318 == 1) {
@@ -2452,7 +2452,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
                     if (r23 == NULL) {
                         i_this->m0300[0] = 50;
                         i_this->m0310 = 20;
-                        if (fabsf(i_this->speedF) > 10.0f) {
+                        if (std::fabsf(i_this->speedF) > 10.0f) {
                             another_hit = 1;
                         } else {
                             i_this->scale.x = i_this->scale.y = i_this->scale.z = 0.5f;

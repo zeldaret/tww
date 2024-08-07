@@ -450,13 +450,13 @@ bool daStandItem_c::actionFobj05() {
 
 /* 800E45E0-800E4770       .text actionFobj06__13daStandItem_cFv */
 bool daStandItem_c::actionFobj06() {
-    /* Nonmatching */
+    /* Nonmatching - *1.0f gets optimized out */
     cXyz wind = dKyw_get_AllWind_vecpow(&current.pos);
     f32 windStrength = wind.absXZ();
     cXyz zero(0.0f, 0.0f, 0.0f);
     s16 angle = cLib_targetAngleY(&zero, &wind);
     cLib_distanceAngleS(angle, current.angle.y);
-    m6C4 += fabsf(windStrength * 1.0f);
+    m6C4 += fabs(windStrength * 1.0f);
     if (m6C4 > 4.0f) {
         m6C4 = 4.0f;
     }

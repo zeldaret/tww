@@ -31,22 +31,22 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     cLib_addCalcAngleS2(&i_ac->current.angle.x, z, 10, 0x800);
     cLib_addCalcAngleS2(&i_ac->current.angle.z, x, 10, 0x800);
 
-    f32 dist = (REG0_F(4) + 50.0f) * fabsf(pos1.z - pos2.z);
+    f32 dist = (REG0_F(4) + 50.0f) * std::fabsf(pos1.z - pos2.z);
     if (pActor->m2BC.x < dist) {
         pActor->m2BC.x = dist;
     }
 
-    dist = (REG0_F(4) + 50.0f) * fabsf(pos1.x - pos2.x);
+    dist = (REG0_F(4) + 50.0f) * std::fabsf(pos1.x - pos2.x);
     if (pActor->m2BC.z < dist) {
         pActor->m2BC.z = dist;
     }
 
-    dist = (REG0_F(8) + 5.0f) * fabsf(pos1.x - pos2.x);
+    dist = (REG0_F(8) + 5.0f) * std::fabsf(pos1.x - pos2.x);
     if (dist > 10.0f && pActor->m2B0.x < dist) {
         cLib_addCalc2(&pActor->m2B0.x, dist, 1.0f, REG0_F(7) + 1.2f);
     }
 
-    dist = (REG0_F(8) + 5.0f) * fabsf(pos1.z - pos2.z);
+    dist = (REG0_F(8) + 5.0f) * std::fabsf(pos1.z - pos2.z);
     if (dist > 10.0f && pActor->m2B0.z < dist) {
         cLib_addCalc2(&pActor->m2B0.z, dist, 1.0f, REG0_F(7) + 1.2f);
     }

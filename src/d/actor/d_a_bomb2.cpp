@@ -679,7 +679,7 @@ namespace daBomb2 {
             f28 = 1.0f;
         }
         mWindVec = sp48 * f31 + hitNormal * f28 * f30;
-        if (fabsf(mWindVec.y) < 5.0f) {
+        if (std::fabsf(mWindVec.y) < 5.0f) {
             mWindVec.y += attr().field_0x38*f31 + f29*(attr().field_0x3C*f28);
         }
         field_0x7A8 = 2;

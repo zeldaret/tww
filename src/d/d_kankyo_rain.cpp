@@ -166,14 +166,14 @@ void dKyr_kamome_move() {
                 }
 
                 oldTarget.x = cM_ssin(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
-                oldTarget.y = fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
+                oldTarget.y = std::fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
                 oldTarget.z = cM_scos(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
 
                 pWind->mKamomeEff[i].mAngleY += pWind->mKamomeEff[i].mAngleYSpeed * pWind->mKamomeEff[i].mScale;
                 pWind->mKamomeEff[i].mAngleX += 15;
 
                 newTarget.x = cM_ssin(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
-                newTarget.y = fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
+                newTarget.y = std::fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
                 newTarget.z = cM_scos(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
 
                 newPos.x = pCamera->mLookat.mEye.x + newTarget.x;
@@ -824,7 +824,7 @@ void dKyr_star_move() {
     dKankyo_star_Packet* pPkt = g_env_light.mpStarPacket;
     pPkt->mCount = g_env_light.mStarCount;
     if (pPkt->mCount != 0) {
-        f32 wave = fabsf(cM_fsin(pPkt->mStarEff[0].mAnimCounter));
+        f32 wave = std::fabsf(cM_fsin(pPkt->mStarEff[0].mAnimCounter));
         pPkt->mStarEff[0].mAnimCounter += 0.01f;
         pPkt->mStarEff[0].mSin = wave;
         cLib_addCalc(&pPkt->mStarEff[0].mSin, wave, 0.5f, 0.1f, 0.01f);
@@ -934,8 +934,8 @@ void wave_move() {
     vectle_calc(&deltaXZ, &vectle);
 
     pPkt->mSkewDir = cM3d_VectorProduct2d(0.0f, 0.0f, -windPowVec2.x, -windPowVec2.z, vectle.x, vectle.z);
-    pPkt->mSkewWidth = windPow * (1.0f - fabsf(windPowVec2.y)) * (1.0f - fabsf(windPowVec2.x * vectle.x + windPowVec2.z * vectle.z));
-    pPkt->mSkewWidth *= 0.6f * fabsf(pPkt->mSkewDir);
+    pPkt->mSkewWidth = windPow * (1.0f - std::fabsf(windPowVec2.y)) * (1.0f - std::fabsf(windPowVec2.x * vectle.x + windPowVec2.z * vectle.z));
+    pPkt->mSkewWidth *= 0.6f * std::fabsf(pPkt->mSkewDir);
 
     for (s32 i = 0; i < g_env_light.mWaveChan.mWaveCount; i++) {
         if (g_env_light.mWaveChan.mWaveReset)
@@ -2034,7 +2034,7 @@ void drawPoison(Mtx drawMtx, u8** pImg) {
 
         GXLoadTexObj(&texObj, GX_TEXMAP0);
 
-        f32 cosR = fabsf(cM_scos(envLight.mpPoisonPacket->mCount * 500.0f + i * 4000));
+        f32 cosR = std::fabsf(cM_scos(envLight.mpPoisonPacket->mCount * 500.0f + i * 4000));
         cosR *= cosR;
 
         reg0.r = 95.0f + -50.0f * cosR;

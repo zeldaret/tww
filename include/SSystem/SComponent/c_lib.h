@@ -6,7 +6,7 @@
 #include "dolphin/mtx/mtx.h"
 
 inline bool cLib_IsZero(f32 value) {
-    return fabsf(value) < 8e-11f;
+    return std::fabsf(value) < 8e-11f;
 }
 
 void cLib_memCpy(void* dst, const void* src, unsigned long size);

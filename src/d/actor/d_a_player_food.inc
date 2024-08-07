@@ -206,7 +206,7 @@ BOOL daPy_lk_c::procFoodSet() {
         seStartOnlyReverb(JA_SE_LK_HYOI_SET);
     }
     
-    if (fabsf(frameCtrl.getRate()) < 0.01f) {
+    if (std::abs(frameCtrl.getRate()) < 0.01f) {
         if (mDemo.getDemoType() != 5) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else if (m34D0 < 0) {

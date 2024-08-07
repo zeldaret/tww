@@ -416,7 +416,7 @@ void action_dousa(pw_class* i_this) {
     }
     if (i_this->m37C == 0 && i_this->mState < 0x5A) {
         if (i_this->mState == 0x0E || i_this->mState == 0x10 || i_this->mState == 0x14) {
-            if (!hani_check(i_this) && fopAcM_searchPlayerDistance(i_this) < 500.0f && fabsf(i_this->current.pos.y - player->current.pos.y) < 100.0f) {
+            if (!hani_check(i_this) && fopAcM_searchPlayerDistance(i_this) < 500.0f && std::fabsf(i_this->current.pos.y - player->current.pos.y) < 100.0f) {
                 if (!Line_check(i_this, i_this->current.pos, 1) && (i_this->m346 == 1 || !TORITUKI_ON)) {
                     i_this->mAction = 1;
                     i_this->mState = 0x1E;

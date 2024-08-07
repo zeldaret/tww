@@ -151,7 +151,7 @@ calc_012:
         *r28 += pt.x;
         *r27 += pt.z;
         cLib_addCalc2(&*r26, i_this->mGroundY, REG0_F(6) + 0.3f, REG0_F(7) + 20.0f);
-        if (fabsf(*r26 - i_this->mGroundY) < 1.0f) {
+        if (std::fabsf(*r26 - i_this->mGroundY) < 1.0f) {
             *r26 = i_this->mGroundY;
             i_this->mState = 10;
         }
@@ -183,7 +183,7 @@ calc_012:
         *r28 += pt.x;
         *r27 += pt.z;
         cLib_addCalc2(&*r26, i_this->mTargetPos.y, REG0_F(6) + 0.5f, REG0_F(7) + 20.0f);
-        if (fabsf(*r26 - i_this->mTargetPos.y) < 1.0f) {
+        if (std::fabsf(*r26 - i_this->mTargetPos.y) < 1.0f) {
             i_this->mState = 20;
             i_this->mSpeedLerp = 0.0f;
         }
@@ -197,7 +197,7 @@ calc_012:
         cLib_addCalc2(&*r27, i_this->mTargetPos.z, 1.0f, i_this->mSpeedLerp);
         cLib_addCalc2(&i_this->mSpeedLerp, 1000.0f, 1.0f, REG0_F(16) + 10.0f);
         cLib_addCalcAngleS2(&i_this->current.angle.y, player->shape_angle.y, 2, 0x1000);
-        if (fabsf(*r26 - i_this->mTargetPos.y) > 1.0f)
+        if (std::fabsf(*r26 - i_this->mTargetPos.y) > 1.0f)
             dispWing = true;
         if (CPad_CHECK_TRIG_LEFT(0)) {
             i_this->mState = 0;

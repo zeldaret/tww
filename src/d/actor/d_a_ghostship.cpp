@@ -121,7 +121,7 @@ BOOL daGhostship_c::_pathMove(cXyz* curPos, cXyz* p_curPntPos, cXyz* p_nextPntPo
 
     s16 targetAngleY = cM_atan2s(delta.x, delta.z);
     s16 angleLeftToTarget = cLib_addCalcAngleS(&current.angle.y, targetAngleY, 8, 0x200, 8);
-    f32 step = speedF * fabsf(cM_scos(angleLeftToTarget));
+    f32 step = speedF * std::fabsf(cM_scos(angleLeftToTarget));
     cLib_chasePosXZ(curPos, mNextPntPos, step);
     if((*curPos - mNextPntPos).absXZ() < step * (REG12_F(5) + 1.0f) || (*curPos - mNextPntPos).absXZ() == 0.0f) {
         return TRUE;

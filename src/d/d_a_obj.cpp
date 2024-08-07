@@ -107,9 +107,9 @@ namespace daObj {
             f32 dz = delta.z;
 
             cXyz result(dx * param_4, dy * param_4, dz * param_4);
-            result.x += fabsf(dx) * dx * param_5;
-            result.y += fabsf(dy) * dy * param_5;
-            result.z += fabsf(dz) * dz * param_5;
+            result.x += std::fabsf(dx) * dx * param_5;
+            result.y += std::fabsf(dy) * dy * param_5;
+            result.z += std::fabsf(dz) * dz * param_5;
 
             result *= -1.0f;
             *pDst = result;

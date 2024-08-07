@@ -1121,7 +1121,7 @@ void daItem_c::set_bound_se() {
         return;
     }
     
-    u32 temp = fabsf(field_0x650) * 2.0f;
+    u32 temp = std::fabsf(field_0x650) * 2.0f;
     if (temp > 100) {
         temp = 100;
     }

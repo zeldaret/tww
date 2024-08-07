@@ -884,7 +884,7 @@ void dPa_waveEcallBack::executeAfter(JPABaseEmitter* emitter) {
     rot.z = 0;
     emitter->setGlobalRotation(rot);
     
-    if (fabsf(speed - mVel) > mVelSpeed) {
+    if (std::fabsf(speed - mVel) > mVelSpeed) {
         if (speed - mVel > 0.0f) {
             speed = mVel + mVelSpeed;
         } else {

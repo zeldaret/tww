@@ -58,7 +58,7 @@ BOOL daTama_c::_execute() {
     bool del = true;
     if (partner != NULL) {
         f32 distXZ = fopAcM_searchActorDistanceXZ(this, partner);
-        f32 distY = fabsf(current.pos.y - partner->current.pos.y);
+        f32 distY = std::fabsf(current.pos.y - partner->current.pos.y);
         if (distXZ < mDis && distY < 400.0f) {
             del = false;
             speed.y = speedF * cM_ssin(current.angle.x);

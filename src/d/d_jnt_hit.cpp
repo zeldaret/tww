@@ -150,7 +150,7 @@ BOOL JntHit_c::Cyl2HitPosAngleOffset(cXyz* r27, csXyz* r29, cXyz* r30, csXyz* r3
     cXyz r1_7C;
     cXyz r1_70(x, -sinX, z);
     f32 f1 = r1_70.inprod(r1_88);
-    if (!(fabsf(f1) < cXyz::getNearZeroValue())) { // TODO: is this an inline?
+    if (!cLib_IsZero(f1)) {
         if (f1 > 0.0f) {
             f1 = -f30 / f1;
         } else {
@@ -315,7 +315,7 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz
                     f31 = f4;
                     hitIndex = i;
                     hitPosIndex = posIndex;
-                    if (fabsf(f5) < cXyz::getNearZeroValue() && fabsf(f29) < cXyz::getNearZeroValue()) {
+                    if (cLib_IsZero(f5) && cLib_IsZero(f29)) {
                         if (!isThrow(*pShapeType)) {
                             if (*pShapeType == 0) {
                                 CylHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_17C, r1_170, *pRadius);
@@ -344,7 +344,7 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz
                 f31 = temp;
                 hitIndex = i;
                 hitPosIndex = posIndex;
-                if (fabsf(f31) < cXyz::getNearZeroValue()) {
+                if (cLib_IsZero(f31)) {
                     SphHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_140, *pRadius);
                     if (isDelete(*pShapeType)) {
                         jointIndex = -3;

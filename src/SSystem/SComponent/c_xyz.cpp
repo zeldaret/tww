@@ -141,8 +141,9 @@ bool cXyz::operator!=(const Vec& vec) const {
 
 /* 80245CE4-80245D48       .text isZero__4cXyzCFv */
 bool cXyz::isZero(void) const {
-    return fabsf(this->x) < 3.8146972e-06f && fabsf(this->y) < 3.8146972e-06f &&
-           fabsf(this->z) < 3.8146972e-06f;
+    return std::fabsf(this->x) < 3.8146972e-06f &&
+           std::fabsf(this->y) < 3.8146972e-06f &&
+           std::fabsf(this->z) < 3.8146972e-06f;
 }
 
 // Unused, but must be in .rodata to match

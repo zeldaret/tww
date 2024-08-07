@@ -1219,7 +1219,7 @@ BOOL daNpc_Md_c::checkCollision(int r30) {
             sp3C.y = 0.0f;
             sp3C.normalizeZP();
             s16 sp08;
-            if (fabsf(sp3C.x) < 0.001f && fabsf(sp3C.z) < 0.001f) {
+            if (std::abs(sp3C.x) < 0.001f && std::abs(sp3C.z) < 0.001f) {
                 sp08 = 0;
             } else {
                 sp08 = cM_atan2s(sp3C.x, sp3C.z);

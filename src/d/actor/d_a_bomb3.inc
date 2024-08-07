@@ -1158,7 +1158,7 @@ void daBomb_c::set_wind_vec() {
         f28 = 1.0f;
     }
     mWindVec = sp48 * f31 + hitNormal * f28 * f30;
-    if (fabsf(mWindVec.y) < 5.0f) {
+    if (std::fabsf(mWindVec.y) < 5.0f) {
         mWindVec.y += f29*(100.0f*f28) + 140.0f*f31;
     }
 }
