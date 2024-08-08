@@ -348,7 +348,7 @@ public:
     /* 0x29C */ u32 mNoResetFlg0;
     /* 0x2A0 */ u32 mNoResetFlg1;
     /* 0x2A4 */ u32 mResetFlg0;
-    /* 0x2A8 */ f32 field_0x2a8;
+    /* 0x2A8 */ f32 mMaxNormalSpeed;
     /* 0x2AC */ f32 mHeight;
     /* 0x2B0 */ f32 field_0x2b0;
     /* 0x2B4 */ csXyz mBodyAngle;

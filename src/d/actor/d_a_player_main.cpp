@@ -4189,7 +4189,7 @@ void daPy_lk_c::playerInit() {
     mAcch.OnLineCheck();
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(125.0f);
-    field_0x2a8 = daPy_HIO_move_c0::m.field_0x18;
+    mMaxNormalSpeed = daPy_HIO_move_c0::m.field_0x18;
     gravity = daPy_HIO_autoJump_c0::m.field_0xC;
     maxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
     mAcchCir[0].SetWall(30.1f, 35.0f);
