@@ -1655,7 +1655,7 @@ int JAIZelBasic::checkOnOuterSea(f32* r4) {
     f32 f6 = sp0C.field_0x0 - (mAudioCamera->field_0x0->x - islandX * 100000.0f);
     f32 f0 = sp0C.field_0x8 - (mAudioCamera->field_0x0->z - islandY * 100000.0f);
     *r4 = f6*f6 + f0*f0;
-    *r4 = sqrtf(*r4);
+    *r4 = std::sqrtf(*r4);
     
     if (*r4 <= sp0C.field_0xC) {
         return 0;

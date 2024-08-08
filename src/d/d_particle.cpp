@@ -94,7 +94,7 @@ void dPa_J3DmodelEmitter_c::draw() {
             f32 sq = mtx1[0][1]*mtx1[0][1] + mtx1[1][1]*mtx1[1][1] + mtx1[2][1]*mtx1[2][1];
             if (!cM3d_IsZero(sq)) {
                 if (!cM3d_IsZero(sq)) {
-                    f32 mag = sqrtf(sq);
+                    f32 mag = std::sqrtf(sq);
                     mtx1[0][1] *= mag;
                     mtx1[1][1] *= mag;
                     mtx1[2][1] *= mag;

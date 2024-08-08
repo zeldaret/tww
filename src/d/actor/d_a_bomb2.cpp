@@ -651,7 +651,7 @@ namespace daBomb2 {
         cXyz sp48 = *mSph.GetTgRVecP();
         f32 f31 = sp48.abs2();
         if (f31 > f30*f30) {
-            sp48 *= f30 / sqrtf(f31);;
+            sp48 *= f30 / std::sqrtf(f31);;
         }
         cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
         cXyz hitNormal = cXyz::Zero;

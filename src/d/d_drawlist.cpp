@@ -1642,13 +1642,13 @@ u8 setShadowRealMtx(Mtx r26, Mtx r27, Mtx r28, cXyz* r6, cXyz* r29, f32 f30, f32
         local_64.x *= tmp;
         local_64.z *= tmp;
     }
-    f32 tmp2 = sqrtf(local_64.abs2());
+    f32 tmp2 = std::sqrtf(local_64.abs2());
     if (tmp2 != 0.0f) {
         f32 tmp3 = (local_64.y / tmp2);
         if (tmp3 < 1.5f) {
             local_64.y = 1.5f * tmp2;
             tmp2 = local_64.abs2();
-            tmp2 = sqrtf(tmp2);
+            tmp2 = std::sqrtf(tmp2);
         }
         tmp2 = (f30 * 0.5f) / tmp2;
     }
@@ -1828,7 +1828,7 @@ void dDlst_shadowSimple_c::set(cXyz* pos, f32 y, f32 param_3, cXyz* floorNrm, s1
     mDoMtx_stack_c::scaleM(param_3, offsetY + offsetY + 16.0f, param_3 * param_6);
     mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mVolumeMtx);
 
-    f32 xs = sqrtf(1.0f - floorNrm->x * floorNrm->x);
+    f32 xs = std::sqrtf(1.0f - floorNrm->x * floorNrm->x);
     f32 yy;
     f32 zz;
     if (xs != 0.0f) {

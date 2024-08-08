@@ -1248,7 +1248,7 @@ namespace daObjMovebox {
             f3 = movebox->i_attr()->m30;
             f4 = movebox->i_attr()->m74 * movebox->i_attr()->m48;
         }
-        f32 f6 = sqrtf(deltaX*deltaX + deltaZ*deltaZ);
+        f32 f6 = std::sqrtf(deltaX*deltaX + deltaZ*deltaZ);
         f6 = 1.0f - f6 * attr->m74;
         f6 = f6 * 0.9f + 0.1f;
         if (f6 < 0.0f) {
@@ -1405,7 +1405,7 @@ namespace daObjMovebox {
             mBgc.chk_wall_touch2(this, bgcSrc, bgcSrcCount, M_dir_base[3]);
         
         if (f31 > f30) {
-            f32 temp = i_attr()->m4C / sqrtf(f31);
+            f32 temp = i_attr()->m4C / std::sqrtf(f31);
             m60C *= temp;
             m610 *= temp;
         }

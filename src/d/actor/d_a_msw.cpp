@@ -63,7 +63,7 @@ void chain_Draw(msw_class* i_this) {
         angle1 = -cM_atan2s(tmp.y, tmp.z);
 
         // TODO: std::sqrtf(float)
-        angle2 = cM_atan2s(tmp.x, sqrtf(tmp.y * tmp.y + tmp.z * tmp.z));
+        angle2 = cM_atan2s(tmp.x, std::sqrtf(tmp.y * tmp.y + tmp.z * tmp.z));
 
         MtxTrans(i_this->m2E0[i].x, i_this->m2E0[i].y, i_this->m2E0[i].z, false);
 

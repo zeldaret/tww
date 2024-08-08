@@ -604,7 +604,7 @@ bool cM3d_Cross_CpsSph(const cM3dGCps& param_1, const cM3dGSph& param_2, Vec* pa
     }
     Vec auStack_34;
     if (cM3d_Len3dSqPntAndSegLine(&param_1, param_2.GetCP(), &auStack_34, &local_38) != 0) {
-        if (sqrtf(local_38) < param_1.GetR() + param_2.GetR()) {
+        if (std::sqrtf(local_38) < param_1.GetR() + param_2.GetR()) {
             cM3d_Cross_CpsSph_CrossPos(param_1, param_2, auStack_34, param_3);
             return true;
         }
@@ -635,7 +635,7 @@ void cM3d_CalcVecAngle(const Vec& vec, s16* a, s16* b) {
 
 /* 80251560-80251634       .text cM3d_CalcVecZAngle__FRC3VecP5csXyz */
 void cM3d_CalcVecZAngle(const Vec& param_0, csXyz* param_1) {
-    param_1->x = -cM_atan2s(param_0.y, sqrtf(param_0.x * param_0.x + param_0.z * param_0.z));;
+    param_1->x = -cM_atan2s(param_0.y, std::sqrtf(param_0.x * param_0.x + param_0.z * param_0.z));;
     param_1->y = cM_atan2s(param_0.x, param_0.z);
     param_1->z = 0;
 }

@@ -171,7 +171,7 @@ namespace daObj {
         }
 
         pActor->speed.set(x, y, z);
-        pActor->speedF = sqrtf(x * x + z * z);
+        pActor->speedF = std::sqrtf(x * x + z * z);
         pActor->current.angle.y = cM_atan2s(spf, grav);
         fopAcM_posMove(pActor, pAddVel);
     }

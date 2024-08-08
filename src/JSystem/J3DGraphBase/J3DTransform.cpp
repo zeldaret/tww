@@ -33,9 +33,9 @@ f32 J3DCalcZValue(MtxP m, Vec v) {
 
 /* 802DA120-802DA2E0       .text J3DCalcBBoardMtx__FPA4_f */
 void J3DCalcBBoardMtx(Mtx mtx) {
-    f32 sx = sqrtf(mtx[0][0]*mtx[0][0] + mtx[1][0]*mtx[1][0] + mtx[2][0]*mtx[2][0]);
-    f32 sy = sqrtf(mtx[0][1]*mtx[0][1] + mtx[1][1]*mtx[1][1] + mtx[2][1]*mtx[2][1]);
-    f32 sz = sqrtf(mtx[0][2]*mtx[0][2] + mtx[1][2]*mtx[1][2] + mtx[2][2]*mtx[2][2]);
+    f32 sx = std::sqrtf(mtx[0][0]*mtx[0][0] + mtx[1][0]*mtx[1][0] + mtx[2][0]*mtx[2][0]);
+    f32 sy = std::sqrtf(mtx[0][1]*mtx[0][1] + mtx[1][1]*mtx[1][1] + mtx[2][1]*mtx[2][1]);
+    f32 sz = std::sqrtf(mtx[0][2]*mtx[0][2] + mtx[1][2]*mtx[1][2] + mtx[2][2]*mtx[2][2]);
 
     mtx[0][0] = sx;
     mtx[0][1] = 0.0f;
@@ -53,9 +53,9 @@ void J3DCalcBBoardMtx(Mtx mtx) {
 /* 802DA2E0-802DA584       .text J3DCalcYBBoardMtx__FPA4_f */
 void J3DCalcYBBoardMtx(Mtx mtx) {
     /* Nonmatching */
-    f32 sx = sqrtf(mtx[0][0]*mtx[0][0] + mtx[1][0]*mtx[1][0] + mtx[2][0]*mtx[2][0]);
-    f32 sy = sqrtf(mtx[0][1]*mtx[0][1] + mtx[1][1]*mtx[1][1] + mtx[2][1]*mtx[2][1]);
-    f32 sz = sqrtf(mtx[0][2]*mtx[0][2] + mtx[1][2]*mtx[1][2] + mtx[2][2]*mtx[2][2]);
+    f32 sx = std::sqrtf(mtx[0][0]*mtx[0][0] + mtx[1][0]*mtx[1][0] + mtx[2][0]*mtx[2][0]);
+    f32 sy = std::sqrtf(mtx[0][1]*mtx[0][1] + mtx[1][1]*mtx[1][1] + mtx[2][1]*mtx[2][1]);
+    f32 sz = std::sqrtf(mtx[0][2]*mtx[0][2] + mtx[1][2]*mtx[1][2] + mtx[2][2]*mtx[2][2]);
 
     Vec axisX, axisY, axisZ;
 

@@ -3601,7 +3601,7 @@ BOOL daNpc_Ji1_c::chkAttention(cXyz param_1, s16 param_2) {
     temp4.x = player->current.pos.x - param_1.x;
     temp4.z = player->current.pos.z - param_1.z;
 
-    f32 dist = sqrtf(temp4.x * temp4.x + temp4.z * temp4.z);
+    f32 dist = std::sqrtf(temp4.x * temp4.x + temp4.z * temp4.z);
     s16 angle = cM_atan2s(temp4.x, temp4.z);
 
     if(field_0xD7A != 0) {

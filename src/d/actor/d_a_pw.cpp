@@ -346,7 +346,7 @@ void action_dousa(pw_class* i_this) {
             f32 delta_x = pnt->mPos.x - i_this->current.pos.x;
             f32 delta_z = pnt->mPos.z - i_this->current.pos.z;
             i_this->m38C = cM_atan2s(delta_x, delta_z);
-            f32 dist_xz = sqrtf(delta_x*delta_x + delta_z*delta_z);
+            f32 dist_xz = std::sqrtf(delta_x*delta_x + delta_z*delta_z);
             if (dist_xz < 80.0f) {
                 i_this->mPathPntIdx++;
                 if (i_this->mPathPntIdx >= i_this->mpPath->m_num) {

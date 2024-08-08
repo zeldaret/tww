@@ -543,7 +543,7 @@ void dNpc_EventCut_c::cutMoveToPosProc() {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
 
-    f32 dist = sqrtf((temp - mpActor->current.pos).abs2XZ());
+    f32 dist = std::sqrtf((temp - mpActor->current.pos).abs2XZ());
 
     cLib_addCalc2(&mpActor->current.pos.x, temp.x, 0.1f, mSpeed);
     cLib_addCalc2(&mpActor->current.pos.z, temp.z, 0.1f, mSpeed);

@@ -51,7 +51,7 @@ void dGrass_data_c::WorkCo(fopAc_ac_c* other, u32, int roomNo) {
 
     delta.y = mPos.y - other->current.pos.y;
     s16 rotY = cM_atan2s(delta.x, delta.z);
-    f32 dist = sqrtf(distSq);
+    f32 dist = std::sqrtf(distSq);
     dGrass_anm_c* anm;
     if (mAnimIdx < 8) {
         if (other->speedF > 16.0f) {

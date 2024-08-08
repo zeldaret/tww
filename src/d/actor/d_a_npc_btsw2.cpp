@@ -212,7 +212,7 @@ bool daNpc_Btsw2_c::chkAttention(cXyz pos, s16 facingAngleY) {
     cXyz delta;
     delta.x = player->current.pos.x - pos.x;
     delta.z = player->current.pos.z - pos.z;
-    f32 distXZ = sqrtf(delta.x*delta.x + delta.z*delta.z);
+    f32 distXZ = std::sqrtf(delta.x*delta.x + delta.z*delta.z);
     s16 targetAngleY = cM_atan2s(delta.x, delta.z);
     if (mHasAttention) {
         // Increase the attention range when we're already looking at the player so it sticks slightly out of range.

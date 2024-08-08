@@ -130,7 +130,7 @@ static void wave_cont(bwdg_class* i_this, u8 r4) {
         sp24.x = posVtx->x - sp30.x;
         sp24.z = posVtx->z - sp30.z;
         
-        f32 f0 = sqrtf(sp24.x*sp24.x + sp24.z*sp24.z);
+        f32 f0 = std::sqrtf(sp24.x*sp24.x + sp24.z*sp24.z);
         f32 f1 = 3000.0f - f0;
         f32 f3;
         f32 f4 = f1;

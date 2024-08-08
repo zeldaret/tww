@@ -50,7 +50,7 @@ dPath* get_nearpos_rail(kytag02_class* i_this, dPath* i_path, cXyz* pos, int* i_
         for (s32 i = 0; i < path->m_num; i++) {
             f32 dx = path->mpPnt[i].mPos.x - pos->x;
             f32 dz = path->mpPnt[i].mPos.z - pos->z;
-            f32 dist = sqrtf(dx*dx + dz*dz);
+            f32 dist = std::sqrtf(dx*dx + dz*dz);
             if (best > dist) {
                 bestPath = path;
                 bestIdx = i;

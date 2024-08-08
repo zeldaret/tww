@@ -2830,7 +2830,7 @@ void dKy_Itemgetcol_chg_move() {
 
             cXyz camfwd;
             dKyr_get_vectle_calc(&camera->mLookat.mEye, &camera->mLookat.mCenter, &camfwd);
-            f32 cam_distXZ = sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
+            f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
             s16 angle = cM_atan2s(camfwd.x, camfwd.z) - offsAngle;
             camfwd.x = cM_scos(0) * cM_ssin(angle);
             camfwd.y = cM_ssin(0);

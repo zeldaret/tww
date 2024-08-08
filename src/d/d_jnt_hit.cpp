@@ -98,7 +98,7 @@ BOOL JntHit_c::CylHitPosAngleOffset(cXyz* r27, csXyz* r28, cXyz* r29, csXyz* r30
         f32 temp = f31*f31 + f28*f28 - r1_DC.abs2();
         if (temp < 0.0f)
             temp = 0.0f;
-        r1_E8 = r1_C4 * (-f31 - sqrtf(temp));
+        r1_E8 = r1_C4 * (-f31 - std::sqrtf(temp));
         r1_E8 += *r27;
         if (temp == 0.0f) {
             cXyz r1_AC = r1_E8;
@@ -197,7 +197,7 @@ BOOL JntHit_c::SphHitPosAngleOffset(cXyz* r27, csXyz* r29, cXyz* r30, csXyz* r31
     if (temp < 0.0f)
         temp = 0.0f;
     
-    cXyz r1_28 = r1_34 * (-f31 - sqrtf(temp));
+    cXyz r1_28 = r1_34 * (-f31 - std::sqrtf(temp));
     r1_28 += *r27;
     if (r1_28.abs() > f30) {
         r1_28.normalizeZP();
@@ -309,7 +309,7 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz
                         f5 = 0.0f;
                     }
                 }
-                f32 f4 = sqrtf(f5*f5 + f29*f29);
+                f32 f4 = std::sqrtf(f5*f5 + f29*f29);
                 if (f4 <= f31) {
                     jointIndex = *pJointIndex;
                     f31 = f4;

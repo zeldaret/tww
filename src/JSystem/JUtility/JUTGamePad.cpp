@@ -305,7 +305,7 @@ u32 JUTGamePad::CStick::update(s8 x_val, s8 y_val, EStickMode mode, EWhichStick 
     field_0xf = y_val;
     mPosX = (f32)x_val / (f32)clamp;
     mPosY = (f32)y_val / (f32)clamp;
-    mValue = sqrtf((mPosX * mPosX) + (mPosY * mPosY));
+    mValue = std::sqrtf((mPosX * mPosX) + (mPosY * mPosY));
 
     if (mValue > 1.0f) {
         if (mode == STICK_MODE_1) {

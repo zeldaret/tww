@@ -505,7 +505,7 @@ void enemy_fire(enemyfire* ef) {
         
         ef->mDirection.y = 0.2f + REG0_F(11);
         
-        f32 speed = sqrtf(vel.x * vel.x + vel.y * vel.y + vel.z * vel.z);
+        f32 speed = std::sqrtf(vel.x * vel.x + vel.y * vel.y + vel.z * vel.z);
         speed = (0.03f + REG0_F(12)) * speed + 1.0f;
         if (speed > 1.5f + REG0_F(13)) {
             speed = 1.5f + REG0_F(13);

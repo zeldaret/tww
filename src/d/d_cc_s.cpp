@@ -218,12 +218,12 @@ void dCcS::SetPosCorrect(cCcD_Obj* obj1, cXyz* ppos1, cCcD_Obj* obj2, cXyz* ppos
         objsDist.x = ppos2->x - ppos1->x;
         objsDist.y = ppos2->y - ppos1->y;
         objsDist.z = ppos2->z - ppos1->z;
-        objDistLen = sqrtf(objsDist.x*objsDist.x + objsDist.y*objsDist.y + objsDist.z*objsDist.z);
+        objDistLen = std::sqrtf(objsDist.x*objsDist.x + objsDist.y*objsDist.y + objsDist.z*objsDist.z);
     } else {
         objsDist.x = ppos2->x - ppos1->x;
         objsDist.y = 0.0f;
         objsDist.z = ppos2->z - ppos1->z;
-        objDistLen = sqrtf(objsDist.x*objsDist.x + objsDist.z*objsDist.z);
+        objDistLen = std::sqrtf(objsDist.x*objsDist.x + objsDist.z*objsDist.z);
     }
     if (!cM3d_IsZero(objDistLen)) {
         if (correctY) {

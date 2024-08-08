@@ -56,14 +56,14 @@ void kotori_move(kt_class* i_this) {
 
     f32 dx = player->current.pos.x - *(r28 = &i_this->current.pos.x);
     f32 dz = player->current.pos.z - *(r27 = &i_this->current.pos.z);
-    f32 dist_xz = sqrtf(dx*dx + dz*dz);
+    f32 dist_xz = std::sqrtf(dx*dx + dz*dz);
     cLib_addCalcAngleS2(&i_this->mAngleRoll, 0, 2, REG0_S(4) + 0x1000);
 
     f32 vx = i_this->mTargetPos.x - *r28;
     f32 vy = i_this->mTargetPos.y - *(r26 = &i_this->current.pos.y);
     f32 vz = i_this->mTargetPos.z - *r27;
     s16 angleX = cM_atan2s(vx, vz);
-    s16 angleY = -cM_atan2s(vy, sqrtf(vx*vx + vz*vz));
+    s16 angleY = -cM_atan2s(vy, std::sqrtf(vx*vx + vz*vz));
 
     cXyz offs;
     cXyz pt;
@@ -115,7 +115,7 @@ void kotori_move(kt_class* i_this) {
         cLib_addCalc2(&i_this->mSpeedLerp, 1.0f, 1.0f, 0.1f);
         goto calc_012;
     case 1:
-        dist = sqrtf(vx*vx + vy*vy + vz*vz);
+        dist = std::sqrtf(vx*vx + vy*vy + vz*vz);
         if (dist < REG0_F(1) * 10.0f + 800.0f) {
             i_this->mState = 8;
         }
@@ -161,7 +161,7 @@ calc_012:
     case 2:
         i_this->mTargetPos = headTopPos;
         i_this->mTargetPos.y += 200.0f;
-        dist = sqrtf(vx*vx + vy*vy + vz*vz);
+        dist = std::sqrtf(vx*vx + vy*vy + vz*vz);
         if (dist < REG0_F(1) * 10.0f + 800.0f) {
             i_this->mState = 9;
         }

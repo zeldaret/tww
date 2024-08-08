@@ -199,7 +199,7 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
 
 /* 802F3FA8-802F4064       .text normalize__11J3DDeformerFPf */
 void J3DDeformer::normalize(f32* vec) {
-    f32 inv = 1.0f / sqrtf(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
+    f32 inv = 1.0f / std::sqrtf(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
     vec[0] *= inv;
     vec[1] *= inv;
     vec[2] *= inv;
