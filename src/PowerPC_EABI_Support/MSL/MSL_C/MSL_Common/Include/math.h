@@ -78,6 +78,7 @@ inline float fmodf(float x, float y) { return fmod(x, y); }
 inline float atan2f(float y, float x) { return (float)atan2(y, x); }
 inline float sinf(float x) { return sin(x); }
 inline float cosf(float x) { return cos(x); }
+inline float tanf(float x) { return tan(x); }
 
 extern inline float sqrtf(float x) {
     const double _half = .5;
@@ -93,7 +94,6 @@ extern inline float sqrtf(float x) {
     }
     return x;
 }
-
 }; // namespace std
 #endif
 

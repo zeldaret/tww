@@ -71,17 +71,17 @@ s16 cSAngle::Inv() const {
 
 /* 80253D40-80253D68       .text Sin__7cSAngleCFv */
 f32 cSAngle::Sin() const {
-    return sin(Radian());
+    return std::sinf(Radian());
 }
 
 /* 80253D68-80253D90       .text Cos__7cSAngleCFv */
 f32 cSAngle::Cos() const {
-    return cos(Radian());
+    return std::cosf(Radian());
 }
 
 /* 80253D90-80253DB8       .text Tan__7cSAngleCFv */
 f32 cSAngle::Tan() const {
-    return tan(Radian());
+    return std::tanf(Radian());
 }
 
 /* 80253DB8-80253DE4       .text __mi__7cSAngleCFv */
