@@ -337,11 +337,11 @@ static s32 daKt_Create(fopAc_ac_c* i_ac) {
                 i_this->current.pos.y = REG0_F(0) * 10.0f + 2500.0f;
                 fopAcM_SetParam(i_this, 1000);
                 for (s32 i = 0; i < num; i++) {
-                    fopAcM_prm_class* appen = fopAcM_CreateAppend();
-                    appen->mPos = i_this->current.pos;
-                    appen->mAngle.set(0, 0, 0);
-                    appen->mParameter = 1001 + i;
-                    fpcM_Create(PROC_KT, NULL, appen);
+                    fopAcM_prm_class* params = fopAcM_CreateAppend();
+                    params->mPos = i_this->current.pos;
+                    params->mAngle.set(0, 0, 0);
+                    params->mParameter = 1001 + i;
+                    fpcM_Create(PROC_KT, NULL, params);
                 }
             }
 

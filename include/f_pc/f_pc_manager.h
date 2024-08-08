@@ -18,52 +18,52 @@ typedef int (*fpcM_DrawIteraterFunc)(void*, void*);
 inline fpc_ProcID fpcM_GetID(void* pProc) {
     return pProc != NULL ? ((base_process_class*)pProc)->mBsPcId : fpcM_ERROR_PROCESS_ID_e;
 }
-inline s16 fpcM_GetName(void* pActor) {
-    return ((base_process_class*)pActor)->mProcName;
+inline s16 fpcM_GetName(void* pProc) {
+    return ((base_process_class*)pProc)->mProcName;
 }
-inline u32 fpcM_GetParam(void* pActor) {
-    return ((base_process_class*)pActor)->mParameters;
-}
-
-inline void fpcM_SetParam(void* p_actor, u32 param) {
-    ((base_process_class*)p_actor)->mParameters = param;
+inline u32 fpcM_GetParam(void* pProc) {
+    return ((base_process_class*)pProc)->mParameters;
 }
 
-inline s16 fpcM_GetProfName(void* pActor) {
-    return ((base_process_class*)pActor)->mProfName;
+inline void fpcM_SetParam(void* pProc, u32 param) {
+    ((base_process_class*)pProc)->mParameters = param;
 }
 
-inline fpc_ProcID fpcM_Create(s16 procName, FastCreateReqFunc createFunc, void* process) {
+inline s16 fpcM_GetProfName(void* pProc) {
+    return ((base_process_class*)pProc)->mProfName;
+}
+
+inline fpc_ProcID fpcM_Create(s16 procName, FastCreateReqFunc createFunc, void* params) {
     return fpcSCtRq_Request(fpcLy_CurrentLayer(), procName, (stdCreateFunc)createFunc, NULL,
-                            process);
+                            params);
 }
 
-inline s16 fpcM_DrawPriority(void* param_0) {
-    return fpcLf_GetPriority((leafdraw_class*)param_0);
+inline s16 fpcM_DrawPriority(void* pProc) {
+    return fpcLf_GetPriority((leafdraw_class*)pProc);
 }
 
-inline s32 fpcM_ChangeLayerID(void* proc, int layerID) {
-    return fpcPi_Change(&((base_process_class*)proc)->mPi, layerID, fpcPi_CURRENT_e, fpcPi_CURRENT_e);
+inline s32 fpcM_ChangeLayerID(void* pProc, int layerID) {
+    return fpcPi_Change(&((base_process_class*)pProc)->mPi, layerID, fpcPi_CURRENT_e, fpcPi_CURRENT_e);
 }
 
-inline void fpcM_SetPriority(void* proc, int priority) {
-    fpcPi_Change(&((base_process_class*)proc)->mPi, fpcLy_CURRENT_e, priority, fpcPi_CURRENT_e);
+inline void fpcM_SetPriority(void* pProc, int priority) {
+    fpcPi_Change(&((base_process_class*)pProc)->mPi, fpcLy_CURRENT_e, priority, fpcPi_CURRENT_e);
 }
 
 inline s32 fpcM_IsJustType(int type1, int type2) {
     return fpcBs_Is_JustOfType(type1, type2);
 }
 
-inline bool fpcM_IsFirstCreating(void* proc) {
-    return ((base_process_class*)proc)->mInitState == 0;
+inline bool fpcM_IsFirstCreating(void* pProc) {
+    return ((base_process_class*)pProc)->mInitState == 0;
 }
 
-inline process_profile_definition* fpcM_GetProfile(void* proc) {
-    return (process_profile_definition*)((base_process_class*)proc)->mpProf;
+inline process_profile_definition* fpcM_GetProfile(void* pProc) {
+    return (process_profile_definition*)((base_process_class*)pProc)->mpProf;
 }
 
-inline void* fpcM_GetAppend(void* proc) {
-    return ((base_process_class*)proc)->mpUserData;
+inline void* fpcM_GetAppend(void* pProc) {
+    return ((base_process_class*)pProc)->mpUserData;
 }
 
 inline BOOL fpcM_IsExecuting(fpc_ProcID id) {
@@ -74,8 +74,8 @@ inline void* fpcM_LyJudge(process_node_class* i_node, fpcLyIt_JudgeFunc i_func, 
     return fpcLyIt_Judge(&i_node->mLayer, i_func, i_data);
 }
 
-inline s8 fpcM_CreateResult(void* pActor) {
-    return ((base_process_class*)pActor)->mCreateResult;
+inline s8 fpcM_CreateResult(void* pProc) {
+    return ((base_process_class*)pProc)->mCreateResult;
 }
 
 void fpcM_Draw(void* pProc);
@@ -85,11 +85,11 @@ s32 fpcM_Delete(void* pProc);
 BOOL fpcM_IsCreating(fpc_ProcID pID);
 void fpcM_Management(fpcM_ManagementFunc pFunc1, fpcM_ManagementFunc pFunc2);
 void fpcM_Init(void);
-base_process_class* fpcM_FastCreate(s16 pProcTypeID, FastCreateReqFunc param_2, void* param_3,
-                                    void* pData);
-s32 fpcM_IsPause(void* pProc, u8 param_2);
-void fpcM_PauseEnable(void* pProc, u8 param_2);
-void fpcM_PauseDisable(void* pProc, u8 param_2);
+base_process_class* fpcM_FastCreate(s16 pProcTypeID, FastCreateReqFunc createFunc, void* pUserData,
+                                    void* params);
+s32 fpcM_IsPause(void* pProc, u8 i_flag);
+void fpcM_PauseEnable(void* pProc, u8 i_flag);
+void fpcM_PauseDisable(void* pProc, u8 i_flag);
 void* fpcM_JudgeInLayer(uint i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, void* i_data);
 
 extern "C" {
