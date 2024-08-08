@@ -254,7 +254,7 @@ void daPy_swBlur_c::copySwBlur(MtxP mtx, int param_2) {
         field_0x304[i + var_r31] = field_0x304[i];
     }
 
-    // Very obvious fakematch
+    // Probably fakematch
     f32 var_f31 = 0.0f;
     f32 frac = 1.0f / var_r31;
     int i;
@@ -1111,6 +1111,7 @@ void daPy_lk_c::setFootEffect() {
 /* 8012C128-8012C1A8       .text resetFootEffect__9daPy_lk_cFv */
 void daPy_lk_c::resetFootEffect() {
     // Fakematch?
+    // Should probably use array indexing
     daPy_footEffect_c* pFootEffect = m31E8;
     for (int idx = 0; idx < (s32)ARRAY_SIZE(m31E8); idx++) {
         pFootEffect[0].getSmokeCallBack()->end();
@@ -1187,7 +1188,7 @@ void daPy_lk_c::setWaterDrop() {
     tmp.z = mtx[2][3];
     m336C.setPos(&tmp);
 
-    if (mModeFlg & ModeFlg_00000001) {
+    if (checkModeFlg(ModeFlg_00000001)) {
         daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = TRUE;
     } else {
         daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = FALSE;
@@ -1257,7 +1258,7 @@ void daPy_lk_c::setDamageCurseEmitter() {
     if (!daPy_dmEcallBack_c::checkCurse()) {
         endDamageEmitter();
 
-        mDmEcallBack->makeEmitter(0x815B, mpCLModel->getAnmMtx(0x1E), &current.pos, NULL);
+        mDmEcallBack[0].makeEmitter(0x815B, mpCLModel->getAnmMtx(0x1E), &current.pos, NULL);
 
         if (checkUpperReadyThrowAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
