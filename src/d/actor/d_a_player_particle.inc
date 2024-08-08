@@ -481,7 +481,6 @@ void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
 
 /* 8012A288-8012A8D8       .text setAuraEffect__9daPy_lk_cFv */
 void daPy_lk_c::setAuraEffect() {
-    /* Nonmatching */
     static const u16 aura_emitter_joint[] = {
         0x0007,
         0x000B,
@@ -503,11 +502,10 @@ void daPy_lk_c::setAuraEffect() {
         0x0026,
     };
 
-
     J3DAnmTevRegKey* curYaura00Brk = mYaura00rBrk.getBrkAnm();
     J3DAnmTevRegKey* curYmgcs00Brk = mYmgcs00Brk.getBrkAnm();
-    f32 temp_f29 = curYaura00Brk->getFrame();
-    f32 temp_f31 = curYmgcs00Brk->getFrame();
+    f32 yauraFrame = curYaura00Brk->getFrame();
+    f32 ymgcsFrame = curYmgcs00Brk->getFrame();
     f32 y00BtkFrameMax = mpYaura00Btk->getFrameMax();
 
     if (checkNoDamageMode()) {
@@ -550,57 +548,56 @@ void daPy_lk_c::setAuraEffect() {
         }
     }
 
-    f32 var_f28, var_f31;
     if (checkNoDamageMode() && (dComIfGp_event_getMode() == 0 || (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(dEvtFlag_TALK_e))) ) {
-        if (temp_f29 < 0.01f) {
+        if (yauraFrame < 0.01f) {
             for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++) {
                 mMagicArmorAuraEntries[idx].setFrame(cM_rndF(y00BtkFrameMax));
             }
         }
 
-        var_f28 = temp_f29 + 1.0f;
-        if (var_f28 >= curYaura00Brk->getFrameMax()) {
-            var_f28 = curYaura00Brk->getFrameMax() - 0.001f;
+        yauraFrame += 1.0f;
+        if (yauraFrame >= curYaura00Brk->getFrameMax()) {
+            yauraFrame = curYaura00Brk->getFrameMax() - 0.001f;
         }
 
-        var_f31 = temp_f31 + 1.0f;
-        if (var_f31 >= curYmgcs00Brk->getFrameMax()) {
-            var_f31 = curYmgcs00Brk->getFrameMax() - 0.001f;
+        ymgcsFrame += 1.0f;
+        if (ymgcsFrame >= curYmgcs00Brk->getFrameMax()) {
+            ymgcsFrame = curYmgcs00Brk->getFrameMax() - 0.001f;
         }
 
         seStartMapInfo(JA_SE_LK_MG_SHELD_USING);
     } else {
-        var_f28 = temp_f29 - 1.0f;
-        if (var_f28 < 0.0f) {
-            var_f28 = 0.0f;
+        yauraFrame -= 1.0f;
+        if (yauraFrame < 0.0f) {
+            yauraFrame = 0.0f;
         }
 
-        var_f31 = temp_f31 - 1.0f;
-        if (var_f31 < 0.0f) {
-            var_f31 = 0.0f;
+        ymgcsFrame -= 1.0f;
+        if (ymgcsFrame < 0.0f) {
+            ymgcsFrame = 0.0f;
         }
     }
 
-    mYaura00rBrk.entryFrame(var_f28);
-    mYmgcs00Brk.entryFrame(var_f31);
-    if (var_f28 > 0.0f) {
-        f32 var_f31_2, var_f28_2;
+    mYaura00rBrk.entryFrame(yauraFrame);
+    mYmgcs00Brk.entryFrame(ymgcsFrame);
+    if (yauraFrame > 0.0f) {
+        f32 var_f28, var_f31;
         daPy_aura_c* auraEntry = mMagicArmorAuraEntries;
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
-            var_f31_2 = 0.0f;
-            var_f28_2 = 1.0f + (fabsf(dComIfGp_getShipActor()->speedF) / 15.0f);
-            if (var_f28_2 > 1.5f) {
-                var_f28_2 = 1.5f;
+            var_f31 = 0.0f;
+            var_f28 = 1.0f + (fabsf(dComIfGp_getShipActor()->speedF) / 15.0f);
+            if (var_f28 > 1.5f) {
+                var_f28 = 1.5f;
             }
         } else {
-            var_f31_2 = fabsf(mVelocity) / daPy_HIO_move_c0::m.field_0x18;
-            if (var_f31_2 > 1.0f) {
-                var_f31_2 = 1.0f;
+            var_f31 = fabsf(mVelocity) / daPy_HIO_move_c0::m.field_0x18;
+            if (var_f31 > 1.0f) {
+                var_f31 = 1.0f;
             }
-            var_f28_2 = 1.0f;
+            var_f28 = 1.0f;
         }
 
-        cXyz localScale = scale * (var_f28_2 * cM_fcos(M_PI * (0.5f * var_f31_2)));
+        cXyz localScale = scale * (var_f28 * cM_fcos(M_PI * (0.5f * var_f31)));
 
         for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++, auraEntry++) {
             f32 var_f0 = 1.0f + auraEntry->getFrame();
@@ -611,11 +608,11 @@ void daPy_lk_c::setAuraEffect() {
             auraEntry->getModel()->setBaseTRMtx(mpCLModel->getAnmMtx(aura_model_joint[idx]));
 
             if (idx == 0) {
-                auraEntry->getModel()->setBaseScale(scale * var_f31_2 * 1.2f);
+                auraEntry->getModel()->setBaseScale(scale * var_f31 * 1.2f);
             } else if (idx != 1) {
                 auraEntry->getModel()->setBaseScale(localScale);
             } else {
-                auraEntry->getModel()->setBaseScale((scale * (1.0f - (0.3f * var_f31_2))) * 2.0f);
+                auraEntry->getModel()->setBaseScale((scale * (1.0f - (0.3f * var_f31))) * 2.0f);
             }
 
         }
@@ -721,7 +718,6 @@ void daPy_lk_c::setWaterRipple() {
         local_4c.z = suimenMunyaMtx[2][3];
 
         local_40.y = m35D0;
-
         local_4c -= local_40;
 
         cXyz local_50;
