@@ -700,7 +700,7 @@ f32 cM_rnd_c::get() {
     m0 = (m0 * 171) % 30269;
     m4 = (m4 * 172) % 30307;
     m8 = (m8 * 170) % 30323;
-    return std::fabsf(fmod((m0 / 30269.0f) + (m4 / 30307.0f) + (m8 / 30323.0f), 1.0f));
+    return std::fabsf(std::fmodf((m0 / 30269.0f) + (m4 / 30307.0f) + (m8 / 30323.0f), 1.0f));
 }
 
 f32 cM_rnd_c::getF(f32 m) {

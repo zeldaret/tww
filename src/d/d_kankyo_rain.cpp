@@ -1477,12 +1477,12 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
             dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &camfwd);
 
             f32 cam_distXZ = sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
-            f32 cam_theta = atan2f(camfwd.x, camfwd.z);
-            f32 cam_phi = atan2f(camfwd.y, cam_distXZ);
+            f32 cam_theta = std::atan2f(camfwd.x, camfwd.z);
+            f32 cam_phi = std::atan2f(camfwd.y, cam_distXZ);
 
             f32 moon_distXZ = sqrtf(moonPos.x*moonPos.x + moonPos.z*moonPos.z);
-            f32 moon_theta = atan2f(moonPos.x, moonPos.z);
-            f32 moon_phi = atan2f(moonPos.y, moon_distXZ);
+            f32 moon_theta = std::atan2f(moonPos.x, moonPos.z);
+            f32 moon_phi = std::atan2f(moonPos.y, moon_distXZ);
 
             f32 angle = 45.0f + (((moon_theta - cam_theta) / -8.0f) * moon_phi) * 360.0f;
             MTXRotDeg(rotMtx, 'Z', angle);
@@ -1575,14 +1575,14 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
             snap_sunmoon_proc(&sunPos, 9);
 
             f32 sun_distXZ = sqrtf(sunPos.x*sunPos.x + sunPos.z*sunPos.z);
-            f32 sun_theta = atan2f(sunPos.x, sunPos.z);
-            f32 sun_phi = atan2f(sunPos.y, sun_distXZ);
+            f32 sun_theta = std::atan2f(sunPos.x, sunPos.z);
+            f32 sun_phi = std::atan2f(sunPos.y, sun_distXZ);
 
             dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &camfwd);
 
             f32 cam_distXZ = sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
-            f32 cam_theta = atan2f(camfwd.x, camfwd.z);
-            f32 cam_phi = atan2f(camfwd.y, cam_distXZ);
+            f32 cam_theta = std::atan2f(camfwd.x, camfwd.z);
+            f32 cam_phi = std::atan2f(camfwd.y, cam_distXZ);
 
             MTXRotDeg(rotMtx, 'Z', -50.0f + (360.0f * ((sun_theta - cam_theta) / -8.0f)));
             MTXConcat(camMtx, rotMtx, camMtx);

@@ -583,9 +583,9 @@ void dScnKy_env_light_c::setSunpos() {
         var_f1 = g_env_light.mCurTime + 345.0f;
     }
 
-    sp8.x = i_sinf(DEG_TO_RAD(var_f1)) * 80000.0f;
-    sp8.y = i_cosf(DEG_TO_RAD(var_f1)) * 80000.0f;
-    sp8.z = i_cosf(DEG_TO_RAD(var_f1)) * -48000.0f;
+    sp8.x = std::sinf(DEG_TO_RAD(var_f1)) * 80000.0f;
+    sp8.y = std::cosf(DEG_TO_RAD(var_f1)) * 80000.0f;
+    sp8.z = std::cosf(DEG_TO_RAD(var_f1)) * -48000.0f;
 
     if (!dComIfGp_event_runCheck() || g_env_light.mInitAnimTimer != 0) {
         mSunPos.x = camera_p->mLookat.mEye.x + sp8.x;

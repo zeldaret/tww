@@ -35,9 +35,6 @@ inline double fabs(double f) {
 
 double floor(double);
 double fmod(double, double);
-inline float fmodf(float f1, float f2) {
-    return fmod(f1, f2);
-}
 
 double frexp(double, int*);
 double ldexp(double, int);
@@ -85,20 +82,6 @@ extern inline double sqrt(double x) {
     return HUGE_VALF;
 }
 
-inline float atan2f(float y, float x) {
-    return (float)atan2(y, x);
-}
-
-// these are duplicated due to sinf/cosf having a symbol, but
-// still being used as inlines elsewhere
-inline float i_sinf(float x) {
-    return sin(x);
-}
-
-inline float i_cosf(float x) {
-    return cos(x);
-}
-
 #ifdef __cplusplus
 };
 
@@ -106,6 +89,10 @@ inline float i_cosf(float x) {
 namespace std {
 inline float fabsf(float f) { return fabs(f); }
 inline float abs(float f) { return fabsf(f); }
+inline float fmodf(float x, float y) { return fmod(x, y); }
+inline float atan2f(float y, float x) { return (float)atan2(y, x); }
+inline float sinf(float x) { return sin(x); }
+inline float cosf(float x) { return cos(x); }
 }; // namespace std
 #endif
 

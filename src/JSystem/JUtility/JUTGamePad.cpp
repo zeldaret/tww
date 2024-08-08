@@ -323,7 +323,7 @@ u32 JUTGamePad::CStick::update(s8 x_val, s8 y_val, EStickMode mode, EWhichStick 
                 mAngle = -0x4000;
             }
         } else {
-            mAngle = 10430.379f * atan2f(mPosX, -mPosY);
+            mAngle = 10430.379f * std::atan2f(mPosX, -mPosY);
         }
     }
 

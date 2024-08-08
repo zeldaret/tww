@@ -1045,8 +1045,8 @@ int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 par
 
     int sid = dComIfGd_setRealShadow2(id, param_2, pModel, pPos, param_5, y - param_8, param_10);
     if (sid == 0) {
-        cXyz i_pos(pPos->x, y, pPos->z);
-        dComIfGd_setSimpleShadow2(&i_pos, param_8, param_6, pFloorPoly, rotY, param_12, pTexObj);
+        cXyz pos(pPos->x, y, pPos->z);
+        dComIfGd_setSimpleShadow2(&pos, param_8, param_6, pFloorPoly, rotY, param_12, pTexObj);
     }
     return sid;
 }

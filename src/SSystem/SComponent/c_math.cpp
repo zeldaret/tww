@@ -178,7 +178,7 @@ float cM_rnd(void) {
     r0 = (r0 * 0xAB) % 0x763D;
     r1 = (r1 * 0xAC) % 0x7663;
     r2 = (r2 * 0xAA) % 0x7673;
-    return std::fabsf(fmod(r0 / 30269.0f + r1 / 30307.0f + r2 / 30323.0f, 1.0));
+    return std::fabsf(std::fmodf(r0 / 30269.0f + r1 / 30307.0f + r2 / 30323.0f, 1.0));
 }
 
 /* 802463B0-802463E8       .text cM_rndF__Ff */

@@ -11,12 +11,12 @@ namespace math {
     
 /* 8026E610-8026E778       .text getRotation_xyz__Q27JStudio4mathFPA4_ffff */
 void getRotation_xyz(MtxP param_1, f32 x, f32 y, f32 z) {
-    f32 cosx = i_cosf(DEG_TO_RAD(x));
-    f32 sinx = i_sinf(DEG_TO_RAD(x));
-    f32 cosy = i_cosf(DEG_TO_RAD(y));
-    f32 siny = i_sinf(DEG_TO_RAD(y));
-    f32 cosz = i_cosf(DEG_TO_RAD(z));
-    f32 sinz = i_sinf(DEG_TO_RAD(z));
+    f32 cosx = std::cosf(DEG_TO_RAD(x));
+    f32 sinx = std::sinf(DEG_TO_RAD(x));
+    f32 cosy = std::cosf(DEG_TO_RAD(y));
+    f32 siny = std::sinf(DEG_TO_RAD(y));
+    f32 cosz = std::cosf(DEG_TO_RAD(z));
+    f32 sinz = std::sinf(DEG_TO_RAD(z));
     f32 cosxcosz = cosx * cosz;
     f32 cosxsinz = cosx * sinz;
     f32 sinxcosz = sinx * cosz;
