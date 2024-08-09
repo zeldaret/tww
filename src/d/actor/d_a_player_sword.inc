@@ -71,7 +71,7 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
         modelData->entryTexMtxAnimator(mpEquipItemBtk);
     }
     
-    mSwBlur.mpPosBuffer = new(0x20) u8[0x4800];
+    mSwBlur.mpPosBuffer = new(0x20) Vec[2 * 0x300];
     modelData = initModel(&mpSwordModel1, model_tbl.glowModel, 0x13000222);
     
     buffer = new(0x20) u8[0x400];

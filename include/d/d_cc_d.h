@@ -54,6 +54,7 @@ enum CcG_Tg_HitMark {
 enum dCcG_At_Spl {
     /* 0x0 */ dCcG_At_Spl_UNK0 = 0,
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
+    /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
     /* 0x9 */ dCcG_At_Spl_UNK9 = 9,
     /* 0xB */ dCcG_At_Spl_UNKB = 0xB,

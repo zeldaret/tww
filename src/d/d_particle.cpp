@@ -716,8 +716,16 @@ void dPa_control_c::setSimpleLand(cBgS_PolyInfo&, const cXyz*, const csXyz*, f32
 }
 
 /* 8007DA58-8007DAA8       .text checkAtrCodeEffect__13dPa_control_cFi */
-void dPa_control_c::checkAtrCodeEffect(int) {
-    /* Nonmatching */
+s32 dPa_control_c::checkAtrCodeEffect(int code) {
+    if (code == dBgS_Attr_WATER_e) {
+        return 0x23;
+    } else if (code == dBgS_Attr_GRASS_e) {
+        return 0x24;
+    } else if (code != dBgS_Attr_UNK1B_e && code != dBgS_Attr_ICE_e && code != dBgS_Attr_GIANT_FLOWER_e && code != dBgS_Attr_CARPET_e) {
+        return 0x2022;
+    } else {
+        return -1;
+    }
 }
 
 /* 8007DAA8-8007DB34       .text setNormalStripes__13dPa_control_cFUsPC4cXyzPC5csXyzPC4cXyzUcUs */

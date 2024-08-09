@@ -59,7 +59,7 @@ public:
     void getHeight() {}
     void getLifeTime() const {}
     void getLocalPosition(JGeometry::TVec3<f32>&) const {}
-    void getOffsetPosition(JGeometry::TVec3<f32>&) const {}
+    void getOffsetPosition(JGeometry::TVec3<f32>& out) const { out.set(mPosition); }
     void getVelVec(JGeometry::TVec3<f32>&) const {}
     void getWidth() {}
     void setDeleteParticleFlag() {}
