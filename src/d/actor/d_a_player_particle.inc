@@ -11,7 +11,37 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_main_data.h"
+#include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_ship.h"
+#include "d/d_procname.h"
+#include "f_op/f_op_kankyo_mng.h"
+#include "m_Do/m_Do_lib.h"
+#include "SSystem/SComponent/c_math.h"
+
+static u8 l_sightDL[] ALIGN_DECL(32) = {
+    0x10, 0x00, 0x00, 0x10, 0x40, 0xFF, 0xFF, 0x42, 0x80, 0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00,
+    0x10, 0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00,
+    0x61, 0x28, 0x38, 0x03, 0xC0,
+    0x61, 0xC0, 0x08, 0x42, 0x8F,
+    0x61, 0xC1, 0x08, 0xE6, 0x70,
+    0x61, 0x43, 0x00, 0x00, 0x01,
+    0x61, 0x40, 0x00, 0x00, 0x06,
+    0x61, 0x41, 0x00, 0x04, 0xAD,
+    0x61, 0xF3, 0x64, 0x00, 0x00,
+    0x10, 0x00, 0x00, 0x10, 0x3F, 0x00, 0x00, 0x00, 0x01,
+    0x10, 0x00, 0x00, 0x10, 0x09, 0x00, 0x00, 0x00, 0x00,
+    0x61, 0x00, 0x00, 0x00, 0x01,
+    0x98, 0x00, 0x04, 0x01, 0x01, 0x00, 0x01,
+    0x01, 0xFF, 0x01, 0x00, 0x00, 0x01, 0x01, 0xFF, 0x00, 0x01, 0x00, 0xFF, 0xFF,
+    
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00,
+};
 
 /* 8012901C-80129034       .text setup__24daPy_swimTailEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void daPy_swimTailEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz* angle, s8) {
@@ -66,7 +96,7 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
     }
 
     if (field_0x20 != NULL) {
-        emitter->setGlobalTranslation(field_0x14.x, field_0x14.y, field_0x14.z);
+        emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
         JGeometry::TVec3<s16> rot(0, 0, 0);
         rot.y = field_0x20->y;
         emitter->setGlobalRotation(rot);
@@ -106,22 +136,147 @@ void daPy_swimTailEcallBack_c::draw(JPABaseEmitter*) {
 
 /* 80129348-8012952C       .text draw__18daPy_sightPacket_cFv */
 void daPy_sightPacket_c::draw() {
-    /* Nonmatching */
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_S8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_U8, 0);
+
+    GXTexObj texObj;
+    GXColor color;
+    if (mLockFlag) {
+        GXInitTexObj(&texObj, mpLockTex, mpImg->width, mpImg->height, (GXTexFmt)mpImg->format, (GXTexWrapMode)mpImg->wrapS, (GXTexWrapMode)mpImg->wrapT, (mpImg->mipmapCount > 1) ? GX_TRUE : GX_FALSE);
+
+        color.r = 0xFF;
+        color.g = 0xFF;
+        color.b = 0x32;
+        color.a = mLockAlpha;
+        GXSetTevColor(GX_TEVREG0, color);
+        GXSetTevColor(GX_TEVREG1, color);
+    } else {
+        GXInitTexObj(&texObj, mpSightTex, 0x80, 0x80, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
+
+        color.r = 0xFF;
+        color.g = 0x00;
+        color.b = 0x00;
+        color.a = 0xFF;
+        GXSetTevColor(GX_TEVREG0, color);
+        GXSetTevColor(GX_TEVREG1, color);
+    }
+
+    GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+    GXLoadPosMtxImm(mMtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXCallDisplayList(&l_sightDL, sizeof(l_sightDL) - 0x09);
+    J3DShape::resetVcdVatCache();
 }
 
 /* 8012952C-801296FC       .text setSight__18daPy_sightPacket_cFv */
 void daPy_sightPacket_c::setSight() {
-    /* Nonmatching */
+    cXyz proj;
+    mDoLib_project(&mPos, &proj);
+    mDoMtx_stack_c::transS(proj);
+
+    if (mLockFlag) {
+        f32 var_f2;
+        f32 var_f31;
+        if (field_0x6 < 13) {
+            var_f2 = 1.0f - ((s16)field_0x6 / 13.0f);
+            var_f31 = -var_f2;
+        } else {
+            var_f2 = (field_0x6 - 13) / 13.0f;
+            var_f31 = var_f2;
+        }
+
+        mLockAlpha = 150.0f + (30.0f * var_f2);
+        f32 temp_f3 = 0.65f + (0.35f * var_f2);
+
+        mDoMtx_stack_c::scaleM(temp_f3 * mpImg->width, temp_f3 * mpImg->height, temp_f3);
+        mDoMtx_stack_c::ZrotM(32768.0f * cM_ssin(16384.0f * var_f31));
+    } else {
+        mDoMtx_stack_c::scaleM(10.0f, 10.0f, 10.0f);
+    }
+
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    dComIfGd_set2DXlu(this);
 }
 
 /* 801296FC-801297F4       .text initSwBlur__13daPy_swBlur_cFPA4_fifi */
-void daPy_swBlur_c::initSwBlur(MtxP, int, f32, int) {
-    /* Nonmatching */
+void daPy_swBlur_c::initSwBlur(MtxP mtx, int idx, f32 blurTopRate, int blurColorType) {
+    int i = idx * 2;
+
+    mBlurTopRate = blurTopRate;
+    mBlurColorType = blurColorType;
+
+    mDoMtx_multVec(mtx, mpPosBuffer + i, &field_0x034[0]);
+    mDoMtx_multVec(mtx, mpPosBuffer + i + 1, &field_0x304[0]);
+
+    field_0x034[0] += (field_0x034[0] - field_0x304[0]) * mBlurTopRate;
+    field_0x034[1] = field_0x034[0];
+    field_0x304[1] = field_0x304[0];
+    field_0x014 = 0;
+    field_0x018 = idx;
+    field_0x028.set(mtx[0][3], mtx[1][3], mtx[2][3]);
 }
 
 /* 801297F4-80129A78       .text copySwBlur__13daPy_swBlur_cFPA4_fi */
-void daPy_swBlur_c::copySwBlur(MtxP, int) {
-    /* Nonmatching */
+void daPy_swBlur_c::copySwBlur(MtxP mtx, int param_2) {
+    int var_r31 = param_2 - field_0x018;
+    field_0x018 = param_2;
+
+    int var_r30;
+    if (var_r31 > 0) {
+        var_r30 = -2;
+
+        if (var_r31 > 60) {
+            var_r31 = 60;
+        }
+    } else if (var_r31 < 0) {
+        var_r30 = 2;
+
+        if (var_r31 < -60) {
+            var_r31 = 60;
+        } else {
+            var_r31 = -var_r31;
+        }
+    } else {
+        var_r31 = 10;
+        var_r30 = 0;
+    }
+
+    for (int i = 59 - var_r31; i >= 0; i--) {
+        field_0x034[i + var_r31] = field_0x034[i];
+        field_0x304[i + var_r31] = field_0x304[i];
+    }
+
+    // Probably fakematch
+    f32 var_f31 = 0.0f;
+    f32 frac = 1.0f / var_r31;
+    int i;
+    int buffIdx = field_0x018 * 2;
+    cXyz sp50(mtx[0][3], mtx[1][3], mtx[2][3]);
+    cXyz sp38 = field_0x028 - sp50;
+    field_0x028 = sp50;
+    for (i = 0; i < var_r31 && buffIdx >= 0; i++) {
+        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx, &field_0x034[i]);
+        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx + 1, &field_0x304[i]);
+
+        field_0x034[i] += (field_0x034[i] - field_0x304[i]) * mBlurTopRate;
+        field_0x034[i] += sp38 * var_f31;
+        field_0x304[i] += sp38 * var_f31;
+        var_f31 += frac;
+        buffIdx += var_r30;
+    }
+
+    field_0x014 += var_r31;
+    if (field_0x014 >= 59) {
+        field_0x014 = 58;
+    }
 }
 
 /* 80129A78-80129DD0       .text draw__13daPy_swBlur_cFv */
@@ -144,11 +299,11 @@ void daPy_swBlur_c::draw() {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetNumChans(0);
 
-    if (mBlurColorType == 0) {
+    if (mBlurColorType == NORMAL_SLASH_BLUR) {
         // Normal color.
         static GXColor n_color0 = {0xFF, 0xFF, 0xFF, 0x96};
         GXSetTevColor(GX_TEVREG0, n_color0);
-    } else if (mBlurColorType == 1) {
+    } else if (mBlurColorType == ELIXIR_SOUP_SLASH_BLUR) {
         // Elixir Soup color.
         static GXColor y_color0 = {0xFF, 0xFF, 0x7B, 0x96};
         GXSetTevColor(GX_TEVREG0, y_color0);
@@ -193,23 +348,49 @@ void daPy_swBlur_c::draw() {
 }
 
 /* 80129DD0-80129E9C       .text execute__24daPy_fanSwingEcallBack_cFP14JPABaseEmitter */
-void daPy_fanSwingEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPy_fanSwingEcallBack_c::execute(JPABaseEmitter* emitter) {
+    if (emitter->isEnableDeleteEmitter()) {
+        emitter->quitImmortalEmitter();
+        emitter->setEmitterCallBackPtr(NULL);
+        mpEmitter = NULL;
+    } else if (mAlphaOutFlg != FALSE) {
+        s16 alpha = emitter->getGlobalAlpha();
+        cLib_chaseS(&alpha, 0, 50);
+        emitter->setGlobalAlpha(alpha);
+
+        if (alpha == 0) {
+            emitter->quitImmortalEmitter();
+            emitter->setEmitterCallBackPtr(NULL);
+            mpEmitter = NULL;
+        }
+    }
 }
 
 /* 80129E9C-80129F48       .text execute__25daPy_waterDropPcallBack_cFP14JPABaseEmitterP15JPABaseParticle */
-void daPy_waterDropPcallBack_c::execute(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
+void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle* ptcl) {
+    if (field_0x4) {
+        JGeometry::TVec3<f32> ptclPos;
+        ptcl->getOffsetPosition(ptclPos);
+
+        cXyz pos(ptclPos.x, ptclPos.y + 25.0f, ptclPos.z);
+        mGndChk.SetPos(&pos);
+
+        pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
+
+        if (pos.y > ptclPos.y) {
+            fopKyM_create(PROC_WATER_MARK, 1, &pos);
+        }
+    }
 }
 
 /* 80129F48-80129F98       .text execute__22daPy_followEcallBack_cFP14JPABaseEmitter */
 void daPy_followEcallBack_c::execute(JPABaseEmitter* emitter) {
-    JGeometry::TVec3<f32> pos(field_0x08.x, field_0x08.y, field_0x08.z);
+    JGeometry::TVec3<f32> pos(mPos.x, mPos.y, mPos.z);
     emitter->setGlobalTranslation(pos);
     JGeometry::TVec3<s16> rot;
-    rot.x = field_0x14.x;
-    rot.y = field_0x14.y;
-    rot.z = field_0x14.z;
+    rot.x = mAngle.x;
+    rot.y = mAngle.y;
+    rot.z = mAngle.z;
     emitter->setGlobalRotation(rot);
 }
 
@@ -244,7 +425,13 @@ void daPy_waterDropEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, 
 
 /* 8012A058-8012A0B4       .text end__25daPy_waterDropEcallBack_cFv */
 void daPy_waterDropEcallBack_c::end() {
-    /* Nonmatching */
+    if (mpEmitter != NULL) {
+        mpEmitter->quitImmortalEmitter();
+        mpEmitter->deleteAllParticle();
+        mpEmitter->setParticleCallBackPtr(NULL);
+
+        daPy_followEcallBack_c::end();
+    }
 }
 
 /* 8012A0B4-8012A0E0       .text makeEmitterColor__28daPy_mtxPosFollowEcallBack_cFUsPA4_fPC4cXyzPC5csXyzPC8_GXColorPC8_GXColor */
@@ -254,21 +441,46 @@ void daPy_mtxPosFollowEcallBack_c::makeEmitterColor(u16 particleID, MtxP mtx, co
 }
 
 /* 8012A0E0-8012A160       .text execute__28daPy_mtxPosFollowEcallBack_cFP14JPABaseEmitter */
-void daPy_mtxPosFollowEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPy_mtxPosFollowEcallBack_c::execute(JPABaseEmitter* emitter) {
+    mDoMtx_stack_c::transS(mpMtx[0][3], mpMtx[1][3], mpMtx[2][3]);
+    if (mpAngle != NULL) {
+        mDoMtx_stack_c::YrotM(mpAngle->y);
+    }
+
+    emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
 }
 
 s16 daPy_dmEcallBack_c::m_timer = 0;
 u16 daPy_dmEcallBack_c::m_type = 3;
 
 /* 8012A160-8012A288       .text execute__18daPy_dmEcallBack_cFP14JPABaseEmitter */
-void daPy_dmEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
+    if (m_type == 0) {
+        cXy v;
+        v.x = emitter->mGlobalTranslation.x;
+        v.y = emitter->mGlobalTranslation.z;
+
+        emitter->setGlobalTranslation(mpMtx[0][3], mpMtx[1][3], mpMtx[2][3]);
+
+        v.x = (mpMtx[0][3] - v.x) * -0.05f;
+        v.y = (mpMtx[2][3] - v.y) * -0.05f;
+        f32 sq = v.x * v.x + v.y * v.y;
+
+        if (sq > 1.0f) {
+            f32 distFrac = 1.0f / std::sqrtf(sq);
+
+            v.x *= distFrac;
+            v.y *= distFrac;
+        }
+
+        emitter->setDirection(JGeometry::TVec3<f32>(v.x, 0.6f, v.y));
+    } else {
+        emitter->setGlobalRTMatrix(mpMtx);
+    }
 }
 
 /* 8012A288-8012A8D8       .text setAuraEffect__9daPy_lk_cFv */
 void daPy_lk_c::setAuraEffect() {
-    /* Nonmatching */
     static const u16 aura_emitter_joint[] = {
         0x0007,
         0x000B,
@@ -289,66 +501,685 @@ void daPy_lk_c::setAuraEffect() {
         0x0021,
         0x0026,
     };
+
+    J3DAnmTevRegKey* curYaura00Brk = mYaura00rBrk.getBrkAnm();
+    J3DAnmTevRegKey* curYmgcs00Brk = mYmgcs00Brk.getBrkAnm();
+    f32 yauraFrame = curYaura00Brk->getFrame();
+    f32 ymgcsFrame = curYmgcs00Brk->getFrame();
+    f32 y00BtkFrameMax = mpYaura00Btk->getFrameMax();
+
+    if (checkNoDamageMode()) {
+        J3DAnmTevRegKey* pYaura00Brk;
+        J3DAnmTevRegKey* pYmgcs00Brk;
+
+        if (checkEquipDragonShield()) {
+            if (dComIfGp_event_getMode() == 0) {
+                m3548 -= 1;
+            }
+
+            if (m3548 == 0) {
+                if (dComIfGs_getMagic() != 0) {
+                    m3548 = daPy_HIO_magicShield_c0::m.field_0x0;
+                    dComIfGp_setItemMagicCount(-1);
+                } else {
+                    offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
+                }
+            }
+
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS));
+        } else {
+            if (dComIfGp_event_getMode() == 0) {
+                mTinkleShieldTimer -= 1;
+            }
+
+            pYaura00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_G));
+            pYmgcs00Brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_TS));
+        }
+
+        if (pYaura00Brk != curYaura00Brk) {
+            mYaura00rBrk.init(mMagicArmorAuraEntries[0].getModel()->getModelData(), pYaura00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            curYaura00Brk = pYaura00Brk;
+        }
+
+        if (pYmgcs00Brk != curYmgcs00Brk) {
+            mYmgcs00Brk.init(mpYmgcs00Model->getModelData(), pYmgcs00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            curYmgcs00Brk = pYmgcs00Brk;
+        }
+    }
+
+    if (checkNoDamageMode() && (dComIfGp_event_getMode() == 0 || (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(dEvtFlag_TALK_e))) ) {
+        if (yauraFrame < 0.01f) {
+            for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++) {
+                mMagicArmorAuraEntries[idx].setFrame(cM_rndF(y00BtkFrameMax));
+            }
+        }
+
+        yauraFrame += 1.0f;
+        if (yauraFrame >= curYaura00Brk->getFrameMax()) {
+            yauraFrame = curYaura00Brk->getFrameMax() - 0.001f;
+        }
+
+        ymgcsFrame += 1.0f;
+        if (ymgcsFrame >= curYmgcs00Brk->getFrameMax()) {
+            ymgcsFrame = curYmgcs00Brk->getFrameMax() - 0.001f;
+        }
+
+        seStartMapInfo(JA_SE_LK_MG_SHELD_USING);
+    } else {
+        yauraFrame -= 1.0f;
+        if (yauraFrame < 0.0f) {
+            yauraFrame = 0.0f;
+        }
+
+        ymgcsFrame -= 1.0f;
+        if (ymgcsFrame < 0.0f) {
+            ymgcsFrame = 0.0f;
+        }
+    }
+
+    mYaura00rBrk.entryFrame(yauraFrame);
+    mYmgcs00Brk.entryFrame(ymgcsFrame);
+    if (yauraFrame > 0.0f) {
+        f32 var_f28, var_f31;
+        daPy_aura_c* auraEntry = mMagicArmorAuraEntries;
+        if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
+            var_f31 = 0.0f;
+            var_f28 = 1.0f + (std::fabsf(dComIfGp_getShipActor()->speedF) / 15.0f);
+            if (var_f28 > 1.5f) {
+                var_f28 = 1.5f;
+            }
+        } else {
+            var_f31 = std::fabsf(mVelocity) / daPy_HIO_move_c0::m.field_0x18;
+            if (var_f31 > 1.0f) {
+                var_f31 = 1.0f;
+            }
+            var_f28 = 1.0f;
+        }
+
+        cXyz localScale = scale * (var_f28 * cM_fcos(M_PI * (0.5f * var_f31)));
+
+        for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++, auraEntry++) {
+            f32 var_f0 = 1.0f + auraEntry->getFrame();
+            if (var_f0 >= y00BtkFrameMax) {
+                var_f0 -= y00BtkFrameMax;
+            }
+            auraEntry->setFrame(var_f0);
+            auraEntry->getModel()->setBaseTRMtx(mpCLModel->getAnmMtx(aura_model_joint[idx]));
+
+            if (idx == 0) {
+                auraEntry->getModel()->setBaseScale(scale * var_f31 * 1.2f);
+            } else if (idx != 1) {
+                auraEntry->getModel()->setBaseScale(localScale);
+            } else {
+                auraEntry->getModel()->setBaseScale((scale * (1.0f - (0.3f * var_f31))) * 2.0f);
+            }
+
+        }
+    }
+
+    if (checkNoDamageMode() || mYmgcs00Brk.getBrkAnm()->getFrame() > 0.0f) {
+        mpYmgcs00Model->setBaseTRMtx(mpCLModel->getBaseTRMtx());
+        mpYmgcs00Model->calc();
+        simpleAnmPlay(mpYmgcs00Btk);
+    }
 }
 
 /* 8012A8D8-8012B340       .text setWaterRipple__9daPy_lk_cFv */
 void daPy_lk_c::setWaterRipple() {
-    /* Nonmatching */
     static Vec waterfall_ripple_scale = {0.75f, 0.75f, 0.75f};
-    static JGeometry::TVec3<f32> normal_ripple_scale;
-    static JGeometry::TVec3<f32> small_ripple_scale;
-    static JGeometry::TVec3<f32> waterfall_splash_trans;
+    static JGeometry::TVec3<f32> normal_ripple_scale(1.0f, 1.0f, 1.0f);
+    static JGeometry::TVec3<f32> small_ripple_scale(0.4f, 0.4f, 0.4f);
     static const Vec wave_offset = {0.0f, 18.0f, 0.0f};
     static const Vec swim_offset = {0.0f, 30.0f, 0.0f};
     static const Vec swim_side_offset = {0.0f, 0.0f, 30.0f};
+
+    // Probably fakematch
+    BOOL var_r3;
+    if (mCurProc == daPyProc_DEMO_DEAD_e && dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)) {
+        var_r3 = TRUE;
+    } else {
+        var_r3 = FALSE;
+    }
+
+    // Probably fakematch (May use inlines?)
+    if ((var_r3 && m34D6 != 0) ||
+        (mCurProc != daPyProc_VOMIT_WAIT_e && !var_r3 && (!checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_HANG) || checkModeFlg(ModeFlg_SWIM)) && ((checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 5.0f + mCyl.GetC().y && m35D0 < mCyl.GetC().y + mCyl.GetH()) || (mCurrAttributeCode == dBgS_Attr_WATER_e && mAcch.ChkGroundHit())))
+    ) {
+
+        if (m3280.getEmitter() == NULL) {
+            dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, NULL, 0xFF, &m3280);
+        }
+
+        f32 var_f1 = (0.1f * std::fabsf(getSpeedF()));
+        var_f1 *= var_f1;
+        if (var_f1 > 1.0f) {
+            var_f1 = 1.0f;
+        }
+        m3280.setRate(var_f1);
+        simpleAnmPlay(mpSuimenMunyaBtk);
+
+        JPABaseEmitter* emitter = m3280.getEmitter();
+        if (emitter != NULL && ((emitter->mGlobalParticleScale.x < 0.8f && checkNoResetFlg0(daPyFlg0_UNK80)) || (emitter->mGlobalParticleScale.x > 0.8f && !checkNoResetFlg0(daPyFlg0_UNK80)))) {
+            m3280.end();
+
+            emitter = dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, NULL, 0xFF, &m3280);
+        }
+
+        if (emitter != NULL) {
+            if (checkNoResetFlg0(daPyFlg0_UNK80)) {
+                emitter->setGlobalScale(normal_ripple_scale);
+            } else {
+                emitter->setGlobalScale(small_ripple_scale);
+            }
+        }
+    } else if (m3280.getEmitter() != NULL) {
+        m3280.end();
+    }
+
+    if (checkModeFlg(ModeFlg_SWIM)) {
+        if (!mSwimTailEcallBack[0].field_0x04) {
+            mSwimTailEcallBack[0].field_0x08 = std::fabsf(mVelocity / mMaxNormalSpeed);
+        }
+
+        if (!mSwimTailEcallBack[1].field_0x04) {
+            mSwimTailEcallBack[1].field_0x08 = std::fabsf(mVelocity / mMaxNormalSpeed);
+        }
+        cXyz local_1c;
+        cMtx_multVec(mpCLModel->getAnmMtx(15), &wave_offset, &local_1c);
+
+        cXyz local_20;
+        cXyz local_28;
+        local_1c.y = m35D0;
+
+        f32 cos = cM_scos(shape_angle.y) * 5.0f;
+        f32 sin = cM_ssin(shape_angle.y) * 5.0f;
+
+        local_20.x = local_1c.x + cos;
+        local_20.y = local_1c.y;
+        local_20.z = local_1c.z - sin;
+        local_28.x = local_1c.x - cos;
+        local_28.y = local_1c.y;
+        local_28.z = local_1c.z + sin;
+        mSwimTailEcallBack[0].mPos.set(local_20);
+        mSwimTailEcallBack[0].field_0x0C = m35D0 + 2.0f;
+        mSwimTailEcallBack[0].field_0x10 = mAcch.m_wtr.GetHeight();
+        mSwimTailEcallBack[1].mPos.set(local_28);
+        mSwimTailEcallBack[1].field_0x0C = m35D0 + 2.0f;
+        mSwimTailEcallBack[1].field_0x10 = mAcch.m_wtr.GetHeight();
+
+        cXyz local_40;
+        cMtx_multVec(mpCLModel->getAnmMtx(15), &swim_offset, &local_40);
+        MtxP suimenMunyaMtx = mpSuimenMunyaModel->getBaseTRMtx();
+
+        cXyz local_4c;
+        mDoMtx_multVecZero(suimenMunyaMtx, &local_4c);
+
+        local_40.y = m35D0;
+        local_4c -= local_40;
+
+        cXyz local_50;
+        local_50.z = (local_4c.absXZ() / mMaxNormalSpeed) * 0.5f + 1.0f;
+        if (local_50.z > 1.5f) {
+            local_50.z = 1.5f;
+        }
+        local_50.x = 1.0f;
+        local_50.y = 1.0f;
+
+        if (mCurProc == daPyProc_DEMO_DEAD_e) {
+            mDoMtx_stack_c::transS(current.pos.x + cM_ssin(shape_angle.y) * 60.0f, local_40.y + 2.0f, current.pos.z + cM_scos(shape_angle.y) * 60.0f);
+        } else {
+            mDoMtx_stack_c::transS(local_40.x, local_40.y + 2.0f, local_40.z);
+        }
+
+        if (dPa_control_c::isStatus(0x01)) {
+            MtxP mtx = mpCLModel->getAnmMtx(15);
+            cXyz local_5c;
+            mDoMtx_multVecZero(mtx, &local_5c);
+
+            cXyz local_68;
+            cMtx_multVec(mtx, &swim_side_offset, &local_68);
+            cXyz local_74(local_5c.x * 2.0f - local_68.x, local_5c.y, local_5c.z * 2.0f - local_68.z);
+            cXyz local_80(local_5c.x * 2.0f - local_40.x, local_5c.y, local_5c.z * 2.0f - local_40.z);
+
+            if (daSea_ChkArea(local_68.x, local_68.z)) {
+                local_68.y = daSea_calcWave(local_68.x, local_68.z);
+            }
+
+            if (daSea_ChkArea(local_74.x, local_74.z)) {
+                local_74.y = daSea_calcWave(local_74.x, local_74.z);
+            }
+
+            if (daSea_ChkArea(local_80.x, local_80.z)) {
+                local_80.y = daSea_calcWave(local_80.x, local_80.z);
+            }
+
+            cXyz local_b8 = local_40 - local_80;
+            cXyz local_c4 = local_74 - local_68;
+
+            mDoMtx_stack_c::ZXYrotM(cM_atan2s(-local_b8.y, local_b8.absXZ()), shape_angle.y, cM_atan2s(-local_c4.y, local_c4.absXZ()));
+        } else {
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+        }
+
+        mpSuimenMunyaModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpSuimenMunyaModel->setBaseScale(local_50);
+    }
+
+    static JGeometry::TVec3<f32> waterfall_splash_trans(0.0f, 15.0f, 0.0f);
+
+    if (((mAcch.ChkGroundHit() || checkModeFlg(ModeFlg_SWIM)) && mCurrAttributeCode == dBgS_Attr_WATERFALL_e) || (checkModeFlg(ModeFlg_HANG) && m3588 == 0x17)) {
+        if (m3400.getEmitter() == NULL) {
+            m3400.makeEmitter(0x23, mpCLModel->getAnmMtx(15), &current.pos, NULL);
+            JPABaseEmitter* emitter = m3400.getEmitter();
+
+            if (emitter != NULL) {
+                emitter->setRate(4.0f);
+                emitter->setSpread(1.0f);
+                emitter->setEmitterTranslation(waterfall_splash_trans);
+            }
+        }
+
+        if (m34CD == 0) {
+            cXyz local_ac;
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_ac);
+
+            dComIfGp_particle_setSingleRipple(0x3F, &local_ac, NULL, (cXyz*)&waterfall_ripple_scale);
+            m34CD = 15;
+            dComIfGp_getVibration().StartQuake(4, 1, cXyz(0.0f, 1.0f, 0.0f));
+        } else {
+            m34CD -= 1;
+            if (m34CD == 5) {
+                dComIfGp_getVibration().StopQuake(-1);
+            }
+        }
+    } else {
+        if (m3400.getEmitter() != NULL) {
+            dComIfGp_getVibration().StopQuake(-1);
+        }
+
+        m3400.end();
+    }
+
+    if (m3400.getEmitter() != NULL) {
+        GXColor amb, dif;
+        dKy_get_seacolor(&amb, &dif);
+        m3400.getEmitter()->setGlobalPrmColor(amb.r, amb.g, amb.b);
+    }
 }
 
 /* 8012B340-8012B8EC       .text setFootEffectType__9daPy_lk_cFiP4cXyzii */
-void daPy_lk_c::setFootEffectType(int, cXyz*, int, int) {
-    /* Nonmatching */
-    static JGeometry::TVec3<f32> run_splash_scale;
+void daPy_lk_c::setFootEffectType(int param_0, cXyz* i_pos, int param_2, int param_3) {
+    static JGeometry::TVec3<f32> run_splash_scale(0.6f, 0.6f, 0.6f);
     static Vec grass_scale = {1.5f, 1.5f, 1.5f};
-    static JGeometry::TVec3<f32> run_grass_scale;
+    static JGeometry::TVec3<f32> run_grass_scale(0.65f, 0.65f, 0.65f);
     static Vec smoke_scale = {1.25f, 1.25f, 1.25f};
-    static JGeometry::TVec3<f32> heavy_emit_smoke_scale;
-    static JGeometry::TVec3<f32> heavy_dyn_smoke_scale;
-    static JGeometry::TVec3<f32> heavy_pat_smoke_scale;
+    static JGeometry::TVec3<f32> heavy_emit_smoke_scale(1.0f, 0.0f, 1.0f);
+    static JGeometry::TVec3<f32> heavy_dyn_smoke_scale(0.25f, 0.25f, 0.25f);
+    static JGeometry::TVec3<f32> heavy_pat_smoke_scale(0.75f, 0.75f, 0.75f);
+
+    JPABaseEmitter* emitter = NULL;
+
+    csXyz angle;
+    daPy_footEffect_c* footEffect = &m31E8[param_2];
+    if (mAcch.ChkGroundHit() && !checkNoResetFlg0(static_cast<daPy_lk_c::daPy_FLG0>(daPyFlg0_UNK80000000 | daPyFlg0_UNK20000000))) {
+        angle.x = getGroundAngle(&mAcch.m_gnd, current.angle.y);
+    } else {
+        angle.x = 0;
+    }
+
+    angle.y = current.angle.y;
+    angle.z = 0;
+
+    footEffect->setPos(i_pos);
+    footEffect->setAngle(&angle);
+    if (param_0 == 0x23) {
+        if (checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 10.0f + i_pos->y) {
+            footEffect->mPos.y = m35D0 - 10.0f;
+        }
+    } else if (mCurProc == daPyProc_CUT_ROLL_e && param_0 == 0x2022) {
+        param_0 = -2;
+    } else if (param_3 == 5) {
+        param_0 = 0x2027;
+    }
+
+    s32 effectId = footEffect->getID();
+    if (param_0 != effectId) {
+        if (effectId != fpcM_ERROR_PROCESS_ID_e) {
+            footEffect->getSmokeCallBack()->end();
+            footEffect->getOtherCallBack()->end();
+        }
+
+        if (param_0 == -2) {
+             emitter = dComIfGp_particle_setP1(0x2022, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
+        } else if (param_0 == 0x2022 || param_0 == 0x2027) {
+             emitter = dComIfGp_particle_setToonP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
+        } else if (param_0 == 0x24) {
+             GXColor color = {tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b, tevStr.mColorC0.a};
+             emitter = dComIfGp_particle_setP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&grass_scale, 0xFF, footEffect->getOtherCallBack(), -1, &color, &tevStr.mColorK0);
+        } else {
+            GXColor amb, dif;
+            dKy_get_seacolor(&amb, &dif);
+            emitter = dComIfGp_particle_setP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), NULL, 0xFF, footEffect->getOtherCallBack(), -1, &amb);
+        }
+
+        if (emitter != NULL) {
+            footEffect->setID(param_0);
+        }
+
+        if (param_0 == -2) {
+            param_0 = 0x2022;
+        }
+    }
+
+    if (emitter != NULL) {
+        if (param_3 == 5) {
+            if (param_0 == 0x2027) {
+                emitter->setLifeTime(40);
+                emitter->setRate(10.0f);
+                emitter->setEmitterScale(heavy_emit_smoke_scale);
+                emitter->setGlobalDynamicsScale(heavy_dyn_smoke_scale);
+                emitter->setGlobalParticleScale(heavy_pat_smoke_scale);
+            } else {
+                emitter->setRate(15.0f);
+                emitter->setSpread(1.0f);
+                if (param_0 == 0x24) {
+                    emitter->setDirectionalSpeed(12.0f);
+                }
+            }
+        } else if (param_3 == 1) {
+            emitter->setRate(16.0f);
+            emitter->setSpread(1.0f);
+        } else if (param_3 == 3) {
+            emitter->setRate(8.0f);
+            emitter->setSpread(0.3f);
+        } else if (param_3 == 2) {
+            if (param_0 == 0x24) {
+                emitter->setGlobalScale(run_grass_scale);
+                emitter->setRate(10.0f);
+                emitter->setSpread(1.0f);
+                emitter->setLifeTime(15);
+            } else {
+                emitter->setRate(18.0f);
+                emitter->setSpread(1.0f);
+                emitter->setGlobalScale(run_splash_scale);
+            }
+        } else if (param_3 == 4 && param_0 == 0x23) {
+            emitter->setRate(3.0f);
+            emitter->setSpread(0.2f);
+        } else {
+            emitter->setRate(3.0f);
+            emitter->setSpread(0.05f);
+        }
+    }
 }
 
 /* 8012B8EC-8012B9DC       .text setFootMark__9daPy_lk_cFP4cXyz */
-void daPy_lk_c::setFootMark(cXyz*) {
-    /* Nonmatching */
+void daPy_lk_c::setFootMark(cXyz* i_pos) {
+    cXyz pos(i_pos->x, i_pos->y + 5.0f, i_pos->z);
+    mGndChk.SetPos(&pos);
+
+    pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
+    if (pos.y != -1e9f && dComIfG_Bgsp()->GetAttributeCode(mGndChk) == dBgS_Attr_SAND_e) {
+        fopKyM_create(PROC_WATER_MARK, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
+    }
+
+    if (m336C.mpEmitter != NULL) {
+        fopKyM_create(PROC_WATER_MARK, shape_angle.y << 16, i_pos, &scale);
+    }
 }
 
 /* 8012B9DC-8012C128       .text setFootEffect__9daPy_lk_cFv */
 void daPy_lk_c::setFootEffect() {
-    /* Nonmatching */
+    if (!mAcch.ChkGroundHit() || checkNoResetFlg0(daPyFlg0_UNK80000000)) {
+        resetFootEffect();
+        m3410.end();
+        return;
+    }
+
+    cXyz pos;
+    if (getFootOnGround()) {
+        if (getRightFootOnGround()) {
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x27), &pos);
+            setFootMark(&pos);
+        }
+
+        if (getLeftFootOnGround()) {
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x22), &pos);
+            setFootMark(&pos);
+        }
+    }
+
+    if (checkResetFlg0(daPyRFlg0_UNK10) && mCurrAttributeCode == dBgS_Attr_WATER_e && m35D0 > 25.0f + current.pos.y) {
+        cXyz& p = m3410.getPos();
+        p.x = current.pos.x + 45.0f * cM_ssin(current.angle.y);
+        p.y = m35D0;
+        p.z = current.pos.z + 45.0f * cM_scos(current.angle.y);
+
+        m3410.setAngle(0, current.angle.y + 0x8000, 0);
+
+        if (m3410.mpEmitter == NULL) {
+            GXColor amb, dif;
+            dKy_get_seacolor(&amb, &dif);
+
+            JPABaseEmitter* emitter = dComIfGp_particle_setP1(0x23, &p, NULL, NULL, 0xFF, &m3410, -1, &amb);
+            if (emitter != NULL) {
+                emitter->setLifeTime(15);
+                emitter->setRate(4.0f);
+                emitter->setSpread(0.6f);
+                emitter->setDirectionalSpeed(11.0f);
+            }
+        }
+    } else {
+        m3410.end();
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0) {
+        if (checkResetFlg0(daPyRFlg0_UNK10)) {
+            if (getFootOnGround() && m35D0 <= current.pos.y) {
+                dComIfGp_particle_setP1(0x8237, &pos, &current.angle);
+            }
+        }
+    }
+
+    s32 temp_r3_4 = dComIfGp_particle_checkAtrCodeEffect(mCurrAttributeCode);
+    if (temp_r3_4 == -1) {
+        return;
+    }
+
+    s32 var_r29;
+    if (checkResetFlg0(daPyRFlg0_UNK10) && getFootOnGround() && (checkHeavyStateOn() || temp_r3_4 == 0x23 || temp_r3_4 == 0x24)) {
+        if (getRightFootOnGround()) {
+            m34BE = 2;
+        } else {
+            m34BE = 1;
+        }
+
+        if (checkHeavyStateOn()) {
+            var_r29 = 5;
+            dComIfGp_getVibration().StartShock(2, -0x31, cXyz(0.0f, 1.0f, 0.0f));
+        } else {
+            var_r29 = 2;
+        }
+
+    } else {
+        if (mCurProc == daPyProc_JUMP_CUT_LAND_e) {
+            var_r29 = 3;
+        } else if (mCurProc == daPyProc_FRONT_ROLL_e) {
+            var_r29 = 4;
+        } else {
+            var_r29 = 0;
+        }
+    }
+
+    if (m34BE == 0) {
+        return;
+    }
+
+    if (mCurProc == daPyProc_DEMO_LAST_COMBO_e) {
+        f32 rnd = cM_rndFX(17.5f);
+        cXyz sp44 = m370C;
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x1), &m370C);
+
+        if (m3570 != 0) {
+            current.angle.y = shape_angle.y - 0x4000;
+            m3570 = 0;
+        } else {
+            cXyz sp38 = m370C - sp44;
+            current.angle.y = cM_atan2s(sp38.x, sp38.z);
+        }
+
+        pos.x = m370C.x + rnd * cM_scos(current.angle.y);
+        pos.y = current.pos.y;
+        pos.z = m370C.z - rnd * cM_scos(current.angle.y);
+        setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+    } else {
+        if (m34BE == 4) {
+            f32 rnd = cM_rndFX(17.5f);
+            pos.x = current.pos.x + rnd * cM_scos(current.angle.y);
+            pos.y = current.pos.y;
+            pos.z = current.pos.z - rnd * cM_scos(current.angle.y);
+            setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+
+        } else if (m34BE == 3) {
+            if (mCurrAttributeCode == dBgS_Attr_GRASS_e || mCurrAttributeCode == dBgS_Attr_WATER_e) {
+                mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x27), &pos);
+                setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+
+                mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x22), &pos);
+                setFootEffectType(temp_r3_4, &pos, 1, var_r29);
+
+            } else {
+                setFootEffectType(temp_r3_4, &current.pos, 0, var_r29);
+            }
+        } else if (m34BE == 1) {
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x22), &pos);
+            setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+        } else if (m34BE == 2) {
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x27), &pos);
+            setFootEffectType(temp_r3_4, &pos, 0, var_r29);
+        } else if (m34BE == 5) {
+            setFootEffectType(temp_r3_4, &current.pos, 0, 1);
+        } else if (m34BE == 6) {
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &pos);
+
+
+            mGndChk.SetPos(&pos);
+
+            f32 groundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
+            if (groundY != -1e9f) {
+                pos.y = groundY;
+            }
+
+            setFootEffectType(temp_r3_4, &pos, 0, 1);
+        }
+    }
 }
 
 /* 8012C128-8012C1A8       .text resetFootEffect__9daPy_lk_cFv */
 void daPy_lk_c::resetFootEffect() {
-    /* Nonmatching */
+    // Fakematch?
+    // Should probably use array indexing
+    daPy_footEffect_c* pFootEffect = m31E8;
+    for (int idx = 0; idx < (s32)ARRAY_SIZE(m31E8); idx++) {
+        pFootEffect[0].getSmokeCallBack()->end();
+        pFootEffect[0].getOtherCallBack()->end();
+        pFootEffect[0].setID(-1);
+
+        pFootEffect++;
+    }
+
+    m34BE = 0;
 }
 
 /* 8012C1A8-8012C2A4       .text setSwimTail__9daPy_lk_cFv */
 void daPy_lk_c::setSwimTail() {
-    /* Nonmatching */
     static JGeometry::TVec3<f32> tail_scale(1.0f, 1.0f, -1.0f);
+
+    if (mSwimTailEcallBack[0].getEmitter() == NULL) {
+        dComIfGp_particle_setShipTail(0x3A, &mSwimTailEcallBack[0].getPos(), &current.angle, &scale, 0xFF, &mSwimTailEcallBack[0]);
+        mSwimTailEcallBack[0].field_0x05 = true;
+    }
+
+    if (mSwimTailEcallBack[1].getEmitter() == NULL) {
+        dComIfGp_particle_setShipTail(0x3A, &mSwimTailEcallBack[1].getPos(), &current.angle, &scale, 0xFF, &mSwimTailEcallBack[1]);
+    }
 }
 
 /* 8012C2A4-8012C330       .text setCutWaterSplash__9daPy_lk_cFv */
 void daPy_lk_c::setCutWaterSplash() {
-    /* Nonmatching */
+    if (m336C.getEmitter() != NULL) {
+        cXyz pos;
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(4), &pos);
+
+        dComIfGp_particle_setP1(0x39, &pos);
+    }
 }
 
 /* 8012C330-8012C45C       .text setSwimWaterDrop__9daPy_lk_cFP25daPy_waterDropEcallBack_c */
-void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c*) {
-    /* Nonmatching */
+void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c* callBack) {
+    f32 tmp = m35D0 + 10.0f;
+    if (checkNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP) || !checkNoResetFlg0(daPy_lk_c::daPyFlg0_UNK80) || (callBack->getPos().y > tmp && !checkModeFlg(ModeFlg_SWIM))) {
+        if (callBack->getEmitter() == NULL && (callBack->field_0x1C || checkNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP))) {
+            JPABaseEmitter* emitter = dComIfGp_particle_setP1(0x38, &callBack->getPos(), NULL, NULL, 0xFF, callBack);
+
+            if (emitter != NULL) {
+                emitter->setParticleCallBackPtr(&daPy_waterDropEcallBack_c::m_pcallback);
+            }
+        }
+
+        callBack->field_0x1C = FALSE;
+        offNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP);
+    } else if (checkNoResetFlg0(daPy_lk_c::daPyFlg0_UNK80) && callBack->getPos().y < m35D0) {
+        callBack->end();
+        if (mCurProc != daPyProc_VOMIT_WAIT_e) {
+            callBack->field_0x1C = TRUE;
+        }
+    }
 }
 
 /* 8012C45C-8012C620       .text setWaterDrop__9daPy_lk_cFv */
 void daPy_lk_c::setWaterDrop() {
-    /* Nonmatching */
+    MtxP mtx = mpCLModel->getAnmMtx(0x0E);
+    cXyz tmp;
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x0E), &tmp);
+    m334C.setPos(&tmp);
+
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x02), &tmp);
+    m336C.setPos(&tmp);
+
+    if (checkModeFlg(ModeFlg_00000001)) {
+        daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = TRUE;
+    } else {
+        daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = FALSE;
+    }
+
+    if (mDmEcallBack->m_type == 0) {
+        m334C.end();
+        m336C.end();
+        m3460[0].end();
+        m3460[1].end();
+        return;
+    }
+
+    if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != PROC_KI && mAcch.m_roof_y == 1e9f) {
+        if (m3460[0].mpEmitter == NULL) {
+            m3460[0].makeEmitter(0x432, mpCLModel->getAnmMtx(0x0E), &current.pos, NULL);
+        }
+
+        if (m3460[1].mpEmitter == NULL) {
+            m3460[1].makeEmitter(0x432, mpCLModel->getAnmMtx(0x02), &current.pos, NULL);
+        }
+
+        m334C.end();
+        m336C.end();
+        return;
+    }
+
+    m3460[0].end();
+    m3460[1].end();
+    setSwimWaterDrop(&m334C);
+    setSwimWaterDrop(&m336C);
 }
 
 /* 8012C620-8012C754       .text setDamageFlameEmitter__9daPy_lk_cFv */
@@ -384,22 +1215,62 @@ void daPy_lk_c::setDamageFlameEmitter() {
 
 /* 8012C754-8012C7F0       .text setDamageCurseEmitter__9daPy_lk_cFv */
 void daPy_lk_c::setDamageCurseEmitter() {
-    /* Nonmatching */
+    if (!daPy_dmEcallBack_c::checkCurse()) {
+        endDamageEmitter();
+
+        mDmEcallBack[0].makeEmitter(0x815B, mpCLModel->getAnmMtx(0x1E), &current.pos, NULL);
+
+        if (checkUpperReadyThrowAnime()) {
+            resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
+            freeRopeItem();
+        }
+    }
+
+    cancelNoDamageMode();
+    daPy_dmEcallBack_c::setCurse(200);
 }
 
 /* 8012C7F0-8012C880       .text setDamageElecEmitter__9daPy_lk_cFv */
 void daPy_lk_c::setDamageElecEmitter() {
-    /* Nonmatching */
+    if (!daPy_dmEcallBack_c::checkElec()) {
+        endDamageEmitter();
+
+        mDmEcallBack[0].makeEmitter(0x3ED, mpCLModel->getAnmMtx(4), &current.pos, NULL);
+        mDmEcallBack[1].makeEmitter(0x3EE, mpCLModel->getAnmMtx(4), &current.pos, NULL);
+    }
+
+    daPy_dmEcallBack_c::setElec(daPy_HIO_elecDamage_c0::m.field_0x2);
 }
 
 /* 8012C880-8012C8F8       .text setDamageEmitter__9daPy_lk_cFv */
 void daPy_lk_c::setDamageEmitter() {
-    /* Nonmatching */
+    dCcD_GObjInf* tgHitGObj = mCyl.GetTgHitGObj();
+    if (tgHitGObj != NULL) {
+        if (tgHitGObj->GetAtSpl() == dCcG_At_Spl_UNK3) {
+            setDamageCurseEmitter();
+        } else if (tgHitGObj->GetAtSpl() == dCcG_At_Spl_UNKB) {
+            setDamageElecEmitter();
+        } else if (tgHitGObj->ChkAtType(AT_TYPE_FIRE)) {
+            setDamageFlameEmitter();
+        }
+    }
 }
 
 /* 8012C8F8-8012C9D8       .text endFlameDamageEmitter__9daPy_lk_cFv */
 void daPy_lk_c::endFlameDamageEmitter() {
-    /* Nonmatching */
+    if (!daPy_dmEcallBack_c::checkFlame()) return;
+
+    if (current.pos.y < m35D0 - 10.0f) {
+        for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++) {
+            cXyz pos;
+            mDoMtx_multVecZero(mDmEcallBack[i].mpMtx, &pos);
+            pos.y = m35D0;
+
+            dComIfGp_particle_set(0x35A, &pos);
+        }
+    }
+
+    endDamageEmitter();
 }
 
 /* 8012C9D8-8012CA44       .text endDamageEmitter__9daPy_lk_cFv */
@@ -413,9 +1284,50 @@ void daPy_lk_c::endDamageEmitter() {
 }
 
 /* 8012CA44-8012CD60       .text setItemWaterEffect__9daPy_lk_cFP10fopAc_ac_cii */
-u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c*, int, int) {
-    /* Nonmatching */
+u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c* i_actor, int param_1, int param_2) {
     static cXyz eff_scale0(0.5f, 0.5f, 0.5f);
     static cXyz eff_scale2(0.13f, 0.13f, 0.13f);
     static JGeometry::TVec3<f32> direction(0.0f, 1.0f, 0.0f);
+
+    f32 waterY;
+    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) != 0 && ((param_1 != 0 && i_actor->current.pos.y > waterY) || (param_1 == 0 && waterY >= i_actor->current.pos.y))) {
+        param_1 ^= 1;
+        if (param_1 == 0 && param_2 == 0) {
+            return param_1;
+        }
+
+        f32 deltaY = std::fabsf(i_actor->old.pos.y - i_actor->current.pos.y);
+        f32 waterDistY = std::fabsf(waterY - i_actor->current.pos.y);
+        cXyz pos;
+        if (deltaY < 1.0f) {
+            pos = i_actor->current.pos;
+        } else {
+            f32 var_f31 = waterDistY / deltaY;
+
+            if (var_f31 > 1.0f) {
+                var_f31 = 1.0f;
+            }
+
+            pos = i_actor->old.pos * var_f31 + i_actor->current.pos * (1.0f - var_f31);
+        }
+
+        dComIfGp_particle_setSingleRipple(0x3D, &pos, NULL, &eff_scale0);
+        dComIfGp_particle_setSingleRipple(0x3F, &pos, NULL, &eff_scale0);
+
+        GXColor amb, dif;
+        dKy_get_seacolor(&amb, &dif);
+        JPABaseEmitter* emitter = dComIfGp_particle_setP1(0x23, &pos, NULL, &eff_scale2, 0xFF, NULL, -1, &amb);
+
+        if (emitter != NULL) {
+            emitter->setMaxFrame(1);
+            emitter->setLifeTime(20);
+            emitter->setRate(40.0f);
+            emitter->setAwayFromAxisSpeed(20.0f);
+            emitter->setDirectionalSpeed(80.0f);
+            emitter->setSpread(0.0f);
+            emitter->setDirection(direction);
+        }
+    }
+
+    return param_1;
 }

@@ -372,7 +372,7 @@ public:
     void setSimpleLand(int, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);
     void setSimpleLand(cBgS_PolyInfo&, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*,
                        int*, int);
-    void checkAtrCodeEffect(int);
+    s32 checkAtrCodeEffect(int);
     void setNormalStripes(u16, cXyz const*, csXyz const*, cXyz const*, u8, u16);
     bool newSimple(u16, u8);
     bool setSimple(u16, cXyz const*, u8, GXColor const&, GXColor const&, int);

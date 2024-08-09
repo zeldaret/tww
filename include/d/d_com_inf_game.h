@@ -3416,6 +3416,8 @@ inline u32 dComIfGp_particle_getParticleNum() { return g_dComIfG_gameInfo.play.g
 inline u32 dComIfGp_particle_getEmitterNum() { return g_dComIfG_gameInfo.play.getParticle()->getEmitterNum(); }
 inline JKRHeap* dComIfGp_particle_getCommonHeap() { return g_dComIfG_gameInfo.play.getParticle()->getHeap(); }
 
+inline s32 dComIfGp_particle_checkAtrCodeEffect(int code) { return g_dComIfG_gameInfo.play.getParticle()->checkAtrCodeEffect(code); }
+
 /**
  * === ATTENTION ===
  */

@@ -40,19 +40,20 @@ public:
     void onLockFlg() { mLockFlag = true; }
     void offLockFlg() { mLockFlag = false; }
     void setPos(const cXyz* i_pos) { mPos = *i_pos; }
-    void setSightTex(void* sightTex) { mSightTex = sightTex; }
+    void setSightTex(void* sightTex) { mpSightTex = sightTex; }
     void setLockTex(void* lockTex) { mpLockTex = lockTex; }
     void setImage(ResTIMG* image) { mpImg = image; }
 
 private:
     /* 0x04 */ bool mDrawFlag;
     /* 0x05 */ bool mLockFlag;
-    /* 0x06 */ u8 field_0x6[2];
+    /* 0x06 */ u8 field_0x6;
+    /* 0x07 */ u8 mLockAlpha;
     /* 0x08 */ cXyz mPos;
-    /* 0x14 */ Mtx field_0x14;
+    /* 0x14 */ Mtx mMtx;
     /* 0x44 */ ResTIMG* mpImg;
     /* 0x48 */ void* mpLockTex;
-    /* 0x4C */ void* mSightTex;
+    /* 0x4C */ void* mpSightTex;
 };
 
 class daPy_actorKeep_c {
@@ -78,10 +79,19 @@ public:
     
     dPa_smokeEcallBack* getSmokeCallBack() { return &mSmokeCb; }
     dPa_followEcallBack* getOtherCallBack() { return &mFollowCb; }
-    
+
+    void setID(s32 id) { mId = id; }
+    s32 getID() const { return mId; }
+    void setAngle(csXyz* angle) { mAngle = *angle; }
+    const csXyz& getAngle() { return mAngle; }
+    void setPos(const cXyz* pos) { mPos = *pos; }
+    const cXyz& getPos() { return mPos; }
+
     /* 0x00 */ dPa_smokeEcallBack mSmokeCb;
     /* 0x20 */ dPa_followEcallBack mFollowCb;
-    /* 0x34 */ u8 field_0x34[0x4C - 0x34];
+    /* 0x34 */ cXyz mPos;
+    /* 0x40 */ csXyz mAngle;
+    /* 0x48 */ s32 mId;
 };
 
 class daPy_fanSwingEcallBack_c : public dPa_levelEcallBack {
@@ -108,8 +118,8 @@ public:
     void execute(JPABaseEmitter*, JPABaseParticle*);
     ~daPy_waterDropPcallBack_c() {}
     
-    /* 0x4 */ u8 field_0x4[0x4];
-    /* 0x8 */ dBgS_ObjGndChk field_0x8;
+    /* 0x4 */ BOOL field_0x4;
+    /* 0x8 */ dBgS_ObjGndChk mGndChk;
 };
 
 class daPy_swimTailEcallBack_c : public dPa_levelEcallBack {
@@ -127,12 +137,16 @@ public:
         field_0x20 = NULL;
     }
 
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    cXyz& getPos() { return mPos; }
+    void setPos(cXyz& pos) { mPos = pos; }
+
     /* 0x04 */ bool field_0x04;
     /* 0x05 */ bool field_0x05;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ f32 field_0x0C;
     /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ cXyz field_0x14;
+    /* 0x14 */ cXyz mPos;
     /* 0x20 */ const csXyz* field_0x20;
     /* 0x24 */ JPABaseEmitter* mpEmitter;
 };  // Size: 0x28
@@ -145,10 +159,14 @@ public:
     void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
     ~daPy_followEcallBack_c() {}
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    void setPos(const cXyz* pos) { mPos = *pos; }
+    cXyz& getPos() { return mPos; }
+    void setAngle(s16 x, s16 y, s16 z) { mAngle.set(x, y, z); }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
-    /* 0x08 */ cXyz field_0x08;
-    /* 0x14 */ csXyz field_0x14;
+    /* 0x08 */ cXyz mPos;
+    /* 0x14 */ csXyz mAngle;
     /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
 };  // Size: 0x1C
 
@@ -162,7 +180,7 @@ public:
 
     static daPy_waterDropPcallBack_c m_pcallback;
 
-    /* 0x1C */ u8 field_0x1C[0x4];
+    /* 0x1C */ BOOL field_0x1C;
 };  // Size: 0x20
 
 class daPy_dmEcallBack_c : public daPy_mtxFollowEcallBack_c {
@@ -241,6 +259,12 @@ public:
 
 class daPy_swBlur_c : public J3DPacket {
 public:
+    enum BlurColorType {
+        NORMAL_SLASH_BLUR,
+        ELIXIR_SOUP_SLASH_BLUR,
+        PARRYING_SLASH_BLUR,
+    };
+public:
     void initSwBlur(MtxP, int, f32, int);
     void copySwBlur(MtxP, int);
     void draw();
@@ -250,8 +274,8 @@ public:
     /* 0x014 */ int field_0x014;
     /* 0x018 */ int field_0x018;
     /* 0x01C */ int mBlurColorType;
-    /* 0x020 */ f32 field_0x020;
-    /* 0x024 */ void* mpPosBuffer;
+    /* 0x020 */ f32 mBlurTopRate;
+    /* 0x024 */ Vec* mpPosBuffer;
     /* 0x028 */ cXyz field_0x028;
     /* 0x034 */ cXyz field_0x034[60];
     /* 0x304 */ cXyz field_0x304[60];
