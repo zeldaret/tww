@@ -8,8 +8,8 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "dolphin/types.h"
 
-static void dummy() {
-    fabsf(1.0f);
+static f32 dummy() {
+    return 1.0f;
 }
 
 /* 8025991C-802599A0       .text JPAGetYZRotateMtx__FssPA4_f */

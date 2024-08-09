@@ -135,7 +135,7 @@ s32 daNh_c::create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     
     if (l_HIO.mChildID < 0) {
-        l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("森のほたる", &l_HIO);
+        l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("森のほたる", &l_HIO); // "Forest Firefly" (mori no hotaru)
         l_HIO.mpActor = this;
     }
     if (!init()) {

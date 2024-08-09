@@ -131,10 +131,10 @@ struct cXyz : Vec {
         cXyz tmp2(other.x, 0, other.z);
         return tmp.abs2(tmp2);
     }
-    f32 abs() const { return sqrtf(this->abs2()); }
-    f32 abs(const Vec& other) const { return sqrtf(this->abs2(other)); }
-    f32 absXZ() const { return sqrtf(this->abs2XZ()); }
-    f32 absXZ(const Vec& other) const { return sqrtf(this->abs2XZ(other)); }
+    f32 abs() const { return std::sqrtf(this->abs2()); }
+    f32 abs(const Vec& other) const { return std::sqrtf(this->abs2(other)); }
+    f32 absXZ() const { return std::sqrtf(this->abs2XZ()); }
+    f32 absXZ(const Vec& other) const { return std::sqrtf(this->abs2XZ(other)); }
     f32 getMagXZ() const { return cXyz(this->x, 0, this->z).getSquareMag(); }
 
     f32 getDotProduct(const Vec& other) const { return VECDotProduct(this, &other); }

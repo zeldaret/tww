@@ -1378,7 +1378,7 @@ void daRd_c::setBtkAnm(s8 idx) {
         mBtkAnm.init(modelData, btk, true, a_play_prm_tbl[m6DB].loopMode, 1.0f, 0, -1, true, 0);
         
         if (mBtkAnm.isStop()) {
-            if (a_play_prm_tbl[m6DB].m01 != -1 && a_play_prm_tbl[m6DB].loopMode == 0) {
+            if (a_play_prm_tbl[m6DB].m01 != -1 && a_play_prm_tbl[m6DB].loopMode == J3DFrameCtrl::LOOP_ONCE_e) {
                 m6DB = a_play_prm_tbl[m6DB].m01;
             }
         }

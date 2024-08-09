@@ -64,7 +64,7 @@ J3DModelData* J3DModelLoader::load(const void* i_data, u32 i_flags) {
     JKRGetCurrentHeap()->getTotalFreeSize();
     mpModelData = new J3DModelData();
     mpModelData->clear();
-    mpModelData->mpRawData = i_data;
+    mpModelData->mBinary = i_data;
     mpModelData->setModelDataType(0);
     mpMaterialTable = &mpModelData->mMaterialTable;
     const JUTDataFileHeader* data = (JUTDataFileHeader*)i_data;
@@ -149,7 +149,7 @@ J3DMaterialTable* J3DModelLoader::loadMaterialTable(const void* i_data) {
 J3DModelData* J3DModelLoader::loadBinaryDisplayList(const void* i_data, u32 i_flags) {
     mpModelData = new J3DModelData();
     mpModelData->clear();
-    mpModelData->mpRawData = i_data;
+    mpModelData->mBinary = i_data;
     mpModelData->setModelDataType(1);
     mpMaterialTable = &mpModelData->mMaterialTable;
     const JUTDataFileHeader* data = (JUTDataFileHeader*)i_data;

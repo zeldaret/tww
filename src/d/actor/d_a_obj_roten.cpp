@@ -100,7 +100,7 @@ s32 daObj_Roten_c::_create() {
     fopAcM_SetupActor(this, daObj_Roten_c);
 
     mType = fopAcM_GetParam(this) >> 0x18;
-    mType = cLib_minMaxLimit<u8>((int)mType, 0, 2); // fakematch? debug says this is templated to u8
+    mType = cLib_minMaxLimit<u8>(mType, 0, 2);
 
     if(Roten_create_check(mType)) {
         field_0x2D1 = 0;

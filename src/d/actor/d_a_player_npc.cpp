@@ -173,7 +173,7 @@ void daPy_npc_c::drawDamageFog() {
     
     cXyz camPos;
     mDoLib_pos2camera(&current.pos, &camPos);
-    f32 adjust = fabsf(cM_ssin(g_Counter.mTimer * 0x800));
+    f32 adjust = std::abs(cM_ssin(g_Counter.mTimer * 0x800));
     tevStr.mFogColor.r = 255;
     tevStr.mFogColor.g = 60;
     tevStr.mFogColor.b = 60;

@@ -5,6 +5,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daMozo_c : public fopAc_ac_c {
 public:
@@ -50,25 +51,43 @@ public:
     /* 0x3BC */ dCcD_Cps mCps;
 };
 
-class daMozo_HIO_c {
-public:
-    daMozo_HIO_c();
-    ~daMozo_HIO_c() {}
-};
-
 class daMozo_childHIO_c {
 public:
-    ~daMozo_childHIO_c() {}
+    virtual ~daMozo_childHIO_c() {}
+
+    /* 0x04 */ f32 m04;
+    /* 0x08 */ f32 m08;
+    /* 0x0C */ s16 m0C;
+    /* 0x0E */ s16 m0E;
+    /* 0x10 */ u8 m10;
+    /* 0x11 */ u8 m11[0x14 - 0x11];
+};  // Size: 0x14
+
+class daMozo_BeamChildHIO_c : public daMozo_childHIO_c {
+public:
+    virtual ~daMozo_BeamChildHIO_c() {}
 };
 
-class daMozo_FireChildHIO_c {
+class daMozo_FireChildHIO_c : public daMozo_childHIO_c {
 public:
-    ~daMozo_FireChildHIO_c() {}
+    virtual ~daMozo_FireChildHIO_c() {}
 };
 
-class daMozo_BeamChildHIO_c {
+class daMozo_HIO_c : public JORReflexible {
 public:
-    ~daMozo_BeamChildHIO_c() {}
-};
+    daMozo_HIO_c();
+    virtual ~daMozo_HIO_c() {}
+
+    /* 0x04 */ s8 mChildID;
+    /* 0x05 */ u8 m05[0x08 - 0x05];
+    /* 0x08 */ int m08;
+    /* 0x0C */ daMozo_BeamChildHIO_c* mpBeamChild;
+    /* 0x10 */ daMozo_FireChildHIO_c* mpFireChild;
+    /* 0x14 */ daMozo_BeamChildHIO_c mBeamChild;
+    /* 0x28 */ daMozo_FireChildHIO_c mFireChild;
+    /* 0x3C */ f32 m3C;
+    /* 0x40 */ f32 m40;
+    /* 0x44 */ f32 m44;
+};  // Size: 0x48
 
 #endif /* D_A_MOZO_H */

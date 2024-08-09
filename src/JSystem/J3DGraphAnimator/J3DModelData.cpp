@@ -93,7 +93,7 @@ void J3DJointTree::makeHierarchy(J3DNode* pRootNode, const J3DModelHierarchy** p
 
 /* 802ED108-802ED130       .text clear__12J3DModelDataFv */
 void J3DModelData::clear() {
-    mpRawData = NULL;
+    mBinary = NULL;
     mFlags = 0;
     mbHasBumpArray = 0;
     mbHasBillboard = 0;

@@ -4,76 +4,386 @@
 //
 
 #include "d/actor/d_a_lod_bg.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/actor/d_a_obj_light.h"
+#include "m_Do/m_Do_dvd_thread.h"
+#include "m_Do/m_Do_lib.h"
+#include "m_Do/m_Do_printf.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "JSystem/J3DGraphLoader/J3DModelLoader.h"
+#include "printf.h"
+
+static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
+static Vec dummy2 = { 1.0f, 1.0f, 1.0f };
+static struct {
+    u32 m0;
+    f32 m1;
+    f32 m2;
+    f32 m3;
+    f32 m4;
+    f32 m5;
+} dummy3 = { 0x02000201, 0.0f, 2.125f, 0.0f, 1.75f, 0.0f };
+
+const char daLodbg_c::LodAllPath[] = "/res/Stage/sea/LODALL.arc";
+
+daLodbg_c::daLodbg_c() {
+    if (sObjectCount == 0) {
+        JUT_ASSERT(0x5e, sLocalHeap == NULL);
+        sLocalHeap = JKRCreateExpHeap(0x20000, mDoExt_getArchiveHeap(), false);
+        JUT_ASSERT(0x60, sLocalHeap != NULL);
+    }
+
+    sObjectCount++;
+    mExecuteFunc = NULL;
+    mModel = NULL;
+    mModel2[0] = NULL;
+    mModel2[1] = NULL;
+    mAlpha = 0;
+    mDrawModel2 = false;
+    mMountCommand = NULL;
+    mArchive = NULL;
+    mDataSize = 0;
+    mDataSize2 = 0;
+    mDataHeap = NULL;
+    mDataHeap2 = NULL;
+    setExecute(&daLodbg_c::execCreateWait);
+    scale.x *= 20000.0f;
+    scale.z = scale.x + 20000.0f;
+    dKy_tevstr_init(&tevStr, fopAcM_GetParam(this), 0xFF);
+}
+
+daLodbg_c::~daLodbg_c() {
+    deleteModelData();
+    if (--sObjectCount == 0) {
+        JUT_ASSERT(0x91, sLocalHeap != NULL);
+        JUT_ASSERT(0x92, sLocalHeap->getTotalUsedSize() == 0);
+        sLocalHeap->destroy();
+        sLocalHeap = NULL;
+    }
+}
+
+s32 daLodbg_c::getRoomNo() {
+    return fopAcM_GetParam(this);
+}
 
 /* 0000031C-0000046C       .text deleteModelData__9daLodbg_cFv */
 void daLodbg_c::deleteModelData() {
     /* Nonmatching */
+    if (mMountCommand != NULL) {
+        OSReport_Warning("LOD読み込み中に削除処理ですか?\n");
+        bool sync = mMountCommand->sync();
+        mMountCommand->destroy();
+        mMountCommand = NULL;
+    }
+    if (mModelData != NULL) {
+        const void* binary = mModelData->getBinary();
+        JKRFreeToHeap(NULL, mModelData);
+        mModelData = NULL;
+        if (binary != NULL)
+            JKRFreeToHeap(NULL, (void*)binary);
+    }
+    if (mDataHeap != NULL) {
+        mDataHeap->destroy();
+        JKRFreeToHeap(NULL, mDataHeap);
+        mDataHeap = NULL;
+    }
+    if (mModelData2 != NULL) {
+        const void* binary = mModelData2->getBinary();
+        JKRFreeToHeap(NULL, mModelData2);
+        mModelData2 = NULL;
+        if (binary != NULL)
+            JKRFreeToHeap(NULL, (void*)binary);
+    }
+    if (mDataHeap2 != NULL) {
+        mDataHeap2->destroy();
+        JKRFreeToHeap(NULL, mDataHeap2);
+        mDataHeap2 = NULL;
+    }
+    if (mArchive != NULL) {
+        mArchive->unmount();
+        mArchive = NULL;
+    }
 }
 
 /* 0000046C-00000738       .text loadModelData__9daLodbg_cFPCcRP12J3DModelDataRP12JKRSolidHeapRUl */
-void daLodbg_c::loadModelData(const char*, J3DModelData*&, JKRSolidHeap*&, unsigned long&) {
+BOOL daLodbg_c::loadModelData(const char* filename, J3DModelData*& mModelData, JKRSolidHeap*& mDataHeap, u32& mDataSize) {
     /* Nonmatching */
+    JUT_ASSERT(0x124, mModelData == NULL);
+    void* bin = mArchive->getResource(filename);
+    if (bin == NULL)
+        return FALSE;
+
+    s32 resSize = mArchive->getExpandedResSize(bin);
+    JUT_ASSERT(0x12a, resSize != -1);
+    bool success = mArchive->detachResource(bin);
+    JUT_ASSERT(0x12f, success);
+
+    if (sLocalHeap != NULL) {
+        void* dst = JKRAllocFromHeap(sLocalHeap, resSize, 0x20);
+        if (dst != NULL) {
+            memcpy(dst, bin, resSize);
+            JKRFreeToHeap(NULL, bin);
+            bin = dst;
+        }
+    }
+
+    JUT_ASSERT(0x13d, mDataHeap == NULL);
+    mDataHeap = JKRSolidHeap::create(-1, sLocalHeap, false);
+    if (mDataHeap != NULL && mDataHeap->getTotalFreeSize() < 0x2000) {
+        mDataHeap->destroy();
+        mDataHeap = NULL;
+    }
+    if (mDataHeap == NULL)
+        mDataHeap = JKRSolidHeap::create(-1, mDoExt_getArchiveHeap(), false);
+    JKRHeap* oldHeap = JKRHeap::getCurrentHeap();
+    mDataHeap->becomeCurrentHeap();
+    mModelData = J3DModelLoaderDataBase::loadBinaryDisplayList(bin, 0x2020);
+    if (mModelData == NULL) {
+        JKRFreeToHeap(NULL, bin);
+        bin = NULL;
+    }
+    oldHeap->becomeCurrentHeap();
+    s32 size = mDataHeap->adjustSize();
+    JUT_ASSERT(0x15f, size >= 0);
+
+    mDataSize = size;
+    if (bin != NULL)
+        return TRUE;
+    else
+        return FALSE;
 }
 
 /* 00000738-000008B8       .text createModelData__9daLodbg_cFv */
-void daLodbg_c::createModelData() {
+BOOL daLodbg_c::createModelData() {
     /* Nonmatching */
+    static char resPath[32];
+    JUT_ASSERT(0x177, mModelData == NULL);
+    JUT_ASSERT(0x178, mModelData2 == NULL);
+    sprintf(resPath, "/lod%02d/bdl/model.bdl", fopAcM_GetParam(this));
+    if (!loadModelData(resPath, mModelData, mDataHeap, mDataSize))
+        return FALSE;
+
+    if (getRoomNo() == 11) { // windfall
+        if (!loadModelData("/lod11/bdl/shikari.bdl", mModelData2, mDataHeap2, mDataSize2))
+            return FALSE;
+    } else if (getRoomNo() == 1 && !dComIfGs_isEventBit(0x1820)) { // forsaken
+        if (!loadModelData("/lod01/bdl/model1.bdl", mModelData2, mDataHeap2, mDataSize2))
+            return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 000008B8-00000A38       .text createHeap__9daLodbg_cFv */
-void daLodbg_c::createHeap() {
+BOOL daLodbg_c::createHeap() {
     /* Nonmatching */
+    JUT_ASSERT(0x1b4, mModelData != NULL);
+    mModel = mDoExt_J3DModel__create(mModelData, 0x80000, 0x11000022);
+    if (mModel == NULL)
+        return FALSE;
+    if (getRoomNo() == 11) { // windfall
+        JUT_ASSERT(0x1bf, mModelData2 != NULL);
+        for (s32 i = 0; i < 2; i++) {
+            mModel2[i] = mDoExt_J3DModel__create(mModelData2, 0x80000, 0x11000022);
+            if (mModel2[i] == NULL) {
+                mModel2[0] = NULL;
+                mModel = NULL;
+                return FALSE;
+            }
+        }
+    } else if (getRoomNo() == 1 && mModelData2 != NULL) { // forsaken
+        mModel2[0] = mDoExt_J3DModel__create(mModelData2, 0x80000, 0x11000022);
+        if (mModel2[0] == NULL) {
+            mModel = NULL;
+            return FALSE;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 00000A38-00000A58       .text createHeapCallBack__FP10fopAc_ac_c */
-static BOOL createHeapCallBack(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL createHeapCallBack(fopAc_ac_c* i_ac) {
+    return ((daLodbg_c*)i_ac)->createHeap();
 }
 
 /* 00000A58-00000B4C       .text execCreateWait__9daLodbg_cFv */
-void daLodbg_c::execCreateWait() {
+BOOL daLodbg_c::execCreateWait() {
     /* Nonmatching */
+    f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    if (dist > scale.x)
+        return TRUE;
+
+    JUT_ASSERT(0x1f7, mMountCommand == NULL);
+    mMountCommand = mDoDvdThd_mountXArchive_c::create(LodAllPath, 0, JKRArchive::MOUNT_ARAM);
+    if (mMountCommand == NULL) {
+        JUT_WARN(0x1fb, "LODALL archive nothing !! <LODALL.arc>");
+        return FALSE;
+    }
+
+    setExecute(&daLodbg_c::execReadWait);
+    return TRUE;
 }
 
 /* 00000B4C-00000D68       .text execReadWait__9daLodbg_cFv */
-void daLodbg_c::execReadWait() {
+BOOL daLodbg_c::execReadWait() {
     /* Nonmatching */
+    if (!mMountCommand->sync())
+        return TRUE;
+
+    JUT_ASSERT(0x217, mArchive == NULL);
+    mArchive = mMountCommand->getArchive();
+    delete mMountCommand;
+    mMountCommand = NULL;
+
+    if (mArchive == NULL) {
+        setExecute(&daLodbg_c::execDeleteWait);
+        return TRUE;
+    }
+
+    createModelData();
+    JUT_ASSERT(0x23b, mModel == NULL);
+    JUT_ASSERT(0x23c, mModel2[0] == NULL);
+    JUT_ASSERT(0x23d, mModel2[1] == NULL);
+
+    if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0)) {
+        mModel = NULL;
+        mModel2[0] = NULL;
+        mModel2[1] = NULL;
+        setExecute(&daLodbg_c::execDeleteWait);
+        return TRUE;
+    }
+
+    fopAcM_SetMtx(this, mModel->getBaseTRMtx());
+    setExecute(&daLodbg_c::execDeleteWait);
+    return TRUE;
 }
 
 /* 00000D68-00000FC4       .text execDeleteWait__9daLodbg_cFv */
-void daLodbg_c::execDeleteWait() {
+BOOL daLodbg_c::execDeleteWait() {
     /* Nonmatching */
+    if (heap != NULL) {
+        f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+        if (dist < scale.z) {
+            s32 roomNo = getRoomNo();
+            bool disp = dist < scale.x && !(dComIfGp_roomControl_checkStatusFlag(roomNo, 0x01) && !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x04)); // inline?
+            cLib_chaseUC(&mAlpha, disp ? 255 : 0, 16);
+            if (mAlpha != 0) {
+                f32 y = 0.0f;
+                if ((150000.0f - dist) <= 0.0f)
+                    y = (150000.0f - dist) * 0.1f;
+                mDoMtx_stack_c::transS(current.pos.x, current.pos.y + y, current.pos.z);
+                mDoMtx_stack_c::YrotM(shape_angle.y);
+                mModel->setBaseTRMtx(mDoMtx_stack_c::get());
+                if (mModel2[0] != NULL) {
+                    if (roomNo == 11) { // windfall
+                        mDrawModel2 = daObjLight::Act_c::renew_light_angle();
+                        if (mDrawModel2) {
+                            mDoMtx_stack_c::transS(630.46338f, y + 4044.508f, -202724.0f);
+                            mDoMtx_stack_c::YrotM(daObjLight::Act_c::get_light_angle());
+                            mModel2[0]->setBaseTRMtx(mDoMtx_stack_c::get());
+                            mDoMtx_stack_c::YrotM(-0x8000);
+                            mModel2[1]->setBaseTRMtx(mDoMtx_stack_c::get());
+                        }
+                    } else if (roomNo == 1) { // forsaken
+                        mModel2[0]->setBaseTRMtx(mDoMtx_stack_c::get());
+                        mDrawModel2 = true;
+                    }
+                }
+            }
+
+            return TRUE;
+        }
+    }
+
+    mModel = NULL;
+    mModel2[0] = NULL;
+    mModel2[1] = NULL;
+    mAlpha = 0;
+    fopAcM_DeleteHeap(this);
+    deleteModelData();
+    setExecute(&daLodbg_c::execCreateWait);
+    return TRUE;
 }
 
 /* 00000FC4-00001274       .text draw__9daLodbg_cFv */
 BOOL daLodbg_c::draw() {
     /* Nonmatching */
+    if (heap == NULL || mAlpha == 0)
+        return TRUE;
+
+    s32 roomNo = getRoomNo();
+    if (roomNo == 26 && !dComIfGs_isEventBit(0x1e40)) // totg
+        return TRUE;
+
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, NULL, &tevStr);
+    g_env_light.setLightTevColorType(mModel, &tevStr);
+    J3DModelData* modelData = mModel->getModelData();
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++)
+        modelData->getMaterialNodePointer(i)->getTevKColor(3)->mColor.a = mAlpha;
+    mDoLib_clipper::changeFar(500000.0f);
+    mModel->calc();
+    mDoLib_clipper::clip(mModel);
+    mDoExt_modelEntryDL(mModel);
+
+    if (mModel2[0] != NULL && mDrawModel2) {
+        if (roomNo == 11) { // windfall
+            J3DModelData* modelData = mModel2[0]->getModelData();
+            for (u16 i = 0; i < modelData->getMaterialNum(); i++)
+                modelData->getMaterialNodePointer(i)->getTevKColor(3)->mColor.a = mAlpha;
+
+            for (s32 i = 0; i < 2; i++) {
+                mModel2[i]->calc();
+                mDoLib_clipper::clip(mModel2[i]);
+                mDoExt_modelEntryDL(mModel2[i]);
+            }
+        } else if (roomNo == 1) { // forsaken
+            g_env_light.setLightTevColorType(mModel2[0], &tevStr);
+            J3DModelData* modelData = mModel2[0]->getModelData(); // ??? was this supposed to modify mModel2?
+            for (u16 i = 0; i < modelData->getMaterialNum(); i++)
+                modelData->getMaterialNodePointer(i)->getTevKColor(3)->mColor.a = mAlpha;
+            mModel2[0]->calc();
+            mDoLib_clipper::clip(mModel2[0]);
+            mDoExt_modelEntryDL(mModel2[0]);
+        }
+    }
+
+    mDoLib_clipper::resetFar();
+    return TRUE;
+}
+
+BOOL daLodbg_c::execute() {
+    return (this->*this->mExecuteFunc)();
 }
 
 /* 00001274-00001294       .text daLodbg_Draw__FP9daLodbg_c */
-static BOOL daLodbg_Draw(daLodbg_c*) {
-    /* Nonmatching */
+static BOOL daLodbg_Draw(daLodbg_c* i_this) {
+    return i_this->draw();
 }
 
 /* 00001294-000012BC       .text daLodbg_Execute__FP9daLodbg_c */
-static BOOL daLodbg_Execute(daLodbg_c*) {
-    /* Nonmatching */
+static BOOL daLodbg_Execute(daLodbg_c* i_this) {
+    return i_this->execute();
 }
 
 /* 000012BC-000012C4       .text daLodbg_IsDelete__FP9daLodbg_c */
-static BOOL daLodbg_IsDelete(daLodbg_c*) {
-    /* Nonmatching */
+static BOOL daLodbg_IsDelete(daLodbg_c* i_this) {
+    return TRUE;
 }
 
 /* 000012C4-000012EC       .text daLodbg_Delete__FP9daLodbg_c */
-static BOOL daLodbg_Delete(daLodbg_c*) {
-    /* Nonmatching */
+static BOOL daLodbg_Delete(daLodbg_c* i_this) {
+    i_this->~daLodbg_c();
+    return TRUE;
 }
 
 /* 000012EC-0000133C       .text daLodbg_Create__FP10fopAc_ac_c */
-static s32 daLodbg_Create(fopAc_ac_c*) {
+static s32 daLodbg_Create(fopAc_ac_c* i_ac) {
     /* Nonmatching */
+    daLodbg_c* i_this = (daLodbg_c*)i_ac;
+    fopAcM_SetupActor(i_this, daLodbg_c);
+    return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daLodbg_Method = {

@@ -246,7 +246,7 @@ static s32 daDr_Create(fopAc_ac_c* i_actor) {
         daDr_setMtx(i_this);
         
         if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("ドラゴン", &l_HIO);
+            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("ドラゴン", &l_HIO); // "Dragon"
         }
     }
     

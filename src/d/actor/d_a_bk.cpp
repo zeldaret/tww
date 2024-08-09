@@ -695,9 +695,9 @@ static fpc_ProcID search_wepon(bk_class* i_this) {
             sp18.x = r25->current.pos.x - i_this->eyePos.x;
             sp18.y = 50.0f + r25->current.pos.y - i_this->eyePos.y;
             sp18.z = r25->current.pos.z - i_this->eyePos.z;
-            f32 f4 = sqrtf(sp18.x*sp18.x + sp18.z*sp18.z);
+            f32 f4 = std::sqrtf(sp18.x*sp18.x + sp18.z*sp18.z);
             if (f4 < f29 && !daBk_other_bg_check(i_this, r25)) {
-                if (fabsf(r25->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
+                if (std::fabsf(r25->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
                     s16 angleDiff = i_this->m0330 - cM_atan2s(sp18.x, sp18.z);
                     if (angleDiff < 0) {
                         angleDiff = -angleDiff;
@@ -708,8 +708,8 @@ static fpc_ProcID search_wepon(bk_class* i_this) {
                     cMtx_YrotS(*calc_mtx, -i_this->current.angle.y);
                     cXyz sp0C;
                     MtxPosition(&sp18, &sp0C);
-                    if (fabsf(sp0C.x) < l_bkHIO.m03C &&
-                        fabsf(sp0C.y) < l_bkHIO.m040 &&
+                    if (std::fabsf(sp0C.x) < l_bkHIO.m03C &&
+                        std::fabsf(sp0C.y) < l_bkHIO.m040 &&
                         sp0C.z > l_bkHIO.m048 &&
                         sp0C.z < l_bkHIO.m044
                     ) {
@@ -774,13 +774,13 @@ static fopAc_ac_c* search_bomb(bk_class* i_this, BOOL r26) {
             cXyz sp1C;
             sp1C.x = r24->current.pos.x - i_this->current.pos.x;
             sp1C.z = r24->current.pos.z - i_this->current.pos.z;
-            f32 f0 = sqrtf(sp28.x*sp28.x + sp28.z*sp28.z);
-            f32 f5 = sqrtf(sp1C.x*sp1C.x + sp1C.z*sp1C.z);
+            f32 f0 = std::sqrtf(sp28.x*sp28.x + sp28.z*sp28.z);
+            f32 f5 = std::sqrtf(sp1C.x*sp1C.x + sp1C.z*sp1C.z);
             if (f0 < f29 && !(f5 > 30.0f + i_this->mPlayerDistance) &&
                 !(daBk_other_bg_check(i_this, r24) && r26)
             ) {
                 if (r26) {
-                    if (fabsf(r24->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
+                    if (std::fabsf(r24->current.pos.y + 50.0f - i_this->eyePos.y) <= l_bkHIO.m038) {
                         s16 angleDiff = i_this->m0330 - cM_atan2s(sp28.x, sp28.z);
                         if (angleDiff < 0) {
                             angleDiff = -angleDiff;
@@ -791,8 +791,8 @@ static fopAc_ac_c* search_bomb(bk_class* i_this, BOOL r26) {
                         cMtx_YrotS(*calc_mtx, -i_this->current.angle.y);
                         cXyz sp10;
                         MtxPosition(&sp28, &sp10);
-                        if (fabsf(sp10.x) < l_bkHIO.m03C &&
-                            fabsf(sp10.y) < l_bkHIO.m040 &&
+                        if (std::fabsf(sp10.x) < l_bkHIO.m03C &&
+                            std::fabsf(sp10.y) < l_bkHIO.m040 &&
                             sp10.z > l_bkHIO.m048 &&
                             sp10.z < l_bkHIO.m044
                         ) {
@@ -855,7 +855,7 @@ static BOOL daBk_player_bg_check(bk_class* i_this, cXyz* r22) {
     if (search_sp != 0 || i_this->mType == 0xA) {
         return FALSE;
     }
-    if (i_this->dr.m713 == 0 && fabsf(player->speedF) < 0.1f && player->checkGrabWear()) {
+    if (i_this->dr.m713 == 0 && std::fabsf(player->speedF) < 0.1f && player->checkGrabWear()) {
         return TRUE;
     }
     dBgS_LinChk linChk;
@@ -881,7 +881,7 @@ static BOOL daBk_player_view_check(bk_class* i_this, cXyz* r30, s16 r27, s16 r31
     if (daBk_player_bg_check(i_this, r30)) {
         return FALSE;
     }
-    if (fabsf(player->current.pos.y + 50.0f - i_this->eyePos.y) > l_bkHIO.m038) {
+    if (std::fabsf(player->current.pos.y + 50.0f - i_this->eyePos.y) > l_bkHIO.m038) {
         return FALSE;
     }
     s16 angleDiff = i_this->m0330 - r27;
@@ -899,8 +899,8 @@ static BOOL daBk_player_view_check(bk_class* i_this, cXyz* r30, s16 r27, s16 r31
     sp14.z = r30->z - i_this->current.pos.z;
     cXyz sp08;
     MtxPosition(& sp14, &sp08);
-    if (fabsf(sp08.x) < l_bkHIO.m03C &&
-        fabsf(sp08.y) < l_bkHIO.m040 &&
+    if (std::fabsf(sp08.x) < l_bkHIO.m03C &&
+        std::fabsf(sp08.y) < l_bkHIO.m040 &&
         sp08.z > l_bkHIO.m048 &&
         sp08.z < l_bkHIO.m044
     ) {
@@ -999,7 +999,7 @@ static void path_check(bk_class* i_this, u8 r19) {
             f32 distX = i_this->current.pos.x - pnt->mPos.x;
             f32 distY = i_this->current.pos.y - pnt->mPos.y;
             f32 distZ = i_this->current.pos.z - pnt->mPos.z;
-            if (sqrtf(distX*distX + distY*distY + distZ*distZ) < f0) {
+            if (std::sqrtf(distX*distX + distY*distY + distZ*distZ) < f0) {
                 if (r19) {
                     i_this->m1216 = j;
                 } else {
@@ -1101,7 +1101,7 @@ static void jyunkai(bk_class* i_this) {
         i_this->dr.m4D0 = cM_atan2s(sp10.x, sp10.z);
         
         if (i_this->m1215 != 0 && (i_this->m0B30 != 0 || i_this->m11F3 != 0)) {
-            if (sqrtf(sp10.x*sp10.x + sp10.z*sp10.z) < f31 * 0.25f * 2.0f) {
+            if (std::sqrtf(sp10.x*sp10.x + sp10.z*sp10.z) < f31 * 0.25f * 2.0f) {
                 if (i_this->ppd->mpPnt[i_this->m1216].mArg3 == 3) {
                     wait_set(i_this);
                     i_this->dr.m004 = 2;
@@ -1109,7 +1109,7 @@ static void jyunkai(bk_class* i_this) {
                     i_this->dr.m004 = -1;
                 }
             }
-        } else if (sqrtf(sp10.x*sp10.x + sp10.z*sp10.z) < f31 * 0.25f * 2.0f ||
+        } else if (std::sqrtf(sp10.x*sp10.x + sp10.z*sp10.z) < f31 * 0.25f * 2.0f ||
             (
                 i_this->m0300[2] == 0 && (
                     i_this->dr.mAcch.ChkWallHit() ||
@@ -1331,7 +1331,7 @@ static void stand(bk_class* i_this) {
     case 0x34:
         sp28 = i_this->home.pos - i_this->current.pos;
         i_this->dr.m4D0 = cM_atan2s(sp28.x, sp28.z);
-        if (sqrtf(sp28.x*sp28.x + sp28.z*sp28.z) < l_bkHIO.m054 * 0.25f * 5.0f) {
+        if (std::sqrtf(sp28.x*sp28.x + sp28.z*sp28.z) < l_bkHIO.m054 * 0.25f * 5.0f) {
             i_this->dr.m004 = 0;
         }
         cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->dr.m4D0, 4, 0x1000);
@@ -1546,7 +1546,7 @@ static void stand2(bk_class* i_this) {
         sp24 = i_this->home.pos - i_this->current.pos;
 temp_568:
         i_this->dr.m4D0 = cM_atan2s(sp24.x, sp24.z);
-        if (sqrtf(sp24.x*sp24.x + sp24.z*sp24.z) < l_bkHIO.m054 * 0.25f * 5.0f) {
+        if (std::sqrtf(sp24.x*sp24.x + sp24.z*sp24.z) < l_bkHIO.m054 * 0.25f * 5.0f) {
             if (i_this->dr.m004 == 0x3C) {
                 i_this->dr.m004 = 0;
             } else if (i_this->m1216 == 0) {
@@ -1623,7 +1623,7 @@ static void path_run(bk_class* i_this) {
         sp0C.z = z - i_this->current.pos.z;
         i_this->dr.m4D0 = cM_atan2s(sp0C.x, sp0C.z);
         
-        if (sqrtf(sp0C.x*sp0C.x + sp0C.z*sp0C.z) < 100.0f) {
+        if (std::sqrtf(sp0C.x*sp0C.x + sp0C.z*sp0C.z) < 100.0f) {
             i_this->m1216 += i_this->m1217;
             if (i_this->m1216 >= (s8)i_this->ppd->m_num) {
                 i_this->m1216 = i_this->ppd->m_num - 1;
@@ -1870,7 +1870,7 @@ static void fight_run(bk_class* i_this) {
             i_this->m0300[1] = 20.0f + cM_rndF(20.0f);
             break;
         }
-        if ((i_this->m02DD & 0xC) == 0 && fabsf(stickPosX) > 0.1f) {
+        if ((i_this->m02DD & 0xC) == 0 && std::fabsf(stickPosX) > 0.1f) {
             if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
                 anm_init(i_this, BK_BCK_BK_WALK2, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, BK_BAS_BK_WALK2);
             } else {
@@ -2063,7 +2063,7 @@ static void fight_run(bk_class* i_this) {
     }
     i_this->m02DD = ground_4_check(i_this, 4, i_this->current.angle.y, 90.0f + REG6_F(7));
     if (i_this->m0314 != 0) {
-        if (fabsf(i_this->speedF) < 30.0f) {
+        if (std::fabsf(i_this->speedF) < 30.0f) {
             if (i_this->m0318 == 0) {
                 i_this->dr.m710 = 3;
             } else if (i_this->m0318 == 1) {
@@ -2452,7 +2452,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
                     if (r23 == NULL) {
                         i_this->m0300[0] = 50;
                         i_this->m0310 = 20;
-                        if (fabsf(i_this->speedF) > 10.0f) {
+                        if (std::fabsf(i_this->speedF) > 10.0f) {
                             another_hit = 1;
                         } else {
                             i_this->scale.x = i_this->scale.y = i_this->scale.z = 0.5f;

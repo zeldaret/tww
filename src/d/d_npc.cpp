@@ -107,7 +107,7 @@ void dNpc_JntCtrl_c::lookAtTarget(s16* outY, cXyz* pDstPos, cXyz srcPos, s16 def
         delta.x = pDstPos->x - srcPos.x;
         delta.y = pDstPos->y - srcPos.y;
         delta.z = pDstPos->z - srcPos.z;
-        f32 distXZ = sqrtf(delta.x * delta.x + delta.z * delta.z);
+        f32 distXZ = std::sqrtf(delta.x * delta.x + delta.z * delta.z);
         targetY = cM_atan2s(delta.x, delta.z);
         r23 = cM_atan2s(delta.y, distXZ);
     } else {
@@ -426,7 +426,7 @@ bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
             cXyz diff = (*param_1 - point);
             f32 xz_mag = diff.abs2XZ();
             f32 y_mag = param_2 * (diff.y * diff.y);
-            f32 dist = sqrtf(y_mag + xz_mag);
+            f32 dist = std::sqrtf(y_mag + xz_mag);
 
             if(max_dist > dist) {
                 max_dist = dist;
@@ -632,7 +632,7 @@ void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, s16* param
     diff.z = param_2.z - param_1.z;
 
     if(param_3 != 0) {
-        f32 dist = sqrtf(diff.x * diff.x + diff.z * diff.z);
+        f32 dist = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
         *param_3 = dist;
     }
 

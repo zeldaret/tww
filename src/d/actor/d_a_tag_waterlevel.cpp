@@ -90,7 +90,7 @@ namespace daTagWaterlevel {
                 M_now = 1.0f;
             }
         } else {
-            if (fabsf(target - get_now()) < attr().field_0x0c) {
+            if (std::fabsf(target - get_now()) < attr().field_0x0c) {
                 M_now = target;
                 field_0x290 = 0.0f;
             } else {

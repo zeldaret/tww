@@ -174,7 +174,7 @@ s32 dThunder_c::create() {
     mScale.z = 1.0f;
 
     dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &fwd);
-    f32 distXZ = sqrtf(fwd.x * fwd.x + fwd.z * fwd.z);
+    f32 distXZ = std::sqrtf(fwd.x * fwd.x + fwd.z * fwd.z);
 
     s16 rotX = cM_atan2s(fwd.x, fwd.z);
     s16 rotY = cM_atan2s(fwd.y, distXZ);

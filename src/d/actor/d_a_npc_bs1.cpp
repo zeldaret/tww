@@ -1596,7 +1596,7 @@ BOOL daNpc_Bs1_c::CreateInit() {
             mShopIndex = 6;
         }
 
-        mShopIndex = cLib_minMaxLimit<int>(mShopIndex, 0, 7);
+        mShopIndex = cLib_minMaxLimit<s8>(mShopIndex, 0, 7);
 
         mShopCamAction.setCamDataIdx(mShopIndex);
         mShopItems.setItemDataIdx(mShopIndex);

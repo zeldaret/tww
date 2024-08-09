@@ -50,7 +50,7 @@ f32 cLib_addCalc(f32* pValue, f32 target, f32 scale, f32 maxStep, f32 minStep) {
             }
         }
     }
-    return fabsf(target - *pValue);
+    return std::fabsf(target - *pValue);
 }
 
 /* 802529A4-802529E8       .text cLib_addCalc2__FPffff */

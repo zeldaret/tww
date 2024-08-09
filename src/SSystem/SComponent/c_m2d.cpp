@@ -31,9 +31,9 @@ void cM2d_CrossCirLin(cM2dGCir& circle, f32 x0, f32 y0, f32 x1, f32 y1, f32* pDs
             if (dVar10 < 0.0f) {
             } else {
                 f32 fVar2 = 1.0f / (2.0f * dVar13);
-                f32 fVar15 = sqrtf(dVar10);
+                f32 fVar15 = std::sqrtf(dVar10);
                 fVar15 = fVar2 * (-dVar14 + fVar15);
-                f32 fVar16 = sqrtf(dVar10);
+                f32 fVar16 = std::sqrtf(dVar10);
                 f32 fVar4 = fVar2 * (-dVar14 - fVar16);
                 if (fVar15 > fVar4) {
                     t = fVar15;

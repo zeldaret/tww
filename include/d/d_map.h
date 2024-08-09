@@ -2,6 +2,7 @@
 #define D_MAP_H
 
 #include "d/d_drawlist.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 struct ResTIMG;
 struct dmap_dmap_tlut_s;
@@ -63,22 +64,55 @@ class dMap_RoomInfo_c {
 public:
     dMap_RoomInfo_c();
     ~dMap_RoomInfo_c();
-    void getRoomDspFloorNo(u8, int);
+    u32 getRoomDspFloorNo(u8, int);
     void init(dMap_RoomInfo_c*, int);
     void getRoomImage(int, u8, int, ResTIMG**, ResTIMG**, map_dt_c**, stage_map_info_class**, u8*);
     void makeRoomDspFloorNoTbl(int);
-    void roomEntryRoom(int, u8, int, u8, dMap_RoomInfo_c*, s16, s16, f32);
+    u32 roomEntryRoom(int, u8, int, u8, dMap_RoomInfo_c*, s16, s16, f32);
     void Changeimage(u8, u8, int, s16, s16, f32);
-    void deleteRoom();
+    BOOL deleteRoom();
     void enlagementSizeTextureCordCalc(f32*, f32*, f32*, f32*, f32, f32, f32, f32, f32, f32);
     void roomDrawRoomEnlargementSize(int, int, int, int, f32, f32, f32, f32, u8);
     void roomDrawRoomRealSize(int, int, int, int, f32, f32, f32, f32, f32, f32, u8);
 
-    /* 0x00 */ u8 field_0x0;
+    inline void clrUseRoom() {}
+    inline void setUseRoom() {}
+    inline void checkUseRoom() {}
+    inline void getEnableFlg() {}
+    inline void getStageMapInfoPE() {}
+    inline void getStageMapInfoCmPDot() {}
+    inline void getStageMapInfoMap0_X0() {}
+    inline void getStageMapInfoMap0_X1() {}
+    inline void getStageMapInfoMap0_Z0() {}
+    inline void getStageMapInfoMap0_Z1() {}
+    inline void getStageMapInfoMap0_XC() {}
+    inline void getStageMapInfoMap0_ZC() {}
+    inline void getStageMapInfoMap1_X0() {}
+    inline void getStageMapInfoMap1_X1() {}
+    inline void getStageMapInfoMap1_Z0() {}
+    inline void getStageMapInfoMap1_Z1() {}
+    inline void getStageMapInfoMap1_ZC() {}
+    inline void getStageMapInfoMap1_XC() {}
+    inline void getStageMapInfoAlpha() {}
+    inline void getMapDtP() {}
+    inline void getNowDspFloorNo() {}
+    inline void getMapDtSize() {}
+    inline void getMap0ScaleX() {}
+    inline void getMap0ScaleZ() {}
+    inline void getMap1ScaleX() {}
+    inline void getMap1ScaleZ() {}
+    inline void getMap1Width() {}
+    inline void getMap1Height() {}
+
+    inline u8 getRoomNo() { return m_no; }
+    inline stage_map_info_class* getStageMapInfoP() { JUT_ASSERT(0x467, mStageMapInfoP != NULL); return mStageMapInfoP; }
+    inline dMap_RoomInfo_c* getNextRoomInfoP() { return m_next; }
+
+    /* 0x00 */ u8 m_exist;
     /* 0x01 */ u8 field_0x1;
     /* 0x02 */ u8 field_0x2[10];
     /* 0x0C */ u8 field_0xc;
-    /* 0x10 */ int field_0x10;
+    /* 0x10 */ int m_no;
     /* 0x14 */ int field_0x14;
     /* 0x18 */ f32 field_0x18;
     /* 0x1C */ f32 field_0x1c;
@@ -89,20 +123,25 @@ public:
     /* 0x30 */ dMap_2DMtMapSpcl_c field_0x30;
     /* 0x44 */ dMap_2DMtMapSpcl_tex_c field_0x44[1];
     /* 0x8C */ dMap_2DAGBScrDsp_c field_0x8c;
-    /* 0xE4 */ dMap_RoomInfo_c* field_0xe4;
-    /* 0xE8 */ void* field_0xe8;
+    /* 0xC4 */ u32 field_0xc4[0x08];
+    /* 0xE4 */ dMap_RoomInfo_c* m_next;
+    /* 0xE8 */ stage_map_info_class* mStageMapInfoP;
 };
 
 class dMap_RoomInfoCtrl_c {
 public:
-    void roomExistenceCheck(int, dMap_RoomInfo_c**);
-    void getNextRoomP(dMap_RoomInfo_c*);
-    void ctrlEntryRoom(int, u8, int, u8, s16, s16, f32);
-    void deleteRoom(int);
+    bool roomExistenceCheck(int, dMap_RoomInfo_c**);
+    dMap_RoomInfo_c* getNextRoomP(dMap_RoomInfo_c*);
+    dMap_RoomInfo_c* ctrlEntryRoom(int, u8, int, u8, s16, s16, f32);
+    bool deleteRoom(int);
     void ctrlDrawRoomEnlargementSize(int, int, int, int, int, f32, f32, f32, f32, u8);
     void ctrlDrawRoomRealSize(int, int, int, int, int, f32, f32, f32, f32, f32, f32, u8);
     void init();
     void checkFloorMoveImageChangeRoom(u8, u8, int, s16, s16, f32);
+
+public:
+    /* 0x00 */ s32 m_num;
+    /* 0x04 */ dMap_RoomInfo_c *m_info;
 };
 
 class dMap_2DSQ_c : public dDlst_base_c {

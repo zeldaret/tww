@@ -352,6 +352,10 @@ inline fopAc_ac_c* fopAcM_SearchByName(s16 procName) {
     return (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &procName);
 }
 
+inline fpc_ProcID fopAcM_GetLinkId(const fopAc_ac_c* pActor) {
+    return pActor->parentActorID;
+}
+
 inline void dComIfGs_onItem(int bitNo, int roomNo);
 inline void fopAcM_onItem(fopAc_ac_c* item, int bitNo) {
     dComIfGs_onItem(bitNo, fopAcM_GetHomeRoomNo(item));

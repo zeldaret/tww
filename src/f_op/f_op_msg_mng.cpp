@@ -1167,7 +1167,7 @@ f32 fopMsgM_valueIncrease(int max, int value, u8 mode) {
     f32 v = ((f32)value) / ((f32)max);
     switch (mode) {
     case 0: ret = v * v; break;
-    case 1: ret = sqrtf(v); break;
+    case 1: ret = std::sqrtf(v); break;
     case 2: default: ret = v; break;
     case 3: ret = (v * 2.0f - 1.0f) * 2.0f - 1.0f; break;
     case 4: ret = JMASSin(v * 32768.0f * 0.5f) * JMASSin(v * 32768.0f * 0.5f); break;

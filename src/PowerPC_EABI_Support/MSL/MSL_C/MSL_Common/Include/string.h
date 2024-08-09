@@ -27,7 +27,13 @@ char* strcpy(char* dst, const char* src);
 size_t strlen(const char* str);
 
 #ifdef __cplusplus
-}
+};
+
+
+namespace std {
+using ::strlen;
+using ::strrchr;
+}; // namespace std
 #endif
 
 #endif /* _MSL_COMMON_STRING_H */

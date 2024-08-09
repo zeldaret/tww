@@ -1130,7 +1130,7 @@ void daBomb_c::set_wind_vec() {
     cXyz sp48 = *mSph.GetTgRVecP();
     f32 f31 = sp48.abs2();
     if (f31 > 180.0f*180.0f) {
-        sp48 *= 180.0f / sqrtf(f31);;
+        sp48 *= 180.0f / std::sqrtf(f31);;
     }
     cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
     cXyz hitNormal = cXyz::Zero;
@@ -1158,7 +1158,7 @@ void daBomb_c::set_wind_vec() {
         f28 = 1.0f;
     }
     mWindVec = sp48 * f31 + hitNormal * f28 * f30;
-    if (fabsf(mWindVec.y) < 5.0f) {
+    if (std::fabsf(mWindVec.y) < 5.0f) {
         mWindVec.y += f29*(100.0f*f28) + 140.0f*f31;
     }
 }

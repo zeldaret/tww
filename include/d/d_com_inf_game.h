@@ -981,6 +981,14 @@ inline void dComIfGs_offCompleteCollectMap(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().offCompleteMap(i_no - 1);
 }
 
+inline void dComIfGs_onSaveArriveGridForAgb(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().onSaveArriveGridForAgb(i_no);
+}
+
+inline BOOL dComIfGs_isSaveArriveGridForAgb(int i_no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGridForAgb(i_no);
+}
+
 inline u8 dComIfGs_getArrowNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getArrowNum();
 }
@@ -1258,6 +1266,11 @@ inline u8 dComIfGs_getOptVibration() {
 
 inline void dComIfGs_setOptVibration(u8 vib) {
     g_dComIfG_gameInfo.save.getPlayer().getConfig().setVibration(vib);
+}
+
+/* Not present in debug maps, imitates TP version */
+inline u8 dComIfGs_checkOptVibration() {
+    return g_dComIfG_gameInfo.save.getPlayer().getConfig().checkVibration();
 }
 
 inline BOOL dComIfGs_isTbox(int i_no) {

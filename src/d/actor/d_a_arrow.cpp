@@ -152,7 +152,7 @@ void daArrow_c::_atHit(dCcD_GObjInf* thisObjInf, fopAc_ac_c* hitActor, dCcD_GObj
 void daArrow_c::checkCreater() {
     // Check if this arrow was fired by Princess Zelda (during the Ganondorf fight).
     fopAc_ac_c* archer;
-    if (fopAcM_SearchByID(parentActorID, &archer)) {
+    if (fopAcM_SearchByID(fopAcM_GetLinkId(this), &archer)) {
         if (fpcM_GetName(archer) == PROC_PZ) {
             mbSetByZelda = true;
         }
@@ -542,7 +542,7 @@ void daArrow_c::setKeepMatrix() {
     // Transform the arrow onto its archer's hand.
     if (mbSetByZelda) {
         daPz_c* zelda;
-        fopAcM_SearchByID(parentActorID, (fopAc_ac_c**)&zelda);
+        fopAcM_SearchByID(fopAcM_GetLinkId(this), (fopAc_ac_c**)&zelda);
         
         mDoMtx_stack_c::transS(0.7f, -0.07f, -0.2f);
         mDoMtx_stack_c::XYZrotM(0x238E, 0x2CDF, 0x29BE);
@@ -1073,12 +1073,8 @@ BOOL daArrow_c::createInit() {
     
     setKeepMatrix();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    cull.box.min.x = -6.0f;
-    cull.box.min.y = -6.0f;
-    cull.box.min.z = 0.0f;
-    cull.box.max.x = 6.0f;
-    cull.box.max.y = 6.0f;
-    cull.box.max.z = 65.0f;
+    fopAcM_SetMin(this, -6.0f, -6.0f, 0.0f);
+    fopAcM_SetMax(this, 6.0f, 6.0f, 65.0f);
     
     mStts.Init(10, 0xFF, this);
     mAtCps.Set(m_at_cps_src);

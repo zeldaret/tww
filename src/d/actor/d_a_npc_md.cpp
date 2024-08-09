@@ -574,7 +574,7 @@ static BOOL hairCross(cXyz* i_r3, cXyz* i_r4, cXyz* i_r5) {
             f32 f30 = r1_e4.abs();
             cXyz r1_108 = (r1_138 - r1_120);
             r1_108.normalizeZP();
-            r1_108 = r1_108 * sqrtf(f30 * f30 - f31 * f31);
+            r1_108 = r1_108 * std::sqrtf(f30 * f30 - f31 * f31);
             *i_r5 = r1_120 + r1_108;
             return TRUE;
         }
@@ -588,7 +588,7 @@ static BOOL hairCross(cXyz* i_r3, cXyz* i_r4, cXyz* i_r5) {
             f32 f30 = r1_e4.abs();
             cXyz r1_108 = (r1_138 - r1_120);
             r1_108.normalizeZP();
-            r1_108 = r1_108 * sqrtf(f30 * f30 - f31 * f31);
+            r1_108 = r1_108 * std::sqrtf(f30 * f30 - f31 * f31);
             *i_r5 = r1_120 + r1_108;
             return TRUE;
         }
@@ -1219,7 +1219,7 @@ BOOL daNpc_Md_c::checkCollision(int r30) {
             sp3C.y = 0.0f;
             sp3C.normalizeZP();
             s16 sp08;
-            if (fabsf(sp3C.x) < 0.001f && fabsf(sp3C.z) < 0.001f) {
+            if (std::abs(sp3C.x) < 0.001f && std::abs(sp3C.z) < 0.001f) {
                 sp08 = 0;
             } else {
                 sp08 = cM_atan2s(sp3C.x, sp3C.z);

@@ -791,7 +791,7 @@ BOOL daPy_lk_c::draw() {
     ) {
         cXyz sp18;
         mDoLib_pos2camera(&current.pos, &sp18);
-        f32 f2 = fabsf(cM_ssin(g_Counter.mTimer * 0x800));
+        f32 f2 = std::abs(cM_ssin(g_Counter.mTimer * 0x800));
         if (daPy_dmEcallBack_c::checkCurse() || checkConfuse()) {
             tevStr.mFogColor.r = 0x80;
             tevStr.mFogColor.g = 0x00;
@@ -2958,8 +2958,12 @@ void daPy_lk_c::setCollision() {
 /* 8011EC0C-8011EEBC       .text setAttentionPos__9daPy_lk_cFv */
 void daPy_lk_c::setAttentionPos() {
     /* Nonmatching */
-    static const Vec offset_39104 = {0.0f, 30.0f, 20.0f};
-    static const Vec offset_39108 = {0.0f, 70.0f, 0.0f};
+    {
+        static const Vec offset = {0.0f, 30.0f, 20.0f};
+    }
+    {
+        static const Vec offset = {0.0f, 70.0f, 0.0f};
+    }
 }
 
 /* 8011EEBC-8011EF94       .text setRoomInfo__9daPy_lk_cFv */

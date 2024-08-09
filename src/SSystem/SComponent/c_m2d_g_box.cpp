@@ -46,12 +46,12 @@ f32 cM2dGBox::GetLen(const cXy& p) const {
             // Diagonally above and to the left of the box.
             distX = p.x - mP0.x;
             distY = p.y - mP0.y;
-            return sqrtf(distX * distX + distY * distY);
+            return std::sqrtf(distX * distX + distY * distY);
         } else {
             // Diagonally below and to the left of the box.
             distX = p.x - mP0.x;
             distY = p.y - mP1.y;
-            return sqrtf(distX * distX + distY * distY);
+            return std::sqrtf(distX * distX + distY * distY);
         }
     } else {
         f32 distY;
@@ -60,12 +60,12 @@ f32 cM2dGBox::GetLen(const cXy& p) const {
             // Diagonally above and to the right of the box.
             distX = p.x - mP1.x;
             distY = p.y - mP0.y;
-            return sqrtf(distX * distX + distY * distY);
+            return std::sqrtf(distX * distX + distY * distY);
         } else {
             // Diagonally below and to the right of the box.
             distX = p.x - mP1.x;
             distY = p.y - mP1.y;
-            return sqrtf(distX * distX + distY * distY);
+            return std::sqrtf(distX * distX + distY * distY);
         }
     }
 }

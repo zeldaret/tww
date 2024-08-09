@@ -61,7 +61,7 @@ namespace daObj {
     }
 
     /* 800668BC-800669E8       .text get_wind_spd__5daObjFP10fopAc_ac_cf */
-    void get_wind_spd(fopAc_ac_c* param_1, f32 param_2) {
+    cXyz& get_wind_spd(fopAc_ac_c* param_1, f32 param_2) {
         static cXyz total_spd(cXyz::Zero);
 
         cXyz wind = *dKyw_get_wind_vec() * dKyw_get_wind_pow();
@@ -72,6 +72,7 @@ namespace daObj {
         pntVec *= pntPow;
 
         total_spd = (wind + pntVec) * (param_2 * 0.5f);
+        return total_spd;
     }
 
     /* 800669E8-80066B0C       .text get_path_spd__5daObjFR13cBgS_PolyInfof */
@@ -106,9 +107,9 @@ namespace daObj {
             f32 dz = delta.z;
 
             cXyz result(dx * param_4, dy * param_4, dz * param_4);
-            result.x += fabsf(dx) * dx * param_5;
-            result.y += fabsf(dy) * dy * param_5;
-            result.z += fabsf(dz) * dz * param_5;
+            result.x += std::fabsf(dx) * dx * param_5;
+            result.y += std::fabsf(dy) * dy * param_5;
+            result.z += std::fabsf(dz) * dz * param_5;
 
             result *= -1.0f;
             *pDst = result;
@@ -170,7 +171,7 @@ namespace daObj {
         }
 
         pActor->speed.set(x, y, z);
-        pActor->speedF = sqrtf(x * x + z * z);
+        pActor->speedF = std::sqrtf(x * x + z * z);
         pActor->current.angle.y = cM_atan2s(spf, grav);
         fopAcM_posMove(pActor, pAddVel);
     }

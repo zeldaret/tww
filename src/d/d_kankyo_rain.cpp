@@ -166,14 +166,14 @@ void dKyr_kamome_move() {
                 }
 
                 oldTarget.x = cM_ssin(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
-                oldTarget.y = fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
+                oldTarget.y = std::fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
                 oldTarget.z = cM_scos(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
 
                 pWind->mKamomeEff[i].mAngleY += pWind->mKamomeEff[i].mAngleYSpeed * pWind->mKamomeEff[i].mScale;
                 pWind->mKamomeEff[i].mAngleX += 15;
 
                 newTarget.x = cM_ssin(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
-                newTarget.y = fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
+                newTarget.y = std::fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
                 newTarget.z = cM_scos(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
 
                 newPos.x = pCamera->mLookat.mEye.x + newTarget.x;
@@ -373,7 +373,7 @@ void dKyr_wind_move() {
                     windEff.mState = 1;
                 }
 
-                f32 windVec_absXZ = sqrtf(windVec.x*windVec.x + windVec.z*windVec.z);
+                f32 windVec_absXZ = std::sqrtf(windVec.x*windVec.x + windVec.z*windVec.z);
                 windEff.mAngleXZ = cM_atan2s(windVec.x, windVec.z);
                 windEff.mAngleY = cM_atan2s(windVec.y, windVec_absXZ);
 
@@ -401,7 +401,7 @@ void dKyr_wind_move() {
                     if (windEff.field_0x28 > 60535)
                         windEff.field_0x32 = 0;
                 } else {
-                    f32 windVec_absXZ = sqrtf(windVec.x*windVec.x + windVec.z*windVec.z);
+                    f32 windVec_absXZ = std::sqrtf(windVec.x*windVec.x + windVec.z*windVec.z);
                     s16 targetAngleXZ = cM_atan2s(windVec.x, windVec.z);
                     s16 targetAngleY = cM_atan2s(windVec.y, windVec_absXZ);
                     cLib_addCalcAngleS(&windEff.mAngleY, targetAngleY, 10, 1000, 1);
@@ -824,7 +824,7 @@ void dKyr_star_move() {
     dKankyo_star_Packet* pPkt = g_env_light.mpStarPacket;
     pPkt->mCount = g_env_light.mStarCount;
     if (pPkt->mCount != 0) {
-        f32 wave = fabsf(cM_fsin(pPkt->mStarEff[0].mAnimCounter));
+        f32 wave = std::fabsf(cM_fsin(pPkt->mStarEff[0].mAnimCounter));
         pPkt->mStarEff[0].mAnimCounter += 0.01f;
         pPkt->mStarEff[0].mSin = wave;
         cLib_addCalc(&pPkt->mStarEff[0].mSin, wave, 0.5f, 0.1f, 0.01f);
@@ -934,8 +934,8 @@ void wave_move() {
     vectle_calc(&deltaXZ, &vectle);
 
     pPkt->mSkewDir = cM3d_VectorProduct2d(0.0f, 0.0f, -windPowVec2.x, -windPowVec2.z, vectle.x, vectle.z);
-    pPkt->mSkewWidth = windPow * (1.0f - fabsf(windPowVec2.y)) * (1.0f - fabsf(windPowVec2.x * vectle.x + windPowVec2.z * vectle.z));
-    pPkt->mSkewWidth *= 0.6f * fabsf(pPkt->mSkewDir);
+    pPkt->mSkewWidth = windPow * (1.0f - std::fabsf(windPowVec2.y)) * (1.0f - std::fabsf(windPowVec2.x * vectle.x + windPowVec2.z * vectle.z));
+    pPkt->mSkewWidth *= 0.6f * std::fabsf(pPkt->mSkewDir);
 
     for (s32 i = 0; i < g_env_light.mWaveChan.mWaveCount; i++) {
         if (g_env_light.mWaveChan.mWaveReset)
@@ -1476,13 +1476,13 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
             snap_sunmoon_proc(&moonPos2, texidx);
             dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &camfwd);
 
-            f32 cam_distXZ = sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
-            f32 cam_theta = atan2f(camfwd.x, camfwd.z);
-            f32 cam_phi = atan2f(camfwd.y, cam_distXZ);
+            f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
+            f32 cam_theta = std::atan2f(camfwd.x, camfwd.z);
+            f32 cam_phi = std::atan2f(camfwd.y, cam_distXZ);
 
-            f32 moon_distXZ = sqrtf(moonPos.x*moonPos.x + moonPos.z*moonPos.z);
-            f32 moon_theta = atan2f(moonPos.x, moonPos.z);
-            f32 moon_phi = atan2f(moonPos.y, moon_distXZ);
+            f32 moon_distXZ = std::sqrtf(moonPos.x*moonPos.x + moonPos.z*moonPos.z);
+            f32 moon_theta = std::atan2f(moonPos.x, moonPos.z);
+            f32 moon_phi = std::atan2f(moonPos.y, moon_distXZ);
 
             f32 angle = 45.0f + (((moon_theta - cam_theta) / -8.0f) * moon_phi) * 360.0f;
             MTXRotDeg(rotMtx, 'Z', angle);
@@ -1574,15 +1574,15 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
             cXyz camfwd;
             snap_sunmoon_proc(&sunPos, 9);
 
-            f32 sun_distXZ = sqrtf(sunPos.x*sunPos.x + sunPos.z*sunPos.z);
-            f32 sun_theta = atan2f(sunPos.x, sunPos.z);
-            f32 sun_phi = atan2f(sunPos.y, sun_distXZ);
+            f32 sun_distXZ = std::sqrtf(sunPos.x*sunPos.x + sunPos.z*sunPos.z);
+            f32 sun_theta = std::atan2f(sunPos.x, sunPos.z);
+            f32 sun_phi = std::atan2f(sunPos.y, sun_distXZ);
 
             dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &camfwd);
 
-            f32 cam_distXZ = sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
-            f32 cam_theta = atan2f(camfwd.x, camfwd.z);
-            f32 cam_phi = atan2f(camfwd.y, cam_distXZ);
+            f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
+            f32 cam_theta = std::atan2f(camfwd.x, camfwd.z);
+            f32 cam_phi = std::atan2f(camfwd.y, cam_distXZ);
 
             MTXRotDeg(rotMtx, 'Z', -50.0f + (360.0f * ((sun_theta - cam_theta) / -8.0f)));
             MTXConcat(camMtx, rotMtx, camMtx);
@@ -2034,7 +2034,7 @@ void drawPoison(Mtx drawMtx, u8** pImg) {
 
         GXLoadTexObj(&texObj, GX_TEXMAP0);
 
-        f32 cosR = fabsf(cM_scos(envLight.mpPoisonPacket->mCount * 500.0f + i * 4000));
+        f32 cosR = std::fabsf(cM_scos(envLight.mpPoisonPacket->mCount * 500.0f + i * 4000));
         cosR *= cosR;
 
         reg0.r = 95.0f + -50.0f * cosR;

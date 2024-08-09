@@ -583,9 +583,9 @@ void dScnKy_env_light_c::setSunpos() {
         var_f1 = g_env_light.mCurTime + 345.0f;
     }
 
-    sp8.x = i_sinf(DEG_TO_RAD(var_f1)) * 80000.0f;
-    sp8.y = i_cosf(DEG_TO_RAD(var_f1)) * 80000.0f;
-    sp8.z = i_cosf(DEG_TO_RAD(var_f1)) * -48000.0f;
+    sp8.x = std::sinf(DEG_TO_RAD(var_f1)) * 80000.0f;
+    sp8.y = std::cosf(DEG_TO_RAD(var_f1)) * 80000.0f;
+    sp8.z = std::cosf(DEG_TO_RAD(var_f1)) * -48000.0f;
 
     if (!dComIfGp_event_runCheck() || g_env_light.mInitAnimTimer != 0) {
         mSunPos.x = camera_p->mLookat.mEye.x + sp8.x;
@@ -2830,7 +2830,7 @@ void dKy_Itemgetcol_chg_move() {
 
             cXyz camfwd;
             dKyr_get_vectle_calc(&camera->mLookat.mEye, &camera->mLookat.mCenter, &camfwd);
-            f32 cam_distXZ = sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
+            f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
             s16 angle = cM_atan2s(camfwd.x, camfwd.z) - offsAngle;
             camfwd.x = cM_scos(0) * cM_ssin(angle);
             camfwd.y = cM_ssin(0);

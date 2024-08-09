@@ -4,56 +4,113 @@
 //
 
 #include "d/actor/d_a_kytag02.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo_rain.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
 
 /* 00000078-000000C0       .text set_path_info__FP10fopAc_ac_c */
-void set_path_info(fopAc_ac_c*) {
-    /* Nonmatching */
+dPath* set_path_info(fopAc_ac_c* i_ac) {
+    dPath* ret = NULL;
+    u8 pathId = (fopAcM_GetParam(i_ac) >> 16);
+    if (pathId != 0xFF)
+        ret = dPath_GetRoomPath(pathId, i_ac->current.roomNo);
+    return ret;
 }
 
 /* 000000C0-000000F0       .text set_next_path_info__FP13kytag02_classP5dPath */
-void set_next_path_info(kytag02_class*, dPath*) {
-    /* Nonmatching */
+dPath* set_next_path_info(kytag02_class* i_this, dPath* path) {
+    return dPath_GetNextRoomPath(path, i_this->current.roomNo);
 }
 
 /* 000000F0-0000017C       .text get_railwind_vec__FP5dPathi */
-void get_railwind_vec(dPath*, int) {
+cXyz get_railwind_vec(dPath* path, int i_no) {
     /* Nonmatching */
+    cXyz ret;
+    cXyz p0 = path->mpPnt[i_no + 0].mPos;
+    cXyz p1 = path->mpPnt[i_no + 1].mPos;
+    dKyr_get_vectle_calc(&p0, &p1, &ret);
+    return ret;
 }
 
 /* 0000017C-000002E8       .text get_nearpos_rail__FP13kytag02_classP5dPathP4cXyzPi */
-void get_nearpos_rail(kytag02_class*, dPath*, cXyz*, int*) {
+dPath* get_nearpos_rail(kytag02_class* i_this, dPath* i_path, cXyz* pos, int* i_no) {
     /* Nonmatching */
+    dPath* path;
+    dPath* bestPath;
+    f32 best;
+    int bestIdx;
+
+    bestIdx = 0;
+    path = i_path;
+    best = 1000000000.0f;
+    bestPath = path;
+
+    while (true) {
+        for (s32 i = 0; i < path->m_num; i++) {
+            f32 dx = path->mpPnt[i].mPos.x - pos->x;
+            f32 dz = path->mpPnt[i].mPos.z - pos->z;
+            f32 dist = std::sqrtf(dx*dx + dz*dz);
+            if (best > dist) {
+                bestPath = path;
+                bestIdx = i;
+                best = dist;
+            }
+        }
+
+        if (path->mNextPathId == 0xFFFF)
+            break;
+        path = set_next_path_info(i_this, path);
+    }
+    if (bestIdx == i_path->m_num - 1)
+        bestIdx--;
+    *i_no = bestIdx;
+    return bestPath;
 }
 
 /* 000002E8-000003D4       .text windtag_move__FP13kytag02_class */
-void windtag_move(kytag02_class*) {
-    /* Nonmatching */
+void windtag_move(kytag02_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    int i_no;
+
+    if (i_this->mpPath != NULL) {
+        dPath* path = get_nearpos_rail(i_this, i_this->mpPath, &player->current.pos, &i_no);
+        i_this->mWindVec = get_railwind_vec(path, i_no);
+        g_env_light.mWind.mpWindVecOverride = &i_this->mWindVec;
+        dPath__Point* pnt = &path->mpPnt[i_no];
+        u32 strength = (s32)pnt->mArg3 != 0xFF ? pnt->mArg3 : path->mArg0;
+        g_env_light.mWind.mWindStrengthOverride = (f32)strength / 100.0f;
+    }
 }
 
 /* 000003D4-000003DC       .text daKytag02_Draw__FP13kytag02_class */
-static BOOL daKytag02_Draw(kytag02_class*) {
-    /* Nonmatching */
+static BOOL daKytag02_Draw(kytag02_class* i_this) {
+    return TRUE;
 }
 
 /* 000003DC-00000400       .text daKytag02_Execute__FP13kytag02_class */
-static BOOL daKytag02_Execute(kytag02_class*) {
-    /* Nonmatching */
+static BOOL daKytag02_Execute(kytag02_class* i_this) {
+    windtag_move(i_this);
+    return TRUE;
 }
 
 /* 00000400-00000408       .text daKytag02_IsDelete__FP13kytag02_class */
-static BOOL daKytag02_IsDelete(kytag02_class*) {
-    /* Nonmatching */
+static BOOL daKytag02_IsDelete(kytag02_class* i_this) {
+    return TRUE;
 }
 
 /* 00000408-00000420       .text daKytag02_Delete__FP13kytag02_class */
-static BOOL daKytag02_Delete(kytag02_class*) {
-    /* Nonmatching */
+static BOOL daKytag02_Delete(kytag02_class* i_this) {
+    g_env_light.mWind.mpWindVecOverride = NULL;
+    return TRUE;
 }
 
 /* 00000420-0000047C       .text daKytag02_Create__FP10fopAc_ac_c */
-static s32 daKytag02_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daKytag02_Create(fopAc_ac_c* i_ac) {
+    kytag02_class* i_this = (kytag02_class*)i_ac;
+    fopAcM_SetupActor(i_this, kytag02_class);
+    i_this->mpPath = set_path_info(i_this);
+    return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daKytag02_Method = {

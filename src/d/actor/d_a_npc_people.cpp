@@ -8118,7 +8118,7 @@ BOOL daNpcPeople_c::checkPig() {
             if(pPig && pPig->m408 == 0) {
                 f32 temp;
                 dNpc_calc_DisXZ_AngY(current.pos, pPig->current.pos, &temp, NULL);
-                if(temp < 400.0f && fabsf(current.pos.y - pPig->current.pos.y) <= 10.0f) {
+                if(temp < 400.0f && std::abs(current.pos.y - pPig->current.pos.y) <= 10.0f) {
                     pPig->taura_pos_set(current.pos);
                     m78D = 2;
                     m758 |= 0x80;

@@ -62,7 +62,7 @@ BOOL ice_bg_check(enemyice* ei) {
     }
     
     if (ei->mBgAcch.ChkWallHit()) {
-        if (fabsf(ei->mSpeedF) > 10.0f) {
+        if (std::fabsf(ei->mSpeedF) > 10.0f) {
             ret = TRUE;
         }
         ei->mSpeedF *= 0.5f;
@@ -187,7 +187,7 @@ BOOL enemy_ice(enemyice* ei) {
         if (ei->mParticleScale < 0.1f) {
             ei->mParticleScale = 1.0f;
         }
-        if (fabsf(ei->mYOffset) < 0.1f) {
+        if (std::fabsf(ei->mYOffset) < 0.1f) {
             ei->mYOffset = 80.0f;
         }
         ei->mState = 1;
@@ -282,7 +282,7 @@ BOOL enemy_ice(enemyice* ei) {
             ac->current.pos += *ccMove;
         }
         
-        if (fabsf(ei->mSpeedF) > 5.0f) {
+        if (std::fabsf(ei->mSpeedF) > 5.0f) {
             ei->mCyl.OnAtSetBit();
         } else {
             ei->mCyl.OffAtSetBit();
@@ -505,7 +505,7 @@ void enemy_fire(enemyfire* ef) {
         
         ef->mDirection.y = 0.2f + REG0_F(11);
         
-        f32 speed = sqrtf(vel.x * vel.x + vel.y * vel.y + vel.z * vel.z);
+        f32 speed = std::sqrtf(vel.x * vel.x + vel.y * vel.y + vel.z * vel.z);
         speed = (0.03f + REG0_F(12)) * speed + 1.0f;
         if (speed > 1.5f + REG0_F(13)) {
             speed = 1.5f + REG0_F(13);

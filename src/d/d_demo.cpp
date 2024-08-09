@@ -68,22 +68,73 @@ void* dDemo_actor_c::getP_BtkData(const char*) {
 }
 
 /* 8006969C-80069838       .text getPrm_Morf__13dDemo_actor_cFv */
-void dDemo_actor_c::getPrm_Morf() {
+f32 dDemo_actor_c::getPrm_Morf() {
     /* Nonmatching */
 }
 
 /* 80069838-800698C0       .text dDemo_getJaiPointer__FPCcUliPUs */
-void dDemo_getJaiPointer(const char*, u32, int, u16*) {
+void* dDemo_getJaiPointer(const char* a_name, u32 bck, int num, u16* tbl) {
     /* Nonmatching */
+    if (num <= 0 || tbl == NULL)
+        return NULL;
+    for (s32 i = 0; i < num; i++)
+        if (tbl[i*2 + 0] == bck)
+            return dComIfG_getObjectIDRes(a_name, tbl[i*2 + 1]);
+    return NULL;
 }
 
 /* 800698C0-80069BC0       .text dDemo_setDemoData__FP10fopAc_ac_cUcP14mDoExt_McaMorfPCciPUsUlSc */
-BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int, u16*, u32, s8) {
+BOOL dDemo_setDemoData(fopAc_ac_c* ac, u8 flag, mDoExt_McaMorf* morf, const char* a_name, int p5, u16* p6, u32 mtrlSndId, s8 reverb) {
     /* Nonmatching */
-    char* a_name;
-    JUT_ASSERT(0, a_name != NULL);
-    void* i_key;
-    JUT_ASSERT(0, i_key != NULL);
+    dDemo_actor_c* demoActor = dComIfGp_demo_getActor(ac->demoActorID);
+    if (demoActor == NULL)
+        return FALSE;
+
+    u32 enable = demoActor->checkEnable(flag);
+    if (enable & 2) {
+        ac->current.pos = demoActor->mTranslation;
+        ac->old.pos = ac->current.pos;
+    }
+    if (enable & 8) {
+        ac->shape_angle = demoActor->mRotation;
+        ac->current.angle = ac->shape_angle;
+    }
+    if (enable & 4) {
+        ac->scale = demoActor->mScaling;
+    }
+
+    if (morf == NULL)
+        return TRUE;
+
+    demoActor->mModel = morf->getModel();
+
+    if ((enable & 0x20)) {
+        int bck = demoActor->mNextBckId;
+        if (bck & 0x10000)
+            a_name = dStage_roomControl_c::getDemoArcName();
+        JUT_ASSERT(0, a_name != NULL);
+        demoActor->mBckId = bck;
+
+        J3DAnmTransform* i_key = (J3DAnmTransform*)dComIfG_getObjectIDRes(a_name, bck);
+        JUT_ASSERT(0, i_key != NULL);
+
+        void* i_sound = dDemo_getJaiPointer(a_name, bck, p5, p6);
+        morf->setAnm(i_key, -1, demoActor->getPrm_Morf(), 1.0f, 0.0f, -1.0f, i_sound);
+        demoActor->mAnimationFrameMax = morf->getEndFrame();
+
+        if (enable & 0x40) {
+            if (demoActor->mAnimationFrame > 1.0f) {
+                morf->setFrame(demoActor->mAnimationFrame - 1.0f);
+                morf->play(&ac->current.pos, mtrlSndId, reverb);
+            } else {
+                morf->setFrame(demoActor->mAnimationFrame);
+            }
+        } else {
+            morf->play(&ac->current.pos, mtrlSndId, reverb);
+        }
+    }
+
+    return TRUE;
 }
 
 /* 80069BC0-80069BDC       .text JSGSetData__13dDemo_actor_cFUlPCvUl */

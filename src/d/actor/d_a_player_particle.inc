@@ -305,12 +305,12 @@ void daPy_swBlur_c::draw() {
         GXSetTevColor(GX_TEVREG0, n_color);
     } else if (mBlurColorType == ELIXIR_SOUP_SLASH_BLUR) {
         // Elixir Soup color.
-        static GXColor y_color = {0xFF, 0xFF, 0x7B, 0x96};
-        GXSetTevColor(GX_TEVREG0, y_color);
+        static GXColor y_color0 = {0xFF, 0xFF, 0x7B, 0x96};
+        GXSetTevColor(GX_TEVREG0, y_color0);
     } else {
         // Parrying color.
-        static GXColor g_color = {0x5A, 0xFF, 0x5A, 0x96};
-        GXSetTevColor(GX_TEVREG0, g_color);
+        static GXColor g_color0 = {0x5A, 0xFF, 0x5A, 0x96};
+        GXSetTevColor(GX_TEVREG0, g_color0);
     }
 
     GXSetNumTexGens(1);
@@ -467,7 +467,7 @@ void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
         f32 sq = v.x * v.x + v.y * v.y;
 
         if (sq > 1.0f) {
-            f32 distFrac = 1.0f / sqrtf(sq);
+            f32 distFrac = 1.0f / std::sqrtf(sq);
 
             v.x *= distFrac;
             v.y *= distFrac;
@@ -585,12 +585,12 @@ void daPy_lk_c::setAuraEffect() {
         daPy_aura_c* auraEntry = mMagicArmorAuraEntries;
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
             var_f31 = 0.0f;
-            var_f28 = 1.0f + (fabsf(dComIfGp_getShipActor()->speedF) / 15.0f);
+            var_f28 = 1.0f + (std::fabsf(dComIfGp_getShipActor()->speedF) / 15.0f);
             if (var_f28 > 1.5f) {
                 var_f28 = 1.5f;
             }
         } else {
-            var_f31 = fabsf(mVelocity) / daPy_HIO_move_c0::m.field_0x18;
+            var_f31 = std::fabsf(mVelocity) / daPy_HIO_move_c0::m.field_0x18;
             if (var_f31 > 1.0f) {
                 var_f31 = 1.0f;
             }
@@ -651,7 +651,7 @@ void daPy_lk_c::setWaterRipple() {
             dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, NULL, 0xFF, &m3280);
         }
 
-        f32 var_f1 = (0.1f * fabsf(getSpeedF()));
+        f32 var_f1 = (0.1f * std::fabsf(getSpeedF()));
         var_f1 *= var_f1;
         if (var_f1 > 1.0f) {
             var_f1 = 1.0f;
@@ -679,11 +679,11 @@ void daPy_lk_c::setWaterRipple() {
 
     if (checkModeFlg(ModeFlg_SWIM)) {
         if (!mSwimTailEcallBack[0].field_0x04) {
-            mSwimTailEcallBack[0].field_0x08 = fabsf(mVelocity / mMaxNormalSpeed);
+            mSwimTailEcallBack[0].field_0x08 = std::fabsf(mVelocity / mMaxNormalSpeed);
         }
 
         if (!mSwimTailEcallBack[1].field_0x04) {
-            mSwimTailEcallBack[1].field_0x08 = fabsf(mVelocity / mMaxNormalSpeed);
+            mSwimTailEcallBack[1].field_0x08 = std::fabsf(mVelocity / mMaxNormalSpeed);
         }
         cXyz local_1c;
         cMtx_multVec(mpCLModel->getAnmMtx(15), &wave_offset, &local_1c);
@@ -1334,8 +1334,8 @@ u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c* i_actor, int param_1, int param_2)
             return param_1;
         }
 
-        f32 deltaY = fabsf(i_actor->old.pos.y - i_actor->current.pos.y);
-        f32 waterDistY = fabsf(waterY - i_actor->current.pos.y);
+        f32 deltaY = std::fabsf(i_actor->old.pos.y - i_actor->current.pos.y);
+        f32 waterDistY = std::fabsf(waterY - i_actor->current.pos.y);
         cXyz pos;
         if (deltaY < 1.0f) {
             pos = i_actor->current.pos;

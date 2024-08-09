@@ -458,7 +458,7 @@ static void medama_move(am_class* i_this) {
         i_this->mTargetEyeRot.y = 0x71C;
     }
 
-    i_this->mTargetEyeRot.x = cM_atan2s(diffY, sqrtf(diffX*diffX + diffZ*diffZ));
+    i_this->mTargetEyeRot.x = cM_atan2s(diffY, std::sqrtf(diffX*diffX + diffZ*diffZ));
     if (i_this->mTargetEyeRot.x < -0x38E) {
         i_this->mTargetEyeRot.x = -0x38E;
     } else if (i_this->mTargetEyeRot.x > 0x38E) {
@@ -487,7 +487,7 @@ static void action_dousa(am_class* i_this) {
         fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
         if (fopAcM_searchPlayerDistance(i_this) < 1000.0f) {
             f32 yDist = player->current.pos.y - i_this->current.pos.y;
-            yDist = sqrtf(yDist*yDist); // ???
+            yDist = std::sqrtf(yDist*yDist); // ???
             if (yDist > 300.0f) {
                 break;
             }
@@ -532,7 +532,7 @@ static void action_dousa(am_class* i_this) {
         if (i_this->mType & 1) {
             f32 xDist = i_this->current.pos.x - i_this->mSpawnPos.x;
             f32 zDist = i_this->current.pos.z - i_this->mSpawnPos.z;
-            f32 xzDist = sqrtf(xDist*xDist + zDist*zDist);
+            f32 xzDist = std::sqrtf(xDist*xDist + zDist*zDist);
             if (xzDist > i_this->mAreaRadius) {
                 i_this->mAction = ACTION_MODORU_MOVE;
                 i_this->mState = 0x14;
@@ -544,7 +544,7 @@ static void action_dousa(am_class* i_this) {
                 break;
             }
             f32 yDist = player->current.pos.y - i_this->current.pos.y;
-            yDist = sqrtf(yDist*yDist); // ???
+            yDist = std::sqrtf(yDist*yDist); // ???
             if (yDist > 300.0f) {
                 i_this->mState = 9;
                 break;
@@ -690,7 +690,7 @@ static void action_modoru_move(am_class* i_this) {
             i_this->mTargetAngleY = cM_atan2s(xDistToSpawn, zDistToSpawn);
         }
 
-        f32 xzDist = sqrtf(xDistToSpawn*xDistToSpawn + zDistToSpawn*zDistToSpawn);
+        f32 xzDist = std::sqrtf(xDistToSpawn*xDistToSpawn + zDistToSpawn*zDistToSpawn);
         if (xzDist < 20.0f) {
             i_this->mTargetAngleY = i_this->mSpawnRotY;
             i_this->speedF = 0.0f;

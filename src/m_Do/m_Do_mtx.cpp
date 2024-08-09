@@ -268,7 +268,7 @@ void mDoMtx_MtxToRot(const Mtx m, csXyz* o_rot) {
     f31 *= f31;
     f32 f30 = m[2][2];
     f31 += f30 * f30;
-    f31 = sqrtf(f31);
+    f31 = std::sqrtf(f31);
     o_rot->x = cM_atan2s(-m[1][2], f31);
 
     if (o_rot->x == 0x4000 || o_rot->x == -0x4000) {

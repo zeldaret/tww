@@ -117,13 +117,13 @@ u16 U_GetAtanTable(float f0, float f1) {
 /* 802460D0-80246270       .text cM_atan2s__Fff */
 s16 cM_atan2s(float f0, float f1) {
     u32 retVar;
-    if (fabsf(f0) < G_CM3D_F_ABS_MIN) {
+    if (cM3d_IsZero(f0)) {
         if (f1 >= 0.0f) {
             retVar = 0;
         } else {
             retVar = 0x8000;
         }
-    } else if (fabsf(f1) < G_CM3D_F_ABS_MIN) {
+    } else if (cM3d_IsZero(f1)) {
         if (f0 >= 0.0f) {
             retVar = 0x4000;
         } else {
@@ -178,7 +178,7 @@ float cM_rnd(void) {
     r0 = (r0 * 0xAB) % 0x763D;
     r1 = (r1 * 0xAC) % 0x7663;
     r2 = (r2 * 0xAA) % 0x7673;
-    return fabsf(fmod(r0 / 30269.0f + r1 / 30307.0f + r2 / 30323.0f, 1.0));
+    return std::fabsf(std::fmodf(r0 / 30269.0f + r1 / 30307.0f + r2 / 30323.0f, 1.0));
 }
 
 /* 802463B0-802463E8       .text cM_rndF__Ff */

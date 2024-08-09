@@ -136,13 +136,7 @@ const char* JKRFileLoader::fetchVolumeName(char* buffer, s32 bufferSize, const c
     path++;
     while (*path != 0 && *path != '/') {
         if (1 < bufferSize) {
-            int lower_char;
-            int ch = (int)*path;
-            if (ch == -1) {
-                lower_char = -1;
-            } else {
-                lower_char = __lower_map[ch & 0xFF];
-            }
+            int lower_char = std::tolower(*path);
 
             *buffer = lower_char;
             buffer++;

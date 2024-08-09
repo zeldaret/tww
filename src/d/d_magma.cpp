@@ -121,7 +121,7 @@ BOOL dMagma_ball_c::rangeCheck(cXyz& pos, f32* dst) {
     f32 rad1 = mScale * 243.6414f;
     if (distSq < rad1*rad1) {
         f32 rad2 = mScale * 800.0f;
-        f32 dist = sqrtf(rad2 * rad2 - distSq);
+        f32 dist = std::sqrtf(rad2 * rad2 - distSq);
         f32 temp = (mPos.y - (rad2 - 47.999146f));
         temp += dist;
         *dst = temp;
@@ -421,7 +421,7 @@ f32 dMagma_packet_c::checkYpos(cXyz& pos) {
         if (floor->mpBalls == NULL)
             continue;
 
-        if (fabsf(pos.y - floor->mPos.y) <= 236.803879f && fabsf(pos.x - floor->mPos.x) <= floor->mScaleX * 500.0f && fabsf(pos.z - floor->mPos.z) <= floor->mScaleZ * 500.0f) {
+        if (std::fabsf(pos.y - floor->mPos.y) <= 236.803879f && std::fabsf(pos.x - floor->mPos.x) <= floor->mScaleX * 500.0f && std::fabsf(pos.z - floor->mPos.z) <= floor->mScaleZ * 500.0f) {
             dMagma_ball_c** ball = floor->mpBalls;
             for (s32 j = 0; j < floor->mBallNum; ball++, j++) {
                 f32 y;

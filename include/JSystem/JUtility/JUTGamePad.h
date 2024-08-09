@@ -193,9 +193,9 @@ public:
         static PADMask mEnabled;
 
         enum ERumble {
-            VAL_0 = 0,
-            VAL_1 = 1,
-            VAL_2 = 2,
+            LOOP_ONCE    = 0,
+            LOOP_FOREVER = 1,
+            SET_DURATION = 2,
         };
 
         void clear();

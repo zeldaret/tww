@@ -130,7 +130,7 @@ f32 cM3d_SignedLenPlaAndPos(const cM3dGPla* plane, const Vec* pos) {
 void cM3d_CalcPla(const Vec* p0, const Vec* p1, const Vec* p2, Vec* pDst, f32* pT) {
     cM3d_VectorProduct(p0, p1, p2, pDst);
     f32 t = VECMag(pDst);
-    if (fabsf(t) >= 0.02f) {
+    if (std::fabsf(t) >= 0.02f) {
         VECScale(pDst, pDst, 1.0f / t);
         *pT = -VECDotProduct(pDst, p0);
     } else {
@@ -232,7 +232,7 @@ int cM3d_Check_LinLin(const cM3dGLin* lin_a, const cM3dGLin* lin_b, f32* dst_a, 
         f32 tmpF = -VECDotProduct(&linAVec, &linBVec);
         f32 tmpF2 = VECDotProduct(&tmp, &linAVec);
         VECSquareMag(&tmp);  // result not used
-        f32 tmpF3 = fabsf(1.0f - (tmpF * tmpF));
+        f32 tmpF3 = std::fabsf(1.0f - (tmpF * tmpF));
         if (!cM3d_IsZero(tmpF3)) {
             f32 tmpF4 = -VECDotProduct(&tmp, &linBVec);
             f32 tmpF7 = 1.0f / tmpF3;
@@ -424,9 +424,9 @@ bool cM3d_Cross_LinTri(const cM3dGLin* lin, const cM3dGTri* tri, Vec* dst, bool 
     if (!cM3d_Cross_LinPla(lin, tri, dst, a, b)) {
         return false;
     }
-    if ((fabsf(tri->GetNP()->x) < 0.008f || cM3d_CrossX_Tri(tri, dst)) &&
-        (fabsf(tri->GetNP()->y) < 0.008f || cM3d_CrossY_Tri(tri, dst)) &&
-        (fabsf(tri->GetNP()->z) < 0.008f || cM3d_CrossZ_Tri(tri, dst))
+    if ((std::fabsf(tri->GetNP()->x) < 0.008f || cM3d_CrossX_Tri(tri, dst)) &&
+        (std::fabsf(tri->GetNP()->y) < 0.008f || cM3d_CrossY_Tri(tri, dst)) &&
+        (std::fabsf(tri->GetNP()->z) < 0.008f || cM3d_CrossZ_Tri(tri, dst))
     ) {
         return true;
     } else {
@@ -604,7 +604,7 @@ bool cM3d_Cross_CpsSph(const cM3dGCps& param_1, const cM3dGSph& param_2, Vec* pa
     }
     Vec auStack_34;
     if (cM3d_Len3dSqPntAndSegLine(&param_1, param_2.GetCP(), &auStack_34, &local_38) != 0) {
-        if (sqrtf(local_38) < param_1.GetR() + param_2.GetR()) {
+        if (std::sqrtf(local_38) < param_1.GetR() + param_2.GetR()) {
             cM3d_Cross_CpsSph_CrossPos(param_1, param_2, auStack_34, param_3);
             return true;
         }
@@ -635,7 +635,7 @@ void cM3d_CalcVecAngle(const Vec& vec, s16* a, s16* b) {
 
 /* 80251560-80251634       .text cM3d_CalcVecZAngle__FRC3VecP5csXyz */
 void cM3d_CalcVecZAngle(const Vec& param_0, csXyz* param_1) {
-    param_1->x = -cM_atan2s(param_0.y, sqrtf(param_0.x * param_0.x + param_0.z * param_0.z));;
+    param_1->x = -cM_atan2s(param_0.y, std::sqrtf(param_0.x * param_0.x + param_0.z * param_0.z));;
     param_1->y = cM_atan2s(param_0.x, param_0.z);
     param_1->z = 0;
 }
@@ -658,9 +658,9 @@ int cM3d_2PlaneCrossLine(const cM3dGPla& pPlaneA, const cM3dGPla& pPlaneB, cM3dG
     if (cM3d_IsZero(tmp.x) && cM3d_IsZero(tmp.y) && cM3d_IsZero(tmp.z)) {
         return 0;
     } else {
-        f32 absTX = fabsf(tmp.x);
-        f32 absTY = fabsf(tmp.y);
-        f32 absTZ = fabsf(tmp.z);
+        f32 absTX = std::fabsf(tmp.x);
+        f32 absTY = std::fabsf(tmp.y);
+        f32 absTZ = std::fabsf(tmp.z);
         if (absTX >= absTY && absTX >= absTZ) {
             cM3d_PlaneCrossLineProcWork(pPlaneA.GetNP()->y, pPlaneA.GetNP()->z, pPlaneB.GetNP()->y,
                                         pPlaneB.GetNP()->z, tmp.x, pPlaneA.GetD(), pPlaneB.GetD(),
@@ -753,7 +753,7 @@ int cM3d_2PlaneLinePosNearPos(const cM3dGPla& p0, const cM3dGPla& p1, const Vec*
 /* 80251C44-80251CC4       .text cM3d_CrawVec__FRC3VecRC3VecP3Vec */
 void cM3d_CrawVec(const Vec& v0, const Vec& v1, Vec* pDst) {
     Vec tmp;
-    f32 sq = fabsf(v1.x * v0.x + v1.y * v0.y + v1.z * v0.z);
+    f32 sq = std::fabsf(v1.x * v0.x + v1.y * v0.y + v1.z * v0.z);
     VECScale(&v0, &tmp, sq);
     VECAdd(&tmp, &v1, pDst);
 }

@@ -32,18 +32,9 @@ extern float __fabsf(float);
 inline double fabs(double f) {
     return __fabs(f);
 }
-inline double fabsf2(float f) {
-    return __fabsf(f);
-}
-inline float fabsf(float f) {
-    return fabsf2(f);
-}
 
 double floor(double);
 double fmod(double, double);
-inline float fmodf(float f1, float f2) {
-    return fmod(f1, f2);
-}
 
 double frexp(double, int*);
 double ldexp(double, int);
@@ -56,21 +47,6 @@ float tanf(float);
 
 inline double sqrt_step(double tmpd, float mag) {
     return tmpd * 0.5 * (3.0 - mag * (tmpd * tmpd));
-}
-
-extern inline float sqrtf(float x) {
-    const double _half = .5;
-    const double _three = 3.0;
-    volatile float y;
-    if (x > 0.0f) {
-        double guess = __frsqrte((double)x);                   // returns an approximation to
-        guess = _half * guess * (_three - guess * guess * x);  // now have 12 sig bits
-        guess = _half * guess * (_three - guess * guess * x);  // now have 24 sig bits
-        guess = _half * guess * (_three - guess * guess * x);  // now have 32 sig bits
-        y = (float)(x * guess);
-        return y;
-    }
-    return x;
 }
 
 extern inline double sqrt(double x) {
@@ -91,22 +67,34 @@ extern inline double sqrt(double x) {
     return HUGE_VALF;
 }
 
-inline float atan2f(float y, float x) {
-    return (float)atan2(y, x);
-}
-
-// these are duplicated due to sinf/cosf having a symbol, but
-// still being used as inlines elsewhere
-inline float i_sinf(float x) {
-    return sin(x);
-}
-
-inline float i_cosf(float x) {
-    return cos(x);
-}
-
 #ifdef __cplusplus
 };
+
+
+namespace std {
+inline float fabsf(float f) { return fabs(f); }
+inline float abs(float f) { return fabsf(f); }
+inline float fmodf(float x, float y) { return fmod(x, y); }
+inline float atan2f(float y, float x) { return (float)atan2(y, x); }
+inline float sinf(float x) { return sin(x); }
+inline float cosf(float x) { return cos(x); }
+inline float tanf(float x) { return tan(x); }
+
+extern inline float sqrtf(float x) {
+    const double _half = .5;
+    const double _three = 3.0;
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double)x);                   // returns an approximation to
+        guess = _half * guess * (_three - guess * guess * x);  // now have 12 sig bits
+        guess = _half * guess * (_three - guess * guess * x);  // now have 24 sig bits
+        guess = _half * guess * (_three - guess * guess * x);  // now have 32 sig bits
+        y = (float)(x * guess);
+        return y;
+    }
+    return x;
+}
+}; // namespace std
 #endif
 
 #endif

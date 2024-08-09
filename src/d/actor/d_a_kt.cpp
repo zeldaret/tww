@@ -56,14 +56,14 @@ void kotori_move(kt_class* i_this) {
 
     f32 dx = player->current.pos.x - *(r28 = &i_this->current.pos.x);
     f32 dz = player->current.pos.z - *(r27 = &i_this->current.pos.z);
-    f32 dist_xz = sqrtf(dx*dx + dz*dz);
+    f32 dist_xz = std::sqrtf(dx*dx + dz*dz);
     cLib_addCalcAngleS2(&i_this->mAngleRoll, 0, 2, REG0_S(4) + 0x1000);
 
     f32 vx = i_this->mTargetPos.x - *r28;
     f32 vy = i_this->mTargetPos.y - *(r26 = &i_this->current.pos.y);
     f32 vz = i_this->mTargetPos.z - *r27;
     s16 angleX = cM_atan2s(vx, vz);
-    s16 angleY = -cM_atan2s(vy, sqrtf(vx*vx + vz*vz));
+    s16 angleY = -cM_atan2s(vy, std::sqrtf(vx*vx + vz*vz));
 
     cXyz offs;
     cXyz pt;
@@ -115,7 +115,7 @@ void kotori_move(kt_class* i_this) {
         cLib_addCalc2(&i_this->mSpeedLerp, 1.0f, 1.0f, 0.1f);
         goto calc_012;
     case 1:
-        dist = sqrtf(vx*vx + vy*vy + vz*vz);
+        dist = std::sqrtf(vx*vx + vy*vy + vz*vz);
         if (dist < REG0_F(1) * 10.0f + 800.0f) {
             i_this->mState = 8;
         }
@@ -151,7 +151,7 @@ calc_012:
         *r28 += pt.x;
         *r27 += pt.z;
         cLib_addCalc2(&*r26, i_this->mGroundY, REG0_F(6) + 0.3f, REG0_F(7) + 20.0f);
-        if (fabsf(*r26 - i_this->mGroundY) < 1.0f) {
+        if (std::fabsf(*r26 - i_this->mGroundY) < 1.0f) {
             *r26 = i_this->mGroundY;
             i_this->mState = 10;
         }
@@ -161,7 +161,7 @@ calc_012:
     case 2:
         i_this->mTargetPos = headTopPos;
         i_this->mTargetPos.y += 200.0f;
-        dist = sqrtf(vx*vx + vy*vy + vz*vz);
+        dist = std::sqrtf(vx*vx + vy*vy + vz*vz);
         if (dist < REG0_F(1) * 10.0f + 800.0f) {
             i_this->mState = 9;
         }
@@ -183,7 +183,7 @@ calc_012:
         *r28 += pt.x;
         *r27 += pt.z;
         cLib_addCalc2(&*r26, i_this->mTargetPos.y, REG0_F(6) + 0.5f, REG0_F(7) + 20.0f);
-        if (fabsf(*r26 - i_this->mTargetPos.y) < 1.0f) {
+        if (std::fabsf(*r26 - i_this->mTargetPos.y) < 1.0f) {
             i_this->mState = 20;
             i_this->mSpeedLerp = 0.0f;
         }
@@ -197,7 +197,7 @@ calc_012:
         cLib_addCalc2(&*r27, i_this->mTargetPos.z, 1.0f, i_this->mSpeedLerp);
         cLib_addCalc2(&i_this->mSpeedLerp, 1000.0f, 1.0f, REG0_F(16) + 10.0f);
         cLib_addCalcAngleS2(&i_this->current.angle.y, player->shape_angle.y, 2, 0x1000);
-        if (fabsf(*r26 - i_this->mTargetPos.y) > 1.0f)
+        if (std::fabsf(*r26 - i_this->mTargetPos.y) > 1.0f)
             dispWing = true;
         if (CPad_CHECK_TRIG_LEFT(0)) {
             i_this->mState = 0;
@@ -337,11 +337,11 @@ static s32 daKt_Create(fopAc_ac_c* i_ac) {
                 i_this->current.pos.y = REG0_F(0) * 10.0f + 2500.0f;
                 fopAcM_SetParam(i_this, 1000);
                 for (s32 i = 0; i < num; i++) {
-                    fopAcM_prm_class* appen = fopAcM_CreateAppend();
-                    appen->mPos = i_this->current.pos;
-                    appen->mAngle.set(0, 0, 0);
-                    appen->mParameter = 1001 + i;
-                    fpcM_Create(PROC_KT, NULL, appen);
+                    fopAcM_prm_class* params = fopAcM_CreateAppend();
+                    params->mPos = i_this->current.pos;
+                    params->mAngle.set(0, 0, 0);
+                    params->mParameter = 1001 + i;
+                    fpcM_Create(PROC_KT, NULL, params);
                 }
             }
 

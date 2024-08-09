@@ -152,7 +152,6 @@ void cBgW::ClassifyPlane() {
         return;
 
     s32 i = 0;
-    f32 eps = G_CM3D_F_ABS_MIN;
 
     int roof, wall, ground;
     for (; i < pm_bgd->m_b_num; i++) {
@@ -174,9 +173,8 @@ void cBgW::ClassifyPlane() {
         for (s32 j = startTri; j <= lastTri; j++) {
             cBgW_TriElm* tri_elm = &pm_tri[j];
 
-            /* cM3d_isZero */
-            f32 ny = tri_elm->m_plane.mNormal.y;
-            if (fabsf(tri_elm->m_plane.mNormal.x) < eps && fabsf(tri_elm->m_plane.mNormal.y) < eps && fabsf(tri_elm->m_plane.mNormal.z) < eps)
+            f32 ny = tri_elm->m_plane.GetNP()->y;
+            if (cM3d_IsZero(tri_elm->m_plane.GetNP()->x) && cM3d_IsZero(tri_elm->m_plane.GetNP()->y) && cM3d_IsZero(tri_elm->m_plane.GetNP()->z))
                 continue;
 
             if (cBgW_CheckBGround(ny)) {

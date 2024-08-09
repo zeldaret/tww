@@ -996,7 +996,7 @@ f32 daNpc_Os_c::checkForwardGroundY(s16 param_1) {
 f32 daNpc_Os_c::checkWallJump(s16 param_1) {
     f32 delta = checkForwardGroundY(param_1) - current.pos.y;
     if(0.0f < delta && delta < 80.0f) {
-        delta = sqrtf(delta) * 3.6f;
+        delta = std::sqrtf(delta) * 3.6f;
     }
     else {
         delta = -1.0f;
@@ -1773,7 +1773,7 @@ BOOL daNpc_Os_c::chkAttention(cXyz param_1, s16 param_2) {
     cXyz delta;
     delta.x = player->current.pos.x - param_1.x;
     delta.z = player->current.pos.z - param_1.z;
-    f32 dist = sqrtf(delta.x*delta.x + delta.z*delta.z);
+    f32 dist = std::sqrtf(delta.x*delta.x + delta.z*delta.z);
 
     s16 angle = cM_atan2s(delta.x, delta.z);
     if(field_0x7A4) {
@@ -1798,7 +1798,7 @@ bool daNpc_Os_c::chkArea(cXyz* param_1) {
     cXyz delta;
     delta.x = player->current.pos.x - param_1->x;
     delta.z = player->current.pos.z - param_1->z;
-    f32 dist = sqrtf(delta.x*delta.x + delta.z*delta.z);
+    f32 dist = std::sqrtf(delta.x*delta.x + delta.z*delta.z);
 
     maxDist += 40.0f;
     return maxDist > dist;

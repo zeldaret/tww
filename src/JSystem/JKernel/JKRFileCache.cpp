@@ -59,7 +59,7 @@ JKRFileCache::JKRFileCache(const char* path, const char* volume) {
 
         const char* volumePath = volume;
         if (!volume) {
-            volumePath = strrchr(mRootPath, '/');
+            volumePath = std::strrchr(mRootPath, '/');
             volumePath++;
         }
 

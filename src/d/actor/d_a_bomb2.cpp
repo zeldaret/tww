@@ -651,7 +651,7 @@ namespace daBomb2 {
         cXyz sp48 = *mSph.GetTgRVecP();
         f32 f31 = sp48.abs2();
         if (f31 > f30*f30) {
-            sp48 *= f30 / sqrtf(f31);;
+            sp48 *= f30 / std::sqrtf(f31);;
         }
         cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
         cXyz hitNormal = cXyz::Zero;
@@ -679,7 +679,7 @@ namespace daBomb2 {
             f28 = 1.0f;
         }
         mWindVec = sp48 * f31 + hitNormal * f28 * f30;
-        if (fabsf(mWindVec.y) < 5.0f) {
+        if (std::fabsf(mWindVec.y) < 5.0f) {
             mWindVec.y += attr().field_0x38*f31 + f29*(attr().field_0x3C*f28);
         }
         field_0x7A8 = 2;
@@ -1293,10 +1293,10 @@ namespace daBomb2 {
         };
 
         if(fopAcM_GetModel(this) == 0) {
-            f32 frame = mBck0.getFrame();
-            frame = mult[cLib_minMaxLimit<int>(mBck0.getEndFrame() - frame, 0, 9)] * 25.0f;
+            int framesLeft = mBck0.getEndFrame() - mBck0.getFrame();
+            f32 scale = mult[cLib_minMaxLimit<int>(framesLeft, 0, 9)] * 25.0f;
 
-            dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), frame, mAcch.m_gnd, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+            dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), scale, mAcch.m_gnd, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
         }
     }
 

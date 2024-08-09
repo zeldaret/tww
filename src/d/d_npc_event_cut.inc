@@ -224,8 +224,8 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
 
     s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
     int temp2 = tAngle - mpActor->current.angle.y;
-    f32 temp = fabsf(temp2);
-    if(field_0x44 == temp && fabsf(temp2) < 5376.0f) {
+    f32 temp = std::fabsf(temp2);
+    if(field_0x44 == temp && std::fabsf(temp2) < 5376.0f) {
         cLib_calcTimer(&mTimer);
     }
 
@@ -234,7 +234,7 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
     
-    field_0x44 = fabsf(tAngle - mpActor->current.angle.y);
+    field_0x44 = std::fabsf(tAngle - mpActor->current.angle.y);
 }
 
 /* 8021D51C-8021D730       .text cutMoveToActorStart__15dNpc_EventCut_cFv */
@@ -462,8 +462,8 @@ void dNpc_EventCut_c::cutTurnToPosProc() {
     }
 
     int temp2 = tAngle - mpActor->current.angle.y;
-    f32 temp = fabsf(temp2);
-    if(field_0x44 == temp && fabsf(temp2) < 5376.0f) {
+    f32 temp = std::fabsf(temp2);
+    if(field_0x44 == temp && std::fabsf(temp2) < 5376.0f) {
         cLib_calcTimer(&mTimer);
     }
 
@@ -472,7 +472,7 @@ void dNpc_EventCut_c::cutTurnToPosProc() {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
     
-    field_0x44 = fabsf(tAngle - mpActor->current.angle.y);
+    field_0x44 = std::fabsf(tAngle - mpActor->current.angle.y);
 }
 
 /* 8021DFB0-8021E168       .text cutMoveToPosStart__15dNpc_EventCut_cFv */
@@ -543,7 +543,7 @@ void dNpc_EventCut_c::cutMoveToPosProc() {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
 
-    f32 dist = sqrtf((temp - mpActor->current.pos).abs2XZ());
+    f32 dist = std::sqrtf((temp - mpActor->current.pos).abs2XZ());
 
     cLib_addCalc2(&mpActor->current.pos.x, temp.x, 0.1f, mSpeed);
     cLib_addCalc2(&mpActor->current.pos.z, temp.z, 0.1f, mSpeed);
