@@ -301,8 +301,8 @@ void daPy_swBlur_c::draw() {
 
     if (mBlurColorType == NORMAL_SLASH_BLUR) {
         // Normal color.
-        static GXColor n_color = {0xFF, 0xFF, 0xFF, 0x96};
-        GXSetTevColor(GX_TEVREG0, n_color);
+        static GXColor n_color0 = {0xFF, 0xFF, 0xFF, 0x96};
+        GXSetTevColor(GX_TEVREG0, n_color0);
     } else if (mBlurColorType == ELIXIR_SOUP_SLASH_BLUR) {
         // Elixir Soup color.
         static GXColor y_color0 = {0xFF, 0xFF, 0x7B, 0x96};
@@ -713,9 +713,7 @@ void daPy_lk_c::setWaterRipple() {
         MtxP suimenMunyaMtx = mpSuimenMunyaModel->getBaseTRMtx();
 
         cXyz local_4c;
-        local_4c.x = suimenMunyaMtx[0][3];
-        local_4c.y = suimenMunyaMtx[1][3];
-        local_4c.z = suimenMunyaMtx[2][3];
+        mDoMtx_multVecZero(suimenMunyaMtx, &local_4c);
 
         local_40.y = m35D0;
         local_4c -= local_40;
@@ -737,9 +735,7 @@ void daPy_lk_c::setWaterRipple() {
         if (dPa_control_c::isStatus(0x01)) {
             MtxP mtx = mpCLModel->getAnmMtx(15);
             cXyz local_5c;
-            local_5c.x = mtx[0][3];
-            local_5c.y = mtx[1][3];
-            local_5c.z = mtx[2][3];
+            mDoMtx_multVecZero(mtx, &local_5c);
 
             cXyz local_68;
             cMtx_multVec(mtx, &swim_side_offset, &local_68);
@@ -785,11 +781,9 @@ void daPy_lk_c::setWaterRipple() {
         }
 
         if (m34CD == 0) {
-            MtxP mtx = mpCLModel->getAnmMtx(0);
             cXyz local_ac;
-            local_ac.x = mtx[0][3];
-            local_ac.y = mtx[1][3];
-            local_ac.z = mtx[2][3];
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &local_ac);
+
             dComIfGp_particle_setSingleRipple(0x3F, &local_ac, NULL, (cXyz*)&waterfall_ripple_scale);
             m34CD = 15;
             dComIfGp_getVibration().StartQuake(4, 1, cXyz(0.0f, 1.0f, 0.0f));
@@ -946,18 +940,12 @@ void daPy_lk_c::setFootEffect() {
     cXyz pos;
     if (getFootOnGround()) {
         if (getRightFootOnGround()) {
-            MtxP mtx = mpCLModel->getAnmMtx(0x27);
-            pos.x = mtx[0][3];
-            pos.y = mtx[1][3];
-            pos.z = mtx[2][3];
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x27), &pos);
             setFootMark(&pos);
         }
 
         if (getLeftFootOnGround()) {
-            MtxP mtx = mpCLModel->getAnmMtx(0x22);
-            pos.x = mtx[0][3];
-            pos.y = mtx[1][3];
-            pos.z = mtx[2][3];
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x22), &pos);
             setFootMark(&pos);
         }
     }
@@ -1031,10 +1019,8 @@ void daPy_lk_c::setFootEffect() {
     if (mCurProc == daPyProc_DEMO_LAST_COMBO_e) {
         f32 rnd = cM_rndFX(17.5f);
         cXyz sp44 = m370C;
-        MtxP mtx = mpCLModel->getAnmMtx(0x1);
-        m370C.x = mtx[0][3];
-        m370C.y = mtx[1][3];
-        m370C.z = mtx[2][3];
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x1), &m370C);
+
         if (m3570 != 0) {
             current.angle.y = shape_angle.y - 0x4000;
             m3570 = 0;
@@ -1057,40 +1043,26 @@ void daPy_lk_c::setFootEffect() {
 
         } else if (m34BE == 3) {
             if (mCurrAttributeCode == dBgS_Attr_GRASS_e || mCurrAttributeCode == dBgS_Attr_WATER_e) {
-                MtxP mtx = mpCLModel->getAnmMtx(0x27);
-                pos.x = mtx[0][3];
-                pos.y = mtx[1][3];
-                pos.z = mtx[2][3];
+                mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x27), &pos);
                 setFootEffectType(temp_r3_4, &pos, 0, var_r29);
 
-                mtx = mpCLModel->getAnmMtx(0x22);
-                pos.x = mtx[0][3];
-                pos.y = mtx[1][3];
-                pos.z = mtx[2][3];
+                mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x22), &pos);
                 setFootEffectType(temp_r3_4, &pos, 1, var_r29);
 
             } else {
                 setFootEffectType(temp_r3_4, &current.pos, 0, var_r29);
             }
         } else if (m34BE == 1) {
-            MtxP mtx = mpCLModel->getAnmMtx(0x22);
-            pos.x = mtx[0][3];
-            pos.y = mtx[1][3];
-            pos.z = mtx[2][3];
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x22), &pos);
             setFootEffectType(temp_r3_4, &pos, 0, var_r29);
         } else if (m34BE == 2) {
-            MtxP mtx = mpCLModel->getAnmMtx(0x27);
-            pos.x = mtx[0][3];
-            pos.y = mtx[1][3];
-            pos.z = mtx[2][3];
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x27), &pos);
             setFootEffectType(temp_r3_4, &pos, 0, var_r29);
         } else if (m34BE == 5) {
             setFootEffectType(temp_r3_4, &current.pos, 0, 1);
         } else if (m34BE == 6) {
-            MtxP mtx = mpCLModel->getAnmMtx(0);
-            pos.x = mtx[0][3];
-            pos.y = mtx[1][3];
-            pos.z = mtx[2][3];
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0), &pos);
+
 
             mGndChk.SetPos(&pos);
 
@@ -1137,11 +1109,8 @@ void daPy_lk_c::setSwimTail() {
 /* 8012C2A4-8012C330       .text setCutWaterSplash__9daPy_lk_cFv */
 void daPy_lk_c::setCutWaterSplash() {
     if (m336C.getEmitter() != NULL) {
-        MtxP mtx = mpCLModel->getAnmMtx(4);
         cXyz pos;
-        pos.x = mtx[0][3];
-        pos.y = mtx[1][3];
-        pos.z = mtx[2][3];
+        mDoMtx_multVecZero(mpCLModel->getAnmMtx(4), &pos);
 
         dComIfGp_particle_setP1(0x39, &pos);
     }
@@ -1173,15 +1142,10 @@ void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c* callBack) {
 void daPy_lk_c::setWaterDrop() {
     MtxP mtx = mpCLModel->getAnmMtx(0x0E);
     cXyz tmp;
-    tmp.x = mtx[0][3];
-    tmp.y = mtx[1][3];
-    tmp.z = mtx[2][3];
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x0E), &tmp);
     m334C.setPos(&tmp);
 
-    mtx = mpCLModel->getAnmMtx(0x02);
-    tmp.x = mtx[0][3];
-    tmp.y = mtx[1][3];
-    tmp.z = mtx[2][3];
+    mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x02), &tmp);
     m336C.setPos(&tmp);
 
     if (checkModeFlg(ModeFlg_00000001)) {
@@ -1282,9 +1246,9 @@ void daPy_lk_c::setDamageElecEmitter() {
 void daPy_lk_c::setDamageEmitter() {
     dCcD_GObjInf* tgHitGObj = mCyl.GetTgHitGObj();
     if (tgHitGObj != NULL) {
-        if (tgHitGObj->GetAtSpl() == 0x3) {
+        if (tgHitGObj->GetAtSpl() == dCcG_At_Spl_UNK3) {
             setDamageCurseEmitter();
-        } else if (tgHitGObj->GetAtSpl() == 0xB) {
+        } else if (tgHitGObj->GetAtSpl() == dCcG_At_Spl_UNKB) {
             setDamageElecEmitter();
         } else if (tgHitGObj->ChkAtType(AT_TYPE_FIRE)) {
             setDamageFlameEmitter();
@@ -1299,9 +1263,7 @@ void daPy_lk_c::endFlameDamageEmitter() {
     if (current.pos.y < m35D0 - 10.0f) {
         for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++) {
             cXyz pos;
-            pos.x = mDmEcallBack[i].mpMtx[0][3];
-            pos.y = mDmEcallBack[i].mpMtx[1][3];
-            pos.z = mDmEcallBack[i].mpMtx[2][3];
+            mDoMtx_multVecZero(mDmEcallBack[i].mpMtx, &pos);
             pos.y = m35D0;
 
             dComIfGp_particle_set(0x35A, &pos);
