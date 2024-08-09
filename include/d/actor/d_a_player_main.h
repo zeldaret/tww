@@ -80,7 +80,6 @@ public:
     dPa_smokeEcallBack* getSmokeCallBack() { return &mSmokeCb; }
     dPa_followEcallBack* getOtherCallBack() { return &mFollowCb; }
 
-    // Might be incorrect
     void setID(s32 id) { mId = id; }
     s32 getID() const { return mId; }
     void setAngle(csXyz* angle) { mAngle = *angle; }
