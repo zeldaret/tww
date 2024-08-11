@@ -28,7 +28,7 @@ jobs:
     - name: Download objdiff CLI
       if: github.ref == 'refs/heads/main'
       run: |
-        python tools/download_tool.py --tag v2.0.0-beta.1 objdiff-cli objdiff-cli
+        python tools/download_tool.py --tag v2.0.0-beta.2 objdiff-cli objdiff-cli
     - name: Build
       run: |
         python configure.py --version ${{matrix.version}} --compilers /compilers --warn error
