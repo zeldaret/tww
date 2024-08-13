@@ -22,7 +22,12 @@ namespace JASystem {
         f32 getOffset();
         bool forceStop();
         bool release();
-        void calc(s16*);
+        f32 calc(s16*);
+
+        static s16 oscTableForceStop[6];
+        static const f32 relTableSampleCell[17];
+        static const f32 relTableSqRoot[17];
+        static const f32 relTableSquare[17];
 
         /* 0x00 */ const Osc_* field_0x0;
         /* 0x04 */ u8 field_0x4;

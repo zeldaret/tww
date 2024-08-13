@@ -4,6 +4,36 @@
 //
 
 #include "JSystem/JAudio/JASOscillator.h"
+#include "JSystem/JAudio/JASDriverIF.h"
+#include "JSystem/JAudio/JASRate.h"
+#include "dolphin/os/OS.h"
+
+s16 JASystem::TOscillator::oscTableForceStop[] = {
+    0x000F, 0x000F, 0x0000,
+    0x0000, 0x0000, 0x0000,
+};
+
+const f32 JASystem::TOscillator::relTableSampleCell[] = {
+    1.0f, 0.970489f, 0.781274f, 0.546281f, 0.399792f, 0.289315f,
+    0.212104f, 0.157476f, 0.112613f, 0.0817896f, 0.0579852f, 0.0436415f,
+    0.0308237f, 0.0237129f, 0.0152593f, 0.00915555f,
+};
+
+// relTableSqRoot[i] = pow(1 - i/16, 2)
+const f32 JASystem::TOscillator::relTableSqRoot[] = {
+    1.0f, 0.878906f, 0.765625f, 0.660156f,
+    0.5625f, 0.472656f, 0.390625f, 0.316406f,
+    0.25f, 0.191406f, 0.140625f, 0.0976562f,
+    0.0625f, 0.0351562f, 0.015625f, 0.00390625,
+};
+
+// relTableSquare[i] = sqrt(1 - i/16)
+const f32 JASystem::TOscillator::relTableSquare[] = {
+    1.0f, 0.968246f, 0.935414f, 0.901388f,
+    0.866025f, 0.829156f, 0.790569f, 0.75f,
+    0.707107f, 0.661438f, 0.612372f, 0.559017f,
+    0.5f, 0.433013f, 0.353553f, 0.25f,
+};
 
 /* 8028DE94-8028DECC       .text init__Q28JASystem11TOscillatorFv */
 void JASystem::TOscillator::init() {
@@ -36,7 +66,46 @@ void JASystem::TOscillator::initStart() {
 
 /* 8028DF2C-8028E070       .text getOffset__Q28JASystem11TOscillatorFv */
 f32 JASystem::TOscillator::getOffset() {
-    /* Nonmatching */
+    if (field_0x0 == NULL) {
+        OSReport("----- Oscillator is NULL\n");
+        field_0xc = 1.0f;
+        return 1.0f;
+    }
+
+    switch (field_0x4) {
+    case 0:
+        return 1.0f;
+    case 3:
+        return field_0x0->field_0x14 + (field_0xc * field_0x0->field_0x10);
+
+    case 1:
+        field_0x4 = 2;
+        OSReport("----- Error Initialize\n");
+        /* Fallthrough */
+    default:
+        s16* var_r4;
+        if (field_0x4 == 4) {
+            var_r4 = (s16*)field_0x0->rel_table;
+        } else if (field_0x4 == 5) {
+            var_r4 = oscTableForceStop;
+        } else {
+            var_r4 = (s16*)field_0x0->table;
+        }
+
+        if (var_r4 == NULL && field_0x4 != 6) {
+            field_0xc = 1.0f;
+            return 1.0f;
+        }
+
+        if (field_0x4 == 5) {
+            field_0x8 -= 1.0f;
+        } else {
+            field_0x8 -= field_0x0->field_0x4;
+        }
+
+        return calc(var_r4);
+
+    }
 }
 
 /* 8028E070-8028E0AC       .text forceStop__Q28JASystem11TOscillatorFv */
@@ -53,10 +122,48 @@ bool JASystem::TOscillator::forceStop() {
 
 /* 8028E0AC-8028E238       .text release__Q28JASystem11TOscillatorFv */
 bool JASystem::TOscillator::release() {
-    /* Nonmatching */
+    if (field_0x4 == 5) {
+        return false;
+    }
+
+    if (field_0x0->table != field_0x0->rel_table) {
+        field_0x6 = 0;
+        field_0x8 = 0.0f;
+        field_0x10 = field_0xc;
+    }
+
+    if (field_0x0->rel_table == NULL && field_0x18 == 0) {
+        field_0x18 = 0x10;
+    }
+
+    if (field_0x18 != 0) {
+        field_0x4 = 6;
+        field_0x5 = (field_0x18 >> 0xE) & 3;
+
+        f32 temp_f31 = field_0x18 & 0x3FFF;
+        temp_f31 *= ((Kernel::getDacRate() / 80.0f) / 600.0f);
+        temp_f31 /= Driver::getUpdateInterval();
+        field_0x8 = temp_f31;
+
+        if (field_0x8 < 1.0f) {
+            field_0x8 = 1.0f;
+        }
+
+        field_0x1c = field_0x8;
+        field_0x10 = 0.0f;
+        if (field_0x5 == 0) {
+            field_0x14 = (field_0x10 - field_0xc) / field_0x8;
+        } else {
+            field_0x14 = field_0x10 - field_0xc;
+        }
+    } else {
+        field_0x4 = 4;
+    }
+
+    return true;
 }
 
 /* 8028E238-8028E5EC       .text calc__Q28JASystem11TOscillatorFPs */
-void JASystem::TOscillator::calc(s16*) {
+f32 JASystem::TOscillator::calc(s16*) {
     /* Nonmatching */
 }
