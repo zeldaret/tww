@@ -47,7 +47,7 @@ void JASystem::TChannel::init() {
     }
     for (u32 i = 0; i < 4; i++) {
         JUT_ASSERT(155, osc[i]);
-        osc[i]->field_0x0 = NULL;
+        osc[i]->setOsc(NULL);
         osc[i]->init();
     }
     mPauseFlag = 0;
@@ -67,7 +67,7 @@ void JASystem::TChannel::setOscillator(u32 oscnum, TOscillator* param_2) {
 /* 8028B620-8028B6A8       .text setOscInit__Q28JASystem8TChannelFUlPCQ38JASystem11TOscillator4Osc_ */
 void JASystem::TChannel::setOscInit(u32 oscnum, const TOscillator::Osc_* param_2) {
     JUT_ASSERT(183, oscnum < (4));
-    osc[oscnum]->field_0x0 = param_2;
+    osc[oscnum]->setOsc(param_2);
     osc[oscnum]->initStart();
 }
 
