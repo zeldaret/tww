@@ -7,10 +7,12 @@
 #include "JSystem/JAudio/JASDriverIF.h"
 #include "JSystem/JAudio/JASRate.h"
 #include "dolphin/os/OS.h"
+#include "dolphin/types.h"
+#include "math.h"
 
 s16 JASystem::TOscillator::oscTableForceStop[] = {
-    0x000F, 0x000F, 0x0000,
-    0x0000, 0x0000, 0x0000,
+    0x0000, 0x000F, 0x0000,
+    0x000F, 0x0000, 0x0000
 };
 
 const f32 JASystem::TOscillator::relTableSampleCell[] = {
@@ -38,69 +40,69 @@ const f32 JASystem::TOscillator::relTableSquare[] = {
 /* 8028DE94-8028DECC       .text init__Q28JASystem11TOscillatorFv */
 void JASystem::TOscillator::init() {
     field_0x0 = NULL;
-    field_0x4 = 1;
+    mState = 1;
     field_0x5 = 0;
     field_0x6 = 0;
-    field_0x8 = 0.0f;
-    field_0xc = 0.0f;
-    field_0x10 = 0.0f;
-    field_0x14 = 0.0f;
-    field_0x18 = 0;
+    mReleaseRate = 0.0f;
+    mPhase = 0.0f;
+    mTargetPhase = 0.0f;
+    mPhaseChangeRate = 0.0f;
+    mDirectRelease = 0;
     field_0x1c = 0.0f;
 }
 
 /* 8028DECC-8028DF2C       .text initStart__Q28JASystem11TOscillatorFv */
 void JASystem::TOscillator::initStart() {
-    field_0x4 = 2;
-    field_0x18 = 0;
+    mState = 2;
+    mDirectRelease = 0;
     if (!field_0x0 || !field_0x0->table) {
-        field_0xc = 0.0f;
+        mPhase = 0.0f;
         return;
     }
     field_0x6 = 0;
-    field_0x8 = 0.0f;
-    field_0x10 = 0.0f;
-    field_0x18 = 0;
-    field_0x8 -= field_0x0->field_0x4;
+    mReleaseRate = 0.0f;
+    mTargetPhase = 0.0f;
+    mDirectRelease = 0;
+    mReleaseRate -= field_0x0->field_0x4;
 }
 
 /* 8028DF2C-8028E070       .text getOffset__Q28JASystem11TOscillatorFv */
 f32 JASystem::TOscillator::getOffset() {
     if (field_0x0 == NULL) {
         OSReport("----- Oscillator is NULL\n");
-        field_0xc = 1.0f;
+        mPhase = 1.0f;
         return 1.0f;
     }
 
-    switch (field_0x4) {
+    switch (mState) {
     case 0:
         return 1.0f;
     case 3:
-        return field_0x0->field_0x14 + (field_0xc * field_0x0->field_0x10);
+        return field_0x0->field_0x14 + (mPhase * field_0x0->field_0x10);
 
     case 1:
-        field_0x4 = 2;
+        mState = 2;
         OSReport("----- Error Initialize\n");
         /* Fallthrough */
     default:
         s16* var_r4;
-        if (field_0x4 == 4) {
+        if (mState == 4) {
             var_r4 = (s16*)field_0x0->rel_table;
-        } else if (field_0x4 == 5) {
+        } else if (mState == 5) {
             var_r4 = oscTableForceStop;
         } else {
             var_r4 = (s16*)field_0x0->table;
         }
 
-        if (var_r4 == NULL && field_0x4 != 6) {
-            field_0xc = 1.0f;
+        if (var_r4 == NULL && mState != 6) {
+            mPhase = 1.0f;
             return 1.0f;
         }
 
-        if (field_0x4 == 5) {
-            field_0x8 -= 1.0f;
+        if (mState == 5) {
+            mReleaseRate -= 1.0f;
         } else {
-            field_0x8 -= field_0x0->field_0x4;
+            mReleaseRate -= field_0x0->field_0x4;
         }
 
         return calc(var_r4);
@@ -110,60 +112,167 @@ f32 JASystem::TOscillator::getOffset() {
 
 /* 8028E070-8028E0AC       .text forceStop__Q28JASystem11TOscillatorFv */
 bool JASystem::TOscillator::forceStop() {
-    if (field_0x4 == 5) {
+    if (mState == 5) {
         return false;
     }
     field_0x6 = 0;
-    field_0x8 = 0.0f;
-    field_0x10 = field_0xc;
-    field_0x4 = 5;
+    mReleaseRate = 0.0f;
+    mTargetPhase = mPhase;
+    mState = 5;
     return true;
 }
 
 /* 8028E0AC-8028E238       .text release__Q28JASystem11TOscillatorFv */
 bool JASystem::TOscillator::release() {
-    if (field_0x4 == 5) {
+    if (mState == 5) {
         return false;
     }
 
     if (field_0x0->table != field_0x0->rel_table) {
         field_0x6 = 0;
-        field_0x8 = 0.0f;
-        field_0x10 = field_0xc;
+        mReleaseRate = 0.0f;
+        mTargetPhase = mPhase;
     }
 
-    if (field_0x0->rel_table == NULL && field_0x18 == 0) {
-        field_0x18 = 0x10;
+    if (field_0x0->rel_table == NULL && mDirectRelease == 0) {
+        mDirectRelease = 0x10;
     }
 
-    if (field_0x18 != 0) {
-        field_0x4 = 6;
-        field_0x5 = (field_0x18 >> 0xE) & 3;
+    if (mDirectRelease != 0) {
+        mState = 6;
+        field_0x5 = (mDirectRelease >> 14) & 3;
 
-        f32 temp_f31 = field_0x18 & 0x3FFF;
+        f32 temp_f31 = mDirectRelease & 0x3FFF;
         temp_f31 *= ((Kernel::getDacRate() / 80.0f) / 600.0f);
         temp_f31 /= Driver::getUpdateInterval();
-        field_0x8 = temp_f31;
+        mReleaseRate = temp_f31;
 
-        if (field_0x8 < 1.0f) {
-            field_0x8 = 1.0f;
+        if (mReleaseRate < 1.0f) {
+            mReleaseRate = 1.0f;
         }
 
-        field_0x1c = field_0x8;
-        field_0x10 = 0.0f;
+        field_0x1c = mReleaseRate;
+        mTargetPhase = 0.0f;
         if (field_0x5 == 0) {
-            field_0x14 = (field_0x10 - field_0xc) / field_0x8;
+            mPhaseChangeRate = (mTargetPhase - mPhase) / mReleaseRate;
         } else {
-            field_0x14 = field_0x10 - field_0xc;
+            mPhaseChangeRate = mTargetPhase - mPhase;
         }
     } else {
-        field_0x4 = 4;
+        mState = 4;
     }
 
     return true;
 }
 
 /* 8028E238-8028E5EC       .text calc__Q28JASystem11TOscillatorFPs */
-f32 JASystem::TOscillator::calc(s16*) {
-    /* Nonmatching */
+f32 JASystem::TOscillator::calc(s16* i_table) {
+    while (mReleaseRate <= 0.0f) {
+        int idx = field_0x6 * 3;
+        mPhase = mTargetPhase;
+        if (mState == 6) {
+            mState = 0;
+            break;
+        }
+
+        s16 envMode  = i_table[idx];
+		s16 envTime  = i_table[idx + 1];
+		s16 envValue = i_table[idx + 2];
+
+        if (envMode == 13) {
+            field_0x6 = envValue;
+            continue;
+        }
+
+        if (envMode == 15) {
+            mState = 0;
+            break;
+        }
+
+        if (envMode == 14) {
+            mState = 3;
+            return field_0x0->field_0x14 + mPhase * field_0x0->field_0x10;
+        }
+
+        field_0x5 = envMode;
+
+        if (envTime == 0) {
+            mTargetPhase = envValue / 32768.0f;
+            field_0x6 += 1;
+            continue;
+        }
+
+        mReleaseRate = envTime * ((Kernel::getDacRate() / 80.0f) / 600.0f) / Driver::getUpdateInterval();
+        field_0x1c = mReleaseRate;
+        mTargetPhase = envValue / 32768.0f;
+
+        if (field_0x5 == 0) {
+            mPhaseChangeRate = (mTargetPhase - mPhase) / mReleaseRate;
+        } else {
+            mPhaseChangeRate = mTargetPhase - mPhase;
+        }
+
+        field_0x6 += 1;
+    }
+
+    if (field_0x0->field_0x10 == 0.0f) {
+        return field_0x0->field_0x14;
+    }
+
+
+    f32 temp_f31 = 0.0f;
+    f32 newPhase;
+    if (field_0x1c == 0.0) { // Developer probably forgot the f suffix
+        newPhase = mTargetPhase;
+        mPhase = mTargetPhase; 
+    } else {
+        if (field_0x5 == 0 || (temp_f31 = mPhaseChangeRate) == 0.0f) {
+            newPhase = mTargetPhase - (mPhaseChangeRate * mReleaseRate);
+            mPhase = newPhase;
+        } else if (field_0x5 == 3 || field_0x5 == 1 || field_0x5 == 2) {
+            const f32* table = NULL;
+
+            switch (field_0x5) {
+            case 3:
+                table = relTableSampleCell;
+                break;
+            case 1:
+                table = relTableSquare;
+                break;
+            case 2:
+                table = relTableSqRoot;
+                break;
+            }
+
+            f32 fIdx;
+
+            if (temp_f31 < 0.0f) {
+                fIdx = 16.0f * (1.0f - (mReleaseRate / field_0x1c));
+            } else {
+                fIdx = 16.0f * (mReleaseRate / field_0x1c);
+            }
+
+            u32 idx = fIdx;
+            f32 prop = fIdx - (f32)idx;
+            if (idx >= 16) {
+                idx = 15;
+                prop = 1.0f;
+            }
+
+            f32 valAbs = std::fabsf(temp_f31 * (prop * (table[idx + 1] - table[idx]) + table[idx]));
+
+            if (mPhaseChangeRate < 0.0f) {
+                newPhase = mTargetPhase + valAbs;
+            } else {
+                newPhase = mTargetPhase - (mPhaseChangeRate - valAbs);
+            }
+
+            mPhase = newPhase;
+        } else {
+            newPhase = mTargetPhase - (temp_f31 * mReleaseRate);
+            mPhase = newPhase;
+        }
+    }
+
+    return newPhase * field_0x0->field_0x10 + field_0x0->field_0x14;
 }
