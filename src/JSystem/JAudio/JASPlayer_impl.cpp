@@ -65,15 +65,15 @@ const JASystem::TOscillator::Osc_ JASystem::Player::sAdsrDef = {
 };
 
 const JASystem::TOscillator::Osc_ JASystem::Player::sEnvelopeDef = {
-    0, 1.0f, NULL, &sRelTable, 1.0f, 0.0f
+    0, 1.0f, NULL, sRelTable, 1.0f, 0.0f
 };
 
 const JASystem::TOscillator::Osc_ JASystem::Player::sVibratoDef = {
-    1, 0.5f, &sVibTable, &sVibTable, 0.0f, 1.0f
+    1, 0.5f, sVibTable, sVibTable, 0.0f, 1.0f
 };
 
 const JASystem::TOscillator::Osc_ JASystem::Player::sTremoroDef = {
-    0, 0.5f, &sTreTable, &sTreTable, 0.0f, 1.0f
+    0, 0.5f, sTreTable, sTreTable, 0.0f, 1.0f
 };
 
 s16 JASystem::Player::CUTOFF_TO_IIR_TABLE[] = {
