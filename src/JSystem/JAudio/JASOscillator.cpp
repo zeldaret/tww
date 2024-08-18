@@ -87,11 +87,11 @@ f32 JASystem::TOscillator::getOffset() {
     default:
         s16* var_r4;
         if (mState == 4) {
-            var_r4 = (s16*)mOsc->rel_table;
+            var_r4 = mOsc->rel_table;
         } else if (mState == 5) {
             var_r4 = oscTableForceStop;
         } else {
-            var_r4 = (s16*)mOsc->table;
+            var_r4 = mOsc->table;
         }
 
         if (var_r4 == NULL && mState != 6) {
