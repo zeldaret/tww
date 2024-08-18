@@ -176,8 +176,8 @@ f32 JASystem::TOscillator::calc(s16* i_table) {
         }
 
         s16 envMode  = i_table[idx];
-		s16 envTime  = i_table[idx + 1];
-		s16 envValue = i_table[idx + 2];
+        s16 envTime  = i_table[idx + 1];
+        s16 envValue = i_table[idx + 2];
 
         if (envMode == 13) {
             field_0x6 = envValue;
