@@ -10,35 +10,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 
-static dCcD_SrcSph m_co_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ AT_TYPE_WATER,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_VS_OTHER,
-        /* SrcObjTg  Type    */ 0,
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
-        /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
-        /* Radius */ 100.0f,
-    },
-};
-
 /* 00000078-00000080       .text daHitobj_Draw__FP12hitobj_class */
 static BOOL daHitobj_Draw(hitobj_class* i_this) {
     return TRUE;
@@ -79,8 +50,36 @@ static s32 daHitobj_Create(fopAc_ac_c* pActor) {
     if (res == cPhs_COMPLEATE_e) {
         i_this->mUnusedParam = fopAcM_GetParam(i_this) & 0xFF; 
 
+        static dCcD_SrcSph cc_sph_src = {
+            // dCcD_SrcGObjInf
+            {
+                /* Flags             */ 0,
+                /* SrcObjAt  Type    */ AT_TYPE_WATER,
+                /* SrcObjAt  Atp     */ 0,
+                /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_VS_OTHER,
+                /* SrcObjTg  Type    */ 0,
+                /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
+                /* SrcObjCo  SPrm    */ 0,
+                /* SrcGObjAt Se      */ 0,
+                /* SrcGObjAt HitMark */ 0,
+                /* SrcGObjAt Spl     */ 0,
+                /* SrcGObjAt Mtrl    */ 0,
+                /* SrcGObjAt SPrm    */ 0,
+                /* SrcGObjTg Se      */ 0,
+                /* SrcGObjTg HitMark */ 0,
+                /* SrcGObjTg Spl     */ 0,
+                /* SrcGObjTg Mtrl    */ 0,
+                /* SrcGObjTg SPrm    */ 0,
+                /* SrcGObjCo SPrm    */ 0,
+            },
+            // cM3dGSphS
+            {
+                /* Center */ 0.0f, 0.0f, 0.0f,
+                /* Radius */ 100.0f,
+            },
+        };
         i_this->mStts.Init(0xFF, 0xFF, i_this);
-        i_this->mSph.Set(m_co_sph_src);
+        i_this->mSph.Set(cc_sph_src);
         i_this->mSph.SetStts(&i_this->mStts);
 
         i_this->mTimer = 3;
