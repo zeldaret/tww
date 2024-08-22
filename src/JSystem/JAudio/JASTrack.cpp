@@ -325,7 +325,7 @@ void JASystem::TTrack::overwriteOsc(TChannel* param_1) {
             }
             param_1->copyOsc(r28, &field_0x2cc[i]);
         } else if (var1 & 4) {
-            void* var4 = field_0x2cc[i].rel_table;
+            s16* var4 = field_0x2cc[i].rel_table;
             if (!param_1->isOsc(r28)) {
                 JUT_WARN(603, "%s", "cannot copy osc");
                 continue;
@@ -390,7 +390,7 @@ void JASystem::TTrack::oscSetupFull(u8 param_1, u32 param_2, u32 param_3) {
         if (param_2 == 0) {
             field_0x2cc[var1].table = NULL;
         }
-        field_0x2cc[var1].table = mSeqCtrl.mRawFilePtr + param_2;
+        field_0x2cc[var1].table = (s16*)(mSeqCtrl.mRawFilePtr + param_2);
     }
     if (!var5) {
         return;
@@ -398,7 +398,7 @@ void JASystem::TTrack::oscSetupFull(u8 param_1, u32 param_2, u32 param_3) {
     if (param_3 == 0) {
         field_0x2cc[var1].rel_table = Player::sRelTable;
     }
-    field_0x2cc[var1].rel_table = mSeqCtrl.mRawFilePtr + param_2;
+    field_0x2cc[var1].rel_table = (s16*)(mSeqCtrl.mRawFilePtr + param_2);
 }
 
 /* 802817E4-80281850       .text oscSetupSimpleEnv__Q28JASystem6TTrackFUcUl */
@@ -406,10 +406,10 @@ void JASystem::TTrack::oscSetupSimpleEnv(u8 param_1, u32 param_2) {
     switch (param_1) {
     case 0:
         field_0x2cc[0] = Player::sEnvelopeDef;
-        field_0x2cc[0].table = mSeqCtrl.mRawFilePtr + param_2;
+        field_0x2cc[0].table = (s16*)(mSeqCtrl.mRawFilePtr + param_2);
         break;
     case 1:
-        field_0x2cc[0].rel_table = mSeqCtrl.mRawFilePtr + param_2;
+        field_0x2cc[0].rel_table = (s16*)(mSeqCtrl.mRawFilePtr + param_2);
         break;
     }
 }

@@ -47,7 +47,7 @@ void JASystem::TChannel::init() {
     }
     for (u32 i = 0; i < 4; i++) {
         JUT_ASSERT(155, osc[i]);
-        osc[i]->field_0x0 = NULL;
+        osc[i]->setOsc(NULL);
         osc[i]->init();
     }
     mPauseFlag = 0;
@@ -67,7 +67,7 @@ void JASystem::TChannel::setOscillator(u32 oscnum, TOscillator* param_2) {
 /* 8028B620-8028B6A8       .text setOscInit__Q28JASystem8TChannelFUlPCQ38JASystem11TOscillator4Osc_ */
 void JASystem::TChannel::setOscInit(u32 oscnum, const TOscillator::Osc_* param_2) {
     JUT_ASSERT(183, oscnum < (4));
-    osc[oscnum]->field_0x0 = param_2;
+    osc[oscnum]->setOsc(param_2);
     osc[oscnum]->initStart();
 }
 
@@ -75,27 +75,28 @@ void JASystem::TChannel::setOscInit(u32 oscnum, const TOscillator::Osc_* param_2
 bool JASystem::TChannel::forceStopOsc(u32 numosc) {
     /* Nonmatching */
     JUT_ASSERT(195, numosc < (4));
-    return osc[numosc]->field_0x0 != NULL ? osc[numosc]->forceStop() : false;
+    return osc[numosc]->isOsc() ? osc[numosc]->forceStop() : false;
 }
 
 /* 8028B73C-8028B7D0       .text releaseOsc__Q28JASystem8TChannelFUl */
 bool JASystem::TChannel::releaseOsc(u32 numosc) {
     /* Nonmatching */
     JUT_ASSERT(209, numosc < (4));
-    return osc[numosc]->field_0x0 ? osc[numosc]->release() : false;
+    return osc[numosc]->isOsc() ? osc[numosc]->release() : false;
 }
 
 /* 8028B7D0-8028B850       .text directReleaseOsc__Q28JASystem8TChannelFUlUs */
 void JASystem::TChannel::directReleaseOsc(u32 oscnum, u16 param_2) {
     JUT_ASSERT(224, oscnum < (4));
-    osc[oscnum]->field_0x18 = param_2;
+    osc[oscnum]->releaseDirect(param_2);
 }
 
 /* 8028B850-8028B8E4       .text bankOscToOfs__Q28JASystem8TChannelFUl */
 f32 JASystem::TChannel::bankOscToOfs(u32 oscnum) {
     /* Nonmatching */
     JUT_ASSERT(234, oscnum < (4));
-    return osc[oscnum]->field_0x0 ? osc[oscnum]->getOffset() : 1.0f;
+    // Probably uses inline JASystem::TOscillator::bankOscToOfs
+    return osc[oscnum]->isOsc() ? osc[oscnum]->getOffset() : 1.0f;
 }
 
 /* 8028B8E4-8028BA98       .text effectOsc__Q28JASystem8TChannelFUlf */
@@ -107,14 +108,14 @@ void JASystem::TChannel::effectOsc(u32 oscnum, f32 param_2) {
 int JASystem::TChannel::getOscState(u32 oscnum) const {
     /* Nonmatching */
     JUT_ASSERT(274, oscnum < (4));
-    return osc[oscnum]->field_0x4;
+    return osc[oscnum]->mState;
 }
 
 /* 8028BB14-8028BB98       .text isOsc__Q28JASystem8TChannelFUl */
 BOOL JASystem::TChannel::isOsc(u32 oscnum) {
     /* Nonmatching */
     JUT_ASSERT(284, oscnum < (4));
-    return osc[oscnum]->field_0x0 != 0;
+    return osc[oscnum]->isOsc();
 }
 
 /* 8028BB98-8028BC78       .text copyOsc__Q28JASystem8TChannelFUlPQ38JASystem11TOscillator4Osc_ */
@@ -122,7 +123,7 @@ void JASystem::TChannel::copyOsc(u32 oscnum, TOscillator::Osc_* param_2) {
     /* Nonmatching */
     JUT_ASSERT(295, oscnum < (4));
     if (isOsc(oscnum)) {
-        *param_2 = *osc[oscnum]->field_0x0;
+        *param_2 = *osc[oscnum]->getOsc();
     } else {
         OSReport("osc[%d] is NULL\n", oscnum);
     }
