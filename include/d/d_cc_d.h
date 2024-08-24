@@ -70,7 +70,7 @@ struct dCcD_SrcGObjAt {
     /* 0x0 */ u8 mSe;       // Sound Effect ID
     /* 0x1 */ u8 mHitMark;  // Hit Mark particle ID
     /* 0x2 */ u8 mSpl;
-    /* 0x3 */ u8 mMtrl;
+    /* 0x3 */ u8 mMtrl;     // Seems to be unused and always 0 in TWW
     /* 0x4 */ dCcD_SrcGAtTgCoCommonBase mBase;
 };  // Size: 0x8
 
@@ -78,7 +78,7 @@ struct dCcD_SrcGObjTg {
     /* 0x0 */ u8 mSe;       // Sound Effect ID
     /* 0x1 */ u8 mHitMark;  // Hit Mark particle ID
     /* 0x2 */ u8 mSpl;
-    /* 0x3 */ u8 mMtrl;
+    /* 0x3 */ u8 mMtrl;     // Seems to be unused and always 0 in TWW
     /* 0x4 */ dCcD_SrcGAtTgCoCommonBase mBase;
 };  // Size: 0x8
 
@@ -242,11 +242,9 @@ public:
     cXyz* GetVecP() { return &mVec; }
     void SetHitMark(u8 mark) { mHitMark = mark; }
     void SetSe(u8 se) { mSe = se; }
-    void SetMtrl(u8 mtrl) { mMtrl = mtrl; }
     void SetSpl(dCcG_At_Spl spl) { mSpl = spl; }
     u8 GetSe() { return mSe; }
     u8 GetSpl() { return mSpl; }
-    u8 GetMtrl() { return mMtrl; }
     u8 GetHitMark() { return mHitMark; }
     void SetRVec(cXyz& vec) { mRVec = vec; }
     void SetHitPos(cXyz& pos) { mHitPos = pos; }
@@ -255,7 +253,7 @@ public:
 
     // private:
     /* 0x1C */ u8 mSe;
-    /* 0x1D */ u8 mMtrl;
+    /* 0x1D */ u8 mMtrl; // Seems to be unused and always 0 in TWW
     /* 0x1E */ u8 mHitMark;
     /* 0x1F */ u8 mSpl;
     /* 0x20 */ cXyz mHitPos;
@@ -272,8 +270,6 @@ public:
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
     void SetShieldFrontRangeYAngle(s16* angle) { mpShieldFrontRangeYAngle = angle; }
-    void SetMtrl(u8 mtrl) { mMtrl = mtrl; }
-    u8 GetMtrl() { return mMtrl; }
     void SetHitMark(CcG_Tg_HitMark mark) { mHitMark = mark; }
     s16* GetShieldFrontRangeYAngle() { return mpShieldFrontRangeYAngle; }
     u8 GetSpl() { return mSpl; }
@@ -288,7 +284,7 @@ public:
 
 private:
     /* 0x1C */ u8 mSe;
-    /* 0x1D */ u8 mMtrl;
+    /* 0x1D */ u8 mMtrl; // Seems to be unused and always 0 in TWW
     /* 0x1E */ u8 mHitMark;
     /* 0x1F */ u8 mSpl;
     /* 0x20 */ cXyz mVec;
@@ -357,8 +353,6 @@ public:
     void SetTgHitMark(CcG_Tg_HitMark mark) { mGObjTg.SetHitMark(mark); }
     void SetAtSe(u8 se) { mGObjAt.SetSe(se); }
     void SetTgSe(u8 se) { mGObjTg.SetSe(se); }
-    void SetAtMtrl(u8 mtrl) { mGObjAt.SetMtrl(mtrl); }
-    void SetTgMtrl(u8 mtrl) { mGObjTg.SetMtrl(mtrl); }
     fopAc_ac_c* GetAtHitAc() { return mGObjAt.GetAc(); }
     cXyz* GetAtVecP() { return mGObjAt.GetVecP(); }
     cXyz* GetTgVecP() { return mGObjTg.GetVecP(); }
@@ -371,8 +365,6 @@ public:
     void SetTgHitCallback(dCcD_HitCallback callback) { mGObjTg.SetHitCallback(callback); }
     void SetCoHitCallback(dCcD_HitCallback callback) { mGObjCo.SetHitCallback(callback); }
     u8 GetAtSe() { return mGObjAt.GetSe(); }
-    u8 GetAtMtrl() { return mGObjAt.GetMtrl(); }
-    u8 GetTgMtrl() { return mGObjTg.GetMtrl(); }
     fopAc_ac_c* GetTgHitAc() { return mGObjTg.GetAc(); }
     void SetTgShieldFrontRangeYAngle(s16* angle) { mGObjTg.SetShieldFrontRangeYAngle(angle); }
     bool ChkTgShield() { return mGObjTg.ChkSPrm(G_TG_SPRM_SHIELD); }

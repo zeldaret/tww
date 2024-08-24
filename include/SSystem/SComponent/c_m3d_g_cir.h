@@ -26,8 +26,8 @@ class cM3dGCir : public cM2dGCir {
     f32 mPosZ;
 
 public:
-    cM3dGCir(void) {}
-    virtual ~cM3dGCir(void) {}
+    cM3dGCir() {}
+    virtual ~cM3dGCir() {}
     void Set(f32 x, f32 y, f32 z, f32 r) {
         cM2dGCir::Set(x, y, r);
         mPosZ = z;

@@ -186,10 +186,10 @@ cCcD_GStts* cCcD_Stts::GetGStts() {
 /* 80241934-80241994       .text Init__9cCcD_SttsFiiPvUi */
 void cCcD_Stts::Init(int weight, int param_1, void* pProc, fpc_ProcID procID) {
     Ct();
-    mWeight = weight;
+    m_weight = weight;
     field_0x15 = param_1;
-    mActor = (fopAc_ac_c*)pProc;
-    mApid = procID;
+    mp_actor = (fopAc_ac_c*)pProc;
+    m_apid = procID;
 }
 
 /* 80241994-802419C4       .text Ct__9cCcD_SttsFv */
@@ -197,11 +197,11 @@ void cCcD_Stts::Ct() {
     m_cc_move.x = 0.0f;
     m_cc_move.y = 0.0f;
     m_cc_move.z = 0.0f;
-    mActor = NULL;
-    mApid = fpcM_ERROR_PROCESS_ID_e;
-    mWeight = 0;
+    mp_actor = NULL;
+    m_apid = fpcM_ERROR_PROCESS_ID_e;
+    m_weight = 0;
     field_0x15 = 0;
-    mDmg = 0;
+    m_dmg = 0;
 }
 
 /* 802419C4-80241C5C       .text PlusCcMove__9cCcD_SttsFfff */

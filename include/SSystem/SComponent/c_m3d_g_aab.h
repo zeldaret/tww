@@ -26,16 +26,16 @@ public:
     }
     void SetMin(const cXyz&);
     void SetMax(const cXyz&);
-    const cXyz* GetMaxP(void) const { return &mMax; }
-    const cXyz* GetMinP(void) const { return &mMin; }
-    cXyz* GetMaxP(void) { return &mMax; }
-    cXyz* GetMinP(void) { return &mMin; }
-    const f32 GetMaxX(void) const { return mMax.x; }
-    const f32 GetMaxY(void) const { return mMax.y; }
-    const f32 GetMaxZ(void) const { return mMax.z; }
-    const f32 GetMinX(void) const { return mMin.x; }
-    const f32 GetMinY(void) const { return mMin.y; }
-    const f32 GetMinZ(void) const { return mMin.z; }
+    const cXyz* GetMaxP() const { return &mMax; }
+    const cXyz* GetMinP() const { return &mMin; }
+    cXyz* GetMaxP() { return &mMax; }
+    cXyz* GetMinP() { return &mMin; }
+    const f32 GetMaxX() const { return mMax.x; }
+    const f32 GetMaxY() const { return mMax.y; }
+    const f32 GetMaxZ() const { return mMax.z; }
+    const f32 GetMinX() const { return mMin.x; }
+    const f32 GetMinY() const { return mMin.y; }
+    const f32 GetMinZ() const { return mMin.z; }
     bool Cross(const cM3dGAab *aab) {
         return cM3d_Cross_AabAab(this, aab);
     }

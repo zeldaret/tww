@@ -16,8 +16,8 @@ class cM3dGCps : public cM3dGLin {
 public:
     /* 0x1C */ f32 mRadius;
 
-    cM3dGCps(void) {}
-    virtual ~cM3dGCps(void) {}
+    cM3dGCps() {}
+    virtual ~cM3dGCps() {}
     void Set(const cXyz& start, const cXyz& end, f32 radius) {
         SetStartEnd(start, end);
         SetR(radius);

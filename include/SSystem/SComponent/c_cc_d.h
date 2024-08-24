@@ -353,11 +353,11 @@ private:
 class cCcD_Stts {
 private:
     /* 0x00 */ cXyz m_cc_move;
-    /* 0x0C */ fopAc_ac_c* mActor;
-    /* 0x10 */ fpc_ProcID mApid;
-    /* 0x14 */ u8 mWeight;
+    /* 0x0C */ fopAc_ac_c* mp_actor;
+    /* 0x10 */ fpc_ProcID m_apid;
+    /* 0x14 */ u8 m_weight;
     /* 0x15 */ u8 field_0x15;
-    /* 0x16 */ u8 mDmg;
+    /* 0x16 */ u8 m_dmg;
     /* 0x18 */ /* vtable */
 
 public:
@@ -371,18 +371,18 @@ public:
     void ClrCcMove() {
         m_cc_move.x = m_cc_move.y = m_cc_move.z = 0.0f;
     }
-    void PlusDmg(int dmg) { mDmg = dmg; }
-    u8 GetDmg() { return mDmg; }
-    f32 GetWeightF() const { return (s32)mWeight; }
-    u8 GetWeightUc() const { return mWeight; }
-    void SetWeight(u8 weight) { mWeight = weight; }
+    void PlusDmg(int dmg) { m_dmg = dmg; }
+    u8 GetDmg() { return m_dmg; }
+    f32 GetWeightF() const { return (s32)m_weight; }
+    u8 GetWeightUc() const { return m_weight; }
+    void SetWeight(u8 weight) { m_weight = weight; }
     virtual void ClrAt() {}
-    virtual void ClrTg() { mDmg = 0; }
+    virtual void ClrTg() { m_dmg = 0; }
     
-    fopAc_ac_c* GetActor() const { return mActor; }
-    void SetActor(void* ac) { mActor = (fopAc_ac_c*)ac; }
+    fopAc_ac_c* GetActor() const { return mp_actor; }
+    void SetActor(void* ac) { mp_actor = (fopAc_ac_c*)ac; }
     cXyz* GetCCMoveP() { return &m_cc_move; }
-    fpc_ProcID GetApid() const { return mApid; }
+    fpc_ProcID GetApid() const { return m_apid; }
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cCcD_Stts));

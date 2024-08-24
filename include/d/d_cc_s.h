@@ -21,13 +21,10 @@ public:
                                         dCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, dCcD_GStts*,
                                         dCcD_GStts*, cXyz*);
     bool ChkCamera(cXyz&, cXyz&, f32, fopAc_ac_c*, fopAc_ac_c*);
-    bool chkCameraPoint(cXyz const&, cCcD_ShapeAttr::Shape*, fopAc_ac_c*,
-                                       fopAc_ac_c*);
     void DrawAfter();
     void Move();
     void Draw();
     void MassClear();
-    int ChkAtTgMtrlHit(u8, u8);
 
     virtual void SetPosCorrect(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, f32);
     virtual void SetCoGObjInf(bool, bool, cCcD_GObjInf*, cCcD_GObjInf*, cCcD_Stts*,
@@ -59,8 +56,6 @@ public:
     void OnMassAllTimer() {}
     void SetMassAreaChk(cCcD_Obj*, u8, void (*)(fopAc_ac_c*, cXyz*, u32)) {}
     void SetMassCam(cM3dGCps&) {}
-
-    static u8 m_mtrl_hit_tbl[64];
 
     // /* 0x0000 */ cCcS mCCcS;
     /* 0x2854 */ dCcMassS_Mng mMass_Mng;
