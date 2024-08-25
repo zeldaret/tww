@@ -5,6 +5,9 @@
 
 #include "d/actor/d_a_obj_quake.h"
 #include "d/d_procname.h"
+#include "d/d_a_obj.h"
+
+static daObjQuake_HIO_c l_HIO;
 
 /* 000000EC-00000134       .text __ct__16daObjQuake_HIO_cFv */
 daObjQuake_HIO_c::daObjQuake_HIO_c() {
@@ -18,11 +21,11 @@ s32 daObjQuake_c::_create() {
 
 /* 000002C4-000002CC       .text _delete__12daObjQuake_cFv */
 BOOL daObjQuake_c::_delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000002CC-00000390       .text _is_delete__12daObjQuake_cFv */
-void daObjQuake_c::_is_delete() {
+BOOL daObjQuake_c::_is_delete() {
     /* Nonmatching */
 }
 
@@ -32,43 +35,43 @@ BOOL daObjQuake_c::_execute() {
 }
 
 /* 00000674-000006A0       .text getPrmType__12daObjQuake_cFv */
-void daObjQuake_c::getPrmType() {
-    /* Nonmatching */
+u8 daObjQuake_c::getPrmType() {
+    return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S);
 }
 
 /* 000006A0-000006CC       .text getPrmSch__12daObjQuake_cFv */
-void daObjQuake_c::getPrmSch() {
-    /* Nonmatching */
+u8 daObjQuake_c::getPrmSch() {
+    return daObj::PrmAbstract<Prm_e>(this, PRM_SCH_W, PRM_SCH_S);
 }
 
 /* 000006CC-000006F8       .text getPrmPower__12daObjQuake_cFv */
-void daObjQuake_c::getPrmPower() {
-    /* Nonmatching */
+s32 daObjQuake_c::getPrmPower() {
+    return daObj::PrmAbstract<Prm_e>(this, PRM_POWER_W, PRM_POWER_S) + 1;
 }
 
 /* 000006F8-00000718       .text daObjQuakeCreate__FPv */
-static s32 daObjQuakeCreate(void*) {
-    /* Nonmatching */
+static s32 daObjQuakeCreate(void* i_this) {
+    return static_cast<daObjQuake_c*>(i_this)->_create();
 }
 
 /* 00000718-00000738       .text daObjQuakeDelete__FPv */
-static BOOL daObjQuakeDelete(void*) {
-    /* Nonmatching */
+static BOOL daObjQuakeDelete(void* i_this) {
+    return static_cast<daObjQuake_c*>(i_this)->_delete();
 }
 
 /* 00000738-00000758       .text daObjQuakeExecute__FPv */
-static BOOL daObjQuakeExecute(void*) {
-    /* Nonmatching */
+static BOOL daObjQuakeExecute(void* i_this) {
+    return static_cast<daObjQuake_c*>(i_this)->_execute();
 }
 
 /* 00000758-00000760       .text daObjQuakeDraw__FPv */
-static BOOL daObjQuakeDraw(void*) {
-    /* Nonmatching */
+static BOOL daObjQuakeDraw(void* i_this) {
+    return TRUE;
 }
 
 /* 00000760-00000780       .text daObjQuakeIsDelete__FPv */
-static BOOL daObjQuakeIsDelete(void*) {
-    /* Nonmatching */
+static BOOL daObjQuakeIsDelete(void* i_this) {
+    return static_cast<daObjQuake_c*>(i_this)->_is_delete();
 }
 
 static actor_method_class daObjQuakeMethodTable = {

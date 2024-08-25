@@ -5,13 +5,24 @@
 
 class daObjQuake_c : public fopAc_ac_c {
 public:
+    enum Prm_e {
+        PRM_SCH_W = 0x8,
+        PRM_SCH_S = 0x0,
+
+        PRM_TYPE_W = 0x3,
+        PRM_TYPE_S = 0x8,
+
+        PRM_POWER_W = 0x3,
+        PRM_POWER_S = 0xB,
+    };
+
     s32 _create();
     BOOL _delete();
-    void _is_delete();
+    BOOL _is_delete();
     BOOL _execute();
-    void getPrmType();
-    void getPrmSch();
-    void getPrmPower();
+    u8 getPrmType();
+    u8 getPrmSch();
+    s32 getPrmPower();
 
 public:
     /* Place member variables here */
