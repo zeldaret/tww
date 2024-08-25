@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_quake.h"
 #include "d/d_procname.h"
 #include "d/d_a_obj.h"
+#include "d/d_com_inf_game.h"
 
 static daObjQuake_HIO_c l_HIO;
 
@@ -16,7 +17,39 @@ daObjQuake_HIO_c::daObjQuake_HIO_c() {
 
 /* 00000134-000002C4       .text _create__12daObjQuake_cFv */
 s32 daObjQuake_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjQuake_c);
+
+    if (dComIfGs_isSymbol(1)) {
+        return cPhs_UNK3_e;
+    }
+
+    if (getPrmType() < 3) {
+        fopAcM_offDraw(this);
+        mType = getPrmType();
+        m2A1 = 0;
+        m290 = 30.0f * dStage_stagInfo_GetSchSec(dComIfGp_getStageStagInfo());
+
+        switch (mType) {
+        case 0:
+        case 2:
+            m298 = 4.0f;
+            m29C = 6.0f;
+            break;
+        case 1:
+            m298 = 0.0f;
+            m29C = 6.0f;
+            break;
+        }
+
+        if (l_HIO.mChildID < 0) {
+            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("camera", &l_HIO);
+        }
+
+        l_HIO.field_0x8 += 1;
+        return cPhs_COMPLEATE_e;
+    }
+
+    return cPhs_ERROR_e;
 }
 
 /* 000002C4-000002CC       .text _delete__12daObjQuake_cFv */

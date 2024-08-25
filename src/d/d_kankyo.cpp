@@ -553,7 +553,7 @@ s32 dStage_roomControl_c::GetTimePass() {
  */
 void dScnKy_env_light_c::SetSchbit() {
     stage_stag_info_class* pstag = dComIfGp_getStageStagInfo();
-    int uvar1 = pstag->field_0x0c & 0xFF;
+    int uvar1 = dStage_stagInfo_GetSchSec(pstag);
 
     if (dStage_stagInfo_getStartSch(pstag) != 0) {
         if (mSchbit == 0) {

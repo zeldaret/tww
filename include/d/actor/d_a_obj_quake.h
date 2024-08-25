@@ -2,6 +2,7 @@
 #define D_A_OBJ_QUAKE_H
 
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daObjQuake_c : public fopAc_ac_c {
 public:
@@ -25,15 +26,22 @@ public:
     s32 getPrmPower();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ f32 m290;
+    /* 0x294 */ f32 m294;
+    /* 0x298 */ f32 m298;
+    /* 0x29C */ f32 m29C;
+    /* 0x2A0 */ u8 mType;
+    /* 0x2A1 */ u8 m2A1;
 };
 
-class daObjQuake_HIO_c {
+class daObjQuake_HIO_c : public JORReflexible {
 public:
     daObjQuake_HIO_c();
+    virtual ~daObjQuake_HIO_c() {}
 
 public:
-    /* Place member variables here */
+    /* 0x04 */ s8 mChildID;
+    /* 0x08 */ s32 field_0x8;
 };
 
 #endif /* D_A_OBJ_QUAKE_H */

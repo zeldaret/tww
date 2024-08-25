@@ -1026,10 +1026,12 @@ inline s8 dStage_stagInfo_GetTimeH(stage_stag_info_class* p_info) {
 inline u8 dStage_stagInfo_getStartSch(stage_stag_info_class* p_info) {
     return (p_info->field_0x10 >> 0x10) & 0xFF;
 }
+inline u8 dStage_stagInfo_GetSchSec(stage_stag_info_class* p_info) {
+    return p_info->field_0x0c & 0xFF;
+}
 
 // TODO:
 // dStage_stagInfo_GetAgbCon__FP21stage_stag_info_class
-// dStage_stagInfo_GetSchSec__FP21stage_stag_info_class - field_0x0c & 0xFF
 // dStage_stagInfo_DefaultCameraType__FP21stage_stag_info_class
 // dStage_stagInfo_GetCullPoint__FP21stage_stag_info_class
 // dStage_stagInfo_GetUpButton__FP21stage_stag_info_class
