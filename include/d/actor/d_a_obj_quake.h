@@ -31,7 +31,7 @@ public:
     /* 0x298 */ f32 m298;
     /* 0x29C */ f32 m29C;
     /* 0x2A0 */ u8 mType;
-    /* 0x2A1 */ u8 m2A1;
+    /* 0x2A1 */ bool m2A1;
 };
 
 class daObjQuake_HIO_c : public JORReflexible {

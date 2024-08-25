@@ -26,7 +26,7 @@ s32 daObjQuake_c::_create() {
     if (getPrmType() < 3) {
         fopAcM_offDraw(this);
         mType = getPrmType();
-        m2A1 = 0;
+        m2A1 = false;
         m290 = 30.0f * dStage_stagInfo_GetSchSec(dComIfGp_getStageStagInfo());
 
         switch (mType) {
@@ -59,7 +59,26 @@ BOOL daObjQuake_c::_delete() {
 
 /* 000002CC-00000390       .text _is_delete__12daObjQuake_cFv */
 BOOL daObjQuake_c::_is_delete() {
-    /* Nonmatching */
+    if (m2A1) {
+        switch (mType) {
+        case 0:
+            dComIfGp_getVibration().StopQuake(0x3E);
+            break;
+        case 2:
+            dComIfGp_getVibration().StopQuake(1);
+            break;
+        }
+    }
+
+    if (l_HIO.mChildID >= 0) {
+        l_HIO.field_0x8 -= 1;
+        if (l_HIO.field_0x8 == 0) {
+            mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildID);
+            l_HIO.mChildID = -1;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 00000390-00000674       .text _execute__12daObjQuake_cFv */
