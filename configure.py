@@ -1326,7 +1326,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_otble"),
     ActorRel(Matching,    "d_a_obj_pbco"),
     ActorRel(NonMatching, "d_a_obj_pirateship"),
-    ActorRel(NonMatching, "d_a_obj_quake"),
+    ActorRel(Matching,    "d_a_obj_quake"),
     ActorRel(NonMatching, "d_a_obj_rcloud"),
     ActorRel(Matching,    "d_a_obj_roten", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_shelf"),
