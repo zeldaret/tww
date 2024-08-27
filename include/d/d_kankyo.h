@@ -452,6 +452,7 @@ cXyz dKy_get_orion_pos();
 cXyz dKy_get_hokuto_pos();
 void dKy_DayProc();
 u8 dKy_get_schbit();
+int dKy_get_schbit_timer();
 int dKy_rain_check();
 void dKy_setLight_mine(dKy_tevstr_c* pTevStr);
 BOOL dKy_daynighttact_stop_chk();
