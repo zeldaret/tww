@@ -156,7 +156,7 @@ static BOOL daSyan_Execute(syan_class* i_this) {
                     cXyz dir(dirZ, 0.1f, dirZ);
                     emtr->setDirection(dir);
 
-                    f32 dirMag = sqrtf(dirX*dirX + dirZ*dirZ);
+                    f32 dirMag = std::sqrtf(dirX*dirX + dirZ*dirZ);
                     f32 scaleY = (REG0_F(12) + 2.0f) * dirMag + 1.0f;
                     if (scaleY > REG0_F(13) + 4.0f)
                         scaleY = REG0_F(13) + 4.0f;
