@@ -15,23 +15,16 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
-static f32 dummy[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-// I suspect this is HIO data.
-struct _dummy {
-    u8 field_0x00;
-    u8 field_0x01;
-    u8 field_0x02;
-    u8 field_0x03;
-    f32 field_0x04;
-    f32 field_0x08;
-    f32 field_0x0c;
-    f32 field_0x10;
-    f32 field_0x14;
-} dummy3 = {
-    0x02, 0x00, 0x02, 0x01,
-    0.0f, 2.125f, 0.0f, 1.75f, 0.0f,
-};
+static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
+static Vec dummy2 = { 1.0f, 1.0f, 1.0f };
+static struct {
+    u32 m0;
+    f32 m1;
+    f32 m2;
+    f32 m3;
+    f32 m4;
+    f32 m5;
+} dummy3 = { 0x02000201, 0.0f, 2.125f, 0.0f, 1.75f, 0.0f };
 
 static btd_class* btd = NULL;
 
