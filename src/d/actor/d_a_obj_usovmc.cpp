@@ -4,78 +4,110 @@
 //
 
 #include "d/actor/d_a_obj_usovmc.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/res/res_usovmc.h"
+
+const char daObjUsovmc::Act_c::M_arcname[7] = "Usovmc";
+Mtx daObjUsovmc::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjUsovmc5Act_cFv */
-void daObjUsovmc::Act_c::CreateHeap() {
-    /* Nonmatching */
+int daObjUsovmc::Act_c::CreateHeap() {
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, USOVMC_BDL_VMCBX);
+    JUT_ASSERT(0x4a, model_data != NULL);
+    mModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
+    return mModel != NULL;
 }
 
 /* 0000012C-00000198       .text Create__Q211daObjUsovmc5Act_cFv */
-s32 daObjUsovmc::Act_c::Create() {
-    /* Nonmatching */
+int daObjUsovmc::Act_c::Create() {
+    fopAcM_SetMtx(this, mModel->getBaseTRMtx());
+    init_mtx();
+    fopAcM_setCullSizeBox(this, -80.0f, -1.0f, -80.0f, 80.0f, 205.0f, 80.0f);
+    return TRUE;
 }
 
 /* 00000198-00000290       .text Mthd_Create__Q211daObjUsovmc5Act_cFv */
-void daObjUsovmc::Act_c::Mthd_Create() {
-    /* Nonmatching */
+s32 daObjUsovmc::Act_c::Mthd_Create() {
+    fopAcM_SetupActor(this, Act_c);
+
+    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        phase_state = MoveBGCreate(M_arcname, USOVMC_DZB_VMCBS, NULL, 0);
+        JUT_ASSERT(0x74, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+    }
+
+    return phase_state;
 }
 
 /* 00000290-00000298       .text Delete__Q211daObjUsovmc5Act_cFv */
 BOOL daObjUsovmc::Act_c::Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000298-000002E4       .text Mthd_Delete__Q211daObjUsovmc5Act_cFv */
-void daObjUsovmc::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+BOOL daObjUsovmc::Act_c::Mthd_Delete() {
+    s32 ret = MoveBGDelete();
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return ret;
 }
 
 /* 000002E4-00000364       .text set_mtx__Q211daObjUsovmc5Act_cFv */
 void daObjUsovmc::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 00000364-000003A0       .text init_mtx__Q211daObjUsovmc5Act_cFv */
 void daObjUsovmc::Act_c::init_mtx() {
-    /* Nonmatching */
+    mModel->setBaseScale(scale);
+    set_mtx();
 }
 
 /* 000003A0-000003DC       .text Execute__Q211daObjUsovmc5Act_cFPPA3_A4_f */
-void daObjUsovmc::Act_c::Execute(float(**)[3][4]) {
-    /* Nonmatching */
+int daObjUsovmc::Act_c::Execute(Mtx** mtx) {
+    set_mtx();
+    *mtx = &M_tmp_mtx;
+    return TRUE;
 }
 
 /* 000003DC-0000047C       .text Draw__Q211daObjUsovmc5Act_cFv */
 BOOL daObjUsovmc::Act_c::Draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mModel, &tevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mModel);
+    dComIfGd_setList();
+    return TRUE;
 }
 
 namespace daObjUsovmc {
 namespace {
 /* 0000047C-0000049C       .text Mthd_Create__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* i_ac) {
+    return ((Act_c*)i_ac)->Mthd_Create();
 }
 
 /* 0000049C-000004BC       .text Mthd_Delete__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_ac) {
+    return ((Act_c*)i_ac)->Mthd_Delete();
 }
 
 /* 000004BC-000004DC       .text Mthd_Execute__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_ac) {
+    return ((Act_c*)i_ac)->MoveBGExecute();
 }
 
 /* 000004DC-00000508       .text Mthd_Draw__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_ac) {
+    return ((Act_c*)i_ac)->MoveBGDraw();
 }
 
 /* 00000508-00000534       .text Mthd_IsDelete__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_ac) {
+    return ((Act_c*)i_ac)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Usovmc = {

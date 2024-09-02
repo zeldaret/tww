@@ -1623,7 +1623,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_trap"),
     ActorRel(NonMatching, "d_a_obj_tribox"),
     ActorRel(NonMatching, "d_a_obj_try"),
-    ActorRel(NonMatching, "d_a_obj_usovmc"),
+    ActorRel(Matching,    "d_a_obj_usovmc"),
     ActorRel(Matching,    "d_a_obj_vfan", extra_cflags=[ '-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_vgnfd"),
     ActorRel(Matching,    "d_a_obj_vmc", extra_cflags=["-sym off"]),
