@@ -23,7 +23,7 @@ public:
     /* 0x00 */ u8 mState;
     /* 0x01 */ u8 mInitFlags;
     /* 0x02 */ s8 mAnimIdx;
-    /* 0x03 */ u8 mItemIdx;
+    /* 0x03 */ s8 mItemIdx;
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ Mtx mModelMtx;
     /* 0x40 */ dGrass_data_c* mpNextData;
@@ -43,6 +43,7 @@ class dGrass_room_c {
 public:
     void newData(dGrass_data_c*);
     void deleteData();
+    dGrass_data_c* getData() { return mpData; }
     dGrass_room_c();
 
     /* 0x0 */ dGrass_data_c* mpData;
@@ -58,7 +59,11 @@ public:
     dGrass_data_c* newData(cXyz&, int, s8);
     s32 newAnm();
     void setAnm(int, s16);
+    dGrass_anm_c& getAnm(s32 idx) { return mGrassAnm[idx]; }
     void deleteRoom(s32 roomNo) { mGrassRoom[roomNo].deleteData(); }
+
+    u16 getKusaRunPID() { return mCoParticle; }
+    u16 getKusaKenPID() { return mAtParticle; }
 
     virtual void draw();
     virtual ~dGrass_packet_c();
@@ -78,7 +83,7 @@ public:
     /* 0x1A660 */ void* mpDLCut;
     /* 0x1A664 */ u32 mDLCutSize;
     /* 0x1A668 */ u16 mCoParticle;
-    /* 0x1A66A */ u16 field_0x1a66a;
+    /* 0x1A66A */ u16 mAtParticle;
 };
 
 #endif /* D_GRASS_H */

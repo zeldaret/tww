@@ -6,9 +6,11 @@
 #include "d/d_grass.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "d/d_bg_s_gnd_chk.h"
+#include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_graphic.h"
@@ -44,20 +46,24 @@ void setBatta(cXyz* pos, GXColor* color) {
 /* 8007712C-8007734C       .text WorkCo__13dGrass_data_cFP10fopAc_ac_cUli */
 void dGrass_data_c::WorkCo(fopAc_ac_c* other, u32, int roomNo) {
     /* Nonmatching */
-    cXyz delta(mPos.x - other->current.pos.x, 0.0f, mPos.z - other->current.pos.z);
-    f32 distSq = delta.abs2();
+    cXyz delta;
+    delta.x = mPos.x - other->current.pos.x;
+    delta.z = mPos.z - other->current.pos.z;
+
+    f32 distSq = delta.abs2XZ();
     if (distSq > 1600.0f)
         return;
 
     delta.y = mPos.y - other->current.pos.y;
     s16 rotY = cM_atan2s(delta.x, delta.z);
     f32 dist = std::sqrtf(distSq);
+
     dGrass_anm_c* anm;
     if (mAnimIdx < 8) {
         if (other->speedF > 16.0f) {
-            cXyz ptclPos(mPos.x, mPos.y + 20.0f, mPos.z);
+            cXyz pos(mPos.x, mPos.y + 20.0f, mPos.z);
             dKy_tevstr_c* tevStr = dComIfGp_roomControl_getTevStr(roomNo);
-            dComIfGp_particle_setSimple(dComIfGp_getGrass()->mCoParticle, &ptclPos, 0xFF, tevStr->mColorK0, tevStr->mColorK0, 1);
+            dComIfGp_particle_setSimple(dComIfGp_getGrass()->getKusaRunPID(), &pos, 0xFF, tevStr->mColorK0, tevStr->mColorK0, 1);
             setBatta(&mPos, &tevStr->mColorK0);
         }
 
@@ -65,9 +71,9 @@ void dGrass_data_c::WorkCo(fopAc_ac_c* other, u32, int roomNo) {
         if (anmIdx < 0)
             return;
         mAnimIdx = anmIdx;
-        anm = &dComIfGp_getGrass()->mGrassAnm[mAnimIdx];
+        anm = &dComIfGp_getGrass()->getAnm(mAnimIdx);
     } else {
-        anm = &dComIfGp_getGrass()->mGrassAnm[mAnimIdx];
+        anm = &dComIfGp_getGrass()->getAnm(mAnimIdx);
     }
 
     anm->mRotY = rotY;
@@ -76,18 +82,108 @@ void dGrass_data_c::WorkCo(fopAc_ac_c* other, u32, int roomNo) {
 }
 
 /* 8007734C-800775E4       .text WorkAt_NoCutAnim__13dGrass_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_Obj */
-void dGrass_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, u32, int, dCcMassS_HitInf*, cCcD_Obj*) {
-    /* Nonmatching */
+void dGrass_data_c::WorkAt_NoCutAnim(fopAc_ac_c* ac, u32 p1, int roomNo, dCcMassS_HitInf* hitInf, cCcD_Obj* hitObj) {
+    dCcD_GObjInf* hitObjInf = dCcD_GetGObjInf(hitObj);
+    cXyz vel = *hitObjInf->GetAtVecP();
+    f32 mag = vel.abs2XZ();
+
+    if (cM3d_IsZero(mag)) {
+        if (hitObj->GetShapeAttr()->GetNVec(mPos, &vel)) {
+            vel *= 5.0f;
+            mag = vel.abs2XZ();
+        } else {
+            vel.x = mPos.x - ac->current.pos.x;
+            vel.y = mPos.y - ac->current.pos.y;
+            vel.z = mPos.z - ac->current.pos.z;
+            mag = vel.abs2XZ();
+        }
+    }
+
+    if (!cM3d_IsZero(mag)) {
+        s16 angle = cM_atan2s(vel.x, vel.z);
+        dGrass_anm_c* anm;
+        if (mAnimIdx < 8) {
+            s32 newIdx = dComIfGp_getGrass()->newAnm();
+            if (newIdx < 0)
+                return;
+            mAnimIdx = newIdx;
+            anm = &dComIfGp_getGrass()->getAnm(mAnimIdx);
+        } else {
+            anm = &dComIfGp_getGrass()->getAnm(mAnimIdx);
+        }
+
+        anm->mRotY = angle * (cM_rnd() * 0.2f + 0.9f);
+        anm->mRotX = cM_atan2s(mag, 40.0f) * (cM_rnd() * 0.2f + 0.9f);
+        anm->mState = 2;
+    }
 }
 
 /* 800775EC-800777CC       .text WorkAt__13dGrass_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInf */
-void dGrass_data_c::WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*) {
+void dGrass_data_c::WorkAt(fopAc_ac_c* ac, u32 p1, int roomNo, dCcMassS_HitInf* inf) {
     /* Nonmatching */
+    cCcD_Obj* hitObj = inf->GetAtHitObj();
+    if (hitObj != NULL && (hitObj->ChkAtType(AT_TYPE_WIND) ||
+        hitObj->ChkAtType(AT_TYPE_NORMAL_ARROW) ||
+        hitObj->ChkAtType(AT_TYPE_FIRE_ARROW) ||
+        hitObj->ChkAtType(AT_TYPE_ICE_ARROW) ||
+        hitObj->ChkAtType(AT_TYPE_LIGHT_ARROW) ||
+        hitObj->ChkAtType(AT_TYPE_HOOKSHOT))) {
+        WorkAt_NoCutAnim(ac, p1, roomNo, inf, hitObj);
+    } else {
+        if (mAnimIdx >= 8) {
+            dGrass_packet_c* grass = dComIfGp_getGrass();
+            grass->mGrassAnm[mAnimIdx].mState = 0;
+        }
+        mAnimIdx = -1;
+        static csXyz ang(0, 0, 0);
+        cXyz pos(mPos.x, mPos.y + 25.0f, mPos.z);
+        dKy_tevstr_c* tevStr = dComIfGp_roomControl_getTevStr(roomNo);
+        dComIfGp_particle_setSimple(dComIfGp_getGrass()->getKusaKenPID(), &pos, 0xFF, tevStr->mColorK0, tevStr->mColorK0, 1);
+        setBatta(&mPos, &tevStr->mColorK0);
+
+        if (mItemIdx >= 0)
+            fopAcM_createItemFromTable(&mPos, mItemIdx, 0xFFFFFFFF, roomNo, 0, NULL, 1, NULL);
+        if (!l_CutSoundFlag) {
+            l_CutSoundFlag = true;
+            mDoAud_seStart(JA_SE_LK_CUT_GRASS, &mPos, 0, dComIfGp_getReverb(roomNo));
+        }
+    }
 }
 
 /* 800777CC-800779D4       .text hitCheck__13dGrass_data_cFi */
-void dGrass_data_c::hitCheck(int) {
+void dGrass_data_c::hitCheck(int roomNo) {
     /* Nonmatching */
+    dCcMassS_HitInf hitInf;
+    fopAc_ac_c* actor;
+    u32 ret = dComIfG_Ccsp()->ChkMass(&mPos, &actor, &hitInf);
+    bool checkAt = false;
+    if (ret & 1) {
+        checkAt = actor != NULL && fopAcM_GetName(actor) != PROC_TSUBO && fopAcM_GetName(actor) != PROC_STONE;
+    }
+
+    if (mAnimIdx >= 8) {
+        dGrass_anm_c& anm = dComIfGp_getGrass()->getAnm(mAnimIdx);
+        s16 rotY = anm.mRotY;
+        s16 targetY = rotY & 0xe000;
+        u32 origIdx = (rotY >> 13) & 0x07;
+        dGrass_anm_c& origAnm = dComIfGp_getGrass()->getAnm(origIdx);
+        if (anm.mState == 2) {
+            mDoAud_seStart(JA_SE_FT_ADD_GRASS, &mPos, 0, dComIfGp_getReverb(roomNo));
+            anm.mState = 1;
+        }
+
+        if (!cLib_addCalcAngleS(&anm.mRotX, origAnm.mRotX, 16, 4000, 10)) {
+            if (cLib_chaseAngleS(&anm.mRotY, targetY, 800)) {
+                dComIfGp_getGrass()->getAnm(mAnimIdx).mState = 0;
+                mAnimIdx = origIdx;
+            }
+        }
+    } else {
+        if (ret)
+            WorkCo(actor, ret, roomNo);
+        if (checkAt)
+            WorkAt(actor, ret, roomNo, &hitInf);
+    }
 }
 
 /* 80077A1C-80077A2C       .text newData__13dGrass_room_cFP13dGrass_data_c */
@@ -128,7 +224,7 @@ dGrass_packet_c::dGrass_packet_c() {
         mpDLCut = l_Vmori_01DL;
         mDLCutSize = 0x80;
         mCoParticle = 0x8222;
-        field_0x1a66a = 0x8221;
+        mAtParticle = 0x8221;
     } else {
         mpPosArr = (f32*)l_pos;
         mpColorArr = l_color;
@@ -140,7 +236,7 @@ dGrass_packet_c::dGrass_packet_c() {
         mpDLCut = l_Oba_kusa_a_cutDL;
         mDLCutSize = 0x80;
         mCoParticle = 0x03db;
-        field_0x1a66a = 0x03da;
+        mAtParticle = 0x03da;
     }
 }
 
@@ -212,9 +308,12 @@ void dGrass_packet_c::calc() {
 
     f32 windSpeed = 0.0f;
     if (!mDoGph_gInf_c::isMonotone() || strcmp(dComIfGp_getStartStageName(), "Hyrule") != 0) {
-        windSpeed = dKyw_get_wind_pow() * 1000.0f + 1000.0f;
-        if (windSpeed > 2000.0f)
-            windSpeed = 2000.0f;
+        f32 speed2 = dKyw_get_wind_pow() * 1000.0f + 1000.0f;
+
+        windSpeed = 2000.0f;
+        if (speed2 > 2000.0f) {
+            windSpeed = speed2;
+        }
     }
 
     s32 theta = 0;
@@ -223,13 +322,18 @@ void dGrass_packet_c::calc() {
     }
 
     s32 roomNo = dStage_roomControl_c::getStayNo();
-    dGrass_data_c* data = mGrassRoom[roomNo].mpData;
+    dGrass_data_c* data = mGrassRoom[roomNo].getData();
     if (data != NULL) {
-        l_CutSoundFlag = 0;
+        l_CutSoundFlag = false;
         dComIfG_Ccsp()->SetMassAttr(40.0f, 80.0f, 11, 0);
-        for (; data != NULL; data = data->mpNextData) {
+
+        while (true) {
             if (!(data->mInitFlags & 2) && data->mAnimIdx >= 0)
                 data->hitCheck(roomNo);
+
+            data = data->mpNextData;
+            if (data == NULL)
+                break;
         }
     }
 }
@@ -250,19 +354,31 @@ static f32 checkGroundY(cXyz& pos) {
 /* 800782B8-800784E8       .text update__15dGrass_packet_cFv */
 void dGrass_packet_c::update() {
     /* Nonmatching */
-    dGrass_anm_c* anm = &mGrassAnm[0];
-    for (s32 i = 0; i < (s32)ARRAY_SIZE(mGrassAnm); anm++, i++) {
+
+    dGrass_data_c* data;
+    dGrass_anm_c* anm;
+    s32 ianm;
+    s32 numPerFrame;
+    s32 i;
+    s32 angle;
+
+    anm = &mGrassAnm[0];
+    for (ianm = 0; ianm < (s32)ARRAY_SIZE(mGrassAnm); anm++, ianm++) {
         mDoMtx_stack_c::YrotS(anm->mRotY);
         mDoMtx_stack_c::XrotM(anm->mRotX);
         mDoMtx_stack_c::YrotM(-anm->mRotY);
         mDoMtx_copy(mDoMtx_stack_c::get(), anm->mAnimMtx);
     }
 
-    dGrass_data_c* data = &mGrassData[0];
-    mDoLib_clipper::changeFar(mDoLib_clipper::getFar() * 1.636364f);
-    s32 numPerFrame = 0;
-    s32 angle = 0;
-    for (s32 i = 0; i < (s32)ARRAY_SIZE(mGrassData); data++, i++) {
+    data = &mGrassData[0];
+    anm = &mGrassAnm[0];
+
+    numPerFrame = 0;
+
+    mDoLib_clipper::changeFar(mDoLib_clipper::getFar() * 1.6363636f);
+    i = 0;
+    angle = 0;
+    for (; i < (s32)ARRAY_SIZE(mGrassData); i++, data++, angle += 3535) {
         if (data->mState != 0) {
             if (data->mState == 1 && numPerFrame < 30) {
                 data->mPos.y = checkGroundY(data->mPos);
@@ -276,19 +392,18 @@ void dGrass_packet_c::update() {
             } else {
                 data->mInitFlags &= ~2;
                 if (data->mAnimIdx >= 0) {
-                    Mtx& mtx = mGrassAnm[data->mAnimIdx].mAnimMtx;
-                    mtx[0][3] = pos.x;
-                    mtx[1][3] = pos.y;
-                    mtx[2][3] = pos.z;
+                    Mtx& mtx = anm[data->mAnimIdx].mAnimMtx;
+                    mtx[0][3] = data->mPos.x;
+                    mtx[1][3] = data->mPos.y;
+                    mtx[2][3] = data->mPos.z;
                     mDoMtx_concat(j3dSys.getViewMtx(), mtx, data->mModelMtx);
                 } else {
-                    mDoMtx_trans(data->mModelMtx, pos.x, pos.y, pos.z);
+                    mDoMtx_trans(data->mModelMtx, data->mPos.x, data->mPos.y, data->mPos.z);
                     mDoMtx_YrotM(data->mModelMtx, angle);
                     mDoMtx_concat(j3dSys.getViewMtx(), data->mModelMtx, data->mModelMtx);
                 }
             }
         }
-        angle += 3535;
     }
     mDoLib_clipper::resetFar();
     j3dSys.getDrawBuffer(0)->entryImm(this, 0);
@@ -314,36 +429,23 @@ void dGrass_packet_c::setData(dGrass_data_c* data, int nextIdx, cXyz& pos, int i
 
 /* 800785C0-800786FC       .text newData__15dGrass_packet_cFR4cXyziSc */
 dGrass_data_c* dGrass_packet_c::newData(cXyz& pos, int i_roomNo, s8 itemIdx) {
-    /* Nonmatching */
     JUT_ASSERT(0x600, 0 <= i_roomNo && i_roomNo < 64);
-    u32 idx = mNextIdx;
-    dGrass_data_c* data = &mGrassData[idx];
-    s32 remain = ARRAY_SIZE(mGrassData) - idx;
-    if (idx < ARRAY_SIZE(mGrassData)) {
-        while (true) {
-            if (data->mState == 0) {
-                setData(data, idx, pos, i_roomNo, itemIdx);
-                return data;
-            }
-            data++;
-            idx++;
-            remain--;
-            if (remain == 0)
-                break;
+
+    dGrass_data_c* data = &mGrassData[mNextIdx];
+    s32 i = mNextIdx;
+    for (; i < (s32)ARRAY_SIZE(mGrassData); data++, i++) {
+        if (data->mState == 0) {
+            setData(data, i, pos, i_roomNo, itemIdx);
+            return data;
         }
     }
 
     data = mGrassData;
-    remain = 0;
-    while (idx > 0) {
+    for (i = 0; i < mNextIdx; data++, i++) {
         if (data->mState == 0) {
-            setData(data, idx, pos, i_roomNo, itemIdx);
+            setData(data, i, pos, i_roomNo, itemIdx);
             return data;
         }
-
-        data++;
-        idx++;
-        remain--;
     }
 
     return NULL;
