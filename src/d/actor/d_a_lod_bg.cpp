@@ -69,7 +69,6 @@ s32 daLodbg_c::getRoomNo() {
 
 /* 0000031C-0000046C       .text deleteModelData__9daLodbg_cFv */
 void daLodbg_c::deleteModelData() {
-    /* Nonmatching */
     if (mMountCommand != NULL) {
         OSReport_Warning("LOD読み込み中に削除処理ですか?\n");
         bool sync = mMountCommand->sync();
@@ -156,7 +155,6 @@ BOOL daLodbg_c::loadModelData(const char* filename, J3DModelData*& mModelData, J
 
 /* 00000738-000008B8       .text createModelData__9daLodbg_cFv */
 BOOL daLodbg_c::createModelData() {
-    /* Nonmatching */
     static char resPath[32];
     JUT_ASSERT(0x177, mModelData == NULL);
     JUT_ASSERT(0x178, mModelData2 == NULL);
@@ -177,7 +175,6 @@ BOOL daLodbg_c::createModelData() {
 
 /* 000008B8-00000A38       .text createHeap__9daLodbg_cFv */
 BOOL daLodbg_c::createHeap() {
-    /* Nonmatching */
     JUT_ASSERT(0x1b4, mModelData != NULL);
     mModel = mDoExt_J3DModel__create(mModelData, 0x80000, 0x11000022);
     if (mModel == NULL)
@@ -210,7 +207,6 @@ static BOOL createHeapCallBack(fopAc_ac_c* i_ac) {
 
 /* 00000A58-00000B4C       .text execCreateWait__9daLodbg_cFv */
 BOOL daLodbg_c::execCreateWait() {
-    /* Nonmatching */
     f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
     if (dist > scale.x)
         return TRUE;
@@ -228,7 +224,6 @@ BOOL daLodbg_c::execCreateWait() {
 
 /* 00000B4C-00000D68       .text execReadWait__9daLodbg_cFv */
 BOOL daLodbg_c::execReadWait() {
-    /* Nonmatching */
     if (!mMountCommand->sync())
         return TRUE;
 
@@ -267,12 +262,16 @@ BOOL daLodbg_c::execDeleteWait() {
         f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
         if (dist < scale.z) {
             s32 roomNo = getRoomNo();
-            bool disp = dist < scale.x && !(dComIfGp_roomControl_checkStatusFlag(roomNo, 0x01) && !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x04)); // inline?
+            bool disp = dist > scale.x || (dComIfGp_roomControl_checkStatusFlag(roomNo, 0x01) && !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x04)); // inline?
             cLib_chaseUC(&mAlpha, disp ? 255 : 0, 16);
             if (mAlpha != 0) {
-                f32 y = 0.0f;
-                if ((150000.0f - dist) <= 0.0f)
-                    y = (150000.0f - dist) * 0.1f;
+                f32 y = (150000.0f - dist);
+
+                if (y >= 0.0f)
+                    y = 0.0f;
+                else
+                    y *= 0.1f;
+
                 mDoMtx_stack_c::transS(current.pos.x, current.pos.y + y, current.pos.z);
                 mDoMtx_stack_c::YrotM(shape_angle.y);
                 mModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -309,7 +308,6 @@ BOOL daLodbg_c::execDeleteWait() {
 
 /* 00000FC4-00001274       .text draw__9daLodbg_cFv */
 BOOL daLodbg_c::draw() {
-    /* Nonmatching */
     if (heap == NULL || mAlpha == 0)
         return TRUE;
 
