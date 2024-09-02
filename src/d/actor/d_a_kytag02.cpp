@@ -26,9 +26,10 @@ dPath* set_next_path_info(kytag02_class* i_this, dPath* path) {
 /* 000000F0-0000017C       .text get_railwind_vec__FP5dPathi */
 cXyz get_railwind_vec(dPath* path, int i_no) {
     /* Nonmatching */
+    dPath__Point* pnt = path->mpPnt;
+    cXyz p0 = pnt[i_no].mPos;
+    cXyz p1 = pnt[i_no + 1].mPos;
     cXyz ret;
-    cXyz p0 = path->mpPnt[i_no + 0].mPos;
-    cXyz p1 = path->mpPnt[i_no + 1].mPos;
     dKyr_get_vectle_calc(&p0, &p1, &ret);
     return ret;
 }

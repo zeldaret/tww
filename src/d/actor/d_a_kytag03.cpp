@@ -47,12 +47,11 @@ void draw_SUB(kytag03_class* i_this) {
 /* 00000280-0000050C       .text daKytag03_Execute__FP13kytag03_class */
 static BOOL daKytag03_Execute(kytag03_class* i_this) {
     /* Nonmatching */
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (!dComIfGp_event_runCheck() || !dComIfGp_event_chkEventFlag(dEvtFlag_STAFF_ALL_e)) {
         if (i_this->tevStr.mRoomNo == dStage_roomControl_c::getStayNo()) {
             i_this->mbRoomActive = true;
             if (i_this->mSwitchID != 0xFF) {
-                if (dComIfGs_isSwitch(i_this->mSwitchID, i_this->tevStr.mRoomNo)) {
+                if (dComIfGs_isSwitch(i_this->mSwitchID, dStage_roomControl_c::getStayNo())) {
                     if (!dKy_contrast_flg_get()) {
                         dKy_contrast_flg_set(true);
                         dKy_change_colpat(4);
@@ -90,13 +89,13 @@ static BOOL daKytag03_Execute(kytag03_class* i_this) {
             }
         }
     } else if (i_this->tevStr.mRoomNo != dStage_roomControl_c::getStayNo()) {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
         if (!i_this->mbIsActive && dKy_contrast_flg_get()) {
             if (!i_this->mbVisible) {
-                s16 angleY = 0;
                 cXyz pos;
-                pos.x = cM_scos(angleY) * cM_ssin(player->shape_angle.y);
-                pos.y = cM_ssin(angleY);
-                pos.z = cM_scos(angleY) * cM_scos(player->shape_angle.y);
+                pos.x = cM_scos(0) * cM_ssin(player->shape_angle.y);
+                pos.y = cM_ssin(0);
+                pos.z = cM_scos(0) * cM_scos(player->shape_angle.y);
                 i_this->current.pos = player->current.pos + pos * -100.0f;
                 i_this->current.angle.y = player->current.angle.y;
                 i_this->shape_angle.y = player->shape_angle.y;
