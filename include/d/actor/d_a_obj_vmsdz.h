@@ -2,19 +2,24 @@
 #define D_A_OBJ_VMSDZ_H
 
 #include "f_op/f_op_actor.h"
+#include "SSystem/SComponent/c_phase.h"
 
 class daObjVmsdz_c : public fopAc_ac_c {
 public:
-    void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
+    static BOOL solidHeapCB(fopAc_ac_c*);
+    BOOL create_heap();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void init_mtx();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
-    /* Place member variables here */
+    static const char M_arcname[];
+
+public:
+    /* 0x290 */ J3DModel* mModel;
+    /* 0x294 */ request_of_phase_process_class mPhs;
 };
 
 #endif /* D_A_OBJ_VMSDZ_H */

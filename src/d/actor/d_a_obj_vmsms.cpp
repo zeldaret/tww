@@ -4,72 +4,113 @@
 //
 
 #include "d/actor/d_a_obj_vmsms.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/res/res_vmsms.h"
+
+const char daObjVmsms_c::M_arcname[6] = "VmsMS";
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVmsms_cFP10fopAc_ac_c */
-void daObjVmsms_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjVmsms_c::solidHeapCB(fopAc_ac_c* i_ac) {
+    return ((daObjVmsms_c*)i_ac)->create_heap();
 }
 
 /* 00000098-0000015C       .text create_heap__12daObjVmsms_cFv */
-void daObjVmsms_c::create_heap() {
-    /* Nonmatching */
+BOOL daObjVmsms_c::create_heap() {
+    J3DModelData* mdl_data;
+    BOOL ret = FALSE;
+
+    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VMSMS_BDL_VMSMS);
+    JUT_ASSERT(0x5b, mdl_data != NULL);
+
+    if (mdl_data != NULL) {
+        mModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
+        if (mModel != NULL) {
+            ret = TRUE;
+        }
+    }
+
+    return ret;
 }
 
 /* 0000015C-0000021C       .text _create__12daObjVmsms_cFv */
 s32 daObjVmsms_c::_create() {
-    /* Nonmatching */
+    s32 ret = cPhs_ERROR_e;
+
+    fopAcM_SetupActor(this, daObjVmsms_c);
+
+    if (!check_demo()) {
+        ret = dComIfG_resLoad(&mPhs, M_arcname);
+        if (ret == cPhs_COMPLEATE_e) {
+            ret = cPhs_ERROR_e;
+            if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+                fopAcM_SetMtx(this, mModel->getBaseTRMtx());
+                init_mtx();
+                ret = cPhs_COMPLEATE_e;
+            }
+        }
+    }
+
+    return ret;
 }
 
 /* 0000021C-0000024C       .text _delete__12daObjVmsms_cFv */
-BOOL daObjVmsms_c::_delete() {
-    /* Nonmatching */
+bool daObjVmsms_c::_delete() {
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 0000024C-0000026C       .text init_mtx__12daObjVmsms_cFv */
 void daObjVmsms_c::init_mtx() {
-    /* Nonmatching */
+    mModel->setBaseScale(scale);
 }
 
 /* 0000026C-000002A8       .text check_demo__12daObjVmsms_cCFv */
-void daObjVmsms_c::check_demo() const {
-    /* Nonmatching */
+bool daObjVmsms_c::check_demo() const {
+    return dComIfGs_isEventBit(0x2d04);
 }
 
 /* 000002A8-0000030C       .text _execute__12daObjVmsms_cFv */
-BOOL daObjVmsms_c::_execute() {
-    /* Nonmatching */
+bool daObjVmsms_c::_execute() {
+    if (dComIfGp_event_runCheck()) {
+        if (dComIfGp_evmng_startCheck("master_sword"))
+            fopAcM_delete(this);
+    }
+    return true;
 }
 
 /* 0000030C-0000036C       .text _draw__12daObjVmsms_cFv */
-BOOL daObjVmsms_c::_draw() {
-    /* Nonmatching */
+bool daObjVmsms_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mModel, &tevStr);
+    mDoExt_modelUpdateDL(mModel);
+    return true;
 }
 
 namespace {
 /* 0000036C-0000038C       .text Mthd_Create__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* i_ac) {
+    return ((daObjVmsms_c*)i_ac)->_create();
 }
 
 /* 0000038C-000003B0       .text Mthd_Delete__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_ac) {
+    return ((daObjVmsms_c*)i_ac)->_delete();
 }
 
 /* 000003B0-000003D4       .text Mthd_Execute__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_ac) {
+    return ((daObjVmsms_c*)i_ac)->_execute();
 }
 
 /* 000003D4-000003F8       .text Mthd_Draw__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_ac) {
+    return ((daObjVmsms_c*)i_ac)->_draw();
 }
 
 /* 000003F8-00000400       .text Mthd_IsDelete__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_ac) {
+    return TRUE;
 }
 
 static actor_method_class Vmsms_Mthd_Table = {
