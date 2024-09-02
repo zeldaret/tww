@@ -270,10 +270,18 @@ bool daObjVmc::Act_c::_execute() {
 
     cXyz dist = dComIfGp_getLinkPlayer()->current.pos - current.pos;
     if (!mLinkRangeCheck) {
+#if VERSION == VERSION_JPN
+        if (dist.absXZ() > 110.0f)
+#else
         if (dist.absXZ() > 110.0f || dist.y < -500.0f || dist.y > 500.0f)
+#endif
             mLinkRangeCheck = true;
     } else {
+#if VERSION == VERSION_JPN
+        if (dist.absXZ() < 100.0f)
+#else
         if (dist.absXZ() < 100.0f && dist.y > -490.0f && dist.y < 490.0f)
+#endif
             mLinkRangeCheck = false;
     }
 
