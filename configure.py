@@ -19,6 +19,7 @@ from typing import Any, Dict, List
 
 from tools.project import (
     Object,
+    ProgressCategory,
     ProjectConfig,
     calculate_progress,
     generate_build,
@@ -144,6 +145,7 @@ if args.no_asm:
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
 config.dtk_tag = "v0.9.2"
+config.objdiff_tag = "v2.0.0-beta.4"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -256,6 +258,7 @@ def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         "lib": lib_name,
         "mw_version": "GC/1.2.5n",
         "cflags": cflags_base,
+        "progress_category": "dolphin",
         "host": False,
         "objects": objects,
     }
@@ -267,6 +270,7 @@ def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         "lib": lib_name,
         "mw_version": "GC/1.3.2",
         "cflags": cflags_rel,
+        "progress_category": "game",
         "host": True,
         "objects": objects,
     }
@@ -283,6 +287,7 @@ def JSystemLib(lib_name, objects):
         "lib": lib_name,
         "mw_version": "GC/1.3.2",
         "cflags": cflags_framework,
+        "progress_category": "core",
         "host": True,
         "objects": objects,
     }
@@ -293,14 +298,22 @@ Equivalent = config.non_matching  # Object should be linked when configured with
 
 config.warn_missing_config = True
 config.warn_missing_source = False
+config.progress_categories = [
+    ProgressCategory("all", "All"),
+    ProgressCategory("dol", "DOL"),
+    ProgressCategory("modules", "Modules"),
+    ProgressCategory("core", "Core"),
+    ProgressCategory("game", "Game"),
+    ProgressCategory("dolphin", "Dolphin"),
+]
 config.libs = [
     {
-        "lib": "framework",
+        "lib": "machine",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_framework,
+        "progress_category": "core",
         "host": True,
         "objects": [
-            # machine
             Object(Matching,    "m_Do/m_Do_main.cpp"),
             Object(Matching,    "m_Do/m_Do_printf.cpp"),
             Object(Matching,    "m_Do/m_Do_audio.cpp"),
@@ -318,11 +331,26 @@ config.libs = [
             Object(NonMatching, "m_Do/m_Do_MemCardRWmng.cpp"),
             Object(Matching,    "m_Do/m_Do_gba_com.cpp"),
             Object(Matching,    "m_Do/m_Do_machine_exception.cpp"),
-
-            # c
+        ],
+    },
+    {
+        "lib": "c",
+        "mw_version": "GC/1.3.2",
+        "cflags": cflags_framework,
+        "progress_category": "game",
+        "host": True,
+        "objects": [
             Object(NonMatching, "c/c_damagereaction.cpp"),
             Object(Matching,    "c/c_dylink.cpp"),
-
+        ],
+    },
+    {
+        "lib": "framework",
+        "mw_version": "GC/1.3.2",
+        "cflags": cflags_framework,
+        "progress_category": "core",
+        "host": True,
+        "objects": [
             # f_ap
             Object(Matching,    "f_ap/f_ap_game.cpp"),
 
@@ -381,8 +409,15 @@ config.libs = [
             Object(Matching,    "f_pc/f_pc_draw.cpp"),
             Object(Matching,    "f_pc/f_pc_fstcreate_req.cpp"),
             Object(Matching,    "f_pc/f_pc_stdcreate_req.cpp"),
-
-            # dolzel
+        ],
+    },
+    {
+        "lib": "dolzel",
+        "mw_version": "GC/1.3.2",
+        "cflags": cflags_framework,
+        "progress_category": "game",
+        "host": True,
+        "objects": [
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_map.cpp"),
             Object(Matching,    "d/d_com_inf_game.cpp", extra_cflags=['-sym off']),
@@ -543,7 +578,15 @@ config.libs = [
             Object(Matching,    "d/d_wind_arrow.cpp"),
             Object(NonMatching, "d/d_wpillar.cpp"),
             Object(Matching,    "d/d_wpot_water.cpp"),
-
+        ],
+    },
+    {
+        "lib": "DynamicLink",
+        "mw_version": "GC/1.3.2",
+        "cflags": cflags_framework,
+        "progress_category": "core",
+        "host": True,
+        "objects": [
             Object(Matching,    "DynamicLink.cpp"),
         ],
     },
@@ -551,6 +594,7 @@ config.libs = [
         "lib": "SSystem",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_framework,
+        "progress_category": "core",
         "host": True,
         "objects": [
             Object(Matching,    "SSystem/SComponent/c_malloc.cpp"),
@@ -1114,6 +1158,7 @@ config.libs = [
         "lib": "Runtime.PPCEABI.H",
         "mw_version": "GC/1.3",
         "cflags": cflags_runtime,
+        "progress_category": "dolphin",
         "host": False,
         "objects": [
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/__mem.c"),
@@ -1132,6 +1177,7 @@ config.libs = [
         "lib": "MSL_C",
         "mw_version": "GC/1.3",
         "cflags": cflags_runtime,
+        "progress_category": "dolphin",
         "host": False,
         "objects": [
             Object(Matching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/abort_exit.c"),
@@ -1185,6 +1231,7 @@ config.libs = [
         "lib": "TRK_MINNOW_DOLPHIN",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
+        "progress_category": "dolphin",
         "host": False,
         "objects": [
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/mainloop.c"),
@@ -1217,6 +1264,7 @@ config.libs = [
         "lib": "amcstubs",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
+        "progress_category": "dolphin",
         "host": False,
         "objects": [
             Object(NonMatching, "amcstubs/AmcExi2Stubs.c"),
@@ -1226,6 +1274,7 @@ config.libs = [
         "lib": "OdemuExi2",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
+        "progress_category": "dolphin",
         "host": False,
         "objects": [
             Object(NonMatching, "OdemuExi2/DebuggerDriver.c"),
@@ -1235,6 +1284,7 @@ config.libs = [
         "lib": "odenotstub",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
+        "progress_category": "dolphin",
         "host": False,
         "objects": [
             Object(NonMatching, "odenotstub/odenotstub.c"),
@@ -1246,6 +1296,7 @@ config.libs = [
         "lib": "REL",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_rel,
+        "progress_category": "core",
         "host": False,
         "objects": [
             Object(Matching, "REL/executor.c"),
