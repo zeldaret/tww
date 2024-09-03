@@ -96,10 +96,13 @@ Setting up Ghidra
 
 Ghidra is a tool that automatically decompiles code. Although Ghidra's output is not accurate enough to be directly copy-pasted into this decompilation project, it can still be helpful for understanding functions and decompiling them faster.
 
-We have a shared Ghidra project for TWW already set up which you can access like so:
+We have a shared Ghidra project for TWW already set up. To get access to this server:
 
 * Go to https://ghidra.decomp.dev and link your Discord account.
 * Request "Read" access to the WindWaker server.
+
+Then wait for an admin to approve your request. Once you have access, you can set up the Ghidra project like so:
+
 * To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/de/temurin/releases/).
 * Download the RootCubed Ghidra build ghidra_11.1_DEV_20240115 from [here](https://rootcubed.dev/ghidra_builds/).
 * Launch Ghidra with `ghidraRun`.
