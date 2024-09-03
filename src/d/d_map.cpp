@@ -185,8 +185,7 @@ u32 dMap_RoomInfo_c::getRoomDspFloorNo(u8 i_no, BOOL search) {
 }
 
 /* 80045E54-80045F40       .text init__15dMap_RoomInfo_cFP15dMap_RoomInfo_ci */
-void dMap_RoomInfo_c::init(dMap_RoomInfo_c* prev, int p2) {
-    /* Nonmatching */
+dMap_RoomInfo_c* dMap_RoomInfo_c::init(dMap_RoomInfo_c* prev, int p2) {
     m_exist = 0;
     field_0x1 = 0;
     for (int i = 0; i < ARRAY_SIZE(field_0x2); i++)
@@ -205,6 +204,7 @@ void dMap_RoomInfo_c::init(dMap_RoomInfo_c* prev, int p2) {
     mStageMapInfoP = NULL;
     if (prev != NULL)
         prev->m_next = this;
+    return this;
 }
 
 /* 80045F40-80046314       .text getRoomImage__15dMap_RoomInfo_cFiUciPP7ResTIMGPP7ResTIMGPP8map_dt_cPP20stage_map_info_classPUc */

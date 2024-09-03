@@ -55,6 +55,14 @@ public:
     dMagma_ball_c** create(cXyz&, cXyz&, s16, u8, int);
     void remove();
 
+    dMagma_floor_c* getNext() { return mpNext; }
+    void setNext(dMagma_floor_c* v) { mpNext = v; }
+    dMagma_ball_c** getBall() { return mpBalls; }
+    s32 getBallNum() { return mBallNum; }
+    cXyz& getPos() { return mPos; }
+    f32 getScaleX() { return mScaleX; }
+    f32 getScaleZ() { return mScaleZ; }
+
     /* 0x00 */ dMagma_ball_c** mpBalls;
     /* 0x04 */ u8 mBallNum;
     /* 0x05 */ u8 mPathNo;
@@ -71,6 +79,7 @@ public:
 class dMagma_room_c {
 public:
     void newFloor(dMagma_floor_c*);
+    dMagma_floor_c* getFloor() { return mpFirst; }
     void deleteFloor();
 
     dMagma_room_c();
@@ -89,6 +98,10 @@ public:
 
     virtual void draw();
     virtual ~dMagma_packet_c();
+
+    static GXTexObj& getKuroTexObj() { return mKuroTexObj; }
+    static GXTexObj& getColTexObj() { return mColTexObj; }
+    static Mtx& getKuroMtx() { return mKuroMtx; }
 
     static GXTexObj mKuroTexObj;
     static Mtx mKuroMtx;

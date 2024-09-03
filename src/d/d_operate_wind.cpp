@@ -222,7 +222,7 @@ bool dOperate_wind_c::_close() {
 void dOw_c::_create() {
     /* Nonmatching */
     dOw_scrn = new dOperate_wind_c();
-    JUT_ASSERT(0x578, dOw_scrn != NULL);
+    JUT_ASSERT(0x478, dOw_scrn != NULL);
     dOw_scrn->_create();
 }
 

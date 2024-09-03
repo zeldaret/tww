@@ -26,10 +26,11 @@ Mtx dMagma_packet_c::mBallMtx;
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 
-u8 l_YfloorPos[] = {
-    0xC3, 0xFA, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x43, 0xFA, 0x00, 0x00, 0x43, 0xFA, 0x00, 0x00,
-    0x80, 0x00, 0x00, 0x00, 0x43, 0xFA, 0x00, 0x00, 0xC3, 0xFA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xC3, 0xFA, 0x00, 0x00, 0x43, 0xFA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC3, 0xFA, 0x00, 0x00,
+Vec l_YfloorPos[] = {
+    { -500.0f, -0.0f, 500.0f },
+    { 500.0f, -0.0f, 500.0f },
+    { -500.0f, 0.0f, -500.0f },
+    { 500.0f, 0.0f, -500.0f },
 };
 
 u8 l_YfloorDL[] ALIGN_DECL(32) = {
@@ -106,10 +107,10 @@ u8 l_YballMatDL[] ALIGN_DECL(32) = {
 void dMagma_ball_c::draw() {
     GXLoadTexMtxImm(mTexProjMtx, GX_TEXMTX2, GX_MTX3x4);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX2, GX_FALSE, GX_PTTEXMTX0);
-    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_TRUE, GXGetTexObjWidth(&dMagma_packet_c::mKuroTexObj), GXGetTexObjHeight(&dMagma_packet_c::mKuroTexObj));
+    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_TRUE, GXGetTexObjWidth(&dMagma_packet_c::getKuroTexObj()), GXGetTexObjHeight(&dMagma_packet_c::getKuroTexObj()));
     GXSetTexCoordBias(GX_TEXCOORD0, GX_FALSE, GX_FALSE);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX2, GX_FALSE, GX_PTTEXMTX1);
-    GXSetTexCoordScaleManually(GX_TEXCOORD1, GX_TRUE, GXGetTexObjWidth(&dMagma_packet_c::mColTexObj), GXGetTexObjHeight(&dMagma_packet_c::mColTexObj));
+    GXSetTexCoordScaleManually(GX_TEXCOORD1, GX_TRUE, GXGetTexObjWidth(&dMagma_packet_c::getColTexObj()), GXGetTexObjHeight(&dMagma_packet_c::getColTexObj()));
     GXSetTexCoordBias(GX_TEXCOORD1, GX_FALSE, GX_FALSE);
     GXLoadPosMtxImm(mPosMtx, GX_PNMTX0);
     GXCallDisplayList(l_YballDL, 0x60);
@@ -173,9 +174,9 @@ void dMagma_ballPath_c::setup(f32 offsY, u8 pathNo, int roomNo) {
 void dMagma_floor_c::draw() {
     GXSetArray(GX_VA_POS, l_YfloorPos, sizeof(*l_YfloorPos));
     GXLoadTexMtxImm(mTexMtx0, GX_TEXMTX2, GX_MTX3x4);
-    GXLoadTexMtxImm(dMagma_packet_c::mKuroMtx, (u32)GX_PTTEXMTX0, GX_MTX3x4);
+    GXLoadTexMtxImm(dMagma_packet_c::getKuroMtx(), (u32)GX_PTTEXMTX0, GX_MTX3x4);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX2, GX_FALSE, GX_PTTEXMTX0);
-    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_TRUE, GXGetTexObjWidth(&dMagma_packet_c::mKuroTexObj), GXGetTexObjHeight(&dMagma_packet_c::mKuroTexObj));
+    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_TRUE, GXGetTexObjWidth(&dMagma_packet_c::getKuroTexObj()), GXGetTexObjHeight(&dMagma_packet_c::getKuroTexObj()));
     GXSetTexCoordBias(GX_TEXCOORD0, GX_FALSE, GX_FALSE);
     GXCallDisplayList(&l_YfloorMatDL, 0x40);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -195,8 +196,8 @@ void dMagma_floor_c::draw() {
     GXCallDisplayList(l_YballMatDL, 0x40);
     GXLoadTexMtxImm(mPostMtx0, (u32)GX_PTTEXMTX1, GX_MTX3x4);
 
-    dMagma_ball_c** ball = &mpBalls[0];
-    for (s32 i = 0; i < mBallNum; ball++, i++)
+    dMagma_ball_c** ball = getBall();
+    for (s32 i = 0; i < getBallNum(); ball++, i++)
         (*ball)->draw();
 }
 
@@ -208,16 +209,16 @@ void dMagma_floor_c::calc(int i_roomNo) {
     else
         mDoMtx_stack_c::transM(0.0f, -(mPos.y + 30.0f), 0.0f);
     mDoMtx_concat(l_colOrthoMtx, mDoMtx_stack_c::get(), mPostMtx0);
-    dMagma_ball_c** ball = &mpBalls[0];
-    for (s32 i = 0; i < mBallNum; ball++, i++)
+    dMagma_ball_c** ball = getBall();
+    for (s32 i = 0; i < getBallNum(); ball++, i++)
         (*ball)->calc(mPos.y, mPathNo, i_roomNo);
 }
 
 /* 80075DD8-80075E50       .text update__14dMagma_floor_cFv */
 void dMagma_floor_c::update() {
     mDoMtx_concat(j3dSys.getViewMtx(), mTexMtx0, mPosMtx);
-    dMagma_ball_c** ball = &mpBalls[0];
-    for (s32 i = 0; i < mBallNum; ball++, i++)
+    dMagma_ball_c** ball = getBall();
+    for (s32 i = 0; i < getBallNum(); ball++, i++)
         (*ball)->update();
 }
 
@@ -267,8 +268,8 @@ dMagma_ball_c** dMagma_floor_c::create(cXyz& pos, cXyz& scale, s16 pathNo, u8 ba
 
 /* 80076080-80076100       .text remove__14dMagma_floor_cFv */
 void dMagma_floor_c::remove() {
-    dMagma_ball_c** ball = &mpBalls[0];
-    for (s32 i = 0; i < mBallNum; ball++, i++)
+    dMagma_ball_c** ball = getBall();
+    for (s32 i = 0; i < getBallNum(); ball++, i++)
         delete *ball;
 
     delete mpBalls;
@@ -277,7 +278,7 @@ void dMagma_floor_c::remove() {
 
 /* 80076100-80076110       .text newFloor__13dMagma_room_cFP14dMagma_floor_c */
 void dMagma_room_c::newFloor(dMagma_floor_c* floor) {
-    floor->mpNext = mpFirst;
+    floor->setNext(mpFirst);
     mpFirst = floor;
 }
 
@@ -285,7 +286,7 @@ void dMagma_room_c::newFloor(dMagma_floor_c* floor) {
 void dMagma_room_c::deleteFloor() {
     while (mpFirst != NULL) {
         mpFirst->remove();
-        mpFirst = mpFirst->mpNext;
+        mpFirst = mpFirst->getNext();
     }
 }
 
@@ -294,13 +295,13 @@ dMagma_packet_c::dMagma_packet_c() {
     dComIfG_setObjectRes("Magma", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 
     ResTIMG* kuro = (ResTIMG*)dComIfG_getObjectRes("Magma", MAGMA_BTI_MAG_KURO);
-    mDoLib_setResTimgObj(kuro, &mKuroTexObj, 0, NULL);
+    mDoLib_setResTimgObj(kuro, &getKuroTexObj(), 0, NULL);
 
     C_MTXLightOrtho(l_kuroOrthoMtx, 1.0f, -1.0f, -1.0f, 1.0f, 0.5f, -0.5f, 0.5f, 0.5f);
     mDoMtx_copy(l_kuroOrthoMtx, l_colOrthoMtx);
 
     ResTIMG* col = (ResTIMG*)dComIfG_getObjectRes("Magma", MAGMA_BTI_MAG_COL);
-    mDoLib_setResTimgObj(col, &mColTexObj, 0, NULL);
+    mDoLib_setResTimgObj(col, &getColTexObj(), 0, NULL);
     mDoMtx_identity(mFloorMtx);
     mDoMtx_identity(mBallMtx);
     mTimer = 0.0f;
@@ -331,8 +332,8 @@ void dMagma_packet_c::draw() {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXLoadTexObj(&mKuroTexObj, GX_TEXMAP0);
-    GXLoadTexObj(&mColTexObj, GX_TEXMAP1);
+    GXLoadTexObj(&getKuroTexObj(), GX_TEXMAP0);
+    GXLoadTexObj(&getColTexObj(), GX_TEXMAP1);
     dKy_GxFog_set();
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
     GXSetTevColor(GX_TEVREG1, mColor1);
@@ -366,11 +367,11 @@ void dMagma_packet_c::calc() {
 
     mDoMtx_stack_c::scaleS(0.0022f, 0.0018f, 0.0017f);
     mDoMtx_stack_c::XrotM(0x4000);
-    mDoMtx_concat(l_kuroOrthoMtx, mDoMtx_stack_c::get(), mKuroMtx);
+    mDoMtx_concat(l_kuroOrthoMtx, mDoMtx_stack_c::get(), getKuroMtx());
 
     dMagma_room_c* room = mRoom;
     for (s32 i = 0; i < (s32)ARRAY_SIZE(mRoom); i++, room++)
-        for (dMagma_floor_c* floor = room->mpFirst; floor != NULL; floor = floor->mpNext)
+        for (dMagma_floor_c* floor = room->getFloor(); floor != NULL; floor = floor->getNext())
             if (floor->mpBalls != NULL)
                 floor->calc(i);
 
@@ -404,7 +405,7 @@ void dMagma_packet_c::calc() {
 
 /* 80076770-800767E4       .text update__15dMagma_packet_cFv */
 void dMagma_packet_c::update() {
-    dMagma_floor_c* floor = &mFloor[0];
+    dMagma_floor_c* floor = mFloor;
     for (s32 i = 0; i < 8; i++, floor++) {
         if (floor->mpBalls != NULL)
             floor->update();
@@ -415,19 +416,19 @@ void dMagma_packet_c::update() {
 /* 800767E4-80076924       .text checkYpos__15dMagma_packet_cFR4cXyz */
 f32 dMagma_packet_c::checkYpos(cXyz& pos) {
     /* Nonmatching */
-    f32 ret = C_BG_INVALID_HEIGHT;
+    f32 ret = -1e8;
     dMagma_floor_c* floor = mFloor;
     for (s32 i = 0; i < (s32)ARRAY_SIZE(mFloor); floor++, i++) {
         if (floor->mpBalls == NULL)
             continue;
 
-        if (std::fabsf(pos.y - floor->mPos.y) <= 236.803879f && std::fabsf(pos.x - floor->mPos.x) <= floor->mScaleX * 500.0f && std::fabsf(pos.z - floor->mPos.z) <= floor->mScaleZ * 500.0f) {
-            dMagma_ball_c** ball = floor->mpBalls;
-            for (s32 j = 0; j < floor->mBallNum; ball++, j++) {
+        if (std::fabsf(pos.y - floor->getPos().y) <= 236.803879f && std::fabsf(pos.x - floor->getPos().x) <= floor->getScaleX() * 500.0f && std::fabsf(pos.z - floor->getPos().z) <= floor->getScaleZ() * 500.0f) {
+            dMagma_ball_c** ball = floor->getBall();
+            for (s32 j = 0; j < floor->getBallNum(); ball++, j++) {
                 f32 y;
                 if ((*ball)->rangeCheck(pos, &y)) {
-                    if (y < floor->mPos.y)
-                        y = floor->mPos.y;
+                    if (y < floor->getPos().y)
+                        y = floor->getPos().y;
 
                     if (y > ret)
                         ret = y;

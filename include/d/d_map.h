@@ -65,7 +65,7 @@ public:
     dMap_RoomInfo_c();
     ~dMap_RoomInfo_c();
     u32 getRoomDspFloorNo(u8, int);
-    void init(dMap_RoomInfo_c*, int);
+    dMap_RoomInfo_c* init(dMap_RoomInfo_c*, int);
     void getRoomImage(int, u8, int, ResTIMG**, ResTIMG**, map_dt_c**, stage_map_info_class**, u8*);
     void makeRoomDspFloorNoTbl(int);
     u32 roomEntryRoom(int, u8, int, u8, dMap_RoomInfo_c*, s16, s16, f32);
