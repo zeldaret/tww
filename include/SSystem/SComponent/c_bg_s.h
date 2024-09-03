@@ -4,6 +4,8 @@
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "dolphin/types.h"
 
+#define C_BG_INVALID_HEIGHT (-1e+9f)
+
 class fopAc_ac_c;
 class cBgS_ShdwDraw;
 class cBgS_LinChk;

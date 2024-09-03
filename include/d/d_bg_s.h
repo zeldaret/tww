@@ -122,7 +122,7 @@ public:
         mWallRadius = 0.0f;
         pm_pos = NULL;
         pm_old_pos = NULL;
-        mGroundH = -1e+9f;
+        mGroundH = C_BG_INVALID_HEIGHT;
         field_0x60 = 0;
         field_0x68 = 20.0f;
         field_0x58 = NULL;

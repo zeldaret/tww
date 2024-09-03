@@ -1314,7 +1314,7 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     
     cXyz r1_14;
     dBgS_GndChk r1_5C;
-    f32 f30 = -1e+9f;
+    f32 f30 = C_BG_INVALID_HEIGHT;
     r1_5C.OffWall();
     r1_14.y = actor->current.pos.y + 150.0f;
     static f32 l_ckOffset[][2] = {

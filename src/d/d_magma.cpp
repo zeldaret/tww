@@ -415,7 +415,7 @@ void dMagma_packet_c::update() {
 /* 800767E4-80076924       .text checkYpos__15dMagma_packet_cFR4cXyz */
 f32 dMagma_packet_c::checkYpos(cXyz& pos) {
     /* Nonmatching */
-    f32 ret = -100000000.0f;
+    f32 ret = C_BG_INVALID_HEIGHT;
     dMagma_floor_c* floor = mFloor;
     for (s32 i = 0; i < (s32)ARRAY_SIZE(mFloor); floor++, i++) {
         if (floor->mpBalls == NULL)

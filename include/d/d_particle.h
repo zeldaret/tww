@@ -54,7 +54,8 @@ public:
     bool isEnd() { return mFlag & 1; }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
-    /* 0x08 */ u8 field_0x08[0x10 - 0x08];
+    /* 0x08 */ const cXyz* mPos;
+    /* 0x0C */ const csXyz* mAngle;
     /* 0x10 */ u8 mFlag;
     /* 0x11 */ u8 mRateOff;
     /* 0x12 */ u8 field_0x12;
@@ -100,6 +101,8 @@ public:
     JPABaseEmitter* create(JPAEmitterManager*, u16, u8);
     JPABaseEmitter* createEmitter(JPAEmitterManager*);
     bool set(cXyz const*, u8, GXColor const&, GXColor const&, int);
+
+    u16 getID() { return mResID; }
 
     /* 0x004 */ JPABaseEmitter* mpBaseEmitter;
     /* 0x008 */ u16 mResID;
@@ -354,6 +357,20 @@ class dPa_control_c {
 public:
     dPa_control_c();
 
+    enum {
+        dPtclGroup_Normal_e,
+        dPtclGroup_NormalP1_e,
+        dPtclGroup_Toon_e,
+        dPtclGroup_ToonP1_e,
+        dPtclGroup_Projection_e,
+        dPtclGroup_ShipTail_e,
+        dPtclGroup_Wind_e,
+        dPtclGroup_2Dfore_e,
+        dPtclGroup_2Dback_e,
+        dPtclGroup_2DmenuFore_e,
+        dPtclGroup_2DmenuBack_e,
+    };
+
     static u8 getRM_ID(u16);
     void swapFrameBufferTexture();
     void createCommon(void const*);
@@ -369,11 +386,10 @@ public:
     JPABaseEmitter* set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*,
                         s8, GXColor const*, GXColor const*, cXyz const*);
     JPABaseEmitter* setBombSmoke(u16, cXyz const*, csXyz const*, cXyz const*, u8);
-    void setSimpleLand(int, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);
-    void setSimpleLand(cBgS_PolyInfo&, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*,
-                       int*, int);
+    JPABaseEmitter* setSimpleLand(int, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);
+    JPABaseEmitter* setSimpleLand(cBgS_PolyInfo&, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);
     s32 checkAtrCodeEffect(int);
-    void setNormalStripes(u16, cXyz const*, csXyz const*, cXyz const*, u8, u16);
+    JPABaseEmitter* setNormalStripes(u16, cXyz const*, csXyz const*, cXyz const*, u8, u16);
     bool newSimple(u16, u8);
     bool setSimple(u16, cXyz const*, u8, GXColor const&, GXColor const&, int);
     dPa_simpleEcallBack* getSimple(u16);
@@ -382,72 +398,72 @@ public:
                               const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                               s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                               const cXyz* pScale2D) {
-        return set(0, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(dPtclGroup_Normal_e, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* setNormalP1(u16 particleID, const cXyz* pos, const csXyz* angle,
                                 const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                                 s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                                 const cXyz* pScale2D) {
-        return set(1, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(dPtclGroup_NormalP1_e, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* setToon(u16 particleID, const cXyz* pos, const csXyz* angle,
                             const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                             s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                             const cXyz* pScale2D) {
-        return set(2, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(dPtclGroup_Toon_e, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* setToonP1(u16 particleID, const cXyz* pos, const csXyz* angle,
                               const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                               s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                               const cXyz* pScale2D) {
-        return set(3, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(dPtclGroup_ToonP1_e, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* setProjection(u16 particleID, const cXyz* pos, const csXyz* angle,
                                   const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                                   s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                                   const cXyz* pScale2D) {
-        return set(4, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(dPtclGroup_Projection_e, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* setShipTail(u16 particleID, const cXyz* pos, const csXyz* angle,
                                 const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                                 s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                                 const cXyz* pScale2D) {
-        return set(5, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(dPtclGroup_ShipTail_e, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* set2Dfore(u16 particleID, const cXyz* pos, const csXyz* angle,
                               const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                               s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                               const cXyz* pScale2D) {
-        return set(7, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(dPtclGroup_2Dfore_e, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* set2Dback(u16 particleID, const cXyz* pos, const csXyz* angle,
                               const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                               s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                               const cXyz* pScale2D) {
-        return set(8, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(dPtclGroup_2Dback_e, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* set2DmenuFore(u16 particleID, const cXyz* pos, const csXyz* angle,
                                   const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                                   s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                                   const cXyz* pScale2D) {
-        return set(9, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(dPtclGroup_2DmenuFore_e, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* setSingleRipple(u16 particleID, const cXyz* pos, const csXyz* angle,
                                     const cXyz* scale, u8 alpha) {
-        return set(5, particleID, pos, angle, scale, alpha, &mSingleRippleEcallBack, -1, NULL, NULL, NULL);
+        return set(dPtclGroup_ShipTail_e, particleID, pos, angle, scale, alpha, &mSingleRippleEcallBack, -1, NULL, NULL, NULL);
     }
 
-    void draw(JPADrawInfo* inf) { draw(inf, 0); }
-    void drawP1(JPADrawInfo* inf) { draw(inf, 1); }
-    void drawToon(JPADrawInfo* inf) { draw(inf, 2); }
-    void drawToonP1(JPADrawInfo* inf) { draw(inf, 3); }
-    void drawProjection(JPADrawInfo* inf) { draw(inf, 4); }
-    void drawShipTail(JPADrawInfo* inf) { draw(inf, 5); }
-    void drawWind(JPADrawInfo* inf) { draw(inf, 6); }
-    void draw2Dfore(JPADrawInfo* inf) { draw(inf, 7); }
-    void draw2Dback(JPADrawInfo* inf) { draw(inf, 8); }
-    void draw2DmenuFore(JPADrawInfo* inf) { draw(inf, 9); }
-    void draw2DmenuBack(JPADrawInfo* inf) { draw(inf, 10); }
+    void draw(JPADrawInfo* inf) { draw(inf, dPtclGroup_Normal_e); }
+    void drawP1(JPADrawInfo* inf) { draw(inf, dPtclGroup_NormalP1_e); }
+    void drawToon(JPADrawInfo* inf) { draw(inf, dPtclGroup_Toon_e); }
+    void drawToonP1(JPADrawInfo* inf) { draw(inf, dPtclGroup_ToonP1_e); }
+    void drawProjection(JPADrawInfo* inf) { draw(inf, dPtclGroup_Projection_e); }
+    void drawShipTail(JPADrawInfo* inf) { draw(inf, dPtclGroup_ShipTail_e); }
+    void drawWind(JPADrawInfo* inf) { draw(inf, dPtclGroup_Wind_e); }
+    void draw2Dfore(JPADrawInfo* inf) { draw(inf, dPtclGroup_2Dfore_e); }
+    void draw2Dback(JPADrawInfo* inf) { draw(inf, dPtclGroup_2Dfore_e); }
+    void draw2DmenuFore(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuFore_e); }
+    void draw2DmenuBack(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuBack_e); }
 
     u32 getParticleNum() { return mEmitterMng->getParticleNumber(); } 
     u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); } 

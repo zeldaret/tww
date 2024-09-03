@@ -41,6 +41,7 @@ public:
     JPABaseParticle() : mLink(this), mCurFrame(0.0f) {}
     void setOffsetPosition(f32 x, f32 y, f32 z) { mGlobalPosition.set(x, y, z); }
     void setOffsetPosition(const JGeometry::TVec3<f32>& pos) { mGlobalPosition.set(pos); }
+    void getOffsetPosition(JGeometry::TVec3<f32>& out) const { out.set(mPosition); } // XXX: something about this is wrong
     void getGlobalPosition(JGeometry::TVec3<f32>& out) const { out.set(mGlobalPosition); }
     s32 getAge() const { return mCurFrame; } // TODO: Not sure about this one, especially the cast to s32; this could also be mCurNormTime?
     void calcCB(JPABaseEmitter* emtr) { if (mpCallBack2 != NULL) mpCallBack2->execute(emtr, this); }
@@ -59,7 +60,6 @@ public:
     void getHeight() {}
     void getLifeTime() const {}
     void getLocalPosition(JGeometry::TVec3<f32>&) const {}
-    void getOffsetPosition(JGeometry::TVec3<f32>& out) const { out.set(mPosition); }
     void getVelVec(JGeometry::TVec3<f32>&) const {}
     void getWidth() {}
     void setDeleteParticleFlag() {}
