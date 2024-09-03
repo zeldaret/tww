@@ -118,10 +118,10 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
         JSULink<JPABaseParticle>* nextLink = link->getNext();
         JPABaseParticle* particle = link->getObject();
 
-        JGeometry::TVec3<f32> sp14;
-        particle->getGlobalPosition(sp14);
-        getMaxWaterY(&sp14);
-        particle->setOffsetPosition(sp14);
+        JGeometry::TVec3<f32> offsetPos;
+        particle->getOffsetPosition(offsetPos);
+        getMaxWaterY(&offsetPos);
+        particle->setOffsetPosition(offsetPos);
 
         link = nextLink;
     }
@@ -370,7 +370,7 @@ void daPy_fanSwingEcallBack_c::execute(JPABaseEmitter* emitter) {
 void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle* ptcl) {
     if (field_0x4) {
         JGeometry::TVec3<f32> ptclPos;
-        ptcl->getOffsetPosition(ptclPos);
+        ptcl->getGlobalPosition(ptclPos);
 
         cXyz pos(ptclPos.x, ptclPos.y + 25.0f, ptclPos.z);
         mGndChk.SetPos(&pos);

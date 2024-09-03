@@ -26,7 +26,7 @@ void JPABaseParticle::initParticle() {
     if ((emtr->mDataFlag & 0x08) != 0)
         setStatus(0x20);
 
-    mGlobalPosition.set(emtrInfo.mEmitterGlobalCenter);
+    mOffsetPosition.set(emtrInfo.mEmitterGlobalCenter);
 
     if (emtr->mInitialVelOmni)
         velOmni.setLength(emtrInfo.mVelOmni, emtr->mInitialVelOmni);
@@ -82,10 +82,10 @@ void JPABaseParticle::initParticle() {
     mLifeTime = emtr->mLifeTime * (1.0f - emtr->mLifeTimeRndm * emtr->getRandomF());
     mCurNormTime = 0.0f;
 
-    mPosition.set(
-        mGlobalPosition.x + mLocalPosition.x * emtrInfo.mPublicScale.x,
-        mGlobalPosition.y + mLocalPosition.y * emtrInfo.mPublicScale.y,
-        mGlobalPosition.z + mLocalPosition.z * emtrInfo.mPublicScale.z
+    mGlobalPosition.set(
+        mOffsetPosition.x + mLocalPosition.x * emtrInfo.mPublicScale.x,
+        mOffsetPosition.y + mLocalPosition.y * emtrInfo.mPublicScale.y,
+        mOffsetPosition.z + mLocalPosition.z * emtrInfo.mPublicScale.z
     );
 
     setCallBackPtr(emtr->mpParticleCallBack);
@@ -139,7 +139,7 @@ void JPABaseParticle::initChild(JPABaseParticle* parent) {
     if (emtr->checkEmDataFlag(0x10))
         setStatus(0x20);
 
-    mGlobalPosition.set(parent->mGlobalPosition);
+    mOffsetPosition.set(parent->mOffsetPosition);
     mLocalPosition.set(parent->mLocalPosition);
 
     f32 posRndm = sweep->getPosRndm();
@@ -175,7 +175,7 @@ void JPABaseParticle::incFrame() {
 void JPABaseParticle::calcVelocity() {
     mFieldVel.zero();
     if (checkStatus(0x20))
-        mGlobalPosition.set(JPABaseEmitter::emtrInfo.mEmitterGlobalCenter);
+        mOffsetPosition.set(JPABaseEmitter::emtrInfo.mEmitterGlobalCenter);
     mBaseVel.add(mAccel);
     if (!checkStatus(0x40))
         JPABaseEmitter::emtrInfo.mpCurEmitter->mFieldManager.calc(this);
@@ -196,10 +196,10 @@ void JPABaseParticle::calcVelocity() {
 void JPABaseParticle::calcPosition() {
     mLocalPosition.add(mVelocity);
 
-    mPosition.set(
-        mLocalPosition.x * JPABaseEmitter::emtrInfo.mPublicScale.x + mGlobalPosition.x,
-        mLocalPosition.y * JPABaseEmitter::emtrInfo.mPublicScale.y + mGlobalPosition.y,
-        mLocalPosition.z * JPABaseEmitter::emtrInfo.mPublicScale.z + mGlobalPosition.z
+    mGlobalPosition.set(
+        mLocalPosition.x * JPABaseEmitter::emtrInfo.mPublicScale.x + mOffsetPosition.x,
+        mLocalPosition.y * JPABaseEmitter::emtrInfo.mPublicScale.y + mOffsetPosition.y,
+        mLocalPosition.z * JPABaseEmitter::emtrInfo.mPublicScale.z + mOffsetPosition.z
     );
 }
 

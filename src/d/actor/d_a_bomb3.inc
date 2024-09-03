@@ -124,7 +124,7 @@ void daBomb_fuseSparksEcallBack::execute(JPABaseEmitter* emitter) {
         JSUPtrLink* next = link->getNext();
 
         JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
-        ptcl->mGlobalPosition.set(x, y, z);
+        ptcl->setOffsetPosition(x, y, z);
 
         link = next;
     }

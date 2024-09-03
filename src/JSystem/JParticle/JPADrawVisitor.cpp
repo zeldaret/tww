@@ -290,7 +290,7 @@ void JPADrawExecBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl
     scaleY *= (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY);
 
     JGeometry::TVec3<f32> pt;
-    pt.set(ptcl->mPosition);
+    ptcl->getGlobalPosition(pt);
     MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, pt, &pt);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -323,7 +323,7 @@ void JPADrawExecRotBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* p
     f32 y1 = -ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY);
 
     JGeometry::TVec3<f32> pt;
-    pt.set(ptcl->mPosition);
+    ptcl->getGlobalPosition(pt);
     MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, pt, &pt);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -355,12 +355,12 @@ void dirTypeVel(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f3
 
 /* 80261368-80261384       .text dirTypePos__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
 void dirTypePos(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
-    out.set(ptcl->mLocalPosition);
+    ptcl->getLocalPosition(out);
 }
 
 /* 80261384-802613C4       .text dirTypePosInv__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
 void dirTypePosInv(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
-    out.set(ptcl->mLocalPosition);
+    ptcl->getLocalPosition(out);
     out.negate();
 }
 
@@ -372,10 +372,10 @@ void dirTypeEmtrDir(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec
 /* 802613E8-802614A8       .text dirTypePrevPtcl__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
 void dirTypePrevPtcl(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
     JGeometry::TVec3<f32> pos;
-    pos.set(ptcl->mPosition);
+    ptcl->getGlobalPosition(pos);
     JSULink<JPABaseParticle>* prev = ptcl->getLinkBufferPtr()->getPrev();
     if (prev != NULL) {
-        out.set(prev->getObject()->mPosition);
+        prev->getObject()->getGlobalPosition(out);
     } else {
         emtr->calcEmitterGlobalPosition(out);
     }
@@ -541,9 +541,9 @@ void JPADrawExecRotation::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl)
     JPADrawContext::pcb->mRotTypeFunc(sin, cos, rotMtx);
 
     MTXMultVecArray(rotMtx, pt, pt, ARRAY_SIZE(pt));
-    f32 x = ptcl->mPosition.x;
-    f32 y = ptcl->mPosition.y;
-    f32 z = ptcl->mPosition.z;
+    f32 x = ptcl->mGlobalPosition.x;
+    f32 y = ptcl->mGlobalPosition.y;
+    f32 z = ptcl->mGlobalPosition.z;
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(pt[0].x + x, pt[0].y + y, pt[0].z + z);
@@ -589,9 +589,9 @@ void JPADrawExecRotationCross::exec(const JPADrawContext* pDC, JPABaseParticle* 
     JPADrawContext::pcb->mRotTypeFunc(sin, cos, rotMtx);
 
     MTXMultVecArray(rotMtx, pt, pt, ARRAY_SIZE(pt));
-    f32 x = ptcl->mPosition.x;
-    f32 y = ptcl->mPosition.y;
-    f32 z = ptcl->mPosition.z;
+    f32 x = ptcl->mGlobalPosition.x;
+    f32 y = ptcl->mGlobalPosition.y;
+    f32 z = ptcl->mGlobalPosition.z;
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 8);
     GXPosition3f32(pt[0].x + x, pt[0].y + y, pt[0].z + z);
@@ -619,7 +619,7 @@ void JPADrawExecPoint::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
         return;
 
     JGeometry::TVec3<f32> pos;
-    pos.set(ptcl->mPosition);
+    ptcl->getGlobalPosition(pos);
     GXBegin(GX_POINTS, GX_VTXFMT0, 1);
     GXPosition3f32(pos.x, pos.y, pos.z);
     GXTexCoord2f32(0.0f, 0.0f);
@@ -634,7 +634,7 @@ void JPADrawExecLine::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JGeometry::TVec3<f32> pt0;
     JGeometry::TVec3<f32> vel;
 
-    pt0.set(ptcl->mPosition);
+    ptcl->getGlobalPosition(pt0);
     vel.set(ptcl->mVelocity);
     if (!vel.isZero()) {
         vel.normalize();

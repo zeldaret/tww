@@ -134,7 +134,7 @@ void JPAAirField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     if (data->mSttFlag & 0x01) {
         JGeometry::TVec3<f32> vel;
         if (data->mSttFlag & 0x02) {
-            vel.sub(ptcl->mPosition, data->mWork0);
+            vel.sub(ptcl->mGlobalPosition, data->mWork0);
         } else {
             vel.sub(ptcl->mLocalPosition, data->mWork0);
         }
@@ -169,7 +169,7 @@ void JPAMagnetField::preCalc(JPAFieldData* data) {
 /* 8025A788-8025A8AC       .text calc__14JPAMagnetFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAMagnetField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     if (data->mSttFlag & 0x02) {
-        data->mVel.sub(data->mWork0, ptcl->mPosition);
+        data->mVel.sub(data->mWork0, ptcl->mGlobalPosition);
     } else {
         data->mVel.sub(data->mWork0, ptcl->mLocalPosition);
     }
@@ -192,7 +192,7 @@ void JPANewtonField::preCalc(JPAFieldData* data) {
 /* 8025A954-8025ABB8       .text calc__14JPANewtonFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPANewtonField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     if (data->mSttFlag & 0x02) {
-        data->mVel.sub(data->mWork0, ptcl->mPosition);
+        data->mVel.sub(data->mWork0, ptcl->mGlobalPosition);
     } else {
         data->mVel.sub(data->mWork0, ptcl->mLocalPosition);
     }
@@ -413,7 +413,7 @@ void JPAFieldManager::calc(JPABaseParticle* ptcl) {
     for (JSULink<JPAFieldData>* link = mList.getFirst(); link != NULL; link = link->getNext()) {
         JPAFieldData* data = link->getObject();
         if (data->mSttFlag & 0x80) {
-            if (!data->mpBaseField->isItinRange(data, ptcl->mPosition.squared(data->mPos)))
+            if (!data->mpBaseField->isItinRange(data, ptcl->mGlobalPosition.squared(data->mPos)))
                 continue;
         }
         data->mpBaseField->calc(data, ptcl);

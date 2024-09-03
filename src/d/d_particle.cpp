@@ -107,9 +107,9 @@ void dPa_J3DmodelEmitter_c::draw() {
             }
 
             // TODO: all the math
-            mtx1[0][3] = ptcl->mPosition.x;
-            mtx1[1][3] = ptcl->mPosition.y;
-            mtx1[2][3] = ptcl->mPosition.z;
+            mtx1[0][3] = ptcl->mGlobalPosition.x;
+            mtx1[1][3] = ptcl->mGlobalPosition.y;
+            mtx1[2][3] = ptcl->mGlobalPosition.z;
             g_env_light.setLightTevColorType(model, &tevStr);
 
             if (field_0x1c != NULL && field_0x20 != NULL) {
@@ -409,12 +409,13 @@ void dPa_smokeEcallBack::end() {
 
 /* 8007BBD8-8007BC84       .text dPa_setWindPower__FP15JPABaseParticle */
 void dPa_setWindPower(JPABaseParticle* ptcl) {
-    /* Nonmatching */
-    cXyz pos(ptcl->mGlobalPosition);
+    JGeometry::TVec3<f32> offsetPos;
     cXyz wind;
     f32 pow;
-    dKyw_get_AllWind_vec(&pos, &wind, &pow);
-    ptcl->mGlobalPosition.add(pos, wind * (pow * 8.0f));
+    ptcl->getOffsetPosition(offsetPos);
+    dKyw_get_AllWind_vec((cXyz*)&offsetPos, &wind, &pow);
+    offsetPos += wind * (pow * 8.0f);
+    ptcl->setOffsetPosition(offsetPos);
 }
 
 /* 8007BC84-8007BCB4       .text execute__18dPa_smokePcallBackFP14JPABaseEmitterP15JPABaseParticle */
@@ -963,9 +964,9 @@ void dPa_singleRippleEcallBack::draw(JPABaseEmitter*) {
 void dPa_ripplePcallBack::execute(JPABaseEmitter* param_1, JPABaseParticle* ptcl) {
     /* Nonmatching */
     f32 height;
-    cXyz pos(ptcl->mPosition.x, ptcl->mPosition.y, ptcl->mPosition.z);
+    cXyz pos(ptcl->mGlobalPosition.x, ptcl->mGlobalPosition.y, ptcl->mGlobalPosition.z);
     if (fopAcM_getWaterY(&pos, &height)) {
-        ptcl->mGlobalPosition.y = height;
+        ptcl->mOffsetPosition.y = height;
     }
 }
 
