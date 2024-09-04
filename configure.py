@@ -16,15 +16,7 @@ import argparse
 import sys
 from pathlib import Path
 from typing import Any, Dict, List
-
-from tools.project import (
-    Object,
-    ProgressCategory,
-    ProjectConfig,
-    calculate_progress,
-    generate_build,
-    is_windows,
-)
+from tools.project import *
 
 # Game versions
 DEFAULT_VERSION = 1
@@ -145,7 +137,7 @@ if args.no_asm:
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
 config.dtk_tag = "v0.9.2"
-config.objdiff_tag = "v2.0.0-beta.4"
+config.objdiff_tag = "v2.0.0-beta.5"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -298,14 +290,6 @@ Equivalent = config.non_matching  # Object should be linked when configured with
 
 config.warn_missing_config = True
 config.warn_missing_source = False
-config.progress_categories = [
-    ProgressCategory("all", "All"),
-    ProgressCategory("dol", "DOL"),
-    ProgressCategory("modules", "Modules"),
-    ProgressCategory("core", "Core"),
-    ProgressCategory("game", "Game"),
-    ProgressCategory("dolphin", "Dolphin"),
-]
 config.libs = [
     {
         "lib": "machine",
@@ -1724,12 +1708,19 @@ config.libs = [
     ActorRel(NonMatching, "d_a_movie_player", extra_cflags=["-O3,p"]),
 ]
 
+# Optional extra categories for progress tracking
+config.progress_categories = [
+    ProgressCategory("core", "Core Game Engine"),
+    ProgressCategory("game", "TWW Game Code"),
+    ProgressCategory("dolphin", "GameCube Specific Code"),
+]
+config.progress_each_module = args.verbose
+
 if args.mode == "configure":
     # Write build.ninja and objdiff.json
     generate_build(config)
 elif args.mode == "progress":
     # Print progress and write progress.json
-    config.progress_each_module = args.verbose
     calculate_progress(config)
 else:
     sys.exit("Unknown mode: " + args.mode)

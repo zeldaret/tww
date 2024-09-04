@@ -17,7 +17,7 @@ import os
 import platform
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, cast
 
 from . import ninja_syntax
 from .ninja_syntax import serialize_path
@@ -72,6 +72,7 @@ class Object:
         def set_default(key: str, value: Any) -> None:
             if obj.options[key] is None:
                 obj.options[key] = value
+
         set_default("add_to_all", True)
         set_default("asflags", config.asflags)
         set_default("asm_dir", config.asm_dir)
@@ -156,11 +157,11 @@ class ProjectConfig:
             None  # Custom build steps, types are ["pre-compile", "post-compile", "post-link", "post-build"]
         )
 
-        # Progress output and progress.json config
+        # Progress output, progress.json and report.json config
         self.progress_all: bool = True  # Include combined "all" category
         self.progress_modules: bool = True  # Include combined "modules" category
         self.progress_each_module: bool = (
-            True  # Include individual modules, disable for large numbers of modules
+            False  # Include individual modules, disable for large numbers of modules
         )
         self.progress_categories: List[ProgressCategory] = []  # Additional categories
 
@@ -567,8 +568,8 @@ def generate_build_ninja(
         n.comment("Custom project build rules (pre/post-processing)")
     for rule in config.custom_build_rules or {}:
         n.rule(
-            name=rule.get("name"),
-            command=rule.get("command"),
+            name=cast(str, rule.get("name")),
+            command=cast(str, rule.get("command")),
             description=rule.get("description", None),
             depfile=rule.get("depfile", None),
             generator=rule.get("generator", False),
@@ -580,12 +581,12 @@ def generate_build_ninja(
         )
         n.newline()
 
-    def write_custom_step(step: str) -> List[str]:
-        implicit = []
+    def write_custom_step(step: str) -> List[str | Path]:
+        implicit: List[str | Path] = []
         if config.custom_build_steps and step in config.custom_build_steps:
             n.comment(f"Custom build steps ({step})")
             for custom_step in config.custom_build_steps[step]:
-                outputs = custom_step.get("outputs")
+                outputs = cast(List[str | Path], custom_step.get("outputs"))
 
                 if isinstance(outputs, list):
                     implicit.extend(outputs)
@@ -594,7 +595,7 @@ def generate_build_ninja(
 
                 n.build(
                     outputs=outputs,
-                    rule=custom_step.get("rule"),
+                    rule=cast(str, custom_step.get("rule")),
                     inputs=custom_step.get("inputs", None),
                     implicit=custom_step.get("implicit", None),
                     order_only=custom_step.get("order_only", None),
@@ -734,7 +735,7 @@ def generate_build_ninja(
             used_compiler_versions.add(obj.options["mw_version"])
 
             # Avoid creating duplicate build rules
-            if obj.src_obj_path in source_added:
+            if obj.src_obj_path is None or obj.src_obj_path in source_added:
                 return obj.src_obj_path
             source_added.add(obj.src_obj_path)
 
@@ -757,15 +758,16 @@ def generate_build_ninja(
             )
 
             # Add ctx build rule
-            n.build(
-                outputs=obj.ctx_path,
-                rule="decompctx",
-                inputs=src_path,
-                implicit=decompctx,
-            )
+            if obj.ctx_path is not None:
+                n.build(
+                    outputs=obj.ctx_path,
+                    rule="decompctx",
+                    inputs=src_path,
+                    implicit=decompctx,
+                )
 
             # Add host build rule
-            if obj.options["host"]:
+            if obj.options["host"] and obj.host_obj_path is not None:
                 n.build(
                     outputs=obj.host_obj_path,
                     rule="host_cc" if src_path.suffix == ".c" else "host_cpp",
@@ -784,7 +786,9 @@ def generate_build_ninja(
 
             return obj.src_obj_path
 
-        def asm_build(obj: Object, src_path: Path, obj_path: Path) -> Optional[Path]:
+        def asm_build(
+            obj: Object, src_path: Path, obj_path: Optional[Path]
+        ) -> Optional[Path]:
             if obj.options["asflags"] is None:
                 sys.exit("ProjectConfig.asflags missing")
             asflags_str = make_flags_str(obj.options["asflags"])
@@ -793,7 +797,7 @@ def generate_build_ninja(
                 asflags_str += " " + extra_asflags_str
 
             # Avoid creating duplicate build rules
-            if obj_path in source_added:
+            if obj_path is None or obj_path in source_added:
                 return obj_path
             source_added.add(obj_path)
 
@@ -825,7 +829,7 @@ def generate_build_ninja(
 
             link_built_obj = obj.completed
             built_obj_path: Optional[Path] = None
-            if obj.src_path.exists():
+            if obj.src_path is not None and obj.src_path.exists():
                 if obj.src_path.suffix in (".c", ".cp", ".cpp"):
                     # Add MWCC & host build rules
                     built_obj_path = c_build(obj, obj.src_path)
@@ -932,7 +936,7 @@ def generate_build_ninja(
             rspfile="$rspfile",
             rspfile_content="$in_newline",
         )
-        generated_rels = []
+        generated_rels: List[str] = []
         for idx, link in enumerate(build_config["links"]):
             # Map module names to link steps
             link_steps_local = list(
@@ -1048,10 +1052,11 @@ def generate_build_ninja(
             command=f"{objdiff} report generate -o $out",
             description="REPORT",
         )
+        report_implicit: List[str | Path] = [objdiff, "all_source"]
         n.build(
             outputs=report_path,
             rule="report",
-            implicit=[objdiff, "all_source"],
+            implicit=report_implicit,
         )
 
         ###
@@ -1169,7 +1174,7 @@ def generate_objdiff_config(
         return
 
     objdiff_config: Dict[str, Any] = {
-        "min_version": "1.0.0",
+        "min_version": "2.0.0-beta.5",
         "custom_make": "ninja",
         "build_target": False,
         "watch_patterns": [
@@ -1185,6 +1190,7 @@ def generate_objdiff_config(
             "*.json",
         ],
         "units": [],
+        "progress_categories": [],
     }
 
     # decomp.me compiler name mapping
@@ -1220,22 +1226,21 @@ def generate_objdiff_config(
         "Wii/1.7": "mwcc_43_213",
     }
 
-    build_path = config.out_path()
-
-    def add_unit(build_obj: Dict[str, Any], module_name: str) -> None:
-        if build_obj["autogenerated"]:
-            # Skip autogenerated objects
-            return
-
+    def add_unit(
+        build_obj: Dict[str, Any], module_name: str, progress_categories: List[str]
+    ) -> None:
         obj_path, obj_name = build_obj["object"], build_obj["name"]
         base_object = Path(obj_name).with_suffix("")
         unit_config: Dict[str, Any] = {
             "name": Path(module_name) / base_object,
             "target_path": obj_path,
+            "metadata": {
+                "auto_generated": build_obj["autogenerated"],
+            },
         }
 
         obj = objects.get(obj_name)
-        if obj is None or not obj.src_path.exists():
+        if obj is None or not obj.src_path or not obj.src_path.exists():
             objdiff_config["units"].append(unit_config)
             return
 
@@ -1264,8 +1269,6 @@ def generate_objdiff_config(
                 cflags.insert(0, "-lang=c")
 
         unit_config["base_path"] = obj.src_obj_path
-        unit_config["reverse_fn_order"] = reverse_fn_order
-        unit_config["complete"] = obj.completed
         compiler_version = COMPILER_MAP.get(obj.options["mw_version"])
         if compiler_version is None:
             print(f"Missing scratch compiler mapping for {obj.options['mw_version']}")
@@ -1281,25 +1284,56 @@ def generate_objdiff_config(
                 "ctx_path": obj.ctx_path,
                 "build_ctx": True,
             }
-        metadata = {
+        category_opt: List[str] | str = obj.options["progress_category"]
+        if isinstance(category_opt, list):
+            progress_categories.extend(category_opt)
+        elif category_opt is not None:
+            progress_categories.append(category_opt)
+        unit_config["metadata"].update({
+            "complete": obj.completed,
+            "reverse_fn_order": reverse_fn_order,
             "source_path": obj.src_path,
-        }
-        if obj.options["progress_category"] is not None:
-            if isinstance(obj.options["progress_category"], list):
-                metadata["progress_categories"] = obj.options["progress_category"]
-            else:
-                metadata["progress_categories"] = [obj.options["progress_category"]]
-        unit_config["metadata"] = metadata
+            "progress_categories": progress_categories,
+        })
         objdiff_config["units"].append(unit_config)
 
     # Add DOL units
     for unit in build_config["units"]:
-        add_unit(unit, build_config["name"])
+        progress_categories = []
+        # Only include a "dol" category if there are any modules
+        # Otherwise it's redundant with the global report measures
+        if len(build_config["modules"]) > 0:
+            progress_categories.append("dol")
+        add_unit(unit, build_config["name"], progress_categories)
 
     # Add REL units
     for module in build_config["modules"]:
         for unit in module["units"]:
-            add_unit(unit, module["name"])
+            progress_categories = []
+            if config.progress_modules:
+                progress_categories.append("modules")
+            if config.progress_each_module:
+                progress_categories.append(module["name"])
+            add_unit(unit, module["name"], progress_categories)
+
+    # Add progress categories
+    def add_category(id: str, name: str):
+        objdiff_config["progress_categories"].append(
+            {
+                "id": id,
+                "name": name,
+            }
+        )
+
+    if len(build_config["modules"]) > 0:
+        add_category("dol", "DOL")
+        if config.progress_modules:
+            add_category("modules", "Modules")
+        if config.progress_each_module:
+            for module in build_config["modules"]:
+                add_category(module["name"], module["name"])
+    for category in config.progress_categories:
+        add_category(category.id, category.name)
 
     # Write objdiff.json
     with open("objdiff.json", "w", encoding="utf-8") as w:
@@ -1364,16 +1398,15 @@ def calculate_progress(config: ProjectConfig) -> None:
             return self.data_progress / self.data_total
 
     progress_units: Dict[str, ProgressUnit] = {}
+    if config.progress_all:
+        progress_units["all"] = ProgressUnit("All")
+    progress_units["dol"] = ProgressUnit("DOL")
+    if len(build_config["modules"]) > 0:
+        if config.progress_modules:
+            progress_units["modules"] = ProgressUnit("Modules")
     if len(config.progress_categories) > 0:
         for category in config.progress_categories:
             progress_units[category.id] = ProgressUnit(category.name)
-    else:
-        if config.progress_all:
-            progress_units["all"] = ProgressUnit("All")
-        progress_units["dol"] = ProgressUnit("DOL")
-        if len(build_config["modules"]) > 0:
-            if config.progress_modules:
-                progress_units["modules"] = ProgressUnit("Modules")
     if config.progress_each_module:
         for module in build_config["modules"]:
             progress_units[module["name"]] = ProgressUnit(module["name"])
@@ -1389,12 +1422,12 @@ def calculate_progress(config: ProjectConfig) -> None:
         add_unit("dol", unit)
         obj = objects.get(unit["name"])
         if obj is not None:
-            category = obj.options["progress_category"]
-            if isinstance(category, list):
-                for category in category:
-                    add_unit(category, unit)
-            elif category is not None:
-                add_unit(category, unit)
+            category_opt = obj.options["progress_category"]
+            if isinstance(category_opt, list):
+                for id in category_opt:
+                    add_unit(id, unit)
+            elif category_opt is not None:
+                add_unit(category_opt, unit)
 
     # Add REL units
     for module in build_config["modules"]:
@@ -1404,12 +1437,12 @@ def calculate_progress(config: ProjectConfig) -> None:
             add_unit(module["name"], unit)
             obj = objects.get(unit["name"])
             if obj is not None:
-                category = obj.options["progress_category"]
-                if isinstance(category, list):
-                    for category in category:
-                        add_unit(category, unit)
-                elif category is not None:
-                    add_unit(category, unit)
+                category_opt = obj.options["progress_category"]
+                if isinstance(category_opt, list):
+                    for id in category_opt:
+                        add_unit(id, unit)
+                elif category_opt is not None:
+                    add_unit(category_opt, unit)
 
     # Print human-readable progress
     print("Progress:")
