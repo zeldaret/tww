@@ -21,20 +21,19 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
     - name: Git config
       run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
     - name: Prepare
       run: cp -R /orig/${{matrix.version}} orig
-    - name: Download objdiff CLI
-      if: github.ref == 'refs/heads/main'
-      run: |
-        python tools/download_tool.py --tag v2.0.0-beta.4 objdiff-cli objdiff-cli
     - name: Build
       run: |
         python configure.py --version ${{matrix.version}} --compilers /compilers --warn error
         ninja
         python configure.py --version ${{matrix.version}} --compilers /compilers --warn off
-        ninja all_source
+        ninja all_source build/${{ matrix.version }}/progress.json build/${{ matrix.version }}/report.json
     - name: Upload progress
       if: github.ref == 'refs/heads/main'
       continue-on-error: true
@@ -43,16 +42,11 @@ jobs:
       run: |
         python tools/upload_progress.py -b https://progress.decomp.club/ -p tww -v ${{matrix.version}} \
           build/${{matrix.version}}/progress.json
-    - name: Generate objdiff progress report
-      if: github.ref == 'refs/heads/main'
-      run: |
-        ./objdiff-cli report generate -o report.json
-    - name: Save objdiff progress report artifact
-      if: github.ref == 'refs/heads/main'
+    - name: Upload report
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.version }}-report-${{ github.sha }}
-        path: report.json
+        name: ${{ matrix.version }}_report
+        path: build/${{ matrix.version }}/report.json
 
   website:
     runs-on: ubuntu-latest
