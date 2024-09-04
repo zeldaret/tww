@@ -60,7 +60,7 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v4
       with:
-        name: GZLE01-report-${{ github.sha }}
+        name: GZLE01_report
         path: ./artifacts
     - name: Rename artifact
       run: |
