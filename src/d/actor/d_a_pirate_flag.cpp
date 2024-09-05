@@ -105,8 +105,37 @@ static u8 l_pirate_flag_matDL[0x34] ALIGN_DECL(32) = {
 static daPirate_Flag_HIO_c l_HIO;
 
 /* 000000EC-00000364       .text setCorrectNrmAngle__22daPirate_Flag_packet_cFsf */
-void daPirate_Flag_packet_c::setCorrectNrmAngle(s16, f32) {
-    /* Nonmatching */
+void daPirate_Flag_packet_c::setCorrectNrmAngle(s16 param_0, f32 param_1) {
+    m87C += (s16)((s32)cM_rndF(200.0f) + 900);
+    m878 = 300.0f * cM_ssin(m87C);
+
+    s16 temp_r0 = param_0 + 0x8000;
+    s32 param_0_int = param_0; // Probably fake variable
+    s16 temp_r26 = (l_HIO.m1C * (1.0f - param_1 * 0.5f));
+
+    if (abs((s32)temp_r0) < (s16)cM_deg2s(temp_r26 * 1.25f)) {
+        s16 var_r4;
+        if (temp_r0 > 0) {
+            var_r4 = (s16)cM_deg2s(-temp_r26);
+        } else {
+            var_r4 = (s16)cM_deg2s(temp_r26);
+        }
+
+        cLib_addCalcAngleS2(&m87A, var_r4, 5, 0xC0);
+    } else if (abs(param_0_int) < (s16)cM_deg2s(temp_r26 * 1.25f)) {
+        s16 var_r4;
+        if ((s16)param_0_int > 0) { // Fakematch? Pointless cast
+            var_r4 = (s16)cM_deg2s(-temp_r26);
+        } else {
+            var_r4 = (s16)cM_deg2s(temp_r26);
+        }
+
+        cLib_addCalcAngleS2(&m87A, var_r4, 5, 0xC0);
+    } else {
+        cLib_addCalcAngleS2(&m87A, 0, 5, 0xC0);
+    }
+
+    m878 += m87A;
 }
 
 /* 00000364-000003F0       .text setBackNrm__22daPirate_Flag_packet_cFv */
