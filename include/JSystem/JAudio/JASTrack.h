@@ -96,7 +96,13 @@ namespace JASystem {
 
         class MoveParam_ {
         public:
-            MoveParam_();
+            MoveParam_()
+                : mCurrentValue(0.0f)
+                , mTargetValue(0.0f)
+                , mMoveTime(0.0f)
+                , mMoveAmount(0.0f)
+            {
+            }
 
             /* 0x00 */ f32 mCurrentValue;
             /* 0x04 */ f32 mTargetValue;
@@ -108,10 +114,21 @@ namespace JASystem {
         public:
             AInnerParam_();
 
-            /* 0x000 */ MoveParam_ mIIRs[4];
-            /* 0x010 */ f32 field_0x10[32];
-            /* 0x0C0 */ MoveParam_ field_0xc0[4];
-            /* 0x100 */ f32 field_0x100[8];
+            /* 0x000 */ MoveParam_ mVolume;
+            /* 0x010 */ MoveParam_ mPitch;
+            /* 0x020 */ MoveParam_ mFxmix;
+            /* 0x030 */ MoveParam_ mPan;
+            /* 0x040 */ MoveParam_ mDolby;
+            /* 0x050 */ MoveParam_ _50;
+            /* 0x060 */ MoveParam_ mOsc0Width;
+            /* 0x070 */ MoveParam_ mOsc0Rate;
+            /* 0x080 */ MoveParam_ mOsc0Vertex;
+            /* 0x090 */ MoveParam_ mOsc1Width;
+            /* 0x0A0 */ MoveParam_ mOsc1Rate;
+            /* 0x0B0 */ MoveParam_ mOsc1Vertex;
+            /* 0x0C0 */ MoveParam_ mIIRs[4];
+            /* 0x100 */ MoveParam_ _100;
+            /* 0x110 */ MoveParam_ _110;
         };
 
         class TimedParam_ {

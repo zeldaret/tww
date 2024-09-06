@@ -581,25 +581,32 @@ int JASystem::TSeqParser::cmdVibPitch(TTrack* track, u32* args) {
 
 /* 8027F544-8027F5C8       .text cmdIIRSet__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdIIRSet(TTrack* track, u32* args) {
-    /* Nonmatching */
-    for (int i = 0; i < 4; i++) {
-        track->mTimedParam.mInnerParam.mIIRs[i].mTargetValue = (s16)args[i] / 32768.0f;
-        track->mTimedParam.mInnerParam.mIIRs[i].mCurrentValue = track->mTimedParam.mInnerParam.mIIRs[i].mTargetValue;
-        track->mTimedParam.mInnerParam.mIIRs[i].mMoveAmount = 0.0f;
-        track->mTimedParam.mInnerParam.mIIRs[i].mMoveTime = 1.0f;
+    for (u8 i = 0; i < 4; i++) {
+        // TTrack::MoveParam_* iir = &track->mTimedParam.mInnerParam.mIIRs[i];
+        // Fakematch? Accessing mIIRs directly results in fewer instructions than indexing into
+        // mVolume as if it was an array.
+        TTrack::MoveParam_* iir = (&track->mTimedParam.mInnerParam.mVolume) + (u8)(i + 0xC);
+        iir->mTargetValue = (s16)args[i] / 32768.0f;
+        iir->mCurrentValue = iir->mTargetValue;
+        iir->mMoveAmount = 0.0f;
+        iir->mMoveTime = 1.0f;
     }
     return 0;
 }
 
 /* 8027F5C8-8027F65C       .text cmdIIRCutOff__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdIIRCutOff(TTrack* track, u32* args) {
-    /* Nonmatching */
-    s16* table = &JASystem::Player::CUTOFF_TO_IIR_TABLE[u8(args[0]) * 4];
-    for (int i = 0; i < 4; i++) {
-        track->mTimedParam.mInnerParam.mIIRs[i].mTargetValue = table[i] / (32768.0f - 1.0f);
-        track->mTimedParam.mInnerParam.mIIRs[i].mCurrentValue = track->mTimedParam.mInnerParam.mIIRs[i].mTargetValue;
-        track->mTimedParam.mInnerParam.mIIRs[i].mMoveAmount = 0.0f;
-        track->mTimedParam.mInnerParam.mIIRs[i].mMoveTime = 1.0f;
+    u8 iirTableIdx = args[0];
+    for (u8 i = 0; i < 4; i++) {
+        s16* table = &JASystem::Player::CUTOFF_TO_IIR_TABLE[iirTableIdx * 4];
+        // TTrack::MoveParam_* iir = &track->mTimedParam.mInnerParam.mIIRs[i];
+        // Fakematch? Accessing mIIRs directly results in fewer instructions than indexing into
+        // mVolume as if it was an array.
+        TTrack::MoveParam_* iir = (&track->mTimedParam.mInnerParam.mVolume) + (u8)(i + 0xC);
+        iir->mTargetValue = table[i] / (32768.0f - 1.0f);
+        iir->mCurrentValue = iir->mTargetValue;
+        iir->mMoveAmount = 0.0f;
+        iir->mMoveTime = 1.0f;
     }
     return 0;
 }

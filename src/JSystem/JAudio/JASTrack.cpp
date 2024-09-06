@@ -724,16 +724,22 @@ f32 JASystem::TVibrate::getValue() const {
     /* Nonmatching */
 }
 
-/* 80283FD0-80283FE8       .text __ct__Q38JASystem6TTrack10MoveParam_Fv */
-JASystem::TTrack::MoveParam_::MoveParam_() {
-    /* Nonmatching */
-    mCurrentValue = 0.0f;
-    mTargetValue = 0.0f;
-    mMoveTime = 0.0f;
-    mMoveAmount = 0.0f;
-}
-
 /* 80283FE8-80284118       .text __ct__Q38JASystem6TTrack12AInnerParam_Fv */
-JASystem::TTrack::AInnerParam_::AInnerParam_() {
-    /* Nonmatching */
+JASystem::TTrack::AInnerParam_::AInnerParam_()
+    : mVolume()
+    , mPitch()
+    , mFxmix()
+    , mPan()
+    , mDolby()
+    , _50()
+    , mOsc0Width()
+    , mOsc0Rate()
+    , mOsc0Vertex()
+    , mOsc1Width()
+    , mOsc1Rate()
+    , mOsc1Vertex()
+    , mIIRs()
+    , _100()
+    , _110()
+{
 }
