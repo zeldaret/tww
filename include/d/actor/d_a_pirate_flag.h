@@ -25,7 +25,10 @@ public:
 public:
     /* 0x010 */ Mtx m010;
     /* 0x040 */ dKy_tevstr_c* m040;
-    /* 0x044 */ u8 m044[0x878 - 0x044];
+    /* 0x044 */ cXyz m044[2][25];
+    /* 0x29C */ cXyz m29C[2][25];
+    /* 0x4F4 */ cXyz m4F4[2][25];
+    /* 0x74C */ u8 pad74C[0x12C];
     /* 0x878 */ s16 m878;
     /* 0x87A */ s16 m87A;
     /* 0x87C */ s16 m87C;

@@ -140,7 +140,15 @@ void daPirate_Flag_packet_c::setCorrectNrmAngle(s16 param_0, f32 param_1) {
 
 /* 00000364-000003F0       .text setBackNrm__22daPirate_Flag_packet_cFv */
 void daPirate_Flag_packet_c::setBackNrm() {
-    /* Nonmatching */
+    cXyz* a = m29C[m87E];
+    cXyz* b = m4F4[m87E];
+    for (int i = 0; i < (s32)ARRAY_SIZE(m29C[0]); i++) {
+        b->setall(0.0f);
+        *b -= *a;
+
+        a++;
+        b++;
+    }
 }
 
 /* 000003F0-00000800       .text setNrmVtx__22daPirate_Flag_packet_cFP4cXyzii */
