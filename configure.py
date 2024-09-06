@@ -1393,7 +1393,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_tag_attention"),
     ActorRel(NonMatching, "d_a_tag_ba1"),
     ActorRel(Matching,    "d_a_tag_event"),
-    ActorRel(NonMatching, "d_a_tag_evsw"),
+    ActorRel(Matching,    "d_a_tag_evsw", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_tag_ghostship"),
     ActorRel(NonMatching, "d_a_tag_hint"),
     ActorRel(Matching,    "d_a_tag_kb_item"),

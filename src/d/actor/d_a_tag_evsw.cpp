@@ -5,52 +5,78 @@
 
 #include "d/actor/d_a_tag_evsw.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
 
 /* 00000078-000001F8       .text _create__Q29daTagEvsw5Act_cFv */
 s32 daTagEvsw::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+    
+    if (dComIfGs_isEventBit(prm_get_eventbitID())) {
+        fopAcM_onSwitch(this, prm_get_swSave());
+    } else {
+        switch (prm_get_Type()) {
+        case 1:
+            break;
+        default:
+            fopAcM_offSwitch(this, prm_get_swSave());
+            break;
+        }
+    }
+    
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000003B0-000003B8       .text _delete__Q29daTagEvsw5Act_cFv */
-BOOL daTagEvsw::Act_c::_delete() {
-    /* Nonmatching */
+bool daTagEvsw::Act_c::_delete() {
+    return true;
 }
 
 /* 000003B8-0000047C       .text _execute__Q29daTagEvsw5Act_cFv */
-BOOL daTagEvsw::Act_c::_execute() {
-    /* Nonmatching */
+bool daTagEvsw::Act_c::_execute() {
+    if (dComIfGs_isEventBit(prm_get_eventbitID())) {
+        fopAcM_onSwitch(this, prm_get_swSave());
+    } else {
+        switch (prm_get_Type()) {
+        case 1:
+            break;
+        default:
+            fopAcM_offSwitch(this, prm_get_swSave());
+            break;
+        }
+    }
+    return true;
 }
 
 /* 0000047C-00000484       .text _draw__Q29daTagEvsw5Act_cFv */
-BOOL daTagEvsw::Act_c::_draw() {
-    /* Nonmatching */
+bool daTagEvsw::Act_c::_draw() {
+    return true;
 }
 
 namespace daTagEvsw {
 namespace {
 /* 00000484-000004A4       .text Mthd_Create__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_create();
 }
 
 /* 000004A4-000004C8       .text Mthd_Delete__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_delete();
 }
 
 /* 000004C8-000004EC       .text Mthd_Execute__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_execute();
 }
 
 /* 000004EC-00000510       .text Mthd_Draw__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_draw();
 }
 
 /* 00000510-00000518       .text Mthd_IsDelete__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
