@@ -186,11 +186,11 @@ static void* bk_s_sub3(void* i_this, void*) {
 }
 
 /* 0000055C-000005D4       .text bb_s_sub__FPvPv */
-static void* bb_s_sub(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BB)  {
+static void* bb_s_sub(void* search, void*) {
+    if(fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BB)  {
         s32 count = check_count; //regswaps without this
         if(count < 7) {
-            ac[check_count] = i_this;
+            ac[check_count] = search;
             check_count++;
         }
 

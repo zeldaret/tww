@@ -1294,7 +1294,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_agbsw0", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_andsw0"),
     ActorRel(Matching,    "d_a_andsw2"),
-    ActorRel(NonMatching, "d_a_att"),
+    ActorRel(Matching,    "d_a_att", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_bflower", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_bita", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_branch"),

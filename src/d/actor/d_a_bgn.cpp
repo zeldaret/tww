@@ -7,6 +7,7 @@
 #include "d/actor/d_a_bgn2.h"
 #include "d/actor/d_a_bgn3.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
 
 /* 000000EC-000003F0       .text __ct__11daBgn_HIO_cFv */
 daBgn_HIO_c::daBgn_HIO_c() {
@@ -269,8 +270,9 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 0000B9DC-0000CA80       .text daBgn_Create__FP10fopAc_ac_c */
-static s32 daBgn_Create(fopAc_ac_c*) {
+static s32 daBgn_Create(fopAc_ac_c* i_this) {
     /* Nonmatching */
+    fopAcM_SetupActor(i_this, bgn_class);
 }
 
 static actor_method_class l_daBgn_Method = {
