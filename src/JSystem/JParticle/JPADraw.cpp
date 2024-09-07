@@ -822,7 +822,7 @@ void JPADraw::drawParticle() {
     GXSetCullMode(GX_CULL_NONE);
     if (dc.pbsp->isClipOn()) {
         GXSetClipMode(GX_CLIP_ENABLE);
-        GXSetMisc(1, 8);
+        GXSetMisc(GX_MT_XF_FLUSH, 8);
     } else {
         GXSetClipMode(GX_CLIP_DISABLE);
     }
@@ -845,7 +845,7 @@ void JPADraw::drawParticle() {
         }
     }
 
-    GXSetMisc(1, 0);
+    GXSetMisc(GX_MT_XF_FLUSH, 0);
 }
 
 /* 8026BC2C-8026BF88       .text drawChild__7JPADrawFv */
@@ -871,7 +871,7 @@ void JPADraw::drawChild() {
 
     if (dc.pssp->isClipOn()) {
         GXSetClipMode(GX_CLIP_ENABLE);
-        GXSetMisc(1, 8);
+        GXSetMisc(GX_MT_XF_FLUSH, 8);
     } else {
         GXSetClipMode(GX_CLIP_DISABLE);
     }
@@ -894,7 +894,7 @@ void JPADraw::drawChild() {
         }
     }
 
-    GXSetMisc(1, 0);
+    GXSetMisc(GX_MT_XF_FLUSH, 0);
 }
 
 /* 8026BF88-8026C024       .text zDraw__7JPADrawFv */
@@ -922,7 +922,7 @@ void JPADraw::zDrawParticle() {
     GXSetCullMode(GX_CULL_NONE);
     if (dc.pbsp->isClipOn()) {
         GXSetClipMode(GX_CLIP_ENABLE);
-        GXSetMisc(1, 8);
+        GXSetMisc(GX_MT_XF_FLUSH, 8);
     } else {
         GXSetClipMode(GX_CLIP_DISABLE);
     }
@@ -945,7 +945,7 @@ void JPADraw::zDrawParticle() {
         }
     }
 
-    GXSetMisc(1, 0);
+    GXSetMisc(GX_MT_XF_FLUSH, 0);
 }
 
 /* 8026C24C-8026C4DC       .text zDrawChild__7JPADrawFv */
@@ -971,7 +971,7 @@ void JPADraw::zDrawChild() {
 
     if (dc.pssp->isClipOn()) {
         GXSetClipMode(GX_CLIP_ENABLE);
-        GXSetMisc(1, 8);
+        GXSetMisc(GX_MT_XF_FLUSH, 8);
     } else {
         GXSetClipMode(GX_CLIP_DISABLE);
     }
@@ -994,7 +994,7 @@ void JPADraw::zDrawChild() {
         }
     }
 
-    GXSetMisc(1, 0);
+    GXSetMisc(GX_MT_XF_FLUSH, 0);
 }
 
 /* 8026C4DC-8026C640       .text loadYBBMtx__7JPADrawFPA4_f */

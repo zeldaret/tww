@@ -441,7 +441,7 @@ dKyd_Schedule* dKyd_schejule_menu_getp() {
 /* 80086F34-80086F74       .text dKyd_xfog_table_set__FUc */
 void dKyd_xfog_table_set(u8 i_idx) {
     for (int i = 0; i < 10; i++) {
-        u16 fogAdjTableEntry = S_xfog_table_data[i_idx].r[i];
-        g_env_light.mFogAdjTable.r[i] = fogAdjTableEntry;
+        u16 fogAdjTableEntry = S_xfog_table_data[i_idx].fogVals[i];
+        g_env_light.mFogAdjTable.fogVals[i] = fogAdjTableEntry;
     }
 }

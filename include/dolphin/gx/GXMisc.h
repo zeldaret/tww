@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-void GXSetMisc(u32 id, u32 value);
+void GXSetMisc(GXMiscToken token, u32 val);
 void GXFlush(void);
 void __GXAbort(void);
 void GXAbortFrame(void);
@@ -21,7 +21,7 @@ void GXPokeBlendMode(GXBlendMode mode, GXBlendFactor src_factor, GXBlendFactor d
 void GXPokeColorUpdate(GXBool enable_update);
 void GXPokeDstAlpha(GXBool enable, u8 alpha);
 void GXPokeDither(GXBool enable);
-void GXPokeZMode(GXBool enable_compare, GXCompare comp);
+void GXPokeZMode(GXBool enable_compare, GXCompare comp, GXBool update_enable);
 void GXPeekARGB(u16 x, u16 y, u32* color);
 void GXPeekZ(u16 x, u16 y, u32* z);
 
@@ -30,7 +30,7 @@ GXDrawSyncCallback GXSetDrawSyncCallback(GXDrawSyncCallback callback);
 void GXSetDrawSync(GXBool enable);
 
 typedef void (*GXDrawDoneCallback)(void);
-void GXSetDrawDoneCallback(GXDrawDoneCallback callback);
+GXDrawDoneCallback GXSetDrawDoneCallback(GXDrawDoneCallback callback);
 void __GXPEInit(void);
 
 #ifdef __cplusplus

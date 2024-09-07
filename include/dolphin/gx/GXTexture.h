@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 u32 GXGetTexBufferSize(u16 width, u16 height, u32 format, GXBool mipmap, u8 max_lod);
-void __GetImageTileCount(u32 arg0, s16 arg1, s16 arg2, s32* arg3, s32* arg4, s32* arg5);
+void __GetImageTileCount(GXTexFmt format, u16 width, u16 height, u32* a, u32* b, u32* c);
 void GXInitTexObj(GXTexObj* obj, void* image, u16 width, u16 height, GXTexFmt fmt,
                   GXTexWrapMode wrapS, GXTexWrapMode wrapT, GXBool mipmap);
 void GXInitTexObjCI(GXTexObj* obj, void* image, u16 width, u16 height, GXCITexFmt format,
@@ -19,10 +19,10 @@ void GXInitTexObjLOD(GXTexObj* obj, GXTexFilter min_filter, GXTexFilter max_filt
 void* GXGetTexObjData(GXTexObj* obj);
 u16 GXGetTexObjWidth(GXTexObj* obj);
 u16 GXGetTexObjHeight(GXTexObj* obj);
-GXTexFmt GXGetTexObjFmt(GXTexObj* obj);
+GXTexFmt GXGetTexObjFmt(const GXTexObj* obj);
 GXTexWrapMode GXGetTexObjWrapS(GXTexObj* obj);
 GXTexWrapMode GXGetTexObjWrapT(GXTexObj* obj);
-GXBool GXGetTexObjMipMap(GXTexObj* obj);
+GXBool GXGetTexObjMipMap(const GXTexObj* obj);
 u32 GXGetTexObjTlut(GXTexObj* obj);
 void GXLoadTexObj(GXTexObj* obj, GXTexMapID id);
 void GXInitTlutObj(GXTlutObj* obj, void* lut, GXTlutFmt fmt, u16 entry_num);

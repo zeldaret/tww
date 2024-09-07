@@ -148,7 +148,7 @@ void J3DSys::setTexCacheRegion(GXTexCacheSize size) {
 
 /* 802D8EE0-802D956C       .text drawInit__6J3DSysFv */
 void J3DSys::drawInit() {
-    GXSetMisc(2, 0);
+    GXSetMisc(GX_MT_DL_SAVE_CONTEXT, 0);
     GXInvalidateVtxCache();
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_BACK);

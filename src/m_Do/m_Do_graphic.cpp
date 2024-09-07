@@ -522,7 +522,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXCopyTex(zbuf, GX_FALSE);
 
     GXSetTexCopySrc(x, y, w, h);
-    GXSetTexCopyDst(hw, hh, mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
+    GXSetTexCopyDst(hw, hh, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
     GXCopyTex(fbbuf, GX_FALSE);
 
     GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zbuf, w, h, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -933,7 +933,7 @@ bool mDoGph_screenCapture() {
 
     setUpRectangle();
     GXSetTexCopySrc(centerX - sizeW, centerY - sizeH, sizeW2, sizeH2);
-    GXSetTexCopyDst(sizeW, sizeH, mCaptureCaptureFormat, GX_TRUE);
+    GXSetTexCopyDst(sizeW, sizeH, (_GXTexFmt)mCaptureCaptureFormat, GX_TRUE);
     DCInvalidateRange(mCaptureCaptureBuffer, mCaptureCaptureSize);
     GXCopyTex(mCaptureCaptureBuffer, GX_FALSE);
     GXPixModeSync();
