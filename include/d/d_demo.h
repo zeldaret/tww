@@ -163,7 +163,7 @@ public:
     ~dDemo_light_c() {}
     void JSGSetLightType(JStage::TELight);
     void JSGSetPosition(const Vec&);
-    void JSGSetColor(_GXColor);
+    void JSGSetColor(GXColor);
     void JSGSetDistanceAttenuation(f32, f32, GXDistAttnFn);
     void JSGSetAngleAttenuation(f32, GXSpotFn);
     void JSGSetDirection(const Vec&);
@@ -185,10 +185,10 @@ class dDemo_fog_c : public JStage::TFog {
 public:
     dDemo_fog_c() { mFlags = 0; }
     ~dDemo_fog_c() {}
-    void JSGSetFogFunction(_GXFogType);
+    void JSGSetFogFunction(GXFogType);
     void JSGSetStartZ(f32);
     void JSGSetEndZ(f32);
-    void JSGSetColor(_GXColor);
+    void JSGSetColor(GXColor);
 
 private:
     /* 0x04 */ u8 mFlags;

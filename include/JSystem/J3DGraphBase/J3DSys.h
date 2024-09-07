@@ -137,7 +137,7 @@ public:
     J3DSys();
     void loadPosMtxIndx(int, u16) const;
     void loadNrmMtxIndx(int, u16) const;
-    void setTexCacheRegion(_GXTexCacheSize);
+    void setTexCacheRegion(GXTexCacheSize);
     void drawInit();
     void reinitGX();
     void reinitGenMode();

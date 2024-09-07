@@ -51,7 +51,7 @@ public:
 class dDlst_2DtEff1_c : public dDlst_base_c {
 public:
     ~dDlst_2DtEff1_c() {}
-    void init(_GXColor);
+    void init(GXColor);
     void draw();
 
     /* 0x004 */ f32 timer;

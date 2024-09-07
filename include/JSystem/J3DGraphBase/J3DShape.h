@@ -77,8 +77,8 @@ public:
     };
 
     void initialize();
-    void addTexMtxIndexInDL(_GXAttr, u32);
-    void addTexMtxIndexInVcd(_GXAttr);
+    void addTexMtxIndexInDL(GXAttr, u32);
+    void addTexMtxIndexInVcd(GXAttr);
     void calcNBTScale(Vec const&, Mtx33*, Mtx33*);
     u32 countBumpMtxNum() const;
     void loadVtxArray() const;

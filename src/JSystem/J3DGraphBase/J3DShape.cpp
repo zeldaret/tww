@@ -12,7 +12,7 @@
 #include "dolphin/os/OS.h"
 #include "dolphin/types.h"
 
-extern void J3DGDSetVtxAttrFmtv(_GXVtxFmt, GXVtxAttrFmtList *, bool);
+extern void J3DGDSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList *, bool);
 extern void J3DFifoLoadPosMtxImm(Mtx, u32);
 extern void J3DFifoLoadNrmMtxImm(Mtx, u32);
 
@@ -64,7 +64,7 @@ void J3DLoadCPCmd(u8 cmd, u32 param) {
 }
 
 /* 802DD308-802DD344       .text J3DLoadArrayBasePtr__F7_GXAttrPv */
-static void J3DLoadArrayBasePtr(_GXAttr attr, void* data) {
+static void J3DLoadArrayBasePtr(GXAttr attr, void* data) {
     u32 idx = (attr == GX_VA_NBT) ? 1 : (attr - GX_VA_POS);
     J3DLoadCPCmd(0xA0 + idx, ((u32)data & 0x7FFFFFFF));
 }

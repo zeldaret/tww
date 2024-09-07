@@ -16,7 +16,7 @@ public:
 
     void clearIndex();
     void common_init(int);
-    JUTXfb(_GXRenderModeObj const*, JKRHeap*, JUTXfb::EXfbNumber);
+    JUTXfb(GXRenderModeObj const*, JKRHeap*, JUTXfb::EXfbNumber);
     ~JUTXfb();
     void delXfb(int);
     static JUTXfb* createManager(const _GXRenderModeObj*, JKRHeap*, JUTXfb::EXfbNumber);

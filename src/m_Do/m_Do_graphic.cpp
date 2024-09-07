@@ -933,7 +933,7 @@ bool mDoGph_screenCapture() {
 
     setUpRectangle();
     GXSetTexCopySrc(centerX - sizeW, centerY - sizeH, sizeW2, sizeH2);
-    GXSetTexCopyDst(sizeW, sizeH, (_GXTexFmt)mCaptureCaptureFormat, GX_TRUE);
+    GXSetTexCopyDst(sizeW, sizeH, (GXTexFmt)mCaptureCaptureFormat, GX_TRUE);
     DCInvalidateRange(mCaptureCaptureBuffer, mCaptureCaptureSize);
     GXCopyTex(mCaptureCaptureBuffer, GX_FALSE);
     GXPixModeSync();
