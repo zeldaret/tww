@@ -9,11 +9,13 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_bgn.h"
 
+#if VERSION == VERSION_USA
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
+#endif
 
 static bgn_class* boss;
 static cXyz non_pos(-30000.0f, -30000.0f, -30000.0f);
@@ -33,6 +35,7 @@ static void* boss_s_sub(void* search, void*) {
 
 /* 00000140-0000052C       .text daAtt_Execute__FP9att_class */
 static BOOL daAtt_Execute(att_class* i_this) {
+#if VERSION == VERSION_USA
     if (i_this->m2B5 == 101) {
         i_this->attention_info.position = i_this->eyePos = i_this->current.pos;
         fopAcM_OffStatus(i_this, 0);
@@ -40,6 +43,7 @@ static BOOL daAtt_Execute(att_class* i_this) {
         i_this->mSph.SetC(i_this->current.pos);
         dComIfG_Ccsp()->Set(&i_this->mSph);
     }
+#endif
     if (i_this->m2B5 == 100) {
         i_this->attention_info.position = i_this->eyePos = i_this->current.pos;
     } else {
@@ -113,6 +117,7 @@ static BOOL daAtt_Delete(att_class* i_this) {
 
 /* 00000578-00000768       .text daAtt_Create__FP10fopAc_ac_c */
 static s32 daAtt_Create(fopAc_ac_c* i_this) {
+#if VERSION == VERSION_USA
     static dCcD_SrcSph sita_sph_src = {
         // dCcD_SrcGObjInf
         {
@@ -141,6 +146,7 @@ static s32 daAtt_Create(fopAc_ac_c* i_this) {
             /* Radius */ 90.0f,
         },
     };
+#endif
     static dCcD_SrcCyl cc_cyl_src = {
         // dCcD_SrcGObjInf
         {
@@ -205,6 +211,7 @@ static s32 daAtt_Create(fopAc_ac_c* i_this) {
     a_this->m2B5 = fopAcM_GetParam(a_this) & 0xFF;
     a_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
     
+#if VERSION == VERSION_USA
     if (a_this->m2B5 == 101) {
         fopAcM_OnStatus(a_this, fopAcStts_UNK10000000_e);
         a_this->mStts.Init(0xFF, 0xFF, a_this);
@@ -212,6 +219,7 @@ static s32 daAtt_Create(fopAc_ac_c* i_this) {
         a_this->mSph.Set(sita_sph_src);
         a_this->mSph.SetStts(&a_this->mStts);
     }
+#endif
     
     if (a_this->m2B5 < 10) {
         boss = NULL;
