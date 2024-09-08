@@ -729,7 +729,7 @@ int JASystem::TSeqParser::Cmd_Process(TTrack* track, u8 r5, u16 r6) {
     if (cmdFunc == NULL) {
         return 0;
     }
-    (this->*cmdFunc)(track, sp18);
+    return (this->*cmdFunc)(track, sp18);
 }
 
 /* 8027FA48-8027FB08       .text RegCmd_Process__Q28JASystem10TSeqParserFPQ28JASystem6TTrackii */
@@ -750,7 +750,7 @@ int JASystem::TSeqParser::RegCmd_Process(TTrack* track, int r30, int r31) {
             r4 <<= 2;
         }
     }
-    Cmd_Process(track, r5, r6);
+    return Cmd_Process(track, r5, r6);
 }
 
 /* 8027FB08-8027FC98       .text cmdSetParam__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
