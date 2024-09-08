@@ -726,10 +726,7 @@ int JASystem::TSeqParser::Cmd_Process(TTrack* track, u8 r5, u16 r6) {
     }
     
     JASystem::TSeqParser::CmdFunc cmdFunc = sCmdPList[r5-0xC0];
-    if (cmdFunc == NULL) {
-        return 0;
-    }
-    return (this->*cmdFunc)(track, sp18);
+    return cmdFunc == NULL ? 0 : (this->*cmdFunc)(track, sp18);
 }
 
 /* 8027FA48-8027FB08       .text RegCmd_Process__Q28JASystem10TSeqParserFPQ28JASystem6TTrackii */
@@ -842,7 +839,6 @@ int JASystem::TSeqParser::cmdNoteOff(TTrack* track, u8 flag) {
 
 /* 8027FE08-80280148       .text cmdNoteOn__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
 int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8 note) {
-    /* Nonmatching */
     u32 r27 = track->getSeq()->readByte();
     if (r27 & 0x80) {
         note = track->exchangeRegisterValue(note);
@@ -943,7 +939,7 @@ int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8 note) {
         return 0;
     }
 
-    track->getSeq()->wait(r24 ? r27 : -1);
+    track->getSeq()->wait(r24 ? (s32)r27 : -1);
 
     return 1;
 }
