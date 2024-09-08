@@ -396,6 +396,7 @@ void dKy_instant_rainchg();
 SND_INFLUENCE * dKy_Sound_get();
 void dKy_Sound_set(cXyz i_pos, int param_1, fpc_ProcID i_actorID, int param_3);
 void dKy_SordFlush_set(cXyz hitPos, int lightType);
+cXyz dKy_FirstlightVec_get(cXyz* param_0);
 void dKy_itudemo_se();
 void dKy_actor_addcol_set(s16, s16, s16, f32);
 void dKy_actor_addcol_amb_set(s16, s16, s16, f32);
