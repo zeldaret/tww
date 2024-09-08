@@ -563,6 +563,7 @@ void daSail_packet_c::setNrmVtx(cXyz* param_0, int param_1, int param_2) {
 /* 00000870-000010D8       .text draw__15daSail_packet_cFv */
 void daSail_packet_c::draw() {
     j3dSys.reinitGX();
+
 #if VERSION != VERSION_JPN
     GXSetNumIndStages(0);
 #endif
@@ -766,7 +767,7 @@ static void sail_pos_move(sail_class* i_this) {
     f25 *= 1.0f - (0.5f * i_this->mSailPacket.m1C44 * i_this->mSailPacket.m1C4C);
     f0 *= 1.0f - (0.75f * i_this->mSailPacket.m1C44);
 
-    f32 ELEVEN = 11.0f;
+    f32 ELEVEN = 11.0f; // this must be non-const
 
     for (int i = 0; i < 12; i++) {
         f32 f12 = i - 6;
@@ -777,9 +778,7 @@ static void sail_pos_move(sail_class* i_this) {
         for (int j = 0; j < 7; j++, vtxPos++) {
             f32 f24;
             f32 f23 = j - 3;
-            f32 f22;
-            f32 f21;
-            f32 f20;
+            f32 f22, f21, f20; // these are xyz components
             f32 f17 = i * 5.0f;
 
             u32 r22 = (i_this->mSailPacket.m1C50 * (s32)f23) + (i_this->mSailPacket.m1C52 * (s32)f12);
@@ -807,8 +806,8 @@ static void sail_pos_move(sail_class* i_this) {
                 }
             }
 
-            f32 f14 = 100.0f - std::sqrtf(15625.0f - (f16 * f16));
-            sp6C[j] += f14 > -10.0f ? f14 : -10.0f;
+            f32 f14 = 100.0f - std::sqrtf((125.0f * 125.0f) - (f16 * f16));
+            sp6C[j] += f14 > -10.0f ? f14 : -10.0f; // this looks like cLib_minLimit but it does not match
 
             sp10.x = 0.0f;
             sp10.y = 0.0f;
