@@ -152,8 +152,58 @@ void daPirate_Flag_packet_c::setBackNrm() {
 }
 
 /* 000003F0-00000800       .text setNrmVtx__22daPirate_Flag_packet_cFP4cXyzii */
-void daPirate_Flag_packet_c::setNrmVtx(cXyz*, int, int) {
-    /* Nonmatching */
+void daPirate_Flag_packet_c::setNrmVtx(cXyz* param_0, int param_1, int param_2) {
+    /* Nonmatching - regalloc */
+    cXyz* vec_arr = m044[m87E];
+
+    cXyz tmp;
+    cXyz tmp2;
+    cXyz tmp3;
+    cXyz spD4;
+    cXyz spC8 = vec_arr[param_1 + (param_2 * 5)];
+    spD4.set(0.0f, 0.0f, 0.0f);
+
+    if (param_1 != 0) {
+        tmp = vec_arr[(param_1 + (param_2 * 5)) - 1] - spC8;
+        if (param_2 != 0) {
+            tmp2 = vec_arr[(param_1 + (param_2 - 1) * 5)] - spC8;
+            tmp3 = tmp.outprod(tmp2);
+            tmp3 = tmp3.normZP();
+            spD4 += tmp3;
+        }
+
+        if (param_2 != 4) {
+            tmp2 = vec_arr[(param_1 + (param_2 + 1) * 5)] - spC8;
+            tmp3 = tmp2.outprod(tmp);
+            tmp3 = tmp3.normZP();
+            spD4 += tmp3;
+        }
+    }
+
+    if (param_1 != 4) {
+        tmp = vec_arr[1 + param_1 + param_2 * 5] - spC8;
+        if (param_2 != 0) {
+            tmp2 = vec_arr[(param_1 + (param_2 - 1) * 5)] - spC8;
+            tmp3 = tmp2.outprod(tmp);
+            tmp3 = tmp3.normZP();
+            spD4 += tmp3;
+        }
+
+        if (param_2 != 4) {
+            tmp2 = vec_arr[(param_1 + (param_2 + 1) * 5)] - spC8;
+            tmp3 = tmp.outprod(tmp2);
+            tmp3 = tmp3.normZP();
+            spD4 += tmp3;
+        }
+    }
+
+    spD4 = spD4.normZP();
+    MtxPush();
+    cMtx_YrotM(*calc_mtx, 900.0f * cM_ssin((param_1 + param_2) * -800));
+    MtxPosition(&spD4, &tmp3);
+
+    *param_0 = tmp3.normZP();
+    MtxPull();
 }
 
 /* 0000083C-00000E44       .text draw__22daPirate_Flag_packet_cFv */
