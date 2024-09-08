@@ -14,8 +14,8 @@ namespace JASystem {
         void writeImport(int, u16);
         void writeExport(int, u16);
 
-        bool checkImport(int i) const { return mImportFlag[i] != 0; }
-        bool checkExport(int i) const { return mExportFlag[i] != 0; }
+        u8 checkImport(int i) const { return mImportFlag[i]; }
+        u8 checkExport(int i) const { return mExportFlag[i]; }
         u16 get(u32 i) { return mValue[i]; }
 
         /* 0x00 */ u8 mImportFlag[TRACKPORT_MAX];

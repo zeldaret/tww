@@ -6,6 +6,14 @@
 namespace JASystem {
     class TIntrMgr {
     public:
+        void disable() { field_0x0 = 0; }
+        void enable() { field_0x0 = 1; }
+        void setTimer(u32 param_1, u32 param_2) {
+            field_0x3 = param_1;
+            field_0x4 = param_2;
+            field_0x8 = param_2;
+        }
+
         void init();
         void request(u32);
         void setIntr(u32, void*);

@@ -14,7 +14,7 @@ namespace JASystem {
 
         void getAddress(int) const {}
         void getBendSense() const {}
-        void getFlag() const {}
+        u16 getFlag() const { return field_0x0[3]; }
         void getPanPowerBank() const {}
         void getPanPowerExt() const {}
         void getPanPowerOsc() const {}
@@ -22,7 +22,7 @@ namespace JASystem {
         void getPanPowerTrack() const {}
         void getPriority() const {}
         void setAddress(int, u32) {}
-        void setFlag(u16) {}
+        void setFlag(u16 flag) { field_0x0[3] = flag; }
         void setPanPower(int i, u16 power) { mPanPower[i] = power; }
 
         /* 0x00 */ u16 field_0x0[6];

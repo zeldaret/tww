@@ -143,6 +143,14 @@ namespace JASystem {
 
         class TNoteMgr {
         public:
+            void setBaseTime(u32 time) { mBaseTime = time; }
+            u8 getConnectCase() const { return mConnectCase; }
+            void setConnectCase(u8 val) { mConnectCase = val; }
+            u8 getLastNote() const { return mLastNote; }
+            void setLastNote(u8 note) { mLastNote = note; }
+            bool checkBeforeTieMode() const { return mBeforeTieMode; }
+            void setBeforeTieMode(bool mode) { mBeforeTieMode = mode; }
+
             void init();
             void endProcess();
             void setChannel(int, TChannel*);
@@ -151,10 +159,10 @@ namespace JASystem {
 
             /* 0x00 */ TChannel* field_0x0[8];
             /* 0x20 */ u16 field_0x20[8];
-            /* 0x30 */ int field_0x30;
-            /* 0x34 */ u8 field_0x34;
-            /* 0x35 */ u8 field_0x35;
-            /* 0x36 */ u8 field_0x36;
+            /* 0x30 */ int mBaseTime;
+            /* 0x34 */ u8 mConnectCase;
+            /* 0x35 */ u8 mLastNote;
+            /* 0x36 */ u8 mBeforeTieMode;
         };
 
         static const int MAX_CHILDREN = 16;
@@ -227,26 +235,26 @@ namespace JASystem {
 
         TOuterParam* getOuterParam() { return mOuterParam; }
 
-        bool checkImport(int i) const { return mTrackPort.checkImport(i); }
-        bool checkExport(int i) const { return mTrackPort.checkExport(i); }
+        u8 checkImport(int i) const { return mTrackPort.checkImport(i); }
+        u8 checkExport(int i) const { return mTrackPort.checkExport(i); }
         void getActivity() const {}
         void getRoute() const {}
         TSeqCtrl* getSeq() { return &mSeqCtrl; }
         // void operator delete(void*, u32) {}
         // void* operator new(size_t) {}
-        void pauseTrackAll() {}
+        void pauseTrackAll() { pause(true, true); }
+        void unPauseTrackAll() { pause(false, true); }
         void setPanPower(int i, u16 power) { mRegisterParam.setPanPower(i, power); }
-        void setPauseStatus(u8) {}
+        void setPauseStatus(u8 status) { mPauseStatus = status; }
         void setTranspose(s32 transpose) { field_0x37a = transpose; }
         void setVolumeMode(u8 mode) { mVolumeMode = mode; }
-        void unPauseTrackAll() {}
 
         /* 0x000 */ union {
             TSeqCtrl mSeqCtrl;
             TTrack* next;
         };
         /* 0x048 */ TTrackPort mTrackPort;
-        /* 0x088 */ TIntrMgr field_0x88;
+        /* 0x088 */ TIntrMgr mIntrMgr;
         /* 0x0B4 */ TNoteMgr mNoteMgr;
         /* 0x0EC */ TVibrate mVibrate;
         /* 0x0F8 */ TChannelMgr mChannelUpdater;

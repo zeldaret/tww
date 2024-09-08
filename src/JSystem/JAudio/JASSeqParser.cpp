@@ -10,7 +10,7 @@
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-int (JASystem::TSeqParser::*JASystem::TSeqParser::sCmdPList[64])(JASystem::TTrack*, u32*) = {
+JASystem::TSeqParser::CmdFunc JASystem::TSeqParser::sCmdPList[64] = {
     NULL,
     &JASystem::TSeqParser::cmdOpenTrack,
     &JASystem::TSeqParser::cmdOpenTrackBros,
@@ -77,7 +77,7 @@ int (JASystem::TSeqParser::*JASystem::TSeqParser::sCmdPList[64])(JASystem::TTrac
     &JASystem::TSeqParser::cmdFinish,
 };
 
-const u16 JASystem::Arglist[0x40][2] = {
+const JASystem::Arg_s JASystem::Arglist[0x40] = {
     {0x0000, 0x0000},
     {0x0002, 0x0008},
     {0x0002, 0x0008},
@@ -313,13 +313,13 @@ int JASystem::TSeqParser::cmdChildWritePort(TTrack* track, u32* args) {
 
 /* 8027ED80-8027ED98       .text cmdCheckPortImport__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdCheckPortImport(TTrack* track, u32* args) {
-    track->mRegisterParam.field_0x0[3] = track->mTrackPort.mImportFlag[args[0]];
+    track->mRegisterParam.setFlag(track->checkImport(args[0]));
     return 0;
 }
 
 /* 8027ED98-8027EDB0       .text cmdCheckPortExport__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdCheckPortExport(TTrack* track, u32* args) {
-    track->mRegisterParam.field_0x0[3] = track->mTrackPort.mExportFlag[args[0]];
+    track->mRegisterParam.setFlag(track->checkExport(args[0]));
     return 0;
 }
 
@@ -335,7 +335,7 @@ int JASystem::TSeqParser::cmdSetLastNote(TTrack* track, u32* args) {
     u32 key = args[0];
     key += track->getTranspose();
     JUT_ASSERT(506, key < 256);
-    track->mNoteMgr.field_0x35 = key;
+    track->mNoteMgr.setLastNote(key);
     return 0;
 }
 
@@ -412,8 +412,7 @@ int JASystem::TSeqParser::cmdBusConnect(TTrack* track, u32* args) {
 
 /* 8027F088-8027F098       .text cmdPauseStatus__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdPauseStatus(TTrack* track, u32* args) {
-    /* Nonmatching */
-    track->mPauseStatus = args[0];
+    track->setPauseStatus(args[0]);
     return 0;
 }
 
@@ -425,32 +424,32 @@ int JASystem::TSeqParser::cmdVolumeMode(TTrack* track, u32* args) {
 
 /* 8027F0A8-8027F0E0       .text cmdSetInterrupt__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdSetInterrupt(TTrack* track, u32* args) {
-    track->field_0x88.setIntr(args[0], track->getSeq()->getBase() + args[1]);
+    track->mIntrMgr.setIntr(args[0], track->getSeq()->getBase() + args[1]);
     return 0;
 }
 
 /* 8027F0E0-8027F10C       .text cmdDisInterrupt__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdDisInterrupt(TTrack* track, u32* args) {
-    track->field_0x88.resetInter(args[0]);
+    track->mIntrMgr.resetInter(args[0]);
     return 0;
 }
 
 /* 8027F10C-8027F124       .text cmdClrI__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdClrI(TTrack* track, u32* args) {
-    track->field_0x88.field_0x0 = 1;
+    track->mIntrMgr.enable();
     track->getSeq()->clrIntr();
     return 0;
 }
 
 /* 8027F124-8027F134       .text cmdSetI__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdSetI(TTrack* track, u32* args) {
-    track->field_0x88.field_0x0 = 0;
+    track->mIntrMgr.disable();
     return 0;
 }
 
 /* 8027F134-8027F178       .text cmdRetI__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdRetI(TTrack* track, u32* args) {
-    track->field_0x88.field_0x0 = 1;
+    track->mIntrMgr.enable();
     track->getSeq()->retIntr();
     track->tryInterrupt();
     return 0;
@@ -458,10 +457,7 @@ int JASystem::TSeqParser::cmdRetI(TTrack* track, u32* args) {
 
 /* 8027F178-8027F194       .text cmdIntTimer__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdIntTimer(TTrack* track, u32* args) {
-    u32 param2 = args[1];
-    track->field_0x88.field_0x3 = args[0];
-    track->field_0x88.field_0x4 = param2;
-    track->field_0x88.field_0x8 = param2;
+    track->mIntrMgr.setTimer(args[0], args[1]);
     return 0;
 }
 
@@ -471,7 +467,7 @@ int JASystem::TSeqParser::cmdSyncCPU(TTrack* track, u32* args) {
     if (TTrack::sCallBackFunc) {
         var1 = TTrack::sCallBackFunc(track, args[0]);
     }
-    track->mRegisterParam.field_0x0[3] = var1;
+    track->mRegisterParam.setFlag(var1);
     return 0;
 }
 
@@ -619,19 +615,19 @@ int JASystem::TSeqParser::cmdOscFull(TTrack* track, u32* args) {
 
 /* 8027F698-8027F6A8       .text cmdCheckWave__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdCheckWave(TTrack* track, u32* args) {
-    track->mRegisterParam.field_0x0[3] = 0;
+    track->mRegisterParam.setFlag(0);
     return 0;
 }
 
 /* 8027F6A8-8027F8F4       .text cmdPrintf__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdPrintf(TTrack* track, u32* args) {
-    /* Nonmatching */
     char buf[128];
     u8 byteArray[4];
     int registers[4];
     u32 count = 0;
 
-    for (u32 i = 0; i < 128; i++) {
+    u32 i;
+    for (i = 0; i < 128; i++) {
         buf[i] = track->getSeq()->readByte();
         if (!buf[i]) {
             break;
@@ -642,19 +638,21 @@ int JASystem::TSeqParser::cmdPrintf(TTrack* track, u32* args) {
                 break;
             }
 
-            if (buf[i] != 'n') {
-                continue;
-            } else {
-                buf[i] = '\r';
-                continue;
-            }
+			switch (buf[i]) {
+			case 'n':
+				buf[i] = '\r';
+				continue;
+			default:
+				continue;
+			}
         }
 
         if (buf[i] != '%') {
             continue;
         }
 
-        buf[++i] = track->getSeq()->readByte();
+        i++;
+        buf[i] = track->getSeq()->readByte();
         if (!buf[i]) {
             break;
         }
@@ -685,7 +683,7 @@ int JASystem::TSeqParser::cmdPrintf(TTrack* track, u32* args) {
         count++;
     }
 
-    for (u32 i = 0; i < count; i++) {
+    for (i = 0; i < count; i++) {
         registers[i] = track->getSeq()->readByte();
         if (byteArray[i] == 2) {
             registers[i] = (int)track->getSeq()->getAddr(registers[i]);
@@ -702,8 +700,36 @@ int JASystem::TSeqParser::cmdPrintf(TTrack* track, u32* args) {
 }
 
 /* 8027F8F4-8027FA48       .text Cmd_Process__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUcUs */
-int JASystem::TSeqParser::Cmd_Process(TTrack* track, u8, u16) {
-    /* Nonmatching */
+int JASystem::TSeqParser::Cmd_Process(TTrack* track, u8 r5, u16 r6) {
+    JASystem::Arg_s sp08 = Arglist[r5-0xC0];
+    u16 r29 = sp08.m02;
+    r29 |= r6;
+    u32 sp18[10];
+    for (int i = 0 ; i < sp08.m00; i++) {
+        u32 r3 = 0;
+        switch (r29 & 0x3) {
+        case 0:
+            r3 = track->getSeq()->readByte();
+            break;
+        case 1:
+            r3 = track->getSeq()->read16();
+            break;
+        case 2:
+            r3 = track->getSeq()->read24();
+            break;
+        case 3:
+            r3 = track->exchangeRegisterValue(track->getSeq()->readByte());
+            break;
+        }
+        sp18[i] = r3;
+        r29 >>= 2;
+    }
+    
+    JASystem::TSeqParser::CmdFunc cmdFunc = sCmdPList[r5-0xC0];
+    if (cmdFunc == NULL) {
+        return 0;
+    }
+    (this->*cmdFunc)(track, sp18);
 }
 
 /* 8027FA48-8027FB08       .text RegCmd_Process__Q28JASystem10TSeqParserFPQ28JASystem6TTrackii */
@@ -729,7 +755,6 @@ int JASystem::TSeqParser::RegCmd_Process(TTrack* track, int r30, int r31) {
 
 /* 8027FB08-8027FC98       .text cmdSetParam__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
 int JASystem::TSeqParser::cmdSetParam(TTrack* track, u8 param_2) {
-    /* Nonmatching */
     u8 flag = track->getSeq()->readByte();
 
     s16 data;
@@ -765,7 +790,7 @@ int JASystem::TSeqParser::cmdSetParam(TTrack* track, u8 param_2) {
         val = track->getSeq()->readByte();
         break;
     case 3:
-        val = track->getSeq()->read16() & 0xFFFF;
+        val = track->getSeq()->read16();
         break;
     }
 
@@ -791,19 +816,17 @@ int JASystem::TSeqParser::cmdWait(TTrack* track, u8 flag) {
 
 /* 8027FCE4-8027FE08       .text cmdNoteOff__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
 int JASystem::TSeqParser::cmdNoteOff(TTrack* track, u8 flag) {
-    /* Nonmatching */
     if (flag == 0xF9) {
         u32 r30 = track->getSeq()->readByte();
         u32 rdata2 = (track->exchangeRegisterValue(r30 & 0x7) & 0xFF);
         JUT_ASSERT(0x496, rdata2 >= 1);
         JUT_ASSERT(0x497, rdata2 <= 7);
         
-        // flag = rdata2 + 0x80;
-        // if (r30 & 0x80) {
-        //     flag |= 0x08;
-        // }
-        
-        flag = r30 & 0x80 ? (rdata2 + 0x80) | 0x08 : (rdata2 + 0x80);
+        flag = rdata2;
+        flag += 0x80;
+        if (r30 & 0x80) {
+            flag |= 0x08;
+        }
     }
 
     int r6 = 0;
@@ -820,112 +843,114 @@ int JASystem::TSeqParser::cmdNoteOff(TTrack* track, u8 flag) {
 /* 8027FE08-80280148       .text cmdNoteOn__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
 int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8 note) {
     /* Nonmatching */
-    s32 flag = *track->mSeqCtrl.mCurrentFilePtr++;
-    if (flag & 0x80) {
+    u32 r27 = track->getSeq()->readByte();
+    if (r27 & 0x80) {
         note = track->exchangeRegisterValue(note);
     }
 
     note += track->getTranspose();
 
-    int val28 = (flag >> 5) & 0x3;
-    u8 val27;
-    if ((flag >> 5) & 0x2) {
-        val27 = note;
-        note = track->mNoteMgr.field_0x35;
+    u8 r26 = (r27 >> 5) & 0x3;
+    u8 r25;
+    u32 r24;
+    u8 r31;
+    if ((r27 >> 5) & 0x2) {
+        r31 = note;
+        note = track->mNoteMgr.getLastNote();
     }
 
-    u8 val26 = *track->mSeqCtrl.mCurrentFilePtr++;
-    if (val26 & 0x80) {
-        val26 = track->exchangeRegisterValue(val26 & 0x7F);
+    r25 = track->getSeq()->readByte();
+    if (r25 & 0x80) {
+        r25 = track->exchangeRegisterValue(r25 & 0x7F);
     }
-    u8 val25;
-    u8 noteid = flag & 0x7;
-    int val23 = 0;
+    u8 r23;
+    u8 noteid = r27 & 0x7;
+    int r22 = 0;
     if (!noteid) {
-        val25 = *track->mSeqCtrl.mCurrentFilePtr++;
-        if (val25 & 0x80) {
-            val25 = track->exchangeRegisterValue(val25 & 0x7F);
+        r23 = track->getSeq()->readByte();
+        if (r23 & 0x80) {
+            r23 = track->exchangeRegisterValue(r23 & 0x7F);
         }
-        int count = (flag >> 3) & 0x3;
-        flag = 0;
+        r24 = 0;
+        int count = (r27 >> 3) & 0x3;
         for (int i = 0; i < count; i++) {
-            flag <<= 8;
-            flag |= *track->mSeqCtrl.mCurrentFilePtr++;
+            r24 <<= 8;
+            r24 |= track->getSeq()->readByte();
         }
 
-        if ((u32)count == 1 && flag & 0x80) {
-            flag = track->exchangeRegisterValue(flag & 0x7F);
+        if ((u32)count == 1 && r24 & 0x80) {
+            r24 = track->exchangeRegisterValue(r24 & 0x7F);
         }
     } else {
-        if ((flag >> 3) & 0x3) {
+        if ((r27 >> 3) & 0x3) {
             noteid = track->exchangeRegisterValue(noteid - 1);
+            JUT_ASSERT(0x4FE, noteid < 8);
         }
-        JUT_ASSERT(0x4FE, noteid < 8);
-        if (val28 & 1) {
-            val23 = track->exchangeRegisterValue(*track->mSeqCtrl.mCurrentFilePtr++);
-            val28 = (val28 ^ 1) & 0xFF;
+        if (r26 & 1) {
+            r22 = track->exchangeRegisterValue(track->getSeq()->readByte());
+            r26 ^= 1;
         }
 
-        flag = -1;
-        val25 = 100;
+        r24 = -1;
+        r23 = 100;
     }
 
-    track->mNoteMgr.field_0x34 = val28;
-    s32 time = flag;
-    if (track->mNoteMgr.field_0x36) {
-        if (track->mNoteMgr.field_0x34 & 1) {
+    track->mNoteMgr.setConnectCase(r26);
+    r27 = r24;
+    s32 time = r24;
+    if (track->mNoteMgr.checkBeforeTieMode()) {
+        if (track->mNoteMgr.getConnectCase() & 1) {
             time = -1;
         }
         if (time != -1) {
-            time = track->seqTimeToDspTime(time, val25);
+            time = track->seqTimeToDspTime(time, r23);
         }
 
         if (!track->mIsPaused || !(track->mPauseStatus & 0x10)) {
-            track->gateOn(noteid, note, val26, time);
+            track->gateOn(noteid, note, r25, time);
         }
     } else {
-        if (flag != -1) {
-            time = track->seqTimeToDspTime(flag, val25);
+        if ((s32)r24 != -1) {
+            time = track->seqTimeToDspTime(r24, r23);
         }
-        if (track->mNoteMgr.field_0x34 & 1) {
+        if (track->mNoteMgr.getConnectCase() & 1) {
             time = -1;
         }
 
         if (!track->mIsPaused || !(track->mPauseStatus & 0x10)) {
-            track->noteOn(noteid, note, val26, time, val23);
+            track->noteOn(noteid, note, r25, time, r22);
         }
     }
 
-    track->mNoteMgr.field_0x30 = flag;
-    track->mNoteMgr.field_0x36 = track->mNoteMgr.field_0x34 & 1;
-    if (track->mNoteMgr.field_0x34 & 0x2) {
+    track->mNoteMgr.setBaseTime(r24);
+    track->mNoteMgr.setBeforeTieMode(track->mNoteMgr.getConnectCase() & 1);
+    if (track->mNoteMgr.getConnectCase() & 0x2) {
         s32 val = time;
         if (time == -1) {
-            val = track->seqTimeToDspTime(flag, val25);
+            val = track->seqTimeToDspTime(r27, r23);
         }
 
         JASystem::TChannel* channel = track->mNoteMgr.getChannel(0);
         if (channel) {
-            channel->setKeySweepTarget(val27 + track->getTranspose(), val);
+            channel->setKeySweepTarget((u8)r31 + track->getTranspose(), val);
         }
 
-        note = val27;
+        note = r31;
     }
 
-    track->mNoteMgr.field_0x35 = note;
-    if (flag == 0xFFFFFFFF) {
+    track->mNoteMgr.setLastNote(note);
+    if (r24 == 0xFFFFFFFF) {
         return 0;
     }
 
-    track->mSeqCtrl.mWaitTimer = ((u32)flag) ? flag : -1;
+    track->getSeq()->wait(r24 ? r27 : -1);
 
     return 1;
 }
 
 /* 80280148-8028024C       .text conditionCheck__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
 bool JASystem::TSeqParser::conditionCheck(TTrack* track, u8 param_2) {
-    /* Nonmatching */
-    u16 val = (u32)track->mRegisterParam.field_0x0[3];
+    u16 val = (u32)track->mRegisterParam.getFlag();
     switch (param_2 & 0xF) {
     case 0:
         return true;

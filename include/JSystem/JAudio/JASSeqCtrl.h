@@ -44,7 +44,7 @@ namespace JASystem {
         u16 get16(u32) const;
         u32 get24(u32) const;
         u32 get32(u32) const;
-        u32 read16();
+        u16 read16();
         u32 read24();
 
         /* 0x00 */ u8* mRawFilePtr;

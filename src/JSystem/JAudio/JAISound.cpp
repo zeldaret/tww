@@ -548,7 +548,7 @@ void JAISound::setPauseMode(u8 param_1, u8 param_2) {
                 break;
             case 2:
                 JASystem::TTrack* track = getSeqParameter()->getRootTrackPointer();
-                track->pause(true, true);
+                track->pauseTrackAll();
                 break;
             }
         } else {
@@ -559,7 +559,7 @@ void JAISound::setPauseMode(u8 param_1, u8 param_2) {
                 break;
             case 2:
                 JASystem::TTrack* track = getSeqParameter()->getRootTrackPointer();
-                track->pause(false, true);
+                track->unPauseTrackAll();
                 break;
             }
         }
