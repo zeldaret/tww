@@ -227,10 +227,9 @@ int JASystem::TSeqParser::cmdRet(TTrack* track, u32* args) {
 
 /* 8027E9AC-8027EAF4       .text cmdJmp__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdJmp(TTrack* track, u32* args) {
-    u8 flag;
     bool usetrackptr = false;
     int trackptr = 0;
-    flag = track->getSeq()->readByte();
+    u8 flag = track->getSeq()->readByte();
     u32 data;
 
     if (flag & 0x80) {
@@ -704,7 +703,7 @@ int JASystem::TSeqParser::Cmd_Process(TTrack* track, u8 r5, u16 r6) {
     JASystem::Arg_s sp08 = Arglist[r5-0xC0];
     u16 r29 = sp08.m02;
     r29 |= r6;
-    u32 sp18[10];
+    u32 sp18[8];
     for (int i = 0 ; i < sp08.m00; i++) {
         u32 r3 = 0;
         switch (r29 & 0x3) {

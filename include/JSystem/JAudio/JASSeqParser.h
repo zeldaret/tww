@@ -70,7 +70,7 @@ namespace JASystem {
         bool conditionCheck(TTrack*, u8);
         int parseSeq(TTrack*);
 
-        static int (TSeqParser::*sCmdPList[])(TTrack*, u32*);
+        static CmdFunc sCmdPList[];
     };
 
     struct Arg_s { // Fake name
