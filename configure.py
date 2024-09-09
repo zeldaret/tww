@@ -690,7 +690,7 @@ config.libs = [
         [
             Object(Matching,    "JSystem/JStudio/JStudio_JStage/control.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio_JStage/object.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-actor.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JStage/object-actor.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio_JStage/object-ambientlight.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-camera.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio_JStage/object-fog.cpp"),

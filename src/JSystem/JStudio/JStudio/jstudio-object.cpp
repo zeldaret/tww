@@ -64,19 +64,19 @@ void JStudio::TAdaptor::adaptor_setVariableValue(JStudio::TObject* pObject, u32 
     /* Nonmatching */
     setVarFunc func;
     switch (param_3) {
-    case JStudio::data::UNK_0x1:
+    case JStudio::data::TEOD_Unknown_01:
         func = &adaptor_setVariableValue_VOID_;
         break;
-    case JStudio::data::UNK_0x2:
+    case JStudio::data::TEOD_Unknown_02:
         func = &adaptor_setVariableValue_IMMEDIATE_;
         break;
-    case JStudio::data::UNK_0x3:
+    case JStudio::data::TEOD_Unknown_03:
         func = &adaptor_setVariableValue_TIME_;
         break;
-    case JStudio::data::UNK_0x10:
+    case JStudio::data::TEOD_Unknown_10:
         func = &adaptor_setVariableValue_FVR_NAME_;
         break;
-    case JStudio::data::UNK_0x12:
+    case JStudio::data::TEOD_Unknown_12:
         func = &adaptor_setVariableValue_FVR_INDEX_;
         break;
      default:
@@ -91,19 +91,19 @@ void JStudio::TAdaptor::adaptor_setVariableValue_n(JStudio::TObject* pObject, co
     setVarFunc pcVar6;
     u32 iVar7;
     switch(param_4) {
-    case JStudio::data::UNK_0x1:
+    case JStudio::data::TEOD_Unknown_01:
         iVar7 = 0;
         pcVar6 = adaptor_setVariableValue_VOID_;
         break;
-    case JStudio::data::UNK_0x2:
+    case JStudio::data::TEOD_Unknown_02:
         iVar7 = 4;
         pcVar6 = adaptor_setVariableValue_IMMEDIATE_;
         break;
-    case JStudio::data::UNK_0x3:
+    case JStudio::data::TEOD_Unknown_03:
         iVar7 = 4;
         pcVar6 = adaptor_setVariableValue_TIME_;
         break;
-    case JStudio::data::UNK_0x12:
+    case JStudio::data::TEOD_Unknown_12:
         iVar7 = 4;
         pcVar6 = adaptor_setVariableValue_FVR_INDEX_;
         break;

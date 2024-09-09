@@ -69,7 +69,7 @@ void TAdaptor_sound::adaptor_do_update(const JStudio::TObject* object, u32) {
 /* 80278FB8-80279064       .text adaptor_do_SOUND__Q214JStudio_JAudio14TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
 void TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperationData op, const void* data, u32) {
     switch (op) {
-    case JStudio::data::UNK_0x19:
+    case JStudio::data::TEOD_Unknown_19:
         u32 flags = *(s32*)data;
         if (flags & 0xc0000000) {
             if (mpSound) {
@@ -89,7 +89,7 @@ void TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperationData op, const v
 /* 80279064-8027908C       .text adaptor_do_LOCATED__Q214JStudio_JAudio14TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
 void TAdaptor_sound::adaptor_do_LOCATED(JStudio::data::TEOperationData op, const void* data, u32 flag) {
     switch (op) {
-    case JStudio::data::UNK_0x2:
+    case JStudio::data::TEOD_Unknown_02:
         Vec* pos  = *(Vec**)data;
         mPosition = NULL;
         if (!pos)

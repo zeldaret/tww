@@ -6,107 +6,251 @@
 #include "JSystem/JStudio/JStudio_JStage/object-actor.h"
 #include "dolphin/types.h"
 
+namespace JStudio_JStage {
+
 /* 80276264-80276318       .text __ct__Q214JStudio_JStage14TAdaptor_actorFPCQ26JStage7TSystemPQ26JStage6TActor */
-JStudio_JStage::TAdaptor_actor::TAdaptor_actor(const JStage::TSystem*, JStage::TActor*) {
-    /* Nonmatching */
+TAdaptor_actor::TAdaptor_actor(const JStage::TSystem* system, JStage::TActor* actor)
+   : JStudio::TAdaptor_actor()
+    , mSystem(system)
+    , mObject(actor)
+    , m12C(NULL)
+    , m130(0xFFFFFFFF)
+    , m134(NULL)
+    , m138(0xFFFFFFFF)
+    , m13C(0)
+    , m140(0)
+{
 }
 
 /* 80276318-80276390       .text __dt__Q214JStudio_JStage14TAdaptor_actorFv */
-JStudio_JStage::TAdaptor_actor::~TAdaptor_actor() {
-    /* Nonmatching */
+TAdaptor_actor::~TAdaptor_actor() {
+    adaptor_do_end(NULL);
 }
 
 /* 80276390-8027641C       .text adaptor_do_prepare__Q214JStudio_JStage14TAdaptor_actorFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_prepare(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_prepare(const JStudio::TObject* object) {
+    for (const TVVOutputObject* output = saoVVOutput_; output->mValueIndex != -1; output++) {
+        mVariableValues[output->mValueIndex].setOutput(output);
+    }
+    for (const TVVOutput_ANIMATION_FRAME_* output = saoVVOutput_ANIMATION_FRAME_; output->mValueIndex != -1; output++) {
+        mVariableValues[output->mValueIndex].setOutput(output);
+    }
 }
 
 /* 8027641C-80276600       .text adaptor_do_begin__Q214JStudio_JStage14TAdaptor_actorFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_begin(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_begin(const JStudio::TObject* object) {
+    mObject->JSGFEnableFlag(1);
+    
+    const JStudio::TControl* pControl = object->getControl();
+    Vec sp2C[2];
+    Vec sp14[2];
+    Vec sp08;
+    mObject->JSGGetTranslation(&sp2C[0]);
+    mObject->JSGGetRotation(&sp2C[1]);
+    mObject->JSGGetScaling(&sp08);
+    Vec* r29;
+    if (!pControl->transformOnGet_isEnabled()) {
+        r29 = sp2C;
+    } else {
+        MTXMultVec(pControl->transformOnGet_getMatrix(), &sp2C[0], &sp14[0]);
+        sp14[1].x = sp2C[1].x;
+        sp14[1].y = sp2C[1].y + pControl->field_0xa8;
+        sp14[1].z = sp2C[1].z;
+        r29 = sp14;
+    }
+    adaptor_setVariableValue_Vec(sauVariableValue_3_TRANSLATION_XYZ, r29[0]);
+    adaptor_setVariableValue_Vec(sauVariableValue_3_ROTATION_XYZ, r29[1]);
+    adaptor_setVariableValue_Vec(sauVariableValue_3_SCALING_XYZ, sp08);
+    
+    for (const TVVOutputObject* output = saoVVOutput_; output->mValueIndex != -1; output++) {
+        mVariableValues[output->mValueIndex].setValue_immediate((mObject->*(output->mGetter))());
+    }
+    for (const TVVOutput_ANIMATION_FRAME_* output = saoVVOutput_ANIMATION_FRAME_; output->mValueIndex != -1; output++) {
+        mVariableValues[output->mValueIndex].setValue_immediate((mObject->*(output->mGetter))());
+    }
 }
 
 /* 80276600-80276654       .text adaptor_do_end__Q214JStudio_JStage14TAdaptor_actorFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_end(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_end(const JStudio::TObject* object) {
+    mObject->JSGFDisableFlag(1);
 }
 
 /* 80276654-80276750       .text adaptor_do_update__Q214JStudio_JStage14TAdaptor_actorFPCQ27JStudio7TObjectUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_update(const JStudio::TObject*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_update(const JStudio::TObject* object, u32 p2) {
+    const JStudio::TControl* pControl = object->getControl();
+    Vec sp2C[2];
+    Vec sp14[2];
+    Vec sp08;
+    adaptor_getVariableValue_Vec(&sp2C[0], sauVariableValue_3_TRANSLATION_XYZ);
+    adaptor_getVariableValue_Vec(&sp2C[1], sauVariableValue_3_ROTATION_XYZ);
+    adaptor_getVariableValue_Vec(&sp08, sauVariableValue_3_SCALING_XYZ);
+    Vec* r31;
+    if (!pControl->transformOnSet_isEnabled()) {
+        r31 = sp2C;
+    } else {
+        MTXMultVec(pControl->transformOnSet_getMatrix(), &sp2C[0], &sp14[0]);
+        sp14[1].x = sp2C[1].x;
+        sp14[1].y = sp2C[1].y + pControl->transformOnSet_getRotationY();
+        sp14[1].z = sp2C[1].z;
+        r31 = sp14;
+    }
+    mObject->JSGSetTranslation(r31[0]);
+    mObject->JSGSetRotation(r31[1]);
+    mObject->JSGSetScaling(sp08);
 }
 
 /* 80276750-80276784       .text adaptor_do_data__Q214JStudio_JStage14TAdaptor_actorFPCQ27JStudio7TObjectPCvUlPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_data(const JStudio::TObject*, const void*, u32, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_data(const JStudio::TObject* object, const void* p2, u32 p3, const void* p4, u32 p5) {
+    TAdaptor_object_::adaptor_data_(mObject, p2, p3, p4, p5);
 }
 
 /* 80276784-802767DC       .text adaptor_do_SHAPE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_SHAPE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_SHAPE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    setJSG_ID_(&JStage::TActor::JSGSetShape, operation, p2, p3);
 }
 
 /* 802767DC-80276834       .text adaptor_do_ANIMATION__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_ANIMATION(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_ANIMATION(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    setJSG_ID_(&JStage::TActor::JSGSetAnimation, operation, p2, p3);
 }
 
 /* 80276834-80276848       .text adaptor_do_ANIMATION_MODE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_ANIMATION_MODE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_ANIMATION_MODE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    if (operation != JStudio::data::TEOD_Unknown_02) {
+        return;
+    }
+    m13C = *(u32*)p2;
 }
 
 /* 80276848-802768A0       .text adaptor_do_TEXTURE_ANIMATION__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_TEXTURE_ANIMATION(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_TEXTURE_ANIMATION(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    setJSG_ID_(&JStage::TActor::JSGSetTextureAnimation, operation, p2, p3);
 }
 
 /* 802768A0-802768B4       .text adaptor_do_TEXTURE_ANIMATION_MODE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_TEXTURE_ANIMATION_MODE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_TEXTURE_ANIMATION_MODE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    if (operation != JStudio::data::TEOD_Unknown_02) {
+        return;
+    }
+    m140 = *(u32*)p2;
 }
 
 /* 802768B4-80276908       .text adaptor_do_PARENT__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_PARENT(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_18:
+        m12C = (JStage::TObject*)mSystem->JSGFindObject((const char*)p2, JStage::TOBJ_ACTOR_UNK);
+        break;
+    }
 }
 
 /* 80276908-80276978       .text adaptor_do_PARENT_NODE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_18:
+        if (m12C) {
+            m130 = m12C->JSGFindNodeID((const char*)p2);
+        }
+        break;
+    case JStudio::data::TEOD_Unknown_19:
+        m130 = *(u32*)p2;
+        break;
+    }
 }
 
 /* 80276978-802769D4       .text adaptor_do_PARENT_ENABLE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_02:
+        bool v0 = (*(u32*)p2 != 0);
+        JStage::TObject* object = NULL;
+        u32 v1 = 0xFFFFFFFF;
+        if (v0 != 0) {
+            object = m12C;
+            v1     = m130;
+        }
+        mObject->JSGSetParent(object, v1);
+    }
 }
 
 /* 802769D4-80276A28       .text adaptor_do_RELATION__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_RELATION(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_18:
+        m134 = (JStage::TObject*)mSystem->JSGFindObject((const char*)p2, JStage::TOBJ_ACTOR_UNK);
+        break;
+    }
 }
 
 /* 80276A28-80276A98       .text adaptor_do_RELATION_NODE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION_NODE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_RELATION_NODE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_18:
+        if (m134) {
+            m138 = m134->JSGFindNodeID((const char*)p2);
+        }
+        break;
+    case JStudio::data::TEOD_Unknown_19:
+        m138 = *(u32*)p2;
+        break;
+    }
 }
 
 /* 80276A98-80276AF0       .text adaptor_do_RELATION_ENABLE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION_ENABLE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::adaptor_do_RELATION_ENABLE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_02:
+        mObject->JSGSetRelation(*(u32*)p2, m134, m138);
+        break;
+    }
 }
 
 /* 80276AF0-80276B2C       .text setJSG_ID___Q214JStudio_JStage14TAdaptor_actorFMQ26JStage6TActorFPCvPvUl_vQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_actor::setJSG_ID_(void (JStage::TActor::*)(u32), JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_actor::setJSG_ID_(IDFunction function, JStudio::data::TEOperationData operation, const void* p3, u32 p4) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_19:
+        (mObject->*function)(*(u32*)p3);
+        break;
+    }
 }
 
 /* 80276B2C-80276C00       .text __cl__Q314JStudio_JStage14TAdaptor_actor26TVVOutput_ANIMATION_FRAME_CFfPQ27JStudio8TAdaptor */
-void JStudio_JStage::TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::operator()(f32, JStudio::TAdaptor*) const {
-    /* Nonmatching */
+void TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::operator()(f32 p1, JStudio::TAdaptor* adaptor) const {
+    JStage::TActor* actor = static_cast<TAdaptor_actor*>(adaptor)->mObject;
+    // not sure what this bit is
+    u32 idx = *(u32*)(((u32)adaptor - 1) + _08);
+
+    u8 idx_lowBytes  = idx;
+    u8 idx_highBytes = idx >> 8;
+
+    f32 maxVal = (actor->*mMaxGetter)();
+    switch (idx_highBytes) {
+    case 1:
+        p1 = maxVal - p1;
+        break;
+    case 0:
+        break;
+    }
+
+    if (maxVal > 0.0f) {
+        p1 = (f32)(*JStudio::TFunctionValue::toFunction_outside(idx_lowBytes))(p1, maxVal);
+    }
+    (actor->*mSetter)(p1);
 }
 
 /* 80276C00-80276C60       .text __dt__Q314JStudio_JStage14TAdaptor_actor26TVVOutput_ANIMATION_FRAME_Fv */
-JStudio_JStage::TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::~TVVOutput_ANIMATION_FRAME_() {
-    /* Nonmatching */
+TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::~TVVOutput_ANIMATION_FRAME_() {
 }
+
+const TAdaptor_actor::TVVOutputObject TAdaptor_actor::saoVVOutput_[] = {
+    TVVOutputObject(1, &JStage::TActor::JSGSetAnimationTransition, &JStage::TActor::JSGGetAnimationTransition),
+    TVVOutputObject(-1, NULL, NULL)
+};
+
+const TAdaptor_actor::TVVOutput_ANIMATION_FRAME_ TAdaptor_actor::saoVVOutput_ANIMATION_FRAME_[] = {
+    TVVOutput_ANIMATION_FRAME_(0, 317, &JStage::TActor::JSGSetAnimationFrame, &JStage::TActor::JSGGetAnimationFrame, &JStage::TActor::JSGGetAnimationFrameMax),
+    TVVOutput_ANIMATION_FRAME_(2, 321, &JStage::TActor::JSGSetTextureAnimationFrame, &JStage::TActor::JSGGetTextureAnimationFrame, &JStage::TActor::JSGGetTextureAnimationFrameMax),
+    TVVOutput_ANIMATION_FRAME_(-1, 0, NULL, NULL, NULL)
+};
+
+} // namespace JStudio_JStage

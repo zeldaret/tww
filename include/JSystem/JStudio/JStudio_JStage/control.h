@@ -55,10 +55,34 @@ struct TAdaptor_object_ {
     /* 0x8 */ JStage::TObject* mObject;
 };
 
-struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::TAdaptor_object_ {
-    struct TVVOutput_ANIMATION_FRAME_ {
-        void operator()(f32, JStudio::TAdaptor*) const;
-        ~TVVOutput_ANIMATION_FRAME_();
+struct TAdaptor_actor : public JStudio::TAdaptor_actor {
+    typedef void (JStage::TActor::*IDFunction)(u32);
+    typedef TVariableValueOutput_object_<TAdaptor_actor, JStage::TActor> TVVOutputObject;
+    
+    struct TVVOutput_ANIMATION_FRAME_ : public JStudio::TVariableValue::TOutput {
+        typedef void (JStage::TActor::*Setter)(f32);
+        typedef f32 (JStage::TActor::*Getter)() const;
+        typedef f32 (JStage::TActor::*MaxGetter)() const;
+
+        TVVOutput_ANIMATION_FRAME_(int valueIndex, u32 val, Setter setter, Getter getter, MaxGetter maxGetter)
+            : TOutput()
+            , mValueIndex(valueIndex)
+            , _08(val)
+            , mSetter(setter)
+            , mGetter(getter)
+            , mMaxGetter(maxGetter)
+        {
+        }
+
+        virtual void operator()(f32, JStudio::TAdaptor*) const;
+        inline virtual ~TVVOutput_ANIMATION_FRAME_();
+
+        // _00 = VTBL
+        int mValueIndex;      // _04
+        u32 _08;              // _08
+        Setter mSetter;       // _0C
+        Getter mGetter;       // _18
+        MaxGetter mMaxGetter; // _24
     };
 
     TAdaptor_actor(JStage::TSystem const*, JStage::TActor*);
@@ -72,7 +96,6 @@ struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::T
     virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32);
-    virtual void adaptor_do_PARENT_FUNCTION(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_RELATION(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_RELATION_NODE(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_RELATION_ENABLE(JStudio::data::TEOperationData, void const*, u32);
@@ -84,13 +107,18 @@ struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::T
     
     void setJSG_ID_(void (JStage::TActor::*)(u32),
                                     JStudio::data::TEOperationData, void const*, u32);
-    void setJSG_SRT_(JStudio::TControl const*);
-    void getJSG_SRT_(JStudio::TControl const*);
 
-    static u8 saoVVOutput_[64];
-    static u8 saoVVOutput_ANIMATION_FRAME_[144 + 4 /* padding */];
+    static const TVVOutputObject saoVVOutput_[];
+    static const TVVOutput_ANIMATION_FRAME_ saoVVOutput_ANIMATION_FRAME_[];
 
-    /* 0x130 */ u8 field_0x130[0x144 - 0x130];
+    /* 0x124 */ const JStage::TSystem* mSystem;
+    /* 0x128 */ JStage::TActor* mObject;
+    /* 0x12C */ JStage::TObject* m12C;
+    /* 0x130 */ u32 m130;
+    /* 0x134 */ JStage::TObject* m134;
+    /* 0x138 */ u32 m138;
+    /* 0x13C */ u32 m13C;
+    /* 0x140 */ u32 m140;
 };  // Size: 0x144
 
 struct TAdaptor_ambientLight : public JStudio::TAdaptor_ambientLight {

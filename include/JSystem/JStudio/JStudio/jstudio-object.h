@@ -9,13 +9,32 @@ typedef struct _GXColor GXColor;
 namespace JStudio {
 namespace data {
     enum TEOperationData {
-        UNK_0x1 = 0x1,
-        UNK_0x2 = 0x2,
-        UNK_0x3 = 0x3,
-        UNK_0x10 = 0x10,
-        UNK_0x12 = 0x12,
-        UNK_0x18 = 0x18,
-        UNK_0x19 = 0x19,
+        TEOD_Unknown_00 = 0x00,
+        TEOD_Unknown_01 = 0x01,
+        TEOD_Unknown_02 = 0x02,
+        TEOD_Unknown_03 = 0x03,
+        TEOD_Unknown_04 = 0x04,
+        TEOD_Unknown_05 = 0x05,
+        TEOD_Unknown_06 = 0x06,
+        TEOD_Unknown_07 = 0x07,
+        TEOD_Unknown_08 = 0x08,
+        TEOD_Unknown_09 = 0x09,
+        TEOD_Unknown_0A = 0x0A,
+        TEOD_Unknown_0B = 0x0B,
+        TEOD_Unknown_0C = 0x0C,
+        TEOD_Unknown_0D = 0x0D,
+        TEOD_Unknown_0E = 0x0E,
+        TEOD_Unknown_0F = 0x0F,
+        TEOD_Unknown_10 = 0x10,
+        TEOD_Unknown_11 = 0x11,
+        TEOD_Unknown_12 = 0x12,
+        TEOD_Unknown_13 = 0x13,
+        TEOD_Unknown_14 = 0x14,
+        TEOD_Unknown_15 = 0x15,
+        TEOD_Unknown_16 = 0x16,
+        TEOD_Unknown_17 = 0x17,
+        TEOD_Unknown_18 = 0x18,
+        TEOD_Unknown_19 = 0x19,
     };
 };
 
@@ -26,7 +45,7 @@ struct TVariableValue {
         virtual ~TOutput() = 0;
     };  // Size: 0x04
 
-    struct TOutput_none_ {
+    struct TOutput_none_ : public TOutput {
         ~TOutput_none_();
         void operator()(f32, JStudio::TAdaptor*) const;
     };
@@ -35,7 +54,12 @@ struct TVariableValue {
     static void update_immediate_(JStudio::TVariableValue*, f64);
     static void update_time_(JStudio::TVariableValue*, f64);
     static void update_functionValue_(JStudio::TVariableValue*, f64);
-    TVariableValue();
+    TVariableValue()
+        : field_0x4(0)
+        , field_0x8(NULL)
+        , pOutput_(&soOutput_none_)
+    {
+    }
 
     void setValue_immediate(f32 value) {
         field_0x8 = &update_immediate_;
@@ -85,7 +109,7 @@ struct TVariableValue {
         pOutput_ = (output != NULL ? (TOutput*)output : (TOutput*)&soOutput_none_);
     }
 
-    static u8 soOutput_none_[4 + 4 /* padding */];
+    static TOutput_none_ soOutput_none_;
 
     /* 0x00 */ f32 mValue;
     /* 0x04 */ u32 field_0x4;
@@ -206,12 +230,28 @@ struct TAdaptor_actor : public TAdaptor {
     {
     }
     virtual ~TAdaptor_actor() = 0;
+    virtual void adaptor_do_prepare(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_begin(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_end(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_update(const JStudio::TObject*, u32) = 0;
+    virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32) = 0;
+    virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_RELATION(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_RELATION_NODE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_RELATION_ENABLE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_SHAPE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_ANIMATION(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_ANIMATION_MODE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_TEXTURE_ANIMATION(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_TEXTURE_ANIMATION_MODE(JStudio::data::TEOperationData, void const*, u32) = 0;
 
     /* 0x10 */ TVariableValue mValue[14];
 
-    static u8 const sauVariableValue_3_TRANSLATION_XYZ[12];
-    static u8 const sauVariableValue_3_ROTATION_XYZ[12];
-    static u8 const sauVariableValue_3_SCALING_XYZ[12];
+    static u32 const sauVariableValue_3_TRANSLATION_XYZ[3];
+    static u32 const sauVariableValue_3_ROTATION_XYZ[3];
+    static u32 const sauVariableValue_3_SCALING_XYZ[3];
 };  // Size: 0x128
 
 struct TObject_actor : public TObject {
@@ -251,6 +291,14 @@ struct TAdaptor_camera : public TAdaptor {
     {
     }
     virtual ~TAdaptor_camera() = 0;
+    virtual void adaptor_do_prepare(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_begin(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_end(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_update(const JStudio::TObject*, u32) = 0;
+    virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32) = 0;
+    virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32) = 0;
 
     /* 0x10 */ TVariableValue mValue[11];
 
@@ -297,6 +345,13 @@ struct TAdaptor_light : public TAdaptor {
     {
     }
     virtual ~TAdaptor_light() = 0;
+    virtual void adaptor_do_prepare(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_begin(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_end(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_update(const JStudio::TObject*, u32) = 0;
+    virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32) = 0;
+    virtual void adaptor_do_ENABLE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_FACULTY(JStudio::data::TEOperationData, void const*, u32) = 0;
 
     /* 0x10 */ TVariableValue mValue[13];
 
@@ -322,6 +377,7 @@ struct TAdaptor_message : public TAdaptor {
     }
 
     virtual ~TAdaptor_message() = 0;
+    virtual void adaptor_do_MESSAGE(JStudio::data::TEOperationData, const void*, u32) = 0;
 };
 
 struct TObject_message : public TObject {
@@ -339,6 +395,13 @@ struct TAdaptor_particle : public TAdaptor {
     {
     }
     virtual ~TAdaptor_particle() = 0;
+    virtual void adaptor_do_prepare(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_end(const JStudio::TObject*) = 0;
+    virtual void adaptor_do_update(const JStudio::TObject*, u32) = 0;
+    virtual void adaptor_do_PARTICLE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32) = 0;
+    virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32) = 0;
 
     /* 0x10 */ TVariableValue mValue[20];
 
