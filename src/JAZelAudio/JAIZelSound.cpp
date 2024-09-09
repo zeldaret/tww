@@ -74,7 +74,7 @@ void JAIZelSound::setSeDistanceVolume(u8 r30) {
     } else {
         f31 = 1.0f;
     }
-    setSeInterVolume(4, f31, r30, 0);
+    setSeInterVolume(SOUNDPARAM_Distance, f31, r30, 0);
 }
 
 /* 802AF2A0-802AF314       .text setSeDistancePan__11JAIZelSoundFUc */
@@ -82,7 +82,7 @@ void JAIZelSound::setSeDistancePan(u8 r31) {
     if ((getSwBit() & 0x00800000) && field_0x18 > 1) {
         return;
     }
-    setSeInterPan(4, setDistancePanCommon(), r31, 0);
+    setSeInterPan(SOUNDPARAM_Distance, setDistancePanCommon(), r31, 0);
 }
 
 /* 802AF314-802AF458       .text setSeDistanceDolby__11JAIZelSoundFUc */
@@ -110,5 +110,5 @@ void JAIZelSound::setSeDistanceDolby(u8 r30) {
     }
     
     u8 r0 = f0;
-    setSeInterDolby(4, r0 / 127.0f, r30, 0);
+    setSeInterDolby(SOUNDPARAM_Distance, r0 / 127.0f, r30, 0);
 }

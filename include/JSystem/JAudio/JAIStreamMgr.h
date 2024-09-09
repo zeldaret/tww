@@ -26,7 +26,7 @@ namespace JAInter {
         /* 0x04 */ f32 field_0x4;
         /* 0x08 */ f32 field_0x8;
         /* 0x0C */ f32 field_0xc;
-        /* 0x10 */ int field_0x10;
+        /* 0x10 */ u32 mActiveTrackFlag;
         /* 0x14 */ JAISound* mpSound;
     };
     
@@ -38,15 +38,17 @@ namespace JAInter {
 
     class StreamParameter {
     public:
-        /* 0x000 */ u8 field_0x0;
+        void init() {} // TODO
+
+        /* 0x000 */ u8 mPauseMode;
         /* 0x004 */ int field_0x4;
-        /* 0x008 */ int field_0x8;
-        /* 0x00C */ int field_0xc;
-        /* 0x010 */ int field_0x10;
-        /* 0x014 */ JAInter::MoveParaSet field_0x14[20];
+        /* 0x008 */ u32 mVolumeFlags;
+        /* 0x00C */ u32 mPitchFlags;
+        /* 0x010 */ u32 mPanFlags;
+        /* 0x014 */ JAInter::MoveParaSet mVolumes[20];
         /* 0x154 */ JAInter::MoveParaSet* pitch;
         /* 0x158 */ JAInter::MoveParaSet* pan;
-        /* 0x15C */ streamUpdate_t* field_0x15c;
+        /* 0x15C */ streamUpdate_t* mUpdateData;
     };
 
     namespace StreamMgr {
