@@ -273,12 +273,12 @@ def ActorRel(status, rel_name, extra_cflags=[]):
 
 
 # Helper function for JSystem libraries
-def JSystemLib(lib_name, objects):
+def JSystemLib(lib_name, objects, progress_category="core"):
     return {
         "lib": lib_name,
         "mw_version": "GC/1.3.2",
         "cflags": cflags_framework,
-        "progress_category": "core",
+        "progress_category": progress_category,
         "host": True,
         "objects": objects,
     }
@@ -827,6 +827,7 @@ config.libs = [
             Object(Matching,    "JAZelAudio/JAIZelScene.cpp"),
             Object(Matching,    "JAZelAudio/JAIZelSound.cpp"),
         ],
+        progress_category="game",
     ),
     DolphinLib(
         "gf",
