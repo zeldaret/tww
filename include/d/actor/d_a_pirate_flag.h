@@ -10,25 +10,25 @@
 class daPirate_Flag_packet_c : public J3DPacket {
 public:
     void changeCurrentPos() {}
-    void getEscapeNrmAngle() {}
-    void getMtx() {}
-    void getNrm() {}
-    void getOffsetVec() {}
-    void getPos() {}
+    s16 getEscapeNrmAngle() { return m87A; }
+    MtxP getMtx() { return mMtx; }
+    cXyz* getNrm() { return mNrm[m87E]; }
+    cXyz getOffsetVec() {}
+    cXyz* getPos() { return mPos[m87E]; }
     void setNrmMtx() {}
-    void setTevStr(dKy_tevstr_c*) {}
+    void setTevStr(dKy_tevstr_c* i_tevStr) { mTevStr = i_tevStr; }
 
     void setCorrectNrmAngle(s16, f32);
     void setBackNrm();
     void setNrmVtx(cXyz*, int, int);
     void draw();
 public:
-    /* 0x010 */ Mtx m010;
-    /* 0x040 */ dKy_tevstr_c* m040;
-    /* 0x044 */ cXyz m044[2][25];
-    /* 0x29C */ cXyz m29C[2][25];
+    /* 0x010 */ Mtx mMtx;
+    /* 0x040 */ dKy_tevstr_c* mTevStr;
+    /* 0x044 */ cXyz mPos[2][25];
+    /* 0x29C */ cXyz mNrm[2][25];
     /* 0x4F4 */ cXyz m4F4[2][25];
-    /* 0x74C */ u8 pad74C[0x12C];
+    /* 0x74C */ cXyz m74C[25];
     /* 0x878 */ s16 m878;
     /* 0x87A */ s16 m87A;
     /* 0x87C */ s16 m87C;
@@ -61,7 +61,7 @@ public:
     /* 0x290 */ request_of_phase_process_class mPhs1;
     /* 0x298 */ request_of_phase_process_class mPhs2;
     /* 0x2A0 */ u8 pad2A0[0x18];
-    /* 0x2B8 */ daPirate_Flag_packet_c packet;
+    /* 0x2B8 */ daPirate_Flag_packet_c mPacket;
 };
 
 #endif /* D_A_PIRATE_FLAG_H */
