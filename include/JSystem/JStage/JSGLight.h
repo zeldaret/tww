@@ -7,6 +7,11 @@
 
 namespace JStage {
     enum TELight {
+        TELIGHT_Unk0 = 0,
+        TELIGHT_Unk1 = 1,
+        TELIGHT_Unk2 = 2,
+        TELIGHT_Unk3 = 3,
+        
         kLightMax = 0xFFFFFFFF,
     };
 

@@ -15,6 +15,8 @@
 #include "string.h"
 #include "dolphin/os/OS.h"
 
+const u32 sChannelMax = 2;
+
 #define JUT_ASSERT_3(LINE, COND)                                                                   \
     if (!(COND)) {                                                                                 \
         if (!(COND)) {                                                                             \
@@ -114,8 +116,8 @@ void JAInter::StreamMgr::init() {
     tmp->field_0x4 = 1.0f;
     tmp->field_0x8 = 1.0f;
     tmp->field_0xc = 0.5f;
-    tmp->field_0x10 = 0;
-    tmp->mpSound = 0;
+    tmp->mActiveTrackFlag = SOUNDACTIVE_Unk0;
+    tmp->mpSound = NULL;
 }
 
 /* 8029BEB4-8029C04C       .text storeStreamBuffer__Q27JAInter9StreamMgrFPP8JAISoundPQ27JAInter5ActorUlUlUcPv */
@@ -129,20 +131,20 @@ void JAInter::StreamMgr::storeStreamBuffer(JAISound** param_1, JAInter::Actor* p
     }
     JAISound* sound = streamControl.getSound();
     StreamParameter* para = sound->getStreamParameter();
-    para->field_0x0 = 0;
+    para->mPauseMode = 0;
     para->field_0x4 = 0;
-    para->field_0x8 = 0;
-    para->field_0xc = 0;
-    para->field_0x10 = 0;
+    para->mVolumeFlags = 0;
+    para->mPitchFlags = 0;
+    para->mPanFlags = 0;
     for (u32 i = 0; i < 20; i++) {
-        MoveParaSet* movePara = &para->field_0x14[i];
+        MoveParaSet* movePara = &para->mVolumes[i];
         movePara->init(1.0f);
     }
     for (u32 i = 0; i < JAIGlobalParameter::getParamStreamParameterLines(); i++) {
         para->pitch[i].init(1.0f);
         para->pan[i].init(0.5f);
     }
-    sound->field_0x5 = 1;
+    sound->mState = SOUNDSTATE_Stored;
     sound->field_0x6 = 10;
     streamUpdate->field_0x2 = 0;
     sound->initParameter(param_1, param_2, param_3, param_4, param_5, param_6);
@@ -150,17 +152,17 @@ void JAInter::StreamMgr::storeStreamBuffer(JAISound** param_1, JAInter::Actor* p
 
 /* 8029C04C-8029C0F0       .text releaseStreamBuffer__Q27JAInter9StreamMgrFP8JAISoundUl */
 void JAInter::StreamMgr::releaseStreamBuffer(JAISound* param_1, u32 param_2) {
-    if (param_2 == 0 || param_1->field_0x5 < 4) {
+    if (param_2 == 0 || param_1->mState < SOUNDSTATE_Playing) {
         StreamLib::stop();
-        param_1->field_0x5 = 0;
-        streamUpdate->mpSound = 0;
+        param_1->mState = SOUNDSTATE_Inactive;
+        streamUpdate->mpSound = NULL;
         param_1->clearMainSoundPPointer();
         streamControl.releaseSound(param_1);
         JASystem::Dvd::unpauseDvdT();
     } else {
-        if (param_1->getStreamParameter()->field_0x15c) {
-            param_1->getStreamParameter()->field_0x15c->field_0x10 |= 2;
-            param_1->field_0x14 = param_2;
+        if (param_1->getStreamParameter()->mUpdateData) {
+            param_1->getStreamParameter()->mUpdateData->mActiveTrackFlag |= SOUNDACTIVE_DoFadeout;
+            param_1->mFadeCounter = param_2;
         }
     }
 }
@@ -178,19 +180,19 @@ void JAInter::StreamMgr::processGFrameStream() {
 /* 8029C128-8029C1D8       .text checkEntriedStream__Q27JAInter9StreamMgrFv */
 void JAInter::StreamMgr::checkEntriedStream() {
     for (JAISound* sound = streamControl.field_0x4; sound; sound = sound->field_0x34) {
-        if (sound->field_0x5 != 1 || StreamLib::getPlayingFlag() == 1) {
+        if (sound->mState != SOUNDSTATE_Stored || StreamLib::getPlayingFlag() == 1) {
             continue;
         }
-        sound->field_0x5 = 2;
-        sound->getStreamParameter()->field_0x15c = streamUpdate;
+        sound->mState = SOUNDSTATE_Loaded;
+        sound->getStreamParameter()->mUpdateData = streamUpdate;
         streamUpdate_t* tmp = streamUpdate;
         tmp->field_0x0 = 0;
         tmp->field_0x1 = 0;
         tmp->field_0x4 = 1.0f;
         tmp->field_0x8 = 1.0f;
         tmp->field_0xc = 0.5f;
-        tmp->field_0x10 = 0;
-        tmp->mpSound = 0;
+        tmp->mActiveTrackFlag = SOUNDACTIVE_Unk0;
+        tmp->mpSound = NULL;
         streamUpdate->mpSound = sound;
     }
 }
@@ -201,14 +203,14 @@ void JAInter::StreamMgr::checkWaitStream() {
     if (!sound) {
         return;
     }
-    if (sound->field_0x5 != 2) {
+    if (sound->mState != SOUNDSTATE_Loaded) {
         return;
     }
     char buffer[64];
     strcpy(buffer, JAIGlobalParameter::getParamStreamPath());
     strcat(buffer, streamList[JAIBasic::getInterface()->getSoundOffsetNumberFromID(sound->getID())].field_0x10);
     JAIBasic::getInterface()->setSeExtParameter(sound);
-    sound->field_0x5 = 3;
+    sound->mState = SOUNDSTATE_Ready;
     checkPlayingStream();
     StreamLib::start(buffer, sound->getStreamParameter()->field_0x4, streamList[sound->getID() & 0x3FF].field_0x20);
     StreamLib::setPrepareFlag(1);
@@ -220,16 +222,16 @@ void JAInter::StreamMgr::checkRequestStream() {
     if (!sound) {
         return;
     }
-    if (sound->field_0x5 != 3) {
+    if (sound->mState != SOUNDSTATE_Ready) {
         return;
     }
     if (streamUpdate->field_0x2) {
         return;
     }
-    sound->field_0x5 = 4;
-    if (sound->field_0x14 > 1) {
-        sound->setStreamInterVolume(7, 0.0, 0);
-        sound->setStreamInterVolume(7, 1.0, sound->field_0x14);
+    sound->mState = SOUNDSTATE_Playing;
+    if (sound->mFadeCounter > 1) {
+        sound->setStreamInterVolume(SOUNDPARAM_Fadeout, 0.0, 0);
+        sound->setStreamInterVolume(SOUNDPARAM_Fadeout, 1.0, sound->mFadeCounter);
         StreamLib::setVolume(0.0);
     }
     StreamLib::setPrepareFlag(0);
@@ -237,7 +239,129 @@ void JAInter::StreamMgr::checkRequestStream() {
 
 /* 8029C344-8029C730       .text checkPlayingStream__Q27JAInter9StreamMgrFv */
 void JAInter::StreamMgr::checkPlayingStream() {
-    /* Nonmatching */
+    JAISound* streamSound = getUpdateInfo()->mpSound;
+    if (streamSound == NULL) {
+        return;
+    }
+
+    streamUpdate_t* data = getUpdateInfo();
+    if (streamSound->mState >= SOUNDSTATE_Playing) {
+        streamSound->getStreamParameter();
+        if (StreamLib::getPlayingFlag() == 2) {
+            streamSound->mState = SOUNDSTATE_Inactive;
+            if (streamSound->getStreamParameter()->mUpdateData) {
+                streamSound->getStreamParameter()->mUpdateData->mpSound = NULL;
+            }
+            streamSound->clearMainSoundPPointer();
+            streamControl.releaseSound(streamSound);
+            return;
+        }
+
+        if (streamSound->field_0x6 != 0) {
+            streamSound->field_0x6--;
+        }
+
+        if ((data->mActiveTrackFlag & SOUNDACTIVE_DoFadeout) != 0) {
+            streamSound->setStreamInterVolume(SOUNDPARAM_Fadeout, 0.0f, streamSound->mFadeCounter);
+            streamSound->mState = SOUNDSTATE_Fadeout;
+            data->mActiveTrackFlag ^= SOUNDACTIVE_DoFadeout;
+        }
+        
+        if (streamSound->mState == SOUNDSTATE_Fadeout &&
+            (streamSound->getStreamInterVolume(SOUNDPARAM_Fadeout) == 0.0f || streamSound->mFadeCounter == 0) &&
+            streamSound->field_0x6 == 0
+        ) {
+            StreamLib::stop();
+            streamSound->mState = SOUNDSTATE_Inactive;
+            if (streamSound->getStreamParameter()->mUpdateData != NULL) {
+                streamSound->getStreamParameter()->mUpdateData->mpSound = NULL;
+            }
+            streamSound->clearMainSoundPPointer();
+            streamControl.releaseSound(streamSound);
+        }
+    }
+    if (streamSound->mState < SOUNDSTATE_Ready) {
+        return;
+    }
+
+    StreamParameter* param = streamSound->getStreamParameter();
+    if (data->mActiveTrackFlag & SOUNDACTIVE_Volume) {
+        f32 volFactor = 1.0f;
+        for (u8 i = 0; i < 20; i++) {
+            MoveParaSet* vol = &param->mVolumes[i];
+            if (param->mVolumeFlags & (1 << i)) {
+                if (vol->move() == FALSE) {
+                    param->mVolumeFlags ^= (1 << i);
+                }
+            }
+
+            volFactor *= vol->mCurrentValue;
+        }
+
+        if (streamUpdate->field_0x4 != volFactor) {
+            StreamLib::setVolume(volFactor);
+            streamUpdate->field_0x4 = volFactor;
+        }
+
+        if (param->mVolumeFlags == 0) {
+            data->mActiveTrackFlag ^= SOUNDACTIVE_Volume;
+        }
+    }
+
+    if (data->mActiveTrackFlag & SOUNDACTIVE_Pitch) {
+        f32 pitchFactor = 1.0f;
+        for (u8 i = 0; i < 7; i++) {
+            MoveParaSet* pitch = &param->pitch[i];
+            if (param->mPitchFlags & (1 << i)) {
+                if (pitch->move() == FALSE) {
+                    param->mPitchFlags ^= (1 << i);
+                }
+            }
+
+            pitchFactor *= pitch->mCurrentValue;
+        }
+
+        if (streamUpdate->field_0x8 != pitchFactor) {
+            StreamLib::setPitch(pitchFactor);
+            streamUpdate->field_0x8 = pitchFactor;
+        }
+
+        if (param->mPitchFlags == 0) {
+            data->mActiveTrackFlag ^= SOUNDACTIVE_Pitch;
+        }
+    }
+
+    if (data->mActiveTrackFlag & SOUNDACTIVE_Pan) {
+        f32 panFactor = 0.0f;
+        for (u8 i = 0; i < 7; i++) {
+            MoveParaSet* pan = &param->pan[i];
+            if (param->mPanFlags & (1 << i)) {
+                if (pan->move() == FALSE) {
+                    param->mPanFlags ^= (1 << i);
+                }
+            }
+
+            panFactor += (pan->mCurrentValue - 0.5f);
+        }
+
+        panFactor += 0.5f;
+        if (panFactor > 1.0f) {
+            panFactor = 1.0f;
+        } else if (panFactor < 0.0f) {
+            panFactor = 0.0f;
+        }
+
+        if (streamUpdate->field_0xc != panFactor) {
+            StreamLib::setPan(panFactor);
+            getUpdateInfo()->field_0xc = panFactor;
+        }
+
+        if (param->mPanFlags == 0) {
+            data->mActiveTrackFlag ^= SOUNDACTIVE_Pan;
+        }
+    }
+
+    streamSound->field_0x18++;
 }
 
 /* 8029C730-8029C858       .text Play_DirectPCM__Q27JAInter9StreamLibFPQ28JASystem11TDSPChannelPsUsUlsUs */

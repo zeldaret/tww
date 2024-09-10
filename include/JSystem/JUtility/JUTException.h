@@ -14,7 +14,7 @@ class JUTDirectPrint;
 
 class JUTExternalFB {
 public:
-    JUTExternalFB(_GXRenderModeObj*, GXGamma, void*, u32);
+    JUTExternalFB(GXRenderModeObj*, GXGamma, void*, u32);
 
 private:
     /* 0x00 */ _GXRenderModeObj* mRenderMode;

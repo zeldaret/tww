@@ -558,6 +558,18 @@ public:
     void entryOpa() { j3dSys.getDrawBuffer(0)->entryImm(this, 0); }
 };
 
+class mDoExt_J3DModelPacketS : public J3DPacket {
+public:
+    mDoExt_J3DModelPacketS() {}
+    ~mDoExt_J3DModelPacketS() {}
+
+    void setModel(J3DModel*) {}
+    void update() {}
+    
+    void draw();
+    void setMaterial();
+};
+
 class mDoExt_3Dline_c {
 public:
     mDoExt_3Dline_c();

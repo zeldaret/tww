@@ -108,8 +108,8 @@ u32 JASystem::TSeqCtrl::get32(u32 param_1) const {
 }
 
 /* 8027E614-8027E63C       .text read16__Q28JASystem8TSeqCtrlFv */
-u32 JASystem::TSeqCtrl::read16() {
-    u32 result = readByte() << 8;
+u16 JASystem::TSeqCtrl::read16() {
+    u16 result = readByte() << 8;
     result |= readByte();
     return result;
 }

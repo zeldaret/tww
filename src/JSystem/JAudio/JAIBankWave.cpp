@@ -76,7 +76,7 @@ void JAInter::BankWave::setWaveScene() {
 
 /* 802914D4-80291578       .text loadSecondStayWave__Q27JAInter8BankWaveFv */
 void JAInter::BankWave::loadSecondStayWave() {
-    if (SeMgr::seHandle->field_0x5 == 3 && flags.flag2 == 0 && initOnCodeWs) {
+    if (SeMgr::seHandle->mState == SOUNDSTATE_Ready && flags.flag2 == 0 && initOnCodeWs) {
         for (int i = 0; initOnCodeWs[i].field_0x0; i++) {
             if (initOnCodeWs[i].field_0x8 == 1) {
                 loadGroupWave(i, 0);

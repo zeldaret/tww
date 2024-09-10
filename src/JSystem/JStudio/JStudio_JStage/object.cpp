@@ -14,7 +14,7 @@ void JStudio_JStage::TAdaptor_object_::adaptor_data_(JStage::TObject* object, co
 /* 802761D0-80276264       .text adaptor_ENABLE___Q214JStudio_JStage16TAdaptor_object_FPQ26JStage7TObjectQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JStage::TAdaptor_object_::adaptor_ENABLE_(JStage::TObject* object, JStudio::data::TEOperationData op, const void* data, u32) {
     switch (op) {
-    case JStudio::data::UNK_0x2:
+    case JStudio::data::TEOD_Unknown_02:
         if ((*(u32*)data) != 0) {
             object->JSGFEnableFlag(2);
         } else {

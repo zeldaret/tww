@@ -7,6 +7,8 @@ namespace JASystem {
     class TTrack;
     class TSeqParser {
     public:
+        typedef int (TSeqParser::*CmdFunc)(JASystem::TTrack*, u32*);
+        
         int cmdOpenTrack(TTrack*, u32*);
         int cmdOpenTrackBros(TTrack*, u32*);
         int cmdCall(TTrack*, u32*);
@@ -68,10 +70,14 @@ namespace JASystem {
         bool conditionCheck(TTrack*, u8);
         int parseSeq(TTrack*);
 
-        static int (TSeqParser::*sCmdPList[])(TTrack*, u32*);
+        static CmdFunc sCmdPList[];
     };
 
-    extern const u16 Arglist[0x40][2];
+    struct Arg_s { // Fake name
+        u16 m00;
+        u16 m02;
+    };
+    extern const Arg_s Arglist[0x40];
 }
 
 #endif /* JASSEQPARSER_H */

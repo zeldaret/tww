@@ -176,7 +176,7 @@ void JAIZelBasic::gframeProcess() {
     if (!JAInter::SeMgr::seHandle) {
         return;
     }
-    if (JAInter::SeMgr::seHandle->field_0x5 >= 4) {
+    if (JAInter::SeMgr::seHandle->mState >= SOUNDSTATE_Playing) {
         zeldaGFrameWork();
     }
     processFrameWork();
@@ -197,14 +197,14 @@ void JAIZelBasic::resetProcess() {
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         JAInter::SeqUpdateData* data = JAInter::SequenceMgr::getPlayTrackInfo(i);
         if (data && data->field_0x48) {
-            data->field_0x48->setSeqInterVolume(6, 0.0f, 1);
+            data->field_0x48->setSeqInterVolume(SOUNDPARAM_Direct, 0.0f, 1);
         }
     }
     if (JAInter::StreamMgr::getUpdateInfo()->mpSound) {
         JAInter::StreamMgr::getUpdateInfo()->mpSound->stop(1);
     }
     if (JAInter::SeMgr::seHandle) {
-        JAInter::SeMgr::seHandle->setSeqInterVolume(6, 0.0f, 1);
+        JAInter::SeMgr::seHandle->setSeqInterVolume(SOUNDPARAM_Direct, 0.0f, 1);
     }
     mNextSceneBgmId = 0;
     field_0x022e = 0;
@@ -214,7 +214,7 @@ void JAIZelBasic::resetProcess() {
 /* 802A31C0-802A334C       .text resetRecover__11JAIZelBasicFv */
 void JAIZelBasic::resetRecover() {
     if (JAInter::SeMgr::seHandle) {
-        JAInter::SeMgr::seHandle->setSeqInterVolume(6, 1.0f, 0);
+        JAInter::SeMgr::seHandle->setSeqInterVolume(SOUNDPARAM_Direct, 1.0f, 0);
     }
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         JAInter::SeqUpdateData* data = JAInter::SequenceMgr::getPlayTrackInfo(i);
@@ -540,7 +540,7 @@ void JAIZelBasic::enemyNearByGFrame() {
 void JAIZelBasic::bgmAllMute(u32 param_1) {
     field_0x0080 = 0.0;
     if (mpMainBgmSound) {
-        mpMainBgmSound->setVolume(calcMainBgmVol(), param_1, 0);
+        mpMainBgmSound->setVolume(calcMainBgmVol(), param_1, SOUNDPARAM_Unk0);
     }
 }
 
@@ -549,14 +549,14 @@ void JAIZelBasic::taktModeMute() {
     field_0x0098 = 0.0f;
     if (mpMainBgmSound) {
         if (mMainBgmNum != JA_BGM_TAKT_MAKORE && mMainBgmNum != JA_BGM_TAKT_MEDRI) {
-            mpMainBgmSound->setVolume(calcMainBgmVol(), 10, 0);
+            mpMainBgmSound->setVolume(calcMainBgmVol(), 10, SOUNDPARAM_Unk0);
         } else {
             field_0x0098 = 1.0f;
         }
     }
     field_0x00a4 = 0.0;
     if (mpSubBgmSound) {
-        mpSubBgmSound->setVolume(calcSubBgmVol(), 10, 0);
+        mpSubBgmSound->setVolume(calcSubBgmVol(), 10, SOUNDPARAM_Unk0);
     }
 }
 
@@ -564,17 +564,17 @@ void JAIZelBasic::taktModeMute() {
 void JAIZelBasic::taktModeMuteOff() {
     field_0x0098 = 1.0;
     if (mpMainBgmSound) {
-        mpMainBgmSound->setVolume(calcMainBgmVol(), 10, 0);
+        mpMainBgmSound->setVolume(calcMainBgmVol(), 10, SOUNDPARAM_Unk0);
     }
     if (mSubBgmNum == JA_BGM_TAKT_KAZE) {
         field_0x008c = 1.0;
         if (mpMainBgmSound) {
-            mpMainBgmSound->setVolume(calcMainBgmVol(), 45, 0);
+            mpMainBgmSound->setVolume(calcMainBgmVol(), 45, SOUNDPARAM_Unk0);
         }
     }
     field_0x00a4 = 1.0;
     if (mpSubBgmSound) {
-        mpSubBgmSound->setVolume(calcSubBgmVol(), 10, 0);
+        mpSubBgmSound->setVolume(calcSubBgmVol(), 10, SOUNDPARAM_Unk0);
     }
 }
 
@@ -598,7 +598,7 @@ void JAIZelBasic::cbPracticeStop() {
     field_0x00a8 = 1.0;
     field_0x009c = 1.0;
     if (mpMainBgmSound) {
-        mpMainBgmSound->setVolume(calcMainBgmVol(), 90, 0);
+        mpMainBgmSound->setVolume(calcMainBgmVol(), 90, SOUNDPARAM_Unk0);
     }
     field_0x00d0 = 0;
 }
@@ -886,11 +886,11 @@ void JAIZelBasic::talkIn() {
     if (field_0x0064 != 1 && isDemo() != 1 && field_0x0098 != 0.0f) {
         field_0x0084 = JAIZelParam::VOL_BGM_TALKING;
         if (mpMainBgmSound && mMainBgmNum != JA_BGM_BIRDMAN_GOAL && mMainBgmNum != JA_BGM_BIRDMAN_FAIL) {
-            mpMainBgmSound->setVolume(calcMainBgmVol(), 2, 0);
+            mpMainBgmSound->setVolume(calcMainBgmVol(), 2, SOUNDPARAM_Unk0);
         }
         field_0x00a0 = JAIZelParam::VOL_BGM_TALKING;
         if (mpSubBgmSound) {
-            mpSubBgmSound->setSeqInterVolume(0, calcSubBgmVol(), 2);
+            mpSubBgmSound->setSeqInterVolume(SOUNDPARAM_Unk0, calcSubBgmVol(), 2);
         }
         setSeCategoryVolume(0, JAIZelParam::VOL_SE_SYSTEM_TALKING);
         setSeCategoryVolume(1, JAIZelParam::VOL_SE_LINK_VOICE_TALKING);
@@ -910,11 +910,11 @@ void JAIZelBasic::talkOut() {
     }
     field_0x0084 = JAIZelParam::VOL_BGM_DEFAULT;
     if (mpMainBgmSound) {
-        mpMainBgmSound->setVolume(calcMainBgmVol(), 2, 0);
+        mpMainBgmSound->setVolume(calcMainBgmVol(), 2, SOUNDPARAM_Unk0);
     }
     field_0x00a0 = JAIZelParam::VOL_BGM_DEFAULT;
     if (mpSubBgmSound) {
-        mpSubBgmSound->setSeqInterVolume(0, calcSubBgmVol(), 2);
+        mpSubBgmSound->setSeqInterVolume(SOUNDPARAM_Unk0, calcSubBgmVol(), 2);
     }
     setSeCategoryVolume(0, JAIZelParam::VOL_SE_SYSTEM_DEFAULT);
     setSeCategoryVolume(1, JAIZelParam::VOL_SE_LINK_VOICE_DEFAULT);
@@ -930,11 +930,11 @@ void JAIZelBasic::talkOut() {
 void JAIZelBasic::menuIn() {
     field_0x0088 = JAIZelParam::VOL_BGM_PAUSING;
     if (mpMainBgmSound) {
-        mpMainBgmSound->setVolume(calcMainBgmVol(), 2, 0);
+        mpMainBgmSound->setVolume(calcMainBgmVol(), 2, SOUNDPARAM_Unk0);
     }
     field_0x00a0 = JAIZelParam::VOL_BGM_PAUSING;
     if (mpSubBgmSound) {
-        mpSubBgmSound->setSeqInterVolume(0, calcSubBgmVol(), 2);
+        mpSubBgmSound->setSeqInterVolume(SOUNDPARAM_Unk0, calcSubBgmVol(), 2);
     }
     setSeCategoryVolume(0, JAIZelParam::VOL_SE_SYSTEM_PAUSING);
     setSeCategoryVolume(1, JAIZelParam::VOL_SE_LINK_VOICE_PAUSING);
@@ -1064,7 +1064,7 @@ void JAIZelBasic::changeSeaBgm() {
         case 2:
             field_0x0094 = (sp08 - (sp0C.field_0xC + 2000.0f)) / 1000.0f;
             if (mpMainBgmSound) {
-                mpMainBgmSound->setVolume(calcMainBgmVol(), 1, 0);
+                mpMainBgmSound->setVolume(calcMainBgmVol(), 1, SOUNDPARAM_Unk0);
             }
             return;
         default:
@@ -1080,14 +1080,14 @@ void JAIZelBasic::changeSeaBgm() {
     case 1:
         field_0x0094 = ((sp0C.field_0xC + 2000.0f) - sp08) / 2000.0f;
         if (mpMainBgmSound) {
-            mpMainBgmSound->setVolume(calcMainBgmVol(), 1, 0);
+            mpMainBgmSound->setVolume(calcMainBgmVol(), 1, SOUNDPARAM_Unk0);
         }
         break;
     case 2:
     case 3:
         field_0x0094 = 0.0f;
         if (mpMainBgmSound) {
-            mpMainBgmSound->setVolume(calcMainBgmVol(), 0, 0);
+            mpMainBgmSound->setVolume(calcMainBgmVol(), 0, SOUNDPARAM_Unk0);
         }
         break;
     }

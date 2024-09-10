@@ -14,14 +14,14 @@ struct ResTLUT {
 
 class JUTPalette {
 public:
-    JUTPalette(_GXTlut p1, _GXTlutFmt p2, JUTTransparency p3, u16 p4, void* p5) {
+    JUTPalette(GXTlut p1, _GXTlutFmt p2, JUTTransparency p3, u16 p4, void* p5) {
         this->storeTLUT(p1, p2, p3, p4, p5);
     }
 
     JUTPalette(GXTlut tlutNo, ResTLUT* p_tlutRes) { storeTLUT(tlutNo, p_tlutRes); }
 
-    void storeTLUT(_GXTlut, ResTLUT*);
-    void storeTLUT(_GXTlut, _GXTlutFmt, JUTTransparency, u16, void*);
+    void storeTLUT(GXTlut, ResTLUT*);
+    void storeTLUT(GXTlut, _GXTlutFmt, JUTTransparency, u16, void*);
     bool load();
 
     u8 getTlutName() const { return mTlutName; }

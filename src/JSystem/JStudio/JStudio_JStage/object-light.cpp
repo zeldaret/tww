@@ -4,60 +4,158 @@
 //
 
 #include "JSystem/JStudio/JStudio_JStage/object-light.h"
-#include "dolphin/types.h"
+#include "math.h"
+
+namespace JStudio_JStage {
+
+TAdaptor_light::TVVOutput_direction_ TAdaptor_light::saoVVOutput_direction_[6] = {
+    TAdaptor_light::TVVOutput_direction_(TE_VALUE_10, DIRECTION_1),
+    TAdaptor_light::TVVOutput_direction_(TE_VALUE_11, DIRECTION_1),
+    TAdaptor_light::TVVOutput_direction_(TE_VALUE_7, DIRECTION_2),
+    TAdaptor_light::TVVOutput_direction_(TE_VALUE_8, DIRECTION_2),
+    TAdaptor_light::TVVOutput_direction_(TE_VALUE_9, DIRECTION_2),
+    TAdaptor_light::TVVOutput_direction_(TE_VALUE_NONE, DIRECTION_0)
+};
 
 /* 80278228-802782C4       .text __ct__Q214JStudio_JStage14TAdaptor_lightFPCQ26JStage7TSystemPQ26JStage6TLight */
-JStudio_JStage::TAdaptor_light::TAdaptor_light(const JStage::TSystem*, JStage::TLight*) {
-    /* Nonmatching */
+TAdaptor_light::TAdaptor_light(const JStage::TSystem* system, JStage::TLight* light)
+    : mSystem(system)
+    , mObject(light)
+    , _118(0)
+{
 }
 
 /* 802782C4-8027833C       .text __dt__Q214JStudio_JStage14TAdaptor_lightFv */
-JStudio_JStage::TAdaptor_light::~TAdaptor_light() {
-    /* Nonmatching */
+TAdaptor_light::~TAdaptor_light() {
+    adaptor_do_end(NULL);
 }
 
 /* 8027833C-80278384       .text adaptor_do_prepare__Q214JStudio_JStage14TAdaptor_lightFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_light::adaptor_do_prepare(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_light::adaptor_do_prepare(const JStudio::TObject* object) {
+    for (const TVVOutput_direction_* output = saoVVOutput_direction_; output->isEnd_(); output++) {
+        output->adaptor_setOutput_(this);
+    }
 }
 
 /* 80278384-802785BC       .text adaptor_do_begin__Q214JStudio_JStage14TAdaptor_lightFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_light::adaptor_do_begin(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_light::adaptor_do_begin(const JStudio::TObject* object) {
+    mObject->JSGFEnableFlag(1);
+    const JStudio::TControl* control = (JStudio::TControl*)object->getControl();
+    GXColor color = mObject->JSGGetColor();
+    adaptor_setVariableValue_GXColor(sauVariableValue_4_COLOR_RGBA, color);
+
+    JStudio::TControl::TTransform_position_direction posDir;
+    JStudio::TControl::TTransform_position_direction transformedPosDir;
+    const JStudio::TControl::TTransform_position_direction* vvVec;
+    mObject->JSGGetPosition(&posDir.mPosition);
+    mObject->JSGGetDirection(&posDir.mDirection);
+
+    vvVec = (JStudio::TControl::TTransform_position_direction*)control->transformOnGet_transform_ifEnabled(posDir, &transformedPosDir);
+
+    adaptor_setVariableValue_Vec(sauVariableValue_3_POSITION_XYZ, vvVec->mPosition);
+
+    f32 x = vvVec->mDirection.x;
+    f32 y = vvVec->mDirection.y;
+    f32 z = vvVec->mDirection.z;
+    f32 dist = std::sqrtf(x * x + z * z);
+    f32 atanVal1 = std::atan2f(x, z);
+    f32 atanVal2 = std::atan2f(y, dist);
+
+    adaptor_setVariableValue_immediate(10, RAD_TO_DEG(atanVal1));
+    adaptor_setVariableValue_immediate(11, RAD_TO_DEG(atanVal2));
+
+    Vec targetPos;
+    VECAdd(&vvVec->mPosition, &vvVec->mDirection, &targetPos);
+    adaptor_setVariableValue_Vec(sauVariableValue_3_TARGET_POSITION_XYZ, targetPos);
 }
 
 /* 802785BC-80278610       .text adaptor_do_end__Q214JStudio_JStage14TAdaptor_lightFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_light::adaptor_do_end(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_light::adaptor_do_end(const JStudio::TObject* object) {
+    mObject->JSGFDisableFlag(1);
 }
 
 /* 80278610-802787C4       .text adaptor_do_update__Q214JStudio_JStage14TAdaptor_lightFPCQ27JStudio7TObjectUl */
-void JStudio_JStage::TAdaptor_light::adaptor_do_update(const JStudio::TObject*, u32) {
-    /* Nonmatching */
+void TAdaptor_light::adaptor_do_update(const JStudio::TObject* object, u32 p2) {
+    const JStudio::TControl* control = object->getControl();
+    GXColor color;
+    adaptor_getVariableValue_GXColor(&color, sauVariableValue_4_COLOR_RGBA);
+    mObject->JSGSetColor(color);
+
+    JStudio::TControl::TTransform_position_direction posDir1;
+    adaptor_getVariableValue_Vec(&posDir1.mPosition, sauVariableValue_3_POSITION_XYZ);
+
+    switch (_118) {
+    case 1:
+        f32 val10 = adaptor_getVariableValue(10)->getValue();
+        f32 val11 = adaptor_getVariableValue(11)->getValue();
+        f32 cosX = std::cosf(DEG_TO_RAD(val11));
+        f32 sinX = std::sinf(DEG_TO_RAD(val11));
+
+        posDir1.mDirection.x = cosX * std::sinf(DEG_TO_RAD(val10));
+        posDir1.mDirection.y = sinX;
+        posDir1.mDirection.z = cosX * std::cosf(DEG_TO_RAD(val10));
+
+        break;
+    case 2:
+        Vec target;
+        adaptor_getVariableValue_Vec(&target, sauVariableValue_3_TARGET_POSITION_XYZ);
+        VECSubtract(&target, &posDir1.mPosition, &posDir1.mDirection);
+        break;
+    }
+
+    JStudio::TControl::TTransform_position_direction* posDir;
+    if (!control->mTransformOnSet) {
+        posDir = &posDir1;
+    } else {
+        JStudio::TControl::TTransform_position_direction posDir2;
+        MTXMultVec(control->transformOnSet_getMatrix(), &posDir1.mPosition, &posDir2.mPosition);
+        MTXMultVecSR(control->transformOnSet_getMatrix(), &posDir1.mDirection, &posDir2.mDirection);
+        posDir = &posDir2;
+    }
+
+    mObject->JSGSetPosition(posDir->mPosition);
+    mObject->JSGSetDirection(posDir->mDirection);
 }
 
 /* 802787C4-802787F8       .text adaptor_do_data__Q214JStudio_JStage14TAdaptor_lightFPCQ27JStudio7TObjectPCvUlPCvUl */
-void JStudio_JStage::TAdaptor_light::adaptor_do_data(const JStudio::TObject*, const void*, u32, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_light::adaptor_do_data(const JStudio::TObject* object, const void* p2, u32 p3, const void* p4, u32 p5) {
+    TAdaptor_object_::adaptor_data_(mObject, p2, p3, p4, p5);
 }
 
 /* 802787F8-80278870       .text adaptor_do_FACULTY__Q214JStudio_JStage14TAdaptor_lightFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_light::adaptor_do_FACULTY(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_light::adaptor_do_FACULTY(JStudio::data::TEOperationData op, const void* data, u32 flag) {
+    switch (op) {
+    case JStudio::data::TEOD_Unknown_02:
+        JStage::TELight lightType;
+        switch (((int*)data)[0]) {
+        case 0x301:
+            lightType = JStage::TELIGHT_Unk1;
+            break;
+        case 0x302:
+            lightType = JStage::TELIGHT_Unk2;
+            break;
+        case 0x303:
+            lightType = JStage::TELIGHT_Unk3;
+            break;
+        default:
+            goto break_outer_switch;
+            break;
+        }
+
+        mObject->JSGSetLightType(lightType);
+    break_outer_switch:
+        break;
+    }
 }
 
 /* 80278870-80278894       .text adaptor_do_ENABLE__Q214JStudio_JStage14TAdaptor_lightFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_light::adaptor_do_ENABLE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_light::adaptor_do_ENABLE(JStudio::data::TEOperationData op, const void* data, u32 flag) {
+    TAdaptor_object_::adaptor_ENABLE_(mObject, op, data, flag);
 }
 
 /* 80278894-802788A0       .text __cl__Q314JStudio_JStage14TAdaptor_light20TVVOutput_direction_CFfPQ27JStudio8TAdaptor */
-void JStudio_JStage::TAdaptor_light::TVVOutput_direction_::operator()(f32, JStudio::TAdaptor*) const {
-    /* Nonmatching */
+void TAdaptor_light::TVVOutput_direction_::operator()(f32, JStudio::TAdaptor* adaptor) const {
+    ((TAdaptor_light*)adaptor)->_118 = _08;
 }
 
-/* 802788A0-80278900       .text __dt__Q314JStudio_JStage14TAdaptor_light20TVVOutput_direction_Fv */
-JStudio_JStage::TAdaptor_light::TVVOutput_direction_::~TVVOutput_direction_() {
-    /* Nonmatching */
-}
-
+} // namespace JStudio_JStage

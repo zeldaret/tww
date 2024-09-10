@@ -55,9 +55,9 @@ public:
     void storeTIMG(ResTIMG const*, JUTPalette*);
     void attachPalette(JUTPalette*);
     void init();
-    void initTexObj(_GXTlut);
+    void initTexObj(GXTlut);
     void initTexObj();
-    void load(_GXTexMapID);
+    void load(GXTexMapID);
 
     const ResTIMG* getTexInfo() const { return mTexInfo; }
     u8 getFormat() const { return mTexInfo->format; }

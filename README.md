@@ -91,6 +91,35 @@ Select an object from the left sidebar to begin diffing. Changes to the project 
 
 ![](assets/objdiff.png)
 
+Setting up Ghidra
+=================
+
+Ghidra is a tool that automatically decompiles code. Although Ghidra's output is not accurate enough to be directly copy-pasted into this decompilation project, it can still be helpful for understanding functions and decompiling them faster.
+
+We have a shared Ghidra project for TWW already set up. To get access to this server:
+
+* Go to https://ghidra.decomp.dev and link your Discord account.
+* Request "Read" access to the WindWaker server.
+
+Then wait for an admin to approve your request. Once you have access, you can set up the Ghidra project like so:
+
+* To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/de/temurin/releases/).
+* Download the RootCubed Ghidra build ghidra_11.1_DEV_20240115 from [here](https://rootcubed.dev/ghidra_builds/).
+* Launch Ghidra with `ghidraRun`.
+* In Ghidra, go to `File -> New Project...`. Select `Shared Project` and input the following information:
+    * Server Name: ghidra.decomp.dev
+    * Port Number: 13100
+    * User ID: `put your own username here`
+    * Password: changeme
+* After logging in, change your password as prompted so that it's not "changeme".
+* You should now be able to view the files in the Ghidra project. You should checkout the `main` file.
+
+Now you have Ghidra set up and ready to use.
+
+For an introduction on how to use Ghidra, you can read [this section of the Twilight Princess decompilation's guide](https://zsrtp.link/contribute/decompiler-setup#using-ghidra).
+
+Optionally, you may also want to also request "Read" access to the TwilightPrincess server on https://ghidra.decomp.dev and set that Ghidra project up too, even if you are not interested in working on that game. The reason for this is that a significant amount of engine code is shared between The Wind Waker and Twilight Princess, and the debug version of Twilight Princess (called `shield_chn_debug` in the Ghidra project) is easier to work with because inline functions are not inlined in that version. It can be worth checking if the function you're working on is present in that game as well.
+
 More documentation
 ====================
 

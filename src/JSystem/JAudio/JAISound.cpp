@@ -15,7 +15,7 @@
 /* 8029859C-802985C4       .text __ct__8JAISoundFv */
 JAISound::JAISound() {
     field_0x3c = NULL;
-    field_0x5 = 0;
+    mState = SOUNDSTATE_Inactive;
     field_0x6 = 10;
     field_0x24 = NULL;
 }
@@ -51,7 +51,7 @@ void JAISound::clearMainSoundPPointer() {
 /* 80298648-80298688       .text start__8JAISoundFUl */
 void JAISound::start(u32 param_1) {
     setPrepareFlag(0);
-    field_0x14 = param_1;
+    mFadeCounter = param_1;
 }
 
 /* 80298688-802986B8       .text stop__8JAISoundFUl */
@@ -380,7 +380,7 @@ void JAISound::setSeqPortData(u8 line_, u16 param_2, u32 param_3) {
     if (!getSeqParameter()) {
         return;
     }
-    if (getSeqParameter()->field_0x10[line_].mCurrentValue == 0.0f && field_0x5 >= 3) {
+    if (getSeqParameter()->field_0x10[line_].mCurrentValue == 0.0f && mState >= SOUNDSTATE_Ready) {
         u16 local_38;
         JASystem::TTrack* track = getSeqParameter()->getRootTrackPointer();
         track->readPortApp(line_ << 16, &local_38);
@@ -403,7 +403,7 @@ void JAISound::setTrackVolume(u8 line_, f32 param_2, u32 param_3) {
     if (!getSeqParameter()) {
         return;
     }
-    if (field_0x5 >= 4 && (getSeqParameter()->field_0x135c->field_0x4 & 1 << line_) == 0) {
+    if (mState >= SOUNDSTATE_Playing && (getSeqParameter()->field_0x135c->field_0x4 & 1 << line_) == 0) {
         return;
     }
     if (param_3 == 0) {
@@ -544,22 +544,22 @@ void JAISound::setPauseMode(u8 param_1, u8 param_2) {
         if (param_1 != 0) {
             switch (param_1) {
             case 1:
-                setSeqInterVolume(11, param_2 / 127.0f, 1);
+                setSeqInterVolume(SOUNDPARAM_Pause, param_2 / 127.0f, 1);
                 break;
             case 2:
                 JASystem::TTrack* track = getSeqParameter()->getRootTrackPointer();
-                track->pause(true, true);
+                track->pauseTrackAll();
                 break;
             }
         } else {
             getSeqParameter();
             switch (getSeqParameter()->field_0x1261) {
             case 1:
-                setSeqInterVolume(11, 1.0f, 1);
+                setSeqInterVolume(SOUNDPARAM_Pause, 1.0f, 1);
                 break;
             case 2:
                 JASystem::TTrack* track = getSeqParameter()->getRootTrackPointer();
-                track->pause(false, true);
+                track->unPauseTrackAll();
                 break;
             }
         }
@@ -572,23 +572,23 @@ void JAISound::setPauseMode(u8 param_1, u8 param_2) {
         if (param_1 != 0) {
             switch (param_1) {
             case 1:
-                setStreamInterVolume(11, param_2 / 127.0f, 1);
+                setStreamInterVolume(SOUNDPARAM_Pause, param_2 / 127.0f, 1);
                 break;
             case 2:
                 JAInter::StreamLib::setPauseFlag(2);
                 break;
             }
         } else {
-            switch (getStreamParameter()->field_0x0) {
+            switch (getStreamParameter()->mPauseMode) {
             case 1:
-                setStreamInterVolume(11, 1.0f, 1);
+                setStreamInterVolume(SOUNDPARAM_Pause, 1.0f, 1);
                 break;
             case 2:
                 JAInter::StreamLib::clearPauseFlag(2);
                 break;
             }
         }
-        getStreamParameter()->field_0x0 = param_1;
+        getStreamParameter()->mPauseMode = param_1;
         break;
     default:
         JUT_ASSERT_MSG(1443, 0, "JAISound::setPauseMode サウンドカテゴリービットが異常です。\n");
@@ -647,7 +647,7 @@ int JAInter::MoveParaSet::set(f32, u32) {
 }
 
 /* 8029B07C-8029B0C4       .text move__Q27JAInter11MoveParaSetFv */
-bool JAInter::MoveParaSet::move() {
+BOOL JAInter::MoveParaSet::move() {
     /* Nonmatching */
 }
 
@@ -671,20 +671,20 @@ void JAInter::LinkSound::init(JAISound* param_1, u32 param_2) {
     field_0x4 = NULL;
     Buffer[0x00].field_0x30 = NULL;
     Buffer[0x00].field_0x34 = Buffer + 1;
-    Buffer[0x00].field_0x5 = 0;
+    Buffer[0x00].mState = SOUNDSTATE_Inactive;
     Buffer[0x00].mPositionInfo = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAISound::PositionInfo_t[JAIGlobalParameter::getParamAudioCameraMax()];
     JUT_ASSERT_MSG(2084, Buffer[0x00].mPositionInfo, "LinkSound::initLinkSound Cannot Alloc Heap!!\n");
     int i;
     for (i = 1; i < param_2 - 1; i++) {
         Buffer[i].field_0x30 = Buffer + (i - 1);
         Buffer[i].field_0x34 = Buffer + (i + 1);
-        Buffer[i].field_0x5 = 0;
+        Buffer[i].mState = SOUNDSTATE_Inactive;
         Buffer[i].mPositionInfo = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAISound::PositionInfo_t[JAIGlobalParameter::getParamAudioCameraMax()];
         JUT_ASSERT_MSG(2092, Buffer[i].mPositionInfo, "LinkSound::initLinkSound Cannot Alloc Heap!!\n");
     }
     Buffer[i].field_0x30 = Buffer + (i - 1);
     Buffer[i].field_0x34 = NULL;
-    Buffer[i].field_0x5 = 0;
+    Buffer[i].mState = SOUNDSTATE_Inactive;
     Buffer[i].mPositionInfo = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAISound::PositionInfo_t[JAIGlobalParameter::getParamAudioCameraMax()];
     JUT_ASSERT_MSG(2099, Buffer[i].mPositionInfo, "LinkSound::initLinkSound Cannot Alloc Heap!!\n");
 }

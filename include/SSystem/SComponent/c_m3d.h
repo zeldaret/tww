@@ -16,10 +16,14 @@ class cM3dGTri;
 class csXyz;
 class cXyz;
 
-struct cM3d_Range;
 struct Vec;
 
 extern const f32 G_CM3D_F_ABS_MIN;
+
+struct cM3d_Range {
+    f32 start;
+    f32 end;
+};
 
 void cM3d_InDivPos1(const Vec*, const Vec*, f32, Vec*);
 void cM3d_InDivPos2(const Vec*, const Vec*, f32, Vec*);
@@ -35,7 +39,7 @@ int cM3d_Check_LinLin(const cM3dGLin*, const cM3dGLin*, f32*, f32*);
 bool cM3d_Cross_LinPla(const cM3dGLin*, const cM3dGPla*, Vec*, bool, bool);
 bool cM3d_Cross_MinMaxBoxLine(const Vec*, const Vec*, const Vec*, const Vec*);
 bool cM3d_InclusionCheckPosIn3PosBox3d(const Vec*, const Vec*, const Vec*, const Vec*, f32);
-bool cM3d_InclusionCheckPosIn3PosBox2d(f32, f32, f32, f32, f32, f32, f32, f32, f32);
+inline static bool cM3d_InclusionCheckPosIn3PosBox2d(f32, f32, f32, f32, f32, f32, f32, f32);
 bool cM3d_CrossX_Tri(const cM3dGTri*, const Vec*, f32);
 bool cM3d_CrossX_Tri(const cM3dGTri*, const Vec*);
 bool cM3d_CrossX_LinTri_proc(const cM3dGTri*, const Vec*);

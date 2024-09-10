@@ -502,7 +502,7 @@ void J3DGDSetFog(GXFogType type, f32 startZ, f32 endZ, f32 nearZ, f32 farZ, GXCo
 void J3DGDSetFogRangeAdj(u8 enabled, u16 center, GXFogAdjTable* pFogAdjTable) {
     if (enabled) {
         for (s32 i = 0; i < 10; i += 2) {
-            J3DGDWriteBPCmd((0xe9 + i / 2) << 24 | pFogAdjTable->r[i + 1] << 12 | pFogAdjTable->r[i] << 0);
+            J3DGDWriteBPCmd((0xe9 + i / 2) << 24 | pFogAdjTable->fogVals[i + 1] << 12 | pFogAdjTable->fogVals[i] << 0);
         }
     }
 

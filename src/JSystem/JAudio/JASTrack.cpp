@@ -48,7 +48,7 @@ JASystem::TTrack::TimedParam_::TimedParam_() {}
 void JASystem::TTrack::init() {
     mSeqCtrl.init();
     mTrackPort.init();
-    field_0x88.init();
+    mIntrMgr.init();
     mNoteMgr.init();
     mChannelUpdater.initAllocChannel(0);
     initTimed();
@@ -141,8 +141,8 @@ s8 JASystem::TTrack::mainProc() {
             mParent->mChannelUpdater.field_0x0++;
         }
     }
-    field_0x88.request(7);
-    field_0x88.timerProcess();
+    mIntrMgr.request(7);
+    mIntrMgr.timerProcess();
     tryInterrupt();
     if (mIsPaused == 0 && (mPauseStatus & 2) == 0) {
         // TODO:
@@ -166,7 +166,7 @@ s8 JASystem::TTrack::mainProc() {
 
 /* 80280F80-80280FA8       .text setInterrupt__Q28JASystem6TTrackFUs */
 void JASystem::TTrack::setInterrupt(u16 param_1) {
-    field_0x88.request(param_1);
+    mIntrMgr.request(param_1);
 }
 
 /* 80280FA8-80281004       .text tryInterrupt__Q28JASystem6TTrackFv */
@@ -174,7 +174,7 @@ bool JASystem::TTrack::tryInterrupt() {
     if (mSeqCtrl.mPreviousFilePtr) {
         return false;
     }
-    void* var1 = field_0x88.checkIntr();
+    void* var1 = mIntrMgr.checkIntr();
     if (var1 == NULL) {
         return false;
     }
@@ -724,16 +724,22 @@ f32 JASystem::TVibrate::getValue() const {
     /* Nonmatching */
 }
 
-/* 80283FD0-80283FE8       .text __ct__Q38JASystem6TTrack10MoveParam_Fv */
-JASystem::TTrack::MoveParam_::MoveParam_() {
-    /* Nonmatching */
-    mCurrentValue = 0.0f;
-    mTargetValue = 0.0f;
-    mMoveTime = 0.0f;
-    mMoveAmount = 0.0f;
-}
-
 /* 80283FE8-80284118       .text __ct__Q38JASystem6TTrack12AInnerParam_Fv */
-JASystem::TTrack::AInnerParam_::AInnerParam_() {
-    /* Nonmatching */
+JASystem::TTrack::AInnerParam_::AInnerParam_()
+    : mVolume()
+    , mPitch()
+    , mFxmix()
+    , mPan()
+    , mDolby()
+    , _50()
+    , mOsc0Width()
+    , mOsc0Rate()
+    , mOsc0Vertex()
+    , mOsc1Width()
+    , mOsc1Rate()
+    , mOsc1Vertex()
+    , mIIRs()
+    , _100()
+    , _110()
+{
 }

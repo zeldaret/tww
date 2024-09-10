@@ -11,10 +11,10 @@ static const int MULTI_MAX = 8;
 
 /* 8027DD54-8027DD94       .text init__Q38JASystem6TTrack8TNoteMgrFv */
 void JASystem::TTrack::TNoteMgr::init() {
-    field_0x30 = 0;
-    field_0x34 = 0;
-    field_0x35 = 0;
-    field_0x36 = 0;
+    mBaseTime = 0;
+    mConnectCase = 0;
+    mLastNote = 0;
+    mBeforeTieMode = 0;
     for (int i = 0; i < MULTI_MAX; i++) {
         field_0x0[i] = NULL;
         field_0x20[i] = 0;
@@ -23,10 +23,10 @@ void JASystem::TTrack::TNoteMgr::init() {
 
 /* 8027DD94-8027DDBC       .text endProcess__Q38JASystem6TTrack8TNoteMgrFv */
 void JASystem::TTrack::TNoteMgr::endProcess() {
-    if (field_0x30 == 0xffffffff) {
+    if (mBaseTime == 0xffffffff) {
         return;
     }
-    if (field_0x34 != 0) {
+    if (mConnectCase != 0) {
         return;
     }
     field_0x0[0] = NULL;

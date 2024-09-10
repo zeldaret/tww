@@ -48,13 +48,13 @@ void JUTTexture::storeTIMG(const ResTIMG* pTimg, u8 param_1) {
             initTexObj();
         } else {
             if (mTexInfo->numColors > 0x100) {
-                tlut = (_GXTlut)((param_1 % 4) + GX_BIGTLUT0);
+                tlut = (GXTlut)((param_1 % 4) + GX_BIGTLUT0);
             } else {
-                tlut = (_GXTlut)param_1;
+                tlut = (GXTlut)param_1;
             }
 
             mEmbPalette = new JUTPalette(
-                tlut, (_GXTlutFmt)mTexInfo->colorFormat, (JUTTransparency)mTexInfo->alphaEnabled,
+                tlut, (GXTlutFmt)mTexInfo->colorFormat, (JUTTransparency)mTexInfo->alphaEnabled,
                 mTexInfo->numColors, (void*)(&mTexInfo->format + mTexInfo->paletteOffset));
 
             mFlags = mFlags & 1 | 2;
@@ -71,7 +71,7 @@ void JUTTexture::attachPalette(JUTPalette* pPalette) {
         } else {
             mAttachedPalette = pPalette;
         }
-        _GXTlut name = (_GXTlut)mAttachedPalette->getTlutName();
+        _GXTlut name = (GXTlut)mAttachedPalette->getTlutName();
         initTexObj(name);
     }
 }
@@ -94,7 +94,7 @@ void JUTTexture::initTexObj() {
 }
 
 /* 802C1740-802C183C       .text initTexObj__10JUTTextureF7_GXTlut */
-void JUTTexture::initTexObj(_GXTlut tlut) {
+void JUTTexture::initTexObj(GXTlut tlut) {
     GXBool mipmapEnabled;
     if (mTexInfo->mipmapEnabled != 0) {
         mipmapEnabled = 1;
@@ -112,7 +112,7 @@ void JUTTexture::initTexObj(_GXTlut tlut) {
 }
 
 /* 802C183C-802C188C       .text load__10JUTTextureF11_GXTexMapID */
-void JUTTexture::load(_GXTexMapID id) {
+void JUTTexture::load(GXTexMapID id) {
     if (mAttachedPalette) {
         mAttachedPalette->load();
     }

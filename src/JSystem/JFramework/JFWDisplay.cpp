@@ -389,7 +389,7 @@ void JFWDisplay::clearEfb_init() {
 }
 
 /* 80255F60-80255FA0       .text clearEfb__10JFWDisplayF8_GXColor */
-void JFWDisplay::clearEfb(_GXColor color) {
+void JFWDisplay::clearEfb(GXColor color) {
     int height = mpRenderMode->efb_height;
     int width = mpRenderMode->fb_width;
 

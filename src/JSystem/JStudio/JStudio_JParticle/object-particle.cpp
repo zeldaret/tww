@@ -81,7 +81,7 @@ void TAdaptor_particle::adaptor_do_update(const JStudio::TObject* param_1, u32 p
 /* 80279C2C-80279C40       .text adaptor_do_PARTICLE__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
 void TAdaptor_particle::adaptor_do_PARTICLE(JStudio::data::TEOperationData operation, const void* r5, u32) {
     switch (operation) {
-    case JStudio::data::UNK_0x19:
+    case JStudio::data::TEOD_Unknown_19:
         _188 = *(int*)r5;
         break;
     }
@@ -90,7 +90,7 @@ void TAdaptor_particle::adaptor_do_PARTICLE(JStudio::data::TEOperationData opera
 /* 80279C40-80279CA4       .text adaptor_do_PARENT__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
 void TAdaptor_particle::adaptor_do_PARENT(JStudio::data::TEOperationData operation, const void* param_2, u32) {
     switch (operation) {
-    case JStudio::data::UNK_0x18:
+    case JStudio::data::TEOD_Unknown_18:
         if (mSystem != NULL) {
             _19C = (JStage::TObject*)mSystem->JSGFindObject((const char*)param_2, JStage::TOBJ_ACTOR_UNK);
             if (_19C == 0) {
@@ -105,7 +105,7 @@ void TAdaptor_particle::adaptor_do_PARENT(JStudio::data::TEOperationData operati
 /* 80279CA4-80279D24       .text adaptor_do_PARENT_NODE__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
 void TAdaptor_particle::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData operation, const void* param_2, u32) {
     switch (operation) {
-    case JStudio::data::UNK_0x18:
+    case JStudio::data::TEOD_Unknown_18:
         if (_19C != NULL) {
             _1A0 = _19C->JSGFindNodeID((const char*)param_2);
             if (_1A0 == 0xFFFFFFFF) {
@@ -113,7 +113,7 @@ void TAdaptor_particle::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData op
             }
         }
         break;
-    case JStudio::data::UNK_0x19:
+    case JStudio::data::TEOD_Unknown_19:
         _1A0 = *(u32*)param_2;
         break;
     }
@@ -122,7 +122,7 @@ void TAdaptor_particle::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData op
 /* 80279D24-80279D40       .text adaptor_do_PARENT_ENABLE__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
 void TAdaptor_particle::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData operation, const void* param_2, u32 param_3) {
     switch (operation) {
-    case JStudio::data::UNK_0x2:
+    case JStudio::data::TEOD_Unknown_02:
         _1A4 = *(u32*)param_2;
         break;
     }

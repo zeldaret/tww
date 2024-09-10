@@ -22,27 +22,77 @@ extern "C" {
 
 // Pack value into bitfield
 #define GX_BITFIELD_SET(field, pos, size, value) (field) = __rlwimi((field), (value), 31 - (pos) - (size) + 1, (pos), (pos) + (size)-1)
+#define GX_BITFIELD_TRUNC(field, pos, size, value) (__rlwimi((field), (value), 0, (pos), (pos) + (size)-1))
+
+#define GX_BITGET(field, pos, size)              ((field) >> (31 - (pos) - (size) + 1) & ((1 << (size)) - 1))
+#define GX_GET_REG(reg, st, end)    GX_BITGET(reg, st, (end - st + 1))
+#define GX_SET_REG(reg, x, st, end) GX_BITFIELD_SET(reg, st, (end - st + 1), x)
+#define GX_SET_TRUNC(reg, x, st, end) GX_BITFIELD_TRUNC((reg), (st), ((end) - (st) + 1), (x))
+
+#define GXCOLOR_AS_U32(color) (*((u32*)&(color)))
 
 #define INSERT_FIELD(reg, value, nbits, shift)                                 \
     (reg) = ((u32) (reg) & ~(((1 << (nbits)) - 1) << (shift))) |               \
             ((u32) (value) << (shift));
 
+#define FAST_FLAG_SET(regOrg, newFlag, shift, size)                                                                \
+    do {                                                                                                           \
+        (regOrg) = (u32)__rlwimi((int)(regOrg), (int)(newFlag), (shift), (32 - (shift) - (size)), (31 - (shift))); \
+    } while (0);
+
+#define GX_LOAD_BP_REG 0x61
 #define GX_NOP 0
 
 typedef union {
-	u8 u8;
-	u16 u16;
-	u32 u32;
-	u64 u64;
-	s8 s8;
-	s16 s16;
-	s32 s32;
-	s64 s64;
-	f32 f32;
-	f64 f64;
+    u8 u8;
+    u16 u16;
+    u32 u32;
+    u64 u64;
+    s8 s8;
+    s16 s16;
+    s32 s32;
+    s64 s64;
+    f32 f32;
+    f64 f64;
 } PPCWGPipe;
 
-volatile PPCWGPipe GXFIFO AT_ADDRESS(0xCC008000);
+#define GXFIFO_ADDR 0xCC008000
+volatile PPCWGPipe GXFIFO AT_ADDRESS(GXFIFO_ADDR);
+
+#define GX_CP_LOAD_REG(addr, data)                                                                 \
+    GXFIFO.s8 = GX_FIFO_CMD_LOAD_CP_REG;                                                         \
+    GXFIFO.s8 = (addr);                                                                          \
+    GXFIFO.s32 = (data);
+
+/**
+ * Header for an XF register load
+ */
+#define GX_XF_LOAD_REG_HDR(addr)                                                                   \
+    GXFIFO.s8 = GX_FIFO_CMD_LOAD_XF_REG;                                                           \
+    GXFIFO.s32 = (addr);
+
+/**
+ * Load immediate value into XF register
+ */
+#define GX_XF_LOAD_REG(addr, data)                                                                 \
+    GX_XF_LOAD_REG_HDR(addr);                                                                      \
+    GXFIFO.s32 = (data);
+
+/**
+ * Load immediate value into BP register
+ */
+#define GX_BP_LOAD_REG(data)                                                                       \
+    GXFIFO.s8 = GX_FIFO_CMD_LOAD_BP_REG;                                                           \
+    GXFIFO.s32 = (data);
+
+/**
+ * Load immediate values into multiple XF registers
+ */
+#define GX_XF_LOAD_REGS(size, addr)                                                                \
+    {                                                                                              \
+        u32 cmd = (size) << 16 | addr;                                                             \
+        GX_XF_LOAD_REG_HDR(cmd);                                                                   \
+    }
 
 // Direct
 inline void GXPosition2f32(f32 x, f32 z) {
@@ -118,8 +168,8 @@ inline void GXTexCoord2u16(u16 x, u16 y) {
 }
 
 inline void GXTexCoord2s16(const s16 u, const s16 v) {
-	GXFIFO.s16 = u;
-	GXFIFO.s16 = v;
+    GXFIFO.s16 = u;
+    GXFIFO.s16 = v;
 }
 
 // Indexed

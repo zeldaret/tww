@@ -3,6 +3,58 @@
 
 #include "dolphin/types.h"
 
+enum JAISoundType {
+    SOUNDPARAM_Unk0     = 0,
+    SOUNDPARAM_Dopplar  = 1,
+    SOUNDPARAM_Demo     = 2,
+    SOUNDPARAM_Unk3     = 3,
+    SOUNDPARAM_Distance = 4,
+    SOUNDPARAM_Unk5     = 5,
+    SOUNDPARAM_Direct   = 6,
+    SOUNDPARAM_Fadeout  = 7,
+    SOUNDPARAM_Unk8     = 8,
+    SOUNDPARAM_Unk9     = 9,
+    SOUNDPARAM_Unk10    = 10,
+    SOUNDPARAM_Pause    = 11,
+};
+
+enum JAISoundState {
+    SOUNDSTATE_Inactive = 0,
+    SOUNDSTATE_Stored   = 1,
+    SOUNDSTATE_Loaded   = 2,
+    SOUNDSTATE_Ready    = 3,
+    SOUNDSTATE_Playing  = 4,
+    SOUNDSTATE_Fadeout  = 5,
+};
+
+enum JAISoundTrackActiveFlags {
+    SOUNDACTIVE_Unk0                 = 0,
+    SOUNDACTIVE_Unk1                 = 1 << 0,  // 0x1
+    SOUNDACTIVE_DoFadeout            = 1 << 1,  // 0x2
+    SOUNDACTIVE_TempoProportion      = 1 << 2,  // 0x4
+    SOUNDACTIVE_Unk4                 = 1 << 3,  // 0x8
+    SOUNDACTIVE_Unk5                 = 1 << 4,  // 0x10
+    SOUNDACTIVE_Unk6                 = 1 << 5,  // 0x20
+    SOUNDACTIVE_TrackVolume          = 1 << 6,  // 0x40
+    SOUNDACTIVE_TrackPan             = 1 << 7,  // 0x80
+    SOUNDACTIVE_TrackDolby           = 1 << 8,  // 0x100
+    SOUNDACTIVE_TrackPitch           = 1 << 9,  // 0x200
+    SOUNDACTIVE_Unk11                = 1 << 10, // 0x400
+    SOUNDACTIVE_TrackFxmix           = 1 << 11, // 0x800
+    SOUNDACTIVE_TrackPortData        = 1 << 12, // 0x1000
+    SOUNDACTIVE_Unk14                = 1 << 13, // 0x2000
+    SOUNDACTIVE_Unk15                = 1 << 14, // 0x4000
+    SOUNDACTIVE_Unk16                = 1 << 15, // 0x8000
+    SOUNDACTIVE_Unk17                = 1 << 16, // 0x10000
+    SOUNDACTIVE_Unk18                = 1 << 17, // 0x20000
+    SOUNDACTIVE_Volume               = 1 << 18, // 0x40000
+    SOUNDACTIVE_Pan                  = 1 << 19, // 0x80000
+    SOUNDACTIVE_Pitch                = 1 << 20, // 0x100000
+    SOUNDACTIVE_Fxmix                = 1 << 21, // 0x200000
+    SOUNDACTIVE_Dolby                = 1 << 22, // 0x400000
+    SOUNDACTIVE_TrackInterruptSwitch = 1 << 23, // 0x800000
+};
+
 namespace JAInter {
     class Actor;
     class SeParameter;
@@ -103,7 +155,7 @@ public:
     void setDemoFxmix(f32 f1, u32 r4) { setFxmix(f1, r4, 3); }
     void setDemoPan(f32 f1, u32 r4) { setPan(f1, r4, 3); }
     void setDemoPitch(f32 f1, u32 r4) { setPitch(f1, r4, 3); }
-    void setDemoVolume(f32 f1, u32 r4) { setVolume(f1, r4, 3); }
+    void setDemoVolume(f32 f1, u32 r4) { setVolume(f1, r4, SOUNDPARAM_Unk3); }
     void setFadetime(u32) {}
     void setID(u32) {}
     void setMainSoundPPointer(JAISound**) {}
@@ -121,7 +173,7 @@ public:
     void setWait(u8) {}
 
     /* 0x04 */ u8 field_0x4;
-    /* 0x05 */ u8 field_0x5;
+    /* 0x05 */ u8 mState;
     /* 0x06 */ u8 field_0x6;
     /* 0x07 */ u8 field_0x7;
     /* 0x08 */ u8 field_0x8;
@@ -129,7 +181,7 @@ public:
     /* 0x0a */ s16 field_0xa;
     /* 0x0c */ u32 mSoundID;
     /* 0x10 */ int field_0x10;
-    /* 0x14 */ u32 field_0x14;
+    /* 0x14 */ u32 mFadeCounter;
     /* 0x18 */ u32 field_0x18;
     /* 0x1c */ int field_0x1c;
     /* 0x20 */ PositionInfo_t* mPositionInfo;
@@ -148,7 +200,7 @@ namespace JAInter {
     public:
         MoveParaSet(f32 param_1=1.0f) { init(param_1); }
         int set(f32 param_1, u32 param_2);
-        bool move();
+        BOOL move();
 
         void init(f32 value) {
             mCurrentValue = value;
