@@ -11,7 +11,7 @@ namespace JGadget {
 template <typename T>
 inline const T& toValueFromIndex(int idx, const T* pValue, u32 count, const T& fallback) {
     ASSERT(pValue != NULL);
-    return (idx >= count) ? fallback : pValue[idx];
+    return (idx < count) ? pValue[idx] : fallback;
 }
 
 }  // namespace JGadget

@@ -6,14 +6,19 @@
 namespace JGadget {
 template <typename T>
 struct TAllocator {
-    static TAllocator get() { }
+    // TODO: this constructor declaration needs to be removed in order to match TFunctionValue_composite's constructor
+    // in functionvalue.cpp, and in order to get the @564 struct literal to appear in the .sbss section of that TU.
+    // however, removing this declaration also causes that bss literal to appear in hundreds of other TUs it shouldn't.
+    TAllocator();
 
-    inline TAllocator();
+    // TODO
+    void AllocateRaw(u32) {}
+    void DeallocateRaw(void*) {}
+    void allocate(u32, const void*) {}
+    void deallocate(T*, u32) {}
+    void destroy(T*) {}
 
     /* 0x00 */ u8 _00;
-    /* 0x04 */ u32 _04;
-    /* 0x08 */ u32 _08;
-    /* 0x0C */ u32 _0C;
 };
 
 typedef TAllocator<void*> TVoidAllocator;
