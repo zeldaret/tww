@@ -175,9 +175,23 @@ struct TAdaptor_fog : public JStudio::TAdaptor_fog {
 };  // Size: 0x8C
 
 struct TAdaptor_light : public JStudio::TAdaptor_light {
-    struct TVVOutput_direction_ {
-        void operator()(f32, JStudio::TAdaptor*) const;
-        ~TVVOutput_direction_();
+    struct TVVOutput_direction_ : public JStudio::TVariableValue::TOutput {
+        TVVOutput_direction_(JStudio::TAdaptor_light::TEVariableValue val, JStudio_JStage::TAdaptor_light::TEDirection_ dir)
+        {
+            mValueIndex = val;
+            _08 = dir;
+        }
+
+        virtual void operator()(f32, JStudio::TAdaptor*) const;
+        virtual ~TVVOutput_direction_() {}
+        
+        void adaptor_setOutput_(JStudio::TAdaptor* adaptor) const {
+            adaptor->adaptor_referVariableValue(mValueIndex)->setOutput(this);
+        }
+        bool isEnd_() const { return mValueIndex != -1; }
+
+        /* 0x04 */ int mValueIndex;
+        /* 0x08 */ int _08;
     };
 
     TAdaptor_light(JStage::TSystem const*, JStage::TLight*);
@@ -190,9 +204,11 @@ struct TAdaptor_light : public JStudio::TAdaptor_light {
     virtual void adaptor_do_ENABLE(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_FACULTY(JStudio::data::TEOperationData, void const*, u32);
 
-    static u8 saoVVOutput_direction_[72];
+    static TVVOutput_direction_ saoVVOutput_direction_[6];
 
-    /* 0x110 */ u8 field_0x110[0x11C - 0x110];
+    /* 0x110 */ const JStage::TSystem* mSystem;
+    /* 0x114 */ JStage::TLight* mObject;
+    /* 0x118 */ int _118;
 };  // Size: 0x11C
 
 void

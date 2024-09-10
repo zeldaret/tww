@@ -339,6 +339,20 @@ struct TObject_fog : public TObject {
 };
 
 struct TAdaptor_light : public TAdaptor {
+    enum TEVariableValue {
+        TE_VALUE_NONE = -1,
+        TE_VALUE_7 = 7,
+        TE_VALUE_8 = 8,
+        TE_VALUE_9 = 9,
+        TE_VALUE_10 = 10,
+        TE_VALUE_11 = 11,
+    };
+    enum TEDirection_ {
+        DIRECTION_0,
+        DIRECTION_1,
+        DIRECTION_2,
+    };
+
     TAdaptor_light()
         : TAdaptor(mValue, ARRAY_SIZE(mValue))
         , mValue()
@@ -356,9 +370,9 @@ struct TAdaptor_light : public TAdaptor {
     /* 0x10 */ TVariableValue mValue[13];
 
     static u8 const sauVariableValue_3_COLOR_RGB[12];
-    static u8 const sauVariableValue_4_COLOR_RGBA[16];
-    static u8 const sauVariableValue_3_POSITION_XYZ[12];
-    static u8 const sauVariableValue_3_TARGET_POSITION_XYZ[12];
+    static u32 const sauVariableValue_4_COLOR_RGBA[4];
+    static u32 const sauVariableValue_3_POSITION_XYZ[3];
+    static u32 const sauVariableValue_3_TARGET_POSITION_XYZ[3];
     static u8 sauVariableValue_2_DIRECTION_THETA_PHI[8];
 };
 

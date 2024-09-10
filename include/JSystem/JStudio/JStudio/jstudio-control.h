@@ -5,13 +5,14 @@
 #include "JSystem/JStudio/JStudio/stb.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/mtx/vec.h"
+#include "dolphin/mtx/mtxvec.h"
 
 namespace JStudio {
 struct TObject;
 struct TCreateObject {
     TCreateObject() {}
     virtual ~TCreateObject() = 0;
-    virtual bool create(TObject**, JStudio::stb::data::TParse_TBlock_object const&) = 0;
+    virtual bool create(TObject**, stb::data::TParse_TBlock_object const&) = 0;
 
     /* 0x4 */ JGadget::TLinkListNode mNode;
 };  // Size: 0xC
@@ -20,9 +21,9 @@ struct TFactory : public stb::TFactory {
     TFactory() {}
 
     virtual ~TFactory();
-    virtual TObject* create(JStudio::stb::data::TParse_TBlock_object const&);
+    virtual TObject* create(stb::data::TParse_TBlock_object const&);
 
-    void appendCreateObject(JStudio::TCreateObject*);
+    void appendCreateObject(TCreateObject*);
 
     /* 0x04 */ JGadget::TLinkList<TCreateObject, -4> mList;
     /* 0x10 */ fvb::TFactory fvb_Factory;
@@ -33,7 +34,10 @@ public:
     struct TTransform_position {
         Vec mPosition;
     };
-    struct TTransform_position_direction {};
+    struct TTransform_position_direction {
+        Vec mPosition;  // _00
+        Vec mDirection; // _0C
+    };
     struct TTransform_translation_rotation {};
     struct TTransform_translation_rotation_scaling {};
 
@@ -42,7 +46,7 @@ public:
     void transformOnSet_setOrigin(const Vec&, f32);
     void transformOnGet_setOrigin(const Vec&, f32);
 
-    void setFactory(JStudio::TFactory* factory) {
+    void setFactory(TFactory* factory) {
         stb::TFactory* stb_factory = factory;
         fvb::TFactory* fvb_factory = factory == NULL ? NULL : &factory->fvb_Factory;
         stb::TControl::setFactory(stb_factory);
@@ -104,31 +108,47 @@ public:
         return obj->referFunctionValue();
     }
     
+    const TTransform_position_direction* transformOnGet_transform_ifEnabled(const TTransform_position_direction& posDir, TTransform_position_direction* transformedPosDir) const {
+        if (!transformOnGet_isEnabled()) {
+            return &posDir;
+        } else {
+            transformOnGet_transform(posDir, transformedPosDir);
+            return transformedPosDir;
+        }
+    }
+    void transformOnGet_transform(const TTransform_position_direction& posDir, TTransform_position_direction* transformedPosDir) const {
+        transformOnGet_transformTranslation(posDir.mPosition, &transformedPosDir->mPosition);
+        transformOnGet_transformDirection(posDir.mDirection, &transformedPosDir->mDirection);
+    }
+    void transformOnGet_transformTranslation(const Vec& pos, Vec* transformedPos) const {
+        MTXMultVec(transformOnGet_getMatrix(), &pos, transformedPos);
+    }
+    void transformOnGet_transformDirection(const Vec& dir, Vec* transformedDir) const {
+        MTXMultVecSR(transformOnGet_getMatrix(), &dir, transformedDir);
+    }
+    
+    // TODO
     void fvb_getObjectContainer() const {}
     void fvb_referControl() {}
     void fvb_removeObject_all() {}
     void stb_getObjectContainer() const {}
     void stb_referObjectContainer() {}
-    void stb_removeObject(JStudio::TObject*) {}
-    void transformOnGet_transform(const JStudio::TControl::TTransform_position&, JStudio::TControl::TTransform_position*) const {}
-    void transformOnGet_transform(const JStudio::TControl::TTransform_position_direction&, JStudio::TControl::TTransform_position_direction*) const {}
-    void transformOnGet_transform(const JStudio::TControl::TTransform_translation_rotation&, JStudio::TControl::TTransform_translation_rotation*) const {}
-    void transformOnGet_transformDirection(const Vec&, Vec*) const {}
+    void stb_removeObject(TObject*) {}
+    void transformOnGet_transform(const TTransform_position&, TTransform_position*) const {}
+    void transformOnGet_transform(const TTransform_translation_rotation&, TTransform_translation_rotation*) const {}
     void transformOnGet_transformRotation(const Vec&, Vec*) const {}
-    void transformOnGet_transformTranslation(const Vec&, Vec*) const {}
-    void transformOnGet_transform_ifEnabled(const JStudio::TControl::TTransform_position_direction&, JStudio::TControl::TTransform_position_direction*) const {}
-    void transformOnGet_transform_ifEnabled(const JStudio::TControl::TTransform_translation_rotation&, JStudio::TControl::TTransform_translation_rotation*) const {}
-    void transformOnSet_transform(const JStudio::TControl::TTransform_position&, JStudio::TControl::TTransform_position*) const {}
-    void transformOnSet_transform(const JStudio::TControl::TTransform_position_direction&, JStudio::TControl::TTransform_position_direction*) const {}
-    void transformOnSet_transform(const JStudio::TControl::TTransform_translation_rotation&, JStudio::TControl::TTransform_translation_rotation*) const {}
+    void transformOnGet_transform_ifEnabled(const TTransform_translation_rotation&, TTransform_translation_rotation*) const {}
+    void transformOnSet_transform(const TTransform_position&, TTransform_position*) const {}
+    void transformOnSet_transform(const TTransform_position_direction&, TTransform_position_direction*) const {}
+    void transformOnSet_transform(const TTransform_translation_rotation&, TTransform_translation_rotation*) const {}
     void transformOnSet_transform(CMtxP, MtxP) const {}
     void transformOnSet_transformDirection(const Vec&, Vec*) const {}
     void transformOnSet_transformDirection_ifEnabled(const Vec&, Vec*) const {}
     void transformOnSet_transformRotation(const Vec&, Vec*) const {}
     void transformOnSet_transformTranslation(const Vec&, Vec*) const {}
     void transformOnSet_transformTranslation_ifEnabled(const Vec&, Vec*) const {}
-    void transformOnSet_transform_ifEnabled(const JStudio::TControl::TTransform_position_direction&, JStudio::TControl::TTransform_position_direction*) const {}
-    void transformOnSet_transform_ifEnabled(const JStudio::TControl::TTransform_translation_rotation&, JStudio::TControl::TTransform_translation_rotation*) const {}
+    void transformOnSet_transform_ifEnabled(const TTransform_position_direction&, TTransform_position_direction*) const {}
+    void transformOnSet_transform_ifEnabled(const TTransform_translation_rotation&, TTransform_translation_rotation*) const {}
     void transformOnSet_transform_ifEnabled(CMtxP, MtxP) const {}
 
     /* 0x58 */ f64 mSecondPerFrame;
@@ -144,12 +164,12 @@ public:
 };
 
 struct TParse : public stb::TParse {
-    TParse(JStudio::TControl*);
-    bool parseBlock_block_fvb_(JStudio::stb::data::TParse_TBlock const&, u32);
+    TParse(TControl*);
+    bool parseBlock_block_fvb_(stb::data::TParse_TBlock const&, u32);
 
     virtual ~TParse();
-    virtual bool parseHeader(JStudio::stb::data::TParse_THeader const&, u32);
-    virtual bool parseBlock_block(JStudio::stb::data::TParse_TBlock const&, u32);
+    virtual bool parseHeader(stb::data::TParse_THeader const&, u32);
+    virtual bool parseBlock_block(stb::data::TParse_TBlock const&, u32);
 
     TControl* getControl() { return (TControl*)stb::TParse::getControl(); }
 

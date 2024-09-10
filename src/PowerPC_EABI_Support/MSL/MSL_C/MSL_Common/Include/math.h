@@ -10,7 +10,7 @@
 #define M_SQRT3 1.73205f
 
 #define DEG_TO_RAD(degrees) (degrees * (M_PI / 180.0f))
-#define RAD_TO_DEG(radians) (radians / (180.0f / M_PI))
+#define RAD_TO_DEG(radians) (radians * (180.0f / M_PI + 0.000005f)) // the 0.000005f is probably a fakematch
 
 #ifdef __cplusplus
 extern "C" {
