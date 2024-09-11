@@ -47,10 +47,6 @@ namespace {
         } else {
             pControl->transformOnGet_transform(rSrc.mCurrent, &pDst->mCurrent);
             pControl->transformOnGet_transform(rSrc.mTarget, &pDst->mTarget);
-            // Fixes codegen, but breaks regalloc:
-            // CMtxP temp = pControl->mTransformOnGet_Matrix;
-            // MTXMultVec(temp, &rSrc.mCurrent.mPosition, &pDst->mCurrent.mPosition);
-            // MTXMultVec(temp, &rSrc.mTarget.mPosition, &pDst->mTarget.mPosition);
             return pDst;
         }
     }
@@ -60,10 +56,6 @@ namespace {
         } else {
             pControl->transformOnSet_transform(rSrc.mCurrent, &pDst->mCurrent);
             pControl->transformOnSet_transform(rSrc.mTarget, &pDst->mTarget);
-            // Fixes codegen, but breaks regalloc:
-            // CMtxP temp = pControl->mTransformOnSet_Matrix;
-            // MTXMultVec(temp, &rSrc.mCurrent.mPosition, &pDst->mCurrent.mPosition);
-            // MTXMultVec(temp, &rSrc.mTarget.mPosition, &pDst->mTarget.mPosition);
             return pDst;
         }
     }
@@ -71,10 +63,9 @@ namespace {
 
 /* 802774A8-80277600       .text adaptor_do_begin__Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio7TObject */
 void TAdaptor_camera::adaptor_do_begin(const JStudio::TObject* object) {
-    /* Nonmatching */
     mObject->JSGFEnableFlag(1);
     
-    const JStudio::TControl* pControl = (JStudio::TControl*)object->getControl();
+    JStudio::TControl* pControl = (JStudio::TControl*)object->getControl();
     TTransformed_ sp20;
     TTransformed_ sp08;
     const TTransformed_* r29;
@@ -95,8 +86,7 @@ void TAdaptor_camera::adaptor_do_end(const JStudio::TObject* object) {
 
 /* 80277654-8027771C       .text adaptor_do_update__Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio7TObjectUl */
 void TAdaptor_camera::adaptor_do_update(const JStudio::TObject* object, u32 p2) {
-    /* Nonmatching */
-    const JStudio::TControl* pControl = (JStudio::TControl*)object->getControl();
+    JStudio::TControl* pControl = (JStudio::TControl*)object->getControl();
     TTransformed_ sp20;
     TTransformed_ sp08;
     adaptor_getVariableValue_Vec(&sp20.mCurrent.mPosition, sauVariableValue_3_POSITION_XYZ);
