@@ -637,13 +637,13 @@ int JASystem::TSeqParser::cmdPrintf(TTrack* track, u32* args) {
                 break;
             }
 
-			switch (buf[i]) {
-			case 'n':
-				buf[i] = '\r';
-				continue;
-			default:
-				continue;
-			}
+            switch (buf[i]) {
+            case 'n':
+                buf[i] = '\r';
+                continue;
+            default:
+                continue;
+            }
         }
 
         if (buf[i] != '%') {
