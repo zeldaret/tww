@@ -9,13 +9,15 @@
 
 class daPirate_Flag_packet_c : public J3DPacket {
 public:
-    void changeCurrentPos() {}
+    void changeCurrentPos() { m87E ^= 1; }
     s16 getEscapeNrmAngle() { return m87A; }
     MtxP getMtx() { return mMtx; }
     cXyz* getNrm() { return mNrm[m87E]; }
-    cXyz getOffsetVec() {}
+    cXyz* getOffsetVec() { return m74C; } // Guessed based on size in debug maps
     cXyz* getPos() { return mPos[m87E]; }
-    void setNrmMtx() {}
+    void setNrmMtx() {
+        cMtx_YrotS(*calc_mtx, m878);
+    }
     void setTevStr(dKy_tevstr_c* i_tevStr) { mTevStr = i_tevStr; }
 
     void setCorrectNrmAngle(s16, f32);
@@ -60,7 +62,9 @@ public:
     /* Place member variables here */
     /* 0x290 */ request_of_phase_process_class mPhs1;
     /* 0x298 */ request_of_phase_process_class mPhs2;
-    /* 0x2A0 */ u8 pad2A0[0x18];
+    /* 0x2A0 */ u8 pad2A0[0x08];
+    /* 0x2A8 */ s16 m2A8;
+    /* 0x2AA */ u8 pad2AA[0x0C];
     /* 0x2B8 */ daPirate_Flag_packet_c mPacket;
 };
 

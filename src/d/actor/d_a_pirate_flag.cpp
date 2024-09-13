@@ -8,6 +8,7 @@
 #include "d/res/res_kaizokusen.h"
 #include "d/res/res_cloth.h"
 #include "d/actor/d_a_obj_pirateship.h"
+#include "d/d_kankyo_wether.h"
 
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
@@ -285,6 +286,7 @@ void daPirate_Flag_packet_c::draw() {
         GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
         GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     }
+
     GXSetTevColorS10(GX_TEVREG0, mTevStr->mColorC0);
     GXSetTevColor(GX_TEVREG1, mTevStr->mColorK0);
     GXSetTevColor(GX_TEVREG2, mTevStr->mColorK1);
@@ -300,7 +302,6 @@ void daPirate_Flag_packet_c::draw() {
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
     J3DShape::resetVcdVatCache();
-
 }
 
 const u8 dummy_4211[] = {0x00, 0xFF, 0x00, 0x80};
@@ -415,8 +416,63 @@ static cXyz get_cloth_anim_factor(pirate_flag_class* param_0, cXyz* param_1, cXy
 }
 
 /* 00001624-00001938       .text pirate_flag_move__FP17pirate_flag_class */
-static void pirate_flag_move(pirate_flag_class*) {
-    /* Nonmatching */
+static void pirate_flag_move(pirate_flag_class* i_this) {
+    cXyz* windVec = dKyw_get_wind_vec();
+    cXyz* pos = i_this->mPacket.getPos();
+    cXyz* nrm = i_this->mPacket.getNrm();
+    i_this->mPacket.changeCurrentPos();
+
+    s16 windAngle = cM_atan2s(windVec->x, windVec->z);
+
+    cMtx_YrotS(*calc_mtx, -((s16)(i_this->current.angle.y + i_this->shape_angle.y) - windAngle));
+    cXyz tmp(0.0f, 0.0f, 0.064f);
+    cXyz dest;
+    MtxPosition(&tmp, &dest);
+    tmp.x = 1.0f;
+    tmp.z = 0.0f;
+    MtxPosition(&tmp, &dest);
+    f32 absZ = std::fabsf(dest.z);
+    i_this->m2A8 += l_HIO.m08;
+    cXyz* temp_r28 = i_this->mPacket.getPos();
+    cXyz* offsetVec = i_this->mPacket.getOffsetVec();
+    f32 temp_f3 = 0.5f + (cM_ssin(i_this->m2A8) * 0.5f);
+
+    cXyz sp14;
+    cXyz sp2C(0.0f, 0.0f, l_HIO.m0C * temp_f3 + (l_HIO.m10 * (1.0f - temp_f3)));
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            int idx = i + j * 5;
+            temp_r28[idx].set(pos[idx]);
+            sp14 = get_cloth_anim_factor(i_this, pos, nrm, &sp2C, &offsetVec[idx], i, j);
+            offsetVec[idx] += sp14;
+            offsetVec[idx] *= 0.875f;
+            temp_r28[idx] += offsetVec[idx];
+        }
+    }
+
+    cXyz* var_21_2 = i_this->mPacket.getNrm();
+    s16 angleY = i_this->current.angle.y;
+
+    cXyz lightVec;
+    dKy_FirstlightVec_get(&lightVec);
+    s16 lightAngle = cM_atan2s(lightVec.x, lightVec.z);
+    i_this->mPacket.setCorrectNrmAngle(lightAngle - angleY, absZ);
+    i_this->mPacket.setNrmMtx();
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            i_this->mPacket.setNrmVtx(var_21_2, j, i);
+
+            var_21_2++;
+        }
+    }
+
+    i_this->mPacket.setBackNrm();
+
+    DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(*i_this->mPacket.mPos));
+    DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(*i_this->mPacket.mNrm));
+    DCStoreRangeNoSync(i_this->mPacket.getNrm() + sizeof(i_this->mPacket.mNrm) / sizeof(cXyz), sizeof(*i_this->mPacket.m4F4)); // Fakematch?
 }
 
 /* 00001938-00001A38       .text daPirate_Flag_Execute__FP17pirate_flag_class */
