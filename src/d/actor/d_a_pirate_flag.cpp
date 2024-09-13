@@ -362,8 +362,56 @@ static void get_cloth_anim_sub_factor(cXyz* param_0, cXyz* param_1, cXyz* param_
 }
 
 /* 000012D4-00001624       .text get_cloth_anim_factor__FP17pirate_flag_classP4cXyzP4cXyzP4cXyzP4cXyzii */
-static void get_cloth_anim_factor(pirate_flag_class*, cXyz*, cXyz*, cXyz*, cXyz*, int, int) {
-    /* Nonmatching */
+static cXyz get_cloth_anim_factor(pirate_flag_class* param_0, cXyz* param_1, cXyz* param_2, cXyz* param_3, cXyz* param_4, int param_5, int param_6) {
+    int temp_r30 = param_6 * 5;
+    int idx = param_5 + temp_r30;
+
+    cXyz sp20(param_1[idx]);
+    cXyz sp14 = param_2[idx] * param_3->inprod(param_2[idx]);
+    sp14.y += l_HIO.m14;
+
+    if (param_5 != 0) {
+        get_cloth_anim_sub_factor(&sp20, &param_1[temp_r30 + (param_5 - 1)], &sp14, param_4, 200.0f);
+        if (param_6 != 0) {
+            get_cloth_anim_sub_factor(&sp20, &param_1[ (param_6 - 1) * 5 + param_5], &sp14, param_4, 100.0f);
+            get_cloth_anim_sub_factor(&sp20, &param_1[(param_6 - 1) * 5 + (param_5 - 1)], &sp14, param_4, 223.6068f);
+        }
+
+        if (param_6 != 4) {
+            get_cloth_anim_sub_factor(&sp20, &param_1[(param_6 + 1) * 5 + param_5], &sp14, param_4, 100.0f);
+            get_cloth_anim_sub_factor(&sp20, &param_1[(param_6 + 1) * 5 + (param_5 - 1)], &sp14, param_4, 223.6068f);
+        }
+
+        if (param_5 != 4) {
+            get_cloth_anim_sub_factor(&sp20, &param_1[1 + param_5 + temp_r30], &sp14, param_4, 200.0f);
+            if (param_6 != 0) {
+                get_cloth_anim_sub_factor(&sp20, &param_1[1 + param_5 + ((param_6 - 1) * 5)], &sp14, param_4, 223.6068f);
+            }
+
+            if (param_6 != 4) {
+                get_cloth_anim_sub_factor(&sp20, &param_1[1 + param_5 + ((param_6 + 1) * 5)], &sp14, param_4, 223.6068f);
+            }
+        }
+
+        return sp14;
+    }
+
+    if (param_6 != 0 && param_6 != 4) {
+        get_cloth_anim_sub_factor(&sp20, &param_1[temp_r30 + (param_5 + 1)], &sp14, param_4, 200.0f);
+        if (param_6 != 0) {
+            get_cloth_anim_sub_factor(&sp20, &param_1[(param_6 - 1) * 5 + param_5], &sp14, param_4, 100.0f);
+            get_cloth_anim_sub_factor(&sp20, &param_1[(param_6 - 1) * 5 + (param_5 + 1)], &sp14, param_4, 223.6068f);
+        }
+
+        if (param_6 != 4) {
+            get_cloth_anim_sub_factor(&sp20, &param_1[(param_6 + 1) * 5 + param_5], &sp14, param_4, 100.0f);
+            get_cloth_anim_sub_factor(&sp20, &param_1[(param_6 + 1) * 5 + (param_5 + 1)], &sp14, param_4, 223.6068f);
+        }
+
+        return sp14;
+    }
+
+    return cXyz::Zero;
 }
 
 /* 00001624-00001938       .text pirate_flag_move__FP17pirate_flag_class */
