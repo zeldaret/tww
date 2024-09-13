@@ -10,6 +10,25 @@
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_kankyo_wether.h"
 
+static Vec bss_3569;
+// Not sure what these are, but they have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.
+static u8 bss_1036 ALIGN_DECL(4);
+static u8 bss_1034 ALIGN_DECL(4);
+static u8 bss_1032 ALIGN_DECL(4);
+static u8 bss_1031 ALIGN_DECL(4);
+static u8 bss_1026 ALIGN_DECL(4);
+static u8 bss_1024 ALIGN_DECL(4);
+static u8 bss_1022 ALIGN_DECL(4);
+static u8 bss_1021 ALIGN_DECL(4);
+static u8 bss_984 ALIGN_DECL(4);
+static u8 bss_982 ALIGN_DECL(4);
+static u8 bss_980 ALIGN_DECL(4);
+static u8 bss_979 ALIGN_DECL(4);
+static u8 bss_941 ALIGN_DECL(4);
+static u8 bss_939 ALIGN_DECL(4);
+static u8 bss_937 ALIGN_DECL(4);
+static u8 bss_936 ALIGN_DECL(4);
+
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
@@ -476,8 +495,23 @@ static void pirate_flag_move(pirate_flag_class* i_this) {
 }
 
 /* 00001938-00001A38       .text daPirate_Flag_Execute__FP17pirate_flag_class */
-static BOOL daPirate_Flag_Execute(pirate_flag_class*) {
-    /* Nonmatching */
+static BOOL daPirate_Flag_Execute(pirate_flag_class* i_this) {
+    if (l_HIO.m07 != 0) {
+        return TRUE;
+    }
+
+    static cXyz flag_offset(0.0f, 1000.0f, 100.0f);
+
+    cMtx_multVec(l_p_ship->mpModel->getBaseTRMtx(), &flag_offset, &i_this->current.pos);
+
+    i_this->current.angle = l_p_ship->shape_angle;
+    cXyz* windVec = dKyw_get_wind_vec();
+    s16 target = cM_atan2s(windVec->x, windVec->z);
+    target -= i_this->current.angle.y;
+    cLib_addCalcAngleS2(&i_this->shape_angle.y, target, 8, 0x400);
+    pirate_flag_move(i_this);
+
+    return TRUE;
 }
 
 /* 00001A38-00001A40       .text daPirate_Flag_IsDelete__FP17pirate_flag_class */
