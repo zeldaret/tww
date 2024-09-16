@@ -43,8 +43,7 @@ int dBgS_MoveBgActor::MoveBGCreateHeap() {
     return 1;
 }
 
-/* 800A57F4-800A58F4       .text
- * MoveBGCreate__16dBgS_MoveBgActorFPCciPFP4dBgWPvR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz_vUl */
+/* 800A57F4-800A58F4       .text MoveBGCreate__16dBgS_MoveBgActorFPCciPFP4dBgWPvR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz_vUl */
 int dBgS_MoveBgActor::MoveBGCreate(const char* i_arcName, int i_dzb_id,
                                    MoveBGActor_SetFunc i_setFunc, u32 i_heapSize) {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);

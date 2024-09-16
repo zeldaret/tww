@@ -162,7 +162,7 @@ static f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
 }
 
 /* 8018FB14-8018FCFC       .text dKy_light_influence_id__F4cXyzi */
-int dKy_light_influence_id(cXyz param_0, int param_1) {
+int dKy_light_influence_id(cXyz i_pos, int param_1) {
     f32 var_f31 = 1000000.0f;
 
     int var_r28 = -1;
@@ -175,8 +175,8 @@ int dKy_light_influence_id(cXyz param_0, int param_1) {
             if (g_env_light.mpPLights[j] != NULL && (i == 0 || j != var_r28) &&
                 g_env_light.mpPLights[j]->mPower > 0.01f)
             {
-                if (var_f31 > param_0.abs(g_env_light.mpPLights[j]->mPos)) {
-                    var_f31 = param_0.abs(g_env_light.mpPLights[j]->mPos);
+                if (var_f31 > i_pos.abs(g_env_light.mpPLights[j]->mPos)) {
+                    var_f31 = i_pos.abs(g_env_light.mpPLights[j]->mPos);
 
                     if (i == 0) {
                         var_r28 = j;
@@ -207,7 +207,7 @@ int dKy_light_influence_id(cXyz param_0, int param_1) {
 }
 
 /* 8018FCFC-8018FEC4       .text dKy_eflight_influence_id__F4cXyzi */
-int dKy_eflight_influence_id(cXyz param_0, int param_1) {
+int dKy_eflight_influence_id(cXyz i_pos, int param_1) {
     f32 var_f31 = 1000000.0f;
 
     int var_r28 = -1;
@@ -218,10 +218,10 @@ int dKy_eflight_influence_id(cXyz param_0, int param_1) {
     for (i = 0; i <= param_1; i++) {
         for (j = 0; j < 10; j++) {
             if (g_env_light.mpEfLights[j] != NULL && (i == 0 || j != var_r28)) {
-                if (var_f31 > param_0.abs(g_env_light.mpEfLights[j]->mPos) &&
+                if (var_f31 > i_pos.abs(g_env_light.mpEfLights[j]->mPos) &&
                     g_env_light.mpEfLights[j]->mPower > 0.01f)
                 {
-                    var_f31 = param_0.abs(g_env_light.mpEfLights[j]->mPos);
+                    var_f31 = i_pos.abs(g_env_light.mpEfLights[j]->mPos);
 
                     if (i == 0) {
                         var_r28 = j;
@@ -269,8 +269,8 @@ f32 dKy_light_influence_yuragi(int i_lightIdx) {
 }
 
 /* 8018FF7C-80190020       .text dKy_light_influence_distance__F4cXyzi */
-f32 dKy_light_influence_distance(cXyz param_0, int i_lightIdx) {
-    return param_0.abs(g_env_light.mpPLights[i_lightIdx >= 0 ? i_lightIdx : 0]->mPos);
+f32 dKy_light_influence_distance(cXyz i_pos, int i_lightIdx) {
+    return i_pos.abs(g_env_light.mpPLights[i_lightIdx >= 0 ? i_lightIdx : 0]->mPos);
 }
 
 /* 80190020-8019004C       .text dKy_eflight_influence_col__Fi */
@@ -289,8 +289,8 @@ f32 dKy_eflight_influence_yuragi(int i_eflightIdx) {
 }
 
 /* 8019009C-80190140       .text dKy_eflight_influence_distance__F4cXyzi */
-f32 dKy_eflight_influence_distance(cXyz param_0, int i_eflightIdx) {
-    return param_0.abs(g_env_light.mpEfLights[i_eflightIdx >= 0 ? i_eflightIdx : 0]->mPos);
+f32 dKy_eflight_influence_distance(cXyz i_pos, int i_eflightIdx) {
+    return i_pos.abs(g_env_light.mpEfLights[i_eflightIdx >= 0 ? i_eflightIdx : 0]->mPos);
 }
 
 /* 80190140-801901D8       .text plight_init__Fv */
@@ -625,8 +625,7 @@ BOOL dKy_daynight_check() {
     }
 }
 
-/* 80190CF8-801912EC       .text
- * setLight_palno_get__18dScnKy_env_light_cFPUcPUcPUcPUcPUcPUcPUcPUcPfPiPiPfPUc */
+/* 80190CF8-801912EC       .text setLight_palno_get__18dScnKy_env_light_cFPUcPUcPUcPUcPUcPUcPUcPUcPfPiPiPfPUc */
 void dScnKy_env_light_c::setLight_palno_get(u8* i_envrSel0, u8* i_envrSel1, u8* i_pSelIdx0,
                                             u8* i_pSelIdx1, u8* i_palIdx0A, u8* i_palIdx0B,
                                             u8* i_palIdx1A, u8* i_palIdx1B, f32* i_blendPalAB,
@@ -1078,9 +1077,7 @@ void dScnKy_env_light_c::setLight() {
     mVrKasumiMaeColor.a = 0xFF;
 }
 
-/* 80191C44-8019223C       .text
- * setLight_bg__18dScnKy_env_light_cFP12dKy_tevstr_cP11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10PfPf
- */
+/* 80191C44-8019223C       .text setLight_bg__18dScnKy_env_light_cFP12dKy_tevstr_cP11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10P11_GXColorS10PfPf */
 void dScnKy_env_light_c::setLight_bg(dKy_tevstr_c* i_tevstr, GXColorS10* i_BG0_C0,
                                      GXColorS10* i_BG0_K0, GXColorS10* i_BG1_C0,
                                      GXColorS10* i_BG1_K0, GXColorS10* i_BG2_C0,
@@ -1240,8 +1237,7 @@ void dScnKy_env_light_c::setLight_bg(dKy_tevstr_c* i_tevstr, GXColorS10* i_BG0_C
     }
 }
 
-/* 8019223C-8019252C       .text
- * setLight_actor__18dScnKy_env_light_cFP12dKy_tevstr_cP11_GXColorS10PfPf */
+/* 8019223C-8019252C       .text setLight_actor__18dScnKy_env_light_cFP12dKy_tevstr_cP11_GXColorS10PfPf */
 void dScnKy_env_light_c::setLight_actor(dKy_tevstr_c* i_tevstr, GXColorS10* i_fogColor,
                                         f32* i_fogStartZ, f32* i_fogEndZ) {
     u8 palIdx0A;
@@ -1319,10 +1315,8 @@ void dScnKy_env_light_c::setLight_actor(dKy_tevstr_c* i_tevstr, GXColorS10* i_fo
     }
 }
 
-/* 8019252C-8019261C       .text
- * settingTevStruct_colget_actor__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_cP11_GXColorS10P11_GXColorS10P11_GXColorS10PfPf
- */
-void dScnKy_env_light_c::settingTevStruct_colget_actor(cXyz*, dKy_tevstr_c* i_tevstr, GXColorS10* i_colorC0, GXColorS10* i_colorK0, GXColorS10* i_fogColor, f32* i_fogStartZ, f32* i_fogEndZ) {
+/* 8019252C-8019261C       .text settingTevStruct_colget_actor__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_cP11_GXColorS10P11_GXColorS10P11_GXColorS10PfPf */
+void dScnKy_env_light_c::settingTevStruct_colget_actor(cXyz* i_pos, dKy_tevstr_c* i_tevstr, GXColorS10* i_colorC0, GXColorS10* i_colorK0, GXColorS10* i_fogColor, f32* i_fogStartZ, f32* i_fogEndZ) {
     if (i_tevstr->mEnvrIdxOverride != 0xFF) {
         i_tevstr->mEnvrIdxCurr = i_tevstr->mEnvrIdxOverride;
     } else if (i_tevstr->mRoomNo >= 0) {
@@ -1348,8 +1342,7 @@ void dScnKy_env_light_c::settingTevStruct_colget_actor(cXyz*, dKy_tevstr_c* i_te
     i_colorK0->b = i_tevstr->mColorK0.b;
 }
 
-/* 8019261C-801926C0       .text
- * settingTevStruct_colget_player__18dScnKy_env_light_cFP12dKy_tevstr_c */
+/* 8019261C-801926C0       .text settingTevStruct_colget_player__18dScnKy_env_light_cFP12dKy_tevstr_c */
 void dScnKy_env_light_c::settingTevStruct_colget_player(dKy_tevstr_c* i_tevstr) {
     if (i_tevstr->mEnvrIdxOverride != 0xFF) {
         i_tevstr->mEnvrIdxCurr = i_tevstr->mEnvrIdxOverride;
@@ -1374,10 +1367,8 @@ void dScnKy_env_light_c::settingTevStruct_colget_player(dKy_tevstr_c* i_tevstr) 
 
 cXyz dKy_light_influence_pos(int i_lightIdx);
 
-/* 801926C0-80192E04       .text
- * settingTevStruct_plightcol_plus__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_c11_GXColorS1011_GXColorS10Uc
- */
-void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr_c* i_tevstr, GXColorS10 c0, GXColorS10 k0, u8 reset) {
+/* 801926C0-80192E04       .text settingTevStruct_plightcol_plus__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_c11_GXColorS1011_GXColorS10Uc */
+void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr_c* i_tevstr, GXColorS10 c0, GXColorS10 k0, u8 timer) {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     MtxP viewMtx = j3dSys.getViewMtx();
 
@@ -1425,7 +1416,7 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr
     }
 
     f32 bright;
-    if (lightPower <= 0.0f || reset)
+    if (lightPower <= 0.0f || timer > 0)
         bright = 1.0f;
     else
         bright = lightDist / lightPower;
@@ -1455,7 +1446,7 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr
     if (mK0.g > 0xFF) mK0.g = 0xFF;
     if (mK0.b > 0xFF) mK0.b = 0xFF;
 
-    if (reset != 0 || resetLight) {
+    if (timer > 0 || resetLight) {
         i_tevstr->mLightPosWorld = lightPos;
     } else {
         f32 oldDist = i_pos->abs(i_tevstr->mLightPosWorld) / 10000.0f;
@@ -1496,8 +1487,7 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr
     i_tevstr->mLightObj.mInfo.mDistAtten.z = 0.0f;
 }
 
-/* 80192E04-80193028       .text
- * settingTevStruct_eflightcol_plus__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_c */
+/* 80192E04-80193028       .text settingTevStruct_eflightcol_plus__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_c */
 void dScnKy_env_light_c::settingTevStruct_eflightcol_plus(cXyz* i_pos, dKy_tevstr_c* i_tevstr) {
     s32 hasEflight = false;
     s32 efi = mPlayerEflightIdx;
@@ -1531,26 +1521,26 @@ void dScnKy_env_light_c::settingTevStruct_eflightcol_plus(cXyz* i_pos, dKy_tevst
 dKy_setLight__Status lightStatusData[8];
 
 /* 80193028-80193650       .text settingTevStruct__18dScnKy_env_light_cFiP4cXyzP12dKy_tevstr_c */
-void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_tevstr_c* i_tevstr) {
-    int var_r31 = -1;
-    u8 var_r30 = i_tevstr->mInitTimer;
-    bool var_r29 = false;
+void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* i_pos, dKy_tevstr_c* i_tevstr) {
+    int bg_index = -1;
+    u8 timer = i_tevstr->mInitTimer;
+    bool is_full = false;
 
-    GXColorS10 sp98;
-    GXColorS10 sp90;
-    GXColorS10 sp88;
+    GXColorS10 C0;
+    GXColorS10 K0;
+    GXColorS10 fog_color;
 
     f32 fog_z_start;
     f32 fog_z_end;
 
-    GXColorS10 sp80;
-    GXColorS10 sp78;
-    GXColorS10 sp70;
-    GXColorS10 sp68;
-    GXColorS10 sp60;
-    GXColorS10 sp58;
-    GXColorS10 sp50;
-    GXColorS10 sp48;
+    GXColorS10 BG0_C0;
+    GXColorS10 BG0_K0;
+    GXColorS10 BG1_C0;
+    GXColorS10 BG1_K0;
+    GXColorS10 BG2_C0;
+    GXColorS10 BG2_K0;
+    GXColorS10 BG3_C0;
+    GXColorS10 BG3_K0;
 
     if (i_tevstr->mInitType != 123 && i_tevstr->mInitType != 124) {
         dKy_tevstr_init(i_tevstr, dComIfGp_roomControl_getStayNo(), 0xFF);
@@ -1565,34 +1555,34 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
     if (i_lightType == TEV_TYPE_ACTOR || i_lightType == TEV_TYPE_PLAYER || i_lightType == TEV_TYPE_UNK99) {
         i_tevstr->mLightMode = 1;
 
-        sp98 = mActorC0;
-        sp90 = mActorK0;
-        sp88 = mFogColor;
+        C0 = mActorC0;
+        K0 = mActorK0;
+        fog_color = mFogColor;
 
         fog_z_start = mFogStartZ__setLight;
         fog_z_end = mFogEndZ__setLight;
 
         if (i_lightType == TEV_TYPE_ACTOR || i_lightType == TEV_TYPE_UNK99) {
-            settingTevStruct_colget_actor(param_1, i_tevstr, &sp98, &sp90, &sp88, &fog_z_start, &fog_z_end);
+            settingTevStruct_colget_actor(i_pos, i_tevstr, &C0, &K0, &fog_color, &fog_z_start, &fog_z_end);
         } else if (i_lightType == TEV_TYPE_PLAYER) {
-            var_r30 = g_env_light.mInitAnimTimer;
+            timer = g_env_light.mInitAnimTimer;
             settingTevStruct_colget_player(i_tevstr);
-            settingTevStruct_colget_actor(param_1, i_tevstr, &sp98, &sp90, &sp88, &fog_z_start, &fog_z_end);
+            settingTevStruct_colget_actor(i_pos, i_tevstr, &C0, &K0, &fog_color, &fog_z_start, &fog_z_end);
         }
 
-        mC0.r = sp98.r;
-        mC0.g = sp98.g;
-        mC0.b = sp98.b;
+        mC0.r = C0.r;
+        mC0.g = C0.g;
+        mC0.b = C0.b;
         mC0.a = 255;
 
-        mK0.r = sp90.r;
-        mK0.g = sp90.g;
-        mK0.b = sp90.b;
+        mK0.r = K0.r;
+        mK0.g = K0.g;
+        mK0.b = K0.b;
         mK0.a = 255;
 
         if (i_lightType != TEV_TYPE_UNK99) {
-            settingTevStruct_plightcol_plus(param_1, i_tevstr, sp98, sp90, var_r30);
-            settingTevStruct_eflightcol_plus(param_1, i_tevstr);
+            settingTevStruct_plightcol_plus(i_pos, i_tevstr, C0, K0, timer);
+            settingTevStruct_eflightcol_plus(i_pos, i_tevstr);
         }
 
         if (i_lightType == TEV_TYPE_PLAYER) {
@@ -1607,51 +1597,51 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
             i_tevstr->mEnvrIdxCurr = i_tevstr->mRoomNo;
         }
 
-        setLight_bg(i_tevstr, &sp80, &sp78, &sp70, &sp68, &sp60, &sp58, &sp50, &sp48, &sp88,
-                    &fog_z_start, &fog_z_end);
+        setLight_bg(i_tevstr, &BG0_C0, &BG0_K0, &BG1_C0, &BG1_K0, &BG2_C0, &BG2_K0, &BG3_C0, &BG3_K0,
+                    &fog_color, &fog_z_start, &fog_z_end);
 
         if (i_lightType >= TEV_TYPE_BG0_FULL && i_lightType <= TEV_TYPE_BG3_FULL) {
-            var_r29 = true;
+            is_full = true;
             i_lightType = TEV_TYPE_BG0 + (i_lightType - TEV_TYPE_BG0_FULL);
         }
 
         if (i_lightType >= TEV_TYPE_BG0_PLIGHT && i_lightType <= TEV_TYPE_ACTOR_NOLIGHT) {
-            var_r31 = i_lightType - TEV_TYPE_BG0_PLIGHT;
+            bg_index = i_lightType - TEV_TYPE_BG0_PLIGHT;
         } else {
-            var_r31 = i_lightType - TEV_TYPE_BG0;
+            bg_index = i_lightType - TEV_TYPE_BG0;
         }
 
-        switch (var_r31) {
+        switch (bg_index) {
         case 0:
-            mC0 = sp80;
-            mK0 = sp78;
+            mC0 = BG0_C0;
+            mK0 = BG0_K0;
             break;
         case 1:
-            mC0 = sp70;
-            mK0 = sp68;
+            mC0 = BG1_C0;
+            mK0 = BG1_K0;
             break;
         case 2:
-            mC0 = sp60;
-            mK0 = sp58;
+            mC0 = BG2_C0;
+            mK0 = BG2_K0;
             break;
         case 3:
         default:
-            mC0 = sp50;
-            mK0 = sp48;
+            mC0 = BG3_C0;
+            mK0 = BG3_K0;
             break;
         }
 
         if (i_lightType >= TEV_TYPE_BG0_PLIGHT && i_lightType < TEV_TYPE_ACTOR_NOLIGHT) {
-            sp98.r = (u8)mC0.r;
-            sp98.g = (u8)mC0.g;
-            sp98.b = (u8)mC0.b;
+            C0.r = (u8)mC0.r;
+            C0.g = (u8)mC0.g;
+            C0.b = (u8)mC0.b;
 
-            sp90.r = (u8)mK0.r;
-            sp90.g = (u8)mK0.g;
-            sp90.b = (u8)mK0.b;
+            K0.r = (u8)mK0.r;
+            K0.g = (u8)mK0.g;
+            K0.b = (u8)mK0.b;
 
             i_tevstr->mLightMode = 2;
-            settingTevStruct_plightcol_plus(param_1, i_tevstr, sp98, sp90, var_r30);
+            settingTevStruct_plightcol_plus(i_pos, i_tevstr, C0, K0, timer);
         } else {
             Vec spA0;
             cMtx_multVec(j3dSys.getViewMtx(), &lightStatusData[0].mPos, &spA0);
@@ -1661,7 +1651,7 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
             i_tevstr->mLightPosWorld = lightStatusData[0].mPos;
             light_info.mLightDirection = g_env_light.mLightDir;
 
-            if (!var_r29) {
+            if (!is_full) {
                 light_info.mColor.r = 255;
                 light_info.mColor.g = 0;
                 light_info.mColor.b = 0;
@@ -1689,8 +1679,8 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
     i_tevstr->mColorK0.g = mK0.g;
     i_tevstr->mColorK0.b = mK0.b;
 
-    if (var_r31 != 1) {
-        i_tevstr->mFogColor = sp88;
+    if (bg_index != 1) {
+        i_tevstr->mFogColor = fog_color;
     } else {
         i_tevstr->mFogColor = g_env_light.mVrUsoUmiColor;
     }
@@ -1791,8 +1781,7 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
     }
 }
 
-/* 80193A34-80193ADC       .text
- * setLightTevColorType__18dScnKy_env_light_cFP8J3DModelP12dKy_tevstr_c */
+/* 80193A34-80193ADC       .text setLightTevColorType__18dScnKy_env_light_cFP8J3DModelP12dKy_tevstr_c */
 void dScnKy_env_light_c::setLightTevColorType(J3DModel* i_model, dKy_tevstr_c* i_tevstr) {
     if (i_tevstr->mInitType != 0x7c) {
         if (i_tevstr->mInitType != 0x7b) {

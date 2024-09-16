@@ -41,8 +41,7 @@ void J2DOrthoGraph::setLookat() {
     GXLoadPosMtxImm(mPosMtx, GX_PNMTX0);
 }
 
-/* 802CDD84-802CDE10       .text
- * scissorBounds__13J2DOrthoGraphFPQ29JGeometry8TBox2<f>PCQ29JGeometry8TBox2<f> */
+/* 802CDD84-802CDE10       .text scissorBounds__13J2DOrthoGraphFPQ29JGeometry8TBox2<f>PCQ29JGeometry8TBox2<f> */
 void J2DOrthoGraph::scissorBounds(JGeometry::TBox2<f32>* param_0,
                                   const JGeometry::TBox2<f32>* param_1) {
     f32 widthPower = this->getWidthPower();
