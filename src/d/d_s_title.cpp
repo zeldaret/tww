@@ -118,7 +118,7 @@ static s32 dScnTitle_Create(scene_class* i_scn) {
 #if VERSION == VERSION_PAL
     dScnTitle_c::mMp = NULL;
     if (fpcM_GetName(i_this) == PROC_ENDING_SCENE) {
-        fopMsgM_Create(PROC_MESG, 0, 0);
+        fopMsgM_Create(PROC_MESG, NULL, NULL);
     }
 #endif
 

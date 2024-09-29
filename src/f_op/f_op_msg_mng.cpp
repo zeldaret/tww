@@ -200,17 +200,17 @@ void createTimerAppend(int, u16, u8, u8, f32, f32, f32, f32, uint) {
 }
 
 /* 8002B1C8-8002B23C       .text fopMsgM_create__FsP10fopAc_ac_cP4cXyzPUlPUlPFPv_i */
-fpc_ProcID fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, int (*)(void*)) {
+fpc_ProcID fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, fopMsgCreateFunc) {
     /* Nonmatching */
 }
 
 /* 8002B23C-8002B2B0       .text fop_MGameTerm_create__FsssiiPFPv_i */
-void fop_MGameTerm_create(s16, s16, s16, int, int, int (*)(void*)) {
+void fop_MGameTerm_create(s16, s16, s16, int, int, fopMsgCreateFunc) {
     /* Nonmatching */
 }
 
 /* 8002B2B0-8002B324       .text fop_Timer_create__FsUcUsUcUcffffPFPv_i */
-fpc_ProcID fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, int (*)(void*)) {
+fpc_ProcID fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, fopMsgCreateFunc) {
     /* Nonmatching */
 }
 
@@ -490,7 +490,7 @@ void fopMsgM_outFontDraw2(J2DPicture*, J2DPicture*, int, int, int, int, s16*, u8
 }
 
 /* 8002E204-8002E254       .text fopMsgM_Create__FsPFPv_iPv */
-fpc_ProcID fopMsgM_Create(s16, int (*)(void*), void*) {
+fpc_ProcID fopMsgM_Create(s16, fopMsgCreateFunc, void*) {
     /* Nonmatching */
 }
 
