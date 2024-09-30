@@ -262,7 +262,7 @@ def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         "lib": lib_name,
         "mw_version": "GC/1.2.5n",
         "cflags": cflags_base,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": objects,
     }
@@ -286,7 +286,7 @@ def ActorRel(status, rel_name, extra_cflags=[]):
 
 
 # Helper function for JSystem libraries
-def JSystemLib(lib_name, objects, progress_category="core"):
+def JSystemLib(lib_name, objects, progress_category="third_party"):
     return {
         "lib": lib_name,
         "mw_version": "GC/1.3.2",
@@ -590,7 +590,7 @@ config.libs = [
         "lib": "SSystem",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_framework,
-        "progress_category": "core",
+        "progress_category": "third_party",
         "host": True,
         "objects": [
             Object(Matching,    "SSystem/SComponent/c_malloc.cpp"),
@@ -1155,7 +1155,7 @@ config.libs = [
         "lib": "Runtime.PPCEABI.H",
         "mw_version": "GC/1.3",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/__mem.c"),
@@ -1174,7 +1174,7 @@ config.libs = [
         "lib": "MSL_C",
         "mw_version": "GC/1.3",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(Matching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/abort_exit.c"),
@@ -1228,7 +1228,7 @@ config.libs = [
         "lib": "TRK_MINNOW_DOLPHIN",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/mainloop.c"),
@@ -1261,7 +1261,7 @@ config.libs = [
         "lib": "amcstubs",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(NonMatching, "amcstubs/AmcExi2Stubs.c"),
@@ -1271,7 +1271,7 @@ config.libs = [
         "lib": "OdemuExi2",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(NonMatching, "OdemuExi2/DebuggerDriver.c"),
@@ -1281,7 +1281,7 @@ config.libs = [
         "lib": "odenotstub",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(NonMatching, "odenotstub/odenotstub.c"),
@@ -1293,7 +1293,7 @@ config.libs = [
         "lib": "REL",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_rel,
-        "progress_category": "core",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(Matching, "REL/executor.c"),
@@ -1723,9 +1723,10 @@ config.libs = [
 
 # Optional extra categories for progress tracking
 config.progress_categories = [
-    ProgressCategory("core", "Core Game Engine"),
     ProgressCategory("game", "TWW Game Code"),
-    ProgressCategory("dolphin", "GameCube Specific Code"),
+    ProgressCategory("core", "Core Engine"),
+    ProgressCategory("sdk", "SDK"),
+    ProgressCategory("third_party", "Third Party"),
 ]
 config.progress_each_module = args.verbose
 
