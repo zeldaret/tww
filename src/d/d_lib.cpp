@@ -199,9 +199,13 @@ bool dLib_pathInfo(dPath** dst, u8 no) {
 
 /* 80057AA4-80057D1C       .text dLib_pathMove__FP4cXyzPScP5dPathfPFP4cXyzP4cXyzP4cXyzPv_iPv */
 void dLib_pathMove(cXyz* pos, s8* pPntNo, dPath* pPath, f32 speed, int (*pCallBack)(cXyz*, cXyz*, cXyz*, void*), void* pCallBackData) {
-    /* Nonmatching */
     s8 pnt_no = *pPntNo;
-    s8 pnt_next_no = pnt_no > (pPath->m_num - 1) ? 0 : pnt_no + 1;
+    s8 pnt_next_no;
+    if (pnt_no < (pPath->m_num - 1)) {
+        pnt_next_no = pnt_no + 1;
+    } else {
+        pnt_next_no = 0;
+    }
     cXyz pnt_pos = pPath->mpPnt[pnt_no].mPos;
     cXyz pnt_next_pos = pPath->mpPnt[pnt_next_no].mPos;
 
@@ -486,14 +490,16 @@ bool STControl::checkDownTrigger() {
 
 /* 80058780-80058834       .text dLib_getIplDaysFromSaveTime__Fv */
 u32 dLib_getIplDaysFromSaveTime() {
-    /* Nonmatching */
     OSTime dateIpl = dComIfGs_getDateIpl();
     if (dateIpl == 0)
         return 0;
 
     OSTime curTime = OSGetTime();
-    u32 seconds = OSTicksToSeconds(curTime - dateIpl);
-    return seconds;
+    OSTime temp2 = curTime - dateIpl;
+    // TODO: below line might be a macro
+    OSTime temp = (OSTime)((OSTime)(OS_TIMER_CLOCK * (OSTime)60) * (OSTime)60) * (OSTime)24;
+    u32 days = temp2 / temp;
+    return days;
 }
 
 /* 80058834-80058910       .text dLib_get_QuatFromTriangle__FP4cXyzP4cXyzP4cXyz */

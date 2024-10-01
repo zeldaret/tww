@@ -426,7 +426,7 @@ config.libs = [
             Object(Matching,    "d/d_com_inf_game.cpp", extra_cflags=['-sym off']),
             Object(Matching,    "d/d_com_lib_game.cpp"),
             Object(Matching,    "d/d_com_static.cpp", extra_cflags=['-sym off']),
-            Object(NonMatching, "d/d_lib.cpp"),
+            Object(Matching,    "d/d_lib.cpp"),
             Object(Matching,    "d/d_save.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(Matching,    "d/d_save_init.cpp"),
             Object(Matching,    "d/d_shop.cpp", extra_cflags=['-pragma "nosyminline on"']),
