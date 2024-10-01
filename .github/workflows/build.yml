@@ -30,7 +30,7 @@ jobs:
       run: cp -R /orig/${{matrix.version}} orig
     - name: Build
       run: |
-        python configure.py --version ${{matrix.version}} --compilers /compilers --warn error
+        python configure.py --version ${{matrix.version}} --compilers /compilers --warn error --no-progress
         ninja
         python configure.py --version ${{matrix.version}} --compilers /compilers --warn off
         ninja all_source build/${{ matrix.version }}/progress.json build/${{ matrix.version }}/report.json
