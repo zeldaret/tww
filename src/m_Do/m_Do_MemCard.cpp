@@ -26,7 +26,7 @@ void mDoMemCd_Ctrl_c::ThdInit() {
     CARDInit();
     mPictDataPtr = NULL;
     mPictDataWritePtr = NULL;
-    field_0x1659 = 0;
+    mCopyToPos = 0;
     field_0x165A = 2;
     field_0x1660 = CARD_NO_COMMAND;
     mCommand = CARD_NO_COMMAND;

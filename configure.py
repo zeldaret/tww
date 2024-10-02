@@ -331,7 +331,7 @@ config.libs = [
             Object(Matching,    "m_Do/m_Do_dvd_thread.cpp"),
             Object(Matching,    "m_Do/m_Do_DVDError.cpp"),
             Object(Matching,    "m_Do/m_Do_MemCard.cpp"),
-            Object(NonMatching, "m_Do/m_Do_MemCardRWmng.cpp"),
+            Object(Matching,    "m_Do/m_Do_MemCardRWmng.cpp"),
             Object(Matching,    "m_Do/m_Do_gba_com.cpp"),
             Object(Matching,    "m_Do/m_Do_machine_exception.cpp"),
         ],
