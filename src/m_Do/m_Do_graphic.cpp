@@ -736,7 +736,7 @@ void mDoGph_CaptureCansel() {
 /* 80009C38-8000A180       .text blockenc__FPUc */
 void blockenc(u8* block) {
     /* Nonmatching */
-    u8 colors[16]; // sp18
+    u8 colors[16*3]; // sp18
     u32 color_mags[4]; // sp08
     u32 pix_idx;
     u32 color_num = 0; // r11
@@ -775,7 +775,8 @@ void blockenc(u8* block) {
                 u32 b1 = colors[r21+2] * 11;
                 u32 r20 = 0; // r20
                 u32 pix_idx = 0; // r19
-                for (u32 r22 = 0; r22 < 0x10; r22++, pix_idx += 4) {
+                u32 r22 = 0; // r22
+                for (; r22 < 0x10; r22++, pix_idx += 4) {
                     // u32 b2 = block[pix_idx + 2] * 11;
                     // u32 r2 = block[pix_idx + 0] * 30;
                     // u32 g2 = block[pix_idx + 1] * 59;
@@ -792,7 +793,7 @@ void blockenc(u8* block) {
                     
                     u32 r5 = 0;
                     u32 r6 = INT32_MAX;
-                    for (; r5 < 4; r5++) {
+                    for (; r5 < ARRAY_SIZE(color_mags); r5++) {
                         if (color_mags[r5] < r6) {
                             r6 = color_mags[r5];
                         }
@@ -854,7 +855,7 @@ void blockenc(u8* block) {
         u32 r5 = 0;
         u32 r24;
         u32 r25 = INT32_MAX;
-        for (; r5 < 4; r5++) {
+        for (; r5 < ARRAY_SIZE(color_mags); r5++) {
             if (color_mags[r5] < r25) {
                 r25 = color_mags[r5];
                 r24 = r5;
@@ -872,18 +873,112 @@ void blockenc(u8* block) {
 }
 
 /* 8000A180-8000A530       .text encode_s3tc__FPUcPUcii9_GXTexFmt */
-void encode_s3tc(u8*, u8* r26, int, int, GXTexFmt) {
+u32 encode_s3tc(u8* r25, u8* r26, int r27, int r28, GXTexFmt fmt) {
     /* Nonmatching */
-    u32 i8low;// = 256; // r30
-    u32 i8high;// = 0; // r29
-    u8 block[0x48]; // sp08;
-    blockenc(block);
-    memcpy(r26, &block[0x40], 8);
-    JUT_ASSERT(0x8A7, 16 <= i8low && i8high <= 235);
-    blockenc(block);
-    memcpy(r26, &block[0x40], 8);
-    blockenc(block);
-    memcpy(r26, &block[0x40], 8);
+    // params: capture_buffer, texture_buffer, width, height, fmt
+    u8 block[0x40 + 0x8]; // sp08;
+    u32 r31 = 0;
+    if (fmt == GX_TF_I8) {
+        u32 i8low = 255; // r30
+        u32 i8high = 0; // r29
+        for (int r18 = 0; r18 < r28; r18 += 8) {
+            for (int r19 = 0, r24 = 0; r19 < r27; r19 += 8, r24 += 0x20) {
+                for (int r20 = 0; r20 < 8; r20 += 4) {
+                    int r21 = 0;
+                    u32 r23 = r24 + r27 * (r18 + r20);
+                    for (; r21 < 8; r21 += 4) {
+                        u32 r5 = 0;
+                        int r3 = 0;
+                        u32 r10 = r21 + r23;
+                        for (; r3 < 4; r3++) {
+                            u32 r4 = r3*8 + r10;
+                            u32 r9 = 219;
+                            u32 r8 = 255; // r8 (alpha)
+                            u8* r7 = &r25[r4];
+                            for (int i = 0; i < 4; r5++, i++) {
+                                u32 r11 = r7[i];
+                                if (i8low > r11) {
+                                    i8low = r11;
+                                }
+                                if (i8high < r11) {
+                                    i8high = r11;
+                                }
+                                u32 r0 = ((r11 - 16) * 255) / r9;
+                                block[r5*4+0] = r0 & 0xF8;
+                                block[r5*4+1] = r0 & 0xFC;
+                                block[r5*4+2] = r0 & 0xF8;
+                                block[r5*4+3] = r8;
+                            }
+                        }
+                        blockenc(block);
+                        memcpy(&r26[r31], &block[0x40], 8);
+                        r31 += 8;
+                    }
+                }
+            }
+        }
+        JUT_ASSERT(0x8A7, 16 <= i8low && i8high <= 235);
+    } else if (fmt == GX_TF_RGB565) {
+        for (int r24 = 0; r24 < r28; r24 += 8) {
+            for (int r29 = 0; r29 < r27; r29 += 8) {
+                for (int r30 = 0; r30 < 8; r30 += 4) {
+                    int r21 = 0;
+                    u32 r22 = 2 * (r27 * (r24 + r30));
+                    for (; r21 < 8; r21 += 4) {
+                        u32 r8 = 0;
+                        int r9 = 0;
+                        // u32 r3 = 0;
+                        u32 r6 = r22 + 8 * (r29 + r21);
+                        u32 r5 = 255; // r5 (alpha)
+                        for (; r9 < 4; r9++) {//, r3 += 8) {
+                            u32 r10 = r9*8 + r6;
+                            u16* r4 = (u16*)&r25[r10];
+                            for (int i = 0; i < 4; i++, r8++, r10 += 2, r4++) {
+                                u32 r11 = *r4;
+                                block[r8*4+0] = (r11 >> 8) & 0xF8;
+                                block[r8*4+1] = (r11 >> 3) & 0xFC;
+                                block[r8*4+2] = (r11 << 3) & 0xF8;
+                                block[r8*4+3] = r5;
+                            }
+                        }
+                        blockenc(block);
+                        memcpy(&r26[r31], &block[0x40], 8);
+                        r31 += 8;
+                    }
+                }
+            }
+        }
+    } else if (fmt == GX_TF_RGBA8) {
+        for (int r24 = 0; r24 < r28; r24 += 8) {
+            for (int r29 = 0; r29 < r27; r29 += 8) {
+                for (int r30 = 0; r30 < 8; r30 += 4) {
+                    int r21 = 0;
+                    u32 r22 = 4 * (r27 * (r24 + r30));
+                    for (; r21 < 8; r21 += 4) {
+                        u32 r4 = 0;
+                        for (int r5 = 0; r5 < 4; r5++) {
+                            u32 r6 = r5 * 8 + r22 + 16 * (r29 + r21);
+                            u32 r7 = r6 + 0x20;
+                            u32 r9 = 255; // r9 (alpha)
+                            for (int i = 0; i < 4; i++, r4++, r6 += 2, r7 += 2) {
+                                u8* r3 = &r25[r6];
+                                block[r4*4+0] = r3[1] & 0xF8;
+                                u8* r12 = &r25[r7];
+                                block[r4*4+1] = r12[0] & 0xFC;
+                                block[r4*4+2] = r12[1] & 0xF8;
+                                block[r4*4+3] = r3[0];
+                                block[r4*4+3] = r9;
+                            }
+                        }
+                        blockenc(block);
+                        memcpy(&r26[r31], &block[0x40], 8);
+                        r31 += 8;
+                    }
+                }
+            }
+        }
+    }
+    return r31;
 }
 
 /* 8000A530-8000A744       .text setUpRectangle__Fv */
@@ -1291,7 +1386,7 @@ bool mDoGph_Painter() {
             if (mCaptureTextureFormat == GX_TF_CMPR) {
                 mCaptureThreadStackHead = mDoGph_allocFromAny(mCaptureThreadStackSize, 0x20);
                 if (mCaptureThreadStackHead == NULL) {
-                    mCaptureProc(0);
+                    mCaptureProc(NULL);
                     if (mCaptureCaptureBuffer != NULL) {
                         JKRFreeToHeap(NULL, mCaptureCaptureBuffer);
                         mCaptureCaptureBuffer = NULL;
