@@ -15,7 +15,7 @@
 
 JFWDisplay* JFWDisplay::sManager = NULL;
 
-bool JFWAutoAbortGfx = true;
+u8 JFWAutoAbortGfx = 1;
 Mtx e_mtx = {
     {1.0f, 0.0f, 0.0f, 0.0f},
     {0.0f, 1.0f, 0.0f, 0.0f},
@@ -495,7 +495,7 @@ void JFWGXDrawDoneAutoAbort() {
 /* 8025640C-802564D4       .text JFWGXAbortAlarmHandler__FP7OSAlarmP9OSContext */
 void JFWGXAbortAlarmHandler(OSAlarm*, OSContext*) {
     diagnoseGpHang();
-    if(JFWAutoAbortGfx != true) {
+    if(JFWAutoAbortGfx != 1) {
         OSReport("自動復帰しません\n");
         JUT_WARN(VERSION_SELECT(1351, 1350, 1350), "GP FREEZE!");
         JUT_ASSERT(VERSION_SELECT(1352, 1351, 1351), 0);
