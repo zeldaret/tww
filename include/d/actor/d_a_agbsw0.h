@@ -18,6 +18,24 @@ struct agb_mail_struct {
 
 class daAgbsw0_c : public fopAc_ac_c {
 public:
+    enum {
+        daAgbsw0Type_A_e       = 0x00,
+        daAgbsw0Type_AT_e      = 0x01,
+        daAgbsw0Type_M_e       = 0x02,
+        daAgbsw0Type_A2_e      = 0x03,
+        daAgbsw0Type_F2_e      = 0x04,
+        daAgbsw0Type_F_e       = 0x05,
+        daAgbsw0Type_T_e       = 0x06,
+        daAgbsw0Type_MW_e      = 0x07,
+        daAgbsw0Type_S_e       = 0x08,
+        daAgbsw0Type_R_e       = 0x09,
+        daAgbsw0Type_B_e       = 0x0A,
+        daAgbsw0Type_D_e       = 0x0B,
+        daAgbsw0Type_FA_e      = 0x0C,
+        daAgbsw0Type_UNK_0xD_e = 0x0D,
+        daAgbsw0Type_UNK_0xE_e = 0x0E,
+    };
+
     /* 0x290 */ f32 mOrigScaleX;
     /* 0x294 */ f32 mOrigScaleZ;
     /* 0x298 */ u8 field_0x298;
@@ -69,14 +87,13 @@ public:
         return current.angle.x & 0xFFFF;
     }
 
-    void deleteSub() {}
-    
     static void incTclDispose();
     static void incTclBeat();
     
     inline BOOL draw();
     inline int create();
     inline BOOL execute();
+    inline void deleteSub();
     
     static agb_mail_struct mMail;
     static u32 mSE;

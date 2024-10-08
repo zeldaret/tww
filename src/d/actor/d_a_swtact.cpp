@@ -151,7 +151,7 @@ bool daSwTact_c::_execute() {
                 mTrigger = true;
             break;
         case 0xFF:
-            if ((u32)tactMusic <= 4 || tactMusic == 5)
+            if (tactMusic == 0 || tactMusic == 1 || tactMusic == 2 || tactMusic == 3 || tactMusic == 4 || tactMusic == 5)
                 mTrigger = true;
             break;
         }
