@@ -1154,7 +1154,7 @@ void dComIfGs_setGameStartStage() {
         point = data_p->mStartCode;
     } else {
         u32 stage_type = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
-        int save_tbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+        int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
         BOOL isNot_PShip = strcmp(dComIfGp_getStartStageName(), "PShip");
 
         if (!isNot_PShip) {
@@ -1185,13 +1185,13 @@ void dComIfGs_setGameStartStage() {
             }
         } else if (stage_type == dStageType_DUNGEON_e || stage_type == dStageType_MINIBOSS_e ||
                    stage_type == dStageType_BOSS_e || stage_type == dStageType_UNKNOWN_8_e ||
-                   save_tbl == dSv_save_c::STAGE_HYRULE)
+                   stageNo == dSv_save_c::STAGE_HYRULE)
         {
             stage_scls_info_class* scls_p = getSceneList(0);
             strcpy(stage_name, scls_p->mStage);
             room_no = scls_p->mRoom;
             point = scls_p->mStart;
-        } else if (save_tbl == dSv_save_c::STAGE_SHIP) {
+        } else if (stageNo == dSv_save_c::STAGE_SHIP) {
             cXyz ikada_pos;
             dComIfGp_getIkadaShipBeforePos(&ikada_pos);
 
@@ -1199,8 +1199,8 @@ void dComIfGs_setGameStartStage() {
             strcpy(stage_name, scls_p->mStage);
             room_no = scls_p->mRoom;
             point = scls_p->mStart;
-        } else if (save_tbl == dSv_save_c::STAGE_MISC || save_tbl == dSv_save_c::STAGE_SUBDUNGEON ||
-                   save_tbl == dSv_save_c::STAGE_SUBDUNGEON_NEW)
+        } else if (stageNo == dSv_save_c::STAGE_MISC || stageNo == dSv_save_c::STAGE_SUBDUNGEON ||
+                   stageNo == dSv_save_c::STAGE_SUBDUNGEON_NEW)
         {
             strcpy(stage_name, "sea");
 

@@ -9,7 +9,7 @@ class daAgb_c;
 struct agb_mail_struct {
     /* 0x00 */ u16 msgNo;
     /* 0x02 */ u8 swToSet;
-    /* 0x03 */ u8 stageSaveTbl;
+    /* 0x03 */ u8 stageNo;
     /* 0x04 */ u8 roomNo;
     /* 0x05 */ u8 reactType;
     /* 0x06 */ u8 swToCheck;

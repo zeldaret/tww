@@ -60,7 +60,7 @@ public:
 struct stage_stag_info_class {
     /* 0x00 */ f32 field_0x0;
     /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ u8 mCameraType;
+    /* 0x08 */ u8 mDefaultCameraType;
     /* 0x09 */ u8 field_0x09;
     /* 0x0A */ u16 field_0x0a;
     /* 0x0C */ u32 field_0x0c;
@@ -1007,12 +1007,25 @@ void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int i_roomNo);
 dStage_objectNameInf* dStage_searchName(const char*);
 const char* dStage_getName2(s16 i_procName, s8 i_subtype);
 
+
+inline u8 dStage_stagInfo_DefaultCameraType(stage_stag_info_class* p_info) {
+    return p_info->mDefaultCameraType;
+}
+
+inline s32 dStage_stagInfo_ChkKeyDisp(stage_stag_info_class* i_stagInfo) {
+    return i_stagInfo->field_0x09 & 1;
+}
+
 inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x09 >> 1) & 0x7F;
 }
 
 inline u32 dStage_stagInfo_GetSTType(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x0c >> 16) & 7;
+}
+
+inline u8 dStage_stagInfo_GetUpButton(stage_stag_info_class* i_stagInfo) {
+    return i_stagInfo->field_0x0a & 3;
 }
 
 inline u8 dStage_stagInfo_GetParticleNo(stage_stag_info_class* i_stagInfo) {
@@ -1023,19 +1036,20 @@ inline s8 dStage_stagInfo_GetTimeH(stage_stag_info_class* p_info) {
     return (p_info->field_0x0c >> 8) & 0xFF;
 }
 
+inline u8 dStage_stagInfo_GetCullPoint(stage_stag_info_class* p_info) {
+    return p_info->field_0x10 & 0xFFFF;
+}
+
 inline u8 dStage_stagInfo_getStartSch(stage_stag_info_class* p_info) {
     return (p_info->field_0x10 >> 0x10) & 0xFF;
 }
+
 inline u8 dStage_stagInfo_GetSchSec(stage_stag_info_class* p_info) {
     return p_info->field_0x0c & 0xFF;
 }
 
 // TODO:
 // dStage_stagInfo_GetAgbCon__FP21stage_stag_info_class
-// dStage_stagInfo_DefaultCameraType__FP21stage_stag_info_class
-// dStage_stagInfo_GetCullPoint__FP21stage_stag_info_class
-// dStage_stagInfo_GetUpButton__FP21stage_stag_info_class
-// dStage_stagInfo_ChkKeyDisp__FP21stage_stag_info_class
 
 inline u8 dStage_roomRead_dt_c_GetLoadRoomIndex(u8 param_0) {
     return param_0 & 0x3F;

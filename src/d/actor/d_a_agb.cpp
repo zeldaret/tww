@@ -797,20 +797,20 @@ void daAgb_c::FlagsRecv() {
 
 /* 800D0978-800D0A54       .text SwitchOn__7daAgb_cFv */
 void daAgb_c::SwitchOn() {
-    if (mSwitch.field_0x1 == (u8)dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo())) {
+    if (mSwitch.stageNo == (u8)dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo())) {
         u8 var_r31 = mSwitch.field_0x3 - 1;
 
         if (mSwitch.field_0x0 != 0xFF) {
-            dComIfGs_revSwitch(mSwitch.field_0x0, mSwitch.field_0x2);
+            dComIfGs_revSwitch(mSwitch.field_0x0, mSwitch.roomNo);
         }
 
         if (var_r31 != 9) {
             u8 sw = mSwitch.field_0x4;
             if (sw != 0xFF) {
-                if (var_r31 <= 1 || var_r31 == 8) {
-                    dComIfGs_onSwitch(sw, mSwitch.field_0x2);
+                if (var_r31 == 0 || var_r31 == 1 || var_r31 == 8) {
+                    dComIfGs_onSwitch(sw, mSwitch.roomNo);
                 } else {
-                    dComIfGs_revSwitch(sw, mSwitch.field_0x2);
+                    dComIfGs_revSwitch(sw, mSwitch.roomNo);
                 }
             }
         }

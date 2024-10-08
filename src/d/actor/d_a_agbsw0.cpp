@@ -2468,7 +2468,7 @@ void daAgbsw0_c::MailSend(u16 msgNo, u8 reactType, u8 toCheck, u8 toSet, u8 sfx)
     mMail.msgNo = msgNo;
     mMail.swToSet = toSet;
     mMail.swToCheck = toCheck;
-    mMail.stageSaveTbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+    mMail.stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
     mMail.roomNo = fopAcM_GetHomeRoomNo(this);
     mMail.reactType = reactType;
     mMail.sfx = sfx;
@@ -2529,7 +2529,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
         info.msgNo = 0xFFFF;
         info.swToSet = 0xFF;
         info.swToCheck = 0xFF;
-        info.stageSaveTbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+        info.stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
         info.roomNo = fopAcM_GetHomeRoomNo(i_this);
         info.reactType = 0;
         info.sfx = 0;

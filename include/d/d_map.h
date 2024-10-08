@@ -220,9 +220,9 @@ public:
     static void setMapChgSizeRealSize() {}
 
     static void create();
-    static void isEnableEnlargementScroll();
+    static BOOL isEnableEnlargementScroll();
     static bool isEnableDispMap();
-    static void getKindMapType();
+    static int getKindMapType();
     static void remove();
     static void setImage(int, int, f32);
     static void deleteImage(int);
