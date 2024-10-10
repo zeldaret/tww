@@ -58,12 +58,12 @@ void dComIfG_play_c::ct()
 
 /* 800521A4-800521D4       .text init__14dComIfG_play_cFv */
 void dComIfG_play_c::init() {
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mpPlayer); i++) {
         mpPlayer[i] = NULL;
         mCurCamera[i] = -1;
     }
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mpPlayerPtr); i++) {
         mpPlayerPtr[i] = NULL;
     }
 }
@@ -111,7 +111,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4931 = 0;
     field_0x4932 = 0;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mSelectItem); i++) {
         mSelectItem[i] = 0;
         mSelectEquip[i] = 0;
     }
@@ -138,7 +138,7 @@ void dComIfG_play_c::itemInit() {
     mMesgSendButton = 0;
     mMesgCancelButton = 0;
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x494a); i++) {
         field_0x494a[i] = 0;
     }
 
@@ -174,7 +174,7 @@ void dComIfG_play_c::itemInit() {
     mMesgCameraTagInfo = 0;
     field_0x4984 = 0;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x4988); i++) {
         field_0x4988[i] = 0;
     }
 
@@ -1105,7 +1105,7 @@ BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo) {
 
     landing_event* event_check = l_landingEvent;
 
-    for (u32 i = 0; i < 6; i++) {
+    for (u32 i = 0; i < ARRAY_SIZE(l_landingEvent); i++) {
         if (i_roomNo == event_check->roomNo && !dComIfGs_isEventBit(event_check->event)) {
             return FALSE;
         }
@@ -1136,7 +1136,7 @@ void dComIfGs_setGameStartStage() {
     };
 
     check_data* data_p = l_checkData;
-    for (u32 i = 0; i < 5; i++) {
+    for (u32 i = 0; i < ARRAY_SIZE(l_checkData)-1; i++) {
         if (data_p->mbHasEvent == true && dComIfGs_isEventBit(data_p->mEvent)) {
             break;
         }

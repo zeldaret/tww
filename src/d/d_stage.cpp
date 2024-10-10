@@ -338,7 +338,7 @@ dStage_darkStatus_c* dStage_roomControl_c::getDarkStatus() {
     if (plist_p == NULL)
         return NULL;
 
-    int idx = (plist_p->mParam & 0x78) >> 3;
+    int idx = dStage_FileList_dt_DarkNo(plist_p);
     return &mDarkStatus[idx];
 }
 
@@ -348,7 +348,7 @@ u32 dStage_roomControl_c::getDarkMode() {
     dStage_FileList_dt_c* plist_p = pRoomStatus->mRoomDt.mpFileList;
 
     u8 mode = 0;
-    if (plist_p != NULL && (plist_p->mParam & 1) != 0)
+    if (plist_p != NULL && dStage_FileList_dt_CheckDarkOn(plist_p) != 0)
         mode = 1;
     return mode;
 }

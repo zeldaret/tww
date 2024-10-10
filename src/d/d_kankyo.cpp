@@ -90,11 +90,17 @@ u16 lightMaskData[] = {
     GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7,
 };
 
+/**
+ * Returns true if toon lighting and shadow should be reversed.
+ */
 /* 8018F7FC-8018F848       .text toon_proc_check__Fv */
 BOOL toon_proc_check() {
     s32 roomNo = dComIfGp_roomControl_getStayNo();
     if (roomNo >= 0) {
-        dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
+        dStage_FileList_dt_c* fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
+        if (dStage_FileList_dt_GetToonsw(fili_p)) {
+            // Something was probably commented out here.
+        }
     }
 
     return false;

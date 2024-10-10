@@ -1071,48 +1071,51 @@ inline s32 dStage_sclsInfo_getWipe(stage_scls_info_class* p_info) {
     return p_info->mWipe & 0xF;
 }
 
-inline int dStage_FileList_dt_ChkPathWindEffect(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mParam & 0x100000;
-}
-
-inline int dStage_FileList_dt_GlobalWindLevel(dStage_FileList_dt_c* i_fili) {
-    return (i_fili->mParam >> 18) & 3;
-}
-
-inline f32 dStage_FileList_dt_SeaLevel(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mSeaLevel;
-}
-
-inline u8 dStage_FileList_dt_PhotoDepth(dStage_FileList_dt_c* i_fili) {
-    return (i_fili->mParam >> 7) & 0xFF;
-}
-
 inline s32 dStage_FileList_dt_CheckDarkOn(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mParam & 1;
-}
-
-inline u8 dStage_FileList_dt_DarkNo(dStage_FileList_dt_c* i_fili) {
-    return (i_fili->mParam & 0x78) >> 3;
+    return i_fili->mParam & 0x00000001;
 }
 
 inline u8 dStage_FileList_dt_CheckAgbCom(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mParam & 2;
+    return i_fili->mParam & 0x00000002;
 }
 
 inline u8 dStage_FileList_dt_CheckAgbHover(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mParam & 4;
+    return i_fili->mParam & 0x00000004;
+}
+
+inline u8 dStage_FileList_dt_DarkNo(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam & 0x00000078) >> 3;
+}
+
+inline u8 dStage_FileList_dt_PhotoDepth(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam & 0x00007F80) >> 7;
+}
+
+inline int dStage_FileList_dt_GlobalWindLevel(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam & 0x000C0000) >> 18;
+}
+
+inline int dStage_FileList_dt_ChkPathWindEffect(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 0x00100000;
+}
+
+inline u32 dStage_FileList_dt_GetParticleNo(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam & 0x1FE00000) >> 21;
 }
 
 inline u32 dStage_FileList_dt_GetSongOk(dStage_FileList_dt_c* i_fili) {
     return i_fili->mParam & 0x40000000;
 }
 
-// inline u8 dStage_FileList_dt_GetToonsw(dStage_FileList_dt_c* i_fili) {
-    
-// }
+inline u8 dStage_FileList_dt_GetToonsw(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 0; // TODO.
+    // Seems unused in the final game.
+    // It could be one of the following bits which have no known inline: 0xA0038000
+    // Of those, these three are the most likely, as there are rooms with these set: 0x20028000
+}
 
-inline u32 dStage_FileList_dt_GetParticleNo(dStage_FileList_dt_c* i_fili) {
-    return (i_fili->mParam >> 21) & 0xFF;
+inline f32 dStage_FileList_dt_SeaLevel(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mSeaLevel;
 }
 
 bool dStage_chkPlayerId(int playerId, int room_no);
