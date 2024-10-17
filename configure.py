@@ -150,8 +150,8 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v1.0.0"
-config.objdiff_tag = "v2.2.1"
+config.dtk_tag = "v1.1.3"
+config.objdiff_tag = "v2.3.2"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -306,6 +306,12 @@ def JSystemLib(lib_name, objects, progress_category="third_party"):
 Matching = True                   # Object matches and should be linked
 NonMatching = False               # Object does not match and should not be linked
 Equivalent = config.non_matching  # Object should be linked when configured with --non-matching
+
+
+# Object is only matching for specific versions
+def MatchingFor(*versions):
+    return config.version in versions
+
 
 config.warn_missing_config = True
 config.warn_missing_source = False
@@ -794,10 +800,10 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASChannelMgr.cpp"),
             Object(Matching,    "JSystem/JAudio/JASOscillator.cpp"),
             Object(Matching,    "JSystem/JAudio/JASDriverTables.cpp"),
-            Object(Matching,    "JSystem/JAudio/dspproc.c", extra_cflags="-lang c++ -O4 -func_align 32"),
-            Object(Matching,    "JSystem/JAudio/dsptask.c", extra_cflags="-lang c++ -O4 -func_align 32"),
-            Object(Matching,    "JSystem/JAudio/osdsp.c", extra_cflags="-lang c++ -O4 -func_align 32 -str nopool"),
-            Object(Matching,    "JSystem/JAudio/osdsp_task.c", extra_cflags="-lang c++ -O4 -func_align 32"),
+            Object(Matching,    "JSystem/JAudio/dspproc.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
+            Object(Matching,    "JSystem/JAudio/dsptask.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
+            Object(Matching,    "JSystem/JAudio/osdsp.c", extra_cflags=["-lang c++", "-O4", "-func_align 32", "-str nopool"]),
+            Object(Matching,    "JSystem/JAudio/osdsp_task.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
             Object(NonMatching, "JSystem/JAudio/JAIAnimation.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIBasic.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIBankWave.cpp"),

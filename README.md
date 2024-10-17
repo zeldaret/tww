@@ -64,20 +64,20 @@ Building
   ```
   git clone https://github.com/zeldaret/tww.git
   ```
-- Using [Dolphin Emulator](https://dolphin-emu.org/), extract your game to `orig/GZLE01` (or `GZLJ01` for JPN, `GZLP01` for PAL).  
-![](assets/dolphin-extract.png)
-  - To save space, the only necessary files are the following. Any others can be deleted.
-    - `sys/main.dol`
-    - `files/rels/*.rel`
-    - `files/RELS.arc`
+
+- Copy your game's disc image to `orig/GZLE01`.
+  - Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, NFS, GCZ, TGC
+  - After the initial build, the disc image can be deleted to save space.
+
 - Configure:
   ```
   python configure.py
   ```
   To use a version other than `GZLE01` (USA), specify `--version GZLJ01` (JPN) or `--version GZLP01` (PAL).
+
 - Build:
   ```
-  ninja && ninja all_source
+  ninja
   ```
 
 Diffing
