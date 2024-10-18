@@ -223,7 +223,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
 
     if (cacheBuffer != NULL) {
         JUT_ASSERT(351, ( (u32)cacheBuffer & 0x1f ) == 0);
-        mCacheBuffer = cacheBuffer;
+        mCacheBuffer = static_cast<u8*>(cacheBuffer);
         field_0xb0 = 0;
     } else {
         mCacheBuffer = new (heap, 0x20) u8[v1];
@@ -253,7 +253,7 @@ bool JUTCacheFont::allocArray(JKRHeap* heap) {
         mpGlyphBlocks = (ResFONT::GLY1**)blocks;
         blocks = blocks + mGlyphBlockNum;
         for (int i = 0; i < mGlyphBlockNum; i++) {
-            mpGlyphBlocks[i] = (ResFONT::GLY1*)((u8*)mCacheBuffer + (field_0x94 * i));
+            mpGlyphBlocks[i] = (ResFONT::GLY1*)(mCacheBuffer + (field_0x94 * i));
         }
     }
     if (mMapBlockNum) {
@@ -267,7 +267,7 @@ void JUTCacheFont::setBlock() {
     int widthNum = 0;
     int gylphNum = 0;
     int mapNum = 0;
-    u8* pWidth = (u8*)field_0x7c;
+    u8* pWidth = field_0x7c;
     ResFONT::GLY1* piVar5 = (ResFONT::GLY1*)field_0x80;
     ResFONT::MAP1* pMap = (ResFONT::MAP1*)field_0x84;
     u32 aramAddress = field_0xac->getAddress();
@@ -276,23 +276,22 @@ void JUTCacheFont::setBlock() {
 
     for (int i = 0; i < mResFont->numBlocks; i++) {
         switch (*pData) {
-        case 'INF1':
+        case 'INF1': {
             memcpy(mInfoBlock, pData, 0x20);
             u32 u = mInfoBlock->fontType;
             JUT_ASSERT(447, u < suAboutEncoding_);
             mIsLeadByte = &JUTResFont::saoAboutEncoding_[u];
             break;
+        }
         case 'WID1':
             memcpy(pWidth, pData, pData[1]);
             mpWidthBlocks[widthNum] = (ResFONT::WID1*)pWidth;
             pWidth += pData[1];
             widthNum++;
             break;
-        case 'GLY1':
+        case 'GLY1': {
             memcpy(piVar5, pData, 0x20);
-            JKRAramBlock* iVar1 =
-                JKRMainRamToAram((u8*)pData + 0x20, aramAddress, pData[1] - 0x20,
-                                 EXPAND_SWITCH_UNKNOWN0, 0, NULL, 0xffffffff);
+            JKRAramBlock* iVar1 = JKRMainRamToAram((u8*)pData + 0x20, aramAddress, pData[1] - 0x20, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1);
             if (iVar1 == NULL) {
                 OSPanic(__FILE__, 476, "Cannot alloc ARAM area.");
             }
@@ -305,6 +304,7 @@ void JUTCacheFont::setBlock() {
             piVar5++;
             aramAddress = pData[1] + aramAddress - 0x20;
             break;
+        }
         case 'MAP1':
             memcpy(pMap, pData, pData[1]);
             mpMapBlocks[mapNum] = pMap;

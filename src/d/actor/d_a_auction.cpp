@@ -9,7 +9,6 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
 #include "d/d_procname.h"
-#include "d/res/res_auction.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 struct NpcDatStruct {

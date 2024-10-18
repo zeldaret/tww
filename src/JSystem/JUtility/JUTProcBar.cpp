@@ -72,7 +72,7 @@ void JUTProcBar::clear() {
 /* 802C8AD8-802C8C6C       .text bar_subroutine__10JUTProcBarFiiiiiiiQ28JUtility6TColorQ28JUtility6TColor */
 void JUTProcBar::bar_subroutine(int param_0, int param_1, int param_2, int param_3, int param_4, int param_5, int param_6, JUtility::TColor param_7, JUtility::TColor param_8) {
     int var1 = param_6 * param_3 / param_4;
-    J2DFillBox(param_0, param_1, param_5 * param_3 / param_4, param_2, param_7);
+    J2DFillBox(param_0, param_1, (int)(param_5 * param_3 / param_4), param_2, param_7);
     if (var1 < 0) {
         return;
     }
@@ -249,9 +249,9 @@ void heapBar(JKRHeap* param_0, int param_1, int param_2, int param_3, int param_
     int stack52 = param_1 + addrToXPos(param_0->getStartAddr(), param_4);
     int var1 = param_1 + addrToXPos(param_0->getEndAddr(), param_4);
     int stack36 = byteToXLen(param_0->getTotalFreeSize(), param_4);
-    J2DFillBox(stack52, param_2 - param_5 * 2 + param_5 / 2, var1 - stack52, param_5 / 2,
+    J2DFillBox(stack52, (int)(param_2 - param_5 * 2 + param_5 / 2), var1 - stack52, (int)(param_5 / 2),
                JUtility::TColor(255, 0, 200, 255));
-    J2DFillBox(stack52, param_2 - param_5 * 2 + param_5 / 2, stack36, param_5 / 2,
+    J2DFillBox(stack52, (int)(param_2 - param_5 * 2 + param_5 / 2), stack36, (int)(param_5 / 2),
                JUtility::TColor(255, 180, 250, 255));
 }
 
@@ -281,7 +281,7 @@ void JUTProcBar::drawHeapBar() {
 
         // draws a light blue line that shows how much memory is free in the root heap(blends to light pink, not sure how this works)
         int size = byteToXLen(JKRHeap::getRootHeap()->getTotalFreeSize(), width);
-        J2DFillBox(start, posY - (height * 2), size, height / 2, JUtility::TColor(0, 250, 250, 255));
+        J2DFillBox(start, posY - (height * 2), size, (int)(height / 2), JUtility::TColor(0, 250, 250, 255));
         if (field_0x128 == 0)
         {
             // draws a line of either the watch heap(if available), otherwise draw the current heap

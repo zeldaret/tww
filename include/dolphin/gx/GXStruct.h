@@ -2,7 +2,6 @@
 #define GXSTRUCT_H
 
 #include "global.h"
-#include "dolphin/gx/GXEnum.h"
 #include "dolphin/vi/vi.h"
 
 typedef struct _GXColor {

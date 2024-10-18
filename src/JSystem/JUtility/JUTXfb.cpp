@@ -86,12 +86,12 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
     int size = ((u32)width + 0xf & 0xfff0) * (u32)height * 2;
 
     void* buf = ::operator new[](size, pHeap, 0x20);
-    mBuffer[0] = buf;
+    mBuffer[0] = static_cast<u8*>(buf);
     mXfbAllocated[0] = true;
 
     if (xfbNum >= 2) {
         buf = ::operator new[](size, pHeap, 0x20);
-        mBuffer[1] = buf;
+        mBuffer[1] = static_cast<u8*>(buf);
         mXfbAllocated[1] = true;
     } else {
         mBuffer[1] = NULL;
@@ -100,7 +100,7 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
 
     if (xfbNum >= 3) {
         buf = ::operator new[](size, pHeap, 0x20);
-        mBuffer[2] = buf;
+        mBuffer[2] = static_cast<u8*>(buf);
         mXfbAllocated[2] = true;
     } else {
         mBuffer[2] = NULL;

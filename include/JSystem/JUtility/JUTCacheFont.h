@@ -61,12 +61,12 @@ private:
     /* 0x70 */ u32 mTotalWidSize;
     /* 0x74 */ u32 mTotalGlySize;
     /* 0x78 */ u32 mTotalMapSize;
-    /* 0x7C */ void* field_0x7c;
-    /* 0x80 */ void* field_0x80;
-    /* 0x84 */ void* field_0x84;
+    /* 0x7C */ u8* field_0x7c;
+    /* 0x80 */ u8* field_0x80;
+    /* 0x84 */ u8* field_0x84;
     /* 0x88 */ u32 mMaxSheetSize;
     /* 0x8C */ EPagingType mPagingType;
-    /* 0x90 */ void* mCacheBuffer;
+    /* 0x90 */ u8* mCacheBuffer;
     /* 0x94 */ int field_0x94;
     /* 0x98 */ u32 mCachePage;
     /* 0x9C */ TGlyphCacheInfo* field_0x9c;

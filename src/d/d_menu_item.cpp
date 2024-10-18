@@ -4,7 +4,6 @@
 //
 
 #include "d/d_menu_item.h"
-#include "dolphin/types.h"
 
 /* 801C7B4C-801C7C7C       .text __ct__9dMi_HIO_cFv */
 dMi_HIO_c::dMi_HIO_c() {

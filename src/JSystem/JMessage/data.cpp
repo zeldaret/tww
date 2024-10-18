@@ -4,7 +4,6 @@
 //
 
 #include "JSystem/JMessage/data.h"
-#include "dolphin/types.h"
 
 namespace JMessage {
 namespace data {

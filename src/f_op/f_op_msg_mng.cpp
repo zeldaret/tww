@@ -14,7 +14,6 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "SSystem/SComponent/c_malloc.h"
 #include "printf.h"
-#include "math.h"
 
 static bool pushButton;
 static bool pushButton2;

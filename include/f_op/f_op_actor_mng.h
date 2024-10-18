@@ -1,7 +1,7 @@
 #ifndef F_OP_ACTOR_MNG_H_
 #define F_OP_ACTOR_MNG_H_
 
-#include "new.h" // IWYU pragma: keep // Used by the fopAcM_SetupActor macro.
+#include "new.h" // IWYU pragma: export // Used by the fopAcM_SetupActor macro.
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_iter.h"
 #include "f_pc/f_pc_manager.h"
