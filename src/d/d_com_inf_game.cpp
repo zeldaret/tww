@@ -58,12 +58,12 @@ void dComIfG_play_c::ct()
 
 /* 800521A4-800521D4       .text init__14dComIfG_play_cFv */
 void dComIfG_play_c::init() {
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mpPlayer); i++) {
         mpPlayer[i] = NULL;
         mCurCamera[i] = -1;
     }
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mpPlayerPtr); i++) {
         mpPlayerPtr[i] = NULL;
     }
 }
@@ -111,7 +111,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4931 = 0;
     field_0x4932 = 0;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mSelectItem); i++) {
         mSelectItem[i] = 0;
         mSelectEquip[i] = 0;
     }
@@ -138,7 +138,7 @@ void dComIfG_play_c::itemInit() {
     mMesgSendButton = 0;
     mMesgCancelButton = 0;
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x494a); i++) {
         field_0x494a[i] = 0;
     }
 
@@ -174,7 +174,7 @@ void dComIfG_play_c::itemInit() {
     mMesgCameraTagInfo = 0;
     field_0x4984 = 0;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x4988); i++) {
         field_0x4988[i] = 0;
     }
 
@@ -1034,8 +1034,7 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
     return get_item;
 }
 
-/* 80054578-8005468C       .text
- * dComIfGd_setShadow__FUlScP8J3DModelP4cXyzffffR13cBgS_PolyInfoP12dKy_tevstr_csfP9_GXTexObj */
+/* 80054578-8005468C       .text dComIfGd_setShadow__FUlScP8J3DModelP4cXyzffffR13cBgS_PolyInfoP12dKy_tevstr_csfP9_GXTexObj */
 int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
                        f32 y, f32 param_8, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
                        s16 rotY, f32 param_12, GXTexObj* pTexObj) {
@@ -1106,7 +1105,7 @@ BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo) {
 
     landing_event* event_check = l_landingEvent;
 
-    for (u32 i = 0; i < 6; i++) {
+    for (u32 i = 0; i < ARRAY_SIZE(l_landingEvent); i++) {
         if (i_roomNo == event_check->roomNo && !dComIfGs_isEventBit(event_check->event)) {
             return FALSE;
         }
@@ -1137,7 +1136,7 @@ void dComIfGs_setGameStartStage() {
     };
 
     check_data* data_p = l_checkData;
-    for (u32 i = 0; i < 5; i++) {
+    for (u32 i = 0; i < ARRAY_SIZE(l_checkData)-1; i++) {
         if (data_p->mbHasEvent == true && dComIfGs_isEventBit(data_p->mEvent)) {
             break;
         }
@@ -1155,7 +1154,7 @@ void dComIfGs_setGameStartStage() {
         point = data_p->mStartCode;
     } else {
         u32 stage_type = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
-        int save_tbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+        int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
         BOOL isNot_PShip = strcmp(dComIfGp_getStartStageName(), "PShip");
 
         if (!isNot_PShip) {
@@ -1186,13 +1185,13 @@ void dComIfGs_setGameStartStage() {
             }
         } else if (stage_type == dStageType_DUNGEON_e || stage_type == dStageType_MINIBOSS_e ||
                    stage_type == dStageType_BOSS_e || stage_type == dStageType_UNKNOWN_8_e ||
-                   save_tbl == dSv_save_c::STAGE_HYRULE)
+                   stageNo == dSv_save_c::STAGE_HYRULE)
         {
             stage_scls_info_class* scls_p = getSceneList(0);
             strcpy(stage_name, scls_p->mStage);
             room_no = scls_p->mRoom;
             point = scls_p->mStart;
-        } else if (save_tbl == dSv_save_c::STAGE_SHIP) {
+        } else if (stageNo == dSv_save_c::STAGE_SHIP) {
             cXyz ikada_pos;
             dComIfGp_getIkadaShipBeforePos(&ikada_pos);
 
@@ -1200,8 +1199,8 @@ void dComIfGs_setGameStartStage() {
             strcpy(stage_name, scls_p->mStage);
             room_no = scls_p->mRoom;
             point = scls_p->mStart;
-        } else if (save_tbl == dSv_save_c::STAGE_MISC || save_tbl == dSv_save_c::STAGE_SUBDUNGEON ||
-                   save_tbl == dSv_save_c::STAGE_SUBDUNGEON_NEW)
+        } else if (stageNo == dSv_save_c::STAGE_MISC || stageNo == dSv_save_c::STAGE_SUBDUNGEON ||
+                   stageNo == dSv_save_c::STAGE_SUBDUNGEON_NEW)
         {
             strcpy(stage_name, "sea");
 

@@ -30,12 +30,10 @@ ExtrapolateParameter gapfnExtrapolateParameter_[4] = {
 
 /* 80271020-80271068       .text toFunction_outside__Q27JStudio14TFunctionValueFi */
 ExtrapolateParameter TFunctionValue::toFunction_outside(int idx) {
-    /* Nonmatching */
     ExtrapolateParameter fallback = NULL;
     ExtrapolateParameter result;
 
-    result = JGadget::toValueFromIndex<ExtrapolateParameter>(idx, gapfnExtrapolateParameter_, 4,
-                                                             fallback);
+    result = JGadget::toValueFromIndex<ExtrapolateParameter>(idx, gapfnExtrapolateParameter_, 4, fallback);
 
     if (result == NULL) {
         JUTWarn w;
@@ -80,28 +78,51 @@ f64 interpolateValue_hermite(f64 c0, f64 c1, f64 x, f64 c2, f64 x2, f64 c3, f64 
 
 /* 8027114C-802711B0       .text interpolateValue_BSpline_uniform__Q27JStudio13functionvalueFddddd */
 f64 interpolateValue_BSpline_uniform(f64 f1, f64 f2, f64 f3, f64 f4, f64 f5) {
-    /* Nonmatching */
+    /* Nonmatching - operand swap */
     // pow3(1.0 - f1)
     f64 f6 = (1.0 - f1);
-    f64 temp = f6;
-    temp = (f6 * f6) * temp;
+    f64 f0 = f6;
+    f0 = (f6 * f6) * f0;
+    f64 f8 = f0;
 
-    f64 f0 = f1 * f1;
-    f64 f8 = f0 * f1;
+    f64 f9 = f1 * f1;
+    f64 f10 = f9 * f1;
 
-    f64 temp2 = (0.5 + (1.0 / 6.0) * ((f1 + f0) - f8));
+    f64 temp2 = ((1.0 / 6.0) + 0.5 * ((f1 + f9) - f10));
     f64 temp3 = temp2 * f4;
 
-    f64 temp4 = (((1.0 / 6.0) * f8 - f0) + (2.0 / 3.0));
+    f64 temp4 = ((0.5 * f10 - f9) + (2.0 / 3.0));
     f64 temp5 = temp4 * f3;
 
-    return temp5 + (temp * f2 + f8 * f5) * 0.5 +
-           temp3;
+    return temp5 + (f8 * f2 + f10 * f5) * (1.0 / 6.0) + temp3;
 }
 
 /* 802711B0-80271290       .text interpolateValue_BSpline_nonuniform__Q27JStudio13functionvalueFdPCdPCd */
-f64 interpolateValue_BSpline_nonuniform(f64, const f64*, const f64*) {
-    /* Nonmatching */
+f64 interpolateValue_BSpline_nonuniform(f64 interpolationFactor, const f64* controlPoints, const f64* knotVector) {
+    f64 knot0              = knotVector[0];
+    f64 knot1              = knotVector[1];
+    f64 knot2              = knotVector[2];
+    f64 knot3              = knotVector[3];
+    f64 knot4              = knotVector[4];
+    f64 knot5              = knotVector[5];
+    f64 diff0              = interpolationFactor - knot0;
+    f64 diff1              = interpolationFactor - knot1;
+    f64 diff2              = interpolationFactor - knot2;
+    f64 diff3              = knot3 - interpolationFactor;
+    f64 diff4              = knot4 - interpolationFactor;
+    f64 diff5              = knot5 - interpolationFactor;
+    f64 inverseDeltaKnot32 = 1 / (knot3 - knot2);
+    f64 blendFactor3       = (diff3 * inverseDeltaKnot32) / (knot3 - knot1);
+    f64 blendFactor2       = (diff2 * inverseDeltaKnot32) / (knot4 - knot2);
+    f64 blendFactor1       = (diff3 * blendFactor3) / (knot3 - knot0);
+    f64 blendFactor4       = ((diff1 * blendFactor3) + (diff4 * blendFactor2)) / (knot4 - knot1);
+    f64 blendFactor5       = (diff2 * blendFactor2) / (knot5 - knot2);
+    f64 term1              = diff3 * blendFactor1;
+    f64 term2              = (diff0 * blendFactor1) + (diff4 * blendFactor4);
+    f64 term3              = (diff1 * blendFactor4) + (diff5 * blendFactor5);
+    f64 term4              = diff2 * blendFactor5;
+
+    return (term1 * controlPoints[0]) + (term2 * controlPoints[1]) + (term3 * controlPoints[2]) + (term4 * controlPoints[3]);
 }
 
 inline f64 interpolateValue_linear(double a1, double a2, double a3, double a4, double a5) {
@@ -141,30 +162,29 @@ void TFunctionValueAttribute_range::range_initialize() {
 
 /* 80271324-802713CC       .text range_prepare__Q27JStudio29TFunctionValueAttribute_rangeFv */
 void TFunctionValueAttribute_range::range_prepare() {
-    /* Nonmatching */
     TFunctionValue::TEProgress progress = range_getProgress();
 
     switch (progress) {
     default:
         JUTWarn w;
         w << "unknown progress : " << progress;
-    case 0:
+    case TFunctionValue::PROG_INIT:
         _20 = 0.0;
         _28 = 1.0;
         break;
-    case 1:
+    case TFunctionValue::PROG_UNK1:
         _20 = 0.0;
         _28 = -1.0;
         break;
-    case 2:
+    case TFunctionValue::PROG_UNK2:
         _20 = fBegin_;
         _28 = -1.0;
         break;
-    case 3:
+    case TFunctionValue::PROG_UNK3:
         _20 = fEnd_;
         _28 = -1.0;
         break;
-    case 4:
+    case TFunctionValue::PROG_UNK4:
         _20 = 0.5 * (fBegin_ + fEnd_);
         _28 = -1.0;
         break;
@@ -182,7 +202,6 @@ void TFunctionValueAttribute_range::range_set(f64 begin, f64 end) {
 
 /* 802713E0-802716F0       .text range_getParameter__Q27JStudio29TFunctionValueAttribute_rangeCFddd */
 f64 TFunctionValueAttribute_range::range_getParameter(f64 arg1, f64 arg2, f64 arg3) const {
-    /* Nonmatching */
     f64 progress = range_getParameter_progress(arg1);
     TFunctionValue::TEAdjust adjust = range_getAdjust();
 
@@ -220,7 +239,7 @@ TFunctionValueAttribute_range::TFunctionValueAttribute_range()
 
 /* 80271734-80271790       .text __ct__Q27JStudio24TFunctionValue_compositeFv */
 TFunctionValue_composite::TFunctionValue_composite() : pfn_(NULL), data((void*)NULL) {
-    /* Nonmatching */
+    /* Nonmatching - see TODO comment in allocator.h */
 }
 
 /* 80271790-80271798       .text getType__Q27JStudio24TFunctionValue_compositeCFv */
@@ -288,7 +307,7 @@ f64 TFunctionValue_composite::composite_index(const JGadget::TVector_pointer<TFu
             index = size - 2;
         }
         break;
-    case 1:
+    case 1: {
         div_t dt = div(index, size - 1);
         index = dt.rem;
         if (index < 0) {
@@ -296,6 +315,7 @@ f64 TFunctionValue_composite::composite_index(const JGadget::TVector_pointer<TFu
             index--;
         }
         break;
+    }
     case 2:
         if (size - 1 == 1) {
             index = 0;
@@ -459,7 +479,6 @@ void TFunctionValue_transition::prepare() {
 
 /* 80271EE8-802720B0       .text getValue__Q27JStudio25TFunctionValue_transitionFd */
 f64 TFunctionValue_transition::getValue(f64 param_1) {
-    /* Nonmatching */
     f64 progress = range_getParameter_progress(param_1);
     f64 dVar3 = range_getParameter_outside(progress);
     switch (range_getAdjust()) {
@@ -488,6 +507,7 @@ f64 TFunctionValue_transition::getValue(f64 param_1) {
         }
         switch (interpolate_get()) {
         case 0:
+        default:
             goto ADJ_UNK3_label;
         case 1:
         case 3:
@@ -552,7 +572,6 @@ void TFunctionValue_list::prepare() {
 
 /* 8027224C-80272604       .text getValue__Q27JStudio19TFunctionValue_listFd */
 f64 TFunctionValue_list::getValue(f64 param_1) {
-    /* Nonmatching */
     f64 dVar9 = range_getParameter_progress(param_1);
     u32 iVar7 = uData_ - 1;
     TFunctionValue::TEAdjust iVar5 = range_getAdjust();

@@ -49,6 +49,7 @@ void TAdaptor_actor::adaptor_do_begin(const JStudio::TObject* object) {
     mObject->JSGGetRotation(&sp2C[1]);
     mObject->JSGGetScaling(&sp08);
     Vec* r29;
+    // TODO: inline
     if (!pControl->transformOnGet_isEnabled()) {
         r29 = sp2C;
     } else {

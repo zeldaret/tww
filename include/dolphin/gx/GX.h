@@ -1,19 +1,21 @@
 #ifndef GX_H_
 #define GX_H_
 
-#include "dolphin/gx/GXAttr.h"
-#include "dolphin/gx/GXBump.h"
-#include "dolphin/gx/GXDisplayList.h"
-#include "dolphin/gx/GXFifo.h"
-#include "dolphin/gx/GXFrameBuf.h"
-#include "dolphin/gx/GXGeometry.h"
-#include "dolphin/gx/GXLight.h"
-#include "dolphin/gx/GXMisc.h"
-#include "dolphin/gx/GXPerf.h"
-#include "dolphin/gx/GXPixel.h"
-#include "dolphin/gx/GXTev.h"
-#include "dolphin/gx/GXTexture.h"
-#include "dolphin/gx/GXTransform.h"
+#include "dolphin/gx/GXAttr.h" // IWYU pragma: export
+#include "dolphin/gx/GXBump.h" // IWYU pragma: export
+#include "dolphin/gx/GXDisplayList.h" // IWYU pragma: export
+#include "dolphin/gx/GXFifo.h" // IWYU pragma: export
+#include "dolphin/gx/GXFrameBuf.h" // IWYU pragma: export
+#include "dolphin/gx/GXGeometry.h" // IWYU pragma: export
+#include "dolphin/gx/GXLight.h" // IWYU pragma: export
+#include "dolphin/gx/GXMisc.h" // IWYU pragma: export
+#include "dolphin/gx/GXPerf.h" // IWYU pragma: export
+#include "dolphin/gx/GXPixel.h" // IWYU pragma: export
+#include "dolphin/gx/GXTev.h" // IWYU pragma: export
+#include "dolphin/gx/GXTexture.h" // IWYU pragma: export
+#include "dolphin/gx/GXTransform.h" // IWYU pragma: export
+#include "dolphin/gx/GXStruct.h" // IWYU pragma: export
+
 #include "dolphin/os/OSUtil.h"
 
 #ifdef __cplusplus

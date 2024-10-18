@@ -482,7 +482,7 @@ void main() {
     }
 
     s32 priority = OSGetThreadPriority(current_thread);
-    OSCreateThread(&mainThread, main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
+    OSCreateThread(&mainThread, (void*)main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
     OSResumeThread(&mainThread);
     OSSetThreadPriority(current_thread, 0x1F);
     OSSuspendThread(current_thread);

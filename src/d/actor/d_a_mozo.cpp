@@ -10,9 +10,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
-#include "d/d_cc_d.h"
 #include "d/d_lib.h"
-#include "m_do/m_Do_mtx.h"
+#include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
 

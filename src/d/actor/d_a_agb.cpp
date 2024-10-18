@@ -797,20 +797,20 @@ void daAgb_c::FlagsRecv() {
 
 /* 800D0978-800D0A54       .text SwitchOn__7daAgb_cFv */
 void daAgb_c::SwitchOn() {
-    if (mSwitch.field_0x1 == (u8)dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo())) {
+    if (mSwitch.stageNo == (u8)dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo())) {
         u8 var_r31 = mSwitch.field_0x3 - 1;
 
         if (mSwitch.field_0x0 != 0xFF) {
-            dComIfGs_revSwitch(mSwitch.field_0x0, mSwitch.field_0x2);
+            dComIfGs_revSwitch(mSwitch.field_0x0, mSwitch.roomNo);
         }
 
         if (var_r31 != 9) {
             u8 sw = mSwitch.field_0x4;
             if (sw != 0xFF) {
-                if (var_r31 <= 1 || var_r31 == 8) {
-                    dComIfGs_onSwitch(sw, mSwitch.field_0x2);
+                if (var_r31 == 0 || var_r31 == 1 || var_r31 == 8) {
+                    dComIfGs_onSwitch(sw, mSwitch.roomNo);
                 } else {
-                    dComIfGs_revSwitch(sw, mSwitch.field_0x2);
+                    dComIfGs_revSwitch(sw, mSwitch.roomNo);
                 }
             }
         }
@@ -1084,10 +1084,10 @@ void daAgb_c::Shopping() {
 /* 800D12E4-800D1A3C       .text FlagsSend__7daAgb_cFUl */
 void daAgb_c::FlagsSend(u32 stage_type) {
     if (field_0x670 &&
-        (stage_type == dSv_save_c::STAGE_SEA2 ||
-        stage_type == dSv_save_c::STAGE_TOTG ||
-        stage_type == dSv_save_c::STAGE_ET ||
-        stage_type == dSv_save_c::STAGE_WT))
+        (stage_type == dStageType_DUNGEON_e ||
+        stage_type == dStageType_FF1_e ||
+        stage_type == dStageType_MINIBOSS_e ||
+        stage_type == dStageType_SEA_e))
     {
         mFlags.field_0xa_7 = 0;
     } else {
@@ -1170,7 +1170,7 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     mFlags.field_0xa_3 = dComIfGs_isEventBit(0x1E40);
     mFlags.field_0xa_0 = mIsFree;
     mFlags.field_0xb_7 = getFollowTarget();
-    if (stage_type == dSv_save_c::STAGE_ET) {
+    if (stage_type == dStageType_MINIBOSS_e) {
         mFlags.field_0x8_0 = 1;
     } else {
         mFlags.field_0x8_0 = 0;
@@ -1200,7 +1200,7 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     
     f32 f31;
-    if (stage_type == dSv_save_c::STAGE_WT) {
+    if (stage_type == dStageType_SEA_e) {
         f31 = field_0x67e ? 50.0f : 781.25f;
     } else {
         f31 = 25.0f;
@@ -1221,7 +1221,7 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
             actor->home.pos.z += f31;
         }
         
-        if (stage_type == dSv_save_c::STAGE_WT && !field_0x67e) {
+        if (stage_type == dStageType_SEA_e && !field_0x67e) {
             if (actor->home.pos.x < -350000.0f) {
                 actor->home.pos.x = -350000.0f;
             } else if (actor->home.pos.x > 350000.0f) {
@@ -1454,7 +1454,7 @@ void daAgb_c::modeMove() {
         if (getFollowTarget() != 0) {
             setTargetID(fpcM_ERROR_PROCESS_ID_e);
             setFollowTarget(false);
-        } else if (stage_type != dSv_save_c::STAGE_ET) {
+        } else if (stage_type != dStageType_MINIBOSS_e) {
             dAttList_c* attList = dComIfGp_getAttention().GetLockonList(0);
             if (attList) {
                 fopAc_ac_c* r3 = attList->getActor();

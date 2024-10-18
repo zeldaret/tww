@@ -108,7 +108,7 @@ void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
         param_0[i].field_0x5 = 0;
     }
 
-    field_0x114 = -1;
+    field_0x114 = 0xFFFFFFFF;
     field_0x118 = 0;
 
     field_0x12c.U16._12e_1 = (u32)cM_rndF(32767.0f);
@@ -529,15 +529,15 @@ void mDoGaC_agbCom_c::mDoGaC_GbaWrite() {
     if (field_0xa == field_0x9) {
         if (field_0x5 == 1) {
             mDoGaC_ComStop();
-            field_0x114 = -0x10101011;
+            field_0x114 = 0xEFEFEFEF;
         } else {
-            field_0x114 = -1;
+            field_0x114 = 0xFFFFFFFF;
         }
     } else {
         mDoGaC_unk_data* temp_r31 = &field_0xc[field_0xa];
         switch (field_0x8) {
         case 0:
-            field_0x114 = BigLittleChange(-0x01010102);
+            field_0x114 = BigLittleChange(0xFEFEFEFE);
             field_0x8 = 1;
             break;
         case 1:
@@ -592,7 +592,7 @@ void mDoGaC_agbCom_c::mDoGaC_GbaWrite() {
             }
             break;
         default:
-            field_0x114 = -1;
+            field_0x114 = 0xFFFFFFFF;
             break;
         }
     }
@@ -628,7 +628,7 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
         switch (field_0x7) {
         case 0:
             u32 temp_r0 = BigLittleChange(field_0x118);
-            if (temp_r0 == -0x1010102) {
+            if (temp_r0 == 0xFEFEFEFE) {
                 field_0x7 = 1;
             }
             break;

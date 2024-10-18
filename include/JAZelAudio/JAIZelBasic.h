@@ -1,8 +1,9 @@
 #ifndef JAZELAUDIO_JAIZELBASIC_H
 #define JAZELAUDIO_JAIZELBASIC_H
 
-#include "JAZelAudio/JAZelAudio_SE.h"
-#include "JAZelAudio/JAZelAudio_BGM.h"
+#include "JAZelAudio/JAZelAudio_SE.h" // IWYU pragma: export
+#include "JAZelAudio/JAZelAudio_BGM.h" // IWYU pragma: export
+
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JMath/random.h"
 #include "dolphin/mtx/mtx.h"

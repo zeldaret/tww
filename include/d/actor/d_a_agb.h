@@ -142,8 +142,8 @@ public:
 
     struct daAgb_Switch {
         /* 0x0 */ u8 field_0x0;
-        /* 0x1 */ u8 field_0x1;
-        /* 0x1 */ u8 field_0x2;
+        /* 0x1 */ u8 stageNo;
+        /* 0x1 */ u8 roomNo;
         /* 0x3 */ u8 field_0x3;
         /* 0x4 */ u8 field_0x4;
         u8 field_0x5[0x8 - 0x5];

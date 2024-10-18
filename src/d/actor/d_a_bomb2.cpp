@@ -4,15 +4,15 @@
  */
 
 #include "d/actor/d_a_bomb2.h"
-#include "d/d_procname.h"
-#include "d/d_kankyo_wether.h"
-#include "f_op/f_op_camera_mng.h"
-#include "f_op/f_op_kankyo_mng.h"
-#include "m_Do/m_Do_mtx.h"
-#include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
+#include "d/d_procname.h"
+#include "d/d_kankyo_wether.h"
+#include "d/d_com_inf_game.h"
 #include "d/res/res_vbakh.h"
+#include "f_op/f_op_camera.h"
+#include "f_op/f_op_kankyo_mng.h"
+#include "m_Do/m_Do_mtx.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};

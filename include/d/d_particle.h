@@ -461,7 +461,7 @@ public:
     void drawShipTail(JPADrawInfo* inf) { draw(inf, dPtclGroup_ShipTail_e); }
     void drawWind(JPADrawInfo* inf) { draw(inf, dPtclGroup_Wind_e); }
     void draw2Dfore(JPADrawInfo* inf) { draw(inf, dPtclGroup_2Dfore_e); }
-    void draw2Dback(JPADrawInfo* inf) { draw(inf, dPtclGroup_2Dfore_e); }
+    void draw2Dback(JPADrawInfo* inf) { draw(inf, dPtclGroup_2Dback_e); }
     void draw2DmenuFore(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuFore_e); }
     void draw2DmenuBack(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuBack_e); }
 

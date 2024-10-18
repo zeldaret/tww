@@ -1,8 +1,9 @@
 #ifndef D_A_LBRIDGE_H
 #define D_A_LBRIDGE_H
 
-#include "d/d_com_inf_game.h"
-#include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_particle.h"
+#include "d/d_bg_w.h"
 
 class daLbridge_c : public fopAc_ac_c {
 public:

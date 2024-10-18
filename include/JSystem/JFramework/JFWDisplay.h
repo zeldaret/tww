@@ -14,7 +14,7 @@ class JKRHeap;
 
 typedef void (*JFWDisplayUnkFunc)(void);
 
-extern bool JFWAutoAbortGfx;
+extern u8 JFWAutoAbortGfx;
 
 class JFWAlarm : public OSAlarm {
 public:

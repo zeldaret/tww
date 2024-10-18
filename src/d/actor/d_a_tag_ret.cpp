@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_tag_ret.h"
-#include "d/d_a_obj.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/d_cc_d.h"

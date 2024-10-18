@@ -11,7 +11,6 @@
 #include "m_Do/m_Do_printf.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JKernel/JKRFileCache.h"
-#include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "DynamicLink.h"
 #include "dolphin/os/OS.h"

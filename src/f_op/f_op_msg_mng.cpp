@@ -13,8 +13,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "SSystem/SComponent/c_malloc.h"
-#include "printf.h"
-#include "math.h"
+#include <stdio.h>
 
 static bool pushButton;
 static bool pushButton2;
@@ -200,17 +199,17 @@ void createTimerAppend(int, u16, u8, u8, f32, f32, f32, f32, uint) {
 }
 
 /* 8002B1C8-8002B23C       .text fopMsgM_create__FsP10fopAc_ac_cP4cXyzPUlPUlPFPv_i */
-fpc_ProcID fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, int (*)(void*)) {
+fpc_ProcID fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, fopMsgCreateFunc) {
     /* Nonmatching */
 }
 
 /* 8002B23C-8002B2B0       .text fop_MGameTerm_create__FsssiiPFPv_i */
-void fop_MGameTerm_create(s16, s16, s16, int, int, int (*)(void*)) {
+void fop_MGameTerm_create(s16, s16, s16, int, int, fopMsgCreateFunc) {
     /* Nonmatching */
 }
 
 /* 8002B2B0-8002B324       .text fop_Timer_create__FsUcUsUcUcffffPFPv_i */
-fpc_ProcID fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, int (*)(void*)) {
+fpc_ProcID fop_Timer_create(s16, u8, u16, u8, u8, f32, f32, f32, f32, fopMsgCreateFunc) {
     /* Nonmatching */
 }
 
@@ -356,30 +355,30 @@ bool fopMsgM_releaseScopeMode() {
 }
 
 static const char* fopMsgM_buttonTex[] = {
-    /* 0x00 */ {"font_00.bti"},
-    /* 0x01 */ {"font_01.bti"},
-    /* 0x02 */ {"font_09.bti"},
-    /* 0x03 */ {"font_04.bti"},
-    /* 0x04 */ {"font_05.bti"},
-    /* 0x05 */ {"font_02.bti"},
-    /* 0x06 */ {"font_03.bti"},
-    /* 0x07 */ {"font_06.bti"},
-    /* 0x08 */ {"font_08.bti"},
-    /* 0x09 */ {"font_07_01.bti"},
-    /* 0x0A */ {"font_10.bti"},
-    /* 0x0B */ {"font_10.bti"},
-    /* 0x0C */ {"font_10.bti"},
-    /* 0x0D */ {"font_10.bti"},
-    /* 0x0E */ {"font_07_01.bti"},
-    /* 0x0F */ {"font_07_01.bti"},
-    /* 0x10 */ {"font_07_01.bti"},
-    /* 0x11 */ {"font_07_01.bti"},
-    /* 0x12 */ {"font_07_01.bti"},
-    /* 0x13 */ {"font_07_01.bti"},
-    /* 0x14 */ {"font_12.bti"},
-    /* 0x15 */ {"font_13.bti"},
-    /* 0x16 */ {"font_14.bti"},
-    /* 0x17 */ {"font_15.bti"},
+    /* 0x00 */ "font_00.bti",
+    /* 0x01 */ "font_01.bti",
+    /* 0x02 */ "font_09.bti",
+    /* 0x03 */ "font_04.bti",
+    /* 0x04 */ "font_05.bti",
+    /* 0x05 */ "font_02.bti",
+    /* 0x06 */ "font_03.bti",
+    /* 0x07 */ "font_06.bti",
+    /* 0x08 */ "font_08.bti",
+    /* 0x09 */ "font_07_01.bti",
+    /* 0x0A */ "font_10.bti",
+    /* 0x0B */ "font_10.bti",
+    /* 0x0C */ "font_10.bti",
+    /* 0x0D */ "font_10.bti",
+    /* 0x0E */ "font_07_01.bti",
+    /* 0x0F */ "font_07_01.bti",
+    /* 0x10 */ "font_07_01.bti",
+    /* 0x11 */ "font_07_01.bti",
+    /* 0x12 */ "font_07_01.bti",
+    /* 0x13 */ "font_07_01.bti",
+    /* 0x14 */ "font_12.bti",
+    /* 0x15 */ "font_13.bti",
+    /* 0x16 */ "font_14.bti",
+    /* 0x17 */ "font_15.bti",
 };
 
 static GXColor fopMsgM_buttonW[] = {
@@ -490,7 +489,7 @@ void fopMsgM_outFontDraw2(J2DPicture*, J2DPicture*, int, int, int, int, s16*, u8
 }
 
 /* 8002E204-8002E254       .text fopMsgM_Create__FsPFPv_iPv */
-fpc_ProcID fopMsgM_Create(s16, int (*)(void*), void*) {
+fpc_ProcID fopMsgM_Create(s16, fopMsgCreateFunc, void*) {
     /* Nonmatching */
 }
 

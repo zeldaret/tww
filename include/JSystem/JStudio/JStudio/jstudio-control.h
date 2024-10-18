@@ -116,15 +116,24 @@ public:
             return transformedPosDir;
         }
     }
-    void transformOnGet_transform(const TTransform_position_direction& posDir, TTransform_position_direction* transformedPosDir) const {
-        transformOnGet_transformTranslation(posDir.mPosition, &transformedPosDir->mPosition);
-        transformOnGet_transformDirection(posDir.mDirection, &transformedPosDir->mDirection);
+    void transformOnGet_transform(const TTransform_position& rSrc, TTransform_position* pDst) const {
+        transformOnGet_transformTranslation(rSrc.mPosition, &pDst->mPosition);
     }
-    void transformOnGet_transformTranslation(const Vec& pos, Vec* transformedPos) const {
-        MTXMultVec(transformOnGet_getMatrix(), &pos, transformedPos);
+    void transformOnSet_transform(const TTransform_position& rSrc, TTransform_position* pDst) const {
+        transformOnSet_transformTranslation(rSrc.mPosition, &pDst->mPosition);
     }
-    void transformOnGet_transformDirection(const Vec& dir, Vec* transformedDir) const {
-        MTXMultVecSR(transformOnGet_getMatrix(), &dir, transformedDir);
+    void transformOnGet_transform(const TTransform_position_direction& rSrc, TTransform_position_direction* pDst) const {
+        transformOnGet_transformTranslation(rSrc.mPosition, &pDst->mPosition);
+        transformOnGet_transformDirection(rSrc.mDirection, &pDst->mDirection);
+    }
+    void transformOnGet_transformTranslation(const Vec& rSrc, Vec* pDst) const {
+        MTXMultVec(transformOnGet_getMatrix(), &rSrc, pDst);
+    }
+    void transformOnSet_transformTranslation(const Vec& rSrc, Vec* pDst) const {
+        MTXMultVec(transformOnSet_getMatrix(), &rSrc, pDst);
+    }
+    void transformOnGet_transformDirection(const Vec& rSrc, Vec* pDst) const {
+        MTXMultVecSR(transformOnGet_getMatrix(), &rSrc, pDst);
     }
     
     // TODO
@@ -134,22 +143,19 @@ public:
     void stb_getObjectContainer() const {}
     void stb_referObjectContainer() {}
     void stb_removeObject(TObject*) {}
-    void transformOnGet_transform(const TTransform_position&, TTransform_position*) const {}
-    void transformOnGet_transform(const TTransform_translation_rotation&, TTransform_translation_rotation*) const {}
-    void transformOnGet_transformRotation(const Vec&, Vec*) const {}
-    void transformOnGet_transform_ifEnabled(const TTransform_translation_rotation&, TTransform_translation_rotation*) const {}
-    void transformOnSet_transform(const TTransform_position&, TTransform_position*) const {}
-    void transformOnSet_transform(const TTransform_position_direction&, TTransform_position_direction*) const {}
-    void transformOnSet_transform(const TTransform_translation_rotation&, TTransform_translation_rotation*) const {}
-    void transformOnSet_transform(CMtxP, MtxP) const {}
-    void transformOnSet_transformDirection(const Vec&, Vec*) const {}
-    void transformOnSet_transformDirection_ifEnabled(const Vec&, Vec*) const {}
-    void transformOnSet_transformRotation(const Vec&, Vec*) const {}
-    void transformOnSet_transformTranslation(const Vec&, Vec*) const {}
-    void transformOnSet_transformTranslation_ifEnabled(const Vec&, Vec*) const {}
-    void transformOnSet_transform_ifEnabled(const TTransform_position_direction&, TTransform_position_direction*) const {}
-    void transformOnSet_transform_ifEnabled(const TTransform_translation_rotation&, TTransform_translation_rotation*) const {}
-    void transformOnSet_transform_ifEnabled(CMtxP, MtxP) const {}
+    void transformOnGet_transform(const TTransform_translation_rotation& rSrc, TTransform_translation_rotation* pDst) const {}
+    void transformOnGet_transformRotation(const Vec& rSrc, Vec* pDst) const {}
+    void transformOnGet_transform_ifEnabled(const TTransform_translation_rotation& rSrc, TTransform_translation_rotation* pDst) const {}
+    void transformOnSet_transform(const TTransform_position_direction& rSrc, TTransform_position_direction* pDst) const {}
+    void transformOnSet_transform(const TTransform_translation_rotation& rSrc, TTransform_translation_rotation* pDst) const {}
+    void transformOnSet_transform(CMtxP pSrc, MtxP pDst) const {}
+    void transformOnSet_transformDirection(const Vec& rSrc, Vec* pDst) const {}
+    void transformOnSet_transformDirection_ifEnabled(const Vec& rSrc, Vec* pDst) const {}
+    void transformOnSet_transformRotation(const Vec& rSrc, Vec* pDst) const {}
+    void transformOnSet_transformTranslation_ifEnabled(const Vec& rSrc, Vec* pDst) const {}
+    void transformOnSet_transform_ifEnabled(const TTransform_position_direction& rSrc, TTransform_position_direction* pDst) const {}
+    void transformOnSet_transform_ifEnabled(const TTransform_translation_rotation& rSrc, TTransform_translation_rotation* pDst) const {}
+    void transformOnSet_transform_ifEnabled(CMtxP pSrc, MtxP pDst) const {}
 
     /* 0x58 */ f64 mSecondPerFrame;
     /* 0x60 */ fvb::TControl fvb_Control;

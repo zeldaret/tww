@@ -136,6 +136,8 @@ struct TAdaptor_ambientLight : public JStudio::TAdaptor_ambientLight {
 };  // Size: 0x64
 
 struct TAdaptor_camera : public JStudio::TAdaptor_camera {
+    typedef TVariableValueOutput_object_<TAdaptor_camera, JStage::TCamera> TVVOutput;
+
     TAdaptor_camera(JStage::TSystem const*, JStage::TCamera*);
     virtual ~TAdaptor_camera();
     virtual void adaptor_do_prepare(const JStudio::TObject*);
@@ -147,14 +149,12 @@ struct TAdaptor_camera : public JStudio::TAdaptor_camera {
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32);
 
-    void setJSG_position_(JStudio::TControl const*);
-    void getJSG_position_(JStudio::TControl const*);
-    void setJSG_targetPosition_(JStudio::TControl const*);
-    void getJSG_targetPosition_(JStudio::TControl const*);
+    static const TVVOutput saoVVOutput_[5];
 
-    static u8 saoVVOutput_[160 + 4 /* padding */];
-
-    /* 0xE8 */ u8 field_0xE8[0xF8 - 0xE8];
+    /* 0xE8 */ const JStage::TSystem* mSystem;
+    /* 0xEC */ JStage::TCamera* mObject;
+    /* 0xF0 */ JStage::TObject* mF0;
+    /* 0xF4 */ u32 mF4;
 };  // Size: 0xF8
 
 struct TAdaptor_fog : public JStudio::TAdaptor_fog {

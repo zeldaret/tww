@@ -15,7 +15,6 @@ u32 daPy_py_c::checkPlayerFly() const { return 0; }
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "d/d_npc.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"

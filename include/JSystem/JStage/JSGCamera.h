@@ -4,7 +4,7 @@
 #include "JSystem/JStage/JSGObject.h"
 
 namespace JStage {
-    struct TECameraProjection {};
+    enum TECameraProjection {};
 
     struct TECameraView {};
 

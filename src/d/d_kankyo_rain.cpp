@@ -870,7 +870,6 @@ void wave_move() {
     if (roomNo >= 0)
         fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
-    seaLevel;
     if (fili_p != NULL)
         seaLevel = dStage_FileList_dt_SeaLevel(fili_p);
 
@@ -927,7 +926,6 @@ void wave_move() {
 
     d0.zero();
 
-    deltaXZ;
     deltaXZ.x = pCamera->mLookat.mCenter.x - pCamera->mLookat.mEye.x;
     deltaXZ.y = 0.0f;
     deltaXZ.z = pCamera->mLookat.mCenter.z - pCamera->mLookat.mEye.z;
@@ -1167,7 +1165,9 @@ void cloud_shadow_move() {
                 pPkt->mEff[i].mPos.z += pPkt->mEff[i].mPntWindVel.z;
 
                 // botched comparison?
-                strcmp(dComIfGp_getStartStageName(), "kaze");
+                if (strcmp(dComIfGp_getStartStageName(), "kaze") == 0) {
+                    
+                }
 
                 if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0) {
                     speed = 20.0f;

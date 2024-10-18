@@ -166,7 +166,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
     case dBgS_Attr_DIRT_e:
     case dBgS_Attr_WOOD_e:
     case dBgS_Attr_STONE_e:
-    case dBgS_Attr_SAND_e:
+    case dBgS_Attr_SAND_e: {
         i_this->m0350.end();
         JPABaseEmitter* emitter1 = dComIfGp_particle_setToon(
             0x2022, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
@@ -182,6 +182,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
             emitter1->setGlobalParticleScale(scale);
         }
         break;
+    }
     case dBgS_Attr_GRASS_e:
         JPABaseEmitter* emitter2 = dComIfGp_particle_set(0x24, &i_this->m0338, &i_this->m0344);
         if (emitter2) {
@@ -1457,7 +1458,7 @@ static void stand2(bk_class* i_this) {
     case 0x00:
         i_this->dr.m004 = 1;
         // Fall-through
-    case 0x01:
+    case 0x01: {
         if (i_this->mpSearchLight != NULL) {
             i_this->mpSearchLight->setBkControl(true);
         }
@@ -1490,6 +1491,7 @@ static void stand2(bk_class* i_this) {
         cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->home.angle.y, 2, 0x800);
         i_this->speedF = 0.0f;
         break;
+    }
     case 0x0A:
         i_this->m0B7B = 1;
         if (i_this->m0300[1] == 30) {
@@ -1537,11 +1539,12 @@ static void stand2(bk_class* i_this) {
             i_this->m0300[2] = 60;
         }
         break;
-    case 0x34:
+    case 0x34: {
         dPath__Point* pnt = &i_this->ppd->mpPnt[i_this->m1216];
         i_this->m0320 = pnt->mPos;
         sp24 = i_this->m0320 - i_this->current.pos;
         goto temp_568;
+    }
     case 0x3C:
         sp24 = i_this->home.pos - i_this->current.pos;
 temp_568:
@@ -1702,7 +1705,7 @@ static void path_run(bk_class* i_this) {
 static void attack_set(bk_class* i_this, u8 r28) {
     i_this->m0B5C = 0;
     i_this->m11F1 = 0;
-    i_this->m11FC = -1;
+    i_this->m11FC = fpcM_ERROR_PROCESS_ID_e;
     i_this->m11F2 = 0;
     i_this->m0B64 = 0.0f;
     i_this->m0300[4] = 0;
@@ -2139,7 +2142,205 @@ static fopAc_ac_c* yari_hit_check(bk_class* i_this) {
 
 /* 000075E8-00007EF4       .text fight__FP8bk_class */
 static void fight(bk_class* i_this) {
-    /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    switch (i_this->dr.m004) {
+    case -0x0A:
+        if (i_this->dr.mAcch.ChkGroundHit()) {
+            anm_init(i_this, BK_BCK_BK_JUMP2, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, BK_BAS_BK_JUMP2);
+            i_this->dr.m004 = -0x09;
+            i_this->speedF = 0.0f;
+        }
+        break;
+    case -0x09:
+        if (i_this->mpMorf->isStop()) {
+            i_this->dr.m004 = 1;
+            i_this->m0300[2] = 8;
+            anm_init(i_this, BK_BCK_BK_JATTACK1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            i_this->speedF = 80.0f + REG0_F(5);
+            i_this->speed.y = 115.0f + REG0_F(6);
+            goto temp_1B8;
+        }
+        break;
+    case 0x00:
+        if (i_this->m0B30 != 0) {
+            attack_set(i_this, 0);
+        } else {
+            attack_set(i_this, 2);
+            i_this->speedF = 70.0f + REG0_F(7);
+            i_this->speed.y = 105.0f + REG0_F(8);
+            fopAcM_monsSeStart(i_this, JA_SE_CV_BK_ATTACK_L, 0);
+        }
+        i_this->dr.m004 = 1;
+        i_this->m0300[2] = 8;
+        // Fall-through
+temp_1B8:
+    case 0x01:
+        i_this->m1040.SetAtAtp(bk_attack_AP[i_this->m0B5C]);
+        f32 f1 = attack_info[i_this->m0B5C][i_this->m0B60].speed;
+        if (i_this->dr.mAcch.ChkGroundHit() || (i_this->m0B5C != 1 && i_this->m0B5C != 2)) {
+            i_this->m0B64 += f1;
+            cLib_addCalc2(&i_this->speedF, 0.0f, 1.0f, 20.0f);
+        }
+        if (
+            i_this->m0B64 > i_this->m0B70 &&
+            daBk_player_view_check(i_this, &i_this->dr.m714->current.pos, i_this->m0332, l_bkHIO.m034)
+        ) {
+            i_this->dr.m710 = 1;
+        }
+        
+        if (i_this->m0B7A > 0) {
+            if (i_this->m0B5C == 0) {
+                int r3 = l_bkHIO.m0A0 + l_bkHIO.m0A2 + l_bkHIO.m0A4 + l_bkHIO.m0A6;
+                if ((int)i_this->m0B64 >= l_bkHIO.m0A0 && (int)i_this->m0B64 <= r3) {
+                    i_this->m02F0 = 1;
+                    if ((int)i_this->m0B64 >= (l_bkHIO.m0A0 + l_bkHIO.m0A2) && (int)i_this->m0B64 < (l_bkHIO.m0A0 + l_bkHIO.m0A2 + l_bkHIO.m0A4)) {
+                        i_this->m02F4 = 1;
+                    }
+                    int r0 = (int)i_this->m0B64 - l_bkHIO.m0A0;
+                    if (r0 < (int)ARRAY_SIZE(l_bkHIO.m0A8)) {
+                        i_this->m02EC = l_bkHIO.m0A8[r0];
+                    }
+                }
+            } else if (i_this->m0B5C == 1) {
+                int r3 = l_bkHIO.m0D0 + l_bkHIO.m0D2 + l_bkHIO.m0D4 + l_bkHIO.m0D6;
+                if ((int)i_this->m0B64 >= l_bkHIO.m0D0 && (int)i_this->m0B64 <= r3) {
+                    i_this->m02F0 = 1;
+                    if ((int)i_this->m0B64 >= (l_bkHIO.m0D0 + l_bkHIO.m0D2) && (int)i_this->m0B64 < (l_bkHIO.m0D0 + l_bkHIO.m0D2 + l_bkHIO.m0D4)) {
+                        i_this->m02F4 = 1;
+                    }
+                    int r0 = (int)i_this->m0B64 - l_bkHIO.m0D0;
+                    if (r0 < (int)ARRAY_SIZE(l_bkHIO.m0D8)) {
+                        i_this->m02EC = l_bkHIO.m0D8[r0];
+                    }
+                }
+            }
+        }
+        
+        if ((i_this->m0B64 < i_this->m0B74) || i_this->m11F2 != 0) {
+            i_this->dr.m4D0 = i_this->m0332;
+        }
+        
+        cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->dr.m4D0, 4, 0x800);
+        
+        u8 attackType = 0;
+        f32 startFrame = 1000.0f;
+        f32 endFrame = 1000.0f;
+        f32 maxDist = 10000.0f;
+        if (i_this->m0B5C == 0) {
+            startFrame = 12.0f + REG0_F(8);
+            endFrame = 25.0f + REG0_F(9);
+            attackType = 2;
+        } else if (i_this->m0B5C == 1) {
+            startFrame = REG0_F(10);
+            endFrame = 10.0f + REG0_F(11);
+            attackType = 2;
+        }
+        i_this->setBtAttackData(startFrame, endFrame, maxDist, attackType);
+        i_this->setBtMaxDis(l_bkHIO.m014);
+        i_this->setBtNowFrame(i_this->m0B64);
+        
+        fopAc_ac_c* hitActor = yari_hit_check(i_this);
+        if (hitActor != NULL) {
+            if (fopAcM_GetName(hitActor) == PROC_PLAYER) {
+                // Note: The code seems to assume that the hit actor and the controlled player are the same actor.
+                // This isn't necessarily correct, but likely doesn't cause any bugs in practice as checkPlayerGuard always
+                // returns false for non-Link player actors.
+                if (player->checkPlayerGuard() && (i_this->m0B5C == 0 || i_this->m0B5C == 1)) {
+                    i_this->mpMorf->setPlaySpeed(-1.0f);
+                    if (i_this->m034C != 0) {
+                        i_this->m034C = l_bkHIO.m00C + 6;
+                    }
+                    
+                    i_this->m0B7A = -1;
+                    i_this->mpMorf->play(&i_this->eyePos, 0, 0);
+                    if (i_this->m0B30 != 0 && i_this->m02D5 == 0 && cM_rndF(1.0f) < 0.5f) {
+                        i_this->m0B34 = 1;
+                        i_this->dr.mState = 8;
+                        i_this->dr.m004 = -10;
+                        i_this->m0300[0] = 10;
+                        i_this->m0300[1] = 100;
+                    }
+                }
+            } else if (fopAcM_GetName(hitActor) == PROC_BK) {
+                i_this->m11FC = fopAcM_GetID(hitActor);
+            }
+        } else {
+            i_this->m1040.ClrAtHit();
+            if (i_this->m11F0 != 0) {
+                if (i_this->m11F0 == 2) {
+                    i_this->mpMorf->setPlaySpeed(-1.0f);
+                    i_this->m02F0 = 0;
+                    if (i_this->m034C != 0) {
+                        i_this->m034C = l_bkHIO.m00C + 6;
+                    }
+                    i_this->m0B7A = -1;
+                    i_this->mpMorf->play(&i_this->eyePos, 0, 0);
+                } else {
+                    i_this->dr.mState = 0;
+                    path_check(i_this, 0);
+                    wait_set(i_this);
+                    i_this->dr.m004 = 2;
+                }
+                i_this->m0318 = 1;
+                i_this->m0314 = 0x10;
+                cXyz sp18;
+                sp18.x = sp18.y = sp18.z = 1.0f;
+                dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &i_this->m11E4, NULL, &sp18);
+            }
+        }
+        
+        if (!i_this->mpMorf->isStop()) {
+            break;
+        }
+        
+        if (
+            (i_this->m0B60 == 2 && i_this->m0B7A > 0) ||
+            (i_this->m0B7A < 0 && i_this->m0B60 == 0) ||
+            (i_this->m0B5C == 2 && i_this->m0B60 == 1)
+        ) {
+            if (i_this->m11FC != fpcM_ERROR_PROCESS_ID_e) {
+                i_this->dr.mState = 0xE;
+                i_this->dr.m004 = 0;
+            } else if (i_this->mPlayerDistance < l_bkHIO.m02C) {
+                if (daBk_player_view_check(i_this, &i_this->dr.m714->current.pos, i_this->m0332, l_bkHIO.m034)) {
+                    if (cM_rndF(1.0f) < 0.8f || i_this->m0B7A < 0) {
+                        i_this->dr.mState = 4;
+                        i_this->dr.m004 = 2;
+                        i_this->m0300[1] = 0;
+                    } else {
+                        i_this->dr.m004 = 0;
+                    }
+                } else {
+                    if (i_this->m0B30 != 0 || i_this->m11F3 != 0) {
+                        i_this->dr.mState = 8;
+                        i_this->dr.m004 = 0;
+                    } else {
+                        i_this->dr.mState = 0;
+                        wait_set(i_this);
+                        i_this->dr.m004 = 2;
+                    }
+                }
+            } else {
+                i_this->dr.mState = 0;
+                path_check(i_this, 0);
+                wait_set(i_this);
+                i_this->dr.m004 = 2;
+            }
+        } else if (i_this->dr.mAcch.ChkGroundHit()) {
+            attack_info_s* r6 = attack_info[i_this->m0B5C];
+            f32 speed;
+            if (i_this->m0B7A > 0) {
+                i_this->m0B60++;
+                speed = r6[i_this->m0B60].speed;
+            } else {
+                i_this->m0B60--;
+                speed = -r6[i_this->m0B60].speed;
+            }
+            anm_init(i_this, r6[i_this->m0B60].bckFileIdx, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, speed, r6[i_this->m0B60].soundFileIdx);
+        }
+        
+        break;
+    }
 }
 
 /* 00007EF4-00008108       .text p_lost__FP8bk_class */
@@ -2154,7 +2355,31 @@ static void b_nige(bk_class* i_this) {
 
 /* 00008470-00008580       .text defence__FP8bk_class */
 static void defence(bk_class* i_this) {
-    /* Nonmatching */
+    i_this->dr.m710 = 1;
+    i_this->dr.m4D0 = i_this->m0332;
+    cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->dr.m4D0, 4, 0x400);
+    
+    switch (i_this->dr.m004) {
+    case 0:
+        i_this->dr.m004 = 1;
+        anm_init(i_this, BK_BCK_BK_BOUGYO1, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        i_this->speedF = 0.0f;
+        // Fall-through
+    case 1:
+        i_this->m0F14.SetR(60.0f);
+        i_this->m11D8 = i_this->m11CC;
+        if (i_this->m0300[1] == 0) {
+            if (cM_rndF(1.0f) < 0.5f) {
+                i_this->dr.mState = 5;
+                i_this->dr.m004 = 0;
+            } else {
+                i_this->dr.mState = 4;
+                i_this->m0300[1] = 0;
+                i_this->dr.m004 = 0;
+            }
+        }
+        break;
+    }
 }
 
 /* 00008580-00008654       .text oshi__FP8bk_class */
@@ -2191,7 +2416,7 @@ static void aite_miru(bk_class* i_this) {
             }
         }
         if (i_this->m0300[1] == 0) {
-            i_this->m11FC = -1;
+            i_this->m11FC = fpcM_ERROR_PROCESS_ID_e;
             i_this->dr.mState = 0;
             i_this->dr.m004 = 0;
             path_check(i_this, 0);
@@ -2212,7 +2437,37 @@ static void yogan_fail(bk_class* i_this) {
 
 /* 000090E0-0000924C       .text water_fail__FP8bk_class */
 static void water_fail(bk_class* i_this) {
-    /* Nonmatching */
+    i_this->dr.m71E = 5;
+    i_this->m030E = 5;
+    fopAcM_OffStatus(i_this, 0);
+    i_this->attention_info.flags = 0;
+    i_this->speedF = 0.0f;
+    
+    switch (i_this->dr.m004) {
+    case 0:
+        anm_init(i_this, BK_BCK_BK_NIGERU, 5.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, BK_BAS_BK_NIGERU);
+        i_this->dr.m004 = 1;
+        fopAcM_monsSeStart(i_this, JA_SE_CV_BK_SURPRISE, 0);
+        i_this->dr.m458.y = 0.0f;
+        i_this->dr.m44C.y = 0.0f;
+        i_this->dr.m480 = 0;
+        if (i_this->m0B30 != 0) {
+            i_this->m0B34 = 1;
+        }
+        i_this->m0300[3] = 120;
+        // Fall-through
+    case 1:
+        i_this->speed.y = 0.0f;
+        i_this->current.pos.y -= 1.0f;
+        cLib_addCalcAngleS2(&i_this->current.angle.x, 0, 8, 0x800);
+        if (i_this->m0300[3] == 0) {
+            fopAcM_delete(i_this);
+            if (i_this->m02B8 != 0) {
+                dComIfGs_onSwitch(i_this->m02B8, i_this->current.roomNo);
+            }
+        }
+        break;
+    }
 }
 
 /* 0000924C-00009944       .text wepon_search__FP8bk_class */
@@ -2237,7 +2492,31 @@ static void carry_drop(bk_class* i_this) {
 
 /* 00009DF0-00009F1C       .text d_mahi__FP8bk_class */
 static void d_mahi(bk_class* i_this) {
-    /* Nonmatching */
+    switch (i_this->dr.m004) {
+    case 0:
+        i_this->dr.m004 = 1;
+        anm_init(i_this, BK_BCK_BK_SUWARI, 20.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, BK_BAS_BK_SUWARI);
+        i_this->m0300[0] = 100;
+        // Fall-through
+    case 1:
+        if (i_this->m0300[0] <= 80 && i_this->m0300[0] >= 40) {
+            if (i_this->m0300[0] == 80) {
+                enemy_piyo_set(i_this);
+            }
+            fopAcM_seStart(i_this, JA_SE_CM_MD_PIYO, 0);
+        }
+        i_this->speedF = 0.0f;
+        if (i_this->m0300[0] == 30) {
+            i_this->dr.m49E = 0xF;
+        }
+        if (i_this->m0300[0] == 0) {
+            i_this->dr.mState = 0;
+            path_check(i_this, 0);
+            wait_set(i_this);
+            i_this->dr.m004 = 2;
+        }
+        break;
+    }
 }
 
 /* 00009F1C-0000A350       .text tubo_wait__FP8bk_class */
@@ -2347,6 +2626,8 @@ static void bou_mtx_set(bk_class* i_this) {
         i_this->m02D8->setBaseTRMtx(*calc_mtx);
     }
 }
+
+static u8 temp[0x118] = {};
 
 /* 0000CE18-0000DD1C       .text daBk_Execute__FP8bk_class */
 static BOOL daBk_Execute(bk_class* i_this) {
@@ -2517,7 +2798,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
     int r3 = damage_reaction(&i_this->dr);
     if (r3 != 0) {
         i_this->m034C = 1;
-        i_this->m11FC = -1;
+        i_this->m11FC = fpcM_ERROR_PROCESS_ID_e;
         switch (r3) {
         case 1:
             anm_init(i_this, BK_BCK_BK_AOMUKE, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, BK_BAS_BK_AOMUKE);
@@ -2732,8 +3013,6 @@ static BOOL daBk_Delete(bk_class* i_this) {
     enemy_fire_remove(&i_this->mEnemyFire);
     return TRUE;
 }
-
-static u8 temp[0x118] = {};
 
 /* 0000DDD8-0000E2C8       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_actor) {

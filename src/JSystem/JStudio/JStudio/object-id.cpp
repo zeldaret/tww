@@ -23,7 +23,7 @@ bool JStudio::object::TIDData::isEqual(const JStudio::object::TIDData& a, const 
         return true;
     }
 
-    for (bytesRemaining; bytesRemaining >= 4; bytesRemaining -= 4, aStr32++, bStr32++) {
+    for (; bytesRemaining >= 4; bytesRemaining -= 4, aStr32++, bStr32++) {
         if (*aStr32 != *bStr32) {
             return false;
         }

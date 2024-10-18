@@ -60,7 +60,7 @@ public:
 struct stage_stag_info_class {
     /* 0x00 */ f32 field_0x0;
     /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ u8 mCameraType;
+    /* 0x08 */ u8 mDefaultCameraType;
     /* 0x09 */ u8 field_0x09;
     /* 0x0A */ u16 field_0x0a;
     /* 0x0C */ u32 field_0x0c;
@@ -1007,12 +1007,25 @@ void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int i_roomNo);
 dStage_objectNameInf* dStage_searchName(const char*);
 const char* dStage_getName2(s16 i_procName, s8 i_subtype);
 
+
+inline u8 dStage_stagInfo_DefaultCameraType(stage_stag_info_class* p_info) {
+    return p_info->mDefaultCameraType;
+}
+
+inline s32 dStage_stagInfo_ChkKeyDisp(stage_stag_info_class* i_stagInfo) {
+    return i_stagInfo->field_0x09 & 1;
+}
+
 inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x09 >> 1) & 0x7F;
 }
 
 inline u32 dStage_stagInfo_GetSTType(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x0c >> 16) & 7;
+}
+
+inline u8 dStage_stagInfo_GetUpButton(stage_stag_info_class* i_stagInfo) {
+    return i_stagInfo->field_0x0a & 3;
 }
 
 inline u8 dStage_stagInfo_GetParticleNo(stage_stag_info_class* i_stagInfo) {
@@ -1023,19 +1036,20 @@ inline s8 dStage_stagInfo_GetTimeH(stage_stag_info_class* p_info) {
     return (p_info->field_0x0c >> 8) & 0xFF;
 }
 
+inline u8 dStage_stagInfo_GetCullPoint(stage_stag_info_class* p_info) {
+    return p_info->field_0x10 & 0xFFFF;
+}
+
 inline u8 dStage_stagInfo_getStartSch(stage_stag_info_class* p_info) {
     return (p_info->field_0x10 >> 0x10) & 0xFF;
 }
+
 inline u8 dStage_stagInfo_GetSchSec(stage_stag_info_class* p_info) {
     return p_info->field_0x0c & 0xFF;
 }
 
 // TODO:
 // dStage_stagInfo_GetAgbCon__FP21stage_stag_info_class
-// dStage_stagInfo_DefaultCameraType__FP21stage_stag_info_class
-// dStage_stagInfo_GetCullPoint__FP21stage_stag_info_class
-// dStage_stagInfo_GetUpButton__FP21stage_stag_info_class
-// dStage_stagInfo_ChkKeyDisp__FP21stage_stag_info_class
 
 inline u8 dStage_roomRead_dt_c_GetLoadRoomIndex(u8 param_0) {
     return param_0 & 0x3F;
@@ -1057,48 +1071,51 @@ inline s32 dStage_sclsInfo_getWipe(stage_scls_info_class* p_info) {
     return p_info->mWipe & 0xF;
 }
 
-inline int dStage_FileList_dt_ChkPathWindEffect(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mParam & 0x100000;
-}
-
-inline int dStage_FileList_dt_GlobalWindLevel(dStage_FileList_dt_c* i_fili) {
-    return (i_fili->mParam >> 18) & 3;
-}
-
-inline f32 dStage_FileList_dt_SeaLevel(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mSeaLevel;
-}
-
-inline u8 dStage_FileList_dt_PhotoDepth(dStage_FileList_dt_c* i_fili) {
-    return (i_fili->mParam >> 7) & 0xFF;
-}
-
 inline s32 dStage_FileList_dt_CheckDarkOn(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mParam & 1;
-}
-
-inline u8 dStage_FileList_dt_DarkNo(dStage_FileList_dt_c* i_fili) {
-    return (i_fili->mParam & 0x78) >> 3;
+    return i_fili->mParam & 0x00000001;
 }
 
 inline u8 dStage_FileList_dt_CheckAgbCom(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mParam & 2;
+    return i_fili->mParam & 0x00000002;
 }
 
 inline u8 dStage_FileList_dt_CheckAgbHover(dStage_FileList_dt_c* i_fili) {
-    return i_fili->mParam & 4;
+    return i_fili->mParam & 0x00000004;
+}
+
+inline u8 dStage_FileList_dt_DarkNo(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam & 0x00000078) >> 3;
+}
+
+inline u8 dStage_FileList_dt_PhotoDepth(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam & 0x00007F80) >> 7;
+}
+
+inline int dStage_FileList_dt_GlobalWindLevel(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam & 0x000C0000) >> 18;
+}
+
+inline int dStage_FileList_dt_ChkPathWindEffect(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 0x00100000;
+}
+
+inline u32 dStage_FileList_dt_GetParticleNo(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam & 0x1FE00000) >> 21;
 }
 
 inline u32 dStage_FileList_dt_GetSongOk(dStage_FileList_dt_c* i_fili) {
     return i_fili->mParam & 0x40000000;
 }
 
-// inline u8 dStage_FileList_dt_GetToonsw(dStage_FileList_dt_c* i_fili) {
-    
-// }
+inline u8 dStage_FileList_dt_GetToonsw(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 0; // TODO.
+    // Seems unused in the final game.
+    // It could be one of the following bits which have no known inline: 0xA0038000
+    // Of those, these three are the most likely, as there are rooms with these set: 0x20028000
+}
 
-inline u32 dStage_FileList_dt_GetParticleNo(dStage_FileList_dt_c* i_fili) {
-    return (i_fili->mParam >> 21) & 0xFF;
+inline f32 dStage_FileList_dt_SeaLevel(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mSeaLevel;
 }
 
 bool dStage_chkPlayerId(int playerId, int room_no);

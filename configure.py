@@ -16,7 +16,15 @@ import argparse
 import sys
 from pathlib import Path
 from typing import Any, Dict, List
-from tools.project import *
+
+from tools.project import (
+    Object,
+    ProgressCategory,
+    ProjectConfig,
+    calculate_progress,
+    generate_build,
+    is_windows,
+)
 
 # Game versions
 DEFAULT_VERSION = 1
@@ -113,6 +121,12 @@ parser.add_argument(
     choices=["all", "off", "error"],
     help="how to handle warnings",
 )
+parser.add_argument(
+    "--no-progress",
+    dest="progress",
+    action="store_false",
+    help="disable progress calculation",
+)
 args = parser.parse_args()
 
 config = ProjectConfig()
@@ -124,10 +138,10 @@ config.build_dir = args.build_dir
 config.dtk_path = args.dtk
 config.binutils_path = args.binutils
 config.compilers_path = args.compilers
-config.debug = args.debug
 config.generate_map = args.map
 config.non_matching = args.non_matching
 config.sjiswrap_path = args.sjiswrap
+config.progress = args.progress
 if not is_windows():
     config.wrapper = args.wrapper
 if args.no_asm:
@@ -136,8 +150,8 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v0.9.5"
-config.objdiff_tag = "v2.0.0-beta.5"
+config.dtk_tag = "v1.1.4"
+config.objdiff_tag = "v2.3.2"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -154,8 +168,13 @@ config.asflags = [
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
-    # "-listclosure", # Uncomment for Wii linkers
 ]
+if args.debug:
+    config.ldflags.append("-g")  # Or -gdwarf-2 for Wii linkers
+if args.map:
+    config.ldflags.append("-mapunused")
+    # config.ldflags.append("-listclosure") # For Wii linkers
+
 # Use for any additional files that should cause a re-configure when modified
 config.reconfig_deps = []
 
@@ -191,7 +210,8 @@ cflags_base = [
 ]
 
 # Debug flags
-if config.debug:
+if args.debug:
+    # Or -sym dwarf-2 for Wii compilers
     cflags_base.extend(["-sym on", "-DDEBUG=1"])
 else:
     cflags_base.append("-DNDEBUG=1")
@@ -249,7 +269,7 @@ def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         "lib": lib_name,
         "mw_version": "GC/1.2.5n",
         "cflags": cflags_base,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": objects,
     }
@@ -273,7 +293,7 @@ def ActorRel(status, rel_name, extra_cflags=[]):
 
 
 # Helper function for JSystem libraries
-def JSystemLib(lib_name, objects, progress_category="core"):
+def JSystemLib(lib_name, objects, progress_category="third_party"):
     return {
         "lib": lib_name,
         "mw_version": "GC/1.3.2",
@@ -286,6 +306,12 @@ def JSystemLib(lib_name, objects, progress_category="core"):
 Matching = True                   # Object matches and should be linked
 NonMatching = False               # Object does not match and should not be linked
 Equivalent = config.non_matching  # Object should be linked when configured with --non-matching
+
+
+# Object is only matching for specific versions
+def MatchingFor(*versions):
+    return config.version in versions
+
 
 config.warn_missing_config = True
 config.warn_missing_source = False
@@ -311,7 +337,7 @@ config.libs = [
             Object(Matching,    "m_Do/m_Do_dvd_thread.cpp"),
             Object(Matching,    "m_Do/m_Do_DVDError.cpp"),
             Object(Matching,    "m_Do/m_Do_MemCard.cpp"),
-            Object(NonMatching, "m_Do/m_Do_MemCardRWmng.cpp"),
+            Object(Matching,    "m_Do/m_Do_MemCardRWmng.cpp"),
             Object(Matching,    "m_Do/m_Do_gba_com.cpp"),
             Object(Matching,    "m_Do/m_Do_machine_exception.cpp"),
         ],
@@ -406,7 +432,7 @@ config.libs = [
             Object(Matching,    "d/d_com_inf_game.cpp", extra_cflags=['-sym off']),
             Object(Matching,    "d/d_com_lib_game.cpp"),
             Object(Matching,    "d/d_com_static.cpp", extra_cflags=['-sym off']),
-            Object(NonMatching, "d/d_lib.cpp"),
+            Object(Matching,    "d/d_lib.cpp"),
             Object(Matching,    "d/d_save.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(Matching,    "d/d_save_init.cpp"),
             Object(Matching,    "d/d_shop.cpp", extra_cflags=['-pragma "nosyminline on"']),
@@ -543,7 +569,7 @@ config.libs = [
             Object(Matching,    "d/d_metronome.cpp"),
             Object(Matching,    "d/d_ovlp_fade.cpp"),
             Object(Matching,    "d/d_ovlp_fade2.cpp"),
-            Object(NonMatching, "d/d_ovlp_fade3.cpp"),
+            Object(MatchingFor("GZLE01", "GZLP01"), "d/d_ovlp_fade3.cpp"),
             Object(NonMatching, "d/d_ovlp_fade4.cpp"),
             Object(NonMatching, "d/d_picture_box.cpp"),
             Object(Matching,    "d/d_s_logo.cpp"),
@@ -577,7 +603,7 @@ config.libs = [
         "lib": "SSystem",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_framework,
-        "progress_category": "core",
+        "progress_category": "third_party",
         "host": True,
         "objects": [
             Object(Matching,    "SSystem/SComponent/c_malloc.cpp"),
@@ -692,7 +718,7 @@ config.libs = [
             Object(Matching,    "JSystem/JStudio/JStudio_JStage/object.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio_JStage/object-actor.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio_JStage/object-ambientlight.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-camera.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JStage/object-camera.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio_JStage/object-fog.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio_JStage/object-light.cpp"),
         ],
@@ -774,10 +800,10 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASChannelMgr.cpp"),
             Object(Matching,    "JSystem/JAudio/JASOscillator.cpp"),
             Object(Matching,    "JSystem/JAudio/JASDriverTables.cpp"),
-            Object(Matching,    "JSystem/JAudio/dspproc.c", extra_cflags="-lang c++ -O4 -func_align 32"),
-            Object(Matching,    "JSystem/JAudio/dsptask.c", extra_cflags="-lang c++ -O4 -func_align 32"),
-            Object(Matching,    "JSystem/JAudio/osdsp.c", extra_cflags="-lang c++ -O4 -func_align 32 -str nopool"),
-            Object(Matching,    "JSystem/JAudio/osdsp_task.c", extra_cflags="-lang c++ -O4 -func_align 32"),
+            Object(Matching,    "JSystem/JAudio/dspproc.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
+            Object(Matching,    "JSystem/JAudio/dsptask.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
+            Object(Matching,    "JSystem/JAudio/osdsp.c", extra_cflags=["-lang c++", "-O4", "-func_align 32", "-str nopool"]),
+            Object(Matching,    "JSystem/JAudio/osdsp_task.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
             Object(NonMatching, "JSystem/JAudio/JAIAnimation.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIBasic.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIBankWave.cpp"),
@@ -1142,7 +1168,7 @@ config.libs = [
         "lib": "Runtime.PPCEABI.H",
         "mw_version": "GC/1.3",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/__mem.c"),
@@ -1161,7 +1187,7 @@ config.libs = [
         "lib": "MSL_C",
         "mw_version": "GC/1.3",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(Matching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/abort_exit.c"),
@@ -1215,7 +1241,7 @@ config.libs = [
         "lib": "TRK_MINNOW_DOLPHIN",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(NonMatching, "TRK_MINNOW_DOLPHIN/Portable/mainloop.c"),
@@ -1248,7 +1274,7 @@ config.libs = [
         "lib": "amcstubs",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(NonMatching, "amcstubs/AmcExi2Stubs.c"),
@@ -1258,7 +1284,7 @@ config.libs = [
         "lib": "OdemuExi2",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(NonMatching, "OdemuExi2/DebuggerDriver.c"),
@@ -1268,7 +1294,7 @@ config.libs = [
         "lib": "odenotstub",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_runtime,
-        "progress_category": "dolphin",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(NonMatching, "odenotstub/odenotstub.c"),
@@ -1280,7 +1306,7 @@ config.libs = [
         "lib": "REL",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_rel,
-        "progress_category": "core",
+        "progress_category": "sdk",
         "host": False,
         "objects": [
             Object(Matching, "REL/executor.c"),
@@ -1710,11 +1736,18 @@ config.libs = [
 
 # Optional extra categories for progress tracking
 config.progress_categories = [
-    ProgressCategory("core", "Core Game Engine"),
     ProgressCategory("game", "TWW Game Code"),
-    ProgressCategory("dolphin", "GameCube Specific Code"),
+    ProgressCategory("core", "Core Engine"),
+    ProgressCategory("sdk", "SDK"),
+    ProgressCategory("third_party", "Third Party"),
 ]
 config.progress_each_module = args.verbose
+
+# Disable missing return type warnings for incomplete objects
+for lib in config.libs:
+    for obj in lib["objects"]:
+        if not obj.completed:
+            obj.options["extra_clang_flags"].append("-Wno-return-type")
 
 if args.mode == "configure":
     # Write build.ninja and objdiff.json

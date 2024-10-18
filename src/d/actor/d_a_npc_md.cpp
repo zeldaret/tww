@@ -381,7 +381,7 @@ s32 daNpc_Md_c::create() {
     fopAcM_SetupActor(this, daNpc_Md_c);
     
     mType = fopAcM_GetParam(this) >> 0x08;
-    if (mType == -2) {
+    if (mType == -2) { // Bug: Comparing unsigned value with -2 is always false.
         dComIfGs_onEventBit(0x1620);
     } else {
         if (dComIfGs_isCollect(0, 2)) {

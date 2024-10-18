@@ -6,17 +6,11 @@
 
 struct J3DTextureSRTInfo;
 
-// struct J3DTransformInfo {
-//     /* 0x00 */ JGeometry::TVec3<f32> mScale;
-//     /* 0x0C */ JGeometry::TVec3<s16> mRotation;
-//     /* 0x14 */ JGeometry::TVec3<f32> mTranslate;
-// };  // Size: 0x20
-
-// I doubt this is right but it seems like the only way to prevent an empty ctor being added on array construction
 struct J3DTransformInfo {
     /* 0x00 */ Vec mScale;
     /* 0x0C */ SVec mRotation;
     /* 0x14 */ Vec mTranslate;
+
     inline J3DTransformInfo& operator=(const J3DTransformInfo& b) {
         mScale = b.mScale;
         mRotation = b.mRotation;
@@ -65,6 +59,7 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* d
     register f32 fra2;
     register f32 fr01;
     register f32 fr00;
+#ifdef __MWERKS__
     asm {
         psq_l fr00, 0(vec), 0, 0
         psq_l fr2, 0(mtx), 0, 0
@@ -87,6 +82,7 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* d
         ps_sum0 fra6, fra5, fra6, fra5
         psq_st fra6, 8(dst), 1, 0
     }
+#endif
 }
 
 // regalloc issues
@@ -107,6 +103,7 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register SVec* vec, register SVec*
     register f32 fra2;
     register f32 fr01;
     register f32 fr00;
+#ifdef __MWERKS__
     asm {
         psq_l fr00, 0(vec), 0, 7
         psq_l fr2, 0(mtx), 0, 0
@@ -129,6 +126,7 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register SVec* vec, register SVec*
         ps_sum0 fra6, fra5, fra6, fra5
         psq_st fra6, 4(dst), 1, 7
     }
+#endif
 }
 
 // regalloc issues
@@ -147,6 +145,7 @@ inline void J3DPSMulMtxVec(register Mtx3P mtx, register Vec* vec, register Vec* 
     register f32 fr2;
     register f32 fr01;
     register f32 fr00;
+#ifdef __MWERKS__
     asm {
         lis punit, PSMulUnit01@ha
         psq_l fr00, 0(vec), 0, 0
@@ -173,6 +172,7 @@ inline void J3DPSMulMtxVec(register Mtx3P mtx, register Vec* vec, register Vec* 
         ps_sum0 fr6, fr5, fr6, fr5
         psq_st fr6, 8(dst), 1, 0
     }
+#endif
 }
 
 // regalloc issues
@@ -186,6 +186,7 @@ inline void J3DPSMulMtxVec(register Mtx3P mtx, register SVec* vec, register SVec
     register f32 fr2;
     register f32 fr01;
     register f32 fr00;
+#ifdef __MWERKS__
     asm {
         lis punit, PSMulUnit01@ha
         psq_l fr00, 0(vec), 0, 7
@@ -212,6 +213,7 @@ inline void J3DPSMulMtxVec(register Mtx3P mtx, register SVec* vec, register SVec
         ps_sum0 fr6, fr5, fr6, fr5
         psq_st fr6, 4(dst), 1, 7
     }
+#endif
 }
 
 #endif /* J3DTRANSFORM_H */

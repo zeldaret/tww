@@ -1654,7 +1654,7 @@ void dMeter_swimLightAnime(sub_meter_class* i_this, s16) {
 void dMeter_placeNameMove() {
     if (!dMeter_place_name) {
         if (dComIfGp_checkStageName() == 2) {
-            fopMsgM_create(PROC_PLACE_NAME, NULL, NULL, NULL, NULL, NULL);
+            fopMsgM_create(PROC_PLACE_NAME);
             dMeter_place_name = true;
         }
     } else {

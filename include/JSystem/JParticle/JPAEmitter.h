@@ -88,6 +88,15 @@ public:
     inline virtual void draw(T);
 };  // Size: 0x04
 
+template<>
+void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {}
+template<>
+void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {}
+template<>
+void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {}
+template<>
+void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {}
+
 template<typename T, typename U>
 class JPACallBackBase2 {
 public:
@@ -98,6 +107,13 @@ public:
     inline virtual void execute(T, U);
     inline virtual void draw(T, U);
 };
+
+template<>
+void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, JPABaseParticle*) {}
+template<>
+void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter*, JPABaseParticle*) {}
+template<>
+void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::draw(JPABaseEmitter*, JPABaseParticle*) {}
 
 struct JPAEmitterInfo {
 public:
@@ -392,14 +408,5 @@ public:
     /* 0x215 */ u8 mResMgrID;
     /* 0x216 */ u16 field_0x216;
 };
-
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {}
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {}
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {}
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {}
-
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, JPABaseParticle*) {}
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter*, JPABaseParticle*) {}
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::draw(JPABaseEmitter*, JPABaseParticle*) {}
 
 #endif /* JPAEMITTER_H */

@@ -6,6 +6,7 @@
 #include "d/d_map.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_stage.h"
+#include "d/actor/d_a_agb.h"
 
 enum {
     Floor_B5F = 123,
@@ -366,8 +367,8 @@ void dMap_c::create() {
 }
 
 /* 8004826C-800482B4       .text isEnableEnlargementScroll__6dMap_cFv */
-void dMap_c::isEnableEnlargementScroll() {
-    /* Nonmatching */
+BOOL dMap_c::isEnableEnlargementScroll() {
+    return dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e;
 }
 
 /* 800482B4-800482D8       .text isEnableDispMap__6dMap_cFv */
@@ -376,8 +377,15 @@ bool dMap_c::isEnableDispMap() {
 }
 
 /* 800482D8-80048340       .text getKindMapType__6dMap_cFv */
-void dMap_c::getKindMapType() {
-    /* Nonmatching */
+int dMap_c::getKindMapType() {
+    u32 stage_type = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
+    if (stage_type == dStageType_DUNGEON_e || stage_type == dStageType_FF1_e || stage_type == dStageType_MINIBOSS_e) {
+        return 2;
+    } else if (stage_type == dStageType_SEA_e) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 /* 80048340-80048370       .text remove__6dMap_cFv */
@@ -441,8 +449,12 @@ void dMap_c::setPlayerStayAgbMapTypeNow(f32, f32) {
 }
 
 /* 800494C8-80049538       .text agbMapNoSet__6dMap_cFUcUc */
-void dMap_c::agbMapNoSet(u8, u8) {
-    /* Nonmatching */
+void dMap_c::agbMapNoSet(u8 r29, u8 r30) {
+    daAgb_c* agb = dComIfGp_getAgb();
+    if (agb) {
+        int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+        agb->MapNoSet(stageNo, r29, r30);
+    }
 }
 
 /* 80049538-800495D8       .text agbMapNoSetCall__6dMap_cFv */

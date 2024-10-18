@@ -4,11 +4,8 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_cc_d.h"
-#include "d/d_lib.h"
 #include "d/d_npc.h"
 #include "d/d_particle.h"
-#include "SSystem/SComponent/c_angle.h"
-#include "JSystem/J3DGraphAnimator/J3DNode.h"
 
 class mDoExt_McaMorf;
 

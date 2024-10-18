@@ -197,7 +197,7 @@ bool J2DPicture::remove(u8 idx) {
         mBlendKonstColorF[i] = mBlendKonstColorF[i + 1];
         mBlendKonstAlphaF[i] = mBlendKonstAlphaF[i + 1];
     }
-    mValidTexture = mValidTexture & (1 << idx) - 1 | ((mValidTexture & ~((1 << idx + 1) - 1)) >> 1);
+    mValidTexture = mValidTexture & (1 << idx) - 1 | ((mValidTexture & ~((1 << (idx + 1)) - 1)) >> 1);
     mNumTexture--;
     setBlendKonstColor();
     setBlendKonstAlpha();

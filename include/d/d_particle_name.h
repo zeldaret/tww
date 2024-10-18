@@ -24,8 +24,8 @@ namespace dPa_name {
         ID_SCENE_END = 0x8466,
     };
     
-    u16 j_o_id[];
-    u16 s_o_id[];
+    extern u16 j_o_id[];
+    extern u16 s_o_id[];
 }
 
 #endif /* D_PARTICLE_NAME */

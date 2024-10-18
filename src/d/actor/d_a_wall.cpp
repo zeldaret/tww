@@ -217,7 +217,7 @@ void daWall_c::mode_break() {
         switch (mType) {
         case 0:
         case 1:
-        case 2:
+        case 2: {
             if ((mBreakCounter > 10) && cLib_chaseF(&mDst, 0.0f, 2.2222223f)) {
                 fopAcM_delete(this);
             }
@@ -227,6 +227,7 @@ void daWall_c::mode_break() {
                 pEmitter->setGlobalAlpha(mDst);
             }
             break;
+        }
         default:
             fopAcM_delete(this);
             break;

@@ -184,7 +184,7 @@ BOOL daPds_c::setAction(ActionFunc_t action, void* param_1) {
 /* 0000073C-000007C4       .text action__Q210daPedestal7daPds_cFPv */
 void daPds_c::action(void* param_1) {
     if (!mAction) {
-        setAction(&waitAction, NULL);
+        setAction(&daPds_c::waitAction, NULL);
     }
 
     (this->*mAction)(param_1);

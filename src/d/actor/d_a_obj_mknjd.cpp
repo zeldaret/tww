@@ -8,12 +8,9 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_op/f_op_msg.h"
-#include "f_op/f_op_draw_tag.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JAZelAudio/JAIZelBasic.h"
-#include "JAZelAudio/JAZelAudio_BGM.h"
-#include "JAZelAudio/JAZelAudio_SE.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
@@ -23,7 +20,6 @@
 #include "d/d_item_data.h"
 #include "d/d_particle.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_a_obj.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -501,7 +497,7 @@ void daObjMknjD::Act_c::privateCut() {
                 case ACT_WAIT:
                     doCutEnd = true;
                     break;
-                case ACT_BREAK:
+                case ACT_BREAK: {
                     if (daObjMknjD_break() == true) {
                         if (strcmp(dComIfGp_getStartStageName(), "Ekaze") == 0 || strcmp(dComIfGp_getStartStageName(), "Edaichi") == 0) {
                             mDoAud_bgmStart(JA_BGM_JABOO_CAVE);
@@ -523,13 +519,15 @@ void daObjMknjD::Act_c::privateCut() {
                         doCutEnd = true;
                     }
                     break;
-                case ACT_LESSON:
+                }
+                case ACT_LESSON: {
                     u16 msgStatus = talk(1);
 
                     if (msgStatus == fopMsgStts_BOX_CLOSED_e || msgStatus == fopMsgStts_UNK15_e) {
                         doCutEnd = true;
                     }
                     break;
+                }
                 case ACT_TACT:
                     if (m0504 == false) {
                         doCutEnd = true;
@@ -687,7 +685,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
             fallingShardNum = 0;
         }
 
-        for (fallingShardNum; fallingShardNum < 20; fallingShardNum++) {
+        for (; fallingShardNum < 20; fallingShardNum++) {
             mShardHeights[fallingShardNum] -= 2.0f;
             mShardPositions[fallingShardNum].y += mShardHeights[fallingShardNum];
         }

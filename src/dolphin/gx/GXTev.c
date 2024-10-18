@@ -109,7 +109,7 @@ void GXSetTevColorOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale 
     tevReg = __GXData->tevc[stage];
     FAST_FLAG_SET(tevReg, op & 1, 18, 1);
 
-    if (op <= 1) {
+    if (op <= GX_TEV_SUB) {
         FAST_FLAG_SET(tevReg, scale, 20, 2);
         FAST_FLAG_SET(tevReg, bias, 16, 2);
     } else {
@@ -133,7 +133,7 @@ void GXSetTevAlphaOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale 
     tevReg = __GXData->teva[stage];
     FAST_FLAG_SET(tevReg, op & 1, 18, 1);
 
-    if (op <= 1) {
+    if (op <= GX_TEV_SUB) {
         FAST_FLAG_SET(tevReg, scale, 20, 2);
         FAST_FLAG_SET(tevReg, bias, 16, 2);
     } else {

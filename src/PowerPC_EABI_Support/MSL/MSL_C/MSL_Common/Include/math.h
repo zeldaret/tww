@@ -28,10 +28,14 @@ double cos(double);
 float cosf(float);
 double exp(double);
 
+extern double __fabs(double);
 extern float __fabsf(float);
 inline double fabs(double f) {
     return __fabs(f);
 }
+
+double __frsqrte(double);
+float __fres(float);
 
 double floor(double);
 double fmod(double, double);
@@ -44,10 +48,6 @@ double sin(double);
 float sinf(float);
 double tan(double);
 float tanf(float);
-
-inline double sqrt_step(double tmpd, float mag) {
-    return tmpd * 0.5 * (3.0 - mag * (tmpd * tmpd));
-}
 
 extern inline double sqrt(double x) {
     if(x > 0.0)

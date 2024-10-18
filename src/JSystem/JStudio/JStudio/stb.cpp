@@ -174,18 +174,20 @@ void TObject::process_sequence_() {
         JUT_EXPECT(pContent == 0);
         setWait(u32Value);
         break;
-    case 3:
+    case 3: {
         JUT_EXPECT(pContent == 0);
         s32 off = toInt32FromUInt24_(u32Value);
         void* nextseq = (void*)getSequence_offset(off);
         setSequence_next(nextseq);
         break;
-    case 4:
+    }
+    case 4: {
         JUT_EXPECT(pContent == 0);
         u32 val = toInt32FromUInt24_(u32Value);
         suspend(val);
         break;
-    case 0x80:
+    }
+    case 0x80: {
         ASSERT(pContent != 0);
         void* p = (void*)pContent;
         data::TParse_TParagraph para(NULL);
@@ -204,6 +206,7 @@ void TObject::process_sequence_() {
         }
         JUT_EXPECT(p == pNext);
         break;
+    }
     default:
         break;
     }
@@ -218,19 +221,21 @@ void TObject::process_paragraph_reserved_(u32 arg1, const void* pContent, u32 uS
     case 0x2:
         setWait(*(u32*)pContent);
         break;
-    case 0x3:
+    case 0x3: {
         const void* seq = getSequence_offset(*(s32*)pContent);
         setSequence_next(seq);
         break;
+    }
     case 0x80:
         on_data(NULL, 0, pContent, uSize);
         break;
-    case 0x81:
+    case 0x81: {
         data::TParse_TParagraph_dataID dataID(pContent);
         const void* temp = dataID.getContent();
         on_data(dataID.get_ID(), dataID.get_IDSize(), temp,
                 uSize - ((u32)temp - (u32)dataID.getRaw()));
         break;
+    }
     case 0x82:
         break;
     }

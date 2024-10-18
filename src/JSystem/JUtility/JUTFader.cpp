@@ -5,7 +5,6 @@
 
 #include "JSystem/JUtility/JUTFader.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
-#include "dolphin/types.h"
 
 /* 802C8544-802C85F0       .text __ct__8JUTFaderFiiiiQ28JUtility6TColor */
 JUTFader::JUTFader(int x, int y, int width, int height, JUtility::TColor pColor) : mColor(pColor), mBox(x, y, x + width, y + height) {

@@ -225,10 +225,7 @@ class JntHit_c;
 
 struct fopAc_cullSizeSphere {
 public:
-#ifdef __INTELLISENSE__
-    /* 0x0 */ Vec center;
-    /* 0xC */ f32 radius;
-#else
+#ifdef __MWERKS__
     /* 0x0 */ cXyz center;
     /* 0xC */ f32 radius;
 
@@ -238,15 +235,21 @@ public:
         radius = r;
     }
     ~fopAc_cullSizeSphere() {}
+#else
+    /* 0x0 */ Vec center;
+    /* 0xC */ f32 radius;
 #endif
 };
 
+#ifdef __MWERKS__
+#define fopAc_MakeCullSizeSphere(center, radius) fopAc_cullSizeSphere(center, radius)
+#else
+#define fopAc_MakeCullSizeSphere(center, radius) {(Vec)center, radius}
+#endif
+
 struct fopAc_cullSizeBox {
 public:
-#ifdef __INTELLISENSE__
-    /* 0x0 */ Vec min;
-    /* 0xC */ Vec max;
-#else
+#ifdef __MWERKS__
     fopAc_cullSizeBox() {}
     fopAc_cullSizeBox(const fopAc_cullSizeBox& box) {
         min = box.min;
@@ -260,8 +263,17 @@ public:
 
     /* 0x0 */ cXyz min;
     /* 0xC */ cXyz max;
+#else
+    /* 0x0 */ Vec min;
+    /* 0xC */ Vec max;
 #endif
 };
+
+#ifdef __MWERKS__
+#define fopAc_MakeCullSizeBox(min, max) fopAc_cullSizeBox(min, max)
+#else
+#define fopAc_MakeCullSizeBox(min, max) {(Vec)min, (Vec)max}
+#endif
 
 class fopAc_ac_c : public leafdraw_class {
 public:

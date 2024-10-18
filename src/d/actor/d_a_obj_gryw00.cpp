@@ -122,7 +122,7 @@ int daObjGryw00_c::Create() {
         mBck.setFrame(RISE_PHASE_ANIM_LEN);
         mIsHidden = FALSE;
 
-        modeFunc = &high_water_level_act_proc;
+        modeFunc = &daObjGryw00_c::high_water_level_act_proc;
 
         mWaterLv = HIGH_WATER_LEVEL;
         mWaterMaxLv = HIGH_WATER_LEVEL;
@@ -133,7 +133,7 @@ int daObjGryw00_c::Create() {
         /* Waiting state until puzzle is solved */
         mIsHidden = TRUE;
 
-        modeFunc = &switch_wait_act_proc;
+        modeFunc = &daObjGryw00_c::switch_wait_act_proc;
         mWaterLv = -5;
         mWaterMaxLv = -5;
 
@@ -193,13 +193,13 @@ void daObjGryw00_c::switch_wait_act_proc() {
     mGeyserSeRemaining = GEYSER_SOUND_LEN;
     mShouldPlaySe = TRUE;
     mIsHidden = FALSE;
-    modeFunc = &spread_water_face_act_proc;
+    modeFunc = &daObjGryw00_c::spread_water_face_act_proc;
 }
 
 /* 00000B50-00000BB0       .text spread_water_face_act_proc__13daObjGryw00_cFv */
 void daObjGryw00_c::spread_water_face_act_proc() {
     if (mBtk.checkFrame(SPREAD_PHASE_ANIM_LEN)) {
-        modeFunc = &water_level_move_wait_act_proc;
+        modeFunc = &daObjGryw00_c::water_level_move_wait_act_proc;
     }
 }
 
@@ -208,7 +208,7 @@ void daObjGryw00_c::water_level_move_wait_act_proc() {
     if (mBtk.checkFrame(RISE_PHASE_ANIM_LEN)) {
         mWaterLvIncrement = WATER_RISE_SPEED;
         mWaterMaxLv = HIGH_WATER_LEVEL;
-        modeFunc = &anime_loop_start_wait_act_proc;
+        modeFunc = &daObjGryw00_c::anime_loop_start_wait_act_proc;
         mBck.setPlaySpeed(0);
         mBck.setFrame(RISE_PHASE_ANIM_LEN);
     }
@@ -219,7 +219,7 @@ void daObjGryw00_c::anime_loop_start_wait_act_proc() {
     if (mBtk.isStop()) {
         particle_delete();
         setup_high_water_level_btk_anm();
-        modeFunc = &high_water_level_act_proc;
+        modeFunc = &daObjGryw00_c::high_water_level_act_proc;
     }
 }
 

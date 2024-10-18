@@ -6,52 +6,137 @@
 #include "JSystem/JStudio/JStudio_JStage/object-camera.h"
 #include "dolphin/types.h"
 
+namespace JStudio_JStage {
+
+const TAdaptor_camera::TVVOutput TAdaptor_camera::saoVVOutput_[5] = {
+    TVVOutput(7, &JStage::TCamera::JSGSetViewRoll, &JStage::TCamera::JSGGetViewRoll),
+    TVVOutput(6, &JStage::TCamera::JSGSetProjectionFovy, &JStage::TCamera::JSGGetProjectionFovy),
+    TVVOutput(8, &JStage::TCamera::JSGSetProjectionNear, &JStage::TCamera::JSGGetProjectionNear),
+    TVVOutput(9, &JStage::TCamera::JSGSetProjectionFar, &JStage::TCamera::JSGGetProjectionFar),
+    TVVOutput(-1, NULL, NULL),
+};
+
 /* 80277354-802773E8       .text __ct__Q214JStudio_JStage15TAdaptor_cameraFPCQ26JStage7TSystemPQ26JStage7TCamera */
-JStudio_JStage::TAdaptor_camera::TAdaptor_camera(const JStage::TSystem*, JStage::TCamera*) {
-    /* Nonmatching */
+TAdaptor_camera::TAdaptor_camera(const JStage::TSystem* system, JStage::TCamera* camera)
+    : mSystem(system)
+    , mObject(camera)
+{
 }
 
 /* 802773E8-80277460       .text __dt__Q214JStudio_JStage15TAdaptor_cameraFv */
-JStudio_JStage::TAdaptor_camera::~TAdaptor_camera() {
-    /* Nonmatching */
+TAdaptor_camera::~TAdaptor_camera() {
+    adaptor_do_end(NULL);
 }
 
 /* 80277460-802774A8       .text adaptor_do_prepare__Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_camera::adaptor_do_prepare(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_camera::adaptor_do_prepare(const JStudio::TObject* object) {
+    for (const TVVOutput* output = saoVVOutput_; output->mValueIndex != -1; output++) {
+        mVariableValues[output->mValueIndex].setOutput(output);
+    }
 }
 
+namespace {
+    struct TTransformed_ {
+        JStudio::TControl::TTransform_position mCurrent;
+        JStudio::TControl::TTransform_position mTarget;
+    };
+    
+    inline const TTransformed_* transformOnGet_transform_ifEnabled_(const JStudio::TControl* pControl, const TTransformed_& rSrc, TTransformed_* pDst) {
+        if (!pControl->transformOnGet_isEnabled()) {
+            return &rSrc;
+        } else {
+            pControl->transformOnGet_transform(rSrc.mCurrent, &pDst->mCurrent);
+            pControl->transformOnGet_transform(rSrc.mTarget, &pDst->mTarget);
+            return pDst;
+        }
+    }
+    inline const TTransformed_* transformOnSet_transform_ifEnabled_(const JStudio::TControl* pControl, const TTransformed_& rSrc, TTransformed_* pDst) {
+        if (!pControl->transformOnSet_isEnabled()) {
+            return &rSrc;
+        } else {
+            pControl->transformOnSet_transform(rSrc.mCurrent, &pDst->mCurrent);
+            pControl->transformOnSet_transform(rSrc.mTarget, &pDst->mTarget);
+            return pDst;
+        }
+    }
+};
+
 /* 802774A8-80277600       .text adaptor_do_begin__Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_camera::adaptor_do_begin(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_camera::adaptor_do_begin(const JStudio::TObject* object) {
+    mObject->JSGFEnableFlag(1);
+    
+    JStudio::TControl* pControl = (JStudio::TControl*)object->getControl();
+    TTransformed_ sp20;
+    TTransformed_ sp08;
+    const TTransformed_* r29;
+    mObject->JSGGetViewPosition(&sp20.mCurrent.mPosition);
+    mObject->JSGGetViewTargetPosition(&sp20.mTarget.mPosition);
+    r29 = (TTransformed_*)transformOnGet_transform_ifEnabled_(pControl, sp20, &sp08);
+    adaptor_setVariableValue_Vec(sauVariableValue_3_POSITION_XYZ, r29->mCurrent.mPosition);
+    adaptor_setVariableValue_Vec(sauVariableValue_3_TARGET_POSITION_XYZ, r29->mTarget.mPosition);
+    for (const TVVOutput* output = saoVVOutput_; output->mValueIndex != -1; output++) {
+        mVariableValues[output->mValueIndex].setValue_immediate((mObject->*(output->mGetter))());
+    }
 }
 
 /* 80277600-80277654       .text adaptor_do_end__Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio7TObject */
-void JStudio_JStage::TAdaptor_camera::adaptor_do_end(const JStudio::TObject*) {
-    /* Nonmatching */
+void TAdaptor_camera::adaptor_do_end(const JStudio::TObject* object) {
+    mObject->JSGFDisableFlag(1);
 }
 
 /* 80277654-8027771C       .text adaptor_do_update__Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio7TObjectUl */
-void JStudio_JStage::TAdaptor_camera::adaptor_do_update(const JStudio::TObject*, u32) {
-    /* Nonmatching */
+void TAdaptor_camera::adaptor_do_update(const JStudio::TObject* object, u32 p2) {
+    JStudio::TControl* pControl = (JStudio::TControl*)object->getControl();
+    TTransformed_ sp20;
+    TTransformed_ sp08;
+    adaptor_getVariableValue_Vec(&sp20.mCurrent.mPosition, sauVariableValue_3_POSITION_XYZ);
+    adaptor_getVariableValue_Vec(&sp20.mTarget.mPosition, sauVariableValue_3_TARGET_POSITION_XYZ);
+    const TTransformed_* r31 = transformOnSet_transform_ifEnabled_(pControl, sp20, &sp08);
+    mObject->JSGSetViewPosition(r31->mCurrent.mPosition);
+    mObject->JSGSetViewTargetPosition(r31->mTarget.mPosition);
 }
 
 /* 8027771C-80277750       .text adaptor_do_data__Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio7TObjectPCvUlPCvUl */
-void JStudio_JStage::TAdaptor_camera::adaptor_do_data(const JStudio::TObject*, const void*, u32, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_camera::adaptor_do_data(const JStudio::TObject* object, const void* p2, u32 p3, const void* p4, u32 p5) {
+    TAdaptor_object_::adaptor_data_(mObject, p2, p3, p4, p5);
 }
 
 /* 80277750-802777A4       .text adaptor_do_PARENT__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_camera::adaptor_do_PARENT(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_18:
+        mF0 = (JStage::TObject*)mSystem->JSGFindObject((const char*)p2, JStage::TOBJ_ACTOR_UNK);
+        break;
+    }
 }
 
 /* 802777A4-80277814       .text adaptor_do_PARENT_NODE__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_camera::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_18:
+        if (mF0) {
+            mF4 = mF0->JSGFindNodeID((const char*)p2);
+        }
+        break;
+    case JStudio::data::TEOD_Unknown_19:
+        mF4 = *(u32*)p2;
+        break;
+    }
 }
 
 /* 80277814-80277870       .text adaptor_do_PARENT_ENABLE__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl */
-void JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, const void*, u32) {
-    /* Nonmatching */
+void TAdaptor_camera::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
+    switch (operation) {
+    case JStudio::data::TEOD_Unknown_02:
+        JStage::TObject* parent = NULL;
+        u32 idx                 = -1;
+        if (*(u32*)p2 != 0) {
+            parent = mF0;
+            idx    = mF4;
+        }
+        mObject->JSGSetParent(parent, idx);
+        break;
+    }
 }
+
+} // namespace JStudio_JStage

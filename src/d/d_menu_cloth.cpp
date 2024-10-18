@@ -4,7 +4,6 @@
 //
 
 #include "d/d_menu_cloth.h"
-#include "dolphin/types.h"
 
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */
 daCLOTH_HIO_c::daCLOTH_HIO_c() {

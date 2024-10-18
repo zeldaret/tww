@@ -118,7 +118,7 @@ void dOvlpFd2_c::execFirstSnap() {
         if (!cLib_calcTimer(&mTimer)) {
             mProc = &dOvlpFd2_c::execFadeOut;
             fopOvlpM_Done(this);
-            mTimer = 244;
+            mTimer = -12;
         }
 
         dComIfGp_setWindowNum(0);

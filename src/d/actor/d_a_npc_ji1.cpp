@@ -4,12 +4,13 @@
 //
 
 #include "d/actor/d_a_npc_ji1.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_tsubo.h"
 #include "d/res/res_ji.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_snap.h"
-#include "d/actor/d_a_player_main.h"
-#include "d/actor/d_a_tsubo.h"
+#include "d/d_lib.h"
 #include "f_op/f_op_msg.h"
 
 static void daNpc_Ji1_setHairAngle(daNpc_Ji1_c*);
@@ -418,21 +419,21 @@ BOOL daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
                     field_0xC84 = 0xC;
                     field_0x2C8 = field_0x2B0;
 
-                    setAction(&eventAction, 0);
+                    setAction(&daNpc_Ji1_c::eventAction, 0);
                 }
                 else if(field_0xD74 == 5) {
                     setAnm(5, 4.0f, 0);
                     field_0xC84 = 0xD;
                     field_0x2C8 = field_0x2B0;
 
-                    setAction(&eventAction, 0);
+                    setAction(&daNpc_Ji1_c::eventAction, 0);
                 }
                 else if(field_0xD74 > 5) {
                     setAnm(5, 4.0f, 0);
                     field_0xC84 = 0xE;
                     field_0x2C8 = field_0x2B0;
 
-                    setAction(&eventAction, 0);
+                    setAction(&daNpc_Ji1_c::eventAction, 0);
 
                     field_0xD74 = 0;
                 }
@@ -466,21 +467,21 @@ BOOL daNpc_Ji1_c::normalSubActionGuard(s16 param_1) {
                 field_0xC84 = 0xC;
                 field_0x2C8 = field_0x2B0;
 
-                setAction(&eventAction, 0);
+                setAction(&daNpc_Ji1_c::eventAction, 0);
             }
             else if(field_0xD74 == 5) {
                 setAnm(5, 4.0f, 0);
                 field_0xC84 = 0xD;
                 field_0x2C8 = field_0x2B0;
 
-                setAction(&eventAction, 0);
+                setAction(&daNpc_Ji1_c::eventAction, 0);
             }
             else if(field_0xD74 > 5) {
                 setAnm(5, 4.0f, 0);
                 field_0xC84 = 0xE;
                 field_0x2C8 = field_0x2B0;
 
-                setAction(&eventAction, 0);
+                setAction(&daNpc_Ji1_c::eventAction, 0);
             }
             else {
                 setAnm(0x1, 8.0f, 0);
@@ -520,7 +521,7 @@ BOOL daNpc_Ji1_c::normalAction(void*) {
             temp3 -= m_jnt.getBackbone_y();
             cLib_addCalcAngleS2(&current.angle.y, temp3, 8, 0x800);
             if(cLib_distanceAngleS(current.angle.y, temp3) < 0x100) {
-                setAction(&talkAction, 0);
+                setAction(&daNpc_Ji1_c::talkAction, 0);
             }
         }
 
@@ -583,7 +584,7 @@ BOOL daNpc_Ji1_c::kaitenExpAction(void*) {
     else if(field_0xC78 != -1) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Ji1");
         if(getEventActionNo(staffIdx) == 2) {
-            setAction(&kaitenspeakAction, 0);
+            setAction(&daNpc_Ji1_c::kaitenspeakAction, 0);
         }
         else {
             dComIfGp_evmng_cutEnd(staffIdx);
@@ -612,7 +613,7 @@ BOOL daNpc_Ji1_c::kaitenspeakAction(void*) {
             if(temp2 == 0) {
                 m_jnt.clrTrn();
 
-                setAction(&talkAction, 0);
+                setAction(&daNpc_Ji1_c::talkAction, 0);
             }
         }
         else {
@@ -642,8 +643,8 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
     else if(field_0xC78 != -1) {
         if(!dComIfGs_isEventBit(0x501) && daNpc_Ji1_plRoomOutCheck()) {
             field_0xC84 = 9;
-            setAction(&eventAction, 0);
-            field_0x2C8 = &kaitenwaitAction;
+            setAction(&daNpc_Ji1_c::eventAction, 0);
+            field_0x2C8 = &daNpc_Ji1_c::kaitenwaitAction;
 
             return true;
         }
@@ -670,7 +671,7 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
             temp3 -= m_jnt.getBackbone_y();
             cLib_addCalcAngleS2(&current.angle.y, temp3, 8, 0x800);
             if(cLib_distanceAngleS(current.angle.y, temp3) < 0x100) {
-                setAction(&talkAction, 0);
+                setAction(&daNpc_Ji1_c::talkAction, 0);
             }
         }
 
@@ -682,7 +683,7 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
             field_0xD79 = 1;
             dComIfGp_getDetect().set_quake(0);
             
-            setAction(&kaitenAction, 0);
+            setAction(&daNpc_Ji1_c::kaitenAction, 0);
         }
 
         if(field_0xD84 == 1) {
@@ -776,11 +777,11 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
                     fopAcM_seStart(this, JA_SE_VS_JI_OPENING, 0);
                     mDoAud_bgmStop(0x0000002D);
 
-                    setAction(&plmoveAction, 0);
+                    setAction(&daNpc_Ji1_c::plmoveAction, 0);
                 }
                 else {
                     setAnm(1, 8.0f, 0);
-                    setAction(&normalAction, 0);
+                    setAction(&daNpc_Ji1_c::normalAction, 0);
                 }
 
                 dComIfGp_event_reset();
@@ -1079,10 +1080,10 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
                             fopAcM_seStart(this, JA_SE_VS_JI_OPENING, 0);
                             mDoAud_bgmStop(0x0000002D);
 
-                            setAction(&plmoveAction, 0);
+                            setAction(&daNpc_Ji1_c::plmoveAction, 0);
                         }
                         else {
-                            setAction(&kaitenwaitAction, 0);
+                            setAction(&daNpc_Ji1_c::kaitenwaitAction, 0);
                         }
                     }
                 }
@@ -1095,10 +1096,10 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
                     fopAcM_seStart(this, JA_SE_VS_JI_OPENING, 0);
                     mDoAud_bgmStop(0x0000002D);
 
-                    setAction(&plmoveAction, 0);
+                    setAction(&daNpc_Ji1_c::plmoveAction, 0);
                 }
                 else if(field_0x2AC == 0x995) {
-                    setAction(&plmoveAction, 0);
+                    setAction(&daNpc_Ji1_c::plmoveAction, 0);
                 }
                 else {
                     setAction(field_0x2BC, 0);
@@ -1205,7 +1206,7 @@ BOOL daNpc_Ji1_c::speakBadAction(void*) {
                         l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                         if(field_0x2AC == 0x969) {
                             field_0xD70 = 0;
-                            setAction(&teachAction, 0);
+                            setAction(&daNpc_Ji1_c::teachAction, 0);
                         }
                         else {
                             setAction(field_0x2BC, 0);
@@ -1981,7 +1982,7 @@ BOOL daNpc_Ji1_c::endspeakAction(void*) {
                 else if(l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
                     l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                     mDoAud_bgmStop(0x2D);
-                    setAction(&reiAction, 0);
+                    setAction(&daNpc_Ji1_c::reiAction, 0);
                 }
             }
         }
@@ -2077,8 +2078,8 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
         dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
         if(daNpc_Ji1_plRoomOutCheck()) {
             field_0xC84 = 9;
-            setAction(&eventAction, 0);
-            field_0x2C8 = &teachSPRollCutAction;
+            setAction(&daNpc_Ji1_c::eventAction, 0);
+            field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
 
             return true;
         }
@@ -2096,8 +2097,8 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 field_0x7E0.OffTgShield();
                 field_0xC84 = 10;
 
-                setAction(&eventAction, 0);
-                field_0x2C8 = &teachSPRollCutAction;
+                setAction(&daNpc_Ji1_c::eventAction, 0);
+                field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
                 
                 return 1;
             }
@@ -2105,8 +2106,8 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
             if(cutType == 8) {
                 field_0xC84 = 0xB;
 
-                setAction(&eventAction, 0);
-                field_0x2C8 = &teachSPRollCutAction;
+                setAction(&daNpc_Ji1_c::eventAction, 0);
+                field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
 
                 return 1;
             }
@@ -2150,9 +2151,9 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                         if(field_0xC8C == 9) {
                             field_0xC84 = 0xA;
 
-                            setAction(&eventAction, 0);
+                            setAction(&daNpc_Ji1_c::eventAction, 0);
 
-                            field_0x2C8 = &normalAction;
+                            field_0x2C8 = &daNpc_Ji1_c::normalAction;
 
                             return true;
                         }
@@ -2190,7 +2191,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                         field_0xC50 = 0.0f;
                         field_0xC2C = 0.0f;
 
-                        setAction(&speakBadAction, 0);
+                        setAction(&daNpc_Ji1_c::speakBadAction, 0);
                     }
                     else {
                         field_0xC90 = 0;
@@ -2198,7 +2199,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                         field_0xC9C = 0.0f;
                         field_0xD38 = current.pos;
 
-                        setAction(&speakAction, 0);
+                        setAction(&daNpc_Ji1_c::speakAction, 0);
                     }
                 }
             }
@@ -2246,7 +2247,7 @@ void daNpc_Ji1_c::battleSubActionWaitInit() {
     /* Nonmatching */
 
     field_0xC9C = 0;
-    setSubAction(&battleSubActionWait);
+    setSubAction(&daNpc_Ji1_c::battleSubActionWait);
 }
 
 /* 0000A430-0000A564       .text battleSubActionWait__11daNpc_Ji1_cFv */
@@ -2263,7 +2264,7 @@ void daNpc_Ji1_c::battleSubActionNockBackInit(int param_1) {
     field_0xC9C = 0;
     field_0xD38 = current.pos;
     field_0x330->setPlaySpeed(-1.0f);
-    setSubAction(&battleSubActionNockBack);
+    setSubAction(&daNpc_Ji1_c::battleSubActionNockBack);
     field_0x2A4 = 30.0f;
 }
 
@@ -2280,7 +2281,7 @@ void daNpc_Ji1_c::battleSubActionAttackInit() {
     field_0x330->setPlaySpeed(l_HIO.field_0x6C);
     fopAcM_seStart(this, JA_SE_CV_JI_ATTACK, 0);
     field_0xC34 = 0;
-    setSubAction(&battleSubActionYokoAttack);
+    setSubAction(&daNpc_Ji1_c::battleSubActionYokoAttack);
 }
 
 /* 0000A808-0000AAA4       .text battleSubActionAttack__11daNpc_Ji1_cFv */
@@ -2296,7 +2297,7 @@ void daNpc_Ji1_c::battleSubActionTateAttackInit() {
     field_0x330->setPlaySpeed(l_HIO.field_0x78);
     fopAcM_seStart(this, JA_SE_CV_JI_ATTACK, 0);
     field_0xC34 = 0;
-    setSubAction(&battleSubActionYokoAttack);
+    setSubAction(&daNpc_Ji1_c::battleSubActionYokoAttack);
 }
 
 /* 0000AB68-0000AE2C       .text battleSubActionTateAttack__11daNpc_Ji1_cFv */
@@ -2312,7 +2313,7 @@ void daNpc_Ji1_c::battleSubActionYokoAttackInit() {
     field_0x330->setPlaySpeed(l_HIO.field_0x80);
     fopAcM_seStart(this, JA_SE_CV_JI_ATTACK, 0);
     field_0xC34 = 0;
-    setSubAction(&battleSubActionYokoAttack);
+    setSubAction(&daNpc_Ji1_c::battleSubActionYokoAttack);
 }
 
 /* 0000AEF0-0000B254       .text battleSubActionYokoAttack__11daNpc_Ji1_cFv */
@@ -2327,7 +2328,7 @@ void daNpc_Ji1_c::battleSubActionJumpInit() {
     setAnm(0xB, 0.0f, 1);
     field_0xC9C = 0;
     field_0xD38 = current.pos;
-    setSubAction(&battleSubActionJump);
+    setSubAction(&daNpc_Ji1_c::battleSubActionJump);
 }
 
 /* 0000B2D4-0000B5EC       .text battleSubActionJump__11daNpc_Ji1_cFv */
@@ -2343,7 +2344,7 @@ void daNpc_Ji1_c::battleSubActionDamageInit() {
     field_0x330->setPlaySpeed(1.5f);
     field_0xC9C = 0;
     field_0xD38 = current.pos;
-    setSubAction(&battleSubActionDamage);
+    setSubAction(&daNpc_Ji1_c::battleSubActionDamage);
 }
 
 /* 0000B67C-0000B8AC       .text battleSubActionDamage__11daNpc_Ji1_cFv */
@@ -2358,7 +2359,7 @@ void daNpc_Ji1_c::battleSubActionJpGuardInit() {
     setAnm(0xA, 0.0f, 1);
     field_0xC9C = 0;
     field_0xD38 = current.pos;
-    setSubAction(&battleSubActionJpGuard);
+    setSubAction(&daNpc_Ji1_c::battleSubActionJpGuard);
 }
 
 /* 0000B92C-0000BAEC       .text battleSubActionJpGuard__11daNpc_Ji1_cFv */
@@ -2373,7 +2374,7 @@ void daNpc_Ji1_c::battleSubActionGuardInit() {
     field_0xC9C = 0;
     field_0xD38 = current.pos;
     setParticle(0x10, 1.0f, 0.1f);
-    setSubAction(&battleSubActionGuard);
+    setSubAction(&daNpc_Ji1_c::battleSubActionGuard);
 }
 
 /* 0000BB6C-0000BD8C       .text battleSubActionGuard__11daNpc_Ji1_cFv */
@@ -2404,9 +2405,9 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
             case 0x6:
             case 0x8:
             case 0x9:
-            case 0x1A:
+            case 0x1A: {
                 if(!isAttackAnim()) {
-                    if(!checkSubAction(&battleSubActionNockBack)) {
+                    if(!checkSubAction(&daNpc_Ji1_c::battleSubActionNockBack)) {
                         setAnm(8, 0.0f, 1);
                         battleSubActionGuardInit();
                         break;
@@ -2414,7 +2415,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
                 }
 
                 int attackFrame = isAttackFrame();
-                if(checkSubAction(&battleSubActionNockBack)) {
+                if(checkSubAction(&daNpc_Ji1_c::battleSubActionNockBack)) {
                     setAnm(8, 0.0f, 1);
                     battleSubActionGuardInit();
                 }
@@ -2435,6 +2436,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
                 }
 
                 break;
+            }
             case 0xA:
                 battleSubActionJpGuardInit();
                 break;
@@ -2461,17 +2463,17 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
             case 0x1D:
             case 0x1E:
             case 0x1F:
-            default:
+            default: {
                 if(!isAttackAnim()) {
-                    if(!checkSubAction(&battleSubActionNockBack)) {
+                    if(!checkSubAction(&daNpc_Ji1_c::battleSubActionNockBack)) {
                         setAnm(9, 0.0f, 1);
                         battleSubActionGuardInit();
                         break;
                     }
                 }
 
-                attackFrame = isAttackFrame();
-                if(checkSubAction(&battleSubActionNockBack)) {
+                int attackFrame = isAttackFrame();
+                if(checkSubAction(&daNpc_Ji1_c::battleSubActionNockBack)) {
                     setAnm(9, 0.0f, 1);
                     battleSubActionGuardInit();
                 }
@@ -2492,6 +2494,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
                 }
 
                 break;
+            }
         }
         
         if(field_0xC24 == 0) {
@@ -2539,10 +2542,10 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
                     field_0xC38 = 1;
                 }
 
-                setAction(&eventAction, 0);
+                setAction(&daNpc_Ji1_c::eventAction, 0);
 
                 dComIfGp_setMessageCountNumber(field_0xD70);
-                field_0x2C8 = &normalAction;
+                field_0x2C8 = &daNpc_Ji1_c::normalAction;
                 if (dComIfG_getTimerPtr()) {
                     dComIfG_TimerDeleteRequest();
                     setClearRecord(field_0xD70);
@@ -2561,20 +2564,20 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
     }
 
     if(field_0xC3C > 2) {
-        if(checkAction(&battleAction)) {
+        if(checkAction(&daNpc_Ji1_c::battleAction)) {
             dComIfG_TimerDeleteRequest();
             
             if(isClearRecord(field_0xD70)) {
                 setClearRecord(field_0xD70);
                 field_0xC84 = 7;
 
-                setAction(&eventAction, 0);
+                setAction(&daNpc_Ji1_c::eventAction, 0);
 
                 dComIfGp_setMessageCountNumber(field_0xD70);
-                field_0x2C8 = &normalAction;
+                field_0x2C8 = &daNpc_Ji1_c::normalAction;
             }
             else {
-                setAction(&endspeakAction, 0);
+                setAction(&daNpc_Ji1_c::endspeakAction, 0);
             }
         }
     }
@@ -3346,7 +3349,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
             current.pos.z = -850.0f;
             current.angle.y = -0x8000;
 
-            setAction(&kaitenExpAction, 0);
+            setAction(&daNpc_Ji1_c::kaitenExpAction, 0);
         }
         else {
             field_0xD84 = 1;
@@ -3357,7 +3360,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
             field_0xD5C.y = 0;
             field_0xD5C.z = 0x7FFF;
 
-            setAction(&normalAction, 0);
+            setAction(&daNpc_Ji1_c::normalAction, 0);
         }
 
         field_0xD28 = home.pos;
@@ -3373,17 +3376,17 @@ BOOL daNpc_Ji1_c::CreateInit() {
             field_0xD5C.z = 0x7FFF;
             field_0xD28 = home.pos;
 
-            setAction(&normalAction, 0);
+            setAction(&daNpc_Ji1_c::normalAction, 0);
         }
         else {
             field_0xD84 = 0;
             if(!dComIfGs_isEventBit(0x640) || l_HIO.field_0x30) {
                 field_0xD68 = 0;
 
-                setAction(&kaitenExpAction, 0);
+                setAction(&daNpc_Ji1_c::kaitenExpAction, 0);
             }
             else {
-                setAction(&kaitenwaitAction, 0);
+                setAction(&daNpc_Ji1_c::kaitenwaitAction, 0);
             }
             
             current.pos.x = 0.0f;
@@ -3641,7 +3644,11 @@ BOOL daNpc_Ji1_c::lookBack() {
         dstPos = &attnPos;
     }
     else {
-        if((field_0xD7A != 0 || isGuardAnim()) || (checkAction(&kaitenwaitAction) && !dComIfGs_isEventBit(0x501)) || (!checkAction(&normalAction) && dist < 600.0f)) {
+        if(
+            (field_0xD7A != 0 || isGuardAnim()) ||
+            (checkAction(&daNpc_Ji1_c::kaitenwaitAction) && !dComIfGs_isEventBit(0x501)) ||
+            (!checkAction(&daNpc_Ji1_c::normalAction) && dist < 600.0f)
+        ) {
             if(field_0xD64 == 0xD) {
                 dstPos = 0;
             }

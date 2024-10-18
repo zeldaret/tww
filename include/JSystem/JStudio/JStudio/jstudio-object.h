@@ -302,14 +302,13 @@ struct TAdaptor_camera : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[11];
 
-    static u8 const sauVariableValue_3_POSITION_XYZ[12];
-    static u8 const sauVariableValue_3_TARGET_POSITION_XYZ[12];
+    static u32 const sauVariableValue_3_POSITION_XYZ[3];
+    static u32 const sauVariableValue_3_TARGET_POSITION_XYZ[3];
     static u8 sauVariableValue_2_DISTANCE_NEAR_FAR[8];
 };
 
 struct TObject_camera : public TObject {
-    TObject_camera(JStudio::stb::data::TParse_TBlock_object const&,
-                                  JStudio::TAdaptor_camera*);
+    TObject_camera(JStudio::stb::data::TParse_TBlock_object const&, JStudio::TAdaptor_camera*);
     
     virtual ~TObject_camera();
     virtual void do_paragraph(u32, void const*, u32);

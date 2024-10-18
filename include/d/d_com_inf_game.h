@@ -1,7 +1,6 @@
 #ifndef D_COM_D_COM_INF_GAME_H
 #define D_COM_D_COM_INF_GAME_H
 
-#include "JSystem/JUtility/TColor.h"
 #include "d/d_attention.h"
 #include "d/d_bg_s.h"
 #include "d/d_cc_s.h"
@@ -17,8 +16,9 @@
 #include "d/d_vibration.h"
 #include "d/d_demo.h"
 #include "d/d_timer.h"
-#include "d/res/res_always.h"
 #include "SSystem/SComponent/c_data_tbl.h"
+
+#include "d/res/res_always.h" // IWYU pragma: export
 
 class JKRArchive;
 class JKRAramBlock;
@@ -3464,11 +3464,12 @@ inline void dComIfG_TimerDeleteRequest() {
         dComIfG_getTimerPtr()->deleteRequest();
 }
 inline void dComIfG_TimerStart(int timer, s16 mode) {
-    if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL)
+    if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL) {
         if (timer != 0)
             dComIfG_getTimerPtr()->start(timer);
         else
             dComIfG_getTimerPtr()->start();
+    }
 }
 inline void dComIfG_TimerReStart(int timer) {
     if (dComIfG_getTimerPtr() != NULL)

@@ -63,7 +63,7 @@ struct TParseValue_raw_ {
 
 template <typename T>
 struct TParseValue_endian_big_ : public TParseValue_raw_<T> {
-    static T parse(const void* data) { return TParseValue_raw_::parse(data); }
+    static T parse(const void* data) { return TParseValue_raw_<T>::parse(data); }
 };
 
 template <typename T, template <class> class Parser>

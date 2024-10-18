@@ -166,15 +166,15 @@ struct TParseData {
     }
 
     bool isEnd() const {
-        return m_data->_0 == 0;
+        return m_data->status == 0;
     }
 
     bool empty() const {
-        return m_data->_c == NULL;
+        return m_data->fileCount == NULL;
     }
 
     bool isValid() const {
-        return !empty() && m_data->_0 == 50;
+        return !empty() && m_data->status == 50;
     }
 
     data::TParse_TParagraph_data::TData* m_data;
@@ -182,14 +182,14 @@ struct TParseData {
 
 template <int T>
 struct TParseData_fixed : public TParseData<T> {
-    TParseData_fixed(const void* pContent) : TParseData(pContent) {}
+    TParseData_fixed(const void* pContent) : TParseData<T>(pContent) {}
 
     const void* getNext() const {
-        return m_data->_c;
+        return this->m_data->fileCount;
     }
 
     bool isValid() const {
-        return TParseData::isValid() && getNext() != NULL;
+        return TParseData<T>::isValid() && getNext() != NULL;
     }
 };
 

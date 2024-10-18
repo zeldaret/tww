@@ -3,8 +3,9 @@
 
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "d/d_com_inf_game.h"
 #include "d/d_npc.h"
+#include "d/d_particle.h"
+#include "d/d_timer.h"
 #include "m_Do/m_Do_hostIO.h"
 
 class daAuction_c : public fopNpc_npc_c {

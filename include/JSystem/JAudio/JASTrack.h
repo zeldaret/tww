@@ -129,7 +129,7 @@ namespace JASystem {
             /* 0x0C0 */ MoveParam_ mIIRs[4];
             /* 0x100 */ MoveParam_ _100;
             /* 0x110 */ MoveParam_ _110;
-        };
+        };  // Size: 0x120
 
         class TimedParam_ {
         public:

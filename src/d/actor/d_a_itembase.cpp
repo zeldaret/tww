@@ -6,7 +6,6 @@
 #include "d/actor/d_a_itembase.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
-#include "d/d_resorce.h"
 #include "d/d_drawlist.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"

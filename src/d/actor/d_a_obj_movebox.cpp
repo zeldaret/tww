@@ -1013,9 +1013,9 @@ namespace daObjMovebox {
     
     void Act_c::mode_proc_call() {
         static ModeFunc mode_proc[] = {
-            &mode_wait,
-            &mode_walk,
-            &mode_afl,
+            &Act_c::mode_wait,
+            &Act_c::mode_walk,
+            &Act_c::mode_afl,
         };
         (this->*mode_proc[mMode])();
     }

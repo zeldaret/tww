@@ -903,8 +903,8 @@ JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignmen
     }
 
     JKRSolidHeap* createdHeap;
-    if (i_size == 0 || i_size == 0xFFFFFFFF) {
-        createdHeap = JKRSolidHeap::create(0xFFFFFFFFFF, i_heap, false);
+    if (i_size == 0 || i_size == -1) {
+        createdHeap = JKRSolidHeap::create(-1, i_heap, false);
     } else {
         i_size = ALIGN_NEXT(i_size, 0x10);
         i_size += 0x80;
@@ -1164,7 +1164,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
         return;
     }
     if (modelData->getModelDataType() == 1 && modelFlag == 0) {
-        if (modelFlag = modelData->isLocked()) {
+        if (modelData->isLocked()) {
             modelFlag = 0x20000;
         } else {
             modelFlag = 0x80000;
@@ -1451,7 +1451,7 @@ mDoExt_McaMorf2::mDoExt_McaMorf2(J3DModelData* modelData, mDoExt_McaMorfCallBack
         return;
     }
     if (modelData->getModelDataType() == 1 && modelFlag == 0) {
-        if (modelFlag = modelData->isLocked()) {
+        if (modelData->isLocked()) {
             modelFlag = 0x20000;
         } else {
             modelFlag = 0x80000;
@@ -2587,7 +2587,7 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
     J3DModel* model = new J3DModel();
     if (model) {
         if (i_modelData->getModelDataType() == 1 && i_modelFlag == 0) {
-            if (i_modelFlag = i_modelData->isLocked()) {
+            if (i_modelData->isLocked()) {
                 i_modelFlag = 0x20000;
             } else {
                 i_modelFlag = 0x80000;

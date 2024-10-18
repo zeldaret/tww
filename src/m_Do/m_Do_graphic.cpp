@@ -63,7 +63,7 @@ u32 mCaptureTextureSize;
 u32 mCaptureCaptureSize;
 GXDrawSyncCallback mCaptureOldCB;
 OSThreadQueue mCaptureThreadQueue;
-u64 mCaptureTimeOutTicks;
+u64 mCaptureTimeOutTicks = OS_TIMER_CLOCK;
 
 JKRHeap * mDoGph_gInf_c::mHeap[2] = {};
 GXColor mDoGph_gInf_c::mBackColor = {};
@@ -501,7 +501,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
 
     s16 x = (s16)viewport->mXOrig & ~0x07;
     s16 y = (s16)viewport->mYOrig & ~0x07;
-    y = (y < 0) ? y : 0; // y = y & (y >> 31);
+    s16 y2 = (y < 0) ? 0 : y;
     s16 w = (s16)viewport->mWidth & ~0x07;
     s16 h = (s16)viewport->mHeight & ~0x07;
 
@@ -513,8 +513,10 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
         zbuf += GXGetTexBufferSize(320, hh, GX_TF_IA8, GX_FALSE, 0);
         fbbuf += GXGetTexBufferSize(320, hh, mDoGph_gInf_c::getFrameBufferTimg()->format, GX_FALSE, 0);
     }
+    y = y2;
 
-    u16 hw = w >> 1, hh = h >> 1;
+    u16 hw = w >> 1;
+    u16 hh = h >> 1;
     GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, JUTVideo::getManager()->getRenderMode()->vfilter);
 
     GXSetTexCopySrc(x, y, w, h);
@@ -594,32 +596,35 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
 
-    if (y == 0 && (s16)viewport->mScissor.mYOrig != 0) {
-        s16 h = (f32)((s16)viewport->mScissor.mYOrig) + (f32)viewport->mScissor.mHeight;
-        GXSetNumChans(1);
-        GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
-        GXSetNumTexGens(0);
-        GXSetNumTevStages(1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetBlendMode(GX_BM_NONE, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
-        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
-        GXClearVtxDesc();
-        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 8);
-            GXPosition3s16(0, 0, -5);
-            GXPosition3s16(640, 0, -5);
-            GXPosition3s16(640, y, -5);
-            GXPosition3s16(0, y, -5);
+    if (y == 0) {
+        s16 h = (s16)viewport->mScissor.mYOrig;
+        if (h != 0) {
+            h += (f32)viewport->mScissor.mHeight;
+            GXSetNumChans(1);
+            GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+            GXSetNumTexGens(0);
+            GXSetNumTevStages(1);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetBlendMode(GX_BM_NONE, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+            GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+            GXClearVtxDesc();
+            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+            GXBegin(GX_QUADS, GX_VTXFMT0, 8);
+                GXPosition3s16(0, 0, -5);
+                GXPosition3s16(640, 0, -5);
+                GXPosition3s16(640, y, -5);
+                GXPosition3s16(0, y, -5);
 
-            GXPosition3s16(0, h, -5);
-            GXPosition3s16(640, h, -5);
-            GXPosition3s16(640, 480, -5);
-            GXPosition3s16(0, 480, -5);
-        GXEnd();
+                GXPosition3s16(0, h, -5);
+                GXPosition3s16(640, h, -5);
+                GXPosition3s16(640, 480, -5);
+                GXPosition3s16(0, 480, -5);
+            GXEnd();
+        }
     }
 
     GXSetScissor(viewport->mScissor.mXOrig, viewport->mScissor.mYOrig, viewport->mScissor.mWidth, viewport->mScissor.mHeight);
@@ -726,15 +731,254 @@ void mDoGph_CaptureCansel() {
     }
 }
 
+#define COLOR_SQUARE_MAG(r0, g0, b0, r1, g1, b1) (r0 - r1)*(r0 - r1) + (g0 - g1)*(g0 - g1) + (b0 - b1)*(b0 - b1)
+
 /* 80009C38-8000A180       .text blockenc__FPUc */
-void blockenc(u8*) {
+void blockenc(u8* block) {
     /* Nonmatching */
+    u8 colors[16*3]; // sp18
+    u32 color_mags[4]; // sp08
+    u32 pix_idx;
+    u32 color_num = 0; // r11
+    u32 i = 0; // r8
+    pix_idx = 0; // r10
+    for (; i < 0x30; i += 3, pix_idx += 4) {
+        u32 r9 = 0; // r9
+        u8* pix = &block[pix_idx];
+        for (int j = 0; j < color_num; j++) {
+            u8* temp = &colors[r9*3];
+            if (temp[0] == pix[0] && temp[1] == pix[1] && temp[2] == pix[2]) {
+                break;
+            }
+            r9++;
+        }
+        if (r9 == color_num) {
+            colors[r9*3 + 0] = pix[0];
+            colors[r9*3 + 1] = pix[1];
+            colors[r9*3 + 2] = pix[2];
+            color_num += 1;
+        }
+    }
+    
+    u32 color_0_idx = 0; // r17
+    u32 color_1_idx = 0; // r16
+    if (color_num > 1) {
+        u32 r23 = 0;
+        u32 r18 = INT32_MAX;
+        for (; r23 < color_num*3 - 3; r23 += 3) {
+            u32 r0 = colors[r23+0] * 30;
+            u32 g0 = colors[r23+1] * 59;
+            u32 b0 = colors[r23+2] * 11;
+            for (u32 r21 = r23+3; r21 < color_num*3 - 3; r21 += 3) {
+                u32 r1 = colors[r21+0] * 30;
+                u32 g1 = colors[r21+1] * 59;
+                u32 b1 = colors[r21+2] * 11;
+                u32 r20 = 0; // r20
+                u32 pix_idx = 0; // r19
+                u32 r22 = 0; // r22
+                for (; r22 < 0x10; r22++, pix_idx += 4) {
+                    // u32 b2 = block[pix_idx + 2] * 11;
+                    // u32 r2 = block[pix_idx + 0] * 30;
+                    // u32 g2 = block[pix_idx + 1] * 59;
+                    color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                    color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                    u32 r3 = (r0 * 5 + r1 * 3) / 8;
+                    u32 g3 = (g0 * 5 + g1 * 3) / 8;
+                    u32 b3 = (b0 * 5 + b1 * 3) / 8;
+                    color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                    u32 r4 = (r1 * 5 + r0 * 3) / 8;
+                    u32 g4 = (g1 * 5 + g0 * 3) / 8;
+                    u32 b4 = (b1 * 5 + b0 * 3) / 8;
+                    color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                    
+                    u32 r5 = 0;
+                    u32 r6 = INT32_MAX;
+                    for (; r5 < ARRAY_SIZE(color_mags); r5++) {
+                        if (color_mags[r5] < r6) {
+                            r6 = color_mags[r5];
+                        }
+                    }
+                    
+                    r20 += r6;
+                }
+                
+                if (r20 < r18) {
+                    r18 = r20;
+                    color_0_idx = r23;
+                    color_1_idx = r21;
+                }
+            }
+        }
+    }
+    
+    u32 r11 = (colors[color_0_idx + 0] & 0xF8) << 8 |
+              (colors[color_0_idx + 1] & 0xFC) << 3 |
+              (colors[color_0_idx + 2] & 0xF8) >> 3;
+    u32 r4  = (colors[color_1_idx + 0] & 0xF8) << 8 |
+              (colors[color_1_idx + 1] & 0xFC) << 3 |
+              (colors[color_1_idx + 2] & 0xF8) >> 3;
+    if (r11 < r4) {
+        u32 temp = r11;
+        r11 = r4;
+        r4 = temp;
+    } else if (r11 == r4) {
+        r4 = 0;
+    }
+    block[0x40] = r11 >> 8;
+    block[0x41] = r11 & 0xFF;
+    block[0x42] = r4 >> 8;
+    block[0x43] = r4 & 0xFF;
+    
+    u32 r0 = ((r11 >> 8) & 0xF8) * 30;
+    u32 g0 = ((r11 >> 3) & 0xFC) * 59;
+    u32 b0 = ((r11 << 3) & 0xFC) * 11;
+    u32 r1 = ((r4 >> 8) & 0xF8) * 30;
+    u32 g1 = ((r4 >> 3) & 0xFC) * 59;
+    u32 b1 = ((r4 << 3) & 0xFC) * 11;
+    u32 r6 = 30; // r6 (bit offset within r8)
+    u32 r8 = 0; // r8 (bitfield of color indexes)
+    for (pix_idx = 0; pix_idx < 0x40; pix_idx += 4) {
+        // u32 b2 = block[pix_idx + 2] * 11;
+        // u32 r2 = block[pix_idx + 0] * 30;
+        // u32 g2 = block[pix_idx + 1] * 59;
+        color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+        color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+        u32 r3 = (r0 * 5 + r1 * 3) / 8;
+        u32 g3 = (g0 * 5 + g1 * 3) / 8;
+        u32 b3 = (b0 * 5 + b1 * 3) / 8;
+        color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+        u32 r4 = (r1 * 5 + r0 * 3) / 8;
+        u32 g4 = (g1 * 5 + g0 * 3) / 8;
+        u32 b4 = (b1 * 5 + b0 * 3) / 8;
+        color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+        
+        u32 r5 = 0;
+        u32 r24;
+        u32 r25 = INT32_MAX;
+        for (; r5 < ARRAY_SIZE(color_mags); r5++) {
+            if (color_mags[r5] < r25) {
+                r25 = color_mags[r5];
+                r24 = r5;
+            }
+        }
+        
+        r8 |= (r24 & 0x03) << r6;
+        r6 -= 2;
+    }
+    
+    block[0x44] = r8 >> 24;
+    block[0x45] = r8 >> 16;
+    block[0x46] = r8 >> 8;
+    block[0x47] = r8 & 0xFF;
 }
 
 /* 8000A180-8000A530       .text encode_s3tc__FPUcPUcii9_GXTexFmt */
-void encode_s3tc(u8*, u8*, int, int, GXTexFmt) {
+u32 encode_s3tc(u8* r25, u8* r26, int r27, int r28, GXTexFmt fmt) {
     /* Nonmatching */
-    OSReport("16 <= i8low && i8high <= 235");
+    // params: capture_buffer, texture_buffer, width, height, fmt
+    u8 block[0x40 + 0x8]; // sp08;
+    u32 r31 = 0;
+    if (fmt == GX_TF_I8) {
+        u32 i8low = 255; // r30
+        u32 i8high = 0; // r29
+        for (int r18 = 0; r18 < r28; r18 += 8) {
+            for (int r19 = 0, r24 = 0; r19 < r27; r19 += 8, r24 += 0x20) {
+                for (int r20 = 0; r20 < 8; r20 += 4) {
+                    int r21 = 0;
+                    u32 r23 = r24 + r27 * (r18 + r20);
+                    for (; r21 < 8; r21 += 4) {
+                        u32 r5 = 0;
+                        int r3 = 0;
+                        u32 r10 = r21 + r23;
+                        for (; r3 < 4; r3++) {
+                            u32 r4 = r3*8 + r10;
+                            u32 r9 = 219;
+                            u32 r8 = 255; // r8 (alpha)
+                            u8* r7 = &r25[r4];
+                            for (int i = 0; i < 4; r5++, i++) {
+                                u32 r11 = r7[i];
+                                if (i8low > r11) {
+                                    i8low = r11;
+                                }
+                                if (i8high < r11) {
+                                    i8high = r11;
+                                }
+                                u32 r0 = ((r11 - 16) * 255) / r9;
+                                block[r5*4+0] = r0 & 0xF8;
+                                block[r5*4+1] = r0 & 0xFC;
+                                block[r5*4+2] = r0 & 0xF8;
+                                block[r5*4+3] = r8;
+                            }
+                        }
+                        blockenc(block);
+                        memcpy(&r26[r31], &block[0x40], 8);
+                        r31 += 8;
+                    }
+                }
+            }
+        }
+        JUT_ASSERT(0x8A7, 16 <= i8low && i8high <= 235);
+    } else if (fmt == GX_TF_RGB565) {
+        for (int r24 = 0; r24 < r28; r24 += 8) {
+            for (int r29 = 0; r29 < r27; r29 += 8) {
+                for (int r30 = 0; r30 < 8; r30 += 4) {
+                    int r21 = 0;
+                    u32 r22 = 2 * (r27 * (r24 + r30));
+                    for (; r21 < 8; r21 += 4) {
+                        u32 r8 = 0;
+                        int r9 = 0;
+                        // u32 r3 = 0;
+                        u32 r6 = r22 + 8 * (r29 + r21);
+                        u32 r5 = 255; // r5 (alpha)
+                        for (; r9 < 4; r9++) {//, r3 += 8) {
+                            u32 r10 = r9*8 + r6;
+                            u16* r4 = (u16*)&r25[r10];
+                            for (int i = 0; i < 4; i++, r8++, r10 += 2, r4++) {
+                                u32 r11 = *r4;
+                                block[r8*4+0] = (r11 >> 8) & 0xF8;
+                                block[r8*4+1] = (r11 >> 3) & 0xFC;
+                                block[r8*4+2] = (r11 << 3) & 0xF8;
+                                block[r8*4+3] = r5;
+                            }
+                        }
+                        blockenc(block);
+                        memcpy(&r26[r31], &block[0x40], 8);
+                        r31 += 8;
+                    }
+                }
+            }
+        }
+    } else if (fmt == GX_TF_RGBA8) {
+        for (int r24 = 0; r24 < r28; r24 += 8) {
+            for (int r29 = 0; r29 < r27; r29 += 8) {
+                for (int r30 = 0; r30 < 8; r30 += 4) {
+                    int r21 = 0;
+                    u32 r22 = 4 * (r27 * (r24 + r30));
+                    for (; r21 < 8; r21 += 4) {
+                        u32 r4 = 0;
+                        for (int r5 = 0; r5 < 4; r5++) {
+                            u32 r6 = r5 * 8 + r22 + 16 * (r29 + r21);
+                            u32 r7 = r6 + 0x20;
+                            u32 r9 = 255; // r9 (alpha)
+                            for (int i = 0; i < 4; i++, r4++, r6 += 2, r7 += 2) {
+                                u8* r3 = &r25[r6];
+                                block[r4*4+0] = r3[1] & 0xF8;
+                                u8* r12 = &r25[r7];
+                                block[r4*4+1] = r12[0] & 0xFC;
+                                block[r4*4+2] = r12[1] & 0xF8;
+                                block[r4*4+3] = r3[0];
+                                block[r4*4+3] = r9;
+                            }
+                        }
+                        blockenc(block);
+                        memcpy(&r26[r31], &block[0x40], 8);
+                        r31 += 8;
+                    }
+                }
+            }
+        }
+    }
+    return r31;
 }
 
 /* 8000A530-8000A744       .text setUpRectangle__Fv */
@@ -866,7 +1110,7 @@ void mCaptureGXDrawSyncCallback(u16) {
     OSCancelAlarm(&mCaptureTimeOutAlarm);
     BOOL interrupt = OSDisableInterrupts();
     if (mCaptureStep == 2) {
-        void * oldcb = GXSetDrawSyncCallback(mCaptureOldCB);
+        void* oldcb = (void*)GXSetDrawSyncCallback(mCaptureOldCB);
         JUT_ASSERT(0xa5f, oldcb == mCaptureGXDrawSyncCallback);
         mCaptureOldCB = NULL;
         mCaptureStep++;
@@ -1142,14 +1386,14 @@ bool mDoGph_Painter() {
             if (mCaptureTextureFormat == GX_TF_CMPR) {
                 mCaptureThreadStackHead = mDoGph_allocFromAny(mCaptureThreadStackSize, 0x20);
                 if (mCaptureThreadStackHead == NULL) {
-                    mCaptureProc(0);
+                    mCaptureProc(NULL);
                     if (mCaptureCaptureBuffer != NULL) {
                         JKRFreeToHeap(NULL, mCaptureCaptureBuffer);
                         mCaptureCaptureBuffer = NULL;
                     }
                     mCaptureStep = 5;
                 } else {
-                    OSCreateThread(&mCaptureThread, mCaptureProc, NULL, mCaptureThreadStackHead + mCaptureThreadStackSize, mCaptureThreadStackSize, mCaptureThreadPriority, 0);
+                    OSCreateThread(&mCaptureThread, (void*)mCaptureProc, NULL, mCaptureThreadStackHead + mCaptureThreadStackSize, mCaptureThreadStackSize, mCaptureThreadPriority, 0);
                     OSResumeThread(&mCaptureThread);
                     mCaptureStep++;
                 }

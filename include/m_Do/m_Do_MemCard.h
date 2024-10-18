@@ -52,12 +52,20 @@ public:
     void setPictDataPtr(u8* v) { mPictDataPtr = v; }
     void setCardSerialNo(u64 v) { mCardSerialNo = v; }
     void setDataVersion(u32 v) { mDataVersion = v; }
+    u8 getCopyToPos() { return mCopyToPos; }
+    void setCopyToPos(u8 pos) { mCopyToPos = pos; }
+
+    void clearProbeStat() {}
+    void getCardSerialNo() {}
+    void getDataVersion() {}
+    void getProbeStat() {}
+    void setPictWriteDataPtr(u8*) {}
 
     /* 0x0000 */ u8 mData[0x1650];
     /* 0x1650 */ u8* mPictDataPtr;
     /* 0x1654 */ u8* mPictDataWritePtr;
     /* 0x1658 */ u8 mCardSlot;
-    /* 0x1659 */ u8 field_0x1659;
+    /* 0x1659 */ u8 mCopyToPos;
     /* 0x165A */ u8 field_0x165A;
     /* 0x165B */ u8 field_0x165B;
     /* 0x165C */ s32 mCommand;
@@ -108,6 +116,14 @@ inline void mDoMemCd_setPictDataPtr(u8* v) {
 
 inline u8* mDoMemCd_getPictWriteDataPtr() {
     return g_mDoMemCd_control.getPictWriteDataPtr();
+}
+
+inline u8 mDoMemCd_getCopyToPos() {
+    return g_mDoMemCd_control.getCopyToPos();
+}
+
+inline void mDoMemCd_setCopyToPos(u8 pos) {
+    g_mDoMemCd_control.setCopyToPos(pos);
 }
 
 #endif /* M_DO_M_DO_MEMCARD_H */

@@ -1,7 +1,7 @@
 #ifndef F_OP_ACTOR_MNG_H_
 #define F_OP_ACTOR_MNG_H_
 
-#include "new.h"
+#include "new.h" // IWYU pragma: export // Used by the fopAcM_SetupActor macro.
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_iter.h"
 #include "f_pc/f_pc_manager.h"
@@ -461,14 +461,22 @@ void fopAcM_DeleteHeap(fopAc_ac_c* p_actor);
 bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 size);
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
-#ifndef __INTELLISENSE__
+#ifdef __MWERKS__
     p_actor->cull.box.min.set(minX, minY, minZ);
+#else
+    p_actor->cull.box.min.x = minX;
+    p_actor->cull.box.min.y = minY;
+    p_actor->cull.box.min.z = minZ;
 #endif
 }
 
 inline void fopAcM_SetMax(fopAc_ac_c* p_actor, f32 maxX, f32 maxY, f32 maxZ) {
-#ifndef __INTELLISENSE__
+#ifdef __MWERKS__
     p_actor->cull.box.max.set(maxX, maxY, maxZ);
+#else
+    p_actor->cull.box.max.x = maxX;
+    p_actor->cull.box.max.y = maxY;
+    p_actor->cull.box.max.z = maxZ;
 #endif
 }
 
