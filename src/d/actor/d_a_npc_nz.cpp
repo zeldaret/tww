@@ -663,7 +663,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
         case 0x3401:
         case 0x3402:
             switch(mpCurrMsg->mSelectNum) {
-                case 0:
+                case 0: {
                     u32 msgNo = daNpcNz_getShopBoughtMsg(field_0x908);
                     if(msgNo != 0) {
                         *pMsgNo = msgNo;
@@ -682,6 +682,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
                     dComIfGp_event_setGtItm(field_0x908);
                     msgStatus = fopMsgStts_MSG_ENDS_e;
                     break;
+                }
                 case 1:
                     *pMsgNo = field_0x900;
                     break;

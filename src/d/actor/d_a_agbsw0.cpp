@@ -1738,13 +1738,14 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             }
 
             break;
-        case 5:
+        case 5: {
             daGhostship_c* gship = (daGhostship_c*)fopAcM_searchFromName("Ayush", 0, 0);
             if(gship && gship->checkInShip()) {
                return 0;
             }
 
             break;
+        }
         case 6:
             if(dComIfGs_isEventBit(0x1A10)) {
                 return 0;

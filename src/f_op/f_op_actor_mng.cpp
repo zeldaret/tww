@@ -13,8 +13,8 @@
 #include "d/d_procname.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
+#include "d/d_bg_s_lin_chk.h"
 #include "d/actor/d_a_player.h"
-#include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_item.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ib.h"
@@ -535,34 +535,31 @@ s32 fopAcM_checkCullingBox(Mtx pMtx, f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32
 static l_HIO l_hio;
 
 static fopAc_cullSizeBox l_cullSizeBox[14] = {
-#ifndef __INTELLISENSE__
-    /* fopAc_CULLBOX_0_e  */ fopAc_cullSizeBox(cXyz(-40.0f, 0.0f, -40.0f), cXyz(40.0f, 125.0f, 40.0f)),
-    /* fopAc_CULLBOX_1_e  */ fopAc_cullSizeBox(cXyz(-25.0f, 0.0f, -25.0f), cXyz(25.0f, 50.0f, 25.0f)),
-    /* fopAc_CULLBOX_2_e  */ fopAc_cullSizeBox(cXyz(-50.0f, 0.0f, -50.0f), cXyz(50.0f, 100.0f, 50.0f)),
-    /* fopAc_CULLBOX_3_e  */ fopAc_cullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 150.0f, 75.0f)),
-    /* fopAc_CULLBOX_4_e  */ fopAc_cullSizeBox(cXyz(-100.0f, 0.0f, -100.0f), cXyz(100.0f, 800.0f, 100.0f)),
-    /* fopAc_CULLBOX_5_e  */ fopAc_cullSizeBox(cXyz(-125.0f, 0.0f, -125.0f), cXyz(125.0f, 250.0f, 125.0f)),
-    /* fopAc_CULLBOX_6_e  */ fopAc_cullSizeBox(cXyz(-150.0f, 0.0f, -150.0f), cXyz(150.0f, 300.0f, 150.0f)),
-    /* fopAc_CULLBOX_7_e  */ fopAc_cullSizeBox(cXyz(-200.0f, 0.0f, -200.0f), cXyz(200.0f, 400.0f, 200.0f)),
-    /* fopAc_CULLBOX_8_e  */ fopAc_cullSizeBox(cXyz(-600.0f, 0.0f, -600.0f), cXyz(600.0f, 900.0f, 600.0f)),
-    /* fopAc_CULLBOX_9_e  */ fopAc_cullSizeBox(cXyz(-250.0f, 0.0f, -50.0f), cXyz(250.0f, 450.0f, 50.0f)),
-    /* fopAc_CULLBOX_10_e */ fopAc_cullSizeBox(cXyz(-60.0f, 0.0f, -20.0f), cXyz(40.0f, 130.0f, 150.0f)),
-    /* fopAc_CULLBOX_11_e */ fopAc_cullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 210.0f, 75.0f)),
-    /* fopAc_CULLBOX_12_e */ fopAc_cullSizeBox(cXyz(-70.0f, -100.0f, -80.0f), cXyz(70.0f, 240.0f, 100.0f)),
-    /* fopAc_CULLBOX_13_e */ fopAc_cullSizeBox(cXyz(-60.0f, -20.0f, -60.0f), cXyz(60.0f, 160.0f, 60.0f)),
-#endif
+    /* fopAc_CULLBOX_0_e  */ fopAc_MakeCullSizeBox(cXyz(-40.0f, 0.0f, -40.0f), cXyz(40.0f, 125.0f, 40.0f)),
+    /* fopAc_CULLBOX_1_e  */ fopAc_MakeCullSizeBox(cXyz(-25.0f, 0.0f, -25.0f), cXyz(25.0f, 50.0f, 25.0f)),
+    /* fopAc_CULLBOX_2_e  */ fopAc_MakeCullSizeBox(cXyz(-50.0f, 0.0f, -50.0f), cXyz(50.0f, 100.0f, 50.0f)),
+    /* fopAc_CULLBOX_3_e  */ fopAc_MakeCullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 150.0f, 75.0f)),
+    /* fopAc_CULLBOX_4_e  */ fopAc_MakeCullSizeBox(cXyz(-100.0f, 0.0f, -100.0f), cXyz(100.0f, 800.0f, 100.0f)),
+    /* fopAc_CULLBOX_5_e  */ fopAc_MakeCullSizeBox(cXyz(-125.0f, 0.0f, -125.0f), cXyz(125.0f, 250.0f, 125.0f)),
+    /* fopAc_CULLBOX_6_e  */ fopAc_MakeCullSizeBox(cXyz(-150.0f, 0.0f, -150.0f), cXyz(150.0f, 300.0f, 150.0f)),
+    /* fopAc_CULLBOX_7_e  */ fopAc_MakeCullSizeBox(cXyz(-200.0f, 0.0f, -200.0f), cXyz(200.0f, 400.0f, 200.0f)),
+    /* fopAc_CULLBOX_8_e  */ fopAc_MakeCullSizeBox(cXyz(-600.0f, 0.0f, -600.0f), cXyz(600.0f, 900.0f, 600.0f)),
+    /* fopAc_CULLBOX_9_e  */ fopAc_MakeCullSizeBox(cXyz(-250.0f, 0.0f, -50.0f), cXyz(250.0f, 450.0f, 50.0f)),
+    /* fopAc_CULLBOX_10_e */ fopAc_MakeCullSizeBox(cXyz(-60.0f, 0.0f, -20.0f), cXyz(40.0f, 130.0f, 150.0f)),
+    /* fopAc_CULLBOX_11_e */ fopAc_MakeCullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 210.0f, 75.0f)),
+    /* fopAc_CULLBOX_12_e */ fopAc_MakeCullSizeBox(cXyz(-70.0f, -100.0f, -80.0f), cXyz(70.0f, 240.0f, 100.0f)),
+    /* fopAc_CULLBOX_13_e */ fopAc_MakeCullSizeBox(cXyz(-60.0f, -20.0f, -60.0f), cXyz(60.0f, 160.0f, 60.0f)),
+
 };
 static fopAc_cullSizeSphere l_cullSizeSphere[8] = {
-#ifndef __INTELLISENSE__
-    /* fopAc_CULLSPHERE_0_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 80.0f),
-    /* fopAc_CULLSPHERE_1_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 50.0f),
-    /* fopAc_CULLSPHERE_2_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 100.0f),
-    /* fopAc_CULLSPHERE_3_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 150.0f),
-    /* fopAc_CULLSPHERE_4_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 200.0f),
-    /* fopAc_CULLSPHERE_5_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 250.0f),
-    /* fopAc_CULLSPHERE_6_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 300.0f),
-    /* fopAc_CULLSPHERE_7_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 400.0f),
-#endif
+    /* fopAc_CULLSPHERE_0_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 80.0f),
+    /* fopAc_CULLSPHERE_1_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 50.0f),
+    /* fopAc_CULLSPHERE_2_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 100.0f),
+    /* fopAc_CULLSPHERE_3_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 150.0f),
+    /* fopAc_CULLSPHERE_4_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 200.0f),
+    /* fopAc_CULLSPHERE_5_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 250.0f),
+    /* fopAc_CULLSPHERE_6_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 300.0f),
+    /* fopAc_CULLSPHERE_7_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 400.0f),
 };
 
 static void dummy() {
@@ -812,7 +809,7 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo
         case 0x01:
         case 0x02:
         case 0x03:
-        case 0x04:
+        case 0x04: {
             int life = dComIfGs_getLife() * 100;
             int max = dComIfGs_getMaxLife() & 0xFC;
             u8 lifePercent = life / max;
@@ -826,6 +823,7 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo
                 tableIdx = 1;
             }
             break;
+        }
         case 0x0B:
         case 0x0C:
         case 0x0D:

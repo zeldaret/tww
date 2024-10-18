@@ -336,6 +336,7 @@ f32 J3DHermiteInterpolationS(f32 t, s16* time0, s16* value0, s16* tangent0, s16*
     register s16* p6 = value1;
     register s16* p7 = tangent1;
     register f32 fout;
+#ifdef __MWERKS__
     asm {
         psq_l f0, 0(p2), 0x1, 5
         psq_l f3, 0(p5), 0x1, 5
@@ -358,6 +359,7 @@ f32 J3DHermiteInterpolationS(f32 t, s16* time0, s16* value0, s16* tangent0, s16*
         fmadds fout, f5, f7, fout
         fsubs fout, fout, f3
     }
+#endif
     return fout;
 }
 

@@ -3464,11 +3464,12 @@ inline void dComIfG_TimerDeleteRequest() {
         dComIfG_getTimerPtr()->deleteRequest();
 }
 inline void dComIfG_TimerStart(int timer, s16 mode) {
-    if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL)
+    if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL) {
         if (timer != 0)
             dComIfG_getTimerPtr()->start(timer);
         else
             dComIfG_getTimerPtr()->start();
+    }
 }
 inline void dComIfG_TimerReStart(int timer) {
     if (dComIfG_getTimerPtr() != NULL)

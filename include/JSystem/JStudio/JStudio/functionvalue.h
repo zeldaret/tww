@@ -18,7 +18,7 @@ class TFunctionValueAttribute_interpolate;
 
 class TFunctionValue {
 public:
-    enum TEProgress { PROG_INIT };
+    enum TEProgress { PROG_INIT, PROG_UNK1, PROG_UNK2, PROG_UNK3, PROG_UNK4 };
     enum TEAdjust { ADJ_INIT, ADJ_UNK1, ADJ_UNK2, ADJ_UNK3, ADJ_UNK4 };
     enum TEOutside { OUT_INIT };
     enum TEInterpolate {};

@@ -124,13 +124,13 @@ void J2DPrint::printReturn(const char* param_1, f32 param_2, f32 param_3, J2DTex
 
         for (int iVar8 = 0; local_2b0[iVar8] != 0xffff; iVar8++) {
             switch (param_4) {
-            case VBIND_TOP:
+            case HBIND_LEFT:
                 local_2b0[iVar8] = 0;
                 break;
-            case VBIND_BOTTOM:
+            case HBIND_RIGHT:
                 local_2b0[iVar8] = param_2 - local_2b0[iVar8];
                 break;
-            case VBIND_CENTER:
+            case HBIND_CENTER:
                 f32 fVar1 = (local_2b0[iVar8]);
                 fVar1 = param_2 - fVar1;
                 f32 ratio = 0.5f;
@@ -329,7 +329,7 @@ void J2DPrint::doCtrlCode(int param_1) {
     case 9:
         if (field_0x20 > 0) {
             f32 fVar1 = field_0x2c;
-            field_0x2c = field_0x20 + field_0x20 * ((int)field_0x2c / field_0x20);
+            field_0x2c = field_0x20 + field_0x20 * (int)((int)field_0x2c / field_0x20);
             field_0x34 = field_0x2c - fVar1;
         }
         break;
@@ -397,12 +397,13 @@ u16 J2DPrint::doEscapeCode(const u8** param_1, u8 param_2) {
     case 'LD':
         mCursorV += field_0x14;
         break;
-    case 'ST':
+    case 'ST': {
         s32 val = getNumberS32(param_1, field_0x20, field_0x20, 10);
         if (val > 0) {
             field_0x20 = val;
         }
         break;
+    }
     case 'CC':
         field_0x8 = getNumberS32(param_1, *(u32*)&mCharColor, *(u32*)&field_0x8, 16);
         local_40 = field_0x8;
@@ -431,25 +432,27 @@ u16 J2DPrint::doEscapeCode(const u8** param_1, u8 param_2) {
         }
         mFont->setGradColor(local_40, *local_74);
         break;
-    case 'FX':
+    case 'FX': {
         f32 dVar13 = getNumberF32(param_1, mFontSizeX, field_0x18, 10);
         if (dVar13 >= 0) {
             field_0x18 = dVar13;
         }
         break;
-    case 'FY':
+    }
+    case 'FY': {
         f32 dVar14 = getNumberF32(param_1, mFontSizeY, field_0x1c, 10);
         if (dVar14 >= 0) {
             field_0x1c = dVar14;
         }
         break;
+    }
     case 'SH':
         field_0x10 = getNumberF32(param_1, field_0x48, field_0x10, 10);
         break;
     case 'SV':
         field_0x14 = getNumberF32(param_1, field_0x4c, field_0x14, 10);
         break;
-    case 'GM':
+    case 'GM': {
         s32 isZero = getNumberS32(param_1, field_0x22 == 0, field_0x22, 10) == 0;
         field_0x22 = isZero == 0;
         local_40.a = local_40.a * param_2 / 0xff;
@@ -463,6 +466,7 @@ u16 J2DPrint::doEscapeCode(const u8** param_1, u8 param_2) {
         }
         mFont->setGradColor(local_40, *local_80);
         break;
+    }
     case 'HM':
         break;
     default:

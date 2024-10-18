@@ -394,7 +394,7 @@ BOOL daNpc_kam_c::init() {
     mTargetAngVelY = l_HIO.mHio1.mGlidingAngVelY;
     mTargetAngVelX = l_HIO.mHio1.mGlidingAngVelX;
     
-    setNpcAction(&waitNpcAction, NULL);
+    setNpcAction(&daNpc_kam_c::waitNpcAction, NULL);
     
     mAcchCirs[0].SetWall(20.0f, 50.0f);
     mAcchCirs[1].SetWall(-20.0f, 50.0f);
@@ -452,7 +452,7 @@ void daNpc_kam_c::npcAction(void* arg) {
     if (!mCurrNpcActionFunc) {
         speedF = 0.0f;
         offHyoiKamome();
-        setNpcAction(&waitNpcAction, NULL);
+        setNpcAction(&daNpc_kam_c::waitNpcAction, NULL);
 #if VERSION != VERSION_JPN
         mDoAud_zelAudio_c::getInterface()->field_0x0062 = 0;
 #endif
@@ -471,7 +471,7 @@ void daNpc_kam_c::setNpcAction(ActionFunc actionFunc, void* arg) {
 void daNpc_kam_c::playerAction(void* arg) {
     if (!mCurrPlayerActionFunc) {
         speedF = 0.0f;
-        setPlayerAction(&waitPlayerAction, NULL);
+        setPlayerAction(&daNpc_kam_c::waitPlayerAction, NULL);
     }
     
     dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
@@ -805,7 +805,7 @@ int daNpc_kam_c::waitPlayerAction(void*) {
         }
         
         if (mTgSph.ChkTgHit()) {
-            setPlayerAction(&damagePlayerAction, NULL);
+            setPlayerAction(&daNpc_kam_c::damagePlayerAction, NULL);
         }
     }
     return TRUE;

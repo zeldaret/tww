@@ -121,10 +121,12 @@ inline s16 __OSf32tos16(register f32 inF) {
     u32 tmp;
     register u32* tmpPtr = &tmp;
     // clang-format off
+#ifdef __MWERKS__
     asm {
         psq_st inF, 0(tmpPtr), 0x1, 5
         lha out, 0(tmpPtr)
     }
+#endif
     // clang-format on
 
     return out;
@@ -139,10 +141,12 @@ inline u8 __OSf32tou8(register f32 inF) {
     u32 tmp;
     register u32* tmpPtr = &tmp;
     // clang-format off
+#ifdef __MWERKS__
     asm {
         psq_st inF, 0(tmpPtr), 0x1, 2
         lbz out, 0(tmpPtr)
     }
+#endif
     // clang-format on
 
     return out;
@@ -154,6 +158,7 @@ inline void OSf32tou8(f32* f, u8* out) {
 
 static inline void OSInitFastCast(void) {
     // clang-format off
+#ifdef __MWERKS__
     asm {
         li r3, 4
         oris r3, r3, 4
@@ -168,6 +173,7 @@ static inline void OSInitFastCast(void) {
         oris r3, r3, 7
         mtspr GQR5, r3
     }
+#endif
     // clang-format on
 }
 

@@ -4,7 +4,6 @@
 #include "JSystem/JGadget/binary.h"
 #include "JSystem/JGadget/linklist.h"
 #include "JSystem/JMessage/data.h"
-#include "JSystem/JUtility/JUTDataHeader.h"
 
 namespace JMessage {
     namespace data {
@@ -47,7 +46,12 @@ namespace JMessage {
         /* 0x18 */ data::JUTMesgIDData* mMessageID;
     };
 
+#ifdef __MWERKS__
     class TResourceContainer : public JGadget::TLinkList_factory<TResource, -offsetof(TResource, mLinkNode)> {
+#else
+    // clangd does not support offsetof in template arguments.
+    class TResourceContainer : public JGadget::TLinkList_factory<TResource, -0x00> {
+#endif
     public:
         TResourceContainer();
         virtual TResource* Do_create();

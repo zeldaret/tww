@@ -168,23 +168,23 @@ void TFunctionValueAttribute_range::range_prepare() {
     default:
         JUTWarn w;
         w << "unknown progress : " << progress;
-    case 0:
+    case TFunctionValue::PROG_INIT:
         _20 = 0.0;
         _28 = 1.0;
         break;
-    case 1:
+    case TFunctionValue::PROG_UNK1:
         _20 = 0.0;
         _28 = -1.0;
         break;
-    case 2:
+    case TFunctionValue::PROG_UNK2:
         _20 = fBegin_;
         _28 = -1.0;
         break;
-    case 3:
+    case TFunctionValue::PROG_UNK3:
         _20 = fEnd_;
         _28 = -1.0;
         break;
-    case 4:
+    case TFunctionValue::PROG_UNK4:
         _20 = 0.5 * (fBegin_ + fEnd_);
         _28 = -1.0;
         break;
@@ -307,7 +307,7 @@ f64 TFunctionValue_composite::composite_index(const JGadget::TVector_pointer<TFu
             index = size - 2;
         }
         break;
-    case 1:
+    case 1: {
         div_t dt = div(index, size - 1);
         index = dt.rem;
         if (index < 0) {
@@ -315,6 +315,7 @@ f64 TFunctionValue_composite::composite_index(const JGadget::TVector_pointer<TFu
             index--;
         }
         break;
+    }
     case 2:
         if (size - 1 == 1) {
             index = 0;

@@ -338,11 +338,11 @@ void daNpc_Bs1_c::checkOrder() {
     if(eventInfo.checkCommandDemoAccrpt()) {
         if(m82A == 3) {
             m82A = 0;
-            setAction(&getdemo_action, 0);
+            setAction(&daNpc_Bs1_c::getdemo_action, 0);
         }
         else if(m82A == 4) {
             m82A = 0;
-            setAction(&event_action, 0);
+            setAction(&daNpc_Bs1_c::event_action, 0);
         }
     }
     else if (eventInfo.checkCommandTalk()) {
@@ -480,7 +480,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
         case 0xF8F:
         case 0xF94:
         case 0xF99:
-        case 0xF9E:
+        case 0xF9E: {
             m83C = dComIfGp_getMessageRupee();
             int buyMax = daNpc_Bs1_getBuyItemMax(m83C, m840);
             setBuyItemMax(buyMax);
@@ -492,9 +492,10 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
 
             *pMsgNo = 0xF7E;
             break;
-        case 0xFD4:
+        }
+        case 0xFD4: {
             m83C = dComIfGp_getMessageRupee();
-            buyMax = daNpc_Bs1_getBuyItemMax(m83C, m840);
+            int buyMax = daNpc_Bs1_getBuyItemMax(m83C, m840);
             setBuyItemMax(buyMax);
             setBuyItem(buyMax);
             if(buyMax != 0) {
@@ -504,6 +505,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
 
             *pMsgNo = 0xF7E;
             break;
+        }
         case 0xF7A:
         case 0xF82:
         case 0xF87:
@@ -936,7 +938,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             *pMsgNo = 0xF3E;
             break;
         case 0xF4C:
-        case 0xF4E:
+        case 0xF4E: {
             int points = dComIfGs_getEventReg(0x86FF);
             points += 1;
             points = cLib_maxLimit<int>(points, 0xFF);
@@ -966,6 +968,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
 
             *pMsgNo = 0xF4F;
             break;
+        }
         default:
             msgStatus = fopMsgStts_MSG_ENDS_e;
             break;
@@ -1564,13 +1567,13 @@ BOOL daNpc_Bs1_c::CreateInit() {
 
     switch(mType) {
         case 0:
-            setAction(&wait_action, 0);
+            setAction(&daNpc_Bs1_c::wait_action, 0);
             m83A = dComIfGp_evmng_getEventIdx("BS1_GETDEMO");
             mEventCut.setActorInfo("Bs1", this);
             mEventCut.setJntCtrlPtr(&mJntCtrl);
             break;
         case 1:
-            setAction(&wait_action, 0);
+            setAction(&daNpc_Bs1_c::wait_action, 0);
             m83A = dComIfGp_evmng_getEventIdx("BS2_GETDEMO");
             mEventCut.setActorInfo("Bs2", this);
             mEventCut.setJntCtrlPtr(&mJntCtrl);

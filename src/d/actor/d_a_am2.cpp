@@ -471,7 +471,7 @@ static void action_dousa(am2_class* i_this) {
         }
         i_this->mState++;
         // Fall-through
-    case 1:
+    case 1: {
         f32 playerDist = fopAcM_searchPlayerDistance(i_this);
         if (playerDist < i_this->mAreaRadius) {
             cXyz centerPos = player->current.pos;
@@ -487,6 +487,7 @@ static void action_dousa(am2_class* i_this) {
             }
         }
         break;
+    }
     case 2:
         if (i_this->mpMorf->checkFrame(24.0f)) {
             fopAcM_seStart(i_this, JA_SE_CM_AM2_SPIKE_OUT, 0);
@@ -496,12 +497,12 @@ static void action_dousa(am2_class* i_this) {
         }
         i_this->mState++;
         // Fall-through
-    case 3:
+    case 3: {
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
             i_this->mCountUpTimers[i] = 0;
         }
         i_this->speedF = 0.0f;
-        playerDist = fopAcM_searchPlayerDistance(i_this);
+        f32 playerDist = fopAcM_searchPlayerDistance(i_this);
         f32 radiusAdjust = 200.0f;
         if (playerDist > i_this->mAreaRadius + radiusAdjust) {
             i_this->mState = 6;
@@ -518,6 +519,7 @@ static void action_dousa(am2_class* i_this) {
             i_this->mState++;
         }
         break;
+    }
     case 4:
         if (i_this->mAcch.ChkGroundHit()) {
             i_this->gravity = -3.0f;
@@ -961,7 +963,7 @@ static void action_itai(am2_class* i_this) {
 static void action_handou_move(am2_class* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     switch (i_this->mState) {
-    case 0x1E:
+    case 0x1E: {
         i_this->speedF = 40.0f;
         s16 angleToPlayer = fopAcM_searchPlayerAngleY(i_this);
         i_this->current.angle.y = angleToPlayer + 0x8000;
@@ -975,6 +977,8 @@ static void action_handou_move(am2_class* i_this) {
         i_this->mNeedleCyl.ClrTgHit();
         i_this->mTargetAngleY = i_this->current.angle.y;
         i_this->mState++;
+        // Fall-through
+    }
     case 0x1F:
         fopAcM_seStart(i_this, JA_SE_CM_AM2_SLIP, 0);
         cLib_addCalc0(&i_this->speedF, 0.8f, 2.0f);

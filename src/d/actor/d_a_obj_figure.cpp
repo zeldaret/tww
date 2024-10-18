@@ -1237,7 +1237,7 @@ void daObjFigure_c::eventMesSetInit(int staffIdx) {
 /* 00001294-00001600       .text eventMesSet__13daObjFigure_cFv */
 bool daObjFigure_c::eventMesSet() {
     switch(m73F) {
-        case 0:
+        case 0: {
             if(m73A != 0) {
                 m73A--;
             }
@@ -1301,6 +1301,7 @@ bool daObjFigure_c::eventMesSet() {
             dCam_getBody()->Set(m70C, m718, m724, 0);
 
             break;
+        }
         case 1:
             talk(0);
             if(m694 != fpcM_ERROR_PROCESS_ID_e) {

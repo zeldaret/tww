@@ -501,7 +501,7 @@ void daObjMknjD::Act_c::privateCut() {
                 case ACT_WAIT:
                     doCutEnd = true;
                     break;
-                case ACT_BREAK:
+                case ACT_BREAK: {
                     if (daObjMknjD_break() == true) {
                         if (strcmp(dComIfGp_getStartStageName(), "Ekaze") == 0 || strcmp(dComIfGp_getStartStageName(), "Edaichi") == 0) {
                             mDoAud_bgmStart(JA_BGM_JABOO_CAVE);
@@ -523,13 +523,15 @@ void daObjMknjD::Act_c::privateCut() {
                         doCutEnd = true;
                     }
                     break;
-                case ACT_LESSON:
+                }
+                case ACT_LESSON: {
                     u16 msgStatus = talk(1);
 
                     if (msgStatus == fopMsgStts_BOX_CLOSED_e || msgStatus == fopMsgStts_UNK15_e) {
                         doCutEnd = true;
                     }
                     break;
+                }
                 case ACT_TACT:
                     if (m0504 == false) {
                         doCutEnd = true;
@@ -687,7 +689,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
             fallingShardNum = 0;
         }
 
-        for (fallingShardNum; fallingShardNum < 20; fallingShardNum++) {
+        for (; fallingShardNum < 20; fallingShardNum++) {
             mShardHeights[fallingShardNum] -= 2.0f;
             mShardPositions[fallingShardNum].y += mShardHeights[fallingShardNum];
         }

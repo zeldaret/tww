@@ -947,7 +947,7 @@ static int __pformatter(void* (*WriteProc)(void*, const char*, size_t), void* Wr
                 long_num = (signed char)long_num;
             }
 
-            if ((format.argument_options == long_long_argument)) {
+            if (format.argument_options == long_long_argument) {
                 if (!(buff_ptr = longlong2str(long_long_num, buff + 512, format))) {
                     goto conversion_error;
                 }
@@ -980,7 +980,7 @@ static int __pformatter(void* (*WriteProc)(void*, const char*, size_t), void* Wr
                 long_num = (unsigned char)long_num;
             }
 
-            if ((format.argument_options == long_long_argument)) {
+            if (format.argument_options == long_long_argument) {
                 if (!(buff_ptr = longlong2str(long_long_num, buff + 512, format))) {
                     goto conversion_error;
                 }

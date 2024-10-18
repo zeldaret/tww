@@ -6,7 +6,6 @@
 #include "JSystem/JAudio/dspproc.h"
 #include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JAudio/dsptask.h"
-#include "dolphin/dsp.h"
 
 /* 8028E600-8028E648       .text DSPReleaseHalt2__FUl */
 void DSPReleaseHalt2(u32 msg) {

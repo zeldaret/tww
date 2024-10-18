@@ -674,20 +674,20 @@ void daPy_lk_c::setBootsModel(J3DModel** pBootModels) {
     u16 bootsJointIdx;
     if (checkEquipHeavyBoots()) {
         // TODO: add enum for link's joint numbers
-        pBootModels[0]->setAnmMtx(0x01, mpCLModel->getAnmMtx(0x26));
-        pBootModels[1]->setAnmMtx(0x01, mpCLModel->getAnmMtx(0x21));
+        pBootModels[0]->setAnmMtx(0x01, mpCLModel->getAnmMtx(0x26)); // RlegB_jnt joint
+        pBootModels[1]->setAnmMtx(0x01, mpCLModel->getAnmMtx(0x21)); // LlegB_jnt joint
         bootsJointIdx = 2;
     } else {
         bootsJointIdx = 1;
     }
     
     J3DModel* bootModel = pBootModels[0];
-    bootModel->setAnmMtx(bootsJointIdx, mpCLModel->getAnmMtx(0x28));
-    bootModel->setAnmMtx(bootsJointIdx+1, mpCLModel->getAnmMtx(0x27));
+    bootModel->setAnmMtx(bootsJointIdx, mpCLModel->getAnmMtx(0x28)); // Rtoe_jnt joint
+    bootModel->setAnmMtx(bootsJointIdx+1, mpCLModel->getAnmMtx(0x27)); // Rfoot_jnt joint
     
     bootModel = pBootModels[1];
-    bootModel->setAnmMtx(bootsJointIdx, mpCLModel->getAnmMtx(0x23));
-    bootModel->setAnmMtx(bootsJointIdx+1, mpCLModel->getAnmMtx(0x22));
+    bootModel->setAnmMtx(bootsJointIdx, mpCLModel->getAnmMtx(0x23)); // Ltoe_jnt joint
+    bootModel->setAnmMtx(bootsJointIdx+1, mpCLModel->getAnmMtx(0x22)); // Lfoot_jnt joint
 }
 
 /* 80105910-80106660       .text setItemModel__9daPy_lk_cFv */
@@ -4753,7 +4753,7 @@ static actor_method_class2 l_daPy_Method = {
 actor_process_profile_definition2 g_profile_PLAYER = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 5,
-    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_PLAYER,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daPy_lk_c),

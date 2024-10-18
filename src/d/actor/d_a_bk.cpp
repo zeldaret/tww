@@ -166,7 +166,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
     case dBgS_Attr_DIRT_e:
     case dBgS_Attr_WOOD_e:
     case dBgS_Attr_STONE_e:
-    case dBgS_Attr_SAND_e:
+    case dBgS_Attr_SAND_e: {
         i_this->m0350.end();
         JPABaseEmitter* emitter1 = dComIfGp_particle_setToon(
             0x2022, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
@@ -182,6 +182,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
             emitter1->setGlobalParticleScale(scale);
         }
         break;
+    }
     case dBgS_Attr_GRASS_e:
         JPABaseEmitter* emitter2 = dComIfGp_particle_set(0x24, &i_this->m0338, &i_this->m0344);
         if (emitter2) {
@@ -1457,7 +1458,7 @@ static void stand2(bk_class* i_this) {
     case 0x00:
         i_this->dr.m004 = 1;
         // Fall-through
-    case 0x01:
+    case 0x01: {
         if (i_this->mpSearchLight != NULL) {
             i_this->mpSearchLight->setBkControl(true);
         }
@@ -1490,6 +1491,7 @@ static void stand2(bk_class* i_this) {
         cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->home.angle.y, 2, 0x800);
         i_this->speedF = 0.0f;
         break;
+    }
     case 0x0A:
         i_this->m0B7B = 1;
         if (i_this->m0300[1] == 30) {
@@ -1537,11 +1539,12 @@ static void stand2(bk_class* i_this) {
             i_this->m0300[2] = 60;
         }
         break;
-    case 0x34:
+    case 0x34: {
         dPath__Point* pnt = &i_this->ppd->mpPnt[i_this->m1216];
         i_this->m0320 = pnt->mPos;
         sp24 = i_this->m0320 - i_this->current.pos;
         goto temp_568;
+    }
     case 0x3C:
         sp24 = i_this->home.pos - i_this->current.pos;
 temp_568:
