@@ -41,7 +41,10 @@ public:
     bool cross(const cM3dGCyl*, cXyz*) const;
     bool cross(const cM3dGSph*, cXyz*) const;
     bool cross(const cM3dGSph*, f32*) const;
-    bool cross(const cM3dGCyl* cyl, f32* out) const { return cM3d_Cross_CylSph(cyl, this, &cXyz(), out); }
+    bool cross(const cM3dGCyl* cyl, f32* out) const {
+        cXyz temp;
+        return cM3d_Cross_CylSph(cyl, this, &temp, out);
+    }
     void cross(const cM3dGTri*) const {}
     const cXyz& GetC() const { return mCenter; }
     cXyz& GetC() { return mCenter; }

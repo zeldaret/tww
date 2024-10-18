@@ -8,7 +8,6 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_overlap.h"
 #include "m_Do/m_Do_graphic.h"
-#include "new.h"
 
 /* 80224390-80224484       .text init__15dDlst_2DtEff1_cF8_GXColor */
 void dDlst_2DtEff1_c::init(GXColor color) {
@@ -285,8 +284,8 @@ void dOvlpFd4_c::execFadeOut() {
 
 /* 802253C4-80225528       .text execNextSnap__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execNextSnap() {
-    setExecute(execFadeIn);
-    setDraw(drawFadeIn);
+    setExecute(&dOvlpFd4_c::execFadeIn);
+    setDraw(&dOvlpFd4_c::drawFadeIn);
     fadeIn_dlst.first = true;
     dComIfGp_setWindowNum(1);
 

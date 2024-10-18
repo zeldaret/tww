@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_obj_xfuta.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_item.h"
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 

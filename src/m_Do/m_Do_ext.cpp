@@ -1987,7 +1987,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         f32 scale = delta.abs();
         if (scale != 0.0f) {
             scale = size / scale;
-            VECScale(&delta, &delta, scale);
+            delta *= scale;
         }
 
         dstPos[0] = pos[0] + delta;
@@ -2012,9 +2012,9 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
             if (scale != 0.0f)
                 scale = r_size / scale;
 
-            VECScale(&delta, &delta, scale);
-            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
-            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+            delta *= scale;
+            nextP0 += pos[0] + delta;
+            nextP1 += pos[0] - delta;
 
             r_dstPos[0] = nextP0 * 0.5f;
             r_dstPos[1] = nextP1 * 0.5f;
@@ -2079,7 +2079,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
         f32 scale = delta.abs();
         if (scale != 0.0f) {
             scale = *size_p / scale;
-            VECScale(&delta, &delta, scale);
+            delta *= scale;
         }
 
         dstPos[0] = pos[0] + delta;
@@ -2102,9 +2102,9 @@ void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
             if (scale != 0.0f)
                 scale = *size_p / scale;
 
-            VECScale(&delta, &delta, scale);
-            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
-            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+            delta *= scale;
+            nextP0 += pos[0] + delta;
+            nextP1 += pos[0] - delta;
 
             r_dstPos[0] = nextP0 * 0.5f;
             r_dstPos[1] = nextP1 * 0.5f;
@@ -2276,7 +2276,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         f32 scale = delta.abs();
         if (scale != 0.0f) {
             scale = size / scale;
-            VECScale(&delta, &delta, scale);
+            delta *= scale;
         }
 
         dstPos[0] = pos[0] + delta;
@@ -2307,9 +2307,9 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
             if (scale != 0.0f)
                 scale = r_size / scale;
 
-            VECScale(&delta, &delta, scale);
-            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
-            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+            delta *= scale;
+            nextP0 += pos[0] + delta;
+            nextP1 += pos[0] - delta;
 
             r_dstPos[0] = nextP0 * 0.5f;
             r_dstPos[1] = nextP1 * 0.5f;
@@ -2392,7 +2392,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
         f32 scale = delta.abs();
         if (scale != 0.0f) {
             scale = *size_p / scale;
-            VECScale(&delta, &delta, scale);
+            delta *= scale;
         }
 
         dstPos[0] = pos[0] + delta;
@@ -2421,9 +2421,9 @@ void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
             if (scale != 0.0f)
                 scale = *size_p / scale;
 
-            VECScale(&delta, &delta, scale);
-            VECAdd(&nextP0, &(pos[0] + delta), &nextP0);
-            VECAdd(&nextP1, &(pos[0] - delta), &nextP1);
+            delta *= scale;
+            nextP0 += pos[0] + delta;
+            nextP1 += pos[0] - delta;
 
             r_dstPos[0] = nextP0 * 0.5f;
             r_dstPos[1] = nextP1 * 0.5f;
