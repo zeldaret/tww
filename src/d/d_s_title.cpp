@@ -133,7 +133,7 @@ static scene_method_class l_dScnTitle_Method = {
     (process_method_func)dScnTitle_Draw,
 };
 
-extern scene_process_profile_definition g_profile_TITLE_SCENE = {
+scene_process_profile_definition g_profile_TITLE_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,
@@ -146,7 +146,7 @@ extern scene_process_profile_definition g_profile_TITLE_SCENE = {
     &l_dScnTitle_Method,
 };
 
-extern scene_process_profile_definition g_profile_ENDING_SCENE = {
+scene_process_profile_definition g_profile_ENDING_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,

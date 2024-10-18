@@ -84,8 +84,8 @@ void daObjTimer::Act_c::mode_count() {
 /* 00000304-00000394       .text _execute__Q210daObjTimer5Act_cFv */
 bool daObjTimer::Act_c::_execute() {
     static ModeFunc mode_proc[] = {
-        &mode_wait,
-        &mode_count,
+        &Act_c::mode_wait,
+        &Act_c::mode_count,
     };
     (this->*mode_proc[mMode])();
 

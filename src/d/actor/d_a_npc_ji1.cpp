@@ -10,6 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_snap.h"
+#include "d/d_lib.h"
 #include "f_op/f_op_msg.h"
 
 static void daNpc_Ji1_setHairAngle(daNpc_Ji1_c*);

@@ -163,10 +163,10 @@ bool daDekuItem_c::_execute() {
 /* 00000A74-00000B30       .text mode_proc_call__12daDekuItem_cFv */
 void daDekuItem_c::mode_proc_call() {
     static ModeFunc mode_proc[] = {
-        &mode_wait,
-        &mode_getdemo_init,
-        &mode_getdemo_wait,
-        &mode_getdemo,
+        &daDekuItem_c::mode_wait,
+        &daDekuItem_c::mode_getdemo_init,
+        &daDekuItem_c::mode_getdemo_wait,
+        &daDekuItem_c::mode_getdemo,
     };
 
     (this->*mode_proc[mMode])();

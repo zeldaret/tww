@@ -19,7 +19,7 @@ extern "C" void* __va_arg(_va_list_struct*, int);
 void* __va_arg(_va_list_struct*, int);
 #endif
 
-#if defined __INTELLISENSE__
+#ifndef __MWERKS__
 #define __builtin_va_info(...)
 #define _var_arg_typeof(...)
 #endif

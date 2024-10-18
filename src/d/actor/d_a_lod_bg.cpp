@@ -12,7 +12,7 @@
 #include "m_Do/m_Do_printf.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
-#include "printf.h"
+#include <stdio.h>
 
 static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
 static Vec dummy2 = { 1.0f, 1.0f, 1.0f };

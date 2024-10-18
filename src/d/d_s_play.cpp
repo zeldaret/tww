@@ -37,8 +37,7 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
-#include "printf.h"
-#include "string.h"
+#include <stdio.h>
 
 static Vec dummy_3569;
 
@@ -1505,7 +1504,7 @@ static scene_method_class l_dScnPly_Method = {
     (process_method_func)dScnPly_Draw,
 };
 
-extern scene_process_profile_definition g_profile_PLAY_SCENE = {
+scene_process_profile_definition g_profile_PLAY_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,
@@ -1518,7 +1517,7 @@ extern scene_process_profile_definition g_profile_PLAY_SCENE = {
     &l_dScnPly_Method,
 };
 
-extern scene_process_profile_definition g_profile_OPENING_SCENE = {
+scene_process_profile_definition g_profile_OPENING_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,
@@ -1531,7 +1530,7 @@ extern scene_process_profile_definition g_profile_OPENING_SCENE = {
     &l_dScnPly_Method,
 };
 
-extern scene_process_profile_definition g_profile_OPENING2_SCENE = {
+scene_process_profile_definition g_profile_OPENING2_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,

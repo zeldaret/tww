@@ -10,8 +10,8 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
-#include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 // Needed for the .data section to match.

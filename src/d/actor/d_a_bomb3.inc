@@ -9,7 +9,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_sea.h"
 #include "d/d_kankyo_wether.h"
-#include "f_op/f_op_camera_mng.h"
+#include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"

@@ -5,18 +5,17 @@
 
 #include "d/actor/d_a_npc_people.h"
 #include "d/actor/d_a_kb.h"
-#include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ship.h"
+#include "d/actor/d_a_dai.h"
 #include "d/d_procname.h"
 #include "d/d_com_lib_game.h"
-#include "JSystem/JKernel/JKRHeap.h"
-#include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_camera.h"
 #include "d/d_a_obj.h"
 #include "d/d_snap.h"
 #include "d/d_kankyo_wether.h"
-#include "d/actor/d_a_dai.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
 extern dCcD_SrcCyl dNpc_cyl_src;
