@@ -28,7 +28,7 @@ include_dirs = [
     os.path.join(root_dir, "src/PowerPC_EABI_Support/Runtime/Inc"),
 ]
 
-include_pattern = re.compile(r'^#include\s*[<"](.+?)[>"]$')
+include_pattern = re.compile(r'^#include\s*[<"](.+?)[>"]')
 guard_pattern = re.compile(r"^#ifndef\s+(.*)$")
 
 defines = set()
