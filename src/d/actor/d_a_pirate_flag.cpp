@@ -234,7 +234,10 @@ void daPirate_Flag_packet_c::setNrmVtx(cXyz* param_0, int param_1, int param_2) 
 void daPirate_Flag_packet_c::draw() {
     j3dSys.reinitGX();
 
+#if VERSION != VERSION_JPN
     GXSetNumIndStages(0);
+#endif
+
     dKy_GxFog_tevstr_set(mTevStr);
     dKy_setLight_mine(mTevStr);
     GXClearVtxDesc();
@@ -320,10 +323,12 @@ void daPirate_Flag_packet_c::draw() {
     GXSetArray(GX_VA_NRM, m4F4[m87E], sizeof(cXyz));
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
+#if VERSION != VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
-const u8 dummy_4211[] = {0x00, 0xFF, 0x00, 0x80};
+const u8 dummy_4241[] = {0x00, 0xFF, 0x00, 0x80};
 const u8 dummy_4243[] = {0x00, 0x00, 0xFF, 0x80};
 const u8 dummy_4245[] = {0xFF, 0x00, 0x00, 0x80};
 
@@ -489,9 +494,17 @@ static void pirate_flag_move(pirate_flag_class* i_this) {
 
     i_this->mPacket.setBackNrm();
 
+#if VERSION == VERSION_JPN
+    // WTH is even happening here? This just seems like an overflow.
+    // 7500 is bigger than the total size of pirate_flag_class.
+    // 7500 / sizeof(cXyz) = 7500 / 12 = 625 = 25 * 25
+    // Each buffer contains 25 elements.
+    DCStoreRangeNoSync(i_this->mPacket.getPos(), 7500);
+#else
     DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(*i_this->mPacket.mPos));
     DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(*i_this->mPacket.mNrm));
     DCStoreRangeNoSync(i_this->mPacket.getNrm() + sizeof(i_this->mPacket.mNrm) / sizeof(cXyz), sizeof(*i_this->mPacket.m4F4)); // Fakematch?
+#endif
 }
 
 /* 00001938-00001A38       .text daPirate_Flag_Execute__FP17pirate_flag_class */
@@ -528,8 +541,34 @@ static BOOL daPirate_Flag_Delete(pirate_flag_class* i_this) {
 }
 
 /* 00001A90-00001C8C       .text daPirate_Flag_Create__FP10fopAc_ac_c */
-static s32 daPirate_Flag_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daPirate_Flag_Create(fopAc_ac_c* i_this) {
+    pirate_flag_class* a_this = static_cast<pirate_flag_class*>(i_this);
+    fopAcM_SetupActor(i_this, pirate_flag_class);
+
+    s32 result = dComIfG_resLoad(&a_this->mPhs1, "Cloth");
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
+    }
+
+    result = dComIfG_resLoad(&a_this->mPhs2, "Kaizokusen");
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
+    }
+
+    cXyz* pos = a_this->mPacket.getPos();
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            cXyz tmp = l_pos[i * 5 + j];
+
+            *pos++ = tmp;
+        }
+    }
+
+    l_p_ship = static_cast<daObjPirateship::Act_c*>(fopAcM_SearchByID(a_this->parentActorID));
+    pirate_flag_move(a_this);
+
+    return cPhs_COMPLEATE_e;
 }
 
 static s32 daPirate_Flag_ToFore(pirate_flag_class*); // Unused
