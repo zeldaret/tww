@@ -27,10 +27,10 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_malloc.h"
 
+#include "weak_bss_3569.h" // IWYU pragma: keep
+
 #define MAKE_ITEM_PARAMS(itemNo, itemBitNo, switchNo2, type, action)                               \
     ((itemNo & 0xFF) << 0 | (itemBitNo & 0xFF) << 0x8 | switchNo2 << 0x10 | (type & 0x3) << 0x18 | (action & 0x3F) << 0x1A)
-
-static Vec dummy_3569;
 
 /* 80024060-80024104       .text fopAcM_setStageLayer__FPv */
 void fopAcM_setStageLayer(void* pProc) {

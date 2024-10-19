@@ -10,11 +10,7 @@
 #include "d/actor/d_a_bgn.h"
 
 #if VERSION == VERSION_USA
-// Needed for the .data section to match.
-static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
-static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
-static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_data_1811.h" // IWYU pragma: keep
 #endif
 
 static bgn_class* boss;

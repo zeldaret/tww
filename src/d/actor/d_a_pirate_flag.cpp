@@ -10,30 +10,8 @@
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_kankyo_wether.h"
 
-static Vec bss_3569;
-// Not sure what these are, but they have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.
-static u8 bss_1036 ALIGN_DECL(4);
-static u8 bss_1034 ALIGN_DECL(4);
-static u8 bss_1032 ALIGN_DECL(4);
-static u8 bss_1031 ALIGN_DECL(4);
-static u8 bss_1026 ALIGN_DECL(4);
-static u8 bss_1024 ALIGN_DECL(4);
-static u8 bss_1022 ALIGN_DECL(4);
-static u8 bss_1021 ALIGN_DECL(4);
-static u8 bss_984 ALIGN_DECL(4);
-static u8 bss_982 ALIGN_DECL(4);
-static u8 bss_980 ALIGN_DECL(4);
-static u8 bss_979 ALIGN_DECL(4);
-static u8 bss_941 ALIGN_DECL(4);
-static u8 bss_939 ALIGN_DECL(4);
-static u8 bss_937 ALIGN_DECL(4);
-static u8 bss_936 ALIGN_DECL(4);
-
-// Needed for the .data section to match.
-static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
-static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
-static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static Vec l_pos[25] = {
     {0.0f, 2200.0f, 0.0f},

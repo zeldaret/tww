@@ -11,9 +11,7 @@
 #include "d/d_procname.h"
 #include "global.h"
 
-// Needed for the .data section to match.
-static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
-static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 static u8 l_chainS3TCTEX[] ALIGN_DECL(32) = {
     0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

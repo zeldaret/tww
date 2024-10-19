@@ -24,11 +24,8 @@
 #include "d/actor/d_a_bomb.h"
 #include "stdio.h"
 
-static u8 dummy_3569[0xC];
-
-// Needed for the .data section to match.
-static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
-static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
+#include "weak_bss_3569.h" // IWYU pragma: keep
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 

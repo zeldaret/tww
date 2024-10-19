@@ -6,26 +6,9 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "global.h"
 
-static Vec bss_3569;
-// Not sure what these are, but they have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.
-static u8 bss_1036 ALIGN_DECL(4);
-static u8 bss_1034 ALIGN_DECL(4);
-static u8 bss_1032 ALIGN_DECL(4);
-static u8 bss_1031 ALIGN_DECL(4);
-static u8 bss_1026 ALIGN_DECL(4);
-static u8 bss_1024 ALIGN_DECL(4);
-static u8 bss_1022 ALIGN_DECL(4);
-static u8 bss_1021 ALIGN_DECL(4);
-static u8 bss_984 ALIGN_DECL(4);
-static u8 bss_982 ALIGN_DECL(4);
-static u8 bss_980 ALIGN_DECL(4);
-static u8 bss_979 ALIGN_DECL(4);
-static u8 bss_941 ALIGN_DECL(4);
-static u8 bss_939 ALIGN_DECL(4);
-static u8 bss_937 ALIGN_DECL(4);
-static u8 bss_936 ALIGN_DECL(4);
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 static u8 msg_mode;

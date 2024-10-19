@@ -114,9 +114,7 @@
 #include "d/res/res_vtin5.h"
 #include "d/res/res_vbeso.h"
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 /* 80383F20-803840E0       .data item_arcname_tbl__10dItem_data */
 char* dItem_data::item_arcname_tbl[0x70] = {

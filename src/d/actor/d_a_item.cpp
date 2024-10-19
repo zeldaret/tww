@@ -14,9 +14,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 s32 daItem_c::m_timer_max = 10000;
 

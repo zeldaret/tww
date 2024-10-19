@@ -9,7 +9,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 
-static u8 temp[0x4C];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 namespace daObjHomensmoke {
     /* 000000EC-00000230       .text set_mtx__Q215daObjHomensmoke5Act_cFv */

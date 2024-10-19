@@ -3,25 +3,16 @@
 // Translation Unit: d_a_obj_eskban.cpp
 //
 
-#include "f_op/f_op_actor_mng.h"
-
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_eskban.h"
 #include "d/res/res_eskban.h"
+#include "f_op/f_op_actor_mng.h"
 
-/* .bss alignment */
-static u8 dummy[0x4c];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjEskban {
-/* .data alignment, seemingly unused by this unit */
-static Vec _data_align[4] = {
-    {1, 1, 1},
-    {1, 1, 1},
-    {9.40453e-38 /* possibly not actually a float? */, 0, 2.125},
-    {0, 1.75, 0},
-};
-
 Mtx Act_c::M_tmp_mtx;
 const char Act_c::M_arcname[7] = "Eskban";
 const char Act_c::M_evname[7] = "Eskban";

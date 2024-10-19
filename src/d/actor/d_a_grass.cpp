@@ -9,12 +9,11 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_flower.h"
 #include "d/d_grass.h"
-#include "d/d_item_data.h"
 #include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "SSystem/SComponent/c_sxyz.h"
 
-static u8 dummy[0x4C];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 namespace daGrass_prm {
     inline s8 getItemNo(grass_class* ac) { return (fopAcM_GetParam(ac) >> 6) & 0x3F; }

@@ -11,6 +11,9 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_controller_pad.h"
 
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
+
 struct NpcDatStruct {
     /* 0x00 */ f32 field_0x00;
     /* 0x04 */ f32 field_0x04;
@@ -34,8 +37,6 @@ struct NpcCameraDatStruct {
     /* 0x0A */ s16 field_0x0A;
 };
 
-static u8 dummy_bss[0x4C];
-
 static cXyz l_camera_pos[3][2] = {
     cXyz(-265.0f, 48.0f, -631.0f),
     cXyz(332.0f, 232.0f, 286.0f),
@@ -50,12 +51,6 @@ static cXyz l_camera_pos[3][2] = {
 #ifdef DEBUG
 static daAuction_HIO_c l_HIO;
 #endif
-
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0f, 0.5f};
 
 
 static daAuction_c::ItemData l_item_dat[] = {

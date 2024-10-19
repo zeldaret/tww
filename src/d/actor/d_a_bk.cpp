@@ -26,19 +26,14 @@
 #include "d/d_snap.h"
 #include "JSystem/JUtility/JUTReport.h"
 
-static u8 dummy[0x49];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static u8 hio_set;
 static u8 another_hit;
 static fopAc_ac_c* ken;
 static s8 search_sp;
 static bkHIO_c l_bkHIO;
-
-// Needed for the .data section to match.
-static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
-static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
-static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
 
 static dCcG_At_Spl bk_at_kind[] = { dCcG_At_Spl_UNK0, dCcG_At_Spl_UNK1, dCcG_At_Spl_UNK0 };
 static int bk_attack_ready_SE[] = { JA_SE_CV_BK_KAMAE, JA_SE_CV_BK_KAMAE, -0xDCF }; // TODO what is -0xDCF?

@@ -11,7 +11,6 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_bg_s.h"
-#include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
 #include "d/d_procname.h"
@@ -22,6 +21,8 @@
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/actor/d_a_sea.h"
+
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 /* 80040900-80040938       .text set__18dStage_nextStage_cFPCcScsScSc */
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe) {
@@ -37,8 +38,6 @@ void dStage_SetErrorRoom() {}
 
 /* 8004093C-80040940       .text dStage_SetErrorStage__Fv */
 void dStage_SetErrorStage() {}
-
-static Vec dummy;
 
 dStage_KeepTresureInfo TresureInfo;
 dStage_KeepDoorInfo DoorInfo;
@@ -175,7 +174,7 @@ void dStage_roomControl_c::setStayNo(int i_roomNo) {
     mOldStayNo = mStayNo;
     mStayNo = i_roomNo;
 
-    if (mStayNo == 0xFF) {
+    if (mStayNo == 0xFF) { // Bug: Comparing s8 to 0xFF is always false.
         return;
     }
 

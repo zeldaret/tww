@@ -33,7 +33,8 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "m_Do/m_Do_graphic.h"
 
-static u8 dummy[0xC];
+#include "weak_bss_3569.h" // IWYU pragma: keep
+
 JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.67f, 0.67f, 0.67f);
 
 #include "d/actor/d_a_player_main_data.inc"

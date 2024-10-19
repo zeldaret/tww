@@ -18,13 +18,9 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
+#include "weak_data_1811.h" // IWYU pragma: keep
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+extern dCcD_SrcCyl dNpc_cyl_src;
 
 static char* l_npc_staff_id[] = {
     "Uo1",

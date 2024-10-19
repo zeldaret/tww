@@ -15,7 +15,7 @@
 #include "d/d_timer.h"
 #include "stdio.h"
 
-u8 dummy_3569[0xC];
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 dMeter_info_c dMeter_Info;
 fopMsgM_pane_class item_parts;

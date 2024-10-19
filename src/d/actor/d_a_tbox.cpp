@@ -17,7 +17,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_hostIO.h"
-#include "m_do/m_Do_mtx.h"
+#include "m_Do/m_Do_mtx.h"
 
 
 #define DEMO_PROC_WAIT 0
@@ -35,13 +35,9 @@
 #define FUNC_TYPE_EXTRA_SAVE_INFO 7
 #define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
 
-extern dCcD_SrcCyl dNpc_cyl_src;
+#include "weak_data_1811.h" // IWYU pragma: keep
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+extern dCcD_SrcCyl dNpc_cyl_src;
 
 static daTbox_HIO_c l_HIO;
 

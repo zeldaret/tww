@@ -9,11 +9,12 @@
 #include "d/res/res_magma.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 // #pragma sym on
 
-static Vec dummy_3569;
+#include "weak_bss_3569.h" // IWYU pragma: keep
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
+
 Mtx l_kuroOrthoMtx;
 Mtx l_colOrthoMtx;
 GXTexObj dMagma_packet_c::mKuroTexObj;
@@ -21,10 +22,6 @@ Mtx dMagma_packet_c::mKuroMtx;
 GXTexObj dMagma_packet_c::mColTexObj;
 Mtx dMagma_packet_c::mFloorMtx;
 Mtx dMagma_packet_c::mBallMtx;
-
-// Needed for the .data section to match.
-static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
-static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 
 Vec l_YfloorPos[] = {
     { -500.0f, -0.0f, 500.0f },

@@ -9,13 +9,10 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg_mng.h"
 #include "SSystem/SComponent/c_math.h"
-#include "JSystem/JGeometry.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_item_data.h"
 
-// Needed for the .data section to match.
-static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
-static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 /* 8021A7B4-8021A858       .text angCalcS__14dNpc_JntCtrl_cFPssss */
 bool dNpc_JntCtrl_c::angCalcS(s16* out, s16 targetY, s16 speed, s16 maxVel) {

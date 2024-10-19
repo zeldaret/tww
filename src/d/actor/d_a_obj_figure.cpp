@@ -14,7 +14,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-static u8 dummy_bss[0x4C];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 #define TOTAL_FIGURE_COUNT 0x86
 

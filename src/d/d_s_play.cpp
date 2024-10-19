@@ -39,7 +39,7 @@
 #include "m_Do/m_Do_machine.h"
 #include <stdio.h>
 
-static Vec dummy_3569;
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 static const int PRELOAD_RES_MAX = 0x23;
 static const int PRELOAD_DYL_MAX = 0x1B;

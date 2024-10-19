@@ -14,16 +14,7 @@
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include <stdio.h>
 
-static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
-static Vec dummy2 = { 1.0f, 1.0f, 1.0f };
-static struct {
-    u32 m0;
-    f32 m1;
-    f32 m2;
-    f32 m3;
-    f32 m4;
-    f32 m5;
-} dummy3 = { 0x02000201, 0.0f, 2.125f, 0.0f, 1.75f, 0.0f };
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daLodbg_c::LodAllPath[] = "/res/Stage/sea/LODALL.arc";
 

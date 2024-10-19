@@ -23,14 +23,12 @@
 #include "m_Do/m_Do_printf.h"
 #include "math.h"
 
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
+
 class sub_kankyo__class : public kankyo_class {
 };
 
 #include "d/d_kankyo_dayproc.inc"
-
-// stripped or compiler generated?
-static Vec unused_lit_2100[] = {1.0f, 1.0f, 1.0f};
-static Vec unused_lit_210c[] = {1.0f, 1.0f, 1.0f};
 
 struct dKy_setLight__Status {
     /* 0x00 */ Vec mPos;

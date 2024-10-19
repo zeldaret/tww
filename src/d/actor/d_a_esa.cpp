@@ -4,17 +4,18 @@
 //
 
 #include "d/actor/d_a_esa.h"
-#include "d/res/res_link.h"
-#include "JSystem/JKernel/JKRHeap.h"
-#include "f_op/f_op_actor_mng.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_sea.h"
+#include "d/d_bg_s_gnd_chk.h"
+#include "d/d_bg_s_lin_chk.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_bg_s_func.h"
-#include "d/actor/d_a_sea.h"
-#include "d/actor/d_a_player_main.h"
+#include "d/res/res_link.h"
+#include "f_op/f_op_actor_mng.h"
 
-static Vec bss_3569;
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 /* 800E7E60-800E7EA8       .text daEsa_Draw__FP9esa_class */
 static BOOL daEsa_Draw(esa_class* i_this) {

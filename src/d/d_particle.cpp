@@ -24,10 +24,8 @@
 #include "m_Do/m_Do_lib.h"
 #include "stdio.h"
 
-static f32 dummy_2100[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy_2080[3] = {1.0f, 1.0f, 1.0f};
-
-static Vec dummy_3569;
+#include "weak_bss_3569.h" // IWYU pragma: keep
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 /* 8007A4D8-8007A514       .text __ct__18dPa_modelEmitter_cFv */
 dPa_modelEmitter_c::dPa_modelEmitter_c() {

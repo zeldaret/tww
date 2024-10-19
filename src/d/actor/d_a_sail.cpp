@@ -14,30 +14,8 @@
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_lib.h"
 
-static Vec bss_3569;
-// Not sure what these are, but they have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.
-static u8 bss_1036 ALIGN_DECL(4);
-static u8 bss_1034 ALIGN_DECL(4);
-static u8 bss_1032 ALIGN_DECL(4);
-static u8 bss_1031 ALIGN_DECL(4);
-static u8 bss_1026 ALIGN_DECL(4);
-static u8 bss_1024 ALIGN_DECL(4);
-static u8 bss_1022 ALIGN_DECL(4);
-static u8 bss_1021 ALIGN_DECL(4);
-static u8 bss_984 ALIGN_DECL(4);
-static u8 bss_982 ALIGN_DECL(4);
-static u8 bss_980 ALIGN_DECL(4);
-static u8 bss_979 ALIGN_DECL(4);
-static u8 bss_941 ALIGN_DECL(4);
-static u8 bss_939 ALIGN_DECL(4);
-static u8 bss_937 ALIGN_DECL(4);
-static u8 bss_936 ALIGN_DECL(4);
-
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daObjPirateship::Act_c* l_p_ship;
 static daSail_HIO_c l_HIO;

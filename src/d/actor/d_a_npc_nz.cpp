@@ -12,13 +12,8 @@
 #include "d/d_item.h"
 #include "d/d_procname.h"
 
-static u8 dummy_bss[0x4C];
-
-// need to figure out what's putting this data in front of a bunch of rels
-static f32 dummy[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daNpc_Nz_c::m_arc_name[] = "NZ";
 const char daNpc_Nz_c::m_bdl_arc_name[] = "Npcnz";
