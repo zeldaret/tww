@@ -8,6 +8,7 @@
 #include "JSystem/JAudio/JAISequenceMgr.h"
 #include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTConsole.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_controller_pad.h"
