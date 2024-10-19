@@ -52,7 +52,7 @@ void search_target(himo2_class*, cXyz) {
 }
 
 /* 800ED19C-800ED2E0       .text setTargetPos__11himo2_classFP4cXyzPfPf */
-void himo2_class::setTargetPos(cXyz*, float*, float*) {
+BOOL himo2_class::setTargetPos(cXyz*, float*, float*) {
     /* Nonmatching */
 }
 

@@ -47,7 +47,7 @@ static BOOL daBoomerang_Draw(daBoomerang_c*) {
 }
 
 /* 800E19B8-800E1A14       .text getFlyMax__13daBoomerang_cFv */
-void daBoomerang_c::getFlyMax() {
+float daBoomerang_c::getFlyMax() {
     /* Nonmatching */
 }
 

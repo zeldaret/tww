@@ -43,6 +43,10 @@ public:
     void setSightTex(void* sightTex) { mpSightTex = sightTex; }
     void setLockTex(void* lockTex) { mpLockTex = lockTex; }
     void setImage(ResTIMG* image) { mpImg = image; }
+    u8 checkSEFrame() { return field_0x6; }
+    void incFrame() { field_0x6++; }
+    // This inline isn't in the map but I couldn't think of another clean way to do it
+    void resetFrame() { field_0x6 = 0; }
 
 private:
     /* 0x04 */ bool mDrawFlag;
@@ -908,7 +912,7 @@ public:
     void setShapeAngleToAtnActor();
     void cancelItemUpperReadyAnime();
     BOOL checkBodyAngleX(s16);
-    void setBodyAngleToCamera();
+    BOOL setBodyAngleToCamera();
     void setBodyAngleXReadyAnime();
     void setSpeedAndAngleNormal(s16);
     void setSpeedAndAngleAtn();

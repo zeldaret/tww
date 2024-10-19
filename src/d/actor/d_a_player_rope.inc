@@ -11,6 +11,11 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_HIO.h"
+#include "d/actor/d_a_himo2.h"
+#include "d/d_attention.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_audio.h"
 
 /* 80142D08-80142D68       .text checkRopeAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkRopeAnime() const {
@@ -81,12 +86,84 @@ BOOL daPy_lk_c::checkHangRopeActorNull() {
 
 /* 80143F3C-80144038       .text procRopeSubject_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procRopeSubject_init() {
-    /* Nonmatching */
+    if(mCurProc == daPyProc_ROPE_SUBJECT_e) {
+        return false;
+    }
+
+    commonProcInit(daPyProc_ROPE_SUBJECT_e);
+
+    mVelocity = 0.0f;
+
+    if(fopAcM_GetParam(mActorKeepEquip.getActor()) == 0) {
+        setActAnimeUpper(LKANM_BCK_ROPETHROWWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+        setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x54);
+    }
+
+    dComIfGp_setPlayerStatus0(0, daPyStts0_ROPE_AIM_e);
+
+    current.angle.y = shape_angle.y;
+
+    mDoAud_seStart(0x81C);
+
+    m3570 = 0;
+    m3600 = -1.0f;
+    m3604 = -1.0f;
+
+    return true;
 }
 
 /* 80144038-8014422C       .text procRopeSubject__9daPy_lk_cFv */
 BOOL daPy_lk_c::procRopeSubject() {
-    /* Nonmatching */
+    if(!checkItemModeActorPointer()) {
+        return true;
+    }
+
+    himo2_class* grapple = (himo2_class*)mActorKeepEquip.getActor();
+    if(fopAcM_GetParam(grapple) == 0) {
+        dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK40000_e);
+    }
+    else {
+        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK40000_e);
+    }
+
+    if(mpAttention->Lockon()) {
+        setSpeedAndAngleAtn();
+    }
+
+    if(checkNextMode(0) == 0 && setBodyAngleToCamera()) {
+        if(mBodyAngle.x > 0) {
+            mBodyAngle.x = 0;
+        }
+
+        cXyz sight;
+        checkSightLine(2200.0f, &sight);
+        mSightPacket.onDrawFlg();
+        mSightPacket.setPos(&sight);
+
+        if(grapple->setTargetPos(&sight, &m3600, &m3604)) {
+            mSightPacket.onDrawFlg();
+            if(mSightPacket.getLockFlg()) {
+                mSightPacket.incFrame();
+                if(mSightPacket.checkSEFrame() == 26) {
+                    mSightPacket.resetFrame();
+                }
+
+                if(mSightPacket.checkSEFrame() == 0) {
+                    mDoAud_seStart(0x820);
+                }
+            }
+            else {
+                mSightPacket.onLockFlg();
+                mSightPacket.resetFrame();
+                mDoAud_seStart(0x820);
+            }
+        }
+        else {
+            mSightPacket.offLockFlg();
+        }
+    }
+
+    return true;
 }
 
 /* 8014422C-80144464       .text procRopeReady_init__9daPy_lk_cFv */
