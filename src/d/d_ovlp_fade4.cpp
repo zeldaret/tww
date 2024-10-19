@@ -83,11 +83,10 @@ void dDlst_snapShot2_c::draw() {
 
 /* 80224748-80224884       .text dDlst_setResTimgObj__FPC7ResTIMGP9_GXTexObjPvUlUl */
 bool dDlst_setResTimgObj(const ResTIMG* timg, GXTexObj* texObj, void* imagePtr, u32 w, u32 h) {
-    /* Nonmatching */
     if (timg->indexTexture) {
         JUT_ASSERT(0xd9, FALSE);
     } else {
-        GXInitTexObj(texObj, imagePtr, w, h, (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT, (GXBool)(timg->mipmapCount > 1));
+        GXInitTexObj(texObj, imagePtr, w, h, (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT, (GXBool)((int)timg->mipmapCount > 1));
     }
 
     GXInitTexObjLOD(texObj, (GXTexFilter)timg->minFilter, (GXTexFilter)timg->magFilter,
