@@ -202,6 +202,7 @@ class dPa_modelEmitter_c : public node_class {
 public:
     dPa_modelEmitter_c();
     virtual ~dPa_modelEmitter_c() {}
+    virtual void draw() = 0;
 };
 
 class JKRSolidHeap;
