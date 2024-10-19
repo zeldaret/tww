@@ -20,16 +20,16 @@ public:
 
     virtual ~daPirate_Flag_packet_c() {}
 
-    void changeCurrentPos() { m87E ^= 1; }
-    s16 getEscapeNrmAngle() { return m87A; }
     MtxP getMtx() { return mMtx; }
+    void setTevStr(dKy_tevstr_c* i_tevStr) { mTevStr = i_tevStr; }
+    cXyz* getPos() { return mPos[m87E]; }
     cXyz* getNrm() { return mNrm[m87E]; }
     cXyz* getOffsetVec() { return m74C; } // Guessed based on size in debug maps
-    cXyz* getPos() { return mPos[m87E]; }
+    s16 getEscapeNrmAngle() { return m87A; }
+    void changeCurrentPos() { m87E ^= 1; }
     void setNrmMtx() {
         cMtx_YrotS(*calc_mtx, m878);
     }
-    void setTevStr(dKy_tevstr_c* i_tevStr) { mTevStr = i_tevStr; }
 
     void setCorrectNrmAngle(s16, f32);
     void setBackNrm();

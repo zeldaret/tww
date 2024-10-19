@@ -145,7 +145,7 @@ void daPirate_Flag_packet_c::setCorrectNrmAngle(s16 param_0, f32 param_1) {
 void daPirate_Flag_packet_c::setBackNrm() {
     cXyz* a = getNrm();
     cXyz* b = m4F4[m87E];
-    for (int i = 0; i < (s32)ARRAY_SIZE(mNrm[0]); i++) {
+    for (int i = 0; i < (s32)ARRAY_SIZE(*mNrm); i++) {
         b->setall(0.0f);
         *b -= *a;
 
@@ -473,11 +473,9 @@ static void pirate_flag_move(pirate_flag_class* i_this) {
     i_this->mPacket.setBackNrm();
 
 #if VERSION == VERSION_JPN
-    // WTH is even happening here? This just seems like an overflow.
-    // 7500 is bigger than the total size of pirate_flag_class.
-    // 7500 / sizeof(cXyz) = 7500 / 12 = 625 = 25 * 25
-    // Each buffer contains 25 elements.
-    DCStoreRangeNoSync(i_this->mPacket.getPos(), 7500);
+    // Bug: The number of bytes (0x1D4C) passed here is way too large and causes an overflow.
+    // The below sizeof calculation is a guess as to what led the devs to arriving at this wrong number.
+    DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(*i_this->mPacket.mPos) * sizeof(*i_this->mPacket.mNrm) / sizeof(cXyz));
 #else
     DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(*i_this->mPacket.mPos));
     DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(*i_this->mPacket.mNrm));

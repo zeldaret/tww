@@ -465,8 +465,8 @@ void daSail_packet_c::setNrmMtx() {
 
 /* 00000398-00000424       .text setBackNrm__15daSail_packet_cFv */
 void daSail_packet_c::setBackNrm() {
-    cXyz* vtxNrm1 = m0C74 + (0x54 * m1C3A);
-    cXyz* vtxNrm2 = m1454 + (0x54 * m1C3A);
+    cXyz* vtxNrm1 = getNrm();
+    cXyz* vtxNrm2 = m1454[m1C3A];
     for (int i = 0; i < 0x54; i++) {
         vtxNrm2->setall(0.0f);
         *vtxNrm2 -= *vtxNrm1;
@@ -897,11 +897,13 @@ static void sail_move(sail_class* i_this) {
     i_this->mSailPacket.setBackNrm();
 
 #if VERSION == VERSION_JPN
-    DCStoreRangeNoSync(i_this->mSailPacket.getPos(), 0x14ac0);
+    // Bug: The number of bytes (0x14AC0) passed here is way too large and causes an overflow.
+    // The below sizeof calculation is a guess as to what led the devs to arriving at this wrong number.
+    DCStoreRangeNoSync(i_this->mSailPacket.getPos(), sizeof(*i_this->mSailPacket.mPos) * sizeof(*i_this->mSailPacket.mNrm) / sizeof(cXyz));
 #else
-    DCStoreRangeNoSync(i_this->mSailPacket.getPos() + 0 * 0x54, 0x03f0);
-    DCStoreRangeNoSync(i_this->mSailPacket.getPos() + 3 * 0x54, 0x03f0);
-    DCStoreRangeNoSync(i_this->mSailPacket.getPos() + 5 * 0x54, 0x03f0);
+    DCStoreRangeNoSync(i_this->mSailPacket.getPos(), sizeof(*i_this->mSailPacket.mPos));
+    DCStoreRangeNoSync(i_this->mSailPacket.getNrm(), sizeof(*i_this->mSailPacket.mNrm));
+    DCStoreRangeNoSync(i_this->mSailPacket.getNrm() + sizeof(i_this->mSailPacket.mNrm) / sizeof(cXyz), sizeof(*i_this->mSailPacket.m1454)); // Fakematch?
 #endif
 }
 
