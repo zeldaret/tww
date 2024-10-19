@@ -85,7 +85,7 @@ void TAdaptor_light::adaptor_do_update(const JStudio::TObject* object, u32 p2) {
     adaptor_getVariableValue_Vec(&posDir1.mPosition, sauVariableValue_3_POSITION_XYZ);
 
     switch (_118) {
-    case 1:
+    case 1: {
         f32 val10 = adaptor_getVariableValue(10)->getValue();
         f32 val11 = adaptor_getVariableValue(11)->getValue();
         f32 cosX = std::cosf(DEG_TO_RAD(val11));
@@ -96,6 +96,7 @@ void TAdaptor_light::adaptor_do_update(const JStudio::TObject* object, u32 p2) {
         posDir1.mDirection.z = cosX * std::cosf(DEG_TO_RAD(val10));
 
         break;
+    }
     case 2:
         Vec target;
         adaptor_getVariableValue_Vec(&target, sauVariableValue_3_TARGET_POSITION_XYZ);
@@ -144,6 +145,8 @@ void TAdaptor_light::adaptor_do_FACULTY(JStudio::data::TEOperationData op, const
 
         mObject->JSGSetLightType(lightType);
     break_outer_switch:
+        break;
+    default:
         break;
     }
 }

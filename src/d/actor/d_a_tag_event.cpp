@@ -100,11 +100,12 @@ void daTag_Event_c::demoInitProc() {
     case 0x5:
         mDoAud_bgmAllMute(0x1E);
         break;
-    case 0x6:
+    case 0x6: {
         fopAc_ac_c* mo2 = fopAcM_searchFromName("mo2", 0, 0);
         dComIfGp_event_setItemPartner(mo2);
         dComIfGp_event_setTalkPartner(mo2);
         break;
+    }
     case 0x9:
         u8 r30;
         if (!dComIfGs_isEventBit(0x3B20)) {

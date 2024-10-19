@@ -1,11 +1,11 @@
 {
   "[c]": {
     "files.encoding": "utf8",
-    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
   },
   "[cpp]": {
     "files.encoding": "utf8",
-    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
   },
   "editor.tabSize": 4,
   // "files.autoSave": "onFocusChange",
@@ -30,5 +30,10 @@
     ".ninja_*": true,
     "objdiff.json": true,
     ".cache/**": true,
+    "ctx.c": true,
   },
+  "clangd.arguments": [
+      "--function-arg-placeholders=0",
+      "-header-insertion=never",
+  ],
 }
