@@ -103,7 +103,7 @@ BOOL daPy_lk_c::procRopeSubject_init() {
 
     current.angle.y = shape_angle.y;
 
-    mDoAud_seStart(0x81C);
+    mDoAud_seStart(JA_SE_CAMERA_L_MOVE);
 
     m3570 = 0;
     m3600 = -1.0f;
@@ -142,21 +142,7 @@ BOOL daPy_lk_c::procRopeSubject() {
 
         if(grapple->setTargetPos(&sight, &m3600, &m3604)) {
             mSightPacket.onDrawFlg();
-            if(mSightPacket.getLockFlg()) {
-                mSightPacket.incFrame();
-                if(mSightPacket.checkSEFrame() == 26) {
-                    mSightPacket.resetFrame();
-                }
-
-                if(mSightPacket.checkSEFrame() == 0) {
-                    mDoAud_seStart(0x820);
-                }
-            }
-            else {
-                mSightPacket.onLockFlg();
-                mSightPacket.resetFrame();
-                mDoAud_seStart(0x820);
-            }
+            mSightPacket.incFrame();
         }
         else {
             mSightPacket.offLockFlg();

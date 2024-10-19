@@ -2088,7 +2088,7 @@ BOOL daPy_lk_c::checkScopeEnd() {
 /* 80112100-8011215C       .text setSubjectMode__9daPy_lk_cFv */
 void daPy_lk_c::setSubjectMode() {
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
-    mDoAud_seStart(0x8FA);
+    mDoAud_seStart(JA_SE_SUBJ_VIEW_IN);
 }
 
 /* 8011215C-801121C8       .text checkMaskDraw__9daPy_lk_cFv */
@@ -2100,7 +2100,7 @@ BOOL daPy_lk_c::checkMaskDraw() {
 BOOL daPy_lk_c::checkSubjectEnd(int param_1) {
     if(dComIfGp_event_runCheck() || (mPressedButtons & 3) || (m34C9 & 0x20) || dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x2000)) {
         if(param_1) {
-            mDoAud_seStart(0x8FB);
+            mDoAud_seStart(JA_SE_SUBJ_VIEW_OUT);
         }
 
         onResetFlg0(daPyRFlg0_UNK10000000);
@@ -2336,8 +2336,8 @@ BOOL daPy_lk_c::procSubjectivity_init(int param_1) {
 BOOL daPy_lk_c::procSubjectivity() {
     dComIfGp_setAStatus(7);
 
-    if(checkSubjectEnd(0) != 0 || (m3570 != 0 && (m34C9 & 0x40) == 0)) {
-        mDoAud_seStart(0x8FB);
+    if(checkSubjectEnd(0) || (m3570 != 0 && (m34C9 & 0x40) == 0)) {
+        mDoAud_seStart(JA_SE_SUBJ_VIEW_OUT);
         if(m3570 != 0) {
             if(mEquipItem == daPyItem_NONE_e) {
                 return procCrouch_init();

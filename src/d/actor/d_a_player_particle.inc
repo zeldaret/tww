@@ -185,11 +185,11 @@ void daPy_sightPacket_c::setSight() {
     if (mLockFlag) {
         f32 var_f2;
         f32 var_f31;
-        if (field_0x6 < 13) {
-            var_f2 = 1.0f - ((s16)field_0x6 / 13.0f);
+        if (mFrame < 13) {
+            var_f2 = 1.0f - ((s16)mFrame / 13.0f);
             var_f31 = -var_f2;
         } else {
-            var_f2 = (field_0x6 - 13) / 13.0f;
+            var_f2 = (mFrame - 13) / 13.0f;
             var_f31 = var_f2;
         }
 

@@ -43,15 +43,29 @@ public:
     void setSightTex(void* sightTex) { mpSightTex = sightTex; }
     void setLockTex(void* lockTex) { mpLockTex = lockTex; }
     void setImage(ResTIMG* image) { mpImg = image; }
-    u8 checkSEFrame() { return field_0x6; }
-    void incFrame() { field_0x6++; }
-    // This inline isn't in the map but I couldn't think of another clean way to do it
-    void resetFrame() { field_0x6 = 0; }
+    u8 checkSEFrame() { return mFrame; }
+    void incFrame() {
+        if(getLockFlg()) {
+            mFrame++;
+            if(checkSEFrame() == 26) {
+                mFrame = 0;
+            }
+
+            if(checkSEFrame() == 0) {
+                mDoAud_seStart(JA_SE_INDICATOR_1);
+            }
+        }
+        else {
+            onLockFlg();
+            mFrame = 0;
+            mDoAud_seStart(JA_SE_INDICATOR_1);
+        }
+    }
 
 private:
     /* 0x04 */ bool mDrawFlag;
     /* 0x05 */ bool mLockFlag;
-    /* 0x06 */ u8 field_0x6;
+    /* 0x06 */ u8 mFrame;
     /* 0x07 */ u8 mLockAlpha;
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ Mtx mMtx;
