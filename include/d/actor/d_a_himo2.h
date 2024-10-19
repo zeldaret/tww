@@ -9,7 +9,7 @@ struct himo2_s {
 
 class himo2_class : public fopAc_ac_c {
 public:
-    void setTargetPos(cXyz*, float*, float*);
+    BOOL setTargetPos(cXyz*, float*, float*);
 
 public:
     /* Place member variables here */

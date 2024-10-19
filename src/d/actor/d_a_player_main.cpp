@@ -19,6 +19,7 @@
 #include "d/actor/d_a_itembase.h"
 #include "d/d_item_data.h"
 #include "d/d_item.h"
+#include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/d_material.h"
@@ -1193,7 +1194,7 @@ BOOL daPy_lk_c::checkBodyAngleX(s16) {
 }
 
 /* 8010A204-8010A2F4       .text setBodyAngleToCamera__9daPy_lk_cFv */
-void daPy_lk_c::setBodyAngleToCamera() {
+BOOL daPy_lk_c::setBodyAngleToCamera() {
     /* Nonmatching */
 }
 
@@ -2086,7 +2087,8 @@ BOOL daPy_lk_c::checkScopeEnd() {
 
 /* 80112100-8011215C       .text setSubjectMode__9daPy_lk_cFv */
 void daPy_lk_c::setSubjectMode() {
-    /* Nonmatching */
+    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
+    mDoAud_seStart(JA_SE_SUBJ_VIEW_IN);
 }
 
 /* 8011215C-801121C8       .text checkMaskDraw__9daPy_lk_cFv */
@@ -2095,8 +2097,17 @@ BOOL daPy_lk_c::checkMaskDraw() {
 }
 
 /* 801121C8-80112280       .text checkSubjectEnd__9daPy_lk_cFi */
-BOOL daPy_lk_c::checkSubjectEnd(int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::checkSubjectEnd(int param_1) {
+    if(dComIfGp_event_runCheck() || (mPressedButtons & 3) || (m34C9 & 0x20) || dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x2000)) {
+        if(param_1) {
+            mDoAud_seStart(JA_SE_SUBJ_VIEW_OUT);
+        }
+
+        onResetFlg0(daPyRFlg0_UNK10000000);
+        return true;
+    }
+
+    return false;
 }
 
 /* 80112280-80112330       .text checkGuardAccept__9daPy_lk_cFv */
@@ -2305,13 +2316,43 @@ BOOL daPy_lk_c::procScope() {
 }
 
 /* 80112AA8-80112B18       .text procSubjectivity_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procSubjectivity_init(int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::procSubjectivity_init(int param_1) {
+    commonProcInit(daPyProc_SUBJECTIVITY_e);
+
+    mVelocity = 0.0f;
+
+    setSubjectMode();
+
+    if(param_1 == 0) {
+        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    }
+
+    m3570 = param_1;
+
+    return true;
 }
 
 /* 80112B18-80112BEC       .text procSubjectivity__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSubjectivity() {
-    /* Nonmatching */
+    dComIfGp_setAStatus(7);
+
+    if(checkSubjectEnd(0) || (m3570 != 0 && (m34C9 & 0x40) == 0)) {
+        mDoAud_seStart(JA_SE_SUBJ_VIEW_OUT);
+        if(m3570 != 0) {
+            if(mEquipItem == daPyItem_NONE_e) {
+                return procCrouch_init();
+            }
+
+            return procCrouchDefense_init();
+        }
+
+        changeWaitProc();
+    }
+    else {
+        setBodyAngleToCamera();
+    }
+
+    return true;
 }
 
 /* 80112BEC-80112C90       .text procCall_init__9daPy_lk_cFv */

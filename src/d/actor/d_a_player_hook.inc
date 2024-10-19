@@ -10,7 +10,10 @@
  * a function from this file.
  */
 
+#include "d/actor/d_a_hookshot.h"
+#include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
+#include "f_op/f_op_actor_mng.h"
 
 /* 8014AB5C-8014ABA0       .text checkHookshotReturn__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkHookshotReturn() {
@@ -52,12 +55,51 @@ BOOL daPy_lk_c::checkNextHookshotMode() {
 
 /* 8014B350-8014B3F4       .text procHookshotSubject_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHookshotSubject_init() {
-    /* Nonmatching */
+    if(mCurProc == daPyProc_HOOKSHOT_SUBJECT_e) {
+        return false;
+    }
+
+    commonProcInit(daPyProc_HOOKSHOT_SUBJECT_e);
+
+    mVelocity = 0.0f;
+
+    setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+
+    dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
+
+    return true;
 }
 
 /* 8014B3F4-8014B518       .text procHookshotSubject__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHookshotSubject() {
-    /* Nonmatching */
+    if(!checkItemModeActorPointer()) {
+        return true;
+    }
+
+    daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
+    if(fopAcM_GetParam(hookshot) == 0) {
+        dComIfGp_setDoStatus(7);
+    }
+
+    if(mpAttention->Lockon()) {
+        setSpeedAndAngleAtn();
+    }
+
+    mSightPacket.offDrawFlg();
+
+    if(checkNextMode(0) == 0 && fopAcM_GetParam(hookshot) == 0 && setBodyAngleToCamera() && fopAcM_GetParam(hookshot) == 0) {
+        setHookshotSight();
+    }
+
+    if(fopAcM_GetParam(hookshot) == 0) {
+        dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK40000_e);
+    }
+    else {
+        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK40000_e);
+    }
+
+    return true;
 }
 
 /* 8014B518-8014B5E8       .text procHookshotMove_init__9daPy_lk_cFv */

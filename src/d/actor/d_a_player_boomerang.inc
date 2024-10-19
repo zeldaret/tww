@@ -10,7 +10,9 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/actor/d_a_boomerang.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_HIO.h"
 
 /* 8014956C-80149590       .text checkBoomerangAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkBoomerangAnime() const {
@@ -49,12 +51,56 @@ void daPy_lk_c::changeBoomerangCatchProc() {
 
 /* 80149A44-80149AF0       .text procBoomerangSubject_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBoomerangSubject_init() {
-    /* Nonmatching */
+    if(mCurProc == daPyProc_BOOMERANG_SUBJECT_e) {
+        return false;
+    }
+
+    commonProcInit(daPyProc_BOOMERANG_SUBJECT_e);
+
+    mVelocity = 0.0f;
+
+    setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+
+    dComIfGp_setPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
+
+    current.angle.y = shape_angle.y;
+
+    return true;
 }
 
 /* 80149AF0-80149C00       .text procBoomerangSubject__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBoomerangSubject() {
-    /* Nonmatching */
+    if(!checkItemModeActorPointer()) {
+        return true;
+    }
+
+    if(checkBoomerangReadyAnime()) {
+        dComIfGp_setDoStatus(7);
+    }
+
+    setShapeAngleToAtnActor();
+
+    if(mpAttention->Lockon()) {
+        setSpeedAndAngleAtn();
+    }
+
+    if(checkNextMode(0) == 0) {
+        if(setBodyAngleToCamera()) {
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepEquip.getActor();
+            if(boomerang != NULL) {
+                cXyz sight;
+                checkSightLine(boomerang->getFlyMax(), &sight);
+                mSightPacket.setPos(&sight);
+                mSightPacket.onDrawFlg();
+            }
+        }
+    }
+    else {
+        mSightPacket.offDrawFlg();
+    }
+
+    return true;
 }
 
 /* 80149C00-80149CC8       .text procBoomerangMove_init__9daPy_lk_cFv */
