@@ -10,6 +10,7 @@
  * a function from this file.
  */
 
+#include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_hookshot.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
@@ -32,7 +33,59 @@ void daPy_lk_c::setHookshotModel() {
 
 /* 8014ACCC-8014B02C       .text setHookshotSight__9daPy_lk_cFv */
 void daPy_lk_c::setHookshotSight() {
-    /* Nonmatching */
+    cXyz sp50(
+        cM_ssin(shape_angle.y) * cM_scos(mBodyAngle.x),
+        -cM_ssin(mBodyAngle.x),
+        cM_scos(shape_angle.y) * cM_scos(mBodyAngle.x)
+    );
+    cXyz sp44;
+    cXyz sp38;
+    sp38 = mHookshotRootPos + sp50 * 1500.0f;
+    sp44 = mHookshotRootPos - sp50 * 60.0f;
+    mRopeLinChk.Set(&sp44, &sp38, this);
+    daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
+    BOOL r30 = dComIfG_Bgsp()->LineCross(&mRopeLinChk);
+    mSightPacket.onDrawFlg();
+    if (r30 || hookshot->mCps.ChkAtHit()) {
+        BOOL r3;
+        if (r30 && mHookshotRootPos.abs2(current.pos) > mRopeLinChk.GetCross().abs2(current.pos)) {
+            mSightPacket.setPos(&mHookshotRootPos);
+            r3 = FALSE;
+        } else if (!r30) {
+            mSightPacket.setPos(&hookshot->m2CC);
+            r3 = TRUE;
+        } else if (!hookshot->mCps.ChkAtHit()) {
+            mSightPacket.setPos(&mRopeLinChk.GetCross());
+            r3 = FALSE;
+        } else if (mRopeLinChk.GetCross().abs2(mHookshotRootPos) > hookshot->m2CC.abs2(mHookshotRootPos)) {
+            mSightPacket.setPos(&hookshot->m2CC);
+            r3 = TRUE;
+        } else {
+            mSightPacket.setPos(&mRopeLinChk.GetCross());
+            r3 = FALSE;
+        }
+        
+        if (
+            (r3 && hookshot->m2B0) ||
+            (!r3 && dComIfG_Bgsp()->ChkPolyHSStick(mRopeLinChk))
+        ) {
+            if(mSightPacket.getLockFlg()) {
+                mSightPacket.incFrame();
+                if(mSightPacket.checkSEFrame()) {
+                    mDoAud_seStart(JA_SE_INDICATOR_1);
+                }
+            }
+            else {
+                mSightPacket.onLockFlg();
+                mDoAud_seStart(JA_SE_INDICATOR_1);
+            }
+        } else {
+            mSightPacket.offLockFlg();
+        }
+    } else {
+        mSightPacket.setPos(&sp38);
+        mSightPacket.offLockFlg();
+    }
 }
 
 /* 8014B02C-8014B05C       .text freeHookshotItem__9daPy_lk_cFv */

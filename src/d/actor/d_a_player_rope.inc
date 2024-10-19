@@ -142,7 +142,17 @@ BOOL daPy_lk_c::procRopeSubject() {
 
         if(grapple->setTargetPos(&sight, &m3600, &m3604)) {
             mSightPacket.onDrawFlg();
-            mSightPacket.incFrame();
+            if(mSightPacket.getLockFlg()) {
+                mSightPacket.incFrame();
+
+                if(mSightPacket.checkSEFrame()) {
+                    mDoAud_seStart(JA_SE_INDICATOR_1);
+                }
+            }
+            else {
+                mSightPacket.onLockFlg();
+                mDoAud_seStart(JA_SE_INDICATOR_1);
+            }
         }
         else {
             mSightPacket.offLockFlg();
