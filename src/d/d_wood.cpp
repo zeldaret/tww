@@ -41,27 +41,9 @@ enum UnitFlags {
   Unit_IsChopped = 1 << 2,
 };
 
-//-----------------------------------------
-// Globals
-//-----------------------------------------
-const s32 L_Room_Max = 64;
-u8 L_Alpha_Cutoff = 0x80;
-const GXColor l_shadowColor = {0x00, 0x00, 0x00, 0x64};
-u8 l_matDL[8 /* TODO: real length */] = {};
+typedef u8 ALIGN_DECL(32) jData;
 
-u32 l_Oba_swood_b_cutDL_SIZE = 0xc0;
-u32 l_Oba_swood_bDL_SIZE = 0x100;
-u8 l_Oba_swood_b_cutDL[0xc0];
-u8 l_Oba_swood_bDL[0x100];
-u8 l_pos[12];
-u8 l_color[4];
-u8 l_texCoord[8];
-
-const float l_Ground_check_y_offset = 100.0f;
-const float l_Ground_check_unk0 = 1.0E+9;
-const double l_Ground_check_unk1 = 0.5;
-const double l_Ground_check_unk2 = 3.0;
-float kGroundHeightBias = 1.0f;
+typedef void (dWood::Anm_c::*modeProcFunc)(dWood::Packet_c *);
 
 struct AnimAttrs {
   /* 0x0 */ s16 unkUShort0;
@@ -70,10 +52,6 @@ struct AnimAttrs {
   /* 0x6 */ s16 unkShort3;
   /* 0x8 */ float unkFloat;
 };
-
-STATIC_ASSERT(sizeof(AnimAttrs) == 0xc);
-
-// Constants
 struct Attr_c {
   /* 0x0 */ AnimAttrs base[4][2];
   /* 0x60 */ u8 kCutCooldown;           // = 23
@@ -91,9 +69,40 @@ struct Attr_c {
   /* 0x8c */ float kClipRadius;         // = 100.0f;
   /* 0x90 */ float kClipCenterYOffset;  // = 40.0f;
   /* 0x94 */ u8 kPushBackCountdown;     // = 23
+  /* 0x95 */ const u8 L_Alpha_Cutoff;   // = 0x80;
 };
 
-static const Attr_c L_attr = {};
+//-----------------------------------------
+// Data
+//-----------------------------------------
+static Vec _pad0[1] = {};
+static Vec _pad1[1] = {};
+
+namespace dWood {
+namespace {
+// .data
+jData l_Txa_swood_bTEX[0x800] = {};
+u8 l_pos[0x2e8] = {};
+u8 l_color[0x50] = {};
+u8 l_texCoord[0x50] = {};
+jData l_Oba_swood_bDL[0x11c] = {};
+jData l_Oba_swood_b_cutDL[0xcb] = {};
+jData l_matDL[0xa3] = {};
+
+// .rodata
+const Attr_c L_attr = {};
+} // namespace
+} // namespace dWood
+
+//-----------------------------------------
+// Constants
+//-----------------------------------------
+const s32 L_Room_Max = 64;
+const float l_Ground_check_y_offset = 100.0f;
+const float l_Ground_check_unk0 = 1.0E+9;
+const double l_Ground_check_unk1 = 0.5;
+const double l_Ground_check_unk2 = 3.0;
+const float kGroundHeightBias = 1.0f;
 
 //-----------------------------------------
 // Classes
@@ -131,16 +140,11 @@ dWood::Anm_c::Anm_c() {
 /* 800BD710-800BD800       .text play__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::play(dWood::Packet_c *i_packet) {
   if (mMode != 6) {
-    typedef void (dWood::Anm_c::*modeProcFunc)(dWood::Packet_c *);
-
-    // @TODO: Still not sure why these addresses are nonmatching. See
-    // daWall_c::*procFunc for a working example.
     static modeProcFunc mode_proc[] = {
         &dWood::Anm_c::mode_cut,       &dWood::Anm_c::mode_push_into,
         &dWood::Anm_c::mode_push_back, &dWood::Anm_c::mode_fan,
         &dWood::Anm_c::mode_norm,      &dWood::Anm_c::mode_to_norm,
     };
-
     (this->*mode_proc[mMode])(i_packet);
   }
   return;
@@ -244,23 +248,21 @@ void dWood::Anm_c::mode_push_back(dWood::Packet_c *packet) {}
 void dWood::Anm_c::mode_fan(dWood::Packet_c *) { /* Nonmatching */
 }
 
-static s32 _M_init_num = 0;
-
 /* 800BDED0-800BDF5C       .text mode_norm_init__Q25dWood5Anm_cFv */
 void dWood::Anm_c::mode_norm_init() {
   mMode = Mode_Norm;
 
   for (u32 i = 0; i < 2; i++) {
-    mRotY[i] = _M_init_num * 0x2000;
-    mRotX[i] = _M_init_num * 0x2000;
+    mRotY[i] = M_init_num * 0x2000;
+    mRotX[i] = M_init_num * 0x2000;
     mUnkArr2[i] = L_attr.base[0][i].unkShort1;
     mUnkArr3[i] = L_attr.base[0][i].unkShort3;
   }
 
   mAlphaScale = 0xff;
 
-  _M_init_num++;
-  _M_init_num = _M_init_num % 8;
+  M_init_num++;
+  M_init_num = M_init_num % 8;
 }
 
 /* 800BDF5C-800BE148       .text mode_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c */
@@ -631,7 +633,7 @@ void dWood::Packet_c::delete_room(int room_no) {
 
 /* 800BF1C8-800BF2D4       .text put_unit__Q25dWood8Packet_cFRC4cXyzi */
 s32 dWood::Packet_c::put_unit(const cXyz &pos, int room_no) {
-  JUT_ASSERT(0x6e0, (room_no >= 0) && (room_no < L_Room_Max));
+  JUT_ASSERT(0x6e0, (room_no >= 0) && (room_no < 64));
 
   const s32 unitCount = ARRAY_SIZE(mUnit);
   s32 unitIdx = search_empty_UnitID();
@@ -760,6 +762,7 @@ void dWood::Packet_c::draw() {
       {GX_VA_TEX0, GX_CLR_RGBA, GX_F32},
       {GX_VA_NULL, GX_CLR_RGBA, GX_RGB8},
   };
+  static const GXColor l_shadowColor = {0x00, 0x00, 0x00, 0x64};
 
   // Assign the shadow material and draw state
   GFSetVtxDescv(l_shadowVtxDescList);
@@ -791,8 +794,8 @@ void dWood::Packet_c::draw() {
   GFSetArray(GX_VA_CLR0, l_color, 4);
   GFSetArray(GX_VA_TEX0, l_texCoord, 8);
   GXCallDisplayList(l_matDL, 0xa0);
-  GFSetAlphaCompare(GX_GREATER, L_Alpha_Cutoff, GX_AOP_OR, GX_GREATER,
-                    L_Alpha_Cutoff);
+  GFSetAlphaCompare(GX_GREATER, L_attr.L_Alpha_Cutoff, GX_AOP_OR, GX_GREATER,
+                    L_attr.L_Alpha_Cutoff);
   GFSetTevColor(GX_TEVREG2, alphaColor);
 
   // Draw the trunk and body for each active unit
@@ -816,17 +819,18 @@ void dWood::Packet_c::draw() {
           }
           GFSetTevColor(GX_TEVREG2, alphaColor);
           GFLoadPosMtxImm(pUnit->mModelViewMtx, 0);
-          GXCallDisplayList(l_Oba_swood_bDL, 0x100);
+          GXCallDisplayList(l_Oba_swood_bDL, ARRAY_SIZE(l_Oba_swood_bDL));
 
           if ((alphaScale & 0xff) != 0xff) {
-            GFSetAlphaCompare(GX_GREATER, L_Alpha_Cutoff, GX_AOP_OR, GX_GREATER,
-                              L_Alpha_Cutoff); // Alpha Test < 50%
+            GFSetAlphaCompare(GX_GREATER, L_attr.L_Alpha_Cutoff, GX_AOP_OR,
+                              GX_GREATER,
+                              L_attr.L_Alpha_Cutoff); // Alpha Test < 50%
           }
           alphaColor.a = 0xff;
           GFSetTevColor(GX_TEVREG2, alphaColor);
         }
         GFLoadPosMtxImm(pUnit->mTrunkModelViewMtx, 0);
-        GXCallDisplayList(l_Oba_swood_b_cutDL, l_Oba_swood_b_cutDL_SIZE);
+        GXCallDisplayList(l_Oba_swood_b_cutDL, ARRAY_SIZE(l_Oba_swood_b_cutDL));
       }
     }
   }

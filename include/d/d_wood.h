@@ -111,6 +111,8 @@ public:
     /* 0x88 */ s16 mNextAnimIdx; // Corresponds to the index in Packet_c::mAnm;
 
     /* 0x8A */ u8 mAlphaScale;
+
+    static s32 M_init_num;
 };
 
 STATIC_ASSERT(sizeof(Anm_c) == 0x8C);
