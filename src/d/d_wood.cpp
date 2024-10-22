@@ -95,25 +95,6 @@ struct Attr_c {
 static const Attr_c L_attr = {};
 
 //-----------------------------------------
-// Helpers
-//-----------------------------------------
-
-// This is a 3-step sqrt estimate, but it also contains an extra multiply by the
-// supplied magnitude. I am not 100% sure what it is accomplishing.
-static inline double inv_sqrt(float mag) {
-  if (mag > 0.0f) {
-    double root = __frsqrte(mag);
-    double res = mag;
-    res = 0.5 * root * (3.0 - res * (root * root)) * res * mag;
-    res = 0.5 * root * (3.0 - res * (root * root)) * res * mag;
-    res = 0.5 * root * (3.0 - res * (root * root)) * res;
-    return res;
-  } else {
-    return mag;
-  }
-}
-
-//-----------------------------------------
 // Classes
 //-----------------------------------------
 
@@ -400,7 +381,7 @@ bool dWood::Unit_c::set_ground() {
     cM3dGPla *triPla = dComIfG_Bgsp()->GetTriPla(gndChk);
 
     cXyz gndNorm = *triPla->GetNP();
-    float unkFloat = inv_sqrt(1.0f - gndNorm.x * gndNorm.x);
+    float unkFloat = std::sqrtf(1.0f - gndNorm.x * gndNorm.x);
 
     float scaledNormY;
     float scaledNormZ;
@@ -408,8 +389,8 @@ bool dWood::Unit_c::set_ground() {
       scaledNormY = gndNorm.y * unkFloat;
       scaledNormZ = -gndNorm.z * unkFloat;
     } else {
-      scaledNormY = unkFloat;
-      scaledNormZ = unkFloat;
+      scaledNormY = 0.0f;
+      scaledNormZ = 0.0f;
     }
 
     MtxP mtx = mDoMtx_stack_c::get();
@@ -422,7 +403,7 @@ bool dWood::Unit_c::set_ground() {
     mtx[1][0] = -gndNorm.x * scaledNormY;
     mtx[1][1] = gndNorm.y;
     mtx[1][2] = scaledNormZ;
-    mtx[1][3] = gndHeight + kGroundHeightBias;
+    mtx[1][3] = kGroundHeightBias + gndHeight;
 
     mtx[2][0] = gndNorm.x * scaledNormZ;
     mtx[2][1] = gndNorm.z;
@@ -524,6 +505,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     }
   }
 
+  // Check for collisions that are not attacks
   if ((ret & 2) && actor && inf.GetCoHitObj() && inf.GetCoHitObj()->GetStts()) {
     animIdx = packet->search_anm(Anm_c::Mode_PushInto);
 
