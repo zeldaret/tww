@@ -459,8 +459,6 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
   if ((ret & 1)) {
     cCcD_Obj *atHitObj = inf.GetAtHitObj();
     if (atHitObj != NULL &&
-        // @TODO: I think the cCcD_ObjAtType enum is reversed. E.g. the first
-        // one should be Machete (bit 21) not Wind
         (atHitObj->ChkAtType(AT_TYPE_WIND) ||
          atHitObj->ChkAtType(AT_TYPE_BOMB) ||
          atHitObj->ChkAtType(AT_TYPE_FIRE) ||
@@ -529,6 +527,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     }
   }
 
+  // Check for attacks that WILL cut us down
   if ((ret & 1)) {
     oldAnimIdx = mAnmIdx;
     if ((mAnmIdx < 8)) {
