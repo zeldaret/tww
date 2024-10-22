@@ -4,184 +4,917 @@
 //
 
 #include "d/d_wood.h"
+#include "JAZelAudio/JAIZelBasic.h"
+#include "JSystem/J3DGraphBase/J3DShape.h"
+#include "JSystem/J3DU/J3DUClipper.h"
+#include "JSystem/JMath/JMath.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "SSystem/SComponent/c_bg_s_gnd_chk.h"
+#include "SSystem/SComponent/c_lib.h"
+#include "d/d_bg_s_gnd_chk.h"
+#include "d/d_bg_s_spl_grp_chk.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_drawlist.h"
+#include "d/d_kankyo_wether.h"
+#include "d/d_procname.h"
+#include "d/d_tree.h"
+#include "dolphin/gf/GFGeometry.h"
+#include "dolphin/gf/GFTev.h"
+#include "dolphin/gf/GFTransform.h"
+#include "dolphin/gx/GXAttr.h"
+#include "dolphin/gx/GXDisplayList.h"
 #include "dolphin/types.h"
+#include "m_Do/m_Do_lib.h"
+#include "m_Do/m_Do_mtx.h"
+
+// These belong in the d_tree compilation unit, in the d_tree namespace. But in
+// order to match, they must be in this compilation unit so they can have a
+// 16-bit offset, allowing us load their pointer using a single load immediate
+// instruction
+u8 d_tree::g_dTree_shadowTexCoord[8 /* TODO: real length */] =
+    {}; // Supposed to be 2 byte UV, but I can't find a matching type
+
+//-----------------------------------------
+// Types
+//-----------------------------------------
+enum UnitFlags {
+  Unit_IsActive = 1 << 0,
+  Unit_IsFrustumCulled = 1 << 1,
+  Unit_IsChopped = 1 << 2,
+};
+
+//-----------------------------------------
+// Globals
+//-----------------------------------------
+const s32 L_Room_Max = 64;
+u8 L_Alpha_Cutoff = 0x80;
+const GXColor l_shadowColor = {0x00, 0x00, 0x00, 0x64};
+u8 l_matDL[8 /* TODO: real length */] = {};
+
+u32 l_Oba_swood_b_cutDL_SIZE = 0xc0;
+u32 l_Oba_swood_bDL_SIZE = 0x100;
+u8 l_Oba_swood_b_cutDL[0xc0];
+u8 l_Oba_swood_bDL[0x100];
+
+const float l_Ground_check_y_offset = 100.0f;
+const float l_Ground_check_unk0 = 1.0E+9;
+const double l_Ground_check_unk1 = 0.5;
+const double l_Ground_check_unk2 = 3.0;
+float kGroundHeightBias = 1.0f;
+
+struct AnimAttrs {
+  /* 0x0 */ s16 unkUShort0;
+  /* 0x2 */ s16 unkShort1;
+  /* 0x4 */ s16 unkShort2;
+  /* 0x6 */ s16 unkShort3;
+  /* 0x8 */ float unkFloat;
+};
+
+STATIC_ASSERT(sizeof(AnimAttrs) == 0xc);
+
+// Constants
+struct Attr_c {
+  /* 0x0 */ AnimAttrs base[4][2];
+  /* 0x60 */ u8 kCutCooldown;           // = 23
+  /* 0x61 */ u8 kCutPosOffsetX;         // = 0
+  /* 0x64 */ float kCutInitVelY;        // = 18.0f
+  /* 0x68 */ float kCutYAccel;          // = -3.0f (Units per frame per frame)
+  /* 0x6C */ float kCutZVel;            // = 2.5f (Units per frame)
+  /* 0x70 */ float kCutPitchVel;        // = 8 (shortRad per frame)
+  /* 0x74 */ float kUncutShadowScale;   // = 1.5f
+  /* 0x78 */ float kCutShadowScale;     // = 0.3f
+  /* 0x7c */ float kCollisionRad;       // = 80.0f;
+  /* 0x80 */ float kCollisionRadCut;    // = 15.0f;
+  /* 0x84 */ float kCollisionHeight;    // = 80.0f;
+  /* 0x88 */ float kCollisionHeightCut; // = 15.0f;
+  /* 0x8c */ float kClipRadius;         // = 100.0f;
+  /* 0x90 */ float kClipCenterYOffset;  // = 40.0f;
+  /* 0x94 */ u8 kPushBackCountdown;     // = 23
+};
+
+static const Attr_c L_attr = {};
+
+//-----------------------------------------
+// Helpers
+//-----------------------------------------
+
+// This is a 3-step sqrt estimate, but it also contains an extra multiply by the
+// supplied magnitude. I am not 100% sure what it is accomplishing.
+static inline double inv_sqrt(float mag) {
+  if (mag > 0.0f) {
+    double root = __frsqrte(mag);
+    double res = mag;
+    res = 0.5 * root * (3.0 - res * (root * root)) * res * mag;
+    res = 0.5 * root * (3.0 - res * (root * root)) * res * mag;
+    res = 0.5 * root * (3.0 - res * (root * root)) * res;
+    return res;
+  } else {
+    return mag;
+  }
+}
+
+//-----------------------------------------
+// Classes
+//-----------------------------------------
 
 /* 800BD678-800BD710       .text __ct__Q25dWood5Anm_cFv */
 dWood::Anm_c::Anm_c() {
-    /* Nonmatching */
+  int iVar1;
+  int iVar2;
+
+  PSMTXIdentity(mModelMtx);
+  PSMTXIdentity(mTrunkModelMtx);
+  mMode = Mode_Max;
+  this->mCountdown = 0;
+  this->mWindDir = 0;
+  this->mWindPow = 0.0;
+  this->mPosOffsetY = 0.0;
+  this->mPosOffsetZ = 0.0;
+  this->mVelY = 0.0;
+
+  iVar1 = 0;
+  for (u32 i = 0; i < 2; i++) {
+    this->mRotY[iVar1] = 0;
+    this->mRotX[iVar1] = 0;
+    this->mUnkArr2[iVar1] = 0;
+    this->mUnkArr3[iVar1] = 0;
+    iVar1 = iVar1 + 1;
+  }
+
+  this->mNextAnimIdx = 0;
+  this->mAlphaScale = 0xff;
+  return;
 }
 
 /* 800BD710-800BD800       .text play__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::play(dWood::Packet_c*) {
-    /* Nonmatching */
+void dWood::Anm_c::play(dWood::Packet_c *i_packet) {
+  if (this->mMode != 6) {
+    typedef void (dWood::Anm_c::*modeProcFunc)(dWood::Packet_c *);
+
+    // @TODO: Still not sure why these addresses are nonmatching. See
+    // daWall_c::*procFunc for a working example.
+    static modeProcFunc mode_proc[] = {
+        &dWood::Anm_c::mode_cut,       &dWood::Anm_c::mode_push_into,
+        &dWood::Anm_c::mode_push_back, &dWood::Anm_c::mode_fan,
+        &dWood::Anm_c::mode_norm,      &dWood::Anm_c::mode_to_norm,
+    };
+
+    (this->*mode_proc[mMode])(i_packet);
+  }
+  return;
 }
 
 /* 800BD800-800BD848       .text copy_angamp__Q25dWood5Anm_cFPCQ25dWood5Anm_c */
-void dWood::Anm_c::copy_angamp(const dWood::Anm_c*) {
-    /* Nonmatching */
+void dWood::Anm_c::copy_angamp(const dWood::Anm_c *other) {
+  if (this == other) {
+    return;
+  }
+
+  s32 iVar1 = 0;
+  for (u32 i = 0; i < 2; i++) {
+    this->mRotY[iVar1] = other->mRotY[iVar1];
+    this->mRotX[iVar1] = other->mRotX[iVar1];
+    this->mUnkArr2[iVar1] = other->mUnkArr2[iVar1];
+    this->mUnkArr3[iVar1] = other->mUnkArr3[iVar1];
+    iVar1 = iVar1 + 1;
+  }
 }
 
-/* 800BD848-800BD8BC       .text mode_cut_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs */
-void dWood::Anm_c::mode_cut_init(const dWood::Anm_c*, short) {
-    /* Nonmatching */
+/* 800BD848-800BD8BC       .text mode_cut_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs
+ */
+void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, short targetAngle) {
+  s32 iVar1 = 0;
+  for (u32 i = 0; i < 2; i++) {
+    this->mRotY[iVar1] = 0;
+    this->mRotX[iVar1] = 0;
+    this->mUnkArr2[iVar1] = 0;
+    this->mUnkArr3[iVar1] = 0;
+    iVar1 = iVar1 + 1;
+  }
+
+  this->mWindDir = targetAngle;
+  this->mVelY = L_attr.kCutInitVelY;
+  this->mPosOffsetY = 0.0;
+  this->mPosOffsetZ = 0.0;
+  this->mAlphaScale = 0xff;
+  this->mCountdown = L_attr.kCutCooldown;
+  this->mMode = Anm_c::Mode_Cut;
 }
 
 /* 800BD8BC-800BD9E4       .text mode_cut__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_cut(dWood::Packet_c*) {
-    /* Nonmatching */
+void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
+  this->mVelY = this->mVelY + L_attr.kCutYAccel;
+  if (this->mVelY < -40.0f) {
+    this->mVelY = -40.0f;
+  }
+
+  this->mPosOffsetY = this->mPosOffsetY + this->mVelY;
+  this->mPosOffsetZ = this->mPosOffsetZ + L_attr.kCutZVel;
+  this->mRotX[0] = this->mRotX[0] + L_attr.kCutPitchVel;
+
+  mDoMtx_YrotS(mDoMtx_stack_c::now, (int)this->mWindDir);
+  mDoMtx_stack_c::transM(L_attr.kCutPosOffsetX, this->mPosOffsetY,
+                         this->mPosOffsetZ);
+  mDoMtx_XrotM(mDoMtx_stack_c::now, this->mRotX[0]);
+  mDoMtx_YrotM(mDoMtx_stack_c::now, -this->mWindDir);
+  mDoMtx_copy(mDoMtx_stack_c::now, this->mModelMtx);
+
+  // Fade out the bush as it falls
+  if (this->mCountdown < 20) {
+    int alphaScale = this->mAlphaScale - 14;
+    if (alphaScale < 0) {
+      alphaScale = 0;
+    }
+    this->mAlphaScale = (u8)alphaScale;
+  }
+
+  if (this->mCountdown > 0) {
+    this->mCountdown = this->mCountdown + -1;
+  }
 }
 
-/* 800BD9E4-800BDA38       .text mode_push_into_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs */
-void dWood::Anm_c::mode_push_into_init(const dWood::Anm_c*, short) {
-    /* Nonmatching */
+/* 800BD9E4-800BDA38       .text
+ * mode_push_into_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs */
+void dWood::Anm_c::mode_push_into_init(const dWood::Anm_c *packet,
+                                       short targetAngle) {
+  copy_angamp(packet);
+  this->mWindDir = targetAngle;
+  this->mAlphaScale = 0xff;
+  this->mCountdown = 2;
+  this->mMode = Mode_PushInto;
 }
 
-/* 800BDA38-800BDC24       .text mode_push_into__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_push_into(dWood::Packet_c*) {
-    /* Nonmatching */
-}
+/* 800BDA38-800BDC24       .text
+ * mode_push_into__Q25dWood5Anm_cFPQ25dWood8Packet_c */
+void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) {}
 
 /* 800BDC24-800BDC48       .text mode_push_back_init__Q25dWood5Anm_cFv */
 void dWood::Anm_c::mode_push_back_init() {
-    /* Nonmatching */
+  this->mCountdown = L_attr.kPushBackCountdown;
+  this->mAlphaScale = 0xff;
+  this->mMode = Mode_PushBack;
 }
 
-/* 800BDC48-800BDECC       .text mode_push_back__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_push_back(dWood::Packet_c*) {
-    /* Nonmatching */
-}
+/* 800BDC48-800BDECC       .text
+ * mode_push_back__Q25dWood5Anm_cFPQ25dWood8Packet_c */
+void dWood::Anm_c::mode_push_back(dWood::Packet_c *packet) {}
 
 /* 800BDECC-800BDED0       .text mode_fan__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_fan(dWood::Packet_c*) {
-    /* Nonmatching */
+void dWood::Anm_c::mode_fan(dWood::Packet_c *) { /* Nonmatching */
 }
+
+static s32 _M_init_num = 0;
 
 /* 800BDED0-800BDF5C       .text mode_norm_init__Q25dWood5Anm_cFv */
 void dWood::Anm_c::mode_norm_init() {
-    /* Nonmatching */
+  this->mMode = Mode_Norm;
+
+  for (u32 i = 0; i < 2; i++) {
+    this->mRotY[i] = (short)(_M_init_num << 0xd);
+    this->mRotX[i] = (short)(_M_init_num << 0xd);
+    this->mUnkArr2[i] = L_attr.base[0][i].unkShort1;
+    this->mUnkArr3[i] = L_attr.base[0][i].unkShort3;
+  }
+
+  this->mAlphaScale = 0xff;
+
+  _M_init_num++;
+  _M_init_num = _M_init_num % 8;
 }
 
 /* 800BDF5C-800BE148       .text mode_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_norm(dWood::Packet_c*) {
-    /* Nonmatching */
+void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
+  int phase;
+  if (this->mWindPow < 0.33f) {
+    phase = 0;
+  } else {
+    if (this->mWindPow < 0.66f) {
+      phase = 1;
+    } else {
+      phase = 2;
+    }
+  }
+
+  float fVar1 = 0.0f;
+  float fVar6 = fVar1;
+  for (s32 i = 0; i < 2; i++) {
+    const AnimAttrs *baseAttr = &L_attr.base[phase][i];
+    s16 unk2 = baseAttr->unkShort2;
+    s16 unk1 = baseAttr->unkShort1;
+    s16 unk3 = baseAttr->unkShort3;
+    float unk4 = baseAttr->unkFloat;
+
+    this->mRotY[i] += baseAttr->unkUShort0;
+    this->mRotX[i] += unk2;
+    cLib_chaseS(&this->mUnkArr2[i], unk1, 2);
+    cLib_chaseS(&this->mUnkArr3[i], unk3, 2);
+
+    fVar1 += this->mUnkArr2[i] * JMASCos(this->mRotY[i]);
+    fVar6 += this->mUnkArr3[i] * (unk4 + JMASCos(this->mRotX[i]));
+  }
+
+  mDoMtx_YrotS(mModelMtx, (s16)fVar1 + this->mWindDir); // Y Rotation (Yaw)
+  mDoMtx_XrotM(mModelMtx, fVar6);                       // X Rotation
+  mDoMtx_YrotM(mModelMtx, -this->mWindDir);             // Y Rotation
 }
 
 /* 800BE148-800BE154       .text mode_norm_set_wind__Q25dWood5Anm_cFfs */
-void dWood::Anm_c::mode_norm_set_wind(float, short) {
-    /* Nonmatching */
+void dWood::Anm_c::mode_norm_set_wind(float windPow, short windDir) {
+  this->mWindPow = windPow;
+  this->mWindDir = windDir;
+  return;
+}
+/* 800BE154-800BE1F0       .text
+ * mode_to_norm_init__Q25dWood5Anm_cFQ25dWood7AnmID_e */
+void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
+  bool bVar1;
+  u32 uVar2;
+
+  JUT_ASSERT(0x4d7, (anm_id_norm >= 0) && (anm_id_norm < AnmID_Norm_Max));
+
+  this->mNextAnimIdx = (short)anm_id_norm;
+  this->mAlphaScale = 0xff;
+  this->mCountdown = 0x14;
+  this->mMode = Anm_c::Mode_ToNorm;
 }
 
-/* 800BE154-800BE1F0       .text mode_to_norm_init__Q25dWood5Anm_cFQ25dWood7AnmID_e */
-void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e) {
-    /* Nonmatching */
-}
+/* 800BE1F0-800BE428       .text mode_to_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c
+ */
+void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
+  Anm_c *normAnim = packet->get_anm(this->mNextAnimIdx);
 
-/* 800BE1F0-800BE428       .text mode_to_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_to_norm(dWood::Packet_c*) {
-    /* Nonmatching */
+  int phase;
+  if (normAnim->mWindPow < 0.33f) {
+    phase = 0;
+  } else if (normAnim->mWindPow < 0.66f) {
+    phase = 1;
+  } else {
+    phase = 2;
+  }
+
+  cLib_chaseAngleS(&this->mWindDir, normAnim->mWindDir, 3000);
+
+  float fVar1 = 0.0;
+  float fVar5 = fVar1;
+
+  for (s32 i = 0; i < 2; i++) {
+    const AnimAttrs *baseAttr = &L_attr.base[phase][i];
+    float fVar2 = baseAttr->unkFloat;
+    s16 rotXStep = baseAttr->unkShort2 + 3000;
+
+    cLib_chaseS(&this->mRotY[i], normAnim->mRotY[i],
+                baseAttr->unkUShort0 + 3000);
+    cLib_chaseS(&this->mRotX[i], normAnim->mRotX[i], rotXStep);
+    cLib_chaseS(&this->mUnkArr2[i], normAnim->mUnkArr2[i], 0xf);
+    cLib_chaseS(&this->mUnkArr3[i], normAnim->mUnkArr3[i], 0xf);
+
+    fVar1 += this->mUnkArr2[i] * JMASCos(this->mRotY[i]);
+    fVar5 += this->mUnkArr3[i] * (fVar2 + JMASCos(this->mRotX[i]));
+  }
+
+  mDoMtx_YrotS(this->mModelMtx, (s16)fVar1 + this->mWindDir);
+  mDoMtx_XrotM(this->mModelMtx, fVar5);
+  mDoMtx_YrotM(this->mModelMtx, -this->mWindDir);
+
+  if (this->mCountdown > 0) {
+    this->mCountdown -= 1;
+  }
 }
 
 /* 800BE428-800BE4DC       .text __ct__Q25dWood6Unit_cFv */
-dWood::Unit_c::Unit_c() {
-    /* Nonmatching */
-}
+dWood::Unit_c::Unit_c() { clear(); }
 
 /* 800BE4DC-800BE93C       .text set_ground__Q25dWood6Unit_cFv */
-void dWood::Unit_c::set_ground() {
-    /* Nonmatching */
+bool dWood::Unit_c::set_ground() {
+  bool uVar4;
+
+  cXyz pos(mPos.x, mPos.y + l_Ground_check_y_offset, mPos.z);
+
+  // Cast the current position to the ground
+  dBgS_ObjGndChk gndChk;
+  gndChk.SetPos(&pos);
+  f32 gndHeight = dComIfG_Bgsp()->GroundCross(&gndChk);
+
+  if (gndHeight > l_Ground_check_unk0) {
+    this->mPos.y = gndHeight;
+    cM3dGPla *triPla = dComIfG_Bgsp()->GetTriPla(gndChk);
+
+    cXyz gndNorm = *triPla->GetNP();
+    float unkFloat = inv_sqrt(1.0f - gndNorm.x * gndNorm.x);
+
+    float scaledNormY;
+    float scaledNormZ;
+    if (unkFloat != 0.0f) {
+      scaledNormY = gndNorm.y * unkFloat;
+      scaledNormZ = -gndNorm.z * unkFloat;
+    } else {
+      scaledNormY = unkFloat;
+      scaledNormZ = unkFloat;
+    }
+
+    MtxP mtx = mDoMtx_stack_c::get();
+
+    mtx[0][0] = unkFloat;
+    mtx[0][1] = gndNorm.x;
+    mtx[0][2] = 0.0f;
+    mtx[0][3] = mPos.x;
+
+    mtx[1][0] = -gndNorm.x * scaledNormY;
+    mtx[1][1] = gndNorm.y;
+    mtx[1][2] = scaledNormZ;
+    mtx[1][3] = gndHeight + kGroundHeightBias;
+
+    mtx[2][0] = gndNorm.x * scaledNormZ;
+    mtx[2][1] = gndNorm.z;
+    mtx[2][2] = scaledNormY;
+    mtx[2][3] = mPos.z;
+    mDoMtx_stack_c::scaleM(L_attr.kUncutShadowScale, kGroundHeightBias,
+                           L_attr.kUncutShadowScale);
+    mDoMtx_copy(mDoMtx_stack_c::now, this->mShadowModelMtx);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 /* 800BE93C-800BEA28       .text set_mtx__Q25dWood6Unit_cFPQ25dWood5Anm_c */
-void dWood::Unit_c::set_mtx(dWood::Anm_c*) {
-    /* Nonmatching */
+void dWood::Unit_c::set_mtx(dWood::Anm_c *anim) {
+  int iVar1;
+
+  iVar1 = this->mAnmIdx;
+
+  mDoMtx_copy(anim[iVar1].mModelMtx, mDoMtx_stack_c::get());
+  mDoMtx_stack_c::now[0][3] = mDoMtx_stack_c::now[0][3] + (this->mPos).x;
+  mDoMtx_stack_c::now[1][3] = mDoMtx_stack_c::now[1][3] + (this->mPos).y;
+  mDoMtx_stack_c::now[2][3] = mDoMtx_stack_c::now[2][3] + (this->mPos).z;
+  mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::now, mModelViewMtx);
+
+  mDoMtx_copy(anim[iVar1].mTrunkModelMtx, mDoMtx_stack_c::get());
+  mDoMtx_stack_c::now[0][3] = (this->mPos).x;
+  mDoMtx_stack_c::now[1][3] = (this->mPos).y;
+  mDoMtx_stack_c::now[2][3] = (this->mPos).z;
+  mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(),
+                this->mTrunkModelViewMtx);
+
+  mDoMtx_concat(j3dSys.getViewMtx(), this->mShadowModelMtx,
+                this->mShadowModelViewMtx);
 }
 
 /* 800BEA28-800BEA50       .text clear__Q25dWood6Unit_cFv */
-void dWood::Unit_c::clear() {
-    /* Nonmatching */
+void dWood::Unit_c::clear() { cLib_memSet(this, 0, 0x18c); }
+
+/* 800BEA50-800BEE9C       .text
+ * cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
+void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
+  int animIdx;
+  int oldAnimIdx;
+
+  dCcMassS_HitInf inf;
+  fopAc_ac_c *actor;
+  u32 ret = dComIfG_Ccsp()->ChkMass(&mPos, &actor, &inf);
+
+  if (this->mAnimCooldown > 0) {
+    this->mAnimCooldown -= 1;
+  }
+
+  // Evaluate for attacks that will not cut us down
+  if ((ret & 1)) {
+    cCcD_Obj *atHitObj = inf.GetAtHitObj();
+    if (atHitObj != NULL &&
+        // @TODO: I think the cCcD_ObjAtType enum is reversed. E.g. the first
+        // one should be Machete (bit 21) not Wind
+        (atHitObj->ChkAtType(AT_TYPE_WIND) ||
+         atHitObj->ChkAtType(AT_TYPE_BOMB) ||
+         atHitObj->ChkAtType(AT_TYPE_FIRE) ||
+         atHitObj->ChkAtType(AT_TYPE_NORMAL_ARROW) ||
+         atHitObj->ChkAtType(AT_TYPE_FIRE_ARROW) ||
+         atHitObj->ChkAtType(AT_TYPE_ICE_ARROW) ||
+         atHitObj->ChkAtType(AT_TYPE_LIGHT_ARROW) ||
+         atHitObj->ChkAtType(AT_TYPE_HOOKSHOT))) {
+
+      // Clear the hit bit so that we don't get cut down
+      ret &= ~0x01;
+
+      if (actor != NULL && mAnimCooldown == 0) {
+        animIdx = packet->search_anm(Anm_c::Mode_PushInto);
+        this->mAnimCooldown = 20;
+
+        // Play the cut sound
+        JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_TREE_SWING, &this->mPos,
+                                             0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+
+        // If we are currently performing a basic animation, assign a new
+        // animation
+        oldAnimIdx = this->mAnmIdx;
+        if ((oldAnimIdx < 8) && (animIdx != -1)) {
+          this->mAnmIdx = animIdx;
+        }
+
+        // If we were able to allocate an animation (or we already have one),
+        // start the "PushInto" (shrinking) animation
+        if ((this->mAnmIdx >= 8) &&
+            packet->get_anm(this->mAnmIdx)->get_mode() >=
+                Anm_c::Mode_PushInto) {
+          s16 targetAngle =
+              cLib_targetAngleY(&(actor->current).pos, &this->mPos);
+          packet->mAnm[mAnmIdx].mode_push_into_init(packet->mAnm + oldAnimIdx,
+                                                    (s32)targetAngle);
+        }
+      }
+    }
+  }
+
+  if ((ret & 2) && actor && inf.GetCoHitObj() && inf.GetCoHitObj()->GetStts()) {
+    animIdx = packet->search_anm(Anm_c::Mode_PushInto);
+
+    if (fopAcM_GetName(actor) == PROC_PLAYER && inf.GetCoHitLen() >= 2.0f &&
+        this->mAnimCooldown == 0) {
+
+      this->mAnimCooldown = 20;
+      JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_TREE_SWING, &this->mPos, 0,
+                                           0, 1.0, 1.0, -1.0, -1.0, 0);
+
+      // If we are currently performing a basic animation, assign a new
+      // animation
+      oldAnimIdx = this->mAnmIdx;
+      if ((oldAnimIdx < 8) && (animIdx != -1)) {
+        this->mAnmIdx = animIdx;
+      }
+
+      // If we were able to allocate an animation (or we already have one),
+      // start the "PushInto" (shrinking) animation
+      if ((this->mAnmIdx >= 8) && (packet->get_anm(this->mAnmIdx)->get_mode() >=
+                                   Anm_c::Mode_PushInto)) {
+        s16 targetAngle = cLib_targetAngleY(&(actor->current).pos, &this->mPos);
+        packet->mAnm[mAnmIdx].mode_push_into_init(packet->mAnm + oldAnimIdx,
+                                                  (s32)targetAngle);
+      }
+    }
+  }
+
+  if ((ret & 1)) {
+    oldAnimIdx = this->mAnmIdx;
+    if ((mAnmIdx < 8)) {
+      animIdx = packet->search_anm(Anm_c::Mode_Cut);
+
+      if (animIdx != -1) {
+        this->mAnmIdx = animIdx;
+      }
+
+      if ((this->mAnmIdx >= 8)) {
+        if (packet->get_anm(this->mAnmIdx)->get_mode() > Anm_c::Mode_Cut) {
+          s16 targetAngle =
+              cLib_targetAngleY(&(actor->current).pos, &this->mPos);
+          packet->get_anm(mAnmIdx)->mode_cut_init(packet->get_anm(oldAnimIdx),
+                                                  (s32)targetAngle);
+
+          // Compute the color settings for particels
+          g_env_light.settingTevStruct(TEV_TYPE_BG0, &mPos, &mTevStr);
+
+          // Spawn cut down particles (a bunch of leaves)
+          dComIfGp_particle_set(dPa_name::ID_CUT_L_TREE_DOWN, &this->mPos, NULL,
+                                NULL, 0xff, NULL, -1, &this->mTevStr.mColorK0,
+                                NULL, NULL);
+
+          JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_CUT_L_TREE_DOWN,
+                                               &this->mPos, 0, 0, 1.0, 1.0,
+                                               -1.0, -1.0, 0);
+
+          float newShadowScale =
+              L_attr.kCutShadowScale / L_attr.kUncutShadowScale;
+
+          mDoMtx_copy(this->mShadowModelMtx, mDoMtx_stack_c::get());
+          mDoMtx_stack_c::scaleM(newShadowScale, 1.0, newShadowScale);
+          mDoMtx_copy(mDoMtx_stack_c::get(), this->mShadowModelMtx);
+        }
+      }
+    }
+  }
 }
 
-/* 800BEA50-800BEE9C       .text cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
-void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c*) {
-    /* Nonmatching */
-}
-
-/* 800BEE9C-800BEEA0       .text cc_hit_after_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
-void dWood::Unit_c::cc_hit_after_cut(dWood::Packet_c*) {
-    /* Nonmatching */
-}
+/* 800BEE9C-800BEEA0       .text
+ * cc_hit_after_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
+void dWood::Unit_c::cc_hit_after_cut(dWood::Packet_c *) {}
 
 /* 800BEEA0-800BEF78       .text proc__Q25dWood6Unit_cFPQ25dWood8Packet_c */
-void dWood::Unit_c::proc(dWood::Packet_c*) {
-    /* Nonmatching */
+void dWood::Unit_c::proc(dWood::Packet_c *packet) {
+  // If this unit is active, and performing a non-normal animation...
+  if (((this->mFlags & Unit_IsActive) != 0)) {
+    int animIdx = this->mAnmIdx;
+
+    if (animIdx >= 8) {
+      Anm_c &anim = packet->mAnm[animIdx];
+      Anm_c::Mode_e mode = anim.mMode;
+      if (mode == Anm_c::Mode_ToNorm) {
+        if (anim.mCountdown <= 0) {
+          this->mAnmIdx = anim.mNextAnimIdx;
+          anim.mMode = Anm_c::Mode_Max;
+        }
+      } else if (mode == Anm_c::Mode_Cut) {
+        if (anim.mCountdown <= 0) {
+          s32 newAnimIdx = packet->search_anm(Anm_c::Mode_Norm);
+          this->mAnmIdx = newAnimIdx;
+          anim.mMode = Anm_c::Mode_Max;
+          this->mFlags = this->mFlags | Unit_IsChopped;
+        }
+      } else if (mode == Anm_c::Mode_Max) {
+        animIdx = packet->search_anm(Anm_c::Mode_Norm);
+        this->mAnmIdx = animIdx;
+      }
+    }
+  }
 }
 
 /* 800BEF78-800BEF84       .text __ct__Q25dWood6Room_cFv */
-dWood::Room_c::Room_c() {
-    /* Nonmatching */
-}
+dWood::Room_c::Room_c() { this->mpUnit = (Unit_c *)0x0; }
 
-/* 800BEF84-800BEF94       .text entry_unit__Q25dWood6Room_cFPQ25dWood6Unit_c */
-void dWood::Room_c::entry_unit(dWood::Unit_c*) {
-    /* Nonmatching */
+/* 800BEF84-800BEF94       .text entry_unit__Q25dWood6Room_cFPQ25dWood6Unit_c
+ */
+void dWood::Room_c::entry_unit(dWood::Unit_c *unit) {
+  unit->mpNext = this->mpUnit;
+  this->mpUnit = unit;
+  return;
 }
 
 /* 800BEF94-800BEFF0       .text delete_all_unit__Q25dWood6Room_cFv */
 void dWood::Room_c::delete_all_unit() {
-    /* Nonmatching */
+  Unit_c *unit;
+  while (unit = this->mpUnit, unit != (Unit_c *)0x0) {
+    this->mpUnit = unit->mpNext;
+    mDoAud_zelAudio_c::getInterface()->seDeleteObject((Vec *)unit);
+    unit->clear();
+  }
 }
 
 /* 800BEFF0-800BF0D4       .text __ct__Q25dWood8Packet_cFv */
 dWood::Packet_c::Packet_c() {
-    /* Nonmatching */
-}
-
-/* 800BF0D4-800BF110       .text __dt__Q25dWood6Unit_cFv */
-dWood::Unit_c::~Unit_c() {
-    /* Nonmatching */
-}
-
-/* 800BF110-800BF194       .text __dt__Q25dWood8Packet_cFv */
-dWood::Packet_c::~Packet_c() {
-    /* Nonmatching */
+  u32 iVar1 = 0;
+  u32 iVar2 = 0;
+  for (s32 i = 0; i < 8; i++) {
+    mAnm[i].mode_norm_init();
+  }
 }
 
 /* 800BF194-800BF1C8       .text delete_room__Q25dWood8Packet_cFi */
-void dWood::Packet_c::delete_room(int) {
-    /* Nonmatching */
+void dWood::Packet_c::delete_room(int room_no) {
+  mRoom[room_no].delete_all_unit();
 }
 
 /* 800BF1C8-800BF2D4       .text put_unit__Q25dWood8Packet_cFRC4cXyzi */
-void dWood::Packet_c::put_unit(const cXyz&, int) {
-    /* Nonmatching */
+s32 dWood::Packet_c::put_unit(const cXyz &pos, int room_no) {
+  JUT_ASSERT(0x6e0, (room_no >= 0) && (room_no < L_Room_Max));
+
+  const s32 unitCount = ARRAY_SIZE(mUnit);
+  s32 unitIdx = search_empty_UnitID();
+  if (unitIdx != unitCount) {
+    Unit_c *unit = &this->mUnit[unitIdx];
+    unit->mFlags = Unit_IsActive;
+    (unit->mPos).x = pos.x;
+    (unit->mPos).y = pos.y;
+    (unit->mPos).z = pos.z;
+    unit->mAnmIdx = search_anm(Anm_c::Mode_Norm);
+    s8 valid = unit->set_ground();
+    if (valid & 0xff) {
+      this->mRoom[room_no].entry_unit(unit);
+    } else {
+      unit->clear();
+    }
+  }
+  return unitIdx;
 }
 
 /* 800BF2D4-800BF404       .text calc_cc__Q25dWood8Packet_cFv */
+// Collision Calculations
 void dWood::Packet_c::calc_cc() {
-    /* Nonmatching */
+  const s32 roomIdx = dStage_roomControl_c::mStayNo;
+
+  if ((roomIdx >= 0) && (roomIdx < (s32)ARRAY_SIZE(mRoom))) {
+    dComIfG_Ccsp()->SetMassAttr(L_attr.kCollisionRad, L_attr.kCollisionHeight,
+                                (u8)0x13, 1);
+
+    Room_c *room = &this->mRoom[roomIdx];
+    for (Unit_c *unit = room->mpUnit; unit != NULL; unit = unit->mpNext) {
+      if ((unit->mFlags & Unit_IsChopped) == 0) {
+        unit->cc_hit_before_cut(this);
+      }
+    }
+
+    dComIfG_Ccsp()->SetMassAttr(L_attr.kCollisionRadCut,
+                                L_attr.kCollisionHeightCut, (u8)0x12, 1);
+    for (Unit_c *unit = room->mpUnit; unit != NULL; unit = unit->mpNext) {
+      if ((unit->mFlags & Unit_IsChopped) != 0) {
+        unit->cc_hit_after_cut(this);
+      }
+    }
+  }
 }
 
 /* 800BF404-800BF4EC       .text calc__Q25dWood8Packet_cFv */
 void dWood::Packet_c::calc() {
-    /* Nonmatching */
+  calc_cc();
+
+  cXyz *windDir = dKyw_get_wind_vec();
+  float windVel = dKyw_get_wind_pow();
+  s16 windAngle = cM_atan2s(windDir->x, windDir->z);
+
+  for (s32 i = 0; i < (s32)8; i++) {
+    mAnm[i].mode_norm_set_wind(windVel, (s32)windAngle);
+  }
+
+  for (s32 i = 0; i < (s32)ARRAY_SIZE(mAnm); i++) {
+    mAnm[i].play(this);
+  }
+
+  for (s32 i = 0; i < (s32)ARRAY_SIZE(mUnit); i++) {
+    mUnit[i].proc(this);
+  }
 }
 
 /* 800BF4EC-800BF614       .text update__Q25dWood8Packet_cFv */
 void dWood::Packet_c::update() {
-    /* Nonmatching */
+  s32 i = 0;
+  for (Unit_c *unit = this->mUnit; i < (s32)ARRAY_SIZE(mUnit); i++, unit++) {
+    if ((unit->mFlags & Unit_IsActive) != 0) {
+      cXyz clipPos((unit->mPos).x, (unit->mPos).y + L_attr.kClipCenterYOffset,
+                   (unit->mPos).z);
+      s32 res = mDoLib_clipper::clip(j3dSys.getViewMtx(), clipPos,
+                                     L_attr.kClipRadius);
+
+      if (res != 0) {
+        unit->mFlags = unit->mFlags | Unit_IsFrustumCulled;
+      } else {
+        unit->mFlags = unit->mFlags & ~Unit_IsFrustumCulled;
+        unit->set_mtx(this->mAnm);
+      }
+    }
+  }
+
+  dComIfGd_setXluListBG();
+  j3dSys.getDrawBuffer(0)->entryImm(this, 0);
+  dComIfGd_setXluList();
 }
 
 /* 800BF614-800BF900       .text draw__Q25dWood8Packet_cFv */
 void dWood::Packet_c::draw() {
-    /* Nonmatching */
+  u8 bVar1;
+  int iVar2;
+  int iVar3;
+  uint uVar4;
+  Unit_c *pUnit;
+  int iVar6;
+  int iVar7;
+  GXColor local_48;
+  GXColor local_44;
+  GXColor local_40;
+  GXColor local_38;
+  GXColorS10 local_30;
+
+  static GXVtxDescList l_shadowVtxDescList[] = {
+      {GX_VA_POS, GX_INDEX8},
+      {GX_VA_TEX0, GX_INDEX8},
+      {GX_VA_NULL, GX_NONE},
+  };
+  static GXVtxAttrFmtList l_shadowVtxAttrFmtList[] = {
+      {GX_VA_POS, GX_CLR_RGBA, GX_RGB8},
+      {GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8},
+      {GX_VA_NULL, GX_CLR_RGBA, GX_RGB8},
+  };
+  static GXVtxDescList l_vtxDescList[] = {
+      {GX_VA_POS, GX_INDEX8},
+      {GX_VA_CLR0, GX_INDEX8},
+      {GX_VA_TEX0, GX_INDEX8},
+      {GX_VA_NULL, GX_NONE},
+  };
+  static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+      {GX_VA_POS, GX_CLR_RGBA, GX_F32},
+      {GX_VA_CLR0, GX_CLR_RGBA, GX_RGB8},
+      {GX_VA_TEX0, GX_CLR_RGBA, GX_F32},
+      {GX_VA_NULL, GX_CLR_RGBA, GX_RGB8},
+  };
+
+  // Assign the shadow material and draw state
+  GFSetVtxDescv(l_shadowVtxDescList);
+  GFSetVtxAttrFmtv(GX_VTXFMT0, l_shadowVtxAttrFmtList);
+  GFSetArray(GX_VA_POS, d_tree::g_dTree_shadowPos, 3);
+  GFSetArray(GX_VA_TEX0, d_tree::g_dTree_shadowTexCoord, 2);
+  dKy_GxFog_set();
+  GXCallDisplayList(d_tree::g_dTree_shadowMatDL,
+                    d_tree::g_dTree_shadowMatDL_SIZE & ~0b11111);
+  GFSetTevColor(GX_TEVREG0, l_shadowColor);
+
+  // Draw the drop shadows for each active unit
+  Room_c *room = &this->mRoom[0];
+  void *dl = d_tree::g_dTree_Oba_kage_32DL;
+  const u32 dlSize = d_tree::g_dTree_Oba_kage_32DL_SIZE;
+  for (s32 i = 0; i < (s32)ARRAY_SIZE(mRoom); room++, i++) {
+    for (Unit_c *data = room->mpUnit; data != NULL; data = data->mpNext) {
+      if ((pUnit->mFlags & Unit_IsFrustumCulled) == 0) {
+        GFLoadPosMtxImm(pUnit->mShadowModelViewMtx, 0);
+        GXCallDisplayList(dl, dlSize);
+      }
+    }
+  }
+
+  // Assign the body and trunk material and draw state
+  GXColor alphaColor = {0xff, 0xff, 0xff, 0xff};
+  GFSetVtxDescv(l_vtxDescList);
+  GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+  GFSetArray(GX_VA_POS, d_tree::l_pos, 0xc);
+  GFSetArray(GX_VA_CLR0, d_tree::l_color, 4);
+  GFSetArray(GX_VA_TEX0, d_tree::l_texCoord, 8);
+  GXCallDisplayList(l_matDL, 0xa0);
+  GFSetAlphaCompare(GX_GREATER, L_Alpha_Cutoff, GX_AOP_OR, GX_GREATER,
+                    L_Alpha_Cutoff);
+  GFSetTevColor(GX_TEVREG2, alphaColor);
+
+  // Draw the trunk and body for each active unit
+  room = this->mRoom;
+  for (s32 i = 0; i < (s32)ARRAY_SIZE(mRoom); room++, i++) {
+    dKy_tevstr_c *tevStr = dComIfGp_roomControl_getTevStr(i);
+    GFSetTevColorS10(GX_TEVREG0, tevStr->mColorC0);
+    GFSetTevColor(GX_TEVREG1, tevStr->mColorK0);
+
+    dKy_GfFog_tevstr_set(tevStr);
+
+    for (Unit_c *data = room->mpUnit; data != NULL; data = data->mpNext) {
+      if ((pUnit->mFlags & Unit_IsFrustumCulled) == 0) {
+        if ((pUnit->mFlags & Unit_IsChopped) == 0) {
+          u32 alphaScale = this->mAnm[pUnit->mAnmIdx].mAlphaScale;
+          alphaColor.a = alphaScale;
+
+          if ((alphaScale & 0xff) != 0xff) {
+            GFSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER,
+                              0); // Disable Alpha Test
+          }
+          GFSetTevColor(GX_TEVREG2, alphaColor);
+          GFLoadPosMtxImm(pUnit->mModelViewMtx, 0);
+          GXCallDisplayList(l_Oba_swood_bDL, 0x100);
+
+          if ((alphaScale & 0xff) != 0xff) {
+            GFSetAlphaCompare(GX_GREATER, L_Alpha_Cutoff, GX_AOP_OR, GX_GREATER,
+                              L_Alpha_Cutoff); // Alpha Test < 50%
+          }
+          alphaColor.a = 0xff;
+          GFSetTevColor(GX_TEVREG2, alphaColor);
+        }
+        GFLoadPosMtxImm(pUnit->mTrunkModelViewMtx, 0);
+        GXCallDisplayList(l_Oba_swood_b_cutDL, l_Oba_swood_b_cutDL_SIZE);
+      }
+    }
+  }
+  J3DShape::sOldVcdVatCmd = 0;
 }
 
 /* 800BF900-800BF938       .text search_empty_UnitID__Q25dWood8Packet_cCFv */
-void dWood::Packet_c::search_empty_UnitID() const {
-    /* Nonmatching */
+s32 dWood::Packet_c::search_empty_UnitID() const {
+  const Unit_c *unit;
+  int idx = 0;
+  unit = this->mUnit;
+
+  for (s32 i = 0; i < ARRAY_SIZE(mUnit); i++) {
+    if ((s32)unit->mFlags == 0) {
+      return idx;
+    }
+    idx += 1;
+    unit = unit + 1;
+  }
+
+  return ARRAY_SIZE(mUnit);
 }
 
-/* 800BF938-800BFA70       .text search_anm__Q25dWood8Packet_cFQ35dWood5Anm_c6Mode_e */
-void dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e) {
-    /* Nonmatching */
+/* 800BF938-800BFA70       .text
+ * search_anm__Q25dWood8Packet_cFQ35dWood5Anm_c6Mode_e */
+s32 dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
+  s32 animIdx;
+
+  JUT_ASSERT(0x80d, (i_mode >= 0) && (i_mode < Anm_c::Mode_Max));
+
+  if (i_mode == Anm_c::Mode_Norm) {
+    static s32 anm_norm_num = 0;
+    animIdx = anm_norm_num++;
+    anm_norm_num = anm_norm_num % 8;
+  } else {
+    // Return the first anim slot which has an unset mode
+    animIdx = 8;
+    for (s32 i = 0; i < 64; i++) {
+      if (this->mAnm[animIdx].mMode == Anm_c::Mode_Max) {
+        return animIdx;
+      }
+      animIdx++;
+    }
+
+    // If none are available, return the first one which has a higher mode
+    animIdx = 8;
+    for (s32 i = 0; i < 64; i++) {
+      if (i_mode < this->mAnm[animIdx].mMode) {
+        return animIdx;
+      }
+      animIdx++;
+    }
+
+    // If no available anim slot is found, return -1
+    animIdx = -1;
+  }
+
+  return animIdx;
 }

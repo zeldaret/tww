@@ -3008,6 +3008,10 @@ inline void dComIfGd_setList() {
     g_dComIfG_gameInfo.drawlist.setXluList();
 }
 
+inline void dComIfGd_setXluList() {
+    g_dComIfG_gameInfo.drawlist.setXluList();
+}
+
 inline void dComIfGd_setListInvisisble() {
     g_dComIfG_gameInfo.drawlist.setOpaListInvisible();
     g_dComIfG_gameInfo.drawlist.setXluListInvisible();
