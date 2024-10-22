@@ -476,8 +476,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         mAnimCooldown = 20;
 
         // Play the cut sound
-        JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0,
-                                             1.0, 1.0, -1.0, -1.0, 0);
+        mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0);
 
         // If we are currently performing a basic animation, assign a new
         // animation
@@ -506,8 +505,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         mAnimCooldown == 0) {
 
       mAnimCooldown = 20;
-      JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0,
-                                           1.0, 1.0, -1.0, -1.0, 0);
+      mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0);
 
       // If we are currently performing a basic animation, assign a new
       // animation
@@ -550,8 +548,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
           dComIfGp_particle_set(dPa_name::ID_CUT_L_TREE_DOWN, &mPos, NULL, NULL,
                                 0xff, NULL, -1, &mTevStr.mColorK0, NULL, NULL);
 
-          JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_CUT_L_TREE_DOWN, &mPos,
-                                               0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+          mDoAud_seStart(JA_SE_OBJ_CUT_L_TREE_DOWN, &mPos, 0, 0);
 
           float newShadowScale =
               L_attr.kCutShadowScale / L_attr.kUncutShadowScale;
