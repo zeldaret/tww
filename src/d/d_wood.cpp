@@ -104,8 +104,8 @@ dWood::Anm_c::Anm_c() {
   int iVar1;
   int iVar2;
 
-  PSMTXIdentity(mModelMtx);
-  PSMTXIdentity(mTrunkModelMtx);
+  MTXIdentity(mModelMtx);
+  MTXIdentity(mTrunkModelMtx);
   mMode = Mode_Max;
   mCountdown = 0;
   mWindDir = 0;
