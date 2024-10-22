@@ -50,7 +50,7 @@ public:
     /* 0x0A8 */ Mtx mShadowModelViewMtx;
     /* 0x0D8 */ Unit_c* mpNext;
 
-    dKy_tevstr_c mTevStr;
+    /* 0x0DC */ dKy_tevstr_c mTevStr;
 };
 
 STATIC_ASSERT(sizeof(Unit_c) == 0x18C);
