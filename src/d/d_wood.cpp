@@ -270,7 +270,6 @@ void dWood::Anm_c::mode_norm_init() {
 
 /* 800BDF5C-800BE148       .text mode_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
-    /* Nonmatching */
     int phase;
     if (mWindPow < 0.33f) {
         phase = 0;
@@ -286,7 +285,7 @@ void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
     float fVar6 = fVar1;
     for (s32 i = 0; i < 2; i++) {
         const AnimAttrs *baseAttr = &L_attr.base[phase][i];
-        s16 unk2 = baseAttr->unkShort2;
+        s32 unk2 = baseAttr->unkShort2;
         s16 unk1 = baseAttr->unkShort1;
         s16 unk3 = baseAttr->unkShort3;
         float unk4 = baseAttr->unkFloat;
