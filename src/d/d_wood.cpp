@@ -500,7 +500,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
   if ((ret & 2) && actor && inf.GetCoHitObj() && inf.GetCoHitObj()->GetStts()) {
     animIdx = packet->search_anm(Anm_c::Mode_PushInto);
 
-    if (fopAcM_GetName(actor) == PROC_PLAYER && inf.GetCoHitLen() >= 2.0f &&
+    if (fopAcM_GetProfName(actor) == PROC_PLAYER && inf.GetCoHitLen() >= 2.0f &&
         mAnimCooldown == 0) {
 
       mAnimCooldown = 20;
@@ -527,35 +527,35 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
   // Check for attacks that WILL cut us down
   if ((ret & 1)) {
     oldAnimIdx = mAnmIdx;
+
     if ((mAnmIdx < 8)) {
       animIdx = packet->search_anm(Anm_c::Mode_Cut);
-
       if (animIdx != -1) {
         mAnmIdx = animIdx;
       }
+    }
 
-      if ((mAnmIdx >= 8)) {
-        if (packet->get_anm(mAnmIdx)->get_mode() > Anm_c::Mode_Cut) {
-          s16 targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
-          packet->get_anm(mAnmIdx)->mode_cut_init(packet->get_anm(oldAnimIdx),
-                                                  (s32)targetAngle);
+    if ((mAnmIdx >= 8)) {
+      if (packet->get_anm(mAnmIdx)->get_mode() > Anm_c::Mode_Cut) {
+        s16 targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
+        packet->get_anm(mAnmIdx)->mode_cut_init(packet->get_anm(oldAnimIdx),
+                                                (s32)targetAngle);
 
-          // Compute the color settings for particels
-          g_env_light.settingTevStruct(TEV_TYPE_BG0, &mPos, &mTevStr);
+        // Compute the color settings for particels
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &mPos, &mTevStr);
 
-          // Spawn cut down particles (a bunch of leaves)
-          dComIfGp_particle_set(dPa_name::ID_CUT_L_TREE_DOWN, &mPos, NULL, NULL,
-                                0xff, NULL, -1, &mTevStr.mColorK0, NULL, NULL);
+        // Spawn cut down particles (a bunch of leaves)
+        dComIfGp_particle_set(dPa_name::ID_CUT_L_TREE_DOWN, &mPos, NULL, NULL,
+                              0xff, NULL, -1, &mTevStr.mColorK0, NULL, NULL);
 
-          mDoAud_seStart(JA_SE_OBJ_CUT_L_TREE_DOWN, &mPos, 0, 0);
+        mDoAud_seStart(JA_SE_OBJ_CUT_L_TREE_DOWN, &mPos, 0, 0);
 
-          float newShadowScale =
-              L_attr.kCutShadowScale / L_attr.kUncutShadowScale;
+        float newShadowScale =
+            L_attr.kCutShadowScale / L_attr.kUncutShadowScale;
 
-          mDoMtx_copy(mShadowModelMtx, mDoMtx_stack_c::get());
-          mDoMtx_stack_c::scaleM(newShadowScale, 1.0, newShadowScale);
-          mDoMtx_copy(mDoMtx_stack_c::get(), mShadowModelMtx);
-        }
+        mDoMtx_copy(mShadowModelMtx, mDoMtx_stack_c::get());
+        mDoMtx_stack_c::scaleM(newShadowScale, 1.0, newShadowScale);
+        mDoMtx_copy(mDoMtx_stack_c::get(), mShadowModelMtx);
       }
     }
   }
