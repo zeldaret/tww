@@ -7,15 +7,12 @@
 #include "dolphin/types.h"
 #include "dolphin/mtx/mtx.h"
 
-u8 d_tree::g_dTree_shadowPos[] = {}; // Supposed to be 3 byte position, but I can't find a matching type 
-u8 d_tree::g_dTree_shadowTexCoord[] = {}; // Supposed to be 2 byte UV, but I can't find a matching type 
-
-const u32 d_tree::g_dTree_shadowMatDL_SIZE = 0x80;
-const u32 d_tree:: g_dTree_Oba_kage_32DL_SIZE = 0x20;
-
-Vec d_tree::l_pos[];
-GXColor d_tree::l_color[];
-cXy d_tree::l_texCoord[];
+u8 g_dTree_shadowPos[3];
+u8 g_dTree_shadowTexCoord[2];
+const u32 g_dTree_shadowMatDL_SIZE = 0x80;
+const u32  g_dTree_Oba_kage_32DL_SIZE = 0x20;
+extern u8 g_dTree_shadowMatDL[0x80];
+extern u8 g_dTree_Oba_kage_32DL[0x20];
 
 /* 800787BC-80078960       .text WorkCo__12dTree_data_cFP10fopAc_ac_cUli */
 void dTree_data_c::WorkCo(fopAc_ac_c*, u32, int) {

@@ -27,12 +27,10 @@
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
 
-// These belong in the d_tree compilation unit, in the d_tree namespace. But in
-// order to match, they must be in this compilation unit so they can have a
-// 16-bit offset, allowing us load their pointer using a single load immediate
-// instruction
-u8 d_tree::g_dTree_shadowTexCoord[8 /* TODO: real length */] =
-    {}; // Supposed to be 2 byte UV, but I can't find a matching type
+// These belong in the d_tree compilation unit. But in order to match, they must
+// be in this compilation unit so they can have a 16-bit offset, allowing us
+// load their pointer using a single load immediate instruction
+u8 g_dTree_shadowTexCoord[2];
 
 //-----------------------------------------
 // Types
@@ -55,6 +53,9 @@ u32 l_Oba_swood_b_cutDL_SIZE = 0xc0;
 u32 l_Oba_swood_bDL_SIZE = 0x100;
 u8 l_Oba_swood_b_cutDL[0xc0];
 u8 l_Oba_swood_bDL[0x100];
+u8 l_pos[12];
+u8 l_color[4];
+u8 l_texCoord[8];
 
 const float l_Ground_check_y_offset = 100.0f;
 const float l_Ground_check_unk0 = 1.0E+9;
@@ -194,8 +195,7 @@ void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
   mRotX[0] = mRotX[0] + L_attr.kCutPitchVel;
 
   mDoMtx_YrotS(mDoMtx_stack_c::now, (int)mWindDir);
-  mDoMtx_stack_c::transM(L_attr.kCutPosOffsetX, mPosOffsetY,
-                         mPosOffsetZ);
+  mDoMtx_stack_c::transM(L_attr.kCutPosOffsetX, mPosOffsetY, mPosOffsetZ);
   mDoMtx_XrotM(mDoMtx_stack_c::now, mRotX[0]);
   mDoMtx_YrotM(mDoMtx_stack_c::now, -mWindDir);
   mDoMtx_copy(mDoMtx_stack_c::now, mModelMtx);
@@ -295,7 +295,7 @@ void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
   }
 
   mDoMtx_YrotS(mModelMtx, (s16)fVar1 + mWindDir); // Y Rotation (Yaw)
-  mDoMtx_XrotM(mModelMtx, fVar6);                       // X Rotation
+  mDoMtx_XrotM(mModelMtx, fVar6);                 // X Rotation
   mDoMtx_YrotM(mModelMtx, -mWindDir);             // Y Rotation
 }
 
@@ -343,8 +343,7 @@ void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
     float fVar2 = baseAttr->unkFloat;
     s16 rotXStep = baseAttr->unkShort2 + 3000;
 
-    cLib_chaseS(&mRotY[i], normAnim->mRotY[i],
-                baseAttr->unkUShort0 + 3000);
+    cLib_chaseS(&mRotY[i], normAnim->mRotY[i], baseAttr->unkUShort0 + 3000);
     cLib_chaseS(&mRotX[i], normAnim->mRotX[i], rotXStep);
     cLib_chaseS(&mUnkArr2[i], normAnim->mUnkArr2[i], 0xf);
     cLib_chaseS(&mUnkArr3[i], normAnim->mUnkArr3[i], 0xf);
@@ -434,11 +433,9 @@ void dWood::Unit_c::set_mtx(dWood::Anm_c *anim) {
   mDoMtx_stack_c::now[0][3] = (mPos).x;
   mDoMtx_stack_c::now[1][3] = (mPos).y;
   mDoMtx_stack_c::now[2][3] = (mPos).z;
-  mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(),
-                mTrunkModelViewMtx);
+  mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mTrunkModelViewMtx);
 
-  mDoMtx_concat(j3dSys.getViewMtx(), mShadowModelMtx,
-                mShadowModelViewMtx);
+  mDoMtx_concat(j3dSys.getViewMtx(), mShadowModelMtx, mShadowModelViewMtx);
 }
 
 /* 800BEA28-800BEA50       .text clear__Q25dWood6Unit_cFv */
@@ -481,8 +478,8 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         mAnimCooldown = 20;
 
         // Play the cut sound
-        JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_TREE_SWING, &mPos,
-                                             0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+        JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0,
+                                             1.0, 1.0, -1.0, -1.0, 0);
 
         // If we are currently performing a basic animation, assign a new
         // animation
@@ -494,10 +491,8 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         // If we were able to allocate an animation (or we already have one),
         // start the "PushInto" (shrinking) animation
         if ((mAnmIdx >= 8) &&
-            packet->get_anm(mAnmIdx)->get_mode() >=
-                Anm_c::Mode_PushInto) {
-          s16 targetAngle =
-              cLib_targetAngleY(&(actor->current).pos, &mPos);
+            packet->get_anm(mAnmIdx)->get_mode() >= Anm_c::Mode_PushInto) {
+          s16 targetAngle = cLib_targetAngleY(&(actor->current).pos, &mPos);
           packet->mAnm[mAnmIdx].mode_push_into_init(packet->mAnm + oldAnimIdx,
                                                     (s32)targetAngle);
         }
@@ -513,8 +508,8 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         mAnimCooldown == 0) {
 
       mAnimCooldown = 20;
-      JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0,
-                                           0, 1.0, 1.0, -1.0, -1.0, 0);
+      JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0,
+                                           1.0, 1.0, -1.0, -1.0, 0);
 
       // If we are currently performing a basic animation, assign a new
       // animation
@@ -525,8 +520,8 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
 
       // If we were able to allocate an animation (or we already have one),
       // start the "PushInto" (shrinking) animation
-      if ((mAnmIdx >= 8) && (packet->get_anm(mAnmIdx)->get_mode() >=
-                                   Anm_c::Mode_PushInto)) {
+      if ((mAnmIdx >= 8) &&
+          (packet->get_anm(mAnmIdx)->get_mode() >= Anm_c::Mode_PushInto)) {
         s16 targetAngle = cLib_targetAngleY(&(actor->current).pos, &mPos);
         packet->mAnm[mAnmIdx].mode_push_into_init(packet->mAnm + oldAnimIdx,
                                                   (s32)targetAngle);
@@ -545,8 +540,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
 
       if ((mAnmIdx >= 8)) {
         if (packet->get_anm(mAnmIdx)->get_mode() > Anm_c::Mode_Cut) {
-          s16 targetAngle =
-              cLib_targetAngleY(&(actor->current).pos, &mPos);
+          s16 targetAngle = cLib_targetAngleY(&(actor->current).pos, &mPos);
           packet->get_anm(mAnmIdx)->mode_cut_init(packet->get_anm(oldAnimIdx),
                                                   (s32)targetAngle);
 
@@ -554,13 +548,11 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
           g_env_light.settingTevStruct(TEV_TYPE_BG0, &mPos, &mTevStr);
 
           // Spawn cut down particles (a bunch of leaves)
-          dComIfGp_particle_set(dPa_name::ID_CUT_L_TREE_DOWN, &mPos, NULL,
-                                NULL, 0xff, NULL, -1, &mTevStr.mColorK0,
-                                NULL, NULL);
+          dComIfGp_particle_set(dPa_name::ID_CUT_L_TREE_DOWN, &mPos, NULL, NULL,
+                                0xff, NULL, -1, &mTevStr.mColorK0, NULL, NULL);
 
-          JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_CUT_L_TREE_DOWN,
-                                               &mPos, 0, 0, 1.0, 1.0,
-                                               -1.0, -1.0, 0);
+          JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_CUT_L_TREE_DOWN, &mPos,
+                                               0, 0, 1.0, 1.0, -1.0, -1.0, 0);
 
           float newShadowScale =
               L_attr.kCutShadowScale / L_attr.kUncutShadowScale;
@@ -777,17 +769,16 @@ void dWood::Packet_c::draw() {
   // Assign the shadow material and draw state
   GFSetVtxDescv(l_shadowVtxDescList);
   GFSetVtxAttrFmtv(GX_VTXFMT0, l_shadowVtxAttrFmtList);
-  GFSetArray(GX_VA_POS, d_tree::g_dTree_shadowPos, 3);
-  GFSetArray(GX_VA_TEX0, d_tree::g_dTree_shadowTexCoord, 2);
+  GFSetArray(GX_VA_POS, g_dTree_shadowPos, 3);
+  GFSetArray(GX_VA_TEX0, g_dTree_shadowTexCoord, 2);
   dKy_GxFog_set();
-  GXCallDisplayList(d_tree::g_dTree_shadowMatDL,
-                    d_tree::g_dTree_shadowMatDL_SIZE & ~0b11111);
+  GXCallDisplayList(g_dTree_shadowMatDL, g_dTree_shadowMatDL_SIZE & ~0b11111);
   GFSetTevColor(GX_TEVREG0, l_shadowColor);
 
   // Draw the drop shadows for each active unit
   Room_c *room = &mRoom[0];
-  void *dl = d_tree::g_dTree_Oba_kage_32DL;
-  const u32 dlSize = d_tree::g_dTree_Oba_kage_32DL_SIZE;
+  void *dl = g_dTree_Oba_kage_32DL;
+  const u32 dlSize = g_dTree_Oba_kage_32DL_SIZE;
   for (s32 i = 0; i < (s32)ARRAY_SIZE(mRoom); room++, i++) {
     for (Unit_c *data = room->mpUnit; data != NULL; data = data->mpNext) {
       if ((pUnit->mFlags & Unit_IsFrustumCulled) == 0) {
@@ -801,9 +792,9 @@ void dWood::Packet_c::draw() {
   GXColor alphaColor = {0xff, 0xff, 0xff, 0xff};
   GFSetVtxDescv(l_vtxDescList);
   GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
-  GFSetArray(GX_VA_POS, d_tree::l_pos, 0xc);
-  GFSetArray(GX_VA_CLR0, d_tree::l_color, 4);
-  GFSetArray(GX_VA_TEX0, d_tree::l_texCoord, 8);
+  GFSetArray(GX_VA_POS, l_pos, 0xc);
+  GFSetArray(GX_VA_CLR0, l_color, 4);
+  GFSetArray(GX_VA_TEX0, l_texCoord, 8);
   GXCallDisplayList(l_matDL, 0xa0);
   GFSetAlphaCompare(GX_GREATER, L_Alpha_Cutoff, GX_AOP_OR, GX_GREATER,
                     L_Alpha_Cutoff);
