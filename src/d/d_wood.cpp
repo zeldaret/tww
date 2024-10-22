@@ -424,15 +424,15 @@ void dWood::Unit_c::set_mtx(dWood::Anm_c *anim) {
   iVar1 = mAnmIdx;
 
   mDoMtx_copy(anim[iVar1].mModelMtx, mDoMtx_stack_c::get());
-  mDoMtx_stack_c::now[0][3] = mDoMtx_stack_c::now[0][3] + (mPos).x;
-  mDoMtx_stack_c::now[1][3] = mDoMtx_stack_c::now[1][3] + (mPos).y;
-  mDoMtx_stack_c::now[2][3] = mDoMtx_stack_c::now[2][3] + (mPos).z;
+  mDoMtx_stack_c::now[0][3] = mDoMtx_stack_c::now[0][3] + mPos.x;
+  mDoMtx_stack_c::now[1][3] = mDoMtx_stack_c::now[1][3] + mPos.y;
+  mDoMtx_stack_c::now[2][3] = mDoMtx_stack_c::now[2][3] + mPos.z;
   mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::now, mModelViewMtx);
 
   mDoMtx_copy(anim[iVar1].mTrunkModelMtx, mDoMtx_stack_c::get());
-  mDoMtx_stack_c::now[0][3] = (mPos).x;
-  mDoMtx_stack_c::now[1][3] = (mPos).y;
-  mDoMtx_stack_c::now[2][3] = (mPos).z;
+  mDoMtx_stack_c::now[0][3] = mPos.x;
+  mDoMtx_stack_c::now[1][3] = mPos.y;
+  mDoMtx_stack_c::now[2][3] = mPos.z;
   mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mTrunkModelViewMtx);
 
   mDoMtx_concat(j3dSys.getViewMtx(), mShadowModelMtx, mShadowModelViewMtx);
@@ -458,15 +458,14 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
   // Evaluate for attacks that will not cut us down
   if ((ret & 1)) {
     cCcD_Obj *atHitObj = inf.GetAtHitObj();
-    if (atHitObj != NULL &&
-        (atHitObj->ChkAtType(AT_TYPE_WIND) ||
-         atHitObj->ChkAtType(AT_TYPE_BOMB) ||
-         atHitObj->ChkAtType(AT_TYPE_FIRE) ||
-         atHitObj->ChkAtType(AT_TYPE_NORMAL_ARROW) ||
-         atHitObj->ChkAtType(AT_TYPE_FIRE_ARROW) ||
-         atHitObj->ChkAtType(AT_TYPE_ICE_ARROW) ||
-         atHitObj->ChkAtType(AT_TYPE_LIGHT_ARROW) ||
-         atHitObj->ChkAtType(AT_TYPE_HOOKSHOT))) {
+    if (atHitObj != NULL && (atHitObj->ChkAtType(AT_TYPE_WIND) ||
+                             atHitObj->ChkAtType(AT_TYPE_BOMB) ||
+                             atHitObj->ChkAtType(AT_TYPE_FIRE) ||
+                             atHitObj->ChkAtType(AT_TYPE_NORMAL_ARROW) ||
+                             atHitObj->ChkAtType(AT_TYPE_FIRE_ARROW) ||
+                             atHitObj->ChkAtType(AT_TYPE_ICE_ARROW) ||
+                             atHitObj->ChkAtType(AT_TYPE_LIGHT_ARROW) ||
+                             atHitObj->ChkAtType(AT_TYPE_HOOKSHOT))) {
 
       // Clear the hit bit so that we don't get cut down
       ret &= ~0x01;
@@ -489,7 +488,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         // start the "PushInto" (shrinking) animation
         if ((mAnmIdx >= 8) &&
             packet->get_anm(mAnmIdx)->get_mode() >= Anm_c::Mode_PushInto) {
-          s16 targetAngle = cLib_targetAngleY(&(actor->current).pos, &mPos);
+          s16 targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
           packet->mAnm[mAnmIdx].mode_push_into_init(packet->mAnm + oldAnimIdx,
                                                     (s32)targetAngle);
         }
@@ -518,7 +517,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
       // start the "PushInto" (shrinking) animation
       if ((mAnmIdx >= 8) &&
           (packet->get_anm(mAnmIdx)->get_mode() >= Anm_c::Mode_PushInto)) {
-        s16 targetAngle = cLib_targetAngleY(&(actor->current).pos, &mPos);
+        s16 targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
         packet->mAnm[mAnmIdx].mode_push_into_init(packet->mAnm + oldAnimIdx,
                                                   (s32)targetAngle);
       }
@@ -537,7 +536,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
 
       if ((mAnmIdx >= 8)) {
         if (packet->get_anm(mAnmIdx)->get_mode() > Anm_c::Mode_Cut) {
-          s16 targetAngle = cLib_targetAngleY(&(actor->current).pos, &mPos);
+          s16 targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
           packet->get_anm(mAnmIdx)->mode_cut_init(packet->get_anm(oldAnimIdx),
                                                   (s32)targetAngle);
 
@@ -639,9 +638,9 @@ s32 dWood::Packet_c::put_unit(const cXyz &pos, int room_no) {
   if (unitIdx != unitCount) {
     Unit_c *unit = &mUnit[unitIdx];
     unit->mFlags = Unit_IsActive;
-    (unit->mPos).x = pos.x;
-    (unit->mPos).y = pos.y;
-    (unit->mPos).z = pos.z;
+    unit->mPos.x = pos.x;
+    unit->mPos.y = pos.y;
+    unit->mPos.z = pos.z;
     unit->mAnmIdx = search_anm(Anm_c::Mode_Norm);
     s8 valid = unit->set_ground();
     if (valid & 0xff) {
@@ -705,8 +704,8 @@ void dWood::Packet_c::update() {
   s32 i = 0;
   for (Unit_c *unit = mUnit; i < (s32)ARRAY_SIZE(mUnit); i++, unit++) {
     if ((unit->mFlags & Unit_IsActive) != 0) {
-      cXyz clipPos((unit->mPos).x, (unit->mPos).y + L_attr.kClipCenterYOffset,
-                   (unit->mPos).z);
+      cXyz clipPos(unit->mPos.x, unit->mPos.y + L_attr.kClipCenterYOffset,
+                   unit->mPos.z);
       s32 res = mDoLib_clipper::clip(j3dSys.getViewMtx(), clipPos,
                                      L_attr.kClipRadius);
 
