@@ -251,8 +251,8 @@ void dWood::Anm_c::mode_norm_init() {
   this->mMode = Mode_Norm;
 
   for (u32 i = 0; i < 2; i++) {
-    this->mRotY[i] = (short)(_M_init_num << 0xd);
-    this->mRotX[i] = (short)(_M_init_num << 0xd);
+    this->mRotY[i] = _M_init_num * 0x2000;
+    this->mRotX[i] = _M_init_num * 0x2000;
     this->mUnkArr2[i] = L_attr.base[0][i].unkShort1;
     this->mUnkArr3[i] = L_attr.base[0][i].unkShort3;
   }
