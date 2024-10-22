@@ -32,6 +32,12 @@ class Unit_c {
 public:
     Unit_c();
 
+    enum State_e {
+        STATE_ACTIVE = 1 << 0,
+        STATE_FRUSTUM_CULLED = 1 << 1,
+        STATE_CUT = 1 << 2,
+    };
+
     bool set_ground();
     void set_mtx(Anm_c*);
     void clear();

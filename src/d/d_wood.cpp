@@ -35,12 +35,6 @@ u8 g_dTree_shadowTexCoord[2];
 //-----------------------------------------
 // Types
 //-----------------------------------------
-enum UnitFlags {
-    Unit_IsActive = 1 << 0,
-    Unit_IsFrustumCulled = 1 << 1,
-    Unit_IsChopped = 1 << 2,
-};
-
 typedef u8 ALIGN_DECL(32) jData;
 
 typedef void (dWood::Anm_c::*modeProcFunc)(dWood::Packet_c *);
@@ -464,7 +458,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     }
 
     // Evaluate for attacks that will not cut us down
-    if ((ret & 1)) {
+    if (cLib_checkBit(ret, 0x01UL)) {
         cCcD_Obj *atHitObj = inf.GetAtHitObj();
         if (atHitObj != NULL && (atHitObj->ChkAtType(AT_TYPE_WIND) ||
                                  atHitObj->ChkAtType(AT_TYPE_BOMB) ||
@@ -506,7 +500,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     }
 
     // Check for collisions that are not attacks
-    if ((ret & 2) && actor && inf.GetCoHitObj() &&
+    if (cLib_checkBit(ret, 0x02UL) && actor && inf.GetCoHitObj() &&
         inf.GetCoHitObj()->GetStts()) {
         animIdx = packet->search_anm(Anm_c::Mode_PushInto);
 
@@ -535,7 +529,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     }
 
     // Check for attacks that WILL cut us down
-    if ((ret & 1)) {
+    if (cLib_checkBit(ret, 0x01UL)) {
         oldAnimIdx = mAnmIdx;
 
         if ((mAnmIdx < 8)) {
@@ -579,7 +573,7 @@ void dWood::Unit_c::cc_hit_after_cut(dWood::Packet_c *) {}
 /* 800BEEA0-800BEF78       .text proc__Q25dWood6Unit_cFPQ25dWood8Packet_c */
 void dWood::Unit_c::proc(dWood::Packet_c *packet) {
     // If this unit is active, and performing a non-normal animation...
-    if (((mFlags & Unit_IsActive) != 0)) {
+    if (cLib_checkBit(mFlags, STATE_ACTIVE)) {
         int animIdx = mAnmIdx;
 
         if (animIdx >= 8) {
@@ -595,7 +589,7 @@ void dWood::Unit_c::proc(dWood::Packet_c *packet) {
                     s32 newAnimIdx = packet->search_anm(Anm_c::Mode_Norm);
                     mAnmIdx = newAnimIdx;
                     anim.mMode = Anm_c::Mode_Max;
-                    mFlags = mFlags | Unit_IsChopped;
+                    cLib_onBit(mFlags, STATE_CUT);
                 }
             } else if (mode == Anm_c::Mode_Max) {
                 animIdx = packet->search_anm(Anm_c::Mode_Norm);
@@ -648,7 +642,7 @@ s32 dWood::Packet_c::put_unit(const cXyz &pos, int room_no) {
     s32 unitIdx = search_empty_UnitID();
     if (unitIdx != unitCount) {
         Unit_c *unit = &mUnit[unitIdx];
-        unit->mFlags = Unit_IsActive;
+        cLib_setBit(unit->mFlags, Unit_c::STATE_ACTIVE);
         unit->mPos.x = pos.x;
         unit->mPos.y = pos.y;
         unit->mPos.z = pos.z;
@@ -675,7 +669,7 @@ void dWood::Packet_c::calc_cc() {
 
         Room_c *room = &mRoom[roomIdx];
         for (Unit_c *unit = room->mpUnit; unit != NULL; unit = unit->mpNext) {
-            if ((unit->mFlags & Unit_IsChopped) == 0) {
+            if (!cLib_checkBit(unit->mFlags, Unit_c::STATE_CUT)) {
                 unit->cc_hit_before_cut(this);
             }
         }
@@ -683,7 +677,7 @@ void dWood::Packet_c::calc_cc() {
         dComIfG_Ccsp()->SetMassAttr(L_attr.kCollisionRadCut,
                                     L_attr.kCollisionHeightCut, (u8)0x12, 1);
         for (Unit_c *unit = room->mpUnit; unit != NULL; unit = unit->mpNext) {
-            if ((unit->mFlags & Unit_IsChopped) != 0) {
+            if (cLib_checkBit(unit->mFlags, Unit_c::STATE_CUT)) {
                 unit->cc_hit_after_cut(this);
             }
         }
@@ -715,16 +709,16 @@ void dWood::Packet_c::calc() {
 void dWood::Packet_c::update() {
     s32 i = 0;
     for (Unit_c *unit = mUnit; i < (s32)ARRAY_SIZE(mUnit); i++, unit++) {
-        if ((unit->mFlags & Unit_IsActive) != 0) {
+        if (cLib_checkBit(unit->mFlags, Unit_c::STATE_ACTIVE)) {
             cXyz clipPos(unit->mPos.x, unit->mPos.y + L_attr.kClipCenterYOffset,
                          unit->mPos.z);
             s32 res = mDoLib_clipper::clip(j3dSys.getViewMtx(), clipPos,
                                            L_attr.kClipRadius);
 
             if (res != 0) {
-                unit->mFlags = unit->mFlags | Unit_IsFrustumCulled;
+                cLib_onBit(unit->mFlags, Unit_c::STATE_FRUSTUM_CULLED);
             } else {
-                unit->mFlags = unit->mFlags & ~Unit_IsFrustumCulled;
+                cLib_offBit(unit->mFlags, Unit_c::STATE_FRUSTUM_CULLED);
                 unit->set_mtx(mAnm);
             }
         }
@@ -790,7 +784,7 @@ void dWood::Packet_c::draw() {
     const u32 dlSize = g_dTree_Oba_kage_32DL_SIZE;
     for (s32 i = 0; i < (s32)ARRAY_SIZE(mRoom); room++, i++) {
         for (Unit_c *data = room->mpUnit; data != NULL; data = data->mpNext) {
-            if ((pUnit->mFlags & Unit_IsFrustumCulled) == 0) {
+            if (!cLib_checkBit(data->mFlags, Unit_c::STATE_FRUSTUM_CULLED)) {
                 GFLoadPosMtxImm(pUnit->mShadowModelViewMtx, 0);
                 GXCallDisplayList(dl, dlSize);
             }
@@ -819,8 +813,8 @@ void dWood::Packet_c::draw() {
         dKy_GfFog_tevstr_set(tevStr);
 
         for (Unit_c *data = room->mpUnit; data != NULL; data = data->mpNext) {
-            if ((pUnit->mFlags & Unit_IsFrustumCulled) == 0) {
-                if ((pUnit->mFlags & Unit_IsChopped) == 0) {
+            if (!cLib_checkBit(data->mFlags, Unit_c::STATE_FRUSTUM_CULLED)) {
+                if (!cLib_checkBit(data->mFlags, Unit_c::STATE_CUT)) {
                     u32 alphaScale = mAnm[pUnit->mAnmIdx].mAlphaScale;
                     alphaColor.a = alphaScale;
 
