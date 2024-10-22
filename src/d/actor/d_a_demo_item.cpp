@@ -14,7 +14,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "f_op/f_op_camera.h"
 
-static u8 dummy[0x4C]; // TODO
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 const int daDitem_c::m_rot_time = 8*30;
 

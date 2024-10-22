@@ -13,11 +13,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
-// Needed for the .data section to match.
-static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
-static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
-static u8 dummy_1811[] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 const s16 daWall_c::m_heapsize[3] = {
     0x1160,
@@ -217,7 +213,7 @@ void daWall_c::mode_break() {
         switch (mType) {
         case 0:
         case 1:
-        case 2:
+        case 2: {
             if ((mBreakCounter > 10) && cLib_chaseF(&mDst, 0.0f, 2.2222223f)) {
                 fopAcM_delete(this);
             }
@@ -227,6 +223,7 @@ void daWall_c::mode_break() {
                 pEmitter->setGlobalAlpha(mDst);
             }
             break;
+        }
         default:
             fopAcM_delete(this);
             break;

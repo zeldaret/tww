@@ -39,7 +39,7 @@
 #include "d/actor/d_a_npc_bs1.h"
 #include "SSystem/SComponent/c_counter.h"
 
-static Vec dummy_3569;
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 s32 daLodbg_c::sObjectCount;
 JKRExpHeap* daLodbg_c::sLocalHeap;

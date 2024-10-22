@@ -17,12 +17,12 @@ public:
     }
 
     Mtx* getMtx() { return &mMtx; }
-    cXyz* getNrm() { return m0C74 + (0x54 * m1C3A); }
-    cXyz* getPos() { return m00A4 + (0x54 * m1C3A); }
-    cXyz* getPosSpd() { return m0884; }
-    Mtx* getStickMtx() { return &mStickMtx; }
     Mtx* getTexMtx() { return &mTexMtx; }
+    Mtx* getStickMtx() { return &mStickMtx; }
     void setTevStr(dKy_tevstr_c* tevStr) { mTevStr = tevStr; }
+    cXyz* getPos() { return mPos[m1C3A]; }
+    cXyz* getPosSpd() { return m0884; }
+    cXyz* getNrm() { return mNrm[m1C3A]; }
 
     void setCorrectNrmAngle(s16, f32);
     void setNrmMtx();
@@ -36,10 +36,10 @@ public:
     /* 0x0040 */ Mtx mTexMtx;
     /* 0x0070 */ Mtx mStickMtx;
     /* 0x00A0 */ dKy_tevstr_c* mTevStr;
-    /* 0x00A4 */ cXyz m00A4[0x54 * 2];
+    /* 0x00A4 */ cXyz mPos[2][0x54];
     /* 0x0884 */ cXyz m0884[0x54];
-    /* 0x0C74 */ cXyz m0C74[0x54 * 2];
-    /* 0x1454 */ cXyz m1454[0x54 * 2];
+    /* 0x0C74 */ cXyz mNrm[2][0x54];
+    /* 0x1454 */ cXyz m1454[2][0x54];
     /* 0x1C34 */ s16 m1C34;
     /* 0x1C36 */ s16 m1C36;
     /* 0x1C38 */ s16 m1C38;

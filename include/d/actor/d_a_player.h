@@ -1,9 +1,10 @@
 #ifndef D_A_PLAYER
 #define D_A_PLAYER
 
-#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
 #include "d/d_cc_d.h"
+#include "d/d_item_data.h"
 
 inline u8 dComIfGs_getSelectEquip(int i_no);
 inline u8 dComIfGp_getMiniGameType();

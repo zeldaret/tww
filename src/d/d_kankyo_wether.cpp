@@ -4,11 +4,10 @@
 //
 
 #include "d/d_kankyo_wether.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_rain.h"
-#include "f_op/f_op_camera_mng.h"
+#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_audio.h"
 
 /* 80086F74-80086FC4       .text dKyw_setDrawPacketList__FP9J3DPacketi */

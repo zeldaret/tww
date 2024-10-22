@@ -9,7 +9,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_bg_w.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_link.h"
+#include "d/res/res_link.h" // IWYU pragma: export
 #include "d/res/res_lkanm.h"
 
 class mDoExt_MtxCalcOldFrame;
@@ -37,17 +37,30 @@ public:
     void onDrawFlg() { mDrawFlag = true; }
     void offDrawFlg() { mDrawFlag = false; }
     bool getLockFlg() { return mLockFlag; }
-    void onLockFlg() { mLockFlag = true; }
+    void onLockFlg() {
+        mLockFlag = true;
+        mFrame = 0;
+    }
     void offLockFlg() { mLockFlag = false; }
     void setPos(const cXyz* i_pos) { mPos = *i_pos; }
     void setSightTex(void* sightTex) { mpSightTex = sightTex; }
     void setLockTex(void* lockTex) { mpLockTex = lockTex; }
     void setImage(ResTIMG* image) { mpImg = image; }
+    bool checkSEFrame() {
+        // This implementation might be incomplete, debug map says it's 0x18 bytes but this line is only 0x10 bytes.
+        return mFrame == 0;
+    }
+    void incFrame() {
+        mFrame++;
+        if(mFrame == 26) {
+            mFrame = 0;
+        }
+    }
 
 private:
     /* 0x04 */ bool mDrawFlag;
     /* 0x05 */ bool mLockFlag;
-    /* 0x06 */ u8 field_0x6;
+    /* 0x06 */ u8 mFrame;
     /* 0x07 */ u8 mLockAlpha;
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ Mtx mMtx;
@@ -908,7 +921,7 @@ public:
     void setShapeAngleToAtnActor();
     void cancelItemUpperReadyAnime();
     BOOL checkBodyAngleX(s16);
-    void setBodyAngleToCamera();
+    BOOL setBodyAngleToCamera();
     void setBodyAngleXReadyAnime();
     void setSpeedAndAngleNormal(s16);
     void setSpeedAndAngleAtn();

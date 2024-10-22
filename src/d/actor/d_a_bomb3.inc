@@ -9,15 +9,13 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_sea.h"
 #include "d/d_kankyo_wether.h"
-#include "f_op/f_op_camera_mng.h"
+#include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/res/res_vbakh.h"
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 namespace {
     enum AttrSt_e {

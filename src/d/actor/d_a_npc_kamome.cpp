@@ -16,14 +16,10 @@
 #include "d/d_snap.h"
 #include "d/d_camera.h"
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static char* l_staff_name = "HyoiKam";
-static u8 temp[0x4C]; // TODO
 static daNpc_kam_HIO_c l_HIO;
 static int l_hio_counter;
 static fpc_ProcID l_msgId;
@@ -394,7 +390,7 @@ BOOL daNpc_kam_c::init() {
     mTargetAngVelY = l_HIO.mHio1.mGlidingAngVelY;
     mTargetAngVelX = l_HIO.mHio1.mGlidingAngVelX;
     
-    setNpcAction(&waitNpcAction, NULL);
+    setNpcAction(&daNpc_kam_c::waitNpcAction, NULL);
     
     mAcchCirs[0].SetWall(20.0f, 50.0f);
     mAcchCirs[1].SetWall(-20.0f, 50.0f);
@@ -452,7 +448,7 @@ void daNpc_kam_c::npcAction(void* arg) {
     if (!mCurrNpcActionFunc) {
         speedF = 0.0f;
         offHyoiKamome();
-        setNpcAction(&waitNpcAction, NULL);
+        setNpcAction(&daNpc_kam_c::waitNpcAction, NULL);
 #if VERSION != VERSION_JPN
         mDoAud_zelAudio_c::getInterface()->field_0x0062 = 0;
 #endif
@@ -471,7 +467,7 @@ void daNpc_kam_c::setNpcAction(ActionFunc actionFunc, void* arg) {
 void daNpc_kam_c::playerAction(void* arg) {
     if (!mCurrPlayerActionFunc) {
         speedF = 0.0f;
-        setPlayerAction(&waitPlayerAction, NULL);
+        setPlayerAction(&daNpc_kam_c::waitPlayerAction, NULL);
     }
     
     dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
@@ -805,7 +801,7 @@ int daNpc_kam_c::waitPlayerAction(void*) {
         }
         
         if (mTgSph.ChkTgHit()) {
-            setPlayerAction(&damagePlayerAction, NULL);
+            setPlayerAction(&daNpc_kam_c::damagePlayerAction, NULL);
         }
     }
     return TRUE;

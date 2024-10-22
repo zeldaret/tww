@@ -31,8 +31,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 
-static Vec lit_2100 = {1.0f, 1.0f, 1.0f};
-static Vec lit_2080 = {1.0f, 1.0f, 1.0f};
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 dSn_HIO_c g_snHIO;
 

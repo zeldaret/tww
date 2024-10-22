@@ -12,13 +12,8 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/actor/d_a_player_main.h"
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
-
-static u8 temp[0x4C]; // TODO
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daNpc_Os_HIO_c l_HIO;
 static s32 l_hio_counter = 0;
@@ -578,7 +573,7 @@ void daNpc_Os_c::npcAction(void* param_1) {
             initBrkAnm(6, true);
         }
 
-        setNpcAction(&waitNpcAction, 0);
+        setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
     }
 
     (this->*mNpcAction)(param_1);
@@ -594,7 +589,7 @@ void daNpc_Os_c::setNpcAction(ActionFunc_t action, void* param_2) {
 void daNpc_Os_c::playerAction(void* param_1) {
     if(!mPlayerAction) {
         speedF = 0.0f;
-        setPlayerAction(&waitPlayerAction, 0);
+        setPlayerAction(&daNpc_Os_c::waitPlayerAction, 0);
     }
 
     dComIfGp_setRStatusForce(7);
@@ -710,7 +705,7 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
             current.angle.y = shape_angle.y;
 
             if(finishCheck()) {
-                setNpcAction(&finish01NpcAction, 0);
+                setNpcAction(&daNpc_Os_c::finish01NpcAction, 0);
             }
         }
 
@@ -725,7 +720,7 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
         else {
             if(wakeupCheck()) {
                 if(dist >= l_HIO.field_0x60 * l_HIO.field_0x60) {
-                    setNpcAction(&searchNpcAction, 0);
+                    setNpcAction(&daNpc_Os_c::searchNpcAction, 0);
                 }
             }
             else {
@@ -761,7 +756,7 @@ BOOL daNpc_Os_c::finish01NpcAction(void* param_1) {
         mJntCtrl.lookAtTarget(&shape_angle.y, 0, cXyz::Zero, shape_angle.y, field_0x798, true);
 
         if(field_0x7A1) {
-            setNpcAction(&finish02NpcAction, 0);
+            setNpcAction(&daNpc_Os_c::finish02NpcAction, 0);
         }
 
         setAttention(true);
@@ -820,12 +815,12 @@ BOOL daNpc_Os_c::talkNpcAction(void*) {
         }
         else if(field_0x7A9 == 2) {
             if(talk()) {
-                setNpcAction(&waitNpcAction, 0);
+                setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
                 dComIfGp_event_reset();
             }
         }
         else if(field_0x7A9 == 3) {
-            setNpcAction(&waitNpcAction, 0);
+            setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
         mJntCtrl.setTrn();
@@ -864,21 +859,21 @@ BOOL daNpc_Os_c::carryNpcAction(void* param_1) {
             fopAcM_cancelCarryNow(this);
 
             s16 temp = mAcchCir[wallHit].GetWallAngleY();
-            setNpcAction(&throwNpcAction, &temp);
+            setNpcAction(&daNpc_Os_c::throwNpcAction, &temp);
 
             return true;
         }
 
         if(!fopAcM_checkCarryNow(this)) {
             if(speedF > 0.0f) {
-                setNpcAction(&throwNpcAction, 0);
+                setNpcAction(&daNpc_Os_c::throwNpcAction, 0);
 
                 return true;
             }
             else {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
                 smokeSet(0xA328);
-                setNpcAction(&waitNpcAction, 0);
+                setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
 
                 return true;
             }
@@ -913,7 +908,7 @@ BOOL daNpc_Os_c::throwNpcAction(void* param_1) {
         if(mAcch.ChkGroundHit()) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
             smokeSet(0xA33B);
-            setNpcAction(&waitNpcAction, 0);
+            setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
         setAttention(true);
@@ -939,7 +934,7 @@ BOOL daNpc_Os_c::jumpNpcAction(void* param_1) {
     else if(field_0x7A9 != -1) {
         if(mAcch.ChkGroundHit()) {
             smokeSet(0xA33B);
-            setNpcAction(&waitNpcAction, 0);
+            setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
         setAttention(true);
@@ -1019,7 +1014,7 @@ BOOL daNpc_Os_c::routeCheck(f32 param_1, s16* param_2) {
 
         if(dComIfG_Bgsp()->GroundCross(&gndChk) - current.pos.y > -100.0f) {
             if(cLib_distanceAngleS(current.angle.y, *param_2) < 0x800) {
-                setNpcAction(&jumpNpcAction, 0);
+                setNpcAction(&daNpc_Os_c::jumpNpcAction, 0);
             }
             
             return true;
@@ -1036,7 +1031,7 @@ BOOL daNpc_Os_c::routeCheck(f32 param_1, s16* param_2) {
         if(mAcch.ChkWallHit()) {
             f32 temp4 = checkWallJump(*param_2);
             if(temp4 >= 0.0f) {
-                setNpcAction(&jumpNpcAction, &temp4);
+                setNpcAction(&daNpc_Os_c::jumpNpcAction, &temp4);
                 return true;
             }
 
@@ -1101,7 +1096,7 @@ BOOL daNpc_Os_c::searchNpcAction(void*) {
         s16 temp4 = shape_angle.y;
         lookBack(1, 0, 0);
         if(temp < 0.001f) {
-            setNpcAction(&waitNpcAction, 0);
+            setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
         else {
             shape_angle.y = temp4;
@@ -1146,7 +1141,7 @@ BOOL daNpc_Os_c::waitPlayerAction(void*) {
             current.angle.y = shape_angle.y;
             if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0xA0 && stickPos == 0) {
                 current.angle.y = target;
-                setPlayerAction(&walkPlayerAction, 0);
+                setPlayerAction(&daNpc_Os_c::walkPlayerAction, 0);
             }
         }
         else {
@@ -1195,11 +1190,11 @@ BOOL daNpc_Os_c::walkPlayerAction(void*) {
             }
 
             if(stickPos != 0) {
-                setPlayerAction(&waitPlayerAction, 0);
+                setPlayerAction(&daNpc_Os_c::waitPlayerAction, 0);
             }
         }
         else {
-            setPlayerAction(&waitPlayerAction, 0);
+            setPlayerAction(&daNpc_Os_c::waitPlayerAction, 0);
         }
 
         setAttention(true);
@@ -1270,7 +1265,7 @@ BOOL daNpc_Os_c::eventProc() {
         }
         else if(field_0x7A5 != 2 && field_0x7A5 != 4 && field_0x7A5 != 6) {
             if(field_0x7A5 == 0xA || field_0x7A5 == 0xB || field_0x7A5 == 0xC || field_0x7A5 == 0xD || field_0x7A5 == 0xE || field_0x7A5 == 0xF) {
-                setNpcAction(&waitNpcAction, 0);
+                setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
                 offNpcCallCommand();
                 onNpcNotChange();
                 dComIfGp_setCb1Player(NULL);
@@ -1460,7 +1455,7 @@ void daNpc_Os_c::initialEndEvent(int) {
     setFinish();
 
     u32 temp = 0;
-    setNpcAction(&finish02NpcAction, &temp);
+    setNpcAction(&daNpc_Os_c::finish02NpcAction, &temp);
 }
 
 /* 00004748-0000474C       .text initialTurnEvent__10daNpc_Os_cFi */
@@ -1807,7 +1802,7 @@ bool daNpc_Os_c::chkArea(cXyz* param_1) {
 /* 000052D4-00005328       .text carryCheck__10daNpc_Os_cFv */
 void daNpc_Os_c::carryCheck() {
     if(fopAcM_checkCarryNow(this)) {
-        setNpcAction(&carryNpcAction, 0);
+        setNpcAction(&daNpc_Os_c::carryNpcAction, 0);
     }
 }
 
@@ -1832,7 +1827,7 @@ void daNpc_Os_c::eventOrder() {
 void daNpc_Os_c::checkOrder() {
     if(eventInfo.checkCommandTalk() && (field_0x7A5 == 0x12 || field_0x7A5 == 0x11)) {
         field_0x7A5 = 0xFF;
-        setNpcAction(&talkNpcAction, 0);
+        setNpcAction(&daNpc_Os_c::talkNpcAction, 0);
         fopAcM_cancelCarryNow(this);
     }
 }
@@ -1980,11 +1975,11 @@ BOOL daNpc_Os_c::init() {
     }
 
     if(finishCheck()) {
-        setNpcAction(&finish02NpcAction, 0);
+        setNpcAction(&daNpc_Os_c::finish02NpcAction, 0);
     }
     else {
         setAnm(0);
-        setNpcAction(&waitNpcAction, 0);
+        setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
     }
 
     field_0x754 = current.pos;
@@ -2100,7 +2095,7 @@ BOOL daNpc_Os_c::execute() {
 
     fopAcM_setStageLayer(this);
 
-    if(chkNpcAction(&carryNpcAction)) {
+    if(chkNpcAction(&daNpc_Os_c::carryNpcAction)) {
         mAcchCir[0].SetWallR(15.0f);
         mAcchCir[1].SetWallR(15.0f);
     }
@@ -2158,7 +2153,7 @@ BOOL daNpc_Os_c::execute() {
     }
     else {
         if(check_moveStop()) {
-            setNpcAction(&waitNpcAction, 0);
+            setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
             field_0x7A3 = 0;
             endBeam();
 
@@ -2199,7 +2194,7 @@ BOOL daNpc_Os_c::execute() {
         mAcch.CrrPos(*dComIfG_Bgsp());
         field_0x784 |= 0x10;
 
-        if(chkPlayerAction(&walkPlayerAction) || chkNpcAction(&searchNpcAction)) {
+        if(chkPlayerAction(&daNpc_Os_c::walkPlayerAction) || chkNpcAction(&daNpc_Os_c::searchNpcAction)) {
             if(!mAcch.ChkGroundHit()) {
                 f32 gndY = mAcch.GetGroundH();
                 f32 delta = gndY - current.pos.y;
@@ -2311,7 +2306,7 @@ BOOL daNpc_Os_c::execute() {
                 checkOrder();
                 npcAction(0);
 
-                if(!chkNpcAction(&throwNpcAction)) {
+                if(!chkNpcAction(&daNpc_Os_c::throwNpcAction)) {
                     current.angle.y = shape_angle.y;
                 }
             }

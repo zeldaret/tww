@@ -1,7 +1,6 @@
 #ifndef D_COM_D_COM_INF_GAME_H
 #define D_COM_D_COM_INF_GAME_H
 
-#include "JSystem/JUtility/TColor.h"
 #include "d/d_attention.h"
 #include "d/d_bg_s.h"
 #include "d/d_cc_s.h"
@@ -17,8 +16,9 @@
 #include "d/d_vibration.h"
 #include "d/d_demo.h"
 #include "d/d_timer.h"
-#include "d/res/res_always.h"
 #include "SSystem/SComponent/c_data_tbl.h"
+
+#include "d/res/res_always.h" // IWYU pragma: export
 
 class JKRArchive;
 class JKRAramBlock;
@@ -41,8 +41,12 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK80_e          = 0x00000080,
     daPyStts0_UNK100_e         = 0x00000100,
     daPyStts0_BOW_AIM_e        = 0x00001000,
+    daPyStts0_UNK2000_e        = 0x00002000,
+    daPyStts0_HOOKSHOT_AIM_e   = 0x00004000,
     daPyStts0_SWORD_SWING_e    = 0x00008000,
     daPyStts0_SHIP_RIDE_e      = 0x00010000,
+    daPyStts0_ROPE_AIM_e       = 0x00020000,
+    daPyStts0_UNK40000_e       = 0x00040000,
     daPyStts0_BOOMERANG_AIM_e  = 0x00080000,
     daPyStts0_SWIM_e           = 0x00100000,
     daPyStts0_TELESCOPE_LOOK_e = 0x00200000,
@@ -3468,11 +3472,12 @@ inline void dComIfG_TimerDeleteRequest() {
         dComIfG_getTimerPtr()->deleteRequest();
 }
 inline void dComIfG_TimerStart(int timer, s16 mode) {
-    if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL)
+    if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL) {
         if (timer != 0)
             dComIfG_getTimerPtr()->start(timer);
         else
             dComIfG_getTimerPtr()->start();
+    }
 }
 inline void dComIfG_TimerReStart(int timer) {
     if (dComIfG_getTimerPtr() != NULL)

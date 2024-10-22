@@ -230,15 +230,15 @@ struct TEnumerator2 {
 };
 
 template <typename T, int I>
-struct TContainerEnumerator : public TEnumerator2<TLinkList<T, I>::iterator, T> {
+struct TContainerEnumerator : public TEnumerator2<typename TLinkList<T, I>::iterator, T> {
     inline TContainerEnumerator(TLinkList<T, I>* param_0)
-        : TEnumerator2<TLinkList<T, I>::iterator, T>(param_0->begin(), param_0->end()) {}
+        : TEnumerator2<typename TLinkList<T, I>::iterator, T>(param_0->begin(), param_0->end()) {}
 };
 
 template <typename T, int I>
-struct TContainerEnumerator_const : public TEnumerator2<TLinkList<T, I>::const_iterator, const T> {
+struct TContainerEnumerator_const : public TEnumerator2<typename TLinkList<T, I>::const_iterator, const T> {
     inline TContainerEnumerator_const(const TLinkList<T, I>* param_0)
-        : TEnumerator2<TLinkList<T, I>::const_iterator, const T>(param_0->begin(), param_0->end()) {}
+        : TEnumerator2<typename TLinkList<T, I>::const_iterator, const T>(param_0->begin(), param_0->end()) {}
 };
 
 };  // namespace JGadget

@@ -41,12 +41,13 @@ s32 J2DScreen::makeHierarchyPanes(J2DPane* pParent, JSURandomInputStream* pStrea
         case 'EXT1':
             pStream->seek(header.mSize, JSUStreamSeekFrom_CUR);
             return 1;
-        case 'BGN1':
+        case 'BGN1': {
             pStream->seek(header.mSize, JSUStreamSeekFrom_CUR);
             s32 ret = makeHierarchyPanes(pPane, pStream);
             if (ret != 0)
                 return ret;
             break;
+        }
         case 'END1':
             pStream->seek(header.mSize, JSUStreamSeekFrom_CUR);
             return 0;

@@ -6,9 +6,10 @@
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/mtx/mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "JSystem/JMath/JMath.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_math.h"
+
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 /* 8000CB48-8000CBEC       .text mDoMtx_XYZrotM__FPA4_fsss */
 void mDoMtx_XYZrotM(Mtx mtx, s16 x, s16 y, s16 z) {
@@ -280,8 +281,6 @@ void mDoMtx_MtxToRot(const Mtx m, csXyz* o_rot) {
     }
 }
 
-static u8 lit_3569[12];
-
 Mtx mDoMtx_stack_c::now;
 Mtx mDoMtx_stack_c::buffer[16];
 
@@ -349,7 +348,7 @@ mDoMtx_stack_c mDoMtx_stack;
 
 mDoMtx_quatStack_c mDoMtx_quatStack;
 
-extern Mtx g_mDoMtx_identity = {
+Mtx g_mDoMtx_identity = {
     {1.0f, 0.0f, 0.0f, 0.0f},
     {0.0f, 1.0f, 0.0f, 0.0f},
     {0.0f, 0.0f, 1.0f, 0.0f},

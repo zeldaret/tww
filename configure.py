@@ -150,8 +150,8 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v1.0.0"
-config.objdiff_tag = "v2.2.1"
+config.dtk_tag = "v1.1.4"
+config.objdiff_tag = "v2.3.2"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -213,6 +213,7 @@ cflags_base = [
 if args.debug:
     # Or -sym dwarf-2 for Wii compilers
     cflags_base.extend(["-sym on", "-DDEBUG=1"])
+    cflags_base.extend(['-pragma "dont_inline on"'])
 else:
     cflags_base.append("-DNDEBUG=1")
 if args.warn == "all":
@@ -306,6 +307,12 @@ def JSystemLib(lib_name, objects, progress_category="third_party"):
 Matching = True                   # Object matches and should be linked
 NonMatching = False               # Object does not match and should not be linked
 Equivalent = config.non_matching  # Object should be linked when configured with --non-matching
+
+
+# Object is only matching for specific versions
+def MatchingFor(*versions):
+    return config.version in versions
+
 
 config.warn_missing_config = True
 config.warn_missing_source = False
@@ -563,7 +570,7 @@ config.libs = [
             Object(Matching,    "d/d_metronome.cpp"),
             Object(Matching,    "d/d_ovlp_fade.cpp"),
             Object(Matching,    "d/d_ovlp_fade2.cpp"),
-            Object(NonMatching, "d/d_ovlp_fade3.cpp"),
+            Object(MatchingFor("GZLE01", "GZLP01"), "d/d_ovlp_fade3.cpp"),
             Object(NonMatching, "d/d_ovlp_fade4.cpp"),
             Object(NonMatching, "d/d_picture_box.cpp"),
             Object(Matching,    "d/d_s_logo.cpp"),
@@ -794,10 +801,10 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASChannelMgr.cpp"),
             Object(Matching,    "JSystem/JAudio/JASOscillator.cpp"),
             Object(Matching,    "JSystem/JAudio/JASDriverTables.cpp"),
-            Object(Matching,    "JSystem/JAudio/dspproc.c", extra_cflags="-lang c++ -O4 -func_align 32"),
-            Object(Matching,    "JSystem/JAudio/dsptask.c", extra_cflags="-lang c++ -O4 -func_align 32"),
-            Object(Matching,    "JSystem/JAudio/osdsp.c", extra_cflags="-lang c++ -O4 -func_align 32 -str nopool"),
-            Object(Matching,    "JSystem/JAudio/osdsp_task.c", extra_cflags="-lang c++ -O4 -func_align 32"),
+            Object(Matching,    "JSystem/JAudio/dspproc.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
+            Object(Matching,    "JSystem/JAudio/dsptask.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
+            Object(Matching,    "JSystem/JAudio/osdsp.c", extra_cflags=["-lang c++", "-O4", "-func_align 32", "-str nopool"]),
+            Object(Matching,    "JSystem/JAudio/osdsp_task.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
             Object(NonMatching, "JSystem/JAudio/JAIAnimation.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIBasic.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIBankWave.cpp"),
@@ -1736,6 +1743,12 @@ config.progress_categories = [
     ProgressCategory("third_party", "Third Party"),
 ]
 config.progress_each_module = args.verbose
+
+# Disable missing return type warnings for incomplete objects
+for lib in config.libs:
+    for obj in lib["objects"]:
+        if not obj.completed:
+            obj.options["extra_clang_flags"].append("-Wno-return-type")
 
 if args.mode == "configure":
     # Write build.ninja and objdiff.json

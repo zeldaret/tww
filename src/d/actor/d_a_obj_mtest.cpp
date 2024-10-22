@@ -12,12 +12,8 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 
-// Needed for the .data and .bss sections to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
-static u8 dummy5[0x4C];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 char* daObjMtest::Act_c::M_arcname[Type_Max] = {
     "Mtest",

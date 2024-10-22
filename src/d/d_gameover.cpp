@@ -263,7 +263,8 @@ BOOL dDlst_GameOverScrnDraw_c::animeOpen() {
             if (letter[i].mUserArea >= 1 && var_r30 != i) {
                 anime1(i);
                 if (letter[i].mUserArea == 5) {
-                    dComIfGp_particle_set2Dfore(0x2E, &cXyz(x[i], 50.0f, 0.0f));
+                    cXyz temp(x[i], 50.0f, 0.0f);
+                    dComIfGp_particle_set2Dfore(0x2E, &temp);
                 }
             }
 

@@ -1110,7 +1110,7 @@ void mCaptureGXDrawSyncCallback(u16) {
     OSCancelAlarm(&mCaptureTimeOutAlarm);
     BOOL interrupt = OSDisableInterrupts();
     if (mCaptureStep == 2) {
-        void * oldcb = GXSetDrawSyncCallback(mCaptureOldCB);
+        void* oldcb = (void*)GXSetDrawSyncCallback(mCaptureOldCB);
         JUT_ASSERT(0xa5f, oldcb == mCaptureGXDrawSyncCallback);
         mCaptureOldCB = NULL;
         mCaptureStep++;
@@ -1393,7 +1393,7 @@ bool mDoGph_Painter() {
                     }
                     mCaptureStep = 5;
                 } else {
-                    OSCreateThread(&mCaptureThread, mCaptureProc, NULL, mCaptureThreadStackHead + mCaptureThreadStackSize, mCaptureThreadStackSize, mCaptureThreadPriority, 0);
+                    OSCreateThread(&mCaptureThread, (void*)mCaptureProc, NULL, mCaptureThreadStackHead + mCaptureThreadStackSize, mCaptureThreadStackSize, mCaptureThreadPriority, 0);
                     OSResumeThread(&mCaptureThread);
                     mCaptureStep++;
                 }

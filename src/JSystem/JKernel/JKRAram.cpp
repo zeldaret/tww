@@ -9,7 +9,6 @@
 #include "JSystem/JKernel/JKRDecomp.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "JSystem/JUtility/JUTException.h"
 #include "string.h"
 #include "dolphin/ar/ar.h"
 #include "dolphin/ar/arq.h"

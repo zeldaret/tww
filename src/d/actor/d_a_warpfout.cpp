@@ -8,9 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-static Vec unkVecs[] = {{1, 1, 1}, {1, 1, 1}};
-static int unkInt[] = {0x02000201, 0x00000000};
-static f64 unkf64[] = {3, 0.5};
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daWarpfout_c::EventActionInitFunc event_init_tbl[] = {
     &daWarpfout_c::initWarp1, &daWarpfout_c::initWarp2, &daWarpfout_c::initWarp3,

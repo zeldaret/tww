@@ -9,8 +9,10 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
 #include "d/d_procname.h"
-#include "d/res/res_auction.h"
 #include "m_Do/m_Do_controller_pad.h"
+
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 struct NpcDatStruct {
     /* 0x00 */ f32 field_0x00;
@@ -35,8 +37,6 @@ struct NpcCameraDatStruct {
     /* 0x0A */ s16 field_0x0A;
 };
 
-static u8 dummy_bss[0x4C];
-
 static cXyz l_camera_pos[3][2] = {
     cXyz(-265.0f, 48.0f, -631.0f),
     cXyz(332.0f, 232.0f, 286.0f),
@@ -51,12 +51,6 @@ static cXyz l_camera_pos[3][2] = {
 #ifdef DEBUG
 static daAuction_HIO_c l_HIO;
 #endif
-
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0f, 0.5f};
 
 
 static daAuction_c::ItemData l_item_dat[] = {
@@ -567,7 +561,7 @@ void daAuction_c::privateCut() {
         evtRes = eventGetItem();
         break;
     case 7:
-        evtRes = &eventMesSet != NULL;
+        evtRes = &daAuction_c::eventMesSet != NULL;
         break;
     case 8:
         evtRes = eventCameraOffNpc();
@@ -720,7 +714,7 @@ void daAuction_c::eventMainInit() {
             restMsgTime = l_rest_msg_time1[i];
         }
 
-        if (60000 > restMsgTime) break;
+        if (60000 > restMsgTime) break; // Bug: restMsgTime is an s16, so this condition is always true.
 
         m82A += 1;
     }
@@ -1307,7 +1301,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         dAuction_screen_slotShow();
         *pMsgNo = 0x1CF8;
         break;
-    case 0x1CF9:
+    case 0x1CF9: {
         dComIfGp_setMiniGameRupee(mCurrBid);
         dComIfGp_setAuctionRupee(mCurrBid);
         if (m82C < 4) {
@@ -1330,7 +1324,8 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             setLinkAnm(1);
         }
         break;
-    case 0x1CFA:
+    }
+    case 0x1CFA: {
         s16 msgSetNo = dComIfGp_getMessageSetNumber();
 
         if (dComIfGs_getRupee() < msgSetNo) {
@@ -1371,6 +1366,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             dComIfGp_setMessageCountNumber(mCurrBid);
         }
         break;
+    }
     case 0x1CFC:
         if (mpCurrMsg->mSelectNum == 0) {
             *pMsgNo = 0x1D1F;
@@ -1396,13 +1392,13 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
     case 0x1D20:
     case 0x1D21:
     case 0x1D22:
-    case 0x1D23:
+    case 0x1D23: {
         setLinkAnm(0x14);
         int rnd = getRand(6) + 1;
         *pMsgNo = l_npc_msg_dat[getAucMdlNo(rnd)].field_0x06;
         m825 = rnd;
         break;
-
+    }
     case 0x1D48:
     case 0x33A2:
     case 0x33A8:

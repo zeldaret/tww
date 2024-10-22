@@ -16,7 +16,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_printf.h"
 
-u8 dummy_3569[0xC];
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 JAIZelInst mDoAud_zelAudio_c::mTact;
 mDoAud_zelAudio_c g_mDoAud_zelAudio;

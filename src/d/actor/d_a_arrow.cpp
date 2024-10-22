@@ -15,7 +15,6 @@ u32 daPy_py_c::checkPlayerFly() const { return 0; }
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "d/d_npc.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
@@ -24,9 +23,7 @@ u32 daPy_py_c::checkPlayerFly() const { return 0; }
 #include "d/d_s_play.h"
 #include "d/res/res_link.h"
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 s16 daArrow_c::m_count;
 

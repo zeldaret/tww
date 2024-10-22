@@ -4,27 +4,27 @@
 #include "stdarg.h"
 #include "dolphin/dvd/dvd.h"
 
-#include "dolphin/os/OSAlarm.h"
-#include "dolphin/os/OSAlloc.h"
-#include "dolphin/os/OSArena.h"
-#include "dolphin/os/OSAudioSystem.h"
-#include "dolphin/os/OSCache.h"
-#include "dolphin/os/OSContext.h"
-#include "dolphin/os/OSError.h"
-#include "dolphin/os/OSFont.h"
-#include "dolphin/os/OSInterrupt.h"
-#include "dolphin/os/OSLink.h"
-#include "dolphin/os/OSMemory.h"
-#include "dolphin/os/OSMessage.h"
-#include "dolphin/os/OSMutex.h"
-#include "dolphin/os/OSReboot.h"
-#include "dolphin/os/OSReset.h"
-#include "dolphin/os/OSResetSW.h"
-#include "dolphin/os/OSRtc.h"
-#include "dolphin/os/OSSync.h"
-#include "dolphin/os/OSThread.h"
-#include "dolphin/os/OSTime.h"
-#include "dolphin/os/OSUtil.h"
+#include "dolphin/os/OSAlarm.h" // IWYU pragma: export
+#include "dolphin/os/OSAlloc.h" // IWYU pragma: export
+#include "dolphin/os/OSArena.h" // IWYU pragma: export
+#include "dolphin/os/OSAudioSystem.h" // IWYU pragma: export
+#include "dolphin/os/OSCache.h" // IWYU pragma: export
+#include "dolphin/os/OSContext.h" // IWYU pragma: export
+#include "dolphin/os/OSError.h" // IWYU pragma: export
+#include "dolphin/os/OSFont.h" // IWYU pragma: export
+#include "dolphin/os/OSInterrupt.h" // IWYU pragma: export
+#include "dolphin/os/OSLink.h" // IWYU pragma: export
+#include "dolphin/os/OSMemory.h" // IWYU pragma: export
+#include "dolphin/os/OSMessage.h" // IWYU pragma: export
+#include "dolphin/os/OSMutex.h" // IWYU pragma: export
+#include "dolphin/os/OSReboot.h" // IWYU pragma: export
+#include "dolphin/os/OSReset.h" // IWYU pragma: export
+#include "dolphin/os/OSResetSW.h" // IWYU pragma: export
+#include "dolphin/os/OSRtc.h" // IWYU pragma: export
+#include "dolphin/os/OSSync.h" // IWYU pragma: export
+#include "dolphin/os/OSThread.h" // IWYU pragma: export
+#include "dolphin/os/OSTime.h" // IWYU pragma: export
+#include "dolphin/os/OSUtil.h" // IWYU pragma: export
 
 #ifdef __cplusplus
 extern "C" {
@@ -121,10 +121,12 @@ inline s16 __OSf32tos16(register f32 inF) {
     u32 tmp;
     register u32* tmpPtr = &tmp;
     // clang-format off
+#ifdef __MWERKS__
     asm {
         psq_st inF, 0(tmpPtr), 0x1, 5
         lha out, 0(tmpPtr)
     }
+#endif
     // clang-format on
 
     return out;
@@ -139,10 +141,12 @@ inline u8 __OSf32tou8(register f32 inF) {
     u32 tmp;
     register u32* tmpPtr = &tmp;
     // clang-format off
+#ifdef __MWERKS__
     asm {
         psq_st inF, 0(tmpPtr), 0x1, 2
         lbz out, 0(tmpPtr)
     }
+#endif
     // clang-format on
 
     return out;
@@ -154,6 +158,7 @@ inline void OSf32tou8(f32* f, u8* out) {
 
 static inline void OSInitFastCast(void) {
     // clang-format off
+#ifdef __MWERKS__
     asm {
         li r3, 4
         oris r3, r3, 4
@@ -168,6 +173,7 @@ static inline void OSInitFastCast(void) {
         oris r3, r3, 7
         mtspr GQR5, r3
     }
+#endif
     // clang-format on
 }
 

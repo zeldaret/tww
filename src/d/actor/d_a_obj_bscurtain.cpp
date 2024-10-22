@@ -6,16 +6,14 @@
 #include "d/actor/d_a_obj_bscurtain.h"
 #include "d/res/res_ptc.h"
 #include "f_op/f_op_actor_mng.h"
-#include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
-#include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 
-static u8 dummy[0x4C]; // TODO
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 daObj_Bscurtain_HIO_c l_HIO;
 

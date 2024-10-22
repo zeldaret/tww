@@ -12,13 +12,8 @@
 #include "d/d_item.h"
 #include "d/d_procname.h"
 
-static u8 dummy_bss[0x4C];
-
-// need to figure out what's putting this data in front of a bunch of rels
-static f32 dummy[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daNpc_Nz_c::m_arc_name[] = "NZ";
 const char daNpc_Nz_c::m_bdl_arc_name[] = "Npcnz";
@@ -663,7 +658,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
         case 0x3401:
         case 0x3402:
             switch(mpCurrMsg->mSelectNum) {
-                case 0:
+                case 0: {
                     u32 msgNo = daNpcNz_getShopBoughtMsg(field_0x908);
                     if(msgNo != 0) {
                         *pMsgNo = msgNo;
@@ -682,6 +677,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
                     dComIfGp_event_setGtItm(field_0x908);
                     msgStatus = fopMsgStts_MSG_ENDS_e;
                     break;
+                }
                 case 1:
                     *pMsgNo = field_0x900;
                     break;

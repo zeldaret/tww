@@ -12,7 +12,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
-static u8 dummy[0x4C];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 namespace daObjFerris {
     namespace {

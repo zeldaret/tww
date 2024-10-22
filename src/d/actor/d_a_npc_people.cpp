@@ -5,27 +5,22 @@
 
 #include "d/actor/d_a_npc_people.h"
 #include "d/actor/d_a_kb.h"
-#include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ship.h"
+#include "d/actor/d_a_dai.h"
 #include "d/d_procname.h"
 #include "d/d_com_lib_game.h"
-#include "JSystem/JKernel/JKRHeap.h"
-#include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_camera.h"
 #include "d/d_a_obj.h"
 #include "d/d_snap.h"
 #include "d/d_kankyo_wether.h"
-#include "d/actor/d_a_dai.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
+#include "weak_data_1811.h" // IWYU pragma: keep
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+extern dCcD_SrcCyl dNpc_cyl_src;
 
 static char* l_npc_staff_id[] = {
     "Uo1",
@@ -4137,7 +4132,7 @@ static s32 phase_1(daNpcPeople_c* i_this) {
 
             break;
         case 0x11:
-        case 0x12:
+        case 0x12: {
             int day = dKy_get_dayofweek();
 
             switch(arg0) {
@@ -4153,9 +4148,9 @@ static s32 phase_1(daNpcPeople_c* i_this) {
                     }
 
                     break;
-
-                break;
             }
+            break;
+        }
         case 0x7:
         case 0x9:
         case 0xB:
@@ -4357,7 +4352,7 @@ s32 daNpcPeople_c::createInit() {
             m766[0] = dComIfGp_evmng_getEventIdx("SA3_GET_ITEM");
 
             break;
-        case 0xF:
+        case 0xF: {
             m766[0] = dComIfGp_evmng_getEventIdx("SA5_TALK_XY");
             m766[1] = dComIfGp_evmng_getEventIdx("SA5_GET_ITEM");
 
@@ -4371,7 +4366,8 @@ s32 daNpcPeople_c::createInit() {
                     }
                 }
             }
-
+            // Fall-through
+        }
         case 0x10:
             if(mbIsNight) {
                 m758 |= 0x40000000;
@@ -6264,7 +6260,7 @@ u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
     u16 status = fopMsgStts_MSG_CONTINUES_e;
 
     switch(*pMsgNo) {
-        case 0x358B:
+        case 0x358B: {
             daNpcPeople_c* pActor = (daNpcPeople_c*)fopAcM_searchFromName(l_npc_staff_id[17], 0, 0);
             if(mpCurrMsg->mSelectNum == 0) {
                 pActor->mCurrMsgNo = 0x358C;
@@ -6280,6 +6276,7 @@ u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
             status = fopMsgStts_MSG_ENDS_e;
             
             break;
+        }
         case 0x3024:
             dComIfGs_onEventBit(0x2220);
             status = fopMsgStts_MSG_ENDS_e;
@@ -6347,7 +6344,7 @@ u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
                         status = fopMsgStts_MSG_ENDS_e;
 
                         break;
-                    case 8:
+                    case 8: {
                         m734++;
                         u8 item = (*m734 == 0) ? (u8)0x29 : (u8)0x28;
                         m734++;
@@ -6359,6 +6356,7 @@ u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
                         *pMsgNo = *m734;
 
                         break;
+                    }
                     case 9:
                         m77E |= 0x40;
                         m75C = 4;
@@ -8022,7 +8020,8 @@ BOOL daNpcPeople_c::is1DayGetMap20() {
 int daNpcPeople_c::getWindDir() {
     cXyz* wind = dKyw_get_wind_vec();
     u16 angle = cM_atan2s(wind->x, wind->z);
-    return angle + 0x1000 >> 0xD & 7; // what is this dark magic
+    // Round to nearest multiple of 0x2000 then convert to a value from 0-7 on a compass.
+    return ((u32)(angle + 0x1000) / 0x2000) & 7;
 }
 
 /* 0000917C-000091B8       .text isUo1FdaiAll__13daNpcPeople_cFv */

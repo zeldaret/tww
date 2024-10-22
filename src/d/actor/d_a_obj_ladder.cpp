@@ -8,11 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-// Needed for .data to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 Mtx daObjLadder::Act_c::M_tmp_mtx;
 
@@ -277,11 +273,11 @@ void daObjLadder::Act_c::init_mtx() {
 int daObjLadder::Act_c::Execute(Mtx** ppMtx) {
     typedef void (Act_c::*ModeFunc)();
     static const ModeFunc mode_proc[] = {
-        &daObjLadder::Act_c::mode_wait,
-        &daObjLadder::Act_c::mode_demoreq,
-        &daObjLadder::Act_c::mode_vib,
-        &daObjLadder::Act_c::mode_drop,
-        &daObjLadder::Act_c::mode_fell,
+        &Act_c::mode_wait,
+        &Act_c::mode_demoreq,
+        &Act_c::mode_vib,
+        &Act_c::mode_drop,
+        &Act_c::mode_fell,
     };
 
     demo_end_reset();

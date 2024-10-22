@@ -5,13 +5,9 @@
 
 #include "d/actor/d_a_obj_timer.h"
 #include "d/d_procname.h"
-#include "d/d_com_inf_game.h"
+#include "d/d_com_inf_game.h" // IWYU pragma: keep // Needed for dComIfGs_isSwitch inline definition
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
 s32 daObjTimer::Act_c::_create() {
@@ -84,8 +80,8 @@ void daObjTimer::Act_c::mode_count() {
 /* 00000304-00000394       .text _execute__Q210daObjTimer5Act_cFv */
 bool daObjTimer::Act_c::_execute() {
     static ModeFunc mode_proc[] = {
-        &mode_wait,
-        &mode_count,
+        &Act_c::mode_wait,
+        &Act_c::mode_count,
     };
     (this->*mode_proc[mMode])();
 

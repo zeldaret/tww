@@ -19,13 +19,8 @@
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-// Needed for the .data section to match.
-static Vec dummy1 = {1.0f, 1.0f, 1.0f};
-static Vec dummy2 = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
-
-static u8 dummy5[0x4C];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daRd_HIO_c l_HIO;
 
@@ -1239,63 +1234,63 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
 
     static ModeEntry mode_tbl[] = {
         {
-            &modeWaitInit,
-            &modeWait,
+            &daRd_c::modeWaitInit,
+            &daRd_c::modeWait,
             "WAIT",
         },
         {
-            &modeDamageInit,
-            &modeDamage,
+            &daRd_c::modeDamageInit,
+            &daRd_c::modeDamage,
             "DAMAGE",
         },
         {
-            &modeParalysisInit,
-            &modeParalysis,
+            &daRd_c::modeParalysisInit,
+            &daRd_c::modeParalysis,
             "PARALYSIS",
         },
         {
-            &modeDeathInit,
-            &modeDeath,
+            &daRd_c::modeDeathInit,
+            &daRd_c::modeDeath,
             "DEATH",
         },
         {
-            &modeMoveInit,
-            &modeMove,
+            &daRd_c::modeMoveInit,
+            &daRd_c::modeMove,
             "MOVE",
         },
         {
-            &modeCryInit,
-            &modeCry,
+            &daRd_c::modeCryInit,
+            &daRd_c::modeCry,
             "CRY",
         },
         {
-            &modeCryWaitInit,
-            &modeCryWait,
+            &daRd_c::modeCryWaitInit,
+            &daRd_c::modeCryWait,
             "CRY_WAIT",
         },
         {
-            &modeAttackInit,
-            &modeAttack,
+            &daRd_c::modeAttackInit,
+            &daRd_c::modeAttack,
             "ATTACK",
         },
         {
-            &modeReturnInit,
-            &modeReturn,
+            &daRd_c::modeReturnInit,
+            &daRd_c::modeReturn,
             "RETURN",
         },
         {
-            &modeSilentPrayInit,
-            &modeSilentPray,
+            &daRd_c::modeSilentPrayInit,
+            &daRd_c::modeSilentPray,
             "SILENT_PRAY",
         },
         {
-            &modeSwWaitInit,
-            &modeSwWait,
+            &daRd_c::modeSwWaitInit,
+            &daRd_c::modeSwWait,
             "SW_WAIT",
         },
         {
-            &modeKanokeInit,
-            &modeKanoke,
+            &daRd_c::modeKanokeInit,
+            &daRd_c::modeKanoke,
             "KANOKE",
         },
     };

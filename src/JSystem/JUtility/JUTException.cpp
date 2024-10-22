@@ -916,7 +916,7 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
                 break;
             if ((length < 28))
                 continue;
-            if ((buffer[28] == '4')) {
+            if (buffer[28] == '4') {
                 u32 addr = ((buffer[18] - '0') << 28) | strtol(buffer + 19, NULL, 16);
                 int size = strtol(buffer + 11, NULL, 16);
                 if ((addr <= address && address < addr + size)) {

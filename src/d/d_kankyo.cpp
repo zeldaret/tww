@@ -23,14 +23,12 @@
 #include "m_Do/m_Do_printf.h"
 #include "math.h"
 
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
+
 class sub_kankyo__class : public kankyo_class {
 };
 
 #include "d/d_kankyo_dayproc.inc"
-
-// stripped or compiler generated?
-static Vec unused_lit_2100[] = {1.0f, 1.0f, 1.0f};
-static Vec unused_lit_210c[] = {1.0f, 1.0f, 1.0f};
 
 struct dKy_setLight__Status {
     /* 0x00 */ Vec mPos;
@@ -1597,7 +1595,7 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* i_pos, dKy_tevs
     } else {
         i_tevstr->mLightMode = 0;
 
-        if (i_tevstr->mRoomNo >= 128) {
+        if (i_tevstr->mRoomNo >= 128) { // Bug: mRoomNo is an s8, so this condition never evaluates to true.
             i_tevstr->mEnvrIdxCurr = 0;
         } else {
             i_tevstr->mEnvrIdxCurr = i_tevstr->mRoomNo;
@@ -2134,7 +2132,7 @@ void dKy_event_proc() {
                         switch (env_light.mDiceWeatherState) {
                         case DICE_STATE_RESET_e:
                             break;
-                        case DICE_STATE_INIT_e:
+                        case DICE_STATE_INIT_e: {
                             u8 table_no = cM_rndF(7.99f);
                             env_light.mDiceWeatherCurrPattern = S_wether_table[table_no];
                             env_light.mDiceWeatherCounter = 0;
@@ -2165,6 +2163,7 @@ void dKy_event_proc() {
                             env_light.mDiceWeatherCounter++;
                             env_light.mDiceWeatherState++;
                             break;
+                        }
                         case DICE_STATE_EXEC_e:
                             if (current_time > env_light.mDiceWeatherTime &&
                                 current_time - env_light.mDiceWeatherTime < 180.0f)

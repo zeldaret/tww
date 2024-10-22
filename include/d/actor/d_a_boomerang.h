@@ -12,7 +12,7 @@ public:
     s32 create();
     BOOL draw();
     BOOL execute();
-    void getFlyMax();
+    float getFlyMax();
     void rockLineCallback(fopAc_ac_c*);
     void setAimActor(fopAc_ac_c*);
     void setLockActor(fopAc_ac_c*, int);

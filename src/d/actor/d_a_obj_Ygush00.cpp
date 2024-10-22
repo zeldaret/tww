@@ -15,15 +15,11 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+#include "weak_data_1811.h" // IWYU pragma: keep
+
 namespace {
     static const char l_arcname[] = "Ygush00";
 };
-
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
 
 /* 00000078-0000009C       .text solidHeapCB__14daObjYgush00_cFP10fopAc_ac_c */
 BOOL daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {

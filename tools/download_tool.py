@@ -56,17 +56,7 @@ def dtk_url(tag: str) -> str:
     return f"{repo}/releases/download/{tag}/dtk-{system}-{arch}{suffix}"
 
 
-def sjiswrap_url(tag: str) -> str:
-    repo = "https://github.com/encounter/sjiswrap"
-    return f"{repo}/releases/download/{tag}/sjiswrap-windows-x86.exe"
-
-
-def wibo_url(tag: str) -> str:
-    repo = "https://github.com/decompals/wibo"
-    return f"{repo}/releases/download/{tag}/wibo"
-
-
-def objdiffcli_url(tag: str) -> str:
+def objdiff_cli_url(tag: str) -> str:
     uname = platform.uname()
     suffix = ""
     system = uname.system.lower()
@@ -82,13 +72,23 @@ def objdiffcli_url(tag: str) -> str:
     return f"{repo}/releases/download/{tag}/objdiff-cli-{system}-{arch}{suffix}"
 
 
+def sjiswrap_url(tag: str) -> str:
+    repo = "https://github.com/encounter/sjiswrap"
+    return f"{repo}/releases/download/{tag}/sjiswrap-windows-x86.exe"
+
+
+def wibo_url(tag: str) -> str:
+    repo = "https://github.com/decompals/wibo"
+    return f"{repo}/releases/download/{tag}/wibo"
+
+
 TOOLS: Dict[str, Callable[[str], str]] = {
     "binutils": binutils_url,
     "compilers": compilers_url,
     "dtk": dtk_url,
+    "objdiff-cli": objdiff_cli_url,
     "sjiswrap": sjiswrap_url,
     "wibo": wibo_url,
-    "objdiff-cli": objdiffcli_url,
 }
 
 

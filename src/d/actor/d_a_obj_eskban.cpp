@@ -3,25 +3,16 @@
 // Translation Unit: d_a_obj_eskban.cpp
 //
 
-#include "f_op/f_op_actor_mng.h"
-
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_eskban.h"
 #include "d/res/res_eskban.h"
+#include "f_op/f_op_actor_mng.h"
 
-/* .bss alignment */
-static u8 dummy[0x4c];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjEskban {
-/* .data alignment, seemingly unused by this unit */
-static Vec _data_align[4] = {
-    {1, 1, 1},
-    {1, 1, 1},
-    {9.40453e-38 /* possibly not actually a float? */, 0, 2.125},
-    {0, 1.75, 0},
-};
-
 Mtx Act_c::M_tmp_mtx;
 const char Act_c::M_arcname[7] = "Eskban";
 const char Act_c::M_evname[7] = "Eskban";
@@ -215,9 +206,11 @@ void daObjEskban::Act_c::eff_m_break(u16 particleID, u16 prm_b) {
     J3DAnmTexPattern* txPattern =
         static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI));
 
-    JPABaseEmitter* pBEmtr =
-        dComIfGp_particle_set(particleID, &this->current.pos, &this->shape_angle, NULL, 0xff, NULL,
-                              -1, NULL, NULL, &cXyz(3, 3, 3));
+    cXyz scale(3.0f, 3.0f, 3.0f);
+    JPABaseEmitter* pBEmtr = dComIfGp_particle_set(
+        particleID, &this->current.pos, &this->shape_angle, NULL,
+        0xff, NULL, -1, NULL, NULL, &scale
+    );
     if (!pBEmtr) {
         return;
     }
@@ -237,9 +230,11 @@ void daObjEskban::Act_c::eff_b_break(u16 particleID) {
     c0.b = tevStr.mColorC0.b;
     c0.a = tevStr.mColorC0.a;
 
-    JPABaseEmitter* pBEmtr =
-        dComIfGp_particle_set(particleID, &this->current.pos, NULL, NULL, 0xff, NULL, -1,
-                              &tevStr.mColorK0, &c0, &cXyz(1, 1, 1));
+    cXyz scale(1.0f, 1.0f, 1.0f);
+    JPABaseEmitter* pBEmtr = dComIfGp_particle_set(
+        particleID, &this->current.pos, NULL, NULL,
+        0xff, NULL, -1, &tevStr.mColorK0, &c0, &scale
+    );
     if (!pBEmtr) {
         return;
     }
@@ -293,7 +288,7 @@ int daObjEskban::Act_c::Execute(Mtx** pMtx) {
         }
     }
     switch (mActorState) {
-    case ST_WAIT: /* 0x148 */
+    case ST_WAIT: /* 0x148 */ {
         if (!mCameraCyl.ChkCoHit()) {
             break;
         }
@@ -309,6 +304,7 @@ int daObjEskban::Act_c::Execute(Mtx** pMtx) {
             mActorState = ST_DESTROYED;
         }
         break;
+    }
     case ST_DESTROYED: /* 0x1d8 */
         if (eventInfo.checkCommandDemoAccrpt()) {
             mActorState = ST_CUTSCENING;
@@ -316,7 +312,7 @@ int daObjEskban::Act_c::Execute(Mtx** pMtx) {
         }
         fopAcM_orderOtherEvent(this, "Eskban");
         break;
-    case ST_CUTSCENING: /* 0x214 */
+    case ST_CUTSCENING: /* 0x214 */ {
         if (fopAcM_SearchByID(mActorID) == NULL) {
             mActorState = ST_SMOKING;
             mRemainingSmokeAnm = DESTROY_SMOKE_ANM_LEN;
@@ -335,6 +331,7 @@ int daObjEskban::Act_c::Execute(Mtx** pMtx) {
         mDoAud_seStart(JA_SE_READ_RIDDLE_1);
         daObjEskban_effect_set();
         break;
+    }
     case ST_SMOKING: /* 0x350 */
         if (mRemainingSmokeAnm > 0) {
             mRemainingSmokeAnm--;

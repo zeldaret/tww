@@ -1,0 +1,13 @@
+# https://clangd.llvm.org/config
+CompileFlags:
+  Add: [
+    "-Wno-c++11-compat-deprecated-writable-strings",
+    "-Wno-undefined-inline",
+  ]
+---
+If:
+  PathMatch: .*\.inc
+CompileFlags:
+  Add: [
+    "-Wno-return-type",
+  ]

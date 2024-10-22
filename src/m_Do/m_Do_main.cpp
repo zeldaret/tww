@@ -26,6 +26,8 @@
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_printf.h"
 
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
+
 class JUTGamePad;
 
 /* 800056E0-80005748       .text version_check__Fv */
@@ -50,10 +52,6 @@ void HeapCheck::CheckHeap1() {
     if (mMaxTotalFreeSize > freeSize)
         mMaxTotalFreeSize = freeSize;
 }
-
-// unused data?
-static u32 lit_2100[] = {0x3F800000, 0x3F800000, 0x3F800000};
-static u32 lit_2080[] = {0x3F800000, 0x3F800000, 0x3F800000};
 
 char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
 
@@ -482,7 +480,7 @@ void main() {
     }
 
     s32 priority = OSGetThreadPriority(current_thread);
-    OSCreateThread(&mainThread, main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
+    OSCreateThread(&mainThread, (void*)main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
     OSResumeThread(&mainThread);
     OSSetThreadPriority(current_thread, 0x1F);
     OSSuspendThread(current_thread);

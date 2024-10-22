@@ -18,6 +18,8 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+#include "weak_data_1811.h" // IWYU pragma: keep
+
 extern dScnPly_reg_HIO_c g_regHIO;
 
 const char daObjTpost_c::m_arc_name[] = "Toripost";
@@ -74,12 +76,6 @@ const s32 daObjTpost_c::m_send_price[] = {
 };
 
 static daObjTpost_HIO_c l_HIO;
-
-// need to figure out what's putting this data in front of a bunch of rels with the compiler-generated symbol names
-static Vec dummy = {1.0f, 1.0f, 1.0f};
-static Vec dummy2 = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c* i_this) {

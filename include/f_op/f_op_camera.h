@@ -1,10 +1,8 @@
 #ifndef F_F_OP_CAMERA_H_
 #define F_F_OP_CAMERA_H_
 
-#include "d/d_cam_param.h"
 #include "d/d_camera.h"
 #include "f_op/f_op_view.h"
-#include "global.h"
 
 typedef struct leafdraw_method_class leafdraw_method_class;
 

@@ -181,7 +181,7 @@ J3DModelData* J3DModelLoader::loadBinaryDisplayList(const void* i_data, u32 i_fl
                 readMaterialDL((J3DMaterialDLBlock*)block, i_flags);
                 modifyMaterial(i_flags);
                 break;
-            case 'MAT3':
+            case 'MAT3': {
                 u32 matFlags = 0x50100000;
                 matFlags |= i_flags & 0x03000000;
                 mpMaterialBlock = (J3DMaterialBlock*)block;
@@ -192,6 +192,7 @@ J3DModelData* J3DModelLoader::loadBinaryDisplayList(const void* i_data, u32 i_fl
                     readPatchedMaterial((J3DMaterialBlock*)block, matFlags);
                 }
                 break;
+            }
             default:
                 OSReport("Unknown data block\n");
                 break;

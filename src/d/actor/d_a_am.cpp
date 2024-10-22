@@ -25,11 +25,7 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_bomb2.h"
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 enum Action {
     ACTION_DOUSA       = 0x0,
@@ -521,7 +517,7 @@ static void action_dousa(am_class* i_this) {
         i_this->mTargetAngleY = fopAcM_searchPlayerAngleY(i_this);
         i_this->mState += 1;
         // Fall-through
-    case 4:
+    case 4: {
         if (i_this->mCountDownTimers[2] == 1) {
             i_this->mNeedleCyl.OnAtSPrmBit(AT_SPRM_SET);
             i_this->mNeedleCyl.OnAtHitBit();
@@ -555,6 +551,7 @@ static void action_dousa(am_class* i_this) {
             i_this->mState += 1;
         }
         break;
+    }
     case 5:
         i_this->speedF = 30.0f;
         i_this->gravity = -11.0f;
@@ -655,7 +652,7 @@ static void action_dousa(am_class* i_this) {
 /* 00002564-000028C4       .text action_modoru_move__FP8am_class */
 static void action_modoru_move(am_class* i_this) {
     switch (i_this->mState) {
-    case 0x14:
+    case 0x14: {
         anm_init(i_this, AM_BCK_CLOSE_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         i_this->mNeedleCyl.OnAtSetBit();
         i_this->mNeedleCyl.OnAtHitBit();
@@ -669,9 +666,10 @@ static void action_modoru_move(am_class* i_this) {
         i_this->mTargetAngleY = cM_atan2s(xDistToSpawn, zDistToSpawn);
         i_this->mState += 1;
         break;
-    case 0x15:
-        xDistToSpawn = i_this->mSpawnPos.x - i_this->current.pos.x;
-        zDistToSpawn = i_this->mSpawnPos.z - i_this->current.pos.z;
+    }
+    case 0x15: {
+        f32 xDistToSpawn = i_this->mSpawnPos.x - i_this->current.pos.x;
+        f32 zDistToSpawn = i_this->mSpawnPos.z - i_this->current.pos.z;
         if (i_this->mAcch.ChkGroundHit()) {
             i_this->mSmokeCbs[0].end();
             dComIfGp_particle_setToon(
@@ -697,7 +695,8 @@ static void action_modoru_move(am_class* i_this) {
             i_this->mState += 1;
         }
         break;
-    case 0x16:
+    }
+    case 0x16: {
         s16 angleDiff = cLib_distanceAngleS(i_this->shape_angle.y, i_this->mTargetAngleY);
         if (angleDiff < 0x100) {
             i_this->mNeedleCyl.OffAtSetBit();
@@ -708,13 +707,14 @@ static void action_modoru_move(am_class* i_this) {
         }
         break;
     }
+    }
 }
 
 /* 000028C4-00002A6C       .text action_handou_move__FP8am_class */
 static void action_handou_move(am_class* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     switch (i_this->mState) {
-    case 0x1E:
+    case 0x1E: {
         i_this->speedF = 20.0f;
         s16 angleToPlayer = fopAcM_searchPlayerAngleY(i_this);
         i_this->current.angle.y = angleToPlayer + 0x8000;
@@ -731,7 +731,9 @@ static void action_handou_move(am_class* i_this) {
             anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         }
         i_this->mState += 1;
-    case 0x1F:
+        // Fall-through
+    }
+    case 0x1F: {
         cLib_addCalc0(&i_this->speedF, 0.8f, 2.0f);
         if (i_this->speedF < 0.1f) {
             i_this->speedF = 0.0f;
@@ -740,6 +742,8 @@ static void action_handou_move(am_class* i_this) {
             i_this->mAction = ACTION_DOUSA;
             i_this->mState = 3;
         }
+        break;
+    }
     }
 }
 

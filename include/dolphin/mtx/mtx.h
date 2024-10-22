@@ -1,7 +1,7 @@
 #ifndef MTX_H
 #define MTX_H
 
-#include "dolphin/mtx/mtx44.h"
+#include "dolphin/mtx/mtx44.h" // IWYU pragma: export
 #include "dolphin/mtx/quat.h"
 #include "dolphin/types.h"
 
@@ -45,7 +45,8 @@ inline void C_MTXRotAxisRad(Mtx m, const Vec* axis, f32 rad) {
 
 /* When compiling in debug mode, use C implementations */
 #ifdef DEBUG
-#define MTXIdentity C_MTXIdentity
+// TODO: Add debug rom C implementations
+/* #define MTXIdentity C_MTXIdentity
 #define MTXCopy C_MTXCopy
 #define MTXConcat C_MTXConcat
 #define MTXInverse C_MTXInverse
@@ -56,7 +57,22 @@ inline void C_MTXRotAxisRad(Mtx m, const Vec* axis, f32 rad) {
 #define MTXTransApply C_MTXTransApply
 #define MTXScale C_MTXScale
 #define MTXScaleApply C_MTXScaleApply
-#define MTXQuat C_MTXQuat
+#define MTXQuat C_MTXQuat */
+
+// Temporary until the C implementations are done
+#define MTXIdentity PSMTXIdentity
+#define MTXCopy PSMTXCopy
+#define MTXConcat PSMTXConcat
+#define MTXInverse PSMTXInverse
+#define MTXRotRad PSMTXRotRad
+#define MTXRotTrig PSMTXRotTrig
+#define MTXRotAxisRad PSMTXRotAxisRad
+#define MTXTrans PSMTXTrans
+#define MTXTransApply PSMTXTransApply
+#define MTXScale PSMTXScale
+#define MTXScaleApply PSMTXScaleApply
+#define MTXQuat PSMTXQuat
+
 #else
 #define MTXIdentity PSMTXIdentity
 #define MTXCopy PSMTXCopy

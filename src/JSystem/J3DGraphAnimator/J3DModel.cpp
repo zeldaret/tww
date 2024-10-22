@@ -598,7 +598,7 @@ extern void J3DPSMtxArrayConcat(f32(*)[4], f32(*)[4], f32(*)[4], u32);
 void J3DModel::calcDrawMtx() {
     u16 i;
     switch (getMtxCalcMode()) {
-    case 0:
+    case 0: {
         MtxP viewMtx = j3dSys.getViewMtx();
         for (i = 0; i < mModelData->getDrawFullWgtMtxNum(); i++) {
             u16 drawMtxIdx = mModelData->getDrawMtxIndex(i);
@@ -608,6 +608,7 @@ void J3DModel::calcDrawMtx() {
             J3DPSMtxArrayConcat(viewMtx, getWeightAnmMtx(0), getDrawMtx(mModelData->getDrawFullWgtMtxNum()), mModelData->getWEvlpMtxNum());
         }
         break;
+    }
     case 1:
         for (i = 0; i < mModelData->getDrawFullWgtMtxNum(); i++) {
             MTXCopy(getAnmMtx(mModelData->getDrawMtxIndex(i)), getDrawMtx(i));

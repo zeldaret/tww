@@ -17,7 +17,12 @@ void C_QUATSlerp(const Quaternion* p, const Quaternion* q, Quaternion* r, f32 t)
 
 /* When compiling in debug mode, use C implementations */
 #ifdef DEBUG
-#define QUATMultiply C_QUATMultiply
+// TODO: Add debug rom C implementations
+/* #define QUATMultiply C_QUATMultiply */
+
+// Temporary until the C implementations are done
+#define QUATMultiply PSQUATMultiply
+
 #else
 #define QUATMultiply PSQUATMultiply
 #endif

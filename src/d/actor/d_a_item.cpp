@@ -10,13 +10,11 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
-#include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 s32 daItem_c::m_timer_max = 10000;
 
@@ -657,20 +655,22 @@ void daItem_c::itemGetExecute() {
     case dItem_DEKU_LEAF_e:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case SWORD:
+    case SWORD: {
         daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
         if (item && item->m_itemNo == SHIELD) {
             item->itemGetExecute();
         }
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case SHIELD:
-        item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
+    }
+    case SHIELD: {
+        daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
         if (item && item->m_itemNo == SWORD) {
             item->itemGetExecute();
         }
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
+    }
     case DROPPED_SWORD:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
@@ -1333,12 +1333,13 @@ BOOL daItem_c::initAction() {
         scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
         
         switch (mAction) {
-        case 4:
+        case 4: {
             current.angle.y = cM_rndF((f32)0xFFFF);
             f32 temp = getData()->field_0x2C + cM_rndF(5.0f);
             speedF = cM_rndF(getData()->field_0x30);
             speed.set(0.0f, temp, 0.0f);
             break;
+        }
         case 5:
             speed.setall(0.0f);
             speedF = 0.0f;

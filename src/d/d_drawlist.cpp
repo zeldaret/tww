@@ -11,16 +11,17 @@
 #include "dolphin/gf/GFLight.h"
 #include "dolphin/gf/GFPixel.h"
 #include "dolphin/gf/GFTransform.h"
-#include "f_op/f_op_camera_mng.h"
+#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "SSystem/SComponent/c_rnd.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "global.h"
+
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 class ShdwDrawPoly_c : public cBgS_ShdwDraw {
 public:
@@ -37,8 +38,6 @@ public:
     /* 0x38 */ cXyz* mLightVec;
     /* 0x3C */ dDlst_shadowPoly_c* mPoly;
 };  // Size: 0x40
-
-Vec dummy0;
 
 GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 

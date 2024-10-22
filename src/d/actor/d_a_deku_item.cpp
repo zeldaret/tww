@@ -8,11 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daDekuItem_c::m_arcname[] = "Deku";
 
@@ -163,10 +159,10 @@ bool daDekuItem_c::_execute() {
 /* 00000A74-00000B30       .text mode_proc_call__12daDekuItem_cFv */
 void daDekuItem_c::mode_proc_call() {
     static ModeFunc mode_proc[] = {
-        &mode_wait,
-        &mode_getdemo_init,
-        &mode_getdemo_wait,
-        &mode_getdemo,
+        &daDekuItem_c::mode_wait,
+        &daDekuItem_c::mode_getdemo_init,
+        &daDekuItem_c::mode_getdemo_wait,
+        &daDekuItem_c::mode_getdemo,
     };
 
     (this->*mode_proc[mMode])();

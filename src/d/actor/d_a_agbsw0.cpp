@@ -6,11 +6,7 @@
 #include "global.h"
 #include "d/d_procname.h"
 
-// need to figure out what's putting this data in front of a bunch of rels with the compiler-generated symbol names
-static f32 dummy[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_agbsw0.h"
 #include "f_op/f_op_actor_mng.h"
@@ -1738,13 +1734,14 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             }
 
             break;
-        case 5:
+        case 5: {
             daGhostship_c* gship = (daGhostship_c*)fopAcM_searchFromName("Ayush", 0, 0);
             if(gship && gship->checkInShip()) {
                return 0;
             }
 
             break;
+        }
         case 6:
             if(dComIfGs_isEventBit(0x1A10)) {
                 return 0;

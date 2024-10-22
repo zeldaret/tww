@@ -13,8 +13,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "SSystem/SComponent/c_malloc.h"
-#include "printf.h"
-#include "math.h"
+#include <stdio.h>
 
 static bool pushButton;
 static bool pushButton2;
@@ -356,30 +355,30 @@ bool fopMsgM_releaseScopeMode() {
 }
 
 static const char* fopMsgM_buttonTex[] = {
-    /* 0x00 */ {"font_00.bti"},
-    /* 0x01 */ {"font_01.bti"},
-    /* 0x02 */ {"font_09.bti"},
-    /* 0x03 */ {"font_04.bti"},
-    /* 0x04 */ {"font_05.bti"},
-    /* 0x05 */ {"font_02.bti"},
-    /* 0x06 */ {"font_03.bti"},
-    /* 0x07 */ {"font_06.bti"},
-    /* 0x08 */ {"font_08.bti"},
-    /* 0x09 */ {"font_07_01.bti"},
-    /* 0x0A */ {"font_10.bti"},
-    /* 0x0B */ {"font_10.bti"},
-    /* 0x0C */ {"font_10.bti"},
-    /* 0x0D */ {"font_10.bti"},
-    /* 0x0E */ {"font_07_01.bti"},
-    /* 0x0F */ {"font_07_01.bti"},
-    /* 0x10 */ {"font_07_01.bti"},
-    /* 0x11 */ {"font_07_01.bti"},
-    /* 0x12 */ {"font_07_01.bti"},
-    /* 0x13 */ {"font_07_01.bti"},
-    /* 0x14 */ {"font_12.bti"},
-    /* 0x15 */ {"font_13.bti"},
-    /* 0x16 */ {"font_14.bti"},
-    /* 0x17 */ {"font_15.bti"},
+    /* 0x00 */ "font_00.bti",
+    /* 0x01 */ "font_01.bti",
+    /* 0x02 */ "font_09.bti",
+    /* 0x03 */ "font_04.bti",
+    /* 0x04 */ "font_05.bti",
+    /* 0x05 */ "font_02.bti",
+    /* 0x06 */ "font_03.bti",
+    /* 0x07 */ "font_06.bti",
+    /* 0x08 */ "font_08.bti",
+    /* 0x09 */ "font_07_01.bti",
+    /* 0x0A */ "font_10.bti",
+    /* 0x0B */ "font_10.bti",
+    /* 0x0C */ "font_10.bti",
+    /* 0x0D */ "font_10.bti",
+    /* 0x0E */ "font_07_01.bti",
+    /* 0x0F */ "font_07_01.bti",
+    /* 0x10 */ "font_07_01.bti",
+    /* 0x11 */ "font_07_01.bti",
+    /* 0x12 */ "font_07_01.bti",
+    /* 0x13 */ "font_07_01.bti",
+    /* 0x14 */ "font_12.bti",
+    /* 0x15 */ "font_13.bti",
+    /* 0x16 */ "font_14.bti",
+    /* 0x17 */ "font_15.bti",
 };
 
 static GXColor fopMsgM_buttonW[] = {

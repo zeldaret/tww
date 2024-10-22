@@ -10,16 +10,7 @@
 #include "d/d_s_play.h"
 #include "d/res/res_syan.h"
 
-static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
-static Vec dummy2 = { 1.0f, 1.0f, 1.0f };
-static struct {
-    u32 m0;
-    f32 m1;
-    f32 m2;
-    f32 m3;
-    f32 m4;
-    f32 m5;
-} dummy3 = { 0x02000201, 0.0f, 2.125f, 0.0f, 1.75f, 0.0f };
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static f32 b_pos_x[6] = { 870.0f, 420.0f, -420.0f, -880.0f, -400.0f, 440.0f };
 static f32 b_pos_y[6] = { -560.0f, -760.0f, -630.0f, -710.0f, -670.0f, -690.0f };

@@ -16,12 +16,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
-
-// Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daObj_Hole_HIO_c l_HIO;
 
@@ -239,7 +234,7 @@ BOOL daObj_Hole_c::_createHeap() {
 
 /* 00000928-0000096C       .text getArg__12daObj_Hole_cFv */
 void daObj_Hole_c::getArg() {
-    u32 param = fopAcM_GetParamBit(fopAcM_GetParam(this), 0, 0xFFFF);
+    u16 param = fopAcM_GetParamBit(fopAcM_GetParam(this), 0, 16);
     mExitIdx = param & 0xFF;
     mHasModel = param >> 8;
 

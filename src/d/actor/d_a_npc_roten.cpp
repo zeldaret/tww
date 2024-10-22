@@ -14,13 +14,9 @@
 #include "d/d_a_obj.h"
 #include "d/d_snap.h"
 
-extern dCcD_SrcCyl dNpc_cyl_src;
+#include "weak_data_1811.h" // IWYU pragma: keep
 
-// Needed for the .data section to match.
-static Vec dummy1 = {1.0f, 1.0f, 1.0f};
-static Vec dummy2 = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
+extern dCcD_SrcCyl dNpc_cyl_src;
 
 static const char* l_arcname_tbl[] = {
     "Ro",

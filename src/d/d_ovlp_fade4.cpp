@@ -8,7 +8,6 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_overlap.h"
 #include "m_Do/m_Do_graphic.h"
-#include "new.h"
 
 /* 80224390-80224484       .text init__15dDlst_2DtEff1_cF8_GXColor */
 void dDlst_2DtEff1_c::init(GXColor color) {
@@ -84,11 +83,10 @@ void dDlst_snapShot2_c::draw() {
 
 /* 80224748-80224884       .text dDlst_setResTimgObj__FPC7ResTIMGP9_GXTexObjPvUlUl */
 bool dDlst_setResTimgObj(const ResTIMG* timg, GXTexObj* texObj, void* imagePtr, u32 w, u32 h) {
-    /* Nonmatching */
     if (timg->indexTexture) {
         JUT_ASSERT(0xd9, FALSE);
     } else {
-        GXInitTexObj(texObj, imagePtr, w, h, (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT, (GXBool)(timg->mipmapCount > 1));
+        GXInitTexObj(texObj, imagePtr, w, h, (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT, (GXBool)((int)timg->mipmapCount > 1));
     }
 
     GXInitTexObjLOD(texObj, (GXTexFilter)timg->minFilter, (GXTexFilter)timg->magFilter,
@@ -285,8 +283,8 @@ void dOvlpFd4_c::execFadeOut() {
 
 /* 802253C4-80225528       .text execNextSnap__10dOvlpFd4_cFv */
 void dOvlpFd4_c::execNextSnap() {
-    setExecute(execFadeIn);
-    setDraw(drawFadeIn);
+    setExecute(&dOvlpFd4_c::execFadeIn);
+    setDraw(&dOvlpFd4_c::drawFadeIn);
     fadeIn_dlst.first = true;
     dComIfGp_setWindowNum(1);
 

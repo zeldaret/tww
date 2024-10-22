@@ -8,7 +8,7 @@
 #include "d/d_procname.h"
 #include "d/d_bg_s_lin_chk.h"
 
-static u8 dummy_bss[0x4C];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static cXyz l_break_particle_offset(0.0f, 0.0f, 30.0f);
 dBgS_ObjGndChk daBoko_c::m_ground_check;
@@ -21,7 +21,8 @@ static u8 l_HIO;
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {
-    mpLineMat->update(0xA, 1.25f, (GXColor){0xFF, 0x64, 0x00, 0xFF}, 2, &tevStr);
+    GXColor color = {0xFF, 0x64, 0x00, 0xFF};
+    mpLineMat->update(0xA, 1.25f, color, 2, &tevStr);
     dComIfGd_set3DlineMat(mpLineMat);
 }
 

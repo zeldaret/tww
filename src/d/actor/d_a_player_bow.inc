@@ -11,6 +11,7 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_HIO.h"
 
 /* 80149ECC-80149F88       .text bowJointCB__9daPy_lk_cFi */
 void daPy_lk_c::bowJointCB(int) {
@@ -79,12 +80,38 @@ void daPy_lk_c::setBowModel() {
 
 /* 8014A834-8014A8D4       .text procBowSubject_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBowSubject_init() {
-    /* Nonmatching */
+    if(mCurProc == daPyProc_BOW_SUBJECT_e) {
+        return false;
+    }
+
+    commonProcInit(daPyProc_BOW_SUBJECT_e);
+
+    if(!checkBowAnime()) {
+        setBowReadyAnime();
+    }
+    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+
+    mVelocity = 0.0f;
+
+    dComIfGp_setPlayerStatus0(0, daPyStts0_BOW_AIM_e);
+
+    return true;
 }
 
 /* 8014A8D4-8014A974       .text procBowSubject__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBowSubject() {
-    /* Nonmatching */
+    dComIfGp_setDoStatus(7);
+
+    if(mpAttention->Lockon()) {
+        setSpeedAndAngleAtn();
+    }
+
+    if(checkNextMode(0) == 0) {
+        setBodyAngleToCamera();
+        m35EC = mFrameCtrlUpper[UPPER_MOVE2_e].getFrame();
+    }
+
+    return true;
 }
 
 /* 8014A974-8014AA2C       .text procBowMove_init__9daPy_lk_cFv */

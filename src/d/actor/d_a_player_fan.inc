@@ -13,7 +13,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 
-char l_arcName[];
+extern char l_arcName[];
 
 /* 8014BAA0-8014BAEC       .text fanWindEffectDraw__9daPy_lk_cFv */
 BOOL daPy_lk_c::fanWindEffectDraw() {
