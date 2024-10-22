@@ -189,6 +189,7 @@ void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, short targetAngle) {
 
 /* 800BD8BC-800BD9E4       .text mode_cut__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
+  /* Nonmatching */
   mVelY = mVelY + L_attr.kCutYAccel;
   if (mVelY < -40.0f) {
     mVelY = -40.0f;
@@ -231,7 +232,8 @@ void dWood::Anm_c::mode_push_into_init(const dWood::Anm_c *packet,
 
 /* 800BDA38-800BDC24       .text
  * mode_push_into__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) {}
+void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) { /* Nonmatching */
+}
 
 /* 800BDC24-800BDC48       .text mode_push_back_init__Q25dWood5Anm_cFv */
 void dWood::Anm_c::mode_push_back_init() {
@@ -242,7 +244,8 @@ void dWood::Anm_c::mode_push_back_init() {
 
 /* 800BDC48-800BDECC       .text
  * mode_push_back__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_push_back(dWood::Packet_c *packet) {}
+void dWood::Anm_c::mode_push_back(dWood::Packet_c *packet) { /* Nonmatching */
+}
 
 /* 800BDECC-800BDED0       .text mode_fan__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::mode_fan(dWood::Packet_c *) { /* Nonmatching */
@@ -267,6 +270,7 @@ void dWood::Anm_c::mode_norm_init() {
 
 /* 800BDF5C-800BE148       .text mode_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
+  /* Nonmatching */
   int phase;
   if (mWindPow < 0.33f) {
     phase = 0;
@@ -324,6 +328,7 @@ void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
 /* 800BE1F0-800BE428       .text mode_to_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c
  */
 void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
+    /* Nonmatching */
   Anm_c *normAnim = packet->get_anm(mNextAnimIdx);
 
   int phase;
@@ -446,6 +451,7 @@ void dWood::Unit_c::clear() { cLib_memSet(this, 0, 0x18c); }
 /* 800BEA50-800BEE9C       .text
  * cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
 void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
+    /* Nonmatching */
   int animIdx;
   int oldAnimIdx;
 
@@ -657,6 +663,7 @@ s32 dWood::Packet_c::put_unit(const cXyz &pos, int room_no) {
 /* 800BF2D4-800BF404       .text calc_cc__Q25dWood8Packet_cFv */
 // Collision Calculations
 void dWood::Packet_c::calc_cc() {
+    /* Nonmatching */
   const s32 roomIdx = dStage_roomControl_c::mStayNo;
 
   if ((roomIdx >= 0) && (roomIdx < (s32)ARRAY_SIZE(mRoom))) {
@@ -727,6 +734,7 @@ void dWood::Packet_c::update() {
 
 /* 800BF614-800BF900       .text draw__Q25dWood8Packet_cFv */
 void dWood::Packet_c::draw() {
+    /* Nonmatching */
   u8 bVar1;
   int iVar2;
   int iVar3;
@@ -857,6 +865,7 @@ s32 dWood::Packet_c::search_empty_UnitID() const {
 /* 800BF938-800BFA70       .text
  * search_anm__Q25dWood8Packet_cFQ35dWood5Anm_c6Mode_e */
 s32 dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
+    /* Nonmatching */
   s32 animIdx;
 
   JUT_ASSERT(0x80d, (i_mode >= 0) && (i_mode < Anm_c::Mode_Max));
