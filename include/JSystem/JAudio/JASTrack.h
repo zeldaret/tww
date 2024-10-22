@@ -135,10 +135,14 @@ namespace JASystem {
         public:
             TimedParam_();
 
+#ifdef __MWERKS__
             union {
                 AInnerParam_ mInnerParam;
                 MoveParam_ mMoveParams[TIMED_Count];
             };
+#else
+            MoveParam_ mMoveParams[TIMED_Count];
+#endif
         };
 
         class TNoteMgr {

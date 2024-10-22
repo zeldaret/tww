@@ -577,10 +577,8 @@ int JASystem::TSeqParser::cmdVibPitch(TTrack* track, u32* args) {
 /* 8027F544-8027F5C8       .text cmdIIRSet__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdIIRSet(TTrack* track, u32* args) {
     for (u8 i = 0; i < 4; i++) {
-        // TTrack::MoveParam_* iir = &track->mTimedParam.mInnerParam.mIIRs[i];
-        // Fakematch? Accessing mIIRs directly results in fewer instructions than indexing into
-        // mVolume as if it was an array.
-        TTrack::MoveParam_* iir = (&track->mTimedParam.mInnerParam.mVolume) + (u8)(i + 0xC);
+        u8 iirIndex = TTrack::TIMED_IIR_Unk0 + i;
+        TTrack::MoveParam_* iir = &track->mTimedParam.mMoveParams[iirIndex];
         iir->mTargetValue = (s16)args[i] / 32768.0f;
         iir->mCurrentValue = iir->mTargetValue;
         iir->mMoveAmount = 0.0f;
@@ -594,10 +592,8 @@ int JASystem::TSeqParser::cmdIIRCutOff(TTrack* track, u32* args) {
     u8 iirTableIdx = args[0];
     for (u8 i = 0; i < 4; i++) {
         s16* table = &JASystem::Player::CUTOFF_TO_IIR_TABLE[iirTableIdx * 4];
-        // TTrack::MoveParam_* iir = &track->mTimedParam.mInnerParam.mIIRs[i];
-        // Fakematch? Accessing mIIRs directly results in fewer instructions than indexing into
-        // mVolume as if it was an array.
-        TTrack::MoveParam_* iir = (&track->mTimedParam.mInnerParam.mVolume) + (u8)(i + 0xC);
+        u8 iirIndex = TTrack::TIMED_IIR_Unk0 + i;
+        TTrack::MoveParam_* iir = &track->mTimedParam.mMoveParams[iirIndex];
         iir->mTargetValue = table[i] / (32768.0f - 1.0f);
         iir->mCurrentValue = iir->mTargetValue;
         iir->mMoveAmount = 0.0f;
@@ -761,7 +757,7 @@ int JASystem::TSeqParser::cmdSetParam(TTrack* track, u8 param_2) {
     case 4:
         data = track->getSeq()->readByte();
         break;
-    case 8:
+    case 8: {
         u8 byte = track->getSeq()->readByte();
         if (byte & 0x80) {
             data = byte << 8;
@@ -769,6 +765,7 @@ int JASystem::TSeqParser::cmdSetParam(TTrack* track, u8 param_2) {
             data = byte << 8 | byte << 1;
         }
         break;
+    }
     case 12:
         data = track->getSeq()->read16();
         break;

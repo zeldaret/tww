@@ -75,7 +75,7 @@ static Vec l_pos[] = {
     { 2.0f, -1.522254f, 7.0f },
 
 };
-static f32 l_texCoord[][2] = {
+static cXy l_texCoord[] = {
     { 0.02736f, 0.041406f },
     { 0.97264f, 0.041406f },
     { 0.830848f, 0.40324f },

@@ -76,7 +76,7 @@ int daObjEbomzo::Act_c::Create() {
     }
     else mMode = Ebomzo_Mode_Check;
 
-  return TRUE;
+    return TRUE;
 }
 
 /* 0000021C-000003A0       .text Mthd_Create__Q211daObjEbomzo5Act_cFv */
