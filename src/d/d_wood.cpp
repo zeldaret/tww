@@ -39,7 +39,16 @@ typedef u8 ALIGN_DECL(32) jData;
 
 typedef void (dWood::Anm_c::*modeProcFunc)(dWood::Packet_c *);
 
-struct AnimAttrs {
+// TODO: Use this
+enum AttrSway_e {
+    SWAY0,
+    SWAY1,
+    SWAY2,
+    SWAY3,
+};
+
+// TODO: Fill these in
+struct AnimAttrs { 
     /* 0x0 */ s16 unkUShort0;
     /* 0x2 */ s16 unkShort1;
     /* 0x4 */ s16 unkShort2;
@@ -126,7 +135,7 @@ dWood::Anm_c::Anm_c() {
         iVar1 = iVar1 + 1;
     }
 
-    mNextAnimIdx = 0;
+    mNormAnimIdx = AnmID_Norm0;
     mAlphaScale = 0xff;
     return;
 }
@@ -312,7 +321,7 @@ void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
 
     JUT_ASSERT(0x4d7, (anm_id_norm >= 0) && (anm_id_norm < AnmID_Norm_Max));
 
-    mNextAnimIdx = (short)anm_id_norm;
+    mNormAnimIdx = anm_id_norm;
     mAlphaScale = 0xff;
     mCountdown = 0x14;
     mMode = Anm_c::Mode_ToNorm;
@@ -322,7 +331,7 @@ void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
  */
 void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
     /* Nonmatching */
-    Anm_c *normAnim = packet->get_anm(mNextAnimIdx);
+    Anm_c *normAnim = packet->get_anm_p((AnmID_e)mNormAnimIdx);
 
     int phase;
     if (normAnim->mWindPow < 0.33f) {
@@ -446,8 +455,8 @@ void dWood::Unit_c::clear() { cLib_memSet(this, 0, 0x18c); }
  * cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
 void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     /* Nonmatching */
-    int animIdx;
-    int oldAnimIdx;
+    AnmID_e animIdx;
+    AnmID_e oldAnimIdx;
 
     dCcMassS_HitInf inf;
     fopAc_ac_c *actor;
@@ -488,7 +497,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
 
                 // If we were able to allocate an animation (or we already have
                 // one), start the "PushInto" (shrinking) animation
-                if ((mAnmIdx >= 8) && packet->get_anm(mAnmIdx)->get_mode() >=
+                if ((mAnmIdx >= 8) && packet->get_anm_p(mAnmIdx)->get_mode() >=
                                           Anm_c::Mode_PushInto) {
                     s16 targetAngle =
                         cLib_targetAngleY(&actor->current.pos, &mPos);
@@ -519,7 +528,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
 
             // If we were able to allocate an animation (or we already have
             // one), start the "PushInto" (shrinking) animation
-            if ((mAnmIdx >= 8) && (packet->get_anm(mAnmIdx)->get_mode() >=
+            if ((mAnmIdx >= 8) && (packet->get_anm_p(mAnmIdx)->get_mode() >=
                                    Anm_c::Mode_PushInto)) {
                 s16 targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
                 packet->mAnm[mAnmIdx].mode_push_into_init(
@@ -540,10 +549,10 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         }
 
         if ((mAnmIdx >= 8)) {
-            if (packet->get_anm(mAnmIdx)->get_mode() > Anm_c::Mode_Cut) {
+            if (packet->get_anm_p(mAnmIdx)->get_mode() > Anm_c::Mode_Cut) {
                 s16 targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
-                packet->get_anm(mAnmIdx)->mode_cut_init(
-                    packet->get_anm(oldAnimIdx), (s32)targetAngle);
+                packet->get_anm_p(mAnmIdx)->mode_cut_init(
+                    packet->get_anm_p(oldAnimIdx), (s32)targetAngle);
 
                 // Compute the color settings for particels
                 g_env_light.settingTevStruct(TEV_TYPE_BG0, &mPos, &mTevStr);
@@ -574,19 +583,19 @@ void dWood::Unit_c::cc_hit_after_cut(dWood::Packet_c *) {}
 void dWood::Unit_c::proc(dWood::Packet_c *packet) {
     // If this unit is active, and performing a non-normal animation...
     if (cLib_checkBit(mFlags, STATE_ACTIVE)) {
-        int animIdx = mAnmIdx;
+        AnmID_e animIdx = mAnmIdx;
 
         if (animIdx >= 8) {
             Anm_c &anim = packet->mAnm[animIdx];
             Anm_c::Mode_e mode = anim.mMode;
             if (mode == Anm_c::Mode_ToNorm) {
                 if (anim.mCountdown <= 0) {
-                    mAnmIdx = anim.mNextAnimIdx;
+                    mAnmIdx = (AnmID_e)anim.mNormAnimIdx;
                     anim.mMode = Anm_c::Mode_Max;
                 }
             } else if (mode == Anm_c::Mode_Cut) {
                 if (anim.mCountdown <= 0) {
-                    s32 newAnimIdx = packet->search_anm(Anm_c::Mode_Norm);
+                    AnmID_e newAnimIdx = packet->search_anm(Anm_c::Mode_Norm);
                     mAnmIdx = newAnimIdx;
                     anim.mMode = Anm_c::Mode_Max;
                     cLib_onBit(mFlags, STATE_CUT);
@@ -864,9 +873,9 @@ s32 dWood::Packet_c::search_empty_UnitID() const {
 
 /* 800BF938-800BFA70       .text
  * search_anm__Q25dWood8Packet_cFQ35dWood5Anm_c6Mode_e */
-s32 dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
+dWood::AnmID_e dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
     /* Nonmatching */
-    s32 animIdx;
+    u32 animIdx;
 
     JUT_ASSERT(0x80d, (i_mode >= 0) && (i_mode < Anm_c::Mode_Max));
 
@@ -879,7 +888,7 @@ s32 dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
         animIdx = 8;
         for (s32 i = 0; i < 64; i++) {
             if (mAnm[animIdx].mMode == Anm_c::Mode_Max) {
-                return animIdx;
+                return (AnmID_e)animIdx;
             }
             animIdx++;
         }
@@ -888,7 +897,7 @@ s32 dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
         animIdx = 8;
         for (s32 i = 0; i < 64; i++) {
             if (i_mode < mAnm[animIdx].mMode) {
-                return animIdx;
+                return (AnmID_e)animIdx;
             }
             animIdx++;
         }
@@ -897,5 +906,5 @@ s32 dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
         animIdx = -1;
     }
 
-    return animIdx;
+    return (AnmID_e)animIdx;
 }

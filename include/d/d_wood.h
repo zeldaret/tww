@@ -48,8 +48,8 @@ public:
     /* 0x000 */ cXyz mPos;
     /* 0x00C */ s16 mAnimCooldown; // In frames. Animations will not change unless this is 0.
     /* 0x00E */ u8 field_0x00C[0x010 - 0x00E];
-    /* 0x010 */ u32 mFlags;
-    /* 0x014 */ s32 mAnmIdx;
+    /* 0x010 */ State_e mFlags;
+    /* 0x014 */ AnmID_e mAnmIdx;
     /* 0x018 */ Mtx mModelViewMtx;
     /* 0x048 */ Mtx mTrunkModelViewMtx;
     /* 0x078 */ Mtx mShadowModelMtx;
@@ -114,7 +114,7 @@ public:
     /* 0x80 */ s16 mUnkArr2[2];
     /* 0x84 */ s16 mUnkArr3[2];
     
-    /* 0x88 */ s16 mNextAnimIdx; // Corresponds to the index in Packet_c::mAnm;
+    /* 0x88 */ s16 mNormAnimIdx;
 
     /* 0x8A */ u8 mAlphaScale;
 
@@ -142,9 +142,9 @@ public:
     void calc();
     void update();
     s32 search_empty_UnitID() const;
-    s32 search_anm(Anm_c::Mode_e mode);
+    AnmID_e search_anm(Anm_c::Mode_e mode);
 
-    Anm_c* get_anm(u32 idx) { return &mAnm[idx]; }
+    inline Anm_c* get_anm_p(AnmID_e idx) { return &mAnm[idx]; }
 
     virtual void draw();
     virtual ~Packet_c() {};
