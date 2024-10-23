@@ -839,7 +839,7 @@ void dWood::Packet_c::draw() {
         {GX_VA_TEX0, GX_CLR_RGBA, GX_F32},
         {GX_VA_NULL, GX_CLR_RGBA, GX_RGB8},
     };
-    static const GXColor l_shadowColor = {0x00, 0x00, 0x00, 0x64};
+    static GXColor l_shadowColor = {0x00, 0x00, 0x00, 0x64};
 
     // Assign the shadow material and draw state
     GFSetVtxDescv(l_shadowVtxDescList);
