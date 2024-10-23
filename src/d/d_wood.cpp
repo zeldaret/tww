@@ -340,13 +340,13 @@ void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
  */
 void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
     /* Nonmatching */
-    Anm_c *normAnim = packet->get_anm_p(mode_to_norm_get_AnmID());
+    const Anm_c *normAnim = packet->get_anm_p(mode_to_norm_get_AnmID());
 
     AttrSway_e swayID;
-    if (mWindPow < 0.33f) {
+    if (normAnim->mWindPow < 0.33f) {
         swayID = SWAY_LIGHT;
     } else {
-        if (mWindPow < 0.66f) {
+        if (normAnim->mWindPow < 0.66f) {
             swayID = SWAY_MEDIUM;
         } else {
             swayID = SWAY_STRONG;
@@ -355,25 +355,25 @@ void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
 
     cLib_chaseAngleS(&mWindDir, normAnim->mWindDir, 3000);
 
-    float fVar1 = 0.0;
-    float fVar5 = fVar1;
-
+    float rotY = 0.0f;
+    float rotX = rotY;
     for (s32 i = 0; i < 2; i++) {
         const AttrSway_c *sway = &attr_sway(swayID, i);
         float phaseBiasX = sway->phaseBiasX;
-        s16 rotXStep = sway->phaseVelX + 3000;
+        s32 phaseVelX = sway->phaseVelX;
+        s16 rotXStep = phaseVelX + 3000;
 
         cLib_chaseS(&mPhaseY[i], normAnim->mPhaseY[i], sway->phaseVelY + 3000);
         cLib_chaseS(&mPhaseX[i], normAnim->mPhaseX[i], rotXStep);
         cLib_chaseS(&mAmpY[i], normAnim->mAmpY[i], 0xf);
         cLib_chaseS(&mAmpX[i], normAnim->mAmpX[i], 0xf);
 
-        fVar1 += mAmpY[i] * JMASCos(mPhaseY[i]);
-        fVar5 += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
+        rotY += mAmpY[i] * JMASCos(mPhaseY[i]);
+        rotX += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
     }
 
-    mDoMtx_YrotS(mModelMtx, (s16)fVar1 + mWindDir);
-    mDoMtx_XrotM(mModelMtx, fVar5);
+    mDoMtx_YrotS(mModelMtx, (s16)rotY + mWindDir);
+    mDoMtx_XrotM(mModelMtx, rotX);
     mDoMtx_YrotM(mModelMtx, -mWindDir);
 
     if (mCountdown > 0) {
