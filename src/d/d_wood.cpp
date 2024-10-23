@@ -55,12 +55,13 @@ struct AttrSway_c {
 };
 struct Attr_c {
     /* 0x0 */ AttrSway_c kSways[4][2];
-    /* 0x60 */ u8 kCutCooldown;           // = 23
-    /* 0x61 */ u8 kCutPosOffsetX;         // = 0
+    /* 0x60 */ u8 kCutCooldown;           // = 20
+    /* 0x61 */ u8 kCutPosOffsetX;         // = 20
+    /* 0x62 */ u8 kCutAlphaFadeSpeed;     // = 14
     /* 0x64 */ float kCutInitVelY;        // = 18.0f
     /* 0x68 */ float kCutYAccel;          // = -3.0f (Units per frame per frame)
     /* 0x6C */ float kCutZVel;            // = 2.5f (Units per frame)
-    /* 0x70 */ float kCutPitchVel;        // = 8 (shortRad per frame)
+    /* 0x70 */ s16 kCutPitchVel;          // = 200 (shortRad per frame)
     /* 0x74 */ float kUncutShadowScale;   // = 1.5f
     /* 0x78 */ float kCutShadowScale;     // = 0.3f
     /* 0x7c */ float kCollisionRad;       // = 80.0f;
@@ -91,7 +92,58 @@ jData l_Oba_swood_b_cutDL[0xcb] = {};
 jData l_matDL[0xa3] = {};
 
 // .rodata
-const Attr_c L_attr = {};
+const Attr_c L_attr = { 
+    {{{
+            0x00C8,
+            0x50,
+            0x5DC,
+            0x32,
+            0.6
+        }, {
+            0x00B4,
+            0x1E,
+            0xC80,
+            0xA,
+            0.2,
+        }}, {{
+            0x01f4,
+            0x96,
+            0x4B0,
+            0x96,
+            0.6,
+        }, {
+            0x02BC,
+            0x32,
+            0x898,
+            0x1E,
+            0.2,
+        }}, {{
+            0x0258,
+            0xC8,
+            0x898,
+            0x12C,
+            0.6,
+        }, {
+            0x01BC,
+            0x1E,
+            0xFA0,
+            0x32,
+            0.2,
+        }}, {{
+            0x0258,
+            0xC8,
+            0x1838,
+            0x1F4,
+            0.6,
+        }, {
+            0x01BC,
+            0x1E,
+            0x3E8,
+            0x32,
+            0.2,
+        }}
+    }, 0x14, 0x14, 0x0e, 18.0f, -3.0f, 2.5f, 200, 1.5f, 0.3f, 80.0f, 15.0f, 80.0f, 15.0f, 100.0f, 40.0f, 0x23, 0x80
+};
 } // namespace
 } // namespace dWood
 
@@ -219,7 +271,7 @@ void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
 
     // Fade out the bush as it falls
     if (mCountdown < 20) {
-        int alphaScale = mAlphaScale - 14;
+        int alphaScale = mAlphaScale - attr().kCutAlphaFadeSpeed;
         if (alphaScale < 0) {
             alphaScale = 0;
         }
