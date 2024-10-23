@@ -113,10 +113,10 @@ public:
     /* 0x70 */ float mPosOffsetZ;
     /* 0x74 */ float mVelY;
 
-    /* 0x78 */ s16 mRotY[2];
-    /* 0x7c */ s16 mRotX[2];
-    /* 0x80 */ s16 mUnkArr2[2];
-    /* 0x84 */ s16 mUnkArr3[2];
+    /* 0x78 */ s16 mPhaseY[2];
+    /* 0x7c */ s16 mPhaseX[2];
+    /* 0x80 */ s16 mAmpY[2];
+    /* 0x84 */ s16 mAmpX[2];
     
     /* 0x88 */ s16 mNormAnimIdx;
 

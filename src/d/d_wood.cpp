@@ -41,22 +41,22 @@ typedef void (dWood::Anm_c::*modeProcFunc)(dWood::Packet_c *);
 
 // TODO: Use this
 enum AttrSway_e {
-    SWAY0,
-    SWAY1,
-    SWAY2,
-    SWAY3,
+    SWAY_LIGHT,
+    SWAY_MEDIUM,
+    SWAY_STRONG,
+    SWAY_EXTREME,
 };
 
 // TODO: Fill these in
-struct AnimAttrs { 
-    /* 0x0 */ s16 unkUShort0;
-    /* 0x2 */ s16 unkShort1;
-    /* 0x4 */ s16 unkShort2;
-    /* 0x6 */ s16 unkShort3;
-    /* 0x8 */ float unkFloat;
+struct AttrSway_c {
+    /* 0x0 */ s16 phaseVelY;
+    /* 0x2 */ s16 ampY;
+    /* 0x4 */ s16 phaseVelX;
+    /* 0x6 */ s16 ampX;
+    /* 0x8 */ float phaseBiasX;
 };
 struct Attr_c {
-    /* 0x0 */ AnimAttrs base[4][2];
+    /* 0x0 */ AttrSway_c kSways[4][2];
     /* 0x60 */ u8 kCutCooldown;           // = 23
     /* 0x61 */ u8 kCutPosOffsetX;         // = 0
     /* 0x64 */ float kCutInitVelY;        // = 18.0f
@@ -108,6 +108,17 @@ const double l_Ground_check_unk2 = 3.0;
 const float kGroundHeightBias = 1.0f;
 
 //-----------------------------------------
+// Helpers
+//-----------------------------------------
+namespace {
+inline const Attr_c &attr() { return dWood::L_attr; }
+
+inline const AttrSway_c &attr_sway(AttrSway_e swayID, int idx) {
+    return attr().kSways[swayID][idx];
+}
+} // namespace
+
+//-----------------------------------------
 // Classes
 //-----------------------------------------
 
@@ -128,10 +139,10 @@ dWood::Anm_c::Anm_c() {
 
     iVar1 = 0;
     for (u32 i = 0; i < 2; i++) {
-        mRotY[iVar1] = 0;
-        mRotX[iVar1] = 0;
-        mUnkArr2[iVar1] = 0;
-        mUnkArr3[iVar1] = 0;
+        mPhaseY[iVar1] = 0;
+        mPhaseX[iVar1] = 0;
+        mAmpY[iVar1] = 0;
+        mAmpX[iVar1] = 0;
         iVar1 = iVar1 + 1;
     }
 
@@ -161,10 +172,10 @@ void dWood::Anm_c::copy_angamp(const dWood::Anm_c *other) {
 
     s32 iVar1 = 0;
     for (u32 i = 0; i < 2; i++) {
-        mRotY[iVar1] = other->mRotY[iVar1];
-        mRotX[iVar1] = other->mRotX[iVar1];
-        mUnkArr2[iVar1] = other->mUnkArr2[iVar1];
-        mUnkArr3[iVar1] = other->mUnkArr3[iVar1];
+        mPhaseY[iVar1] = other->mPhaseY[iVar1];
+        mPhaseX[iVar1] = other->mPhaseX[iVar1];
+        mAmpY[iVar1] = other->mAmpY[iVar1];
+        mAmpX[iVar1] = other->mAmpX[iVar1];
         iVar1 = iVar1 + 1;
     }
 }
@@ -174,10 +185,10 @@ void dWood::Anm_c::copy_angamp(const dWood::Anm_c *other) {
 void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, short targetAngle) {
     s32 iVar1 = 0;
     for (u32 i = 0; i < 2; i++) {
-        mRotY[iVar1] = 0;
-        mRotX[iVar1] = 0;
-        mUnkArr2[iVar1] = 0;
-        mUnkArr3[iVar1] = 0;
+        mPhaseY[iVar1] = 0;
+        mPhaseX[iVar1] = 0;
+        mAmpY[iVar1] = 0;
+        mAmpX[iVar1] = 0;
         iVar1 = iVar1 + 1;
     }
 
@@ -200,11 +211,11 @@ void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
 
     mPosOffsetY = mPosOffsetY + mVelY;
     mPosOffsetZ = mPosOffsetZ + L_attr.kCutZVel;
-    mRotX[0] = mRotX[0] + L_attr.kCutPitchVel;
+    mPhaseX[0] = mPhaseX[0] + L_attr.kCutPitchVel;
 
     mDoMtx_YrotS(mDoMtx_stack_c::now, (int)mWindDir);
     mDoMtx_stack_c::transM(L_attr.kCutPosOffsetX, mPosOffsetY, mPosOffsetZ);
-    mDoMtx_XrotM(mDoMtx_stack_c::now, mRotX[0]);
+    mDoMtx_XrotM(mDoMtx_stack_c::now, mPhaseX[0]);
     mDoMtx_YrotM(mDoMtx_stack_c::now, -mWindDir);
     mDoMtx_copy(mDoMtx_stack_c::now, mModelMtx);
 
@@ -259,10 +270,10 @@ void dWood::Anm_c::mode_norm_init() {
     mMode = Mode_Norm;
 
     for (u32 i = 0; i < 2; i++) {
-        mRotY[i] = M_init_num * 0x2000;
-        mRotX[i] = M_init_num * 0x2000;
-        mUnkArr2[i] = L_attr.base[0][i].unkShort1;
-        mUnkArr3[i] = L_attr.base[0][i].unkShort3;
+        mPhaseY[i] = M_init_num * 0x2000;
+        mPhaseX[i] = M_init_num * 0x2000;
+        mAmpY[i] = attr_sway(SWAY_LIGHT, i).ampY;
+        mAmpX[i] = attr_sway(SWAY_LIGHT, i).ampX;
     }
 
     mAlphaScale = 0xff;
@@ -273,38 +284,38 @@ void dWood::Anm_c::mode_norm_init() {
 
 /* 800BDF5C-800BE148       .text mode_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
-    int phase;
+    AttrSway_e swayID;
     if (mWindPow < 0.33f) {
-        phase = 0;
+        swayID = SWAY_LIGHT;
     } else {
         if (mWindPow < 0.66f) {
-            phase = 1;
+            swayID = SWAY_MEDIUM;
         } else {
-            phase = 2;
+            swayID = SWAY_STRONG;
         }
     }
 
-    float fVar1 = 0.0f;
-    float fVar6 = fVar1;
+    float rotY = 0.0f;
+    float rotX = rotY;
     for (s32 i = 0; i < 2; i++) {
-        const AnimAttrs *baseAttr = &L_attr.base[phase][i];
-        s32 unk2 = baseAttr->unkShort2;
-        s16 unk1 = baseAttr->unkShort1;
-        s16 unk3 = baseAttr->unkShort3;
-        float unk4 = baseAttr->unkFloat;
+        const AttrSway_c *sway = &attr_sway(swayID, i);
+        s32 phaseVelX = sway->phaseVelX;
+        s16 ampY = sway->ampY;
+        s16 ampX = sway->ampX;
+        float phaseBiasX = sway->phaseBiasX;
 
-        mRotY[i] += baseAttr->unkUShort0;
-        mRotX[i] += unk2;
-        cLib_chaseS(&mUnkArr2[i], unk1, 2);
-        cLib_chaseS(&mUnkArr3[i], unk3, 2);
+        mPhaseY[i] += sway->phaseVelY;
+        mPhaseX[i] += phaseVelX;
+        cLib_chaseS(&mAmpY[i], ampY, 2);
+        cLib_chaseS(&mAmpX[i], ampX, 2);
 
-        fVar1 += mUnkArr2[i] * JMASCos(mRotY[i]);
-        fVar6 += mUnkArr3[i] * (unk4 + JMASCos(mRotX[i]));
+        rotY += mAmpY[i] * JMASCos(mPhaseY[i]);
+        rotX += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
     }
 
-    mDoMtx_YrotS(mModelMtx, (s16)fVar1 + mWindDir); // Y Rotation (Yaw)
-    mDoMtx_XrotM(mModelMtx, fVar6);                 // X Rotation
-    mDoMtx_YrotM(mModelMtx, -mWindDir);             // Y Rotation
+    mDoMtx_YrotS(mModelMtx, (s16)rotY + mWindDir); // Y Rotation (Yaw)
+    mDoMtx_XrotM(mModelMtx, rotX);                 // X Rotation
+    mDoMtx_YrotM(mModelMtx, -mWindDir);            // Y Rotation
 }
 
 /* 800BE148-800BE154       .text mode_norm_set_wind__Q25dWood5Anm_cFfs */
@@ -333,13 +344,15 @@ void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
     /* Nonmatching */
     Anm_c *normAnim = packet->get_anm_p(mode_to_norm_get_AnmID());
 
-    int phase;
-    if (normAnim->mWindPow < 0.33f) {
-        phase = 0;
-    } else if (normAnim->mWindPow < 0.66f) {
-        phase = 1;
+    AttrSway_e swayID;
+    if (mWindPow < 0.33f) {
+        swayID = SWAY_LIGHT;
     } else {
-        phase = 2;
+        if (mWindPow < 0.66f) {
+            swayID = SWAY_MEDIUM;
+        } else {
+            swayID = SWAY_STRONG;
+        }
     }
 
     cLib_chaseAngleS(&mWindDir, normAnim->mWindDir, 3000);
@@ -348,17 +361,17 @@ void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
     float fVar5 = fVar1;
 
     for (s32 i = 0; i < 2; i++) {
-        const AnimAttrs *baseAttr = &L_attr.base[phase][i];
-        float fVar2 = baseAttr->unkFloat;
-        s16 rotXStep = baseAttr->unkShort2 + 3000;
+        const AttrSway_c *sway = &attr_sway(swayID, i);
+        float phaseBiasX = sway->phaseBiasX;
+        s16 rotXStep = sway->phaseVelX + 3000;
 
-        cLib_chaseS(&mRotY[i], normAnim->mRotY[i], baseAttr->unkUShort0 + 3000);
-        cLib_chaseS(&mRotX[i], normAnim->mRotX[i], rotXStep);
-        cLib_chaseS(&mUnkArr2[i], normAnim->mUnkArr2[i], 0xf);
-        cLib_chaseS(&mUnkArr3[i], normAnim->mUnkArr3[i], 0xf);
+        cLib_chaseS(&mPhaseY[i], normAnim->mPhaseY[i], sway->phaseVelY + 3000);
+        cLib_chaseS(&mPhaseX[i], normAnim->mPhaseX[i], rotXStep);
+        cLib_chaseS(&mAmpY[i], normAnim->mAmpY[i], 0xf);
+        cLib_chaseS(&mAmpX[i], normAnim->mAmpX[i], 0xf);
 
-        fVar1 += mUnkArr2[i] * JMASCos(mRotY[i]);
-        fVar5 += mUnkArr3[i] * (fVar2 + JMASCos(mRotX[i]));
+        fVar1 += mAmpY[i] * JMASCos(mPhaseY[i]);
+        fVar5 += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
     }
 
     mDoMtx_YrotS(mModelMtx, (s16)fVar1 + mWindDir);
