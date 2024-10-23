@@ -321,7 +321,7 @@ void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
 
     JUT_ASSERT(0x4d7, (anm_id_norm >= 0) && (anm_id_norm < AnmID_Norm_Max));
 
-    mNormAnimIdx = anm_id_norm;
+    mode_to_norm_set_AnmID(anm_id_norm);
     mAlphaScale = 0xff;
     mCountdown = 0x14;
     mMode = Anm_c::Mode_ToNorm;
@@ -331,7 +331,7 @@ void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
  */
 void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
     /* Nonmatching */
-    Anm_c *normAnim = packet->get_anm_p((AnmID_e)mNormAnimIdx);
+    Anm_c *normAnim = packet->get_anm_p(mode_to_norm_get_AnmID());
 
     int phase;
     if (normAnim->mWindPow < 0.33f) {
@@ -491,7 +491,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                 // If we are currently performing a basic animation, assign a
                 // new animation
                 oldAnimIdx = mAnmIdx;
-                if ((oldAnimIdx < 8) && (animIdx != -1)) {
+                if ((oldAnimIdx < 8) && (animIdx != AnmID_Norm_Invalid)) {
                     mAnmIdx = animIdx;
                 }
 
@@ -522,7 +522,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
             // If we are currently performing a basic animation, assign a new
             // animation
             oldAnimIdx = mAnmIdx;
-            if ((oldAnimIdx < 8) && (animIdx != -1)) {
+            if ((oldAnimIdx < 8) && (animIdx != AnmID_Norm_Invalid)) {
                 mAnmIdx = animIdx;
             }
 
@@ -543,7 +543,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
 
         if ((mAnmIdx < 8)) {
             animIdx = packet->search_anm(Anm_c::Mode_Cut);
-            if (animIdx != -1) {
+            if (animIdx != AnmID_Norm_Invalid) {
                 mAnmIdx = animIdx;
             }
         }
@@ -590,7 +590,7 @@ void dWood::Unit_c::proc(dWood::Packet_c *packet) {
             Anm_c::Mode_e mode = anim.mMode;
             if (mode == Anm_c::Mode_ToNorm) {
                 if (anim.mCountdown <= 0) {
-                    mAnmIdx = (AnmID_e)anim.mNormAnimIdx;
+                    mAnmIdx = anim.mode_to_norm_get_AnmID();
                     anim.mMode = Anm_c::Mode_Max;
                 }
             } else if (mode == Anm_c::Mode_Cut) {
@@ -903,7 +903,7 @@ dWood::AnmID_e dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
         }
 
         // If no available anim slot is found, return -1
-        animIdx = -1;
+        animIdx = AnmID_Norm_Invalid;
     }
 
     return (AnmID_e)animIdx;

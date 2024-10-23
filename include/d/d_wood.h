@@ -23,7 +23,8 @@ enum AnmID_e {
     AnmID_Norm6,
     AnmID_Norm7,
 
-    AnmID_Norm_Max
+    AnmID_Norm_Max = 8,
+    AnmID_Norm_Invalid = -1
 };
 
 class Anm_c;
@@ -94,6 +95,9 @@ public:
     void mode_norm_set_wind(float, short);
     void mode_to_norm_init(AnmID_e);
     void mode_to_norm(Packet_c*);
+
+    inline AnmID_e mode_to_norm_get_AnmID() { return (AnmID_e)mNormAnimIdx; }
+    inline void mode_to_norm_set_AnmID(AnmID_e anmID)  { mNormAnimIdx = anmID; }
 
     Mode_e get_mode() { return mMode; }
 
