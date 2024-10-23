@@ -30,7 +30,7 @@
 // These belong in the d_tree compilation unit. But in order to match, they must
 // be in this compilation unit so they can have a 16-bit offset, allowing us
 // load their pointer using a single load immediate instruction
-u8 g_dTree_shadowTexCoord[2];
+// u8 g_dTree_shadowTexCoord[2];
 
 //-----------------------------------------
 // Types
@@ -156,6 +156,8 @@ const float l_Ground_check_unk0 = 1.0E+9;
 const double l_Ground_check_unk1 = 0.5;
 const double l_Ground_check_unk2 = 3.0;
 const float kGroundHeightBias = 1.0f;
+
+s32 dWood::Anm_c::M_init_num = 0;
 
 //-----------------------------------------
 // Helpers
