@@ -39,7 +39,6 @@ typedef u8 ALIGN_DECL(32) jData;
 
 typedef void (dWood::Anm_c::*modeProcFunc)(dWood::Packet_c *);
 
-// TODO: Use this
 enum AttrSway_e {
     SWAY_LIGHT,
     SWAY_MEDIUM,
@@ -47,7 +46,6 @@ enum AttrSway_e {
     SWAY_EXTREME,
 };
 
-// TODO: Fill these in
 struct AttrSway_c {
     /* 0x0 */ s16 phaseVelY;
     /* 0x2 */ s16 ampY;
@@ -467,9 +465,9 @@ void dWood::Unit_c::clear() { cLib_memSet(this, 0, 0x18c); }
 /* 800BEA50-800BEE9C       .text
  * cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
 void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
-    /* Nonmatching */
     AnmID_e animIdx;
     AnmID_e oldAnimIdx;
+    s16 targetAngle;
 
     dCcMassS_HitInf inf;
     fopAc_ac_c *actor;
@@ -512,9 +510,9 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                 // one), start the "PushInto" (shrinking) animation
                 if ((mAnmIdx >= 8) && packet->get_anm_p(mAnmIdx)->get_mode() >=
                                           Anm_c::Mode_PushInto) {
-                    s16 targetAngle =
+                    targetAngle =
                         cLib_targetAngleY(&actor->current.pos, &mPos);
-                    packet->mAnm[mAnmIdx].mode_push_into_init(
+                    packet->get_anm_p(mAnmIdx)->mode_push_into_init(
                         packet->mAnm + oldAnimIdx, (s32)targetAngle);
                 }
             }
@@ -543,8 +541,8 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
             // one), start the "PushInto" (shrinking) animation
             if ((mAnmIdx >= 8) && (packet->get_anm_p(mAnmIdx)->get_mode() >=
                                    Anm_c::Mode_PushInto)) {
-                s16 targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
-                packet->mAnm[mAnmIdx].mode_push_into_init(
+                targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
+                packet->get_anm_p(mAnmIdx)->mode_push_into_init(
                     packet->mAnm + oldAnimIdx, (s32)targetAngle);
             }
         }
@@ -552,7 +550,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
 
     // Check for attacks that WILL cut us down
     if (cLib_checkBit(ret, 0x01UL)) {
-        oldAnimIdx = mAnmIdx;
+        AnmID_e oldAnimIdx = mAnmIdx;
 
         if ((mAnmIdx < 8)) {
             animIdx = packet->search_anm(Anm_c::Mode_Cut);
@@ -563,7 +561,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
 
         if ((mAnmIdx >= 8)) {
             if (packet->get_anm_p(mAnmIdx)->get_mode() > Anm_c::Mode_Cut) {
-                s16 targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
+                targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
                 packet->get_anm_p(mAnmIdx)->mode_cut_init(
                     packet->get_anm_p(oldAnimIdx), (s32)targetAngle);
 
@@ -599,18 +597,18 @@ void dWood::Unit_c::proc(dWood::Packet_c *packet) {
         AnmID_e animIdx = mAnmIdx;
 
         if (animIdx >= 8) {
-            Anm_c &anim = packet->mAnm[animIdx];
-            Anm_c::Mode_e mode = anim.mMode;
+            Anm_c* anim = packet->get_anm_p(animIdx);
+            Anm_c::Mode_e mode = anim->mMode;
             if (mode == Anm_c::Mode_ToNorm) {
-                if (anim.mCountdown <= 0) {
-                    mAnmIdx = anim.mode_to_norm_get_AnmID();
-                    anim.mMode = Anm_c::Mode_Max;
+                if (anim->mCountdown <= 0) {
+                    mAnmIdx = anim->mode_to_norm_get_AnmID();
+                    anim->mMode = Anm_c::Mode_Max;
                 }
             } else if (mode == Anm_c::Mode_Cut) {
-                if (anim.mCountdown <= 0) {
+                if (anim->mCountdown <= 0) {
                     AnmID_e newAnimIdx = packet->search_anm(Anm_c::Mode_Norm);
                     mAnmIdx = newAnimIdx;
-                    anim.mMode = Anm_c::Mode_Max;
+                    anim->mMode = Anm_c::Mode_Max;
                     cLib_onBit(mFlags, STATE_CUT);
                 }
             } else if (mode == Anm_c::Mode_Max) {
