@@ -655,7 +655,7 @@ void dWood::Packet_c::delete_room(int room_no) {
 
 /* 800BF1C8-800BF2D4       .text put_unit__Q25dWood8Packet_cFRC4cXyzi */
 s32 dWood::Packet_c::put_unit(const cXyz &pos, int room_no) {
-    JUT_ASSERT(0x6e0, (room_no >= 0) && (room_no < 64));
+    JUT_ASSERT(0x6e0, (room_no >= 0) && (room_no < L_Room_Max));
 
     const s32 unitCount = ARRAY_SIZE(mUnit);
     s32 unitIdx = search_empty_UnitID();
