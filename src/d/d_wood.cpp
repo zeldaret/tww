@@ -510,8 +510,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                 // one), start the "PushInto" (shrinking) animation
                 if ((mAnmIdx >= 8) && packet->get_anm_p(mAnmIdx)->get_mode() >=
                                           Anm_c::Mode_PushInto) {
-                    targetAngle =
-                        cLib_targetAngleY(&actor->current.pos, &mPos);
+                    targetAngle = cLib_targetAngleY(&actor->current.pos, &mPos);
                     packet->get_anm_p(mAnmIdx)->mode_push_into_init(
                         packet->mAnm + oldAnimIdx, (s32)targetAngle);
                 }
@@ -597,7 +596,7 @@ void dWood::Unit_c::proc(dWood::Packet_c *packet) {
         AnmID_e animIdx = mAnmIdx;
 
         if (animIdx >= 8) {
-            Anm_c* anim = packet->get_anm_p(animIdx);
+            Anm_c *anim = packet->get_anm_p(animIdx);
             Anm_c::Mode_e mode = anim->mMode;
             if (mode == Anm_c::Mode_ToNorm) {
                 if (anim->mCountdown <= 0) {
@@ -680,8 +679,7 @@ s32 dWood::Packet_c::put_unit(const cXyz &pos, int room_no) {
 /* 800BF2D4-800BF404       .text calc_cc__Q25dWood8Packet_cFv */
 // Collision Calculations
 void dWood::Packet_c::calc_cc() {
-    /* Nonmatching */
-    const s32 roomIdx = dStage_roomControl_c::mStayNo;
+    int roomIdx = dComIfGp_roomControl_getStayNo();
 
     if ((roomIdx >= 0) && (roomIdx < (s32)ARRAY_SIZE(mRoom))) {
         dComIfG_Ccsp()->SetMassAttr(L_attr.kCollisionRad,
