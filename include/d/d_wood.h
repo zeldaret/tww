@@ -76,6 +76,8 @@ public:
 
     Anm_c();
     void play(Packet_c*);
+
+    // Copies the "angle" and "amplitude" from another animation
     void copy_angamp(const Anm_c*);
     
     // Animations are assigned from the Packet to specific Wood instances (Bushes) when a new animation starts
