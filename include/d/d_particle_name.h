@@ -16,6 +16,7 @@ namespace dPa_name {
         ID_COMMON_LIGHT_EXPLOSION = 0x272,
         ID_COMMON_STARS_SPIN = 0x27A,
         ID_COMMON_STARS_BLOW = 0x27B,
+        ID_CUT_L_TREE_DOWN = 0x3E0,
         ID_PEDESTAL_OCTAGON_GLOW = 0x826D,
         ID_WARPFOUT_WARP4 = 0x830e,
     };

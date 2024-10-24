@@ -52,6 +52,8 @@ public:
     void SetAtHitObj(cCcD_Obj* obj) { mpAtObj = obj; }
     void SetCoHitLen(f32 len) { mCoHitLen = len; }
     cCcD_Obj* GetAtHitObj() const { return mpAtObj; }
+    cCcD_Obj* GetCoHitObj() const { return mpCoObj; }
+    f32 GetCoHitLen() const { return mCoHitLen; }
 
     void ClearPointer() {
         mpArea = NULL;
@@ -59,8 +61,6 @@ public:
         mpCoObj = NULL;
         mCoHitLen = 0.0f;
     }
-    void GetCoHitLen() const {}
-    void GetCoHitObj() const {}
 };
 
 class dCcMassS_Mng {

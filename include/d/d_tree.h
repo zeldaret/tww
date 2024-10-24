@@ -9,6 +9,13 @@ class cCcD_Obj;
 class dCcMassS_HitInf;
 class fopAc_ac_c;
 
+extern u8 g_dTree_shadowPos[];
+extern u8 g_dTree_shadowTexCoord[];
+extern const u32 g_dTree_shadowMatDL_SIZE;
+extern const u32 g_dTree_Oba_kage_32DL_SIZE;
+extern u8 g_dTree_shadowMatDL[];
+extern u8 g_dTree_Oba_kage_32DL[];
+
 class dTree_data_c {
 public:
     ~dTree_data_c();
