@@ -187,10 +187,10 @@ dWood::Anm_c::Anm_c() {
     mMode = Mode_Max;
     mCountdown = 0;
     mWindDir = 0;
-    mWindPow = 0.0;
-    mPosOffsetY = 0.0;
-    mPosOffsetZ = 0.0;
-    mVelY = 0.0;
+    mWindPow = 0.0f;
+    mPosOffsetY = 0.0f;
+    mPosOffsetZ = 0.0f;
+    mVelY = 0.0f;
 
     iVar1 = 0;
     for (u32 i = 0; i < 2; i++) {
@@ -208,7 +208,7 @@ dWood::Anm_c::Anm_c() {
 
 /* 800BD710-800BD800       .text play__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::play(dWood::Packet_c *i_packet) {
-    if (mMode != 6) {
+    if (mMode != Mode_Max) {
         static modeProcFunc mode_proc[] = {
             &dWood::Anm_c::mode_cut,       &dWood::Anm_c::mode_push_into,
             &dWood::Anm_c::mode_push_back, &dWood::Anm_c::mode_fan,
@@ -249,8 +249,8 @@ void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, short targetAngle) {
 
     mWindDir = targetAngle;
     mVelY = L_attr.kCutInitVelY;
-    mPosOffsetY = 0.0;
-    mPosOffsetZ = 0.0;
+    mPosOffsetY = 0.0f;
+    mPosOffsetZ = 0.0f;
     mAlphaScale = 0xff;
     mCountdown = L_attr.kCutCooldown;
     mMode = Anm_c::Mode_Cut;
@@ -517,7 +517,9 @@ void dWood::Unit_c::set_mtx(dWood::Anm_c *anim) {
 }
 
 /* 800BEA28-800BEA50       .text clear__Q25dWood6Unit_cFv */
-void dWood::Unit_c::clear() { cLib_memSet(this, 0, 0x18c); }
+void dWood::Unit_c::clear() { 
+    cLib_memSet(this, 0, 0x18c);
+}
 
 /* 800BEA50-800BEE9C       .text
  * cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
@@ -676,7 +678,9 @@ void dWood::Unit_c::proc(dWood::Packet_c *packet) {
 }
 
 /* 800BEF78-800BEF84       .text __ct__Q25dWood6Room_cFv */
-dWood::Room_c::Room_c() { mpUnit = (Unit_c *)0x0; }
+dWood::Room_c::Room_c() { 
+    mpUnit = NULL; 
+}
 
 /* 800BEF84-800BEF94       .text entry_unit__Q25dWood6Room_cFPQ25dWood6Unit_c
  */
@@ -689,7 +693,7 @@ void dWood::Room_c::entry_unit(dWood::Unit_c *unit) {
 /* 800BEF94-800BEFF0       .text delete_all_unit__Q25dWood6Room_cFv */
 void dWood::Room_c::delete_all_unit() {
     Unit_c *unit;
-    while (unit = mpUnit, unit != (Unit_c *)0x0) {
+    while (unit = mpUnit, unit != NULL) {
         mpUnit = unit->mpNext;
         mDoAud_zelAudio_c::getInterface()->seDeleteObject((Vec *)unit);
         unit->clear();
