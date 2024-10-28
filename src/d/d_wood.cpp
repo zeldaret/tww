@@ -27,11 +27,6 @@
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
 
-// These belong in the d_tree compilation unit. But in order to match, they must
-// be in this compilation unit so they can have a 16-bit offset, allowing us
-// load their pointer using a single load immediate instruction
-// u8 g_dTree_shadowTexCoord[2];
-
 //-----------------------------------------
 // Types
 //-----------------------------------------
@@ -784,7 +779,6 @@ void dWood::Packet_c::update() {
 
 /* 800BF614-800BF900       .text draw__Q25dWood8Packet_cFv */
 void dWood::Packet_c::draw() {
-    /* Nonmatching */
     u8 bVar1;
     int iVar2;
     int iVar3;
