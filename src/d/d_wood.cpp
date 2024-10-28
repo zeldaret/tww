@@ -51,7 +51,7 @@ struct AttrSway_c {
 struct Attr_c {
     /* 0x0 */ AttrSway_c kSways[4][2];
     /* 0x60 */ u8 kCutCooldown;           // = 20
-    /* 0x61 */ u8 kCutPosOffsetX;         // = 20
+    /* 0x61 */ u8 kCutFadeStart;          // = 20 (Countdown time at which bush starts to fade out)
     /* 0x62 */ u8 kCutAlphaFadeSpeed;     // = 14
     /* 0x64 */ float kCutInitVelY;        // = 18.0f
     /* 0x68 */ float kCutYAccel;          // = -3.0f (Units per frame per frame)
@@ -252,24 +252,25 @@ void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
 
     mPosOffsetY = mPosOffsetY + mVelY;
     mPosOffsetZ = mPosOffsetZ + L_attr.kCutZVel;
-    mPhaseX[0] = mPhaseX[0] + L_attr.kCutPitchVel;
+    mPhaseX[0] = mPhaseX[0] - L_attr.kCutPitchVel;
 
     mDoMtx_YrotS(mDoMtx_stack_c::now, (int)mWindDir);
-    mDoMtx_stack_c::transM(L_attr.kCutPosOffsetX, mPosOffsetY, mPosOffsetZ);
+    mDoMtx_stack_c::transM(0.0f, mPosOffsetY, mPosOffsetZ);
     mDoMtx_XrotM(mDoMtx_stack_c::now, mPhaseX[0]);
     mDoMtx_YrotM(mDoMtx_stack_c::now, -mWindDir);
     mDoMtx_copy(mDoMtx_stack_c::now, mModelMtx);
 
     // Fade out the bush as it falls
-    if (mCountdown < 20) {
-        int alphaScale = mAlphaScale - attr().kCutAlphaFadeSpeed;
+    if (mCountdown < attr().kCutFadeStart) {
+        int alphaScale = mAlphaScale;
+        alphaScale -= attr().kCutAlphaFadeSpeed;
         if (alphaScale < 0) {
             alphaScale = 0;
         }
         mAlphaScale = (u8)alphaScale;
     }
 
-    if (mCountdown > 0) {
+    if ((s32)mCountdown > 0) {
         mCountdown = mCountdown + -1;
     }
 }
