@@ -179,9 +179,6 @@ inline const AttrSway_c &attr_sway(AttrSway_e swayID, int idx) {
 
 /* 800BD678-800BD710       .text __ct__Q25dWood5Anm_cFv */
 dWood::Anm_c::Anm_c() {
-    int iVar1;
-    int iVar2;
-
     MTXIdentity(mModelMtx);
     MTXIdentity(mTrunkModelMtx);
     mMode = Mode_Max;
@@ -192,13 +189,11 @@ dWood::Anm_c::Anm_c() {
     mPosOffsetZ = 0.0f;
     mVelY = 0.0f;
 
-    iVar1 = 0;
     for (u32 i = 0; i < 2; i++) {
-        mPhaseY[iVar1] = 0;
-        mPhaseX[iVar1] = 0;
-        mAmpY[iVar1] = 0;
-        mAmpX[iVar1] = 0;
-        iVar1 = iVar1 + 1;
+        mPhaseY[i] = 0;
+        mPhaseX[i] = 0;
+        mAmpY[i] = 0;
+        mAmpX[i] = 0;
     }
 
     mNormAnimIdx = AnmID_Norm0;
@@ -225,26 +220,22 @@ void dWood::Anm_c::copy_angamp(const dWood::Anm_c *other) {
         return;
     }
 
-    s32 iVar1 = 0;
     for (u32 i = 0; i < 2; i++) {
-        mPhaseY[iVar1] = other->mPhaseY[iVar1];
-        mPhaseX[iVar1] = other->mPhaseX[iVar1];
-        mAmpY[iVar1] = other->mAmpY[iVar1];
-        mAmpX[iVar1] = other->mAmpX[iVar1];
-        iVar1 = iVar1 + 1;
+        mPhaseY[i] = other->mPhaseY[i];
+        mPhaseX[i] = other->mPhaseX[i];
+        mAmpY[i] = other->mAmpY[i];
+        mAmpX[i] = other->mAmpX[i];
     }
 }
 
 /* 800BD848-800BD8BC       .text mode_cut_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs
  */
 void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, short targetAngle) {
-    s32 iVar1 = 0;
     for (u32 i = 0; i < 2; i++) {
-        mPhaseY[iVar1] = 0;
-        mPhaseX[iVar1] = 0;
-        mAmpY[iVar1] = 0;
-        mAmpX[iVar1] = 0;
-        iVar1 = iVar1 + 1;
+        mPhaseY[i] = 0;
+        mPhaseX[i] = 0;
+        mAmpY[i] = 0;
+        mAmpX[i] = 0;
     }
 
     mWindDir = targetAngle;
@@ -288,8 +279,7 @@ void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
     }
 }
 
-/* 800BD9E4-800BDA38       .text
- * mode_push_into_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs */
+/* 800BD9E4-800BDA38       .text mode_push_into_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs */
 void dWood::Anm_c::mode_push_into_init(const dWood::Anm_c *anm,
                                        short targetAngle) {
     copy_angamp(anm);
@@ -299,8 +289,7 @@ void dWood::Anm_c::mode_push_into_init(const dWood::Anm_c *anm,
     mMode = Mode_PushInto;
 }
 
-/* 800BDA38-800BDC24       .text
- * mode_push_into__Q25dWood5Anm_cFPQ25dWood8Packet_c */
+/* 800BDA38-800BDC24       .text mode_push_into__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) { /* Nonmatching */
 }
 
@@ -311,14 +300,12 @@ void dWood::Anm_c::mode_push_back_init() {
     mMode = Mode_PushBack;
 }
 
-/* 800BDC48-800BDECC       .text
- * mode_push_back__Q25dWood5Anm_cFPQ25dWood8Packet_c */
+/* 800BDC48-800BDECC       .text mode_push_back__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::mode_push_back(dWood::Packet_c *packet) { /* Nonmatching */
 }
 
 /* 800BDECC-800BDED0       .text mode_fan__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_fan(dWood::Packet_c *) { /* Nonmatching */
-}
+void dWood::Anm_c::mode_fan(dWood::Packet_c *) {}
 
 /* 800BDED0-800BDF5C       .text mode_norm_init__Q25dWood5Anm_cFv */
 void dWood::Anm_c::mode_norm_init() {
@@ -377,14 +364,9 @@ void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
 void dWood::Anm_c::mode_norm_set_wind(float windPow, short windDir) {
     mWindPow = windPow;
     mWindDir = windDir;
-    return;
 }
-/* 800BE154-800BE1F0       .text
- * mode_to_norm_init__Q25dWood5Anm_cFQ25dWood7AnmID_e */
+/* 800BE154-800BE1F0       .text mode_to_norm_init__Q25dWood5Anm_cFQ25dWood7AnmID_e */
 void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
-    bool bVar1;
-    u32 uVar2;
-
     JUT_ASSERT(0x4d7, (anm_id_norm >= 0) && (anm_id_norm < AnmID_Norm_Max));
 
     mode_to_norm_set_AnmID(anm_id_norm);
@@ -393,10 +375,8 @@ void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
     mMode = Anm_c::Mode_ToNorm;
 }
 
-/* 800BE1F0-800BE428       .text mode_to_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c
- */
+/* 800BE1F0-800BE428       .text mode_to_norm__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
-    /* Nonmatching */
     const Anm_c *normAnim = packet->get_anm_p(mode_to_norm_get_AnmID());
 
     AttrSway_e swayID;
@@ -439,12 +419,12 @@ void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
 }
 
 /* 800BE428-800BE4DC       .text __ct__Q25dWood6Unit_cFv */
-dWood::Unit_c::Unit_c() { clear(); }
+dWood::Unit_c::Unit_c() {
+    clear(); 
+}
 
 /* 800BE4DC-800BE93C       .text set_ground__Q25dWood6Unit_cFv */
 bool dWood::Unit_c::set_ground() {
-    bool uVar4;
-
     cXyz pos(mPos.x, mPos.y + l_Ground_check_y_offset, mPos.z);
 
     // Cast the current position to the ground
@@ -496,17 +476,15 @@ bool dWood::Unit_c::set_ground() {
 
 /* 800BE93C-800BEA28       .text set_mtx__Q25dWood6Unit_cFPQ25dWood5Anm_c */
 void dWood::Unit_c::set_mtx(dWood::Anm_c *anim) {
-    int iVar1;
+    int anmIdx = mAnmIdx;
 
-    iVar1 = mAnmIdx;
-
-    mDoMtx_copy(anim[iVar1].mModelMtx, mDoMtx_stack_c::get());
+    mDoMtx_copy(anim[anmIdx].mModelMtx, mDoMtx_stack_c::get());
     mDoMtx_stack_c::now[0][3] = mDoMtx_stack_c::now[0][3] + mPos.x;
     mDoMtx_stack_c::now[1][3] = mDoMtx_stack_c::now[1][3] + mPos.y;
     mDoMtx_stack_c::now[2][3] = mDoMtx_stack_c::now[2][3] + mPos.z;
     mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::now, mModelViewMtx);
 
-    mDoMtx_copy(anim[iVar1].mTrunkModelMtx, mDoMtx_stack_c::get());
+    mDoMtx_copy(anim[anmIdx].mTrunkModelMtx, mDoMtx_stack_c::get());
     mDoMtx_stack_c::now[0][3] = mPos.x;
     mDoMtx_stack_c::now[1][3] = mPos.y;
     mDoMtx_stack_c::now[2][3] = mPos.z;
@@ -521,8 +499,7 @@ void dWood::Unit_c::clear() {
     cLib_memSet(this, 0, 0x18c);
 }
 
-/* 800BEA50-800BEE9C       .text
- * cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
+/* 800BEA50-800BEE9C       .text cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
 void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     AnmID_e animIdx;
     AnmID_e oldAnimIdx;
@@ -644,8 +621,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     }
 }
 
-/* 800BEE9C-800BEEA0       .text
- * cc_hit_after_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
+/* 800BEE9C-800BEEA0       .text cc_hit_after_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
 void dWood::Unit_c::cc_hit_after_cut(dWood::Packet_c *) {}
 
 /* 800BEEA0-800BEF78       .text proc__Q25dWood6Unit_cFPQ25dWood8Packet_c */
@@ -702,8 +678,6 @@ void dWood::Room_c::delete_all_unit() {
 
 /* 800BEFF0-800BF0D4       .text __ct__Q25dWood8Packet_cFv */
 dWood::Packet_c::Packet_c() {
-    u32 iVar1 = 0;
-    u32 iVar2 = 0;
     for (s32 i = 0; i < 8; i++) {
         mAnm[i].mode_norm_init();
     }
@@ -938,10 +912,8 @@ s32 dWood::Packet_c::search_empty_UnitID() const {
     return ARRAY_SIZE(mUnit);
 }
 
-/* 800BF938-800BFA70       .text
- * search_anm__Q25dWood8Packet_cFQ35dWood5Anm_c6Mode_e */
+/* 800BF938-800BFA70       .text search_anm__Q25dWood8Packet_cFQ35dWood5Anm_c6Mode_e */
 dWood::AnmID_e dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
-    /* Nonmatching */
     u32 animIdx;
 
     JUT_ASSERT(0x80d, (i_mode >= 0) && (i_mode < Anm_c::Mode_Max));
