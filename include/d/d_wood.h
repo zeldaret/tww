@@ -109,7 +109,7 @@ public:
     /* 0x60 */ Mode_e mMode;
 
     /* 0x64 */ s16 mCountdown;
-    /* 0x66 */ s16 mWindDir;     // The direction from the wind or actor who instigated this animation
+    /* 0x66 */ s16 mForceDir;     // The direction from the wind or actor who instigated this animation
     /* 0x68 */ float mWindPow;   // 0.0 - 1.0
     /* 0x6c */ float mPosOffsetY;
     /* 0x70 */ float mPosOffsetZ;

@@ -38,7 +38,7 @@ enum AttrSway_e {
     SWAY_LIGHT,
     SWAY_MEDIUM,
     SWAY_STRONG,
-    SWAY_EXTREME,
+    SWAY_PUSH,
 };
 
 struct AttrSway_c {
@@ -178,7 +178,7 @@ dWood::Anm_c::Anm_c() {
     MTXIdentity(mTrunkModelMtx);
     mMode = Mode_Max;
     mCountdown = 0;
-    mWindDir = 0;
+    mForceDir = 0;
     mWindPow = 0.0f;
     mPosOffsetY = 0.0f;
     mPosOffsetZ = 0.0f;
@@ -233,7 +233,7 @@ void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, short targetAngle) {
         mAmpX[i] = 0;
     }
 
-    mWindDir = targetAngle;
+    mForceDir = targetAngle;
     mVelY = L_attr.kCutInitVelY;
     mPosOffsetY = 0.0f;
     mPosOffsetZ = 0.0f;
@@ -254,10 +254,10 @@ void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
     mPosOffsetZ = mPosOffsetZ + L_attr.kCutZVel;
     mPhaseX[0] = mPhaseX[0] - L_attr.kCutPitchVel;
 
-    mDoMtx_YrotS(mDoMtx_stack_c::now, (int)mWindDir);
+    mDoMtx_YrotS(mDoMtx_stack_c::now, (int)mForceDir);
     mDoMtx_stack_c::transM(0.0f, mPosOffsetY, mPosOffsetZ);
     mDoMtx_XrotM(mDoMtx_stack_c::now, mPhaseX[0]);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, -mWindDir);
+    mDoMtx_YrotM(mDoMtx_stack_c::now, -mForceDir);
     mDoMtx_copy(mDoMtx_stack_c::now, mModelMtx);
 
     // Fade out the bush as it falls
@@ -279,14 +279,40 @@ void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
 void dWood::Anm_c::mode_push_into_init(const dWood::Anm_c *anm,
                                        short targetAngle) {
     copy_angamp(anm);
-    mWindDir = targetAngle;
+    mForceDir = targetAngle;
     mAlphaScale = 0xff;
     mCountdown = 2;
     mMode = Mode_PushInto;
 }
 
 /* 800BDA38-800BDC24       .text mode_push_into__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) { /* Nonmatching */
+void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) {
+    if (--mCountdown <= 0) {
+        mode_push_back_init();
+    }
+    else {
+        float rotY = 0.0f;
+        float rotX = rotY;
+        for (s32 i = 0; i < 2; i++) {
+            const AttrSway_c* sway = &attr().kSways[SWAY_PUSH][i];
+            s32 phaseVelX = sway->phaseVelX;
+            s32 ampY = sway->ampY;
+            s32 ampX = sway->ampX;
+            float phaseBiasX = sway->phaseBiasX;
+
+            mPhaseY[i] += sway->phaseVelY;
+            cLib_chaseAngleS(&mPhaseX[i], 0, phaseVelX);
+            cLib_chaseS(&mAmpY[i], ampY/4, 0x14);
+            cLib_addCalcAngleS(&mAmpX[i], ampX, 8, 0x14, 5);
+            
+            rotY += mAmpY[i] * JMASCos(mPhaseY[i]);
+            rotX +=  mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
+        }
+
+        mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
+        mDoMtx_XrotM(mModelMtx, (s32)rotX);
+        mDoMtx_YrotM(mModelMtx, -mForceDir);
+    }
 }
 
 /* 800BDC24-800BDC48       .text mode_push_back_init__Q25dWood5Anm_cFv */
@@ -351,15 +377,15 @@ void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
         rotX += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
     }
 
-    mDoMtx_YrotS(mModelMtx, (s16)rotY + mWindDir); // Y Rotation (Yaw)
-    mDoMtx_XrotM(mModelMtx, rotX);                 // X Rotation
-    mDoMtx_YrotM(mModelMtx, -mWindDir);            // Y Rotation
+    mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir); // Y Rotation (Yaw)
+    mDoMtx_XrotM(mModelMtx, rotX);                  // X Rotation
+    mDoMtx_YrotM(mModelMtx, -mForceDir);            // Y Rotation
 }
 
 /* 800BE148-800BE154       .text mode_norm_set_wind__Q25dWood5Anm_cFfs */
 void dWood::Anm_c::mode_norm_set_wind(float windPow, short windDir) {
     mWindPow = windPow;
-    mWindDir = windDir;
+    mForceDir = windDir;
 }
 /* 800BE154-800BE1F0       .text mode_to_norm_init__Q25dWood5Anm_cFQ25dWood7AnmID_e */
 void dWood::Anm_c::mode_to_norm_init(dWood::AnmID_e anm_id_norm) {
@@ -386,7 +412,7 @@ void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
         }
     }
 
-    cLib_chaseAngleS(&mWindDir, normAnim->mWindDir, 3000);
+    cLib_chaseAngleS(&mForceDir, normAnim->mForceDir, 3000);
 
     float rotY = 0.0f;
     float rotX = rotY;
@@ -405,9 +431,9 @@ void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
         rotX += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
     }
 
-    mDoMtx_YrotS(mModelMtx, (s16)rotY + mWindDir);
+    mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
     mDoMtx_XrotM(mModelMtx, rotX);
-    mDoMtx_YrotM(mModelMtx, -mWindDir);
+    mDoMtx_YrotM(mModelMtx, -mForceDir);
 
     if (mCountdown > 0) {
         mCountdown -= 1;
