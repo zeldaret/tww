@@ -153,7 +153,7 @@ public:
     inline Anm_c* get_anm_p(AnmID_e idx) { return &mAnm[idx]; }
 
     virtual void draw();
-    virtual ~Packet_c() {};
+    virtual ~Packet_c();
 
     /* 0x00010 */ Unit_c mUnit[200];
     /* 0x13570 */ Anm_c mAnm[72];

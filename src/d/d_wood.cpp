@@ -732,6 +732,8 @@ dWood::Packet_c::Packet_c() {
     }
 }
 
+dWood::Packet_c::~Packet_c() {};
+
 /* 800BF194-800BF1C8       .text delete_room__Q25dWood8Packet_cFi */
 void dWood::Packet_c::delete_room(int room_no) {
     mRoom[room_no].delete_all_unit();
