@@ -244,7 +244,6 @@ void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, short targetAngle) {
 
 /* 800BD8BC-800BD9E4       .text mode_cut__Q25dWood5Anm_cFPQ25dWood8Packet_c */
 void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
-    /* Nonmatching */
     mVelY = mVelY + L_attr.kCutYAccel;
     if (mVelY < -40.0f) {
         mVelY = -40.0f;
@@ -323,7 +322,36 @@ void dWood::Anm_c::mode_push_back_init() {
 }
 
 /* 800BDC48-800BDECC       .text mode_push_back__Q25dWood5Anm_cFPQ25dWood8Packet_c */
-void dWood::Anm_c::mode_push_back(dWood::Packet_c *packet) { /* Nonmatching */
+void dWood::Anm_c::mode_push_back(dWood::Packet_c *packet) {
+    if (--mCountdown <= 0) {
+        AnmID_e animIdx = packet->search_anm(Anm_c::Mode_Norm);
+        mode_to_norm_init(animIdx);
+    }
+    else {
+        float t = mCountdown * (1.0f / L_attr.kPushBackCountdown);
+
+        float rotY = 0.0;
+        float rotX = rotY;
+        for (s32 i = 0; i < 2; i++) {
+            const AttrSway_c* sway = &attr().kSways[SWAY_PUSH][i];
+            s32 phaseVelX = sway->phaseVelX;
+            s16 ampY = t * sway->ampY;
+            s16 ampX = t * sway->ampX;
+            float phaseBiasX = sway->phaseBiasX;
+
+            mPhaseY[i] += sway->phaseVelY;
+            mPhaseX[i] += phaseVelX;
+            cLib_chaseS(&mAmpY[i], (s32)ampY, 0x14);
+            cLib_chaseS(&mAmpX[i], (s32)ampX, 0x14);
+
+            rotY += mAmpY[i] * JMASCos(mPhaseY[i]);
+            rotX +=  mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
+        }
+
+        mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
+        mDoMtx_XrotM(mModelMtx, (s32)rotX);
+        mDoMtx_YrotM(mModelMtx, -mForceDir);
+    }
 }
 
 /* 800BDECC-800BDED0       .text mode_fan__Q25dWood5Anm_cFPQ25dWood8Packet_c */
