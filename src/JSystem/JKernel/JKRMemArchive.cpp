@@ -215,16 +215,16 @@ bool JKRMemArchive::removeResource(void* resource) {
 /* 802B9E80-802B9F50       .text fetchResource_subroutine__13JKRMemArchiveFPUcUlPUcUli */
 u32 JKRMemArchive::fetchResource_subroutine(u8* src, u32 srcLength, u8* dst, u32 dstLength, int compression) {
     switch (compression) {
-    case COMPRESSION_NONE:
+    case COMPRESSION_NONE: {
         if (srcLength > dstLength) {
             srcLength = dstLength;
         }
 
         memcpy(dst, src, srcLength);
         return srcLength;
-
+    }
     case COMPRESSION_YAY0:
-    case COMPRESSION_YAZ0:
+    case COMPRESSION_YAZ0: {
         u32 expendedSize = JKRDecompExpandSize(src);
         srcLength = expendedSize;
         if (expendedSize > dstLength) {
@@ -233,7 +233,7 @@ u32 JKRMemArchive::fetchResource_subroutine(u8* src, u32 srcLength, u8* dst, u32
 
         JKRDecompress(src, dst, srcLength, 0);
         return srcLength;
-
+    }
     default:
         OSPanic(__FILE__, 703, ":::??? bad sequence\n");
         break;

@@ -4,13 +4,13 @@
 //
 
 #include "m_Do/m_Do_graphic.h"
+#include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_meter.h"
 #include "d/d_s_play.h"
 #include "f_ap/f_ap_game.h"
-#include "f_op/f_op_camera_mng.h"
-#include "m_Do/m_Do_controller_pad.h"
+#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_main.h"
 #include "m_Do/m_Do_mtx.h"
@@ -459,19 +459,13 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
 
         int temp = z * 0xFFFFFF;
         depth = (0xFF0000 - temp) >> 8;
-        if (depth < -0x400) {
-            temp = -0x400;
-        } else {
-            temp = -depth & ~depth;
-            temp = ~(temp >> 31) & depth;
-        }
-        depth = temp;
+        depth = cLib_minMaxLimit(depth, -0x400, 0);
     }
 
     static GXColorS10 l_tevColor0 = { 0, 0, 0, 0 };
     if (mDoGph_gInf_c::isMonotone()) {
         mDoGph_gInf_c::calcMonotone();
-        l_tevColor0.a = mDoGph_gInf_c::mMonotoneRate;
+        l_tevColor0.a = mDoGph_gInf_c::getMonotoneRate();
     } else {
         dStage_FileList_dt_c * fili_p = NULL;
         s32 roomNo = dComIfGp_roomControl_getStayNo();
@@ -482,19 +476,15 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
             if (!mDoGph_gInf_c::isAutoForcus()) {
                 l_tevColor0.a = depth - g_envHIO.mOther.field_0x40;
             } else {
-                s16 photoDepth = -g_envHIO.mOther.field_0x40;
-                if (photoDepth > (s16)depth)
-                    photoDepth = depth;
-                l_tevColor0.a = photoDepth;
+                int photoDepth = -g_envHIO.mOther.field_0x40;
+                l_tevColor0.a = cLib_maxLimit<s16>(photoDepth, depth);
             }
         } else {
             if (!mDoGph_gInf_c::isAutoForcus()) {
                 l_tevColor0.a = depth - dStage_FileList_dt_PhotoDepth(fili_p);
             } else {
                 int photoDepth = -dStage_FileList_dt_PhotoDepth(fili_p);
-                if (photoDepth > depth)
-                    photoDepth = depth;
-                l_tevColor0.a = photoDepth;
+                l_tevColor0.a = cLib_maxLimit<int>(photoDepth, depth);
             }
         }
     }
@@ -537,8 +527,8 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXLoadTexObj(mDoGph_gInf_c::getZbufferTexObj(), GX_TEXMAP0);
     GXSetNumChans(0);
     GXSetNumTexGens(2);                         
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetNumTevStages(3);                                  
     GXSetTevColorS10(GX_TEVREG0, l_tevColor0);
     GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_ALPHA, GX_CH_GREEN, GX_CH_BLUE, GX_CH_RED);
@@ -639,7 +629,7 @@ void motionBlure(view_class* view) {
         color.a = mDoGph_gInf_c::getBlureRate();
         GXSetNumChans(0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
         GXLoadTexMtxImm(mDoGph_gInf_c::getBlureMtx(), GX_TEXMTX0, GX_MTX2x4);
         GXSetNumTevStages(1);
         GXSetTevColor(GX_TEVREG0, color);
@@ -985,7 +975,7 @@ u32 encode_s3tc(u8* r25, u8* r26, int r27, int r28, GXTexFmt fmt) {
 void setUpRectangle() {
     GXSetNumChans(0);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetNumTevStages(1);
     GXSetTevColor(GX_TEVREG0, mCaptureMonoColor0);
     GXSetTevColor(GX_TEVREG1, mCaptureMonoColor1);

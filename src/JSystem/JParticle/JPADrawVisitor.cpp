@@ -32,15 +32,15 @@ void JPADrawExecLoadExTex::exec(const JPADrawContext* pDC) {
     GXTexCoordID coord = GX_TEXCOORD1;
     switch (pDC->petx->getIndTexMode()) {
     case 1:
-        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXEnableTexOffsets(GX_TEXCOORD1, GX_TRUE, GX_TRUE);
         texIdx = pDC->pTexIdx[pDC->petx->getIndTextureID()];
         pDC->mpTextureResource->pTexResArray[texIdx]->load(GX_TEXMAP5);
         coord = GX_TEXCOORD2;
         break;
     case 2:
-        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-        GXSetTexCoordGen2(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+        GXSetTexCoordGen(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXEnableTexOffsets(GX_TEXCOORD1, GX_TRUE, GX_TRUE);
         GXEnableTexOffsets(GX_TEXCOORD2, GX_TRUE, GX_TRUE);
         texIdx = pDC->pTexIdx[pDC->petx->getIndTextureID()];
@@ -52,7 +52,7 @@ void JPADrawExecLoadExTex::exec(const JPADrawContext* pDC) {
     }
 
     if (pDC->petx->isEnableSecondTex()) {
-        GXSetTexCoordGen2(coord, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXSetTexCoordGen(coord, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXEnableTexOffsets(coord, GX_TRUE, GX_TRUE);
         texIdx = pDC->pTexIdx[pDC->petx->getSecondTexIndex()];
         pDC->mpTextureResource->pTexResArray[texIdx]->load(GX_TEXMAP7);
@@ -67,7 +67,7 @@ void JPADrawExecGenPrjMtx::exec(const JPADrawContext* pDC) {
     C_MTXLightPerspective(mtx, fovy, aspect, 0.5f, -0.5f, 0.5f, 0.5f);
     MTXConcat(mtx, JPADrawContext::pcb->mDrawMtx, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX3x4);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 }
 
@@ -106,19 +106,19 @@ void JPADrawExecGenPrjTexMtx::exec(const JPADrawContext* pDC) {
     MTXConcat(mtx, projMtx, projMtx);
     MTXConcat(projMtx, JPADrawContext::pcb->mDrawMtx, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX3x4);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 }
 
 /* 8025FF20-8025FF68       .text exec__21JPADrawExecGenTexMtx0FPC14JPADrawContext */
 void JPADrawExecGenTexMtx0::exec(const JPADrawContext* pDC) {
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 }
 
 /* 8025FF68-8025FFB0       .text exec__20JPADrawExecGenIdtMtxFPC14JPADrawContext */
 void JPADrawExecGenIdtMtx::exec(const JPADrawContext* pDC) {
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 }
 
@@ -152,7 +152,7 @@ void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC) {
     mtx[2][3] = 0.0f;
 
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 }
 

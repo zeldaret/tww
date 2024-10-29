@@ -355,10 +355,6 @@ void J2DWindow::drawContentsTexture(f32 x0, f32 y0, f32 w, f32 h) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
 }
 
-static inline void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType type, GXTexGenSrc src, u32 mtx) {
-    GXSetTexCoordGen2(dst, type, src, mtx, GX_FALSE, GX_PTIDENTITY);
-}
-
 /* 802D29F4-802D2D8C       .text setTevMode__9J2DWindowFP10JUTTextureQ28JUtility6TColorQ28JUtility6TColor */
 void J2DWindow::setTevMode(JUTTexture* pTexture, JUtility::TColor reg0, JUtility::TColor reg1) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);

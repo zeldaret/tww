@@ -5,7 +5,6 @@
 
 #include "d/d_particle.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h"
-#include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JParticle/JPAParticle.h"
@@ -366,8 +365,8 @@ void smokeEcallBack(JPABaseEmitter* emtr, dKy_tevstr_c* tevStr, s8, GXColor colo
         }
         color.a = emtr->mGlobalPrmColor.a;
         GXSetNumTexGens(2);
-        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+        GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY);
         emtr->mDraw.loadTexture(1, GX_TEXMAP1);
         GXSetNumTevStages(3);                             
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_KONST, GX_CC_TEXC, GX_CC_ZERO);

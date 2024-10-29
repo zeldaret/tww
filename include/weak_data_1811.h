@@ -17,6 +17,7 @@ static u8 data_1811[] = {0x02, 0x00, 0x02, 0x01};
 // It always seems to come after @1811 ends at offset 0x1C, getting padded to start at 0x20 and ending at 0x30.
 // It being an array of two doubles is guessed based on how it looks and its apparently 0x8 byte alignment.
 // Its actual purpose is unknown since it's never used.
+// Could this be somehow related to the two double constants in std::sqrtf?
 static f64 data_no_symbol_3_5[2] = {3.0, 0.5};
 
 #endif /* WEAK_DATA_1811_H */

@@ -853,7 +853,7 @@ void JPADraw::drawChild() {
     field_0xc2 |= 0x02;
     setChildClipBoard();
     dc.mpActiveParticles = &dc.pbe->mChildParticles;
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 
     if (dc.pbsp->textureIsEmpty()) {
@@ -953,7 +953,7 @@ void JPADraw::zDrawChild() {
     field_0xc2 |= 0x02;
     setChildClipBoard();
     dc.mpActiveParticles = &dc.pbe->mChildParticles;
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 
     if (dc.pbsp->textureIsEmpty()) {

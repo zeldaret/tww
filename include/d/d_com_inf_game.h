@@ -713,7 +713,7 @@ public:
     /* 0x4980 */ int mMesgCameraTagInfo;
     /* 0x4984 */ int field_0x4984;
     /* 0x4988 */ int field_0x4988[10];
-    /* 0x49B0 */ u8 mPlayerInfoBuffer[0x4A20 - 0x49B0];
+    /* 0x49B0 */ u8 mPlayerInfoBuffer[sizeof(dSv_player_status_c_c)];
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
     /* 0x4A28 */ u32 mPlayerStatus[2][2];

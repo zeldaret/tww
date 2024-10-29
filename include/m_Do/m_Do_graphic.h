@@ -59,15 +59,15 @@ public:
     static void fadeIn(f32 rate, GXColor& color) { fadeOut(-rate, color); }
     static u16 getFrameRate() { return JFWDisplay::getManager()->getFrameRate(); }
     static void setFrameRate(u16 framerate) { JFWDisplay::getManager()->setFrameRate(framerate); }
+    static s16 getMonotoneRate() { return mMonotoneRate; }
+    static void setMonotoneRate(s16 rate) { mMonotoneRate = rate; }
+    static void setMonotoneRateSpeed(s16 speed) { mMonotoneRateSpeed = speed; }
 
     static void alloc32(u32) {}
     static void getFrameBufferMemory() {}
     static void getFrameBufferSize() {}
-    static void getMonotoneRate() {}
     static void setBlureMtx(const Mtx) {}
     static void setBlureRate(u8) {}
-    static void setMonotoneRate(s16 rate) { mMonotoneRate = rate; }
-    static void setMonotoneRateSpeed(s16 speed) { mMonotoneRateSpeed = speed; }
 
     static GXTexObj mFrameBufferTexObj;
     static GXTexObj mZbufferTexObj;

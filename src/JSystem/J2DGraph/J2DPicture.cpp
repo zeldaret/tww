@@ -488,10 +488,6 @@ void J2DPicture::drawTexCoord(f32 x, f32 y, f32 width, f32 height, f32 s0, f32 t
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
 }
 
-static inline void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType type, GXTexGenSrc src, u32 mtx) {
-    GXSetTexCoordGen2(dst, type, src, mtx, GX_FALSE, GX_PTIDENTITY);
-}
-
 /* 802D4B3C-802D4F44       .text setTevMode__10J2DPictureFv */
 void J2DPicture::setTevMode() {
     u8 i;

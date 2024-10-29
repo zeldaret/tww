@@ -17,14 +17,15 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
+#if VERSION == VERSION_PAL
 #include "m_Do/m_Do_MemCard.h"
+#endif
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramBlock.h"
 #include "JSystem/JKernel/JKRAramHeap.h"
-#include "dolphin/vi/vi.h"
 #include "dolphin/os/OS.h"
 #include "string.h"
 #include "stdio.h"

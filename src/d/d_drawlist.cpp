@@ -177,7 +177,7 @@ void dDlst_2DT2_c::draw() {
     GXSetNumChans(0);
     GXSetTevColor(GX_TEVREG0, mColor);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
@@ -453,8 +453,8 @@ void dDlst_2DM_c::draw() {
     GXSetTevColor(GX_TEVREG1, mC1);
 
     GXSetNumTexGens(2);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY);
 
     GXSetNumTevStages(2);
 
@@ -560,8 +560,8 @@ void dDlst_2Dm_c::draw() {
     GXSetTevColor(GX_TEVREG1, mC1);
 
     GXSetNumTexGens(2);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY);
 
     GXSetNumTevStages(2);
 
@@ -625,7 +625,7 @@ void dDlst_2DMt_c::draw() {
         GXSetVtxAttrFmt(GX_VTXFMT0, (GXAttr)((u32)GX_VA_TEX0 + texIdx), GX_TEX_ST, GX_F32, 0);
         GXSetVtxDesc((GXAttr)((u32)GX_VA_TEX0 + texIdx), GX_DIRECT);
         GXSetTevColor((GXTevRegID)((u32)GX_TEVREG0 + texIdx), pTex->getColor());
-        GXSetTexCoordGen2((GXTexCoordID)texIdx, GX_TG_MTX2x4, (GXTexGenSrc)((u32)GX_TG_TEX0 + texIdx), GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXSetTexCoordGen((GXTexCoordID)texIdx, GX_TG_MTX2x4, (GXTexGenSrc)((u32)GX_TG_TEX0 + texIdx), GX_IDENTITY);
         GXSetTevOrder((GXTevStageID)texIdx, (GXTexCoordID)texIdx, (GXTexMapID)texIdx, GX_COLOR_NULL);
         GXSetTevColorIn((GXTevStageID)texIdx, GX_CC_ZERO, (GXTevColorArg)((u32)GX_CC_C0 + texIdx * 2), GX_CC_TEXC, (texIdx != 0) ? GX_CC_CPREV : GX_CC_ZERO);
         GXSetTevColorOp((GXTevStageID)texIdx, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -1920,7 +1920,7 @@ void dDlst_shadowControl_c::draw(Mtx drawMtx) {
     GXColor alpha = { 0x00, 0x00, 0x00, 0x20 };
     GXSetChanMatColor(GX_ALPHA0, alpha);
     GXSetArray(GX_VA_POS, l_shadowVolPos, sizeof(*l_shadowVolPos));
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXSetNumTevStages(1);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
@@ -1935,7 +1935,7 @@ void dDlst_shadowControl_c::draw(Mtx drawMtx) {
 
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
     GXSetArray(GX_VA_POS, l_simpleShadowPos, sizeof(*l_simpleShadowPos));
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
 
@@ -2063,7 +2063,7 @@ void dDlst_mirrorPacket::draw() {
     GXCallDisplayList(l_shadowVolDL, 0x40);
     GXCallDisplayList(l_frontNoZSubMat, 0x20);
     GXCallDisplayList(l_shadowVolDL, 0x40);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXCallDisplayList(l_mirrorProjMat, 0x40);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXLoadTexObj(&mTexObj, GX_TEXMAP0);
