@@ -29,11 +29,11 @@ void daPy_lk_c::setEnemyWeaponAtParam(BOOL r4) {
     u8 hitMark;
     if (r4) {
         spl = dCcG_At_Spl_UNK1;
-        hitMark = G_AT_MARK_BIG_HIT;
+        hitMark = dCcG_AtHitMark_Big_e;
         cutType++;
     } else {
         spl = dCcG_At_Spl_UNK0;
-        hitMark = G_AT_MARK_NORMAL_HIT;
+        hitMark = dCcG_AtHitMark_Nrm_e;
     }
     setAtParam(boko->getAtType(), boko->getAtPoint(), spl, boko->getSeType(), hitMark, cutType, boko->getCpsR());
 }

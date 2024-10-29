@@ -74,25 +74,25 @@ void dCcS::CalcTgPlusDmg(cCcD_Obj* obj1, cCcD_Obj* obj2, cCcD_Stts* stts1, cCcD_
 }
 
 /* 800AD86C-800AD8EC       .text ChkAtTgHitAfterCross__4dCcSFbbPC12cCcD_GObjInfPC12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts */
-bool dCcS::ChkAtTgHitAfterCross(bool r4, bool r5, const cCcD_GObjInf* inf1_, const cCcD_GObjInf* inf2_,
-                                cCcD_Stts* stts1_, cCcD_Stts* stts2_, cCcD_GStts* gstts1_, cCcD_GStts* gstts2_) {
-    dCcD_GObjInf* inf1 = (dCcD_GObjInf*)inf1_;
-    dCcD_GObjInf* inf2 = (dCcD_GObjInf*)inf2_;
-    dCcD_Stts* stts1 = (dCcD_Stts*)stts1_;
-    dCcD_Stts* stts2 = (dCcD_Stts*)stts2_;
-    dCcD_GStts* gstts1 = (dCcD_GStts*)gstts1_;
-    dCcD_GStts* gstts2 = (dCcD_GStts*)gstts2_;
-    fpc_ProcID r11 = stts1->GetApid();
-    fpc_ProcID r3 = stts2->GetApid();
-    if (r4) {
-        gstts1->SetAtApid(r3);
-        if (inf1->ChkAtNoConHit() && gstts1->GetAtOldApid() == stts2->GetApid()) {
+bool dCcS::ChkAtTgHitAfterCross(bool i_setAt, bool i_setTg, const cCcD_GObjInf* i_atInf, const cCcD_GObjInf* i_tgInf,
+                                cCcD_Stts* i_atStts, cCcD_Stts* i_tgStts, cCcD_GStts* i_atGStts, cCcD_GStts* i_tgGStts) {
+    dCcD_GObjInf* atInf = (dCcD_GObjInf*)i_atInf;
+    dCcD_GObjInf* tgInf = (dCcD_GObjInf*)i_tgInf;
+    dCcD_Stts* atStts = (dCcD_Stts*)i_atStts;
+    dCcD_Stts* stts2 = (dCcD_Stts*)i_tgStts;
+    dCcD_GStts* atGStts = (dCcD_GStts*)i_atGStts;
+    dCcD_GStts* tgGStts = (dCcD_GStts*)i_tgGStts;
+    fpc_ProcID atApid = atStts->GetApid();
+    fpc_ProcID tgApid = stts2->GetApid();
+    if (i_setAt) {
+        atGStts->SetAtApid(tgApid);
+        if (atInf->ChkAtNoConHit() && atGStts->GetAtOldApid() == stts2->GetApid()) {
             return true;
         }
     }
-    if (r5) {
-        gstts2->SetTgApid(r11);
-        if (inf2->ChkTgNoConHit() && !inf1->ChkAtStopNoConHit() && gstts2->GetTgOldApid() == stts1->GetApid()) {
+    if (i_setTg) {
+        tgGStts->SetTgApid(atApid);
+        if (tgInf->ChkTgNoConHit() && !atInf->ChkAtStopNoConHit() && tgGStts->GetTgOldApid() == atStts->GetApid()) {
             return true;
         }
     }
@@ -299,27 +299,27 @@ void dCcS::CalcParticleAngle(dCcD_GObjInf* i_atObjInf, cCcD_Stts* i_atStts, cCcD
 }
 
 /* 800ADFF8-800AE308       .text ProcAtTgHitmark__4dCcSFbbP8cCcD_ObjP8cCcD_ObjP12dCcD_GObjInfP12dCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10dCcD_GSttsP10dCcD_GSttsP4cXyz */
-void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* r6, cCcD_Obj* r7, dCcD_GObjInf* atInf, dCcD_GObjInf* tgInf,
-                           cCcD_Stts* r10, cCcD_Stts* r30, dCcD_GStts*, dCcD_GStts* r4, cXyz* pos)
+void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* atObj, cCcD_Obj* tgObj, dCcD_GObjInf* atInf, dCcD_GObjInf* tgInf,
+                           cCcD_Stts* atStts, cCcD_Stts* tgStts, dCcD_GStts* atGStts, dCcD_GStts* tgGStts, cXyz* pos)
 {
     if (atInf->ChkAtNoHitMark()) { return; }
     if (tgInf->ChkTgNoHitMark()) { return; }
     if (tgInf->GetTgHitMark() == 0xFF) { return; }
-    if (!r4->ChkNoneActorPerfTblId()) { return; }
+    if (!tgGStts->ChkNoneActorPerfTblId()) { return; }
     
-    if (!ChkShield(r6, r7, atInf, tgInf)) {
-        if (atInf->GetAtHitMark() == 0) { return; }
-        if (atInf->GetAtHitMark() == 1 && tgInf->GetTgHitMark() == 1) {
+    if (!ChkShield(atObj, tgObj, atInf, tgInf)) {
+        if (atInf->GetAtHitMark() == dCcG_AtHitMark_None_e) { return; }
+        if (atInf->GetAtHitMark() == dCcG_AtHitMark_Unk1_e && tgInf->GetTgHitMark() == dCcG_TgHitMark_Unk1_e) {
             dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, pos);
         } else {
             csXyz angle;
-            CalcParticleAngle(atInf, r10, r30, &angle);
-            if (atInf->GetAtHitMark() == 0xF) {
+            CalcParticleAngle(atInf, atStts, tgStts, &angle);
+            if (atInf->GetAtHitMark() == dCcG_AtHitMark_Big_e) {
                 dComIfGp_particle_set(0x10, pos);
                 cXyz scale;
                 scale.x = scale.y = scale.z = 2.0f;
                 dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pos, &angle, &scale);
-            } else if (atInf->GetAtHitMark() == 1) {
+            } else if (atInf->GetAtHitMark() == dCcG_AtHitMark_Unk1_e) {
                 dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pos, &angle);
             } else {
                 dComIfGp_particle_set(atInf->GetAtHitMark(), pos, &angle);
@@ -330,38 +330,40 @@ void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* r6, cCcD_Obj* r7, dCcD_GObjInf*
         if (tgInf->GetTgHitMark() == 0) { return; }
         dKy_SordFlush_set(*pos, 0);
         csXyz angle;
-        CalcParticleAngle(atInf, r10, r30, &angle);
+        CalcParticleAngle(atInf, atStts, tgStts, &angle);
         dComIfGp_particle_set(tgInf->GetTgHitMark(), pos, &angle);
     }
 }
 
 /* 800AE308-800AE5AC       .text SetAtTgGObjInf__4dCcSFbbP8cCcD_ObjP8cCcD_ObjP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GSttsP4cXyz */
-void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* param_2, cCcD_Obj* param_3,
-                          cCcD_GObjInf* i_atObjInf, cCcD_GObjInf* i_tgObjInf, cCcD_Stts* param_6,
-                          cCcD_Stts* param_7, cCcD_GStts* param_8, cCcD_GStts* param_9,
-                          cXyz* i_hitPos) {
+void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg,
+        cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj,
+        cCcD_GObjInf* i_atObjInf, cCcD_GObjInf* i_tgObjInf,
+        cCcD_Stts* i_atStts, cCcD_Stts* i_tgStts,
+        cCcD_GStts* i_atGStts, cCcD_GStts* i_tgGStts,
+        cXyz* i_hitPos) {
     dCcD_GObjInf* atObjInf = (dCcD_GObjInf*)i_atObjInf;
     dCcD_GObjInf* tgObjInf = (dCcD_GObjInf*)i_tgObjInf;
-    dCcD_GStts* stts1 = (dCcD_GStts*)param_8;
-    dCcD_GStts* stts2 = (dCcD_GStts*)param_9;
+    dCcD_GStts* atGStts = (dCcD_GStts*)i_atGStts;
+    dCcD_GStts* tgGStts = (dCcD_GStts*)i_tgGStts;
 
-    bool chk_shield = ChkShield(param_2, param_3, atObjInf, tgObjInf);
+    bool chk_shield = ChkShield(i_atObj, i_tgObj, atObjInf, tgObjInf);
 
     if (i_setAt) {
         atObjInf->SetAtHitPos(*i_hitPos);
         atObjInf->SetAtRVec(*tgObjInf->GetTgVecP());
 
-        if (stts1 != NULL && stts1->GetTgSpl() == 0) {
-            stts1->SetTgSpl(tgObjInf->GetTgSpl());
+        if (atGStts != NULL && atGStts->GetTgSpl() == 0) {
+            atGStts->SetTgSpl(tgObjInf->GetTgSpl());
         }
 
-        atObjInf->SetAtHitApid(param_7->GetApid());
+        atObjInf->SetAtHitApid(i_tgStts->GetApid());
 
         if (chk_shield) {
             atObjInf->OnAtShieldHit();
         }
 
-        if (stts2->ChkNoActor()) {
+        if (tgGStts->ChkNoActor()) {
             atObjInf->OnAtHitNoActor();
         }
     }
@@ -370,17 +372,17 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* param_2, cCcD_Ob
         tgObjInf->SetTgHitPos(*i_hitPos);
         tgObjInf->SetTgRVec(*atObjInf->GetAtVecP());
 
-        if (stts2 != NULL && stts1->GetAtSpl() == 0) {
-            stts2->SetAtSpl(atObjInf->GetAtSpl());
+        if (tgGStts != NULL && atGStts->GetAtSpl() == 0) {
+            tgGStts->SetAtSpl(atObjInf->GetAtSpl());
         }
 
-        tgObjInf->SetTgHitApid(param_6->GetApid());
+        tgObjInf->SetTgHitApid(i_atStts->GetApid());
 
         if (chk_shield) {
             tgObjInf->OnTgShieldHit();
         }
 
-        if (stts1->ChkNoActor()) {
+        if (atGStts->ChkNoActor()) {
             tgObjInf->OnTgHitNoActor();
         }
     }
@@ -409,8 +411,8 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* param_2, cCcD_Ob
         atObjInf->SetAtEffCounterTimer();
         tgObjInf->SetTgEffCounterTimer();
 
-        ProcAtTgHitmark(i_setAt, i_setTg, param_2, param_3, atObjInf, tgObjInf, param_6, param_7,
-                        stts1, stts2, i_hitPos);
+        ProcAtTgHitmark(i_setAt, i_setTg, i_atObj, i_tgObj, atObjInf, tgObjInf, i_atStts, i_tgStts,
+                        atGStts, tgGStts, i_hitPos);
     }
 }
 
@@ -482,4 +484,3 @@ bool dCcS::ChkNoHitGCo(cCcD_Obj* obj1, cCcD_Obj* obj2) {
 bool cCcS::ChkNoHitGAtTg(const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_GStts*, cCcD_GStts*) {
     return false;
 }
-

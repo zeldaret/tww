@@ -16,67 +16,49 @@ class cCcD_AabAttr;
 class cCcD_CylAttr;
 class cCcD_SphAttr;
 
-enum cCcD_ObjAtType {
-    /* 0x00000002 */ AT_TYPE_SWORD          = (1 << 1),
-    /* 0x00000020 */ AT_TYPE_BOMB           = (1 << 5),
-    /* 0x00000040 */ AT_TYPE_BOOMERANG      = (1 << 6),
-    /* 0x00000080 */ AT_TYPE_BOKO_STICK     = (1 << 7),
-    /* 0x00000100 */ AT_TYPE_WATER          = (1 << 8),
-    /* 0x00000200 */ AT_TYPE_FIRE           = (1 << 9),
-    /* 0x00000400 */ AT_TYPE_MACHETE        = (1 << 10),
-    /* 0x00000800 */ AT_TYPE_UNK800         = (1 << 11),
-    /* 0x00001000 */ AT_TYPE_UNK1000        = (1 << 12),
-    /* 0x00002000 */ AT_TYPE_UNK2000        = (1 << 13),
-    /* 0x00004000 */ AT_TYPE_NORMAL_ARROW   = (1 << 14),
-    /* 0x00008000 */ AT_TYPE_HOOKSHOT       = (1 << 15),
-    /* 0x00010000 */ AT_TYPE_SKULL_HAMMER   = (1 << 16),
-    /* 0x00020000 */ AT_TYPE_UNK20000       = (1 << 17),
-    /* 0x00040000 */ AT_TYPE_FIRE_ARROW     = (1 << 18),
-    /* 0x00080000 */ AT_TYPE_ICE_ARROW      = (1 << 19),
-    /* 0x00100000 */ AT_TYPE_LIGHT_ARROW    = (1 << 20),
-    /* 0x00200000 */ AT_TYPE_WIND           = (1 << 21),
-    /* 0x00400000 */ AT_TYPE_UNK400000      = (1 << 22),
-    /* 0x00800000 */ AT_TYPE_LIGHT          = (1 << 23),
-    /* 0x01000000 */ AT_TYPE_STALFOS_MACE   = (1 << 24),
-    /* 0x02000000 */ AT_TYPE_UNK2000000     = (1 << 25),
-    /* 0x04000000 */ AT_TYPE_DARKNUT_SWORD  = (1 << 26),
-    /* 0x08000000 */ AT_TYPE_GRAPPLING_HOOK = (1 << 27),
-    /* 0x10000000 */ AT_TYPE_MOBLIN_SPEAR   = (1 << 28),
-    /* 0x20000000 */ AT_TYPE_PGANON_SWORD   = (1 << 29),
-    /* 0xFFFFFFFF */ AT_TYPE_ALL            = ~0,
+enum cCcD_AtSPrm_e {
+    /* 0x01 */ cCcD_AtSPrm_Set_e = 0x01,
+    /* 0x02 */ cCcD_AtSPrm_VsEnemy_e = 0x02,
+    /* 0x04 */ cCcD_AtSPrm_VsPlayer_e = 0x04,
+    /* 0x08 */ cCcD_AtSPrm_VsOther_e = 0x08,
+    /* 0x0E */ cCcD_AtSPrm_GrpAll_e = cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e,
+    /* 0x10 */ cCcD_AtSPrm_NoTgHitInfSet_e = 0x10,
 };
 
-enum cCcD_AtSPrm_e {
-    /* 0x01 */ AT_SPRM_SET = 0x01,
-    /* 0x02 */ AT_SPRM_VS_ENEMY = 0x02,
-    /* 0x04 */ AT_SPRM_VS_PLAYER = 0x04,
-    /* 0x08 */ AT_SPRM_VS_OTHER = 0x08,
-    /* 0x0E */ AT_SPRM_GRP = AT_SPRM_VS_ENEMY | AT_SPRM_VS_PLAYER | AT_SPRM_VS_OTHER,
-    /* 0x10 */ AT_SPRM_NO_TG_HIT_INF_SET = 0x10,
+enum cCcD_AtRPrm_e {
+    cCcD_AtRPrm_Hit_e = 1 << 0,
 };
 
 enum cCcD_TgSPrm_e {
-    /* 0x01 */ TG_SPRM_SET = 0x01,
-    /* 0x02 */ TG_SPRM_IS_ENEMY = 0x02,
-    /* 0x04 */ TG_SPRM_IS_PLAYER = 0x04,
-    /* 0x08 */ TG_SPRM_IS_OTHER = 0x08,
-    /* 0x0E */ TG_SPRM_GRP = TG_SPRM_IS_ENEMY | TG_SPRM_IS_PLAYER | TG_SPRM_IS_OTHER,
-    /* 0x10 */ TG_SPRM_NO_AT_HIT_INF_SET = 0x10,
+    /* 0x01 */ cCcD_TgSPrm_Set_e = 0x01,
+    /* 0x02 */ cCcD_TgSPrm_IsEnemy_e = 0x02,
+    /* 0x04 */ cCcD_TgSPrm_IsPlayer_e = 0x04,
+    /* 0x08 */ cCcD_TgSPrm_IsOther_e = 0x08,
+    /* 0x0E */ cCcD_TgSPrm_GrpAll_e = cCcD_TgSPrm_IsEnemy_e | cCcD_TgSPrm_IsPlayer_e | cCcD_TgSPrm_IsOther_e,
+    /* 0x10 */ cCcD_TgSPrm_NoAtHitInfSet_e = 0x10,
+};
+
+enum cCcD_TgRPrm_e {
+    cCcD_TgRPrm_Hit_e = 1 << 0,
 };
 
 enum cCcD_CoSPrm_e {
-    /* 0x0001 */ CO_SPRM_SET = 0x01,
-    /* 0x0002 */ CO_SPRM_IS_UNK2 = 0x02,
-    /* 0x0004 */ CO_SPRM_IS_UNK4 = 0x04,
-    /* 0x0008 */ CO_SPRM_IS_UNK8 = 0x08,
-    /* 0x0010 */ CO_SPRM_VS_UNK2 = 0x10,
-    /* 0x0020 */ CO_SPRM_VS_UNK4 = 0x20,
-    /* 0x0040 */ CO_SPRM_VS_UNK8 = 0x40,
-    /* 0x000E */ CO_SPRM_IGRP = CO_SPRM_IS_UNK2 | CO_SPRM_IS_UNK4 | CO_SPRM_IS_UNK8,
-    /* 0x0070 */ CO_SPRM_VSGRP = CO_SPRM_VS_UNK2 | CO_SPRM_VS_UNK4 | CO_SPRM_VS_UNK8,
-    /* 0x0080 */ CO_SPRM_SPH_3D_CRR = 0x80,
-    /* 0x0100 */ CO_SPRM_NO_CRR = 0x100,
-    /* 0x0200 */ CO_SPRM_NO_CO_HIT_INF_SET = 0x200,
+    /* 0x0001 */ cCcD_CoSPrm_Set_e = 0x01,
+    /* 0x0002 */ cCcD_CoSPrm_IsEnemy_e = 0x02,
+    /* 0x0004 */ cCcD_CoSPrm_IsPlayer_e = 0x04,
+    /* 0x0008 */ cCcD_CoSPrm_IsOther_e = 0x08,
+    /* 0x0010 */ cCcD_CoSPrm_VsEnemy_e = 0x10,
+    /* 0x0020 */ cCcD_CoSPrm_VsPlayer_e = 0x20,
+    /* 0x0040 */ cCcD_CoSPrm_VsOther_e = 0x40,
+    /* 0x000E */ cCcD_CoSPrm_IGrpAll_e = cCcD_CoSPrm_IsEnemy_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_IsOther_e,
+    /* 0x0070 */ cCcD_CoSPrm_VsGrpAll_e = cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+    /* 0x0080 */ cCcD_CoSPrm_Sph3DCrr_e = 0x80,
+    /* 0x0100 */ cCcD_CoSPrm_NoCrr_e = 0x100,
+    /* 0x0200 */ cCcD_CoSPrm_NoCoHitInfSet_e = 0x200,
+};
+
+enum cCcD_CoRPrm_e {
+    cCcD_CoRPrm_Hit_e = 1 << 0,
 };
 
 class cCcD_ShapeAttr {
@@ -426,7 +408,7 @@ public:
     cCcD_ObjAt() { mType = 0; }
     virtual ~cCcD_ObjAt() {}
     void SetHit(cCcD_Obj* obj) {
-        SetRPrm(1);
+        SetRPrm(cCcD_AtRPrm_Hit_e);
         SetHitObj(obj);
     }
     void Set(cCcD_SrcObjAt const& src) {
@@ -434,18 +416,18 @@ public:
         mType = src.mType;
         mAtp = src.mAtp;
     }
-    void ClrHit() { ClrRPrm(1); ClrObj(); }
+    void ClrHit() { ClrRPrm(cCcD_AtRPrm_Hit_e); ClrObj(); }
     u32 GetType() const { return mType; }
-    u32 GetGrp() const { return MskSPrm(AT_SPRM_GRP); }
-    bool ChkSet() const { return MskSPrm(AT_SPRM_SET); }
+    u32 GetGrp() const { return MskSPrm(cCcD_AtSPrm_GrpAll_e); }
+    bool ChkSet() const { return MskSPrm(cCcD_AtSPrm_Set_e); }
     u8 GetAtp() const { return mAtp; }
     u32 MskType(u32 msk) const { return mType & msk; }
     void SetType(u32 type) { mType = type; }
     void SetAtp(int atp) { mAtp = atp; }
-    void ClrSet() { OffSPrmBit(AT_SPRM_SET); }
-    void OnHitBit() { SetRPrm(1); }
-    void OffHitBit() { ClrRPrm(1); }
-    u32 ChkHit() const { return MskRPrm(1); }
+    void ClrSet() { OffSPrmBit(cCcD_AtSPrm_Set_e); }
+    void OnHitBit() { SetRPrm(cCcD_AtRPrm_Hit_e); }
+    void OffHitBit() { ClrRPrm(cCcD_AtRPrm_Hit_e); }
+    u32 ChkHit() const { return MskRPrm(cCcD_AtRPrm_Hit_e); }
 
 protected:
     /* 0x10 */ u32 mType;
@@ -463,20 +445,20 @@ public:
         mType = src.mType;
     }
     void SetGrp(u32 grp) {
-        OffSPrmBit(TG_SPRM_GRP);
+        OffSPrmBit(cCcD_TgSPrm_GrpAll_e);
         OnSPrmBit(grp);
     }
-    void ClrHit() { ClrRPrm(1); ClrObj(); }
+    void ClrHit() { ClrRPrm(cCcD_TgRPrm_Hit_e); ClrObj(); }
     void SetHit(cCcD_Obj* obj) {
-        SetRPrm(1);
+        SetRPrm(cCcD_TgRPrm_Hit_e);
         SetHitObj(obj);
     }
     u32 GetType() const { return mType; }
     void SetType(u32 type) { mType = type; }
-    u32 GetGrp() const { return MskSPrm(TG_SPRM_GRP); }
-    bool ChkSet() const { return MskSPrm(TG_SPRM_SET); }
-    void ClrSet() { OffSPrmBit(TG_SPRM_SET); }
-    u32 ChkHit() const { return MskRPrm(1); }
+    u32 GetGrp() const { return MskSPrm(cCcD_TgSPrm_GrpAll_e); }
+    bool ChkSet() const { return MskSPrm(cCcD_TgSPrm_Set_e); }
+    void ClrSet() { OffSPrmBit(cCcD_TgSPrm_Set_e); }
+    u32 ChkHit() const { return MskRPrm(cCcD_TgRPrm_Hit_e); }
 
 private:
     /* 0x10 */ u32 mType;
@@ -488,25 +470,25 @@ class cCcD_ObjCo : public cCcD_ObjCommonBase {
 public:
     virtual ~cCcD_ObjCo() {}
     void SetHit(cCcD_Obj* obj) {
-        SetRPrm(1);
+        SetRPrm(cCcD_CoRPrm_Hit_e);
         SetHitObj(obj);
     }
-    void ClrHit() { ClrRPrm(1); ClrObj(); }
+    void ClrHit() { ClrRPrm(cCcD_CoRPrm_Hit_e); ClrObj(); }
     void SetIGrp(u32 grp) { // Fake inline, but exists in TP
-        OffSPrmBit(CO_SPRM_IGRP);
+        OffSPrmBit(cCcD_CoSPrm_IGrpAll_e);
         OnSPrmBit(grp);
     }
     void SetVsGrp(u32 grp) {
-        OffSPrmBit(CO_SPRM_VSGRP);
+        OffSPrmBit(cCcD_CoSPrm_VsGrpAll_e);
         OnSPrmBit(grp);
     }
-    bool ChkSet() const { return MskSPrm(CO_SPRM_SET); }
-    u32 GetVsGrp() const { return MskSPrm(CO_SPRM_VSGRP); }
-    u32 GetIGrp() const { return MskSPrm(CO_SPRM_IGRP); }
-    u32 ChkNoCrr() const { return MskSPrm(CO_SPRM_NO_CRR); }
-    u32 ChkSph3DCrr() const { return MskSPrm(CO_SPRM_SPH_3D_CRR); }
-    void ClrSet() { OffSPrmBit(CO_SPRM_SET); }
-    u32 ChkHit() const { return MskRPrm(1); }
+    bool ChkSet() const { return MskSPrm(cCcD_CoSPrm_Set_e); }
+    u32 GetVsGrp() const { return MskSPrm(cCcD_CoSPrm_VsGrpAll_e); }
+    u32 GetIGrp() const { return MskSPrm(cCcD_CoSPrm_IGrpAll_e); }
+    u32 ChkNoCrr() const { return MskSPrm(cCcD_CoSPrm_NoCrr_e); }
+    u32 ChkSph3DCrr() const { return MskSPrm(cCcD_CoSPrm_Sph3DCrr_e); }
+    void ClrSet() { OffSPrmBit(cCcD_CoSPrm_Set_e); }
+    u32 ChkHit() const { return MskRPrm(cCcD_CoRPrm_Hit_e); }
 
     void Set(cCcD_SrcObjCo const& src) {
         cCcD_ObjCommonBase::Set(src.mBase);
@@ -542,9 +524,9 @@ public:
     u32 GetCoVsGrp() const { return mObjCo.GetVsGrp(); }
     u32 GetCoIGrp() const { return mObjCo.GetIGrp(); }
     u8 GetAtAtp() const { return mObjAt.GetAtp(); }
-    u32 ChkAtNoTgHitInfSet() const { return mObjAt.MskSPrm(AT_SPRM_NO_TG_HIT_INF_SET); }
-    u32 ChkTgNoAtHitInfSet() const { return mObjTg.MskSPrm(TG_SPRM_NO_AT_HIT_INF_SET); }
-    u32 ChkCoNoCoHitInfSet() { return mObjCo.MskSPrm(CO_SPRM_NO_CO_HIT_INF_SET); }
+    u32 ChkAtNoTgHitInfSet() const { return mObjAt.MskSPrm(cCcD_AtSPrm_NoTgHitInfSet_e); }
+    u32 ChkTgNoAtHitInfSet() const { return mObjTg.MskSPrm(cCcD_TgSPrm_NoAtHitInfSet_e); }
+    u32 ChkCoNoCoHitInfSet() { return mObjCo.MskSPrm(cCcD_CoSPrm_NoCoHitInfSet_e); }
     void SetAtHit(cCcD_Obj* obj) { mObjAt.SetHit(obj); }
     void SetTgHit(cCcD_Obj* obj) { mObjTg.SetHit(obj); }
     void SetCoHit(cCcD_Obj* obj) { mObjCo.SetHit(obj); }
@@ -558,22 +540,22 @@ public:
     void OnCoSPrmBit(u32 flag) { mObjCo.OnSPrmBit(flag); }
     void OffCoSPrmBit(u32 flag) { mObjCo.OffSPrmBit(flag); }
     void SetAtType(u32 type) { mObjAt.SetType(type); }
-    void OnAtSetBit() { mObjAt.OnSPrmBit(AT_SPRM_SET); }
+    void OnAtSetBit() { mObjAt.OnSPrmBit(cCcD_AtSPrm_Set_e); }
     void SetAtAtp(int atp) { mObjAt.SetAtp(atp); }
     void OffCoSetBit() { mObjCo.ClrSet(); }
     void SetTgType(u32 type) { mObjTg.SetType(type); }
     void OffAtSetBit() { mObjAt.ClrSet(); }
     void OnAtHitBit() { mObjAt.OnHitBit(); }
     void OffAtHitBit() { mObjAt.OffHitBit(); }
-    void OnTgSetBit() { mObjTg.OnSPrmBit(TG_SPRM_SET); }
+    void OnTgSetBit() { mObjTg.OnSPrmBit(cCcD_TgSPrm_Set_e); }
     void OffTgSetBit() { mObjTg.ClrSet(); }
-    void OnCoSetBit() { mObjCo.OnSPrmBit(CO_SPRM_SET); }
+    void OnCoSetBit() { mObjCo.OnSPrmBit(cCcD_CoSPrm_Set_e); }
     void OnAtVsBitSet(u32 prm) { mObjAt.OnSPrmBit(prm); }
     void OffAtVsBitSet(u32 prm) { mObjAt.OffSPrmBit(prm); }
-    void OnAtVsEnemyBit() { mObjAt.OnSPrmBit(AT_SPRM_VS_ENEMY); }
-    void OffAtVsEnemyBit() { mObjAt.OffSPrmBit(AT_SPRM_VS_ENEMY); }
-    void OnAtVsPlayerBit() { mObjAt.OnSPrmBit(AT_SPRM_VS_PLAYER); }
-    void OffAtVsPlayerBit() { mObjAt.OffSPrmBit(AT_SPRM_VS_PLAYER); }
+    void OnAtVsEnemyBit() { mObjAt.OnSPrmBit(cCcD_AtSPrm_VsEnemy_e); }
+    void OffAtVsEnemyBit() { mObjAt.OffSPrmBit(cCcD_AtSPrm_VsEnemy_e); }
+    void OnAtVsPlayerBit() { mObjAt.OnSPrmBit(cCcD_AtSPrm_VsPlayer_e); }
+    void OffAtVsPlayerBit() { mObjAt.OffSPrmBit(cCcD_AtSPrm_VsPlayer_e); }
     void SetTgSPrm(u32 prm) { mObjTg.SetSPrm(prm); } // Fake inline, but exists in TP
     void SetCoSPrm(u32 prm) { mObjCo.SetSPrm(prm); }
     void ClrAtHit() { mObjAt.ClrHit(); }
@@ -589,9 +571,9 @@ public:
     void ClrTgSet() { OffTgSetBit(); }
     void ClrCoSet() { OffCoSetBit(); }
     u32 MskAtSPrm(u32 prm) const { return mObjAt.MskSPrm(prm); }
-    void OnAtNoTgHitInfSet() { mObjAt.OnSPrmBit(AT_SPRM_NO_TG_HIT_INF_SET); }
-    void OffAtNoTgHitInfSet() { mObjAt.OffSPrmBit(AT_SPRM_NO_TG_HIT_INF_SET); }
-    void OnTgNoAtHitInfSet() { mObjTg.OnSPrmBit(TG_SPRM_NO_AT_HIT_INF_SET); }
+    void OnAtNoTgHitInfSet() { mObjAt.OnSPrmBit(cCcD_AtSPrm_NoTgHitInfSet_e); }
+    void OffAtNoTgHitInfSet() { mObjAt.OffSPrmBit(cCcD_AtSPrm_NoTgHitInfSet_e); }
+    void OnTgNoAtHitInfSet() { mObjTg.OnSPrmBit(cCcD_TgSPrm_NoAtHitInfSet_e); }
     void SetTgGrp(u32 grp) { mObjTg.SetGrp(grp); }
     void SetCoIGrp(u32 grp) { mObjCo.SetIGrp(grp); } // Fake inline, but exists in TP
     void SetCoVsGrp(u32 grp) { mObjCo.SetVsGrp(grp); }

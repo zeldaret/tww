@@ -35,12 +35,12 @@ const dCcD_SrcCps daArrow_c::m_at_cps_src = {
         /* Flags             */ 0,
         /* SrcObjAt  Type    */ AT_TYPE_NORMAL_ARROW,
         /* SrcObjAt  Atp     */ 2,
-        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_VS_OTHER,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsOther_e,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ dCcD_SE_ARROW,
-        /* SrcGObjAt HitMark */ G_AT_MARK_NORMAL_HIT,
+        /* SrcGObjAt Se      */ dCcG_SE_ARROW,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_Nrm_e,
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
@@ -68,8 +68,8 @@ const dCcD_SrcSph daArrow_c::m_co_sph_src = {
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2 | CO_SPRM_NO_CRR,
-        /* SrcGObjAt Se      */ dCcD_SE_ARROW,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_NoCrr_e,
+        /* SrcGObjAt Se      */ dCcG_SE_ARROW,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
@@ -78,7 +78,7 @@ const dCcD_SrcSph daArrow_c::m_co_sph_src = {
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_HIT_MARK,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
@@ -262,7 +262,7 @@ void daArrow_c::setDrawShapeMaterial() {
     if (mbSetByZelda) {
         mAtCps.SetAtAtp(4);
         mAtCps.SetAtType(arrow_mat[0].mAtType);
-        mAtCps.OnAtSPrmBit(AT_SPRM_GRP);
+        mAtCps.OnAtSPrmBit(cCcD_AtSPrm_GrpAll_e);
     }
     
     if (arrow_mat[mArrowType].mTipJointIdx != 0) {

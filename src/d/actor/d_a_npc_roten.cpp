@@ -1356,7 +1356,7 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ AT_TYPE_WIND,
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
@@ -1367,7 +1367,7 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_HIT_MARK,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS

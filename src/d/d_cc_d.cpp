@@ -37,7 +37,7 @@ dCcD_GStts::dCcD_GStts() {
     mAtOldApid = fpcM_ERROR_PROCESS_ID_e;
     mTgApid = fpcM_ERROR_PROCESS_ID_e;
     mTgOldApid = fpcM_ERROR_PROCESS_ID_e;
-    field_0x1C = 0;
+    mFlag = 0;
 }
 
 /* 800AB384-800AB3BC       .text Ct__10dCcD_GSttsFv */
@@ -50,7 +50,7 @@ void dCcD_GStts::Ct() {
     mAtOldApid = fpcM_ERROR_PROCESS_ID_e;
     mTgApid = fpcM_ERROR_PROCESS_ID_e;
     mTgOldApid = fpcM_ERROR_PROCESS_ID_e;
-    field_0x1C = 0;
+    mFlag = 0;
 }
 
 /* 800AB3BC-800AB3DC       .text Move__10dCcD_GSttsFv */

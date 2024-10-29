@@ -24,7 +24,7 @@ static dCcD_SrcCyl cyl_check_src = {
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ AT_TYPE_PGANON_SWORD,
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,

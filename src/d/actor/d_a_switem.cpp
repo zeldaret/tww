@@ -20,7 +20,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ AT_TYPE_ALL,
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
@@ -31,7 +31,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_HIT_MARK,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS

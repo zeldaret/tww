@@ -24,7 +24,7 @@ static dCcD_SrcCyl cyl_src_base = {
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_VS_UNK2 | CO_SPRM_IS_UNK8 | CO_SPRM_NO_CRR,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_NoCrr_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,

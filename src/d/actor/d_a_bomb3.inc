@@ -666,9 +666,9 @@ void daBomb_c::makeWaterEffect() {
     if(field_0x77D == 0) {
         fopAcM_seStart(this, JA_SE_OBJ_BOMB_WATER, 0);
         fopKyM_createWpillar(&current.pos, 1.0f, 1.0f, 1);
-        mSph.OffTgSPrmBit(TG_SPRM_SET);
-        mSph.OffCoSPrmBit(CO_SPRM_SET);
-        mSph.OnAtSPrmBit(AT_SPRM_SET);
+        mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
+        mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+        mSph.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
         mSph.SetR(200.0f);
         mSph.SetC(current.pos);
         if(mMassCounter != g_Counter.mCounter0) {
@@ -828,9 +828,9 @@ int daBomb_c::procExplode_init() {
         field_0x6F0 = 0;
     }
 
-    mSph.OffTgSPrmBit(TG_SPRM_SET);
-    mSph.OffCoSPrmBit(CO_SPRM_SET);
-    mSph.OnAtSPrmBit(AT_SPRM_SET);
+    mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
+    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
     mSph.SetR(200.0f);
     mSph.SetC(current.pos);
     if(mMassCounter != g_Counter.mCounter0) {
@@ -927,7 +927,7 @@ bool daBomb_c::procCarry_init() {
     speedF = 0.0f;
     speed.set(cXyz::Zero);
     attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
-    mSph.OffCoSPrmBit(CO_SPRM_SET);
+    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
 
     return true;
 }
@@ -963,7 +963,7 @@ bool daBomb_c::procWait_init() {
         change_state(STATE_1);
     }
 
-    mSph.OnCoSPrmBit(CO_SPRM_SET);
+    mSph.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
     return true;
 }
 
@@ -1367,10 +1367,10 @@ static dCcD_SrcSph l_sph_src = {
         /* Flags             */ 0,
         /* SrcObjAt  Type    */ AT_TYPE_BOMB,
         /* SrcObjAt  Atp     */ 0x04,
-        /* SrcObjAt  SPrm    */ AT_SPRM_GRP,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_GrpAll_e,
         /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
@@ -1380,7 +1380,7 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS

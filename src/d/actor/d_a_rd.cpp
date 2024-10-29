@@ -34,18 +34,18 @@ const dCcD_SrcCyl daRd_c::m_cyl_src = {
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000),
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IGRP | CO_SPRM_VSGRP,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IGrpAll_e | cCcD_CoSPrm_VsGrpAll_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ dCcD_SE_UNK23,
+        /* SrcGObjTg Se      */ dCcG_SE_UNK23,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT | G_TG_SPRM_NO_HIT_MARK,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
@@ -656,16 +656,16 @@ bool daRd_c::checkTgHit() {
 /* 00001650-000017D0       .text setCollision__6daRd_cFv */
 void daRd_c::setCollision() {
     if (mMode == MODE_DEATH) {
-        mCyl.OffCoSPrmBit(CO_SPRM_VS_UNK2);
-        mCyl.OffCoSPrmBit(CO_SPRM_IS_UNK2);
-        mCyl.OffTgSPrmBit(TG_SPRM_SET);
-        mCyl.OffTgSPrmBit(TG_SPRM_IS_OTHER);
+        mCyl.OffCoSPrmBit(cCcD_CoSPrm_VsEnemy_e);
+        mCyl.OffCoSPrmBit(cCcD_CoSPrm_IsEnemy_e);
+        mCyl.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
+        mCyl.OffTgSPrmBit(cCcD_TgSPrm_IsOther_e);
     } else if (mMode == MODE_ATTACK || mMode == MODE_CRY || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
-        mCyl.OffCoSPrmBit(CO_SPRM_VS_UNK2);
-        mCyl.OffCoSPrmBit(CO_SPRM_IS_UNK2);
+        mCyl.OffCoSPrmBit(cCcD_CoSPrm_VsEnemy_e);
+        mCyl.OffCoSPrmBit(cCcD_CoSPrm_IsEnemy_e);
     } else {
-        mCyl.OnCoSPrmBit(CO_SPRM_VS_UNK2);
-        mCyl.OnCoSPrmBit(CO_SPRM_IS_UNK2);
+        mCyl.OnCoSPrmBit(cCcD_CoSPrm_VsEnemy_e);
+        mCyl.OnCoSPrmBit(cCcD_CoSPrm_IsEnemy_e);
     }
     
     if (isAnm(AnmPrm_SUWARIP)) {

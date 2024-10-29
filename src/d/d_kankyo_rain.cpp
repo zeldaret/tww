@@ -6,6 +6,7 @@
 #include "d/d_kankyo_rain.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_roof_chk.h"
+#include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"

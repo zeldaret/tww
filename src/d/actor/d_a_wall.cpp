@@ -61,7 +61,7 @@ static dCcD_SrcTri l_tri_src = {
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ AT_TYPE_BOMB,
-        /* SrcObjTg  SPrm    */ G_TG_SPRM_SHIELD | G_TG_SPRM_SHIELD_FRONT_RANGE,
+        /* SrcObjTg  SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_ShieldFrontRange_e,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
@@ -72,7 +72,7 @@ static dCcD_SrcTri l_tri_src = {
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_HIT_MARK,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGTriS

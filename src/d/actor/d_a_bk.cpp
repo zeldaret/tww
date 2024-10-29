@@ -1709,13 +1709,13 @@ static void attack_set(bk_class* i_this, u8 r28) {
     
     if (r28 == 2) {
         i_this->m1040.SetAtType(AT_TYPE_UNK2000);
-        i_this->m1040.SetAtSe(dCcD_SE_UNK6);
+        i_this->m1040.SetAtSe(dCcG_SE_UNK6);
     } else if (i_this->m02D5 != 0) {
         i_this->m1040.SetAtType(AT_TYPE_UNK800);
-        i_this->m1040.SetAtSe(dCcD_SE_UNK2);
+        i_this->m1040.SetAtSe(dCcG_SE_UNK2);
     } else {
         i_this->m1040.SetAtType(AT_TYPE_UNK2000);
-        i_this->m1040.SetAtSe(dCcD_SE_UNK4);
+        i_this->m1040.SetAtSe(dCcG_SE_UNK4);
     }
     
     if (r28 == 0) {
@@ -3394,7 +3394,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ 0,
                 /* SrcObjTg  SPrm    */ 0,
-                /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK4 | CO_SPRM_VSGRP,
+                /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
                 /* SrcGObjAt Se      */ 0,
                 /* SrcGObjAt HitMark */ 0,
                 /* SrcGObjAt Spl     */ 0,
@@ -3404,7 +3404,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjTg HitMark */ 0,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
-                /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGCylS
@@ -3424,7 +3424,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-                /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
+                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
                 /* SrcObjCo  SPrm    */ 0,
                 /* SrcGObjAt Se      */ 0,
                 /* SrcGObjAt HitMark */ 0,
@@ -3432,10 +3432,10 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjAt Mtrl    */ 0,
                 /* SrcGObjAt SPrm    */ 0,
                 /* SrcGObjTg Se      */ 0,
-                /* SrcGObjTg HitMark */ G_TG_MARK_UNK1,
+                /* SrcGObjTg HitMark */ dCcG_TgHitMark_Unk1_e,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
-                /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGCylS
@@ -3455,7 +3455,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-                /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
+                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
                 /* SrcObjCo  SPrm    */ 0,
                 /* SrcGObjAt Se      */ 0,
                 /* SrcGObjAt HitMark */ 0,
@@ -3463,10 +3463,10 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjAt Mtrl    */ 0,
                 /* SrcGObjAt SPrm    */ 0,
                 /* SrcGObjTg Se      */ 0,
-                /* SrcGObjTg HitMark */ G_TG_MARK_UNK1,
+                /* SrcGObjTg HitMark */ dCcG_TgHitMark_Unk1_e,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
-                /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
@@ -3483,15 +3483,15 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
                 /* Flags             */ 0,
                 /* SrcObjAt  Type    */ AT_TYPE_UNK800,
                 /* SrcObjAt  Atp     */ 2,
-                /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_VS_PLAYER | AT_SPRM_VS_OTHER,
+                /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e,
                 /* SrcObjTg  Type    */ 0,
                 /* SrcObjTg  SPrm    */ 0,
                 /* SrcObjCo  SPrm    */ 0,
                 /* SrcGObjAt Se      */ 0,
-                /* SrcGObjAt HitMark */ G_AT_MARK_NORMAL_HIT,
+                /* SrcGObjAt HitMark */ dCcG_AtHitMark_Nrm_e,
                 /* SrcGObjAt Spl     */ 0,
                 /* SrcGObjAt Mtrl    */ 0,
-                /* SrcGObjAt SPrm    */ G_AT_SPRM_NO_CON_HIT,
+                /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
                 /* SrcGObjTg Se      */ 0,
                 /* SrcGObjTg HitMark */ 0,
                 /* SrcGObjTg Spl     */ 0,
@@ -3515,18 +3515,18 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-                /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
+                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
                 /* SrcObjCo  SPrm    */ 0,
                 /* SrcGObjAt Se      */ 0,
                 /* SrcGObjAt HitMark */ 0,
                 /* SrcGObjAt Spl     */ 0,
                 /* SrcGObjAt Mtrl    */ 0,
                 /* SrcGObjAt SPrm    */ 0,
-                /* SrcGObjTg Se      */ dCcD_SE_UNK6,
-                /* SrcGObjTg HitMark */ G_TG_MARK_PURPLE_HIT,
+                /* SrcGObjTg Se      */ dCcG_SE_UNK6,
+                /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
-                /* SrcGObjTg SPrm    */ G_TG_SPRM_SHIELD | G_TG_SPRM_NO_CON_HIT,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS

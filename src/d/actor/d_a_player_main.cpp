@@ -1971,11 +1971,11 @@ BOOL daPy_lk_c::changeDamageProc() {
                 setDashDamage();
             } else {
                 u8 hitSe = mCyl.GetTgHitObjSe();
-                if (hitSe == dCcD_SE_UNK6) {
+                if (hitSe == dCcG_SE_UNK6) {
                     seStartOnlyReverb(JA_SE_OBJ_COL_N_BDY_MPLT);
-                } else if (hitSe == dCcD_SE_UNK2 || hitSe == dCcD_SE_UNK5) {
+                } else if (hitSe == dCcG_SE_UNK2 || hitSe == dCcG_SE_UNK5) {
                     seStartOnlyReverb(JA_SE_OBJ_COL_SWS_NMTLP);
-                } else if (hitSe == dCcD_SE_UNK4) {
+                } else if (hitSe == dCcG_SE_UNK4) {
                     seStartOnlyReverb(JA_SE_OBJ_COL_NWHP_NMTL);
                 } else {
                     seStartOnlyReverb(JA_SE_OBJ_COL_SWM_NSWL);

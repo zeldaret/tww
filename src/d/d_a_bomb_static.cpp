@@ -41,9 +41,9 @@ void daBomb_c::setBombFire_ON() {
 void daBomb_c::setBombNoHit() {
     _prm_chk_version();
 
-    mSph.OffTgSPrmBit(TG_SPRM_SET);
-    mSph.OffCoSPrmBit(CO_SPRM_SET);
-    mSph.OffAtSPrmBit(AT_SPRM_SET);
+    mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
+    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
     mSph.ClrAtSet();
 
     field_0x6F3 = true;
@@ -53,14 +53,14 @@ void daBomb_c::setBombNoHit() {
 void daBomb_c::setBombOffCoSet() {
     _prm_chk_version();
 
-    mSph.OffCoSPrmBit(CO_SPRM_SET);
+    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
 }
 
 /* 80068104-8006813C       .text setBombOnCoSet__8daBomb_cFv */
 void daBomb_c::setBombOnCoSet() {
     _prm_chk_version();
 
-    mSph.OnCoSPrmBit(CO_SPRM_SET);
+    mSph.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
 }
 
 /* 8006813C-800681CC       .text setBombNoEff__8daBomb_cFv */
@@ -178,9 +178,9 @@ void daBomb2::Act_c::set_eat() {
 
 /* 800684AC-800684E0       .text set_no_hit__Q27daBomb25Act_cFv */
 void daBomb2::Act_c::set_no_hit() {
-    mSph.OffTgSPrmBit(TG_SPRM_SET);
-    mSph.OffCoSPrmBit(CO_SPRM_SET);
-    mSph.OffAtSPrmBit(AT_SPRM_SET);
+    mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
+    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
     mSph.ClrAtSet();
 }
 

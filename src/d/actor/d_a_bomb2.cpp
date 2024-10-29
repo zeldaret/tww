@@ -306,10 +306,10 @@ namespace daBomb2 {
             /* Flags             */ 0,
             /* SrcObjAt  Type    */ AT_TYPE_BOMB,
             /* SrcObjAt  Atp     */ 0x04,
-            /* SrcObjAt  SPrm    */ AT_SPRM_GRP,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_GrpAll_e,
             /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-            /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
-            /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
             /* SrcGObjAt Se      */ 0,
             /* SrcGObjAt HitMark */ 0,
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
@@ -319,7 +319,7 @@ namespace daBomb2 {
             /* SrcGObjTg HitMark */ 0,
             /* SrcGObjTg Spl     */ 0,
             /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
@@ -966,7 +966,7 @@ namespace daBomb2 {
     void Act_c::mode_wait_init() {
         mState = 0;
         gravity = attr().gravity;
-        mSph.OnCoSPrmBit(CO_SPRM_SET);
+        mSph.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
     }
 
     void Act_c::mode_wait() {
@@ -1024,7 +1024,7 @@ namespace daBomb2 {
         speedF = 0.0f;
         speed = cXyz::Zero;
         off_carry();
-        mSph.OffCoSPrmBit(CO_SPRM_SET);
+        mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
     }
 
     void Act_c::mode_carry() {
@@ -1060,9 +1060,9 @@ namespace daBomb2 {
         speed = cXyz::Zero;
         gravity = 0.0f;
         off_carry();
-        mSph.OffTgSPrmBit(TG_SPRM_SET);
-        mSph.OffCoSPrmBit(CO_SPRM_SET);
-        mSph.OnAtSPrmBit(AT_SPRM_SET);
+        mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
+        mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+        mSph.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
         fopAcM_cancelCarryNow(this);
         mBombTimer = 0;
         field_0x73C = 4;
@@ -1080,9 +1080,9 @@ namespace daBomb2 {
         mState = 3;
         speed.y *= 0.8f;
         speedF *= 0.8f;
-        mSph.OffAtSPrmBit(AT_SPRM_SET);
-        mSph.OffTgSPrmBit(TG_SPRM_SET);
-        mSph.OffCoSPrmBit(CO_SPRM_SET);
+        mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
+        mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
+        mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
         off_carry();
         fopAcM_cancelCarryNow(this);
         field_0x698 = 4;

@@ -165,7 +165,7 @@ void daPy_lk_c::setNormalCutAtParam(u8 cutType) {
         radius = daPy_HIO_cut_c0::m.field_0x44;
         m35FC = daPy_HIO_cut_c0::m.field_0x48;
     }
-    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK0, dCcD_SE_UNK1, G_AT_MARK_NORMAL_HIT, cutType, radius);
+    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK0, dCcG_SE_UNK1, dCcG_AtHitMark_Nrm_e, cutType, radius);
 }
 
 /* 80155694-8015572C       .text setFinishCutAtParam__9daPy_lk_cFUc */
@@ -181,7 +181,7 @@ void daPy_lk_c::setFinishCutAtParam(u8 cutType) {
         radius = daPy_HIO_cut_c0::m.field_0x44;
         m35FC = daPy_HIO_cut_c0::m.field_0x48;
     }
-    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, cutType, radius);
+    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcG_SE_UNK1, dCcG_AtHitMark_Big_e, cutType, radius);
 }
 
 /* 8015572C-801557C4       .text setExtraCutAtParam__9daPy_lk_cFUc */
@@ -197,7 +197,7 @@ void daPy_lk_c::setExtraCutAtParam(u8 cutType) {
         radius = daPy_HIO_cut_c0::m.field_0x64;
         m35FC = daPy_HIO_cut_c0::m.field_0x68;
     }
-    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK0, dCcD_SE_UNK1, G_AT_MARK_NORMAL_HIT, cutType, radius);
+    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK0, dCcG_SE_UNK1, dCcG_AtHitMark_Nrm_e, cutType, radius);
 }
 
 /* 801557C4-8015585C       .text setExtraFinishCutAtParam__9daPy_lk_cFUc */
@@ -213,7 +213,7 @@ void daPy_lk_c::setExtraFinishCutAtParam(u8 cutType) {
         radius = daPy_HIO_cut_c0::m.field_0x64;
         m35FC = daPy_HIO_cut_c0::m.field_0x68;
     }
-    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, cutType, radius);
+    setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcG_SE_UNK1, dCcG_AtHitMark_Big_e, cutType, radius);
 }
 
 /* 8015585C-80155970       .text setJumpCutAtParam__9daPy_lk_cFv */
@@ -231,13 +231,13 @@ void daPy_lk_c::setJumpCutAtParam() {
             radius = daPy_HIO_cut_c0::m.field_0x54;
             m35FC = daPy_HIO_cut_c0::m.field_0x58;
         }
-        setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, 0xA, radius);
+        setAtParam(AT_TYPE_SWORD, atp, dCcG_At_Spl_UNK1, dCcG_SE_UNK1, dCcG_AtHitMark_Big_e, 0xA, radius);
     } else if (mEquipItem == dItem_SKULL_HAMMER_e) {
-        setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK1, dCcD_SE_UNK5, G_AT_MARK_NORMAL_HIT, 0x13, 50.0f);
+        setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK1, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, 0x13, 50.0f);
     } else if (mActorKeepEquip.getActor()) {
         setEnemyWeaponAtParam(TRUE);
     } else {
-        setAtParam(AT_TYPE_MACHETE, 2, dCcG_At_Spl_UNK1, dCcD_SE_UNK1, G_AT_MARK_BIG_HIT, 0xE, 30.0f);
+        setAtParam(AT_TYPE_MACHETE, 2, dCcG_At_Spl_UNK1, dCcG_SE_UNK1, dCcG_AtHitMark_Big_e, 0xE, 30.0f);
     }
 }
 

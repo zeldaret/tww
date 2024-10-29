@@ -268,7 +268,7 @@ static BOOL medama_atari_check(am_class* i_this) {
         if (i_this->mCurrBckIdx == AM_BCK_SLEEP || i_this->mCurrBckIdx == AM_BCK_SLEEP_LOOP) {
             anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-            i_this->mNeedleCyl.OnAtSPrmBit(AT_SPRM_SET);
+            i_this->mNeedleCyl.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
             i_this->mNeedleCyl.OnAtHitBit();
             i_this->mAction = ACTION_DOUSA;
             i_this->mState = 2;
@@ -519,7 +519,7 @@ static void action_dousa(am_class* i_this) {
         // Fall-through
     case 4: {
         if (i_this->mCountDownTimers[2] == 1) {
-            i_this->mNeedleCyl.OnAtSPrmBit(AT_SPRM_SET);
+            i_this->mNeedleCyl.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
             i_this->mNeedleCyl.OnAtHitBit();
         }
         if (i_this->mCountDownTimers[2] != 0) {
@@ -1186,7 +1186,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ AT_TYPE_NORMAL_ARROW | AT_TYPE_FIRE_ARROW | AT_TYPE_ICE_ARROW | AT_TYPE_LIGHT_ARROW | AT_TYPE_GRAPPLING_HOOK,
-                /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
+                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
                 /* SrcObjCo  SPrm    */ 0,
                 /* SrcGObjAt Se      */ 0,
                 /* SrcGObjAt HitMark */ 0,
@@ -1197,7 +1197,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjTg HitMark */ 0,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
-                /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT | G_TG_SPRM_NO_HIT_MARK,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
@@ -1218,7 +1218,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ 0,
                 /* SrcObjTg  SPrm    */ 0,
-                /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK4 | CO_SPRM_VS_UNK8 | CO_SPRM_NO_CRR,
+                /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsOther_e | cCcD_CoSPrm_NoCrr_e,
                 /* SrcGObjAt Se      */ 0,
                 /* SrcGObjAt HitMark */ 0,
                 /* SrcGObjAt Spl     */ 0,
@@ -1228,7 +1228,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjTg HitMark */ 0,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
-                /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
@@ -1248,18 +1248,18 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-                /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
-                /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK4 | CO_SPRM_VSGRP,
+                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+                /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
                 /* SrcGObjAt Se      */ 0,
                 /* SrcGObjAt HitMark */ 0,
                 /* SrcGObjAt Spl     */ 0,
                 /* SrcGObjAt Mtrl    */ 0,
                 /* SrcGObjAt SPrm    */ 0,
                 /* SrcGObjTg Se      */ 0,
-                /* SrcGObjTg HitMark */ G_TG_MARK_PURPLE_HIT,
+                /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
-                /* SrcGObjTg SPrm    */ G_TG_SPRM_SHIELD | G_TG_SPRM_NO_CON_HIT,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGCylS
@@ -1278,20 +1278,20 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
                 /* Flags             */ 0,
                 /* SrcObjAt  Type    */ AT_TYPE_UNK1000,
                 /* SrcObjAt  Atp     */ 2,
-                /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_GRP,
+                /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
                 /* SrcObjTg  Type    */ 0,
                 /* SrcObjTg  SPrm    */ 0,
-                /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK4 | CO_SPRM_VSGRP,
+                /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
                 /* SrcGObjAt Se      */ 0,
                 /* SrcGObjAt HitMark */ 0,
                 /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK6,
                 /* SrcGObjAt Mtrl    */ 0,
                 /* SrcGObjAt SPrm    */ 0,
                 /* SrcGObjTg Se      */ 0,
-                /* SrcGObjTg HitMark */ G_TG_MARK_PURPLE_HIT,
+                /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
-                /* SrcGObjTg SPrm    */ G_TG_SPRM_SHIELD | G_TG_SPRM_NO_CON_HIT,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGCylS
