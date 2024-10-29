@@ -147,7 +147,6 @@ const Attr_c L_attr = {
 //-----------------------------------------
 const s32 L_Room_Max = 64;
 const float l_Ground_check_y_offset = 100.0f;
-const float l_Ground_check_unk0 = 1.0E+9;
 const double l_Ground_check_unk1 = 0.5;
 const double l_Ground_check_unk2 = 3.0;
 const float kGroundHeightBias = 1.0f;
@@ -482,7 +481,7 @@ bool dWood::Unit_c::set_ground() {
     gndChk.SetPos(&pos);
     f32 gndHeight = dComIfG_Bgsp()->GroundCross(&gndChk);
 
-    if (gndHeight > l_Ground_check_unk0) {
+    if (gndHeight > -1000000000.0f) {
         mPos.y = gndHeight;
         cM3dGPla *triPla = dComIfG_Bgsp()->GetTriPla(gndChk);
 
