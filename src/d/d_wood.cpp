@@ -72,8 +72,8 @@ struct Attr_c {
 //-----------------------------------------
 // Data
 //-----------------------------------------
-static Vec _pad0[1] = {1, 1, 1};
-static Vec _pad1[1] = {1, 1, 1};
+static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
+static Vec dummy2 = { 1.0f, 1.0f, 1.0f };
 
 namespace dWood {
 namespace {
