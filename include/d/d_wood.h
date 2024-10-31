@@ -2,7 +2,6 @@
 #define D_WOOD_H
 
 #include "JSystem/J3DGraphBase/J3DPacket.h"
-#include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "dolphin/mtx/mtx.h"
 #include "d/d_kankyo.h"
@@ -48,7 +47,6 @@ public:
 
     /* 0x000 */ cXyz mPos;
     /* 0x00C */ s16 mAnimCooldown; // In frames. Animations will not change unless this is 0.
-    /* 0x00E */ u8 field_0x00C[0x010 - 0x00E];
     /* 0x010 */ State_e mFlags;
     /* 0x014 */ AnmID_e mAnmIdx;
     /* 0x018 */ Mtx mModelViewMtx;
@@ -56,11 +54,11 @@ public:
     /* 0x078 */ Mtx mShadowModelMtx;
     /* 0x0A8 */ Mtx mShadowModelViewMtx;
     /* 0x0D8 */ Unit_c* mpNext;
-
     /* 0x0DC */ dKy_tevstr_c mTevStr;
-};
+};  // Size: 0x18C
 
 STATIC_ASSERT(sizeof(Unit_c) == 0x18C);
+
 class Anm_c {
 public:
     enum Mode_e {
@@ -85,16 +83,16 @@ public:
     // The mode_*() function is called to update the animation each frame, until finished
     // Their are 8 pre-allocated "normal" animations. When not animating, each unit is assigned one of the 8.
 
-    void mode_cut_init(const Anm_c*, short);
+    void mode_cut_init(const Anm_c*, s16);
     void mode_cut(Packet_c*);
-    void mode_push_into_init(const Anm_c*, short);
+    void mode_push_into_init(const Anm_c*, s16);
     void mode_push_into(Packet_c*);
     void mode_push_back_init();
     void mode_push_back(Packet_c*);
     void mode_fan(Packet_c*);
     void mode_norm_init();
     void mode_norm(Packet_c*);
-    void mode_norm_set_wind(float, short);
+    void mode_norm_set_wind(f32, s16);
     void mode_to_norm_init(AnmID_e);
     void mode_to_norm(Packet_c*);
 
@@ -109,11 +107,11 @@ public:
     /* 0x60 */ Mode_e mMode;
 
     /* 0x64 */ s16 mCountdown;
-    /* 0x66 */ s16 mForceDir;     // The direction from the wind or actor who instigated this animation
-    /* 0x68 */ float mWindPow;   // 0.0 - 1.0
-    /* 0x6c */ float mPosOffsetY;
-    /* 0x70 */ float mPosOffsetZ;
-    /* 0x74 */ float mVelY;
+    /* 0x66 */ s16 mForceDir; // The direction from the wind or actor who instigated this animation
+    /* 0x68 */ f32 mWindPow; // 0.0 - 1.0
+    /* 0x6c */ f32 mPosOffsetY;
+    /* 0x70 */ f32 mPosOffsetZ;
+    /* 0x74 */ f32 mVelY;
 
     /* 0x78 */ s16 mPhaseY[2];
     /* 0x7c */ s16 mPhaseX[2];

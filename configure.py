@@ -496,7 +496,7 @@ config.libs = [
             Object(NonMatching, "d/d_cam_style.cpp"),
             Object(NonMatching, "d/d_cam_type2.cpp"),
             Object(NonMatching, "d/d_ev_camera.cpp"),
-            Object(MatchingFor("GZLE01", "GZLP01"), "d/d_wood.cpp", extra_cflags=["-sym off"]),
+            Object(Matching,    "d/d_wood.cpp", extra_cflags=["-sym off"]),
             Object(NonMatching, "d/d_flower.cpp"),
             Object(Matching,    "d/d_item_data.cpp"),
             Object(Matching,    "d/d_seafightgame.cpp"),

@@ -2,6 +2,7 @@
 #define D_TREE_H
 
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_particle.h"
 #include "dolphin/mtx/mtx.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 
@@ -9,12 +10,12 @@ class cCcD_Obj;
 class dCcMassS_HitInf;
 class fopAc_ac_c;
 
-extern const u32 g_dTree_shadowMatDL_SIZE;
-extern const u32 g_dTree_Oba_kage_32DL_SIZE;
+extern u8 g_dTree_shadowPos[4][3];
+extern u8 g_dTree_shadowTexCoord[4][2];
 extern u8 g_dTree_shadowMatDL[];
 extern u8 g_dTree_Oba_kage_32DL[];
-extern u8 g_dTree_shadowPos[12];
-extern u8 g_dTree_shadowTexCoord[8];
+extern const u32 g_dTree_shadowMatDL_SIZE;
+extern const u32 g_dTree_Oba_kage_32DL_SIZE;
 
 class dTree_data_c {
 public:
@@ -38,6 +39,8 @@ public:
     /* 0x0A0 */ Mtx mShadowMtx;
     /* 0x0D0 */ u8 field_0x0D0[0x100 - 0x0D0];
     /* 0x100 */ dTree_data_c* mpNext;
+
+    static dPa_smokeEcallBack mSmokeEcallback;
 };
 
 class dTree_anm_c {
