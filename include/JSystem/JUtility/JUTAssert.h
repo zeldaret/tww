@@ -2,7 +2,7 @@
 #define JUTASSERT_H
 
 #include "dolphin/types.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os/OS.h" // IWYU pragma: export // Used by the JUT_ASSERT macro.
 
 #define JUT_SHOW_ASSERT(LINE, COND) JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND)
 

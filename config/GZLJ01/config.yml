@@ -1785,12 +1785,22 @@ extract:
 - symbol: l_Oba_swood_a_mikiDL
   binary: assets/l_Oba_swood_a_mikiDL.bin
   header: assets/l_Oba_swood_a_mikiDL.h
+- symbol: l_matDL!.data:0x8036e1e0
+  binary: assets/l_matDL__d_tree.bin
+  header: assets/l_matDL__d_tree.h
+  header_type: none
+  custom_type: matDL
 - symbol: l_Txa_kage_32TEX
   binary: assets/l_Txa_kage_32TEX.bin
   header: assets/l_Txa_kage_32TEX.h
 - symbol: g_dTree_Oba_kage_32DL
   binary: assets/g_dTree_Oba_kage_32DL.bin
   header: assets/g_dTree_Oba_kage_32DL.h
+- symbol: g_dTree_shadowMatDL
+  binary: assets/g_dTree_shadowMatDL.bin
+  header: assets/g_dTree_shadowMatDL.h
+  header_type: none
+  custom_type: matDL
 
 - symbol: l_chainS3TCTEX!.data:0x80369e80
   binary: assets/l_chainS3TCTEX__d_chain.bin
@@ -1798,9 +1808,11 @@ extract:
 - symbol: l_chainDL!.data:0x8036a180
   binary: assets/l_chainDL__d_chain.bin
   header: assets/l_chainDL__d_chain.h
-# - symbol: l_matDL!.data:0x8036a200
-#   binary: assets/l_matDL__d_chain.bin
-#   header: assets/l_matDL__d_chain.h
+- symbol: l_matDL!.data:0x8036a200
+  binary: assets/l_matDL__d_chain.bin
+  header: assets/l_matDL__d_chain.h
+  header_type: none
+  custom_type: matDL
 
 - symbol: l_chainS3TCTEX!.data:0x8037f3e0
   binary: assets/l_chainS3TCTEX__d_hookshot.bin
@@ -1808,6 +1820,8 @@ extract:
 - symbol: l_chainDL!.data:0x8037f6e0
   binary: assets/l_chainDL__d_hookshot.bin
   header: assets/l_chainDL__d_hookshot.h
-# - symbol: l_matDL!.data:0x8037f760
-#   binary: assets/l_matDL__d_hookshot.bin
-#   header: assets/l_matDL__d_hookshot.h
+- symbol: l_matDL!.data:0x8037f760
+  binary: assets/l_matDL__d_hookshot.bin
+  header: assets/l_matDL__d_hookshot.h
+  header_type: none
+  custom_type: matDL
