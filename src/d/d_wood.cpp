@@ -1249,7 +1249,7 @@ void dWood::Packet_c::draw() {
     }
 
 #if VERSION != VERSION_JPN
-    J3DShape::sOldVcdVatCmd = NULL;
+    J3DShape::resetVcdVatCache();
 #endif
 }
 

@@ -654,7 +654,7 @@ void daSail_packet_c::draw() {
     GXCallDisplayList(l_sail_DL, 0x200);
 
 #if VERSION != VERSION_JPN
-    J3DShape::sOldVcdVatCmd = NULL;
+    J3DShape::resetVcdVatCache();
 #endif
 }
 
