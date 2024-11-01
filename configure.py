@@ -150,9 +150,9 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v1.1.4"
-config.objdiff_tag = "v2.3.2"
-config.sjiswrap_tag = "v1.1.1"
+config.dtk_tag = "v1.2.0"
+config.objdiff_tag = "v2.3.4"
+config.sjiswrap_tag = "v1.2.0"
 config.wibo_tag = "0.6.11"
 
 # Project
