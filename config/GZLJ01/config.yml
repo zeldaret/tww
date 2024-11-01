@@ -350,6 +350,13 @@ modules:
 - object: files/RELS.arc:rels/mmem/d_a_pirate_flag.rel
   splits: config/GZLJ01/rels/d_a_pirate_flag/splits.txt
   symbols: config/GZLJ01/rels/d_a_pirate_flag/symbols.txt
+  extract:
+  - symbol: l_pirate_flag_DL
+    binary: assets/l_pirate_flag_DL.bin
+    header: assets/l_pirate_flag_DL.h
+  - symbol: l_pirate_flag_matDL
+    binary: assets/l_pirate_flag_matDL.bin
+    header: assets/l_pirate_flag_matDL.h
 
 - object: files/RELS.arc:rels/mmem/d_a_race_item.rel
   splits: config/GZLJ01/rels/d_a_race_item/splits.txt
@@ -1671,3 +1678,136 @@ modules:
 - object: files/rels/d_a_movie_player.rel
   splits: config/GZLJ01/rels/d_a_movie_player/splits.txt
   symbols: config/GZLJ01/rels/d_a_movie_player/symbols.txt
+
+extract:
+- symbol: black_tex
+  binary: assets/black_tex.bin
+  header: assets/black_tex.h
+- symbol: msg_data
+  binary: assets/msg_data.bin
+  header: assets/msg_data.h
+- symbol: font_data
+  binary: assets/font_data.bin
+  header: assets/font_data.h
+
+- symbol: l_backRevZMat
+  binary: assets/l_backRevZMat.bin
+  header: assets/l_backRevZMat.h
+- symbol: l_frontZMat
+  binary: assets/l_frontZMat.bin
+  header: assets/l_frontZMat.h
+- symbol: l_frontNoZSubMat
+  binary: assets/l_frontNoZSubMat.bin
+  header: assets/l_frontNoZSubMat.h
+- symbol: l_bonboriDL
+  binary: assets/l_bonboriDL.bin
+  header: assets/l_bonboriDL.h
+- symbol: l_s_beam_checkDL
+  binary: assets/l_s_beam_checkDL.bin
+  header: assets/l_s_beam_checkDL.h
+- symbol: l_cubeDL
+  binary: assets/l_cubeDL.bin
+  header: assets/l_cubeDL.h
+- symbol: l_bonbori2DL
+  binary: assets/l_bonbori2DL.bin
+  header: assets/l_bonbori2DL.h
+# - symbol: l_matDL$5108
+#   binary: assets/l_matDL__draw__18dDlst_alphaModel_cFPA4_f.bin
+#   header: assets/l_matDL__draw__18dDlst_alphaModel_cFPA4_f.h
+- symbol: l_shadowVolDL
+  binary: assets/l_shadowVolDL.bin
+  header: assets/l_shadowVolDL.h
+- symbol: l_shadowProjMat
+  binary: assets/l_shadowProjMat.bin
+  header: assets/l_shadowProjMat.h
+- symbol: l_shadowVolMat
+  binary: assets/l_shadowVolMat.bin
+  header: assets/l_shadowVolMat.h
+- symbol: l_clearMat
+  binary: assets/l_clearMat.bin
+  header: assets/l_clearMat.h
+- symbol: l_frontMat
+  binary: assets/l_frontMat.bin
+  header: assets/l_frontMat.h
+- symbol: l_backSubMat
+  binary: assets/l_backSubMat.bin
+  header: assets/l_backSubMat.h
+- symbol: l_shadowVolumeDL
+  binary: assets/l_shadowVolumeDL.bin
+  header: assets/l_shadowVolumeDL.h
+- symbol: l_shadowSealTexDL
+  binary: assets/l_shadowSealTexDL.bin
+  header: assets/l_shadowSealTexDL.h
+- symbol: l_shadowSealTex2DL
+  binary: assets/l_shadowSealTex2DL.bin
+  header: assets/l_shadowSealTex2DL.h
+- symbol: l_shadowSealDL
+  binary: assets/l_shadowSealDL.bin
+  header: assets/l_shadowSealDL.h
+# - symbol: l_matDL$5761
+#   binary: assets/l_matDL__imageDraw__21dDlst_shadowControl_cFPA4_f.bin
+#   header: assets/l_matDL__imageDraw__21dDlst_shadowControl_cFPA4_f.h
+- symbol: l_mirrorProjMat
+  binary: assets/l_mirrorProjMat.bin
+  header: assets/l_mirrorProjMat.h
+# - symbol: l_backMat$6016
+#   binary: assets/l_backMat__draw__23dDlst_alphaInvVolPacketFv.bin
+#   header: assets/l_backMat__draw__23dDlst_alphaInvVolPacketFv.h
+
+# - symbol: l_Txa_swood_bTEX__Q25dWood20@unnamed@d_wood_cpp@
+#   binary: assets/l_Txa_swood_bTEX.bin
+#   header: assets/l_Txa_swood_bTEX.h
+# - symbol: l_Oba_swood_bDL__Q25dWood20@unnamed@d_wood_cpp@
+#   binary: assets/l_Oba_swood_bDL.bin
+#   header: assets/l_Oba_swood_bDL.h
+# - symbol: l_Oba_swood_b_cutDL__Q25dWood20@unnamed@d_wood_cpp@
+#   binary: assets/l_Oba_swood_b_cutDL.bin
+#   header: assets/l_Oba_swood_b_cutDL.h
+# - symbol: l_matDL__Q25dWood20@unnamed@d_wood_cpp@
+#   binary: assets/l_matDL.bin
+#   header: assets/l_matDL.h
+
+- symbol: l_Txa_swood_aTEX
+  binary: assets/l_Txa_swood_aTEX.bin
+  header: assets/l_Txa_swood_aTEX.h
+- symbol: l_Oba_swood_noneDL
+  binary: assets/l_Oba_swood_noneDL.bin
+  header: assets/l_Oba_swood_noneDL.h
+- symbol: l_Oba_swood_a_cuttDL
+  binary: assets/l_Oba_swood_a_cuttDL.bin
+  header: assets/l_Oba_swood_a_cuttDL.h
+- symbol: l_Oba_swood_a_cutuDL
+  binary: assets/l_Oba_swood_a_cutuDL.bin
+  header: assets/l_Oba_swood_a_cutuDL.h
+- symbol: l_Oba_swood_a_hapaDL
+  binary: assets/l_Oba_swood_a_hapaDL.bin
+  header: assets/l_Oba_swood_a_hapaDL.h
+- symbol: l_Oba_swood_a_mikiDL
+  binary: assets/l_Oba_swood_a_mikiDL.bin
+  header: assets/l_Oba_swood_a_mikiDL.h
+- symbol: l_Txa_kage_32TEX
+  binary: assets/l_Txa_kage_32TEX.bin
+  header: assets/l_Txa_kage_32TEX.h
+- symbol: g_dTree_Oba_kage_32DL
+  binary: assets/g_dTree_Oba_kage_32DL.bin
+  header: assets/g_dTree_Oba_kage_32DL.h
+
+- symbol: l_chainS3TCTEX!.data:0x80369e80
+  binary: assets/l_chainS3TCTEX__d_chain.bin
+  header: assets/l_chainS3TCTEX__d_chain.h
+- symbol: l_chainDL!.data:0x8036a180
+  binary: assets/l_chainDL__d_chain.bin
+  header: assets/l_chainDL__d_chain.h
+# - symbol: l_matDL!.data:0x8036a200
+#   binary: assets/l_matDL__d_chain.bin
+#   header: assets/l_matDL__d_chain.h
+
+- symbol: l_chainS3TCTEX!.data:0x8037f3e0
+  binary: assets/l_chainS3TCTEX__d_hookshot.bin
+  header: assets/l_chainS3TCTEX__d_hookshot.h
+- symbol: l_chainDL!.data:0x8037f6e0
+  binary: assets/l_chainDL__d_hookshot.bin
+  header: assets/l_chainDL__d_hookshot.h
+# - symbol: l_matDL!.data:0x8037f760
+#   binary: assets/l_matDL__d_hookshot.bin
+#   header: assets/l_matDL__d_hookshot.h

@@ -26,7 +26,15 @@
 #include "dolphin/dvd/dvd.h"
 #include "dolphin/gx/GX.h"
 
-#include "f_pc/f_pc_manager_data.inc"
+#include "assets/black_tex.h"
+#include "assets/msg_data.h"
+#if VERSION == VERSION_PAL
+#include "assets/msg_data_ge.h"
+#include "assets/msg_data_fr.h"
+#include "assets/msg_data_sp.h"
+#include "assets/msg_data_it.h"
+#endif
+#include "assets/font_data.h"
 
 /* 8003E318-8003E338       .text fpcM_Draw__FPv */
 void fpcM_Draw(void* i_proc) {
