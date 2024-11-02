@@ -344,7 +344,6 @@ def convert_binary_to_matDL_c_source(src_path, dest_path, symbol_name):
         write_macro_line(f"u8 {symbol_name}[] ALIGN_DECL(32) = {{")
         
         while True:
-            print(binary_file.tell())
             command_type = read_u8(binary_file)
             if command_type is None:
                 break
@@ -397,7 +396,6 @@ def convert_binary_to_matDL_c_source(src_path, dest_path, symbol_name):
             else:
                 raise Exception(f"Unknown command type: {command_type:02X}")
 
-            print(line_elements)
             write_macro_line("    " + ", ".join(line_elements) + ",")
         
         c_file.write("};\n")
