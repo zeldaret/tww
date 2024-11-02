@@ -1813,6 +1813,8 @@ extract:
   header: assets/g_dTree_shadowMatDL.h
   header_type: none
   custom_type: matDL
+  custom_data:
+    scope: global
 
 - symbol: l_chainS3TCTEX!.data:0x8037d6c0
   binary: assets/l_chainS3TCTEX__d_chain.bin

@@ -1741,7 +1741,7 @@ config.libs = [
 config.custom_build_rules = [
     {
         "name": "convert_matDL",
-        "command": "$python tools/converters/matDL_dis.py $in $out --symbol $symbol",
+        "command": "$python tools/converters/matDL_dis.py $in $out --symbol $symbol --scope $scope",
         "description": "CONVERT $symbol",
     },
 ]
@@ -1755,6 +1755,7 @@ out_dir = config.build_dir / version
 # This generates the build steps needed for preprocessing
 def emit_build_rule(asset):
     steps = config.custom_build_steps.setdefault("pre-compile", [])
+    custom_data = asset.get("custom_data") or {}
 
     match asset.get("custom_type"):
         case None:
@@ -1768,6 +1769,7 @@ def emit_build_rule(asset):
                     "outputs": out_dir / "include" / asset["header"],
                     "variables": {
                         "symbol": asset["symbol"],
+                        "scope": custom_data.get("scope", "local")
                     },
                     "implicit": Path("tools/converters/matDL_dis.py"),
                 }
