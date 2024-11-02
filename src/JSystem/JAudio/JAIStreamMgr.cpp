@@ -598,7 +598,7 @@ void JAInter::StreamLib::setDecodedBufferBlocks(u32 param_1) {
 /* 8029D424-8029D464       .text LoopInit__Q27JAInter9StreamLibFv */
 void JAInter::StreamLib::LoopInit() {
     loop_start_flag = true;
-    u32 var1 = (header.field_0x14 - (header.field_0x14 & 0x7F) >> 4) * 18 + 32;
+    u32 var1 = ((header.field_0x14 - (header.field_0x14 & 0x7F)) >> 4) * 18 + 32;
     adpcm_loadpoint = var1;
     var1 -= 32;
     adpcm_remain = header.field_0x0 - var1;

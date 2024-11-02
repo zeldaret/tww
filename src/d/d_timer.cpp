@@ -5,14 +5,12 @@
 
 #include "d/d_timer.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_item.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_audio.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRArchive.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 
 u32 ShipRaceSeTable[] = {

@@ -48,6 +48,8 @@ void* JKRAramStream::run() {
         case JKRAramStreamCommand::WRITE:
             writeToAram(command);
             break;
+        default:
+            break;
         }
     }
 }

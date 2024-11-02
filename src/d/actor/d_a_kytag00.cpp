@@ -9,11 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_kankyo.h"
-#include "d/actor/d_a_player.h"
-#include "m_Do/m_Do_ext.h"
-#include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_lib.h"
-#include "JSystem/JUtility/JUTAssert.h"
 
 /* 00000078-0000024C       .text get_check_pos__FP13kytag00_class */
 cXyz get_check_pos(kytag00_class* i_this) {

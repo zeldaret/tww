@@ -22,5 +22,7 @@ void JStudio_JMessage::TAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOpe
     case JStudio::data::TEOD_Unknown_19:
         mControl->setMessageCode(*(u32*)param_2);
         break;
+    default:
+        break;
     }
 }

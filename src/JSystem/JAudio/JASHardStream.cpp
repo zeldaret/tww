@@ -108,7 +108,7 @@ void JASystem::HardStream::main() {
             }
             strCtrl.field_0xb = 4;
             return;
-        case 4:
+        case 4: {
             u8 currentVol = strCtrl.getCurVol();
             AISetStreamVolLeft(currentVol);
             AISetStreamVolRight(currentVol);
@@ -116,7 +116,8 @@ void JASystem::HardStream::main() {
             cur_addr_cmd++;
             cur_addr_cmd %= 16;
             return;
-        case 5:
+        }
+        case 5: {
             TPlayList* list = strCtrl.getList();
             if (!list) {
                 if (strCtrl.field_0x8 != 2) {
@@ -161,6 +162,7 @@ void JASystem::HardStream::main() {
             }
             strCtrl.field_0xb = 4;
             return;
+        }
         case 6:
             AISetStreamVolLeft(0);
             AISetStreamVolRight(0);

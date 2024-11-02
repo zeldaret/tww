@@ -228,7 +228,7 @@ f32 JAISound::setDistanceVolumeCommon(f32 param_1, u8 param_2) {
     var1 -= JAIGlobalParameter::maxVolumeDistance;
     f32 var2 = param_1 - JAIGlobalParameter::maxVolumeDistance;
     if (param_2 > 3) {
-        var2 /= 1 << (param_2 & 3) + 1;
+        var2 /= 1 << ((param_2 & 3) + 1);
     } else if (param_2 != 0) {
         var2 *= 1 << (param_2 & 3);
     }

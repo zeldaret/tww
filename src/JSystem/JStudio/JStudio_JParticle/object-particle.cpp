@@ -84,6 +84,8 @@ void TAdaptor_particle::adaptor_do_PARTICLE(JStudio::data::TEOperationData opera
     case JStudio::data::TEOD_Unknown_19:
         _188 = *(int*)r5;
         break;
+    default:
+        break;
     }
 }
 
@@ -98,6 +100,8 @@ void TAdaptor_particle::adaptor_do_PARENT(JStudio::data::TEOperationData operati
                 *(f32*)NULL = *(f32*)NULL;
             }
         }
+        break;
+    default:
         break;
     }
 }
@@ -116,6 +120,8 @@ void TAdaptor_particle::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData op
     case JStudio::data::TEOD_Unknown_19:
         _1A0 = *(u32*)param_2;
         break;
+    default:
+        break;
     }
 }
 
@@ -124,6 +130,8 @@ void TAdaptor_particle::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData 
     switch (operation) {
     case JStudio::data::TEOD_Unknown_02:
         _1A4 = *(u32*)param_2;
+        break;
+    default:
         break;
     }
 }

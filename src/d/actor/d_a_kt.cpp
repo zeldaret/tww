@@ -208,7 +208,7 @@ calc_012:
             i_this->mTimer[2] = REG0_S(5) + 300;
         }
         break;
-    case 10:
+    case 10: {
         i_this->mLiftY += i_this->mLiftYTimer;
         i_this->mLiftYTimer -= REG0_F(8) * 0.1f + 5.0f;
         if (i_this->mLiftY <= 0.0f) {
@@ -230,6 +230,7 @@ calc_012:
         *r27 += i_this->mSpeedVel.z;
         goto calc_11;
         break;
+    }
     case 11:
         if (i_this->mTimer[0] == 0) {
             i_this->mTimer[0] = cM_rndF(2.0f) + 10.0f + REG0_F(12);

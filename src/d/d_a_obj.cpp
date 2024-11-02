@@ -9,7 +9,6 @@
 #include "d/d_procname.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_path.h"
-#include "m_Do/m_Do_mtx.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 
 namespace daObj {

@@ -142,6 +142,8 @@ void TAdaptor_actor::adaptor_do_PARENT(JStudio::data::TEOperationData operation,
     case JStudio::data::TEOD_Unknown_18:
         m12C = (JStage::TObject*)mSystem->JSGFindObject((const char*)p2, JStage::TOBJ_ACTOR_UNK);
         break;
+    default:
+        break;
     }
 }
 
@@ -156,13 +158,15 @@ void TAdaptor_actor::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData opera
     case JStudio::data::TEOD_Unknown_19:
         m130 = *(u32*)p2;
         break;
+    default:
+        break;
     }
 }
 
 /* 80276978-802769D4       .text adaptor_do_PARENT_ENABLE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
 void TAdaptor_actor::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
     switch (operation) {
-    case JStudio::data::TEOD_Unknown_02:
+    case JStudio::data::TEOD_Unknown_02: {
         bool v0 = (*(u32*)p2 != 0);
         JStage::TObject* object = NULL;
         u32 v1 = 0xFFFFFFFF;
@@ -172,6 +176,9 @@ void TAdaptor_actor::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData ope
         }
         mObject->JSGSetParent(object, v1);
     }
+    default:
+        break;
+    }
 }
 
 /* 802769D4-80276A28       .text adaptor_do_RELATION__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl */
@@ -179,6 +186,8 @@ void TAdaptor_actor::adaptor_do_RELATION(JStudio::data::TEOperationData operatio
     switch (operation) {
     case JStudio::data::TEOD_Unknown_18:
         m134 = (JStage::TObject*)mSystem->JSGFindObject((const char*)p2, JStage::TOBJ_ACTOR_UNK);
+        break;
+    default:
         break;
     }
 }
@@ -194,6 +203,8 @@ void TAdaptor_actor::adaptor_do_RELATION_NODE(JStudio::data::TEOperationData ope
     case JStudio::data::TEOD_Unknown_19:
         m138 = *(u32*)p2;
         break;
+    default:
+        break;
     }
 }
 
@@ -203,6 +214,8 @@ void TAdaptor_actor::adaptor_do_RELATION_ENABLE(JStudio::data::TEOperationData o
     case JStudio::data::TEOD_Unknown_02:
         mObject->JSGSetRelation(*(u32*)p2, m134, m138);
         break;
+    default:
+        break;
     }
 }
 
@@ -211,6 +224,8 @@ void TAdaptor_actor::setJSG_ID_(IDFunction function, JStudio::data::TEOperationD
     switch (operation) {
     case JStudio::data::TEOD_Unknown_19:
         (mObject->*function)(*(u32*)p3);
+        break;
+    default:
         break;
     }
 }

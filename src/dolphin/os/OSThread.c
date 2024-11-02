@@ -255,7 +255,7 @@ static void UnsetRun(OSThread* thread) {
     }
 
     if (queue->head == NULL) {
-        RunQueueBits &= ~(1 << 31 - thread->effective_priority);
+        RunQueueBits &= ~(1 << (31 - thread->effective_priority));
     }
 
     thread->queue = NULL;

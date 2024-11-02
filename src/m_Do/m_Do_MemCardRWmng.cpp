@@ -243,7 +243,7 @@ void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
         snprintf(header->info, sizeof(header->info), "%d/%d Spielstand", cal.day_of_month, cal.month + 1);
         break;
     case 2:
-        // Extended ASCII 0xE9 is: é
+        // Extended ASCII 0xE9 is: é ("Données de jeu")
         snprintf(header->info, sizeof(header->info), "Donn%ces de jeu %d/%d", 0xE9, cal.day_of_month, cal.month + 1);
         break;
     case 3:

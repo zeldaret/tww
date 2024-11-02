@@ -8,7 +8,6 @@
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_pause.h"
 #include "f_pc/f_pc_executor.h"
-#include "f_pc/f_pc_manager.h"
 
 static cPhs__Step fopScnRq_phase_ClearOverlap(scene_request_class* i_sceneReq) {
     if (fopOvlpM_ClearOfReq() == 1) {

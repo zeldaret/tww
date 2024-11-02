@@ -64,7 +64,7 @@ static void daAndsw0_check(andsw0_class* i_this) {
             }
 
             break;
-        case ACT_OFF_ALL:
+        case ACT_OFF_ALL: {
             u32 switchToCheck2 = i_this->mFirstSwitchToCheck ? i_this->mFirstSwitchToCheck : i_this->mSwitchToSet + 1;
 
             for(int i = 0; i < numToCheck; i++) {
@@ -78,6 +78,7 @@ static void daAndsw0_check(andsw0_class* i_this) {
             }
 
             break;
+        }
         case ACT_TIMER:
             i_this->mTimer = (i_this->home.angle.z & 0xFF) * 15;
             if(fopAcM_isSwitch(i_this, i_this->mSwitchToSet)) {

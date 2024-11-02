@@ -135,7 +135,7 @@ BOOL daRaceItem_c::execute() {
     daPy_lk_c* player;
     cXyz headPos;
     switch(field_0x640) {
-        case 0:
+        case 0: {
             checkGet();
 
             s16 spin = 0xFFFF / daItemBase_c::m_data.mRotateYSpeed;
@@ -144,6 +144,7 @@ BOOL daRaceItem_c::execute() {
             dComIfG_Ccsp()->Set(&mCyl);
 
             break;
+        }
         case 1:
             player = daPy_getPlayerLinkActorClass();
             headPos = player->getHeadTopPos();

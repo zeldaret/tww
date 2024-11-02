@@ -124,7 +124,7 @@ u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* i_data, u32 i_flag
             break;
         case 'MAT2':
             break;
-        case 'MAT3':
+        case 'MAT3': {
             u32 matFlags = 0x50100000;
             matFlags |= (u32)i_flags & 0x03000000;
             mpMaterialBlock = (const J3DMaterialBlock*)block;
@@ -137,6 +137,7 @@ u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* i_data, u32 i_flag
                 size += calcSizePatchedMaterial((const J3DMaterialBlock*)block, matFlags);
             }
             break;
+        }
         case 'EVP1':
             break;
         case 'DRW1':

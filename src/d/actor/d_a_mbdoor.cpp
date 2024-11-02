@@ -13,6 +13,18 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/actor/d_a_player.h"
 
+enum {
+    ACT_WAIT,
+    ACT_SET_START,
+    ACT_SET_ANGLE,
+    ACT_END,
+    ACT_OPEN,
+    ACT_STOP_OPEN,
+    ACT_SET_GOAL,
+    ACT_SET_GOAL2,
+    ACT_ADJUSTMENT,
+};
+
 /* 00000078-00000084       .text getSwbit__10daMbdoor_cFv */
 u8 daMbdoor_c::getSwbit() {
     return fopAcM_GetParam(this) & 0xFF;
@@ -285,33 +297,33 @@ void daMbdoor_c::demoProc() {
     
     if (dComIfGp_evmng_getIsAddvance(mEvtStaffId)) {
         switch (actIdx) {
-        case 1: // SET_START
+        case ACT_SET_START:
             calcMtx();
             goal = field_0x2c4;
             dComIfGp_evmng_setGoal(&goal);
             break;
-        case 2: // SET_ANGLE
+        case ACT_SET_ANGLE:
             angle = current.angle.y + 0x7FFF;
             player->changeDemoMoveAngle(angle);
             break;
-        case 4: // OPEN
+        case ACT_OPEN:
             fopAcM_seStart(this, JA_SE_OBJ_MJ_GATE_OPEN, 0);
             field_0x2b4 = 0;
             break;
-        case 5: // STOP_OPEN
+        case ACT_STOP_OPEN:
             fopAcM_seStart(this, JA_SE_OBJ_MJ_GATE_BAR_OPEN, 0);
             field_0x2b4 = 0;
             field_0x2b6 = 1;
             break;
-        case 6: // SET_GOAL
+        case ACT_SET_GOAL:
             goal = mGoalPos;
             dComIfGp_evmng_setGoal(&goal);
             break;
-        case 7: // SET_GOAL2
+        case ACT_SET_GOAL2:
             goal = mGoal2Pos;
             dComIfGp_evmng_setGoal(&goal);
             break;
-        case 8: // ADJUSTMENT
+        case ACT_ADJUSTMENT:
             calcMtx();
             mAdjustmentTimer = 0;
             u32* timerP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
@@ -323,9 +335,9 @@ void daMbdoor_c::demoProc() {
     }
     
     switch (actIdx) {
-    case 3: // END
+    case ACT_END:
         break;
-    case 4: // OPEN
+    case ACT_OPEN: {
         if (field_0x2b4 < 250) {
             field_0x2b4 += 50;
         }
@@ -344,12 +356,13 @@ void daMbdoor_c::demoProc() {
         }
         player->setPlayerPosAndAngle(&field_0x2c4, angle);
         break;
-    case 5: // STOP_OPEN
+    }
+    case ACT_STOP_OPEN:
         if (field_0x2b6) {
             if (field_0x2b4 < 400) {
                 field_0x2b4 += 40;
             }
-            temp = field_0x2b0 - field_0x2b4;
+            s32 temp = field_0x2b0 - field_0x2b4;
             if (temp < -0x3F65) {
                 field_0x2b0 = -0x3F65;
                 dComIfGp_evmng_cutEnd(mEvtStaffId);
@@ -363,7 +376,7 @@ void daMbdoor_c::demoProc() {
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
         break;
-    case 8: // ADJUSTMENT
+    case ACT_ADJUSTMENT:
         angle = player->shape_angle.y;
         cLib_addCalcAngleS2(&angle, current.angle.y + 0x7FFF, 10, 0x800);
         goal = player->current.pos;

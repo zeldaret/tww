@@ -282,6 +282,8 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
                     OSReport(" Invlid Data : CPU Pipeline process GX_INDEX16 Data Only\n");
                 }
                 break;
+            default:
+                break;
             }
 
             vtxSize += size[desc->type];

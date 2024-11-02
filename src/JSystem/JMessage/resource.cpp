@@ -120,13 +120,14 @@ bool JMessage::TParse::parseBlock_next(const void** ppData, u32* pOutSize, u32 f
     case 'INF1':
         mResource->setData_block_info(pHeader);
         break;
-    case 'DAT1':
+    case 'DAT1': {
         mResource->setData_block_messageData((char*)&pHeader[1]);
         TResource* res = mResourceContainer->Get_groupID(mResource->mInfo.get_groupID());
         if (res != mResource && !!(flag & 0x80)) {
             mResourceContainer->Erase_destroy(res);
         }
         break;
+    }
     case 'STR1':
         mResource->setData_block_stringAttribute((char*)&pHeader[1]);
         break;

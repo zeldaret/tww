@@ -107,6 +107,8 @@ void TAdaptor_camera::adaptor_do_PARENT(JStudio::data::TEOperationData operation
     case JStudio::data::TEOD_Unknown_18:
         mF0 = (JStage::TObject*)mSystem->JSGFindObject((const char*)p2, JStage::TOBJ_ACTOR_UNK);
         break;
+    default:
+        break;
     }
 }
 
@@ -121,13 +123,15 @@ void TAdaptor_camera::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData oper
     case JStudio::data::TEOD_Unknown_19:
         mF4 = *(u32*)p2;
         break;
+    default:
+        break;
     }
 }
 
 /* 80277814-80277870       .text adaptor_do_PARENT_ENABLE__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl */
 void TAdaptor_camera::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData operation, const void* p2, u32 p3) {
     switch (operation) {
-    case JStudio::data::TEOD_Unknown_02:
+    case JStudio::data::TEOD_Unknown_02: {
         JStage::TObject* parent = NULL;
         u32 idx                 = -1;
         if (*(u32*)p2 != 0) {
@@ -135,6 +139,9 @@ void TAdaptor_camera::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData op
             idx    = mF4;
         }
         mObject->JSGSetParent(parent, idx);
+        break;
+    }
+    default:
         break;
     }
 }

@@ -35,7 +35,7 @@ typedef unsigned int uint;
     (((u32)ptr[offset] << 24) | ((u32)ptr[offset + 1] << 16) | ((u32)ptr[offset + 2] << 8) |       \
      (u32)ptr[offset + 3]);
 
-#include "stddef.h"
+#include "stddef.h" // IWYU pragma: export
 
 #define INT32_MAX (0x7fffffff)
 #define UINT32_MAX (0xffffffff)

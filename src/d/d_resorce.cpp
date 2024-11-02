@@ -11,7 +11,6 @@
 void daPy_py_c::setPlayerPosAndAngle(cXyz*, s16) { }
 
 #include "d/d_resorce.h"
-#include "d/d_bg_s.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_printf.h"
 #include "m_Do/m_Do_ext.h"
@@ -25,7 +24,6 @@ void daPy_py_c::setPlayerPosAndAngle(cXyz*, s16) { }
 #include "JSystem/JKernel/JKRFileFinder.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "JSystem/JUtility/JUTTexture.h"
 #include "stdio.h"
 #include "string.h"
 #include "dolphin/os/OSCache.h"

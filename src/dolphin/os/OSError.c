@@ -12,11 +12,11 @@ extern volatile u32 __OSLastInterruptSrr0;
 extern volatile s16 __OSLastInterrupt;
 extern volatile OSTime __OSLastInterruptTime;
 
-extern OSErrorHandlerEx __OSErrorTable[16];
-OSErrorHandlerEx __OSErrorTable[16];
+extern OSErrorHandlerEx __OSErrorTable[EXCEPTION_MAX];
+OSErrorHandlerEx __OSErrorTable[EXCEPTION_MAX];
 
 #define FPSCR_ENABLE (FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE)
-extern u32 __OSFpscrEnableBits = FPSCR_ENABLE;
+u32 __OSFpscrEnableBits = FPSCR_ENABLE;
 
 __declspec(weak) void OSReport(const char* msg, ...) {
     va_list marker;

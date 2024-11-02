@@ -280,7 +280,7 @@ void dEvDtStaff_c::specialProcMessage() {
         case 0: // WAIT
             specialProc_WaitStart(staffIdx);
             break;
-        case 1: // CREATE_MSG
+        case 1: { // CREATE_MSG
             l_msgId = fpcM_ERROR_PROCESS_ID_e;
             l_msg = NULL;
             u32* idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "msgNo");
@@ -288,25 +288,28 @@ void dEvDtStaff_c::specialProcMessage() {
             l_msgNo = *idata;
             mWipeDirection = 0;
             break;
+        }
         case 3: // FINISH
         case 5: // END
             JUT_ASSERT(0x1D8, l_msg);
             l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
             break;
-        case 4: // CONTINUE
+        case 4: { // CONTINUE
             JUT_ASSERT(0x1DC, l_msg);
             l_msg->mStatus = fopMsgStts_MSG_CONTINUES_e;
-            idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "msgNo");
+            u32* idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "msgNo");
             JUT_ASSERT(0x1DF, idata);
             l_msgNo = *idata;
             fopMsgM_messageSet(l_msgNo);
             break;
-        case 7: // TELOP_ON
-            idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "tlpNo");
+        }
+        case 7: { // TELOP_ON
+            u32* idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "tlpNo");
             JUT_ASSERT(0x1E5, idata);
             dComIfGp_setStageNameOn(*idata);
             specialProc_WaitStart(staffIdx);
             break;
+        }
         case 8: // TELOP_OFF
             dComIfGp_setStageNameOff();
             break;
@@ -869,15 +872,16 @@ bool dEvDtBase_c::advanceCutLocal(dEvDtStaff_c* staff) {
 
     if (cutP->getNext() != -1) {
         switch (mCutP[cutP->getNext()].startCheck()) {
-        case -1:
+        case -1: {
             u32 flag_id = cutP->getFlagId();
             if (dEvDtFlagCheck(flag_id)) {
                 staff->advanceCut(cutP->getNext());
                 return true;
             }
             break;
+        }
         case 1:
-            flag_id = cutP->getFlagId();
+            u32 flag_id = cutP->getFlagId();
             dEvDtFlagSet(flag_id);
             staff->advanceCut(cutP->getNext());
             return true;
@@ -890,4 +894,3 @@ bool dEvDtBase_c::advanceCutLocal(dEvDtStaff_c* staff) {
         staff->mAdvance = 0;
     return false;
 }
-

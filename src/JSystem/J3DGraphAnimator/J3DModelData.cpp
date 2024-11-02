@@ -154,6 +154,8 @@ bool J3DModelData::isDeformablePositionFormat() const {
             if (vtxAttr->mCompType == GX_F32 && vtxAttr->mCompCnt == GX_POS_XYZ)
                 return true;
             break;
+        default:
+            break;
         }
     }
 

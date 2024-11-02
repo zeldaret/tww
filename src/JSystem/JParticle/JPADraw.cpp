@@ -693,7 +693,7 @@ void JPADraw::setParticleClipBoard() {
     cb.mTexCoordPt[3].y = tilingY;
 
     if (!dc.pbsp->textureIsEmpty() && !dc.pbsp->isEnableTextureAnm())
-        mTexIdx = dc.pTexIdx[dc.pbsp->getTextureIndex()], GX_TEXMAP0;
+        mTexIdx = dc.pTexIdx[dc.pbsp->getTextureIndex()];
 
     cb.mDirTypeFunc = NULL;
     cb.mRotTypeFunc = NULL;

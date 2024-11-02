@@ -4,7 +4,6 @@
 //
 
 #include "JSystem/JStudio/JStudio_JMessage/control.h"
-#include "dolphin/types.h"
 
 namespace JStudio_JMessage {
 

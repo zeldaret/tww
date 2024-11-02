@@ -9,7 +9,6 @@
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "dolphin/gd/GDBase.h"
 #include "dolphin/gd/GDGeometry.h"
-#include "dolphin/os/OS.h"
 #include "dolphin/types.h"
 
 extern void J3DGDSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList *, bool);

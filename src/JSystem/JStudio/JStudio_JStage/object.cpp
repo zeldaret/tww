@@ -21,5 +21,7 @@ void JStudio_JStage::TAdaptor_object_::adaptor_ENABLE_(JStage::TObject* object, 
             object->JSGFDisableFlag(2);
         }
         break;
+    default:
+        break;
     }
 }

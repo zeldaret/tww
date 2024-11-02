@@ -7,8 +7,6 @@
 #include "d/d_save_init.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
-#include "d/d_stage.h"
-#include "d/d_s_play.h"
 #include "d/actor/d_a_npc_sarace.h"
 #include "m_Do/m_Do_audio.h"
 #include "JSystem/JUtility/JUTAssert.h"

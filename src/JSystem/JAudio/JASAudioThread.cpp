@@ -134,7 +134,7 @@ void JASystem::TAudioThread::start(JKRSolidHeap* heap, u32 aramSize, u32 flag) {
     Dvd::resumeThread();
     Kernel::stackInit((u64*)saAudioStack, 0x200);
     if ((flag & 2)) {
-        OSCreateThread(&sAudioThread, audioproc, NULL, &saAudioStack[sizeof(saAudioStack)], sizeof(saAudioStack), sDSPPrio, 1);
+        OSCreateThread(&sAudioThread, (void*)audioproc, NULL, &saAudioStack[sizeof(saAudioStack)], sizeof(saAudioStack), sDSPPrio, 1);
         OSResumeThread(&sAudioThread);
     }
 }

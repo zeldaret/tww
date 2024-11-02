@@ -463,10 +463,11 @@ void TSequenceProcessor::do_systemTagCode_(u16 code, const void* data, u32 size)
     case 2:
     case 3:
         break;
-    case 6:
+    case 6: {
         u32 target = JGadget::binary::TParseValue<u32, JGadget::binary::TParseValue_endian_big_>::parse(data);
         on_jump_register(process_jump_, target);
         break;
+    }
     case 4:
     case 5:
     default:

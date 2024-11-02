@@ -544,7 +544,7 @@ void mDoGaC_agbCom_c::mDoGaC_GbaWrite() {
             field_0x114 = BigLittleChange(temp_r31->field_0x8);
             field_0x8 = 2;
             break;
-        case 2:
+        case 2: {
             u8 temp_r3_2 = field_0x110[temp_r31->field_0x8].field_0x4;
             if (temp_r3_2 == 2) {
                 field_0x110[temp_r31->field_0x8].field_0x4 = 3;
@@ -565,6 +565,7 @@ void mDoGaC_agbCom_c::mDoGaC_GbaWrite() {
                 field_0x8 = 0;
             }
             break;
+        }
         case 3:
             field_0x114 = BigLittleChange(temp_r31->field_0x4);
             temp_r31->field_0xc = 0;
@@ -626,13 +627,14 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultRead(mDoGaC_getPortNo(), sp8) && field_0x4 == 0) {
         switch (field_0x7) {
-        case 0:
+        case 0: {
             u32 temp_r0 = BigLittleChange(field_0x118);
             if (temp_r0 == 0xFEFEFEFE) {
                 field_0x7 = 1;
             }
             break;
-        case 1:
+        }
+        case 1: {
             u32 temp_r0_2 = BigLittleChange(field_0x118);
             data_type = temp_r0_2;
             if ((temp_r0_2 & 0xFF) < 0x10) {
@@ -643,7 +645,8 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
             }
             field_0x7 = 2;
             break;
-        case 2:
+        }
+        case 2: {
             u32 temp_r0_3 = BigLittleChange(field_0x118);
             field_0x110[data_type].field_0x4 = temp_r0_3;
             if (temp_r0_3 == 7) {
@@ -655,7 +658,8 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
                 }
             }
             break;
-        case 3:
+        }
+        case 3: {
             u32 temp_r0_4 = (BigLittleChange(field_0x118) + 3) & ~3;
             end_p = (u32*)((u8*)field_0x110[data_type].field_0x0 + temp_r0_4);
             data_sum = 0;
@@ -665,6 +669,7 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
                 field_0x7 = 5;
             }
             break;
+        }
         case 4:
             check_sum = BigLittleChange(field_0x118);
             if (data_sum == check_sum) {
@@ -676,10 +681,11 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
             }
             field_0x7 = 0;
             break;
-        case 5:
+        case 5: {
             u32 temp = field_0x118;
             *recv_p = temp;
             data_sum += BigLittleChange(temp);
+        }
         case 6:
             recv_p++;
             if (recv_p >= end_p) {

@@ -4,11 +4,13 @@
  */
 
 #include "d/actor/d_a_pw.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "d/d_com_inf_game.h"
 #include "d/res/res_pw.h"
-#include "d/actor/d_a_player_main.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_procname.h"
-#include "f_op/f_op_camera_mng.h"
+#include "f_op/f_op_camera.h"
 #include "f_pc/f_pc_manager.h"
 
 enum daPW__BehaviorType {
