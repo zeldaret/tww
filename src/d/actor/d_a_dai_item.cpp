@@ -4,14 +4,18 @@
 //
 
 #include "d/actor/d_a_dai_item.h"
+#include "SSystem/SComponent/c_math.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/res/res_fdai.h"
 #include "d/res/res_cloth.h"
 
+#include "weak_bss_3569.h" // IWYU pragma: keep
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
+
 const char daStandItem_c::m_arcname[] = "Fdai";
-const s16 daStandItem_c::m_bmdidx[12] = {
+const s16 daStandItem_c::m_bmdidx[] = {
     FDAI_BDL_FOBJ00, /* FLOWER_1 */
     FDAI_BDL_FOBJ01, /* FLOWER_2 */
     FDAI_BDL_FOBJ02, /* FLOWER_3 */
@@ -25,7 +29,7 @@ const s16 daStandItem_c::m_bmdidx[12] = {
     FDAI_BDL_FOBJ10, /* POSTMAN_STATUE */
     FDAI_BDL_FOBJ11, /* PRESIDENT_STATUE */
 };
-const s16 daStandItem_c::m_bckidx[12] = {
+const s16 daStandItem_c::m_bckidx[] = {
     FDAI_BCK_FOBJ00,  /* FLOWER_1 */
     FDAI_BCK_FOBJ01,  /* FLOWER_2 */
     FDAI_BCK_FOBJ02,  /* FLOWER_3 */
@@ -39,7 +43,7 @@ const s16 daStandItem_c::m_bckidx[12] = {
     FDAI_BCK_FOBJ10,  /* POSTMAN_STATUE */
     FDAI_BCK_FOBJ11,  /* PRESIDENT_STATUE */
 };
-const u16 daStandItem_c::m_heapsize[12] = {
+const u16 daStandItem_c::m_heapsize[] = {
     0x2000, /* FLOWER_1 */
     0x2000, /* FLOWER_2 */
     0x2000, /* FLOWER_3 */
@@ -53,7 +57,7 @@ const u16 daStandItem_c::m_heapsize[12] = {
     0x2000, /* POSTMAN_STATUE */
     0x2000, /* PRESIDENT_STATUE */
 };
-const u16 daStandItem_c::m_anim_min_time[12] = {
+const s16 daStandItem_c::m_anim_min_time[] = {
     50, /* FLOWER_1 */
     50, /* FLOWER_2 */
     50, /* FLOWER_3 */
@@ -67,7 +71,7 @@ const u16 daStandItem_c::m_anim_min_time[12] = {
     50, /* POSTMAN_STATUE */
     50, /* PRESIDENT_STATUE */
 };
-const u16 daStandItem_c::m_anim_max_time[12] = {
+const s16 daStandItem_c::m_anim_max_time[] = {
     100, /* FLOWER_1 */
     100, /* FLOWER_2 */
     100, /* FLOWER_3 */
@@ -81,7 +85,7 @@ const u16 daStandItem_c::m_anim_max_time[12] = {
     100, /* POSTMAN_STATUE */
     100, /* PRESIDENT_STATUE */
 };
-const u16 daStandItem_c::m_stop_min_time[12] = {
+const s16 daStandItem_c::m_stop_min_time[] = {
     50,  /* FLOWER_1 */
     50,  /* FLOWER_2 */
     50,  /* FLOWER_3 */
@@ -95,7 +99,7 @@ const u16 daStandItem_c::m_stop_min_time[12] = {
     50,  /* POSTMAN_STATUE */
     0,   /* PRESIDENT_STATUE */
 };
-const u16 daStandItem_c::m_stop_max_time[12] = {
+const s16 daStandItem_c::m_stop_max_time[] = {
     100,  /* FLOWER_1 */
     100,  /* FLOWER_2 */
     100,  /* FLOWER_3 */
@@ -108,30 +112,6 @@ const u16 daStandItem_c::m_stop_max_time[12] = {
     1000, /* WATER_STATUE */
     100,  /* POSTMAN_STATUE */
     0,    /* PRESIDENT_STATUE */
-};
-
-static cXyz Vobj03_pos0[] = {};
-static cXyz Vobj03_pos1[] = {};
-
-static cXyz Vobj04_pos0[] = {};
-static cXyz Vobj04_pos1[] = {};
-
-static cXyz Vobj05_pos0[] = {};
-static cXyz Vobj05_pos1[] = {};
-
-static cXyz Vobj07_0_pos0[] = {};
-static cXyz Vobj07_0_pos1[] = {};
-
-static cXyz* Vobj03_pos[] = { Vobj03_pos0, Vobj03_pos1, };
-static cXyz* Vobj04_pos[] = { Vobj04_pos0, Vobj04_pos1, };
-static cXyz* Vobj05_pos[] = { Vobj05_pos0, Vobj05_pos1, };
-static cXyz* Vobj07_0_pos[] = { Vobj07_0_pos0, Vobj07_0_pos1, };
-
-static cXyz** VobjFlagPosTbl[4] = {
-    Vobj03_pos,
-    Vobj04_pos,
-    Vobj05_pos,
-    Vobj07_0_pos,
 };
 
 /* 800E3638-800E36C8       .text convItemNo__FUc */
@@ -152,6 +132,60 @@ static u32 convItemNo(u8 itemNo) {
     default: return 0;
     }
 }
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 0.0f,
+        /* Height */ 0.0f,
+    },
+};
+
+static cXyz Vobj03_pos0[25];
+static cXyz Vobj03_pos1[25];
+
+static cXyz Vobj04_pos0[25];
+static cXyz Vobj04_pos1[25];
+
+static cXyz Vobj05_pos0[25];
+static cXyz Vobj05_pos1[25];
+
+static cXyz Vobj07_0_pos0[25];
+static cXyz Vobj07_0_pos1[25];
+
+static cXyz* Vobj03_pos[] = { Vobj03_pos0, Vobj03_pos1, };
+static cXyz* Vobj04_pos[] = { Vobj04_pos0, Vobj04_pos1, };
+static cXyz* Vobj05_pos[] = { Vobj05_pos0, Vobj05_pos1, };
+static cXyz* Vobj07_0_pos[] = { Vobj07_0_pos0, Vobj07_0_pos1, };
+
+static cXyz** VobjFlagPosTbl[] = {
+    Vobj03_pos,
+    Vobj04_pos,
+    Vobj05_pos,
+    Vobj07_0_pos,
+};
 
 /* 800E36C8-800E3798       .text _delete__13daStandItem_cFv */
 bool daStandItem_c::_delete() {
@@ -201,7 +235,7 @@ BOOL daStandItem_c::CreateHeap() {
         JUT_ASSERT(0x250, pbck != NULL);
         mpBckAnm = new mDoExt_bckAnm();
 
-        static const u32 playmode[12] = {
+        static const u32 playmode[] = {
             J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_1 */
             J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_2 */
             J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_3 */
@@ -269,7 +303,7 @@ BOOL daStandItem_c::CreateHeap() {
 
 /* 800E3AF8-800E3E94       .text CreateInit__13daStandItem_cFv */
 void daStandItem_c::CreateInit() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -100.0f, -0.0f, -100.0f, 100.0f, 300.0f, 100.0f);
     mAcchCir.SetWall(30.0f, 30.0f);
@@ -285,21 +319,27 @@ void daStandItem_c::CreateInit() {
     set_mtx();
     mpModel->setUserArea(NULL);
 
+    JUTNameTab* jointNameTab = mpModel->getModelData()->getJointName();
+    u16 i;
     switch (mItemNo) {
-    case WATER_STATUE:
+    case WIND_FLAG:
         {
-            for (u32 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
-                if (strcmp(mpModel->getModelData()->getJointName()->getName(i), "tuboko_head") == 0 || strcmp(mpModel->getModelData()->getJointName()->getName(i), "tuboko_hbase") == 0)
+            for (i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+                const char* jointName = jointNameTab->getName(i);
+                if (strcmp("top", jointName) == 0) {
                     mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
+                    break;
+                }
             }
             mpModel->setUserArea((u32)this);
             mpModel->calc();
         }
         break;
-    case WIND_FLAG:
+    case WATER_STATUE:
         {
-            for (u32 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
-                if (strcmp(mpModel->getModelData()->getJointName()->getName(i), "top") == 0)
+            for (i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+                const char* jointName = jointNameTab->getName(i);
+                if (strcmp("tuboko_head", jointName) == 0 || strcmp("tuboko_base", jointName) == 0)
                     mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
             }
             mpModel->setUserArea((u32)this);
@@ -310,10 +350,20 @@ void daStandItem_c::CreateInit() {
 
     m6BC = dKyw_get_wind_pow();
 
+    s16 animMinTime = m_anim_min_time[mItemType];
+    s16 animMaxTime = m_anim_max_time[mItemType];
     s16 stopMinTime = m_stop_min_time[mItemType];
     s16 stopMaxTime = m_stop_max_time[mItemType];
+    s16 r29 = (animMinTime + animMaxTime) / 2;
+    s16 r28 = (animMaxTime - animMinTime) / 2;
+    s16 temp = (stopMaxTime - stopMinTime) / 2;
     mBckPlayTimer = 0;
-    // TODO: timer math
+    f32 temp2 = cM_rndFX(temp);
+    s16 temp3 = (stopMinTime + stopMaxTime) / 2;
+    mBckStopTimer = temp3 + temp2;
+    if (stopMaxTime == 0) {
+        mBckPlayTimer = r29 + cM_rndFX(r28);
+    }
 
     m690 = NULL;
     m694 = NULL;
@@ -456,7 +506,8 @@ bool daStandItem_c::actionFobj06() {
     cXyz zero(0.0f, 0.0f, 0.0f);
     s16 angle = cLib_targetAngleY(&zero, &wind);
     cLib_distanceAngleS(angle, current.angle.y);
-    m6C4 += fabs(windStrength * 1.0f);
+    f32 temp = 1.0f;
+    m6C4 += fabs(windStrength * temp);
     if (m6C4 > 4.0f) {
         m6C4 = 4.0f;
     }
@@ -514,7 +565,7 @@ void daStandItem_c::animTestForOneTime() {
 void daStandItem_c::execAction() {
     /* Nonmatching */
     typedef void (daStandItem_c::*ModeFunc)();
-    static const ModeFunc mode_func_tbl[] = {
+    static const ModeFunc mode_proc[] = {
         &daStandItem_c::mode_carry,
         &daStandItem_c::mode_wait,
         &daStandItem_c::mode_drop,
@@ -526,7 +577,7 @@ void daStandItem_c::execAction() {
     if (mCarry && !carry)
         mode_wait_init();
 
-    (this->*(mode_func_tbl[mMode]))();
+    (this->*(mode_proc[mMode]))();
     mCarry = carry;
 }
 

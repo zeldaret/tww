@@ -37,15 +37,10 @@ struct NpcCameraDatStruct {
     /* 0x0A */ s16 field_0x0A;
 };
 
-static cXyz l_camera_pos[3][2] = {
-    cXyz(-265.0f, 48.0f, -631.0f),
-    cXyz(332.0f, 232.0f, 286.0f),
-
-    cXyz(-50.0f, 202.0f, 137.0f),
-    cXyz(-87.0f, 239.0f, 330.0f),
-
-    cXyz(-216.0f, 205.0f, 5.0f),
-    cXyz(-379.0f, 238.0f, 115.0f),
+static cXyz l_camera_pos[][2] = {
+    {cXyz(-265.0f, 48.0f, -631.0f), cXyz(332.0f, 232.0f, 286.0f)},
+    {cXyz(-50.0f, 202.0f, 137.0f), cXyz(-87.0f, 239.0f, 330.0f)},
+    {cXyz(-216.0f, 205.0f, 5.0f), cXyz(-379.0f, 238.0f, 115.0f)},
 };
 
 #ifdef DEBUG

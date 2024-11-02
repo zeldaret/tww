@@ -126,25 +126,25 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_ac) {
 
 /* 800D88F8-800D8C50       .text createHeap__6daBg_cFv */
 BOOL daBg_c::createHeap() {
-    static char l_modelName[4][13] = {
+    static char l_modelName[][13] = {
         "model.bmd",
         "model1.bmd",
         "model2.bmd",
         "model3.bmd",
     };
-    static char l_modelName2[4][13] = {
+    static char l_modelName2[][13] = {
         "model.bdl",
         "model1.bdl",
         "model2.bdl",
         "model3.bdl",
     };
-    static char l_btkName[4][13] = {
+    static char l_btkName[][13] = {
         "model.btk",
         "model1.btk",
         "model2.btk",
         "model3.btk",
     };
-    static char l_brkName[4][13] = {
+    static char l_brkName[][13] = {
         "model.brk",
         "model1.brk",
         "model2.brk",

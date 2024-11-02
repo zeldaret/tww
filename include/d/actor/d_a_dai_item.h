@@ -52,10 +52,10 @@ public:
     static const s16 m_bmdidx[12];
     static const s16 m_bckidx[12];
     static const u16 m_heapsize[12];
-    static const u16 m_anim_min_time[12];
-    static const u16 m_anim_max_time[12];
-    static const u16 m_stop_min_time[12];
-    static const u16 m_stop_max_time[12];
+    static const s16 m_anim_min_time[12];
+    static const s16 m_anim_max_time[12];
+    static const s16 m_stop_min_time[12];
+    static const s16 m_stop_max_time[12];
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsDai;

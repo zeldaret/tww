@@ -1314,15 +1314,15 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     f32 f30 = C_BG_INVALID_HEIGHT;
     r1_5C.OffWall();
     r1_14.y = actor->current.pos.y + 150.0f;
-    static f32 l_ckOffset[][2] = {
-        -49.0f, -49.0f,
-        49.0f, -49.0f,
-        -49.0f, 49.0f,
-        49.0f, 49.0f,
+    static cXy l_ckOffset[] = {
+        {-49.0f, -49.0f},
+        {49.0f, -49.0f},
+        {-49.0f, 49.0f},
+        {49.0f, 49.0f},
     };
     for (int i = 0; i < 4; i++) {
-        r1_14.x = actor->current.pos.x + l_ckOffset[i][0];
-        r1_14.z = actor->current.pos.z + l_ckOffset[i][1];
+        r1_14.x = actor->current.pos.x + l_ckOffset[i].x;
+        r1_14.z = actor->current.pos.z + l_ckOffset[i].y;
         r1_5C.SetPos(&r1_14);
         f32 groundY = dComIfG_Bgsp()->GroundCross(&r1_5C);
         if (groundY > f30) {
