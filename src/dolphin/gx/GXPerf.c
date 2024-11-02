@@ -15,9 +15,9 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF0_XF_REGRD_CLKS:
     case GX_PERF0_CLIP_RATIO:
     case GX_PERF0_CLOCKS:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0;
         break;
 
     case GX_PERF0_TRIANGLES:
@@ -36,8 +36,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF0_TRIANGLES_0CLR:
     case GX_PERF0_TRIANGLES_1CLR:
     case GX_PERF0_TRIANGLES_2CLR:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x23000000);
+        GFWriteBPCmd(0x23000000);
         break;
 
     case GX_PERF0_QUAD_0CVG:
@@ -47,8 +46,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF0_QUAD_3CVG:
     case GX_PERF0_QUAD_4CVG:
     case GX_PERF0_AVG_QUAD_CNT:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x24000000);
+        GFWriteBPCmd(0x24000000);
         break;
 
     case GX_PERF0_NONE:
@@ -66,8 +64,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF1_TC_CHECK7_8:
     case GX_PERF1_TC_MISS:
     case GX_PERF1_CLOCKS:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x67000000);
+        GFWriteBPCmd(0x67000000);
         break;
 
     case GX_PERF1_VC_ELEMQ_FULL:
@@ -79,9 +76,9 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF1_VC_ALL_STALLS:
     case GX_PERF1_VERTICES:
         FAST_FLAG_SET(__GXData->perfSel, 0, 4, 4);
-        GX_WRITE_U8(8);
-        GX_WRITE_U8(32);
-        GX_WRITE_U32(__GXData->perfSel);
+        GXFIFO.u8 = 8;
+        GXFIFO.u8 = 32;
+        GXFIFO.u32 = __GXData->perfSel;
         break;
 
     case GX_PERF1_FIFO_REQ:
@@ -99,158 +96,135 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
 
     switch (__GXData->perf0) {
     case GX_PERF0_VERTICES:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x273);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x273;
         break;
     case GX_PERF0_CLIP_VTX:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x14A);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x14A;
         break;
     case GX_PERF0_CLIP_CLKS:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x16B);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x16B;
         break;
     case GX_PERF0_XF_WAIT_IN:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x84);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x84;
         break;
     case GX_PERF0_XF_WAIT_OUT:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0xC6);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0xC6;
         break;
     case GX_PERF0_XF_XFRM_CLKS:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x210);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x210;
         break;
     case GX_PERF0_XF_LIT_CLKS:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x252);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x252;
         break;
     case GX_PERF0_XF_BOT_CLKS:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x231);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x231;
         break;
     case GX_PERF0_XF_REGLD_CLKS:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x1AD);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x1AD;
         break;
     case GX_PERF0_XF_REGRD_CLKS:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x1CE);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x1CE;
         break;
     case GX_PERF0_CLOCKS:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x21);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x21;
         break;
     case GX_PERF0_CLIP_RATIO:
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1006);
-        GX_WRITE_U32(0x153);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1006;
+        GXFIFO.u32 = 0x153;
         break;
 
     case GX_PERF0_TRIANGLES:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300AE7F);
+        GFWriteBPCmd(0x2300AE7F);
         break;
     case GX_PERF0_TRIANGLES_CULLED:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x23008E7F);
+        GFWriteBPCmd(0x23008E7F);
         break;
     case GX_PERF0_TRIANGLES_PASSED:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x23009E7F);
+        GFWriteBPCmd(0x23009E7F);
         break;
     case GX_PERF0_TRIANGLES_SCISSORED:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x23001E7F);
+        GFWriteBPCmd(0x23001E7F);
         break;
     case GX_PERF0_TRIANGLES_0TEX:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300AC3F);
+        GFWriteBPCmd(0x2300AC3F);
         break;
     case GX_PERF0_TRIANGLES_1TEX:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300AC7F);
+        GFWriteBPCmd(0x2300AC7F);
         break;
     case GX_PERF0_TRIANGLES_2TEX:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300ACBF);
+        GFWriteBPCmd(0x2300ACBF);
         break;
     case GX_PERF0_TRIANGLES_3TEX:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300ACFF);
+        GFWriteBPCmd(0x2300ACFF);
         break;
     case GX_PERF0_TRIANGLES_4TEX:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300AD3F);
+        GFWriteBPCmd(0x2300AD3F);
         break;
     case GX_PERF0_TRIANGLES_5TEX:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300AD7F);
+        GFWriteBPCmd(0x2300AD7F);
         break;
     case GX_PERF0_TRIANGLES_6TEX:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300ADBF);
+        GFWriteBPCmd(0x2300ADBF);
         break;
     case GX_PERF0_TRIANGLES_7TEX:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300ADFF);
+        GFWriteBPCmd(0x2300ADFF);
         break;
     case GX_PERF0_TRIANGLES_8TEX:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300AE3F);
+        GFWriteBPCmd(0x2300AE3F);
         break;
     case GX_PERF0_TRIANGLES_0CLR:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300A27F);
+        GFWriteBPCmd(0x2300A27F);
         break;
     case GX_PERF0_TRIANGLES_1CLR:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300A67F);
+        GFWriteBPCmd(0x2300A67F);
         break;
     case GX_PERF0_TRIANGLES_2CLR:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2300AA7F);
+        GFWriteBPCmd(0x2300AA7F);
         break;
 
     case GX_PERF0_QUAD_0CVG:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2402C0C6);
+        GFWriteBPCmd(0x2402C0C6);
         break;
     case GX_PERF0_QUAD_NON0CVG:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2402C16B);
+        GFWriteBPCmd(0x2402C16B);
         break;
     case GX_PERF0_QUAD_1CVG:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2402C0E7);
+        GFWriteBPCmd(0x2402C0E7);
         break;
     case GX_PERF0_QUAD_2CVG:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2402C108);
+        GFWriteBPCmd(0x2402C108);
         break;
     case GX_PERF0_QUAD_3CVG:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2402C129);
+        GFWriteBPCmd(0x2402C129);
         break;
     case GX_PERF0_QUAD_4CVG:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2402C14A);
+        GFWriteBPCmd(0x2402C14A);
         break;
     case GX_PERF0_AVG_QUAD_CNT:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x2402C1AD);
+        GFWriteBPCmd(0x2402C1AD);
         break;
 
     case GX_PERF0_NONE:
@@ -261,93 +235,83 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
 
     switch (__GXData->perf1) {
     case GX_PERF1_TEXELS:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x67000042);
+        GFWriteBPCmd(0x67000042);
         break;
     case GX_PERF1_TX_IDLE:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x67000084);
+        GFWriteBPCmd(0x67000084);
         break;
     case GX_PERF1_TX_REGS:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x67000063);
+        GFWriteBPCmd(0x67000063);
         break;
     case GX_PERF1_TX_MEMSTALL:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x67000129);
+        GFWriteBPCmd(0x67000129);
         break;
     case GX_PERF1_TC_MISS:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x67000252);
+        GFWriteBPCmd(0x67000252);
         break;
     case GX_PERF1_CLOCKS:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x67000021);
+        GFWriteBPCmd(0x67000021);
         break;
     case GX_PERF1_TC_CHECK1_2:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x6700014B);
+        GFWriteBPCmd(0x6700014B);
         break;
     case GX_PERF1_TC_CHECK3_4:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x6700018D);
+        GFWriteBPCmd(0x6700018D);
         break;
     case GX_PERF1_TC_CHECK5_6:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x670001CF);
+        GFWriteBPCmd(0x670001CF);
         break;
     case GX_PERF1_TC_CHECK7_8:
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(0x67000211);
+        GFWriteBPCmd(0x67000211);
         break;
 
     case GX_PERF1_VC_ELEMQ_FULL:
         FAST_FLAG_SET(__GXData->perfSel, 2, 4, 4);
-        GX_WRITE_U8(8);
-        GX_WRITE_U8(32);
-        GX_WRITE_U32(__GXData->perfSel);
+        GXFIFO.u8 = 8;
+        GXFIFO.u8 = 32;
+        GXFIFO.u32 = __GXData->perfSel;
         break;
     case GX_PERF1_VC_MISSQ_FULL:
         FAST_FLAG_SET(__GXData->perfSel, 3, 4, 4);
-        GX_WRITE_U8(8);
-        GX_WRITE_U8(32);
-        GX_WRITE_U32(__GXData->perfSel);
+        GXFIFO.u8 = 8;
+        GXFIFO.u8 = 32;
+        GXFIFO.u32 = __GXData->perfSel;
         break;
     case GX_PERF1_VC_MEMREQ_FULL:
         FAST_FLAG_SET(__GXData->perfSel, 4, 4, 4);
-        GX_WRITE_U8(8);
-        GX_WRITE_U8(32);
-        GX_WRITE_U32(__GXData->perfSel);
+        GXFIFO.u8 = 8;
+        GXFIFO.u8 = 32;
+        GXFIFO.u32 = __GXData->perfSel;
         break;
     case GX_PERF1_VC_STATUS7:
         FAST_FLAG_SET(__GXData->perfSel, 5, 4, 4);
-        GX_WRITE_U8(8);
-        GX_WRITE_U8(32);
-        GX_WRITE_U32(__GXData->perfSel);
+        GXFIFO.u8 = 8;
+        GXFIFO.u8 = 32;
+        GXFIFO.u32 = __GXData->perfSel;
         break;
     case GX_PERF1_VC_MISSREP_FULL:
         FAST_FLAG_SET(__GXData->perfSel, 6, 4, 4);
-        GX_WRITE_U8(8);
-        GX_WRITE_U8(32);
-        GX_WRITE_U32(__GXData->perfSel);
+        GXFIFO.u8 = 8;
+        GXFIFO.u8 = 32;
+        GXFIFO.u32 = __GXData->perfSel;
         break;
     case GX_PERF1_VC_STREAMBUF_LOW:
         FAST_FLAG_SET(__GXData->perfSel, 7, 4, 4);
-        GX_WRITE_U8(8);
-        GX_WRITE_U8(32);
-        GX_WRITE_U32(__GXData->perfSel);
+        GXFIFO.u8 = 8;
+        GXFIFO.u8 = 32;
+        GXFIFO.u32 = __GXData->perfSel;
         break;
     case GX_PERF1_VC_ALL_STALLS:
         FAST_FLAG_SET(__GXData->perfSel, 9, 4, 4);
-        GX_WRITE_U8(8);
-        GX_WRITE_U8(32);
-        GX_WRITE_U32(__GXData->perfSel);
+        GXFIFO.u8 = 8;
+        GXFIFO.u8 = 32;
+        GXFIFO.u32 = __GXData->perfSel;
         break;
     case GX_PERF1_VERTICES:
         FAST_FLAG_SET(__GXData->perfSel, 8, 4, 4);
-        GX_WRITE_U8(8);
-        GX_WRITE_U8(32);
-        GX_WRITE_U32(__GXData->perfSel);
+        GXFIFO.u8 = 8;
+        GXFIFO.u8 = 32;
+        GXFIFO.u32 = __GXData->perfSel;
         break;
 
     case GX_PERF1_FIFO_REQ:

@@ -23,7 +23,10 @@ extern "C" {
 #endif
 
 // Pack value into bitfield
-#define GX_BITFIELD_SET(field, pos, size, value) (field) = __rlwimi((field), (value), 31 - (pos) - (size) + 1, (pos), (pos) + (size)-1)
+#define GX_BITFIELD_SET(field, pos, size, value)                                                   \
+    (field) =                                                                                      \
+    (field & ~(((1 << (size)) - 1) << (31 - (pos) - (size) + 1))) |                                \
+    ((int)(value) << (31 - (pos) - (size) + 1))
 #define GX_BITFIELD_TRUNC(field, pos, size, value) (__rlwimi((field), (value), 0, (pos), (pos) + (size)-1))
 
 #define GX_BITGET(field, pos, size)              ((field) >> (31 - (pos) - (size) + 1) & ((1 << (size)) - 1))

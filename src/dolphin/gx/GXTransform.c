@@ -71,7 +71,7 @@ void GXProject(f32 model_x, f32 model_y, f32 model_z, Mtx model_mtx, f32* proj_m
 void __GXSetProjection(void) {
     GX_XF_LOAD_REGS(6, GX_XF_REG_PROJECTIONA);
     WriteProjPS(__GXData->projMtx, (volatile void*)GXFIFO_ADDR);
-    GX_WRITE_U32(__GXData->projType);
+    GXFIFO.u32 = __GXData->projType;
 }
 
 void GXSetProjection(const Mtx44 proj, GXProjectionType type) {
@@ -225,12 +225,12 @@ void __GXSetViewport(void) {
     f = far + __GXData->zOffset;
 
     GX_XF_LOAD_REGS(5, GX_XF_REG_SCALEX);
-    GX_WRITE_F32(a);
-    GX_WRITE_F32(b);
-    GX_WRITE_F32(c);
-    GX_WRITE_F32(d);
-    GX_WRITE_F32(e);
-    GX_WRITE_F32(f);
+    GXFIFO.f32 = a;
+    GXFIFO.f32 = b;
+    GXFIFO.f32 = c;
+    GXFIFO.f32 = d;
+    GXFIFO.f32 = e;
+    GXFIFO.f32 = f;
 }
 
 void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearZ, f32 farZ) {

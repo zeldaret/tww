@@ -20,9 +20,9 @@ GXTexRegion* __GXDefaultTexRegionCallback(const GXTexObj* obj, GXTexMapID id) {
 
     switch (format) {
     case GX_TF_RGBA8:
-        if (isMipMap) {
-            return &__GXData->TexRegions2[id];
-        }
+        // if (isMipMap) {
+        //     return &__GXData->TexRegions2[id];
+        // }
         return &__GXData->TexRegions1[id];
 
     case GX_TF_C4:
@@ -63,68 +63,15 @@ u16* __cpReg;
 /* ############################################################################################## */
 u32* __piReg;
 
-BOOL __GXShutdown(BOOL final) {
-    u32 val;
-    u32 newPeCount;
-    OSTime newTime;
-
-    if (!final) {
-        if (!calledOnce) {
-            peCount = GXReadMEMReg(0x28, 0x27);
-            time = OSGetTime();
-            calledOnce = 1;
-            return FALSE;
-        }
-
-        newTime = OSGetTime();
-        newPeCount = GXReadMEMReg(0x28, 0x27);
-
-        if (newTime - time < 10) {
-            return FALSE;
-        }
-
-        if (newPeCount != peCount) {
-            peCount = newPeCount;
-            time = newTime;
-            return FALSE;
-        }
-
-    } else {
-        GXSetBreakPtCallback(NULL);
-        GXSetDrawSyncCallback(NULL);
-        GXSetDrawDoneCallback(NULL);
-
-        GX_WRITE_U32(0);
-        GX_WRITE_U32(0);
-        GX_WRITE_U32(0);
-        GX_WRITE_U32(0);
-        GX_WRITE_U32(0);
-        GX_WRITE_U32(0);
-        GX_WRITE_U32(0);
-        GX_WRITE_U32(0);
-
-        PPCSync();
-
-        GX_SET_CP_REG(1, 0);
-        GX_SET_CP_REG(2, 3);
-
-        __GXData->abtWaitPECopy = GX_TRUE;
-
-        __GXAbort();
-    }
-
-    return TRUE;
-}
-
-void __GXInitRevisionBits(void) {
+inline void __GXInitRevisionBits(void) {
     u32 i;
     for (i = 0; i < 8; i++) {
         FAST_FLAG_SET(__GXData->vatA[i], 1, 30, 33);
         FAST_FLAG_SET(__GXData->vatB[i], 1, 31, 33);
 
-        GX_WRITE_U8(0x8);
-        GX_WRITE_U8(i | 0x80);
-        GX_WRITE_U32(__GXData->vatB[i]);
+        GXFIFO.u8 = 0x8;
+        GXFIFO.u8 = i | 0x80;
+        GXFIFO.u32 = __GXData->vatB[i];
     }
 
     {
@@ -137,14 +84,14 @@ void __GXInitRevisionBits(void) {
         FAST_FLAG_SET(reg1, 1, 3, 1);
         FAST_FLAG_SET(reg1, 1, 4, 1);
         FAST_FLAG_SET(reg1, 1, 5, 1);
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1000);
-        GX_WRITE_U32(reg1);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1000;
+        GXFIFO.u32 = reg1;
 
         FAST_FLAG_SET(reg2, 1, 0, 1);
-        GX_WRITE_U8(0x10);
-        GX_WRITE_U32(0x1012);
-        GX_WRITE_U32(reg2);
+        GXFIFO.u8 = 0x10;
+        GXFIFO.u32 = 0x1012;
+        GXFIFO.u32 = reg2;
     }
 
     {
@@ -154,8 +101,7 @@ void __GXInitRevisionBits(void) {
         FAST_FLAG_SET(reg, 1, 2, 1);
         FAST_FLAG_SET(reg, 1, 3, 1);
         FAST_FLAG_SET(reg, 0x58, 24, 8);
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(reg);
+        GFWriteBPCmd(reg);
     }
 }
 
@@ -190,8 +136,6 @@ static u32 GXTexRegionAddrTable[] = {
     0x80000, 0x10000, 0xA0000, 0x30000, 0x80000, 0x50000, 0xA0000, 0x70000,
 };
 
-static OSResetFunctionInfo GXResetFuncInfo = {__GXShutdown, OS_RESET_PRIO_GX};
-
 static void EnableWriteGatherPipe() {
     u32 hid2;  // r31
     hid2 = PPCMfhid2();
@@ -207,7 +151,6 @@ GXFifoObj* GXInit(void* base, u32 size) {
     OSRegisterVersion(__GXVersion);
     __GXData->inDispList = GX_FALSE;
     __GXData->dlSaveContext = GX_TRUE;
-    __GXData->abtWaitPECopy = GX_TRUE;
 
     __GXData->tcsManEnab = 0;
     __GXData->tevTcEnab = 0;
@@ -226,7 +169,7 @@ GXFifoObj* GXInit(void* base, u32 size) {
     GXSetGPFifo(&FifoObj);
 
     if (!resetFuncRegistered) {
-        OSRegisterResetFunction(&GXResetFuncInfo);
+        // OSRegisterResetFunction(&GXResetFuncInfo);
         resetFuncRegistered = 1;
     }
 
@@ -292,14 +235,12 @@ GXFifoObj* GXInit(void* base, u32 size) {
 
         val1 = (val2 / 2048) | 0x69000400;
 
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(val1);
+        GFWriteBPCmd(val1);
 
         __GXFlushTextureState();
 
         val1 = (val2 / 4224) | 0x46000200;
-        GX_WRITE_U8(0x61);
-        GX_WRITE_U32(val1);
+        GFWriteBPCmd(val1);
     }
 
     __GXInitRevisionBits();
@@ -309,8 +250,8 @@ GXFifoObj* GXInit(void* base, u32 size) {
                              GX_TEXCACHE_32K, GXTexRegionAddrTable[i + 8], GX_TEXCACHE_32K);
         GXInitTexCacheRegion(&__GXData->TexRegions1[i], GX_FALSE, GXTexRegionAddrTable[i + 16],
                              GX_TEXCACHE_32K, GXTexRegionAddrTable[i + 24], GX_TEXCACHE_32K);
-        GXInitTexCacheRegion(&__GXData->TexRegions2[i], GX_TRUE, GXTexRegionAddrTable[i + 32],
-                             GX_TEXCACHE_32K, GXTexRegionAddrTable[i + 40], GX_TEXCACHE_32K);
+        // GXInitTexCacheRegion(&__GXData->TexRegions2[i], GX_TRUE, GXTexRegionAddrTable[i + 32],
+        //                      GX_TEXCACHE_32K, GXTexRegionAddrTable[i + 40], GX_TEXCACHE_32K);
     }
 
     for (i = 0; i < GX_MAX_TLUT; i++) {
@@ -325,22 +266,19 @@ GXFifoObj* GXInit(void* base, u32 size) {
 
     FAST_FLAG_SET(__GXData->perfSel, 0, 4, 4);
 
-    GX_WRITE_U8(0x8);
-    GX_WRITE_U8(0x20);
-    GX_WRITE_U32(__GXData->perfSel);
+    GXFIFO.u8 = 0x8;
+    GXFIFO.u8 = 0x20;
+    GXFIFO.u32 = __GXData->perfSel;
 
-    GX_WRITE_U8(0x10);
-    GX_WRITE_U32(0x1006);
-    GX_WRITE_U32(0);
+    GXFIFO.u8 = 0x10;
+    GXFIFO.u32 = 0x1006;
+    GXFIFO.u32 = 0;
 
-    GX_WRITE_U8(0x61);
-    GX_WRITE_U32(0x23000000);
+    GFWriteBPCmd(0x23000000);
 
-    GX_WRITE_U8(0x61);
-    GX_WRITE_U32(0x24000000);
+    GFWriteBPCmd(0x24000000);
 
-    GX_WRITE_U8(0x61);
-    GX_WRITE_U32(0x67000000);
+    GFWriteBPCmd(0x67000000);
 
     __GXSetIndirectMask(0);
     __GXSetTmemConfig(2);

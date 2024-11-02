@@ -80,52 +80,52 @@ typedef struct _GXData {
 
     // Texture regions
     /* 0x208 */ GXTexRegion TexRegions0[GX_MAX_TEXMAP];
-    /* 0x288 */ GXTexRegion TexRegions1[GX_MAX_TEXMAP];
-    /* 0x308 */ GXTexRegion TexRegions2[GX_MAX_TEXMAP];
+    /* 0x288 */ GXTexRegion TexRegions1[4];
+    /* 0x2C8 */ u32 m2C8;
+    /* 0x2C8 */ u32 m2CC;
 
     // Texture lookup table regions
-    /* 0x388 */ GXTlutRegion TlutRegions[GX_MAX_TLUT_ALL];
-    /* 0x4C8 */ GXTexRegionCallback texRegionCallback;
-    /* 0x4CC */ GXTlutRegionCallback tlutRegionCallback;
+    /* 0x2D0 */ GXTlutRegion TlutRegions[GX_MAX_TLUT_ALL];
+    /* 0x410 */ GXTexRegionCallback texRegionCallback;
+    /* 0x414 */ GXTlutRegionCallback tlutRegionCallback;
 
     // Command processor vars
-    /* 0x4D0 */ GXAttrType nrmType;
-    /* 0x4D4 */ GXBool hasNrms;
-    /* 0x4D5 */ GXBool hasBiNrms;
-    /* 0x4D8 */ u32 projType;
-    /* 0x4DC */ f32 projMtx[6];
+    /* 0x418 */ GXAttrType nrmType;
+    /* 0x41C */ GXBool hasNrms;
+    /* 0x41D */ GXBool hasBiNrms;
+    /* 0x420 */ u32 projType;
+    /* 0x424 */ f32 projMtx[6];
 
     // Viewport parms
-    /* 0x4F4 */ f32 vpLeft;
-    /* 0x4F8 */ f32 vpTop;
-    /* 0x4FC */ f32 vpWd;
-    /* 0x500 */ f32 vpHt;
-    /* 0x504 */ f32 vpNearz;
-    /* 0x508 */ f32 vpFarz;
-    /* 0x50C */ f32 zOffset;
-    /* 0x510 */ f32 zScale;
+    /* 0x43C */ f32 vpLeft;
+    /* 0x440 */ f32 vpTop;
+    /* 0x444 */ f32 vpWd;
+    /* 0x448 */ f32 vpHt;
+    /* 0x44C */ f32 vpNearz;
+    /* 0x450 */ f32 vpFarz;
+    /* 0x454 */ f32 zOffset;
+    /* 0x458 */ f32 zScale;
 
     // Texture regs
-    /* 0x514 */ u32 tImage0[8];
-    /* 0x534 */ u32 tMode0[8];
-    /* 0x554 */ u32 texmapId[16];
-    /* 0x594 */ u32 tcsManEnab;
-    /* 0x598 */ u32 tevTcEnab;
+    /* 0x45C */ u32 tImage0[8];
+    /* 0x47C */ u32 tMode0[8];
+    /* 0x49C */ u32 texmapId[16];
+    /* 0x4DC */ u32 tcsManEnab;
+    /* 0x4E0 */ u32 tevTcEnab;
 
     // Performance metrics
-    /* 0x59C */ GXPerf0 perf0;
-    /* 0x5A0 */ GXPerf1 perf1;
-    /* 0x5A4 */ u32 perfSel;
+    /* 0x4E4 */ GXPerf0 perf0;
+    /* 0x4E8 */ GXPerf1 perf1;
+    /* 0x4EC */ u32 perfSel;
 
     // Flags
-    /* 0x5A8 */ GXBool inDispList;
-    /* 0x5A9 */ GXBool dlSaveContext;
-    /* 0x5AA */ GXBool abtWaitPECopy;
-    /* 0x5AB */ u8 dirtyVAT;
-    /* 0x5AC */ u32 dirtyState;
-} GXData;  // Size: 0x5B0
+    /* 0x4F0 */ GXBool inDispList;
+    /* 0x4F1 */ GXBool dlSaveContext;
+    /* 0x4F2 */ u8 dirtyVAT;
+    /* 0x4F4 */ u32 dirtyState;
+} GXData;  // Size: 0x4F8
 
-STATIC_ASSERT(sizeof(GXData) == 0x5B0);
+STATIC_ASSERT(sizeof(GXData) == 0x4F8);
 
 extern GXData* const __GXData;
 

@@ -129,7 +129,7 @@ void GXInitTexObj(GXTexObj* obj, void* imagePtr, u16 width, u16 height, GXTexFmt
 
         maxDimSize = width > height ? 31 - __cntlzw(width) : 31 - __cntlzw(height);
 
-        GX_SET_REG(internal->texture_lod, (maxDimSize) * 16.f, 16, 23);
+        GX_SET_REG(internal->texture_lod, (u8)((maxDimSize) * 16.f), 16, 23);
     } else {
         GX_SET_REG(internal->texture_filter, 4, 24, 26);
     }
@@ -223,7 +223,7 @@ void GXInitTexObjLOD(GXTexObj* obj, GXTexFilter minFilter, GXTexFilter maxFilter
         lodBias = 3.99f;
     }
 
-    GX_SET_REG(internal->texture_filter, lodBias * 32.0f, 15, 22);
+    GX_SET_REG(internal->texture_filter, (u8)(lodBias * 32.0f), 15, 22);
     GX_SET_REG(internal->texture_filter, maxFilter == 1 ? 1 : 0, 27, 27);
     GX_SET_REG(internal->texture_filter, GX2HWFiltConv[minFilter], 24, 26);
     GX_SET_REG(internal->texture_filter, doEdgeLOD ? 0 : 1, 23, 23);
@@ -268,10 +268,6 @@ GXTexWrapMode GXGetTexObjWrapS(GXTexObj* obj) {
 
 GXTexWrapMode GXGetTexObjWrapT(GXTexObj* obj) {
     return (obj->texture_filter & 0xc) >> 2;
-}
-
-GXBool GXGetTexObjMipMap(const GXTexObj* obj) {
-    return (obj->texture_flags & 1) == 1;
 }
 
 u32 GXGetTexObjTlut(GXTexObj* obj) {
@@ -511,31 +507,6 @@ void __GXSetSUTexRegs(void) {
 
 void __GXSetTmemConfig(u32 config) {
     switch (config) {
-    case 2:
-        GX_BP_LOAD_REG(0x8c0d8000);
-        GX_BP_LOAD_REG(0x900dc000);
-
-        GX_BP_LOAD_REG(0x8d0d8800);
-        GX_BP_LOAD_REG(0x910dc800);
-
-        GX_BP_LOAD_REG(0x8e0d9000);
-        GX_BP_LOAD_REG(0x920dd000);
-
-        GX_BP_LOAD_REG(0x8f0d9800);
-        GX_BP_LOAD_REG(0x930dd800);
-
-        GX_BP_LOAD_REG(0xac0da000);
-        GX_BP_LOAD_REG(0xb00dc400);
-
-        GX_BP_LOAD_REG(0xad0da800);
-        GX_BP_LOAD_REG(0xb10dcc00);
-
-        GX_BP_LOAD_REG(0xae0db000);
-        GX_BP_LOAD_REG(0xb20dd400);
-
-        GX_BP_LOAD_REG(0xaf0db800);
-        GX_BP_LOAD_REG(0xb30ddc00);
-        break;
     case 1:
         GX_BP_LOAD_REG(0x8c0d8000);
         GX_BP_LOAD_REG(0x900dc000);

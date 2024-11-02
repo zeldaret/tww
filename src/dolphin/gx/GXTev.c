@@ -50,16 +50,14 @@ void GXSetTevOp(GXTevStageID stage, GXTevMode mode) {
     tevReg = __GXData->tevc[stage];
     tevReg = (*color & ~0xFF000000) | (tevReg & 0xFF000000);
 
-    GX_WRITE_U8(0x61);
-    GX_WRITE_U32(tevReg);
+    GFWriteBPCmd(tevReg);
 
     __GXData->tevc[stage] = tevReg;
 
     tevReg = __GXData->teva[stage];
     tevReg = (*alpha & ~0xFF00000F) | (tevReg & 0xFF00000F);
 
-    GX_WRITE_U8(0x61);
-    GX_WRITE_U32(tevReg);
+    GFWriteBPCmd(tevReg);
 
     __GXData->teva[stage] = tevReg;
 
@@ -77,8 +75,7 @@ void GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTev
     FAST_FLAG_SET(tevReg, c, 4, 4);
     FAST_FLAG_SET(tevReg, d, 0, 4);
 
-    GX_WRITE_U8(0x61);
-    GX_WRITE_U32(tevReg);
+    GFWriteBPCmd(tevReg);
 
     __GXData->tevc[stage] = tevReg;
     __GXData->bpSentNot = GX_FALSE;
@@ -95,8 +92,7 @@ void GXSetTevAlphaIn(GXTevStageID stage, GXTevAlphaArg a, GXTevAlphaArg b, GXTev
     FAST_FLAG_SET(tevReg, c, 7, 3);
     FAST_FLAG_SET(tevReg, d, 4, 3);
 
-    GX_WRITE_U8(0x61);
-    GX_WRITE_U32(tevReg);
+    GFWriteBPCmd(tevReg);
 
     __GXData->teva[stage] = tevReg;
     __GXData->bpSentNot = GX_FALSE;
@@ -120,8 +116,7 @@ void GXSetTevColorOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale 
     FAST_FLAG_SET(tevReg, doClamp, 19, 1);
     FAST_FLAG_SET(tevReg, outReg, 22, 2);
 
-    GX_WRITE_U8(0x61);
-    GX_WRITE_U32(tevReg);
+    GFWriteBPCmd(tevReg);
     __GXData->tevc[stage] = tevReg;
     __GXData->bpSentNot = GX_FALSE;
 }
@@ -144,8 +139,7 @@ void GXSetTevAlphaOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale 
     FAST_FLAG_SET(tevReg, doClamp, 19, 1);
     FAST_FLAG_SET(tevReg, outReg, 22, 2);
 
-    GX_WRITE_U8(0x61);
-    GX_WRITE_U32(tevReg);
+    GFWriteBPCmd(tevReg);
     __GXData->teva[stage] = tevReg;
     __GXData->bpSentNot = GX_FALSE;
 }

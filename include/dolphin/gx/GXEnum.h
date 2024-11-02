@@ -1773,7 +1773,6 @@ typedef enum _GXMiscToken {
     GX_MT_NULL = 0,
     GX_MT_XF_FLUSH = 1,
     GX_MT_DL_SAVE_CONTEXT = 2,
-    GX_MT_ABORT_WAIT_COPYOUT = 3,
 } GXMiscToken;
 
 // Transform memory types.
