@@ -825,6 +825,21 @@ modules:
 - object: files/rels/d_a_bwdg.rel
   splits: config/GZLJ01/rels/d_a_bwdg/splits.txt
   symbols: config/GZLJ01/rels/d_a_bwdg/symbols.txt
+  extract:
+  - symbol: l_B_sand2TEX
+    binary: assets/l_B_sand2TEX.bin
+    header: assets/l_B_sand2TEX.h
+  - symbol: l_texCoord
+    binary: assets/l_texCoord.bin
+    header: assets/l_texCoord.h
+  - symbol: l_Hsand1DL
+    binary: assets/l_Hsand1DL.bin
+    header: assets/l_Hsand1DL.h
+  - symbol: l_matDL
+    binary: assets/l_matDL.bin
+    header: assets/l_matDL.h
+    header_type: none
+    custom_type: matDL
 
 - object: files/rels/d_a_bwds.rel
   splits: config/GZLJ01/rels/d_a_bwds/splits.txt
@@ -1554,6 +1569,19 @@ modules:
 - object: files/rels/d_a_sail.rel
   splits: config/GZLJ01/rels/d_a_sail/splits.txt
   symbols: config/GZLJ01/rels/d_a_sail/symbols.txt
+  extract:
+  - symbol: l_sail_DL
+    binary: assets/l_sail_DL.bin
+    header: assets/l_sail_DL.h
+  - symbol: l_sail_matDL
+    binary: assets/l_sail_matDL.bin
+    header: assets/l_sail_matDL.h
+  - symbol: l_Txa_kizoku_mastTEX
+    binary: assets/l_Txa_kizoku_mastTEX.bin
+    header: assets/l_Txa_kizoku_mastTEX.h
+  - symbol: l_AmastDL
+    binary: assets/l_AmastDL.bin
+    header: assets/l_AmastDL.h
 
 - object: files/rels/d_a_salvage_tbox.rel
   splits: config/GZLJ01/rels/d_a_salvage_tbox/splits.txt
@@ -1827,3 +1855,56 @@ extract:
   header: assets/l_matDL__d_hookshot.h
   header_type: none
   custom_type: matDL
+
+- symbol: l_YfloorDL
+  binary: assets/l_YfloorDL.bin
+  header: assets/l_YfloorDL.h
+- symbol: l_YfloorMatDL
+  binary: assets/l_YfloorMatDL.bin
+  header: assets/l_YfloorMatDL.h
+- symbol: l_YballDL
+  binary: assets/l_YballDL.bin
+  header: assets/l_YballDL.h
+- symbol: l_YballMatDL
+  binary: assets/l_YballMatDL.bin
+  header: assets/l_YballMatDL.h
+
+- symbol: l_K_kusa_00TEX
+  binary: assets/l_K_kusa_00TEX.bin
+  header: assets/l_K_kusa_00TEX.h
+- symbol: l_Vmori_00DL
+  binary: assets/l_Vmori_00DL.bin
+  header: assets/l_Vmori_00DL.h
+- symbol: l_Vmori_01DL
+  binary: assets/l_Vmori_01DL.bin
+  header: assets/l_Vmori_01DL.h
+- symbol: l_Vmori_matDL
+  binary: assets/l_Vmori_matDL.bin
+  header: assets/l_Vmori_matDL.h
+  header_type: none
+  custom_type: matDL
+- symbol: l_Txa_ob_kusa_aTEX
+  binary: assets/l_Txa_ob_kusa_aTEX.bin
+  header: assets/l_Txa_ob_kusa_aTEX.h
+- symbol: l_Oba_kusa_aDL
+  binary: assets/l_Oba_kusa_aDL.bin
+  header: assets/l_Oba_kusa_aDL.h
+- symbol: l_Oba_kusa_a_cutDL
+  binary: assets/l_Oba_kusa_a_cutDL.bin
+  header: assets/l_Oba_kusa_a_cutDL.h
+- symbol: l_matDL!.data:0x8036cf80
+  binary: assets/l_matDL__d_grass.bin
+  header: assets/l_matDL__d_grass.h
+  header_type: none
+  custom_type: matDL
+
+- symbol: l_sightMatDL
+  binary: assets/l_sightMatDL.bin
+  header: assets/l_sightMatDL.h
+- symbol: l_sightDL!.data:0x8037df00
+  binary: assets/l_sightDL__d_a_boomerang.bin
+  header: assets/l_sightDL__d_a_boomerang.h
+
+- symbol: l_sightDL!.data:0x80383320
+  binary: assets/l_sightDL__d_a_player_main.bin
+  header: assets/l_sightDL__d_a_player_main.h

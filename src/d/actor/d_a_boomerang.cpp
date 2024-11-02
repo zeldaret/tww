@@ -6,6 +6,9 @@
 #include "d/actor/d_a_boomerang.h"
 #include "d/d_procname.h"
 
+#include "assets/l_sightMatDL.h"
+#include "assets/l_sightDL__d_a_boomerang.h"
+
 /* 800E0C08-800E0D44       .text initBlur__18daBoomerang_blur_cFPA4_fs */
 void daBoomerang_blur_c::initBlur(MtxP, s16) {
     /* Nonmatching */

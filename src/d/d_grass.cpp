@@ -18,22 +18,29 @@
 #include "dolphin/gf/GFGeometry.h"
 #include "dolphin/gf/GFTev.h"
 
-static Vec dummy[2] = {};
-u8 l_K_kusa_00TEX[0x1000] ALIGN_DECL(32) = {};
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
+
+#include "assets/l_K_kusa_00TEX.h"
+const u32 l_K_kusa_00TEX__width = 64;
+const u32 l_K_kusa_00TEX__height = 128;
 Vec l_Vmori_pos[27] = {};
 GXColor l_Vmori_color[5] = {};
 cXy l_Vmori_texCoord[9] = {};
-u8 l_Vmori_00DL[0xb0] ALIGN_DECL(32) = {};
-u8 l_Vmori_01DL[0x8c] ALIGN_DECL(32) = {};
-u8 l_Vmori_matDL[0xa8] ALIGN_DECL(32) = {};
+#include "assets/l_Vmori_00DL.h"
+#include "assets/l_Vmori_01DL.h"
+#include "assets/l_Vmori_matDL.h"
+l_Vmori_matDL(l_K_kusa_00TEX);
 
-u8 l_Txa_ob_kusa_aTEX[0x800] ALIGN_DECL(32) = {};
+#include "assets/l_Txa_ob_kusa_aTEX.h"
+const u32 l_Txa_ob_kusa_aTEX__width = 64;
+const u32 l_Txa_ob_kusa_aTEX__height = 64;
 Vec l_pos[27] = {};
 GXColor l_color[8] = {};
 cXy l_texCoord[9] = {};
-u8 l_Oba_kusa_aDL[0xa7] ALIGN_DECL(32) = {};
-u8 l_Oba_kusa_a_cutDL[0x8c] ALIGN_DECL(32) = {};
-u8 l_matDL[0xa8] ALIGN_DECL(32) = {};
+#include "assets/l_Oba_kusa_aDL.h"
+#include "assets/l_Oba_kusa_a_cutDL.h"
+#include "assets/l_matDL__d_grass.h"
+l_matDL__d_grass(l_Txa_ob_kusa_aTEX);
 
 static bool l_CutSoundFlag;
 
@@ -271,7 +278,7 @@ void dGrass_packet_c::draw() {
         {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
         {GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0x00},
         {GX_VA_TEX0, GX_TEX_ST, GX_F32, 0x00},
-        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_NULL, GX_POS_XYZ, GX_S8, 0x00},
     };
 
     GFSetVtxDescv(l_vtxDescList);
