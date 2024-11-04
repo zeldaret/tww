@@ -368,7 +368,9 @@ void daStandItem_c::CreateInit() {
     m690 = NULL;
     m694 = NULL;
     m698 = NULL;
+#if VERSION != VERSION_JPN
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+#endif
 }
 
 /* 800E3E94-800E4048       .text _create__13daStandItem_cFv */
