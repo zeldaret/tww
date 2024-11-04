@@ -516,7 +516,7 @@ config.libs = [
             Object(NonMatching, "d/actor/d_a_bomb.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(Matching,    "d/actor/d_a_bomb2.cpp"),
             Object(NonMatching, "d/actor/d_a_boomerang.cpp"),
-            Object(NonMatching, "d/actor/d_a_dai_item.cpp"),
+            Object(Matching,    "d/actor/d_a_dai_item.cpp", extra_cflags=["-sym off"]),
             Object(NonMatching, "d/actor/d_a_demo00.cpp"),
             Object(Matching,    "d/actor/d_a_disappear.cpp"),
             Object(Matching,    "d/actor/d_a_esa.cpp"),

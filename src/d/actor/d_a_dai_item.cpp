@@ -11,6 +11,7 @@
 #include "d/res/res_fdai.h"
 #include "d/res/res_cloth.h"
 
+#include "f_op/f_op_actor.h"
 #include "weak_bss_3569.h" // IWYU pragma: keep
 #include "weak_data_2100_2080.h" // IWYU pragma: keep
 
@@ -189,7 +190,6 @@ static cXyz** VobjFlagPosTbl[] = {
 
 /* 800E36C8-800E3798       .text _delete__13daStandItem_cFv */
 bool daStandItem_c::_delete() {
-    /* Nonmatching */
     if (m694 != NULL) {
         m694->becomeInvalidEmitter();
         m694 = NULL;
@@ -303,7 +303,6 @@ BOOL daStandItem_c::CreateHeap() {
 
 /* 800E3AF8-800E3E94       .text CreateInit__13daStandItem_cFv */
 void daStandItem_c::CreateInit() {
-    /* Nonmatching - regalloc */
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -100.0f, -0.0f, -100.0f, 100.0f, 300.0f, 100.0f);
     mAcchCir.SetWall(30.0f, 30.0f);
@@ -320,12 +319,13 @@ void daStandItem_c::CreateInit() {
     mpModel->setUserArea(NULL);
 
     JUTNameTab* jointNameTab = mpModel->getModelData()->getJointName();
+    const char* jointName;
     u16 i;
     switch (mItemNo) {
     case WIND_FLAG:
         {
             for (i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
-                const char* jointName = jointNameTab->getName(i);
+                jointName = jointNameTab->getName(i);
                 if (strcmp("top", jointName) == 0) {
                     mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
                     break;
@@ -338,7 +338,7 @@ void daStandItem_c::CreateInit() {
     case WATER_STATUE:
         {
             for (i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
-                const char* jointName = jointNameTab->getName(i);
+                jointName = jointNameTab->getName(i);
                 if (strcmp("tuboko_head", jointName) == 0 || strcmp("tuboko_base", jointName) == 0)
                     mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
             }
@@ -500,7 +500,6 @@ bool daStandItem_c::actionFobj05() {
 
 /* 800E45E0-800E4770       .text actionFobj06__13daStandItem_cFv */
 bool daStandItem_c::actionFobj06() {
-    /* Nonmatching - *1.0f gets optimized out */
     cXyz wind = dKyw_get_AllWind_vecpow(&current.pos);
     f32 windStrength = wind.absXZ();
     cXyz zero(0.0f, 0.0f, 0.0f);
@@ -534,7 +533,62 @@ bool daStandItem_c::actionFobj08() {
 
 /* 800E47E0-800E4B94       .text actionFobj09__13daStandItem_cFv */
 bool daStandItem_c::actionFobj09() {
-    /* Nonmatching */
+    fopAc_ac_c* link = dComIfGp_getLinkPlayer();
+    f32 f31 = (link->current.pos - current.pos).absXZ();
+    animTestForOneTime();
+    if (f31 < 500.0f && !mbBckDidPlay) {
+        if (m694) {
+            m694->becomeInvalidEmitter();
+            m694 = NULL;
+        }
+        if (m698) {
+            m698->quitImmortalEmitter();
+            m698->becomeInvalidEmitter();
+            m698 = NULL;
+        }
+        if (m690 == NULL) {
+            m690 = dComIfGp_particle_set(0x82B3, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
+        } else {
+            m690->setGlobalRTMatrix(m660);
+        }
+    } else if (!mbBckDidPlay) {
+        if (m690) {
+            m690->becomeInvalidEmitter();
+            m690 = NULL;
+        }
+        if (m694) {
+            m694->becomeInvalidEmitter();
+            m694 = NULL;
+        }
+        if (m698) {
+            m698->quitImmortalEmitter();
+            m698->becomeInvalidEmitter();
+            m698 = NULL;
+        }
+    } else if (mbBckDidPlay) {
+        if (!m6B1) {
+            if (m690) {
+                m690->becomeInvalidEmitter();
+                m690 = NULL;
+            }
+            if (m694 == NULL) {
+                m694 = dComIfGp_particle_set(0x82B4, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
+            }
+            if (m698 == NULL) {
+                m698 = dComIfGp_particle_set(0x82B5, &current.pos, &current.angle);
+            }
+            if (m698) {
+                m698->becomeImmortalEmitter();
+            }
+        }
+        if (m694) {
+            m694->setGlobalRTMatrix(m660);
+        }
+        if (m698) {
+            m698->setGlobalRTMatrix(m630);
+        }
+    }
+    m6B1 = mbBckDidPlay;
     return true;
 }
 
@@ -553,17 +607,92 @@ bool daStandItem_c::actionFobj11() {
 
 /* 800E4BE4-800E4E44       .text animTest__13daStandItem_cFv */
 void daStandItem_c::animTest() {
-    /* Nonmatching */
+    s16 animMinTime = m_anim_min_time[mItemType];
+    s16 animMaxTime = m_anim_max_time[mItemType];
+    s16 stopMinTime = m_stop_min_time[mItemType];
+    s16 stopMaxTime = m_stop_max_time[mItemType];
+    mbBckDidPlay = false;
+    
+    if (mBckPlayTimer > 0) {
+        mBckPlayTimer--;
+        if (mpBckAnm) {
+            mpBckAnm->play();
+            mbBckDidPlay = true;
+        }
+        if (stopMaxTime == 0) {
+            mBckPlayTimer = 16;
+            mpBckAnm->setPlaySpeed(1.0f);
+        }
+        if (mBckPlayTimer < 15 && stopMaxTime != 0) {
+            cLib_addCalc(&mBckSpeed, 0.0f, 0.1f, 0.1f, 0.05f);
+            mpBckAnm->setPlaySpeed(mBckSpeed);
+        }
+        if (mBckSpeed == 0.0f || mBckPlayTimer == 0) {
+            mpBckAnm->setPlaySpeed(0.0f);
+            s16 temp = (stopMaxTime - stopMinTime) / 2;
+            s16 temp2 = (stopMinTime + stopMaxTime) / 2;
+            mBckStopTimer = temp2 + cM_rndFX(temp);
+        }
+    } else if (mBckStopTimer > 0) {
+        mBckStopTimer--;
+        if (animMaxTime == 0) {
+            mBckStopTimer = 1;
+        }
+        if (mBckStopTimer == 0) {
+            s16 temp = (animMaxTime - animMinTime) / 2;
+            s16 temp2 = (animMinTime + animMaxTime) / 2;
+            mBckPlayTimer = temp2 + cM_rndFX(temp);
+            mBckSpeed = 1.0f;
+            if (mpBckAnm) {
+                mpBckAnm->setPlaySpeed(mBckSpeed);
+            }
+        }
+    }
 }
 
 /* 800E4E44-800E509C       .text animTestForOneTime__13daStandItem_cFv */
 void daStandItem_c::animTestForOneTime() {
-    /* Nonmatching */
+    s16 animMinTime = m_anim_min_time[mItemType];
+    s16 animMaxTime = m_anim_max_time[mItemType];
+    s16 stopMinTime = m_stop_min_time[mItemType];
+    s16 stopMaxTime = m_stop_max_time[mItemType];
+    mbBckDidPlay = false;
+    BOOL isStop = mpBckAnm->play();
+    
+    if (mBckStopTimer > 0) {
+        mBckStopTimer--;
+        if (mBckStopTimer == 0) {
+            mpBckAnm->setPlaySpeed(1.0f);
+            mpBckAnm->setFrame(0.0f);
+            s16 temp = (animMaxTime - animMinTime) / 2;
+            s16 temp2 = (animMinTime + animMaxTime) / 2;
+            mBckPlayTimer = temp2 + cM_rndFX(temp);
+        }
+    } else if (mBckPlayTimer > 0) {
+        mBckPlayTimer--;
+        if (mBckPlayTimer > 0 && isStop) {
+            mpBckAnm->setPlaySpeed(1.0f);
+            mpBckAnm->setFrame(0.0f);
+        } else if (mBckPlayTimer == 0 && isStop) {
+            s16 temp = (stopMaxTime - stopMinTime) / 2;
+            s16 temp2 = (stopMinTime + stopMaxTime) / 2;
+            mBckStopTimer = temp2 + cM_rndFX(temp);
+        } else if (mBckPlayTimer == 0) {
+            mBckPlayTimer = 1;
+        }
+    }
+    
+    if (stopMaxTime == 0 && isStop) {
+        mpBckAnm->setPlaySpeed(1.0f);
+        mpBckAnm->setFrame(0.0f);
+    }
+    if (!isStop) {
+        mbBckDidPlay = true;
+    }
 }
 
 /* 800E509C-800E5190       .text execAction__13daStandItem_cFv */
 void daStandItem_c::execAction() {
-    /* Nonmatching */
     typedef void (daStandItem_c::*ModeFunc)();
     static const ModeFunc mode_proc[] = {
         &daStandItem_c::mode_carry,
