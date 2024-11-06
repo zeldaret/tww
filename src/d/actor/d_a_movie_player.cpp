@@ -2005,7 +2005,11 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
                 }
 
                 block[__THPJpegNaturalOrder[k]] = (s16)ssss;
+#ifdef __MWERKS__
                 goto _RECV_END;
+#else
+                continue;
+#endif
             }
 
             {
@@ -2246,7 +2250,7 @@ _FailedCheckEnoughbits_Updated:
     goto __CODE_PLUS_VP_CNT;
 
 _FailedCheckNoBits0:
-_FailedCheckNoBits1 :
+_FailedCheckNoBits1:
 
 {
     register u32 mask = 0xFFFFFFFF << (33 - cnt);

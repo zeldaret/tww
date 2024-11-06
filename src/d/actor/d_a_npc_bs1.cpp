@@ -1548,7 +1548,6 @@ BOOL daNpc_Bs1_c::isSellBomb() {
 
 /* 00003090-00003478       .text CreateInit__11daNpc_Bs1_cFv */
 BOOL daNpc_Bs1_c::CreateInit() {
-    /* Nonmatching */
     cXyz dummy(0.0f, 0.0f, 0.0f);
 
     m726.x = current.angle.x;

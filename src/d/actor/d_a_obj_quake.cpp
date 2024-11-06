@@ -51,7 +51,7 @@ s32 daObjQuake_c::_create() {
         }
 
         if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("振動効果", &l_HIO);
+            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("振動効果", &l_HIO); // "Vibration Effect"
         }
 
         l_HIO.field_0x08 += 1;

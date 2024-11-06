@@ -41,6 +41,7 @@
 #endif
 
 extern int __cntlzw(uint);
+extern void __dcbz(void*, int);
 
 #define VERSION_JPN 0
 #define VERSION_USA 1

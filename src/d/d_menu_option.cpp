@@ -4,16 +4,117 @@
 //
 
 #include "d/d_menu_option.h"
-#include "dolphin/types.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_lib.h"
+#include "f_op/f_op_msg_mng.h"
+#include "global.h"
+
+dMo_HIO_c g_moHIO;
+
+static const u32 soundMode[3] = {0, 1, 2};
 
 /* 801D2B68-801D2B78       .text __ct__9dMo_HIO_cFv */
 dMo_HIO_c::dMo_HIO_c() {
-    /* Nonmatching */
 }
 
 /* 801D2B78-801D3388       .text screenSet__14dMenu_Option_cFv */
 void dMenu_Option_c::screenSet() {
-    /* Nonmatching */
+    static const u32 label_t[] = {
+        'ft00', 'ft01', 'ft02', 'ft03', 'ft04', 'ft05', 'ft06', 'ft07',
+        'ft08', 'ft09', 'ft10', 'ft11', 'ft12', 'ft13', 'ft14',
+    };
+    static const u32 label_d[] = {
+        'fd00', 'fd01', 'fd02', 'fd03', 'fd04', 'fd05', 'fd06', 'fd07',
+        'fd08', 'fd09', 'fd10', 'fd11', 'fd12', 'fd13', 'fd14',
+    };
+    
+    fopMsgM_setPaneData(&m008, scrn->search('topt'));
+    fopMsgM_setPaneData(&m040, scrn->search('sp01'));
+    fopMsgM_setPaneData(&m078, scrn->search('sk01'));
+    
+    for (int i = 0; i < (s32)ARRAY_SIZE(m0B0); i++) {
+        fopMsgM_setPaneData(&m0B0[i], scrn->search(label_t[i]));
+        fopMsgM_setPaneData(&m3F8[i], scrn->search(label_d[i]));
+        ((J2DPicture*)m0B0[i].pane)->changeTexture("font_07_02.bti", 0);
+        fopMsgM_blendInit(&m0B0[i], "font_00.bti");
+    }
+    
+    fopMsgM_setPaneData(&m778, scrn->search('str0'));
+    fopMsgM_setPaneData(&m740, scrn->search('st00'));
+    fopMsgM_setPaneData(&m7B0, scrn->search('nt00'));
+    fopMsgM_setPaneData(&m7E8, scrn->search('nk00'));
+    fopMsgM_setPaneData(&m820, scrn->search('no11'));
+    fopMsgM_setPaneData(&m858, scrn->search('yaz2'));
+    fopMsgM_setPaneData(&m890, scrn->search('yaz1'));
+    fopMsgM_setPaneData(&m8C8[0], scrn->search('ttyu'));
+    fopMsgM_setPaneData(&m9A8[0], scrn->search('thld'));
+    fopMsgM_setPaneData(&m9A8[1], scrn->search('tsic'));
+    fopMsgM_setPaneData(&m8C8[3], scrn->search('tsou'));
+    fopMsgM_setPaneData(&mA18[0], scrn->search('tmon'));
+    fopMsgM_setPaneData(&mA18[1], scrn->search('tste'));
+    fopMsgM_setPaneData(&mA18[2], scrn->search('tsur'));
+    fopMsgM_setPaneData(&m8C8[2], scrn->search('tvib'));
+    fopMsgM_setPaneData(&mAC0[1], scrn->search('tari'));
+    fopMsgM_setPaneData(&mAC0[0], scrn->search('tnas'));
+    fopMsgM_setPaneData(&mB30, scrn->search('cr32'));
+    fopMsgM_setPaneData(&mB68, scrn->search('cr31'));
+    fopMsgM_setPaneData(&mBA0, scrn->search('cc22'));
+    fopMsgM_setPaneData(&mBD8, scrn->search('cc21'));
+    fopMsgM_setPaneData(&mC10, scrn->search('cc12'));
+    fopMsgM_setPaneData(&mC48, scrn->search('cr11'));
+    fopMsgM_setPaneData(&mC80, scrn->search('bs09'));
+    fopMsgM_setPaneData(&mCB8, scrn->search('bs00'));
+    fopMsgM_setPaneData(&mCF0, scrn->search('blak'));
+    
+    fopMsgM_messageGet(mD48, 0x19D);
+    fopMsgM_messageGet(mD5C[0], 0x19B);
+    fopMsgM_messageGet(mD5C[1], 0x1A9);
+    fopMsgM_messageGet(mD84[0], 0x1D5);
+    fopMsgM_messageGet(mD84[1], 0x1D4);
+    fopMsgM_messageGet(mDAC[0], 0x1D7);
+    fopMsgM_messageGet(mDAC[1], 0x1D8);
+    fopMsgM_messageGet(mDAC[2], 0x1EB);
+    fopMsgM_messageGet(mDE8[0], 0x19A);
+    fopMsgM_messageGet(mDE8[1], 0x19A);
+    fopMsgM_messageGet(mDE8[2], 0x1D1);
+    fopMsgM_messageGet(mDE8[3], 0x1D6);
+    
+    ((J2DTextBox*)m008.pane)->setFont(mD2C);
+    ((J2DTextBox*)m008.pane)->setString(mD48);
+    ((J2DTextBox*)m740.pane)->setFont(mD2C);
+    ((J2DTextBox*)m778.pane)->setFont(mD30);
+    
+    for (int i = 0; i < 2; i++) {
+        ((J2DTextBox*)m9A8[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)m9A8[i].pane)->setString(mD5C[i]);
+        ((J2DTextBox*)mAC0[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)mAC0[i].pane)->setString(mD84[i]);
+        changeScaleCenter(&m9A8[i], mD5C[i]);
+        changeScaleCenter(&mAC0[i], mD84[i]);
+    }
+    
+    for (int i = 0; i < 3; i++) {
+        ((J2DTextBox*)mA18[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)mA18[i].pane)->setString(mDAC[i]);
+        changeScaleCenter(&mA18[i], mDAC[i]);
+    }
+    
+    for (int i = 0; i < 4; i++) {
+        if (i == 1) continue;
+        ((J2DTextBox*)m8C8[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)m8C8[i].pane)->setString(mDE8[i]);
+        changeScaleRight(&m8C8[i], mDE8[i]);
+    }
+    
+    m820.mUserArea = m820.pane->mRotation;
+    m008.mUserArea = m008.pane->mRotation;
+    m040.mUserArea = m040.pane->mRotation;
+    m078.mUserArea = m078.pane->mRotation;
+    if (m820.mUserArea > 180) m820.mUserArea -= 360;
+    if (m008.mUserArea > 180) m008.mUserArea -= 360;
+    if (m040.mUserArea > 180) m040.mUserArea -= 360;
+    if (m078.mUserArea > 180) m078.mUserArea -= 360;
 }
 
 /* 801D3388-801D3518       .text mainInit__14dMenu_Option_cFv */
@@ -64,6 +165,7 @@ void dMenu_Option_c::typeMove() {
 /* 801D3F98-801D41C4       .text yazAnime__14dMenu_Option_cFv */
 void dMenu_Option_c::yazAnime() {
     /* Nonmatching */
+    static const u32 moveX[6] = { 0, 2, 8, 18, 8, 2};
 }
 
 /* 801D41C4-801D428C       .text ccAnime__14dMenu_Option_cFv */
@@ -72,7 +174,7 @@ void dMenu_Option_c::ccAnime() {
 }
 
 /* 801D428C-801D47A4       .text stickMove__14dMenu_Option_cFUc */
-void dMenu_Option_c::stickMove(unsigned char) {
+void dMenu_Option_c::stickMove(u8) {
     /* Nonmatching */
 }
 
@@ -107,7 +209,7 @@ void dMenu_Option_c::changeScaleCenter(fopMsgM_pane_class*, char*) {
 }
 
 /* 801D50A0-801D50E8       .text setSoundMode__14dMenu_Option_cFUl */
-void dMenu_Option_c::setSoundMode(unsigned long) {
+void dMenu_Option_c::setSoundMode(u32) {
     /* Nonmatching */
 }
 
@@ -124,6 +226,23 @@ void dMenu_Option_c::initialize() {
 /* 801D5224-801D53F0       .text _create__14dMenu_Option_cFv */
 void dMenu_Option_c::_create() {
     /* Nonmatching */
+    scrn = new J2DScreen();
+    JUT_ASSERT(1074, scrn != NULL);
+    scrn->set("option.blo", mpArchive);
+    
+    stick = new STControl(5, 2, 3, 2);
+    JUT_ASSERT(1078, stick != NULL);
+    
+    screenSet();
+    initialize();
+    
+    mE40 = 0;
+    mE38 = 0;
+    mE39 = 10;
+    mE3A = 0xFF;
+    mE3B = 0xC0;
+    
+    g_moHIO.mChildID = mDoHIO_root.mDoHIO_createChild("オプション画面", &g_moHIO); // "Option Screen"
 }
 
 /* 801D53F0-801D546C       .text _delete__14dMenu_Option_cFv */

@@ -205,4 +205,6 @@ void fopMsgM_demoMsgFlagOn();
 void fopMsgM_demoMsgFlagOff();
 bool fopMsgM_demoMsgFlagCheck();
 
+void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data);
+
 #endif

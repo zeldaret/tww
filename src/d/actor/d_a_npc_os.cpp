@@ -1081,7 +1081,7 @@ BOOL daNpc_Os_c::searchNpcAction(void*) {
             if(!door) {
                 if(cLib_calcTimer(&field_0x7A7) == 0) {
                     field_0x7A6 ^= 1;
-                    field_0x7A7 = cLib_getRndValue(8, 0x14);
+                    field_0x7A7 = cLib_getRndValue(8, 20);
                 }
                 
                 mpMorf->setPlaySpeed(2.0f);

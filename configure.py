@@ -215,6 +215,7 @@ if args.debug:
     # Or -sym dwarf-2 for Wii compilers
     cflags_base.extend(["-sym on", "-DDEBUG=1"])
     cflags_base.extend(['-pragma "dont_inline on"'])
+    cflags_base.extend(['-pragma "optimization_level 0"'])
 else:
     cflags_base.append("-DNDEBUG=1")
 if args.warn == "all":
