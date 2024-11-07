@@ -137,6 +137,7 @@ void* VIGetCurrentFrameBuffer();
 void VISetBlack(BOOL);
 u32 VIGetRetraceCount();
 u32 VIGetDTVStatus();
+u32 VIGetTvFormat();
 
 vu16 __VIRegs[59] AT_ADDRESS(0xCC002000);
 

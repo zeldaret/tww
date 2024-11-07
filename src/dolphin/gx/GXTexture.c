@@ -1,5 +1,6 @@
 #include "dolphin/gx/GXTexture.h"
 #include "dolphin/gx/GX.h"
+#include "string.h"
 
 #define GET_TILE_COUNT(a, b) (((a) + (1 << (b)) - 1) >> (b))
 
@@ -297,21 +298,21 @@ void GXLoadTexObjPreLoaded(GXTexObj* obj, GXTexRegion* region, GXTexMapID map) {
     GX_BP_LOAD_REG(internalObj->texture_address);
 
     if ((internalObj->texture_flags & 2) == 0) {
-        GXTlutObj* tlut = (GXTlutObj*)__GXData->tlutRegionCallback(internalObj->tlut_name);
+        GXTlutObj* tlut = (GXTlutObj*)gx->tlutRegionCallback(internalObj->tlut_name);
         GX_SET_REG(tlut->address, GXTexTlutIds[map], 0, 7);
 
         GX_BP_LOAD_REG(tlut->address);
     }
 
-    __GXData->tImage0[map] = internalObj->texture_size;
-    __GXData->tMode0[map] = internalObj->texture_filter;
+    gx->tImage0[map] = internalObj->texture_size;
+    gx->tMode0[map] = internalObj->texture_filter;
 
-    __GXData->dirtyState |= GX_DIRTY_SU_TEX;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->dirtyState |= GX_DIRTY_SU_TEX;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXLoadTexObj(GXTexObj* obj, GXTexMapID map) {
-    GXTexRegion* ret = (GXTexRegion*)__GXData->texRegionCallback(obj, map);
+    GXTexRegion* ret = (GXTexRegion*)gx->texRegionCallback(obj, map);
 
     GXLoadTexObjPreLoaded(obj, ret, map);
 }
@@ -330,7 +331,7 @@ void GXInitTlutObj(GXTlutObj* obj, void* table, GXTlutFmt format, u16 numEntries
 
 void GXLoadTlut(GXTlutObj* obj, u32 tlut_name) {
     GXTlutObj* internal = (GXTlutObj*)obj;
-    GXTlutRegion* ret = (GXTlutRegion*)__GXData->tlutRegionCallback(tlut_name);
+    GXTlutRegion* ret = (GXTlutRegion*)gx->tlutRegionCallback(tlut_name);
     u32 reg;
 
     __GXFlushTextureState();
@@ -413,14 +414,14 @@ void GXInvalidateTexAll(void) {
 }
 
 GXTexRegionCallback GXSetTexRegionCallback(GXTexRegionCallback callback) {
-    GXTexRegionCallback prev = __GXData->texRegionCallback;
-    __GXData->texRegionCallback = callback;
+    GXTexRegionCallback prev = gx->texRegionCallback;
+    gx->texRegionCallback = callback;
     return prev;
 }
 
 GXTlutRegionCallback GXSetTlutRegionCallback(GXTlutRegionCallback callback) {
-    GXTlutRegionCallback prev = __GXData->tlutRegionCallback;
-    __GXData->tlutRegionCallback = callback;
+    GXTlutRegionCallback prev = gx->tlutRegionCallback;
+    gx->tlutRegionCallback = callback;
     return prev;
 }
 
@@ -432,22 +433,22 @@ void __SetSURegs(u32 texImgIndex, u32 setUpRegIndex) {
     u16 a1, a2;
     GXBool b, c;
 
-    a1 = GX_GET_REG(__GXData->tImage0[texImgIndex], 22, 31);
-    a2 = (__GXData->tImage0[texImgIndex] & (0x3ff << 10)) >> 10;
+    a1 = GX_GET_REG(gx->tImage0[texImgIndex], 22, 31);
+    a2 = (gx->tImage0[texImgIndex] & (0x3ff << 10)) >> 10;
 
-    GX_SET_REG(__GXData->suTs0[setUpRegIndex], a1, 16, 31);
-    GX_SET_REG(__GXData->suTs1[setUpRegIndex], a2, 16, 31);
+    GX_SET_REG(gx->suTs0[setUpRegIndex], a1, 16, 31);
+    GX_SET_REG(gx->suTs1[setUpRegIndex], a2, 16, 31);
 
-    b = GX_GET_REG(__GXData->tMode0[texImgIndex], 30, 31) == 1;
-    c = GX_GET_REG(__GXData->tMode0[texImgIndex], 28, 29) == 1;
+    b = GX_GET_REG(gx->tMode0[texImgIndex], 30, 31) == 1;
+    c = GX_GET_REG(gx->tMode0[texImgIndex], 28, 29) == 1;
 
-    GX_SET_REG(__GXData->suTs0[setUpRegIndex], b, 15, 15);
-    GX_SET_REG(__GXData->suTs1[setUpRegIndex], c, 15, 15);
+    GX_SET_REG(gx->suTs0[setUpRegIndex], b, 15, 15);
+    GX_SET_REG(gx->suTs1[setUpRegIndex], c, 15, 15);
 
-    GX_BP_LOAD_REG(__GXData->suTs0[setUpRegIndex]);
-    GX_BP_LOAD_REG(__GXData->suTs1[setUpRegIndex]);
+    GX_BP_LOAD_REG(gx->suTs0[setUpRegIndex]);
+    GX_BP_LOAD_REG(gx->suTs1[setUpRegIndex]);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 #pragma dont_inline on
@@ -458,38 +459,38 @@ void __GXSetSUTexRegs(void) {
     u32 c;
     u32 d;
     u32 stackFiller;
-    if (__GXData->tcsManEnab != 0xff) {
-        a = GX_GET_REG(__GXData->genMode, 18, 21) + 1;
-        b = GX_GET_REG(__GXData->genMode, 13, 15);
+    if (gx->tcsManEnab != 0xff) {
+        a = GX_GET_REG(gx->genMode, 18, 21) + 1;
+        b = GX_GET_REG(gx->genMode, 13, 15);
         for (i = 0; i < b; i++) {
             switch (i) {
             case 0:
-                c = GX_GET_REG(__GXData->iref, 29, 31);
-                d = GX_GET_REG(__GXData->iref, 26, 28);
+                c = GX_GET_REG(gx->iref, 29, 31);
+                d = GX_GET_REG(gx->iref, 26, 28);
                 break;
             case 1:
-                c = GX_GET_REG(__GXData->iref, 23, 25);
-                d = GX_GET_REG(__GXData->iref, 20, 22);
+                c = GX_GET_REG(gx->iref, 23, 25);
+                d = GX_GET_REG(gx->iref, 20, 22);
                 break;
             case 2:
-                c = GX_GET_REG(__GXData->iref, 17, 19);
-                d = GX_GET_REG(__GXData->iref, 14, 16);
+                c = GX_GET_REG(gx->iref, 17, 19);
+                d = GX_GET_REG(gx->iref, 14, 16);
                 break;
             case 3:
-                c = GX_GET_REG(__GXData->iref, 11, 13);
-                d = GX_GET_REG(__GXData->iref, 8, 10);
+                c = GX_GET_REG(gx->iref, 11, 13);
+                d = GX_GET_REG(gx->iref, 8, 10);
                 break;
             }
 
-            if (!(__GXData->tcsManEnab & (1 << d))) {
+            if (!(gx->tcsManEnab & (1 << d))) {
                 __SetSURegs(c, d);
             }
         }
 
         for (i = 0; i < a; i++) {
-            u32* g = &__GXData->tref[i / 2];
+            u32* g = &gx->tref[i / 2];
 
-            c = __GXData->texmapId[i] & ~0x100;
+            c = gx->texmapId[i] & ~0x100;
 
             if (i & 1) {
                 d = GX_GET_REG(*g, 14, 16);
@@ -497,7 +498,7 @@ void __GXSetSUTexRegs(void) {
                 d = GX_GET_REG(*g, 26, 28);
             }
 
-            if (c != 0xff && !(__GXData->tcsManEnab & (1 << d)) && __GXData->tevTcEnab & (1 << i)) {
+            if (c != 0xff && !(gx->tcsManEnab & (1 << d)) && gx->tevTcEnab & (1 << i)) {
                 __SetSURegs(c, d);
             }
         }

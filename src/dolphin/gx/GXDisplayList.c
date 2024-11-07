@@ -7,11 +7,11 @@
 #include "dolphin/gx/GX.h"
 
 void GXCallDisplayList(void* list, u32 nbytes) {
-    if (__GXData->dirtyState != 0) {
+    if (gx->dirtyState != 0) {
         __GXSetDirtyState();
     }
 
-    if (*(u32*)__GXData == 0) {
+    if (*(u32*)gx == 0) {
         __GXSendFlushPrim();
     }
 

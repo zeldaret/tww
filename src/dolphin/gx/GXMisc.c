@@ -3,6 +3,7 @@
 #include "dolphin/os/OSInterrupt.h"
 #include "dolphin/os/OSReset.h"
 #include "dolphin/os/OSTime.h"
+#include "dolphin/base/PPCArch.h"
 
 static void GXTokenInterruptHandler(__OSInterrupt interrupt, OSContext* context);
 static void GXFinishInterruptHandler(__OSInterrupt interrupt, OSContext* pContext);
@@ -13,23 +14,23 @@ void GXSetMisc(GXMiscToken token, u32 val) {
         break;
 
     case GX_MT_XF_FLUSH:
-        __GXData->vNum = val;
-        __GXData->vNumNot = !__GXData->vNum;
-        __GXData->bpSentNot = GX_TRUE;
+        gx->vNum = val;
+        gx->vNumNot = !gx->vNum;
+        gx->bpSentNot = GX_TRUE;
 
-        if (__GXData->vNum) {
-            __GXData->dirtyState |= GX_DIRTY_VCD;
+        if (gx->vNum) {
+            gx->dirtyState |= GX_DIRTY_VCD;
         }
         break;
 
     case GX_MT_DL_SAVE_CONTEXT:
-        __GXData->dlSaveContext = (val != 0);
+        gx->dlSaveContext = (val != 0);
         break;
     }
 }
 
 void GXFlush(void) {
-    if (__GXData->dirtyState) {
+    if (gx->dirtyState) {
         __GXSetDirtyState();
     }
 
@@ -101,8 +102,8 @@ void GXDrawDone(void) {
 
 void GXPixModeSync(void) {
     GXFIFO.u8 = 0x61;
-    GXFIFO.u32 = __GXData->peCtrl;
-    __GXData->bpSentNot = 0;
+    GXFIFO.u32 = gx->peCtrl;
+    gx->bpSentNot = 0;
 }
 
 void GXPokeAlphaMode(GXCompare comp, u8 threshold) {

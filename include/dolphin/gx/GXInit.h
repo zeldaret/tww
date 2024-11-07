@@ -127,7 +127,7 @@ typedef struct _GXData {
 
 STATIC_ASSERT(sizeof(GXData) == 0x4F8);
 
-extern GXData* const __GXData;
+extern GXData* const gx;
 
 // Define register addresses.
 #define GX_CP_ADDR  (0x0C000000)
@@ -151,14 +151,14 @@ extern vu16* __memReg;
 #define GX_SET_PI_REG(offset, val)  (*(vu32*)((vu32*)(__piReg) + (offset)) = val)
 
 inline void GXSetWasteFlags() {
-    GXData* data = __GXData;
+    GXData* data = gx;
     data->dirtyState |= GX_DIRTY_SU_TEX | GX_DIRTY_BP_MASK;
     data->bpSentNot = 0;
 }
 
 static inline void set_x2(u16 value)
 {
-    __GXData->bpSentNot = value;
+    gx->bpSentNot = value;
 }
 
 #ifdef __cplusplus

@@ -1,6 +1,7 @@
 #include "dolphin/gx/GXFifo.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/os/OS.h"
+#include "dolphin/base/PPCArch.h"
 
 static void GXInitFifoLimits(GXFifoObj* fifo, u32 hi_watermark, u32 lo_watermark);
 
@@ -36,8 +37,8 @@ static void GXUnderflowHandler() {
 static void GXBreakPointHandler(OSContext* context) {
     OSContext bpContext;
 
-    FAST_FLAG_SET(__GXData->cpEnable, 0, 5, 1);
-    GX_SET_CP_REG(1, __GXData->cpEnable);
+    FAST_FLAG_SET(gx->cpEnable, 0, 5, 1);
+    GX_SET_CP_REG(1, gx->cpEnable);
 
     if (BreakPointCB) {
         OSClearContext(&bpContext);
@@ -49,17 +50,17 @@ static void GXBreakPointHandler(OSContext* context) {
 }
 
 static void GXCPInterruptHandler(s16 p1, OSContext* context) {
-    __GXData->cpStatus = GX_GET_CP_REG(0);
+    gx->cpStatus = GX_GET_CP_REG(0);
 
-    if ((__GXData->cpEnable >> 3 & 1) && (__GXData->cpStatus >> 1 & 1)) {
+    if ((gx->cpEnable >> 3 & 1) && (gx->cpStatus >> 1 & 1)) {
         GXUnderflowHandler();
     }
 
-    if ((__GXData->cpEnable >> 2 & 1) && (__GXData->cpStatus >> 0 & 1)) {
+    if ((gx->cpEnable >> 2 & 1) && (gx->cpStatus >> 0 & 1)) {
         GXOverflowHandler();
     }
 
-    if ((__GXData->cpEnable >> 5 & 1) && (__GXData->cpStatus >> 4 & 1)) {
+    if ((gx->cpEnable >> 5 & 1) && (gx->cpStatus >> 4 & 1)) {
         GXBreakPointHandler(context);
     }
 }
@@ -163,11 +164,11 @@ void GXSetGPFifo(GXFifoObj* fifo) {
         __GXWriteFifoIntEnable(0, 0);
         __GXFifoLink(0);
     }
-    reg = __GXData->cpEnable;
+    reg = gx->cpEnable;
     GX_BITFIELD_SET(reg, 0x1e, 1, 0);
     GX_BITFIELD_SET(reg, 0x1a, 1, 0);
     GX_SET_CP_REG(1, reg);
-    GX_SET_CP_REG(1, __GXData->cpEnable);
+    GX_SET_CP_REG(1, gx->cpEnable);
     __GXWriteFifoIntReset(1, 1);
     __GXFifoReadEnable();
     OSRestoreInterrupts(interrupts);
@@ -198,12 +199,12 @@ void __GXSaveCPUFifoAux(GXFifoObj* fifo) {
 
 void GXGetGPStatus(GXBool* overhi, GXBool* underlow, GXBool* readIdle, GXBool* cmdIdle,
                    GXBool* brkpt) {
-    __GXData->cpStatus = GX_GET_CP_REG(0);
-    *overhi = __GXData->cpStatus & 1;
-    *underlow = (__GXData->cpStatus >> 1) & 1;
-    *readIdle = (__GXData->cpStatus >> 2) & 1;
-    *cmdIdle = (__GXData->cpStatus >> 3) & 1;
-    *brkpt = (__GXData->cpStatus >> 4) & 1;
+    gx->cpStatus = GX_GET_CP_REG(0);
+    *overhi = gx->cpStatus & 1;
+    *underlow = (gx->cpStatus >> 1) & 1;
+    *readIdle = (gx->cpStatus >> 2) & 1;
+    *cmdIdle = (gx->cpStatus >> 3) & 1;
+    *brkpt = (gx->cpStatus >> 4) & 1;
 }
 
 void* GXGetFifoBase(GXFifoObj* fifo) {
@@ -232,13 +233,13 @@ void __GXFifoInit(void) {
 }
 
 void __GXFifoReadEnable(void) {
-    FAST_FLAG_SET(__GXData->cpEnable, 1, 0, 1);
-    GX_SET_CP_REG(1, __GXData->cpEnable);
+    FAST_FLAG_SET(gx->cpEnable, 1, 0, 1);
+    GX_SET_CP_REG(1, gx->cpEnable);
 }
 
 void __GXFifoReadDisable(void) {
-    FAST_FLAG_SET(__GXData->cpEnable, 0, 0, 1);
-    GX_SET_CP_REG(1, __GXData->cpEnable);
+    FAST_FLAG_SET(gx->cpEnable, 0, 0, 1);
+    GX_SET_CP_REG(1, gx->cpEnable);
 }
 
 void __GXFifoLink(u8 link) {
@@ -248,20 +249,20 @@ void __GXFifoLink(u8 link) {
     } else {
         b = 0;
     }
-    FAST_FLAG_SET(__GXData->cpEnable, b, 4, 1);
-    GX_SET_CP_REG(1, __GXData->cpEnable);
+    FAST_FLAG_SET(gx->cpEnable, b, 4, 1);
+    GX_SET_CP_REG(1, gx->cpEnable);
 }
 
 void __GXWriteFifoIntEnable(u32 p1, u32 p2) {
-    FAST_FLAG_SET(__GXData->cpEnable, p1, 2, 1);
-    FAST_FLAG_SET(__GXData->cpEnable, (u8)p2, 3, 1);
-    GX_SET_CP_REG(1, __GXData->cpEnable);
+    FAST_FLAG_SET(gx->cpEnable, p1, 2, 1);
+    FAST_FLAG_SET(gx->cpEnable, (u8)p2, 3, 1);
+    GX_SET_CP_REG(1, gx->cpEnable);
 }
 
 void __GXWriteFifoIntReset(u32 p1, u32 p2) {
-    FAST_FLAG_SET(__GXData->cpClr, p1, 0, 1);
-    FAST_FLAG_SET(__GXData->cpClr, (u8)p2, 1, 1);
-    GX_SET_CP_REG(2, __GXData->cpClr);
+    FAST_FLAG_SET(gx->cpClr, p1, 0, 1);
+    FAST_FLAG_SET(gx->cpClr, (u8)p2, 1, 1);
+    GX_SET_CP_REG(2, gx->cpClr);
 }
 
 void __GXCleanGPFifo(void) {

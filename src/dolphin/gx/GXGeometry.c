@@ -7,7 +7,7 @@
 #include "dolphin/gx/GX.h"
 
 void __GXSetDirtyState(void) {
-    u32 dirtyFlags = __GXData->dirtyState;
+    u32 dirtyFlags = gx->dirtyState;
 
     if (dirtyFlags & GX_DIRTY_SU_TEX) {
         __GXSetSUTexRegs();
@@ -33,11 +33,11 @@ void __GXSetDirtyState(void) {
         __GXCalculateVLim();
     }
 
-    __GXData->dirtyState = 0;
+    gx->dirtyState = 0;
 }
 
 void GXBegin(GXPrimitive type, GXVtxFmt fmt, u16 vert_num) {
-    GXData* data = __GXData;
+    GXData* data = gx;
     u32 dirtyFlags = data->dirtyState;
 
     if (data->dirtyState != 0) {
@@ -65,10 +65,10 @@ void GXBegin(GXPrimitive type, GXVtxFmt fmt, u16 vert_num) {
             __GXCalculateVLim();
         }
 
-        __GXData->dirtyState = 0;
+        gx->dirtyState = 0;
     }
 
-    if (*(u32*)__GXData == 0) {
+    if (*(u32*)gx == 0) {
         __GXSendFlushPrim();
     }
 
@@ -78,20 +78,20 @@ void GXBegin(GXPrimitive type, GXVtxFmt fmt, u16 vert_num) {
 
 void __GXSendFlushPrim(void) {
     u32 i;
-    u32 sz = __GXData->vNum * __GXData->vLim;
+    u32 sz = gx->vNum * gx->vLim;
 
     GXFIFO.u8 = 0x98;
-    GXFIFO.u16 = __GXData->vNum;
+    GXFIFO.u16 = gx->vNum;
 
     for (i = 0; i < sz; i += 4) {
         GXFIFO.s32 = 0;
     }
 
-    __GXData->bpSentNot = 1;
+    gx->bpSentNot = 1;
 }
 
 void GXSetLineWidth(u8 width, GXTexOffset offsets) {
-    GXData* data = __GXData;
+    GXData* data = gx;
 
     GX_BITFIELD_SET(data->lpSize, 24, 8, width);
     GX_BITFIELD_SET(data->lpSize, 13, 3, offsets);
@@ -101,7 +101,7 @@ void GXSetLineWidth(u8 width, GXTexOffset offsets) {
 }
 
 void GXSetPointSize(u8 size, GXTexOffset offsets) {
-    GXData* data = __GXData;
+    GXData* data = gx;
 
     GX_BITFIELD_SET(data->lpSize, 16, 8, size);
     GX_BITFIELD_SET(data->lpSize, 10, 3, offsets);
@@ -111,7 +111,7 @@ void GXSetPointSize(u8 size, GXTexOffset offsets) {
 }
 
 void GXEnableTexOffsets(GXTexCoordID coord, GXBool line, GXBool point) {
-    GXData* data = __GXData;
+    GXData* data = gx;
 
     GX_BITFIELD_SET(data->suTs0[coord], 13, 1, line);
     GX_BITFIELD_SET(data->suTs0[coord], 12, 1, point);
@@ -123,7 +123,7 @@ void GXEnableTexOffsets(GXTexCoordID coord, GXBool line, GXBool point) {
 void GXSetCullMode(GXCullMode mode) {
     GXData* data;
     GXCullMode mode2;
-    data = __GXData;
+    data = gx;
 
     mode2 = (mode >> 1) & 1;
     GX_BITFIELD_SET(mode2, 30, 1, mode);
@@ -133,7 +133,7 @@ void GXSetCullMode(GXCullMode mode) {
 }
 
 void GXSetCoPlanar(GXBool enable) {
-    GXData* data = __GXData;
+    GXData* data = gx;
 
     GX_BITFIELD_SET(data->genMode, 12, 1, enable);
     GXFIFO.u8 = 0x61;
@@ -144,6 +144,6 @@ void GXSetCoPlanar(GXBool enable) {
 
 void __GXSetGenMode(void) {
     GXFIFO.u8 = 0x61;
-    GXFIFO.u32 = __GXData->genMode;
-    __GXData->bpSentNot = 0;
+    GXFIFO.u32 = gx->genMode;
+    gx->bpSentNot = 0;
 }

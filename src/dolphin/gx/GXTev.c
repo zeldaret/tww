@@ -47,28 +47,28 @@ void GXSetTevOp(GXTevStageID stage, GXTevMode mode) {
         alpha = &TEVAOpTableST1[mode];
     }
 
-    tevReg = __GXData->tevc[stage];
+    tevReg = gx->tevc[stage];
     tevReg = (*color & ~0xFF000000) | (tevReg & 0xFF000000);
 
     GFWriteBPCmd(tevReg);
 
-    __GXData->tevc[stage] = tevReg;
+    gx->tevc[stage] = tevReg;
 
-    tevReg = __GXData->teva[stage];
+    tevReg = gx->teva[stage];
     tevReg = (*alpha & ~0xFF00000F) | (tevReg & 0xFF00000F);
 
     GFWriteBPCmd(tevReg);
 
-    __GXData->teva[stage] = tevReg;
+    gx->teva[stage] = tevReg;
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c,
                      GXTevColorArg d) {
     u32 tevReg;
 
-    tevReg = __GXData->tevc[stage];
+    tevReg = gx->tevc[stage];
 
     FAST_FLAG_SET(tevReg, a, 12, 4);
     FAST_FLAG_SET(tevReg, b, 8, 4);
@@ -77,15 +77,15 @@ void GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTev
 
     GFWriteBPCmd(tevReg);
 
-    __GXData->tevc[stage] = tevReg;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->tevc[stage] = tevReg;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevAlphaIn(GXTevStageID stage, GXTevAlphaArg a, GXTevAlphaArg b, GXTevAlphaArg c,
                      GXTevAlphaArg d) {
     u32 tevReg;
 
-    tevReg = __GXData->teva[stage];
+    tevReg = gx->teva[stage];
 
     FAST_FLAG_SET(tevReg, a, 13, 3);
     FAST_FLAG_SET(tevReg, b, 10, 3);
@@ -94,15 +94,15 @@ void GXSetTevAlphaIn(GXTevStageID stage, GXTevAlphaArg a, GXTevAlphaArg b, GXTev
 
     GFWriteBPCmd(tevReg);
 
-    __GXData->teva[stage] = tevReg;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->teva[stage] = tevReg;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevColorOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale scale,
                      GXBool doClamp, GXTevRegID outReg) {
     u32 tevReg;
 
-    tevReg = __GXData->tevc[stage];
+    tevReg = gx->tevc[stage];
     FAST_FLAG_SET(tevReg, op & 1, 18, 1);
 
     if (op <= GX_TEV_SUB) {
@@ -117,15 +117,15 @@ void GXSetTevColorOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale 
     FAST_FLAG_SET(tevReg, outReg, 22, 2);
 
     GFWriteBPCmd(tevReg);
-    __GXData->tevc[stage] = tevReg;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->tevc[stage] = tevReg;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevAlphaOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale scale,
                      GXBool doClamp, GXTevRegID outReg) {
     u32 tevReg;
 
-    tevReg = __GXData->teva[stage];
+    tevReg = gx->teva[stage];
     FAST_FLAG_SET(tevReg, op & 1, 18, 1);
 
     if (op <= GX_TEV_SUB) {
@@ -140,8 +140,8 @@ void GXSetTevAlphaOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale 
     FAST_FLAG_SET(tevReg, outReg, 22, 2);
 
     GFWriteBPCmd(tevReg);
-    __GXData->teva[stage] = tevReg;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->teva[stage] = tevReg;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevColor(GXTevRegID reg, GXColor color) {
@@ -159,7 +159,7 @@ void GXSetTevColor(GXTevRegID reg, GXColor color) {
     GX_BP_LOAD_REG(bg);
     GX_BP_LOAD_REG(bg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevColorS10(GXTevRegID reg, GXColorS10 color) {
@@ -178,7 +178,7 @@ void GXSetTevColorS10(GXTevRegID reg, GXColorS10 color) {
     GX_BP_LOAD_REG(bg);
     GX_BP_LOAD_REG(bg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevKColor(GXTevKColorID id, GXColor color) {
@@ -199,13 +199,13 @@ void GXSetTevKColor(GXTevKColorID id, GXColor color) {
     GX_BP_LOAD_REG(ra);
     GX_BP_LOAD_REG(bg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevKColorSel(GXTevStageID stage, GXTevKColorSel sel) {
     u32* reg;
 
-    reg = &__GXData->tevKsel[stage >> 1];
+    reg = &gx->tevKsel[stage >> 1];
 
     if (stage & 1) {
         GX_SET_REG(*reg, sel, 13, 17);
@@ -215,13 +215,13 @@ void GXSetTevKColorSel(GXTevStageID stage, GXTevKColorSel sel) {
 
     GX_BP_LOAD_REG(*reg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevKAlphaSel(GXTevStageID stage, GXTevKAlphaSel sel) {
     u32* reg;
 
-    reg = &__GXData->tevKsel[stage >> 1];
+    reg = &gx->tevKsel[stage >> 1];
 
     if (stage & 1) {
         GX_SET_REG(*reg, sel, 8, 12);
@@ -231,36 +231,36 @@ void GXSetTevKAlphaSel(GXTevStageID stage, GXTevKAlphaSel sel) {
 
     GX_BP_LOAD_REG(*reg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevSwapMode(GXTevStageID stage, GXTevSwapSel rasSel, GXTevSwapSel texSel) {
-    u32* reg = &__GXData->teva[stage];
+    u32* reg = &gx->teva[stage];
     GX_SET_REG(*reg, rasSel, 30, 31);
     GX_SET_REG(*reg, texSel, 28, 29);
 
     GX_BP_LOAD_REG(*reg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevSwapModeTable(GXTevSwapSel table, GXTevColorChan red, GXTevColorChan green,
                            GXTevColorChan blue, GXTevColorChan alpha) {
     u32* reg;
 
-    reg = &__GXData->tevKsel[table << 1];
+    reg = &gx->tevKsel[table << 1];
     GX_SET_REG(*reg, red, 30, 31);
     GX_SET_REG(*reg, green, 28, 29);
 
     GX_BP_LOAD_REG(*reg);
 
-    reg = &__GXData->tevKsel[(table << 1) + 1];
+    reg = &gx->tevKsel[(table << 1) + 1];
     GX_SET_REG(*reg, blue, 30, 31);
     GX_SET_REG(*reg, alpha, 28, 29);
 
     GX_BP_LOAD_REG(*reg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetAlphaCompare(GXCompare comp0, u8 ref0, GXAlphaOp op, GXCompare comp1, u8 ref1) {
@@ -274,7 +274,7 @@ void GXSetAlphaCompare(GXCompare comp0, u8 ref0, GXAlphaOp op, GXCompare comp1, 
 
     GX_BP_LOAD_REG(reg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetZTexture(GXZTexOp op, GXTexFmt format, u32 bias) {
@@ -310,7 +310,7 @@ void GXSetZTexture(GXZTexOp op, GXTexFmt format, u32 bias) {
 
     GX_BP_LOAD_REG(val2);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXChannelID color) {
@@ -320,18 +320,18 @@ void GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXCha
     u32 tempMap;
     u32 tempCoord;
 
-    reg = &__GXData->tref[stage / 2];
-    __GXData->texmapId[stage] = map;
+    reg = &gx->tref[stage / 2];
+    gx->texmapId[stage] = map;
 
     tempMap = map & ~0x100;
     tempMap = (tempMap >= GX_MAX_TEXMAP) ? GX_TEXMAP0 : tempMap;
 
     if (coord >= GX_MAXCOORD) {
         tempCoord = GX_TEXCOORD0;
-        __GXData->tevTcEnab = __GXData->tevTcEnab & ~(1 << stage);
+        gx->tevTcEnab = gx->tevTcEnab & ~(1 << stage);
     } else {
         tempCoord = coord;
-        __GXData->tevTcEnab = __GXData->tevTcEnab | (1 << stage);
+        gx->tevTcEnab = gx->tevTcEnab | (1 << stage);
     }
 
     if (stage & 1) {
@@ -349,12 +349,12 @@ void GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXCha
 
     GX_BP_LOAD_REG(*reg);
 
-    __GXData->bpSentNot = GX_FALSE;
-    __GXData->dirtyState |= 1;
+    gx->bpSentNot = GX_FALSE;
+    gx->dirtyState |= 1;
 }
 
 void GXSetNumTevStages(u8 count) {
-    GX_SET_REG(__GXData->genMode, count - 1, 18, 21);
+    GX_SET_REG(gx->genMode, count - 1, 18, 21);
 
-    __GXData->dirtyState |= 0x4;
+    gx->dirtyState |= 0x4;
 }

@@ -4,90 +4,90 @@
 static inline void SETVCDATTR(GXAttr name, GXAttrType type) {
     switch (name) {
     case GX_VA_PNMTXIDX:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_POSMTXIDX_ST, GX_CP_VCD_LO_POSMTXIDX_END);
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_POSMTXIDX_ST, GX_CP_VCD_LO_POSMTXIDX_END);
         break;
     case GX_VA_TEX0MTXIDX:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_TEX0MTXIDX_ST,
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_TEX0MTXIDX_ST,
                    GX_CP_VCD_LO_TEX0MTXIDX_END);
         break;
     case GX_VA_TEX1MTXIDX:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_TEX1MTXIDX_ST,
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_TEX1MTXIDX_ST,
                    GX_CP_VCD_LO_TEX1MTXIDX_END);
         break;
     case GX_VA_TEX2MTXIDX:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_TEX2MTXIDX_ST,
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_TEX2MTXIDX_ST,
                    GX_CP_VCD_LO_TEX2MTXIDX_END);
         break;
     case GX_VA_TEX3MTXIDX:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_TEX3MTXIDX_ST,
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_TEX3MTXIDX_ST,
                    GX_CP_VCD_LO_TEX3MTXIDX_END);
         break;
     case GX_VA_TEX4MTXIDX:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_TEX4MTXIDX_ST,
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_TEX4MTXIDX_ST,
                    GX_CP_VCD_LO_TEX4MTXIDX_END);
         break;
     case GX_VA_TEX5MTXIDX:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_TEX5MTXIDX_ST,
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_TEX5MTXIDX_ST,
                    GX_CP_VCD_LO_TEX5MTXIDX_END);
         break;
     case GX_VA_TEX6MTXIDX:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_TEX6MTXIDX_ST,
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_TEX6MTXIDX_ST,
                    GX_CP_VCD_LO_TEX6MTXIDX_END);
         break;
     case GX_VA_TEX7MTXIDX:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_TEX7MTXIDX_ST,
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_TEX7MTXIDX_ST,
                    GX_CP_VCD_LO_TEX7MTXIDX_END);
         break;
     case GX_VA_POS:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_POS_ST, GX_CP_VCD_LO_POS_END);
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_POS_ST, GX_CP_VCD_LO_POS_END);
         break;
     case GX_VA_NRM:
         if (type != GX_NONE) {
-            __GXData->hasNrms = TRUE;
-            __GXData->hasBiNrms = FALSE;
-            __GXData->nrmType = type;
+            gx->hasNrms = TRUE;
+            gx->hasBiNrms = FALSE;
+            gx->nrmType = type;
         } else {
-            __GXData->hasNrms = FALSE;
+            gx->hasNrms = FALSE;
         }
         break;
     case GX_VA_NBT:
         if (type != GX_NONE) {
-            __GXData->hasBiNrms = TRUE;
-            __GXData->hasNrms = FALSE;
-            __GXData->nrmType = type;
+            gx->hasBiNrms = TRUE;
+            gx->hasNrms = FALSE;
+            gx->nrmType = type;
         } else {
-            __GXData->hasBiNrms = FALSE;
+            gx->hasBiNrms = FALSE;
         }
         break;
     case GX_VA_CLR0:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_CLRDIF_ST, GX_CP_VCD_LO_CLRDIF_END);
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_CLRDIF_ST, GX_CP_VCD_LO_CLRDIF_END);
         break;
     case GX_VA_CLR1:
-        GX_SET_REG(__GXData->vcdLo, type, GX_CP_VCD_LO_CLRSPEC_ST, GX_CP_VCD_LO_CLRSPEC_END);
+        GX_SET_REG(gx->vcdLo, type, GX_CP_VCD_LO_CLRSPEC_ST, GX_CP_VCD_LO_CLRSPEC_END);
         break;
     case GX_VA_TEX0:
-        GX_SET_REG(__GXData->vcdHi, type, GX_CP_VCD_HI_TEX0COORD_ST, GX_CP_VCD_HI_TEX0COORD_END);
+        GX_SET_REG(gx->vcdHi, type, GX_CP_VCD_HI_TEX0COORD_ST, GX_CP_VCD_HI_TEX0COORD_END);
         break;
     case GX_VA_TEX1:
-        GX_SET_REG(__GXData->vcdHi, type, GX_CP_VCD_HI_TEX1COORD_ST, GX_CP_VCD_HI_TEX1COORD_END);
+        GX_SET_REG(gx->vcdHi, type, GX_CP_VCD_HI_TEX1COORD_ST, GX_CP_VCD_HI_TEX1COORD_END);
         break;
     case GX_VA_TEX2:
-        GX_SET_REG(__GXData->vcdHi, type, GX_CP_VCD_HI_TEX2COORD_ST, GX_CP_VCD_HI_TEX2COORD_END);
+        GX_SET_REG(gx->vcdHi, type, GX_CP_VCD_HI_TEX2COORD_ST, GX_CP_VCD_HI_TEX2COORD_END);
         break;
     case GX_VA_TEX3:
-        GX_SET_REG(__GXData->vcdHi, type, GX_CP_VCD_HI_TEX3COORD_ST, GX_CP_VCD_HI_TEX3COORD_END);
+        GX_SET_REG(gx->vcdHi, type, GX_CP_VCD_HI_TEX3COORD_ST, GX_CP_VCD_HI_TEX3COORD_END);
         break;
     case GX_VA_TEX4:
-        GX_SET_REG(__GXData->vcdHi, type, GX_CP_VCD_HI_TEX4COORD_ST, GX_CP_VCD_HI_TEX4COORD_END);
+        GX_SET_REG(gx->vcdHi, type, GX_CP_VCD_HI_TEX4COORD_ST, GX_CP_VCD_HI_TEX4COORD_END);
         break;
     case GX_VA_TEX5:
-        GX_SET_REG(__GXData->vcdHi, type, GX_CP_VCD_HI_TEX5COORD_ST, GX_CP_VCD_HI_TEX5COORD_END);
+        GX_SET_REG(gx->vcdHi, type, GX_CP_VCD_HI_TEX5COORD_ST, GX_CP_VCD_HI_TEX5COORD_END);
         break;
     case GX_VA_TEX6:
-        GX_SET_REG(__GXData->vcdHi, type, GX_CP_VCD_HI_TEX6COORD_ST, GX_CP_VCD_HI_TEX6COORD_END);
+        GX_SET_REG(gx->vcdHi, type, GX_CP_VCD_HI_TEX6COORD_ST, GX_CP_VCD_HI_TEX6COORD_END);
         break;
     case GX_VA_TEX7:
-        GX_SET_REG(__GXData->vcdHi, type, GX_CP_VCD_HI_TEX7COORD_ST, GX_CP_VCD_HI_TEX7COORD_END);
+        GX_SET_REG(gx->vcdHi, type, GX_CP_VCD_HI_TEX7COORD_ST, GX_CP_VCD_HI_TEX7COORD_END);
         break;
     }
 }
@@ -96,13 +96,13 @@ void GXSetVtxDesc(GXAttr name, GXAttrType type) {
     SETVCDATTR(name, type);
 
     // Set normal data type if enabled
-    if (__GXData->hasNrms || __GXData->hasBiNrms) {
-        GX_BITFIELD_SET(__GXData->vcdLo, 19, 2, __GXData->nrmType);
+    if (gx->hasNrms || gx->hasBiNrms) {
+        GX_BITFIELD_SET(gx->vcdLo, 19, 2, gx->nrmType);
     } else {
-        GX_BITFIELD_SET(__GXData->vcdLo, 19, 2, 0);
+        GX_BITFIELD_SET(gx->vcdLo, 19, 2, 0);
     }
 
-    __GXData->dirtyState |= GX_DIRTY_VCD;
+    gx->dirtyState |= GX_DIRTY_VCD;
 }
 
 void GXSetVtxDescv(GXVtxDescList* list) {
@@ -111,37 +111,37 @@ void GXSetVtxDescv(GXVtxDescList* list) {
     }
 
     // Set normal data type if enabled
-    if (__GXData->hasNrms || __GXData->hasBiNrms) {
-        GX_BITFIELD_SET(__GXData->vcdLo, 19, 2, __GXData->nrmType);
+    if (gx->hasNrms || gx->hasBiNrms) {
+        GX_BITFIELD_SET(gx->vcdLo, 19, 2, gx->nrmType);
     } else {
-        GX_BITFIELD_SET(__GXData->vcdLo, 19, 2, 0);
+        GX_BITFIELD_SET(gx->vcdLo, 19, 2, 0);
     }
 
-    __GXData->dirtyState |= GX_DIRTY_VCD;
+    gx->dirtyState |= GX_DIRTY_VCD;
 }
 
 static void __GXXfVtxSpecs(void) {
     u32 normCount, colorCount, texCount;
 
-    normCount = __GXData->hasBiNrms ? 2 : (__GXData->hasNrms ? 1 : 0);
+    normCount = gx->hasBiNrms ? 2 : (gx->hasNrms ? 1 : 0);
 
     // Both fields in one access
-    colorCount = 33 - __cntlzw((__GXData->vcdLo & (0xf << 0xd)) >> 0xd);
+    colorCount = 33 - __cntlzw((gx->vcdLo & (0xf << 0xd)) >> 0xd);
     colorCount /= 2;  // equivalent to /=2 and >>= 1
 
     // All 16 assigned bits in VCD_Hi
-    texCount = 33 - __cntlzw((__GXData->vcdHi & (0xffff << 0)) >> 0);
+    texCount = 33 - __cntlzw((gx->vcdHi & (0xffff << 0)) >> 0);
     texCount /= 2;  // equivalent to /=2 and >>= 1
 
     GX_XF_LOAD_REG(GX_XF_REG_INVERTEXSPEC, (colorCount) | (normCount << 2) | (texCount << 4));
-    __GXData->bpSentNot = GX_TRUE;
+    gx->bpSentNot = GX_TRUE;
 
     return;
 }
 
 void __GXSetVCD(void) {
-    GX_CP_LOAD_REG(GX_CP_REG_VCD_LO, __GXData->vcdLo);
-    GX_CP_LOAD_REG(GX_CP_REG_VCD_HI, __GXData->vcdHi);
+    GX_CP_LOAD_REG(GX_CP_REG_VCD_LO, gx->vcdLo);
+    GX_CP_LOAD_REG(GX_CP_REG_VCD_HI, gx->vcdHi);
 
     __GXXfVtxSpecs();
 }
@@ -156,15 +156,15 @@ void __GXCalculateVLim(void) {
     u32 vcdHiReg;
     s32 compCnt;
 
-    if (__GXData->vNum == 0) {
+    if (gx->vNum == 0) {
         return;
     }
 
-    vcdLoReg = __GXData->vcdLo;
-    vcdHiReg = __GXData->vcdHi;
+    vcdLoReg = gx->vcdLo;
+    vcdHiReg = gx->vcdHi;
 
     // GXCompCnt bit of normal parameters
-    compCnt = __GXData->vatA[GX_VTXFMT0];
+    compCnt = gx->vatA[GX_VTXFMT0];
     compCnt = (compCnt & 0x200) >> 9;
 
     vlim = GX_GET_REG(vcdLoReg, GX_CP_VCD_LO_POSMTXIDX_ST, GX_CP_VCD_LO_POSMTXIDX_END);
@@ -192,7 +192,7 @@ void __GXCalculateVLim(void) {
     vlim += tbl2[GX_GET_REG(vcdHiReg, GX_CP_VCD_HI_TEX6COORD_ST, GX_CP_VCD_HI_TEX6COORD_END)];
     vlim += tbl2[GX_GET_REG(vcdHiReg, GX_CP_VCD_HI_TEX7COORD_ST, GX_CP_VCD_HI_TEX7COORD_END)];
 
-    __GXData->vLim = vlim;
+    gx->vLim = vlim;
 }
 
 void GXGetVtxDesc(int param_0, GXAttrType* param_1) {
@@ -200,78 +200,78 @@ void GXGetVtxDesc(int param_0, GXAttrType* param_1) {
 
     switch (param_0) {
     case 0:
-        local_38 = __GXData->vcdLo & 1;
+        local_38 = gx->vcdLo & 1;
         break;
     case 1:
-        local_38 = (__GXData->vcdLo & 2) >> 1;
+        local_38 = (gx->vcdLo & 2) >> 1;
         break;
     case 2:
-        local_38 = (__GXData->vcdLo & 4) >> 2;
+        local_38 = (gx->vcdLo & 4) >> 2;
         break;
     case 3:
-        local_38 = (__GXData->vcdLo & 8) >> 3;
+        local_38 = (gx->vcdLo & 8) >> 3;
         break;
     case 4:
-        local_38 = (__GXData->vcdLo & 0x10) >> 4;
+        local_38 = (gx->vcdLo & 0x10) >> 4;
         break;
     case 5:
-        local_38 = (__GXData->vcdLo & 0x20) >> 5;
+        local_38 = (gx->vcdLo & 0x20) >> 5;
         break;
     case 6:
-        local_38 = (__GXData->vcdLo & 0x40) >> 6;
+        local_38 = (gx->vcdLo & 0x40) >> 6;
         break;
     case 7:
-        local_38 = (__GXData->vcdLo & 0x80) >> 7;
+        local_38 = (gx->vcdLo & 0x80) >> 7;
         break;
     case 8:
-        local_38 = (__GXData->vcdLo & 0x100) >> 8;
+        local_38 = (gx->vcdLo & 0x100) >> 8;
         break;
     case 9:
-        local_38 = (__GXData->vcdLo & 0x600) >> 9;
+        local_38 = (gx->vcdLo & 0x600) >> 9;
         break;
     case 10:
-        if (__GXData->hasNrms != 0) {
-            local_38 = (__GXData->vcdLo & 0x1800) >> 11;
+        if (gx->hasNrms != 0) {
+            local_38 = (gx->vcdLo & 0x1800) >> 11;
         } else {
             local_38 = 0;
         }
         break;
     case 0x19:
-        if (__GXData->hasBiNrms != 0) {
-            local_38 = (__GXData->vcdLo & 0x1800) >> 11;
+        if (gx->hasBiNrms != 0) {
+            local_38 = (gx->vcdLo & 0x1800) >> 11;
         } else {
             local_38 = 0;
         }
         break;
     case 11:
-        local_38 = (__GXData->vcdLo & 0x6000) >> 13;
+        local_38 = (gx->vcdLo & 0x6000) >> 13;
         break;
     case 12:
-        local_38 = (__GXData->vcdLo & 0x18000) >> 15;
+        local_38 = (gx->vcdLo & 0x18000) >> 15;
         break;
     case 13:
-        local_38 = (__GXData->vcdHi & 3);
+        local_38 = (gx->vcdHi & 3);
         break;
     case 14:
-        local_38 = (__GXData->vcdHi & 0xC) >> 2;
+        local_38 = (gx->vcdHi & 0xC) >> 2;
         break;
     case 15:
-        local_38 = (__GXData->vcdHi & 0x30) >> 4;
+        local_38 = (gx->vcdHi & 0x30) >> 4;
         break;
     case 16:
-        local_38 = (__GXData->vcdHi & 0xC0) >> 6;
+        local_38 = (gx->vcdHi & 0xC0) >> 6;
         break;
     case 17:
-        local_38 = (__GXData->vcdHi & 0x300) >> 8;
+        local_38 = (gx->vcdHi & 0x300) >> 8;
         break;
     case 18:
-        local_38 = (__GXData->vcdHi & 0xC00) >> 10;
+        local_38 = (gx->vcdHi & 0xC00) >> 10;
         break;
     case 19:
-        local_38 = (__GXData->vcdHi & 0x3000) >> 12;
+        local_38 = (gx->vcdHi & 0x3000) >> 12;
         break;
     case 20:
-        local_38 = (__GXData->vcdHi & 0xC000) >> 14;
+        local_38 = (gx->vcdHi & 0xC000) >> 14;
         break;
     default:
         local_38 = 0;
@@ -297,12 +297,12 @@ void GXGetVtxDescv(GXVtxDescList* attrPtr) {
 }
 
 void GXClearVtxDesc(void) {
-    __GXData->vcdLo = 0;
-    GX_BITFIELD_SET(__GXData->vcdLo, 0x15, 2, GX_DIRECT);
-    __GXData->vcdHi = 0;
-    __GXData->hasNrms = FALSE;
-    __GXData->hasBiNrms = FALSE;
-    __GXData->dirtyState |= GX_DIRTY_VCD;
+    gx->vcdLo = 0;
+    GX_BITFIELD_SET(gx->vcdLo, 0x15, 2, GX_DIRECT);
+    gx->vcdHi = 0;
+    gx->hasNrms = FALSE;
+    gx->hasBiNrms = FALSE;
+    gx->dirtyState |= GX_DIRTY_VCD;
 }
 
 /* ############################################################################################## */
@@ -381,14 +381,14 @@ static inline void SETVAT(u32* vatA, u32* vatB, u32* vatC, GXAttr attr, GXCompCn
 }
 
 void GXSetVtxAttrFmt(GXVtxFmt format, GXAttr attr, GXCompCnt count, GXCompType type, u8 frac) {
-    u32* vA = (u32*)&__GXData->vatA[format];
-    u32* vB = (u32*)&__GXData->vatB[format];
-    u32* vC = &__GXData->vatC[format];
+    u32* vA = (u32*)&gx->vatA[format];
+    u32* vB = (u32*)&gx->vatB[format];
+    u32* vC = &gx->vatC[format];
 
     SETVAT(vA, vB, vC, attr, count, type, frac);
 
-    __GXData->dirtyState |= GX_DIRTY_VAT;
-    __GXData->dirtyVAT |= (u8)(1 << (u8)format);
+    gx->dirtyState |= GX_DIRTY_VAT;
+    gx->dirtyVAT |= (u8)(1 << (u8)format);
 }
 
 void GXSetVtxAttrFmtv(GXVtxFmt format, GXVtxAttrFmtList* list) {
@@ -396,32 +396,32 @@ void GXSetVtxAttrFmtv(GXVtxFmt format, GXVtxAttrFmtList* list) {
     u32* vatB;
     u32* vatC;
 
-    vatA = (u32*)&__GXData->vatA[format];
-    vatB = (u32*)&__GXData->vatB[format];
-    vatC = &__GXData->vatC[format];
+    vatA = (u32*)&gx->vatA[format];
+    vatB = (u32*)&gx->vatB[format];
+    vatC = &gx->vatC[format];
 
     for (; list->mAttrib != GX_VA_NULL; list++) {
         SETVAT(vatA, vatB, vatC, list->mAttrib, list->mCompCnt, list->mCompType, list->mCompShift);
     }
 
-    __GXData->dirtyState |= GX_DIRTY_VAT;
-    __GXData->dirtyVAT |= (u8)(1 << (u8)format);
+    gx->dirtyState |= GX_DIRTY_VAT;
+    gx->dirtyVAT |= (u8)(1 << (u8)format);
 }
 
 void __GXSetVAT(void) {
     u32 i = 0;
-    u32 dirtyVAT = __GXData->dirtyVAT;
+    u32 dirtyVAT = gx->dirtyVAT;
     do {
         if (dirtyVAT & (1)) {
-            GX_CP_LOAD_REG(GX_CP_REG_VAT_GRP0 | i, __GXData->vatA[i]);
-            GX_CP_LOAD_REG(GX_CP_REG_VAT_GRP1 | i, __GXData->vatB[i]);
-            GX_CP_LOAD_REG(GX_CP_REG_VAT_GRP2 | i, __GXData->vatC[i]);
+            GX_CP_LOAD_REG(GX_CP_REG_VAT_GRP0 | i, gx->vatA[i]);
+            GX_CP_LOAD_REG(GX_CP_REG_VAT_GRP1 | i, gx->vatB[i]);
+            GX_CP_LOAD_REG(GX_CP_REG_VAT_GRP2 | i, gx->vatC[i]);
         }
         dirtyVAT >>= 1;
         i++;
     } while (dirtyVAT != 0);
 
-    __GXData->dirtyVAT = 0;
+    gx->dirtyVAT = 0;
 }
 
 static u8 GetFracForNrm(int param_0) {
@@ -502,9 +502,9 @@ void GXGetVtxAttrFmt(GXVtxFmt param_0, int param_1, GXCompCnt* param_2, GXCompTy
     } */
 #endif
 
-    tmp_1 = (GXCompCnt*)&__GXData->vatA[param_0];
-    tmp_2 = (GXCompCnt*)&__GXData->vatB[param_0];
-    tmp_3 = &__GXData->vatC[param_0];
+    tmp_1 = (GXCompCnt*)&gx->vatA[param_0];
+    tmp_2 = (GXCompCnt*)&gx->vatB[param_0];
+    tmp_3 = &gx->vatC[param_0];
 
     switch (param_1) {
     case 9:
@@ -717,35 +717,35 @@ void GXSetTexCoordGen2(GXTexCoordID id, GXTexGenType type, GXTexGenSrc src, u32 
 
     switch (id) {
     case GX_TEXCOORD0:
-        GX_SET_REG(__GXData->matIdxA, texMtxIdx, GX_XF_MTXIDX0_TEX0_ST, GX_XF_MTXIDX0_TEX0_END);
+        GX_SET_REG(gx->matIdxA, texMtxIdx, GX_XF_MTXIDX0_TEX0_ST, GX_XF_MTXIDX0_TEX0_END);
         break;
     case GX_TEXCOORD1:
-        GX_SET_REG(__GXData->matIdxA, texMtxIdx, GX_XF_MTXIDX0_TEX1_ST, GX_XF_MTXIDX0_TEX1_END);
+        GX_SET_REG(gx->matIdxA, texMtxIdx, GX_XF_MTXIDX0_TEX1_ST, GX_XF_MTXIDX0_TEX1_END);
         break;
     case GX_TEXCOORD2:
-        GX_SET_REG(__GXData->matIdxA, texMtxIdx, GX_XF_MTXIDX0_TEX2_ST, GX_XF_MTXIDX0_TEX2_END);
+        GX_SET_REG(gx->matIdxA, texMtxIdx, GX_XF_MTXIDX0_TEX2_ST, GX_XF_MTXIDX0_TEX2_END);
         break;
     case GX_TEXCOORD3:
-        GX_SET_REG(__GXData->matIdxA, texMtxIdx, GX_XF_MTXIDX0_TEX3_ST, GX_XF_MTXIDX0_TEX3_END);
+        GX_SET_REG(gx->matIdxA, texMtxIdx, GX_XF_MTXIDX0_TEX3_ST, GX_XF_MTXIDX0_TEX3_END);
         break;
     case GX_TEXCOORD4:
-        GX_SET_REG(__GXData->matIdxB, texMtxIdx, GX_XF_MTXIDX1_TEX4_ST, GX_XF_MTXIDX1_TEX4_END);
+        GX_SET_REG(gx->matIdxB, texMtxIdx, GX_XF_MTXIDX1_TEX4_ST, GX_XF_MTXIDX1_TEX4_END);
         break;
     case GX_TEXCOORD5:
-        GX_SET_REG(__GXData->matIdxB, texMtxIdx, GX_XF_MTXIDX1_TEX5_ST, GX_XF_MTXIDX1_TEX5_END);
+        GX_SET_REG(gx->matIdxB, texMtxIdx, GX_XF_MTXIDX1_TEX5_ST, GX_XF_MTXIDX1_TEX5_END);
         break;
     case GX_TEXCOORD6:
-        GX_SET_REG(__GXData->matIdxB, texMtxIdx, GX_XF_MTXIDX1_TEX6_ST, GX_XF_MTXIDX1_TEX6_END);
+        GX_SET_REG(gx->matIdxB, texMtxIdx, GX_XF_MTXIDX1_TEX6_ST, GX_XF_MTXIDX1_TEX6_END);
         break;
     default:
-        GX_SET_REG(__GXData->matIdxB, texMtxIdx, GX_XF_MTXIDX1_TEX7_ST, GX_XF_MTXIDX1_TEX7_END);
+        GX_SET_REG(gx->matIdxB, texMtxIdx, GX_XF_MTXIDX1_TEX7_ST, GX_XF_MTXIDX1_TEX7_END);
         break;
     }
     __GXSetMatrixIndex(id + 1);
 }
 
 void GXSetNumTexGens(u8 count) {
-    GX_SET_REG(__GXData->genMode, count, GX_BP_GENMODE_NUMTEX_ST, GX_BP_GENMODE_NUMTEX_END);
+    GX_SET_REG(gx->genMode, count, GX_BP_GENMODE_NUMTEX_ST, GX_BP_GENMODE_NUMTEX_END);
     GX_XF_LOAD_REG(GX_XF_REG_NUMTEX, count);
-    __GXData->dirtyState |= GX_DIRTY_GEN_MODE;
+    gx->dirtyState |= GX_DIRTY_GEN_MODE;
 }

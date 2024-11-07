@@ -2,7 +2,7 @@
 #include "dolphin/gx/GX.h"
 
 void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
-    switch (__GXData->perf0) {
+    switch (gx->perf0) {
     case GX_PERF0_VERTICES:
     case GX_PERF0_CLIP_VTX:
     case GX_PERF0_CLIP_CLKS:
@@ -53,7 +53,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
         break;
     }
 
-    switch (__GXData->perf1) {
+    switch (gx->perf1) {
     case GX_PERF1_TEXELS:
     case GX_PERF1_TX_IDLE:
     case GX_PERF1_TX_REGS:
@@ -75,10 +75,10 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF1_VC_STREAMBUF_LOW:
     case GX_PERF1_VC_ALL_STALLS:
     case GX_PERF1_VERTICES:
-        FAST_FLAG_SET(__GXData->perfSel, 0, 4, 4);
+        FAST_FLAG_SET(gx->perfSel, 0, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
-        GXFIFO.u32 = __GXData->perfSel;
+        GXFIFO.u32 = gx->perfSel;
         break;
 
     case GX_PERF1_FIFO_REQ:
@@ -92,9 +92,9 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
         break;
     }
 
-    __GXData->perf0 = perf0;
+    gx->perf0 = perf0;
 
-    switch (__GXData->perf0) {
+    switch (gx->perf0) {
     case GX_PERF0_VERTICES:
         GXFIFO.u8 = 0x10;
         GXFIFO.u32 = 0x1006;
@@ -231,9 +231,9 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
         break;
     }
 
-    __GXData->perf1 = perf1;
+    gx->perf1 = perf1;
 
-    switch (__GXData->perf1) {
+    switch (gx->perf1) {
     case GX_PERF1_TEXELS:
         GFWriteBPCmd(0x67000042);
         break;
@@ -266,52 +266,52 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
         break;
 
     case GX_PERF1_VC_ELEMQ_FULL:
-        FAST_FLAG_SET(__GXData->perfSel, 2, 4, 4);
+        FAST_FLAG_SET(gx->perfSel, 2, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
-        GXFIFO.u32 = __GXData->perfSel;
+        GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_MISSQ_FULL:
-        FAST_FLAG_SET(__GXData->perfSel, 3, 4, 4);
+        FAST_FLAG_SET(gx->perfSel, 3, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
-        GXFIFO.u32 = __GXData->perfSel;
+        GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_MEMREQ_FULL:
-        FAST_FLAG_SET(__GXData->perfSel, 4, 4, 4);
+        FAST_FLAG_SET(gx->perfSel, 4, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
-        GXFIFO.u32 = __GXData->perfSel;
+        GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_STATUS7:
-        FAST_FLAG_SET(__GXData->perfSel, 5, 4, 4);
+        FAST_FLAG_SET(gx->perfSel, 5, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
-        GXFIFO.u32 = __GXData->perfSel;
+        GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_MISSREP_FULL:
-        FAST_FLAG_SET(__GXData->perfSel, 6, 4, 4);
+        FAST_FLAG_SET(gx->perfSel, 6, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
-        GXFIFO.u32 = __GXData->perfSel;
+        GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_STREAMBUF_LOW:
-        FAST_FLAG_SET(__GXData->perfSel, 7, 4, 4);
+        FAST_FLAG_SET(gx->perfSel, 7, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
-        GXFIFO.u32 = __GXData->perfSel;
+        GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_ALL_STALLS:
-        FAST_FLAG_SET(__GXData->perfSel, 9, 4, 4);
+        FAST_FLAG_SET(gx->perfSel, 9, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
-        GXFIFO.u32 = __GXData->perfSel;
+        GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VERTICES:
-        FAST_FLAG_SET(__GXData->perfSel, 8, 4, 4);
+        FAST_FLAG_SET(gx->perfSel, 8, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
-        GXFIFO.u32 = __GXData->perfSel;
+        GXFIFO.u32 = gx->perfSel;
         break;
 
     case GX_PERF1_FIFO_REQ:
@@ -331,7 +331,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
         break;
     }
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXClearGPMetric(void) {
@@ -340,9 +340,9 @@ void GXClearGPMetric(void) {
 
 #pragma scheduling off
 void GXReadXfRasMetric(u32* xfWaitIn, u32* xfWaitOut, u32* rasBusy, u32* clocks) {
-    *rasBusy = GXReadCPReg(32, 33);
-    *clocks = GXReadCPReg(34, 35);
-    *xfWaitIn = GXReadCPReg(36, 37);
-    *xfWaitOut = GXReadCPReg(38, 39);
+    // *rasBusy = GXReadCPReg(32, 33);
+    // *clocks = GXReadCPReg(34, 35);
+    // *xfWaitIn = GXReadCPReg(36, 37);
+    // *xfWaitOut = GXReadCPReg(38, 39);
 }
 #pragma scheduling reset

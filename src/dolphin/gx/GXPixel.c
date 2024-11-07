@@ -47,7 +47,7 @@ void GXSetFog(GXFogType type, f32 startz, f32 endz, f32 nearz, f32 farz, GXColor
             expB--;
         }
 
-        a = tmpA / (1 << expB + 1);
+        a = tmpA / (1 << (expB + 1));
         magB = 8388638.0f * tmpB;
         shiftB = expB + 1;
         c = tmpC;
@@ -84,7 +84,7 @@ void GXSetFog(GXFogType type, f32 startz, f32 endz, f32 nearz, f32 farz, GXColor
     GX_BP_LOAD_REG(fogParamReg3);
     GX_BP_LOAD_REG(fogColorReg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetFogRangeAdj(GXBool enable, u16 center, GXFogAdjTable* table) {
@@ -110,12 +110,12 @@ void GXSetFogRangeAdj(GXBool enable, u16 center, GXFogAdjTable* table) {
     GX_SET_REG(fogRangeReg, GX_BP_REG_FOGRANGE, 0, 7);
     GX_BP_LOAD_REG(fogRangeReg);
 
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetBlendMode(GXBlendMode type, GXBlendFactor src_factor, GXBlendFactor dst_factor,
                     GXLogicOp op) {
-    u32 blendModeReg = __GXData->cmode0;
+    u32 blendModeReg = gx->cmode0;
     GX_SET_REG(blendModeReg, type == GX_BM_SUBTRACT, GX_BP_BLENDMODE_SUBTRACT_ST,
                GX_BP_BLENDMODE_SUBTRACT_END);
     GX_SET_REG(blendModeReg, type, GX_BP_BLENDMODE_ENABLE_ST, GX_BP_BLENDMODE_ENABLE_END);
@@ -128,44 +128,44 @@ void GXSetBlendMode(GXBlendMode type, GXBlendFactor src_factor, GXBlendFactor ds
                GX_BP_BLENDMODE_DSTFACTOR_END);
 
     GX_BP_LOAD_REG(blendModeReg);
-    __GXData->cmode0 = blendModeReg;
+    gx->cmode0 = blendModeReg;
 
-    __GXData->bpSentNot = FALSE;
+    gx->bpSentNot = FALSE;
 }
 
 void GXSetColorUpdate(GXBool updateEnable) {
-    u32 blendModeReg = __GXData->cmode0;
+    u32 blendModeReg = gx->cmode0;
     GX_SET_REG(blendModeReg, updateEnable, GX_BP_BLENDMODE_COLOR_UPDATE_ST,
                GX_BP_BLENDMODE_COLOR_UPDATE_END);
     GX_BP_LOAD_REG(blendModeReg);
-    __GXData->cmode0 = blendModeReg;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->cmode0 = blendModeReg;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetAlphaUpdate(GXBool updateEnable) {
-    u32 blendModeReg = __GXData->cmode0;
+    u32 blendModeReg = gx->cmode0;
     GX_SET_REG(blendModeReg, updateEnable, GX_BP_BLENDMODE_ALPHA_UPDATE_ST,
                GX_BP_BLENDMODE_ALPHA_UPDATE_END);
     GX_BP_LOAD_REG(blendModeReg);
-    __GXData->cmode0 = blendModeReg;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->cmode0 = blendModeReg;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetZMode(GXBool compareEnable, GXCompare func, GXBool updateEnable) {
-    u32 zModeReg = __GXData->zmode;
+    u32 zModeReg = gx->zmode;
     GX_SET_REG(zModeReg, compareEnable, GX_BP_ZMODE_TEST_ENABLE_ST, GX_BP_ZMODE_TEST_ENABLE_END);
     GX_SET_REG(zModeReg, func, GX_BP_ZMODE_COMPARE_ST, GX_BP_ZMODE_COMPARE_END);
     GX_SET_REG(zModeReg, updateEnable, GX_BP_ZMODE_UPDATE_ENABLE_ST, GX_BP_ZMODE_UPDATE_ENABLE_END);
     GX_BP_LOAD_REG(zModeReg);
-    __GXData->zmode = zModeReg;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->zmode = zModeReg;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetZCompLoc(GXBool beforeTex) {
-    GX_SET_REG(__GXData->peCtrl, beforeTex, GX_BP_ZCONTROL_BEFORE_TEX_ST,
+    GX_SET_REG(gx->peCtrl, beforeTex, GX_BP_ZCONTROL_BEFORE_TEX_ST,
                GX_BP_ZCONTROL_BEFORE_TEX_END);
-    GX_BP_LOAD_REG(__GXData->peCtrl);
-    __GXData->bpSentNot = GX_FALSE;
+    GX_BP_LOAD_REG(gx->peCtrl);
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetPixelFmt(GXPixelFmt pixelFmt, GXZFmt16 zFmt) {
@@ -173,45 +173,45 @@ void GXSetPixelFmt(GXPixelFmt pixelFmt, GXZFmt16 zFmt) {
     static u32 p2f[GX_PF_MAX] = {GX_PF_RGB8_Z24, GX_PF_RGBA6_Z24, GX_PF_RGB565_Z16, GX_PF_Z24,
                                  GX_PF_Y8,       GX_PF_Y8,        GX_PF_Y8,         GX_PF_U8};
 
-    const u32 zControlRegOld = __GXData->peCtrl;
+    const u32 zControlRegOld = gx->peCtrl;
 
-    GX_SET_REG(__GXData->peCtrl, p2f[pixelFmt], GX_BP_ZCONTROL_PIXEL_FMT_ST,
+    GX_SET_REG(gx->peCtrl, p2f[pixelFmt], GX_BP_ZCONTROL_PIXEL_FMT_ST,
                GX_BP_ZCONTROL_PIXEL_FMT_END);
-    GX_SET_REG(__GXData->peCtrl, zFmt, GX_BP_ZCONTROL_Z_FMT_ST, GX_BP_ZCONTROL_Z_FMT_END);
+    GX_SET_REG(gx->peCtrl, zFmt, GX_BP_ZCONTROL_Z_FMT_ST, GX_BP_ZCONTROL_Z_FMT_END);
 
-    if (zControlRegOld != __GXData->peCtrl) {
-        GX_BP_LOAD_REG(__GXData->peCtrl);
+    if (zControlRegOld != gx->peCtrl) {
+        GX_BP_LOAD_REG(gx->peCtrl);
         isZ16 = (pixelFmt == GX_PF_RGB565_Z16) ? GX_TRUE : GX_FALSE;
-        GX_SET_REG(__GXData->genMode, isZ16, GX_BP_GENMODE_MULTISAMPLE_ST,
+        GX_SET_REG(gx->genMode, isZ16, GX_BP_GENMODE_MULTISAMPLE_ST,
                    GX_BP_GENMODE_MULTISAMPLE_END);
-        __GXData->dirtyState |= GX_DIRTY_GEN_MODE;
+        gx->dirtyState |= GX_DIRTY_GEN_MODE;
     }
 
     if (p2f[pixelFmt] == GX_PF_Y8) {
-        GX_SET_REG(__GXData->cmode1, pixelFmt - GX_PF_Y8, GX_BP_DSTALPHA_YUV_FMT_ST,
+        GX_SET_REG(gx->cmode1, pixelFmt - GX_PF_Y8, GX_BP_DSTALPHA_YUV_FMT_ST,
                    GX_BP_DSTALPHA_YUV_FMT_END);
-        GX_SET_REG(__GXData->cmode1, GX_BP_REG_DSTALPHA, 0, 7);
-        GX_BP_LOAD_REG(__GXData->cmode1);
+        GX_SET_REG(gx->cmode1, GX_BP_REG_DSTALPHA, 0, 7);
+        GX_BP_LOAD_REG(gx->cmode1);
     }
 
-    __GXData->bpSentNot = FALSE;
+    gx->bpSentNot = FALSE;
 }
 
 void GXSetDither(GXBool dither) {
-    u32 blendModeReg = __GXData->cmode0;
+    u32 blendModeReg = gx->cmode0;
     GX_SET_REG(blendModeReg, dither, GX_BP_BLENDMODE_DITHER_ST, GX_BP_BLENDMODE_DITHER_END);
     GX_BP_LOAD_REG(blendModeReg);
-    __GXData->cmode0 = blendModeReg;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->cmode0 = blendModeReg;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetDstAlpha(GXBool enable, u8 alpha) {
-    u32 dstAlpha = __GXData->cmode1;
+    u32 dstAlpha = gx->cmode1;
     GX_SET_REG(dstAlpha, alpha, GX_BP_DSTALPHA_ALPHA_ST, GX_BP_DSTALPHA_ALPHA_END);
     GX_SET_REG(dstAlpha, enable, GX_BP_DSTALPHA_ENABLE_ST, GX_BP_DSTALPHA_ENABLE_END);
     GX_BP_LOAD_REG(dstAlpha);
-    __GXData->cmode1 = dstAlpha;
-    __GXData->bpSentNot = GX_FALSE;
+    gx->cmode1 = dstAlpha;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetFieldMask(GXBool enableEven, GXBool enableOdd) {
@@ -221,13 +221,13 @@ void GXSetFieldMask(GXBool enableEven, GXBool enableOdd) {
     GX_SET_REG(fieldMaskReg, GX_BP_REG_FIELDMASK, 0, 7);
 
     GX_BP_LOAD_REG(fieldMaskReg);
-    __GXData->bpSentNot = GX_FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetFieldMode(GXBool texLOD, GXBool adjustAR) {
-    GX_SET_REG(__GXData->lpSize, adjustAR, GX_BP_LINEPTWIDTH_ADJUST_ST,
+    GX_SET_REG(gx->lpSize, adjustAR, GX_BP_LINEPTWIDTH_ADJUST_ST,
                GX_BP_LINEPTWIDTH_ADJUST_END);
-    GX_BP_LOAD_REG(__GXData->lpSize);
+    GX_BP_LOAD_REG(gx->lpSize);
 
     __GXFlushTextureState();
     GX_BP_LOAD_REG(GX_BP_REG_FIELDMODE << 24 | texLOD);
