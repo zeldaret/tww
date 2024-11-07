@@ -21,8 +21,8 @@ const u16 l_B_sand2TEX__width = 512;
 const u16 l_B_sand2TEX__height = 256;
 #include "assets/l_texCoord.h"
 #include "assets/l_Hsand1DL.h"
-#include "assets/l_matDL.h"
-l_matDL(l_B_sand2TEX);
+#include "assets/l_matDL__d_a_bwdg.h"
+l_matDL__d_a_bwdg(l_B_sand2TEX);
 
 // Fakematch: These are supposed to be in-function statics inside daBwdg_packet_c::draw().
 // But for some reason, defining them inside the function causes the function to load them as well

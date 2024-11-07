@@ -1777,7 +1777,7 @@ def emit_build_rule(asset):
                     "inputs": out_dir / "bin" / asset["binary"],
                     "outputs": out_dir / "include" / asset["header"],
                     "variables": {
-                        "symbol": asset["symbol"],
+                        "symbol": asset.get("rename") or asset["symbol"],
                         "scope": custom_data.get("scope", "local")
                     },
                     "implicit": Path("tools/converters/matDL_dis.py"),
