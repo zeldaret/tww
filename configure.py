@@ -151,8 +151,8 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v1.2.0"
-config.objdiff_tag = "v2.3.4"
+config.dtk_tag = "v1.3.0"
+config.objdiff_tag = "v2.4.0"
 config.sjiswrap_tag = "v1.2.0"
 config.wibo_tag = "0.6.11"
 
@@ -178,6 +178,10 @@ if args.map:
 
 # Use for any additional files that should cause a re-configure when modified
 config.reconfig_deps = []
+
+# Optional numeric ID for decomp.me preset
+# Can be overridden in libraries or objects
+config.scratch_preset_id = 72 # The Wind Waker (DOL)
 
 # Base flags, common to most GC/Wii games.
 # Generally leave untouched, with overrides added below.
@@ -292,7 +296,11 @@ def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
 
 # Helper function for actor RELs
 def ActorRel(status, rel_name, extra_cflags=[]):
-    return Rel(rel_name, [Object(status, f"d/actor/{rel_name}.cpp", extra_cflags=extra_cflags)])
+    return Rel(rel_name, [Object(
+        status, f"d/actor/{rel_name}.cpp",
+        extra_cflags=extra_cflags,
+        scratch_preset_id=73, # The Wind Waker (REL)
+    )])
 
 
 # Helper function for JSystem libraries
