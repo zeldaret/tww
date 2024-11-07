@@ -1,13 +1,12 @@
 #include "dolphin/gx/GXTransform.h"
 #include "dolphin/gx/GX.h"
-#include "dolphin/os/OS.h"
-
-void __GXSetMatrixIndex();
+#include "dolphin/gx/GXInit.h"
 
 static void Copy6Floats(register f32 src[6], register f32 dst[6]) {
     register f32 ps_0, ps_1, ps_2;
 
     // clang-format off
+#ifdef __MWERKS__
     asm {
         psq_l  ps_0,  0(src), 0, 0
         psq_l  ps_1,  8(src), 0, 0
@@ -16,6 +15,7 @@ static void Copy6Floats(register f32 src[6], register f32 dst[6]) {
         psq_st ps_1,  8(dst), 0, 0
         psq_st ps_2, 16(dst), 0, 0
     }
+#endif
     // clang-format on
 }
 
@@ -23,6 +23,7 @@ static void WriteProjPS(const register f32 src[6], register volatile void* dst) 
     register f32 ps_0, ps_1, ps_2;
 
     // clang-format off
+#ifdef __MWERKS__
     asm {
         psq_l  ps_0,  0(src), 0, 0
         psq_l  ps_1,  8(src), 0, 0
@@ -31,6 +32,7 @@ static void WriteProjPS(const register f32 src[6], register volatile void* dst) 
         psq_st ps_1,  0(dst), 0, 0
         psq_st ps_2,  0(dst), 0, 0
     }
+#endif
     // clang-format on
 }
 
@@ -41,8 +43,6 @@ void GXProject(f32 model_x, f32 model_y, f32 model_z, Mtx model_mtx, f32* proj_m
     f32 var_f29;
     f32 var_f28;
     f32 var_f31;
-
-    ASSERTMSG(proj_mtx != NULL && viewpoint != NULL && screen_x != NULL && screen_y != NULL && screen_z != NULL, "GXGet*: invalid null pointer");
 
     sp10[0] = (model_mtx[0][0] * model_x) + (model_mtx[0][1] * model_y) +
               (model_mtx[0][2] * model_z) + model_mtx[0][3];
@@ -68,14 +68,9 @@ void GXProject(f32 model_x, f32 model_y, f32 model_z, Mtx model_mtx, f32* proj_m
     *screen_z = viewpoint[5] + (var_f31 * (var_f28 * (viewpoint[5] - viewpoint[4])));
 }
 
-void __GXSetProjection(void) {
-    GX_XF_LOAD_REGS(6, GX_XF_REG_PROJECTIONA);
-    WriteProjPS(__GXData->projMtx, (volatile void*)GXFIFO_ADDR);
-    GXFIFO.u32 = __GXData->projType;
-}
-
 void GXSetProjection(const Mtx44 proj, GXProjectionType type) {
     volatile void* fifo;
+    u32 reg;
     __GXData->projType = type;
 
     __GXData->projMtx[0] = proj[0][0];
@@ -91,28 +86,58 @@ void GXSetProjection(const Mtx44 proj, GXProjectionType type) {
         __GXData->projMtx[3] = proj[1][2];
     }
 
-    __GXSetProjection();
+
+    reg = 0x00061020;
+    GX_WRITE_U8(0x10);
+    GX_WRITE_U32(reg);
+    GX_WRITE_XF_REG_F(32, __GXData->projMtx[0]);
+    GX_WRITE_XF_REG_F(33, __GXData->projMtx[1]);
+    GX_WRITE_XF_REG_F(34, __GXData->projMtx[2]);
+    GX_WRITE_XF_REG_F(35, __GXData->projMtx[3]);
+    GX_WRITE_XF_REG_F(36, __GXData->projMtx[4]);
+    GX_WRITE_XF_REG_F(37, __GXData->projMtx[5]);
+    GX_WRITE_XF_REG_2(38, __GXData->projType);
 
     __GXData->bpSentNot = GX_TRUE;
 }
 
 void GXSetProjectionv(f32* proj) {
-    __GXData->projType = proj[0] == 0.0f ? GX_PERSPECTIVE : GX_ORTHOGRAPHIC;
-    Copy6Floats(&proj[1], __GXData->projMtx);
+    __GXData->projType = proj[0];
+    __GXData->projMtx[0] = proj[1];
+    __GXData->projMtx[1] = proj[2];
+    __GXData->projMtx[2] = proj[3];
+    __GXData->projMtx[3] = proj[4];
+    __GXData->projMtx[4] = proj[5];
+    __GXData->projMtx[5] = proj[6];
 
-    __GXSetProjection();
+
+    GX_WRITE_U8(0x10);
+    GX_WRITE_U32(0x00061020);
+    GX_WRITE_XF_REG_F(32, __GXData->projMtx[0]);
+    GX_WRITE_XF_REG_F(33, __GXData->projMtx[1]);
+    GX_WRITE_XF_REG_F(34, __GXData->projMtx[2]);
+    GX_WRITE_XF_REG_F(35, __GXData->projMtx[3]);
+    GX_WRITE_XF_REG_F(36, __GXData->projMtx[4]);
+    GX_WRITE_XF_REG_F(37, __GXData->projMtx[5]);
+    GX_WRITE_XF_REG_2(38, __GXData->projType);
     __GXData->bpSentNot = GX_TRUE;
 }
 
 void GXGetProjectionv(f32* proj) {
-    *proj = (u32)__GXData->projType != GX_PERSPECTIVE ? 1.0f : 0.0f;
-    Copy6Floats(__GXData->projMtx, &proj[1]);
+    proj[0] = __GXData->projType;
+    proj[1] = __GXData->projMtx[0];
+    proj[2] = __GXData->projMtx[1];
+    proj[3] = __GXData->projMtx[2];
+    proj[4] = __GXData->projMtx[3];
+    proj[5] = __GXData->projMtx[4];
+    proj[6] = __GXData->projMtx[5];
 }
 
 static void WriteMTXPS4x3(register volatile void* dst, register const Mtx src) {
     register f32 ps_0, ps_1, ps_2, ps_3, ps_4, ps_5;
 
     // clang-format off
+#ifdef __MWERKS__
     asm {
         psq_l  ps_0,  0(src), 0, 0
         psq_l  ps_1,  8(src), 0, 0
@@ -128,6 +153,7 @@ static void WriteMTXPS4x3(register volatile void* dst, register const Mtx src) {
         psq_st ps_4, 0(dst),  0, 0
         psq_st ps_5, 0(dst),  0, 0
     }
+#endif
     // clang-format on
 }
 
@@ -140,6 +166,7 @@ static void WriteMTXPS3x3(register volatile void* dst, register const Mtx src) {
     register f32 ps_0, ps_1, ps_2, ps_3, ps_4, ps_5;
 
     // clang-format off
+#ifdef __MWERKS__
     asm {
         psq_l  ps_0,  0(src), 0, 0
         lfs    ps_1,  8(src)
@@ -155,6 +182,7 @@ static void WriteMTXPS3x3(register volatile void* dst, register const Mtx src) {
         psq_st ps_4, 0(dst),  0, 0
         stfs   ps_5, 0(dst)
     }
+#endif
     // clang-format on
 }
 
@@ -172,6 +200,7 @@ static void WriteMTXPS4x2(register volatile void* dst, register const Mtx src) {
     register f32 ps_0, ps_1, ps_2, ps_3;
 
     // clang-format off
+#ifdef __MWERKS__
     asm {
         psq_l  ps_0,  0(src), 0, 0
         psq_l  ps_1,  8(src), 0, 0
@@ -183,6 +212,7 @@ static void WriteMTXPS4x2(register volatile void* dst, register const Mtx src) {
         psq_st ps_2, 0(dst),  0, 0
         psq_st ps_3, 0(dst),  0, 0
     }
+#endif
     // clang-format on
 }
 

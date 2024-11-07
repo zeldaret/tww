@@ -1,7 +1,8 @@
 #ifndef JMATH_H
 #define JMATH_H
 
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx/quat.h"
+#include "math.h"
 
 bool JMANewSinTable(u8 numBits);
 void JMAEulerToQuat(s16 x, s16 y, s16 z, Quaternion* out);

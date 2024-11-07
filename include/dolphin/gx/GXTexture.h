@@ -40,7 +40,7 @@ void GXSetTexCoordBias(GXTexCoordID coord, GXBool s_enable, GXBool t_enable);
 
 void __SetSURegs();
 void __GXSetSUTexRegs();
-void __GXSetTmemConfig();
+void __GXSetTmemConfig(u32);
 
 #ifdef __cplusplus
 };

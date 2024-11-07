@@ -23,6 +23,8 @@ void GXGetScissor(u32* left, u32* top, u32* width, u32* height);
 void GXSetScissorBoxOffset(s32 x, s32 y);
 void GXSetClipMode(GXClipMode mode);
 
+void __GXSetMatrixIndex(GXAttr index);
+
 #ifdef __cplusplus
 };
 #endif

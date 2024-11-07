@@ -1,6 +1,8 @@
 #include "abort_exit.h"
-#include "critical_regions.h"
 #include "stddef.h"
+#include "NMWException.h"
+
+void _ExitProcess();
 
 extern void (*_dtors[])(void);
 

@@ -205,6 +205,88 @@ inline void GFWriteBPCmd(u32 x) {
 
 inline void GXEnd() {}
 
+#define GX_WRITE_U8(ub)     \
+    GXFIFO.u8 = (u8)(ub)
+
+#define GX_WRITE_U16(us)    \
+    GXFIFO.u16 = (u16)(us)
+
+#define GX_WRITE_U32(ui)    \
+    GXFIFO.u32 = (u32)(ui)
+
+#define GX_WRITE_F32(f)     \
+    GXFIFO.f32 = (f32)(f);
+
+#define GX_WRITE_XF_REG(addr, value) \
+do { \
+    GX_WRITE_U8(0x10); \
+    GX_WRITE_U32(0x1000 + (addr)); \
+    GX_WRITE_U32(value); \
+    VERIF_XF_REG(addr, value); \
+} while (0)
+
+#if DEBUG
+#define GX_WRITE_XF_REG_2(addr, value) \
+do { \
+    u32 xfData = (value); &xfData; \
+    GX_WRITE_U32(value); \
+    VERIF_XF_REG_alt(addr, xfData); \
+} while (0)
+#define GX_WRITE_XF_REG_F(addr, value) \
+do { \
+    f32 xfData = (value); \
+    GX_WRITE_F32(value); \
+    VERIF_XF_REG_alt(addr, *(u32 *)&xfData); \
+} while (0)
+#else
+#define GX_WRITE_XF_REG_2(addr, value) \
+do { \
+    GX_WRITE_U32(value); \
+} while (0)
+#define GX_WRITE_XF_REG_F(addr, value) \
+do { \
+    GX_WRITE_F32(value); \
+} while (0)
+#endif
+
+#define GX_WRITE_RAS_REG(value) \
+do { \
+    GX_WRITE_U8(0x61); \
+    GX_WRITE_U32(value); \
+    VERIF_RAS_REG(value); \
+} while (0)
+
+#define GX_WRITE_SOME_REG2(a, b, c, addr) \
+do { \
+    long regAddr; \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+    regAddr = addr; \
+    if (regAddr >= 0 && regAddr < 4) { \
+        gx->indexBase[regAddr] = c; \
+    } \
+} while (0)
+#define GX_WRITE_SOME_REG3(a, b, c, addr) \
+do { \
+    long regAddr; \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+    regAddr = addr; \
+    if (regAddr >= 0 && regAddr < 4) { \
+        gx->indexStride[regAddr] = c; \
+    } \
+} while (0)
+#define GX_WRITE_SOME_REG4(a, b, c, addr) \
+do { \
+    long regAddr; \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+    regAddr = addr; \
+} while (0)
+
 #ifdef __cplusplus
 };
 #endif

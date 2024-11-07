@@ -24,6 +24,7 @@
   "search.exclude": {
     "build/*/config.json": true,
     "build/**/*.MAP": true,
+    "build/*/include/assets/**": true,
     "build.ninja": true,
     ".ninja_*": true,
     "objdiff.json": true,

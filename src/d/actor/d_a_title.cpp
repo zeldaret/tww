@@ -4,9 +4,6 @@
 //
 
 #include "d/actor/d_a_title.h"
-#include "d/res/res_tlogo.h"
-#include "d/res/res_tlogoe.h"
-#include "d/res/res_tlogoe0.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene_mng.h"
@@ -17,6 +14,16 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "stdio.h"
+
+#if VERSION == VERSION_JPN
+#include "d/res/res_tlogo.h"
+#endif
+#if VERSION == VERSION_USA
+#include "d/res/res_tlogoe.h"
+#endif
+#if VERSION == VERSION_PAL
+#include "d/res/res_tlogoe0.h"
+#endif
 
 // Note: For VERSION_PAL the "TlogoE0" string literal is modified at runtime.
 #define ARCNAME VERSION_SELECT("Tlogo", "TlogoE", "TlogoE0")

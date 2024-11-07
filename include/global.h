@@ -41,6 +41,7 @@
 #endif
 
 extern int __cntlzw(uint);
+extern int __rlwimi(int, int, int, int, int);
 extern void __dcbz(void*, int);
 
 #define VERSION_JPN 0

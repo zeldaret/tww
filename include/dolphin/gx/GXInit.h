@@ -81,8 +81,8 @@ typedef struct _GXData {
     // Texture regions
     /* 0x208 */ GXTexRegion TexRegions0[GX_MAX_TEXMAP];
     /* 0x288 */ GXTexRegion TexRegions1[4];
-    /* 0x2C8 */ u32 m2C8;
-    /* 0x2C8 */ u32 m2CC;
+    /* 0x2C8 */ u32 nextTexRgn;
+    /* 0x2C8 */ u32 nextTexRgnCI;
 
     // Texture lookup table regions
     /* 0x2D0 */ GXTlutRegion TlutRegions[GX_MAX_TLUT_ALL];
@@ -139,6 +139,16 @@ extern u32* __piReg;
 extern u16* __cpReg;
 extern u16* __peReg;
 extern vu16* __memReg;
+
+#define GX_GET_MEM_REG(offset) (*(vu16*)((vu16*)(__memReg) + (offset)))
+#define GX_GET_CP_REG(offset)  (*(vu16*)((vu16*)(__cpReg) + (offset)))
+#define GX_GET_PE_REG(offset)  (*(vu16*)((vu16*)(__peReg) + (offset)))
+#define GX_GET_PI_REG(offset)  (*(vu32*)((vu32*)(__piReg) + (offset)))
+
+#define GX_SET_MEM_REG(offset, val) (*(vu16*)((vu16*)(__memReg) + (offset)) = val)
+#define GX_SET_CP_REG(offset, val)  (*(vu16*)((vu16*)(__cpReg) + (offset)) = val)
+#define GX_SET_PE_REG(offset, val)  (*(vu16*)((vu16*)(__peReg) + (offset)) = val)
+#define GX_SET_PI_REG(offset, val)  (*(vu32*)((vu32*)(__piReg) + (offset)) = val)
 
 inline void GXSetWasteFlags() {
     GXData* data = __GXData;

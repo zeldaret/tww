@@ -127,36 +127,22 @@ void GXSetIndTexCoordScale(GXIndTexStageID texStage, GXIndTexScale scaleS, GXInd
 }
 
 void GXSetIndTexOrder(GXIndTexStageID stage, GXTexCoordID coord, GXTexMapID map) {
-    GXData* data;
-
-    if (map == 0xFF) {
-        map = GX_TEXMAP0;
-    }
-
-    if (coord == 0xFF) {
-        coord = GX_TEXCOORD0;
-    }
-
     switch (stage) {
     case GX_INDTEXSTAGE0:
-        data = __GXData;
-        GX_BITFIELD_SET(data->iref, 29, 3, map);
-        GX_BITFIELD_SET(data->iref, 26, 3, coord);
+        GX_BITFIELD_SET(__GXData->iref, 29, 3, map);
+        GX_BITFIELD_SET(__GXData->iref, 26, 3, coord);
         break;
     case GX_INDTEXSTAGE1:
-        data = __GXData;
-        GX_BITFIELD_SET(data->iref, 23, 3, map);
-        GX_BITFIELD_SET(data->iref, 20, 3, coord);
+        GX_BITFIELD_SET(__GXData->iref, 23, 3, map);
+        GX_BITFIELD_SET(__GXData->iref, 20, 3, coord);
         break;
     case GX_INDTEXSTAGE2:
-        data = __GXData;
-        GX_BITFIELD_SET(data->iref, 17, 3, map);
-        GX_BITFIELD_SET(data->iref, 14, 3, coord);
+        GX_BITFIELD_SET(__GXData->iref, 17, 3, map);
+        GX_BITFIELD_SET(__GXData->iref, 14, 3, coord);
         break;
     case GX_INDTEXSTAGE3:
-        data = __GXData;
-        GX_BITFIELD_SET(data->iref, 11, 3, map);
-        GX_BITFIELD_SET(data->iref, 8, 3, coord);
+        GX_BITFIELD_SET(__GXData->iref, 11, 3, map);
+        GX_BITFIELD_SET(__GXData->iref, 8, 3, coord);
         break;
     }
 

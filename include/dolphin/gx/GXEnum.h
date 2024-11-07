@@ -454,7 +454,7 @@ typedef enum _GXAnisotropy {
 
 typedef enum _GXCITexFmt {
     /* 0x8 */ GX_TF_C4 = 8,
-    /* 0x8 */ GX_TF_C8,
+    /* 0x9 */ GX_TF_C8,
     /* 0xA */ GX_TF_C14X2
 } GXCITexFmt;
 

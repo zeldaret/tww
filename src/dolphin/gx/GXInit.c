@@ -4,37 +4,21 @@
 
 char* __GXVersion = "<< Dolphin SDK - GX    release build: Nov 10 2004 06:27:12 (0x2301) >>";
 
-static GXFifoObj FifoObj;
-
 static GXData gxData;
+
+static GXFifoObj FifoObj;
 
 GXData* const __GXData = &gxData;
 
 GXTexRegion* __GXDefaultTexRegionCallback(const GXTexObj* obj, GXTexMapID id) {
-    GXTexFmt format;  // r31
-    GXBool isMipMap;  // r3
+    GXTexFmt format;
 
     format = GXGetTexObjFmt(obj);
-    isMipMap = GXGetTexObjMipMap(obj);
-    id = (GXTexMapID)(id % GX_MAX_TEXMAP);
 
-    switch (format) {
-    case GX_TF_RGBA8:
-        // if (isMipMap) {
-        //     return &__GXData->TexRegions2[id];
-        // }
-        return &__GXData->TexRegions1[id];
-
-    case GX_TF_C4:
-    case GX_TF_C8:
-    case GX_TF_C14X2:
-        return &__GXData->TexRegions0[id];
-
-    default:
-        if (isMipMap) {
-            return &__GXData->TexRegions1[id];
-        }
-        return &__GXData->TexRegions0[id];
+    if (format != GX_TF_C4 && format != GX_TF_C8 && format != GX_TF_C14X2) {
+        return &__GXData->TexRegions0[__GXData->nextTexRgn++ % GX_MAX_TEXMAP];
+    } else {
+        return &__GXData->TexRegions1[__GXData->nextTexRgnCI++ % 4];
     }
 }
 
@@ -168,11 +152,6 @@ GXFifoObj* GXInit(void* base, u32 size) {
     GXSetCPUFifo(&FifoObj);
     GXSetGPFifo(&FifoObj);
 
-    if (!resetFuncRegistered) {
-        // OSRegisterResetFunction(&GXResetFuncInfo);
-        resetFuncRegistered = 1;
-    }
-
     __GXPEInit();
     EnableWriteGatherPipe();
 
@@ -280,7 +259,6 @@ GXFifoObj* GXInit(void* base, u32 size) {
 
     GFWriteBPCmd(0x67000000);
 
-    __GXSetIndirectMask(0);
     __GXSetTmemConfig(2);
     __GXInitGX();
 
@@ -289,7 +267,6 @@ GXFifoObj* GXInit(void* base, u32 size) {
 
 void __GXInitGX(void) {
     GXRenderModeObj* renderObj;
-    GXTexObj texObj;
     Mtx ident;
     GXColor clearColor = {64, 64, 64, 255};
     GXColor ambColor = {0, 0, 0, 0};
@@ -395,18 +372,10 @@ void __GXInitGX(void) {
     GXSetChanMatColor(GX_COLOR1A1, matColor);
 
     GXInvalidateTexAll();
+    __GXData->nextTexRgn = 0;
+    __GXData->nextTexRgnCI = 0;
     GXSetTexRegionCallback(__GXDefaultTexRegionCallback);
     GXSetTlutRegionCallback(__GXDefaultTlutRegionCallback);
-
-    GXInitTexObj(&texObj, DefaultTexData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-    GXLoadTexObj(&texObj, GX_TEXMAP0);
-    GXLoadTexObj(&texObj, GX_TEXMAP1);
-    GXLoadTexObj(&texObj, GX_TEXMAP2);
-    GXLoadTexObj(&texObj, GX_TEXMAP3);
-    GXLoadTexObj(&texObj, GX_TEXMAP4);
-    GXLoadTexObj(&texObj, GX_TEXMAP5);
-    GXLoadTexObj(&texObj, GX_TEXMAP6);
-    GXLoadTexObj(&texObj, GX_TEXMAP7);
 
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
