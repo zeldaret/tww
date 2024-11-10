@@ -10,7 +10,6 @@ void GXSetTevIndirect(GXTevStageID tevStage, GXIndTexStageID texStage, GXIndTexF
                       GXIndTexBiasSel biasSel, GXIndTexMtxID mtxID, GXIndTexWrap wrapS,
                       GXIndTexWrap wrapT, u8 addPrev, u8 utcLod, GXIndTexAlphaSel alphaSel) {
     u32 field = 0;
-    u32 stage = tevStage + 0x10;
 
     GX_BITFIELD_SET(field, 30, 2, texStage);
     GX_BITFIELD_SET(field, 28, 2, texFmt);
@@ -21,7 +20,7 @@ void GXSetTevIndirect(GXTevStageID tevStage, GXIndTexStageID texStage, GXIndTexF
     GX_BITFIELD_SET(field, 13, 3, wrapT);
     GX_BITFIELD_SET(field, 12, 1, utcLod);
     GX_BITFIELD_SET(field, 11, 1, addPrev);
-    GX_BITFIELD_SET(field, 0, 8, stage);
+    GX_BITFIELD_SET(field, 0, 8, tevStage + 0x10);
 
     GXFIFO.u8 = 0x61;
     GXFIFO.s32 = field;
@@ -33,6 +32,7 @@ void GXSetIndTexMtx(GXIndTexMtxID mtxID, f32 offset[6], s8 scale_exp) {
     u32 val;
     u32 field;
     f32 mtx2[6];
+    u32 stack_padding[6];
 
     scale_exp += 17;
 

@@ -40,10 +40,8 @@ extern "C" {
     (reg) = ((u32) (reg) & ~(((1 << (nbits)) - 1) << (shift))) |               \
             ((u32) (value) << (shift));
 
-#define FAST_FLAG_SET(regOrg, newFlag, shift, size)                                                                \
-    do {                                                                                                           \
-        (regOrg) = (u32)__rlwimi((int)(regOrg), (int)(newFlag), (shift), (32 - (shift) - (size)), (31 - (shift))); \
-    } while (0);
+#define SET_REG_FIELD(reg, size, shift, val) \
+    (reg) = ((u32)(reg) & ~(((1 << (size)) - 1) << (shift))) | ((u32)(val) << (shift)); \
 
 #define GX_LOAD_BP_REG 0x61
 #define GX_NOP 0
@@ -286,6 +284,22 @@ do { \
     GX_WRITE_U32(c); \
     regAddr = addr; \
 } while (0)
+
+static inline u32 __GXReadCPCounterU32(u32 regAddrL, u32 regAddrH) {
+    u32 ctrH0;
+    u32 ctrH1;
+    u32 ctrL;
+
+    ctrH0 = GX_GET_CP_REG(regAddrH);
+
+    do {
+        ctrH1 = ctrH0;
+        ctrL = GX_GET_CP_REG(regAddrL);
+        ctrH0 = GX_GET_CP_REG(regAddrH);
+    } while (ctrH0 != ctrH1);
+
+    return (ctrH0 << 0x10) | ctrL;
+}
 
 #ifdef __cplusplus
 };

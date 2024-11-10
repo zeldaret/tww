@@ -75,7 +75,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF1_VC_STREAMBUF_LOW:
     case GX_PERF1_VC_ALL_STALLS:
     case GX_PERF1_VERTICES:
-        FAST_FLAG_SET(gx->perfSel, 0, 4, 4);
+        SET_REG_FIELD(gx->perfSel, 4, 4, 0);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
         GXFIFO.u32 = gx->perfSel;
@@ -266,49 +266,49 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
         break;
 
     case GX_PERF1_VC_ELEMQ_FULL:
-        FAST_FLAG_SET(gx->perfSel, 2, 4, 4);
+        SET_REG_FIELD(gx->perfSel, 4, 4, 2);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
         GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_MISSQ_FULL:
-        FAST_FLAG_SET(gx->perfSel, 3, 4, 4);
+        SET_REG_FIELD(gx->perfSel, 4, 4, 3);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
         GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_MEMREQ_FULL:
-        FAST_FLAG_SET(gx->perfSel, 4, 4, 4);
+        SET_REG_FIELD(gx->perfSel, 4, 4, 4);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
         GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_STATUS7:
-        FAST_FLAG_SET(gx->perfSel, 5, 4, 4);
+        SET_REG_FIELD(gx->perfSel, 4, 4, 5);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
         GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_MISSREP_FULL:
-        FAST_FLAG_SET(gx->perfSel, 6, 4, 4);
+        SET_REG_FIELD(gx->perfSel, 4, 4, 6);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
         GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_STREAMBUF_LOW:
-        FAST_FLAG_SET(gx->perfSel, 7, 4, 4);
+        SET_REG_FIELD(gx->perfSel, 4, 4, 7);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
         GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VC_ALL_STALLS:
-        FAST_FLAG_SET(gx->perfSel, 9, 4, 4);
+        SET_REG_FIELD(gx->perfSel, 4, 4, 9);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
         GXFIFO.u32 = gx->perfSel;
         break;
     case GX_PERF1_VERTICES:
-        FAST_FLAG_SET(gx->perfSel, 8, 4, 4);
+        SET_REG_FIELD(gx->perfSel, 4, 4, 8);
         GXFIFO.u8 = 8;
         GXFIFO.u8 = 32;
         GXFIFO.u32 = gx->perfSel;
@@ -339,10 +339,11 @@ void GXClearGPMetric(void) {
 }
 
 #pragma scheduling off
-void GXReadXfRasMetric(u32* xfWaitIn, u32* xfWaitOut, u32* rasBusy, u32* clocks) {
-    // *rasBusy = GXReadCPReg(32, 33);
-    // *clocks = GXReadCPReg(34, 35);
-    // *xfWaitIn = GXReadCPReg(36, 37);
-    // *xfWaitOut = GXReadCPReg(38, 39);
+void GXReadXfRasMetric(u32 *xf_wait_in, u32 *xf_wait_out, u32 *ras_busy, u32 *clocks)
+{
+    *ras_busy = __GXReadCPCounterU32(32, 33);
+    *clocks = __GXReadCPCounterU32(34, 35);
+    *xf_wait_in = __GXReadCPCounterU32(36, 37);
+    *xf_wait_out = __GXReadCPCounterU32(38, 39);
 }
 #pragma scheduling reset

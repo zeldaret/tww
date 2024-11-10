@@ -37,7 +37,7 @@ static void GXUnderflowHandler() {
 static void GXBreakPointHandler(OSContext* context) {
     OSContext bpContext;
 
-    FAST_FLAG_SET(gx->cpEnable, 0, 5, 1);
+    SET_REG_FIELD(gx->cpEnable, 1, 5, 2);
     GX_SET_CP_REG(1, gx->cpEnable);
 
     if (BreakPointCB) {
@@ -233,12 +233,12 @@ void __GXFifoInit(void) {
 }
 
 void __GXFifoReadEnable(void) {
-    FAST_FLAG_SET(gx->cpEnable, 1, 0, 1);
+    SET_REG_FIELD(gx->cpEnable, 1, 0, 2);
     GX_SET_CP_REG(1, gx->cpEnable);
 }
 
 void __GXFifoReadDisable(void) {
-    FAST_FLAG_SET(gx->cpEnable, 0, 0, 1);
+    SET_REG_FIELD(gx->cpEnable, 1, 0, 2);
     GX_SET_CP_REG(1, gx->cpEnable);
 }
 
@@ -249,19 +249,19 @@ void __GXFifoLink(u8 link) {
     } else {
         b = 0;
     }
-    FAST_FLAG_SET(gx->cpEnable, b, 4, 1);
+    SET_REG_FIELD(gx->cpEnable, 1, 4, 2);
     GX_SET_CP_REG(1, gx->cpEnable);
 }
 
 void __GXWriteFifoIntEnable(u32 p1, u32 p2) {
-    FAST_FLAG_SET(gx->cpEnable, p1, 2, 1);
-    FAST_FLAG_SET(gx->cpEnable, (u8)p2, 3, 1);
+    SET_REG_FIELD(gx->cpEnable, 1, 2, 2);
+    SET_REG_FIELD(gx->cpEnable, 1, 3, 2);
     GX_SET_CP_REG(1, gx->cpEnable);
 }
 
 void __GXWriteFifoIntReset(u32 p1, u32 p2) {
-    FAST_FLAG_SET(gx->cpClr, p1, 0, 1);
-    FAST_FLAG_SET(gx->cpClr, (u8)p2, 1, 1);
+    SET_REG_FIELD(gx->cpClr, 1, 0, 2);
+    SET_REG_FIELD(gx->cpClr, 1, 1, 2);
     GX_SET_CP_REG(2, gx->cpClr);
 }
 

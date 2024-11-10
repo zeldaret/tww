@@ -375,7 +375,7 @@ config.libs = [
             Object(Matching,    "f_ap/f_ap_game.cpp"),
 
             # f_op
-            Object(Matching,    "f_op/f_op_actor.cpp", extra_cflags=['-pragma "nosyminline on"']),
+            Object(Matching,    "f_op/f_op_actor.cpp", extra_cflags=["-sym off"]),
             Object(Matching,    "f_op/f_op_actor_iter.cpp"),
             Object(Matching,    "f_op/f_op_actor_tag.cpp"),
             Object(Matching,    "f_op/f_op_actor_mng.cpp", extra_cflags=['-pragma "nosyminline on"']),
@@ -1165,7 +1165,7 @@ config.libs = [
             Object(NonMatching, "dolphin/gx/GXStubs.c"),
             Object(NonMatching, "dolphin/gx/GXDisplayList.c"),
             Object(NonMatching, "dolphin/gx/GXTransform.c", extra_cflags=["-fp_contract off"]),
-            Object(NonMatching, "dolphin/gx/GXPerf.c"),
+            Object(Matching,    "dolphin/gx/GXPerf.c"),
         ],
     ),
     DolphinLib(

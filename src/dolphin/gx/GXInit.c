@@ -48,48 +48,6 @@ u16* __cpReg;
 /* ############################################################################################## */
 u32* __piReg;
 
-inline void __GXInitRevisionBits(void) {
-    u32 i;
-    for (i = 0; i < 8; i++) {
-        FAST_FLAG_SET(gx->vatA[i], 1, 30, 33);
-        FAST_FLAG_SET(gx->vatB[i], 1, 31, 33);
-
-        GXFIFO.u8 = 0x8;
-        GXFIFO.u8 = i | 0x80;
-        GXFIFO.u32 = gx->vatB[i];
-    }
-
-    {
-        u32 reg1 = 0;
-        u32 reg2 = 0;
-
-        FAST_FLAG_SET(reg1, 1, 0, 1);
-        FAST_FLAG_SET(reg1, 1, 1, 1);
-        FAST_FLAG_SET(reg1, 1, 2, 1);
-        FAST_FLAG_SET(reg1, 1, 3, 1);
-        FAST_FLAG_SET(reg1, 1, 4, 1);
-        FAST_FLAG_SET(reg1, 1, 5, 1);
-        GXFIFO.u8 = 0x10;
-        GXFIFO.u32 = 0x1000;
-        GXFIFO.u32 = reg1;
-
-        FAST_FLAG_SET(reg2, 1, 0, 1);
-        GXFIFO.u8 = 0x10;
-        GXFIFO.u32 = 0x1012;
-        GXFIFO.u32 = reg2;
-    }
-
-    {
-        u32 reg = 0;
-        FAST_FLAG_SET(reg, 1, 0, 1);
-        FAST_FLAG_SET(reg, 1, 1, 1);
-        FAST_FLAG_SET(reg, 1, 2, 1);
-        FAST_FLAG_SET(reg, 1, 3, 1);
-        FAST_FLAG_SET(reg, 0x58, 24, 8);
-        GFWriteBPCmd(reg);
-    }
-}
-
 static u16 DefaultTexData[] ALIGN_DECL(32) = {
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
@@ -157,13 +115,13 @@ GXFifoObj* GXInit(void* base, u32 size) {
     EnableWriteGatherPipe();
 
     gx->genMode = 0;
-    FAST_FLAG_SET(gx->genMode, 0, 24, 8);
+    SET_REG_FIELD(gx->genMode, 8, 24, 2);
 
     gx->bpMask = 255;
-    FAST_FLAG_SET(gx->bpMask, 0xF, 24, 8);
+    SET_REG_FIELD(gx->bpMask, 8, 24, 2);
 
     gx->lpSize = 0;
-    FAST_FLAG_SET(gx->lpSize, 34, 24, 8);
+    SET_REG_FIELD(gx->lpSize, 8, 24, 2);
 
     for (i = 0; i < GX_MAX_TEVSTAGE; i++) {
         gx->tevc[i] = 0;
@@ -171,33 +129,33 @@ GXFifoObj* GXInit(void* base, u32 size) {
         gx->tref[i / 2] = 0;
         gx->texmapId[i] = GX_TEXMAP_NULL;
 
-        FAST_FLAG_SET(gx->tevc[i], 0xC0 + i * 2, 24, 8);
-        FAST_FLAG_SET(gx->teva[i], 0xC1 + i * 2, 24, 8);
-        FAST_FLAG_SET(gx->tevKsel[i / 2], 0xF6 + i / 2, 24, 8);
-        FAST_FLAG_SET(gx->tref[i / 2], 0x28 + i / 2, 24, 8);
+        SET_REG_FIELD(gx->tevc[i], 8, 24, 2);
+        SET_REG_FIELD(gx->teva[i], 8, 24, 2);
+        SET_REG_FIELD(gx->tevKsel[i / 2], 8, 24, 2);
+        SET_REG_FIELD(gx->tref[i / 2], 8, 24, 2);
     }
 
     gx->iref = 0;
-    FAST_FLAG_SET(gx->iref, 0x27, 24, 8);
+    SET_REG_FIELD(gx->iref, 8, 24, 2);
 
     for (i = 0; i < GX_MAXCOORD; i++) {
         gx->suTs0[i] = 0;
         gx->suTs1[i] = 0;
 
-        FAST_FLAG_SET(gx->suTs0[i], 0x30 + i * 2, 24, 8);
-        FAST_FLAG_SET(gx->suTs1[i], 0x31 + i * 2, 24, 8);
+        SET_REG_FIELD(gx->suTs0[i], 8, 24, 2);
+        SET_REG_FIELD(gx->suTs1[i], 8, 24, 2);
     }
 
-    FAST_FLAG_SET(gx->suScis0, 0x20, 24, 8);
-    FAST_FLAG_SET(gx->suScis1, 0x21, 24, 8);
+    SET_REG_FIELD(gx->suScis0, 8, 24, 2);
+    SET_REG_FIELD(gx->suScis1, 8, 24, 2);
 
-    FAST_FLAG_SET(gx->cmode0, 0x41, 24, 8);
-    FAST_FLAG_SET(gx->cmode1, 0x42, 24, 8);
+    SET_REG_FIELD(gx->cmode0, 8, 24, 2);
+    SET_REG_FIELD(gx->cmode1, 8, 24, 2);
 
-    FAST_FLAG_SET(gx->zmode, 0x40, 24, 8);
-    FAST_FLAG_SET(gx->peCtrl, 0x43, 24, 8);
+    SET_REG_FIELD(gx->zmode, 8, 24, 2);
+    SET_REG_FIELD(gx->peCtrl, 8, 24, 2);
 
-    FAST_FLAG_SET(gx->cpTex, 0, 7, 2);
+    SET_REG_FIELD(gx->cpTex, 2, 7, 2);
 
     gx->zScale = 1.6777216E7f;
     gx->zOffset = 0.0f;
@@ -223,8 +181,6 @@ GXFifoObj* GXInit(void* base, u32 size) {
         GFWriteBPCmd(val1);
     }
 
-    __GXInitRevisionBits();
-
     for (i = 0; i < GX_MAX_TEXMAP; i++) {
         GXInitTexCacheRegion(&gx->TexRegions0[i], GX_FALSE, GXTexRegionAddrTable[i],
                              GX_TEXCACHE_32K, GXTexRegionAddrTable[i + 8], GX_TEXCACHE_32K);
@@ -244,7 +200,7 @@ GXFifoObj* GXInit(void* base, u32 size) {
 
     GX_SET_CP_REG(3, 0);
 
-    FAST_FLAG_SET(gx->perfSel, 0, 4, 4);
+    SET_REG_FIELD(gx->perfSel, 4, 4, 2);
 
     GXFIFO.u8 = 0x8;
     GXFIFO.u8 = 0x20;

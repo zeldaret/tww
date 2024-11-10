@@ -70,10 +70,10 @@ void GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTev
 
     tevReg = gx->tevc[stage];
 
-    FAST_FLAG_SET(tevReg, a, 12, 4);
-    FAST_FLAG_SET(tevReg, b, 8, 4);
-    FAST_FLAG_SET(tevReg, c, 4, 4);
-    FAST_FLAG_SET(tevReg, d, 0, 4);
+    SET_REG_FIELD(tevReg, 4, 12, 2);
+    SET_REG_FIELD(tevReg, 4, 8, 2);
+    SET_REG_FIELD(tevReg, 4, 4, 2);
+    SET_REG_FIELD(tevReg, 4, 0, 2);
 
     GFWriteBPCmd(tevReg);
 
@@ -87,10 +87,10 @@ void GXSetTevAlphaIn(GXTevStageID stage, GXTevAlphaArg a, GXTevAlphaArg b, GXTev
 
     tevReg = gx->teva[stage];
 
-    FAST_FLAG_SET(tevReg, a, 13, 3);
-    FAST_FLAG_SET(tevReg, b, 10, 3);
-    FAST_FLAG_SET(tevReg, c, 7, 3);
-    FAST_FLAG_SET(tevReg, d, 4, 3);
+    SET_REG_FIELD(tevReg, 3, 13, 2);
+    SET_REG_FIELD(tevReg, 3, 10, 2);
+    SET_REG_FIELD(tevReg, 3, 7, 2);
+    SET_REG_FIELD(tevReg, 3, 4, 2);
 
     GFWriteBPCmd(tevReg);
 
@@ -103,18 +103,18 @@ void GXSetTevColorOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale 
     u32 tevReg;
 
     tevReg = gx->tevc[stage];
-    FAST_FLAG_SET(tevReg, op & 1, 18, 1);
+    SET_REG_FIELD(tevReg, 1, 18, 2);
 
     if (op <= GX_TEV_SUB) {
-        FAST_FLAG_SET(tevReg, scale, 20, 2);
-        FAST_FLAG_SET(tevReg, bias, 16, 2);
+        SET_REG_FIELD(tevReg, 2, 20, 2);
+        SET_REG_FIELD(tevReg, 2, 16, 2);
     } else {
-        FAST_FLAG_SET(tevReg, (op >> 1) & 3, 20, 2);
-        FAST_FLAG_SET(tevReg, 3, 16, 2);
+        SET_REG_FIELD(tevReg, 2, 20, 2);
+        SET_REG_FIELD(tevReg, 2, 16, 2);
     }
 
-    FAST_FLAG_SET(tevReg, doClamp, 19, 1);
-    FAST_FLAG_SET(tevReg, outReg, 22, 2);
+    SET_REG_FIELD(tevReg, 1, 19, 2);
+    SET_REG_FIELD(tevReg, 2, 22, 2);
 
     GFWriteBPCmd(tevReg);
     gx->tevc[stage] = tevReg;
@@ -126,18 +126,18 @@ void GXSetTevAlphaOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale 
     u32 tevReg;
 
     tevReg = gx->teva[stage];
-    FAST_FLAG_SET(tevReg, op & 1, 18, 1);
+    SET_REG_FIELD(tevReg, 1, 18, 2);
 
     if (op <= GX_TEV_SUB) {
-        FAST_FLAG_SET(tevReg, scale, 20, 2);
-        FAST_FLAG_SET(tevReg, bias, 16, 2);
+        SET_REG_FIELD(tevReg, 2, 20, 2);
+        SET_REG_FIELD(tevReg, 2, 16, 2);
     } else {
-        FAST_FLAG_SET(tevReg, (op >> 1) & 3, 20, 2);
-        FAST_FLAG_SET(tevReg, 3, 16, 2);
+        SET_REG_FIELD(tevReg, 2, 20, 2);
+        SET_REG_FIELD(tevReg, 2, 16, 2);
     }
 
-    FAST_FLAG_SET(tevReg, doClamp, 19, 1);
-    FAST_FLAG_SET(tevReg, outReg, 22, 2);
+    SET_REG_FIELD(tevReg, 1, 19, 2);
+    SET_REG_FIELD(tevReg, 2, 22, 2);
 
     GFWriteBPCmd(tevReg);
     gx->teva[stage] = tevReg;
