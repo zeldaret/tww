@@ -13,7 +13,7 @@
 
 #include "f_op/f_op_actor.h"
 #include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daStandItem_c::m_arcname[] = "Fdai";
 const s16 daStandItem_c::m_bmdidx[] = {

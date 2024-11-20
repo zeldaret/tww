@@ -25,7 +25,7 @@
 #include "stdio.h"
 
 #include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 

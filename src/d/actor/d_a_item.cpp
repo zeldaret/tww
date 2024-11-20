@@ -14,7 +14,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 s32 daItem_c::m_timer_max = 10000;
 

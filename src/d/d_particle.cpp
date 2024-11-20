@@ -24,7 +24,7 @@
 #include "stdio.h"
 
 #include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 8007A4D8-8007A514       .text __ct__18dPa_modelEmitter_cFv */
 dPa_modelEmitter_c::dPa_modelEmitter_c() {

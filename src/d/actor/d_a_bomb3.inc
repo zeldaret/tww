@@ -15,7 +15,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "d/res/res_vbakh.h"
 
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace {
     enum AttrSt_e {

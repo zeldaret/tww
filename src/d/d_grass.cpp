@@ -18,7 +18,7 @@
 #include "dolphin/gf/GFGeometry.h"
 #include "dolphin/gf/GFTev.h"
 
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 #include "assets/l_K_kusa_00TEX.h"
 const u32 l_K_kusa_00TEX__width = 64;

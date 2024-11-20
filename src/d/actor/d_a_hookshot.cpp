@@ -10,7 +10,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_procname.h"
 
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 #include "assets/l_chainS3TCTEX__d_hookshot.h"
 const u16 l_chainS3TCTEX__width = 32;

@@ -14,7 +14,7 @@
 #include "global.h"
 #include "m_Do/m_Do_mtx.h"
 
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 struct daIball_c__data {
     /* 0x00 */ u8 m00;

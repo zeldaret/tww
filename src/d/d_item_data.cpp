@@ -114,7 +114,7 @@
 #include "d/res/res_vtin5.h"
 #include "d/res/res_vbeso.h"
 
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 80383F20-803840E0       .data item_arcname_tbl__10dItem_data */
 char* dItem_data::item_arcname_tbl[0x70] = {

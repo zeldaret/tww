@@ -22,7 +22,7 @@
 #include "m_Do/m_Do_printf.h"
 #include "math.h"
 
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 class sub_kankyo__class : public kankyo_class {
 };

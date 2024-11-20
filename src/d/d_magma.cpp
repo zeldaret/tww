@@ -13,7 +13,7 @@
 // #pragma sym on
 
 #include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 Mtx l_kuroOrthoMtx;
 Mtx l_colOrthoMtx;

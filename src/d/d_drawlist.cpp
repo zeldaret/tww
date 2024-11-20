@@ -41,7 +41,7 @@ public:
 
 GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 800804A4-800804C0       .text setViewPort__14dDlst_window_cFffffff */
 void dDlst_window_c::setViewPort(f32 x, f32 y, f32 w, f32 h, f32 n, f32 f) {

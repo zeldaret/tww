@@ -8,7 +8,7 @@
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_mtx.h"
 
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 #include "assets/l_chainS3TCTEX__d_chain.h"
 const u16 l_chainS3TCTEX__width = 32;
