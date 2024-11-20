@@ -1672,7 +1672,15 @@ def generate_compile_commands(
 
         def default_format(o):
             if isinstance(o, Path):
-                return o.resolve().as_posix()
+                path_str = o.resolve().as_posix()
+                if os.name == "nt":
+                    # clangd has an issue dealing with case-insensitive paths on Windows.
+                    # If the drive letter of a path is a capital letter, clangd will fail to handle
+                    # cross-file rename operations, so we have to convert the first character of the
+                    # path to lowercase as a workaround.
+                    # https://github.com/clangd/clangd/issues/108
+                    path_str = path_str[0].lower() + path_str[1:]
+                return path_str
             return str(o)
 
         json.dump(clangd_config, w, indent=2, default=default_format)
