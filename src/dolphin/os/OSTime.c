@@ -5,6 +5,7 @@
 #define OS_TIME_WEEK_DAY_MAX 7
 #define OS_TIME_YEAR_DAY_MAX 365
 
+#ifdef __MWERKS__
 asm OSTime OSGetTime(void) {
     // clang-format off
 	nofralloc
@@ -19,7 +20,9 @@ asm OSTime OSGetTime(void) {
     blr
     // clang-format on
 }
+#endif
 
+#ifdef __MWERKS__
 asm OSTick OSGetTick(void) {
     // clang-format off
 	nofralloc
@@ -28,6 +31,7 @@ asm OSTick OSGetTick(void) {
 	blr
     // clang-format on
 }
+#endif
 
 #define OS_SYSTEMTIME_BASE 0x30D8
 

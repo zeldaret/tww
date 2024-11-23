@@ -55,6 +55,7 @@ inline BOOL __OSCallResetFunctions(u32 arg0) {
     return 1;
 }
 
+#ifdef __MWERKS__
 static asm void Reset(register s32 param_0) {
     // clang-format off
     nofralloc
@@ -107,6 +108,7 @@ lbl_8033F7F8:
     b lbl_8033F790
     // clang-format on
 }
+#endif
 
 inline static void KillThreads(void) {
     OSThread* thread;

@@ -25,7 +25,7 @@ JKRThread::JKRThread(u32 stack_size, int message_count, int param_3) : mThreadLi
     mThreadRecord = (OSThread*)JKRAllocFromHeap(mHeap, sizeof(OSThread), 0x20);
 
     void* stackBase = (void*)((int)mStackMemory + mStackSize);
-    OSCreateThread(mThreadRecord, start, this, stackBase, mStackSize, param_3, 1);
+    OSCreateThread(mThreadRecord, (void*)start, this, stackBase, mStackSize, param_3, 1);
 
     mMessageCount = message_count;
     mMessages = (OSMessage*)JKRAllocFromHeap(mHeap, mMessageCount * sizeof(OSMessage), 0);

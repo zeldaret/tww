@@ -33,5 +33,6 @@
   },
   "clangd.arguments": [
     "--function-arg-placeholders=0",
+    // "--log=verbose",
   ],
 }

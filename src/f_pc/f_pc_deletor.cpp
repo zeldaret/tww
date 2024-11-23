@@ -34,7 +34,7 @@ s32 fpcDt_deleteMethod(base_process_class* i_proc) {
 
 /* 8003D314-8003D34C       .text fpcDt_Handler__Fv */
 void fpcDt_Handler(void) {
-    cLsIt_Method(&g_fpcDtTg_Queue, (cNdIt_MethodFunc)fpcDtTg_Do, fpcDt_deleteMethod);
+    cLsIt_Method(&g_fpcDtTg_Queue, (cNdIt_MethodFunc)fpcDtTg_Do, (void*)fpcDt_deleteMethod);
 }
 
 /* 8003D34C-8003D3C8       .text fpcDt_ToQueue__FP18base_process_class */

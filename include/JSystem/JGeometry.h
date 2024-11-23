@@ -320,7 +320,7 @@ struct TVec2 {
 template <class T>
 struct TBox {
     TBox() : i(), f() {}
-    TBox(const TBox& other) : i(other.f), f(other.y) {}
+    TBox(const TBox& other) : i(other.i), f(other.f) {}
 
     T i, f;
 };

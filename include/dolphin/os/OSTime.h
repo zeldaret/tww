@@ -30,7 +30,7 @@ OSTime OSGetTime(void);
 OSTick OSGetTick(void);
 OSTime __OSGetSystemTime(void);
 OSTime __OSTimeToSystemTime(OSTime time);
-void GetDates(s32 days, OSCalendarTime* ct);
+static void GetDates(s32 days, OSCalendarTime* ct);
 void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* ct);
 
 extern u32 __OSBusClock AT_ADDRESS(0x800000F8);

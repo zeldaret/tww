@@ -26,7 +26,7 @@ void mDoDvdErr_ThdInit() {
         OSThread* curThread = OSGetCurrentThread();
         s32 priority = OSGetThreadPriority(curThread);
 
-        OSCreateThread(&DvdErr_thread, mDoDvdErr_Watch, NULL, DvdErr_stack + sizeof(DvdErr_stack),
+        OSCreateThread(&DvdErr_thread, (void*)mDoDvdErr_Watch, NULL, DvdErr_stack + sizeof(DvdErr_stack),
                        sizeof(DvdErr_stack), priority - 3, 1);
         OSResumeThread(&DvdErr_thread);
         OSCreateAlarm(&Alarm);
