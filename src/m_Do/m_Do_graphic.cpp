@@ -1088,11 +1088,11 @@ out:
 }
 
 /* 8000AAC4-8000AB1C       .text mCaptureProc__FPv */
-void* mCaptureProc(void* thd) {
-    thd = (void*)encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
+void* mCaptureProc(void* dummy) {
+    void* bytesCopied = (void*)encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
     DCStoreRange(mCaptureTextureBuffer, mCaptureTextureSize);
-    OSExitThread(thd);
-    return thd;
+    OSExitThread(bytesCopied);
+    return bytesCopied;
 }
 
 /* 8000AB1C-8000ABC4       .text mCaptureGXDrawSyncCallback__FUs */
