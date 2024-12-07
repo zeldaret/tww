@@ -526,10 +526,10 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP1);
     GXLoadTexObj(mDoGph_gInf_c::getZbufferTexObj(), GX_TEXMAP0);
     GXSetNumChans(0);
-    GXSetNumTexGens(2);                         
+    GXSetNumTexGens(2);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    GXSetNumTevStages(3);                                  
+    GXSetNumTevStages(3);
     GXSetTevColorS10(GX_TEVREG0, l_tevColor0);
     GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_ALPHA, GX_CH_GREEN, GX_CH_BLUE, GX_CH_RED);
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP3);
@@ -749,7 +749,7 @@ void blockenc(u8* block) {
             color_num += 1;
         }
     }
-    
+
     u32 color_0_idx = 0; // r17
     u32 color_1_idx = 0; // r16
     if (color_num > 1) {
@@ -780,7 +780,7 @@ void blockenc(u8* block) {
                     u32 g4 = (g1 * 5 + g0 * 3) / 8;
                     u32 b4 = (b1 * 5 + b0 * 3) / 8;
                     color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                    
+
                     u32 r5 = 0;
                     u32 r6 = INT32_MAX;
                     for (; r5 < ARRAY_SIZE(color_mags); r5++) {
@@ -788,10 +788,10 @@ void blockenc(u8* block) {
                             r6 = color_mags[r5];
                         }
                     }
-                    
+
                     r20 += r6;
                 }
-                
+
                 if (r20 < r18) {
                     r18 = r20;
                     color_0_idx = r23;
@@ -800,7 +800,7 @@ void blockenc(u8* block) {
             }
         }
     }
-    
+
     u32 r11 = (colors[color_0_idx + 0] & 0xF8) << 8 |
               (colors[color_0_idx + 1] & 0xFC) << 3 |
               (colors[color_0_idx + 2] & 0xF8) >> 3;
@@ -818,7 +818,7 @@ void blockenc(u8* block) {
     block[0x41] = r11 & 0xFF;
     block[0x42] = r4 >> 8;
     block[0x43] = r4 & 0xFF;
-    
+
     u32 r0 = ((r11 >> 8) & 0xF8) * 30;
     u32 g0 = ((r11 >> 3) & 0xFC) * 59;
     u32 b0 = ((r11 << 3) & 0xFC) * 11;
@@ -841,7 +841,7 @@ void blockenc(u8* block) {
         u32 g4 = (g1 * 5 + g0 * 3) / 8;
         u32 b4 = (b1 * 5 + b0 * 3) / 8;
         color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-        
+
         u32 r5 = 0;
         u32 r24;
         u32 r25 = INT32_MAX;
@@ -851,11 +851,11 @@ void blockenc(u8* block) {
                 r24 = r5;
             }
         }
-        
+
         r8 |= (r24 & 0x03) << r6;
         r6 -= 2;
     }
-    
+
     block[0x44] = r8 >> 24;
     block[0x45] = r8 >> 16;
     block[0x46] = r8 >> 8;
@@ -1088,11 +1088,11 @@ out:
 }
 
 /* 8000AAC4-8000AB1C       .text mCaptureProc__FPv */
-void* mCaptureProc(void* thd) {
-    encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
+void* mCaptureProc(void* dummy) {
+    void* bytesCopied = (void*)encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
     DCStoreRange(mCaptureTextureBuffer, mCaptureTextureSize);
-    OSExitThread(thd);
-    return thd;
+    OSExitThread(bytesCopied);
+    return bytesCopied;
 }
 
 /* 8000AB1C-8000ABC4       .text mCaptureGXDrawSyncCallback__FUs */
