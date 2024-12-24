@@ -1592,7 +1592,7 @@ static s32 phase_1(daNpcRoten_c* i_this) {
     i_this->setNpcNo(i_this->getPrmNpcNo());
 
     if(!dComIfGs_isEventBit(0x1108)) {
-        return cPhs_UNK3_e;
+        return cPhs_STOP_e;
     }
 
     i_this->setResFlag(1);

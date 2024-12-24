@@ -124,9 +124,9 @@ s32 fpcBs_SubCreate(base_process_class* i_proc) {
         i_proc->mInitState = 1;
         i_proc->mCreateResult = cPhs_INIT_e;
         return cPhs_INIT_e;
-    case cPhs_UNK3_e:
-        i_proc->mCreateResult = cPhs_UNK3_e;
-        return cPhs_UNK3_e;
+    case cPhs_STOP_e:
+        i_proc->mCreateResult = cPhs_STOP_e;
+        return cPhs_STOP_e;
     case cPhs_ERROR_e:
     default:
         i_proc->mCreateResult = cPhs_ERROR_e;

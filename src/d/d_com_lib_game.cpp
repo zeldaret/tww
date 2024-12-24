@@ -15,7 +15,7 @@ int dComLbG_PhaseHandler(request_of_phase_process_class* i_phaseReq, cPhs__Handl
         phase = dComLbG_PhaseHandler(i_phaseReq, i_handler, i_data);
         break;
     case cPhs_LOADING_e:
-    case cPhs_UNK3_e:
+    case cPhs_STOP_e:
         break;
     }
 

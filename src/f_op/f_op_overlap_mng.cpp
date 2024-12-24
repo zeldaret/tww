@@ -85,7 +85,7 @@ request_base_class* fopOvlpM_Request(s16 procName, u16 peekTime) {
 void fopOvlpM_Management() {
     if (l_fopOvlpM_overlap[0] != NULL) {
         switch (fopOvlpReq_Handler(l_fopOvlpM_overlap[0])) {
-        case cPhs_UNK3_e:
+        case cPhs_STOP_e:
         case cPhs_COMPLEATE_e:
         case cPhs_ERROR_e:
             l_fopOvlpM_overlap[0] = NULL;

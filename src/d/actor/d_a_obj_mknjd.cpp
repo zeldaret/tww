@@ -329,7 +329,7 @@ int daObjMknjD::Act_c::Delete() {
 s32 daObjMknjD::Act_c::Mthd_Delete() {
     int bgDeleteResult = MoveBGDelete();
     
-    if (fpcM_CreateResult(this) != cPhs_UNK3_e) {
+    if (fpcM_CreateResult(this) != cPhs_STOP_e) {
         dComIfG_resDelete(&mPhs, M_arcname);
     }
 

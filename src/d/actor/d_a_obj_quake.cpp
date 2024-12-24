@@ -29,7 +29,7 @@ s32 daObjQuake_c::_create() {
     fopAcM_SetupActor(this, daObjQuake_c);
 
     if (dComIfGs_isSymbol(1)) {
-        return cPhs_UNK3_e;
+        return cPhs_STOP_e;
     }
 
     if (getPrmType() < 3) {

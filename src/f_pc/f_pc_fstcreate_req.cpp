@@ -12,7 +12,7 @@
 /* 80040520-80040570       .text fpcFCtRq_Do__FP19fast_create_request */
 s32 fpcFCtRq_Do(fast_create_request* i_createReq) {
     if (i_createReq->mpFastCreateFunc != NULL && i_createReq->mpFastCreateFunc(i_createReq->base.mpRes, i_createReq->mpFastCreateData) == 0) {
-        return cPhs_UNK3_e;
+        return cPhs_STOP_e;
     } else {
         return cPhs_COMPLEATE_e;
     }

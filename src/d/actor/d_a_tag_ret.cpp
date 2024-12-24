@@ -47,7 +47,7 @@ namespace daTagRet {
         fopAcM_SetupActor(this, daTagRet::Act_c);
 
         if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
-            return cPhs_UNK3_e;
+            return cPhs_STOP_e;
         }
 
         mStts.Init(0xFF, 0xFF, this);

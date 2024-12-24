@@ -36,7 +36,7 @@ s32 daObjKanat::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjKanat::Act_c);
     
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
-        return cPhs_UNK3_e;
+        return cPhs_STOP_e;
     }
     
     s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
@@ -57,7 +57,7 @@ BOOL daObjKanat::Act_c::Delete() {
 /* 0000031C-00000374       .text Mthd_Delete__Q210daObjKanat5Act_cFv */
 BOOL daObjKanat::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
-    if (fpcM_CreateResult(this) != cPhs_UNK3_e) {
+    if (fpcM_CreateResult(this) != cPhs_STOP_e) {
         dComIfG_resDelete(&mPhs, M_arcname);
     }
     return result;

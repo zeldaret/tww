@@ -87,7 +87,7 @@ s32 daObjYboil_c::_create() {
 
     s32 ret;
     if (dComIfGs_isEventBit(0x1902)) {
-        ret = cPhs_UNK3_e;
+        ret = cPhs_STOP_e;
     } else {
         ret = dComIfG_resLoad(&mPhs, "Yboil");
         if (ret == cPhs_COMPLEATE_e) {
@@ -102,7 +102,7 @@ s32 daObjYboil_c::_create() {
 }
 
 bool daObjYboil_c::_delete() {
-    if (fpcM_CreateResult(this) != cPhs_UNK3_e) {
+    if (fpcM_CreateResult(this) != cPhs_STOP_e) {
         dComIfG_resDelete(&mPhs, "Yboil");
     }
     return true;

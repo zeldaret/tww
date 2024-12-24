@@ -8,7 +8,7 @@ enum cPhs__Step {
     /* 0x0 */ cPhs_INIT_e,
     /* 0x1 */ cPhs_LOADING_e,
     /* 0x2 */ cPhs_NEXT_e,
-    /* 0x3 */ cPhs_UNK3_e,  // appears to be an alternate error code, unsure how it differs
+    /* 0x3 */ cPhs_STOP_e, // similar to error, except doesn't indicate anything bad
     /* 0x4 */ cPhs_COMPLEATE_e,
     /* 0x5 */ cPhs_ERROR_e,
 };

@@ -87,8 +87,8 @@ s32 fpcNdRq_Execute(node_create_request* i_NdCtReq) {
     case cPhs_COMPLEATE_e:
         return cPhs_NEXT_e;
     case cPhs_ERROR_e:
-    case cPhs_UNK3_e:
-        return cPhs_UNK3_e;
+    case cPhs_STOP_e:
+        return cPhs_STOP_e;
     default:
         return result;
     }
@@ -116,7 +116,7 @@ s32 fpcNdRq_Handler() {
     while (currentNode != NULL) {
         node_create_request* req = ((request_node_class*)currentNode)->mNodeCrReq;
         switch (req->mpNodeCrReqMthCls->mpExecuteFunc(req)) {
-        case cPhs_UNK3_e:
+        case cPhs_STOP_e:
         case cPhs_ERROR_e:
             currentNode = NODE_GET_NEXT(currentNode);
             if (fpcNdRq_Cancel(req) == 0) {

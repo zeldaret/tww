@@ -67,7 +67,7 @@ cPhs__Step daObjTower_c::_create() {
     field_0x2d0 = 0;
 
     if (!dComIfGs_isEventBit(0x1e40)) {
-        PVar3 = cPhs_UNK3_e;
+        PVar3 = cPhs_STOP_e;
     } else {
         PVar3 = (cPhs__Step)dComIfG_resLoad(&mPhs, "X_tower");
         if (PVar3 == cPhs_COMPLEATE_e) {
@@ -91,7 +91,7 @@ BOOL daObjTower_c::_delete() {
         dComIfG_Bgsp()->Release(mpBgW);
     }
 
-    if (fpcM_CreateResult(this) != cPhs_UNK3_e) {
+    if (fpcM_CreateResult(this) != cPhs_STOP_e) {
         dComIfG_resDelete(&(mPhs), "X_tower");
     }
 

@@ -154,7 +154,7 @@ s32 daObjEskban::Act_c::Mthd_Create() {
 
     s32 swSave = param_get_swSave();
     if (fopAcM_isSwitch(this, swSave)) {
-        return cPhs_UNK3_e;
+        return cPhs_STOP_e;
     }
     phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -178,7 +178,7 @@ BOOL daObjEskban::Act_c::Delete() {
 /* 00000A10-00000A68       .text Mthd_Delete__Q211daObjEskban5Act_cFv */
 BOOL daObjEskban::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
-    if (fpcM_CreateResult(this) != cPhs_UNK3_e) {
+    if (fpcM_CreateResult(this) != cPhs_STOP_e) {
         dComIfG_resDelete(&mPhs, M_arcname);
     }
     return result;

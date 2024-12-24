@@ -62,9 +62,9 @@ int cPhs_Do(request_of_phase_process_class* pPhase, void* pUserData) {
             return cPhs_Next(pPhase) == cPhs_LOADING_e ? cPhs_NEXT_e : cPhs_COMPLEATE_e;
         case cPhs_COMPLEATE_e:
             return cPhs_Compleate(pPhase);
-        case cPhs_UNK3_e:
+        case cPhs_STOP_e:
             cPhs_UnCompleate(pPhase);
-            return cPhs_UNK3_e;
+            return cPhs_STOP_e;
         case cPhs_ERROR_e:
             cPhs_UnCompleate(pPhase);
             return cPhs_ERROR_e;

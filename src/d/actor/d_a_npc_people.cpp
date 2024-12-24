@@ -4117,7 +4117,7 @@ static s32 phase_1(daNpcPeople_c* i_this) {
         case 0x6:
             if(strcmp(dComIfGp_getStartStageName(), "Ocmera") == 0) {
                 if(dComIfGs_checkGetItem(COLLECT_MAP_20) || arg0 != dComIfGp_getStartStagePoint()) {
-                    return cPhs_UNK3_e;
+                    return cPhs_STOP_e;
                 }
 
                 i_this->setEtcFlag(0x40);
@@ -4127,7 +4127,7 @@ static s32 phase_1(daNpcPeople_c* i_this) {
         case 0x8:
         case 0xA:
             if(arg0 != 0xFF && (u32)((arg0 << 1) & 0xFE) != (dComIfGs_getEventReg(0xB907) & 6)) {
-                return cPhs_UNK3_e;
+                return cPhs_STOP_e;
             }
 
             break;
@@ -4138,13 +4138,13 @@ static s32 phase_1(daNpcPeople_c* i_this) {
             switch(arg0) {
                 case 0:
                     if(day == 5 || day == 6) {
-                        return cPhs_UNK3_e;
+                        return cPhs_STOP_e;
                     }
 
                     break;
                 case 1:
                     if(day != 5 && day != 6) {
-                        return cPhs_UNK3_e;
+                        return cPhs_STOP_e;
                     }
 
                     break;

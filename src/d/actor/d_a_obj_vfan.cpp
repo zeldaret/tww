@@ -89,7 +89,7 @@ s32 daObjVfan::Act_c::Mthd_Create() {
     int phase_state;
 
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
-        return cPhs_UNK3_e;
+        return cPhs_STOP_e;
     } else {
         phase_state = dComIfG_resLoad(&mPhs, M_arcname);
         if (phase_state == cPhs_COMPLEATE_e) {
@@ -110,7 +110,7 @@ BOOL daObjVfan::Act_c::Delete() {
 /* 00000590-000005E8       .text Mthd_Delete__Q29daObjVfan5Act_cFv */
 BOOL daObjVfan::Act_c::Mthd_Delete() {
     int res = MoveBGDelete();
-    if (fpcM_CreateResult(this) != cPhs_UNK3_e) {
+    if (fpcM_CreateResult(this) != cPhs_STOP_e) {
         dComIfG_resDelete(&mPhs, M_arcname);
     }
     return res;

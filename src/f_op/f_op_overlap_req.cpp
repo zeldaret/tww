@@ -124,7 +124,7 @@ s32 fopOvlpReq_Handler(overlap_request_class* i_this) {
         return cPhs_INIT_e;
     case cPhs_COMPLEATE_e:
         return cPhs_COMPLEATE_e;
-    case cPhs_UNK3_e:
+    case cPhs_STOP_e:
     case cPhs_ERROR_e:
         return cPhs_ERROR_e;
     default:
