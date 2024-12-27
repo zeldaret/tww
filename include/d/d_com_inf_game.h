@@ -863,26 +863,64 @@ inline OSTime dComIfGs_getDateIpl() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().getDateIpl();
 }
 
+// The inventory slot for items. Also known as "select item"
+enum dInventorySlot_e {
+    dInvSlot_ItemFirst_e = 0,
+    dInvSlot_TELESCOPE_e = 0,
+    dInvSlot_SAIL_e = 1,
+    dInvSlot_WIND_WAKER_e = 2,
+    dInvSlot_GRAPPLING_HOOK_e = 3,
+    dInvSlot_EMONO_BAG_e = 4,
+    dInvSlot_BOOMERANG_e = 5,
+    dInvSlot_DEKU_LEAF_e = 6,
+    dInvSlot_TINGLE_TUNER_e = 7,
+    dInvSlot_CAMERA_e = 8,
+    dInvSlot_IRON_BOOTS_e = 9,
+    dInvSlot_MAGIC_ARMOR_e = 10,
+    dInvSlot_ESA_BAG_e = 11,
+    dInvSlot_BOW_e = 12,
+    dInvSlot_BOMB_e = 13,
+    dInvSlot_BOTTLE0_e = 14,
+    dInvSlot_BOTTLE1_e = 15,
+    dInvSlot_BOTTLE2_e = 16,
+    dInvSlot_BOTTLE3_e = 17,
+    dInvSlot_DELIVERY_BAG_e = 18,
+    dInvSlot_HOOKSHOT_e = 19,
+    dInvSlot_SKULL_HAMMER_e = 20,
+    dInvSlot_ItemLast_e = 21,
+
+    dInvSlot_BeastFirst_e = 24, // Spoils Bag
+    dInvSlot_BeastLast_e = 32,
+
+    dInvSlot_BaitFirst_e = 36, // Bait Bag
+    dInvSlot_BaitLast_e = 44,
+
+    dInvSlot_ReserveFirst_e = 48,
+    dInvSlot_ReserveLast_e = 56,
+
+    dInvSlot_NONE_e = 0xFF,
+};
+
 /**
  * Returns which item is in a specific inventory slot.
  * @param i_invIdx The index of the inventory slot.
  * @return The item number of the item in that slot, or 0xFF for no item.
  */
 inline u8 dComIfGs_getItem(int i_invIdx) {
-    if (i_invIdx < 0x15) {
+    if (i_invIdx < dInvSlot_ItemLast_e) {
         return g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(i_invIdx);
-    } else if (i_invIdx < 0x18) {
+    } else if (i_invIdx < dInvSlot_BeastFirst_e) {
         return 0xFF;
-    } else if (i_invIdx < 0x18 + 8) {
-        return dComIfGs_getItemBeast(i_invIdx - 0x18);
-    } else if (i_invIdx < 0x24) {
+    } else if (i_invIdx < dInvSlot_BeastLast_e) {
+        return dComIfGs_getItemBeast(i_invIdx - dInvSlot_BeastFirst_e);
+    } else if (i_invIdx < dInvSlot_BaitFirst_e) {
         return 0xFF;
-    } else if (i_invIdx < 0x24 + 8) {
-        return dComIfGs_getItemBait(i_invIdx - 0x24);
-    } else if (i_invIdx < 0x30) {
+    } else if (i_invIdx < dInvSlot_BaitLast_e) {
+        return dComIfGs_getItemBait(i_invIdx - dInvSlot_BaitFirst_e);
+    } else if (i_invIdx < dInvSlot_ReserveFirst_e) {
         return 0xFF;
-    } else if (i_invIdx < 0x30 + 8) {
-        return dComIfGs_getItemReserve(i_invIdx - 0x30);
+    } else if (i_invIdx < dInvSlot_ReserveLast_e) {
+        return dComIfGs_getItemReserve(i_invIdx - dInvSlot_ReserveFirst_e);
     } else {
         return 0xFF;
     }
@@ -894,20 +932,20 @@ inline u8 dComIfGs_getItem(int i_invIdx) {
  * @param i_itemNo The item number of the item to place in that slot, or 0xFF for no item.
  */
 inline void dComIfGs_setItem(int i_invIdx, u8 i_itemNo) {
-    if (i_invIdx < 0x15) {
+    if (i_invIdx < dInvSlot_ItemLast_e) {
         g_dComIfG_gameInfo.save.getPlayer().getItem().setItem(i_invIdx, i_itemNo);
-    } else if (i_invIdx < 0x18) {
+    } else if (i_invIdx < dInvSlot_BeastFirst_e) {
         return;
-    } else if (i_invIdx < 0x18 + 8) {
-        dComIfGs_setItemBeast(i_invIdx - 0x18, i_itemNo);
-    } else if (i_invIdx < 0x24) {
+    } else if (i_invIdx < dInvSlot_BeastLast_e) {
+        dComIfGs_setItemBeast(i_invIdx - dInvSlot_BeastFirst_e, i_itemNo);
+    } else if (i_invIdx < dInvSlot_BaitFirst_e) {
         return;
-    } else if (i_invIdx < 0x24 + 8) {
-        dComIfGs_setItemBait(i_invIdx - 0x24, i_itemNo);
-    } else if (i_invIdx < 0x30) {
+    } else if (i_invIdx < dInvSlot_BaitLast_e) {
+        dComIfGs_setItemBait(i_invIdx - dInvSlot_BaitFirst_e, i_itemNo);
+    } else if (i_invIdx < dInvSlot_ReserveFirst_e) {
         return;
-    } else if (i_invIdx < 0x30 + 8) {
-        dComIfGs_setItemReserve(i_invIdx - 0x30, i_itemNo);
+    } else if (i_invIdx < dInvSlot_ReserveLast_e) {
+        dComIfGs_setItemReserve(i_invIdx - dInvSlot_ReserveFirst_e, i_itemNo);
     } else {
         return;
     }
@@ -2437,7 +2475,7 @@ inline u8 dComIfGp_getSelectItem(int i_btnIdx) {
  * @param i_btnIdx The index of the button. 0 for X, 1 for Y, 2 for Z.
  */
 inline void dComIfGp_setSelectItem(int i_btnIdx) {
-    if (dComIfGs_getSelectItem(i_btnIdx) != 0xFF) {
+    if (dComIfGs_getSelectItem(i_btnIdx) != dInvSlot_NONE_e) {
         int invIdx = dComIfGs_getSelectItem(i_btnIdx);
         u8 itemNo = dComIfGs_getItem(invIdx);
         g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, itemNo);
@@ -2445,10 +2483,10 @@ inline void dComIfGp_setSelectItem(int i_btnIdx) {
         invIdx = dComIfGs_getSelectItem(i_btnIdx);
         itemNo = dComIfGs_getItem(invIdx);
         if (itemNo == 0xFF) {
-            dComIfGs_setSelectItem(i_btnIdx, 0xFF);
+            dComIfGs_setSelectItem(i_btnIdx, dInvSlot_NONE_e);
         }
     } else {
-        g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, 0xFF);
+        g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, dInvSlot_NONE_e);
     }
 }
 

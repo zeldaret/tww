@@ -1488,7 +1488,7 @@ void daNpc_Bs1_c::createShopList() {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index = 1;
         }
-        if(dComIfGs_getItem(0xC) != dItem_NONE_e) {
+        if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
             index++;
         }
@@ -1498,7 +1498,7 @@ void daNpc_Bs1_c::createShopList() {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index++;
         }
-        if(dComIfGs_getItem(0xC) == dItem_NONE_e) {
+        if(dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
         }
 
@@ -1522,7 +1522,7 @@ void daNpc_Bs1_c::createShopList() {
     mShopItems.setItemSetDataList(mpItemSetList);
     for(int i = 0; i < 3; i++) {
         mShopItems.mSelectedItemIdx = i;
-        if((!dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(0xC) == dItem_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
+        if((!dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
             mShopItems.SoldOutItem(i);
             m76C[i] = true;
         }

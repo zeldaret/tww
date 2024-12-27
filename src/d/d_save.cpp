@@ -99,7 +99,7 @@ void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
 /* 80058E44-80058F74       .text setEmptyBottle__17dSv_player_item_cFv */
 void dSv_player_item_c::setEmptyBottle() {
     for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
-        int invIdx = 0xE + bottleIdx;
+        int invIdx = dInvSlot_BOTTLE0_e + bottleIdx;
         if (dComIfGs_getItem((u8)invIdx) == dItem_NONE_e) {
             dComIfGs_setItem((u8)invIdx, EMPTY_BOTTLE);
             break;
@@ -110,15 +110,13 @@ void dSv_player_item_c::setEmptyBottle() {
 /* 80058F74-8005918C       .text setEquipBottleItemIn__17dSv_player_item_cFUcUc */
 void dSv_player_item_c::setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
     u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
-    if (invIdx < 0xE) {
+    if (invIdx < dInvSlot_BOTTLE0_e)
         return;
-    }
-    if (invIdx > 0x11) {
+    if (invIdx > dInvSlot_BOTTLE3_e)
         return;
-    }
-    
+
     mItems[invIdx] = i_itemNo;
-    
+
     dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
     dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
     dComIfGp_setSelectItem(i_btnIdx);
@@ -141,7 +139,7 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemNo) {
     } else {
         return;
     }
-    
+
     u8 invIdx = dComIfGs_getSelectItem(btnIdx);
     if (invIdx < 0xE) {
         return;
@@ -149,9 +147,9 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemNo) {
     if (invIdx > 0x11) {
         return;
     }
-    
+
     mItems[invIdx] = i_itemNo;
-    
+
     dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
     dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
     dComIfGp_setSelectItem(btnIdx);
@@ -429,7 +427,7 @@ void dSv_player_bag_item_c::setBaitItemChange(u8 i_itemNo) {
     } else {
         return;
     }
-    
+
     u8 invIdx = dComIfGs_getSelectItem(btnIdx);
     if (invIdx < 0x24) {
         return;
@@ -437,7 +435,7 @@ void dSv_player_bag_item_c::setBaitItemChange(u8 i_itemNo) {
     if (invIdx >= 0x2C) {
         return;
     }
-    
+
     dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
     dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
     dComIfGp_setSelectItem(btnIdx);
@@ -448,7 +446,7 @@ void dSv_player_bag_item_c::setBaitItemChange(u8 i_btnIdx, u8 i_itemNo) {
     if (i_btnIdx > 2) {
         return;
     }
-    
+
     u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
     if (invIdx < 0x24) {
         return;
@@ -456,7 +454,7 @@ void dSv_player_bag_item_c::setBaitItemChange(u8 i_btnIdx, u8 i_itemNo) {
     if (invIdx >= 0x2C) {
         return;
     }
-    
+
     dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
     dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
     dComIfGp_setSelectItem(i_btnIdx);
@@ -474,7 +472,7 @@ void dSv_player_bag_item_c::setBaitItemEmpty() {
     } else {
         return;
     }
-    
+
     u8 invIdx = dComIfGs_getSelectItem(btnIdx);
     if (invIdx < 0x24) {
         return;
@@ -482,11 +480,11 @@ void dSv_player_bag_item_c::setBaitItemEmpty() {
     if (invIdx >= 0x2C) {
         return;
     }
-    
+
     int baitSlotIdx = invIdx - 0x24;
     u8 num = dComIfGs_getBaitNum(baitSlotIdx);
     u8 itemNo = dComIfGp_getSelectItem(btnIdx);
-    
+
     if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
         setBaitItemChange(dItem_NONE_e);
@@ -507,7 +505,7 @@ void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
     if (i_btnIdx > 2) {
         return;
     }
-    
+
     u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
     if (invIdx < 0x24) {
         return;
@@ -515,11 +513,11 @@ void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
     if (invIdx >= 0x2C) {
         return;
     }
-    
+
     int baitSlotIdx = invIdx - 0x24;
     u8 num = dComIfGs_getBaitNum(baitSlotIdx);
     u8 itemNo = dComIfGp_getSelectItem(i_btnIdx);
-    
+
     if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
         setBaitItemChange(i_btnIdx, dItem_NONE_e);
@@ -578,7 +576,7 @@ void dSv_player_bag_item_c::setReserveItemChange(u8 i_itemNo) {
     } else {
         return;
     }
-    
+
     u8 invIdx = dComIfGs_getSelectItem(btnIdx);
     if (invIdx < 0x30) {
         return;
@@ -586,7 +584,7 @@ void dSv_player_bag_item_c::setReserveItemChange(u8 i_itemNo) {
     if (invIdx >= 0x38) {
         return;
     }
-    
+
     dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
     dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
     dComIfGp_setSelectItem(btnIdx);
@@ -597,7 +595,7 @@ void dSv_player_bag_item_c::setReserveItemChange(u8 i_btnIdx, u8 i_itemNo) {
     if (i_btnIdx > 2) {
         return;
     }
-    
+
     u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
     if (invIdx < 0x30) {
         return;
@@ -605,7 +603,7 @@ void dSv_player_bag_item_c::setReserveItemChange(u8 i_btnIdx, u8 i_itemNo) {
     if (invIdx >= 0x38) {
         return;
     }
-    
+
     dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
     dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
     dComIfGp_setSelectItem(i_btnIdx);
@@ -1355,61 +1353,61 @@ void dSv_info_c::reinit() {
                                    0x84FF, 0x83FF, 0x82FF, 0x81FF, 0x80FF};
 
     static u16 l_onEventBit[] = {0x2F08, 0x2F04, 0x2F02, 0x3A01, 0x3401};
-    
+
     u8* r29 = new u8[ARRAY_SIZE(l_holdEventReg)];
     for (int i = 0; i < ARRAY_SIZE(l_holdEventReg); i++) {
         r29[i] = dComIfGs_getEventReg(l_holdEventReg[i]);
     }
-    
+
     u8 clearCount = dComIfGs_getClearCount();
-    
+
     char name[17];
     strcpy(name, dComIfGs_getPlayerName());
-    
+
     u8 attnType = dComIfGs_getOptAttentionType();
     u8 ruby = dComIfGs_getOptRuby();
     u8 sound = dComIfGs_getOptSound();
     u8 vib = dComIfGs_getOptVibration();
-    
+
     u8 pictureNum = dComIfGs_getPictureNum();
-    
+
     u8 r27 = dComIfGs_getEventReg(0x89FF);
-    
+
     init();
-    
+
     for (int i = 0; i < ARRAY_SIZE(l_holdEventReg); i++) {
         dComIfGs_setEventReg(l_holdEventReg[i], r29[i]);
     }
-    
+
     for (int i = 0; i < ARRAY_SIZE(l_onEventBit); i++) {
         dComIfGs_onEventBit(l_onEventBit[i]);
     }
-    
+
     dComIfGs_setEventReg(0xC407, 7);
-    
+
     dComIfGs_setClearCount(clearCount);
-    
+
     dComIfGs_onSaveTbox(dSv_save_c::STAGE_MISC, 0x00);
     dComIfGs_onSaveSwitch(dSv_save_c::STAGE_SEA, 0x47);
     dComIfGs_onSaveSwitch(dSv_save_c::STAGE_SEA, 0x5E);
-    
+
     dComIfGs_setPlayerName(name);
-    
+
     dComIfGs_setOptAttentionType(attnType);
     dComIfGs_setOptRuby(ruby);
     dComIfGs_setOptSound(sound);
     dComIfGs_setOptVibration(vib);
-    
+
     dComIfGs_setRandomSalvagePoint(3);
-    
-    dComIfGs_setItem(0x8, CAMERA2);
-    dComIfGp_setItem(0x8, CAMERA2);
-    
-    dComIfGs_onGetItem(0x8, 0);
-    dComIfGs_onGetItem(0x8, 1);
-    
+
+    dComIfGs_setItem(dInvSlot_CAMERA_e, CAMERA2);
+    dComIfGp_setItem(dInvSlot_CAMERA_e, CAMERA2);
+
+    dComIfGs_onGetItem(dInvSlot_CAMERA_e, 0);
+    dComIfGs_onGetItem(dInvSlot_CAMERA_e, 1);
+
     dComIfGs_setPictureNum(pictureNum);
-    
+
     dComIfGs_setEventReg(0x89FF, r27);
 }
 
@@ -1613,7 +1611,7 @@ BOOL dSv_info_c::isActor(int i_id, int i_roomNo) {
     if (0 > i_id || i_id >= dSv_zoneActor_c::ACTOR_MAX) {
         JUT_ASSERT(VERSION_SELECT(3717, 3744, 3744), 0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX);
     }
-    
+
     JUT_ASSERT(VERSION_SELECT(3719, 3746, 3746), 0 <= i_roomNo && i_roomNo < 64);
 
     int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
@@ -1632,52 +1630,52 @@ int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
     char* buffer_start;
     char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
     buffer_start = buffer;
-    
+
     memcpy(buffer, dComIfGs_getpPlayerStatusA(), sizeof(dSv_player_status_a_c));
     dSv_player_status_a_c* status_a = (dSv_player_status_a_c*)buffer;
     if (status_a->getLife() < 0xC) {
         status_a->setLife(0xC);
     }
     buffer += sizeof(dSv_player_status_a_c);
-    
+
     memcpy(buffer, dComIfGs_getpPlayerStatusB(), sizeof(dSv_player_status_b_c));
     dSv_player_status_b_c* status_b = (dSv_player_status_b_c*)buffer;
     status_b->setDateIpl(OSGetTime());
     buffer += sizeof(dSv_player_status_b_c);
-    
+
     memcpy(buffer, dComIfGs_getpPlayerReturnPlace(), sizeof(dSv_player_return_place_c));
     buffer += sizeof(dSv_player_return_place_c);
-    
+
     memcpy(buffer, dComIfGs_getpItem(), sizeof(dSv_player_item_c));
     buffer += sizeof(dSv_player_item_c);
-    
+
     memcpy(buffer, dComIfGs_getpGetItem(), sizeof(dSv_player_get_item_c));
     buffer += sizeof(dSv_player_get_item_c);
-    
+
     memcpy(buffer, dComIfGs_getpItemRecord(), sizeof(dSv_player_item_record_c));
     buffer += sizeof(dSv_player_item_record_c);
-    
+
     memcpy(buffer, dComIfGs_getpItemMax(), sizeof(dSv_player_item_max_c));
     buffer += sizeof(dSv_player_item_max_c);
-    
+
     memcpy(buffer, dComIfGs_getpBagItem(), sizeof(dSv_player_bag_item_c));
     buffer += sizeof(dSv_player_bag_item_c);
-    
+
     memcpy(buffer, dComIfGs_getpGetBagItem(), sizeof(dSv_player_get_bag_item_c));
     buffer += sizeof(dSv_player_get_bag_item_c);
-    
+
     memcpy(buffer, dComIfGs_getpBagItemRecord(), sizeof(dSv_player_bag_item_record_c));
     buffer += sizeof(dSv_player_bag_item_record_c);
-    
+
     memcpy(buffer, dComIfGs_getpCollect(), sizeof(dSv_player_collect_c));
     buffer += sizeof(dSv_player_collect_c);
-    
+
     memcpy(buffer, dComIfGs_getpMap(), sizeof(dSv_player_map_c));
     buffer += sizeof(dSv_player_map_c);
-    
+
     memcpy(buffer, dComIfGs_getpPlayerInfo(), sizeof(dSv_player_info_c));
     buffer += sizeof(dSv_player_info_c);
-    
+
     memcpy(buffer, dComIfGs_getpConfig(), sizeof(dSv_player_config_c));
     buffer += sizeof(dSv_player_config_c);
 #if VERSION == VERSION_JPN
@@ -1687,27 +1685,27 @@ int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
         OSSetSoundMode(1);
     }
 #endif
-    
+
     memcpy(buffer, dComIfGs_getpPriest(), sizeof(dSv_player_priest_c));
     buffer += sizeof(dSv_player_priest_c);
-    
+
     for (int i = 0; i < 4; i++) {
         memcpy(buffer, dComIfGs_getpPlayerStatusC(i), sizeof(dSv_player_status_c_c));
         buffer += sizeof(dSv_player_status_c_c);
     }
-    
+
     memcpy(buffer, dComIfGs_getPCourseInfo(), sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX);
     buffer += sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX;
-    
+
     memcpy(buffer, dComIfGs_getPOcean(), sizeof(dSv_ocean_c));
     buffer += sizeof(dSv_ocean_c);
-    
+
     memcpy(buffer, dComIfGs_getPEvent(), sizeof(dSv_event_c));
     buffer += sizeof(dSv_event_c);
-    
+
     memcpy(buffer, dComIfGs_getPReserve(), sizeof(dSv_reserve_c));
     buffer += sizeof(dSv_reserve_c);
-    
+
     s32 save_size = buffer - buffer_start;
     if (save_size > dSv_save_c::PACKED_STRUCT_SIZE) {
         printf("SAVE size over(%d/%d)\n", dSv_save_c::PACKED_STRUCT_SIZE, save_size);
@@ -1723,46 +1721,46 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
     char* buffer_start;
     char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
     buffer_start = buffer;
-    
+
     memcpy(dComIfGs_getpPlayerStatusA(), buffer, sizeof(dSv_player_status_a_c));
     buffer += sizeof(dSv_player_status_a_c);
-    
+
     memcpy(dComIfGs_getpPlayerStatusB(), buffer,  sizeof(dSv_player_status_b_c));
     buffer += sizeof(dSv_player_status_b_c);
-    
+
     memcpy(dComIfGs_getpPlayerReturnPlace(), buffer,  sizeof(dSv_player_return_place_c));
     buffer += sizeof(dSv_player_return_place_c);
-    
+
     memcpy(dComIfGs_getpItem(), buffer,  sizeof(dSv_player_item_c));
     buffer += sizeof(dSv_player_item_c);
-    
+
     memcpy(dComIfGs_getpGetItem(), buffer,  sizeof(dSv_player_get_item_c));
     buffer += sizeof(dSv_player_get_item_c);
-    
+
     memcpy(dComIfGs_getpItemRecord(), buffer,  sizeof(dSv_player_item_record_c));
     buffer += sizeof(dSv_player_item_record_c);
-    
+
     memcpy(dComIfGs_getpItemMax(), buffer,  sizeof(dSv_player_item_max_c));
     buffer += sizeof(dSv_player_item_max_c);
-    
+
     memcpy(dComIfGs_getpBagItem(), buffer,  sizeof(dSv_player_bag_item_c));
     buffer += sizeof(dSv_player_bag_item_c);
-    
+
     memcpy(dComIfGs_getpGetBagItem(), buffer,  sizeof(dSv_player_get_bag_item_c));
     buffer += sizeof(dSv_player_get_bag_item_c);
-    
+
     memcpy(dComIfGs_getpBagItemRecord(), buffer,  sizeof(dSv_player_bag_item_record_c));
     buffer += sizeof(dSv_player_bag_item_record_c);
-    
+
     memcpy(dComIfGs_getpCollect(), buffer,  sizeof(dSv_player_collect_c));
     buffer += sizeof(dSv_player_collect_c);
-    
+
     memcpy(dComIfGs_getpMap(), buffer,  sizeof(dSv_player_map_c));
     buffer += sizeof(dSv_player_map_c);
-    
+
     memcpy(dComIfGs_getpPlayerInfo(), buffer,  sizeof(dSv_player_info_c));
     buffer += sizeof(dSv_player_info_c);
-    
+
     memcpy(dComIfGs_getpConfig(), buffer,  sizeof(dSv_player_config_c));
     buffer += sizeof(dSv_player_config_c);
     if (OSGetSoundMode() == 0) {
@@ -1774,27 +1772,27 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
         dComIfGs_setOptSound(1);
         mDoAud_setOutputMode(1);
     }
-    
+
     memcpy(dComIfGs_getpPriest(), buffer,  sizeof(dSv_player_priest_c));
     buffer += sizeof(dSv_player_priest_c);
-    
+
     for (int i = 0; i < 4; i++) {
         memcpy(dComIfGs_getpPlayerStatusC(i), buffer,  sizeof(dSv_player_status_c_c));
         buffer += sizeof(dSv_player_status_c_c);
     }
-    
+
     memcpy(dComIfGs_getPCourseInfo(), buffer,  sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX);
     buffer += sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX;
-    
+
     memcpy(dComIfGs_getPOcean(), buffer,  sizeof(dSv_ocean_c));
     buffer += sizeof(dSv_ocean_c);
-    
+
     memcpy(dComIfGs_getPEvent(), buffer,  sizeof(dSv_event_c));
     buffer += sizeof(dSv_event_c);
-    
+
     memcpy(dComIfGs_getPReserve(), buffer,  sizeof(dSv_reserve_c));
     buffer += sizeof(dSv_reserve_c);
-    
+
     s32 load_size = buffer - buffer_start;
     if (load_size > dSv_save_c::PACKED_STRUCT_SIZE) {
         printf("LOAD size over(%d/%d)\n", dSv_save_c::PACKED_STRUCT_SIZE, load_size);
@@ -1811,7 +1809,7 @@ int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
     char* buffer_start = buffer;
     char* buffer_src;
-    
+
     dSv_player_status_a_c status_a;
     status_a.init();
     buffer_src = (char*)&status_a;
@@ -1908,7 +1906,7 @@ int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
         memcpy(buffer, buffer_src, sizeof(dSv_player_status_c_c));
         buffer += sizeof(dSv_player_status_c_c);
     }
-    
+
     // Bug: It copies 16 instances of dSv_memory_c from the stack to the card, but only allocates and initializes 1.
     // This means when it initializes an empty save slot in the memory card, all of the stage save tables except the
     // first are filled with garbage data instead of all zeroes.

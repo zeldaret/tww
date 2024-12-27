@@ -1361,22 +1361,22 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     }
 
     if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
-        dComIfGs_setItem(12, dItem_NONE_e); // take away the bow
+        dComIfGs_setItem(dInvSlot_BOW_e, dItem_NONE_e); // take away the bow
         for (s32 i = 0; i < 3; i++) {
             u32 itemno = dComIfGp_getSelectItem(i);
             if (itemno == dItem_BOW_e || itemno == dItem_MAGIC_ARROW_e || itemno == dItem_LIGHT_ARROW_e) {
-                dComIfGs_setSelectItem(i, dItem_NONE_e);
+                dComIfGs_setSelectItem(i, dInvSlot_NONE_e);
                 dComIfGp_setSelectItem(i);
             }
         }
-    } else if (dComIfGs_getItem(12) == dItem_NONE_e) {
+    } else if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {
         // give the bow back
-        if (dComIfGs_isGetItem(12, 2))
-            dComIfGs_setItem(12, dItem_LIGHT_ARROW_e);
-        else if (dComIfGs_isGetItem(12, 1))
-            dComIfGs_setItem(12, dItem_MAGIC_ARROW_e);
-        else if (dComIfGs_isGetItem(12, 0))
-            dComIfGs_setItem(12, dItem_BOW_e);
+        if (dComIfGs_isGetItem(dInvSlot_BOW_e, 2))
+            dComIfGs_setItem(dInvSlot_BOW_e, dItem_LIGHT_ARROW_e);
+        else if (dComIfGs_isGetItem(dInvSlot_BOW_e, 1))
+            dComIfGs_setItem(dInvSlot_BOW_e, dItem_MAGIC_ARROW_e);
+        else if (dComIfGs_isGetItem(dInvSlot_BOW_e, 0))
+            dComIfGs_setItem(dInvSlot_BOW_e, dItem_BOW_e);
     }
 
     if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 ||

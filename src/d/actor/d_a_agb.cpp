@@ -1003,8 +1003,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 |= 0x10000;
             }
 
-            if (dComIfGs_getItem(12) != dItem_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax())
-            {
+            if (dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
                 temp_r29 |= 0x100;
             }
         }

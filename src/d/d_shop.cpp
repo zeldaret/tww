@@ -1344,7 +1344,7 @@ u8 dShop_BoughtErrorStatus(ShopItems_c* shopItems, int param_2, int param_3) {
     
     if (buyCond & Shop_BuyCond_MUST_OWN_ITEM_e) {
         if (itemData->mMustOwnItemNo == dItem_BOW_e) {
-            if (dComIfGs_getItem(0xC) == dItem_NONE_e) {
+            if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {
                 errorStatus |= Shop_BuyCond_MUST_OWN_ITEM_e;
             }
         } else {

@@ -610,29 +610,29 @@ void item_func_l_magic() {
 
 /* 800C3008-800C3060       .text item_func_bomb_5__Fv */
 void item_func_bomb_5() {
-    dComIfGs_onGetItem(0xD, 0);
-    dComIfGp_setItem(0xD, BOMB_5);
+    dComIfGs_onGetItem(dInvSlot_BOMB_e, 0);
+    dComIfGp_setItem(dInvSlot_BOMB_e, BOMB_5);
     dComIfGp_setItemBombNumCount(5);
 }
 
 /* 800C3060-800C30B0       .text item_func_bomb_10__Fv */
 void item_func_bomb_10() {
-    dComIfGs_onGetItem(0xD, 0);
-    dComIfGs_setItem(0xD, dItem_BOMB_BAG_e);
+    dComIfGs_onGetItem(dInvSlot_BOMB_e, 0);
+    dComIfGs_setItem(dInvSlot_BOMB_e, dItem_BOMB_BAG_e);
     dComIfGp_setItemBombNumCount(10);
 }
 
 /* 800C30B0-800C3100       .text item_func_bomb_20__Fv */
 void item_func_bomb_20() {
-    dComIfGs_onGetItem(0xD, 0);
-    dComIfGs_setItem(0xD, dItem_BOMB_BAG_e);
+    dComIfGs_onGetItem(dInvSlot_BOMB_e, 0);
+    dComIfGs_setItem(dInvSlot_BOMB_e, dItem_BOMB_BAG_e);
     dComIfGp_setItemBombNumCount(20);
 }
 
 /* 800C3100-800C3150       .text item_func_bomb_30__Fv */
 void item_func_bomb_30() {
-    dComIfGs_onGetItem(0xD, 0);
-    dComIfGs_setItem(0xD, dItem_BOMB_BAG_e);
+    dComIfGs_onGetItem(dInvSlot_BOMB_e, 0);
+    dComIfGs_setItem(dInvSlot_BOMB_e, dItem_BOMB_BAG_e);
     dComIfGp_setItemBombNumCount(30);
 }
 
@@ -684,50 +684,50 @@ void item_func_pendant() {
 
 /* 800C3258-800C329C       .text item_func_telescope__Fv */
 void item_func_telescope() {
-    dComIfGs_onGetItem(0x0, 0);
-    dComIfGs_setItem(0x0, dItem_TELESCOPE_e);
+    dComIfGs_onGetItem(dInvSlot_TELESCOPE_e, 0);
+    dComIfGs_setItem(dInvSlot_TELESCOPE_e, dItem_TELESCOPE_e);
 }
 
 /* 800C329C-800C32E0       .text item_func_tncl_whitsl__Fv */
 void item_func_tncl_whitsl() {
-    dComIfGs_onGetItem(0x7, 0);
-    dComIfGs_setItem(0x7, dItem_TINGLE_TUNER_e);
+    dComIfGs_onGetItem(dInvSlot_TINGLE_TUNER_e, 0);
+    dComIfGs_setItem(dInvSlot_TINGLE_TUNER_e, dItem_TINGLE_TUNER_e);
 }
 
 /* 800C32E0-800C3324       .text item_func_wind_tact__Fv */
 void item_func_wind_tact() {
-    dComIfGs_onGetItem(0x2, 0);
-    dComIfGs_setItem(0x2, dItem_WIND_WAKER_e);
+    dComIfGs_onGetItem(dInvSlot_WIND_WAKER_e, 0);
+    dComIfGs_setItem(dInvSlot_WIND_WAKER_e, dItem_WIND_WAKER_e);
 }
 
 /* 800C3324-800C3368       .text item_func_camera__Fv */
 void item_func_camera() {
-    dComIfGs_onGetItem(0x8, 0);
-    dComIfGs_setItem(0x8, CAMERA);
+    dComIfGs_onGetItem(dInvSlot_CAMERA_e, 0);
+    dComIfGs_setItem(dInvSlot_CAMERA_e, CAMERA);
 }
 
 /* 800C3368-800C33AC       .text item_func_emono_bag__Fv */
 void item_func_emono_bag() {
-    dComIfGs_onGetItem(0x4, 0);
-    dComIfGs_setItem(0x4, EMONO_BAG);
+    dComIfGs_onGetItem(dInvSlot_EMONO_BAG_e, 0);
+    dComIfGs_setItem(dInvSlot_EMONO_BAG_e, EMONO_BAG);
 }
 
 /* 800C33AC-800C33F0       .text item_func_rope__Fv */
 void item_func_rope() {
-    dComIfGs_onGetItem(0x3, 0);
-    dComIfGs_setItem(0x3, dItem_GRAPPLING_HOOK_e);
+    dComIfGs_onGetItem(dInvSlot_GRAPPLING_HOOK_e, 0);
+    dComIfGs_setItem(dInvSlot_GRAPPLING_HOOK_e, dItem_GRAPPLING_HOOK_e);
 }
 
 /* 800C33F0-800C3434       .text item_func_camera2__Fv */
 void item_func_camera2() {
-    dComIfGs_onGetItem(0x8, 1);
-    dComIfGs_setItem(0x8, CAMERA2);
+    dComIfGs_onGetItem(dInvSlot_CAMERA_e, 1);
+    dComIfGs_setItem(dInvSlot_CAMERA_e, CAMERA2);
 }
 
 /* 800C3434-800C3484       .text item_func_bow__Fv */
 void item_func_bow() {
-    dComIfGs_onGetItem(0xC, 0);
-    dComIfGs_setItem(0xC, dItem_BOW_e);
+    dComIfGs_onGetItem(dInvSlot_BOW_e, 0);
+    dComIfGs_setItem(dInvSlot_BOW_e, dItem_BOW_e);
     dComIfGs_setArrowNum(30);
     dComIfGs_setArrowMax(30);
 }
@@ -740,14 +740,14 @@ void item_func_pwr_groove() {
 
 /* 800C34C4-800C3508       .text item_func_hvy_boots__Fv */
 void item_func_hvy_boots() {
-    dComIfGs_onGetItem(0x9, 0);
-    dComIfGs_setItem(0x9, dItem_IRON_BOOTS_e);
+    dComIfGs_onGetItem(dInvSlot_IRON_BOOTS_e, 0);
+    dComIfGs_setItem(dInvSlot_IRON_BOOTS_e, dItem_IRON_BOOTS_e);
 }
 
 /* 800C3508-800C354C       .text item_func_drgn_shield__Fv */
 void item_func_drgn_shield() {
-    dComIfGs_onGetItem(0xA, 0);
-    dComIfGs_setItem(0xA, dItem_MAGIC_ARMOR_e);
+    dComIfGs_onGetItem(dInvSlot_MAGIC_ARMOR_e, 0);
+    dComIfGs_setItem(dInvSlot_MAGIC_ARMOR_e, dItem_MAGIC_ARMOR_e);
 }
 
 /* 800C354C-800C3550       .text item_func_water_boots__Fv */
@@ -756,37 +756,37 @@ void item_func_water_boots() {
 
 /* 800C3550-800C3594       .text item_func_esa_bag__Fv */
 void item_func_esa_bag() {
-    dComIfGs_onGetItem(0xB, 0);
-    dComIfGs_setItem(0xB, ESA_BAG);
+    dComIfGs_onGetItem(dInvSlot_ESA_BAG_e, 0);
+    dComIfGs_setItem(dInvSlot_ESA_BAG_e, ESA_BAG);
 }
 
 /* 800C3594-800C35D8       .text item_func_boomerang__Fv */
 void item_func_boomerang() {
-    dComIfGs_onGetItem(0x5, 0);
-    dComIfGs_setItem(0x5, dItem_BOOMERANG_e);
+    dComIfGs_onGetItem(dInvSlot_BOOMERANG_e, 0);
+    dComIfGs_setItem(dInvSlot_BOOMERANG_e, dItem_BOOMERANG_e);
 }
 
 /* 800C35D8-800C3600       .text item_func_bare_hand__Fv */
 void item_func_bare_hand() {
-    dComIfGs_setSelectEquip(0x2, BARE_HAND);
+    dComIfGs_setSelectEquip(0x02, BARE_HAND);
 }
 
 /* 800C3600-800C3644       .text item_func_hookshot__Fv */
 void item_func_hookshot() {
-    dComIfGs_onGetItem(0x13, 0);
-    dComIfGs_setItem(0x13, dItem_HOOKSHOT_e);
+    dComIfGs_onGetItem(dInvSlot_HOOKSHOT_e, 0);
+    dComIfGs_setItem(dInvSlot_HOOKSHOT_e, dItem_HOOKSHOT_e);
 }
 
 /* 800C3644-800C3688       .text item_func_warasibe_bag__Fv */
 void item_func_warasibe_bag() {
-    dComIfGs_onGetItem(0x12, 0);
-    dComIfGs_setItem(0x12, dItem_DELIVERY_BAG_e);
+    dComIfGs_onGetItem(dInvSlot_DELIVERY_BAG_e, 0);
+    dComIfGs_setItem(dInvSlot_DELIVERY_BAG_e, dItem_DELIVERY_BAG_e);
 }
 
 /* 800C3688-800C36D8       .text item_func_bomb_bag__Fv */
 void item_func_bomb_bag() {
-    dComIfGs_onGetItem(0xD, 0);
-    dComIfGs_setItem(0xD, dItem_BOMB_BAG_e);
+    dComIfGs_onGetItem(dInvSlot_BOMB_e, 0);
+    dComIfGs_setItem(dInvSlot_BOMB_e, dItem_BOMB_BAG_e);
     dComIfGs_setBombNum(30);
     dComIfGs_setBombMax(30);
 }
@@ -797,22 +797,22 @@ void item_func_fuku() {
 
 /* 800C36DC-800C3720       .text item_func_hummer__Fv */
 void item_func_hummer() {
-    dComIfGs_onGetItem(0x14, 0);
-    dComIfGs_setItem(0x14, dItem_SKULL_HAMMER_e);
+    dComIfGs_onGetItem(dInvSlot_SKULL_HAMMER_e, 0);
+    dComIfGs_setItem(dInvSlot_SKULL_HAMMER_e, dItem_SKULL_HAMMER_e);
 }
 
 /* 800C3720-800C377C       .text item_func_deku_leaf__Fv */
 void item_func_deku_leaf() {
-    dComIfGs_onGetItem(0x6, 0);
-    dComIfGs_setItem(0x6, dItem_DEKU_LEAF_e);
+    dComIfGs_onGetItem(dInvSlot_DEKU_LEAF_e, 0);
+    dComIfGs_setItem(dInvSlot_DEKU_LEAF_e, dItem_DEKU_LEAF_e);
     dComIfGp_setItemMaxMagicCount(16);
     dComIfGp_setItemMagicCount(16);
 }
 
 /* 800C377C-800C3928       .text item_func_magic_arrow__Fv */
 void item_func_magic_arrow() {
-    dComIfGs_onGetItem(0xC, 1);
-    dComIfGs_setItem(0xC, dItem_MAGIC_ARROW_e);
+    dComIfGs_onGetItem(dInvSlot_BOW_e, 1);
+    dComIfGs_setItem(dInvSlot_BOW_e, dItem_MAGIC_ARROW_e);
     
 #if VERSION != VERSION_JPN
     // If the regular bow was equipped on an X/Y/Z button, force it to update.
@@ -826,9 +826,9 @@ void item_func_magic_arrow() {
 
 /* 800C3928-800C3AD4       .text item_func_light_arrow__Fv */
 void item_func_light_arrow() {
-    dComIfGs_onGetItem(0xC, 2);
-    dComIfGs_setItem(0xC, dItem_LIGHT_ARROW_e);
-    
+    dComIfGs_onGetItem(dInvSlot_BOW_e, 2);
+    dComIfGs_setItem(dInvSlot_BOW_e, dItem_LIGHT_ARROW_e);
+
 #if VERSION != VERSION_JPN
     // If the fire/ice bow was equipped on an X/Y/Z button, force it to update.
     for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
@@ -1113,8 +1113,8 @@ void item_func_tact_song6() {
 
 /* 800C458C-800C45C8       .text item_func_normal_sail__Fv */
 void item_func_normal_sail() {
-    dComIfGs_setItem(0x1, NORMAL_SAIL);
-    dComIfGs_onGetItem(0x1, 0);
+    dComIfGs_setItem(dInvSlot_SAIL_e, NORMAL_SAIL);
+    dComIfGs_onGetItem(dInvSlot_SAIL_e, 0);
 }
 
 /* 800C45C8-800C45CC       .text item_func_triforce_map1__Fv */

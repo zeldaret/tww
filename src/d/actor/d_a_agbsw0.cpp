@@ -1712,201 +1712,201 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
     switch(conditionNo) {
         case 1:
             if(dComIfGs_isEventBit(0xF80)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 2:
             if(dComIfGs_isSymbol(0)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 3:
             if(dComIfGs_isEventBit(0x1E40)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 4:
             if(dComIfGs_isEventBit(0x1820)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 5: {
             daGhostship_c* gship = (daGhostship_c*)fopAcM_searchFromName("Ayush", 0, 0);
             if(gship && gship->checkInShip()) {
-               return 0;
+               return FALSE;
             }
 
             break;
         }
         case 6:
             if(dComIfGs_isEventBit(0x1A10)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 7:
             if(dComIfGs_isEventBit(0x1A08)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 8:
             if(dComIfGs_isEventBit(0x1708)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 9:
             if(dComIfGs_isStageTbox(dSv_save_c::STAGE_DRC, 0xF)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0xA:
             if(dComIfGs_isStageTbox(dSv_save_c::STAGE_FW, 0xF)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0xB:
             if(dComIfGs_isStageTbox(dSv_save_c::STAGE_TOTG, 0xF)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0xC:
             if(dComIfGs_isStageTbox(dSv_save_c::STAGE_WT, 0xF)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0xD:
             if(dComIfGs_isStageTbox(dSv_save_c::STAGE_ET, 0xF)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x11:
             if(dComIfGp_getSelectItem(0) != dItem_BOW_e && dComIfGp_getSelectItem(1) != dItem_BOW_e && dComIfGp_getSelectItem(2) != dItem_BOW_e) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x12:
             if(dComIfGp_getSelectItem(0) != dItem_BOOMERANG_e && dComIfGp_getSelectItem(1) != dItem_BOOMERANG_e && dComIfGp_getSelectItem(2) != dItem_BOOMERANG_e) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x13:
             if(dComIfGp_getSelectItem(0) != dItem_DEKU_LEAF_e && dComIfGp_getSelectItem(1) != dItem_DEKU_LEAF_e && dComIfGp_getSelectItem(2) != dItem_DEKU_LEAF_e) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x14:
             if(dComIfGp_getSelectItem(0) != dItem_GRAPPLING_HOOK_e && dComIfGp_getSelectItem(1) != dItem_GRAPPLING_HOOK_e && dComIfGp_getSelectItem(2) != dItem_GRAPPLING_HOOK_e) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x15:
             if(dComIfGp_getSelectItem(0) != dItem_BOMB_BAG_e && dComIfGp_getSelectItem(1) != dItem_BOMB_BAG_e && dComIfGp_getSelectItem(2) != dItem_BOMB_BAG_e) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x16:
             if(dComIfGp_getSelectItem(0) != dItem_HOOKSHOT_e && dComIfGp_getSelectItem(1) != dItem_HOOKSHOT_e && dComIfGp_getSelectItem(2) != dItem_HOOKSHOT_e) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x17:
             if(dComIfGs_checkGetItem(dItem_MAGIC_ARMOR_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x18:
             if(dComIfGs_isCollect(2, 0)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x19:
             if(dComIfGs_getLife() < dComIfGs_getMaxLife()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x1A:
-            if(dComIfGs_getItem(12) != dItem_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
-                return 0;
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
+                return FALSE;
             }
 
             break;
         case 0x1B:
             if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x1C:
             if(dComIfGs_getLife() < 8) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x1D:
             if(dComIfGs_getMaxMagic() != 0 && !dComIfGs_getMagic) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x1E:
-            if(dComIfGs_getItem(12) != dItem_NONE_e && dComIfGs_getArrowNum() == 0) {
-                return 0;
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() == 0) {
+                return FALSE;
             }
 
             break;
         case 0x1F:
             if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x20:
-            if(dComIfGs_isEventBit(0x1708) && dComIfGs_getItem(12) != dItem_NONE_e && dComIfGs_getArrowNum() == 0) {
-                return 0;
+            if(dComIfGs_isEventBit(0x1708) && dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() == 0) {
+                return FALSE;
             }
 
             break;
         case 0x21:
             if(dComIfGs_isEventBit(0x1708) && dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x22:
             if((u32)dComIfGs_getRupee() <= 10) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x23:
             if(dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x24:
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
@@ -1916,7 +1916,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
                 dComIfGp_getSelectItem(1) != dItem_BOMB_BAG_e &&
                 dComIfGp_getSelectItem(2) != dItem_BOMB_BAG_e)
             {
-                return 0;
+                return FALSE;
             }
 
             break;
@@ -1926,176 +1926,176 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
                 dComIfGp_getSelectItem(1) != dItem_GRAPPLING_HOOK_e &&
                 dComIfGp_getSelectItem(2) != dItem_GRAPPLING_HOOK_e)
             {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x27:
             if(dComIfGs_getKeyNum() == 0) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x28:
             if(!dComIfGs_isDungeonItemBossKey()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x29:
             if(dComIfGs_checkGetItem(dItem_GRAPPLING_HOOK_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x2A:
             if(dComIfGs_checkGetItem(dItem_BOOMERANG_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x2B:
             if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x2C:
-            if(dComIfGs_getItem(12) != dItem_NONE_e) {
-                return 0;
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
+                return FALSE;
             }
 
             break;
         case 0x2D:
             if(!daPy_getPlayerLinkActorClass()->checkGrabWeapon(1)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x2E:
             if(daPy_getPlayerLinkActorClass()->checkGrabWeapon(1)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x2F:
             if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(0x1A08)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x30:
             if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(0x1A10)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x31:
             if(!dComIfGs_isEventBit(0x1708)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x32:
             if(dComIfGs_isTact(0)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x33:
             if(!dComIfGs_isTact(0)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x34:
             if(!dKyw_get_windsdir()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x35:
             if(dKyw_get_windsdir()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x36:
             if(dKyw_get_windsdir() == 4) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x37:
             if(!dKyw_get_windsdir() == 4) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x38:
             if(dKyw_get_windsdir() == 2) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x39:
             if(!dKyw_get_windsdir() == 2) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x3A:
             if(dKyw_get_windsdir() == 6) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x3B:
             if(!dKyw_get_windsdir() == 6) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x3C:
             if(mFigureDispose == 1) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x3D:
             if(mFigureDispose == 2) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x3E:
             if(mFigureBeat == 1) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x3F:
             if(mFigureBeat == 2) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x40:
             if(mFigureBeat == 3) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x41:
             if(mFigureBeat == 4) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x42:
             for (int i = 0; i < 3; i++) {
                 if(daNpc_Os_c::isPlayerRoom(i)) {
-                    return 0;
+                    return FALSE;
                 }
             }
 
@@ -2107,154 +2107,154 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
                 }
             }
 
-            return 0;
+            return FALSE;
         case 0x44:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_OS) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x45:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_OS) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x46:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x47:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x48:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_CB1) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x49:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_CB1) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x4A:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_KAM) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x4B:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_KAM) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x4C:
             if(dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x4D:
             if(!dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x4E:
             if(dComIfGs_checkGetItem(MIRROR_SHIELD)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x4F:
             if(!dComIfGs_checkGetItem(MIRROR_SHIELD)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x50:
             if(daNpc_Md_c::isPlayerRoom()) {
-               return 0;
+               return FALSE;
             }
 
             break;
         case 0x51:
             if(!daNpc_Md_c::isPlayerRoom()) {
-               return 0;
+               return FALSE;
             }
 
             break;
         case 0x52:
             if(dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x53:
             if(!dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x54:
             if(daNpc_Cb1_c::isPlayerRoom()) {
-               return 0;
+               return FALSE;
             }
 
             break;
         case 0x55:
             if(!daNpc_Cb1_c::isPlayerRoom()) {
-               return 0;
+               return FALSE;
             }
 
             break;
         case 0x56:
             if(!dComIfGs_isEventBit(0x2E08)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x57:
             if(!dComIfGs_isCollect(2, 0)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x58:
             if(!dComIfGs_checkGetItem(dItem_IRON_BOOTS_e)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x59:
             if(dComIfGs_checkGetItem(LV3_SWORD) || dComIfGs_checkGetItem(MASTER_SWORD_EX)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x5A:
             if(!dComIfGs_checkGetItem(LV3_SWORD) && !dComIfGs_checkGetItem(MASTER_SWORD_EX)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x5B:
             if(dComIfGs_checkGetItem(MASTER_SWORD_EX)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x5C:
             if(!dComIfGs_checkGetItem(MASTER_SWORD_EX)) {
-                return 0;
+                return FALSE;
             }
 
             break;
@@ -2262,7 +2262,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             if((u32)dComIfGs_getRupee() >= 500) {
                 for (int i = 1; i < 9; i++) {
                     if(dComIfGs_isGetCollectMap(i) && !dComIfGs_isCollectMapTriforce(i)) {
-                        return 0;
+                        return FALSE;
                     }
                 }
             }
@@ -2272,7 +2272,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             if((u32)dComIfGs_getRupee() < 500) {
                 for (int i = 1; i < 9; i++) {
                     if(dComIfGs_isGetCollectMap(i) && !dComIfGs_isCollectMapTriforce(i)) {
-                        return 0;
+                        return FALSE;
                     }
                 }
             }
@@ -2280,207 +2280,207 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x5F:
             if(!dComIfGs_isGetCollectMap(1)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x60:
             if(dComIfGs_isGetCollectMap(1) && dComIfGs_isCollectMapTriforce(1) && !dComIfGs_isTriforce(0)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x61:
             if(dComIfGs_isTriforce(0)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x62:
             if(!dComIfGs_isGetCollectMap(2)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x63:
             if(dComIfGs_isGetCollectMap(2) && dComIfGs_isCollectMapTriforce(2) && !dComIfGs_isTriforce(1)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x64:
             if(dComIfGs_isTriforce(1)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x65:
             if(!dComIfGs_isGetCollectMap(3)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x66:
             if(dComIfGs_isGetCollectMap(3) && dComIfGs_isCollectMapTriforce(3) && !dComIfGs_isTriforce(2)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x67:
             if(dComIfGs_isTriforce(2)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x68:
             if(!dComIfGs_isGetCollectMap(4)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x69:
             if(dComIfGs_isGetCollectMap(4) && dComIfGs_isCollectMapTriforce(4) && !dComIfGs_isTriforce(3)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x6A:
             if(dComIfGs_isTriforce(3)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x6B:
             if(!dComIfGs_isGetCollectMap(5)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x6C:
             if(dComIfGs_isGetCollectMap(5) && dComIfGs_isCollectMapTriforce(5) && !dComIfGs_isTriforce(4)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x6D:
             if(dComIfGs_isTriforce(4)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x6E:
             if(!dComIfGs_isGetCollectMap(6)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x6F:
             if(dComIfGs_isGetCollectMap(6) && dComIfGs_isCollectMapTriforce(6) && !dComIfGs_isTriforce(5)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x70:
             if(dComIfGs_isTriforce(5)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x71:
             if(!dComIfGs_isGetCollectMap(7)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x72:
             if(dComIfGs_isGetCollectMap(7) && dComIfGs_isCollectMapTriforce(7) && !dComIfGs_isTriforce(6)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x73:
             if(dComIfGs_isTriforce(6)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x74:
             if(!dComIfGs_isGetCollectMap(8)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x75:
             if(dComIfGs_isGetCollectMap(8) && dComIfGs_isCollectMapTriforce(8) && !dComIfGs_isTriforce(7)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x76:
             if(dComIfGs_isTriforce(7)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x77:
             if(daPy_dmEcallBack_c::checkCurse()) {
-               return 0;
+               return FALSE;
             }
 
             break;
         case 0x78:
             if(!daPy_dmEcallBack_c::checkCurse()) {
-               return 0;
+               return FALSE;
             }
 
             break;
         case 0x79:
             if(daPy_getPlayerActorClass()->checkConfuse()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x7A:
             if(!daPy_getPlayerActorClass()->checkConfuse()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x7B:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD  && daNpc_Md_c::isFlying()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x7C:
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD || !daNpc_Md_c::isFlying()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x7F:
             // Potential bug: This seems to check if the current player is Medli, but that Makar is flying?
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD && daNpc_Cb1_c::isFlying()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x80:
             // Potential bug: This seems to check if the current player is Medli, but that Makar is flying?
             if(fopAcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD || !daNpc_Cb1_c::isFlying()) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x7D:
             if(!fopAcM_isSwitch(this, 0x7C)) {
-                return 0;
+                return FALSE;
             }
 
             break;
         case 0x7E:
             if(dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e) && !dComIfGs_isEventBit(0x2D01)) {
-                return 0;
+                return FALSE;
             }
 
             break;
@@ -2492,7 +2492,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
                 }
             }
             else if(!daNpc_Md_c::isPlayerRoom()) {
-                return 0;
+                return FALSE;
             }
 
             break;
@@ -2503,16 +2503,16 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
                 }
             }
             else if(!daNpc_Cb1_c::isPlayerRoom()) {
-                return 0;
+                return FALSE;
             }
 
             break;
 #endif
         default:
-            return 0;
+            return FALSE;
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 0000477C-00004818       .text MailSend__10daAgbsw0_cFUsUcUcUcUc */
