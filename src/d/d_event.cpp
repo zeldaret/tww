@@ -82,7 +82,7 @@ void dEvt_control_c::setParam(dEvt_order_c* order) {
         mPtTalk = getPId(order->mActor2);
         mPtItem = getPId(order->mActor2);
     }
-    
+
     mEventInfoIdx = order->mEventInfoIdx;
 
     if (order->mEventInfoIdx == 0xFF || stageEventInfo == NULL || order->mEventInfoIdx >= stageEventInfo->num)
@@ -154,9 +154,9 @@ BOOL dEvt_control_c::talkCheck(dEvt_order_c* order) {
 /* 80070390-8007055C       .text talkXyCheck__14dEvt_control_cFP12dEvt_order_c */
 BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
     const char* defaultEventName = "DEFAULT_TALK_XY";
-    
+
     fopAc_ac_c* actor2 = order->mActor2;
-    
+
     int equippedItemIdx;
     switch (order->mEventType) {
     case dEvtType_SHOWITEM_X_e:
@@ -169,19 +169,19 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
         equippedItemIdx = 2;
         break;
     }
-    
+
     if (dComIfGp_getSelectItem(equippedItemIdx) == dItem_NONE_e) {
         return FALSE;
     }
-    
+
     if (actor2 == NULL || !actor2->eventInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
         return FALSE;
     }
-    
+
     if (commonCheck(order, dEvtCnd_CANTALK_e, dEvtCmd_INTALK_e)) {
         mMode = dEvtMode_TALK_e;
         mItemNo = dComIfGp_getSelectItem(equippedItemIdx);
-        
+
         switch (order->mEventType) {
         case dEvtType_SHOWITEM_X_e:
             mTalkButton = 1;
@@ -193,7 +193,7 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
             mTalkButton = 3;
             break;
         }
-        
+
         // Fakematch
         s16 r3;
         if (actor2 != NULL && (r3 = actor2->eventInfo.runXyEventCB(actor2, equippedItemIdx), r3 != -1)) {
@@ -201,13 +201,13 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
         } else {
             mEventId = dComIfGp_evmng_getEventIdx(defaultEventName);
         }
-        
+
         if (!dComIfGp_evmng_order(mEventId)) {
             JUT_ASSERT(401, FALSE);
         }
         return TRUE;
     }
-    
+
     return FALSE;
 }
 
@@ -576,7 +576,7 @@ BOOL dEvt_control_c::photoCheck() {
             equippedItemIdx = 2;
             break;
         }
-        
+
         if (equippedItemIdx != -1 &&
             (dComIfGp_getSelectItem(equippedItemIdx) == CAMERA || dComIfGp_getSelectItem(equippedItemIdx) == CAMERA2) &&
             dComIfGs_getPictureNum() != 0
@@ -605,7 +605,7 @@ BOOL dEvt_control_c::photoCheck() {
             return TRUE;
         }
     }
-    
+
     return FALSE;
 }
 

@@ -1322,11 +1322,11 @@ void dComIfGs_setPlayerRecollectionData() {
     tmp_sttsA.mSelectEquip[3] = dComIfGs_getSelectEquip(3);
     tmp_sttsA.mSelectEquip[4] = dComIfGs_getSelectEquip(4);
 
-    tmp_item.mItems[14] = dComIfGs_getItem(14);
-    tmp_item.mItems[15] = dComIfGs_getItem(15);
-    tmp_item.mItems[16] = dComIfGs_getItem(16);
-    tmp_item.mItems[17] = dComIfGs_getItem(17);
-    tmp_item.mItems[8]  = dComIfGs_getItem(8);
+    tmp_item.mItems[dInvSlot_BOTTLE0_e] = dComIfGs_getItem(dInvSlot_BOTTLE0_e);
+    tmp_item.mItems[dInvSlot_BOTTLE1_e] = dComIfGs_getItem(dInvSlot_BOTTLE1_e);
+    tmp_item.mItems[dInvSlot_BOTTLE2_e] = dComIfGs_getItem(dInvSlot_BOTTLE2_e);
+    tmp_item.mItems[dInvSlot_BOTTLE3_e] = dComIfGs_getItem(dInvSlot_BOTTLE3_e);
+    tmp_item.mItems[dInvSlot_CAMERA_e]  = dComIfGs_getItem(dInvSlot_CAMERA_e);
 
     // TODO: This matches but could probably be cleaned up somehow.
     dSv_player_status_c_c* stts = dComIfGs_getpPlayerStatusC(tbl);
@@ -1430,11 +1430,11 @@ void dComIfGs_revPlayerRecollectionData() {
     tmp_sttsA.mSelectEquip[3] = dComIfGs_getSelectEquip(3);
     tmp_sttsA.mSelectEquip[4] = dComIfGs_getSelectEquip(4);
 
-    tmp_item.mItems[14] = dComIfGs_getItem(14);
-    tmp_item.mItems[15] = dComIfGs_getItem(15);
-    tmp_item.mItems[16] = dComIfGs_getItem(16);
-    tmp_item.mItems[17] = dComIfGs_getItem(17);
-    tmp_item.mItems[8]  = dComIfGs_getItem(8);
+    tmp_item.mItems[dInvSlot_BOTTLE0_e] = dComIfGs_getItem(dInvSlot_BOTTLE0_e);
+    tmp_item.mItems[dInvSlot_BOTTLE1_e] = dComIfGs_getItem(dInvSlot_BOTTLE1_e);
+    tmp_item.mItems[dInvSlot_BOTTLE2_e] = dComIfGs_getItem(dInvSlot_BOTTLE2_e);
+    tmp_item.mItems[dInvSlot_BOTTLE3_e] = dComIfGs_getItem(dInvSlot_BOTTLE3_e);
+    tmp_item.mItems[dInvSlot_CAMERA_e]  = dComIfGs_getItem(dInvSlot_CAMERA_e);
 
     // TODO: This matches but could probably be cleaned up somehow.
     u32 buffer = (u32)dComIfGp_getPlayerInfoBuffer();

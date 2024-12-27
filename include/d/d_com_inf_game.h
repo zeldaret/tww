@@ -1597,7 +1597,7 @@ inline BOOL dComIfGs_checkEmptyBottle() {
 inline BOOL dComIfGs_checkGetBottle() {
     u8 bottleCount = 0;
     for (int i = 0; i < 4; i++) {
-        if (dComIfGs_getItem(0xE + i) != 0xFF) {
+        if (dComIfGs_getItem(dInvSlot_BOTTLE0_e + i) != dItem_NONE_e) {
             bottleCount++;
         }
     }
@@ -2482,11 +2482,11 @@ inline void dComIfGp_setSelectItem(int i_btnIdx) {
 
         invIdx = dComIfGs_getSelectItem(i_btnIdx);
         itemNo = dComIfGs_getItem(invIdx);
-        if (itemNo == 0xFF) {
+        if (itemNo == dItem_NONE_e) {
             dComIfGs_setSelectItem(i_btnIdx, dInvSlot_NONE_e);
         }
     } else {
-        g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, dInvSlot_NONE_e);
+        g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, dItem_NONE_e);
     }
 }
 
