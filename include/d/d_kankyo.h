@@ -106,12 +106,6 @@ struct WAVE_INFO {
     /* 0x14 */ f32 field_0x14;
 };
 
-struct DEMO_PLIGHT {
-    /* 0x00 */ int field_0x00;
-    /* 0x04 */ int field_0x04;
-    /* 0x08 */ LIGHT_INFLUENCE mLightInfluence;
-};
-
 class dKy_tevstr_c {
 public:
     /* 0x00 */ J3DLightObj mLightObj;

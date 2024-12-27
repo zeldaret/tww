@@ -80,8 +80,8 @@ public:
     void getScale() {}
     void getTrans() {}
     void onEnable(u16) {}
-    void setAnmFrameMax(f32) {}
-    void setModel(J3DModel*) {}
+    void setAnmFrameMax(f32 v) { mAnimationFrameMax = v; }
+    void setModel(J3DModel* model) { mModel = model; }
     void setOldAnmId(u32) {}
     void setOldScrId(u32) {}
     void setOldTevId(u32) {}

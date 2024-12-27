@@ -4,6 +4,7 @@
  */
 
 #include "d/d_kankyo.h"
+#include "d/d_kankyo_demo.h"
 
 /* 8009BE64-8009BF6C       .text dKydm_demo_plight_entry__FP11DEMO_PLIGHTP4cXyziUc */
 void dKydm_demo_plight_entry(DEMO_PLIGHT* i_plight, cXyz* i_pos, int param_2, u8 param_3) {
