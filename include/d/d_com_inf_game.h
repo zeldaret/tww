@@ -298,6 +298,7 @@ public:
     int getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
+    s16 getMessageCountNumber() { return mMsgCountNumber; }
 
     void setMessageSetNumber(s16 num) { mMsgSetNumber = num; }
     s16 getMessageSetNumber() { return mMsgSetNumber; }
@@ -467,6 +468,7 @@ public:
 
     void setMsgArchive(JKRArchive * pArc) { mpMsgArchive = pArc; }
     void setDmsgArchive(JKRArchive * pArc) { mpDmsgArchive = pArc; }
+    JKRArchive* getDmsgArchive() { return mpDmsgArchive; }
     void setTmsgArchive(JKRArchive * pArc) { mpTmsgArchive = pArc; }
     JKRArchive* getTmsgArchive() { return mpTmsgArchive; }
     void setMenuArchive(JKRArchive * pArc) { mpMenuArchive = pArc; }
@@ -498,8 +500,10 @@ public:
     void setWindResArchive(JKRArchive * pArc) { mpWindResArchive = pArc; }
     void setFontArchive(JKRArchive * pArc) { mpFont0Archive = pArc; }
     void setMsgDtArchive(JKRArchive * pArc) { mpEnglishTextArchive = pArc; }
+    JKRArchive* getMsgDtArchive() { return mpEnglishTextArchive; }
 #if VERSION != VERSION_JPN
     void setMsgDt2Archive(JKRArchive * pArc) { mpHyruleTextArchive = pArc; }
+    JKRArchive* getMsgDt2Archive() { return mpHyruleTextArchive; }
 #endif
 
     void setItemTable(void * pData) { mpItemTable = (ItemTableList*)pData; }
@@ -2358,6 +2362,10 @@ inline void dComIfGp_setMessageCountNumber(s16 num) {
     g_dComIfG_gameInfo.play.setMessageCountNumber(num);
 }
 
+inline s16 dComIfGp_getMessageCountNumber() {
+    return g_dComIfG_gameInfo.play.getMessageCountNumber();
+}
+
 inline s32 dComIfGp_checkStatus(u16 flags) {
     return g_dComIfG_gameInfo.play.checkStatus(flags);
 }
@@ -3154,6 +3162,7 @@ inline void dComIfGp_setAnmArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.
 inline JKRArchive* dComIfGp_getAnmArchive() { return g_dComIfG_gameInfo.play.getAnmArchive(); }
 inline void dComIfGp_setMsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgArchive(pArc); }
 inline void dComIfGp_setDmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setDmsgArchive(pArc); }
+inline JKRArchive* dComIfGp_getDmsgArchive() { return g_dComIfG_gameInfo.play.getDmsgArchive(); }
 inline void dComIfGp_setTmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setTmsgArchive(pArc); }
 inline JKRArchive* dComIfGp_getTmsgArchive() { return g_dComIfG_gameInfo.play.getTmsgArchive(); }
 inline void dComIfGp_setMenuArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMenuArchive(pArc); }
@@ -3183,8 +3192,10 @@ inline void dComIfGp_setSwimResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.p
 inline void dComIfGp_setWindResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setWindResArchive(pArc); }
 inline void dComIfGp_setFontArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFontArchive(pArc); }
 inline void dComIfGp_setMsgDtArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDtArchive(pArc); }
+inline JKRArchive* dComIfGp_getMsgDtArchive() { return g_dComIfG_gameInfo.play.getMsgDtArchive(); }
 #if VERSION != VERSION_JPN
 inline void dComIfGp_setMsgDt2Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDt2Archive(pArc); }
+inline JKRArchive* dComIfGp_getMsgDt2Archive() { return g_dComIfG_gameInfo.play.getMsgDt2Archive(); }
 #endif
 
 inline void dComIfGp_setItemTable(void * pData) { g_dComIfG_gameInfo.play.setItemTable(pData); }

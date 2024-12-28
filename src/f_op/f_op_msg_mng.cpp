@@ -4,6 +4,8 @@
 //
 
 #include "f_op/f_op_msg_mng.h"
+#include "JSystem/JKernel/JKRArchive.h"
+#include "JSystem/JUtility/JUTDataHeader.h"
 #include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_layer_iter.h"
@@ -14,6 +16,39 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "SSystem/SComponent/c_malloc.h"
 #include <stdio.h>
+
+struct mesg_header : JUTDataFileHeader {
+    // first block is mesg_info
+};
+
+struct mesg_entry {
+    /* 0x00 */ u32 mDataOffs;
+    /* 0x04 */ u16 mMesgID;
+    /* 0x06 */ u16 mItemPrice;
+    /* 0x08 */ u16 mNextMessageID;
+    /* 0x0A */ u16 field_0x0a;
+    /* 0x0C */ u8 mTextboxType;
+    /* 0x0D */ u8 mDrawType;
+    /* 0x0E */ u8 mTextboxPosition;
+    /* 0x0F */ u8 mItemImage;
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 mInitialSound;
+    /* 0x12 */ u8 mInitialCamera;
+    /* 0x13 */ u8 mInitialAnimation;
+    /* 0x14 */ u8 field_0x14[4];
+};
+
+struct mesg_info : JUTDataBlockHeader {
+    /* 0x08 */ u16 mNumEntry;
+    /* 0x0A */ u16 mEntrySize;
+    /* 0x0C */ u16 mGroupID;
+    /* 0x10 */ u8 mColor;
+    /* 0x14 */ mesg_entry mEntries[1]; // variable-length array
+};
+
+struct mesg_data : JUTDataBlockHeader {
+    char mData[1]; // variable-length array
+};
 
 static bool pushButton;
 static bool pushButton2;
@@ -127,7 +162,7 @@ void MyPicture::drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mt
 }
 
 /* 8002AD4C-8002AE28       .text fopMsgM_hyrule_language_check__FUl */
-void fopMsgM_hyrule_language_check(u32) {
+bool fopMsgM_hyrule_language_check(u32) {
     /* Nonmatching */
 }
 
@@ -493,74 +528,105 @@ fpc_ProcID fopMsgM_Create(s16, fopMsgCreateFunc, void*) {
     /* Nonmatching */
 }
 
-class fopMsgM_msgGet_c {
-public:
-    virtual ~fopMsgM_msgGet_c() {};
-    mesg_header* getMesgHeader(u32);
-    void* getMesgInfo(mesg_header*);
-    void* getMesgData(mesg_header*);
-    void* getMesgEntry(mesg_header*);
-    void* getMessage(mesg_header*);
-};
-
 /* 8002E254-8002E2D8       .text getMesgHeader__16fopMsgM_msgGet_cFUl */
-mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32) {
-    /* Nonmatching */
+mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32 msg) {
+    mGroupID = (msg >> 16) & 0xFFFF;
+    mMsgID = msg & 0xFFFF;
+
+    if (fopMsgM_hyrule_language_check(msg)) {
+        JKRArchive* arc = dComIfGp_getMsgDt2Archive();
+        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
+    } else {
+        JKRArchive* arc = dComIfGp_getMsgDtArchive();
+        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
+    }
 }
 
 /* 8002E2D8-8002E2E0       .text getMesgInfo__16fopMsgM_msgGet_cFP11mesg_header */
-void* fopMsgM_msgGet_c::getMesgInfo(mesg_header*) {
-    /* Nonmatching */
+mesg_info* fopMsgM_msgGet_c::getMesgInfo(mesg_header* msg) {
+    return (mesg_info*)&msg->mFirstBlock;
 }
 
 /* 8002E2E0-8002E308       .text getMesgData__16fopMsgM_msgGet_cFP11mesg_header */
-void* fopMsgM_msgGet_c::getMesgData(mesg_header*) {
-    /* Nonmatching */
+mesg_data* fopMsgM_msgGet_c::getMesgData(mesg_header* msg) {
+    return (mesg_data*)getMesgInfo(msg)->getNext();
 }
 
 /* 8002E308-8002E378       .text getMesgEntry__16fopMsgM_msgGet_cFP11mesg_header */
-void* fopMsgM_msgGet_c::getMesgEntry(mesg_header*) {
-    /* Nonmatching */
+mesg_entry fopMsgM_msgGet_c::getMesgEntry(mesg_header* msg) {
+    return getMesgInfo(msg)->mEntries[mMsgIdx];
 }
 
 /* 8002E378-8002E430       .text getMessage__16fopMsgM_msgGet_cFP11mesg_header */
-void* fopMsgM_msgGet_c::getMessage(mesg_header*) {
-    /* Nonmatching */
+const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
+    mesg_info* info = getMesgInfo(msg);
+    const char* data = getMesgData(msg)->mData;
+
+    const char* ret = NULL;
+
+    for (u16 i = 0; i < info->mNumEntry; i++) {
+        if (info->mEntries[i].mDataOffs == 0)
+            continue;
+
+        mMsgIdx = i;
+        if (mMsgID == info->mEntries[i].mMesgID) {
+            mesg_entry* entry = &info->mEntries[mMsgIdx];
+            mResMsgIdx = entry->mMesgID;
+            ret = &data[entry->mDataOffs];
+            break;
+        }
+    }
+
+    return ret;
 }
 
-class fopMsgM_itemMsgGet_c {
-public:
-    virtual ~fopMsgM_itemMsgGet_c() {};
-    mesg_header* getMesgHeader(u32);
-    void* getMesgInfo(mesg_header*);
-    void* getMesgData(mesg_header*);
-    void* getMesgEntry(mesg_header*);
-    void* getMessage(mesg_header*);
-};
-
 /* 8002E430-8002E4AC       .text getMesgHeader__20fopMsgM_itemMsgGet_cFUl */
-mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32) {
+mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32 msg) {
     /* Nonmatching */
+    mMsgID = msg & 0xFFFF;
+
+    if (fopMsgM_hyrule_language_check(msg)) {
+        JKRArchive* arc = dComIfGp_getMsgDt2Archive();
+        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
+    } else {
+        JKRArchive* arc = dComIfGp_getMsgDtArchive();
+        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
+    }
 }
 
 /* 8002E4AC-8002E4B4       .text getMesgInfo__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void* fopMsgM_itemMsgGet_c::getMesgInfo(mesg_header*) {
-    /* Nonmatching */
+mesg_info* fopMsgM_itemMsgGet_c::getMesgInfo(mesg_header* msg) {
+    return (mesg_info*)&msg->mFirstBlock;
 }
 
 /* 8002E4B4-8002E4DC       .text getMesgData__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void* fopMsgM_itemMsgGet_c::getMesgData(mesg_header*) {
-    /* Nonmatching */
+mesg_data* fopMsgM_itemMsgGet_c::getMesgData(mesg_header* msg) {
+    return (mesg_data*)getMesgInfo(msg)->getNext();
 }
 
 /* 8002E4DC-8002E54C       .text getMesgEntry__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void* fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header*) {
-    /* Nonmatching */
+mesg_entry fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* msg) {
+    return getMesgInfo(msg)->mEntries[mMsgIdx];
 }
 
 /* 8002E54C-8002E5FC       .text getMessage__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void* fopMsgM_itemMsgGet_c::getMessage(mesg_header*) {
-    /* Nonmatching */
+const char* fopMsgM_itemMsgGet_c::getMessage(mesg_header* msg) {
+    mesg_info* info = getMesgInfo(msg);
+    const char* data = getMesgData(msg)->mData;
+
+    for (u16 i = 0; i < info->mNumEntry; i++) {
+        if (info->mEntries[i].mDataOffs == 0)
+            continue;
+
+        mMsgIdx = i;
+        if (mMsgID == info->mEntries[i].mMesgID) {
+            mesg_entry* entry = &info->mEntries[i];
+            mResMsgIdx = entry->mMesgID;
+            return &data[entry->mDataOffs];
+        }
+    }
+
+    return NULL;
 }
 
 /* 8002E7DC-8002E95C       .text dataInit__21fopMsgM_msgDataProc_cFv */
@@ -569,8 +635,19 @@ void fopMsgM_msgDataProc_c::dataInit() {
 }
 
 /* 8002E95C-8002EA58       .text charLength__21fopMsgM_msgDataProc_cFiib */
-void fopMsgM_msgDataProc_c::charLength(int, int, bool) {
+f32 fopMsgM_msgDataProc_c::charLength(int scale, int charNo, bool mode) {
     /* Nonmatching */
+    JUTFont::TWidth width;
+    font[0]->getWidthEntry(charNo, &width);
+    f32 charWidth = (f32)(int)width.field_0x1;
+    f32 cellWidth = (f32)scale / (f32)font[0]->getCellWidth();
+
+    if (mode) {
+        return charWidth * cellWidth;
+    } else {
+        // This should be field_0x11c
+        return field_0x010 + (charWidth * cellWidth);
+    }
 }
 
 /* 8002EA58-8002EB4C       .text rubyLength__21fopMsgM_msgDataProc_cFib */
@@ -634,8 +711,9 @@ void fopMsgM_msgDataProc_c::selectArrow(J2DPicture*, f32, f32) {
 }
 
 /* 80032288-800322B4       .text colorAnime__21fopMsgM_msgDataProc_cFP10J2DPicture */
-void fopMsgM_msgDataProc_c::colorAnime(J2DPicture*) {
+void fopMsgM_msgDataProc_c::colorAnime(J2DPicture* pic) {
     /* Nonmatching */
+    // fopMsgM_arrowAnime(pane, &field_0x260);
 }
 
 /* 800322B4-80034F3C       .text stringSet__21fopMsgM_msgDataProc_cFv */
@@ -933,6 +1011,15 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
 /* 800394B4-8003966C       .text tag_birdman__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_birdman() {
     /* Nonmatching */
+    u16 num = dComIfGp_getMessageCountNumber();
+
+    char buf[16];
+    fopMsgM_int_to_char(buf, num, false);
+    if (num == 1) {
+        strcat(buf, " yard");
+    } else {
+        strcat(buf, " yards");
+    }
 }
 
 /* 8003966C-80039834       .text tag_point__21fopMsgM_msgDataProc_cFv */

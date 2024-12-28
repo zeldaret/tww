@@ -12,6 +12,11 @@ class msg_class;
 class J2DPane;
 class J2DScreen;
 class J2DPicture;
+class JUTFont;
+struct mesg_header;
+struct mesg_data;
+struct mesg_info;
+struct mesg_entry;
 
 struct msg_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
@@ -56,12 +61,43 @@ struct fopMsgM_pane_alpha_class {
     /* 0x05 */ u8 mNowAlpha;
 };
 
+class fopMsgM_msgGet_c {
+public:
+    virtual ~fopMsgM_msgGet_c() {}
+    mesg_header* getMesgHeader(u32);
+    mesg_info* getMesgInfo(mesg_header*);
+    mesg_data* getMesgData(mesg_header*);
+    mesg_entry getMesgEntry(mesg_header*);
+    const char* getMessage(mesg_header*);
+
+public:
+    /* 0x04 */ u32 mMsgIdx;
+    /* 0x08 */ u16 mGroupID;
+    /* 0x0A */ u16 mMsgID;
+    /* 0x0C */ u16 mResMsgIdx;
+};
+
+class fopMsgM_itemMsgGet_c {
+public:
+    virtual ~fopMsgM_itemMsgGet_c() {}
+    mesg_header* getMesgHeader(u32);
+    mesg_info* getMesgInfo(mesg_header*);
+    mesg_data* getMesgData(mesg_header*);
+    mesg_entry getMesgEntry(mesg_header*);
+    const char* getMessage(mesg_header*);
+
+public:
+    /* 0x04 */ u32 mMsgIdx;
+    /* 0x08 */ u16 mMsgID;
+    /* 0x0A */ u16 mResMsgIdx;
+};
+
 class fopMsgM_msgDataProc_c {
 public:
     fopMsgM_msgDataProc_c();
     virtual ~fopMsgM_msgDataProc_c();
     void dataInit();
-    void charLength(int, int, bool);
+    f32 charLength(int, int, bool);
     void rubyLength(int, bool);
     void stringLength();
     void stringShift();
@@ -148,6 +184,13 @@ public:
     void tag_input_kenshi();
 
 public:
+    /* 0x004 */ JUTFont* font[2];
+    /* 0x00C */ mesg_entry* mesg_entry;
+    /* 0x010 */ u32 field_0x010;
+    /* 0x014 */ f32 field_0x014;
+    /* 0x018 */ f32 field_0x018;
+    /* 0x01C */ f32 field_0x01C;
+    /* 0x020 */ f32 field_0x020;
     /* 0x000 */ u8 field_0x00[0x29C];
 };
 
