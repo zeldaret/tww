@@ -197,7 +197,7 @@ public:
     /* 0x6D4 */ int m6D4;
     /* 0x6D8 */ s8 mBckIdx;
     /* 0x6D9 */ s8 mAnmPrmIdx;
-    /* 0x6DA */ s8 m6DA;
+    /* 0x6DA */ s8 mOldAnmPrmIdx;
     /* 0x6DB */ s8 m6DB;
     /* 0x6DC */ s8 m6DC;
     /* 0x6DD */ u8 m6DD[0x6E0 - 0x6DD];

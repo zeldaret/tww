@@ -18,10 +18,33 @@ public:
         PROC_EXEC = 1
     };
 
-    void eventSet(s8) {}
+    enum Mode {
+        MODE_WAIT         = 0x0,
+        MODE_TALK         = 0x1,
+        MODE_TALK_XY      = 0x2,
+        MODE_RECEIVE      = 0x3,
+        MODE_RECEIVE_DEMO = 0x4,
+        MODE_NULL,
+    };
+
+    enum BckIdx {
+        BckIdx_POST_GET    = 0x0,
+        BckIdx_POST_PUTOUT = 0x1,
+        BckIdx_POST_WAIT   = 0x2,
+    };
+
+    enum AnmPrm {
+        AnmPrm_POST_GET0   = 0x1,
+        AnmPrm_POST_GET1   = 0x2,
+        AnmPrm_POST_PUTOUT = 0x3,
+        AnmPrm_POST_WAIT   = 0x4,
+        AnmPrm_NULL,
+    };
+
+    void eventSet(s8 eventIdx) { mEventIdx = eventIdx; }
     s32 getSendPrice() { return m_send_price[mPayType]; }
-    void isAnm(s8) {}
-    void modeProcInit(int) {}
+    bool isAnm(s8 idx) { return mAnmPrmIdx == idx; }
+    void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
 
     BOOL _createHeap();
     void cutProc();
@@ -72,9 +95,9 @@ private:
     static const s32 m_send_price[];
 
     /* 0x6C4 */ u32 mCurMode;
-    /* 0x6C8 */ s8 field_0x6C8;
-    /* 0x6C9 */ s8 field_0x6C9;
-    /* 0x6CA */ s8 field_0x6CA;
+    /* 0x6C8 */ s8 mBckIdx;
+    /* 0x6C9 */ s8 mAnmPrmIdx;
+    /* 0x6CA */ s8 mOldAnmPrmIdx;
     /* 0x6CC */ request_of_phase_process_class mPhs;
     /* 0x6D4 */ mDoExt_McaMorf* mMorf;
     /* 0x6D8 */ dBgS_ObjAcch mAcch;
@@ -86,12 +109,12 @@ private:
     /* 0x8E9 */ u8 field_0x8E9;
     /* 0x8EA */ u8 field_0x8EA;
     /* 0x8EB */ u8 field_0x8EB;
-    /* 0x8EC */ s32 mNumReadable;
+    /* 0x8EC */ int mNumReadable;
     /* 0x8F0 */ u32 field_0x8F0;
     /* 0x8F4 */ u8 field_0x8F4;
     /* 0x8F5 */ u8 field_0x8F5;
     /* 0x8F6 */ u8 mPreItemNo;
-    /* 0x8F7 */ s8 field_0x8F7;
+    /* 0x8F7 */ s8 mEventIdx;
 };
 
 class daObjTpost_HIO_c {
