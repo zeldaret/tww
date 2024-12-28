@@ -23,11 +23,13 @@
   "search.useIgnoreFiles": false,
   "search.exclude": {
     "build/*/config.json": true,
+    "build/*/report.json": true,
     "build/**/*.MAP": true,
     "build/*/include/assets/**": true,
     "build.ninja": true,
     ".ninja_*": true,
     "objdiff.json": true,
+    "compile_commands.json": true,
     ".cache/**": true,
     "ctx.c": true,
   },
