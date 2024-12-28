@@ -11,7 +11,7 @@
  */
 
 #include "d/actor/d_a_player_main.h"
-#include "d/actor/d_a_player_hio.h"
+#include "d/actor/d_a_player_HIO.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
 /* 80154B80-80154FBC       .text setSwordModel__9daPy_lk_cFi */
