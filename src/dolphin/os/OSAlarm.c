@@ -23,7 +23,7 @@ void OSCreateAlarm(OSAlarm* alarm) {
     alarm->tag = 0;
 }
 
-static inline SetTimer(OSAlarm* alarm) {
+static void SetTimer(OSAlarm* alarm) {
     OSTime delta;
 
     delta = alarm->fire_time - __OSGetSystemTime();
@@ -177,7 +177,7 @@ static void DecrementerExceptionCallback(register __OSException exception,
     OSLoadContext(context);
 }
 
-static asm void DecrementerExceptionHandler(register __OSException exception,
+static ASM void DecrementerExceptionHandler(register __OSException exception,
                                             register OSContext* context) {
     // clang-format off
     nofralloc

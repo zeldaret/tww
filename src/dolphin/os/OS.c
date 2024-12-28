@@ -44,7 +44,7 @@ f64 ZeroPS;
 extern f64 ZeroF;
 f64 ZeroF;
 
-asm void __OSFPRInit(void) {
+ASM void __OSFPRInit(void) {
     // clang-format off
     nofralloc
 
@@ -451,7 +451,7 @@ static void OSExceptionInit(void) {
     DBPrintf("Exceptions initialized...\n");
 }
 
-asm void __OSDBIntegrator(void) {
+ASM void __OSDBIntegrator(void) {
     // clang-format off
     nofralloc
 
@@ -469,7 +469,7 @@ entry __OSDBINTEND
     // clang-format on
 }
 
-asm void __OSDBJump(void){
+ASM void __OSDBJump(void){
     // clang-format off
     nofralloc
 
@@ -489,7 +489,7 @@ OSExceptionHandler __OSGetExceptionHandler(__OSException exception) {
     return OSExceptionTable[exception];
 }
 
-static asm void OSExceptionVector(void) {
+static ASM void OSExceptionVector(void) {
     // clang-format off
     nofralloc
 
@@ -573,7 +573,7 @@ entry __OSEVEnd
     // clang-format on
 }
 
-static asm void OSDefaultExceptionHandler(register __OSException exception,
+static ASM void OSDefaultExceptionHandler(register __OSException exception,
                                           register OSContext* context) {
     // clang-format off
     nofralloc
@@ -605,7 +605,7 @@ static asm void OSDefaultExceptionHandler(register __OSException exception,
     // clang-format on
 }
 
-asm void __OSPSInit(void){
+ASM void __OSPSInit(void){
     // clang-format off
     nofralloc
 

@@ -3,7 +3,7 @@
 #include "dolphin/db/db.h"
 #include "dolphin/os/OS.h"
 
-static asm void DCEnable(void) {
+static ASM void DCEnable(void) {
     // clang-format off
     nofralloc
 
@@ -16,7 +16,7 @@ static asm void DCEnable(void) {
     // clang-format on
 }
 
-asm void DCInvalidateRange(register void* start, register u32 nBytes) {
+ASM void DCInvalidateRange(register void* start, register u32 nBytes) {
     // clang-format off
     nofralloc
 
@@ -38,7 +38,7 @@ do_invalidate:
     // clang-format on
 }
 
-asm void DCFlushRange(register void* start, register u32 nBytes) {
+ASM void DCFlushRange(register void* start, register u32 nBytes) {
     // clang-format off
     nofralloc
 
@@ -61,7 +61,7 @@ do_flush:
     // clang-format on
 }
 
-asm void DCStoreRange(register void* start, register u32 nBytes) {
+ASM void DCStoreRange(register void* start, register u32 nBytes) {
     // clang-format off
     nofralloc
 
@@ -84,7 +84,7 @@ do_store:
     // clang-format on
 }
 
-asm void DCFlushRangeNoSync(register void* start, register u32 nBytes) {
+ASM void DCFlushRangeNoSync(register void* start, register u32 nBytes) {
     // clang-format off
     nofralloc
 
@@ -106,7 +106,7 @@ do_flush:
     // clang-format on
 }
 
-asm void DCStoreRangeNoSync(register void* start, register u32 nBytes) {
+ASM void DCStoreRangeNoSync(register void* start, register u32 nBytes) {
     // clang-format off
     nofralloc
 
@@ -128,7 +128,7 @@ do_store:
     // clang-format on
 }
 
-asm void DCZeroRange(register void* start, register u32 nBytes) {
+ASM void DCZeroRange(register void* start, register u32 nBytes) {
     // clang-format off
     nofralloc
 
@@ -150,7 +150,7 @@ do_zero:
     // clang-format on
 }
 
-asm void ICInvalidateRange(register void* start, register u32 nBytes) {
+ASM void ICInvalidateRange(register void* start, register u32 nBytes) {
     // clang-format off
     nofralloc
 
@@ -175,7 +175,7 @@ do_invalidate:
     // clang-format on
 }
 
-asm void ICFlashInvalidate(void) {
+ASM void ICFlashInvalidate(void) {
     // clang-format off
     nofralloc
 
@@ -187,7 +187,7 @@ asm void ICFlashInvalidate(void) {
     // clang-format on
 }
 
-static asm void ICEnable(void) {
+static ASM void ICEnable(void) {
     // clang-format off
     nofralloc
 
@@ -200,7 +200,7 @@ static asm void ICEnable(void) {
     // clang-format on
 }
 
-asm void __LCEnable(void) {
+ASM void __LCEnable(void) {
     // clang-format off
     nofralloc
 
@@ -274,7 +274,7 @@ void LCEnable(void) {
     OSRestoreInterrupts(interrupt);
 }
 
-asm void LCDisable(void) {
+ASM void LCDisable(void) {
     // clang-format off
     nofralloc
 
@@ -294,7 +294,7 @@ do_invalidate:
     // clang-format on
 }
 
-static asm void LCStoreBlocks(register void* destAddr, register void* srcAddr,
+static ASM void LCStoreBlocks(register void* destAddr, register void* srcAddr,
                               register u32 blockNum){
     // clang-format off
     nofralloc
@@ -331,7 +331,7 @@ u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes) {
     return ret;
 }
 
-asm void LCQueueWait(register u32 len) {
+ASM void LCQueueWait(register u32 len) {
     // clang-format off
     nofralloc
 

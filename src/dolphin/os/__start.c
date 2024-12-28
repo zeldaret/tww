@@ -11,7 +11,7 @@ SECTION_INIT void __check_pad3(void) {
     }
 }
 
-SECTION_INIT asm void __start(void) {
+SECTION_INIT ASM void __start(void) {
     // clang-format off
     nofralloc
 
@@ -114,7 +114,7 @@ lbl_8000329C:
     // clang-format on
 }
 
-asm static void __init_registers(void)
+ASM static void __init_registers(void)
 {
 #ifdef __MWERKS__
     nofralloc
@@ -165,7 +165,7 @@ void __init_data(void)
     }
 }
 
-asm void __init_hardware() {
+ASM void __init_hardware() {
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     mfmsr r0
@@ -179,7 +179,7 @@ asm void __init_hardware() {
 #endif // clang-format on
 }
 
-asm void __flush_cache(void* addr, u32 size)
+ASM void __flush_cache(void* addr, u32 size)
 {
 #ifdef __MWERKS__
     nofralloc

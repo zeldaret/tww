@@ -33,11 +33,13 @@
 #define ALIGN_DECL(ALIGNMENT) __attribute__((aligned(ALIGNMENT)))
 #define SECTION_DATA __declspec(section ".data")
 #define SECTION_INIT __declspec(section ".init")
+#define ASM asm
 #else
 #define STATIC_ASSERT(...)
 #define ALIGN_DECL(...)
 #define SECTION_DATA
 #define SECTION_INIT
+#define ASM
 #endif
 
 extern int __cntlzw(uint);

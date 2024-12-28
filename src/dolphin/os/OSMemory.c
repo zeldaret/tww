@@ -73,7 +73,7 @@ void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control) {
     OSRestoreInterrupts(enabled);
 }
 
-static asm void Config24MB(void) {
+static ASM void Config24MB(void) {
     // clang-format off
     nofralloc
 
@@ -112,7 +112,7 @@ static asm void Config24MB(void) {
     // clang-format on
 }
 
-static asm void Config48MB(void) {
+static ASM void Config48MB(void) {
     // clang-format off
     nofralloc
 
@@ -151,7 +151,7 @@ static asm void Config48MB(void) {
     // clang-format on
 }
 
-static asm void RealMode(register u32 config) {
+static ASM void RealMode(register u32 config) {
     // clang-format off
     nofralloc
 

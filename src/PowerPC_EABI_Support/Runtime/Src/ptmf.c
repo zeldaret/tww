@@ -1,8 +1,9 @@
 #include "ptmf.h"
+#include "global.h"
 
 const __ptmf __ptmf_null = { 0, 0, 0 };
 
-asm long __ptmf_test(register __ptmf* ptmf) {
+ASM long __ptmf_test(register __ptmf* ptmf) {
     lwz r5, __ptmf.this_delta(ptmf)
     lwz r6, __ptmf.v_offset(ptmf)
     lwz r7, __ptmf.f_data(ptmf)
@@ -17,7 +18,7 @@ asm long __ptmf_test(register __ptmf* ptmf) {
     blr
 };
 
-asm void __ptmf_cmpr(register __ptmf* lhs, register __ptmf* rhs) {
+ASM void __ptmf_cmpr(register __ptmf* lhs, register __ptmf* rhs) {
     lwz r5, __ptmf.this_delta(lhs)
     lwz r6, __ptmf.this_delta(rhs)
     lwz r7, __ptmf.v_offset(lhs)
@@ -35,7 +36,7 @@ asm void __ptmf_cmpr(register __ptmf* lhs, register __ptmf* rhs) {
     blr
 };
 
-asm void __ptmf_scall(...) {
+ASM void __ptmf_scall(...) {
     nofralloc;
     lwz r0, __ptmf.this_delta(r12)
     lwz r11, __ptmf.v_offset(r12)

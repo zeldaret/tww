@@ -22,7 +22,7 @@ typedef struct _ApploaderHeader {
 
 static ApploaderHeader Header ALIGN_DECL(32);
 
-asm static void Run(register u32 addr) {
+ASM static void Run(register u32 addr) {
     nofralloc
 
     sync
