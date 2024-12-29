@@ -15,11 +15,15 @@ enum J2DRotateAxis {
 };
 
 enum J2DBasePosition {
-    J2DBasePosition_0,
-    J2DBasePosition_1,
-    J2DBasePosition_2,
-    J2DBasePosition_3,
-    J2DBasePosition_4,
+    J2DBasePosition_TopLeft,
+    J2DBasePosition_TopMiddle,
+    J2DBasePosition_TopRight,
+    J2DBasePosition_CenterLeft,
+    J2DBasePosition_CenterMiddle,
+    J2DBasePosition_CenterRight,
+    J2DBasePosition_BottomLeft,
+    J2DBasePosition_BottomMiddle,
+    J2DBasePosition_BottomRight,
 };
 
 struct J2DPaneHeader {
