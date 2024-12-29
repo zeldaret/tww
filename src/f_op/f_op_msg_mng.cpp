@@ -17,6 +17,8 @@
 #include "SSystem/SComponent/c_malloc.h"
 #include <stdio.h>
 
+#include "global.h"
+
 struct mesg_header : JUTDataFileHeader {
     // first block is mesg_info
 };
@@ -534,7 +536,11 @@ mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32 msg) {
     mMsgID = msg & 0xFFFF;
 
     if (fopMsgM_hyrule_language_check(msg)) {
+#if VERSION != VERSION_JPN
         JKRArchive* arc = dComIfGp_getMsgDt2Archive();
+#else
+        JKRArchive* arc = dComIfGp_getMsgDtArchive();
+#endif
         return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
     } else {
         JKRArchive* arc = dComIfGp_getMsgDtArchive();
@@ -586,7 +592,11 @@ mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32 msg) {
     mMsgID = msg & 0xFFFF;
 
     if (fopMsgM_hyrule_language_check(msg)) {
+#if VERSION != VERSION_JPN
         JKRArchive* arc = dComIfGp_getMsgDt2Archive();
+#else
+        JKRArchive* arc = dComIfGp_getMsgDtArchive();
+#endif
         return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
     } else {
         JKRArchive* arc = dComIfGp_getMsgDtArchive();
