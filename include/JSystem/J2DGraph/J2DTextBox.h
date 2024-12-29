@@ -3,6 +3,7 @@
 
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/JKernel/JKRArchive.h"
+#include "JSystem/JUtility/JUTFont.h"
 #include "JSystem/JUtility/JUTResFont.h"
 
 enum J2DTextBoxHBinding {
@@ -36,6 +37,7 @@ public:
 
     void initiate(const ResFONT*, const char*, J2DTextBoxHBinding, J2DTextBoxVBinding);
     void setFont(JUTFont*);
+    JUTFont* getFont() { return mpFont; }
     void setFontSize(f32 sizeX, f32 sizeY) {
         mFontSizeX = sizeX > 0.0f ? sizeX : 0.0f;
         mFontSizeY = sizeY > 0.0f ? sizeY : 0.0f;

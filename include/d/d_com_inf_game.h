@@ -291,12 +291,14 @@ public:
     }
     
     int getMessageRupee() { return mMessageRupee; }
+    void setMessageRupee(s16 count) { mMessageRupee = count; }
 
     void setAuctionRupee(s16 count) { mAuctionRupee = count; }
     void setAuctionGauge(s16 gauge) { mAuctionGauge = gauge; }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
+    s16 getMessageCountNumber() { return mMsgCountNumber; }
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
 
     void setMessageSetNumber(s16 num) { mMsgSetNumber = num; }
@@ -497,8 +499,10 @@ public:
     void setSwimResArchive(JKRArchive * pArc) { mpSwimResArchive = pArc; }
     void setWindResArchive(JKRArchive * pArc) { mpWindResArchive = pArc; }
     void setFontArchive(JKRArchive * pArc) { mpFont0Archive = pArc; }
+    JKRArchive* getMsgDtArchive() { return mpEnglishTextArchive; }
     void setMsgDtArchive(JKRArchive * pArc) { mpEnglishTextArchive = pArc; }
 #if VERSION != VERSION_JPN
+    JKRArchive* getMsgDt2Archive() { return mpHyruleTextArchive; }
     void setMsgDt2Archive(JKRArchive * pArc) { mpHyruleTextArchive = pArc; }
 #endif
 
@@ -546,7 +550,10 @@ public:
     void clearBaseAnimeID() { mMesgAnime = 0xFF; }
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
+    int getMesgCamInfoID() { return mMesgCameraTagInfo; }
+    void clearMesgCamInfoID() { mMesgCameraTagInfo = -1; }
     u8 getMesgStatus() { return mMesgStatus; }
+    void setMesgStatus(u8 status) { mMesgStatus = status; }
 
     u8 getButtonMode() { return mButtonMode; }
     void setButtonMode(u8 mode) { mButtonMode = mode; }
@@ -642,7 +649,7 @@ public:
     /* 0x48E6 */ s16 field_0x48e6;
     /* 0x48E8 */ s16 mItemBeastNumCounts[8];
     /* 0x48F8 */ u8 field_0x48F8[0x4918 - 0x48F8];
-    /* 0x4918 */ u16 mMsgCountNumber;
+    /* 0x4918 */ s16 mMsgCountNumber;
     /* 0x491A */ s16 mMsgSetNumber;
     /* 0x491C */ s16 mMessageRupee;
     /* 0x491E */ s16 mAuctionRupee;
@@ -817,6 +824,10 @@ inline void dComIfGp_resetItemTimer(s16 timer) {
 
 inline int dComIfGp_getMessageRupee() {
     return g_dComIfG_gameInfo.play.getMessageRupee();
+}
+
+inline void dComIfGp_setMessageRupee(s16 count) {
+    g_dComIfG_gameInfo.play.setMessageRupee(count);
 }
 
 inline void dComIfGp_setAuctionRupee(s16 count) {
@@ -2268,6 +2279,10 @@ inline void dComIfGp_setItemRupeeCount(s32 count) {
     g_dComIfG_gameInfo.play.setItemRupeeCount(count);
 }
 
+inline s16 dComIfGp_getMessageCountNumber() {
+    return g_dComIfG_gameInfo.play.getMessageCountNumber();
+}
+
 inline s16 dComIfGp_getMessageSetNumber() {
     return g_dComIfG_gameInfo.play.getMessageSetNumber();
 }
@@ -2631,8 +2646,20 @@ inline void dComIfGp_clearMesgAnimeTagInfo() {
     g_dComIfG_gameInfo.play.clearNowAnimeID();
 }
 
+inline int dComIfGp_getMesgCameraTagInfo() {
+    return g_dComIfG_gameInfo.play.getMesgCamInfoID();
+}
+
+inline void dComIfGp_clearMesgCameraTagInfo() {
+    g_dComIfG_gameInfo.play.clearMesgCamInfoID();
+}
+
 inline u8 dComIfGp_getMesgStatus() {
     return g_dComIfG_gameInfo.play.getMesgStatus();
+}
+
+inline void dComIfGp_setMesgStatus(u8 status) {
+    g_dComIfG_gameInfo.play.setMesgStatus(status);
 }
 
 inline JKRAramBlock* dComIfGp_getPictureBoxData(int i) {
@@ -3144,8 +3171,10 @@ inline void dComIfGp_setCamResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.pl
 inline void dComIfGp_setSwimResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSwimResArchive(pArc); }
 inline void dComIfGp_setWindResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setWindResArchive(pArc); }
 inline void dComIfGp_setFontArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFontArchive(pArc); }
+inline JKRArchive* dComIfGp_getMsgDtArchive() { return g_dComIfG_gameInfo.play.getMsgDtArchive(); }
 inline void dComIfGp_setMsgDtArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDtArchive(pArc); }
 #if VERSION != VERSION_JPN
+inline JKRArchive* dComIfGp_getMsgDt2Archive() { return g_dComIfG_gameInfo.play.getMsgDt2Archive(); }
 inline void dComIfGp_setMsgDt2Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDt2Archive(pArc); }
 #endif
 
