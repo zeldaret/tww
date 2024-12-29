@@ -6,6 +6,9 @@
 #include "f_op/f_op_msg_mng.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JUtility/JUTDataHeader.h"
+#if VERSION == VERSION_JPN
+#include "d/d_s_play.h"
+#endif
 #include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_layer_iter.h"
@@ -288,6 +291,8 @@ u32 fopMsgM_tactMessageSet() {
 /* 8002BB78-8002BDBC       .text fopMsgM_messageGet__FPcUl */
 char* fopMsgM_messageGet(char*, u32) {
     /* Nonmatching */
+    OSReport("head_p");
+    OSReport("");
 }
 
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */
@@ -532,20 +537,27 @@ fpc_ProcID fopMsgM_Create(s16, fopMsgCreateFunc, void*) {
 
 /* 8002E254-8002E2D8       .text getMesgHeader__16fopMsgM_msgGet_cFUl */
 mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32 msg) {
-    mGroupID = (msg >> 16) & 0xFFFF;
-    mMsgID = msg & 0xFFFF;
+    mGroupID = (msg >> 16);
+    mMsgID = msg;
 
-    if (fopMsgM_hyrule_language_check(msg)) {
-#if VERSION != VERSION_JPN
-        JKRArchive* arc = dComIfGp_getMsgDt2Archive();
+#if VERSION == VERSION_JPN
+    char path[12];
+    if (g_msgDHIO.field_0x08 == 0) {
+        sprintf(path, "zel_%02d.bmg", mGroupID);
+    } else {
+        sprintf(path, "zel_e%02d.bmg", mGroupID);
+    }
+    JKRArchive* arc = dComIfGp_getMsgDtArchive();
+    return (mesg_header*)JKRArchive::getGlbResource('ROOT', path, arc);
 #else
-        JKRArchive* arc = dComIfGp_getMsgDtArchive();
-#endif
+    if (fopMsgM_hyrule_language_check(msg)) {
+        JKRArchive* arc = dComIfGp_getMsgDt2Archive();
         return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
     } else {
         JKRArchive* arc = dComIfGp_getMsgDtArchive();
         return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
     }
+#endif
 }
 
 /* 8002E2D8-8002E2E0       .text getMesgInfo__16fopMsgM_msgGet_cFP11mesg_header */
@@ -588,20 +600,29 @@ const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
 
 /* 8002E430-8002E4AC       .text getMesgHeader__20fopMsgM_itemMsgGet_cFUl */
 mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32 msg) {
-    /* Nonmatching */
-    mMsgID = msg & 0xFFFF;
-
-    if (fopMsgM_hyrule_language_check(msg)) {
-#if VERSION != VERSION_JPN
-        JKRArchive* arc = dComIfGp_getMsgDt2Archive();
-#else
-        JKRArchive* arc = dComIfGp_getMsgDtArchive();
+#if VERSION == VERSION_JPN
+    u16 groupID = msg >> 16;
 #endif
+    mMsgID = msg;
+
+#if VERSION == VERSION_JPN
+    char path[12];
+    if (g_msgDHIO.field_0x08 == 0) {
+        sprintf(path, "zel_%02d.bmg", groupID);
+    } else {
+        sprintf(path, "zel_e%02d.bmg", groupID);
+    }
+    JKRArchive* arc = dComIfGp_getMsgDtArchive();
+    return (mesg_header*)JKRArchive::getGlbResource('ROOT', path, arc);
+#else
+    if (fopMsgM_hyrule_language_check(msg)) {
+        JKRArchive* arc = dComIfGp_getMsgDt2Archive();
         return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
     } else {
         JKRArchive* arc = dComIfGp_getMsgDtArchive();
         return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
     }
+#endif
 }
 
 /* 8002E4AC-8002E4B4       .text getMesgInfo__20fopMsgM_itemMsgGet_cFP11mesg_header */

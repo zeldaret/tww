@@ -1,5 +1,5 @@
-#ifndef F_F_OP_MSG_MNG_H_
-#define F_F_OP_MSG_MNG_H_
+#ifndef F_OP_MSG_MNG_H
+#define F_OP_MSG_MNG_H
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "f_pc/f_pc_leaf.h"
@@ -250,4 +250,4 @@ bool fopMsgM_demoMsgFlagCheck();
 
 void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data);
 
-#endif
+#endif /* F_OP_MSG_MNG_H */
