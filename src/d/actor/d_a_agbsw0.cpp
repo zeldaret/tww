@@ -1791,37 +1791,61 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x11:
-            if(dComIfGp_getSelectItem(0) != dItem_BOW_e && dComIfGp_getSelectItem(1) != dItem_BOW_e && dComIfGp_getSelectItem(2) != dItem_BOW_e) {
+            if(
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_BOW_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_BOW_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_BOW_e
+            ) {
                 return FALSE;
             }
 
             break;
         case 0x12:
-            if(dComIfGp_getSelectItem(0) != dItem_BOOMERANG_e && dComIfGp_getSelectItem(1) != dItem_BOOMERANG_e && dComIfGp_getSelectItem(2) != dItem_BOOMERANG_e) {
+            if(
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_BOOMERANG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_BOOMERANG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_BOOMERANG_e
+            ) {
                 return FALSE;
             }
 
             break;
         case 0x13:
-            if(dComIfGp_getSelectItem(0) != dItem_DEKU_LEAF_e && dComIfGp_getSelectItem(1) != dItem_DEKU_LEAF_e && dComIfGp_getSelectItem(2) != dItem_DEKU_LEAF_e) {
+            if(
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_DEKU_LEAF_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_DEKU_LEAF_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_DEKU_LEAF_e
+            ) {
                 return FALSE;
             }
 
             break;
         case 0x14:
-            if(dComIfGp_getSelectItem(0) != dItem_GRAPPLING_HOOK_e && dComIfGp_getSelectItem(1) != dItem_GRAPPLING_HOOK_e && dComIfGp_getSelectItem(2) != dItem_GRAPPLING_HOOK_e) {
+            if(
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_GRAPPLING_HOOK_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_GRAPPLING_HOOK_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_GRAPPLING_HOOK_e
+            ) {
                 return FALSE;
             }
 
             break;
         case 0x15:
-            if(dComIfGp_getSelectItem(0) != dItem_BOMB_BAG_e && dComIfGp_getSelectItem(1) != dItem_BOMB_BAG_e && dComIfGp_getSelectItem(2) != dItem_BOMB_BAG_e) {
+            if(
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_BOMB_BAG_e
+            ) {
                 return FALSE;
             }
 
             break;
         case 0x16:
-            if(dComIfGp_getSelectItem(0) != dItem_HOOKSHOT_e && dComIfGp_getSelectItem(1) != dItem_HOOKSHOT_e && dComIfGp_getSelectItem(2) != dItem_HOOKSHOT_e) {
+            if(
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_HOOKSHOT_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_HOOKSHOT_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_HOOKSHOT_e
+            ) {
                 return FALSE;
             }
 
@@ -1912,9 +1936,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x25:
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
-                dComIfGp_getSelectItem(0) != dItem_BOMB_BAG_e &&
-                dComIfGp_getSelectItem(1) != dItem_BOMB_BAG_e &&
-                dComIfGp_getSelectItem(2) != dItem_BOMB_BAG_e)
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_BOMB_BAG_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_BOMB_BAG_e)
             {
                 return FALSE;
             }
@@ -1922,9 +1946,9 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x26:
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
-                dComIfGp_getSelectItem(0) != dItem_GRAPPLING_HOOK_e &&
-                dComIfGp_getSelectItem(1) != dItem_GRAPPLING_HOOK_e &&
-                dComIfGp_getSelectItem(2) != dItem_GRAPPLING_HOOK_e)
+                dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_GRAPPLING_HOOK_e &&
+                dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_GRAPPLING_HOOK_e &&
+                dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_GRAPPLING_HOOK_e)
             {
                 return FALSE;
             }

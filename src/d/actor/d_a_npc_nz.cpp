@@ -203,10 +203,10 @@ daNpc_Nz_HIO_c::daNpc_Nz_HIO_c() {
 }
 
 /* 00001010-000011A0       .text daNpc_Nz_XyCheckCB__FPvi */
-static s16 daNpc_Nz_XyCheckCB(void* i_actor, int equippedItemIdx) {
+static s16 daNpc_Nz_XyCheckCB(void* i_actor, int i_itemBtn) {
     daNpc_Nz_c* i_this = static_cast<daNpc_Nz_c*>(i_actor);
 
-    if(dComIfGp_getSelectItem(equippedItemIdx) == BIRD_ESA_5) {
+    if(dComIfGp_getSelectItem(i_itemBtn) == BIRD_ESA_5) {
         f32 temp2 = l_HIO.field_0x20;
         daPy_py_c* player = daPy_getPlayerActorClass();
         cXyz temp(player->current.pos);

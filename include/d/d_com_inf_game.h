@@ -867,7 +867,7 @@ inline OSTime dComIfGs_getDateIpl() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().getDateIpl();
 }
 
-// The inventory slot for items. Also known as "select item"
+// The inventory slot for items. Also known as "select item".
 enum dInventorySlot_e {
     dInvSlot_ItemFirst_e = 0,
     dInvSlot_TELESCOPE_e = 0,
@@ -888,6 +888,7 @@ enum dInventorySlot_e {
     dInvSlot_BOTTLE1_e = 15,
     dInvSlot_BOTTLE2_e = 16,
     dInvSlot_BOTTLE3_e = 17,
+    dInvSlot_BOTTLE_COUNT_e = dInvSlot_BOTTLE3_e + 1 - dInvSlot_BOTTLE0_e,
     dInvSlot_DELIVERY_BAG_e = 18,
     dInvSlot_HOOKSHOT_e = 19,
     dInvSlot_SKULL_HAMMER_e = 20,
@@ -903,6 +904,15 @@ enum dInventorySlot_e {
     dInvSlot_ReserveLast_e = 56,
 
     dInvSlot_NONE_e = 0xFF,
+};
+
+// The index of a button that can have an item assigned to it.
+enum dItemButton_e {
+    dItemBtn_X_e = 0,
+    dItemBtn_Y_e = 1,
+    dItemBtn_Z_e = 2,
+    dItemBtn_NONE_e = 3,
+    dItemBtn_COUNT_e = 3,
 };
 
 /**
@@ -1087,8 +1097,8 @@ inline void dComIfGs_setReserveNum(int i_idx, u8 num) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().setReserveNum(i_idx, num);
 }
 
-inline void dComIfGs_setReserveItemChange(u8 idx, u8 no) {
-    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemChange(idx, no);
+inline void dComIfGs_setReserveItemChange(u8 i_itemBtn, u8 no) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemChange(i_itemBtn, no);
 }
 
 inline u8 dComIfGs_checkReserveItemEmpty() {
@@ -1099,8 +1109,8 @@ inline void dComIfGs_setReserveItemEmpty() {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemEmpty();
 }
 
-inline void dComIfGs_setReserveBaitEmpty(u8 i_btnIdx) {
-    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBaitItemEmpty(i_btnIdx);
+inline void dComIfGs_setReserveBaitEmpty(u8 i_itemBtn) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBaitItemEmpty(i_itemBtn);
 }
 
 inline void dComIfGs_setEventReg(u16 i_reg, u8 i_no) {
@@ -1502,20 +1512,20 @@ inline BOOL dComIfGs_isActor(int i_no, int i_roomNo) {
 
 /**
  * Returns which inventory slot the item equipped on a specific button is located in.
- * @param i_btnIdx The index of the button. 0 for X, 1 for Y, 2 for Z.
+ * @param i_itemBtn The dItemButton_e of the button.
  * @return The index of the inventory slot for the item equipped on that button, or 0xFF for no item.
  */
-inline u8 dComIfGs_getSelectItem(int i_btnIdx) {
-    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectItem(i_btnIdx);
+inline u8 dComIfGs_getSelectItem(int i_itemBtn) {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectItem(i_itemBtn);
 }
 
 /**
  * Sets which inventory slot the item equipped on a specific button is located in.
- * @param i_btnIdx The index of the button. 0 for X, 1 for Y, 2 for Z.
+ * @param i_itemBtn The dItemButton_e of the button.
  * @param i_invIdx The index of the inventory slot, or 0xFF for no item.
  */
-inline void dComIfGs_setSelectItem(int i_btnIdx, u8 i_invIdx) {
-    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setSelectItem(i_btnIdx, i_invIdx);
+inline void dComIfGs_setSelectItem(int i_itemBtn, u8 i_invIdx) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setSelectItem(i_itemBtn, i_invIdx);
 }
 
 inline u16 dComIfGs_getDate() {
@@ -1578,12 +1588,12 @@ inline void dComIfGs_setEmptyBottle() {
     g_dComIfG_gameInfo.save.getPlayer().getItem().setEmptyBottle();
 }
 
-inline void dComIfGs_setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
-    g_dComIfG_gameInfo.save.getPlayer().getItem().setEquipBottleItemIn(i_btnIdx, i_itemNo);
+inline void dComIfGs_setEquipBottleItemIn(u8 i_itemBtn, u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setEquipBottleItemIn(i_itemBtn, i_itemNo);
 }
 
-inline void dComIfGs_setEquipBottleItemEmpty(u8 i_btnIdx) {
-    g_dComIfG_gameInfo.save.getPlayer().getItem().setEquipBottleItemEmpty(i_btnIdx);
+inline void dComIfGs_setEquipBottleItemEmpty(u8 i_itemBtn) {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setEquipBottleItemEmpty(i_itemBtn);
 }
 
 inline void dComIfGs_setEquipBottleItemEmpty() {
@@ -2471,30 +2481,30 @@ inline void dComIfGp_setAStatusForce(u8 value) {
 
 /**
  * Returns which item is on a specific button.
- * @param i_btnIdx The index of the button. 0 for X, 1 for Y, 2 for Z.
+ * @param i_itemBtn The dItemButton_e of the button.
  * @return The item number of the item in that slot, or 0xFF for no item.
  */
-inline u8 dComIfGp_getSelectItem(int i_btnIdx) {
-    return g_dComIfG_gameInfo.play.getSelectItem(i_btnIdx);
+inline u8 dComIfGp_getSelectItem(int i_itemBtn) {
+    return g_dComIfG_gameInfo.play.getSelectItem(i_itemBtn);
 }
 
 /**
  * Updates which item is on a specific button to match which item is in the inventory slot correspond to that button.
- * @param i_btnIdx The index of the button. 0 for X, 1 for Y, 2 for Z.
+ * @param i_itemBtn The dItemButton_e of the button.
  */
-inline void dComIfGp_setSelectItem(int i_btnIdx) {
-    if (dComIfGs_getSelectItem(i_btnIdx) != dInvSlot_NONE_e) {
-        int invIdx = dComIfGs_getSelectItem(i_btnIdx);
+inline void dComIfGp_setSelectItem(int i_itemBtn) {
+    if (dComIfGs_getSelectItem(i_itemBtn) != dInvSlot_NONE_e) {
+        int invIdx = dComIfGs_getSelectItem(i_itemBtn);
         u8 itemNo = dComIfGs_getItem(invIdx);
-        g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, itemNo);
+        g_dComIfG_gameInfo.play.setSelectItem(i_itemBtn, itemNo);
 
-        invIdx = dComIfGs_getSelectItem(i_btnIdx);
+        invIdx = dComIfGs_getSelectItem(i_itemBtn);
         itemNo = dComIfGs_getItem(invIdx);
         if (itemNo == dItem_NONE_e) {
-            dComIfGs_setSelectItem(i_btnIdx, dInvSlot_NONE_e);
+            dComIfGs_setSelectItem(i_itemBtn, dInvSlot_NONE_e);
         }
     } else {
-        g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, dItem_NONE_e);
+        g_dComIfG_gameInfo.play.setSelectItem(i_itemBtn, dItem_NONE_e);
     }
 }
 
@@ -2741,6 +2751,10 @@ inline BOOL dComIfGp_event_runCheck() {
     return g_dComIfG_gameInfo.play.getEvent().runCheck();
 }
 
+/**
+ * Returns the button (X Y or Z) that was used to start this event.
+ * @return The dTalkXYButton_e of the button the player used to initiate this event.
+ */
 inline u8 dComIfGp_event_getTalkXYBtn() {
     return g_dComIfG_gameInfo.play.getEvent().getTalkXYBtn();
 }

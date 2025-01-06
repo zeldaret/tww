@@ -68,13 +68,13 @@ daNpc_kam_HIO_c::daNpc_kam_HIO_c() {
 }
 
 /* 00000240-00000260       .text daNpc_kam_XyCheckCB__FPvi */
-static s16 daNpc_kam_XyCheckCB(void* i_this, int equippedItemIdx) {
-    return ((daNpc_kam_c*)i_this)->XyCheckCB(equippedItemIdx);
+static s16 daNpc_kam_XyCheckCB(void* i_this, int i_itemBtn) {
+    return ((daNpc_kam_c*)i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 00000260-000002A4       .text XyCheckCB__11daNpc_kam_cFi */
-s16 daNpc_kam_c::XyCheckCB(int equippedItemIdx) {
-    if (dComIfGp_getSelectItem(equippedItemIdx) == dItem_HYOI_PEAR_e) {
+s16 daNpc_kam_c::XyCheckCB(int i_itemBtn) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_HYOI_PEAR_e) {
         return callDemoStartCheck();
     } else {
         return FALSE;
@@ -139,12 +139,12 @@ int daNpc_kam_c::callDemoStartCheck() {
 }
 
 /* 0000052C-0000054C       .text daNpc_kam_XyEventCB__FPvi */
-static s16 daNpc_kam_XyEventCB(void* i_this, int equippedItemIdx) {
-    return ((daNpc_kam_c*)i_this)->XyEventCB(equippedItemIdx);
+static s16 daNpc_kam_XyEventCB(void* i_this, int i_itemBtn) {
+    return ((daNpc_kam_c*)i_this)->XyEventCB(i_itemBtn);
 }
 
 /* 0000054C-00000568       .text XyEventCB__11daNpc_kam_cFi */
-s16 daNpc_kam_c::XyEventCB(int equippedItemIdx) {
+s16 daNpc_kam_c::XyEventCB(int i_itemBtn) {
     onEventAccept();
     mCurrEventIdxIdx = 1; // "kamome_call"
     return mEventIdxs[1];

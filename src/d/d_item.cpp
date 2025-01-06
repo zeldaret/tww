@@ -816,9 +816,9 @@ void item_func_magic_arrow() {
     
 #if VERSION != VERSION_JPN
     // If the regular bow was equipped on an X/Y/Z button, force it to update.
-    for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
-        if (dComIfGp_getSelectItem(btnIdx) == dItem_BOW_e) {
-            dComIfGp_setSelectItem(btnIdx);
+    for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+        if (dComIfGp_getSelectItem(itemBtn) == dItem_BOW_e) {
+            dComIfGp_setSelectItem(itemBtn);
         }
     }
 #endif
@@ -831,9 +831,9 @@ void item_func_light_arrow() {
 
 #if VERSION != VERSION_JPN
     // If the fire/ice bow was equipped on an X/Y/Z button, force it to update.
-    for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
-        if (dComIfGp_getSelectItem(btnIdx) == dItem_MAGIC_ARROW_e) {
-            dComIfGp_setSelectItem(btnIdx);
+    for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+        if (dComIfGp_getSelectItem(itemBtn) == dItem_MAGIC_ARROW_e) {
+            dComIfGp_setSelectItem(itemBtn);
         }
     }
 #endif
@@ -2815,7 +2815,7 @@ u8 getEmonoItemFromLifeBallTable(u16 itemTableIdx) {
     items[14] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM14(), itemTableIdx);
     items[15] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM15(), itemTableIdx);
     
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < (int)ARRAY_SIZE(items); i++) {
         if (isEmono(items[i])) {
             return items[i];
         }

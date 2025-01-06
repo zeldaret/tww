@@ -131,16 +131,16 @@ BOOL daPy_lk_c::procFoodThrow() {
         if (esa) {
             m3630 = fopAcM_GetID(esa);
             if (mDemo.getDemoType() != 5) {
-                u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-                if (btnIdx == 1) {
-                    dComIfGs_setReserveBaitEmpty(0);
-                } else if (btnIdx == 2) {
-                    dComIfGs_setReserveBaitEmpty(1);
+                u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+                if (talkBtn == dTalkBtn_X_e) {
+                    dComIfGs_setReserveBaitEmpty(dItemBtn_X_e);
+                } else if (talkBtn == dTalkBtn_Y_e) {
+                    dComIfGs_setReserveBaitEmpty(dItemBtn_Y_e);
                 } else {
-                    dComIfGs_setReserveBaitEmpty(2);
+                    dComIfGs_setReserveBaitEmpty(dItemBtn_Z_e);
                 }
             } else {
-                dComIfGs_setReserveBaitEmpty(mReadyItemIdx);
+                dComIfGs_setReserveBaitEmpty(mReadyItemBtn);
             }
         }
     }
@@ -152,13 +152,13 @@ BOOL daPy_lk_c::procFoodSet_init() {
     if (mCurProc == daPyProc_FOOD_SET_e) {
         if (mDemo.getParam0() == 1) {
             if (mEquipItem == dItem_HYOI_PEAR_e) {
-                u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-                if (btnIdx == 1) {
-                    dComIfGs_setEquipBottleItemEmpty(0);
-                } else if (btnIdx == 2) {
-                    dComIfGs_setEquipBottleItemEmpty(1);
+                u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+                if (talkBtn == dTalkBtn_X_e) {
+                    dComIfGs_setEquipBottleItemEmpty(dItemBtn_X_e);
+                } else if (talkBtn == dTalkBtn_Y_e) {
+                    dComIfGs_setEquipBottleItemEmpty(dItemBtn_Y_e);
                 } else {
-                    dComIfGs_setEquipBottleItemEmpty(2);
+                    dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
                 }
             }
             

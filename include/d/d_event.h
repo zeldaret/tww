@@ -2,7 +2,6 @@
 #define D_EVENT_D_EVENT_H
 
 #include "f_pc/f_pc_base.h"
-#include "global.h"
 
 class fopAc_ac_c;
 
@@ -59,6 +58,13 @@ public:
 
 class dStage_Event_dt_c;
 
+enum dTalkXYButton_e {
+    dTalkBtn_NONE_e = 0,
+    dTalkBtn_X_e = 1,
+    dTalkBtn_Y_e = 2,
+    dTalkBtn_Z_e = 3,
+};
+
 class dEvt_control_c {
 public:
     dEvt_control_c();
@@ -98,7 +104,11 @@ public:
     bool giveItemCut(u8);
 
     u8 getTalkXYBtn() { return mTalkButton; }
-    bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
+    bool chkTalkXY() {
+        return mTalkButton == dTalkBtn_X_e ||
+               mTalkButton == dTalkBtn_Y_e ||
+               mTalkButton == dTalkBtn_Z_e;
+    }
     void setPtI_Id(fpc_ProcID id) { mPtItem = id; }
     void setPtI(void* actor) { mPtItem = getPId(actor); }
     fopAc_ac_c* getPtI() { return convPId(mPtItem); }

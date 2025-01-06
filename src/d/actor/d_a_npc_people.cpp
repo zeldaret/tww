@@ -4268,13 +4268,13 @@ BOOL daNpcPeople_c::createHeap() {
 }
 
 /* 00000E0C-00000E2C       .text daNpcPeople_XyCheckCB__FPvi */
-static s16 daNpcPeople_XyCheckCB(void* i_this, int equippedItemIdx) {
-    return static_cast<daNpcPeople_c*>(i_this)->XyCheckCB(equippedItemIdx);
+static s16 daNpcPeople_XyCheckCB(void* i_this, int i_itemBtn) {
+    return static_cast<daNpcPeople_c*>(i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 00000E2C-00000E4C       .text daNpcPeople_XyEventCB__FPvi */
-static s16 daNpcPeople_XyEventCB(void* i_this, int equippedItemIdx) {
-    return static_cast<daNpcPeople_c*>(i_this)->XyEventCB(equippedItemIdx);
+static s16 daNpcPeople_XyEventCB(void* i_this, int i_itemBtn) {
+    return static_cast<daNpcPeople_c*>(i_this)->XyEventCB(i_itemBtn);
 }
 
 /* 00000E4C-00000E6C       .text daNpcPeople_photoCB__FPvi */
@@ -7732,8 +7732,8 @@ void daNpcPeople_c::setWaitAnm() {
 }
 
 /* 0000884C-00008A10       .text XyCheckCB__13daNpcPeople_cFi */
-s16 daNpcPeople_c::XyCheckCB(int equippedItemIdx) {
-    u8 itemNo = dComIfGp_getSelectItem(equippedItemIdx);
+s16 daNpcPeople_c::XyCheckCB(int i_itemBtn) {
+    u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
 
     switch(mNpcType) {
         case 0x2:
@@ -7792,9 +7792,9 @@ s16 daNpcPeople_c::XyCheckCB(int equippedItemIdx) {
 }
 
 /* 00008A10-00008AC8       .text XyEventCB__13daNpcPeople_cFi */
-s16 daNpcPeople_c::XyEventCB(int equippedItemIdx) {
+s16 daNpcPeople_c::XyEventCB(int i_itemBtn) {
     s16 ret = -1;
-    u8 itemNo = dComIfGp_getSelectItem(equippedItemIdx);
+    u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
 
     switch(mNpcType) {
         case 0x3:

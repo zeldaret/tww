@@ -231,8 +231,8 @@ daNpc_Ji1_HIO_c::daNpc_Ji1_HIO_c() {
 }
 
 /* 000003C0-000003E4       .text daNpc_Ji1_XyCheckCB__FPvi */
-static s16 daNpc_Ji1_XyCheckCB(void*, int equippedItemIdx) {
-    return dComIfGp_getSelectItem(equippedItemIdx) == BOKO_BELT ? TRUE : FALSE;
+static s16 daNpc_Ji1_XyCheckCB(void*, int i_itemBtn) {
+    return dComIfGp_getSelectItem(i_itemBtn) == BOKO_BELT ? TRUE : FALSE;
 }
 
 /* 000003E4-00000404       .text daJi1_CoHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */

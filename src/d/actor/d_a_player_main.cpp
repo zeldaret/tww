@@ -292,9 +292,9 @@ void daPy_lk_c::voiceStart(u32 param_1) {
 
 /* 801031A4-801031DC       .text itemButton__9daPy_lk_cCFv */
 BOOL daPy_lk_c::itemButton() const {
-    if (mReadyItemIdx == 0) {
+    if (mReadyItemBtn == dItemBtn_X_e) {
         return m34C9 & 0x04;
-    } else if (mReadyItemIdx == 1) {
+    } else if (mReadyItemBtn == dItemBtn_Y_e) {
         return m34C9 & 0x08;
     } else {
         return m34C9 & 0x10;
@@ -303,9 +303,9 @@ BOOL daPy_lk_c::itemButton() const {
 
 /* 801031DC-80103214       .text itemTrigger__9daPy_lk_cCFv */
 BOOL daPy_lk_c::itemTrigger() const {
-    if (mReadyItemIdx == 0) {
+    if (mReadyItemBtn == dItemBtn_X_e) {
         return mPressedButtons & 0x04;
-    } else if (mReadyItemIdx == 1) {
+    } else if (mReadyItemBtn == dItemBtn_Y_e) {
         return mPressedButtons & 0x08;
     } else {
         return mPressedButtons & 0x10;
@@ -314,26 +314,26 @@ BOOL daPy_lk_c::itemTrigger() const {
 
 /* 80103214-80103258       .text getReadyItem__9daPy_lk_cFv */
 int daPy_lk_c::getReadyItem() {
-    if (mReadyItemIdx == 0) {
-        return dComIfGp_getSelectItem(0);
-    } else if (mReadyItemIdx == 1) {
-        return dComIfGp_getSelectItem(1);
+    if (mReadyItemBtn == dItemBtn_X_e) {
+        return dComIfGp_getSelectItem(dItemBtn_X_e);
+    } else if (mReadyItemBtn == dItemBtn_Y_e) {
+        return dComIfGp_getSelectItem(dItemBtn_Y_e);
     } else {
-        return dComIfGp_getSelectItem(2);
+        return dComIfGp_getSelectItem(dItemBtn_Z_e);
     }
 }
 
 /* 80103258-801032E4       .text checkGroupItem__9daPy_lk_cFii */
 BOOL daPy_lk_c::checkGroupItem(int param_1, int itemNo) {
-    if (param_1 == 0x105) {
+    if (param_1 == daPyItem_DRINK_BOTTLE_e) {
         return checkDrinkBottleItem(itemNo);
-    } else if (param_1 == 0x106) {
+    } else if (param_1 == daPyItem_OPEN_BOTTLE_e) {
         return checkOpenBottleItem(itemNo);
-    } else if (param_1 == 0x107) {
+    } else if (param_1 == daPyItem_ESA_e) {
         return isEsa(itemNo);
-    } else if (param_1 == 0x108) {
+    } else if (param_1 == daPyItem_BOW_e) {
         return checkBowItem(itemNo);
-    } else if (param_1 == 0x109) {
+    } else if (param_1 == daPyItem_PHOTOBOX_e) {
         return checkPhotoBoxItem(itemNo);
     } else {
         return param_1 == itemNo;
@@ -343,16 +343,16 @@ BOOL daPy_lk_c::checkGroupItem(int param_1, int itemNo) {
 /* 801032E4-801033E4       .text checkSetItemTrigger__9daPy_lk_cFii */
 BOOL daPy_lk_c::checkSetItemTrigger(int param_1, int param_2) {
     if (param_2 == 0 || !daPy_dmEcallBack_c::checkCurse()) {
-        if (mPressedButtons & 0x04 && checkGroupItem(param_1, dComIfGp_getSelectItem(0))) {
-            mReadyItemIdx = 0;
+        if (mPressedButtons & 0x04 && checkGroupItem(param_1, dComIfGp_getSelectItem(dItemBtn_X_e))) {
+            mReadyItemBtn = dItemBtn_X_e;
             return TRUE;
         }
-        if (mPressedButtons & 0x08 && checkGroupItem(param_1, dComIfGp_getSelectItem(1))) {
-            mReadyItemIdx = 1;
+        if (mPressedButtons & 0x08 && checkGroupItem(param_1, dComIfGp_getSelectItem(dItemBtn_Y_e))) {
+            mReadyItemBtn = dItemBtn_Y_e;
             return TRUE;
         }
-        if (mPressedButtons & 0x10 && checkGroupItem(param_1, dComIfGp_getSelectItem(2))) {
-            mReadyItemIdx = 2;
+        if (mPressedButtons & 0x10 && checkGroupItem(param_1, dComIfGp_getSelectItem(dItemBtn_Z_e))) {
+            mReadyItemBtn = dItemBtn_Z_e;
             return TRUE;
         }
     }
@@ -1629,17 +1629,17 @@ BOOL daPy_lk_c::checkItemChangeFromButton() {
                 setAnimeEquipSword(1);
             } else if (mPressedButtons & 0x04) {
                 if (checkNewItemChange(0)) {
-                    mReadyItemIdx = 0;
+                    mReadyItemBtn = dItemBtn_X_e;
                     return TRUE;
                 }
             } else if (mPressedButtons & 0x08) {
                 if (checkNewItemChange(1)) {
-                    mReadyItemIdx = 1;
+                    mReadyItemBtn = dItemBtn_Y_e;
                     return TRUE;
                 }
             } else if (mPressedButtons & 0x10) {
                 if (checkNewItemChange(2)) {
-                    mReadyItemIdx = 2;
+                    mReadyItemBtn = dItemBtn_Z_e;
                     return TRUE;
                 }
             } else if (mPressedButtons & 0x01) {
@@ -1654,7 +1654,7 @@ BOOL daPy_lk_c::checkItemChangeFromButton() {
                 if (checkEquipHeavyBoots() && checkSetItemTrigger(dItem_IRON_BOOTS_e, 0)) {
                     return procBootsEquip_init(dItem_IRON_BOOTS_e);
                 } else if (checkSetItemTrigger(daPyItem_DRINK_BOTTLE_e, 0)) {
-                    return procBottleDrink_init(dComIfGp_getSelectItem(mReadyItemIdx));
+                    return procBottleDrink_init(dComIfGp_getSelectItem(mReadyItemBtn));
                 } else if (checkSetItemTrigger(FAIRY_BOTTLE, 0)) {
                     return procBottleOpen_init(FAIRY_BOTTLE);
                 } else if (mPressedButtons & 0x01) {
@@ -3294,15 +3294,15 @@ BOOL daPy_lk_c::execute() {
     }
     
     if (checkEquipHeavyBoots() &&
-        dComIfGp_getSelectItem(0) != dItem_IRON_BOOTS_e &&
-        dComIfGp_getSelectItem(1) != dItem_IRON_BOOTS_e &&
-        dComIfGp_getSelectItem(2) != dItem_IRON_BOOTS_e
+        dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_IRON_BOOTS_e &&
+        dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_IRON_BOOTS_e &&
+        dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_IRON_BOOTS_e
     ) {
         offNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS);
     } else if (checkEquipDragonShield() &&
-        dComIfGp_getSelectItem(0) != dItem_MAGIC_ARMOR_e &&
-        dComIfGp_getSelectItem(1) != dItem_MAGIC_ARMOR_e &&
-        dComIfGp_getSelectItem(2) != dItem_MAGIC_ARMOR_e
+        dComIfGp_getSelectItem(dItemBtn_X_e) != dItem_MAGIC_ARMOR_e &&
+        dComIfGp_getSelectItem(dItemBtn_Y_e) != dItem_MAGIC_ARMOR_e &&
+        dComIfGp_getSelectItem(dItemBtn_Z_e) != dItem_MAGIC_ARMOR_e
     ) {
         offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
     }

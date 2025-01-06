@@ -187,7 +187,7 @@ dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
 
 /* 8009D9A8-8009D9FC       .text getActionBtnX__12dAttention_cFv */
 dAttList_c* dAttention_c::getActionBtnX() {
-    if (!dComIfGs_checkGetItemNum(dComIfGp_getSelectItem(0)))
+    if (!dComIfGs_checkGetItemNum(dComIfGp_getSelectItem(dItemBtn_X_e)))
         return NULL;
 
     return getActionBtnXYZ_local(0);
@@ -195,7 +195,7 @@ dAttList_c* dAttention_c::getActionBtnX() {
 
 /* 8009D9FC-8009DA50       .text getActionBtnY__12dAttention_cFv */
 dAttList_c* dAttention_c::getActionBtnY() {
-    if (!dComIfGs_checkGetItemNum(dComIfGp_getSelectItem(1)))
+    if (!dComIfGs_checkGetItemNum(dComIfGp_getSelectItem(dItemBtn_Y_e)))
         return NULL;
 
     return getActionBtnXYZ_local(1);
@@ -203,7 +203,7 @@ dAttList_c* dAttention_c::getActionBtnY() {
 
 /* 8009DA50-8009DAA4       .text getActionBtnZ__12dAttention_cFv */
 dAttList_c* dAttention_c::getActionBtnZ() {
-    if (!dComIfGs_checkGetItemNum(dComIfGp_getSelectItem(2)))
+    if (!dComIfGs_checkGetItemNum(dComIfGp_getSelectItem(dItemBtn_Z_e)))
         return NULL;
 
     return getActionBtnXYZ_local(2);
@@ -668,4 +668,3 @@ void dAttLook_c::request(fopAc_ac_c*, f32, f32, f32, s16, int) {
 void dAttLook_c::requestF(fopAc_ac_c*, s16, int) {
     /* Nonmatching */
 }
-

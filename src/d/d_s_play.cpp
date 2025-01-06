@@ -1362,11 +1362,11 @@ s32 phase_4(dScnPly_ply_c* i_this) {
 
     if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
         dComIfGs_setItem(dInvSlot_BOW_e, dItem_NONE_e); // take away the bow
-        for (s32 i = 0; i < 3; i++) {
-            u32 itemno = dComIfGp_getSelectItem(i);
+        for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+            u32 itemno = dComIfGp_getSelectItem(itemBtn);
             if (itemno == dItem_BOW_e || itemno == dItem_MAGIC_ARROW_e || itemno == dItem_LIGHT_ARROW_e) {
-                dComIfGs_setSelectItem(i, dInvSlot_NONE_e);
-                dComIfGp_setSelectItem(i);
+                dComIfGs_setSelectItem(itemBtn, dInvSlot_NONE_e);
+                dComIfGp_setSelectItem(itemBtn);
             }
         }
     } else if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {

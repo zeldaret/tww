@@ -1280,16 +1280,16 @@ void dComIfGs_setPlayerRecollectionData() {
         tbl = 3;
         dComIfGp_setPlayerInfoBufferStageNo(4);
     } else {
-        dComIfGs_setSelectItem(0, dInvSlot_NONE_e);
-        dComIfGs_setSelectItem(1, dInvSlot_NONE_e);
-        dComIfGs_setSelectItem(2, dInvSlot_NONE_e);
+        dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
+        dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
+        dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);
         return;
     }
 
     if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[0] != dItem_TELESCOPE_e) {
-        dComIfGs_setSelectItem(0, dInvSlot_NONE_e);
-        dComIfGs_setSelectItem(1, dInvSlot_NONE_e);
-        dComIfGs_setSelectItem(2, dInvSlot_NONE_e);
+        dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
+        dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
+        dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);
         return;
     }
 
@@ -1382,15 +1382,15 @@ void dComIfGs_setPlayerRecollectionData() {
     // TODO: Investigate this more.
     dComIfGp_setSelectEquip(4, dComIfGs_getSelectEquip(4));
 
-    dComIfGs_setItem(14, tmp_item.mItems[14]);
-    dComIfGs_setItem(15, tmp_item.mItems[15]);
-    dComIfGs_setItem(16, tmp_item.mItems[16]);
-    dComIfGs_setItem(17, tmp_item.mItems[17]);
-    dComIfGs_setItem(8,  tmp_item.mItems[8]);
+    dComIfGs_setItem(dInvSlot_BOTTLE0_e, tmp_item.mItems[dInvSlot_BOTTLE0_e]);
+    dComIfGs_setItem(dInvSlot_BOTTLE1_e, tmp_item.mItems[dInvSlot_BOTTLE1_e]);
+    dComIfGs_setItem(dInvSlot_BOTTLE2_e, tmp_item.mItems[dInvSlot_BOTTLE2_e]);
+    dComIfGs_setItem(dInvSlot_BOTTLE3_e, tmp_item.mItems[dInvSlot_BOTTLE3_e]);
+    dComIfGs_setItem(dInvSlot_CAMERA_e,  tmp_item.mItems[dInvSlot_CAMERA_e]);
 
-    dComIfGs_setSelectItem(0, dInvSlot_NONE_e);
-    dComIfGs_setSelectItem(1, dInvSlot_NONE_e);
-    dComIfGs_setSelectItem(2, dInvSlot_NONE_e);
+    dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
+    dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
+    dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);
 }
 
 /* 80055318-80055580       .text dComIfGs_revPlayerRecollectionData__Fv */
@@ -1487,9 +1487,9 @@ void dComIfGs_revPlayerRecollectionData() {
     dComIfGs_setItem(dInvSlot_BOTTLE3_e, tmp_item.mItems[dInvSlot_BOTTLE3_e]);
     dComIfGs_setItem(dInvSlot_CAMERA_e,  tmp_item.mItems[dInvSlot_CAMERA_e]);
 
-    dComIfGs_setSelectItem(0, dInvSlot_NONE_e);
-    dComIfGs_setSelectItem(1, dInvSlot_NONE_e);
-    dComIfGs_setSelectItem(2, dInvSlot_NONE_e);
+    dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
+    dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
+    dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);
 }
 
 /* 80055580-8005586C       .text dComIfGs_exchangePlayerRecollectionData__Fv */

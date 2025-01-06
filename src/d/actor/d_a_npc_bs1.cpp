@@ -115,9 +115,9 @@ static s16 daNpc_Bs1_XyEventCB(void* i_this, int value) {
     return ((daNpc_Bs1_c*)i_this)->XyEventCB(value);
 }
 /* 000002E4-00000490       .text XyEventCB__11daNpc_Bs1_cFi */
-s16 daNpc_Bs1_c::XyEventCB(int selectItemIdx) {
+s16 daNpc_Bs1_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx = -1;
-    u8 selectedItem = (s32)dComIfGp_getSelectItem(selectItemIdx);
+    u8 selectedItem = (s32)dComIfGp_getSelectItem(i_itemBtn);
     if (mType == 0) {
         if (selectedItem == KAISEN_PRESENT1) {
             eventIdx = mEventIdxs[0];

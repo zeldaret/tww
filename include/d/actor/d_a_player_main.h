@@ -1997,7 +1997,7 @@ public:
     /* 0x34BA */ u8 m34BA;
     /* 0x34BB */ u8 mCurrItemHeapIdx;
     /* 0x34BC */ u8 m34BC;
-    /* 0x34BD */ u8 mReadyItemIdx; // Which of the three item buttons the player last used.
+    /* 0x34BD */ u8 mReadyItemBtn; // Which of the three item buttons the player last used.
     /* 0x34BE */ u8 m34BE;
     /* 0x34BF */ s8 mReverb;
     /* 0x34C0 */ u8 mLeftHandIdx;

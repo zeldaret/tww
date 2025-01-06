@@ -157,20 +157,20 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
 
     fopAc_ac_c* actor2 = order->mActor2;
 
-    int equippedItemIdx;
+    int itemBtn;
     switch (order->mEventType) {
     case dEvtType_SHOWITEM_X_e:
-        equippedItemIdx = 0;
+        itemBtn = dItemBtn_X_e;
         break;
     case dEvtType_SHOWITEM_Y_e:
-        equippedItemIdx = 1;
+        itemBtn = dItemBtn_Y_e;
         break;
     default:
-        equippedItemIdx = 2;
+        itemBtn = dItemBtn_Z_e;
         break;
     }
 
-    if (dComIfGp_getSelectItem(equippedItemIdx) == dItem_NONE_e) {
+    if (dComIfGp_getSelectItem(itemBtn) == dItem_NONE_e) {
         return FALSE;
     }
 
@@ -180,23 +180,23 @@ BOOL dEvt_control_c::talkXyCheck(dEvt_order_c* order) {
 
     if (commonCheck(order, dEvtCnd_CANTALK_e, dEvtCmd_INTALK_e)) {
         mMode = dEvtMode_TALK_e;
-        mItemNo = dComIfGp_getSelectItem(equippedItemIdx);
+        mItemNo = dComIfGp_getSelectItem(itemBtn);
 
         switch (order->mEventType) {
         case dEvtType_SHOWITEM_X_e:
-            mTalkButton = 1;
+            mTalkButton = dTalkBtn_X_e;
             break;
         case dEvtType_SHOWITEM_Y_e:
-            mTalkButton = 2;
+            mTalkButton = dTalkBtn_Y_e;
             break;
         default:
-            mTalkButton = 3;
+            mTalkButton = dTalkBtn_Z_e;
             break;
         }
 
         // Fakematch
         s16 r3;
-        if (actor2 != NULL && (r3 = actor2->eventInfo.runXyEventCB(actor2, equippedItemIdx), r3 != -1)) {
+        if (actor2 != NULL && (r3 = actor2->eventInfo.runXyEventCB(actor2, itemBtn), r3 != -1)) {
             mEventId = r3;
         } else {
             mEventId = dComIfGp_evmng_getEventIdx(defaultEventName);
@@ -404,7 +404,7 @@ BOOL dEvt_control_c::endProc() {
     mMode = dEvtMode_NONE_e;
     field_0xde = 0xFF;
     mEventInfoIdx = 0xFF;
-    mTalkButton = 0;
+    mTalkButton = dTalkBtn_NONE_e;
     mbInPhoto = 0;
     mItemNo = 0xFF;
     mEventFlag = 0;
@@ -564,21 +564,21 @@ BOOL dEvt_control_c::photoCheck() {
     s8 orderIdx = mFirstOrderIdx;
     if (mOrderCount != 0) {
         dEvt_order_c* order = &mOrder[orderIdx];
-        int equippedItemIdx = -1;
+        int itemBtn = -1;
         switch (order->mEventType) {
         case dEvtType_SHOWITEM_X_e:
-            equippedItemIdx = 0;
+            itemBtn = dItemBtn_X_e;
             break;
         case dEvtType_SHOWITEM_Y_e:
-            equippedItemIdx = 1;
+            itemBtn = dItemBtn_Y_e;
             break;
         case dEvtType_SHOWITEM_Z_e:
-            equippedItemIdx = 2;
+            itemBtn = dItemBtn_Z_e;
             break;
         }
 
-        if (equippedItemIdx != -1 &&
-            (dComIfGp_getSelectItem(equippedItemIdx) == CAMERA || dComIfGp_getSelectItem(equippedItemIdx) == CAMERA2) &&
+        if (itemBtn != -1 &&
+            (dComIfGp_getSelectItem(itemBtn) == CAMERA || dComIfGp_getSelectItem(itemBtn) == CAMERA2) &&
             dComIfGs_getPictureNum() != 0
         ) {
             actor2 = order->mActor2;
@@ -669,7 +669,7 @@ void dEvt_control_c::remove() {
     mCullFarClipRatio = 0.0f;
     field_0xde = 0xff;
     mEventInfoIdx = 0xff;
-    mTalkButton = 0;
+    mTalkButton = dTalkBtn_NONE_e;
     mbInPhoto = 0;
     mItemNo = 0xff;
     mEventFlag = 0;

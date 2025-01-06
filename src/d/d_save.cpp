@@ -25,12 +25,12 @@ void dSv_player_status_a_c::init() {
     mLife = 12;
     field_0x8 = 0;
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mSelectItem); i++) {
         mSelectItem[i] = dItem_NONE_e;
         dComIfGp_setSelectItem(i);
     }
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mSelectEquip); i++) {
         mSelectEquip[i] = dItem_NONE_e;
     }
 
@@ -71,19 +71,19 @@ void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status
 
 /* 80058C60-80058C7C       .text init__17dSv_player_item_cFv */
 void dSv_player_item_c::init() {
-    for (int i = 0; i < 21; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mItems); i++) {
         mItems[i] = dItem_NONE_e;
     }
 }
 
 /* 80058C7C-80058E1C       .text setBottleItemIn__17dSv_player_item_cFUcUc */
 void dSv_player_item_c::setBottleItemIn(u8 prevItemNo, u8 newItemNo) {
-    for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
-        if (mItems[0xE + bottleIdx] == prevItemNo) {
-            mItems[0xE + bottleIdx] = newItemNo;
-            for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
-                if (dComIfGs_getSelectItem(btnIdx) == 0xE + bottleIdx) {
-                    dComIfGp_setSelectItem(btnIdx);
+    for (int bottleIdx = 0; bottleIdx < dInvSlot_BOTTLE_COUNT_e; bottleIdx++) {
+        if (mItems[dInvSlot_BOTTLE0_e + bottleIdx] == prevItemNo) {
+            mItems[dInvSlot_BOTTLE0_e + bottleIdx] = newItemNo;
+            for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+                if (dComIfGs_getSelectItem(itemBtn) == dInvSlot_BOTTLE0_e + bottleIdx) {
+                    dComIfGp_setSelectItem(itemBtn);
                 }
             }
             break;
@@ -98,7 +98,7 @@ void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
 
 /* 80058E44-80058F74       .text setEmptyBottle__17dSv_player_item_cFv */
 void dSv_player_item_c::setEmptyBottle() {
-    for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
+    for (int bottleIdx = 0; bottleIdx < dInvSlot_BOTTLE_COUNT_e; bottleIdx++) {
         int invIdx = dInvSlot_BOTTLE0_e + bottleIdx;
         if (dComIfGs_getItem((u8)invIdx) == dItem_NONE_e) {
             dComIfGs_setItem((u8)invIdx, EMPTY_BOTTLE);
@@ -108,8 +108,8 @@ void dSv_player_item_c::setEmptyBottle() {
 }
 
 /* 80058F74-8005918C       .text setEquipBottleItemIn__17dSv_player_item_cFUcUc */
-void dSv_player_item_c::setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
-    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
+void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemBtn, u8 i_itemNo) {
+    u8 invIdx = dComIfGs_getSelectItem(i_itemBtn);
     if (invIdx < dInvSlot_BOTTLE0_e)
         return;
     if (invIdx > dInvSlot_BOTTLE3_e)
@@ -117,42 +117,43 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
 
     mItems[invIdx] = i_itemNo;
 
-    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(i_btnIdx);
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(i_itemBtn);
 }
 
 /* 8005918C-800591B0       .text setEquipBottleItemEmpty__17dSv_player_item_cFUc */
-void dSv_player_item_c::setEquipBottleItemEmpty(u8 i_btnIdx) {
-    setEquipBottleItemIn(i_btnIdx, EMPTY_BOTTLE);
+void dSv_player_item_c::setEquipBottleItemEmpty(u8 i_itemBtn) {
+    setEquipBottleItemIn(i_itemBtn, EMPTY_BOTTLE);
 }
 
 /* 800591B0-80059408       .text setEquipBottleItemIn__17dSv_player_item_cFUc */
 void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemNo) {
-    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-    if (btnIdx == 1) {
-        btnIdx = 0;
-    } else if (btnIdx == 2) {
-        btnIdx = 1;
-    } else if (btnIdx == 3) {
-        btnIdx = 2;
+    u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+    u8 itemBtn;
+    if (talkBtn == dTalkBtn_X_e) {
+        itemBtn = dItemBtn_X_e;
+    } else if (talkBtn == dTalkBtn_Y_e) {
+        itemBtn = dItemBtn_Y_e;
+    } else if (talkBtn == dTalkBtn_Z_e) {
+        itemBtn = dItemBtn_Z_e;
     } else {
         return;
     }
 
-    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
-    if (invIdx < 0xE) {
+    u8 invIdx = dComIfGs_getSelectItem(itemBtn);
+    if (invIdx < dInvSlot_BOTTLE0_e) {
         return;
     }
-    if (invIdx > 0x11) {
+    if (invIdx > dInvSlot_BOTTLE3_e) {
         return;
     }
 
     mItems[invIdx] = i_itemNo;
 
-    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(btnIdx);
+    dComIfGs_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(itemBtn);
 }
 
 /* 80059408-8005942C       .text setEquipBottleItemEmpty__17dSv_player_item_cFv */
@@ -164,8 +165,8 @@ void dSv_player_item_c::setEquipBottleItemEmpty() {
 u8 dSv_player_item_c::checkBottle(u8 i_itemNo) {
     u8 ret = 0;
 
-    for (int i = 0; i < 4; i++) {
-        if (i_itemNo == mItems[i + 14]) {
+    for (int i = 0; i < dInvSlot_BOTTLE_COUNT_e; i++) {
+        if (i_itemNo == mItems[i + dInvSlot_BOTTLE0_e]) {
             ret++;
         }
     }
@@ -177,8 +178,8 @@ u8 dSv_player_item_c::checkBottle(u8 i_itemNo) {
 u8 dSv_player_item_c::checkEmptyBottle() {
     u8 ret = 0;
 
-    for (int i = 0; i < 4; i++) {
-        if (mItems[i + 14] == EMPTY_BOTTLE) {
+    for (int i = 0; i < dInvSlot_BOTTLE_COUNT_e; i++) {
+        if (mItems[i + dInvSlot_BOTTLE0_e] == EMPTY_BOTTLE) {
             ret++;
         }
     }
@@ -188,7 +189,7 @@ u8 dSv_player_item_c::checkEmptyBottle() {
 
 /* 800594A8-800594C4       .text init__21dSv_player_get_item_cFv */
 void dSv_player_get_item_c::init() {
-    for (int i = 0; i < 21; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mItemFlags); i++) {
         mItemFlags[i] = 0;
     }
 }
@@ -360,15 +361,15 @@ void dSv_player_item_max_c::init() {
 }
 /* 80059908-80059968       .text init__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::init() {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mBeast); i++) {
         mBeast[i] = dItem_NONE_e;
     }
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mBait); i++) {
         mBait[i] = dItem_NONE_e;
     }
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mReserve); i++) {
         mReserve[i] = dItem_NONE_e;
     }
 }
@@ -376,7 +377,7 @@ void dSv_player_bag_item_c::init() {
 /* 80059968-800599D8       .text setBeastItem__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setBeastItem(u8 i_itemNo) {
     if (!checkBeastItem(i_itemNo)) {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < ARRAY_SIZE(mBeast); i++) {
             if (mBeast[i] == dItem_NONE_e) {
                 mBeast[i] = i_itemNo;
                 return;
@@ -388,14 +389,14 @@ void dSv_player_bag_item_c::setBeastItem(u8 i_itemNo) {
 /* 800599D8-80059C30       .text setBeastItemEmpty__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setBeastItemEmpty(u8 i_itemNo) {
     if (checkBeastItem(i_itemNo)) {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < ARRAY_SIZE(mBeast); i++) {
             if (mBeast[i] == i_itemNo) {
                 mBeast[i] = dItem_NONE_e;
-                for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
-                    if (dComIfGp_getSelectItem(btnIdx) == i_itemNo) {
-                        dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), dItem_NONE_e);
-                        dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), dItem_NONE_e);
-                        dComIfGp_setSelectItem(btnIdx);
+                for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+                    if (dComIfGp_getSelectItem(itemBtn) == i_itemNo) {
+                        dComIfGs_setItem(dComIfGs_getSelectItem(itemBtn), dItem_NONE_e);
+                        dComIfGp_setItem(dComIfGs_getSelectItem(itemBtn), dItem_NONE_e);
+                        dComIfGp_setSelectItem(itemBtn);
                     }
                 }
                 return;
@@ -406,7 +407,7 @@ void dSv_player_bag_item_c::setBeastItemEmpty(u8 i_itemNo) {
 
 /* 80059C30-80059C60       .text checkBeastItem__21dSv_player_bag_item_cFUc */
 bool dSv_player_bag_item_c::checkBeastItem(u8 i_itemNo) {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mBeast); i++) {
         if (mBeast[i] == i_itemNo) {
             return true;
         }
@@ -417,73 +418,75 @@ bool dSv_player_bag_item_c::checkBeastItem(u8 i_itemNo) {
 
 /* 80059C60-80059EB0       .text setBaitItemChange__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setBaitItemChange(u8 i_itemNo) {
-    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-    if (btnIdx == 1) {
-        btnIdx = 0;
-    } else if (btnIdx == 2) {
-        btnIdx = 1;
-    } else if (btnIdx == 3) {
-        btnIdx = 2;
+    u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+    u8 itemBtn;
+    if (talkBtn == dTalkBtn_X_e) {
+        itemBtn = dItemBtn_X_e;
+    } else if (talkBtn == dTalkBtn_Y_e) {
+        itemBtn = dItemBtn_Y_e;
+    } else if (talkBtn == dTalkBtn_Z_e) {
+        itemBtn = dItemBtn_Z_e;
     } else {
         return;
     }
 
-    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
-    if (invIdx < 0x24) {
+    u8 invIdx = dComIfGs_getSelectItem(itemBtn);
+    if (invIdx < dInvSlot_BaitFirst_e) {
         return;
     }
-    if (invIdx >= 0x2C) {
+    if (invIdx >= dInvSlot_BaitLast_e) {
         return;
     }
 
-    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(btnIdx);
+    dComIfGs_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(itemBtn);
 }
 
 /* 80059EB0-8005A0C8       .text setBaitItemChange__21dSv_player_bag_item_cFUcUc */
-void dSv_player_bag_item_c::setBaitItemChange(u8 i_btnIdx, u8 i_itemNo) {
-    if (i_btnIdx > 2) {
+void dSv_player_bag_item_c::setBaitItemChange(u8 i_itemBtn, u8 i_itemNo) {
+    if (i_itemBtn > dItemBtn_COUNT_e-1) {
         return;
     }
 
-    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
-    if (invIdx < 0x24) {
+    u8 invIdx = dComIfGs_getSelectItem(i_itemBtn);
+    if (invIdx < dInvSlot_BaitFirst_e) {
         return;
     }
-    if (invIdx >= 0x2C) {
+    if (invIdx >= dInvSlot_BaitLast_e) {
         return;
     }
 
-    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(i_btnIdx);
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(i_itemBtn);
 }
 
 /* 8005A0C8-8005A1A4       .text setBaitItemEmpty__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::setBaitItemEmpty() {
-    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-    if (btnIdx == 1) {
-        btnIdx = 0;
-    } else if (btnIdx == 2) {
-        btnIdx = 1;
-    } else if (btnIdx == 3) {
-        btnIdx = 2;
+    u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+    u8 itemBtn;
+    if (talkBtn == dTalkBtn_X_e) {
+        itemBtn = dItemBtn_X_e;
+    } else if (talkBtn == dTalkBtn_Y_e) {
+        itemBtn = dItemBtn_Y_e;
+    } else if (talkBtn == dTalkBtn_Z_e) {
+        itemBtn = dItemBtn_Z_e;
     } else {
         return;
     }
 
-    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
-    if (invIdx < 0x24) {
+    u8 invIdx = dComIfGs_getSelectItem(itemBtn);
+    if (invIdx < dInvSlot_BaitFirst_e) {
         return;
     }
-    if (invIdx >= 0x2C) {
+    if (invIdx >= dInvSlot_BaitLast_e) {
         return;
     }
 
-    int baitSlotIdx = invIdx - 0x24;
+    int baitSlotIdx = invIdx - dInvSlot_BaitFirst_e;
     u8 num = dComIfGs_getBaitNum(baitSlotIdx);
-    u8 itemNo = dComIfGp_getSelectItem(btnIdx);
+    u8 itemNo = dComIfGp_getSelectItem(itemBtn);
 
     if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
@@ -501,26 +504,26 @@ void dSv_player_bag_item_c::setBaitItemEmpty() {
 }
 
 /* 8005A1A4-8005A248       .text setBaitItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
-    if (i_btnIdx > 2) {
+void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_itemBtn) {
+    if (i_itemBtn > dItemBtn_COUNT_e-1) {
         return;
     }
 
-    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
-    if (invIdx < 0x24) {
+    u8 invIdx = dComIfGs_getSelectItem(i_itemBtn);
+    if (invIdx < dInvSlot_BaitFirst_e) {
         return;
     }
-    if (invIdx >= 0x2C) {
+    if (invIdx >= dInvSlot_BaitLast_e) {
         return;
     }
 
-    int baitSlotIdx = invIdx - 0x24;
+    int baitSlotIdx = invIdx - dInvSlot_BaitFirst_e;
     u8 num = dComIfGs_getBaitNum(baitSlotIdx);
-    u8 itemNo = dComIfGp_getSelectItem(i_btnIdx);
+    u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
 
     if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
-        setBaitItemChange(i_btnIdx, dItem_NONE_e);
+        setBaitItemChange(i_itemBtn, dItem_NONE_e);
     } else if (itemNo == BIRD_ESA_5) {
         num = dComIfGs_getBaitNum(baitSlotIdx);
         if (num > 0) {
@@ -528,7 +531,7 @@ void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
         }
         dComIfGs_setBaitNum(baitSlotIdx, num);
         if (num == 0) {
-            setBaitItemChange(i_btnIdx, dItem_NONE_e);
+            setBaitItemChange(i_itemBtn, dItem_NONE_e);
         }
     }
 }
@@ -566,47 +569,48 @@ u8 dSv_player_bag_item_c::checkBaitItem(u8 i_itemNo) {
 
 /* 8005A334-8005A584       .text setReserveItemChange__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setReserveItemChange(u8 i_itemNo) {
-    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-    if (btnIdx == 1) {
-        btnIdx = 0;
-    } else if (btnIdx == 2) {
-        btnIdx = 1;
-    } else if (btnIdx == 3) {
-        btnIdx = 2;
+    u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+    u8 itemBtn;
+    if (talkBtn == dTalkBtn_X_e) {
+        itemBtn = dItemBtn_X_e;
+    } else if (talkBtn == dTalkBtn_Y_e) {
+        itemBtn = dItemBtn_Y_e;
+    } else if (talkBtn == dTalkBtn_Z_e) {
+        itemBtn = dItemBtn_Z_e;
     } else {
         return;
     }
 
-    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
-    if (invIdx < 0x30) {
+    u8 invIdx = dComIfGs_getSelectItem(itemBtn);
+    if (invIdx < dInvSlot_ReserveFirst_e) {
         return;
     }
-    if (invIdx >= 0x38) {
+    if (invIdx >= dInvSlot_ReserveLast_e) {
         return;
     }
 
-    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(btnIdx);
+    dComIfGs_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(itemBtn);
 }
 
 /* 8005A584-8005A79C       .text setReserveItemChange__21dSv_player_bag_item_cFUcUc */
-void dSv_player_bag_item_c::setReserveItemChange(u8 i_btnIdx, u8 i_itemNo) {
-    if (i_btnIdx > 2) {
+void dSv_player_bag_item_c::setReserveItemChange(u8 i_itemBtn, u8 i_itemNo) {
+    if (i_itemBtn > dItemBtn_COUNT_e-1) {
         return;
     }
 
-    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
-    if (invIdx < 0x30) {
+    u8 invIdx = dComIfGs_getSelectItem(i_itemBtn);
+    if (invIdx < dInvSlot_ReserveFirst_e) {
         return;
     }
-    if (invIdx >= 0x38) {
+    if (invIdx >= dInvSlot_ReserveLast_e) {
         return;
     }
 
-    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(i_btnIdx);
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(i_itemBtn);
 }
 
 /* 8005A79C-8005A7C0       .text setReserveItemEmpty__21dSv_player_bag_item_cFv */
@@ -709,7 +713,7 @@ void dSv_player_bag_item_record_c::init() {
 
 /* 8005ACA8-8005ACE0       .text init__20dSv_player_collect_cFv */
 void dSv_player_collect_c::init() {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mCollect); i++) {
         mCollect[i] = 0;
     }
 
@@ -941,7 +945,7 @@ void dSv_player_info_c::init() {
     mDeathCount = 0;
     mClearCount = 0;
 
-    for (int i = 0; i < 17; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x47); i++) {
         field_0x47[i] = 0;
     }
 
@@ -1014,13 +1018,13 @@ void dSv_player_c::init() {
 void dSv_memBit_c::init() {
     mTbox = 0;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mSwitch); i++) {
         mSwitch[i] = 0;
     }
 
     mItem[0] = 0;
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mVisitedRoom); i++) {
         mVisitedRoom[i] = 0;
     }
 
