@@ -1866,8 +1866,8 @@ bool dStage_setShipPos(int param_0, int i_roomNo) {
 }
 
 /* 80042B10-80042B70       .text dStage_chkTaura__Fi */
-bool dStage_chkTaura(int param_0) {
-    if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && param_0 == 11) {
+bool dStage_chkTaura(int i_roomNo) {
+    if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && i_roomNo == dIsleRoom_WindfallIsland_e) {
         return true;
     }
 

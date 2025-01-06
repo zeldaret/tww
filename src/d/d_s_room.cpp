@@ -275,7 +275,9 @@ s32 phase_4(room_of_scene_class* i_this) {
     if (strcmp(dComIfGp_getStartStageName(), "Omori") == 0 && dComIfGs_checkGetItem(dItem_PEARL_FARORE_e))
         i_this->field_0x1dc = 2;
 
-    if (roomNo == 13) {
+    // Bug? The game seems to set these flags for DRI even when you're not on the sea stage.
+    // TODO: Look into this more.
+    if (roomNo == dIsleRoom_DragonRoostIsland_e) {
         dComIfGs_setEventReg(0xb8ff, 0);
         if (dComIfGs_isEventBit(0x3f02))
             dComIfGs_onEventBit(0x1580);

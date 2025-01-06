@@ -193,7 +193,7 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
         }
 
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
-            if (i_roomNo == 44) {
+            if (i_roomNo == dIsleRoom_OutsetIsland_e) {
                 if (dComIfGs_isEventBit(0x520)) {
                     return layer | 4;
                 } else if (dComIfGs_isEventBit(0xE20)) {
@@ -201,13 +201,13 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
                 } else if (dComIfGs_isEventBit(0x101)) {
                     return 9;
                 }
-            } else if (i_roomNo == 11) {
+            } else if (i_roomNo == dIsleRoom_WindfallIsland_e) {
                 if (dComIfGs_isEventBit(0x2D01)) {
                     return layer | 4;
                 } else if (dKy_checkEventNightStop()) {
                     return layer | 2;
                 }
-            } else if (i_roomNo == 1) {
+            } else if (i_roomNo == dIsleRoom_ForsakenFortress_e) {
                 return dComIfGs_isEventBit(0x1820) ? 3 : 1;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "A_mori") == 0) {
@@ -1211,7 +1211,7 @@ void dComIfGs_setGameStartStage() {
             point = 0;
         } else {
             strcpy(stage_name, "sea");
-            room_no = 11;
+            room_no = dIsleRoom_WindfallIsland_e;
             point = 0;
         }
     }

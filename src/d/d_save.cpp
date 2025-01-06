@@ -56,7 +56,7 @@ void dSv_player_status_b_c::init() {
 /* 80058B84-80058BC8       .text init__25dSv_player_return_place_cFv */
 void dSv_player_return_place_c::init() {
     strcpy(mName, "sea");
-    mRoomNo = 44;
+    mRoomNo = dIsleRoom_OutsetIsland_e;
     mPoint = 206;
 }
 
@@ -793,23 +793,23 @@ int dSv_player_collect_c::getTriforceNum() {
 
 /* 8005B290-8005B320       .text init__16dSv_player_map_cFv */
 void dSv_player_map_c::init() {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x0[0]); i++) {
         field_0x0[0][i] = 0;
         field_0x0[1][i] = 0;
         field_0x0[2][i] = 0;
         field_0x0[3][i] = 0;
     }
 
-    for (int i = 0; i < 49; i++) {
-        field_0x40[i] = 0;
+    for (int i = 0; i < ARRAY_SIZE(mFmapBits); i++) {
+        mFmapBits[i] = 0;
     }
 
     field_0x81 = 0;
-    field_0x40[0] = 3;
-    field_0x40[43] = 3;
-    field_0x40[10] = 3;
+    mFmapBits[dIsleIdx_ForsakenFortress_e] = 1 | 2;
+    mFmapBits[dIsleIdx_OutsetIsland_e] = 1 | 2;
+    mFmapBits[dIsleIdx_WindfallIsland_e] = 1 | 2;
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x71); i++) {
         field_0x71[i] = 0;
     }
 }
@@ -895,13 +895,13 @@ int dSv_player_map_c::getCollectMapNum() {
 /* 8005BAE8-8005BB84       .text onFmapBit__16dSv_player_map_cFiUc */
 void dSv_player_map_c::onFmapBit(int i_idx, u8 i_no) {
     JUT_ASSERT(1957, 0 <= i_no && i_no < 8);
-    field_0x40[i_idx] |= (u8)(1 << i_no);
+    mFmapBits[i_idx] |= (u8)(1 << i_no);
 }
 
 /* 8005BB84-8005BC24       .text isFmapBit__16dSv_player_map_cFiUc */
 BOOL dSv_player_map_c::isFmapBit(int i_idx, u8 i_no) {
     JUT_ASSERT(1987, 0 <= i_no && i_no < 8);
-    return field_0x40[i_idx] & (u8)(1 << i_no) ? TRUE : FALSE;
+    return mFmapBits[i_idx] & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005BC24-8005BCBC       .text onSaveArriveGrid__16dSv_player_map_cFi */
@@ -1693,7 +1693,7 @@ int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
     memcpy(buffer, dComIfGs_getpPriest(), sizeof(dSv_player_priest_c));
     buffer += sizeof(dSv_player_priest_c);
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < dSv_player_c::PLAYER_STATUS_C_COUNT; i++) {
         memcpy(buffer, dComIfGs_getpPlayerStatusC(i), sizeof(dSv_player_status_c_c));
         buffer += sizeof(dSv_player_status_c_c);
     }

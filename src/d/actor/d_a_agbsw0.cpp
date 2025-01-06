@@ -907,7 +907,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 #else
             int roomNo = agb->field_0x66d;
 #endif
-            return roomNo == 0x21 ? 0x30A : 0x30B;
+            return roomNo == dIsleRoom_PrivateOasis_e ? 0x30A : 0x30B;
         }
         else {
             u8 num = dComIfGs_checkGetItemNum(dItem_JOY_PENDANT_e);
@@ -922,7 +922,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 #else
                 int roomNo = agb->field_0x66d;
 #endif
-                return roomNo == 0x23 ? 0x311 : 0x310;
+                return roomNo == dIsleRoom_BirdsPeakRock_e ? 0x311 : 0x310;
             }
             else {
                 return 0x30F;
@@ -1021,7 +1021,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 #else
             int roomNo = agb->field_0x66d;
 #endif
-            return roomNo == 0x1D ? 0x31C : 0x31D;
+            return roomNo == dIsleRoom_NeedleRockIsle_e ? 0x31C : 0x31D;
         }
     }
     if(!dComIfGs_isCollect(2, 0)) {
@@ -1039,7 +1039,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 #else
         int roomNo = agb->field_0x66d;
 #endif
-        return roomNo == 0x2C ? 0x325 : 0x324;
+        return roomNo == dIsleRoom_OutsetIsland_e ? 0x325 : 0x324;
     }
     if(!dComIfGs_isGetCollectMap(7)) {
 #if VERSION == VERSION_JPN
@@ -1047,7 +1047,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 #else
         int roomNo = agb->field_0x66d;
 #endif
-        return roomNo == 0x1F ? 0x327 : 0x326;
+        return roomNo == dIsleRoom_StoneWatcherIsland_e ? 0x327 : 0x326;
     }
     if(dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
 #if VERSION == VERSION_JPN
@@ -1055,7 +1055,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 #else
         int roomNo = agb->field_0x66d;
 #endif
-        return roomNo == 0x7 ? 0x32C : 0x32D;
+        return roomNo == dIsleRoom_OverlookIsland_e ? 0x32C : 0x32D;
     }
 
     return 0x32B;

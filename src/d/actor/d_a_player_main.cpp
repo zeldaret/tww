@@ -3135,7 +3135,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
             mTinkleShieldTimer = 0;
             
             if (stageType == dStageType_SEA_e && !dComIfGs_isEventBit(dSv_evtBit_c::RODE_KORL) &&
-                (current.roomNo == 11 || current.roomNo == 44) && dStage_chkPlayerId(0x80, current.roomNo))
+                (current.roomNo == dIsleRoom_WindfallIsland_e || current.roomNo == dIsleRoom_OutsetIsland_e) &&
+                dStage_chkPlayerId(0x80, current.roomNo))
             {
                 dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, mode);
                 u32 roomParam = setParamData(-1, 0, eventInfoIdx, 0);

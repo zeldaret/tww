@@ -261,7 +261,7 @@ s32 daObjTpost_c::getReadableLetterNum() {
 
 /* 00000750-000007B8       .text checkSendPrice__12daObjTpost_cFv */
 u8 daObjTpost_c::checkSendPrice() {
-    static const u8 pay_type[49] = {
+    static const u8 pay_type[dIsleIdx_COUNT_e] = {
         02,
         01,
         01,

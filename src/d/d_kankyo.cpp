@@ -2065,10 +2065,13 @@ BOOL phantomship_wether() {
 
     if (cur_time > 285.0f || cur_time < 90.0f) {
         s32 roomNo = dComIfGp_roomControl_getStayNo();
-        if ((roomNo == 5 && weekday == 0) || (roomNo == 36 && weekday == 1) ||
-            (roomNo == 34 && weekday == 2) || (roomNo == 10 && weekday == 3) ||
-            (roomNo == 49 && weekday == 4) || (roomNo == 21 && weekday == 5) ||
-            (roomNo == 23 && weekday == 6))
+        if ((roomNo == dIsleRoom_CrescentMoonIsland_e  && weekday == 0) ||
+            (roomNo == dIsleRoom_DiamondSteppeIsland_e && weekday == 1) ||
+            (roomNo == dIsleRoom_BombIsland_e          && weekday == 2) ||
+            (roomNo == dIsleRoom_SpectacleIsland_e     && weekday == 3) ||
+            (roomNo == dIsleRoom_FiveStarIsles_e       && weekday == 4) ||
+            (roomNo == dIsleRoom_StarBeltArchipelago_e && weekday == 5) ||
+            (roomNo == dIsleRoom_GreatfishIsle_e       && weekday == 6))
         {
             rt = true;
         }
