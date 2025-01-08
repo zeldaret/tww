@@ -67,6 +67,8 @@ BOOL daBg_btkAnm_c::create(J3DModelData* modelData, J3DAnmTextureSRTKey* anmData
 void daBg_btkAnm_c::entry(J3DModelData* modelData) {
     anm->entry(modelData, 0.0f);
 
+    // Bg model material names that start with the prefix "SC_01" trigger special BTK animation behavior.
+    // These BTK animations will animate in sync with the global wave timer, as controlled by a SOND entry.
     const char * name = anm->getBtkAnm()->getUpdateMaterialName()->getName(0);
     if (name[0] == 'S' && name[1] == 'C' && name[2] == '_' && name[3] == '0' && name[4] == '1')
         special = 1;

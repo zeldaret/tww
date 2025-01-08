@@ -304,23 +304,23 @@ void JAIZelBasic::bgmStart(u32, u32, s32) {
 }
 
 /* 802A4658-802A4770       .text bgmStop__11JAIZelBasicFUll */
-void JAIZelBasic::bgmStop(u32 param_1, s32 param_2) {
+void JAIZelBasic::bgmStop(u32 i_fadeTime, s32 param_2) {
     if (mMainBgmNum != JA_BGM_GOMA && mMainBgmNum != JA_BGM_GOMA_2) {
         mSomeSpecialBGMFlag = 0;
     }
     if (mpMainBgmSound) {
-        mpMainBgmSound->stop(param_1);
+        mpMainBgmSound->stop(i_fadeTime);
     }
     mpMainBgmSound = NULL;
     mMainBgmNum = -1;
     if (mpStreamBgmSound) {
-        mpStreamBgmSound->stop(param_1);
+        mpStreamBgmSound->stop(i_fadeTime);
     }
     mpStreamBgmSound = NULL;
     mStreamBgmNum = -1;
     if (param_2 == 0) {
         if (mpSubBgmSound) {
-            mpSubBgmSound->stop(param_1);
+            mpSubBgmSound->stop(i_fadeTime);
             mpSubBgmSound = NULL;
         }
         mSubBgmNum = -1;
@@ -328,7 +328,7 @@ void JAIZelBasic::bgmStop(u32 param_1, s32 param_2) {
         field_0x00bb = 0;
         field_0x0206 = 0;
     }
-    demoBgmStop(param_1);
+    demoBgmStop(i_fadeTime);
     field_0x1f3c = 0;
     field_0x0201 = 0;
     mLastMinibossSubBGMType = 0;

@@ -68,8 +68,8 @@ inline void mDoAud_bgmStreamPlay() {
     mDoAud_zelAudio_c::getInterface()->bgmStreamPlay();
 }
 
-inline void mDoAud_bgmStop(u32 param_0) {
-    mDoAud_zelAudio_c::getInterface()->bgmStop(param_0, 0);
+inline void mDoAud_bgmStop(u32 i_fadeTime) {
+    mDoAud_zelAudio_c::getInterface()->bgmStop(i_fadeTime, 0);
 }
 
 inline void mDoAud_bgmAllMute(u32 param_0) {

@@ -161,7 +161,7 @@ public:
      * Translates the `now` Matrix by the given cXyz
      * @param xyz The xyz translation vector
      */
-    static inline void transS(cXyz const& xyz) { MTXTrans(now, xyz.x, xyz.y, xyz.z); }
+    static inline void transS(cXyz const& xyz) { transS(xyz.x, xyz.y, xyz.z); }
 
     /**
      * Translates a new Matrix by the given cXyz and then concatenates it with the `now` matrix

@@ -228,7 +228,7 @@ void JAIBasic::startSoundBasic(u32, JAISound**, JAInter::Actor*, u32, u8, void*)
 }
 
 /* 80290708-802907E0       .text stopSoundHandle__8JAIBasicFP8JAISoundUl */
-void JAIBasic::stopSoundHandle(JAISound*, u32) {
+void JAIBasic::stopSoundHandle(JAISound*, u32 fadeTime) {
     /* Nonmatching */
 }
 
