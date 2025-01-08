@@ -730,7 +730,7 @@ void daAuction_c::eventMainInit() {
     daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
 
     pLink->changeOriginalDemo();
-    mCurLinkAnm = 1;
+    mCurLinkAnm = daPy_demo_c::DEMO_UNK1_e;
     dComIfGp_event_setTalkPartner(this);
     m82F = 0;
 
@@ -753,8 +753,13 @@ static daAuction_c::ProcFunc_t eventProc[] = {
 bool daAuction_c::eventMain() {
     daPy_lk_c* pLink = (daPy_lk_c*)dComIfGp_getLinkPlayer();
 
-    if (pLink->getBaseAnimeFrameRate() == 0.0f && mCurLinkAnm != 1 && mCurLinkAnm != 0x1D && mCurLinkAnm != 0x25) {
-        setLinkAnm(1);
+    if (
+        pLink->getBaseAnimeFrameRate() == 0.0f &&
+        mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e &&
+        mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e &&
+        mCurLinkAnm != daPy_demo_c::DEMO_UNK25_e
+    ) {
+        setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
     }
 
     mFlags &= 4;
@@ -897,7 +902,7 @@ void daAuction_c::eventMainKai() {
                     m800 = mCurrBid + 1;
                     dComIfGp_setMessageSetNumber(mCurrBid + 1);
                     end = 0x1CFA;
-                    setLinkAnm(0x48);
+                    setLinkAnm(daPy_demo_c::DEMO_UNK48_e);
                     mpTimer->mpScrnDraw->setShowType(1);
 
                     dAuction_screen_gaugeUp();
@@ -929,8 +934,8 @@ void daAuction_c::eventMainKai() {
                     dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m824)].field_0x00);
                     setMessage2(msgParam);
                     setCameraNpc(m824, 0);
-                    if (m824 == 0 && mCurLinkAnm != 0x1D) {
-                        setLinkAnm(0x14);
+                    if (m824 == 0 && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
+                        setLinkAnm(daPy_demo_c::DEMO_UNK14_e);
                     }
 
                     m834 |= 0x20;
@@ -1040,7 +1045,7 @@ void daAuction_c::eventMainUri() {
                     setCameraNpc(m824, 0);
 
                     if (m824 == 0) {
-                        setLinkAnm(0x14);
+                        setLinkAnm(daPy_demo_c::DEMO_UNK14_e);
                     }
 
                     m834 |= 0x20;
@@ -1081,8 +1086,8 @@ void daAuction_c::eventMainMsgSet() {
 /* 0000279C-0000294C       .text eventMainMsgEnd__11daAuction_cFv */
 void daAuction_c::eventMainMsgEnd() {
     if (eventMesEnd()) {
-        if (mCurLinkAnm != 1 && mCurLinkAnm != 0x1D) {
-            setLinkAnm(1);
+        if (mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
+            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
         }
 
         if (m834 & 0x20) {
@@ -1316,7 +1321,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         m826 = tmp;
         m824 = tmp;
         if (m826 != 0) {
-            setLinkAnm(1);
+            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
         }
         break;
     }
@@ -1325,12 +1330,12 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
 
         if (dComIfGs_getRupee() < msgSetNo) {
             mDoAud_seStart(JA_SE_AUC_BID_NG);
-            setLinkAnm(0x4A);
+            setLinkAnm(daPy_demo_c::DEMO_UNK4A_e);
             *pMsgNo = 0x1CFB;
             m7C4[0] = 50.0f;
         } else if (msgSetNo <= mCurrBid) {
             mDoAud_seStart(JA_SE_AUC_BID_NG);
-            setLinkAnm(0x4A);
+            setLinkAnm(daPy_demo_c::DEMO_UNK4A_e);
             *pMsgNo = 0x1D1E;
             m7C4[0] = 50.0f;
         } else {
@@ -1388,7 +1393,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
     case 0x1D21:
     case 0x1D22:
     case 0x1D23: {
-        setLinkAnm(0x14);
+        setLinkAnm(daPy_demo_c::DEMO_UNK14_e);
         int rnd = getRand(6) + 1;
         *pMsgNo = l_npc_msg_dat[getAucMdlNo(rnd)].field_0x06;
         m825 = rnd;
@@ -1538,8 +1543,8 @@ void daAuction_c::setCameraNpc(int idx, s16 param_2) {
 
 /* 000039FC-00003A3C       .text setLinkAnm__11daAuction_cFUc */
 void daAuction_c::setLinkAnm(u8 linkAnm) {
-    if (linkAnm == 1 && m826 == 0) {
-        linkAnm = 0x1D;
+    if (linkAnm == daPy_demo_c::DEMO_UNK1_e && m826 == 0) {
+        linkAnm = daPy_demo_c::DEMO_UNK1D_e;
     }
 
     daPy_lk_c* pLink = (daPy_lk_c*)dComIfGp_getLinkPlayer();

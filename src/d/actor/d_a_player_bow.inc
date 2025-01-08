@@ -24,8 +24,12 @@ static BOOL daPy_bowJointCB(J3DNode*, int) {
 }
 
 /* 80149FD0-8014A008       .text bowButton__9daPy_lk_cCFv */
-void daPy_lk_c::bowButton() const {
-    /* Nonmatching */
+BOOL daPy_lk_c::bowButton() const {
+    if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e) {
+        return doButton();
+    } else {
+        return itemButton();
+    }
 }
 
 /* 8014A008-8014A02C       .text checkBowReadyAnime__9daPy_lk_cCFv */
