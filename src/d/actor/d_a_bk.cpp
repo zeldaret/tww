@@ -3086,7 +3086,7 @@ static BOOL daBk_Delete(bk_class* i_this) {
     }
     if (i_this->m121D) {
         hio_set = 0;
-        mDoHIO_root.mDoHIO_deleteChild(l_bkHIO.mChildID);
+        mDoHIO_deleteChild(l_bkHIO.mChildID);
     }
     i_this->m0350.end();
     i_this->dr.mParticleCallBack.end();
@@ -3362,7 +3362,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
         }
         
         if (!hio_set) {
-            l_bkHIO.mChildID = mDoHIO_root.mDoHIO_createChild("ボコちゃん", &l_bkHIO); // "Boko-chan"
+            l_bkHIO.mChildID = mDoHIO_createChild("ボコちゃん", &l_bkHIO); // "Boko-chan"
             i_this->m121D = 1;
             hio_set = 1;
         }

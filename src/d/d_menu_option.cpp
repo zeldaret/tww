@@ -242,7 +242,7 @@ void dMenu_Option_c::_create() {
     mE3A = 0xFF;
     mE3B = 0xC0;
     
-    g_moHIO.mChildID = mDoHIO_root.mDoHIO_createChild("オプション画面", &g_moHIO); // "Option Screen"
+    g_moHIO.mChildID = mDoHIO_createChild("オプション画面", &g_moHIO); // "Option Screen"
 }
 
 /* 801D53F0-801D546C       .text _delete__14dMenu_Option_cFv */

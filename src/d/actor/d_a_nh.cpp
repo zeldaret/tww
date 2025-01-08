@@ -75,7 +75,7 @@ daNh_HIO_c::daNh_HIO_c() {
 /* 800F9654-800F9874       .text __dt__6daNh_cFv */
 daNh_c::~daNh_c() {
     if (l_HIO.mChildID >= 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildID);
+        mDoHIO_deleteChild(l_HIO.mChildID);
         l_HIO.mChildID = -1;
     }
 }
@@ -135,7 +135,7 @@ s32 daNh_c::create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     
     if (l_HIO.mChildID < 0) {
-        l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("森のほたる", &l_HIO); // "Forest Firefly" (mori no hotaru)
+        l_HIO.mChildID = mDoHIO_createChild("森のほたる", &l_HIO); // "Forest Firefly" (mori no hotaru)
         l_HIO.mpActor = this;
     }
     if (!init()) {

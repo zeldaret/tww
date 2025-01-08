@@ -199,7 +199,7 @@ s32 daMozo_c::CreateInit() {
     wait_proc_init();
 
     if (l_HIO.mChildID < 0) {
-        l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("モ石像", &l_HIO); // "Mo Statue" (mo sekizou)
+        l_HIO.mChildID = mDoHIO_createChild("モ石像", &l_HIO); // "Mo Statue" (mo sekizou)
     }
 
     return cPhs_COMPLEATE_e;

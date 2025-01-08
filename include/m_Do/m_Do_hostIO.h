@@ -49,10 +49,10 @@ public:
 
     void update();
     
-    s8 mDoHIO_createChild(const char* name, JORReflexible* hio) {
+    s8 createChild(const char* name, JORReflexible* hio) {
         return m_subroot.createChild(name, hio);
     }
-    void mDoHIO_deleteChild(s8 childID) {
+    void deleteChild(s8 childID) {
         m_subroot.deleteChild(childID);
     }
 
@@ -65,5 +65,13 @@ public:
 };
 
 extern mDoHIO_root_c mDoHIO_root;
+
+inline s8 mDoHIO_createChild(const char* name, JORReflexible* hio) {
+    return mDoHIO_root.createChild(name, hio);
+}
+
+inline void mDoHIO_deleteChild(s8 childID) {
+    mDoHIO_root.deleteChild(childID);
+}
 
 #endif /* M_DO_M_DO_HOSTIO_H */

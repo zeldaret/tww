@@ -163,7 +163,7 @@ daNpc_kam_c::~daNpc_kam_c() {
     }
     
     if (l_HIO.mChildID >= 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildID);
+        mDoHIO_deleteChild(l_HIO.mChildID);
         l_HIO.mChildID = -1;
     }
     
@@ -268,7 +268,7 @@ s32 daNpc_kam_c::create() {
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
         if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("かもめ", &l_HIO); // "Seagull" (kamome)
+            l_HIO.mChildID = mDoHIO_createChild("かもめ", &l_HIO); // "Seagull" (kamome)
             l_HIO.mpActor = this;
         }
         
