@@ -8,14 +8,14 @@ namespace daObjRforce {
     class Act_c : public fopAc_ac_c {
     public:
         static BOOL solidHeapCB(fopAc_ac_c*);
-        BOOL create_heap();
+        bool create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void set_mtx();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
 
-        virtual ~Act_c();
+        virtual ~Act_c() {};
     
     public:
         static const char M_arcname[8];

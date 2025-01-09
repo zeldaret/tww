@@ -7,36 +7,36 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "d/res/res_vdora.h"
+#include "d/res/res_stptetu.h"
 
 const char daObjRforce::Act_c::M_arcname[] = "StpTetu";
 
 /* 00000078-0000009C       .text solidHeapCB__Q211daObjRforce5Act_cFP10fopAc_ac_c */
 BOOL daObjRforce::Act_c::solidHeapCB(fopAc_ac_c* this_i) {
-    return ((Act_c*)this_i)->create_heap() & 0xFF;
+    return static_cast<Act_c*>(this_i)->create_heap();
 }
 
 /* 0000009C-00000220       .text create_heap__Q211daObjRforce5Act_cFv */
-BOOL daObjRforce::Act_c::create_heap() {
+bool daObjRforce::Act_c::create_heap() {
 
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VDORA_INDEX_BDL_VDORA));
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, STPTETU_BDL_STPTETU));
     JUT_ASSERT(0x57, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
     
     set_mtx();
 
-    J3DModelData* bgw_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 0x07));
+    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, 0x07));
     JUT_ASSERT(0x64, bgw_data != NULL);
     if(bgw_data != NULL){
         mpBgw = new dBgW();
         if(mpBgw != NULL){
-            if(mpBgw->Set((cBgD_t*)bgw_data, cBgW::MOVE_BG_e, &mtx) == true) return FALSE;
+            if(mpBgw->Set(bgw_data, cBgW::MOVE_BG_e, &mtx) == true) return false;
         }
     }
 
-    BOOL ret = FALSE;
+    bool ret = false;
     if(mdl_data != NULL && mpModel != NULL && bgw_data != NULL && mpBgw != NULL){
-        ret = TRUE;
+        ret = true;
     }
     return ret;
 }
@@ -48,7 +48,7 @@ s32 daObjRforce::Act_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
     
     if(ret == cPhs_COMPLEATE_e){
-        if(!fopAcM_entrySolidHeap(this, solidHeapCB, 0) == FALSE){
+        if(fopAcM_entrySolidHeap(this, solidHeapCB, 0)){
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             dComIfG_Bgsp()->Regist(mpBgw, this);
             mpBgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
@@ -62,12 +62,12 @@ s32 daObjRforce::Act_c::_create() {
 }
 
 /* 000002F8-00000384       .text _delete__Q211daObjRforce5Act_cFv */
-BOOL daObjRforce::Act_c::_delete() {
+bool daObjRforce::Act_c::_delete() {
     if(heap != NULL && mpBgw != NULL && mpBgw->ChkUsed()){
         dComIfG_Bgsp()->Release(mpBgw);
     }
     dComIfG_resDelete(&mPhs, M_arcname);
-    return TRUE;
+    return true;
 }
 
 /* 00000384-00000430       .text set_mtx__Q211daObjRforce5Act_cFv */
@@ -81,14 +81,14 @@ void daObjRforce::Act_c::set_mtx() {
 }
 
 /* 00000430-00000468       .text _execute__Q211daObjRforce5Act_cFv */
-BOOL daObjRforce::Act_c::_execute() {
+bool daObjRforce::Act_c::_execute() {
     set_mtx();
     mpBgw->Move();
-    return TRUE;
+    return true;
 }
 
 /* 00000468-00000508       .text _draw__Q211daObjRforce5Act_cFv */
-BOOL daObjRforce::Act_c::_draw() {
+bool daObjRforce::Act_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     dComIfGd_setListBG();
     
@@ -96,31 +96,29 @@ BOOL daObjRforce::Act_c::_draw() {
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
 
-    return TRUE;
+    return true;
 }
-
-daObjRforce::Act_c::~Act_c(){}
 
 namespace daObjRforce {
 namespace {
 /* 00000508-00000528       .text Mthd_Create__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-void Mthd_Create(void* obj) {
-    ((daObjRforce::Act_c*)obj)->_create();
+s32 Mthd_Create(void* obj) {
+    return static_cast<daObjRforce::Act_c*>(obj)->_create();
 }
 
 /* 00000528-0000054C       .text Mthd_Delete__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-int Mthd_Delete(void* obj) {
-    return ((daObjRforce::Act_c*)obj)->_delete() & 0xFF;
+s32 Mthd_Delete(void* obj) {
+    return static_cast<daObjRforce::Act_c*>(obj)->_delete();
 }
 
 /* 0000054C-00000570       .text Mthd_Execute__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
 int Mthd_Execute(void* obj) {
-    return ((daObjRforce::Act_c*)obj)->_execute() & 0xFF;
+    return static_cast<daObjRforce::Act_c*>(obj)->_execute();
 }
 
 /* 00000570-00000594       .text Mthd_Draw__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
 int Mthd_Draw(void* obj) {
-    return ((daObjRforce::Act_c*)obj)->_draw() & 0xFF;
+    return static_cast<daObjRforce::Act_c*>(obj)->_draw();
 }
 
 /* 00000594-0000059C       .text Mthd_IsDelete__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
