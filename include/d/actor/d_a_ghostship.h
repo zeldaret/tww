@@ -11,6 +11,12 @@
 
 class daGhostship_c : public fopAc_ac_c {
 public:
+    enum Mode {
+        MODE_WAIT = 0x0,
+        MODE_REALIZE = 0x1,
+        MODE_PATH_MOVE = 0x2,
+    };
+
     bool checkInShip() { return mbCanEnterShip; }
     void getAlpha() {}
     void setMtx() {}

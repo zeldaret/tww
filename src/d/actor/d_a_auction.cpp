@@ -1145,7 +1145,7 @@ void daAuction_c::eventMainMsgBikonC() {
         m7A8.y += getPiconDispOfs(m827);
 
         dComIfGp_particle_set(0x8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
-        mTimer = 0x1E;
+        mTimer = 30;
 
         if (m827 == 0) {
             mDoAud_seStart(JA_SE_AUC_BID_GAUGE_MAX);

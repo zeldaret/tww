@@ -4,7 +4,7 @@
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_particle.h"
-#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_actor.h"
 #include "global.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -62,6 +62,13 @@ public:
 #endif
         /* 0xA */ UpAct_UNKA,
         /* 0xB */ UpAct_UNKB,
+    };
+
+    enum Mode {
+        MODE_MOVE = 0x0,
+        MODE_LOOK_ATTENTION = 0x1,
+        MODE_LOAD = 0x2,
+        MODE_DELETE = 0x3,
     };
 
     void NameConv();

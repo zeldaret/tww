@@ -590,7 +590,7 @@ void daAgb_c::modeLoad() {
     } else {
         mUploadAction  = UpAct_UNK0;
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
-        mMode = 0;
+        mMode = MODE_MOVE;
     }
 }
 
@@ -606,7 +606,7 @@ void daAgb_c::modeLookAttention() {
 
         if (dComIfGp_evmng_endCheck("DEFAULT_AGB_LOOK_ATTENTION")) {
             dComIfGp_event_reset();
-            mMode = 0;
+            mMode = MODE_MOVE;
             se_flag = false;
 
             field_0x65c = 1;
@@ -1347,7 +1347,7 @@ void daAgb_c::modeMove() {
     
     if (eventInfo.checkCommandTalk()) {
         mUploadAction  = UpAct_UNK0;
-        mMode = 2;
+        mMode = MODE_LOAD;
         return;
     }
     
@@ -1407,7 +1407,7 @@ void daAgb_c::modeMove() {
                 dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)
             )
         ) {
-            mMode = 1;
+            mMode = MODE_LOOK_ATTENTION;
             offActive();
             eyePos = current.pos;
             
@@ -1502,7 +1502,7 @@ void daAgb_c::modeMove() {
         CursorMove(this, stage_type);
     }
     
-    if (mMode == 0) {
+    if (mMode == MODE_MOVE) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
 }
@@ -1614,7 +1614,7 @@ static int daAgb_Execute(daAgb_c* i_this) {
             }
         }
 
-        if (i_this->isHold() && !var_r27 && i_this->mMode != 1) {
+        if (i_this->isHold() && !var_r27 && i_this->mMode != daAgb_c::MODE_LOOK_ATTENTION) {
             if (i_this->field_0x675) {
                 if (i_this->field_0x676) {
                     i_this->shape_angle.z += 0x1000;
@@ -1633,7 +1633,7 @@ static int daAgb_Execute(daAgb_c* i_this) {
         mDoMtx_stack_c::ZrotM(i_this->shape_angle.z);
         i_this->mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
-        if (i_this->mMode == 1) {
+        if (i_this->mMode == daAgb_c::MODE_LOOK_ATTENTION) {
             i_this->mBrk.setFrame(19.0f);
         } else if (i_this->field_0x65c != 0 &&
                    (i_this->field_0x66b == 4 || i_this->field_0x66b == 13 ||
@@ -1665,8 +1665,8 @@ static int daAgb_Draw(daAgb_c* i_this) {
         if (i_this->field_0x66f && !daAgb_c::mFlags.field_0xa_7 &&
             (!dComIfGp_event_runCheck() ||
              dComIfGp_evmng_startCheck("DEFAULT_AGB_LOOK_ATTENTION") ||
-             i_this->mMode == 2) &&
-            (i_this->field_0x65c == 0 || i_this->mMode == 1 || i_this->field_0x66b == 0x10 ||
+             i_this->mMode == daAgb_c::MODE_LOAD) &&
+            (i_this->field_0x65c == 0 || i_this->mMode == daAgb_c::MODE_LOOK_ATTENTION || i_this->field_0x66b == 0x10 ||
              i_this->field_0x66b == 3 || i_this->field_0x66b == 12 || i_this->field_0x66b == 4 ||
              i_this->field_0x66b == 13 || (i_this->field_0x66b == 14 && i_this->field_0x65c > 120)))
         {

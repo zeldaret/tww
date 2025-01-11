@@ -34,6 +34,11 @@ public:
         FLAG_HOOK = 0x40,
     };
     
+    enum Mode {
+        MODE_WAIT  = 0x0,
+        MODE_WATER = 0x2,
+    };
+    
     float getYOffset();
     void set_mtx();
     void set_mtx_base(J3DModel*, cXyz, csXyz);

@@ -1200,14 +1200,14 @@ BOOL daItem_c::timeCount() {
 
 /* 800F7F0C-800F7F50       .text mode_wait_init__8daItem_cFv */
 void daItem_c::mode_wait_init() {
-    mMode = 0;
+    mMode = MODE_WAIT;
     gravity = getData()->mGravity;
     mPtclRippleCb.end();
 }
 
 /* 800F7F50-800F80CC       .text mode_water_init__8daItem_cFv */
 void daItem_c::mode_water_init() {
-    mMode = 2;
+    mMode = MODE_WATER;
     
     if (daSea_ChkArea(current.pos.x, current.pos.z)) {
         f32 seaH = daSea_calcWave(current.pos.x, current.pos.z);
@@ -1358,7 +1358,7 @@ BOOL daItem_c::initAction() {
         
         gravity = getData()->mGravity;
         clrFlag(FLAG_UNK04);
-        mMode = 0;
+        mMode = MODE_WAIT;
         
         return TRUE;
     }
@@ -1399,7 +1399,7 @@ BOOL daItem_c::initAction() {
     case 0xA:
         gravity = getData()->mGravity;
         scale.setall(0.0f);
-        mMode = 0;
+        mMode = MODE_WAIT;
         break;
     case 0xB:
         current.angle.y = cM_rndF((f32)0xFFFF);
@@ -1427,7 +1427,7 @@ BOOL daItem_c::initAction() {
     fopAcM_SetSpeedF(this, speedF);
     scale.setall(0.0f);
     
-    mMode = 0;
+    mMode = MODE_WAIT;
     
     setFlag(FLAG_UNK04);
     

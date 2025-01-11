@@ -90,7 +90,7 @@ void daGhostship_c::pathMove() {
 
 /* 000004CC-000004D8 .text modeWaitInit__13daGhostship_cFv */
 void daGhostship_c::modeWaitInit() {
-    mMode = 0;
+    mMode = MODE_WAIT;
 }
 
 /* 000004D8-000004DC .text modeWait__13daGhostship_cFv */
@@ -128,7 +128,7 @@ BOOL daGhostship_c::_pathMove(cXyz* curPos, cXyz* p_curPntPos, cXyz* p_nextPntPo
 
 /* 00000770-0000077C .text modePathMoveInit__13daGhostship_cFv */
 void daGhostship_c::modePathMoveInit() {
-    mMode = 2;
+    mMode = MODE_PATH_MOVE;
 }
 
 /* 0000077C-000007D0       .text modePathMove__13daGhostship_cFv */

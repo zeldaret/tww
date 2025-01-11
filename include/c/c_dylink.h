@@ -1,7 +1,8 @@
 #ifndef C_C_DYLINK_H
 #define C_C_DYLINK_H
 
-#include "f_op/f_op_scene_mng.h"
+#include "dolphin/types.h"
+#include "SSystem/SComponent/c_phase.h"
 
 struct cDylPhs {
     static int phase_01(void*);
