@@ -723,9 +723,8 @@ void daObjTpost_c::modeTalkXY() {
         }
 
         if(field_0x8E4 != -1 && cLib_calcTimer(&field_0x8E4) == 0) {
-            player->mDemo.setOriginalDemoType();
-            player->mDemo.setParam0(0);
-            player->mDemo.setDemoMode(0x18);
+            player->changeOriginalDemo();
+            player->changeDemoMode(daPy_demo_c::DEMO_UNK18_e);
 
             field_0x8E4 = -1;
         }
@@ -736,9 +735,8 @@ void daObjTpost_c::modeTalkXY() {
             case 0xCF0:
             case 0xCF1:
                 if(player->getBaseAnimeFrameRate() == 0.0f) {
-                    player->mDemo.setOriginalDemoType();
-                    player->mDemo.setParam0(0);
-                    player->mDemo.setDemoMode(1);
+                    player->changeOriginalDemo();
+                    player->changeDemoMode(daPy_demo_c::DEMO_UNK1_e);
                 }
 
                 break;

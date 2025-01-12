@@ -186,7 +186,7 @@ void JAInter::SequenceMgr::storeSeqBuffer(JAISound**, JAInter::Actor*, u32, u32,
 }
 
 /* 80298208-802982C0       .text releaseSeqBuffer__Q27JAInter11SequenceMgrFP8JAISoundUl */
-void JAInter::SequenceMgr::releaseSeqBuffer(JAISound*, u32) {
+void JAInter::SequenceMgr::releaseSeqBuffer(JAISound*, u32 fadeTime) {
     /* Nonmatching */
 }
 

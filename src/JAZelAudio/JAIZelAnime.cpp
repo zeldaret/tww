@@ -5,10 +5,18 @@
 
 #include "JAZelAudio/JAIZelAnime.h"
 #include "dolphin/types.h"
+#include "m_Do/m_Do_audio.h"
 
 /* 802AC830-802AC888       .text setAnimSound__11JAIZelAnimeFP3VecffUlSc */
 void JAIZelAnime::setAnimSound(Vec* pos, f32 frame, f32 rate, u32 mtrlSndId, s8 reverb) {
-    /* Nonmatching */
+    u32 r6 = (mtrlSndId & 0x00FFFFFF) + (reverb << 24);
+    if (rate == 0.0f) {
+        return;
+    }
+    if (rate < 0.0f) {
+        rate *= -1.0f;
+    }
+    setAnimSoundVec(mDoAud_zelAudio_c::getInterface(), pos, frame, rate, r6, 0);
 }
 
 /* 802AC888-802ACD34       .text startAnimSound__11JAIZelAnimeFPvUlPP8JAISoundPQ27JAInter5ActorUc */

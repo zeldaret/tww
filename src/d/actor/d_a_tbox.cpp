@@ -537,7 +537,7 @@ void daTbox_c::CreateInit() {
     mAllColRatio = 1.0f;
 
     if (l_HIO.mHioId < 0) {
-        l_HIO.mHioId = mDoHIO_root.mDoHIO_createChild("宝箱", &l_HIO); // "Treasure Chest"
+        l_HIO.mHioId = mDoHIO_createChild("宝箱", &l_HIO); // "Treasure Chest"
     }
 
     shape_angle.z = 0;
@@ -1227,7 +1227,7 @@ static s32 daTbox_Delete(daTbox_c* i_tbox) {
     dComIfG_resDelete(i_tbox->getPhase(), "Dalways");
 
     if (l_HIO.mHioId >= 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mHioId);
+        mDoHIO_deleteChild(l_HIO.mHioId);
         l_HIO.mHioId = -1;
     }
 

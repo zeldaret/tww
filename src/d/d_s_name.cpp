@@ -496,7 +496,7 @@ void dScnName_c::NoteOpen() {
         field_0x558--;
         return;
     }
-    mDoAud_seStart(2201, NULL, 0, 0);
+    mDoAud_seStart(JA_SE_MSEL_CLOTH_ON, NULL, 0, 0);
     mMainProc = 2;
     field_0x55d = 1;
     cloth.cloth_c->init();

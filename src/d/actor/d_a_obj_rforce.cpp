@@ -25,7 +25,8 @@ bool daObjRforce::Act_c::create_heap() {
     
     set_mtx();
 
-    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, 0x07));
+    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, STPTETU_DZB_STPTETU));
+
     JUT_ASSERT(0x64, bgw_data != NULL);
     if(bgw_data != NULL){
         mpBgw = new dBgW();
@@ -107,17 +108,18 @@ s32 Mthd_Create(void* obj) {
 }
 
 /* 00000528-0000054C       .text Mthd_Delete__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-s32 Mthd_Delete(void* obj) {
+
+BOOL Mthd_Delete(void* obj) {
     return static_cast<daObjRforce::Act_c*>(obj)->_delete();
 }
 
 /* 0000054C-00000570       .text Mthd_Execute__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-int Mthd_Execute(void* obj) {
+BOOL Mthd_Execute(void* obj) {
     return static_cast<daObjRforce::Act_c*>(obj)->_execute();
 }
 
 /* 00000570-00000594       .text Mthd_Draw__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-int Mthd_Draw(void* obj) {
+BOOL Mthd_Draw(void* obj) {
     return static_cast<daObjRforce::Act_c*>(obj)->_draw();
 }
 

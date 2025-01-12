@@ -13,6 +13,12 @@ class J3DNode;
 
 class daStandItem_c : public fopAc_ac_c {
 public:
+    enum Mode {
+        MODE_CARRY = 0x0,
+        MODE_WAIT = 0x1,
+        MODE_DROP = 0x2,
+    };
+
     int getItemNo() const { return mItemNo; }
 
     bool _delete();

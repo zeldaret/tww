@@ -149,7 +149,7 @@ void dGrass_data_c::WorkAt(fopAc_ac_c* ac, u32 p1, int roomNo, dCcMassS_HitInf* 
         setBatta(&mPos, &tevStr->mColorK0);
 
         if (mItemIdx >= 0)
-            fopAcM_createItemFromTable(&mPos, mItemIdx, 0xFFFFFFFF, roomNo, 0, NULL, 1, NULL);
+            fopAcM_createItemFromTable(&mPos, mItemIdx, 0xFFFFFFFF, roomNo, daItemType_0_e, NULL, daItemAct_1_e, NULL);
         if (!l_CutSoundFlag) {
             l_CutSoundFlag = true;
             mDoAud_seStart(JA_SE_LK_CUT_GRASS, &mPos, 0, dComIfGp_getReverb(roomNo));

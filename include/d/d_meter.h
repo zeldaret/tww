@@ -17,6 +17,8 @@ public:
     dMeter_HIO_c();
     virtual ~dMeter_HIO_c();
 
+    void genMessage(JORMContext* ctx);
+
     /* 0x004 */ u8 field_0x4[0x006 - 0x004];
     /* 0x006 */ short field_0x6;
     /* 0x008 */ u8 field_0x8[0x00C - 0x008];
@@ -187,6 +189,8 @@ public:
     dMeter_menuHIO_c();
     virtual ~dMeter_menuHIO_c();
 
+    void genMessage(JORMContext* ctx);
+
     /* 0x04 */ u8 field_0x4[0x08 - 0x04];
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ f32 field_0xc;
@@ -287,6 +291,8 @@ public:
     dMeter_msg_HIO_c();
     virtual ~dMeter_msg_HIO_c();
 
+    void genMessage(JORMContext* ctx);
+
     /* 0x04 */ u8 field_0x4[0x05 - 0x04];
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u8 field_0x6;
@@ -385,6 +391,8 @@ class dMeter_message_HIO_c : public JORReflexible {
 public:
     dMeter_message_HIO_c();
     virtual ~dMeter_message_HIO_c();
+
+    void genMessage(JORMContext* ctx);
 
     /* 0x04 */ u8 field_0x4[0x05 - 0x04];
     /* 0x05 */ u8 field_0x5;
@@ -502,6 +510,8 @@ class dMeter_map_HIO_c : public JORReflexible {
 public:
     dMeter_map_HIO_c();
     virtual ~dMeter_map_HIO_c();
+
+    void genMessage(JORMContext* ctx);
 
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5;

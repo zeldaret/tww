@@ -2,7 +2,7 @@
 #define D_S_PLAY
 
 #include "d/d_stage.h"
-#include "f_op/f_op_scene_mng.h"
+#include "f_op/f_op_scene.h"
 #include "m_Do/m_Do_hostIO.h"
 
 class mDoDvdThd_toMainRam_c;
@@ -31,6 +31,9 @@ public:
     dScnPly_dark_HIO_c();
     virtual ~dScnPly_dark_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 mChildID;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06;
@@ -43,6 +46,9 @@ public:
     dScnPly_reg_childHIO_c();
     virtual ~dScnPly_reg_childHIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ f32 mFloatRegs[30];
     /* 0x7C */ s16 mShortRegs[10];
 };
@@ -52,6 +58,9 @@ public:
     dScnPly_env_otherHIO_c();
     virtual ~dScnPly_env_otherHIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 mChildID;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06;
@@ -82,6 +91,9 @@ public:
     dScnPly_env_debugHIO_c();
     virtual ~dScnPly_env_debugHIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 mChildID;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ f32 field_0x0c;
@@ -106,6 +118,9 @@ public:
 
     virtual ~dScnPly_msg_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 mChildID;
     /* 0x05 */ u8 mIsUpdate;
     /* 0x06 */ u8 field_0x06;
@@ -120,12 +135,17 @@ public:
 class dScnPly_preLoad_HIO_c : public mDoHIO_entry_c {
 public:
     virtual ~dScnPly_preLoad_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
 };
 
 class dScnPly_env_HIO_c : public JORReflexible {
 public:
     virtual ~dScnPly_env_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 mChildID;
     /* 0x08 */ dScnPly_env_otherHIO_c mOther;
     /* 0x50 */ dScnPly_env_debugHIO_c mEnvDebug;

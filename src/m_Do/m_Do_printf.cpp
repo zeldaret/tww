@@ -44,7 +44,7 @@ extern "C" int search_partial_address(void* address, int* module_id, int* sectio
     if (address == NULL)
         return 0xFFFFFFFF;
 
-    OSModuleInfo* module = *(OSModuleInfo**)0x800030C8;
+    OSModuleInfo* module = __OSModuleList.head;
     for (; module != NULL; module = (OSModuleInfo*)module->link.next) {
         u32 i, addr;
         OSSectionInfo* section = (OSSectionInfo*)module->sectionInfoOffset;

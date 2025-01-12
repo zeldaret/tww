@@ -13,6 +13,9 @@ public:
     fapGm_HIO_c();
     virtual ~fapGm_HIO_c();
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ u8 mChildID;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 mDisplayMeter;

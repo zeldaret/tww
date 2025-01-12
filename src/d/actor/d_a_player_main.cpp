@@ -293,22 +293,22 @@ void daPy_lk_c::voiceStart(u32 param_1) {
 /* 801031A4-801031DC       .text itemButton__9daPy_lk_cCFv */
 BOOL daPy_lk_c::itemButton() const {
     if (mReadyItemBtn == dItemBtn_X_e) {
-        return m34C9 & 0x04;
+        return itemButtonX();
     } else if (mReadyItemBtn == dItemBtn_Y_e) {
-        return m34C9 & 0x08;
+        return itemButtonY();
     } else {
-        return m34C9 & 0x10;
+        return itemButtonZ();
     }
 }
 
 /* 801031DC-80103214       .text itemTrigger__9daPy_lk_cCFv */
 BOOL daPy_lk_c::itemTrigger() const {
     if (mReadyItemBtn == dItemBtn_X_e) {
-        return mPressedButtons & 0x04;
+        return itemTriggerX();
     } else if (mReadyItemBtn == dItemBtn_Y_e) {
-        return mPressedButtons & 0x08;
+        return itemTriggerY();
     } else {
-        return mPressedButtons & 0x10;
+        return itemTriggerZ();
     }
 }
 
@@ -343,15 +343,15 @@ BOOL daPy_lk_c::checkGroupItem(int param_1, int itemNo) {
 /* 801032E4-801033E4       .text checkSetItemTrigger__9daPy_lk_cFii */
 BOOL daPy_lk_c::checkSetItemTrigger(int param_1, int param_2) {
     if (param_2 == 0 || !daPy_dmEcallBack_c::checkCurse()) {
-        if (mPressedButtons & 0x04 && checkGroupItem(param_1, dComIfGp_getSelectItem(dItemBtn_X_e))) {
+        if (itemTriggerX() && checkGroupItem(param_1, dComIfGp_getSelectItem(dItemBtn_X_e))) {
             mReadyItemBtn = dItemBtn_X_e;
             return TRUE;
         }
-        if (mPressedButtons & 0x08 && checkGroupItem(param_1, dComIfGp_getSelectItem(dItemBtn_Y_e))) {
+        if (itemTriggerY() && checkGroupItem(param_1, dComIfGp_getSelectItem(dItemBtn_Y_e))) {
             mReadyItemBtn = dItemBtn_Y_e;
             return TRUE;
         }
-        if (mPressedButtons & 0x10 && checkGroupItem(param_1, dComIfGp_getSelectItem(dItemBtn_Z_e))) {
+        if (itemTriggerZ() && checkGroupItem(param_1, dComIfGp_getSelectItem(dItemBtn_Z_e))) {
             mReadyItemBtn = dItemBtn_Z_e;
             return TRUE;
         }
@@ -1625,24 +1625,24 @@ BOOL daPy_lk_c::checkItemChangeFromButton() {
         !checkPlayerGuard()
     ) {
         if (!daPy_dmEcallBack_c::checkCurse()) {
-            if (mPressedButtons & 0x02 && checkSwordEquip() && mEquipItem != daPyItem_SWORD_e) {
+            if (swordTrigger() && checkSwordEquip() && mEquipItem != daPyItem_SWORD_e) {
                 setAnimeEquipSword(1);
-            } else if (mPressedButtons & 0x04) {
+            } else if (itemTriggerX()) {
                 if (checkNewItemChange(0)) {
                     mReadyItemBtn = dItemBtn_X_e;
                     return TRUE;
                 }
-            } else if (mPressedButtons & 0x08) {
+            } else if (itemTriggerY()) {
                 if (checkNewItemChange(1)) {
                     mReadyItemBtn = dItemBtn_Y_e;
                     return TRUE;
                 }
-            } else if (mPressedButtons & 0x10) {
+            } else if (itemTriggerZ()) {
                 if (checkNewItemChange(2)) {
                     mReadyItemBtn = dItemBtn_Z_e;
                     return TRUE;
                 }
-            } else if (mPressedButtons & 0x01) {
+            } else if (doTrigger()) {
                 if (dComIfGp_getDoStatus() == 0x08) { // A button shows "Put Away"
                     setAnimeUnequip();
                 }
@@ -1657,12 +1657,12 @@ BOOL daPy_lk_c::checkItemChangeFromButton() {
                     return procBottleDrink_init(dComIfGp_getSelectItem(mReadyItemBtn));
                 } else if (checkSetItemTrigger(FAIRY_BOTTLE, 0)) {
                     return procBottleOpen_init(FAIRY_BOTTLE);
-                } else if (mPressedButtons & 0x01) {
+                } else if (doTrigger()) {
                     if (dComIfGp_getDoStatus() == 0x08) { // A button shows "Put Away"
                         setAnimeUnequip();
                     }
                 }
-            } else if (mPressedButtons & 0x01) {
+            } else if (doTrigger()) {
                 if (dComIfGp_getDoStatus() == 0x08) { // A button shows "Put Away"
                     setAnimeUnequip();
                 }
@@ -2098,9 +2098,10 @@ BOOL daPy_lk_c::checkMaskDraw() {
 }
 
 /* 801121C8-80112280       .text checkSubjectEnd__9daPy_lk_cFi */
-BOOL daPy_lk_c::checkSubjectEnd(int param_1) {
-    if(dComIfGp_event_runCheck() || (mPressedButtons & 3) || (m34C9 & 0x20) || dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x2000)) {
-        if(param_1) {
+BOOL daPy_lk_c::checkSubjectEnd(BOOL i_playSound) {
+    // TODO: these trigger/button checks are likely inlines
+    if(dComIfGp_event_runCheck() || (mItemTrigger & (BTN_A | BTN_B)) || (mItemButton & BTN_L) || dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x2000)) {
+        if(i_playSound) {
             mDoAud_seStart(JA_SE_SUBJ_VIEW_OUT);
         }
 
@@ -2317,27 +2318,30 @@ BOOL daPy_lk_c::procScope() {
 }
 
 /* 80112AA8-80112B18       .text procSubjectivity_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procSubjectivity_init(int param_1) {
+BOOL daPy_lk_c::procSubjectivity_init(BOOL i_crouch) {
     commonProcInit(daPyProc_SUBJECTIVITY_e);
 
     mVelocity = 0.0f;
 
     setSubjectMode();
 
-    if(param_1 == 0) {
+    if(!i_crouch) {
         setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
     }
 
-    m3570 = param_1;
+    m3570 = i_crouch;
 
     return true;
 }
 
 /* 80112B18-80112BEC       .text procSubjectivity__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSubjectivity() {
-    dComIfGp_setAStatus(7);
+    dComIfGp_setAStatus(7); // Show "Return" on the B button
 
-    if(checkSubjectEnd(0) || (m3570 != 0 && (m34C9 & 0x40) == 0)) {
+    if(
+        checkSubjectEnd(FALSE) ||
+        (m3570 != 0 && !spActionButton() // Player released R while crouching
+    )) {
         mDoAud_seStart(JA_SE_SUBJ_VIEW_OUT);
         if(m3570 != 0) {
             if(mEquipItem == daPyItem_NONE_e) {
@@ -3118,7 +3122,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
     if (!checkNoResetFlg0(daPyFlg0_UNK4000) && (i_point != 0 || dComIfGp_event_compulsory(this))) {
         mDemo.setOriginalDemoType();
         if (i_point == 0) {
-            mDemo.setDemoMode(1);
+            mDemo.setDemoMode(daPy_demo_c::DEMO_UNK1_e);
         }
         onNoResetFlg0(daPyFlg0_UNK4000);
         changePlayer(this);

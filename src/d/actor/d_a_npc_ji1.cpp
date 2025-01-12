@@ -769,7 +769,7 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
                 if(field_0x2AC == 0x967) {
                     field_0xD70 = -1;
                     fopAcM_seStart(this, JA_SE_VS_JI_OPENING, 0);
-                    mDoAud_bgmStop(0x0000002D);
+                    mDoAud_bgmStop(45);
 
                     setAction(&daNpc_Ji1_c::plmoveAction, 0);
                 }
@@ -1072,7 +1072,7 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
                         if(field_0x2AC == 0x98A) {
                             field_0xD70 = -1;
                             fopAcM_seStart(this, JA_SE_VS_JI_OPENING, 0);
-                            mDoAud_bgmStop(0x0000002D);
+                            mDoAud_bgmStop(45);
 
                             setAction(&daNpc_Ji1_c::plmoveAction, 0);
                         }
@@ -1088,7 +1088,7 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
 
                     field_0xD70 = -1;
                     fopAcM_seStart(this, JA_SE_VS_JI_OPENING, 0);
-                    mDoAud_bgmStop(0x0000002D);
+                    mDoAud_bgmStop(45);
 
                     setAction(&daNpc_Ji1_c::plmoveAction, 0);
                 }
@@ -1558,10 +1558,10 @@ u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
     if(data) {
         switch(*data) {
             case 0:
-                mDoAud_bgmStop(0x0000002D);
+                mDoAud_bgmStop(45);
                 break;
             case 1:
-                mDoAud_bgmStart(0x80000018);
+                mDoAud_bgmStart(JA_BGM_HOUSE_G);
                 break;
             case 2:
                 fopAcM_seStart(this, JA_SE_VS_JI_ENDING, 0);
@@ -1975,7 +1975,7 @@ BOOL daNpc_Ji1_c::endspeakAction(void*) {
                 }
                 else if(l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
                     l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
-                    mDoAud_bgmStop(0x2D);
+                    mDoAud_bgmStop(45);
                     setAction(&daNpc_Ji1_c::reiAction, 0);
                 }
             }

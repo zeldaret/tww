@@ -798,7 +798,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             if (eventInfo.checkCommandDemoAccrpt()) {
                 m043F = 7;
 
-                mDoAud_bgmStop(0x1E);
+                mDoAud_bgmStop(30);
                 mDoAud_taktModeMuteOff();
 
                 dComIfGp_getAttention().mFlags |= 0x80000000;

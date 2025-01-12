@@ -21,22 +21,22 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
         i_this->mTimer--;
         
         if (i_this->mTimer == 0) {
-            s8 health = i_this->health; // TODO: add enum for disappear types (stored in health)
+            s8 dropType = i_this->health;
 
-            if (health != 1 && health != 3) {
-                if (health == 2) {
-                    fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle);
+            if (dropType != daDisItem_NONE1_e && dropType != daDisItem_NONE3_e) {
+                if (dropType == daDisItem_HEART_CONTAINER_e) {
+                    fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle, NULL, 0);
                 }
-                else if (health >= 0x0A && health <= 0x0D) {
+                else if (dropType >= daDisItem_HEART_e && dropType <= daDisItem_UNK13_e) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
-                    if (health < 0x0D) {
-                        static u32 ki_item_d[] = {
-                            dItem_HEART_e,
-                            L_MAGIC,
-                            ARROW_10,
-                        };
-
-                        fopAcM_createItem(&i_this->current.pos, ki_item_d[health - 0xA], -1, -1, 0, NULL, 4);
+                    // This also seems to be used by several other enemies, such as Molgera's spawn.
+                    static u32 ki_item_d[] = {
+                        dItem_HEART_e,
+                        L_MAGIC,
+                        ARROW_10,
+                    };
+                    if (dropType < daDisItem_HEART_e + (int)ARRAY_SIZE(ki_item_d)) {
+                        fopAcM_createItem(&i_this->current.pos, ki_item_d[dropType - daDisItem_HEART_e], -1, -1, daItemType_0_e, NULL, daItemAct_4_e);
                     }
                 }
                 else {

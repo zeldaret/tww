@@ -4,7 +4,10 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "d/actor/d_a_obj_gryw00.h"
+#include "d/d_a_obj.h"
+#include "m_Do/m_Do_hostIO.h"
+
+class daObjGryw00_c;
 
 class daObjYgush00_c : public fopAc_ac_c {
 public:
@@ -13,7 +16,7 @@ public:
         PRM_TYPE_S = 0,
     };
 
-    void param_get_arg() const {}
+    int param_get_arg() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
 
     s32 _create();
     bool _delete();
@@ -29,6 +32,16 @@ public:
     /* 0x2B0 */ mDoExt_bckAnm mBckAnm;
     /* 0x2C0 */ s32 mType;
     /* 0x2C4 */ daObjGryw00_c * mpGryw00;
+};
+
+class daObjYgush00_HIO_c : public JORReflexible  {
+public:
+    daObjYgush00_HIO_c();
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04 */ s8 mChildID;
 };
 
 #endif /* D_A_OBJ_YGUSH00_H */

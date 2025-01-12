@@ -12,6 +12,9 @@ public:
     daRd_HIO_c();
     virtual ~daRd_HIO_c() {}
     
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ dNpc_HIO_c mNpc;
     /* 0x2C */ u8 m2C;
     /* 0x2D */ u8 m2D[0x30 - 0x2D];

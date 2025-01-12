@@ -338,7 +338,7 @@ BOOL daPy_lk_c::procTactWait() {
         dComIfGp_setAStatus(7);
     }
     
-    if (m34D2 == 0 || ((mPressedButtons & 2) != 0 && dComIfGp_getAStatus() == 7) || m35AC <= 0.0f) {
+    if (m34D2 == 0 || (cancelTrigger() && dComIfGp_getAStatus() == 7) || m35AC <= 0.0f) {
         if (m34D2 != 0) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
             resetActAnimeUpper(UPPER_MOVE1_e, -1.0f);
@@ -347,7 +347,7 @@ BOOL daPy_lk_c::procTactWait() {
         
         g_dComIfG_gameInfo.play.field_0x4947 = 0;
         
-        if ((mPressedButtons & 2) != 0 && m3570 == 5) {
+        if (cancelTrigger() && m3570 == 5) {
             m35AC = -1000.0f;
         }
         

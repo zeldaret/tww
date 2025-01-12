@@ -63,10 +63,11 @@ public:
         m14 = -3.5f;
         m18 = 0.45f;
     }
-
     virtual ~daPirate_Flag_HIO_c() {
         mChildID = -1;
     }
+
+    void genMessage(JORMContext* ctx);
 
 public:
     /* 0x04 */ s8 mChildID;

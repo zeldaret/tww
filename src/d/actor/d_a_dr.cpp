@@ -206,7 +206,7 @@ static BOOL daDr_IsDelete(dr_class* i_this) {
 static BOOL daDr_Delete(dr_class* i_this) {
     dComIfG_resDelete(&i_this->mPhs, "Dr");
     if (l_HIO.mChildID >= 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildID);
+        mDoHIO_deleteChild(l_HIO.mChildID);
     }
     return TRUE;
 }
@@ -246,7 +246,7 @@ static s32 daDr_Create(fopAc_ac_c* i_actor) {
         daDr_setMtx(i_this);
         
         if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("ドラゴン", &l_HIO); // "Dragon"
+            l_HIO.mChildID = mDoHIO_createChild("ドラゴン", &l_HIO); // "Dragon"
         }
     }
     

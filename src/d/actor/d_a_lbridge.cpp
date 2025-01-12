@@ -240,7 +240,7 @@ void daLbridge_c::appear_bridge() {
         mpEmitter->playDrawParticle();
     }
 
-    mTimer = 0x1F;
+    mTimer = 31;
     unk31C = 1;
 }
 

@@ -51,7 +51,7 @@ s32 daObjQuake_c::_create() {
         }
 
         if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("振動効果", &l_HIO); // "Vibration Effect"
+            l_HIO.mChildID = mDoHIO_createChild("振動効果", &l_HIO); // "Vibration Effect"
         }
 
         l_HIO.field_0x08 += 1;
@@ -82,7 +82,7 @@ BOOL daObjQuake_c::_is_delete() {
     if (l_HIO.mChildID >= 0) {
         l_HIO.field_0x08 -= 1;
         if (l_HIO.field_0x08 == 0) {
-            mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildID);
+            mDoHIO_deleteChild(l_HIO.mChildID);
             l_HIO.mChildID = -1;
         }
     }

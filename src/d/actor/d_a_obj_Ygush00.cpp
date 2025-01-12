@@ -7,7 +7,6 @@
 #include "d/res/res_ygush00.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
@@ -17,9 +16,23 @@
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+
 namespace {
     static const char l_arcname[] = "Ygush00";
 };
+
+#ifdef DEBUG
+static daObjYgush00_HIO_c l_HIO;
+#endif
+
+daObjYgush00_HIO_c::daObjYgush00_HIO_c() {
+    
+}
+
+void daObjYgush00_HIO_c::genMessage(JORMContext* ctx) {
+    ctx->genCheckBox(NULL, NULL, 0, 0, NULL, 0, 0, 0, 0); // placeholder
+}
 
 /* 00000078-0000009C       .text solidHeapCB__14daObjYgush00_cFP10fopAc_ac_c */
 BOOL daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
@@ -57,8 +70,8 @@ bool daObjYgush00_c::create_heap() {
 s32 daObjYgush00_c::_create() {
     fopAcM_SetupActor(this, daObjYgush00_c);
 
-    if (fpcM_IsFirstCreating(this)) {
-        u32 type = daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
+    if (fopAcM_IsFirstCreating(this)) {
+        u32 type = param_get_arg();
         mType = type;
         if ((int)mType < 0 || 4 <= (int)mType)
             mType = 0;
@@ -76,6 +89,12 @@ s32 daObjYgush00_c::_create() {
             fopAcM_setCullSizeBox(this,
                 scale.x * -80.0f, 0.0f, scale.z * -80.0f,
                 scale.x * 80.0f, scale.y * 125.0f, scale.z * 80.0f);
+
+#ifdef DEBUG
+                if (l_HIO.mChildID < 0) {
+                    l_HIO.mChildID = mDoHIO_createChild("", &l_HIO);
+                }
+#endif
         } else {
             ret = cPhs_ERROR_e;
         }
@@ -87,6 +106,14 @@ s32 daObjYgush00_c::_create() {
 /* 000004F4-00000524       .text _delete__14daObjYgush00_cFv */
 bool daObjYgush00_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcname);
+
+#ifdef DEBUG
+    if (l_HIO.mChildID >= 0) {
+        mDoHIO_deleteChild(l_HIO.mChildID);
+        l_HIO.mChildID = -1;
+    }
+#endif
+
     return true;
 }
 
@@ -144,6 +171,14 @@ static BOOL daObjYgush00_Draw(daObjYgush00_c* i_this) {
 
 /* 00000788-00000790       .text daObjYgush00_IsDelete__FP14daObjYgush00_c */
 static BOOL daObjYgush00_IsDelete(daObjYgush00_c* i_this) {
+    return TRUE;
+}
+
+static BOOL daObjYgush00_ToFore(daObjYgush00_c* i_this) {
+    return TRUE;
+}
+
+static BOOL daObjYgush00_ToBack(daObjYgush00_c* i_this) {
     return TRUE;
 }
 

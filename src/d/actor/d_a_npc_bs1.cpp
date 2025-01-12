@@ -2102,15 +2102,14 @@ BOOL daNpc_Bs1_c::_delete() {
         mpMorf->stopZelAnime();
     }
     if (l_HIO.m8 >= 0 && (l_HIO.m8 -= 1) < 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildId);
+        mDoHIO_deleteChild(l_HIO.mChildId);
     }
     return TRUE;
 }
 
 /* 00004960-00004980       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
-    ((daNpc_Bs1_c*)i_this)->CreateHeap();
-    return;
+    return ((daNpc_Bs1_c*)i_this)->CreateHeap();
 }
 
 /* 00004980-00004AD8       .text _create__11daNpc_Bs1_cFv */
@@ -2140,7 +2139,7 @@ s32 daNpc_Bs1_c::_create() {
         } else {
             fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
             if (l_HIO.m8 < 0) {
-                l_HIO.mChildId = mDoHIO_root.mDoHIO_createChild("ボ−トショップ店員", &l_HIO); // "Boat Shopkeeper"
+                l_HIO.mChildId = mDoHIO_createChild("ボ−トショップ店員", &l_HIO); // "Boat Shopkeeper"
             }
             l_HIO.m8 += 1;
             if (!CreateInit()) {

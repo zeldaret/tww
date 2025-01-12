@@ -124,6 +124,9 @@ public:
     daTbox_HIO_c();
     virtual ~daTbox_HIO_c() { }
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 mHioId;
     /* 0x06 */ s16 m06;
     /* 0x08 */ s16 m08;

@@ -189,6 +189,8 @@ public:
     daNpc_Bs1_HIO_c();
     virtual ~daNpc_Bs1_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x000 */ // this.__vt
     /* 0x004 */ s8 mChildId;

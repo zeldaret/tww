@@ -456,7 +456,7 @@ s32 daNpc_Md_c::create() {
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
         if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("リト族（メドリ）", &l_HIO); // "Rito (Medli)" (Ritozoku (Medli))
+            l_HIO.mChildID = mDoHIO_createChild("リト族（メドリ）", &l_HIO); // "Rito (Medli)" (Ritozoku (Medli))
             l_HIO.mpActor = this;
         }
         
@@ -3049,7 +3049,7 @@ daNpc_Md_c::~daNpc_Md_c() {
     m304C.end();
     m3074.remove();
     if (l_HIO.mChildID >= 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildID);
+        mDoHIO_deleteChild(l_HIO.mChildID);
         l_HIO.mChildID = -1;
     }
     m_flying = false;

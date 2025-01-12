@@ -9815,7 +9815,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
 };
 
 /* 803886B0-803888B4       .data effect_info__10dItem_data */
-dItem_data_effect_info dItem_data::effect_info[0x81] = {
+dItem_data_effect_info dItem_data::effect_info[] = {
     {
         // 0x00: dItem_HEART_e
         0x0002,
@@ -10465,7 +10465,7 @@ dItem_data_effect_info dItem_data::effect_info[0x81] = {
 
 /* 800C12F4-800C1334       .text checkAppearEffect__10dItem_dataFUc */
 bool dItem_data::checkAppearEffect(u8 no) {
-    if (no > 0x80) {
+    if (no > ARRAY_SIZE(effect_info)-1) {
         return false;
     }
     return effect_info[no].m_appear != dPa_name::ID_SCENE_END;
@@ -10479,7 +10479,7 @@ u16 dItem_data::getAppearEffect(u8 no) {
 
 /* 800C13B4-800C13F8       .text checkSpecialEffect__10dItem_dataFUc */
 bool dItem_data::checkSpecialEffect(u8 no) {
-    if (no > 0x80) {
+    if (no > ARRAY_SIZE(effect_info)-1) {
         return false;
     }
     return effect_info[no].m_sp_effect != dPa_name::ID_SCENE_END;
