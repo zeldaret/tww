@@ -764,7 +764,7 @@ fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c* i_this) {
 }
 
 /* 80026118-800261E8       .text fopAcM_createItemForPresentDemo__FP4cXyziUciiP5csXyzP4cXyz */
-fpc_ProcID fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, int roomNo, int param_5, csXyz* rot, cXyz* scale) {
+fpc_ProcID fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, int roomNo, int param_5, csXyz* angle, cXyz* scale) {
     JUT_ASSERT(2413, 0 <= i_itemNo && i_itemNo < 256);
 
     dComIfGp_event_setGtItm(i_itemNo);
@@ -773,11 +773,11 @@ fpc_ProcID fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, 
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    return fopAcM_createDemoItem(pos, i_itemNo, roomNo, rot, param_5, scale, argFlag);
+    return fopAcM_createDemoItem(pos, i_itemNo, roomNo, angle, param_5, scale, argFlag);
 }
 
 /* 800261E8-800262B4       .text fopAcM_createItemForTrBoxDemo__FP4cXyziiiP5csXyzP4cXyz */
-fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param_5, csXyz* rot, cXyz* scale) {
+fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param_5, csXyz* angle, cXyz* scale) {
     JUT_ASSERT(2458, 0 <= i_itemNo && i_itemNo < 256);
 
     dComIfGp_event_setGtItm(i_itemNo);
@@ -786,7 +786,7 @@ fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, in
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    return fopAcM_createDemoItem(pos, i_itemNo, roomNo, rot, param_5, scale, 0x00);
+    return fopAcM_createDemoItem(pos, i_itemNo, roomNo, angle, param_5, scale, 0x00);
 }
 
 /* 800262B4-80026694       .text fopAcM_createItemFromTable__FP4cXyziiiiP5csXyziP4cXyz */
@@ -857,7 +857,7 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo
                 }
 
                 itemNo = getItemNoByLife((s8)itemNo);
-                daItem_c* item = (daItem_c*)fopAcM_fastCreateItem2(&pos, itemNo, i_itemBitNo, roomNo, type, &angle, 8);
+                daItem_c* item = (daItem_c*)fopAcM_fastCreateItem2(&pos, itemNo, i_itemBitNo, roomNo, type, &angle, daItemAct_8_e);
 
                 lastItemPID = fopAcM_GetID(item);
                 if (lastItemPID == fpcM_ERROR_PROCESS_ID_e) {
@@ -901,18 +901,18 @@ fpc_ProcID fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBit
 }
 
 /* 800267C8-8002688C       .text fopAcM_createShopItem__FP4cXyziP5csXyziP4cXyzPFPv_i */
-fpc_ProcID fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz* scale,
+fpc_ProcID fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* angle, int roomNo, cXyz* scale,
                            createFunc createFunc) {
     JUT_ASSERT(2716, 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    return fopAcM_create(PROC_ShopItem, i_itemNo, pos, roomNo, rot, scale, -1, createFunc);
+    return fopAcM_create(PROC_ShopItem, i_itemNo, pos, roomNo, angle, scale, -1, createFunc);
 }
 
 /* 8002688C-80026980       .text fopAcM_createRaceItem__FP4cXyziiP5csXyziP4cXyzi */
-fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, int param_7) {
+fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* angle, int roomNo, cXyz* scale, int param_7) {
     JUT_ASSERT(2763, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
@@ -920,33 +920,33 @@ fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz
 
     i_itemNo = check_itemno(i_itemNo);
     u32 params = (i_itemBitNo & 0x7F) << 0x08 | i_itemNo & 0xFF | (param_7 & 0xF) << 0xF;
-    return fopAcM_create(PROC_RACEITEM, params, pos, roomNo, rot, scale);
+    return fopAcM_create(PROC_RACEITEM, params, pos, roomNo, angle, scale);
 }
 
 /* 80026980-80026A68       .text fopAcM_createDemoItem__FP4cXyziiP5csXyziP4cXyzUc */
-fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, u8 argFlag) {
+fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* angle, int roomNo, cXyz* scale, u8 argFlag) {
     JUT_ASSERT(2813, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
     u32 params = i_itemNo & 0xFF | (i_itemBitNo & 0x7F) << 0x08 | (argFlag & 0xFF) << 0x10;
-    return fopAcM_create(PROC_Demo_Item, params, pos, roomNo, rot, scale);
+    return fopAcM_create(PROC_Demo_Item, params, pos, roomNo, angle, scale);
 }
 
 /* 80026A68-80026ADC       .text fopAcM_createItemForBoss__FP4cXyziiP5csXyzP4cXyzi */
-fpc_ProcID fopAcM_createItemForBoss(cXyz* pos, int, int roomNo, csXyz* rot, cXyz* scale, int param_6) {
+fpc_ProcID fopAcM_createItemForBoss(cXyz* pos, int unused, int roomNo, csXyz* angle, cXyz* scale, int param_6) {
     switch (param_6) {
     case 1:
-        return fopAcM_createItem(pos, dItem_HEART_CONTAINER_e, -1, roomNo, 3, rot, 0xC, scale);
-    case 0:
+        return fopAcM_createItem(pos, dItem_HEART_CONTAINER_e, -1, roomNo, daItemType_3_e, angle, daItemAct_BOSS_e, scale);
+    case 0: // Disappear
     default:
-        return fopAcM_createItem(pos, dItem_HEART_CONTAINER_e, -1, roomNo, 3, rot, 5, scale);
+        return fopAcM_createItem(pos, dItem_HEART_CONTAINER_e, -1, roomNo, daItemType_3_e, angle, daItemAct_BOSS_DISAPPEAR_e, scale);
     }
 }
 
 /* 80026ADC-80026C90       .text fopAcM_createItem__FP4cXyziiiiP5csXyziP4cXyz */
-fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* rot, int action, cXyz* scale) {
+fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* angle, int action, cXyz* scale) {
     int switchNo = 0xFF;
     int switchNo2 = 0xFF;
     
@@ -956,32 +956,32 @@ fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
         return fpcM_ERROR_PROCESS_ID_e;
     }
     
-    csXyz prmRot = csXyz::Zero;
-    if (rot) {
-        prmRot = *rot;
+    csXyz prmAngle = csXyz::Zero;
+    if (angle) {
+        prmAngle = *angle;
     }
-    prmRot.z = switchNo;
+    prmAngle.z = switchNo;
     
     u8 itemNo = check_itemno(i_itemNo);
     u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
     
     switch (i_itemNo) {
     case RECOVER_FAIRY:
-        return fopAcM_create(PROC_NPC_FA1, 1, pos, roomNo, rot, scale);
+        return fopAcM_create(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (int i = 0; i < 2; i++) {
-            fopAcM_create(PROC_ITEM, params, pos, roomNo, &prmRot, scale);
+            fopAcM_create(PROC_ITEM, params, pos, roomNo, &prmAngle, scale);
         }
         // Fall-through
     default:
-        return fopAcM_create(PROC_ITEM, params, pos, roomNo, &prmRot, scale);
+        return fopAcM_create(PROC_ITEM, params, pos, roomNo, &prmAngle, scale);
     }
 }
 
 /* 80026C90-80026E5C       .text fopAcM_fastCreateItem2__FP4cXyziiiiP5csXyziP4cXyz */
 void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type,
-                             csXyz* rot, int action, cXyz* scale)
+                             csXyz* angle, int action, cXyz* scale)
 {
     int switchNo = 0xFF;
     int switchNo2 = 0xFF;
@@ -990,41 +990,41 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
 
     int i;
     
-    csXyz prmRot = csXyz::Zero;
+    csXyz prmAngle = csXyz::Zero;
 
     if (i_itemNo == dItem_NONE_e) {
         return NULL;
     }
 
-    if (rot) {
-        prmRot = *rot;
+    if (angle) {
+        prmAngle = *angle;
     }
-    prmRot.z = switchNo;
+    prmAngle.z = switchNo;
 
     u8 itemNo = check_itemno(i_itemNo);
     u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
 
     switch (i_itemNo) {
     case RECOVER_FAIRY:
-        return fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, rot, scale);
+        return fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (i = 0; i < 2; i++) {
-            fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmRot, scale);
+            fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmAngle, scale);
         }
         // Fall-through
     default:
-        return fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmRot, scale);
+        return fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmAngle, scale);
     }
 }
 
 /* 80026E5C-80026F5C       .text fopAcM_createItemForKP2__FP4cXyziiP5csXyzP4cXyzfffUs */
-fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXyz* scale, f32 speedF, f32 speedY, f32 gravity, u16 i_itemBitNo) {
+fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale, f32 speedF, f32 speedY, f32 gravity, u16 i_itemBitNo) {
     JUT_ASSERT(0xc25, 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == dItem_NONE_e)
         return NULL;
 
-    fopAc_ac_c* ac = (fopAc_ac_c*)fopAcM_fastCreate(PROC_SPC_ITEM01, i_itemNo | (i_itemBitNo & 0xFFFF) << 8, pos, roomNo, rot, scale);
+    fopAc_ac_c* ac = (fopAc_ac_c*)fopAcM_fastCreate(PROC_SPC_ITEM01, i_itemNo | (i_itemBitNo & 0xFFFF) << 8, pos, roomNo, angle, scale);
     if (ac != NULL) {
         fopAcM_SetSpeedF(ac, speedF);
         ac->speed.y = speedY;
@@ -1034,18 +1034,18 @@ fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* 
 }
 
 /* 80026F5C-80026F98       .text fopAcM_createItemForSimpleDemo__FP4cXyziiP5csXyzP4cXyzff */
-daItem_c* fopAcM_createItemForSimpleDemo(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXyz* scale, f32 speedF, f32 speedY) {
-    daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(pos, i_itemNo, roomNo, rot, scale, speedF, speedY, -7.0f);
+daItem_c* fopAcM_createItemForSimpleDemo(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale, f32 speedF, f32 speedY) {
+    daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(pos, i_itemNo, roomNo, angle, scale, speedF, speedY, -7.0f);
     if (item != NULL)
         item->setStatus(5);
     return item;
 }
 
 /* 80026F98-80027254       .text fopAcM_fastCreateItem__FP4cXyziiP5csXyzP4cXyzfffiPFPv_i */
-void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXyz* scale,
+void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale,
                             f32 speedF, f32 speedY, f32 gravity, int i_itemBitNo, createFunc createFunc) {
-    int type = 0;
-    int action = 0xA;
+    int type = daItemType_0_e;
+    int action = daItemAct_A_e;
     int switchNo = 0xFF;
     int switchNo2 = 0xFF;
     
@@ -1065,23 +1065,23 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
     }
 
     daItem_c* item;
-    csXyz prmRot;
+    csXyz prmAngle;
     switch (i_itemNo) {
     case RECOVER_FAIRY:
-        item = (daItem_c*)fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, rot, scale);
+        item = (daItem_c*)fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
         return item;
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (i = 0; i < 2; i++) {
-            if (rot) {
-                prmRot = *rot;
+            if (angle) {
+                prmAngle = *angle;
             } else {
-                prmRot = csXyz::Zero;
+                prmAngle = csXyz::Zero;
             }
-            prmRot.z = switchNo;
-            prmRot.y += (int)cM_rndFX(0x2000);
+            prmAngle.z = switchNo;
+            prmAngle.y += (int)cM_rndFX(0x2000);
 
-            item = (daItem_c*)fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmRot, scale, -1, createFunc);
+            item = (daItem_c*)fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmAngle, scale, -1, createFunc);
             if (item) {
                 item->speedF = speedF * (1.0f + cM_rndFX(0.3f));
                 item->speed.y = speedY * (1.0f + cM_rndFX(0.2f));
@@ -1090,14 +1090,14 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
         }
         // Fall-through
     default:
-        if (rot) {
-            prmRot = *rot;
+        if (angle) {
+            prmAngle = *angle;
         } else {
-            prmRot = csXyz::Zero;
+            prmAngle = csXyz::Zero;
         }
-        prmRot.z = 0xFF;
+        prmAngle.z = 0xFF;
 
-        item = (daItem_c*)fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmRot, scale, -1, createFunc);
+        item = (daItem_c*)fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmAngle, scale, -1, createFunc);
         if (item) {
             item->speedF = speedF;
             item->speed.y = speedY;

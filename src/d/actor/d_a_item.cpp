@@ -159,7 +159,7 @@ void daItem_c::CreateInit() {
     mItemStatus = STATUS_UNK0;
     
     mType = daItem_prm::getType(this);
-    if (daItem_prm::getType(this) == 3 || daItem_prm::getType(this) == 1) {
+    if (daItem_prm::getType(this) == daItemType_3_e || daItem_prm::getType(this) == daItemType_1_e) {
         setFlag(FLAG_UNK02);
     }
     mAction = daItem_prm::getAction(this);
@@ -309,7 +309,7 @@ void daItem_c::mode_proc_call() {
         &daItem_c::mode_water,
     };
     
-    if (mType == 1) {
+    if (mType == daItemType_1_e) {
         itemDefaultRotateY();
     } else {
         (this->*mode_proc[mMode])();
@@ -333,8 +333,8 @@ void daItem_c::mode_proc_call() {
         }
     }
     
-    if (mType == 1 && (fopAcM_checkHookCarryNow(this) || checkFlag(FLAG_BOOMERANG))) {
-        mType = 3;
+    if (mType == daItemType_1_e && (fopAcM_checkHookCarryNow(this) || checkFlag(FLAG_BOOMERANG))) {
+        mType = daItemType_3_e;
     }
 }
 
@@ -430,7 +430,7 @@ void daItem_c::execMainGetDemoDirection() {
 
 /* 800F5D44-800F5D88       .text execBringNezumi__8daItem_cFv */
 void daItem_c::execBringNezumi() {
-    if (mType != 1) {
+    if (mType != daItemType_1_e) {
         fopAcM_posMoveF(this, mStts.GetCCMoveP());
     }
     mode_proc_call();
@@ -439,7 +439,7 @@ void daItem_c::execBringNezumi() {
 /* 800F5D88-800F5F40       .text execWaitMain__8daItem_cFv */
 void daItem_c::execWaitMain() {
     checkGetItem();
-    if (mType != 1) {
+    if (mType != daItemType_1_e) {
         fopAcM_posMoveF(this, mStts.GetCCMoveP());
     }
     mode_proc_call();
@@ -474,7 +474,7 @@ void daItem_c::execWaitMain() {
 /* 800F5F40-800F5FC0       .text execWaitMainFromBoss__8daItem_cFv */
 void daItem_c::execWaitMainFromBoss() {
     checkGetItem();
-    if (mType != 1) {
+    if (mType != daItemType_1_e) {
         fopAcM_posMoveF(this, mStts.GetCCMoveP());
     }
     mode_proc_call();
@@ -853,16 +853,16 @@ BOOL daItem_c::itemActionForRupee() {
         field_0x650 = speed.y;
     }
     
-    field_0x654 = getData()->mRotateXSpeed;
+    mRotateSpeed = getData()->mRotateXSpeed;
     
     if (mOnGroundTimer == 0) {
-        mTargetAngleX = current.angle.x + field_0x654;
+        mTargetAngleX = current.angle.x + mRotateSpeed;
     } else {
         mTargetAngleX = 0;
     }
     
     if (!checkFlag(FLAG_UNK02)) {
-        cLib_chaseAngleS(&current.angle.x, mTargetAngleX, field_0x654);
+        cLib_chaseAngleS(&current.angle.x, mTargetAngleX, mRotateSpeed);
     }
     
     return TRUE;
@@ -903,7 +903,7 @@ BOOL daItem_c::itemActionForKey() {
             speedF = 0.0f;
             current.angle.x = 0x4000;
             mTargetAngleX = current.angle.x;
-            field_0x654 = 0;
+            mRotateSpeed = 0;
         } else {
             speed.set(0.0f, -temp2, 0.0f);
         }
@@ -924,15 +924,15 @@ BOOL daItem_c::itemActionForKey() {
         field_0x650 = speed.y;
     }
     
-    field_0x654 = getData()->mRotateXSpeed;
+    mRotateSpeed = getData()->mRotateXSpeed;
     
     if (mOnGroundTimer == 0) {
-        mTargetAngleX = current.angle.x + field_0x654;
+        mTargetAngleX = current.angle.x + mRotateSpeed;
     } else {
         mTargetAngleX = 0;
     }
     
-    cLib_chaseAngleS(&current.angle.x, mTargetAngleX, field_0x654);
+    cLib_chaseAngleS(&current.angle.x, mTargetAngleX, mRotateSpeed);
     
     return TRUE;
 }
@@ -1079,10 +1079,10 @@ BOOL daItem_c::itemActionForArrow() {
         if (mOnGroundTimer != 0) {
             getData();
             s16 rotationSpeed = 0xFFFF / getData()->mRotateYSpeed;
-            cLib_addCalcAngleS(&field_0x654, rotationSpeed, 10, 0x400, 0x100);
+            cLib_addCalcAngleS(&mRotateSpeed, rotationSpeed, 10, 0x400, 0x100);
         }
         
-        cLib_chaseAngleS(&shape_angle.y, shape_angle.y + field_0x654, field_0x654);
+        cLib_chaseAngleS(&shape_angle.y, shape_angle.y + mRotateSpeed, mRotateSpeed);
     }
     
     if (speed.y != 0.0f) {
@@ -1226,7 +1226,7 @@ void daItem_c::mode_water_init() {
     current.angle.z = 0;
     current.angle.x = 0;
     mExtraZRot = 0;
-    field_0x654 = 0;
+    mRotateSpeed = 0;
     clrFlag(FLAG_UNK04);
     scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     
@@ -1333,26 +1333,26 @@ BOOL daItem_c::initAction() {
         scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
         
         switch (mAction) {
-        case 4: {
+        case daItemAct_4_e: {
             current.angle.y = cM_rndF((f32)0xFFFF);
             f32 temp = getData()->field_0x2C + cM_rndF(5.0f);
             speedF = cM_rndF(getData()->field_0x30);
             speed.set(0.0f, temp, 0.0f);
             break;
         }
-        case 5:
+        case daItemAct_BOSS_DISAPPEAR_e:
             speed.setall(0.0f);
             speedF = 0.0f;
             scale.setall(0.0f);
             mItemStatus = STATUS_WAIT_BOSS1;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
-            field_0x654 = 0x4A8;
+            mRotateSpeed = 0x4A8;
             break;
-        case 0xC:
+        case daItemAct_BOSS_e:
             scale.setall(1.0f);
             mItemStatus = STATUS_WAIT_BOSS2;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
-            field_0x654 = 0x4A8;
+            mRotateSpeed = 0x4A8;
             break;
         }
         
@@ -1363,10 +1363,12 @@ BOOL daItem_c::initAction() {
         return TRUE;
     }
     
-    // TODO: bug? usage of uninitialized register f31 in some cases
+    // Bug: Usage of uninitialized variable y_speed (register f31) in some cases.
+    // In practice only daItem_c::CreateInit calls daItem_c::initAction, which means y_speed will
+    // be set to the item's collision height if the action is 0, 5, or 0xA.
     f32 y_speed;
     switch (mAction) {
-    case 1:
+    case daItemAct_1_e:
         y_speed = getData()->mLaunchSpeed + cM_rndFX(5.0f);
         speedF = getData()->mSpeedH / 10.0f;
         if (g_mDoCPd_cpadInfo[0].mMainStickValue) {
@@ -1374,43 +1376,43 @@ BOOL daItem_c::initAction() {
         }
         current.angle.y = cM_rndF((f32)0xFFFF);
         break;
-    case 3:
+    case daItemAct_3_e:
         y_speed = 25.0f;
         current.angle.y = cM_rndF((f32)0xFFFF);
         speedF = getData()->mVelocityScale;
         break;
-    case 7:
+    case daItemAct_7_e:
         speedF = getData()->mVelocityScale * 1.5f;
         current.angle.y = cM_rndF((f32)0xFFFF);
         y_speed = getData()->mLaunchSpeed + cM_rndFX(5.0f);
         break;
-    case 2:
-    case 4:
-    case 9:
+    case daItemAct_2_e:
+    case daItemAct_4_e:
+    case daItemAct_9_e:
         speedF = 0.0f;
         current.angle.y = cM_rndF((f32)0xFFFF);
         y_speed = getData()->mLaunchSpeed + cM_rndFX(5.0f);
         break;
-    case 8:
+    case daItemAct_8_e:
         current.angle.y = cM_rndF((f32)0xFFFF);
         y_speed = getData()->field_0x44 + cM_rndFX(5.0f);
         speedF = getData()->mVelocityScale;
         break;
-    case 0xA:
+    case daItemAct_A_e:
         gravity = getData()->mGravity;
         scale.setall(0.0f);
         mMode = MODE_WAIT;
         break;
-    case 0xB:
+    case daItemAct_B_e:
         current.angle.y = cM_rndF((f32)0xFFFF);
         y_speed = 0.0f;
         speedF = 0.0f;
         break;
-    case 6:
+    case daItemAct_6_e:
         y_speed = getData()->mLaunchSpeed + cM_rndFX(5.0f);
         break;
-    case 0:
-    case 5:
+    case daItemAct_0_e:
+    case daItemAct_BOSS_DISAPPEAR_e:
         break;
     }
     

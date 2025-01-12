@@ -107,7 +107,7 @@ public:
     /* 0x648 */ s32 mSpawnSwitchNo;
     /* 0x64C */ s32 mCollideSwitchNo;
     /* 0x650 */ f32 field_0x650;
-    /* 0x654 */ s16 field_0x654;
+    /* 0x654 */ s16 mRotateSpeed;
     /* 0x656 */ s16 mTargetAngleX;
     /* 0x658 */ s16 mWaitTimer;
     /* 0x65A */ s16 mDisappearTimer;

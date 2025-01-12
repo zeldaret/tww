@@ -135,7 +135,8 @@ bool daSwItem_c::_execute() {
         csXyz angle(0, home.angle.y, 0);
         fpc_ProcID itemProcId = fopAcM_createItemFromTable(
             &current.pos, itemTbl, itemBitNo,
-            fopAcM_GetHomeRoomNo(this), 0, &angle, 1
+            fopAcM_GetHomeRoomNo(this), daItemType_0_e,
+            &angle, daItemAct_1_e
         );
 
         daItem_c* item = (daItem_c*)fopAcM_SearchByID(itemProcId);
