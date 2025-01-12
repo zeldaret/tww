@@ -70,7 +70,7 @@ BOOL daObjHbrf1::Act_c::Delete() {
 BOOL daObjHbrf1::Act_c::Mthd_Delete() {
     BOOL ret = MoveBGDelete();
 
-    // Debug map shows dComIfG_deleteObjectRes here?
+    // The demo version (and thus the demo debug maps) used dComIfG_deleteObjectRes here instead.
     dComIfG_resDelete(&mPhs, M_arcname);
 
     return ret;
