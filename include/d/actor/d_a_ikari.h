@@ -14,6 +14,8 @@ public:
     }
     virtual ~daObjIkariHIO_c(){};
 
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x04 */ u8 unk[2];
     /* 0x08 */ f32 mWindPowerScale;

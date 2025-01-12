@@ -20,6 +20,9 @@ public:
     dSn_HIO_c();
     virtual ~dSn_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 field_0x4;
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u8 field_0x6;

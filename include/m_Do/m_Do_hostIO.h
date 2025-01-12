@@ -4,15 +4,36 @@
 #include "dolphin/types.h"
 
 // move JOR stuff later
+class JOREventListener;
+class JORPropertyEvent;
+class JORNodeEvent;
+class JORGenEvent;
+class JOREvent;
+
+class JORMContext {
+public:
+    void genCheckBox(const char* param_1, u8* param_2, u8 param_3, u32 param_4, JOREventListener* param_5, u16 param_6, u16 param_7, u16 param_8, u16 param_9) {
+        genCheckBoxSub(0x108, param_1, (u32)param_2, param_4, *param_2, param_3, param_5, param_6, param_7, param_8, param_9);
+    }
+    void genCheckBoxSub(u32, const char*, u32, u32, u16, u16, JOREventListener*, u16, u16, u16, u16);
+};
+
 class JOREventListener {
 public:
-
+#ifdef DEBUG
+    virtual ~JOREventListener() = 0;
+#endif
 };
 
 class JORReflexible : public JOREventListener {
 public:
 #ifdef DEBUG
-    virtual ~JORReflexible() {}
+    virtual ~JORReflexible() = 0;
+    virtual void genMessage(JORMContext* ctx) = 0;
+    virtual void listen(u32, const JOREvent*);
+    virtual void genObjectInfo(const JORGenEvent*);
+    virtual void listenNodeEvent(const JORNodeEvent*);
+    virtual void listenPropertyEvent(const JORPropertyEvent*);
 #endif
 };
 

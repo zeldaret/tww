@@ -36,6 +36,9 @@ public:
     daObj_Roten_HIO_c();
     virtual ~daObj_Roten_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 field_0x04;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ s16 field_0x0C;

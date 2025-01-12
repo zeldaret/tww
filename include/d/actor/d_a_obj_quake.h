@@ -39,6 +39,8 @@ public:
     daObjQuake_HIO_c();
     virtual ~daObjQuake_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x04 */ s8 mChildID;
     /* 0x08 */ s32 field_0x08;

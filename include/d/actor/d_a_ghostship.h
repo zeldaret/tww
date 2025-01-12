@@ -78,6 +78,9 @@ public:
     daGhostship_HIO_c();
     ~daGhostship_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ u8 field_0x04;
     /* 0x05 */ bool hideShip;
     /* 0x08 */ f32 shipAlpha;

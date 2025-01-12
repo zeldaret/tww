@@ -1,7 +1,6 @@
 #ifndef D_A_NPC_OS_H
 #define D_A_NPC_OS_H
 
-#include "f_op/f_op_actor.h"
 #include "d/d_bg_s_acch.h"
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "SSystem/SComponent/c_phase.h"
@@ -230,6 +229,8 @@ public:
     daNpc_Os_HIO2_c();
     virtual ~daNpc_Os_HIO2_c() {}
 
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x00 - vtable */
 
@@ -250,6 +251,8 @@ class daNpc_Os_HIO_c : public JORReflexible {
 public:
     daNpc_Os_HIO_c();
     virtual ~daNpc_Os_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
 
 public:
     /* 0x00 - vtable*/

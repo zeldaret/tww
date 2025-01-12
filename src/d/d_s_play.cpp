@@ -30,6 +30,7 @@
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_overlap_mng.h"
+#include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_audio.h"
