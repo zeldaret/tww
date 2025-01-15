@@ -50,7 +50,7 @@ public:
     }
 
     ~JUTTexture();
-    void storeTIMG(ResTIMG const*, JUTPalette*, _GXTlut);
+    void storeTIMG(ResTIMG const*, JUTPalette*, GXTlut);
     void storeTIMG(ResTIMG const*, u8);
     void storeTIMG(ResTIMG const*, JUTPalette*);
     void attachPalette(JUTPalette*);

@@ -101,7 +101,7 @@ void dMCloth_c::ShadowTevSetting() {
 }
 
 /* 8019ADD4-8019B670       .text draw__9dMCloth_cFf8_GXColor8_GXColorUc */
-void dMCloth_c::draw(float, _GXColor, _GXColor, unsigned char) {
+void dMCloth_c::draw(float, GXColor, GXColor, unsigned char) {
     /* Nonmatching */
 }
 

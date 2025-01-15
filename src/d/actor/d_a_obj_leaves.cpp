@@ -20,7 +20,7 @@ void daObjLeaves_c::init_mtx() {
 }
 
 /* 00000148-000002E4       .text birthEffect__13daObjLeaves_cFiP4cXyzP5csXyzP8_GXColor */
-void daObjLeaves_c::birthEffect(int, cXyz*, csXyz*, _GXColor*) {
+void daObjLeaves_c::birthEffect(int, cXyz*, csXyz*, GXColor*) {
     /* Nonmatching */
 }
 

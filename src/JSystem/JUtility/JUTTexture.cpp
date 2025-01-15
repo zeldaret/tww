@@ -20,7 +20,7 @@ JUTTexture::~JUTTexture() {
 
 /* 802C1470-802C15FC       .text storeTIMG__10JUTTextureFPC7ResTIMGUc */
 void JUTTexture::storeTIMG(const ResTIMG* pTimg, u8 param_1) {
-    _GXTlut tlut;
+    GXTlut tlut;
 
     if (pTimg && param_1 < 0x10) {
         mTexInfo = pTimg;
@@ -71,7 +71,7 @@ void JUTTexture::attachPalette(JUTPalette* pPalette) {
         } else {
             mAttachedPalette = pPalette;
         }
-        _GXTlut name = (GXTlut)mAttachedPalette->getTlutName();
+        GXTlut name = (GXTlut)mAttachedPalette->getTlutName();
         initTexObj(name);
     }
 }

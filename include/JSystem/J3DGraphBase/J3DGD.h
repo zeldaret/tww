@@ -53,7 +53,7 @@ inline void J3DGXCmd1f32ptr(f32* value) {
     GXFIFO.u32 = *(u32*)value;
 }
 
-void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevStageNum, u8 IndTexStageNum, _GXCullMode cullMode);
+void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevStageNum, u8 IndTexStageNum, GXCullMode cullMode);
 void J3DGDSetGenMode_3Param(u8 texGenNum, u8 tevStageNum, u8 indTexStageNum);
 void J3DGDSetIndTexStageNum(u32);
 void J3DGDSetLightAttn(GXLightID, f32, f32, f32, f32, f32, f32);

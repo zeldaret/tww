@@ -55,7 +55,7 @@ public:
     void calcChild(JPABaseParticle*);
     void initParticle(JPABaseParticle*);
     void initChild(JPABaseParticle*, JPABaseParticle*);
-    bool loadTexture(u8, _GXTexMapID);
+    bool loadTexture(u8, GXTexMapID);
     void setDrawExecVisitorsBeforeCB(const JPADraw::JPADrawVisitorDefFlags&);
     void setDrawExecVisitorsAfterCB(const JPADraw::JPADrawVisitorDefFlags&);
     void setDrawCalcVisitors(const JPADraw::JPADrawVisitorDefFlags&);

@@ -304,7 +304,7 @@ dPa_smokeEcallBack::dPa_smokeEcallBack(u8 param_1, u8 param_2, u8 param_3, u8 pa
 }
 
 /* 8007B558-8007B5E8       .text __ct__18dPa_smokeEcallBackFRC8_GXColorP12dKy_tevstr_cUc */
-dPa_smokeEcallBack::dPa_smokeEcallBack(const _GXColor& param_1, dKy_tevstr_c* param_2, u8 param_3) {
+dPa_smokeEcallBack::dPa_smokeEcallBack(const GXColor& param_1, dKy_tevstr_c* param_2, u8 param_3) {
     field_0x16 = param_1;
     mTevstr = param_2;
     mRateOff = param_3;
@@ -880,7 +880,7 @@ bool dPa_control_c::newSimple(u16 param_1, u8 param_2) {
 }
 
 /* 8007DBC4-8007DC30       .text setSimple__13dPa_control_cFUsPC4cXyzUcRC8_GXColorRC8_GXColori */
-bool dPa_control_c::setSimple(u16 param_1, const cXyz* param_2, u8 param_3, const _GXColor& param_4, const _GXColor& param_5, int param_6) {
+bool dPa_control_c::setSimple(u16 param_1, const cXyz* param_2, u8 param_3, const GXColor& param_4, const GXColor& param_5, int param_6) {
     dPa_simpleEcallBack* simple = getSimple(param_1);
     if (simple == NULL) {
         return false;

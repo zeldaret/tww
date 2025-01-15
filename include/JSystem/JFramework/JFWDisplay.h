@@ -40,8 +40,8 @@ public:
         /* 0x1 */ Async = 1,
     };
 
-    void ctor_subroutine(const _GXRenderModeObj*, bool enableAlpha);
-    JFWDisplay(const _GXRenderModeObj*, JKRHeap*, JUTXfb::EXfbNumber, bool);
+    void ctor_subroutine(const GXRenderModeObj*, bool enableAlpha);
+    JFWDisplay(const GXRenderModeObj*, JKRHeap*, JUTXfb::EXfbNumber, bool);
     static JFWDisplay* createManager(JKRHeap*, JUTXfb::EXfbNumber, bool);
     void prepareCopyDisp();
     void drawendXfb_single();
@@ -103,7 +103,7 @@ public:
 
 private:
     /* 0x04 */ JUTFader* mpFader;
-    /* 0x08 */ const _GXRenderModeObj* mpRenderMode;
+    /* 0x08 */ const GXRenderModeObj* mpRenderMode;
     /* 0x0C */ JUtility::TColor mClearColor;
     /* 0x10 */ u32 mZClear;
     /* 0x14 */ JUTXfb* mXfbManager;

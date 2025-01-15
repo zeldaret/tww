@@ -282,7 +282,7 @@ f32 JUTResFont::drawChar_scale(f32 posX, f32 posY, f32 scaleX, f32 scaleY, int c
 }
 
 /* 802C2D6C-802C2DE8       .text loadFont__10JUTResFontFi11_GXTexMapIDPQ27JUTFont6TWidth */
-void JUTResFont::loadFont(int code, _GXTexMapID texMapID, JUTFont::TWidth* pDstWidth) {
+void JUTResFont::loadFont(int code, GXTexMapID texMapID, JUTFont::TWidth* pDstWidth) {
     if (pDstWidth) {
         getWidthEntry(code, pDstWidth);
     }
@@ -397,7 +397,7 @@ int JUTResFont::getFontCode(int chr) const {
 }
 
 /* 802C30E4-802C3248       .text loadImage__10JUTResFontFi11_GXTexMapID */
-void JUTResFont::loadImage(int code, _GXTexMapID id) {
+void JUTResFont::loadImage(int code, GXTexMapID id) {
     int i = 0;
     for (; i < mGlyphBlockNum; i++) {
         if (mpGlyphBlocks[i]->startCode <= code && code <= mpGlyphBlocks[i]->endCode) {
