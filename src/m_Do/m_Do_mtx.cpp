@@ -285,7 +285,7 @@ Mtx mDoMtx_stack_c::now;
 Mtx mDoMtx_stack_c::buffer[16];
 
 Mtx* mDoMtx_stack_c::next = mDoMtx_stack_c::buffer;
-Mtx* mDoMtx_stack_c::end = mDoMtx_stack_c::buffer + 16;
+Mtx* mDoMtx_stack_c::end = mDoMtx_stack_c::buffer + ARRAY_SIZE(mDoMtx_stack_c::buffer);
 
 /* 8000D74C-8000D7CC       .text push__14mDoMtx_stack_cFv */
 bool mDoMtx_stack_c::push() {

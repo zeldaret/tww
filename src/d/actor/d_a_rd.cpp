@@ -529,6 +529,7 @@ bool daRd_c::checkTgHit() {
             case 0x0F:
             case 0x10:
             case 0x15:
+            case 0x17:
             case 0x19:
             case 0x1A:
             case 0x1B:

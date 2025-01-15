@@ -181,13 +181,13 @@ void JPABaseEmitter::create(JPADataBlockLinkInfo* info) {
     mFieldManager.initField(info, &emtrInfo);
 
     switch (mVolumeType) {
+    case 4: mVolumeFunc = &JPABaseEmitter::calcVolumePoint; break;
+    case 6: mVolumeFunc = &JPABaseEmitter::calcVolumeLine; break;
+    case 5: mVolumeFunc = &JPABaseEmitter::calcVolumeCircle; break;
     case 0: mVolumeFunc = &JPABaseEmitter::calcVolumeCube; break;
     case 1: mVolumeFunc = &JPABaseEmitter::calcVolumeSphere; break;
     case 2: mVolumeFunc = &JPABaseEmitter::calcVolumeCylinder; break;
     case 3: mVolumeFunc = &JPABaseEmitter::calcVolumeTorus; break;
-    case 4: mVolumeFunc = &JPABaseEmitter::calcVolumePoint; break;
-    case 5: mVolumeFunc = &JPABaseEmitter::calcVolumeCircle; break;
-    case 6: mVolumeFunc = &JPABaseEmitter::calcVolumeLine; break;
     default: mVolumeFunc = NULL; break;
     }
 }

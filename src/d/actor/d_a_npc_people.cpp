@@ -430,7 +430,7 @@ static int* l_head_bck_ix_tbl[][2] = {
     },
     {
         l_head_bck_ix_sa,
-        l_head_bck_ix_sa,
+        l_head_bck_ix_sa_n,
     },
     {
         NULL,
@@ -3809,8 +3809,8 @@ static PsoData* l_pso_tbl[] = {
     &l_pso_uo3,
     &l_pso_ub4,
     &l_pso_uw2,
-    &l_pso_uw2_2,
     &l_pso_um2,
+    &l_pso_uw2_2,
 };
 
 const char daNpcPeople_c::m_arcname[] = "Uo";
@@ -4352,7 +4352,7 @@ s32 daNpcPeople_c::createInit() {
             m766[0] = dComIfGp_evmng_getEventIdx("SA3_GET_ITEM");
 
             break;
-        case 0xF: {
+        case 0x10: {
             m766[0] = dComIfGp_evmng_getEventIdx("SA5_TALK_XY");
             m766[1] = dComIfGp_evmng_getEventIdx("SA5_GET_ITEM");
 
@@ -4368,7 +4368,7 @@ s32 daNpcPeople_c::createInit() {
             }
             // Fall-through
         }
-        case 0x10:
+        case 0xF:
             if(mbIsNight) {
                 m758 |= 0x40000000;
             }
@@ -6164,7 +6164,7 @@ u16 daNpcPeople_c::talk2(int param_1, fopAc_ac_c* param_2) {
                 }
 
                 break;
-            case fopMsgStts_MSG_ENDS_e:
+            case fopMsgStts_UNKA_e:
                 if(m7A8 == 0) {
                     chkMsg();
                     m7A8 = 1;
@@ -7341,16 +7341,16 @@ void daNpcPeople_c::setAnmFromMsgTagSa(int param_1) {
         case 9:
             setAnmTbl(l_npc_anm_talk, 1);
             break;
-        case 2:
+        case 8:
             setAnmTbl(l_npc_anm_talk_sa, 1);
             break;
-        case 4:
+        case 2:
             setAnmTbl(l_npc_anm_talk2_sa, 1);
             break;
-        case 5:
+        case 4:
             setAnmTbl(l_npc_anm_talk3_sa, 1);
             break;
-        case 8:
+        case 5:
             setAnmTbl(l_npc_anm_kiai_sa, 1);
             break;
     }
@@ -8163,7 +8163,6 @@ void daNpcPeople_c::initUgSearchArea() {
     static u8 l_ug_no[] = {
         0x11,
         0x12,
-        0x00
     };
 
     for(int i = 0; i < 2; i++) {

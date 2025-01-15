@@ -46,15 +46,6 @@ namespace daWindTag {
     };
 }
 
-const char *daWindTag::daWindTag_c::m_arcname[] = { "Yaflw00", "Ybgaf00" };
-s16 daWindTag::daWindTag_c::m_bdlidx[] = { YAFLW00_BDL_YAFLW00, YBGAF00_BDL_YBGAF00 };
-s16 daWindTag::daWindTag_c::m_heapsize[] = { 0x0C40, 0x0C40 };
-s16 daWindTag::daWindTag_c::m_bckidx[] = { YAFLW00_BCK_YAFLW00, YBGAF00_BCK_YBGAF00 };
-s16 daWindTag::daWindTag_c::m_btkidx[] = { YAFLW00_BTK_YAFLW00_01, YBGAF00_BTK_YBGAF00_01 };
-s16 daWindTag::daWindTag_c::m_btkidx2[] = { YAFLW00_BTK_YAFLW00_02, YBGAF00_BTK_YBGAF00_02 };
-f32 daWindTag::daWindTag_c::m_cullsize_far = 4.0f;
-f32 daWindTag::daWindTag_c::m_ef_cullsize_far = 2.0f;
-
 /* 00000078-000000F0       .text _delete__Q29daWindTag11daWindTag_cFv */
 bool daWindTag::daWindTag_c::_delete() {
     if (mpEmitter != NULL) {
@@ -99,6 +90,15 @@ BOOL daWindTag::daWindTag_c::CreateHeap() {
 
     return TRUE;
 }
+
+const char *daWindTag::daWindTag_c::m_arcname[] = { "Yaflw00", "Ybgaf00" };
+s16 daWindTag::daWindTag_c::m_bdlidx[] = { YAFLW00_BDL_YAFLW00, YBGAF00_BDL_YBGAF00 };
+s16 daWindTag::daWindTag_c::m_heapsize[] = { 0x0C40, 0x0C40 };
+s16 daWindTag::daWindTag_c::m_bckidx[] = { YAFLW00_BCK_YAFLW00, YBGAF00_BCK_YBGAF00 };
+s16 daWindTag::daWindTag_c::m_btkidx[] = { YAFLW00_BTK_YAFLW00_01, YBGAF00_BTK_YBGAF00_01 };
+s16 daWindTag::daWindTag_c::m_btkidx2[] = { YAFLW00_BTK_YAFLW00_02, YBGAF00_BTK_YBGAF00_02 };
+f32 daWindTag::daWindTag_c::m_cullsize_far = 4.0f;
+f32 daWindTag::daWindTag_c::m_ef_cullsize_far = 2.0f;
 
 /* 000003E4-00000828       .text CreateInit__Q29daWindTag11daWindTag_cFv */
 void daWindTag::daWindTag_c::CreateInit() {
@@ -322,6 +322,7 @@ bool daWindTag::daWindTag_c::_draw() {
 /* 00001814-00001AA4       .text MoveEmitter__Q29daWindTag11daWindTag_cFv */
 void daWindTag::daWindTag_c::MoveEmitter() {
     /* Nonmatching */
+    cM3dGTri temp;
 }
 
 /* 00001B00-00001B20       .text daWindTag_Create__FPv */
