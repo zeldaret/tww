@@ -35,9 +35,9 @@ JUTXfb::JUTXfb(const _GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber 
         GXRenderModeObj* obj = JUTVideo::getManager()->getRenderMode();
         initiate(obj->fb_width, obj->xfb_height, pHeap, xfbNum);
 #else
-        u16 fb_width = JUTVideo::getManager()->getFbWidth();
-        u16 efb_height = JUTVideo::getManager()->getEfbHeight();
-        u16 xfb_height = JUTVideo::getManager()->getXfbHeight();
+        u16 fb_width = JUTVideo::getManager()->getRenderMode()->fb_width;
+        u16 efb_height = (u32)JUTVideo::getManager()->getRenderMode()->efb_height;
+        u16 xfb_height = JUTVideo::getManager()->getRenderMode()->xfb_height;
         f32 scale_factor = GXGetYScaleFactor(efb_height, xfb_height);
         u16 xfb_lines = GXGetNumXfbLines(efb_height, scale_factor);
 
