@@ -688,12 +688,14 @@ void dDlst_2D_c::draw() {
     mPicture.draw(mX, mY, false, false, false);
 }
 
+/* 80082264-80082274       .text init__8cM_rnd_cFiii */
 void cM_rnd_c::init(int a, int b, int c) {
     m0 = a;
     m4 = b;
     m8 = c;
 }
 
+/* 80082274-80082368       .text get__8cM_rnd_cFv */
 f32 cM_rnd_c::get() {
     m0 = (m0 * 171) % 30269;
     m4 = (m4 * 172) % 30307;
@@ -701,14 +703,17 @@ f32 cM_rnd_c::get() {
     return std::fabsf(std::fmodf((m0 / 30269.0f) + (m4 / 30307.0f) + (m8 / 30323.0f), 1.0f));
 }
 
+/* 80082368-800823A0       .text getF__8cM_rnd_cFf */
 f32 cM_rnd_c::getF(f32 m) {
     return get() * m;
 }
 
+/* 800823A0-800823E8       .text getFX__8cM_rnd_cFf */
 f32 cM_rnd_c::getFX(f32 m) {
     return m * (get() - 0.5f) * 2.0f;
 }
 
+/* 800823E8-80082424       .text getValue__8cM_rnd_cFff */
 f32 cM_rnd_c::getValue(f32 min, f32 range) {
     return min + getF(range);
 }
