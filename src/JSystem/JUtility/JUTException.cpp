@@ -264,7 +264,7 @@ bool JUTException::searchPartialModule(u32 address, u32* module_id, u32* section
         return false;
     }
 
-    OSModuleInfo* module = *(OSModuleInfo**)0x800030C8;
+    OSModuleInfo* module = __OSModuleList.head;
     for (; module != NULL; module = (OSModuleInfo*)module->link.next) {
         OSSectionInfo* section = (OSSectionInfo*)module->sectionInfoOffset;
         for (u32 i = 0; i < module->numSections; section++, i++) {

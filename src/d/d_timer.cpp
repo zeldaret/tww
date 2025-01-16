@@ -422,16 +422,16 @@ void dDlst_TimerScrnDraw_c::changeNumberTexture(J2DPane* pane, int no) {
 /* 8023CA78-8023CA8C       .text getNumber__21dDlst_TimerScrnDraw_cFi */
 const char* dDlst_TimerScrnDraw_c::getNumber(int no) {
     static const char* number[] = {
-        "s_rupy_num_00.bti",
-        "s_rupy_num_01.bti",
-        "s_rupy_num_02.bti",
-        "s_rupy_num_03.bti",
-        "s_rupy_num_04.bti",
-        "s_rupy_num_05.bti",
-        "s_rupy_num_06.bti",
-        "s_rupy_num_07.bti",
-        "s_rupy_num_08.bti",
-        "s_rupy_num_09.bti",
+        "rupy_num_00.bti",
+        "rupy_num_01.bti",
+        "rupy_num_02.bti",
+        "rupy_num_03.bti",
+        "rupy_num_04.bti",
+        "rupy_num_05.bti",
+        "rupy_num_06.bti",
+        "rupy_num_07.bti",
+        "rupy_num_08.bti",
+        "rupy_num_09.bti",
     };
 
     return number[no];

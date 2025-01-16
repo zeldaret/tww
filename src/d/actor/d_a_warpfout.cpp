@@ -86,7 +86,7 @@ void daWarpfout_c::initWarp1(int) {
 
 /* 000002A8-00000344       .text actWarp1__12daWarpfout_cFi */
 BOOL daWarpfout_c::actWarp1(int) {
-    if (mTimer == 0x4) {
+    if (mTimer == 4) {
         cXyz effectPos = dComIfGp_getLinkPlayer()->current.pos;
         effectPos.y += 40.0f;
 

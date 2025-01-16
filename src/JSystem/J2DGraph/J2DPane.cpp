@@ -94,7 +94,7 @@ void J2DPane::makePaneStream(J2DPane* pParentPane, JSURandomInputStream* pStream
         setBasePosition((J2DBasePosition)pStream->readU8());
         size--;
     } else {
-        setBasePosition(J2DBasePosition_0);
+        setBasePosition(J2DBasePosition_TopLeft);
     }
 
     mAlpha = 0xFF;

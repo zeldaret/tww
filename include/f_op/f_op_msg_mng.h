@@ -1,5 +1,5 @@
-#ifndef F_F_OP_MSG_MNG_H_
-#define F_F_OP_MSG_MNG_H_
+#ifndef F_OP_MSG_MNG_H
+#define F_OP_MSG_MNG_H
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "f_pc/f_pc_leaf.h"
@@ -93,6 +93,37 @@ struct fopMsgM_pane_alpha_class {
     /* 0x00 */ J2DPane * pane;
     /* 0x04 */ u8 mInitAlpha;
     /* 0x05 */ u8 mNowAlpha;
+};
+
+class fopMsgM_msgGet_c {
+public:
+    virtual ~fopMsgM_msgGet_c() {}
+    mesg_header* getMesgHeader(u32);
+    mesg_info* getMesgInfo(mesg_header*);
+    mesg_data* getMesgData(mesg_header*);
+    mesg_entry getMesgEntry(mesg_header*);
+    const char* getMessage(mesg_header*);
+
+public:
+    /* 0x04 */ u32 mMsgIdx;
+    /* 0x08 */ u16 mGroupID;
+    /* 0x0A */ u16 mMsgID;
+    /* 0x0C */ u16 mResMsgIdx;
+};
+
+class fopMsgM_itemMsgGet_c {
+public:
+    virtual ~fopMsgM_itemMsgGet_c() {}
+    mesg_header* getMesgHeader(u32);
+    mesg_info* getMesgInfo(mesg_header*);
+    mesg_data* getMesgData(mesg_header*);
+    mesg_entry getMesgEntry(mesg_header*);
+    const char* getMessage(mesg_header*);
+
+public:
+    /* 0x04 */ u32 mMsgIdx;
+    /* 0x08 */ u16 mMsgID;
+    /* 0x0A */ u16 mResMsgIdx;
 };
 
 class fopMsgM_msgDataProc_c {
@@ -335,4 +366,4 @@ void fopMsgM_blendDraw(J2DPicture* pic, const char* data);
 void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char* param_4, int param_5, int param_6);
 void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int size, int, int);
 
-#endif
+#endif /* F_OP_MSG_MNG_H */

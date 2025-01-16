@@ -55,8 +55,8 @@ void JAISound::start(u32 param_1) {
 }
 
 /* 80298688-802986B8       .text stop__8JAISoundFUl */
-void JAISound::stop(u32 param_1) {
-    JAIBasic::msBasic->stopSoundHandle(this, param_1);
+void JAISound::stop(u32 fadeTime) {
+    JAIBasic::msBasic->stopSoundHandle(this, fadeTime);
 }
 
 /* 802986B8-8029878C       .text setVolume__8JAISoundFfUlUc */

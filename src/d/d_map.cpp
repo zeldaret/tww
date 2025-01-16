@@ -708,7 +708,7 @@ void dMap_RoomInfoCtrl_c::checkFloorMoveImageChangeRoom(u8, u8, int, s16, s16, f
 }
 
 /* 8004DA54-8004DBE0       .text init__22dMap_2DMtMapSpcl_tex_cFP7ResTIMGUlRC8_GXColor */
-void dMap_2DMtMapSpcl_tex_c::init(ResTIMG*, u32, const _GXColor&) {
+void dMap_2DMtMapSpcl_tex_c::init(ResTIMG*, u32, const GXColor&) {
     /* Nonmatching */
 }
 
@@ -773,7 +773,7 @@ void dMap_2DAGBScrDsp_c::setScale(f32, f32) {
 }
 
 /* 8004EE50-8004EE88       .text init__12dMap_2DTri_cFssRC8_GXColorffs */
-void dMap_2DTri_c::init(s16, s16, const _GXColor&, f32, f32, s16) {
+void dMap_2DTri_c::init(s16, s16, const GXColor&, f32, f32, s16) {
     /* Nonmatching */
 }
 
@@ -788,7 +788,7 @@ void dMap_2DTri_c::setPos(s16, s16) {
 }
 
 /* 8004F08C-8004F0BC       .text init__14dMap_2DPoint_cFssRC8_GXColorUc */
-void dMap_2DPoint_c::init(s16, s16, const _GXColor&, u8) {
+void dMap_2DPoint_c::init(s16, s16, const GXColor&, u8) {
     /* Nonmatching */
 }
 
@@ -798,7 +798,7 @@ void dMap_2DPoint_c::draw() {
 }
 
 /* 8004F1E4-8004F214       .text init__18dMap_2DAGBCursor_cFssRC8_GXColorUc */
-void dMap_2DAGBCursor_c::init(s16, s16, const _GXColor&, u8) {
+void dMap_2DAGBCursor_c::init(s16, s16, const GXColor&, u8) {
     /* Nonmatching */
 }
 

@@ -4,61 +4,179 @@
 //
 
 #include "d/actor/d_a_demo00.h"
+#include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/J3DGraphBase/J3DTexture.h"
+#include "JSystem/JUtility/JUTNameTab.h"
+#include "SSystem/SComponent/c_phase.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_demo.h"
+#include "d/d_kankyo.h"
+#include "d/d_kankyo_demo.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_graphic.h"
+#include "m_Do/m_Do_mtx.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "string.h"
 
 /* 800E595C-800E598C       .text reset__16daDemo00_resID_cFv */
 void daDemo00_resID_c::reset() {
-    /* Nonmatching */
+    modelID = -1;
+    bckID = -1;
+    field_0x08 = -1;
+    btpID = -1;
+    btkID = -1;
+    brkID = -1;
+    field_0x18 = -1;
+    field_0x1C = -1;
+    plightID = -1;
+    shadowID = -1;
 }
 
 /* 800E598C-800E59EC       .text reset__16daDemo00_model_cFv */
 void daDemo00_model_c::reset() {
-    /* Nonmatching */
+    resID.reset();
+    model = NULL;
+    btpAnm = NULL;
+    btkAnm = NULL;
+    brkAnm = NULL;
+    if (plight != NULL) {
+        dKydm_demo_plight_delete(plight);
+        plight = NULL;
+    }
+    shadow = NULL;
+}
+
+daDemo00_c::~daDemo00_c() {
+    if (heap != NULL && model.morf != NULL) {
+        model.morf->stopZelAnime();
+    }
 }
 
 /* 800E5A60-800E5AFC       .text setBaseMtx__10daDemo00_cFv */
 void daDemo00_c::setBaseMtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::XYZrotM(shape_angle);
+    model.model->setBaseTRMtx(mDoMtx_stack_c::get());
+    model.model->setBaseScale(scale);
+    model.model->calc();
 }
 
 /* 800E5AFC-800E5DEC       .text setShadowSize__10daDemo00_cFv */
 void daDemo00_c::setShadowSize() {
-    /* Nonmatching */
+    J3DModelData* modelData = model.model->getModelData();
+
+    cXyz min(1000000000.0f, 1000000000.0f, 1000000000.0f);
+    cXyz max(-1000000000.0f, -1000000000.0f, -1000000000.0f);
+
+    for (u16 i = 0; i < modelData->getJointNum(); i++) {
+        J3DJoint* joint = modelData->getJointNodePointer(i);
+        if (joint->getKind() == 0) {
+            cXyz jntMin;
+            cXyz jntMax;
+
+            mDoMtx_multVec(model.model->getAnmMtx(i), joint->getMin(), &jntMin);
+            mDoMtx_multVec(model.model->getAnmMtx(i), joint->getMax(), &jntMax);
+            min.x = jntMin.x < min.x ? jntMin.x : min.x;
+            min.y = jntMin.y < min.y ? jntMin.y : min.y;
+            min.z = jntMin.z < min.z ? jntMin.z : min.z;
+            max.x = jntMax.x > max.x ? jntMax.x : max.x;
+            max.y = jntMax.y > max.y ? jntMax.y : max.y;
+            max.z = jntMax.z > max.z ? jntMax.z : max.z;
+        }
+    }
+
+    model.shadow->pos.x = (max.x + min.x) * 0.5f;
+    model.shadow->pos.y = (max.y + min.y) * 0.5f;
+    model.shadow->pos.z = (max.z + min.z) * 0.5f;
+
+    cXyz extents = max - min;
+    model.shadow->field_0x10 = extents.abs() * 3.0f;
+    model.shadow->field_0x14 = extents.absXZ() * 0.25f;
 }
 
 /* 800E5DEC-800E5FF4       .text awaCheck__FP8J3DModel */
-void awaCheck(J3DModel*) {
-    /* Nonmatching */
+BOOL awaCheck(J3DModel* model) {
+    J3DModelData* modelData = model->getModelData();
+    J3DTexture* tex = modelData->getTexture();
+    if (tex != NULL) {
+        JUTNameTab* texName = modelData->getTextureName();
+        if (texName != NULL) {
+            for (u16 i = 0; i < tex->getNum(); i++) {
+                const char* name = texName->getName(i);
+                if (strcmp(name, "B_dummy") == 0 || strcmp(name, "cy_kankyo") == 0) {
+                    J3DSkinDeform* deform = new J3DSkinDeform();
+                    if (deform == NULL)
+                        return FALSE;
+
+                    if (model->setSkinDeform(deform, 1) != J3DErrType_Success)
+                        return FALSE;
+
+                    if (strcmp(name, "B_dummy") == 0) {
+                        tex->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
+                        mDoExt_modelTexturePatch(modelData);
+                    }
+                }
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 800E5FF4-800E6014       .text createHeapCallBack__FP10fopAc_ac_c */
-static BOOL createHeapCallBack(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL createHeapCallBack(fopAc_ac_c* i_this) {
+    return ((daDemo00_c*)i_this)->createHeap();
 }
 
 /* 800E6014-800E6620       .text createHeap__10daDemo00_cFv */
-void daDemo00_c::createHeap() {
+BOOL daDemo00_c::createHeap() {
     /* Nonmatching */
 }
 
 /* 800E6620-800E6758       .text actStandby__10daDemo00_cFP13dDemo_actor_c */
-void daDemo00_c::actStandby(dDemo_actor_c*) {
+BOOL daDemo00_c::actStandby(dDemo_actor_c* act) {
     /* Nonmatching */
+    if (nextRes.modelID != 0xFFFF || nextRes.plightID != 0xFFFF) {
+        model.resID = nextRes;
+        if (fopAcM_entrySolidHeap(this, createHeapCallBack, 0x4000) != 0) {
+            if (model.model != NULL) {
+                setBaseMtx();
+                fopAcM_SetMtx(this, model.model->getBaseTRMtx());
+                act->setModel(model.model);
+                if (model.morf != NULL)
+                    act->setAnmFrameMax(model.morf->getEndFrame());
+            }
+
+            setAction(&daDemo00_c::actPerformance);
+        }
+    }
+
+    return TRUE;
 }
 
 /* 800E6758-800E6E2C       .text actPerformance__10daDemo00_cFP13dDemo_actor_c */
-void daDemo00_c::actPerformance(dDemo_actor_c*) {
+BOOL daDemo00_c::actPerformance(dDemo_actor_c*) {
     /* Nonmatching */
 }
 
 /* 800E6E2C-800E6E90       .text actLeaving__10daDemo00_cFP13dDemo_actor_c */
-void daDemo00_c::actLeaving(dDemo_actor_c*) {
+BOOL daDemo00_c::actLeaving(dDemo_actor_c* act) {
     /* Nonmatching */
+    if (model.morf != NULL) {
+        model.morf->stopZelAnime();
+    }
+
+    fopAcM_DeleteHeap(this);
+    setAction(&daDemo00_c::actStandby);
+    return TRUE;
 }
 
 /* 800E6E90-800E6EB0       .text daDemo00_Draw__FP10daDemo00_c */
-static BOOL daDemo00_Draw(daDemo00_c*) {
-    /* Nonmatching */
+static BOOL daDemo00_Draw(daDemo00_c* i_this) {
+    return i_this->draw();
 }
 
 /* 800E6EB0-800E7204       .text draw__10daDemo00_cFv */
@@ -67,8 +185,8 @@ BOOL daDemo00_c::draw() {
 }
 
 /* 800E7204-800E7224       .text daDemo00_Execute__FP10daDemo00_c */
-static BOOL daDemo00_Execute(daDemo00_c*) {
-    /* Nonmatching */
+static BOOL daDemo00_Execute(daDemo00_c* i_this) {
+    return i_this->execute();
 }
 
 /* 800E7224-800E78A0       .text execute__10daDemo00_cFv */
@@ -77,18 +195,25 @@ BOOL daDemo00_c::execute() {
 }
 
 /* 800E78A0-800E78A8       .text daDemo00_IsDelete__FP10daDemo00_c */
-static BOOL daDemo00_IsDelete(daDemo00_c*) {
-    /* Nonmatching */
+static BOOL daDemo00_IsDelete(daDemo00_c* i_this) {
+    return TRUE;
 }
 
 /* 800E78A8-800E78D0       .text daDemo00_Delete__FP10daDemo00_c */
-static BOOL daDemo00_Delete(daDemo00_c*) {
-    /* Nonmatching */
+static BOOL daDemo00_Delete(daDemo00_c* i_this) {
+    i_this->~daDemo00_c();
+    return TRUE;
 }
 
 /* 800E78D0-800E7964       .text daDemo00_Create__FP10fopAc_ac_c */
-static s32 daDemo00_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daDemo00_Create(fopAc_ac_c* i_ac) {
+    daDemo00_c* i_this = (daDemo00_c*)i_ac;
+    fopAcM_SetupActor(i_this, daDemo00_c);
+    dKy_tevstr_init(&i_this->tevStr, dComIfGp_roomControl_getStayNo(), 0xFF);
+    i_this->setAction(&daDemo00_c::actStandby);
+    i_this->nextRes.reset();
+    i_this->field_0x29d = -1;
+    return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daDemo00_Method = {

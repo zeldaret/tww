@@ -283,6 +283,115 @@ public:
 
 STATIC_ASSERT(sizeof(dSv_player_collect_c) == 0xD);
 
+enum dIslandRoomNo_e {
+    // Room 0 on the sea is not an island, it's the sea floor, used to load islands as you sail.
+    dIsleRoom_SeaFloor_e = 0,
+
+    /* 0x01 */ dIsleRoom_ForsakenFortress_e       = 1,
+    /* 0x02 */ dIsleRoom_StarIsland_e             = 2,
+    /* 0x03 */ dIsleRoom_NorthernFairyIsland_e    = 3,
+    /* 0x04 */ dIsleRoom_GaleIsle_e               = 4,
+    /* 0x05 */ dIsleRoom_CrescentMoonIsland_e     = 5,
+    /* 0x06 */ dIsleRoom_SevenStarIsles_e         = 6,
+    /* 0x07 */ dIsleRoom_OverlookIsland_e         = 7,
+    /* 0x08 */ dIsleRoom_FourEyeReef_e            = 8,
+    /* 0x09 */ dIsleRoom_MotherandChildIsles_e    = 9,
+    /* 0x0A */ dIsleRoom_SpectacleIsland_e        = 10,
+    /* 0x0B */ dIsleRoom_WindfallIsland_e         = 11,
+    /* 0x0C */ dIsleRoom_PawprintIsle_e           = 12,
+    /* 0x0D */ dIsleRoom_DragonRoostIsland_e      = 13,
+    /* 0x0E */ dIsleRoom_FlightControlPlatform_e  = 14,
+    /* 0x0F */ dIsleRoom_WesternFairyIsland_e     = 15,
+    /* 0x10 */ dIsleRoom_RockSpireIsle_e          = 16,
+    /* 0x11 */ dIsleRoom_TingleIsland_e           = 17,
+    /* 0x12 */ dIsleRoom_NorthernTriangleIsland_e = 18,
+    /* 0x13 */ dIsleRoom_EasternFairyIsland_e     = 19,
+    /* 0x14 */ dIsleRoom_FireMountain_e           = 20,
+    /* 0x15 */ dIsleRoom_StarBeltArchipelago_e    = 21,
+    /* 0x16 */ dIsleRoom_ThreeEyeReef_e           = 22,
+    /* 0x17 */ dIsleRoom_GreatfishIsle_e          = 23,
+    /* 0x18 */ dIsleRoom_CyclopsReef_e            = 24,
+    /* 0x19 */ dIsleRoom_SixEyeReef_e             = 25,
+    /* 0x1A */ dIsleRoom_ToweroftheGods_e         = 26,
+    /* 0x1B */ dIsleRoom_EasternTriangleIsland_e  = 27,
+    /* 0x1C */ dIsleRoom_ThornedFairyIsland_e     = 28,
+    /* 0x1D */ dIsleRoom_NeedleRockIsle_e         = 29,
+    /* 0x1E */ dIsleRoom_IsletofSteel_e           = 30,
+    /* 0x1F */ dIsleRoom_StoneWatcherIsland_e     = 31,
+    /* 0x20 */ dIsleRoom_SouthernTriangleIsland_e = 32,
+    /* 0x21 */ dIsleRoom_PrivateOasis_e           = 33,
+    /* 0x22 */ dIsleRoom_BombIsland_e             = 34,
+    /* 0x23 */ dIsleRoom_BirdsPeakRock_e          = 35,
+    /* 0x24 */ dIsleRoom_DiamondSteppeIsland_e    = 36,
+    /* 0x25 */ dIsleRoom_FiveEyeReef_e            = 37,
+    /* 0x26 */ dIsleRoom_SharkIsland_e            = 38,
+    /* 0x27 */ dIsleRoom_SouthernFairyIsland_e    = 39,
+    /* 0x28 */ dIsleRoom_IceRingIsle_e            = 40,
+    /* 0x29 */ dIsleRoom_ForestHaven_e            = 41,
+    /* 0x2A */ dIsleRoom_CliffPlateauIsles_e      = 42,
+    /* 0x2B */ dIsleRoom_HorseshoeIsland_e        = 43,
+    /* 0x2C */ dIsleRoom_OutsetIsland_e           = 44,
+    /* 0x2D */ dIsleRoom_HeadstoneIsland_e        = 45,
+    /* 0x2E */ dIsleRoom_TwoEyeReef_e             = 46,
+    /* 0x2F */ dIsleRoom_AngularIsles_e           = 47,
+    /* 0x30 */ dIsleRoom_BoatingCourse_e          = 48,
+    /* 0x31 */ dIsleRoom_FiveStarIsles_e          = 49,
+};
+
+enum dIslandIndex_e {
+    dIsleIdx_ForsakenFortress_e       = 0,
+    dIsleIdx_StarIsland_e             = 1,
+    dIsleIdx_NorthernFairyIsland_e    = 2,
+    dIsleIdx_GaleIsle_e               = 3,
+    dIsleIdx_CrescentMoonIsland_e     = 4,
+    dIsleIdx_SevenStarIsles_e         = 5,
+    dIsleIdx_OverlookIsland_e         = 6,
+    dIsleIdx_FourEyeReef_e            = 7,
+    dIsleIdx_MotherandChildIsles_e    = 8,
+    dIsleIdx_SpectacleIsland_e        = 9,
+    dIsleIdx_WindfallIsland_e         = 10,
+    dIsleIdx_PawprintIsle_e           = 11,
+    dIsleIdx_DragonRoostIsland_e      = 12,
+    dIsleIdx_FlightControlPlatform_e  = 13,
+    dIsleIdx_WesternFairyIsland_e     = 14,
+    dIsleIdx_RockSpireIsle_e          = 15,
+    dIsleIdx_TingleIsland_e           = 16,
+    dIsleIdx_NorthernTriangleIsland_e = 17,
+    dIsleIdx_EasternFairyIsland_e     = 18,
+    dIsleIdx_FireMountain_e           = 19,
+    dIsleIdx_StarBeltArchipelago_e    = 20,
+    dIsleIdx_ThreeEyeReef_e           = 21,
+    dIsleIdx_GreatfishIsle_e          = 22,
+    dIsleIdx_CyclopsReef_e            = 23,
+    dIsleIdx_SixEyeReef_e             = 24,
+    dIsleIdx_ToweroftheGods_e         = 25,
+    dIsleIdx_EasternTriangleIsland_e  = 26,
+    dIsleIdx_ThornedFairyIsland_e     = 27,
+    dIsleIdx_NeedleRockIsle_e         = 28,
+    dIsleIdx_IsletofSteel_e           = 29,
+    dIsleIdx_StoneWatcherIsland_e     = 30,
+    dIsleIdx_SouthernTriangleIsland_e = 31,
+    dIsleIdx_PrivateOasis_e           = 32,
+    dIsleIdx_BombIsland_e             = 33,
+    dIsleIdx_BirdsPeakRock_e          = 34,
+    dIsleIdx_DiamondSteppeIsland_e    = 35,
+    dIsleIdx_FiveEyeReef_e            = 36,
+    dIsleIdx_SharkIsland_e            = 37,
+    dIsleIdx_SouthernFairyIsland_e    = 38,
+    dIsleIdx_IceRingIsle_e            = 39,
+    dIsleIdx_ForestHaven_e            = 40,
+    dIsleIdx_CliffPlateauIsles_e      = 41,
+    dIsleIdx_HorseshoeIsland_e        = 42,
+    dIsleIdx_OutsetIsland_e           = 43,
+    dIsleIdx_HeadstoneIsland_e        = 44,
+    dIsleIdx_TwoEyeReef_e             = 45,
+    dIsleIdx_AngularIsles_e           = 46,
+    dIsleIdx_BoatingCourse_e          = 47,
+    dIsleIdx_FiveStarIsles_e          = 48,
+
+    dIsleIdx_COUNT_e = 49,
+};
+
 class dSv_player_map_c {
 public:
     void init();
@@ -306,7 +415,7 @@ public:
     BOOL isSaveArriveGridForAgb(int);
 
     /* 0x00 */ u32 field_0x0[4][4];
-    /* 0x40 */ u8 field_0x40[49];
+    /* 0x40 */ u8 mFmapBits[dIsleIdx_COUNT_e];
     /* 0x71 */ u8 field_0x71[16];
     /* 0x81 */ u8 field_0x81;
     /* 0x82 */ u8 field_0x82[0x84 - 0x82];
@@ -454,6 +563,8 @@ public:
 
     dSv_player_status_c_c* getpPlayerStatusC(int i_idx) { return &mStatusC[i_idx]; }
 
+    static const int PLAYER_STATUS_C_COUNT = 4;
+
     static const int PACKED_STRUCT_SIZE =
         sizeof(dSv_player_status_a_c) +
         sizeof(dSv_player_status_b_c) +
@@ -470,7 +581,7 @@ public:
         sizeof(dSv_player_info_c) +
         sizeof(dSv_player_config_c) +
         sizeof(dSv_player_priest_c) +
-        sizeof(dSv_player_status_c_c) * 4;
+        sizeof(dSv_player_status_c_c) * PLAYER_STATUS_C_COUNT;
 
     /* 0x000 */ dSv_player_status_a_c mPlayerStatusA;
     /* 0x018 */ dSv_player_status_b_c mPlayerStatusB;
@@ -490,7 +601,7 @@ public:
     /* 0x1A4 */ dSv_player_config_c mConfig;
     /* 0x1A9 */ /* 3 bytes of alignment padding */
     /* 0x1AC */ dSv_player_priest_c mPriest;
-    /* 0x1BC */ dSv_player_status_c_c mStatusC[4];
+    /* 0x1BC */ dSv_player_status_c_c mStatusC[PLAYER_STATUS_C_COUNT];
     /* 0x37C */ /* 4 bytes of alignment padding */
 };  // Size: 0x380
 

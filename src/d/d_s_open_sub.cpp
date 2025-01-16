@@ -3,6 +3,7 @@
 // Translation Unit: d_s_open_sub.cpp
 //
 
+#include "JSystem/J2DGraph/J2DPane.h"
 #include "d/d_s_open.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_msg_mng.h"
@@ -16,16 +17,26 @@
 /* 80232EFC-8023334C       .text set_message__18dScnOpen_message_cFUli */
 void dScnOpen_message_c::set_message(u32, int) {
     /* Nonmatching */
+    JKRHeap* old_heap = mDoExt_setCurrentHeap(exp_heap);
+    if (field_0x22bc != 13 && field_0x22bc != 14) { // fopMsg_MessageStatus_e?
+        mMsgDataProc.stringSet();
+    }
+    strcpy(msg1, "");
+    strcpy(msg2, "");
+    strcpy(msg3, "");
+    strcpy(msg4, "");
+    mDoExt_setCurrentHeap(old_heap);
 }
 
 /* 8023334C-80233524       .text exec__18dScnOpen_message_cFv */
 void dScnOpen_message_c::exec() {
     /* Nonmatching */
+    void* head_p = NULL;
+    JUT_ASSERT(0x5d, head_p);
 }
 
 /* 80233524-80233620       .text __ct__18dScnOpen_message_cFP10JKRExpHeap */
 dScnOpen_message_c::dScnOpen_message_c(JKRExpHeap* heap) {
-    /* Nonmatching */
     exp_heap = heap;
     JKRHeap* old_heap = mDoExt_setCurrentHeap(exp_heap);
     tFont = mDoExt_getMesgFont();
@@ -44,9 +55,30 @@ dScnOpen_message_c::~dScnOpen_message_c() {
     mDoExt_setCurrentHeap(old_heap);
 }
 
+void dScnOpen_message_c::set_pane_pointer(J2DPane* tx1, J2DPane* tx2) {
+    field_0x22c4 = (J2DTextBox*)tx1;
+    field_0x22c8 = (J2DTextBox*)tx2;
+    field_0x22c4->setFont(tFont);
+    field_0x22c8->setFont(rFont);
+    field_0x22c8->setLineSpace(field_0x22c4->getLineSpace());
+}
+
+enum {
+    PANE_d1,
+    PANE_d2,
+    PANE_d3,
+    PANE_d4,
+    PANE_d42,
+    PANE_d5,
+    PANE_d6,
+    PANE_mak1,
+    PANE_mak2,
+    PANE_tx1,
+    PANE_tx2,
+};
+
 /* 80233698-80233B0C       .text __ct__15dScnOpen_proc_cFv */
 dScnOpen_proc_c::dScnOpen_proc_c() {
-    /* Nonmatching */
     exp_heap = fopMsgM_createExpHeap(0x20000);
     JUT_ASSERT(0xe2, exp_heap != NULL);
     JKRHeap* old_heap = mDoExt_setCurrentHeap(exp_heap);
@@ -57,25 +89,22 @@ dScnOpen_proc_c::dScnOpen_proc_c() {
     dRes_info_c* resInfo = dComIfG_getObjectResInfo("Opening");
     JUT_ASSERT(0xeb, resInfo != NULL);
     m_Screen->set("Opening.blo", resInfo->getArchive());
-    d1 = m_Screen->search('\0\0d1');
-    d2 = m_Screen->search('\0\0d2');
-    d3 = m_Screen->search('\0\0d3');
-    d4 = m_Screen->search('\0\0d4');
-    d42 = m_Screen->search('\0d42');
-    d5 = m_Screen->search('\0\0d5');
-    d6 = m_Screen->search('\0\0d6');
-    mak1 = m_Screen->search('mak1');
-    mak2 = m_Screen->search('mak2');
-    tx1 = (J2DTextBox*)m_Screen->search('\0tx1');
-    tx2 = (J2DTextBox*)m_Screen->search('\0tx2');
-    tx1->move(tx1->mBounds.i.x, 376.0f);
-    m_message->field_0x22c4 = tx1;
-    m_message->field_0x22c8 = tx2;
-    m_message->field_0x22c4->setFont(m_message->tFont);
-    m_message->field_0x22c8->setFont(m_message->rFont);
-    m_message->field_0x22c8->setLineSpace(m_message->field_0x22c4->getLineSpace());
+    pane2d[PANE_d1] = m_Screen->search('\0\0d1');
+    pane2d[PANE_d2] = m_Screen->search('\0\0d2');
+    pane2d[PANE_d3] = m_Screen->search('\0\0d3');
+    pane2d[PANE_d4] = m_Screen->search('\0\0d4');
+    pane2d[PANE_d42] = m_Screen->search('\0d42');
+    pane2d[PANE_d5] = m_Screen->search('\0\0d5');
+    pane2d[PANE_d6] = m_Screen->search('\0\0d6');
+    pane2d[PANE_mak1] = m_Screen->search('mak1');
+    pane2d[PANE_mak2] = m_Screen->search('mak2');
+    pane2d[PANE_tx1] = m_Screen->search('\0tx1');
+    pane2d[PANE_tx2] = m_Screen->search('\0tx2');
+    pane2d[PANE_tx1]->move(pane2d[PANE_tx1]->mBounds.i.x, 376.0f);
+    m_message->set_pane_pointer(pane2d[PANE_tx1], pane2d[PANE_tx2]);
+
     for (s32 i = 0; i < (s32)ARRAY_SIZE(pane); i++) {
-        fopMsgM_setPaneData(&pane[i], &d1[i]);
+        fopMsgM_setPaneData(&pane[i], pane2d[i]);
         fopMsgM_setNowAlpha(&pane[i], 0.0f);
         fopMsgM_setAlpha(&pane[i]);
     }
@@ -103,7 +132,6 @@ dScnOpen_proc_c::~dScnOpen_proc_c() {
 
 /* 80233BE4-802344D8       .text proc_execute__15dScnOpen_proc_cFv */
 void dScnOpen_proc_c::proc_execute() {
-    /* Nonmatching */
     JKRHeap* old_heap = mDoExt_setCurrentHeap(exp_heap);
     m_message->exec();
     switch (mState) {
@@ -293,7 +321,7 @@ void dScnOpen_proc_c::proc_execute() {
         break;
     case 32:
         mTimer = 0;
-        mState = 31;
+        mState = 33;
     case 33:
         if (mTimer >= 90)
             mState = 34;
@@ -331,8 +359,8 @@ void dScnOpen_proc_c::proc_execute() {
             mAlpha = 1.0f;
             mState = 40;
         }
-        fopMsgM_setNowAlpha(&pane[7], mAlpha);
-        fopMsgM_paneScaleXY(&pane[7], mScale);
+        fopMsgM_setNowAlpha(&pane[6], mAlpha);
+        fopMsgM_paneScaleXY(&pane[6], mScale);
         break;
     case 40:
         m_message->set_message(0x58a, 4);

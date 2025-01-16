@@ -17,14 +17,14 @@ typedef enum _GXCullMode {
     /* 0x0 */ GX_CULL_NONE,
     /* 0x1 */ GX_CULL_FRONT,
     /* 0x2 */ GX_CULL_BACK,
-    /* 0x3 */ GX_CULL_ALL
+    /* 0x3 */ GX_CULL_ALL,
 } GXCullMode;
 
 typedef enum _GXBoolVal {
     /* 0x0 */ GX_FALSE,
     /* 0x1 */ GX_TRUE,
     /* 0x0 */ GX_DISABLE = 0,
-    /* 0x1 */ GX_ENABLE
+    /* 0x1 */ GX_ENABLE,
 } GXBoolVal;
 
 typedef u8 GXBool;

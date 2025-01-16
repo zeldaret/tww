@@ -77,6 +77,8 @@ public:
         mChildID = -1;
     }
 
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x04 */ s8 mChildID;
     /* 0x05 */ u8 m05;

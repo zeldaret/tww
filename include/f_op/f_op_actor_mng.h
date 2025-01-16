@@ -66,6 +66,40 @@ struct fopAcM_search_prm {
     /* 0x08 */ u32 mParameter;
 };
 
+enum daItemType_e {
+    daItemType_0_e = 0,
+    daItemType_1_e = 1,
+    daItemType_3_e = 3,
+};
+
+enum daItemAction_e {
+    daItemAct_0_e = 0,
+    daItemAct_1_e = 1,
+    daItemAct_2_e = 2,
+    daItemAct_3_e = 3,
+    daItemAct_4_e = 4,
+    daItemAct_BOSS_DISAPPEAR_e = 5,
+    daItemAct_6_e = 6,
+    daItemAct_7_e = 7,
+    daItemAct_8_e = 8,
+    daItemAct_9_e = 9,
+    daItemAct_A_e = 10,
+    daItemAct_B_e = 11,
+    daItemAct_BOSS_e = 12,
+};
+
+enum daDisappearItemType_e {
+    daDisItem_NORMAL_e = 0,
+    daDisItem_NONE1_e = 1,
+    daDisItem_HEART_CONTAINER_e = 2,
+    daDisItem_NONE3_e = 3,
+    daDisItem_UNK4_e = 4,
+    daDisItem_HEART_e = 10,
+    daDisItem_MAGIC_e = 11,
+    daDisItem_ARROW_e = 12,
+    daDisItem_UNK13_e = 13,
+};
+
 class l_HIO {
 public:
     ~l_HIO() {}
@@ -74,7 +108,6 @@ public:
     void erase() {}
 };
 
-class dKy_tevstr_c;
 typedef int (*heapCallbackFunc)(fopAc_ac_c*);
 typedef int (*createFunc)(void*);
 
@@ -534,8 +567,8 @@ fpc_ProcID fopAcM_createItemForPresentDemo(cXyz* p_pos, int i_itemNo, u8 argFlag
 fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz* p_pos, int i_itemNo, int i_itemBitNo = -1,
                                    int i_roomNo = -1, csXyz* p_angle = NULL, cXyz* p_scale = NULL);
 
-fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int i_roomNo, int,
-                                csXyz* p_angle, int, cXyz* p_scale = NULL);
+fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int i_roomNo, int type,
+                                csXyz* p_angle, int action, cXyz* p_scale = NULL);
 
 fpc_ProcID fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int i_roomNo,
                                     csXyz* angle, cXyz* scale, int param_7);
@@ -551,21 +584,21 @@ fpc_ProcID fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int roomNo, csXyz* 
 fpc_ProcID fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle,
                            int roomNo, cXyz* scale, u8 argFlag);
 
-fpc_ProcID fopAcM_createItemForBoss(cXyz* p_pos, int param_2, int roomNo, csXyz* p_angle,
-                              cXyz* p_scale = NULL, int param_8 = 0);
+fpc_ProcID fopAcM_createItemForBoss(cXyz* p_pos, int unused, int roomNo, csXyz* p_angle,
+                              cXyz* p_scale, int param_8);
 
 daItem_c* fopAcM_createItemForSimpleDemo(cXyz* p_pos, int i_itemNo, int i_roomNo,
                                          csXyz* p_angle, cXyz* p_scale, f32 speedF, f32 speedY);
 
-fpc_ProcID fopAcM_createItem(cXyz* p_pos, int itemNo, int param_3, int roomNo, int type, csXyz* p_angle,
+fpc_ProcID fopAcM_createItem(cXyz* p_pos, int itemNo, int itemBitNo, int roomNo, int type, csXyz* p_angle,
                        int action, cXyz* p_scale = NULL);
 
-void* fopAcM_fastCreateItem2(cXyz* p_pos, int itemNo, int param_3, int roomNo, int param_5,
-                             csXyz* p_angle, int, cXyz* p_scale = NULL);
+void* fopAcM_fastCreateItem2(cXyz* p_pos, int itemNo, int itemBitNo, int roomNo, int type,
+                             csXyz* p_angle, int action, cXyz* p_scale = NULL);
 
 void* fopAcM_fastCreateItem(cXyz* p_pos, int i_itemNo, int i_roomNo, csXyz* p_angle,
-                            cXyz* p_scale, f32 p_speedF, f32 p_speedY, f32 param_8,
-                            int param_9 = -1, createFunc p_createFunc = NULL);
+                            cXyz* p_scale, f32 speedF, f32 speedY, f32 gravity,
+                            int i_itemBitNo = -1, createFunc p_createFunc = NULL);
 
 void* fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int i_roomNo, csXyz* p_angle, int i_itemBitNo);
 
@@ -584,7 +617,7 @@ static const char* fopAcM_getProcNameString(fopAc_ac_c* p_actor);
 
 static fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* p_actor, void* p_data);
 
-fopAc_ac_c* fopAcM_searchFromName(char* name, u32 param0, u32 param1);
+fopAc_ac_c* fopAcM_searchFromName(char* name, u32 paramMask, u32 parameter);
 
 fopAc_ac_c* fopAcM_findObject4EventCB(fopAc_ac_c* p_actor, void* p_data);
 

@@ -450,19 +450,19 @@ daArrow_c* daArrow_c::changeArrowType() {
     daArrow_c* ret = this;
     
     if (mArrowType == TYPE_NORMAL) {
-        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(0xC) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(0xC) == dItem_LIGHT_ARROW_e)) {
+        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(dInvSlot_BOW_e) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e)) {
             mArrowType = TYPE_NORMAL;
         } else {
             mArrowType = TYPE_FIRE;
         }
     } else if (mArrowType == TYPE_FIRE) {
-        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(0xC) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(0xC) == dItem_LIGHT_ARROW_e)) {
+        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(dInvSlot_BOW_e) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e)) {
             mArrowType = TYPE_NORMAL;
         } else {
             mArrowType = TYPE_ICE;
         }
     } else if (mArrowType == TYPE_ICE) {
-        if (dComIfGs_getMagic() < 2 || dComIfGs_getItem(0xC) != dItem_LIGHT_ARROW_e) {
+        if (dComIfGs_getMagic() < 2 || dComIfGs_getItem(dInvSlot_BOW_e) != dItem_LIGHT_ARROW_e) {
             mArrowType = TYPE_NORMAL;
         } else {
             mArrowType = TYPE_LIGHT;
@@ -495,18 +495,18 @@ void daArrow_c::changeArrowTypeNotReady() {
         if (dComIfGs_getMagic() < 1) {
             return;
         }
-        if (dComIfGs_getItem(0xC) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(0xC) == dItem_LIGHT_ARROW_e) {
+        if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e) {
             m_keep_type = TYPE_FIRE;
         }
     } else if (m_keep_type == TYPE_FIRE) {
         if (dComIfGs_getMagic() < 1) {
             return;
         }
-        if (dComIfGs_getItem(0xC) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(0xC) == dItem_LIGHT_ARROW_e) {
+        if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e) {
             m_keep_type = TYPE_ICE;
         }
     } else if (m_keep_type == TYPE_ICE) {
-        if (dComIfGs_getMagic() >= 2 && dComIfGs_getItem(0xC) == dItem_LIGHT_ARROW_e) {
+        if (dComIfGs_getMagic() >= 2 && dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e) {
             m_keep_type = TYPE_LIGHT;
         } else {
             m_keep_type = TYPE_NORMAL;

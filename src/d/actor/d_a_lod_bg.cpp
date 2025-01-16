@@ -153,10 +153,10 @@ BOOL daLodbg_c::createModelData() {
     if (!loadModelData(resPath, mModelData, mDataHeap, mDataSize))
         return FALSE;
 
-    if (getRoomNo() == 11) { // windfall
+    if (getRoomNo() == dIsleRoom_WindfallIsland_e) {
         if (!loadModelData("/lod11/bdl/shikari.bdl", mModelData2, mDataHeap2, mDataSize2))
             return FALSE;
-    } else if (getRoomNo() == 1 && !dComIfGs_isEventBit(0x1820)) { // forsaken
+    } else if (getRoomNo() == dIsleRoom_ForsakenFortress_e && !dComIfGs_isEventBit(0x1820)) {
         if (!loadModelData("/lod01/bdl/model1.bdl", mModelData2, mDataHeap2, mDataSize2))
             return FALSE;
     }
@@ -170,7 +170,7 @@ BOOL daLodbg_c::createHeap() {
     mModel = mDoExt_J3DModel__create(mModelData, 0x80000, 0x11000022);
     if (mModel == NULL)
         return FALSE;
-    if (getRoomNo() == 11) { // windfall
+    if (getRoomNo() == dIsleRoom_WindfallIsland_e) {
         JUT_ASSERT(0x1bf, mModelData2 != NULL);
         for (s32 i = 0; i < 2; i++) {
             mModel2[i] = mDoExt_J3DModel__create(mModelData2, 0x80000, 0x11000022);
@@ -180,7 +180,7 @@ BOOL daLodbg_c::createHeap() {
                 return FALSE;
             }
         }
-    } else if (getRoomNo() == 1 && mModelData2 != NULL) { // forsaken
+    } else if (getRoomNo() == dIsleRoom_ForsakenFortress_e && mModelData2 != NULL) {
         mModel2[0] = mDoExt_J3DModel__create(mModelData2, 0x80000, 0x11000022);
         if (mModel2[0] == NULL) {
             mModel = NULL;
@@ -267,7 +267,7 @@ BOOL daLodbg_c::execDeleteWait() {
                 mDoMtx_stack_c::YrotM(shape_angle.y);
                 mModel->setBaseTRMtx(mDoMtx_stack_c::get());
                 if (mModel2[0] != NULL) {
-                    if (roomNo == 11) { // windfall
+                    if (roomNo == dIsleRoom_WindfallIsland_e) {
                         mDrawModel2 = daObjLight::Act_c::renew_light_angle();
                         if (mDrawModel2) {
                             mDoMtx_stack_c::transS(630.46338f, y + 4044.508f, -202724.0f);
@@ -276,7 +276,7 @@ BOOL daLodbg_c::execDeleteWait() {
                             mDoMtx_stack_c::YrotM(-0x8000);
                             mModel2[1]->setBaseTRMtx(mDoMtx_stack_c::get());
                         }
-                    } else if (roomNo == 1) { // forsaken
+                    } else if (roomNo == dIsleRoom_ForsakenFortress_e) {
                         mModel2[0]->setBaseTRMtx(mDoMtx_stack_c::get());
                         mDrawModel2 = true;
                     }
@@ -303,7 +303,7 @@ BOOL daLodbg_c::draw() {
         return TRUE;
 
     s32 roomNo = getRoomNo();
-    if (roomNo == 26 && !dComIfGs_isEventBit(0x1e40)) // totg
+    if (roomNo == dIsleRoom_ToweroftheGods_e && !dComIfGs_isEventBit(0x1e40))
         return TRUE;
 
     g_env_light.settingTevStruct(TEV_TYPE_BG0, NULL, &tevStr);
@@ -317,7 +317,7 @@ BOOL daLodbg_c::draw() {
     mDoExt_modelEntryDL(mModel);
 
     if (mModel2[0] != NULL && mDrawModel2) {
-        if (roomNo == 11) { // windfall
+        if (roomNo == dIsleRoom_WindfallIsland_e) {
             J3DModelData* modelData = mModel2[0]->getModelData();
             for (u16 i = 0; i < modelData->getMaterialNum(); i++)
                 modelData->getMaterialNodePointer(i)->getTevKColor(3)->mColor.a = mAlpha;
@@ -327,7 +327,7 @@ BOOL daLodbg_c::draw() {
                 mDoLib_clipper::clip(mModel2[i]);
                 mDoExt_modelEntryDL(mModel2[i]);
             }
-        } else if (roomNo == 1) { // forsaken
+        } else if (roomNo == dIsleRoom_ForsakenFortress_e) {
             g_env_light.setLightTevColorType(mModel2[0], &tevStr);
             J3DModelData* modelData = mModel2[0]->getModelData(); // ??? was this supposed to modify mModel2?
             for (u16 i = 0; i < modelData->getMaterialNum(); i++)

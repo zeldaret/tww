@@ -179,22 +179,22 @@ public:
     void setCommand(u16 command) { mCommand = command; }
 
     void setXyEventCB(CallbackFunc cb) { mpEventCB = cb; }
-    s16 runXyEventCB(void* ac, int equippedItemIdx) {
+    s16 runXyEventCB(void* ac, int i_itemBtn) {
         if (mpEventCB == NULL)
             return -1;
-        return mpEventCB(ac, equippedItemIdx);
+        return mpEventCB(ac, i_itemBtn);
     }
     void setXyCheckCB(CallbackFunc cb) { mpCheckCB = cb; }
-    s16 runXyCheckCB(void* ac, int equippedItemIdx) {
+    s16 runXyCheckCB(void* ac, int i_itemBtn) {
         if (mpCheckCB == NULL)
             return -1;
-        return mpCheckCB(ac, equippedItemIdx);
+        return mpCheckCB(ac, i_itemBtn);
     }
     void setPhotoEventCB(CallbackFunc cb) { mpPhotoCB = cb; }
-    s16 runPhotoEventCB(void* ac, int equippedItemIdx) {
+    s16 runPhotoEventCB(void* ac, int i_itemBtn) {
         if (mpPhotoCB == NULL)
             return -1;
-        return mpPhotoCB(ac, equippedItemIdx);
+        return mpPhotoCB(ac, i_itemBtn);
     }
 
 public:

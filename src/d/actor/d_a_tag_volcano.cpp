@@ -31,7 +31,7 @@ s32 daTagvolcano::Act_c::_create() {
     field_0x2a0 = 0;
 
     if (mType == 0) {
-        if (current.roomNo == 20) {
+        if (current.roomNo == dIsleRoom_FireMountain_e) {
             if (dComIfGs_isEventBit(0x1902)) {
                 fopAcM_onSwitch(this, prm_get_swSave());
             } else if (dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()) {
@@ -113,7 +113,7 @@ bool daTagvolcano::Act_c::_execute() {
                     }
                 } else {
                     u16 timer = prm_get_timer() * 10;
-                    if (current.roomNo == 20) {
+                    if (current.roomNo == dIsleRoom_FireMountain_e) {
                         if (dComIfGp_evmng_endCheck("FREEZE_VOLCANO")) {
                             dTimer_createTimer(3, timer, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
                             field_0x298 = 1;

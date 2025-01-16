@@ -6,179 +6,179 @@
 volatile OSContext* __OSCurrentContext AT_ADDRESS(OS_BASE_CACHED | 0x00D4);
 volatile OSContext* __OSFPUContext AT_ADDRESS(OS_BASE_CACHED | 0x00D8);
 
-asm void __OSLoadFPUContext(void) {
+ASM void __OSLoadFPUContext(s32 unused0, register OSContext* context) {
     // clang-format off
     nofralloc
 
-    lhz r5, 0x1A2(r4)
+    lhz r5, OSContext.state(context)
     clrlwi. r5, r5, 0x1f
     beq exit
 
-    lfd f0, 0x190(r4)
+    lfd f0, OSContext.field_0x190(context)
     mtfsf 0xFF, f0
     mfspr r5, 0x398
     rlwinm. r5, r5, 3, 0x1F, 0x1F
     beq load_fprs
 
-    psq_l f0, 0x1C8(r4), 0, 0
-    psq_l f1, 0x1D0(r4), 0, 0
-    psq_l f2, 0x1D8(r4), 0, 0
-    psq_l f3, 0x1E0(r4), 0, 0
-    psq_l f4, 0x1E8(r4), 0, 0
-    psq_l f5, 0x1F0(r4), 0, 0
-    psq_l f6, 0x1F8(r4), 0, 0
-    psq_l f7, 0x200(r4), 0, 0
-    psq_l f8, 0x208(r4), 0, 0
-    psq_l f9, 0x210(r4), 0, 0
-    psq_l f10, 0x218(r4), 0, 0
-    psq_l f11, 0x220(r4), 0, 0
-    psq_l f12, 0x228(r4), 0, 0
-    psq_l f13, 0x230(r4), 0, 0
-    psq_l f14, 0x238(r4), 0, 0
-    psq_l f15, 0x240(r4), 0, 0
-    psq_l f16, 0x248(r4), 0, 0
-    psq_l f17, 0x250(r4), 0, 0
-    psq_l f18, 0x258(r4), 0, 0
-    psq_l f19, 0x260(r4), 0, 0
-    psq_l f20, 0x268(r4), 0, 0
-    psq_l f21, 0x270(r4), 0, 0
-    psq_l f22, 0x278(r4), 0, 0
-    psq_l f23, 0x280(r4), 0, 0
-    psq_l f24, 0x288(r4), 0, 0
-    psq_l f25, 0x290(r4), 0, 0
-    psq_l f26, 0x298(r4), 0, 0
-    psq_l f27, 0x2A0(r4), 0, 0
-    psq_l f28, 0x2A8(r4), 0, 0
-    psq_l f29, 0x2B0(r4), 0, 0
-    psq_l f30, 0x2B8(r4), 0, 0
-    psq_l f31, 0x2C0(r4), 0, 0
+    psq_l f0,  OSContext.ps[0](context), 0, 0
+    psq_l f1,  OSContext.ps[1](context), 0, 0
+    psq_l f2,  OSContext.ps[2](context), 0, 0
+    psq_l f3,  OSContext.ps[3](context), 0, 0
+    psq_l f4,  OSContext.ps[4](context), 0, 0
+    psq_l f5,  OSContext.ps[5](context), 0, 0
+    psq_l f6,  OSContext.ps[6](context), 0, 0
+    psq_l f7,  OSContext.ps[7](context), 0, 0
+    psq_l f8,  OSContext.ps[8](context), 0, 0
+    psq_l f9,  OSContext.ps[9](context), 0, 0
+    psq_l f10, OSContext.ps[10](context), 0, 0
+    psq_l f11, OSContext.ps[11](context), 0, 0
+    psq_l f12, OSContext.ps[12](context), 0, 0
+    psq_l f13, OSContext.ps[13](context), 0, 0
+    psq_l f14, OSContext.ps[14](context), 0, 0
+    psq_l f15, OSContext.ps[15](context), 0, 0
+    psq_l f16, OSContext.ps[16](context), 0, 0
+    psq_l f17, OSContext.ps[17](context), 0, 0
+    psq_l f18, OSContext.ps[18](context), 0, 0
+    psq_l f19, OSContext.ps[19](context), 0, 0
+    psq_l f20, OSContext.ps[20](context), 0, 0
+    psq_l f21, OSContext.ps[21](context), 0, 0
+    psq_l f22, OSContext.ps[22](context), 0, 0
+    psq_l f23, OSContext.ps[23](context), 0, 0
+    psq_l f24, OSContext.ps[24](context), 0, 0
+    psq_l f25, OSContext.ps[25](context), 0, 0
+    psq_l f26, OSContext.ps[26](context), 0, 0
+    psq_l f27, OSContext.ps[27](context), 0, 0
+    psq_l f28, OSContext.ps[28](context), 0, 0
+    psq_l f29, OSContext.ps[29](context), 0, 0
+    psq_l f30, OSContext.ps[30](context), 0, 0
+    psq_l f31, OSContext.ps[31](context), 0, 0
 
 load_fprs:
-    lfd f0, 0x90(r4)
-    lfd f1, 0x98(r4)
-    lfd f2, 0xA0(r4)
-    lfd f3, 0xA8(r4)
-    lfd f4, 0xB0(r4)
-    lfd f5, 0xB8(r4)
-    lfd f6, 0xC0(r4)
-    lfd f7, 0xC8(r4)
-    lfd f8, 0xD0(r4)
-    lfd f9, 0xD8(r4)
-    lfd f10, 0xE0(r4)
-    lfd f11, 0xE8(r4)
-    lfd f12, 0xF0(r4)
-    lfd f13, 0xF8(r4)
-    lfd f14, 0x100(r4)
-    lfd f15, 0x108(r4)
-    lfd f16, 0x110(r4)
-    lfd f17, 0x118(r4)
-    lfd f18, 0x120(r4)
-    lfd f19, 0x128(r4)
-    lfd f20, 0x130(r4)
-    lfd f21, 0x138(r4)
-    lfd f22, 0x140(r4)
-    lfd f23, 0x148(r4)
-    lfd f24, 0x150(r4)
-    lfd f25, 0x158(r4)
-    lfd f26, 0x160(r4)
-    lfd f27, 0x168(r4)
-    lfd f28, 0x170(r4)
-    lfd f29, 0x178(r4)
-    lfd f30, 0x180(r4)
-    lfd f31, 0x188(r4)
+    lfd f0,  OSContext.fpr[ 0](context)
+    lfd f1,  OSContext.fpr[ 1](context)
+    lfd f2,  OSContext.fpr[ 2](context)
+    lfd f3,  OSContext.fpr[ 3](context)
+    lfd f4,  OSContext.fpr[ 4](context)
+    lfd f5,  OSContext.fpr[ 5](context)
+    lfd f6,  OSContext.fpr[ 6](context)
+    lfd f7,  OSContext.fpr[ 7](context)
+    lfd f8,  OSContext.fpr[ 8](context)
+    lfd f9,  OSContext.fpr[ 9](context)
+    lfd f10, OSContext.fpr[10](context)
+    lfd f11, OSContext.fpr[11](context)
+    lfd f12, OSContext.fpr[12](context)
+    lfd f13, OSContext.fpr[13](context)
+    lfd f14, OSContext.fpr[14](context)
+    lfd f15, OSContext.fpr[15](context)
+    lfd f16, OSContext.fpr[16](context)
+    lfd f17, OSContext.fpr[17](context)
+    lfd f18, OSContext.fpr[18](context)
+    lfd f19, OSContext.fpr[19](context)
+    lfd f20, OSContext.fpr[20](context)
+    lfd f21, OSContext.fpr[21](context)
+    lfd f22, OSContext.fpr[22](context)
+    lfd f23, OSContext.fpr[23](context)
+    lfd f24, OSContext.fpr[24](context)
+    lfd f25, OSContext.fpr[25](context)
+    lfd f26, OSContext.fpr[26](context)
+    lfd f27, OSContext.fpr[27](context)
+    lfd f28, OSContext.fpr[28](context)
+    lfd f29, OSContext.fpr[29](context)
+    lfd f30, OSContext.fpr[30](context)
+    lfd f31, OSContext.fpr[31](context)
 
 exit:
     blr
     // clang-format on
 }
 
-asm void __OSSaveFPUContext(s32 unused0, s32 unused1, register OSContext* context) {
+ASM void __OSSaveFPUContext(s32 unused0, s32 unused1, register OSContext* context) {
     // clang-format off
     nofralloc
 
-    lhz r3, 0x1A2(context)
+    lhz r3, OSContext.state(context)
     ori r3, r3, 1
-    sth r3, 0x1A2(context)
+    sth r3, OSContext.state(context)
 
-    stfd f0, 0x90(context)
-    stfd f1, 0x98(context)
-    stfd f2, 0xa0(context)
-    stfd f3, 0xa8(context)
-    stfd f4, 0xb0(context)
-    stfd f5, 0xb8(context)
-    stfd f6, 0xc0(context)
-    stfd f7, 0xc8(context)
-    stfd f8, 0xd0(context)
-    stfd f9, 0xd8(context)
-    stfd f10, 0xe0(context)
-    stfd f11, 0xe8(context)
-    stfd f12, 0xf0(context)
-    stfd f13, 0xf8(context)
-    stfd f14, 0x100(context)
-    stfd f15, 0x108(context)
-    stfd f16, 0x110(context)
-    stfd f17, 0x118(context)
-    stfd f18, 0x120(context)
-    stfd f19, 0x128(context)
-    stfd f20, 0x130(context)
-    stfd f21, 0x138(context)
-    stfd f22, 0x140(context)
-    stfd f23, 0x148(context)
-    stfd f24, 0x150(context)
-    stfd f25, 0x158(context)
-    stfd f26, 0x160(context)
-    stfd f27, 0x168(context)
-    stfd f28, 0x170(context)
-    stfd f29, 0x178(context)
-    stfd f30, 0x180(context)
-    stfd f31, 0x188(context)
+    stfd f0,  OSContext.fpr[ 0](context)
+    stfd f1,  OSContext.fpr[ 1](context)
+    stfd f2,  OSContext.fpr[ 2](context)
+    stfd f3,  OSContext.fpr[ 3](context)
+    stfd f4,  OSContext.fpr[ 4](context)
+    stfd f5,  OSContext.fpr[ 5](context)
+    stfd f6,  OSContext.fpr[ 6](context)
+    stfd f7,  OSContext.fpr[ 7](context)
+    stfd f8,  OSContext.fpr[ 8](context)
+    stfd f9,  OSContext.fpr[ 9](context)
+    stfd f10, OSContext.fpr[10](context)
+    stfd f11, OSContext.fpr[11](context)
+    stfd f12, OSContext.fpr[12](context)
+    stfd f13, OSContext.fpr[13](context)
+    stfd f14, OSContext.fpr[14](context)
+    stfd f15, OSContext.fpr[15](context)
+    stfd f16, OSContext.fpr[16](context)
+    stfd f17, OSContext.fpr[17](context)
+    stfd f18, OSContext.fpr[18](context)
+    stfd f19, OSContext.fpr[19](context)
+    stfd f20, OSContext.fpr[20](context)
+    stfd f21, OSContext.fpr[21](context)
+    stfd f22, OSContext.fpr[22](context)
+    stfd f23, OSContext.fpr[23](context)
+    stfd f24, OSContext.fpr[24](context)
+    stfd f25, OSContext.fpr[25](context)
+    stfd f26, OSContext.fpr[26](context)
+    stfd f27, OSContext.fpr[27](context)
+    stfd f28, OSContext.fpr[28](context)
+    stfd f29, OSContext.fpr[29](context)
+    stfd f30, OSContext.fpr[30](context)
+    stfd f31, OSContext.fpr[31](context)
 
     mffs f0
-    stfd f0, 0x190(context)
-    lfd f0, 0x90(context)
+    stfd f0, OSContext.field_0x190(context)
+    lfd f0, OSContext.fpr[0](context)
     mfspr r3, 0x398
     rlwinm. r3, r3, 3, 0x1f, 0x1f
     beq exit
 
-    psq_st f0, 456(context), 0, 0
-    psq_st f1, 464(context), 0, 0
-    psq_st f2, 472(context), 0, 0
-    psq_st f3, 480(context), 0, 0
-    psq_st f4, 488(context), 0, 0
-    psq_st f5, 496(context), 0, 0
-    psq_st f6, 504(context), 0, 0
-    psq_st f7, 512(context), 0, 0
-    psq_st f8, 520(context), 0, 0
-    psq_st f9, 528(context), 0, 0
-    psq_st f10, 536(context), 0, 0
-    psq_st f11, 544(context), 0, 0
-    psq_st f12, 552(context), 0, 0
-    psq_st f13, 560(context), 0, 0
-    psq_st f14, 568(context), 0, 0
-    psq_st f15, 576(context), 0, 0
-    psq_st f16, 584(context), 0, 0
-    psq_st f17, 592(context), 0, 0
-    psq_st f18, 600(context), 0, 0
-    psq_st f19, 608(context), 0, 0
-    psq_st f20, 616(context), 0, 0
-    psq_st f21, 624(context), 0, 0
-    psq_st f22, 632(context), 0, 0
-    psq_st f23, 640(context), 0, 0
-    psq_st f24, 648(context), 0, 0
-    psq_st f25, 656(context), 0, 0
-    psq_st f26, 664(context), 0, 0
-    psq_st f27, 672(context), 0, 0
-    psq_st f28, 680(context), 0, 0
-    psq_st f29, 688(context), 0, 0
-    psq_st f30, 696(context), 0, 0
-    psq_st f31, 704(context), 0, 0
+    psq_st f0,  OSContext.ps[ 0](context), 0, 0
+    psq_st f1,  OSContext.ps[ 1](context), 0, 0
+    psq_st f2,  OSContext.ps[ 2](context), 0, 0
+    psq_st f3,  OSContext.ps[ 3](context), 0, 0
+    psq_st f4,  OSContext.ps[ 4](context), 0, 0
+    psq_st f5,  OSContext.ps[ 5](context), 0, 0
+    psq_st f6,  OSContext.ps[ 6](context), 0, 0
+    psq_st f7,  OSContext.ps[ 7](context), 0, 0
+    psq_st f8,  OSContext.ps[ 8](context), 0, 0
+    psq_st f9,  OSContext.ps[ 9](context), 0, 0
+    psq_st f10, OSContext.ps[10](context), 0, 0
+    psq_st f11, OSContext.ps[11](context), 0, 0
+    psq_st f12, OSContext.ps[12](context), 0, 0
+    psq_st f13, OSContext.ps[13](context), 0, 0
+    psq_st f14, OSContext.ps[14](context), 0, 0
+    psq_st f15, OSContext.ps[15](context), 0, 0
+    psq_st f16, OSContext.ps[16](context), 0, 0
+    psq_st f17, OSContext.ps[17](context), 0, 0
+    psq_st f18, OSContext.ps[18](context), 0, 0
+    psq_st f19, OSContext.ps[19](context), 0, 0
+    psq_st f20, OSContext.ps[20](context), 0, 0
+    psq_st f21, OSContext.ps[21](context), 0, 0
+    psq_st f22, OSContext.ps[22](context), 0, 0
+    psq_st f23, OSContext.ps[23](context), 0, 0
+    psq_st f24, OSContext.ps[24](context), 0, 0
+    psq_st f25, OSContext.ps[25](context), 0, 0
+    psq_st f26, OSContext.ps[26](context), 0, 0
+    psq_st f27, OSContext.ps[27](context), 0, 0
+    psq_st f28, OSContext.ps[28](context), 0, 0
+    psq_st f29, OSContext.ps[29](context), 0, 0
+    psq_st f30, OSContext.ps[30](context), 0, 0
+    psq_st f31, OSContext.ps[31](context), 0, 0
 
 exit:
     blr
     // clang-format on
 }
 
-asm void OSSaveFPUContext(register OSContext* context) {
+ASM void OSSaveFPUContext(register OSContext* context) {
     // clang-format off
     nofralloc
 
@@ -187,29 +187,29 @@ asm void OSSaveFPUContext(register OSContext* context) {
     // clang-format on
 }
 
-asm void OSSetCurrentContext(register OSContext* context) {
+ASM void OSSetCurrentContext(register OSContext* context) {
     // clang-format off
     nofralloc
 
     lis r4, OS_CURRENT_CONTEXT@ha
     stw context, OS_CURRENT_CONTEXT@l(r4)
     clrlwi r5, context, 2
-    stw r5, 0xc0(r4)
-    lwz r5, 0xd8(r4)
+    stw r5, OS_PHYSICAL_CONTEXT@l(r4)
+    lwz r5, OS_CURRENT_FPU_CONTEXT@l(r4)
     cmpw r5, context
-    bne lbl_800EE9AC
-    lwz r6, 0x19c(context)
+    bne disable_fpu
+    lwz r6, OSContext.srr1(context)
     ori r6, r6, 0x2000
-    stw r6, 0x19c(context)
+    stw r6, OSContext.srr1(context)
     mfmsr r6
     ori r6, r6, 2
     mtmsr r6
     blr
 
-lbl_800EE9AC:
-    lwz r6, 0x19c(context)
+disable_fpu:
+    lwz r6, OSContext.srr1(context)
     rlwinm r6, r6, 0, 0x13, 0x11
-    stw r6, 0x19c(context)
+    stw r6, OSContext.srr1(context)
     mfmsr r6
     rlwinm r6, r6, 0, 0x13, 0x11
     ori r6, r6, 2
@@ -223,118 +223,118 @@ OSContext* OSGetCurrentContext(void) {
     return OS_CURRENT_CONTEXT;
 }
 
-asm u32 OSSaveContext(register OSContext* context) {
+ASM u32 OSSaveContext(register OSContext* context) {
     // clang-format off
     nofralloc
 
-    stmw r13, 0x34(context)
+    stmw r13, OSContext.gpr[13](context)
 
     mfspr r0, GQR1
-    stw r0, 0x1a8(context)
+    stw r0, OSContext.gqr[1](context)
     mfspr r0, GQR2
-    stw r0, 0x1ac(context)
+    stw r0, OSContext.gqr[2](context)
     mfspr r0, GQR3
-    stw r0, 0x1b0(context)
+    stw r0, OSContext.gqr[3](context)
     mfspr r0, GQR4
-    stw r0, 0x1b4(context)
+    stw r0, OSContext.gqr[4](context)
     mfspr r0, GQR5
-    stw r0, 0x1b8(context)
+    stw r0, OSContext.gqr[5](context)
     mfspr r0, GQR6
-    stw r0, 0x1bc(context)
+    stw r0, OSContext.gqr[6](context)
     mfspr r0, GQR7
-    stw r0, 0x1c0(context)
+    stw r0, OSContext.gqr[7](context)
 
     mfcr r0
-    stw r0, 0x80(context)
+    stw r0, OSContext.cr(context)
     mflr r0
-    stw r0, 0x84(context)
-    stw r0, 0x198(context)
+    stw r0, OSContext.lr(context)
+    stw r0, OSContext.srr0(context)
     mfmsr r0
-    stw r0, 0x19c(context)
+    stw r0, OSContext.srr1(context)
     mfctr r0
-    stw r0, 0x88(context)
+    stw r0, OSContext.ctr(context)
     mfxer r0
-    stw r0, 0x8c(context)
+    stw r0, OSContext.xer(context)
 
-    stw r1, 4(context)
-    stw r2, 8(context)
+    stw r1, OSContext.gpr[1](context)
+    stw r2, OSContext.gpr[2](context)
 
     li r0, 1
-    stw r0, 0xc(context)
+    stw r0, OSContext.gpr[3](context)
 
     li r3, 0
     blr
     // clang-format on
 }
 
-asm void OSLoadContext(register OSContext* context) {
+ASM void OSLoadContext(register OSContext* context) {
     // clang-format off
     nofralloc
 
-    lis r4, OSDisableInterrupts@ha
-    lwz r6, 0x198(context)
-    addi r5, r4, OSDisableInterrupts@l
+    lis r4, __RAS_OSDisableInterrupts_begin@ha
+    lwz r6, OSContext.srr0(context)
+    addi r5, r4, __RAS_OSDisableInterrupts_begin@l
     cmplw r6, r5
     ble srr0_not_in_disableintr
     lis r4, __RAS_OSDisableInterrupts_end@ha
     addi r0, r4, __RAS_OSDisableInterrupts_end@l
     cmplw r6, r0
     bge srr0_not_in_disableintr
-    stw r5, 0x198(context)
+    stw r5, OSContext.srr0(context)
         
 srr0_not_in_disableintr:
-    lwz r0, 0(context)
-    lwz r1, 4(context)
-    lwz r2, 8(context)
-    lhz r4, 0x1a2(context)
+    lwz r0, OSContext.gpr[0](context)
+    lwz r1, OSContext.gpr[1](context)
+    lwz r2, OSContext.gpr[2](context)
+    lhz r4, OSContext.state(context)
     rlwinm. r5, r4, 0, 0x1e, 0x1e
     beq load_saved_gprs
     rlwinm r4, r4, 0, 0x1f, 0x1d
-    sth r4, 0x1a2(context)
-    lmw r5, 0x14(context)
+    sth r4, OSContext.state(context)
+    lmw r5, OSContext.gpr[5](context)
     b load_special_regs
     
 load_saved_gprs:
-    lmw r13, 0x34(context)
+    lmw r13, OSContext.gpr[13](context)
     
 load_special_regs:
-    lwz r4, 0x1a8(context)
+    lwz r4, OSContext.gqr[1](context)
     mtspr 0x391, r4
-    lwz r4, 0x1ac(context)
+    lwz r4, OSContext.gqr[2](context)
     mtspr 0x392, r4
-    lwz r4, 0x1b0(context)
+    lwz r4, OSContext.gqr[3](context)
     mtspr 0x393, r4
-    lwz r4, 0x1b4(context)
+    lwz r4, OSContext.gqr[4](context)
     mtspr 0x394, r4
-    lwz r4, 0x1b8(context)
+    lwz r4, OSContext.gqr[5](context)
     mtspr 0x395, r4
-    lwz r4, 0x1bc(context)
+    lwz r4, OSContext.gqr[6](context)
     mtspr 0x396, r4
-    lwz r4, 0x1c0(context)
+    lwz r4, OSContext.gqr[7](context)
     mtspr 0x397, r4
-    lwz r4, 0x80(context)
+    lwz r4, OSContext.cr(context)
     mtcrf 0xff, r4
-    lwz r4, 0x84(context)
+    lwz r4, OSContext.lr(context)
     mtlr r4
-    lwz r4, 0x88(context)
+    lwz r4, OSContext.ctr(context)
     mtctr r4
-    lwz r4, 0x8c(context)
+    lwz r4, OSContext.xer(context)
     mtxer r4
     mfmsr r4
     rlwinm r4, r4, 0, 0x11, 0xf
     rlwinm r4, r4, 0, 0x1f, 0x1d
     mtmsr r4
-    lwz r4, 0x198(context)
+    lwz r4, OSContext.srr0(context)
     mtspr 0x1a, r4
-    lwz r4, 0x19c(context)
+    lwz r4, OSContext.srr1(context)
     mtspr 0x1b, r4
-    lwz r4, 0x10(context)
-    lwz context, 0xc(context)
+    lwz r4, OSContext.gpr[4](context)
+    lwz context, OSContext.gpr[3](context)
     rfi
     // clang-format on
 }
 
-asm u8* OSGetStackPointer(void) {
+ASM u8* OSGetStackPointer(void) {
     // clang-format off
     nofralloc
 
@@ -352,74 +352,59 @@ void OSClearContext(OSContext* context) {
     }
 }
 
-asm void OSInitContext(register OSContext* context, register u32 srr0, register u32 stack) {
+ASM void OSInitContext(register OSContext* context, register u32 srr0, register u32 stack) {
     // clang-format off
     nofralloc
     
-    stw srr0, 0x198(context)
-    stw stack, 4(context)
+    stw srr0, OSContext.srr0(context)
+    stw stack, OSContext.gpr[1](context)
     li r11, 0
     ori r11, r11, 0x9032
-    stw r11, 0x19c(context)
+    stw r11, OSContext.srr1(context)
     li r0, 0
-    stw r0, 0x80(context)
-    stw r0, 0x8c(context)
-    stw r2, 8(context)
-    stw r13, 0x34(context)
-    stw r0, 0xc(context)
-    stw r0, 0x10(context)
-    stw r0, 0x14(context)
-    stw r0, 0x18(context)
-    stw r0, 0x1c(context)
-    stw r0, 0x20(context)
-    stw r0, 0x24(context)
-    stw r0, 0x28(context)
-    stw r0, 0x2c(context)
-    stw r0, 0x30(context)
-    stw r0, 0x38(context)
-    stw r0, 0x3c(context)
-    stw r0, 0x40(context)
-    stw r0, 0x44(context)
-    stw r0, 0x48(context)
-    stw r0, 0x4c(context)
-    stw r0, 0x50(context)
-    stw r0, 0x54(context)
-    stw r0, 0x58(context)
-    stw r0, 0x5c(context)
-    stw r0, 0x60(context)
-    stw r0, 0x64(context)
-    stw r0, 0x68(context)
-    stw r0, 0x6c(context)
-    stw r0, 0x70(context)
-    stw r0, 0x74(context)
-    stw r0, 0x78(context)
-    stw r0, 0x7c(context)
-    stw r0, 0x1a4(context)
-    stw r0, 0x1a8(context)
-    stw r0, 0x1ac(context)
-    stw r0, 0x1b0(context)
-    stw r0, 0x1b4(context)
-    stw r0, 0x1b8(context)
-    stw r0, 0x1bc(context)
-    stw r0, 0x1c0(context)
+    stw r0, OSContext.cr(context)
+    stw r0, OSContext.xer(context)
+    stw r2, OSContext.gpr[2](context)
+    stw r13, OSContext.gpr[13](context)
+    stw r0, OSContext.gpr[3](context)
+    stw r0, OSContext.gpr[4](context)
+    stw r0, OSContext.gpr[5](context)
+    stw r0, OSContext.gpr[6](context)
+    stw r0, OSContext.gpr[7](context)
+    stw r0, OSContext.gpr[8](context)
+    stw r0, OSContext.gpr[9](context)
+    stw r0, OSContext.gpr[10](context)
+    stw r0, OSContext.gpr[11](context)
+    stw r0, OSContext.gpr[12](context)
+    stw r0, OSContext.gpr[14](context)
+    stw r0, OSContext.gpr[15](context)
+    stw r0, OSContext.gpr[16](context)
+    stw r0, OSContext.gpr[17](context)
+    stw r0, OSContext.gpr[18](context)
+    stw r0, OSContext.gpr[19](context)
+    stw r0, OSContext.gpr[20](context)
+    stw r0, OSContext.gpr[21](context)
+    stw r0, OSContext.gpr[22](context)
+    stw r0, OSContext.gpr[23](context)
+    stw r0, OSContext.gpr[24](context)
+    stw r0, OSContext.gpr[25](context)
+    stw r0, OSContext.gpr[26](context)
+    stw r0, OSContext.gpr[27](context)
+    stw r0, OSContext.gpr[28](context)
+    stw r0, OSContext.gpr[29](context)
+    stw r0, OSContext.gpr[30](context)
+    stw r0, OSContext.gpr[31](context)
+    stw r0, OSContext.gqr[0](context)
+    stw r0, OSContext.gqr[1](context)
+    stw r0, OSContext.gqr[2](context)
+    stw r0, OSContext.gqr[3](context)
+    stw r0, OSContext.gqr[4](context)
+    stw r0, OSContext.gqr[5](context)
+    stw r0, OSContext.gqr[6](context)
+    stw r0, OSContext.gqr[7](context)
 
     b OSClearContext
     // clang-format on
-}
-
-// inline duplicates for OSDumpContext to match
-// maybe need to change inlining compiler flag for better match?
-inline void i_OSClearContext(OSContext* context) {
-    context->mode = 0;
-    context->state = 0;
-
-    if (context == OS_CURRENT_FPU_CONTEXT) {
-        OS_CURRENT_FPU_CONTEXT = NULL;
-    }
-}
-
-inline OSContext* i_OSGetCurrentContext(void) {
-    return OS_CURRENT_CONTEXT;
 }
 
 void OSDumpContext(OSContext* context) {
@@ -448,8 +433,8 @@ void OSDumpContext(OSContext* context) {
         BOOL enabled;
 
         enabled = OSDisableInterrupts();
-        currentContext = i_OSGetCurrentContext();
-        i_OSClearContext(&fpuContext);
+        currentContext = OSGetCurrentContext();
+        OSClearContext(&fpuContext);
         OSSetCurrentContext(&fpuContext);
 
         OSReport("\n\nFPRs----------\n");
@@ -463,7 +448,7 @@ void OSDumpContext(OSContext* context) {
                      (u32)context->ps[i + 1]);
         }
 
-        i_OSClearContext(&fpuContext);
+        OSClearContext(&fpuContext);
         OSSetCurrentContext(currentContext);
         OSRestoreInterrupts(enabled);
     }
@@ -474,7 +459,7 @@ void OSDumpContext(OSContext* context) {
     }
 }
 
-static asm void OSSwitchFPUContext(register u8 err, register OSContext* context) {
+static ASM void OSSwitchFPUContext(register u8 err, register OSContext* context) {
     // clang-format off
     nofralloc
 
@@ -482,12 +467,12 @@ static asm void OSSwitchFPUContext(register u8 err, register OSContext* context)
     ori r5, r5, 0x2000
     mtmsr r5
     isync
-    lwz r5, 0x19c(context)
+    lwz r5, OSContext.srr1(context)
     ori r5, r5, 0x2000
     mtspr 0x1b, r5
     lis r3, OS_CURRENT_FPU_CONTEXT@ha
     lwz r5, OS_CURRENT_FPU_CONTEXT@l(r3)
-    stw context, 0xd8(r3)
+    stw context, OS_CURRENT_FPU_CONTEXT@l(r3)
     cmpw r5, context
     beq context_is_curr_fpu_context
     cmpwi r5, 0
@@ -498,22 +483,22 @@ context_is_null:
     bl __OSLoadFPUContext
 
 context_is_curr_fpu_context:
-    lwz r3, 0x80(context)
+    lwz r3, OSContext.cr(context)
     mtcrf 0xff, r3
-    lwz r3, 0x84(context)
+    lwz r3, OSContext.lr(context)
     mtlr r3
-    lwz r3, 0x198(context)
+    lwz r3, OSContext.srr0(context)
     mtspr 0x1a, r3
-    lwz r3, 0x88(context)
+    lwz r3, OSContext.ctr(context)
     mtctr r3
-    lwz r3, 0x8c(context)
+    lwz r3, OSContext.xer(context)
     mtxer r3
-    lhz r3, 0x1a2(context)
+    lhz r3, OSContext.state(context)
     rlwinm r3, r3, 0, 0x1f, 0x1d
-    sth r3, 0x1a2(context)
-    lwz r5, 0x14(context)
-    lwz r3, 0xc(context)
-    lwz context, 0x10(context)
+    sth r3, OSContext.state(context)
+    lwz r5, OSContext.gpr[5](context)
+    lwz r3, OSContext.gpr[3](context)
+    lwz context, OSContext.gpr[4](context)
     rfi
     // clang-format on
 }
@@ -524,7 +509,7 @@ void __OSContextInit(void) {
     DBPrintf("FPU-unavailable handler installed\n");
 }
 
-asm void OSFillFPUContext(register OSContext* context) {
+ASM void OSFillFPUContext(register OSContext* context) {
     // clang-format off
     nofralloc
 
@@ -533,78 +518,78 @@ asm void OSFillFPUContext(register OSContext* context) {
     mtmsr r5
     isync
 
-    stfd f0, 0x90(context)
-    stfd f1, 0x98(context)
-    stfd f2, 0xa0(context)
-    stfd f3, 0xa8(context)
-    stfd f4, 0xb0(context)
-    stfd f5, 0xb8(context)
-    stfd f6, 0xc0(context)
-    stfd f7, 0xc8(context)
-    stfd f8, 0xd0(context)
-    stfd f9, 0xd8(context)
-    stfd f10, 0xe0(context)
-    stfd f11, 0xe8(context)
-    stfd f12, 0xf0(context)
-    stfd f13, 0xf8(context)
-    stfd f14, 0x100(context)
-    stfd f15, 0x108(context)
-    stfd f16, 0x110(context)
-    stfd f17, 0x118(context)
-    stfd f18, 0x120(context)
-    stfd f19, 0x128(context)
-    stfd f20, 0x130(context)
-    stfd f21, 0x138(context)
-    stfd f22, 0x140(context)
-    stfd f23, 0x148(context)
-    stfd f24, 0x150(context)
-    stfd f25, 0x158(context)
-    stfd f26, 0x160(context)
-    stfd f27, 0x168(context)
-    stfd f28, 0x170(context)
-    stfd f29, 0x178(context)
-    stfd f30, 0x180(context)
-    stfd f31, 0x188(context)
+    stfd f0,  OSContext.fpr[ 0](context)
+    stfd f1,  OSContext.fpr[ 1](context)
+    stfd f2,  OSContext.fpr[ 2](context)
+    stfd f3,  OSContext.fpr[ 3](context)
+    stfd f4,  OSContext.fpr[ 4](context)
+    stfd f5,  OSContext.fpr[ 5](context)
+    stfd f6,  OSContext.fpr[ 6](context)
+    stfd f7,  OSContext.fpr[ 7](context)
+    stfd f8,  OSContext.fpr[ 8](context)
+    stfd f9,  OSContext.fpr[ 9](context)
+    stfd f10, OSContext.fpr[10](context)
+    stfd f11, OSContext.fpr[11](context)
+    stfd f12, OSContext.fpr[12](context)
+    stfd f13, OSContext.fpr[13](context)
+    stfd f14, OSContext.fpr[14](context)
+    stfd f15, OSContext.fpr[15](context)
+    stfd f16, OSContext.fpr[16](context)
+    stfd f17, OSContext.fpr[17](context)
+    stfd f18, OSContext.fpr[18](context)
+    stfd f19, OSContext.fpr[19](context)
+    stfd f20, OSContext.fpr[20](context)
+    stfd f21, OSContext.fpr[21](context)
+    stfd f22, OSContext.fpr[22](context)
+    stfd f23, OSContext.fpr[23](context)
+    stfd f24, OSContext.fpr[24](context)
+    stfd f25, OSContext.fpr[25](context)
+    stfd f26, OSContext.fpr[26](context)
+    stfd f27, OSContext.fpr[27](context)
+    stfd f28, OSContext.fpr[28](context)
+    stfd f29, OSContext.fpr[29](context)
+    stfd f30, OSContext.fpr[30](context)
+    stfd f31, OSContext.fpr[31](context)
 
     mffs f0
-    stfd f0, 0x190(context)
-    lfd f0, 0x90(context)
+    stfd f0, OSContext.field_0x190(context)
+    lfd f0, OSContext.fpr[0](context)
     mfspr r5, 0x398
     rlwinm. r5, r5, 3, 0x1f, 0x1f
     beq exit
 
-    psq_st f0, 456(context), 0, 0
-    psq_st f1, 464(context), 0, 0
-    psq_st f2, 472(context), 0, 0
-    psq_st f3, 480(context), 0, 0
-    psq_st f4, 488(context), 0, 0
-    psq_st f5, 496(context), 0, 0
-    psq_st f6, 504(context), 0, 0
-    psq_st f7, 512(context), 0, 0
-    psq_st f8, 520(context), 0, 0
-    psq_st f9, 528(context), 0, 0
-    psq_st f10, 536(context), 0, 0
-    psq_st f11, 544(context), 0, 0
-    psq_st f12, 552(context), 0, 0
-    psq_st f13, 560(context), 0, 0
-    psq_st f14, 568(context), 0, 0
-    psq_st f15, 576(context), 0, 0
-    psq_st f16, 584(context), 0, 0
-    psq_st f17, 592(context), 0, 0
-    psq_st f18, 600(context), 0, 0
-    psq_st f19, 608(context), 0, 0
-    psq_st f20, 616(context), 0, 0
-    psq_st f21, 624(context), 0, 0
-    psq_st f22, 632(context), 0, 0
-    psq_st f23, 640(context), 0, 0
-    psq_st f24, 648(context), 0, 0
-    psq_st f25, 656(context), 0, 0
-    psq_st f26, 664(context), 0, 0
-    psq_st f27, 672(context), 0, 0
-    psq_st f28, 680(context), 0, 0
-    psq_st f29, 688(context), 0, 0
-    psq_st f30, 696(context), 0, 0
-    psq_st f31, 704(context), 0, 0
+    psq_st f0,  OSContext.ps[ 0](context), 0, 0
+    psq_st f1,  OSContext.ps[ 1](context), 0, 0
+    psq_st f2,  OSContext.ps[ 2](context), 0, 0
+    psq_st f3,  OSContext.ps[ 3](context), 0, 0
+    psq_st f4,  OSContext.ps[ 4](context), 0, 0
+    psq_st f5,  OSContext.ps[ 5](context), 0, 0
+    psq_st f6,  OSContext.ps[ 6](context), 0, 0
+    psq_st f7,  OSContext.ps[ 7](context), 0, 0
+    psq_st f8,  OSContext.ps[ 8](context), 0, 0
+    psq_st f9,  OSContext.ps[ 9](context), 0, 0
+    psq_st f10, OSContext.ps[10](context), 0, 0
+    psq_st f11, OSContext.ps[11](context), 0, 0
+    psq_st f12, OSContext.ps[12](context), 0, 0
+    psq_st f13, OSContext.ps[13](context), 0, 0
+    psq_st f14, OSContext.ps[14](context), 0, 0
+    psq_st f15, OSContext.ps[15](context), 0, 0
+    psq_st f16, OSContext.ps[16](context), 0, 0
+    psq_st f17, OSContext.ps[17](context), 0, 0
+    psq_st f18, OSContext.ps[18](context), 0, 0
+    psq_st f19, OSContext.ps[19](context), 0, 0
+    psq_st f20, OSContext.ps[20](context), 0, 0
+    psq_st f21, OSContext.ps[21](context), 0, 0
+    psq_st f22, OSContext.ps[22](context), 0, 0
+    psq_st f23, OSContext.ps[23](context), 0, 0
+    psq_st f24, OSContext.ps[24](context), 0, 0
+    psq_st f25, OSContext.ps[25](context), 0, 0
+    psq_st f26, OSContext.ps[26](context), 0, 0
+    psq_st f27, OSContext.ps[27](context), 0, 0
+    psq_st f28, OSContext.ps[28](context), 0, 0
+    psq_st f29, OSContext.ps[29](context), 0, 0
+    psq_st f30, OSContext.ps[30](context), 0, 0
+    psq_st f31, OSContext.ps[31](context), 0, 0
 
 exit:
     blr

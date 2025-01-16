@@ -30,6 +30,7 @@
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_overlap_mng.h"
+#include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_audio.h"
@@ -1110,9 +1111,9 @@ static BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     
     g_msgDHIO.field_0x06 = 0;
     g_msgDHIO.field_0x10 = -1;
-    mDoHIO_root.mDoHIO_deleteChild(g_darkHIO.mChildID);
-    mDoHIO_root.mDoHIO_deleteChild(g_envHIO.mChildID);
-    mDoHIO_root.mDoHIO_deleteChild(g_msgDHIO.mChildID);
+    mDoHIO_deleteChild(g_darkHIO.mChildID);
+    mDoHIO_deleteChild(g_envHIO.mChildID);
+    mDoHIO_deleteChild(g_msgDHIO.mChildID);
     
     dComIfGp_setWindowNum(0);
     
@@ -1338,9 +1339,9 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dStage_Create();
     mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 30);
 
-    g_darkHIO.mChildID = mDoHIO_root.mDoHIO_createChild("暗闇スポット", &g_darkHIO); // "Darkness Spot"
-    g_envHIO.mChildID = mDoHIO_root.mDoHIO_createChild("描画設定", &g_envHIO); // "Draw Settings"
-    g_msgDHIO.mChildID = mDoHIO_root.mDoHIO_createChild("Message Data", &g_msgDHIO);
+    g_darkHIO.mChildID = mDoHIO_createChild("暗闇スポット", &g_darkHIO); // "Darkness Spot"
+    g_envHIO.mChildID = mDoHIO_createChild("描画設定", &g_envHIO); // "Draw Settings"
+    g_msgDHIO.mChildID = mDoHIO_createChild("Message Data", &g_msgDHIO);
 
     new(&dComIfGp_getAttention()) dAttention_c(dComIfGp_getPlayer(0), NULL);
     dComIfGp_getVibration().Init();
@@ -1361,22 +1362,22 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     }
 
     if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
-        dComIfGs_setItem(12, dItem_NONE_e); // take away the bow
-        for (s32 i = 0; i < 3; i++) {
-            u32 itemno = dComIfGp_getSelectItem(i);
+        dComIfGs_setItem(dInvSlot_BOW_e, dItem_NONE_e); // take away the bow
+        for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+            u32 itemno = dComIfGp_getSelectItem(itemBtn);
             if (itemno == dItem_BOW_e || itemno == dItem_MAGIC_ARROW_e || itemno == dItem_LIGHT_ARROW_e) {
-                dComIfGs_setSelectItem(i, dItem_NONE_e);
-                dComIfGp_setSelectItem(i);
+                dComIfGs_setSelectItem(itemBtn, dInvSlot_NONE_e);
+                dComIfGp_setSelectItem(itemBtn);
             }
         }
-    } else if (dComIfGs_getItem(12) == dItem_NONE_e) {
+    } else if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {
         // give the bow back
-        if (dComIfGs_isGetItem(12, 2))
-            dComIfGs_setItem(12, dItem_LIGHT_ARROW_e);
-        else if (dComIfGs_isGetItem(12, 1))
-            dComIfGs_setItem(12, dItem_MAGIC_ARROW_e);
-        else if (dComIfGs_isGetItem(12, 0))
-            dComIfGs_setItem(12, dItem_BOW_e);
+        if (dComIfGs_isGetItem(dInvSlot_BOW_e, 2))
+            dComIfGs_setItem(dInvSlot_BOW_e, dItem_LIGHT_ARROW_e);
+        else if (dComIfGs_isGetItem(dInvSlot_BOW_e, 1))
+            dComIfGs_setItem(dInvSlot_BOW_e, dItem_MAGIC_ARROW_e);
+        else if (dComIfGs_isGetItem(dInvSlot_BOW_e, 0))
+            dComIfGs_setItem(dInvSlot_BOW_e, dItem_BOW_e);
     }
 
     if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 ||

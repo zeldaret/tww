@@ -1543,7 +1543,7 @@ daNpcRoten_c::daNpcRoten_c() {
     field_0x9C1 = 0;
     field_0x9C4 = 0;
     field_0x99C = 1;
-    field_0x9C5 = 3;
+    mShownItemBtn = dItemBtn_NONE_e;
     field_0x9BC = 0;
     field_0x9C6 = 0;
     field_0x9C7 = 0;
@@ -2395,7 +2395,7 @@ u16 daNpcRoten_c::next_msgStatus(u32* pMsgNo) {
                                 *pMsgNo = l_msg_xy_koukan_first[mNpcNo];
                             }
 
-                            dComIfGs_setReserveItemChange(field_0x9C5, temp + FLOWER_1);
+                            dComIfGs_setReserveItemChange(mShownItemBtn, temp + FLOWER_1);
                             field_0x98C = NULL;
                             break;
                         }
@@ -2782,23 +2782,23 @@ BOOL daNpcRoten_c::isGetMap(u8 itemNo) {
 }
 
 /* 00003B30-00003C7C       .text XyEventCB__12daNpcRoten_cFi */
-s16 daNpcRoten_c::XyEventCB(int equippedItemIdx) {
+s16 daNpcRoten_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx;
 
-    int itemNo = dComIfGp_getSelectItem(equippedItemIdx);
+    int itemNo = dComIfGp_getSelectItem(i_itemBtn);
     field_0x9BE = itemNo - FLOWER_1;
     if(isKoukanItem(itemNo) && dComIfGs_getEventReg(l_save_dat[mNpcNo].field_0x02) < 3 && !isGetMap(itemNo)) {
-        if(dComIfGp_event_getTalkXYBtn() == 1) {
-            field_0x9C5 = 0;
+        if(dComIfGp_event_getTalkXYBtn() == dTalkBtn_X_e) {
+            mShownItemBtn = dItemBtn_X_e;
         }
-        else if(dComIfGp_event_getTalkXYBtn() == 2) {
-            field_0x9C5 = 1;
+        else if(dComIfGp_event_getTalkXYBtn() == dTalkBtn_Y_e) {
+            mShownItemBtn = dItemBtn_Y_e;
         }
-        else if(dComIfGp_event_getTalkXYBtn() == 3) {
-            field_0x9C5 = 2;
+        else if(dComIfGp_event_getTalkXYBtn() == dTalkBtn_Z_e) {
+            mShownItemBtn = dItemBtn_Z_e;
         }
         else {
-            field_0x9C5 = 3;
+            mShownItemBtn = dItemBtn_NONE_e;
         }
 
         eventIdx = field_0x99E;

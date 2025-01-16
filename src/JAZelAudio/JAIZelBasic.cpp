@@ -110,7 +110,7 @@ JAIZelBasic::JAIZelBasic() {
     field_0x00c9 = 0;
     field_0x00ca = 0;
     mCameraSeaFloorGroupInfo = 0;
-    mIslandRoomNo = 0;
+    mIslandRoomNo = dIsleRoom_SeaFloor_e;
     mLinkSeaFloorGroupInfo = 0;
     field_0x021e = 0;
     field_0x00cb = -1;
@@ -222,7 +222,7 @@ void JAIZelBasic::resetRecover() {
             data->field_0x48->stop(0);
         }
     }
-    setScene(0, 0, 0, -1);
+    setScene(0, dIsleRoom_SeaFloor_e, 0, -1);
     load1stDynamicWave();
     sceneBgmStart();
     load2ndDynamicWave();
@@ -304,23 +304,23 @@ void JAIZelBasic::bgmStart(u32, u32, s32) {
 }
 
 /* 802A4658-802A4770       .text bgmStop__11JAIZelBasicFUll */
-void JAIZelBasic::bgmStop(u32 param_1, s32 param_2) {
+void JAIZelBasic::bgmStop(u32 i_fadeTime, s32 param_2) {
     if (mMainBgmNum != JA_BGM_GOMA && mMainBgmNum != JA_BGM_GOMA_2) {
         mSomeSpecialBGMFlag = 0;
     }
     if (mpMainBgmSound) {
-        mpMainBgmSound->stop(param_1);
+        mpMainBgmSound->stop(i_fadeTime);
     }
     mpMainBgmSound = NULL;
     mMainBgmNum = -1;
     if (mpStreamBgmSound) {
-        mpStreamBgmSound->stop(param_1);
+        mpStreamBgmSound->stop(i_fadeTime);
     }
     mpStreamBgmSound = NULL;
     mStreamBgmNum = -1;
     if (param_2 == 0) {
         if (mpSubBgmSound) {
-            mpSubBgmSound->stop(param_1);
+            mpSubBgmSound->stop(i_fadeTime);
             mpSubBgmSound = NULL;
         }
         mSubBgmNum = -1;
@@ -328,7 +328,7 @@ void JAIZelBasic::bgmStop(u32 param_1, s32 param_2) {
         field_0x00bb = 0;
         field_0x0206 = 0;
     }
-    demoBgmStop(param_1);
+    demoBgmStop(i_fadeTime);
     field_0x1f3c = 0;
     field_0x0201 = 0;
     mLastMinibossSubBGMType = 0;
@@ -1022,7 +1022,7 @@ void JAIZelBasic::setCameraGroupInfo(u8 param_1) {
                 }
             } else if (mCameraSeaFloorGroupInfo & 0x80) {
                 OSReport("[JAIZelBasic::setCameraGroupInfo] Outer Edge -> Outer Sea\n");
-                mIslandRoomNo = 0;
+                mIslandRoomNo = dIsleRoom_SeaFloor_e;
             } else if ((mCameraSeaFloorGroupInfo & 0x40) == 0 && mCameraSeaFloorGroupInfo) {
                 OSReport("[JAIZelBasic::setCameraGroupInfo] Inner Edge -> Inner Sea\n");
             }
@@ -1034,7 +1034,7 @@ void JAIZelBasic::setCameraGroupInfo(u8 param_1) {
 /* 802A9F60-802AA2B8       .text changeSeaBgm__11JAIZelBasicFv */
 void JAIZelBasic::changeSeaBgm() {
     if (field_0x0224 != 0x12) { return; }
-    if (mIslandRoomNo == 0) { return; }
+    if (mIslandRoomNo == dIsleRoom_SeaFloor_e) { return; }
     if (mMainBgmNum == JA_BGM_DIE_LINK) { return; }
     if (!checkEventBit(dSv_evtBit_c::MET_KORL)) { return; }
     if (mAudioCamera->field_0x0 == NULL) { return; }
@@ -1099,7 +1099,7 @@ void JAIZelBasic::startIsleBgm() {
         return;
     }
     u32 bgmNum;
-    if (mIslandRoomNo == 44 && checkEventBit(0xe20) == 1) {
+    if (mIslandRoomNo == dIsleRoom_OutsetIsland_e && checkEventBit(0xe20) == 1) {
         bgmNum = JA_BGM_ISLAND_LINK_3;
     } else {
         bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
@@ -1113,7 +1113,7 @@ void JAIZelBasic::setLinkGroupInfo(u8 param_1) {
     if (field_0x0224 != 0x12) {
         return;
     }
-    if (mIslandRoomNo == 0) {
+    if (mIslandRoomNo == dIsleRoom_SeaFloor_e) {
         return;
     }
     if (param_1 == mLinkSeaFloorGroupInfo) {
@@ -1159,7 +1159,7 @@ void JAIZelBasic::setScene(s32 sceneNum, s32 roomNo, s32 param_3, s32 layerNo) {
         }
         OSReport("  --- Isle = %d\n", mIslandRoomNo);
         if (param_3 != 1) {
-            if (mIslandRoomNo == 44) {
+            if (mIslandRoomNo == dIsleRoom_OutsetIsland_e) {
                 if (layerNo == 10) {
                     bgmNum = 0;
                 } else if (checkEventBit(0x3510) == 0) {
@@ -1174,21 +1174,21 @@ void JAIZelBasic::setScene(s32 sceneNum, s32 roomNo, s32 param_3, s32 layerNo) {
                     bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
                     bgmNum = expandSceneBgmNum(bgmNum);
                 }
-            } else if (mIslandRoomNo == 11) {
+            } else if (mIslandRoomNo == dIsleRoom_WindfallIsland_e) {
                 if (checkEventBit(0x2e01) == 0) {
                     bgmNum = 0;
                 } else {
                     bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
                     bgmNum = expandSceneBgmNum(bgmNum);
                 }
-            } else if (mIslandRoomNo == 13) {
+            } else if (mIslandRoomNo == dIsleRoom_DragonRoostIsland_e) {
                 if (layerNo == 8 || layerNo == 10 || layerNo == 11) {
                     bgmNum = 0;
                 } else {
                     bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
                     bgmNum = expandSceneBgmNum(bgmNum);
                 }
-            } else if (mIslandRoomNo == 14) {
+            } else if (mIslandRoomNo == dIsleRoom_FlightControlPlatform_e) {
                 if (layerNo == 2 || layerNo == 3) {
                     bgmNum = 0;
                     field_0x00bd = 1;
@@ -1204,7 +1204,7 @@ void JAIZelBasic::setScene(s32 sceneNum, s32 roomNo, s32 param_3, s32 layerNo) {
         var1 = m_isle_info[mIslandRoomNo].field_0x2;
         var2 = m_isle_info[mIslandRoomNo].field_0x3;
     } else {
-        mIslandRoomNo = 0;
+        mIslandRoomNo = dIsleRoom_SeaFloor_e;
         if (sceneNum == 16 && checkEventBit(0x280) == 0) {
             bgmNum = JA_BGM_FIND_TETRA;
         } else if (sceneNum == 19 && checkEventBit(0x801) == 0) {
@@ -1372,7 +1372,7 @@ u32 JAIZelBasic::expandSceneBgmNum(u32 bgmNum) {
 /* 802AAD0C-802AAD48       .text checkLinkOnSea__11JAIZelBasicFv */
 BOOL JAIZelBasic::checkLinkOnSea() {
     if (field_0x0224 == 0x12) {
-        if (mIslandRoomNo == 0) {
+        if (mIslandRoomNo == dIsleRoom_SeaFloor_e) {
             return TRUE;
         } else if (mLinkSeaFloorGroupInfo != 0) {
             return TRUE;
@@ -1643,7 +1643,7 @@ int JAIZelBasic::checkOnOuterSea(f32* r4) {
     if (field_0x0224 != 0x12) {
         return -1;
     }
-    if (mIslandRoomNo == 0) {
+    if (mIslandRoomNo == dIsleRoom_SeaFloor_e) {
         return 4;
     }
     isle_area_s sp0C = mIsleArea[mIslandRoomNo];

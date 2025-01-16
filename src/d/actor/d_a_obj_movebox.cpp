@@ -1260,7 +1260,7 @@ namespace daObjMovebox {
     }
     
     /* 00001C64-00001DD4       .text PPCallBack__Q212daObjMovebox5Act_cFP10fopAc_ac_cP10fopAc_ac_csQ24dBgW13PushPullLabel */
-    fopAc_ac_c* Act_c::PPCallBack(fopAc_ac_c* actor, fopAc_ac_c*, s16 rot, dBgW::PushPullLabel orig_pp_label) {
+    fopAc_ac_c* Act_c::PPCallBack(fopAc_ac_c* actor, fopAc_ac_c*, s16 angle, dBgW::PushPullLabel orig_pp_label) {
         Act_c* i_this = (Act_c*)actor;
         
         dBgW::PushPullLabel pp_label = static_cast<dBgW::PushPullLabel>(orig_pp_label & (dBgW::PP_UNK1_e | dBgW::PP_UNK2_e));
@@ -1272,18 +1272,18 @@ namespace daObjMovebox {
                 unk = orig_pp_label & dBgW::PP_UNK8_e;
             }
             if (unk) {
-                s16 angle = (s16)(pp_label & dBgW::PP_UNK2_e ? rot - 0x8000 : rot) - actor->home.angle.y;
+                s16 angleDiff = (s16)(pp_label & dBgW::PP_UNK2_e ? angle - 0x8000 : angle) - actor->home.angle.y;
                 int pp_field = dBgW::PP_UNK1_e | dBgW::PP_UNK2_e;
                 JUT_ASSERT(1813, pp_label != pp_field);
                 
                 i_this->mPPLabel = orig_pp_label;
                 
                 int whichSide;
-                if (angle >= -0x2000 && angle < 0x2000) {
+                if (angleDiff >= -0x2000 && angleDiff < 0x2000) {
                     whichSide = 0;
-                } else if (angle >= 0x2000 && angle < 0x6000) {
+                } else if (angleDiff >= 0x2000 && angleDiff < 0x6000) {
                     whichSide = 1;
-                } else if (angle >= 0x6000 || angle < -0x6000) {
+                } else if (angleDiff >= 0x6000 || angleDiff < -0x6000) {
                     whichSide = 2;
                 } else {
                     whichSide = 3;
@@ -1707,7 +1707,11 @@ namespace daObjMovebox {
     void Act_c::make_item() {
         s32 itemTableNo = prm_get_itemNo();
         s32 itemBitNo = prm_get_itemSave();
-        fopAcM_createItemFromTable(&current.pos, itemTableNo, itemBitNo, fopAcM_GetHomeRoomNo(this), 0, &current.angle, 7);
+        fopAcM_createItemFromTable(
+            &current.pos, itemTableNo, itemBitNo,
+            fopAcM_GetHomeRoomNo(this), daItemType_0_e,
+            &current.angle, daItemAct_7_e
+        );
     }
     
     /* 00003450-00003570       .text eff_break__Q212daObjMovebox5Act_cFv */

@@ -11,6 +11,12 @@
 
 class daGhostship_c : public fopAc_ac_c {
 public:
+    enum Mode {
+        MODE_WAIT = 0x0,
+        MODE_REALIZE = 0x1,
+        MODE_PATH_MOVE = 0x2,
+    };
+
     bool checkInShip() { return mbCanEnterShip; }
     void getAlpha() {}
     void setMtx() {}
@@ -72,6 +78,9 @@ public:
     daGhostship_HIO_c();
     ~daGhostship_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ u8 field_0x04;
     /* 0x05 */ bool hideShip;
     /* 0x08 */ f32 shipAlpha;

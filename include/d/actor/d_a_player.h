@@ -39,7 +39,14 @@ public:
 class daPy_demo_c {
 public:
     enum {
-        // TODO
+        DEMO_UNK1_e = 0x01,
+        DEMO_UNK14_e = 0x14,
+        DEMO_UNK18_e = 0x18,
+        DEMO_UNK1D_e = 0x1D,
+        DEMO_UNK25_e = 0x25,
+        DEMO_UNK44_e = 0x44,
+        DEMO_UNK48_e = 0x48,
+        DEMO_UNK4A_e = 0x4A,
         DEMO_LAST_e = 0x4B,
         DEMO_NEW_ANM0_e = 0x200,
     };
@@ -387,7 +394,7 @@ public:
     }
     void cancelOriginalDemo() {
         mDemo.setSystemDemoType();
-        mDemo.setDemoMode(1);
+        mDemo.setDemoMode(daPy_demo_c::DEMO_UNK1_e);
     }
 
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }

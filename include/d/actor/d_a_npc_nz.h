@@ -116,6 +116,9 @@ public:
     daNpc_Nz_HIO_c();
     virtual ~daNpc_Nz_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x00 - vtable */
     /* 0x04 */ s8 field_0x04;
     /* 0x06 */ s16 field_0x06;

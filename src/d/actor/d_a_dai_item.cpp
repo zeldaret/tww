@@ -460,7 +460,7 @@ static const ActionFunc item_action_tbl[] = {
 
 /* 800E44A4-800E4518       .text itemProc__13daStandItem_cFv */
 void daStandItem_c::itemProc() {
-    if (mMode == 1 && item_action_tbl[mItemType] != NULL)
+    if (mMode == MODE_WAIT && item_action_tbl[mItemType] != NULL)
         (this->*(item_action_tbl[mItemType]))();
 }
 
@@ -718,7 +718,7 @@ void daStandItem_c::mode_carry_init() {
     speed = cXyz::Zero;
     attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
     mCyl.OffCoSetBit();
-    mMode = 0;
+    mMode = MODE_CARRY;
 }
 
 /* 800E51D8-800E5204       .text mode_carry__13daStandItem_cFv */
@@ -732,7 +732,7 @@ void daStandItem_c::mode_wait_init() {
     fopAcM_SetSpeedF(this, 0.0f);
     fopAcM_SetSpeed(this, 0.0f, 0.0f, 0.0f);
     mCyl.OnCoSetBit();
-    mMode = 1;
+    mMode = MODE_WAIT;
 }
 
 /* 800E5230-800E5234       .text mode_wait__13daStandItem_cFv */
@@ -741,7 +741,7 @@ void daStandItem_c::mode_wait() {
 
 /* 800E5234-800E5240       .text mode_drop_init__13daStandItem_cFv */
 void daStandItem_c::mode_drop_init() {
-    mMode = 2;
+    mMode = MODE_DROP;
 }
 
 /* 800E5240-800E52D0       .text mode_drop__13daStandItem_cFv */

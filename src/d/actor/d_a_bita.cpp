@@ -34,7 +34,7 @@ static void* b_a_sub(void* search, void* user) {
 /* 000000C4-0000018C       .text daBita_Draw__FP10bita_class */
 static BOOL daBita_Draw(bita_class* i_this) {
     dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->tevStr);
-    if (i_this->mMode == 1 && i_this->mSub == 1) {
+    if (i_this->mMode == bita_class::MODE_DEAD && i_this->mSub == 1) {
         dKy_getEnvlight().setLightTevColorType(i_this->mpModelEf, &i_this->tevStr);
         i_this->mpBrkAnm->entry(i_this->mpModelEf->getModelData());
         mDoExt_modelUpdateDL(i_this->mpModelEf);
@@ -56,7 +56,7 @@ static void mode_normal(bita_class* i_this) {
             }
         } else {
             if (i_this->mCyl.ChkTgHit() && i_this->mCyl.GetTgHitObj()->GetAtType() == AT_TYPE_FIRE) {
-                i_this->mMode = 1;
+                i_this->mMode = bita_class::MODE_DEAD;
                 i_this->mSub = 0;
             }
         }
@@ -101,7 +101,7 @@ static void base_mtx_set(bita_class* i_this) {
     MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, false);
     cMtx_YrotM(*calc_mtx, i_this->shape_angle.y);
     cMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
-    if (i_this->mMode == 1 && i_this->mSub >= 1) {
+    if (i_this->mMode == bita_class::MODE_DEAD && i_this->mSub >= 1) {
         i_this->mpModelEf->setBaseTRMtx(*calc_mtx);
         if (i_this->mTimer < 60)
             i_this->mpBrkAnm->play();
@@ -120,10 +120,10 @@ static BOOL daBita_Execute(bita_class* i_this) {
         fopAcM_OffStatus(i_this, fopAcStts_UNK4000_e);
 
     switch (i_this->mMode) {
-    case 0:
+    case bita_class::MODE_NORMAL:
         mode_normal(i_this);
         break;
-    case 1:
+    case bita_class::MODE_DEAD:
         mode_dead(i_this);
         break;
     }
@@ -132,7 +132,7 @@ static BOOL daBita_Execute(bita_class* i_this) {
     cMtx_copy(*calc_mtx, i_this->mMtx);
     i_this->mpBgW->Move();
 
-    if (btd != NULL && i_this->mMode == 0) {
+    if (btd != NULL && i_this->mMode == bita_class::MODE_NORMAL) {
         cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
         cMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
         cXyz offs(0.0f, -80.0f, 160.0f);

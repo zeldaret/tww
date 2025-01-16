@@ -41,7 +41,7 @@ BOOL daNpc_Nz_c::NodeCallBack(J3DNode* node, int param_1) {
             mDoMtx_stack_c::XrotM(m_jnt.getBackbone_y());
             mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
         }
-        
+
         model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
         cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     }
@@ -203,10 +203,10 @@ daNpc_Nz_HIO_c::daNpc_Nz_HIO_c() {
 }
 
 /* 00001010-000011A0       .text daNpc_Nz_XyCheckCB__FPvi */
-static s16 daNpc_Nz_XyCheckCB(void* i_actor, int equippedItemIdx) {
+static s16 daNpc_Nz_XyCheckCB(void* i_actor, int i_itemBtn) {
     daNpc_Nz_c* i_this = static_cast<daNpc_Nz_c*>(i_actor);
 
-    if(dComIfGp_getSelectItem(equippedItemIdx) == BIRD_ESA_5) {
+    if(dComIfGp_getSelectItem(i_itemBtn) == BIRD_ESA_5) {
         f32 temp2 = l_HIO.field_0x20;
         daPy_py_c* player = daPy_getPlayerActorClass();
         cXyz temp(player->current.pos);
@@ -216,7 +216,7 @@ static s16 daNpc_Nz_XyCheckCB(void* i_actor, int equippedItemIdx) {
         if(temp3.absXZ() < l_HIO.field_0x24) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -518,7 +518,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
         execItemGet(itemTemp);
         return 0x3403;
     }
-    
+
     return 0;
 }
 
@@ -623,7 +623,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
             if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
                 temp += 1;
             }
-            if(dComIfGs_getItem(0xC) != dItem_NONE_e) {
+            if(dComIfGs_getItem(dItem_BOW_e) != dItem_NONE_e) {
                 temp += 1;
             }
 
@@ -664,7 +664,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
                         *pMsgNo = msgNo;
                         break;
                     }
-                    
+
                     daShopItem_c* item = getShopItem(field_0x909);
                     if(item) {
                         item->hide();
@@ -817,7 +817,7 @@ bool daNpc_Nz_c::_draw() {
         g_env_light.setLightTevColorType(pModel, &tevStr);
 
         mpMorf->entryDL();
-        
+
         dComIfGd_setListMaskOff();
 
         matShape->show();
@@ -919,7 +919,7 @@ s32 daNpc_Nz_c::_create() {
     if(!fopAcM_entrySolidHeap(this, createHeap_CB, 0x2FE0)) {
         return cPhs_ERROR_e;
     }
-    
+
     BOOL success = createInit();
     if (!success) {
         // Fakematch?

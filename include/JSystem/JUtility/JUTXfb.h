@@ -19,7 +19,7 @@ public:
     JUTXfb(GXRenderModeObj const*, JKRHeap*, JUTXfb::EXfbNumber);
     ~JUTXfb();
     void delXfb(int);
-    static JUTXfb* createManager(const _GXRenderModeObj*, JKRHeap*, JUTXfb::EXfbNumber);
+    static JUTXfb* createManager(const GXRenderModeObj*, JKRHeap*, JUTXfb::EXfbNumber);
     static void destroyManager();
     void initiate(u16, u16, JKRHeap*, JUTXfb::EXfbNumber);
 

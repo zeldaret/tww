@@ -6,7 +6,7 @@
 vu32 __PIRegs[12] AT_ADDRESS(0xCC003000);
 vu16 __MEMRegs[64] AT_ADDRESS(0xCC004000);
 
-asm BOOL OSDisableInterrupts(void) {
+ASM BOOL OSDisableInterrupts(void) {
     // clang-format off
     nofralloc
 
@@ -25,7 +25,7 @@ asm BOOL OSDisableInterrupts(void) {
     // clang-format on
 }
 
-asm BOOL OSEnableInterrupts(void) {
+ASM BOOL OSEnableInterrupts(void) {
     // clang-format off
     nofralloc
 
@@ -40,7 +40,7 @@ asm BOOL OSEnableInterrupts(void) {
     // clang-format on
 }
 
-asm BOOL OSRestoreInterrupts(register BOOL status) {
+ASM BOOL OSRestoreInterrupts(register BOOL status) {
     // clang-format off
     nofralloc
 
@@ -400,7 +400,7 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context) {
     OSLoadContext(context);
 }
 
-static asm void ExternalInterruptHandler(register __OSInterrupt type, register OSContext* context) {
+static ASM void ExternalInterruptHandler(register __OSInterrupt type, register OSContext* context) {
     // clang-format off
     nofralloc
 

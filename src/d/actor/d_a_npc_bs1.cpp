@@ -115,9 +115,9 @@ static s16 daNpc_Bs1_XyEventCB(void* i_this, int value) {
     return ((daNpc_Bs1_c*)i_this)->XyEventCB(value);
 }
 /* 000002E4-00000490       .text XyEventCB__11daNpc_Bs1_cFi */
-s16 daNpc_Bs1_c::XyEventCB(int selectItemIdx) {
+s16 daNpc_Bs1_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx = -1;
-    u8 selectedItem = (s32)dComIfGp_getSelectItem(selectItemIdx);
+    u8 selectedItem = (s32)dComIfGp_getSelectItem(i_itemBtn);
     if (mType == 0) {
         if (selectedItem == KAISEN_PRESENT1) {
             eventIdx = mEventIdxs[0];
@@ -1488,7 +1488,7 @@ void daNpc_Bs1_c::createShopList() {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index = 1;
         }
-        if(dComIfGs_getItem(0xC) != dItem_NONE_e) {
+        if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
             index++;
         }
@@ -1498,7 +1498,7 @@ void daNpc_Bs1_c::createShopList() {
             dataSet[index] = &shopItems_setData_Bomb30Bs2;
             index++;
         }
-        if(dComIfGs_getItem(0xC) == dItem_NONE_e) {
+        if(dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e) {
             dataSet[index] = &shopItems_setData_arrow30Bs2;
         }
 
@@ -1522,7 +1522,7 @@ void daNpc_Bs1_c::createShopList() {
     mShopItems.setItemSetDataList(mpItemSetList);
     for(int i = 0; i < 3; i++) {
         mShopItems.mSelectedItemIdx = i;
-        if((!dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(0xC) == dItem_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
+        if((!dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && isBomb(mShopItems.getSelectItemNo())) || (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_NONE_e && isArrow(mShopItems.getSelectItemNo()))) {
             mShopItems.SoldOutItem(i);
             m76C[i] = true;
         }
@@ -2102,15 +2102,14 @@ BOOL daNpc_Bs1_c::_delete() {
         mpMorf->stopZelAnime();
     }
     if (l_HIO.m8 >= 0 && (l_HIO.m8 -= 1) < 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildId);
+        mDoHIO_deleteChild(l_HIO.mChildId);
     }
     return TRUE;
 }
 
 /* 00004960-00004980       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
-    ((daNpc_Bs1_c*)i_this)->CreateHeap();
-    return;
+    return ((daNpc_Bs1_c*)i_this)->CreateHeap();
 }
 
 /* 00004980-00004AD8       .text _create__11daNpc_Bs1_cFv */
@@ -2140,7 +2139,7 @@ s32 daNpc_Bs1_c::_create() {
         } else {
             fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
             if (l_HIO.m8 < 0) {
-                l_HIO.mChildId = mDoHIO_root.mDoHIO_createChild("ボ−トショップ店員", &l_HIO); // "Boat Shopkeeper"
+                l_HIO.mChildId = mDoHIO_createChild("ボ−トショップ店員", &l_HIO); // "Boat Shopkeeper"
             }
             l_HIO.m8 += 1;
             if (!CreateInit()) {

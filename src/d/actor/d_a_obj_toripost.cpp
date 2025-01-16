@@ -185,10 +185,10 @@ void daObjTpost_c::cutPresentProc(int staffIdx) {
 void daObjTpost_c::cutSetAnmStart(int staffIdx) {
     const char* name = dComIfGp_evmng_getMyStringP(staffIdx, "Name");
     if(name != 0 && strcmp(name, "HAKIDASU") == 0) {
-        setAnm(3, false);
+        setAnm(AnmPrm_POST_PUTOUT, false);
     }
     else {
-        setAnm(1, false);
+        setAnm(AnmPrm_POST_GET0, false);
     }
 }
 
@@ -230,7 +230,7 @@ void daObjTpost_c::deliverLetter() {
 /* 00000650-000006C0       .text getReceiveLetterNum__12daObjTpost_cFv */
 s16 daObjTpost_c::getReceiveLetterNum() {
     s16 num = 0;
-    for(int i = 1; i < 0xD; i++) {
+    for(int i = 1; i < (int)ARRAY_SIZE(m_letter); i++) {
         if(dLetter_isStock(m_letter[i].mEventReg)) {
             num = num + 1;
         }
@@ -242,12 +242,12 @@ s16 daObjTpost_c::getReceiveLetterNum() {
 /* 000006C0-00000750       .text getReadableLetterNum__12daObjTpost_cFv */
 s32 daObjTpost_c::getReadableLetterNum() {
     s32 num = 0;
-    s32 startIdx = mNumReadable ? mNumReadable : 1;
+    s32 startIdx = mNumReadable != 0 ? mNumReadable : 1;
     s32 readable = mNumReadable;
 
-    if(readable < 0xD) {
-        for(int i = startIdx; i < 0xD; i++) {
-            if(dLetter_isStock(m_letter[i].mEventReg) == 0) {
+    if(readable < (int)ARRAY_SIZE(m_letter)) {
+        for(int i = startIdx; i < (int)ARRAY_SIZE(m_letter); i++) {
+            if(!dLetter_isStock(m_letter[i].mEventReg)) {
                 continue;
             }
             
@@ -261,7 +261,7 @@ s32 daObjTpost_c::getReadableLetterNum() {
 
 /* 00000750-000007B8       .text checkSendPrice__12daObjTpost_cFv */
 u8 daObjTpost_c::checkSendPrice() {
-    static const u8 pay_type[49] = {
+    static const u8 pay_type[dIsleIdx_COUNT_e] = {
         02,
         01,
         01,
@@ -342,13 +342,13 @@ int daObjTpost_c::getMsgXY() {
             break;
         case dItem_FATHER_LETTER_e:
         case MO_LETTER:
-            setAnm(3, false);
+            setAnm(AnmPrm_POST_PUTOUT, false);
             field_0x8EA = 1;
             msgId = 0xCEA;
 
             break;
         default:
-            setAnm(3, false);
+            setAnm(AnmPrm_POST_PUTOUT, false);
             field_0x8EA = 1;
             msgId = 0xCE9;
 
@@ -400,7 +400,7 @@ u16 daObjTpost_c::next_msgStatus(u32* pMsgNo) {
     switch(*pMsgNo) {
         case 0xCE5:
         case 0xCE6:
-            if(mNumReadable) {
+            if(mNumReadable != 0) {
                 dComIfGp_setMessageCountNumber(getReceiveLetterNum());
                 *pMsgNo = 0xCEB;
             }
@@ -408,13 +408,13 @@ u16 daObjTpost_c::next_msgStatus(u32* pMsgNo) {
                 *pMsgNo = 0xCE7;
             }
 
-            break;
+            break;  
         case 0xCEB:
             dComIfGp_setMessageCountNumber(field_0x8F0);
             *pMsgNo = 0xCF7;
             break;
         case 0xCF7:
-            if(l_HIO.field_0x07 != 0 || m_letter[mNumReadable].field_0x00 != 0) {
+            if(l_HIO.field_0x07 != 0 || m_letter[mNumReadable].field_0x00) {
                 *pMsgNo = 0xCF3;
             }
             else {
@@ -442,13 +442,13 @@ u16 daObjTpost_c::next_msgStatus(u32* pMsgNo) {
                     *pMsgNo = 0xCF2;
                 }
                 else {
-                    setAnm(3, false);
+                    setAnm(AnmPrm_POST_PUTOUT, false);
                     field_0x8EA = 1;
                     *pMsgNo = 0xCF1;
                 }
             }
             else {
-                setAnm(3, false);
+                setAnm(AnmPrm_POST_PUTOUT, false);
                 field_0x8EA = 1;
                 *pMsgNo = 0xCF0;
             }
@@ -489,7 +489,7 @@ u16 daObjTpost_c::next_msgStatus(u32* pMsgNo) {
             mNumReadable += 1;
             field_0x8F0 += 1;
             mNumReadable = getReadableLetterNum();
-            if(mNumReadable) {
+            if(mNumReadable != 0) {
                 dComIfGp_setMessageCountNumber(field_0x8F0);
                 *pMsgNo = 0xCF7;
             }
@@ -521,29 +521,29 @@ void daObjTpost_c::eventOrder() {
         "DEFAULT_POST"
     };
 
-    if(field_0x8F7 == 1 || field_0x8F7 == 2) {
+    if(mEventIdx == 1 || mEventIdx == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
         eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
 
-        if(field_0x8F7 == 1) {
+        if(mEventIdx == 1) {
             fopAcM_orderSpeakEvent(this);
         }
     }
-    else if(field_0x8F7 >= 3) {
-        fopAcM_orderOtherEvent(this, a_demo_name_tbl[field_0x8F7 - 3], 0x14F);
+    else if(mEventIdx >= 3) {
+        fopAcM_orderOtherEvent(this, a_demo_name_tbl[mEventIdx - 3], 0x14F);
     }
 }
 
 /* 00000DC0-00000E48       .text checkOrder__12daObjTpost_cFv */
 void daObjTpost_c::checkOrder() {
     if(eventInfo.checkCommandDemoAccrpt()) {
-        field_0x8F7 = 0;
+        eventSet(0);
         return;
     }
 
     if(eventInfo.checkCommandTalk()) {
-        if(field_0x8F7 == 1 || field_0x8F7 == 2) {
-            field_0x8F7 = 0;
+        if(mEventIdx == 1 || mEventIdx == 2) {
+            eventSet(0);
             if(dComIfGp_event_chkTalkXY()) {
                 field_0x8F5 = 1;
             }
@@ -565,7 +565,7 @@ void daObjTpost_c::setAttention() {
 }
 
 /* 00000EA4-0000100C       .text setAnm__12daObjTpost_cFScb */
-void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
+void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
         TORIPOST_BCK_POST_GET,
         TORIPOST_BCK_POST_PUTOUT,
@@ -573,6 +573,7 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {
+            // Unused entry
             /* mBckIdx     */ -1,
             /* mNextPrmIdx */ -1,
             /* field_0x02  */ 0,
@@ -581,7 +582,8 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
             /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
         },
         {
-            /* mBckIdx     */ 0,
+            // AnmPrm_POST_GET0
+            /* mBckIdx     */ BckIdx_POST_GET,
             /* mNextPrmIdx */ -1,
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
@@ -589,7 +591,8 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
             /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
         },
         {
-            /* mBckIdx     */ 0,
+            // AnmPrm_POST_GET1
+            /* mBckIdx     */ BckIdx_POST_GET,
             /* mNextPrmIdx */ -1,
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
@@ -597,7 +600,8 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
             /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
         },
         {
-            /* mBckIdx     */ 1,
+            // AnmPrm_POST_PUTOUT
+            /* mBckIdx     */ BckIdx_POST_PUTOUT,
             /* mNextPrmIdx */ -1,
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
@@ -605,7 +609,8 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
             /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
         },
         {
-            /* mBckIdx     */ 2,
+            // AnmPrm_POST_WAIT
+            /* mBckIdx     */ BckIdx_POST_WAIT,
             /* mNextPrmIdx */ -1,
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
@@ -614,15 +619,15 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
         },
     };
 
-    if(param_1 != 5) {
-        field_0x6C9 = param_1;
+    if(anmPrmIdx != AnmPrm_NULL) {
+        mAnmPrmIdx = anmPrmIdx;
     }
 
-    if(field_0x6C8 == 0 && mMorf->getFrame() == 1.0f) {
+    if(mBckIdx == BckIdx_POST_GET && mMorf->getFrame() == 1.0f) {
         mDoAud_seStart(JA_SE_OBJ_POST_EAT_LUGGAGE);
     }
 
-    if(field_0x6C8 == 1) {
+    if(mBckIdx == BckIdx_POST_PUTOUT) {
         cXyz scale;
         scale.setall(1.0f);
         if(mMorf->getFrame() == 1.0f) {
@@ -631,7 +636,7 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
         }
     }
 
-    dLib_bcks_setAnm(m_arc_name, mMorf, &field_0x6C8, &field_0x6C9, &field_0x6CA, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
+    dLib_bcks_setAnm(m_arc_name, mMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
 }
 
 /* 0000100C-00001094       .text setMtx__12daObjTpost_cFv */
@@ -647,33 +652,33 @@ void daObjTpost_c::setMtx() {
 /* 00001094-000010E0       .text modeWaitInit__12daObjTpost_cFv */
 void daObjTpost_c::modeWaitInit() {
     field_0x8F0 = 1;
-    if(mNumReadable) {
-        setAnm(4, false);
+    if(mNumReadable != 0) {
+        setAnm(AnmPrm_POST_WAIT, false);
     }
     else {
-        setAnm(1, false);
+        setAnm(AnmPrm_POST_GET0, false);
     }
 }
 
 /* 000010E0-00001188       .text modeWait__12daObjTpost_cFv */
 void daObjTpost_c::modeWait() {
-    if(mNumReadable) {
-        setAnm(4, false);
+    if(mNumReadable != 0) {
+        setAnm(AnmPrm_POST_WAIT, false);
     }
     else {
-        setAnm(1, false);
+        setAnm(AnmPrm_POST_GET0, false);
     }
 
     if(field_0x8F4) {
-        modeProc(PROC_INIT, 1);
+        modeProcInit(MODE_TALK);
     }
     else {
         if(field_0x8F5) {
-            modeProc(PROC_INIT, 2);
+            modeProcInit(MODE_TALK_XY);
         }
         else {
             if(checkTalk()) {
-                field_0x8F7 = 2;
+                eventSet(2);
             }
         }
     }
@@ -681,18 +686,18 @@ void daObjTpost_c::modeWait() {
 
 /* 00001188-000011B0       .text modeTalkInit__12daObjTpost_cFv */
 void daObjTpost_c::modeTalkInit() {
-    setAnm(1, false);
+    setAnm(AnmPrm_POST_GET0, false);
 }
 
 /* 000011B0-00001240       .text modeTalk__12daObjTpost_cFv */
 void daObjTpost_c::modeTalk() {
     if(talk(1) == fopMsgStts_BOX_CLOSED_e) {
         if(field_0x8E9) {
-            modeProc(PROC_INIT, 3);
+            modeProcInit(MODE_RECEIVE);
             field_0x8E9 = 0;
         }
         else {
-            modeProc(PROC_INIT, 0);
+            modeProcInit(MODE_WAIT);
         }
 
         dComIfGp_event_reset();
@@ -702,7 +707,7 @@ void daObjTpost_c::modeTalk() {
 
 /* 00001240-0000129C       .text modeTalkXYInit__12daObjTpost_cFv */
 void daObjTpost_c::modeTalkXYInit() {
-    setAnm(1, false);
+    setAnm(AnmPrm_POST_GET0, false);
     mPreItemNo = dComIfGp_event_getPreItemNo();
     field_0x8DC = l_HIO.field_0x14;
     field_0x8E0 = l_HIO.field_0x16;
@@ -711,16 +716,15 @@ void daObjTpost_c::modeTalkXYInit() {
 /* 0000129C-00001490       .text modeTalkXY__12daObjTpost_cFv */
 void daObjTpost_c::modeTalkXY() {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    if(field_0x6C9 == 3) {
+    if(isAnm(AnmPrm_POST_PUTOUT)) {
         if(field_0x8EA != 0) {
             field_0x8E4 = 10;
             field_0x8EA = 0;
         }
 
         if(field_0x8E4 != -1 && cLib_calcTimer(&field_0x8E4) == 0) {
-            player->mDemo.setOriginalDemoType();
-            player->mDemo.setParam0(0);
-            player->mDemo.setDemoMode(0x18);
+            player->changeOriginalDemo();
+            player->changeDemoMode(daPy_demo_c::DEMO_UNK18_e);
 
             field_0x8E4 = -1;
         }
@@ -731,24 +735,23 @@ void daObjTpost_c::modeTalkXY() {
             case 0xCF0:
             case 0xCF1:
                 if(player->getBaseAnimeFrameRate() == 0.0f) {
-                    player->mDemo.setOriginalDemoType();
-                    player->mDemo.setParam0(0);
-                    player->mDemo.setDemoMode(1);
+                    player->changeOriginalDemo();
+                    player->changeDemoMode(daPy_demo_c::DEMO_UNK1_e);
                 }
 
                 break;
         }
     }
 
-    if(field_0x6C9 == 1 && dComIfGp_evmng_ChkPresentEnd() && cLib_calcTimer(&field_0x8E0) == 0) {
+    if(isAnm(AnmPrm_POST_GET0) && dComIfGp_evmng_ChkPresentEnd() && cLib_calcTimer(&field_0x8E0) == 0) {
         dComIfGp_evmng_CancelPresent();
-        setAnm(2, false);
+        setAnm(AnmPrm_POST_GET1, false);
     }
 
-    if(field_0x6C9 == 2 || field_0x6C9 == 3) {
+    if(isAnm(AnmPrm_POST_GET1) || isAnm(AnmPrm_POST_PUTOUT)) {
         if(mMorf->isStop()) {
             if(cLib_calcTimer(&field_0x8DC) == 0 && talk(1) == fopMsgStts_BOX_CLOSED_e) {
-                modeProc(PROC_INIT, 0);
+                modeProcInit(MODE_WAIT);
                 dComIfGp_event_reset();
                 field_0x8F5 = 0;
             }
@@ -759,13 +762,13 @@ void daObjTpost_c::modeTalkXY() {
 /* 00001490-000014D4       .text modeReceiveInit__12daObjTpost_cFv */
 void daObjTpost_c::modeReceiveInit() {
     dComIfGp_event_reset();
-    field_0x8F7 = 3;
-    setAnm(1, false);
+    eventSet(3);
+    setAnm(AnmPrm_POST_GET0, false);
 }
 
 /* 000014D4-000014FC       .text modeReceive__12daObjTpost_cFv */
 void daObjTpost_c::modeReceive() {
-    modeProc(PROC_INIT, 4);
+    modeProcInit(MODE_RECEIVE_DEMO);
 }
 
 /* 000014FC-00001500       .text modeReceiveDemoInit__12daObjTpost_cFv */
@@ -781,13 +784,13 @@ void daObjTpost_c::modeReceiveDemo() {
         dComIfGp_event_reset();
 
         if(mNumReadable != 0) {
-            modeProc(PROC_INIT, 1);
-            field_0x8F7 = 1;
+            modeProcInit(MODE_TALK);
+            eventSet(1);
             field_0x8EB = 1;
             field_0x8F0 += 1;
         }
         else {
-            modeProc(PROC_INIT, 0);
+            modeProcInit(MODE_WAIT);
             field_0x8F0 = 1;
         }
     }
@@ -851,7 +854,7 @@ bool daObjTpost_c::_execute() {
     checkOrder();
     setAttention();
     setCollision(40.0f, 140.0f);
-    modeProc(PROC_EXEC, 5);
+    modeProc(PROC_EXEC, MODE_NULL);
 
     if(dComIfGp_event_runCheck() && !mEventCut.cutProc()) {
         cutProc();
@@ -870,7 +873,7 @@ bool daObjTpost_c::_execute() {
     mMorf->play(0, 0, 0);
     mMorf->calc();
     setMtx();
-    setAnm(5, false);
+    setAnm(AnmPrm_NULL, false);
 
     return 0;
 }
@@ -925,7 +928,7 @@ void daObjTpost_c::createInit() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 6;
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
-    setAnm(1, false);
+    setAnm(AnmPrm_POST_GET0, false);
     setMtx();
     mMorf->calc();
 
@@ -938,7 +941,7 @@ void daObjTpost_c::createInit() {
     mCyl.SetStts(&mStts);
 
     mPayType = checkSendPrice();
-    modeProc(PROC_INIT, 0);
+    modeProcInit(MODE_WAIT);
 
     mAcchCir.SetWall(30.0f, 30.0f);
     mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);

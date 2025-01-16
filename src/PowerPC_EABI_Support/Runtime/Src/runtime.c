@@ -1,4 +1,5 @@
 #include "PowerPC_EABI_Support/Runtime/Inc/runtime.h"
+#include "global.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,14 +18,14 @@ extern "C" {
 
 #define save_restore_reg r11
 
-asm void __div2u(void);
-asm void __div2i(void);
-asm void __mod2u(void);
-asm void __mod2i(void);
-asm void __shl2i(void);
-asm void __shr2u(void);
-asm void __shr2i(void);
-asm void __cvt_dbl_usll(void);
+ASM void __div2u(void);
+ASM void __div2i(void);
+ASM void __mod2u(void);
+ASM void __mod2i(void);
+ASM void __shl2i(void);
+ASM void __shr2u(void);
+ASM void __shr2i(void);
+ASM void __cvt_dbl_usll(void);
 
 void SAVE_FPR(14)(void);
 void SAVE_FPR(15)(void);
@@ -110,7 +111,7 @@ static const u32 __constants[] = {
  * @note Address: 0x800C1B4C
  * @note Size: 0x5C
  */
-asm u32 __cvt_fp2unsigned(register f64 d)
+ASM u32 __cvt_fp2unsigned(register f64 d)
 {
 #ifdef __MWERKS__ // clang-format off
 		nofralloc
@@ -145,7 +146,7 @@ asm u32 __cvt_fp2unsigned(register f64 d)
  * @note Address: 0x800C1BA8
  * @note Size: 0x4C
  */
-asm static void __save_fpr(void) {
+ASM static void __save_fpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 		stfd    fp14,-144(save_restore_reg)
@@ -178,7 +179,7 @@ asm static void __save_fpr(void) {
  * @note Address: 0x800C1BF4
  * @note Size: 0x4C
  */
-asm static void __restore_fpr(void) {
+ASM static void __restore_fpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 		lfd     fp14,-144(save_restore_reg)
@@ -211,7 +212,7 @@ asm static void __restore_fpr(void) {
  * @note Address: 0x800C1C40
  * @note Size: 0x4C
  */
-asm static void __save_gpr(void) {
+ASM static void __save_gpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	ENTRY_SAVE_GPR(14)
@@ -256,7 +257,7 @@ asm static void __save_gpr(void) {
  * @note Address: 0x800C1C8C
  * @note Size: 0x4C
  */
-asm static void __restore_gpr(void) {
+ASM static void __restore_gpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	ENTRY_RESTORE_GPR(14)
@@ -301,7 +302,7 @@ asm static void __restore_gpr(void) {
  * @note Address: 0x800C1CD8
  * @note Size: 0xEC
  */
-asm void __div2u(void) {
+ASM void __div2u(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	cmpwi   cr0,r3,0
@@ -379,7 +380,7 @@ lab9:
  * @note Address: 0x800C1DC4
  * @note Size: 0x138
  */
-asm void __div2i(void) {
+ASM void __div2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	stwu    r1,-16(r1)
@@ -482,7 +483,7 @@ func_end:
  * @note Address: 0x800C1EFC
  * @note Size: 0xE4
  */
-asm void __mod2u(void) {
+ASM void __mod2u(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	cmpwi   cr0,r3,0
@@ -558,7 +559,7 @@ lab9:
  * @note Address: 0x800C1FE0
  * @note Size: 0x10C
  */
-asm void __mod2i(void) {
+ASM void __mod2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 
@@ -648,7 +649,7 @@ no_adjust:
  * @note Address: 0x800C20EC
  * @note Size: 0x24
  */
-asm void __shl2i(void) {
+ASM void __shl2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	subfic  r8,r5,32
@@ -667,7 +668,7 @@ asm void __shl2i(void) {
  * @note Address: 0x800C2110
  * @note Size: 0x24
  */
-asm void __shr2u(void) {
+ASM void __shr2u(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	subfic  r8,r5,32
@@ -686,7 +687,7 @@ asm void __shr2u(void) {
  * @note Address: 0x800C2134
  * @note Size: 0x28
  */
-asm void __shr2i(void) {
+ASM void __shr2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	subfic  r8, r5, 0x20
@@ -707,7 +708,7 @@ around:
  * @note Address: 0x800C21F8
  * @note Size: 0xCC
  */
-asm void __cvt_dbl_usll(void)
+ASM void __cvt_dbl_usll(void)
 {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc

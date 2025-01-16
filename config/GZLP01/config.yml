@@ -10,6 +10,14 @@ mw_comment_version: 10 # GC Linker 1.3.2
 symbols_known: true # Very fast analysis
 fill_gaps: false # Alignments known
 
+block_relocations:
+- source: .sdata:0x803fd93c
+add_relocations:
+- source: .sdata:0x803fd93c
+  type: abs
+  target: buffer__14mDoMtx_stack_c
+  addend: 0x300
+
 modules:
 - object: files/RELS.arc:rels/mmem/f_pc_profile_lst.rel
   splits: config/GZLP01/rels/f_pc_profile_lst/splits.txt

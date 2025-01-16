@@ -4,7 +4,7 @@
 void __OSSystemCallVectorStart();
 void __OSSystemCallVectorEnd();
 
-static asm void SystemCallVector(void) {
+static ASM void SystemCallVector(void) {
     // clang-format off
     nofralloc
 

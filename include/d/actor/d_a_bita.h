@@ -11,6 +11,11 @@ class dBgW;
 
 class bita_class : public fopAc_ac_c {
 public:
+    enum Mode {
+        MODE_NORMAL = 0x0,
+        MODE_DEAD = 0x1,
+    };
+
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ J3DModel* mpModelEf;

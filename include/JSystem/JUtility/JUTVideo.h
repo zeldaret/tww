@@ -27,8 +27,8 @@ public:
     static void postRetraceProc(u32);
     static void drawDoneCallback();
 
-    u32 getFbWidth() const { return mRenderObj->fb_width; }
-    u32 getEfbHeight() const { return mRenderObj->efb_height; }
+    u16 getFbWidth() const { return mRenderObj->fb_width; }
+    u16 getEfbHeight() const { return mRenderObj->efb_height; }
     void getBounds(u16& width, u16& height) const {
         width = (u16)getFbWidth();
         height = (u16)getEfbHeight();
@@ -51,7 +51,7 @@ private:
     static OSTick sVideoInterval;
 
 private:
-    /* 0x04 */ _GXRenderModeObj* mRenderObj;
+    /* 0x04 */ GXRenderModeObj* mRenderObj;
     /* 0x08 */ u32 field_0x8;
     /* 0x0C */ u32 mRetraceCount;
     /* 0x10 */ u32 field_0x10;

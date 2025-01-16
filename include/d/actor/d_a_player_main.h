@@ -857,6 +857,16 @@ public:
         daPyItem_UNK10B_e = 0x10B,
     };
     
+    enum daPy_lk_ITEM_BTN {
+        /* 0x01 */ BTN_A = (1 << 0),
+        /* 0x02 */ BTN_B = (1 << 1),
+        /* 0x04 */ BTN_X = (1 << 2),
+        /* 0x08 */ BTN_Y = (1 << 3),
+        /* 0x10 */ BTN_Z = (1 << 4),
+        /* 0x20 */ BTN_L = (1 << 5),
+        /* 0x40 */ BTN_R = (1 << 6),
+    };
+    
     typedef BOOL (daPy_lk_c::*ProcFunc)();
     
     void seStartOnlyReverb(u32);
@@ -989,13 +999,13 @@ public:
     BOOL checkScopeEnd();
     void setSubjectMode();
     BOOL checkMaskDraw();
-    BOOL checkSubjectEnd(int);
+    BOOL checkSubjectEnd(BOOL);
     BOOL checkGuardAccept();
     void cancelNoDamageMode();
     BOOL commonProcInit(daPy_PROC proc);
     BOOL procScope_init(int);
     BOOL procScope();
-    BOOL procSubjectivity_init(int);
+    BOOL procSubjectivity_init(BOOL);
     BOOL procSubjectivity();
     BOOL procCall_init();
     BOOL procCall();
@@ -1507,7 +1517,7 @@ public:
     BOOL procBoomerangCatch_init();
     BOOL procBoomerangCatch();
     void bowJointCB(int);
-    void bowButton() const;
+    BOOL bowButton() const;
     BOOL checkBowReadyAnime() const;
     BOOL checkBowAnime() const;
     void makeArrow();
@@ -1752,8 +1762,29 @@ public:
     J3DAnmTransform* getNowAnmPackUnder(daPy_UNDER idx) { return mAnmRatioUnder[idx].getAnmTransform(); }
     J3DAnmTransform* getNowAnmPackUpper(daPy_UPPER idx) { return mAnmRatioUpper[idx].getAnmTransform(); }
     
+    BOOL doButton() const { return mItemButton & BTN_A; }
+    BOOL swordButton() const { return mItemButton & BTN_B; }
+    BOOL itemButtonX() const { return mItemButton & BTN_X; }
+    BOOL itemButtonY() const { return mItemButton & BTN_Y; }
+    BOOL itemButtonZ() const { return mItemButton & BTN_Z; }
+    BOOL spActionButton() const { return mItemButton & BTN_R; }
+    
+    BOOL doTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL talkTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL swordTrigger() const { return mItemTrigger & BTN_B; }
+    BOOL cancelTrigger() const { return mItemTrigger & BTN_B; }
+    BOOL itemTriggerX() const { return mItemTrigger & BTN_X; }
+    BOOL itemTriggerY() const { return mItemTrigger & BTN_Y; }
+    BOOL itemTriggerZ() const { return mItemTrigger & BTN_Z; }
+    BOOL spLTrigger() const { return mItemTrigger & BTN_L; }
+    BOOL spActionTrigger() const { return mItemTrigger & BTN_R; }
     void allTrigger() const {}
-    void cancelTrigger() const {}
+    void otherWeaponTrigger() const {}
+    void spBattleTrigger() const {}
+    
+    void checkPlayerDemoMode() const {}
+    void checkSpecialDemoMode() const {}
+    
     void checkAttentionLock() {}
     void checkBoomerangRock() {}
     void checkBothItemEquipAnime() const {}
@@ -1766,40 +1797,22 @@ public:
     void checkIsland() const {}
     void checkMirrorShieldEquip() const {}
     void checkNoUpperAnime() const {}
-    void checkPlayerDemoMode() const {}
     void checkPowerGloveEquip() const {}
     void checkRopeThrowAnime() const {}
     void checkShieldEquip() const {}
-    void checkSpecialDemoMode() const {}
     void checkSwordEquipAnime() const {}
     void checkUpperAnime(u16) const {}
-    void doButton() const {}
-    void doTrigger() const {}
     void getAnmSpeedStickRate(f32, f32) {}
     void getBombWaterPillarBrk() {}
     void getBombWaterPillarBtk() {}
     void getStartModeFromParam(u32) {}
     void getTactLeftHandPos() const {}
-    void itemButtonX() const {}
-    void itemButtonY() const {}
-    void itemButtonZ() const {}
-    void itemTriggerX() const {}
-    void itemTriggerY() const {}
-    void itemTriggerZ() const {}
-    void otherWeaponTrigger() const {}
     void seStartSystem(u32) {}
     void setFootEffectPosType(u8) {}
     void setSpeedAndAngleBoomerang() {}
     void setSpeedAndAngleBow() {}
     void setSpeedAndAngleHookshot() {}
     void setSpeedAndAngleRope() {}
-    void spActionButton() const {}
-    void spActionTrigger() const {}
-    void spBattleTrigger() const {}
-    void spLTrigger() const {}
-    void swordButton() const {}
-    void swordTrigger() const {}
-    void talkTrigger() const {}
     
     virtual void setPlayerPosAndAngle(cXyz*, s16);
     virtual void setPlayerPosAndAngle(cXyz*, csXyz*);
@@ -1997,7 +2010,7 @@ public:
     /* 0x34BA */ u8 m34BA;
     /* 0x34BB */ u8 mCurrItemHeapIdx;
     /* 0x34BC */ u8 m34BC;
-    /* 0x34BD */ u8 mReadyItemIdx; // Which of the three item buttons the player last used.
+    /* 0x34BD */ u8 mReadyItemBtn; // Which of the three item buttons the player last used.
     /* 0x34BE */ u8 m34BE;
     /* 0x34BF */ s8 mReverb;
     /* 0x34C0 */ u8 mLeftHandIdx;
@@ -2008,8 +2021,8 @@ public:
     /* 0x34C5 */ u8 m34C5;
     /* 0x34C6 */ u8 m34C6;
     /* 0x34C7 */ u8 mActivePlayerBombs;
-    /* 0x34C8 */ u8 mPressedButtons;
-    /* 0x34C9 */ u8 m34C9;
+    /* 0x34C8 */ u8 mItemTrigger;
+    /* 0x34C9 */ u8 mItemButton;
     /* 0x34CA */ u8 m34CA;
     /* 0x34CB */ u8 mDekuSpRestartPoint;
     /* 0x34CC */ u8 m34CC;

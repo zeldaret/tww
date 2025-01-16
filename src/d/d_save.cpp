@@ -25,12 +25,12 @@ void dSv_player_status_a_c::init() {
     mLife = 12;
     field_0x8 = 0;
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mSelectItem); i++) {
         mSelectItem[i] = dItem_NONE_e;
         dComIfGp_setSelectItem(i);
     }
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mSelectEquip); i++) {
         mSelectEquip[i] = dItem_NONE_e;
     }
 
@@ -56,7 +56,7 @@ void dSv_player_status_b_c::init() {
 /* 80058B84-80058BC8       .text init__25dSv_player_return_place_cFv */
 void dSv_player_return_place_c::init() {
     strcpy(mName, "sea");
-    mRoomNo = 44;
+    mRoomNo = dIsleRoom_OutsetIsland_e;
     mPoint = 206;
 }
 
@@ -71,19 +71,19 @@ void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status
 
 /* 80058C60-80058C7C       .text init__17dSv_player_item_cFv */
 void dSv_player_item_c::init() {
-    for (int i = 0; i < 21; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mItems); i++) {
         mItems[i] = dItem_NONE_e;
     }
 }
 
 /* 80058C7C-80058E1C       .text setBottleItemIn__17dSv_player_item_cFUcUc */
 void dSv_player_item_c::setBottleItemIn(u8 prevItemNo, u8 newItemNo) {
-    for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
-        if (mItems[0xE + bottleIdx] == prevItemNo) {
-            mItems[0xE + bottleIdx] = newItemNo;
-            for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
-                if (dComIfGs_getSelectItem(btnIdx) == 0xE + bottleIdx) {
-                    dComIfGp_setSelectItem(btnIdx);
+    for (int bottleIdx = 0; bottleIdx < dInvSlot_BOTTLE_COUNT_e; bottleIdx++) {
+        if (mItems[dInvSlot_BOTTLE0_e + bottleIdx] == prevItemNo) {
+            mItems[dInvSlot_BOTTLE0_e + bottleIdx] = newItemNo;
+            for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+                if (dComIfGs_getSelectItem(itemBtn) == dInvSlot_BOTTLE0_e + bottleIdx) {
+                    dComIfGp_setSelectItem(itemBtn);
                 }
             }
             break;
@@ -98,8 +98,8 @@ void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
 
 /* 80058E44-80058F74       .text setEmptyBottle__17dSv_player_item_cFv */
 void dSv_player_item_c::setEmptyBottle() {
-    for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
-        int invIdx = 0xE + bottleIdx;
+    for (int bottleIdx = 0; bottleIdx < dInvSlot_BOTTLE_COUNT_e; bottleIdx++) {
+        int invIdx = dInvSlot_BOTTLE0_e + bottleIdx;
         if (dComIfGs_getItem((u8)invIdx) == dItem_NONE_e) {
             dComIfGs_setItem((u8)invIdx, EMPTY_BOTTLE);
             break;
@@ -108,53 +108,52 @@ void dSv_player_item_c::setEmptyBottle() {
 }
 
 /* 80058F74-8005918C       .text setEquipBottleItemIn__17dSv_player_item_cFUcUc */
-void dSv_player_item_c::setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
-    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
-    if (invIdx < 0xE) {
+void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemBtn, u8 i_itemNo) {
+    u8 invIdx = dComIfGs_getSelectItem(i_itemBtn);
+    if (invIdx < dInvSlot_BOTTLE0_e)
         return;
-    }
-    if (invIdx > 0x11) {
+    if (invIdx > dInvSlot_BOTTLE3_e)
         return;
-    }
-    
+
     mItems[invIdx] = i_itemNo;
-    
-    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(i_btnIdx);
+
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(i_itemBtn);
 }
 
 /* 8005918C-800591B0       .text setEquipBottleItemEmpty__17dSv_player_item_cFUc */
-void dSv_player_item_c::setEquipBottleItemEmpty(u8 i_btnIdx) {
-    setEquipBottleItemIn(i_btnIdx, EMPTY_BOTTLE);
+void dSv_player_item_c::setEquipBottleItemEmpty(u8 i_itemBtn) {
+    setEquipBottleItemIn(i_itemBtn, EMPTY_BOTTLE);
 }
 
 /* 800591B0-80059408       .text setEquipBottleItemIn__17dSv_player_item_cFUc */
 void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemNo) {
-    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-    if (btnIdx == 1) {
-        btnIdx = 0;
-    } else if (btnIdx == 2) {
-        btnIdx = 1;
-    } else if (btnIdx == 3) {
-        btnIdx = 2;
+    u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+    u8 itemBtn;
+    if (talkBtn == dTalkBtn_X_e) {
+        itemBtn = dItemBtn_X_e;
+    } else if (talkBtn == dTalkBtn_Y_e) {
+        itemBtn = dItemBtn_Y_e;
+    } else if (talkBtn == dTalkBtn_Z_e) {
+        itemBtn = dItemBtn_Z_e;
     } else {
         return;
     }
-    
-    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
-    if (invIdx < 0xE) {
+
+    u8 invIdx = dComIfGs_getSelectItem(itemBtn);
+    if (invIdx < dInvSlot_BOTTLE0_e) {
         return;
     }
-    if (invIdx > 0x11) {
+    if (invIdx > dInvSlot_BOTTLE3_e) {
         return;
     }
-    
+
     mItems[invIdx] = i_itemNo;
-    
-    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(btnIdx);
+
+    dComIfGs_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(itemBtn);
 }
 
 /* 80059408-8005942C       .text setEquipBottleItemEmpty__17dSv_player_item_cFv */
@@ -166,8 +165,8 @@ void dSv_player_item_c::setEquipBottleItemEmpty() {
 u8 dSv_player_item_c::checkBottle(u8 i_itemNo) {
     u8 ret = 0;
 
-    for (int i = 0; i < 4; i++) {
-        if (i_itemNo == mItems[i + 14]) {
+    for (int i = 0; i < dInvSlot_BOTTLE_COUNT_e; i++) {
+        if (i_itemNo == mItems[i + dInvSlot_BOTTLE0_e]) {
             ret++;
         }
     }
@@ -179,8 +178,8 @@ u8 dSv_player_item_c::checkBottle(u8 i_itemNo) {
 u8 dSv_player_item_c::checkEmptyBottle() {
     u8 ret = 0;
 
-    for (int i = 0; i < 4; i++) {
-        if (mItems[i + 14] == EMPTY_BOTTLE) {
+    for (int i = 0; i < dInvSlot_BOTTLE_COUNT_e; i++) {
+        if (mItems[i + dInvSlot_BOTTLE0_e] == EMPTY_BOTTLE) {
             ret++;
         }
     }
@@ -190,7 +189,7 @@ u8 dSv_player_item_c::checkEmptyBottle() {
 
 /* 800594A8-800594C4       .text init__21dSv_player_get_item_cFv */
 void dSv_player_get_item_c::init() {
-    for (int i = 0; i < 21; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mItemFlags); i++) {
         mItemFlags[i] = 0;
     }
 }
@@ -362,15 +361,15 @@ void dSv_player_item_max_c::init() {
 }
 /* 80059908-80059968       .text init__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::init() {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mBeast); i++) {
         mBeast[i] = dItem_NONE_e;
     }
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mBait); i++) {
         mBait[i] = dItem_NONE_e;
     }
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mReserve); i++) {
         mReserve[i] = dItem_NONE_e;
     }
 }
@@ -378,7 +377,7 @@ void dSv_player_bag_item_c::init() {
 /* 80059968-800599D8       .text setBeastItem__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setBeastItem(u8 i_itemNo) {
     if (!checkBeastItem(i_itemNo)) {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < ARRAY_SIZE(mBeast); i++) {
             if (mBeast[i] == dItem_NONE_e) {
                 mBeast[i] = i_itemNo;
                 return;
@@ -390,14 +389,14 @@ void dSv_player_bag_item_c::setBeastItem(u8 i_itemNo) {
 /* 800599D8-80059C30       .text setBeastItemEmpty__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setBeastItemEmpty(u8 i_itemNo) {
     if (checkBeastItem(i_itemNo)) {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < ARRAY_SIZE(mBeast); i++) {
             if (mBeast[i] == i_itemNo) {
                 mBeast[i] = dItem_NONE_e;
-                for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
-                    if (dComIfGp_getSelectItem(btnIdx) == i_itemNo) {
-                        dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), dItem_NONE_e);
-                        dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), dItem_NONE_e);
-                        dComIfGp_setSelectItem(btnIdx);
+                for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+                    if (dComIfGp_getSelectItem(itemBtn) == i_itemNo) {
+                        dComIfGs_setItem(dComIfGs_getSelectItem(itemBtn), dItem_NONE_e);
+                        dComIfGp_setItem(dComIfGs_getSelectItem(itemBtn), dItem_NONE_e);
+                        dComIfGp_setSelectItem(itemBtn);
                     }
                 }
                 return;
@@ -408,7 +407,7 @@ void dSv_player_bag_item_c::setBeastItemEmpty(u8 i_itemNo) {
 
 /* 80059C30-80059C60       .text checkBeastItem__21dSv_player_bag_item_cFUc */
 bool dSv_player_bag_item_c::checkBeastItem(u8 i_itemNo) {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mBeast); i++) {
         if (mBeast[i] == i_itemNo) {
             return true;
         }
@@ -419,74 +418,76 @@ bool dSv_player_bag_item_c::checkBeastItem(u8 i_itemNo) {
 
 /* 80059C60-80059EB0       .text setBaitItemChange__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setBaitItemChange(u8 i_itemNo) {
-    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-    if (btnIdx == 1) {
-        btnIdx = 0;
-    } else if (btnIdx == 2) {
-        btnIdx = 1;
-    } else if (btnIdx == 3) {
-        btnIdx = 2;
+    u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+    u8 itemBtn;
+    if (talkBtn == dTalkBtn_X_e) {
+        itemBtn = dItemBtn_X_e;
+    } else if (talkBtn == dTalkBtn_Y_e) {
+        itemBtn = dItemBtn_Y_e;
+    } else if (talkBtn == dTalkBtn_Z_e) {
+        itemBtn = dItemBtn_Z_e;
     } else {
         return;
     }
-    
-    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
-    if (invIdx < 0x24) {
+
+    u8 invIdx = dComIfGs_getSelectItem(itemBtn);
+    if (invIdx < dInvSlot_BaitFirst_e) {
         return;
     }
-    if (invIdx >= 0x2C) {
+    if (invIdx >= dInvSlot_BaitLast_e) {
         return;
     }
-    
-    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(btnIdx);
+
+    dComIfGs_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(itemBtn);
 }
 
 /* 80059EB0-8005A0C8       .text setBaitItemChange__21dSv_player_bag_item_cFUcUc */
-void dSv_player_bag_item_c::setBaitItemChange(u8 i_btnIdx, u8 i_itemNo) {
-    if (i_btnIdx > 2) {
+void dSv_player_bag_item_c::setBaitItemChange(u8 i_itemBtn, u8 i_itemNo) {
+    if (i_itemBtn > dItemBtn_COUNT_e-1) {
         return;
     }
-    
-    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
-    if (invIdx < 0x24) {
+
+    u8 invIdx = dComIfGs_getSelectItem(i_itemBtn);
+    if (invIdx < dInvSlot_BaitFirst_e) {
         return;
     }
-    if (invIdx >= 0x2C) {
+    if (invIdx >= dInvSlot_BaitLast_e) {
         return;
     }
-    
-    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(i_btnIdx);
+
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(i_itemBtn);
 }
 
 /* 8005A0C8-8005A1A4       .text setBaitItemEmpty__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::setBaitItemEmpty() {
-    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-    if (btnIdx == 1) {
-        btnIdx = 0;
-    } else if (btnIdx == 2) {
-        btnIdx = 1;
-    } else if (btnIdx == 3) {
-        btnIdx = 2;
+    u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+    u8 itemBtn;
+    if (talkBtn == dTalkBtn_X_e) {
+        itemBtn = dItemBtn_X_e;
+    } else if (talkBtn == dTalkBtn_Y_e) {
+        itemBtn = dItemBtn_Y_e;
+    } else if (talkBtn == dTalkBtn_Z_e) {
+        itemBtn = dItemBtn_Z_e;
     } else {
         return;
     }
-    
-    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
-    if (invIdx < 0x24) {
+
+    u8 invIdx = dComIfGs_getSelectItem(itemBtn);
+    if (invIdx < dInvSlot_BaitFirst_e) {
         return;
     }
-    if (invIdx >= 0x2C) {
+    if (invIdx >= dInvSlot_BaitLast_e) {
         return;
     }
-    
-    int baitSlotIdx = invIdx - 0x24;
+
+    int baitSlotIdx = invIdx - dInvSlot_BaitFirst_e;
     u8 num = dComIfGs_getBaitNum(baitSlotIdx);
-    u8 itemNo = dComIfGp_getSelectItem(btnIdx);
-    
+    u8 itemNo = dComIfGp_getSelectItem(itemBtn);
+
     if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
         setBaitItemChange(dItem_NONE_e);
@@ -503,26 +504,26 @@ void dSv_player_bag_item_c::setBaitItemEmpty() {
 }
 
 /* 8005A1A4-8005A248       .text setBaitItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
-    if (i_btnIdx > 2) {
+void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_itemBtn) {
+    if (i_itemBtn > dItemBtn_COUNT_e-1) {
         return;
     }
-    
-    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
-    if (invIdx < 0x24) {
+
+    u8 invIdx = dComIfGs_getSelectItem(i_itemBtn);
+    if (invIdx < dInvSlot_BaitFirst_e) {
         return;
     }
-    if (invIdx >= 0x2C) {
+    if (invIdx >= dInvSlot_BaitLast_e) {
         return;
     }
-    
-    int baitSlotIdx = invIdx - 0x24;
+
+    int baitSlotIdx = invIdx - dInvSlot_BaitFirst_e;
     u8 num = dComIfGs_getBaitNum(baitSlotIdx);
-    u8 itemNo = dComIfGp_getSelectItem(i_btnIdx);
-    
+    u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
+
     if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
-        setBaitItemChange(i_btnIdx, dItem_NONE_e);
+        setBaitItemChange(i_itemBtn, dItem_NONE_e);
     } else if (itemNo == BIRD_ESA_5) {
         num = dComIfGs_getBaitNum(baitSlotIdx);
         if (num > 0) {
@@ -530,7 +531,7 @@ void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
         }
         dComIfGs_setBaitNum(baitSlotIdx, num);
         if (num == 0) {
-            setBaitItemChange(i_btnIdx, dItem_NONE_e);
+            setBaitItemChange(i_itemBtn, dItem_NONE_e);
         }
     }
 }
@@ -568,47 +569,48 @@ u8 dSv_player_bag_item_c::checkBaitItem(u8 i_itemNo) {
 
 /* 8005A334-8005A584       .text setReserveItemChange__21dSv_player_bag_item_cFUc */
 void dSv_player_bag_item_c::setReserveItemChange(u8 i_itemNo) {
-    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
-    if (btnIdx == 1) {
-        btnIdx = 0;
-    } else if (btnIdx == 2) {
-        btnIdx = 1;
-    } else if (btnIdx == 3) {
-        btnIdx = 2;
+    u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+    u8 itemBtn;
+    if (talkBtn == dTalkBtn_X_e) {
+        itemBtn = dItemBtn_X_e;
+    } else if (talkBtn == dTalkBtn_Y_e) {
+        itemBtn = dItemBtn_Y_e;
+    } else if (talkBtn == dTalkBtn_Z_e) {
+        itemBtn = dItemBtn_Z_e;
     } else {
         return;
     }
-    
-    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
-    if (invIdx < 0x30) {
+
+    u8 invIdx = dComIfGs_getSelectItem(itemBtn);
+    if (invIdx < dInvSlot_ReserveFirst_e) {
         return;
     }
-    if (invIdx >= 0x38) {
+    if (invIdx >= dInvSlot_ReserveLast_e) {
         return;
     }
-    
-    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(btnIdx);
+
+    dComIfGs_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(itemBtn);
 }
 
 /* 8005A584-8005A79C       .text setReserveItemChange__21dSv_player_bag_item_cFUcUc */
-void dSv_player_bag_item_c::setReserveItemChange(u8 i_btnIdx, u8 i_itemNo) {
-    if (i_btnIdx > 2) {
+void dSv_player_bag_item_c::setReserveItemChange(u8 i_itemBtn, u8 i_itemNo) {
+    if (i_itemBtn > dItemBtn_COUNT_e-1) {
         return;
     }
-    
-    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
-    if (invIdx < 0x30) {
+
+    u8 invIdx = dComIfGs_getSelectItem(i_itemBtn);
+    if (invIdx < dInvSlot_ReserveFirst_e) {
         return;
     }
-    if (invIdx >= 0x38) {
+    if (invIdx >= dInvSlot_ReserveLast_e) {
         return;
     }
-    
-    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
-    dComIfGp_setSelectItem(i_btnIdx);
+
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_itemBtn), i_itemNo);
+    dComIfGp_setSelectItem(i_itemBtn);
 }
 
 /* 8005A79C-8005A7C0       .text setReserveItemEmpty__21dSv_player_bag_item_cFv */
@@ -711,7 +713,7 @@ void dSv_player_bag_item_record_c::init() {
 
 /* 8005ACA8-8005ACE0       .text init__20dSv_player_collect_cFv */
 void dSv_player_collect_c::init() {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mCollect); i++) {
         mCollect[i] = 0;
     }
 
@@ -791,23 +793,23 @@ int dSv_player_collect_c::getTriforceNum() {
 
 /* 8005B290-8005B320       .text init__16dSv_player_map_cFv */
 void dSv_player_map_c::init() {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x0[0]); i++) {
         field_0x0[0][i] = 0;
         field_0x0[1][i] = 0;
         field_0x0[2][i] = 0;
         field_0x0[3][i] = 0;
     }
 
-    for (int i = 0; i < 49; i++) {
-        field_0x40[i] = 0;
+    for (int i = 0; i < ARRAY_SIZE(mFmapBits); i++) {
+        mFmapBits[i] = 0;
     }
 
     field_0x81 = 0;
-    field_0x40[0] = 3;
-    field_0x40[43] = 3;
-    field_0x40[10] = 3;
+    mFmapBits[dIsleIdx_ForsakenFortress_e] = 1 | 2;
+    mFmapBits[dIsleIdx_OutsetIsland_e] = 1 | 2;
+    mFmapBits[dIsleIdx_WindfallIsland_e] = 1 | 2;
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x71); i++) {
         field_0x71[i] = 0;
     }
 }
@@ -893,13 +895,13 @@ int dSv_player_map_c::getCollectMapNum() {
 /* 8005BAE8-8005BB84       .text onFmapBit__16dSv_player_map_cFiUc */
 void dSv_player_map_c::onFmapBit(int i_idx, u8 i_no) {
     JUT_ASSERT(1957, 0 <= i_no && i_no < 8);
-    field_0x40[i_idx] |= (u8)(1 << i_no);
+    mFmapBits[i_idx] |= (u8)(1 << i_no);
 }
 
 /* 8005BB84-8005BC24       .text isFmapBit__16dSv_player_map_cFiUc */
 BOOL dSv_player_map_c::isFmapBit(int i_idx, u8 i_no) {
     JUT_ASSERT(1987, 0 <= i_no && i_no < 8);
-    return field_0x40[i_idx] & (u8)(1 << i_no) ? TRUE : FALSE;
+    return mFmapBits[i_idx] & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005BC24-8005BCBC       .text onSaveArriveGrid__16dSv_player_map_cFi */
@@ -943,7 +945,7 @@ void dSv_player_info_c::init() {
     mDeathCount = 0;
     mClearCount = 0;
 
-    for (int i = 0; i < 17; i++) {
+    for (int i = 0; i < ARRAY_SIZE(field_0x47); i++) {
         field_0x47[i] = 0;
     }
 
@@ -1016,13 +1018,13 @@ void dSv_player_c::init() {
 void dSv_memBit_c::init() {
     mTbox = 0;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mSwitch); i++) {
         mSwitch[i] = 0;
     }
 
     mItem[0] = 0;
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < ARRAY_SIZE(mVisitedRoom); i++) {
         mVisitedRoom[i] = 0;
     }
 
@@ -1355,61 +1357,61 @@ void dSv_info_c::reinit() {
                                    0x84FF, 0x83FF, 0x82FF, 0x81FF, 0x80FF};
 
     static u16 l_onEventBit[] = {0x2F08, 0x2F04, 0x2F02, 0x3A01, 0x3401};
-    
+
     u8* r29 = new u8[ARRAY_SIZE(l_holdEventReg)];
     for (int i = 0; i < ARRAY_SIZE(l_holdEventReg); i++) {
         r29[i] = dComIfGs_getEventReg(l_holdEventReg[i]);
     }
-    
+
     u8 clearCount = dComIfGs_getClearCount();
-    
+
     char name[17];
     strcpy(name, dComIfGs_getPlayerName());
-    
+
     u8 attnType = dComIfGs_getOptAttentionType();
     u8 ruby = dComIfGs_getOptRuby();
     u8 sound = dComIfGs_getOptSound();
     u8 vib = dComIfGs_getOptVibration();
-    
+
     u8 pictureNum = dComIfGs_getPictureNum();
-    
+
     u8 r27 = dComIfGs_getEventReg(0x89FF);
-    
+
     init();
-    
+
     for (int i = 0; i < ARRAY_SIZE(l_holdEventReg); i++) {
         dComIfGs_setEventReg(l_holdEventReg[i], r29[i]);
     }
-    
+
     for (int i = 0; i < ARRAY_SIZE(l_onEventBit); i++) {
         dComIfGs_onEventBit(l_onEventBit[i]);
     }
-    
+
     dComIfGs_setEventReg(0xC407, 7);
-    
+
     dComIfGs_setClearCount(clearCount);
-    
+
     dComIfGs_onSaveTbox(dSv_save_c::STAGE_MISC, 0x00);
     dComIfGs_onSaveSwitch(dSv_save_c::STAGE_SEA, 0x47);
     dComIfGs_onSaveSwitch(dSv_save_c::STAGE_SEA, 0x5E);
-    
+
     dComIfGs_setPlayerName(name);
-    
+
     dComIfGs_setOptAttentionType(attnType);
     dComIfGs_setOptRuby(ruby);
     dComIfGs_setOptSound(sound);
     dComIfGs_setOptVibration(vib);
-    
+
     dComIfGs_setRandomSalvagePoint(3);
-    
-    dComIfGs_setItem(0x8, CAMERA2);
-    dComIfGp_setItem(0x8, CAMERA2);
-    
-    dComIfGs_onGetItem(0x8, 0);
-    dComIfGs_onGetItem(0x8, 1);
-    
+
+    dComIfGs_setItem(dInvSlot_CAMERA_e, CAMERA2);
+    dComIfGp_setItem(dInvSlot_CAMERA_e, CAMERA2);
+
+    dComIfGs_onGetItem(dInvSlot_CAMERA_e, 0);
+    dComIfGs_onGetItem(dInvSlot_CAMERA_e, 1);
+
     dComIfGs_setPictureNum(pictureNum);
-    
+
     dComIfGs_setEventReg(0x89FF, r27);
 }
 
@@ -1613,7 +1615,7 @@ BOOL dSv_info_c::isActor(int i_id, int i_roomNo) {
     if (0 > i_id || i_id >= dSv_zoneActor_c::ACTOR_MAX) {
         JUT_ASSERT(VERSION_SELECT(3717, 3744, 3744), 0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX);
     }
-    
+
     JUT_ASSERT(VERSION_SELECT(3719, 3746, 3746), 0 <= i_roomNo && i_roomNo < 64);
 
     int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
@@ -1632,52 +1634,52 @@ int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
     char* buffer_start;
     char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
     buffer_start = buffer;
-    
+
     memcpy(buffer, dComIfGs_getpPlayerStatusA(), sizeof(dSv_player_status_a_c));
     dSv_player_status_a_c* status_a = (dSv_player_status_a_c*)buffer;
     if (status_a->getLife() < 0xC) {
         status_a->setLife(0xC);
     }
     buffer += sizeof(dSv_player_status_a_c);
-    
+
     memcpy(buffer, dComIfGs_getpPlayerStatusB(), sizeof(dSv_player_status_b_c));
     dSv_player_status_b_c* status_b = (dSv_player_status_b_c*)buffer;
     status_b->setDateIpl(OSGetTime());
     buffer += sizeof(dSv_player_status_b_c);
-    
+
     memcpy(buffer, dComIfGs_getpPlayerReturnPlace(), sizeof(dSv_player_return_place_c));
     buffer += sizeof(dSv_player_return_place_c);
-    
+
     memcpy(buffer, dComIfGs_getpItem(), sizeof(dSv_player_item_c));
     buffer += sizeof(dSv_player_item_c);
-    
+
     memcpy(buffer, dComIfGs_getpGetItem(), sizeof(dSv_player_get_item_c));
     buffer += sizeof(dSv_player_get_item_c);
-    
+
     memcpy(buffer, dComIfGs_getpItemRecord(), sizeof(dSv_player_item_record_c));
     buffer += sizeof(dSv_player_item_record_c);
-    
+
     memcpy(buffer, dComIfGs_getpItemMax(), sizeof(dSv_player_item_max_c));
     buffer += sizeof(dSv_player_item_max_c);
-    
+
     memcpy(buffer, dComIfGs_getpBagItem(), sizeof(dSv_player_bag_item_c));
     buffer += sizeof(dSv_player_bag_item_c);
-    
+
     memcpy(buffer, dComIfGs_getpGetBagItem(), sizeof(dSv_player_get_bag_item_c));
     buffer += sizeof(dSv_player_get_bag_item_c);
-    
+
     memcpy(buffer, dComIfGs_getpBagItemRecord(), sizeof(dSv_player_bag_item_record_c));
     buffer += sizeof(dSv_player_bag_item_record_c);
-    
+
     memcpy(buffer, dComIfGs_getpCollect(), sizeof(dSv_player_collect_c));
     buffer += sizeof(dSv_player_collect_c);
-    
+
     memcpy(buffer, dComIfGs_getpMap(), sizeof(dSv_player_map_c));
     buffer += sizeof(dSv_player_map_c);
-    
+
     memcpy(buffer, dComIfGs_getpPlayerInfo(), sizeof(dSv_player_info_c));
     buffer += sizeof(dSv_player_info_c);
-    
+
     memcpy(buffer, dComIfGs_getpConfig(), sizeof(dSv_player_config_c));
     buffer += sizeof(dSv_player_config_c);
 #if VERSION == VERSION_JPN
@@ -1687,27 +1689,27 @@ int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
         OSSetSoundMode(1);
     }
 #endif
-    
+
     memcpy(buffer, dComIfGs_getpPriest(), sizeof(dSv_player_priest_c));
     buffer += sizeof(dSv_player_priest_c);
-    
-    for (int i = 0; i < 4; i++) {
+
+    for (int i = 0; i < dSv_player_c::PLAYER_STATUS_C_COUNT; i++) {
         memcpy(buffer, dComIfGs_getpPlayerStatusC(i), sizeof(dSv_player_status_c_c));
         buffer += sizeof(dSv_player_status_c_c);
     }
-    
+
     memcpy(buffer, dComIfGs_getPCourseInfo(), sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX);
     buffer += sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX;
-    
+
     memcpy(buffer, dComIfGs_getPOcean(), sizeof(dSv_ocean_c));
     buffer += sizeof(dSv_ocean_c);
-    
+
     memcpy(buffer, dComIfGs_getPEvent(), sizeof(dSv_event_c));
     buffer += sizeof(dSv_event_c);
-    
+
     memcpy(buffer, dComIfGs_getPReserve(), sizeof(dSv_reserve_c));
     buffer += sizeof(dSv_reserve_c);
-    
+
     s32 save_size = buffer - buffer_start;
     if (save_size > dSv_save_c::PACKED_STRUCT_SIZE) {
         printf("SAVE size over(%d/%d)\n", dSv_save_c::PACKED_STRUCT_SIZE, save_size);
@@ -1723,46 +1725,46 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
     char* buffer_start;
     char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
     buffer_start = buffer;
-    
+
     memcpy(dComIfGs_getpPlayerStatusA(), buffer, sizeof(dSv_player_status_a_c));
     buffer += sizeof(dSv_player_status_a_c);
-    
+
     memcpy(dComIfGs_getpPlayerStatusB(), buffer,  sizeof(dSv_player_status_b_c));
     buffer += sizeof(dSv_player_status_b_c);
-    
+
     memcpy(dComIfGs_getpPlayerReturnPlace(), buffer,  sizeof(dSv_player_return_place_c));
     buffer += sizeof(dSv_player_return_place_c);
-    
+
     memcpy(dComIfGs_getpItem(), buffer,  sizeof(dSv_player_item_c));
     buffer += sizeof(dSv_player_item_c);
-    
+
     memcpy(dComIfGs_getpGetItem(), buffer,  sizeof(dSv_player_get_item_c));
     buffer += sizeof(dSv_player_get_item_c);
-    
+
     memcpy(dComIfGs_getpItemRecord(), buffer,  sizeof(dSv_player_item_record_c));
     buffer += sizeof(dSv_player_item_record_c);
-    
+
     memcpy(dComIfGs_getpItemMax(), buffer,  sizeof(dSv_player_item_max_c));
     buffer += sizeof(dSv_player_item_max_c);
-    
+
     memcpy(dComIfGs_getpBagItem(), buffer,  sizeof(dSv_player_bag_item_c));
     buffer += sizeof(dSv_player_bag_item_c);
-    
+
     memcpy(dComIfGs_getpGetBagItem(), buffer,  sizeof(dSv_player_get_bag_item_c));
     buffer += sizeof(dSv_player_get_bag_item_c);
-    
+
     memcpy(dComIfGs_getpBagItemRecord(), buffer,  sizeof(dSv_player_bag_item_record_c));
     buffer += sizeof(dSv_player_bag_item_record_c);
-    
+
     memcpy(dComIfGs_getpCollect(), buffer,  sizeof(dSv_player_collect_c));
     buffer += sizeof(dSv_player_collect_c);
-    
+
     memcpy(dComIfGs_getpMap(), buffer,  sizeof(dSv_player_map_c));
     buffer += sizeof(dSv_player_map_c);
-    
+
     memcpy(dComIfGs_getpPlayerInfo(), buffer,  sizeof(dSv_player_info_c));
     buffer += sizeof(dSv_player_info_c);
-    
+
     memcpy(dComIfGs_getpConfig(), buffer,  sizeof(dSv_player_config_c));
     buffer += sizeof(dSv_player_config_c);
     if (OSGetSoundMode() == 0) {
@@ -1774,27 +1776,27 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
         dComIfGs_setOptSound(1);
         mDoAud_setOutputMode(1);
     }
-    
+
     memcpy(dComIfGs_getpPriest(), buffer,  sizeof(dSv_player_priest_c));
     buffer += sizeof(dSv_player_priest_c);
-    
+
     for (int i = 0; i < 4; i++) {
         memcpy(dComIfGs_getpPlayerStatusC(i), buffer,  sizeof(dSv_player_status_c_c));
         buffer += sizeof(dSv_player_status_c_c);
     }
-    
+
     memcpy(dComIfGs_getPCourseInfo(), buffer,  sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX);
     buffer += sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX;
-    
+
     memcpy(dComIfGs_getPOcean(), buffer,  sizeof(dSv_ocean_c));
     buffer += sizeof(dSv_ocean_c);
-    
+
     memcpy(dComIfGs_getPEvent(), buffer,  sizeof(dSv_event_c));
     buffer += sizeof(dSv_event_c);
-    
+
     memcpy(dComIfGs_getPReserve(), buffer,  sizeof(dSv_reserve_c));
     buffer += sizeof(dSv_reserve_c);
-    
+
     s32 load_size = buffer - buffer_start;
     if (load_size > dSv_save_c::PACKED_STRUCT_SIZE) {
         printf("LOAD size over(%d/%d)\n", dSv_save_c::PACKED_STRUCT_SIZE, load_size);
@@ -1811,7 +1813,7 @@ int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
     char* buffer_start = buffer;
     char* buffer_src;
-    
+
     dSv_player_status_a_c status_a;
     status_a.init();
     buffer_src = (char*)&status_a;
@@ -1908,7 +1910,7 @@ int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
         memcpy(buffer, buffer_src, sizeof(dSv_player_status_c_c));
         buffer += sizeof(dSv_player_status_c_c);
     }
-    
+
     // Bug: It copies 16 instances of dSv_memory_c from the stack to the card, but only allocates and initializes 1.
     // This means when it initializes an empty save slot in the memory card, all of the stage save tables except the
     // first are filled with garbage data instead of all zeroes.

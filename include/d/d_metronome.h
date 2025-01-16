@@ -13,6 +13,8 @@ public:
     dMn_HIO_c();
     virtual ~dMn_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x04 */ f32 mEchoScale;
     /* 0x08 */ s16 mShiftTiming;

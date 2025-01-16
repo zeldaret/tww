@@ -323,8 +323,8 @@ static s16 daNpc_Md_XyCheckCB(void* i_this, int param_1) {
 }
 
 /* 000006FC-000007FC       .text XyCheckCB__10daNpc_Md_cFi */
-s16 daNpc_Md_c::XyCheckCB(int equippedItemIdx) {
-    u8 selectItemNo = dComIfGp_getSelectItem(equippedItemIdx);
+s16 daNpc_Md_c::XyCheckCB(int i_itemBtn) {
+    u8 selectItemNo = dComIfGp_getSelectItem(i_itemBtn);
     if (isTypeSea()) {
         if (selectItemNo == dItem_WIND_WAKER_e) {
             return TRUE;
@@ -351,8 +351,8 @@ static s16 daNpc_Md_XyEventCB(void* i_this, int param_1) {
 }
 
 /* 0000081C-00000864       .text XyEventCB__10daNpc_Md_cFi */
-s16 daNpc_Md_c::XyEventCB(int equippedItemIdx) {
-    u8 selectItemNo = dComIfGp_getSelectItem(equippedItemIdx);
+s16 daNpc_Md_c::XyEventCB(int i_itemBtn) {
+    u8 selectItemNo = dComIfGp_getSelectItem(i_itemBtn);
     if (selectItemNo == dItem_WIND_WAKER_e) {
         offDefaultTalkXY();
         return mEventIdxTable[5];
@@ -456,7 +456,7 @@ s32 daNpc_Md_c::create() {
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
         if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("リト族（メドリ）", &l_HIO); // "Rito (Medli)" (Ritozoku (Medli))
+            l_HIO.mChildID = mDoHIO_createChild("リト族（メドリ）", &l_HIO); // "Rito (Medli)" (Ritozoku (Medli))
             l_HIO.mpActor = this;
         }
         
@@ -3049,7 +3049,7 @@ daNpc_Md_c::~daNpc_Md_c() {
     m304C.end();
     m3074.remove();
     if (l_HIO.mChildID >= 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildID);
+        mDoHIO_deleteChild(l_HIO.mChildID);
         l_HIO.mChildID = -1;
     }
     m_flying = false;

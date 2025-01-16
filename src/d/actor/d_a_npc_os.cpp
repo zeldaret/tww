@@ -166,7 +166,7 @@ s32 daNpc_Os_c::create() {
         setBaseMtx();
         fopAcM_SetMtx(this, mpMorf->mpModel->getBaseTRMtx());
         if(l_HIO.field_0x04 < 0) {
-            l_HIO.field_0x04 = mDoHIO_root.mDoHIO_createChild("お供石像", &l_HIO); // "Companion Statue" (otomo sekizou)
+            l_HIO.field_0x04 = mDoHIO_createChild("お供石像", &l_HIO); // "Companion Statue" (otomo sekizou)
             l_HIO.field_0x5C = this;
             l_hio_counter = 1;
         }
@@ -2350,7 +2350,7 @@ daNpc_Os_c::~daNpc_Os_c() {
     }
     
     if(l_hio_counter <= 0 && l_HIO.field_0x04 >= 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.field_0x04);
+        mDoHIO_deleteChild(l_HIO.field_0x04);
         l_HIO.field_0x04 = -1;
     }
 

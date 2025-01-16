@@ -31,7 +31,7 @@ u8 clear_z_TX[64] ALIGN_DECL(32) = {
 
 
 /* 802551C0-8025527C       .text ctor_subroutine__10JFWDisplayFPC16_GXRenderModeObjb */
-void JFWDisplay::ctor_subroutine(const _GXRenderModeObj* mode, bool enableAlpha) {
+void JFWDisplay::ctor_subroutine(const GXRenderModeObj* mode, bool enableAlpha) {
     mEnableAlpha = enableAlpha;
     mClamp = 3;
 
@@ -61,7 +61,7 @@ void JFWDisplay::ctor_subroutine(const _GXRenderModeObj* mode, bool enableAlpha)
 }
 
 /* 8025527C-802552EC       .text __ct__10JFWDisplayFPC16_GXRenderModeObjP7JKRHeapQ26JUTXfb10EXfbNumberb */
-JFWDisplay::JFWDisplay(const _GXRenderModeObj* mode, JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_num, bool enableAlpha) {
+JFWDisplay::JFWDisplay(const GXRenderModeObj* mode, JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_num, bool enableAlpha) {
     ctor_subroutine(mode, enableAlpha);
     mXfbManager = JUTXfb::createManager(mode, p_heap, xfb_num);
 }
@@ -96,7 +96,7 @@ void callDirectDraw() {
 
 /* 80255444-80255528       .text prepareCopyDisp__10JFWDisplayFv */
 void JFWDisplay::prepareCopyDisp() {
-    _GXRenderModeObj* renderObj = JUTVideo::getManager()->getRenderMode();
+    GXRenderModeObj* renderObj = JUTVideo::getManager()->getRenderMode();
     u16 width, height;
     JUTVideo::getManager()->getBounds(width, height);
     u16 xfb_height = JUTVideo::getManager()->getXfbHeight();

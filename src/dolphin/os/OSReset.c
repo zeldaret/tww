@@ -56,7 +56,7 @@ inline BOOL __OSCallResetFunctions(u32 arg0) {
 }
 
 #ifdef __MWERKS__
-static asm void Reset(register s32 param_0) {
+static ASM void Reset(register s32 param_0) {
     // clang-format off
     nofralloc
 

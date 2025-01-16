@@ -4,68 +4,126 @@
 //
 
 #include "d/actor/d_a_obj_rforce.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/res/res_stptetu.h"
+
+const char daObjRforce::Act_c::M_arcname[] = "StpTetu";
 
 /* 00000078-0000009C       .text solidHeapCB__Q211daObjRforce5Act_cFP10fopAc_ac_c */
-void daObjRforce::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjRforce::Act_c::solidHeapCB(fopAc_ac_c* this_i) {
+    return static_cast<Act_c*>(this_i)->create_heap();
 }
 
 /* 0000009C-00000220       .text create_heap__Q211daObjRforce5Act_cFv */
-void daObjRforce::Act_c::create_heap() {
-    /* Nonmatching */
+bool daObjRforce::Act_c::create_heap() {
+
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, STPTETU_BDL_STPTETU));
+    JUT_ASSERT(0x57, mdl_data != NULL);
+    mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
+    
+    set_mtx();
+
+    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, STPTETU_DZB_STPTETU));
+    JUT_ASSERT(0x64, bgw_data != NULL);
+    if(bgw_data != NULL){
+        mpBgw = new dBgW();
+        if(mpBgw != NULL){
+            if(mpBgw->Set(bgw_data, cBgW::MOVE_BG_e, &mtx) == true) return false;
+        }
+    }
+
+    bool ret = false;
+    if(mdl_data != NULL && mpModel != NULL && bgw_data != NULL && mpBgw != NULL){
+        ret = true;
+    }
+    return ret;
 }
 
 /* 00000220-000002F8       .text _create__Q211daObjRforce5Act_cFv */
 s32 daObjRforce::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+
+    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    
+    if(ret == cPhs_COMPLEATE_e){
+        if(fopAcM_entrySolidHeap(this, solidHeapCB, 0)){
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+            dComIfG_Bgsp()->Regist(mpBgw, this);
+            mpBgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
+        }
+        else {
+            ret = cPhs_ERROR_e;
+        }
+    }
+
+    return ret;
 }
 
 /* 000002F8-00000384       .text _delete__Q211daObjRforce5Act_cFv */
-BOOL daObjRforce::Act_c::_delete() {
-    /* Nonmatching */
+bool daObjRforce::Act_c::_delete() {
+    if(heap != NULL && mpBgw != NULL && mpBgw->ChkUsed()){
+        dComIfG_Bgsp()->Release(mpBgw);
+    }
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 00000384-00000430       .text set_mtx__Q211daObjRforce5Act_cFv */
 void daObjRforce::Act_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    MTXCopy(mDoMtx_stack_c::get(), mtx);
+    mpModel->calc();
 }
 
 /* 00000430-00000468       .text _execute__Q211daObjRforce5Act_cFv */
-BOOL daObjRforce::Act_c::_execute() {
-    /* Nonmatching */
+bool daObjRforce::Act_c::_execute() {
+    set_mtx();
+    mpBgw->Move();
+    return true;
 }
 
 /* 00000468-00000508       .text _draw__Q211daObjRforce5Act_cFv */
-BOOL daObjRforce::Act_c::_draw() {
-    /* Nonmatching */
+bool daObjRforce::Act_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    dComIfGd_setListBG();
+    
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+
+    return true;
 }
 
 namespace daObjRforce {
 namespace {
 /* 00000508-00000528       .text Mthd_Create__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* obj) {
+    return static_cast<daObjRforce::Act_c*>(obj)->_create();
 }
 
 /* 00000528-0000054C       .text Mthd_Delete__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* obj) {
+    return static_cast<daObjRforce::Act_c*>(obj)->_delete();
 }
 
 /* 0000054C-00000570       .text Mthd_Execute__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* obj) {
+    return static_cast<daObjRforce::Act_c*>(obj)->_execute();
 }
 
 /* 00000570-00000594       .text Mthd_Draw__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* obj) {
+    return static_cast<daObjRforce::Act_c*>(obj)->_draw();
 }
 
 /* 00000594-0000059C       .text Mthd_IsDelete__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void*) {
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {

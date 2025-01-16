@@ -9,19 +9,76 @@
 
 /* 802D5F38-802D60B0       .text J3DGDSetGenMode__FUcUcUcUc11_GXCullMode */
 void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevNum, u8 indTevNum, GXCullMode cull) {
-    static u8 cm2hw[] = { 0, 2, 1, 3 };
+    static u8 cm2hw[] = {
+        /* GX_CULL_NONE  */ 0,
+        /* GX_CULL_FRONT */ 2,
+        /* GX_CULL_BACK  */ 1,
+        /* GX_CULL_ALL   */ 3,
+    };
     GDOverflowCheck(10);
 
     J3DGDWriteBPCmd(0x07FC3F | 0xFE << 24);
     J3DGDWriteBPCmd(texGenNum << 0 | colorChanNum << 4 | (tevNum - 1) << 10 | cm2hw[cull] << 14 | indTevNum << 16 | 0x00 << 24);
 }
 
-u8 J3DGDTexMode0Ids[]  = { 0x80, 0x81, 0x82, 0x83, 0xa0, 0xa1, 0xa2, 0xa3 };
-u8 J3DGDTexMode1Ids[]  = { 0x84, 0x85, 0x86, 0x87, 0xa4, 0xa5, 0xa6, 0xa7 };
-u8 J3DGDTexImage0Ids[] = { 0x88, 0x89, 0x8a, 0x8b, 0xa8, 0xa9, 0xaa, 0xab };
-u8 J3DGDTexImage3Ids[] = { 0x94, 0x95, 0x96, 0x97, 0xb4, 0xb5, 0xb6, 0xb7 };
-u8 J3DGDTexTlutIds[]   = { 0x98, 0x99, 0x9a, 0x9b, 0xb8, 0xb9, 0xba, 0xbb };
-static u8 GX2HWFiltConv[]     = { 0, 4, 1, 5, 2, 6 };
+u8 J3DGDTexMode0Ids[] = {
+    GX_BP_REG_SETMODE0_TEX0,
+    GX_BP_REG_SETMODE0_TEX1,
+    GX_BP_REG_SETMODE0_TEX2,
+    GX_BP_REG_SETMODE0_TEX3,
+    GX_BP_REG_SETMODE0_TEX4,
+    GX_BP_REG_SETMODE0_TEX5,
+    GX_BP_REG_SETMODE0_TEX6,
+    GX_BP_REG_SETMODE0_TEX7,
+};
+u8 J3DGDTexMode1Ids[] = {
+    GX_BP_REG_SETMODE1_TEX0,
+    GX_BP_REG_SETMODE1_TEX1,
+    GX_BP_REG_SETMODE1_TEX2,
+    GX_BP_REG_SETMODE1_TEX3,
+    GX_BP_REG_SETMODE1_TEX4,
+    GX_BP_REG_SETMODE1_TEX5,
+    GX_BP_REG_SETMODE1_TEX6,
+    GX_BP_REG_SETMODE1_TEX7,
+};
+u8 J3DGDTexImage0Ids[] = {
+    GX_BP_REG_SETIMAGE0_TEX0,
+    GX_BP_REG_SETIMAGE0_TEX1,
+    GX_BP_REG_SETIMAGE0_TEX2,
+    GX_BP_REG_SETIMAGE0_TEX3,
+    GX_BP_REG_SETIMAGE0_TEX4,
+    GX_BP_REG_SETIMAGE0_TEX5,
+    GX_BP_REG_SETIMAGE0_TEX6,
+    GX_BP_REG_SETIMAGE0_TEX7,
+};
+u8 J3DGDTexImage3Ids[] = {
+    GX_BP_REG_SETIMAGE3_TEX0,
+    GX_BP_REG_SETIMAGE3_TEX1,
+    GX_BP_REG_SETIMAGE3_TEX2,
+    GX_BP_REG_SETIMAGE3_TEX3,
+    GX_BP_REG_SETIMAGE3_TEX4,
+    GX_BP_REG_SETIMAGE3_TEX5,
+    GX_BP_REG_SETIMAGE3_TEX6,
+    GX_BP_REG_SETIMAGE3_TEX7,
+};
+u8 J3DGDTexTlutIds[] = {
+    GX_BP_REG_SETTLUT_TEX0,
+    GX_BP_REG_SETTLUT_TEX1,
+    GX_BP_REG_SETTLUT_TEX2,
+    GX_BP_REG_SETTLUT_TEX3,
+    GX_BP_REG_SETTLUT_TEX4,
+    GX_BP_REG_SETTLUT_TEX5,
+    GX_BP_REG_SETTLUT_TEX6,
+    GX_BP_REG_SETTLUT_TEX7,
+};
+static u8 GX2HWFiltConv[] = {
+    /* GX_NEAR          */ 0,
+    /* GX_LINEAR        */ 4,
+    /* GX_NEAR_MIP_NEAR */ 1,
+    /* GX_LIN_MIP_NEAR  */ 5,
+    /* GX_NEAR_MIP_LIN  */ 2,
+    /* GX_LIN_MIP_LIN   */ 6,
+};
 
 /* 802D60B0-802D6204       .text J3DGDSetGenMode_3Param__FUcUcUc */
 void J3DGDSetGenMode_3Param(u8 texGenNum, u8 tevNum, u8 indTevNum) {
@@ -405,7 +462,24 @@ void J3DGDSetIndTexOrder(u32 num, GXTexCoordID tc0, GXTexMapID tm0, GXTexCoordID
 
 /* 802D80D0-802D825C       .text J3DGDSetTevOrder__F13_GXTevStageID13_GXTexCoordID11_GXTexMapID12_GXChannelID13_GXTexCoordID11_GXTexMapID12_GXChannelID */
 void J3DGDSetTevOrder(GXTevStageID stage, GXTexCoordID coord1, GXTexMapID map1, GXChannelID color1, GXTexCoordID coord2, GXTexMapID map2, GXChannelID color2) {
-    static u8 c2r[] = {0, 1, 0, 1, 0, 1, 7, 5, 6, 0, 0, 0, 0, 0, 0, 7};
+    static u8 c2r[] = {
+        /* GX_COLOR0      */ 0,
+        /* GX_COLOR1      */ 1,
+        /* GX_ALPHA0      */ 0,
+        /* GX_ALPHA1      */ 1,
+        /* GX_COLOR0A0    */ 0,
+        /* GX_COLOR1A1    */ 1,
+        /* GX_COLOR_ZERO  */ 7,
+        /* GX_ALPHA_BUMP  */ 5,
+        /* GX_ALPHA_BUMPN */ 6,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        /* GX_COLOR_NULL  */ 7,
+    };
 
     GXTexCoordID r31 = coord1 >= GX_MAXCOORD ? GX_TEXCOORD0 : coord1;
     GXTexCoordID r30 = coord2 >= GX_MAXCOORD ? GX_TEXCOORD0 : coord2;

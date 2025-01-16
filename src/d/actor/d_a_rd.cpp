@@ -529,6 +529,7 @@ bool daRd_c::checkTgHit() {
             case 0x0F:
             case 0x10:
             case 0x15:
+            case 0x17:
             case 0x19:
             case 0x1A:
             case 0x1B:
@@ -1348,12 +1349,12 @@ void daRd_c::setBtkAnm(s8 idx) {
         RD_BTK_RD_OPEN,
         RD_BTK_RD_CLOSE,
     };
-    struct play_prm_struct {
+    struct anm_prm_struct {
         s8 m00;
         s8 m01;
         int loopMode;
     };
-    static const play_prm_struct a_play_prm_tbl[] = {
+    static const anm_prm_struct a_anm_prm_tbl[] = {
         {0x01,   -1, J3DFrameCtrl::LOOP_ONCE_e},
         {0x00,   -1, J3DFrameCtrl::LOOP_REPEAT_e},
         {0x01,   -1, J3DFrameCtrl::LOOP_REPEAT_e},
@@ -1365,16 +1366,16 @@ void daRd_c::setBtkAnm(s8 idx) {
         m6DB = idx;
     }
     
-    int r5 = a_play_prm_tbl[m6DB].m00;
+    int r5 = a_anm_prm_tbl[m6DB].m00;
     if (m6DC != m6DB && r5 != -1) {
         J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, a_anm_idx_tbl[r5]));
         JUT_ASSERT(1930, btk != NULL);
         J3DModelData* modelData = mpMorf->getModel()->getModelData();
-        mBtkAnm.init(modelData, btk, true, a_play_prm_tbl[m6DB].loopMode, 1.0f, 0, -1, true, 0);
+        mBtkAnm.init(modelData, btk, true, a_anm_prm_tbl[m6DB].loopMode, 1.0f, 0, -1, true, 0);
         
         if (mBtkAnm.isStop()) {
-            if (a_play_prm_tbl[m6DB].m01 != -1 && a_play_prm_tbl[m6DB].loopMode == J3DFrameCtrl::LOOP_ONCE_e) {
-                m6DB = a_play_prm_tbl[m6DB].m01;
+            if (a_anm_prm_tbl[m6DB].m01 != -1 && a_anm_prm_tbl[m6DB].loopMode == J3DFrameCtrl::LOOP_ONCE_e) {
+                m6DB = a_anm_prm_tbl[m6DB].m01;
             }
         }
     }
@@ -1383,7 +1384,7 @@ void daRd_c::setBtkAnm(s8 idx) {
 }
 
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
-void daRd_c::setAnm(s8 anmIdx, bool param_2) {
+void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
         RD_BCK_TACHIP,
         RD_BCK_SUWARIP,
@@ -1538,11 +1539,11 @@ void daRd_c::setAnm(s8 anmIdx, bool param_2) {
         },
     };
     
-    if (anmIdx != AnmPrm_NULL) {
-        mAnmPrmIdx = anmIdx;
+    if (anmPrmIdx != AnmPrm_NULL) {
+        mAnmPrmIdx = anmPrmIdx;
     }
     
-    if (m6DA != mAnmPrmIdx) {
+    if (mOldAnmPrmIdx != mAnmPrmIdx) {
         if (isAnm(AnmPrm_BEAM_HIT)) {
             setBrkAnm(0x1);
         } else if (isAnm(AnmPrm_BEAM)) {
@@ -1554,11 +1555,11 @@ void daRd_c::setAnm(s8 anmIdx, bool param_2) {
         }
     }
     
-    if (mBckIdx == RD_BCK_DAMAGE || mBckIdx == RD_BCK_DEAD || mBckIdx == RD_BCK_IKARI_SAMPLE) {
+    if (mBckIdx == BckIdx_BEAM_HIT || mBckIdx == BckIdx_BEAM || mBckIdx == BckIdx_BEAM_END) {
         mBrkAnm.setFrame(mpMorf->getFrame());
     }
     
-    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &m6DA, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
+    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
 }
 
 /* 00003C48-000040A8       .text _execute__6daRd_cFv */

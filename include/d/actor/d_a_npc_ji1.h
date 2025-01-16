@@ -282,11 +282,14 @@ public:
     static s8 game_life_point;
 }; // Size: 0xD88
 
-class daNpc_Ji1_HIO_c : JORReflexible {
+class daNpc_Ji1_HIO_c : public JORReflexible {
 public:
     daNpc_Ji1_HIO_c();
     virtual ~daNpc_Ji1_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x004 */ s8 field_0x04;
     /* 0x008 */ f32 field_0x08;
     /* 0x00C */ s16 field_0x0C;

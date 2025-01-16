@@ -99,6 +99,8 @@ public:
     dMo_HIO_c();
     virtual ~dMo_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x04 */ s8 mChildID;
 };  // Size: 0x08

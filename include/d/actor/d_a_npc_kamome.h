@@ -49,6 +49,8 @@ public:
     daNpc_kam_HIO_c();
     virtual ~daNpc_kam_HIO_c() {}
     
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x04 */ s8 mChildID;
     /* 0x08 */ hio_prm_c prm;

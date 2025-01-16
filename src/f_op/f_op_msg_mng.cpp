@@ -4,7 +4,11 @@
 //
 
 #include "f_op/f_op_msg_mng.h"
-#include "JSystem/J2DGraph/J2DTextBox.h"
+#include "JSystem/JKernel/JKRArchive.h"
+#include "JSystem/JUtility/JUTDataHeader.h"
+#if VERSION == VERSION_JPN
+#include "d/d_s_play.h"
+#endif
 #include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_layer_iter.h"
@@ -19,9 +23,44 @@
 #include "SSystem/SComponent/c_malloc.h"
 #include <stdio.h>
 
+#include "global.h"
+
 STControl stick;
 
 fpc_ProcID i_msgID = fpcM_ERROR_PROCESS_ID_e;
+
+struct mesg_header : JUTDataFileHeader {
+    // first block is mesg_info
+};
+
+struct mesg_entry {
+    /* 0x00 */ u32 mDataOffs;
+    /* 0x04 */ u16 mMesgID;
+    /* 0x06 */ u16 mItemPrice;
+    /* 0x08 */ u16 mNextMessageID;
+    /* 0x0A */ u16 field_0x0a;
+    /* 0x0C */ u8 mTextboxType;
+    /* 0x0D */ u8 mDrawType;
+    /* 0x0E */ u8 mTextboxPosition;
+    /* 0x0F */ u8 mItemImage;
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 mInitialSound;
+    /* 0x12 */ u8 mInitialCamera;
+    /* 0x13 */ u8 mInitialAnimation;
+    /* 0x14 */ u8 field_0x14[4];
+};
+
+struct mesg_info : JUTDataBlockHeader {
+    /* 0x08 */ u16 mNumEntry;
+    /* 0x0A */ u16 mEntrySize;
+    /* 0x0C */ u16 mGroupID;
+    /* 0x10 */ u8 mColor;
+    /* 0x14 */ mesg_entry mEntries[1]; // variable-length array
+};
+
+struct mesg_data : JUTDataBlockHeader {
+    char mData[1]; // variable-length array
+};
 
 static bool pushButton;
 static bool pushButton2;
@@ -1095,96 +1134,128 @@ fpc_ProcID fopMsgM_Create(s16 param_1, fopMsgCreateFunc param_2, void* param_3) 
 }
 
 /* 8002E254-8002E2D8       .text getMesgHeader__16fopMsgM_msgGet_cFUl */
-mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32 msgNo) {
-    mGrpID = msgNo >> 0x10;
-    mMsgID = msgNo;
-    if(fopMsgM_hyrule_language_check(msgNo)) {
+mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32 msg) {
+    mGroupID = (msg >> 16);
+    mMsgID = msg;
+
+#if VERSION == VERSION_JPN
+    char path[12];
+    if (g_msgDHIO.field_0x08 == 0) {
+        sprintf(path, "zel_%02d.bmg", mGroupID);
+    } else {
+        sprintf(path, "zel_e%02d.bmg", mGroupID);
+    }
+    JKRArchive* arc = dComIfGp_getMsgDtArchive();
+    return (mesg_header*)JKRArchive::getGlbResource('ROOT', path, arc);
+#else
+    if (fopMsgM_hyrule_language_check(msg)) {
         JKRArchive* arc = dComIfGp_getMsgDt2Archive();
         return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
+    } else {
+        JKRArchive* arc = dComIfGp_getMsgDtArchive();
+        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
     }
-
-    JKRArchive* arc = dComIfGp_getMsgDtArchive();
-    return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
+#endif
 }
 
 /* 8002E2D8-8002E2E0       .text getMesgInfo__16fopMsgM_msgGet_cFP11mesg_header */
-mesg_info* fopMsgM_msgGet_c::getMesgInfo(mesg_header* pHdr) {
-    //return pHdr->pInf1;
+mesg_info* fopMsgM_msgGet_c::getMesgInfo(mesg_header* msg) {
+    return (mesg_info*)&msg->mFirstBlock;
 }
 
 /* 8002E2E0-8002E308       .text getMesgData__16fopMsgM_msgGet_cFP11mesg_header */
-void* fopMsgM_msgGet_c::getMesgData(mesg_header* pHdr) {
-    mesg_info* info = getMesgInfo(pHdr);
-    return (u8*)info + info->size;
+mesg_data* fopMsgM_msgGet_c::getMesgData(mesg_header* msg) {
+    return (mesg_data*)getMesgInfo(msg)->getNext();
 }
 
 /* 8002E308-8002E378       .text getMesgEntry__16fopMsgM_msgGet_cFP11mesg_header */
-mesg_entry fopMsgM_msgGet_c::getMesgEntry(mesg_header* pHdr) {
-    /* Nonmatching */
-    return getMesgInfo(pHdr)->entries[mMsgIdx];
+mesg_entry fopMsgM_msgGet_c::getMesgEntry(mesg_header* msg) {
+    return getMesgInfo(msg)->mEntries[mMsgIdx];
 }
 
 /* 8002E378-8002E430       .text getMessage__16fopMsgM_msgGet_cFP11mesg_header */
-char* fopMsgM_msgGet_c::getMessage(mesg_header* pHdr) {
-    /* Nonmatching */
-    mesg_info* info = getMesgInfo(pHdr);
-    void* data = getMesgData(pHdr);
-    for(int i = 0; info->entries[i].textOffs != 0 && mMsgID == info->entries[i].msgID; i++) {
-        if(info->count <= i) {
-            return NULL;
-        }
+const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
+    mesg_info* info = getMesgInfo(msg);
+    const char* data = getMesgData(msg)->mData;
+
+    const char* ret = NULL;
+
+    for (u16 i = 0; i < info->mNumEntry; i++) {
+        if (info->mEntries[i].mDataOffs == 0)
+            continue;
 
         mMsgIdx = i;
+        if (mMsgID == info->mEntries[i].mMesgID) {
+            mesg_entry* entry = &info->mEntries[mMsgIdx];
+            mResMsgIdx = entry->mMesgID;
+            ret = &data[entry->mDataOffs];
+            break;
+        }
     }
 
-    mResMsgIdx = info->entries[mMsgIdx].msgID;
-    return (char*)data + info->entries[mMsgIdx].textOffs + 8;
+    return ret;
 }
 
 /* 8002E430-8002E4AC       .text getMesgHeader__20fopMsgM_itemMsgGet_cFUl */
-mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32 msgNo) {
-    field_0x08 = msgNo;
-    if(fopMsgM_hyrule_language_check(msgNo)) {
+mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32 msg) {
+#if VERSION == VERSION_JPN
+    u16 groupID = msg >> 16;
+#endif
+    mMsgID = msg;
+
+#if VERSION == VERSION_JPN
+    char path[12];
+    if (g_msgDHIO.field_0x08 == 0) {
+        sprintf(path, "zel_%02d.bmg", groupID);
+    } else {
+        sprintf(path, "zel_e%02d.bmg", groupID);
+    }
+    JKRArchive* arc = dComIfGp_getMsgDtArchive();
+    return (mesg_header*)JKRArchive::getGlbResource('ROOT', path, arc);
+#else
+    if (fopMsgM_hyrule_language_check(msg)) {
         JKRArchive* arc = dComIfGp_getMsgDt2Archive();
         return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
+    } else {
+        JKRArchive* arc = dComIfGp_getMsgDtArchive();
+        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
     }
-
-    JKRArchive* arc = dComIfGp_getMsgDtArchive();
-    return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
+#endif
 }
 
 /* 8002E4AC-8002E4B4       .text getMesgInfo__20fopMsgM_itemMsgGet_cFP11mesg_header */
-mesg_info* fopMsgM_itemMsgGet_c::getMesgInfo(mesg_header* pHdr) {
-    /* Nonmatching */
+mesg_info* fopMsgM_itemMsgGet_c::getMesgInfo(mesg_header* msg) {
+    return (mesg_info*)&msg->mFirstBlock;
 }
 
 /* 8002E4B4-8002E4DC       .text getMesgData__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void* fopMsgM_itemMsgGet_c::getMesgData(mesg_header* pHdr) {
-    mesg_info* info = getMesgInfo(pHdr);
-    return (u8*)info + info->size;
+mesg_data* fopMsgM_itemMsgGet_c::getMesgData(mesg_header* msg) {
+    return (mesg_data*)getMesgInfo(msg)->getNext();
 }
 
 /* 8002E4DC-8002E54C       .text getMesgEntry__20fopMsgM_itemMsgGet_cFP11mesg_header */
-mesg_entry fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* pHdr) {
-    /* Nonmatching */
-    return getMesgInfo(pHdr)->entries[field_0x04];
+mesg_entry fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* msg) {
+    return getMesgInfo(msg)->mEntries[mMsgIdx];
 }
 
 /* 8002E54C-8002E5FC       .text getMessage__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void* fopMsgM_itemMsgGet_c::getMessage(mesg_header* pHdr) {
-    /* Nonmatching */
-    mesg_info* info = getMesgInfo(pHdr);
-    void* data = getMesgData(pHdr);
-    for(int i = 0; info->entries[i].textOffs != 0 && field_0x0A == info->entries[i].msgID; i++) {
-        if(info->count <= i) {
-            return NULL;
-        }
+const char* fopMsgM_itemMsgGet_c::getMessage(mesg_header* msg) {
+    mesg_info* info = getMesgInfo(msg);
+    const char* data = getMesgData(msg)->mData;
 
-        field_0x04 = i;
+    for (u16 i = 0; i < info->mNumEntry; i++) {
+        if (info->mEntries[i].mDataOffs == 0)
+            continue;
+
+        mMsgIdx = i;
+        if (mMsgID == info->mEntries[i].mMesgID) {
+            mesg_entry* entry = &info->mEntries[i];
+            mResMsgIdx = entry->mMesgID;
+            return &data[entry->mDataOffs];
+        }
     }
 
-    field_0x08 = info->entries[field_0x04].msgID;
-    return (char*)data + info->entries[field_0x04].textOffs + 8;
+    return NULL;
 }
 
 /* 8002E7DC-8002E95C       .text dataInit__21fopMsgM_msgDataProc_cFv */
@@ -1265,17 +1336,18 @@ void fopMsgM_msgDataProc_c::dataInit() {
 }
 
 /* 8002E95C-8002EA58       .text charLength__21fopMsgM_msgDataProc_cFiib */
-f32 fopMsgM_msgDataProc_c::charLength(int param_1, int param_2, bool param_3) {
+f32 fopMsgM_msgDataProc_c::charLength(int scale, int charNo, bool mode) {
+    /* Nonmatching */
     JUTFont::TWidth width;
-    field_0x04[0]->getWidthEntry(param_2, &width);
-    f32 advance = (s32)width.field_0x1;
-    f32 width2 = field_0x04[0]->getCellWidth();
-    f32 temp = (param_1 / width2);
-    if(param_3) {
-        return advance * temp;
-    }
+    font[0]->getWidthEntry(charNo, &width);
+    f32 charWidth = (f32)(int)width.field_0x1;
+    f32 cellWidth = (f32)scale / (f32)font[0]->getCellWidth();
 
-    return field_0x11C + advance * temp;
+    if (mode) {
+        return charWidth * cellWidth;
+    } else {
+        return field_0x11C + (charWidth * cellWidth);
+    }
 }
 
 /* 8002EA58-8002EB4C       .text rubyLength__21fopMsgM_msgDataProc_cFib */

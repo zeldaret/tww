@@ -25,7 +25,7 @@ public:
     virtual int getCellWidth() const;
     virtual s32 getCellHeight() const;
     virtual bool isLeadByte(int) const;
-    virtual void loadImage(int, _GXTexMapID);
+    virtual void loadImage(int, GXTexMapID);
     virtual void setBlock();
 
     JUTResFont(ResFONT const*, JKRHeap*);
@@ -35,7 +35,7 @@ public:
     bool initiate(ResFONT const*, JKRHeap*);
     bool protected_initiate(ResFONT const*, JKRHeap*);
     void countBlock();
-    void loadFont(int, _GXTexMapID, JUTFont::TWidth*);
+    void loadFont(int, GXTexMapID, JUTFont::TWidth*);
     int getFontCode(int) const;
     int convertSjis(int, u16*) const;
 
@@ -49,7 +49,7 @@ public:
 
     /* 0x1C */ int mWidth;
     /* 0x20 */ int mHeight;
-    /* 0x24 */ _GXTexObj mTexObj;
+    /* 0x24 */ GXTexObj mTexObj;
     /* 0x44 */ int mTexPageIdx;
     /* 0x48 */ const ResFONT* mResFont;
     /* 0x4C */ ResFONT::INF1* mInfoBlock;

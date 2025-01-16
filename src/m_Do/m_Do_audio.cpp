@@ -219,9 +219,9 @@ int mDoAud_getTactDirection(int stick, int ret) {
 }
 
 /* 800073D8-80007424       .text mDoAud_setSceneName__FPCcll */
-void mDoAud_setSceneName(const char* i_name, s32 i_point, s32 i_layer) {
+void mDoAud_setSceneName(const char* i_name, s32 i_roomNo, s32 i_layer) {
     if (mDoAud_zelAudio_c::getLoadTimer() == 0) {
-        mDoAud_zelAudio_c::getInterface()->setSceneName((char*)i_name, i_point, i_layer);
+        mDoAud_zelAudio_c::getInterface()->setSceneName((char*)i_name, i_roomNo, i_layer);
         mDoAud_zelAudio_c::setLoadTimer(36);
     }
 }

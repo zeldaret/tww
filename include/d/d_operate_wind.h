@@ -16,6 +16,8 @@ class dOw_HIO_c : public mDoHIO_entry_c {
 public:
     dOw_HIO_c();
 
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ s16 field_0x08;

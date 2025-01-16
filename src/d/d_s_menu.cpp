@@ -146,7 +146,7 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
         dComIfGp_setNextStage(room->stageName, startCode, room->roomNo, room->layerNo);
         if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
             fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, PROC_OVERLAP0, 5);
-            mDoAud_bgmStop(0x1E);
+            mDoAud_bgmStop(30);
         } else {
             fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, PROC_OVERLAP0, 5);
             dComIfGs_setRestartRoomParam(0);

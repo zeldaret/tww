@@ -1,5 +1,6 @@
 #include "NMWException.h"
 #include "__ppc_eabi_linker.h"
+#include "global.h"
 
 #if __MWERKS__
 #pragma exceptions off
@@ -20,7 +21,7 @@ extern void __fini_cpp_exceptions(void);
 static int fragmentID = -2;
 
 /* clang-format off */
-static asm char* GetR2() {
+static ASM char* GetR2() {
     nofralloc;
     mr r3, r2
     blr

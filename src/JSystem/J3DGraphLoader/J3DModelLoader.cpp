@@ -293,7 +293,7 @@ void J3DModelLoader::readVertex(const J3DVertexBlock* i_block) {
             JSUConvertOffsetToPtr<void>(i_block, i_block->mpVtxTexCoordArray[i]);
     }
 
-    _GXCompType nrm_type = getFmtType(vertex_data.mVtxAttrFmtList, GX_VA_NRM);
+    GXCompType nrm_type = getFmtType(vertex_data.mVtxAttrFmtList, GX_VA_NRM);
     u32 nrm_size = nrm_type == GX_F32 ? 12 : 6;
 
     void* nrm_end = NULL;
