@@ -13,38 +13,10 @@ class J2DPane;
 class J2DScreen;
 class J2DPicture;
 class JUTFont;
-
-class mesg_entry {
-public:
-    /* 0x00 */ s32 textOffs;
-    /* 0x04 */ s16 msgID;
-    /* 0x06 */ s16 price;
-    /* 0x08 */ s16 nextMsgID;
-    /* 0x0A */ s16 field_0xA;
-    /* 0x0C */ u8 textboxType;
-    /* 0x0D */ u8 drawType;
-    /* 0x0E */ u8 textboxPosition;
-    /* 0x0F */ u8 itemImage;
-    /* 0x10 */ u8 field_0x11;
-    /* 0x11 */ u8 initialSound;
-    /* 0x12 */ u8 initialCamera;
-    /* 0x13 */ u8 initialAnimation;
-    /* 0x14 */ u8 field_0x14;
-    /* 0x15 */ u8 field_0x15;
-    /* 0x16 */ u8 totalRows;
-    /* 0x17 */ u8 field_0x17;
-};
-
-class mesg_info {
-public:
-    char magic[4];
-    s32 size;
-    s16 count;
-    s16 entrySize;
-    s16 groupID;
-    u8 defaultColor;
-    mesg_entry* entries;
-};
+struct mesg_header;
+struct mesg_data;
+struct mesg_info;
+struct mesg_entry;
 
 struct msg_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
@@ -129,7 +101,7 @@ public:
 class fopMsgM_msgDataProc_c {
 public:
     fopMsgM_msgDataProc_c();
-    virtual ~fopMsgM_msgDataProc_c();
+    virtual ~fopMsgM_msgDataProc_c() {}
     void dataInit();
     f32 charLength(int, int, bool);
     f32 rubyLength(int, bool);
@@ -218,7 +190,7 @@ public:
     void tag_input_kenshi();
 
 public:
-    /* 0x004 */ JUTFont* field_0x04[2];
+    /* 0x004 */ JUTFont* font[2];
     /* 0x00C */ mesg_entry* field_0x0C;
     /* 0x010 */ f32 field_0x10;
     /* 0x014 */ f32 field_0x14;

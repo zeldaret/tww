@@ -298,7 +298,6 @@ public:
 
     int getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
-    s16 getMessageCountNumber() { return mMsgCountNumber; }
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
     s16 getMessageCountNumber() { return mMsgCountNumber; }
 
@@ -501,11 +500,9 @@ public:
     void setSwimResArchive(JKRArchive * pArc) { mpSwimResArchive = pArc; }
     void setWindResArchive(JKRArchive * pArc) { mpWindResArchive = pArc; }
     void setFontArchive(JKRArchive * pArc) { mpFont0Archive = pArc; }
-    JKRArchive* getMsgDtArchive() { return mpEnglishTextArchive; }
     void setMsgDtArchive(JKRArchive * pArc) { mpEnglishTextArchive = pArc; }
     JKRArchive* getMsgDtArchive() { return mpEnglishTextArchive; }
 #if VERSION != VERSION_JPN
-    JKRArchive* getMsgDt2Archive() { return mpHyruleTextArchive; }
     void setMsgDt2Archive(JKRArchive * pArc) { mpHyruleTextArchive = pArc; }
     JKRArchive* getMsgDt2Archive() { return mpHyruleTextArchive; }
 #endif
@@ -2331,10 +2328,6 @@ inline void dComIfGp_setItemRupeeCount(s32 count) {
     g_dComIfG_gameInfo.play.setItemRupeeCount(count);
 }
 
-inline s16 dComIfGp_getMessageCountNumber() {
-    return g_dComIfG_gameInfo.play.getMessageCountNumber();
-}
-
 inline s16 dComIfGp_getMessageSetNumber() {
     return g_dComIfG_gameInfo.play.getMessageSetNumber();
 }
@@ -3232,11 +3225,9 @@ inline void dComIfGp_setCamResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.pl
 inline void dComIfGp_setSwimResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSwimResArchive(pArc); }
 inline void dComIfGp_setWindResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setWindResArchive(pArc); }
 inline void dComIfGp_setFontArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFontArchive(pArc); }
-inline JKRArchive* dComIfGp_getMsgDtArchive() { return g_dComIfG_gameInfo.play.getMsgDtArchive(); }
 inline void dComIfGp_setMsgDtArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDtArchive(pArc); }
 inline JKRArchive* dComIfGp_getMsgDtArchive() { return g_dComIfG_gameInfo.play.getMsgDtArchive(); }
 #if VERSION != VERSION_JPN
-inline JKRArchive* dComIfGp_getMsgDt2Archive() { return g_dComIfG_gameInfo.play.getMsgDt2Archive(); }
 inline void dComIfGp_setMsgDt2Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDt2Archive(pArc); }
 inline JKRArchive* dComIfGp_getMsgDt2Archive() { return g_dComIfG_gameInfo.play.getMsgDt2Archive(); }
 #endif

@@ -16,6 +16,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_npc_bs1.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DPicture.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
@@ -159,35 +160,7 @@ private:
     u8 m134;
 };
 
-class fopMsgM_msgGet_c {
-public:
-    virtual ~fopMsgM_msgGet_c() {};
-    mesg_header* getMesgHeader(u32);
-    mesg_info* getMesgInfo(mesg_header*);
-    void* getMesgData(mesg_header*);
-    mesg_entry getMesgEntry(mesg_header*);
-    char* getMessage(mesg_header*);
 
-    s32 mMsgIdx;
-    s16 mGrpID;
-    s16 mMsgID;
-    s16 mResMsgIdx;
-};
-
-
-class fopMsgM_itemMsgGet_c {
-public:
-    virtual ~fopMsgM_itemMsgGet_c() {};
-    mesg_header* getMesgHeader(u32);
-    mesg_info* getMesgInfo(mesg_header*);
-    void* getMesgData(mesg_header*);
-    mesg_entry getMesgEntry(mesg_header*);
-    void* getMessage(mesg_header*);
-
-    u32 field_0x04;
-    s16 field_0x08;
-    s16 field_0x0A;
-};
 
 /* 8002ABB4-8002AC1C       .text drawSelf__9MyPictureFff */
 void MyPicture::drawSelf(f32 x, f32 y) {
@@ -411,7 +384,7 @@ uint fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* param_3,
     /* Nonmatching */
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
-    msgGet.mGrpID = 0;
+    msgGet.mGroupID = 0;
     msgGet.mMsgID = 0;
     msgGet.mResMsgIdx = 0;  
 
@@ -427,10 +400,10 @@ uint fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* param_3,
         if(header != NULL) {
             if(msgGet.getMessage(header) != NULL) {
                 mesg_entry entry = msgGet.getMesgEntry(header);
-                dComIfGp_setMesgAnimeAttrInfo(entry.initialAnimation);
-                dComIfGp_setMessageRupee(entry.price);
+                dComIfGp_setMesgAnimeAttrInfo(entry.mInitialAnimation);
+                dComIfGp_setMessageRupee(entry.mItemPrice);
 
-                if(entry.textboxType == 2 || entry.textboxType == 6 || entry.textboxType == 7) {
+                if(entry.mTextboxType == 2 || entry.mTextboxType == 6 || entry.mTextboxType == 7) {
                     pcId = fopMsgM_create(PROC_MSG2, param_1, param_2, param_3, param_4, NULL);
                 }
                 else {
@@ -460,7 +433,7 @@ u32 fopMsgM_searchMessageNumber(u32 msgNo) {
     /* Nonmatching */
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
-    msgGet.mGrpID = 0;
+    msgGet.mGroupID = 0;
     msgGet.mMsgID = 0;
     msgGet.mResMsgIdx = 0;  
 
@@ -642,9 +615,9 @@ u32 fopMsgM_tactMessageSet() {
 /* 8002BB78-8002BDBC       .text fopMsgM_messageGet__FPcUl */
 char* fopMsgM_messageGet(char* dst, u32 msgNo) {
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.field_0x04 = 0;
-    msgGet.field_0x08 = 0;
-    msgGet.field_0x0A = 0;
+    msgGet.mMsgIdx = 0;
+    msgGet.mMsgID = 0;
+    msgGet.mResMsgIdx = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(0x6BD, head_p);
@@ -695,9 +668,9 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */
 void fopMsgM_passwordGet(char* dst, u32 msgNo) {
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.field_0x04 = 0;
-    msgGet.field_0x08 = 0;
-    msgGet.field_0x0A = 0;
+    msgGet.mMsgIdx = 0;
+    msgGet.mMsgID = 0;
+    msgGet.mResMsgIdx = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(0x735, head_p);
@@ -749,9 +722,9 @@ void fopMsgM_passwordGet(char* dst, u32 msgNo) {
 void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3, char* param_4, char* param_5, char* param_6, u32 param_7) {
     fopMsgM_msgDataProc_c temp;
     fopMsgM_itemMsgGet_c msgGet;
-    msgGet.field_0x04 = 0;
-    msgGet.field_0x08 = 0;
-    msgGet.field_0x0A = 0;
+    msgGet.mMsgIdx = 0;
+    msgGet.mMsgID = 0;
+    msgGet.mResMsgIdx = 0;
 
     strcpy(param_3, "\x1B""CC[000000FF]\x1B""GM[0]");
     strcpy(param_4, "");
@@ -764,8 +737,8 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     const char* src = (char*)msgGet.getMessage(head_p);
     mesg_entry entry = msgGet.getMesgEntry(head_p);
     temp.dataInit();
-    temp.field_0x04[0] = ((J2DTextBox*)param_1)->getFont();
-    temp.field_0x04[1] = ((J2DTextBox*)param_2)->getFont();
+    temp.font[0] = ((J2DTextBox*)param_1)->getFont();
+    temp.font[1] = ((J2DTextBox*)param_2)->getFont();
     temp.stringLength();
     temp.stringShift();
     temp.iconIdxRefresh();
@@ -1353,9 +1326,9 @@ f32 fopMsgM_msgDataProc_c::charLength(int scale, int charNo, bool mode) {
 /* 8002EA58-8002EB4C       .text rubyLength__21fopMsgM_msgDataProc_cFib */
 f32 fopMsgM_msgDataProc_c::rubyLength(int param_1, bool param_2) {
     JUTFont::TWidth width;
-    field_0x04[1]->getWidthEntry(param_1, &width);
+    font[1]->getWidthEntry(param_1, &width);
     s32 advance = width.field_0x1;
-    f32 width2 = field_0x04[1]->getCellWidth();
+    f32 width2 = font[1]->getCellWidth();
     f32 temp = ((s32)field_0x14C / width2);
     if(param_2) {
         return advance * temp;
@@ -1482,7 +1455,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             strcat(field_0x6C, field_0x70);
         }
         if(field_0x27C != 8 && field_0x27C != 9 && field_0x27C != 0x14 && field_0x27C != 0x15) {
-            if(field_0x0C->textboxType != 2 && field_0x0C->textboxType != 6 && field_0x0C->textboxType != 7 && field_0x0C->textboxType != 0xB && field_0x0C->textboxType != 5 && field_0x0C->textboxType != 0xD && field_0x0C->textboxType != 9) {
+            if(field_0x0C->mTextboxType != 2 && field_0x0C->mTextboxType != 6 && field_0x0C->mTextboxType != 7 && field_0x0C->mTextboxType != 0xB && field_0x0C->mTextboxType != 5 && field_0x0C->mTextboxType != 0xD && field_0x0C->mTextboxType != 9) {
                 if(dComIfGp_roomControl_getStayNo()) {
                     mDoAud_messageSePlay(0, 0, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
                 }
@@ -1492,8 +1465,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
             }
 
             if(fopMsgM_nextMsgFlagCheck()) {
-                if(field_0x0C->nextMsgID != 0) {
-                    fopMsgM_messageSet(field_0x0C->nextMsgID);
+                if(field_0x0C->mNextMessageID != 0) {
+                    fopMsgM_messageSet(field_0x0C->mNextMessageID);
                     field_0x27C = 0xF;
                 }
                 else {
@@ -1539,7 +1512,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     return;
                 }
 
-                if(field_0x0C->textboxType != 2 && field_0x0C->textboxType != 6 && field_0x0C->textboxType != 7 && field_0x0C->textboxType != 0xB && field_0x0C->textboxType != 5 && field_0x0C->textboxType != 0xD && field_0x0C->textboxType != 9) {
+                if(field_0x0C->mTextboxType != 2 && field_0x0C->mTextboxType != 6 && field_0x0C->mTextboxType != 7 && field_0x0C->mTextboxType != 0xB && field_0x0C->mTextboxType != 5 && field_0x0C->mTextboxType != 0xD && field_0x0C->mTextboxType != 9) {
                     if(dComIfGp_roomControl_getStayNo()) {
                         mDoAud_messageSePlay(0, 0, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
                     }
@@ -1549,8 +1522,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 if(fopMsgM_nextMsgFlagCheck()) {
-                    if(field_0x0C->nextMsgID != 0) {
-                        fopMsgM_messageSet(field_0x0C->nextMsgID);
+                    if(field_0x0C->mNextMessageID != 0) {
+                        fopMsgM_messageSet(field_0x0C->mNextMessageID);
                         field_0x27C = 0xF;
                     }
                     else {
@@ -1586,7 +1559,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             const char* temp = &field_0x3C[origOffset];
             if(*temp != 0x1A) break;
             if(temp[2] == 0xFF && temp[3] == 0 && temp[4] == 0) {
-                if(field_0x0C->msgID == 0x42 || field_0x0C->msgID == 0x43 || field_0x0C->msgID == 0x44 || field_0x0C->msgID == 0x45 || field_0x0C->msgID == 0x46 || field_0x0C->msgID == 0x47 || field_0x0C->msgID == 0x48 || field_0x0C->msgID == 0x49 || field_0x0C->msgID == 0x4A || field_0x0C->msgID == 0x4B) {
+                if(field_0x0C->mMesgID == 0x42 || field_0x0C->mMesgID == 0x43 || field_0x0C->mMesgID == 0x44 || field_0x0C->mMesgID == 0x45 || field_0x0C->mMesgID == 0x46 || field_0x0C->mMesgID == 0x47 || field_0x0C->mMesgID == 0x48 || field_0x0C->mMesgID == 0x49 || field_0x0C->mMesgID == 0x4A || field_0x0C->mMesgID == 0x4B) {
                     static const u32 colorTable[9] = {
                         0x000000FF,
                         0xB40000FF,
@@ -1605,7 +1578,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
                 else {
                     if(temp[5] > -1 && temp[5] < 9) {
-                        if(field_0x0C->textboxType == 2 || field_0x0C->textboxType == 6 || field_0x0C->textboxType == 7) {
+                        if(field_0x0C->mTextboxType == 2 || field_0x0C->mTextboxType == 6 || field_0x0C->mTextboxType == 7) {
                             static const u32 colorTable[9] = {
                                 0x00000000,
                                 0xB4000000,
@@ -1617,7 +1590,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                                 0x50505000,
                                 0xFFB40000,
                             };
-                            field_0x25C = colorTable[field_0x0C->textboxType];
+                            field_0x25C = colorTable[field_0x0C->mTextboxType];
                             char buf[16];
                             sprintf(buf, "\x1B""CC[%08x]\x1B""GC[%08x]", field_0x25C | field_0x290, field_0x25C | field_0x291);
                             strcat(field_0x60, buf);
@@ -1707,7 +1680,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             else if(temp[2] == 0 && temp[3] == 0 && temp[4] == 0) {
                 char buf[12];
                 strcpy(buf, dComIfGs_getPlayerName());
-                if(dComIfGs_getPalLanguage() == 1 && (field_0x0C->msgID == 0x33B || field_0x0C->msgID == 0xC8B || field_0x0C->msgID == 0x1D21 || field_0x0C->msgID == 0x31D7 || field_0x0C->msgID == 0x37DD || field_0x0C->msgID == 0x37DE)) {
+                if(dComIfGs_getPalLanguage() == 1 && (field_0x0C->mMesgID == 0x33B || field_0x0C->mMesgID == 0xC8B || field_0x0C->mMesgID == 0x1D21 || field_0x0C->mMesgID == 0x31D7 || field_0x0C->mMesgID == 0x37DD || field_0x0C->mMesgID == 0x37DE)) {
                     s32 bufLen = strlen(buf);
                     char current = (buf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -1866,7 +1839,7 @@ void fopMsgM_int_to_char2(char* dst, int num) {
 void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
-    msgGet.mGrpID = 0;
+    msgGet.mGroupID = 0;
     msgGet.mMsgID = 0;
     msgGet.mResMsgIdx = 0;
     static const char* name = "no name";
@@ -1925,7 +1898,7 @@ void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
 void fopMsgM_msgDataProc_c::getString(char* dst, char*, char*, char*, u32 msgNo, f32*, f32*, int*) {
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
-    msgGet.mGrpID = 0;
+    msgGet.mGroupID = 0;
     msgGet.mMsgID = 0;
     msgGet.mResMsgIdx = 0;
     static const char* name = "no name";
