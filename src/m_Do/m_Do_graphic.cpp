@@ -1088,10 +1088,10 @@ out:
 }
 
 /* 8000AAC4-8000AB1C       .text mCaptureProc__FPv */
-void* mCaptureProc(void* dummy) {
-    void* bytesCopied = (void*)encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
+u32 mCaptureProc(void* dummy) {
+    u32 bytesCopied = encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
     DCStoreRange(mCaptureTextureBuffer, mCaptureTextureSize);
-    OSExitThread(bytesCopied);
+    OSExitThread((void*)bytesCopied);
     return bytesCopied;
 }
 

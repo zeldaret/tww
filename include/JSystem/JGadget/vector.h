@@ -52,11 +52,11 @@ struct TVector {
     void** end() { return mEnd; }
     void** const end() const { return mEnd; }
 
-    u8 _00;
-    void** mBegin;
-    void** mEnd;
-    void** _0C;
-    vector::ExtendFunc mExtend;
+    /* 0x04 */ u8 _00;
+    /* 0x08 */ void** mBegin;
+    /* 0x0C */ void** mEnd;
+    /* 0x10 */ void** _0C;
+    /* 0x14 */ vector::ExtendFunc mExtend;
 };
 
 struct TVector_pointer_void : TVector<void*, TAllocator> {

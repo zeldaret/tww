@@ -49,13 +49,13 @@ void TProcessor::pushCurrent(const char* v) {
     if (!mStack.IsStorable())
         return;
 
-    mStack.push(mCurrent);
-    mCurrent = v;
+    mStack.push(getCurrent());
+    setCurrent_(v);
 }
 
 /* 8029EEA4-8029EEC8       .text popCurrent__Q28JMessage10TProcessorFv */
 const char* TProcessor::popCurrent() {
-    mCurrent = mStack.top();
+    setCurrent_(mStack.top());
     mStack.pop();
 }
 
@@ -69,8 +69,8 @@ struct SelectCallBackWork {
 /* 8029EEC8-8029EF54       .text on_select_begin__Q28JMessage10TProcessorFPFPQ28JMessage10TProcessor_PCcPCvPCcUl */
 void TProcessor::on_select_begin(OnSelectBeginCallBack callback, const void* offs, const char* base, u32 rest) {
     if (mStack.IsStorable()) {
-        mProcess.reset_select();
-        SelectCallBackWork* work = (SelectCallBackWork*)&mProcess.mCallBackWork;
+        mStatusData.mCallBack = process_onCharacterEnd_select_;
+        SelectCallBackWork* work = (SelectCallBackWork*)&mStatusData.mCallBackWork;
         work->mCallBack = callback;
         work->mBase = base;
         work->mTable = offs;
@@ -84,7 +84,7 @@ void TProcessor::on_select_begin(OnSelectBeginCallBack callback, const void* off
 
 /* 8029EF54-8029EFA0       .text on_select_end__Q28JMessage10TProcessorFv */
 void TProcessor::on_select_end() {
-    mProcess.reset_normal();
+    mStatusData.mCallBack = process_onCharacterEnd_normal_;
     popCurrent();
     do_select_end();
 }
@@ -92,7 +92,7 @@ void TProcessor::on_select_end() {
 /* 8029EFA0-8029EFFC       .text on_select_separate__Q28JMessage10TProcessorFv */
 void TProcessor::on_select_separate() {
     popCurrent();
-    SelectCallBackWork* work = (SelectCallBackWork*)&mProcess.mCallBackWork;
+    SelectCallBackWork* work = (SelectCallBackWork*)&mStatusData.mCallBackWork;
     const char *v = work->mCallBack(this);
     pushCurrent(v);
     do_select_separate();
@@ -130,9 +130,9 @@ TProcessor::~TProcessor() {
 
 /* 8029F064-8029F080       .text reset___Q28JMessage10TProcessorFPCc */
 void TProcessor::reset_(const char* v) {
-    mCurrent = v;
+    setCurrent_(v);
     mStack.clear();
-    mProcess.reset_normal();
+    mStatusData.mCallBack = process_onCharacterEnd_normal_;
 }
 
 /* 8029F080-8029F120       .text on_tag___Q28JMessage10TProcessorFv */
@@ -141,13 +141,11 @@ void TProcessor::on_tag_() {
     const u8* current = (const u8*)getCurrent();
     size = current[1];
 
-    mCurrent = (const char*)current + size;
+    setCurrent_((const char*)current + size);
     u32 tag = (current[2] << 16 | (u8)current[3] << 8);
     tag |= current[4];
 
-    if (!do_tag(tag, &current[5], size - 5)) {
-        do_tag_(tag, &current[5], size - 5);
-    }
+    on_tag(tag, &current[5], size - 5);
 }
 
 /* 8029F120-8029F248       .text do_tag___Q28JMessage10TProcessorFUlPCvUl */
@@ -188,24 +186,24 @@ void TProcessor::do_systemTagCode_(u16 code, const void* data, u32 size) {
 /* 8029F2A0-8029F37C       .text process_character___Q28JMessage10TProcessorFv */
 bool TProcessor::process_character_() {
     const u8* current = (const u8*)getCurrent();
-    u32 r31 = current[0];
+    u32 character = current[0];
     switch (current[0]) {
     case 0:
-        if (!mProcess.mCallBack(this))
+        if (!mStatusData.mCallBack(this))
             return false;
         break;
     case 0x1A:
         on_tag_();
         break;
     default:
-        if (mControl->mResourceContainer->IsLeadByte(r31)) {
-            r31 <<= 8;
+        if (mControl->mResourceContainer->IsLeadByte(character)) {
+            character <<= 8;
             mCurrent++;
             current = (const u8*)getCurrent();
-            r31 |= current[0];
+            character |= current[0];
         }
         mCurrent++;
-        do_character(r31);
+        on_character(character);
         break;
     }
     return true;
@@ -224,7 +222,7 @@ bool TProcessor::process_onCharacterEnd_normal_(TProcessor* proc) {
 
 /* 8029F3C4-8029F40C       .text process_onCharacterEnd_select___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
 bool TProcessor::process_onCharacterEnd_select_(TProcessor* proc) {
-    SelectCallBackWork* work = (SelectCallBackWork*) &proc->mProcess.mCallBackWork;
+    SelectCallBackWork* work = (SelectCallBackWork*) &proc->mStatusData.mCallBackWork;
     work->mRest--;
     if (work->mRest != 0) {
         proc->on_select_separate();
@@ -237,7 +235,7 @@ bool TProcessor::process_onCharacterEnd_select_(TProcessor* proc) {
 
 /* 8029F40C-8029F428       .text process_select_limited___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
 const char* TProcessor::process_select_limited_(TProcessor* proc) {
-    SelectCallBackWork* work = (SelectCallBackWork*) &proc->mProcess.mCallBackWork;
+    SelectCallBackWork* work = (SelectCallBackWork*) &proc->mStatusData.mCallBackWork;
     u16 offs = ((const u16*)work->mTable)[0];
     work->mTable = (const char*)work->mTable + sizeof(offs);
     return &work->mBase[offs];
@@ -246,7 +244,7 @@ const char* TProcessor::process_select_limited_(TProcessor* proc) {
 /* 8029F428-8029F444       .text process_select___Q28JMessage10TProcessorFPQ28JMessage10TProcessor */
 const char* TProcessor::process_select_(TProcessor* proc) {
     /* Nonmatching */
-    SelectCallBackWork* work = (SelectCallBackWork*) &proc->mProcess.mCallBackWork;
+    SelectCallBackWork* work = (SelectCallBackWork*) &proc->mStatusData.mCallBackWork;
     u32 offs = ((const u32*)work->mTable)[0];
     work->mTable = (const char*)work->mTable + sizeof(offs);
     return &work->mBase[offs];
@@ -282,12 +280,12 @@ const char* TSequenceProcessor::process(const char* stop) {
                 return mCurrent;
 
             mStatus = kStatus_Normal;
-            if (mProcess.mCallBack(this))
+            if (mStatusData.mCallBack(this))
                 on_jump(mControl->getMessageEntry(), mControl->getMessageData_begin());
             break;
         case kStatus_Branch:
             {
-                BranchCallBackWork* work = (BranchCallBackWork*) &mProcess.mCallBackWork;
+                BranchCallBackWork* work = (BranchCallBackWork*) &mStatusData.mCallBackWork;
                 u32 rt = on_branch_queryResult();
 
                 if (rt > 0xFFFF) {
@@ -300,7 +298,7 @@ const char* TSequenceProcessor::process(const char* stop) {
                     }
                 } else {
                     mStatus = kStatus_Normal;
-                    if (rt < work->mTarget && mProcess.mCallBack(this))
+                    if (rt < work->mTarget && mStatusData.mCallBack(this))
                         on_branch(mControl->getMessageEntry(), mControl->getMessageData_begin());
                 }
             }
@@ -308,7 +306,7 @@ const char* TSequenceProcessor::process(const char* stop) {
         }
 
         if (mCurrent == stop) {
-            do_end_();
+            on_end();
             return NULL;
         }
 
@@ -327,8 +325,8 @@ bool TSequenceProcessor::on_isReady() {
 /* 8029F684-8029F698       .text on_jump_register__Q28JMessage18TSequenceProcessorFPFPQ28JMessage18TSequenceProcessor_bUl */
 void TSequenceProcessor::on_jump_register(OnJumpRegisterCallBack callback, u32 target) {
     mStatus = kStatus_Jump;
-    mProcess.mCallBack = (ProcessorCallBack)callback;
-    JumpCallBackWork* work = (JumpCallBackWork*) &mProcess.mCallBackWork;
+    mStatusData.mCallBack = (ProcessorCallBack)callback;
+    JumpCallBackWork* work = (JumpCallBackWork*) &mStatusData.mCallBackWork;
     work->mTarget = target;
 }
 
@@ -345,15 +343,15 @@ void TSequenceProcessor::on_jump(const void* target, const char* v) {
 
 /* 8029F720-8029F730       .text on_branch_register__Q28JMessage18TSequenceProcessorFPFPQ28JMessage18TSequenceProcessorUl_bPCvUl */
 void TSequenceProcessor::on_branch_register(OnBranchRegisterCallBack callback, const void* offset, u32 target) {
-    mProcess.mCallBack = (ProcessorCallBack)callback;
-    BranchCallBackWork* work = (BranchCallBackWork*) &mProcess.mCallBackWork;
+    mStatusData.mCallBack = (ProcessorCallBack)callback;
+    BranchCallBackWork* work = (BranchCallBackWork*) &mStatusData.mCallBackWork;
     work->mTable = offset;
     work->mTarget = target;
 }
 
 /* 8029F730-8029F764       .text on_branch_query__Q28JMessage18TSequenceProcessorFUs */
 void TSequenceProcessor::on_branch_query(u16 branch) {
-    mStatus = 4;
+    mStatus = kStatus_Branch;
     do_branch_query(branch);
 }
 
@@ -478,27 +476,27 @@ void TSequenceProcessor::do_systemTagCode_(u16 code, const void* data, u32 size)
 
 /* 8029FA2C-8029FA5C       .text process_jump_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
 bool TSequenceProcessor::process_jump_limited_(TSequenceProcessor* proc) {
-    JumpCallBackWork* work = (JumpCallBackWork*) &proc->mProcess.mCallBackWork;
+    JumpCallBackWork* work = (JumpCallBackWork*) &proc->mStatusData.mCallBackWork;
     process_setMessage_index_(proc->mControl, work->mTarget);
 }
 
 /* 8029FA5C-8029FA88       .text process_jump___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
 bool TSequenceProcessor::process_jump_(TSequenceProcessor* proc) {
-    JumpCallBackWork* work = (JumpCallBackWork*) &proc->mProcess.mCallBackWork;
+    JumpCallBackWork* work = (JumpCallBackWork*) &proc->mStatusData.mCallBackWork;
     process_setMessage_code_(proc->mControl, work->mTarget);
 }
 
 /* 8029FA88-8029FAB8       .text process_branch_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */
 bool TSequenceProcessor::process_branch_limited_(TSequenceProcessor* proc, u32 choice) {
     /* Nonmatching */
-    BranchCallBackWork* work = (BranchCallBackWork*) &proc->mProcess.mCallBackWork;
+    BranchCallBackWork* work = (BranchCallBackWork*) &proc->mStatusData.mCallBackWork;
     process_setMessage_index_(proc->mControl, ((u16*)work->mTable)[choice]);
 }
 
 /* 8029FAB8-8029FAE8       .text process_branch___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */
 bool TSequenceProcessor::process_branch_(TSequenceProcessor* proc, u32 choice) {
     /* Nonmatching */
-    BranchCallBackWork* work = (BranchCallBackWork*) &proc->mProcess.mCallBackWork;
+    BranchCallBackWork* work = (BranchCallBackWork*) &proc->mStatusData.mCallBackWork;
     process_setMessage_code_(proc->mControl, ((u32*)work->mTable)[choice]);
 }
 
@@ -512,10 +510,9 @@ TRenderingProcessor::~TRenderingProcessor() {
 
 /* 8029FB80-8029FBF0       .text process__Q28JMessage19TRenderingProcessorFPCc */
 const char* TRenderingProcessor::process(const char* stop) {
-    /* Nonmatching */
     do {
         if (mCurrent == stop) {
-            do_end_();
+            on_end();
             return NULL;
         }
     } while(process_character_());

@@ -20,12 +20,12 @@ public:
     struct TStack_ {
         TStack_() { clear(); }
 
-        TStack_(const TStack_& other) {
-            for (int i = 0; i < mNum; i++) {
-                mStack[i] = mStack[i];
-            }
-            mNum = other.mNum;
-        }
+        // TStack_(const TStack_& other) {
+        //     for (int i = 0; i < mNum; i++) {
+        //         mStack[i] = mStack[i];
+        //     }
+        //     mNum = other.mNum;
+        // }
 
         inline void clear() { mNum = 0; }
         inline void push(const char* str) {
@@ -41,12 +41,10 @@ public:
         /* 0x10 */ u32 mNum;
     };
 
-    // XXX: None of this shows up in the debug map. Is this TStatusData?
-    struct TProcess {
-        TProcess() { reset_normal(); }
+    struct TStatusData_ {
+        TStatusData_() { mCallBack = process_onCharacterEnd_normal_; }
 
-        void reset_normal() { mCallBack = process_onCharacterEnd_normal_; }
-        void reset_select() { mCallBack = process_onCharacterEnd_select_; }
+        void reset() {} // TODO
 
         /* 0x00 */ ProcessorCallBack mCallBack;
         /* 0x04 */ void* mCallBackWork[4];
@@ -89,13 +87,29 @@ public:
     void on_tag_();
     bool process_character_();
 
+    TControl* getControl() const { return mControl; }
     const char* getCurrent() const { return mCurrent; }
+    void setCurrent_(const char* v) { mCurrent = v; }
+    void on_character(int character) { do_character(character); }
+    void on_tag(u32 tag, const void* data, u32 size) {
+        if (!do_tag(tag, data, size)) {
+            do_tag_(tag, data, size);
+        }
+    }
+    void on_begin(const void* param_0, const char* param_1) { do_begin_(param_0, param_1); }
+    void on_end() { do_end_(); }
+
+    // TODO: these inlines don't work because of circular includes
+    // const char* on_message(u32 code) { mControl->on_message(code); }
+    // void on_message_limited(u16 messageIndex) { mControl->on_message_limited(messageIndex); }
+    // void on_word(u32 messageIndex) { mControl->on_word(messageIndex); }
+    // void on_isLeadByte(int param_0) { mControl->on_isLeadByte(param_0); }
 
     /* 0x00 */ /* vtable */
     /* 0x04 */ TControl* mControl;
     /* 0x08 */ const char* mCurrent;
     /* 0x0C */ TStack_ mStack;
-    /* 0x20 */ TProcess mProcess;
+    /* 0x20 */ TStatusData_ mStatusData;
 };
 
 struct TSequenceProcessor : public TProcessor {
@@ -142,7 +156,7 @@ struct TSequenceProcessor : public TProcessor {
     void process_setMessageIndex_reserved_(u16);
     void process_setMessageCode_(const TSequenceProcessor*, u16, u16);
 
-    void reset() {}
+    void reset() { reset_(NULL); }
     void setBegin(const void* param_1, const char* param_2) {
         reset_(param_2);
         do_begin_(param_1, param_2);
@@ -164,6 +178,7 @@ struct TRenderingProcessor : public TProcessor {
     TRenderingProcessor(const TReference*);
     TRenderingProcessor(TControl*);
 
+    void reset() { reset_(NULL); }
     void setBegin(const void* entry, const char* data) {
         reset_(data);
         do_begin_(entry, data);

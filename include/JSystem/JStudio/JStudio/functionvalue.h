@@ -11,6 +11,7 @@ typedef f64 (*ExtrapolateParameter)(f64, f64);
 
 class TFunctionValue;
 class TFunctionValueAttributeSet;
+class TFunctionValueAttributeSet;
 
 class TFunctionValueAttribute_refer;
 class TFunctionValueAttribute_range;
@@ -188,8 +189,9 @@ public:
     };
     typedef f64 (*UnkFunc)(f64, const TFunctionValueAttribute_refer*,
                            const TFunctionValue_composite::TData*);
-    typedef f64 (*CompositeFunc)(const JGadget::TVector_pointer<TFunctionValue>&,
+    typedef f64 (*CompositeFunc)(const JGadget::TVector_pointer<TFunctionValue*>&,
                                  const TFunctionValue_composite::TData&, f64);
+    typedef TFunctionValue_composite::TData (*GetCompositeFunc)(const void*);
 
     TFunctionValue_composite();
     virtual ~TFunctionValue_composite() {}

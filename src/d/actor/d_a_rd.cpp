@@ -1672,7 +1672,7 @@ void daRd_c::debugDraw() {
     spawnPos.y += 10.0f;
     cXyz pos = current.pos;
     pos.y += 10.0f;
-    (GXColor){0x00, 0xFF, 0x00, 0x80}; // Unused color, needed for the .rodata section to match.
+    GXColor unused = {0x00, 0xFF, 0x00, 0x80}; // Unused color, needed for the .rodata section to match.
     dLib_debugDrawFan(pos, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, (GXColor){0xFF, 0xFF, 0x00, 0x80});
     dLib_debugDrawFan(pos, shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, (GXColor){0xFF, 0x00, 0x00, 0x80});
     dLib_debugDrawFan(pos, shape_angle.y, l_HIO.m40, l_HIO.m34, (GXColor){0xFF, 0x00, 0xFF, 0x80});

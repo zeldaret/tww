@@ -346,7 +346,7 @@ static u32 __GXGetNumXfbLines(u32 height, u32 scale) {
     return actualHeight;
 }
 
-u16 GXGetNumXfbLines(const u16 efbHeight, f32 yScale) {
+u16 GXGetNumXfbLines(u16 efbHeight, f32 yScale) {
     u32 scale = (u32)(256.0f / yScale) & 0x1FF;
 
     return __GXGetNumXfbLines(efbHeight, scale);

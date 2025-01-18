@@ -14,7 +14,7 @@ extern const char ga4cSignature[4];
 
 const int PARAGRAPH_DATA = 1;
 
-typedef enum TEComposite {
+enum TEComposite {
     /* 0x0 */ COMPOSITE_NONE,
     /* 0x1 */ COMPOSITE_RAW,
     /* 0x2 */ COMPOSITE_IDX,
@@ -26,7 +26,10 @@ typedef enum TEComposite {
     /* 0x8 */ COMPOSITE_ENUM_SIZE,
 };
 
-typedef const void* (*CompositeOperation)(TFunctionValue_composite::TData);
+struct CompositeOperation {
+    TFunctionValue_composite::CompositeFunc mSetFunc;
+    TFunctionValue_composite::GetCompositeFunc mGetFunc;
+};
 
 struct TBlock {
     /* 0x0 */ u32 size;
