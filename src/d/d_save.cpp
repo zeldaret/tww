@@ -7,6 +7,7 @@
 #include "d/d_save_init.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
+#include "m_Do/m_Do_MemCardRWmng.h"
 #if VERSION == VERSION_JPN
 #include "d/d_s_play.h"
 #endif
@@ -1626,13 +1627,8 @@ BOOL dSv_info_c::isActor(int i_id, int i_roomNo) {
 
 /* 8005E780-8005EA24       .text memory_to_card__10dSv_info_cFPci */
 int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
-    // The size of the dSv_save_c struct in RAM (i.e. with alignment padding) is 0x778.
-    // The size that gets stored to the memory card (i.e. packed, without the padding) is 0x768.
-    // At the end of this function there's a check to ensure it doesn't copy more than 0x768 bytes.
-    // At the start of this function, the size the index gets multiplied by to find the slot in the card is 0x770.
-    // I'm not sure where 0x770 comes from, but my best guess is that it's 0x768 aligned to the next 0x10 bytes.
     char* buffer_start;
-    char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
+    char* buffer = i_cardPtr + i_dataNum * sizeof(card_gamedata);
     buffer_start = buffer;
 
     memcpy(buffer, dComIfGs_getpPlayerStatusA(), sizeof(dSv_player_status_a_c));
@@ -1723,7 +1719,7 @@ int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
 /* 8005EA24-8005ED00       .text card_to_memory__10dSv_info_cFPci */
 int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
     char* buffer_start;
-    char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
+    char* buffer = i_cardPtr + i_dataNum * sizeof(card_gamedata);
     buffer_start = buffer;
 
     memcpy(dComIfGs_getpPlayerStatusA(), buffer, sizeof(dSv_player_status_a_c));
@@ -1810,7 +1806,7 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
 /* 8005ED00-8005EF88       .text initdata_to_card__10dSv_info_cFPci */
 int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     // TODO: This function could probably be cleaned up somehow
-    char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
+    char* buffer = i_cardPtr + i_dataNum * sizeof(card_gamedata);
     char* buffer_start = buffer;
     char* buffer_src;
 

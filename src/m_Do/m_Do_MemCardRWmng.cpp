@@ -15,36 +15,6 @@
 #include <string.h>
 #include <printf.h>
 
-struct mDoMemCdRWm_HeaderData
-{
-    /* 0x0000 */ u8 banner[0x0e00];
-    /* 0x0e00 */ u8 icon[0x0200];
-    /* 0x1000 */ u8 field_0x1000[0x0c00];
-    /* 0x1c00 */ char comment[32];
-    /* 0x1c20 */ char info[32];
-};
-
-struct card_pictdata
-{
-    u8 data[0x1ffe];
-    u16 csum;
-};
-
-struct card_gamedata
-{
-    u8 data[0x768];
-    u64 csum;
-};
-
-struct card_savedata
-{
-    u32 saveCount;
-    u32 dataVersion;
-    card_gamedata gamedata[3];
-    u32 field_0x1658[0x269];
-    u32 csum;
-};
-
 static u8 sTmpBuf[0x2000] ALIGN_DECL(32);
 static u8 sTmpBuf2[0x2000] ALIGN_DECL(32);
 static u32 sSaveCount;
