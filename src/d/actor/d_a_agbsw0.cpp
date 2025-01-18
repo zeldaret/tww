@@ -915,7 +915,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
         }
     }
     if(!dComIfGs_isGetCollectMap(3)) {
-        if(dComIfGs_checkGetItem(ESA_BAG)) {
+        if(dComIfGs_checkGetItem(dItem_BAIT_BAG_e)) {
             if(dComIfGs_checkBaitItem(dItem_HYOI_PEAR_e)) {
 #if VERSION == VERSION_JPN
                 s8 roomNo = dComIfGp_roomControl_getStayNo();
@@ -1259,7 +1259,7 @@ BOOL daAgbsw0_c::ExeSubR() {
                 itemNo = 0;
             }
 
-            if(itemNo != RECOVER_FAIRY) {
+            if(itemNo != dItem_RECOVER_FAIRY_e) {
                 current.pos.y += scale.y / 2.0f;
             }
 
@@ -1524,7 +1524,7 @@ BOOL daAgbsw0_c::ExeSubD() {
                 }
                 else if(field_0x299 == 2 && fopAcM_isSwitch(this, getSw1())) {
                     s32 itemNo = getParamNo();
-                    if(itemNo != RECOVER_FAIRY) {
+                    if(itemNo != dItem_RECOVER_FAIRY_e) {
                         current.pos.y += scale.y / 2;
                     }
                     if(0 <= itemNo && itemNo < 0x1F && itemNo != dItem_HEART_PIECE_e && itemNo != dItem_HEART_CONTAINER_e && itemNo != dItem_SMALL_KEY_e) {
@@ -2193,13 +2193,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x4E:
-            if(dComIfGs_checkGetItem(MIRROR_SHIELD)) {
+            if(dComIfGs_checkGetItem(dItem_MIRROR_SHIELD_e)) {
                 return FALSE;
             }
 
             break;
         case 0x4F:
-            if(!dComIfGs_checkGetItem(MIRROR_SHIELD)) {
+            if(!dComIfGs_checkGetItem(dItem_MIRROR_SHIELD_e)) {
                 return FALSE;
             }
 
@@ -2259,25 +2259,25 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x59:
-            if(dComIfGs_checkGetItem(LV3_SWORD) || dComIfGs_checkGetItem(MASTER_SWORD_EX)) {
+            if(dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e) || dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
                 return FALSE;
             }
 
             break;
         case 0x5A:
-            if(!dComIfGs_checkGetItem(LV3_SWORD) && !dComIfGs_checkGetItem(MASTER_SWORD_EX)) {
+            if(!dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e) && !dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
                 return FALSE;
             }
 
             break;
         case 0x5B:
-            if(dComIfGs_checkGetItem(MASTER_SWORD_EX)) {
+            if(dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
                 return FALSE;
             }
 
             break;
         case 0x5C:
-            if(!dComIfGs_checkGetItem(MASTER_SWORD_EX)) {
+            if(!dComIfGs_checkGetItem(dItem_MASTER_SWORD_3_e)) {
                 return FALSE;
             }
 

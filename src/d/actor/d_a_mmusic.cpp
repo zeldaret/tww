@@ -40,7 +40,7 @@ BOOL daMmusic::Act_c::Macore_is_playing() {
         dComIfGs_isEventBit(0x2910) ||
         dComIfGs_isEventBit(0x2e02) ||
         dComIfGs_isEventBit(0x1610) ||
-        !dComIfGs_checkGetItem(LV3_SWORD))
+        !dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e))
         return FALSE;
 
     return TRUE;

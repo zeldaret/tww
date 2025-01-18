@@ -32,8 +32,8 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                     // This also seems to be used by several other enemies, such as Molgera's spawn.
                     static u32 ki_item_d[] = {
                         dItem_HEART_e,
-                        L_MAGIC,
-                        ARROW_10,
+                        dItem_LARGE_MAGIC_e,
+                        dItem_ARROW_10_e,
                     };
                     if (dropType < daDisItem_HEART_e + (int)ARRAY_SIZE(ki_item_d)) {
                         fopAcM_createItem(&i_this->current.pos, ki_item_d[dropType - daDisItem_HEART_e], -1, -1, daItemType_0_e, NULL, daItemAct_4_e);

@@ -994,7 +994,7 @@ void daAgb_c::GbaItemUse() {
         field_0x65c = 30;
         break;
     case 7:
-        if (dComIfGs_checkGetItem(ESA_BAG)) {
+        if (dComIfGs_checkGetItem(dItem_BAIT_BAG_e)) {
             if (dComIfGs_checkBaitItemEmpty()) {
                 temp_r29 |= 0x1000000;
             }
@@ -1064,7 +1064,7 @@ void daAgb_c::Shopping() {
             }
         } else {
             if (dComIfGs_checkBaitItemEmpty()) {
-                dComIfGs_setBaitItem(BIRD_ESA_5);
+                dComIfGs_setBaitItem(dItem_BIRD_BAIT_5_e);
             } else {
                 itemBuy.U8.field_0x1 = 2;
                 return;

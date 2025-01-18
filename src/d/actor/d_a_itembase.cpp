@@ -39,12 +39,12 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
     }
     
     switch (m_itemNo) {
-    case ARROW_30:
+    case dItem_ARROW_30_e:
         mpModelArrow[0] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
         if (!mpModelArrow[0]) {
             return FALSE;
         }
-    case ARROW_20:
+    case dItem_ARROW_20_e:
         mpModelArrow[1] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
         if (!mpModelArrow[1]) {
             return FALSE;

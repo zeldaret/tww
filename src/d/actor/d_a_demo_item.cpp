@@ -28,24 +28,24 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x03, // dItem_ORANGE_RUPEE_e
     0x00, // dItem_HEART_PIECE_e
     0x00, // dItem_HEART_CONTAINER_e
-    0x04, // S_MAGIC
-    0x04, // L_MAGIC
-    0x04, // BOMB_5
-    0x04, // BOMB_10
-    0x04, // BOMB_20
-    0x04, // BOMB_30
+    0x04, // dItem_SMALL_MAGIC_e
+    0x04, // dItem_LARGE_MAGIC_e
+    0x04, // dItem_BOMB_5_e
+    0x04, // dItem_BOMB_10_e
+    0x04, // dItem_BOMB_20_e
+    0x04, // dItem_BOMB_30_e
     0x03, // dItem_SILVER_RUPEE_e
-    0x04, // ARROW_10
-    0x04, // ARROW_20
-    0x04, // ARROW_30
+    0x04, // dItem_ARROW_10_e
+    0x04, // dItem_ARROW_20_e
+    0x04, // dItem_ARROW_30_e
     0x04, // noentry19
     0x04, // noentry20
     0x02, // dItem_SMALL_KEY_e
-    0x04, // RECOVER_FAIRY
+    0x04, // dItem_RECOVER_FAIRY_e
     0x04, // noentry23
     0x04, // noentry24
     0x04, // noentry25
-    0x03, // SUB_DUN_RUPEE
+    0x03, // dItem_SUB_DUN_RUPEE_e
     0x04, // noentry27
     0x04, // noentry28
     0x04, // noentry29
@@ -55,15 +55,15 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x00, // dItem_TINGLE_TUNER_e
     0x00, // dItem_WIND_WAKER_e
     0x00, // CAMERA
-    0x00, // EMONO_BAG
+    0x00, // dItem_SPOILS_BAG_e
     0x00, // dItem_GRAPPLING_HOOK_e
     0x00, // CAMERA2
     0x00, // dItem_BOW_e
-    0x00, // PWR_GROOVE
+    0x00, // dItem_POWER_BRACELETS_e
     0x00, // dItem_IRON_BOOTS_e
     0x00, // dItem_MAGIC_ARMOR_e
     0x04, // WATER_BOOTS
-    0x00, // ESA_BAG
+    0x00, // dItem_BAIT_BAG_e
     0x00, // dItem_BOOMERANG_e
     0x04, // BARE_HAND
     0x00, // dItem_HOOKSHOT_e
@@ -75,40 +75,40 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x00, // dItem_MAGIC_ARROW_e
     0x00, // dItem_LIGHT_ARROW_e
     0x04, // dItem_NEW_FUKU_e
-    0x00, // SWORD
-    0x00, // MASTER_SWORD
-    0x04, // LV3_SWORD
-    0x00, // SHIELD
-    0x00, // MIRROR_SHIELD
-    0x00, // DROPPED_SWORD
-    0x04, // MASTER_SWORD_EX
+    0x00, // dItem_SWORD_e
+    0x00, // dItem_MASTER_SWORD_1_e
+    0x04, // dItem_MASTER_SWORD_2_e
+    0x00, // dItem_SHIELD_e
+    0x00, // dItem_MIRROR_SHIELD_e
+    0x00, // dItem_DROPPED_SWORD_e
+    0x04, // dItem_MASTER_SWORD_3_e
     0x01, // KAKERA_HEART2
     0x04, // noentry64
     0x04, // noentry65
-    0x00, // PIRATES_OMAMORI
-    0x00, // HEROS_OMAMORI
+    0x00, // dItem_PIRATES_CHARM_e
+    0x00, // dItem_HEROS_CHARM_e
     0x04, // GRASS_BALL
-    0x01, // SKULL_NECKLACE
-    0x01, // BOKOBABA_SEED
-    0x01, // GOLDEN_FEATHER
+    0x01, // dItem_SKULL_NECKLACE_e
+    0x01, // dItem_BOKOBABA_SEED_e
+    0x01, // dItem_GOLDEN_FEATHER_e
     0x01, // BOKO_BELT
-    0x01, // RED_JELLY
-    0x01, // GREEN_JELLY
-    0x01, // BLUE_JELLY
+    0x01, // dItem_RED_JELLY_e
+    0x01, // dItem_GREEN_JELLY_e
+    0x01, // dItem_BLUE_JELLY_e
     0x01, // dItem_MAP_e
     0x01, // dItem_COMPASS_e
     0x00, // dItem_BOSS_KEY_e
     0x04, // EMPTY_BSHIP
-    0x00, // EMPTY_BOTTLE
-    0x02, // RED_BOTTLE
-    0x02, // GREEN_BOTTLE
-    0x02, // BLUE_BOTTLE
+    0x00, // dItem_EMPTY_BOTTLE_e
+    0x02, // dItem_RED_POTION_e
+    0x02, // dItem_GREEN_POTION_e
+    0x02, // dItem_BLUE_POTION_e
     0x00, // dItem_HALF_SOUP_BOTTLE_e
     0x00, // dItem_SOUP_BOTTLE_e
-    0x02, // BIN_IN_WATER
-    0x02, // FAIRY_BOTTLE
-    0x00, // FIREFLY_BOTTLE
-    0x02, // FWATER_BOTTLE
+    0x02, // dItem_WATER_BOTTLE_e
+    0x02, // dItem_FAIRY_BOTTLE_e
+    0x00, // dItem_FIREFLY_BOTTLE_e
+    0x02, // dItem_FOREST_WATER_e
     0x04, // UNK_BOTTLE_5A
     0x04, // UNK_BOTTLE_5B
     0x04, // UNK_BOTTLE_5C
@@ -149,7 +149,7 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x00, // TRIFORCE_MAP7
     0x00, // TRIFORCE_MAP8
     0x04, // noentry129
-    0x02, // BIRD_ESA_5
+    0x02, // dItem_BIRD_BAIT_5_e
     0x02, // dItem_HYOI_PEAR_e
     0x04, // ESA1
     0x04, // ESA2
@@ -190,14 +190,14 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x00, // TINGLE_STATUE6
     0x04, // noentry169
     0x04, // dItem_HURRICANE_SPIN_e
-    0x00, // MAX_RUPEE_UP1
-    0x00, // MAX_RUPEE_UP2
-    0x00, // MAX_BOMB_UP1
-    0x00, // MAX_BOMB_UP2
-    0x00, // MAX_ARROW_UP1
-    0x00, // MAX_ARROW_UP2
-    0x04, // MAGIC_POWER
-    0x04, // MAX_MP_UP1
+    0x00, // dItem_MAX_RUPEE_UP1_e
+    0x00, // dItem_MAX_RUPEE_UP2_e
+    0x00, // dItem_MAX_BOMB_UP1_e
+    0x00, // dItem_MAX_BOMB_UP2_e
+    0x00, // dItem_MAX_ARROW_UP1_e
+    0x00, // dItem_MAX_ARROW_UP2_e
+    0x04, // dItem_MAGIC_POWER_e
+    0x04, // dItem_MAX_MP_UP1_e
     0x03, // TINCLE_RUPEE1
     0x03, // TINCLE_RUPEE2
     0x03, // TINCLE_RUPEE3
@@ -210,70 +210,70 @@ u8 daDitem_c::m_effect_type[0x100] = {
     0x04, // LITHOGRAPH4
     0x04, // LITHOGRAPH5
     0x04, // LITHOGRAPH6
-    0x04, // COLLECT_MAP_64
-    0x04, // COLLECT_MAP_63
-    0x04, // COLLECT_MAP_62
-    0x00, // COLLECT_MAP_61
-    0x00, // COLLECT_MAP_60
-    0x00, // COLLECT_MAP_59
-    0x00, // COLLECT_MAP_58
-    0x00, // COLLECT_MAP_57
-    0x00, // COLLECT_MAP_56
-    0x00, // COLLECT_MAP_55
-    0x00, // COLLECT_MAP_54
-    0x00, // COLLECT_MAP_53
-    0x00, // COLLECT_MAP_52
-    0x00, // COLLECT_MAP_51
-    0x00, // COLLECT_MAP_50
-    0x00, // COLLECT_MAP_49
-    0x00, // COLLECT_MAP_48
-    0x00, // COLLECT_MAP_47
-    0x00, // COLLECT_MAP_46
-    0x00, // COLLECT_MAP_45
-    0x00, // COLLECT_MAP_44
-    0x00, // COLLECT_MAP_43
-    0x00, // COLLECT_MAP_42
-    0x00, // COLLECT_MAP_41
-    0x00, // COLLECT_MAP_40
-    0x00, // COLLECT_MAP_39
-    0x00, // COLLECT_MAP_38
-    0x00, // COLLECT_MAP_37
-    0x00, // COLLECT_MAP_36
-    0x00, // COLLECT_MAP_35
-    0x00, // COLLECT_MAP_34
-    0x00, // COLLECT_MAP_33
-    0x00, // COLLECT_MAP_32
-    0x00, // COLLECT_MAP_31
-    0x00, // COLLECT_MAP_30
-    0x00, // COLLECT_MAP_29
-    0x00, // COLLECT_MAP_28
-    0x00, // COLLECT_MAP_27
-    0x00, // COLLECT_MAP_26
-    0x00, // COLLECT_MAP_25
-    0x00, // COLLECT_MAP_24
-    0x00, // COLLECT_MAP_23
-    0x00, // COLLECT_MAP_22
-    0x00, // COLLECT_MAP_21
-    0x00, // COLLECT_MAP_20
-    0x00, // COLLECT_MAP_19
-    0x00, // COLLECT_MAP_18
-    0x00, // COLLECT_MAP_17
-    0x00, // COLLECT_MAP_16
-    0x00, // COLLECT_MAP_15
-    0x00, // COLLECT_MAP_14
-    0x00, // COLLECT_MAP_13
-    0x00, // COLLECT_MAP_12
-    0x00, // COLLECT_MAP_11
-    0x00, // COLLECT_MAP_10
-    0x00, // COLLECT_MAP_09
-    0x00, // COLLECT_MAP_08
-    0x00, // COLLECT_MAP_07
-    0x00, // COLLECT_MAP_06
-    0x00, // COLLECT_MAP_05
-    0x00, // COLLECT_MAP_04
-    0x00, // COLLECT_MAP_03
-    0x00, // COLLECT_MAP_02
-    0x00, // COLLECT_MAP_01
+    0x04, // dItem_COLLECT_MAP_64_e
+    0x04, // dItem_COLLECT_MAP_63_e
+    0x04, // dItem_COLLECT_MAP_62_e
+    0x00, // dItem_COLLECT_MAP_61_e
+    0x00, // dItem_COLLECT_MAP_60_e
+    0x00, // dItem_COLLECT_MAP_59_e
+    0x00, // dItem_COLLECT_MAP_58_e
+    0x00, // dItem_COLLECT_MAP_57_e
+    0x00, // dItem_COLLECT_MAP_56_e
+    0x00, // dItem_COLLECT_MAP_55_e
+    0x00, // dItem_COLLECT_MAP_54_e
+    0x00, // dItem_COLLECT_MAP_53_e
+    0x00, // dItem_COLLECT_MAP_52_e
+    0x00, // dItem_COLLECT_MAP_51_e
+    0x00, // dItem_COLLECT_MAP_50_e
+    0x00, // dItem_COLLECT_MAP_49_e
+    0x00, // dItem_COLLECT_MAP_48_e
+    0x00, // dItem_COLLECT_MAP_47_e
+    0x00, // dItem_COLLECT_MAP_46_e
+    0x00, // dItem_COLLECT_MAP_45_e
+    0x00, // dItem_COLLECT_MAP_44_e
+    0x00, // dItem_COLLECT_MAP_43_e
+    0x00, // dItem_COLLECT_MAP_42_e
+    0x00, // dItem_COLLECT_MAP_41_e
+    0x00, // dItem_COLLECT_MAP_40_e
+    0x00, // dItem_COLLECT_MAP_39_e
+    0x00, // dItem_COLLECT_MAP_38_e
+    0x00, // dItem_COLLECT_MAP_37_e
+    0x00, // dItem_COLLECT_MAP_36_e
+    0x00, // dItem_COLLECT_MAP_35_e
+    0x00, // dItem_COLLECT_MAP_34_e
+    0x00, // dItem_COLLECT_MAP_33_e
+    0x00, // dItem_COLLECT_MAP_32_e
+    0x00, // dItem_COLLECT_MAP_31_e
+    0x00, // dItem_COLLECT_MAP_30_e
+    0x00, // dItem_COLLECT_MAP_29_e
+    0x00, // dItem_COLLECT_MAP_28_e
+    0x00, // dItem_COLLECT_MAP_27_e
+    0x00, // dItem_COLLECT_MAP_26_e
+    0x00, // dItem_COLLECT_MAP_25_e
+    0x00, // dItem_COLLECT_MAP_24_e
+    0x00, // dItem_COLLECT_MAP_23_e
+    0x00, // dItem_COLLECT_MAP_22_e
+    0x00, // dItem_COLLECT_MAP_21_e
+    0x00, // dItem_COLLECT_MAP_20_e
+    0x00, // dItem_COLLECT_MAP_19_e
+    0x00, // dItem_COLLECT_MAP_18_e
+    0x00, // dItem_COLLECT_MAP_17_e
+    0x00, // dItem_COLLECT_MAP_16_e
+    0x00, // dItem_COLLECT_MAP_15_e
+    0x00, // dItem_COLLECT_MAP_14_e
+    0x00, // dItem_COLLECT_MAP_13_e
+    0x00, // dItem_COLLECT_MAP_12_e
+    0x00, // dItem_COLLECT_MAP_11_e
+    0x00, // dItem_COLLECT_MAP_10_e
+    0x00, // dItem_COLLECT_MAP_09_e
+    0x00, // dItem_COLLECT_MAP_08_e
+    0x00, // dItem_COLLECT_MAP_07_e
+    0x00, // dItem_COLLECT_MAP_06_e
+    0x00, // dItem_COLLECT_MAP_05_e
+    0x00, // dItem_COLLECT_MAP_04_e
+    0x00, // dItem_COLLECT_MAP_03_e
+    0x00, // dItem_COLLECT_MAP_02_e
+    0x00, // dItem_COLLECT_MAP_01_e
     0x04, // dItem_NONE_e
 };
 
@@ -378,16 +378,16 @@ void daDitem_c::set_pos() {
 void daDitem_c::anim_control() {
     switch (m_itemNo) {
     case EMPTY_BSHIP:
-    case EMPTY_BOTTLE:
-    case RED_BOTTLE:
-    case GREEN_BOTTLE:
-    case BLUE_BOTTLE:
+    case dItem_EMPTY_BOTTLE_e:
+    case dItem_RED_POTION_e:
+    case dItem_GREEN_POTION_e:
+    case dItem_BLUE_POTION_e:
     case dItem_HALF_SOUP_BOTTLE_e:
     case dItem_SOUP_BOTTLE_e:
-    case BIN_IN_WATER:
-    case FAIRY_BOTTLE:
-    case FIREFLY_BOTTLE:
-    case FWATER_BOTTLE:
+    case dItem_WATER_BOTTLE_e:
+    case dItem_FAIRY_BOTTLE_e:
+    case dItem_FIREFLY_BOTTLE_e:
+    case dItem_FOREST_WATER_e:
     case UNK_BOTTLE_5A:
     case UNK_BOTTLE_5B:
     case UNK_BOTTLE_5C:

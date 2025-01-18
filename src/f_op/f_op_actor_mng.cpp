@@ -848,10 +848,12 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo
                     angle = *p_angle;
                 }
 
-                if (tableIdx == RECOVER_FAIRY) {
-                    // Bug: This condition never gets triggered. They meant to check if (itemNo == RECOVER_FAIRY) so
-                    // that the 3x fairies drop table (table 0x14) spawns them in a triangle. But instead they check if
-                    // the table index is equal to 0x16/RECOVER_FAIRY, which will never be true.
+                if (tableIdx == dItem_RECOVER_FAIRY_e) {
+                    // Bug: This condition never gets triggered.
+                    // They meant to check if (itemNo == dItem_RECOVER_FAIRY_e) so that the
+                    // 3x fairies drop table (table 0x14) spawns them in a triangle.
+                    // But instead they check if the table index is equal to
+                    // 0x16/dItem_RECOVER_FAIRY_e, which will never be true.
                     pos += fairy_offset_tbl[i];
                     angle.y = cM_rndF((f32)0x7FFE);
                 }
@@ -966,7 +968,7 @@ fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
     
     switch (i_itemNo) {
-    case RECOVER_FAIRY:
+    case dItem_RECOVER_FAIRY_e:
         return fopAcM_create(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
@@ -1005,7 +1007,7 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
 
     switch (i_itemNo) {
-    case RECOVER_FAIRY:
+    case dItem_RECOVER_FAIRY_e:
         return fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
@@ -1067,7 +1069,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
     daItem_c* item;
     csXyz prmAngle;
     switch (i_itemNo) {
-    case RECOVER_FAIRY:
+    case dItem_RECOVER_FAIRY_e:
         item = (daItem_c*)fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
         return item;
     case dItem_TRIPLE_HEART_e:

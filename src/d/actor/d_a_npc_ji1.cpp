@@ -1242,7 +1242,7 @@ void daNpc_Ji1_c::createItem() {
     u8 itemNo;
 
     if(field_0xD7C) {
-        itemNo = SWORD;
+        itemNo = dItem_SWORD_e;
     }
     else if(field_0xD7B == 1) {
         itemNo = dItem_HURRICANE_SPIN_e;
@@ -2588,15 +2588,15 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
     if(field_0xC78 == 0) {
         u8 icon;
         switch(dComIfGs_getSelectEquip(0)) {
-            case SWORD:
+            case dItem_SWORD_e:
                 icon = 1;
                 break;
                 icon = 2;
                 break;
-            case LV3_SWORD:
+            case dItem_MASTER_SWORD_2_e:
                 icon = 2;
                 break;
-            case MASTER_SWORD:
+            case dItem_MASTER_SWORD_1_e:
             default:
                 icon = 2;
                 break;

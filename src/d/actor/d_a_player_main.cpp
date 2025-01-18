@@ -954,7 +954,7 @@ BOOL daPy_lk_c::draw() {
         if (checkFreezeState() && checkMaskDraw()) {
             entryDLSetLight(mpYamuModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
         }
-        if (dComIfGs_getSelectEquip(2) == PWR_GROOVE) {
+        if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
             entryDLSetLight(mpPringModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
         }
         if (checkMasterSwordEquip() && !checkCaughtShapeHide() && !checkDemoShieldNoDraw()) {
@@ -1014,7 +1014,7 @@ BOOL daPy_lk_c::draw() {
                 }
                 entryDLSetLight(mpEquipItemModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
                 if (mpSwordModel1 != NULL) {
-                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX) {
+                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e) {
                         updateDLSetLight(mpSwordModel1, 0);
                     }
                 }
@@ -1575,7 +1575,7 @@ void daPy_lk_c::makeItemType() {
     } else if (mEquipItem == dItem_SKULL_HAMMER_e) {
         setHammerModel();
         return;
-    } else if (mEquipItem == EMPTY_BOTTLE) {
+    } else if (mEquipItem == dItem_EMPTY_BOTTLE_e) {
         setBottleModel(mEquipItem);
         return;
     } else {
@@ -1655,8 +1655,8 @@ BOOL daPy_lk_c::checkItemChangeFromButton() {
                     return procBootsEquip_init(dItem_IRON_BOOTS_e);
                 } else if (checkSetItemTrigger(daPyItem_DRINK_BOTTLE_e, 0)) {
                     return procBottleDrink_init(dComIfGp_getSelectItem(mReadyItemBtn));
-                } else if (checkSetItemTrigger(FAIRY_BOTTLE, 0)) {
-                    return procBottleOpen_init(FAIRY_BOTTLE);
+                } else if (checkSetItemTrigger(dItem_FAIRY_BOTTLE_e, 0)) {
+                    return procBottleOpen_init(dItem_FAIRY_BOTTLE_e);
                 } else if (doTrigger()) {
                     if (dComIfGp_getDoStatus() == 0x08) { // A button shows "Put Away"
                         setAnimeUnequip();
@@ -1753,7 +1753,7 @@ BOOL daPy_lk_c::setDamagePoint(f32 amount) {
         dComIfGp_setItemLifeCount(amount);
         if (amount < 0.0f) {
             offNoResetFlg1(daPyFlg1_UNK8000);
-            if (dComIfGs_getSelectEquip(0) != MASTER_SWORD_EX) {
+            if (dComIfGs_getSelectEquip(0) != dItem_MASTER_SWORD_3_e) {
                 offNoResetFlg1(daPyFlg1_UNK200000);
             }
         }
@@ -2058,17 +2058,17 @@ BOOL daPy_lk_c::checkHeavyStateOn() {
 
 /* 80111F5C-80111F7C       .text checkBottleItem__9daPy_lk_cCFi */
 BOOL daPy_lk_c::checkBottleItem(int itemNo) const {
-    return itemNo >= EMPTY_BOTTLE && itemNo <= UNK_BOTTLE_60;
+    return itemNo >= dItem_EMPTY_BOTTLE_e && itemNo <= UNK_BOTTLE_60;
 }
 
 /* 80111F7C-80111FEC       .text checkDrinkBottleItem__9daPy_lk_cCFi */
 BOOL daPy_lk_c::checkDrinkBottleItem(int itemNo) const {
-    return itemNo == RED_BOTTLE || itemNo == GREEN_BOTTLE || itemNo == BLUE_BOTTLE || itemNo == dItem_SOUP_BOTTLE_e || itemNo == dItem_HALF_SOUP_BOTTLE_e;
+    return itemNo == dItem_RED_POTION_e || itemNo == dItem_GREEN_POTION_e || itemNo == dItem_BLUE_POTION_e || itemNo == dItem_SOUP_BOTTLE_e || itemNo == dItem_HALF_SOUP_BOTTLE_e;
 }
 
 /* 80111FEC-8011201C       .text checkOpenBottleItem__9daPy_lk_cCFi */
 BOOL daPy_lk_c::checkOpenBottleItem(int itemNo) const {
-    return itemNo == FIREFLY_BOTTLE || itemNo == BIN_IN_WATER || itemNo == FWATER_BOTTLE || itemNo == FAIRY_BOTTLE;
+    return itemNo == dItem_FIREFLY_BOTTLE_e || itemNo == dItem_WATER_BOTTLE_e || itemNo == dItem_FOREST_WATER_e || itemNo == dItem_FAIRY_BOTTLE_e;
 }
 
 /* 8011201C-80112044       .text checkBowItem__9daPy_lk_cCFi */
@@ -3269,11 +3269,11 @@ BOOL daPy_lk_c::execute() {
         return TRUE;
     }
     
-    if (dComIfGs_checkBottle(FWATER_BOTTLE)) {
+    if (dComIfGs_checkBottle(dItem_FOREST_WATER_e)) {
         if (dComIfGs_getFwaterTimer() == 0) {
             if (dComIfGp_event_compulsory(this)) {
                 onNoResetFlg1(daPyFlg1_UNK200);
-                dComIfGs_setBottleItemIn(FWATER_BOTTLE, BIN_IN_WATER);
+                dComIfGs_setBottleItemIn(dItem_FOREST_WATER_e, dItem_WATER_BOTTLE_e);
                 mDemo.setDemoType(5);
                 m3628 = fpcM_ERROR_PROCESS_ID_e;
                 if (mCurProc == daPyProc_SCOPE_e) {

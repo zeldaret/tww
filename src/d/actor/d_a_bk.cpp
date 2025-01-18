@@ -1183,7 +1183,7 @@ static void jyunkai(bk_class* i_this) {
 static void* ken_s_sub(void* param_1, void*) {
     if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_ITEM) {
         daItem_c* item = (daItem_c*)param_1;
-        if (item->getItemNo() == DROPPED_SWORD) {
+        if (item->getItemNo() == dItem_DROPPED_SWORD_e) {
             return param_1;
         }
     }

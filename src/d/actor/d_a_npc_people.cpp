@@ -3713,11 +3713,11 @@ static u32 l_msg_ug2_out_area[] = {
 
 static int l_get_item_no[] = {
     dItem_HEART_PIECE_e,
-    COLLECT_MAP_20,
-    COLLECT_MAP_16,
+    dItem_COLLECT_MAP_20_e,
+    dItem_COLLECT_MAP_16_e,
     dItem_HEART_PIECE_e,
     dItem_HEART_PIECE_e,
-    COLLECT_MAP_15,
+    dItem_COLLECT_MAP_15_e,
 };
 
 struct PsoData {
@@ -4116,7 +4116,7 @@ static s32 phase_1(daNpcPeople_c* i_this) {
     switch(i_this->getNpcNo()) {
         case 0x6:
             if(strcmp(dComIfGp_getStartStageName(), "Ocmera") == 0) {
-                if(dComIfGs_checkGetItem(COLLECT_MAP_20) || arg0 != dComIfGp_getStartStagePoint()) {
+                if(dComIfGs_checkGetItem(dItem_COLLECT_MAP_20_e) || arg0 != dComIfGp_getStartStagePoint()) {
                     return cPhs_STOP_e;
                 }
 
@@ -4417,7 +4417,7 @@ s32 daNpcPeople_c::createInit() {
     m_jnt.setParam(mpNpcDat->field_0x04, mpNpcDat->field_0x06, mpNpcDat->field_0x0C, mpNpcDat->field_0x0E, mpNpcDat->field_0x00, mpNpcDat->field_0x02, mpNpcDat->field_0x08, mpNpcDat->field_0x0A, mpNpcDat->field_0x10);
 
     if(mNpcType == 0xB && !mbIsNight) {
-        dComIfGs_checkGetItem(COLLECT_MAP_15);
+        dComIfGs_checkGetItem(dItem_COLLECT_MAP_15_e);
     }
 
     m79D = mpNpcDat->field_0x5A;
@@ -4640,7 +4640,7 @@ bool daNpcPeople_c::_execute() {
 
                     break;
                 case 0xB:
-                    if(!dComIfGs_checkGetItem(COLLECT_MAP_15) && (m795 & 0x3)) {
+                    if(!dComIfGs_checkGetItem(dItem_COLLECT_MAP_15_e) && (m795 & 0x3)) {
                         m795 &= ~0x3;
                         u8 rand = getRand(8);
                         if(rand == m794) {
@@ -6457,7 +6457,7 @@ u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
                         break;
                     case 0x11:
                         if(mpCurrMsg->mSelectNum == 0) {
-                            if(dComIfGs_checkGetItemNum(SKULL_NECKLACE) < 3) {
+                            if(dComIfGs_checkGetItemNum(dItem_SKULL_NECKLACE_e) < 3) {
                                 m734 = l_msg_xy_sa5_yes_ng;
                             }
                             else {
@@ -6562,7 +6562,7 @@ u32 daNpcPeople_c::getMsg() {
                 else if(!isColor()) {
                     m734 = l_msg_xy_ub4_no_color;
                 }
-                else if(!dComIfGs_checkGetItem(COLLECT_MAP_16)) {
+                else if(!dComIfGs_checkGetItem(dItem_COLLECT_MAP_16_e)) {
                     m734 = l_msg_xy_ub4_get_item;
                     dComIfGs_onEventBit(0x2504);
                 }
@@ -6628,7 +6628,7 @@ u32 daNpcPeople_c::getMsg() {
                 msgNo = 0x2D63;
                 break;
             case 0x10:
-                if(itemNo != SKULL_NECKLACE) {
+                if(itemNo != dItem_SKULL_NECKLACE_e) {
                     m734 = l_msg_xy_sa5_no_skull_necklace;
                 }
                 else if(!dComIfGs_isEventBit(0x2620)) {
@@ -6897,7 +6897,7 @@ u32 daNpcPeople_c::getMsg() {
                     else if(!dComIfGs_isEventBit(0x2310)) {
                         m734 = l_msg_um3_no_nazo_talk;
                     }
-                    else if(dComIfGs_checkGetItem(COLLECT_MAP_15)) {
+                    else if(dComIfGs_checkGetItem(dItem_COLLECT_MAP_15_e)) {
                         m734 = l_msg_um3_map15;
                     }
                     else {
@@ -6911,7 +6911,7 @@ u32 daNpcPeople_c::getMsg() {
                 else if(!dComIfGs_isEventBit(0x2308)) {
                     m734 = l_msg_um3_no_look_moon;
                 }
-                else if(dComIfGs_checkGetItem(COLLECT_MAP_15) && dComIfGs_isEventBit(0x2280)) {
+                else if(dComIfGs_checkGetItem(dItem_COLLECT_MAP_15_e) && dComIfGs_isEventBit(0x2280)) {
                     m734 = l_msg_um3_map15_n;
                 }
                 else {
@@ -7720,7 +7720,7 @@ void daNpcPeople_c::setWaitAnm() {
     if(mNpcType == 5 && m789 != 0) {
         setAnmTbl(l_npc_anm_wait, 0);
     }
-    else if(mNpcType == 0xB && !mbIsNight && dComIfGs_checkGetItem(COLLECT_MAP_15)) {
+    else if(mNpcType == 0xB && !mbIsNight && dComIfGs_checkGetItem(dItem_COLLECT_MAP_15_e)) {
         setAnmTbl(l_npc_anm_um3_wait3, 1);
     }
     else if(mNpcType == 8 && m793 == 1) {
@@ -7771,7 +7771,7 @@ s16 daNpcPeople_c::XyCheckCB(int i_itemBtn) {
 
             break;
         case 0xB:
-            if(!mbIsNight && isPhoto(itemNo) && dComIfGs_isEventBit(0x2310) && !dComIfGs_checkGetItem(COLLECT_MAP_15)) {
+            if(!mbIsNight && isPhoto(itemNo) && dComIfGs_isEventBit(0x2310) && !dComIfGs_checkGetItem(dItem_COLLECT_MAP_15_e)) {
                 return true;
             }
 
@@ -7810,7 +7810,7 @@ s16 daNpcPeople_c::XyEventCB(int i_itemBtn) {
 
             break;
         case 0x10:
-            if(itemNo == SKULL_NECKLACE) {
+            if(itemNo == dItem_SKULL_NECKLACE_e) {
                 ret = m766[0];
                 m79C = 0;
 
@@ -8008,7 +8008,7 @@ BOOL daNpcPeople_c::chkEndEvent() {
 
 /* 000090D0-00009100       .text is1GetMap20__13daNpcPeople_cFv */
 BOOL daNpcPeople_c::is1GetMap20() {
-    return dComIfGs_checkGetItem(COLLECT_MAP_20) ? TRUE : FALSE;
+    return dComIfGs_checkGetItem(dItem_COLLECT_MAP_20_e) ? TRUE : FALSE;
 }
 
 /* 00009100-00009144       .text is1DayGetMap20__13daNpcPeople_cFv */

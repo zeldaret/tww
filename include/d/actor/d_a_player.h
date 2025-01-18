@@ -461,13 +461,13 @@ public:
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
     bool checkNormalSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == SWORD ||
+        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e ||
             dComIfGp_getMiniGameType() == 2;
     }
     bool checkMasterSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == MASTER_SWORD ||
-            dComIfGs_getSelectEquip(0) == LV3_SWORD ||
-            dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX;
+        return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
+            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
+            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
     }
     void setFace(daPy_FACE face) { mFace = face; }
     

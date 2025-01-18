@@ -29,86 +29,86 @@ u32 default_select_msg[] = {
 };
 
 ShopItems_c__ItemData shopItemData_Feedbag = {
-    /* mItemNo           */ ESA_BAG,
-    /* mMustNotOwnItemNo */ ESA_BAG,
+    /* mItemNo           */ dItem_BAIT_BAG_e,
+    /* mMustNotOwnItemNo */ dItem_BAIT_BAG_e,
     /* mMustOwnItemNo    */ -1,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MUST_NOT_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_FoodAll = {
-    /* mItemNo           */ BIRD_ESA_5,
-    /* mMustNotOwnItemNo */ BIRD_ESA_5,
-    /* mMustOwnItemNo    */ ESA_BAG,
+    /* mItemNo           */ dItem_BIRD_BAIT_5_e,
+    /* mMustNotOwnItemNo */ dItem_BIRD_BAIT_5_e,
+    /* mMustOwnItemNo    */ dItem_BAIT_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_FoodHyoi = {
     /* mItemNo           */ dItem_HYOI_PEAR_e,
     /* mMustNotOwnItemNo */ dItem_HYOI_PEAR_e,
-    /* mMustOwnItemNo    */ ESA_BAG,
+    /* mMustOwnItemNo    */ dItem_BAIT_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_arrow10 = {
-    /* mItemNo           */ ARROW_10,
-    /* mMustNotOwnItemNo */ ARROW_10,
+    /* mItemNo           */ dItem_ARROW_10_e,
+    /* mMustNotOwnItemNo */ dItem_ARROW_10_e,
     /* mMustOwnItemNo    */ dItem_BOW_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_arrow30 = {
-    /* mItemNo           */ ARROW_30,
-    /* mMustNotOwnItemNo */ ARROW_30,
+    /* mItemNo           */ dItem_ARROW_30_e,
+    /* mMustNotOwnItemNo */ dItem_ARROW_30_e,
     /* mMustOwnItemNo    */ dItem_BOW_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e | Shop_BuyCond_MUST_OWN_ITEM_e,
 };
 
 ShopItems_c__ItemData shopItemData_red_bottle = {
-    /* mItemNo           */ RED_BOTTLE,
-    /* mMustNotOwnItemNo */ RED_BOTTLE,
-    /* mMustOwnItemNo    */ EMPTY_BOTTLE,
+    /* mItemNo           */ dItem_RED_POTION_e,
+    /* mMustNotOwnItemNo */ dItem_RED_POTION_e,
+    /* mMustOwnItemNo    */ dItem_EMPTY_BOTTLE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_EMPTY_BOTTLE_e | Shop_BuyCond_ANY_BOTTLE_e,
 };
 
 ShopItems_c__ItemData shopItemData_blue_bottle = {
-    /* mItemNo           */ BLUE_BOTTLE,
-    /* mMustNotOwnItemNo */ BLUE_BOTTLE,
-    /* mMustOwnItemNo    */ EMPTY_BOTTLE,
+    /* mItemNo           */ dItem_BLUE_POTION_e,
+    /* mMustNotOwnItemNo */ dItem_BLUE_POTION_e,
+    /* mMustOwnItemNo    */ dItem_EMPTY_BOTTLE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_EMPTY_BOTTLE_e | Shop_BuyCond_ANY_BOTTLE_e,
 };
 
 ShopItems_c__ItemData shopItemData_green_bottle = {
-    /* mItemNo           */ GREEN_BOTTLE,
-    /* mMustNotOwnItemNo */ GREEN_BOTTLE,
-    /* mMustOwnItemNo    */ EMPTY_BOTTLE,
+    /* mItemNo           */ dItem_GREEN_POTION_e,
+    /* mMustNotOwnItemNo */ dItem_GREEN_POTION_e,
+    /* mMustOwnItemNo    */ dItem_EMPTY_BOTTLE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_EMPTY_BOTTLE_e | Shop_BuyCond_ANY_BOTTLE_e,
 };
 
 ShopItems_c__ItemData shopItemData_bomb10 = {
-    /* mItemNo           */ BOMB_10,
-    /* mMustNotOwnItemNo */ BOMB_10,
+    /* mItemNo           */ dItem_BOMB_10_e,
+    /* mMustNotOwnItemNo */ dItem_BOMB_10_e,
     /* mMustOwnItemNo    */ dItem_BOMB_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_bomb20 = {
-    /* mItemNo           */ BOMB_20,
-    /* mMustNotOwnItemNo */ BOMB_20,
+    /* mItemNo           */ dItem_BOMB_20_e,
+    /* mMustNotOwnItemNo */ dItem_BOMB_20_e,
     /* mMustOwnItemNo    */ dItem_BOMB_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_bomb30 = {
-    /* mItemNo           */ BOMB_30,
-    /* mMustNotOwnItemNo */ BOMB_30,
+    /* mItemNo           */ dItem_BOMB_30_e,
+    /* mMustNotOwnItemNo */ dItem_BOMB_30_e,
     /* mMustOwnItemNo    */ dItem_BOMB_BAG_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MAXIMUM_e,
 };
 
 ShopItems_c__ItemData shopItemData_emptybottle = {
-    /* mItemNo           */ EMPTY_BOTTLE,
-    /* mMustNotOwnItemNo */ EMPTY_BOTTLE,
-    /* mMustOwnItemNo    */ EMPTY_BOTTLE,
+    /* mItemNo           */ dItem_EMPTY_BOTTLE_e,
+    /* mMustNotOwnItemNo */ dItem_EMPTY_BOTTLE_e,
+    /* mMustOwnItemNo    */ dItem_EMPTY_BOTTLE_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e,
 };
 
@@ -120,9 +120,9 @@ ShopItems_c__ItemData shopItemData_kakera_heart = {
 };
 
 ShopItems_c__ItemData shopItemData_map = {
-    /* mItemNo           */ COLLECT_MAP_30,
-    /* mMustNotOwnItemNo */ COLLECT_MAP_30,
-    /* mMustOwnItemNo    */ COLLECT_MAP_30,
+    /* mItemNo           */ dItem_COLLECT_MAP_30_e,
+    /* mMustNotOwnItemNo */ dItem_COLLECT_MAP_30_e,
+    /* mMustOwnItemNo    */ dItem_COLLECT_MAP_30_e,
     /* mBuyConditions    */ Shop_BuyCond_RUPEES_e | Shop_BuyCond_MUST_NOT_OWN_ITEM_e,
 };
 
@@ -1314,7 +1314,7 @@ BOOL dShop_now_triggercheck(msg_class* msg, STControl* stickControl, ShopItems_c
 
 /* 8006036C-8006044C       .text dShop_maxCheck__Fii */
 BOOL dShop_maxCheck(int itemNo, int) {
-    if (itemNo == BIRD_ESA_5 || itemNo == dItem_HYOI_PEAR_e) {
+    if (itemNo == dItem_BIRD_BAIT_5_e || itemNo == dItem_HYOI_PEAR_e) {
         if (!dComIfGs_checkBaitItemEmpty()) {
             return TRUE;
         }
@@ -1323,11 +1323,11 @@ BOOL dShop_maxCheck(int itemNo, int) {
         if (dComIfGs_checkReserveItemEmpty() == 0) {
             return TRUE;
         }
-    } else if (itemNo >= ARROW_10 && itemNo <= ARROW_30) {
+    } else if (itemNo >= dItem_ARROW_10_e && itemNo <= dItem_ARROW_30_e) {
         if (dComIfGs_getArrowNum() == dComIfGs_getArrowMax()) {
             return TRUE;
         }
-    } else if (itemNo >= BOMB_5 && itemNo <= BOMB_30) {
+    } else if (itemNo >= dItem_BOMB_5_e && itemNo <= dItem_BOMB_30_e) {
         if (dComIfGs_getBombNum() == dComIfGs_getBombMax()) {
             return TRUE;
         }

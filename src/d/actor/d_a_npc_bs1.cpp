@@ -362,25 +362,25 @@ void daNpc_Bs1_c::checkOrder() {
 static u32 daNpc_Bs1_getBuyItemMax(int i_itemCost, int i_itemNo) {
     int beastIdx;
     switch (i_itemNo) {
-    case BOKOBABA_SEED:
+    case dItem_BOKOBABA_SEED_e:
         beastIdx = 1;
         break;
-    case SKULL_NECKLACE:
+    case dItem_SKULL_NECKLACE_e:
         beastIdx = 0;
         break;
-    case RED_JELLY:
+    case dItem_RED_JELLY_e:
         beastIdx = 4;
         break;
-    case GREEN_JELLY:
+    case dItem_GREEN_JELLY_e:
         beastIdx = 5;
         break;
-    case BLUE_JELLY:
+    case dItem_BLUE_JELLY_e:
         beastIdx = 6;
         break;
     case dItem_JOY_PENDANT_e:
         beastIdx = 7;
         break;
-    case GOLDEN_FEATHER:
+    case dItem_GOLDEN_FEATHER_e:
         beastIdx = 2;
         break;
     default:
@@ -828,7 +828,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 fopAcM_seStart(this, JA_SE_SHOP_BOUGHT, 0);
                 mShopItems.hideSelectItem();
                 dComIfGp_setItemRupeeCount(-rupee);
-                if(mShopItems.getSelectItemNo() == ESA_BAG) {
+                if(mShopItems.getSelectItemNo() == dItem_BAIT_BAG_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
                 }
@@ -891,18 +891,18 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 mShopItems.hideSelectItem();
                 dComIfGp_setItemRupeeCount(-rupee);
                 u8 itemNo = mShopItems.getSelectItemNo();
-                if(itemNo == EMPTY_BOTTLE || itemNo == dItem_HEART_PIECE_e || itemNo == COLLECT_MAP_30) {
+                if(itemNo == dItem_EMPTY_BOTTLE_e || itemNo == dItem_HEART_PIECE_e || itemNo == dItem_COLLECT_MAP_30_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
 
                     switch(itemNo) {
-                        case EMPTY_BOTTLE:
+                        case dItem_EMPTY_BOTTLE_e:
                             dComIfGs_onEventBit(0x2020);
                             break;
                         case dItem_HEART_PIECE_e:
                             dComIfGs_onEventBit(0x2010);
                             break;
-                        case COLLECT_MAP_30:
+                        case dItem_COLLECT_MAP_30_e:
                             dComIfGs_onEventBit(0x2008);
                             break;
                     }
@@ -988,25 +988,25 @@ u32 daNpc_Bs1_c::getMsg() {
                 if(isEmono(itemNo)) {
                     m840 = itemNo;
                     switch(itemNo) {
-                        case BOKOBABA_SEED:
+                        case dItem_BOKOBABA_SEED_e:
                             msgNo = 0xF78;
                             break;
-                        case SKULL_NECKLACE:
+                        case dItem_SKULL_NECKLACE_e:
                             msgNo = 0xF80;
                             break;
-                        case RED_JELLY:
+                        case dItem_RED_JELLY_e:
                             msgNo = 0xF85;
                             break;
-                        case GREEN_JELLY:
+                        case dItem_GREEN_JELLY_e:
                             msgNo = 0xF8A;
                             break;
-                        case BLUE_JELLY:
+                        case dItem_BLUE_JELLY_e:
                             msgNo = 0xF8F;
                             break;
                         case dItem_JOY_PENDANT_e:
                             msgNo = 0xF94;
                             break;
-                        case GOLDEN_FEATHER:
+                        case dItem_GOLDEN_FEATHER_e:
                             msgNo = 0xF99;
                             break;
                         default:
@@ -1470,7 +1470,7 @@ void daNpc_Bs1_c::createShopList() {
         for(int i = 0; i < 3; i++) {
             u8 itemNo = pDataSet[i]->mpItemData->mItemNo;
             int idx = i;
-            if((itemNo == ESA_BAG && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItem_HYOI_PEAR_e && dComIfGs_checkGetItem(dItem_BOMB_BAG_e))) {
+            if((itemNo == dItem_BAIT_BAG_e && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItem_HYOI_PEAR_e && dComIfGs_checkGetItem(dItem_BOMB_BAG_e))) {
                 itemNo = pDataSet[i + 3][0].mpItemData->mItemNo;
                 idx += 3;
             }

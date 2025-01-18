@@ -230,7 +230,7 @@ void daObjBarrier_c::break_start_wait_proc() {
         daPy_py_c* player_p = (daPy_py_c*)daPy_getPlayerActorClass();
 
         if ((player_p->current.pos - current.pos).absXZ() >= 8800.0f &&
-            dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX)
+            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e)
         {
             switch (player_p->getCutType()) {
             case 1:

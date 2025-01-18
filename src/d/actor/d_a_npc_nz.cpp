@@ -206,7 +206,7 @@ daNpc_Nz_HIO_c::daNpc_Nz_HIO_c() {
 static s16 daNpc_Nz_XyCheckCB(void* i_actor, int i_itemBtn) {
     daNpc_Nz_c* i_this = static_cast<daNpc_Nz_c*>(i_actor);
 
-    if(dComIfGp_getSelectItem(i_itemBtn) == BIRD_ESA_5) {
+    if(dComIfGp_getSelectItem(i_itemBtn) == dItem_BIRD_BAIT_5_e) {
         f32 temp2 = l_HIO.field_0x20;
         daPy_py_c* player = daPy_getPlayerActorClass();
         cXyz temp(player->current.pos);
@@ -394,22 +394,22 @@ void daNpc_Nz_c::setMtx() {
         cXyz temp3 = temp + temp2;
 
         switch(field_0x908) {
-            case BIRD_ESA_5:
+            case dItem_BIRD_BAIT_5_e:
                 temp4 = -15.0f;
                 break;
             case dItem_HYOI_PEAR_e:
                 temp4 = -5.0f;
                 break;
-            case RED_BOTTLE:
-            case BLUE_BOTTLE:
+            case dItem_RED_POTION_e:
+            case dItem_BLUE_POTION_e:
                 temp4 = -5.0f;
                 break;
-            case BOMB_10:
-            case BOMB_30:
+            case dItem_BOMB_10_e:
+            case dItem_BOMB_30_e:
                 temp4 = -15.0f;
                 break;
-            case ARROW_10:
-            case ARROW_30:
+            case dItem_ARROW_10_e:
+            case dItem_ARROW_30_e:
                 temp4 = -10.0f;
                 break;
         }
@@ -496,7 +496,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
         return 0x3405;
     }
 
-    if((itemNo == RED_BOTTLE || itemNo == BLUE_BOTTLE) && !dComIfGs_checkEmptyBottle()) {
+    if((itemNo == dItem_RED_POTION_e || itemNo == dItem_BLUE_POTION_e) && !dComIfGs_checkEmptyBottle()) {
         return 0x3406;
     }
 
@@ -508,7 +508,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
         return 0x3407;
     }
 
-    if((itemNo == BIRD_ESA_5 || itemNo == dItem_HYOI_PEAR_e) && !dComIfGs_checkBaitItemEmpty()) {
+    if((itemNo == dItem_BIRD_BAIT_5_e || itemNo == dItem_HYOI_PEAR_e) && !dComIfGs_checkBaitItemEmpty()) {
         return 0x3407;
     }
 
@@ -594,20 +594,20 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
 
     const u8 itemArr1[4][2] = {
         {
-            BIRD_ESA_5,
+            dItem_BIRD_BAIT_5_e,
             dItem_HYOI_PEAR_e
         },
         {
-            RED_BOTTLE,
-            BLUE_BOTTLE
+            dItem_RED_POTION_e,
+            dItem_BLUE_POTION_e
         },
         {
-            BOMB_10,
-            BOMB_30
+            dItem_BOMB_10_e,
+            dItem_BOMB_30_e
         },
         {
-            ARROW_10,
-            ARROW_30
+            dItem_ARROW_10_e,
+            dItem_ARROW_30_e
         }
     };
 

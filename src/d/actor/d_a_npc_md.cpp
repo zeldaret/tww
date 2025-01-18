@@ -329,17 +329,17 @@ s16 daNpc_Md_c::XyCheckCB(int i_itemBtn) {
         if (selectItemNo == dItem_WIND_WAKER_e) {
             return TRUE;
         }
-        if (selectItemNo == GOLDEN_FEATHER) {
+        if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
             if (!dComIfGs_isEventBit(0x2E40) || (dComIfGs_isEventBit(0x2E40) && m_seaTalk)) {
                 return TRUE;
             }
         }
     } else if (isTypeM_Dai() || isTypeEdaichi()) {
-        if (selectItemNo == GOLDEN_FEATHER && !dComIfGs_isEventBit(0x3B80)) {
+        if (selectItemNo == dItem_GOLDEN_FEATHER_e && !dComIfGs_isEventBit(0x3B80)) {
             return TRUE;
         }
     }
-    if (selectItemNo == GOLDEN_FEATHER) {
+    if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
         dComIfGs_onEventBit(0x2C08);
     }
     return FALSE;
@@ -356,7 +356,7 @@ s16 daNpc_Md_c::XyEventCB(int i_itemBtn) {
     if (selectItemNo == dItem_WIND_WAKER_e) {
         offDefaultTalkXY();
         return mEventIdxTable[5];
-    } else if (selectItemNo == GOLDEN_FEATHER) {
+    } else if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
         onDefaultTalkXY();
     }
     return -1;
