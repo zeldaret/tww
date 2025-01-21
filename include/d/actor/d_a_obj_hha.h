@@ -1,10 +1,13 @@
 #ifndef D_A_OBJ_HHA_H
 #define D_A_OBJ_HHA_H
 
+#include "SSystem/SComponent/c_xyz.h"
+#include "d/d_bg_w.h"
 #include "f_op/f_op_actor.h"
 
 class daObjHha_c : public fopAc_ac_c {
 public:
+
     void check_sw(); // weak but not inline?
 
     void solidHeapCB(fopAc_ac_c*);
@@ -35,13 +38,31 @@ public:
     void setExeProc(void (daObjHhaPart_c::*)(daObjHha_c*)) {}
     void start_move() {}
 
-    void init_data(float, float, unsigned short, unsigned char, unsigned char);
-    void set_mdl_area(const char*, int);
-    void set_bgw(const char*, int);
+    void init_data(float, float, u16, u8, u8);
+    bool set_mdl_area(const char*, int);
+    bool set_bgw(const char*, int);
     void init_mtx(cXyz, csXyz, cXyz);
-    void exe_normal(daObjHha_c*);
+    static void exe_normal(daObjHha_c*);
     void exe_move(daObjHha_c*);
-    void draw_normal(daObjHha_c*);
+    static void draw_normal(daObjHha_c*);
+public: 
+    typedef void utype0(daObjHha_c*);
+    struct utype1 {
+        int i0;
+        int i4;
+        utype0* m8; 
+    };
+
+    /* 0x00 */ J3DModel* mpModel;
+    /* 0x04 */ dBgW* mpBgw;
+    /* 0x08 */ cXyz m08;
+    /* 0x14 */ cXyz m14;
+    /* 0x20 */ cXyz m20;
+    /* 0x2C */ float f2C;
+    /* 0x30 */ u8 u30;
+    /* 0x31 */ u8 u31;
+    /* 0x34 */ utype1 m34;
+    /* 0x40 */ utype1 m40;
 };
 
 class daObjHhaSplash_c {

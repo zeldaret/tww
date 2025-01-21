@@ -4,31 +4,68 @@
 //
 
 #include "d/actor/d_a_obj_hha.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "SSystem/SComponent/c_bg_w.h"
+#include "SSystem/SComponent/c_xyz.h"
+#include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */
-void daObjHhaPart_c::init_data(float, float, unsigned short, unsigned char, unsigned char) {
-    /* Nonmatching */
+void daObjHhaPart_c::init_data(float param1, float param2, u16 param3, u8 param4, u8 param5) {
+    this->m08.set(0, param1, 0);
+    this->m14.set(0, param2, 0);
+    this->u30 = param4;
+    this->f2C = (param2 - param1) / param3;
+    this->m20 = this->m14 - this->m08;
+    this->m20.normalizeRS();
+    this->m34.i0 = 0;
+    this->m34.i4 = -1;
+    this->m34.m8 = this->exe_normal;
+    this->m40.i0 = 0;
+    this->m40.i4 = -1;
+    this->m40.m8 = this->draw_normal;
+    this->u31 = param5;
 }
 
 /* 00000170-00000224       .text set_mdl_area__14daObjHhaPart_cFPCci */
-void daObjHhaPart_c::set_mdl_area(const char*, int) {
-    /* Nonmatching */
+bool daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, index));
+    JUT_ASSERT(0x1d9, mdl_data != 0);
+    if(mdl_data != NULL){
+        this->mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203); 
+    }
+
+    return (mdl_data != NULL);
 }
 
 /* 00000224-000002A4       .text set_bgw__14daObjHhaPart_cFPCci */
-void daObjHhaPart_c::set_bgw(const char*, int) {
-    /* Nonmatching */
+bool daObjHhaPart_c::set_bgw(const char* arcname, int index) {
+    this->mpBgw = dBgW_NewSet(
+        static_cast<cBgD_t*>(dComIfG_getObjectRes(arcname, index)), 
+        1,
+        &this->mpModel->getBaseTRMtx()
+    );
+
+    return (this->mpBgw != NULL);
 }
 
 /* 000002A4-0000035C       .text init_mtx__14daObjHhaPart_cF4cXyz5csXyz4cXyz */
-void daObjHhaPart_c::init_mtx(cXyz, csXyz, cXyz) {
-    /* Nonmatching */
+void daObjHhaPart_c::init_mtx(cXyz param1, csXyz param2, cXyz param3) {
+    this->mpModel->setBaseScale(param3);
+    mDoMtx_stack_c::transS(param1);
+    mDoMtx_stack_c::ZXYrotM(param2);
+    mDoMtx_stack_c::transM(this->m08);
+    this->mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    this->mpModel->calc();
 }
 
 /* 0000035C-0000040C       .text exe_normal__14daObjHhaPart_cFP10daObjHha_c */
-void daObjHhaPart_c::exe_normal(daObjHha_c*) {
-    /* Nonmatching */
+void daObjHhaPart_c::exe_normal(daObjHha_c* param1) {
+    
 }
 
 /* 0000040C-00000524       .text exe_move__14daObjHhaPart_cFP10daObjHha_c */
