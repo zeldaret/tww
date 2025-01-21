@@ -11,6 +11,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/res/res_hha.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -94,8 +95,32 @@ void daObjHhaSplash_c::create_s(unsigned short param1, cXyz param2, float param3
 }
 
 /* 00000698-000008AC       .text create_area__15daObjHhaYgush_cFPCc */
-void daObjHhaYgush_c::create_area(const char*) {
-    /* Nonmatching */
+bool daObjHhaYgush_c::create_area(const char* arcname) {
+    bool retval = false;
+    
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, HHA_BDL_YGSTP00));
+    JUT_ASSERT(0x280, mdl_data != 0);
+    
+    if(mdl_data != NULL){
+        this->mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
+        JUT_ASSERT(0x289, this->mpModel != 0);
+
+        if((this->mpModel != 0)){
+            J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
+            JUT_ASSERT(0x290, btk_data != 0);
+            
+            if(this->mBtk.init(this->mpModel->getModelData(), btk_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false, 0) != false){  
+                J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
+                JUT_ASSERT(0x295, bck_data != 0);
+                
+                if(this->mBck.init(this->mpModel->getModelData(), bck_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false) != false){
+                    retval = true;
+                }
+            }
+        }
+    }
+
+    return retval;
 }
 
 /* 000008AC-00000AD8       .text init_data__15daObjHhaYgush_cFP4cXyzfP5csXyzP4cXyzP12dKy_tevstr_cUc */
