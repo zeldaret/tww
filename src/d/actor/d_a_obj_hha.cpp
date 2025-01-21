@@ -130,16 +130,23 @@ void daObjHhaYgush_c::init_data(cXyz param1, f32 param2, csXyz param3, cXyz para
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &cStack3C);
     cStack3C *= param2;
     this->mD8 = param1 + cStack3C;
-    this->mE4 = this->mD8;
-    this->mFC = param3;
-    this->mF0 = param4;
+    this->mTransMtx = this->mD8;
+    this->mRotMtx = param3;
+    this->mScale = param4;
     this->m28 = param5;
     this->u102 = param6;
 }
 
 /* 00000AD8-00000B88       .text init_mtx__15daObjHhaYgush_cFv */
 void daObjHhaYgush_c::init_mtx() {
-    /* Nonmatching */
+    J3DModel* pModel = this->mpModel;
+    if(pModel != NULL){
+        pModel->setBaseScale(this->mScale);
+        mDoMtx_stack_c::transS(this->mTransMtx);
+        mDoMtx_stack_c::ZXYrotM(this->mRotMtx);
+        mDoMtx_stack_c::scaleM(13.0f, 1.0f, 11.0f);
+        this->mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    }
 }
 
 /* 00000B88-00000C2C       .text draw__15daObjHhaYgush_cFv */

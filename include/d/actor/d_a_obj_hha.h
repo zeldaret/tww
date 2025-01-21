@@ -110,9 +110,9 @@ public:
     /* 0x018 */ mDoExt_bckAnm mBck;
     /* 0x028 */ dKy_tevstr_c m28;
     /* 0x0D8 */ cXyz mD8;
-    /* 0x0E4 */ cXyz mE4;
-    /* 0x0F0 */ cXyz mF0;
-    /* 0x0FC */ csXyz mFC;
+    /* 0x0E4 */ cXyz mTransMtx;
+    /* 0x0F0 */ cXyz mScale;
+    /* 0x0FC */ csXyz mRotMtx;
     /* 0x102 */ u8 u102;
 };
 
