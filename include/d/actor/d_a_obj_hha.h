@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_bg_w.h"
+#include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 
 class daObjHha_c : public fopAc_ac_c {
@@ -65,19 +66,28 @@ public:
     /* 0x40 */ utype1 m40;
 };
 
-class daObjHhaSplash_c {
+class daObjHhaSplash_c : dPa_followEcallBack {
 public:
+    daObjHhaSplash_c() {}
+    ~daObjHhaSplash_c() {}
+
     void chk_stop() {}
     void delete_s() {}
-    void get_base_pos() {}
-    void get_pos() {}
+    virtual void get_base_pos() {}
+    virtual void get_pos() {}
     void get_pos_y() {}
     void play_particle() {}
     void set_pos(cXyz*) {}
     void set_pos_y(float) {}
     void stop_particle() {}
 
-    void create_s(unsigned short, cXyz*, float, float, csXyz*);
+    void create_s(unsigned short, cXyz, float, float, csXyz);
+
+public:
+    /* 0x14 */ cXyz m14;
+    /* 0x20 */ cXyz m20;
+    /* 0x2C */ csXyz m2C;
+    /* 0x32 */ bool b32;
 };
 
 class daObjHhaYgush_c {

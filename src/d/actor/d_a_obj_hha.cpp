@@ -79,8 +79,18 @@ void daObjHhaPart_c::draw_normal(daObjHha_c*) {
 }
 
 /* 0000056C-00000698       .text create_s__16daObjHhaSplash_cFUsP4cXyzffP5csXyz */
-void daObjHhaSplash_c::create_s(unsigned short, cXyz*, float, float, csXyz*) {
-    /* Nonmatching */
+void daObjHhaSplash_c::create_s(unsigned short param1, cXyz param2, float param3, float param4, csXyz param5) {
+    cXyz acStack38;
+
+    this->m20.set(param2.x, param2.y + param3, param2.z);
+    mDoMtx_stack_c::YrotS(param5.y);
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &acStack38);
+    acStack38 *= param4;
+    this->m20 += acStack38;
+    this->m14 = this->m20;
+    this->m2C = param5;
+    dComIfGp_particle_set(param1, &this->m20, &this->m2C, NULL, 0xff, this);
+    this->b32 = true;
 }
 
 /* 00000698-000008AC       .text create_area__15daObjHhaYgush_cFPCc */
