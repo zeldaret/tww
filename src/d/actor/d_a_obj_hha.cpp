@@ -17,19 +17,19 @@
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */
 void daObjHhaPart_c::init_data(float param1, float param2, u16 param3, u8 param4, u8 param5) {
-    this->m08.set(0, param1, 0);
-    this->m14.set(0, param2, 0);
-    this->u30 = param4;
-    this->f2C = (param2 - param1) / param3;
-    this->m20 = this->m14 - this->m08;
-    this->m20.normalizeRS();
-    this->m34.i0 = 0;
-    this->m34.i4 = -1;
-    this->m34.m8 = this->exe_normal;
-    this->m40.i0 = 0;
-    this->m40.i4 = -1;
-    this->m40.m8 = this->draw_normal;
-    this->u31 = param5;
+    m08.set(0, param1, 0);
+    m14.set(0, param2, 0);
+    u30 = param4;
+    f2C = (param2 - param1) / param3;
+    m20 = m14 - m08;
+    m20.normalizeRS();
+    m34.i0 = 0;
+    m34.i4 = -1;
+    m34.m8 = exe_normal;
+    m40.i0 = 0;
+    m40.i4 = -1;
+    m40.m8 = draw_normal;
+    u31 = param5;
 }
 
 /* 00000170-00000224       .text set_mdl_area__14daObjHhaPart_cFPCci */
@@ -37,7 +37,7 @@ bool daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, index));
     JUT_ASSERT(0x1d9, mdl_data != 0);
     if(mdl_data != NULL){
-        this->mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203); 
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203); 
     }
 
     return (mdl_data != NULL);
@@ -45,23 +45,23 @@ bool daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
 
 /* 00000224-000002A4       .text set_bgw__14daObjHhaPart_cFPCci */
 bool daObjHhaPart_c::set_bgw(const char* arcname, int index) {
-    this->mpBgw = dBgW_NewSet(
+    mpBgw = dBgW_NewSet(
         static_cast<cBgD_t*>(dComIfG_getObjectRes(arcname, index)), 
         1,
-        &this->mpModel->getBaseTRMtx()
+        &mpModel->getBaseTRMtx()
     );
 
-    return (this->mpBgw != NULL);
+    return (mpBgw != NULL);
 }
 
 /* 000002A4-0000035C       .text init_mtx__14daObjHhaPart_cF4cXyz5csXyz4cXyz */
 void daObjHhaPart_c::init_mtx(cXyz param1, csXyz param2, cXyz param3) {
-    this->mpModel->setBaseScale(param3);
+    mpModel->setBaseScale(param3);
     mDoMtx_stack_c::transS(param1);
     mDoMtx_stack_c::ZXYrotM(param2);
-    mDoMtx_stack_c::transM(this->m08);
-    this->mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
-    this->mpModel->calc();
+    mDoMtx_stack_c::transM(m08);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpModel->calc();
 }
 
 /* 0000035C-0000040C       .text exe_normal__14daObjHhaPart_cFP10daObjHha_c */
@@ -83,15 +83,15 @@ void daObjHhaPart_c::draw_normal(daObjHha_c*) {
 void daObjHhaSplash_c::create_s(unsigned short param1, cXyz param2, float param3, float param4, csXyz param5) {
     cXyz acStack38;
 
-    this->m20.set(param2.x, param2.y + param3, param2.z);
+    m20.set(param2.x, param2.y + param3, param2.z);
     mDoMtx_stack_c::YrotS(param5.y);
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &acStack38);
     acStack38 *= param4;
-    this->m20 += acStack38;
-    this->m14 = this->m20;
-    this->m2C = param5;
-    dComIfGp_particle_set(param1, &this->m20, &this->m2C, NULL, 0xff, this);
-    this->b32 = true;
+    m20 += acStack38;
+    m14 = m20;
+    m2C = param5;
+    dComIfGp_particle_set(param1, &m20, &m2C, NULL, 0xff, this);
+    b32 = true;
 }
 
 /* 00000698-000008AC       .text create_area__15daObjHhaYgush_cFPCc */
@@ -102,18 +102,18 @@ bool daObjHhaYgush_c::create_area(const char* arcname) {
     JUT_ASSERT(0x280, mdl_data != 0);
     
     if(mdl_data != NULL){
-        this->mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
-        JUT_ASSERT(0x289, this->mpModel != 0);
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
+        JUT_ASSERT(0x289, mpModel != 0);
 
-        if((this->mpModel != 0)){
+        if((mpModel != 0)){
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
             JUT_ASSERT(0x290, btk_data != 0);
             
-            if(this->mBtk.init(this->mpModel->getModelData(), btk_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false, 0) != false){  
+            if(mBtk.init(mpModel->getModelData(), btk_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false, 0) != false){  
                 J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
                 JUT_ASSERT(0x295, bck_data != 0);
                 
-                if(this->mBck.init(this->mpModel->getModelData(), bck_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false) != false){
+                if(mBck.init(mpModel->getModelData(), bck_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false) != false){
                     retval = true;
                 }
             }
@@ -129,29 +129,35 @@ void daObjHhaYgush_c::init_data(cXyz param1, f32 param2, csXyz param3, cXyz para
     mDoMtx_stack_c::YrotS(param3.y);
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &cStack3C);
     cStack3C *= param2;
-    this->mD8 = param1 + cStack3C;
-    this->mTransMtx = this->mD8;
-    this->mRotMtx = param3;
-    this->mScale = param4;
-    this->m28 = param5;
-    this->u102 = param6;
+    mD8 = param1 + cStack3C;
+    mTrans = mD8;
+    mRot = param3;
+    mScale = param4;
+    mTev = param5;
+    bVisible = param6;
 }
 
 /* 00000AD8-00000B88       .text init_mtx__15daObjHhaYgush_cFv */
 void daObjHhaYgush_c::init_mtx() {
-    J3DModel* pModel = this->mpModel;
+    J3DModel* pModel = mpModel;
     if(pModel != NULL){
-        pModel->setBaseScale(this->mScale);
-        mDoMtx_stack_c::transS(this->mTransMtx);
-        mDoMtx_stack_c::ZXYrotM(this->mRotMtx);
+        pModel->setBaseScale(mScale);
+        mDoMtx_stack_c::transS(mTrans);
+        mDoMtx_stack_c::ZXYrotM(mRot);
         mDoMtx_stack_c::scaleM(13.0f, 1.0f, 11.0f);
-        this->mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
     }
 }
 
 /* 00000B88-00000C2C       .text draw__15daObjHhaYgush_cFv */
 BOOL daObjHhaYgush_c::draw() {
-    /* Nonmatching */
+    if(bVisible != false && mpModel != NULL){
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &mTrans, &mTev);
+        dKy_getEnvlight().setLightTevColorType(mpModel, &mTev);
+        mBtk.entry(mpModel->getModelData());
+        mBck.entry(mpModel->getModelData());
+        mDoExt_modelUpdateDL(mpModel);
+    }
 }
 
 /* 00000C2C-00000C4C       .text solidHeapCB__10daObjHha_cFP10fopAc_ac_c */

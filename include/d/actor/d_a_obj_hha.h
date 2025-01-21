@@ -108,12 +108,12 @@ public:
     /* 0x000 */ J3DModel* mpModel;
     /* 0x004 */ mDoExt_btkAnm mBtk;
     /* 0x018 */ mDoExt_bckAnm mBck;
-    /* 0x028 */ dKy_tevstr_c m28;
+    /* 0x028 */ dKy_tevstr_c mTev;
     /* 0x0D8 */ cXyz mD8;
-    /* 0x0E4 */ cXyz mTransMtx;
+    /* 0x0E4 */ cXyz mTrans;
     /* 0x0F0 */ cXyz mScale;
-    /* 0x0FC */ csXyz mRotMtx;
-    /* 0x102 */ u8 u102;
+    /* 0x0FC */ csXyz mRot;
+    /* 0x102 */ u8 bVisible;
 };
 
 #endif /* D_A_OBJ_HHA_H */
