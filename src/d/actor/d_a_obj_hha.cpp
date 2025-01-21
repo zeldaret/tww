@@ -97,7 +97,7 @@ void daObjHhaSplash_c::create_s(unsigned short param1, cXyz param2, float param3
 /* 00000698-000008AC       .text create_area__15daObjHhaYgush_cFPCc */
 bool daObjHhaYgush_c::create_area(const char* arcname) {
     bool retval = false;
-    
+
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, HHA_BDL_YGSTP00));
     JUT_ASSERT(0x280, mdl_data != 0);
     
@@ -124,8 +124,17 @@ bool daObjHhaYgush_c::create_area(const char* arcname) {
 }
 
 /* 000008AC-00000AD8       .text init_data__15daObjHhaYgush_cFP4cXyzfP5csXyzP4cXyzP12dKy_tevstr_cUc */
-void daObjHhaYgush_c::init_data(cXyz*, float, csXyz*, cXyz*, dKy_tevstr_c*, unsigned char) {
-    /* Nonmatching */
+void daObjHhaYgush_c::init_data(cXyz param1, f32 param2, csXyz param3, cXyz param4, dKy_tevstr_c param5, u8 param6) {
+    cXyz cStack3C;
+    mDoMtx_stack_c::YrotS(param3.y);
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &cStack3C);
+    cStack3C *= param2;
+    this->mD8 = param1 + cStack3C;
+    this->mE4 = this->mD8;
+    this->mFC = param3;
+    this->mF0 = param4;
+    this->m28 = param5;
+    this->u102 = param6;
 }
 
 /* 00000AD8-00000B88       .text init_mtx__15daObjHhaYgush_cFv */

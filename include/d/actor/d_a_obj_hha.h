@@ -100,7 +100,7 @@ public:
     void set_pos(cXyz) {}
 
     bool create_area(const char*);
-    void init_data(cXyz*, float, csXyz*, cXyz*, dKy_tevstr_c*, unsigned char);
+    void init_data(cXyz, f32, csXyz, cXyz, dKy_tevstr_c, u8);
     void init_mtx();
     BOOL draw();
 
