@@ -3,34 +3,11 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_bg_w.h"
+#include "d/d_cc_d.h"
 #include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 
-class daObjHha_c : public fopAc_ac_c {
-public:
-
-    void check_sw(); // weak but not inline?
-
-    void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
-    s32 _create();
-    BOOL _delete();
-    void set_tex(float, float, int);
-    void init_mtx();
-    void init_co();
-    void get_water_h();
-    void set_splash_bottom_h();
-    void set_splash_bottom_r();
-    void set_splash_bottom_stop_r();
-    void water_manager();
-    void part_manager();
-    void ygush_manager();
-    BOOL _execute();
-    BOOL _draw();
-
-public:
-    /* Place member variables here */
-};
+class daObjHha_c;
 
 class daObjHhaPart_c {
 public:
@@ -114,6 +91,54 @@ public:
     /* 0x0F0 */ cXyz mScale;
     /* 0x0FC */ csXyz mRot;
     /* 0x102 */ u8 bVisible;
+};
+
+class daObjHha_c : public fopAc_ac_c {
+public:
+
+    void check_sw(); // weak but not inline?
+
+    void solidHeapCB(fopAc_ac_c*);
+    void create_heap();
+    s32 _create();
+    BOOL _delete();
+    void set_tex(float, float, int);
+    void init_mtx();
+    void init_co();
+    void get_water_h();
+    void set_splash_bottom_h();
+    void set_splash_bottom_r();
+    void set_splash_bottom_stop_r();
+    void water_manager();
+    void part_manager();
+    void ygush_manager();
+    BOOL _execute();
+    BOOL _draw();
+
+public:
+    /* 0x290 */ J3DModel* mpModel;
+    /* 0x294 */ mDoExt_btkAnm mBtkA[2];
+    /* 0x2BC */ request_of_phase_process_class mPhs;
+    /* 0x2C0 */     int pad2C0;
+    /* 0x2C4 */ dCcD_Stts mCylStts;
+    /* 0x300 */ dCcD_Cyl mCyl;
+    /* 0x430 */     int pad430;
+    /* 0x434 */ dCcD_Stts cSphStts;
+    /* 0x470 */ dCcD_Sph mSph;
+    /* 0x59C */ daObjHhaYgush_c mYgush;
+    /* 0x6A0 */ daObjHhaPart_c mPartA[2];
+    /* 0x738 */ daObjHhaSplash_c mSplashA[2];
+    /* 0x7A0 */ float f7A0;
+    /* 0x7A4 */ float f7A4;
+    /* 0x7A8 */ float f7A8;
+    /* 0x7AC */ uint i7AC;
+    /* 0x7B0 */ u8 i7B0;
+    /* 0x7B2 */ short i7B2;
+    /* 0x7B4 */ float f7B4;
+    /* 0x7B8 */     u8 pad7B8[8];
+    /* 0x7C0 */ short m7C0;
+    /* 0x7C2 */ u8 i7C2;
+    /* 0x7C3 */ u8 i7C3;
 };
 
 #endif /* D_A_OBJ_HHA_H */
