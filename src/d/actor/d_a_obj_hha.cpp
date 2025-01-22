@@ -15,6 +15,70 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+const dCcD_SrcCyl daObjHha_c::M_cyl_data = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsOther_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 570.0f,
+        /* Height */ 100.0f,
+    },
+};
+
+const dCcD_SrcSph daObjHha_c::M_sph_data = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 220.0f,
+    },
+};
+
+const HHA_RES_FILE_ID l_daObjHha_bdl_idx_table[2] = {HHA_BDL_HHA1, HHA_BDL_HHA2};
+const HHA_RES_FILE_ID l_daObjHha_dzb_idx_table[2] = {HHA_DZB_HHA1, HHA_DZB_HHA2};
+const HHA_RES_FILE_ID l_daObjHha_btk_idx_table[2] = {HHA_BTK_YSWTR00_01, HHA_BTK_YSWTR00_02};
+const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::LOOP_REPEAT_e, J3DFrameCtrl::LOOP_ONCE_e};
+
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */
 void daObjHhaPart_c::init_data(float param1, float param2, u16 param3, u8 param4, u8 param5) {
     m08.set(0, param1, 0);
@@ -23,17 +87,15 @@ void daObjHhaPart_c::init_data(float param1, float param2, u16 param3, u8 param4
     f2C = (param2 - param1) / param3;
     m20 = m14 - m08;
     m20.normalizeRS();
-    m34.i0 = 0;
-    m34.i4 = -1;
+    m34.i0 = 0xFFFFFFFF;
     m34.m8 = &daObjHhaPart_c::exe_normal;
-    m40.i0 = 0;
-    m40.i4 = -1;
+    m40.i0 = 0xFFFFFFFF;
     m40.m8 = &daObjHhaPart_c::draw_normal;
     u31 = param5;
 }
 
 /* 00000170-00000224       .text set_mdl_area__14daObjHhaPart_cFPCci */
-bool daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
+BOOL daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, index));
     JUT_ASSERT(0x1d9, mdl_data != 0);
     if(mdl_data != NULL){
@@ -44,7 +106,7 @@ bool daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
 }
 
 /* 00000224-000002A4       .text set_bgw__14daObjHhaPart_cFPCci */
-bool daObjHhaPart_c::set_bgw(const char* arcname, int index) {
+BOOL daObjHhaPart_c::set_bgw(const char* arcname, int index) {
     mpBgw = dBgW_NewSet(
         static_cast<cBgD_t*>(dComIfG_getObjectRes(arcname, index)), 
         1,
@@ -85,8 +147,18 @@ void daObjHhaPart_c::exe_normal(daObjHha_c* parent) {
 }
 
 /* 0000040C-00000524       .text exe_move__14daObjHhaPart_cFP10daObjHha_c */
-void daObjHhaPart_c::exe_move(daObjHha_c*) {
-    /* Nonmatching */
+void daObjHhaPart_c::exe_move(daObjHha_c* parent) {
+    m08.y += f2C;
+    cXyz unk0 = m14 - m08;
+    if(m20.getDotProduct(unk0) <= 0.0f){
+        m08 = m14;
+        m34.i0 = 0xFFFFFFFF;
+        m34.m8 = &daObjHhaPart_c::exe_normal;
+        if(u31 == 0 && u30 == 0){
+            dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0,1.0,0.0));
+        }
+    } 
+    exe_normal(parent);
 }
 
 /* 00000524-0000056C       .text draw_normal__14daObjHhaPart_cFP10daObjHha_c */
@@ -111,8 +183,8 @@ void daObjHhaSplash_c::create_s(unsigned short param1, cXyz param2, float param3
 }
 
 /* 00000698-000008AC       .text create_area__15daObjHhaYgush_cFPCc */
-bool daObjHhaYgush_c::create_area(const char* arcname) {
-    bool retval = false;
+BOOL daObjHhaYgush_c::create_area(const char* arcname) {
+    BOOL ret = FALSE;
 
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, HHA_BDL_YGSTP00));
     JUT_ASSERT(0x280, mdl_data != 0);
@@ -130,13 +202,13 @@ bool daObjHhaYgush_c::create_area(const char* arcname) {
                 JUT_ASSERT(0x295, bck_data != 0);
                 
                 if(mBck.init(mpModel->getModelData(), bck_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false) != false){
-                    retval = true;
+                    ret = TRUE;
                 }
             }
         }
     }
 
-    return retval;
+    return ret;
 }
 
 /* 000008AC-00000AD8       .text init_data__15daObjHhaYgush_cFP4cXyzfP5csXyzP4cXyzP12dKy_tevstr_cUc */
@@ -178,12 +250,42 @@ BOOL daObjHhaYgush_c::draw() {
 
 /* 00000C2C-00000C4C       .text solidHeapCB__10daObjHha_cFP10fopAc_ac_c */
 void daObjHha_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+    this->create_heap();
 }
 
+const char daObjHha_c::M_arcname[] = "Hha";
 /* 00000C4C-00000E48       .text create_heap__10daObjHha_cFv */
-void daObjHha_c::create_heap() {
-    /* Nonmatching */
+BOOL daObjHha_c::create_heap() {
+    BOOL ret = TRUE;
+
+    for(int i = 0; i < 2; i++){
+        if( (mPartA[i].set_mdl_area(M_arcname, l_daObjHha_bdl_idx_table[i]) == FALSE) || (mPartA[i].set_bgw(M_arcname, l_daObjHha_dzb_idx_table[i]) == FALSE) ){
+            ret = FALSE;
+            break;
+        }
+    }
+
+    if(ret != FALSE){
+        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 12));
+        JUT_ASSERT(0x324, mdl_data != 0);
+        if(mdl_data != 0){
+            this->mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
+            for(int i = 0; i < 2; i++){
+                J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, l_daObjHha_btk_idx_table[i]));
+                JUT_ASSERT(0x32f, btk_data != 0);
+                if(this->mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i], 1.0, 0, -1, false, 0) == FALSE){
+                    ret = FALSE;
+                    break;
+                }
+            }
+        }
+    }
+
+    if(ret != FALSE){
+        ret = this->mYgush.create_area(M_arcname);
+    }
+
+    return ret;
 }
 
 /* 00000E48-000011AC       .text _create__10daObjHha_cFv */

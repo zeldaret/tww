@@ -17,8 +17,8 @@ public:
     void start_move() {}
 
     void init_data(float, float, u16, u8, u8);
-    bool set_mdl_area(const char*, int);
-    bool set_bgw(const char*, int);
+    BOOL set_mdl_area(const char*, int);
+    BOOL set_bgw(const char*, int);
     void init_mtx(cXyz, csXyz, cXyz);
     void exe_normal(daObjHha_c*);
     void exe_move(daObjHha_c*);
@@ -26,9 +26,8 @@ public:
 public: 
     typedef void (daObjHhaPart_c::*utype0)(daObjHha_c*);
     struct utype1 {
-        int i0;
-        int i4;
-        utype0 m8; 
+        u64 i0;
+        utype0 m8;
     };
 
     /* 0x00 */ J3DModel* mpModel;
@@ -76,7 +75,7 @@ public:
     void get_base_pos() {}
     void set_pos(cXyz) {}
 
-    bool create_area(const char*);
+    BOOL create_area(const char*);
     void init_data(cXyz, f32, csXyz, cXyz, dKy_tevstr_c, u8);
     void init_mtx();
     BOOL draw();
@@ -99,7 +98,7 @@ public:
     void check_sw(); // weak but not inline?
 
     void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
+    BOOL create_heap();
     s32 _create();
     BOOL _delete();
     void set_tex(float, float, int);
@@ -116,6 +115,10 @@ public:
     BOOL _draw();
 
 public:
+    static const dCcD_SrcCyl M_cyl_data;
+    static const dCcD_SrcSph M_sph_data;
+    static const char M_arcname[4];
+
     /* 0x290 */ J3DModel* mpModel;
     /* 0x294 */ mDoExt_btkAnm mBtkA[2];
     /* 0x2BC */ request_of_phase_process_class mPhs;
