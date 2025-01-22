@@ -25,10 +25,10 @@ void daObjHhaPart_c::init_data(float param1, float param2, u16 param3, u8 param4
     m20.normalizeRS();
     m34.i0 = 0;
     m34.i4 = -1;
-    m34.m8 = exe_normal;
+    m34.m8 = &daObjHhaPart_c::exe_normal;
     m40.i0 = 0;
     m40.i4 = -1;
-    m40.m8 = draw_normal;
+    m40.m8 = &daObjHhaPart_c::draw_normal;
     u31 = param5;
 }
 
@@ -55,18 +55,33 @@ bool daObjHhaPart_c::set_bgw(const char* arcname, int index) {
 }
 
 /* 000002A4-0000035C       .text init_mtx__14daObjHhaPart_cF4cXyz5csXyz4cXyz */
-void daObjHhaPart_c::init_mtx(cXyz param1, csXyz param2, cXyz param3) {
-    mpModel->setBaseScale(param3);
-    mDoMtx_stack_c::transS(param1);
-    mDoMtx_stack_c::ZXYrotM(param2);
+void daObjHhaPart_c::init_mtx(cXyz currentPos, csXyz shapeAngle, cXyz scale) {
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(currentPos);
+    mDoMtx_stack_c::ZXYrotM(shapeAngle);
     mDoMtx_stack_c::transM(m08);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
     mpModel->calc();
 }
 
 /* 0000035C-0000040C       .text exe_normal__14daObjHhaPart_cFP10daObjHha_c */
-void daObjHhaPart_c::exe_normal(daObjHha_c* param1) {
-    
+void daObjHhaPart_c::exe_normal(daObjHha_c* parent) {
+    init_mtx(parent->current.pos, parent->shape_angle, parent->scale);
+
+    bool doMove;
+    if(this->mpBgw != NULL){
+        if(0 <= this->mpBgw->GetId() && this->mpBgw->GetId() < 0x100){
+            doMove = true;
+        }
+        else {
+            doMove = false;
+        }
+
+        if(doMove){
+            this->mpBgw->Move();
+        }
+    }
+
 }
 
 /* 0000040C-00000524       .text exe_move__14daObjHhaPart_cFP10daObjHha_c */
@@ -75,8 +90,9 @@ void daObjHhaPart_c::exe_move(daObjHha_c*) {
 }
 
 /* 00000524-0000056C       .text draw_normal__14daObjHhaPart_cFP10daObjHha_c */
-void daObjHhaPart_c::draw_normal(daObjHha_c*) {
-    /* Nonmatching */
+void daObjHhaPart_c::draw_normal(daObjHha_c* parent) {
+    dKy_getEnvlight().setLightTevColorType(mpModel, &parent->tevStr);
+    mDoExt_modelUpdateDL(this->mpModel);
 }
 
 /* 0000056C-00000698       .text create_s__16daObjHhaSplash_cFUsP4cXyzffP5csXyz */

@@ -20,15 +20,15 @@ public:
     bool set_mdl_area(const char*, int);
     bool set_bgw(const char*, int);
     void init_mtx(cXyz, csXyz, cXyz);
-    static void exe_normal(daObjHha_c*);
+    void exe_normal(daObjHha_c*);
     void exe_move(daObjHha_c*);
-    static void draw_normal(daObjHha_c*);
+    void draw_normal(daObjHha_c*);
 public: 
-    typedef void utype0(daObjHha_c*);
+    typedef void (daObjHhaPart_c::*utype0)(daObjHha_c*);
     struct utype1 {
         int i0;
         int i4;
-        utype0* m8; 
+        utype0 m8; 
     };
 
     /* 0x00 */ J3DModel* mpModel;
