@@ -8,6 +8,8 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -423,12 +425,50 @@ void daObjHha_c::init_mtx() {
 
 /* 00001B00-00001C64       .text init_co__10daObjHha_cFv */
 void daObjHha_c::init_co() {
-    /* Nonmatching */
+    const float yOffset = -400.0f, zOffset = -110.0f;
+    cXyz center;
+
+    mDoMtx_stack_c::YrotS(current.angle.y);
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &center);
+    center *= 460.0f;
+    center.y = get_water_h();
+    center += current.pos;
+
+    mCylStts.Init(0xff, 0xff, this);
+    mCyl.SetStts(&mCylStts);
+    mCyl.Set(M_cyl_data);
+    mCyl.SetC(center);
+
+    bool doSphInit = false;
+    if(!dComIfGs_isSwitch(iNo, home.roomNo) && i7B0 == 0){
+        doSphInit = true;
+    }
+
+    if(doSphInit){
+        mSphStts.Init(0xff, 0xff, this);
+        mSph.SetStts(&mSphStts);
+        mSph.Set(M_sph_data);
+        center.set(current.pos.x, current.pos.y + yOffset, current.pos.z + zOffset);
+        mSph.SetC(center);
+        mSph.SetR(220.0f);
+    }
 }
 
 /* 00001C64-00001E14       .text get_water_h__10daObjHha_cFv */
-void daObjHha_c::get_water_h() {
-    /* Nonmatching */
+float daObjHha_c::get_water_h() {
+    dBgS_WtrChk waterChk;
+    cXyz chkPos = current.pos;
+    float ret = current.pos.y;
+
+    cXyz offVec = cXyz::BaseZ;
+    mDoMtx_stack_c::YrotS(current.angle.y);
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &offVec);
+    offVec *= 400.0f;
+    chkPos += offVec;
+    if((dBgS_SplGrpChk_In_ObjGnd(chkPos, &waterChk, 1.0) & 0xff) != false){
+        ret = waterChk.GetHeight();
+    }
+    return ret;
 }
 
 /* 00001F38-00001F68       .text set_splash_bottom_h__10daObjHha_cFv */

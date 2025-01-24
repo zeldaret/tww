@@ -100,7 +100,7 @@ public:
     void set_tex(float, float, int);
     void init_mtx();
     void init_co();
-    void get_water_h();
+    float get_water_h();
     void set_splash_bottom_h();
     void set_splash_bottom_r();
     void set_splash_bottom_stop_r();
@@ -121,7 +121,7 @@ public:
     /* 0x2C4 */ dCcD_Stts mCylStts;
     /* 0x300 */ dCcD_Cyl mCyl;
     /* 0x430 */ bool b430;
-    /* 0x434 */ dCcD_Stts cSphStts;
+    /* 0x434 */ dCcD_Stts mSphStts;
     /* 0x470 */ dCcD_Sph mSph;
     /* 0x59C */ daObjHhaYgush_c mYgush;
     /* 0x6A0 */ daObjHhaPart_c mPartA[2];
