@@ -369,7 +369,36 @@ s32 daObjHha_c::_create() {
 
 /* 000018EC-000019EC       .text _delete__10daObjHha_cFv */
 BOOL daObjHha_c::_delete() {
-    /* Nonmatching */
+    if(heap != NULL){
+        for(int i = 0; i < 2; i++){
+            cBgW* bgw = mPartA[i].mpBgw;
+            if(bgw != NULL){
+                bool toErase;
+                if(bgw->GetId() >= 0 && bgw->GetId() < 0x100){
+                    toErase = true;
+                }
+                else {
+                    toErase = false;
+                }
+
+                if(toErase){
+                    dComIfG_Bgsp()->Release(bgw);
+                    mPartA[i].mpBgw = NULL;
+                }
+            }
+        }
+    }
+
+    for(int i = 0; i < 2; i++){
+        if(mSplashA[i].getEmitter() != NULL){
+            mSplashA[i].end();
+            mSplashA[i].b32 = 0;
+        }
+    }
+
+    dComIfG_resDelete(&mPhs, M_arcname);
+
+    return TRUE;
 }
 
 /* 000019EC-00001A24       .text check_sw__10daObjHha_cFv */
