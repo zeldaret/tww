@@ -24,11 +24,7 @@ public:
     void exe_move(daObjHha_c*);
     void draw_normal(daObjHha_c*);
 public: 
-    typedef void (daObjHhaPart_c::*utype0)(daObjHha_c*);
-    struct utype1 {
-        u64 i0;
-        utype0 m8;
-    };
+    typedef void (daObjHhaPart_c::*daObjHhaPartCallBack)(daObjHha_c*);
 
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ dBgW* mpBgw;
@@ -36,13 +32,13 @@ public:
     /* 0x14 */ cXyz m14;
     /* 0x20 */ cXyz m20;
     /* 0x2C */ float f2C;
-    /* 0x30 */ u8 u30;
+    /* 0x30 */ u8 partIdx;
     /* 0x31 */ u8 u31;
-    /* 0x34 */ utype1 m34;
-    /* 0x40 */ utype1 m40;
-};
+    /* 0x34 */ daObjHhaPartCallBack m34;
+    /* 0x40 */ daObjHhaPartCallBack m40;
+}; // 0x4C
 
-class daObjHhaSplash_c : dPa_followEcallBack {
+class daObjHhaSplash_c : public dPa_followEcallBack {
 public:
     daObjHhaSplash_c() {}
     ~daObjHhaSplash_c() {}
@@ -57,12 +53,12 @@ public:
     void set_pos_y(float) {}
     void stop_particle() {}
 
-    void create_s(unsigned short, cXyz, float, float, csXyz);
+    void create_s(unsigned short, cXyz*, float, float, csXyz*);
 
 public:
     /* 0x14 */ cXyz m14;
-    /* 0x20 */ cXyz m20;
-    /* 0x2C */ csXyz m2C;
+    /* 0x20 */ cXyz mPos;
+    /* 0x2C */ csXyz mAngle;
     /* 0x32 */ bool b32;
 };
 
@@ -76,7 +72,7 @@ public:
     void set_pos(cXyz) {}
 
     BOOL create_area(const char*);
-    void init_data(cXyz, f32, csXyz, cXyz, dKy_tevstr_c, u8);
+    void init_data(cXyz*, f32, csXyz*, cXyz*, dKy_tevstr_c*, u8);
     void init_mtx();
     BOOL draw();
 
@@ -95,9 +91,9 @@ public:
 class daObjHha_c : public fopAc_ac_c {
 public:
 
-    void check_sw(); // weak but not inline?
+    s32 check_sw(); // weak but not inline?
 
-    void solidHeapCB(fopAc_ac_c*);
+    static int solidHeapCB(fopAc_ac_c*);
     BOOL create_heap();
     s32 _create();
     BOOL _delete();
@@ -122,10 +118,9 @@ public:
     /* 0x290 */ J3DModel* mpModel;
     /* 0x294 */ mDoExt_btkAnm mBtkA[2];
     /* 0x2BC */ request_of_phase_process_class mPhs;
-    /* 0x2C0 */     int pad2C0;
     /* 0x2C4 */ dCcD_Stts mCylStts;
     /* 0x300 */ dCcD_Cyl mCyl;
-    /* 0x430 */     int pad430;
+    /* 0x430 */ bool b430;
     /* 0x434 */ dCcD_Stts cSphStts;
     /* 0x470 */ dCcD_Sph mSph;
     /* 0x59C */ daObjHhaYgush_c mYgush;
@@ -134,7 +129,7 @@ public:
     /* 0x7A0 */ float f7A0;
     /* 0x7A4 */ float f7A4;
     /* 0x7A8 */ float f7A8;
-    /* 0x7AC */ uint i7AC;
+    /* 0x7AC */ u32 i7AC;
     /* 0x7B0 */ u8 i7B0;
     /* 0x7B2 */ short i7B2;
     /* 0x7B4 */ float f7B4;
