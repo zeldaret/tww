@@ -126,9 +126,7 @@ public:
     /* 0x59C */ daObjHhaYgush_c mYgush;
     /* 0x6A0 */ daObjHhaPart_c mPartA[2];
     /* 0x738 */ daObjHhaSplash_c mSplashA[2];
-    /* 0x7A0 */ float f7A0;
-    /* 0x7A4 */ float f7A4;
-    /* 0x7A8 */ float f7A8;
+    /* 0x7A0 */ cXyz m7A0;
     /* 0x7AC */ u32 iNo;
     /* 0x7B0 */ u8 i7B0;
     /* 0x7B2 */ short i7B2;

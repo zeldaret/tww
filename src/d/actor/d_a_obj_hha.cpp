@@ -321,9 +321,7 @@ s32 daObjHha_c::_create() {
                 floatIdx++;
             }
 
-            f7A0 = 0.0f;
-            f7A4 = -1400.0f;
-            f7A8 = 50.0f;
+            m7A0.set(0.0f, -1400.0f, 50.0f);
             f7B4 = 1.0f;
 
             for(int i = 0; i < 2; i++){
@@ -414,7 +412,13 @@ void daObjHha_c::set_tex(float frame, float speed, int idx) {
 
 /* 00001A40-00001B00       .text init_mtx__10daObjHha_cFv */
 void daObjHha_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::transM(m7A0);
+    mDoMtx_stack_c::scaleM(1.0, 1.0, f7B4);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpModel->calc();
 }
 
 /* 00001B00-00001C64       .text init_co__10daObjHha_cFv */
