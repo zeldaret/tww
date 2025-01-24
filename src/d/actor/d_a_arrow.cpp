@@ -3,14 +3,6 @@
 // Translation Unit: d_a_arrow.cpp
 //
 
-// Fakematch: This is supposed to be a weak function defined in d_a_player.h that wind up at the end of the
-// d_a_agb TU. But weak function ordering is currently broken, so to get d_a_agb to match, we define it
-// here (at the start of the *next* TU after d_a_agb) so that it gets placed into the correct spot in
-// the DOL, even though this is an ugly hack and they're now in the wrong translation unit instead.
-#include "d/actor/d_a_player.h"
-u32 daPy_py_c::checkPlayerFly() const { return 0; }
-#include "d/d_procname.h"
-
 #include "d/actor/d_a_arrow.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"

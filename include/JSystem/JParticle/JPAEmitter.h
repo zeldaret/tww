@@ -8,8 +8,6 @@
 #include "JSystem/JMath/random.h"
 #include "JSystem/JGeometry.h"
 #include "JSystem/TPosition3.hh"
-#include "SSystem/SComponent/c_xyz.h"
-#include "SSystem/SComponent/c_sxyz.h"
 #include "dolphin/gx/GXStruct.h"
 #include "dolphin/mtx/mtx.h"
 

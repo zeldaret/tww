@@ -486,15 +486,15 @@ public:
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
     virtual f32 getGroundY() = 0;
-    virtual s32 getTactMusic() const;// { return -1; }
+    virtual s32 getTactMusic() const { return -1; }
     virtual int getTactTimerCancel() const { return 0; }
     virtual BOOL checkPlayerGuard() const { return FALSE; }
     virtual fopAc_ac_c* getGrabMissActor() { return NULL; }
-    virtual u32 checkPlayerFly() const;// { return 0; }
+    virtual u32 checkPlayerFly() const { return 0; }
     virtual BOOL checkFrontRoll() const { return FALSE; }
     virtual BOOL checkBottleSwing() const { return FALSE; }
     virtual BOOL checkCutCharge() const { return FALSE; }
-    virtual BOOL getBokoFlamePos(cXyz*);// { return FALSE; }
+    virtual BOOL getBokoFlamePos(cXyz*) { return FALSE; }
     virtual BOOL checkTactWait() const { return FALSE; }
     virtual void setTactZev(fpc_ProcID, int, char*) {}
     virtual void onDekuSpReturnFlg(u8) {}
@@ -503,18 +503,18 @@ public:
     virtual f32 getBaseAnimeFrame() = 0;
     virtual fpc_ProcID getItemID() const { return fpcM_ERROR_PROCESS_ID_e; }
     virtual fpc_ProcID getThrowBoomerangID() const { return fpcM_ERROR_PROCESS_ID_e; }
-    virtual fpc_ProcID getGrabActorID() const;// { return fpcM_ERROR_PROCESS_ID_e; }
+    virtual fpc_ProcID getGrabActorID() const { return fpcM_ERROR_PROCESS_ID_e; }
     virtual BOOL checkGrabBarrel() { return FALSE; }
     virtual u32 checkPlayerNoDraw() { return FALSE; }
     virtual BOOL checkRopeTag() { return FALSE; }
     virtual BOOL checkRopeReadyAnime() const { return FALSE; }
     virtual void voiceStart(u32) {}
     virtual void setOutPower(f32, s16, int) {}
-    virtual void onFrollCrashFlg(u32);// {}
+    virtual void onFrollCrashFlg(u32) {}
     virtual MtxP getModelJointMtx(u16) { return NULL; }
     virtual f32 getOldSpeedY() { return 0.0f; }
     virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*) { return FALSE; }
-    virtual void setPlayerPosAndAngle(cXyz*, s16);// {}
+    virtual void setPlayerPosAndAngle(cXyz*, s16) {}
     virtual void setPlayerPosAndAngle(cXyz*, csXyz*) {}
     virtual void setPlayerPosAndAngle(MtxP) {}
     virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int) { return FALSE; }

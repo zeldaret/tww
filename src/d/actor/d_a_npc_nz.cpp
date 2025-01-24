@@ -623,7 +623,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
             if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
                 temp += 1;
             }
-            if(dComIfGs_getItem(dItem_BOW_e) != dItem_NONE_e) {
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
                 temp += 1;
             }
 

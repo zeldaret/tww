@@ -2405,16 +2405,6 @@ void daNpc_Os_infiniteEcallBack_c::makeEmitter(u16 param_1, const cXyz* param_2,
     dComIfGp_particle_set(param_1, param_2, param_3, param_4, -1, this);
 }
 
-/* 00007A10-00007A14       .text execute__28daNpc_Os_infiniteEcallBack_cFP14JPABaseEmitter */
-void daNpc_Os_infiniteEcallBack_c::execute(JPABaseEmitter*) {
-    return;
-}
-
-/* 00007A14-00007A1C       .text setup__28daNpc_Os_infiniteEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daNpc_Os_infiniteEcallBack_c::setup(JPABaseEmitter* pEmitter, const cXyz*, const csXyz*, signed char) {
-    mpBaseEmitter = pEmitter;
-}
-
 static actor_method_class l_daNpc_Os_Method = {
     (process_method_func)daNpc_Os_Create,
     (process_method_func)daNpc_Os_Delete,

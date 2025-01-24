@@ -16,8 +16,10 @@ class daNpc_Os_infiniteEcallBack_c : public dPa_levelEcallBack {
 public:
     void end();
     void makeEmitter(u16, const cXyz*, const csXyz*, const cXyz*);
-    void execute(JPABaseEmitter*);
-    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
+    void execute(JPABaseEmitter*) {}
+    void setup(JPABaseEmitter* pEmitter, const cXyz*, const csXyz*, s8) {
+        mpBaseEmitter = pEmitter;
+    }
 
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
 
@@ -41,8 +43,6 @@ public:
     cXyz& getAttentionBasePos() { return field_0x754; }
     s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
     s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
-    f32 getBaseAnimeFrame() { return 0.0f; }
-    f32 getBaseAnimeFrameRate() { return 1.0f; }
     s8 getCattleRoomNo() { return m_cattleRoomNo; }
     cXyz& getEyePos() { return field_0x748; }
     f32 getGroundY() { return mAcch.GetGroundH(); }
@@ -50,6 +50,8 @@ public:
     s16 getHead_y() { return mJntCtrl.getHead_y(); }
     MtxP getLeftHandMatrix() { return cullMtx; }
     MtxP getRightHandMatrix() { return cullMtx; }
+    f32 getBaseAnimeFrameRate() { return 1.0f; }
+    f32 getBaseAnimeFrame() { return 0.0f; }
     void incAttnSetCount() {
         if(field_0x7A3 != 0xFF) {
             field_0x7A3 += 1;
