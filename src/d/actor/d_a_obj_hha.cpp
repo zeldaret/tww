@@ -407,8 +407,9 @@ s32 daObjHha_c::check_sw() {
 }
 
 /* 00001A24-00001A40       .text set_tex__10daObjHha_cFffi */
-void daObjHha_c::set_tex(float, float, int) {
-    /* Nonmatching */
+void daObjHha_c::set_tex(float frame, float speed, int idx) {
+    mBtkA[idx].setFrame(frame);
+    mBtkA[idx].setPlaySpeed(speed);
 }
 
 /* 00001A40-00001B00       .text init_mtx__10daObjHha_cFv */
