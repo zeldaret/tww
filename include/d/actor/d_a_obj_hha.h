@@ -129,7 +129,7 @@ public:
     /* 0x7A0 */ float f7A0;
     /* 0x7A4 */ float f7A4;
     /* 0x7A8 */ float f7A8;
-    /* 0x7AC */ u32 i7AC;
+    /* 0x7AC */ u32 iNo;
     /* 0x7B0 */ u8 i7B0;
     /* 0x7B2 */ short i7B2;
     /* 0x7B4 */ float f7B4;

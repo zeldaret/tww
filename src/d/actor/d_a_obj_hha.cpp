@@ -299,7 +299,7 @@ s32 daObjHha_c::_create() {
     if(ret == cPhs_COMPLEATE_e){
         ret = cPhs_ERROR_e;
         if(fopAcM_entrySolidHeap(this, &solidHeapCB, 0x3C80) != false){
-            i7AC = fpcM_GetParam(this) & 0xFF;
+            iNo = fpcM_GetParam(this) & 0xFF;
             i7B0 = fpcM_GetParam(this) >> 8;
             m7C0 = dComIfGp_evmng_getEventIdx("hha_close");
 
@@ -403,7 +403,7 @@ BOOL daObjHha_c::_delete() {
 
 /* 000019EC-00001A24       .text check_sw__10daObjHha_cFv */
 s32 daObjHha_c::check_sw() {
-    /* Nonmatching */
+    return dComIfGs_isSwitch(iNo, home.roomNo);
 }
 
 /* 00001A24-00001A40       .text set_tex__10daObjHha_cFffi */
