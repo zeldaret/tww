@@ -506,7 +506,15 @@ void daObjHha_c::set_splash_bottom_r() {
 
 /* 000020C0-000021CC       .text set_splash_bottom_stop_r__10daObjHha_cFv */
 void daObjHha_c::set_splash_bottom_stop_r() {
-    /* Nonmatching */
+    cXyz calcVec = cXyz::BaseZ;
+    int iVar2 = i7BC - 15;
+    float scaling = (1.0f - iVar2 / 75.0f) * -300.0f;
+    mDoMtx_stack_c::YrotS(current.angle.y);
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &calcVec);
+    calcVec *= scaling;
+    calcVec += mSplashA[0].get_pos();
+    calcVec.y = mSplashA[0].get_pos_y();
+    mSplashA[0].set_pos(calcVec);
 }
 
 /* 000021CC-00002470       .text water_manager__10daObjHha_cFv */

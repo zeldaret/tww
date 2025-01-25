@@ -131,7 +131,8 @@ public:
     /* 0x7B0 */ u8 i7B0;
     /* 0x7B2 */ short i7B2;
     /* 0x7B4 */ float f7B4;
-    /* 0x7B8 */     u8 pad7B8[8];
+    /* 0x7B8 */ int u7B8;
+    /* 0x7BC */ u16 i7BC;
     /* 0x7C0 */ short m7C0;
     /* 0x7C2 */ u8 i7C2;
     /* 0x7C3 */ u8 i7C3;
