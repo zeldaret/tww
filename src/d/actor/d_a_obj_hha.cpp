@@ -8,6 +8,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/actor/d_a_tag_waterlevel.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_w.h"
@@ -167,6 +168,14 @@ void daObjHhaPart_c::draw_normal(daObjHha_c* parent) {
     mDoExt_modelUpdateDL(mpModel);
 }
 
+cXyz daObjHhaSplash_c::get_base_pos(){
+    return mBasePos;
+}
+
+cXyz daObjHhaSplash_c::get_pos(){
+    return mPos;
+}
+
 /* 0000056C-00000698       .text create_s__16daObjHhaSplash_cFUsP4cXyzffP5csXyz */
 void daObjHhaSplash_c::create_s(unsigned short id, cXyz* pPos, float offsetY, float offsetZ, csXyz* pAngle) {
     cXyz acStack38;
@@ -176,7 +185,7 @@ void daObjHhaSplash_c::create_s(unsigned short id, cXyz* pPos, float offsetY, fl
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &acStack38);
     acStack38 *= offsetZ;
     mPos += acStack38;
-    m14 = mPos;
+    mBasePos = mPos;
     mAngle = *pAngle;
     dComIfGp_particle_set(id, &mPos, &mAngle, NULL, 0xff, this);
     b32 = true;
@@ -218,7 +227,7 @@ void daObjHhaYgush_c::init_data(cXyz* pPos, f32 param2, csXyz* pAngle, cXyz* pSc
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &cStack3C);
     cStack3C *= param2;
     mD8 = *pPos + cStack3C;
-    mTrans = mD8;
+    mPos = mD8;
     mRot = *pAngle;
     mScale = *pScale;
     mTev = *param5;
@@ -230,7 +239,7 @@ void daObjHhaYgush_c::init_mtx() {
     J3DModel* pModel = mpModel;
     if(pModel != NULL){
         pModel->setBaseScale(mScale);
-        mDoMtx_stack_c::transS(mTrans);
+        mDoMtx_stack_c::transS(mPos);
         mDoMtx_stack_c::ZXYrotM(mRot);
         mDoMtx_stack_c::scaleM(13.0f, 1.0f, 11.0f);
         mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
@@ -240,7 +249,7 @@ void daObjHhaYgush_c::init_mtx() {
 /* 00000B88-00000C2C       .text draw__15daObjHhaYgush_cFv */
 BOOL daObjHhaYgush_c::draw() {
     if(bVisible != false && mpModel != NULL){
-        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &mTrans, &mTev);
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &mPos, &mTev);
         dKy_getEnvlight().setLightTevColorType(mpModel, &mTev);
         mBtk.entry(mpModel->getModelData());
         mBck.entry(mpModel->getModelData());
@@ -473,17 +482,26 @@ float daObjHha_c::get_water_h() {
 
 /* 00001F38-00001F68       .text set_splash_bottom_h__10daObjHha_cFv */
 void daObjHha_c::set_splash_bottom_h() {
-    /* Nonmatching */
+    mSplashA[0].set_pos_y(get_water_h());
 }
 
 /* 00001F68-0000201C       .text daObjHha_get_r__Fs */
-void daObjHha_get_r(short) {
-    /* Nonmatching */
+cXyz daObjHha_get_r(short yAngle) {
+    cXyz calcVec = cXyz::BaseZ;
+    float waterLevel = daTagWaterlevel::Act_c::get_now() * -190.0f;
+    mDoMtx_stack_c::YrotS(yAngle);
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &calcVec);
+    calcVec *= waterLevel;
+    return calcVec;
 }
 
 /* 0000201C-000020C0       .text set_splash_bottom_r__10daObjHha_cFv */
 void daObjHha_c::set_splash_bottom_r() {
-    /* Nonmatching */
+    cXyz local20 = cXyz::BaseZ;
+    local20 = daObjHha_get_r(current.angle.y);
+    local20 += mSplashA[0].get_base_pos();
+    local20.y = mSplashA[0].get_pos_y();
+    mSplashA[0].set_pos(local20);
 }
 
 /* 000020C0-000021CC       .text set_splash_bottom_stop_r__10daObjHha_cFv */

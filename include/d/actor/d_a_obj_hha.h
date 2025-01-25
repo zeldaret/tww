@@ -45,18 +45,18 @@ public:
 
     void chk_stop() {}
     void delete_s() {}
-    virtual void get_base_pos() {}
-    virtual void get_pos() {}
-    void get_pos_y() {}
+    cXyz get_base_pos();
+    cXyz get_pos();
+    f32 get_pos_y() { return mPos.y; }
     void play_particle() {}
-    void set_pos(cXyz*) {}
-    void set_pos_y(float) {}
+    void set_pos(cXyz& pos) { mPos.set(pos); }
+    void set_pos_y(float y) { mPos.y = y; }
     void stop_particle() {}
 
     void create_s(unsigned short, cXyz*, float, float, csXyz*);
 
 public:
-    /* 0x14 */ cXyz m14;
+    /* 0x14 */ cXyz mBasePos;
     /* 0x20 */ cXyz mPos;
     /* 0x2C */ csXyz mAngle;
     /* 0x32 */ bool b32;
@@ -82,7 +82,7 @@ public:
     /* 0x018 */ mDoExt_bckAnm mBck;
     /* 0x028 */ dKy_tevstr_c mTev;
     /* 0x0D8 */ cXyz mD8;
-    /* 0x0E4 */ cXyz mTrans;
+    /* 0x0E4 */ cXyz mPos;
     /* 0x0F0 */ cXyz mScale;
     /* 0x0FC */ csXyz mRot;
     /* 0x102 */ u8 bVisible;
