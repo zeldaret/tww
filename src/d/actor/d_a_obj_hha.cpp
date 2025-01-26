@@ -91,7 +91,7 @@ void daObjHhaPart_c::init_data(float yPos, float yTar, u16 param3, u8 i, u8 para
     f2C = (yTar - yPos) / param3;
     m20 = m14 - m08;
     m20.normalizeRS();
-    m34 = &daObjHhaPart_c::exe_normal;
+    setExeProc(&daObjHhaPart_c::exe_normal);
     m40 = &daObjHhaPart_c::draw_normal;
     u31 = param5;
 }
@@ -154,7 +154,7 @@ void daObjHhaPart_c::exe_move(daObjHha_c* parent) {
     cXyz unk0 = m14 - m08;
     if(m20.getDotProduct(unk0) <= 0.0f){
         m08 = m14;
-        m34 = &daObjHhaPart_c::exe_normal;
+        setExeProc(&daObjHhaPart_c::exe_normal);
         if(u31 == 0 && partIdx == 0){
             dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0,1.0,0.0));
         }
@@ -524,7 +524,21 @@ void daObjHha_c::water_manager() {
 
 /* 00002470-0000259C       .text part_manager__10daObjHha_cFv */
 void daObjHha_c::part_manager() {
-    /* Nonmatching */
+    if(i7B2 == 0){
+        mPartA[0].setExeProc( &daObjHhaPart_c::exe_move);
+        mPartA[1].setExeProc( &daObjHhaPart_c::exe_move);
+        i7B2 = -1;
+        if(i7B0 == 0){
+            fopAcM_seStartCurrent(this, JA_SE_OBJ_F_WATERGATE_CL, 0);
+        }
+    }
+    else if(i7B2 > 0){
+        i7B2 -= 1;
+    }
+
+    for(int i = 0; i < 2; i++){
+        mPartA[i].execute(this);
+    }
 }
 
 /* 0000259C-00002658       .text ygush_manager__10daObjHha_cFv */

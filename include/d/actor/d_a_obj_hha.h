@@ -11,9 +11,15 @@ class daObjHha_c;
 
 class daObjHhaPart_c {
 public:
+    typedef void(daObjHhaPart_c::*daObjHhaPartCallBack)(daObjHha_c*);
+public:
     void draw(daObjHha_c*) {}
-    void execute(daObjHha_c*) {}
-    void setExeProc(void (daObjHhaPart_c::*)(daObjHha_c*)) {}
+    void execute(daObjHha_c* arg) {
+        if(cbExec){
+            (this->*(cbExec))(arg);
+        }
+    }
+    void setExeProc(daObjHhaPartCallBack newCb) { cbExec = newCb; }
     void start_move() {}
 
     void init_data(float, float, u16, u8, u8);
@@ -24,8 +30,6 @@ public:
     void exe_move(daObjHha_c*);
     void draw_normal(daObjHha_c*);
 public: 
-    typedef void (daObjHhaPart_c::*daObjHhaPartCallBack)(daObjHha_c*);
-
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ dBgW* mpBgw;
     /* 0x08 */ cXyz m08;
@@ -34,9 +38,10 @@ public:
     /* 0x2C */ float f2C;
     /* 0x30 */ u8 partIdx;
     /* 0x31 */ u8 u31;
-    /* 0x34 */ daObjHhaPartCallBack m34;
+    /* 0x34 */ daObjHhaPartCallBack cbExec;
     /* 0x40 */ daObjHhaPartCallBack m40;
-}; // 0x4C
+
+}; // Size : 0x4C
 
 class daObjHhaSplash_c : public dPa_followEcallBack {
 public:
@@ -60,7 +65,8 @@ public:
     /* 0x20 */ cXyz mPos;
     /* 0x2C */ csXyz mAngle;
     /* 0x32 */ bool b32;
-};
+
+}; // Size : 0x34
 
 class daObjHhaYgush_c {
 public:
@@ -86,7 +92,8 @@ public:
     /* 0x0F0 */ cXyz mScale;
     /* 0x0FC */ csXyz mRot;
     /* 0x102 */ u8 bVisible;
-};
+
+}; // Size : 0x104
 
 class daObjHha_c : public fopAc_ac_c {
 public:
@@ -131,8 +138,9 @@ public:
     /* 0x7B0 */ u8 i7B0;
     /* 0x7B2 */ short i7B2;
     /* 0x7B4 */ float f7B4;
-    /* 0x7B8 */ int u7B8;
+    /* 0x7B8 */ float f7B8;
     /* 0x7BC */ u16 i7BC;
+    /* 0X7BE */ u8 i7BE;
     /* 0x7C0 */ short m7C0;
     /* 0x7C2 */ u8 i7C2;
     /* 0x7C3 */ u8 i7C3;
