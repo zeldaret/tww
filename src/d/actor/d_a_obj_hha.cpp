@@ -519,7 +519,81 @@ void daObjHha_c::set_splash_bottom_stop_r() {
 
 /* 000021CC-00002470       .text water_manager__10daObjHha_cFv */
 void daObjHha_c::water_manager() {
-    /* Nonmatching */
+    set_splash_bottom_h();
+    set_splash_bottom_r();
+    switch(i7BE){
+        case 0:
+        break;
+
+        case 1:
+            f7B4 -= 11.0f/1800;
+            if(f7B4 < f7B8){
+                f7B4 = f7B8;
+            }
+            if(i7BC == 34){
+                set_tex(37.0f,1.0f,1);
+            }
+            if(i7BC == 15){
+                if(mSplashA[1].mEcallBack.getEmitter() != NULL){
+                    mSplashA[1].mEcallBack.getEmitter()->setStatus(1);
+                    mSplashA[1].b32 = false;
+                }
+
+                if(mSplashA[1].mEcallBack.getEmitter() != NULL){
+                    mSplashA[1].mEcallBack.end();
+                    mSplashA[1].b32 = false;
+                }
+            }
+            else if(i7BC > 15){
+                set_splash_bottom_stop_r();
+            }
+            i7BC--;
+            if(i7BC == 0){
+                i7BE = 0;
+                if(mSplashA[0].mEcallBack.getEmitter() != NULL){
+                    mSplashA[0].mEcallBack.getEmitter()->setStatus(1);
+                    mSplashA[0].b32 = false;
+                }
+
+                if(mSplashA[0].mEcallBack.getEmitter() != NULL){
+                    mSplashA[0].mEcallBack.end();
+                    mSplashA[0].b32 = false;
+                }
+                b430 = false;
+                mYgush.bVisible = false;
+                i7C3 = 0;
+            }
+        break;
+
+        case 2:
+            if(i7BC == 35){
+                if(mSplashA[1].mEcallBack.getEmitter() != NULL){
+                    mSplashA[1].mEcallBack.getEmitter()->clearStatus(1);
+                    mSplashA[1].b32 = 1;
+                }
+                set_tex(0.0f,1.0f,1);
+            }
+            i7BC--;
+            if(mSplashA[0].b32 == 0 && i7BC <= daTagWaterlevel::Act_c::M_now * 5.0f + 10.0f){
+                if(mSplashA[0].mEcallBack.getEmitter() != NULL){
+                    mSplashA[0].mEcallBack.getEmitter()->clearStatus(1);
+                    mSplashA[0].b32 = true;
+                }
+                mYgush.bVisible = true;
+                i7C3 = 1;
+            }
+            if(i7BC == 0){
+                set_tex(36.0, 0.0, 1);
+                i7BE = 0;
+                b430 = true;
+            }
+        break;
+    }
+
+    for(int i = 0; i < 2; i++){
+        mBtkA[i].play();
+    }
+    init_mtx();
 }
 
 /* 00002470-0000259C       .text part_manager__10daObjHha_cFv */
@@ -613,7 +687,7 @@ BOOL daObjHha_c::_execute() {
 /* 000028E4-000029F4       .text _draw__10daObjHha_cFv */
 BOOL daObjHha_c::_draw() {
     int i;
-    
+
     dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     for(i = 0; i < 2; i++){
         mPartA[i].draw(this);
