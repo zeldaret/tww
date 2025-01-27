@@ -612,7 +612,23 @@ BOOL daObjHha_c::_execute() {
 
 /* 000028E4-000029F4       .text _draw__10daObjHha_cFv */
 BOOL daObjHha_c::_draw() {
-    /* Nonmatching */
+    int i;
+    
+    dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    for(i = 0; i < 2; i++){
+        mPartA[i].draw(this);
+    }
+
+    if(mpModel != NULL){
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        dKy_getEnvlight().setLightTevColorType(mpModel, &tevStr);
+        for(i = 0; i < 2; i++){
+            mBtkA[i].entry(mpModel->getModelData());
+        }
+        mDoExt_modelUpdateDL(mpModel);
+    }
+    mYgush.draw();
+    return TRUE;
 }
 
 namespace {
