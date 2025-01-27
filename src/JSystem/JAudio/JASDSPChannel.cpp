@@ -266,7 +266,7 @@ void JASystem::TDSPChannel::updateAll() {
     TDSPQueue::checkQueue();
     for (u32 i = 0; i < 64; i++) {
         if ((i & 0x0f) == 0 && i != 0) {
-            DSPReleaseHalt2(i - 1 >> 4);
+            DSPReleaseHalt2((i - 1) >> 4);
         }
         dspBuffer = DSPCH[i].field_0xc;
         TDSPChannel* dspChannel = &DSPCH[i];

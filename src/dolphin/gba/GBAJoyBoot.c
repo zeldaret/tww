@@ -135,48 +135,79 @@ static void F27(s32 chan, s32 ret) {
     gba->ret = ret;
 }
 
-// NONMATCHING
 static void F29(s32 chan, s32 ret) {
     GBAControl* gba = &__GBA[chan];
     GBABootInfo* bootInfo = &__GBA[chan].bootInfo;
-
-    if (ret == GBA_READY) {
-        __GBAX02(chan, bootInfo->readbuf);
-    } else {
-        F104(chan, ret);
-    }
-
-    gba->ret = ret;
-}
-
-void __GBAX01(s32 chan, s32 ret) {
-    GBAControl* gba = &__GBA[chan];
-    GBABootInfo* bootInfo = &__GBA[chan].bootInfo;
     int val200;
-
+    
     if (ret == GBA_READY) {
-        bootInfo->keyA = gba->param->keyA;
-        bootInfo->keyB = gba->param->keyB;
-        if (bootInfo->readbuf[3] == 0 || bootInfo->readbuf[2] == 0 ||
-            (bootInfo->keyA & (D54[5] << 9)) == 0 || bootInfo->readbuf[1] == 0 ||
-            (bootInfo->keyA >> 15) == 0 || bootInfo->readbuf[0] == 0)
-        {
+        bootInfo->keyA =
+            (bootInfo->readbuf[3] ^ D54[28]) << 24 |
+            (bootInfo->readbuf[2] ^ D54[14]) << 16 |
+            (bootInfo->readbuf[1] ^ D54[15]) << 8 |
+            (bootInfo->readbuf[0] ^ D54[25]);
+        
+        if (
+            bootInfo->readbuf[3] == 0 ||
+            bootInfo->readbuf[2] == 0 ||
+            (bootInfo->keyA & (D54[5] << 9)) == 0 ||
+            bootInfo->readbuf[1] == 0 ||
+            (bootInfo->keyA >> 15) == 0 ||
+            bootInfo->readbuf[0] == 0
+        ) {
             ret = GBA_JOYBOOT_UNKNOWN_STATE;
         } else {
+            switch (bootInfo->paletteSpeed) {
+            case -4:
+            case -3:
+            case -2:
+            case -1:
+                bootInfo->keyB = (bootInfo->paletteColor << 4 | (3 - bootInfo->paletteSpeed)*2) << 16;
+                break;
+            case 0:
+                bootInfo->keyB = (bootInfo->paletteColor << 1 | 0x70) << 16;
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                bootInfo->keyB = (bootInfo->paletteColor << 4 | (bootInfo->paletteSpeed - 1)*2) << 16;
+                break;
+            }
+            
             bootInfo->i = ~D54[36] & bootInfo->length + D54[36];
             val200 = D54[20] << D54[33];
-
+            
             if (bootInfo->i < val200) {
                 bootInfo->i = val200;
             }
-
+            
             bootInfo->realLength = bootInfo->i;
             bootInfo->i -= val200;
             bootInfo->i >>= D54[32];
-            bootInfo->writebuf[0] = (u8)(bootInfo->keyB >> 0);
-            bootInfo->writebuf[1] = (u8)(bootInfo->keyB >> 8);
-            bootInfo->writebuf[3] = (u8)(bootInfo->keyB >> 24);
-            bootInfo->writebuf[2] = (u8)(bootInfo->keyB >> 16);
+            bootInfo->keyB |=
+                ((bootInfo->i & (D54[3] << D54[36])) << D54[31]) |
+                ((bootInfo->i & (D54[3] | (D54[6] << D54[37]))) << D54[7]) |
+                bootInfo->i & D54[4];
+            
+            bootInfo->keyB |=
+                ((bootInfo->keyB + (bootInfo->keyB >> 8) + (bootInfo->keyB >> 16))) << 24 |
+                D54[3] << 24 |
+                D54[5] << 17 |
+                D54[17] << 10 |
+                D54[3];
+            
+            if ((bootInfo->keyB & val200) != 0) {
+                bootInfo->writebuf[3] = (bootInfo->keyB >> 24) ^ D54[13];
+                bootInfo->writebuf[2] = (bootInfo->keyB >> 16) ^ D54[16];
+                bootInfo->writebuf[0] = bootInfo->keyB ^ D54[25];
+                bootInfo->writebuf[1] = (bootInfo->keyB >> 8) ^ D54[26];
+            } else {
+                bootInfo->writebuf[0] = bootInfo->keyB ^ D54[21];
+                bootInfo->writebuf[1] = (bootInfo->keyB >> 8) ^ D54[22];
+                bootInfo->writebuf[3] = (bootInfo->keyB >> 24) ^ D54[22];
+                bootInfo->writebuf[2] = (bootInfo->keyB >> 16) ^ D54[23];
+            }
             bootInfo->crc = (D54[38] + 1) << D54[34];
             bootInfo->curOffset = D54[8];
             bootInfo->begin = OSGetTime();
@@ -184,10 +215,11 @@ void __GBAX01(s32 chan, s32 ret) {
             ret = GBAWriteAsync(chan, bootInfo->writebuf, bootInfo->status, F31);
         }
     }
-
+    
     if (ret != GBA_READY) {
         F104(chan, ret);
     }
+
     gba->ret = ret;
 }
 

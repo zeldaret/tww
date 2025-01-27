@@ -134,7 +134,6 @@ int mDoCPd_Read() {
 }
 
 /* 80007A70-80007BBC       .text mDoCPd_Create__Fv */
-// NONMATCHING - weird ending
 int mDoCPd_Create() {
     JUTGamePad::mSuppressPadReset = 1;
 

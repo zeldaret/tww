@@ -549,7 +549,6 @@ static fopAc_cullSizeBox l_cullSizeBox[14] = {
     /* fopAc_CULLBOX_11_e */ fopAc_MakeCullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 210.0f, 75.0f)),
     /* fopAc_CULLBOX_12_e */ fopAc_MakeCullSizeBox(cXyz(-70.0f, -100.0f, -80.0f), cXyz(70.0f, 240.0f, 100.0f)),
     /* fopAc_CULLBOX_13_e */ fopAc_MakeCullSizeBox(cXyz(-60.0f, -20.0f, -60.0f), cXyz(60.0f, 160.0f, 60.0f)),
-
 };
 static fopAc_cullSizeSphere l_cullSizeSphere[8] = {
     /* fopAc_CULLSPHERE_0_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 80.0f),

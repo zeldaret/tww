@@ -846,7 +846,7 @@ config.libs = [
         [
             Object(Matching,    "dolphin/gba/GBA.c"),
             Object(Matching,    "dolphin/gba/GBAGetProcessStatus.c"),
-            Object(NonMatching, "dolphin/gba/GBAJoyBoot.c"),
+            Object(Matching,    "dolphin/gba/GBAJoyBoot.c"),
             Object(Matching,    "dolphin/gba/GBARead.c"),
             Object(Matching,    "dolphin/gba/GBAWrite.c"),
             Object(Matching,    "dolphin/gba/GBAXfer.c"),
