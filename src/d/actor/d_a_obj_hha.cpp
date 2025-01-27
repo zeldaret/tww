@@ -92,7 +92,7 @@ void daObjHhaPart_c::init_data(float yPos, float yTar, u16 param3, u8 i, u8 para
     m20 = m14 - m08;
     m20.normalizeRS();
     setExeProc(&daObjHhaPart_c::exe_normal);
-    m40 = &daObjHhaPart_c::draw_normal;
+    cbDraw = &daObjHhaPart_c::draw_normal;
     u31 = param5;
 }
 
@@ -187,7 +187,7 @@ void daObjHhaSplash_c::create_s(unsigned short id, cXyz* pPos, float offsetY, fl
     mPos += acStack38;
     mBasePos = mPos;
     mAngle = *pAngle;
-    dComIfGp_particle_set(id, &mPos, &mAngle, NULL, 0xff, this);
+    dComIfGp_particle_set(id, &mPos, &mAngle, NULL, 0xff, &mEcallBack);
     b32 = true;
 }
 
@@ -226,8 +226,8 @@ void daObjHhaYgush_c::init_data(cXyz* pPos, f32 param2, csXyz* pAngle, cXyz* pSc
     mDoMtx_stack_c::YrotS(pAngle->y);
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &cStack3C);
     cStack3C *= param2;
-    mD8 = *pPos + cStack3C;
-    mPos = mD8;
+    mBasePos = *pPos + cStack3C;
+    mPos = mBasePos;
     mRot = *pAngle;
     mScale = *pScale;
     mTev = *param5;
@@ -312,7 +312,7 @@ s32 daObjHha_c::_create() {
         if(fopAcM_entrySolidHeap(this, &solidHeapCB, 0x3C80) != false){
             iNo = fpcM_GetParam(this) & 0xFF;
             i7B0 = fpcM_GetParam(this) >> 8;
-            m7C0 = dComIfGp_evmng_getEventIdx("hha_close");
+            mEventID = dComIfGp_evmng_getEventIdx("hha_close");
 
             if(i7B0 == 0xf){
                 i7B0 = 0;
@@ -349,13 +349,13 @@ s32 daObjHha_c::_create() {
                 set_tex(0.0f, 0.0f, 1);
 
                 // Following might be an inline for loop
-                JPABaseEmitter* pSplashEmitter = mSplashA[0].getEmitter();
+                JPABaseEmitter* pSplashEmitter = mSplashA[0].mEcallBack.getEmitter();
                 if(pSplashEmitter != NULL){
                     pSplashEmitter->setStatus(1);
                     mSplashA[0].b32 = false;
                 }
 
-                pSplashEmitter = mSplashA[1].getEmitter();
+                pSplashEmitter = mSplashA[1].mEcallBack.getEmitter();
                 if(pSplashEmitter != NULL){
                     pSplashEmitter->setStatus(1);
                     mSplashA[1].b32 = false;
@@ -399,8 +399,8 @@ BOOL daObjHha_c::_delete() {
     }
 
     for(int i = 0; i < 2; i++){
-        if(mSplashA[i].getEmitter() != NULL){
-            mSplashA[i].end();
+        if(mSplashA[i].mEcallBack.getEmitter() != NULL){
+            mSplashA[i].mEcallBack.end();
             mSplashA[i].b32 = 0;
         }
     }
@@ -557,7 +557,57 @@ void daObjHha_c::ygush_manager() {
 
 /* 00002658-000028E4       .text _execute__10daObjHha_cFv */
 BOOL daObjHha_c::_execute() {
-    /* Nonmatching */
+    switch(i7C2){
+        case 0: if(dComIfGs_isSwitch(iNo, home.roomNo)){
+            if(i7B0 == 0){
+                if(eventInfo.mCommand != dEvtCmd_INDEMO_e){
+                    fopAcM_orderOtherEventId(this, mEventID);
+                    eventInfo.onCondition(2);
+                }
+                else {
+                    mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+                    i7BE = 1;
+                    i7BC = 90;
+                    i7B2 = 65;
+                    i7C2 = 1;
+                }
+            }
+            else {
+                if(dComIfGp_evmng_startCheck(mEventID) != FALSE){
+                    i7BE = 2;
+                    i7BC = 35;
+                    i7B2 = 0;
+                    i7C2 = 2;
+                }
+            }
+        } break;
+
+
+        case 1: if(dComIfGp_evmng_endCheck(mEventID)){
+            dComIfGp_onStatus(8);
+            i7C2 = 2;
+        } break;
+    }
+
+    part_manager();
+    water_manager();
+    ygush_manager();
+
+    if(i7C3 != 0){
+        fopAcM_seStartCurrent(this, JA_SE_ATM_WATER_GATE,0);
+    }
+    if(b430 != false){
+        cXyz local28 = mCyl.GetC();
+        local28.y = get_water_h();
+        mCyl.SetC(local28);
+        dComIfG_Ccsp()->Set(&mCyl);
+        bool bVar2 = (!dComIfGs_isSwitch(iNo, home.roomNo) && i7B0 == 0);
+        if(bVar2){
+            dComIfG_Ccsp()->Set(&mSph);
+        }
+    }
+
+    return TRUE;
 }
 
 /* 000028E4-000029F4       .text _draw__10daObjHha_cFv */

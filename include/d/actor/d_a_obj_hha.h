@@ -13,10 +13,14 @@ class daObjHhaPart_c {
 public:
     typedef void(daObjHhaPart_c::*daObjHhaPartCallBack)(daObjHha_c*);
 public:
-    void draw(daObjHha_c*) {}
+    void draw(daObjHha_c* arg) {
+        if(cbDraw){
+            (this->*cbDraw)(arg);
+        }
+    }
     void execute(daObjHha_c* arg) {
         if(cbExec){
-            (this->*(cbExec))(arg);
+            (this->*cbExec)(arg);
         }
     }
     void setExeProc(daObjHhaPartCallBack newCb) { cbExec = newCb; }
@@ -39,11 +43,11 @@ public:
     /* 0x30 */ u8 partIdx;
     /* 0x31 */ u8 u31;
     /* 0x34 */ daObjHhaPartCallBack cbExec;
-    /* 0x40 */ daObjHhaPartCallBack m40;
+    /* 0x40 */ daObjHhaPartCallBack cbDraw;
 
 }; // Size : 0x4C
 
-class daObjHhaSplash_c : public dPa_followEcallBack {
+class daObjHhaSplash_c {
 public:
     daObjHhaSplash_c() {}
     ~daObjHhaSplash_c() {}
@@ -61,6 +65,7 @@ public:
     void create_s(unsigned short, cXyz*, float, float, csXyz*);
 
 public:
+    /* 0x00 */ dPa_followEcallBack mEcallBack;
     /* 0x14 */ cXyz mBasePos;
     /* 0x20 */ cXyz mPos;
     /* 0x2C */ csXyz mAngle;
@@ -74,8 +79,8 @@ public:
     void check_draw() {}
     void disp_off() {}
     void disp_on() {}
-    cXyz get_base_pos() {}
-    void set_pos(cXyz) {}
+    cXyz get_base_pos() { return mBasePos; }
+    void set_pos(cXyz newpos) { mPos = newpos; }
 
     BOOL create_area(const char*);
     void init_data(cXyz*, f32, csXyz*, cXyz*, dKy_tevstr_c*, u8);
@@ -87,7 +92,7 @@ public:
     /* 0x004 */ mDoExt_btkAnm mBtk;
     /* 0x018 */ mDoExt_bckAnm mBck;
     /* 0x028 */ dKy_tevstr_c mTev;
-    /* 0x0D8 */ cXyz mD8;
+    /* 0x0D8 */ cXyz mBasePos;
     /* 0x0E4 */ cXyz mPos;
     /* 0x0F0 */ cXyz mScale;
     /* 0x0FC */ csXyz mRot;
@@ -141,7 +146,7 @@ public:
     /* 0x7B8 */ float f7B8;
     /* 0x7BC */ u16 i7BC;
     /* 0X7BE */ u8 i7BE;
-    /* 0x7C0 */ short m7C0;
+    /* 0x7C0 */ short mEventID;
     /* 0x7C2 */ u8 i7C2;
     /* 0x7C3 */ u8 i7C3;
 };
