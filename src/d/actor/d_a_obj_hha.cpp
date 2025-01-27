@@ -543,7 +543,16 @@ void daObjHha_c::part_manager() {
 
 /* 0000259C-00002658       .text ygush_manager__10daObjHha_cFv */
 void daObjHha_c::ygush_manager() {
-    /* Nonmatching */
+    cXyz local14;
+    if(static_cast<BOOL>(mYgush.bVisible) != FALSE){
+        local14 = daObjHha_get_r(current.angle.y);
+        local14 += mYgush.get_base_pos();
+        local14.y = get_water_h();
+        mYgush.set_pos(local14);
+        mYgush.mBtk.play();
+        mYgush.mBck.play();
+        mYgush.init_mtx();
+    }
 }
 
 /* 00002658-000028E4       .text _execute__10daObjHha_cFv */

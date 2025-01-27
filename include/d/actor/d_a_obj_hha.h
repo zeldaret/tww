@@ -74,7 +74,7 @@ public:
     void check_draw() {}
     void disp_off() {}
     void disp_on() {}
-    void get_base_pos() {}
+    cXyz get_base_pos() {}
     void set_pos(cXyz) {}
 
     BOOL create_area(const char*);
@@ -91,7 +91,7 @@ public:
     /* 0x0E4 */ cXyz mPos;
     /* 0x0F0 */ cXyz mScale;
     /* 0x0FC */ csXyz mRot;
-    /* 0x102 */ u8 bVisible;
+    /* 0x102 */ bool bVisible;
 
 }; // Size : 0x104
 
