@@ -141,9 +141,6 @@ m_Do/m_Do_machine_exception.cpp:
 	.rodata     start:0x803396F8 end:0x803398D8
 	.sbss       start:0x803F69B0 end:0x803F69B8
 
-dolphin/os/__start.c:
-	.init       start:0x80003100 end:0x800033A8
-
 c/c_damagereaction.cpp:
 	.text       start:0x8001BEDC end:0x800227A0
 	.ctors      start:0x803386A4 end:0x803386A8
@@ -1703,9 +1700,6 @@ d/d_wpot_water.cpp:
 	.bss        start:0x803E8100 end:0x803E8110
 	.sbss       start:0x803F7300 end:0x803F7308
 	.sdata2     start:0x803FBB00 end:0x803FBB20
-
-PowerPC_EABI_Support/Runtime/Src/__mem.c:
-	.init       start:0x800033A8 end:0x800034E0
 
 DynamicLink.cpp:
 	.text       start:0x80240098 end:0x80241278
@@ -4007,6 +4001,12 @@ TRK_MINNOW_DOLPHIN/Portable/notify.c:
 
 TRK_MINNOW_DOLPHIN/ppc/Generic/flush_cache.c:
 	.text       start:0x80335690 end:0x803356C8
+
+dolphin/os/__start.c:
+	.init       start:0x80003100 end:0x800033A8
+
+PowerPC_EABI_Support/Runtime/Src/__mem.c:
+	.init       start:0x800033A8 end:0x800034E0
 
 TRK_MINNOW_DOLPHIN/Portable/mem_TRK.c:
 	.init       start:0x800034E0 end:0x80003534
