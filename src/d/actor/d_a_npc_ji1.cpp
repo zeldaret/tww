@@ -1753,6 +1753,7 @@ u32 daNpc_Ji1_c::evn_hide_init(int staffIdx) {
 
 /* 00005508-000055E4       .text AnimeControlToWait__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::AnimeControlToWait() {
+    /* Nonmatching */
     if(field_0x330->getPlayMode() == J3DFrameCtrl::LOOP_ONCE_e) {
         if(field_0x330->checkFrame(field_0x330->getEndFrame() - 1.0f)) {
             if(isAttackAnim() || isGuardAnim()) {
@@ -2581,9 +2582,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
 /* 0000C7E4-0000CA98       .text battleAction__11daNpc_Ji1_cFPv */
 BOOL daNpc_Ji1_c::battleAction(void*) {
-    /* Nonmatching */
-
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     if(field_0xC78 == 0) {
         u8 icon;
@@ -2644,8 +2643,6 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
 
 /* 0000CA98-0000CC28       .text checkCutType__11daNpc_Ji1_cFii */
 BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
-    /* Nonmatching */
-
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     BOOL ret = false;
@@ -3588,8 +3585,6 @@ static void daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
 /* 00010E3C-00010FC0       .text chkAttention__11daNpc_Ji1_cF4cXyzs */
 BOOL daNpc_Ji1_c::chkAttention(cXyz param_1, s16 param_2) {
-    /* Nonmatching */
-
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 temp = 800.0f;
     s32 temp2 = l_HIO.field_0x10 + l_HIO.field_0x12;
@@ -3606,22 +3601,19 @@ BOOL daNpc_Ji1_c::chkAttention(cXyz param_1, s16 param_2) {
         temp2 += 0x71C;
     }
 
-    field_0xD7A = temp2 > abs(static_cast<s16>(angle - param_2)) && temp > dist;
+    angle -= param_2;
+    field_0xD7A = temp2 > abs(angle) && temp > dist;
     
-    return temp2 > abs(static_cast<s16>(angle - param_2)) && temp > dist;
+    return temp2 > abs(angle) && temp > dist;
 }
 
 /* 00010FC0-0001132C       .text lookBack__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::lookBack() {
-    /* Nonmatching */
-
     BOOL ret = false;
 
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    cXyz& this_pos = fopAcM_GetPosition(dComIfGp_getPlayer(0));
-    cXyz& other_pos = fopAcM_GetPosition(this);
-    cXyz temp = (other_pos - this_pos);
+    cXyz temp = fopAcM_GetPosition(player) - fopAcM_GetPosition(this);
     f32 dist = temp.absXZ();
 
     bool temp2 = true;
