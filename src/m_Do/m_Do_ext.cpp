@@ -1567,8 +1567,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
             *infoPtr = spD8[0];
         } else {
             mpAnm2->getTransform(param_0, &spD8[1]);
-            f31 = 1.0f - field_0x84;
-            f30 = field_0x84;
+            f31 = 1.0f - mAnmRate;
+            f30 = mAnmRate;
             infoPtr->mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
             infoPtr->mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
             infoPtr->mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
@@ -1602,8 +1602,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
     } else {
         mpAnm1->getTransform(param_0, &spD8[0]);
         mpAnm2->getTransform(param_0, &spD8[1]);
-        f31 = 1.0f - field_0x84;
-        f30 = field_0x84;
+        f31 = 1.0f - mAnmRate;
+        f30 = mAnmRate;
         sp68.mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
         sp68.mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
         sp68.mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
@@ -1639,7 +1639,7 @@ void mDoExt_McaMorf2::setAnm(J3DAnmTransform* bckAnm1, J3DAnmTransform* bckAnm2,
                              void* basAnm) {
     mpAnm1 = bckAnm1;
     mpAnm2 = bckAnm2;
-    field_0x84 = f1;
+    mAnmRate = f1;
     setStartFrame(startFrame);
     if (endFrame < 0.0f) {
         if (!mpAnm1) {

@@ -213,7 +213,7 @@ struct TVec3<f32> : public Vec {
         }
         f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(norm * len);
-        return sq * norm;
+        return norm * sq;
     }
 
     f32 setLength(const TVec3<f32>& b, f32 len) {
@@ -224,7 +224,7 @@ struct TVec3<f32> : public Vec {
         }
         f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(norm * len, b);
-        return sq * norm;
+        return norm * sq;
     }
 
     template<typename S>

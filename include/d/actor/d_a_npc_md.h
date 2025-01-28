@@ -210,6 +210,26 @@ public:
         ACTION_ENDING    = -1,
     };
     
+    enum daNpc_Md_StatusBit_e {
+        daMdStts_UNK1            = 0x00000001,
+        daMdStts_UNK2            = 0x00000002,
+        daMdStts_UNK4            = 0x00000004,
+        daMdStts_FLY             = 0x00000010,
+        daMdStts_CAM_TAG_IN      = 0x00000020,
+        daMdStts_UNK40           = 0x00000040,
+        daMdStts_UNK80           = 0x00000080,
+        daMdStts_XY_TALK         = 0x00000100,
+        daMdStts_UNK200          = 0x00000200,
+        daMdStts_UNK400          = 0x00000400,
+        daMdStts_CARRY_ACTION    = 0x00000800,
+        daMdStts_SHIP_RIDE       = 0x00001000,
+        daMdStts_LIGHT_HIT       = 0x00002000,
+        daMdStts_UNK4000         = 0x00004000,
+        daMdStts_LIGHT_BODY_HIT  = 0x00008000,
+        daMdStts_DEFAULT_TALK_XY = 0x00010000,
+        daMdStts_UNK20000        = 0x00020000,
+    };
+    
     typedef BOOL (daNpc_Md_c::*ActionFunc)(void*);
     typedef void (daNpc_Md_c::*EventActionInitFunc)(int evtStaffId);
     typedef BOOL (daNpc_Md_c::*EventActionFunc)(int evtStaffId);
@@ -217,29 +237,32 @@ public:
     BOOL chkPlayerAction(ActionFunc func) { return mCurrPlayerActionFunc == func; }
     BOOL chkNpcAction(ActionFunc func) { return mCurrNpcActionFunc == func; }
     
-    bool checkStatusFly() { return cLib_checkBit(m30F0, 0x10UL); }
-    void onBitCamTagIn() { cLib_onBit(m30F0, 0x20UL); }
-    void offBitCamTagIn() { cLib_offBit(m30F0, 0x20UL); }
-    bool checkStatusCamTagIn() { return cLib_checkBit(m30F0, 0x20UL); }
-    void onXYTalk() { cLib_onBit(m30F0, 0x100UL); }
-    void offXYTalk() { cLib_offBit(m30F0, 0x100UL); }
-    bool isXYTalk() { return cLib_checkBit(m30F0, 0x100UL); }
-    void noCarryAction() { cLib_onBit(m30F0, 0x800UL); }
-    void offNoCarryAction() { cLib_offBit(m30F0, 0x800UL); }
-    bool isNoCarryAction() { return cLib_checkBit(m30F0, 0x800UL); }
-    void onShipRide() { cLib_onBit(m30F0, 0x1000UL); }
-    void offShipRide() { cLib_offBit(m30F0, 0x1000UL); }
-    bool isShipRide() { return cLib_checkBit(m30F0, 0x1000UL); }
-    void onLightHit() { cLib_onBit(m30F0, 0x2000UL); }
-    void offLightHit() { cLib_offBit(m30F0, 0x2000UL); }
-    bool isLightHit() { return cLib_checkBit(m30F0, 0x2000UL); }
-    void onLightBodyHit() { cLib_onBit(m30F0, 0x8000UL); }
-    void offLightBodyHit() { cLib_offBit(m30F0, 0x8000UL); }
-    bool isLightBodyHit() { return cLib_checkBit(m30F0, 0x8000UL); }
-    bool isOldLightBodyHit() { return cLib_checkBit(m30F0, 0x8000UL); }
-    void onDefaultTalkXY() { cLib_onBit(m30F0, 0x10000UL); }
-    void offDefaultTalkXY() { cLib_offBit(m30F0, 0x10000UL); }
-    bool isDefaultTalkXY() { return cLib_checkBit(m30F0, 0x10000UL); }
+    void setBitStatus(u32 status) { cLib_onBit<u32>(m30F0, status); }
+    void clearStatus(u32 status) { cLib_offBit<u32>(m30F0, status); }
+    bool checkStatus(u32 status) { return cLib_checkBit<u32>(m30F0, status); }
+    bool checkStatusFly() { return cLib_checkBit<u32>(m30F0, daMdStts_FLY); }
+    void onBitCamTagIn() { cLib_onBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
+    void offBitCamTagIn() { cLib_offBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
+    bool checkStatusCamTagIn() { return cLib_checkBit<u32>(m30F0, daMdStts_CAM_TAG_IN); }
+    void onXYTalk() { cLib_onBit<u32>(m30F0, daMdStts_XY_TALK); }
+    void offXYTalk() { cLib_offBit<u32>(m30F0, daMdStts_XY_TALK); }
+    bool isXYTalk() { return cLib_checkBit<u32>(m30F0, daMdStts_XY_TALK); }
+    void noCarryAction() { cLib_onBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
+    void offNoCarryAction() { cLib_offBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
+    bool isNoCarryAction() { return cLib_checkBit<u32>(m30F0, daMdStts_CARRY_ACTION); }
+    void onShipRide() { cLib_onBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
+    void offShipRide() { cLib_offBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
+    bool isShipRide() { return cLib_checkBit<u32>(m30F0, daMdStts_SHIP_RIDE); }
+    void onLightHit() { cLib_onBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
+    void offLightHit() { cLib_offBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
+    bool isLightHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_HIT); }
+    void onLightBodyHit() { cLib_onBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
+    void offLightBodyHit() { cLib_offBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
+    bool isLightBodyHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
+    bool isOldLightBodyHit() { return cLib_checkBit<u32>(m30F0, daMdStts_LIGHT_BODY_HIT); }
+    void onDefaultTalkXY() { cLib_onBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
+    void offDefaultTalkXY() { cLib_offBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
+    bool isDefaultTalkXY() { return cLib_checkBit<u32>(m30F0, daMdStts_DEFAULT_TALK_XY); }
     
     void setOldLightBodyHit() {} // 0x20000?
     
@@ -294,22 +317,24 @@ public:
         }
     }
     
+    void setRunRate(f32 rate) {
+        mRunRate = rate;
+        mpMorf->setAnmRate(mRunRate);
+        mpArmMorf->setAnmRate(mRunRate);
+    }
+    
+    void setStatus(u32) {}
     void getFlyingTimer() {}
     void setFlyingTimer(s16) {}
     void calcFlyingTimer() {}
     void checkBitEffectStatus(u8) {}
-    void checkStatus(u32) {}
-    void setStatus(u32) {}
     void clearJntAng() {}
     void clearStatus() {}
-    void clearStatus(u32) {}
     void getTalkType() {}
     void setTalkType(u8) {}
     void setBitEffectStatus(u8) {}
-    void setBitStatus(u32) {}
     void setEffectStatus(u8) {}
     void setPiyo2TalkCNT(u8) {}
-    void setRunRate(f32) {}
     
     daNpc_Md_c() {}
     ~daNpc_Md_c();
@@ -343,7 +368,7 @@ public:
     void restartPoint(s16);
     void setMessageAnimation(u8);
     void waitGroundCheck();
-    void chkAdanmaeDemoOrder();
+    BOOL chkAdanmaeDemoOrder();
     BOOL waitNpcAction(void*);
     BOOL harpWaitNpcAction(void*);
     BOOL XYTalkCheck();
@@ -435,8 +460,8 @@ public:
     BOOL setAnm(int);
     bool dNpc_Md_setAnm(mDoExt_McaMorf2*, f32, int, f32, f32, char*, char*, const char*);
     bool dNpc_Md_setAnm(mDoExt_McaMorf*, int, f32, f32, char*, const char*);
-    void chkAttention(cXyz, s16, int);
-    void chkArea(cXyz*);
+    u8 chkAttention(cXyz, s16, int);
+    bool chkArea(cXyz*);
     void carryCheck();
     void eventOrder();
     void checkOrder();
@@ -520,8 +545,8 @@ public:
     /* 0x30F0 */ u32 m30F0;
     /* 0x30F4 */ u8 m30F4[0x30F8 - 0x30F4];
     /* 0x30F8 */ f32 m30F8;
-    /* 0x30FC */ f32 m30FC;
-    /* 0x3100 */ u8 m3100[0x3104 - 0x3100];
+    /* 0x30FC */ f32 mRunRate;
+    /* 0x3100 */ int m3100;
     /* 0x3104 */ int m3104;
     /* 0x3108 */ f32 m3108;
     /* 0x310C */ f32 m310C;

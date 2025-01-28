@@ -416,7 +416,9 @@ public:
         return mFrameCtrl.checkPass(frame);
     }
     BOOL isMorf() { return mCurMorf < 1.0f; }
-    void setAnmRate(f32) {} // TODO
+    void setAnmRate(f32 rate) {
+        mAnmRate = rate;
+    }
 
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm1;
@@ -427,7 +429,7 @@ public:
     /* 0x78 */ f32 mCurMorf;
     /* 0x7C */ f32 mPrevMorf;
     /* 0x80 */ f32 mMorfStep;
-    /* 0x84 */ f32 field_0x84;
+    /* 0x84 */ f32 mAnmRate;
     /* 0x88 */ mDoExt_zelAnime* mpSound;
     /* 0x8C */ mDoExt_McaMorfCallBack1_c * mpCallback1;
     /* 0x90 */ mDoExt_McaMorfCallBack2_c * mpCallback2;
