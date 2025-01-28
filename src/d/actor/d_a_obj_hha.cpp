@@ -80,16 +80,16 @@ const dCcD_SrcSph daObjHha_c::M_sph_data = {
 const HHA_RES_FILE_ID l_daObjHha_bdl_idx_table[2] = {HHA_BDL_HHA1, HHA_BDL_HHA2};
 const HHA_RES_FILE_ID l_daObjHha_dzb_idx_table[2] = {HHA_DZB_HHA1, HHA_DZB_HHA2};
 const HHA_RES_FILE_ID l_daObjHha_btk_idx_table[2] = {HHA_BTK_YSWTR00_01, HHA_BTK_YSWTR00_02};
-const u16 l_daObjHha_splash_id_table[2] = {0x810D, 0x810E};
 const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::LOOP_REPEAT_e, J3DFrameCtrl::LOOP_ONCE_e};
+const u16 l_daObjHha_splash_id_table[2] = {0x810D, 0x810E};
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */
 void daObjHhaPart_c::init_data(float yPos, float yTar, u16 param3, u8 i, u8 param5) {
-    m08.set(0, yPos, 0);
+    mPos.set(0, yPos, 0);
     m14.set(0, yTar, 0);
     partIdx = i;
     f2C = (yTar - yPos) / param3;
-    m20 = m14 - m08;
+    m20 = m14 - mPos;
     m20.normalizeRS();
     setExeProc(&daObjHhaPart_c::exe_normal);
     cbDraw = &daObjHhaPart_c::draw_normal;
@@ -98,24 +98,31 @@ void daObjHhaPart_c::init_data(float yPos, float yTar, u16 param3, u8 i, u8 para
 
 /* 00000170-00000224       .text set_mdl_area__14daObjHhaPart_cFPCci */
 BOOL daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
+    BOOL ret = FALSE;
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, index));
     JUT_ASSERT(0x1d9, mdl_data != 0);
     if(mdl_data != NULL){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203); 
+        ret = TRUE;
     }
 
-    return (mdl_data != NULL);
+    return ret;
 }
 
 /* 00000224-000002A4       .text set_bgw__14daObjHhaPart_cFPCci */
 BOOL daObjHhaPart_c::set_bgw(const char* arcname, int index) {
+    BOOL ret = TRUE;
     mpBgw = dBgW_NewSet(
         static_cast<cBgD_t*>(dComIfG_getObjectRes(arcname, index)), 
         1,
         &mpModel->getBaseTRMtx()
     );
 
-    return (mpBgw != NULL);
+    if(mpBgw == NULL){
+        ret = FALSE;
+    }
+
+    return ret;
 }
 
 /* 000002A4-0000035C       .text init_mtx__14daObjHhaPart_cF4cXyz5csXyz4cXyz */
@@ -123,7 +130,7 @@ void daObjHhaPart_c::init_mtx(cXyz currentPos, csXyz shapeAngle, cXyz scale) {
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(currentPos);
     mDoMtx_stack_c::ZXYrotM(shapeAngle);
-    mDoMtx_stack_c::transM(m08);
+    mDoMtx_stack_c::transM(mPos);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
     mpModel->calc();
 }
@@ -150,10 +157,10 @@ void daObjHhaPart_c::exe_normal(daObjHha_c* parent) {
 
 /* 0000040C-00000524       .text exe_move__14daObjHhaPart_cFP10daObjHha_c */
 void daObjHhaPart_c::exe_move(daObjHha_c* parent) {
-    m08.y += f2C;
-    cXyz unk0 = m14 - m08;
+    mPos.y += f2C;
+    cXyz unk0 = m14 - mPos;
     if(m20.getDotProduct(unk0) <= 0.0f){
-        m08 = m14;
+        mPos = m14;
         setExeProc(&daObjHhaPart_c::exe_normal);
         if(u31 == 0 && partIdx == 0){
             dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0,1.0,0.0));
@@ -187,7 +194,7 @@ void daObjHhaSplash_c::create_s(unsigned short id, cXyz* pPos, float offsetY, fl
     mPos += acStack38;
     mBasePos = mPos;
     mAngle = *pAngle;
-    dComIfGp_particle_set(id, &mPos, &mAngle, NULL, 0xff, &mEcallBack);
+    dComIfGp_particle_set(id, &mPos, &mAngle, NULL, 255, &mEcallBack);
     b32 = true;
 }
 
@@ -200,7 +207,8 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
     
     if(mdl_data != NULL){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
-        JUT_ASSERT(0x289, mpModel != 0);
+        J3DModel* M_mdl = mpModel; // Renaming for assertion to match
+        JUT_ASSERT(0x289, M_mdl != 0);
 
         if((mpModel != 0)){
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
@@ -265,15 +273,16 @@ int daObjHha_c::solidHeapCB(fopAc_ac_c* this_i) {
 const char daObjHha_c::M_arcname[] = "Hha";
 const float pos_y[4] = {150.0f, -150.0f, 0.0f, 0.0f};
 const float tar_y[4] = {0.0f, 0.0f, 150.0f, -150.0f};
-const u16 move_frame[2] = {0x37, 0x1E};
+const u16 move_frame[2] = {55, 30};
 const float splash_y[2] = {-1400.0f, -1450.0f};
 const float splash_z[2] = {0.0f, 100.0f};
 
 /* 00000C4C-00000E48       .text create_heap__10daObjHha_cFv */
 BOOL daObjHha_c::create_heap() {
+    int i;
     BOOL ret = TRUE;
 
-    for(int i = 0; i < 2; i++){
+    for(i = 0; i < 2; i++){
         if( (mPartA[i].set_mdl_area(M_arcname, l_daObjHha_bdl_idx_table[i]) == FALSE) || (mPartA[i].set_bgw(M_arcname, l_daObjHha_dzb_idx_table[i]) == FALSE) ){
             ret = FALSE;
             break;
@@ -285,7 +294,7 @@ BOOL daObjHha_c::create_heap() {
         JUT_ASSERT(0x324, mdl_data != 0);
         if(mdl_data != 0){
             mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
-            for(int i = 0; i < 2; i++){
+            for(i = 0; i < 2; i++){
                 J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, l_daObjHha_btk_idx_table[i]));
                 JUT_ASSERT(0x32f, btk_data != 0);
                 if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i], 1.0, 0, -1, false, 0) == FALSE){
@@ -378,8 +387,9 @@ s32 daObjHha_c::_create() {
 
 /* 000018EC-000019EC       .text _delete__10daObjHha_cFv */
 BOOL daObjHha_c::_delete() {
+    int i;
     if(heap != NULL){
-        for(int i = 0; i < 2; i++){
+        for(i = 0; i < 2; i++){
             cBgW* bgw = mPartA[i].mpBgw;
             if(bgw != NULL){
                 bool toErase;
@@ -398,7 +408,7 @@ BOOL daObjHha_c::_delete() {
         }
     }
 
-    for(int i = 0; i < 2; i++){
+    for(i = 0; i < 2; i++){
         if(mSplashA[i].mEcallBack.getEmitter() != NULL){
             mSplashA[i].mEcallBack.end();
             mSplashA[i].b32 = 0;
@@ -599,8 +609,8 @@ void daObjHha_c::water_manager() {
 /* 00002470-0000259C       .text part_manager__10daObjHha_cFv */
 void daObjHha_c::part_manager() {
     if(i7B2 == 0){
-        mPartA[0].setExeProc( &daObjHhaPart_c::exe_move);
-        mPartA[1].setExeProc( &daObjHhaPart_c::exe_move);
+        mPartA[0].start_move();
+        mPartA[1].start_move();
         i7B2 = -1;
         if(i7B0 == 0){
             fopAcM_seStartCurrent(this, JA_SE_OBJ_F_WATERGATE_CL, 0);
@@ -657,10 +667,15 @@ BOOL daObjHha_c::_execute() {
         } break;
 
 
-        case 1: if(dComIfGp_evmng_endCheck(mEventID)){
-            dComIfGp_onStatus(8);
-            i7C2 = 2;
-        } break;
+        case 1:
+            if(dComIfGp_evmng_endCheck(mEventID)){
+                dComIfGp_event_reset();
+                i7C2 = 2;
+            }
+        break;
+
+        case 2:
+        break;
     }
 
     part_manager();

@@ -24,7 +24,7 @@ public:
         }
     }
     void setExeProc(daObjHhaPartCallBack newCb) { cbExec = newCb; }
-    void start_move() {}
+    void start_move() { setExeProc(&daObjHhaPart_c::exe_move);}
 
     void init_data(float, float, u16, u8, u8);
     BOOL set_mdl_area(const char*, int);
@@ -36,7 +36,7 @@ public:
 public: 
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ dBgW* mpBgw;
-    /* 0x08 */ cXyz m08;
+    /* 0x08 */ cXyz mPos;
     /* 0x14 */ cXyz m14;
     /* 0x20 */ cXyz m20;
     /* 0x2C */ float f2C;
@@ -96,7 +96,7 @@ public:
     /* 0x0E4 */ cXyz mPos;
     /* 0x0F0 */ cXyz mScale;
     /* 0x0FC */ csXyz mRot;
-    /* 0x102 */ bool bVisible;
+    /* 0x102 */ u8 bVisible;
 
 }; // Size : 0x104
 
