@@ -28,8 +28,6 @@
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
-class JUTGamePad;
-
 /* 800056E0-80005748       .text version_check__Fv */
 void version_check() {
     if (strcmp("05Sep2002", "05Sep2002") == 0 && strcmp("", "") == 0) {

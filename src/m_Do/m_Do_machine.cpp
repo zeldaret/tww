@@ -40,6 +40,27 @@ static int archiveHeapErrors;
 static int unknownHeapErrors;
 static u32 heapErrors;
 
+#if VERSION == VERSION_JPN
+const int FifoBufSize = 0x80000; // 512 KB
+const int CommandHeapSize = 0x1000; // 4 KB
+const int ArchiveHeapSize = 0xA3F000; // 10492 KB
+const int GameHeapSize = 0x2CE000; // 2872 KB
+const int SysHeapNonZeldaSize = 0x10000; // 64 KB
+#else
+const int FifoBufSize = 0xA0000; // 640 KB
+const int CommandHeapSize = 0x1000; // 4 KB
+const int ArchiveHeapSize = 0xA51400; // 10565 KB
+const int GameHeapSize = 0x2CE800; // 2874 KB
+const int SysHeapNonZeldaSize = 0x10000; // 64 KB
+#endif
+
+const int AramAudioBufSize = 0xA00000; // 10240 KB
+const int AramGraphBufSize = 0x5CE000; // 5944 KB
+const int TransBufferSize = 0x2000; // 8 KB
+const int SzpBufferSize = 0x2000; // 8 KB
+
+const int JMASinTableBitSize = 0xC; // 20 KB (5*(2^N) bytes)
+
 /* 8000BD24-8000BEEC       .text myGetHeapTypeByString__FP7JKRHeap */
 const char* myGetHeapTypeByString(JKRHeap* p_heap) {
         static char tmpString[5];
@@ -442,15 +463,10 @@ bool mDoMch_Create() {
         arenaSize += mDoMain::memMargin;
     }
 
-#if VERSION == VERSION_JPN
-    JFWSystem::setSysHeapSize(arenaSize - 0xD0E000);
-    JFWSystem::setFifoBufSize(0x80000);
-#else
-    JFWSystem::setSysHeapSize(arenaSize - 0xD20C00);
-    JFWSystem::setFifoBufSize(0xA0000);
-#endif
-    JFWSystem::setAramAudioBufSize(0xA00000);
-    JFWSystem::setAramGraphBufSize(0x5CE000);
+    JFWSystem::setSysHeapSize(arenaSize - CommandHeapSize - ArchiveHeapSize - GameHeapSize);
+    JFWSystem::setFifoBufSize(FifoBufSize);
+    JFWSystem::setAramAudioBufSize(AramAudioBufSize);
+    JFWSystem::setAramGraphBufSize(AramGraphBufSize);
 #if VERSION == VERSION_PAL
     if (OSGetResetCode() - 0x80000000 == 0 && OSGetEuRgb60Mode() == 1) {
         mDoMch_render_c::setProgressiveMode();
@@ -472,34 +488,26 @@ bool mDoMch_Create() {
 #if VERSION == VERSION_JPN
     rootHeap->dump_sort();
 #endif
-    // Command Heap size: 4 KB
-    mDoExt_createCommandHeap(0x1000, rootHeap);
+    mDoExt_createCommandHeap(CommandHeapSize, rootHeap);
 #if VERSION == VERSION_JPN
     rootHeap->dump_sort();
 #endif
 
-#if VERSION == VERSION_JPN
-    mDoExt_createArchiveHeap(0xA3F000, rootHeap);
-    mDoExt_createGameHeap(0x2CE000, rootHeap);
-#else
-    // Archive Heap size: 10565 KB
-    mDoExt_createArchiveHeap(0xA51400, rootHeap);
+    mDoExt_createArchiveHeap(ArchiveHeapSize, rootHeap);
 
-    // Game Heap size: 2874 KB
-    mDoExt_createGameHeap(0x2CE800, rootHeap);
-#endif
+    mDoExt_createGameHeap(GameHeapSize, rootHeap);
 
 
-    JKRHeap* sysHeap = JKRHeap::getSystemHeap();
-    s32 size = sysHeap->getFreeSize() - 0x10000;
+    JKRHeap* sysHeap = JKRGetSystemHeap();
+    s32 size = sysHeap->getFreeSize() - SysHeapNonZeldaSize;
     JUT_ASSERT(VERSION_SELECT(996, 1104, 1143), size > 0);
     JKRHeap* zeldaHeap = mDoExt_createZeldaHeap(size, sysHeap);
     zeldaHeap->becomeCurrentHeap();
 
-    JKRAramStream::setTransBuffer(NULL, 0x2000, JKRHeap::getSystemHeap());
-    JKRAram::setSzpBufferSize(0x2000);
-    JKRDvdAramRipper::setSzpBufferSize(0x2000);
-    JKRDvdRipper::setSzpBufferSize(0x2000);
+    JKRAramStream::setTransBuffer(NULL, TransBufferSize, JKRGetSystemHeap());
+    JKRAram::setSzpBufferSize(SzpBufferSize);
+    JKRDvdAramRipper::setSzpBufferSize(SzpBufferSize);
+    JKRDvdRipper::setSzpBufferSize(SzpBufferSize);
     JKRThreadSwitch::createManager(NULL);
     JKRThread* thread = new JKRThread(OSGetCurrentThread(), 0);
 
@@ -510,7 +518,7 @@ bool mDoMch_Create() {
     JUTException::appendMapFile("/maps/framework.map");
     JUTException::setPreUserCallback(myExceptionCallback);
     JUTException::setPostUserCallback(fault_callback_scroll);
-    JMANewSinTable(0xc);
+    JMANewSinTable(JMASinTableBitSize);
 
     cMl::init(mDoExt_getZeldaHeap());
     cM_initRnd(100, 100, 100);
