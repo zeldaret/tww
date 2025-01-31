@@ -4,19 +4,12 @@
 //
 
 #include "d/actor/d_a_obj_hha.h"
-#include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "JSystem/JUtility/JUTAssert.h"
-#include "SSystem/SComponent/c_bg_w.h"
-#include "SSystem/SComponent/c_xyz.h"
 #include "d/actor/d_a_tag_waterlevel.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_bg_s_wtr_chk.h"
-#include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/res/res_hha.h"
-#include "m_Do/m_Do_ext.h"
-#include "m_Do/m_Do_mtx.h"
 
 const dCcD_SrcCyl daObjHha_c::M_cyl_data = {
     // dCcD_SrcGObjInf
@@ -84,16 +77,16 @@ const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::LO
 const u16 l_daObjHha_splash_id_table[2] = {0x810D, 0x810E};
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */
-void daObjHhaPart_c::init_data(float yPos, float yTar, u16 param3, u8 i, u8 param5) {
+void daObjHhaPart_c::init_data(float yPos, float yTar, u16 speed, u8 i, u8 IsMiddle) {
     mPos.set(0, yPos, 0);
-    m14.set(0, yTar, 0);
+    mPosTarget.set(0, yTar, 0);
     partIdx = i;
-    f2C = (yTar - yPos) / param3;
-    m20 = m14 - mPos;
-    m20.normalizeRS();
+    mDeltaY = (yTar - yPos) / speed;
+    mPosDeltaDir = mPosTarget - mPos;
+    mPosDeltaDir.normalizeRS();
     setExeProc(&daObjHhaPart_c::exe_normal);
     cbDraw = &daObjHhaPart_c::draw_normal;
-    u31 = param5;
+    bMid = IsMiddle;
 }
 
 /* 00000170-00000224       .text set_mdl_area__14daObjHhaPart_cFPCci */
@@ -157,12 +150,12 @@ void daObjHhaPart_c::exe_normal(daObjHha_c* parent) {
 
 /* 0000040C-00000524       .text exe_move__14daObjHhaPart_cFP10daObjHha_c */
 void daObjHhaPart_c::exe_move(daObjHha_c* parent) {
-    mPos.y += f2C;
-    cXyz unk0 = m14 - mPos;
-    if(m20.getDotProduct(unk0) <= 0.0f){
-        mPos = m14;
+    mPos.y += mDeltaY;
+    cXyz positionDelta = mPosTarget - mPos;
+    if(mPosDeltaDir.getDotProduct(positionDelta) <= 0.0f){
+        mPos = mPosTarget;
         setExeProc(&daObjHhaPart_c::exe_normal);
-        if(u31 == 0 && partIdx == 0){
+        if(bMid == 0 && partIdx == 0){
             dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0,1.0,0.0));
         }
     } 
@@ -175,27 +168,19 @@ void daObjHhaPart_c::draw_normal(daObjHha_c* parent) {
     mDoExt_modelUpdateDL(mpModel);
 }
 
-cXyz daObjHhaSplash_c::get_base_pos(){
-    return mBasePos;
-}
-
-cXyz daObjHhaSplash_c::get_pos(){
-    return mPos;
-}
-
 /* 0000056C-00000698       .text create_s__16daObjHhaSplash_cFUsP4cXyzffP5csXyz */
 void daObjHhaSplash_c::create_s(unsigned short id, cXyz* pPos, float offsetY, float offsetZ, csXyz* pAngle) {
-    cXyz acStack38;
+    cXyz calcVec;
 
     mPos.set(pPos->x, pPos->y + offsetY, pPos->z);
     mDoMtx_stack_c::YrotS(pAngle->y);
-    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &acStack38);
-    acStack38 *= offsetZ;
-    mPos += acStack38;
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &calcVec);
+    calcVec *= offsetZ;
+    mPos += calcVec;
     mBasePos = mPos;
     mAngle = *pAngle;
     dComIfGp_particle_set(id, &mPos, &mAngle, NULL, 255, &mEcallBack);
-    b32 = true;
+    bIsActive = true;
 }
 
 /* 00000698-000008AC       .text create_area__15daObjHhaYgush_cFPCc */
@@ -229,16 +214,16 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
 }
 
 /* 000008AC-00000AD8       .text init_data__15daObjHhaYgush_cFP4cXyzfP5csXyzP4cXyzP12dKy_tevstr_cUc */
-void daObjHhaYgush_c::init_data(cXyz* pPos, f32 param2, csXyz* pAngle, cXyz* pScale, dKy_tevstr_c* param5, u8 isVisible) {
-    cXyz cStack3C;
+void daObjHhaYgush_c::init_data(cXyz* pPos, f32 zScale, csXyz* pAngle, cXyz* pScale, dKy_tevstr_c* tev, u8 isVisible) {
+    cXyz calcVec;
     mDoMtx_stack_c::YrotS(pAngle->y);
-    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &cStack3C);
-    cStack3C *= param2;
-    mBasePos = *pPos + cStack3C;
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &calcVec);
+    calcVec *= zScale;
+    mBasePos = *pPos + calcVec;
     mPos = mBasePos;
     mRot = *pAngle;
     mScale = *pScale;
-    mTev = *param5;
+    mTev = *tev;
     bVisible = isVisible;
 }
 
@@ -256,7 +241,7 @@ void daObjHhaYgush_c::init_mtx() {
 
 /* 00000B88-00000C2C       .text draw__15daObjHhaYgush_cFv */
 BOOL daObjHhaYgush_c::draw() {
-    if(bVisible != false && mpModel != NULL){
+    if(check_draw() && mpModel != NULL){
         dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &mPos, &mTev);
         dKy_getEnvlight().setLightTevColorType(mpModel, &mTev);
         mBtk.entry(mpModel->getModelData());
@@ -265,17 +250,17 @@ BOOL daObjHhaYgush_c::draw() {
     }
 }
 
-/* 00000C2C-00000C4C       .text solidHeapCB__10daObjHha_cFP10fopAc_ac_c */
-int daObjHha_c::solidHeapCB(fopAc_ac_c* this_i) {
-    return static_cast<daObjHha_c*>(this_i)->create_heap();
-}
-
-const char daObjHha_c::M_arcname[] = "Hha";
+const char daObjHha_c::M_arcname[4] = "Hha";
 const float pos_y[4] = {150.0f, -150.0f, 0.0f, 0.0f};
 const float tar_y[4] = {0.0f, 0.0f, 150.0f, -150.0f};
 const u16 move_frame[2] = {55, 30};
 const float splash_y[2] = {-1400.0f, -1450.0f};
 const float splash_z[2] = {0.0f, 100.0f};
+
+/* 00000C2C-00000C4C       .text solidHeapCB__10daObjHha_cFP10fopAc_ac_c */
+int daObjHha_c::solidHeapCB(fopAc_ac_c* this_i) {
+    return static_cast<daObjHha_c*>(this_i)->create_heap();
+}
 
 /* 00000C4C-00000E48       .text create_heap__10daObjHha_cFv */
 BOOL daObjHha_c::create_heap() {
@@ -290,7 +275,7 @@ BOOL daObjHha_c::create_heap() {
     }
 
     if(ret != FALSE){
-        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 12));
+        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, HHA_BDL_YSWTR00));
         JUT_ASSERT(0x324, mdl_data != 0);
         if(mdl_data != 0){
             mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
@@ -319,59 +304,46 @@ s32 daObjHha_c::_create() {
     if(ret == cPhs_COMPLEATE_e){
         ret = cPhs_ERROR_e;
         if(fopAcM_entrySolidHeap(this, &solidHeapCB, 0x3C80) != false){
-            iNo = fpcM_GetParam(this) & 0xFF;
-            i7B0 = fpcM_GetParam(this) >> 8;
-            mEventID = dComIfGp_evmng_getEventIdx("hha_close");
+            mSwitchNo = fpcM_GetParam(this) & 0xFF;
+            mIsMiddle = fpcM_GetParam(this) >> 8;
+            mEventIdx = dComIfGp_evmng_getEventIdx("hha_close");
 
-            if(i7B0 == 0xf){
-                i7B0 = 0;
+            if(mIsMiddle == 0xf)
+                mIsMiddle = 0;
+
+            if(check_sw() != FALSE){
+                mIsMiddle = (mIsMiddle + 1) & 1; // Negate and make sure that mIsMiddle is just 0 or 1
+                mState = State_CLOSED;
             }
+            mPartTimer = -1;
 
-            if(check_sw() != 0){
-                i7B0 = i7B0 + 1 & 1;
-                i7C2 = 2;
-            }
-            i7B2 = -1;
-
-            int floatIdx = 2 * (i7B0 & 1);
+            int posIdx = 2 * (mIsMiddle & 1);
             for(int i = 0; i < 2; i++){
-                mPartA[i].init_data(pos_y[floatIdx], tar_y[floatIdx], move_frame[i7B0], i, i7B0);
+                mPartA[i].init_data(pos_y[posIdx], tar_y[posIdx], move_frame[mIsMiddle], i, mIsMiddle);
                 dComIfG_Bgsp()->Regist(mPartA[i].mpBgw, this);
                 mPartA[i].init_mtx(current.pos, shape_angle, scale);
-                floatIdx++;
+                posIdx++;
             }
 
-            m7A0.set(0.0f, -1400.0f, 50.0f);
-            f7B4 = 1.0f;
+            mPosOffset.set(0.0f, -1400.0f, 50.0f);
+            fWtrScale = 1.0f;
 
             for(int i = 0; i < 2; i++){
                 mSplashA[i].create_s(l_daObjHha_splash_id_table[i], &current.pos, splash_y[i], splash_z[i], &current.angle);
             }
 
-            if(i7B0 == 0){
+            if(mIsMiddle == 0){
                 set_tex(36.0f, 0.0f, 1);
-                b430 = true;
+                mHitboxActive = true;
                 mYgush.init_data(&current.pos, 600.0f, &current.angle, &scale, &tevStr, true);
-                i7C3 = 1;
+                mWaterSound = true;
             }
             else {
                 set_tex(0.0f, 0.0f, 1);
-
-                // Following might be an inline for loop
-                JPABaseEmitter* pSplashEmitter = mSplashA[0].mEcallBack.getEmitter();
-                if(pSplashEmitter != NULL){
-                    pSplashEmitter->setStatus(1);
-                    mSplashA[0].b32 = false;
-                }
-
-                pSplashEmitter = mSplashA[1].mEcallBack.getEmitter();
-                if(pSplashEmitter != NULL){
-                    pSplashEmitter->setStatus(1);
-                    mSplashA[1].b32 = false;
-                }
-
+                mSplashA[0].stop_particle();
+                mSplashA[1].stop_particle();
                 mYgush.init_data(&current.pos, 600.0f, &current.angle, &scale, &tevStr, false);
-                i7C3 = 0;
+                mWaterSound = false;
             }
             mYgush.init_mtx();
             init_mtx();
@@ -409,10 +381,7 @@ BOOL daObjHha_c::_delete() {
     }
 
     for(i = 0; i < 2; i++){
-        if(mSplashA[i].mEcallBack.getEmitter() != NULL){
-            mSplashA[i].mEcallBack.end();
-            mSplashA[i].b32 = 0;
-        }
+        mSplashA[i].delete_s();
     }
 
     dComIfG_resDelete(&mPhs, M_arcname);
@@ -421,8 +390,8 @@ BOOL daObjHha_c::_delete() {
 }
 
 /* 000019EC-00001A24       .text check_sw__10daObjHha_cFv */
-s32 daObjHha_c::check_sw() {
-    return dComIfGs_isSwitch(iNo, home.roomNo);
+inline BOOL daObjHha_c::check_sw() {
+    return fopAcM_isSwitch(this, mSwitchNo);
 }
 
 /* 00001A24-00001A40       .text set_tex__10daObjHha_cFffi */
@@ -434,10 +403,10 @@ void daObjHha_c::set_tex(float frame, float speed, int idx) {
 /* 00001A40-00001B00       .text init_mtx__10daObjHha_cFv */
 void daObjHha_c::init_mtx() {
     mpModel->setBaseScale(scale);
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(  current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    mDoMtx_stack_c::transM(m7A0);
-    mDoMtx_stack_c::scaleM(1.0, 1.0, f7B4);
+    mDoMtx_stack_c::transM(mPosOffset);
+    mDoMtx_stack_c::scaleM(1.0, 1.0, fWtrScale);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
     mpModel->calc();
 }
@@ -459,7 +428,7 @@ void daObjHha_c::init_co() {
     mCyl.SetC(center);
 
     bool doSphInit = false;
-    if(!dComIfGs_isSwitch(iNo, home.roomNo) && i7B0 == 0){
+    if(!check_sw() && mIsMiddle == 0){
         doSphInit = true;
     }
 
@@ -507,18 +476,17 @@ cXyz daObjHha_get_r(short yAngle) {
 
 /* 0000201C-000020C0       .text set_splash_bottom_r__10daObjHha_cFv */
 void daObjHha_c::set_splash_bottom_r() {
-    cXyz local20 = cXyz::BaseZ;
-    local20 = daObjHha_get_r(current.angle.y);
-    local20 += mSplashA[0].get_base_pos();
-    local20.y = mSplashA[0].get_pos_y();
-    mSplashA[0].set_pos(local20);
+    cXyz pos = cXyz::BaseZ;
+    pos = daObjHha_get_r(current.angle.y);
+    pos += mSplashA[0].get_base_pos();
+    pos.y = mSplashA[0].get_pos_y();
+    mSplashA[0].set_pos(pos);
 }
 
 /* 000020C0-000021CC       .text set_splash_bottom_stop_r__10daObjHha_cFv */
 void daObjHha_c::set_splash_bottom_stop_r() {
     cXyz calcVec = cXyz::BaseZ;
-    int iVar2 = i7BC - 15;
-    float scaling = (1.0f - iVar2 / 75.0f) * -300.0f;
+    float scaling = (1.0f - (mWtrTimer - 15) / 75.0f) * -300.0f;
     mDoMtx_stack_c::YrotS(current.angle.y);
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &calcVec);
     calcVec *= scaling;
@@ -531,71 +499,51 @@ void daObjHha_c::set_splash_bottom_stop_r() {
 void daObjHha_c::water_manager() {
     set_splash_bottom_h();
     set_splash_bottom_r();
-    switch(i7BE){
+    switch(mWtrState){
         case 0:
         break;
 
         case 1:
-            f7B4 -= 11.0f/1800;
-            if(f7B4 < f7B8){
-                f7B4 = f7B8;
+            fWtrScale -= 11.0f/1800;
+            if(fWtrScale < fWtrScaleMin){
+                fWtrScale = fWtrScaleMin;
             }
-            if(i7BC == 34){
+            if(mWtrTimer == 34){
                 set_tex(37.0f,1.0f,1);
             }
-            if(i7BC == 15){
-                if(mSplashA[1].mEcallBack.getEmitter() != NULL){
-                    mSplashA[1].mEcallBack.getEmitter()->setStatus(1);
-                    mSplashA[1].b32 = false;
-                }
-
-                if(mSplashA[1].mEcallBack.getEmitter() != NULL){
-                    mSplashA[1].mEcallBack.end();
-                    mSplashA[1].b32 = false;
-                }
+            if(mWtrTimer == 15){
+                mSplashA[1].stop_particle();
+                mSplashA[1].delete_s();
             }
-            else if(i7BC > 15){
+            else if(mWtrTimer > 15){
                 set_splash_bottom_stop_r();
             }
-            i7BC--;
-            if(i7BC == 0){
-                i7BE = 0;
-                if(mSplashA[0].mEcallBack.getEmitter() != NULL){
-                    mSplashA[0].mEcallBack.getEmitter()->setStatus(1);
-                    mSplashA[0].b32 = false;
-                }
-
-                if(mSplashA[0].mEcallBack.getEmitter() != NULL){
-                    mSplashA[0].mEcallBack.end();
-                    mSplashA[0].b32 = false;
-                }
-                b430 = false;
-                mYgush.bVisible = false;
-                i7C3 = 0;
+            mWtrTimer--;
+            if(mWtrTimer == 0){
+                mWtrState = 0;
+                mSplashA[0].stop_particle();
+                mSplashA[0].delete_s();
+                mHitboxActive = false;
+                mYgush.disp_off();
+                mWaterSound = false;
             }
         break;
 
         case 2:
-            if(i7BC == 35){
-                if(mSplashA[1].mEcallBack.getEmitter() != NULL){
-                    mSplashA[1].mEcallBack.getEmitter()->clearStatus(1);
-                    mSplashA[1].b32 = 1;
-                }
+            if(mWtrTimer == 35){
+                mSplashA[1].play_particle();
                 set_tex(0.0f,1.0f,1);
             }
-            i7BC--;
-            if(mSplashA[0].b32 == 0 && i7BC <= daTagWaterlevel::Act_c::M_now * 5.0f + 10.0f){
-                if(mSplashA[0].mEcallBack.getEmitter() != NULL){
-                    mSplashA[0].mEcallBack.getEmitter()->clearStatus(1);
-                    mSplashA[0].b32 = true;
-                }
-                mYgush.bVisible = true;
-                i7C3 = 1;
+            mWtrTimer--;
+            if( mSplashA[0].chk_stop() && mWtrTimer <= daTagWaterlevel::Act_c::M_now * 5.0f + 10.0f){
+                mSplashA[0].play_particle();
+                mYgush.disp_on();
+                mWaterSound = true;
             }
-            if(i7BC == 0){
+            if(mWtrTimer == 0){
                 set_tex(36.0, 0.0, 1);
-                i7BE = 0;
-                b430 = true;
+                mWtrState = 0;
+                mHitboxActive = true;
             }
         break;
     }
@@ -608,17 +556,16 @@ void daObjHha_c::water_manager() {
 
 /* 00002470-0000259C       .text part_manager__10daObjHha_cFv */
 void daObjHha_c::part_manager() {
-    if(i7B2 == 0){
+    if(mPartTimer == 0){
         mPartA[0].start_move();
         mPartA[1].start_move();
-        i7B2 = -1;
-        if(i7B0 == 0){
+        mPartTimer = -1;
+        if(mIsMiddle == 0){
             fopAcM_seStartCurrent(this, JA_SE_OBJ_F_WATERGATE_CL, 0);
         }
     }
-    else if(i7B2 > 0){
-        i7B2 -= 1;
-    }
+    else if(mPartTimer > 0)
+        mPartTimer -= 1;
 
     for(int i = 0; i < 2; i++){
         mPartA[i].execute(this);
@@ -627,54 +574,51 @@ void daObjHha_c::part_manager() {
 
 /* 0000259C-00002658       .text ygush_manager__10daObjHha_cFv */
 void daObjHha_c::ygush_manager() {
-    cXyz local14;
-    if(static_cast<BOOL>(mYgush.bVisible) != FALSE){
-        local14 = daObjHha_get_r(current.angle.y);
-        local14 += mYgush.get_base_pos();
-        local14.y = get_water_h();
-        mYgush.set_pos(local14);
-        mYgush.mBtk.play();
-        mYgush.mBck.play();
-        mYgush.init_mtx();
+    cXyz ygushPos;
+    // Weird to cast "bVisible" here, but i can't get things to match otherwise
+    if( static_cast<BOOL>(mYgush.bVisible) != FALSE ){
+        ygushPos = daObjHha_get_r(current.angle.y);
+        ygushPos += mYgush.get_base_pos();
+        ygushPos.y = get_water_h();
+        mYgush.anm_play(ygushPos);
     }
 }
 
 /* 00002658-000028E4       .text _execute__10daObjHha_cFv */
 BOOL daObjHha_c::_execute() {
-    switch(i7C2){
-        case 0: if(dComIfGs_isSwitch(iNo, home.roomNo)){
-            if(i7B0 == 0){
+    switch(mState){
+        case State_OPEN: if(check_sw()){
+            if(mIsMiddle == 0){
                 if(eventInfo.mCommand != dEvtCmd_INDEMO_e){
-                    fopAcM_orderOtherEventId(this, mEventID);
+                    fopAcM_orderOtherEventId(this, mEventIdx);
                     eventInfo.onCondition(2);
                 }
                 else {
                     mDoAud_seStart(JA_SE_READ_RIDDLE_1);
-                    i7BE = 1;
-                    i7BC = 90;
-                    i7B2 = 65;
-                    i7C2 = 1;
+                    mWtrState = 1;
+                    mWtrTimer = 90;
+                    mPartTimer = 65;
+                    mState = State_SWITCHING;
                 }
             }
             else {
-                if(dComIfGp_evmng_startCheck(mEventID) != FALSE){
-                    i7BE = 2;
-                    i7BC = 35;
-                    i7B2 = 0;
-                    i7C2 = 2;
+                if(dComIfGp_evmng_startCheck(mEventIdx) != FALSE){
+                    mWtrState = 2;
+                    mWtrTimer = 35;
+                    mPartTimer = 0;
+                    mState = State_CLOSED;
                 }
             }
         } break;
 
 
-        case 1:
-            if(dComIfGp_evmng_endCheck(mEventID)){
+        case State_SWITCHING: if(dComIfGp_evmng_endCheck(mEventIdx)){
                 dComIfGp_event_reset();
-                i7C2 = 2;
+                mState = State_CLOSED;
             }
         break;
 
-        case 2:
+        case State_CLOSED:
         break;
     }
 
@@ -682,16 +626,16 @@ BOOL daObjHha_c::_execute() {
     water_manager();
     ygush_manager();
 
-    if(i7C3 != 0){
+    if(mWaterSound != false)
         fopAcM_seStartCurrent(this, JA_SE_ATM_WATER_GATE,0);
-    }
-    if(b430 != false){
-        cXyz local28 = mCyl.GetC();
-        local28.y = get_water_h();
-        mCyl.SetC(local28);
+    
+    if(mHitboxActive != false){
+        cXyz calcVec = mCyl.GetC();
+        calcVec.y = get_water_h();
+        mCyl.SetC(calcVec);
         dComIfG_Ccsp()->Set(&mCyl);
-        bool bVar2 = (!dComIfGs_isSwitch(iNo, home.roomNo) && i7B0 == 0);
-        if(bVar2){
+        bool isSphActive = (!check_sw() && mIsMiddle == 0);
+        if(isSphActive){
             dComIfG_Ccsp()->Set(&mSph);
         }
     }
