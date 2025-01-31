@@ -314,7 +314,7 @@ daNpc_Md_HIO_c::daNpc_Md_HIO_c() {
     m1A8 = 3.0f;
     m1AC = 1000.0f;
     m1B0 = 1000.0f;
-    mChildID = -0x1;
+    mNo = -1;
 }
 
 /* 000006DC-000006FC       .text daNpc_Md_XyCheckCB__FPvi */
@@ -455,8 +455,8 @@ s32 daNpc_Md_c::create() {
         
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
-        if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_createChild("リト族（メドリ）", &l_HIO); // "Rito (Medli)" (Ritozoku (Medli))
+        if (l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("リト族（メドリ）", &l_HIO); // "Rito (Medli)" (Ritozoku (Medli))
             l_HIO.mpActor = this;
         }
         
@@ -3304,9 +3304,9 @@ daNpc_Md_c::~daNpc_Md_c() {
     m3058.end();
     m304C.end();
     m3074.remove();
-    if (l_HIO.mChildID >= 0) {
-        mDoHIO_deleteChild(l_HIO.mChildID);
-        l_HIO.mChildID = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
     m_flying = false;
     m_mirror = false;

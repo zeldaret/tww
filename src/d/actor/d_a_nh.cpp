@@ -50,7 +50,7 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 800F95B8-800F9654       .text __ct__10daNh_HIO_cFv */
 daNh_HIO_c::daNh_HIO_c() {
-    mChildID = -1;
+    mNo = -1;
     static const hio_prm_c init_data = {
         /* field_0x08         */ 200.0f,
         /* field_0x0c         */ 100.0f,
@@ -74,9 +74,9 @@ daNh_HIO_c::daNh_HIO_c() {
 
 /* 800F9654-800F9874       .text __dt__6daNh_cFv */
 daNh_c::~daNh_c() {
-    if (l_HIO.mChildID >= 0) {
-        mDoHIO_deleteChild(l_HIO.mChildID);
-        l_HIO.mChildID = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 }
 
@@ -134,8 +134,8 @@ s32 daNh_c::create() {
     
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     
-    if (l_HIO.mChildID < 0) {
-        l_HIO.mChildID = mDoHIO_createChild("森のほたる", &l_HIO); // "Forest Firefly" (mori no hotaru)
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("森のほたる", &l_HIO); // "Forest Firefly" (mori no hotaru)
         l_HIO.mpActor = this;
     }
     if (!init()) {

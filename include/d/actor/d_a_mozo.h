@@ -81,8 +81,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
-    /* 0x05 */ u8 m05[0x08 - 0x05];
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ int m08;
     /* 0x0C */ daMozo_BeamChildHIO_c* mpBeamChild;
     /* 0x10 */ daMozo_FireChildHIO_c* mpFireChild;

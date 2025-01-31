@@ -17,7 +17,7 @@ static daDr_HIO_c l_HIO;
 
 /* 000000EC-00000148       .text __ct__10daDr_HIO_cFv */
 daDr_HIO_c::daDr_HIO_c() {
-    mChildID = -1;
+    mNo = -1;
     mScale = 1.0f;
     m0C = false;
     m0E = 10*30;
@@ -205,8 +205,8 @@ static BOOL daDr_IsDelete(dr_class* i_this) {
 /* 00000A94-00000AE8       .text daDr_Delete__FP8dr_class */
 static BOOL daDr_Delete(dr_class* i_this) {
     dComIfG_resDelete(&i_this->mPhs, "Dr");
-    if (l_HIO.mChildID >= 0) {
-        mDoHIO_deleteChild(l_HIO.mChildID);
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
     }
     return TRUE;
 }
@@ -245,8 +245,8 @@ static s32 daDr_Create(fopAc_ac_c* i_actor) {
         
         daDr_setMtx(i_this);
         
-        if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_createChild("ドラゴン", &l_HIO); // "Dragon"
+        if (l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("ドラゴン", &l_HIO); // "Dragon"
         }
     }
     

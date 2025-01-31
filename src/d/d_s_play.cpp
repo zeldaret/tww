@@ -1111,9 +1111,9 @@ static BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     
     g_msgDHIO.field_0x06 = 0;
     g_msgDHIO.field_0x10 = -1;
-    mDoHIO_deleteChild(g_darkHIO.mChildID);
-    mDoHIO_deleteChild(g_envHIO.mChildID);
-    mDoHIO_deleteChild(g_msgDHIO.mChildID);
+    mDoHIO_deleteChild(g_darkHIO.mNo);
+    mDoHIO_deleteChild(g_envHIO.mNo);
+    mDoHIO_deleteChild(g_msgDHIO.mNo);
     
     dComIfGp_setWindowNum(0);
     
@@ -1339,9 +1339,9 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dStage_Create();
     mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 30);
 
-    g_darkHIO.mChildID = mDoHIO_createChild("暗闇スポット", &g_darkHIO); // "Darkness Spot"
-    g_envHIO.mChildID = mDoHIO_createChild("描画設定", &g_envHIO); // "Draw Settings"
-    g_msgDHIO.mChildID = mDoHIO_createChild("Message Data", &g_msgDHIO);
+    g_darkHIO.mNo = mDoHIO_createChild("暗闇スポット", &g_darkHIO); // "Darkness Spot"
+    g_envHIO.mNo = mDoHIO_createChild("描画設定", &g_envHIO); // "Draw Settings"
+    g_msgDHIO.mNo = mDoHIO_createChild("Message Data", &g_msgDHIO);
 
     new(&dComIfGp_getAttention()) dAttention_c(dComIfGp_getPlayer(0), NULL);
     dComIfGp_getVibration().Init();

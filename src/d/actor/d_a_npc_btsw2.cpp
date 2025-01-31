@@ -71,7 +71,7 @@ daNpc_Btsw2_HIO_c::daNpc_Btsw2_HIO_c() {
     m38 = 0.95f;
     m3C = 0x5A;
     m3E = 0x5A;
-    mChildID = -1;
+    mNo = -1;
 }
 
 const char daNpc_Btsw2_c::m_arc_name[] = "Btsw";

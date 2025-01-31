@@ -95,7 +95,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x004 */ s8 mChildID;
+    /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 m005[0x008 - 0x005];
     /* 0x008 */ daNpc_Md_HIO2_c m008;
     /* 0x034 */ daNpc_Md_HIO3_c m034;

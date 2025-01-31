@@ -91,8 +91,8 @@ s32 daObjYgush00_c::_create() {
                 scale.x * 80.0f, scale.y * 125.0f, scale.z * 80.0f);
 
 #ifdef DEBUG
-                if (l_HIO.mChildID < 0) {
-                    l_HIO.mChildID = mDoHIO_createChild("", &l_HIO);
+                if (l_HIO.mNo < 0) {
+                    l_HIO.mNo = mDoHIO_createChild("", &l_HIO);
                 }
 #endif
         } else {
@@ -108,9 +108,9 @@ bool daObjYgush00_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcname);
 
 #ifdef DEBUG
-    if (l_HIO.mChildID >= 0) {
-        mDoHIO_deleteChild(l_HIO.mChildID);
-        l_HIO.mChildID = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 #endif
 

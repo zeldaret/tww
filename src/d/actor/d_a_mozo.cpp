@@ -23,7 +23,7 @@ daMozo_HIO_c::daMozo_HIO_c() {
     m3C = 0.0f;
     m40 = -300.0f;
     m44 = 600.0f;
-    mChildID = -1;
+    mNo = -1;
     m08 = -1;
     mpBeamChild = &mBeamChild;
     mpFireChild = &mFireChild;
@@ -198,8 +198,8 @@ s32 daMozo_c::CreateInit() {
     mAnimMorf->calc();
     wait_proc_init();
 
-    if (l_HIO.mChildID < 0) {
-        l_HIO.mChildID = mDoHIO_createChild("モ石像", &l_HIO); // "Mo Statue" (mo sekizou)
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("モ石像", &l_HIO); // "Mo Statue" (mo sekizou)
     }
 
     return cPhs_COMPLEATE_e;

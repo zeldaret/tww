@@ -54,7 +54,7 @@ daNpc_kam_HIO1_c::daNpc_kam_HIO1_c() {
 
 /* 00000174-000001F8       .text __ct__15daNpc_kam_HIO_cFv */
 daNpc_kam_HIO_c::daNpc_kam_HIO_c() {
-    mChildID = -1;
+    mNo = -1;
     static const hio_prm_c init_data = {
         /* m08 */ 3000.0f,
         /* m0C */ 1000.0f,
@@ -162,9 +162,9 @@ daNpc_kam_c::~daNpc_kam_c() {
         mpMorf->stopZelAnime();
     }
     
-    if (l_HIO.mChildID >= 0) {
-        mDoHIO_deleteChild(l_HIO.mChildID);
-        l_HIO.mChildID = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
     
     offHyoiKamome();
@@ -267,8 +267,8 @@ s32 daNpc_kam_c::create() {
         
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
-        if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_createChild("かもめ", &l_HIO); // "Seagull" (kamome)
+        if (l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("かもめ", &l_HIO); // "Seagull" (kamome)
             l_HIO.mpActor = this;
         }
         

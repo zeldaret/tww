@@ -52,7 +52,7 @@ public:
 class daPirate_Flag_HIO_c : public JORReflexible {
 public:
     daPirate_Flag_HIO_c() {
-        mChildID = -1;
+        mNo = -1;
         m06 = 0;
         m1C = 0.0f;
         m05 = 0;
@@ -64,13 +64,13 @@ public:
         m18 = 0.45f;
     }
     virtual ~daPirate_Flag_HIO_c() {
-        mChildID = -1;
+        mNo = -1;
     }
 
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05;
     /* 0x06 */ u8 m06;
     /* 0x07 */ u8 m07;

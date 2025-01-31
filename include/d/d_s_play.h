@@ -34,7 +34,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ u8 field_0x07[0x08 - 0x07];
@@ -61,7 +61,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ u8 field_0x07;
@@ -94,7 +94,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ f32 field_0x0c;
     /* 0x10 */ f32 field_0x10;
@@ -121,7 +121,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 mIsUpdate;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ u8 field_0x07;
@@ -146,7 +146,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ dScnPly_env_otherHIO_c mOther;
     /* 0x50 */ dScnPly_env_debugHIO_c mEnvDebug;
 };
@@ -155,7 +155,7 @@ class dScnPly_reg_HIO_c {
 public:
     virtual ~dScnPly_reg_HIO_c() {}
 
-    /* 0x4 */ s8 mChildID;
+    /* 0x4 */ s8 mNo;
     /* 0x8 */ dScnPly_reg_childHIO_c mChild[22];
 };
 

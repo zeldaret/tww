@@ -2,7 +2,6 @@
 #define JMATRIGONOMETRIC_H
 
 #include "dolphin/types.h"
-#include "utility.h"
 
 extern u32 jmaSinShift;
 extern f32 *jmaSinTable;

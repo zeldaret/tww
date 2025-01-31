@@ -94,7 +94,7 @@ public:
     virtual ~daNpc_Btsw2_HIO_c() {}
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ dNpc_HIO_c mNpc;
     /* 0x30 */ s16 m30;
     /* 0x32 */ s16 m32;

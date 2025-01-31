@@ -67,20 +67,20 @@ public:
 class daSail_HIO_c : public JORReflexible {
 public:
     daSail_HIO_c() {
-        mChildID = -1;
+        mNo = -1;
         m05 = 1;
         m06 = 1;
         m10 = 0.0f;
         m07 = 0;
     }
     virtual ~daSail_HIO_c() {
-        mChildID = -1;
+        mNo = -1;
     }
 
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05;
     /* 0x06 */ u8 m06;
     /* 0x07 */ u8 m07;

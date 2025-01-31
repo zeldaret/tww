@@ -12,7 +12,7 @@ static daObjQuake_HIO_c l_HIO;
 
 /* 000000EC-00000134       .text __ct__16daObjQuake_HIO_cFv */
 daObjQuake_HIO_c::daObjQuake_HIO_c() {
-    mChildID = -1;
+    mNo = -1;
     field_0x08 = 0;
     field_0x0C = 0;
     field_0x0D = 0;
@@ -50,8 +50,8 @@ s32 daObjQuake_c::_create() {
             break;
         }
 
-        if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_createChild("振動効果", &l_HIO); // "Vibration Effect"
+        if (l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("振動効果", &l_HIO); // "Vibration Effect"
         }
 
         l_HIO.field_0x08 += 1;
@@ -79,11 +79,11 @@ BOOL daObjQuake_c::_is_delete() {
         }
     }
 
-    if (l_HIO.mChildID >= 0) {
+    if (l_HIO.mNo >= 0) {
         l_HIO.field_0x08 -= 1;
         if (l_HIO.field_0x08 == 0) {
-            mDoHIO_deleteChild(l_HIO.mChildID);
-            l_HIO.mChildID = -1;
+            mDoHIO_deleteChild(l_HIO.mNo);
+            l_HIO.mNo = -1;
         }
     }
 

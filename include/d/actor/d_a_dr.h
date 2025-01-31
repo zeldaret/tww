@@ -34,7 +34,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05[0x08 - 0x05];
     /* 0x08 */ f32 mScale;
     /* 0x0C */ bool m0C;
