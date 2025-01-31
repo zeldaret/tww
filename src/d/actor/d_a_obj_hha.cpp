@@ -240,7 +240,7 @@ void daObjHhaYgush_c::init_mtx() {
 }
 
 /* 00000B88-00000C2C       .text draw__15daObjHhaYgush_cFv */
-BOOL daObjHhaYgush_c::draw() {
+void daObjHhaYgush_c::draw() {
     if(check_draw() && mpModel != NULL){
         dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &mPos, &mTev);
         dKy_getEnvlight().setLightTevColorType(mpModel, &mTev);

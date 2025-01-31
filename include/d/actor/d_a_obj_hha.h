@@ -5,7 +5,6 @@
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
-#include "f_op/f_op_actor_mng.h"
 
 class daObjHha_c;
 
@@ -102,7 +101,7 @@ public:
     BOOL create_area(const char*);
     void init_data(cXyz*, f32, csXyz*, cXyz*, dKy_tevstr_c*, u8);
     void init_mtx();
-    BOOL draw();
+    void draw();
 
 public:
     /* 0x000 */ J3DModel* mpModel;
