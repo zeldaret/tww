@@ -251,11 +251,6 @@ void daObjHhaYgush_c::draw() {
 }
 
 const char daObjHha_c::M_arcname[4] = "Hha";
-const float pos_y[4] = {150.0f, -150.0f, 0.0f, 0.0f};
-const float tar_y[4] = {0.0f, 0.0f, 150.0f, -150.0f};
-const u16 move_frame[2] = {55, 30};
-const float splash_y[2] = {-1400.0f, -1450.0f};
-const float splash_z[2] = {0.0f, 100.0f};
 
 /* 00000C2C-00000C4C       .text solidHeapCB__10daObjHha_cFP10fopAc_ac_c */
 int daObjHha_c::solidHeapCB(fopAc_ac_c* this_i) {
@@ -299,6 +294,13 @@ BOOL daObjHha_c::create_heap() {
 
 /* 00000E48-000011AC       .text _create__10daObjHha_cFv */
 s32 daObjHha_c::_create() {
+    static const float pos_y[4] = {150.0f, -150.0f, 0.0f, 0.0f};
+    static const float tar_y[4] = {0.0f, 0.0f, 150.0f, -150.0f};
+    static const u16 move_frame[2] = {55, 30};
+    static const float splash_y[2] = {-1400.0f, -1450.0f};
+    static const float splash_z[2] = {0.0f, 100.0f};
+
+
     fopAcM_SetupActor(this, daObjHha_c);
     s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
     if(ret == cPhs_COMPLEATE_e){
