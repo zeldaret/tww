@@ -124,7 +124,7 @@ public:
     static int solidHeapCB(fopAc_ac_c*);
     BOOL create_heap();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void set_tex(float, float, int);
     void init_mtx();
     void init_co();
@@ -135,8 +135,8 @@ public:
     void water_manager();
     void part_manager();
     void ygush_manager();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
     static const dCcD_SrcCyl M_cyl_data;

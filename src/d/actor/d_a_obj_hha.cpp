@@ -360,7 +360,7 @@ s32 daObjHha_c::_create() {
 }
 
 /* 000018EC-000019EC       .text _delete__10daObjHha_cFv */
-BOOL daObjHha_c::_delete() {
+bool daObjHha_c::_delete() {
     int i;
     if(heap != NULL){
         for(i = 0; i < 2; i++){
@@ -587,7 +587,7 @@ void daObjHha_c::ygush_manager() {
 }
 
 /* 00002658-000028E4       .text _execute__10daObjHha_cFv */
-BOOL daObjHha_c::_execute() {
+bool daObjHha_c::_execute() {
     switch(mState){
         case State_OPEN: if(check_sw()){
             if(mIsMiddle == 0){
@@ -646,7 +646,7 @@ BOOL daObjHha_c::_execute() {
 }
 
 /* 000028E4-000029F4       .text _draw__10daObjHha_cFv */
-BOOL daObjHha_c::_draw() {
+bool daObjHha_c::_draw() {
     int i;
 
     dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
@@ -668,22 +668,22 @@ BOOL daObjHha_c::_draw() {
 
 namespace {
 /* 000029F4-00002A14       .text Mthd_Create__25@unnamed@d_a_obj_hha_cpp@FPv */
-void Mthd_Create(void* this_i) {
-    static_cast<daObjHha_c*>(this_i)->_create();
+s32 Mthd_Create(void* this_i) {
+    return static_cast<daObjHha_c*>(this_i)->_create();
 }
 
 /* 00002A14-00002A38       .text Mthd_Delete__25@unnamed@d_a_obj_hha_cpp@FPv */
-u8 Mthd_Delete(void* this_i) {
+BOOL Mthd_Delete(void* this_i) {
     return static_cast<daObjHha_c*>(this_i)->_delete();
 }
 
 /* 00002A38-00002A5C       .text Mthd_Execute__25@unnamed@d_a_obj_hha_cpp@FPv */
-u8 Mthd_Execute(void* this_i) {
+BOOL Mthd_Execute(void* this_i) {
     return static_cast<daObjHha_c*>(this_i)->_execute();
 }
 
 /* 00002A5C-00002A80       .text Mthd_Draw__25@unnamed@d_a_obj_hha_cpp@FPv */
-u8 Mthd_Draw(void* this_i) {
+BOOL Mthd_Draw(void* this_i) {
     return static_cast<daObjHha_c*>(this_i)->_draw();
 }
 
