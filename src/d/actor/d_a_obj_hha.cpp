@@ -93,7 +93,7 @@ void daObjHhaPart_c::init_data(float yPos, float yTar, u16 speed, u8 i, u8 IsMid
 BOOL daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
     BOOL ret = FALSE;
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, index));
-    JUT_ASSERT(0x1d9, mdl_data != 0);
+    JUT_ASSERT(0x1d9, mdl_data != NULL);
     if(mdl_data != NULL){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203); 
         ret = TRUE;
@@ -188,20 +188,20 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
     BOOL ret = FALSE;
 
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, HHA_BDL_YGSTP00));
-    JUT_ASSERT(0x280, mdl_data != 0);
+    JUT_ASSERT(0x280, mdl_data != NULL);
     
     if(mdl_data != NULL){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
         J3DModel* M_mdl = mpModel; // Renaming for assertion to match
-        JUT_ASSERT(0x289, M_mdl != 0);
+        JUT_ASSERT(0x289, M_mdl != NULL);
 
         if((mpModel != 0)){
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
-            JUT_ASSERT(0x290, btk_data != 0);
+            JUT_ASSERT(0x290, btk_data != NULL);
             
             if(mBtk.init(mpModel->getModelData(), btk_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false, 0) != false){  
                 J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
-                JUT_ASSERT(0x295, bck_data != 0);
+                JUT_ASSERT(0x295, bck_data != NULL);
                 
                 if(mBck.init(mpModel->getModelData(), bck_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false) != false){
                     ret = TRUE;
@@ -271,12 +271,12 @@ BOOL daObjHha_c::create_heap() {
 
     if(ret != FALSE){
         J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, HHA_BDL_YSWTR00));
-        JUT_ASSERT(0x324, mdl_data != 0);
+        JUT_ASSERT(0x324, mdl_data != NULL);
         if(mdl_data != 0){
             mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
             for(i = 0; i < 2; i++){
                 J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, l_daObjHha_btk_idx_table[i]));
-                JUT_ASSERT(0x32f, btk_data != 0);
+                JUT_ASSERT(0x32f, btk_data != NULL);
                 if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i], 1.0, 0, -1, false, 0) == FALSE){
                     ret = FALSE;
                     break;
@@ -350,7 +350,7 @@ s32 daObjHha_c::_create() {
             mYgush.init_mtx();
             init_mtx();
             init_co();
-            cullMtx = mPartA[0].mpModel->getBaseTRMtx();
+            fopAcM_SetMtx(this, mPartA[0].mpModel->getBaseTRMtx());
             fopAcM_setCullSizeBox(this, -700.0f, -1600.0f, -400.0f, 700.0f, 120.0f, 1000.0f);
             ret = cPhs_COMPLEATE_e;
         }
@@ -537,7 +537,7 @@ void daObjHha_c::water_manager() {
                 set_tex(0.0f,1.0f,1);
             }
             mWtrTimer--;
-            if( mSplashA[0].chk_stop() && mWtrTimer <= daTagWaterlevel::Act_c::M_now * 5.0f + 10.0f){
+            if( mSplashA[0].chk_stop() && mWtrTimer <= daTagWaterlevel::Act_c::get_now() * 5.0f + 10.0f){
                 mSplashA[0].play_particle();
                 mYgush.disp_on();
                 mWaterSound = true;
