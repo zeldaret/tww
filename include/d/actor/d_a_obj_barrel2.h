@@ -30,7 +30,7 @@ namespace daObjBarrel2 {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void tg_hitCB(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
         void co_hitCB(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
         void cull_set_draw();
@@ -73,8 +73,8 @@ namespace daObjBarrel2 {
         void mine_chk_range_explode();
         void mine_chk_range_damage();
         void execute_sub();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

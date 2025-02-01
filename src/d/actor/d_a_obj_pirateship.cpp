@@ -94,7 +94,7 @@ s32 daObjPirateship::Act_c::_create() {
 }
 
 /* 000012A4-000017E0       .text _execute__Q215daObjPirateship5Act_cFv */
-BOOL daObjPirateship::Act_c::_execute() {
+bool daObjPirateship::Act_c::_execute() {
     /* Nonmatching */
 }
 

@@ -61,7 +61,7 @@ static int daObjPbka_Create(void* i_this) {
     return static_cast<daObjPbka_c*>(i_this)->_create();
 }
 
-BOOL daObjPbka_c::_delete() {
+bool daObjPbka_c::_delete() {
     dComIfG_resDelete(&mPhase,"Pbka");
     return TRUE;
 }
@@ -72,7 +72,7 @@ static BOOL daObjPbka_Delete(void* i_this) {
     return TRUE;
 }
 
-BOOL daObjPbka_c::_draw() {
+bool daObjPbka_c::_draw() {
     dKy_tevstr_c * pTevStr;
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &tevStr);
     g_env_light.setLightTevColorType(mpModel, pTevStr);
@@ -88,7 +88,7 @@ static BOOL daObjPbka_Draw(void* i_this) {
     return a_this->_draw();
 }
 
-BOOL daObjPbka_c::_execute() {
+bool daObjPbka_c::_execute() {
     current.angle.y += 0x500;
     shape_angle.y = current.angle.y;
     fopAcM_seStartCurrent(this, JA_SE_OBJ_BOMB_SHOP_FAN, 0);

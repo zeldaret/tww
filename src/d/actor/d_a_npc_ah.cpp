@@ -48,17 +48,17 @@ void daNpcAh_c::createInit() {
 }
 
 /* 00000D60-00000DCC       .text _delete__9daNpcAh_cFv */
-BOOL daNpcAh_c::_delete() {
+bool daNpcAh_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000DCC-00000EDC       .text _draw__9daNpcAh_cFv */
-BOOL daNpcAh_c::_draw() {
+bool daNpcAh_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000EDC-00001134       .text _execute__9daNpcAh_cFv */
-BOOL daNpcAh_c::_execute() {
+bool daNpcAh_c::_execute() {
     /* Nonmatching */
 }
 

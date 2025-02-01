@@ -22,11 +22,11 @@ public:
     void particle_set();
     void make_item();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void wait_act_proc();
     void fall_act_proc();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
     /* Place member variables here */

@@ -24,7 +24,7 @@ namespace daObjBarrel {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void mode_wait_init();
         void mode_wait();
         void mode_carry_init();
@@ -58,8 +58,8 @@ namespace daObjBarrel {
         void damage_cc_proc();
         void damage_bg_proc();
         void damage_bg_proc_directly();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

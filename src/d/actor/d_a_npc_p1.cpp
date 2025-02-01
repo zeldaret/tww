@@ -138,7 +138,7 @@ void daNpc_P1_c::CreateHeap() {
 }
 
 /* 00003D6C-00003DF8       .text _delete__10daNpc_P1_cFv */
-BOOL daNpc_P1_c::_delete() {
+bool daNpc_P1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -153,12 +153,12 @@ void daNpc_P1_c::kaji_anm() {
 }
 
 /* 000043CC-0000458C       .text _execute__10daNpc_P1_cFv */
-BOOL daNpc_P1_c::_execute() {
+bool daNpc_P1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 0000458C-00004814       .text _draw__10daNpc_P1_cFv */
-BOOL daNpc_P1_c::_draw() {
+bool daNpc_P1_c::_draw() {
     /* Nonmatching */
 }
 

@@ -52,7 +52,7 @@ static BOOL daTori_FlagExecute(void*) {
 }
 
 /* 00000878-00000B1C       .text _execute__13daTori_Flag_cFv */
-BOOL daTori_Flag_c::_execute() {
+bool daTori_Flag_c::_execute() {
     /* Nonmatching */
 }
 

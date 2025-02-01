@@ -127,7 +127,7 @@ BOOL daObjMagmarock::Method::Execute(void*) {
 }
 
 /* 00001B38-00001EC0       .text _execute__Q214daObjMagmarock5Act_cFv */
-BOOL daObjMagmarock::Act_c::_execute() {
+bool daObjMagmarock::Act_c::_execute() {
     /* Nonmatching */
 }
 

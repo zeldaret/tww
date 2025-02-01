@@ -22,7 +22,7 @@ s32 daObjGnnbtaki_c::_create() {
 }
 
 /* 000003EC-0000041C       .text _delete__15daObjGnnbtaki_cFv */
-BOOL daObjGnnbtaki_c::_delete() {
+bool daObjGnnbtaki_c::_delete() {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void daObjGnnbtaki_c::init_mtx() {
 }
 
 /* 0000043C-00000548       .text _execute__15daObjGnnbtaki_cFv */
-BOOL daObjGnnbtaki_c::_execute() {
+bool daObjGnnbtaki_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000548-000005CC       .text _draw__15daObjGnnbtaki_cFv */
-BOOL daObjGnnbtaki_c::_draw() {
+bool daObjGnnbtaki_c::_draw() {
     /* Nonmatching */
 }
 

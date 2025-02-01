@@ -5,10 +5,10 @@
 
 class daFire_c : public fopAc_ac_c {
 public:
-    BOOL _delete();
+    bool _delete();
     void CreateInit();
     s32 _create();
-    BOOL _execute();
+    bool _execute();
     void search_wind();
     void ctrlEffect();
     void demo_proc();
@@ -20,7 +20,7 @@ public:
     void execPlayFire();
     void setDirParticle(cXyz*);
     void checkCol();
-    BOOL _draw();
+    bool _draw();
 
 public:
     /* Place member variables here */

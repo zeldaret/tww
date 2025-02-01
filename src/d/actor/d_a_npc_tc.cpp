@@ -263,7 +263,7 @@ void daNpc_Tc_c::set_mtx() {
 }
 
 /* 000038A0-00003A40       .text _draw__10daNpc_Tc_cFv */
-BOOL daNpc_Tc_c::_draw() {
+bool daNpc_Tc_c::_draw() {
     /* Nonmatching */
 }
 
@@ -273,12 +273,12 @@ void daNpc_Tc_c::setTower() {
 }
 
 /* 00003BE0-00003E90       .text _execute__10daNpc_Tc_cFv */
-BOOL daNpc_Tc_c::_execute() {
+bool daNpc_Tc_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00003E90-00003F1C       .text _delete__10daNpc_Tc_cFv */
-BOOL daNpc_Tc_c::_delete() {
+bool daNpc_Tc_c::_delete() {
     /* Nonmatching */
 }
 

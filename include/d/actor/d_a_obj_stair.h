@@ -6,9 +6,9 @@
 class daObj_Stair_c : public fopAc_ac_c {
 public:
     inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _draw();
-    inline BOOL _execute();
+    inline bool _delete();
+    inline bool _draw();
+    inline bool _execute();
     void set_mtx() {}
 
     void CreateHeap();

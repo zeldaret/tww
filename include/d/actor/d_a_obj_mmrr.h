@@ -18,15 +18,15 @@ namespace daObjMmrr {
         void set_cc_trans_pos();
         void set_cull();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void set_mtx();
         void init_mtx();
         void chk_light();
         void eff_start();
         void eff_stop();
         void eff_remove();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* 0x290 */ u8 m290[0xBF8 - 0x290];

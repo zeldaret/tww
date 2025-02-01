@@ -7,13 +7,13 @@
 
 class daSwProp_c : public fopAc_ac_c {
 public:
-    BOOL _delete();
+    bool _delete();
     void CreateHeap();
     void CreateInit();
     s32 _create();
     void set_mtx();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
     /* 0x290 */ u8 m290[0x294 - 0x290];

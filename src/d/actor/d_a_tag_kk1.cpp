@@ -17,17 +17,17 @@ void daTag_Kk1_c::createInit() {
 }
 
 /* 00000128-00000130       .text _draw__11daTag_Kk1_cFv */
-BOOL daTag_Kk1_c::_draw() {
+bool daTag_Kk1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000130-0000024C       .text _execute__11daTag_Kk1_cFv */
-BOOL daTag_Kk1_c::_execute() {
+bool daTag_Kk1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 0000024C-000002A0       .text _delete__11daTag_Kk1_cFv */
-BOOL daTag_Kk1_c::_delete() {
+bool daTag_Kk1_c::_delete() {
     /* Nonmatching */
 }
 

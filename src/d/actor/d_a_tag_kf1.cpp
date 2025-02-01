@@ -122,17 +122,17 @@ void daTag_Kf1_c::wait_action1(void*) {
 }
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
-BOOL daTag_Kf1_c::_draw() {
+bool daTag_Kf1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000BF0-00000C68       .text _execute__11daTag_Kf1_cFv */
-BOOL daTag_Kf1_c::_execute() {
+bool daTag_Kf1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000C68-00000CBC       .text _delete__11daTag_Kf1_cFv */
-BOOL daTag_Kf1_c::_delete() {
+bool daTag_Kf1_c::_delete() {
     /* Nonmatching */
 }
 

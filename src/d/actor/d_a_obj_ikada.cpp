@@ -237,7 +237,7 @@ void daObj_Ikada_c::epProc() {
 }
 
 /* 00003750-00003CA0       .text _execute__13daObj_Ikada_cFv */
-BOOL daObj_Ikada_c::_execute() {
+bool daObj_Ikada_c::_execute() {
     /* Nonmatching */
 }
 
@@ -247,7 +247,7 @@ void daObj_Ikada_c::debugDraw() {
 }
 
 /* 00003CD4-00003EE0       .text _draw__13daObj_Ikada_cFv */
-BOOL daObj_Ikada_c::_draw() {
+bool daObj_Ikada_c::_draw() {
     /* Nonmatching */
 }
 
@@ -272,7 +272,7 @@ s32 daObj_Ikada_c::_create() {
 }
 
 /* 00005320-0000543C       .text _delete__13daObj_Ikada_cFv */
-BOOL daObj_Ikada_c::_delete() {
+bool daObj_Ikada_c::_delete() {
     /* Nonmatching */
 }
 

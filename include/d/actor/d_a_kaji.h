@@ -22,8 +22,8 @@ public:
     void setAnm(int, f32) {}
 
     inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _execute();
+    inline bool _delete();
+    inline bool _execute();
     inline bool _draw();
 
     BOOL CreateHeap();

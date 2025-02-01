@@ -52,12 +52,12 @@ void daNpc_Fa1_c::createInit() {
 }
 
 /* 800FB514-800FB5D8       .text _draw__11daNpc_Fa1_cFv */
-BOOL daNpc_Fa1_c::_draw() {
+bool daNpc_Fa1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 800FB5D8-800FB6AC       .text _execute__11daNpc_Fa1_cFv */
-BOOL daNpc_Fa1_c::_execute() {
+bool daNpc_Fa1_c::_execute() {
     /* Nonmatching */
 }
 
@@ -262,7 +262,7 @@ void daNpc_Fa1_c::findPlayer() {
 }
 
 /* 800FD050-800FD0F0       .text _delete__11daNpc_Fa1_cFv */
-BOOL daNpc_Fa1_c::_delete() {
+bool daNpc_Fa1_c::_delete() {
     /* Nonmatching */
 }
 

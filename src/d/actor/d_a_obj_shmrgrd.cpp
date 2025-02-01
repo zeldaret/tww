@@ -27,7 +27,7 @@ s32 daObjShmrgrd_c::_create() {
 }
 
 /* 00000964-00000A14       .text _delete__14daObjShmrgrd_cFv */
-BOOL daObjShmrgrd_c::_delete() {
+bool daObjShmrgrd_c::_delete() {
     /* Nonmatching */
 }
 
@@ -147,12 +147,12 @@ void daObjShmrgrd_c::mode_lower() {
 }
 
 /* 000017C4-000019D4       .text _execute__14daObjShmrgrd_cFv */
-BOOL daObjShmrgrd_c::_execute() {
+bool daObjShmrgrd_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000019D4-00001A74       .text _draw__14daObjShmrgrd_cFv */
-BOOL daObjShmrgrd_c::_draw() {
+bool daObjShmrgrd_c::_draw() {
     /* Nonmatching */
 }
 

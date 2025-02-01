@@ -50,13 +50,13 @@ public:
     void modeDeleteInit();
     void modeDelete();
     void modeProc(Proc_e, int);
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
     void createInit();
     void _createHeap();
     void getArg();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
 
 public:
     /* 0x290 */ u8 m290[0x2AC - 0x290];

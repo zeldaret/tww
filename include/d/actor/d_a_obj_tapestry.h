@@ -24,15 +24,15 @@ public:
     void checkCollision();
     void set_eye_pos();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void wait_act_proc();
     void demo_request_act_proc();
     void burn_act_proc();
     void burn_act_init_proc();
     void fine_act_init_proc();
     void setup_action(int);
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 };
 
 class daObjTapestryPLight_c : public fopAc_ac_c {

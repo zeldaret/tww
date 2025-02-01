@@ -38,7 +38,7 @@ namespace daObjEff {
         void remove_pinecone_smoke();
         void remove_woodBox_smoke();
         void remove();
-        BOOL _delete();
+        bool _delete();
         void die_barrel_smoke();
         void die_stool_smoke();
         void die_skull_smoke();
@@ -46,7 +46,7 @@ namespace daObjEff {
         void die_pinecone_smoke();
         void die_woodBox_smoke();
         void die();
-        BOOL _execute();
+        bool _execute();
     
     public:
         /* Place member variables here */

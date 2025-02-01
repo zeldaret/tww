@@ -107,7 +107,7 @@ s32 daObjVyasi::Act_c::_create() {
 }
 
 /* 00001D8C-00001DBC       .text _delete__Q210daObjVyasi5Act_cFv */
-BOOL daObjVyasi::Act_c::_delete() {
+bool daObjVyasi::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -132,12 +132,12 @@ void daObjVyasi::Act_c::leaf_scale_main() {
 }
 
 /* 00002938-000029BC       .text _execute__Q210daObjVyasi5Act_cFv */
-BOOL daObjVyasi::Act_c::_execute() {
+bool daObjVyasi::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000029BC-00002A6C       .text _draw__Q210daObjVyasi5Act_cFv */
-BOOL daObjVyasi::Act_c::_draw() {
+bool daObjVyasi::Act_c::_draw() {
     /* Nonmatching */
 }
 

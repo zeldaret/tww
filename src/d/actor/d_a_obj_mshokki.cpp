@@ -47,17 +47,17 @@ s32 daObjMshokki_c::_create() {
 }
 
 /* 00000C44-00000C74       .text _delete__14daObjMshokki_cFv */
-BOOL daObjMshokki_c::_delete() {
+bool daObjMshokki_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000C74-00000E24       .text _execute__14daObjMshokki_cFv */
-BOOL daObjMshokki_c::_execute() {
+bool daObjMshokki_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000E24-00000E84       .text _draw__14daObjMshokki_cFv */
-BOOL daObjMshokki_c::_draw() {
+bool daObjMshokki_c::_draw() {
     /* Nonmatching */
 }
 

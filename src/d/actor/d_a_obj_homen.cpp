@@ -22,7 +22,7 @@ s32 daObjHomen::Act_c::_create() {
 }
 
 /* 000011A4-00001230       .text _delete__Q210daObjHomen5Act_cFv */
-BOOL daObjHomen::Act_c::_delete() {
+bool daObjHomen::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -147,12 +147,12 @@ void daObjHomen::Act_c::adjust_hookshot() {
 }
 
 /* 00002810-000028E0       .text _execute__Q210daObjHomen5Act_cFv */
-BOOL daObjHomen::Act_c::_execute() {
+bool daObjHomen::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000028E0-00002954       .text _draw__Q210daObjHomen5Act_cFv */
-BOOL daObjHomen::Act_c::_draw() {
+bool daObjHomen::Act_c::_draw() {
     /* Nonmatching */
 }
 

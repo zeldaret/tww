@@ -22,7 +22,7 @@ s32 daObjSwheavy::Act_c::_create() {
 }
 
 /* 00000628-000006EC       .text _delete__Q212daObjSwheavy5Act_cFv */
-BOOL daObjSwheavy::Act_c::_delete() {
+bool daObjSwheavy::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -97,12 +97,12 @@ void daObjSwheavy::Act_c::mode_l_u() {
 }
 
 /* 00000FBC-00001104       .text _execute__Q212daObjSwheavy5Act_cFv */
-BOOL daObjSwheavy::Act_c::_execute() {
+bool daObjSwheavy::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001104-000011C0       .text _draw__Q212daObjSwheavy5Act_cFv */
-BOOL daObjSwheavy::Act_c::_draw() {
+bool daObjSwheavy::Act_c::_draw() {
     /* Nonmatching */
 }
 

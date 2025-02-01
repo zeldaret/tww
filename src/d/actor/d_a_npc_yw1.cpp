@@ -357,17 +357,17 @@ void daNpc_Yw1_c::shadowDraw() {
 }
 
 /* 00003B4C-00003C84       .text _draw__11daNpc_Yw1_cFv */
-BOOL daNpc_Yw1_c::_draw() {
+bool daNpc_Yw1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00003C84-00003EDC       .text _execute__11daNpc_Yw1_cFv */
-BOOL daNpc_Yw1_c::_execute() {
+bool daNpc_Yw1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00003EDC-00003F38       .text _delete__11daNpc_Yw1_cFv */
-BOOL daNpc_Yw1_c::_delete() {
+bool daNpc_Yw1_c::_delete() {
     /* Nonmatching */
 }
 

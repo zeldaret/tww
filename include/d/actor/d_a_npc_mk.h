@@ -76,9 +76,9 @@ public:
     void seek_action(void*);
     void hind_action(void*);
     void visit_action(void*);
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     s32 _create();
     void CreateHeap();
 

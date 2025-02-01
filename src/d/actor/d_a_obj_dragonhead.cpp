@@ -126,7 +126,7 @@ s32 daObjDragonhead_c::_create() {
     return ret;
 }
 
-BOOL daObjDragonhead_c::_delete() {
+bool daObjDragonhead_c::_delete() {
     if (heap != NULL && field_0x40c == 1)
         dComIfG_Bgsp()->Release(mpBgW);
 
@@ -135,7 +135,7 @@ BOOL daObjDragonhead_c::_delete() {
     return TRUE;
 }
 
-BOOL daObjDragonhead_c::_execute() {
+bool daObjDragonhead_c::_execute() {
     dComIfG_Ccsp()->Set(&mSph);
     if (!mSwitchOn) {
         mDoAud_seStart(JA_SE_OBJ_ICEBERG_BREATH, &mSphCenter, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -181,7 +181,7 @@ BOOL daObjDragonhead_c::_execute() {
     return TRUE;
 }
 
-BOOL daObjDragonhead_c::_draw() {
+bool daObjDragonhead_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();

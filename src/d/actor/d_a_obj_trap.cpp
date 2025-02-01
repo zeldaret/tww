@@ -22,7 +22,7 @@ s32 daObjTrap_c::_create() {
 }
 
 /* 00000DF0-00000E84       .text _delete__11daObjTrap_cFv */
-BOOL daObjTrap_c::_delete() {
+bool daObjTrap_c::_delete() {
     /* Nonmatching */
 }
 
@@ -97,12 +97,12 @@ void daObjTrap_c::shine_move() {
 }
 
 /* 00002758-00002CB0       .text _execute__11daObjTrap_cFv */
-BOOL daObjTrap_c::_execute() {
+bool daObjTrap_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002CB0-00002D54       .text _draw__11daObjTrap_cFv */
-BOOL daObjTrap_c::_draw() {
+bool daObjTrap_c::_draw() {
     /* Nonmatching */
 }
 

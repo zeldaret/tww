@@ -22,7 +22,7 @@ s32 daObjGnntakis_c::_create() {
 }
 
 /* 000003AC-000003DC       .text _delete__15daObjGnntakis_cFv */
-BOOL daObjGnntakis_c::_delete() {
+bool daObjGnntakis_c::_delete() {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void daObjGnntakis_c::init_mtx() {
 }
 
 /* 000003FC-00000514       .text _execute__15daObjGnntakis_cFv */
-BOOL daObjGnntakis_c::_execute() {
+bool daObjGnntakis_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000514-0000058C       .text _draw__15daObjGnntakis_cFv */
-BOOL daObjGnntakis_c::_draw() {
+bool daObjGnntakis_c::_draw() {
     /* Nonmatching */
 }
 

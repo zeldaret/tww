@@ -21,7 +21,7 @@ public:
     void chk_event_flg();
     void set_em_set_offsetY();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void trap_off_wait_act_proc();
     void trap_on_wait_act_proc();
     void demo_regist_wait_act_proc();
@@ -36,8 +36,8 @@ public:
     void demo_wait2_act_init_proc();
     void demo_end_wait_act_init_proc();
     void setup_action(int);
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
     /* Place member variables here */

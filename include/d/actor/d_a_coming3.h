@@ -27,9 +27,9 @@ namespace daComing3 {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         s32 _create();
-        BOOL _delete();
-        BOOL _execute();
-        BOOL _draw();
+        bool _delete();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

@@ -286,7 +286,7 @@ bool daLbridge_c::_draw() {
     return TRUE;
 }
 
-BOOL daLbridge_c::_delete() {
+bool daLbridge_c::_delete() {
     if (mpEmitter != NULL) {
         mpEmitter->becomeInvalidEmitter();
         mpEmitter = NULL;

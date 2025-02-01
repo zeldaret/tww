@@ -133,17 +133,17 @@ void daNpc_Btsw_c::getdemo_action(void*) {
 }
 
 /* 00002844-000029A0       .text _draw__12daNpc_Btsw_cFv */
-BOOL daNpc_Btsw_c::_draw() {
+bool daNpc_Btsw_c::_draw() {
     /* Nonmatching */
 }
 
 /* 000029A0-00002AF4       .text _execute__12daNpc_Btsw_cFv */
-BOOL daNpc_Btsw_c::_execute() {
+bool daNpc_Btsw_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002AF4-00002B90       .text _delete__12daNpc_Btsw_cFv */
-BOOL daNpc_Btsw_c::_delete() {
+bool daNpc_Btsw_c::_delete() {
     /* Nonmatching */
 }
 

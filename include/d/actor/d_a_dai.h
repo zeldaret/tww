@@ -11,7 +11,7 @@ public:
     void incNowDaizaNum() {}
     void incNowItemNum() {}
 
-    BOOL _delete();
+    bool _delete();
     void CreateHeap();
     void CreateInit();
     s32 _create();
@@ -20,9 +20,9 @@ public:
     void checkOrder();
     void XyCheckCB(int);
     void XyEventCB(int);
-    BOOL _execute();
+    bool _execute();
     void proc();
-    BOOL _draw();
+    bool _draw();
     void getMsg();
     void next_msgStatus(unsigned long*);
 

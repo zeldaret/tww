@@ -57,9 +57,9 @@ public:
     void wait_action1(void*);
     void demo();
     void shadowDraw();
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     s32 _create();
     void bodyCreateHeap();
     void CreateHeap();

@@ -42,12 +42,12 @@ void daTagPhoto_c::createInit() {
 }
 
 /* 00000298-000002A0       .text _delete__12daTagPhoto_cFv */
-BOOL daTagPhoto_c::_delete() {
+bool daTagPhoto_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000002A0-000002A8       .text _draw__12daTagPhoto_cFv */
-BOOL daTagPhoto_c::_draw() {
+bool daTagPhoto_c::_draw() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daTagPhoto_c::setMode(unsigned char) {
 }
 
 /* 000002CC-00000368       .text _execute__12daTagPhoto_cFv */
-BOOL daTagPhoto_c::_execute() {
+bool daTagPhoto_c::_execute() {
     /* Nonmatching */
 }
 

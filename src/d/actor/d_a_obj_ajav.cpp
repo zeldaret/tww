@@ -112,7 +112,7 @@ s32 daObjAjav::Act_c::_create() {
 }
 
 /* 00001B3C-00001C08       .text _delete__Q29daObjAjav5Act_cFv */
-BOOL daObjAjav::Act_c::_delete() {
+bool daObjAjav::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -177,12 +177,12 @@ void daObjAjav::Act_c::set_hamon(float) {
 }
 
 /* 000024A4-00002CF4       .text _execute__Q29daObjAjav5Act_cFv */
-BOOL daObjAjav::Act_c::_execute() {
+bool daObjAjav::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002D50-00002DCC       .text _draw__Q29daObjAjav5Act_cFv */
-BOOL daObjAjav::Act_c::_draw() {
+bool daObjAjav::Act_c::_draw() {
     /* Nonmatching */
 }
 

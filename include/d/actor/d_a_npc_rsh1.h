@@ -58,9 +58,9 @@ public:
     void privateCut();
     void event_action(void*);
     void dummy_action(void*);
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     s32 _create();
     void CreateHeap();
     void set_mtx();

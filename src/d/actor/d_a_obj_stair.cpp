@@ -63,7 +63,7 @@ static BOOL daObj_StairExecute(void*) {
 }
 
 /* 00000B20-00001364       .text _execute__13daObj_Stair_cFv */
-BOOL daObj_Stair_c::_execute() {
+bool daObj_Stair_c::_execute() {
     /* Nonmatching */
 }
 

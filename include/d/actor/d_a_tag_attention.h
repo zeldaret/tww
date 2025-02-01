@@ -11,7 +11,7 @@ namespace daTagAttention {
         void prm_get_swSave() const {}
     
         s32 _create();
-        BOOL _execute();
+        bool _execute();
     
     public:
         /* Place member variables here */

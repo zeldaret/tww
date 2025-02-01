@@ -88,10 +88,10 @@ namespace daObjFtree {
         BOOL NodeCallBack_Effect(J3DNode*, int);
         void create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void set_mtx();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* 0x290 */ void* m290;

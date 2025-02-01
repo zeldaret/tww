@@ -52,7 +52,7 @@ s32 daObjMmrr::Act_c::_create() {
 }
 
 /* 0000122C-0000126C       .text _delete__Q29daObjMmrr5Act_cFv */
-BOOL daObjMmrr::Act_c::_delete() {
+bool daObjMmrr::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -87,12 +87,12 @@ void daObjMmrr::Act_c::eff_remove() {
 }
 
 /* 000014D0-000016E8       .text _execute__Q29daObjMmrr5Act_cFv */
-BOOL daObjMmrr::Act_c::_execute() {
+bool daObjMmrr::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000016E8-000017E8       .text _draw__Q29daObjMmrr5Act_cFv */
-BOOL daObjMmrr::Act_c::_draw() {
+bool daObjMmrr::Act_c::_draw() {
     /* Nonmatching */
 }
 

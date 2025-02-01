@@ -303,17 +303,17 @@ void daNpc_Uk_c::visit_action(void*) {
 }
 
 /* 00004774-00004A20       .text _draw__10daNpc_Uk_cFv */
-BOOL daNpc_Uk_c::_draw() {
+bool daNpc_Uk_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00004A20-00004CE4       .text _execute__10daNpc_Uk_cFv */
-BOOL daNpc_Uk_c::_execute() {
+bool daNpc_Uk_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00004CE4-00004D34       .text _delete__10daNpc_Uk_cFv */
-BOOL daNpc_Uk_c::_delete() {
+bool daNpc_Uk_c::_delete() {
     /* Nonmatching */
 }
 

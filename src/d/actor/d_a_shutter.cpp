@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */
-BOOL daShutter_c::_delete() {
+bool daShutter_c::_delete() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daShutter_c::set_mtx() {
 }
 
 /* 000006F0-00000788       .text _execute__11daShutter_cFv */
-BOOL daShutter_c::_execute() {
+bool daShutter_c::_execute() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daShutter_c::demo() {
 }
 
 /* 00000CF0-00000DD8       .text _draw__11daShutter_cFv */
-BOOL daShutter_c::_draw() {
+bool daShutter_c::_draw() {
     /* Nonmatching */
 }
 

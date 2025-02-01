@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 000000EC-0000016C       .text _delete__10daWarphr_cFv */
-BOOL daWarphr_c::_delete() {
+bool daWarphr_c::_delete() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daWarphr_c::set_mtx() {
 }
 
 /* 00000808-00000A58       .text _execute__10daWarphr_cFv */
-BOOL daWarphr_c::_execute() {
+bool daWarphr_c::_execute() {
     /* Nonmatching */
 }
 
@@ -137,7 +137,7 @@ void daWarphr_c::check_warp() {
 }
 
 /* 000014F0-000016E0       .text _draw__10daWarphr_cFv */
-BOOL daWarphr_c::_draw() {
+bool daWarphr_c::_draw() {
     /* Nonmatching */
 }
 

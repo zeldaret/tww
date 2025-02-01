@@ -44,7 +44,7 @@ s32 daObjIce_c::_create() {
 }
 
 /* 00000A78-00000B18       .text _delete__10daObjIce_cFv */
-BOOL daObjIce_c::_delete() {
+bool daObjIce_c::_delete() {
     /* Nonmatching */
 }
 
@@ -59,7 +59,7 @@ void daObjIce_c::fade_out_retire_act_proc() {
 }
 
 /* 00000DFC-00000EB8       .text _execute__10daObjIce_cFv */
-BOOL daObjIce_c::_execute() {
+bool daObjIce_c::_execute() {
     /* Nonmatching */
 }
 
@@ -74,7 +74,7 @@ void set_material(J3DModel*, unsigned char) {
 }
 
 /* 00000FB0-00001070       .text _draw__10daObjIce_cFv */
-BOOL daObjIce_c::_draw() {
+bool daObjIce_c::_draw() {
     /* Nonmatching */
 }
 

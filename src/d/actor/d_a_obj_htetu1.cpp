@@ -27,7 +27,7 @@ s32 daObjHtetu1_c::_create() {
 }
 
 /* 00000508-00000610       .text _delete__13daObjHtetu1_cFv */
-BOOL daObjHtetu1_c::_delete() {
+bool daObjHtetu1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -57,12 +57,12 @@ void daObjHtetu1_c::splash_manager() {
 }
 
 /* 00000BCC-0000101C       .text _execute__13daObjHtetu1_cFv */
-BOOL daObjHtetu1_c::_execute() {
+bool daObjHtetu1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 0000101C-0000107C       .text _draw__13daObjHtetu1_cFv */
-BOOL daObjHtetu1_c::_draw() {
+bool daObjHtetu1_c::_draw() {
     /* Nonmatching */
 }
 

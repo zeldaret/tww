@@ -65,12 +65,12 @@ s32 daKaji_c::_create() {
     return phase_state;
 }
 
-BOOL daKaji_c::_delete() {
+bool daKaji_c::_delete() {
     dComIfG_resDelete(&mPhs, M_arcname);
     return TRUE;
 }
 
-BOOL daKaji_c::_execute() {
+bool daKaji_c::_execute() {
     // Copy the ship's transform (plus an offset) to the helm.
     cXyz offset(0.0f, 740.0f, -858.0f);
     offset.y += REG10_F(10);

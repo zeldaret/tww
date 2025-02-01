@@ -42,7 +42,7 @@ s32 daObj_Pfall_c::_create() {
 }
 
 /* 000009EC-00000AB0       .text _delete__13daObj_Pfall_cFv */
-BOOL daObj_Pfall_c::_delete() {
+bool daObj_Pfall_c::_delete() {
     /* Nonmatching */
 }
 
@@ -107,7 +107,7 @@ void daObj_Pfall_c::mode_proc_call() {
 }
 
 /* 00001130-000012F4       .text _execute__13daObj_Pfall_cFv */
-BOOL daObj_Pfall_c::_execute() {
+bool daObj_Pfall_c::_execute() {
     /* Nonmatching */
 }
 
@@ -117,7 +117,7 @@ void daObj_Pfall_c::nz_draw() {
 }
 
 /* 0000142C-000014E4       .text _draw__13daObj_Pfall_cFv */
-BOOL daObj_Pfall_c::_draw() {
+bool daObj_Pfall_c::_draw() {
     /* Nonmatching */
 }
 

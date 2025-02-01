@@ -32,17 +32,17 @@ void daObjHat_c::createInit() {
 }
 
 /* 000006AC-000006DC       .text _delete__10daObjHat_cFv */
-BOOL daObjHat_c::_delete() {
+bool daObjHat_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000006DC-0000073C       .text _draw__10daObjHat_cFv */
-BOOL daObjHat_c::_draw() {
+bool daObjHat_c::_draw() {
     /* Nonmatching */
 }
 
 /* 0000073C-00000884       .text _execute__10daObjHat_cFv */
-BOOL daObjHat_c::_execute() {
+bool daObjHat_c::_execute() {
     /* Nonmatching */
 }
 

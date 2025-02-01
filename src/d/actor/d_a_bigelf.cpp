@@ -302,17 +302,17 @@ void daBigelf_c::wait_action(void*) {
 }
 
 /* 00002C8C-00002DB4       .text _draw__10daBigelf_cFv */
-BOOL daBigelf_c::_draw() {
+bool daBigelf_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00002DB4-00002F5C       .text _execute__10daBigelf_cFv */
-BOOL daBigelf_c::_execute() {
+bool daBigelf_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002F5C-00002FAC       .text _delete__10daBigelf_cFv */
-BOOL daBigelf_c::_delete() {
+bool daBigelf_c::_delete() {
     /* Nonmatching */
 }
 

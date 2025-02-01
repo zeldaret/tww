@@ -12,7 +12,7 @@ public:
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void tell_agb_attack();
     void tell_agb_sink();
     void init_mtx();
@@ -39,8 +39,8 @@ public:
     void hit_bg();
     void make_vib();
     void check_circle();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
     /* Place member variables here */

@@ -42,12 +42,12 @@ void daAleaf_c::set_mtx() {
 }
 
 /* 000008D0-00000C44       .text _execute__9daAleaf_cFv */
-BOOL daAleaf_c::_execute() {
+bool daAleaf_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000C44-00000CD4       .text _draw__9daAleaf_cFv */
-BOOL daAleaf_c::_draw() {
+bool daAleaf_c::_draw() {
     /* Nonmatching */
 }
 

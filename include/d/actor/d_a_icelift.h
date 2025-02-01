@@ -5,17 +5,17 @@
 
 class daIlift_c : public fopAc_ac_c {
 public:
-    BOOL _delete();
+    bool _delete();
     void CreateHeap();
     void CreateInit();
     s32 _create();
     void set_mtx();
-    BOOL _execute();
+    bool _execute();
     void lift_wave();
     void path_move();
     void lift_normal_move();
     void set_next_pnt();
-    BOOL _draw();
+    bool _draw();
 
 public:
     /* Place member variables here */

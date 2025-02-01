@@ -8,7 +8,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
-BOOL daSwProp_c::_delete() {
+bool daSwProp_c::_delete() {
     /* Nonmatching */
 }
 
@@ -43,12 +43,12 @@ void daSwProp_c::set_mtx() {
 }
 
 /* 00000838-00000B60       .text _execute__10daSwProp_cFv */
-BOOL daSwProp_c::_execute() {
+bool daSwProp_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000B60-00000C00       .text _draw__10daSwProp_cFv */
-BOOL daSwProp_c::_draw() {
+bool daSwProp_c::_draw() {
     /* Nonmatching */
 }
 

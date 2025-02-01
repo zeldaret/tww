@@ -58,7 +58,7 @@ static s32 daThrowstoneCreate(void* ptr) {
     return ((daThrowstone_c*)ptr)->_create();
 }
 
-BOOL daThrowstone_c::_delete() {
+bool daThrowstone_c::_delete() {
     dComIfG_resDelete(&mPhs, M_arcname);
     return TRUE;
 }
@@ -68,7 +68,7 @@ static BOOL daThrowstoneDelete(void* ptr) {
     return ((daThrowstone_c*)ptr)->_delete();
 }
 
-BOOL daThrowstone_c::_execute() {
+bool daThrowstone_c::_execute() {
     dDemo_setDemoData(this, 0x6a, NULL, NULL, 0, NULL, 0, 0);
 
     mpModel->setBaseScale(scale);

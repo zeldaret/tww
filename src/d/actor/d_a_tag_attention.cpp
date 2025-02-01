@@ -12,7 +12,7 @@ s32 daTagAttention::Act_c::_create() {
 }
 
 /* 00000340-00000480       .text _execute__Q214daTagAttention5Act_cFv */
-BOOL daTagAttention::Act_c::_execute() {
+bool daTagAttention::Act_c::_execute() {
     /* Nonmatching */
 }
 

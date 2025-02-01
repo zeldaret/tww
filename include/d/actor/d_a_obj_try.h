@@ -24,7 +24,7 @@ namespace daObjTry {
         void search_sameType(void*, void*);
         void chk_appear() const;
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void mode_restart_init();
         void mode_restart();
         void mode_wait_init();
@@ -58,8 +58,8 @@ namespace daObjTry {
         void make_vib();
         void check_circle();
         void get_water_h();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

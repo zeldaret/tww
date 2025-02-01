@@ -41,12 +41,12 @@ public:
     void modeEventOpenInit();
     void modeEventOpen();
     void modeProc(Proc_e, int);
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
     void getArg();
     void createInit();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
 
 public:
     /* Place member variables here */

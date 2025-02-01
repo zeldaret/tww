@@ -157,7 +157,7 @@ void daObj_Search::Act_c::smoke_set(float, int) {
 }
 
 /* 801010C4-801013AC       .text _execute__Q212daObj_Search5Act_cFv */
-BOOL daObj_Search::Act_c::_execute() {
+bool daObj_Search::Act_c::_execute() {
     /* Nonmatching */
 }
 
@@ -217,12 +217,12 @@ void daObj_Search::Act_c::is_path_info() {
 }
 
 /* 80102398-801026F8       .text _draw__Q212daObj_Search5Act_cFv */
-BOOL daObj_Search::Act_c::_draw() {
+bool daObj_Search::Act_c::_draw() {
     /* Nonmatching */
 }
 
 /* 801026F8-8010283C       .text _delete__Q212daObj_Search5Act_cFv */
-BOOL daObj_Search::Act_c::_delete() {
+bool daObj_Search::Act_c::_delete() {
     /* Nonmatching */
 }
 

@@ -19,9 +19,9 @@ public:
     s32 _create();
     void createHeap();
     void createInit();
-    BOOL _delete();
-    BOOL _draw();
-    BOOL _execute();
+    bool _delete();
+    bool _draw();
+    bool _execute();
     void executeCommon();
     void executeSetMode(unsigned char);
     void executeWaitInit();

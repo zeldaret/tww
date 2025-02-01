@@ -86,15 +86,15 @@ public:
     void modeFollowInit();
     void modeFollow();
     void modeProc(Proc_e, int);
-    BOOL _execute();
+    bool _execute();
     void bowDraw();
     void bodyDraw();
     void drawShadow();
-    BOOL _draw();
+    bool _draw();
     void bodyCreateInit();
     void createInit();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
 
 public:
     /* 0x06C4 */ int mMode;

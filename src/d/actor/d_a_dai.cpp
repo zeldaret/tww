@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000000C4       .text _delete__7daDai_cFv */
-BOOL daDai_c::_delete() {
+bool daDai_c::_delete() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ void daDai_c::XyEventCB(int) {
 }
 
 /* 00000C18-00000C78       .text _execute__7daDai_cFv */
-BOOL daDai_c::_execute() {
+bool daDai_c::_execute() {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void daDai_c::proc() {
 }
 
 /* 00000DE8-00000E48       .text _draw__7daDai_cFv */
-BOOL daDai_c::_draw() {
+bool daDai_c::_draw() {
     /* Nonmatching */
 }
 

@@ -52,9 +52,9 @@ public:
     void privateCut();
     void demo_move();
     void demo_end_init();
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     s32 _create();
     void CreateHeap();
 

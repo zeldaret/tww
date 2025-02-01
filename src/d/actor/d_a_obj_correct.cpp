@@ -12,7 +12,7 @@ s32 daObjCorrect::Act_c::_create() {
 }
 
 /* 000001B0-000001B8       .text _delete__Q212daObjCorrect5Act_cFv */
-BOOL daObjCorrect::Act_c::_delete() {
+bool daObjCorrect::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -122,7 +122,7 @@ void daObjCorrect::Act_c::demo_run() {
 }
 
 /* 00000CAC-00000DD8       .text _execute__Q212daObjCorrect5Act_cFv */
-BOOL daObjCorrect::Act_c::_execute() {
+bool daObjCorrect::Act_c::_execute() {
     /* Nonmatching */
 }
 

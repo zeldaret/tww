@@ -77,7 +77,7 @@ s32 daObjFirewall_c::_create() {
 }
 
 /* 00001550-000015F4       .text _delete__15daObjFirewall_cFv */
-BOOL daObjFirewall_c::_delete() {
+bool daObjFirewall_c::_delete() {
     /* Nonmatching */
 }
 
@@ -117,12 +117,12 @@ void daObjFirewall_c::retire_act_proc() {
 }
 
 /* 00001BEC-00001C70       .text _execute__15daObjFirewall_cFv */
-BOOL daObjFirewall_c::_execute() {
+bool daObjFirewall_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001C70-00001CD4       .text _draw__15daObjFirewall_cFv */
-BOOL daObjFirewall_c::_draw() {
+bool daObjFirewall_c::_draw() {
     /* Nonmatching */
 }
 

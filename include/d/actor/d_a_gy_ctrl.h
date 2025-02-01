@@ -30,15 +30,15 @@ public:
     void modeHideInit();
     void modeHide();
     void deadCheckGy();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
     void createInitNoArer();
     void createInit();
     void getParam(unsigned long, unsigned char, unsigned char);
     void getArg();
     void checkGyCtrlExist();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
 
 public:
     /* Place member variables here */

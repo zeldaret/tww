@@ -12,7 +12,7 @@ s32 daTpota_c::_create() {
 }
 
 /* 00000250-00000298       .text _delete__9daTpota_cFv */
-BOOL daTpota_c::_delete() {
+bool daTpota_c::_delete() {
     /* Nonmatching */
 }
 
@@ -37,12 +37,12 @@ void daTpota_c::renew_splash() {
 }
 
 /* 000003F4-000004C8       .text _execute__9daTpota_cFv */
-BOOL daTpota_c::_execute() {
+bool daTpota_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000004C8-000004D0       .text _draw__9daTpota_cFv */
-BOOL daTpota_c::_draw() {
+bool daTpota_c::_draw() {
     /* Nonmatching */
 }
 

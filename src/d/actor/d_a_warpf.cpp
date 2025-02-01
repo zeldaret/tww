@@ -17,7 +17,7 @@ void daWarpf_c::CreateHeap() {
 }
 
 /* 00000A74-00000B58       .text _delete__9daWarpf_cFv */
-BOOL daWarpf_c::_delete() {
+bool daWarpf_c::_delete() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ s32 daWarpf_c::_create() {
 }
 
 /* 00000E74-00000ED0       .text _execute__9daWarpf_cFv */
-BOOL daWarpf_c::_execute() {
+bool daWarpf_c::_execute() {
     /* Nonmatching */
 }
 
@@ -172,7 +172,7 @@ void daWarpf_c::set_mtx() {
 }
 
 /* 0000219C-00002340       .text _draw__9daWarpf_cFv */
-BOOL daWarpf_c::_draw() {
+bool daWarpf_c::_draw() {
     /* Nonmatching */
 }
 

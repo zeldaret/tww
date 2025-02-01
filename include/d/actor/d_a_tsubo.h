@@ -76,7 +76,7 @@ namespace daTsubo {
         void create_init_bgc();
         s32 _create();
         void _is_delete();
-        BOOL _delete();
+        bool _delete();
         void spec_make_boko(int);
         void spec_init();
         void spec_set_actor();
@@ -182,8 +182,8 @@ namespace daTsubo {
         void se_pickup();
         void set_senv(int, int) const;
         void cam_lockoff() const;
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* 0x290 */ request_of_phase_process_class mPhs;

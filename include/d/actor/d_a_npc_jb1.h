@@ -44,9 +44,9 @@ public:
     void wait_1();
     void wait_action1(void*);
     void demo();
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     s32 _create();
     void create_Anm();
     void create_lgt();

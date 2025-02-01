@@ -757,17 +757,17 @@ void daNpc_Bm1_c::shadowDraw() {
 }
 
 /* 0000768C-00007AB4       .text _draw__11daNpc_Bm1_cFv */
-BOOL daNpc_Bm1_c::_draw() {
+bool daNpc_Bm1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00007AB4-00007CAC       .text _execute__11daNpc_Bm1_cFv */
-BOOL daNpc_Bm1_c::_execute() {
+bool daNpc_Bm1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00007CAC-00007D50       .text _delete__11daNpc_Bm1_cFv */
-BOOL daNpc_Bm1_c::_delete() {
+bool daNpc_Bm1_c::_delete() {
     /* Nonmatching */
 }
 

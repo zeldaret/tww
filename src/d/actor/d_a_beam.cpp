@@ -48,7 +48,7 @@ void daBeam_c::CreateInit() {
 }
 
 /* 00000F24-000015A4       .text _execute__8daBeam_cFv */
-BOOL daBeam_c::_execute() {
+bool daBeam_c::_execute() {
     /* Nonmatching */
 }
 

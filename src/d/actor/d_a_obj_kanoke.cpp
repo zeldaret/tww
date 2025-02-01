@@ -32,17 +32,17 @@ void daObjKanoke_c::createInit() {
 }
 
 /* 00000B28-00000C0C       .text _delete__13daObjKanoke_cFv */
-BOOL daObjKanoke_c::_delete() {
+bool daObjKanoke_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000C0C-00000CE0       .text _draw__13daObjKanoke_cFv */
-BOOL daObjKanoke_c::_draw() {
+bool daObjKanoke_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000CE0-00000E7C       .text _execute__13daObjKanoke_cFv */
-BOOL daObjKanoke_c::_execute() {
+bool daObjKanoke_c::_execute() {
     /* Nonmatching */
 }
 

@@ -327,7 +327,7 @@ void daPz_c::modeProc(daPz_c::Proc_e, int) {
 }
 
 /* 00005C58-000060D8       .text _execute__6daPz_cFv */
-BOOL daPz_c::_execute() {
+bool daPz_c::_execute() {
     /* Nonmatching */
 }
 
@@ -347,7 +347,7 @@ void daPz_c::drawShadow() {
 }
 
 /* 000066D8-0000676C       .text _draw__6daPz_cFv */
-BOOL daPz_c::_draw() {
+bool daPz_c::_draw() {
     /* Nonmatching */
 }
 
@@ -367,7 +367,7 @@ s32 daPz_c::_create() {
 }
 
 /* 00007DA0-00007E20       .text _delete__6daPz_cFv */
-BOOL daPz_c::_delete() {
+bool daPz_c::_delete() {
     /* Nonmatching */
 }
 

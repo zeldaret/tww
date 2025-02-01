@@ -24,7 +24,7 @@ namespace daStone {
         void create_heap();
         void chk_appear();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void mode_wait_init();
         void mode_wait();
         void mode_carry_init();
@@ -59,8 +59,8 @@ namespace daStone {
         void se_fall_lava();
         void set_senv(int, int) const;
         void cam_lockoff() const;
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

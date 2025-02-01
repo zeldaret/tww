@@ -19,7 +19,7 @@ namespace daObjSwhammer {
         s32 Create();
         s32 _create();
         BOOL Delete();
-        BOOL _delete();
+        bool _delete();
         void set_mtx();
         void init_mtx();
         void set_damage();

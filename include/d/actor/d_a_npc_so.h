@@ -71,14 +71,14 @@ public:
     void eventOrder();
     void checkOrder();
     void setScale();
-    BOOL _execute();
+    bool _execute();
     void debugDraw();
     void hudeDraw();
-    BOOL _draw();
+    bool _draw();
     void createInit();
     void getArg();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
 
     void cutAppearProc();
     void cutAppearStart();

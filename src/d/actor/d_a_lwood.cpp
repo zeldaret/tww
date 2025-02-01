@@ -126,7 +126,7 @@ s32 daLwood_c::_create() {
     return ret;
 }
 
-BOOL daLwood_c::_delete() {
+bool daLwood_c::_delete() {
     if (heap != NULL)
         dComIfG_Bgsp()->Release(mpBgW);
 
@@ -134,12 +134,12 @@ BOOL daLwood_c::_delete() {
     return TRUE;
 }
 
-BOOL daLwood_c::_execute() {
+bool daLwood_c::_execute() {
     mTimer++;
     return TRUE;
 }
 
-BOOL daLwood_c::_draw() {
+bool daLwood_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mModel, &tevStr);
     dComIfGd_setListBG();

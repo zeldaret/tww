@@ -32,7 +32,7 @@ BOOL daObjSwhammer::Act_c::Delete() {
 }
 
 /* 00000828-0000087C       .text _delete__Q213daObjSwhammer5Act_cFv */
-BOOL daObjSwhammer::Act_c::_delete() {
+bool daObjSwhammer::Act_c::_delete() {
     /* Nonmatching */
 }
 

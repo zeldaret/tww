@@ -8,7 +8,7 @@ public:
     typedef void (daWarpfout_c::*EventActionInitFunc)(int evtStaffId);
     typedef BOOL (daWarpfout_c::*EventActionFunc)(int evtStaffId);
 
-    inline BOOL _draw();
+    inline bool _draw();
 
     bool _delete();
     void CreateInit();

@@ -16,9 +16,9 @@ public:
     void break_proc();
     void set_se();
     s32 _create();
-    BOOL _delete();
-    BOOL _execute();
-    BOOL _draw();
+    bool _delete();
+    bool _execute();
+    bool _draw();
 
 public:
     /* Place member variables here */

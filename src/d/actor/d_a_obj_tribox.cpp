@@ -77,7 +77,7 @@ s32 daObjTribox::Act_c::_create() {
 }
 
 /* 00000CA4-00000D68       .text _delete__Q211daObjTribox5Act_cFv */
-BOOL daObjTribox::Act_c::_delete() {
+bool daObjTribox::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -327,12 +327,12 @@ void daObjTribox::Act_c::execute_correct() {
 }
 
 /* 00003324-000033D8       .text _execute__Q211daObjTribox5Act_cFv */
-BOOL daObjTribox::Act_c::_execute() {
+bool daObjTribox::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000033D8-00003538       .text _draw__Q211daObjTribox5Act_cFv */
-BOOL daObjTribox::Act_c::_draw() {
+bool daObjTribox::Act_c::_draw() {
     /* Nonmatching */
 }
 

@@ -242,17 +242,17 @@ void daNpc_Ds1_c::RoomEffectDelete() {
 }
 
 /* 00003F20-000041D0       .text _draw__11daNpc_Ds1_cFv */
-BOOL daNpc_Ds1_c::_draw() {
+bool daNpc_Ds1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 000041D0-00004554       .text _execute__11daNpc_Ds1_cFv */
-BOOL daNpc_Ds1_c::_execute() {
+bool daNpc_Ds1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00004554-0000465C       .text _delete__11daNpc_Ds1_cFv */
-BOOL daNpc_Ds1_c::_delete() {
+bool daNpc_Ds1_c::_delete() {
     /* Nonmatching */
 }
 

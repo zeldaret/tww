@@ -12,10 +12,10 @@ public:
     s32 _create();
     void createHeap();
     void createInit();
-    BOOL _delete();
-    BOOL _draw();
+    bool _delete();
+    bool _draw();
     void setMode(unsigned char);
-    BOOL _execute();
+    bool _execute();
     void executeWait();
     void executeTalk();
     void checkOrder();

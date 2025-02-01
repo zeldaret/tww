@@ -10,12 +10,12 @@ public:
     void isMinigame() {}
     void isTag() {}
 
-    BOOL _execute();
+    bool _execute();
     void debugDraw();
-    BOOL _draw();
+    bool _draw();
     void getArg();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
 
 public:
     /* Place member variables here */

@@ -50,7 +50,7 @@ s32 daObjLeaves_c::_create() {
 }
 
 /* 00000CC0-00000D74       .text _delete__13daObjLeaves_cFv */
-BOOL daObjLeaves_c::_delete() {
+bool daObjLeaves_c::_delete() {
     /* Nonmatching */
 }
 
@@ -75,7 +75,7 @@ void daObjLeaves_c::retire_wait_proc() {
 }
 
 /* 00001010-0000107C       .text _execute__13daObjLeaves_cFv */
-BOOL daObjLeaves_c::_execute() {
+bool daObjLeaves_c::_execute() {
     /* Nonmatching */
 }
 
@@ -90,7 +90,7 @@ void set_material(J3DModel*, unsigned char) {
 }
 
 /* 00001218-00001290       .text _draw__13daObjLeaves_cFv */
-BOOL daObjLeaves_c::_draw() {
+bool daObjLeaves_c::_draw() {
     /* Nonmatching */
 }
 
