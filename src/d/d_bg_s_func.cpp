@@ -27,7 +27,7 @@ f32 dBgS_ObjGndChk_Wtr_Func(cXyz& r19) {
 }
 
 /* 800A49E0-800A4F68       .text dBgS_SplGrpChk_In_ObjGnd__FR4cXyzP14dBgS_SplGrpChkf */
-BOOL dBgS_SplGrpChk_In_ObjGnd(cXyz& r30, dBgS_SplGrpChk* r31, f32 f31) {
+bool dBgS_SplGrpChk_In_ObjGnd(cXyz& r30, dBgS_SplGrpChk* r31, f32 f31) {
     dBgS_ObjGndChk gndChk;
     cXyz sp1c = r30;
     sp1c.y += f31;

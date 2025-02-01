@@ -12,9 +12,9 @@ class daObjHhaPart_c {
 public:
     typedef void(daObjHhaPart_c::*daObjHhaPartCallBack)(daObjHha_c*);
 public:
-    void draw(daObjHha_c* arg) { if(cbDraw) (this->*cbDraw)(arg); }
-    void execute(daObjHha_c* arg) { if(cbExec) (this->*cbExec)(arg); }
-    void setExeProc(daObjHhaPartCallBack newCb) { cbExec = newCb; }
+    void draw(daObjHha_c* arg) { if(mCbDraw) (this->*mCbDraw)(arg); }
+    void execute(daObjHha_c* arg) { if(mCbExec) (this->*mCbExec)(arg); }
+    void setExeProc(daObjHhaPartCallBack newCb) { mCbExec = newCb; }
     void start_move() { setExeProc(&daObjHhaPart_c::exe_move);}
 
     void init_data(float, float, u16, u8, u8);
@@ -31,10 +31,10 @@ public:
     /* 0x14 */ cXyz mPosTarget;
     /* 0x20 */ cXyz mPosDeltaDir;
     /* 0x2C */ float mDeltaY;
-    /* 0x30 */ u8 partIdx;
-    /* 0x31 */ u8 bMid;
-    /* 0x34 */ daObjHhaPartCallBack cbExec;
-    /* 0x40 */ daObjHhaPartCallBack cbDraw;
+    /* 0x30 */ u8 mPartIdx;
+    /* 0x31 */ u8 mbMid;
+    /* 0x34 */ daObjHhaPartCallBack mCbExec;
+    /* 0x40 */ daObjHhaPartCallBack mCbDraw;
 
 }; // Size : 0x4C
 
@@ -92,9 +92,9 @@ public:
         mBck.play();
         init_mtx();
     }
-    bool check_draw() { return bVisible != false; }
-    void disp_off() { bVisible = false; }
-    void disp_on() { bVisible = true; }
+    BOOL check_draw() { return mbVisible; }
+    void disp_off() { mbVisible = false; }
+    void disp_on() { mbVisible = true; }
     cXyz get_base_pos() { return mBasePos; }
     void set_pos(cXyz newpos) { mPos = newpos; }
 
@@ -104,7 +104,7 @@ public:
     void draw();
 
 public:
-    /* 0x000 */ J3DModel* mpModel;
+    /* 0x000 */ J3DModel* M_mdl;
     /* 0x004 */ mDoExt_btkAnm mBtk;
     /* 0x018 */ mDoExt_bckAnm mBck;
     /* 0x028 */ dKy_tevstr_c mTev;
@@ -112,7 +112,7 @@ public:
     /* 0x0E4 */ cXyz mPos;
     /* 0x0F0 */ cXyz mScale;
     /* 0x0FC */ csXyz mRot;
-    /* 0x102 */ u8 bVisible;
+    /* 0x102 */ u8 mbVisible;
 
 }; // Size : 0x104
 
@@ -159,8 +159,8 @@ public:
     /* 0x7AC */ u32 mSwitchNo;
     /* 0x7B0 */ u8 mIsMiddle;
     /* 0x7B2 */ short mPartTimer;
-    /* 0x7B4 */ float fWtrScale;
-    /* 0x7B8 */ float fWtrScaleMin;
+    /* 0x7B4 */ float mWtrScale;
+    /* 0x7B8 */ float mWtrScaleMin;
     /* 0x7BC */ u16 mWtrTimer;
     /* 0X7BE */ u8 mWtrState;
     /* 0x7C0 */ short mEventIdx;

@@ -77,16 +77,16 @@ const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::LO
 const u16 l_daObjHha_splash_id_table[2] = {0x810D, 0x810E};
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */
-void daObjHhaPart_c::init_data(float yPos, float yTar, u16 speed, u8 i, u8 IsMiddle) {
-    mPos.set(0, yPos, 0);
-    mPosTarget.set(0, yTar, 0);
-    partIdx = i;
+void daObjHhaPart_c::init_data(float yPos, float yTar, u16 speed, u8 i, u8 isMiddle) {
+    mPos.set(0.0f, yPos, 0.0f);
+    mPosTarget.set(0.0f, yTar, 0.0f);
+    mPartIdx = i;
     mDeltaY = (yTar - yPos) / speed;
     mPosDeltaDir = mPosTarget - mPos;
     mPosDeltaDir.normalizeRS();
     setExeProc(&daObjHhaPart_c::exe_normal);
-    cbDraw = &daObjHhaPart_c::draw_normal;
-    bMid = IsMiddle;
+    mCbDraw = &daObjHhaPart_c::draw_normal;
+    mbMid = isMiddle;
 }
 
 /* 00000170-00000224       .text set_mdl_area__14daObjHhaPart_cFPCci */
@@ -155,8 +155,8 @@ void daObjHhaPart_c::exe_move(daObjHha_c* parent) {
     if(mPosDeltaDir.getDotProduct(positionDelta) <= 0.0f){
         mPos = mPosTarget;
         setExeProc(&daObjHhaPart_c::exe_normal);
-        if(bMid == 0 && partIdx == 0){
-            dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0,1.0,0.0));
+        if(mbMid == 0 && mPartIdx == 0){
+            dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
         }
     } 
     exe_normal(parent);
@@ -191,19 +191,18 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
     JUT_ASSERT(0x280, mdl_data != NULL);
     
     if(mdl_data != NULL){
-        mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
-        J3DModel* M_mdl = mpModel; // Renaming for assertion to match
+        M_mdl = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
         JUT_ASSERT(0x289, M_mdl != NULL);
 
-        if((mpModel != 0)){
+        if(M_mdl != NULL){
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
             JUT_ASSERT(0x290, btk_data != NULL);
             
-            if(mBtk.init(mpModel->getModelData(), btk_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false, 0) != false){  
+            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, false) != false){  
                 J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
                 JUT_ASSERT(0x295, bck_data != NULL);
                 
-                if(mBck.init(mpModel->getModelData(), bck_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, 0, -1, false) != false){
+                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false) != false){
                     ret = TRUE;
                 }
             }
@@ -224,37 +223,37 @@ void daObjHhaYgush_c::init_data(cXyz* pPos, f32 zScale, csXyz* pAngle, cXyz* pSc
     mRot = *pAngle;
     mScale = *pScale;
     mTev = *tev;
-    bVisible = isVisible;
+    mbVisible = isVisible;
 }
 
 /* 00000AD8-00000B88       .text init_mtx__15daObjHhaYgush_cFv */
 void daObjHhaYgush_c::init_mtx() {
-    J3DModel* pModel = mpModel;
+    J3DModel* pModel = M_mdl;
     if(pModel != NULL){
         pModel->setBaseScale(mScale);
         mDoMtx_stack_c::transS(mPos);
         mDoMtx_stack_c::ZXYrotM(mRot);
         mDoMtx_stack_c::scaleM(13.0f, 1.0f, 11.0f);
-        mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+        M_mdl->setBaseTRMtx(mDoMtx_stack_c::now);
     }
 }
 
 /* 00000B88-00000C2C       .text draw__15daObjHhaYgush_cFv */
 void daObjHhaYgush_c::draw() {
-    if(check_draw() && mpModel != NULL){
+    if(mbVisible != false && M_mdl != NULL){
         dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG1, &mPos, &mTev);
-        dKy_getEnvlight().setLightTevColorType(mpModel, &mTev);
-        mBtk.entry(mpModel->getModelData());
-        mBck.entry(mpModel->getModelData());
-        mDoExt_modelUpdateDL(mpModel);
+        dKy_getEnvlight().setLightTevColorType(M_mdl, &mTev);
+        mBtk.entry(M_mdl->getModelData());
+        mBck.entry(M_mdl->getModelData());
+        mDoExt_modelUpdateDL(M_mdl);
     }
 }
 
 const char daObjHha_c::M_arcname[4] = "Hha";
 
 /* 00000C2C-00000C4C       .text solidHeapCB__10daObjHha_cFP10fopAc_ac_c */
-int daObjHha_c::solidHeapCB(fopAc_ac_c* this_i) {
-    return static_cast<daObjHha_c*>(this_i)->create_heap();
+int daObjHha_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return static_cast<daObjHha_c*>(i_this)->create_heap();
 }
 
 /* 00000C4C-00000E48       .text create_heap__10daObjHha_cFv */
@@ -272,12 +271,12 @@ BOOL daObjHha_c::create_heap() {
     if(ret != FALSE){
         J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, HHA_BDL_YSWTR00));
         JUT_ASSERT(0x324, mdl_data != NULL);
-        if(mdl_data != 0){
+        if(mdl_data != NULL){
             mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
             for(i = 0; i < 2; i++){
                 J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, l_daObjHha_btk_idx_table[i]));
                 JUT_ASSERT(0x32f, btk_data != NULL);
-                if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i], 1.0, 0, -1, false, 0) == FALSE){
+                if(mBtkA[i].init(mdl_data, btk_data, true, l_daObjHha_btk_mode_table[i], 1.0f, 0, -1, false, false) == FALSE){
                     ret = FALSE;
                     break;
                 }
@@ -328,7 +327,7 @@ s32 daObjHha_c::_create() {
             }
 
             mPosOffset.set(0.0f, -1400.0f, 50.0f);
-            fWtrScale = 1.0f;
+            mWtrScale = 1.0f;
 
             for(int i = 0; i < 2; i++){
                 mSplashA[i].create_s(l_daObjHha_splash_id_table[i], &current.pos, splash_y[i], splash_z[i], &current.angle);
@@ -408,7 +407,7 @@ void daObjHha_c::init_mtx() {
     mDoMtx_stack_c::transS(  current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_stack_c::transM(mPosOffset);
-    mDoMtx_stack_c::scaleM(1.0, 1.0, fWtrScale);
+    mDoMtx_stack_c::scaleM(1.0f, 1.0f, mWtrScale);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
     mpModel->calc();
 }
@@ -455,7 +454,7 @@ float daObjHha_c::get_water_h() {
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &offVec);
     offVec *= 400.0f;
     chkPos += offVec;
-    if((dBgS_SplGrpChk_In_ObjGnd(chkPos, &waterChk, 1.0) & 0xff) != false){
+    if(dBgS_SplGrpChk_In_ObjGnd(chkPos, &waterChk, 1.0f) != false){
         ret = waterChk.GetHeight();
     }
     return ret;
@@ -506,9 +505,9 @@ void daObjHha_c::water_manager() {
         break;
 
         case 1:
-            fWtrScale -= 11.0f/1800;
-            if(fWtrScale < fWtrScaleMin){
-                fWtrScale = fWtrScaleMin;
+            mWtrScale -= 11.0f/1800;
+            if(mWtrScale < mWtrScaleMin){
+                mWtrScale = mWtrScaleMin;
             }
             if(mWtrTimer == 34){
                 set_tex(37.0f,1.0f,1);
@@ -543,7 +542,7 @@ void daObjHha_c::water_manager() {
                 mWaterSound = true;
             }
             if(mWtrTimer == 0){
-                set_tex(36.0, 0.0, 1);
+                set_tex(36.0f, 0.0f, 1);
                 mWtrState = 0;
                 mHitboxActive = true;
             }
@@ -577,8 +576,7 @@ void daObjHha_c::part_manager() {
 /* 0000259C-00002658       .text ygush_manager__10daObjHha_cFv */
 void daObjHha_c::ygush_manager() {
     cXyz ygushPos;
-    // Weird to cast "bVisible" here, but i can't get things to match otherwise
-    if( static_cast<BOOL>(mYgush.bVisible) != FALSE ){
+    if(mYgush.check_draw()){
         ygushPos = daObjHha_get_r(current.angle.y);
         ygushPos += mYgush.get_base_pos();
         ygushPos.y = get_water_h();
@@ -668,27 +666,27 @@ bool daObjHha_c::_draw() {
 
 namespace {
 /* 000029F4-00002A14       .text Mthd_Create__25@unnamed@d_a_obj_hha_cpp@FPv */
-s32 Mthd_Create(void* this_i) {
-    return static_cast<daObjHha_c*>(this_i)->_create();
+s32 Mthd_Create(void* i_this) {
+    return static_cast<daObjHha_c*>(i_this)->_create();
 }
 
 /* 00002A14-00002A38       .text Mthd_Delete__25@unnamed@d_a_obj_hha_cpp@FPv */
-BOOL Mthd_Delete(void* this_i) {
-    return static_cast<daObjHha_c*>(this_i)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return static_cast<daObjHha_c*>(i_this)->_delete();
 }
 
 /* 00002A38-00002A5C       .text Mthd_Execute__25@unnamed@d_a_obj_hha_cpp@FPv */
-BOOL Mthd_Execute(void* this_i) {
-    return static_cast<daObjHha_c*>(this_i)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return static_cast<daObjHha_c*>(i_this)->_execute();
 }
 
 /* 00002A5C-00002A80       .text Mthd_Draw__25@unnamed@d_a_obj_hha_cpp@FPv */
-BOOL Mthd_Draw(void* this_i) {
-    return static_cast<daObjHha_c*>(this_i)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return static_cast<daObjHha_c*>(i_this)->_draw();
 }
 
 /* 00002A80-00002A88       .text Mthd_IsDelete__25@unnamed@d_a_obj_hha_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void* i_this) {
     return TRUE;
 }
 
