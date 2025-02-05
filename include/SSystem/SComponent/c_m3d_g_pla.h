@@ -51,12 +51,14 @@ public:
     void SetupFrom3Vtx(const Vec* a, const Vec* b, const Vec* c) {
         cM3d_CalcPla(a, b, c, &mNormal, &mD);
     }
+    bool cross(const cM3dGLin& line, Vec& point) const {
+        return cM3d_Cross_LinPla(&line, this, &point, true, true);
+    }
     
     virtual ~cM3dGPla() {}
 
     // TODO
     cM3dGPla(const cXyz*, f32) {}
-    void cross(const cM3dGLin&, Vec&) const {}
 };  // Size: 0x14
 
 #endif

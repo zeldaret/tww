@@ -4,8 +4,8 @@
 //
 
 #include "SSystem/SComponent/c_m3d.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_m3d_g_aab.h"
-#include "SSystem/SComponent/c_m3d_g_cir.h"
 #include "SSystem/SComponent/c_m3d_g_cps.h"
 #include "SSystem/SComponent/c_m3d_g_cyl.h"
 #include "SSystem/SComponent/c_m3d_g_lin.h"
@@ -14,37 +14,18 @@
 #include "SSystem/SComponent/c_m3d_g_tri.h"
 #include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_sxyz.h"
-#include "float.h"
+
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
+#define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
+#define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
 
 const f32 G_CM3D_F_ABS_MIN = 3.8146973e-06f;
 
-// TODO: these should be in .sdata2
-u32 BPCP_OUTCODE0 = 0x00000001;
-u32 BPCP_OUTCODE1 = 0x00000002;
-u32 BPCP_OUTCODE4 = 0x00000010;
-u32 BPCP_OUTCODE5 = 0x00000020;
-u32 BPCP_OUTCODE2 = 0x00000004;
-u32 BPCP_OUTCODE3 = 0x00000008;
-u32 BEVEL2D_OUTCODE0 = 0x00000001;
-u32 BEVEL2D_OUTCODE1 = 0x00000002;
-u32 BEVEL2D_OUTCODE2 = 0x00000004;
-u32 BEVEL2D_OUTCODE3 = 0x00000008;
-u32 BEVEL2D_OUTCODE4 = 0x00000010;
-u32 BEVEL2D_OUTCODE5 = 0x00000020;
-u32 BEVEL2D_OUTCODE6 = 0x00000040;
-u32 BEVEL2D_OUTCODE7 = 0x00000080;
-u32 BEVEL2D_OUTCODE8 = 0x00000100;
-u32 BEVEL2D_OUTCODE9 = 0x00000200;
-u32 BEVEL2D_OUTCODE10 = 0x00000400;
-u32 BEVEL2D_OUTCODE11 = 0x00000800;
-u32 BEVEL3D_OUTCODE0 = 0x00000001;
-u32 BEVEL3D_OUTCODE1 = 0x00000002;
-u32 BEVEL3D_OUTCODE2 = 0x00000004;
-u32 BEVEL3D_OUTCODE3 = 0x00000008;
-u32 BEVEL3D_OUTCODE4 = 0x00000010;
-u32 BEVEL3D_OUTCODE5 = 0x00000020;
-u32 BEVEL3D_OUTCODE6 = 0x00000040;
-u32 BEVEL3D_OUTCODE7 = 0x00000080;
+static void dummy(f32 dummy) {
+    // to fix float literal order
+    std::sqrtf(dummy);
+}
 
 /* 8024A400-8024A450       .text cM3d_InDivPos1__FPC3VecPC3VecfP3Vec */
 void cM3d_InDivPos1(const Vec* v0, const Vec* v1, f32 scale, Vec* pDst) {
@@ -286,9 +267,268 @@ bool cM3d_Cross_LinPla(const cM3dGLin* lin, const cM3dGPla* pla, Vec* dst, bool 
     }
 }
 
+const u32 BPCP_OUTCODE0 = 0x00000001;
+const u32 BPCP_OUTCODE1 = 0x00000002;
+const u32 BPCP_OUTCODE4 = 0x00000010;
+const u32 BPCP_OUTCODE5 = 0x00000020;
+const u32 BPCP_OUTCODE2 = 0x00000004;
+const u32 BPCP_OUTCODE3 = 0x00000008;
+const u32 BEVEL2D_OUTCODE0 = 0x00000001;
+const u32 BEVEL2D_OUTCODE1 = 0x00000002;
+const u32 BEVEL2D_OUTCODE2 = 0x00000004;
+const u32 BEVEL2D_OUTCODE3 = 0x00000008;
+const u32 BEVEL2D_OUTCODE4 = 0x00000010;
+const u32 BEVEL2D_OUTCODE5 = 0x00000020;
+const u32 BEVEL2D_OUTCODE6 = 0x00000040;
+const u32 BEVEL2D_OUTCODE7 = 0x00000080;
+const u32 BEVEL2D_OUTCODE8 = 0x00000100;
+const u32 BEVEL2D_OUTCODE9 = 0x00000200;
+const u32 BEVEL2D_OUTCODE10 = 0x00000400;
+const u32 BEVEL2D_OUTCODE11 = 0x00000800;
+const u32 BEVEL3D_OUTCODE0 = 0x00000001;
+const u32 BEVEL3D_OUTCODE1 = 0x00000002;
+const u32 BEVEL3D_OUTCODE2 = 0x00000004;
+const u32 BEVEL3D_OUTCODE3 = 0x00000008;
+const u32 BEVEL3D_OUTCODE4 = 0x00000010;
+const u32 BEVEL3D_OUTCODE5 = 0x00000020;
+const u32 BEVEL3D_OUTCODE6 = 0x00000040;
+const u32 BEVEL3D_OUTCODE7 = 0x00000080;
+
+inline u32 cM3d_CheckBoxEdgePlane_Bevel2DCheck(const Vec* param_0, const Vec* param_1, const Vec* param_2) {
+    u32 ret = 0;
+    if (-param_0->x + param_0->y > -param_1->x + param_2->y) {
+        ret |= BEVEL2D_OUTCODE0;
+    }
+    if (-param_0->x + param_0->y < -param_2->x + param_1->y) {
+        ret |= BEVEL2D_OUTCODE1;
+    }
+    if (param_0->x + param_0->y > param_2->x + param_2->y) {
+        ret |= BEVEL2D_OUTCODE2;
+    }
+    if (param_0->x + param_0->y < param_1->x + param_1->y) {
+        ret |= BEVEL2D_OUTCODE3;
+    }
+    if (-param_0->z + param_0->y > -param_1->z + param_2->y) {
+        ret |= BEVEL2D_OUTCODE4;
+    }
+    if (-param_0->z + param_0->y < -param_2->z + param_1->y) {
+        ret |= BEVEL2D_OUTCODE5;
+    }
+    if (param_0->z + param_0->y > param_2->z + param_2->y) {
+        ret |= BEVEL2D_OUTCODE6;
+    }
+    if (param_0->z + param_0->y < param_1->z + param_1->y) {
+        ret |= BEVEL2D_OUTCODE7;
+    }
+    if (-param_0->z + param_0->x > -param_1->z + param_2->x) {
+        ret |= BEVEL2D_OUTCODE8;
+    }
+    if (-param_0->z + param_0->x < -param_2->z + param_1->x) {
+        ret |= BEVEL2D_OUTCODE9;
+    }
+    if (param_0->z + param_0->x > param_2->z + param_2->x) {
+        ret |= BEVEL2D_OUTCODE10;
+    }
+    if (param_0->z + param_0->x < param_1->z + param_1->x) {
+        ret |= BEVEL2D_OUTCODE11;
+    }
+    return ret;
+}
+
+inline u32 cM3d_CheckBoxEdgePlane_Bevel3DCheck(const Vec* param_0, const Vec* param_1, const Vec* param_2) {
+    u32 ret = 0;
+    if (param_0->x + param_0->y + param_0->z > param_2->x + param_2->y + param_2->z) {
+        ret |= BEVEL3D_OUTCODE0;
+    }
+    if (-param_0->x + param_0->y + param_0->z > -param_1->x + param_2->y + param_2->z) {
+        ret |= BEVEL3D_OUTCODE1;
+    }
+    if (-param_0->x + param_0->y - param_0->z > -param_1->x + param_2->y - param_1->z) {
+        ret |= BEVEL3D_OUTCODE2;
+    }
+    if (param_0->x + param_0->y - param_0->z > param_2->x + param_2->y - param_1->z) {
+        ret |= BEVEL3D_OUTCODE3;
+    }
+    if (param_0->x - param_0->y + param_0->z > param_2->x - param_1->y + param_2->z) {
+        ret |= BEVEL3D_OUTCODE4;
+    }
+    if (-param_0->x - param_0->y + param_0->z > -param_1->x - param_1->y + param_2->z) {
+        ret |= BEVEL3D_OUTCODE5;
+    }
+    if (-param_0->x - param_0->y + param_0->z > -param_1->x - param_1->y + param_2->z) {
+        ret |= BEVEL3D_OUTCODE6;
+    }
+    if (-param_0->x - param_0->y - param_0->z > -param_1->x - param_1->y - param_1->z) {
+        ret |= BEVEL3D_OUTCODE7;
+    }
+    return ret;
+}
+
 /* 8024AE3C-8024BA18       .text cM3d_Cross_MinMaxBoxLine__FPC3VecPC3VecPC3VecPC3Vec */
-bool cM3d_Cross_MinMaxBoxLine(const Vec*, const Vec*, const Vec*, const Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_MinMaxBoxLine(const Vec* param_0, const Vec* param_1, const Vec* param_2, const Vec* param_3) {
+    u32 uVar3 = 0;
+    u32 uVar4 = 0;
+
+    if (param_2->x > param_1->x) {
+        if (param_3->x > param_1->x) {
+            return false;
+        }
+        uVar3 |= BPCP_OUTCODE0;
+    } else if (param_3->x > param_1->x) {
+        uVar4 |= BPCP_OUTCODE0;
+    }
+
+    if ((uVar3 & BPCP_OUTCODE0) == 0 && param_2->x < param_0->x) {
+        if ((uVar4 & BPCP_OUTCODE0) == 0 && param_3->x < param_0->x) {
+            return false;
+        }
+        uVar3 |= BPCP_OUTCODE1;
+    } else if ((uVar4 & BPCP_OUTCODE0) == 0 && param_3->x < param_0->x) {
+        uVar4 |= BPCP_OUTCODE1;
+    }
+
+    if (param_2->z > param_1->z) {
+        if (param_3->z > param_1->z) {
+            return false;
+        }
+        uVar3 |= BPCP_OUTCODE4;
+    } else if (param_3->z > param_1->z) {
+        uVar4 |= BPCP_OUTCODE4;
+    }
+
+    if ((uVar3 & BPCP_OUTCODE4) == 0 && param_2->z < param_0->z) {
+        if ((uVar4 & BPCP_OUTCODE4) == 0 && param_3->z < param_0->z) {
+            return false;
+        }
+        uVar3 |= BPCP_OUTCODE5;
+    } else if ((uVar4 & BPCP_OUTCODE4) == 0 && param_3->z < param_0->z) {
+        uVar4 |= BPCP_OUTCODE5;
+    }
+
+    if (param_2->y > param_1->y) {
+        if (param_3->y > param_1->y) {
+            return false;
+        }
+        uVar3 |= BPCP_OUTCODE2;
+    } else if (param_3->y > param_1->y) {
+        uVar4 |= BPCP_OUTCODE2;
+    }
+
+    if ((uVar3 & BPCP_OUTCODE2) == 0 && param_2->y < param_0->y) {
+        if ((uVar4 & BPCP_OUTCODE2) == 0 && param_3->y < param_0->y) {
+            return false;
+        }
+        uVar3 |= BPCP_OUTCODE3;
+    } else if ((uVar4 & BPCP_OUTCODE2) == 0 && param_3->y < param_0->y) {
+        uVar4 |= BPCP_OUTCODE3;
+    }
+
+    if (uVar3 == 0) {
+        return true;
+    }
+    if (uVar4 == 0) {
+        return true;
+    }
+
+    uVar3 |= cM3d_CheckBoxEdgePlane_Bevel2DCheck(param_2, param_0, param_1) << 8;
+    uVar4 |= cM3d_CheckBoxEdgePlane_Bevel2DCheck(param_3, param_0, param_1) << 8;
+    if ((uVar3 & uVar4) != 0) {
+        return false;
+    }
+
+    uVar3 |= cM3d_CheckBoxEdgePlane_Bevel3DCheck(param_2, param_0, param_1) << 0x18;
+    uVar4 |= cM3d_CheckBoxEdgePlane_Bevel3DCheck(param_3, param_0, param_1) << 0x18;
+    if ((uVar3 & uVar4) != 0) {
+        return false;
+    }
+
+    cM3dGLin line(*param_2, *param_3);
+
+    if ((uVar3 ^ uVar4) & BPCP_OUTCODE0) {
+        cM3dGPla plane;
+        plane.mNormal.x = 1.0f;
+        plane.mNormal.y = 0.0f;
+        plane.mNormal.z = 0.0f;
+        plane.mD = -param_1->x;
+        Vec cross;
+        if (plane.cross(line, cross) && param_0->y <= cross.y && cross.y <= param_1->y
+            && param_0->z <= cross.z && cross.z <= param_1->z)
+        {
+            return true;
+        }
+    }
+
+    if ((uVar3 ^ uVar4) & BPCP_OUTCODE1) {
+        cM3dGPla plane;
+        plane.mNormal.x = -1.0f;
+        plane.mNormal.y = 0.0f;
+        plane.mNormal.z = 0.0f;
+        plane.mD = param_0->x;
+        Vec cross;
+        if (plane.cross(line, cross) && param_0->y <= cross.y && cross.y <= param_1->y
+            && param_0->z <= cross.z && cross.z <= param_1->z)
+        {
+            return true;
+        }
+    }
+
+    if ((uVar3 ^ uVar4) & BPCP_OUTCODE2) {
+        cM3dGPla plane;
+        plane.mNormal.x = 0.0f;
+        plane.mNormal.y = 1.0f;
+        plane.mNormal.z = 0.0f;
+        plane.mD = -param_1->y;
+        Vec cross;
+        if (plane.cross(line, cross) && param_0->x <= cross.x && cross.x <= param_1->x
+            && param_0->z <= cross.z && cross.z <= param_1->z)
+        {
+            return true;
+        }
+    }
+
+    if ((uVar3 ^ uVar4) & BPCP_OUTCODE3) {
+        cM3dGPla plane;
+        plane.mNormal.x = 0.0f;
+        plane.mNormal.y = -1.0f;
+        plane.mNormal.z = 0.0f;
+        plane.mD = param_0->y;
+        Vec cross;
+        if (plane.cross(line, cross) && param_0->x <= cross.x && cross.x <= param_1->x
+            && param_0->z <= cross.z && cross.z <= param_1->z)
+        {
+            return true;
+        }
+    }
+    
+    if ((uVar3 ^ uVar4) & BPCP_OUTCODE4) {
+        cM3dGPla plane;
+        plane.mNormal.x = 0.0f;
+        plane.mNormal.y = 0.0f;
+        plane.mNormal.z = 1.0f;
+        plane.mD = -param_1->z;
+        Vec cross;
+        if (plane.cross(line, cross) && param_0->x <= cross.x && cross.x <= param_1->x
+            && param_0->y <= cross.y && cross.y <= param_1->y)
+        {
+            return true;
+        }
+    }
+
+    if ((uVar3 ^ uVar4) & BPCP_OUTCODE5) {
+        cM3dGPla plane;
+        plane.mNormal.x = 0.0f;
+        plane.mNormal.y = 0.0f;
+        plane.mNormal.z = -1.0f;
+        plane.mD = param_0->z;
+        Vec cross;
+        if (plane.cross(line, cross) && param_0->x <= cross.x && cross.x <= param_1->x
+            && param_0->y <= cross.y && cross.y <= param_1->y)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* 8024BA18-8024BB50       .text cM3d_InclusionCheckPosIn3PosBox3d__FPC3VecPC3VecPC3VecPC3Vecf */
@@ -836,7 +1076,6 @@ bool cM3d_CrossY_Tri(const cM3dGTri* tri, const Vec* pos, const cM3d_Range* rang
 
 /* 8024C828-8024CA0C       .text cM3d_CrossZ_Tri__FPC8cM3dGTriPC3Vecf */
 bool cM3d_CrossZ_Tri(const cM3dGTri* tri, const Vec* pos, f32 f1) {
-    /* Nonmatching */
     if (cM3d_IsZero(tri->GetNP()->z)) {
         return false;
     }
@@ -1017,28 +1256,191 @@ bool cM3d_Cross_LinTri_Easy(const cM3dGTri* tri, const Vec* r31) {
 }
 
 /* 8024CE0C-8024CE54       .text cM3d_Cross_SphPnt__FPC8cM3dGSphPC3Vec */
-bool cM3d_Cross_SphPnt(const cM3dGSph*, const Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_SphPnt(const cM3dGSph* sph, const Vec* point) {
+    return cM3d_LenSq(sph->GetCP(), point) <= sph->GetR() * sph->GetR();
 }
 
 /* 8024CE54-8024D0BC       .text cM3d_Cross_LinSph__FPC8cM3dGLinPC8cM3dGSphP3Vec */
-bool cM3d_Cross_LinSph(const cM3dGLin*, const cM3dGSph*, Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_LinSph(const cM3dGLin* line, const cM3dGSph* sph, Vec* param_2) {
+    Vec lin_vec;
+    cXyz vec;
+    const Vec* center = sph->GetCP();
+
+    f32 max_x = center->x + sph->GetR();
+    if (max_x < line->GetStartP()->x && max_x < line->GetEndP()->x) {
+        return false;
+    }
+    f32 min_x = center->x - sph->GetR();
+    if (min_x > line->GetStartP()->x && min_x > line->GetEndP()->x) {
+        return false;
+    }
+
+    f32 max_y = center->y + sph->GetR();
+    if (max_y < line->GetStartP()->y && max_y < line->GetEndP()->y) {
+        return false;
+    }
+    f32 min_y = center->y - sph->GetR();
+    if (min_y > line->GetStartP()->y && min_y > line->GetEndP()->y) {
+        return false;
+    }
+
+    f32 max_z = center->z + sph->GetR();
+    if (max_z < line->GetStartP()->z && max_z < line->GetEndP()->z) {
+        return false;
+    }
+    f32 min_z = center->z - sph->GetR();
+    if (min_z > line->GetStartP()->z && min_z > line->GetEndP()->z) {
+        return false;
+    }
+
+    VECSubtract(line->GetEndP(), line->GetStartP(), &lin_vec);
+    f32 len_sq = VECSquareMag(&lin_vec);
+    if (cM3d_IsZero(len_sq)) {
+        return false;
+    }
+
+    VECSubtract(center, line->GetStartP(), &vec);
+    f32 proj = VECDotProduct(&vec, &lin_vec) / len_sq;
+    if (proj < 0.0f || proj > 1.0f) {
+        if (line->GetStartP()->abs2(*center) < line->GetEndP()->abs2(*center)) {
+            if (cM3d_Cross_SphPnt(sph, line->GetStartP())) {
+                param_2->x = line->GetStartP()->x;
+                param_2->y = line->GetStartP()->y;
+                param_2->z = line->GetStartP()->z;
+                return true;
+            }
+        } else {
+            if (cM3d_Cross_SphPnt(sph, line->GetEndP())) {
+                param_2->x = line->GetEndP()->x;
+                param_2->y = line->GetEndP()->y;
+                param_2->z = line->GetEndP()->z;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Vec proj_vec;
+    VECScale(&lin_vec, &proj_vec, proj);
+    VECAdd(&proj_vec, line->GetStartP(), param_2);
+    if (cM3d_LenSq(param_2, center) <= sph->GetR() * sph->GetR()) {
+        return true;
+    }
+    return false;
 }
 
 /* 8024D0BC-8024D378       .text cM3d_Cross_LinSph_CrossPos__FRC8cM3dGSphRC8cM3dGLinP3VecP3Vec */
-int cM3d_Cross_LinSph_CrossPos(const cM3dGSph&, const cM3dGLin&, Vec*, Vec*) {
-    /* Nonmatching */
+int cM3d_Cross_LinSph_CrossPos(const cM3dGSph& sph, const cM3dGLin& line, Vec* param_2, Vec* param_3) {
+    int ret;
+    Vec line_vec, vec;
+    VECSubtract(line.GetEndP(), line.GetStartP(), &line_vec);
+    VECSubtract(line.GetStartP(), sph.GetCP(), &vec);
+    f32 len_sq = VECDotProduct(&line_vec, &line_vec);
+    f32 dVar9 = VECDotProduct(&line_vec, &vec) * 2.0f;
+    f32 dVar6 = VECDotProduct(&vec, &vec) - sph.GetR() * sph.GetR();
+
+    if (cM3d_IsZero(len_sq)) {
+        if (cM3d_IsZero(dVar9)) {
+            return 0;
+        } else {
+            ret = 1;
+            Vec vec2;
+            VECScale(&line_vec, &vec2, -dVar6 / dVar9);
+            VECAdd(&vec2, line.GetStartP(), param_2);
+        }
+    } else {
+        f32 f11 = dVar9 * dVar9 - len_sq * 4.0f * dVar6;
+        if (cM3d_IsZero(f11)) {
+            ret = 1;
+            Vec vec2;
+            VECScale(&line_vec, &vec2, -dVar9 / (len_sq * 2.0f));
+            VECAdd(&vec2, line.GetStartP(), param_2);
+        } else if (f11 < 0.0f) {
+            ret = 0;
+        } else {
+            ret = 2;
+            f32 f1 = 1.0f / (len_sq * 2.0f);
+            Vec vec2;
+            f32 scale1 = f1 * (-dVar9 + std::sqrtf(f11));
+            f32 scale2 = f1 * (-dVar9 - std::sqrtf(f11));
+            VECScale(&line_vec, &vec2, scale1);
+            VECAdd(&vec2, line.GetStartP(), param_2);
+            VECScale(&line_vec, &vec2, scale2);
+            VECAdd(&vec2, line.GetStartP(), param_3);
+        }
+    }
+
+    return ret;
 }
 
 /* 8024D378-8024DB34       .text cM3d_Cross_CylSph__FPC8cM3dGCylPC8cM3dGSphP3VecPf */
-bool cM3d_Cross_CylSph(const cM3dGCyl*, const cM3dGSph*, Vec*, f32*) {
-    /* Nonmatching */
+bool cM3d_Cross_CylSph(const cM3dGCyl* pcyl, const cM3dGSph* psph, Vec* param_2, f32* pcross_len) {
+    const Vec* pnow_sph_center = psph->GetCP();
+    CHECK_FLOAT_CLASS(2498, pnow_sph_center->x);
+    CHECK_FLOAT_CLASS(2499, pnow_sph_center->y);
+    CHECK_FLOAT_CLASS(2500, pnow_sph_center->z);
+    CHECK_FLOAT_CLASS(2501, psph->GetR());
+    const Vec* pnow_cyl_center = pcyl->GetCP();
+    CHECK_FLOAT_CLASS(2503, pnow_cyl_center->x);
+    CHECK_FLOAT_CLASS(2504, pnow_cyl_center->y);
+    CHECK_FLOAT_CLASS(2505, pnow_cyl_center->z);
+    CHECK_FLOAT_CLASS(2506, pcyl->GetH());
+    CHECK_FLOAT_CLASS(2507, pcyl->GetR());
+    f32 radius_sum = pcyl->GetR() + psph->GetR();
+    f32 dist = std::sqrtf(cM3d_Len2dSq(pnow_sph_center->x, pnow_sph_center->z, pnow_cyl_center->x, pnow_cyl_center->z));
+
+    if (radius_sum < dist) {
+        return false;
+    }
+
+    if (pnow_sph_center->y + psph->GetR() >= pnow_cyl_center->y
+        && pnow_sph_center->y - psph->GetR() <= pnow_cyl_center->y + pcyl->GetH())
+    {
+        *pcross_len = radius_sum - dist;
+        if (!cM3d_IsZero(dist)) {
+            f32 scale = pcyl->GetR() / dist;
+            if (scale <= 1.0f) {
+                Vec delta;
+                VECSubtract(pnow_sph_center, pnow_cyl_center, &delta);
+                VECScale(&delta, &delta, scale);
+                VECAdd(&delta, pnow_cyl_center, param_2);
+            } else {
+                *param_2 = *pnow_sph_center;
+            }
+        } else {
+            *param_2 = *pnow_sph_center;
+        }
+        CHECK_FLOAT_CLASS(2539, *pcross_len);
+        return true;
+    }
+
+    return false;
 }
 
 /* 8024DB34-8024E1B4       .text cM3d_Cross_SphSph__FPC8cM3dGSphPC8cM3dGSphPfPf */
-bool cM3d_Cross_SphSph(const cM3dGSph*, const cM3dGSph*, f32*, f32*) {
-    /* Nonmatching */
+bool cM3d_Cross_SphSph(const cM3dGSph* i_a, const cM3dGSph* i_b, f32* param_2, f32* i_pcc_crosslen) {
+    CHECK_FLOAT_CLASS(2565, i_a->GetCP()->x);
+    CHECK_FLOAT_CLASS(2566, i_a->GetCP()->y);
+    CHECK_FLOAT_CLASS(2567, i_a->GetCP()->z);
+    CHECK_FLOAT_CLASS(2568, i_a->GetR());
+
+    CHECK_FLOAT_CLASS(2569, i_b->GetCP()->x);
+    CHECK_FLOAT_CLASS(2570, i_b->GetCP()->y);
+    CHECK_FLOAT_CLASS(2571, i_b->GetCP()->z);
+    CHECK_FLOAT_CLASS(2572, i_b->GetR());
+
+    Vec delta;
+    VECSubtract(i_a->GetCP(), i_b->GetCP(), &delta);
+    *param_2 = VECMag(&delta);
+    *i_pcc_crosslen = i_a->GetR() + i_b->GetR() - *param_2;
+    if (*i_pcc_crosslen > G_CM3D_F_ABS_MIN) {
+        CHECK_FLOAT_CLASS(2582, *i_pcc_crosslen);
+        return true;
+    } else {
+        *i_pcc_crosslen = 0.0f;
+        CHECK_FLOAT_CLASS(2587, *i_pcc_crosslen);
+        return false;
+    }
 }
 
 /* 8024E1B4-8024E288       .text cM3d_Cross_SphSph__FPC8cM3dGSphPC8cM3dGSphP3Vec */
@@ -1076,29 +1478,380 @@ void cM3d_CalcSphVsTriCrossPoint(const cM3dGSph* sph, const cM3dGTri* tri, Vec* 
     }
 }
 
+inline bool cM3d_Cross_LinSph(cM3dGLin const* line, cM3dGSph const* sph) {
+    Vec vec;
+    return cM3d_Cross_LinSph(line, sph, &vec);
+}
+
 /* 8024E330-8024E694       .text cM3d_Cross_SphTri__FPC8cM3dGSphPC8cM3dGTriP3Vec */
-bool cM3d_Cross_SphTri(const cM3dGSph*, const cM3dGTri*, Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_SphTri(const cM3dGSph* sph, const cM3dGTri* tri, Vec* param_2) {
+    if (!cM3d_InclusionCheckPosIn3PosBox3d(&tri->mA, &tri->mB, &tri->mC, sph->GetCP(), sph->GetR())) {
+        return false;
+    }
+
+    f32 dist = cM3d_SignedLenPlaAndPos(tri, sph->GetCP());
+    if (std::fabsf(dist) > sph->GetR()) {
+        return false;
+    }
+
+    Vec vec1, vec2;
+    VECScale(tri->GetNP(), &vec2, dist);
+    VECSubtract(sph->GetCP(), &vec2, &vec1);
+
+    if (std::fabsf(tri->GetNP()->y) > 0.5f) {
+        if (cM3d_CrossY_Tri(tri, &vec1, 0.0f)) {
+            if (param_2 != NULL) {
+                cM3d_CalcSphVsTriCrossPoint(sph, tri, param_2);
+            }
+            return true;
+        }
+    } else if (std::fabsf(tri->GetNP()->x) > 0.5f) {
+        if (cM3d_CrossX_Tri(tri, &vec1, 0.0f)) {
+            if (param_2 != NULL) {
+                cM3d_CalcSphVsTriCrossPoint(sph, tri, param_2);
+            }
+            return true;
+        }
+    } else {
+        if (cM3d_CrossZ_Tri(tri, &vec1, 0.0f)) {
+            if (param_2 != NULL) {
+                cM3d_CalcSphVsTriCrossPoint(sph, tri, param_2);
+            }
+            return true;
+        }
+    }
+
+    cM3dGLin line1(tri->mA, tri->mB);
+    if (cM3d_Cross_LinSph(&line1, sph)) {
+        if (param_2 != NULL) {
+            cM3d_CalcSphVsTriCrossPoint(sph, tri, param_2);
+        }
+        return true;
+    }
+
+    cM3dGLin line2(tri->mB, tri->mC);
+    if (cM3d_Cross_LinSph(&line2, sph)) {
+        if (param_2 != NULL) {
+            cM3d_CalcSphVsTriCrossPoint(sph, tri, param_2);
+        }
+        return true;
+    }
+
+    cM3dGLin line3(tri->mC, tri->mA);
+    if (cM3d_Cross_LinSph(&line3, sph)) {
+        if (param_2 != NULL) {
+            cM3d_CalcSphVsTriCrossPoint(sph, tri, param_2);
+        }
+        return true;
+    }
+
+    return false;
 }
 
 /* 8024E694-8024EF80       .text cM3d_Cross_CylCyl__FPC8cM3dGCylPC8cM3dGCylPf */
-bool cM3d_Cross_CylCyl(const cM3dGCyl*, const cM3dGCyl*, f32*) {
-    /* Nonmatching */
+bool cM3d_Cross_CylCyl(const cM3dGCyl* i_cyl1, const cM3dGCyl* i_cyl2, f32* i_pcross_len) {
+    const Vec& c1 = i_cyl1->GetC();
+    CHECK_FLOAT_CLASS(2826, c1.x);
+    CHECK_FLOAT_CLASS(2827, c1.y);
+    CHECK_FLOAT_CLASS(2828, c1.z);
+    CHECK_FLOAT_CLASS(2829, i_cyl1->GetR());
+    CHECK_FLOAT_CLASS(2830, i_cyl1->GetH());
+    const Vec& c2 = i_cyl2->GetC();
+    CHECK_FLOAT_CLASS(2832, c2.x);
+    CHECK_FLOAT_CLASS(2833, c2.y);
+    CHECK_FLOAT_CLASS(2834, c2.z);
+    CHECK_FLOAT_CLASS(2835, i_cyl2->GetR());
+    CHECK_FLOAT_CLASS(2836, i_cyl2->GetH());
+    
+    f32 delta_x = c1.x - c2.x;
+    f32 delta_z = c1.z - c2.z;
+    f32 dist_sq = delta_x * delta_x + delta_z * delta_z;
+    f32 radius_sum = i_cyl1->GetR() + i_cyl2->GetR();
+    
+    if (dist_sq > radius_sum * radius_sum) {
+        *i_pcross_len = 0.0f;
+        CHECK_FLOAT_CLASS(2849, *i_pcross_len);
+        return false;
+    }
+
+    if (c1.y + i_cyl1->GetH() < c2.y || c1.y > c2.y + i_cyl2->GetH()) {
+        *i_pcross_len = 0.0f;
+        CHECK_FLOAT_CLASS(2857, *i_pcross_len);
+        return false;
+    }
+
+    *i_pcross_len = radius_sum - std::sqrtf(dist_sq);
+    CHECK_FLOAT_CLASS(2864, *i_pcross_len);
+    return true;
 }
 
 /* 8024EF80-8024F11C       .text cM3d_Cross_CylCyl__FPC8cM3dGCylPC8cM3dGCylP3Vec */
-bool cM3d_Cross_CylCyl(const cM3dGCyl*, const cM3dGCyl*, Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_CylCyl(const cM3dGCyl* cyl1, const cM3dGCyl* cyl2, Vec* param_2) {
+    const Vec& center1 = cyl1->GetC();
+    const Vec& center2 = cyl2->GetC();
+    f32 delta_x = center1.x - center2.x;
+    f32 delta_z = center1.z - center2.z;
+    f32 dist_sq = delta_x * delta_x + delta_z * delta_z;
+    f32 radius_sum = cyl1->GetR() + cyl2->GetR();
+    
+    if (dist_sq > radius_sum * radius_sum) {
+        return false;
+    }
+
+    if (center1.y + cyl1->GetH() < center2.y || center1.y > center2.y + cyl2->GetH()) {
+        return false;
+    }
+
+    f32 dist = std::sqrtf(dist_sq);
+    if (!cM3d_IsZero(dist)) {
+        f32 scale = cyl2->GetR() / dist;
+        param_2->y = center2.y + cyl2->GetH() * 0.5f;
+        f32 tmp = center1.y;
+        if (param_2->y < tmp) {
+            param_2->y = tmp;
+        } else {
+            tmp += cyl1->GetH();
+            if (param_2->y > tmp) {
+                param_2->y = tmp;
+            }
+        }
+        param_2->x = center2.x + scale * (center1.x - center2.x);
+        param_2->z = center2.z + scale * (center1.z - center2.z);
+    } else {
+        *param_2 = center2;
+    }
+
+    return true;
 }
 
 /* 8024F11C-8024F410       .text cM3d_Cross_CylTri__FPC8cM3dGCylPC8cM3dGTriP3Vec */
-bool cM3d_Cross_CylTri(const cM3dGCyl*, const cM3dGTri*, Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_CylTri(const cM3dGCyl* cyl, const cM3dGTri* tri, Vec* param_2) {
+    const Vec& center = cyl->GetC();
+    f32 top_y = center.y + cyl->GetH();
+    
+    if ((center.y > tri->mA.y && center.y > tri->mB.y && center.y > tri->mC.y)
+        || (top_y < tri->mA.y && top_y < tri->mB.y && top_y < tri->mC.y))
+    {
+        return false;
+    }
+
+    Vec vec1, vec2;
+    f32 min_len_sq = 1.0e9f;
+    if (cM3d_Cross_CylPntPnt(cyl, &tri->mA, &tri->mB, &vec1, &vec2)) {
+        min_len_sq = cM3d_LenSq(&vec1, &tri->mA);
+        *param_2 = vec1;
+    }
+    if (cM3d_Cross_CylPntPnt(cyl, &tri->mC, &tri->mB, &vec1, &vec2)) {
+        f32 len_sq = cM3d_LenSq(&vec1, &tri->mC);
+        if (min_len_sq > len_sq) {
+            min_len_sq = len_sq;
+            *param_2 = vec1;
+        }
+    }
+    if (cM3d_Cross_CylPntPnt(cyl, &tri->mA, &tri->mC, &vec1, &vec2)) {
+        f32 len_sq = cM3d_LenSq(&vec1, &tri->mA);
+        if (min_len_sq > len_sq) {
+            min_len_sq = len_sq;
+            *param_2 = vec1;
+        }
+    }
+
+    if (min_len_sq != 1.0e9f) {
+        return true;
+    }
+
+    cM3d_Range range;
+    range.start = center.y;
+    range.end = top_y;
+    f32 tmp;
+    if (cM3d_CrossY_Tri(tri, &center, &range, &tmp)) {
+        Vec vec3, vec4, vec5, vec6;
+        vec3 = center;
+        vec3.y = tmp;
+        VECAdd(&tri->mA, &tri->mB, &vec6);
+        VECScale(&vec6, &vec4, 0.5f);
+        VECSubtract(&vec4, &vec3, &vec5);
+        f32 dist = std::sqrtf(vec5.x * vec5.x + vec5.z * vec5.z);
+
+        if (cM3d_IsZero(dist)) {
+            param_2->x = vec4.x;
+            param_2->y = vec4.y;
+            param_2->z = vec4.z;
+        } else {
+            cM3d_InDivPos1(&vec3, &vec5, cyl->GetR() / dist, param_2);
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 /* 8024F410-8024FA90       .text cM3d_Cross_CylLin__FPC8cM3dGCylPC8cM3dGLinP3VecP3Vec */
-int cM3d_Cross_CylLin(const cM3dGCyl*, const cM3dGLin*, Vec*, Vec*) {
-    /* Nonmatching */
+int cM3d_Cross_CylLin(const cM3dGCyl* cyl, const cM3dGLin* line, Vec* param_2, Vec* param_3) {
+    /* Nonmatching - regalloc */
+    f32 f1 = 0.0f;
+    f32 f2 = 0.0f;
+    u32 uVar11 = 0;
+
+    if (cM3d_Cross_CylPnt(cyl, line->GetStartP()) && cM3d_Cross_CylPnt(cyl, line->GetEndP())) {
+        *param_2 = *line->GetStartP();
+        *param_3 = *line->GetEndP();
+        return 2;
+    }
+
+    Vec vec1, vec2, vec3;
+    Vec vec[4];
+    const cXyz* center = cyl->GetCP();
+    VECSubtract(line->GetStartP(), center, &vec1);
+    VECSubtract(line->GetEndP(), center, &vec2);
+    VECSubtract(&vec2, &vec1, &vec3);
+    f32 r_sq = cyl->GetR() * cyl->GetR();
+
+    if (!cM3d_IsZero(vec3.y)) {
+        f32 ratio = -vec1.y / vec3.y;
+        if (ratio >= 0.0f && ratio <= 1.0f) {
+            f32 x = vec1.x + vec3.x * ratio;
+            f32 z = vec1.z + vec3.z * ratio;
+            if (x * x + z * z < r_sq) {
+                uVar11 |= 1;
+                vec[0].x = x + center->x;
+                vec[0].y = center->y;
+                vec[0].z = z + center->z;
+            }
+        }
+
+        ratio = (cyl->GetH() - vec1.y) / vec3.y;
+        if (ratio >= 0.0f && ratio <= 1.0f) {
+            f32 x = vec1.x + vec3.x * ratio;
+            f32 z = vec1.z + vec3.z * ratio;
+            if (x * x + z * z < r_sq) {
+                uVar11 |= 2;
+                vec[1].x = x + center->x;
+                vec[1].y = center->y + cyl->GetH();
+                vec[1].z = z + center->z;
+            }
+        }
+    }
+
+    f32 fVar5 = vec3.x * vec3.x + vec3.z * vec3.z;
+    f32 fVar2 = (vec3.x * vec1.x + vec3.z * vec1.z) * 2.0f;
+    f32 fVar1 = vec1.x * vec1.x + vec1.z * vec1.z - r_sq;
+
+    BOOL bVar4, bVar3;
+    if (!cM3d_IsZero(fVar5 * 2.0f)) {
+        f32 fVar6 = fVar2 * fVar2 - fVar5 * 4.0f * fVar1;
+        if (fVar6 < 0.0f) {
+            return 0;
+        }
+        if (fVar6 > 0.0f) {
+            bVar3 = true;
+            bVar4 = true;
+        } else {
+            bVar4 = true;
+            bVar3 = false;
+        }
+        f32 fVar4 = std::sqrtf(fVar6);
+        if (bVar4) {
+            f1 = (-fVar2 + fVar4) / (fVar5 * 2.0f);
+        }
+        if (bVar3) {
+            f2 = (-fVar2 - fVar4) / (fVar5 * 2.0f);
+        }
+    } else {
+        if (!cM3d_IsZero(fVar2)) {
+            bVar4 = true;
+            bVar3 = false;
+            f1 = -fVar1 / fVar2;
+        } else {
+            return 0;
+        }
+    }
+
+    BOOL bVar6, bVar5;
+    if (bVar4 && !bVar3) {
+        if (0.0f > f1 || f1 > 1.0f) {
+            return 0;
+        }
+    } else {
+        bool tmp = false;
+        if (0.0f > f1 || f1 > 1.0f) {
+            tmp = true;
+        }
+        bVar6 = tmp;
+        tmp = false;
+        if (0.0f > f2 || f2 > 1.0f) {
+            tmp = true;
+        }
+        bVar5 = tmp;
+        if (bVar6 && bVar5) {
+            return 0;
+        }
+        if (bVar6) {
+            bVar4 = false;
+        }
+        if (bVar5) {
+            bVar3 = false;
+        }
+    }
+
+    if (bVar4) {
+        f32 tmp = vec1.y + f1 * vec3.y;
+        if (tmp < 0.0f || tmp > cyl->GetH()) {
+            bVar4 = false;
+        }
+    }
+    if (bVar3) {
+        f32 tmp = vec1.y + f2 * vec3.y;
+        if (tmp < 0.0f || tmp > cyl->GetH()) {
+            bVar3 = false;
+        }
+    }
+
+    if (!bVar4 && !bVar3) {
+        return 0;
+    }
+
+    if (bVar4 && bVar3) {
+        Vec vec5, vec6;
+        VECAdd(&vec1, center, &vec5);
+        VECScale(&vec3, &vec6, f1);
+        VECAdd(&vec6, &vec5, &vec[2]);
+        uVar11 |= 0xC;
+        VECScale(&vec3, &vec6, f2);
+        VECAdd(&vec6, &vec5, &vec[3]);
+    } else if (bVar4) {
+        uVar11 |= 4;
+        Vec vec5, vec6;
+        VECScale(&vec3, &vec5, f1);
+        VECAdd(&vec5, &vec1, &vec6);
+        VECAdd(&vec6, center, &vec[2]);
+    } else if (bVar3) {
+        uVar11 |= 4;
+        Vec vec5, vec6;
+        VECScale(&vec3, &vec5, f2);
+        VECAdd(&vec5, &vec1, &vec6);
+        VECAdd(&vec6, center, &vec[2]);
+    }
+
+    int count = 0;
+    for (int i = 0; i < 4; i++) {
+        if (uVar11 & (1 << i)) {
+            if (count == 0) {
+                *param_2 = vec[i];
+            } else if (count == 1) {
+                if (cM3d_LenSq(line->GetStartP(), &vec[i]) < cM3d_LenSq(line->GetStartP(), param_2)) {
+                    *param_3 = vec[i];
+                } else {
+                    *param_3 = *param_2;
+                    *param_2 = vec[i];
+                }
+                break;
+            }
+            count++;
+        }
+    }
+    return count;
 }
 
 /* 8024FA90-8024FB04       .text cM3d_Cross_CylPntPnt__FPC8cM3dGCylPC3VecPC3VecP3VecP3Vec */
@@ -1110,7 +1863,7 @@ int cM3d_Cross_CylPntPnt(const cM3dGCyl* cyl, const Vec* a, const Vec* b, Vec* d
 
 /* 8024FB04-8024FB68       .text cM3d_Cross_CylPnt__FPC8cM3dGCylPC3Vec */
 bool cM3d_Cross_CylPnt(const cM3dGCyl* cyl, const Vec* pt) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     const cXyz& center = cyl->GetC();
     f32 dX = center.x - pt->x;
     f32 dZ = center.z - pt->z;
@@ -1123,13 +1876,182 @@ bool cM3d_Cross_CylPnt(const cM3dGCyl* cyl, const Vec* pt) {
 }
 
 /* 8024FB68-8024FF10       .text cM3d_Cross_CpsCps__FRC8cM3dGCpsRC8cM3dGCpsP3Vec */
-bool cM3d_Cross_CpsCps(const cM3dGCps&, const cM3dGCps&, Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_CpsCps(const cM3dGCps& cps1, const cM3dGCps& cps2, Vec* param_2) {
+    f32 f1, f2;
+    int iVar1 = cM3d_Check_LinLin(&cps1, &cps2, &f1, &f2);
+
+    if (iVar1 == 1) {
+        return false;
+    }
+
+    if (iVar1 == 2) {
+        if (f1 > 0.0f && f1 < 1.0f && f2 > 0.0f && f2 < 1.0f) {
+            Vec pos1, pos2;
+            cps1.CalcPos(&pos1, f1);
+            cps2.CalcPos(&pos2, f2);
+            if (VECDistance(&pos1, &pos2) < cps1.GetR() + cps2.GetR()) {
+                VECAdd(&pos1, &pos2, param_2);
+                VECScale(param_2, param_2, 0.5f);
+                return true;
+            }
+        }
+    } else if (iVar1 == 3) {
+        Vec pos1, pos2;
+        if (f1 < 0.0f) {
+            pos1 = cps1.GetStart();
+            if (f2 < 0.0f) {
+                pos2 = cps2.GetStart();
+            } else if (f2 > 1.0f) {
+                pos2 = cps2.GetEnd();
+            } else {
+                cps2.CalcPos(&pos2, f2);
+            }
+        } else if (f1 > 1.0f) {
+            pos1 = cps1.GetEnd();
+            if (f2 < 0.0f) {
+                pos2 = cps2.GetStart();
+            } else if (f2 > 1.0f) {
+                pos2 = cps2.GetEnd();
+            } else {
+                cps2.CalcPos(&pos2, f2);
+            }
+        } else {
+            cps1.CalcPos(&pos1, f1);
+            if (f2 < 0.0f) {
+                pos2 = cps2.GetStart();
+            } else if (f2 > 1.0f) {
+                pos2 = cps2.GetEnd();
+            } else {
+                cps2.CalcPos(&pos2, f2);
+            }
+        }
+
+        if (VECDistance(&pos1, &pos2) < cps1.GetR() + cps2.GetR()) {
+            VECAdd(&pos1, &pos2, param_2);
+            VECScale(param_2, param_2, 0.5f);
+            return true;
+        }
+        return false;
+    }
+
+    return false;
+}
+
+inline bool cM3d_Cross_CpsCyl_Check(cM3dGCps const& cps, cM3dGCyl const& cyl, Vec& pos1, Vec& pos2, Vec* param_4) {
+    f32 dist = VECDistance(&pos1, &pos2);
+    if (dist < cps.GetR()) {
+        VECAdd(&pos1, &pos2, param_4);
+        VECScale(param_4, param_4, 0.5f);
+        return true;
+    }
+    return false;
 }
 
 /* 8024FF10-802506D4       .text cM3d_Cross_CpsCyl__FRC8cM3dGCpsRC8cM3dGCylP3Vec */
-bool cM3d_Cross_CpsCyl(const cM3dGCps&, const cM3dGCyl&, Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_CpsCyl(const cM3dGCps& cps, const cM3dGCyl& cyl, Vec* param_2) {
+    cM3dGLin line;
+
+    if (cM3d_Cross_CylPnt(&cyl, cps.GetEndP())) {
+        *param_2 = *cps.GetEndP();
+        return true;
+    }
+
+    if (cM3d_Cross_CylPnt(&cyl, cps.GetStartP())) {
+        *param_2 = *cps.GetStartP();
+        return true;
+    }
+
+    *line.GetStartP() = *cyl.GetCP();
+    *line.GetEndP() = *cyl.GetCP();
+    line.GetEndP()->y += cyl.GetH();
+    Vec vec;
+    f32 tmp;
+
+    if (cM3d_Len3dSqPntAndSegLine(&cps, line.GetEndP(), &vec, &tmp)) {
+        f32 dist = VECDistance(line.GetEndP(), &vec);
+        if (dist < cps.GetR()) {
+            VECAdd(line.GetEndP(), &vec, param_2);
+            VECScale(param_2, param_2, 0.5f);
+            *param_2 = *line.GetEndP();
+            return true;
+        }
+    }
+
+    if (cM3d_Len3dSqPntAndSegLine(&cps, line.GetStartP(), &vec, &tmp)) {
+        f32 dist = VECDistance(line.GetStartP(), &vec);
+        if (dist < cps.GetR()) {
+            VECAdd(line.GetStartP(), &vec, param_2);
+            VECScale(param_2, param_2, 0.5f);
+            return true;
+        }
+    }
+
+    f32 f1, f2;
+    int iVar2 = cM3d_Check_LinLin(&cps, &line, &f1, &f2);
+
+    if (iVar2 == 1) {
+        cM3dGSph sph;
+        f32 tmp2;
+        sph.SetR(cps.GetR());
+        sph.SetC(*cps.GetStartP());
+        return cM3d_Cross_CylSph(&cyl, &sph, param_2, &tmp2);
+    } else if (iVar2 == 2) {
+        if (f1 >= 0.0f && f1 <= 1.0f && f2 >= 0.0f && f2 <= 1.0f) {
+            Vec pos1, pos2;
+            cps.CalcPos(&pos1, f1);
+            line.CalcPos(&pos2, f2);
+            if (VECDistance(&pos1, &pos2) < cps.GetR() + cyl.GetR()) {
+                VECAdd(&pos1, &pos2, param_2);
+                VECScale(param_2, param_2, 0.5f);
+                return true;
+            }
+        }
+    } else if (iVar2 == 3) {
+        Vec pos1, pos2;
+        if (f1 < 0.0f) {
+            pos1 = cps.GetStart();
+            if (f2 < 0.0f) {
+                pos2 = line.GetStart();
+                return cM3d_Cross_CpsCyl_Check(cps, cyl, pos1, pos2, param_2);
+            }
+            if (f2 > 1.0f) {
+                pos2 = line.GetEnd();
+                return cM3d_Cross_CpsCyl_Check(cps, cyl, pos1, pos2, param_2);
+            }
+            line.CalcPos(&pos2, f2);
+        } else if (f1 > 1.0f) {
+            pos1 = cps.GetEnd();
+            if (f2 < 0.0f) {
+                pos2 = line.GetStart();
+                return cM3d_Cross_CpsCyl_Check(cps, cyl, pos1, pos2, param_2);
+            }
+            if (f2 > 1.0f) {
+                pos2 = line.GetEnd();
+                return cM3d_Cross_CpsCyl_Check(cps, cyl, pos1, pos2, param_2);
+            }
+            line.CalcPos(&pos2, f2);
+        } else {
+            cps.CalcPos(&pos1, f1);
+            if (f2 < 0.0f) {
+                pos2 = line.GetStart();
+                return cM3d_Cross_CpsCyl_Check(cps, cyl, pos1, pos2, param_2);
+            }
+            if (f2 > 1.0f) {
+                pos2 = line.GetEnd();
+                return cM3d_Cross_CpsCyl_Check(cps, cyl, pos1, pos2, param_2);
+            }
+            line.CalcPos(&pos2, f2);
+        }
+
+        if (VECDistance(&pos1, &pos2) < cps.GetR() + cyl.GetR()) {
+            VECAdd(&pos1, &pos2, param_2);
+            VECScale(param_2, param_2, 0.5f);
+            return true;
+        }
+        return false;
+    }
+
+    return false;
 }
 
 /* 802506D4-80250840       .text cM3d_Cross_CpsSph_CrossPos__FRC8cM3dGCpsRC8cM3dGSphRC3VecP3Vec */
@@ -1214,14 +2136,96 @@ bool cM3d_Cross_TriTri(const cM3dGTri& t0, const cM3dGTri& t1, Vec* r5) {
     return false;
 }
 
+inline f32 cM3d_2LinCenter(cM3dGLin const& pLinA, f32 pLinAF, cM3dGLin const& pLinB, f32 pLinBF, Vec* pVecOut) {
+    Vec tmp, tmp2;
+    pLinA.CalcPos(&tmp, pLinAF);
+    pLinB.CalcPos(&tmp2, pLinBF);
+    VECAdd(&tmp, &tmp2, pVecOut);
+    VECScale(pVecOut, pVecOut, 0.5f);
+    return VECDistance(&tmp, &tmp2);
+}
+
 /* 80250D70-80251280       .text cM3d_Cross_CpsTri__FRC8cM3dGCps8cM3dGTriP3Vec */
-bool cM3d_Cross_CpsTri(const cM3dGCps&, cM3dGTri, Vec*) {
-    /* Nonmatching */
+bool cM3d_Cross_CpsTri(const cM3dGCps& cps, cM3dGTri tri, Vec* param_2) {
+    cM3dGSph sph;
+    sph.SetC(*cps.GetStartP());
+    sph.SetR(cps.GetR());
+    if (cM3d_Cross_SphTri(&sph, &tri, param_2)) {
+        return true;
+    }
+
+    sph.SetC(*cps.GetEndP());
+    sph.SetR(cps.GetR());
+    if (cM3d_Cross_SphTri(&sph, &tri, param_2)) {
+        return true;
+    }
+
+    if (!cM3d_Cross_LinPla(&cps, &tri, param_2, true, true)) {
+        return false;
+    }
+
+    if (cM3d_Cross_LinTri_Easy(&tri, param_2)) {
+        return true;
+    }
+
+    cM3dGLin line;
+    f32 f1, f2;
+
+    line.SetStartEnd(tri.mA, tri.mB);
+    if (cM3d_Check_LinLin(&cps, &line, &f1, &f2) >= 2
+        && f1 > 0.0f && f1 < 1.0f && f2 > 0.0f && f2 < 1.0f
+        && cM3d_2LinCenter(cps, f1, line, f2, param_2) < cps.GetR())
+    {
+        return true;
+    }
+
+    line.SetStartEnd(tri.mB, tri.mC);
+    if (cM3d_Check_LinLin(&cps, &line, &f1, &f2) >= 2
+        && f1 > 0.0f && f1 < 1.0f && f2 > 0.0f && f2 < 1.0f
+        && cM3d_2LinCenter(cps, f1, line, f2, param_2) < cps.GetR())
+    {
+        return true;
+    }
+
+    line.SetStartEnd(tri.mC, tri.mA);
+    if (cM3d_Check_LinLin(&cps, &line, &f1, &f2) >= 2
+        && f1 > 0.0f && f1 < 1.0f && f2 > 0.0f && f2 < 1.0f
+        && cM3d_2LinCenter(cps, f1, line, f2, param_2) < cps.GetR())
+    {
+        return true;
+    }
+
+    return false;
 }
 
 /* 80251280-802514EC       .text cM3d_NearPos_Cps__FRC8cM3dGCpsRC3VecP3Vec */
-bool cM3d_NearPos_Cps(const cM3dGCps&, const Vec&, Vec*) {
-    /* Nonmatching */
+bool cM3d_NearPos_Cps(const cM3dGCps& cps, const Vec& param_2, Vec* param_3) {
+    Vec sp3C;
+    f32 sp14;
+    if (cM3d_Len3dSqPntAndSegLine(&cps, &param_2, &sp3C, &sp14)) {
+        sp14 = std::sqrtf(sp14);
+        Vec tmp;
+        VECSubtract(&param_2, &sp3C, &tmp);
+        VECScale(&tmp, &tmp, cps.GetR() / sp14);
+        VECAdd(&sp3C, &tmp, param_3);
+        return true;
+    }
+    f32 f31 = VECSquareDistance(cps.GetStartP(), &param_2);
+    f32 f1 = VECSquareDistance(cps.GetEndP(), &param_2);
+    if (f31 < f1) {
+        f31 = std::sqrtf(f31);
+        Vec tmp;
+        VECSubtract(cps.GetStartP(), &param_2, &tmp);
+        VECScale(&tmp, &tmp, cps.GetR() / f31);
+        VECAdd(cps.GetStartP(), &tmp, param_3);
+    } else {
+        f1 = std::sqrtf(f1);
+        Vec tmp;
+        VECSubtract(cps.GetEndP(), &param_2, &tmp);
+        VECScale(&tmp, &tmp, cps.GetR() / f1);
+        VECAdd(cps.GetEndP(), &tmp, param_3);
+    }
+    return true;
 }
 
 /* 802514EC-80251560       .text cM3d_CalcVecAngle__FRC3VecPsPs */
@@ -1238,8 +2242,34 @@ void cM3d_CalcVecZAngle(const Vec& param_0, csXyz* param_1) {
 }
 
 /* 80251634-8025172C       .text cM3d_UpMtx_Base__FRC3VecRC3VecPA4_f */
-void cM3d_UpMtx_Base(const Vec&, const Vec&, f32(*)[4]) {
-    /* Nonmatching */
+int cM3d_UpMtx_Base(const Vec& param_0, const Vec& param_1, Mtx m) {
+    if (cM3d_IsZero(PSVECMag(&param_1))) {
+        MTXIdentity(m);
+        return 0;
+    }
+
+    Vec sp3C;
+    Vec sp48;
+    PSVECNormalize(&param_1, &sp48);
+    PSVECCrossProduct(&param_0, &sp48, &sp3C);
+
+    if (cM3d_IsZero(PSVECMag(&sp3C))) {
+        sp3C.x = 1.0f;
+        sp3C.y = 0.0f;
+        sp3C.z = 0.0f;
+    }
+
+    f32 var_f31 = PSVECDotProduct(&param_0, &sp48);
+    if (var_f31 > 1.0f) {
+        var_f31 = 1.0f;
+    } else if (var_f31 < -1.0f) {
+        var_f31 = -1.0f;
+    }
+
+    f32 var_f30 = (float)acos(var_f31);
+    // Bug? Calls the C_MTX func instead of the PSMTX func in the release version.
+    C_MTXRotAxisRad(m, &sp3C, var_f30);
+    return 1;
 }
 
 /* 8025172C-80251758       .text cM3d_PlaneCrossLineProcWork__FfffffffPfPf */

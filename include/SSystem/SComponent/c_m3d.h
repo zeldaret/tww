@@ -1,7 +1,7 @@
 #ifndef C_M3D_H_
 #define C_M3D_H_
 
-#include "math.h"
+#include "math.h" // IWYU pragma: keep
 #include "dolphin/types.h"
 #include "dolphin/mtx/vec.h"
 #include "dolphin/mtx/mtx.h"
@@ -19,6 +19,33 @@ class cXyz;
 struct Vec;
 
 extern const f32 G_CM3D_F_ABS_MIN;
+
+extern const u32 BPCP_OUTCODE0;
+extern const u32 BPCP_OUTCODE1;
+extern const u32 BPCP_OUTCODE4;
+extern const u32 BPCP_OUTCODE5;
+extern const u32 BPCP_OUTCODE2;
+extern const u32 BPCP_OUTCODE3;
+extern const u32 BEVEL2D_OUTCODE0;
+extern const u32 BEVEL2D_OUTCODE1;
+extern const u32 BEVEL2D_OUTCODE2;
+extern const u32 BEVEL2D_OUTCODE3;
+extern const u32 BEVEL2D_OUTCODE4;
+extern const u32 BEVEL2D_OUTCODE5;
+extern const u32 BEVEL2D_OUTCODE6;
+extern const u32 BEVEL2D_OUTCODE7;
+extern const u32 BEVEL2D_OUTCODE8;
+extern const u32 BEVEL2D_OUTCODE9;
+extern const u32 BEVEL2D_OUTCODE10;
+extern const u32 BEVEL2D_OUTCODE11;
+extern const u32 BEVEL3D_OUTCODE0;
+extern const u32 BEVEL3D_OUTCODE1;
+extern const u32 BEVEL3D_OUTCODE2;
+extern const u32 BEVEL3D_OUTCODE3;
+extern const u32 BEVEL3D_OUTCODE4;
+extern const u32 BEVEL3D_OUTCODE5;
+extern const u32 BEVEL3D_OUTCODE6;
+extern const u32 BEVEL3D_OUTCODE7;
 
 struct cM3d_Range {
     f32 start;
@@ -90,7 +117,7 @@ f32 cM3d_lineVsPosSuisenCross(const cM3dGLin*, const Vec*, Vec*);
 f32 cM3d_lineVsPosSuisenCross(const Vec&, const Vec&, const Vec&, Vec*);
 int cM3d_2PlaneLinePosNearPos(const cM3dGPla&, const cM3dGPla&, const Vec*, Vec*);
 void cM3d_CrawVec(const Vec&, const Vec&, Vec*);
-void cM3d_UpMtx_Base(const Vec&, const Vec&, MtxP);
+int cM3d_UpMtx_Base(const Vec&, const Vec&, MtxP);
 
 inline bool cM3d_IsZero(f32 f) {
     return std::fabsf(f) < G_CM3D_F_ABS_MIN;
@@ -119,6 +146,10 @@ inline bool cM3d_CrossInfLineVsInfPlane_proc(f32 a, f32 b, const Vec* pA, const 
         cM3d_InDivPos2(pA, pB, a / (a - b), pDst);
         return true;
     }
+}
+
+inline f32 cM3d_LenSq(const Vec* a, const Vec* b) {
+    return VECSquareDistance(a, b);
 }
 
 #endif
