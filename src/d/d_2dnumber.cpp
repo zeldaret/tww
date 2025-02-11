@@ -17,7 +17,7 @@ dDlst_2DNumber_c::~dDlst_2DNumber_c() {
 }
 
 /* 800C8510-800C8644       .text init__16dDlst_2DNumber_cFissssUc */
-bool dDlst_2DNumber_c::init(int digitNum, s16 x, s16 y, s16 w, s16 h, u8 flag) { /* Nonmatching */
+bool dDlst_2DNumber_c::init(int digitNum, s16 x, s16 y, s16 w, s16 h, u8 flag) {
     mDigitNum = digitNum;
     mFlag = flag;
     mWidth = w;
@@ -159,28 +159,25 @@ bool dDlst_2DBattery_c::init(ResTIMG* rule, ResTIMG* battery, ResTIMG* batteryBa
 
 /* 800C8FAC-800C90F0       .text setRotate__17dDlst_2DBattery_cFf */
 void dDlst_2DBattery_c::setRotate(f32 rot) {
-    /* Nonmatching */
-
     // calculate the angle text
-    int angle = ((rot - 22.5f) / 22.5f) * 35.0f + 15.0f + 0.5f;
+    f32 angle = ((rot - 22.5f) / 22.5f) * 35.0f + 15.0f;
     char buf[16];
-    sprintf(buf, "rupy_num_%02d.bti", angle / 10);
+    sprintf(buf, "rupy_num_%02d.bti", (int)(angle + 0.5f) / 10);
     mNum[2][0]->changeTexture(buf, 0);
     mNum[2][1]->changeTexture(buf, 0);
-    sprintf(buf, "rupy_num_%02d.bti", angle % 10);
+    sprintf(buf, "rupy_num_%02d.bti", (int)(angle + 0.5f) % 10);
     mNum[1][0]->changeTexture(buf, 0);
     mNum[1][1]->changeTexture(buf, 0);
 
     // calculate the visual angle
-    f32 deg;
     if (rot < 20.0f) {
-        deg = 345.0f;
+        rot = 345.0f;
     } else if (rot > 45.0f) {
-        deg = 310.0f;
+        rot = 310.0f;
     } else {
-        deg = 360.0f - ((rot - 20.0f) * 1.4f + 15.0f);
+        rot = 360.0f - ((rot - 20.0f) * 1.4f + 15.0f);
     }
-    mRotation = deg;
+    mRotation = rot;
 }
 
 /* 800C90F0-800C9348       .text draw__17dDlst_2DBattery_cFv */
@@ -252,13 +249,15 @@ void dDlst_2DOutFont_c::setPaneEx(JUTFont*, fopMsgM_pane_class*, fopMsgM_pane_cl
 }
 
 /* 800C9844-800C9854       .text setRuby__17dDlst_2DOutFont_cFP7JUTFontP18fopMsgM_pane_class */
-void dDlst_2DOutFont_c::setRuby(JUTFont*, fopMsgM_pane_class*) {
-    /* Nonmatching */
+void dDlst_2DOutFont_c::setRuby(JUTFont* font, fopMsgM_pane_class* pane) {
+    m20 = font;
+    m18 = pane->pane;
 }
 
 /* 800C9854-800C9864       .text setRubyEx__17dDlst_2DOutFont_cFP7JUTFontP18fopMsgM_pane_classPc */
-void dDlst_2DOutFont_c::setRubyEx(JUTFont*, fopMsgM_pane_class*, char*) {
-    /* Nonmatching */
+void dDlst_2DOutFont_c::setRubyEx(JUTFont* font, fopMsgM_pane_class* pane, char*) {
+    m20 = font;
+    m18 = pane->pane;
 }
 
 /* 800C9864-800C9908       .text charWidth__17dDlst_2DOutFont_cFi */
@@ -307,6 +306,13 @@ void dDlst_2DOutFont_c::move() {
 }
 
 /* 800CB474-800CB4B0       .text setAlpha__17dDlst_2DOutFont_cFUc */
-void dDlst_2DOutFont_c::setAlpha(u8) {
-    /* Nonmatching */
+void dDlst_2DOutFont_c::setAlpha(u8 alpha) {
+    for (int i = 0; i < ARRAY_SIZE(m08); i++) {
+        if (m08[i] != NULL) {
+            m08[i]->setAlpha(alpha);
+        }
+    }
+    if (m14 != NULL) {
+        m14->setAlpha(alpha);
+    }
 }

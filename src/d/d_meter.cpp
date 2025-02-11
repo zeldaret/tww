@@ -901,9 +901,10 @@ void dMeter_parentPaneTrans(fopMsgM_pane_class* pane, f32 scale) {
 
 /* 801F08DC-801F09D8       .text dMeter_childPaneTrans__FP18fopMsgM_pane_classP18fopMsgM_pane_classf */
 void dMeter_childPaneTrans(fopMsgM_pane_class* pane, fopMsgM_pane_class* parent, f32 scale) {
-    /* Nonmatching */
-    pane->mPosCenter.x += (pane->mPosCenterOrig.x - parent->mPosCenterOrig.x) * (scale - 1.0f);
-    pane->mPosCenter.y += (pane->mPosCenterOrig.y - parent->mPosCenterOrig.y) * (scale - 1.0f);
+    f32 x = pane->mPosCenterOrig.x - parent->mPosCenterOrig.x;
+    f32 y = pane->mPosCenterOrig.y - parent->mPosCenterOrig.y;
+    pane->mPosCenter.x += x * (scale - 1.0f);
+    pane->mPosCenter.y += y * (scale - 1.0f);
     pane->mPosCenter.x += g_meterHIO.field_0x50;
     pane->mPosCenter.y += g_meterHIO.field_0x52;
     fopMsgM_paneScaleXY(pane, scale);

@@ -3283,7 +3283,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
     cXyz temp(190.0f, 230.0f, -1100.0f);
     csXyz temp2(0, 0, 0);
 
-    fopAcM_createChild("Kmon", fopAcM_GetID(this), 0, &temp, fopAcM_GetRoomNo(this), &temp2, 0, (createFunc)0);
+    fopAcM_createChild("Kmon", fopAcM_GetID(this), 0, &temp, fopAcM_GetRoomNo(this), &temp2);
     fopAcM_SetMtx(this, field_0x330->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
     gravity = -30.0f;
