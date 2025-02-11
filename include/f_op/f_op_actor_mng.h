@@ -108,7 +108,7 @@ public:
     void erase() {}
 };
 
-typedef int (*heapCallbackFunc)(fopAc_ac_c*);
+typedef BOOL (*heapCallbackFunc)(fopAc_ac_c*);
 typedef int (*createFunc)(void*);
 
 inline s8 fopAcM_GetRoomNo(fopAc_ac_c* pActor) {
@@ -491,7 +491,7 @@ fpc_ProcID fopAcM_createChildFromOffset(char* pProcNameString, fpc_ProcID parent
 
 void fopAcM_DeleteHeap(fopAc_ac_c* p_actor);
 
-bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 size);
+bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 estimatedHeapSize);
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
 #ifdef __MWERKS__

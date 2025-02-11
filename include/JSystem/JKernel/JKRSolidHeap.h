@@ -50,11 +50,12 @@ private:
     /* 0x70 */ u8* mSolidHead;
     /* 0x74 */ u8* mSolidTail;
     /* 0x78 */ Unknown* field_0x78;
+    /* 0x7C */ u8 field_0x7C[0x80 - 0x7C];
 
 public:
     s32 adjustSize(void);
 
     static JKRSolidHeap* create(u32, JKRHeap*, bool);
-};
+};  // Size: 0x80
 
 #endif /* JKRSOLIDHEAP_H */

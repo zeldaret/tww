@@ -303,18 +303,18 @@ void fopAcM_DeleteHeap(fopAc_ac_c* i_this) {
 }
 
 namespace fopAcM {
-    bool HeapAdjustEntry;
-    bool HeapAdjustVerbose;
-    bool HeapAdjustQuiet;
+    bool HeapAdjustEntry = false;
+    bool HeapAdjustVerbose = false;
+    bool HeapAdjustQuiet = false;
 }
 
 /* 80024D24-800250E4       .text fopAcM_entrySolidHeap__FP10fopAc_ac_cPFP10fopAc_ac_c_iUl */
-bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u32 maxHeapSize) {
+bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u32 estimatedHeapSize) {
     const char * pProcNameString = fopAcM_getProcNameString(i_this);
     JKRSolidHeap * heap = NULL;
 
-    if (maxHeapSize != 0) {
-        heap = mDoExt_createSolidHeapFromGameToCurrent(maxHeapSize, 0x20);
+    if (estimatedHeapSize != 0) {
+        heap = mDoExt_createSolidHeapFromGameToCurrent(estimatedHeapSize, 0x20);
         if (heap != NULL) {
             bool result = createHeapCB(i_this);
             if (heap->getFreeSize() >= 0x20)
@@ -323,24 +323,30 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
             mDoExt_restoreCurrentHeap();
 
             if (!result) {
-                if (!fopAcM::HeapAdjustQuiet)
-                    OSReport_Error("見積もりヒープサイズ(%08x)で登録失敗しました。[%s]\n", maxHeapSize, pProcNameString);
+                if (!fopAcM::HeapAdjustQuiet) {
+                    // "Entry failed with estimated heap size (%08x). [%s]\n"
+                    OSReport_Error("見積もりヒープサイズ(%08x)で登録失敗しました。[%s]\n", estimatedHeapSize, pProcNameString);
+                }
                 mDoExt_destroySolidHeap(heap);
                 heap = NULL;
             } else {
                 u32 allocSize = ALIGN_NEXT(heap->getSize() - heap->getFreeSize(), 0x20);
-                if (maxHeapSize < allocSize + 0x40) {
+                if (estimatedHeapSize < allocSize + 0x40) {
                     mDoExt_adjustSolidHeap(heap);
                     i_this->heap = heap;
                     return true;
                 }
 
-                if (fopAcM::HeapAdjustVerbose)
-                    OSReport_Warning("見積もりヒープサイズでは空きが多すぎます。 %08x %08x\n\x1b[m", allocSize, maxHeapSize);
+                if (fopAcM::HeapAdjustVerbose) {
+                    // "The estimated heap size leaves too much free space. %08x %08x\n\x1b[m"
+                    OSReport_Warning("見積もりヒープサイズでは空きが多すぎます。 %08x %08x\n\x1b[m", allocSize, estimatedHeapSize);
+                }
             }
         } else {
-            if (!fopAcM::HeapAdjustQuiet)
+            if (!fopAcM::HeapAdjustQuiet) {
+                // "Failed to allocate the estimated heap size.\n"
                 OSReport_Warning("見積もりヒープが確保できませんでした。\n");
+            }
         }
     }
 
@@ -352,6 +358,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
         mDoExt_restoreCurrentHeap();
 
         if (!result) {
+            // "Entry failed with the max allocatable heap size. [%s]\n"
             OSReport_Error("最大空きヒープサイズで登録失敗。[%s]\n", pProcNameString);
             mDoExt_destroySolidHeap(heap);
             return false;
@@ -368,19 +375,23 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
             return true;
         }
 
+        // If fopAcM::HeapAdjustEntry is set, try to reallocate everything a second time.
+        // This time we set the estimated maximum heap size to the exact size allocated last time.
         JKRSolidHeap * heap1 = NULL;
         u32 allocSize = ALIGN_NEXT(heap->getSize() - heap->getFreeSize(), 0x10);
-        if (allocSize + 0x90 < mDoExt_getGameHeap()->getFreeSize())
+        if (allocSize + 0x10 + sizeof(JKRSolidHeap) < mDoExt_getGameHeap()->getFreeSize())
             heap1 = mDoExt_createSolidHeapFromGameToCurrent(allocSize, 0x20);
 
         if (heap1 != NULL) {
             if (heap1 < heap) {
+                // The exact size heap allocated successfully, and it is located before the original (larger) heap.
                 mDoExt_destroySolidHeap(heap);
                 heap = NULL;
                 bool result = createHeapCB(i_this);
                 mDoExt_restoreCurrentHeap();
                 JUT_ASSERT(0x48d, result != FALSE);
-                if (result == 0) {
+                if (result == FALSE) {
+                    // "Entry failed with the exact size heap? (Bug)\n"
                     OSReport_Error("ぴったりサイズで、登録失敗？(バグ)\n");
                     mDoExt_destroySolidHeap(heap1);
                     heap1 = NULL;
@@ -404,10 +415,12 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
             return true;
         }
 
+        // "Buggy!\n"
         OSReport_Error("ばぐばぐです\n");
         JUT_ASSERT(0x4b5, FALSE);
     }
 
+    // "fopAcM_entrySolidHeap failed. [%s]\n"
     OSReport_Error("fopAcM_entrySolidHeap だめでした [%s]\n", pProcNameString);
     return false;
 }

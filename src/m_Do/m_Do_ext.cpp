@@ -907,7 +907,7 @@ JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignmen
         createdHeap = JKRSolidHeap::create(-1, i_heap, false);
     } else {
         i_size = ALIGN_NEXT(i_size, 0x10);
-        i_size += 0x80;
+        i_size += sizeof(JKRSolidHeap);
 
         if (0x10 < i_alignment) {
             i_size = (i_alignment - 0x10 + i_size);
@@ -968,8 +968,8 @@ s32 mDoExt_adjustSolidHeap(JKRSolidHeap* i_heap) {
         return 0;
 
     s32 result = i_heap->adjustSize();
-    if (result >= 0x80u)
-        result -= 0x80;
+    if (result >= sizeof(JKRSolidHeap))
+        result -= sizeof(JKRSolidHeap);
 
     return result;
 }
