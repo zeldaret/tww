@@ -6,6 +6,22 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_cloth_packet.h"
 
+class daTori_Flag_HIO_c {
+    public:
+        // Constructor
+        daTori_Flag_HIO_c();
+
+        // Virtual Destructor
+        virtual ~daTori_Flag_HIO_c(){}
+        
+    public:
+        /* Place member variables here */
+        /* 0x00 */ //vtable
+        /* 0x04 */ signed char flag;
+        /* 0x08 */ float someFloat;
+        /* 0x0c */ signed short someShort;
+};
+
 class daTori_Flag_c : public fopAc_ac_c {
 public:
     inline s32 _create();
@@ -14,8 +30,10 @@ public:
     inline bool _execute();
 
     void set_mtx();
-    void CreateHeap();
-    void CreateInit();
+    BOOL CreateHeap();
+    s32 CreateInit();
+
+    static const char M_arcname[7];
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsTrflag;
@@ -29,12 +47,7 @@ public:
     /* 0x4D0 */ dCcD_Cyl mCyl2;
 };
 
-class daTori_Flag_HIO_c {
-public:
-    daTori_Flag_HIO_c();
-
-public:
-    /* Place member variables here */
-};
+extern daTori_Flag_HIO_c l_HIO;
+extern cXyz l_flag_offset;
 
 #endif /* D_A_TORI_FLAG_H */
