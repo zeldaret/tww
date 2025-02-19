@@ -5,11 +5,47 @@
 
 #include "d/actor/d_a_kita.h"
 #include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_s_play.h"
+#include "f_op/f_op_actor_mng.h"
 
 /* 00000078-0000032C       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+void ride_call_back(dBgW* param_1, kita_class* param_2, fopAc_ac_c* param_3) {
+    cXyz delta_pos, local_44, local_50;
+    if ((param_2->u29A == 0) || (param_2->u360 != 0)) {
+        mDoMtx_YrotS(*calc_mtx, -param_2->current.angle.y);
+        delta_pos = param_3->current.pos - param_2->current.pos;
+        MtxPosition(&delta_pos,&local_44);
+        delta_pos = param_3->old.pos - param_2->current.pos;
+        MtxPosition(&delta_pos, &local_50);
+        if (fopAcM_GetName(param_3) == 169) {
+            param_2->mExecuteCount = 10;
+        }
+        short zAngle_target = -local_44.x * ((REG0_F(0) + 10.0f) / param_2->scale.x);
+    // local_28 = (longlong)xAngle_target;
+        short xAngle_target = local_44.z * ((REG0_F(0) + 10.0f) / param_2->scale.z);
+    // local_20 = (longlong)zAngle_target;
+        cLib_addCalcAngleS2(&param_2->current.angle.x,xAngle_target,10,0x800);
+        cLib_addCalcAngleS2(&param_2->current.angle.z,zAngle_target,10,0x800);
+        float fVar1 = (REG0_F(4) + 50.0f) * std::abs(local_44.z - local_50.z);
+        if (param_2->u2B4.z < fVar1) {
+            param_2->u2B4.z = fVar1;
+        }
+        fVar1 = (REG0_F(4) + 50.0f) * std::abs(local_44.x - local_50.x);
+        if (param_2->u2C4 < fVar1) {
+            param_2->u2C4 = fVar1;
+        }
+        fVar1 = (REG0_F(8) + 5.0f) * std::abs(local_44.x - local_50.x);
+        if (fVar1 > 10.0 && param_2->u2A8.z < fVar1) {
+            cLib_addCalc2(&param_2->u2A8.z,fVar1,1.0,REG0_F(7) + 1.2f);
+        }
+        fVar1 = (REG0_F(8) + 5.0f) * std::abs(local_44.z - local_50.z);
+        if (fVar1 > 10.0 && param_2->u2B4.y < fVar1) {
+            cLib_addCalc2(&param_2->u2B4.y,fVar1,1.0,REG0_F(7) + 1.2f);
+        }
+        cLib_addCalc2(&param_2->u2A8.x,REG0_F(2) + -100.0f,0.1,REG0_F(3) + 10.0f);
+  }
 }
 
 /* 00000368-00000408       .text daKita_Draw__FP10kita_class */
@@ -48,8 +84,12 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00001EB0-00002224       .text daKita_Create__FP10fopAc_ac_c */
-static s32 daKita_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daKita_Create(kita_class* this_i) {
+    fopAcM_SetupActor(this_i, kita_class);
+    s32 ret = dComIfG_resLoad(&this_i->mPhs, "Kita");
+    if(ret == cPhs_COMPLEATE_e){
+    }
+    return ret;
 }
 
 static actor_method_class l_daKita_Method = {
