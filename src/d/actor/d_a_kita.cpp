@@ -49,8 +49,13 @@ void ride_call_back(dBgW* param_1, kita_class* param_2, fopAc_ac_c* param_3) {
 }
 
 /* 00000368-00000408       .text daKita_Draw__FP10kita_class */
-static BOOL daKita_Draw(kita_class*) {
-    /* Nonmatching */
+static BOOL daKita_Draw(kita_class* param_1) {
+    dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &param_1->current.pos, &param_1->tevStr);
+    dKy_getEnvlight().setLightTevColorType(param_1->mModel, &param_1->tevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(param_1->mModel);
+    dComIfGd_setList();
+    return TRUE;
 }
 
 /* 00000408-0000126C       .text kita_move__FP10kita_class */
