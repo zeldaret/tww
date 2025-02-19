@@ -15,9 +15,8 @@ class daTori_Flag_HIO_c {
         virtual ~daTori_Flag_HIO_c(){}
         
     public:
-        /* Place member variables here */
         /* 0x00 */ //vtable
-        /* 0x04 */ signed char flag;
+        /* 0x04 */ signed char mNo;
         /* 0x08 */ float someFloat;
         /* 0x0c */ signed short someShort;
 };
@@ -46,8 +45,5 @@ public:
     /* 0x3A0 */ dCcD_Cyl mCyl;
     /* 0x4D0 */ dCcD_Cyl mCyl2;
 };
-
-extern daTori_Flag_HIO_c l_HIO;
-extern cXyz l_flag_offset;
 
 #endif /* D_A_TORI_FLAG_H */
