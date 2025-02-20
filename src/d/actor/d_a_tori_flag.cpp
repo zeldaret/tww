@@ -107,7 +107,7 @@ s32 daTori_Flag_c::CreateInit() {
     mWindvec.z = wind_vec->z;
     set_mtx();
     dKy_tevstr_init(&mClothTevStr, current.roomNo, 0xFF);
-    cullMtx = mpModel->mBaseTransformMtx;
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     return 4;
 }
 
@@ -169,7 +169,7 @@ bool daTori_Flag_c::_execute() {
         cLib_addCalcPos2(&mWindvec, wind, 0.05f, 0.05f);
     }
     mCyl.SetC(current.pos);
-    g_dComIfG_gameInfo.play.mCcS.Set(&mCyl);
+    dComIfG_Ccsp()->Set(&mCyl);
     mpCloth->setParam(0.4f, -1.5f, 0.75f, 0.9f, 0.9f, 0x400, 0, 900, -800, 7.0f, 6.0f);
     mpCloth->setWindPower(8.0f, 3.0f);
     mpCloth->setGlobalWind(&mWindvec);
