@@ -33,3 +33,4 @@ compile_commands.json
 # Miscellaneous
 /*.txt
 *.exe
+.DS_Store
