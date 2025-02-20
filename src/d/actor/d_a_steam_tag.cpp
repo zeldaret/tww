@@ -4,56 +4,216 @@
 //
 
 #include "d/actor/d_a_steam_tag.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/JParticle/JPAEmitter.h"
+#include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_item.h"
+#include "d/d_item_data.h"
 #include "d/d_procname.h"
+#include "dolphin/mtx/vec.h"
+
+static dCcD_SrcCps l_cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_WIND,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoHitMark_e,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {
+        /* Start */ 0.0f, 0.0f, 0.0f,
+        /* End */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 200.0f,
+    },
+};
+
+daSteamTag_mData daSteamTag_c::mData = {
+    /* field_0x00        */ 0x3DF5,
+    /* field_0x02        */ 0xC28F,
+    /* create_time_range */ 300,
+    /* create_time_min   */ 100,
+    /* emit_time_min     */ 50,
+    /* emit_time_range   */ 150,
+    /* steam_alpha       */ 0xB4,
+    /* field_0x0D        */ 0x00,
+    /* field_0x0E        */ 0x0000,
+};
 
 /* 00000078-00000084       .text getData__12daSteamTag_cFv */
-void daSteamTag_c::getData() {
-    /* Nonmatching */
+const daSteamTag_mData* daSteamTag_c::getData() {
+    return &daSteamTag_c::mData;
 }
 
 /* 00000084-0000029C       .text CreateInit__12daSteamTag_cFv */
-void daSteamTag_c::CreateInit() {
-    /* Nonmatching */
+s32 daSteamTag_c::CreateInit() {
+    m29B = daSteamTag_prm::getSchBit(this);
+    mEmitTimer = getData()->emit_time_min + cM_rndF(getData()->emit_time_range);
+    mCreateTimer = cM_rndF(getData()->create_time_range);;
+    mpEmitter = NULL;
+    mEmitTimer = 0;
+    mGStts.Init(0xFF,0xFF,this);
+    mCps.Set(l_cps_src);
+    mCps.SetStts(&mGStts);
+    mPntWindCpsS.mStart.x = current.pos.x;
+    mPntWindCpsS.mStart.y = current.pos.y;
+    mPntWindCpsS.mStart.z = current.pos.z;
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(current.angle);
+    float windY = 200.0f;
+    if (current.angle.x != 0) {
+        windY = 50.0f;
+    }
+    mDoMtx_stack_c::transM(0.0f, windY, 0.0f);
+    mDoMtx_stack_c::multVec(&cXyz::Zero, &mPntWindCpsS.mEnd);
+    mPntWindCpsS.mRadius = 50.0;
+    mCps.cM3dGCps::Set(mPntWindCpsS);
+    mCps.CalcAtVec();
+    mPointWind.set_pwind_init(&mPntWindCpsS);
+    fopAcM_offDraw(this);
+    return TRUE;
 }
 
 /* 0000029C-00000398       .text createEmitter__12daSteamTag_cFv */
-void daSteamTag_c::createEmitter() {
-    /* Nonmatching */
+BOOL daSteamTag_c::createEmitter() {    
+    if (mEmitterNum < 8) {
+        u16 particleID;
+        if (((s16)cM_rndF(100.0f) % 2) != 0) {
+            particleID = 0x808B;
+        } else {
+            particleID = 0x808C;
+        }
+        mpEmitter = dComIfGp_particle_setToon(particleID, &current.pos, &current.angle, &scale, getData()->steam_alpha);
+        if (mpEmitter) {
+            mEmitterNum++;
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00000398-000003B4       .text endEmitter__12daSteamTag_cFv */
-void daSteamTag_c::endEmitter() {
-    /* Nonmatching */
+bool daSteamTag_c::endEmitter() {
+    mEmitterNum--;
+    return TRUE;
 }
 
 /* 000003B4-000003BC       .text daSteamTag_Draw__FP12daSteamTag_c */
 static BOOL daSteamTag_Draw(daSteamTag_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000003BC-000003DC       .text daSteamTag_Execute__FP12daSteamTag_c */
-static BOOL daSteamTag_Execute(daSteamTag_c*) {
-    /* Nonmatching */
+static BOOL daSteamTag_Execute(daSteamTag_c* i_this) {
+    return ((daSteamTag_c*)i_this)->execute();
 }
 
 /* 000003DC-000006FC       .text execute__12daSteamTag_cFv */
 BOOL daSteamTag_c::execute() {
-    /* Nonmatching */
+    float windStrength;
+    if ((mEmitTimer == 0) && (mCreateTimer > 0)) {
+        mCreateTimer--;
+        if (mCreateTimer == 0) {
+            if (createEmitter()) {
+                JGeometry::TVec3<s16> angle;
+                angle.x = current.angle.x;
+                angle.y = current.angle.y;
+                angle.z = current.angle.z;
+                mpEmitter->setGlobalTranslation(current.pos);
+                mpEmitter->setGlobalRotation(angle);
+                mpEmitter->setGlobalAlpha(getData()->steam_alpha);
+                mpEmitter->playCreateParticle();
+                mEmitTimer = getData()->emit_time_min + cM_rndF(getData()->emit_time_range);
+            }
+            else {
+                mCreateTimer = 0x1e;
+            }
+        }
+    }
+    else if ((mCreateTimer == 0) && (mEmitTimer > 0)) {
+        mEmitTimer--;
+        if (mEmitTimer == 0) {
+            if (mpEmitter != NULL) {
+                windStrength = 0.0f;
+                mpEmitter->stopCreateParticle();
+                if (mpEmitter->getParticleNumber() == 0) {
+                    mpEmitter->becomeInvalidEmitter();
+                    endEmitter();
+                    mpEmitter = NULL;
+                    mCreateTimer = getData()->create_time_min + cM_rndF(getData()->create_time_range);
+                }
+                else {
+                    mEmitTimer = 1;
+                    windStrength = 1.0f;
+                }
+                mPointWind.set_pwind_power(windStrength);
+            }
+        }
+        else {
+            fopAcM_seStart(this, JA_SE_OBJ_STEAM, 0);
+            if (mpEmitter != NULL) {
+              mpEmitter->setGlobalAlpha(getData()->steam_alpha);
+            }
+            mCps.cM3dGCps::Set(mPntWindCpsS);
+            dComIfG_Ccsp()->Set(&mCps);
+            mPointWind.set_pwind_move();
+        }
+    }
+    return TRUE;
 }
 
 /* 000006FC-00000704       .text daSteamTag_IsDelete__FP12daSteamTag_c */
 static BOOL daSteamTag_IsDelete(daSteamTag_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000704-0000072C       .text daSteamTag_Delete__FP12daSteamTag_c */
-static BOOL daSteamTag_Delete(daSteamTag_c*) {
-    /* Nonmatching */
+static BOOL daSteamTag_Delete(daSteamTag_c* i_this) {
+    ((daSteamTag_c*)i_this)->~daSteamTag_c();
+    return TRUE;
+}
+
+daSteamTag_c::~daSteamTag_c() {
+    if (mpEmitter != NULL) {
+      mpEmitter->becomeInvalidEmitter();
+      mpEmitter = NULL;
+    }
+    mPointWind.set_pwind_delete();
+    return;
+}
+
+s32 daSteamTag_c::create() {
+    int phase_state;
+    fopAcM_SetupActor(this, daSteamTag_c);
+    CreateInit();
+    if ((strcmp(dComIfGp_getStartStageName(),"Adanmae") == 0) &&
+        (current.roomNo == 0) &&
+        (checkItemGet(dItem_PEARL_DIN_e, TRUE))) {
+        phase_state = cPhs_ERROR_e;
+    } else {
+        phase_state = cPhs_COMPLEATE_e;
+    }
+    return phase_state;
 }
 
 /* 00000930-00000AD0       .text daSteamTag_Create__FP10fopAc_ac_c */
-static s32 daSteamTag_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daSteamTag_Create(fopAc_ac_c* i_this) {
+    return ((daSteamTag_c*)i_this)->create();
 }
 
 static actor_method_class l_daSteamTag_Method = {
