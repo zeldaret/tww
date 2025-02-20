@@ -37,13 +37,23 @@ static dCcD_SrcCps l_cps_src = {
     },
     // cM3dGCpsS
     {
-        /* P0 */ 0.0f, 0.0f, 0.0f,
-        /* P1 */ 0.0f, 0.0f, 0.0f,
-        /* Height */ 200.0f,
+        /* Start */ 0.0f, 0.0f, 0.0f,
+        /* End */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 200.0f,
     },
 };
 
-daSteamTag_mData daSteamTag_c::mData = {15861, 49807, 300, 100, 50, 150, 0xB4, 0x00, 0x00};
+daSteamTag_mData daSteamTag_c::mData = {
+    /* field_0x00        */ 0x3DF5,
+    /* field_0x02        */ 0xC28F,
+    /* create_time_range */ 300,
+    /* create_time_min   */ 100,
+    /* emit_time_min     */ 50,
+    /* emit_time_range   */ 150,
+    /* steam_alpha       */ 0xB4,
+    /* field_0x0D        */ 0x00,
+    /* field_0x0E        */ 0x0000,
+};
 
 /* 00000078-00000084       .text getData__12daSteamTag_cFv */
 const daSteamTag_mData* daSteamTag_c::getData() {
@@ -53,9 +63,8 @@ const daSteamTag_mData* daSteamTag_c::getData() {
 /* 00000084-0000029C       .text CreateInit__12daSteamTag_cFv */
 s32 daSteamTag_c::CreateInit() {
     m29B = daSteamTag_prm::getSchBit(this);
-    float fVar2;
-    mEmitTimer = getData()->mEmitTimer_offset + cM_rndF(getData()->mEmitTimer_seed);
-    mCreateTimer = cM_rndF(getData()->mCreateTimer_seed);;
+    mEmitTimer = getData()->emit_time_min + cM_rndF(getData()->emit_time_range);
+    mCreateTimer = cM_rndF(getData()->create_time_range);;
     mpEmitter = NULL;
     mEmitTimer = 0;
     mGStts.Init(0xFF,0xFF,this);
@@ -66,18 +75,18 @@ s32 daSteamTag_c::CreateInit() {
     mPntWindCpsS.mStart.z = current.pos.z;
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(current.angle);
-    fVar2 = 200.0f;
+    float windY = 200.0f;
     if (current.angle.x != 0) {
-      fVar2 = 50.0f;
+        windY = 50.0f;
     }
-    mDoMtx_stack_c::transM(0.0f, fVar2, 0.0f);
+    mDoMtx_stack_c::transM(0.0f, windY, 0.0f);
     mDoMtx_stack_c::multVec(&cXyz::Zero, &mPntWindCpsS.mEnd);
     mPntWindCpsS.mRadius = 50.0;
     mCps.cM3dGCps::Set(mPntWindCpsS);
     mCps.CalcAtVec();
     mPointWind.set_pwind_init(&mPntWindCpsS);
     fopAcM_offDraw(this);
-    return 1;
+    return TRUE;
 }
 
 /* 0000029C-00000398       .text createEmitter__12daSteamTag_cFv */
@@ -89,7 +98,7 @@ BOOL daSteamTag_c::createEmitter() {
         } else {
             particleID = 0x808C;
         }
-        mpEmitter = dComIfGp_particle_setToon(particleID, &current.pos, &current.angle, &scale, getData()->mSteamAlpha);
+        mpEmitter = dComIfGp_particle_setToon(particleID, &current.pos, &current.angle, &scale, getData()->steam_alpha);
         if (mpEmitter) {
             mEmitterNum++;
             return TRUE;
@@ -117,8 +126,6 @@ static BOOL daSteamTag_Execute(daSteamTag_c* i_this) {
 /* 000003DC-000006FC       .text execute__12daSteamTag_cFv */
 BOOL daSteamTag_c::execute() {
     float windStrength;
-    float fVar7;
-    
     if ((mEmitTimer == 0) && (mCreateTimer > 0)) {
         mCreateTimer--;
         if (mCreateTimer == 0) {
@@ -129,9 +136,9 @@ BOOL daSteamTag_c::execute() {
                 angle.z = current.angle.z;
                 mpEmitter->setGlobalTranslation(current.pos);
                 mpEmitter->setGlobalRotation(angle);
-                mpEmitter->setGlobalAlpha(getData()->mSteamAlpha);
+                mpEmitter->setGlobalAlpha(getData()->steam_alpha);
                 mpEmitter->playCreateParticle();
-                mEmitTimer = getData()->mEmitTimer_offset + cM_rndF(getData()->mEmitTimer_seed);
+                mEmitTimer = getData()->emit_time_min + cM_rndF(getData()->emit_time_range);
             }
             else {
                 mCreateTimer = 0x1e;
@@ -148,7 +155,7 @@ BOOL daSteamTag_c::execute() {
                     mpEmitter->becomeInvalidEmitter();
                     endEmitter();
                     mpEmitter = NULL;
-                    mCreateTimer = getData()->mCreateTimer_offset + cM_rndF(getData()->mCreateTimer_seed);
+                    mCreateTimer = getData()->create_time_min + cM_rndF(getData()->create_time_range);
                 }
                 else {
                     mEmitTimer = 1;
@@ -160,7 +167,7 @@ BOOL daSteamTag_c::execute() {
         else {
             fopAcM_seStart(this, JA_SE_OBJ_STEAM, 0);
             if (mpEmitter != NULL) {
-              mpEmitter->setGlobalAlpha(getData()->mSteamAlpha);
+              mpEmitter->setGlobalAlpha(getData()->steam_alpha);
             }
             mCps.cM3dGCps::Set(mPntWindCpsS);
             dComIfG_Ccsp()->Set(&mCps);
@@ -191,17 +198,17 @@ daSteamTag_c::~daSteamTag_c() {
 }
 
 s32 daSteamTag_c::create() {
-    int result;
+    int phase_state;
     fopAcM_SetupActor(this, daSteamTag_c);
     CreateInit();
     if ((strcmp(dComIfGp_getStartStageName(),"Adanmae") == 0) &&
         (current.roomNo == 0) &&
         (checkItemGet(dItem_PEARL_DIN_e, TRUE))) {
-        result = cPhs_ERROR_e;
+        phase_state = cPhs_ERROR_e;
     } else {
-        result = cPhs_COMPLEATE_e;
+        phase_state = cPhs_COMPLEATE_e;
     }
-    return result;
+    return phase_state;
 }
 
 /* 00000930-00000AD0       .text daSteamTag_Create__FP10fopAc_ac_c */

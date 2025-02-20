@@ -12,14 +12,13 @@ class JPABaseEmitter;
 struct daSteamTag_mData {
     /* 0x00 */ s16 field_0x00;
     /* 0x02 */ s16 field_0x02;
-    /* 0x04 */ s16 mCreateTimer_seed;
-    /* 0x06 */ s16 mCreateTimer_offset;
-    /* 0x08 */ s16 mEmitTimer_offset;
-    /* 0x0A */ s16 mEmitTimer_seed;
-    /* 0x0C */ u8  mSteamAlpha;
+    /* 0x04 */ s16 create_time_range;
+    /* 0x06 */ s16 create_time_min;
+    /* 0x08 */ s16 emit_time_min;
+    /* 0x0A */ s16 emit_time_range;
+    /* 0x0C */ u8  steam_alpha;
     /* 0x0D */ u8  field_0x0D;
-    /* 0x0E */ u8  field_0x0E;
-    /* 0x0F */ u8  field_0x0F;
+    /* 0x0E */ s16  field_0x0E;
 };
 
 class daSteamTag_c : public fopAc_ac_c {
