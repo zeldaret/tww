@@ -1715,7 +1715,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_salvage_tbox"),
     ActorRel(Matching,    "d_a_scene_change"),
     ActorRel(Matching,    "d_a_shutter", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_shutter2"),
+    ActorRel(Matching,    "d_a_shutter2"),
     ActorRel(NonMatching, "d_a_st"),
     ActorRel(Matching,    "d_a_steam_tag", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_swattack", extra_cflags=['-pragma "nosyminline on"']),
