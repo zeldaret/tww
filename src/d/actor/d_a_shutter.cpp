@@ -6,21 +6,23 @@
 #include "d/actor/d_a_shutter.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
+#include "d/res/res_htobi1.h"
+#include "d/res/res_htobi2.h"
 
 const float daShutter_c::m_max_speed[2] = {3.0f, 3.0f};
 const float daShutter_c::m_min_speed[2] = {1.0f, 1.0f};
 const float daShutter_c::m_move_len[2] = {200.0f, 84.0f};
 const float daShutter_c::m_width[2] = {220.0f, 82.0f};
 const float daShutter_c::m_height[2] = {200.0f, 100.0f};
-const s16 daShutter_c::m_bdlidx[2] = {4, 4};
-const s16 daShutter_c::m_dzbidx[2] = {7, 7};
+const s16 daShutter_c::m_bdlidx[2] = {HTOBI1_BDL_HTOBI1, HTOBI2_BDL_HTOBI2};
+const s16 daShutter_c::m_dzbidx[2] = {HTOBI1_DZB_HTOBI1, HTOBI2_DZB_HTOBI2};
 const s32 daShutter_c::m_heapsize[2] = {0x1140, 0x3000};
 const Vec daShutter_c::m_cull_min[2] = {{-500.0f, -100.0f, -50.0f}, {-150.0f, -100.0f, -50.0f}};
 const Vec daShutter_c::m_cull_max[2] = {{500.0f, 250.0f, 50.0f}, {150.0f, 250.0f, 50.0f}};
 
 char* daShutter_c::m_arcname[2] = {"Htobi1", "Htobi2"};
 char* daShutter_c::m_open_ev_name[2] = {"HYSDOOROPEN", "R03DOOROPEN"};
-char* daShutter_c::m_close_ev_name[2] = {0, "R03DOORCLOSE"};
+char* daShutter_c::m_close_ev_name[2] = {NULL, "R03DOORCLOSE"};
 char* daShutter_c::m_staff_name[2] = {"Htobi1", "Htobi2"};
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */
