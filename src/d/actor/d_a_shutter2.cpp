@@ -112,11 +112,8 @@ void daShutter2_c::shutter_move() {
     static char* action_table[4] = {"WAIT", "OPEN", "CLOSE", "OPEN_INIT"};
     int actionIndex = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 
-    float maxVel;
-    float minVel;
-
-    maxVel = m_max_speed[mType];
-    minVel = m_min_speed[mType];
+    float maxVel = m_max_speed[mType];
+    float minVel = m_min_speed[mType];
     
     switch (actionIndex) {
         case 0: //WAIT
