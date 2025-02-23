@@ -68,10 +68,10 @@ s32 daShutter_c::Create() {
     Vec cullMin = m_cull_min[mType];
     Vec cullMax = m_cull_max[mType];
     fopAcM_setCullSizeBox(this, cullMin.x, cullMin.y, cullMin.z, cullMax.x, cullMax.y, cullMax.z);
-    mNo = daShutter_prm::getmNo(this);
+    mSwitchNo = daShutter_prm::getSwitchNo(this);
     mcXyz[0].x = -m_width[mType] / 2.0f;
     mcXyz[1].x = m_width[mType] / 2.0f;
-    if (!fopAcM_isSwitch(this, mNo)) {
+    if (!fopAcM_isSwitch(this, mSwitchNo)) {
         field_0x328 = 3;
     }
     else {
@@ -79,7 +79,7 @@ s32 daShutter_c::Create() {
         mcXyz[0].x = mcXyz[0].x - m_move_len[mType];
         mcXyz[1].x = mcXyz[1].x + m_move_len[mType];
     }
-    mCount = 0x1e;
+    mFrameTimer = 0x1e;
     set_mtx();
     for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
         dComIfG_Bgsp()->Regist(mdBgW[i], this);
@@ -126,31 +126,25 @@ void daShutter_c::set_mtx() {
 
 /* 000006F0-00000788       .text _execute__11daShutter_cFv */
 bool daShutter_c::_execute() {
-    bool bVar1;
-    int iVar3;
-    if (mCount >= 0) {
-        mCount--;
+    if (mFrameTimer >= 0) {
+        mFrameTimer--;
     }
     demo();
     set_mtx();
     for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
         mdBgW[i]->Move();
     }
-    mSwitch = fopAcM_isSwitch(this, mNo);
+    mbIsSwitch = fopAcM_isSwitch(this, mSwitchNo);
     return TRUE;
 }
 
-const char* M_act_table[4] = {"WAIT", "WAIT02", "OPEN", "CLOSE"};
-
 /* 00000788-00000B14       .text shutter_move__11daShutter_cFv */
 void daShutter_c::shutter_move() {
-    int actionIndex = dComIfGp_evmng_getMyActIdx(mStaffId, (char**)M_act_table, ARRAY_SIZE(M_act_table), FALSE, 0);
+    static char* action_table[] = {"WAIT", "WAIT02", "OPEN", "CLOSE"};
+    int actionIndex = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 
-    float maxVel;
-    float minVel;
-
-    maxVel = m_max_speed[mType];
-    minVel = m_min_speed[mType];
+    float maxVel = m_max_speed[mType];;
+    float minVel = m_min_speed[mType];
 
     float fVar4;
     float fVar5;
@@ -165,7 +159,7 @@ void daShutter_c::shutter_move() {
         }
         case 1: //WAIT02
         {
-            if (!cLib_calcTimer((u8*)&mTimer)) {
+            if (!cLib_calcTimer(&mTimer)) {
                 field_0x339 = 0;
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
@@ -217,10 +211,10 @@ void daShutter_c::shutter_move() {
 
 /* 00000B14-00000CF0       .text demo__11daShutter_cFv */
 void daShutter_c::demo() {
-    u8 bVar3 = fopAcM_isSwitch(this, mNo);
+    u8 isSwitch = fopAcM_isSwitch(this, mSwitchNo);
     if (field_0x320 == 0) {
-        if ((bVar3 != (u8)mSwitch) && (mCount < 0)) {
-            if (!bVar3) {
+        if ((isSwitch != (u8)mbIsSwitch) && (mFrameTimer < 0)) {
+            if (!isSwitch) {
                 field_0x320 = 2;
             }
             else {
@@ -242,12 +236,12 @@ void daShutter_c::demo() {
         shutter_move();
     }
     else if ((field_0x320 == 1) && (mOpenEventIdx != 0)) {
-        fopAcM_orderOtherEventId(this, mOpenEventIdx, 0xff, 0xffff, 0, 1);
-        eventInfo.mCondition = eventInfo.mCondition | 2;
+        fopAcM_orderOtherEventId(this, mOpenEventIdx);
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
     else if ((field_0x320 == 2) && (mCloseEventIdx != 0)) {
-        fopAcM_orderOtherEventId(this, mCloseEventIdx, 0xff, 0xffff, 0, 1);
-        eventInfo.mCondition = eventInfo.mCondition | 2;
+        fopAcM_orderOtherEventId(this, mCloseEventIdx);
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
 }
 
@@ -255,10 +249,8 @@ void daShutter_c::demo() {
 bool daShutter_c::_draw() {
     cXyz actorPos;
     for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
-        actorPos.x = current.pos.x;
-        actorPos.y = current.pos.y;
-        actorPos.z = current.pos.z;
-        PSVECAdd(&actorPos, &mcXyz[i], &actorPos);
+        actorPos = current.pos;
+        actorPos += mcXyz[i];
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &actorPos, &tevStr);
         g_env_light.setLightTevColorType(mpModel[i], &tevStr);
         dComIfGd_setListBG();

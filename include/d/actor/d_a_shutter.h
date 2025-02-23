@@ -41,23 +41,23 @@ public:
     /* 0x2A8 */ Mtx mMtx[2];
     /* 0x308 */ cXyz mcXyz[2];
     /* 0x320 */ s32 field_0x320;
-    /* 0x324 */ s32 mNo;
+    /* 0x324 */ s32 mSwitchNo;
     /* 0x328 */ s32 field_0x328;
     /* 0x32C */ s32 mStaffId;
     /* 0x330 */ s16 mOpenEventIdx;
     /* 0x332 */ s16 mCloseEventIdx;
     /* 0x334 */ u8 field_0x334;
     /* 0x335 */ u8 mType;
-    /* 0x336 */ s8 mSwitch;
-    /* 0x337 */ s8 mCount;
-    /* 0x338 */ s8 mTimer;
+    /* 0x336 */ s8 mbIsSwitch;
+    /* 0x337 */ s8 mFrameTimer;
+    /* 0x338 */ u8 mTimer;
     /* 0x339 */ u8 field_0x339;
     /* 0x33A */ u8 field_0x33A;
     /* 0x33B */ u8 field_0x33B;
 };
 
 namespace daShutter_prm {
-    inline u8 getmNo(daShutter_c* item) { return (fopAcM_GetParam(item) >> 0) & 0xFF; }
+    inline u8 getSwitchNo(daShutter_c* item) { return (fopAcM_GetParam(item) >> 0) & 0xFF; }
     inline u8 getType(daShutter_c* item) { return (fopAcM_GetParam(item) >> 8) & 0x0F; }
 }
 
