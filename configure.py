@@ -1714,13 +1714,8 @@ config.libs = [
     ActorRel(Equivalent,  "d_a_sail", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_salvage_tbox"),
     ActorRel(Matching,    "d_a_scene_change"),
-<<<<<<< Updated upstream
     ActorRel(NonMatching, "d_a_shutter"),
     ActorRel(NonMatching, "d_a_shutter2"),
-=======
-    ActorRel(Matching,    "d_a_shutter", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(Matching,    "d_a_shutter2"),
->>>>>>> Stashed changes
     ActorRel(NonMatching, "d_a_st"),
     ActorRel(Matching,    "d_a_steam_tag", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_swattack", extra_cflags=['-pragma "nosyminline on"']),
