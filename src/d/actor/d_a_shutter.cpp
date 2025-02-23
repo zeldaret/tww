@@ -213,7 +213,7 @@ void daShutter_c::shutter_move() {
 void daShutter_c::demo() {
     u8 isSwitch = fopAcM_isSwitch(this, mSwitchNo);
     if (field_0x320 == 0) {
-        if ((isSwitch != (u8)mbIsSwitch) && (mFrameTimer < 0)) {
+        if ((isSwitch != mbIsSwitch) && (mFrameTimer < 0)) {
             if (!isSwitch) {
                 field_0x320 = 2;
             }

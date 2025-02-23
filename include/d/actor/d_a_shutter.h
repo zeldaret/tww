@@ -48,7 +48,7 @@ public:
     /* 0x332 */ s16 mCloseEventIdx;
     /* 0x334 */ u8 field_0x334;
     /* 0x335 */ u8 mType;
-    /* 0x336 */ s8 mbIsSwitch;
+    /* 0x336 */ u8 mbIsSwitch;
     /* 0x337 */ s8 mFrameTimer;
     /* 0x338 */ u8 mTimer;
     /* 0x339 */ u8 field_0x339;
