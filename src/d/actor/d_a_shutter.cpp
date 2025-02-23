@@ -5,80 +5,286 @@
 
 #include "d/actor/d_a_shutter.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "d/res/res_htobi1.h"
+#include "d/res/res_htobi2.h"
+
+const float daShutter_c::m_max_speed[2] = {3.0f, 3.0f};
+const float daShutter_c::m_min_speed[2] = {1.0f, 1.0f};
+const float daShutter_c::m_move_len[2] = {200.0f, 84.0f};
+const float daShutter_c::m_width[2] = {220.0f, 82.0f};
+const float daShutter_c::m_height[2] = {200.0f, 100.0f};
+const s16 daShutter_c::m_bdlidx[2] = {HTOBI1_BDL_HTOBI1, HTOBI2_BDL_HTOBI2};
+const s16 daShutter_c::m_dzbidx[2] = {HTOBI1_DZB_HTOBI1, HTOBI2_DZB_HTOBI2};
+const s32 daShutter_c::m_heapsize[2] = {0x1140, 0x3000};
+const Vec daShutter_c::m_cull_min[2] = {{-500.0f, -100.0f, -50.0f}, {-150.0f, -100.0f, -50.0f}};
+const Vec daShutter_c::m_cull_max[2] = {{500.0f, 250.0f, 50.0f}, {150.0f, 250.0f, 50.0f}};
+
+char* daShutter_c::m_arcname[2] = {"Htobi1", "Htobi2"};
+char* daShutter_c::m_open_ev_name[2] = {"HYSDOOROPEN", "R03DOOROPEN"};
+char* daShutter_c::m_close_ev_name[2] = {NULL, "R03DOORCLOSE"};
+char* daShutter_c::m_staff_name[2] = {"Htobi1", "Htobi2"};
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */
 bool daShutter_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, m_arcname[mType]);
+    if (heap != NULL) {
+        for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+            dComIfG_Bgsp()->Release(mdBgW[i]);
+        };
+    }
+    return TRUE;
 }
 
 /* 00000108-00000128       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daShutter_c*)i_this)->CreateHeap();
 }
 
 /* 00000128-000002B8       .text CreateHeap__11daShutter_cFv */
-void daShutter_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daShutter_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
+    JUT_ASSERT(0x121, modelData != 0);
+    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+        mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+        if (!mpModel[i]) {
+            return FALSE;
+        }
+        mdBgW[i] = new dBgW();
+        if (mdBgW[i]) {
+            cBgD_t* pData = (cBgD_t *)dComIfG_getObjectRes(m_arcname[mType], m_dzbidx[mType]);
+            if (mdBgW[i]->Set(pData, 0x1, &mMtx[i]) == 1) {
+                return FALSE;
+            }
+        }
+        else {
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 /* 000002B8-000004B4       .text Create__11daShutter_cFv */
 s32 daShutter_c::Create() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel[0]->getBaseTRMtx());
+    Vec cullMin = m_cull_min[mType];
+    Vec cullMax = m_cull_max[mType];
+    fopAcM_setCullSizeBox(this, cullMin.x, cullMin.y, cullMin.z, cullMax.x, cullMax.y, cullMax.z);
+    mSwitchNo = daShutter_prm::getSwitchNo(this);
+    mcXyz[0].x = -m_width[mType] / 2.0f;
+    mcXyz[1].x = m_width[mType] / 2.0f;
+    if (!fopAcM_isSwitch(this, mSwitchNo)) {
+        field_0x328 = 3;
+    }
+    else {
+        field_0x328 = 2;
+        mcXyz[0].x = mcXyz[0].x - m_move_len[mType];
+        mcXyz[1].x = mcXyz[1].x + m_move_len[mType];
+    }
+    mFrameTimer = 0x1e;
+    set_mtx();
+    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+        dComIfG_Bgsp()->Regist(mdBgW[i], this);
+        mdBgW[i]->Move();
+    }
+    if (m_open_ev_name[mType] != NULL) {
+        mOpenEventIdx = dComIfGp_evmng_getEventIdx(m_open_ev_name[mType], 0xff);
+    }
+    if (m_close_ev_name[mType] != NULL) {
+        mCloseEventIdx = dComIfGp_evmng_getEventIdx(m_close_ev_name[mType], 0xff);
+    }
+    return 1;
 }
 
 /* 000004B4-000005A0       .text _create__11daShutter_cFv */
 s32 daShutter_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daShutter_c);
+    mType = daShutter_prm::getType(this);
+    int result = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    if (result == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])){
+            return cPhs_ERROR_e;
+        }
+        else {
+            Create();
+        }
+    }
+    return result;
 }
 
 /* 000005E0-000006F0       .text set_mtx__11daShutter_cFv */
 void daShutter_c::set_mtx() {
-    /* Nonmatching */
+    cXyz local_48;
+    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+        mDoMtx_stack_c::YrotS(current.angle.y);
+        mDoMtx_stack_c::multVec(&mcXyz[i], &local_48);
+        mpModel[i]->setBaseScale(scale);
+        mDoMtx_stack_c::transS(current.pos.x + local_48.x, current.pos.y + local_48.y, current.pos.z + local_48.z);
+        mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
+        mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        MTXCopy(mDoMtx_stack_c::get(), mMtx[i]);
+    }
 }
 
 /* 000006F0-00000788       .text _execute__11daShutter_cFv */
 bool daShutter_c::_execute() {
-    /* Nonmatching */
+    if (mFrameTimer >= 0) {
+        mFrameTimer--;
+    }
+    demo();
+    set_mtx();
+    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+        mdBgW[i]->Move();
+    }
+    mbIsSwitch = fopAcM_isSwitch(this, mSwitchNo);
+    return TRUE;
 }
 
 /* 00000788-00000B14       .text shutter_move__11daShutter_cFv */
 void daShutter_c::shutter_move() {
-    /* Nonmatching */
+    static char* action_table[] = {"WAIT", "WAIT02", "OPEN", "CLOSE"};
+    int actionIndex = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
+
+    float maxVel = m_max_speed[mType];;
+    float minVel = m_min_speed[mType];
+
+    float fVar4;
+    float fVar5;
+
+    switch (actionIndex) {
+        case 0: //WAIT
+        {
+            mTimer = 0xf;
+            field_0x33A = 0;
+            dComIfGp_evmng_cutEnd(mStaffId);
+            return;
+        }
+        case 1: //WAIT02
+        {
+            if (!cLib_calcTimer(&mTimer)) {
+                field_0x339 = 0;
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+            return;
+        }
+        case 2: //OPEN
+        {
+            field_0x33A++;
+            if (field_0x339 == 0) {
+                field_0x339 = 1;
+                if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStage().getStagInfo()) == 5) {
+                    fopAcM_seStart(this, JA_SE_OBJ_B_SHUTTER_OPEN, 0);
+                }
+            }
+            fVar4 = cLib_addCalc(&mcXyz[0].x, -m_move_len[mType] - m_width[mType] / 2.0f, 0.1f, maxVel, minVel);
+            fVar5 = cLib_addCalc(&mcXyz[1].x, m_move_len[mType] + m_width[mType] / 2.0f, 0.1f, maxVel, minVel);
+            if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStage().getStagInfo()) == 5) && (field_0x33A == 75)) {
+                fopAcM_seStart(this, JA_SE_OBJ_B_SHUTTER_STOP, 0);
+                dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+            }
+            if (fVar4 != 0.0f){
+                return;
+            } 
+            if (fVar5 != 0.0f) {
+                return;
+            }
+            dComIfGp_evmng_cutEnd(mStaffId);
+            return;
+        }
+        case 3: //CLOSE
+        {
+            if (field_0x339 == 0) {
+                field_0x339 = 1;
+            }
+            fVar4 = cLib_addCalc(&mcXyz[0].x, -m_width[mType] / 2.0f, 0.1f, maxVel, minVel);
+            fVar5 = cLib_addCalc(&mcXyz[1].x, m_width[mType] / 2.0f, 0.1f, maxVel, minVel);
+            if (fVar4 != 0.0f) {
+                return;
+            }
+            if (fVar5 != 0.0f) {
+                return;
+            }
+            dComIfGp_evmng_cutEnd(mStaffId);
+            return;
+        }
+    }
+    dComIfGp_evmng_cutEnd(mStaffId);
 }
 
 /* 00000B14-00000CF0       .text demo__11daShutter_cFv */
 void daShutter_c::demo() {
-    /* Nonmatching */
+    u8 isSwitch = fopAcM_isSwitch(this, mSwitchNo);
+    if (field_0x320 == 0) {
+        if ((isSwitch != mbIsSwitch) && (mFrameTimer < 0)) {
+            if (!isSwitch) {
+                field_0x320 = 2;
+            }
+            else {
+                field_0x320 = 1;
+            }
+        }
+    }
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if ((dComIfGp_evmng_startCheck(mOpenEventIdx)) && (field_0x320 == 1)) {
+            field_0x320 = 0;
+        }
+        if ((dComIfGp_evmng_startCheck(mCloseEventIdx)) && (field_0x320 == 2)) {
+            field_0x320 = 0;
+        }
+        if (dComIfGp_evmng_endCheck(mOpenEventIdx) || dComIfGp_evmng_endCheck(mCloseEventIdx)) {
+            dComIfGp_event_reset();
+        }
+        mStaffId = dComIfGp_evmng_getMyStaffId(m_staff_name[mType], NULL, 0);
+        shutter_move();
+    }
+    else if ((field_0x320 == 1) && (mOpenEventIdx != 0)) {
+        fopAcM_orderOtherEventId(this, mOpenEventIdx);
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
+    }
+    else if ((field_0x320 == 2) && (mCloseEventIdx != 0)) {
+        fopAcM_orderOtherEventId(this, mCloseEventIdx);
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
+    }
 }
 
 /* 00000CF0-00000DD8       .text _draw__11daShutter_cFv */
 bool daShutter_c::_draw() {
-    /* Nonmatching */
+    cXyz actorPos;
+    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+        actorPos = current.pos;
+        actorPos += mcXyz[i];
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &actorPos, &tevStr);
+        g_env_light.setLightTevColorType(mpModel[i], &tevStr);
+        dComIfGd_setListBG();
+        mDoExt_modelUpdateDL(mpModel[i]);
+        dComIfGd_setList();
+    }
+    return TRUE;
 }
 
 /* 00000DD8-00000DF8       .text daShutter_Create__FPv */
-static s32 daShutter_Create(void*) {
-    /* Nonmatching */
+static s32 daShutter_Create(void* i_this) {
+    return ((daShutter_c*)i_this)->_create();
 }
 
 /* 00000DF8-00000E18       .text daShutter_Delete__FPv */
-static BOOL daShutter_Delete(void*) {
-    /* Nonmatching */
+static bool daShutter_Delete(void* i_this) {
+    return ((daShutter_c*)i_this)->_delete();
 }
 
 /* 00000E18-00000E38       .text daShutter_Draw__FPv */
-static BOOL daShutter_Draw(void*) {
-    /* Nonmatching */
+static bool daShutter_Draw(void* i_this) {
+    return ((daShutter_c*)i_this)->_draw();
 }
 
 /* 00000E38-00000E58       .text daShutter_Execute__FPv */
-static BOOL daShutter_Execute(void*) {
-    /* Nonmatching */
+static bool daShutter_Execute(void* i_this) {
+    return ((daShutter_c*)i_this)->_execute();
 }
 
 /* 00000E58-00000E60       .text daShutter_IsDelete__FPv */
 static BOOL daShutter_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daShutterMethodTable = {
