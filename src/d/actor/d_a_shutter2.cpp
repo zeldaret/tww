@@ -73,16 +73,10 @@ int daShutter2_c::Create() {
 s32 daShutter2_c::_create() {
     fopAcM_SetupActor(this, daShutter2_c);
     mType = 0;
-    int result = dComIfG_resLoad(&mPhs, m_arcname[mType]);
-    if (result == cPhs_COMPLEATE_e) {
-        if (MoveBGCreate(m_arcname[mType], m_dzbidx[mType], NULL, m_heapsize[mType]) == 5) {
-            result = cPhs_ERROR_e;
-        }
-        else {
-            return;
-        }
+    if ((dComIfG_resLoad(&mPhs, m_arcname[mType]) == cPhs_COMPLEATE_e) && 
+        (MoveBGCreate(m_arcname[mType], m_dzbidx[mType], NULL, m_heapsize[mType]) == cPhs_ERROR_e)) {
+        return cPhs_ERROR_e;
     }
-    return result;
 }
 
 /* 0000041C-000004AC       .text set_mtx__12daShutter2_cFv */
@@ -96,12 +90,12 @@ void daShutter2_c::set_mtx() {
 }
 
 /* 000004AC-00000528       .text Execute__12daShutter2_cFPPA3_A4_f */
-BOOL daShutter2_c::Execute(Mtx** i_this) {
+BOOL daShutter2_c::Execute(Mtx** pMtx) {
     demo();
     set_mtx();
     mbIsSwitch = fopAcM_isSwitch(this, mSwitchNo);
     mbIsNearEnemy = fopAcM_myRoomSearchEnemy(fopAcM_GetRoomNo(this)) == NULL;
-    *i_this = &mMtx;
+    *pMtx = &mMtx;
     return TRUE;
 }
 
@@ -119,13 +113,13 @@ void daShutter2_c::shutter_move() {
         case 0: //WAIT
         {
             dComIfGp_evmng_cutEnd(mStaffId);
-            return;   
+            break;   
         }
         case 3: //OPEN_INIT
         {
             fopAcM_seStart(this, JA_SE_OBJ_WDUN_R04_STR_OP, 0);
             dComIfGp_evmng_cutEnd(mStaffId);
-            return;
+            break;
         }
         case 1: //OPEN
         {
@@ -133,7 +127,7 @@ void daShutter2_c::shutter_move() {
             if (fVar3 == 0.0f){
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
-            return;
+            break;
 
         }
         case 2: //CLOSE
@@ -142,42 +136,44 @@ void daShutter2_c::shutter_move() {
             if (fVar3 == 0.0f){
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
-            return;
+            break;
         }
+        default:
+            dComIfGp_evmng_cutEnd(mStaffId);
     }
-    dComIfGp_evmng_cutEnd(mStaffId);
+    return;
 }
 
 /* 00000698-000008B0       .text demo__12daShutter2_cFv */
 void daShutter2_c::demo() {
     u8 isSwitch = fopAcM_isSwitch(this, mSwitchNo);
     u8 isNearEnemy = fopAcM_myRoomSearchEnemy(fopAcM_GetRoomNo(this)) == NULL;
-    if (m304 == NULL) {
+    if (mActionIndex == 0) {
         if (mSwitchNo != 0xFF) {
             if (isSwitch != (u8)mbIsSwitch) {
                 if (!isSwitch) {
-                    m304 = 2;
+                    mActionIndex = 2;
                 }
                 else {
-                    m304 = 1;
+                    mActionIndex = 1;
                 }
             }
         }
         else if (isNearEnemy != mbIsNearEnemy) {
             if (!isNearEnemy) {
-                m304 = 2;
+                mActionIndex = 2;
             }
             else {
-                m304 = 1;
+                mActionIndex = 1;
             }
         }
     }
     if (eventInfo.checkCommandDemoAccrpt()) {
-        if (dComIfGp_evmng_startCheck(mOpenEventIdx) && (m304 == 1)) {
-            m304 = 0;
+        if (dComIfGp_evmng_startCheck(mOpenEventIdx) && (mActionIndex == 1)) {
+            mActionIndex = 0;
         }
-        if (dComIfGp_evmng_startCheck(mCloseEventIdx) && (m304 == 2)) {
-            m304 = 0;
+        if (dComIfGp_evmng_startCheck(mCloseEventIdx) && (mActionIndex == 2)) {
+            mActionIndex = 0;
         }
         if (dComIfGp_evmng_endCheck(mOpenEventIdx) || dComIfGp_evmng_endCheck(mCloseEventIdx)) {
             dComIfGp_event_reset();
@@ -185,11 +181,11 @@ void daShutter2_c::demo() {
         mStaffId = dComIfGp_evmng_getMyStaffId(m_staff_name[mType], NULL, 0);
         shutter_move();
     }
-    else if ((m304 == 1) && (mOpenEventIdx != 0)) {
+    else if ((mActionIndex == 1) && (mOpenEventIdx != 0)) {
         fopAcM_orderOtherEventId(this, mOpenEventIdx);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
-    else if ((m304 == 2) && (mCloseEventIdx != 0)) {
+    else if ((mActionIndex == 2) && (mCloseEventIdx != 0)) {
         fopAcM_orderOtherEventId(this, mCloseEventIdx);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
@@ -203,7 +199,7 @@ BOOL daShutter2_c::Draw() {
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
-    return 1;
+    return TRUE;
 }
 
 /* 00000950-00000970       .text daShutter2_Create__FPv */
