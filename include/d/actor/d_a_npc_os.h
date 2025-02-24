@@ -259,7 +259,7 @@ public:
 public:
     /* 0x00 - vtable*/
 
-    /* 0x04 */ s8 field_0x04;
+    /* 0x04 */ s8 mNo;
 
     /* 0x08 */ daNpc_Os_HIO2_c mOs2;
     /* 0x34 */ dNpc_HIO_c mNpc;

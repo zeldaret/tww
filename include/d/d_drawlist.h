@@ -324,7 +324,7 @@ class dKy_tevstr_c;
 class dDlst_shadowReal_c {
 public:
     void reset();
-    void imageDraw(f32 (*)[4]);
+    void imageDraw(Mtx);
     void draw();
     u32 set(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     u32 set2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
@@ -340,7 +340,7 @@ public:
     bool isUse() { return mState != 0; }
     bool checkKey(u32 i_key) { return mKey == i_key; }
 
-    enum { MODEL_MAX = 0x1A };
+    static const int MODEL_MAX = 0x1A;
 
 private:
     /* 0x0000 */ u8 mState;
@@ -351,7 +351,7 @@ private:
     /* 0x0008 */ Mtx mViewMtx;
     /* 0x0038 */ Mtx44 mRenderProjMtx;
     /* 0x0078 */ Mtx mReceiverProjMtx;
-    /* 0x00A8 */ void* mpTexData;
+    /* 0x00A8 */ u8* mpTexData;
     /* 0x00AC */ dDlst_shadowRealPoly_c mShadowRealPoly;
     /* 0x24B4 */ GXTexObj mTexObj;
     /* 0x24D4 */ J3DDrawBuffer* mpDrawBuffer;

@@ -2,6 +2,7 @@
 #define D_A_SHUTTER2_H
 
 #include "d/d_bg_s_movebg_actor.h"
+#include "f_op/f_op_actor_mng.h"
 
 class daShutter2_c : public dBgS_MoveBgActor {
 public:
@@ -48,7 +49,7 @@ public:
 };
 
 namespace daShutter2_prm {
-    inline u8 getSwitchNo(daShutter2_c* item) { return (fopAcM_GetParam(item) >> 0) & 0xFF; }
+    inline u8 getSwitchNo(daShutter2_c* i_this) { return (fopAcM_GetParam(i_this) >> 0) & 0xFF; }
 }
 
 #endif /* D_A_SHUTTER2_H */

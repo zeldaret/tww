@@ -121,7 +121,7 @@ daNpc_Os_HIO_c::daNpc_Os_HIO_c() {
     field_0xA8 = 0.75f;
     field_0xAC = 18.0f;
     field_0xB0 = 8.0f;
-    field_0x04 = -1;
+    mNo = -1;
 }
 
 /* 00000300-00000354       .text searchFromName__FPcUlUl */
@@ -165,8 +165,8 @@ s32 daNpc_Os_c::create() {
 
         setBaseMtx();
         fopAcM_SetMtx(this, mpMorf->mpModel->getBaseTRMtx());
-        if(l_HIO.field_0x04 < 0) {
-            l_HIO.field_0x04 = mDoHIO_createChild("お供石像", &l_HIO); // "Companion Statue" (otomo sekizou)
+        if(l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("お供石像", &l_HIO); // "Companion Statue" (otomo sekizou)
             l_HIO.field_0x5C = this;
             l_hio_counter = 1;
         }
@@ -2349,9 +2349,9 @@ daNpc_Os_c::~daNpc_Os_c() {
         l_hio_counter -= 1;
     }
     
-    if(l_hio_counter <= 0 && l_HIO.field_0x04 >= 0) {
-        mDoHIO_deleteChild(l_HIO.field_0x04);
-        l_HIO.field_0x04 = -1;
+    if(l_hio_counter <= 0 && l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 
     m_playerRoom[subtype] = false;

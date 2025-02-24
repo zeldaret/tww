@@ -16,9 +16,6 @@
 #define ASSERT(...)
 #define LOGF(FMT, ...)
 
-#define FLOAT_LABEL(x) (*(f32*)&x)
-#define DOUBLE_LABEL(x) (*(f64*)&x)
-
 #define _SDA_BASE_(dummy) 0
 #define _SDA2_BASE_(dummy) 0
 

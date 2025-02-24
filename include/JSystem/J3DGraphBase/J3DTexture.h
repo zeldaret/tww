@@ -62,10 +62,6 @@ public:
         J3DGDLoadTexMtxImm((Mtx&)mMtx, GX_TEXMTX0 + texMtxID * 3, (GXTexMtxType)mTexMtxInfo.mProjection);
     };
     void calc();
-    void calcTexMtx(f32 const (*)[4]);
-    void calcPostTexMtx(f32 const (*)[4]);
-    void loadTexMtx(u32) const;
-    void loadPostTexMtx(u32) const;
 
     J3DTexMtxInfo& getTexMtxInfo() { return mTexMtxInfo; }
     Mtx& getMtx() { return mMtx; }
@@ -73,6 +69,7 @@ public:
     Mtx& getViewMtx() { return mViewMtx; }
     void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
 
+    // TODO
     void getTextureSRT() {}
 
 private:

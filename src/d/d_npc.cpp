@@ -937,8 +937,8 @@ bool dNpc_chkAttn(fopAc_ac_c* i_this, cXyz destPos, f32 param_3, f32 param_4, f3
     return ret;
 }
 
-static void dummyfunc(int i_pathInf) {
-    JUT_ASSERT(0, i_pathInf != 0);
+static void dummyfunc(dStage_dPath_c* i_pathInf) {
+    JUT_ASSERT(0, i_pathInf != NULL);
 }
 
 dCcD_SrcCyl dNpc_cyl_src = {

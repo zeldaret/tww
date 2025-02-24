@@ -1687,7 +1687,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_pfall"),
     ActorRel(NonMatching, "d_a_obj_plant"),
     ActorRel(NonMatching, "d_a_obj_rflw"),
-    ActorRel(Matching, "d_a_obj_rforce"),
+    ActorRel(Matching,    "d_a_obj_rforce"),
     ActorRel(NonMatching, "d_a_obj_smplbg"),
     ActorRel(NonMatching, "d_a_obj_tapestry"),
     ActorRel(NonMatching, "d_a_obj_tntrap"),

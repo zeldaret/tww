@@ -57,8 +57,8 @@ public:
 };
 
 namespace daShutter_prm {
-    inline u8 getSwitchNo(daShutter_c* item) { return (fopAcM_GetParam(item) >> 0) & 0xFF; }
-    inline u8 getType(daShutter_c* item) { return (fopAcM_GetParam(item) >> 8) & 0x0F; }
+    inline u8 getSwitchNo(daShutter_c* i_this) { return (fopAcM_GetParam(i_this) >> 0) & 0xFF; }
+    inline u8 getType(daShutter_c* i_this) { return (fopAcM_GetParam(i_this) >> 8) & 0x0F; }
 }
 
 #endif /* D_A_SHUTTER_H */

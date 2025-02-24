@@ -14,9 +14,11 @@ f32 PSMulUnit01[2] = { 0.0f, -1.0f };
 
 /* 802DA0A8-802DA0B0       .text __MTGQR7__FUl */
 void __MTGQR7(register u32 v) {
-    asm {
+#ifdef __MWERKS__
+asm {
         mtspr GQR7, v
     }
+#endif
 }
 
 /* 802DA0B0-802DA0E8       .text J3DGQRSetup7__FUlUlUlUl */
@@ -241,7 +243,8 @@ void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo& srt, Mtx dst) {
 void J3DScaleNrmMtx(register Mtx mtx, const register Vec& scl) {
     register f32 mtx_xy, mtx_z_, scl_xy, scl_z_;
 
-    asm {
+#ifdef __MWERKS__
+asm {
         /* Row 0 */
         psq_l  scl_xy, 0(scl), 0, 0
         psq_l  mtx_xy, 0(mtx), 0, 0
@@ -272,6 +275,7 @@ void J3DScaleNrmMtx(register Mtx mtx, const register Vec& scl) {
         fmuls  f4, mtx_z_, scl_z_
         stfs   f4, 40(mtx)
     }
+#endif
 }
 
 /* 802DAB68-802DABBC       .text J3DScaleNrmMtx33__FPA3_fRC3Vec */
@@ -281,7 +285,8 @@ void J3DScaleNrmMtx33(register Mtx33 mtx, const register Vec& scl) {
     register f32 mtx2_xy, mtx2_z_;
     register f32 scl__xy, scl__z_;
 
-    asm {
+#ifdef __MWERKS__
+asm {
         psq_l  mtx0_xy, 0(mtx), 0, 0
         psq_l  scl__xy, 0(scl), 0, 0
         lfs    mtx0_z_, 8(mtx)
@@ -303,6 +308,7 @@ void J3DScaleNrmMtx33(register Mtx33 mtx, const register Vec& scl) {
         psq_st mtx2_xy, 24(mtx), 0, 0
         stfs   mtx2_z_, 32(mtx)
     }
+#endif
 }
 
 /* 802DABBC-802DACE0       .text J3DMtxProjConcat__FPA4_fPA4_fPA4_f */
@@ -318,7 +324,8 @@ void J3DPSMtx33Copy(register Mtx3P src, register Mtx3P dst) {
     register f32 x3_y3;
     register f32 z3;
 
-    asm {
+#ifdef __MWERKS__
+asm {
         psq_l x1_y1, 0(src), 0, 0
         psq_l z1_x2, 8(src), 0, 0
         psq_l y2_z2, 16(src), 0, 0
@@ -330,11 +337,13 @@ void J3DPSMtx33Copy(register Mtx3P src, register Mtx3P dst) {
         psq_st x3_y3, 24(dst), 0, 0
         stfs z3, 32(dst)
     }
+#endif
 }
 
 /* 802DAD0C-802DAD40       .text J3DPSMtx33CopyFrom34__FPA4_fPA3_f */
 void J3DPSMtx33CopyFrom34(register MtxP src, register Mtx3P dst) {
-    asm {
+#ifdef __MWERKS__
+asm {
         psq_l  f0, 0(src), 0, 0
         psq_st f0, 0(dst), 0, 0
         lfs    f1, 8(src)
@@ -348,6 +357,7 @@ void J3DPSMtx33CopyFrom34(register MtxP src, register Mtx3P dst) {
         lfs    f5, 40(src)
         stfs   f5, 32(dst)
     }
+#endif
 }
 
 /* 802DAD40-802DAE1C       .text J3DPSMtxArrayConcat__FPA4_fPA4_fPA4_fUl */

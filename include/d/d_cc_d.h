@@ -102,11 +102,14 @@ enum dCcG_At_Spl {
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
     /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
+    /* 0x8 */ dCcG_At_Spl_UNK8 = 8,
     /* 0x9 */ dCcG_At_Spl_UNK9 = 9,
     /* 0xB */ dCcG_At_Spl_UNKB = 0xB,
 };
 
-enum dCcG_Tg_Spl {};
+enum dCcG_Tg_Spl {
+    /* 0x0 */ dCcG_Tg_Spl_UNK0 = 0,
+};
 
 struct dCcD_SrcGAtTgCoCommonBase {
     /* 0x0 */ u32 mSPrm;
@@ -170,8 +173,8 @@ public:
 
     void Ct();
     void Move();
-    void ClrAt() { mAtSpl = 0; }
-    void ClrTg() { mTgSpl = 0; }
+    void ClrAt() { mAtSpl = dCcG_At_Spl_UNK0; }
+    void ClrTg() { mTgSpl = dCcG_Tg_Spl_UNK0; }
     void SetAtApid(fpc_ProcID id) { mAtApid = id; }
     void SetTgApid(fpc_ProcID id) { mTgApid = id; }
     u8 GetRoomId() { return mRoomId; }

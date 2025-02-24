@@ -25,7 +25,7 @@ bool dBgWHf::Set(cBgD_t* bgd, u16* r5, f32 f1, int r6, int r7, u32 flag) {
     m_gridz = r7;
     mC8 = r5;
     mC4 = f1;
-    if (cBgW::Set(bgd, 0x33, NULL)) {
+    if (cBgW::Set(bgd, MOVE_BG_e | NO_CALC_VTX_e | NO_VTX_TBL_e | GLOBAL_e, NULL)) {
         return true;
     }
     SetFlag(flag);

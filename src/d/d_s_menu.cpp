@@ -92,7 +92,7 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
         if (CPad_CHECK_TRIG_UP(0) || CPad_CHECK_TRIG_DOWN(0)) {
             i_this->field_0x1e1 = 20;
         } else {
-            if (!cLib_calcTimer(&i_this->field_0x1e1))
+            if (cLib_calcTimer(&i_this->field_0x1e1) == 0)
                 i_this->field_0x1e1 = 4;
             else
                 trig = FALSE;
@@ -114,7 +114,7 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
         if (CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_A(0)) {
             i_this->field_0x1e2 = 20;
         } else {
-            if (!cLib_calcTimer(&i_this->field_0x1e2))
+            if (cLib_calcTimer(&i_this->field_0x1e2) == 0)
                 i_this->field_0x1e2 = 4;
             else
                 trig = FALSE;

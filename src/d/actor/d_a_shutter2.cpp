@@ -6,7 +6,6 @@
 #include "d/actor/d_a_shutter2.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_bg_s_movebg_actor.h"
 #include "d/res/res_htobi3.h"
 
 const float daShutter2_c::m_max_speed[1] = {3.0f};
@@ -73,10 +72,14 @@ int daShutter2_c::Create() {
 s32 daShutter2_c::_create() {
     fopAcM_SetupActor(this, daShutter2_c);
     mType = 0;
-    if ((dComIfG_resLoad(&mPhs, m_arcname[mType]) == cPhs_COMPLEATE_e) && 
-        (MoveBGCreate(m_arcname[mType], m_dzbidx[mType], NULL, m_heapsize[mType]) == cPhs_ERROR_e)) {
-        return cPhs_ERROR_e;
+    int phase_state = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        phase_state = MoveBGCreate(m_arcname[mType], m_dzbidx[mType], NULL, m_heapsize[mType]);
+        if (phase_state == cPhs_ERROR_e) {
+            phase_state = cPhs_ERROR_e;
+        }
     }
+    return phase_state;
 }
 
 /* 0000041C-000004AC       .text set_mtx__12daShutter2_cFv */
@@ -103,25 +106,36 @@ BOOL daShutter2_c::Execute(Mtx** pMtx) {
 void daShutter2_c::shutter_move() {
     float fVar3;
 
-    static char* action_table[4] = {"WAIT", "OPEN", "CLOSE", "OPEN_INIT"};
+    static char* action_table[4] = {
+        "WAIT",
+        "OPEN",
+        "CLOSE",
+        "OPEN_INIT",
+    };
+    enum {
+        ACT_WAIT,
+        ACT_OPEN,
+        ACT_CLOSE,
+        ACT_OPEN_INIT,
+    };
     int actionIndex = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 
     float maxVel = m_max_speed[mType];
     float minVel = m_min_speed[mType];
     
     switch (actionIndex) {
-        case 0: //WAIT
+        case ACT_WAIT:
         {
             dComIfGp_evmng_cutEnd(mStaffId);
             break;   
         }
-        case 3: //OPEN_INIT
+        case ACT_OPEN_INIT:
         {
             fopAcM_seStart(this, JA_SE_OBJ_WDUN_R04_STR_OP, 0);
             dComIfGp_evmng_cutEnd(mStaffId);
             break;
         }
-        case 1: //OPEN
+        case ACT_OPEN:
         {
             fVar3 = cLib_addCalc(&current.pos.y, home.pos.y + 350.0f, 0.1f, maxVel, minVel);
             if (fVar3 == 0.0f){
@@ -130,7 +144,7 @@ void daShutter2_c::shutter_move() {
             break;
 
         }
-        case 2: //CLOSE
+        case ACT_CLOSE:
         {
             fVar3 = cLib_addCalc(&current.pos.y, home.pos.y, 0.1f, maxVel, minVel);
             if (fVar3 == 0.0f){
@@ -140,6 +154,7 @@ void daShutter2_c::shutter_move() {
         }
         default:
             dComIfGp_evmng_cutEnd(mStaffId);
+            break;
     }
     return;
 }

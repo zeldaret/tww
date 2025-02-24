@@ -122,7 +122,7 @@ public:
     daObjTpost_HIO_c();
     virtual ~daObjTpost_HIO_c() {}
 
-    /* 0x04 */ s8 field_0x04;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ bool debug_draw;
     /* 0x06 */ s8 field_0x06;
     /* 0x07 */ u8 field_0x07;

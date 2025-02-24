@@ -50,7 +50,7 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 000000EC-00000118       .text __ct__17daTori_Flag_HIO_cFv */
 daTori_Flag_HIO_c::daTori_Flag_HIO_c() {
-    mNo = -0x1;
+    mNo = -1;
     someFloat = 0.0f;
     someShort = 0;
     return;
@@ -82,7 +82,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daTori_Flag_c::CreateHeap() {
     BOOL ret;
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, TRFLAG_BDL_ETHATA);
-    JUT_ASSERT(0x120, modelData != 0);
+    JUT_ASSERT(0x120, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL) {
         ret = FALSE;

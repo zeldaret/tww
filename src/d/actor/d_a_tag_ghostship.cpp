@@ -13,7 +13,7 @@ static daTag_Gship_HIO_c l_HIO;
 
 /* 000000EC-0000010C .text __ct__17daTag_Gship_HIO_cFv */
 daTag_Gship_HIO_c::daTag_Gship_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     field_0x05 = 0;
 }
 

@@ -20,11 +20,6 @@
 #include "m_Do/m_Do_mtx.h"
 
 
-#define DEMO_PROC_WAIT 0
-#define DEMO_PROC_OPEN 1
-#define DEMO_PROC_APPEAR 2
-#define DEMO_PROC_OPEN_SHORT 3
-
 #define FUNC_TYPE_NORMAL 0
 #define FUNC_TYPE_SWITCH 1
 #define FUNC_TYPE_ENEMIES 2
@@ -78,7 +73,7 @@ static daTbox_c::modelInfo l_modelInfo[] = {
 
 /* 000000EC-00000124       .text __ct__12daTbox_HIO_cFv */
 daTbox_HIO_c::daTbox_HIO_c() {
-    mHioId = -1;
+    mNo = -1;
     m06 = 0x82;
     m08 = 0xB4;
     m0A = 0x30;
@@ -242,7 +237,7 @@ s32 daTbox_c::bgCheckSet() {
         return cPhs_ERROR_e;
     }
 
-    if (mpBgWClosed->Set(bgd, cBgW::MOVE_BG_e, &mMtx) == 1) {
+    if (mpBgWClosed->Set(bgd, cBgW::MOVE_BG_e, &mMtx) == true) {
         return cPhs_ERROR_e;
     }
 
@@ -254,7 +249,7 @@ s32 daTbox_c::bgCheckSet() {
         return cPhs_ERROR_e;
     }
 
-    if (mpBgWOpen->Set(bgd, cBgW::MOVE_BG_e, &mMtx) == 1) {
+    if (mpBgWOpen->Set(bgd, cBgW::MOVE_BG_e, &mMtx) == true) {
         return cPhs_ERROR_e;
     }
 
@@ -267,7 +262,7 @@ s32 daTbox_c::bgCheckSet() {
             return cPhs_ERROR_e;
         }
 
-        if (mpBgWVines->Set(bgd, cBgW::MOVE_BG_e, &mMtx) == 1) {
+        if (mpBgWVines->Set(bgd, cBgW::MOVE_BG_e, &mMtx) == true) {
             return cPhs_ERROR_e;
         }
     }
@@ -290,7 +285,7 @@ void daTbox_c::searchRoomNo() {
         mRoomNo = home.angle.x & 0x3F;
     }
 
-    if (flagCheck(0x02)) {
+    if (flagCheck(daTboxFlg_UNK_02)) {
         clrDzb();
     }
     else if (mRoomNo != -1 && mpBgWCurrent == NULL) {
@@ -376,12 +371,12 @@ void daTbox_c::setDzb() {
 
 /* 00000ECC-00000F8C       .text surfaceProc__8daTbox_cFv */
 void daTbox_c::surfaceProc() {
-    if (mpBgWCurrent != NULL && flagCheck(0x20)) {
+    if (mpBgWCurrent != NULL && flagCheck(daTboxFlg_UNK_20)) {
         if (m03EC < -1.0f) {
             m03EC += 1.0f;
         }
         else {
-            flagOff(0x20);
+            flagOff(daTboxFlg_UNK_20);
             m03EC = 0.0f;
         }
 
@@ -496,29 +491,29 @@ void daTbox_c::CreateInit() {
                 frameCtrl->setFrame(frameCtrl->getEnd());
             }
             else {
-                 flagOn(0x04);
+                 flagOn(daTboxFlg_UNK_04);
 
                 switch (funcType) {
                     case FUNC_TYPE_ENEMIES:
                         setAction(&daTbox_c::actionGenocide);
                         mGenocideDelayTimer = 0x41;
-                        flagOn(0x03);
+                        flagOn(daTboxFlg_UNK_01 | daTboxFlg_UNK_02);
                         mAppearTimer = 0x78;
                         break;
                     case FUNC_TYPE_SWITCH:
                     case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
                         setAction(&daTbox_c::actionSwOnWait);
-                        flagOn(0x03);
+                        flagOn(daTboxFlg_UNK_01 | daTboxFlg_UNK_02);
                         mAppearTimer = 0x78;
                         break;
                     case FUNC_TYPE_TACT:
                         setAction(&daTbox_c::actionSwOnWait);
-                        flagOn(0x03);
+                        flagOn(daTboxFlg_UNK_01 | daTboxFlg_UNK_02);
                         mAppearTimer = l_HIO.m08;
                         break;
                     case FUNC_TYPE_SWITCH_TRANSPARENT:
                         setAction(&daTbox_c::actionSwOnWait);
-                        flagOn(0x02);
+                        flagOn(daTboxFlg_UNK_02);
                         mAppearTimer = 0x5A;
 
                         mpAppearRegAnm->setFrame(30.0f);
@@ -536,8 +531,8 @@ void daTbox_c::CreateInit() {
     lightReady();
     mAllColRatio = 1.0f;
 
-    if (l_HIO.mHioId < 0) {
-        l_HIO.mHioId = mDoHIO_createChild("宝箱", &l_HIO); // "Treasure Chest"
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("宝箱", &l_HIO); // "Treasure Chest"
     }
 
     shape_angle.z = 0;
@@ -561,7 +556,7 @@ void daTbox_c::CreateInit() {
         gravity = -2.5f;
     }
 
-    mOpenedSwitch = getTboxNo();
+    mTboxNo = getTboxNo();
 }
 
 /* 00001560-00001624       .text boxCheck__8daTbox_cFv */
@@ -656,7 +651,7 @@ void daTbox_c::demoProcOpen() {
         mFlashRegAnm.setPlaySpeed(1.0f);
 
         mAllColRatio = 0.4f;
-        flagOn(0x08);
+        flagOn(daTboxFlg_UNK_08);
     }
 
     darkProc();
@@ -696,12 +691,12 @@ void daTbox_c::demoInitAppear() {
 /* 00001B38-00001CF4       .text demoProcAppear_Tact__8daTbox_cFv */
 void daTbox_c::demoProcAppear_Tact() {
     if (mAppearTimer == l_HIO.m08 - l_HIO.m06) {
-        flagOff(1);
+        flagOff(daTboxFlg_UNK_01);
         mInvisibleScrollVal = 2.0f;
 
         mpAppearRegAnm->setFrame(mpAppearRegAnm->getEndFrame());
         mpAppearRegAnm->play();
-        flagOff(4);
+        flagOff(daTboxFlg_UNK_04);
     }
 
     mTactPlatformBrk.play();
@@ -755,7 +750,7 @@ void daTbox_c::demoProcAppear() {
 
     if (mpAppearRegAnm->play()) {
         dComIfGp_evmng_cutEnd(mStaffId);
-        flagOff(4);
+        flagOff(daTboxFlg_UNK_04);
     }
 }
 
@@ -765,7 +760,13 @@ s32 daTbox_c::demoProc() {
         "WAIT",
         "OPEN",
         "APPEAR",
-        "OPEN_SHORT"
+        "OPEN_SHORT",
+    };
+    enum {
+        ACT_WAIT,
+        ACT_OPEN,
+        ACT_APPEAR,
+        ACT_OPEN_SHORT,
     };
 
     s32 actionIdx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
@@ -775,36 +776,36 @@ s32 daTbox_c::demoProc() {
         mHasOpenAnmFinished = false;
 
         switch (actionIdx) {
-            case DEMO_PROC_OPEN:
+            case ACT_OPEN:
                 OpenInit();
                 lightReady();
                 mPLight.mPower = 0.0f;
                 mEfLight.mPower = 0.0f;
                 break;
-            case DEMO_PROC_APPEAR:
-                flagOn(0x20);
+            case ACT_APPEAR:
+                flagOn(daTboxFlg_UNK_20);
                 m03EC = -130.0f;
 
                 setDzb();
 
                 if (getFuncType() == FUNC_TYPE_TACT) {
-                    flagOff(0x02);
+                    flagOff(daTboxFlg_UNK_02);
                     demoInitAppear_Tact();
                 }
                 else {
-                    flagOff(0x03);
+                    flagOff(daTboxFlg_UNK_01 | daTboxFlg_UNK_02);
                     demoInitAppear();
                 }
 
                 break;
-            case DEMO_PROC_OPEN_SHORT:
+            case ACT_OPEN_SHORT:
                 OpenInit_com();
                 break;
         }
     }
 
     switch (actionIdx) {
-        case DEMO_PROC_APPEAR:
+        case ACT_APPEAR:
             if (getFuncType() == FUNC_TYPE_TACT) {
                 demoProcAppear_Tact();
             }
@@ -814,7 +815,7 @@ s32 daTbox_c::demoProc() {
 
             surfaceProc();
             break;
-        case DEMO_PROC_OPEN:
+        case ACT_OPEN:
             if (mHasOpenAnmFinished) {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
@@ -826,7 +827,7 @@ s32 daTbox_c::demoProc() {
                 }
             }
             break;
-        case DEMO_PROC_OPEN_SHORT:
+        case ACT_OPEN_SHORT:
             if (mHasOpenAnmFinished) {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
@@ -843,11 +844,11 @@ s32 daTbox_c::demoProc() {
             break;
     }
 
-    if (flagCheck(0x10)) {
+    if (flagCheck(daTboxFlg_UNK_10)) {
         demoProcOpen();
     }
 
-    if (flagCheck(0x08)) {
+    if (flagCheck(daTboxFlg_UNK_08)) {
         dKy_set_allcol_ratio(mAllColRatio);
     }
 
@@ -889,7 +890,7 @@ void daTbox_c::OpenInit() {
     mIsFlashPlaying = TRUE;
     mOpenTimer = 0;
 
-    flagOn(0x10);
+    flagOn(daTboxFlg_UNK_10);
 
     dComIfGp_particle_set(0x01F1, &current.pos, &current.angle);
     dComIfGp_particle_set(0x01F2, &current.pos, &current.angle);
@@ -930,7 +931,7 @@ BOOL daTbox_c::actionDemo() {
 
         dKy_set_allcol_ratio(1.0f);
 
-        flagOff(0x18);
+        flagOff(daTboxFlg_UNK_08 | daTboxFlg_UNK_10);
         dComIfGp_event_setItemPartner(NULL);
 
         if (mSmokeEmitter != NULL) {
@@ -977,7 +978,7 @@ BOOL daTbox_c::actionOpenWait() {
             mDoAud_subBgmStart(JA_BGM_OPEN_BOX);
             mAllColRatio = 0.4f;
 
-            flagOn(0x08);
+            flagOn(daTboxFlg_UNK_08);
             dKy_set_allcol_ratio(mAllColRatio);
 
             lightReady();
@@ -1064,21 +1065,21 @@ BOOL daTbox_c::actionGenocide() {
 
 /* 00002C10-00002FB0       .text draw__8daTbox_cFv */
 BOOL daTbox_c::draw() {
-    u8 openFlag;
+    u8 tboxNo;
 
     if (mRoomNo != -1 && !checkRoomDisp(mRoomNo)) {
         return TRUE;
     }
 
-    if (flagCheck(0x01) || (checkEnv() && flagCheck(0x04))) {
-        openFlag = mOpenedSwitch;
+    if (flagCheck(daTboxFlg_UNK_01) || (checkEnv() && flagCheck(daTboxFlg_UNK_04))) {
+        tboxNo = mTboxNo;
     }
     else {
-        openFlag = 0xFF;
+        tboxNo = 0xFF;
     }
 
     if (!checkOpen()) {
-        dMap_drawPoint(5, current.pos.x, current.pos.y, current.pos.z, mRoomNo, -0x8000, openFlag, gbaName, 0);
+        dMap_drawPoint(5, current.pos.x, current.pos.y, current.pos.z, mRoomNo, -0x8000, tboxNo, gbaName, 0);
     }
 
     tevStr.mRoomNo = mRoomNo;
@@ -1092,7 +1093,7 @@ BOOL daTbox_c::draw() {
         mDoExt_modelUpdateDL(mpTactPlatformMdl);
     }
 
-    if (flagCheck(0x01)) {
+    if (flagCheck(daTboxFlg_UNK_01)) {
         return TRUE;
     }
 
@@ -1108,7 +1109,7 @@ BOOL daTbox_c::draw() {
         mpAppearRegAnm->entry(chestMdlData);
     }
 
-    if (checkEnv() && flagCheck(0x04)) {
+    if (checkEnv() && flagCheck(daTboxFlg_UNK_04)) {
         float scrollOffset = mInvisibleScrollVal - -2.0f;
         s8 offsetAsU8 = scrollOffset;
 
@@ -1127,7 +1128,7 @@ BOOL daTbox_c::draw() {
             }
         }
 
-        if (flagCheck(0x04)) {
+        if (flagCheck(daTboxFlg_UNK_04)) {
             dComIfGd_setListInvisisble();
             mDoExt_modelUpdateDL(mpChestMdl);
             dComIfGd_setList();
@@ -1226,9 +1227,9 @@ static s32 daTbox_Delete(daTbox_c* i_tbox) {
     i_tbox->mSmokeCB.end();
     dComIfG_resDelete(i_tbox->getPhase(), "Dalways");
 
-    if (l_HIO.mHioId >= 0) {
-        mDoHIO_deleteChild(l_HIO.mHioId);
-        l_HIO.mHioId = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 
     return TRUE;

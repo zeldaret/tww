@@ -372,7 +372,7 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg,
         tgObjInf->SetTgHitPos(*i_hitPos);
         tgObjInf->SetTgRVec(*atObjInf->GetAtVecP());
 
-        if (tgGStts != NULL && atGStts->GetAtSpl() == 0) {
+        if (tgGStts != NULL && atGStts->GetAtSpl() == dCcG_At_Spl_UNK0) {
             tgGStts->SetAtSpl(atObjInf->GetAtSpl());
         }
 

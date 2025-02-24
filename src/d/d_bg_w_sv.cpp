@@ -8,7 +8,7 @@
 
 /* 800AABFC-800AAC84       .text Set__6dBgWSvFP6cBgD_tUl */
 bool dBgWSv::Set(cBgD_t* bgd, u32 flag) {
-    if (cBgW::Set(bgd, 0x63, NULL)) {
+    if (cBgW::Set(bgd, MOVE_BG_e | NO_CALC_VTX_e | GLOBAL_e | UNK40_e, NULL)) {
         return true;
     }
     mSvFlag = flag;

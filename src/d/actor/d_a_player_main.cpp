@@ -3220,7 +3220,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
 
 /* 80120BBC-80120BE0       .text checkSuccessGuard__9daPy_lk_cFi */
 BOOL daPy_lk_c::checkSuccessGuard(int atSpl) {
-    if (!mCyl.ChkTgShieldHit() || atSpl >= 8) {
+    if (!mCyl.ChkTgShieldHit() || atSpl >= dCcG_At_Spl_UNK8) {
         return FALSE;
     }
     return TRUE;
