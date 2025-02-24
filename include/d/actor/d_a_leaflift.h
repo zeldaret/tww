@@ -22,8 +22,8 @@ public:
     BOOL MoveDownLift();
     bool _draw();
 
-    void checkEndDownLift();
-    void MoveUpLift();
+    s32 checkEndDownLift();
+    s32 MoveUpLift();
 
     static const f32 m_height;
     static const f32 m_max_speed;
@@ -56,8 +56,8 @@ public:
     /* 0x4A0 */ JPABaseEmitter* mEmitter1;
     /* 0x4A4 */ JPABaseEmitter* mEmitter2;
     /* 0x4A8 */ JPABaseEmitter* mEmitter3;
-    /* 0x4AC */ u32 m4AC;
-    /* 0x4B0 */ f32 m4B0;
+    /* 0x4AC */ JPABaseEmitter* mEmitter4;
+    /* 0x4B0 */ f32 mUpLift;
 };
 
 namespace daLlift_prm {

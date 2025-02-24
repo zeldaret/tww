@@ -4,13 +4,13 @@
 //
 
 #include "d/actor/d_a_leaflift.h"
-#include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_com_inf_game.h"
-#include "d/d_bg_s_movebg_actor.h"
-#include "d/res/res_trflag.h"
-#include "d/d_lib.h"
 #include "d/d_bg_s_func.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_lib.h"
+#include "d/d_procname.h"
+#include "d/res/res_trflag.h"
+#include "m_Do/m_Do_ext.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -111,10 +111,10 @@ void daLlift_c::CreateInit() {
     mCyl.SetStts(&mStts);
     cXyz local_28 = current.pos;
     local_28.y += 200.0f;
-    m4B0 = dBgS_ObjGndChk_Wtr_Func(local_28);
-    if (m4B0 != -1e9f) {
+    mUpLift = dBgS_ObjGndChk_Wtr_Func(local_28);
+    if (mUpLift != -1e9f) {
         cXyz local_29 = current.pos;
-        local_29.y = m4B0 + 1.0f; 
+        local_29.y = mUpLift + 1.0f; 
         mEmitter3 = dComIfGp_particle_set(0x82AA, &local_29, &current.angle);
         if (mEmitter3) {
             mEmitter3->stopCreateParticle();
