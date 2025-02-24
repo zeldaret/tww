@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_steam_tag.h"
-#include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
@@ -190,8 +189,8 @@ static BOOL daSteamTag_Delete(daSteamTag_c* i_this) {
 
 daSteamTag_c::~daSteamTag_c() {
     if (mpEmitter != NULL) {
-      mpEmitter->becomeInvalidEmitter();
-      mpEmitter = NULL;
+        mpEmitter->becomeInvalidEmitter();
+        mpEmitter = NULL;
     }
     mPointWind.set_pwind_delete();
     return;

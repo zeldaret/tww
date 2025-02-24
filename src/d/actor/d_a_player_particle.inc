@@ -830,12 +830,12 @@ void daPy_lk_c::setFootEffectType(int param_0, cXyz* i_pos, int param_2, int par
         }
 
         if (param_0 == -2) {
-             emitter = dComIfGp_particle_setP1(0x2022, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
+            emitter = dComIfGp_particle_setP1(0x2022, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
         } else if (param_0 == 0x2022 || param_0 == 0x2027) {
-             emitter = dComIfGp_particle_setToonP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
+            emitter = dComIfGp_particle_setToonP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
         } else if (param_0 == 0x24) {
-             GXColor color = {tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b, tevStr.mColorC0.a};
-             emitter = dComIfGp_particle_setP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&grass_scale, 0xFF, footEffect->getOtherCallBack(), -1, &color, &tevStr.mColorK0);
+            GXColor color = {tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b, tevStr.mColorC0.a};
+            emitter = dComIfGp_particle_setP1((u16)param_0, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&grass_scale, 0xFF, footEffect->getOtherCallBack(), -1, &color, &tevStr.mColorK0);
         } else {
             GXColor amb, dif;
             dKy_get_seacolor(&amb, &dif);

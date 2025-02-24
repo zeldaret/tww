@@ -163,32 +163,32 @@ void daShutter2_c::shutter_move() {
 void daShutter2_c::demo() {
     u8 isSwitch = fopAcM_isSwitch(this, mSwitchNo);
     u8 isNearEnemy = fopAcM_myRoomSearchEnemy(fopAcM_GetRoomNo(this)) == NULL;
-    if (mActionIndex == 0) {
+    if (mDemoState == 0) {
         if (mSwitchNo != 0xFF) {
-            if (isSwitch != (u8)mbIsSwitch) {
+            if (isSwitch != mbIsSwitch) {
                 if (!isSwitch) {
-                    mActionIndex = 2;
+                    mDemoState = 2;
                 }
                 else {
-                    mActionIndex = 1;
+                    mDemoState = 1;
                 }
             }
         }
         else if (isNearEnemy != mbIsNearEnemy) {
             if (!isNearEnemy) {
-                mActionIndex = 2;
+                mDemoState = 2;
             }
             else {
-                mActionIndex = 1;
+                mDemoState = 1;
             }
         }
     }
     if (eventInfo.checkCommandDemoAccrpt()) {
-        if (dComIfGp_evmng_startCheck(mOpenEventIdx) && (mActionIndex == 1)) {
-            mActionIndex = 0;
+        if (dComIfGp_evmng_startCheck(mOpenEventIdx) && (mDemoState == 1)) {
+            mDemoState = 0;
         }
-        if (dComIfGp_evmng_startCheck(mCloseEventIdx) && (mActionIndex == 2)) {
-            mActionIndex = 0;
+        if (dComIfGp_evmng_startCheck(mCloseEventIdx) && (mDemoState == 2)) {
+            mDemoState = 0;
         }
         if (dComIfGp_evmng_endCheck(mOpenEventIdx) || dComIfGp_evmng_endCheck(mCloseEventIdx)) {
             dComIfGp_event_reset();
@@ -196,11 +196,11 @@ void daShutter2_c::demo() {
         mStaffId = dComIfGp_evmng_getMyStaffId(m_staff_name[mType], NULL, 0);
         shutter_move();
     }
-    else if ((mActionIndex == 1) && (mOpenEventIdx != 0)) {
+    else if ((mDemoState == 1) && (mOpenEventIdx != 0)) {
         fopAcM_orderOtherEventId(this, mOpenEventIdx);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
-    else if ((mActionIndex == 2) && (mCloseEventIdx != 0)) {
+    else if ((mDemoState == 2) && (mCloseEventIdx != 0)) {
         fopAcM_orderOtherEventId(this, mCloseEventIdx);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }

@@ -371,16 +371,16 @@ void daTbox_c::setDzb() {
 
 /* 00000ECC-00000F8C       .text surfaceProc__8daTbox_cFv */
 void daTbox_c::surfaceProc() {
-    if (mpBgWCurrent != NULL && flagCheck(daTboxFlg_UNK_20)) {
-        if (m03EC < -1.0f) {
-            m03EC += 1.0f;
+    if (mpBgWCurrent != NULL && flagCheck(daTboxFlg_APPEARING_e)) {
+        if (mAppearingYOffset < -1.0f) {
+            mAppearingYOffset += 1.0f;
         }
         else {
-            flagOff(daTboxFlg_UNK_20);
-            m03EC = 0.0f;
+            flagOff(daTboxFlg_APPEARING_e);
+            mAppearingYOffset = 0.0f;
         }
 
-        mDoMtx_stack_c::transS(current.pos.x, current.pos.y + m03EC, current.pos.z);
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mAppearingYOffset, current.pos.z);
         mDoMtx_stack_c::YrotM(current.angle.y);
         mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 
@@ -425,7 +425,11 @@ BOOL daTbox_c::checkNormal() {
         return FALSE;
     }
 
-    return dComIfGs_isSwitch(swNo, mRoomNo) ? TRUE : FALSE;
+    if (dComIfGs_isSwitch(swNo, mRoomNo)) {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 0000108C-000010AC       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -491,7 +495,7 @@ void daTbox_c::CreateInit() {
                 frameCtrl->setFrame(frameCtrl->getEnd());
             }
             else {
-                 flagOn(daTboxFlg_UNK_04);
+                flagOn(daTboxFlg_UNK_04);
 
                 switch (funcType) {
                     case FUNC_TYPE_ENEMIES:
@@ -783,8 +787,8 @@ s32 daTbox_c::demoProc() {
                 mEfLight.mPower = 0.0f;
                 break;
             case ACT_APPEAR:
-                flagOn(daTboxFlg_UNK_20);
-                m03EC = -130.0f;
+                flagOn(daTboxFlg_APPEARING_e);
+                mAppearingYOffset = -130.0f;
 
                 setDzb();
 
@@ -844,7 +848,7 @@ s32 daTbox_c::demoProc() {
             break;
     }
 
-    if (flagCheck(daTboxFlg_UNK_10)) {
+    if (flagCheck(daTboxFlg_OPENING_e)) {
         demoProcOpen();
     }
 
@@ -890,7 +894,7 @@ void daTbox_c::OpenInit() {
     mIsFlashPlaying = TRUE;
     mOpenTimer = 0;
 
-    flagOn(daTboxFlg_UNK_10);
+    flagOn(daTboxFlg_OPENING_e);
 
     dComIfGp_particle_set(0x01F1, &current.pos, &current.angle);
     dComIfGp_particle_set(0x01F2, &current.pos, &current.angle);
@@ -931,7 +935,7 @@ BOOL daTbox_c::actionDemo() {
 
         dKy_set_allcol_ratio(1.0f);
 
-        flagOff(daTboxFlg_UNK_08 | daTboxFlg_UNK_10);
+        flagOff(daTboxFlg_UNK_08 | daTboxFlg_OPENING_e);
         dComIfGp_event_setItemPartner(NULL);
 
         if (mSmokeEmitter != NULL) {

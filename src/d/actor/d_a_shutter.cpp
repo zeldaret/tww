@@ -53,7 +53,7 @@ BOOL daShutter_c::CreateHeap() {
         mdBgW[i] = new dBgW();
         if (mdBgW[i]) {
             cBgD_t* pData = (cBgD_t *)dComIfG_getObjectRes(m_arcname[mType], m_dzbidx[mType]);
-            if (mdBgW[i]->Set(pData, 0x1, &mMtx[i]) == 1) {
+            if (mdBgW[i]->Set(pData, cBgW::MOVE_BG_e, &mMtx[i]) == true) {
                 return FALSE;
             }
         }
@@ -172,7 +172,7 @@ void daShutter_c::shutter_move() {
         }
         case ACT_WAIT02:
         {
-            if (!cLib_calcTimer(&mTimer)) {
+            if (cLib_calcTimer(&mTimer) == 0) {
                 field_0x339 = 0;
                 dComIfGp_evmng_cutEnd(mStaffId);
             }

@@ -25,8 +25,8 @@ public:
         daTboxFlg_UNK_02 = 0x02,
         daTboxFlg_UNK_04 = 0x04,
         daTboxFlg_UNK_08 = 0x08,
-        daTboxFlg_UNK_10 = 0x10,
-        daTboxFlg_UNK_20 = 0x20,
+        daTboxFlg_OPENING_e = 0x10,
+        daTboxFlg_APPEARING_e = 0x20,
     };
 
     typedef BOOL (daTbox_c::*ActionFunc)();
@@ -113,7 +113,7 @@ public:
     /* 0x3C4 */ dPa_smokeEcallBack mSmokeCB;
     /* 0x3E4 */ JPABaseEmitter* mSmokeEmitter;
     /* 0x3E8 */ f32 mAllColRatio;
-    /* 0x3EC */ f32 m03EC;
+    /* 0x3EC */ f32 mAppearingYOffset;
     /* 0x3F0 */ u16 mFlags;
     /* 0x3F2 */ u16 mOpenTimer;
     /* 0x3F4 */ bool mHasOpenAnmFinished;

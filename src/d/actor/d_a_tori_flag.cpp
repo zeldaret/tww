@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_tori_flag.h"
-#include "dolphin/mtx/mtx.h"
 #include "d/d_procname.h"
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_mtx.h"
@@ -14,7 +13,6 @@
 #include "d/res/res_cloth.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_a_obj.h"
-#include "SSystem/SComponent/c_math.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 

@@ -5,7 +5,6 @@
 #include "d/d_menu_save.h"
 #include "f_op/f_op_msg_mng.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
-#include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "SSystem/SComponent/c_phase.h"
 

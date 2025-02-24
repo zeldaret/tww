@@ -36,7 +36,7 @@ public:
     /* 0x2C8 */ request_of_phase_process_class mPhs;
     /* 0x2D0 */ J3DModel* mpModel;
     /* 0x2D4 */ Mtx mMtx;
-    /* 0x304 */ s32 mActionIndex;
+    /* 0x304 */ s32 mDemoState;
     /* 0x308 */ s32 mSwitchNo;
     /* 0x30C */ s32 m30C;
     /* 0x310 */ s32 mStaffId;
