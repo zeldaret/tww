@@ -39,7 +39,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 field_0x04;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ s16 field_0x0C;
 }; // Size: 0x0E

@@ -56,7 +56,7 @@ public:
     daObj_Hole_HIO_c();
     virtual ~daObj_Hole_HIO_c() {}
 
-    /* 0x04 */ s8 m04;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05;
     /* 0x08 */ f32 m08;
     /* 0x0C */ s16 m0C;

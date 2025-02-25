@@ -97,7 +97,7 @@ bool daObjZouk::Act_c::create_heap() {
     if (bgw_data_before != NULL) {
         mBgBefore = new dBgW();
         if (mBgBefore != NULL) {
-            if (mBgBefore->Set(bgw_data_before, dBgW::MOVE_BG_e, &mBgMtx) == 1)
+            if (mBgBefore->Set(bgw_data_before, dBgW::MOVE_BG_e, &mBgMtx) == true)
                 return false;
         }
     }
@@ -107,7 +107,7 @@ bool daObjZouk::Act_c::create_heap() {
     if (bgw_data_after != NULL) {
         mBgAfter = new dBgW();
         if (mBgAfter != NULL) {
-            if (mBgAfter->Set(bgw_data_after, dBgW::MOVE_BG_e, &mBgMtx) == 1)
+            if (mBgAfter->Set(bgw_data_after, dBgW::MOVE_BG_e, &mBgMtx) == true)
                 return false;
         }
     }

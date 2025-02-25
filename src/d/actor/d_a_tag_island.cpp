@@ -217,18 +217,18 @@ void daTag_Island_c::demoInitTact_Af() {
     l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
     fopMsgM_messageSendOn();
     if (player->getTactTimerCancel() > 0)
-        setFlag(0x04);
+        setFlag(daTagIsl_UNK_04);
     else
-        clrFlag(0x04);
+        clrFlag(daTagIsl_UNK_04);
 }
 
 /* 00000854-00000A00       .text demoProcTact_Af__14daTag_Island_cFv */
 BOOL daTag_Island_c::demoProcTact_Af() {
     u16 rt = talk();
     if (rt == fopMsgStts_BOX_CLOSED_e || rt == 0xFE) {
-        if (chkFlag(0x01)) {
-            clrFlag(0x01);
-            if (chkFlag(0x04)) {
+        if (chkFlag(daTagIsl_UNK_01)) {
+            clrFlag(daTagIsl_UNK_01);
+            if (chkFlag(daTagIsl_UNK_04)) {
                 if (m2A0 == 1) {
                     mEventId = dComIfGp_evmng_getEventIdx("TACT_TEARCH4");
                 } else {
@@ -244,7 +244,7 @@ BOOL daTag_Island_c::demoProcTact_Af() {
                     mEventId = dComIfGp_evmng_getEventIdx("TACT_TEARCH3");
                 }
             }
-            setFlag(0x02);
+            setFlag(daTagIsl_UNK_02);
             fopAcM_orderChangeEventId(this, daPy_getPlayerLinkActorClass(), mEventId, 0, 0xFFFF);
         } else {
             JUT_ASSERT(0x1b3, FALSE);
@@ -300,7 +300,7 @@ BOOL daTag_Island_c::demoProcWait() {
 
 /* 00000BD4-00000BE4       .text demoInitCom__14daTag_Island_cFv */
 void daTag_Island_c::demoInitCom() {
-    setFlag(0x01);
+    setFlag(daTagIsl_UNK_01);
 }
 
 /* 00000BE4-00000BE8       .text demoProcCom__14daTag_Island_cFv */
@@ -337,9 +337,9 @@ int daTag_Island_c::getNowEventAction() {
 BOOL daTag_Island_c::demoProc() {
     BOOL ret = FALSE;
 
-    if (chkFlag(0x02)) {
+    if (chkFlag(daTagIsl_UNK_02)) {
         mStaffId = dComIfGp_evmng_getMyStaffId("TagIsl");
-        clrFlag(0x02);
+        clrFlag(daTagIsl_UNK_02);
         dComIfGp_event_setTalkPartner(dComIfGp_getShipActor());
     }
 
@@ -381,7 +381,7 @@ BOOL daTag_Island_c::actionTact() {
 BOOL daTag_Island_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventId)) {
         if (getType() == 1) {
-            setFlag(0x02);
+            setFlag(daTagIsl_UNK_02);
             setActio(ACT_TACT);
             mEventId = dComIfGp_evmng_getEventIdx("TACT_TEARCH0");
             fopAcM_orderChangeEventId(this, daPy_getPlayerLinkActorClass(), mEventId, 0, 0xFFFF);

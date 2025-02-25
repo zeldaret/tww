@@ -1721,7 +1721,7 @@ void JAIZelBasic::demoBgmStop(u32) {
 /* 802AC758-802AC788       .text isDemo__11JAIZelBasicFv */
 BOOL JAIZelBasic::isDemo() {
     dDemo_manager_c* demo = dComIfGp_demo_get();
-    if (demo && demo->getMode()) {
+    if (demo && demo->getMode() != 0) {
         return true;
     }
     return false;

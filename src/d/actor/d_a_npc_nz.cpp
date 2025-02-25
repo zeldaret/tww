@@ -185,7 +185,7 @@ BOOL daNpc_Nz_c::_createHeap() {
 
 /* 00000F98-00001010       .text __ct__14daNpc_Nz_HIO_cFv */
 daNpc_Nz_HIO_c::daNpc_Nz_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     field_0x06 = 0x1F40;
     field_0x08 = 0x1F40;
     field_0x0A = 0;

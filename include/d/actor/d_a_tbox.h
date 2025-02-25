@@ -20,6 +20,14 @@ public:
         s16 closedColId;
         s16 openColId;
     };
+    enum {
+        daTboxFlg_UNK_01 = 0x01,
+        daTboxFlg_UNK_02 = 0x02,
+        daTboxFlg_UNK_04 = 0x04,
+        daTboxFlg_UNK_08 = 0x08,
+        daTboxFlg_OPENING_e = 0x10,
+        daTboxFlg_APPEARING_e = 0x20,
+    };
 
     typedef BOOL (daTbox_c::*ActionFunc)();
 
@@ -105,7 +113,7 @@ public:
     /* 0x3C4 */ dPa_smokeEcallBack mSmokeCB;
     /* 0x3E4 */ JPABaseEmitter* mSmokeEmitter;
     /* 0x3E8 */ f32 mAllColRatio;
-    /* 0x3EC */ f32 m03EC;
+    /* 0x3EC */ f32 mAppearingYOffset;
     /* 0x3F0 */ u16 mFlags;
     /* 0x3F2 */ u16 mOpenTimer;
     /* 0x3F4 */ bool mHasOpenAnmFinished;
@@ -116,7 +124,7 @@ public:
     /* 0x5C0 */ dBgS_AcchCir mAcchCir;
     /* 0x600 */ dCcD_Stts mColStatus;
     /* 0x63C */ dCcD_Cyl mColCyl;
-    /* 0x76C */ u8 mOpenedSwitch;
+    /* 0x76C */ u8 mTboxNo;
 };
 
 class daTbox_HIO_c : public JORReflexible {
@@ -127,7 +135,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mHioId;
+    /* 0x04 */ s8 mNo;
     /* 0x06 */ s16 m06;
     /* 0x08 */ s16 m08;
     /* 0x0A */ s16 m0A;

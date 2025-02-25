@@ -237,7 +237,8 @@ BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
 
     cBgD_t* pBgd = static_cast<cBgD_t*>(dComIfG_getObjectRes("Msw", MSW_DZB_MSWING));
 
-    if ((BOOL)pActor->mpBgW->Set(pBgd, cBgW::MOVE_BG_e, &pActor->mMtx) == TRUE) {
+    BOOL error = pActor->mpBgW->Set(pBgd, cBgW::MOVE_BG_e, &pActor->mMtx);
+    if (error == TRUE) {
         return FALSE;
     }
 

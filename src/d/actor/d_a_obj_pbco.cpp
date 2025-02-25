@@ -14,7 +14,7 @@ const char daObj_Pbco_c::M_arcname[] = "Pbco";
 
 /* 000000EC-00000104       .text __ct__16daObj_Pbco_HIO_cFv */
 daObj_Pbco_HIO_c::daObj_Pbco_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
 }
 
 /* 00000104-0000018C       .text set_mtx__12daObj_Pbco_cFv */

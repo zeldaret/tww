@@ -3138,7 +3138,7 @@ s32 daNpc_Ji1_c::_create() {
     s32 state = dComIfG_resLoad(&field_0xC7C, "Ji");
     if(state == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0x16840)) {
-           return cPhs_ERROR_e;
+            return cPhs_ERROR_e;
         }
 
         CreateInit();

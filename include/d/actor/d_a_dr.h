@@ -35,7 +35,6 @@ public:
 
 public:
     /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 m05[0x08 - 0x05];
     /* 0x08 */ f32 mScale;
     /* 0x0C */ bool m0C;
     /* 0x0D */ u8 m0D[0x0E - 0x0D];

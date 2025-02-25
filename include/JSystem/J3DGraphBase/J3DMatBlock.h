@@ -42,7 +42,7 @@ struct J3DGXColor {
 class J3DTexGenBlock {
 public:
     virtual void reset(J3DTexGenBlock*) {}
-    virtual void calc(f32 const (*)[4]) = 0;
+    virtual void calc(const Mtx) = 0;
     virtual void load() = 0;
     virtual void patch() = 0;
     virtual void diff(u32) = 0;
@@ -71,7 +71,7 @@ public:
     void initialize();
 
     virtual void reset(J3DTexGenBlock*);
-    virtual void calc(f32 const (*)[4]);
+    virtual void calc(const Mtx);
     virtual void load() {}
     virtual void patch();
     virtual void diff(u32);
@@ -137,7 +137,7 @@ private:
 
 class J3DTexGenBlockNull : public J3DTexGenBlock {
 public:
-    virtual void calc(f32 const (*)[4]) {}
+    virtual void calc(const Mtx) {}
     virtual void load() {}
     virtual void patch() {}
     virtual void diff(u32) {}

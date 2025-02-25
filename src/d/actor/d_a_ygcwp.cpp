@@ -33,7 +33,7 @@ static void dummy() {
     OSReport("fg_warp1");
 }
 
-static const char* M_act_table[] = {
+static char* M_act_table[] = {
     "warp_start",
     "warp_appear",
     "warp_make",
@@ -144,7 +144,7 @@ bool daYgcwp_c::_execute() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     mStaffId = dComIfGp_evmng_getMyStaffId(M_arcname);
     if (mStaffId != -1) {
-        int actIdx = dComIfGp_evmng_getMyActIdx(mStaffId, (char**)M_act_table, ARRAY_SIZE(M_act_table), FALSE, 0);
+        int actIdx = dComIfGp_evmng_getMyActIdx(mStaffId, M_act_table, ARRAY_SIZE(M_act_table), FALSE, 0);
         if (dComIfGp_evmng_getIsAddvance(mStaffId)) {
             switch (actIdx) {
             case EVENT_WARP_START:

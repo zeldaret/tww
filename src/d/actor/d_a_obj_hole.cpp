@@ -29,7 +29,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_actor) {
 
 /* 0000010C-00000148       .text __ct__16daObj_Hole_HIO_cFv */
 daObj_Hole_HIO_c::daObj_Hole_HIO_c() {
-    m04 = -1;
+    mNo = -1;
     m05 = 0;
     m08 = 65.0f;
     m0C = 0;

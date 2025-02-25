@@ -31,13 +31,13 @@ void J3DCalcYBBoardMtx(Mtx);
 void J3DPSCalcInverseTranspose(f32 (*param_0)[4], f32 (*param_1)[3]);
 void J3DGetTranslateRotateMtx(J3DTransformInfo const&, Mtx);
 void J3DGetTranslateRotateMtx(s16, s16, s16, f32, f32, f32, Mtx);
-void J3DGetTextureMtx(const J3DTextureSRTInfo&, Vec, f32(*)[4]);
-void J3DGetTextureMtxOld(const J3DTextureSRTInfo&, Vec, f32(*)[4]);
-void J3DGetTextureMtxMaya(const J3DTextureSRTInfo&, f32(*)[4]);
-void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo&, f32(*)[4]);
+void J3DGetTextureMtx(const J3DTextureSRTInfo&, Vec, Mtx);
+void J3DGetTextureMtxOld(const J3DTextureSRTInfo&, Vec, Mtx);
+void J3DGetTextureMtxMaya(const J3DTextureSRTInfo&, Mtx);
+void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo&, Mtx);
 void J3DScaleNrmMtx(Mtx, const Vec&);
 void J3DScaleNrmMtx33(Mtx33, const Vec&);
-void J3DMtxProjConcat(f32(*)[4], f32(*)[4], f32(*)[4]);
+void J3DMtxProjConcat(Mtx, Mtx, Mtx);
 void J3DPSMtx33Copy(Mtx3P src, Mtx3P dst);
 void J3DPSMtx33CopyFrom34(MtxP src, Mtx3P dst);
 

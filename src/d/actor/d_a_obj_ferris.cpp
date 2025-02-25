@@ -111,7 +111,7 @@ bool daObjFerris::Act_c::create_heap() {
     if (bgw_data_gondola != NULL) {
         for (i = 0; i < 5; i++) {
             mpBgW[i] = new dBgW();
-            if (mpBgW[i] != NULL && mpBgW[i]->Set(bgw_data_gondola, dBgW::MOVE_BG_e, &mMtx[i]) == 1)
+            if (mpBgW[i] != NULL && mpBgW[i]->Set(bgw_data_gondola, dBgW::MOVE_BG_e, &mMtx[i]) == true)
                 return false;
         }
     }
@@ -120,7 +120,7 @@ bool daObjFerris::Act_c::create_heap() {
     JUT_ASSERT(0x1b0, bgw_data_wheelbase != NULL);
     if (bgw_data_wheelbase != NULL) {
         mpBgW[5] = new dBgW();
-        if (mpBgW[5] != NULL && mpBgW[5]->Set(bgw_data_wheelbase, dBgW::MOVE_BG_e, &mMtx[5]) == 1)
+        if (mpBgW[5] != NULL && mpBgW[5]->Set(bgw_data_wheelbase, dBgW::MOVE_BG_e, &mMtx[5]) == true)
             return false;
     }
 

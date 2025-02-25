@@ -171,7 +171,7 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
     atInfo->mbDead = false;
     if (fopAcM_GetName(atInfo->mpActor) == PROC_PLAYER) {
         dCcD_GObjInf* gObjInf = dCcD_GetGObjInf(atInfo->mpObj);
-        if (gObjInf->GetAtSpl() == 1) {
+        if (gObjInf->GetAtSpl() == dCcG_At_Spl_UNK1) {
             atInfo->mbDead = true;
         }
     } else if (atInfo->mDamage >= 2) {

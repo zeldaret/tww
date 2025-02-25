@@ -516,7 +516,7 @@ void dAttDraw_c::setAnm(int, int, int) {
 }
 
 /* 8009F6B4-8009F834       .text draw__10dAttDraw_cFR4cXyzPA4_f */
-void dAttDraw_c::draw(cXyz&, f32(*)[4]) {
+void dAttDraw_c::draw(cXyz&, Mtx) {
     /* Nonmatching */
 }
 

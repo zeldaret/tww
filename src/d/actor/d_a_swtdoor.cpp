@@ -8,11 +8,9 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_lib.h"
-#include "JSystem/JUtility/JUTAssert.h"
 
 /* 00000078-000000C4       .text daSwtdoor_Draw__FP13swtdoor_class */
 static BOOL daSwtdoor_Draw(swtdoor_class* i_this) {

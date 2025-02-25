@@ -10,7 +10,7 @@
 /* 800A9928-800A9A48       .text Set__10dBgWDeformFP6cBgD_tP8J3DModelUl */
 bool dBgWDeform::Set(cBgD_t* bgd, J3DModel* pmodel, u32 flag) {
     JUT_ASSERT(32, pmodel->getModelData()->isDeformablePositionFormat() == true);
-    if (cBgW::Set(bgd, 0x33, NULL)) {
+    if (cBgW::Set(bgd, MOVE_BG_e | NO_CALC_VTX_e | NO_VTX_TBL_e | GLOBAL_e, NULL)) {
         return true;
     }
     SetFlag(flag);

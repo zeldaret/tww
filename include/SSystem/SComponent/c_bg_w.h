@@ -158,7 +158,7 @@ public:
     void MakeNodeTreeGrpRp(int);
     void MakeNodeTree();
     bool ChkMemoryError();
-    bool Set(cBgD_t*, u32, f32(*)[3][4]);
+    bool Set(cBgD_t*, u32, Mtx*);
     bool RwgLineCheck(u16, cBgS_LinChk*);
     bool LineCheckRp(cBgS_LinChk*, int);
     bool LineCheckGrpRp(cBgS_LinChk*, int, int);
@@ -231,7 +231,7 @@ public:
         return LineCheckGrpRp(chk, m_rootGrpIdx, 1);
     }
 
-    void GetOldInvMtx(float(*)[4]) const {}
+    void GetOldInvMtx(Mtx) const {}
     bool ChkFlush() { return mIgnorePlaneType & 8; }
     void ChkGroundRegist() {}
     void ChkRoofRegist() {}

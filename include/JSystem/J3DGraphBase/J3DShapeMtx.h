@@ -1,31 +1,7 @@
 #ifndef J3DSHAPEMTX_H
 #define J3DSHAPEMTX_H
 
-#include "dolphin/mtx/mtxvec.h"
-
-class J3DTexMtx;
-class J3DTexGenBlock;
-
-class J3DTexMtxObj {
-public:
-    Mtx& getMtx(u16 idx) { return mpTexMtx[idx]; }
-
-private:
-    /* 0x00 */ Mtx* mpTexMtx;
-};
-
-class J3DDifferedTexMtx {
-public:
-    static void loadExecute(f32 const (*)[4]);
-
-    static inline void load(Mtx m) {
-        if (sTexGenBlock != NULL)
-            loadExecute(m);
-    }
-
-    static J3DTexGenBlock* sTexGenBlock;
-    static J3DTexMtxObj* sTexMtxObj;
-};
+#include "dolphin/mtx/mtx.h"
 
 class J3DShapeMtx {
 public:
@@ -43,7 +19,7 @@ public:
     virtual u32 getUseMtxNum() const { return 1; }
     virtual u16 getUseMtxIndex(u16) const { return mUseMtxIndex; }
     virtual void load() const;
-    virtual void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
+    virtual void calcNBTScale(Vec const&, Mtx33*, Mtx33*);
 
     static MtxLoadIndx sMtxLoadPipeline[4];
     static u32 sCurrentPipeline;
@@ -103,7 +79,7 @@ public:
     virtual u32 getType() const { return 'SMCV'; }
     virtual void load() const;
     virtual void loadNrmMtx(int, u16) const {}
-    virtual void loadNrmMtx(int, u16, f32 (*)[4]) const;
+    virtual void loadNrmMtx(int, u16, Mtx) const;
 
     void loadMtxConcatView_PNGP(int, u16) const;
     void loadMtxConcatView_PCPU(int, u16) const;
@@ -178,7 +154,7 @@ public:
     virtual u16 getUseMtxIndex(u16 i) const { return mUseMtxIndexTable[i]; }
     virtual void load() const;
     virtual void loadNrmMtx(int, u16) const {}
-    virtual void loadNrmMtx(int, u16, f32 (*)[4]) const;
+    virtual void loadNrmMtx(int, u16, Mtx) const;
 
 private:
     /* 0x8 */ u16 mUseMtxNum;

@@ -55,7 +55,11 @@ BOOL daLbridge_c::CreateHeap() {
     mpBgW = new dBgW();
 
     if (mpBgW != NULL) {
-        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, GBRG00_DZB_HHASHI1), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
+        if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, GBRG00_DZB_HHASHI1), cBgW::MOVE_BG_e, &mMtx) == true) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
     }
 
     return FALSE;

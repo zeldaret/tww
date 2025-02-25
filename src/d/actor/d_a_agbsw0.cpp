@@ -1623,7 +1623,7 @@ BOOL daAgbsw0_c::ExeSubFA() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                   return true;
+                    return true;
                 }
                 
 
@@ -1737,7 +1737,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
         case 5: {
             daGhostship_c* gship = (daGhostship_c*)fopAcM_searchFromName("Ayush", 0, 0);
             if(gship && gship->checkInShip()) {
-               return FALSE;
+                return FALSE;
             }
 
             break;
@@ -2206,13 +2206,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x50:
             if(daNpc_Md_c::isPlayerRoom()) {
-               return FALSE;
+                return FALSE;
             }
 
             break;
         case 0x51:
             if(!daNpc_Md_c::isPlayerRoom()) {
-               return FALSE;
+                return FALSE;
             }
 
             break;
@@ -2230,13 +2230,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x54:
             if(daNpc_Cb1_c::isPlayerRoom()) {
-               return FALSE;
+                return FALSE;
             }
 
             break;
         case 0x55:
             if(!daNpc_Cb1_c::isPlayerRoom()) {
-               return FALSE;
+                return FALSE;
             }
 
             break;
@@ -2448,13 +2448,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         case 0x77:
             if(daPy_dmEcallBack_c::checkCurse()) {
-               return FALSE;
+                return FALSE;
             }
 
             break;
         case 0x78:
             if(!daPy_dmEcallBack_c::checkCurse()) {
-               return FALSE;
+                return FALSE;
             }
 
             break;

@@ -13,7 +13,6 @@
 #include "d/d_map.h"
 #include "d/d_procname.h"
 #include "d/d_stage.h"
-#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_npc_md.h"
 #include "m_Do/m_Do_dvd_thread.h"

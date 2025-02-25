@@ -12,10 +12,10 @@ class daSceneChgHIO_c {
 public:
     daSceneChgHIO_c();
     virtual ~daSceneChgHIO_c() {
-        m0004 = -1;
+        mNo = -1;
     }
 
-    /* 0x04 */ s8 m0004;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ s8 m0005;
     /* 0x08 */ f32 m0008;
 };

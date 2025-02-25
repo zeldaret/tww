@@ -3,6 +3,8 @@
 #include "misc_io.h"
 #include "string.h"
 #include "wchar_io.h"
+#include "FILE_POS.h"
+#include "buffer_io.h"
 
 size_t fwrite(const void* buffer, size_t size, size_t count, FILE* stream) {
     size_t retval;
