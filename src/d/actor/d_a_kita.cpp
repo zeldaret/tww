@@ -11,9 +11,10 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
 
-#define MIN(a, b) (a < b) ? a : b
-#define MAX(a, b) (a > b) ? a : b
-#define CAP_MIN_VAL(a, b) if(a < b) a = b
+template<class T>
+inline T cap_min_val(T& a, T b){
+    if(a < b) a = b;
+}
 
 
 /* 00000078-0000032C       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
@@ -29,22 +30,20 @@ void ride_call_back(dBgW* param_1, kita_class* param_2, fopAc_ac_c* param_3) {
             param_2->mExecuteCount = 10;
         }
         short zAngle_target = -local_44.x * ((REG0_F(0) + 10.0f) / param_2->scale.x);
-    // local_28 = (longlong)xAngle_target;
         short xAngle_target = local_44.z * ((REG0_F(0) + 10.0f) / param_2->scale.z);
-    // local_20 = (longlong)zAngle_target;
         cLib_addCalcAngleS2(&param_2->current.angle.x,xAngle_target,10,0x800);
         cLib_addCalcAngleS2(&param_2->current.angle.z,zAngle_target,10,0x800);
-        CAP_MIN_VAL(param_2->u2BC.x,  (REG0_F(4) + 50.0f) * std::abs(local_44.z - local_50.z));
-        CAP_MIN_VAL(param_2->u2BC.z, (REG0_F(4) + 50.0f) * std::abs(local_44.x - local_50.x));
+        cap_min_val(param_2->u2BC.x,  (REG0_F(4) + 50.0f) * std::abs(local_44.z - local_50.z));
+        cap_min_val(param_2->u2BC.z, (REG0_F(4) + 50.0f) * std::abs(local_44.x - local_50.x));
         float fVar1 = (REG0_F(8) + 5.0f) * std::abs(local_44.x - local_50.x);
-        if (fVar1 > 10.0 && param_2->u2B0.x < fVar1) {
+        if (fVar1 > 10.0f && param_2->u2B0.x < fVar1) {
             cLib_addCalc2(&param_2->u2B0.x,fVar1,1.0,REG0_F(7) + 1.2f);
         }
         fVar1 = (REG0_F(8) + 5.0f) * std::abs(local_44.z - local_50.z);
-        if (fVar1 > 10.0 && param_2->u2B0.z < fVar1) {
+        if (fVar1 > 10.0f && param_2->u2B0.z < fVar1) {
             cLib_addCalc2(&param_2->u2B0.z,fVar1,1.0,REG0_F(7) + 1.2f);
         }
-        cLib_addCalc2(&param_2->u2B0.y,REG0_F(2) + -100.0f,0.1,REG0_F(3) + 10.0f);
+        cLib_addCalc2(&param_2->mPosRel.y,REG0_F(2) + -100.0f,0.1,REG0_F(3) + 10.0f);
     }
 }
 
@@ -92,7 +91,7 @@ void kita_move(kita_class* this_i) {
                 dBgS_GndChk solid_ground_check;
                 /* Nonmatching */ solid_ground_check.m_pos.set(this_i->current.pos.x, this_i->current.pos.y - 200.0f, this_i->current.pos.z);
                 float solid_ground_cross = REG0_F(13) + dComIfG_Bgsp()->GroundCross(&solid_ground_check);
-                CAP_MIN_VAL(this_i->u35C, solid_ground_cross);
+                cap_min_val(this_i->u35C, solid_ground_cross);
                 dBgS_ObjGndChk_Spl liquid_ground_check;
                 /* Nonmatching */ liquid_ground_check.m_pos.set(this_i->current.pos.x, this_i->current.pos.y - 200.0f, this_i->current.pos.z);
                 float liquid_gnd_cross = dComIfG_Bgsp()->GroundCross(&liquid_ground_check);
