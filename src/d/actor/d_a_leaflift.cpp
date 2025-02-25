@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
 #include "d/d_procname.h"
-#include "d/res/res_trflag.h"
+#include "d/res/res_olift.h"
 #include "m_Do/m_Do_ext.h"
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -61,7 +61,7 @@ bool daLlift_c::_delete() {
         mEmitter3 = NULL;
     }
     if (heap)
-        dComIfG_Bgsp()->Release(mcBgW);
+        dComIfG_Bgsp()->Release(mpBgW);
     dComIfG_resDelete(&mPhs, m_arcname);
     return TRUE;
 }
@@ -75,7 +75,7 @@ static void rideCallBack(dBgW* param1, fopAc_ac_c* i_this, fopAc_ac_c* i_other);
 
 /* 000001E0-00000338       .text CreateHeap__9daLlift_cFv */
 BOOL daLlift_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, TRFLAG_BDL_ETHATA);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, OLIFT_BDL_OLIFT);
     JUT_ASSERT(0x14e, modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -84,14 +84,14 @@ BOOL daLlift_c::CreateHeap() {
     }
 
     mpModel->setUserArea((u32)this);
-    mcBgW = new dBgW();
-    if (mcBgW) {
-        cBgD_t* pData = (cBgD_t *)dComIfG_getObjectRes(m_arcname, TRFLAG_BTI_ETHATA);
-        if (mcBgW->Set(pData, 0x1, &mMtx) == 1) {
+    mpBgW = new dBgW();
+    if (mpBgW) {
+        cBgD_t* pData = (cBgD_t *)dComIfG_getObjectRes(m_arcname, OLIFT_DZB_OLIFT);
+        if (mpBgW->Set(pData, cBgW::MOVE_BG_e, &mMtx) == 1) {
             return FALSE; 
         }
-        mcBgW->SetCrrFunc(dBgS_MoveBGProc_TypicalRotY);
-        mcBgW->SetRideCallback(rideCallBack);
+        mpBgW->SetCrrFunc(dBgS_MoveBGProc_TypicalRotY);
+        mpBgW->SetRideCallback(rideCallBack);
     }
     else {
         return FALSE;
@@ -109,13 +109,13 @@ void daLlift_c::CreateInit() {
     mStts.Init(0xFF,0xFF,this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
-    cXyz local_28 = current.pos;
-    local_28.y += 200.0f;
-    mUpLift = dBgS_ObjGndChk_Wtr_Func(local_28);
-    if (mUpLift != -1e9f) {
-        cXyz local_29 = current.pos;
-        local_29.y = mUpLift + 1.0f; 
-        mEmitter3 = dComIfGp_particle_set(0x82AA, &local_29, &current.angle);
+    cXyz waterCheckPos = current.pos;
+    waterCheckPos.y += 200.0f;
+    mWaterY = dBgS_ObjGndChk_Wtr_Func(waterCheckPos);
+    if (mWaterY != -1e9f) {
+        cXyz particlePos = current.pos;
+        particlePos.y = mWaterY + 1.0f; 
+        mEmitter3 = dComIfGp_particle_set(0x82AA, &particlePos, &current.angle);
         if (mEmitter3) {
             mEmitter3->stopCreateParticle();
         }
@@ -129,8 +129,8 @@ void daLlift_c::CreateInit() {
             break;
         }
     }
-    mZeroQuat = ZeroQuat;
-    mBaseQuat = mZeroQuat;
+    mTargetRotation = ZeroQuat;
+    mCurrentRotation = mTargetRotation;
     if ((s32)daLlift_prm::getPos(this) == 1) {
         current.pos.y =  home.pos.y + m_height;
     }
@@ -142,9 +142,9 @@ void daLlift_c::CreateInit() {
     m43F = 0x1e;
     mpModel->calc();
     setMoveBGMtx();
-    dComIfG_Bgsp()->Regist(mcBgW, this);
+    dComIfG_Bgsp()->Regist(mpBgW, this);
     set_mtx();
-    mcBgW->Move();
+    mpBgW->Move();
 }
 
 /* 00000634-00000760       .text _create__9daLlift_cFv */
@@ -172,7 +172,7 @@ static BOOL nodeCallBack(J3DNode* node, int idx) {
         daLlift_c* i_this = (daLlift_c*)model->getUserArea();
         if (i_this) {
             mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
-            mDoMtx_stack_c::quatM(&i_this->mBaseQuat);
+            mDoMtx_stack_c::quatM(&i_this->mCurrentRotation);
             cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
             cMtx_copy(mDoMtx_stack_c::get(), i_this->mBGMtx);
@@ -183,42 +183,40 @@ static BOOL nodeCallBack(J3DNode* node, int idx) {
 
 /* 000009C4-00000CAC       .text rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 static void rideCallBack(dBgW* param1, fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    f32 fVar1;
-    f32 fVar2;
+    f32 tiltFactor;
+    f32 offsetMagnitude;
     daLlift_c* param2 = (daLlift_c*)i_this;
     daLlift_c* param3 = (daLlift_c*)i_other;
 
     cXyz posOffset = param3->current.pos - param2->current.pos;
     
-    fVar1 = 2.0f;
-    if (fopAcM_GetName(param3) == 0xa9) {
-        param2->m43C = 1;
-        param2->m43E = 1;
+    tiltFactor = 2.0f;
+    if (fopAcM_GetName(param3) == PROC_PLAYER) {
+        param2->m43C = TRUE;
+        param2->m43E = TRUE;
         posOffset = posOffset.outprod(up_vec);
         mDoMtx_stack_c::YrotS(-param2->current.angle.y);
         mDoMtx_stack_c::multVec(&posOffset, &posOffset);
         if (param2->m43D) {
-            posOffset.x = param3->current.pos.x;
-            posOffset.y = param3->current.pos.y;
-            posOffset.z = param3->current.pos.z;
+            posOffset = param3->current.pos;
             posOffset.x += 200.0f;
             posOffset = posOffset.outprod(up_vec);
             mDoMtx_stack_c::YrotS(-param2->current.angle.y);
             mDoMtx_stack_c::multVec(&posOffset, &posOffset);
-            fVar1 = cM_ssin((param2->m444 & 0x1F) << 11) * 2.0f * 0.25f * (cM_rndFX(0.2f) + 1.0f);
+            tiltFactor = cM_ssin((param2->mGlideFrameCounter & 0x1F) << 11) * 2.0f * 0.25f * (cM_rndFX(0.2f) + 1.0f);
         }
-        fVar2 = posOffset.abs();
+        offsetMagnitude = posOffset.abs();
         if (!posOffset.normalizeRS() ) {
           return;
         }
-        cLib_addCalcAngleS2(&param2->m440, -fVar2 * fVar1, 8, 0x200);
-        fVar1 = cM_ssin(param2->m440);
-        param2->mZeroQuat.x = posOffset.x * fVar1;
-        param2->mZeroQuat.y = posOffset.y * fVar1;
-        param2->mZeroQuat.z = posOffset.z * fVar1;
-        param2->mZeroQuat.w = cM_scos(param2->m440);
+        cLib_addCalcAngleS2(&param2->mTiltAngle, -offsetMagnitude * tiltFactor, 8, 0x200);
+        tiltFactor = cM_ssin(param2->mTiltAngle);
+        param2->mTargetRotation.x = posOffset.x * tiltFactor;
+        param2->mTargetRotation.y = posOffset.y * tiltFactor;
+        param2->mTargetRotation.z = posOffset.z * tiltFactor;
+        param2->mTargetRotation.w = cM_scos(param2->mTiltAngle);
     }
-    param2->m43D = 0;
+    param2->m43D = FALSE;
     return;
 }
 
@@ -235,47 +233,45 @@ void daLlift_c::set_mtx() {
 void daLlift_c::setMoveBGMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    mDoMtx_stack_c::quatM(&mBaseQuat);
+    mDoMtx_stack_c::quatM(&mCurrentRotation);
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
     return;
 }
 
 /* 00000D9C-00000F24       .text _execute__9daLlift_cFv */
 bool daLlift_c::_execute() {
-    Quaternion local_1c;
-    cXyz local_28;
+    Quaternion interpolatedRotation;
+    cXyz adjustedPosition;
     float distXZ = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-    m444++;
+    mGlideFrameCounter++;
     if ((m43F) && (m43F--, !m43F)) {
-        m43E = 1;
+        m43E = TRUE;
     }
     if ((!m43C) && (m43E)) {
-        mZeroQuat = ZeroQuat;
+        mTargetRotation = ZeroQuat;
         if (distXZ > 270.0f) {
-            m468 = 1;
+            mbIsDescending = TRUE;
       }
     }
     MoveDownLift();
     set_mtx();
     setMoveBGMtx();
-    m43C = 0;
+    m43C = FALSE;
     mpModel->calc();
-    mDoMtx_quatSlerp(&mBaseQuat, &mZeroQuat, &local_1c, 0.25f);
-    mBaseQuat = local_1c;
-    mcBgW->Move();
-    local_28 = current.pos;
-    local_28.y -= m_height;
-    mCyl.SetC(local_28);
+    mDoMtx_quatSlerp(&mCurrentRotation, &mTargetRotation, &interpolatedRotation, 0.25f);
+    mCurrentRotation = interpolatedRotation;
+    mpBgW->Move();
+    adjustedPosition = current.pos;
+    adjustedPosition.y -= m_height;
+    mCyl.SetC(adjustedPosition);
     dComIfG_Ccsp()->Set(&mCyl);
     emitterCtrl();
     return TRUE;
 }
 
 /* 00000F24-00000FE0       .text emitterCtrl__9daLlift_cFv */
-void daLlift_c::emitterCtrl() {
-    int iVar1;
-  
-    if (m49C == 200) {
+void daLlift_c::emitterCtrl() {  
+    if (mEmitterTimer == 200) {
         if (mEmitter1) {
             mEmitter1->becomeInvalidEmitter();
             mEmitter1 = NULL;
@@ -298,21 +294,21 @@ void daLlift_c::emitterCtrl() {
 BOOL daLlift_c::MoveDownLift() {
     float maxSpeed = m_max_speed;
     float minSpeed = m_min_speed;
-    if (!m468) {
+    if (!mbIsDescending) {
       return TRUE;
     }
-    float fVar4 = cLib_addCalc(&current.pos.y, home.pos.y, 0.1f, maxSpeed, minSpeed);
-    if (fVar4 == 0.0f) {
-        m469 = 0;
-        m468 = 0;
+    float downVel = cLib_addCalc(&current.pos.y, home.pos.y, 0.1f, maxSpeed, minSpeed);
+    if (downVel == 0.0f) {
+        mbIsUpdraftBoosted = FALSE;
+        mbIsDescending = FALSE;
         if (mEmitter3) {
             mEmitter3->playCreateParticle();
         }
         return TRUE;
     }
-    if (fVar4 != 0.0f && !m469) {
+    if (downVel != 0.0f && !mbIsUpdraftBoosted) {
         fopAcM_seStart(this, JA_SE_OBJ_LOTUS_LIFT_DOWN, 0);
-        m469 = 1;
+        mbIsUpdraftBoosted = TRUE;
     }
     return FALSE;
 }

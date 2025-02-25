@@ -17,27 +17,27 @@ s32 daLlift_c::checkEndDownLift() {
 }
 
 /* 80069100-800692C4       .text MoveUpLift__9daLlift_cFv */
-s32 daLlift_c::MoveUpLift() {
-    cXyz upLiftPos[2];
-    u8 res = 0;
-    m49C++;
+BOOL daLlift_c::MoveUpLift() {
+    cXyz upLiftPos;
+    bool res = FALSE;
+    mEmitterTimer++;
     if (current.pos.y != home.pos.y + m_height) {
-        m43D = 1;
+        m43D = TRUE;
     }
     float upVel = cLib_addCalc(&current.pos.y, home.pos.y + m_height, 0.1f, m_max_speed, m_min_speed);
     if (upVel == 0.0f) {
-        m469 = 0;
-        res = 1;
+        mbIsUpdraftBoosted = FALSE;
+        res = TRUE;
     }
-    else if ((upVel != 0.0f) && (m469 == 0)) {
+    else if ((upVel != 0.0f) && (mbIsUpdraftBoosted == FALSE)) {
         fopAcM_seStart(this, JA_SE_OBJ_LOTUS_LIFT_UP, 0);
-        m469 = 1;
+        mbIsUpdraftBoosted = TRUE;
         mEmitter1 = dComIfGp_particle_set(0x82AC, &current.pos, &current.angle);
         mEmitter2 = NULL;
-        upLiftPos[0] = current.pos;
-        upLiftPos[0].y = mUpLift;
-        mEmitter4 = dComIfGp_particle_set(0x82AB, &upLiftPos[0], &current.angle);
-        m49C = 0;
+        upLiftPos = current.pos;
+        upLiftPos.y = mWaterY;
+        mEmitter4 = dComIfGp_particle_set(0x82AB, &upLiftPos, &current.angle);
+        mEmitterTimer = 0;
         if (mEmitter3) {
             mEmitter3->stopCreateParticle();
         }

@@ -23,7 +23,7 @@ public:
     bool _draw();
 
     s32 checkEndDownLift();
-    s32 MoveUpLift();
+    BOOL MoveUpLift();
 
     static const f32 m_height;
     static const f32 m_max_speed;
@@ -36,28 +36,28 @@ public:
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */	dCcD_Stts mStts;
     /* 0x2D8 */ dCcD_Cyl mCyl;
-    /* 0x408 */ dBgW* mcBgW;
+    /* 0x408 */ dBgW* mpBgW;
     /* 0x40C */ Mtx mMtx;
-    /* 0x43C */ u8 m43C;
-    /* 0x43D */ u8 m43D;
-    /* 0x43E */ u8 m43E;
+    /* 0x43C */ bool m43C;
+    /* 0x43D */ bool m43D;
+    /* 0x43E */ bool m43E;
     /* 0x43F */ u8 m43F;
-    /* 0x440 */ s16 m440;
-    /* 0x442 */ s16 m442;
-    /* 0x444 */ s16 m444;
-    /* 0x446 */ s16 m446;
-    /* 0x448 */ Quaternion mBaseQuat;
-    /* 0x458 */ Quaternion mZeroQuat;
-    /* 0x468 */ u8 m468;
-    /* 0x469 */ u8 m469;
-    /* 0x46A */ u8 m46A[0x46B-0x46A];
+    /* 0x440 */ s16 mTiltAngle;
+    /* 0x442 */ u8 m442[0x444-0x442];
+    /* 0x444 */ s16 mGlideFrameCounter;
+    /* 0x446 */ u8 m446[0x448-0x446];
+    /* 0x448 */ Quaternion mCurrentRotation;
+    /* 0x458 */ Quaternion mTargetRotation;
+    /* 0x468 */ bool mbIsDescending;
+    /* 0x469 */ bool mbIsUpdraftBoosted;
+    /* 0x46A */ u8 m46A[0x46C-0x46A];
     /* 0x46C */ Mtx mBGMtx;
-    /* 0x49C */ s32 m49C;
+    /* 0x49C */ s32 mEmitterTimer;
     /* 0x4A0 */ JPABaseEmitter* mEmitter1;
     /* 0x4A4 */ JPABaseEmitter* mEmitter2;
     /* 0x4A8 */ JPABaseEmitter* mEmitter3;
     /* 0x4AC */ JPABaseEmitter* mEmitter4;
-    /* 0x4B0 */ f32 mUpLift;
+    /* 0x4B0 */ f32 mWaterY;
 };
 
 namespace daLlift_prm {
