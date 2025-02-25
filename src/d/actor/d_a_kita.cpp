@@ -59,10 +59,10 @@ static BOOL daKita_Draw(kita_class* this_i) {
 
 /* 00000408-0000126C       .text kita_move__FP10kita_class */
 void kita_move(kita_class* this_i) {
-    static u8 himo_off_check[4] = {0,1,2,4};
-    static short himo_off_ya[16] = {0x800, 0x1A0, 0x60, 0x80, 0xE0, 0xC0, 0xE0, 0xA0, 0x20, 0x20, 0x40, 0x60, 0, 0xE0, 0x20, 0};
-    static short himo_off_xa[16] = {0x100, 0xF0, 0xF0, 0xC8, 0xF0, 0xC8, 0, 0xC0, 0xF0, 0, 0xC8, 0xC0, 0xC8, 0xC0, 0xC0, 0};
-    static short himo_off_yp[16] = {0,0,0x9600, 0x9601, 0x9000, 0x9601, 0x9001, 0x9001, 0xF400, 0x9601, 0x9001, 0x9001, 0xF401, 0x9001, 0xF401, 0xF400};
+    static u8 himo_off_check[4] = {1,2,4, 8};
+    static short himo_off_ya[16] = {1, 0xA000, 0x6000, 0x8000, 0xE000, 0xC000, 0xE000, 0xA000, 0x2000, 0x2000, 0x4000, 0x6000, 0, 0xE000, 0x2000, 1};
+    static short himo_off_xa[16] = {0, 0xF000, 0xF000, 0xC800, 0xF000, 0xC800, 0, 0xC000, 0xF000, 0, 0xC800, 0xC000, 0xC800, 0xC000, 0xC000, 0};
+    static short himo_off_yp[16] = {0, 0x96, 0x96, 0x190, 0x96, 0x190, 0x190,0x1F4, 0x96, 0x190, 0x190, 0x1F4, 0x190, 0x1F4, 0x1F4, 0};
 
     short maxSpeed, ya_offset, xa_offset;
     s32 mask;
@@ -223,8 +223,50 @@ void himo_create(kita_class*) {
 }
 
 /* 000019F8-00001CB8       .text daKita_Execute__FP10kita_class */
-static BOOL daKita_Execute(kita_class*) {
-    /* Nonmatching */
+static BOOL daKita_Execute(kita_class* this_i) {
+    static float xd[4] = {130, -130, 130, -130};
+    static float zd[4] = {130, 130, -130, -130};
+
+    if(this_i->mExecuteCount != 0) this_i->mExecuteCount--;
+    kita_move(this_i);
+
+    MtxTrans(this_i->current.pos.x, this_i->current.pos.y, this_i->current.pos.z, false);
+    mDoMtx_YrotM(*calc_mtx, this_i->shape_angle.y);
+    mDoMtx_YrotM(*calc_mtx, this_i->mRotY);
+    MtxTrans(0, 0, (REG0_F(11) + -150.0f) * JMASSin(this_i->mRotX), true);
+    mDoMtx_XrotM(*calc_mtx, this_i->mRotX);
+    mDoMtx_YrotM(*calc_mtx, -this_i->mRotY);
+    mDoMtx_XrotM(*calc_mtx, this_i->shape_angle.x);
+    mDoMtx_ZrotM(*calc_mtx, this_i->shape_angle.z);
+    this_i->mModel->setBaseTRMtx(*calc_mtx);
+
+    cXyz local48[1];
+    for(int i = 0; i < 4; i++){
+        MtxPush();
+        local48->x = this_i->scale.x * xd[i];
+        local48->y = REG0_F(5) + -15.0f;
+        local48->z = this_i->scale.z * zd[i];
+        MtxPosition(local48, &this_i->u2E8[i]);
+        MtxPull();
+    }
+    mDoMtx_copy(*calc_mtx, this_i->mBgwMtx);
+    this_i->pm_bgw->Move();
+    if(this_i->u360 == 2){
+        if(this_i->mBaseEmitter == NULL){
+            this_i->mBaseEmitter = dComIfGp_particle_set(0x828D, &this_i->current.pos);
+        }
+        else {
+            this_i->mBaseEmitter->setGlobalTranslation(this_i->current.pos.x, this_i->current.pos.y - (REG0_F(17) + 40.0f), this_i->current.pos.z);
+        }
+    }
+    else {
+        if(this_i->mBaseEmitter != NULL){
+            this_i->mBaseEmitter->becomeInvalidEmitter();
+            this_i->mBaseEmitter = NULL;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 00001CB8-00001CC0       .text daKita_IsDelete__FP10kita_class */
