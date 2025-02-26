@@ -83,15 +83,13 @@ static dCcD_SrcCyl l_cyl_src = {
 /* 0000045C-000005D4       .text createHeap__10daObjHat_cFv */
 BOOL daObjHat_c::createHeap() {
     // TODO register ordering?
-    J3DModelData* pModelData = (J3DModelData*)dRes_control_c::getIDRes(
-        "Ro", l_bmd_ix_tbl[this->id], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectIDRes("Ro", l_bmd_ix_tbl[this->id]);
     if (pModelData == NULL) {
         return FALSE;
     } else {
         mDoExt_McaMorf* morf = new mDoExt_McaMorf(
             pModelData, NULL, NULL,
-            (J3DAnmTransformKey*)dRes_control_c::getIDRes(
-                "Ro", l_bck_ix_tbl[this->id], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40),
+            (J3DAnmTransformKey*)dComIfG_getObjectIDRes("Ro", l_bck_ix_tbl[this->id]),
             J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
 
         this->mpMorf = morf;
