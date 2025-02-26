@@ -182,41 +182,40 @@ static BOOL nodeCallBack(J3DNode* node, int idx) {
 }
 
 /* 000009C4-00000CAC       .text rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-static void rideCallBack(dBgW* param1, fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
+static void rideCallBack(dBgW* param1, fopAc_ac_c* i_act, fopAc_ac_c* i_other) {
+    daLlift_c* i_this = (daLlift_c*)i_act;
     f32 tiltFactor;
     f32 offsetMagnitude;
-    daLlift_c* param2 = (daLlift_c*)i_this;
-    daLlift_c* param3 = (daLlift_c*)i_other;
 
-    cXyz posOffset = param3->current.pos - param2->current.pos;
-    
+    cXyz posOffset = i_other->current.pos - i_this->current.pos;
     tiltFactor = 2.0f;
-    if (fopAcM_GetName(param3) == PROC_PLAYER) {
-        param2->m43C = TRUE;
-        param2->m43E = TRUE;
+    if (fopAcM_GetName(i_other) == PROC_PLAYER) {
+        i_this->m43C = TRUE;
+        i_this->m43E = TRUE;
         posOffset = posOffset.outprod(up_vec);
-        mDoMtx_stack_c::YrotS(-param2->current.angle.y);
+        mDoMtx_stack_c::YrotS(-i_this->current.angle.y);
         mDoMtx_stack_c::multVec(&posOffset, &posOffset);
-        if (param2->m43D) {
-            posOffset = param3->current.pos;
+        if (i_this->m43D) {
+            posOffset = i_other->current.pos;
             posOffset.x += 200.0f;
             posOffset = posOffset.outprod(up_vec);
-            mDoMtx_stack_c::YrotS(-param2->current.angle.y);
+            mDoMtx_stack_c::YrotS(-i_this->current.angle.y);
             mDoMtx_stack_c::multVec(&posOffset, &posOffset);
-            tiltFactor = cM_ssin((param2->mGlideFrameCounter & 0x1F) << 11) * 2.0f * 0.25f * (cM_rndFX(0.2f) + 1.0f);
+            s16 angle = (i_this->mActorLifetimeFrameCount & 0x1F) << 11;
+            tiltFactor = cM_ssin(angle) * 2.0f * 0.25f * (cM_rndFX(0.2f) + 1.0f);
         }
         offsetMagnitude = posOffset.abs();
         if (!posOffset.normalizeRS() ) {
           return;
         }
-        cLib_addCalcAngleS2(&param2->mTiltAngle, -offsetMagnitude * tiltFactor, 8, 0x200);
-        tiltFactor = cM_ssin(param2->mTiltAngle);
-        param2->mTargetRotation.x = posOffset.x * tiltFactor;
-        param2->mTargetRotation.y = posOffset.y * tiltFactor;
-        param2->mTargetRotation.z = posOffset.z * tiltFactor;
-        param2->mTargetRotation.w = cM_scos(param2->mTiltAngle);
+        cLib_addCalcAngleS2(&i_this->mTiltAngle, -offsetMagnitude * tiltFactor, 8, 0x200);
+        tiltFactor = cM_ssin(i_this->mTiltAngle);
+        i_this->mTargetRotation.x = posOffset.x * tiltFactor;
+        i_this->mTargetRotation.y = posOffset.y * tiltFactor;
+        i_this->mTargetRotation.z = posOffset.z * tiltFactor;
+        i_this->mTargetRotation.w = cM_scos(i_this->mTiltAngle);
     }
-    param2->m43D = FALSE;
+    i_this->m43D = FALSE;
     return;
 }
 
@@ -243,7 +242,7 @@ bool daLlift_c::_execute() {
     Quaternion interpolatedRotation;
     cXyz adjustedPosition;
     float distXZ = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-    mGlideFrameCounter++;
+    mActorLifetimeFrameCount++;
     if ((m43F) && (m43F--, !m43F)) {
         m43E = TRUE;
     }
@@ -299,16 +298,16 @@ BOOL daLlift_c::MoveDownLift() {
     }
     float downVel = cLib_addCalc(&current.pos.y, home.pos.y, 0.1f, maxSpeed, minSpeed);
     if (downVel == 0.0f) {
-        mbIsUpdraftBoosted = FALSE;
+        mbIsAscending = FALSE;
         mbIsDescending = FALSE;
         if (mEmitter3) {
             mEmitter3->playCreateParticle();
         }
         return TRUE;
     }
-    if (downVel != 0.0f && !mbIsUpdraftBoosted) {
+    if (downVel != 0.0f && !mbIsAscending) {
         fopAcM_seStart(this, JA_SE_OBJ_LOTUS_LIFT_DOWN, 0);
-        mbIsUpdraftBoosted = TRUE;
+        mbIsAscending = TRUE;
     }
     return FALSE;
 }

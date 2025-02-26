@@ -22,7 +22,7 @@ public:
     BOOL MoveDownLift();
     bool _draw();
 
-    s32 checkEndDownLift();
+    BOOL checkEndDownLift();
     BOOL MoveUpLift();
 
     static const f32 m_height;
@@ -44,12 +44,12 @@ public:
     /* 0x43F */ u8 m43F;
     /* 0x440 */ s16 mTiltAngle;
     /* 0x442 */ u8 m442[0x444-0x442];
-    /* 0x444 */ s16 mGlideFrameCounter;
+    /* 0x444 */ s16 mActorLifetimeFrameCount;
     /* 0x446 */ u8 m446[0x448-0x446];
     /* 0x448 */ Quaternion mCurrentRotation;
     /* 0x458 */ Quaternion mTargetRotation;
     /* 0x468 */ bool mbIsDescending;
-    /* 0x469 */ bool mbIsUpdraftBoosted;
+    /* 0x469 */ bool mbIsAscending;
     /* 0x46A */ u8 m46A[0x46C-0x46A];
     /* 0x46C */ Mtx mBGMtx;
     /* 0x49C */ s32 mEmitterTimer;

@@ -12,8 +12,8 @@ const f32 daLlift_c::m_max_speed = 10.0f;
 const f32 daLlift_c::m_min_speed = 5.0f;
 
 /* 800690E4-80069100       .text checkEndDownLift__9daLlift_cFv */
-s32 daLlift_c::checkEndDownLift() {
-    return (((current.pos.y <= home.pos.y) << 1) << 0x1c) >> 0x1d;
+BOOL daLlift_c::checkEndDownLift() {
+    return (current.pos.y <= home.pos.y);
 }
 
 /* 80069100-800692C4       .text MoveUpLift__9daLlift_cFv */
@@ -26,12 +26,12 @@ BOOL daLlift_c::MoveUpLift() {
     }
     float upVel = cLib_addCalc(&current.pos.y, home.pos.y + m_height, 0.1f, m_max_speed, m_min_speed);
     if (upVel == 0.0f) {
-        mbIsUpdraftBoosted = FALSE;
+        mbIsAscending = FALSE;
         res = TRUE;
     }
-    else if ((upVel != 0.0f) && (mbIsUpdraftBoosted == FALSE)) {
+    else if ((upVel != 0.0f) && (mbIsAscending == FALSE)) {
         fopAcM_seStart(this, JA_SE_OBJ_LOTUS_LIFT_UP, 0);
-        mbIsUpdraftBoosted = TRUE;
+        mbIsAscending = TRUE;
         mEmitter1 = dComIfGp_particle_set(0x82AC, &current.pos, &current.angle);
         mEmitter2 = NULL;
         upLiftPos = current.pos;
