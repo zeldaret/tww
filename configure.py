@@ -461,7 +461,7 @@ config.libs = [
             Object(Matching,    "d/d_a_item_static.cpp"),
             Object(Matching,    "d/d_a_shop_item_static.cpp"),
             Object(Matching,    "d/d_a_race_item_static.cpp"),
-            Object(NonMatching, "d/d_a_leaflift_static.cpp"),
+            Object(Matching,    "d/d_a_leaflift_static.cpp"),
             Object(NonMatching, "d/d_demo.cpp"),
             Object(Equivalent,  "d/d_door.cpp", extra_cflags=['-pragma "nosyminline on"']), # weak func order
             Object(Matching,    "d/d_resorce.cpp", extra_cflags=['-pragma "nosyminline on"']),
@@ -1554,7 +1554,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_kmon"),
     ActorRel(Matching,    "d_a_komore", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_lbridge", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_leaflift"),
+    ActorRel(Matching,    "d_a_leaflift", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_lstair"),
     ActorRel(NonMatching, "d_a_machine"),
     ActorRel(NonMatching, "d_a_mant"),
