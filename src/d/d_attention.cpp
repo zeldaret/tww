@@ -21,10 +21,10 @@ dAttParam_c::dAttParam_c(s32) {
     field_0x04 = 45.0f;
     field_0x08 = 30.0f;
     field_0x0c = 90.0f;
-    field_0x00 = 1;
-    field_0x18 = -0.9f;
-    field_0x10 = 3000.0f;
-    field_0x14 = 1000.0f;
+    mFlags = 1;
+    mSWModeDisable = -0.9f;
+    mDangerBGMDistance = 3000.0f;
+    mBGMDistMargin = 1000.0f;
 }
 
 /* 8009D268-8009D2B0       .text __dt__11dAttParam_cFv */
@@ -608,8 +608,21 @@ fopAc_ac_c* dAttention_c::LockonTarget(s32 idx) {
 }
 
 /* 8009F88C-8009F980       .text LockonReleaseDistanse__12dAttention_cFv */
-void dAttention_c::LockonReleaseDistanse() {
-    /* Nonmatching */
+f32 dAttention_c::LockonReleaseDistanse() {
+    if (!LockonTruth()) {
+        return 0.0f;
+    }
+
+    fopAc_ac_c* actor = mLockOnList[mLockOnOffs].getActor();
+    if (actor == NULL) {
+        return 0.0f;
+    }
+
+    int idx =  actor->attention_info.distances[mLockOnList[mLockOnOffs].mType];
+    cSGlobe globe(actor->attention_info.position - mpPlayer->attention_info.position);
+    cSAngle angle(globe.U() - fopAcM_GetShapeAngle_p(mpPlayer)->y);
+
+    return distace_angle_adjust(dist_table[idx].mDistXZAngleAdjust, angle, 1.0f) + dist_table[idx].mDistXZMaxRelease;
 }
 
 /* 8009F980-8009F9B8       .text LockonTargetPId__12dAttention_cFl */
@@ -695,24 +708,62 @@ fopAc_ac_c* dAttCatch_c::convPId(fpc_ProcID i_procID) {
 
 /* 8009FBBC-8009FBDC       .text init__11dAttCatch_cFv */
 void dAttCatch_c::init() {
-    field_0xc = 0x56;
-    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mCatchItemNo = 0x56;
+    mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     mCatghTargetID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }
 
 /* 8009FBDC-8009FC08       .text proc__11dAttCatch_cFv */
 void dAttCatch_c::proc() {
-    mCatghTargetID = field_0x0;
-    mChangeItem = field_0xc;
-    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mCatghTargetID = mRequestActorID;
+    mChangeItem = mCatchItemNo;
+    mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
-    field_0xc = 0x56;
+    mCatchItemNo = 0x56;
 }
 
+
 /* 8009FC08-8009FE10       .text request__11dAttCatch_cFP10fopAc_ac_cUcfffsi */
-void dAttCatch_c::request(fopAc_ac_c*, u8, f32, f32, f32, s16, int) {
-    /* Nonmatching */
+bool dAttCatch_c::request(fopAc_ac_c* reqActor, u8 itemNo, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_7) {
+    // TODO: what is param_7?
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    if (param_7 > field_0x4) {
+        return false;
+    } 
+
+    cXyz vec_to_player = reqActor->attention_info.position - player->attention_info.position;
+    if (vec_to_player.y < downDist || vec_to_player.y > upDist) {
+        return false;
+    }
+
+    f32 player_xz_dist = vec_to_player.absXZ();
+    if (player_xz_dist > horizontalDist) {
+        return false;
+    }
+
+    if (angle != 0) {
+        cSGlobe globe(vec_to_player);
+        csXyz* player_angle_p = fopAcM_GetShapeAngle_p(player);
+
+        s16 angle2 = globe.U() - player_angle_p->y;
+        if (angle2 < 0) {
+            angle2 = -angle2;
+        }
+        if (angle2 > angle) {
+            return false;
+        }
+    }
+
+    if (param_7 < field_0x4 || player_xz_dist < mDistance) {
+        field_0x4 = param_7;
+        mCatchItemNo = itemNo;
+        mRequestActorID = fopAcM_GetID(reqActor);
+        mDistance = player_xz_dist;
+        return true;
+    }
+
+    return false;
 }
 
 /* 8009FE10-8009FE40       .text convPId__10dAttLook_cFUi */
@@ -722,24 +773,85 @@ fopAc_ac_c* dAttLook_c::convPId(fpc_ProcID i_procID) {
 
 /* 8009FE40-8009FE58       .text init__10dAttLook_cFv */
 void dAttLook_c::init() {
-    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     mLookTargetID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }
 
 /* 8009FE58-8009FE74       .text proc__10dAttLook_cFv */
 void dAttLook_c::proc() {
-    mLookTargetID = field_0x0;
-    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mLookTargetID = mRequestActorID ;
+    mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }
 
 /* 8009FE74-800A009C       .text request__10dAttLook_cFP10fopAc_ac_cfffsi */
-void dAttLook_c::request(fopAc_ac_c*, f32, f32, f32, s16, int) {
-    /* Nonmatching */
+bool dAttLook_c::request(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_6) {
+    // TODO: what is param_6
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    if (param_6 > field_0x4) {
+        return false;
+    }
+
+    cXyz vec_to_player = reqActor->eyePos - player->eyePos;
+    if (vec_to_player.y < downDist || vec_to_player.y > upDist) {
+        return false;
+    }
+
+    f32 player_xz_dist = vec_to_player.absXZ();
+    if (player_xz_dist > horizontalDist) {
+        return false;
+    }
+
+    if (angle != 0) {
+        vec_to_player = reqActor->current.pos - player->current.pos;
+        cSGlobe globe(vec_to_player);
+        s16 angle2 = globe.U() - fopAcM_GetShapeAngle_p(player)->y;
+        if (angle2 < 0) {
+            angle2 = -angle2;
+        }
+        if (angle2 > angle) {
+            return false;
+        }
+    }
+
+    if (param_6 < field_0x4 || player_xz_dist < mDistance) {
+        field_0x4 = param_6;
+        mRequestActorID = fopAcM_GetID(reqActor);
+        mDistance = player_xz_dist;
+        return true;
+    }
+
+    return false;
 }
 
 /* 800A009C-800A0270       .text requestF__10dAttLook_cFP10fopAc_ac_csi */
-void dAttLook_c::requestF(fopAc_ac_c*, s16, int) {
-    /* Nonmatching */
+bool dAttLook_c::requestF(fopAc_ac_c* reqActor, s16 angle, int param_3) {
+    // TODO: what is param_3?
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    if (param_3 > this->field_0x4) {
+        return false;
+    }
+    cXyz vec_to_player = reqActor->eyePos - player->eyePos;
+    f32 player_xz_dist = vec_to_player.absXZ();
+
+    if (angle != 0) {
+        vec_to_player = reqActor->current.pos - player->current.pos;
+        cSGlobe globe(vec_to_player);
+        s16 angle2 = globe.U() - fopAcM_GetShapeAngle_p(player)->y;
+        if (angle2 < 0) {
+            angle2 = -angle2;
+        }
+        if (angle2 > angle) {
+            return false;
+        }
+    }
+    if (param_3 < field_0x4 || player_xz_dist < mDistance) {
+        field_0x4 = param_3;
+        mRequestActorID = fopAcM_GetID(reqActor);
+        mDistance = player_xz_dist;
+        return true;
+    }
+
+    return false;
 }
