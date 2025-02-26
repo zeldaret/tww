@@ -43,7 +43,7 @@ void daTag_So_c::getArg() {
     s32 paramRadius;
     
     param = fopAcM_GetParam(this);
-    m290 = fopAcM_GetParamBit(param, 0, 8);;
+    m290 = fopAcM_GetParamBit(param, 0, 8);
     paramRadius = fopAcM_GetParamBit(param, 8, 8);
     m298 = fopAcM_GetParamBit(param, 16, 8);
     if (paramRadius == 0xff) {
