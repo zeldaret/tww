@@ -271,12 +271,20 @@ static BOOL daKita_Execute(kita_class* this_i) {
 
 /* 00001CB8-00001CC0       .text daKita_IsDelete__FP10kita_class */
 static BOOL daKita_IsDelete(kita_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001CC0-00001D3C       .text daKita_Delete__FP10kita_class */
-static BOOL daKita_Delete(kita_class*) {
-    /* Nonmatching */
+static BOOL daKita_Delete(kita_class* this_i) {
+    dComIfG_resDelete(&this_i->mPhs, "Kita");
+    if(this_i->heap != NULL){
+        dComIfG_Bgsp()->Release(this_i->pm_bgw);
+    }
+    if(this_i->mBaseEmitter != NULL){
+        this_i->mBaseEmitter->becomeInvalidEmitter();
+    }
+
+    return TRUE;
 }
 
 /* 00001D3C-00001EB0       .text CallbackCreateHeap__FP10fopAc_ac_c */
