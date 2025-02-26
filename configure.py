@@ -1504,7 +1504,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_syan"),
     ActorRel(NonMatching, "d_a_tag_md_cb"),
     ActorRel(NonMatching, "d_a_tag_mk"),
-    ActorRel(NonMatching, "d_a_tag_so"),
+    ActorRel(Matching,    "d_a_tag_so"),
     ActorRel(NonMatching, "d_a_tornado"),
     ActorRel(NonMatching, "d_a_warpf"),
     ActorRel(NonMatching, "d_a_wind_tag"),
