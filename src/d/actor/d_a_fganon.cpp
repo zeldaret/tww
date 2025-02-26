@@ -5,50 +5,284 @@
 
 #include "d/actor/d_a_fganon.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_hostIO.h"
+#include "d/d_s_play.h"
+#include "m_Do/m_Do_audio.h"
+#include "d/d_camera.h"
+#include "d/d_snap.h"
+#include "d/res/res_fganon.h"
+#include "d/res/res_pgsw.h"
+
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+
+static dCcD_SrcCyl cc_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ ~(AT_TYPE_UNK1000 | AT_TYPE_UNK2000 | AT_TYPE_STALFOS_MACE),
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ cCcD_TgSPrm_IsPlayer_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, -150.0f, 0.0f,
+        /* Radius */ 100.0f,
+        /* Height */ 100.0f,
+    },
+};
+
+static dCcD_SrcSph wepon_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+        /* SrcObjTg  Type    */ ~(AT_TYPE_UNK1000 | AT_TYPE_UNK2000 | AT_TYPE_STALFOS_MACE),
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 90.0f,
+    },
+};
+
+static dCcD_SrcSph ball_tg_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+        /* SrcObjTg  Type    */ AT_TYPE_HOOKSHOT,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 90.0f,
+    },
+};
+
+static dCcD_SrcSph ball_at_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 200.0f,
+    },
+};
+
+fganon_class* master;
+u8 hio_set;
+daFganon_HIO_c l_HIO;
 
 /* 000000EC-000001A0       .text __ct__14daFganon_HIO_cFv */
 daFganon_HIO_c::daFganon_HIO_c() {
-    /* Nonmatching */
+    mNo = -0x1;
+    m05 = 0;
+    m06 = 0;
+    m08 = 60;
+    m0A = 500;
+    m0C = 1500.0f;
+    m10 = 400.0f;
+    m14 = 400.0f;
+    m18 = 400.0f;
+    m1C = 2.0;
+    m20 = 2.0;
+    m24 = 45.0f;
+    m28 = 45.0f;
+    m2C = 30.0f;
+    m30 = -270.0f;
+    m34 = -600.0f;
+    m38 = 270.0f;
+    m3C = 50;
+    m3E = 1;
+    m40 = 32;
+    m44 = 600.0f;
+    m48 = 150;
 }
 
 /* 000001A0-000002C8       .text anm_init__FP12fganon_classifUcfi */
-void anm_init(fganon_class*, int, float, unsigned char, float, int) {
-    /* Nonmatching */
+void anm_init(fganon_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {    
+    if (soundFileIdx >= 0) {
+        void* soundAnm = dComIfG_getObjectRes("Fganon", soundFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Fganon", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
+    }
+    else {
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Fganon", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
+    }
+    return;
 }
 
 /* 000002C8-00000338       .text tama_draw__FP12fganon_class */
-void tama_draw(fganon_class*) {
-    /* Nonmatching */
+/* Renders PG's Energy Ball model */
+void tama_draw(fganon_class* i_this) {
+    if (i_this->m671 != 0) {
+        J3DModel* pModel = i_this->EnergySphereModel;
+        i_this->mpBrkAnm3->entry(pModel->getModelData());
+        i_this->mpBtkAnm->entry(pModel->getModelData());
+        mDoExt_modelUpdateDL(pModel);
+    }
+    return;
 }
 
 /* 00000338-00000420       .text daFganon_Draw__FP12fganon_class */
-static BOOL daFganon_Draw(fganon_class*) {
-    /* Nonmatching */
+/* Renders PG's NPC model */
+static BOOL daFganon_Draw(fganon_class* i_this) {
+    dSnap_RegistFig(0xc2, i_this, 1.0f, 1.0f, 1.0f);
+    J3DModel* pModel = i_this->mpMorf->getModel();
+    g_env_light.setLightTevColorType(pModel, &i_this->tevStr);
+    i_this->mpBrkAnm1->entry(pModel->getModelData());
+    i_this->mpMorf->entryDL();
+    if (i_this->m2D0 != 2) {
+        pModel = i_this->NpcModel;
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->mTevStr);
+        g_env_light.setLightTevColorType(pModel, &i_this->mTevStr);
+        i_this->mpBrkAnm2->entry(pModel->getModelData());
+        mDoExt_modelUpdateDL(pModel);
+    }
+    tama_draw(i_this);
+    return TRUE;
 }
 
 /* 00000420-00000554       .text deru_brk__FP12fganon_class */
-void deru_brk(fganon_class*) {
-    /* Nonmatching */
+/* Appear Animation 1 */
+void deru_brk(fganon_class* i_this) {
+    J3DAnmTevRegKey* ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_MAIN1);
+    i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_KEN1);
+    i_this->mpBrkAnm2->init(i_this->NpcModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    fopAcM_seStart(i_this, JA_SE_CM_PG_APPEAR, 0);
+    i_this->mbIsMaterialized = TRUE;
+    return;
 }
 
 /* 00000554-000006B8       .text kieru_brk__FP12fganon_classUc */
-void kieru_brk(fganon_class*, unsigned char) {
-    /* Nonmatching */
+/* Disappear Animation 1 */
+void kieru_brk(fganon_class* i_this, unsigned char param_2) {
+    J3DAnmTevRegKey* ptrkAnm;
+    if ((param_2 == 0) || (param_2 == 1)) {
+        ptrkAnm = (J3DAnmTevRegKey *)(J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_KIERU_MAIN1);
+        i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+        fopAcM_seStart(i_this, JA_SE_CM_PG_DISAPPEAR, 0);
+    }
+    if ((param_2 == 0) || (param_2 == 2)) {
+        ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Pgsw", PGSW_BRK_KIERU_KEN1);
+        i_this->mpBrkAnm2->init(i_this->NpcModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    }
+    i_this->mbIsMaterialized = FALSE;
+    return;
 }
 
 /* 000006B8-000007EC       .text deru_brk2__FP12fganon_class */
-void deru_brk2(fganon_class*) {
-    /* Nonmatching */
+/* Appear Animation 2 */
+void deru_brk2(fganon_class* i_this) {
+    J3DAnmTevRegKey* ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_MAIN2);
+    i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_KEN2);
+    i_this->mpBrkAnm2->init(i_this->NpcModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    fopAcM_seStart(i_this, JA_SE_CM_PG_APPEAR, 0);
+    i_this->mbIsMaterialized = TRUE;
+    return;
 }
 
 /* 000007EC-00000920       .text kieru_brk2__FP12fganon_class */
-void kieru_brk2(fganon_class*) {
-    /* Nonmatching */
+/* Dissapear Animation 2 */
+void kieru_brk2(fganon_class* i_this) {
+    J3DAnmTevRegKey* ptrkAnm;
+    ptrkAnm = (J3DAnmTevRegKey *)(J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_KIERU_MAIN2);
+    i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_KIERU_KEN2);
+    i_this->mpBrkAnm2->init(i_this->NpcModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    fopAcM_seStart(i_this, JA_SE_CM_PG_DISAPPEAR, 0);
+    i_this->mbIsMaterialized = FALSE;
+    return;
 }
 
 /* 00000920-00000AEC       .text pos_move__FP12fganon_classUc */
-void pos_move(fganon_class*, unsigned char) {
-    /* Nonmatching */
+void pos_move(fganon_class* i_this, unsigned char param_2) {
+    cXyz local_44;
+    if (param_2 == 0) {
+        local_44 = i_this->m38C - i_this->current.pos;
+        s16 yTarget = cM_atan2s(local_44.x,local_44.z);
+        f32 fVar2 = std::sqrtf(local_44.x * local_44.x + local_44.z * local_44.z);
+        s16 xTarget = -cM_atan2s(local_44.y, fVar2);
+        int xMaxStep = (int)(i_this->m39C * i_this->m3A0);
+        s16 scale =  REG0_S(3) + 5;
+        cLib_addCalcAngleS2(&i_this->current.angle.y, yTarget, scale, xMaxStep);
+        cLib_addCalcAngleS2(&i_this->current.angle.x, xTarget, scale, yTarget);
+    }
+    cLib_addCalc2(&i_this->m3A0, 1.0f, 1.0f, 0.05f);
+    local_44.x = 0.0f;
+    local_44.y = 0.0f;
+    local_44.z = i_this->speedF;
+    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    MtxPosition(&local_44, &i_this->speed);
+    PSVECAdd(&i_this->current.pos, &i_this->speed, &i_this->current.pos);
+    return;
 }
 
 /* 00000AEC-00000C14       .text fly_se_set__FP12fganon_class */
@@ -147,8 +381,110 @@ void damage_check(fganon_class*) {
 }
 
 /* 00006288-00006560       .text move__FP12fganon_class */
-void move(fganon_class*) {
-    /* Nonmatching */
+s32 move(fganon_class* i_this) {
+    short sVar1;
+    dCamera_c *pdVar2;
+    actor_place *paVar3;
+    int uVar4;
+    cXyz cStack_28;
+    cXyz local_1c;
+    
+    uVar4 = 0;
+    if (dComIfGp_checkPlayerStatus0(0, 0x10000) || !dComIfGp_checkPlayerStatus0(0, 0x100000) && (i_this->m386 != 0)) {
+        if (i_this->m386 == 10) {
+            pdVar2 = dCam_getBody();
+            pdVar2->SetTypeForce("P_Ganon3", NULL);
+        }
+        else if (i_this->m2BC != 1) {
+            pdVar2 = dCam_getBody();
+            pdVar2->SetTypeForce("P_Ganon2", NULL);
+        }
+        else {
+            pdVar2 = dCam_getBody();
+            pdVar2->SetTypeForce("P_Ganon1", NULL);
+        }
+    }
+    if ((i_this->m2BC == 0) && (sVar1 = i_this->m386, sVar1 < 0x14)) {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        if ((sVar1 == 0) && (player->current.pos.y < 710.0f)) {
+            return 0;
+        }
+        if ((sVar1 != 2) && (player->current.pos.y < 710.0f)) {
+            i_this->m386 = 2;
+            i_this->m388 = 0;
+        }
+    }
+    switch(i_this->m386) {
+    case 0:
+        standby(i_this);
+        break;
+    case 1:
+        deru(i_this);
+        break;
+    case 2:
+        kieru(i_this);
+        break;
+    case 3:
+        fail(i_this);
+        uVar4 = 1;
+        break;
+    case 5:
+        fly(i_this);
+        uVar4 = 1;
+        break;
+    case 6:
+        shot(i_this);
+        uVar4 = 1;
+        break;
+    case 7:
+        spinattack(i_this);
+        uVar4 = 1;
+        break;
+    case 8:
+        fly2(i_this);
+        uVar4 = 1;
+        break;
+    case 9:
+        shot2(i_this);
+        uVar4 = 1;
+        break;
+    case 10:
+        spinattack2(i_this);
+        break;
+    case 0xb:
+        down(i_this);
+        uVar4 = 1;
+        break;
+    case 0x14:
+        start(i_this);
+        break;
+    case 0x15:
+        end(i_this);
+        break;
+    case 0x16:
+        last_end(i_this);
+    }
+    damage_check(i_this);
+    i_this->m68C = 0;
+    if (&i_this->mStts != NULL) {
+        cXyz* ccMove = i_this->mStts.GetCCMoveP();
+        i_this->current.pos.x += (*ccMove).x;
+        i_this->current.pos.y += (*ccMove).y;
+        i_this->current.pos.z += (*ccMove).z;
+        return 0;
+    }
+    local_1c.z = *(float *)&i_this->m3B0;
+    if (local_1c.z > 0.01f) {
+        local_1c.x = 0.0f;
+        local_1c.y = 0.0f;
+        mDoMtx_stack_c::YrotS(i_this->m3B4);
+        mDoMtx_stack_c::YrotM(i_this->m3B6);
+        MtxPosition(&local_1c, &cStack_28);
+        paVar3 = &i_this->current;
+        PSVECAdd(&paVar3->pos, &cStack_28, &paVar3->pos);
+        cLib_addCalc0(&i_this->m3B0, 1.0f, 7.0f);
+    }
+    return uVar4;
 }
 
 /* 00006560-00007434       .text demo_camera__FP12fganon_class */
@@ -167,33 +503,508 @@ void energy_ball_move(fganon_class*) {
 }
 
 /* 00008614-000086B4       .text mahou_se_set__FPvPv */
-void mahou_se_set(void*, void*) {
-    /* Nonmatching */
+void mahou_se_set(void* i_act, void* i_other) {  
+    fganon_class* i_this = (fganon_class*)i_act;
+    if ((fopAc_IsActor(i_this)) && (((base_process_class*)i_this)->mProcName == 0xf4)) {
+        if (i_this->health == 0) {
+            fopAcM_seStart(i_this, JA_SE_OBJ_PG_EBALL_FLY_L, 0);
+        }
+    }
+    else {
+        i_this = NULL;
+    }
+    return;
 }
 
 /* 000086B4-0000924C       .text daFganon_Execute__FP12fganon_class */
-static BOOL daFganon_Execute(fganon_class*) {
-    /* Nonmatching */
+static BOOL daFganon_Execute(fganon_class* i_this) {
+    float fVar1;
+    short sVar2;
+    float fVar3;
+    char cVar6;
+    int iVar4;
+    JPABaseEmitter *pJVar5;
+    //mant_class *cape;
+    short sVar7;
+    int iVar8;
+    int uVar9;
+    int iVar10;
+    J3DModel *pJVar11;
+    int iVar12;
+    int local_98;
+    cXyz local_94;
+    float local_88;
+    float local_84;
+    float local_80;
+    cXyz local_7c;
+    cXyz local_70;
+    float local_60;
+    uint uStack_5c;
+    int local_58;
+    int local_50;
+    
+    local_70.x = 0.0;
+    local_70.y = 0.0;
+    local_70.z = 0.0;
+
+    if ((i_this->mB89 > 1) && (i_this->mB89--, i_this->mB89 == 1)) {
+        mDoAud_subBgmStart(0x80000047);
+    }
+
+    //fpcEx_Search(&mahou_se_set, i_this);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+    sVar2 = i_this->m386;
+
+    if (((((sVar2 == 5) || (sVar2 == 9)) || (sVar2 == 7)) || (sVar2 == 10)) && ((i_this->m68B != 0 && (i_this->m68A == 0)))) {
+        i_this->m68B = 0;
+        anm_init(i_this, 0x17, 2.375f, 2, 1.875f, 0xffffffff);
+        i_this->m68A = 0x3c;
+        cVar6 = dComIfGp_getReverb(fopAcM_GetRoomNo(i_this));
+        if (i_this == NULL) {
+            uVar9 = 0xffffffff;
+        }
+        else {
+            uVar9 = fpcM_GetID(i_this);
+      }
+      fopAcM_monsSeStart(i_this, 0x4941, 0);
+    }
+
+    i_this->m384++;
+    for (int i = 0; i<5; i++){
+        if (i_this->mEmitters1[i])
+            i_this->mEmitters1[i]->becomeInvalidEmitter();
+    }
+
+    if (i_this->m68A != 0)
+        i_this->m68A--;
+    if (i_this->m3AE != 0)
+        i_this->m3AE--;
+    if (i_this->m3B8 != 0)
+        i_this->m3B8--;
+
+    if (l_HIO.mNo == 0) {
+        if (i_this->mbIsMaterialized == 0) {
+            i_this->actor_status = i_this->actor_status;
+            i_this->attention_info.flags = 0;
+        }
+        else {
+            i_this->attention_info.flags = fopAc_Attn_LOCKON_TALK_e;
+        }
+        iVar4 = move(i_this);
+        if (iVar4 != 0) {
+            i_this->mAcch.CrrPos(*dComIfG_Bgsp());
+        }
+        i_this->mpMorf->play(&i_this->eyePos, 0, 0);
+        i_this->mpBrkAnm1->play();
+        i_this->mpBrkAnm2->play();
+    }
+
+    iVar4 = i_this->m384;
+    iVar12 = REG0_S(6);
+    local_80 = i_this->m3BC;
+    local_88 = local_80 * JMASSin((int)(iVar4 * (iVar12 + 700) & 0xffffU));
+    local_84 = local_80 * JMASSin((int)(iVar4 * (iVar12 + 0x2ee) & 0xffffU));
+    local_80 = local_80 * JMASCos((int)(iVar4 * (iVar12 + 0x2d0) & 0xffffU));
+    
+    cLib_addCalc0(&i_this->m3BC, 1.0f, 1.0f);
+    
+    pJVar11 = i_this->mpMorf->mpModel;
+    pJVar11->setBaseScale(i_this->scale);
+    mDoMtx_stack_c::transS(i_this->current.pos.x + local_88, i_this->current.pos.y + local_84, i_this->current.pos.z + local_80);
+    
+    uStack_5c = (int)i_this->m3B8 ^ 0x80000000;
+    local_60 = 176.0f;
+    fVar3 = (float)(int)i_this->m3B8 * (REG0_F(14) + 500.0f);
+    fVar1 = JMASCos((int)(i_this->m384 * 0x2300 & 0xffffU));
+    iVar4 = JMASSin((int)(i_this->m384 * 0x2100 & 0xffffU));
+    local_58 = (int)iVar4;
+    mDoMtx_stack_c::YrotM(i_this->shape_angle.y + (short)iVar4);
+    
+    iVar4 = (int)(fVar3 * fVar1);
+    //local_50 = (longlong)iVar4;
+    //m_Do_mtx::mDoMtx_XrotM(&mDoMtx_stack_c::now,(i_this->parent).shape_angle.x + (short)iVar4);
+    //m_Do_mtx::mDoMtx_ZrotM(&mDoMtx_stack_c::now,(i_this->parent).shape_angle.z);
+    //mtx::PSMTXCopy(&mDoMtx_stack_c::now,&pJVar11->mBaseMtx);
+    //mDoExt_McaMorf::calc(i_this->mpMorf);
+    //mtx::PSMTXCopy(pJVar11->mpNodeMtx + 0x1b,SComponent::calc_mtx);
+    //SComponent::MtxPosition(&local_70,&(i_this->parent).eyePos);
+    //(i_this->parent).attention_info.position.x = (i_this->parent).eyePos.x;
+    //(i_this->parent).attention_info.position.y = (i_this->parent).eyePos.y;
+    //(i_this->parent).attention_info.position.z = (i_this->parent).eyePos.z;
+    //(i_this->parent).attention_info.position.y = (i_this->parent).attention_info.position.y + 30.0;
+    //if (i_this->m2D0 == 0) {
+    //  mtx::PSMTXCopy(i_this->mpMorf->mpModel->mpNodeMtx + 0x18,SComponent::calc_mtx);
+    //  m_Do_mtx::mDoMtx_YrotM(SComponent::calc_mtx,d_s_play::g_regHIO.mChild[8].mShorts[1] + -400);
+    //  m_Do_mtx::mDoMtx_XrotM(SComponent::calc_mtx,d_s_play::g_regHIO.mChild[8].mShorts[2] + -400);
+    //  m_Do_mtx::mDoMtx_ZrotM(SComponent::calc_mtx,d_s_play::g_regHIO.mChild[8].mShorts[3] + -0x8000);
+    //  SComponent::MtxTrans
+    //            (d_s_play::g_regHIO.mChild[8].mFloats[9],d_s_play::g_regHIO.mChild[8].mFloats[10],
+    //             d_s_play::g_regHIO.mChild[8].mFloats[11] + 85.0,true);
+    //  SComponent::MtxTrans
+    //            (d_s_play::g_regHIO.mChild[0].mFloats[12],d_s_play::g_regHIO.mChild[0].mFloats[13],
+    //             d_s_play::g_regHIO.mChild[0].mFloats[14] + 90.0,true);
+    //  m_Do_mtx::mDoMtx_ZrotM(SComponent::calc_mtx,*(short *)&i_this->field_0x6a0);
+    //  local_50 = (longlong)(int)*(float *)&i_this->field_0x694;
+    //  m_Do_mtx::mDoMtx_XrotM(SComponent::calc_mtx,(short)(int)*(float *)&i_this->field_0x694);
+    //  m_Do_mtx::mDoMtx_ZrotM(SComponent::calc_mtx,-*(short *)&i_this->field_0x6a0);
+    //  sVar7 = 0;
+    //  sVar2 = i_this->m6A6;
+    //  iVar4 = (int)sVar2;
+    //  if (sVar2 != 0) {
+    //    local_50 = CONCAT44(0x43300000,iVar4 ^ 0x80000000);
+    //    iVar4 = (int)((d_s_play::g_regHIO.mChild[0].mFloats[14] + 400.0) *
+    //                 (float)iVar4 *
+    //                 JKernel::JMath::jmaSinTable
+    //                 [(int)(iVar4 * (d_s_play::g_regHIO.mChild[0].mShorts[2] + 0x1800) & 0xffffU) >>
+    //                  (JKernel::JMath::jmaSinShift & 0x3f)]);
+    //    local_58 = (longlong)iVar4;
+    //    sVar7 = (short)iVar4;
+    //    i_this->m6A6 = sVar2 + -1;
+    //  }
+    //  m_Do_mtx::mDoMtx_ZrotM(SComponent::calc_mtx,i_this->m6A2 + sVar7);
+    //  SComponent::MtxTrans
+    //            (-d_s_play::g_regHIO.mChild[0].mFloats[12],-d_s_play::g_regHIO.mChild[0].mFloats[13],
+    //             -(d_s_play::g_regHIO.mChild[0].mFloats[14] + 90.0),true);
+    //  mtx::PSMTXCopy(SComponent::calc_mtx,&i_this->NpcModel->mBaseMtx);
+    //}
+    //demo_camera(i_this);
+    //energy_ball_move(i_this);
+    //iVar10 = 0;
+    //iVar12 = 0;
+    //iVar4 = 0;
+    //do {
+    //  if ((i_this->mbIsMaterialized == 0) || (i_this->m386 == 0x16)) {
+    //    iVar8 = *(int *)((int)i_this->mEmitters1 + iVar4);
+    //    if (iVar8 != 0) {
+    //      *(undefined4 *)(iVar8 + 0x60) = 0xffffffff;
+    //      *(uint *)(iVar8 + 0x20c) = *(uint *)(iVar8 + 0x20c) | 1;
+    //      *(undefined4 *)((int)i_this->mEmitters1 + iVar4) = 0;
+    //    }
+    //  }
+    //  else {
+    //    iVar8 = *(int *)((int)i_this->mEmitters1 + iVar4);
+    //    if (iVar8 == 0) {
+    //      pJVar5 = dPa_control_c::set(d_com_inf_game::g_dComIfG_gameInfo.play.mParticleCtrl,0,
+    //                                  *(ushort *)((int)SHORT_ARRAY_8064cce0 + iVar12),
+    //                                  &(i_this->parent).current.pos,(csXyz *)0x0,(cXyz *)0x0,0xff,
+    //                                  (dPa_levelEcallBack *)0x0,-1,(_GXColor *)0x0,(_GXColor *)0x0,
+    //                                  (cXyz *)0x0);
+    //      *(JPABaseEmitter **)((int)i_this->mEmitters1 + iVar4) = pJVar5;
+    //    }
+    //    else {
+    //      JPABase::JPASetRMtxTVecfromMtx
+    //                (i_this->mpMorf->mpModel->mpNodeMtx + *(int *)((int)&DAT_8064ccd8 + iVar4),
+    //                 (MTX34 *)(iVar8 + 0x1a8),(cXyz *)(iVar8 + 0x1e4));
+    //    }
+    //  }
+    //  iVar10 = iVar10 + 1;
+    //  iVar12 = iVar12 + 2;
+    //  iVar4 = iVar4 + 4;
+    //} while (iVar10 < 2);
+    //if (i_this->mbIsMaterialized == 0) {
+    //  (i_this->mCyl).parent.parent.parent.parent.mObjCo.parent.mCommonFlag =
+    //       (i_this->mCyl).parent.parent.parent.parent.mObjCo.parent.mCommonFlag & ~EnableCheck;
+    //  local_50 = CONCAT44(0x43300000,(uint)i_this->m68F);
+    //  local_7c.z = (float)(uint)i_this->m68F * -1000.0;
+    //  local_7c.x = 20000.0;
+    //  local_7c.y = 20000.0;
+    //}
+    //else {
+    //  mtx::PSMTXCopy(i_this->mpMorf->mpModel->mpNodeMtx + 10,SComponent::calc_mtx);
+    //  local_70.x = 0.0;
+    //  local_70.y = 0.0;
+    //  local_70.z = 0.0;
+    //  SComponent::MtxPosition(&local_70,&local_7c);
+    //  local_7c.y = local_7c.y - (d_s_play::g_regHIO.mChild[0].mFloats[0] + 150.0);
+    //  if (i_this->m68F == 0) {
+    //    (i_this->mCyl).parent.parent.parent.parent.mObjCo.parent.mCommonFlag =
+    //         (i_this->mCyl).parent.parent.parent.parent.mObjCo.parent.mCommonFlag | EnableCheck;
+    //  }
+    //  else {
+    //    (i_this->mCyl).parent.parent.parent.parent.mObjCo.parent.mCommonFlag =
+    //         (i_this->mCyl).parent.parent.parent.parent.mObjCo.parent.mCommonFlag & ~EnableCheck;
+    //  }
+    //}
+    //::cM3dGCyl::SetC(&(i_this->mCyl).mCylAttr.mCyl,&local_7c);
+    //::cM3dGCyl::SetH(&(i_this->mCyl).mCylAttr.mCyl,d_s_play::g_regHIO.mChild[8].mFloats[3] + 250.0);
+    //::cM3dGCyl::SetR(&(i_this->mCyl).mCylAttr.mCyl,d_s_play::g_regHIO.mChild[8].mFloats[4] + 70.0);
+    //cCcS::Set(&d_com_inf_game::g_dComIfG_gameInfo.play.mCcS.parent,(cCcD_Obj *)&i_this->mCyl);
+    //local_94.x = -10000.0;
+    //local_94.y = -10000.0;
+    //local_94.z = -10000.0;
+    //if (i_this->m685 == 0) {
+    //  i_this->m684 = 0;
+    //  ::cM3dGSph::SetC(&(i_this->mSph).mSphAttr.mSph,&local_94);
+    //}
+    //else {
+    //  ::cM3dGSph::SetR(&(i_this->mSph).mSphAttr.mSph,d_s_play::g_regHIO.mChild[0].mFloats[13] + 60.0);
+    //  mtx::PSMTXCopy(i_this->mpMorf->mpModel->mpNodeMtx + 0x18,SComponent::calc_mtx);
+    //  local_70.x = 0.0;
+    //  local_70.y = 0.0;
+    //  local_70.z = 100.0;
+    //  SComponent::MtxPosition(&local_70,&local_94);
+    //  i_this->m685 = 0;
+    //  if (i_this->m684 == 0) {
+    //    ::dCcD_Sph::StartCAt(&i_this->mSph,&local_94);
+    //    i_this->m684 = 1;
+    //  }
+    //  else {
+    //    ::dCcD_Sph::MoveCAt(&i_this->mSph,&local_94);
+    //  }
+    //}
+    //cCcS::Set(&d_com_inf_game::g_dComIfG_gameInfo.play.mCcS.parent,(cCcD_Obj *)&i_this->mSph);
+    //i_this->m686 = 0;
+    //local_98 = i_this->mCapeID;
+    //cape = (mant_class *)f_op_actor_iter::fopAcIt_Judge(f_pc_searcher::fpcSch_JudgeByID,&local_98);
+    //if (cape != (mant_class *)0x0) {
+    //  mtx::PSMTXCopy(i_this->mpMorf->mpModel->mpNodeMtx +
+    //                 d_s_play::g_regHIO.mChild[0].mShorts[5] + 0x14,SComponent::calc_mtx);
+    //  local_70.x = d_s_play::g_regHIO.mChild[0].mFloats[0] + 35.0;
+    //  local_70.y = d_s_play::g_regHIO.mChild[0].mFloats[1];
+    //  local_70.z = d_s_play::g_regHIO.mChild[0].mFloats[2] + -30.0;
+    //  SComponent::MtxPosition(&local_70,(cXyz *)&cape->field_0x1be0);
+    //  mtx::PSMTXCopy(i_this->mpMorf->mpModel->mpNodeMtx +
+    //                 d_s_play::g_regHIO.mChild[0].mShorts[6] + 0xb,SComponent::calc_mtx);
+    //  local_70.x = d_s_play::g_regHIO.mChild[0].mFloats[3] + 35.0;
+    //  local_70.y = d_s_play::g_regHIO.mChild[0].mFloats[4];
+    //  local_70.z = d_s_play::g_regHIO.mChild[0].mFloats[5] + 30.0;
+    //  SComponent::MtxPosition(&local_70,&cape->field6493_0x1bec);
+    //  (cape->parent).current.pos.x = (i_this->parent).eyePos.x;
+    //  (cape->parent).current.pos.y = (i_this->parent).eyePos.y;
+    //  (cape->parent).current.pos.z = (i_this->parent).eyePos.z;
+    //  (cape->parent).current.angle.x = (i_this->parent).current.angle.x;
+    //  (cape->parent).current.angle.y = (i_this->parent).current.angle.y;
+    //  (cape->parent).current.angle.z = (i_this->parent).current.angle.z;
+    //  if ((i_this->mbIsMaterialized == 0) || (i_this->m68E != 0)) {
+    //    fVar1 = 0.0;
+    //  }
+    //  else {
+    //    fVar1 = 1.0;
+    //  }
+    //  SComponent::cLib_addCalc2
+    //            (&(cape->parent).scale.y,fVar1,1.0,d_s_play::g_regHIO.mChild[0].mFloats[8] + 0.1);
+    //}
+    //if (i_this->m6AC == 0) {
+    //  i_this->m2A4 = 100.0;
+    //}
+    //else {
+    //  i_this->m6AC = i_this->m6AC + -1;
+    //  i_this->m29C = 0.0;
+    //  i_this->m2A0 = 10.0;
+    //  i_this->m298 = 10000.0;
+    //  *(undefined *)&i_this->m2A8 = 1;
+    //  i_this->m298 = DAT_8064d254;
+    //  i_this->m2A4 = 5.0;
+    //}
+    //
+    return TRUE;
 }
 
 /* 0000924C-00009254       .text daFganon_IsDelete__FP12fganon_class */
 static BOOL daFganon_IsDelete(fganon_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00009254-000093B4       .text daFganon_Delete__FP12fganon_class */
-static BOOL daFganon_Delete(fganon_class*) {
-    /* Nonmatching */
+static BOOL daFganon_Delete(fganon_class* i_this) {
+    int iVar3;
+    
+    if ((i_this->mB8A) && (dComIfG_resDelete(&i_this->mPhs2, "Pgsw"), i_this->mB8A != 1))
+        dComIfG_resDelete(&i_this->mPhs1, "Fganon");
+    
+    if (i_this->mB88 != 0) {
+        hio_set = 0;
+        mDoHIO_deleteChild(l_HIO.mNo);
+    }
+
+    mDoAud_seDeleteObject(&i_this->m3E0);
+
+    if (i_this->mCapeID != 0xffff)
+        fopAcM_delete(fopAcM_SearchByID(i_this->mCapeID));
+
+    if (i_this->mB89)
+        mDoAud_subBgmStop();
+
+    for (int i = 0; i < 4; i++) {
+        if (i_this->mEmitters2[i])
+            i_this->mEmitters2[i]->becomeInvalidEmitter();
+    }
+    
+    for (int i = 0; i < 2; i++) {
+        if (i_this->mEmitters1[i])
+            i_this->mEmitters1[i]->becomeInvalidEmitter();
+    }
+    return TRUE;
 }
 
 /* 000093B4-000097FC       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* i_act) {
+    J3DModel* pModel;
+    J3DModelData* pModelData;
+    J3DAnmTevRegKey* ptrkAnm;
+    J3DAnmTextureSRTKey* ptsrtkAnm;
+    int iVar4;
+    
+    fganon_class* i_this = (fganon_class*)i_act;
+    
+    
+    mDoExt_McaMorf* morf = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("Fgannon", FGANON_BDL_BPG), NULL, NULL, 
+                                              (J3DAnmTransformKey *)dComIfG_getObjectRes("Fgannon", FGANON_BCK_WAIT1), 
+                                              J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11020203);
+    
+    i_this->mpMorf = morf;
+    if ((i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL))
+        return FALSE;
+    
+    i_this->mpBrkAnm1 = new mDoExt_brkAnm();
+    if (i_this->mpBrkAnm1 == NULL)
+        return FALSE;
+
+    ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fgannon", FGANON_BRK_DERU_MAIN1);
+    iVar4 = i_this->mpBrkAnm1->init(i_this->mpMorf->mpModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, FALSE, 0);
+    if (iVar4 == 0)
+        return FALSE;
+
+    pModelData = (J3DModelData *)dComIfG_getObjectRes("Pgsw", PGSW_BDL_BPG_KEN1);
+    pModel = mDoExt_J3DModel__create(pModelData, 0, 0x11020203);
+    i_this->NpcModel = pModel;
+    if (i_this->NpcModel == NULL)
+        return FALSE;
+    
+    i_this->mpBrkAnm2 = new mDoExt_brkAnm();
+    if (i_this->mpBrkAnm2 == NULL)
+        return FALSE;
+
+    ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fgannon", FGANON_BRK_DERU_KEN1);
+    iVar4 = i_this->mpBrkAnm2->init(i_this->NpcModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, FALSE, 0);
+    if (iVar4 == 0)
+        return FALSE;
+    
+    pModelData = (J3DModelData *)dComIfG_getObjectRes("Fgannon", FGANON_BDL_YDKBL00);
+    pModel = mDoExt_J3DModel__create(pModelData, 0, 0x11020203);
+    i_this->EnergySphereModel = pModel;
+    if (i_this->EnergySphereModel == NULL)
+        return FALSE;
+    
+    i_this->mpBtkAnm = new mDoExt_btkAnm();
+    if (i_this->mpBtkAnm == NULL)
+        return FALSE;
+
+    ptsrtkAnm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Fgannon", FGANON_BTK_YDKBL00);
+    iVar4 = i_this->mpBtkAnm->init(pModelData, ptsrtkAnm, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, FALSE, 0);
+    if (iVar4 == 0)
+        return FALSE;
+
+    i_this->mpBrkAnm3 = new mDoExt_brkAnm();
+    if (i_this->mpBrkAnm3 == NULL)
+        return FALSE;
+
+    ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fgannon", FGANON_BRK_YDKBL00);
+    iVar4 = i_this->mpBrkAnm3->init(pModelData, ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, FALSE, 0);
+    if (iVar4 == 0)
+        return FALSE;
+
+    return TRUE;
 }
 
 /* 00009844-00009C70       .text daFganon_Create__FP10fopAc_ac_c */
-static s32 daFganon_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daFganon_Create(fopAc_ac_c* i_act) {
+    fganon_class* i_this = (fganon_class*)i_act;
+    fopAcM_SetupActor(i_this, fganon_class);
+    
+    if (i_this->base.mInitState == 0) {
+        i_this->mSwitchNo = fopAcM_GetParam(i_this) >> 0x10;
+    }
+
+    if ((i_this->mSwitchNo == 0xff) || fopAcM_isSwitch(i_this, dComIfGp_roomControl_getStayNo())) {
+        if (((fopAcM_GetParam(i_this) & 0xF) == 2) && !(dComIfGs_isEventBit(0x3A08))) {
+            fopAcM_create(PROC_BOKO, 5, &i_this->current.pos, i_this->current.roomNo);
+        }
+        return cPhs_ERROR_e;
+    }
+
+    i_this->mB89 = 1;
+    if (dComIfG_resLoad(&i_this->mPhs2, "Pgsw") != cPhs_COMPLEATE_e) {
+        i_this->mB8A = 2;
+        if (dComIfG_resLoad(&i_this->mPhs1, "Fganon") == cPhs_COMPLEATE_e) {
+            i_this->m2BC  = fopAcM_GetParam(i_this) & 0xf;
+            i_this->m2BD  = fopAcM_GetParam(i_this) >> 8;
+            i_this->mSwitchNo = fopAcM_GetParam(i_this) >> 0x10;
+            i_this->m2BF  = fopAcM_GetParam(i_this) >> 0x18;
+            if (i_this->m2BC == 3) {
+                i_this->m68F = (fopAcM_GetParam(i_this) >> 4) & 0xf;
+            }
+            if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x96000)) {
+                return cPhs_ERROR_e;
+            }
+        }
+    }
+
+    i_this->attention_info.flags = 4;
+    i_this->attention_info.distances[2] = 4;
+    
+    if (hio_set == 0) {
+        i_this->mB88 = 1;
+        hio_set = 1;
+        if (i_this->m2BC == 2) {
+            l_HIO.mNo = mDoHIO_createChild("ファントムガノン③", (JORReflexible *)&l_HIO);
+        }
+        else if (i_this->m2BC == 1) {
+            l_HIO.mNo = mDoHIO_createChild("ファントムガノン②", (JORReflexible *)&l_HIO);
+        }
+        else {
+            l_HIO.mNo = mDoHIO_createChild("ファントムガノン①", (JORReflexible *)&l_HIO);
+        }
+    }
+    
+    i_this->mAcch.Set(fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this), i_this, 1, &i_this->mAcchCir, fopAcM_GetSpeed_p(i_this));
+    i_this->mAcch.OffSameActorChk();
+    i_this->mAcchCir.SetWall(200.0f, 200.0f);
+    
+    i_this->mStts.Init(0xFA, 0xFF, i_this);
+    i_this->mCyl.Set(cc_cyl_src);
+    i_this->mCyl.SetStts(&i_this->mStts);
+    i_this->mCyl.OnTgNoHitMark();
+    
+    i_this->mBallTgSph.Set(ball_tg_sph_src); 
+    i_this->mBallTgSph.SetStts(&i_this->mStts);
+    i_this->mBallTgSph.OnTgNoHitMark();
+    
+    i_this->mBallAtSph.Set(ball_at_sph_src);
+    i_this->mBallAtSph.SetStts(&i_this->mStts);
+    
+    i_this->mWeponSph.Set(wepon_sph_src);
+    i_this->mWeponSph.SetStts(&i_this->mStts);
+    
+    if (i_this->m68F == 0) {
+        master = i_this;
+        if (i_this->m2BC == 0) {
+            i_this->m386 = 20;
+            i_this->m388 = 0;
+            kieru_brk(i_this, 0);
+            i_this->max_health = 30;
+            i_this->health = 30;
+            i_this->m690 = 10;
+        }
+        else {
+            i_this->max_health = 100;
+            i_this->health = 100;
+            i_this->m386 = 0;
+            i_this->m388= -1;
+        }
+        i_this->current.pos.y += 10000.0f;
+    }
+    else {
+        i_this->m388 = 10;
+        i_this->m388 = 0;
+        deru_brk(i_this);
+    }
+    
+    i_this->m290 = REG8_F(8) + 300.0f;
+    i_this->m294 = 300.0f;
+    i_this->mCapeID = fopAcM_create(PROC_MANT, 1, &i_this->current.pos, i_this->current.roomNo);
+    daFganon_Execute(i_this);
+    return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daFganon_Method = {
