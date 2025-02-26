@@ -26,18 +26,18 @@ int daTornado_c::jointCallBack(int jntNo) {
         return 1;
     }
 
-    mDoMtx_stack_c::transS(m330[jntIdx], 0.0f, m35c[jntIdx]);
+    mDoMtx_stack_c::transS(mJointX[jntIdx], 0.0f, mJointZ[jntIdx]);
     if (jntIdx != 10 && jntIdx != 0) {
         mDoMtx_stack_c::ZXYrotM(getJointXPos(jntIdx), getJointYPos(jntIdx), getJointZPos(jntIdx));
     }
 
     if (fopAcM_GetParam(this) != 0) {
-        float scale = mCurJointScale[jntIdx];
+        float scale = mJointScale[jntIdx];
         mDoMtx_stack_c::scaleM(scale, scale, scale);
     }
     mDoMtx_stack_c::revConcat(mpModel->getAnmMtx(jntNo));
     mpModel->setAnmMtx(jntNo, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::transS(m330[jntIdx], 0.0f, m35c[jntIdx]);
+    mDoMtx_stack_c::transS(mJointX[jntIdx], 0.0f, mJointZ[jntIdx]);
     mDoMtx_stack_c::revConcat(J3DSys::mCurrentMtx);
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     return 1;
@@ -65,9 +65,9 @@ int daTornado_c::draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
-    mBck1.entry(mpModel->getModelData());
-    mBtk1.entry(mpModel->getModelData(), mBtk1Frame);
-    mBrk1.entry(mpModel->getModelData(), mBrk1Frame);
+    mBck.entry(mpModel->getModelData());
+    mBtk.entry(mpModel->getModelData(), mBtkFrame);
+    mBrk.entry(mpModel->getModelData(), mBrkFrame);
 
     if (dComIfGs_isTmpBit(0x404)) {
         dComIfGd_setListMaskOff();
@@ -79,13 +79,14 @@ int daTornado_c::draw() {
 
     if (fopAcM_GetParam(this) == 0) {
         g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
-        g_env_light.setLightTevColorType(mpUnderModel, &tevStr);
+        g_env_light.setLightTevColorType(mpModelUnder, &tevStr);
 
-        mBck2.entry(mpUnderModel->getModelData(), mBck1.getFrame());
-        mBtk2.entry(mpUnderModel->getModelData(), mBtk2Frame);
-        mBrk2.entry(mpUnderModel->getModelData(), mBrk1Frame);
+        mBckUnder.entry(mpModelUnder->getModelData(), mBck.getFrame());
+        mBtkUnder.entry(mpModelUnder->getModelData(), mBtkUnderFrame);
+        mBrkUnder.entry(mpModelUnder->getModelData(), mBrkFrame);
+
         dComIfGd_setListMaskOff();
-        mDoExt_modelUpdateDL(mpUnderModel);
+        mDoExt_modelUpdateDL(mpModelUnder);
         dComIfGd_setList();
     }
 
@@ -103,18 +104,18 @@ BOOL daTornado_c::execute() {
 
     float fVar8;
 
-    mBck1.play();
-    mBtk1Frame += 1.0f;
-    if (mBtk1Frame >= mBtk1.getBtkAnm()->getFrameMax()) {
-        mBtk1Frame -= mBtk1.getBtkAnm()->getFrameMax();
+    mBck.play();
+    mBtkFrame += 1.0f;
+    if (mBtkFrame >= mBtk.getBtkAnm()->getFrameMax()) {
+        mBtkFrame -= mBtk.getBtkAnm()->getFrameMax();
     }
 
-    mBtk2Frame += 1.0f;
-    if (mBtk2Frame >= mBtk2.getBtkAnm()->getFrameMax()) {
-        mBtk2Frame -= mBtk2.getBtkAnm()->getFrameMax();
+    mBtkUnderFrame += 1.0f;
+    if (mBtkUnderFrame >= mBtkUnder.getBtkAnm()->getFrameMax()) {
+        mBtkUnderFrame -= mBtkUnder.getBtkAnm()->getFrameMax();
     }
-    mCurAngle2 += 250;
-    mCurAngle1 += 500;
+    mAngle2 += 250;
+    mAngle1 += 500;
     m32c = 10000.0f;
     u32 param = fopAcM_GetParam(this);
     if (param == 1) {
@@ -137,12 +138,12 @@ BOOL daTornado_c::execute() {
     }
 
     for (s32 i = 0; i < 11; i++) {
-        float sin = cM_ssin(mCurAngle1 - 0x1000 * i);
+        float sin = cM_ssin(mAngle1 - 0x1000 * i);
         float tmp1 = fVar8 * joint_offset[i];
         float fVar1 = tmp1 * (sin + 1.0f);
-        short angle2 = mCurAngle2 - 0x1800 * i;
-        m330[i] = cM_ssin(angle2) * fVar1 * scale.x;
-        m35c[i] = cM_scos(angle2) * fVar1 * scale.x;
+        short angle2 = mAngle2 - 0x1800 * i;
+        mJointX[i] = cM_ssin(angle2) * fVar1 * scale.x;
+        mJointZ[i] = cM_scos(angle2) * fVar1 * scale.x;
     }
 
     param = fopAcM_GetParam(this);
@@ -171,10 +172,10 @@ BOOL daTornado_c::execute() {
                 current.pos = home.pos + diff * 7500.0f;
             }
         }
-        if (m31e != 0) {
-            m31e -= 1;
+        if (mPtclTimer != 0) {
+            mPtclTimer -= 1;
         } else {
-            m31e = 10;
+            mPtclTimer = 10;
             dComIfGp_particle_set(0x8213, &current.pos, NULL, (cXyz*)&wind_scale);
         }
 
@@ -186,8 +187,8 @@ BOOL daTornado_c::execute() {
             if (ship != NULL) {
                 ship->offTornadoFlg();
             }
-            mBrk1Frame += 0.3f;
-            if (mBrk1Frame >= mBrk1.getBrkAnm()->getFrameMax()) {
+            mBrkFrame += 0.3f;
+            if (mBrkFrame >= mBrk.getBrkAnm()->getFrameMax()) {
                 fopAcM_delete(this);
             }
         } else {
@@ -196,18 +197,18 @@ BOOL daTornado_c::execute() {
     } else if (param == 1) {
         if (m31c != 0) {
             for (int i = 0; i < 11; i++) {
-                cLib_chaseF(&mCurJointScale[i], l_joint_scale[i], (11-i)*0.007f);
-                m330[i] *= mCurJointScale[i];
-                m35c[i] *= mCurJointScale[i];
+                cLib_chaseF(&mJointScale[i], l_joint_scale[i], (11-i)*0.007f);
+                mJointX[i] *= mJointScale[i];
+                mJointZ[i] *= mJointScale[i];
             }
         }
     } else if (m31c != 0) {
         for (int i = 0; i < 11; i++) {
-            cLib_chaseF(&mCurJointScale[i], 0.0f, (i + 1) * 0.001f);
-            m330[i] *= mCurJointScale[i];
-            m35c[i] *= mCurJointScale[i];
+            cLib_chaseF(&mJointScale[i], 0.0f, (i + 1) * 0.001f);
+            mJointX[i] *= mJointScale[i];
+            mJointZ[i] *= mJointScale[i];
         }
-        if (mCurJointScale[10] < 1e-06f) {
+        if (mJointScale[10] < 1e-06f) {
             fopAcM_delete(this);
             return TRUE;
         }
@@ -216,14 +217,14 @@ BOOL daTornado_c::execute() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     attention_info.position = current.pos;
     eyePos = current.pos;
-    m3b4.set(current.pos.x + m330[0], current.pos.y, current.pos.z + m35c[0]);
+    mCenter.set(current.pos.x + mJointX[0], current.pos.y, current.pos.z + mJointZ[0]);
     if (mPtclCb.getEmitter() != NULL) {
         GXColor colorAmb, colorDif;
         dKy_get_seacolor(&colorAmb, &colorDif);
         mPtclCb.getEmitter()->setGlobalPrmColor(colorAmb.r, colorAmb.g, colorAmb.b);
     }
-    mDoMtx_stack_c::transS(m3b4);
-    mpUnderModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_stack_c::transS(mCenter);
+    mpModelUnder->setBaseTRMtx(mDoMtx_stack_c::get());
 
     return TRUE;
 }
@@ -263,34 +264,34 @@ BOOL daTornado_c::createHeap() {
         return FALSE;
     }
 
-    if (!mBck1.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YTRND00), true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false)) {
+    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YTRND00), true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false)) {
         return FALSE;
     }
 
-    if (!mBtk1.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YTRND00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YTRND00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
-    if (!mBrk1.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YTRND00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YTRND00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YWUWT00);
     JUT_ASSERT(0x226, modelData != NULL);
-    mpUnderModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
-    if (!mpUnderModel) {
+    mpModelUnder = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
+    if (!mpModelUnder) {
         return FALSE;
     }
 
-    if (!mBck2.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false)) {
+    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false)) {
         return FALSE;
     }
 
-    if (!mBtk2.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
-    if (!mBrk2.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
@@ -320,12 +321,12 @@ s32 daTornado_c::create() {
         if (param == 1) {
             current.pos.y -= 2000.0f;
             mpModel->setBaseScale(small_scale);
-            mpUnderModel->setBaseScale(under_small_scale);
+            mpModelUnder->setBaseScale(under_small_scale);
         } else if (param == 2) {
             mpModel->setBaseScale(small_scale);
-            mpUnderModel->setBaseScale(under_small_scale);
+            mpModelUnder->setBaseScale(under_small_scale);
             for (int i=0; i<11; i++) {
-                mCurJointScale[i] = l_joint_scale[i];
+                mJointScale[i] = l_joint_scale[i];
             }
         } else {
             fopAcM_SetParam(this, 0);
@@ -333,14 +334,14 @@ s32 daTornado_c::create() {
                 return cPhs_ERROR_e;
             }
             dKyw_tornado_Notice(&current.pos);
-            mpUnderModel->setBaseScale(under_scale);
-            m3b4 = current.pos;
-            dComIfGp_particle_set(0x81bb, &m3b4, NULL, NULL, 0xFF, &mPtclCb);
+            mpModelUnder->setBaseScale(under_scale);
+            mCenter = current.pos;
+            dComIfGp_particle_set(0x81bb, &mCenter, NULL, NULL, 0xFF, &mPtclCb);
             fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
         }
         mDoMtx_stack_c::transS(current.pos);
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-        mpUnderModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpModelUnder->setBaseTRMtx(mDoMtx_stack_c::get());
         J3DModelData* modelData = mpModel->getModelData();
         for (u16 i = 1; i < modelData->getJointNum(); i++) {
             modelData->getJointNodePointer(i)->setCallBack(daTornado_jointCallBack);
