@@ -40,17 +40,17 @@ bool daTag_So_c::_draw() {
 /* 000001C4-00000224       .text getArg__10daTag_So_cFv */
 void daTag_So_c::getArg() {
     s32 param;
-    s32 paramBit;
+    s32 paramRadius;
     
     param = fopAcM_GetParam(this);
-    mParam = param;
-    paramBit = fopAcM_GetParamBit(param, 8, 8);
+    m290 = fopAcM_GetParamBit(param, 0, 8);;
+    paramRadius = fopAcM_GetParamBit(param, 8, 8);
     m298 = fopAcM_GetParamBit(param, 16, 8);
-    if (paramBit == 0xff) {
+    if (paramRadius == 0xff) {
         mRadius = 1600.0f;
     }
     else {
-        mRadius = paramBit * 100;
+        mRadius = paramRadius * 100;
     }
     return;
 }

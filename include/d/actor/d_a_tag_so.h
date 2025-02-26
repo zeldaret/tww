@@ -19,7 +19,7 @@ public:
     bool _delete();
 
 public:
-    /* 0x290 */ u8 mParam;
+    /* 0x290 */ u8 m290;
     /* 0x291 */ u8 m291[0x293-0x291];
     /* 0x294 */ float mRadius;
     /* 0x298 */ u8 m298;
