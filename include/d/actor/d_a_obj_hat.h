@@ -39,7 +39,6 @@ public:
 public:
     typedef void(daObjHat_c::*MoveFunc_t)();
 
-
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* model;
     /* 0x29c */ mDoExt_McaMorf* mpMorf;
@@ -56,6 +55,6 @@ public:
     /* 0x64e */ u8 byte2;
     /* 0x64f */ u8 byte3;
     /* Place member variables here */
-};
+}; /* size: 0x650 */
 
 #endif /* D_A_OBJ_HAT_H */

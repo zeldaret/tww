@@ -82,7 +82,6 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 0000045C-000005D4       .text createHeap__10daObjHat_cFv */
 BOOL daObjHat_c::createHeap() {
-    // TODO register ordering?
     J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectIDRes("Ro", l_bmd_ix_tbl[this->id]);
     if (pModelData == NULL) {
         return FALSE;
@@ -93,10 +92,10 @@ BOOL daObjHat_c::createHeap() {
             J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
 
         this->mpMorf = morf;
-        if (this->mpMorf == NULL || this->mpMorf->mpModel == NULL) {
+        if (this->mpMorf == NULL || this->mpMorf->getModel() == NULL) {
             return FALSE;
         } else {
-            this->model = this->mpMorf->mpModel;
+            this->model = this->mpMorf->getModel();
             acch_cir.SetWall(30.0f, 30.0f);
             acch.Set(&this->current.pos, &this->old.pos, this, 1, &acch_cir, &this->speed,
                      &this->current.angle, &this->shape_angle);
@@ -104,7 +103,6 @@ BOOL daObjHat_c::createHeap() {
         }
     }
     return FALSE;
-    /* Nonmatching */
 }
 
 /* 000005D4-000006AC       .text createInit__10daObjHat_cFv */
@@ -122,7 +120,6 @@ s32 daObjHat_c::createInit() {
         setSpeed(static_cast<daNpcRoten_c*>(parent)->getWindVec());
     }
     setMtx();
-    /* Nonmatching */
     return cPhs_COMPLEATE_e;
 }
 
@@ -178,14 +175,16 @@ bool daObjHat_c::_execute() {
     }
 
     setMtx();
-    return 1;
+    return TRUE;
 }
 
 /* 00000884-00000888       .text executeNormal__10daObjHat_cFv */
-void daObjHat_c::executeNormal() { /* Nonmatching */ }
+void daObjHat_c::executeNormal() { /* empty? */ }
 
 /* 00000888-000008B4       .text getPrmHatNo__10daObjHat_cFv */
-u32 daObjHat_c::getPrmHatNo() { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S) & 3; }
+u32 daObjHat_c::getPrmHatNo() {
+    return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S) & 3;
+}
 
 /* 000008B4-00000964       .text setMtx__10daObjHat_cFv */
 void daObjHat_c::setMtx() {
@@ -199,61 +198,51 @@ void daObjHat_c::setMtx() {
 }
 
 /* 00000964-00000A20       .text setSpeed__10daObjHat_cF4cXyz */
-void daObjHat_c::setSpeed(cXyz param) {
-    param.y = 0;
-    param = param.normZP();
+void daObjHat_c::setSpeed(cXyz speed) {
+    speed.y = 0;
+    speed = speed.normZP();
 
-    this->angle = param;
+    this->angle = speed;
 
-    this->speedF = 20.0f;
+    fopAcM_SetSpeedF(this, 20.0f);
 
-    param.x *= 20.0f;
-    param.y = 50.0f;
-    param.z *= 20.0f;
+    speed.x *= 20.0f;
+    speed.y = 50.0f;
+    speed.z *= 20.0f;
 
-    // what the fuck
-    float var1, var2;
-    var2 = param.z;
-    var1 = param.y;
-    this->speed.x = param.x;
-    this->speed.y = var1;
-    this->speed.z = var2;
-
-    /* Nonmatching */
+    fopAcM_SetSpeed(this, speed.x, speed.y, speed.z);
 }
+
 /* 00000A20-00000A40       .text daSampleCreate__FPv */
 static s32 daSampleCreate(void* arg) {
     static_cast<daObjHat_c*>(arg)->_create();
-    /* Nonmatching */
 }
 
 /* 00000A40-00000A60       .text daSampleDelete__FPv */
 static BOOL daSampleDelete(void* arg) {
     static_cast<daObjHat_c*>(arg)->_delete();
-    /* Nonmatching */
 }
 
 /* 00000A60-00000A80       .text daSampleExecute__FPv */
 static BOOL daSampleExecute(void* arg) {
     static_cast<daObjHat_c*>(arg)->_execute();
-    /* Nonmatching */
 }
 
 /* 00000A80-00000AA0       .text daSampleDraw__FPv */
 static BOOL daSampleDraw(void* arg) {
     static_cast<daObjHat_c*>(arg)->_draw();
-    /* Nonmatching */
 }
 
 /* 00000AA0-00000AA8       .text daSampleIsDelete__FPv */
 static BOOL daSampleIsDelete(void* arg) {
-    /* Nonmatching */
     return 1;
 }
 
 static actor_method_class daSampleMethodTable = {
-    (process_method_func)daSampleCreate,  (process_method_func)daSampleDelete,
-    (process_method_func)daSampleExecute, (process_method_func)daSampleIsDelete,
+    (process_method_func)daSampleCreate,
+    (process_method_func)daSampleDelete,
+    (process_method_func)daSampleExecute,
+    (process_method_func)daSampleIsDelete,
     (process_method_func)daSampleDraw,
 };
 
