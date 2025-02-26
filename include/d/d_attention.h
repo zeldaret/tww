@@ -41,16 +41,16 @@ public:
     fopAc_ac_c* convPId(fpc_ProcID);
     void init();
     void proc();
-    void request(fopAc_ac_c*, u8, f32, f32, f32, s16, int);
+    bool request(fopAc_ac_c*, u8, f32, f32, f32, s16, int);
 
     fopAc_ac_c* getCatghTarget() { return convPId(mCatghTargetID); }
     u8 getChangeItem() { return mChangeItem; }
 
 private:
-    /* 0x00 */ fpc_ProcID field_0x0;
+    /* 0x00 */ fpc_ProcID mRequestActorID;
     /* 0x04 */ int field_0x4;
-    /* 0x08 */ f32 field_0x8;
-    /* 0x0C */ u8 field_0xc;
+    /* 0x08 */ f32 mDistance;
+    /* 0x0C */ u8 mCatchItemNo;
     /* 0x0D */ u8 field_0xd;
     /* 0x0E */ u8 field_0xe;
     /* 0x0F */ u8 field_0xf;
@@ -60,14 +60,14 @@ private:
 
 class dAttParam_c {
 public:
-    /* 0x00 */ u16 field_0x00;
+    /* 0x00 */ u16 mFlags;
     /* 0x02 */ u8 field_0x02[0x04 - 0x02];
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ f32 field_0x0c;
-    /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ f32 field_0x14;
-    /* 0x18 */ f32 field_0x18;
+    /* 0x10 */ f32 mDangerBGMDistance;
+    /* 0x14 */ f32 mBGMDistMargin;
+    /* 0x18 */ f32 mSWModeDisable;
 
 public:
     dAttParam_c() {}
@@ -83,15 +83,15 @@ public:
     fopAc_ac_c* convPId(fpc_ProcID);
     void init();
     void proc();
-    void request(fopAc_ac_c*, f32, f32, f32, s16, int);
-    void requestF(fopAc_ac_c*, s16, int);
+    bool request(fopAc_ac_c*, f32, f32, f32, s16, int);
+    bool requestF(fopAc_ac_c*, s16, int);
 
     fpc_ProcID getLookTarget() { return mLookTargetID; }
 
 private:
-    /* 0x0 */ fpc_ProcID field_0x0;
-    /* 0x4 */ u32 field_0x4;
-    /* 0x8 */ f32 field_0x8;
+    /* 0x0 */ fpc_ProcID mRequestActorID;
+    /* 0x4 */ s32 field_0x4;
+    /* 0x8 */ f32 mDistance;
     /* 0xC */ fpc_ProcID mLookTargetID;
 };  // Size: 0x10
 
@@ -154,7 +154,7 @@ public:
     void Run(u32);
     void Draw();
     fopAc_ac_c* LockonTarget(s32);
-    void LockonReleaseDistanse();
+    f32 LockonReleaseDistanse();
     fpc_ProcID LockonTargetPId(s32);
     fopAc_ac_c* ActionTarget(s32);
     bool LockonTruth();
