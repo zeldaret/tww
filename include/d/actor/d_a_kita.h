@@ -47,7 +47,7 @@ public: // Attributes
     /* 0x37C */ dCcD_Stts mStts;
     /* 0x3B8 */ dCcD_Sph mSph;
     /* 0x4E4 */ dBgS_AcchCir mAcchCir;
-    /* 0x524 */ dBgS_Acch mAcch;
+    /* 0x524 */ dBgS_ObjAcch mAcch;
 };
 
 #endif /* D_A_KITA_H */

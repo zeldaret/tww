@@ -13,7 +13,7 @@
 #include "d/d_bg_s_movebg_actor.h"
 
 template<class T>
-inline T cap_min_val(T& a, T b){
+inline void cap_min_val(T& a, T b){
     if(a < b) a = b;
 }
 
@@ -220,51 +220,51 @@ void kita_move(kita_class* actor) {
 }
 
 /* 00001894-000019F8       .text himo_create__FP10kita_class */
-void himo_create(kita_class*) {
+int himo_create(kita_class*) {
     /* Nonmatching */
 }
 
 /* 000019F8-00001CB8       .text daKita_Execute__FP10kita_class */
-static BOOL daKita_Execute(kita_class* this_i) {
+static BOOL daKita_Execute(kita_class* actor) {
     static float xd[4] = {130, -130, 130, -130};
     static float zd[4] = {130, 130, -130, -130};
 
-    if(this_i->mExecuteCount != 0) this_i->mExecuteCount--;
-    kita_move(this_i);
+    if(actor->mExecuteCount != 0) actor->mExecuteCount--;
+    kita_move(actor);
 
-    MtxTrans(this_i->current.pos.x, this_i->current.pos.y, this_i->current.pos.z, false);
-    mDoMtx_YrotM(*calc_mtx, this_i->shape_angle.y);
-    mDoMtx_YrotM(*calc_mtx, this_i->mRotY);
-    MtxTrans(0, 0, (REG0_F(11) + -150.0f) * JMASSin(this_i->mRotX), true);
-    mDoMtx_XrotM(*calc_mtx, this_i->mRotX);
-    mDoMtx_YrotM(*calc_mtx, -this_i->mRotY);
-    mDoMtx_XrotM(*calc_mtx, this_i->shape_angle.x);
-    mDoMtx_ZrotM(*calc_mtx, this_i->shape_angle.z);
-    this_i->mModel->setBaseTRMtx(*calc_mtx);
+    MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, false);
+    mDoMtx_YrotM(*calc_mtx, actor->shape_angle.y);
+    mDoMtx_YrotM(*calc_mtx, actor->mRotY);
+    MtxTrans(0, 0, (REG0_F(11) + -150.0f) * JMASSin(actor->mRotX), true);
+    mDoMtx_XrotM(*calc_mtx, actor->mRotX);
+    mDoMtx_YrotM(*calc_mtx, -actor->mRotY);
+    mDoMtx_XrotM(*calc_mtx, actor->shape_angle.x);
+    mDoMtx_ZrotM(*calc_mtx, actor->shape_angle.z);
+    actor->mModel->setBaseTRMtx(*calc_mtx);
 
     cXyz local48[1];
     for(int i = 0; i < 4; i++){
         MtxPush();
-        local48->x = this_i->scale.x * xd[i];
+        local48->x = actor->scale.x * xd[i];
         local48->y = REG0_F(5) + -15.0f;
-        local48->z = this_i->scale.z * zd[i];
-        MtxPosition(local48, &this_i->u2E8[i]);
+        local48->z = actor->scale.z * zd[i];
+        MtxPosition(local48, &actor->u2E8[i]);
         MtxPull();
     }
-    mDoMtx_copy(*calc_mtx, this_i->mBgwMtx);
-    this_i->pm_bgw->Move();
-    if(this_i->u360 == 2){
-        if(this_i->mBaseEmitter == NULL){
-            this_i->mBaseEmitter = dComIfGp_particle_set(0x828D, &this_i->current.pos);
+    mDoMtx_copy(*calc_mtx, actor->mBgwMtx);
+    actor->pm_bgw->Move();
+    if(actor->u360 == 2){
+        if(actor->mBaseEmitter == NULL){
+            actor->mBaseEmitter = dComIfGp_particle_set(0x828D, &actor->current.pos);
         }
         else {
-            this_i->mBaseEmitter->setGlobalTranslation(this_i->current.pos.x, this_i->current.pos.y - (REG0_F(17) + 40.0f), this_i->current.pos.z);
+            actor->mBaseEmitter->setGlobalTranslation(actor->current.pos.x, actor->current.pos.y - (REG0_F(17) + 40.0f), actor->current.pos.z);
         }
     }
     else {
-        if(this_i->mBaseEmitter != NULL){
-            this_i->mBaseEmitter->becomeInvalidEmitter();
-            this_i->mBaseEmitter = NULL;
+        if(actor->mBaseEmitter != NULL){
+            actor->mBaseEmitter->becomeInvalidEmitter();
+            actor->mBaseEmitter = NULL;
         }
     }
 
@@ -290,8 +290,9 @@ static BOOL daKita_Delete(kita_class* actor) {
 }
 
 /* 00001D3C-00001EB0       .text CallbackCreateHeap__FP10fopAc_ac_c */
-static BOOL CallbackCreateHeap(kita_class* actor) {
+static BOOL CallbackCreateHeap(fopAc_ac_c* p_actor) {
     BOOL ret;
+    kita_class* actor = static_cast<kita_class*>(p_actor);
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kita", 4));
     actor->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -313,10 +314,96 @@ static BOOL CallbackCreateHeap(kita_class* actor) {
 }
 
 /* 00001EB0-00002224       .text daKita_Create__FP10fopAc_ac_c */
-static s32 daKita_Create(kita_class* this_i) {
-    fopAcM_SetupActor(this_i, kita_class);
-    s32 ret = dComIfG_resLoad(&this_i->mPhs, "Kita");
-    if(ret == cPhs_COMPLEATE_e){
+static BOOL daKita_Create(kita_class* actor) {
+    static dCcD_SrcSph utiwa_sph_src = {
+            // dCcD_SrcGObjInf
+            {
+                /* Flags             */ 0,
+                /* SrcObjAt  Type    */ 0,
+                /* SrcObjAt  Atp     */ 0,
+                /* SrcObjAt  SPrm    */ dCcG_AtSPrm_StopNoConHit_e | dCcG_AtSPrm_NoConHit_e,
+                /* SrcObjTg  Type    */ AT_TYPE_WIND,
+                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+                /* SrcObjCo  SPrm    */ 0,
+                /* SrcGObjAt Se      */ 0,
+                /* SrcGObjAt HitMark */ 0,
+                /* SrcGObjAt Spl     */ 0,
+                /* SrcGObjAt Mtrl    */ 0,
+                /* SrcGObjAt SPrm    */ 0,
+                /* SrcGObjTg Se      */ 0,
+                /* SrcGObjTg HitMark */ 0,
+                /* SrcGObjTg Spl     */ 0,
+                /* SrcGObjTg Mtrl    */ 0,
+                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
+                /* SrcGObjCo SPrm    */ 0,
+            },
+            // cM3dGSphS
+            {
+                /* Center */ 0.0f, 0.0f, 0.0f,
+                /* Radius */ 400.0f,
+            },
+        };
+
+    fopAcM_SetupActor(actor, kita_class);
+    s32 ret = dComIfG_resLoad(&actor->mPhs, "Kita");
+    if(ret != cPhs_COMPLEATE_e){
+        return ret;
+    }
+
+    actor->u2A0 = actor->base.mParameters;
+    actor->u2A1 = actor->base.mParameters >> 8;
+    if(actor->u2A1 == 1){
+        actor->u29A = 1;
+        actor->u360 = 1;
+        actor->u35C = actor->current.pos.y + 70.0f + REG0_F(17);
+    }
+    else {
+        if(himo_create(actor) != 0){
+            return FALSE;
+        }
+    }
+
+    if(actor->u2A0 == 0xff){
+        actor->u2A0 = 0;
+    }
+
+    if(fopAcM_entrySolidHeap(actor, CallbackCreateHeap, 0x10000) == false){
+        return cPhs_ERROR_e;
+    }
+    else if(actor->pm_bgw != NULL && dComIfG_Bgsp()->Regist(actor->pm_bgw, actor) != 0){
+        return cPhs_ERROR_e;
+    }
+
+    switch(actor->u2A0){
+        case 1:
+            actor->scale.x = 1.25f;
+            actor->scale.z = 1.25f;
+            break;
+
+        case 2:
+            actor->scale.x = 1.5f;
+            actor->scale.z = 1.5f;
+            break;
+
+        default:
+            actor->scale.x = 1.0f;
+            actor->scale.z = 1.0f;
+            break;
+    }
+
+    actor->scale.y = 1.0f;
+    actor->cullMtx = actor->mModel->getBaseTRMtx();
+    fopAcM_SetMin(actor, actor->scale.x * -200.0f, -200.0f, actor->scale.z * -200.0f);
+    fopAcM_SetMax(actor, actor->scale.x * 200.0f, 200.0f, actor->scale.z * 200.0f);
+    actor->mModel->setBaseScale(actor->scale);
+    actor->health = 1;
+    actor->mAcch.Set(&actor->current.pos, &actor->old.pos, actor, 1, &actor->mAcchCir, &actor->speed);
+    actor->mAcchCir.SetWall(50.0f, 300.0f);
+    actor->mStts.Init(0xff, 0xff, actor);
+    actor->mSph.Set(utiwa_sph_src);
+    actor->mSph.SetStts(&actor->mStts);
+    for(int i = 0; i < 2; i++){
+        daKita_Execute(actor);
     }
     return ret;
 }
