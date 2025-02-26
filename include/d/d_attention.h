@@ -194,10 +194,12 @@ public:
 
     static s32 loc_type_num;
     static u32 act_type_num;
-    static struct LocTbl {
+    struct LocTbl {
         s16 mType;
         u16 mMask;
-    } loc_type_tbl[3];
+    };
+    static LocTbl loc_type_tbl[3];
+    static LocTbl act_type_tbl[5];
     static struct DistTbl {
         f32 mDistXZMax;
         f32 mDistXZMaxRelease;
