@@ -4,98 +4,258 @@
 //
 
 #include "d/actor/d_a_obj_hat.h"
+#include "d/actor/d_a_npc_roten.h"
+#include "d/d_a_obj.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
 #include "d/d_procname.h"
+#include "d/res/res_ro.h"
+
+// const char daObjHat_c::m_arcname[] = "ObjHat";
 
 /* 00000078-00000184       .text __ct__10daObjHat_cFv */
 daObjHat_c::daObjHat_c() {
+    u32 hatno = getPrmHatNo();
+    this->id = hatno;
+    procid = 0;
     /* Nonmatching */
 }
 
 /* 000003AC-000003CC       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
+    return ((daObjHat_c*)actor)->createHeap();
     /* Nonmatching */
 }
 
 /* 000003CC-0000045C       .text _create__10daObjHat_cFv */
 s32 daObjHat_c::_create() {
+    // if (this->actor_condition & )
+    fopAcM_SetupActor(this, daObjHat_c);
+
+    int var = dComIfG_resLoad(&mPhs, "Ro");
+
+    if (var == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap((fopAc_ac_c*)this, &CheckCreateHeap, 0uL)) {
+            return cPhs_ERROR_e;
+        } else {
+            return createInit();
+        }
+    }
+
     /* Nonmatching */
 }
 
+static const int l_bmd_ix_tbl[] = {RO_BDL_RO_HAT, RO_BDL_RO_HAT2, RO_BDL_RO_HAT3, RO_BDL_RO_HAT};
+static const int l_bck_ix_tbl[] = {RO_INDEX_BCK_HAT_WID, RO_BCK_HAT2_WIND, RO_BCK_HAT3_WID,
+                                   RO_BCK_HAT_WID};
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,//AT_TYPE_UNK1000,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_WIND,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,//AT_TYPE_WIND,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e | dCcG_TgSPrm_NoConHit_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f,
+        0.0f,
+        0.0f,
+        /* Radius */ 70.0f,
+        /* Height */ 80.0f,
+    },
+};
+
 /* 0000045C-000005D4       .text createHeap__10daObjHat_cFv */
-void daObjHat_c::createHeap() {
+BOOL daObjHat_c::createHeap() {
+    // TODO register ordering?
+    J3DModelData* pModelData = (J3DModelData*)dRes_control_c::getIDRes(
+        "Ro", l_bmd_ix_tbl[this->id], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+    if (pModelData == NULL) {
+        return FALSE;
+    } else {
+        mDoExt_McaMorf* morf = new mDoExt_McaMorf(
+            pModelData, NULL, NULL,
+            (J3DAnmTransformKey*)dRes_control_c::getIDRes(
+                "Ro", l_bck_ix_tbl[this->id], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40),
+            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
+
+        this->mpMorf = morf;
+        if (this->mpMorf == NULL || this->mpMorf->mpModel == NULL) {
+            return FALSE;
+        } else {
+            this->model = this->mpMorf->mpModel;
+            acch_cir.SetWall(30.0f, 30.0f);
+            acch.Set(&this->current.pos, &this->old.pos, this, 1, &acch_cir, &this->speed,
+                     &this->current.angle, &this->shape_angle);
+            return TRUE;
+        }
+    }
+    return FALSE;
     /* Nonmatching */
 }
 
 /* 000005D4-000006AC       .text createInit__10daObjHat_cFv */
-void daObjHat_c::createInit() {
+s32 daObjHat_c::createInit() {
+    stts.Init(2, 0xff, this);
+    cyl.Set(l_cyl_src);
+    this->cyl.SetStts(&this->stts);
+    this->cullMtx = this->model->mBaseTransformMtx;
+    fopAcM_setCullSizeBox(this, -50.0f, 0.0f, -50.0f, 50.0f, 200.0f, 50.0f);
+    this->gravity = -5.0f;
+
+    fopAc_ac_c* parent;
+    int res = fopAcM_SearchByID(this->parentActorID, &parent);
+    if ((res != 0) && (parent != NULL)) {
+        setSpeed(static_cast<daNpcRoten_c*>(parent)->getWindVec());
+    }
+    setMtx();
     /* Nonmatching */
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000006AC-000006DC       .text _delete__10daObjHat_cFv */
 bool daObjHat_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, "Ro");
+    return TRUE;
 }
 
 /* 000006DC-0000073C       .text _draw__10daObjHat_cFv */
 bool daObjHat_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &this->current.pos, &this->tevStr);
+    g_env_light.setLightTevColorType(this->model, &this->tevStr);
+    this->mpMorf->updateDL();
+    return TRUE;
 }
+
+static daObjHat_c::MoveFunc_t moveProc[] = {
+    &daObjHat_c::executeNormal,
+};
+
 
 /* 0000073C-00000884       .text _execute__10daObjHat_cFv */
 bool daObjHat_c::_execute() {
-    /* Nonmatching */
+    // dCcD_Sph::~dCcD_Sp
+
+    (this->*moveProc[this->procid])();
+    f32 xspeed = this->angle.x * this->speedF;
+    f32 ymove = this->speed.y + this->gravity;
+    f32 zspeed = this->angle.z * this->speedF;
+    // because downwards vector quantity has negative value
+    if (ymove < this->maxFallSpeed) {
+        ymove = this->maxFallSpeed;
+    }
+
+    this->speed.x = xspeed;
+    this->speed.y = ymove;
+    this->speed.z = zspeed;
+    fopAcM_posMove(this, this->stts.GetCCMoveP());
+    this->acch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+    if ((this->acch.m_flags & dBgS_Acch::WALL_HIT) != 0) {
+        this->speedF = 0;
+    }
+    if ((this->acch.m_flags & dBgS_Acch::GROUND_HIT) != 0) {
+        cLib_addCalc(&this->speedF, 0.0, 0.3, 1000.0, 1.0);
+    }
+
+    this->cyl.SetC(this->current.pos);
+    g_dComIfG_gameInfo.play.mCcS.Set(&this->cyl);
+    u32 res = this->cyl.ChkTgHit();
+    if (res != 0) {
+        setSpeed(*this->cyl.GetTgRVecP());
+    }
+
+    setMtx();
+    return 1;
 }
 
 /* 00000884-00000888       .text executeNormal__10daObjHat_cFv */
-void daObjHat_c::executeNormal() {
-    /* Nonmatching */
-}
+void daObjHat_c::executeNormal() { /* Nonmatching */ }
 
 /* 00000888-000008B4       .text getPrmHatNo__10daObjHat_cFv */
-void daObjHat_c::getPrmHatNo() {
-    /* Nonmatching */
-}
+u32 daObjHat_c::getPrmHatNo() { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S) & 3; }
 
 /* 000008B4-00000964       .text setMtx__10daObjHat_cFv */
 void daObjHat_c::setMtx() {
-    /* Nonmatching */
+    model->mBaseScale = this->scale;
+    MTXTrans(mDoMtx_stack_c::now, this->current.pos.x, this->current.pos.y,
+             this->current.pos.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::now, this->current.angle.y + 0x4000);
+    mDoMtx_XrotM(mDoMtx_stack_c::now, this->current.angle.x);
+    mDoMtx_ZrotM(mDoMtx_stack_c::now, this->current.angle.z + 0x4000);
+    MTXCopy(mDoMtx_stack_c::now, this->model->mBaseTransformMtx);
 }
 
 /* 00000964-00000A20       .text setSpeed__10daObjHat_cF4cXyz */
-void daObjHat_c::setSpeed(cXyz) {
+void daObjHat_c::setSpeed(cXyz param) {
+    param.y = 0;
+    param = param.normZP();
+
+    this->angle = param;
+
+    this->speedF = 20.0f;
+
+    param.x *= 20.0f;
+    param.y = 50.0f;
+    param.z *= 20.0f;
+
+    // what the fuck
+    float var1, var2;
+    var2 = param.z;
+    var1 = param.y;
+    this->speed.x = param.x;
+    this->speed.y = var1;
+    this->speed.z = var2;
+
     /* Nonmatching */
 }
-
 /* 00000A20-00000A40       .text daSampleCreate__FPv */
-static s32 daSampleCreate(void*) {
+static s32 daSampleCreate(void* arg) {
+    static_cast<daObjHat_c*>(arg)->_create();
     /* Nonmatching */
 }
 
 /* 00000A40-00000A60       .text daSampleDelete__FPv */
-static BOOL daSampleDelete(void*) {
+static BOOL daSampleDelete(void* arg) {
+    static_cast<daObjHat_c*>(arg)->_delete();
     /* Nonmatching */
 }
 
 /* 00000A60-00000A80       .text daSampleExecute__FPv */
-static BOOL daSampleExecute(void*) {
+static BOOL daSampleExecute(void* arg) {
+    static_cast<daObjHat_c*>(arg)->_execute();
     /* Nonmatching */
 }
 
 /* 00000A80-00000AA0       .text daSampleDraw__FPv */
-static BOOL daSampleDraw(void*) {
+static BOOL daSampleDraw(void* arg) {
+    static_cast<daObjHat_c*>(arg)->_draw();
     /* Nonmatching */
 }
 
 /* 00000AA0-00000AA8       .text daSampleIsDelete__FPv */
-static BOOL daSampleIsDelete(void*) {
+static BOOL daSampleIsDelete(void* arg) {
     /* Nonmatching */
+    return 1;
 }
 
 static actor_method_class daSampleMethodTable = {
-    (process_method_func)daSampleCreate,
-    (process_method_func)daSampleDelete,
-    (process_method_func)daSampleExecute,
-    (process_method_func)daSampleIsDelete,
+    (process_method_func)daSampleCreate,  (process_method_func)daSampleDelete,
+    (process_method_func)daSampleExecute, (process_method_func)daSampleIsDelete,
     (process_method_func)daSampleDraw,
 };
 
