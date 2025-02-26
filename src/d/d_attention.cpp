@@ -228,28 +228,102 @@ u32 dAttention_c::chkAttMask(u32 type, u32 mask) {
 }
 
 /* 8009DAF4-8009DB60       .text check_event_condition__FUlUs */
-void check_event_condition(u32, u16) {
-    /* Nonmatching */
+bool check_event_condition(u32 attnType, u16 flags) {
+    switch(attnType) {
+        case fopAc_Attn_TYPE_SPEAK_e:
+        case fopAc_Attn_TYPE_TALK_e:
+            if ((flags & dEvtCnd_CANTALK_e) != dEvtCnd_NONE_e) {
+                break;
+            }
+            return true;
+
+        case fopAc_Attn_TYPE_DOOR_e:
+            if ((flags & dEvtCnd_CANDOOR_e) != dEvtCnd_NONE_e) {
+                break;
+            }
+            return true;
+        case fopAc_Attn_TYPE_TREASURE_e:
+            if ((flags & dEvtCnd_CANDOOR_e) != dEvtCnd_NONE_e) {
+                break;
+            }
+            return true;
+    }
+    return false;
 }
 
+
 /* 8009DB60-8009DC28       .text check_flontofplayer__FUlss */
-void check_flontofplayer(u32, s16, s16) {
-    /* Nonmatching */
+bool check_flontofplayer(u32 checkMask, s16 angle1, s16 angle2) {
+    /// merged from TP
+    static uint ftp_table[] = {
+        0x04, 0x01, 0x02, 0x08, 0x10, 0x20, 0x40, 0x80, 0x100,
+    };
+    static s16 ang_table[3] = {
+        0x4000,
+        0x2000,
+        0x0AAA,
+    };
+    static s16 ang_table2[] = {
+        0x0AAA, 0x2000, 0x2AAA, 0x4000, 0x4E38, 0x6000,
+    };
+
+    if (angle1 < 0) {
+        angle1 = -angle1;
+    }
+
+    if (angle2 < 0) {
+        angle2 = -angle2;
+    }
+
+    for (int i = 0; i < 3; i++) {
+        if (checkMask & ftp_table[i]) {
+            if (angle1 > ang_table[i]) {
+                return true;
+            }
+        }
+    }
+
+    for (int i = 8; i > 2; i--) {
+        if (checkMask & ftp_table[i]) {
+            if (angle2 > ang_table2[i - 3]) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 /* 8009DC28-8009DC74       .text distace_weight__Ffsf */
-void distace_weight(f32, s16, f32) {
-    /* Nonmatching */
+f32 distace_weight(f32 distance, s16 angle, f32 ratio) {
+    f32 turns = (f32)angle / 32768.0F;
+    return distance * (f32)((1.0F - ratio) + (f32)(ratio * (turns * turns)));
 }
 
 /* 8009DC74-8009DCD4       .text distace_angle_adjust__Ffsf */
-void distace_angle_adjust(f32, s16, f32) {
-    /* Nonmatching */
+f32 distace_angle_adjust(f32 distance, s16 angle, f32 ratio) {
+    f32 turns = angle / (f32)0x8000;
+    if (turns < 0.0f) {
+        turns = -turns;
+    }
+
+    return distance * ((1.0f - ratio) + (ratio * ((1.0f - turns) * (1.0f - turns))));
 }
 
 /* 8009DCD4-8009DE44       .text check_distace__FP4cXyzsP4cXyzffff */
-void check_distace(cXyz*, s16, cXyz*, f32, f32, f32, f32) {
-    /* Nonmatching */
+bool check_distace(cXyz* playerPos, s16 angle, cXyz* actorPos, f32 maxDistXZBase, f32 maxDistAngleMul, f32 maxDeltaY, f32 minDeltaY) {
+    cXyz dist = *actorPos - *playerPos;
+
+    if (dist.y <= minDeltaY || dist.y >= maxDeltaY) {
+        return false;
+    }
+
+    f32 adjust = maxDistXZBase + distace_angle_adjust(maxDistAngleMul, angle, 1.0f);
+    if (adjust < dist.absXZ()) {
+        return false;
+    }
+
+    return true;
 }
 
 /* 8009DE44-8009E03C       .text calcWeight__12dAttention_cFiP10fopAc_ac_cfssPUl */
