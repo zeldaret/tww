@@ -4,66 +4,92 @@
 //
 
 #include "d/actor/d_a_tag_so.h"
+#include "d/d_lib.h"
 #include "d/d_procname.h"
 
 /* 000000EC-0000010C       .text __ct__14daTag_So_HIO_cFv */
 daTag_So_HIO_c::daTag_So_HIO_c() {
-    /* Nonmatching */
+    mNo = -1;
+    m05 = 0;
+    return;
 }
+
+static daTag_So_HIO_c l_HIO;
 
 /* 0000010C-00000114       .text _execute__10daTag_So_cFv */
 bool daTag_So_c::_execute() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000114-0000018C       .text debugDraw__10daTag_So_cFv */
-void daTag_So_c::debugDraw() {
-    /* Nonmatching */
+void daTag_So_c::debugDraw() {  
+    cXyz actorPos = current.pos;
+    actorPos.y += 20.0f;
+    if (m298 == 1)
+        dLib_debugDrawFan(actorPos, shape_angle.y, 0x3500, mRadius, (GXColor){0xFF, 0x00, 0x00, 0x80});
+    return;
 }
 
 /* 0000018C-000001C4       .text _draw__10daTag_So_cFv */
 bool daTag_So_c::_draw() {
-    /* Nonmatching */
+    if(l_HIO.m05)
+        debugDraw();
+    return TRUE;
 }
 
 /* 000001C4-00000224       .text getArg__10daTag_So_cFv */
 void daTag_So_c::getArg() {
-    /* Nonmatching */
+    s32 param;
+    s32 paramRadius;
+    
+    param = fopAcM_GetParam(this);
+    m290 = fopAcM_GetParamBit(param, 0, 8);
+    paramRadius = fopAcM_GetParamBit(param, 8, 8);
+    m298 = fopAcM_GetParamBit(param, 16, 8);
+    if (paramRadius == 0xff) {
+        mRadius = 1600.0f;
+    }
+    else {
+        mRadius = paramRadius * 100;
+    }
+    return;
 }
 
 /* 00000224-0000027C       .text _create__10daTag_So_cFv */
 s32 daTag_So_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daTag_So_c);
+    getArg();
+    return cPhs_COMPLEATE_e;
 }
 
 /* 0000027C-00000284       .text _delete__10daTag_So_cFv */
 bool daTag_So_c::_delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000284-000002A4       .text daTag_SoCreate__FPv */
-static s32 daTag_SoCreate(void*) {
-    /* Nonmatching */
+static s32 daTag_SoCreate(void* i_this) {
+    return ((daTag_So_c*)i_this)->_create();
 }
 
 /* 000002A4-000002C8       .text daTag_SoDelete__FPv */
-static BOOL daTag_SoDelete(void*) {
-    /* Nonmatching */
+static BOOL daTag_SoDelete(void* i_this) {
+    return ((daTag_So_c*)i_this)->_delete();
 }
 
 /* 000002C8-000002EC       .text daTag_SoExecute__FPv */
-static BOOL daTag_SoExecute(void*) {
-    /* Nonmatching */
+static BOOL daTag_SoExecute(void* i_this) {
+    return ((daTag_So_c*)i_this)->_execute();
 }
 
 /* 000002EC-00000310       .text daTag_SoDraw__FPv */
-static BOOL daTag_SoDraw(void*) {
-    /* Nonmatching */
+static BOOL daTag_SoDraw(void* i_this) {
+    return ((daTag_So_c*)i_this)->_draw();;
 }
 
 /* 00000310-00000318       .text daTag_SoIsDelete__FPv */
 static BOOL daTag_SoIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daTag_SoMethodTable = {
