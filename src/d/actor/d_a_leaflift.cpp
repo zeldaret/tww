@@ -76,7 +76,7 @@ static void rideCallBack(dBgW* param1, fopAc_ac_c* i_this, fopAc_ac_c* i_other);
 /* 000001E0-00000338       .text CreateHeap__9daLlift_cFv */
 BOOL daLlift_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, OLIFT_BDL_OLIFT);
-    JUT_ASSERT(0x14e, modelData != 0);
+    JUT_ASSERT(0x14e, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (!mpModel) {
@@ -201,7 +201,7 @@ static void rideCallBack(dBgW* param1, fopAc_ac_c* i_act, fopAc_ac_c* i_other) {
             posOffset = posOffset.outprod(up_vec);
             mDoMtx_stack_c::YrotS(-i_this->current.angle.y);
             mDoMtx_stack_c::multVec(&posOffset, &posOffset);
-            s16 angle = (i_this->mActorLifetimeFrameCount & 0x1F) << 11;
+            s16 angle = (i_this->mActorLifetimeFrameCount % 32U) * (0x10000 / 32);
             tiltFactor = cM_ssin(angle) * 2.0f * 0.25f * (cM_rndFX(0.2f) + 1.0f);
         }
         offsetMagnitude = posOffset.abs();
