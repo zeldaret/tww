@@ -16,6 +16,20 @@
 s32 dAttention_c::loc_type_num = 3;
 u32 dAttention_c::act_type_num = 5;
 
+dAttention_c::LocTbl dAttention_c::loc_type_tbl[3] = {
+    { 0, 1 },
+    { 1, 2 },
+    { 2, 4 },
+};
+
+dAttention_c::LocTbl dAttention_c::act_type_tbl[5] = {
+    { 3, 0x08 },
+    { 4, 0x10 },
+    { 5, 0x20 },
+    { 6, 0x40 },
+    { 7, 0x80 },
+};
+
 /* 8009D220-8009D268       .text __ct__11dAttParam_cFl */
 dAttParam_c::dAttParam_c(s32) {
     field_0x04 = 45.0f;
@@ -209,12 +223,6 @@ dAttList_c* dAttention_c::getActionBtnZ() {
 
     return getActionBtnXYZ_local(2);
 }
-
-dAttention_c::LocTbl dAttention_c::loc_type_tbl[3] = {
-    { 0, 1 },
-    { 1, 2 },
-    { 2, 4 },
-};
 
 /* 8009DAA4-8009DAF4       .text chkAttMask__12dAttention_cFUlUl */
 u32 dAttention_c::chkAttMask(u32 type, u32 mask) {
