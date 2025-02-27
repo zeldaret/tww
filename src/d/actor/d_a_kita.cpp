@@ -220,8 +220,41 @@ void kita_move(kita_class* actor) {
 }
 
 /* 00001894-000019F8       .text himo_create__FP10kita_class */
-int himo_create(kita_class*) {
-    /* Nonmatching */
+uint himo_create(kita_class* actor) {
+    static short yad[4] = {0x2000, 0xE000, 0x6000, 0xA000};
+    uint shand_count = 0;
+    fopAcM_prm_class *param;
+    void* shand_i;
+
+    for(int i = 0; i < 4; i++){
+        switch(actor->u2E4[i]){
+            case 0:
+                param = fopAcM_CreateAppend();
+                param->mPos = actor->current.pos;
+                param->mAngle.y = yad[i];
+                param->mParameter = 0xFFFFFF35;
+                param->mRoomNo = actor->current.roomNo;
+                actor->u2D4[i] = fpcM_Create(PROC_SHAND, NULL, param);
+                actor->u2E4[i]++;
+
+            case 1:
+                // Junk implementation since shand object has not been decomp yet
+                shand_i = fopAcM_SearchByID(actor->u2D4[i]);
+                if(shand_i != NULL){
+                    *(uint*)((int)shand_i + 0x308) = (actor != NULL) ? actor->base.mBsPcId : 0xffffffff;
+                    *(uint*)((int)shand_i + 0x310) = actor->u2E8[i].x;
+                    *(u8**)((int)shand_i + 0x314) = &actor->u318[i];
+                    actor->u2E4[i]++;
+                    shand_count++;
+                }
+            break;
+
+            default:
+            break;
+        }
+    }
+
+    return (((shand_count ^ 4) >> 1) - ((shand_count ^ 4) & 4)) >> 31; 
 }
 
 /* 000019F8-00001CB8       .text daKita_Execute__FP10kita_class */

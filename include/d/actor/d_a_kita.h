@@ -24,7 +24,7 @@ public: // Attributes
     /* 0x2B4 */ cXyz u2BC;
     /* 0x2C8 */ csXyz u2C8;
     /* 0x2D0 */ float mHeight;
-    /* 0x2D4 */ uint u2D4[4];
+    /* 0x2D4 */ fpc_ProcID u2D4[4];
     /* 0x2E4 */ u8 u2E4[4];
     /* 0x2E8 */ cXyz u2E8[4];
     /* 0x318 */ u8 u318[4];
