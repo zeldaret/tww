@@ -33,7 +33,7 @@ BOOL daShutter2_c::Delete() {
 /* 000000B8-00000194       .text CreateHeap__12daShutter2_cFv */
 int daShutter2_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
-    JUT_ASSERT(0xe0, modelData != 0);
+    JUT_ASSERT(0xe0, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (!mpModel) {
         return FALSE;
