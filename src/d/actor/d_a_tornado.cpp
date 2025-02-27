@@ -28,7 +28,7 @@ int daTornado_c::jointCallBack(int jntNo) {
 
     mDoMtx_stack_c::transS(mJointX[jntIdx], 0.0f, mJointZ[jntIdx]);
     if (jntIdx != 10 && jntIdx != 0) {
-        mDoMtx_stack_c::ZXYrotM(getJointXPos(jntIdx), getJointYPos(jntIdx), getJointZPos(jntIdx));
+        mDoMtx_stack_c::ZXYrotM(-mJointZ[jntIdx] * 3572.0f * 0.001f, 0.0f, mJointX[jntIdx] * 3572.0f * 0.001f);
     }
 
     if (fopAcM_GetParam(this) != 0) {
@@ -156,7 +156,7 @@ BOOL daTornado_c::execute() {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
             daShip_c* ship = dComIfGp_getShipActor();
             cXyz diff = ship->current.pos - current.pos;
-            if (diff.abs2XZ() < 1e+08f) {
+            if (diff.abs2XZ() < 10000000.0f) {
                 ship->onTornadoFlg(fopAcM_GetID(this));
                 speedF = 0.0f;
             }
@@ -166,12 +166,12 @@ BOOL daTornado_c::execute() {
             fopAcM_posMoveF(this, NULL);
             cXyz diff = current.pos - home.pos;
             diff.y = 0;
-            f32 mag = diff.abs2XZ();
-            if (mag > 56250000) {
+            if (diff.abs2XZ() > 56250000) {
                 diff.normalize();
                 current.pos = home.pos + diff * 7500.0f;
             }
         }
+
         if (mPtclTimer != 0) {
             mPtclTimer -= 1;
         } else {
@@ -260,40 +260,26 @@ BOOL daTornado_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YTRND00);
     JUT_ASSERT(0x1fe, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
-    if (!mpModel) {
+    if (!mpModel)
         return FALSE;
-    }
-
-    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YTRND00), true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false)) {
+    if (!mBck.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YTRND00), true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false))
         return FALSE;
-    }
-
-    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YTRND00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YTRND00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
         return FALSE;
-    }
-
-    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YTRND00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YTRND00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
         return FALSE;
-    }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, TRND_BDL_YWUWT00);
     JUT_ASSERT(0x226, modelData != NULL);
     mpModelUnder = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
-    if (!mpModelUnder) {
+    if (!mpModelUnder)
         return FALSE;
-    }
-
-    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false)) {
+    if (!mBckUnder.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, TRND_BCK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false))
         return FALSE;
-    }
-
-    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkUnder.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, TRND_BTK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
         return FALSE;
-    }
-
-    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkUnder.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, TRND_BRK_YWUWT00), false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
         return FALSE;
-    }
 
     return TRUE;
 }
@@ -309,7 +295,7 @@ s32 daTornado_c::create() {
     static cXyz under_small_scale(0.251f, 0.25f, 0.251f);
     static cXyz under_scale(1.01f, 1.0f, 1.01f);
 
-    s32 rt = dComIfG_resLoad(&this->mPhs, l_arcName);
+    s32 rt = dComIfG_resLoad(&mPhs, l_arcName);
     fopAcM_SetupActor(this, daTornado_c);
 
     if (rt == cPhs_COMPLEATE_e) {

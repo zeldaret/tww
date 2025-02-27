@@ -14,9 +14,9 @@ class daTornado_HIO_c0 {
 
 class daTornado_c : public fopAc_ac_c {
 public:
-    float getJointXPos(int jntIdx) const { return -mJointX[jntIdx] * 3572.0f * 0.001f; }
-    float getJointYPos(int) const { return 0.0f; }
-    float getJointZPos(int jntIdx) const { return mJointZ[jntIdx] * 3572.0f * 0.001f; }
+    void getJointXPos(int) const {}
+    void getJointYPos(int) const {}
+    void getJointZPos(int) const {}
     void getScaleEnd() {}
     void getSmallScaleEnd() {}
     void setScaleOn() {}
