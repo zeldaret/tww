@@ -86,6 +86,7 @@ void kita_move(kita_class* actor) {
                     mask |= himo_off_check[i];
                 }
             }
+
             ya_offset = himo_off_ya[mask], xa_offset = himo_off_xa[mask];
             cLib_addCalc2(&actor->mHeight, REG0_F(4) + (-static_cast<float>(himo_off_yp[mask]) * 0.3f), 0.05, actor->u320 * 250.0f);
             if(mask == 0b1111){
@@ -97,7 +98,7 @@ void kita_move(kita_class* actor) {
                 dBgS_ObjGndChk_Spl liquid_ground_check;
                 /* Nonmatching */ liquid_ground_check.m_pos.set(actor->current.pos.x, actor->current.pos.y - 200.0f, actor->current.pos.z);
                 float liquid_gnd_cross = dComIfG_Bgsp()->GroundCross(&liquid_ground_check);
-                if(liquid_gnd_cross != -1e+09 && actor->u35C < liquid_gnd_cross){
+                if(liquid_gnd_cross != -1e+09f && actor->u35C > liquid_gnd_cross){
                     actor->u35C = liquid_gnd_cross + 40.0f + REG0_F(17);
                     actor->u360 = 1;
                 }
@@ -138,12 +139,13 @@ void kita_move(kita_class* actor) {
                         actor->u374 = 20;
                     }
                     else {
-                        actor->u36C = (REG0_F(12) + 6.0f) * JMASCos(fopAcM_searchPlayerAngleY(actor)  - player_actor->shape_angle.y); 
+                        const short angle = fopAcM_searchPlayerAngleY(actor)  - player_actor->shape_angle.y;
+                        actor->u36C = (REG0_F(12) + 6.0f) * JMASCos(angle); 
                         actor->u370 = cM_rndFX(100.0);
                         actor->mPlayerAngle = fopAcM_searchPlayerAngleY(actor);
                         actor->u374 = 20;
                     }
-                    fopAcM_seStart(actor, 0x2884, 0);
+                    fopAcM_seStartCurrent(actor, 0x2884, 0);
                 }
                 mDoMtx_YrotS(*calc_mtx, actor->mPlayerAngle);
                 cXyz pos_offset, pos_offset2;
@@ -220,11 +222,11 @@ void kita_move(kita_class* actor) {
 }
 
 /* 00001894-000019F8       .text himo_create__FP10kita_class */
-uint himo_create(kita_class* actor) {
+int himo_create(kita_class* actor) {
     static short yad[4] = {0x2000, 0xE000, 0x6000, 0xA000};
-    uint shand_count = 0;
+    int shand_count = 0;
     fopAcM_prm_class *param;
-    void* shand_i;
+    fopAc_ac_c* shand_i;
 
     for(int i = 0; i < 4; i++){
         switch(actor->u2E4[i]){
@@ -242,19 +244,19 @@ uint himo_create(kita_class* actor) {
                 shand_i = fopAcM_SearchByID(actor->u2D4[i]);
                 if(shand_i != NULL){
                     *(uint*)((int)shand_i + 0x308) = (actor != NULL) ? actor->base.mBsPcId : 0xffffffff;
-                    *(uint*)((int)shand_i + 0x310) = actor->u2E8[i].x;
+                    *(cXyz**)((int)shand_i + 0x310) = &actor->u2E8[i];
                     *(u8**)((int)shand_i + 0x314) = &actor->u318[i];
                     actor->u2E4[i]++;
                     shand_count++;
                 }
             break;
 
-            default:
+            case 2:
             break;
         }
     }
 
-    return (((shand_count ^ 4) >> 1) - ((shand_count ^ 4) & 4)) >> 31; 
+    return (shand_count < 4);
 }
 
 /* 000019F8-00001CB8       .text daKita_Execute__FP10kita_class */
@@ -349,33 +351,33 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* p_actor) {
 /* 00001EB0-00002224       .text daKita_Create__FP10fopAc_ac_c */
 static BOOL daKita_Create(kita_class* actor) {
     static dCcD_SrcSph utiwa_sph_src = {
-            // dCcD_SrcGObjInf
-            {
-                /* Flags             */ 0,
-                /* SrcObjAt  Type    */ 0,
-                /* SrcObjAt  Atp     */ 0,
-                /* SrcObjAt  SPrm    */ dCcG_AtSPrm_StopNoConHit_e | dCcG_AtSPrm_NoConHit_e,
-                /* SrcObjTg  Type    */ AT_TYPE_WIND,
-                /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
-                /* SrcObjCo  SPrm    */ 0,
-                /* SrcGObjAt Se      */ 0,
-                /* SrcGObjAt HitMark */ 0,
-                /* SrcGObjAt Spl     */ 0,
-                /* SrcGObjAt Mtrl    */ 0,
-                /* SrcGObjAt SPrm    */ 0,
-                /* SrcGObjTg Se      */ 0,
-                /* SrcGObjTg HitMark */ 0,
-                /* SrcGObjTg Spl     */ 0,
-                /* SrcGObjTg Mtrl    */ 0,
-                /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
-                /* SrcGObjCo SPrm    */ 0,
-            },
-            // cM3dGSphS
-            {
-                /* Center */ 0.0f, 0.0f, 0.0f,
-                /* Radius */ 400.0f,
-            },
-        };
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ dCcG_AtSPrm_StopNoConHit_e | dCcG_AtSPrm_NoConHit_e,
+            /* SrcObjTg  Type    */ AT_TYPE_WIND,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ 0,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 400.0f,
+        },
+    };
 
     fopAcM_SetupActor(actor, kita_class);
     s32 ret = dComIfG_resLoad(&actor->mPhs, "Kita");
@@ -419,8 +421,8 @@ static BOOL daKita_Create(kita_class* actor) {
             break;
 
         default:
-            actor->scale.x = 1.0f;
             actor->scale.z = 1.0f;
+            actor->scale.x = 1.0f;
             break;
     }
 
