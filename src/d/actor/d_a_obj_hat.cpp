@@ -13,20 +13,16 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 
 
-// const char daObjHat_c::m_arcname[] = "ObjHat";
-
 /* 00000078-00000184       .text __ct__10daObjHat_cFv */
 daObjHat_c::daObjHat_c() {
     u32 hatno = getPrmHatNo();
     mHatNo = hatno;
     mState = 0;
-    /* Nonmatching */
 }
 
 /* 000003AC-000003CC       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
     return ((daObjHat_c*)actor)->createHeap();
-    /* Nonmatching */
 }
 
 /* 000003CC-0000045C       .text _create__10daObjHat_cFv */
@@ -43,8 +39,6 @@ s32 daObjHat_c::_create() {
             return createInit();
         }
     }
-
-    /* Nonmatching */
 }
 
 static const int l_bmd_ix_tbl[] = {RO_BDL_RO_HAT, RO_BDL_RO_HAT2, RO_BDL_RO_HAT3, RO_BDL_RO_HAT};
@@ -97,7 +91,7 @@ BOOL daObjHat_c::createHeap() {
         if (this->mpMorf == NULL || this->mpMorf->getModel() == NULL) {
             return FALSE;
         } else {
-            this->model = this->mpMorf->getModel();
+            this->mpModel = this->mpMorf->getModel();
             mAcchCir.SetWall(30.0f, 30.0f);
             mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed,
                       &current.angle, &shape_angle);
@@ -112,12 +106,12 @@ s32 daObjHat_c::createInit() {
     mStts.Init(2, 0xff, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
-    cullMtx = model->mBaseTransformMtx;
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -50.0f, 0.0f, -50.0f, 50.0f, 200.0f, 50.0f);
     gravity = -5.0f;
 
     fopAc_ac_c* parent;
-    int res = fopAcM_SearchByID(parentActorID, &parent);
+    int res = fopAcM_SearchByID(fopAcM_GetLinkId(this), &parent);
     if ((res != 0) && (parent != NULL)) {
         setSpeed(static_cast<daNpcRoten_c*>(parent)->getWindVec());
     }
@@ -134,7 +128,7 @@ bool daObjHat_c::_delete() {
 /* 000006DC-0000073C       .text _draw__10daObjHat_cFv */
 bool daObjHat_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType(model, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mpMorf->updateDL();
     return TRUE;
 }
@@ -146,12 +140,11 @@ static daObjHat_c::MoveFunc_t moveProc[] = {
 
 /* 0000073C-00000884       .text _execute__10daObjHat_cFv */
 bool daObjHat_c::_execute() {
-    // dCcD_Sph::~dCcD_Sp
 
     (this->*moveProc[this->mState])();
-    f32 xspeed = this->mSpeed.x * this->speedF;
+    f32 xspeed = this->mMoveNorm.x * this->speedF;
     f32 ymove = this->speed.y + this->gravity;
-    f32 zspeed = this->mSpeed.z * this->speedF;
+    f32 zspeed = this->mMoveNorm.z * this->speedF;
     // because downwards vector quantity has negative value
     if (ymove < this->maxFallSpeed) {
         ymove = this->maxFallSpeed;
@@ -190,16 +183,14 @@ u32 daObjHat_c::getPrmHatNo() {
 
 /* 000008B4-00000964       .text setMtx__10daObjHat_cFv */
 void daObjHat_c::setMtx() {
-    model->setBaseScale(scale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y,
              current.pos.z);
 
     mDoMtx_stack_c::YrotM(current.angle.y + 0x4000);
     mDoMtx_stack_c::XrotM(current.angle.x);
     mDoMtx_stack_c::ZrotM(current.angle.z + 0x4000);
-    //mDoMtx_YrotM(mDoMtx_stack_c::now, this->current.angle.y + 0x4000);
-    model->setBaseTRMtx(mDoMtx_stack_c::get());
-    //MTXCopy(mDoMtx_stack_c::now, this->model->mBaseTransformMtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000964-00000A20       .text setSpeed__10daObjHat_cF4cXyz */
@@ -207,7 +198,7 @@ void daObjHat_c::setSpeed(cXyz speed) {
     speed.y = 0;
     speed = speed.normZP();
 
-    this->mSpeed = speed;
+    this->mMoveNorm = speed;
 
     fopAcM_SetSpeedF(this, 20.0f);
 
@@ -219,28 +210,28 @@ void daObjHat_c::setSpeed(cXyz speed) {
 }
 
 /* 00000A20-00000A40       .text daSampleCreate__FPv */
-static s32 daSampleCreate(void* arg) {
-    static_cast<daObjHat_c*>(arg)->_create();
+static s32 daSampleCreate(void* i_this) {
+    static_cast<daObjHat_c*>(i_this)->_create();
 }
 
 /* 00000A40-00000A60       .text daSampleDelete__FPv */
-static BOOL daSampleDelete(void* arg) {
-    static_cast<daObjHat_c*>(arg)->_delete();
+static BOOL daSampleDelete(void* i_this) {
+    static_cast<daObjHat_c*>(i_this)->_delete();
 }
 
 /* 00000A60-00000A80       .text daSampleExecute__FPv */
-static BOOL daSampleExecute(void* arg) {
-    static_cast<daObjHat_c*>(arg)->_execute();
+static BOOL daSampleExecute(void* i_this) {
+    static_cast<daObjHat_c*>(i_this)->_execute();
 }
 
 /* 00000A80-00000AA0       .text daSampleDraw__FPv */
-static BOOL daSampleDraw(void* arg) {
-    static_cast<daObjHat_c*>(arg)->_draw();
+static BOOL daSampleDraw(void* i_this) {
+    static_cast<daObjHat_c*>(i_this)->_draw();
 }
 
 /* 00000AA0-00000AA8       .text daSampleIsDelete__FPv */
-static BOOL daSampleIsDelete(void* arg) {
-    return 1;
+static BOOL daSampleIsDelete(void* i_this) {
+    return TRUE;
 }
 
 static actor_method_class daSampleMethodTable = {

@@ -31,7 +31,7 @@ public:
     typedef void(daObjHat_c::*MoveFunc_t)();
 
     /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel* model;
+    /* 0x298 */ J3DModel* mpModel;
     /* 0x29c */ mDoExt_McaMorf* mpMorf;
     /* 0x2a0 */ Mtx mMtx;
 
@@ -40,7 +40,7 @@ public:
     /* 0x4d4 */ dCcD_Stts mStts;
     /* 0x510 */ dCcD_Cyl mCyl;
 
-    /* 0x640 */ cXyz mSpeed;
+    /* 0x640 */ cXyz mMoveNorm;
     /* 0x64c */ u8 mState;
     /* 0x64d */ u8 mHatNo;
     /* Place member variables here */
