@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_shand.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
 /* 000000EC-00000114       .text __ct__13daShand_HIO_cFv */
@@ -12,8 +13,10 @@ daShand_HIO_c::daShand_HIO_c() {
 }
 
 /* 00000114-00000194       .text hand_draw__FP11shand_class */
-void hand_draw(shand_class*) {
-    /* Nonmatching */
+void hand_draw(shand_class* actor) {
+    GXColor color = {0x50, 0x96, 0x96, 0xff};
+    actor->mLineMat.update(0x14, color, &actor->tevStr);
+    dComIfGd_set3DlineMat(&actor->mLineMat);
 }
 
 /* 00000194-000001E0       .text daShand_Draw__FP11shand_class */
