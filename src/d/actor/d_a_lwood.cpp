@@ -20,7 +20,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000194       .text CreateHeap__9daLwood_cFv */
 BOOL daLwood_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, LWOOD_BDL_ALWD);
     JUT_ASSERT(0xb9, modelData != NULL);
     mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -40,8 +39,7 @@ BOOL daLwood_c::CreateHeap() {
 static BOOL nodeCallBack(J3DNode*, int);
 
 /* 00000194-000002E0       .text CreateInit__9daLwood_cFv */
-BOOL daLwood_c::CreateInit() {
-    /* Nonmatching */
+void daLwood_c::CreateInit() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
     fopAcM_setCullSizeFar(this, 2.37f);
@@ -77,11 +75,14 @@ static BOOL nodeCallBack(J3DNode* joint, int calcTiming) {
             f32 cy = cM_scos(i_this->getYureTimer() * 300);
             s16 r0 = windSpeed.z * cy * 10.0f;
 
-            s16 r1 = fabs(sy + 1.0f) * 250.0f;
+            // Fakematch: In order for the compiler to put the conversion in the right order, this
+            // needs to be a double assignment for some reason. An unused temp variable is enough.
+            s16 faketemp;
+            s16 r1 = faketemp = fabs(sy + 1.0f) * 250.0f;
 
-            s16 p1 = i_this->getYureScale() * r1;
+            s16 p1 = i_this->getYureScale() * r2;
             s16 p2 = i_this->getYureScale() * r0;
-            s16 p0 = i_this->getYureScale() * r2;
+            s16 p0 = i_this->getYureScale() * r1;
 
             mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
             mDoMtx_stack_c::ZXYrotM(p0, p1, p2);

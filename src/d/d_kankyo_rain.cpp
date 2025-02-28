@@ -426,7 +426,7 @@ void dKyr_wind_move() {
 
                 // so much stuff is missing in here
 
-                fVar14 = fVar27 * (i / 15);
+                fVar14 = fVar27 * (s32)(i / 30); 
                 f32 distance = pos.getSquareDistance(pCamera->mLookat.mEye) / 200.0f;
                 if (distance > 1.0f) {
                     distance = 1.0f;
