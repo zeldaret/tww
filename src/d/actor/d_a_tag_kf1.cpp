@@ -4,30 +4,56 @@
 //
 
 #include "d/actor/d_a_tag_kf1.h"
+#include "d/actor/d_a_tsubo.h"
+#include "d/d_a_obj.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "m_Do/m_Do_hostIO.h"
+
+
+static daTag_Kf1_HIO_c l_HIO;
+static s32 l_check_inf[100];
+static s32 l_check_wrk;
+//const char daTag_Kf1_c::m_arcname[] = "クタニ焼き監視タグ";
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
     /* Nonmatching */
 }
+struct Prm_e {};
 
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
-void searchActor_Kutani(void*, void*) {
+void *searchActor_Kutani(void* arg1, void* arg4) {
+    fopAc_ac_c *act = (fopAc_ac_c*)arg1;
+    if (l_check_wrk < 100 && fopAc_IsActor(act) && act->base.mProcName == 0x1cb &&
+        daObj::PrmAbstract<daTsubo::Act_c::Prm_e>(act,
+                                                  daTsubo::Act_c::PRM_TYPE_W,
+                                                  daTsubo::Act_c::PRM_TYPE_S) == 0xe) {
+        l_check_inf[l_check_wrk] = (u32) act;
+        l_check_wrk++;
+    }
+    return 0;
     /* Nonmatching */
 }
 
 /* 000001B0-00000220       .text createInit__11daTag_Kf1_cFv */
-void daTag_Kf1_c::createInit() {
+BOOL daTag_Kf1_c::createInit() {
+    cut.setActorInfo("TagKf1", this);
+
+    // TODO first arg should be some function pointer
+    this->set_action(&daTag_Kf1_c::wait_action1, NULL);
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
-void daTag_Kf1_c::setStt(signed char) {
+char daTag_Kf1_c::setStt(signed char c) {
+    field_0x768 = c;
     /* Nonmatching */
 }
 
 /* 00000234-00000294       .text next_msgStatus__11daTag_Kf1_cFPUl */
-void daTag_Kf1_c::next_msgStatus(unsigned long*) {
+u16 daTag_Kf1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
@@ -42,17 +68,66 @@ void daTag_Kf1_c::checkOrder() {
 }
 
 /* 00000380-00000470       .text chkAttention__11daTag_Kf1_cF4cXyz */
-void daTag_Kf1_c::chkAttention(cXyz) {
+BOOL daTag_Kf1_c::chkAttention(cXyz vec) {
+    BOOL ret = FALSE;
+    f32 dist = VECSquareDistance(&vec, &dComIfGp_getPlayer(0)->current.pos);
+    dist = std::sqrtf(dist);
+    if (dComIfGp_getPlayer(0)->current.pos.y - vec.y < l_HIO.f2 && dist < l_HIO.f1) {
+        ret = TRUE;
+    }
+    return ret;
     /* Nonmatching */
 }
 
 /* 00000470-0000057C       .text partner_srch__11daTag_Kf1_cFv */
-void daTag_Kf1_c::partner_srch() {
+BOOL daTag_Kf1_c::partner_srch() {
+    BOOL tmp = 0;
+    int i;
+    int j;
+    for (i = 0, j = 8; j != 0; ++i, --j) {
+        partners[i] = 0xffffffff;
+    }
+
+    l_check_wrk = 0;
+    j = 100;
+    for (i = 0; j != 0; ++i, --j) {
+        l_check_inf[i] = 0;
+    }
+    fpcEx_Search(searchActor_Kutani, this);
+    // register/cast fiddling needed here
+    if (l_check_wrk <= 8 && l_check_wrk != 0) {
+        npartners = 0;
+        for (i = 0, j = 0; j < l_check_wrk; ++j, ++i) {
+            if (l_check_inf[i] != 0) {
+                tmp = l_check_inf[i + 1];
+            }
+            else {
+                tmp = 0xffffffff;
+            }
+            partners[i] = tmp;
+            npartners++;
+        }
+        tmp = TRUE;
+    }
+    return tmp;
+
     /* Nonmatching */
 }
 
 /* 0000057C-00000604       .text checkPartner__11daTag_Kf1_cFv */
-void daTag_Kf1_c::checkPartner() {
+s16 daTag_Kf1_c::checkPartner() {
+
+    s16 hits = 0;
+    int id = 0;
+    for (int idx = 0; idx < npartners; ++idx) {
+        int cand_it = partners[idx];
+        fopAc_ac_c* cand = fopAcM_SearchByID(cand_it);
+        if (cand != NULL) {
+            ++hits;
+        }
+        ++id;
+    }
+    return hits;
     /* Nonmatching */
 }
 
@@ -83,6 +158,7 @@ void daTag_Kf1_c::bensyoInit() {
 
 /* 000007A4-000007C4       .text event_bensyo__11daTag_Kf1_cFv */
 void daTag_Kf1_c::event_bensyo() {
+    event_mesSet();
     /* Nonmatching */
 }
 
@@ -107,22 +183,49 @@ void daTag_Kf1_c::set_action(int (daTag_Kf1_c::*)(void*), void*) {
 }
 
 /* 00000AB8-00000B14       .text wait01__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait01() {
+bool daTag_Kf1_c::wait01() {
+    this->field_0x767 = 0;
+    if ((this->field_0x73c != 0) && checkPartner() != this->npartners) {
+       this->field_0x767 = 3;
+    }
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 00000B14-00000B1C       .text wait02__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait02() {
+bool daTag_Kf1_c::wait02() {
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 00000B1C-00000BE8       .text wait_action1__11daTag_Kf1_cFPv */
-void daTag_Kf1_c::wait_action1(void*) {
+BOOL daTag_Kf1_c::wait_action1(void*) {
+    if (field_0x76a == 0) {
+        setStt(1);
+        field_0x76a++;
+    }
+    else if (field_0x76a != -1) {
+        if (field_0x76a == 1) {
+            partner_srch();
+            ++field_0x76a;
+        }
+        field_0x73c = chkAttention(this->current.pos);
+        s8 val = field_0x768;
+        if (val == 2) {
+            wait02();
+        }
+        else if ((val < 2) && (val > 0)) {
+            wait01();
+        }
+    }
+    return TRUE;
+
     /* Nonmatching */
 }
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::_draw() {
+    return TRUE;
     /* Nonmatching */
 }
 
@@ -133,37 +236,68 @@ bool daTag_Kf1_c::_execute() {
 
 /* 00000C68-00000CBC       .text _delete__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::_delete() {
+    fpc_ProcID id = fopAcM_GetID(this);
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 00000CBC-00000E98       .text _create__11daTag_Kf1_cFv */
 s32 daTag_Kf1_c::_create() {
+    fopAcM_SetupActor(this, daTag_Kf1_c);
+
+    // field_0x6d8 = 0;
+    // field_0x6dc = 0;
+    // field_0x738 = 0;
+
+
+    if (fopAcM_GetName(this) != PROC_TAG_KF1) {
+        return cPhs_ERROR_e;
+    } else {
+        this->field_0x769 = 0;
+        if (l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("クタニ焼き監視タグ", &l_HIO);
+        }
+        int res = createInit();
+        if (res == 0) {
+            return cPhs_ERROR_e;
+        }
+    }
+    return cPhs_COMPLEATE_e;
     /* Nonmatching */
 }
 
 /* 000010C0-000010E0       .text daTag_Kf1_Create__FP10fopAc_ac_c */
-static s32 daTag_Kf1_Create(fopAc_ac_c*) {
+static s32 daTag_Kf1_Create(fopAc_ac_c* obj) {
+    (static_cast<daTag_Kf1_c*>(obj))->_create();
     /* Nonmatching */
 }
 
 /* 000010E0-00001100       .text daTag_Kf1_Delete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Delete(daTag_Kf1_c*) {
+static BOOL daTag_Kf1_Delete(daTag_Kf1_c* obj) {
+    (static_cast<daTag_Kf1_c*>(obj))->_delete();
     /* Nonmatching */
 }
 
 /* 00001100-00001120       .text daTag_Kf1_Execute__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Execute(daTag_Kf1_c*) {
+static BOOL daTag_Kf1_Execute(daTag_Kf1_c* obj) {
+    (static_cast<daTag_Kf1_c*>(obj))->_execute();
     /* Nonmatching */
 }
 
 /* 00001120-00001140       .text daTag_Kf1_Draw__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Draw(daTag_Kf1_c*) {
+static BOOL daTag_Kf1_Draw(daTag_Kf1_c* obj) {
+    (static_cast<daTag_Kf1_c*>(obj))->_draw();
     /* Nonmatching */
 }
 
 /* 00001140-00001148       .text daTag_Kf1_IsDelete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_IsDelete(daTag_Kf1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kf1_IsDelete(daTag_Kf1_c* obj) {
+    return TRUE;
 }
 
 static actor_method_class l_daTag_Kf1_Method = {
