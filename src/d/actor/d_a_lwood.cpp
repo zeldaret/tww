@@ -62,12 +62,11 @@ BOOL daLwood_c::CreateInit() {
 }
 
 /* 000002E0-000004D8       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* joint, int timing) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* joint, int calcTiming) {
     if (mDoGph_gInf_c::isMonotone())
         return TRUE;
 
-    if (timing == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         u32 jntNo = ((J3DJoint*)joint)->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daLwood_c* i_this = (daLwood_c*)model->getUserArea();

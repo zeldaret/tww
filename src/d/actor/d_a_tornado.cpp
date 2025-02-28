@@ -43,14 +43,14 @@ BOOL daTornado_c::jointCallBack(int jntNo) {
     return TRUE;
 }
 
-static const float l_joint_scale[11] = { 0.1, 0.4, 0.7, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
-static const float joint_offset[11] = { 100.0, 200.0, 300.0, 400.0, 300.0, 300.0, 400.0, 500.0, 400.0, 500.0, 600.0 };
+static const float l_joint_scale[11] = { 0.1f, 0.4f, 0.7f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
+static const float joint_offset[11] = { 100.0f, 200.0f, 300.0f, 400.0f, 300.0f, 300.0f, 400.0f, 500.0f, 400.0f, 500.0f, 600.0f };
 
 static daTornado_HIO_c0 l_HIO;
 
 /* 00000260-000002A4       .text daTornado_jointCallBack__FP7J3DNodei */
-static BOOL daTornado_jointCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL daTornado_jointCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();

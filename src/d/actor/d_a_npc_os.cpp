@@ -185,8 +185,8 @@ s32 daNpc_Os_c::create() {
 }
 
 /* 00000748-000008CC       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Os_c* i_this = (daNpc_Os_c*)model->getUserArea();
@@ -210,8 +210,8 @@ static BOOL nodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 000008CC-00000988       .text tunoNodeCallBack__FP7J3DNodei */
-static BOOL tunoNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL tunoNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         J3DModel* model = j3dSys.getModel();
         daNpc_Os_c* i_this = (daNpc_Os_c*)model->getUserArea();

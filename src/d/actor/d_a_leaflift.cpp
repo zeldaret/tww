@@ -99,7 +99,7 @@ BOOL daLlift_c::CreateHeap() {
     return TRUE;
 } 
 
-static BOOL nodeCallBack(J3DNode* node, int idx);
+static BOOL nodeCallBack(J3DNode* node, int calcTiming);
 
 /* 00000338-000005F8       .text CreateInit__9daLlift_cFv */
 void daLlift_c::CreateInit() {
@@ -164,8 +164,8 @@ s32 daLlift_c::_create() {
 }
 
 /* 00000918-000009C4       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int idx) {
-    if (!idx) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();

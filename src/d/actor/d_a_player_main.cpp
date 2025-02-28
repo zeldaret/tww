@@ -367,8 +367,8 @@ BOOL daPy_lk_c::auraJointCB0(int jntNo) {
 }
 
 /* 80103450-80103494       .text daPy_auraCallback__FP7J3DNodei */
-static BOOL daPy_auraCallback(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL daPy_auraCallback(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -407,8 +407,8 @@ BOOL daPy_lk_c::jointCB0(int) {
 }
 
 /* 80103EE4-80103F28       .text daPy_jointCallback0__FP7J3DNodei */
-static BOOL daPy_jointCallback0(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL daPy_jointCallback0(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -424,8 +424,8 @@ BOOL daPy_lk_c::jointCB1() {
 }
 
 /* 80104178-801041B4       .text daPy_jointCallback1__FP7J3DNodei */
-static BOOL daPy_jointCallback1(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL daPy_jointCallback1(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
         i_this->jointCB1();

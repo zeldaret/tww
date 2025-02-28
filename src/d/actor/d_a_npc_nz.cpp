@@ -19,13 +19,13 @@ const char daNpc_Nz_c::m_arc_name[] = "NZ";
 const char daNpc_Nz_c::m_bdl_arc_name[] = "Npcnz";
 
 /* 000000EC-00000128       .text daNpcNz_NodeCallBack__FP7J3DNodei */
-static BOOL daNpcNz_NodeCallBack(J3DNode* node, int param_1) {
-    return reinterpret_cast<daNpc_Nz_c*>(j3dSys.getModel()->getUserArea())->NodeCallBack(node, param_1);
+static BOOL daNpcNz_NodeCallBack(J3DNode* node, int calcTiming) {
+    return reinterpret_cast<daNpc_Nz_c*>(j3dSys.getModel()->getUserArea())->NodeCallBack(node, calcTiming);
 }
 
 /* 00000128-0000024C       .text NodeCallBack__10daNpc_Nz_cFP7J3DNodei */
-BOOL daNpc_Nz_c::NodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+BOOL daNpc_Nz_c::NodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
@@ -50,13 +50,13 @@ BOOL daNpc_Nz_c::NodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 00000288-000002C4       .text daNpcNz_TailNodeCallBack__FP7J3DNodei */
-static BOOL daNpcNz_TailNodeCallBack(J3DNode* node, int param_1) {
-    return reinterpret_cast<daNpc_Nz_c*>(j3dSys.getModel()->getUserArea())->TailNodeCallBack(node, param_1);
+static BOOL daNpcNz_TailNodeCallBack(J3DNode* node, int calcTiming) {
+    return reinterpret_cast<daNpc_Nz_c*>(j3dSys.getModel()->getUserArea())->TailNodeCallBack(node, calcTiming);
 }
 
 /* 000002C4-000003A4       .text TailNodeCallBack__10daNpc_Nz_cFP7J3DNodei */
-BOOL daNpc_Nz_c::TailNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+BOOL daNpc_Nz_c::TailNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         s32 idx = 0;

@@ -153,8 +153,8 @@ static const int l_btp_ix_tbl[] = {
 };
 
 /* 00000490-00000658       .text nodeCallBack_Bs__FP7J3DNodei */
-static BOOL nodeCallBack_Bs(J3DNode* node, int value) {
-    if (!value) {
+static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Bs1_c* i_this = (daNpc_Bs1_c*)model->getUserArea();
