@@ -20,8 +20,10 @@ void hand_draw(shand_class* actor) {
 }
 
 /* 00000194-000001E0       .text daShand_Draw__FP11shand_class */
-static BOOL daShand_Draw(shand_class*) {
-    /* Nonmatching */
+static BOOL daShand_Draw(shand_class* actor) {
+    dKy_getEnvlight().settingTevStruct(TEV_TYPE_ACTOR, &actor->eyePos, &actor->tevStr);
+    hand_draw(actor);
+    return TRUE;
 }
 
 /* 000001E0-0000052C       .text control1__FP11shand_class */
