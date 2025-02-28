@@ -21,10 +21,10 @@ public:
     void getSmallScaleEnd() {}
     void setScaleOn() {}
 
-    int jointCallBack(int);
+    BOOL jointCallBack(int);
     BOOL draw();
     BOOL execute();
-    int tornado_delete();
+    BOOL tornado_delete();
     BOOL createHeap();
     s32 create();
 

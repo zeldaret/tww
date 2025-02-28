@@ -20,10 +20,10 @@ const float daTornado_HIO_c0::move_dis = 7500.0f;
 const float daTornado_HIO_c0::start_dis = 10000.0f;
 
 /* 000000EC-00000260       .text jointCallBack__11daTornado_cFi */
-int daTornado_c::jointCallBack(int jntNo) {
+BOOL daTornado_c::jointCallBack(int jntNo) {
     int jntIdx = jntNo - 1;
     if ((jntIdx < 0) || (jntIdx >= 11)) {
-        return 1;
+        return TRUE;
     }
 
     mDoMtx_stack_c::transS(mJointX[jntIdx], 0.0f, mJointZ[jntIdx]);
@@ -40,7 +40,7 @@ int daTornado_c::jointCallBack(int jntNo) {
     mDoMtx_stack_c::transS(mJointX[jntIdx], 0.0f, mJointZ[jntIdx]);
     mDoMtx_stack_c::revConcat(J3DSys::mCurrentMtx);
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
-    return 1;
+    return TRUE;
 }
 
 static const float l_joint_scale[11] = { 0.1, 0.4, 0.7, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
@@ -61,7 +61,7 @@ static BOOL daTornado_jointCallBack(J3DNode* node, int param_1) {
 }
 
 /* 000002A4-00000464       .text draw__11daTornado_cFv */
-int daTornado_c::draw() {
+BOOL daTornado_c::draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
@@ -90,7 +90,7 @@ int daTornado_c::draw() {
         dComIfGd_setList();
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 00000464-00000484       .text daTornado_Draw__FP11daTornado_c */
@@ -240,19 +240,19 @@ static BOOL daTornado_IsDelete(daTornado_c*) {
 }
 
 /* 00000CB0-00000D30       .text tornado_delete__11daTornado_cFv */
-int daTornado_c::tornado_delete() {
+BOOL daTornado_c::tornado_delete() {
     mPtclCb.end();
     if (fopAcM_GetParam(this) == 0 && dComIfGp_getShipActor() != NULL) {
         dComIfGp_getShipActor()->offTornadoFlg();
     }
     dComIfG_resDelete(&mPhs, l_arcName);
-    return 1;
+    return TRUE;
 }
 
 /* 00000D30-00000D54       .text daTornado_Delete__FP11daTornado_c */
-static int daTornado_Delete(daTornado_c* i_this) {
+static BOOL daTornado_Delete(daTornado_c* i_this) {
     i_this->tornado_delete();
-    return 1;
+    return TRUE;
 }
 
 /* 00000D54-0000109C       .text createHeap__11daTornado_cFv */
