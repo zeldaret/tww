@@ -185,18 +185,21 @@ void daObjHat_c::executeNormal() { /* empty? */ }
 
 /* 00000888-000008B4       .text getPrmHatNo__10daObjHat_cFv */
 u32 daObjHat_c::getPrmHatNo() {
-    return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S) & 3;
+    return daObj::PrmAbstract(this, PRM_HAT_NO_W, PRM_HAT_NO_S) & 3;
 }
 
 /* 000008B4-00000964       .text setMtx__10daObjHat_cFv */
 void daObjHat_c::setMtx() {
-    model->mBaseScale = this->scale;
-    MTXTrans(mDoMtx_stack_c::now, this->current.pos.x, this->current.pos.y,
-             this->current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, this->current.angle.y + 0x4000);
-    mDoMtx_XrotM(mDoMtx_stack_c::now, this->current.angle.x);
-    mDoMtx_ZrotM(mDoMtx_stack_c::now, this->current.angle.z + 0x4000);
-    MTXCopy(mDoMtx_stack_c::now, this->model->mBaseTransformMtx);
+    model->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y,
+             current.pos.z);
+
+    mDoMtx_stack_c::YrotM(current.angle.y + 0x4000);
+    mDoMtx_stack_c::XrotM(current.angle.x);
+    mDoMtx_stack_c::ZrotM(current.angle.z + 0x4000);
+    //mDoMtx_YrotM(mDoMtx_stack_c::now, this->current.angle.y + 0x4000);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    //MTXCopy(mDoMtx_stack_c::now, this->model->mBaseTransformMtx);
 }
 
 /* 00000964-00000A20       .text setSpeed__10daObjHat_cF4cXyz */
