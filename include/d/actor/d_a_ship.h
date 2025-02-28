@@ -64,7 +64,7 @@ public:
     void offFantomGanonBattle() {}
     void offStateFlg(daSHIP_SFLG) {}
     void offTornadoFlg() {
-        mTornadoID = -1;
+        mTornadoID = fpcM_ERROR_PROCESS_ID_e;
         mTornadoActor = NULL;
     }
     void offWhirlFlg() {}
@@ -77,7 +77,7 @@ public:
     void onSceneChange() {}
     void onShortHitFlg() {}
     void onStateFlg(daSHIP_SFLG) {}
-    void onTornadoFlg(int tornadoID) { mTornadoID = tornadoID; }
+    void onTornadoFlg(u32 tornadoID) { mTornadoID = tornadoID; }
     void onWhirlFlg(unsigned long, short) {}
     void onWhirlFlgDirect(unsigned long, short) {}
     void setAtnPos(const cXyz*) {}
@@ -241,7 +241,7 @@ public:
     /* 0x040C */ f32 m040C;
     /* 0x0410 */ int mGridId;
     /* 0x0414 */ daGrid_c* mpGrid;
-    /* 0x0418 */ int mTornadoID;
+    /* 0x0418 */ u32 mTornadoID;
     /* 0x041C */ fopAc_ac_c* mTornadoActor;
     /* 0x0420 */ u32 m0420;
     /* 0x0424 */ fopAc_ac_c* m0424;

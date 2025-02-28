@@ -156,7 +156,7 @@ BOOL daTornado_c::execute() {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
             daShip_c* ship = dComIfGp_getShipActor();
             cXyz diff = ship->current.pos - current.pos;
-            if (diff.abs2XZ() < 100000000.0f) {
+            if (diff.abs2XZ() < 10000.0f*10000.0f) {
                 ship->onTornadoFlg(fopAcM_GetID(this));
                 speedF = 0.0f;
             }
@@ -166,7 +166,7 @@ BOOL daTornado_c::execute() {
             fopAcM_posMoveF(this, NULL);
             cXyz diff = current.pos - home.pos;
             diff.y = 0;
-            if (diff.abs2XZ() > 56250000) {
+            if (diff.abs2XZ() > 7500.0f*7500.0f) {
                 diff.normalize();
                 current.pos = home.pos + diff * 7500.0f;
             }
@@ -181,7 +181,7 @@ BOOL daTornado_c::execute() {
 
         fopAcM_seStartCurrent(this, JA_SE_OBJ_TORNADE_SUS, 100);
 
-        if (dComIfGs_isEventBit(10000)) {
+        if (dComIfGs_isEventBit(0x2710)) {
             mPtclCb.end();
             daShip_c* ship = dComIfGp_getShipActor();
             if (ship != NULL) {
@@ -316,7 +316,7 @@ s32 daTornado_c::create() {
             }
         } else {
             fopAcM_SetParam(this, 0);
-            if (dComIfGs_isEventBit(10000)) {
+            if (dComIfGs_isEventBit(0x2710)) {
                 return cPhs_ERROR_e;
             }
             dKyw_tornado_Notice(&current.pos);
