@@ -10,14 +10,16 @@
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
 #include "d/res/res_ro.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+
 
 // const char daObjHat_c::m_arcname[] = "ObjHat";
 
 /* 00000078-00000184       .text __ct__10daObjHat_cFv */
 daObjHat_c::daObjHat_c() {
     u32 hatno = getPrmHatNo();
-    this->id = hatno;
-    procid = 0;
+    mHatNo = hatno;
+    mState = 0;
     /* Nonmatching */
 }
 
@@ -82,13 +84,13 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 0000045C-000005D4       .text createHeap__10daObjHat_cFv */
 BOOL daObjHat_c::createHeap() {
-    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectIDRes("Ro", l_bmd_ix_tbl[this->id]);
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectIDRes("Ro", l_bmd_ix_tbl[this->mHatNo]);
     if (pModelData == NULL) {
         return FALSE;
     } else {
         mDoExt_McaMorf* morf = new mDoExt_McaMorf(
             pModelData, NULL, NULL,
-            (J3DAnmTransformKey*)dComIfG_getObjectIDRes("Ro", l_bck_ix_tbl[this->id]),
+            (J3DAnmTransformKey*)dComIfG_getObjectIDRes("Ro", l_bck_ix_tbl[mHatNo]),
             J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
 
         this->mpMorf = morf;
@@ -96,9 +98,9 @@ BOOL daObjHat_c::createHeap() {
             return FALSE;
         } else {
             this->model = this->mpMorf->getModel();
-            acch_cir.SetWall(30.0f, 30.0f);
-            acch.Set(&this->current.pos, &this->old.pos, this, 1, &acch_cir, &this->speed,
-                     &this->current.angle, &this->shape_angle);
+            mAcchCir.SetWall(30.0f, 30.0f);
+            mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed,
+                      &current.angle, &shape_angle);
             return TRUE;
         }
     }
@@ -107,15 +109,15 @@ BOOL daObjHat_c::createHeap() {
 
 /* 000005D4-000006AC       .text createInit__10daObjHat_cFv */
 s32 daObjHat_c::createInit() {
-    stts.Init(2, 0xff, this);
-    cyl.Set(l_cyl_src);
-    this->cyl.SetStts(&this->stts);
-    this->cullMtx = this->model->mBaseTransformMtx;
+    mStts.Init(2, 0xff, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    cullMtx = model->mBaseTransformMtx;
     fopAcM_setCullSizeBox(this, -50.0f, 0.0f, -50.0f, 50.0f, 200.0f, 50.0f);
-    this->gravity = -5.0f;
+    gravity = -5.0f;
 
     fopAc_ac_c* parent;
-    int res = fopAcM_SearchByID(this->parentActorID, &parent);
+    int res = fopAcM_SearchByID(parentActorID, &parent);
     if ((res != 0) && (parent != NULL)) {
         setSpeed(static_cast<daNpcRoten_c*>(parent)->getWindVec());
     }
@@ -131,9 +133,9 @@ bool daObjHat_c::_delete() {
 
 /* 000006DC-0000073C       .text _draw__10daObjHat_cFv */
 bool daObjHat_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &this->current.pos, &this->tevStr);
-    g_env_light.setLightTevColorType(this->model, &this->tevStr);
-    this->mpMorf->updateDL();
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
+    mpMorf->updateDL();
     return TRUE;
 }
 
@@ -146,32 +148,32 @@ static daObjHat_c::MoveFunc_t moveProc[] = {
 bool daObjHat_c::_execute() {
     // dCcD_Sph::~dCcD_Sp
 
-    (this->*moveProc[this->procid])();
-    f32 xspeed = this->angle.x * this->speedF;
+    (this->*moveProc[this->mState])();
+    f32 xspeed = this->mSpeed.x * this->speedF;
     f32 ymove = this->speed.y + this->gravity;
-    f32 zspeed = this->angle.z * this->speedF;
+    f32 zspeed = this->mSpeed.z * this->speedF;
     // because downwards vector quantity has negative value
     if (ymove < this->maxFallSpeed) {
         ymove = this->maxFallSpeed;
     }
 
-    this->speed.x = xspeed;
-    this->speed.y = ymove;
-    this->speed.z = zspeed;
-    fopAcM_posMove(this, this->stts.GetCCMoveP());
-    this->acch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
-    if ((this->acch.m_flags & dBgS_Acch::WALL_HIT) != 0) {
+    speed.x = xspeed;
+    speed.y = ymove;
+    speed.z = zspeed;
+    fopAcM_posMove(this, mStts.GetCCMoveP());
+    mAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+    if ((this->mAcch.m_flags & dBgS_Acch::WALL_HIT) != 0) {
         this->speedF = 0;
     }
-    if ((this->acch.m_flags & dBgS_Acch::GROUND_HIT) != 0) {
+    if ((this->mAcch.m_flags & dBgS_Acch::GROUND_HIT) != 0) {
         cLib_addCalc(&this->speedF, 0.0, 0.3, 1000.0, 1.0);
     }
 
-    this->cyl.SetC(this->current.pos);
-    g_dComIfG_gameInfo.play.mCcS.Set(&this->cyl);
-    u32 res = this->cyl.ChkTgHit();
+    mCyl.SetC(this->current.pos);
+    g_dComIfG_gameInfo.play.mCcS.Set(&mCyl);
+    u32 res = mCyl.ChkTgHit();
     if (res != 0) {
-        setSpeed(*this->cyl.GetTgRVecP());
+        setSpeed(*mCyl.GetTgRVecP());
     }
 
     setMtx();
@@ -202,7 +204,7 @@ void daObjHat_c::setSpeed(cXyz speed) {
     speed.y = 0;
     speed = speed.normZP();
 
-    this->angle = speed;
+    this->mSpeed = speed;
 
     fopAcM_SetSpeedF(this, 20.0f);
 

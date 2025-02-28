@@ -10,23 +10,14 @@
 class daObjHat_c : public fopAc_ac_c {
 public:
     enum Prm_e {
-        PRM_SWSAVE_W = 8,
-        PRM_SWSAVE_S = 0,
-
-        PRM_SCL_W = 2,
-        PRM_SCL_S = 8,
-
-        PRM_ALWAYS_W = 1,
-        PRM_ALWAYS_S = 12,
-
-        PRM_ARG0_W = 4,
-        PRM_ARG0_S = 16,
+        PRM_HAT_NO_W = 8,
+        PRM_HAT_NO_S = 0,
     };
 
     daObjHat_c();
 
     s32 _create();
-    int createHeap();
+    BOOL createHeap();
     s32 createInit();
     bool _delete();
     bool _draw();
@@ -44,16 +35,14 @@ public:
     /* 0x29c */ mDoExt_McaMorf* mpMorf;
     /* 0x2a0 */ Mtx mMtx;
 
-    /* 0x2d0 */ dBgS_ObjAcch acch;
-    /* 0x494 */ dBgS_AcchCir acch_cir;
-    /* 0x4d4 */ dCcD_Stts stts;
-    /* 0x510 */ dCcD_Cyl cyl;
+    /* 0x2d0 */ dBgS_ObjAcch mAcch;
+    /* 0x494 */ dBgS_AcchCir mAcchCir;
+    /* 0x4d4 */ dCcD_Stts mStts;
+    /* 0x510 */ dCcD_Cyl mCyl;
 
-    /* 0x640 */ cXyz angle;
-    /* 0x64c */ u8 procid;
-    /* 0x64d */ u8 id;
-    /* 0x64e */ u8 byte2;
-    /* 0x64f */ u8 byte3;
+    /* 0x640 */ cXyz mSpeed;
+    /* 0x64c */ u8 mState;
+    /* 0x64d */ u8 mHatNo;
     /* Place member variables here */
 }; /* size: 0x650 */
 
