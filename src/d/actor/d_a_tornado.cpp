@@ -286,7 +286,7 @@ BOOL daTornado_c::createHeap() {
 
 /* 0000109C-000010BC       .text daTornado_createHeap__FP10fopAc_ac_c */
 static BOOL daTornado_createHeap(fopAc_ac_c* i_this) {
-    ((daTornado_c*)i_this)->createHeap();
+    return ((daTornado_c*)i_this)->createHeap();
 }
 
 /* 000010BC-000014D0       .text create__11daTornado_cFv */

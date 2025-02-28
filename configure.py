@@ -1505,7 +1505,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_tag_md_cb"),
     ActorRel(NonMatching, "d_a_tag_mk"),
     ActorRel(Matching,    "d_a_tag_so"),
-    ActorRel(Matching,    "d_a_tornado"),
+    ActorRel(Matching,    "d_a_tornado", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_warpf"),
     ActorRel(NonMatching, "d_a_wind_tag"),
     ActorRel(NonMatching, "d_a_acorn_leaf"),
