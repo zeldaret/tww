@@ -50,8 +50,8 @@ static BOOL daKytag03_Execute(kytag03_class* i_this) {
     if (!dComIfGp_event_runCheck() || !dComIfGp_event_chkEventFlag(dEvtFlag_STAFF_ALL_e)) {
         if (i_this->tevStr.mRoomNo == dStage_roomControl_c::getStayNo()) {
             i_this->mbRoomActive = true;
-            if (i_this->mSwitchID != 0xFF) {
-                if (dComIfGs_isSwitch(i_this->mSwitchID, dStage_roomControl_c::getStayNo())) {
+            if (i_this->mSwitchNo != 0xFF) {
+                if (dComIfGs_isSwitch(i_this->mSwitchNo, dStage_roomControl_c::getStayNo())) {
                     if (!dKy_contrast_flg_get()) {
                         dKy_contrast_flg_set(true);
                         dKy_change_colpat(4);
@@ -70,8 +70,8 @@ static BOOL daKytag03_Execute(kytag03_class* i_this) {
         }
     } else if (!i_this->mbRoomActive) {
         if (i_this->tevStr.mRoomNo != dStage_roomControl_c::getStayNo()) {
-            if (i_this->mSwitchID != 0xFF) {
-                if (dComIfGs_isSwitch(i_this->mSwitchID, i_this->tevStr.mRoomNo)) {
+            if (i_this->mSwitchNo != 0xFF) {
+                if (dComIfGs_isSwitch(i_this->mSwitchNo, i_this->tevStr.mRoomNo)) {
                     if (!dKy_contrast_flg_get()) {
                         dKy_contrast_flg_set(true);
                         dKy_change_colpat(4);
@@ -135,7 +135,7 @@ static s32 daKytag03_Create(fopAc_ac_c* i_ac) {
 
         i_this->field_0x2a0 = 0;
         i_this->field_0x2a8 = 0.0f;
-        i_this->mSwitchID = fopAcM_GetParam(i_this);
+        i_this->mSwitchNo = fopAcM_GetParam(i_this);
         i_this->mbRoomActive = false;
         i_this->mbIsActive = false;
         i_this->mbVisible = false;

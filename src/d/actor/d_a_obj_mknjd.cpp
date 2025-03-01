@@ -76,8 +76,8 @@ static u16 joint_number_table[20];
 Mtx daObjMknjD::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
-static BOOL nodeCallBackL(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0) {
+static BOOL nodeCallBackL(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         
         J3DModel* mdl = j3dSys.getModel();
@@ -97,8 +97,8 @@ static BOOL nodeCallBackL(J3DNode* i_node, int i_param2) {
 }
 
 /* 0000012C-000001E0       .text nodeCallBackR__FP7J3DNodei */
-static BOOL nodeCallBackR(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0) {
+static BOOL nodeCallBackR(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
 
         J3DModel* mdl = j3dSys.getModel();
@@ -118,8 +118,8 @@ static BOOL nodeCallBackR(J3DNode* i_node, int i_param2) {
 }
 
 /* 000001E0-000002B0       .text nodeCallBack_Hahen__FP7J3DNodei */
-static BOOL nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0) {
+static BOOL nodeCallBack_Hahen(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         u16 shardIdx = joint_number_table[jntNo - 1];
 

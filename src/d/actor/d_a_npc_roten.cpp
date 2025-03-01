@@ -1555,8 +1555,8 @@ daNpcRoten_c::daNpcRoten_c() {
 }
 
 /* 000007B4-000008CC       .text daNpc_Roten_nodeCallBack__FP7J3DNodei */
-static BOOL daNpc_Roten_nodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL daNpc_Roten_nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpcRoten_c* i_this = (daNpcRoten_c*)model->getUserArea();
