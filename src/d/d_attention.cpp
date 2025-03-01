@@ -11,6 +11,7 @@
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
+#include "SSystem/SComponent/c_angle.h"
 
 s32 dAttention_c::loc_type_num = 3;
 u32 dAttention_c::act_type_num = 5;
@@ -378,12 +379,12 @@ void dAttention_c::stockAttention(u32 interactMask) {
     if (pTarget != mLockOnList[0].getActor()) {
         if (pTarget != NULL) {
             if (mLockOnList[0].getActor() != NULL)
-                mFlags |= 2;
+                setFlag(0x02);
         } else {
-            mFlags |= 1;
+            setFlag(0x01);
         }
 
-        mFlags |= 4;
+        setFlag(0x04);
     }
 
     LockonTarget(0);
@@ -452,12 +453,12 @@ BOOL sound_attention(fopAc_ac_c* actor, void* userWork) {
 void dAttention_c::runSoundProc() {
     mEnemyBsPcId = fpcM_ERROR_PROCESS_ID_e;
     mEnemyDistance = 10000.0f;
-    if (!(mFlags & 0x80000000)) {
+    if (!chkFlag(0x80000000)) {
         fopAcIt_Executor((fopAcIt_ExecutorFunc)sound_attention, this);
         fopAc_ac_c* actor = fopAcM_SearchByID(mEnemyBsPcId);
         if (actor != NULL) {
             mDoAud_bgmNowBattle(mEnemyDistance * 0.1f);
-            mFlags |= 0x100;
+            setFlag(0x100);
         }
     }
 }

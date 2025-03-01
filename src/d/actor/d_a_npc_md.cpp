@@ -3170,7 +3170,7 @@ BOOL daNpc_Md_c::draw() {
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
     
-    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     drawDamageFog();
     g_env_light.setLightTevColorType(model, &tevStr);
     m0520.entry(modelData);

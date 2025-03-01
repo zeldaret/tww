@@ -2135,14 +2135,6 @@ inline dVibration_c& dComIfGp_getVibration() {
     return g_dComIfG_gameInfo.play.getVibration();
 }
 
-inline dAttention_c& dComIfGp_getAttention() {
-    return g_dComIfG_gameInfo.play.getAttention();
-}
-
-inline void dComIfGp_att_revivalAleart() {
-    return dComIfGp_getAttention().revivalAleart();
-}
-
 inline dDetect_c& dComIfGp_getDetect() {
     return g_dComIfG_gameInfo.play.getDetect();
 }
@@ -3494,14 +3486,58 @@ inline s32 dComIfGp_particle_checkAtrCodeEffect(int code) { return g_dComIfG_gam
  * === ATTENTION ===
  */
 
+ inline dAttention_c& dComIfGp_getAttention() {
+    return g_dComIfG_gameInfo.play.getAttention();
+}
+
+inline void dComIfGp_att_revivalAleart() {
+    dComIfGp_getAttention().revivalAleart();
+}
+
+inline void dComIfGp_att_offAleart() {
+    dComIfGp_getAttention().offAleart();
+}
+
+inline int dComIfGp_att_ZHintRequest(fopAc_ac_c* param_1, int param_2) {
+    return dComIfGp_getAttention().ZHintRequest(param_1, param_2);
+}
+
+inline void dComIfGp_att_LookRequest(fopAc_ac_c* param_0, f32 i_horizontalDist, f32 i_upDist,
+                                     f32 i_downDist, s16 i_angle, int param_5) {
+    dComIfGp_getAttention().LookRequest(param_0, i_horizontalDist, i_upDist, i_downDist, i_angle, param_5);
+}
+
+inline void dComIfGp_att_Look2RequestF(fopAc_ac_c* param_0, s16 param_1, int param_2) {
+    dComIfGp_getAttention().Look2RequestF(param_0, param_1, param_2);
+}
+
 inline void dComIfGp_att_CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
-                                      f32 param_4, s16 param_5, s32 param_6) {
-    dAttention_c& attention = g_dComIfG_gameInfo.play.getAttention();
-    attention.CatchRequest(param_0, param_1, param_2, param_3, param_4,param_5, param_6);
+                                      f32 param_4, s16 param_5, int param_6) {
+    dComIfGp_getAttention().CatchRequest(param_0, param_1, param_2, param_3, param_4,param_5, param_6);
 }
 
 inline u8 dComIfGp_att_getCatchChgItem() {
-    return g_dComIfG_gameInfo.play.getAttention().getCatchChgItem();
+    return dComIfGp_getAttention().getCatchChgItem();
+}
+
+inline fopAc_ac_c* dComIfGp_att_getCatghTarget() {
+    return dComIfGp_getAttention().getCatghTarget();
+}
+
+inline void dComIfGp_att_ChangeOwner() {
+    dComIfGp_getAttention().setFlag(0x80);
+}
+
+inline fopAc_ac_c* dComIfGp_att_getLookTarget() {
+    return dComIfGp_getAttention().getLookTarget();
+}
+
+inline fopAc_ac_c* dComIfGp_att_getZHint() {
+    return dComIfGp_getAttention().getZHintTarget();
+}
+
+inline void dComIfGp_att_chkEnemySound() {
+    return dComIfGp_getAttention().chkEnemySound();
 }
 
 /**

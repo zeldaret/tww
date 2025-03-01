@@ -1,7 +1,6 @@
 #ifndef D_D_ATTENTION_H
 #define D_D_ATTENTION_H
 
-#include "SSystem/SComponent/c_angle.h"
 #include "m_Do/m_Do_ext.h"
 
 class fopAc_ac_c;
@@ -171,14 +170,27 @@ public:
     void setFlag(u32 flag) { mFlags |= flag; }
     void clrFlag(u32 flag) { mFlags &= ~flag; }
     bool Lockon() { return LockonTruth() || chkFlag(0x20000000); } // regswap
+    void offAleart() {
+        setFlag(0x80000000);
+    }
+    void revivalAleart() {
+        clrFlag(0x80000000);
+    }
+
     void CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
                       f32 param_4, s16 param_5, int param_6) {
         mCatch.request(param_0, param_1, param_2, param_3, param_4, param_5, param_6);
     }
+    u8 getCatchChgItem() { return mCatch.getChangeItem(); }
+    fopAc_ac_c* getCatghTarget() { return mCatch.getCatghTarget(); }
 
     fopAc_ac_c* getLookTarget() { return mLook[0].convPId(mLook[0].getLookTarget()); }
     fopAc_ac_c* getLook2Target() { return mLook[1].convPId(mLook[1].getLookTarget()); }
     fopAc_ac_c* getZHintTarget() { return mHint.getZHintTarget(); }
+
+    int ZHintRequest(fopAc_ac_c* param_1, int param_2) {
+        return mHint.request(param_1, param_2);
+    }
 
     static s32 loc_type_num;
     static u32 act_type_num;
@@ -201,15 +213,8 @@ public:
     void LockEdge() {}
     void changeOwner() {}
     void chkEnemySound() {}
-    u8 getCatchChgItem() { return mCatch.getChangeItem(); }
-    void getCatghTarget() {}
-    void offAleart() {}
-    void revivalAleart() {
-        clrFlag(0x80000000);
-    }
     void LookRequest(fopAc_ac_c*, f32, f32, f32, s16, int) {}
     void Look2RequestF(fopAc_ac_c*, s16, int) {}
-    void ZHintRequest(fopAc_ac_c*, int) {}
 
 public:
     /* 0x000 */ daPy_lk_c* mpPlayer;

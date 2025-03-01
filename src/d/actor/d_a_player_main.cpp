@@ -3383,7 +3383,7 @@ BOOL daPy_lk_c::execute() {
     
     setActorPointer();
     setAtnList();
-    fopAc_ac_c* zTarget = dComIfGp_getAttention().getZHintTarget();
+    fopAc_ac_c* zTarget = dComIfGp_att_getZHint();
     if (zTarget) {
         stopDoButtonQuake(FALSE);
     } else {

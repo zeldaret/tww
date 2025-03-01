@@ -316,7 +316,7 @@ s32 daObjMknjD::Act_c::Mthd_Create() {
 
 /* 00000B64-00000BDC       .text Delete__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Delete() {
-    dComIfGp_getAttention().mFlags &= 0x7fffffff;
+    dComIfGp_att_revivalAleart();
 
     for (int i = 0; i < 4; i++) {
         mSmokeCBs[i].end();
@@ -801,7 +801,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 mDoAud_bgmStop(30);
                 mDoAud_taktModeMuteOff();
 
-                dComIfGp_getAttention().mFlags |= 0x80000000;
+                dComIfGp_att_offAleart();
 
                 if (m043E == true) {
                     m0432 = 0x2B;
@@ -818,7 +818,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             privateCut();
 
             if (dComIfGp_evmng_endCheck(mDemoEventIdx)) {
-                dComIfGp_getAttention().mFlags &= ~0x80000000;
+                dComIfGp_att_revivalAleart();
                 dComIfGp_event_reset();
 
                 fopAcM_delete(this);

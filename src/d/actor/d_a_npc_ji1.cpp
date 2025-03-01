@@ -3389,7 +3389,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
         }
     }
 
-    dComIfGp_getAttention().setFlag(0x80000000);
+    dComIfGp_att_offAleart();
     mEventCut.setActorInfo("Ji1", this);
     mEventCut.setJntCtrlPtr(&m_jnt);
     field_0xC84 = 0x12;

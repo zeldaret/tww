@@ -13,6 +13,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_lib.h"
+#include "SSystem/SComponent/c_angle.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -478,7 +479,7 @@ static BOOL daSail_Draw(sail_class* i_this) {
 
     i_this->tevStr = l_p_ship->tevStr;
 
-    g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType(i_this->mSailPacket.mStickModel, &i_this->tevStr);
     mDoExt_modelUpdateDL(i_this->mSailPacket.mStickModel);
 
