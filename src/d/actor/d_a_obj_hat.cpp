@@ -12,35 +12,6 @@
 #include "d/res/res_ro.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 
-
-/* 00000078-00000184       .text __ct__10daObjHat_cFv */
-daObjHat_c::daObjHat_c() {
-    u32 hatno = getPrmHatNo();
-    mHatNo = hatno;
-    mState = 0;
-}
-
-/* 000003AC-000003CC       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
-    return ((daObjHat_c*)actor)->createHeap();
-}
-
-/* 000003CC-0000045C       .text _create__10daObjHat_cFv */
-s32 daObjHat_c::_create() {
-    // if (this->actor_condition & )
-    fopAcM_SetupActor(this, daObjHat_c);
-
-    int var = dComIfG_resLoad(&mPhs, "Ro");
-
-    if (var == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap((fopAc_ac_c*)this, &CheckCreateHeap, 0uL)) {
-            return cPhs_ERROR_e;
-        } else {
-            return createInit();
-        }
-    }
-}
-
 static const int l_bmd_ix_tbl[] = {RO_BDL_RO_HAT, RO_BDL_RO_HAT2, RO_BDL_RO_HAT3, RO_BDL_RO_HAT};
 static const int l_bck_ix_tbl[] = {RO_INDEX_BCK_HAT_WID, RO_BCK_HAT2_WIND, RO_BCK_HAT3_WID,
                                    RO_BCK_HAT_WID};
@@ -76,6 +47,36 @@ static dCcD_SrcCyl l_cyl_src = {
     },
 };
 
+
+
+/* 00000078-00000184       .text __ct__10daObjHat_cFv */
+daObjHat_c::daObjHat_c() {
+    u32 hatno = getPrmHatNo();
+    mHatNo = hatno;
+    mState = 0;
+}
+
+/* 000003AC-000003CC       .text CheckCreateHeap__FP10fopAc_ac_c */
+static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
+    return ((daObjHat_c*)actor)->createHeap();
+}
+
+/* 000003CC-0000045C       .text _create__10daObjHat_cFv */
+s32 daObjHat_c::_create() {
+    // if (this->actor_condition & )
+    fopAcM_SetupActor(this, daObjHat_c);
+
+    int var = dComIfG_resLoad(&mPhs, "Ro");
+
+    if (var == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap((fopAc_ac_c*)this, &CheckCreateHeap, 0uL)) {
+            return cPhs_ERROR_e;
+        } else {
+            return createInit();
+        }
+    }
+}
+
 /* 0000045C-000005D4       .text createHeap__10daObjHat_cFv */
 BOOL daObjHat_c::createHeap() {
     J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectIDRes("Ro", l_bmd_ix_tbl[this->mHatNo]);
@@ -93,8 +94,14 @@ BOOL daObjHat_c::createHeap() {
         } else {
             this->mpModel = this->mpMorf->getModel();
             mAcchCir.SetWall(30.0f, 30.0f);
-            mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed,
-                      &current.angle, &shape_angle);
+            mAcch.Set(fopAcM_GetPosition_p(this),
+                      fopAcM_GetOldPosition_p(this),
+                      this,
+                      1,
+                      &mAcchCir,
+                      fopAcM_GetSpeed_p(this),
+                      fopAcM_GetAngle_p(this),
+                      fopAcM_GetShapeAngle_p(this));
             return TRUE;
         }
     }
@@ -115,6 +122,7 @@ s32 daObjHat_c::createInit() {
     if ((res != 0) && (parent != NULL)) {
         setSpeed(static_cast<daNpcRoten_c*>(parent)->getWindVec());
     }
+
     setMtx();
     return cPhs_COMPLEATE_e;
 }
@@ -145,25 +153,24 @@ bool daObjHat_c::_execute() {
     f32 xspeed = this->mMoveNorm.x * this->speedF;
     f32 ymove = this->speed.y + this->gravity;
     f32 zspeed = this->mMoveNorm.z * this->speedF;
-    // because downwards vector quantity has negative value
-    if (ymove < this->maxFallSpeed) {
-        ymove = this->maxFallSpeed;
-    }
 
-    speed.x = xspeed;
-    speed.y = ymove;
-    speed.z = zspeed;
+    // because downwards vector quantity has negative value
+    if (ymove < fopAcM_GetMaxFallSpeed(this)) {
+        ymove = fopAcM_GetMaxFallSpeed(this);
+    }
+    fopAcM_SetSpeed(this, xspeed, ymove, zspeed);
+
     fopAcM_posMove(this, mStts.GetCCMoveP());
     mAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
-    if ((this->mAcch.m_flags & dBgS_Acch::WALL_HIT) != 0) {
-        this->speedF = 0;
+    if (mAcch.ChkWallHit()) {
+        fopAcM_SetSpeedF(this, 0);
     }
-    if ((this->mAcch.m_flags & dBgS_Acch::GROUND_HIT) != 0) {
+    if (mAcch.ChkGroundHit()) {
         cLib_addCalc(&this->speedF, 0.0, 0.3, 1000.0, 1.0);
     }
 
     mCyl.SetC(this->current.pos);
-    g_dComIfG_gameInfo.play.mCcS.Set(&mCyl);
+    dComIfG_Ccsp()->Set(&mCyl);
     u32 res = mCyl.ChkTgHit();
     if (res != 0) {
         setSpeed(*mCyl.GetTgRVecP());
