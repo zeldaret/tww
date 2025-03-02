@@ -12,7 +12,7 @@
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
-static Mtx M_tmp_mtx;
+Mtx daObjShelf::Act_c::M_tmp_mtx;
 
 namespace daObjShelf {
     namespace {

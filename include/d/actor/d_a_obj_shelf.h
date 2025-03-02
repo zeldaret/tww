@@ -7,6 +7,8 @@
 namespace daObjShelf {
     class Act_c : public dBgS_MoveBgActor {
     public:
+        static Mtx M_tmp_mtx;
+
         enum Prm_e {
             PRM_GROUNDMA_W = 0x01,
             PRM_GROUNDMA_S = 0x00,
