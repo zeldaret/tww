@@ -17,28 +17,30 @@ static Mtx M_tmp_mtx;
 namespace daObjShelf {
     namespace {
         struct Attr_c {
-            /* 0x00 */ short m00;
-            /* 0x02 */ short m02;
-            /* 0x04 */ float m04;
-            /* 0x08 */ short m08;
-            /* 0x0a */ short m0a;
-            /* 0x0c */ float m0c;
-            /* 0x10 */ float m10;
-            /* 0x14 */ float m14;
-            /* 0x18 */ float m18;
-            /* 0x1c */ float m1c;
-            /* 0x20 */ u8 m20;
-            /* 0x21 */ u8 m21;
+            /* 0x00 */ short mVibDuration;
+            /* 0x02 */ short mVibYSpeed;
+            /* 0x04 */ float mVibYMagnitude;
+            /* 0x08 */ short mVibXSpeed;
+            /* 0x0a */ short mVibZSpeed;
+            /* 0x0c */ float mVibXMagnitude;
+            /* 0x10 */ float mVibZMagnitude;
+            /* 0x14 */ float mRotAccel;
+            /* 0x18 */ float mRotDecay;
+            /* 0x1c */ float mBounceFactor;
+            /* 0x20 */ u8 mBounceNum;
+            /* 0x21 */ u8 mRotWaitDuration;
             /* 0x22 */ short m22;
-            /* 0x24 */ float m24;
-            /* 0x28 */ float m28;
+            /* 0x24 */ float mInitSpeed2;
+            /* 0x28 */ float mInitSpeed3;
         };
 
         static const Attr_c L_attr = {
-            0x4, 30000,
-            4.0f,
+            4,
+            30000, 4.0f,
             0x7724,0x7148,
-            200.0f,200.0f,600.0f,0.02f,0.5f,
+            200.0f,200.0f,
+            600.0f,0.02f,
+            0.5f,
             5,0,
             0,
             -3500.0f,-2500.0f
@@ -74,7 +76,6 @@ s32 daObjShelf::Act_c::Mthd_Create() {
     s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, 7, dBgS_MoveBGProc_Trans, 0xb00);
-        // TODO: hio??
         JUT_ASSERT(0x15b, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -108,52 +109,51 @@ void daObjShelf::Act_c::mode_wait_init() {
 /* 00000340-000003FC       .text mode_wait__Q210daObjShelf5Act_cFv */
 void daObjShelf::Act_c::mode_wait() {
     bool quake = dComIfGp_getDetect().chk_quake(&current.pos);
-    // TODO: HIO chk_attack?
-    bool bVar1 = false;
+    bool event = false;
     if (quake && prm_get_groundma() && !dComIfGs_isEventBit(0x1)) {
         hold_event();
         quake = false;
-        bVar1 = true;
+        event = true;
     }
 
     if (quake) {
         mode_vib_init();
-    } else if (bVar1) {
+    } else if (event) {
         mode_rot_init3();
     }
 }
 
 /* 000003FC-00000424       .text mode_vib_init__Q210daObjShelf5Act_cFv */
 void daObjShelf::Act_c::mode_vib_init() {
-    m2de = attr().m00;
-    mAngleY = 0;
-    mAngleX = 0;
-    mAngleZ = 0;
+    mTimer = attr().mVibDuration;
+    mVibY = 0;
+    mVibX = 0;
+    mVibZ = 0;
     mMode = 1;
 }
 
 /* 00000424-00000564       .text mode_vib__Q210daObjShelf5Act_cFv */
 void daObjShelf::Act_c::mode_vib() {
-    if (--m2de <= 0) {
+    if (--mTimer <= 0) {
         current.pos.y = home.pos.y;
         shape_angle.x = home.angle.x;
         shape_angle.z = home.angle.z;
         mode_rot_init();
     } else {
-        mAngleY += attr().m02;
-        current.pos.y = home.pos.y + cM_ssin(mAngleY) * attr().m04;
-        mAngleX += attr().m08;
-        mAngleZ += attr().m0a;
-        shape_angle.x = home.angle.x + (short)(cM_ssin(mAngleX) * attr().m0c);
-        shape_angle.z = home.angle.z + (short)(cM_ssin(mAngleZ) * attr().m10);
+        mVibY += attr().mVibYSpeed;
+        current.pos.y = home.pos.y + cM_ssin(mVibY) * attr().mVibYMagnitude;
+        mVibX += attr().mVibXSpeed;
+        mVibZ += attr().mVibZSpeed;
+        shape_angle.x = home.angle.x + (short)(cM_ssin(mVibX) * attr().mVibXMagnitude);
+        shape_angle.z = home.angle.z + (short)(cM_ssin(mVibZ) * attr().mVibZMagnitude);
     }
 }
 
 /* 00000564-000005A8       .text mode_rot_init__Q210daObjShelf5Act_cFv */
 void daObjShelf::Act_c::mode_rot_init() {
-    m2e6 = attr().m20 + 1;
-    m2d8 = 0.0f;
-    m2de = attr().m21;
+    mCurBounce = attr().mBounceNum + 1;
+    mRotSpeed = 0.0f;
+    mTimer = attr().mRotWaitDuration;
     mTargetAngle = 0x4000;
     m2e7 = false;
     mMode = 2;
@@ -161,9 +161,9 @@ void daObjShelf::Act_c::mode_rot_init() {
 
 /* 000005A8-000005E4       .text mode_rot_init2__Q210daObjShelf5Act_cFv */
 void daObjShelf::Act_c::mode_rot_init2() {
-    m2e6 = attr().m20 + 1;
-    m2d8 = attr().m24;
-    m2de = 0;
+    mCurBounce = attr().mBounceNum + 1;
+    mRotSpeed = attr().mInitSpeed2;
+    mTimer = 0;
     mTargetAngle = 0x4000;
     m2e7 = false;
     mMode = 2;
@@ -171,9 +171,9 @@ void daObjShelf::Act_c::mode_rot_init2() {
 
 /* 000005E4-00000620       .text mode_rot_init3__Q210daObjShelf5Act_cFv */
 void daObjShelf::Act_c::mode_rot_init3() {
-    m2e6 = attr().m20 + 1;
-    m2d8 = attr().m28;
-    m2de = 0;
+    mCurBounce = attr().mBounceNum + 1;
+    mRotSpeed = attr().mInitSpeed3;
+    mTimer = 0;
     mTargetAngle = 0;
     m2e7 = true;
     mMode = 2;
@@ -181,15 +181,15 @@ void daObjShelf::Act_c::mode_rot_init3() {
 
 /* 00000620-000007AC       .text mode_rot__Q210daObjShelf5Act_cFv */
 void daObjShelf::Act_c::mode_rot() {
-    if (m2de > 0) {
-        m2de--;
+    if (mTimer > 0) {
+        mTimer--;
         return;
     }
-    m2d8 += attr().m14;
-    m2d8 -= m2d8 * attr().m18;
-    shape_angle.x += (short)(int)m2d8;
+    mRotSpeed += attr().mRotAccel;
+    mRotSpeed -= mRotSpeed * attr().mRotDecay;
+    shape_angle.x += (short)(int)mRotSpeed;
     if (shape_angle.x > mTargetAngle) {
-        if (--m2e6 <= 0) {
+        if (--mCurBounce <= 0) {
             shape_angle.x = mTargetAngle;
             if (m2e7) {
                 mode_wait_init();
@@ -197,9 +197,10 @@ void daObjShelf::Act_c::mode_rot() {
                 mode_fell_init();
             }
         } else {
-            shape_angle.x = mTargetAngle - (int)((short)(int)(shape_angle.x - mTargetAngle) * attr().m1c);
-            m2d8 = m2d8 * -attr().m1c;
-            if (m2e6 == attr().m20) {
+            // Bounce
+            shape_angle.x = mTargetAngle - (int)((short)(int)(shape_angle.x - mTargetAngle) * attr().mBounceFactor);
+            mRotSpeed = mRotSpeed * -attr().mBounceFactor;
+            if (mCurBounce == attr().mBounceNum) {
                 fopAcM_seStart(this, 0x696d, 0);
             }
         }
@@ -215,7 +216,6 @@ void daObjShelf::Act_c::mode_fell_init() {
 void daObjShelf::Act_c::mode_fell() {
     if (dComIfGp_getDetect().chk_quake(&current.pos)) {
         mode_rot_init2();
-        // TODO: HIO chk_init?
     }
 }
 
