@@ -292,6 +292,7 @@ public:
     }
     
     int getMessageRupee() { return mMessageRupee; }
+    void setMessageRupee(s16 count) { mMessageRupee = count; }
 
     void setAuctionRupee(s16 count) { mAuctionRupee = count; }
     void setAuctionGauge(s16 gauge) { mAuctionGauge = gauge; }
@@ -551,7 +552,10 @@ public:
     void clearBaseAnimeID() { mMesgAnime = 0xFF; }
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
+    int getMesgCamInfoID() { return mMesgCameraTagInfo; }
+    void clearMesgCamInfoID() { mMesgCameraTagInfo = -1; }
     u8 getMesgStatus() { return mMesgStatus; }
+    void setMesgStatus(u8 status) { mMesgStatus = status; }
 
     u8 getButtonMode() { return mButtonMode; }
     void setButtonMode(u8 mode) { mButtonMode = mode; }
@@ -647,7 +651,7 @@ public:
     /* 0x48E6 */ s16 field_0x48e6;
     /* 0x48E8 */ s16 mItemBeastNumCounts[8];
     /* 0x48F8 */ u8 field_0x48F8[0x4918 - 0x48F8];
-    /* 0x4918 */ u16 mMsgCountNumber;
+    /* 0x4918 */ s16 mMsgCountNumber;
     /* 0x491A */ s16 mMsgSetNumber;
     /* 0x491C */ s16 mMessageRupee;
     /* 0x491E */ s16 mAuctionRupee;
@@ -822,6 +826,10 @@ inline void dComIfGp_resetItemTimer(s16 timer) {
 
 inline int dComIfGp_getMessageRupee() {
     return g_dComIfG_gameInfo.play.getMessageRupee();
+}
+
+inline void dComIfGp_setMessageRupee(s16 count) {
+    g_dComIfG_gameInfo.play.setMessageRupee(count);
 }
 
 inline void dComIfGp_setAuctionRupee(s16 count) {
@@ -2548,8 +2556,20 @@ inline void dComIfGp_clearMesgAnimeTagInfo() {
     g_dComIfG_gameInfo.play.clearNowAnimeID();
 }
 
+inline int dComIfGp_getMesgCameraTagInfo() {
+    return g_dComIfG_gameInfo.play.getMesgCamInfoID();
+}
+
+inline void dComIfGp_clearMesgCameraTagInfo() {
+    g_dComIfG_gameInfo.play.clearMesgCamInfoID();
+}
+
 inline u8 dComIfGp_getMesgStatus() {
     return g_dComIfG_gameInfo.play.getMesgStatus();
+}
+
+inline void dComIfGp_setMesgStatus(u8 status) {
+    g_dComIfG_gameInfo.play.setMesgStatus(status);
 }
 
 inline JKRAramBlock* dComIfGp_getPictureBoxData(int i) {
