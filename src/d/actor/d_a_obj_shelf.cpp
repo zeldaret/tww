@@ -59,7 +59,7 @@ const char daObjShelf::Act_c::M_arcname[] = "Otana";
 /* 00000078-0000012C       .text CreateHeap__Q210daObjShelf5Act_cFv */
 int daObjShelf::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData *)dComIfG_getObjectRes(M_arcname, OTANA_BDL_OTANA);
-    JUT_ASSERT(0x12c, model_data != 0);
+    JUT_ASSERT(0x12c, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     return mpModel != NULL;
 }
@@ -79,7 +79,7 @@ s32 daObjShelf::Act_c::Mthd_Create() {
 
     s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, 7, dBgS_MoveBGProc_Trans, 0xb00);
+        phase_state = MoveBGCreate(M_arcname, OTANA_DZB_OTANA, dBgS_MoveBGProc_Trans, 0xb00);
         JUT_ASSERT(0x15b, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -87,7 +87,7 @@ s32 daObjShelf::Act_c::Mthd_Create() {
 
 /* 0000029C-000002A4       .text Delete__Q210daObjShelf5Act_cFv */
 BOOL daObjShelf::Act_c::Delete() {
-    return 1;
+    return TRUE;
 }
 
 /* 000002A4-000002F0       .text Mthd_Delete__Q210daObjShelf5Act_cFv */
@@ -205,7 +205,7 @@ void daObjShelf::Act_c::mode_rot() {
             shape_angle.x = mTargetAngle - (int)((short)(int)(shape_angle.x - mTargetAngle) * attr().mBounceFactor);
             mRotSpeed = mRotSpeed * -attr().mBounceFactor;
             if (mCurBounce == attr().mBounceNum) {
-                fopAcM_seStart(this, 0x696d, 0);
+                fopAcM_seStart(this, JA_SE_OBJ_RACK_BREAK, 0);
             }
         }
     }
@@ -283,13 +283,13 @@ int Mthd_Execute(void* i_this) {
 }
 
 /* 00000AB0-00000ADC       .text Mthd_Draw__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-void Mthd_Draw(void* i_this) {
-    static_cast<Act_c*>(i_this)->Draw();
+BOOL Mthd_Draw(void* i_this) {
+    return static_cast<Act_c*>(i_this)->Draw();
 }
 
 /* 00000ADC-00000B08       .text Mthd_IsDelete__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-void Mthd_IsDelete(void* i_this) {
-    static_cast<Act_c*>(i_this)->IsDelete();
+BOOL Mthd_IsDelete(void* i_this) {
+    return static_cast<Act_c*>(i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Table = {
