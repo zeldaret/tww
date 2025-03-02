@@ -29,21 +29,25 @@ namespace daObjShelf {
             /* 0x1c */ float mBounceFactor;
             /* 0x20 */ u8 mBounceNum;
             /* 0x21 */ u8 mRotWaitDuration;
-            /* 0x22 */ short m22;
             /* 0x24 */ float mInitSpeed2;
             /* 0x28 */ float mInitSpeed3;
         };
 
         static const Attr_c L_attr = {
-            4,
-            30000, 4.0f,
-            0x7724,0x7148,
-            200.0f,200.0f,
-            600.0f,0.02f,
-            0.5f,
-            5,0,
-            0,
-            -3500.0f,-2500.0f
+            /* mVibDuration */ 4,
+            /* mVibYSpeed */ 30000,
+            /* mVibYMagnitude */ 4.0f,
+            /* mVibXSpeed */ 0x7724,
+            /* mVibZSpeed */ 0x7148,
+            /* mVibXMagnitude */ 200.0f,
+            /* mVibZMagnitude */ 200.0f,
+            /* mRotAccel */ 600.0f,
+            /* mRotDecay */ 0.02f,
+            /* mBounceFactor */ 0.5f,
+            /* mBounceNum */ 5,
+            /* mRotWaitDuration */ 0,
+            /* mInitSpeed2 */ -3500.0f,
+            /* mInitSpeed3 */ -2500.0f
         };
 
         inline const Attr_c & attr() { return L_attr; }
