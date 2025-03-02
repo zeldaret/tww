@@ -118,8 +118,7 @@ s32 daObjHat_c::createInit() {
     gravity = -5.0f;
 
     fopAc_ac_c* parent;
-    int res = fopAcM_SearchByID(fopAcM_GetLinkId(this), &parent);
-    if ((res != 0) && (parent != NULL)) {
+    if (fopAcM_SearchByID(fopAcM_GetLinkId(this), &parent) && (parent != NULL)) {
         setSpeed(static_cast<daNpcRoten_c*>(parent)->getWindVec());
     }
 
@@ -163,16 +162,15 @@ bool daObjHat_c::_execute() {
     fopAcM_posMove(this, mStts.GetCCMoveP());
     mAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
     if (mAcch.ChkWallHit()) {
-        fopAcM_SetSpeedF(this, 0);
+        fopAcM_SetSpeedF(this, 0.0f);
     }
     if (mAcch.ChkGroundHit()) {
-        cLib_addCalc(&this->speedF, 0.0, 0.3, 1000.0, 1.0);
+        cLib_addCalc(&this->speedF, 0.0f, 0.3f, 1000.0f, 1.0f);
     }
 
     mCyl.SetC(this->current.pos);
     dComIfG_Ccsp()->Set(&mCyl);
-    u32 res = mCyl.ChkTgHit();
-    if (res != 0) {
+    if (mCyl.ChkTgHit()) {
         setSpeed(*mCyl.GetTgRVecP());
     }
 
@@ -181,7 +179,7 @@ bool daObjHat_c::_execute() {
 }
 
 /* 00000884-00000888       .text executeNormal__10daObjHat_cFv */
-void daObjHat_c::executeNormal() { /* empty? */ }
+void daObjHat_c::executeNormal() { }
 
 /* 00000888-000008B4       .text getPrmHatNo__10daObjHat_cFv */
 u32 daObjHat_c::getPrmHatNo() {
