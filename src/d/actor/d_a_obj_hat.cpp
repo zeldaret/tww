@@ -39,9 +39,7 @@ static dCcD_SrcCyl l_cyl_src = {
     },
     // cM3dGCylS
     {
-        /* Center */ 0.0f,
-        0.0f,
-        0.0f,
+        /* Center */ 0.0f, 0.0f, 0.0f,
         /* Radius */ 70.0f,
         /* Height */ 80.0f,
     },
@@ -150,14 +148,13 @@ BOOL daObjHat_c::_execute() {
 
     (this->*moveProc[mState])();
     f32 xspeed = mMoveNorm.x * speedF;
-    f32 ymove = speed.y + gravity;
+    f32 yspeed = speed.y + gravity;
     f32 zspeed = mMoveNorm.z * speedF;
 
-    // because downwards vector quantity has negative value
-    if (ymove < fopAcM_GetMaxFallSpeed(this)) {
-        ymove = fopAcM_GetMaxFallSpeed(this);
+    if (yspeed < fopAcM_GetMaxFallSpeed(this)) {
+        yspeed = fopAcM_GetMaxFallSpeed(this);
     }
-    fopAcM_SetSpeed(this, xspeed, ymove, zspeed);
+    fopAcM_SetSpeed(this, xspeed, yspeed, zspeed);
 
     fopAcM_posMove(this, mStts.GetCCMoveP());
     mAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);

@@ -34,20 +34,20 @@ namespace daObjShelf {
         };
 
         static const Attr_c L_attr = {
-            /* mVibDuration */ 4,
-            /* mVibYSpeed */ 30000,
-            /* mVibYMagnitude */ 4.0f,
-            /* mVibXSpeed */ 0x7724,
-            /* mVibZSpeed */ 0x7148,
-            /* mVibXMagnitude */ 200.0f,
-            /* mVibZMagnitude */ 200.0f,
-            /* mRotAccel */ 600.0f,
-            /* mRotDecay */ 0.02f,
-            /* mBounceFactor */ 0.5f,
-            /* mBounceNum */ 5,
+            /* mVibDuration     */ 4,
+            /* mVibYSpeed       */ 30000,
+            /* mVibYMagnitude   */ 4.0f,
+            /* mVibXSpeed       */ 30500,
+            /* mVibZSpeed       */ 29000,
+            /* mVibXMagnitude   */ 200.0f,
+            /* mVibZMagnitude   */ 200.0f,
+            /* mRotAccel        */ 600.0f,
+            /* mRotDecay        */ 0.02f,
+            /* mBounceFactor    */ 0.5f,
+            /* mBounceNum       */ 5,
             /* mRotWaitDuration */ 0,
-            /* mInitSpeed2 */ -3500.0f,
-            /* mInitSpeed3 */ -2500.0f
+            /* mInitSpeed2      */ -3500.0f,
+            /* mInitSpeed3      */ -2500.0f,
         };
 
         inline const Attr_c & attr() { return L_attr; }

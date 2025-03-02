@@ -43,7 +43,6 @@ public:
     /* 0x640 */ cXyz mMoveNorm;
     /* 0x64c */ u8 mState;
     /* 0x64d */ u8 mHatNo;
-    /* Place member variables here */
 }; /* size: 0x650 */
 
 #endif /* D_A_OBJ_HAT_H */
