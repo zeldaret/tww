@@ -13,13 +13,13 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 
 static const int l_bmd_ix_tbl[] = {RO_BDL_RO_HAT, RO_BDL_RO_HAT2, RO_BDL_RO_HAT3, RO_BDL_RO_HAT};
-static const int l_bck_ix_tbl[] = {RO_INDEX_BCK_HAT_WID, RO_BCK_HAT2_WIND, RO_BCK_HAT3_WID,
+static const int l_bck_ix_tbl[] = {RO_BCK_HAT_WID, RO_BCK_HAT2_WIND, RO_BCK_HAT3_WID,
                                    RO_BCK_HAT_WID};
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,//AT_TYPE_UNK1000,
+        /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ AT_TYPE_WIND,
@@ -29,7 +29,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,//AT_TYPE_WIND,
+        /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
@@ -63,23 +63,23 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 000003CC-0000045C       .text _create__10daObjHat_cFv */
 s32 daObjHat_c::_create() {
-    // if (this->actor_condition & )
     fopAcM_SetupActor(this, daObjHat_c);
 
-    int var = dComIfG_resLoad(&mPhs, "Ro");
+    int phase_state = dComIfG_resLoad(&mPhs, "Ro");
 
-    if (var == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap((fopAc_ac_c*)this, &CheckCreateHeap, 0uL)) {
-            return cPhs_ERROR_e;
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0uL)) {
+            phase_state = createInit();
         } else {
-            return createInit();
+            phase_state = cPhs_ERROR_e;
         }
     }
+    return phase_state;
 }
 
 /* 0000045C-000005D4       .text createHeap__10daObjHat_cFv */
 BOOL daObjHat_c::createHeap() {
-    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectIDRes("Ro", l_bmd_ix_tbl[this->mHatNo]);
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectIDRes("Ro", l_bmd_ix_tbl[mHatNo]);
     if (pModelData == NULL) {
         return FALSE;
     } else {
@@ -88,11 +88,11 @@ BOOL daObjHat_c::createHeap() {
             (J3DAnmTransformKey*)dComIfG_getObjectIDRes("Ro", l_bck_ix_tbl[mHatNo]),
             J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
 
-        this->mpMorf = morf;
-        if (this->mpMorf == NULL || this->mpMorf->getModel() == NULL) {
+        mpMorf = morf;
+        if (mpMorf == NULL || mpMorf->getModel() == NULL) {
             return FALSE;
         } else {
-            this->mpModel = this->mpMorf->getModel();
+            mpModel = mpMorf->getModel();
             mAcchCir.SetWall(30.0f, 30.0f);
             mAcch.Set(fopAcM_GetPosition_p(this),
                       fopAcM_GetOldPosition_p(this),
@@ -128,13 +128,13 @@ s32 daObjHat_c::createInit() {
 }
 
 /* 000006AC-000006DC       .text _delete__10daObjHat_cFv */
-bool daObjHat_c::_delete() {
+BOOL daObjHat_c::_delete() {
     dComIfG_resDelete(&mPhs, "Ro");
     return TRUE;
 }
 
 /* 000006DC-0000073C       .text _draw__10daObjHat_cFv */
-bool daObjHat_c::_draw() {
+BOOL daObjHat_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mpMorf->updateDL();
@@ -147,12 +147,12 @@ static daObjHat_c::MoveFunc_t moveProc[] = {
 
 
 /* 0000073C-00000884       .text _execute__10daObjHat_cFv */
-bool daObjHat_c::_execute() {
+BOOL daObjHat_c::_execute() {
 
-    (this->*moveProc[this->mState])();
-    f32 xspeed = this->mMoveNorm.x * this->speedF;
-    f32 ymove = this->speed.y + this->gravity;
-    f32 zspeed = this->mMoveNorm.z * this->speedF;
+    (this->*moveProc[mState])();
+    f32 xspeed = mMoveNorm.x * speedF;
+    f32 ymove = speed.y + gravity;
+    f32 zspeed = mMoveNorm.z * speedF;
 
     // because downwards vector quantity has negative value
     if (ymove < fopAcM_GetMaxFallSpeed(this)) {
@@ -166,7 +166,7 @@ bool daObjHat_c::_execute() {
         fopAcM_SetSpeedF(this, 0);
     }
     if (mAcch.ChkGroundHit()) {
-        cLib_addCalc(&this->speedF, 0.0, 0.3, 1000.0, 1.0);
+        cLib_addCalc(&speedF, 0.0, 0.3, 1000.0, 1.0);
     }
 
     mCyl.SetC(this->current.pos);
@@ -205,7 +205,7 @@ void daObjHat_c::setSpeed(cXyz speed) {
     speed.y = 0;
     speed = speed.normZP();
 
-    this->mMoveNorm = speed;
+    mMoveNorm = speed;
 
     fopAcM_SetSpeedF(this, 20.0f);
 
@@ -218,22 +218,22 @@ void daObjHat_c::setSpeed(cXyz speed) {
 
 /* 00000A20-00000A40       .text daSampleCreate__FPv */
 static s32 daSampleCreate(void* i_this) {
-    static_cast<daObjHat_c*>(i_this)->_create();
+    return static_cast<daObjHat_c*>(i_this)->_create();
 }
 
 /* 00000A40-00000A60       .text daSampleDelete__FPv */
 static BOOL daSampleDelete(void* i_this) {
-    static_cast<daObjHat_c*>(i_this)->_delete();
+    return static_cast<daObjHat_c*>(i_this)->_delete();
 }
 
 /* 00000A60-00000A80       .text daSampleExecute__FPv */
 static BOOL daSampleExecute(void* i_this) {
-    static_cast<daObjHat_c*>(i_this)->_execute();
+    return static_cast<daObjHat_c*>(i_this)->_execute();
 }
 
 /* 00000A80-00000AA0       .text daSampleDraw__FPv */
 static BOOL daSampleDraw(void* i_this) {
-    static_cast<daObjHat_c*>(i_this)->_draw();
+    return static_cast<daObjHat_c*>(i_this)->_draw();
 }
 
 /* 00000AA0-00000AA8       .text daSampleIsDelete__FPv */
