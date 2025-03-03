@@ -46,7 +46,6 @@ public:
 
     dNpc_EventCut_c cut;
 
-
     u32 field_0x6d8;
     u32 field_0x6dc;
     u32 field_0x738;
@@ -56,7 +55,7 @@ public:
     /* 0x744 */ s32 partners[8];
     /* 0x764 */ s16 npartners;
     u8 _;
-    u8 field_0x767;
+    s8 event_state;
     s8 field_0x768;
     u8 field_0x769;
     s8 field_0x76a;
@@ -74,8 +73,8 @@ public:
 public:
     /* 0x00 */ u32 field;
     /* 0x04 */ s8 mNo;
-    f32 f1;
-    f32 f2;
+    f32 mAttentionMaxDiff;
+    f32 mAttentionMaxDist;
     /* Place member variables here */
 };
 
