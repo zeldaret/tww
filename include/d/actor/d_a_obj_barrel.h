@@ -2,14 +2,40 @@
 #define D_A_OBJ_BARREL_H
 
 #include "f_op/f_op_actor.h"
+#include "c/c_damagereaction.h"
+#include "d/d_a_obj.h"
 
 namespace daObjBarrel {
     class Act_c : public fopAc_ac_c {
     public:
-        void attr() const {}
+        enum Prm_e {
+            PRM_CULL_W = 0x03,
+            PRM_CULL_S = 0x1c,
+        };
+
+        struct Attr_c {
+            /* 0x00 */ u16 m00;
+            /* 0x02 */ u8 m02[0x4 - 0x2];
+            /* 0x04 */ float m04;
+            /* 0x08 */ float m08;
+            /* 0x0C */ u8 m0C;
+            /* 0x0D */ u8 m0D[0x18 - 0xD];
+            /* 0x18 */ float m18;
+            /* 0x1C */ float m1C;
+            /* 0x20 */ float m20;
+            /* 0x24 */ float m24;
+            /* 0x28 */ u8 m28[0x2A - 0x28];
+            /* 0x2A */ short m2A;
+            /* 0x2C */ u8 m2C[2]; // ??
+            /* 0x2E */ u8 m2E;
+            /* 0x2F */ u8 m2F;
+            /* 0x30 */ u8 m30;
+        };
+
+        const Attr_c& attr() const { return M_attr; }
         void get_slant_angle() {}
         bool pos_init() {
-            if (m60C == 0) {
+            if (mMode == 0) {
                 current.pos = home.pos;
                 current.angle = home.angle;
                 shape_angle = home.angle;
@@ -18,11 +44,11 @@ namespace daObjBarrel {
                 return false;
             }
         }
-        void prm_get_cull() const {}
+        int prm_get_cull() const { daObj::PrmAbstract<Prm_e>(this, PRM_CULL_W, PRM_CULL_S); }
         void set_slant_angle(s16) {}
     
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        static BOOL solidHeapCB(fopAc_ac_c*);
+        bool create_heap();
         s32 _create();
         bool _delete();
         void mode_wait_init();
@@ -40,7 +66,7 @@ namespace daObjBarrel {
         void mode_walk_init();
         void mode_walk();
         void vib_pos_ang();
-        void mode_proc_call();
+        bool mode_proc_call();
         void set_mtx();
         void init_mtx();
         void set_walk_rot();
@@ -55,16 +81,35 @@ namespace daObjBarrel {
         void chk_sink_water();
         void chk_sinkdown_water();
         void eff_land_smoke();
-        void damage_cc_proc();
-        void damage_bg_proc();
-        void damage_bg_proc_directly();
+        bool damage_cc_proc();
+        bool damage_bg_proc();
+        bool damage_bg_proc_directly();
         bool _execute();
         bool _draw();
+
+        static const char M_arcname[9];
+        static const dCcD_SrcCyl M_cyl_src;
+        static const Attr_c M_attr;
     
     public:
-        /* Place member variables here */
-        /* 0x290 */ u8 m290[0x60C - 0x290];
-        /* 0x60C */ int m60C;
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ J3DModel* mpModel;
+        /* 0x29C */ dBgS_Acch mAcch;
+        /* 0x460 */ dBgS_AcchCir mAcchCir;
+        /* 0x4A0 */ dCcD_Stts mStts;
+        /* 0x4DC */ dCcD_Cyl mCyl;
+        /* 0x60C */ int mMode;
+        /* 0x610 */ short m610;
+        /* 0x612 */ short m612;
+        /* 0x614 */ int m614;
+        /* 0x618 */ float m618;
+        /* 0x61C */ u8 m61C[0x620 - 0x61C];
+        /* 0x620 */ u8 m620;
+        /* 0x621 */ u8 m621;
+        /* 0x622 */ bool m622;
+        /* 0x623 */ u8 m623;
+        /* 0x624 */ cXyz m624;
+        /* 0x630 */ short m630;
     };
     
     namespace Method {
