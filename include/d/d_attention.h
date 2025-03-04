@@ -140,7 +140,7 @@ public:
     void stockAttention(u32);
     fopAc_ac_c *nextAttention(u32);
     s32 freeAttention();
-    void chaseAttention();
+    bool chaseAttention();
     f32 EnemyDistance(fopAc_ac_c*);
     void runSoundProc();
     void runDrawProc();
