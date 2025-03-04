@@ -56,6 +56,7 @@ public:
 
     /* 0x73e */ s16 tenth_cost;
 
+    /* 0x742 */ s16 field_0x740;
     /* 0x742 */ s16 field_0x742;
 
     /* 0x744 */ s32 partners[8];

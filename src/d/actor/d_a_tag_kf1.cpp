@@ -85,10 +85,9 @@ void daTag_Kf1_c::eventOrder() {
             fopAcM_orderSpeakEvent(this);
         }
     }
-    else if (event_state > 2) {
-        fopAcM_orderOtherEvent(this, a_demo_name_tbl[event_state]);
+    else if (event_state >= 3) {
+        fopAcM_orderOtherEvent(this, a_demo_name_tbl[event_state - 3]);
     }
-
 }
 
 /* 00000314-00000380       .text checkOrder__11daTag_Kf1_cFv */
@@ -374,6 +373,7 @@ bool daTag_Kf1_c::_delete() {
 
 /* 00000CBC-00000E98       .text _create__11daTag_Kf1_cFv */
 s32 daTag_Kf1_c::_create() {
+    s32 ret = cPhs_COMPLEATE_e;
     fopAcM_SetupActor(this, daTag_Kf1_c);
 
     // field_0x6d8 = 0;
@@ -387,12 +387,11 @@ s32 daTag_Kf1_c::_create() {
         if (l_HIO.mNo < 0) {
             l_HIO.mNo = mDoHIO_createChild("クタニ焼き監視タグ", &l_HIO);
         }
-        int res = createInit();
-        if (res == 0) {
-            return cPhs_ERROR_e;
+        if (!createInit()) {
+            ret = cPhs_ERROR_e;
         }
     }
-    return cPhs_COMPLEATE_e;
+    return ret;
     /* Nonmatching */
 }
 
