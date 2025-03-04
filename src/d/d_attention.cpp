@@ -572,8 +572,51 @@ s32 dAttention_c::freeAttention() {
 }
 
 /* 8009E764-8009E978       .text chaseAttention__12dAttention_cFv */
-void dAttention_c::chaseAttention() {
-    /* Nonmatching */
+bool dAttention_c::chaseAttention() {
+    int offset = mLockOnOffs;
+    fopAc_ac_c* actor = mLockOnList[offset].getActor();
+
+    if (actor == NULL) {
+        return false;
+    }
+
+    cSGlobe globe1 = actor->attention_info.position - mpPlayer->attention_info.position;
+    cSAngle angle1;
+    angle1 = globe1.U() - fopAcM_GetShapeAngle_p(mpPlayer)->y;
+
+    cSGlobe globe2(mpPlayer->attention_info.position - actor->attention_info.position);
+    cSAngle angle2;
+    angle2 = globe2.U() - fopAcM_GetShapeAngle_p(actor)->y;
+
+    u32 type;
+    f32 weight = calcWeight('L', actor, globe1.R(), angle1.Val(), angle2.Val(), &type);
+    if (weight <= 0.0f) {
+        type = mLockOnList[offset].mType;
+        int tbl_idx = actor->attention_info.distances[type];
+
+        if (!chkAttMask(type, actor->attention_info.flags)) {
+            return false;
+        } else if (check_event_condition(type, actor->eventInfo.getCondition()) != 0) {
+            return false;
+        } else if (check_flontofplayer(dist_table[tbl_idx].mFrontAngleCheckBits, angle1.Val(), angle2.Val())) {
+            return false;
+        } else if (check_distace(&mpPlayer->attention_info.position, angle1.Val(), &actor->attention_info.position,
+                                 dist_table[tbl_idx].mDistXZMaxRelease,
+                                 dist_table[tbl_idx].mDistXZAngleAdjust,
+                                 dist_table[tbl_idx].mDeltaYMax, dist_table[tbl_idx].mDeltaYMin)) {
+            mLockOnList[offset].mWeight = distace_weight(globe1.R(), angle1.Val(), 0.5f);
+            return true;
+        }
+
+        return false;
+    }
+
+    mLockOnList[offset].setActor(actor);
+    mLockOnList[offset].mWeight = weight;
+    mLockOnList[offset].mDistance = globe1.R();
+    mLockOnList[offset].mType = type;
+    return true;
+
 }
 
 /* 8009E978-8009EA24       .text EnemyDistance__12dAttention_cFP10fopAc_ac_c */
