@@ -470,7 +470,7 @@ void dAttention_c::stockAttention(u32 interactMask) {
 }
 
 /* 8009E684-8009E728       .text nextAttention__12dAttention_cFUl */
-void dAttention_c::nextAttention(u32 interactMask) {
+fopAc_ac_c *dAttention_c::nextAttention(u32 interactMask) {
     fopAc_ac_c * pTarget = fopAcM_SearchByID(mLockOnTargetBsPcID);
     initList(interactMask);
     if (makeList())
@@ -479,7 +479,7 @@ void dAttention_c::nextAttention(u32 interactMask) {
     if (pTarget == mLockOnList[0].getActor() && mLockOnNum > 1)
         mLockOnOffs = 1;
 
-    LockonTarget(0);
+    return LockonTarget(0);
 }
 
 /* 8009E728-8009E764       .text freeAttention__12dAttention_cFv */
