@@ -498,7 +498,32 @@ int dAttention_c::SelectAttention(fopAc_ac_c* ac) {
 
 /* 8009E474-8009E5C4       .text sortList__12dAttention_cFv */
 void dAttention_c::sortList() {
-    /* Nonmatching */
+    int i;
+    int j;
+    dAttList_c swap;
+    dAttList_c* list;
+
+    list = mLockOnList;
+    for (i = 0; i < mLockOnNum - 1; i++) {
+        for (j = i + 1; j < mLockOnNum; j++) {
+            if (list[i].mWeight > list[j].mWeight) {
+                memcpy(&swap, &list[j], sizeof(dAttList_c));
+                memcpy(&list[j], &list[i], sizeof(dAttList_c));
+                memcpy(&list[i], &swap, sizeof(dAttList_c));
+            }
+        }
+    }
+
+    list = mActionList;
+    for (i = 0; i < mActionNum - 1; i++) {
+        for (j = i + 1; j < mActionNum; j++) {
+            if (list[i].mWeight > list[j].mWeight) {
+                memcpy(&swap, &list[j], sizeof(dAttList_c));
+                memcpy(&list[j], &list[i], sizeof(dAttList_c));
+                memcpy(&list[i], &swap, sizeof(dAttList_c));
+            }
+        }
+    }
 }
 
 /* 8009E5C4-8009E684       .text stockAttention__12dAttention_cFUl */
