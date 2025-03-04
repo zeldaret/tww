@@ -224,7 +224,7 @@ dAttList_c* dAttention_c::getActionBtnZ() {
 }
 
 /* 8009DAA4-8009DAF4       .text chkAttMask__12dAttention_cFUlUl */
-u32 dAttention_c::chkAttMask(u32 type, u32 mask) {
+s32 dAttention_c::chkAttMask(u32 type, u32 mask) {
     for (s32 i = 0; i < loc_type_num; i++) {
         if (type == loc_type_tbl[i].mType) {
             return mask & loc_type_tbl[i].mMask;
@@ -235,7 +235,7 @@ u32 dAttention_c::chkAttMask(u32 type, u32 mask) {
 }
 
 /* 8009DAF4-8009DB60       .text check_event_condition__FUlUs */
-bool check_event_condition(u32 attnType, u16 flags) {
+s32 check_event_condition(u32 attnType, u16 flags) {
     switch(attnType) {
         case fopAc_Attn_TYPE_SPEAK_e:
         case fopAc_Attn_TYPE_TALK_e:
@@ -260,7 +260,7 @@ bool check_event_condition(u32 attnType, u16 flags) {
 
 
 /* 8009DB60-8009DC28       .text check_flontofplayer__FUlss */
-bool check_flontofplayer(u32 checkMask, s16 angle1, s16 angle2) {
+s32 check_flontofplayer(u32 checkMask, s16 angle1, s16 angle2) {
     /// merged from TP
     static uint ftp_table[] = {
         0x04, 0x01, 0x02, 0x08, 0x10, 0x20, 0x40, 0x80, 0x100,
@@ -318,7 +318,7 @@ f32 distace_angle_adjust(f32 distance, s16 angle, f32 ratio) {
 }
 
 /* 8009DCD4-8009DE44       .text check_distace__FP4cXyzsP4cXyzffff */
-bool check_distace(cXyz* playerPos, s16 angle, cXyz* actorPos, f32 maxDistXZBase, f32 maxDistAngleMul, f32 maxDeltaY, f32 minDeltaY) {
+s32 check_distace(cXyz* playerPos, s16 angle, cXyz* actorPos, f32 maxDistXZBase, f32 maxDistAngleMul, f32 maxDeltaY, f32 minDeltaY) {
     cXyz dist = *actorPos - *playerPos;
 
     if (dist.y <= minDeltaY || dist.y >= maxDeltaY) {
