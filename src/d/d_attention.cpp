@@ -334,8 +334,58 @@ s32 check_distace(cXyz* playerPos, s16 angle, cXyz* actorPos, f32 maxDistXZBase,
 }
 
 /* 8009DE44-8009E03C       .text calcWeight__12dAttention_cFiP10fopAc_ac_cfssPUl */
-f32 dAttention_c::calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*) {
-    /* Nonmatching */
+f32 dAttention_c::calcWeight(int listType, fopAc_ac_c* actor, f32 distance, s16 angle, s16 invAngle, u32* attnType) {
+    int i;
+    int num;
+    LocTbl* table;
+
+    num = (listType == 'L') ? loc_type_num : act_type_num;
+    table = (listType == 'L') ? loc_type_tbl : act_type_tbl;
+
+    f32 weight = 0.0f;
+    f32 max_weight = 0.0f;
+
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if (player != NULL) {
+        if (actor == fopAcM_SearchByID(player->getGrabActorID())) {
+            return 0.0f;
+        }
+    }
+
+    for (i = 0; i < num; i++) {
+        f32 dist_weight;
+        LocTbl* locEntry = &table[i];
+
+        if (mFlagMask & locEntry->mMask & actor->attention_info.flags) {
+            DistTbl* distEntry;
+            u8 dist_index = actor->attention_info.distances[locEntry->mType];
+
+            if (check_event_condition(locEntry->mType, actor->eventInfo.getCondition())) {
+                dist_weight = 0.0f;
+            } else {
+                distEntry = &dist_table[dist_index];
+                if (check_flontofplayer(distEntry->mFrontAngleCheckBits, angle, invAngle)) {
+                    dist_weight = 0.0f;
+                } else if (!check_distace(&mpPlayer->attention_info.position, angle, &actor->attention_info.position,
+                                          distEntry->mDistXZMax, distEntry->mDistXZAngleAdjust, distEntry->mDeltaYMax,
+                                          distEntry->mDeltaYMin)) {
+                    dist_weight = 0.0f;
+                } else {
+                    dist_weight = distace_weight(distance, angle, 0.5f);
+                }
+            }
+            if (dist_weight > 0.0f) {
+                f32 dist_tbl_weight = dist_table[dist_index].mWeightDivisor;
+                if (dist_tbl_weight > max_weight) {
+                    max_weight = dist_tbl_weight;
+                    weight = dist_weight / dist_tbl_weight;
+                    *attnType = locEntry->mType;
+                }
+            }
+        }
+    }
+
+    return weight;
 }
 
 /* 8009E03C-8009E128       .text setLList__12dAttention_cFP10fopAc_ac_cffUl */
