@@ -129,7 +129,7 @@ public:
     dAttList_c* getActionBtnX();
     dAttList_c* getActionBtnY();
     dAttList_c* getActionBtnZ();
-    u32 chkAttMask(u32, u32);
+    s32 chkAttMask(u32, u32);
     f32 calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*);
     void setLList(fopAc_ac_c*, f32, f32, u32);
     void setAList(fopAc_ac_c*, f32, f32, u32);
