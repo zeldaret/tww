@@ -669,8 +669,19 @@ void dAttention_c::Draw() {
 }
 
 /* 8009F5FC-8009F6B4       .text setAnm__10dAttDraw_cFiii */
-void dAttDraw_c::setAnm(int, int, int) {
-    /* Nonmatching */
+void dAttDraw_c::setAnm(int resIdxTransform, int resIdxColor, int loopMode) {
+    J3DAnmTransform *pAnimRes;
+    J3DAnmColor *color;
+
+    pAnimRes = (J3DAnmTransform *) dRes_control_c::getRes("Always", resIdxTransform, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+    this->anm->setAnm(pAnimRes, loopMode, 0.0, 1.0, 0.0, -1.0, NULL);
+    if (resIdxColor < 0) {
+        this->mpAnmClr = NULL;
+    }
+    else {
+        color = (J3DAnmColor *)dRes_control_c::getRes("Always", resIdxColor, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+        this->mpAnmClr = color;
+    }
 }
 
 /* 8009F6B4-8009F834       .text draw__10dAttDraw_cFR4cXyzPA4_f */
