@@ -138,7 +138,7 @@ public:
     int SelectAttention(fopAc_ac_c*);
     void sortList();
     void stockAttention(u32);
-    void nextAttention(u32);
+    fopAc_ac_c *nextAttention(u32);
     s32 freeAttention();
     void chaseAttention();
     f32 EnemyDistance(fopAc_ac_c*);
