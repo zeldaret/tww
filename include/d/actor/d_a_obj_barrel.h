@@ -19,17 +19,30 @@ namespace daObjBarrel {
             /* 0x04 */ float m04;
             /* 0x08 */ float m08;
             /* 0x0C */ u8 m0C;
-            /* 0x0D */ u8 m0D[0x18 - 0xD];
+            /* 0x0D */ u8 m0D[0x10 - 0xD];
+            /* 0x10 */ float m10;
+            /* 0x14 */ u8 m14[0x18 - 0x14];
             /* 0x18 */ float m18;
             /* 0x1C */ float m1C;
             /* 0x20 */ float m20;
             /* 0x24 */ float m24;
-            /* 0x28 */ u8 m28[0x2A - 0x28];
+            /* 0x28 */ short m28;
             /* 0x2A */ short m2A;
-            /* 0x2C */ u8 m2C[2]; // ??
+            /* 0x2C */ short m2C;
             /* 0x2E */ u8 m2E;
             /* 0x2F */ u8 m2F;
             /* 0x30 */ u8 m30;
+            /* 0x31 */ u8 m31;
+            /* 0x32 */ u8 m32[0x34 - 0x32];
+            /* 0x34 */ float m34;
+            /* 0x38 */ u8 m38; // ??
+            /* 0x39 */ u8 m39;
+            /* 0x3A */ u8 m3A;
+            /* 0x3B */ u8 m3B;
+            /* 0x3C */ u8 m3C;
+            /* 0x3D */ u8 m3D[0x40 - 0x3D];
+            /* 0x40 */ float m40;
+            /* 0x44 */ float m44;
         };
 
         const Attr_c& attr() const { return M_attr; }
@@ -74,12 +87,12 @@ namespace daObjBarrel {
         void damaged(bool);
         void cull_set_draw();
         void cull_set_move();
-        void get_se_map_hit() const;
+        u32 get_se_map_hit() const;
         void set_senv(int, int) const;
         void se_fall_water();
         void eff_hit_water_splash();
-        void chk_sink_water();
-        void chk_sinkdown_water();
+        bool chk_sink_water();
+        bool chk_sinkdown_water();
         void eff_land_smoke();
         bool damage_cc_proc();
         bool damage_bg_proc();
@@ -103,11 +116,12 @@ namespace daObjBarrel {
         /* 0x612 */ short m612;
         /* 0x614 */ int m614;
         /* 0x618 */ float m618;
-        /* 0x61C */ u8 m61C[0x620 - 0x61C];
-        /* 0x620 */ u8 m620;
-        /* 0x621 */ u8 m621;
+        /* 0x61C */ short m61C;
+        /* 0x61E */ u8 m61E[0x620 - 0x61E];
+        /* 0x620 */ bool m620;
+        /* 0x621 */ s8 m621;
         /* 0x622 */ bool m622;
-        /* 0x623 */ u8 m623;
+        /* 0x623 */ bool m623;
         /* 0x624 */ cXyz m624;
         /* 0x630 */ short m630;
     };
