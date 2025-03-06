@@ -35,42 +35,19 @@ public:
 
     
 public:
-    /* Place member variables here */
-
-    // /* 0x290 */ dBgS_Acch acch;
-    // /* 0x454 */ dBgS_AcchCir acch_cir;
-    // /* 0x494 */ dCcD_Stts stts;
-    // /* 0x4d0 */ dCcD_Cyl cyl;
-    //fopNpc_npc_c npc;
-
-    //dNpc_EventCut_c cut;
-    //ActionFunc field_0x6c4;
-    // ActionFunc field_0x6c8;
-    // ActionFunc field_0x6cc;
-    ActionFunc func;
+    /* 0x6c4 */ ActionFunc func;
     /* 0x6d0 */ dNpc_EventCut_c tag_event_cut;
-    //u32 field_0x6d8;
-    //u32 field_0x6dc;
-    //u32 field_0x738;
     /* 0x73c */ u8 hasAttention;
-
     /* 0x73e */ s16 tenth_cost;
-
-    /* 0x740 */ s16 field_0x740;
-    /* 0x742 */ s16 field_0x742;
+    /* 0x742 */ s16 rupee_count;
 
     /* 0x744 */ s32 partners[8];
     /* 0x764 */ s16 npartners;
     /* 0x766 */ s8 mActIdx;
     /* 0x767 */ s8 event_state;
-    s8 field_0x768;
+    s8 stt;
     u8 field_0x769;
-    s8 field_0x76a;
-    char pad2[39];
-    /* 0x769 */ u8 id;
-    u8 byte1;
-    u8 byte2;
-    u8 byte3;
+    s8 mActionState;
 }; /* Size: 0x076c */
 
 class daTag_Kf1_HIO_c : public JORReflexible {

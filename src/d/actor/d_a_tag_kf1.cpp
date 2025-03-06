@@ -49,14 +49,13 @@ BOOL daTag_Kf1_c::createInit() {
     // TODO first arg should be some function pointer
     this->set_action(&daTag_Kf1_c::wait_action1, NULL);
     return TRUE;
-    /* Nonmatching */
 }
 static char* a_demo_name_tbl[] = {"BENSYO"};
 static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
 char daTag_Kf1_c::setStt(signed char c) {
-   field_0x768 = c;
+    stt = c;
     /* Nonmatching */
 }
 
@@ -72,7 +71,7 @@ u16 daTag_Kf1_c::next_msgStatus(unsigned long* arg) {
             break;
             //return 0xf;
         case 0x1c2e:
-            field_0x742 = dComIfGs_getRupee();
+            rupee_count = dComIfGs_getRupee();
         default: ret = 0x10;
     }
     return ret;
@@ -99,8 +98,6 @@ void daTag_Kf1_c::checkOrder() {
         (event_state == cPhs_STOP_e)) {
         event_state = 0;
     }
-
-    /* Nonmatching */
 }
 
 /* 00000380-00000470       .text chkAttention__11daTag_Kf1_cF4cXyz */
@@ -113,7 +110,6 @@ BOOL daTag_Kf1_c::chkAttention(cXyz vec) {
         ret = TRUE;
     }
     return ret;
-    /* Nonmatching */
 }
 
 /* 00000470-0000057C       .text partner_srch__11daTag_Kf1_cFv */
@@ -164,7 +160,6 @@ s16 daTag_Kf1_c::checkPartner() {
         ++id;
     }
     return hits;
-    /* Nonmatching */
 }
 
 /* 00000604-00000650       .text goto_nextStage__11daTag_Kf1_cFv */
@@ -206,13 +201,12 @@ bool daTag_Kf1_c::event_mesEnd() {
 void daTag_Kf1_c::bensyoInit() { 
     dComIfGp_setItemRupeeCount(-(this->tenth_cost * 10));
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-    if (this->field_0x742 < tenth_cost * 10) {
+    if (this->rupee_count < tenth_cost * 10) {
         this->mCurrMsgNo = 0x1c2f;
     }
     else {
         this->mCurrMsgNo = 0x1c30;
     }
-    /* Nonmatching */ 
 }
 
 /* 000007A4-000007C4       .text event_bensyo__11daTag_Kf1_cFv */
@@ -289,12 +283,12 @@ void daTag_Kf1_c::event_proc() {
 BOOL daTag_Kf1_c::set_action(ActionFunc action, void* param) { 
     if (this->func != action) {
         if (this->func) {
-            this->field_0x76a = 0xff;
+            this->mActionState = 0xff;
             (this->*func)(param);
         }
         this->func = action;
 
-        this->field_0x76a = 0;
+        this->mActionState = 0;
         (this->*func)(param);
     }
 
@@ -308,27 +302,25 @@ bool daTag_Kf1_c::wait01() {
         this->event_state = 3;
     }
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00000B14-00000B1C       .text wait02__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::wait02() {
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00000B1C-00000BE8       .text wait_action1__11daTag_Kf1_cFPv */
 BOOL daTag_Kf1_c::wait_action1(void*) {
-    if (field_0x76a == 0) {
+    if (mActionState == 0) {
         setStt(1);
-        field_0x76a++;
-    } else if (field_0x76a != -1) {
-        if (field_0x76a == 1) {
+        mActionState++;
+    } else if (mActionState != -1) {
+        if (mActionState == 1) {
             partner_srch();
-            field_0x76a = 2;
+            mActionState = 2;
         }
         hasAttention = chkAttention(this->current.pos);
-        s32 val = field_0x768;
+        s32 val = stt;
         switch (val) {
             case 1: wait01(); break;
             case 2: wait02(); break;
@@ -336,14 +328,11 @@ BOOL daTag_Kf1_c::wait_action1(void*) {
         
     }
     return TRUE;
-
-    /* Nonmatching */
 }
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::_draw() {
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00000BF0-00000C68       .text _execute__11daTag_Kf1_cFv */
@@ -354,7 +343,6 @@ bool daTag_Kf1_c::_execute() {
     }
     else { 
         (this->*func)(NULL);
-        //(this->*eventProc)
     }
     eventOrder();
     return TRUE;
@@ -369,7 +357,6 @@ bool daTag_Kf1_c::_delete() {
     }
 
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00000CBC-00000E98       .text _create__11daTag_Kf1_cFv */
@@ -382,7 +369,7 @@ s32 daTag_Kf1_c::_create() {
     // field_0x738 = 0;
 
     if (fopAcM_GetName(this) != PROC_TAG_KF1) {
-        return cPhs_ERROR_e;
+        ret = cPhs_ERROR_e;
     } else {
         this->field_0x769 = 0;
         if (l_HIO.mNo < 0) {
@@ -399,25 +386,21 @@ s32 daTag_Kf1_c::_create() {
 /* 000010C0-000010E0       .text daTag_Kf1_Create__FP10fopAc_ac_c */
 static s32 daTag_Kf1_Create(fopAc_ac_c* obj) {
     (static_cast<daTag_Kf1_c*>(obj))->_create();
-    /* Nonmatching */
 }
 
 /* 000010E0-00001100       .text daTag_Kf1_Delete__FP11daTag_Kf1_c */
 static BOOL daTag_Kf1_Delete(daTag_Kf1_c* obj) {
     (static_cast<daTag_Kf1_c*>(obj))->_delete();
-    /* Nonmatching */
 }
 
 /* 00001100-00001120       .text daTag_Kf1_Execute__FP11daTag_Kf1_c */
 static BOOL daTag_Kf1_Execute(daTag_Kf1_c* obj) {
     (static_cast<daTag_Kf1_c*>(obj))->_execute();
-    /* Nonmatching */
 }
 
 /* 00001120-00001140       .text daTag_Kf1_Draw__FP11daTag_Kf1_c */
 static BOOL daTag_Kf1_Draw(daTag_Kf1_c* obj) {
     (static_cast<daTag_Kf1_c*>(obj))->_draw();
-    /* Nonmatching */
 }
 
 /* 00001140-00001148       .text daTag_Kf1_IsDelete__FP11daTag_Kf1_c */
