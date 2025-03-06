@@ -9,6 +9,7 @@
 #include "d/res/res_key.h"
 #include "d/res/res_hkyo.h"
 #include "d/actor/d_a_player.h"
+#include "SSystem/SComponent/c_angle.h"
 
 /* 8006B39C-8006B3A8       .text getSwbit__12dDoor_info_cFv */
 u8 dDoor_info_c::getSwbit() {

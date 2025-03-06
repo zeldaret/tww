@@ -250,7 +250,7 @@ void JUTConsole::print(const char* param_0) {
 
 /* 802CAFB0-802CB03C       .text JUTConsole_print_f_va_ */
 void JUTConsole_print_f_va_(JUTConsole* console, const char* fmt, va_list args) {
-    JUT_ASSERT(561, console!=0);
+    JUT_ASSERT(561, console!=NULL);
     char buf[1024];
     vsnprintf(buf, sizeof(buf), fmt, args);
     console->print(buf);

@@ -497,7 +497,7 @@ bool daFm_c::_execute() {
 }
 
 /* 00008564-000085A4       .text MtxToRot__6daFm_cFPA4_fP5csXyz */
-void daFm_c::MtxToRot(float(*)[4], csXyz*) {
+void daFm_c::MtxToRot(Mtx, csXyz*) {
     /* Nonmatching */
 }
 

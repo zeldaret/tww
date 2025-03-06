@@ -3,6 +3,7 @@
 
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_cc_d.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 
 class daFan_c : public dBgS_MoveBgActor {

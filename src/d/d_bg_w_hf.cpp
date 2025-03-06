@@ -25,7 +25,7 @@ bool dBgWHf::Set(cBgD_t* bgd, u16* r5, f32 f1, int r6, int r7, u32 flag) {
     m_gridz = r7;
     mC8 = r5;
     mC4 = f1;
-    if (cBgW::Set(bgd, 0x33, NULL)) {
+    if (cBgW::Set(bgd, MOVE_BG_e | NO_CALC_VTX_e | NO_VTX_TBL_e | GLOBAL_e, NULL)) {
         return true;
     }
     SetFlag(flag);
@@ -55,9 +55,9 @@ void dBgWHf::CalcPlane() {
         if (isEven) {
             for (int x = 0; x < m_gridx; r30++, x++) {
                 u16 triIdx = mC8[r30];
-                Vec* vtx0 = &pm_vtx_tbl[tri_tbl[triIdx].vtx0];
-                Vec* vtx1 = &pm_vtx_tbl[tri_tbl[triIdx].vtx1];
-                Vec* vtx2 = &pm_vtx_tbl[tri_tbl[triIdx].vtx2];
+                cBgD_Vtx_t* vtx0 = &pm_vtx_tbl[tri_tbl[triIdx].vtx0];
+                cBgD_Vtx_t* vtx1 = &pm_vtx_tbl[tri_tbl[triIdx].vtx1];
+                cBgD_Vtx_t* vtx2 = &pm_vtx_tbl[tri_tbl[triIdx].vtx2];
                 normal.x = vtx1->y - vtx0->y;
                 normal.y = mC4;
                 normal.z = vtx1->y - vtx2->y;

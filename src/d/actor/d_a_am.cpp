@@ -35,8 +35,8 @@ enum Action {
 };
 
 /* 00000078-0000021C       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();

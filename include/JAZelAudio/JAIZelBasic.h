@@ -352,7 +352,7 @@ public:
     /* 0x1F4C */ struct {
         int field_0x00;
         int field_0x04;
-     } field_0x1f4c[0x1E];
+    } field_0x1f4c[0x1E];
     /* 0x203C */ u8 field_0x203c;
     /* 0x203D */ u8 field_0x203d;
     /* 0x2040 */ int field_0x2040[4];

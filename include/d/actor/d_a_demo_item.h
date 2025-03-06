@@ -39,8 +39,8 @@ public:
 };
 
 namespace daDitem_prm {
-    inline u32 getNo(daDitem_c* item) { return (fopAcM_GetParam(item) >> 0x00) & 0xFF; }
-    inline u32 getFlag(daDitem_c* item) { return (fopAcM_GetParam(item) >> 0x10) & 0xFF; }
+    inline u32 getNo(daDitem_c* i_this) { return (fopAcM_GetParam(i_this) >> 0x00) & 0xFF; }
+    inline u32 getFlag(daDitem_c* i_this) { return (fopAcM_GetParam(i_this) >> 0x10) & 0xFF; }
 };
 
 #endif /* D_A_DEMO_ITEM_H */

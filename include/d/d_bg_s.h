@@ -9,7 +9,6 @@
 #include "SSystem/SComponent/c_m3d_g_cyl.h"
 #include "d/d_bg_s_chk.h"
 #include "d/d_bg_w.h"
-#include "global.h"
 #include "f_pc/f_pc_manager.h"
 
 class cBgS_LinChk;

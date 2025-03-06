@@ -29,8 +29,8 @@ void dCcD_GAtTgCoCommonBase::SetEffCounterTimer() {
 
 /* 800AB334-800AB384       .text __ct__10dCcD_GSttsFv */
 dCcD_GStts::dCcD_GStts() {
-    mAtSpl = 0;
-    mTgSpl = 0;
+    mAtSpl = dCcG_At_Spl_UNK0;
+    mTgSpl = dCcG_Tg_Spl_UNK0;
     mRoomId = 0;
     mActorPerfTblId = -1;
     mAtApid = fpcM_ERROR_PROCESS_ID_e;
@@ -42,8 +42,8 @@ dCcD_GStts::dCcD_GStts() {
 
 /* 800AB384-800AB3BC       .text Ct__10dCcD_GSttsFv */
 void dCcD_GStts::Ct() {
-    mAtSpl = 0;
-    mTgSpl = 0;
+    mAtSpl = dCcG_At_Spl_UNK0;
+    mTgSpl = dCcG_Tg_Spl_UNK0;
     mRoomId = 0;
     mActorPerfTblId = -1;
     mAtApid = fpcM_ERROR_PROCESS_ID_e;
@@ -170,7 +170,7 @@ cCcD_GObjInf* dCcD_GObjInf::GetAtHitGObj() {
 
 /* 800AB938-800AB958       .text ChkAtNoGuard__12dCcD_GObjInfFv */
 u8 dCcD_GObjInf::ChkAtNoGuard() {
-    return GetAtSpl() >= 8;
+    return GetAtSpl() >= dCcG_At_Spl_UNK8;
 }
 
 /* 800AB958-800AB9B0       .text ClrTgHit__12dCcD_GObjInfFv */

@@ -47,7 +47,6 @@ u32 VolcanoSeTable[] = {
 
 /* 8023B860-8023BCD8       .text _create__8dTimer_cFv */
 s32 dTimer_c::_create() {
-    /* Nonmatching */
     s32 rt = dComIfG_resLoad(&mPhs, "Timer");
     fopMsg_prm_timer* prm;
     if (rt == cPhs_COMPLEATE_e) {
@@ -290,7 +289,6 @@ bool dTimer_c::start(s16 param_1) {
 
 /* 8023C2F4-8023C3A8       .text stock_start__8dTimer_cFv */
 bool dTimer_c::stock_start() {
-    /* Nonmatching */
     if (mState == 3) {
         mState = 2;
         OSTime time = OSGetTime();
@@ -373,7 +371,6 @@ s32 dTimer_c::getLimitTimeMs() {
 
 /* 8023C628-8023C69C       .text getRestTimeMs__8dTimer_cFv */
 s32 dTimer_c::getRestTimeMs() {
-    /* Nonmatching */
     OSTime time = mTime - mStartTime - field_0x138;
     time = mLimitTime - time;
     return OSTicksToMilliseconds(time);
@@ -438,23 +435,24 @@ const char* dDlst_TimerScrnDraw_c::getNumber(int no) {
 }
 
 /* 8023CA8C-8023CCD8       .text setTimer__21dDlst_TimerScrnDraw_cFi */
-void dDlst_TimerScrnDraw_c::setTimer(int time) {
-    /* Nonmatching */
-    s32 minsec = time / 1000;
-    s32 ms = time % 1000;
-    s32 min = minsec / 60;
-    s32 sec = minsec % 60;
+void dDlst_TimerScrnDraw_c::setTimer(int i_time) {
+    int sec, min, ms;
+    sec = (i_time / 1000);
+    ms = i_time - sec * 1000;
+    min = sec / 60;
+    sec = sec - min * 60;
+
     changeNumberTexture(mTimerNumber0.pane, min / 10);
     changeNumberTexture(mTimerNumber[0], min % 10);
     changeNumberTexture(mTimerNumber[1], sec / 10);
     changeNumberTexture(mTimerNumber[2], sec % 10);
     changeNumberTexture(mTimerNumber[3], ms / 100);
     changeNumberTexture(mTimerNumber[4], (ms % 100) / 10);
+
     if (dComIfGp_event_getMode() == dEvtMode_TALK_e) {
         if (mClockIcon.mUserArea < 5) {
             mClockIcon.mUserArea++;
-            s16 alphaStep = 5 - mClockIcon.mUserArea;
-            f32 alpha = ((f32)alphaStep * (f32)alphaStep) / 25.0f;
+            f32 alpha = acc(5, 5 - mClockIcon.mUserArea, 0);
             fopMsgM_setNowAlpha(&mClockIcon, alpha);
             fopMsgM_setNowAlpha(&mClockBG, alpha);
             fopMsgM_setNowAlpha(&mTimerNumber0, alpha);
@@ -465,8 +463,7 @@ void dDlst_TimerScrnDraw_c::setTimer(int time) {
     } else {
         if (mClockIcon.mUserArea > 0) {
             mClockIcon.mUserArea--;
-            s16 alphaStep = 5 - mClockIcon.mUserArea;
-            f32 alpha = ((f32)alphaStep * (f32)alphaStep) / 25.0f;
+            f32 alpha = acc(5, 5 - mClockIcon.mUserArea, 0);
             fopMsgM_setNowAlpha(&mClockIcon, alpha);
             fopMsgM_setNowAlpha(&mClockBG, alpha);
             fopMsgM_setNowAlpha(&mTimerNumber0, alpha);
@@ -479,7 +476,6 @@ void dDlst_TimerScrnDraw_c::setTimer(int time) {
 
 /* 8023CCD8-8023CEF0       .text setRupee__21dDlst_TimerScrnDraw_cFs */
 void dDlst_TimerScrnDraw_c::setRupee(s16 num) {
-    /* Nonmatching */
     if (num != mRupeeNum) {
         if (num < mRupeeNum) {
             mRupeeNum--;
@@ -490,24 +486,23 @@ void dDlst_TimerScrnDraw_c::setRupee(s16 num) {
         if (mRupeeNum < 0)
             mRupeeNum = 0;
 
-        s32 r001 = mRupeeNum % 10;
-        s32 r010 = (mRupeeNum % 100) / 10;
-        s32 r100 = mRupeeNum / 100;
+        int r001 = mRupeeNum % 10;
+        int r010 = (mRupeeNum % 100) / 10;
+        int r100 = mRupeeNum / 100;
 
-        changeNumberTexture(mRupeeNumber[2], r100);
+        changeNumberTexture(mRupeeNumber[2], r001);
         changeNumberTexture(mRupeeNumber[1], r010);
-        changeNumberTexture(mRupeeNumber[0], r001);
+        changeNumberTexture(mRupeeNumber[0], r100);
 
-        changeNumberTexture(mRupeeNumberShadow[2], r100);
+        changeNumberTexture(mRupeeNumberShadow[2], r001);
         changeNumberTexture(mRupeeNumberShadow[1], r010);
-        changeNumberTexture(mRupeeNumberShadow[0], r001);
+        changeNumberTexture(mRupeeNumberShadow[0], r100);
     }
 
     if (dComIfGp_event_getMode() == dEvtMode_TALK_e) {
         if (mRupee.mUserArea < 5) {
             mRupee.mUserArea++;
-            s16 alphaStep = mRupee.mUserArea;
-            f32 alpha = 1.0f - ((f32)alphaStep * (f32)alphaStep) / 25.0f;
+            f32 alpha = 1.0f - acc(5, mRupee.mUserArea, 0);
             fopMsgM_setNowAlpha(&mRupee, alpha);
             fopMsgM_setNowAlpha(&mRupeeXShadow, alpha);
             fopMsgM_setNowAlpha(&mRupeeShadow, alpha);
@@ -515,8 +510,7 @@ void dDlst_TimerScrnDraw_c::setRupee(s16 num) {
     } else {
         if (mRupee.mUserArea > 0) {
             mRupee.mUserArea--;
-            s16 alphaStep = mRupee.mUserArea;
-            f32 alpha = 1.0f - ((f32)alphaStep * (f32)alphaStep) / 25.0f;
+            f32 alpha = 1.0f - acc(5, mRupee.mUserArea, 0);
             fopMsgM_setNowAlpha(&mRupee, alpha);
             fopMsgM_setNowAlpha(&mRupeeXShadow, alpha);
             fopMsgM_setNowAlpha(&mRupeeShadow, alpha);
@@ -611,20 +605,60 @@ void dDlst_TimerScrnDraw_c::setIconType(void* tex, u8 type) {
 
 /* 8023D318-8023D644       .text anime__21dDlst_TimerScrnDraw_cFv */
 void dDlst_TimerScrnDraw_c::anime() {
-    /* Nonmatching */
     static const s16 animeFrame[] = { 7, 15, 22 };
+
+    if (field_0x235 == 0) {
+        if (field_0x234 < animeFrame[2]) {
+            field_0x234++;
+        } else {
+            field_0x235 = 1;
+        }
+
+        if (field_0x234 <= animeFrame[1]) {
+            f32 temp_f31 = acc(animeFrame[1], field_0x234, 0);
+            f32 temp_f1 = (1.0f - temp_f31) * -50.0f;
+
+            fopMsgM_paneTrans(&mClockIcon, temp_f1, 0.0f);
+            fopMsgM_paneTrans(&mClockBG, temp_f1, 0.0f);
+            fopMsgM_paneTrans(&mTimerNumberBG, temp_f1, 0.0f);
+            fopMsgM_paneTrans(&mTimerBG, temp_f1, 0.0f);
+            fopMsgM_paneTrans(&mTimerBGShadow, temp_f1, 0.0f);
+            fopMsgM_setNowAlpha(&mClockIcon, temp_f31);
+            fopMsgM_setNowAlpha(&mClockBG, temp_f31);
+            fopMsgM_setNowAlpha(&mTimerNumber0, temp_f31);
+            fopMsgM_setNowAlpha(&mTimerNumberBG, temp_f31);
+            fopMsgM_setNowAlpha(&mTimerBG, temp_f31);
+            fopMsgM_setNowAlpha(&mTimerBGShadow, temp_f31);
+            fopMsgM_paneScaleXY(&mClockIcon, g_menuHIO.field_0x94);
+            dTm_parentPaneScale(&mClockBG, &mClockIcon, g_menuHIO.field_0x94);
+            dTm_parentPaneScale(&mTimerNumber0, &mClockIcon, g_menuHIO.field_0x94);
+            dTm_parentPaneScale(&mTimerNumberBG, &mClockIcon, g_menuHIO.field_0x94);
+            dTm_parentPaneScale(&mTimerBG, &mClockIcon, g_menuHIO.field_0x94);
+            dTm_parentPaneScale(&mTimerBGShadow, &mClockIcon, g_menuHIO.field_0x94);
+        }
+
+        if (field_0x234 > animeFrame[0] && field_0x234 <= animeFrame[2]) {
+            f32 temp_f31 = acc(animeFrame[1], field_0x234 - animeFrame[0], 0);
+            f32 temp_f1 = (1.0f - temp_f31) * -50.0f;
+
+            fopMsgM_paneTrans(&mRupee, temp_f1 + g_menuHIO.field_0x9a, g_menuHIO.field_0x9c);
+            fopMsgM_setNowAlpha(&mRupee, temp_f31);
+            fopMsgM_setNowAlpha(&mRupeeXShadow, temp_f31);
+            fopMsgM_setNowAlpha(&mRupeeShadow, temp_f31);
+            fopMsgM_paneScaleXY(&mRupee, g_menuHIO.field_0xa0);
+            dTm_parentPaneScale(&mRupeeShadow, &mRupee, g_menuHIO.field_0xa0);
+        }
+    }
 }
 
 /* 8023D644-8023D848       .text closeAnime__21dDlst_TimerScrnDraw_cFv */
 BOOL dDlst_TimerScrnDraw_c::closeAnime() {
-    /* Nonmatching */
     BOOL ret = FALSE;
     field_0x234++;
     if (field_0x234 <= 7) {
-        f32 x = (((f32)field_0x234 * (f32)field_0x234) / 49.0f);
-        s16 alphaStep = 7 - field_0x234;
-        f32 alpha = ((f32)alphaStep * (f32)alphaStep) / 49.0f;
-        x = -50.0f * x;
+        f32 temp = acc(7, field_0x234, 0);
+        f32 alpha = acc(7, 7 - field_0x234, 0);
+        f32 x = temp * -50.0f;
         fopMsgM_paneTrans(&mClockIcon, x, 0.0f);
         fopMsgM_paneTrans(&mClockBG, x, 0.0f);
         fopMsgM_paneTrans(&mTimerNumberBG, x, 0.0f);

@@ -195,8 +195,8 @@ void daNpc_kam_c::setBaseMtx() {
 }
 
 /* 00000C00-00000CD0       .text headNodeCallBack__FP7J3DNodei */
-static int headNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static int headNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         J3DModel* model = j3dSys.getModel();
         daNpc_kam_c* i_this = (daNpc_kam_c*)model->getUserArea();

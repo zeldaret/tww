@@ -15,7 +15,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_sxyz.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 #define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
@@ -39,12 +39,6 @@ void cM3d_InDivPos2(const Vec* v0, const Vec* v1, f32 scale, Vec* pDst) {
     Vec tmp;
     VECSubtract(v1, v0, &tmp);
     cM3d_InDivPos1(v0, &tmp, scale, pDst);
-}
-
-inline f32 cM3d_Len2dSq(f32 x0, f32 y0, f32 x1, f32 y1) {
-    f32 x = x0 - x1;
-    f32 y = y0 - y1;
-    return x*x + y*y;
 }
 
 /* 8024A4B4-8024A56C       .text cM3d_Len2dSqPntAndSegLine__FffffffPfPfPf */

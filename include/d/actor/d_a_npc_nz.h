@@ -120,7 +120,7 @@ public:
 
 public:
     /* 0x00 - vtable */
-    /* 0x04 */ s8 field_0x04;
+    /* 0x04 */ s8 mNo;
     /* 0x06 */ s16 field_0x06;
     /* 0x08 */ s16 field_0x08;
     /* 0x0A */ s16 field_0x0A;

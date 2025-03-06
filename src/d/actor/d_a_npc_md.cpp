@@ -472,8 +472,8 @@ s32 daNpc_Md_c::create() {
 }
 
 /* 000012C0-00001444       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Md_c* i_this = (daNpc_Md_c*)model->getUserArea();
@@ -503,8 +503,8 @@ static Vec waistVecDat[4] = {
 };
 
 /* 00001444-0000154C       .text waistNodeCallBack__FP7J3DNodei */
-static BOOL waistNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL waistNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Md_c* i_this = (daNpc_Md_c*)model->getUserArea();
@@ -527,10 +527,10 @@ static BOOL waistNodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 0000154C-0000160C       .text armNodeCallBack__FP7J3DNodei */
-static BOOL armNodeCallBack(J3DNode* node, int param_1) {
+static BOOL armNodeCallBack(J3DNode* node, int calcTiming) {
     // This handles copying the matrices of Medli's arms and wings from the body model to the
     // separate arm/wing models.
-    if (!param_1) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* armModel = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Md_c* i_this = (daNpc_Md_c*)armModel->getUserArea();
@@ -593,8 +593,8 @@ static BOOL hairCross(cXyz* i_r3, cXyz* i_r4, cXyz* i_r5) {
 }
 
 /* 00001CBC-00001D0C       .text hairTopNodeCallBack__FP7J3DNodei */
-static BOOL hairTopNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL hairTopNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daNpc_Md_c* i_this = (daNpc_Md_c*)model->getUserArea();
         if (i_this) {
@@ -649,8 +649,8 @@ static s16 baseAngleX[] = {
 };
 
 /* 00001F5C-0000240C       .text hairNodeCallBack__FP7J3DNodei */
-static BOOL hairNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL hairNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daNpc_Md_c* i_this = (daNpc_Md_c*)model->getUserArea();
         if (i_this) {
@@ -3170,7 +3170,7 @@ BOOL daNpc_Md_c::draw() {
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
     
-    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     drawDamageFog();
     g_env_light.setLightTevColorType(model, &tevStr);
     m0520.entry(modelData);

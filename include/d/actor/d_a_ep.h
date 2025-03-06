@@ -36,7 +36,7 @@ public:
     /* 0x502 */ s16 mAlphaModelRotY;
     /* 0x504 */ u8 mType;
     /* 0x505 */ u8 m505;
-    /* 0x506 */ u8 mOnSwitchId;
+    /* 0x506 */ u8 mOnSwitchNo;
     /* 0x507 */ u8 m507;
     /* 0x508 */ u8 m508;
     /* 0x509 */ u8 m509[0x50C - 0x509];
@@ -72,6 +72,6 @@ public:
     /* 0x894 */ u8 m894[0x910 - 0x894];
     /* 0x910 */ u8 mGroundCheckTimer;
     /* 0x911 */ u8 m911[0x914 - 0x911];
-};
+};  // Size: 0x914
 
 #endif /* D_A_EP_H */

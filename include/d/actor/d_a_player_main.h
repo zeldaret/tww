@@ -2204,7 +2204,7 @@ public:
     
     struct TexAnmTableEntry {
         /* 0x00 */ u16 mBtpIdx;
-        /* 0x04 */ u16 mBtkIdx;
+        /* 0x02 */ u16 mBtkIdx;
     };  // Size: 0x04
     static const TexAnmTableEntry mTexAnmIndexTable[];
     

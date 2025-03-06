@@ -17,9 +17,9 @@ static f32 b_pos_y[6] = { -560.0f, -760.0f, -630.0f, -710.0f, -670.0f, -690.0f }
 static f32 b_pos_z[6] = { 0.0f, 750.0f, 750.0f, 0.0f, -720.0f, -750.0f };
 
 /* 000000EC-000002D4       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int timing) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     J3DJoint* joint = (J3DJoint*)node;
-    if (timing == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         syan_class* i_this = (syan_class*)model->getUserArea();

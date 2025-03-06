@@ -3031,10 +3031,10 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 }
 
 /* 0000DAB0-0000DC04       .text nodeCallBack1__FP7J3DNodei */
-static BOOL nodeCallBack1(J3DNode* node, int param_1) {
+static BOOL nodeCallBack1(J3DNode* node, int calcTiming) {
     /* Nonmatching */
 
-    if (!param_1) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Ji1_c* i_this = (daNpc_Ji1_c*)model->getUserArea();
@@ -3064,8 +3064,8 @@ static BOOL nodeCallBack1(J3DNode* node, int param_1) {
 }
 
 /* 0000DC04-0000DD68       .text nodeCallBack2__FP7J3DNodei */
-static BOOL nodeCallBack2(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack2(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Ji1_c* i_this = (daNpc_Ji1_c*)model->getUserArea();
@@ -3095,8 +3095,8 @@ static BOOL nodeCallBack2(J3DNode* node, int param_1) {
 }
 
 /* 0000DD68-0000DE90       .text nodeCallBack3__FP7J3DNodei */
-static BOOL nodeCallBack3(J3DNode* node, int param_1) {
-    if (param_1) {
+static BOOL nodeCallBack3(J3DNode* node, int calcTiming) {
+    if (calcTiming != J3DNodeCBCalcTiming_In) {
         return true;
     }
     else {
@@ -3138,7 +3138,7 @@ s32 daNpc_Ji1_c::_create() {
     s32 state = dComIfG_resLoad(&field_0xC7C, "Ji");
     if(state == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0x16840)) {
-           return cPhs_ERROR_e;
+            return cPhs_ERROR_e;
         }
 
         CreateInit();
@@ -3389,7 +3389,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
         }
     }
 
-    dComIfGp_getAttention().setFlag(0x80000000);
+    dComIfGp_att_offAleart();
     mEventCut.setActorInfo("Ji1", this);
     mEventCut.setJntCtrlPtr(&m_jnt);
     field_0xC84 = 0x12;

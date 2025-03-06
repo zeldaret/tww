@@ -76,8 +76,8 @@ static u16 joint_number_table[20];
 Mtx daObjMknjD::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
-static BOOL nodeCallBackL(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0) {
+static BOOL nodeCallBackL(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         
         J3DModel* mdl = j3dSys.getModel();
@@ -97,8 +97,8 @@ static BOOL nodeCallBackL(J3DNode* i_node, int i_param2) {
 }
 
 /* 0000012C-000001E0       .text nodeCallBackR__FP7J3DNodei */
-static BOOL nodeCallBackR(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0) {
+static BOOL nodeCallBackR(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
 
         J3DModel* mdl = j3dSys.getModel();
@@ -118,8 +118,8 @@ static BOOL nodeCallBackR(J3DNode* i_node, int i_param2) {
 }
 
 /* 000001E0-000002B0       .text nodeCallBack_Hahen__FP7J3DNodei */
-static BOOL nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0) {
+static BOOL nodeCallBack_Hahen(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         u16 shardIdx = joint_number_table[jntNo - 1];
 
@@ -316,7 +316,7 @@ s32 daObjMknjD::Act_c::Mthd_Create() {
 
 /* 00000B64-00000BDC       .text Delete__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Delete() {
-    dComIfGp_getAttention().mFlags &= 0x7fffffff;
+    dComIfGp_att_revivalAleart();
 
     for (int i = 0; i < 4; i++) {
         mSmokeCBs[i].end();
@@ -801,7 +801,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 mDoAud_bgmStop(30);
                 mDoAud_taktModeMuteOff();
 
-                dComIfGp_getAttention().mFlags |= 0x80000000;
+                dComIfGp_att_offAleart();
 
                 if (m043E == true) {
                     m0432 = 0x2B;
@@ -818,7 +818,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             privateCut();
 
             if (dComIfGp_evmng_endCheck(mDemoEventIdx)) {
-                dComIfGp_getAttention().mFlags &= ~0x80000000;
+                dComIfGp_att_revivalAleart();
                 dComIfGp_event_reset();
 
                 fopAcM_delete(this);

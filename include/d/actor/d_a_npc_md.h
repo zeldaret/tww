@@ -96,7 +96,6 @@ public:
 
 public:
     /* 0x004 */ s8 mNo;
-    /* 0x005 */ u8 m005[0x008 - 0x005];
     /* 0x008 */ daNpc_Md_HIO2_c m008;
     /* 0x034 */ daNpc_Md_HIO3_c m034;
     /* 0x05C */ daNpc_Md_HIO4_c m05C;
@@ -179,7 +178,6 @@ public:
     /* 0x1C6 */ u8 m1C6;
     /* 0x1C7 */ u8 m1C7;
     /* 0x1C8 */ u8 m1C8;
-    /* 0x1C9 */ u8 field_1C9[0x1CC - 0x1C9];
 };
 
 class daNpc_Md_followEcallBack_c : public dPa_levelEcallBack {

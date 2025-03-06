@@ -153,8 +153,8 @@ static const int l_btp_ix_tbl[] = {
 };
 
 /* 00000490-00000658       .text nodeCallBack_Bs__FP7J3DNodei */
-static BOOL nodeCallBack_Bs(J3DNode* node, int value) {
-    if (!value) {
+static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Bs1_c* i_this = (daNpc_Bs1_c*)model->getUserArea();
@@ -1942,6 +1942,17 @@ BOOL daNpc_Bs1_c::privateCut() {
         "GETTICKET",
     };
     
+    enum {
+        ACT_TALKMSG,
+        ACT_CONTINUE_TALK,
+        ACT_JNTLOCK,
+        ACT_WAIT,
+        ACT_SETANM,
+        ACT_PRAISE,
+        ACT_MANTAN,
+        ACT_GETTICKET,
+    };
+    
     int staffId = dComIfGp_evmng_getMyStaffId(mEventCut.getActorName());
     if (staffId == -1) {
         return FALSE;
@@ -1952,47 +1963,47 @@ BOOL daNpc_Bs1_c::privateCut() {
     } else {
         if (dComIfGp_evmng_getIsAddvance(staffId)) {
             switch (actIdx) {
-            case 0:
+            case ACT_TALKMSG:
                 evn_talk_init(staffId);
                 break;
-            case 1:
+            case ACT_CONTINUE_TALK:
                 evn_continue_talk_init(staffId);
                 break;
-            case 2:
+            case ACT_JNTLOCK:
                 evn_jnt_lock_init(staffId);
                 break;
-            case 3:
+            case ACT_WAIT:
                 evn_wait_init(staffId);
                 break;
-            case 4:
+            case ACT_SETANM:
                 evn_set_anm_init(staffId);
                 break;
-            case 5:
+            case ACT_PRAISE:
                 evn_praise_init();
                 break;
-            case 6:
+            case ACT_MANTAN:
                 evn_mantan_init();
                 break;
-            case 7:
+            case ACT_GETTICKET:
                 dComIfGs_setReserveItemEmpty();
                 break;
             }
         }
         
-        BOOL r3;
+        BOOL end;
         switch (actIdx) {
-        case 0x0:
-        case 0x1:
-            r3 = evn_talk();
+        case ACT_TALKMSG:
+        case ACT_CONTINUE_TALK:
+            end = evn_talk();
             break;
-        case 0x3:
-            r3 = evn_wait();
+        case ACT_WAIT:
+            end = evn_wait();
             break;
         default:
-            r3 = TRUE;
+            end = TRUE;
             break;
         }
-        if (r3) {
+        if (end) {
             dComIfGp_evmng_cutEnd(staffId);
         }
     }

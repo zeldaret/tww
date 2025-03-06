@@ -27,7 +27,7 @@ public:
     /* 0x298 */ u8 mParam0;
     /* 0x299 */ u8 mParam1;
     /* 0x29A */ u8 mParam2;
-    /* 0x29B */ u8 mSwitchID;
+    /* 0x29B */ u8 mSwitchNo;
     /* 0x29C */ J3DModel* mpModel;
     /* 0x2A0 */ J3DModel* mpModel2;
     /* 0x2A4 */ fpc_ProcID mTargetActorID;
@@ -67,6 +67,6 @@ public:
     /* 0x6F0 */ dPa_followEcallBack mPtclCallBack1;
     /* 0x704 */ cXyz mParticleScale;
     /* 0x710 */ mo_ga_s mGa[2];
-};
+};  // Size: 0x770
 
 #endif /* D_A_KANTERA_H */

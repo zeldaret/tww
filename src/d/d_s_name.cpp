@@ -140,7 +140,7 @@ s32 dScnName_c::create() {
             dNm_c = NULL;
         }
         dFs_c->_create();
-        g_snHIO.field_0x4 = mDoHIO_root.m_subroot.createChild("名前登録シーン", &g_snHIO);
+        g_snHIO.mNo = mDoHIO_root.m_subroot.createChild("名前登録シーン", &g_snHIO);
         dComIfGp_setWindowNum(1);
         dComIfGp_setWindow(0, 0.0f, 0.0f, mDoMch_render_c::getFbWidth(), mDoMch_render_c::getEfbHeight(), 0.0f, 1.0f, 0, 2);
         g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera = (camera_class*)&field_0x1d4;
@@ -378,7 +378,7 @@ dScnName_c::~dScnName_c() {
     delete btnIcon.scr;
     mArchive->unmountFixed();
     delete cloth.cloth_c;
-    mDoHIO_root.m_subroot.deleteChild(g_snHIO.field_0x4);
+    mDoHIO_root.m_subroot.deleteChild(g_snHIO.mNo);
     JKRSetCurrentHeap(oldHeap);
     heap->destroy();
     dComIfG_deleteStageRes("Stage");

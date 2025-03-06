@@ -106,7 +106,7 @@ public:
     void holeExecute();
     void setHoleScale(float, float, float);
     bool _execute();
-    void MtxToRot(float(*)[4], csXyz*);
+    void MtxToRot(Mtx, csXyz*);
     void debugDraw();
     void holeDraw();
     void bodyDraw();

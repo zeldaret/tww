@@ -72,7 +72,7 @@ s32 GBAJoyBootAsync(s32 chan, s32 paletteColor, s32 paletteSpeed, u8* programp, 
     }
 
     ret = GBAGetProcessStatus(chan, &percent);
-    if (ret != 0) {
+    if (ret != GBA_READY) {
         return ret;
     }
 

@@ -109,7 +109,7 @@ BOOL daObjTpost_c::_createHeap() {
 
 /* 0000022C-00000280       .text __ct__16daObjTpost_HIO_cFv */
 daObjTpost_HIO_c::daObjTpost_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     debug_draw = false;
     field_0x06 = 0;
     field_0x07 = 0;

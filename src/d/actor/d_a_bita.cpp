@@ -194,7 +194,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     if (i_this->mpBgW == NULL)
         return FALSE;
     cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Bita", ita_dzb[type]);
-    if (i_this->mpBgW->Set(dzb, dBgW::MOVE_BG_e, &i_this->mMtx) == 1)
+    if (i_this->mpBgW->Set(dzb, dBgW::MOVE_BG_e, &i_this->mMtx) == true)
         return FALSE;
 
     i_this->mpBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);

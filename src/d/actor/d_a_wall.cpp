@@ -132,7 +132,7 @@ void daWall_c::CreateInit() {
     dComIfG_Bgsp()->Regist(mpBgW, this);
     set_mtx();
     mpBgW->Move();
-    mSwitchIndex = fopAcM_GetParam(this) & 0xFF;
+    mSwitchNo = fopAcM_GetParam(this) & 0xFF;
     mState = false;
 }
 
@@ -140,9 +140,9 @@ void daWall_c::CreateInit() {
 s32 daWall_c::_create() {
     fopAcM_SetupActor(this, daWall_c);
     mType = fopAcM_GetParam(this) >> 8;
-    mSwitchIndex = fopAcM_GetParam(this) & 0xFF;
-    bool isSwitch = dComIfGs_isSwitch(mSwitchIndex, fopAcM_GetHomeRoomNo(this));
-    if (isSwitch || mSwitchIndex == 0xff) {
+    mSwitchNo = fopAcM_GetParam(this) & 0xFF;
+    bool isSwitch = dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this));
+    if (isSwitch || mSwitchNo == 0xff) {
         return cPhs_ERROR_e;
     }
 
@@ -293,8 +293,8 @@ void daWall_c::set_effect() {
     mBreakCounter = 1;
     mState = 1;
     dComIfG_Bgsp()->Release(mpBgW);
-    if (mSwitchIndex != 0xFF)
-        dComIfGs_onSwitch(mSwitchIndex, fopAcM_GetHomeRoomNo(this));
+    if (mSwitchNo != 0xFF)
+        dComIfGs_onSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this));
 }
 
 /* 00000F74-00000FE4       .text set_se__8daWall_cFv */

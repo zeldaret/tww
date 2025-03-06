@@ -260,8 +260,8 @@ static void ground_smoke_set(bk_class* i_this) {
 }
 
 /* 000011F0-00001454       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         int r28 = joint_check[jntNo];
@@ -318,8 +318,8 @@ static BOOL nodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 00001454-00001564       .text nodeCallBack_P__FP7J3DNodei */
-static BOOL nodeCallBack_P(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack_P(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         int r30 = joint_check[jntNo];

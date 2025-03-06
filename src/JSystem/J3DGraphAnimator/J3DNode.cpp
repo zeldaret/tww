@@ -4,7 +4,6 @@
 //
 
 #include "JSystem/J3DGraphAnimator/J3DNode.h"
-#include "dolphin/types.h"
 
 /* 802F5BA4-802F5BC8       .text __ct__7J3DNodeFv */
 J3DNode::J3DNode() {
