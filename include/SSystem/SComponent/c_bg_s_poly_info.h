@@ -7,6 +7,7 @@
 #include "global.h"
 
 class cBgW;
+
 class cBgS_PolyInfo {
 private:
     /* 0x00 */ u16 mPolyIndex;

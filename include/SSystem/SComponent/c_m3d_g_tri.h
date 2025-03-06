@@ -61,7 +61,7 @@ public:
     void setUp() {
         SetupFrom3Vtx(&mA, &mB, &mC);
     }
-    ~cM3dGTri() {}
+    virtual ~cM3dGTri() {}
 };  // Size: 0x38
 
 #endif

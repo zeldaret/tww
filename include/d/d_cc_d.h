@@ -201,6 +201,8 @@ public:
     /* 0x1C */ u32 mFlag;
 };  // Size = 0x20
 
+STATIC_ASSERT(sizeof(dCcD_GStts) == 0x20);
+
 class dCcD_Stts : public cCcD_Stts, public dCcD_GStts {
 public:
     dCcD_Stts() {}
@@ -223,6 +225,8 @@ public:
     /* 0x18 */ /* vtable */
     /* 0x1C */ /* dCcD_GStts */
 };  // Size = 0x3C
+
+STATIC_ASSERT(sizeof(dCcD_Stts) == 0x3C);
 
 class dCcD_GObjInf;
 typedef void (*dCcD_HitCallback)(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
@@ -483,7 +487,7 @@ public:
     /* 0xF8 */ /* cCcD_CylAttr */
 
     void Set(dCcD_SrcCyl const&);
-    cCcD_ShapeAttr* GetShapeAttr() { return this; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return this; }
     void StartCAt(cXyz&);
     void StartCTg(cXyz&);
     void MoveCAtTg(cXyz&);
@@ -492,6 +496,8 @@ public:
     virtual ~dCcD_Cyl() {}
     dCcD_Cyl() {}
 };  // Size = 0x130
+
+STATIC_ASSERT(sizeof(dCcD_Cyl) == 0x130);
 
 // Sphere
 class dCcD_Sph : public dCcD_GObjInf, public cCcD_SphAttr {
@@ -511,7 +517,7 @@ public:
     /* 0xF8 */ /* cCcD_CpsAttr */
 
     void Set(dCcD_SrcCps const&);
-    cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
     void CalcAtVec() {
         cXyz* atVecP = GetAtVecP();
         CalcVec(atVecP);
@@ -525,7 +531,7 @@ public:
 class dCcD_Tri : public dCcD_GObjInf, public cCcD_TriAttr {
 public:
     void Set(dCcD_SrcTri const&);
-    cCcD_ShapeAttr* GetShapeAttr() { return this; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return this; }
     virtual ~dCcD_Tri() {}
     dCcD_Tri() {}
 };

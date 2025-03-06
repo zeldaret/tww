@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "dolphin/mtx/vec.h"
+#include "global.h"
 
 // Plane with a normal
 class cM3dGPla {
@@ -60,5 +61,7 @@ public:
     // TODO
     cM3dGPla(const cXyz*, f32) {}
 };  // Size: 0x14
+
+STATIC_ASSERT(sizeof(cM3dGPla) == 0x14);
 
 #endif

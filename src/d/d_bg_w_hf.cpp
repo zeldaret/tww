@@ -55,9 +55,9 @@ void dBgWHf::CalcPlane() {
         if (isEven) {
             for (int x = 0; x < m_gridx; r30++, x++) {
                 u16 triIdx = mC8[r30];
-                Vec* vtx0 = &pm_vtx_tbl[tri_tbl[triIdx].vtx0];
-                Vec* vtx1 = &pm_vtx_tbl[tri_tbl[triIdx].vtx1];
-                Vec* vtx2 = &pm_vtx_tbl[tri_tbl[triIdx].vtx2];
+                cBgD_Vtx_t* vtx0 = &pm_vtx_tbl[tri_tbl[triIdx].vtx0];
+                cBgD_Vtx_t* vtx1 = &pm_vtx_tbl[tri_tbl[triIdx].vtx1];
+                cBgD_Vtx_t* vtx2 = &pm_vtx_tbl[tri_tbl[triIdx].vtx2];
                 normal.x = vtx1->y - vtx0->y;
                 normal.y = mC4;
                 normal.z = vtx1->y - vtx2->y;

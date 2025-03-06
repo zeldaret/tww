@@ -52,6 +52,12 @@ struct cM3d_Range {
     f32 end;
 };
 
+inline f32 cM3d_Len2dSq(f32 x0, f32 y0, f32 x1, f32 y1) {
+    f32 x = x0 - x1;
+    f32 y = y0 - y1;
+    return x*x + y*y;
+}
+
 void cM3d_InDivPos1(const Vec*, const Vec*, f32, Vec*);
 void cM3d_InDivPos2(const Vec*, const Vec*, f32, Vec*);
 bool cM3d_Len2dSqPntAndSegLine(f32, f32, f32, f32, f32, f32, f32*, f32*, f32*);
