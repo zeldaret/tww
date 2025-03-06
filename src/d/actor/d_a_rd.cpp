@@ -623,7 +623,7 @@ bool daRd_c::checkTgHit() {
             cXyz* hitPos = mCyl.GetTgHitPosP();
             cc_at_check(this, &atInfo);
             if (mHitType == 1 || mHitType == 7 || mHitType == 8 || health <= 0) {
-                dComIfGp_particle_set(0x10, mCyl.GetTgHitPosP());
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, mCyl.GetTgHitPosP());
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, hitPos, &player->shape_angle, &scale);
                 if (health <= 0) {

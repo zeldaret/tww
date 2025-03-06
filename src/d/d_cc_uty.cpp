@@ -226,7 +226,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
             pauseTime = 6 + g_regHIO.mChild->mShortRegs[7];
             
             if (atInfo->pParticlePos) {
-                dComIfGp_particle_set(0x10, atInfo->pParticlePos);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, atInfo->pParticlePos);
                 cXyz scale;
                 scale.x = scale.y = scale.z = 2.0f;
                 csXyz angle;

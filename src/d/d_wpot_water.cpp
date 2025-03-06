@@ -61,9 +61,9 @@ static BOOL dWpotWater_Delete(dWpotWater_c* i_this) {
 
 s32 dWpotWater_c::create() {
     new(this) dWpotWater_c();
-    dComIfGp_particle_set(0x8083, &mPos);
-    dComIfGp_particle_set(0x8084, &mPos);
-    emtr = dComIfGp_particle_set(0x8086, &mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_8083, &mPos);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_8084, &mPos);
+    emtr = dComIfGp_particle_set(dPa_name::ID_SCENE_8086, &mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
     if (emtr == NULL) {
         return cPhs_ERROR_e;
     } else {

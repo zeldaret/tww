@@ -500,7 +500,7 @@ void daNpc_Os_c::eventOrderCheck() {
 /* 00001300-000013D4       .text makeBeam__10daNpc_Os_cFi */
 void daNpc_Os_c::makeBeam(int param_1) {
     if(field_0x738.getEmitter() == NULL) {
-        field_0x738.makeEmitter(0x826E, &current.pos, &shape_angle, 0);
+        field_0x738.makeEmitter(dPa_name::ID_SCENE_826E, &current.pos, &shape_angle, 0);
 
         if(param_1) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_LIGHT_ST, 0);
@@ -508,7 +508,7 @@ void daNpc_Os_c::makeBeam(int param_1) {
     }
 
     if(field_0x740.getEmitter() == NULL) {
-        field_0x740.makeEmitter(0x826F, &current.pos, &shape_angle, 0);
+        field_0x740.makeEmitter(dPa_name::ID_SCENE_826F, &current.pos, &shape_angle, 0);
     }
 }
 
@@ -872,7 +872,7 @@ BOOL daNpc_Os_c::carryNpcAction(void* param_1) {
             }
             else {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
-                smokeSet(0xA328);
+                smokeSet(dPa_name::ID_SCENE_A328);
                 setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
 
                 return true;
@@ -907,7 +907,7 @@ BOOL daNpc_Os_c::throwNpcAction(void* param_1) {
     else if(field_0x7A9 != -1) {
         if(mAcch.ChkGroundHit()) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
-            smokeSet(0xA33B);
+            smokeSet(dPa_name::ID_SCENE_A33B);
             setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
@@ -933,7 +933,7 @@ BOOL daNpc_Os_c::jumpNpcAction(void* param_1) {
     }
     else if(field_0x7A9 != -1) {
         if(mAcch.ChkGroundHit()) {
-            smokeSet(0xA33B);
+            smokeSet(dPa_name::ID_SCENE_A33B);
             setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
@@ -2054,7 +2054,7 @@ void daNpc_Os_c::animationPlay() {
     mPrevMorfFrame = frame;
 
     if(field_0x78C == 1 && mpMorf->checkFrame(17.0f)) {
-        smokeSet(0xA328);
+        smokeSet(dPa_name::ID_SCENE_A328);
     }
 
     playBrkAnm();
@@ -2250,13 +2250,13 @@ BOOL daNpc_Os_c::execute() {
                 if(!isWaterHit()) {
                     onWaterHit();
 
-                    JPABaseEmitter* splash = dComIfGp_particle_set(0x40, &current.pos);
+                    JPABaseEmitter* splash = dComIfGp_particle_set(dPa_name::ID_COMMON_0040, &current.pos);
                     if(splash) {
                         splash->setRate(15.0f);
                         splash->setGlobalScale(splash_scale);
                     }
 
-                    JPABaseEmitter* ripple = dComIfGp_particle_setSingleRipple(0x3D, &current.pos);
+                    JPABaseEmitter* ripple = dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003D, &current.pos);
                     if(ripple) {
                         ripple->setGlobalScale(ripple_scale);
                     }

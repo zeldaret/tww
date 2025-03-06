@@ -885,7 +885,7 @@ void daNpc_Nz_c::setSmokeParticle() {
     }
 
     if(field_0x914.getEmitter() == NULL) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &current.pos, &current.angle, 0, 0xB9, &field_0x914, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, &current.angle, 0, 0xB9, &field_0x914, fopAcM_GetRoomNo(this));
         if(emitter) {
             emitter->setRate(3.0f);
             emitter->setSpread(0.2f);

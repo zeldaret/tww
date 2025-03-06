@@ -111,7 +111,7 @@ void esa_1_move(esa_class* i_this) {
                     i_this->mActionState = 3;
                     if(i_this->field_0x2A4.getEmitter() == NULL) {
                         static cXyz ripple_scale(0.2f, 0.2f, 0.2f);
-                        dComIfGp_particle_setShipTail(0x33, &i_this->current.pos, 0, &ripple_scale, 0xFF, &i_this->field_0x2A4);
+                        dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->current.pos, 0, &ripple_scale, 0xFF, &i_this->field_0x2A4);
                         if(i_this->field_0x2A4.getEmitter()) {
                             i_this->field_0x2A4.setRate(0.4f);
                         }
@@ -174,7 +174,7 @@ void esa_1_move(esa_class* i_this) {
 
                 if(i_this->field_0x2A4.getEmitter() == NULL) {
                     static cXyz ripple_scale(0.2f, 0.2f, 0.2f);
-                    dComIfGp_particle_setShipTail(0x33, &i_this->current.pos, 0, &ripple_scale, 0xFF, &i_this->field_0x2A4);
+                    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->current.pos, 0, &ripple_scale, 0xFF, &i_this->field_0x2A4);
                     if(i_this->field_0x2A4.getEmitter()) {
                         i_this->field_0x2A4.setRate(0.4f);
                     }

@@ -179,7 +179,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                     i_this->mAction = ACTION_DOUSA;
                     i_this->mState = 2;
                 } else {
-                    dComIfGp_particle_set(0x10, &hitPos, &player->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &hitPos, &player->shape_angle);
                     // Using the fopAcM_seStart inline breaks the codegen.
                     // fopAcM_seStart(i_this, JA_SE_CM_AM2_PARALYZED, 0);
                     mDoAud_seStart(JA_SE_CM_AM2_PARALYZED, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
@@ -286,7 +286,7 @@ static BOOL week_atari_check(am2_class* i_this) {
                 cc_at_check(actor, &atInfo);
                 
                 if (hitType == 1) {
-                    dComIfGp_particle_set(0x10, &hitPos);
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &hitPos);
                     cXyz particleScale(2.0f, 2.0f, 2.0f);
                     dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &hitPos, &player->shape_angle, &particleScale);
                 } else {
@@ -422,7 +422,7 @@ static BOOL naraku_check(am2_class* i_this) {
                 
                 cXyz particleScale(1.0f, 1.0f, 1.0f);
                 i_this->mRippleCb.end();
-                dComIfGp_particle_setShipTail(0x33, &i_this->current.pos, NULL, &particleScale, 0xFF, &i_this->mRippleCb);
+                dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->current.pos, NULL, &particleScale, 0xFF, &i_this->mRippleCb);
                 i_this->mRippleCb.setRate(0.0f);
             }
         }
@@ -543,7 +543,7 @@ static void action_dousa(am2_class* i_this) {
             // fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP_S, 0);
             mDoAud_seStart(JA_SE_CM_AM_JUMP_S, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             
-            dComIfGp_particle_setToon(0xA125, &i_this->current.pos, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(i_this));
+            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A125, &i_this->current.pos, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(i_this));
             if (i_this->mSmokeCb.getEmitter()) {
                 i_this->mSmokeCb.getEmitter()->setRate(12.0f);
                 JGeometry::TVec3<f32> scale;
@@ -725,7 +725,7 @@ static void action_mahi(am2_class* i_this) {
                     i_this->mSmokeCb.end();
                     fopAcM_seStart(actor, JA_SE_CM_AM2_LANDING, 0);
                     
-                    dComIfGp_particle_setToon(0xA125, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
+                    dComIfGp_particle_setToon(dPa_name::ID_SCENE_A125, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
                     if (i_this->mSmokeCb.getEmitter()) {
                         i_this->mSmokeCb.getEmitter()->setRate(12.0f);
                         JGeometry::TVec3<f32> scale;
@@ -838,7 +838,7 @@ static void action_itai(am2_class* i_this) {
         i_this->speedF = 20.0f;
         
         fopAcM_monsSeStart(i_this, JA_SE_CV_AM2_DAMAGE, 0x42);
-        dComIfGp_particle_set(0x81AE, &i_this->mWeakPos, &i_this->shape_angle);
+        dComIfGp_particle_set(dPa_name::ID_SCENE_81AE, &i_this->mWeakPos, &i_this->shape_angle);
         
         if (i_this->health > 0) {
             anm_init(i_this, AM2_BCK_DAMAGE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
@@ -897,7 +897,7 @@ static void action_itai(am2_class* i_this) {
         
         if (i_this->mAcch.ChkGroundHit()) {
             i_this->mSmokeCb.end();
-            dComIfGp_particle_setToon(0xA125, &i_this->current.pos, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(i_this));
+            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A125, &i_this->current.pos, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(i_this));
             if (i_this->mSmokeCb.getEmitter()) {
                 i_this->mSmokeCb.getEmitter()->setRate(12.0f);
                 JGeometry::TVec3<f32> scale;
@@ -931,8 +931,8 @@ static void action_itai(am2_class* i_this) {
         
         cXyz centerPos = i_this->current.pos;
         centerPos.y += 50.0f;
-        dComIfGp_particle_set(0x81AF, &i_this->current.pos, &i_this->shape_angle);
-        dComIfGp_particle_set(0x81B0, &i_this->current.pos, &i_this->shape_angle);
+        dComIfGp_particle_set(dPa_name::ID_SCENE_81AF, &i_this->current.pos, &i_this->shape_angle);
+        dComIfGp_particle_set(dPa_name::ID_SCENE_81B0, &i_this->current.pos, &i_this->shape_angle);
         fopAcM_seStart(i_this, JA_SE_CM_AM2_EXPLODE, 0);
         fopAcM_createDisappear(i_this, &centerPos, 5);
         fopAcM_onActor(i_this);

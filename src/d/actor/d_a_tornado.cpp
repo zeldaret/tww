@@ -176,7 +176,7 @@ BOOL daTornado_c::execute() {
             mPtclTimer -= 1;
         } else {
             mPtclTimer = 10;
-            dComIfGp_particle_set(0x8213, &current.pos, NULL, (cXyz*)&wind_scale);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_8213, &current.pos, NULL, (cXyz*)&wind_scale);
         }
 
         fopAcM_seStartCurrent(this, JA_SE_OBJ_TORNADE_SUS, 100);
@@ -322,7 +322,7 @@ s32 daTornado_c::create() {
             dKyw_tornado_Notice(&current.pos);
             mpModelUnder->setBaseScale(under_scale);
             mCenter = current.pos;
-            dComIfGp_particle_set(0x81bb, &mCenter, NULL, NULL, 0xFF, &mPtclCb);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_81BB, &mCenter, NULL, NULL, 0xFF, &mPtclCb);
             fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
         }
         mDoMtx_stack_c::transS(current.pos);

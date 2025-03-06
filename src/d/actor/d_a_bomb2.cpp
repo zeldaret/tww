@@ -733,7 +733,7 @@ namespace daBomb2 {
             field_0x6D8 = field_0x6C0;
 
             dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
-            dComIfGp_particle_setToonP1(0x2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
+            dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
             mSmoke.setOldPosP(&field_0x6CC, &field_0x6D8);
         }
     }

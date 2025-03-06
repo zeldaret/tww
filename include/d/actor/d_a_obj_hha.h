@@ -73,7 +73,7 @@ public:
         }
     }
 
-    void create_s(unsigned short, cXyz*, float, float, csXyz*);
+    void create_s(u16, cXyz*, float, float, csXyz*);
 
 public:
     /* 0x00 */ dPa_followEcallBack mEcallBack;

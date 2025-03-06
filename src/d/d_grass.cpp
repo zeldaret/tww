@@ -47,7 +47,7 @@ static bool l_CutSoundFlag;
 /* 80077048-8007712C       .text setBatta__FP4cXyzP8_GXColor */
 void setBatta(cXyz* pos, GXColor* color) {
     if (!dKy_rain_check() && !dComIfGp_event_runCheck() && strncmp(dComIfGp_getStartStageName(), "kin", 3) != 0 && strcmp(dComIfGp_getStartStageName(), "Xboss1") != 0 && cM_rnd() > 0.99f)
-        dComIfGp_particle_set(0x453, pos, NULL, NULL, 0xFF, NULL, -1, color, color);
+        dComIfGp_particle_set(dPa_name::ID_COMMON_0453, pos, NULL, NULL, 0xFF, NULL, -1, color, color);
 }
 
 /* 8007712C-8007734C       .text WorkCo__13dGrass_data_cFP10fopAc_ac_cUli */
@@ -230,8 +230,8 @@ dGrass_packet_c::dGrass_packet_c() {
         mDLSize = 0xa0;
         mpDLCut = l_Vmori_01DL;
         mDLCutSize = 0x80;
-        mCoParticle = 0x8222;
-        mAtParticle = 0x8221;
+        mCoParticle = dPa_name::ID_SCENE_8222;
+        mAtParticle = dPa_name::ID_SCENE_8221;
     } else {
         mpPosArr = (f32*)l_pos;
         mpColorArr = l_color;
@@ -242,8 +242,8 @@ dGrass_packet_c::dGrass_packet_c() {
         mDLSize = 0xa0;
         mpDLCut = l_Oba_kusa_a_cutDL;
         mDLCutSize = 0x80;
-        mCoParticle = 0x03db;
-        mAtParticle = 0x03da;
+        mCoParticle = dPa_name::ID_COMMON_03DB;
+        mAtParticle = dPa_name::ID_COMMON_03DA;
     }
 }
 

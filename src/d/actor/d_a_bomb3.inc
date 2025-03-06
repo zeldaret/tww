@@ -695,7 +695,7 @@ void daBomb_c::setFuseEffect() {
         mFusePos3 = mFusePos;
 
         dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &mFusePos, NULL, &scale, 0xFF, &mSparks);
-        dComIfGp_particle_setToonP1(0x2012, &mFusePos, NULL, &scale, 0xDC, &mSmoke);
+        dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_2012, &mFusePos, NULL, &scale, 0xDC, &mSmoke);
         mSmoke.field_0x0C = &mFusePos2;
         mSmoke.field_0x10 = &mFusePos3;
         mSmoke.field_0x04 = 0x14;
@@ -719,7 +719,7 @@ void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
         emitter->setGlobalParticleScale(vec);
     }
 
-    dComIfGp_particle_setBombSmoke(0x232A, &current.pos, NULL, &scale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_232A, &current.pos, NULL, &scale);
     emitter = dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
     if(emitter) {
         emitter->mLifeTime = 0x46;

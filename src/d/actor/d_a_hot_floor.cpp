@@ -66,9 +66,9 @@ bool daHot_Floor_c::_delete() {
 bool daHot_Floor_c::_execute() {
     if (mbSpawnParticle) {
         if (mEmitter2 == NULL && !(fopAcM_GetParam(this) & 1))
-            mEmitter2 = dComIfGp_particle_set(0x814c, &current.pos);
+            mEmitter2 = dComIfGp_particle_set(dPa_name::ID_SCENE_814C, &current.pos);
         if (mEmitter1 == NULL && !(fopAcM_GetParam(this) & 2))
-            mEmitter1 = dComIfGp_particle_set(0x8120, &current.pos);
+            mEmitter1 = dComIfGp_particle_set(dPa_name::ID_SCENE_8120, &current.pos);
         cLib_chaseF(&mSpawnTimer, 60.0f, 5.0f);
         mbSpawnParticle = false;
     } else {

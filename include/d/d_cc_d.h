@@ -86,14 +86,14 @@ enum dCcG_hitSe {
 };
 
 enum CcG_At_HitMark {
-    /* 0x0 */ dCcG_AtHitMark_None_e = 0,
-    /* 0x1 */ dCcG_AtHitMark_Unk1_e = 1,
+    /* 0x0 */ dCcG_AtHitMark_None_e = dPa_name::ID_NONE,
+    /* 0x1 */ dCcG_AtHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xD */ dCcG_AtHitMark_Nrm_e = dPa_name::ID_COMMON_NORMAL_HIT,
     /* 0xF */ dCcG_AtHitMark_Big_e = dPa_name::ID_COMMON_BIG_HIT,
 };
 
 enum CcG_Tg_HitMark {
-    /* 0x1 */ dCcG_TgHitMark_Unk1_e = 1,
+    /* 0x1 */ dCcG_TgHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xC */ dCcg_TgHitMark_Purple_e = dPa_name::ID_COMMON_PURPLE_HIT,
 };
 

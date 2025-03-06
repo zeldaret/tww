@@ -373,7 +373,7 @@ BOOL daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
             field_0xD74++;
             field_0xD68 = 0;
             setAnm(9, 0.0f, 1);
-            dComIfGp_particle_set(0xC, field_0x7E0.GetTgHitPosP());
+            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
             fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
             fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
         }
@@ -1864,7 +1864,7 @@ u32 daNpc_Ji1_c::privateCut() {
 u32 daNpc_Ji1_c::setParticle(int max, f32 rate, f32 spread) {
     dtParticle();
     if(field_0x2E0.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
         if(emitter) {
             emitter->setRate(rate);
             emitter->setSpread(spread);
@@ -1888,7 +1888,7 @@ void daNpc_Ji1_c::dtParticle() {
 /* 000058F0-000059E8       .text setParticleAT__11daNpc_Ji1_cFiff */
 u32 daNpc_Ji1_c::setParticleAT(int max, f32 rate, f32 spread) {
     if(field_0x300.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
         if(field_0x300.getEmitter()) {
             JGeometry::TVec3<f32> scaleVec;
             scaleVec.x = 2.0f;
@@ -2813,7 +2813,7 @@ void daNpc_Ji1_c::setAnimFromMsgNo(u32 msgNo) {
             if(field_0x430 != 0) {
                 field_0x430->becomeInvalidEmitter();
                 field_0x430 = 0;
-                field_0x430 = dComIfGp_particle_set(0x81A5, &current.pos);
+                field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A5, &current.pos);
             }
 
             setAnm(0x18, 8.0f, 0);
@@ -2997,7 +2997,7 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
                 pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NAKU);
 
                 if(field_0x430 == 0) {
-                    field_0x430 = dComIfGp_particle_set(0x81A4, &current.pos);
+                    field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A4, &current.pos);
                     harpoonRelease(0);
                 }
 
@@ -3684,8 +3684,8 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
         scale = *param_1;
     }
 
-    dComIfGp_particle_set(0xD, field_0x7E0.GetTgHitPosP(), &angle, &scale);
-    dComIfGp_particle_set(0x10, field_0x7E0.GetTgHitPosP(), 0, &scale);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, field_0x7E0.GetTgHitPosP(), &angle, &scale);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, field_0x7E0.GetTgHitPosP(), 0, &scale);
     fopAcM_seStart(this, JA_SE_CM_JI_DAMAGE, 0);
     fopAcM_seStart(this, param_2, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);
@@ -3693,7 +3693,7 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
 
 /* 000114EC-0001161C       .text setGuardParticle__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::setGuardParticle() {
-    dComIfGp_particle_set(0xC, field_0x7E0.GetTgHitPosP());
+    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
     fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
     fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);

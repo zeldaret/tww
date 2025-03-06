@@ -165,7 +165,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
     case dBgS_Attr_SAND_e: {
         i_this->m0350.end();
         JPABaseEmitter* emitter1 = dComIfGp_particle_setToon(
-            0x2022, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
+            dPa_name::ID_COMMON_2022, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
             &i_this->m0350, fopAcM_GetRoomNo(i_this)
         );
         if (emitter1) {
@@ -180,7 +180,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
         break;
     }
     case dBgS_Attr_GRASS_e:
-        JPABaseEmitter* emitter2 = dComIfGp_particle_set(0x24, &i_this->m0338, &i_this->m0344);
+        JPABaseEmitter* emitter2 = dComIfGp_particle_set(dPa_name::ID_COMMON_0024, &i_this->m0338, &i_this->m0344);
         if (emitter2) {
             emitter2->setRate(rate * 0.5f);
             emitter2->setMaxFrame(3);
@@ -3212,7 +3212,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
         i_this->m0336--;
         if (i_this->m0336 == 0) {
             i_this->m0344.y = i_this->current.angle.y;
-            dComIfGp_particle_set(0xE, &i_this->m116C, &i_this->m0344);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_000E, &i_this->m116C, &i_this->m0344);
         }
     }
     

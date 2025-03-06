@@ -334,7 +334,7 @@ void daNpc_Nz_c::cutSetAnmProc() {
 
             mDoMtx_stack_c::copy(pModel->getAnmMtx(m_jnt.getHeadJntNum()));
             mDoMtx_stack_c::multVec(&temp4, &pos);
-            dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, 0, -1, &color);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0057, &pos, &shape_angle, &scale, 0xFF, 0, -1, &color);
         }
     }
 }

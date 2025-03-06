@@ -141,7 +141,7 @@ void daWarpfout_c::initWarp4(int) {
     fopAc_ac_c* link = dComIfGp_getLinkPlayer();
 
     for (int i = 0; i < 6; i++) {
-        dComIfGp_particle_set(dPa_name::ID_WARPFOUT_WARP4, &link->current.pos);
+        dComIfGp_particle_set(dPa_name::ID_SCENE_WARPFOUT_WARP4, &link->current.pos);
     }
 }
 
@@ -164,7 +164,7 @@ void daWarpfout_c::set_effect_wind01(cXyz effectPos, s16 effectAngleZOffset) {
     csXyz effectAngle = get_effect_angle();
     effectAngle.z += effectAngleZOffset;
 
-    dComIfGp_particle_set(0x830f, &effectPos, &effectAngle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_830F, &effectPos, &effectAngle);
 }
 
 /* 000005F4-00000670       .text get_effect_angle__12daWarpfout_cFv */

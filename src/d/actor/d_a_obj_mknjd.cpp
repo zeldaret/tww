@@ -591,7 +591,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
     /* Particles and sound effects */
     // After 1 frame, the particles for the statue splitting in half spawn.
     if (mBreakTimer == 1) {
-        mEmitters[0] = dComIfGp_particle_set(0x8185, &current.pos, &current.angle);
+        mEmitters[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_8185, &current.pos, &current.angle);
 
         GXColor emitter2Color;
         emitter2Color.r = tevStr.mColorC0.r;
@@ -599,9 +599,9 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
         emitter2Color.b = tevStr.mColorC0.b;
         emitter2Color.a = tevStr.mColorC0.a;
         
-        mEmitters[1] = dComIfGp_particle_setProjection(0x8186, &current.pos, &current.angle, NULL, 0xFF, NULL, current.roomNo, &tevStr.mColorK0, &emitter2Color);
+        mEmitters[1] = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_8186, &current.pos, &current.angle, NULL, 0xFF, NULL, current.roomNo, &tevStr.mColorK0, &emitter2Color);
 
-        mEmitters[2] = dComIfGp_particle_setToon(0xA187, &current.pos, &current.angle, NULL, 0xFF, &mSmokeCBs[2]);
+        mEmitters[2] = dComIfGp_particle_setToon(dPa_name::ID_SCENE_A187, &current.pos, &current.angle, NULL, 0xFF, &mSmokeCBs[2]);
         mSmokeCBs[2].setRateOff(0);
 
         fopAcM_seStartCurrent(this, JA_SE_OBJ_SAGE_GATE_CREAK, 0);
@@ -634,7 +634,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
         mBrokenPos = current.pos;
         mBrokenPos.y += 350.0f;
 
-        mEmitters[3] = dComIfGp_particle_setToon(0x2027, &mBrokenPos, &current.angle, NULL, 0xFF, &mSmokeCBs[3]);
+        mEmitters[3] = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &mBrokenPos, &current.angle, NULL, 0xFF, &mSmokeCBs[3]);
         if (mEmitters[3] != NULL) {
             mEmitters[3]->setVolumeSweep(0.5f);
             mEmitters[3]->setLifeTime(0x2D);

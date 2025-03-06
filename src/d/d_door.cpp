@@ -384,7 +384,7 @@ void dDoor_info_c::setPosAndAngle(cXyz* pPos, s16 angle) {
 void dDoor_smoke_c::smokeInit(dDoor_info_c* door) {
     mPos = door->current.pos;
     mRot.y = door->shape_angle.y;
-    JPABaseEmitter* emtr = dComIfGp_particle_set(0x2022, &mPos, &mRot, NULL, 0xAA, &mSmokeCb, fopAcM_GetRoomNo(door));
+    JPABaseEmitter* emtr = dComIfGp_particle_set(dPa_name::ID_COMMON_2022, &mPos, &mRot, NULL, 0xAA, &mSmokeCb, fopAcM_GetRoomNo(door));
     m34 = 0;
     m35 = 0;
     if (emtr != NULL) {

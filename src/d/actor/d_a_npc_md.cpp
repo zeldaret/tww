@@ -1043,13 +1043,13 @@ BOOL daNpc_Md_c::mirrorCancelCheck() {
 
 /* 00003648-00003674       .text setWingEmitter__10daNpc_Md_cFv */
 void daNpc_Md_c::setWingEmitter() {
-    particle_set(&m0508[0], 0x819B);
+    particle_set(&m0508[0], dPa_name::ID_SCENE_819B);
 }
 
 /* 00003674-000036C0       .text setHane02Emitter__10daNpc_Md_cFv */
 void daNpc_Md_c::setHane02Emitter() {
-    particle_set(&m0508[2], 0x8217);
-    particle_set(&m0508[3], 0x8217);
+    particle_set(&m0508[2], dPa_name::ID_SCENE_8217);
+    particle_set(&m0508[3], dPa_name::ID_SCENE_8217);
 }
 
 /* 000036C0-000036FC       .text deleteHane02Emitter__10daNpc_Md_cFv */
@@ -1060,8 +1060,8 @@ void daNpc_Md_c::deleteHane02Emitter() {
 
 /* 000036FC-00003748       .text setHane03Emitter__10daNpc_Md_cFv */
 void daNpc_Md_c::setHane03Emitter() {
-    particle_set(&m0508[4], 0x827D);
-    particle_set(&m0508[5], 0x827D);
+    particle_set(&m0508[4], dPa_name::ID_SCENE_827D);
+    particle_set(&m0508[5], dPa_name::ID_SCENE_827D);
 }
 
 /* 00003748-00003784       .text deleteHane03Emitter__10daNpc_Md_cFv */
@@ -1132,10 +1132,10 @@ BOOL daNpc_Md_c::lightHitCheck() {
             fopAc_ac_c* hitActor = mCps.GetAtHitAc();
             if (fopAcM_CheckStatus(this, fopAcStts_CARRY_e) && !isNoCarryAction()) {
                 if (hitActor != dComIfGp_getLinkPlayer() && m3058.getEmitter() == NULL) {
-                    dComIfGp_particle_set(0x8232, &current.pos, NULL, NULL, 0xFF, &m3058);
+                    dComIfGp_particle_set(dPa_name::ID_SCENE_8232, &current.pos, NULL, NULL, 0xFF, &m3058);
                 }
             } else if (m3058.getEmitter() == NULL) {
-                dComIfGp_particle_set(0x8232, &current.pos, NULL, NULL, 0xFF, &m3058);
+                dComIfGp_particle_set(dPa_name::ID_SCENE_8232, &current.pos, NULL, NULL, 0xFF, &m3058);
             }
             
             cM3d_lineVsPosSuisenCross(mCps.GetStart(), mCps.GetEnd(), *mCps.GetAtHitPosP(), &m3058.getPos());
@@ -1153,7 +1153,7 @@ BOOL daNpc_Md_c::lightHitCheck() {
         }
         
         if (m304C.getEmitter() == NULL) {
-            m304C.makeEmitter(0x8226, mpHarpLightModel->getBaseTRMtx(), &current.pos, NULL);
+            m304C.makeEmitter(dPa_name::ID_SCENE_8226, mpHarpLightModel->getBaseTRMtx(), &current.pos, NULL);
             JPABaseEmitter* emitter = m304C.getEmitter();
             JGeometry::TVec3<f32> temp;
             temp.set(1.0f, 1.0f, 1.0f);
@@ -2662,7 +2662,7 @@ BOOL daNpc_Md_c::setAnm(int anmIdx) {
     
     if (m312D == 0x10) {
         if (m0508[1] == NULL) {
-            m0508[1] = dComIfGp_particle_set(0x819D, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0, &tevStr.mColorK0);
+            m0508[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_819D, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0, &tevStr.mColorK0);
             if (m0508[1]) {
                 m0508[1]->becomeImmortalEmitter();
             }

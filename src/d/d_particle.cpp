@@ -486,12 +486,12 @@ void dPa_simpleEcallBack::draw(JPABaseEmitter* emtr) {
 }
 
 /* 8007C6EC-8007C774       .text create__19dPa_simpleEcallBackFP17JPAEmitterManagerUsUc */
-JPABaseEmitter* dPa_simpleEcallBack::create(JPAEmitterManager* manager, u16 param_2, u8 param_3) {
+JPABaseEmitter* dPa_simpleEcallBack::create(JPAEmitterManager* manager, u16 effectID, u8 param_3) {
     mpBaseEmitter = NULL;
     mGrpID = param_3;
-    mResID = param_2;
+    mResID = effectID;
     if (createEmitter(manager)) {
-        if (param_2 == 0xa06a || param_2 == 0xa410) {
+        if (effectID == dPa_name::ID_SCENE_A06A || effectID == dPa_name::ID_SCENE_A410) {
             mbIsSmoke = true;
             mpBaseEmitter->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
         } else {
@@ -787,7 +787,7 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
     }
 
     JPABaseEmitter* emtr = NULL;
-    if (*i_return_id == 0x23) {
+    if (*i_return_id == dPa_name::ID_COMMON_0023) {
         if (flag & 0x04) {
             cXyz ptclScale(scale3, scale3, scale3);
             dKy_get_seacolor(&amb, &dif);
@@ -797,7 +797,7 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
                 emtr = setNormal(*i_return_id, pos, angle, &ptclScale, 0xFF, NULL, -1, &amb, NULL, NULL);
             }
         }
-    } else if (*i_return_id == 0x24) {
+    } else if (*i_return_id == dPa_name::ID_COMMON_0024) {
         if (flag & 0x02) {
             cXyz ptclScale(scale2, scale2, scale2);
 
@@ -812,9 +812,9 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
                 emtr = setNormal(*i_return_id, pos, angle, &ptclScale, 0xFF, NULL, -1, &amb, &i_tevStr->mColorK0, NULL);
             }
         }
-    } else if (*i_return_id == 0x2022) {
+    } else if (*i_return_id == dPa_name::ID_COMMON_2022) {
         if (flag & 0x08)
-            *i_return_id = 0x2027;
+            *i_return_id = dPa_name::ID_COMMON_2027;
 
         if (flag & 0x09) {
             cXyz ptclScale(scale1, scale1, scale1);
@@ -836,9 +836,9 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
 }
 
 /* 8007D998-8007DA58       .text setSimpleLand__13dPa_control_cFR13cBgS_PolyInfoPC4cXyzPC5csXyzfffP12dKy_tevstr_cPii */
-JPABaseEmitter* dPa_control_c::setSimpleLand(cBgS_PolyInfo& polyInfo, const cXyz* pos, const csXyz* angle, f32 scale1, f32 scale2, f32 scale3, dKy_tevstr_c* i_tevStr, int* i_return_code, int flag) {
+JPABaseEmitter* dPa_control_c::setSimpleLand(cBgS_PolyInfo& polyInfo, const cXyz* pos, const csXyz* angle, f32 scale1, f32 scale2, f32 scale3, dKy_tevstr_c* i_tevStr, int* i_return_id, int flag) {
     if (dComIfG_Bgsp()->ChkPolySafe(polyInfo)) {
-        return setSimpleLand(dComIfG_Bgsp()->GetAttributeCode(polyInfo), pos, angle, scale1, scale2, scale3, i_tevStr, i_return_code, flag);
+        return setSimpleLand(dComIfG_Bgsp()->GetAttributeCode(polyInfo), pos, angle, scale1, scale2, scale3, i_tevStr, i_return_id, flag);
     }
     return NULL;
 }
@@ -846,11 +846,11 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(cBgS_PolyInfo& polyInfo, const cXyz
 /* 8007DA58-8007DAA8       .text checkAtrCodeEffect__13dPa_control_cFi */
 s32 dPa_control_c::checkAtrCodeEffect(int code) {
     if (code == dBgS_Attr_WATER_e) {
-        return 0x23;
+        return dPa_name::ID_COMMON_0023;
     } else if (code == dBgS_Attr_GRASS_e) {
-        return 0x24;
+        return dPa_name::ID_COMMON_0024;
     } else if (code != dBgS_Attr_UNK1B_e && code != dBgS_Attr_ICE_e && code != dBgS_Attr_GIANT_FLOWER_e && code != dBgS_Attr_CARPET_e) {
-        return 0x2022;
+        return dPa_name::ID_COMMON_2022;
     } else {
         return -1;
     }
@@ -865,13 +865,13 @@ JPABaseEmitter* dPa_control_c::setNormalStripes(u16 ptclID, const cXyz* pos, con
 }
 
 /* 8007DB34-8007DBC4       .text newSimple__13dPa_control_cFUsUc */
-bool dPa_control_c::newSimple(u16 param_1, u8 param_2) {
+bool dPa_control_c::newSimple(u16 effectID, u8 param_2) {
     /* Nonmatching */
     if (mNumSimple >= 25) {
         OSReport("\x1b[43;30m１エミッター登録数オーバー！！\n");
         return false;
     }
-    JPABaseEmitter* emitter = mSimpleCallbacks[mNumSimple].create(mEmitterMng, param_1, param_2);
+    JPABaseEmitter* emitter = mSimpleCallbacks[mNumSimple].create(mEmitterMng, effectID, param_2);
     if (!emitter) {
         return false;
     }

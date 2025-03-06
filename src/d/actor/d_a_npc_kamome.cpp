@@ -1298,13 +1298,13 @@ BOOL daNpc_kam_c::execute() {
                 if (!isWaterHit()) {
                     onWaterHit();
                     
-                    JPABaseEmitter* splashEmitter = dComIfGp_particle_set(0x40, &current.pos);
+                    JPABaseEmitter* splashEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0040, &current.pos);
                     if (splashEmitter) {
                         splashEmitter->setRate(15.0f);
                         splashEmitter->setGlobalScale(splash_scale);
                     }
                     
-                    JPABaseEmitter* rippleEmitter = dComIfGp_particle_setSingleRipple(0x3D, &current.pos);
+                    JPABaseEmitter* rippleEmitter = dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003D, &current.pos);
                     if (rippleEmitter) {
                         rippleEmitter->setGlobalScale(ripple_scale);
                     }

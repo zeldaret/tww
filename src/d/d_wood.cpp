@@ -777,7 +777,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                 g_env_light.settingTevStruct(TEV_TYPE_BG0, &mPos, &mTevStr);
 
                 // Spawn cut down particles (a bunch of leaves)
-                dComIfGp_particle_set(dPa_name::ID_CUT_L_TREE_DOWN, &mPos, NULL,
+                dComIfGp_particle_set(dPa_name::ID_COMMON_CUT_L_TREE_DOWN, &mPos, NULL,
                                       NULL, 0xff, NULL, -1, &mTevStr.mColorK0,
                                       NULL, NULL);
 
