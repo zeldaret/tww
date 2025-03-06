@@ -800,7 +800,7 @@ void daPy_lk_c::setFootEffectType(int effectID, cXyz* i_pos, int param_2, int pa
     JPABaseEmitter* emitter = NULL;
 
     csXyz angle;
-    daPy_footEffect_c* footEffect = &m31E8[param_2];
+    daPy_footEffect_c* footEffect = &mFootEffect[param_2];
     if (mAcch.ChkGroundHit() && !checkNoResetFlg0(static_cast<daPy_lk_c::daPy_FLG0>(daPyFlg0_UNK80000000 | daPyFlg0_UNK20000000))) {
         angle.x = getGroundAngle(&mAcch.m_gnd, current.angle.y);
     } else {
@@ -1060,15 +1060,11 @@ void daPy_lk_c::setFootEffect() {
 
 /* 8012C128-8012C1A8       .text resetFootEffect__9daPy_lk_cFv */
 void daPy_lk_c::resetFootEffect() {
-    // Fakematch?
-    // Should probably use array indexing
-    daPy_footEffect_c* pFootEffect = m31E8;
-    for (int idx = 0; idx < (s32)ARRAY_SIZE(m31E8); idx++) {
-        pFootEffect[0].getSmokeCallBack()->end();
-        pFootEffect[0].getOtherCallBack()->end();
-        pFootEffect[0].setID(-1);
-
-        pFootEffect++;
+    daPy_footEffect_c* pFootEffect = mFootEffect;
+    for (int idx = 0; idx < (s32)ARRAY_SIZE(mFootEffect); idx++, pFootEffect++) {
+        pFootEffect->getSmokeCallBack()->end();
+        pFootEffect->getOtherCallBack()->end();
+        pFootEffect->setID(-1);
     }
 
     m34BE = 0;

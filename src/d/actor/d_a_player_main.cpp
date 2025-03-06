@@ -3798,9 +3798,9 @@ static BOOL daPy_IsDelete(daPy_lk_c*) {
 /* 80122D58-80123058       .text playerDelete__9daPy_lk_cFv */
 BOOL daPy_lk_c::playerDelete() {
     int i;
-    for (i = 0; i < (int)ARRAY_SIZE(m31E8); i++) {
-        m31E8[i].getSmokeCallBack()->end();
-        m31E8[i].getOtherCallBack()->end();
+    for (i = 0; i < (int)ARRAY_SIZE(mFootEffect); i++) {
+        mFootEffect[i].getSmokeCallBack()->end();
+        mFootEffect[i].getOtherCallBack()->end();
     }
     if (mFanSwingCb.mpEmitter) {
         mFanSwingCb.mpEmitter->clearStatus(0x40);
