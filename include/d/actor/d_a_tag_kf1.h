@@ -52,11 +52,11 @@ public:
     //u32 field_0x6d8;
     //u32 field_0x6dc;
     //u32 field_0x738;
-    u8 field_0x73c;
+    /* 0x73c */ u8 hasAttention;
 
     /* 0x73e */ s16 tenth_cost;
 
-    /* 0x742 */ s16 field_0x740;
+    /* 0x740 */ s16 field_0x740;
     /* 0x742 */ s16 field_0x742;
 
     /* 0x744 */ s32 partners[8];
@@ -76,15 +76,14 @@ public:
 class daTag_Kf1_HIO_c : public JORReflexible {
 public:
     daTag_Kf1_HIO_c();
-    ~daTag_Kf1_HIO_c() {};
+    virtual ~daTag_Kf1_HIO_c() {};
 
 public:
-    /* 0x00 */ u32 field;
     /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 mAttentionMaxEuclidDistance;
     /* 0x0C */ f32 mAttentionMaxYDistance;
-    /* 0x10 */ u32 f0x10;
+    /* 0x10 */ f32 f0x10;
     /* Place member variables here */
-};
+}; /* Size: 0x14 */
 
 #endif /* D_A_TAG_KF1_H */

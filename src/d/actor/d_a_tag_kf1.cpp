@@ -23,14 +23,15 @@ daTag_Kf1_HIO_c::daTag_Kf1_HIO_c()
 { 
     mAttentionMaxEuclidDistance = a_prm_tbl[0];
     mAttentionMaxYDistance = a_prm_tbl[1];
-    /* Nonmatching */ 
-    f0x10 = 0;
+    /* Nonmatching */
+    // type is wrong, but anything else seems to make this more wrong 
+    // it seems to definitely come from a_prm_tbl[2], but instructions assign an integer.
+    f0x10 = a_prm_tbl[2];
     mNo = -1;
 }
-struct Prm_e {};
 
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
-void* searchActor_Kutani(void* arg1, void* arg4) {
+void* searchActor_Kutani(void* arg1, void* _) {
     fopAc_ac_c* act = (fopAc_ac_c*)arg1;
     if (l_check_wrk < 100 && fopAc_IsActor(act) && act->base.mProcName == 0x1cb &&
         daObj::PrmAbstract<daTsubo::Act_c::Prm_e>(act, daTsubo::Act_c::PRM_TYPE_W,
@@ -93,7 +94,7 @@ void daTag_Kf1_c::eventOrder() {
 /* 00000314-00000380       .text checkOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::checkOrder() {
     if (eventInfo.checkCommandDemoAccrpt() &&
-        dComIfGp_evmng_startCheck("TagKf1" ".BENSYO") &&
+        dComIfGp_evmng_startCheck("BENSYO") &&
         // TODO correct enum here?
         (event_state == cPhs_STOP_e)) {
         event_state = 0;
@@ -303,7 +304,7 @@ BOOL daTag_Kf1_c::set_action(ActionFunc action, void* param) {
 /* 00000AB8-00000B14       .text wait01__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::wait01() {
     this->event_state = 0;
-    if ((this->field_0x73c != 0) && checkPartner() != this->npartners) {
+    if ((this->hasAttention) && checkPartner() != this->npartners) {
         this->event_state = 3;
     }
     return TRUE;
@@ -326,7 +327,7 @@ BOOL daTag_Kf1_c::wait_action1(void*) {
             partner_srch();
             field_0x76a = 2;
         }
-        field_0x73c = chkAttention(this->current.pos);
+        hasAttention = chkAttention(this->current.pos);
         s32 val = field_0x768;
         switch (val) {
             case 1: wait01(); break;
