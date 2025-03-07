@@ -42,8 +42,8 @@ public:
         *i_value = (-mNormal.x * i_axis.x - mNormal.z * i_axis.z) / mNormal.y;
         return true;
     }
-    f32 getSignedLenPos(const cXyz* param_1) const {
-        return cM3d_SignedLenPlaAndPos(this, param_1);
+    f32 getSignedLenPos(const cXyz* pos) const {
+        return cM3d_SignedLenPlaAndPos(this, pos);
     }
     void Set(const cM3dGPla* pla) {
         mNormal = *pla->GetNP();

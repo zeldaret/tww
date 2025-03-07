@@ -33,6 +33,10 @@ public:
     bool Cross(const cM3dGSph& sph, Vec* out) const { return cM3d_Cross_SphTri(&sph, this, out); }
     bool Cross(const cM3dGTri& tri, Vec* out) const { return cM3d_Cross_TriTri(tri, *this, out); }
 
+    bool crossX(const Vec* pos, f32* pcross_len) const { return cM3d_CrossX_Tri(this, pos, pcross_len); }
+    bool crossY(const Vec* pos) const { return cM3d_CrossY_Tri(this, pos); }
+    bool crossZ(const Vec* pos, f32* pcross_len) const { return cM3d_CrossZ_Tri(this, pos, pcross_len); }
+
     void Up(f32 dist) {
         Vec delta;
         VECScale(&mNormal, &delta, dist);
@@ -42,10 +46,6 @@ public:
         mD -= dist;
     }
 
-    // TODO
-    void crossX(const Vec*, f32*) const {}
-    void crossY(const Vec*) const {}
-    void crossZ(const Vec*, f32*) const {}
     void setBg(const Vec* a, const Vec* b, const Vec* c, const cM3dGPla* pla) {
         mA = *a;
         mB = *b;
@@ -61,6 +61,7 @@ public:
     void setUp() {
         SetupFrom3Vtx(&mA, &mB, &mC);
     }
+
     virtual ~cM3dGTri() {}
 };  // Size: 0x38
 
