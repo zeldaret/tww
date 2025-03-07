@@ -1296,12 +1296,12 @@ void daItem_c::mode_wait() {
         mode_water_init();
     }
     
-    dBgS_ObjGndChk_Yogan gndChk;
+    dBgS_ObjGndChk_Yogan lavaChk;
     cXyz temp;
     temp.set(old.pos.x, old.pos.y, old.pos.z);
-    gndChk.SetPos(&temp);
-    f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if (groundY != -1000000000.0f && groundY > current.pos.y) {
+    lavaChk.SetPos(&temp);
+    f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
+    if (lavaY != C_BG_MIN_HEIGHT && lavaY > current.pos.y) {
         fopAcM_delete(this);
     }
 }

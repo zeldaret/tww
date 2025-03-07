@@ -387,7 +387,7 @@ static BOOL Line_check(am2_class* i_this, cXyz destPos) {
 /* 0000177C-00001A24       .text naraku_check__FP9am2_class */
 static BOOL naraku_check(am2_class* i_this) {
     // Checks if the Armos has fallen into an abyss.
-    if (i_this->mAcch.GetGroundH() != -1000000000.0f &&
+    if (i_this->mAcch.GetGroundH() != C_BG_MIN_HEIGHT &&
         dComIfG_Bgsp()->ChkPolySafe(i_this->mAcch.m_gnd) &&
         dComIfG_Bgsp()->GetGroundCode(i_this->mAcch.m_gnd) == 4) // Abyss ground code
     {

@@ -3087,7 +3087,7 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* oldPos, int attributeCode) {
         mLavaGndChk.SetPos(&pos);
         m35D4 = dComIfG_Bgsp()->GroundCross(&mLavaGndChk);
         if (mAcch.GetGroundH() > m35D4) {
-            m35D4 = -1000000000.0f;
+            m35D4 = C_BG_MIN_HEIGHT;
         }
         if (m35D4 > current.pos.y) {
             attributeCode = dComIfG_Bgsp()->GetAttributeCode(mLavaGndChk);
@@ -3337,7 +3337,7 @@ BOOL daPy_lk_c::execute() {
         !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
         !checkModeFlg(ModeFlg_ROPE | ModeFlg_CLIMB | ModeFlg_LADDER) &&
         mCurProc != daPyProc_DEMO_TOOL_e &&
-        mAcch.GetGroundH() != -1e9f &&
+        mAcch.GetGroundH() != C_BG_MIN_HEIGHT &&
         !checkNoResetFlg0((daPy_FLG0)(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000)) &&
         dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd) &&
         dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd)
@@ -3495,7 +3495,7 @@ BOOL daPy_lk_c::execute() {
         }
     } else if (mCurProc == daPyProc_DEMO_TOOL_e) {
         current.pos = sp14;
-        if (m3574 != 0 && mAcch.GetGroundH() != -1e9f) {
+        if (m3574 != 0 && mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
             current.pos.y = mAcch.GetGroundH();
         }
     } else if (mCurProc == daPyProc_HOOKSHOT_FLY_e ||
@@ -3515,7 +3515,7 @@ BOOL daPy_lk_c::execute() {
     }
     
     int roomNo;
-    if (mAcch.GetGroundH() != -1e9f) {
+    if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
         roomNo = setRoomInfo();
         m357C = m3580;
         m3580 = dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd);

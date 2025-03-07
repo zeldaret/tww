@@ -37,7 +37,7 @@ void daPy_swimTailEcallBack_c::getMaxWaterY(JGeometry::TVec3<f32>* pos) {
         if (field_0x10 > pos->y) {
             pos->y = field_0x10 + 2.0f;
         }
-    } else if (field_0x10 != -1e9f) {
+    } else if (field_0x10 != C_BG_MIN_HEIGHT) {
         pos->y = field_0x10 + 2.0f;
     } else {
         pos->y = field_0x0C;
@@ -899,7 +899,7 @@ void daPy_lk_c::setFootMark(cXyz* i_pos) {
     mGndChk.SetPos(&pos);
 
     pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
-    if (pos.y != -1e9f && dComIfG_Bgsp()->GetAttributeCode(mGndChk) == dBgS_Attr_SAND_e) {
+    if (pos.y != C_BG_MIN_HEIGHT && dComIfG_Bgsp()->GetAttributeCode(mGndChk) == dBgS_Attr_SAND_e) {
         fopKyM_create(PROC_WATER_MARK, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
     }
 
@@ -1049,7 +1049,7 @@ void daPy_lk_c::setFootEffect() {
             mGndChk.SetPos(&pos);
 
             f32 groundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
-            if (groundY != -1e9f) {
+            if (groundY != C_BG_MIN_HEIGHT) {
                 pos.y = groundY;
             }
 

@@ -4430,7 +4430,7 @@ s32 daNpcPeople_c::createInit() {
 
     if(mNpcType != 0xB) {
         mObjAcch.CrrPos(*dComIfG_Bgsp());
-        if(-1.0e9f != mObjAcch.GetGroundH()) {
+        if(C_BG_MIN_HEIGHT != mObjAcch.GetGroundH()) {
             current.pos.y = home.pos.y = mObjAcch.GetGroundH();
         }
     }

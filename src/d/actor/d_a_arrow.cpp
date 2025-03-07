@@ -514,7 +514,7 @@ void daArrow_c::setRoomInfo() {
     
     mGndChk.SetPos(&current.pos);
     f32 groundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
-    if (groundY != -1000000000.0f) {
+    if (groundY != C_BG_MIN_HEIGHT) {
         roomNo = dComIfG_Bgsp()->GetRoomId(mGndChk);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mGndChk);
     } else {

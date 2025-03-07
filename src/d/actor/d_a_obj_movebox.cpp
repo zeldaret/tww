@@ -116,7 +116,7 @@ namespace daObjMovebox {
     /* 000001F0-000003A4       .text gnd_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cif */
     void Bgc_c::gnd_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, f32 param_4) {
         f32 tempz;
-        f32 maxGroundY = -1000000000.0f;
+        f32 maxGroundY = C_BG_MIN_HEIGHT;
         
         mDoMtx_stack_c::transS(movebox->current.pos);
         mDoMtx_stack_c::YrotM(movebox->home.angle.y);
@@ -1872,7 +1872,7 @@ namespace daObjMovebox {
             int temp = mBgc.mMaxGroundIdx;
             f32 groundH = mBgc.mGroundY[temp];
             cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(Bgc_c::M_gnd_work[temp]);
-            if (triPla && groundH != -1000000000.0f) {
+            if (triPla && groundH != C_BG_MIN_HEIGHT) {
                 dComIfGd_setSimpleShadow(&current.pos, groundH, i_attr()->m10, triPla->GetNP(), shape_angle.y, 1.0f, NULL);
             }
         }

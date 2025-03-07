@@ -201,19 +201,19 @@ void daIball_c::checkGeo() {
     
     (this->*mode_proc[mMode])();
     
-    dBgS_ObjGndChk_Yogan gnd_chk;
+    dBgS_ObjGndChk_Yogan lavaChk;
     cXyz pos(current.pos.x, old.pos.y + 30.0f + m_data.mYOffset, current.pos.z);
-    gnd_chk.SetPos(&pos);
-    f32 groundY = dComIfG_Bgsp()->GroundCross(&gnd_chk);
+    lavaChk.SetPos(&pos);
+    f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
     f32 groundH = mAcch.GetGroundH();
-    if (groundY != -1000000000.0f) {
-        f32 dist_off_gnd = groundY - groundH;
-        if ((dist_off_gnd < 20.0f && groundY > current.pos.y) || (dist_off_gnd >= 20.0f && groundY > current.pos.y + 20.0f)) {
+    if (lavaY != C_BG_MIN_HEIGHT) {
+        f32 lava_depth = lavaY - groundH;
+        if ((lava_depth < 20.0f && lavaY > current.pos.y) || (lava_depth >= 20.0f && lavaY > current.pos.y + 20.0f)) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_FALL_MAGMA_S, 0);
             cXyz particle_scale;
             particle_scale.setall(0.25f);
             cXyz particle_pos(current.pos);
-            particle_pos.y = groundY;
+            particle_pos.y = lavaY;
             dComIfGp_particle_set(dPa_name::ID_SCENE_80D5, &particle_pos, NULL, &particle_scale);
             fopAcM_delete(this);
         }
@@ -238,7 +238,7 @@ void daIball_c::mode_wait() {
     }
     
     f32 seaHeight = mAcch.GetSeaHeight();
-    if (seaHeight > current.pos.y && seaHeight != -1000000000.0f) {
+    if (seaHeight > current.pos.y && seaHeight != C_BG_MIN_HEIGHT) {
         mode_water_init();
         current.pos.y = seaHeight;
     }
@@ -254,10 +254,10 @@ void daIball_c::mode_water_init() {
 /* 800F3FE8-800F4054       .text mode_water__9daIball_cFv */
 void daIball_c::mode_water() {
     f32 seaHeight = mAcch.GetSeaHeight();
-    if (seaHeight == -1000000000.0f || seaHeight < current.pos.y) {
+    if (seaHeight == C_BG_MIN_HEIGHT || seaHeight < current.pos.y) {
         mode_wait_init();
     }
-    if (seaHeight != -1000000000.0f) {
+    if (seaHeight != C_BG_MIN_HEIGHT) {
         current.pos.y = seaHeight;
     }
 }

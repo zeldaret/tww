@@ -4,6 +4,7 @@
 //
 
 #include "d/d_bg_w_hf.h"
+#include "SSystem/SComponent/c_bg_s.h"
 #include "dolphin/types.h"
 
 #define CHECK_MINMAX_1(line, min, max)                                                             \
@@ -152,8 +153,8 @@ void dBgWHf::MakeBlckBndHf(int blck_id, f32* r28, f32* r29) {
         r31 = pm_bgd->m_t_num - 1;
     }
     
-    *r28 = 1000000000.0f;
-    *r29 = -1000000000.0f;
+    *r28 = C_BG_MAX_HEIGHT;
+    *r29 = C_BG_MIN_HEIGHT;
     
     for (int t = r7; t <= r31; t++) {
 #if VERSION != VERSION_JPN

@@ -1827,11 +1827,11 @@ bool dDlst_shadowControl_c::addReal(u32 key, J3DModel* model) {
 }
 
 /* 80085274-800852D8       .text setSimple__21dDlst_shadowControl_cFP4cXyzffP4cXyzsfP9_GXTexObj */
-int dDlst_shadowControl_c::setSimple(cXyz* pos, f32 f0, f32 f1, cXyz* floor_nrm, s16 rotY, f32 f2, GXTexObj* tex) {
+int dDlst_shadowControl_c::setSimple(cXyz* pos, f32 groundY, f32 f1, cXyz* floor_nrm, s16 rotY, f32 f2, GXTexObj* tex) {
     if (floor_nrm == NULL || mSimpleNum >= ARRAY_SIZE(mSimple))
         return false;
 
-    mSimple[mSimpleNum].set(pos, f0, f1, floor_nrm, rotY, f2, tex);
+    mSimple[mSimpleNum].set(pos, groundY, f1, floor_nrm, rotY, f2, tex);
     mSimpleNum++;
     return true;
 }

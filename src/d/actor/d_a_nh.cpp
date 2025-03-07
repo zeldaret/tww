@@ -273,7 +273,7 @@ void daNh_c::BGCheck() {
     dBgS_ObjGndChk_All gndChk;
     gndChk.SetPos(&current.pos);
     f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if (groundY != -1000000000.0f) {
+    if (groundY != C_BG_MIN_HEIGHT) {
         mGroundY = groundY;
         tevStr.mRoomNo = current.roomNo = dComIfG_Bgsp()->GetRoomId(gndChk);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(gndChk);

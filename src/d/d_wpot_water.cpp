@@ -76,8 +76,8 @@ s32 dWpotWater_c::create() {
 static s32 dWpotWater_Create(kankyo_class* i_k) {
     dWpotWater_c* i_this = (dWpotWater_c*)i_k;
     
-    dBgS_GndChk chk2;
-    dBgS_ObjGndChk_Yogan chk;
+    dBgS_GndChk gndChk;
+    dBgS_ObjGndChk_Yogan lavaChk;
     cXyz pos;
     
     s16 angle = 0;
@@ -88,13 +88,13 @@ static s32 dWpotWater_Create(kankyo_class* i_k) {
             i_this->mPos.y + 100.0f,
             i_this->mPos.z + f4 * cM_ssin(angle)
         );
-        chk.SetPos(&pos);
-        f32 ret = dComIfG_Bgsp()->GroundCross(&chk);
-        if (ret != -1000000000.0f) {
-            chk2.SetPos(&pos);
-            f32 ret2 = dComIfG_Bgsp()->GroundCross(&chk2);
-            if (chk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(chk) == dBgS_Attr_LAVA_e && ret > ret2) {
-                cXyz spawnPos(pos.x, ret + 25.0f, pos.z);
+        lavaChk.SetPos(&pos);
+        f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
+        if (lavaY != C_BG_MIN_HEIGHT) {
+            gndChk.SetPos(&pos);
+            f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
+            if (lavaChk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(lavaChk) == dBgS_Attr_LAVA_e && lavaY > groundY) {
+                cXyz spawnPos(pos.x, lavaY + 25.0f, pos.z);
                 fopAcM_create(PROC_Obj_Magmarock, 0, &spawnPos, i_this->mParam);
                 break;
             }
@@ -106,10 +106,10 @@ static s32 dWpotWater_Create(kankyo_class* i_k) {
         i_this->mPos.y + 100.0f,
         i_this->mPos.z
     );
-    chk2.SetPos(&pos);
-    f32 ret = dComIfG_Bgsp()->GroundCross(&chk2);
-    i_this->mPos.y = ret;
-    if (ret != -1000000000.0f) {
+    gndChk.SetPos(&pos);
+    f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
+    i_this->mPos.y = groundY;
+    if (groundY != C_BG_MIN_HEIGHT) {
         cXyz sp18(i_this->mPos.x, i_this->mPos.y, i_this->mPos.z);
         fopAcM_create(PROC_HITOBJ, 0, &sp18, i_this->mParam);
         return i_this->create();
