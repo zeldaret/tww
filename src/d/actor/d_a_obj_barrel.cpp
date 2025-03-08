@@ -16,10 +16,10 @@
 const char daObjBarrel::Act_c::M_arcname[] = "Ktaru_01";
 const float daObjBarrel::Act_c::l_s_radius = 45.0f;
 const float daObjBarrel::Act_c::l_l_radius = 50.0f;
-const float daObjBarrel::Act_c::l_gnd_fric = 0.1f; // TODO use
-const short daObjBarrel::Act_c::l_gnd_deg = 0xf; // TODO ??
+const float daObjBarrel::Act_c::l_gnd_fric = 0.1f;
+const short daObjBarrel::Act_c::l_gnd_deg = 0xf;
 const float daObjBarrel::Act_c::l_viscous_resist = 0.006f;
-const float daObjBarrel::Act_c::l_inert_resist = 0.001f; // TODO use more?
+const float daObjBarrel::Act_c::l_inert_resist = 0.001f;
 const float daObjBarrel::Act_c::l_max_move = 30.0f;
 const short daObjBarrel::Act_c::l_max_vib_angl = 2048;
 const float daObjBarrel::Act_c::l_min_move_dir = 5.0f;
@@ -46,7 +46,7 @@ const dCcD_SrcCyl daObjBarrel::Act_c::M_cyl_src = {
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 1,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
@@ -430,6 +430,7 @@ void daObjBarrel::Act_c::set_mtx() {
             mDoMtx_stack_c::YrotM(-m612);
             mDoMtx_stack_c::YrotM(m630);
             mDoMtx_stack_c::transM(0.0f, -l_l_radius, 0.0f);
+            break;
     }
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -508,7 +509,6 @@ u32 daObjBarrel::Act_c::get_se_map_hit() const {
 
 /* 00001940-00001994       .text set_senv__Q211daObjBarrel5Act_cCFii */
 void daObjBarrel::Act_c::set_senv(int p1, int p2) const {
-    // TODO:  create cXyz?
     dKy_Sound_set(current.pos, p1, fopAcM_GetID((void*)this), p2);
 }
 
