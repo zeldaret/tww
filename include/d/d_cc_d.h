@@ -12,6 +12,7 @@
 
 enum dCcD_ObjAtType {
     /* 0x00000002 */ AT_TYPE_SWORD          = (1 << 1),
+    /* 0x00000008 */ AT_TYPE_UNK8           = (1 << 3),
     /* 0x00000020 */ AT_TYPE_BOMB           = (1 << 5),
     /* 0x00000040 */ AT_TYPE_BOOMERANG      = (1 << 6),
     /* 0x00000080 */ AT_TYPE_BOKO_STICK     = (1 << 7),
