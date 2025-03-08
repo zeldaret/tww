@@ -13,7 +13,6 @@
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
-
 const char daObjBarrel::Act_c::M_arcname[] = "Ktaru_01";
 const float daObjBarrel::Act_c::l_s_radius = 45.0f;
 const float daObjBarrel::Act_c::l_l_radius = 50.0f;
@@ -519,7 +518,7 @@ void daObjBarrel::Act_c::se_fall_water() {
         &mAcch.m_wtr,
         &mAcch.m_gnd,
     };
-    
+
     u32 mtrlSndId = 0x13;
     for (int i = 0; i < ARRAY_SIZE(temp); i++) {
         int bg_index = temp[i]->GetBgIndex();
@@ -636,9 +635,10 @@ bool daObjBarrel::Act_c::damage_bg_proc() {
 
 /* 00001FCC-00002154       .text damage_bg_proc_directly__Q211daObjBarrel5Act_cFv */
 bool daObjBarrel::Act_c::damage_bg_proc_directly() {
-    bool groundHit = mAcch.ChkGroundHit();
-    bool groundLanding = mAcch.ChkGroundLanding();
+    u32 groundHit = mAcch.ChkGroundHit() ? TRUE : FALSE;
+    u32 groundLanding = mAcch.ChkGroundLanding() ? TRUE : FALSE;
     bool broken = false;
+
     if (mMode == MODE_WAIT || mMode == MODE_JUMP || mMode == MODE_WALK) {
         if (groundLanding && (mLastGroundY - current.pos.y > attr().mFallDmgH)) {
             damaged(true);

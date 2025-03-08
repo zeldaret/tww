@@ -56,7 +56,7 @@ namespace daObjBarrel {
         const Attr_c& attr() const { return M_attr; }
         void get_slant_angle() {}
         bool pos_init() {
-            if (mMode == 0) {
+            if (mMode == MODE_WAIT) {
                 current.pos = home.pos;
                 current.angle = home.angle;
                 shape_angle = home.angle;
