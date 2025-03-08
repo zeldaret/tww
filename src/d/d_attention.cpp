@@ -124,7 +124,7 @@ dAttList_c* dAttention_c::GetLockonList(s32 idx) {
 
 /* 8009D764-8009D858       .text getActionBtnB__12dAttention_cFv */
 dAttList_c* dAttention_c::getActionBtnB() {
-    /* Nonmatching */
+    int i;
     dAttList_c* list = GetLockonList(0);
     if (list != NULL && list->getActor() != NULL && list->mType == 1 && LockonTruth() != 0 && !(list->getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
         return list;
@@ -132,7 +132,7 @@ dAttList_c* dAttention_c::getActionBtnB() {
     if (mActionNum == 0)
         return NULL;
 
-    for (s32 i = 0; i < mActionNum; i++) {
+    for (i = 0; i < mActionNum; i++) {
         if (mActionList[i].mType == 3) {
             if (!(mActionList[i].getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
                 return &mActionList[i];
@@ -146,7 +146,7 @@ dAttList_c* dAttention_c::getActionBtnB() {
 
 /* 8009D858-8009D9A8       .text getActionBtnXYZ_local__12dAttention_cFi */
 dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
-    /* Nonmatching */
+    int i;
     dAttList_c* list = GetLockonList(0);
     if (list != NULL && list->getActor() != NULL && list->mType == 1 && LockonTruth() != 0) {
         fopAc_ac_c* actor = list->getActor();
@@ -166,7 +166,7 @@ dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
         if (mActionNum == 0)
             return NULL;
 
-        for (s32 i = 0; i < mActionNum; i++) {
+        for (i = 0; i < mActionNum; i++) {
             if (mActionList[i].mType == 3) {
                 fopAc_ac_c* actor = mActionList[i].getActor();
                 if (actor->eventInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
@@ -258,53 +258,53 @@ f32 dAttention_c::calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*) {
 }
 
 /* 8009E03C-8009E128       .text setLList__12dAttention_cFP10fopAc_ac_cffUl */
-void dAttention_c::setLList(fopAc_ac_c* i_actor, f32 weight, f32 distance, u32 type) {
-    f32 bestWeight = 0.0f;
-
-    if (weight > 0.0f) {
-        int bestIdx;
+void dAttention_c::setLList(fopAc_ac_c* i_actor, f32 i_weight, f32 i_distance, u32 i_attnType) {
+    if (i_weight > 0.0f) {
+        int i, maxIndex;
         if (mLockOnNum < (s32)ARRAY_SIZE(mLockOnList)) {
-            bestIdx = mLockOnNum++;
+            maxIndex = mLockOnNum;
+            mLockOnNum++;
         } else {
-            for (int i = (s32)ARRAY_SIZE(mLockOnList); i >= 0; i--) {
-                if (weight > bestWeight) {
-                    bestIdx = i;
-                    bestWeight = weight;
+            f32 bestWeight = 0.0f;
+            for (i = 0, maxIndex = 0; i < (s32)ARRAY_SIZE(mLockOnList); i++) {
+                if (mLockOnList[i].mWeight > bestWeight) {
+                    bestWeight = mLockOnList[i].mWeight;
+                    maxIndex = i;
                 }
             }
         }
 
-        if (weight < mLockOnList[bestIdx].mWeight) {
-            mLockOnList[bestIdx].setActor(i_actor);
-            mLockOnList[bestIdx].mWeight = weight;
-            mLockOnList[bestIdx].mDistance = distance;
-            mLockOnList[bestIdx].mType = type;
+        if (mLockOnList[maxIndex].mWeight > i_weight) {
+            mLockOnList[maxIndex].setActor(i_actor);
+            mLockOnList[maxIndex].mWeight = i_weight;
+            mLockOnList[maxIndex].mDistance = i_distance;
+            mLockOnList[maxIndex].mType = i_attnType;
         }
     }
 }
 
 /* 8009E128-8009E214       .text setAList__12dAttention_cFP10fopAc_ac_cffUl */
-void dAttention_c::setAList(fopAc_ac_c* i_actor, f32 weight, f32 distance, u32 type) {
-    f32 bestWeight = 0.0f;
-
-    if (weight > 0.0f) {
-        int bestIdx;
+void dAttention_c::setAList(fopAc_ac_c* i_actor, f32 i_weight, f32 i_distance, u32 i_attnType) {
+    if (i_weight > 0.0f) {
+        int i, maxIndex;
         if (mActionNum < (s32)ARRAY_SIZE(mActionList)) {
-            bestIdx = mActionNum++;
+            maxIndex = mActionNum;
+            mActionNum++;
         } else {
-            for (int i = (s32)ARRAY_SIZE(mActionList); i >= 0; i--) {
-                if (weight > bestWeight) {
-                    bestIdx = i;
-                    bestWeight = weight;
+            f32 bestWeight = 0.0f;
+            for (i = 0, maxIndex = 0; i < (s32)ARRAY_SIZE(mActionList); i++) {
+                if (mActionList[i].mWeight > bestWeight) {
+                    bestWeight = mActionList[i].mWeight;
+                    maxIndex = i;
                 }
             }
         }
 
-        if (weight < mActionList[bestIdx].mWeight) {
-            mActionList[bestIdx].setActor(i_actor);
-            mActionList[bestIdx].mWeight = weight;
-            mActionList[bestIdx].mDistance = distance;
-            mActionList[bestIdx].mType = type;
+        if (mActionList[maxIndex].mWeight > i_weight) {
+            mActionList[maxIndex].setActor(i_actor);
+            mActionList[maxIndex].mWeight = i_weight;
+            mActionList[maxIndex].mDistance = i_distance;
+            mActionList[maxIndex].mType = i_attnType;
         }
     }
 }
@@ -344,17 +344,18 @@ s32 dAttention_c::makeList() {
 
 /* 8009E33C-8009E474       .text SelectAttention__12dAttention_cFP10fopAc_ac_c */
 int dAttention_c::SelectAttention(fopAc_ac_c* ac) {
-    /* Nonmatching */
     if (ac == mpPlayer || mpPlayer == NULL)
         return 0;
 
-    mFlagMask = ac->attention_info.flags;
+    mFlagMask = mpPlayer->attention_info.flags;
 
     cSGlobe globe1(ac->attention_info.position - mpPlayer->attention_info.position);
-    cSAngle angle1 = globe1.U() - mpPlayer->shape_angle.y;
+    cSAngle angle1;
+    angle1 = globe1.U() - fopAcM_GetShapeAngle_p(mpPlayer)->y;
 
     cSGlobe globe2(mpPlayer->attention_info.position - ac->attention_info.position);
-    cSAngle angle2 = globe2.U() - mpPlayer->shape_angle.y;
+    cSAngle angle2;
+    angle2 = globe2.U() - fopAcM_GetShapeAngle_p(ac)->y;
 
     u32 type;
     f32 weight = calcWeight('L', ac, globe1.R(), angle1, angle2, &type);
@@ -420,7 +421,6 @@ void dAttention_c::chaseAttention() {
 
 /* 8009E978-8009EA24       .text EnemyDistance__12dAttention_cFP10fopAc_ac_c */
 f32 dAttention_c::EnemyDistance(fopAc_ac_c* actor) {
-    /* Nonmatching */
     if (actor == mpPlayer || mpPlayer == NULL)
         return -1.0f;
 
@@ -430,7 +430,7 @@ f32 dAttention_c::EnemyDistance(fopAc_ac_c* actor) {
     if (!(actor->attention_info.flags & fopAc_Attn_LOCKON_BATTLE_e) && !(actor->attention_info.flags & fopAc_Attn_ENEMYFLAG_NOLOCKON_e))
         return -1.0f;
 
-    f32 dist = fopAcM_searchActorDistance(actor, mpPlayer);
+    f32 dist = fopAcM_searchActorDistance(mpPlayer, actor);
     if (dist < (dist_table[actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e]].mDistXZMax + dist_table[actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e]].mDistXZAngleAdjust))
         return dist;
     return -1.0f;
