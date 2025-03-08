@@ -13,7 +13,20 @@
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
+
 const char daObjBarrel::Act_c::M_arcname[] = "Ktaru_01";
+const float daObjBarrel::Act_c::l_s_radius = 45.0f;
+const float daObjBarrel::Act_c::l_l_radius = 50.0f;
+const float daObjBarrel::Act_c::l_gnd_fric = 0.1f; // TODO use
+const short daObjBarrel::Act_c::l_gnd_deg = 0xf; // TODO ??
+const float daObjBarrel::Act_c::l_viscous_resist = 0.006f;
+const float daObjBarrel::Act_c::l_inert_resist = 0.001f; // TODO use more?
+const float daObjBarrel::Act_c::l_max_move = 30.0f;
+const short daObjBarrel::Act_c::l_max_vib_angl = 2048;
+const float daObjBarrel::Act_c::l_min_move_dir = 5.0f;
+const float daObjBarrel::Act_c::l_wind_max = 178.0f;
+const float daObjBarrel::Act_c::l_shape_vec = 25.0f;
+const float daObjBarrel::Act_c::l_tgr_ratio = 0.5f;
 
 const dCcD_SrcCyl daObjBarrel::Act_c::M_cyl_src = {
     // dCcD_SrcGObjInf
@@ -22,7 +35,7 @@ const dCcD_SrcCyl daObjBarrel::Act_c::M_cyl_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
         /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_GrpAll_e,
         /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
         /* SrcGObjAt Se      */ 0,
@@ -40,41 +53,39 @@ const dCcD_SrcCyl daObjBarrel::Act_c::M_cyl_src = {
     // cM3dGCylS
     {
         /* Center */ 0.0f, 0.0f, 0.0f,
-        /* Radius */ 50.0f,
+        /* Radius */ l_l_radius,
         /* Height */ 100.0f,
     },
 };
 
 const daObjBarrel::Act_c::Attr_c daObjBarrel::Act_c::M_attr = {
-    /* m00 */ KTARU_01_BDL_KTARU_01,
-    /* m02 */ {},
-    /* m04 */ 50.0f,
-    /* m08 */ -6.0f,
-    /* m0C */ 200,
-    /* m0D */ {},
-    /* m10 */ 100.0f,
-    /* m14 */ {},
-    /* m18 */ 80.0f,
-    /* m1C */ -14.0f,
-    /* m20 */ -1.0f,
-    /* m24 */ -12.0f,
-    /* m28 */ 0, // TODO: wrong
-    /* m2A */ 3500,
-    /* m2C */ 150,
-    /* m2E */ 5,
-    /* m2F */ 12,
-    /* m30 */ 20,
-    /* m31 */ 50,
-    /* m32 */ {},
-    /* m34 */ 200.0f,
-    /* m38 */ 0, // TODO: wrong
-    /* m39 */ 0x96,
-    /* m3A */ 0x5,
-    /* m3B */ 0x64,
-    /* m3C */ 0x4,
-    /* m3D */ {},
-    /* m40 */ 1.0f,
-    /* m44 */ 0.75f,
+    /* mBdlIdx         */ KTARU_01_BDL_KTARU_01,
+    /* m02             */ 60,
+    /* mEnableCutoff   */ false,
+    /* mAttnH          */ 50.0f,
+    /* mNormalGravity  */ -6.0f,
+    /* mWeight         */ 200,
+    /* mSinkDownDepth  */ 100.0f,
+    /* m14             */ 0.01f, // unused
+    /* mVib0SpeedY     */ 80.0f,
+    /* mVib0Gravity    */ -14.0f,
+    /* mVib1Gravity    */ -1.0f,
+    /* mVib2Gravity    */ -12.0f,
+    /* m28             */ 16000,
+    /* m2A             */ 3500,
+    /* m2C             */ 150,
+    /* mVib0Duration   */ 5,
+    /* mVib1Duration   */ 12,
+    /* mVib2Duration   */ 20,
+    /* m31             */ 50,
+    /* mFallDmgH       */ 200.0f,
+    /* m38             */ 0xff, // unused
+    /* mSeBreakP1      */ 0x96,
+    /* mSeBreakP2      */ 0x5,
+    /* mSeHitP1        */ 0x64,
+    /* mSeHitP2        */ 0x4,
+    /* mWPillarScaleXZ */ 1.0f,
+    /* mWPillarScaleY  */ 0.75f,
 };
 
 /* 00000078-0000009C       .text solidHeapCB__Q211daObjBarrel5Act_cFP10fopAc_ac_c */
@@ -84,10 +95,16 @@ BOOL daObjBarrel::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-00000160       .text create_heap__Q211daObjBarrel5Act_cFv */
 bool daObjBarrel::Act_c::create_heap() {
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, attr().m00);
-    JUT_ASSERT(0x17A, modelData != NULL);
-    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-    return mpModel != NULL;
+    J3DModelData* mdl_data;
+    bool ret = false;
+
+    mdl_data = (J3DModelData *)dComIfG_getObjectRes(M_arcname, attr().mBdlIdx);
+    JUT_ASSERT(0x17A, mdl_data != NULL);
+
+    mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
+    if (mpModel)
+        ret = true;
+    return ret;
 }
 
 /* 00000160-00000474       .text _create__Q211daObjBarrel5Act_cFv */
@@ -96,36 +113,36 @@ s32 daObjBarrel::Act_c::_create() {
     s32 rt = dComIfG_resLoad(&mPhs, M_arcname);
     if (rt == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, solidHeapCB, 0x820) != 0) {
-            mAcchCir.SetWall(30.0f, 50.0f);
+            mAcchCir.SetWall(30.0f, l_l_radius);
             mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
             mAcch.ClrWaterNone();
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             cull_set_draw();
             if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
-                float cull_point = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
-                if (cull_point > 1.0f) {
-                    fopAcM_setCullSizeFar(this, 8000.0f / cull_point);
+                float far = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
+                if (far > 1.0f) {
+                    fopAcM_setCullSizeFar(this, 8000.0f / far);
                 }
             }
-            mStts.Init(attr().m0C, 0xFF, this);
+            mStts.Init(attr().mWeight, 0xFF, this);
             mCyl.Set(M_cyl_src);
             mCyl.SetStts(&mStts);
-            fopAcM_SetGravity(this, attr().m08);
+            fopAcM_SetGravity(this, attr().mNormalGravity);
             attention_info.position.x = current.pos.x;
-            attention_info.position.y = current.pos.y + attr().m04;
+            attention_info.position.y = current.pos.y + attr().mAttnH;
             attention_info.position.z = current.pos.z;
             cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
             attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 9;
-            m622 = true;
+            mForceExec = true;
             fopAcM_posMoveF(this, NULL);
             mAcch.CrrPos(*dComIfG_Bgsp());
             mAcch.ClrGroundLanding();
-            m620 = true;
-            m621 = 0x14;
-            m618 = current.pos.y;
-            m623 = false;
+            mOnGround = true;
+            mInitTimer = 20;
+            mLastGroundY = current.pos.y;
+            mSunk = false;
             init_mtx();
-            m624 = cXyz::Zero;
+            mMove = cXyz::Zero;
             mode_wait_init();
         } else {
             rt = cPhs_ERROR_e;
@@ -143,24 +160,24 @@ bool daObjBarrel::Act_c::_delete() {
 /* 000007B0-00000834       .text mode_wait_init__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_wait_init() {
     mCyl.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OnTgSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OnCoSPrmBit(cCcD_AtSPrm_Set_e);
+    mCyl.OnTgSPrmBit(cCcD_TgSPrm_Set_e);
+    mCyl.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
     fopAcM_SetSpeedF(this, 0.0f);
-    fopAcM_SetGravity(this, attr().m08);
-    mStts.Init(attr().m0C, 0xFF, this);
-    mMode = 0;
+    fopAcM_SetGravity(this, attr().mNormalGravity);
+    mStts.Init(attr().mWeight, 0xFF, this);
+    mMode = MODE_WAIT;
 }
 
 /* 00000834-00000944       .text mode_wait__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_wait() {
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
-    if (shape_angle.z < 0x1001) {
-        cLib_chaseAngleS(&shape_angle.z, 0, 0xc00);
-    } else {
+    if (shape_angle.z > 0x1000) {
         cLib_chaseAngleS(&shape_angle.z, 0x4000, 0xc00);
+    } else {
+        cLib_chaseAngleS(&shape_angle.z, 0, 0xc00);
     }
     set_walk_rot();
-    if (mAcch.ChkGroundHit() != 0) {
+    if (mAcch.ChkGroundHit()) {
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         if (shape_angle.z == 0x4000) {
             cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
@@ -169,7 +186,7 @@ void daObjBarrel::Act_c::mode_wait() {
             }
             mStts.SetWeight(140);
         } else {
-            mStts.SetWeight(attr().m0C);
+            mStts.SetWeight(attr().mWeight);
         }
     } else {
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
@@ -179,24 +196,24 @@ void daObjBarrel::Act_c::mode_wait() {
 /* 00000944-00000A0C       .text mode_carry_init__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_carry_init() {
     mCyl.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OnTgSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OffCoSPrmBit(cCcD_AtSPrm_Set_e);
+    mCyl.OnTgSPrmBit(cCcD_TgSPrm_Set_e);
+    mCyl.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-    mMode = 1;
+    mMode = MODE_CARRY;
     if (strcmp(dComIfGp_getStartStageName(), "majroom") == 0 || strcmp(dComIfGp_getStartStageName(), "MajyuE") == 0) {
         dComIfGs_onEventBit(0x401);
     }
-    m614 = 15;
+    mTimer = 15;
 }
 
 /* 00000A0C-00000A94       .text mode_carry__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_carry() {
-    if (m614 > 0) {
-        m614--;
+    if (mTimer > 0) {
+        mTimer--;
     }
     cLib_chaseAngleS(&shape_angle.z, m61C, 0x1000);
     if (!fopAcM_checkCarryNow(this) && !fopAcM_checkHookCarryNow(this)) {
-        m618 = current.pos.y;
+        mLastGroundY = current.pos.y;
         daObj::SetCurrentRoomNo(this, &mAcch.m_gnd);
         m610 = 0;
         m612 = 0;
@@ -207,55 +224,55 @@ void daObjBarrel::Act_c::mode_carry() {
 /* 00000A94-00000B0C       .text mode_vib0_init__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_vib0_init() {
     mCyl.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OnTgSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OnCoSPrmBit(cCcD_AtSPrm_Set_e);
+    mCyl.OnTgSPrmBit(cCcD_TgSPrm_Set_e);
+    mCyl.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-    fopAcM_SetGravity(this, attr().m1C);
-    speed.y = attr().m18;
+    fopAcM_SetGravity(this, attr().mVib0Gravity);
+    speed.y = attr().mVib0SpeedY;
     shape_angle.y = 0;
     shape_angle.z = 0;
     m610 = attr().m2A;
     m612 = 0;
     m630 = 0;
-    m614 = attr().m2E;
-    mMode = 2;
+    mTimer = attr().mVib0Duration;
+    mMode = MODE_VIB0;
 }
 
 /* 00000B0C-00000B50       .text mode_vib0__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_vib0() {
     vib_pos_ang();
-    if (--m614 <= 0) {
+    if (--mTimer <= 0) {
         mode_vib1_init();
     }
 }
 
 /* 00000B50-00000B74       .text mode_vib1_init__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_vib1_init() {
-    fopAcM_SetGravity(this, attr().m20);
-    m614 = attr().m2F;
-    mMode = 3;
+    fopAcM_SetGravity(this, attr().mVib1Gravity);
+    mTimer = attr().mVib1Duration;
+    mMode = MODE_VIB1;
 }
 
 /* 00000B74-00000BB8       .text mode_vib1__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_vib1() {
    vib_pos_ang();
-   if (--m614 <= 0) {
+   if (--mTimer <= 0) {
        mode_vib2_init();
    }
 }
 
 /* 00000BB8-00000BDC       .text mode_vib2_init__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_vib2_init() {
-    fopAcM_SetGravity(this, attr().m24);
-    m614 = attr().m30;
-    mMode = 4;
+    fopAcM_SetGravity(this, attr().mVib2Gravity);
+    mTimer = attr().mVib2Duration;
+    mMode = MODE_VIB2;
 }
 
 /* 00000BDC-00000C4C       .text mode_vib2__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_vib2() {
     cLib_chaseAngleS(&m610, 0, attr().m2C);
     vib_pos_ang();
-    if (--m614 <= 0) {
+    if (--mTimer <= 0) {
         shape_angle.x = 0;
         m610 = 0;
         m612 = 0;
@@ -266,17 +283,17 @@ void daObjBarrel::Act_c::mode_vib2() {
 /* 00000C4C-00000CBC       .text mode_jump_init__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_jump_init() {
     mCyl.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OnTgSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OnCoSPrmBit(cCcD_AtSPrm_Set_e);
+    mCyl.OnTgSPrmBit(cCcD_TgSPrm_Set_e);
+    mCyl.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     shape_angle.y = 0;
     shape_angle.z = 0;
     m610 = 0;
     m612 = 0;
     m630 = 0;
-    fopAcM_SetGravity(this, attr().m08);
+    fopAcM_SetGravity(this, attr().mNormalGravity);
     speed.y = 30.0f;
-    mMode = 5;
+    mMode = MODE_JUMP;
 
 }
 
@@ -286,7 +303,7 @@ void daObjBarrel::Act_c::mode_jump() {
     if (mAcch.ChkGroundLanding()) {
         mode_walk_init();
     } else {
-        daObj::posMoveF_stream(this, mStts.GetCCMoveP(), &m624, 0.006f, 0.001f);
+        daObj::posMoveF_stream(this, mStts.GetCCMoveP(), &mMove, l_viscous_resist, l_inert_resist);
         cLib_chaseAngleS(&shape_angle.z, 0x4000, 0xc00);
         set_walk_rot();
     }
@@ -295,11 +312,11 @@ void daObjBarrel::Act_c::mode_jump() {
 /* 00000D3C-00000D88       .text mode_walk_init__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_walk_init() {
     mCyl.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OnTgSPrmBit(cCcD_AtSPrm_Set_e);
-    mCyl.OnCoSPrmBit(cCcD_AtSPrm_Set_e);
+    mCyl.OnTgSPrmBit(cCcD_TgSPrm_Set_e);
+    mCyl.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-    fopAcM_SetGravity(this, attr().m08);
-    mMode = 6;
+    fopAcM_SetGravity(this, attr().mNormalGravity);
+    mMode = MODE_WALK;
 }
 
 /* 00000D88-00000F40       .text mode_walk__Q211daObjBarrel5Act_cFv */
@@ -307,32 +324,32 @@ void daObjBarrel::Act_c::mode_walk() {
     daObj::SetCurrentRoomNo(this, &mAcch.m_gnd);
     if (mAcch.ChkGroundHit()) {
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-        cXyz* norm = gndPlane->GetNP();
-        cXyz local_1c(cXyz::Zero);
-        float tmp;
-        float mag;
+        cXyz* norm;
+        cXyz addAccel = cXyz::Zero;
+        float cos, friction;
         if (gndPlane) {
-            mag = 0.1f;
-            tmp = cM_scos(0xA4F);
-            local_1c.set(gndPlane->GetNP()->x, 0.0f, gndPlane->GetNP()->z);
+            norm = gndPlane->GetNP();
+            friction = l_gnd_fric;
+            cos = cM_scos(0xA4F);
+            addAccel.set(norm->x, 0.0f, norm->z);
         } else {
             norm = NULL;
-            mag = 0.0f;
-            tmp = 0.0f;
+            friction = 0.0f;
+            cos = 0.0f;
         }
-        daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &m624, 0.006f, 0.001f, gndPlane->GetNP(), mag, tmp, &local_1c);
+        daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &mMove, l_viscous_resist, l_inert_resist, norm, friction, cos, &addAccel);
         cLib_chaseAngleS(&shape_angle.z, 0x4000, 0xc00);
         set_walk_rot();
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
 
-        mag = speed.abs2XZ();
-        if (mag < 0.1f) {
+        float mag = speed.abs2XZ();
+        if (mag < l_gnd_fric) {
             if (std::fabsf(norm->x) >= 0.001f && std::fabsf(norm->z) >= 0.001f) {
                 mode_wait_init();
             }
         }
     } else {
-        daObj::posMoveF_stream(this, mStts.GetCCMoveP(), &m624, 0.006f, 0.001f);
+        daObj::posMoveF_stream(this, mStts.GetCCMoveP(), &mMove, l_viscous_resist, l_inert_resist);
         cLib_chaseAngleS(&shape_angle.z, 0x4000, 0xc00);
         set_walk_rot();
     }
@@ -340,16 +357,11 @@ void daObjBarrel::Act_c::mode_walk() {
 
 /* 00000F40-00001074       .text vib_pos_ang__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::vib_pos_ang() {
-    float fVar1;
-    if (!mAcch.ChkGroundHit()) {
-        fVar1 = 1.0f;
-    } else {
-        fVar1 = 0.8f;
-    }
-    short sVar2 = m610;
+    float gndFactor = mAcch.ChkGroundHit() ? 0.8f : 1.0f;
+    float tmp1 = (m610 * 8.544922e-05f + 0.3f) * attr().m28 * 0.1f * gndFactor;
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
-    shape_angle.y += fVar1 * (sVar2 * 8.544922e-05 + 0.3f) * 16000.0f * 0.1f;
-    m612 += (fVar1 * 14400.0f);
+    shape_angle.y += (short)tmp1;
+    m612 += (short)(attr().m28 * 0.9f * gndFactor);
 }
 
 /* 00001074-000012A0       .text mode_proc_call__Q211daObjBarrel5Act_cFv */
@@ -366,7 +378,7 @@ bool daObjBarrel::Act_c::mode_proc_call() {
     };
 
     if (fopAcM_checkCarryNow(this) || fopAcM_checkHookCarryNow(this)) {
-        if (mMode != 1) {
+        if (mMode != MODE_CARRY) {
             mode_carry_init();
         }
     }
@@ -374,20 +386,20 @@ bool daObjBarrel::Act_c::mode_proc_call() {
     cXyz curPos = current.pos;
     mAcch.CrrPos(*dComIfG_Bgsp());
     if (dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd)) {
-        m622 = true;
+        mForceExec = true;
     }
-    if (mMode == 1) {
+    if (mMode == MODE_CARRY) {
         current.pos = curPos;
     }
 
     if (!damage_bg_proc_directly()) {
-        if (mMode != 1) {
+        if (mMode != MODE_CARRY) {
             tevStr.mRoomNo = current.roomNo;
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
-        m624 *= 0.95f;
-        if (m624.getSquareMag() < 0.1f) {
-            m624.setall(0.0f);
+        mMove *= 0.95f;
+        if (mMove.abs2() < 0.1f) {
+            mMove.setall(0.0f);
         }
         return true;
     }
@@ -397,29 +409,10 @@ bool daObjBarrel::Act_c::mode_proc_call() {
 /* 000012A0-00001490       .text set_mtx__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
-    // if (mMode < 5) {
-    //     if (mMode < 2 && mMode < 1) {
-    //         // wait
-    //         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    //         return;
-    //     }
-    //     // vib
-    //     mDoMtx_stack_c::transM(0.0f, 50.0f, 0.0f);
-    //     mDoMtx_stack_c::ZXYrotM(0, shape_angle.y, shape_angle.z);
-    //     mDoMtx_stack_c::YrotM(m612);
-    //     mDoMtx_stack_c::XrotM(m610);
-    //     mDoMtx_stack_c::YrotM(-m612);
-    //     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    //     return;
-    // } else if (mMode > 6) {
-    //     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    //     return;
-    // }
-
     switch (mMode) {
-        case 1:
-        case 2:
-        case 3:
+        case MODE_VIB0:
+        case MODE_VIB1:
+        case MODE_VIB2:
             mDoMtx_stack_c::transM(0.0f, attr().m31, 0.0f);
             mDoMtx_stack_c::ZXYrotM(0, shape_angle.y, shape_angle.z);
             mDoMtx_stack_c::YrotM(m612);
@@ -427,16 +420,17 @@ void daObjBarrel::Act_c::set_mtx() {
             mDoMtx_stack_c::YrotM(-m612);
             mDoMtx_stack_c::transM(0.0f, -attr().m31, 0.0f);
             break;
-        case 4:
-        case 5:
-        case 6:
-            mDoMtx_stack_c::transM(0.0f, cM_scos(shape_angle.z) * 5.0f + 45.0f, 0.0f);
+        case MODE_WAIT:
+        case MODE_CARRY:
+        case MODE_JUMP:
+        case MODE_WALK:
+            mDoMtx_stack_c::transM(0.0f, cM_scos(shape_angle.z) * 5.0f + l_s_radius, 0.0f);
             mDoMtx_stack_c::ZXYrotM(0, shape_angle.y, shape_angle.z);
             mDoMtx_stack_c::YrotM(m612);
             mDoMtx_stack_c::XrotM(m610);
             mDoMtx_stack_c::YrotM(-m612);
             mDoMtx_stack_c::YrotM(m630);
-            mDoMtx_stack_c::transM(0.0f, -50.0f, 0.0f);
+            mDoMtx_stack_c::transM(0.0f, -l_l_radius, 0.0f);
     }
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -451,29 +445,36 @@ void daObjBarrel::Act_c::init_mtx() {
 void daObjBarrel::Act_c::set_walk_rot() {
     cXyz delta = current.pos - old.pos;
     float mag = delta.absXZ();
+
+    bool negAngle = false;
     current.angle.y = cM_atan2s(delta.x, delta.z);
-    short rawAngleY = current.angle.y;
-    int angleY = rawAngleY;
-    if (rawAngleY < 0) angleY += 0x8000;
-    if (mag > 5.0f || mMode == 0 && mag > 2.5f) {
-        cLib_chaseAngleS(&shape_angle.y, angleY, 0x600);
+    short targetAngle = current.angle.y;
+    if (targetAngle < 0) {
+        targetAngle += 0x8000;
+        negAngle = true;
     }
-    float fVar2 = 65535.0f * (mag / (cM_scos(shape_angle.z) * 5.0f + 45.0f)) * 6.28f;
-    if (angleY >= 0) {
-        m612 -= (short)(fVar2 * 0.3f);
+    if (mag > l_min_move_dir || mMode == MODE_WAIT && mag > l_min_move_dir / 2) {
+        cLib_chaseAngleS(&shape_angle.y, targetAngle, 0x600);
+    }
+    float fVar2 = mag / ((cM_scos(shape_angle.z) * 5.0f + l_s_radius) * 6.28f) * 65535.0f;
+    if (!negAngle) {
+        m612 -= (short)(fVar2 * 3.0f);
         m630 -= (short)fVar2;
     } else {
-        m612 += (short)(fVar2 * 0.3f);
+        m612 += (short)(fVar2 * 3.0f);
         m630 += (short)fVar2;
     }
-    fVar2 = (mag / 30.0f > 1.0f) ? 1.0f : mag / 30.0f;
-    m610 = fVar2 * 2048.0f;
+    float vibFactor = mag / l_max_move;
+    if (vibFactor > 1.0f) {
+        vibFactor = 1.0f;
+    }
+    m610 = vibFactor * l_max_vib_angl;
 }
 
 /* 00001710-00001824       .text eff_break__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::eff_break() {
     cXyz pos(current.pos.x, current.pos.y + 50.0f, current.pos.z);
-    JPABaseEmitter* emitter = dComIfGp_particle_set(0x3E5, &pos, NULL, NULL, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &pos, NULL, NULL, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     if (emitter) {
         static const JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
         emitter->setEmitterScale(em_scl);
@@ -482,12 +483,12 @@ void daObjBarrel::Act_c::eff_break() {
 }
 
 /* 00001824-000018C8       .text damaged__Q211daObjBarrel5Act_cFb */
-void daObjBarrel::Act_c::damaged(bool brk) {
+void daObjBarrel::Act_c::damaged(bool animate) {
     fopAcM_cancelCarryNow(this);
-    if (brk) {
+    if (animate) {
         eff_break();
         fopAcM_seStart(this, JA_SE_OBJ_COL_SWC_WODCRL, 0);
-        set_senv(attr().m39, attr().m3A);
+        set_senv(attr().mSeBreakP1, attr().mSeBreakP2);
     }
 }
 
@@ -507,9 +508,9 @@ u32 daObjBarrel::Act_c::get_se_map_hit() const {
 }
 
 /* 00001940-00001994       .text set_senv__Q211daObjBarrel5Act_cCFii */
-void daObjBarrel::Act_c::set_senv(int param_1, int param_2) const {
+void daObjBarrel::Act_c::set_senv(int p1, int p2) const {
     // TODO:  create cXyz?
-    dKy_Sound_set(current.pos, param_1, fopAcM_GetID((void*)this), param_2);
+    dKy_Sound_set(current.pos, p1, fopAcM_GetID((void*)this), p2);
 }
 
 /* 00001994-00001A88       .text se_fall_water__Q211daObjBarrel5Act_cFv */
@@ -528,14 +529,14 @@ void daObjBarrel::Act_c::se_fall_water() {
         }
     }
 
-    fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_S, mtrlSndId);
+    fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_M, mtrlSndId);
     set_senv(0x7D, 5);
 }
 
 /* 00001A88-00001AD8       .text eff_hit_water_splash__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::eff_hit_water_splash() {
     cXyz pos(current.pos.x, mAcch.m_wtr.GetHeight(), current.pos.z);
-    fopKyM_createWpillar(&pos, attr().m40, attr().m44, 0);
+    fopKyM_createWpillar(&pos, attr().mWPillarScaleXZ, attr().mWPillarScaleY, 0);
 }
 
 /* 00001AD8-00001B10       .text chk_sink_water__Q211daObjBarrel5Act_cFv */
@@ -545,7 +546,7 @@ bool daObjBarrel::Act_c::chk_sink_water() {
 
 /* 00001B10-00001B58       .text chk_sinkdown_water__Q211daObjBarrel5Act_cFv */
 bool daObjBarrel::Act_c::chk_sinkdown_water() {
-    return mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y + attr().m10 + 50.0f;
+    return mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y + attr().mSinkDownDepth + 50.0f;
 }
 
 /* 00001B58-00001B84       .text eff_land_smoke__Q211daObjBarrel5Act_cFv */
@@ -555,117 +556,112 @@ void daObjBarrel::Act_c::eff_land_smoke() {
 
 /* 00001B84-00001F28       .text damage_cc_proc__Q211daObjBarrel5Act_cFv */
 bool daObjBarrel::Act_c::damage_cc_proc() {
-    bool rt = false;
+    bool broken = false;
     if (mCyl.ChkAtHit()) {
         damaged(true);
-        rt = true;
+        broken = true;
         mCyl.ClrAtHit();
-    } else {
-        if (mCyl.ChkTgHit() != 0) {
-            cCcD_Obj *hitObj = mCyl.GetTgHitObj();
-            u32 uVar4 = get_se_map_hit();
-            if (hitObj != NULL) {
-                if (hitObj->ChkAtType(AT_TYPE_BOMB)
-                        || hitObj->ChkAtType(8)
-                        || hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER)
-                        || (hitObj->MskAtSPrm(cCcD_AtSPrm_VsPlayer_e) &&
-                            cLib_checkBit<u32>(mStts.GetAtSpl(), dCcG_At_Spl_UNK3))) {
-                    damaged(true);
-                    rt = true;
-                } else if ((mMode == 0 || mMode == 6) && hitObj->ChkAtType(AT_TYPE_WIND)) {
-                    cXyz local48 = *mCyl.GetTgRVecP();
-                    float mag2 = local48.abs2();
-                    if (mag2 > 178.0f*178.0f) {
-                        local48 *= 178.0f / std::sqrtf(mag2);
-                    }
-                    cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
-                    cXyz hitNormal = cXyz::Zero;
-                    float fVar1 = 1.0f;
-                    if (hitShapeAttr->GetNVec(current.pos, &hitNormal)) {
-                        hitNormal *= 25.0f;
-                        m624.abs2();
-                        fopAc_ac_c* hitActor = mCyl.GetTgHitAc();
-                        if (hitActor != NULL && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
-                            s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
-                            f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
-                            if (f2 > 0.0f) {
-                                fVar1 = 1.0f + 2.0f * f2;
-                            }
-                        }
-                    }
-                    if (mag2 > 0.01f) {
-                        mag2 = 0.5f;
-                    } else {
-                        mag2 = 0.0f;
-                    }
-
-                    m624 = local48 * mag2 + hitNormal * (1.0f - mag2) * fVar1;
-                    if (mMode == 0) {
-                        if (shape_angle.z == 0) {
-                            mode_jump_init();
-                        } else {
-                            mode_walk_init();
+    } else if (mCyl.ChkTgHit()) {
+        cCcD_Obj *hitObj = mCyl.GetTgHitObj();
+        u32 se = get_se_map_hit();
+        if (hitObj != NULL) {
+            if (hitObj->ChkAtType(AT_TYPE_BOMB) ||
+                hitObj->ChkAtType(AT_TYPE_UNK8) ||
+                hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) ||
+                (hitObj->MskAtSPrm(cCcD_AtSPrm_VsPlayer_e) &&
+                 cLib_checkBit<u32>(mStts.GetAtSpl(), dCcG_At_Spl_UNK3))
+            ) {
+                damaged(true);
+                broken = true;
+            } else if ((mMode == MODE_WAIT || mMode == MODE_WALK) && hitObj->ChkAtType(AT_TYPE_WIND)) {
+                cXyz windVec = *mCyl.GetTgRVecP();
+                float windMag2 = windVec.abs2();
+                if (windMag2 > l_wind_max*l_wind_max) {
+                    windVec *= l_wind_max / std::sqrtf(windMag2);
+                }
+                cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
+                cXyz hitNormal = cXyz::Zero;
+                float f1 = 1.0f;
+                if (hitShapeAttr->GetNVec(current.pos, &hitNormal)) {
+                    hitNormal *= l_shape_vec;
+                    mMove.abs2();
+                    fopAc_ac_c* hitActor = mCyl.GetTgHitAc();
+                    if (hitActor != NULL && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+                        s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
+                        f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
+                        if (f2 > 0.0f) {
+                            f1 = 1.0f + 2.0f * f2;
                         }
                     }
                 }
+                float ratio = windMag2 > 0.01f ? l_tgr_ratio : 0.0f;
+                mMove = windVec * ratio + hitNormal * (1.0f - ratio) * f1;
+                if (mMode == MODE_WAIT) {
+                    if (shape_angle.z == 0) {
+                        mode_jump_init();
+                    } else {
+                        mode_walk_init();
+                    }
+                }
             }
-            if (!rt) {
-                daObj::HitSeStart(&eyePos, current.roomNo, &mCyl, uVar4);
-                set_senv(attr().m3B, attr().m3C);
-                daObj::HitEff_kikuzu(this, &mCyl);
-            }
-            mCyl.ClrTgHit();
         }
+        if (!broken) {
+            daObj::HitSeStart(&eyePos, current.roomNo, &mCyl, se);
+            set_senv(attr().mSeHitP1, attr().mSeHitP2);
+            daObj::HitEff_kikuzu(this, &mCyl);
+        }
+        mCyl.ClrTgHit();
     }
 
-    return rt;
+    return broken;
 }
 
 /* 00001F28-00001FCC       .text damage_bg_proc__Q211daObjBarrel5Act_cFv */
 bool daObjBarrel::Act_c::damage_bg_proc() {
     bool sunk = chk_sink_water();
-    bool rt = false;
-    if ((mMode == 0 || mMode == 5 || mMode == 6) && sunk) {
-        if (!m623) {
+    bool broken = false;
+    if ((mMode == MODE_WAIT || mMode == MODE_JUMP || mMode == MODE_WALK) && sunk) {
+        if (!mSunk) {
             se_fall_water();
             eff_hit_water_splash();
-            m623 = true;
+            mSunk = true;
         }
-        sunk = chk_sinkdown_water();
-        if (sunk) {
+        if (chk_sinkdown_water()) {
             damaged(false);
-            rt = true;
+            broken = true;
         }
     }
-    return rt;
+    return broken;
 }
 
 /* 00001FCC-00002154       .text damage_bg_proc_directly__Q211daObjBarrel5Act_cFv */
 bool daObjBarrel::Act_c::damage_bg_proc_directly() {
-    bool rt = false;
-    if (mMode == 0 || mMode == 5 || mMode == 6) {
-        if (mAcch.ChkGroundLanding() && (m618 - current.pos.y > attr().m34)) {
+    bool groundHit = mAcch.ChkGroundHit();
+    bool groundLanding = mAcch.ChkGroundLanding();
+    bool broken = false;
+    if (mMode == MODE_WAIT || mMode == MODE_JUMP || mMode == MODE_WALK) {
+        if (groundLanding && (mLastGroundY - current.pos.y > attr().mFallDmgH)) {
             damaged(true);
-            rt = true;
+            broken = true;
         }
-        if (mAcch.ChkGroundHit()) {
-            m618 = current.pos.y;
+        if (groundHit) {
+            mLastGroundY = current.pos.y;
         }
     }
-    if (m621 > 0) {
-        m621--;
+    if (mInitTimer > 0) {
+        mInitTimer--;
     } else {
         if (mAcch.ChkGroundHit()) {
-            if (!m620 && mMode != 1) {
+            if (!mOnGround && mMode != MODE_CARRY) {
                 fopAcM_seStart(this, JA_SE_LK_BARREL_TAKE_OFF, dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd));
-                m620 = true;
+                mOnGround = true;
             }
         } else {
-            m620 = false;
+            mOnGround = false;
         }
-        if (mAcch.ChkGroundLanding()) {
-            if (mMode == 1) {
-                if (m614 <= 0) {
+        if (groundLanding) {
+            if (mMode == MODE_CARRY) {
+                if (mTimer <= 0) {
                     eff_land_smoke();
                 }
             } else {
@@ -673,46 +669,43 @@ bool daObjBarrel::Act_c::damage_bg_proc_directly() {
             }
         }
     }
-    return rt;
+    return broken;
 }
 
 /* 00002154-000022F4       .text _execute__Q211daObjBarrel5Act_cFv */
 bool daObjBarrel::Act_c::_execute() {
     cull_set_move();
-    if (!m622) {
-        if (mMode == 0) {
-            if (mAcch.ChkGroundHit() && !mAcch.ChkGroundLanding()) {
-                if (prm_get_cull() != 0) {
-                    if (fopAcM_cullingCheck(this)) {
-                        cull_set_draw();
-                        return true;
-                    }
+
+    if (mForceExec || mMode != MODE_WAIT || !mAcch.ChkGroundHit() || mAcch.ChkGroundLanding() || prm_get_cull() == 0 || !fopAcM_cullingCheck(this)) {
+        mForceExec = false;
+        BOOL broken = TRUE;
+        if (!damage_cc_proc() && !damage_bg_proc()) {
+            if (mMode != MODE_VIB0 &&
+                mMode != MODE_VIB1 &&
+                mMode != MODE_VIB2 &&
+                mMode != MODE_JUMP &&
+                mMode != MODE_WALK &&
+                !fopAcM_checkCarryNow(this)
+            ) {
+                if (shape_angle.x != 0) {
+                    mode_vib0_init();
                 }
             }
-        }
-    }
-    m622 = false;
-    bool del = 1;
-    if (!damage_cc_proc() && !damage_bg_proc()) {
-        if (mMode != 2 && mMode != 3 && mMode != 4 && mMode != 5 && mMode != 6 && !fopAcM_checkCarryNow(this)) {
-            if (shape_angle.x != 0) {
-                mode_vib0_init();
+            if (mode_proc_call()) {
+                broken = FALSE;
+                set_mtx();
+                mStts.SetRoomId(current.roomNo);
+                mCyl.SetC(current.pos);
+                dComIfG_Ccsp()->Set(&mCyl);
+                attention_info.position.x = current.pos.x;
+                attention_info.position.y = current.pos.y + attr().mAttnH;
+                attention_info.position.z = current.pos.z;
+                eyePos = attention_info.position;
             }
         }
-        if (mode_proc_call()) {
-            del = 0;
-            set_mtx();
-            mStts.SetRoomId(current.roomNo);
-            mCyl.SetC(current.pos);
-            dComIfG_Ccsp()->Set(&mCyl);
-            attention_info.position.x = current.pos.x;
-            attention_info.position.y = current.pos.y + attr().m04;
-            attention_info.position.z = current.pos.z;
-            eyePos = attention_info.position;
+        if (broken) {
+            fopAcM_delete(this);
         }
-    }
-    if (del) {
-        fopAcM_delete(this);
     }
     cull_set_draw();
     return true;
@@ -720,7 +713,23 @@ bool daObjBarrel::Act_c::_execute() {
 
 /* 000022F4-0000241C       .text _draw__Q211daObjBarrel5Act_cFv */
 bool daObjBarrel::Act_c::_draw() {
-    /* Nonmatching */
+    bool draw = true;
+    if (attr().mEnableCutoff && fopAcM_viewCutoffCheck(this, 1000.0f)) {
+        draw = false;
+    }
+
+    if (draw) {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
+        mDoExt_modelUpdateDL(mpModel);
+        float gndH = mAcch.GetGroundH();
+        cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
+        cXyz *norm = gndPlane->GetNP();
+        if (gndPlane && gndH != C_BG_MIN_HEIGHT) {
+            dComIfGd_setSimpleShadow(&current.pos, gndH, attr().m02, norm);        
+        }
+    }
+    return true;
 }
 
 /* 0000241C-0000243C       .text Create__Q211daObjBarrel6MethodFPv */

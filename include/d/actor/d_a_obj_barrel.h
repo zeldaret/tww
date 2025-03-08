@@ -13,36 +13,44 @@ namespace daObjBarrel {
             PRM_CULL_S = 0x1c,
         };
 
+        enum Mode {
+            MODE_WAIT  = 0x0,
+            MODE_CARRY = 0x1,
+            MODE_VIB0  = 0x2,
+            MODE_VIB1  = 0x3,
+            MODE_VIB2  = 0x4,
+            MODE_JUMP  = 0x5,
+            MODE_WALK  = 0x6,
+        };
+
         struct Attr_c {
-            /* 0x00 */ u16 m00;
-            /* 0x02 */ u8 m02[0x4 - 0x2];
-            /* 0x04 */ float m04;
-            /* 0x08 */ float m08;
-            /* 0x0C */ u8 m0C;
-            /* 0x0D */ u8 m0D[0x10 - 0xD];
-            /* 0x10 */ float m10;
-            /* 0x14 */ u8 m14[0x18 - 0x14];
-            /* 0x18 */ float m18;
-            /* 0x1C */ float m1C;
-            /* 0x20 */ float m20;
-            /* 0x24 */ float m24;
+            /* 0x00 */ u16 mBdlIdx;
+            /* 0x02 */ u8 m02;
+            /* 0x03 */ bool mEnableCutoff;
+            /* 0x04 */ float mAttnH;
+            /* 0x08 */ float mNormalGravity;
+            /* 0x0C */ u8 mWeight;
+            /* 0x10 */ float mSinkDownDepth;
+            /* 0x14 */ float m14; // unused
+            /* 0x18 */ float mVib0SpeedY;
+            /* 0x1C */ float mVib0Gravity;
+            /* 0x20 */ float mVib1Gravity;
+            /* 0x24 */ float mVib2Gravity;
             /* 0x28 */ short m28;
             /* 0x2A */ short m2A;
             /* 0x2C */ short m2C;
-            /* 0x2E */ u8 m2E;
-            /* 0x2F */ u8 m2F;
-            /* 0x30 */ u8 m30;
+            /* 0x2E */ u8 mVib0Duration;
+            /* 0x2F */ u8 mVib1Duration;
+            /* 0x30 */ u8 mVib2Duration;
             /* 0x31 */ u8 m31;
-            /* 0x32 */ u8 m32[0x34 - 0x32];
-            /* 0x34 */ float m34;
-            /* 0x38 */ u8 m38; // ??
-            /* 0x39 */ u8 m39;
-            /* 0x3A */ u8 m3A;
-            /* 0x3B */ u8 m3B;
-            /* 0x3C */ u8 m3C;
-            /* 0x3D */ u8 m3D[0x40 - 0x3D];
-            /* 0x40 */ float m40;
-            /* 0x44 */ float m44;
+            /* 0x34 */ float mFallDmgH;
+            /* 0x38 */ u8 m38; // unused
+            /* 0x39 */ u8 mSeBreakP1;
+            /* 0x3A */ u8 mSeBreakP2;
+            /* 0x3B */ u8 mSeHitP1;
+            /* 0x3C */ u8 mSeHitP2;
+            /* 0x40 */ float mWPillarScaleXZ;
+            /* 0x44 */ float mWPillarScaleY;
         };
 
         const Attr_c& attr() const { return M_attr; }
@@ -57,7 +65,7 @@ namespace daObjBarrel {
                 return false;
             }
         }
-        int prm_get_cull() const { daObj::PrmAbstract<Prm_e>(this, PRM_CULL_W, PRM_CULL_S); }
+        int prm_get_cull() const { return daObj::PrmAbstract<Prm_e>(this, PRM_CULL_W, PRM_CULL_S); }
         void set_slant_angle(s16) {}
     
         static BOOL solidHeapCB(fopAc_ac_c*);
@@ -101,30 +109,45 @@ namespace daObjBarrel {
         bool _draw();
 
         static const char M_arcname[9];
+        static const float l_s_radius;
+        static const float l_l_radius;
+        static const float l_gnd_fric;
+        static const short l_gnd_deg;
+        static const float l_viscous_resist;
+        static const float l_inert_resist;
+        static const float l_max_move;
+        static const short l_max_vib_angl;
+        static const float l_min_move_dir;
+        static const float l_wind_max;
+        static const float l_shape_vec;
+        static const float l_tgr_ratio;
         static const dCcD_SrcCyl M_cyl_src;
         static const Attr_c M_attr;
     
     public:
         /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ J3DModel* mpModel;
-        /* 0x29C */ dBgS_Acch mAcch;
+        /* 0x29C */ dBgS_ObjAcch mAcch;
         /* 0x460 */ dBgS_AcchCir mAcchCir;
         /* 0x4A0 */ dCcD_Stts mStts;
         /* 0x4DC */ dCcD_Cyl mCyl;
         /* 0x60C */ int mMode;
         /* 0x610 */ short m610;
         /* 0x612 */ short m612;
-        /* 0x614 */ int m614;
-        /* 0x618 */ float m618;
+        /* 0x614 */ int mTimer;
+        /* 0x618 */ float mLastGroundY;
         /* 0x61C */ short m61C;
         /* 0x61E */ u8 m61E[0x620 - 0x61E];
-        /* 0x620 */ bool m620;
-        /* 0x621 */ s8 m621;
-        /* 0x622 */ bool m622;
-        /* 0x623 */ bool m623;
-        /* 0x624 */ cXyz m624;
+        /* 0x620 */ bool mOnGround;
+        /* 0x621 */ s8 mInitTimer;
+        /* 0x622 */ bool mForceExec;
+        /* 0x623 */ bool mSunk;
+        /* 0x624 */ cXyz mMove;
         /* 0x630 */ short m630;
-    };
+        /* 0x632 */ u8 m632[0x634 - 0x632];
+    }; // Size: 0x634
+
+    STATIC_ASSERT(sizeof(Act_c) == 0x634);
     
     namespace Method {
         s32 Create(void*);
