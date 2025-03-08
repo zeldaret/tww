@@ -144,7 +144,6 @@ namespace daObjBarrel {
         /* 0x623 */ bool mSunk;
         /* 0x624 */ cXyz mMove;
         /* 0x630 */ short m630;
-        /* 0x632 */ u8 m632[0x634 - 0x632];
     }; // Size: 0x634
 
     STATIC_ASSERT(sizeof(Act_c) == 0x634);

@@ -648,6 +648,7 @@ bool daObjBarrel::Act_c::damage_bg_proc_directly() {
             mLastGroundY = current.pos.y;
         }
     }
+
     if (mInitTimer > 0) {
         mInitTimer--;
     } else {
