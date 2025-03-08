@@ -153,7 +153,7 @@ namespace daObjPaper {
                 attention_info.position.y += attr(mType).mAttentionOffset;
                 attention_info.distances[fopAc_Attn_TYPE_TALK_e] = attr(mType).mAttentionDist1;
                 attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = attr(mType).mAttentionDist2;
-                attention_info.flags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_READ_e;
+                cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_READ_e);
 
                 mMsgId = fpcM_ERROR_PROCESS_ID_e;
 

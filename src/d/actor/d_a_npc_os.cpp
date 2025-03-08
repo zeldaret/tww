@@ -694,7 +694,7 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
             }
         }
         else {
-            attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
             s16 angle = shape_angle.y + mJntCtrl.getHead_y() + mJntCtrl.getBackbone_y();
             field_0x7A4 = chkAttention(current.pos, angle);
 
@@ -709,7 +709,7 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
             }
         }
 
-        attention_info.flags &= ~(fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e);
+        cLib_offBit<u32>(attention_info.flags, (fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e));
 
         f32 dist = fopAcM_searchPlayerDistance2(this);
         if(!checkNpcCallCommand()) {
@@ -800,7 +800,7 @@ BOOL daNpc_Os_c::talkNpcAction(void*) {
     if(field_0x7A9 == 0) {
         l_msgId = -1;
         field_0x780 = getMsg();
-        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         field_0x7A3 = 0;
         field_0x7A9 += 1;
     }
@@ -837,7 +837,7 @@ BOOL daNpc_Os_c::carryNpcAction(void* param_1) {
     if(field_0x7A9 == 0) {
         setAnm(0);
 
-        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         offNpcCallCommand();
         field_0x7AC = shape_angle.y - dComIfGp_getPlayer(0)->shape_angle.y;
         field_0x788 = 120.0f;
@@ -1052,7 +1052,7 @@ BOOL daNpc_Os_c::routeCheck(f32 param_1, s16* param_2) {
 /* 0000375C-000039EC       .text searchNpcAction__10daNpc_Os_cFPv */
 BOOL daNpc_Os_c::searchNpcAction(void*) {
     if(field_0x7A9 == 0) {
-        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         setAnm(1);
         
         field_0x7A9 += 1;

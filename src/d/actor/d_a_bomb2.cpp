@@ -957,11 +957,11 @@ namespace daBomb2 {
     }
 
     void Act_c::on_carry() {
-        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     }
 
     void Act_c::off_carry() {
-        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     }
 
     void Act_c::mode_wait_init() {

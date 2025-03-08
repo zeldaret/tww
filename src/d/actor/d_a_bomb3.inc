@@ -822,7 +822,7 @@ int daBomb_c::procExplode_init() {
         change_state(STATE_0);
     }
 
-    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
 
     if(field_0x6F0) {
         daPy_getPlayerLinkActorClass()->decrementBombCnt();
@@ -927,7 +927,7 @@ bool daBomb_c::procCarry_init() {
     change_state(STATE_2);
     speedF = 0.0f;
     speed.set(cXyz::Zero);
-    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
 
     return true;
@@ -1001,10 +1001,10 @@ bool daBomb_c::procWait() {
             if(!temp && !field_0x781) {
                 bound(y_vel);
                 if((mAcch.ChkGroundHit() || chk_state(STATE_5)) && !mAcch.ChkGroundLanding()) {
-                    attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+                    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 }
                 else {
-                    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+                    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 }
             }
 
@@ -1420,7 +1420,7 @@ void daBomb_c::create_init() {
     mRestTime = 0x96;
     mInitialState = prm_get_state();
     if(!chk_state(STATE_4)) {
-        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     }
 
     field_0x77C = 0;

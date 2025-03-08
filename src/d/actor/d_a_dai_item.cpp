@@ -716,7 +716,7 @@ void daStandItem_c::execAction() {
 void daStandItem_c::mode_carry_init() {
     fopAcM_SetSpeedF(this, 0.0f);
     speed = cXyz::Zero;
-    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     mCyl.OffCoSetBit();
     mMode = MODE_CARRY;
 }

@@ -270,7 +270,7 @@ int daObjMknjD::Act_c::Create() {
 
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x3D;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x3D;
-    attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e);
 
     if (!checkItemGet(mGiveItemNo, 1)) {
         m043F = 8;

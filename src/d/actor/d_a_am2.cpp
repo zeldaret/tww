@@ -646,7 +646,7 @@ static void action_mahi(am2_class* i_this) {
         break;
     case 0xC:
         if (i_this->mCountDownTimers[3] == 0 || i_this->mCountDownTimers[3] > 3) {
-            actor->attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+            cLib_onBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         }
         if (naraku_check(i_this)) {
             if (i_this->mbNotInHomeRoom) {
@@ -785,7 +785,7 @@ static void action_mahi(am2_class* i_this) {
             
             if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
                 fopAcM_cancelCarryNow(actor);
-                actor->attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+                cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 actor->gravity = -4.0f;
                 actor->speed.y = 20.0f;
             }
@@ -797,7 +797,7 @@ static void action_mahi(am2_class* i_this) {
             if (i_this->mCurrBckIdx != AM2_BCK_BURUBURU) {
                 anm_init(i_this, AM2_BCK_BURUBURU, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
                 i_this->mCountDownTimers[3] = 20*30;
-                actor->attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+                cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 fopAcM_seStart(i_this, JA_SE_CM_AM2_RECOVER, 0);
                 fopAcM_monsSeStart(actor, JA_SE_CV_AM2_AWAKE, 0);
             }
@@ -805,7 +805,7 @@ static void action_mahi(am2_class* i_this) {
             if (i_this->mCountDownTimers[3] == 1) {
                 if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
                     fopAcM_cancelCarryNow(actor);
-                    actor->attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+                    cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 }
                 fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
                 actor->gravity = -4.0f;

@@ -623,10 +623,10 @@ int daNpc_kam_c::waitNpcAction(void*) {
         mC0C = cLib_getRndValue(10, 80);
     } else if (mActionStatus != ACTION_ENDING) {
         if (changeAreaCheck()) {
-            attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
             mEventState = 6;
         } else {
-            attention_info.flags &= ~(fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
+            cLib_offBit<u32>(attention_info.flags, (fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e));
             mEventState = -1;
         }
         

@@ -1291,7 +1291,7 @@ BOOL daNpc_Md_c::chkAdanmaeDemoOrder() {
 /* 000043D4-00004B04       .text waitNpcAction__10daNpc_Md_cFPv */
 BOOL daNpc_Md_c::waitNpcAction(void*) {
     if (mActionStatus == ACTION_STARTING) {
-        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         if (isTypeSea()) {
             if (m3104 == 0x1E || m3104 == 0x29 || m312D == 0xE || m312D == 0x12 || m312D == 0x13 || m312D == 0x1A || m312D == 0x25) {
                 setHarpPlayNum(1);
@@ -1351,19 +1351,19 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
             }
         } else {
             s16 headAngle = shape_angle.y + mJntCtrl.getHead_y() + mJntCtrl.getBackbone_y();
-            attention_info.flags &= ~(fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e);
+            cLib_offBit<u32>(attention_info.flags, (fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e));
             m312C = chkAttention(current.pos, headAngle, 1);
             sp08 = m312C;
             if (sp08 != 0) {
                 if (isTypeAtorizk() || isTypeAdanmae() || isTypeSea()) {
-                    attention_info.flags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+                    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e);
                 }
                 if (isTypeAtorizk() || isTypeAdanmae()) {
                     mCurEventMode = 2;
                 } else if (isTypeM_Dra09()) {
                     if (dComIfGs_isEventBit(0x1140)) {
                         if (dComIfGs_isEventBit(0x1101)) {
-                            attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e;
+                            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e);
                             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e)) {
                                 dComIfGs_onEventBit(0x1280);
                             }
@@ -1373,7 +1373,7 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
                                 mCurEventMode = 1;
                             }
                         } else {
-                            attention_info.flags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+                            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e);
                             mCurEventMode = 2;
                         }
                     } else {
@@ -1384,7 +1384,7 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
                         mCurEventMode = 3;
                     }
                 } else {
-                    attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+                    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 }
             }
             NpcCall(&sp08);
@@ -1611,7 +1611,7 @@ BOOL daNpc_Md_c::hitNpcAction(void* r29) {
         current.angle.y = angle;
         speedF = 10.0f;
         speed.y = 20.0f;
-        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         mAcchCir[1].SetWall(60.0f, 20.0f);
         clearStatus(daMdStts_UNK1 | daMdStts_UNK4);
         setBitStatus(daMdStts_UNK2);

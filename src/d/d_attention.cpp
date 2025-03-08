@@ -427,7 +427,7 @@ f32 dAttention_c::EnemyDistance(fopAc_ac_c* actor) {
     if (fopAcM_GetProfName(actor) == PROC_PLAYER)
         return -1.0f;
 
-    if (!(actor->attention_info.flags & 4) && !(actor->attention_info.flags & 0x4000000))
+    if (!(actor->attention_info.flags & fopAc_Attn_LOCKON_BATTLE_e) && !(actor->attention_info.flags & fopAc_Attn_ENEMYFLAG_NOLOCKON_e))
         return -1.0f;
 
     f32 dist = fopAcM_searchActorDistance(actor, mpPlayer);

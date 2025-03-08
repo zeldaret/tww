@@ -923,7 +923,6 @@ bool cM3d_CrossY_Tri(const Vec& r3, const Vec& r4, const Vec& r5, const cM3dGPla
 
 /* 8024C370-8024C4D0       .text cM3d_CrossY_Tri_Front__FRC3VecRC3VecRC3VecPC3Vec */
 bool cM3d_CrossY_Tri_Front(const Vec& r3, const Vec& r4, const Vec& r5, const Vec* pos) {
-    /* Nonmatching - regalloc */
     if (!cM3d_InclusionCheckPosIn3PosBox2d(
         r3.z,
         r3.x,
