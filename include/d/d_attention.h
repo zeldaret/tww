@@ -137,7 +137,7 @@ public:
     s32 makeList();
     int SelectAttention(fopAc_ac_c*);
     void sortList();
-    void stockAttention(u32);
+    fopAc_ac_c *stockAttention(u32);
     fopAc_ac_c *nextAttention(u32);
     s32 freeAttention();
     bool chaseAttention();
