@@ -530,8 +530,8 @@ void dAttention_c::sortList() {
 }
 
 /* 8009E5C4-8009E684       .text stockAttention__12dAttention_cFUl */
-void dAttention_c::stockAttention(u32 interactMask) {
-    fopAc_ac_c * pTarget = LockonTarget(0);
+fopAc_ac_c* dAttention_c::stockAttention(u32 interactMask) {
+    fopAc_ac_c *pTarget = LockonTarget(0);
     initList(interactMask);
     if (makeList())
         sortList();
@@ -547,7 +547,7 @@ void dAttention_c::stockAttention(u32 interactMask) {
         setFlag(0x04);
     }
 
-    LockonTarget(0);
+    return LockonTarget(0);
 }
 
 /* 8009E684-8009E728       .text nextAttention__12dAttention_cFUl */
