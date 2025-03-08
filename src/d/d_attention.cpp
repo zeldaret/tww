@@ -8,6 +8,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_angle.h"
+#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
@@ -934,6 +935,48 @@ bool dAttention_c::Run(u32 interactMask) {
 /* 8009F460-8009F5FC       .text Draw__12dAttention_cFv */
 void dAttention_c::Draw() {
     /* Nonmatching */
+    Mtx invCamera;
+    PSMTXInverse(g_dComIfG_gameInfo.drawlist.mpCamera->mViewMtxNoTrans, invCamera);
+    fopAc_ac_c *target = LockonTarget(0);
+    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 || g_dComIfG_gameInfo.play.mScopeMesgStatus != 0)
+        return;
+    if (target != NULL) {
+        if (target != NULL) {
+            this->draw[0].draw(target->attention_info.position, invCamera);
+        }
+
+        if (mLockOnNum >= 2 && this->draw[1].mpAnmClr != NULL) {
+            int listIdx = mLockOnOffs;
+
+            if (mLockOnOffs == 0) {
+                listIdx = mLockOnNum - 1;
+            } else {
+                listIdx--;
+            }
+
+            if (mLockOnList[listIdx].getActor() != NULL) {
+                fopAc_ac_c* target = mLockOnList[listIdx].getActor();
+                this->draw[1].draw(target->attention_info.position, invCamera);
+            }
+        }
+
+        fpc_ProcID id = LockonTargetPId(0);
+        this->mlockedOnPId = id;
+        this->field_0x02c = target->attention_info.position;
+        this->field_0x028 = 0;
+    } else {
+        if (this->field_0x028 > 0) {
+            uint temp = this->mlockedOnPId;
+            // unsure about this cast
+            target = reinterpret_cast<fopAc_ac_c*>(fopAcIt_Judge(&fpcSch_JudgeByID, &temp));
+            if (target != NULL) {
+                this->draw[0].draw(target->attention_info.position, invCamera);
+                this->field_0x02c = target->attention_info.position;
+            } else {
+                this->draw[0].draw(this->field_0x02c, invCamera);
+            }
+        }
+    }
 }
 
 /* 8009F5FC-8009F6B4       .text setAnm__10dAttDraw_cFiii */

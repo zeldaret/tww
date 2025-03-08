@@ -236,7 +236,7 @@ public:
     /* 0x028 */ s8 field_0x028;
     /* 0x02C */ cXyz field_0x02c;
     /* 0x038 */ dAttDraw_c draw[2];
-    /* 0x050 */ u32 field_0x050;
+    /* 0x050 */ u32 mlockedOnPId;
     /* 0x054 */ dAttList_c mLockOnList[8];
     /* 0x0D4 */ int mLockOnNum;
     /* 0x0D8 */ int mLockOnOffs;
