@@ -76,8 +76,8 @@ static u16 joint_number_table[20];
 Mtx daObjMknjD::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
-static BOOL nodeCallBackL(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0) {
+static BOOL nodeCallBackL(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         
         J3DModel* mdl = j3dSys.getModel();
@@ -97,8 +97,8 @@ static BOOL nodeCallBackL(J3DNode* i_node, int i_param2) {
 }
 
 /* 0000012C-000001E0       .text nodeCallBackR__FP7J3DNodei */
-static BOOL nodeCallBackR(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0) {
+static BOOL nodeCallBackR(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
 
         J3DModel* mdl = j3dSys.getModel();
@@ -118,8 +118,8 @@ static BOOL nodeCallBackR(J3DNode* i_node, int i_param2) {
 }
 
 /* 000001E0-000002B0       .text nodeCallBack_Hahen__FP7J3DNodei */
-static BOOL nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0) {
+static BOOL nodeCallBack_Hahen(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         u16 shardIdx = joint_number_table[jntNo - 1];
 
@@ -270,7 +270,7 @@ int daObjMknjD::Act_c::Create() {
 
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x3D;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x3D;
-    attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e;
+    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e);
 
     if (!checkItemGet(mGiveItemNo, 1)) {
         m043F = 8;
@@ -316,7 +316,7 @@ s32 daObjMknjD::Act_c::Mthd_Create() {
 
 /* 00000B64-00000BDC       .text Delete__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Delete() {
-    dComIfGp_getAttention().mFlags &= 0x7fffffff;
+    dComIfGp_att_revivalAleart();
 
     for (int i = 0; i < 4; i++) {
         mSmokeCBs[i].end();
@@ -591,7 +591,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
     /* Particles and sound effects */
     // After 1 frame, the particles for the statue splitting in half spawn.
     if (mBreakTimer == 1) {
-        mEmitters[0] = dComIfGp_particle_set(0x8185, &current.pos, &current.angle);
+        mEmitters[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_8185, &current.pos, &current.angle);
 
         GXColor emitter2Color;
         emitter2Color.r = tevStr.mColorC0.r;
@@ -599,9 +599,9 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
         emitter2Color.b = tevStr.mColorC0.b;
         emitter2Color.a = tevStr.mColorC0.a;
         
-        mEmitters[1] = dComIfGp_particle_setProjection(0x8186, &current.pos, &current.angle, NULL, 0xFF, NULL, current.roomNo, &tevStr.mColorK0, &emitter2Color);
+        mEmitters[1] = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_8186, &current.pos, &current.angle, NULL, 0xFF, NULL, current.roomNo, &tevStr.mColorK0, &emitter2Color);
 
-        mEmitters[2] = dComIfGp_particle_setToon(0xA187, &current.pos, &current.angle, NULL, 0xFF, &mSmokeCBs[2]);
+        mEmitters[2] = dComIfGp_particle_setToon(dPa_name::ID_SCENE_A187, &current.pos, &current.angle, NULL, 0xFF, &mSmokeCBs[2]);
         mSmokeCBs[2].setRateOff(0);
 
         fopAcM_seStartCurrent(this, JA_SE_OBJ_SAGE_GATE_CREAK, 0);
@@ -634,7 +634,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
         mBrokenPos = current.pos;
         mBrokenPos.y += 350.0f;
 
-        mEmitters[3] = dComIfGp_particle_setToon(0x2027, &mBrokenPos, &current.angle, NULL, 0xFF, &mSmokeCBs[3]);
+        mEmitters[3] = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &mBrokenPos, &current.angle, NULL, 0xFF, &mSmokeCBs[3]);
         if (mEmitters[3] != NULL) {
             mEmitters[3]->setVolumeSweep(0.5f);
             mEmitters[3]->setLifeTime(0x2D);
@@ -801,7 +801,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 mDoAud_bgmStop(30);
                 mDoAud_taktModeMuteOff();
 
-                dComIfGp_getAttention().mFlags |= 0x80000000;
+                dComIfGp_att_offAleart();
 
                 if (m043E == true) {
                     m0432 = 0x2B;
@@ -818,7 +818,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             privateCut();
 
             if (dComIfGp_evmng_endCheck(mDemoEventIdx)) {
-                dComIfGp_getAttention().mFlags &= ~0x80000000;
+                dComIfGp_att_revivalAleart();
                 dComIfGp_event_reset();
 
                 fopAcM_delete(this);

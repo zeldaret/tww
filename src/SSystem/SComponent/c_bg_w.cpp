@@ -78,7 +78,7 @@ bool cBgW::SetVtx() {
         pm_vtx_tbl = NULL;
     } else {
         if (ChkMoveBg()) {
-            pm_vtx_tbl = new Vec[pm_bgd->m_v_num];
+            pm_vtx_tbl = (cBgD_Vtx_t*)new Vec[pm_bgd->m_v_num];
             if (pm_vtx_tbl == NULL)
                 return true;
 

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_bomb2.h"
+#include "d/d_a_obj.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 const int L_daBomb_Version = 1;

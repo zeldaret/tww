@@ -18,7 +18,7 @@ public:
     void set_mtx(); // weak but not inlined?
 
     BOOL CreateHeap();
-    BOOL CreateInit();
+    void CreateInit();
 
     static const char m_arcname[];
 

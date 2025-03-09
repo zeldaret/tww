@@ -1036,7 +1036,7 @@ inline s8 dStage_stagInfo_GetTimeH(stage_stag_info_class* p_info) {
     return (p_info->field_0x0c >> 8) & 0xFF;
 }
 
-inline u8 dStage_stagInfo_GetCullPoint(stage_stag_info_class* p_info) {
+inline u16 dStage_stagInfo_GetCullPoint(stage_stag_info_class* p_info) {
     return p_info->field_0x10 & 0xFFFF;
 }
 

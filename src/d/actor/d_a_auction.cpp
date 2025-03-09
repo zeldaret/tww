@@ -1144,7 +1144,7 @@ void daAuction_c::eventMainMsgBikonC() {
         m7A8 = getNpcActorP(m827)->current.pos;
         m7A8.y += getPiconDispOfs(m827);
 
-        dComIfGp_particle_set(0x8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_set(dPa_name::ID_SCENE_8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
         mTimer = 30;
 
         if (m827 == 0) {

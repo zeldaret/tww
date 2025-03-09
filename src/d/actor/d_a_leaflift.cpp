@@ -99,7 +99,7 @@ BOOL daLlift_c::CreateHeap() {
     return TRUE;
 } 
 
-static BOOL nodeCallBack(J3DNode* node, int idx);
+static BOOL nodeCallBack(J3DNode* node, int calcTiming);
 
 /* 00000338-000005F8       .text CreateInit__9daLlift_cFv */
 void daLlift_c::CreateInit() {
@@ -112,10 +112,10 @@ void daLlift_c::CreateInit() {
     cXyz waterCheckPos = current.pos;
     waterCheckPos.y += 200.0f;
     mWaterY = dBgS_ObjGndChk_Wtr_Func(waterCheckPos);
-    if (mWaterY != -1e9f) {
+    if (mWaterY != C_BG_MIN_HEIGHT) {
         cXyz particlePos = current.pos;
         particlePos.y = mWaterY + 1.0f; 
-        mEmitter3 = dComIfGp_particle_set(0x82AA, &particlePos, &current.angle);
+        mEmitter3 = dComIfGp_particle_set(dPa_name::ID_SCENE_82AA, &particlePos, &current.angle);
         if (mEmitter3) {
             mEmitter3->stopCreateParticle();
         }
@@ -164,8 +164,8 @@ s32 daLlift_c::_create() {
 }
 
 /* 00000918-000009C4       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int idx) {
-    if (!idx) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();

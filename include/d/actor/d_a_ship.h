@@ -23,7 +23,7 @@ public:
     u32 getTactWarpID() { return mTactWarpID; }
     void setTactWarpID(u32 warpID) { mTactWarpID = warpID; }
     
-    bool unknown_inline_TODO() const { return m041C || m0424; }
+    bool unknown_inline_TODO() const { return mTornadoActor || m0424; }
     
     void checkCraneMode() const {}
     void checkCraneUpEnd() const {}
@@ -58,12 +58,15 @@ public:
     void getTactJntMtx() {}
     void getTillerAngleRate() {}
     void getTillerTopPosP() {}
-    void getTornadoActor() {}
+    fopAc_ac_c* getTornadoActor() { return mTornadoActor; }
     void getWhirlActor() {}
     void offCraneHookFlg() {}
     void offFantomGanonBattle() {}
     void offStateFlg(daSHIP_SFLG) {}
-    void offTornadoFlg() {}
+    void offTornadoFlg() {
+        mTornadoID = fpcM_ERROR_PROCESS_ID_e;
+        mTornadoActor = NULL;
+    }
     void offWhirlFlg() {}
     void onCb1Ride() {}
     void onCraneHookFlg() {}
@@ -74,7 +77,7 @@ public:
     void onSceneChange() {}
     void onShortHitFlg() {}
     void onStateFlg(daSHIP_SFLG) {}
-    void onTornadoFlg(unsigned long) {}
+    void onTornadoFlg(u32 tornadoID) { mTornadoID = tornadoID; }
     void onWhirlFlg(unsigned long, short) {}
     void onWhirlFlgDirect(unsigned long, short) {}
     void setAtnPos(const cXyz*) {}
@@ -238,8 +241,8 @@ public:
     /* 0x040C */ f32 m040C;
     /* 0x0410 */ int mGridId;
     /* 0x0414 */ daGrid_c* mpGrid;
-    /* 0x0418 */ int m0418;
-    /* 0x041C */ fopAc_ac_c* m041C;
+    /* 0x0418 */ u32 mTornadoID;
+    /* 0x041C */ fopAc_ac_c* mTornadoActor;
     /* 0x0420 */ u32 m0420;
     /* 0x0424 */ fopAc_ac_c* m0424;
     /* 0x0428 */ u8 m0428[0x042C - 0x0428];

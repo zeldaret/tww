@@ -145,7 +145,7 @@ void daObjEbomzo::Act_c::check() {
                     r = tevStr.mColorK0.r;
                     g = tevStr.mColorK0.g;
                     b = tevStr.mColorK0.b;
-                    mpParticleEmitter = dComIfGp_particle_set(0x828e, &current.pos, &current.angle);
+                    mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_828E, &current.pos, &current.angle);
                     if (mpParticleEmitter) mpParticleEmitter->setGlobalPrmColor(r, g, b);
                 }
             }
@@ -170,7 +170,7 @@ void daObjEbomzo::Act_c::demo() {
             mpParticleEmitter = NULL;
         }
 
-        dComIfGp_particle_set(0x828f, &current.pos, &current.angle);
+        dComIfGp_particle_set(dPa_name::ID_SCENE_828F, &current.pos, &current.angle);
     }
 }
 

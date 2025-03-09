@@ -165,7 +165,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
     case dBgS_Attr_SAND_e: {
         i_this->m0350.end();
         JPABaseEmitter* emitter1 = dComIfGp_particle_setToon(
-            0x2022, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
+            dPa_name::ID_COMMON_2022, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
             &i_this->m0350, fopAcM_GetRoomNo(i_this)
         );
         if (emitter1) {
@@ -180,7 +180,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
         break;
     }
     case dBgS_Attr_GRASS_e:
-        JPABaseEmitter* emitter2 = dComIfGp_particle_set(0x24, &i_this->m0338, &i_this->m0344);
+        JPABaseEmitter* emitter2 = dComIfGp_particle_set(dPa_name::ID_COMMON_0024, &i_this->m0338, &i_this->m0344);
         if (emitter2) {
             emitter2->setRate(rate * 0.5f);
             emitter2->setMaxFrame(3);
@@ -260,8 +260,8 @@ static void ground_smoke_set(bk_class* i_this) {
 }
 
 /* 000011F0-00001454       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         int r28 = joint_check[jntNo];
@@ -318,8 +318,8 @@ static BOOL nodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 00001454-00001564       .text nodeCallBack_P__FP7J3DNodei */
-static BOOL nodeCallBack_P(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack_P(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         int r30 = joint_check[jntNo];
@@ -625,8 +625,8 @@ static u8 ground_4_check(bk_class* i_this, int r18, s16 r20, f32 f29) {
         sp8 += i_this->current.pos;
         gndChk.SetPos(&sp8);
         sp8.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (sp8.y == -1e9f) {
-            sp8.y = 1e9f;
+        if (sp8.y == C_BG_MIN_HEIGHT) {
+            sp8.y = C_BG_MAX_HEIGHT;
         }
         if (i_this->dr.mAcch.GetGroundH() - sp8.y > 200.0f) {
             r19 |= check_bit[i];
@@ -3212,7 +3212,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
         i_this->m0336--;
         if (i_this->m0336 == 0) {
             i_this->m0344.y = i_this->current.angle.y;
-            dComIfGp_particle_set(0xE, &i_this->m116C, &i_this->m0344);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_000E, &i_this->m116C, &i_this->m0344);
         }
     }
     
@@ -3225,14 +3225,14 @@ static BOOL daBk_Execute(bk_class* i_this) {
         sp28.y += 50.0f - i_this->dr.m44C.y;
         gndChk.SetPos(&sp28);
         sp28.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (sp28.y != -1e9f) {
+        if (sp28.y != C_BG_MIN_HEIGHT) {
             Vec temp;
             temp.x = sp28.x;
             temp.y = 50.0f + sp28.y;
             temp.z = sp28.z + f31;
             gndChk.SetPos(&temp);
             f32 f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (f1 != -1e9f) {
+            if (f1 != C_BG_MIN_HEIGHT) {
                 r21 = (s16)-cM_atan2s(f1 - sp28.y, temp.z - sp28.z);
                 if (r21 > 0x2000 || r21 < -0x2000) {
                     r21 = 0;
@@ -3243,7 +3243,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
             temp.z = sp28.z;
             gndChk.SetPos(&temp);
             f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (f1 != -1e9f) {
+            if (f1 != C_BG_MIN_HEIGHT) {
                 r23 = (s16)cM_atan2s(f1 - sp28.y, temp.x - sp28.x);
                 if (r23 > 0x2000 || r23 < -0x2000) {
                     r23 = 0;

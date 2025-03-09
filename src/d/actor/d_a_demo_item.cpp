@@ -296,13 +296,13 @@ void daDitem_c::setParticle() {
     
     switch (m_effect_type[m_itemNo]) {
     case 0:
-        mpEmitters[0] = dComIfGp_particle_set(0x1F7, &current.pos, &angle);
+        mpEmitters[0] = dComIfGp_particle_set(dPa_name::ID_COMMON_01F7, &current.pos, &angle);
     case 1:
-        mpEmitters[1] = dComIfGp_particle_set(0x1F8, &current.pos, &angle);
+        mpEmitters[1] = dComIfGp_particle_set(dPa_name::ID_COMMON_01F8, &current.pos, &angle);
     case 2:
-        mpEmitters[2] = dComIfGp_particle_set(0x1F9, &current.pos, &angle);
+        mpEmitters[2] = dComIfGp_particle_set(dPa_name::ID_COMMON_01F9, &current.pos, &angle);
     case 3:
-        mpEmitters[3] = dComIfGp_particle_set(0x1FA, &current.pos, &angle);
+        mpEmitters[3] = dComIfGp_particle_set(dPa_name::ID_COMMON_01FA, &current.pos, &angle);
     case 4:
         break;
     }

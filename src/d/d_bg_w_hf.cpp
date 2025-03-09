@@ -4,6 +4,7 @@
 //
 
 #include "d/d_bg_w_hf.h"
+#include "SSystem/SComponent/c_bg_s.h"
 #include "dolphin/types.h"
 
 #define CHECK_MINMAX_1(line, min, max)                                                             \
@@ -55,9 +56,9 @@ void dBgWHf::CalcPlane() {
         if (isEven) {
             for (int x = 0; x < m_gridx; r30++, x++) {
                 u16 triIdx = mC8[r30];
-                Vec* vtx0 = &pm_vtx_tbl[tri_tbl[triIdx].vtx0];
-                Vec* vtx1 = &pm_vtx_tbl[tri_tbl[triIdx].vtx1];
-                Vec* vtx2 = &pm_vtx_tbl[tri_tbl[triIdx].vtx2];
+                cBgD_Vtx_t* vtx0 = &pm_vtx_tbl[tri_tbl[triIdx].vtx0];
+                cBgD_Vtx_t* vtx1 = &pm_vtx_tbl[tri_tbl[triIdx].vtx1];
+                cBgD_Vtx_t* vtx2 = &pm_vtx_tbl[tri_tbl[triIdx].vtx2];
                 normal.x = vtx1->y - vtx0->y;
                 normal.y = mC4;
                 normal.z = vtx1->y - vtx2->y;
@@ -152,8 +153,8 @@ void dBgWHf::MakeBlckBndHf(int blck_id, f32* r28, f32* r29) {
         r31 = pm_bgd->m_t_num - 1;
     }
     
-    *r28 = 1000000000.0f;
-    *r29 = -1000000000.0f;
+    *r28 = C_BG_MAX_HEIGHT;
+    *r29 = C_BG_MIN_HEIGHT;
     
     for (int t = r7; t <= r31; t++) {
 #if VERSION != VERSION_JPN

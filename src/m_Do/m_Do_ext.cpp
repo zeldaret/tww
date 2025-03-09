@@ -1522,7 +1522,7 @@ void mDoExt_McaMorf2::ERROR_EXIT() {
 
 /* 80013770-80013E50       .text calc__15mDoExt_McaMorf2FUs */
 void mDoExt_McaMorf2::calc(u16 param_0) {
-    /* Nonmatching - regalloc (fixing the regalloc causes an instruction swap on f30 = field_0x84) */
+    /* Nonmatching - regalloc (fixing the regalloc causes an instruction swap on f30 = mAnmRate) */
     if (!mpModel) {
         return;
     }

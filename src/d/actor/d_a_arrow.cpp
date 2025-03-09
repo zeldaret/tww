@@ -192,7 +192,7 @@ void daArrow_c::setBlur() {
 /* 800D4994-800D4A04       .text createBlur__9daArrow_cFv */
 void daArrow_c::createBlur() {
     if (!mBlurFollowCb.getEmitter()) {
-        dComIfGp_particle_setP1(0x48, &current.pos, NULL, NULL, 0xFF, &mBlurFollowCb);
+        dComIfGp_particle_setP1(dPa_name::ID_COMMON_0048, &current.pos, NULL, NULL, 0xFF, &mBlurFollowCb);
     }
 }
 
@@ -348,7 +348,7 @@ void daArrow_c::ShieldReflect() {
         targetAngleX = -cLib_targetAngleX(&link->current.pos, &ganondorfChestPos);
         fpcM_SetParam(ganondorf, 0x23);
         mSparkleTimer = 15 + REG0_S(3);
-        mpSparkleEmitter = dComIfGp_particle_set(0x3EE, &link->current.pos);
+        mpSparkleEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03EE, &link->current.pos);
     }
     
     // // Regswaps without creating a fake inline.
@@ -396,7 +396,7 @@ bool daArrow_c::check_water_in() {
         
         if (mArrowType == TYPE_FIRE) {
             mInWaterTimer = 1;
-            dComIfGp_particle_setP1(0x35A, &waterHitPos);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_035A, &waterHitPos);
             if (!field_0x6e4) {
                 dKy_arrowcol_chg_on(&current.pos, 0);
             }
@@ -410,7 +410,7 @@ bool daArrow_c::check_water_in() {
                 dKy_arrowcol_chg_on(&current.pos, 1);
             }
         } else if (mArrowType == TYPE_LIGHT) {
-            dComIfGp_particle_setP1(0x2A1, &waterHitPos);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_02A1, &waterHitPos);
             fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
             if (!field_0x6e4) {
                 dKy_arrowcol_chg_on(&current.pos, 2);
@@ -514,7 +514,7 @@ void daArrow_c::setRoomInfo() {
     
     mGndChk.SetPos(&current.pos);
     f32 groundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
-    if (groundY != -1000000000.0f) {
+    if (groundY != C_BG_MIN_HEIGHT) {
         roomNo = dComIfG_Bgsp()->GetRoomId(mGndChk);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mGndChk);
     } else {
@@ -692,7 +692,7 @@ BOOL daArrow_c::procMove() {
                             mDoMtx_stack_c::ZXYrotM(temp10.x, temp10.y, 0);
                             cMtx_copy(mDoMtx_stack_c::get(), field_0x6b4);
                             
-                            dComIfGp_particle_setP1(0x2A1, &field_0x6a8, &temp10);
+                            dComIfGp_particle_setP1(dPa_name::ID_COMMON_02A1, &field_0x6a8, &temp10);
                             fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
                             fopAcM_delete(this);
                         } else {
@@ -793,15 +793,15 @@ BOOL daArrow_c::procMove() {
             cMtx_copy(mDoMtx_stack_c::get(), field_0x6b4);
             
             if (mArrowType == TYPE_FIRE) {
-                dComIfGp_particle_setP1(0x29A, &field_0x6a8, &temp10);
-                dComIfGp_particle_setP1(0x29B, &field_0x6a8, &temp10);
+                dComIfGp_particle_setP1(dPa_name::ID_COMMON_029A, &field_0x6a8, &temp10);
+                dComIfGp_particle_setP1(dPa_name::ID_COMMON_029B, &field_0x6a8, &temp10);
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARW_EFF, 0);
                 field_0x698 = false;
             } else if (mArrowType == TYPE_ICE) {
                 if (dComIfG_Bgsp()->ChkGrpInf(mLinChk, 0x200)) {
                     fopAcM_create(PROC_Obj_Magmarock, NULL, &field_0x6a8, current.roomNo);
                 } else {
-                    dComIfGp_particle_setP1(0x29E, &field_0x6a8, &temp10);
+                    dComIfGp_particle_setP1(dPa_name::ID_COMMON_029E, &field_0x6a8, &temp10);
                     
                     fopAcM_createChild(
                         PROC_ARROW_ICEEFF, fopAcM_GetID(this),
@@ -812,7 +812,7 @@ BOOL daArrow_c::procMove() {
                     fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ARW_EFF, 0);
                 }
             } else if (mArrowType == TYPE_LIGHT) {
-                dComIfGp_particle_setP1(0x2A1, &field_0x6a8, &temp10);
+                dComIfGp_particle_setP1(dPa_name::ID_COMMON_02A1, &field_0x6a8, &temp10);
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
                 field_0x698 = false;
             }

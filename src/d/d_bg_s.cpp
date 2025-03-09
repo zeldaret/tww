@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 #define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
@@ -354,7 +354,7 @@ void dBgS::WallCorrect(dBgS_Acch* acch) {
 
 /* 800A13E0-800A14FC       .text RoofChk__4dBgSFP12dBgS_RoofChk */
 f32 dBgS::RoofChk(dBgS_RoofChk* chk) {
-    chk->SetNowY(1e+09f);
+    chk->SetNowY(C_BG_MAX_HEIGHT);
     chk->ClearPi();
     cBgS_ChkElm* elm;
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
@@ -606,7 +606,7 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
         mGndChk.SetPos(&pos);
         f32 f31 = pm_pos->y;
         mGroundH = i_bgs.GroundCross(&mGndChk);
-        if (mGroundH != -1e+09f && mGroundH > f31) {
+        if (mGroundH != C_BG_MIN_HEIGHT && mGroundH > f31) {
             pm_pos->y = mGroundH;
             if (field_0x58) {
                 field_0x58->y = 0.0f;

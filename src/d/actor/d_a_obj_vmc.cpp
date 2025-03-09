@@ -186,7 +186,7 @@ void daObjVmc::Act_c::init_mtx() {
 /* 00000B1C-00000BD0       .text daObjVmc_base_main__Q28daObjVmc5Act_cFv */
 void daObjVmc::Act_c::daObjVmc_base_main() {
     if (mHasTree == 1) {
-        dComIfGp_particle_setToon(0xa1bc, &current.pos, &current.angle, NULL, 0xFF, &mSmoke, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_setToon(dPa_name::ID_SCENE_A1BC, &current.pos, &current.angle, NULL, 0xFF, &mSmoke, fopAcM_GetRoomNo(this));
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_UNK10000000_e);
         mState = STATE_TREE_DEMO_WAIT;
         shape_angle.y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0)) + 0x1800;

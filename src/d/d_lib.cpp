@@ -27,7 +27,7 @@ void dLib_setCirclePath(dLib_circle_path_c* path) {
 /* 800570CC-8005716C       .text dLib_getWaterY__FR4cXyzR12dBgS_ObjAcch */
 f32 dLib_getWaterY(cXyz& pos, dBgS_ObjAcch& acch) {
     BOOL waterHit = acch.ChkWaterHit();
-    f32 waterHeight = waterHit ? acch.m_wtr.GetHeight() : C_BG_INVALID_HEIGHT;
+    f32 waterHeight = waterHit ? acch.m_wtr.GetHeight() : C_BG_MIN_HEIGHT;
     if (daSea_ChkArea(pos.x, pos.z)) {
         f32 seaHeight = daSea_calcWave(pos.x, pos.z);
         if (!waterHit || seaHeight > waterHeight) {

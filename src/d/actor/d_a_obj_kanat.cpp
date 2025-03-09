@@ -88,11 +88,11 @@ BOOL daObjKanat::Act_c::Execute(Mtx** pMtx) {
             color.b = tevStr.mColorC0.b;
             color.a = tevStr.mColorC0.a;
             dComIfGp_particle_set(
-                0x82A2, &current.pos, &current.angle, NULL, 0xFF,
+                dPa_name::ID_SCENE_82A2, &current.pos, &current.angle, NULL, 0xFF,
                 NULL, current.roomNo, &tevStr.mColorK0, &color
             );
             dComIfGp_particle_setToon(
-                0xA2A3, &current.pos, &current.angle, NULL, 0xB4,
+                dPa_name::ID_SCENE_A2A3, &current.pos, &current.angle, NULL, 0xB4,
                 &mSmokeCb, current.roomNo, &tevStr.mColorK0, &color
             );
         }

@@ -332,6 +332,8 @@ private:
     /* 0x00 vtable */
 };  // Size = 0x4
 
+STATIC_ASSERT(sizeof(cCcD_GStts) == 0x4);
+
 class cCcD_Stts {
 private:
     /* 0x00 */ cXyz m_cc_move;
