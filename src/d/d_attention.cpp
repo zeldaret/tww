@@ -8,6 +8,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_angle.h"
+#include "m_Do/m_Do_graphic.h"
 
 s32 dAttention_c::loc_type_num = 3;
 u32 dAttention_c::act_type_num = 5;
@@ -673,8 +674,37 @@ void dAttDraw_c::setAnm(int, int, int) {
 }
 
 /* 8009F6B4-8009F834       .text draw__10dAttDraw_cFR4cXyzPA4_f */
-void dAttDraw_c::draw(cXyz&, Mtx) {
-    /* Nonmatching */
+void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
+    J3DModel *model = this->anm->mpModel;
+    mDoMtx_stack_c::transS(pos);
+    mDoMtx_stack_c::concat(mtx);
+    PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+
+    J3DModelData *modeldata = model->getModelData();
+    if (this->mpAnmClr == NULL) {
+        J3DAnmColor *color = reinterpret_cast<J3DAnmColor*>(dRes_control_c::getRes("Always", 0x45, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40));
+        modeldata->getMaterialTable().removeMatColorAnimator(color);
+    } else {
+        this->mpAnmClr->setFrame(this->anm->mFrameCtrl.getFrame());
+        J3DMatColorAnm *p = this->mpAnmMatClr;
+        for(u16 i = 0; i < this->mpAnmClr->getUpdateMaterialNum(); i++) {
+            p->setAnmColor(this->mpAnmClr);
+            p->setAnmIndex(i);
+            p++;
+        }
+        modeldata->getMaterialTable().setMatColorAnimator(this->mpAnmClr, this->mpAnmMatClr);
+    }
+
+    if ((int)mDoGph_gInf_c::mMonotone != 0) {
+        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListP1, 0);
+        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluListP1, 1);
+    } else {
+        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListMaskOff, 0);
+        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluListMaskOff, 1);
+    }
+    this->anm->updateDL();
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaList, 0);
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluList, 1);
 }
 
 /* 8009F834-8009F88C       .text LockonTarget__12dAttention_cFl */
