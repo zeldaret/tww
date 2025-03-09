@@ -151,7 +151,7 @@ public:
     int judgementLostCheck();
     void judgementStatusSw(u32);
     void judgementStatusHd(u32);
-    void Run(u32);
+    bool Run(u32 interactMask);
     void Draw();
     fopAc_ac_c* LockonTarget(s32);
     f32 LockonReleaseDistanse();
