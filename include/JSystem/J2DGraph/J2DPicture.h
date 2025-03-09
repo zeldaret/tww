@@ -110,7 +110,7 @@ public:
     void setTumble(bool v) {} // untested { mFlag = (mFlag & ~0x04) | (v << 2); }
     bool isTumble() const { return mFlag >> 2 & 1; }
 
-private:
+protected:
     /* 0x0CC */ JUTTexture* mpTexture[4];
     /* 0x0DC */ u8 mNumTexture;
     /* 0x0DD */ u8 mValidTexture;
