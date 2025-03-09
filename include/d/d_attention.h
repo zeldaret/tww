@@ -148,7 +148,7 @@ public:
     void runDebugDisp();
     void judgementButton();
     void judgementTriggerProc();
-    void judgementLostCheck();
+    int judgementLostCheck();
     void judgementStatusSw(u32);
     void judgementStatusHd(u32);
     void Run(u32);
