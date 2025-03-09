@@ -64,8 +64,30 @@ void control1(shand_class* actor) {
 }
 
 /* 0000052C-00000740       .text control2__FP11shand_class */
-void control2(shand_class*) {
-    /* Nonmatching */
+void control2(shand_class* actor) {
+    cXyz rel_offset, abs_offset;
+    rel_offset.x = 0;
+    rel_offset.y = 0;
+    rel_offset.z = actor->u2F4;
+
+    cLib_addCalc2(&actor->u31C[19].mPos.x, actor->u2D4.x, 1.0, actor->u2F0 * 50.0f);
+    cLib_addCalc2(&actor->u31C[19].mPos.y, actor->u2D4.y, 1.0, actor->u2F0 * 50.0f);
+    cLib_addCalc2(&actor->u31C[19].mPos.z, actor->u2D4.z, 1.0, actor->u2F0 * 50.0f);
+    cLib_addCalc2(&actor->u2F0, 1.0, 1.0, 0.01);
+
+    int i = 18;
+    shand_s* shand_i = &actor->u31C[i];
+    for(i = 18; i >= 1; i--, shand_i--){
+        float delta_pos_x = shand_i->mPos.x - shand_i[1].mPos.x;
+        float delta_pos_y = shand_i->mPos.y - shand_i[1].mPos.y;
+        float delta_pos_z = shand_i->mPos.z - shand_i[1].mPos.z;
+        int XZangle = cM_atan2s(delta_pos_x, delta_pos_z);
+        short Yangle = -cM_atan2s(delta_pos_y, std::sqrtf(delta_pos_x * delta_pos_x + delta_pos_z * delta_pos_z));
+        mDoMtx_YrotS(*calc_mtx, XZangle);
+        mDoMtx_XrotM(*calc_mtx, Yangle);
+        MtxPosition(&rel_offset, &abs_offset);
+        shand_i->mPos = shand_i[1].mPos + abs_offset;
+    }
 }
 
 /* 00000740-000007C4       .text control3__FP11shand_class */
