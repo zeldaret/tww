@@ -6,6 +6,7 @@
 #include "d/actor/d_a_shand.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_s_play.h"
 
 /* 000000EC-00000114       .text __ct__13daShand_HIO_cFv */
 daShand_HIO_c::daShand_HIO_c() {
@@ -27,8 +28,39 @@ static BOOL daShand_Draw(shand_class* actor) {
 }
 
 /* 000001E0-0000052C       .text control1__FP11shand_class */
-void control1(shand_class*) {
-    /* Nonmatching */
+void control1(shand_class* actor) {
+    actor->u31C[0].mPos = actor->current.pos;
+    int i = 1;
+    shand_s* shand_i = &actor->u31C[i];
+    
+    mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
+
+    cXyz local94, cStack_a0, localac;
+    local94.x = 0.0f;
+    local94.y = actor->u2F8;
+    local94.z = actor->u2FC;
+    MtxPosition(&local94, &localac);
+    cLib_addCalc2(&actor->u2F8, REG0_F(7), 1.0f, 0.1f);
+    cLib_addCalc2(&actor->u2FC, REG0_F(8), 1.0f, 1.0f);
+    local94.z = actor->u2F4;
+    const float fVar1 = actor->u300;
+    cXyz idk;
+    for(i = 1; i < 19; i++, ++shand_i){
+        idk.x = fVar1 * cM_ssin(actor->mExecuteCount * (REG0_S(5) + 1100) + i * (REG0_S(6) + 4000));
+        idk.z =  fVar1 * cM_scos(actor->mExecuteCount * (REG0_S(7) + 800) + i * (REG0_S(8) + 4000));
+        float fVar2 = (i < 15) ? 1.0f : 1.0f - (i - 15) * 0.2f;
+
+        float fVar_x = shand_i->mPos.x - shand_i[-1].mPos.x + (localac.x * fVar2) + (idk.x * fVar2);
+        float fVar_y = shand_i->mPos.y - shand_i[-1].mPos.y + localac.y;
+        float fVar_z = shand_i->mPos.z - shand_i[-1].mPos.z + (localac.z * fVar2) + (idk.z * fVar2);
+
+        int iVar2 = cM_atan2s(fVar_x, fVar_z);
+        short iVar3 = -cM_atan2s(fVar_y, std::sqrtf(fVar_x * fVar_x + fVar_z * fVar_z));
+        mDoMtx_YrotS(*calc_mtx, iVar2);
+        mDoMtx_XrotM(*calc_mtx, iVar3);
+        MtxPosition(&local94, &cStack_a0);
+        shand_i->mPos = shand_i[-1].mPos + cStack_a0;
+    }
 }
 
 /* 0000052C-00000740       .text control2__FP11shand_class */
