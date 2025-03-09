@@ -125,7 +125,7 @@ BOOL enemy_ice(enemyice* ei) {
             ac->tevStr.mFogStartZ = 0.0f;
             ac->tevStr.mFogEndZ = 2000.0f;
             fopAcM_seStart(ac, JA_SE_CM_L_ARROW_SHRINK, 0);
-            ac->attention_info.flags &= ~fopAc_Attn_LOCKON_BATTLE_e;
+            cLib_offBit<u32>(ac->attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         } else {
             ei->mLightShrinkTimer++;
             
@@ -216,7 +216,7 @@ BOOL enemy_ice(enemyice* ei) {
             particleScale.setall(ei->mParticleScale);
             pos = ac->current.pos;
             pos.y += ei->mYOffset;
-            dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0274, &pos, NULL, &particleScale);
         } else {
             return FALSE;
         }
@@ -225,10 +225,10 @@ BOOL enemy_ice(enemyice* ei) {
         frozen = TRUE;
         moveAndCollide = TRUE;
         if (ei->m00C != 1) {
-            ac->attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+            cLib_onBit<u32>(ac->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
             ac->attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 0x12;
             if (fopAcM_CheckStatus(ac, fopAcStts_CARRY_e)) {
-                ac->attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+                cLib_offBit<u32>(ac->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 ei->mState = 3;
                 if (ei->m00C == 2) {
                     ei->m00C = 0;
@@ -322,12 +322,12 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(0x273, &pos, NULL, &particleScale);
-                dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0273, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0274, &pos, NULL, &particleScale);
                 
                 if (ei->mFreezeTimer == -2) {
                     // Shattered by Skull Hammer.
-                    dComIfGp_particle_set(0x10, &pos);
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &pos);
                     csXyz angle(0, fopAcM_searchPlayerAngleY(ac), 0);
                     particleScale.setall(2.0f);
                     dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &pos, &angle, &particleScale);
@@ -375,7 +375,7 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(0x277, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0277, &pos, NULL, &particleScale);
                 fopAcM_seStart(ac, JA_SE_CM_ICE_RECOVER, 0);
             }
         }
@@ -459,7 +459,7 @@ void enemy_fire(enemyfire* ef) {
             }
             cXyz scale;
             scale.setall(ef->mParticleScale[i]);
-            ef->mpFlameEmitters[i] = dComIfGp_particle_set(0x3F1, &ac->current.pos, NULL, &scale);
+            ef->mpFlameEmitters[i] = dComIfGp_particle_set(dPa_name::ID_COMMON_03F1, &ac->current.pos, NULL, &scale);
             ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
             if (ef->mFlameTimers[i] < 10) {
                 ef->mFlameTimers[i] = 10;

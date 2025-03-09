@@ -164,7 +164,7 @@ void daWindTag::daWindTag_c::CreateInit() {
         mEfColor.g = mEfTevStr.mColorC0.g;
         mEfColor.b = mEfTevStr.mColorC0.b;
         mEfColor.a = mEfTevStr.mColorC0.a;
-        mpEmitter = dComIfGp_particle_set(0x8290, &current.pos, NULL, &scale, 0xFF, NULL, fopAcM_GetRoomNo(this), &mEfColor);
+        mpEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8290, &current.pos, NULL, &scale, 0xFF, NULL, fopAcM_GetRoomNo(this), &mEfColor);
         if (mpEmitter != NULL)
             mpEmitter->setGlobalScale(efScale);
     }

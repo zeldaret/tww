@@ -2,12 +2,14 @@
 #define D_A_OBJ_EFF_H
 
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
 #include "d/d_particle.h"
+#include "d/d_procname.h"
 
 namespace daObjEff {
     class Act_c : public fopAc_ac_c {
     public:
-        void make_barrel_smoke(cXyz*) {}
+        static void make_barrel_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, NULL, pos); }
         void make_land_smoke(cXyz*, float) {}
         void make_pinecone_smoke(cXyz*) {}
         void make_skull_smoke(cXyz*) {}

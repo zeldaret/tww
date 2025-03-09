@@ -120,8 +120,8 @@ fopAc_ac_c* daRd_c::_searchNearDeadRd(fopAc_ac_c* i_actor) {
 }
 
 /* 0000030C-00000358       .text nodeControl_CB__FP7J3DNodei */
-static BOOL nodeControl_CB(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daRd_c* i_this = reinterpret_cast<daRd_c*>(model->getUserArea());
         if (i_this) {
@@ -157,8 +157,8 @@ BOOL daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
 }
 
 /* 00000550-0000059C       .text nodeHeadControl_CB__FP7J3DNodei */
-static BOOL nodeHeadControl_CB(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeHeadControl_CB(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daRd_c* i_this = reinterpret_cast<daRd_c*>(model->getUserArea());
         if (i_this) {
@@ -623,7 +623,7 @@ bool daRd_c::checkTgHit() {
             cXyz* hitPos = mCyl.GetTgHitPosP();
             cc_at_check(this, &atInfo);
             if (mHitType == 1 || mHitType == 7 || mHitType == 8 || health <= 0) {
-                dComIfGp_particle_set(0x10, mCyl.GetTgHitPosP());
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, mCyl.GetTgHitPosP());
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, hitPos, &player->shape_angle, &scale);
                 if (health <= 0) {

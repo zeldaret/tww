@@ -88,8 +88,8 @@ BOOL daToge_c::CreateHeap() {
 }
 
 /* 00000290-00000348       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int timing) {
-    if (timing == 0) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         u32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();

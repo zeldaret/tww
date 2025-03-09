@@ -128,7 +128,7 @@ void daYgcwp_c::init_mtx() {
 
 /* 00000588-000005F0       .text make_shine__9daYgcwp_cFv */
 void daYgcwp_c::make_shine() {
-    dComIfGp_particle_set(0x8316, &current.pos, NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_8316, &current.pos, NULL, &scale);
 }
 
 /* 000005F0-00000654       .text set_timer__9daYgcwp_cFv */

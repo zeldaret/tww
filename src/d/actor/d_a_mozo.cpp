@@ -50,7 +50,7 @@ static BOOL daMozo_nodeCallBackFire(daMozo_c*, J3DModel*, J3DNode*, int) {
 }
 
 /* 00000728-0000078C       .text daMozo_nodeCallBack__FP7J3DNodei */
-static BOOL daMozo_nodeCallBack(J3DNode* node, int idx) {
+static BOOL daMozo_nodeCallBack(J3DNode* node, int calcTiming) {
     /* Nonmatching */
     J3DJoint* joint = (J3DJoint*)node;
     s32 jntNo = joint->getJntNo();
@@ -58,8 +58,8 @@ static BOOL daMozo_nodeCallBack(J3DNode* node, int idx) {
     daMozo_c* i_this = (daMozo_c*)model->getUserArea();
 
     switch (i_this->field_0x376) {
-    case 0: return daMozo_nodeCallBackBeam(i_this, model, node, idx);
-    case 1: return daMozo_nodeCallBackFire(i_this, model, node, idx);
+    case 0: return daMozo_nodeCallBackBeam(i_this, model, node, calcTiming);
+    case 1: return daMozo_nodeCallBackFire(i_this, model, node, calcTiming);
     }
 
     return TRUE;

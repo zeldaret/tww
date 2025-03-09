@@ -11,7 +11,7 @@ public:
         
     };
 
-    void holdEventOn() {}
+    void holdEventOn() { mHoldEvent = 1; }
 
     void nodeBa1Control(J3DNode*, J3DModel*);
     void XyCheck_cB(int);
@@ -107,7 +107,8 @@ public:
     void CreateHeap();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ u8 m290[0x7f9 - 0x290];
+    /* 0x7F9 */ u8 mHoldEvent;
 };
 
 class daNpc_Ba1_HIO_c {

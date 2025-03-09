@@ -4078,8 +4078,8 @@ daNpcPeople_c::daNpcPeople_c() {
 }
 
 /* 00000624-0000073C       .text daNpc_People_nodeCallBack__FP7J3DNodei */
-static BOOL daNpc_People_nodeCallBack(J3DNode* node, int param_1) {
-    if(!param_1) {
+static BOOL daNpc_People_nodeCallBack(J3DNode* node, int calcTiming) {
+    if(calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         J3DModel* model = j3dSys.getModel();
         daNpcPeople_c* i_this = (daNpcPeople_c*)model->getUserArea();
@@ -4430,7 +4430,7 @@ s32 daNpcPeople_c::createInit() {
 
     if(mNpcType != 0xB) {
         mObjAcch.CrrPos(*dComIfG_Bgsp());
-        if(-1.0e9f != mObjAcch.GetGroundH()) {
+        if(C_BG_MIN_HEIGHT != mObjAcch.GetGroundH()) {
             current.pos.y = home.pos.y = mObjAcch.GetGroundH();
         }
     }

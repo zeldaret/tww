@@ -52,6 +52,8 @@ public:
     bool WallCrrPos(dBgS_CrrPos*);
     void ChangeAttributeCodeByPathPntNo(int, u32);
 
+    void dummyfunc(); // for assert. TODO remove later
+
     virtual ~dBgW() {}
     virtual bool ChkPolyThrough(int, cBgS_PolyPassChk*);
     virtual bool ChkShdwDrawThrough(int, cBgS_PolyPassChk*);
@@ -66,6 +68,7 @@ public:
     void SetRideCallback(dBgW_RideCallBack func) { mpRideCb = func; }
     void SetPushPullCallback(dBgW_PPCallBack func) { mpPushPullCb = func; }
 
+    // TODO:
     void CalcDiffShapeAngleY(s16) {}
     void CaptPoly(dBgS_CaptPoly&) {}
     void CaptPolyGrpRp(dBgS_CaptPoly&, int) {}

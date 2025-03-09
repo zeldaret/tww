@@ -6,6 +6,7 @@
 #include "d/actor/d_a_bomb2.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
+#include "d/d_a_obj.h"
 #include "d/d_procname.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
@@ -292,12 +293,12 @@ namespace daBomb2 {
         mAcch.ClrRoofNone();
         mAcch.m_roof_crr_height = 50.0f;
         mAcch.OnLineCheck();
-        field_0x51C = -1.0e9f;
-        field_0x520 = -1.0e9f;
+        field_0x51C = C_BG_MIN_HEIGHT;
+        field_0x520 = C_BG_MIN_HEIGHT;
         field_0x524 = 0;
         mbWaterIn = 0;
         field_0x526 = 0;
-        field_0x528 = -1.0e9f;
+        field_0x528 = C_BG_MIN_HEIGHT;
     }
 
     dCcD_SrcSph Act_c::M_sph_src = {
@@ -553,7 +554,7 @@ namespace daBomb2 {
             r5 = true;
             field_0x526 = 1;
         } else {
-            field_0x520 = -1e9f;
+            field_0x520 = C_BG_MIN_HEIGHT;
             field_0x526 = 0;
         }
         mbWaterIn = r5;
@@ -564,7 +565,7 @@ namespace daBomb2 {
     }
 
     bool Act_c::chk_lava_in() const {
-        if(field_0x51C == -1.0e9f) {
+        if(field_0x51C == C_BG_MIN_HEIGHT) {
             return false;
         }
 
@@ -573,7 +574,7 @@ namespace daBomb2 {
 
     void Act_c::setRoomInfo() {
         s32 roomNo;
-        if(mAcch.GetGroundH() != -1.0e9f) {
+        if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
             roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
@@ -733,7 +734,7 @@ namespace daBomb2 {
             field_0x6D8 = field_0x6C0;
 
             dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
-            dComIfGp_particle_setToonP1(0x2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
+            dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
             mSmoke.setOldPosP(&field_0x6CC, &field_0x6D8);
         }
     }
@@ -956,11 +957,11 @@ namespace daBomb2 {
     }
 
     void Act_c::on_carry() {
-        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     }
 
     void Act_c::off_carry() {
-        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     }
 
     void Act_c::mode_wait_init() {
@@ -1092,7 +1093,7 @@ namespace daBomb2 {
     void Act_c::mode_sink() {
         f32 temp;
         bool temp2 = fopAcM_getWaterY(&current.pos, &temp);
-        if(temp2 && field_0x528 != -1.0e9f && --field_0x698 > 0) {
+        if(temp2 && field_0x528 != C_BG_MIN_HEIGHT && --field_0x698 > 0) {
             current.pos.y += temp - field_0x528;
             field_0x528 = temp;
             posMoveF();

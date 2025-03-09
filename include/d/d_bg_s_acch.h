@@ -40,15 +40,23 @@ public:
     f32 GetWallR() { return m_wall_r; }
     s16 GetWallAngleY() { return m_wall_angle_y; }
     void SetWallH(f32 h) { m_wall_h = h; }
+    f32 GetWallRR() { return m_wall_rr; }
+    void SetWallAngleY(s16 i_angle) { m_wall_angle_y = i_angle; }
+
+    bool ChkWallHit() { return m_flags & WALL_HIT; }
+    void SetWallHit() { m_flags |= WALL_HIT; }
+    void ClrWallHit() { m_flags &= ~WALL_HIT; ClearPi(); }
+    bool ChkWallHDirect() { return m_flags & WALL_H_DIRECT; }
     void SetWallHDirect(f32 h) { m_flags |= WALL_H_DIRECT; m_wall_h_direct = h; }
     void ClrWallHDirect() { m_flags &= ~WALL_H_DIRECT; }
-    bool ChkWallHit() { return m_flags & WALL_HIT; }
-    void ClrWallHit() {
-        m_flags &= ~WALL_HIT;
-        ClearPi();
-    }
+    f32 GetWallHDirect() { return m_wall_h_direct; }
 
     void SetCir(cXyz& pos) { m_cir.Set(pos.x, pos.z, pos.y + GetWallH(), m_wall_r); }
+    cM3dGCir* GetCirP() { return &m_cir; }
+
+    void SetWallPolyIndex(int poly_index) {
+        SetPolyIndex(poly_index);
+    }
 };  // Size: 0x40
 
 class dBgS;
@@ -92,25 +100,32 @@ public:
     void SetGroundUpY(f32);
     f32 GetWallAllLowH();
     f32 GetWallAllLowH_R();
-    f32 GetSpeedY();
-    f32 GetWallAddY(Vec&);
+    f32 GetSpeedY() {
+        if (pm_speed != NULL) {
+            return pm_speed->y;
+        }
+    
+        return 0.0f;
+    }
     void SetNowActorInfo(int bg_index, void* bgw, fpc_ProcID apid) {
         m_bg_index = bg_index;
         field_0x78 = bgw;
         m_ap_id = apid;
     }
-    void SetWallPolyIndex(int, int);
-    void CalcMovePosWork();
+    void SetWallPolyIndex(int index, int poly_index) {
+        JUT_ASSERT(628, index <= m_tbl_size);
+        pm_acch_cir[index].SetActorInfo(m_bg_index, field_0x78, m_ap_id);
+        pm_acch_cir[index].SetWallPolyIndex(poly_index);
+    }
+    void CalcMovePosWork() {
+        SetWallCir();
+        SetLin();
+        CalcWallBmdCyl();
+    }
     void CalcWallRR() {
         for (s32 i = 0; i < m_tbl_size; i++)
             pm_acch_cir[i].CalcWallRR();
     }
-    void SetGndThinCellingOff();
-    void ClrGndThinCellingOff();
-    bool ChkGndThinCellingOff();
-    void OnWallSort();
-    bool ChkWallSort();
-    bool ChkLineDown();
     bool GetOnePolyInfo(cBgS_PolyInfo*);
     f32 GetWallAddY(Vec&, int);
 
@@ -174,6 +189,30 @@ public:
     bool ChkSeaIn() { return m_flags & SEA_IN;}
     cM3dGCyl* GetWallBmdCylP() { return &m_wall_cyl; }
 
+    cM3dGCir* GetWallCirP(int index) {
+        JUT_ASSERT(761, index <= m_tbl_size);
+        return pm_acch_cir[index].GetCirP();
+    }
+
+    int GetTblSize() { return m_tbl_size; }
+
+    f32 GetWallH(int i_no) { return pm_acch_cir[i_no].GetWallH(); }
+    f32 GetWallR(int i_no) { return pm_acch_cir[i_no].GetWallR(); }
+    bool ChkWallHDirect(int i_no) { return pm_acch_cir[i_no].ChkWallHDirect(); }
+    f32 GetWallHDirect(int i_no) { return pm_acch_cir[i_no].GetWallHDirect(); }
+    f32 GetWallRR(int i_no) { return pm_acch_cir[i_no].GetWallRR(); }
+    void SetWallCirHit(int i_no) { pm_acch_cir[i_no].SetWallHit(); }
+    void SetWallAngleY(int i_no, s16 i_angle) { pm_acch_cir[i_no].SetWallAngleY(i_angle); }
+
+    f32 GetCx() const { return pm_pos->x; }
+    f32 GetCz() const { return pm_pos->z; }
+
+    // TODO
+    void ChkGroundAway() {}
+    void DrawWall(dBgS&) {}
+    void OnLineCheckHit() {}
+    void SetOld() {}
+
 public:
     /* 0x028 */ u32 m_flags;
     /* 0x02C */ cXyz* pm_pos;
@@ -225,5 +264,7 @@ public:
 
     virtual ~dBgS_ObjAcch() {}
 };  // Size: 0x1C4
+
+STATIC_ASSERT(sizeof(dBgS_ObjAcch) == 0x1C4);
 
 #endif /* D_BG_D_BG_S_ACCH_H */

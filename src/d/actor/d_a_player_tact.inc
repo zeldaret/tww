@@ -277,7 +277,7 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     initShipRideUseItem(r31, 2);
     
     m34D2 = -1;
-    m32E4.makeEmitter(0x50, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
+    m32E4.makeEmitter(dPa_name::ID_COMMON_0050, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     m3570 = r30;
     m34D8 = 0;
     m3574 = -1;
@@ -549,7 +549,7 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
         }
     }
     
-    m32E4.makeEmitter(0x51, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
+    m32E4.makeEmitter(dPa_name::ID_COMMON_0051, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     m34D0 = 0;
     m3574 = r30;
     m3624 = 0;
@@ -793,7 +793,7 @@ BOOL daPy_lk_c::procTactPlayOriginal_init() {
     mDoAud_tact_setStickPos(m3570, m3574);
     mDoAud_tact_playArmSwing(m3570, m3574);
     setTactModel();
-    m32E4.makeEmitter(0x51, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
+    m32E4.makeEmitter(dPa_name::ID_COMMON_0051, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     m34D6 = 0xF;
     m34DA = 0;
     mDoAud_taktModeMute();

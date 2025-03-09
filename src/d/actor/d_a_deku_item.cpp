@@ -175,7 +175,7 @@ void daDekuItem_c::mode_wait() {
     }
 
     if (mpEmitter == NULL) {
-        mpEmitter = dComIfGp_particle_set(0x820F, &current.pos);
+        mpEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_820F, &current.pos);
     } else if (mpEmitter != NULL) {
         mpEmitter->setGlobalTranslation(current.pos);
     }

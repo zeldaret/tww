@@ -337,7 +337,7 @@ int daObjTpost_c::getMsgXY() {
             col.b = REG12_S(2) + 0x80;
             mDoMtx_stack_c::copy(mMorf->getModel()->mpNodeMtx[2]);
             mDoMtx_stack_c::multVec(&pos, &pos);
-            dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0057, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             
             break;
         case dItem_FATHER_LETTER_e:
@@ -631,7 +631,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
         cXyz scale;
         scale.setall(1.0f);
         if(mMorf->getFrame() == 1.0f) {
-            dComIfGp_particle_set(0x8190, &current.pos, &current.angle, &scale);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_8190, &current.pos, &current.angle, &scale);
             mDoAud_seStart(JA_SE_OBJ_POST_LUGGAGE_OUT);
         }
     }

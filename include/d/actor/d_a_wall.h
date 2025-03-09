@@ -24,6 +24,14 @@ public:
     void set_se();
     bool _draw();
 
+    static GXColor m_smoke_color;
+    static const s16 m_heapsize[3];
+    static const char* m_arcname[3];
+    static const Vec m_cull_size[][2];
+    static const Vec m_tri_vtx[3][4];
+    static const s16 m_bmdname[3];
+    static const s16 m_dzbname[3];
+
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
@@ -36,16 +44,8 @@ public:
     /* 0x5D0 */ JPABaseEmitter* mpEmitter;
     /* 0x5D4 */ f32 mDst;
     /* 0x5D8 */ u8 mBreakCounter;
-    /* 0x5DC */ s32 mSwitchIndex;
+    /* 0x5DC */ s32 mSwitchNo;
     /* 0x5E0 */ u8 mType;
-
-    static GXColor m_smoke_color;
-    static const s16 m_heapsize[3];
-    static const char* m_arcname[3];
-    static const Vec m_cull_size[][2];
-    static const Vec m_tri_vtx[3][4];
-    static const s16 m_bmdname[3];
-    static const s16 m_dzbname[3];
-};
+};  // Size: 0x5E4
 
 #endif /* D_A_WALL_H */

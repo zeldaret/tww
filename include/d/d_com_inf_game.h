@@ -2011,86 +2011,6 @@ inline u16 dComIfGp_getStagePlayerNum() {
     return g_dComIfG_gameInfo.play.getStage().getPlayerNum();
 }
 
-inline s32 dComIfGp_roomControl_getTimePass() {
-    return g_dComIfG_gameInfo.play.getRoomControl()->GetTimePass();
-}
-
-inline int dComIfGp_roomControl_getStayNo() {
-    return dStage_roomControl_c::getStayNo();
-}
-
-inline dBgW* dComIfGp_roomControl_getBgW(int i_roomNo) {
-    return g_dComIfG_gameInfo.play.getRoomControl()->getBgW(i_roomNo);
-}
-
-inline s32 dComIfGp_roomControl_getZoneNo(int i_roomNo) {
-    return g_dComIfG_gameInfo.play.getRoomControl()->getZoneNo(i_roomNo);
-}
-
-inline void dComIfGp_roomControl_setZoneNo(int i_roomNo, int i_zoneNo) {
-    g_dComIfG_gameInfo.play.getRoomControl()->setZoneNo(i_roomNo, i_zoneNo);
-}
-
-inline dKy_tevstr_c* dComIfGp_roomControl_getTevStr(int room_no) {
-    return g_dComIfG_gameInfo.play.getRoomControl()->getTevStr(room_no);
-}
-
-inline void dComIfGp_roomControl_init() {
-    g_dComIfG_gameInfo.play.getRoomControl()->init();
-}
-
-inline dStage_roomDt_c* dComIfGp_roomControl_getStatusRoomDt(int room_no) {
-    return g_dComIfG_gameInfo.play.getRoomControl()->getStatusRoomDt(room_no);
-}
-
-inline void dComIfGp_roomControl_checkDrawArea() {
-    return g_dComIfG_gameInfo.play.getRoomControl()->checkDrawArea();
-}
-
-inline void dComIfGp_roomControl_setStayNo(int stayNo) {
-    g_dComIfG_gameInfo.play.getRoomControl()->setStayNo(stayNo);
-}
-
-inline void dComIfGp_roomControl_setStatusFlag(int i_roomNo, u8 i_flag) {
-    g_dComIfG_gameInfo.play.getRoomControl()->setStatusFlag(i_roomNo, i_flag);
-}
-
-inline void dComIfGp_roomControl_onStatusFlag(int i_roomNo, u8 i_flag) {
-    g_dComIfG_gameInfo.play.getRoomControl()->onStatusFlag(i_roomNo, i_flag);
-}
-
-inline void dComIfGp_roomControl_offStatusFlag(int i_roomNo, u8 i_flag) {
-    g_dComIfG_gameInfo.play.getRoomControl()->offStatusFlag(i_roomNo, i_flag);
-}
-
-inline BOOL dComIfGp_roomControl_checkStatusFlag(int i_roomNo, u8 i_flag) {
-    return g_dComIfG_gameInfo.play.getRoomControl()->checkStatusFlag(i_roomNo, i_flag);
-}
-
-inline void dComIfGp_roomControl_zoneCountCheck(int i_roomNo) {
-    g_dComIfG_gameInfo.play.getRoomControl()->zoneCountCheck(i_roomNo);
-}
-
-inline void dComIfGp_roomControl_setTimePass(int isPassing) {
-    g_dComIfG_gameInfo.play.getRoomControl()->SetTimePass(isPassing);
-}
-
-inline int dComIfGp_roomControl_loadRoom(int roomCount, u8* rooms) {
-    return g_dComIfG_gameInfo.play.getRoomControl()->loadRoom(roomCount, rooms);
-}
-
-inline BOOL dComIfGp_roomControl_checkRoomDisp(int i_roomNo) {
-    return g_dComIfG_gameInfo.play.getRoomControl()->checkRoomDisp(i_roomNo);
-}
-
-inline dBgS* dComIfG_Bgsp() {
-    return &g_dComIfG_gameInfo.play.mBgS;
-}
-
-inline dCcS* dComIfG_Ccsp() {
-    return &g_dComIfG_gameInfo.play.mCcS;
-}
-
 inline daShip_c* dComIfGp_getShipActor() {
     return (daShip_c*)g_dComIfG_gameInfo.play.getPlayerPtr(2);
 }
@@ -2135,14 +2055,6 @@ inline dVibration_c& dComIfGp_getVibration() {
     return g_dComIfG_gameInfo.play.getVibration();
 }
 
-inline dAttention_c& dComIfGp_getAttention() {
-    return g_dComIfG_gameInfo.play.getAttention();
-}
-
-inline void dComIfGp_att_revivalAleart() {
-    return dComIfGp_getAttention().revivalAleart();
-}
-
 inline dDetect_c& dComIfGp_getDetect() {
     return g_dComIfG_gameInfo.play.getDetect();
 }
@@ -2176,58 +2088,6 @@ inline void dComIfGp_removeGrass() { g_dComIfG_gameInfo.play.removeGrass(); }
 inline void dComIfGp_removeTree() { g_dComIfG_gameInfo.play.removeTree(); }
 inline void dComIfGp_removeWood() { g_dComIfG_gameInfo.play.removeWood(); }
 inline void dComIfGp_removeFlower() { g_dComIfG_gameInfo.play.removeFlower(); }
-
-inline void dComIfGp_map_mapBufferSendAGB(int param_0) {
-    dMap_c::mapBufferSendAGB(param_0);
-}
-
-inline void dComIfGp_map_setImage(int param_0, int param_1, f32 param_2) {
-    dMap_c::setImage(param_0, param_1, param_2);
-}
-
-inline void dComIfGp_map_deleteImage(int param_0) {
-    dMap_c::deleteImage(param_0);
-}
-
-inline void dComIfGp_map_setAGBMapSendStopFlg() {
-    dMap_c::setAGBMapSendStopFlg();
-}
-
-inline void dComIfGp_map_clrAGBMapSendStopFlg() {
-    dMap_c::clrAGBMapSendStopFlg();
-}
-
-inline void dComIfGp_createDemo() {
-    return g_dComIfG_gameInfo.play.createDemo();
-}
-
-inline void dComIfGp_removeDemo() {
-    return g_dComIfG_gameInfo.play.removeDemo();
-}
-
-inline dDemo_manager_c* dComIfGp_demo_get() {
-    return g_dComIfG_gameInfo.play.getDemo();
-}
-
-inline void dComIfGp_demo_create(const u8* demo_data, cXyz* offsetPos, f32 offsetAngleY) {
-    g_dComIfG_gameInfo.play.getDemo()->create(demo_data, offsetPos, offsetAngleY);
-}
-
-inline void dComIfGp_demo_remove() {
-    g_dComIfG_gameInfo.play.getDemo()->remove();
-}
-
-inline void dComIfGp_demo_update() {
-    g_dComIfG_gameInfo.play.getDemo()->update();
-}
-
-inline s32 dComIfGp_demo_mode() {
-    return g_dComIfG_gameInfo.play.getDemo()->getMode();
-}
-
-inline dDemo_actor_c* dComIfGp_demo_getActor(u8 id) {
-    return g_dComIfG_gameInfo.play.getDemo()->mDemoObj.getActor(id);
-}
 
 inline JKRArchive* dComIfGp_getLkDemoAnmArchive() {
     return g_dComIfG_gameInfo.play.getLkDemoAnmArchive();
@@ -2745,6 +2605,82 @@ inline void dComIfGp_setAdvanceDirection(u8 direction) {
 }
 
 /**
+ * === ROOM CONTROL ===
+ */
+
+inline s32 dComIfGp_roomControl_getTimePass() {
+    return g_dComIfG_gameInfo.play.getRoomControl()->GetTimePass();
+}
+
+inline int dComIfGp_roomControl_getStayNo() {
+    return dStage_roomControl_c::getStayNo();
+}
+
+inline dBgW* dComIfGp_roomControl_getBgW(int i_roomNo) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->getBgW(i_roomNo);
+}
+
+inline s32 dComIfGp_roomControl_getZoneNo(int i_roomNo) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->getZoneNo(i_roomNo);
+}
+
+inline void dComIfGp_roomControl_setZoneNo(int i_roomNo, int i_zoneNo) {
+    g_dComIfG_gameInfo.play.getRoomControl()->setZoneNo(i_roomNo, i_zoneNo);
+}
+
+inline dKy_tevstr_c* dComIfGp_roomControl_getTevStr(int room_no) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->getTevStr(room_no);
+}
+
+inline void dComIfGp_roomControl_init() {
+    g_dComIfG_gameInfo.play.getRoomControl()->init();
+}
+
+inline dStage_roomDt_c* dComIfGp_roomControl_getStatusRoomDt(int room_no) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->getStatusRoomDt(room_no);
+}
+
+inline void dComIfGp_roomControl_checkDrawArea() {
+    return g_dComIfG_gameInfo.play.getRoomControl()->checkDrawArea();
+}
+
+inline void dComIfGp_roomControl_setStayNo(int stayNo) {
+    g_dComIfG_gameInfo.play.getRoomControl()->setStayNo(stayNo);
+}
+
+inline void dComIfGp_roomControl_setStatusFlag(int i_roomNo, u8 i_flag) {
+    g_dComIfG_gameInfo.play.getRoomControl()->setStatusFlag(i_roomNo, i_flag);
+}
+
+inline void dComIfGp_roomControl_onStatusFlag(int i_roomNo, u8 i_flag) {
+    g_dComIfG_gameInfo.play.getRoomControl()->onStatusFlag(i_roomNo, i_flag);
+}
+
+inline void dComIfGp_roomControl_offStatusFlag(int i_roomNo, u8 i_flag) {
+    g_dComIfG_gameInfo.play.getRoomControl()->offStatusFlag(i_roomNo, i_flag);
+}
+
+inline BOOL dComIfGp_roomControl_checkStatusFlag(int i_roomNo, u8 i_flag) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->checkStatusFlag(i_roomNo, i_flag);
+}
+
+inline void dComIfGp_roomControl_zoneCountCheck(int i_roomNo) {
+    g_dComIfG_gameInfo.play.getRoomControl()->zoneCountCheck(i_roomNo);
+}
+
+inline void dComIfGp_roomControl_setTimePass(int isPassing) {
+    g_dComIfG_gameInfo.play.getRoomControl()->SetTimePass(isPassing);
+}
+
+inline int dComIfGp_roomControl_loadRoom(int roomCount, u8* rooms) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->loadRoom(roomCount, rooms);
+}
+
+inline BOOL dComIfGp_roomControl_checkRoomDisp(int i_roomNo) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->checkRoomDisp(i_roomNo);
+}
+
+/**
  * === EVENT ===
  */
 
@@ -2853,10 +2789,6 @@ inline BOOL dComIfGp_event_check() {
     return g_dComIfG_gameInfo.play.getEvent().check();
 }
 
-inline dEvent_manager_c* dComIfGp_getPEvtManager() {
-    return &g_dComIfG_gameInfo.play.getEvtManager();
-}
-
 inline u8 dComIfGp_event_getMode() {
     return g_dComIfG_gameInfo.play.getEvent().getMode();
 }
@@ -2867,6 +2799,14 @@ inline u8 dComIfGp_event_getTactFreeMStick(int which) {
 
 inline u8 dComIfGp_event_getTactFreeCStick(int which) {
     return g_dComIfG_gameInfo.play.getEvent().getTactFreeCStick(which);
+}
+
+/**
+ * === EVENT MANAGER ===
+ */
+
+inline dEvent_manager_c* dComIfGp_getPEvtManager() {
+    return &g_dComIfG_gameInfo.play.getEvtManager();
 }
 
 // Note: Some of the below functions call g_dComIfG_gameInfo.play.getEvtManager(), while others use
@@ -2998,6 +2938,42 @@ inline u8 dComIfGp_evmng_getEventEndSound(s16 eventIdx) {
 }
 
 /**
+ * === DEMO ===
+ */
+
+inline void dComIfGp_createDemo() {
+    return g_dComIfG_gameInfo.play.createDemo();
+}
+
+inline void dComIfGp_removeDemo() {
+    return g_dComIfG_gameInfo.play.removeDemo();
+}
+
+inline dDemo_manager_c* dComIfGp_demo_get() {
+    return g_dComIfG_gameInfo.play.getDemo();
+}
+
+inline void dComIfGp_demo_create(const u8* demo_data, cXyz* offsetPos, f32 offsetAngleY) {
+    g_dComIfG_gameInfo.play.getDemo()->create(demo_data, offsetPos, offsetAngleY);
+}
+
+inline void dComIfGp_demo_remove() {
+    g_dComIfG_gameInfo.play.getDemo()->remove();
+}
+
+inline void dComIfGp_demo_update() {
+    g_dComIfG_gameInfo.play.getDemo()->update();
+}
+
+inline s32 dComIfGp_demo_mode() {
+    return g_dComIfG_gameInfo.play.getDemo()->getMode();
+}
+
+inline dDemo_actor_c* dComIfGp_demo_getActor(u8 id) {
+    return g_dComIfG_gameInfo.play.getDemo()->mDemoObj.getActor(id);
+}
+
+/**
  * === DRAWLIST ===
  */
 
@@ -3006,10 +2982,10 @@ int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 par
                        s16 rotY = 0, f32 param_12 = 1.0f,
                        GXTexObj* pTexObj = dDlst_shadowControl_c::getSimpleTex());
 
-inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 param_1, f32 param_2, cXyz* param_3,
+inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* param_3,
                                     s16 i_angle = 0, f32 param_5 = 1.0f,
                                     GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex()) {
-    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, param_1, param_2, param_3, i_angle,
+    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, groundY, param_2, param_3, i_angle,
                                                        param_5, i_tex);
 }
 
@@ -3291,9 +3267,6 @@ inline void dComIfG_dumpResControl() {
  * === PARTICLE ===
  */
 
-void set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*, s8,
-         GXColor const*, GXColor const*, cXyz const*);
-
 inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos,
                                              const csXyz* angle = NULL, const cXyz* scale = NULL,
                                              u8 alpha = 0xFF, dPa_levelEcallBack* pCallBack = NULL,
@@ -3494,19 +3467,95 @@ inline s32 dComIfGp_particle_checkAtrCodeEffect(int code) { return g_dComIfG_gam
  * === ATTENTION ===
  */
 
+ inline dAttention_c& dComIfGp_getAttention() {
+    return g_dComIfG_gameInfo.play.getAttention();
+}
+
+inline void dComIfGp_att_revivalAleart() {
+    dComIfGp_getAttention().revivalAleart();
+}
+
+inline void dComIfGp_att_offAleart() {
+    dComIfGp_getAttention().offAleart();
+}
+
+inline int dComIfGp_att_ZHintRequest(fopAc_ac_c* param_1, int param_2) {
+    return dComIfGp_getAttention().ZHintRequest(param_1, param_2);
+}
+
+inline void dComIfGp_att_LookRequest(fopAc_ac_c* param_0, f32 i_horizontalDist, f32 i_upDist,
+                                     f32 i_downDist, s16 i_angle, int param_5) {
+    dComIfGp_getAttention().LookRequest(param_0, i_horizontalDist, i_upDist, i_downDist, i_angle, param_5);
+}
+
+inline void dComIfGp_att_Look2RequestF(fopAc_ac_c* param_0, s16 param_1, int param_2) {
+    dComIfGp_getAttention().Look2RequestF(param_0, param_1, param_2);
+}
+
 inline void dComIfGp_att_CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
-                                      f32 param_4, s16 param_5, s32 param_6) {
-    dAttention_c& attention = g_dComIfG_gameInfo.play.getAttention();
-    attention.CatchRequest(param_0, param_1, param_2, param_3, param_4,param_5, param_6);
+                                      f32 param_4, s16 param_5, int param_6) {
+    dComIfGp_getAttention().CatchRequest(param_0, param_1, param_2, param_3, param_4,param_5, param_6);
 }
 
 inline u8 dComIfGp_att_getCatchChgItem() {
-    return g_dComIfG_gameInfo.play.getAttention().getCatchChgItem();
+    return dComIfGp_getAttention().getCatchChgItem();
+}
+
+inline fopAc_ac_c* dComIfGp_att_getCatghTarget() {
+    return dComIfGp_getAttention().getCatghTarget();
+}
+
+inline void dComIfGp_att_ChangeOwner() {
+    dComIfGp_getAttention().setFlag(0x80);
+}
+
+inline fopAc_ac_c* dComIfGp_att_getLookTarget() {
+    return dComIfGp_getAttention().getLookTarget();
+}
+
+inline fopAc_ac_c* dComIfGp_att_getZHint() {
+    return dComIfGp_getAttention().getZHintTarget();
+}
+
+inline void dComIfGp_att_chkEnemySound() {
+    return dComIfGp_getAttention().chkEnemySound();
+}
+
+/**
+ * === MAP ===
+ */
+
+inline void dComIfGp_map_mapBufferSendAGB(int param_0) {
+    dMap_c::mapBufferSendAGB(param_0);
+}
+
+inline void dComIfGp_map_setImage(int param_0, int param_1, f32 param_2) {
+    dMap_c::setImage(param_0, param_1, param_2);
+}
+
+inline void dComIfGp_map_deleteImage(int param_0) {
+    dMap_c::deleteImage(param_0);
+}
+
+inline void dComIfGp_map_setAGBMapSendStopFlg() {
+    dMap_c::setAGBMapSendStopFlg();
+}
+
+inline void dComIfGp_map_clrAGBMapSendStopFlg() {
+    dMap_c::clrAGBMapSendStopFlg();
 }
 
 /**
  * === MISC ===
  */
+
+ inline dBgS* dComIfG_Bgsp() {
+    return &g_dComIfG_gameInfo.play.mBgS;
+}
+
+inline dCcS* dComIfG_Ccsp() {
+    return &g_dComIfG_gameInfo.play.mCcS;
+}
 
 inline void dComIfG_setTimerMode(int ms) { g_dComIfG_gameInfo.play.setTimerMode(ms); }
 inline int dComIfG_getTimerMode() { return g_dComIfG_gameInfo.play.getTimerMode(); }

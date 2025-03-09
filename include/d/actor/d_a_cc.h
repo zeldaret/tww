@@ -25,7 +25,7 @@ public:
     /* 0x2F0 */ u8 mBehaviorType;
     /* 0x2F1 */ u8 mColorType;
     /* 0x2F2 */ u8 mNoticeRangeByte;
-    /* 0x2F3 */ u8 mDisableSpawnSwitchIndex;
+    /* 0x2F3 */ u8 mDisableSpawnSwitchNo;
     /* 0x2F4 */ u8 mCurrAction;
     /* 0x2F5 */ u8 m2F5;
     /* 0x2F6 */ u8 m2F6[0x2F7 - 0x2F6];
@@ -90,6 +90,6 @@ public:
     /* 0xA34 */ u8 mA34[0xBD4 - 0xA34];
     /* 0xBD4 */ enemyfire mEnemyFire;
     /* 0xDFC */ u8 mDFC[0xE04 - 0xDFC];
-};
+};  // Size: 0xE04
 
 #endif /* D_A_CC_H */

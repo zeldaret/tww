@@ -367,8 +367,8 @@ BOOL daPy_lk_c::auraJointCB0(int jntNo) {
 }
 
 /* 80103450-80103494       .text daPy_auraCallback__FP7J3DNodei */
-static BOOL daPy_auraCallback(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL daPy_auraCallback(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -407,8 +407,8 @@ BOOL daPy_lk_c::jointCB0(int) {
 }
 
 /* 80103EE4-80103F28       .text daPy_jointCallback0__FP7J3DNodei */
-static BOOL daPy_jointCallback0(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL daPy_jointCallback0(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -424,8 +424,8 @@ BOOL daPy_lk_c::jointCB1() {
 }
 
 /* 80104178-801041B4       .text daPy_jointCallback1__FP7J3DNodei */
-static BOOL daPy_jointCallback1(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL daPy_jointCallback1(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
         i_this->jointCB1();
@@ -3087,7 +3087,7 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* oldPos, int attributeCode) {
         mLavaGndChk.SetPos(&pos);
         m35D4 = dComIfG_Bgsp()->GroundCross(&mLavaGndChk);
         if (mAcch.GetGroundH() > m35D4) {
-            m35D4 = -1000000000.0f;
+            m35D4 = C_BG_MIN_HEIGHT;
         }
         if (m35D4 > current.pos.y) {
             attributeCode = dComIfG_Bgsp()->GetAttributeCode(mLavaGndChk);
@@ -3337,7 +3337,7 @@ BOOL daPy_lk_c::execute() {
         !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
         !checkModeFlg(ModeFlg_ROPE | ModeFlg_CLIMB | ModeFlg_LADDER) &&
         mCurProc != daPyProc_DEMO_TOOL_e &&
-        mAcch.GetGroundH() != -1e9f &&
+        mAcch.GetGroundH() != C_BG_MIN_HEIGHT &&
         !checkNoResetFlg0((daPy_FLG0)(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000)) &&
         dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd) &&
         dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd)
@@ -3383,7 +3383,7 @@ BOOL daPy_lk_c::execute() {
     
     setActorPointer();
     setAtnList();
-    fopAc_ac_c* zTarget = dComIfGp_getAttention().getZHintTarget();
+    fopAc_ac_c* zTarget = dComIfGp_att_getZHint();
     if (zTarget) {
         stopDoButtonQuake(FALSE);
     } else {
@@ -3495,7 +3495,7 @@ BOOL daPy_lk_c::execute() {
         }
     } else if (mCurProc == daPyProc_DEMO_TOOL_e) {
         current.pos = sp14;
-        if (m3574 != 0 && mAcch.GetGroundH() != -1e9f) {
+        if (m3574 != 0 && mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
             current.pos.y = mAcch.GetGroundH();
         }
     } else if (mCurProc == daPyProc_HOOKSHOT_FLY_e ||
@@ -3515,7 +3515,7 @@ BOOL daPy_lk_c::execute() {
     }
     
     int roomNo;
-    if (mAcch.GetGroundH() != -1e9f) {
+    if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
         roomNo = setRoomInfo();
         m357C = m3580;
         m3580 = dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd);
@@ -3798,9 +3798,9 @@ static BOOL daPy_IsDelete(daPy_lk_c*) {
 /* 80122D58-80123058       .text playerDelete__9daPy_lk_cFv */
 BOOL daPy_lk_c::playerDelete() {
     int i;
-    for (i = 0; i < (int)ARRAY_SIZE(m31E8); i++) {
-        m31E8[i].getSmokeCallBack()->end();
-        m31E8[i].getOtherCallBack()->end();
+    for (i = 0; i < (int)ARRAY_SIZE(mFootEffect); i++) {
+        mFootEffect[i].getSmokeCallBack()->end();
+        mFootEffect[i].getOtherCallBack()->end();
     }
     if (mFanSwingCb.mpEmitter) {
         mFanSwingCb.mpEmitter->clearStatus(0x40);

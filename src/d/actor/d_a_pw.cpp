@@ -202,7 +202,7 @@ void action_dousa(pw_class* i_this) {
             i_this->m3A4 = 0.0f;
             first_mode_change(i_this);
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
-            JPABaseEmitter* particle = dComIfGp_particle_set(0x82EE, &i_this->m2CC, &i_this->shape_angle);
+            JPABaseEmitter* particle = dComIfGp_particle_set(dPa_name::ID_SCENE_82EE, &i_this->m2CC, &i_this->shape_angle);
             if (particle != NULL) {
                 particle->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0x17)); // j_pw_item_r1 joint
             }

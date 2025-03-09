@@ -1,6 +1,7 @@
 #ifndef D_PARTICLE
 #define D_PARTICLE
 
+#include "d/d_particle_name.h" // IWYU pragma: export
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JGeometry.h"
@@ -8,8 +9,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
-#include "d/d_particle_name.h"
-#include "f_pc/f_pc_node.h"
+#include "SSystem/SComponent/c_list.h"
 #include "m_Do/m_Do_ext.h"
 
 class mDoDvdThd_toMainRam_c;

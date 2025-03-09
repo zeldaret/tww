@@ -203,7 +203,7 @@ BOOL daNh_c::checkBinCatch() {
         return TRUE;
     }
     
-    dComIfGp_getAttention().CatchRequest(
+    dComIfGp_att_CatchRequest(
         this, dItem_FIREFLY_BOTTLE_e,
         l_HIO.prm.field_0x08, l_HIO.prm.field_0x0c,
         l_HIO.prm.field_0x10, l_HIO.prm.field_0x3c,
@@ -273,7 +273,7 @@ void daNh_c::BGCheck() {
     dBgS_ObjGndChk_All gndChk;
     gndChk.SetPos(&current.pos);
     f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if (groundY != -1000000000.0f) {
+    if (groundY != C_BG_MIN_HEIGHT) {
         mGroundY = groundY;
         tevStr.mRoomNo = current.roomNo = dComIfG_Bgsp()->GetRoomId(gndChk);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(gndChk);

@@ -4,6 +4,7 @@
 
 #include "d/actor/d_a_bomb.h"
 #include "SSystem/SComponent/c_counter.h"
+#include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
@@ -198,7 +199,7 @@ BOOL daBomb_c::draw() {
         draw_norm();
     }
 
-    if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != -1.0e9f) {
+    if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
         cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         if(pNormal) {
             dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, pNormal->GetNP());
@@ -439,8 +440,8 @@ bool daBomb_c::checkExplodeBg() {
 /* 800DA320-800DA3A0       .text water_tention__8daBomb_cFv */
 void daBomb_c::water_tention() {
     if(chk_water_in()) {
-        if(field_0x554.y != -1.0e9f && field_0x554.z != -1.0e9f) {
-            f32 temp = field_0x554.y - field_0x554.z;
+        if(field_0x558 != C_BG_MIN_HEIGHT && field_0x55C != C_BG_MIN_HEIGHT) {
+            f32 temp = field_0x558 - field_0x55C;
             current.pos.y += temp < 0.0f ? 0.8f * temp : 0.2f * temp;
         }
     }
@@ -506,7 +507,7 @@ void daBomb_c::bgCrrPos_lava() {
     cXyz temp(current.pos.x, old.pos.y + 1.0f, current.pos.z);
     mGndChk.SetPos(&temp);
 
-    field_0x554.x = dComIfG_Bgsp()->GroundCross(&mGndChk);
+    field_0x554 = dComIfG_Bgsp()->GroundCross(&mGndChk);
 }
 
 /* 800DA5E0-800DA700       .text bgCrrPos_water__8daBomb_cFv */
@@ -517,7 +518,7 @@ void daBomb_c::bgCrrPos_water() {
     bool r4 = mAcch.ChkWaterIn();
     bool r3 = r31 && current.pos.y < f1;
     bool r5 = false;
-    field_0x554.z = field_0x554.y;
+    field_0x55C = field_0x558;
     if (r4 && r3) {
         if (f31 > f1) {
             r3 = 0;
@@ -526,15 +527,15 @@ void daBomb_c::bgCrrPos_water() {
         }
     }
     if (r4) {
-        field_0x554.y = f31;
+        field_0x558 = f31;
         r5 = true;
         field_0x562 = 0;
     } else if (r3) {
-        field_0x554.y = f1;
+        field_0x558 = f1;
         r5 = true;
         field_0x562 = 1;
     } else {
-        field_0x554.y = -1e9f;
+        field_0x558 = C_BG_MIN_HEIGHT;
         field_0x562 = 0;
     }
     field_0x560 = r5 && !mbWaterIn;
@@ -555,21 +556,21 @@ bool daBomb_c::chk_water_in() {
 bool daBomb_c::chk_water_sink() {
     bool water = chk_water_in();
 
-    return water && field_0x554.y - current.pos.y > 30.0f;
+    return water && field_0x558 - current.pos.y > 30.0f;
 }
 
 /* 800DA768-800DA794       .text chk_lava_hit__8daBomb_cFv */
 bool daBomb_c::chk_lava_hit() {
-    if(field_0x554.x == -1.0e9f) {
+    if(field_0x554 == C_BG_MIN_HEIGHT) {
         return false;
     }
 
-    return current.pos.y < field_0x554.x;
+    return current.pos.y < field_0x554;
 }
 
 /* 800DA794-800DA7CC       .text chk_dead_zone__8daBomb_cFv */
 bool daBomb_c::chk_dead_zone() {
-    return mAcch.GetGroundH() == -1.0e9f && field_0x554.y == -1.0e9f && field_0x554.x == -1.0e9f;
+    return mAcch.GetGroundH() == C_BG_MIN_HEIGHT && field_0x558 == C_BG_MIN_HEIGHT && field_0x554 == C_BG_MIN_HEIGHT;
 }
 
 /* 800DA7CC-800DA8C8       .text bound__8daBomb_cFf */
@@ -630,7 +631,7 @@ void daBomb_c::set_real_shadow_flag() {
 /* 800DA9DC-800DAA60       .text setRoomInfo__8daBomb_cFv */
 void daBomb_c::setRoomInfo() {
     s32 roomNo;
-    if(mAcch.GetGroundH() != -1.0e9f) {
+    if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
         roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
     }
@@ -695,7 +696,7 @@ void daBomb_c::setFuseEffect() {
         mFusePos3 = mFusePos;
 
         dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &mFusePos, NULL, &scale, 0xFF, &mSparks);
-        dComIfGp_particle_setToonP1(0x2012, &mFusePos, NULL, &scale, 0xDC, &mSmoke);
+        dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_2012, &mFusePos, NULL, &scale, 0xDC, &mSmoke);
         mSmoke.field_0x0C = &mFusePos2;
         mSmoke.field_0x10 = &mFusePos3;
         mSmoke.field_0x04 = 0x14;
@@ -719,7 +720,7 @@ void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
         emitter->setGlobalParticleScale(vec);
     }
 
-    dComIfGp_particle_setBombSmoke(0x232A, &current.pos, NULL, &scale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_232A, &current.pos, NULL, &scale);
     emitter = dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
     if(emitter) {
         emitter->mLifeTime = 0x46;
@@ -821,7 +822,7 @@ int daBomb_c::procExplode_init() {
         change_state(STATE_0);
     }
 
-    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
 
     if(field_0x6F0) {
         daPy_getPlayerLinkActorClass()->decrementBombCnt();
@@ -926,7 +927,7 @@ bool daBomb_c::procCarry_init() {
     change_state(STATE_2);
     speedF = 0.0f;
     speed.set(cXyz::Zero);
-    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
 
     return true;
@@ -1000,10 +1001,10 @@ bool daBomb_c::procWait() {
             if(!temp && !field_0x781) {
                 bound(y_vel);
                 if((mAcch.ChkGroundHit() || chk_state(STATE_5)) && !mAcch.ChkGroundLanding()) {
-                    attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+                    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 }
                 else {
-                    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+                    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 }
             }
 
@@ -1210,7 +1211,7 @@ void daBomb_c::se_cannon_fly_stop() {
 
 /* 800DC44C-800DC568       .text eff_water_splash__8daBomb_cFv */
 void daBomb_c::eff_water_splash() {
-    cXyz pos(current.pos.x, field_0x554.y, current.pos.z);
+    cXyz pos(current.pos.x, field_0x558, current.pos.z);
     fopKyM_createWpillar(&pos, 0.5f, 0.75f, 0);
 
     cBgS_PolyInfo* temp[2] = {
@@ -1399,7 +1400,9 @@ void daBomb_c::create_init() {
     mAcch.m_roof_crr_height = 50.0f;
     mAcch.OnLineCheck();
 
-    field_0x554.setall(-1.0e9f);
+    field_0x554 = C_BG_MIN_HEIGHT;
+    field_0x558 = C_BG_MIN_HEIGHT;
+    field_0x55C = C_BG_MIN_HEIGHT;
     field_0x560 = 0;
     mbWaterIn = 0;
     field_0x562 = 0;
@@ -1417,7 +1420,7 @@ void daBomb_c::create_init() {
     mRestTime = 0x96;
     mInitialState = prm_get_state();
     if(!chk_state(STATE_4)) {
-        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     }
 
     field_0x77C = 0;

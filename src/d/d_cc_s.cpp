@@ -315,7 +315,7 @@ void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* atObj, cCcD_Obj* tgObj, dCcD_GO
             csXyz angle;
             CalcParticleAngle(atInf, atStts, tgStts, &angle);
             if (atInf->GetAtHitMark() == dCcG_AtHitMark_Big_e) {
-                dComIfGp_particle_set(0x10, pos);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, pos);
                 cXyz scale;
                 scale.x = scale.y = scale.z = 2.0f;
                 dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pos, &angle, &scale);

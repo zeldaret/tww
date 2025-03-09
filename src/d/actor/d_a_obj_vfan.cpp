@@ -136,17 +136,17 @@ void daObjVfan::Act_c::init_mtx() {
 
 /* 000006BC-000009B4       .text ParticleSet__Q29daObjVfan5Act_cFv */
 void daObjVfan::Act_c::ParticleSet() {
-    dComIfGp_particle_set(0x83cd, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83ce, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83cf, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83d0, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83d1, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83d2, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83d3, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83d4, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83d5, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83d6, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x83d7, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83CD, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83CE, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83CF, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83D0, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83D1, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83D2, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83D3, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83D4, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83D5, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83D6, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_83D7, &current.pos, &current.angle);
 }
 
 /* 000009B4-00000C74       .text Execute__Q29daObjVfan5Act_cFPPA3_A4_f */

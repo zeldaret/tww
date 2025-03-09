@@ -15,7 +15,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_sxyz.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 #define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
@@ -41,15 +41,8 @@ void cM3d_InDivPos2(const Vec* v0, const Vec* v1, f32 scale, Vec* pDst) {
     cM3d_InDivPos1(v0, &tmp, scale, pDst);
 }
 
-inline f32 cM3d_Len2dSq(f32 x0, f32 y0, f32 x1, f32 y1) {
-    f32 x = x0 - x1;
-    f32 y = y0 - y1;
-    return x*x + y*y;
-}
-
 /* 8024A4B4-8024A56C       .text cM3d_Len2dSqPntAndSegLine__FffffffPfPfPf */
-bool cM3d_Len2dSqPntAndSegLine(f32 xp, f32 yp, f32 x0, f32 y0, f32 x1, f32 y1, f32* outx, f32* outy,
-                               f32* seg) {
+bool cM3d_Len2dSqPntAndSegLine(f32 xp, f32 yp, f32 x0, f32 y0, f32 x1, f32 y1, f32* outx, f32* outy, f32* seg) {
     bool ret = false;
     f32 xd = x1 - x0;
     f32 yd = y1 - y0;
@@ -584,46 +577,47 @@ bool cM3d_InclusionCheckPosIn3PosBox3d(const Vec* pVecA, const Vec* pVecB, const
     return true;
 }
 
-inline static bool cM3d_InclusionCheckPosIn3PosBox2d(f32 param_1, f32 param_2, f32 param_3,
-                                                     f32 param_4, f32 param_5, f32 param_6,
-                                                     f32 param_7, f32 param_8) {
-    f32 dVar7;
-    f32 temp;
+inline static bool cM3d_InclusionCheckPosIn3PosBox2d(
+    f32 param_1, f32 param_2,
+    f32 param_3, f32 param_4,
+    f32 param_5, f32 param_6,
+    f32 param_7, f32 param_8
+) {
+    f32 f31;
+    f32 f30;
     if (param_1 < param_3) {
-        dVar7 = param_1;
-        temp = param_3;
+        f31 = param_1;
+        f30 = param_3;
     } else {
-        dVar7 = param_3;
-        temp = param_1;
+        f31 = param_3;
+        f30 = param_1;
     }
 
-    if (dVar7 > param_5) {
-        dVar7 = param_5;   
-    } else if (temp < param_5) {
-        temp = param_5;
+    if (f31 > param_5) {
+        f31 = param_5;   
+    } else if (f30 < param_5) {
+        f30 = param_5;
     }
 
-    if (dVar7 > param_7 || temp < param_7) {
+    if (f31 > param_7 || f30 < param_7) {
         return false;
     } 
 
-    f32 fVar1;
     if (param_2 < param_4) {
-        fVar1 = param_2;
-        param_4 = param_4;
+        f31 = param_2;
+        f30 = param_4;
     } else {
-        fVar1 = param_4;
-        param_4 = param_2;
+        f31 = param_4;
+        f30 = param_2;
     }
 
-    if (fVar1 > param_6) {
-        fVar1 = param_6;
-    } else if (param_4 < param_6) {
-        param_4 = param_6;
+    if (f31 > param_6) {
+        f31 = param_6;
+    } else if (f30 < param_6) {
+        f30 = param_6;
     }
     
-    if (fVar1 > param_8 || param_4 < param_8)
-    {
+    if (f31 > param_8 || f30 < param_8) {
         return false;
     }
     return true;
@@ -774,9 +768,9 @@ bool cM3d_CrossX_Tri(const cM3dGTri* tri, const Vec* pos) {
 }
 
 /* 8024BF1C-8024BFA0       .text cM3d_CrossX_Tri__FPC8cM3dGTriPC3VecPf */
-bool cM3d_CrossX_Tri(const cM3dGTri* tri, const Vec* r30, f32* r31) {
+bool cM3d_CrossX_Tri(const cM3dGTri* tri, const Vec* r30, f32* pcross_len) {
     if (cM3d_CrossX_Tri(tri, r30)) {
-        *r31 = ((r30->y * -tri->GetNP()->y) - (r30->z * tri->GetNP()->z) - tri->GetD()) / tri->GetNP()->x;
+        *pcross_len = ((r30->y * -tri->GetNP()->y) - (r30->z * tri->GetNP()->z) - tri->GetD()) / tri->GetNP()->x;
         return true;
     } else {
         return false;
@@ -929,7 +923,6 @@ bool cM3d_CrossY_Tri(const Vec& r3, const Vec& r4, const Vec& r5, const cM3dGPla
 
 /* 8024C370-8024C4D0       .text cM3d_CrossY_Tri_Front__FRC3VecRC3VecRC3VecPC3Vec */
 bool cM3d_CrossY_Tri_Front(const Vec& r3, const Vec& r4, const Vec& r5, const Vec* pos) {
-    /* Nonmatching - regalloc */
     if (!cM3d_InclusionCheckPosIn3PosBox2d(
         r3.z,
         r3.x,
@@ -975,9 +968,9 @@ bool cM3d_CrossY_Tri_Front(const Vec& r3, const Vec& r4, const Vec& r5, const Ve
 }
 
 /* 8024C4D0-8024C554       .text cM3d_CrossY_Tri__FPC8cM3dGTriPC3VecPf */
-bool cM3d_CrossY_Tri(const cM3dGTri* tri, const Vec* r30, f32* r31) {
+bool cM3d_CrossY_Tri(const cM3dGTri* tri, const Vec* r30, f32* pcross_len) {
     if (cM3d_CrossY_Tri(tri, r30)) {
-        *r31 = ((r30->x * -tri->GetNP()->x) - (r30->z * tri->GetNP()->z) - tri->GetD()) / tri->GetNP()->y;
+        *pcross_len = ((r30->x * -tri->GetNP()->x) - (r30->z * tri->GetNP()->z) - tri->GetD()) / tri->GetNP()->y;
         return true;
     } else {
         return false;
@@ -1057,7 +1050,7 @@ bool cM3d_CrossY_Tri(const cM3dGTri* tri, const Vec* pos, f32 f1) {
 }
 
 /* 8024C738-8024C828       .text cM3d_CrossY_Tri__FPC8cM3dGTriPC3VecPC10cM3d_RangePf */
-bool cM3d_CrossY_Tri(const cM3dGTri* tri, const Vec* pos, const cM3d_Range* range, f32* r31) {
+bool cM3d_CrossY_Tri(const cM3dGTri* tri, const Vec* pos, const cM3d_Range* range, f32* pcross_len) {
     if (cM3d_IsZero(tri->GetNP()->y)) {
         return false;
     }
@@ -1071,7 +1064,7 @@ bool cM3d_CrossY_Tri(const cM3dGTri* tri, const Vec* pos, const cM3d_Range* rang
     if ((f31 > 0.0f && f1 > 0.0f) || (f31 < 0.0f && f1 < 0.0f)) {
         return false;
     }
-    return cM3d_CrossY_Tri(tri, pos, r31);
+    return cM3d_CrossY_Tri(tri, pos, pcross_len);
 }
 
 /* 8024C828-8024CA0C       .text cM3d_CrossZ_Tri__FPC8cM3dGTriPC3Vecf */
@@ -1219,9 +1212,9 @@ bool cM3d_CrossZ_Tri(const cM3dGTri* tri, const Vec* pos) {
 }
 
 /* 8024CBF4-8024CC78       .text cM3d_CrossZ_Tri__FPC8cM3dGTriPC3VecPf */
-bool cM3d_CrossZ_Tri(const cM3dGTri* tri, const Vec* r30, f32* r31) {
+bool cM3d_CrossZ_Tri(const cM3dGTri* tri, const Vec* r30, f32* pcross_len) {
     if (cM3d_CrossZ_Tri(tri, r30)) {
-        *r31 = ((r30->x * -tri->GetNP()->x) - (r30->y * tri->GetNP()->y) - tri->GetD()) / tri->GetNP()->z;
+        *pcross_len = ((r30->x * -tri->GetNP()->x) - (r30->y * tri->GetNP()->y) - tri->GetD()) / tri->GetNP()->z;
         return true;
     } else {
         return false;
@@ -1689,10 +1682,25 @@ bool cM3d_Cross_CylTri(const cM3dGCyl* cyl, const cM3dGTri* tri, Vec* param_2) {
 
 /* 8024F410-8024FA90       .text cM3d_Cross_CylLin__FPC8cM3dGCylPC8cM3dGLinP3VecP3Vec */
 int cM3d_Cross_CylLin(const cM3dGCyl* cyl, const cM3dGLin* line, Vec* param_2, Vec* param_3) {
-    /* Nonmatching - regalloc */
-    f32 f1 = 0.0f;
-    f32 f2 = 0.0f;
-    u32 uVar11 = 0;
+    f32 ratio;
+    f32 f2;
+    f32 fVar5;
+    f32 fVar2;
+    f32 fVar1;
+    f32 fVar6;
+    f32 fVar4;
+    BOOL bVar4;
+    BOOL bVar3;
+    BOOL bVar6;
+    BOOL bVar5;
+    u32 uVar11;
+    f32 sp28;
+    f32 r_sq;
+    int count;
+
+    ratio = 0.0f;
+    f2 = 0.0f;
+    uVar11 = 0;
 
     if (cM3d_Cross_CylPnt(cyl, line->GetStartP()) && cM3d_Cross_CylPnt(cyl, line->GetEndP())) {
         *param_2 = *line->GetStartP();
@@ -1706,10 +1714,10 @@ int cM3d_Cross_CylLin(const cM3dGCyl* cyl, const cM3dGLin* line, Vec* param_2, V
     VECSubtract(line->GetStartP(), center, &vec1);
     VECSubtract(line->GetEndP(), center, &vec2);
     VECSubtract(&vec2, &vec1, &vec3);
-    f32 r_sq = cyl->GetR() * cyl->GetR();
+    r_sq = cyl->GetR() * cyl->GetR();
 
     if (!cM3d_IsZero(vec3.y)) {
-        f32 ratio = -vec1.y / vec3.y;
+        ratio = -vec1.y / vec3.y;
         if (ratio >= 0.0f && ratio <= 1.0f) {
             f32 x = vec1.x + vec3.x * ratio;
             f32 z = vec1.z + vec3.z * ratio;
@@ -1734,56 +1742,48 @@ int cM3d_Cross_CylLin(const cM3dGCyl* cyl, const cM3dGLin* line, Vec* param_2, V
         }
     }
 
-    f32 fVar5 = vec3.x * vec3.x + vec3.z * vec3.z;
-    f32 fVar2 = (vec3.x * vec1.x + vec3.z * vec1.z) * 2.0f;
-    f32 fVar1 = vec1.x * vec1.x + vec1.z * vec1.z - r_sq;
+    bVar4 = false;
+    bVar3 = false;
+    fVar5 = vec3.x * vec3.x + vec3.z * vec3.z;
+    fVar2 = (vec3.x * vec1.x + vec3.z * vec1.z) * 2.0f;
+    fVar1 = vec1.x * vec1.x + vec1.z * vec1.z - r_sq;
 
-    BOOL bVar4, bVar3;
-    if (!cM3d_IsZero(fVar5 * 2.0f)) {
-        f32 fVar6 = fVar2 * fVar2 - fVar5 * 4.0f * fVar1;
+    f32 sp0C = fVar5 * 2.0f;
+    if (!cM3d_IsZero(sp0C)) {
+        fVar6 = fVar2 * fVar2 - fVar5 * 4.0f * fVar1;
         if (fVar6 < 0.0f) {
             return 0;
         }
         if (fVar6 > 0.0f) {
-            bVar3 = true;
-            bVar4 = true;
+            bVar4 = bVar3 = true;
         } else {
             bVar4 = true;
             bVar3 = false;
         }
-        f32 fVar4 = std::sqrtf(fVar6);
+        fVar4 = std::sqrtf(fVar6);
         if (bVar4) {
-            f1 = (-fVar2 + fVar4) / (fVar5 * 2.0f);
+            ratio = (-fVar2 + fVar4) / sp0C;
         }
         if (bVar3) {
-            f2 = (-fVar2 - fVar4) / (fVar5 * 2.0f);
+            f2 = (-fVar2 - fVar4) / sp0C;
         }
     } else {
         if (!cM3d_IsZero(fVar2)) {
             bVar4 = true;
             bVar3 = false;
-            f1 = -fVar1 / fVar2;
+            ratio = -fVar1 / fVar2;
         } else {
             return 0;
         }
     }
 
-    BOOL bVar6, bVar5;
     if (bVar4 && !bVar3) {
-        if (0.0f > f1 || f1 > 1.0f) {
+        if (0.0f > ratio || ratio > 1.0f) {
             return 0;
         }
     } else {
-        bool tmp = false;
-        if (0.0f > f1 || f1 > 1.0f) {
-            tmp = true;
-        }
-        bVar6 = tmp;
-        tmp = false;
-        if (0.0f > f2 || f2 > 1.0f) {
-            tmp = true;
-        }
-        bVar5 = tmp;
+        bVar6 = 0.0f > ratio || ratio > 1.0f;
+        bVar5 = 0.0f > f2 || f2 > 1.0f;
         if (bVar6 && bVar5) {
             return 0;
         }
@@ -1796,14 +1796,14 @@ int cM3d_Cross_CylLin(const cM3dGCyl* cyl, const cM3dGLin* line, Vec* param_2, V
     }
 
     if (bVar4) {
-        f32 tmp = vec1.y + f1 * vec3.y;
-        if (tmp < 0.0f || tmp > cyl->GetH()) {
+        sp28 = vec1.y + ratio * vec3.y;
+        if (sp28 < 0.0f || sp28 > cyl->GetH()) {
             bVar4 = false;
         }
     }
     if (bVar3) {
-        f32 tmp = vec1.y + f2 * vec3.y;
-        if (tmp < 0.0f || tmp > cyl->GetH()) {
+        sp28 = vec1.y + f2 * vec3.y;
+        if (sp28 < 0.0f || sp28 > cyl->GetH()) {
             bVar3 = false;
         }
     }
@@ -1815,15 +1815,16 @@ int cM3d_Cross_CylLin(const cM3dGCyl* cyl, const cM3dGLin* line, Vec* param_2, V
     if (bVar4 && bVar3) {
         Vec vec5, vec6;
         VECAdd(&vec1, center, &vec5);
-        VECScale(&vec3, &vec6, f1);
+        uVar11 |= 4;
+        VECScale(&vec3, &vec6, ratio);
         VECAdd(&vec6, &vec5, &vec[2]);
-        uVar11 |= 0xC;
+        uVar11 |= 8;
         VECScale(&vec3, &vec6, f2);
         VECAdd(&vec6, &vec5, &vec[3]);
     } else if (bVar4) {
         uVar11 |= 4;
         Vec vec5, vec6;
-        VECScale(&vec3, &vec5, f1);
+        VECScale(&vec3, &vec5, ratio);
         VECAdd(&vec5, &vec1, &vec6);
         VECAdd(&vec6, center, &vec[2]);
     } else if (bVar3) {
@@ -1834,13 +1835,15 @@ int cM3d_Cross_CylLin(const cM3dGCyl* cyl, const cM3dGLin* line, Vec* param_2, V
         VECAdd(&vec6, center, &vec[2]);
     }
 
-    int count = 0;
+    count = 0;
     for (int i = 0; i < 4; i++) {
         if (uVar11 & (1 << i)) {
             if (count == 0) {
                 *param_2 = vec[i];
             } else if (count == 1) {
-                if (cM3d_LenSq(line->GetStartP(), &vec[i]) < cM3d_LenSq(line->GetStartP(), param_2)) {
+                // Bug? This check was changed to the following for TP:
+                // if (cM3d_LenSq(line->GetStartP(), param_2) < cM3d_LenSq(line->GetStartP(), &vec[i])) {
+                if (cM3d_LenSq(param_2, line->GetStartP()) < cM3d_LenSq(param_2, &vec[i])) {
                     *param_3 = vec[i];
                 } else {
                     *param_3 = *param_2;
@@ -1863,12 +1866,12 @@ int cM3d_Cross_CylPntPnt(const cM3dGCyl* cyl, const Vec* a, const Vec* b, Vec* d
 
 /* 8024FB04-8024FB68       .text cM3d_Cross_CylPnt__FPC8cM3dGCylPC3Vec */
 bool cM3d_Cross_CylPnt(const cM3dGCyl* cyl, const Vec* pt) {
-    /* Nonmatching - regalloc */
     const cXyz& center = cyl->GetC();
     f32 dX = center.x - pt->x;
     f32 dZ = center.z - pt->z;
-    f32 maxY = center.y + cyl->GetH();
-    if (dX * dX + dZ * dZ < cyl->GetR() * cyl->GetR() && center.y < pt->y && maxY > pt->y) {
+    f32 y = center.y;
+    f32 maxY = y + cyl->GetH();
+    if (dX * dX + dZ * dZ < cyl->GetR() * cyl->GetR() && y < pt->y && maxY > pt->y) {
         return true;
     } else {
         return false;
@@ -2055,7 +2058,7 @@ bool cM3d_Cross_CpsCyl(const cM3dGCps& cps, const cM3dGCyl& cyl, Vec* param_2) {
 }
 
 /* 802506D4-80250840       .text cM3d_Cross_CpsSph_CrossPos__FRC8cM3dGCpsRC8cM3dGSphRC3VecP3Vec */
-bool cM3d_Cross_CpsSph_CrossPos(const cM3dGCps& param_1, const cM3dGSph& param_2, const Vec& param_3, Vec* param_4) {
+void cM3d_Cross_CpsSph_CrossPos(const cM3dGCps& param_1, const cM3dGSph& param_2, const Vec& param_3, Vec* param_4) {
     Vec aVStack_70;
     Vec VStack_7c;
     int iVar5 = cM3d_Cross_LinSph_CrossPos(param_2, param_1, &aVStack_70, &VStack_7c);

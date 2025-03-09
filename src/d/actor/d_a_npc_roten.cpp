@@ -1555,8 +1555,8 @@ daNpcRoten_c::daNpcRoten_c() {
 }
 
 /* 000007B4-000008CC       .text daNpc_Roten_nodeCallBack__FP7J3DNodei */
-static BOOL daNpc_Roten_nodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL daNpc_Roten_nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpcRoten_c* i_this = (daNpcRoten_c*)model->getUserArea();
@@ -1733,7 +1733,7 @@ s32 daNpcRoten_c::createInit() {
     fopAcM_setCullSizeBox(this, -200.0f, 0.0f, -200.0f, 200.0f, 300.0f, 200.0f);
 
     mObjAcch.CrrPos(*dComIfG_Bgsp());
-    if(-1e9f != mObjAcch.GetGroundH()) {
+    if(C_BG_MIN_HEIGHT != mObjAcch.GetGroundH()) {
         current.pos.y = home.pos.y = mObjAcch.GetGroundH();
     }
 

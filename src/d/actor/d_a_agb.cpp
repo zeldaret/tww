@@ -510,7 +510,7 @@ int daAgb_c::uploadMessageSend() {
             field_0x664 = 60;
 
             dComIfGs_onEventBit(0x1A20);
-            dComIfGp_particle_set(0x2E7, &current.pos, NULL, NULL, 255, &field_0x684);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_02E7, &current.pos, NULL, NULL, 255, &field_0x684);
 
             JKRHeap::free(l_gbaCommand->getMemAddress(), NULL);
             delete l_gbaCommand;
@@ -1310,7 +1310,7 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     
     cXyz r1_14;
     dBgS_GndChk r1_5C;
-    f32 f30 = C_BG_INVALID_HEIGHT;
+    f32 f30 = C_BG_MIN_HEIGHT;
     r1_5C.OffWall();
     r1_14.y = actor->current.pos.y + 150.0f;
     static cXy l_ckOffset[] = {
