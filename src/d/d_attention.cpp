@@ -4,27 +4,40 @@
 //
 
 #include "d/d_attention.h"
-#include "f_op/f_op_actor_mng.h"
-#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_s_play.h"
-#include "m_Do/m_Do_ext.h"
-#include "JSystem/JKernel/JKRSolidHeap.h"
 #include "SSystem/SComponent/c_angle.h"
+#include "f_op/f_op_camera.h"
+#include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_graphic.h"
 
 s32 dAttention_c::loc_type_num = 3;
 u32 dAttention_c::act_type_num = 5;
+
+dAttention_c::LocTbl dAttention_c::loc_type_tbl[3] = {
+    { 0, 1 },
+    { 1, 2 },
+    { 2, 4 },
+};
+
+dAttention_c::LocTbl dAttention_c::act_type_tbl[5] = {
+    { 3, 0x08 },
+    { 4, 0x10 },
+    { 5, 0x20 },
+    { 6, 0x40 },
+    { 7, 0x80 },
+};
 
 /* 8009D220-8009D268       .text __ct__11dAttParam_cFl */
 dAttParam_c::dAttParam_c(s32) {
     field_0x04 = 45.0f;
     field_0x08 = 30.0f;
     field_0x0c = 90.0f;
-    field_0x00 = 1;
-    field_0x18 = -0.9f;
-    field_0x10 = 3000.0f;
-    field_0x14 = 1000.0f;
+    mFlags = 1;
+    mSWModeDisable = -0.9f;
+    mDangerBGMDistance = 3000.0f;
+    mBGMDistMargin = 1000.0f;
 }
 
 /* 8009D268-8009D2B0       .text __dt__11dAttParam_cFv */
@@ -126,14 +139,17 @@ dAttList_c* dAttention_c::GetLockonList(s32 idx) {
 dAttList_c* dAttention_c::getActionBtnB() {
     int i;
     dAttList_c* list = GetLockonList(0);
-    if (list != NULL && list->getActor() != NULL && list->mType == 1 && LockonTruth() != 0 && !(list->getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
+    if (list != NULL && list->getActor() != NULL &&
+            list->mType == fopAc_Attn_TYPE_TALK_e &&
+            LockonTruth() &&
+            !(list->getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
         return list;
 
     if (mActionNum == 0)
         return NULL;
 
     for (i = 0; i < mActionNum; i++) {
-        if (mActionList[i].mType == 3) {
+        if (mActionList[i].mType == fopAc_Attn_TYPE_SPEAK_e) {
             if (!(mActionList[i].getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
                 return &mActionList[i];
         } else {
@@ -210,14 +226,8 @@ dAttList_c* dAttention_c::getActionBtnZ() {
     return getActionBtnXYZ_local(2);
 }
 
-dAttention_c::LocTbl dAttention_c::loc_type_tbl[3] = {
-    { 0, 1 },
-    { 1, 2 },
-    { 2, 4 },
-};
-
 /* 8009DAA4-8009DAF4       .text chkAttMask__12dAttention_cFUlUl */
-u32 dAttention_c::chkAttMask(u32 type, u32 mask) {
+s32 dAttention_c::chkAttMask(u32 type, u32 mask) {
     for (s32 i = 0; i < loc_type_num; i++) {
         if (type == loc_type_tbl[i].mType) {
             return mask & loc_type_tbl[i].mMask;
@@ -228,33 +238,157 @@ u32 dAttention_c::chkAttMask(u32 type, u32 mask) {
 }
 
 /* 8009DAF4-8009DB60       .text check_event_condition__FUlUs */
-void check_event_condition(u32, u16) {
-    /* Nonmatching */
+s32 check_event_condition(u32 attnType, u16 flags) {
+    switch(attnType) {
+        case fopAc_Attn_TYPE_SPEAK_e:
+        case fopAc_Attn_TYPE_TALK_e:
+            if ((flags & dEvtCnd_CANTALK_e) != dEvtCnd_NONE_e) {
+                break;
+            }
+            return true;
+
+        case fopAc_Attn_TYPE_DOOR_e:
+            if ((flags & dEvtCnd_CANDOOR_e) != dEvtCnd_NONE_e) {
+                break;
+            }
+            return true;
+        case fopAc_Attn_TYPE_TREASURE_e:
+            if ((flags & dEvtCnd_CANDOOR_e) != dEvtCnd_NONE_e) {
+                break;
+            }
+            return true;
+    }
+    return false;
 }
 
+
 /* 8009DB60-8009DC28       .text check_flontofplayer__FUlss */
-void check_flontofplayer(u32, s16, s16) {
-    /* Nonmatching */
+s32 check_flontofplayer(u32 checkMask, s16 angle1, s16 angle2) {
+    /// merged from TP
+    static uint ftp_table[] = {
+        0x04, 0x01, 0x02, 0x08, 0x10, 0x20, 0x40, 0x80, 0x100,
+    };
+    static s16 ang_table[3] = {
+        0x4000,
+        0x2000,
+        0x0AAA,
+    };
+    static s16 ang_table2[] = {
+        0x0AAA, 0x2000, 0x2AAA, 0x4000, 0x4E38, 0x6000,
+    };
+
+    if (angle1 < 0) {
+        angle1 = -angle1;
+    }
+
+    if (angle2 < 0) {
+        angle2 = -angle2;
+    }
+
+    for (int i = 0; i < 3; i++) {
+        if (checkMask & ftp_table[i]) {
+            if (angle1 > ang_table[i]) {
+                return true;
+            }
+        }
+    }
+
+    for (int i = 8; i > 2; i--) {
+        if (checkMask & ftp_table[i]) {
+            if (angle2 > ang_table2[i - 3]) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 /* 8009DC28-8009DC74       .text distace_weight__Ffsf */
-void distace_weight(f32, s16, f32) {
-    /* Nonmatching */
+f32 distace_weight(f32 distance, s16 angle, f32 ratio) {
+    f32 turns = (f32)angle / 32768.0F;
+    return distance * (f32)((1.0F - ratio) + (f32)(ratio * (turns * turns)));
 }
 
 /* 8009DC74-8009DCD4       .text distace_angle_adjust__Ffsf */
-void distace_angle_adjust(f32, s16, f32) {
-    /* Nonmatching */
+f32 distace_angle_adjust(f32 distance, s16 angle, f32 ratio) {
+    f32 turns = angle / (f32)0x8000;
+    if (turns < 0.0f) {
+        turns = -turns;
+    }
+
+    return distance * ((1.0f - ratio) + (ratio * ((1.0f - turns) * (1.0f - turns))));
 }
 
 /* 8009DCD4-8009DE44       .text check_distace__FP4cXyzsP4cXyzffff */
-void check_distace(cXyz*, s16, cXyz*, f32, f32, f32, f32) {
-    /* Nonmatching */
+s32 check_distace(cXyz* playerPos, s16 angle, cXyz* actorPos, f32 maxDistXZBase, f32 maxDistAngleMul, f32 maxDeltaY, f32 minDeltaY) {
+    cXyz dist = *actorPos - *playerPos;
+
+    if (dist.y <= minDeltaY || dist.y >= maxDeltaY) {
+        return false;
+    }
+
+    f32 adjust = maxDistXZBase + distace_angle_adjust(maxDistAngleMul, angle, 1.0f);
+    if (adjust < dist.absXZ()) {
+        return false;
+    }
+
+    return true;
 }
 
 /* 8009DE44-8009E03C       .text calcWeight__12dAttention_cFiP10fopAc_ac_cfssPUl */
-f32 dAttention_c::calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*) {
-    /* Nonmatching */
+f32 dAttention_c::calcWeight(int listType, fopAc_ac_c* actor, f32 distance, s16 angle, s16 invAngle, u32* attnType) {
+    int i;
+    int num;
+    LocTbl* table;
+
+    num = (listType == 'L') ? loc_type_num : act_type_num;
+    table = (listType == 'L') ? loc_type_tbl : act_type_tbl;
+
+    f32 weight = 0.0f;
+    f32 max_weight = 0.0f;
+
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if (player != NULL) {
+        if (actor == fopAcM_SearchByID(player->getGrabActorID())) {
+            return 0.0f;
+        }
+    }
+
+    for (i = 0; i < num; i++) {
+        f32 dist_weight;
+        LocTbl* locEntry = &table[i];
+
+        if (mFlagMask & locEntry->mMask & actor->attention_info.flags) {
+            DistTbl* distEntry;
+            u8 dist_index = actor->attention_info.distances[locEntry->mType];
+
+            if (check_event_condition(locEntry->mType, actor->eventInfo.getCondition())) {
+                dist_weight = 0.0f;
+            } else {
+                distEntry = &dist_table[dist_index];
+                if (check_flontofplayer(distEntry->mFrontAngleCheckBits, angle, invAngle)) {
+                    dist_weight = 0.0f;
+                } else if (!check_distace(&mpPlayer->attention_info.position, angle, &actor->attention_info.position,
+                                          distEntry->mDistXZMax, distEntry->mDistXZAngleAdjust, distEntry->mDeltaYMax,
+                                          distEntry->mDeltaYMin)) {
+                    dist_weight = 0.0f;
+                } else {
+                    dist_weight = distace_weight(distance, angle, 0.5f);
+                }
+            }
+            if (dist_weight > 0.0f) {
+                f32 dist_tbl_weight = dist_table[dist_index].mWeightDivisor;
+                if (dist_tbl_weight > max_weight) {
+                    max_weight = dist_tbl_weight;
+                    weight = dist_weight / dist_tbl_weight;
+                    *attnType = locEntry->mType;
+                }
+            }
+        }
+    }
+
+    return weight;
 }
 
 /* 8009E03C-8009E128       .text setLList__12dAttention_cFP10fopAc_ac_cffUl */
@@ -367,12 +501,37 @@ int dAttention_c::SelectAttention(fopAc_ac_c* ac) {
 
 /* 8009E474-8009E5C4       .text sortList__12dAttention_cFv */
 void dAttention_c::sortList() {
-    /* Nonmatching */
+    int i;
+    int j;
+    dAttList_c swap;
+    dAttList_c* list;
+
+    list = mLockOnList;
+    for (i = 0; i < mLockOnNum - 1; i++) {
+        for (j = i + 1; j < mLockOnNum; j++) {
+            if (list[i].mWeight > list[j].mWeight) {
+                memcpy(&swap, &list[j], sizeof(dAttList_c));
+                memcpy(&list[j], &list[i], sizeof(dAttList_c));
+                memcpy(&list[i], &swap, sizeof(dAttList_c));
+            }
+        }
+    }
+
+    list = mActionList;
+    for (i = 0; i < mActionNum - 1; i++) {
+        for (j = i + 1; j < mActionNum; j++) {
+            if (list[i].mWeight > list[j].mWeight) {
+                memcpy(&swap, &list[j], sizeof(dAttList_c));
+                memcpy(&list[j], &list[i], sizeof(dAttList_c));
+                memcpy(&list[i], &swap, sizeof(dAttList_c));
+            }
+        }
+    }
 }
 
 /* 8009E5C4-8009E684       .text stockAttention__12dAttention_cFUl */
-void dAttention_c::stockAttention(u32 interactMask) {
-    fopAc_ac_c * pTarget = LockonTarget(0);
+fopAc_ac_c* dAttention_c::stockAttention(u32 interactMask) {
+    fopAc_ac_c *pTarget = LockonTarget(0);
     initList(interactMask);
     if (makeList())
         sortList();
@@ -388,11 +547,11 @@ void dAttention_c::stockAttention(u32 interactMask) {
         setFlag(0x04);
     }
 
-    LockonTarget(0);
+    return LockonTarget(0);
 }
 
 /* 8009E684-8009E728       .text nextAttention__12dAttention_cFUl */
-void dAttention_c::nextAttention(u32 interactMask) {
+fopAc_ac_c *dAttention_c::nextAttention(u32 interactMask) {
     fopAc_ac_c * pTarget = fopAcM_SearchByID(mLockOnTargetBsPcID);
     initList(interactMask);
     if (makeList())
@@ -401,7 +560,7 @@ void dAttention_c::nextAttention(u32 interactMask) {
     if (pTarget == mLockOnList[0].getActor() && mLockOnNum > 1)
         mLockOnOffs = 1;
 
-    LockonTarget(0);
+    return LockonTarget(0);
 }
 
 /* 8009E728-8009E764       .text freeAttention__12dAttention_cFv */
@@ -415,8 +574,51 @@ s32 dAttention_c::freeAttention() {
 }
 
 /* 8009E764-8009E978       .text chaseAttention__12dAttention_cFv */
-void dAttention_c::chaseAttention() {
-    /* Nonmatching */
+bool dAttention_c::chaseAttention() {
+    int offset = mLockOnOffs;
+    fopAc_ac_c* actor = mLockOnList[offset].getActor();
+
+    if (actor == NULL) {
+        return false;
+    }
+
+    cSGlobe globe1 = actor->attention_info.position - mpPlayer->attention_info.position;
+    cSAngle angle1;
+    angle1 = globe1.U() - fopAcM_GetShapeAngle_p(mpPlayer)->y;
+
+    cSGlobe globe2(mpPlayer->attention_info.position - actor->attention_info.position);
+    cSAngle angle2;
+    angle2 = globe2.U() - fopAcM_GetShapeAngle_p(actor)->y;
+
+    u32 type;
+    f32 weight = calcWeight('L', actor, globe1.R(), angle1.Val(), angle2.Val(), &type);
+    if (weight <= 0.0f) {
+        type = mLockOnList[offset].mType;
+        int tbl_idx = actor->attention_info.distances[type];
+
+        if (!chkAttMask(type, actor->attention_info.flags)) {
+            return false;
+        } else if (check_event_condition(type, actor->eventInfo.getCondition()) != 0) {
+            return false;
+        } else if (check_flontofplayer(dist_table[tbl_idx].mFrontAngleCheckBits, angle1.Val(), angle2.Val())) {
+            return false;
+        } else if (check_distace(&mpPlayer->attention_info.position, angle1.Val(), &actor->attention_info.position,
+                                 dist_table[tbl_idx].mDistXZMaxRelease,
+                                 dist_table[tbl_idx].mDistXZAngleAdjust,
+                                 dist_table[tbl_idx].mDeltaYMax, dist_table[tbl_idx].mDeltaYMin)) {
+            mLockOnList[offset].mWeight = distace_weight(globe1.R(), angle1.Val(), 0.5f);
+            return true;
+        }
+
+        return false;
+    }
+
+    mLockOnList[offset].setActor(actor);
+    mLockOnList[offset].mWeight = weight;
+    mLockOnList[offset].mDistance = globe1.R();
+    mLockOnList[offset].mType = type;
+    return true;
+
 }
 
 /* 8009E978-8009EA24       .text EnemyDistance__12dAttention_cFP10fopAc_ac_c */
@@ -463,9 +665,62 @@ void dAttention_c::runSoundProc() {
     }
 }
 
+// This is some combination of flags `g_dComIfG_gameInfo.play.mPlayerStatus[0][0]`
+// can take, seemingly related to "judgement".
+#define PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT 0x37a02371
+
 /* 8009EB38-8009EDB8       .text runDrawProc__12dAttention_cFv */
 void dAttention_c::runDrawProc() {
-    /* Nonmatching */
+    /* TODO: Magic constants */
+    if (this->chkFlag(8)) {
+        this->draw[0].setAnm(0x1b, 0x48, 0);
+        if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) == 0
+            || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
+            JAIZelBasic::zel_basic->seStart(0x804, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+        }
+    } else if (this->chkFlag(0x10)) {
+        this->draw[0].setAnm(0x17, 0x44, 0);
+        if (this->field_0x028 >= 0) {
+            this->field_0x028 = 1;
+            this->setFlag(0x40000000);
+        }
+
+        if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) == 0
+            || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
+            JAIZelBasic::zel_basic->seStart(0x805, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+        }
+    } else if (this->chkFlag(1)) {
+        this->draw[0].setAnm(0x18, 0x45, 0);
+        this->setFlag(0x40000000);
+    } else if (this->chkFlag(2)) {
+        this->draw[0].setAnm(0x18, 0x45, 0);
+        this->draw[1].setAnm(0x1a, 0x47, 0);
+        this->setFlag(0x40000000);
+    } else if (mLockOnNum <= 0 && this->field_0x028 == 0) {
+        this->draw[0].setAnm(0x1a, 0x47, 0);
+        this->field_0x028 = 1;
+        this->setFlag(0x40000000);
+    }
+
+    int result;
+    if (this->mLockOnState == 1) {
+        result = this->draw[0].anm->play(NULL, 0, 0);
+        if (result) {
+            this->draw[0].setAnm(0x19, -1, 2);
+            this->clrFlag(0x40000000);
+        }
+    } else {
+        result = this->draw[0].anm->play(NULL, 0, 0);
+        if (result) {
+            this->clrFlag(0x40000000);
+            this->field_0x028 = 0xff;
+        }
+    }
+
+    result = this->draw[1].anm->play(NULL, 0, 0);
+    if (result) {
+        this->draw[1].mpAnmClr = NULL;
+    }
 }
 
 /* 8009EDB8-8009EDBC       .text runDebugDisp0__12dAttention_cFv */
@@ -478,47 +733,300 @@ void dAttention_c::runDebugDisp() {
 
 /* 8009EDC0-8009EE90       .text judgementButton__12dAttention_cFv */
 void dAttention_c::judgementButton() {
-    /* Nonmatching */
+    if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) != 0
+        || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
+        if ((int)this->field_0x01a >= 3)
+            return;
+        if ((int)this->field_0x01a < 1)
+            return;
+        this->field_0x01a = 0;
+    } else {
+        switch(this->field_0x01a) {
+            case 0:
+                if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
+                    break;
+                }
+                this->field_0x01a = 1;
+                break;
+            case 1:
+                this->field_0x01a = 2;
+            case 2:
+                if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
+                    this->field_0x01a = 0;
+                }
+                break;
+        }
+    }
 }
 
 /* 8009EE90-8009EED8       .text judgementTriggerProc__12dAttention_cFv */
 void dAttention_c::judgementTriggerProc() {
-    /* Nonmatching */
+    bool haveTarget = chaseAttention();
+    if (haveTarget) {
+        this->setFlag(8);
+        mLockOnState = 1;
+    }
 }
 
 /* 8009EED8-8009EF40       .text judgementLostCheck__12dAttention_cFv */
-void dAttention_c::judgementLostCheck() {
-    /* Nonmatching */
+int dAttention_c::judgementLostCheck() {
+    bool haveTarget = chaseAttention();
+    if (haveTarget) {
+        return false;
+    }
+    mLockOnState = 0;
+    this->setFlag(0x10);
+    freeAttention();
+    this->setFlag(0x40);
+    return true;
 }
 
 /* 8009EF40-8009F0A4       .text judgementStatusSw__12dAttention_cFUl */
-void dAttention_c::judgementStatusSw(u32) {
-    /* Nonmatching */
+void dAttention_c::judgementStatusSw(u32 interactMask) {
+    fpc_ProcID target;
+    fopAc_ac_c *actor;
+  
+    switch(mLockOnState) {
+        case 0:
+            mLockOnTargetBsPcID = -1;
+            stockAttention(interactMask);
+            if (this->field_0x01a == 1) {
+                judgementTriggerProc();
+            }
+            break;
+        case 1:
+            target = LockonTargetPId(0);
+            mLockOnTargetBsPcID = target;
+            if (this->field_0x01a == 1) {
+                f32 stickY = g_mDoCPd_cpadInfo[this->mPlayerNo].mMainStickPosY;
+                if (-0.9f < stickY &&
+                    (actor = nextAttention(interactMask), actor != 0) &&
+                    mLockOnNum > 1) {
+                    this->setFlag(8);
+                } else {
+                    mLockOnState = 2;
+                    this->setFlag(0x10);
+                }
+            } else {
+                judgementLostCheck();
+            }
+            break;
+        case 2:
+            this->setFlag(0x40);
+            if (this->field_0x01a == 1) {
+                mLockOnState = 0;
+                judgementTriggerProc();
+            }
+            else {
+                actor = LockonTarget(0);
+                if (actor == NULL || !this->chkFlag(0x40000000)) {
+                    mLockOnState = 0;
+                    freeAttention();
+                }
+            }
+            break;
+    }
 }
 
 /* 8009F0A4-8009F1D4       .text judgementStatusHd__12dAttention_cFUl */
-void dAttention_c::judgementStatusHd(u32) {
-    /* Nonmatching */
+void dAttention_c::judgementStatusHd(u32 interactMask) {
+    switch(mLockOnState) {
+        case 0:
+            mLockOnTargetBsPcID = -1;
+            stockAttention(interactMask);
+            if (this->field_0x01a == 1) {
+                judgementTriggerProc();
+            }
+            break;
+        case 1: {
+            fpc_ProcID target = LockonTargetPId(0);
+            mLockOnTargetBsPcID = target;
+            s32 result = judgementLostCheck();
+            if (result == 0 && this->field_0x01a == 0) {
+                mLockOnState = 2;
+                this->setFlag(0x10);
+            }
+            break;
+        }
+        case 2:
+            this->setFlag(0x40);
+            if (this->field_0x01a == 1) {
+                fopAc_ac_c *actor = nextAttention(interactMask);
+                if (actor != NULL) {
+                    this->setFlag(8);
+                    mLockOnState = 1;
+                } else {
+                    mLockOnState = 0;
+                    freeAttention();
+                }
+            }
+            else {
+                fopAc_ac_c *actor = LockonTarget(0);
+                if (actor == NULL || !this->chkFlag(0x40000000)) {
+                    mLockOnState = 0;
+                    freeAttention();
+                }
+            }
+            break;
+    }
 }
 
 /* 8009F1D4-8009F460       .text Run__12dAttention_cFUl */
-void dAttention_c::Run(u32) {
-    /* Nonmatching */
+bool dAttention_c::Run(u32 interactMask) {
+    // TODO: magic numbers
+    bool var = g_dComIfG_gameInfo.save.mSavedata.mPlayer.mConfig.mAttentionType == 0;
+    if (this->chkFlag(0x80)) {
+        mpPlayer = (daPy_lk_c*)g_dComIfG_gameInfo.play.mpPlayer[0];
+        mPlayerNo = 0;
+    }
+    this->runDebugDisp0();
+    this->clrFlag(0x7ffffff);
+    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
+        mLockOnState = 0;
+        this->field_0x01a = 0;
+        this->field_0x01b = 0;
+        this->clrFlag(0x20000000);
+        this->clrFlag(0x10000000);
+        this->clrFlag(0x07ffffff);
+        mLockOnTargetBsPcID = -1;
+        this->freeAttention();
+    } else {
+        this->judgementButton();
+        if (var) {
+            judgementStatusHd(interactMask);
+        } else {
+            judgementStatusSw(interactMask);
+        }
+
+        if (this->chkFlag(1<<0x1c)) {
+            if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
+                if (this->chkFlag(0x20000000)) {
+                    JAIZelBasic::zel_basic->seStart(0x81d, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+                    this->clrFlag(0x20000000);
+                }
+                this->clrFlag(0x10000000);
+            }
+        } else if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL != 0) {
+            fopAc_ac_c *target = this->LockonTarget(0);
+            if (target == NULL) {
+                this->setFlag(0x20000000 | 0x20);
+                JAIZelBasic::zel_basic->seStart(0x81c, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+            }
+            this->setFlag(0x10000000);
+        }
+    }
+    this->field_0x019 = mLockOnState;
+    this->runSoundProc();
+    this->runDrawProc();
+    this->runDebugDisp();
+    if (mLockOnState == 1) {
+        g_dComIfG_gameInfo.play.mCameraInfo[mPlayerNo].mCameraAttentionStatus |= 1;
+    } else {
+        g_dComIfG_gameInfo.play.mCameraInfo[mPlayerNo].mCameraAttentionStatus &= ~1;
+    }
+
+    mHint.proc();
+    mCatch.proc();
+    mLook[0].proc();
+    mLook[1].proc();
+    return true;
 }
 
 /* 8009F460-8009F5FC       .text Draw__12dAttention_cFv */
 void dAttention_c::Draw() {
     /* Nonmatching */
+    Mtx invCamera;
+    PSMTXInverse(g_dComIfG_gameInfo.drawlist.mpCamera->mViewMtxNoTrans, invCamera);
+    fopAc_ac_c *target = LockonTarget(0);
+    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 || g_dComIfG_gameInfo.play.mbCamOverrideFarPlane != 0)
+        return;
+    if (target != NULL) {
+        if (target != NULL) {
+            this->draw[0].draw(target->attention_info.position, invCamera);
+        }
+
+        if (mLockOnNum >= 2 && this->draw[1].mpAnmClr != NULL) {
+            int listIdx = mLockOnOffs;
+
+            if (mLockOnOffs == 0) {
+                listIdx = mLockOnNum - 1;
+            } else {
+                listIdx--;
+            }
+
+            if (mLockOnList[listIdx].getActor() != NULL) {
+                fopAc_ac_c* target = mLockOnList[listIdx].getActor();
+                this->draw[1].draw(target->attention_info.position, invCamera);
+            }
+        }
+
+        fpc_ProcID id = LockonTargetPId(0);
+        this->mlockedOnPId = id;
+        this->field_0x02c = target->attention_info.position;
+        this->field_0x028 = 0;
+    } else {
+        if (this->field_0x028 > 0) {
+            uint temp = this->mlockedOnPId;
+            // unsure about this cast
+            target = reinterpret_cast<fopAc_ac_c*>(fopAcIt_Judge(&fpcSch_JudgeByID, &temp));
+            if (target != NULL) {
+                this->draw[0].draw(target->attention_info.position, invCamera);
+                this->field_0x02c = target->attention_info.position;
+            } else {
+                this->draw[0].draw(this->field_0x02c, invCamera);
+            }
+        }
+    }
 }
 
 /* 8009F5FC-8009F6B4       .text setAnm__10dAttDraw_cFiii */
-void dAttDraw_c::setAnm(int, int, int) {
-    /* Nonmatching */
+void dAttDraw_c::setAnm(int resIdxTransform, int resIdxColor, int loopMode) {
+    J3DAnmTransform *pAnimRes;
+    J3DAnmColor *color;
+
+    pAnimRes = (J3DAnmTransform *) dRes_control_c::getRes("Always", resIdxTransform, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+    this->anm->setAnm(pAnimRes, loopMode, 0.0, 1.0, 0.0, -1.0, NULL);
+    if (resIdxColor < 0) {
+        this->mpAnmClr = NULL;
+    }
+    else {
+        color = (J3DAnmColor *)dRes_control_c::getRes("Always", resIdxColor, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+        this->mpAnmClr = color;
+    }
 }
 
 /* 8009F6B4-8009F834       .text draw__10dAttDraw_cFR4cXyzPA4_f */
-void dAttDraw_c::draw(cXyz&, Mtx) {
-    /* Nonmatching */
+void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
+    J3DModel *model = this->anm->mpModel;
+    mDoMtx_stack_c::transS(pos);
+    mDoMtx_stack_c::concat(mtx);
+    PSMTXCopy(mDoMtx_stack_c::now, model->mBaseTransformMtx);
+
+    J3DModelData *modeldata = model->mModelData;
+    if (this->mpAnmClr == NULL) {
+        J3DAnmColor *color = reinterpret_cast<J3DAnmColor*>(dRes_control_c::getRes("Always", 0x45, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40));
+        modeldata->getMaterialTable().removeMatColorAnimator(color);
+    } else {
+        this->mpAnmClr->setFrame(this->anm->mFrameCtrl.getFrame());
+        J3DMatColorAnm *p = this->mpAnmMatClr;
+        for(u16 i = 0; i < this->mpAnmClr->getUpdateMaterialNum(); i++) {
+            p->setAnmColor(this->mpAnmClr);
+            p->setAnmIndex(i);
+            p++;
+        }
+        modeldata->getMaterialTable().setMatColorAnimator(this->mpAnmClr, this->mpAnmMatClr);
+    }
+
+    if ((int)mDoGph_gInf_c::mMonotone != 0) {
+        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListP1, 0);
+        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluListP1, 1);
+    } else {
+        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListMaskOff, 0);
+        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluListMaskOff, 1);
+    }
+    this->anm->updateDL();
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaList, 0);
+    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluList, 1);
 }
 
 /* 8009F834-8009F88C       .text LockonTarget__12dAttention_cFl */
@@ -534,8 +1042,21 @@ fopAc_ac_c* dAttention_c::LockonTarget(s32 idx) {
 }
 
 /* 8009F88C-8009F980       .text LockonReleaseDistanse__12dAttention_cFv */
-void dAttention_c::LockonReleaseDistanse() {
-    /* Nonmatching */
+f32 dAttention_c::LockonReleaseDistanse() {
+    if (!LockonTruth()) {
+        return 0.0f;
+    }
+
+    fopAc_ac_c* actor = mLockOnList[mLockOnOffs].getActor();
+    if (actor == NULL) {
+        return 0.0f;
+    }
+
+    int idx =  actor->attention_info.distances[mLockOnList[mLockOnOffs].mType];
+    cSGlobe globe(actor->attention_info.position - mpPlayer->attention_info.position);
+    cSAngle angle(globe.U() - fopAcM_GetShapeAngle_p(mpPlayer)->y);
+
+    return distace_angle_adjust(dist_table[idx].mDistXZAngleAdjust, angle, 1.0f) + dist_table[idx].mDistXZMaxRelease;
 }
 
 /* 8009F980-8009F9B8       .text LockonTargetPId__12dAttention_cFl */
@@ -621,24 +1142,62 @@ fopAc_ac_c* dAttCatch_c::convPId(fpc_ProcID i_procID) {
 
 /* 8009FBBC-8009FBDC       .text init__11dAttCatch_cFv */
 void dAttCatch_c::init() {
-    field_0xc = 0x56;
-    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mCatchItemNo = 0x56;
+    mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     mCatghTargetID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }
 
 /* 8009FBDC-8009FC08       .text proc__11dAttCatch_cFv */
 void dAttCatch_c::proc() {
-    mCatghTargetID = field_0x0;
-    mChangeItem = field_0xc;
-    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mCatghTargetID = mRequestActorID;
+    mChangeItem = mCatchItemNo;
+    mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
-    field_0xc = 0x56;
+    mCatchItemNo = 0x56;
 }
 
+
 /* 8009FC08-8009FE10       .text request__11dAttCatch_cFP10fopAc_ac_cUcfffsi */
-void dAttCatch_c::request(fopAc_ac_c*, u8, f32, f32, f32, s16, int) {
-    /* Nonmatching */
+bool dAttCatch_c::request(fopAc_ac_c* reqActor, u8 itemNo, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_7) {
+    // TODO: what is param_7?
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    if (param_7 > field_0x4) {
+        return false;
+    } 
+
+    cXyz vec_to_player = reqActor->attention_info.position - player->attention_info.position;
+    if (vec_to_player.y < downDist || vec_to_player.y > upDist) {
+        return false;
+    }
+
+    f32 player_xz_dist = vec_to_player.absXZ();
+    if (player_xz_dist > horizontalDist) {
+        return false;
+    }
+
+    if (angle != 0) {
+        cSGlobe globe(vec_to_player);
+        csXyz* player_angle_p = fopAcM_GetShapeAngle_p(player);
+
+        s16 angle2 = globe.U() - player_angle_p->y;
+        if (angle2 < 0) {
+            angle2 = -angle2;
+        }
+        if (angle2 > angle) {
+            return false;
+        }
+    }
+
+    if (param_7 < field_0x4 || player_xz_dist < mDistance) {
+        field_0x4 = param_7;
+        mCatchItemNo = itemNo;
+        mRequestActorID = fopAcM_GetID(reqActor);
+        mDistance = player_xz_dist;
+        return true;
+    }
+
+    return false;
 }
 
 /* 8009FE10-8009FE40       .text convPId__10dAttLook_cFUi */
@@ -648,24 +1207,85 @@ fopAc_ac_c* dAttLook_c::convPId(fpc_ProcID i_procID) {
 
 /* 8009FE40-8009FE58       .text init__10dAttLook_cFv */
 void dAttLook_c::init() {
-    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     mLookTargetID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }
 
 /* 8009FE58-8009FE74       .text proc__10dAttLook_cFv */
 void dAttLook_c::proc() {
-    mLookTargetID = field_0x0;
-    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mLookTargetID = mRequestActorID ;
+    mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }
 
 /* 8009FE74-800A009C       .text request__10dAttLook_cFP10fopAc_ac_cfffsi */
-void dAttLook_c::request(fopAc_ac_c*, f32, f32, f32, s16, int) {
-    /* Nonmatching */
+bool dAttLook_c::request(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_6) {
+    // TODO: what is param_6
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    if (param_6 > field_0x4) {
+        return false;
+    }
+
+    cXyz vec_to_player = reqActor->eyePos - player->eyePos;
+    if (vec_to_player.y < downDist || vec_to_player.y > upDist) {
+        return false;
+    }
+
+    f32 player_xz_dist = vec_to_player.absXZ();
+    if (player_xz_dist > horizontalDist) {
+        return false;
+    }
+
+    if (angle != 0) {
+        vec_to_player = reqActor->current.pos - player->current.pos;
+        cSGlobe globe(vec_to_player);
+        s16 angle2 = globe.U() - fopAcM_GetShapeAngle_p(player)->y;
+        if (angle2 < 0) {
+            angle2 = -angle2;
+        }
+        if (angle2 > angle) {
+            return false;
+        }
+    }
+
+    if (param_6 < field_0x4 || player_xz_dist < mDistance) {
+        field_0x4 = param_6;
+        mRequestActorID = fopAcM_GetID(reqActor);
+        mDistance = player_xz_dist;
+        return true;
+    }
+
+    return false;
 }
 
 /* 800A009C-800A0270       .text requestF__10dAttLook_cFP10fopAc_ac_csi */
-void dAttLook_c::requestF(fopAc_ac_c*, s16, int) {
-    /* Nonmatching */
+bool dAttLook_c::requestF(fopAc_ac_c* reqActor, s16 angle, int param_3) {
+    // TODO: what is param_3?
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    if (param_3 > this->field_0x4) {
+        return false;
+    }
+    cXyz vec_to_player = reqActor->eyePos - player->eyePos;
+    f32 player_xz_dist = vec_to_player.absXZ();
+
+    if (angle != 0) {
+        vec_to_player = reqActor->current.pos - player->current.pos;
+        cSGlobe globe(vec_to_player);
+        s16 angle2 = globe.U() - fopAcM_GetShapeAngle_p(player)->y;
+        if (angle2 < 0) {
+            angle2 = -angle2;
+        }
+        if (angle2 > angle) {
+            return false;
+        }
+    }
+    if (param_3 < field_0x4 || player_xz_dist < mDistance) {
+        field_0x4 = param_3;
+        mRequestActorID = fopAcM_GetID(reqActor);
+        mDistance = player_xz_dist;
+        return true;
+    }
+
+    return false;
 }
