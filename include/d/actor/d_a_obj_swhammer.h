@@ -22,11 +22,10 @@ namespace daObjSwhammer {
         void off_switch2() const { fopAcM_offSwitch(const_cast<Act_c*>(this), prm_get_swSave2()); }
         void on_switch() const { fopAcM_onSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
         s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-
         s32 prm_get_swSave2() const { return daObj::PrmAbstract(this, PRM_SWSAVE2_W, PRM_SWSAVE2_S); }
     
         Act_c();
-        int CreateHeap();
+        BOOL CreateHeap();
         int Create();
         s32 _create();
         BOOL Delete();

@@ -15,29 +15,29 @@
 namespace daObjSwhammer {
     namespace {
         struct Attr_c {
-            /* 0x00 */ float m00;
-            /* 0x04 */ float m04;
-            /* 0x08 */ float m08;
-            /* 0x0C */ float m0C;
-            /* 0x10 */ float m10;
-            /* 0x14 */ float m14;
+            /* 0x00 */ float mVSpring;
+            /* 0x04 */ float mIntVSpeedDecay;
+            /* 0x08 */ float mExtVSpeedDecay;
+            /* 0x0C */ float mVibMag0Mult;
+            /* 0x10 */ float mVibSpring;
+            /* 0x14 */ float mAngleSpeedDecay;
             /* 0x18 */ short mCrushDuration;
-            /* 0x1C */ float m1C;
-            /* 0x20 */ float m20;
-            /* 0x24 */ float m24;
+            /* 0x1C */ float mUncrushSpeed0;
+            /* 0x20 */ float mUncrushSpring;
+            /* 0x24 */ float mUncrushSpeedDecay;
         };
 
         static const Attr_c L_attr = {
-            0.8f,
-            0.55f,
-            0.55f,
-            1.0f,
-            0.99f,
-            0.18f,
-            18,
-            0.0f,
-            0.8f,
-            0.45f
+            /* mVSpring           */ 0.8f,
+            /* mIntVSpeedDecay    */ 0.55f,
+            /* mExtVSpeedDecay    */ 0.55f,
+            /* mVibMag0Mult       */ 1.0f,
+            /* mVibSpring         */ 0.99f,
+            /* mAngleSpeedDecay   */ 0.18f,
+            /* mCrushDuration     */ 18,
+            /* mUncrushSpeed0     */ 0.0f,
+            /* mUncrushSpring     */ 0.8f,
+            /* mUncrushSpeedDecay */ 0.45f
         };
 
         inline const Attr_c & attr() { return L_attr; }
@@ -115,11 +115,11 @@ daObjSwhammer::Act_c::Act_c() {
 }
 
 /* 000004B0-0000058C       .text CreateHeap__Q213daObjSwhammer5Act_cFv */
-int daObjSwhammer::Act_c::CreateHeap() {
-    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, MHMRSW_BDL_MHMRSW);
+BOOL daObjSwhammer::Act_c::CreateHeap() {
+    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, MHMRSW_BDL_MHMRSW));
     JUT_ASSERT(0x18b, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-    if (mpModel != NULL) {
+    if (mpModel) {
         modelData->getJointNodePointer(1)->setCallBack(jnodeCB);
         mpModel->setUserArea((u32) this);
     }
@@ -231,14 +231,14 @@ void daObjSwhammer::Act_c::set_damage() {
 
 /* 00000A58-00000ABC       .text vib_start__Q213daObjSwhammer5Act_cFsf */
 void daObjSwhammer::Act_c::vib_start(short dir, float mag) {
-    mAngleSpeedZ = mag * attr().m0C * cM_scos(dir);
-    mAngleSpeedX = mag * attr().m0C * cM_ssin(dir);
+    mAngleSpeedZ = mag * attr().mVibMag0Mult * cM_scos(dir);
+    mAngleSpeedX = mag * attr().mVibMag0Mult * cM_ssin(dir);
 }
 
 /* 00000ABC-00000B34       .text vib_proc__Q213daObjSwhammer5Act_cFv */
 void daObjSwhammer::Act_c::vib_proc() {
-    float angleAccelX = -(mAngleX * attr().m10) - mAngleSpeedX * attr().m14;
-    float angleAccelZ = -(mAngleZ * attr().m10) - mAngleSpeedZ * attr().m14;
+    float angleAccelX = -(mAngleX * attr().mVibSpring) - mAngleSpeedX * attr().mAngleSpeedDecay;
+    float angleAccelZ = -(mAngleZ * attr().mVibSpring) - mAngleSpeedZ * attr().mAngleSpeedDecay;
 
     mAngleSpeedZ += angleAccelZ;
     mAngleSpeedX += angleAccelX;
@@ -264,10 +264,10 @@ void daObjSwhammer::Act_c::crush_proc() {
             return;
         }
         mCrushState = 0;
-        mScaleYSpeed = attr().m1C;
+        mScaleYSpeed = attr().mUncrushSpeed0;
         return;
     }
-    mScaleYSpeed += -((mScaleY - 1.0f) * attr().m20) - mScaleYSpeed * attr().m24;
+    mScaleYSpeed += -((mScaleY - 1.0f) * attr().mUncrushSpring) - mScaleYSpeed * attr().mUncrushSpeedDecay;
     mScaleY += mScaleYSpeed;
 }
 
@@ -293,9 +293,11 @@ void daObjSwhammer::Act_c::eff_crush() {
 /* 00000DB8-00000E74       .text calc_top_pos__Q213daObjSwhammer5Act_cFv */
 void daObjSwhammer::Act_c::calc_top_pos() {
     float diff = mCurHFrac - mTargetHFrac;
-    float decay = mCurHFrac > 0.0f && mCurHFrac < 1.0f ? attr().m04 : attr().m08;
+    float decay = mCurHFrac > 0.0f && mCurHFrac < 1.0f
+        ? attr().mIntVSpeedDecay
+        : attr().mExtVSpeedDecay;
 
-    mVSpeed -= diff * attr().m00;
+    mVSpeed -= diff * attr().mVSpring;
     mVSpeed -= mVSpeed * decay;
     mCurHFrac += mVSpeed;
     mCurHFrac = cLib_maxLimit(mCurHFrac, 1.0f);
@@ -305,19 +307,19 @@ void daObjSwhammer::Act_c::calc_top_pos() {
 /* 00000E74-00000F94       .text jnodeCB__Q213daObjSwhammer5Act_cFP7J3DNodei */
 BOOL daObjSwhammer::Act_c::jnodeCB(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
-        J3DJoint* joint = (J3DJoint*)node;
         J3DModel* model = j3dSys.getModel();
-        Act_c *i_this = reinterpret_cast<Act_c*>(model->getUserArea());
-
+        daObjSwhammer::Act_c *i_this = (daObjSwhammer::Act_c*) model->getUserArea();
+        J3DJoint* joint = static_cast<J3DJoint*>(node);
         s32 jntNo = joint->getJntNo();
+
         mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
         mDoMtx_stack_c::transM(0.0f, (1.0f - i_this->mScaleY) * 20.0f, 0.0f);
         mDoMtx_stack_c::scaleM(1.0f, i_this->mScaleY, 1.0f);
         mDoMtx_stack_c::transM(0.0f, i_this->mTopPos, 0.0f);
 
-        cXyz local_28(i_this->mAngleX, 1.0f, i_this->mAngleZ);
+        cXyz tmp(i_this->mAngleX, 1.0f, i_this->mAngleZ);
         Quaternion quat;
-        daObj::quat_rotBaseY2(&quat, local_28);
+        daObj::quat_rotBaseY2(&quat, tmp);
         mDoMtx_stack_c::transM(0.0f, -20.0f, 0.0f);
         mDoMtx_stack_c::quatM(&quat);
         mDoMtx_stack_c::transM(0.0f, 20.0f, 0.0f);
