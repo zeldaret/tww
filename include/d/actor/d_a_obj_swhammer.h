@@ -10,13 +10,20 @@ class J3DNode;
 namespace daObjSwhammer {
     class Act_c : public dBgS_MoveBgActor {
     public:
-        BOOL is_switch() const {
-            return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave());
-        }
-        void off_switch2() const {}
-        void on_switch() const {}
-        s32 prm_get_swSave() const { return -1; }
-        void prm_get_swSave2() const {}
+        enum Prm_e {
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x08,
+
+            PRM_SWSAVE2_W = 0x08,
+            PRM_SWSAVE2_S = 0,
+        };
+
+        BOOL is_switch() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
+        void off_switch2() const { fopAcM_offSwitch(const_cast<Act_c*>(this), prm_get_swSave2()); }
+        void on_switch() const { fopAcM_onSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
+        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+
+        s32 prm_get_swSave2() const { return daObj::PrmAbstract(this, PRM_SWSAVE2_W, PRM_SWSAVE2_S); }
     
         Act_c();
         int CreateHeap();
@@ -45,6 +52,8 @@ namespace daObjSwhammer {
         BOOL Execute(Mtx**);
         BOOL Draw();
 
+        virtual ~Act_c() {};
+
         static int M_damage;
         static short M_damage_dir;
         static Mtx M_tmp_mtx;
@@ -61,25 +70,23 @@ namespace daObjSwhammer {
         /* 0x440 */ dCcD_Cyl mCylTg;
         /* 0x570 */ dCcD_Stts mSttsTg;
         /* 0x5AC */ int mMode;
-        /* 0x5B0 */ short m5B0;
-        /* 0x5B2 */ u8 m5B2;
-        /* 0x5B4 */ float m5B4;
-        /* 0x5B8 */ float m5B8;
-        /* 0x5BC */ float m5BC;
-        /* 0x5C0 */ float m5C0;
-        /* 0x5C4 */ float m5C4;
-        /* 0x5C8 */ float m5C8;
-        /* 0x5CC */ float m5CC;
-        /* 0x5D0 */ float m5D0;
-        /* 0x5D4 */ float m5D4;
+        /* 0x5B0 */ short mCrushTimer;
+        /* 0x5B2 */ u8 mCrushState;
+        /* 0x5B4 */ float mScaleYSpeed;
+        /* 0x5B8 */ float mScaleY;
+        /* 0x5BC */ float mAngleZ;
+        /* 0x5C0 */ float mAngleX;
+        /* 0x5C4 */ float mAngleSpeedZ;
+        /* 0x5C8 */ float mAngleSpeedX;
+        /* 0x5CC */ float mTargetHFrac;
+        /* 0x5D0 */ float mCurHFrac;
+        /* 0x5D4 */ float mVSpeed;
         /* 0x5D8 */ float mTopPos;
-        /* 0x5DC */ dPa_followEcallBack m5DC; // TODO verify
-        /* 0x5F0 */ u8 m5F0[0x5FC - 0x5F0];
+        /* 0x5DC */ dPa_smokeEcallBack mSmokeCb;
         /* 0x5FC */ bool m5FC;
-
     }; /* Size: 0x600 */
 
-    // TODO STATIC_ASSERT(sizeof(Act_c) == 0x600);
+    STATIC_ASSERT(sizeof(Act_c) == 0x600);
 };
 
 #endif /* D_A_OBJ_SWHAMMER_H */

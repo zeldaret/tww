@@ -80,7 +80,7 @@ public:
 
     void offWindOff() {}
     void onWindOff() {}
-    void setColor(const GXColor&) {}
+    void setColor(const GXColor& color) { field_0x16 = color; }
 
     /* 0x14 */ s8 field_0x14;
     /* 0x15 */ u8 field_0x15;
