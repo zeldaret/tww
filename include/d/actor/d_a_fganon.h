@@ -11,15 +11,8 @@ class mDoExt_McaMorf;
 class mDoExt_brkAnm;
 class mDoExt_btkAnm;
 
-class fganon_class : public fopAc_ac_c {
+class fganon_class : public fopEn_enemy_c {
 public:
-    /* 0x290 */ f32 m290;
-    /* 0x294 */ f32 m294;
-    /* 0x298 */ f32 m298;
-    /* 0x29C */ f32 m29C;
-    /* 0x2A0 */ f32 m2A0;
-    /* 0x2A4 */ f32 f2A4;
-    /* 0x2A8 */ f32 f2A8;
     /* 0x2AC */ request_of_phase_process_class mPhs1;
     /* 0x2B4 */ request_of_phase_process_class mPhs2;
     /* 0x2BC */ u8 m2BC;
@@ -42,11 +35,11 @@ public:
     /* 0x39A */ s16 m39A;
     /* 0x39C */ f32 m39C;
     /* 0x3A0 */ f32 m3A0;
-    /* 0x3A4 */ s16 m3A4;
-    /* 0x3A6 */ s16 m3A6;
-    /* 0x3A8 */ s16 m3A8;
-    /* 0x3AA */ s16 m3AA;
-    /* 0x3AC */ s16 m3AC;
+    /* 0x3A4 */ s16 m3A4[5];
+    /* 0x3A6 */ //s16 m3A6;
+    /* 0x3A8 */ //s16 m3A8;
+    /* 0x3AA */ //s16 m3AA;
+    /* 0x3AC */ //s16 m3AC;
     /* 0x3AE */ s16 m3AE;
     /* 0x3B0 */ f32 m3B0;
     /* 0x3B4 */ s16 m3B4;
@@ -56,13 +49,13 @@ public:
     /* 0x3BC */ f32 m3BC;
     /* 0x3C0 */ u8 m3C0[0x3C4 - 0x3C0];
     /* 0x3C4 */ JPABaseEmitter* mEmitters1[2];
-    /* 0x3CC */ JPABaseEmitter* mEmitters2[4];
+    /* 0x3CC */ JPABaseEmitter* mEmitters2[2];
+    /* 0x3D4 */ JPABaseEmitter* mEmitters3[2];
     /* 0x3DC */ u32 m3DC;
     /* 0x3E0 */ cXyz m3E0;
     /* 0x3EC */ u8 m3EC[0x404 - 0x3EC];
-    /* 0x404 */ u8 m404;
-    /* 0x405 */ u8 m405[0x408 - 0x405];
-    /* 0x408 */ u8 m408;
+    /* 0x404 */ f32 m404;
+    /* 0x408 */ s8 m408;
     /* 0x409 */ u8 m409;
     /* 0x40A */ u8 m40A[0x40C - 0x40A];
     /* 0x40C */ dCcD_Sph mBallTgSph;
@@ -70,25 +63,29 @@ public:
     /* 0x664 */ cXyz m664;
     /* 0x670 */ u8 m670;
     /* 0x671 */ s8 m671;
-    /* 0x672 */ u8 m672[0x674 - 0x672];
+    /* 0x672 */ u8 m672;
+    /* 0x673 */ s8 m673;
     /* 0x674 */ J3DModel* EnergySphereModel;
     /* 0x678 */ mDoExt_btkAnm* mpBtkAnm;
     /* 0x67C */ mDoExt_brkAnm* mpBrkAnm3;
-    /* 0x680 */ u8 m680[0x684 - 0x680];
+    /* 0x680 */ f32 m680;
     /* 0x684 */ s8 m684;
     /* 0x685 */ s8 m685;
     /* 0x686 */ s8 m686;
-    /* 0x687 */ u8 m687;
-    /* 0x688 */ u8 m688;
-    /* 0x689 */ u8 m689;
+    /* 0x687 */ s8 m687;
+    /* 0x688 */ s8 m688;
+    /* 0x689 */ s8 m689;
     /* 0x68A */ s8 m68A;
     /* 0x68B */ s8 m68B;
     /* 0x68C */ s8 m68C;
-    /* 0x68D */ bool mbIsMaterialized; // Flag for PG's appearance state, set to `FALSE` when he disappears, `TRUE` when he appears
+    /* 0x68D */ s8 mbIsMaterialized; // Flag for PG's appearance state, set to `FALSE` when he disappears, `TRUE` when he appears
     /* 0x68E */ s8 m68E;
     /* 0x68F */ u8 m68F;
     /* 0x690 */ u8 m690;
-    /* 0x691 */ u8 m691[0x6A2 - 0x691];
+    /* 0x691 */ u8 m691[0x694 - 0x691];
+    /* 0x694 */ f32 m694;
+    /* 0x696 */ u8 m698[0x6A0 - 0x698]; 
+    /* 0x6A0 */ s16 m6A0;
     /* 0x6A2 */ s16 m6A2;
     /* 0x6A4 */ u8 m6A4[0x6A6 - 0x6A4];
     /* 0x6A6 */ s16 m6A6;
@@ -97,7 +94,7 @@ public:
     /* 0x6AD */ u8 m6AD[0x6B4 - 0x6AD];
     /* 0x6B4 */ fpc_ProcID mCapeID;
     /* 0x6B8 */ dBgS_AcchCir mAcchCir;
-    /* 0x6F8 */ dBgS_Acch mAcch;
+    /* 0x6F8 */ dBgS_ObjAcch mAcch;
     /* 0x8BC */ dCcD_Stts mStts;
     /* 0x8F8 */ dCcD_Cyl mCyl;
     /* 0xA28 */ dCcD_Sph mWeponSph;
