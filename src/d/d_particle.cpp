@@ -280,7 +280,7 @@ void dPa_followEcallBack::end() {
 dPa_smokeEcallBack::dPa_smokeEcallBack(u8 param_1) {
     /* Nonmatching */
     GXColor local_18 = {0xa0, 0xa0, 0x80, 0xff};
-    field_0x16 = local_18;
+    mColor = local_18;
     mRateOff = param_1;
     field_0x12 = 0;
     mTevstr = NULL;
@@ -292,7 +292,7 @@ dPa_smokeEcallBack::dPa_smokeEcallBack(u8 param_1) {
 dPa_smokeEcallBack::dPa_smokeEcallBack(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     /* Nonmatching */
     GXColor local_28 = {0xa0, 0xa0, 0x80, 0xff};
-    field_0x16 = local_28;
+    mColor = local_28;
     mRateOff = param_1;
     field_0x12 = param_2;
     field_0x13 = param_4;
@@ -305,7 +305,7 @@ dPa_smokeEcallBack::dPa_smokeEcallBack(u8 param_1, u8 param_2, u8 param_3, u8 pa
 
 /* 8007B558-8007B5E8       .text __ct__18dPa_smokeEcallBackFRC8_GXColorP12dKy_tevstr_cUc */
 dPa_smokeEcallBack::dPa_smokeEcallBack(const GXColor& param_1, dKy_tevstr_c* param_2, u8 param_3) {
-    field_0x16 = param_1;
+    mColor = param_1;
     mTevstr = param_2;
     mRateOff = param_3;
     field_0x12 = 0;
@@ -389,7 +389,7 @@ void smokeEcallBack(JPABaseEmitter* emtr, dKy_tevstr_c* tevStr, s8, GXColor colo
 
 /* 8007BB44-8007BB80       .text draw__18dPa_smokeEcallBackFP14JPABaseEmitter */
 void dPa_smokeEcallBack::draw(JPABaseEmitter* emtr) {
-    smokeEcallBack(emtr, mTevstr, field_0x14, field_0x16);
+    smokeEcallBack(emtr, mTevstr, field_0x14, mColor);
 }
 
 /* 8007BB80-8007BBD8       .text end__18dPa_smokeEcallBackFv */

@@ -1487,7 +1487,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_majyuu_door"),
     ActorRel(NonMatching, "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
-    ActorRel(NonMatching, "d_a_obj_swhammer"),
+    ActorRel(Equivalent,  "d_a_obj_swhammer"), # weak func order
     ActorRel(NonMatching, "d_a_obj_swheavy"),
     ActorRel(NonMatching, "d_a_obj_swlight"),
     ActorRel(NonMatching, "d_a_oq"),
