@@ -185,12 +185,9 @@ void dComIfG_play_c::itemInit() {
 int dComIfG_play_c::getLayerNo(int i_roomNo) {
     int stageLayer = dComIfGp_getStartStageLayer();
     if (stageLayer < 0) {
-        int layer = dKy_getdaytime_hour();
-        if (dKy_checkEventNightStop()) {
-            layer = 1;
-        } else {
-            layer = (layer >= 6 && layer < 18) ? 0 : 1;
-        }
+        int hour = dKy_getdaytime_hour();
+        int layer = dKy_checkEventNightStop() ? 1 :
+                    hour >= 6 && hour < 18 ? 0 : 1;
 
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
             if (i_roomNo == dIsleRoom_OutsetIsland_e) {
