@@ -679,7 +679,7 @@ s16 mCaptureCenterY = 180;
 GXColor mCaptureMonoColor0 = { 0x00, 0x00, 0x00, 0x00 };
 GXColor mCaptureMonoColor1 = { 0xFF, 0xFF, 0xFF, 0xFF };
 u32 mCaptureThreadStackSize = 0x2000;
-u32 mCaptureThreadPriority = 30;
+s32 mCaptureThreadPriority = 30;
 
 /* 80009BBC-80009BE0       .text mCaptureAlarmHandler__FP7OSAlarmP9OSContext */
 void mCaptureAlarmHandler(OSAlarm*, OSContext*) {
