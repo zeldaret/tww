@@ -476,7 +476,7 @@ void daObjBarrel::Act_c::eff_break() {
     cXyz pos(current.pos.x, current.pos.y + 50.0f, current.pos.z);
     JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &pos, NULL, NULL, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     if (emitter) {
-        static const JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
+        static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
         emitter->setEmitterScale(em_scl);
     }
     daObjEff::Act_c::make_barrel_smoke(&pos);

@@ -3267,16 +3267,10 @@ void daNpc_Md_c::emitterTrace(JPABaseEmitter* emitter, MtxP mtx, csXyz* angle) {
     if (emitter == NULL) {
         return;
     }
-    JGeometry::TVec3<f32> pos;
-    pos.x = mtx[0][3];
-    pos.y = mtx[1][3];
-    pos.z = mtx[2][3];
+    JGeometry::TVec3<f32> pos(mtx[0][3], mtx[1][3], mtx[2][3]);
     emitter->setGlobalTranslation(pos);
     if (angle) {
-        JGeometry::TVec3<s16> rot;
-        rot.x = angle->x;
-        rot.y = angle->y;
-        rot.z = angle->z;
+        JGeometry::TVec3<s16> rot(angle->x, angle->y, angle->z);
         emitter->setGlobalRotation(rot);
     }
 }
@@ -3342,10 +3336,7 @@ static BOOL daNpc_Md_IsDelete(daNpc_Md_c* i_this) {
 /* 0001114C-0001119C       .text execute__26daNpc_Md_followEcallBack_cFP14JPABaseEmitter */
 void daNpc_Md_followEcallBack_c::execute(JPABaseEmitter* emitter) {
     emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
-    JGeometry::TVec3<s16> rot;
-    rot.x = mAngle.x;
-    rot.y = mAngle.y;
-    rot.z = mAngle.z;
+    JGeometry::TVec3<s16> rot(mAngle.x, mAngle.y, mAngle.z);
     emitter->setGlobalRotation(rot);
 }
 

@@ -129,18 +129,21 @@ BOOL daSteamTag_c::execute() {
         mCreateTimer--;
         if (mCreateTimer == 0) {
             if (createEmitter()) {
+                // TODO: fakematch? debug map indicates TVec3(s16, s16, s16) constructor was used here, but the codegen doesn't match
+                // JGeometry::TVec3<s16> angle(current.angle.x, current.angle.y, current.angle.z);
                 JGeometry::TVec3<s16> angle;
                 angle.x = current.angle.x;
                 angle.y = current.angle.y;
                 angle.z = current.angle.z;
-                mpEmitter->setGlobalTranslation(current.pos);
+                JGeometry::TVec3<f32> pos(current.pos.x, current.pos.y, current.pos.z);
+                mpEmitter->setGlobalTranslation(pos);
                 mpEmitter->setGlobalRotation(angle);
                 mpEmitter->setGlobalAlpha(getData()->steam_alpha);
                 mpEmitter->playCreateParticle();
                 mEmitTimer = getData()->emit_time_min + cM_rndF(getData()->emit_time_range);
             }
             else {
-                mCreateTimer = 0x1e;
+                mCreateTimer = 30;
             }
         }
     }

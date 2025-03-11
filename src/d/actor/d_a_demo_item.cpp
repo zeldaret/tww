@@ -332,7 +332,9 @@ void daDitem_c::set_effect() {
             continue;
         }
         JGeometry::TVec3<s16> rot;
-        rot.set(angleX, angleY, 0);
+        rot.x = angleX;
+        rot.y = angleY;
+        rot.z = 0;
         mpEmitters[i]->playCreateParticle();
         JGeometry::TVec3<f32> pos;
         pos.set(current.pos);

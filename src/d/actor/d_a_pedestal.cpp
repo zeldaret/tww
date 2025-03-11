@@ -438,12 +438,7 @@ void daPds_infiniteEcallBack_c::execute(JPABaseEmitter* emitter) {
     }
 
     if (mpAngle != NULL) {
-        JGeometry::TVec3<s16> rot;
-
-        rot.x = mpAngle->x;
-        rot.y = mpAngle->y;
-        rot.z = mpAngle->z;
-
+        JGeometry::TVec3<s16> rot(mpAngle->x, mpAngle->y, mpAngle->z);
         emitter->setGlobalRotation(rot);
     }
 }

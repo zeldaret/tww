@@ -1,7 +1,7 @@
 #ifndef JPADYNAMICSBLOCK_H
 #define JPADYNAMICSBLOCK_H
 
-#include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JGeometry.h"
 
 struct JPADynamicsBlockData {
     /* 0x00 */ u32 mFlag;
@@ -76,10 +76,10 @@ public:
     virtual ~JPADynamicsBlockArc() {}
     virtual u32 getDataFlag() { return mpData->mFlag; }
     virtual u32 getUseKeyFlag() { return 0; }
-    virtual void getEmitterScl(JGeometry::TVec3<f32>& out) { out = mpData->mEmitterScl; }
-    virtual void getEmitterRot(JGeometry::TVec3<s16>& out) { out = mpData->mEmitterRot; }
-    virtual void getEmitterTrs(JGeometry::TVec3<f32>& out) { out = mpData->mEmitterTrs; }
-    virtual void getEmitterDir(JGeometry::TVec3<f32>& out) { out = mpData->mEmitterDir; }
+    virtual void getEmitterScl(JGeometry::TVec3<f32>& out) { out.set(mpData->mEmitterScl.x, mpData->mEmitterScl.y, mpData->mEmitterScl.z); }
+    virtual void getEmitterRot(JGeometry::TVec3<s16>& out) { out.set(mpData->mEmitterRot.x, mpData->mEmitterRot.y, mpData->mEmitterRot.z); }
+    virtual void getEmitterTrs(JGeometry::TVec3<f32>& out) { out.set(mpData->mEmitterTrs.x, mpData->mEmitterTrs.y, mpData->mEmitterTrs.z); }
+    virtual void getEmitterDir(JGeometry::TVec3<f32>& out) { out.set(mpData->mEmitterDir.x, mpData->mEmitterDir.y, mpData->mEmitterDir.z); }
     virtual u32 getVolumeType() { return (mpData->mFlag >> 8) & 0x07; }
     virtual u32 getVolumeSize() { return mpData->mVolumeSize; }
     virtual f32 getVolumeSweep() { return mpData->mVolumeSweep; }
