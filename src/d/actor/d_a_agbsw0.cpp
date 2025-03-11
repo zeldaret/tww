@@ -1255,7 +1255,7 @@ BOOL daAgbsw0_c::ExeSubR() {
     if(mDoGaC_GbaLink() && mDoGac_SendStatusCheck(5)) {
         if(sw0 != 0xFF && fopAcM_isSwitch(this, sw0)) {
             s32 itemNo = getParamNo();
-            if(itemNo < 0 || 0x1E < itemNo) {
+            if(itemNo < 0 || dItem_TRIPLE_HEART_e < itemNo) {
                 itemNo = 0;
             }
 
