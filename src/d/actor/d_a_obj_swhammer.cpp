@@ -307,9 +307,9 @@ void daObjSwhammer::Act_c::calc_top_pos() {
 /* 00000E74-00000F94       .text jnodeCB__Q213daObjSwhammer5Act_cFP7J3DNodei */
 BOOL daObjSwhammer::Act_c::jnodeCB(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
-        J3DModel* model = j3dSys.getModel();
+        J3DModel* model = (J3DModel*) j3dSys.getModel();
         daObjSwhammer::Act_c *i_this = (daObjSwhammer::Act_c*) model->getUserArea();
-        J3DJoint* joint = static_cast<J3DJoint*>(node);
+        J3DJoint* joint = (J3DJoint*) node;
         s32 jntNo = joint->getJntNo();
 
         mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
