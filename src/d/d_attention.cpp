@@ -59,8 +59,8 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
     initList(0xFFFFFFFF);
     mFlagMask = 0;
     field_0x01c = -1;
-    field_0x019 = 0;
-    mLockOnState = 0;
+    field_0x019 = LockState_NONE;
+    mLockOnState = LockState_NONE;
     field_0x01a = 0;
     field_0x01b = 0;
     mLockOnTargetBsPcID = fpcM_ERROR_PROCESS_ID_e;
@@ -703,7 +703,7 @@ void dAttention_c::runDrawProc() {
     }
 
     int result;
-    if (this->mLockOnState == 1) {
+    if (this->mLockOnState == LockState_LOCK) {
         result = this->draw[0].anm->play(NULL, 0, 0);
         if (result) {
             this->draw[0].setAnm(0x19, -1, 2);
@@ -764,7 +764,7 @@ void dAttention_c::judgementTriggerProc() {
     bool haveTarget = chaseAttention();
     if (haveTarget) {
         this->setFlag(8);
-        mLockOnState = 1;
+        mLockOnState = LockState_LOCK;
     }
 }
 
@@ -774,7 +774,7 @@ int dAttention_c::judgementLostCheck() {
     if (haveTarget) {
         return false;
     }
-    mLockOnState = 0;
+    mLockOnState = LockState_NONE;
     this->setFlag(0x10);
     freeAttention();
     this->setFlag(0x40);
@@ -787,14 +787,14 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
     fopAc_ac_c *actor;
   
     switch(mLockOnState) {
-        case 0:
+        case LockState_NONE:
             mLockOnTargetBsPcID = -1;
             stockAttention(interactMask);
             if (this->field_0x01a == 1) {
                 judgementTriggerProc();
             }
             break;
-        case 1:
+        case LockState_LOCK:
             target = LockonTargetPId(0);
             mLockOnTargetBsPcID = target;
             if (this->field_0x01a == 1) {
@@ -804,23 +804,23 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
                     mLockOnNum > 1) {
                     this->setFlag(8);
                 } else {
-                    mLockOnState = 2;
+                    mLockOnState = LockState_RELEASE;
                     this->setFlag(0x10);
                 }
             } else {
                 judgementLostCheck();
             }
             break;
-        case 2:
+        case LockState_RELEASE:
             this->setFlag(0x40);
             if (this->field_0x01a == 1) {
-                mLockOnState = 0;
+                mLockOnState = LockState_NONE;
                 judgementTriggerProc();
             }
             else {
                 actor = LockonTarget(0);
                 if (actor == NULL || !this->chkFlag(0x40000000)) {
-                    mLockOnState = 0;
+                    mLockOnState = LockState_NONE;
                     freeAttention();
                 }
             }
@@ -831,39 +831,39 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
 /* 8009F0A4-8009F1D4       .text judgementStatusHd__12dAttention_cFUl */
 void dAttention_c::judgementStatusHd(u32 interactMask) {
     switch(mLockOnState) {
-        case 0:
+        case LockState_NONE:
             mLockOnTargetBsPcID = -1;
             stockAttention(interactMask);
             if (this->field_0x01a == 1) {
                 judgementTriggerProc();
             }
             break;
-        case 1: {
+        case LockState_LOCK: {
             fpc_ProcID target = LockonTargetPId(0);
             mLockOnTargetBsPcID = target;
             s32 result = judgementLostCheck();
             if (result == 0 && this->field_0x01a == 0) {
-                mLockOnState = 2;
+                mLockOnState = LockState_RELEASE;
                 this->setFlag(0x10);
             }
             break;
         }
-        case 2:
+        case LockState_RELEASE:
             this->setFlag(0x40);
             if (this->field_0x01a == 1) {
                 fopAc_ac_c *actor = nextAttention(interactMask);
                 if (actor != NULL) {
                     this->setFlag(8);
-                    mLockOnState = 1;
+                    mLockOnState = LockState_LOCK;
                 } else {
-                    mLockOnState = 0;
+                    mLockOnState = LockState_NONE;
                     freeAttention();
                 }
             }
             else {
                 fopAc_ac_c *actor = LockonTarget(0);
                 if (actor == NULL || !this->chkFlag(0x40000000)) {
-                    mLockOnState = 0;
+                    mLockOnState = LockState_NONE;
                     freeAttention();
                 }
             }
@@ -882,7 +882,7 @@ bool dAttention_c::Run(u32 interactMask) {
     this->runDebugDisp0();
     this->clrFlag(0x7ffffff);
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
-        mLockOnState = 0;
+        mLockOnState = LockState_NONE;
         this->field_0x01a = 0;
         this->field_0x01b = 0;
         this->clrFlag(0x20000000);
@@ -919,7 +919,7 @@ bool dAttention_c::Run(u32 interactMask) {
     this->runSoundProc();
     this->runDrawProc();
     this->runDebugDisp();
-    if (mLockOnState == 1) {
+    if (mLockOnState == LockState_LOCK) {
         g_dComIfG_gameInfo.play.mCameraInfo[mPlayerNo].mCameraAttentionStatus |= 1;
     } else {
         g_dComIfG_gameInfo.play.mCameraInfo[mPlayerNo].mCameraAttentionStatus &= ~1;
@@ -1085,7 +1085,7 @@ fopAc_ac_c* dAttention_c::ActionTarget(s32 idx) {
 
 /* 8009FA10-8009FA64       .text LockonTruth__12dAttention_cFv */
 bool dAttention_c::LockonTruth() {
-    return mLockOnState == 1 || (mLockOnState == 2 && LockonTarget(0));
+    return mLockOnState == LockState_LOCK || (mLockOnState == LockState_RELEASE && LockonTarget(0));
 }
 
 /* 8009FA64-8009FA98       .text getActor__10dAttList_cFv */
