@@ -4,10 +4,31 @@
 //
 
 #include "d/actor/d_a_obj_swheavy.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/actor/d_a_player.h"
+
+const char daObjSwheavy::Act_c::M_arcname[] = "Hhbot";
+const daObjSwheavy::Act_c::Attr_c daObjSwheavy::Act_c::M_attr[5] = {
+    {
+
+    },
+    {
+
+    },
+    {
+
+    },
+    {
+
+    },
+    {
+
+    },
+};
 
 /* 00000078-0000009C       .text solidHeapCB__Q212daObjSwheavy5Act_cFP10fopAc_ac_c */
-void daObjSwheavy::Act_c::solidHeapCB(fopAc_ac_c*) {
+BOOL daObjSwheavy::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
     /* Nonmatching */
 }
 
@@ -18,7 +39,69 @@ void daObjSwheavy::Act_c::create_heap() {
 
 /* 0000032C-00000628       .text _create__Q212daObjSwheavy5Act_cFv */
 s32 daObjSwheavy::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjSwheavy::Act_c);
+    
+    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        mType = prm_get_type();
+        bool b = true;
+        if (!cLib_checkBit(attr().m04, 0x4)) {
+            if (is_switch()) {
+                b = false;
+            }
+        }
+        scale.z = 1.5f;
+        scale.x = 1.5f;
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::ZXYrotM(shape_angle);
+        mDoMtx_stack_c::scaleM(scale);
+        mDoMtx_copy(mDoMtx_stack_c::get(), m2A8);
+        if (!b) {
+            mDoMtx_stack_c::get()[1][3] += -35.5f;
+        }
+        mDoMtx_copy(mDoMtx_stack_c::get(), m2D8);
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x2000)) {
+            dComIfG_Bgsp()->Regist(mpBgW1, this);
+            mpBgW1->SetCrrFunc(NULL);
+            dComIfG_Bgsp()->Regist(mpBgW2, this);
+            mpBgW2->SetCrrFunc(NULL);
+            mpBgW2->SetRideCallback(rideCB);
+            fopAcM_SetMtx(this, mpModel1->getBaseTRMtx());
+            init_mtx();
+            fopAcM_setCullSizeBox(this, -97.5f, -2.0f, -97.5f, 97.5f, 55.0f, 97.5f);
+            m310 = false;
+            m311 = 0;
+            m312 = 0;
+            m314 = false;
+            m315 = false;
+            m316 = 0;
+            m318 = 0;
+            m31A = false;
+            m324 = 0.0f;
+            m330 = 0;
+            m334 = 0.0f;
+            if (cLib_checkBit(attr().m04, 0x4) || !is_switch()) {
+                m31C = 1.0f;
+                m320 = 1.0f;
+                m328 = 0.0f;
+                m32C = 1.0f;
+                m338 = 1.0f;
+                m33C = 0.0f;
+                mode_upper_init();
+            } else {
+                m31C = 0.0f;
+                m320 = 0.0f;
+                m328 = -35.5f;
+                m32C = 0.0f;
+                m338 = 0.0f;
+                m33C = -35.5f;
+                mode_lower_init();
+            }
+            return cPhs_COMPLEATE_e;
+        } else {
+            return cPhs_ERROR_e;
+        }
+    }
 }
 
 /* 00000628-000006EC       .text _delete__Q212daObjSwheavy5Act_cFv */
@@ -33,42 +116,144 @@ void daObjSwheavy::Act_c::set_mtx() {
 
 /* 000007F8-00000850       .text init_mtx__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::init_mtx() {
-    /* Nonmatching */
+    mpModel1->setBaseScale(scale);
+    mpModel2->setBaseScale(scale);
+    set_mtx();
 }
 
 /* 00000850-00000884       .text rideCB__Q212daObjSwheavy5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void daObjSwheavy::Act_c::rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+void daObjSwheavy::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+    daObjSwheavy::Act_c *i_this = (daObjSwheavy::Act_c*)i_ac;
+    if (!fopAcM_CheckStatus(i_pt, fopAcStts_FREEZE_e)) {
+        return;
+    }
+    i_this->m310 = true;
+    if (fopAcM_GetProfName(i_pt) != PROC_PLAYER) {
+        return;
+    }
+    daPy_py_c *py = (daPy_py_c*)i_pt;
+    if (!py->checkEquipHeavyBoots()) {
+        return;
+    }
+    i_this->m315 = true;
 }
 
 /* 00000884-00000998       .text calc_top_pos__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::calc_top_pos() {
-    /* Nonmatching */
+    float decay = attr().m0C;
+    m324 -= (m320 - m31C) * attr().m08;
+    m324 -= m324 * decay;
+    m320 += m324;
+    m328 = (1.0f - m320) * -35.5f;
+    m328 = cLib_minMaxLimit(m328, -36.5f, 1.0f);
+
+    if (m330 > 0) {
+        if (--m330 == 0) {
+            m32C = m334;
+        }
+    }
+    if (mMode == 0) {
+        m338 = m320;
+    } else {
+        m338 = m32C;
+    }
+    m33C = (1.0f - m338) * -35.5f;
+    if (m33C < m328) {
+        m33C = m328;
+    }
 }
 
 /* 00000998-000009A4       .text top_bg_aim_req__Q212daObjSwheavy5Act_cFfs */
-void daObjSwheavy::Act_c::top_bg_aim_req(float, short) {
-    /* Nonmatching */
+void daObjSwheavy::Act_c::top_bg_aim_req(float param_1, short param_2) {
+    m334 = param_1;
+    m330 = param_2;
 }
 
 /* 000009A4-00000AF8       .text set_push_flag__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::set_push_flag() {
     /* Nonmatching */
+    if (m314) {
+        if (m310) {
+            m312 = attr().m16;
+        } else {
+            if (--m312 <= 0) {
+                m314 = false;
+            }
+        }
+    } else {
+        if (m310) {
+            if (++m312 >= attr().m16) {
+                m314 = true;
+            }
+        } else {
+            m312 = 0;
+        }
+    }
+
+    if (m31A) {
+        if (m315) {
+            m318 = attr().m18;
+        } else {
+            if (--m318 <= 0) {
+                m31A = false;
+            }
+        }
+    } else {
+        if (m315) {
+            if (++m318 >= attr().m18) {
+                m31A = true;
+            }
+        } else {
+            m318 = 0;
+        }
+    }    
 }
 
 /* 00000AF8-00000B14       .text mode_upper_init__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_upper_init() {
-    /* Nonmatching */
+    mMode = 0;
+    m31C = 1.0f;
+    m31B = 0;
 }
 
 /* 00000B14-00000C30       .text mode_upper__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_upper() {
     /* Nonmatching */
+
+    bool b = false;
+    float f = 1.0f;
+    if (m314) {
+        if (!cLib_checkBit(attr().m04, 0x4) || m31A) {
+            b = true;
+        } else {
+            f = 0.9f;
+        }
+    }
+
+    if (b) {
+        m31B = 1;
+        mode_u_l_init();
+    } else {
+        if (!cLib_checkBit(attr().m04, 0x1)) {
+            if (is_switch()) {
+                if(b) {
+                    m31B = 1;
+                }
+                mode_u_l_init();
+                return;
+            }
+        }
+        m31C = f;
+        top_bg_aim_req(f, 1);
+    }
 }
 
 /* 00000C30-00000C90       .text mode_u_l_init__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_u_l_init() {
-    /* Nonmatching */
+    mMode = 1;
+    m31C = 0.0f;
+    m324 = attr().m10;
+    top_bg_aim_req(0.0f, attr().m14);
 }
 
 /* 00000C90-00000D98       .text mode_u_l__Q212daObjSwheavy5Act_cFv */
@@ -78,17 +263,51 @@ void daObjSwheavy::Act_c::mode_u_l() {
 
 /* 00000D98-00000DB8       .text mode_lower_init__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_lower_init() {
-    /* Nonmatching */
+    mMode = 2;
+    m31C = 0.0f;
+    m31B = 0;
 }
 
 /* 00000DB8-00000F0C       .text mode_lower__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_lower() {
     /* Nonmatching */
+    bool b = false;
+    if (m314) {
+        if (!cLib_checkBit(attr().m04, 0x8) || m31A) {
+            b = true;
+        }
+    }
+
+    bool b2 = false;
+    if (!cLib_checkBit(attr().m04, 0x2) && !b) {
+        b2 = true;
+    }
+
+    bool b3 = false;
+    bool b4 = false;
+    if (cLib_checkBit(attr().m04, 0x1)) {
+        if (!is_switch()) {
+            b4 = true;
+        }
+    }
+
+    if (b4 && !b) {
+        b3 = true;
+    }
+
+    if (b2 || b3) {
+        if (b2 && !cLib_checkBit(attr().m04, 0x4) && !b) {
+            m31B = 1;
+        }
+        mode_l_u_init();
+    }
 }
 
 /* 00000F0C-00000F44       .text mode_l_u_init__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_l_u_init() {
-    /* Nonmatching */
+    mMode =3;
+    m31C = 1.0f;
+    top_bg_aim_req(1.0f, 1);
 }
 
 /* 00000F44-00000FBC       .text mode_l_u__Q212daObjSwheavy5Act_cFv */
@@ -98,7 +317,27 @@ void daObjSwheavy::Act_c::mode_l_u() {
 
 /* 00000FBC-00001104       .text _execute__Q212daObjSwheavy5Act_cFv */
 bool daObjSwheavy::Act_c::_execute() {
-    /* Nonmatching */
+    typedef void (daObjSwheavy::Act_c::*procFunc)();
+    static procFunc mode_proc[] = {
+        &daObjSwheavy::Act_c::mode_upper,
+        &daObjSwheavy::Act_c::mode_u_l,
+        &daObjSwheavy::Act_c::mode_lower,
+        &daObjSwheavy::Act_c::mode_l_u,
+    };
+    set_push_flag();
+    (this->*mode_proc[mMode])();
+    calc_top_pos();
+    m311 = m310;
+    m316 = m315;
+    m310 = false;
+    m315 = false;
+    set_mtx();
+    mpBgW1->Move();
+    mpBgW2->Move();
+    eyePos.x = current.pos.x;
+    eyePos.y = current.pos.y + m328 - 35.5f;
+    eyePos.z = current.pos.z;
+    return true;
 }
 
 /* 00001104-000011C0       .text _draw__Q212daObjSwheavy5Act_cFv */
