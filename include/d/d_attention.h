@@ -116,6 +116,11 @@ public:
 class daPy_lk_c;
 
 class dAttention_c {
+    enum LockState {
+        LockState_NONE = 0,
+        LockState_LOCK = 1,
+        LockState_RELEASE = 2,
+    };
 public:
     dAttention_c() {}
 
