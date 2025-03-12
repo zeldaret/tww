@@ -23,10 +23,9 @@ daTag_Kf1_HIO_c::daTag_Kf1_HIO_c()
 { 
     mAttentionMaxEuclidDistance = a_prm_tbl[0];
     mAttentionMaxYDistance = a_prm_tbl[1];
-    /* Nonmatching */
-    // type is wrong, but anything else seems to make this more wrong 
-    // it seems to definitely come from a_prm_tbl[2], but instructions assign an integer.
-    f0x10 = a_prm_tbl[2];
+    // this line should def load from a_prm_tbl according to asm,
+    // but unlike the others the type is not float so do this gross cast instead
+    f0x10 = *(u8*)(void*)&a_prm_tbl[2];
     mNo = -1;
 }
 
@@ -54,8 +53,9 @@ static char* a_demo_name_tbl[] = {"BENSYO"};
 static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
-char daTag_Kf1_c::setStt(signed char c) {
+BOOL daTag_Kf1_c::setStt(signed char c) {
     stt = c;
+    return stt;
     /* Nonmatching */
 }
 
@@ -132,6 +132,7 @@ BOOL daTag_Kf1_c::partner_srch() {
         npartners = 0;
         for (i = 0, j = 0; j < l_check_wrk; ++j, ++i) {
             if (l_check_inf[i] != 0) {
+                // TODO apparently wants [i+1] but that gives wrong asm
                 tmp = l_check_inf[i];
             } else {
                 tmp = 0xffffffff;
@@ -201,7 +202,7 @@ bool daTag_Kf1_c::event_mesEnd() {
 void daTag_Kf1_c::bensyoInit() { 
     dComIfGp_setItemRupeeCount(-(this->tenth_cost * 10));
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-    if (this->rupee_count < tenth_cost * 10) {
+    if (this->rupee_count > tenth_cost * 10) {
         this->mCurrMsgNo = 0x1c2f;
     }
     else {
@@ -253,7 +254,7 @@ void daTag_Kf1_c::privateCut() {
         case 0: status = event_mesSet(); break;
         case 1: status = event_mesEnd(); break;
         case 2: status = event_bensyo(); break; 
-        default: status=true; break;
+        default: status=TRUE; break;
     }
     if (status) {
         dComIfGp_evmng_cutEnd(staffIdx);
@@ -364,10 +365,6 @@ s32 daTag_Kf1_c::_create() {
     s32 ret = cPhs_COMPLEATE_e;
     fopAcM_SetupActor(this, daTag_Kf1_c);
 
-    // field_0x6d8 = 0;
-    // field_0x6dc = 0;
-    // field_0x738 = 0;
-
     if (fopAcM_GetName(this) != PROC_TAG_KF1) {
         ret = cPhs_ERROR_e;
     } else {
@@ -375,7 +372,7 @@ s32 daTag_Kf1_c::_create() {
         if (l_HIO.mNo < 0) {
             l_HIO.mNo = mDoHIO_createChild("クタニ焼き監視タグ", &l_HIO);
         }
-        if (!createInit()) {
+        if (createInit()) {
             ret = cPhs_ERROR_e;
         }
     }
