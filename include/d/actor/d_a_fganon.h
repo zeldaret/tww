@@ -5,8 +5,13 @@
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_particle.h"
-#include "SSystem/SComponent/c_phase.h"
+#include "d/actor/d_a_mant.h"
+#include "d/actor/d_a_boko.h"
+#include "d/actor/d_a_player.h"
+#include "f_op/f_op_camera.h"
 
+class camera_class;
+class daPy_py_c;
 class mDoExt_McaMorf;
 class mDoExt_brkAnm;
 class mDoExt_btkAnm;
@@ -36,10 +41,6 @@ public:
     /* 0x39C */ f32 m39C;
     /* 0x3A0 */ f32 m3A0;
     /* 0x3A4 */ s16 m3A4[5];
-    /* 0x3A6 */ //s16 m3A6;
-    /* 0x3A8 */ //s16 m3A8;
-    /* 0x3AA */ //s16 m3AA;
-    /* 0x3AC */ //s16 m3AC;
     /* 0x3AE */ s16 m3AE;
     /* 0x3B0 */ f32 m3B0;
     /* 0x3B4 */ s16 m3B4;
@@ -47,13 +48,14 @@ public:
     /* 0x3B8 */ s16 m3B8;
     /* 0x3BA */ u8 m3BA[0x3BC - 0x3BA];
     /* 0x3BC */ f32 m3BC;
-    /* 0x3C0 */ u8 m3C0[0x3C4 - 0x3C0];
+    /* 0x3C0 */ f32 m3C0;
     /* 0x3C4 */ JPABaseEmitter* mEmitters1[2];
     /* 0x3CC */ JPABaseEmitter* mEmitters2[2];
     /* 0x3D4 */ JPABaseEmitter* mEmitters3[2];
     /* 0x3DC */ u32 m3DC;
     /* 0x3E0 */ cXyz m3E0;
-    /* 0x3EC */ u8 m3EC[0x404 - 0x3EC];
+    /* 0x3EC */ cXyz m3EC;
+    /* 0x3F8 */ u8 m3F8[0x404 - 0x3F8];
     /* 0x404 */ f32 m404;
     /* 0x408 */ s8 m408;
     /* 0x409 */ u8 m409;
@@ -61,7 +63,7 @@ public:
     /* 0x40C */ dCcD_Sph mBallTgSph;
     /* 0x538 */ dCcD_Sph mBallAtSph;
     /* 0x664 */ cXyz m664;
-    /* 0x670 */ u8 m670;
+    /* 0x670 */ s8 m670;
     /* 0x671 */ s8 m671;
     /* 0x672 */ u8 m672;
     /* 0x673 */ s8 m673;
@@ -81,24 +83,35 @@ public:
     /* 0x68D */ s8 mbIsMaterialized; // Flag for PG's appearance state, set to `FALSE` when he disappears, `TRUE` when he appears
     /* 0x68E */ s8 m68E;
     /* 0x68F */ u8 m68F;
-    /* 0x690 */ u8 m690;
+    /* 0x690 */ s8 m690;
     /* 0x691 */ u8 m691[0x694 - 0x691];
     /* 0x694 */ f32 m694;
-    /* 0x696 */ u8 m698[0x6A0 - 0x698]; 
+    /* 0x698 */ f32 m698;
+    /* 0x69C */ f32 m69C;
     /* 0x6A0 */ s16 m6A0;
     /* 0x6A2 */ s16 m6A2;
-    /* 0x6A4 */ u8 m6A4[0x6A6 - 0x6A4];
+    /* 0x6A4 */ s16 m6A4;
     /* 0x6A6 */ s16 m6A6;
-    /* 0x6A8 */ u8 m6A8[0x6AC - 0x6A8];
+    /* 0x6A8 */ u32 m6A8;
     /* 0x6AC */ s8 m6AC;
-    /* 0x6AD */ u8 m6AD[0x6B4 - 0x6AD];
+    /* 0x6AD */ u8 m6AD[0x6B0 - 0x6AD];
+    /* 0x6B0 */ fpc_ProcID mBokoID;
     /* 0x6B4 */ fpc_ProcID mCapeID;
     /* 0x6B8 */ dBgS_AcchCir mAcchCir;
     /* 0x6F8 */ dBgS_ObjAcch mAcch;
     /* 0x8BC */ dCcD_Stts mStts;
     /* 0x8F8 */ dCcD_Cyl mCyl;
     /* 0xA28 */ dCcD_Sph mWeponSph;
-    /* 0xB54 */ u8 mB54[0xB88 - 0xB54];
+    /* 0xB54 */ s16 mB54;
+    /* 0xB56 */ s16 mB56;
+    /* 0xB58 */ u8 mB58[0xB5C - 0xB58];
+    /* 0xB5C */ cXyz mB5C;
+    /* 0xB68 */ cXyz mB68;
+    /* 0xB74 */ s16 mB74;
+    /* 0xB76 */ s16 mB76;
+    /* 0xB78 */ u8 mB78[0xB80 - 0xB78];
+    /* 0xB80 */ f32 mB80;
+    /* 0xB84 */ f32 mB84;
     /* 0xB88 */ u8 mB88;
     /* 0xB89 */ s8 mB89;
     /* 0xB8A */ u8 mB8A;
