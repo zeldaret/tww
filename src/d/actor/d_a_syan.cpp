@@ -162,7 +162,7 @@ static BOOL daSyan_Execute(syan_class* i_this) {
                     i_this->emtrCallBack[i].getEmitter()->setGlobalParticleScale(scale);
 
                     cXyz pos(i_this->partPos[i].x, i_this->partPos[i].y + REG0_F(7) + 20.0f, i_this->partPos[i].z);
-                    dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+                    dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &pos);
                 }
             }
         }

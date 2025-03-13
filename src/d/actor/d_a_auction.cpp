@@ -492,6 +492,19 @@ void daAuction_c::privateCut() {
         "END",
         "CAMERA_TEST",
     };
+    enum {
+        ACT_MES_SET,
+        ACT_MES_END,
+        ACT_START,
+        ACT_MAIN,
+        ACT_GET_ITEM,
+        ACT_CAMERA_OFF,
+        ACT_GET_ITEM_NPC,
+        ACT_GET_ITEM_MES,
+        ACT_CAMERA_OFF_NPC,
+        ACT_END,
+        ACT_CAMERA_TEST,
+    };
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Auction");
 
@@ -508,31 +521,31 @@ void daAuction_c::privateCut() {
 
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (mAction) {
-        case 0:
+        case ACT_MES_SET:
             eventTalkInit(staffIdx);
             break;
-        case 2:
+        case ACT_START:
             eventStartInit();
             break;
-        case 3:
+        case ACT_MAIN:
             eventMainInit();
             break;
-        case 4:
+        case ACT_GET_ITEM:
             eventGetItemInit();
             break;
-        case 5:
+        case ACT_CAMERA_OFF:
             eventCameraOffInit();
             break;
-        case 6:
+        case ACT_GET_ITEM_NPC:
             eventGetItemNpcInit(staffIdx);
             break;
-        case 7:
+        case ACT_GET_ITEM_MES:
             eventGetItemMesInit();
             break;
-        case 9:
+        case ACT_END:
             eventEndInit();
             break;
-        case 10:
+        case ACT_CAMERA_TEST:
             eventCameraTestInit();
             break;
         }
@@ -540,31 +553,32 @@ void daAuction_c::privateCut() {
 
     bool evtRes;
     switch (mAction) {
-    case 0:
+    case ACT_MES_SET:
         evtRes = eventMesSet();
         break;
-    case 1:
+    case ACT_MES_END:
         evtRes = eventMesEnd();
         break;
-    case 2:
+    case ACT_START:
         evtRes = eventStart();
         break;
-    case 3:
+    case ACT_MAIN:
         evtRes = eventMain();
         break;
-    case 4:
+    case ACT_GET_ITEM:
         evtRes = eventGetItem();
         break;
-    case 7:
-        evtRes = &daAuction_c::eventMesSet != NULL;
+    case ACT_GET_ITEM_MES:
+        // @bug They probably meant to call this function
+        evtRes = eventMesSet;
         break;
-    case 8:
+    case ACT_CAMERA_OFF_NPC:
         evtRes = eventCameraOffNpc();
         break;
-    case 9:
+    case ACT_END:
         evtRes = eventEnd();
         break;
-    case 10:
+    case ACT_CAMERA_TEST:
         evtRes = eventCameraTest();
         break;
     default:

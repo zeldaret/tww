@@ -3380,8 +3380,10 @@ inline void dComIfGp_particle_setStripes(u16 particleID, const cXyz* pos, const 
     pParticle->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
 }
 
-inline void dComIfGp_particle_setSimple(u16 particleID, cXyz* pos, u8 alpha, GXColor& prmColor,
-                                        GXColor& envColor, int param_6) {
+inline void dComIfGp_particle_setSimple(u16 particleID, cXyz* pos, u8 alpha = 0xFF,
+                                        GXColor& prmColor = g_whiteColor,
+                                        GXColor& envColor = g_whiteColor,
+                                        int param_6 = 0) {
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
     pParticle->setSimple(particleID, pos, alpha, prmColor, envColor, param_6);
 }

@@ -1788,6 +1788,21 @@ u32 daNpc_Ji1_c::privateCut() {
         "CONTINUETALK",
         "SETANGLE",
     };
+    enum {
+        ACT_SETANM,
+        ACT_TALKMSG,
+        ACT_INITPOS,
+        ACT_CREATEITEM,
+        ACT_SOUND,
+        ACT_HEADSWING,
+        ACT_HARPOON,
+        ACT_ROLLAT_CNT,
+        ACT_GAME_MODE,
+        ACT_TURN_TO_PLAYER,
+        ACT_HIDE,
+        ACT_CONTINUETALK,
+        ACT_SETANGLE,
+    };
     int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
     if(actIdx == -1) {
         dComIfGp_evmng_cutEnd(staffIdx);
@@ -1795,40 +1810,40 @@ u32 daNpc_Ji1_c::privateCut() {
     else {
         if(dComIfGp_evmng_getIsAddvance(staffIdx)) {
             switch(actIdx) {
-                case 0:
+                case ACT_SETANM:
                     evn_setAnm_init(staffIdx);
                     break;
-                case 1:
+                case ACT_TALKMSG:
                     evn_talk_init(staffIdx);
                     break;
-                case 2:
+                case ACT_INITPOS:
                     evn_init_pos_init(staffIdx);
                     break;
-                case 3:
+                case ACT_CREATEITEM:
                     createItem();
                     break;
-                case 4:
+                case ACT_SOUND:
                     evn_sound_proc_init(staffIdx);
                     break;
-                case 5:
+                case ACT_HEADSWING:
                     evn_head_swing_init(staffIdx);
                     break;
-                case 6:
+                case ACT_HARPOON:
                     evn_harpoon_proc_init(staffIdx);
                     break;
-                case 7:
+                case ACT_ROLLAT_CNT:
                     evn_RollAtControl_init(staffIdx);
                     break;
-                case 8:
+                case ACT_GAME_MODE:
                     evn_game_mode_init(staffIdx);
                     break;
-                case 0xA:
+                case ACT_HIDE:
                     evn_hide_init(staffIdx);
                     break;
-                case 0xB:
+                case ACT_CONTINUETALK:
                     evn_continue_talk_init(staffIdx);
                     break;
-                case 0xC:
+                case ACT_SETANGLE:
                     evn_setAngle_init(staffIdx);
                     break;
             }
@@ -1836,16 +1851,16 @@ u32 daNpc_Ji1_c::privateCut() {
 
         BOOL end;
         switch(actIdx) {
-            case 1:
+            case ACT_TALKMSG:
                 end = evn_talk();
                 break;
-            case 7:
+            case ACT_ROLLAT_CNT:
                 end = evn_RollAtControl();
                 break;
-            case 9:
+            case ACT_TURN_TO_PLAYER:
                 end = evn_turn_to_player();
                 break;
-            case 0xB:
+            case ACT_CONTINUETALK:
                 end = evn_continue_talk();
                 break;
             default:

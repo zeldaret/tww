@@ -363,7 +363,7 @@ bool daArrow_Lighteff_c::_execute() {
     if(field_0x2E8 == 1) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARROW_AMB, 0);
         if(!dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
-            dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &field_0x29C, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &field_0x29C);
         }
     }
     else if(field_0x2E8 == 2) {

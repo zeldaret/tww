@@ -96,7 +96,7 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
     if (i_this->mPa.getEmitter()) {
         cXyz whitePartPos = i_this->mPos;
         whitePartPos.y += partHeightOffset;
-        dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &whitePartPos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &whitePartPos);
         cLib_addCalc2(&i_this->mParticlePower, cM_rndF(0.2f) + 1.0f, 0.5f, partMaxFlickerPerTick);
     } else {
         i_this->mParticlePower = 0.0f;

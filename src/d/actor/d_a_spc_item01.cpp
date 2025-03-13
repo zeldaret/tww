@@ -146,7 +146,7 @@ BOOL daSpcItem01_c::_execute() {
 /* 8015DFE8-8015E070       .text set_effect__13daSpcItem01_cFv */
 void daSpcItem01_c::set_effect() {
     if (cLib_checkBit(field_0x644, (u16)0x01) && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != BOKO_BELT) {
-        dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos, (u8)0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos);
     }
 }
 

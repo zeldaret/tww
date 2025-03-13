@@ -77,6 +77,7 @@ void set_disappear(disappear_class* i_this, float scale) {
         case 0xC:
         case 0xD:
             dComIfGp_particle_set(dPa_name::ID_COMMON_0014, &i_this->current.pos, NULL, &particleScale);
+            // Fall-through
         case 0x3:
             dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
             dComIfGp_particle_setStripes(dPa_name::ID_COMMON_0015, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);

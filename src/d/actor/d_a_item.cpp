@@ -1037,10 +1037,7 @@ BOOL daItem_c::itemActionForArrow() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        f32 transX = current.pos.x;
-        f32 transY = current.pos.y;
-        f32 transZ = current.pos.z;
-        mpParticleEmitter->setGlobalTranslation(transX, transY, transZ);
+        mpParticleEmitter->setGlobalTranslation(current.pos);
     }
     
     if (mAcch.ChkGroundLanding()) {
@@ -1244,7 +1241,7 @@ void daItem_c::mode_water_init() {
 void daItem_c::mode_wait() {
     if (checkFlag(FLAG_UNK04) && dItem_data::checkAppearEffect(m_itemNo)) {
         u16 appearEffect = dItem_data::getAppearEffect(m_itemNo);
-        dComIfGp_particle_setSimple(appearEffect, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(appearEffect, &current.pos);
     }
     
     switch (m_itemNo) {
