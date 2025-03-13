@@ -16,7 +16,6 @@ namespace daObjSwheavy {
             short m14;
             short m16;
             short m18;
-            u8 m1A[0x1C - 0x1A];
         };
         const Attr_c& attr() const { return M_attr[mType]; }
 
@@ -36,7 +35,7 @@ namespace daObjSwheavy {
         void rev_switch() const { fopAcM_revSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
     
         static BOOL solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        BOOL create_heap();
         s32 _create();
         bool _delete();
         void set_mtx();
@@ -57,7 +56,7 @@ namespace daObjSwheavy {
         bool _draw();
 
         static const char M_arcname[6];
-        static const Attr_c M_attr[5];
+        static const Attr_c M_attr[4];
 
     public:
         /* 0x290 */ request_of_phase_process_class mPhs;
@@ -77,7 +76,7 @@ namespace daObjSwheavy {
         /* 0x316 */ u8 m316;
         /* 0x318 */ short m318;
         /* 0x31A */ bool m31A;
-        /* 0x31B */ u8 m31B;
+        /* 0x31B */ bool m31B;
         /* 0x31C */ float m31C;
         /* 0x320 */ float m320;
         /* 0x324 */ float m324;
