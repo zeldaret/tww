@@ -32,11 +32,11 @@ BOOL daLlift_c::MoveUpLift() {
     else if ((upVel != 0.0f) && (mbIsAscending == FALSE)) {
         fopAcM_seStart(this, JA_SE_OBJ_LOTUS_LIFT_UP, 0);
         mbIsAscending = TRUE;
-        mEmitter1 = dComIfGp_particle_set(0x82AC, &current.pos, &current.angle);
+        mEmitter1 = dComIfGp_particle_set(dPa_name::ID_SCENE_82AC, &current.pos, &current.angle);
         mEmitter2 = NULL;
         upLiftPos = current.pos;
         upLiftPos.y = mWaterY;
-        mEmitter4 = dComIfGp_particle_set(0x82AB, &upLiftPos, &current.angle);
+        mEmitter4 = dComIfGp_particle_set(dPa_name::ID_SCENE_82AB, &upLiftPos, &current.angle);
         mEmitterTimer = 0;
         if (mEmitter3) {
             mEmitter3->stopCreateParticle();

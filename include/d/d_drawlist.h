@@ -551,9 +551,9 @@ public:
     void drawXluListInvisible() { drawXluDrawList(mpXluListInvisible); }
     void drawOpaList2D() { drawOpaDrawList(mpOpaList2D); }
 
-    int setSimpleShadow(cXyz* i_pos, f32 param_1, f32 param_2, cXyz* param_3, s16 i_angle,
+    int setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* param_3, s16 i_angle,
                         f32 param_5, GXTexObj* i_tex) {
-        return mShadowControl.setSimple(i_pos, param_1, param_2, param_3, i_angle, param_5,
+        return mShadowControl.setSimple(i_pos, groundY, param_2, param_3, i_angle, param_5,
                                         i_tex);
     }
     int setRealShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,

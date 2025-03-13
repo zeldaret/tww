@@ -698,15 +698,9 @@ BOOL daAgbsw0_c::ExeSubF2() {
                 agb->onFree();
                 agb->onHold();
 
-                f32 x = current.pos.x;
-                agb->current.pos.x = x;
-                agb->home.pos.x = x;
-                f32 y = current.pos.y + 50.0f;
-                agb->current.pos.y = y;
-                agb->home.pos.y = y;
-                f32 z = current.pos.z;
-                agb->current.pos.z = z;
-                agb->home.pos.z = z;
+                agb->home.pos.x = agb->current.pos.x = current.pos.x;
+                agb->home.pos.y = agb->current.pos.y = current.pos.y + 50.0f;
+                agb->home.pos.z = agb->current.pos.z = current.pos.z;
                 agb->shape_angle.x = 0x3FFF;
                 agb->field_0x67f = true;
                 mOrigScaleX = scale.x;
@@ -1255,7 +1249,7 @@ BOOL daAgbsw0_c::ExeSubR() {
     if(mDoGaC_GbaLink() && mDoGac_SendStatusCheck(5)) {
         if(sw0 != 0xFF && fopAcM_isSwitch(this, sw0)) {
             s32 itemNo = getParamNo();
-            if(itemNo < 0 || 0x1E < itemNo) {
+            if(itemNo < 0 || dItem_TRIPLE_HEART_e < itemNo) {
                 itemNo = 0;
             }
 

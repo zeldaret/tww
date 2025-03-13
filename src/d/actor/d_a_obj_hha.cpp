@@ -74,7 +74,10 @@ const HHA_RES_FILE_ID l_daObjHha_bdl_idx_table[2] = {HHA_BDL_HHA1, HHA_BDL_HHA2}
 const HHA_RES_FILE_ID l_daObjHha_dzb_idx_table[2] = {HHA_DZB_HHA1, HHA_DZB_HHA2};
 const HHA_RES_FILE_ID l_daObjHha_btk_idx_table[2] = {HHA_BTK_YSWTR00_01, HHA_BTK_YSWTR00_02};
 const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::LOOP_REPEAT_e, J3DFrameCtrl::LOOP_ONCE_e};
-const u16 l_daObjHha_splash_id_table[2] = {0x810D, 0x810E};
+const u16 l_daObjHha_splash_id_table[] = {
+    dPa_name::ID_SCENE_810D,
+    dPa_name::ID_SCENE_810E,
+};
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */
 void daObjHhaPart_c::init_data(float yPos, float yTar, u16 speed, u8 i, u8 isMiddle) {
@@ -169,7 +172,7 @@ void daObjHhaPart_c::draw_normal(daObjHha_c* parent) {
 }
 
 /* 0000056C-00000698       .text create_s__16daObjHhaSplash_cFUsP4cXyzffP5csXyz */
-void daObjHhaSplash_c::create_s(unsigned short id, cXyz* pPos, float offsetY, float offsetZ, csXyz* pAngle) {
+void daObjHhaSplash_c::create_s(u16 particleID, cXyz* pPos, float offsetY, float offsetZ, csXyz* pAngle) {
     cXyz calcVec;
 
     mPos.set(pPos->x, pPos->y + offsetY, pPos->z);
@@ -179,7 +182,7 @@ void daObjHhaSplash_c::create_s(unsigned short id, cXyz* pPos, float offsetY, fl
     mPos += calcVec;
     mBasePos = mPos;
     mAngle = *pAngle;
-    dComIfGp_particle_set(id, &mPos, &mAngle, NULL, 255, &mEcallBack);
+    dComIfGp_particle_set(particleID, &mPos, &mAngle, NULL, 255, &mEcallBack);
     bIsActive = true;
 }
 

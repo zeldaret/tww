@@ -45,7 +45,9 @@ public:
         cXyz temp;
         return cM3d_Cross_CylSph(cyl, this, &temp, out);
     }
-    void cross(const cM3dGTri*) const {}
+    bool cross(const cM3dGTri *param_1) const {
+        return cM3d_Cross_SphTri(this, param_1);
+    }
     const cXyz& GetC() const { return mCenter; }
     cXyz& GetC() { return mCenter; }
     const cXyz* GetCP() const { return &mCenter; }

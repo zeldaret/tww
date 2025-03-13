@@ -623,10 +623,10 @@ int daNpc_kam_c::waitNpcAction(void*) {
         mC0C = cLib_getRndValue(10, 80);
     } else if (mActionStatus != ACTION_ENDING) {
         if (changeAreaCheck()) {
-            attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
             mEventState = 6;
         } else {
-            attention_info.flags &= ~(fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
+            cLib_offBit<u32>(attention_info.flags, (fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e));
             mEventState = -1;
         }
         
@@ -1285,7 +1285,7 @@ BOOL daNpc_kam_c::execute() {
         
         if (!isNoBgCheck()) {
             mAcch.CrrPos(*dComIfG_Bgsp());
-            if (mAcch.GetGroundH() != -1000000000.0f) {
+            if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
                 s8 roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 fopAcM_SetRoomNo(this, roomNo);
                 tevStr.mRoomNo = roomNo;
@@ -1298,13 +1298,13 @@ BOOL daNpc_kam_c::execute() {
                 if (!isWaterHit()) {
                     onWaterHit();
                     
-                    JPABaseEmitter* splashEmitter = dComIfGp_particle_set(0x40, &current.pos);
+                    JPABaseEmitter* splashEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0040, &current.pos);
                     if (splashEmitter) {
                         splashEmitter->setRate(15.0f);
                         splashEmitter->setGlobalScale(splash_scale);
                     }
                     
-                    JPABaseEmitter* rippleEmitter = dComIfGp_particle_setSingleRipple(0x3D, &current.pos);
+                    JPABaseEmitter* rippleEmitter = dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003D, &current.pos);
                     if (rippleEmitter) {
                         rippleEmitter->setGlobalScale(ripple_scale);
                     }

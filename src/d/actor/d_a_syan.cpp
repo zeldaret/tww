@@ -139,7 +139,7 @@ static BOOL daSyan_Execute(syan_class* i_this) {
             if (!i_this->emtrEnabled[i]) {
                 i_this->emtrEnabled[i] = true;
                 static cXyz fire_scale(0.7f, 0.7f, 0.7f);
-                dComIfGp_particle_set(0x1ea, &i_this->partPos[i], NULL, &fire_scale, 0xFF, &i_this->emtrCallBack[i]);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_01EA, &i_this->partPos[i], NULL, &fire_scale, 0xFF, &i_this->emtrCallBack[i]);
             } else {
                 JPABaseEmitter* emtr = i_this->emtrCallBack[i].getEmitter();
                 if (emtr != NULL) {
@@ -162,7 +162,7 @@ static BOOL daSyan_Execute(syan_class* i_this) {
                     i_this->emtrCallBack[i].getEmitter()->setGlobalParticleScale(scale);
 
                     cXyz pos(i_this->partPos[i].x, i_this->partPos[i].y + REG0_F(7) + 20.0f, i_this->partPos[i].z);
-                    dComIfGp_particle_setSimple(0x4004, &pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+                    dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &pos);
                 }
             }
         }

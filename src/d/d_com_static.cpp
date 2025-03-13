@@ -438,10 +438,10 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
             daStandItem_c* i_this = (daStandItem_c*)userArea;
             mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
             switch (i_this->getItemNo()) {
-            case 0x92:
+            case WIND_FLAG:
                 mDoMtx_stack_c::XrotM(i_this->m6B4);
                 break;
-            case 0x95:
+            case WATER_STATUE:
                 if (jntNo == 0) {
                     mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m630);
                 } else if (jntNo == 1) {

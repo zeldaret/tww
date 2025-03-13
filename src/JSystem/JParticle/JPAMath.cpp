@@ -61,11 +61,8 @@ void JPAGetXYZRotateMtx(s16 x, s16 y, s16 z, Mtx dst) {
 /* 80259A64-80259B6C       .text JPAGetDirMtx__FRCQ29JGeometry8TVec3<f>PA4_f */
 void JPAGetDirMtx(const JGeometry::TVec3<f32>& dir, Mtx dst) {
     /* Nonmatching - regalloc */
-    JGeometry::TVec3<f32> perp;
-    perp.x = dir.y;
-    perp.y = -dir.x;
+    JGeometry::TVec3<f32> perp(dir.y, -dir.x, 0.0f);
     f32 z = dir.z;
-    perp.z = 0.0f;
 
     f32 mag = perp.length();
     if (mag <= JGeometry::TUtil<f32>::epsilon()) {

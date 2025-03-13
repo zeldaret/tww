@@ -112,10 +112,10 @@ void daLlift_c::CreateInit() {
     cXyz waterCheckPos = current.pos;
     waterCheckPos.y += 200.0f;
     mWaterY = dBgS_ObjGndChk_Wtr_Func(waterCheckPos);
-    if (mWaterY != -1e9f) {
+    if (mWaterY != C_BG_MIN_HEIGHT) {
         cXyz particlePos = current.pos;
         particlePos.y = mWaterY + 1.0f; 
-        mEmitter3 = dComIfGp_particle_set(0x82AA, &particlePos, &current.angle);
+        mEmitter3 = dComIfGp_particle_set(dPa_name::ID_SCENE_82AA, &particlePos, &current.angle);
         if (mEmitter3) {
             mEmitter3->stopCreateParticle();
         }

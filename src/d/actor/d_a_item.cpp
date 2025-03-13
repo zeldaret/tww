@@ -208,7 +208,7 @@ void daItem_c::CreateInit() {
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     
     if (fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        mpParticleEmitter = dComIfGp_particle_set(0x81E1, &current.pos);
+        mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81E1, &current.pos);
     }
 }
 
@@ -1037,10 +1037,7 @@ BOOL daItem_c::itemActionForArrow() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        f32 transX = current.pos.x;
-        f32 transY = current.pos.y;
-        f32 transZ = current.pos.z;
-        mpParticleEmitter->setGlobalTranslation(transX, transY, transZ);
+        mpParticleEmitter->setGlobalTranslation(current.pos);
     }
     
     if (mAcch.ChkGroundLanding()) {
@@ -1055,7 +1052,7 @@ BOOL daItem_c::itemActionForArrow() {
         mOnGroundTimer++;
         
         if (mOnGroundTimer == 1 && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-            JPABaseEmitter* emitter = dComIfGp_particle_set(0xA1E2, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
+            JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_A1E2, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
             if (emitter) {
                 emitter->setMaxFrame(1);
             }
@@ -1236,7 +1233,7 @@ void daItem_c::mode_water_init() {
     temp3 *= scale.x;
     particleScale.setall(temp3);
     
-    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
+    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
     mPtclRippleCb.mRate = 0.0f;
 }
 
@@ -1244,7 +1241,7 @@ void daItem_c::mode_water_init() {
 void daItem_c::mode_wait() {
     if (checkFlag(FLAG_UNK04) && dItem_data::checkAppearEffect(m_itemNo)) {
         u16 appearEffect = dItem_data::getAppearEffect(m_itemNo);
-        dComIfGp_particle_setSimple(appearEffect, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(appearEffect, &current.pos);
     }
     
     switch (m_itemNo) {
@@ -1296,12 +1293,12 @@ void daItem_c::mode_wait() {
         mode_water_init();
     }
     
-    dBgS_ObjGndChk_Yogan gndChk;
+    dBgS_ObjGndChk_Yogan lavaChk;
     cXyz temp;
     temp.set(old.pos.x, old.pos.y, old.pos.z);
-    gndChk.SetPos(&temp);
-    f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if (groundY != -1000000000.0f && groundY > current.pos.y) {
+    lavaChk.SetPos(&temp);
+    f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
+    if (lavaY != C_BG_MIN_HEIGHT && lavaY > current.pos.y) {
         fopAcM_delete(this);
     }
 }

@@ -1,7 +1,7 @@
 #ifndef C_M3D_G_CIR_H
 #define C_M3D_G_CIR_H
 
-#include "dolphin/types.h"
+#include "global.h"
 
 class cM2dGCir {
 public:
@@ -20,7 +20,9 @@ public:
 
     cM2dGCir() {}
     virtual ~cM2dGCir() {}
-};
+};  // Size: 0x10
+
+STATIC_ASSERT(sizeof(cM2dGCir) == 0x10);
 
 class cM3dGCir : public cM2dGCir {
     f32 mPosZ;
@@ -32,6 +34,8 @@ public:
         cM2dGCir::Set(x, y, r);
         mPosZ = z;
     }
-};
+};  // Size: 0x14
+
+STATIC_ASSERT(sizeof(cM3dGCir) == 0x14);
 
 #endif /* C_M3D_G_CIR_H */

@@ -263,8 +263,16 @@ void daWall_c::set_tri() {
 
 /* 00000D84-00000F74       .text set_effect__8daWall_cFv */
 void daWall_c::set_effect() {
-    u16 projection_id[3] = {0xa16e, 0xa170, 0xa172};
-    u16 particle_id[3] = {0xa16f, 0xa171, 0xa173};
+    u16 projection_id[] = {
+        dPa_name::ID_SCENE_A16E,
+        dPa_name::ID_SCENE_A170,
+        dPa_name::ID_SCENE_A172,
+    };
+    u16 particle_id[] = {
+        dPa_name::ID_SCENE_A16F,
+        dPa_name::ID_SCENE_A171,
+        dPa_name::ID_SCENE_A173,
+    };
 
     csXyz local_28 = current.angle;
     local_28.y += 0x8000;

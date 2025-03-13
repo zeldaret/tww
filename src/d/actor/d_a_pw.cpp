@@ -180,7 +180,7 @@ void action_dousa(pw_class* i_this) {
         i_this->m346 = 0;
         i_this->mState += 1;
         break;
-    case 0x1:
+    case 1:
         if (fopAcM_searchPlayerDistance(i_this) < 500.0f) {
             anm_init(i_this, PW_BCK_DERUA1, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
@@ -191,7 +191,7 @@ void action_dousa(pw_class* i_this) {
             i_this->mState += 1;
         }
         break;
-    case 0x2:
+    case 2:
         i_this->shape_angle.y += 0x1000;
         cLib_addCalc0(&i_this->m3A4, 1.0f, 3.0f);
         i_this->m39A += 7;
@@ -202,7 +202,7 @@ void action_dousa(pw_class* i_this) {
             i_this->m3A4 = 0.0f;
             first_mode_change(i_this);
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
-            JPABaseEmitter* particle = dComIfGp_particle_set(0x82EE, &i_this->m2CC, &i_this->shape_angle);
+            JPABaseEmitter* particle = dComIfGp_particle_set(dPa_name::ID_SCENE_82EE, &i_this->m2CC, &i_this->shape_angle);
             if (particle != NULL) {
                 particle->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0x17)); // j_pw_item_r1 joint
             }
@@ -210,12 +210,12 @@ void action_dousa(pw_class* i_this) {
             i_this->mState = 0x0A;
         }
         break;
-    case 0x9:
+    case 9:
         i_this->m39A = 0;
         i_this->m39C = 0;
         i_this->mState += 1;
         // Fall-through
-    case 0xA:
+    case 10:
         if (i_this->mBehaviorType == InvisibleAtStart) {
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
         }
@@ -237,7 +237,7 @@ void action_dousa(pw_class* i_this) {
             }
         }
         break;
-    case 0xB:
+    case 11:
         dKyr_get_vectle_calc(&i_this->current.pos, &camera->mLookat.mEye, &camfwd);
         i_this->mActorPlace.pos.x = i_this->m2CC.x + camfwd.x * 150.0f;
         i_this->mActorPlace.pos.y = i_this->m2CC.y;
@@ -260,7 +260,7 @@ void action_dousa(pw_class* i_this) {
             }
         }
         break;
-    case 0x6:
+    case 6:
         i_this->m39A += 10;
         if (i_this->m39A > 100) {
             i_this->m39A = 100;
@@ -272,7 +272,7 @@ void action_dousa(pw_class* i_this) {
             i_this->mState = 0xD;
         }
         break;
-    case 0x7:
+    case 7:
         if (fopAcM_searchPlayerDistance(i_this) < i_this->mNoticeRange) {
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
             i_this->current.angle.y = i_this->m38C;
@@ -281,7 +281,7 @@ void action_dousa(pw_class* i_this) {
             i_this->mState = 6;
         }
         break;
-    case 0x8:
+    case 8:
         i_this->m380 = 2;
         i_this->m346 = 1;
         if (fopAcM_searchPlayerDistance(i_this) < i_this->m3AC) {
@@ -289,7 +289,7 @@ void action_dousa(pw_class* i_this) {
             i_this->mState = 7;
         }
         break;
-    case 0xD:
+    case 13:
         for (int i = 0; i < 4; i++) {
             i_this->m384[i] = 0;
         }
@@ -303,14 +303,14 @@ void action_dousa(pw_class* i_this) {
         }
         i_this->mState += 1;
         // Fall-through
-    case 0xE:
+    case 14:
         cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
         if (i_this->m378) {
             break;
         }
         i_this->mState += 1;
         // Fall-through
-    case 0xF:
+    case 15:
         i_this->m378 = cM_rndF(120.0f) + 120.0f;
         if (i_this->m346 == 1) {
             if (i_this->mBckIdx != PW_BCK_IDOU1) {
@@ -328,7 +328,7 @@ void action_dousa(pw_class* i_this) {
             i_this->mState = 0x10;
         }
         break;
-    case 0x10:
+    case 16:
         i_this->speedF = 5.0f;
         move_sound(i_this);
         if (i_this->m37A == 0) {
@@ -339,7 +339,7 @@ void action_dousa(pw_class* i_this) {
             }
         }
         break;
-    case 0x14:
+    case 20:
         i_this->m2FC = i_this->current.pos;
         if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
             i_this->speedF = 5.0f;
@@ -357,42 +357,42 @@ void action_dousa(pw_class* i_this) {
             }
         }
         break;
-    case 0x19:
+    case 25:
         i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
         anm_init(i_this, PW_BCK_DAMAGE_K1, 9.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         i_this->speedF = -2.0f;
         i_this->mState += 1;
         break;
-    case 0x1A:
+    case 26:
         break;
-    case 0x1B:
-    case 0x1C:
+    case 27:
+    case 28:
         if (!fopAcM_CheckStatus(i_this, fopAcStts_HOOK_CARRY_e)) {
             i_this->mState = 0x5A;
         }
         break;
-    case 0x65:
+    case 101:
         if (!i_this->mpMorf->isStop()) {
             break;
         }
         // Fall-through
-    case 0x5A:
-    case 0x5B:
+    case 90:
+    case 91:
         // TODO
         Big_pow_gattai_check(i_this);
         break;
-    case 0x5C:
+    case 92:
         break;
-    case 0x64:
+    case 100:
         anm_init(i_this, PW_BCK_JITTAIKA1, 6.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         i_this->mState += 1;
         break;
-    case 0x6E:
+    case 110:
         anm_init(i_this, PW_BCK_ATTACK1, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         // TODO
         i_this->mState += 1;
         break;
-    case 0x6F:
+    case 111:
         if (i_this->m5C4.mpEmitter != NULL) {
             i_this->mActorPlace.pos = i_this->current.pos;
             i_this->mActorPlace.angle = i_this->shape_angle;
@@ -405,23 +405,23 @@ void action_dousa(pw_class* i_this) {
         i_this->gravity = 0.0f;
         anm_init(i_this, PW_BCK_SIRIMOTI1, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         i_this->mState += 1;
-    case 0x70:
+    case 112:
         // Fall-through
         if (i_this->mpMorf->isStop()) {
-            i_this->mState = 0x5A;
+            i_this->mState = 90;
         }
         break;
     }
     
-    if (i_this->mState <= 0xB) {
+    if (i_this->mState <= 11) {
         return;
     }
-    if (i_this->m37C == 0 && i_this->mState < 0x5A) {
-        if (i_this->mState == 0x0E || i_this->mState == 0x10 || i_this->mState == 0x14) {
+    if (i_this->m37C == 0 && i_this->mState < 90) {
+        if (i_this->mState == 14 || i_this->mState == 16 || i_this->mState == 20) {
             if (!hani_check(i_this) && fopAcM_searchPlayerDistance(i_this) < 500.0f && std::fabsf(i_this->current.pos.y - player->current.pos.y) < 100.0f) {
                 if (!Line_check(i_this, i_this->current.pos, 1) && (i_this->m346 == 1 || !TORITUKI_ON)) {
                     i_this->mAction = 1;
-                    i_this->mState = 0x1E;
+                    i_this->mState = 30;
                 }
             }
         }

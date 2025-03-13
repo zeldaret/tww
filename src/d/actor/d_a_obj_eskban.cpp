@@ -243,8 +243,8 @@ void daObjEskban::Act_c::eff_b_break(u16 particleID) {
 
 /* 00000D44-00000EF0       .text daObjEskban_effect_set__Q211daObjEskban5Act_cFv */
 void daObjEskban::Act_c::daObjEskban_effect_set() {
-    eff_m_break(0x82b1, 2);
-    eff_b_break(0x82b2);
+    eff_m_break(dPa_name::ID_SCENE_82B1, 2);
+    eff_b_break(dPa_name::ID_SCENE_82B2);
 
     static cXyz offset_vec(0, 250, 0);
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
@@ -252,7 +252,7 @@ void daObjEskban::Act_c::daObjEskban_effect_set() {
     if (!M_smoke) {
         return;
     }
-    JPABaseEmitter* pBEmtr = dComIfGp_particle_setToon(0x2027, &mSmokePos, NULL, NULL, 0xc8,
+    JPABaseEmitter* pBEmtr = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &mSmokePos, NULL, NULL, 0xc8,
                                                        M_smoke, -1, NULL, NULL, NULL);
     if (!pBEmtr) {
         return;

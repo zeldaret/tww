@@ -93,9 +93,9 @@ BOOL daSteamTag_c::createEmitter() {
     if (mEmitterNum < 8) {
         u16 particleID;
         if (((s16)cM_rndF(100.0f) % 2) != 0) {
-            particleID = 0x808B;
+            particleID = dPa_name::ID_SCENE_808B;
         } else {
-            particleID = 0x808C;
+            particleID = dPa_name::ID_SCENE_808C;
         }
         mpEmitter = dComIfGp_particle_setToon(particleID, &current.pos, &current.angle, &scale, getData()->steam_alpha);
         if (mpEmitter) {
@@ -129,18 +129,21 @@ BOOL daSteamTag_c::execute() {
         mCreateTimer--;
         if (mCreateTimer == 0) {
             if (createEmitter()) {
+                // TODO: fakematch? debug map indicates TVec3(s16, s16, s16) constructor was used here, but the codegen doesn't match
+                // JGeometry::TVec3<s16> angle(current.angle.x, current.angle.y, current.angle.z);
                 JGeometry::TVec3<s16> angle;
                 angle.x = current.angle.x;
                 angle.y = current.angle.y;
                 angle.z = current.angle.z;
-                mpEmitter->setGlobalTranslation(current.pos);
+                JGeometry::TVec3<f32> pos(current.pos.x, current.pos.y, current.pos.z);
+                mpEmitter->setGlobalTranslation(pos);
                 mpEmitter->setGlobalRotation(angle);
                 mpEmitter->setGlobalAlpha(getData()->steam_alpha);
                 mpEmitter->playCreateParticle();
                 mEmitTimer = getData()->emit_time_min + cM_rndF(getData()->emit_time_range);
             }
             else {
-                mCreateTimer = 0x1e;
+                mCreateTimer = 30;
             }
         }
     }

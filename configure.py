@@ -493,7 +493,7 @@ config.libs = [
             Object(Matching,    "d/d_bg_s_movebg_actor.cpp"),
             Object(Matching,    "d/d_bg_s_spl_grp_chk.cpp"),
             Object(Matching,    "d/d_bg_s_wtr_chk.cpp"),
-            Object(NonMatching, "d/d_bg_w.cpp"),
+            Object(Matching,    "d/d_bg_w.cpp"),
             Object(Matching,    "d/d_bg_w_deform.cpp"),
             Object(Matching,    "d/d_bg_w_hf.cpp"),
             Object(Matching,    "d/d_bg_w_sv.cpp"),
@@ -643,7 +643,7 @@ config.libs = [
             Object(Matching,    "SSystem/SComponent/c_bg_w.cpp"),
             Object(Matching,    "SSystem/SComponent/c_m2d.cpp"),
             Object(Matching,    "SSystem/SComponent/c_m2d_g_box.cpp"),
-            Object(NonMatching, "SSystem/SComponent/c_m3d.cpp"),
+            Object(Matching,    "SSystem/SComponent/c_m3d.cpp"),
             Object(Matching,    "SSystem/SComponent/c_m3d_g_aab.cpp"),
             Object(Matching,    "SSystem/SComponent/c_m3d_g_cyl.cpp"),
             Object(Matching,    "SSystem/SComponent/c_m3d_g_pla.cpp"),
@@ -1375,7 +1375,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_AjavW", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_Ygush00", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_akabe"),
-    ActorRel(NonMatching, "d_a_obj_barrel"),
+    ActorRel(Matching,    "d_a_obj_barrel", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_barrel2"),
     ActorRel(Matching,    "d_a_obj_bscurtain", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_cafelmp"),
@@ -1401,7 +1401,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_quake"),
     ActorRel(NonMatching, "d_a_obj_rcloud"),
     ActorRel(Matching,    "d_a_obj_roten", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_obj_shelf"),
+    ActorRel(Equivalent,  "d_a_obj_shelf"), # weak func order
     ActorRel(NonMatching, "d_a_obj_shmrgrd"),
     ActorRel(NonMatching, "d_a_obj_swpush"),
     ActorRel(NonMatching, "d_a_obj_table"),
@@ -1487,7 +1487,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_majyuu_door"),
     ActorRel(NonMatching, "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
-    ActorRel(NonMatching, "d_a_obj_swhammer"),
+    ActorRel(Equivalent,  "d_a_obj_swhammer"), # weak func order
     ActorRel(NonMatching, "d_a_obj_swheavy"),
     ActorRel(NonMatching, "d_a_obj_swlight"),
     ActorRel(NonMatching, "d_a_oq"),
@@ -1656,7 +1656,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_hami2"),
     ActorRel(NonMatching, "d_a_obj_hami3"),
     ActorRel(NonMatching, "d_a_obj_hami4"),
-    ActorRel(NonMatching, "d_a_obj_hat"),
+    ActorRel(Equivalent,  "d_a_obj_hat"), # weak func order
     ActorRel(Matching,    "d_a_obj_hbrf1"),
     ActorRel(NonMatching, "d_a_obj_hcbh"),
     ActorRel(Equivalent,  "d_a_obj_hha"), # weak func order

@@ -142,7 +142,7 @@ void dKyr_kamome_move() {
                     pWind->mKamomeEff[i].mAngleYSpeed = cM_rndFX(1.0f);
                     pWind->mKamomeEff[i].mScale = 0.0f;
                     pWind->mKamomeEff[i].mTimer = 300.0f + cM_rndF(180.0f);
-                    pWind->mKamomeEff[i].mpEmitter = dComIfGp_particle_set(0x429, &pWind->mKamomeEff[i].mPos);
+                    pWind->mKamomeEff[i].mpEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0429, &pWind->mKamomeEff[i].mPos);
                     pWind->mKamomeEff[i].mStatus++;
                 } else {
                     pWind->mKamomeEff[i].mTimer--;
@@ -366,7 +366,7 @@ void dKyr_wind_move() {
                 pos.y = windEff.mBasePos.y + windEff.mPos.y;
                 pos.z = windEff.mBasePos.z + windEff.mPos.z;
 
-                windEff.mpEmitter = dComIfGp_particle_set(0x31, &pos);
+                windEff.mpEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0031, &pos);
                 if (windEff.mpEmitter != NULL) {
                     windEff.mpEmitter->setGlobalAlpha(0);
                     windEff.mpEmitter->setGlobalScale(JGeometry::TVec3<f32>(fVar23, fVar23, fVar23));
@@ -726,7 +726,7 @@ bool overhead_bg_chk() {
     pos.y += 50.0f;
     roofChk.SetPos(pos);
 
-    if (dComIfG_Bgsp()->RoofChk(&roofChk) != 1000000000.0f)
+    if (dComIfG_Bgsp()->RoofChk(&roofChk) != C_BG_MAX_HEIGHT)
         ret = true;
     pos.y += 10000.0f;
     gndChk.SetPos(&pos);
@@ -755,7 +755,7 @@ bool forward_overhead_bg_chk(cXyz* pPos, f32 dist) {
     *pPos = pos;
     roofChk.SetPos(pos);
 
-    if (dComIfG_Bgsp()->RoofChk(&roofChk) != 1000000000.0f)
+    if (dComIfG_Bgsp()->RoofChk(&roofChk) != C_BG_MAX_HEIGHT)
         ret = true;
     pos.y += 10000.0f;
     gndChk.SetPos(&pos);

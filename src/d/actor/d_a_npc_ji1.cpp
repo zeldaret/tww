@@ -373,7 +373,7 @@ BOOL daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
             field_0xD74++;
             field_0xD68 = 0;
             setAnm(9, 0.0f, 1);
-            dComIfGp_particle_set(0xC, field_0x7E0.GetTgHitPosP());
+            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
             fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
             fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
         }
@@ -1788,6 +1788,21 @@ u32 daNpc_Ji1_c::privateCut() {
         "CONTINUETALK",
         "SETANGLE",
     };
+    enum {
+        ACT_SETANM,
+        ACT_TALKMSG,
+        ACT_INITPOS,
+        ACT_CREATEITEM,
+        ACT_SOUND,
+        ACT_HEADSWING,
+        ACT_HARPOON,
+        ACT_ROLLAT_CNT,
+        ACT_GAME_MODE,
+        ACT_TURN_TO_PLAYER,
+        ACT_HIDE,
+        ACT_CONTINUETALK,
+        ACT_SETANGLE,
+    };
     int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
     if(actIdx == -1) {
         dComIfGp_evmng_cutEnd(staffIdx);
@@ -1795,40 +1810,40 @@ u32 daNpc_Ji1_c::privateCut() {
     else {
         if(dComIfGp_evmng_getIsAddvance(staffIdx)) {
             switch(actIdx) {
-                case 0:
+                case ACT_SETANM:
                     evn_setAnm_init(staffIdx);
                     break;
-                case 1:
+                case ACT_TALKMSG:
                     evn_talk_init(staffIdx);
                     break;
-                case 2:
+                case ACT_INITPOS:
                     evn_init_pos_init(staffIdx);
                     break;
-                case 3:
+                case ACT_CREATEITEM:
                     createItem();
                     break;
-                case 4:
+                case ACT_SOUND:
                     evn_sound_proc_init(staffIdx);
                     break;
-                case 5:
+                case ACT_HEADSWING:
                     evn_head_swing_init(staffIdx);
                     break;
-                case 6:
+                case ACT_HARPOON:
                     evn_harpoon_proc_init(staffIdx);
                     break;
-                case 7:
+                case ACT_ROLLAT_CNT:
                     evn_RollAtControl_init(staffIdx);
                     break;
-                case 8:
+                case ACT_GAME_MODE:
                     evn_game_mode_init(staffIdx);
                     break;
-                case 0xA:
+                case ACT_HIDE:
                     evn_hide_init(staffIdx);
                     break;
-                case 0xB:
+                case ACT_CONTINUETALK:
                     evn_continue_talk_init(staffIdx);
                     break;
-                case 0xC:
+                case ACT_SETANGLE:
                     evn_setAngle_init(staffIdx);
                     break;
             }
@@ -1836,16 +1851,16 @@ u32 daNpc_Ji1_c::privateCut() {
 
         BOOL end;
         switch(actIdx) {
-            case 1:
+            case ACT_TALKMSG:
                 end = evn_talk();
                 break;
-            case 7:
+            case ACT_ROLLAT_CNT:
                 end = evn_RollAtControl();
                 break;
-            case 9:
+            case ACT_TURN_TO_PLAYER:
                 end = evn_turn_to_player();
                 break;
-            case 0xB:
+            case ACT_CONTINUETALK:
                 end = evn_continue_talk();
                 break;
             default:
@@ -1864,7 +1879,7 @@ u32 daNpc_Ji1_c::privateCut() {
 u32 daNpc_Ji1_c::setParticle(int max, f32 rate, f32 spread) {
     dtParticle();
     if(field_0x2E0.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
         if(emitter) {
             emitter->setRate(rate);
             emitter->setSpread(spread);
@@ -1888,7 +1903,7 @@ void daNpc_Ji1_c::dtParticle() {
 /* 000058F0-000059E8       .text setParticleAT__11daNpc_Ji1_cFiff */
 u32 daNpc_Ji1_c::setParticleAT(int max, f32 rate, f32 spread) {
     if(field_0x300.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
         if(field_0x300.getEmitter()) {
             JGeometry::TVec3<f32> scaleVec;
             scaleVec.x = 2.0f;
@@ -2813,7 +2828,7 @@ void daNpc_Ji1_c::setAnimFromMsgNo(u32 msgNo) {
             if(field_0x430 != 0) {
                 field_0x430->becomeInvalidEmitter();
                 field_0x430 = 0;
-                field_0x430 = dComIfGp_particle_set(0x81A5, &current.pos);
+                field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A5, &current.pos);
             }
 
             setAnm(0x18, 8.0f, 0);
@@ -2997,7 +3012,7 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
                 pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NAKU);
 
                 if(field_0x430 == 0) {
-                    field_0x430 = dComIfGp_particle_set(0x81A4, &current.pos);
+                    field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A4, &current.pos);
                     harpoonRelease(0);
                 }
 
@@ -3389,7 +3404,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
         }
     }
 
-    dComIfGp_getAttention().setFlag(0x80000000);
+    dComIfGp_att_offAleart();
     mEventCut.setActorInfo("Ji1", this);
     mEventCut.setJntCtrlPtr(&m_jnt);
     field_0xC84 = 0x12;
@@ -3684,8 +3699,8 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
         scale = *param_1;
     }
 
-    dComIfGp_particle_set(0xD, field_0x7E0.GetTgHitPosP(), &angle, &scale);
-    dComIfGp_particle_set(0x10, field_0x7E0.GetTgHitPosP(), 0, &scale);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, field_0x7E0.GetTgHitPosP(), &angle, &scale);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, field_0x7E0.GetTgHitPosP(), 0, &scale);
     fopAcM_seStart(this, JA_SE_CM_JI_DAMAGE, 0);
     fopAcM_seStart(this, param_2, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);
@@ -3693,7 +3708,7 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
 
 /* 000114EC-0001161C       .text setGuardParticle__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::setGuardParticle() {
-    dComIfGp_particle_set(0xC, field_0x7E0.GetTgHitPosP());
+    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
     fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
     fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);

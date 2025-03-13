@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "dolphin/mtx/vec.h"
+#include "global.h"
 
 // Plane with a normal
 class cM3dGPla {
@@ -41,8 +42,8 @@ public:
         *i_value = (-mNormal.x * i_axis.x - mNormal.z * i_axis.z) / mNormal.y;
         return true;
     }
-    f32 getSignedLenPos(const cXyz* param_1) const {
-        return cM3d_SignedLenPlaAndPos(this, param_1);
+    f32 getSignedLenPos(const cXyz* pos) const {
+        return cM3d_SignedLenPlaAndPos(this, pos);
     }
     void Set(const cM3dGPla* pla) {
         mNormal = *pla->GetNP();
@@ -60,5 +61,7 @@ public:
     // TODO
     cM3dGPla(const cXyz*, f32) {}
 };  // Size: 0x14
+
+STATIC_ASSERT(sizeof(cM3dGPla) == 0x14);
 
 #endif
