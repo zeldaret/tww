@@ -85,7 +85,7 @@ Static variables are prefixed with `l_`, while global variables are prefixed wit
 
 ## Use the official names where possible
 
-If a class has a getter function (whether it's an inline or not) that returns a member variable, you should generally name it as indicated by the inline.
+If a class has a getter function (whether it's an inline or not) that returns a member variable, you should generally name the member as indicated by its getter.
 
 For example: `getChainCnt()` would return `mChainCnt`.
 
