@@ -7,6 +7,7 @@
 
 class daNpc_Kf1_c : public fopNpc_npc_c {
 public:
+    typedef int (daNpc_Kf1_c::*JudgeFunc)(void*);
     struct anm_prm_c {
         /* 0x00 */ s8 anmId;
         /* 0x01 */ s8 flag;
@@ -38,13 +39,13 @@ public:
     void setAnm_ATR();
     void anmAtr(unsigned short);
     u16 next_msgStatus(unsigned long*);
-    void getMsg_KF1_0();
+    u32 getMsg_KF1_0();
     u32 getMsg();
     void eventOrder();
     void checkOrder();
-    void chk_talk();
-    void searchByID(fpc_ProcID, int*);
-    void srch_Tsubo();
+    BOOL chk_talk();
+    fopAc_ac_c *searchByID(fpc_ProcID, int*);
+    BOOL srch_Tsubo();
     void create_rupee(cXyz, int);
     void ready_kutaniCamera(int, int);
     void lookBack();
@@ -112,7 +113,9 @@ public:
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F0 */ u8 field_0x6F0;
     /* 0x6F2 */ s16 field_0x6F2;
-    /* 0x6F3 */ u8 m6D5[0x708 - 0x6F4];
+    /* 0x6F3 */ u8 m6D5[0x700 - 0x6F4];
+    u32 field_0x700;
+    /* 0x6F3 */ u8 m704[0x708 - 0x704];
     /* 0x708 */ dNpc_PathRun_c pathRun;
     /* 0x710 */ u8 m710[0x722 - 0x710];
     /* 0x722 */ csXyz mAngle;
@@ -131,9 +134,16 @@ public:
     u8 field_0x79D;
     u8 field_0x79E;
     /* 0x79F */ u8 field_0x79F;
-    u8 m7a0[0x7a6 - 0x7a0];
+    /* 0x7A0 */ u8 field_0x7A0;
+    /* 0x7A0 */ u8 field_0x7A1;
+    u8 m7a2[0x7a6 - 0x7a2];
     /* 0x7A6 */ bool field_0x7A6;
-    u8 m7a7[0x7f3 - 0x7a7];
+    u8 m7a7[0x7ac - 0x7a7];
+    /* 0x7AC */ u8 field_0x7AC;
+    u8 m7ad[0x7bc - 0x7ad];
+    u32 field_0x7BC[12];
+    /* 0x7EC */ s16 field_0x7EC;
+    u8 m7F0[0x7F3 - 0x7EE];
     /* 0x7F3 */ u8 field_0x7F3;
     /* 0x7F4 */ u8 field_0x7F4;
     /* 0x7F5 */ s8 field_0x7F5;
@@ -145,7 +155,7 @@ public:
     /* 0x7FB */ u8 field_0x7FB;
     /* 0x7FC */ u8 field_0x7FC;
     /* 0x7FD */ u8 field_0x7FD;
-    /* 0x7FE */ u8 field_0x7FE;
+    /* 0x7FE */ s8 field_0x7FE;
 };
 
 class daNpc_Kf1_HIO_c : public JORReflexible {
