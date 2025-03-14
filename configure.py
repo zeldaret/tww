@@ -1538,7 +1538,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_dummy"),
     ActorRel(NonMatching, "d_a_fallrock_tag"),
     ActorRel(Matching,    "d_a_fan", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_fganon"),
+    ActorRel(Matching,    "d_a_fganon", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_fgmahou"),
     ActorRel(NonMatching, "d_a_fire"),
     ActorRel(NonMatching, "d_a_fm"),

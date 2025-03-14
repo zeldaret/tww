@@ -595,4 +595,6 @@ extern dMeter_menuHIO_c g_menuHIO;
 extern dMeter_msg_HIO_c g_msgHIO;
 extern dMeter_message_HIO_c g_messageHIO;
 
+void dMeter_mtrShow();
+
 #endif /* D_METER_H */
