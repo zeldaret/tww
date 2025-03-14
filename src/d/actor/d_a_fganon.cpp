@@ -20,6 +20,7 @@
 #include "d/d_meter.h"
 #include "JSystem/JUtility/JUTReport.h"
 #include "d/d_meter.h"
+#include "d/d_particle_name.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -83,7 +84,7 @@ void tama_draw(fganon_class* i_this) {
 /* 00000338-00000420       .text daFganon_Draw__FP12fganon_class */
 /* Renders PG's NPC model */
 static BOOL daFganon_Draw(fganon_class* i_this) {
-    dSnap_RegistFig(0xc2, i_this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_UNKC2, i_this, 1.0f, 1.0f, 1.0f);
     J3DModel* pModel = i_this->mpMorf->getModel();
     g_env_light.setLightTevColorType(pModel, &i_this->tevStr);
     i_this->mpBrkAnm1->entry(pModel->getModelData());
@@ -201,7 +202,7 @@ void fly(fganon_class* i_this) {
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_LinChk linChk;
 
-    if ((((i_this->m384 & 0xf) == 0) && (cM_rndF(1.0f) < 0.5f)) || (i_this->m388 == -10)) {
+    if ((((i_this->m384 & 0xF) == 0) && (cM_rndF(1.0f) < 0.5f)) || (i_this->m388 == -10)) {
         i_this->m398 = player->shape_angle.y;
     }
 
@@ -285,7 +286,7 @@ void shot(fganon_class* i_this) {
                 fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_S, 0);
             }
             if (i_this->m3A4[0] == 0) {
-                anm_init(i_this, 0xd, 3.0f, 0, 1.0f, -1);
+                anm_init(i_this, 0xD, 3.0f, 0, 1.0f, -1);
                 i_this->m388++;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
                 mDoAud_seStart(JA_SE_CM_PG_EBALL_FIRE_S, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
@@ -294,7 +295,7 @@ void shot(fganon_class* i_this) {
         }
         case 2: {
             s32 mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
-            if (REG0_S(0) + 0xe == mFrame) {
+            if (REG0_S(0) + 14 == mFrame) {
                 i_this->m409 = 1;
                 i_this->m688 = 0;
                 i_this->m687 = 0;
@@ -401,7 +402,7 @@ void spinattack(fganon_class* i_this) {
             break;
         }
         case 3: {
-            if (mFrame == 0xe) {
+            if (mFrame == 14) {
                 fopAcM_seStart(i_this, JA_SE_CM_PG_SWING_L, 0);
             }
             i_this->m685 = 1;
@@ -411,7 +412,7 @@ void spinattack(fganon_class* i_this) {
             }
             float fVar9;
             float fVar10;
-            if ((mFrame >= 0xd) && (mFrame <= 0x18)) {
+            if ((mFrame >= 13) && (mFrame <= 24)) {
                 fVar9 = 20.0f;
                 fVar10 = 4.0f;
             }
@@ -439,7 +440,7 @@ void fly2(fganon_class* i_this) {
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_LinChk linChk;
 
-    if ((((i_this->m384 & 0xf) == 0) && (cM_rndF(1.0f) < 0.5f)) || (i_this->m388 == -10)) {
+    if ((((i_this->m384 & 0xF) == 0) && (cM_rndF(1.0f) < 0.5f)) || (i_this->m388 == -10)) {
         i_this->m398 = player->shape_angle.y;
     }
     switch (i_this->m388) {
@@ -518,8 +519,8 @@ void tama_set(fganon_class* i_this) {
                         i_this->mEmitters3[i] = NULL;
                     }
                 }
-                i_this->mEmitters3[0] = dComIfGp_particle_set(0x821A, &tempPos, NULL);
-                i_this->mEmitters3[1] = dComIfGp_particle_set(0x821B, &tempPos, NULL);
+                i_this->mEmitters3[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_821A, &tempPos, NULL);
+                i_this->mEmitters3[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_821B, &tempPos, NULL);
                 i_this->m672 = 250;
                 i_this->m671 = 2;
                 i_this->mpBrkAnm3->setPlaySpeed(1.0f);
@@ -530,8 +531,8 @@ void tama_set(fganon_class* i_this) {
             case 3: {
                 i_this->mpBrkAnm3->setPlaySpeed(-1.0f);
                 i_this->m671 = 4;
-                dComIfGp_particle_set(0x8242, &tempPos, &i_this->shape_angle);
-                dComIfGp_particle_set(0x8243, &tempPos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_SCENE_8242, &tempPos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_SCENE_8243, &tempPos, &i_this->shape_angle);
                 break;
             }
             case 4: {
@@ -579,7 +580,7 @@ void tama_set(fganon_class* i_this) {
 /* 000029C8-00002A38       .text mahou_set__FP12fganon_class */
 void mahou_set(fganon_class* i_this) {
     for (int i = 0; i < 8; i++) {
-        fopAcM_create(0xF4, i, &i_this->m664, i_this->current.roomNo);
+        fopAcM_create(PROC_FGMAHOU, i, &i_this->m664, i_this->current.roomNo);
     }
     i_this->m670 = 0;
     return;
@@ -598,17 +599,17 @@ void shot2(fganon_class* i_this) {
                     i_this->mEmitters2[i] = NULL;
                 }
             }
-            i_this->mEmitters2[0] = dComIfGp_particle_set(0x8218, &i_this->current.pos, NULL);
-            i_this->mEmitters2[1] = dComIfGp_particle_set(0x8219, &i_this->current.pos, NULL);
+            i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_8218, &i_this->current.pos, NULL);
+            i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_8219, &i_this->current.pos, NULL);
             fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_MAKE_L, 0);
             i_this->m388++;
             // Fall-through
         }
         case 1: {
-            fopAcM_seStart(i_this, 0x5153, 0);
+            fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_L, 0);
             for (int i = 0; i < 2; i++) {
                 if (i_this->mEmitters2[i] != NULL) {
-                    i_this->mEmitters2[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0x1a));
+                    i_this->mEmitters2[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0x1A));
                 }
             }
             if (i_this->mpMorf->isStop()) {
@@ -622,7 +623,7 @@ void shot2(fganon_class* i_this) {
                     }
                 }
             }
-            if (mFrame == 0x1C) {
+            if (mFrame == 28) {
                 i_this->m671 = 1;
                 i_this->m680 = 0.0f;
             }
@@ -631,38 +632,38 @@ void shot2(fganon_class* i_this) {
         case 2: {
             fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_L, 0);
             if (i_this->m3A4[0] == 0) {
-                anm_init(i_this, 0xe, 3.0f, 0, 1.0f, -1);
+                anm_init(i_this, 0xE, 3.0f, 0, 1.0f, -1);
                 i_this->m388++;
-                i_this->mEmitters2[0] = dComIfGp_particle_set(0x821C, &i_this->current.pos, NULL);
-                i_this->mEmitters2[1] = dComIfGp_particle_set(0x821D, &i_this->current.pos, NULL);
+                i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_821C, &i_this->current.pos, NULL);
+                i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_821D, &i_this->current.pos, NULL);
             }
             else {
                 break;
             }
         }
         case 3: {
-            if (mFrame == REG8_S(5) + 0xF) {
-                fopAcM_monsSeStart(i_this, 0x493d, 0);
-                mDoAud_seStart(0x5955, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            if (mFrame == REG8_S(5) + 15) {
+                fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_L, 0);
+                mDoAud_seStart(JA_SE_CM_PG_EBALL_FIRE_L, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             }
-            if (mFrame >= REG8_S(5) + 0xF) {
+            if (mFrame >= REG8_S(5) + 15) {
                 cLib_addCalc2(&i_this->m680, REG8_F(6) + 250.0f, 1.0f, REG8_F(7) + 50.0f);
-                if (mFrame == REG8_S(6) + 0x10) {
+                if (mFrame == REG8_S(6) + 16) {
                     i_this->m671 = 3;
                 }
             
-                if (mFrame == REG8_S(7) + 0x10) {
+                if (mFrame == REG8_S(7) + 16) {
                     mahou_set(i_this);
                 }
             }
             for (int i = 0; i < 2; i++) {
                 if (i_this->mEmitters2[i] != NULL) {
-                    int jointNo = (i*9)+0x0e;
+                    int jointNo = (i * 9) + 14;
                     i_this->mEmitters2[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(jointNo));
                 }
             }
             if (i_this->mpMorf->isStop()) {
-                i_this->m3A4[0] = 0x3C;
+                i_this->m3A4[0] = 60;
                 i_this->m388 = 4;
                 for (int i = 0; i < 2; i++) {
                     if (i_this->mEmitters2[i] != NULL) {
@@ -706,7 +707,7 @@ void spinattack2(fganon_class* i_this) {
             i_this->m388 = 1;
             if (i_this->m68F == 0) {
                 for (int i = 1; i < 5; i++) {
-                    fopAcM_create(0xF3, (i*0x10) | 3, &i_this->current.pos, i_this->current.roomNo);
+                    fopAcM_create(PROC_FGANON, (i * 16) | 3, &i_this->current.pos, i_this->current.roomNo);
                 }
             }
         }
@@ -736,7 +737,7 @@ void spinattack2(fganon_class* i_this) {
                 anm_init(i_this, 9, 2.0f, 0, 1.0f, -1);
                 i_this->m388 = 3;
                 i_this->speedF = 0.0f;
-                fopAcM_monsSeStart(i_this, 0x493c, 0);
+                fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
                 break;
             }
             else {
@@ -744,8 +745,8 @@ void spinattack2(fganon_class* i_this) {
             }
         }
         case 3: {
-            if (mFrame == 0xe) {
-                fopAcM_seStart(i_this, 0x5951, 0);
+            if (mFrame == 14) {
+                fopAcM_seStart(i_this, JA_SE_CM_PG_SWING_L, 0);
             }
             i_this->m685 = 1;
             i_this->mWeponSph.SetAtAtp(8);
@@ -755,7 +756,7 @@ void spinattack2(fganon_class* i_this) {
             if (i_this->mpMorf->isStop()) {
                 if (i_this->m68F == 0) {
                     i_this->m388 = 4;
-                    i_this->m3A4[0] = 0x28;
+                    i_this->m3A4[0] = 40;
                     anm_init(i_this, 0x16, 10.0f, 2, 1.0f, -1);
                 }
                 else {
@@ -806,7 +807,7 @@ void down(fganon_class* i_this) {
         case 3: {
             int mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
             if (mFrame == 2) {
-                fopAcM_monsSeStart(i_this, 0x4940, 0);
+                fopAcM_monsSeStart(i_this, JA_SE_CV_PG_TIRED, 0);
             }
             break;
         }
@@ -853,7 +854,7 @@ BOOL kabe_check(fganon_class* i_this) {
     posVec.y = 0.0f;
     posVec.z = l_HIO.m34 + 100.0f;
     for (int i = 0; i < 8; i++) {
-        cMtx_YrotS(*calc_mtx, i*0x2000);
+        cMtx_YrotS(*calc_mtx, i * 0x2000);
         cXyz transformedPos;
         MtxPosition(&posVec, &transformedPos);
         cXyz tempPos = player->eyePos + transformedPos;
@@ -932,12 +933,12 @@ void kieru(fganon_class* i_this) {
     switch(i_this->m388) {
         case 0: {
             if ((i_this->m408 == 1) || (i_this->m408 == 2)) {
-                i_this->m408 = 0x23;
+                i_this->m408 = 35;
             }
             kieru_brk(i_this, 0);
             if (i_this->m68F != 0) {
                 i_this->m388 = 1;
-                i_this->m3A4[0] = 0x1E;
+                i_this->m3A4[0] = 30;
             }
             else {
                 i_this->m386 = 0;
@@ -970,7 +971,7 @@ void fail(fganon_class* i_this) {
         case 1: {
             if (i_this->mpMorf->isStop()) {
                 i_this->m388 = 2;
-                i_this->m3A4[0] = 0x1e;
+                i_this->m3A4[0] = 30;
                 
                 dBgS_LinChk linChk;
                 
@@ -1028,12 +1029,12 @@ void fail(fganon_class* i_this) {
                     i_this->m6A4 = REG0_S(6) + 0x800;
                     if (i_this->m698 > REG12_F(1) + 700.0f) {
                         i_this->m698 *= -(REG12_F(2) + 0.4f);
-                        fopAcM_seStart(i_this, 0x6998, i_this->m6A8);
-                        if (i_this->m6A8 >= 0x1E) {
-                            i_this->m6A8 -= 0x14;
+                        fopAcM_seStart(i_this, JA_SE_OBJ_TN_SWORD_FALL, i_this->m6A8);
+                        if (i_this->m6A8 >= 30) {
+                            i_this->m6A8 -= 20;
                         }
                         if (i_this->m6A6 == 0) {
-                            i_this->m6A6 = REG0_S(1) + 0x1e;
+                            i_this->m6A6 = REG0_S(1) + 30;
                         }
                     }
                     else {
@@ -1097,8 +1098,8 @@ void standby(fganon_class* i_this) {
             if (distXZ < i_this->m2BD * 10.0f) {
                 i_this->m3A4[0] = l_HIO.m08;
                 i_this->m388 = 1;
-                fopAcM_OnStatus(i_this, 0x20);
-                i_this->mB89 = 0x16;
+                fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
+                i_this->mB89 = 22;
             }
             break;
         }
@@ -1136,7 +1137,7 @@ void start(fganon_class* i_this) {
                 i_this->mB54 = 1;
                 i_this->m388 = 1;
                 anm_init(i_this, 0x16, 0.0f, 2, 1.0f, -1);
-                mDoAud_bgmAllMute(0x1E);
+                mDoAud_bgmAllMute(30);
             }
             break;
         }
@@ -1146,7 +1147,7 @@ void start(fganon_class* i_this) {
         }
         case 2: {
             anm_init(i_this, 0x17, 5.0f, 2, 1.0f, -1);
-            fopAcM_monsSeStart(i_this, 0x4939, 0);
+            fopAcM_monsSeStart(i_this, JA_SE_CV_PG_LAUGH_2, 0);
             i_this->m388 = 3;
             break;
         }
@@ -1161,7 +1162,7 @@ void start(fganon_class* i_this) {
                 mDoAud_subBgmStart(0x80000041);
             }
             if (i_this->m3A4[0] <= (s16)(REG0_S(0) + 0x4B)) {
-                fopAcM_seStart(i_this, 0x5152, 0);
+                fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_S, 0);
             }
             posVec.x = 0.0f;
             posVec.y = i_this->speedF * 0.5f;
@@ -1193,19 +1194,19 @@ void end(fganon_class* i_this) {
         case 0: {
             i_this->m388 = 1;
             anm_init(i_this, 0xB, 2.0f, 0, 1.0f, -1);
-            i_this->mB54 = 0x32;
-            dComIfGs_onEventBit(0x3f20);
+            i_this->mB54 = 50;
+            dComIfGs_onEventBit(0x3f20); // PG_DEFEATED? It appears further down in `energy_ball_move`
             break;
         case 1: {
-            if (mFrame == 0x68) {
-                kieru_brk(i_this,0);
+            if (mFrame == 104) {
+                kieru_brk(i_this, 0);
             }
             break;
         }
         case 2: {
             deru_brk(i_this);
             anm_init(i_this, 0x17, 1.0f, 2, 1.0f, -1);
-            fopAcM_monsSeStart(i_this, 0x4939, 0);
+            fopAcM_monsSeStart(i_this, JA_SE_CV_PG_LAUGH_2, 0);
             i_this->m388 = 3;
             break;
         }
@@ -1214,7 +1215,7 @@ void end(fganon_class* i_this) {
             anm_init(i_this, 0xF, 1.0f, 0, 1.0f, -1);
             i_this->m388 = 5;
             i_this->speed.y = 0.0f;
-            fopAcM_seStart(i_this, 0x5956, 0);
+            fopAcM_seStart(i_this, JA_SE_CM_PG_END_1, 0);
         }
         case 5:
             i_this->current.pos.y += i_this->speed.y;
@@ -1222,10 +1223,10 @@ void end(fganon_class* i_this) {
             if (i_this->speed.y > REG8_F(9) + 20.0f) {
                 i_this->speed.y = REG8_F(9) + 20.0f;
             }
-            if (mFrame == 0x1c) {
+            if (mFrame == 28) {
                 kieru_brk2(i_this);
             }
-            if (mFrame == 0x30) {
+            if (mFrame == 48) {
                 i_this->m388 = 6;
             }
         }
@@ -1248,13 +1249,13 @@ void last_end(fganon_class* i_this) {
             anm_init(i_this, 0xC, 2.0f, 0, 1.0f, -1);
             i_this->mB54 = 100;
             i_this->m3C0 = 10000.0f;
-            i_this->m3A4[0] = REG0_S(4) + 0x19;
-            i_this->m3A4[1] = 0x96;
+            i_this->m3A4[0] = REG0_S(4) + 25;
+            i_this->m3A4[1] = 150;
         }
         case 1: {
             if (i_this->m3A4[1] == 0) {
                 i_this->m388 = 2;
-                i_this->m3A4[1] = 0x14;
+                i_this->m3A4[1] = 20;
                 i_this->m2D0 = 1;
                 i_this->mB54++;
             }
@@ -1266,21 +1267,21 @@ void last_end(fganon_class* i_this) {
             cLib_addCalc2(&i_this->scale.y, 0.1f, 1.0f, 0.05f);
             if (i_this->m3A4[1] == 0) {
                 i_this->m388 = 3;
-                i_this->m3A4[1] = 0x1e;
-                fopAcM_seStart(i_this, 0x5905, 0);
+                i_this->m3A4[1] = 30;
+                fopAcM_seStart(i_this, JA_SE_CM_L_ARROW_PASS_AWAY, 0);
             }
             break;
         }
         case 3: {
-            cLib_addCalc0(&i_this->scale.x, 0.1000000014901161f, 0.05000000074505806f);
-            cLib_addCalc0(&i_this->scale.z, 0.1000000014901161f, 0.05000000074505806f);
+            cLib_addCalc0(&i_this->scale.x, 0.1f, 0.05f); 
+            cLib_addCalc0(&i_this->scale.z, 0.1f, 0.05f);
             cLib_addCalc2(&i_this->scale.y, 10.0f, 0.1f, 1.0f);
             if (i_this->m3A4[1] == 0) {
                 i_this->scale.x = 0.0f;
                 i_this->scale.y = 0.0f;
                 i_this->scale.z = 0.0f;
                 i_this->m388 = 4;
-                i_this->m3A4[1] = 0x1e;
+                i_this->m3A4[1] = 30;
             }
             break;
         }
@@ -1353,76 +1354,102 @@ void damage_check(fganon_class* i_this) {
             atInfo.mpActor = atInfo.mpObj->GetAc();
             if (i_this->m2BC == 2) {
                 if (atInfo.mpObj->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
-                    fopAcM_monsSeStart(i_this, 0x4945, 0);
-                    fopAcM_seStart(a_this, 0x5957, 0);
-                    dComIfGp_particle_set(0x10, &i_this->eyePos, NULL);
+                    fopAcM_monsSeStart(i_this, JA_SE_CV_PG_DIE, 0);
+                    fopAcM_seStart(a_this, JA_SE_CM_PG_END_2, 0);
+                    
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->eyePos, NULL);
+                    
                     local_44.z = 2.0f;
                     local_44.y = 2.0f;
                     local_44.x = 2.0f;
+                    
                     local_a0.z = 0.0f;
                     local_a0.x = 0.0f;
                     local_a0.y = fopAcM_searchPlayerAngleY(i_this);
-                    dComIfGp_particle_set(0xD, &i_this->eyePos, &local_a0, &local_44);
+                    
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &i_this->eyePos, &local_a0, &local_44);
                     dKy_SordFlush_set(i_this->eyePos, 1);
-                    i_this->m386 = 0x16;
+
+                    i_this->m386 = 22;
                     i_this->m388 = 0;
                     i_this->m3AE = 1000;
+
                     mDoAud_subBgmStop();
                     if (i_this->m408 != 0) {
-                        i_this->m408 = 0x23;
+                        i_this->m408 = 35;
                     }
-                    fopAcM_seStart(a_this, 0x5904, 0);
-                    mEmitter = dComIfGp_particle_set(0x8405, &i_this->current.pos, NULL);
+
+                    fopAcM_seStart(a_this, JA_SE_CM_L_ARROW_SHRINK, 0);
+
+                    mEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8405, &i_this->current.pos, NULL);
                     if (mEmitter != NULL) {
                         mEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
                     }
-                    mEmitter = dComIfGp_particle_set(0x8406, &i_this->current.pos, NULL);
+
+                    mEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8406, &i_this->current.pos, NULL);
                     if (mEmitter != NULL) {
                         mEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
                     }
+
                     i_this->speedF = 0.0f;
                 }
                 else {
                     i_this->m386 = 2;
                     i_this->m388 = 0;
                     if ((i_this->m408 == 1) || (i_this->m408 == 2)) {
-                        i_this->m408 = 0x23;
+                        i_this->m408 = 35;
                     }
                 }
+
                 i_this->m671 = 0;
+
                 for (int i = 0; i < 2; i++) {
                     if(i_this->mEmitters3[i] != NULL) {
                         i_this->mEmitters3[i]->becomeInvalidEmitter();
                         i_this->mEmitters3[i] = NULL;
                     }
                 }
+
                 return;
             }
-            if (atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == 0xF4)) {
+            if (atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == PROC_FGMAHOU)) {
                 i_this->m670++;
+
                 anm_init(i_this, 6, 2.0f, 0, 1.0f, -1);
-                i_this->m3A4[0] = 0x3C;
-                fopAcM_monsSeStart(i_this, 0x493F, 0);
+
+                i_this->m3A4[0] = 60;
+
+                fopAcM_monsSeStart(i_this, JA_SE_CV_PG_HIT_EBALL, 0);
+
                 if(i_this->m670 < 5) {
                     return;
                 }
-                dComIfGp_particle_set(0x10, &i_this->eyePos, NULL);
+
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->eyePos, NULL);
+
                 local_44.z = 2.0f;
                 local_44.y = 2.0f;
                 local_44.x = 2.0f;
+
                 local_a0.z = 0.0f;
                 local_a0.x = 0.0f;
                 local_a0.y = fopAcM_searchPlayerAngleY(i_this);
-                dComIfGp_particle_set(0xD, &i_this->eyePos, &local_a0, &local_44);
+
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &i_this->eyePos, &local_a0, &local_44);
                 dKy_SordFlush_set(i_this->eyePos, 1);
+                
                 i_this->m386 = 8;
                 i_this->m388 = 0;
                 i_this->m3B0 = REG8_F(11) + 80.0f;
                 i_this->m3B8 = REG8_S(2) + 7;
+
                 local_80 = i_this->current.pos - player->current.pos;
+
                 i_this->m3B4 = cM_atan2s(local_80.x, local_80.z);
                 distXZ = std::sqrtf(local_80.x * local_80.x + local_80.z * local_80.z);
+                
                 i_this->m3B6 = -cM_atan2s(local_80.y, distXZ);
+                
                 i_this->speedF = 0.0f;
                 return;
             }
@@ -1430,7 +1457,7 @@ void damage_check(fganon_class* i_this) {
     }
     if (i_this->m68F) {
         if ((i_this->mCyl.ChkTgHit()) || (master->m386 == 8)) {
-            mEmitter = dComIfGp_particle_set(0x826b, &i_this->current.pos, NULL);
+            mEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_826B, &i_this->current.pos, NULL);
             if (mEmitter != NULL) {
                 mEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0));
             }
@@ -1451,7 +1478,8 @@ void damage_check(fganon_class* i_this) {
                                                                                               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e)) {
                         atInfo.mpActor = cc_at_check(i_this, &atInfo);
                         if (atInfo.mbDead) {
-                            dComIfGp_particle_set(0x10, &i_this->eyePos, NULL);
+                            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->eyePos, NULL);
+                            
                             local_44.x = 2.0f;
                             local_44.y = 2.0f;
                             local_44.z = 2.0f;
@@ -1462,22 +1490,25 @@ void damage_check(fganon_class* i_this) {
                             local_44.z = 1.0f;
                         }
                         if (i_this->health <= 0) {
-                            fopAcM_monsSeStart(i_this, 0x4943, 0);
+                            fopAcM_monsSeStart(i_this, JA_SE_CV_PG_DAMAGE_L, 0);
                         }
                         else {
-                            fopAcM_monsSeStart(i_this, 0x4942, 0);
+                            fopAcM_monsSeStart(i_this, JA_SE_CV_PG_DAMAGE_S, 0);
                         }
+
                         local_a0.z = 0.0f;
                         local_a0.x = 0.0f;
                         local_a0.y = fopAcM_searchPlayerAngleY(i_this);
-                        dComIfGp_particle_set(0xD, pPos, &local_a0, &local_44);
+
+                        dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pPos, &local_a0, &local_44);
+
                         if ((i_this->m386 == 7) || (i_this->m386 == 10)) {
                             i_this->m386 = 8;
                             i_this->m388 = 0;
                         }
                         else if (i_this->m2BC == 0) {
                             if (i_this->health <= 0) {
-                                i_this->m386 = 0x15;
+                                i_this->m386 = 21;
                                 i_this->m388 = 0;
                                 i_this->m3AE = 1000;
                                 mDoAud_subBgmStop();
@@ -1504,20 +1535,25 @@ void damage_check(fganon_class* i_this) {
                 }
             }
             else {
-                fopAcM_monsSeStart(i_this, 0x493F, 0);
-                dComIfGp_particle_set(0x10, &i_this->eyePos, NULL);
+                fopAcM_monsSeStart(i_this, JA_SE_CV_PG_HIT_EBALL, 0);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->eyePos, NULL);
+
                 local_44.z = 2.0f;
                 local_44.y = 2.0f;
                 local_44.x = 2.0f;
+
                 local_a0.z = 0.0f;
                 local_a0.x = 0.0f;
                 local_a0.y = fopAcM_searchPlayerAngleY(i_this);
-                dComIfGp_particle_set(0xD, &i_this->eyePos, &local_a0, &local_44);
+
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &i_this->eyePos, &local_a0, &local_44);
                 dKy_SordFlush_set(i_this->eyePos, 1);
+
                 i_this->m386 = 8;
                 i_this->m388 = 0;
                 i_this->m3B0 = REG8_F(11) + 80.0f;
                 i_this->m3B8 = REG8_S(2) + 7;
+
                 local_98 = i_this->current.pos - player->current.pos;
                 i_this->m3B4 = cM_atan2s(local_98.x, local_98.z);
                 distXZ = std::sqrtf(local_98.x * local_98.x + local_98.z * local_98.z);
@@ -1532,7 +1568,7 @@ void damage_check(fganon_class* i_this) {
 /* 00006288-00006560       .text move__FP12fganon_class */
 s32 move(fganon_class* i_this) {    
     int res = 0;
-    if (!dComIfGp_checkPlayerStatus0(0, 0x10000) && !dComIfGp_checkPlayerStatus0(0, 0x100000) && i_this->m386) {
+    if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && !dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e) && i_this->m386) {
         if (i_this->m386 == 10) {
             dCam_getBody()->SetTypeForce("P_Ganon3", NULL);
         }
@@ -1543,7 +1579,7 @@ s32 move(fganon_class* i_this) {
             dCam_getBody()->SetTypeForce("P_Ganon2", NULL);
         }
     }
-    if ((i_this->m2BC == 0) && (i_this->m386 < 0x14)) {
+    if ((i_this->m2BC == 0) && (i_this->m386 < 20)) {
         fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
         if ((i_this->m386 == 0) && (player->current.pos.y < 710.0f)) {
             return 0;
@@ -1583,7 +1619,7 @@ s32 move(fganon_class* i_this) {
         fly2(i_this);
         res = 1;
         break;
-    case 0xb:
+    case 0xB:
         shot2(i_this);
         res = 1;
         break;
@@ -1681,18 +1717,18 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB5C.z = -303137.0f;
             
             if (i_this->mB56 == 2) {
-                mDoAud_seStart(0x4938, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+                mDoAud_seStart(JA_SE_CV_PG_LAUGH_1, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             }
             
-            if (i_this->mB56 == 0x1E) {
+            if (i_this->mB56 == 30) {
                 player->mDemo.setDemoMode(0x35);
             }
             
-            if (i_this->mB56 == 0x2D) {
+            if (i_this->mB56 == 45) {
                 deru_brk2(i_this);
             }
             
-            if (i_this->mB56 != 0x2F) {
+            if (i_this->mB56 != 47) {
                 break;
             }
             
@@ -1717,7 +1753,7 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB68.y += REG0_F(0) + 160.0f;
         }
         case 0x3: {
-            if (i_this->mB56 > 0x3C) {
+            if (i_this->mB56 > 60) {
                 cLib_addCalc2(&i_this->mB5C.x, -300269.0f, 0.1f, i_this->mB80 * 100.0f);
                 cLib_addCalc2(&i_this->mB5C.y, 870.0f, 0.1f, i_this->mB80 * 100.0f);
                 cLib_addCalc2(&i_this->mB5C.z, -303335.0, 0.1f, i_this->mB80 * 300.0f);
@@ -1728,17 +1764,17 @@ void demo_camera(fganon_class* i_this) {
                 cLib_addCalc2(&i_this->mB68.y, ((i_this->current.pos.y + 230.0f) - 70.0f) + 55.0f, 0.1f, i_this->mB80 * 55.0f);
                 cLib_addCalc2(&i_this->mB80, 0.1f, 1.0f, REG8_F(7) + 0.01f);
             }
-            if (i_this->mB56 == 0x6E) {
+            if (i_this->mB56 == 110) {
                 i_this->m388 = 2;
             }
-            if (i_this->mB56 == 0xB4) {
+            if (i_this->mB56 == 180) {
                 i_this->m388 = 4;
             }
-            if (i_this->mB56 == 0x118) {
+            if (i_this->mB56 == 280) {
                 i_this->m386 = 6;
                 i_this->m388 = 1;
-                i_this->m3A4[0] = 0x1D;
-                i_this->mB54 = 0x96;
+                i_this->m3A4[0] = 29;
+                i_this->mB54 = 150;
                 if (i_this->m2BF != 0xFF) {
                     dComIfGs_onSwitch(i_this->m2BF, fopAcM_GetRoomNo(a_this));
                 }
@@ -1825,7 +1861,7 @@ void demo_camera(fganon_class* i_this) {
             i_this->current.pos.z = (i_this->mB68.z - 100.0f) + REG0_F(6);
 
             i_this->shape_angle.y = REG0_S(0) + 2000;
-            if (i_this->mB56 == 0x28) {
+            if (i_this->mB56 == 40) {
                 i_this->mB54++;
                 i_this->mB56 = 0;
             }
@@ -1840,7 +1876,7 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB5C.y = 929.0f;
             i_this->mB5C.z = -301770.0f;
 
-            if (i_this->mB56 != 0x1E) { 
+            if (i_this->mB56 != 30) { 
                 break;
             }
             i_this->mB54++;
@@ -1859,7 +1895,7 @@ void demo_camera(fganon_class* i_this) {
         case 0x36: {
             cLib_addCalc2(&i_this->mB68.y, (i_this->eyePos.y - 30.0f) + REG0_F(11), 0.1f, 20.0f);
             if (i_this->mB56 == 100) {
-                i_this->mB54 = 0x37;
+                i_this->mB54 = 55;
                 player->changeDemoMode(0xF);
                 i_this->mB56 = 0;
             }
@@ -1868,8 +1904,8 @@ void demo_camera(fganon_class* i_this) {
             }
         }
         case 0x37: {
-            if (i_this->mB56 == 0x14) {
-                mDoAud_seStart(0x4938, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+            if (i_this->mB56 == 20) {
+                mDoAud_seStart(JA_SE_CV_PG_LAUGH_1, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
             }
 
             i_this->mB68 = player->current.pos;
@@ -1882,10 +1918,10 @@ void demo_camera(fganon_class* i_this) {
             cMtx_YrotS(*calc_mtx, player->shape_angle.y + i_this->mB76 + REG8_S(5));
             MtxPosition(&transformedPos, &playerPos);
 
-            i_this->mB76 += REG8_S(6) + 0x1E;
+            i_this->mB76 += REG8_S(6) + 30;
             i_this->mB5C = player->current.pos + playerPos;
 
-            if (i_this->mB56 != 0x82) {
+            if (i_this->mB56 != 130) {
                 break;
             }
 
@@ -1897,7 +1933,7 @@ void demo_camera(fganon_class* i_this) {
                 dComIfGs_offSwitch(i_this->m2BF, fopAcM_GetRoomNo(a_this));
             }
 
-            i_this->mB54 = 0x96;
+            i_this->mB54 = 150;
             fopAcM_delete(a_this);
             goto label0x96;
         }
@@ -1966,11 +2002,11 @@ void demo_camera(fganon_class* i_this) {
                 cLib_addCalc2(&i_this->mB68.y, player->current.pos.y + REG0_F(9), 0.8f, REG0_F(10) + 30.0f);
             }
 
-            if (i_this->mB56 <= REG0_S(3) + 0x50) {
+            if (i_this->mB56 <= REG0_S(3) + 80) {
                 break;
             }
 
-            i_this->mB54 = 0x96;
+            i_this->mB54 = 150;
 
             fopAcM_delete(a_this);
             
@@ -1989,7 +2025,7 @@ void demo_camera(fganon_class* i_this) {
     }
     if (i_this->mB54 && bVar3) {
         camera->mCamera.Set(i_this->mB68, i_this->mB5C, i_this->mB84, 0);
-        JUTReport(0x19A, 0x1AE, "K SUB  COUNT  %d", i_this->mB56);
+        JUTReport(410, 430, "K SUB  COUNT  %d", i_this->mB56);
         i_this->mB56++;
     }
     return;
@@ -2040,7 +2076,7 @@ void energy_ball_move(fganon_class* i_this) {
 
     atInfo.pParticlePos = NULL;
 
-    if (i_this->m408 == 0x23) {    
+    if (i_this->m408 == 35) {    
         if (i_this->m688 != 0) {
             mDoAud_changeSubBgmStatus(8);
             i_this->m688 = 0;
@@ -2064,12 +2100,12 @@ void energy_ball_move(fganon_class* i_this) {
                 i_this->mEmitters2[i] = NULL;
             }
         }
-        i_this->mEmitters2[0] = dComIfGp_particle_set(0x81CE, &a_this->current.pos, NULL);
-        i_this->mEmitters2[1] = dComIfGp_particle_set(0x81CF, &a_this->current.pos, NULL);
+        i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_81CE, &a_this->current.pos, NULL);
+        i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_81CF, &a_this->current.pos, NULL);
         i_this->m408 = 2;
     }
     if (i_this->m408 == 2) {
-        cMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(0xe), *calc_mtx);
+        cMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(0xE), *calc_mtx);
         MtxTrans(REG12_F(0) + 30.0f, REG12_F(1) + 30.0f, REG12_F(2), TRUE);
         MtxPosition(&local_50, &i_this->m3E0);
          
@@ -2129,7 +2165,7 @@ void energy_ball_move(fganon_class* i_this) {
                         }
                         i_this->m386 = 2;
                         i_this->m388 = 0;
-                        i_this->m40A = 0x32;
+                        i_this->m40A = 50;
                         return;
                     }
                 }
@@ -2205,8 +2241,8 @@ void energy_ball_move(fganon_class* i_this) {
                 }
                 csXyz local_7c(0,0,0);
                 local_7c.y = (short)cM_atan2s(i_this->m3F8.x, i_this->m3F8.z);
-                dComIfGp_particle_set(0x81F0, &i_this->m3E0, &local_7c);
-                mDoAud_seStart(0x28A5, &i_this->m3E0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+                dComIfGp_particle_set(dPa_name::ID_SCENE_81F0, &i_this->m3E0, &local_7c);
+                mDoAud_seStart(JA_SE_LK_PG_BOMB_STRIKE, &i_this->m3E0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
                 PSVECAdd(&i_this->m3E0, &i_this->m3F8, &i_this->m3E0);
                 i_this->m40A = 5;
             }
@@ -2216,9 +2252,9 @@ void energy_ball_move(fganon_class* i_this) {
 
         if (i_this->m40A != 0) {
             i_this->m40A--;
-            local_68.x = -20000.0;
-            local_68.y = -20000.0;
-            local_68.z = 20000.0;
+            local_68.x = -20000.0f;
+            local_68.y = -20000.0f;
+            local_68.z = 20000.0f;
         }
 
         if (i_this->m408 == 3) {
@@ -2266,14 +2302,14 @@ void energy_ball_move(fganon_class* i_this) {
 
             csXyz local_7c(0,0,0);
 
-            dComIfGp_particle_set(0x81EE, &i_this->m3E0, &local_7c, 0);
-            dComIfGp_particle_set(0x81EF, &i_this->m3E0, &local_7c, 0);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_81EE, &i_this->m3E0, &local_7c, 0);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_81EF, &i_this->m3E0, &local_7c, 0);
 
-            mDoAud_seStart(0x6A35, &i_this->m3E0, 100, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+            mDoAud_seStart(JA_SE_OBJ_PG_EBALL_EXP_S, &i_this->m3E0, 100, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
 
             if (i_this->mBallAtSph.ChkTgHit() != 0) {
                 atInfo.mpActor = i_this->mBallAtSph.GetAtHitObj()->GetAc();
-                if ((atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == 0xA9)) && (i_this->m386 != 0x16)) {
+                if ((atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == PROC_PLAYER)) && (i_this->m386 != 22)) {
                     i_this->m68B = 1;
                     i_this->m386 = 5;
                     i_this->m388 = 1;
@@ -2285,7 +2321,7 @@ void energy_ball_move(fganon_class* i_this) {
     local_5c = a_this->home.pos - i_this->m3E0;
         
     if (local_5c.abs() > 10000.0f) {
-      i_this->m408 = 0x23;
+      i_this->m408 = 35;
     }
     return;
 }
@@ -2294,7 +2330,7 @@ void energy_ball_move(fganon_class* i_this) {
 /* Play PG's magic sound effect */
 void* mahou_se_set(void* i_act, void* i_other) {  
     fganon_class* i_this = (fganon_class*)i_act;
-    if ((fopAc_IsActor(i_this)) && (((base_process_class*)i_this)->mProcName == 0xF4)) {
+    if ((fopAc_IsActor(i_this)) && (((base_process_class*)i_this)->mProcName == PROC_FGMAHOU)) {
         if (i_this->health == 0) {
             fopAcM_seStartCurrent(i_this, JA_SE_OBJ_PG_EBALL_FLY_L, 0);
         }
@@ -2304,7 +2340,7 @@ void* mahou_se_set(void* i_act, void* i_other) {
 }
 
 static u32 jno[2] = {0x7, 0xD};
-static u16 eno[2] = {0x81CD, 0x81CC};
+static u16 eno[2] = {dPa_name::ID_SCENE_81CD, dPa_name::ID_SCENE_81CC};
 
 /* 000086B4-0000924C       .text daFganon_Execute__FP12fganon_class */
 static BOOL daFganon_Execute(fganon_class* i_this) {
@@ -2364,8 +2400,8 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     }
     
     local_94.x = i_this->m3BC * cM_ssin(i_this->m384 * (REG0_S(6) + 700));
-    local_94.y = i_this->m3BC * cM_ssin(i_this->m384 * (REG0_S(6) + 0x2ee));
-    local_94.z = i_this->m3BC * cM_scos(i_this->m384 * (REG0_S(6) + 0x2d0));
+    local_94.y = i_this->m3BC * cM_ssin(i_this->m384 * (REG0_S(6) + 750));
+    local_94.z = i_this->m3BC * cM_scos(i_this->m384 * (REG0_S(6) + 720));
     
     cLib_addCalc0(&i_this->m3BC, 1.0f, 1.0f);
 
@@ -2422,7 +2458,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     energy_ball_move(i_this);
     
     for (int i = 0; i < 2; i++) {
-        if ((i_this->mbIsMaterialized != 0) && (i_this->m386 != 0x16)) {
+        if ((i_this->mbIsMaterialized != 0) && (i_this->m386 != 22)) {
             if (i_this->mEmitters1[i] != NULL) {
                 i_this->mEmitters1[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(jno[i]));
             }
@@ -2492,12 +2528,12 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     i_this->m686 = 0;
     mant_class* cape = (mant_class*)fopAcM_SearchByID(i_this->mCapeID);
     if (cape != NULL) {
-        mDoMtx_copy(i_this->mpMorf->mpModel->mpNodeMtx[REG0_S(5) + 0x14], *calc_mtx);
+        mDoMtx_copy(i_this->mpMorf->mpModel->mpNodeMtx[REG0_S(5) + 20], *calc_mtx);
         local_70.x = REG0_F(0) + 35.0f;
         local_70.y = REG0_F(1);
         local_70.z = REG0_F(2) + -30.0f;
         MtxPosition(&local_70, &cape->m1BE0);
-        mDoMtx_copy(i_this->mpMorf->mpModel->mpNodeMtx[REG0_S(6) + 0xB], *calc_mtx);
+        mDoMtx_copy(i_this->mpMorf->mpModel->mpNodeMtx[REG0_S(6) + 11], *calc_mtx);
         local_70.x = REG0_F(3) + 35.0f;
         local_70.y = REG0_F(4);
         local_70.z = REG0_F(5) + 30.0f;
@@ -2542,7 +2578,7 @@ static BOOL daFganon_Delete(fganon_class* i_this) {
 
     mDoAud_seDeleteObject(&i_this->m3E0);
 
-    if (i_this->mCapeID != 0xffff)
+    if (i_this->mCapeID != 0xFFFF)
         fopAcM_delete(fopAcM_SearchByID(i_this->mCapeID));
 
     if (i_this->mB89)
@@ -2756,7 +2792,7 @@ static s32 daFganon_Create(fopAc_ac_c* i_act) {
     }
     
     if ((i_this->mSwitchNo != 0xFF) && (dComIfGs_isSwitch(i_this->mSwitchNo, dComIfGp_roomControl_getStayNo()) != 0)) {
-        if (((fopAcM_GetParam(i_this) & 0xF) == 2) && !(dComIfGs_isEventBit(0x3A08))) {
+        if (((fopAcM_GetParam(i_this) & 0xF) == 2) && !(dComIfGs_isEventBit(0x3A08))) { // Probably a flag to do with beating FF1 so PG spawns?
             fopAcM_create(PROC_BOKO, 5, &i_this->current.pos, i_this->current.roomNo);
         }
         return cPhs_ERROR_e;
