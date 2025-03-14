@@ -19,9 +19,10 @@
 #include "d/d_cc_uty.h"
 #include "d/d_meter.h"
 #include "JSystem/JUtility/JUTReport.h"
-//#include "d/d_meter.cpp"
+#include "d/d_meter.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 fganon_class* master;
 u8 hio_set;
@@ -258,6 +259,7 @@ void fly(fganon_class* i_this) {
         i_this->m386 = 2;
         i_this->m388 = 0;
     }
+    return;
 }
 
 /* 000015A8-00001BD0       .text shot__FP12fganon_class */
@@ -352,8 +354,7 @@ void shot(fganon_class* i_this) {
       i_this->m388 = 0;
     }
     if ((i_this->m388 == 3) || (i_this->m388 == 4)) {
-        s32 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(i_this));
-        mDoAud_monsSeStart(JA_SE_OBJ_PG_EBALL_FLY_S, &i_this->m3E0, 100, reverb);
+        mDoAud_monsSeStart(JA_SE_OBJ_PG_EBALL_FLY_S, &i_this->m3E0, 100, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
     }
     return;
 }
@@ -389,7 +390,8 @@ void spinattack(fganon_class* i_this) {
                 i_this->shape_angle.y = cM_rndFX(32768.0f);
                 break;
             }
-        case 2:
+        }
+        case 2: {
             if (i_this->m3A4[0] == 0) {
                 anm_init(i_this, 0x9, 2.0f, 0, 1.0f, -1);
                 i_this->m388 = 3;
@@ -1577,18 +1579,18 @@ s32 move(fganon_class* i_this) {
         spinattack(i_this);
         res = 1;
         break;
-    case 8:
+    case 9:
         fly2(i_this);
         res = 1;
         break;
-    case 9:
+    case 0xb:
         shot2(i_this);
         res = 1;
         break;
     case 10:
         spinattack2(i_this);
         break;
-    case 0xb:
+    case 8:
         down(i_this);
         res = 1;
         break;
@@ -1600,6 +1602,9 @@ s32 move(fganon_class* i_this) {
         break;
     case 0x16:
         last_end(i_this);
+        break;    
+    default:
+        break;
     }
     damage_check(i_this);
     i_this->m68C = 0;
@@ -1623,19 +1628,27 @@ s32 move(fganon_class* i_this) {
 
 /* 00006560-00007434       .text demo_camera__FP12fganon_class */
 void demo_camera(fganon_class* i_this) {
-    cXyz posVec;
-    float fVar1;
-    float fVar2;
+    camera_class* camera;
+    camera_class* camera2;
+    fopAc_ac_c* a_this;
+    daPy_py_c* player;
+    cXyz transformedPos;
+    cXyz playerPos;
+    float yPos;
+    float zPos;
+    float yPos2;
+    float zPos2;
     s8 bVar3;
     
-    fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    a_this = (fopAc_ac_c*)i_this;
+
+    player = (daPy_py_c*)daPy_getPlayerActorClass();
+    camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     bVar3 = TRUE;
     switch(i_this->mB54) {
         case 0x1: {
             if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(i_this, 2, -1, 0);
+                fopAcM_orderPotentialEvent(a_this, 2, -1, 0);
                 i_this->eventInfo.onCondition(2);
                 bVar3 = FALSE;
                 break;
@@ -1652,12 +1665,12 @@ void demo_camera(fganon_class* i_this) {
             player->changeOriginalDemo();
             player->changeDemoMode(0x18);
         }
-        case 0x3: {
-            posVec.x = -300306.0f;
-            posVec.y = 715.0f;
-            posVec.z = -303407.0f;
-            
-            player->setPlayerPosAndAngle(&posVec, 0.000000061932944f);
+        case 0x2: {
+            playerPos.x = -300306.0f;
+            playerPos.y = 715.0f; 
+            playerPos.z = -303407.0f;
+
+            player->setPlayerPosAndAngle(&playerPos, -0x7BCD);
             
             i_this->mB68.x = -300319.0f;
             i_this->mB68.y = 812.0f;
@@ -1668,7 +1681,7 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB5C.z = -303137.0f;
             
             if (i_this->mB56 == 2) {
-                fopAcM_seStart(i_this, 0x4938, 0);
+                mDoAud_seStart(0x4938, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             }
             
             if (i_this->mB56 == 0x1E) {
@@ -1686,24 +1699,24 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB54 = 3;
             i_this->mB56 = 0;
             
-            fVar1 = REG8_F(2) + -303109.0f;
-            fVar2 = REG8_F(1) + 745.0f;
+            zPos = REG8_F(2) + -303109.0f;
+            yPos = REG8_F(1) + 745.0f;
             
             i_this->current.pos.x = REG8_F(0) + -300294.0f;
-            i_this->current.pos.y = fVar2;
-            i_this->current.pos.z = fVar1;
+            i_this->current.pos.y = yPos;
+            i_this->current.pos.z = zPos;
             
-            fVar1 = REG8_F(5) + -303635.0f;
-            fVar2 = REG8_F(4) + 770.0f;
+            zPos2 = REG8_F(5) + -303635.0f;
+            yPos2 = REG8_F(4) + 770.0f;
             
             i_this->mB5C.x = REG8_F(3) + -300169.0f;
-            i_this->mB5C.y = fVar2;
-            i_this->mB5C.z = fVar1;
+            i_this->mB5C.y = yPos2;
+            i_this->mB5C.z = zPos2;
 
             i_this->mB68 = i_this->current.pos;
             i_this->mB68.y += REG0_F(0) + 160.0f;
         }
-        case 0x32: {
+        case 0x3: {
             if (i_this->mB56 > 0x3C) {
                 cLib_addCalc2(&i_this->mB5C.x, -300269.0f, 0.1f, i_this->mB80 * 100.0f);
                 cLib_addCalc2(&i_this->mB5C.y, 870.0f, 0.1f, i_this->mB80 * 100.0f);
@@ -1727,14 +1740,14 @@ void demo_camera(fganon_class* i_this) {
                 i_this->m3A4[0] = 0x1D;
                 i_this->mB54 = 0x96;
                 if (i_this->m2BF != 0xFF) {
-                    dComIfGs_onSwitch(i_this->m2BF, fopAcM_GetRoomNo(i_this));
+                    dComIfGs_onSwitch(i_this->m2BF, fopAcM_GetRoomNo(a_this));
                 }
             }
             break;
         }
-        case 0x33: {
+        case 0x32: {
             if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(i_this, 2, 0xFFFF, 0);
+                fopAcM_orderPotentialEvent(a_this, 2, 0xFFFF, 0);
                 i_this->eventInfo.onCondition(2);
                 bVar3 = FALSE;
                 break;
@@ -1752,30 +1765,30 @@ void demo_camera(fganon_class* i_this) {
 
             i_this->shape_angle.y = 0;
         }
-        case 0x34: {
+        case 0x33: {
             i_this->current.pos.x = -300202.0f;
             i_this->current.pos.y = 715.0f;
             i_this->current.pos.z = -301859.0f;
 
             cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
             
-            posVec.x = REG0_F(0) - 150.0f;
-            posVec.y = REG0_F(1) + 20.0f;
-            posVec.z = REG0_F(2) + 500.0f;
-
-            MtxPosition(&posVec, &posVec);
-
-            i_this->mB5C = i_this->current.pos + posVec;
-
-            posVec.x = REG0_F(3);
-            posVec.y = 0.0f;
-            posVec.z = REG0_F(5) + 280.0f;
+            transformedPos.x = REG0_F(0) - 150.0f;
+            transformedPos.y = REG0_F(1) + 20.0f;
+            transformedPos.z = REG0_F(2) + 500.0f;
             
-            MtxPosition(&posVec, &posVec);
-            PSVECAdd(&posVec, &i_this->current.pos, &posVec);
-            posVec.y = 715.0f;
+            MtxPosition(&transformedPos, &playerPos);
+
+            i_this->mB5C = i_this->current.pos + playerPos;
+
+            transformedPos.x = REG0_F(3);
+            transformedPos.y = 0.0f;
+            transformedPos.z = REG0_F(5) + 280.0f;
             
-            player->setPlayerPosAndAngle(&posVec, -0x8000);
+            MtxPosition(&transformedPos, &playerPos);
+            PSVECAdd(&playerPos, &i_this->current.pos, &playerPos);
+            playerPos.y = 715.0f;
+            
+            player->setPlayerPosAndAngle(&playerPos, -0x8000);
 
             i_this->mB68 = i_this->eyePos;
             i_this->mB68.y += REG0_F(6) - 40.0f;
@@ -1795,14 +1808,13 @@ void demo_camera(fganon_class* i_this) {
             }
             break;
         }
-        case 0x35: {
-            player->setPlayerPosAndAngle(&cXyz(-300202.0f, i_this->current.pos.y, -301859.0f), 0.0f);
-
-            //posVec.x = -300202.0f;
-            //posVec.y = i_this->current.pos.y;
-            //posVec.z = -301859.0f;
+        case 0x34: {
+            yPos = player->current.pos.y;
+            playerPos.x = -300202.0f;
+            playerPos.y = yPos;
+            playerPos.z = -301859.0f;
             
-            //player->setPlayerPosAndAngle(&cXyz(-300202.0f, i_this->current.pos.y, -301859.0f), 0.0f);
+            player->setPlayerPosAndAngle(&playerPos, 0.0f);
             
             if (i_this->mB56 == 10) {
                 i_this->m388++;
@@ -1819,7 +1831,7 @@ void demo_camera(fganon_class* i_this) {
             }
             break;
         }
-        case 0x36: {
+        case 0x35: {
             i_this->mB68.x = -300098.0f;
             i_this->mB68.y = 580.0f;
             i_this->mB68.z = -301997.0f;
@@ -1844,53 +1856,54 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB68.y -= REG0_F(11) + 30.0f;
             i_this->m388++;
         }
-        case 0x38: {
+        case 0x36: {
             cLib_addCalc2(&i_this->mB68.y, (i_this->eyePos.y - 30.0f) + REG0_F(11), 0.1f, 20.0f);
             if (i_this->mB56 == 100) {
                 i_this->mB54 = 0x37;
                 player->changeDemoMode(0xF);
                 i_this->mB56 = 0;
             }
-            break;
+            else {
+                break;
+            }
         }
-        case 0x64: {
-            
+        case 0x37: {
             if (i_this->mB56 == 0x14) {
-                fopAcM_seStart(i_this, 0x4938, 0);
+                mDoAud_seStart(0x4938, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
             }
 
             i_this->mB68 = player->current.pos;
             i_this->mB68.y += REG8_F(3);
 
-            posVec.x = 0.0f;
-            posVec.y = REG8_F(4) + 1500.0f;
-            posVec.z = REG8_F(5) + 2000.0f;
+            transformedPos.x = 0.0f;
+            transformedPos.y = REG8_F(4) + 1500.0f;
+            transformedPos.z = REG8_F(5) + 2000.0f;
 
             cMtx_YrotS(*calc_mtx, player->shape_angle.y + i_this->mB76 + REG8_S(5));
-            MtxPosition(&posVec, &posVec);
+            MtxPosition(&transformedPos, &playerPos);
 
             i_this->mB76 += REG8_S(6) + 0x1E;
-            i_this->mB5C = player->current.pos + posVec;
+            i_this->mB5C = player->current.pos + playerPos;
 
             if (i_this->mB56 != 0x82) {
                 break;
             }
 
             if (i_this->mSwitchNo != 0xFF) {
-                dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this));
+                dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(a_this));
             }
 
             if (i_this->m2BF != 0xFF) {
-                dComIfGs_offSwitch(i_this->m2BF, fopAcM_GetRoomNo(i_this));
+                dComIfGs_offSwitch(i_this->m2BF, fopAcM_GetRoomNo(a_this));
             }
 
             i_this->mB54 = 0x96;
-            fopAcM_delete(i_this);
-            break;
+            fopAcM_delete(a_this);
+            goto label0x96;
         }
-        case 0x65: {
+        case 0x64: {
             if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(i_this, 2, -1, 0);
+                fopAcM_orderPotentialEvent(a_this, 2, -1, 0);
                 i_this->eventInfo.onCondition(2);
                 bVar3 = FALSE;
                 break;
@@ -1906,42 +1919,50 @@ void demo_camera(fganon_class* i_this) {
 
             player->changeOriginalDemo();
 
-            i_this->mB5C = camera->mLookat.mEye;
-            i_this->mB68 = camera->mLookat.mCenter;
+            camera2 = g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera;
 
-            i_this->shape_angle.y = fopAcM_searchPlayerAngleY(i_this);
+            i_this->mB5C = camera2->mLookat.mEye;
+            i_this->mB68 = camera2->mLookat.mCenter;
+
+            i_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
         }
-        case 0x66: {
+        case 0x65: {
             cLib_addCalc2(&i_this->mB68.x, i_this->current.pos.x, 0.1f, 200.0f);
             cLib_addCalc2(&i_this->mB68.y, i_this->eyePos.y - 50.0f, 0.1f, 200.0f);
             cLib_addCalc2(&i_this->mB68.z, i_this->current.pos.z, 0.1f, 200.0f);
             cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
             
-            posVec.x = 0.0f;
-            posVec.y = REG8_F(0) + -100.0f;
-            posVec.z = REG8_F(1) + 400.0f;
+            transformedPos.x = 0.0f;
+            transformedPos.y = REG8_F(0) + -100.0f;
+            transformedPos.z = REG8_F(1) + 400.0f;
             
-            MtxPosition(&posVec, &posVec);
+            MtxPosition(&transformedPos, &playerPos);
 
-            PSVECAdd(&posVec, &i_this->current.pos, &posVec);
+            PSVECAdd(&playerPos, &i_this->current.pos, &playerPos);
 
-            dBgS_LinChk linChk;
-            linChk.Set(&i_this->mB68, &posVec, a_this);
-            
-            if (dComIfG_Bgsp()->LineCross(&linChk)) {
-                posVec = linChk.GetCross();
+            {
+                dBgS_LinChk linChk;
+                linChk.Set(&i_this->mB68, &playerPos, a_this);
+                
+                if (dComIfG_Bgsp()->LineCross(&linChk)) {
+                    playerPos = linChk.GetCross();
+                    playerPos.y += REG8_F(18) + 20.0f;
+    
+                }
             }
-            posVec.y += REG8_F(18) + 20.0f;
-        }
-        case 0x68: {
-            cLib_addCalc2(&i_this->mB5C.x, posVec.x, 0.1f, i_this->mB80 * 50.0f);
-            cLib_addCalc2(&i_this->mB5C.y, posVec.y, 0.1f, i_this->mB80 * 50.0f);
-            cLib_addCalc2(&i_this->mB5C.z, posVec.z, 0.1f, i_this->mB80 * 50.0f);
+            
+            cLib_addCalc2(&i_this->mB5C.x, playerPos.x, 0.1f, i_this->mB80 * 50.0f);
+            cLib_addCalc2(&i_this->mB5C.y, playerPos.y, 0.1f, i_this->mB80 * 50.0f);
+            cLib_addCalc2(&i_this->mB5C.z, playerPos.z, 0.1f, i_this->mB80 * 50.0f);
             cLib_addCalc2(&i_this->mB80, 1.0f, 1.0f, REG8_F(7) + 0.1f);
             break;
         }
-        case 0x95: {
-            if (i_this->mB56 > REG8_S(2) + 8) {
+        case 0x0:
+        default: {
+            break;
+        }
+        case 0x67: {
+            if (i_this->mB56 > REG0_S(2) + 8) {
                 cLib_addCalc2(&i_this->mB68.y, player->current.pos.y + REG0_F(9), 0.8f, REG0_F(10) + 30.0f);
             }
 
@@ -1951,22 +1972,20 @@ void demo_camera(fganon_class* i_this) {
 
             i_this->mB54 = 0x96;
 
-            fopAcM_delete(i_this);
+            fopAcM_delete(a_this);
             
             if (REG0_S(3) == 0) {
-                dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this));
+                dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(a_this));
             }
         }
         case 0x96: {
+            label0x96:
             camera->mCamera.SetTrimSize(0);
             camera->mCamera.Start();
-            //dMeter_mtrShow();
+            dMeter_mtrShow();
             dComIfGp_event_reset();
             i_this->mB54 = 0;
-            break;
         }
-        default:
-            break;
     }
     if (i_this->mB54 && bVar3) {
         camera->mCamera.Set(i_this->mB68, i_this->mB5C, i_this->mB84, 0);
@@ -1993,15 +2012,289 @@ BOOL ball_bg_check(fganon_class* i_this) {
 }
 
 /* 0000778C-00008614       .text energy_ball_move__FP12fganon_class */
-void energy_ball_move(fganon_class*) {
-    /* Nonmatching */
+void energy_ball_move(fganon_class* i_this) {
+    daPy_py_c* player;
+    fopAc_ac_c* a_this;
+    
+    CcAtInfo atInfo;
+    
+    cXyz local_50;
+    cXyz local_5c;
+    cXyz local_68;
+
+    s8 bVar5;
+    s8 bVar2;
+    u8 bVar3;
+
+    player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    a_this = (fopAc_ac_c*)i_this;
+
+    local_50.x = 0.0f;
+    local_50.y = 0.0f;
+    local_50.z = 0.0f;
+    bVar5 = FALSE;
+    
+    if (i_this->m408 == 0) {
+        return;
+    }
+
+    atInfo.pParticlePos = NULL;
+
+    if (i_this->m408 == 0x23) {    
+        if (i_this->m688 != 0) {
+            mDoAud_changeSubBgmStatus(8);
+            i_this->m688 = 0;
+        }
+        
+        for(int i = 0; i < 2; i++) {
+            if (i_this->mEmitters2[i] != NULL) {
+                i_this->mEmitters2[i]->becomeInvalidEmitter();
+                i_this->mEmitters2[i] = NULL;
+            }
+        }
+
+        i_this->m408 = 0;
+        return;
+    }
+
+    if (i_this->m408 == 1) {
+        for(int i = 0; i < 2; i++) {
+            if (i_this->mEmitters2[i] != NULL) {
+                i_this->mEmitters2[i]->becomeInvalidEmitter();
+                i_this->mEmitters2[i] = NULL;
+            }
+        }
+        i_this->mEmitters2[0] = dComIfGp_particle_set(0x81CE, &a_this->current.pos, NULL);
+        i_this->mEmitters2[1] = dComIfGp_particle_set(0x81CF, &a_this->current.pos, NULL);
+        i_this->m408 = 2;
+    }
+    if (i_this->m408 == 2) {
+        cMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(0xe), *calc_mtx);
+        MtxTrans(REG12_F(0) + 30.0f, REG12_F(1) + 30.0f, REG12_F(2), TRUE);
+        MtxPosition(&local_50, &i_this->m3E0);
+         
+        for(int i = 0; i < 2; i++) {
+            if(i_this->mEmitters2[i] != NULL) {
+                i_this->mEmitters2[i]->setGlobalRTMatrix(*calc_mtx);
+            }
+        }
+
+        if (i_this->m409) {
+            i_this->m409 = 0;
+            i_this->m408 = 3;
+            
+            local_5c = player->eyePos - i_this->m3E0;
+            local_5c.y -= REG0_F(18) + 50.0f;
+
+            cMtx_YrotS(*calc_mtx, cM_atan2s(local_5c.x, local_5c.z));            
+            cMtx_XrotM(*calc_mtx, -cM_atan2s(local_5c.y, std::sqrtf(local_5c.x * local_5c.x + local_5c.z * local_5c.z)));
+
+            if (i_this->m2BC == 0) {
+              local_50.z = l_HIO.m1C;
+            }
+            else {
+              local_50.z = l_HIO.m20;
+            }
+
+            i_this->m404 = local_50.z;
+            MtxPosition(&local_50, &i_this->m3F8);
+            i_this->m40A = 5;
+            i_this->mBallAtSph.ClrAtHit();
+        }
+    }
+    if (i_this->m408 >= 3) {
+        i_this->m3EC = i_this->m3E0;
+        PSVECAdd(&i_this->m3E0, &i_this->m3F8, &i_this->m3E0);
+        mDoMtx_stack_c::transS(i_this->m3E0.x, i_this->m3E0.y, i_this->m3E0.z);
+        for(int i = 0; i < 2; i++) {
+            if (i_this->mEmitters2[i] != NULL) {
+                i_this->mEmitters2[i]->setGlobalRTMatrix(mDoMtx_stack_c::get());
+            }
+        }
+        bVar2 = FALSE;
+        local_5c = a_this->eyePos - i_this->m3E0;
+        local_5c.y -= 50.0f;
+        if (local_5c.abs() < i_this->m404 + 200.0f + REG0_F(3)) {
+            if (i_this->m686 != 0) {
+                bVar5 = 1;
+            }
+            else {
+                if (i_this->m408 == 5) {
+                    if (i_this->m2BC != 2) {
+                        i_this->m68C = 1;
+                    }
+                    else {
+                        if (i_this->m40A != 0) {
+                            return;
+                        }
+                        i_this->m386 = 2;
+                        i_this->m388 = 0;
+                        i_this->m40A = 0x32;
+                        return;
+                    }
+                }
+            }
+        }
+        
+        bVar3 = FALSE;
+        if(i_this->m408 == 4) {
+            if (player->checkBottleSwing()) {
+                local_5c = player->eyePos - i_this->m3E0;
+                local_5c.y -= 30.0f;
+                if (local_5c.abs() < REG0_F(2) + 100.0f) {
+                    bVar3 = TRUE;
+                }
+            }
+        }
+
+        if (((i_this->mBallTgSph.ChkTgHit() || (bVar5 != 0)) || bVar3) && (i_this->m40A == 0)) {
+            if (i_this->mBallTgSph.ChkTgHit()) {
+                atInfo.mpObj = i_this->mBallTgSph.GetTgHitObj();
+                at_power_check(&atInfo);
+            }
+            else {
+                atInfo.mResultingAttackType = 0xFF;
+                atInfo.mpObj = NULL;
+            }
+            if ((atInfo.mpObj && (atInfo.mResultingAttackType == 1) && atInfo.mpObj->ChkAtType(AT_TYPE_SWORD)) && 
+                (dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e || dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e || dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e) || bVar3) {
+                    local_5c = a_this->eyePos - i_this->m3E0;
+                    local_5c.y -= REG0_F(17) + 30.0f;
+
+                    cMtx_YrotS(*calc_mtx, cM_atan2s(local_5c.x, local_5c.z));                    
+                    cMtx_XrotM(*calc_mtx, -cM_atan2s(local_5c.y, std::sqrtf(local_5c.x * local_5c.x + local_5c.z * local_5c.z)));
+                    
+                    local_50.z = i_this->m404;
+                    
+                    MtxPosition(&local_50, &i_this->m3F8);
+                    
+                    i_this->m408 = 5;
+                    
+                    dScnPly_ply_c::setPauseTimer(2);
+                    
+                    bVar2 = TRUE;
+                    
+                    s32 lVar11 = i_this->m688 + 2;
+                    if (lVar11 > 7) {
+                      lVar11 = 7;
+                    }
+                    mDoAud_changeSubBgmStatus(lVar11);
+                    i_this->m688++;
+                    dComIfGs_onEventBit(0x3f20);
+            }
+            else if (bVar5) {
+                local_5c = player->eyePos - i_this->m3E0;
+                local_5c.y -= REG0_F(18) + 50.0f;
+
+                cMtx_YrotS(*calc_mtx, cM_atan2s(local_5c.x, local_5c.z));
+                cMtx_XrotM(*calc_mtx, -cM_atan2s(local_5c.y, std::sqrtf(local_5c.x * local_5c.x + local_5c.z * local_5c.z)));
+
+                local_50.z = i_this->m404;
+
+                MtxPosition(&local_50, &i_this->m3F8);
+                
+                i_this->m408 = 4;
+                bVar2 = TRUE;
+            }
+            if (bVar2) {
+                if (i_this->m2BC == 0) {
+                    i_this->m404 += l_HIO.m24;
+                }
+                else {
+                    i_this->m404 += l_HIO.m28;
+                }
+                csXyz local_7c(0,0,0);
+                local_7c.y = (short)cM_atan2s(i_this->m3F8.x, i_this->m3F8.z);
+                dComIfGp_particle_set(0x81F0, &i_this->m3E0, &local_7c);
+                mDoAud_seStart(0x28A5, &i_this->m3E0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+                PSVECAdd(&i_this->m3E0, &i_this->m3F8, &i_this->m3E0);
+                i_this->m40A = 5;
+            }
+        }
+    
+        local_68 = i_this->m3E0;
+
+        if (i_this->m40A != 0) {
+            i_this->m40A--;
+            local_68.x = -20000.0;
+            local_68.y = -20000.0;
+            local_68.z = 20000.0;
+        }
+
+        if (i_this->m408 == 3) {
+            i_this->mBallAtSph.StartCAt(local_68);
+            i_this->m408 = 4;
+        }
+
+        else {
+            i_this->mBallAtSph.MoveCAt(local_68);
+        }
+
+        i_this->mBallAtSph.SetR(REG0_F(6) + 25.0f);
+
+        i_this->mBallTgSph.SetC(local_68);
+        i_this->mBallTgSph.SetR(REG0_F(7) + 100.0f);
+
+        dComIfG_Ccsp()->Set(&i_this->mBallTgSph);
+        dComIfG_Ccsp()->Set(&i_this->mBallAtSph);
+
+        if ((i_this->m68C || ball_bg_check(i_this)) || i_this->mBallAtSph.ChkTgHit()) {
+            if (i_this->m688 != 0) {
+                if (i_this->m68C != 0) {
+                    mDoAud_changeSubBgmStatus(10);
+                }
+                else {
+                    if (i_this->mBallAtSph.ChkTgHit()) {
+                        mDoAud_changeSubBgmStatus(9);
+                    }
+                    else {
+                        mDoAud_changeSubBgmStatus(8);
+                    }
+                }
+                i_this->m688 = 0;
+            }
+            i_this->m408 = 0;
+
+            if (i_this->mEmitters2[0] != NULL) {
+                i_this->mEmitters2[0]->setGlobalAlpha(0);
+            }
+
+            if (i_this->mEmitters2[1] != NULL) {
+                i_this->mEmitters2[1]->becomeInvalidEmitter();
+                i_this->mEmitters2[1] = NULL;
+            }
+
+            csXyz local_7c(0,0,0);
+
+            dComIfGp_particle_set(0x81EE, &i_this->m3E0, &local_7c, 0);
+            dComIfGp_particle_set(0x81EF, &i_this->m3E0, &local_7c, 0);
+
+            mDoAud_seStart(0x6A35, &i_this->m3E0, 100, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+
+            if (i_this->mBallAtSph.ChkTgHit() != 0) {
+                atInfo.mpActor = i_this->mBallAtSph.GetAtHitObj()->GetAc();
+                if ((atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == 0xA9)) && (i_this->m386 != 0x16)) {
+                    i_this->m68B = 1;
+                    i_this->m386 = 5;
+                    i_this->m388 = 1;
+                    i_this->m3A4[1] = (cM_rndF(30.0f)) + 70.f;
+                }
+            }
+        }
+    }
+    local_5c = a_this->home.pos - i_this->m3E0;
+        
+    if (local_5c.abs() > 10000.0f) {
+      i_this->m408 = 0x23;
+    }
+    return;
 }
 
 /* 00008614-000086B4       .text mahou_se_set__FPvPv */
 /* Play PG's magic sound effect */
 void* mahou_se_set(void* i_act, void* i_other) {  
     fganon_class* i_this = (fganon_class*)i_act;
-    if ((fopAc_IsActor(i_this)) && (((base_process_class*)i_this)->mProcName == 0xf4)) {
+    if ((fopAc_IsActor(i_this)) && (((base_process_class*)i_this)->mProcName == 0xF4)) {
         if (i_this->health == 0) {
             fopAcM_seStartCurrent(i_this, JA_SE_OBJ_PG_EBALL_FLY_L, 0);
         }
@@ -2341,19 +2634,19 @@ static dCcD_SrcCyl cc_cyl_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ 0xFF1DFEF7,
-        /* SrcObjTg  SPrm    */ 0x3,
-        /* SrcObjCo  SPrm    */ 0x75,
+        /* SrcObjTg  Type    */ ~(AT_TYPE_UNK8 | AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0xD,
+        /* SrcGObjTg HitMark */ dCcG_TgHitMark_Nrm_e,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0x2,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
@@ -2368,22 +2661,23 @@ static dCcD_SrcSph wepon_sph_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0x8,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK8,
         /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0xF,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
+        /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0xD,
-        /* SrcGObjAt Mtrl    */ 0x7,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0x1,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_Nrm_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK7,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
+        /* SrcGObjTg Se      */ 0,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0,
-        /* SrcGObjCo SPrm    */ 0x2,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
+        /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
     {
@@ -2399,8 +2693,8 @@ static dCcD_SrcSph ball_tg_sph_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ 0xFF1DFEFF,
-        /* SrcObjTg  SPrm    */ 0x3,
+        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
@@ -2425,15 +2719,15 @@ static dCcD_SrcSph ball_at_sph_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0x800,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK800,
         /* SrcObjAt  Atp     */ 0x2,
-        /* SrcObjAt  SPrm    */ 0xF,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0xA,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNKA,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,

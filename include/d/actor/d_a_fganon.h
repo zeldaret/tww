@@ -55,11 +55,12 @@ public:
     /* 0x3DC */ u32 m3DC;
     /* 0x3E0 */ cXyz m3E0;
     /* 0x3EC */ cXyz m3EC;
-    /* 0x3F8 */ u8 m3F8[0x404 - 0x3F8];
+    /* 0x3F8 */ cXyz m3F8;
     /* 0x404 */ f32 m404;
     /* 0x408 */ s8 m408;
-    /* 0x409 */ u8 m409;
-    /* 0x40A */ u8 m40A[0x40C - 0x40A];
+    /* 0x409 */ s8 m409;
+    /* 0x40A */ s8 m40A;
+    /* 0x40B */ s8 m40B;
     /* 0x40C */ dCcD_Sph mBallTgSph;
     /* 0x538 */ dCcD_Sph mBallAtSph;
     /* 0x664 */ cXyz m664;
