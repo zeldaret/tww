@@ -3,10 +3,16 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daNpc_Kf1_c : public fopNpc_npc_c {
 public:
     struct anm_prm_c {
+        /* 0x00 */ s8 anmId;
+        /* 0x01 */ s8 flag;
+        /* 0x04 */ float morf;
+        /* 0x08 */ float animSpeed;
+        /* 0x0C */ s32 loopMode;
         
     };
 
@@ -44,7 +50,7 @@ public:
     void lookBack();
     void chkAttention();
     void setAttention(bool);
-    BOOL decideType(int);
+    bool decideType(int);
     void cut_init_ANGRY_START(int);
     void cut_move_ANGRY_START();
     void cut_init_BENSYOU_START(int);
@@ -101,42 +107,56 @@ public:
     /* 0x6CD */ s8 m_bbone_jnt_num;
     /* 0x6CE */ s8 m_nck_jnt_num;
     /* 0x6D0 */ J3DModel* mModel;
-    /* 0x6D4 */ const char* field_0x6d4;
+    /* 0x6D4 */ const char field_0x6d4[4];
+    s32 pad;
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F0 */ u8 field_0x6F0;
     /* 0x6F2 */ s16 field_0x6F2;
-    /* 0x6F3 */ u8 m6D5[0x708 - 0x6F3];
+    /* 0x6F3 */ u8 m6D5[0x708 - 0x6F4];
     /* 0x708 */ dNpc_PathRun_c pathRun;
     /* 0x710 */ u8 m710[0x722 - 0x710];
     /* 0x722 */ csXyz mAngle;
-
+    u8 m728[0x730 - 0x728];
     /* 0x730 */ cXyz head_anm_vec;
     u8 m73C[0x754 - 0x73C];
     /* 0x754 */ cXyz mMtx;
-    u8 m75f[0x76C - 0x75C];
-    f32 field_0x76C;
+    u8 m760[0x76C - 0x760];
+    /* 0x76C */ f32 mAnimTimer;
     u8 m770[0x780 - 0x770];
     /* 0x780 */ s16 field_0x780[4];
-    u8 m788[0x79c - 0x788];
+    u8 m788[0x794 - 0x788];
+    /* 0x794 */ s16 field_0x794;
+    u8 m796[0x79c - 0x796];
     u8 field_0x79C;
     u8 field_0x79D;
     u8 field_0x79E;
     /* 0x79F */ u8 field_0x79F;
     u8 m7a0[0x7a6 - 0x7a0];
-    /* 0x7A6 */ u8 field_0x7A6;
-    u8 m7a7[0x7f5 - 0x7a7];
+    /* 0x7A6 */ bool field_0x7A6;
+    u8 m7a7[0x7f3 - 0x7a7];
+    /* 0x7F3 */ u8 field_0x7F3;
+    /* 0x7F4 */ u8 field_0x7F4;
     /* 0x7F5 */ s8 field_0x7F5;
-    /* 0x7F6 */ u8 field_0x7F6;
-    u8 m7f7[0x7fb - 0x7f7];
+    /* 0x7F6 */ s8 mAnmId;
+    /* 0x7F7 */ s8 field_0x7F7;
+    /* 0x7F8 */ s8 field_0x7F8;
+    /* 0x7F9 */ u8 field_0x7F9;
+    /* 0x7FA */ u8 m7f8[0x7fb - 0x7fA];
     /* 0x7FB */ u8 field_0x7FB;
-    /* 0x7FC */ s8 field_0x7FC;
+    /* 0x7FC */ u8 field_0x7FC;
+    /* 0x7FD */ u8 field_0x7FD;
+    /* 0x7FE */ u8 field_0x7FE;
 };
 
-class daNpc_Kf1_HIO_c {
+class daNpc_Kf1_HIO_c : public JORReflexible {
 public:
     daNpc_Kf1_HIO_c();
+    virtual ~daNpc_Kf1_HIO_c() {}
 
 public:
+    u8 a;
+    u32 b;
+    u8 data[0x30];
     /* Place member variables here */
 };
 

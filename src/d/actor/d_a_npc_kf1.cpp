@@ -11,12 +11,19 @@
 
 #include "d/actor/d_a_tsubo.h"
 
-u32 a_siz_tbl[] = {
+static const u32 a_siz_tbl[] = {
     0
 };
 
+
+static u8 a_prm_tbl[0x30];
+
 /* 000000EC-00000150       .text __ct__15daNpc_Kf1_HIO_cFv */
 daNpc_Kf1_HIO_c::daNpc_Kf1_HIO_c() {
+    memcpy(data, a_prm_tbl, 0x30);
+    a = 0xff;
+    b = 0xffffffff;
+
     /* Nonmatching */
 }
 
@@ -142,12 +149,14 @@ BOOL daNpc_Kf1_c::createInit() {
     u8 params = base.mParameters >> 0x10;
     if (params != 0xff) {
         pathRun.setInf(params, current.roomNo, true);
-        if (pathRun.mPath == NULL) {
+        if (pathRun.mPath != NULL) {
+            fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
+            weight = 0xD9;
+            set_pthPoint(0);
+        }
+        else {
             return FALSE;
         }
-        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
-        weight = 0xD9;
-        set_pthPoint(0);
     }
     if (pathRun.mPath == NULL) {
         return FALSE;
@@ -156,7 +165,7 @@ BOOL daNpc_Kf1_c::createInit() {
     attention_info.distances[1] = 0xab;
     attention_info.distances[3] = 0xab;
     gravity = -4.5f;
-    field_0x7F6 = 10;
+    mAnmId = 10;
     BOOL status;
     if (field_0x7FC == 0) {
         status = init_KF1_0();
@@ -189,10 +198,10 @@ void daNpc_Kf1_c::play_animation() {
     }
     s8 reverb = dComIfGp_getReverb(current.roomNo);
     field_0x79C = mpMorf->play(&eyePos, mtrlSndId, reverb);
-    if (mpMorf->mFrameCtrl.mFrame < field_0x76C) {
+    if (mpMorf->mFrameCtrl.mFrame < mAnimTimer) {
         field_0x79C = 1;
     }
-    field_0x76C = mpMorf->mFrameCtrl.mFrame;
+    mAnimTimer = mpMorf->mFrameCtrl.mFrame;
 }
 
 /* 000008E4-00000A20       .text setMtx__11daNpc_Kf1_cFb */
@@ -270,38 +279,89 @@ void daNpc_Kf1_c::play_btp_anm() {
     }
 }
 
+
 /* 00000C08-00000CA4       .text setAnm_anm__11daNpc_Kf1_cFPQ211daNpc_Kf1_c9anm_prm_c */
 void daNpc_Kf1_c::setAnm_anm(daNpc_Kf1_c::anm_prm_c* i_anmPrm) {
+    if (i_anmPrm->anmId < 0 || mAnmId == i_anmPrm->anmId) {
+        return;
+    }
+    dNpc_setAnmIDRes(mpMorf, i_anmPrm->loopMode, i_anmPrm->morf, i_anmPrm->animSpeed,
+                     bckResID(i_anmPrm->anmId), -1, field_0x6d4);
+    mAnmId = i_anmPrm->anmId;
+    field_0x79C = 0;
+    field_0x79D = 0;
+    mAnimTimer = 0.0f;
     /* Nonmatching */
 }
+static u32 foo = 9;
 
 /* 00000CA4-00000D14       .text setAnm_NUM__11daNpc_Kf1_cFii */
-void daNpc_Kf1_c::setAnm_NUM(int, int) {
+void daNpc_Kf1_c::setAnm_NUM(int i_1, int i_2) {
+    static anm_prm_c a_anm_prm_tbl[] = {
+        {0, 0, 15.0f, 1.0f, 2},
+        {1, 1, 8.0f, 1.0f, 2},
+        {2, 0, 8.0f, 1.0f, 2},
+        {3, 0, 8.0f, 1.0f, 2},
+        {4, 0, 8.0f, 1.0f, 2},
+        {5, 0, 8.0f, 1.0f, 2},
+        {6, 0, 8.0f, 1.0f, 2},
+        {7, 0, 8.0f, 1.0f, 0},
+        {8, 0, 8.0f, 1.0f, 0},
+        // TODO address 0x1 has value 0x01
+        {9, 1, 8.0f, 1.0f, 2},
+    };
+    if (i_2 != 0) {
+        init_texPttrnAnm(a_anm_prm_tbl[i_1].flag, true);
+    }
+    setAnm_anm(&a_anm_prm_tbl[i_1]);
     /* Nonmatching */
 }
 
 /* 00000D14-00000D80       .text setAnm__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::setAnm() {
+    static anm_prm_c a_anm_prm_tbl[] = {
+        {0xff, 0xff, 0.0f, 0.0f, 0xffffffff},
+        {0xff, 0xff, 0.0f, 0.0f, 0xffffffff},
+        {0xff, 0xff, 0.0f, 0.0f, 0xffffffff},
+
+    {1, 1, 8.0f, 1.0f, 2}};
+    init_texPttrnAnm(a_anm_prm_tbl[field_0x7F8].flag, true);
+    setAnm_anm(&a_anm_prm_tbl[field_0x7F8]);
     /* Nonmatching */
 }
 
 /* 00000D80-00000D84       .text chngAnmTag__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::chngAnmTag() {
-    /* Nonmatching */
 }
 
 /* 00000D84-00000D88       .text ctrlAnmTag__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::ctrlAnmTag() {
-    /* Nonmatching */
 }
 
 /* 00000D88-00000DEC       .text chngAnmAtr__11daNpc_Kf1_cFUc */
-void daNpc_Kf1_c::chngAnmAtr(unsigned char) {
-    /* Nonmatching */
+void daNpc_Kf1_c::chngAnmAtr(unsigned char c) {
+    switch (mCurrMsgNo) {
+        case 0x1c2e:
+            dComIfGp_event_offHindFlag(0x80);
+    }
+    if (c == field_0x7F3 || c > 0xb) {
+        return;
+    }
+    field_0x7F3 = c;
+    setAnm_ATR();
 }
 
 /* 00000DEC-00000E60       .text ctrlAnmAtr__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::ctrlAnmAtr() {
+    switch (field_0x7F3) {
+    case 7:
+    case 9:
+        if (!field_0x79C) {
+            return;
+        }
+        setAnm_NUM(0, 1);
+        field_0x7F3 = 0;
+    }
     /* Nonmatching */
 }
 
@@ -381,7 +441,7 @@ void daNpc_Kf1_c::setAttention(bool) {
 }
 
 /* 00001CA8-00001D30       .text decideType__11daNpc_Kf1_cFi */
-BOOL daNpc_Kf1_c::decideType(int) {
+bool daNpc_Kf1_c::decideType(int) {
     /* Nonmatching */
 }
 
@@ -546,47 +606,29 @@ void daNpc_Kf1_c::set_action(int (daNpc_Kf1_c::*)(void*), void*) {
 }
 
 /* 00002EC0-00002F88       .text setStt__11daNpc_Kf1_cFSc */
-void daNpc_Kf1_c::setStt(signed char) {
-    /* Nonmatching */
-}
-
-/* 00002F88-00003030       .text set_pthPoint__11daNpc_Kf1_cFUc */
-void daNpc_Kf1_c::set_pthPoint(unsigned char) {
-    /* Nonmatching */
-}
-
-/* 00003030-000030A8       .text chk_tsubo__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::chk_tsubo() {
-    /* Nonmatching */
-}
-
-/* 000030A8-0000317C       .text orderTsuboEvent__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::orderTsuboEvent() {
-    /* Nonmatching */
-}
-
-/* 0000317C-0000327C       .text wait_1__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::wait_1() {
-    /* Nonmatching */
-}
-
-/* 0000327C-000034C4       .text walk_1__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::walk_1() {
-    /* Nonmatching */
-}
-
-/* 000034C4-000035CC       .text talk_1__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::talk_1() {
-    /* Nonmatching */
-}
-
-/* 000035CC-000036B4       .text wait_action1__11daNpc_Kf1_cFPv */
-BOOL daNpc_Kf1_c::wait_action1(void*) {
-    /* Nonmatching */
-}
-
-/* 000036B4-000037F4       .text demo__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::demo() {
+void daNpc_Kf1_c::setStt(signed char stt) {
+    u8 prev = field_0x7F8;
+    field_0x7F8 = stt;
+    switch (field_0x7F8) {
+        case 0: break;
+        case 1:
+            field_0x7F7 = 0;
+            field_0x794 = cLib_getRndValue(60, 90);
+            speedF = 0.0f;
+            break;
+        case 2:
+            field_0x7F7 = 0;
+            field_0x7F3 = 0xff;
+            field_0x7F4 = 0xff;
+            field_0x7FE = 0;
+            field_0x7F9 = prev;
+            break;
+        case 3:
+            field_0x7F7 = 0;
+            field_0x794 = cLib_getRndValue(90, 90);
+            break;
+    }
+    setAnm();
     /* Nonmatching */
 }
 
@@ -614,23 +656,24 @@ bool daNpc_Kf1_c::_delete() {
 s32 daNpc_Kf1_c::_create() {
     /* Nonmatching */
     fopAcM_SetupActor(this, daNpc_Kf1_c);
-    if (!decideType(0)) {
+    if (!decideType(base.mParameters & 0xff)) {
         return cPhs_ERROR_e;
     }
-    field_0x7A6 = dComIfG_resLoad(&this->mPhs, field_0x6d4) == cPhs_COMPLEATE_e;
+    s32 ret = dComIfG_resLoad(&this->mPhs, field_0x6d4) ;
+    field_0x7A6 = ret == cPhs_COMPLEATE_e;
     if (field_0x7A6) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_siz_tbl[this->field_0x7FB])) {
-            return cPhs_ERROR_e;
+            ret = cPhs_ERROR_e;
         }
         else {
             fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
             fopAcM_setCullSizeBox(this,-90.0f,-20.0f,-80.0f,90.0f,200.0f,80.0f);
             if (!createInit()) {
-                return cPhs_ERROR_e;
+                return  cPhs_ERROR_e;
             }
         }
     }
-    return cPhs_COMPLEATE_e;
+    return ret;
 }
 
 /* 00004130-0000442C       .text bodyCreateHeap__11daNpc_Kf1_cFv */
@@ -690,8 +733,8 @@ BOOL daNpc_Kf1_c::CreateHeap() {
     else {
         // TODO nonmatching on account of storage of these?
         mAcchCir.SetWall(30.0f, 90.0f);
-        mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this,
-            1, &mAcchCir, fopAcM_GetSpeed_p(this));
+        mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
+                     fopAcM_GetSpeed_p(this));
     }
     return TRUE;
     /* Nonmatching */
