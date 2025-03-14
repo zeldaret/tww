@@ -65,7 +65,7 @@ inline void mDoAud_subBgmStop() {
 }
 
 inline void mDoAud_changeSubBgmStatus(u32 status) {
-    mDoAud_zelAudio_c::getInterface()->changeBgmStatus(status);
+    mDoAud_zelAudio_c::getInterface()->changeSubBgmStatus(status);
 }
 
 inline void mDoAud_bgmStreamPrepare(u32 id) {
