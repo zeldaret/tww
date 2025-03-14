@@ -2274,13 +2274,13 @@ void energy_ball_move(fganon_class* i_this) {
         dComIfG_Ccsp()->Set(&i_this->mBallTgSph);
         dComIfG_Ccsp()->Set(&i_this->mBallAtSph);
 
-        if ((i_this->m68C || ball_bg_check(i_this)) || i_this->mBallAtSph.ChkTgHit()) {
+        if ((i_this->m68C || ball_bg_check(i_this)) || i_this->mBallAtSph.ChkAtHit()) {
             if (i_this->m688 != 0) {
                 if (i_this->m68C != 0) {
                     mDoAud_changeSubBgmStatus(10);
                 }
                 else {
-                    if (i_this->mBallAtSph.ChkTgHit()) {
+                    if (i_this->mBallAtSph.ChkAtHit()) {
                         mDoAud_changeSubBgmStatus(9);
                     }
                     else {
@@ -2307,7 +2307,7 @@ void energy_ball_move(fganon_class* i_this) {
 
             mDoAud_seStart(JA_SE_OBJ_PG_EBALL_EXP_S, &i_this->m3E0, 100, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
 
-            if (i_this->mBallAtSph.ChkTgHit() != 0) {
+            if (i_this->mBallAtSph.ChkAtHit() != 0) {
                 atInfo.mpActor = i_this->mBallAtSph.GetAtHitObj()->GetAc();
                 if ((atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == PROC_PLAYER)) && (i_this->m386 != 22)) {
                     i_this->m68B = 1;
