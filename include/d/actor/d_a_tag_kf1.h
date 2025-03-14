@@ -8,7 +8,7 @@ class daTag_Kf1_c : public fopNpc_npc_c {
 public:
     typedef int (daTag_Kf1_c::*ActionFunc)(void*);
     BOOL createInit();
-    BOOL setStt(signed char);
+    char setStt(signed char);
     u16 next_msgStatus(unsigned long*);
     void eventOrder();
     void checkOrder();

@@ -53,9 +53,11 @@ static char* a_demo_name_tbl[] = {"BENSYO"};
 static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
-BOOL daTag_Kf1_c::setStt(signed char c) {
+char daTag_Kf1_c::setStt(signed char c) {
     stt = c;
-    return stt;
+    if (stt == 3) {
+        return;
+    }
     /* Nonmatching */
 }
 
@@ -126,18 +128,13 @@ BOOL daTag_Kf1_c::partner_srch() {
     for (i = 0; j != 0; ++i, --j) {
         l_check_inf[i] = 0;
     }
+
     fpcM_Search(searchActor_Kutani, this);
     // register/cast fiddling needed here
     if (l_check_wrk <= 8 && l_check_wrk != 0) {
         npartners = 0;
         for (i = 0, j = 0; j < l_check_wrk; ++j, ++i) {
-            if (l_check_inf[i] != 0) {
-                // TODO apparently wants [i+1] but that gives wrong asm
-                tmp = l_check_inf[i];
-            } else {
-                tmp = 0xffffffff;
-            }
-            partners[i] = tmp;
+            partners[i] = fopAcM_GetID((void*)l_check_inf[i]);
             npartners++;
         }
         tmp = TRUE;
@@ -253,7 +250,8 @@ void daTag_Kf1_c::privateCut() {
     switch (mActIdx) {
         case 0: status = event_mesSet(); break;
         case 1: status = event_mesEnd(); break;
-        case 2: status = event_bensyo(); break; 
+        case 2: status = event_bensyo(); break;
+        case 3:
         default: status=TRUE; break;
     }
     if (status) {
@@ -365,16 +363,18 @@ s32 daTag_Kf1_c::_create() {
     s32 ret = cPhs_COMPLEATE_e;
     fopAcM_SetupActor(this, daTag_Kf1_c);
 
-    if (fopAcM_GetName(this) != PROC_TAG_KF1) {
+    switch (fopAcM_GetName(this)) {
+        case PROC_TAG_KF1:
+            this->field_0x769 = 0;
+            break;
+        default:
+            return cPhs_ERROR_e;
+    }
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("クタニ焼き監視タグ", &l_HIO);
+    }
+    if (!createInit()) {
         ret = cPhs_ERROR_e;
-    } else {
-        this->field_0x769 = 0;
-        if (l_HIO.mNo < 0) {
-            l_HIO.mNo = mDoHIO_createChild("クタニ焼き監視タグ", &l_HIO);
-        }
-        if (createInit()) {
-            ret = cPhs_ERROR_e;
-        }
     }
     return ret;
     /* Nonmatching */
