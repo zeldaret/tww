@@ -200,8 +200,17 @@ void normal(shand_class* actor) {
 }
 
 /* 00001428-00001508       .text cut__FP11shand_class */
-void cut(shand_class*) {
-    /* Nonmatching */
+void cut(shand_class* actor) {
+    cLib_addCalc2(&actor->u2F4, REG8_F(12) + 20.0f, 0.1f, 0.5f);
+    cut_control(actor);
+    cut_control3(actor);
+    if(actor->u2BC[0] == 0 && actor->u30C->health != 0){
+        actor->u2B8 = 0;
+        actor->u2BA = 0;
+        actor->u2F0 = 0.0f;
+        actor->u300 = 0.0f;
+        fopAcM_seStart(actor, JA_SE_OBJ_VINE_S_RECOVER, 0);
+    }
 }
 
 /* 00001508-00001DAC       .text hand_move__FP11shand_class */
