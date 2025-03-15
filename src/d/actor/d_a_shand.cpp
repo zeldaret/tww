@@ -147,8 +147,17 @@ void cut_control(shand_class* actor) {
 }
 
 /* 00000BAC-00000C30       .text cut_control3__FP11shand_class */
-void cut_control3(shand_class*) {
-    /* Nonmatching */
+void cut_control3(shand_class* actor) {
+    shand_s* shand_i = actor->u31C;
+    int counter = 0;
+    for(int i = 20; i != 0; i--, counter++, shand_i++){
+        if(counter < 12){
+            shand_i->u18 = actor->u304;
+        }
+        else {
+            shand_i->u18 = actor->u304 * (1.0f - (counter - 10) * 0.08f);
+        }
+    }
 }
 
 /* 00000C30-00000FF0       .text normal__FP11shand_class */
