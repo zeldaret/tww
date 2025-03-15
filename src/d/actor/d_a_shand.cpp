@@ -43,7 +43,7 @@ void control1(shand_class* actor) {
     cLib_addCalc2(&actor->u2F8, REG0_F(7), 1.0f, 0.1f);
     cLib_addCalc2(&actor->u2FC, REG0_F(8), 1.0f, 1.0f);
     local94.z = actor->u2F4;
-    const float fVar1 = actor->u300;
+    float fVar1 = actor->u300;
     cXyz idk;
     for(i = 1; i < 19; i++, ++shand_i){
         idk.x = fVar1 * cM_ssin(actor->mExecuteCount * (REG0_S(5) + 1100) + i * (REG0_S(6) + 4000));
@@ -105,8 +105,45 @@ void control3(shand_class* actor) {
 }
 
 /* 000007C4-00000BAC       .text cut_control__FP11shand_class */
-void cut_control(shand_class*) {
-    /* Nonmatching */
+void cut_control(shand_class* actor) {
+    actor->u31C[0].mPos = actor->current.pos;
+    int i = 1;
+    shand_s *shand_i = &actor->u31C[i];
+
+    cXyz local_b8, local_d0, local_e8;
+    mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
+    local_b8.x = 0.0f;
+    local_b8.y = actor->u2F8;
+    local_b8.z = actor->u2FC;
+    MtxPosition(&local_b8, &local_d0);
+    cLib_addCalc2(&actor->u2F8, REG14_F(7) + -5.0f, 1.0f, REG12_F(4) + 0.1f);
+    cLib_addCalc2(&actor->u2FC, REG14_F(8) + 20.0f, 1.0f, REG14_F(5) + 0.2f);
+    cLib_addCalc0(&actor->u300, 1.0f, REG12_F(6) + 1.0f);
+    local_b8.z = actor->u2F4;
+    float d0_scaled_x, d0_scaled_z, fVar_x, fVar_y, fVar_z, delta_y;
+    for(i = 1; i < 20; i++, shand_i++){
+        local_e8.x = actor->u300 * cM_ssin(actor->mExecuteCount * (REG0_S(4) + 3500) + i * (REG0_S(5) + 4000));
+        local_e8.y = actor->u300 * cM_scos(actor->mExecuteCount * (REG0_S(6) + 4000) + i * (REG0_S(7) + 4000));
+        local_e8.z = actor->u300 * cM_scos(actor->mExecuteCount * (REG0_S(8) + 3800) + i * (REG0_S(9) + 4000));
+        
+        float factor = 1.0f - i * (REG0_F(9) + 0.03763158f);
+        d0_scaled_x = local_d0.x * factor;
+        d0_scaled_z = local_d0.z * factor;
+        
+        fVar_x = shand_i->mPos.x - shand_i[-1].mPos.x + local_e8.x + d0_scaled_x;
+        fVar_y = local_e8.y + (shand_i->mPos).y + local_d0.y;
+        if (fVar_y < actor->uCE0) fVar_y = actor->uCE0;
+        delta_y = fVar_y - shand_i[-1].mPos.y;
+        fVar_z = shand_i->mPos.z - shand_i[-1].mPos.z + local_e8.z + d0_scaled_z;
+        
+        short iVar5 = cM_atan2s(fVar_x,fVar_z);
+        short iVar6 = -cM_atan2s(delta_y, std::sqrtf(fVar_x * fVar_x + fVar_z * fVar_z));
+        mDoMtx_YrotS(*calc_mtx, iVar5);
+        mDoMtx_XrotM(*calc_mtx, iVar6);
+        cXyz cStack_c4;
+        MtxPosition(&local_b8, &cStack_c4);
+        shand_i->mPos = shand_i[-1].mPos + cStack_c4;
+    }
 }
 
 /* 00000BAC-00000C30       .text cut_control3__FP11shand_class */

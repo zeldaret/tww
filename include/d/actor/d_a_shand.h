@@ -5,6 +5,7 @@
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_hostIO.h"
 
 typedef struct {
     /* 0x00 */ cXyz mPos;
@@ -48,6 +49,9 @@ public:
 class daShand_HIO_c {
 public:
     daShand_HIO_c();
+    ~daShand_HIO_c(){};
+
+    void genMessage(JORMContext* ctx){};
 
 public:
     /* Place member variables here */
