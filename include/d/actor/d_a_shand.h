@@ -35,7 +35,7 @@ public:
     u8 _pad308[0x30C - 0x308];
     /* 0x30C */ shand_class* u30C;
     /* 0x310 */ cXyz* u310;
-    u8 _pad314[0x318 - 0x314];
+    /* 0x314 */ u8* u314;
     /* 0x318 */ short u318;
     /* 0x31C */ shand_s u31C[20]; 
     /* 0x54C */ mDoExt_3DlineMat1_c mLineMat;
