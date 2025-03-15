@@ -238,8 +238,8 @@ public:
     /* 0x01E */ u8 field_0x01E[0x020 - 0x01E];
     /* 0x020 */ u32 mFlags;
     /* 0x024 */ JKRSolidHeap* heap;
-    /* 0x028 */ s8 field_0x028;
-    /* 0x02C */ cXyz field_0x02c;
+    /* 0x028 */ s8 field_0x028; // looks to be same as TP's dAttention_c::field_0x328
+    /* 0x02C */ cXyz mDrawAttnPos;
     /* 0x038 */ dAttDraw_c draw[2];
     /* 0x050 */ u32 mlockedOnPId;
     /* 0x054 */ dAttList_c mLockOnList[8];

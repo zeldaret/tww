@@ -962,7 +962,7 @@ void dAttention_c::Draw() {
 
         fpc_ProcID id = LockonTargetPId(0);
         this->mlockedOnPId = id;
-        this->field_0x02c = target->attention_info.position;
+        this->mDrawAttnPos = target->attention_info.position;
         this->field_0x028 = 0;
     } else {
         if (this->field_0x028 > 0) {
@@ -971,9 +971,9 @@ void dAttention_c::Draw() {
             target = reinterpret_cast<fopAc_ac_c*>(fopAcIt_Judge(&fpcSch_JudgeByID, &temp));
             if (target != NULL) {
                 this->draw[0].draw(target->attention_info.position, invCamera);
-                this->field_0x02c = target->attention_info.position;
+                this->mDrawAttnPos = target->attention_info.position;
             } else {
-                this->draw[0].draw(this->field_0x02c, invCamera);
+                this->draw[0].draw(this->mDrawAttnPos, invCamera);
             }
         }
     }
