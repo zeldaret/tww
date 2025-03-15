@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_shand.h"
+#include "d/d_bg_s_lin_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
@@ -161,8 +162,41 @@ void cut_control3(shand_class* actor) {
 }
 
 /* 00000C30-00000FF0       .text normal__FP11shand_class */
-void normal(shand_class*) {
-    /* Nonmatching */
+void normal(shand_class* actor) {
+    cXyz unused;
+
+    unused.x = unused.y = 0;
+    if(actor->u318 != 0){
+        cXyz chk_end, chk_start;
+        dBgS_LinChk local94;
+
+        chk_start = chk_end = actor->current.pos;
+        chk_end.y += 4000.0f;
+        chk_start.y += 50.0f;
+        local94.Set(&chk_start, &chk_end, actor);
+        if(dComIfG_Bgsp()->LineCross(&local94) != false){
+            actor->u2C8.set(local94.GetLinP()->GetStart());
+            actor->u2D4.set(local94.GetCross());
+            actor->u31C[19].mPos.set(actor->u2D4);
+        };
+        actor->u318--;
+    }
+
+    switch(actor->u2BA){
+        case 0:
+            if(std::abs(actor->u31C[19].mPos.y - actor->u2D4.y) < 10.0f){
+                actor->u2BA = 1;
+                *actor->u314 = 2;
+            }
+        case 1:
+            actor->u2D4.set(actor->u2C8);
+    }
+
+    cLib_addCalc2(&actor->u2F4, std::abs(actor->home.pos.y - actor->u2C8.y) * (REG14_F(11) + 0.05f), 0.1f, 1.0f);
+    cLib_addCalc2(&actor->u300, REG14_F(12) + 10.0f, 0.1f, 0.5f);
+    control1(actor);
+    control2(actor);
+    control3(actor);
 }
 
 /* 00001428-00001508       .text cut__FP11shand_class */
