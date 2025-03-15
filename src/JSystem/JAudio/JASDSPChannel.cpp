@@ -18,10 +18,10 @@ void JASystem::TDSPChannel::init(u8 param_1) {
     mNumber = param_1;
     field_0x1 = 1;
     field_0x8 = 0;
-    field_0x6 = 0;
+    mCBInterval = 0;
     mCallback = NULL;
-    field_0x3 = 0;
-    field_0x4 = 0;
+    mPriority = 0;
+    mPriorityTime = 0;
     field_0xc = DSPInterface::getDSPHandle(param_1);
 }
 
@@ -36,7 +36,7 @@ int JASystem::TDSPChannel::allocate(u32 param_1) {
     }
     field_0x1 = 0;
     field_0x8 = param_1;
-    field_0x3 = 1;
+    mPriority = 1;
     field_0xc->allocInit();
     return true;
 }
@@ -44,7 +44,7 @@ int JASystem::TDSPChannel::allocate(u32 param_1) {
 /* 80289720-8028973C       .text free__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::free() {
     field_0x1 = 1;
-    field_0x3 = 0;
+    mPriority = 0;
     mCallback = NULL;
     field_0x8 = 0;
 }
@@ -74,7 +74,7 @@ bool JASystem::TDSPChannel::forceStop() {
 /* 802897E0-802897F4       .text forceDelete__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::forceDelete() {
     field_0x8 = 0;
-    field_0x3 = 0;
+    mPriority = 0;
     mCallback = NULL;
 }
 
@@ -166,7 +166,7 @@ JASystem::TDSPChannel* JASystem::TDSPChannel::getLower() {
             break;
         }
         if (dspch->mCallback) {
-            r27 = dspch->field_0x3;
+            r27 = dspch->mPriority;
             if (r27 <= r31) {
                 JUT_ASSERT(305, i == dspch->getNumber());
                 if (r27 != r31 || dspch->field_0xc->field_0x10c >= r29) {
@@ -191,7 +191,7 @@ JASystem::TDSPChannel* JASystem::TDSPChannel::getLowerActive() {
         if (dspch->field_0x1 == 2 || dspch->field_0x1 == 1) {
             continue;
         }
-        u8 r30 = dspch->field_0x3;
+        u8 r30 = dspch->mPriority;
         if (r30 <= r29) {
             JUT_ASSERT(345, i == dspch->getNumber());
             if (r30 != r29 || dspch->field_0xc->field_0x10c >= r27) {
@@ -207,7 +207,7 @@ JASystem::TDSPChannel* JASystem::TDSPChannel::getLowerActive() {
 /* 80289D10-80289DC8       .text breakLower__Q28JASystem11TDSPChannelFUc */
 BOOL JASystem::TDSPChannel::breakLower(u8 param_1) {
     TDSPChannel* dspch = getLower();
-    if (dspch->field_0x3 > param_1) {
+    if (dspch->mPriority > param_1) {
         return false;
     }
     if (dspch->field_0x1 != 1) {
@@ -227,7 +227,7 @@ BOOL JASystem::TDSPChannel::breakLower(u8 param_1) {
 /* 80289DC8-80289E68       .text breakLowerActive__Q28JASystem11TDSPChannelFUc */
 bool JASystem::TDSPChannel::breakLowerActive(u8 param_1) {
     TDSPChannel* dspch = getLowerActive();
-    if (dspch->field_0x3 > param_1) {
+    if (dspch->mPriority > param_1) {
         return false;
     }
     if (dspch->field_0x1 != 1) {
@@ -286,17 +286,17 @@ void JASystem::TDSPChannel::updateAll() {
         }
         if (dspBuffer->field_0x10a == 0) {
             dspBuffer->field_0x10c++;
-            if (dspBuffer->field_0x10c == dspChannel->field_0x4 && dspChannel->mCallback) {
+            if (dspBuffer->field_0x10c == dspChannel->getPriorityTime() && dspChannel->mCallback) {
                 dspChannel->mCallback(dspChannel, 4);
             }
         }
         if (dspChannel->mCallback) {
-            if (dspChannel->field_0x6) {
-                dspChannel->field_0x6--;
+            if (dspChannel->getCBInterval() != 0) {
+                dspChannel->decCBInterval();
             }
-            if (dspChannel->field_0x6 == 0) {
+            if (dspChannel->getCBInterval() == 0) {
                 dspChannel->onUpdate(0);
-                if (dspChannel->field_0x6 == 0) {
+                if (dspChannel->getCBInterval() == 0) {
                     dspBuffer->field_0x2 = 0;
                     dspBuffer->field_0x0 = 0;
                     dspBuffer->flushChannel();
@@ -310,7 +310,7 @@ void JASystem::TDSPChannel::updateAll() {
 /* 8028A04C-8028A08C       .text onUpdate__Q28JASystem11TDSPChannelFUl */
 void JASystem::TDSPChannel::onUpdate(u32 param_1) {
     if (mCallback) {
-        field_0x6 = mCallback(this, param_1);
+        mCBInterval = mCallback(this, param_1);
     }
 }
 

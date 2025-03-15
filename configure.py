@@ -807,7 +807,7 @@ config.libs = [
             Object(Matching,    "JSystem/JAudio/JASDriverIF.cpp"),
             Object(Matching,    "JSystem/JAudio/JASChGlobal.cpp"),
             Object(Matching,    "JSystem/JAudio/JASChAllocQueue.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASChannel.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASChannel.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASChannelMgr.cpp"),
             Object(Matching,    "JSystem/JAudio/JASOscillator.cpp"),
             Object(Matching,    "JSystem/JAudio/JASDriverTables.cpp"),

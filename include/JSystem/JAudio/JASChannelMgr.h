@@ -13,8 +13,8 @@ namespace JASystem {
         void stopAllRelease();
         void initAllocChannel(u32);
         TChannel* getLogicalChannel(u32);
-        bool moveListHead(TChannel*, u32);
-        bool moveListTail(TChannel*, u32);
+        BOOL moveListHead(TChannel*, u32);
+        BOOL moveListTail(TChannel*, u32);
         void addListHead(TChannel*, u32);
         void addListTail(TChannel*, u32);
         TChannel* getListHead(u32);
@@ -24,7 +24,7 @@ namespace JASystem {
         void checkLimitStop(TChannel*, u32);
 
         /* 0x00 */ u32 field_0x0;
-        /* 0x04 */ int field_0x4;
+        /* 0x04 */ u32 field_0x4;
         /* 0x08 */ TChannel* field_0x8;
         /* 0x0C */ TChannel* field_0xc;
         /* 0x10 */ TChannel* field_0x10;

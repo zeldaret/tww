@@ -8,13 +8,15 @@ namespace JASystem {
         struct Wave_ {
             /* 0x00 */ u8 field_0x0;
             /* 0x01 */ u8 field_0x1;
-            /* 0x02 */ u8 field_0x2[0x10 - 0x2];
+            /* 0x02 */ u8 field_0x2;
+            /* 0x03 */ u8 field_0x3[0x10 - 0x3];
             /* 0x10 */ int field_0x10;
             /* 0x14 */ int field_0x14;
             /* 0x18 */ int field_0x18;
             /* 0x1C */ int field_0x1c;
             /* 0x20 */ short field_0x20;
             /* 0x22 */ short field_0x22;
+            /* 0x24 */ u32* field_0x24;
         };
     }
     namespace DSPInterface {

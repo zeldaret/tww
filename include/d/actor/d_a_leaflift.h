@@ -34,7 +34,7 @@ public:
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
-    /* 0x29C */	dCcD_Stts mStts;
+    /* 0x29C */ dCcD_Stts mStts;
     /* 0x2D8 */ dCcD_Cyl mCyl;
     /* 0x408 */ dBgW* mpBgW;
     /* 0x40C */ Mtx mMtx;
