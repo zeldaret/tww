@@ -62,8 +62,8 @@ BOOL daShip_c::draw() {
 }
 
 /* 00000B14-00000B34       .text daShip_Draw__FP8daShip_c */
-static BOOL daShip_Draw(daShip_c*) {
-    /* Nonmatching */
+static BOOL daShip_Draw(daShip_c* i_this) {
+    return ((daShip_c*)i_this)->draw();
 }
 
 /* 00000B34-00000DAC       .text checkForceMessage__8daShip_cFv */
@@ -422,13 +422,13 @@ BOOL daShip_c::execute() {
 }
 
 /* 0000B9D4-0000B9F4       .text daShip_Execute__FP8daShip_c */
-static BOOL daShip_Execute(daShip_c*) {
-    /* Nonmatching */
+static BOOL daShip_Execute(daShip_c* i_this) {
+    return ((daShip_c*)i_this)->execute();
 }
 
 /* 0000B9F4-0000B9FC       .text daShip_IsDelete__FP8daShip_c */
 static BOOL daShip_IsDelete(daShip_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000B9FC-0000BB1C       .text shipDelete__8daShip_cFv */
@@ -437,8 +437,9 @@ void daShip_c::shipDelete() {
 }
 
 /* 0000BB1C-0000BB40       .text daShip_Delete__FP8daShip_c */
-static BOOL daShip_Delete(daShip_c*) {
-    /* Nonmatching */
+static BOOL daShip_Delete(daShip_c* i_this) {
+    ((daShip_c*)i_this)->shipDelete();
+    return TRUE;
 }
 
 /* 0000BB40-0000BFB8       .text createHeap__8daShip_cFv */
@@ -447,8 +448,9 @@ void daShip_c::createHeap() {
 }
 
 /* 0000BFB8-0000BFD8       .text daShip_createHeap__FP10fopAc_ac_c */
-static BOOL daShip_createHeap(fopAc_ac_c*) {
+static void daShip_createHeap(fopAc_ac_c* i_this) {
     /* Nonmatching */
+    return ((daShip_c*)i_this)->createHeap();
 }
 
 /* 0000BFD8-0000C790       .text create__8daShip_cFv */
@@ -457,8 +459,8 @@ s32 daShip_c::create() {
 }
 
 /* 0000D018-0000D038       .text daShip_Create__FP10fopAc_ac_c */
-static s32 daShip_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daShip_Create(fopAc_ac_c* i_this) {
+    return ((daShip_c*)i_this)->create();
 }
 
 static actor_method_class l_daShip_Method = {
