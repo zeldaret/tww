@@ -2165,7 +2165,7 @@ inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
     return (daPy_lk_c*)dComIfGp_getLinkPlayer();
 }
 
-inline s8 dComIfGp_getPlayerCameraID(int idx) {
+inline int dComIfGp_getPlayerCameraID(int idx) {
     return g_dComIfG_gameInfo.play.getPlayerCameraID(idx);
 }
 
