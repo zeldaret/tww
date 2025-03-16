@@ -124,6 +124,20 @@ namespace JASystem {
         void initBuffer();
         FXBuffer* getFXHandle(u8 param_1);
 
+        // TODO inlines
+        inline void boot(void (*)(void*)) {}
+        inline void finishWork(u16) {}
+        inline void flushChannel(u8) {}
+        inline void restart() {}
+        inline void setBusConnect(u8, u8, u8) {}
+        inline void setFXLine(u8, s16*, FxlineConfig_*) {}
+        inline void setMixerInitDelayMax(u8, u8) {}
+        inline void setMixerInitVolume(u8, u8, s16, u8) {}
+        inline void setMixerVolume(u8, u8, s16, u8) {}
+        inline void setPauseFlag(u8, u8) {}
+        inline void setPitch(u8, u16) {}
+        inline void sync(u32, u32, u32) {}
+
         extern u16 SEND_TABLE[12];
         extern u32 DOLBY2_DELAY_BUF[];
         extern u16 JAS_DSP_PREFIX;

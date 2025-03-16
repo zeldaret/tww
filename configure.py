@@ -769,7 +769,7 @@ config.libs = [
             Object(Matching,    "JSystem/JAudio/JASDvdThread.cpp"),
             Object(Matching,    "JSystem/JAudio/JASCallback.cpp"),
             Object(Matching,    "JSystem/JAudio/JASRate.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASHardStream.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASHardStream.cpp"),
             Object(Matching,    "JSystem/JAudio/JASHeapCtrl.cpp"),
             Object(Matching,    "JSystem/JAudio/JASResArcLoader.cpp"),
             Object(Matching,    "JSystem/JAudio/JASProbe.cpp"),
