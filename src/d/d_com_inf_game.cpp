@@ -172,7 +172,7 @@ void dComIfG_play_c::itemInit() {
     mNowVibration = dComIfGs_getOptVibration();
     daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
     mMesgCameraTagInfo = 0;
-    field_0x4984 = 0;
+    mMesgCameraInfo = 0;
 
     for (int i = 0; i < ARRAY_SIZE(field_0x4988); i++) {
         field_0x4988[i] = 0;

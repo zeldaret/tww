@@ -192,7 +192,7 @@ public:
 public:
     /* 0x004 */ JUTFont* font[2];
     /* 0x00C */ mesg_entry* field_0x0C;
-    /* 0x010 */ f32 field_0x10;
+    /* 0x010 */ u32 field_0x10;
     /* 0x014 */ f32 field_0x14;
     /* 0x018 */ f32 field_0x18;
     /* 0x01C */ f32 field_0x1C;

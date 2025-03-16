@@ -552,6 +552,8 @@ public:
     void clearBaseAnimeID() { mMesgAnime = 0xFF; }
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
+    int getMesgCameraInfo() { return mMesgCameraInfo; }
+    void setMesgCamInfoBasicID(int id) { mMesgCameraInfo = id; }
     int getMesgCamInfoID() { return mMesgCameraTagInfo; }
     void clearMesgCamInfoID() { mMesgCameraTagInfo = -1; }
     u8 getMesgStatus() { return mMesgStatus; }
@@ -720,7 +722,7 @@ public:
     /* 0x497B */ u8 field_0x497B[0x497C - 0x497B];
     /* 0x497C */ JKRExpHeap* mpExpHeap2D;
     /* 0x4980 */ int mMesgCameraTagInfo;
-    /* 0x4984 */ int field_0x4984;
+    /* 0x4984 */ int mMesgCameraInfo;
     /* 0x4988 */ int field_0x4988[10];
     /* 0x49B0 */ u8 mPlayerInfoBuffer[sizeof(dSv_player_status_c_c)];
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
@@ -2554,6 +2556,14 @@ inline u8 dComIfGp_getMesgAnimeTagInfo() {
 
 inline void dComIfGp_clearMesgAnimeTagInfo() {
     g_dComIfG_gameInfo.play.clearNowAnimeID();
+}
+
+inline int dComIfGp_getMesgCameraInfo() {
+    return g_dComIfG_gameInfo.play.getMesgCameraInfo();
+}
+
+inline void dComIfGp_setMesgCameraAttrInfo(int id) {
+    return g_dComIfG_gameInfo.play.setMesgCamInfoBasicID(id);
 }
 
 inline int dComIfGp_getMesgCameraTagInfo() {

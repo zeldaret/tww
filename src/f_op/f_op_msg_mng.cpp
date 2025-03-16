@@ -6,6 +6,7 @@
 #include "f_op/f_op_msg_mng.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JUtility/JUTDataHeader.h"
+#include "d/d_meter.h"
 #if VERSION == VERSION_JPN
 #include "d/d_s_play.h"
 #endif
@@ -451,9 +452,6 @@ u32 fopMsgM_searchMessageNumber(u32 msgNo) {
 
 /* 8002B634-8002B778       .text fopMsgM_messageSet__FUlP10fopAc_ac_c */
 fpc_ProcID fopMsgM_messageSet(u32 msgNo, fopAc_ac_c* pActor) {
-    /* Nonmatching */
-    u32 msgNoTemp = msgNo;
-
     if (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 7 && dComIfGp_isHeapLockFlag() != 8 && dComIfGp_isHeapLockFlag() != 9) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -463,16 +461,16 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, fopAc_ac_c* pActor) {
 
     cXyz lookAtPos = pActor->eyePos;
     if(i_msgID == -1) {
-        i_msgID = fopMsgM_messageTypeSelect(pActor, &lookAtPos, &msgNoTemp, &msgNoTemp);
+        i_msgID = fopMsgM_messageTypeSelect(pActor, &lookAtPos, &msgNo, &msgNo);
     }
-    else if(fopMsgM_IsExecuting(msgNo)) {
+    else if(fopMsgM_IsExecuting(i_msgID)) {
         msg_class* pMsg = fopMsgM_SearchByID(i_msgID);
         if(pMsg == NULL) {
             i_msgID = fpcM_ERROR_PROCESS_ID_e;
         }
         else {
-            pMsg->mMsgNo = msgNoTemp;
-            pMsg->field_0xf0 = msgNoTemp;
+            pMsg->mMsgNo = msgNo;
+            pMsg->field_0xf0 = msgNo;
             if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
@@ -480,7 +478,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, fopAc_ac_c* pActor) {
         }
     }
     else {
-        i_msgID = fopMsgM_messageTypeSelect(pActor, &lookAtPos, &msgNoTemp, &msgNoTemp);
+        i_msgID = fopMsgM_messageTypeSelect(pActor, &lookAtPos, &msgNo, &msgNo);
     }
 
     return i_msgID;
@@ -488,9 +486,6 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, fopAc_ac_c* pActor) {
 
 /* 8002B778-8002B8A4       .text fopMsgM_messageSet__FUlP4cXyz */
 fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
-    /* Nonmatching */
-    u32 msgNoTemp = msgNo;
-
     if (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 7 && dComIfGp_isHeapLockFlag() != 8 && dComIfGp_isHeapLockFlag() != 9) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -499,16 +494,16 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
     dComIfGp_clearMesgCameraTagInfo();
 
     if(i_msgID == -1) {
-        i_msgID = fopMsgM_messageTypeSelect(NULL, lookAtPos, &msgNoTemp, &msgNoTemp);
+        i_msgID = fopMsgM_messageTypeSelect(NULL, lookAtPos, &msgNo, &msgNo);
     }
-    else if(fopMsgM_IsExecuting(msgNo)) {
+    else if(fopMsgM_IsExecuting(i_msgID)) {
         msg_class* pMsg = fopMsgM_SearchByID(i_msgID);
         if(pMsg == NULL) {
             i_msgID = fpcM_ERROR_PROCESS_ID_e;
         }
         else {
-            pMsg->mMsgNo = msgNoTemp;
-            pMsg->field_0xf0 = msgNoTemp;
+            pMsg->mMsgNo = msgNo;
+            pMsg->field_0xf0 = msgNo;
             if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
@@ -516,7 +511,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
         }
     }
     else {
-        i_msgID = fopMsgM_messageTypeSelect(NULL, lookAtPos, &msgNoTemp, &msgNoTemp);
+        i_msgID = fopMsgM_messageTypeSelect(NULL, lookAtPos, &msgNo, &msgNo);
     }
 
     return i_msgID;
@@ -525,24 +520,22 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
 /* 8002B8A4-8002B9C4       .text fopMsgM_messageSet__FUl */
 fpc_ProcID fopMsgM_messageSet(u32 msgNo) {
     /* Nonmatching */
-    u32 msgNoTemp = msgNo;
-
     if (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 7 && dComIfGp_isHeapLockFlag() != 8 && dComIfGp_isHeapLockFlag() != 9) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
     cXyz lookAtPos(0.0f, 0.0f, 0.0f);
     if(i_msgID == -1) {
-        i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNoTemp, &msgNoTemp);
+        i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNo, &msgNo);
     }
-    else if(fopMsgM_IsExecuting(msgNo)) {
+    else if(fopMsgM_IsExecuting(i_msgID)) {
         msg_class* pMsg = fopMsgM_SearchByID(i_msgID);
         if(pMsg == NULL) {
             i_msgID = fpcM_ERROR_PROCESS_ID_e;
         }
         else {
-            pMsg->mMsgNo = msgNoTemp;
-            pMsg->field_0xf0 = msgNoTemp;
+            pMsg->mMsgNo = msgNo;
+            pMsg->field_0xf0 = msgNo;
             if(fopMsgM_SearchByName(PROC_SCP) || fopMsgM_SearchByName(PROC_PB)) {
                 fopMsgM_Delete(pMsg);
                 i_msgID = fpcM_ERROR_PROCESS_ID_e;
@@ -550,7 +543,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo) {
         }
     }
     else {
-        i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNoTemp, &msgNoTemp);
+        i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNo, &msgNo);
     }
 
     return i_msgID;
@@ -951,47 +944,58 @@ void fopMsgM_outFontSet(J2DPicture* param_1, J2DPicture* param_2, s16* param_3, 
 }
 
 /* 8002C9B0-8002CBDC       .text fopMsgM_outFontSet__FP10J2DPicturePsUlUc */
-void fopMsgM_outFontSet(J2DPicture* param_1, s16* param_3, u32 param_4, u8 param_5) {
+void fopMsgM_outFontSet(J2DPicture* param_1, s16* param_2, u32 param_3, u8 param_4) {
     /* Nonmatching */
-    if(param_5 == 0x17) {
-        param_5 = 0x14;
+    if(param_4 == 0x17) {
+        param_4 = 0x14;
     }
-    else if(param_5 == 0x18) {
-        param_5 = 0x15;
+    else if(param_4 == 0x18) {
+        param_4 = 0x15;
     }
-    else if(param_5 == 0x19) {
-        param_5 = 0x16;
+    else if(param_4 == 0x19) {
+        param_4 = 0x16;
     }
-    else if(param_5 == 0x1A) {
-        param_5 = 0x17;
+    else if(param_4 == 0x1A) {
+        param_4 = 0x17;
     }
 
     param_1->show();
-    fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_5]);
-    if((0xA <= param_5 && param_5 <= 0xE) || param_5 == 0x15 || param_5 == 0x17) {
-        JUtility::TColor col(param_4 >> 0x18, param_4 >> 0x10, param_4 >> 0x8, 0xFF);
+    fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_4]);
+    if((0xA <= param_4 && param_4 <= 0xE) || param_4 == 0x15 || param_4 == 0x17) {
+        JUtility::TColor col(param_3 >> 0x18, param_3 >> 0x10, param_3 >> 0x8, 0xFF);
         param_1->setWhite(col);
         param_1->setBlack(0x00000000);
     }
     else {
-        JUtility::TColor col(fopMsgM_buttonW[param_5]);
+        JUtility::TColor col(fopMsgM_buttonW[param_4]);
         param_1->setWhite(col);
         param_1->setBlack(0x00000000);
     }
 
     param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
 
-    *param_3 = 0;
+    *param_2 = 0;
 }
 
 /* 8002CBDC-8002CEB0       .text fopMsgM_outFontStickAnimePiece__FP10J2DPictureP10J2DPicturess */
-void fopMsgM_outFontStickAnimePiece(J2DPicture*, J2DPicture*, s16, s16) {
+void fopMsgM_outFontStickAnimePiece(J2DPicture* param_1, J2DPicture* param_2, s16 param_3, s16 param_4) {
     /* Nonmatching */
+    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    param_2->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    param_2->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    param_1->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+    param_2->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    param_2->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /* 8002CEB0-8002D088       .text fopMsgM_outFontStickAnimePiece__FP10J2DPicturess */
-void fopMsgM_outFontStickAnimePiece(J2DPicture*, s16, s16) {
-    /* Nonmatching */
+void fopMsgM_outFontStickAnimePiece(J2DPicture* param_1, s16, s16) {
+    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    param_1->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /* 8002D0E4-8002D2B8       .text fopMsgM_outFontStickAnime__FP10J2DPictureP10J2DPicturePiPiiPs */
@@ -1035,70 +1039,83 @@ void fopMsgM_outFontArrow(J2DPicture*, int*, int*, int*, int*, u8) {
 }
 
 /* 8002DD98-8002DFB4       .text fopMsgM_outFontDraw__FP10J2DPictureP10J2DPictureiiiPsUcUc */
-void fopMsgM_outFontDraw(J2DPicture*, J2DPicture*, int, int, int, s16*, u8, u8 param_8) {
+void fopMsgM_outFontDraw(J2DPicture* param_1, J2DPicture* param_2, int param_3, int param_4, int param_5, s16* param_6, u8 param_7, u8 param_8) {
     switch(param_8) {
         case 9:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
-            break;
-        case 0xA:
-        case 0xB:
-        case 0xC:
-        case 0xD:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
+            fopMsgM_outFontStickAnime(param_1, param_2, &param_3, &param_4, param_5, param_6);
             break;
         case 0xE:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
+            fopMsgM_outFontStickAnime(param_1, param_2, &param_3, &param_4, param_5, param_6, 1);
             break;
         case 0xF:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
+            fopMsgM_outFontStickAnime(param_1, param_2, &param_3, &param_4, param_5, param_6, 3);
             break;
         case 0x10:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
+            fopMsgM_outFontStickAnime(param_1, param_2, &param_3, &param_4, param_5, param_6, 0);
             break;
         case 0x11:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
+            fopMsgM_outFontStickAnime(param_1, param_2, &param_3, &param_4, param_5, param_6, 2);
             break;
         case 0x12:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
+            fopMsgM_outFontStickAnime2(param_1, param_2, &param_3, &param_4, param_5, param_6, 0);
             break;
         case 0x13:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
+            fopMsgM_outFontStickAnime2(param_1, param_2, &param_3, &param_4, param_5, param_6, 1);
             break;
+            case 0xA:
+            case 0xB:
+            case 0xC:
+            case 0xD:
+                fopMsgM_outFontArrow(param_1, param_2, &param_3, &param_4, param_5, param_8);
+                break;
     }
+
+    param_2->draw(param_3 + 2, param_4 + 1 + g_msgHIO.field_0x6a, param_5, param_5, false, false, false);
+    param_1->draw(param_3, param_4 - 1 + g_msgHIO.field_0x6a, param_5, param_5, false, false, false);
+
+    param_1->setAlpha(param_7);
+    param_2->setAlpha(param_7);
 }
 
 /* 8002DFB4-8002E204       .text fopMsgM_outFontDraw2__FP10J2DPictureP10J2DPictureiiiiPsUcUc */
-void fopMsgM_outFontDraw2(J2DPicture*, J2DPicture*, int, int, int, int, s16*, u8, u8 param_9) {
-    /* Nonmatching */
+void fopMsgM_outFontDraw2(J2DPicture* param_1, J2DPicture* param_2, int param_3, int param_4, int param_5, int param_6, s16* param_7, u8 param_8, u8 param_9) {
+    int temp1 = 0, temp2 = 0;
+
     switch(param_9) {
         case 9:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
+            fopMsgM_outFontStickAnime(param_1, &temp1, &temp2, &param_5, &param_6, param_7);
+            break;
+        case 0xE:
+            fopMsgM_outFontStickAnime(param_1, &temp1, &temp2, &param_5, &param_6, param_7, 1);
+            break;
+        case 0xF:
+            fopMsgM_outFontStickAnime(param_1, &temp1, &temp2, &param_5, &param_6, param_7, 3);
+            break;
+        case 0x10:
+            fopMsgM_outFontStickAnime(param_1, &temp1, &temp2, &param_5, &param_6, param_7, 0);
+            break;
+        case 0x11:
+            fopMsgM_outFontStickAnime(param_1, &temp1, &temp2, &param_5, &param_6, param_7, 2);
+            break;
+        case 0x12:
+            fopMsgM_outFontStickAnime2(param_1, &temp1, &temp2, &param_5, &param_6, param_7, 0);
+            break;
+        case 0x13:
+            fopMsgM_outFontStickAnime2(param_1, &temp1, &temp2, &param_5, &param_6, param_7, 1);
             break;
         case 0xA:
         case 0xB:
         case 0xC:
         case 0xD:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
-            break;
-        case 0xE:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
-            break;
-        case 0xF:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
-            break;
-        case 0x10:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
-            break;
-        case 0x11:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
-            break;
-        case 0x12:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
-            break;
-        case 0x13:
-            fopMsgM_outFontStickAnime(0, 0, 0, 0, 0, 0);
+            fopMsgM_outFontArrow(param_1, &temp1, &temp2, &param_5, &param_6, param_9);
             break;
     }
+
+    param_2->move(param_3, param_4);
+    param_1->move(temp1, temp2);
+    param_1->resize(param_5, param_6);
+
+    param_1->setAlpha(param_8);
 }
 
 /* 8002E204-8002E254       .text fopMsgM_Create__FsPFPv_iPv */
