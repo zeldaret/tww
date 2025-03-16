@@ -273,17 +273,17 @@ void daNpc_Mk_c::visit_action(void*) {
 }
 
 /* 00003C7C-00003DA0       .text _draw__10daNpc_Mk_cFv */
-BOOL daNpc_Mk_c::_draw() {
+bool daNpc_Mk_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00003DA0-00004010       .text _execute__10daNpc_Mk_cFv */
-BOOL daNpc_Mk_c::_execute() {
+bool daNpc_Mk_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00004010-0000405C       .text _delete__10daNpc_Mk_cFv */
-BOOL daNpc_Mk_c::_delete() {
+bool daNpc_Mk_c::_delete() {
     /* Nonmatching */
 }
 

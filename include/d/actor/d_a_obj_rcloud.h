@@ -13,14 +13,14 @@ public:
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void wait_act_proc();
     void clouds_lift_start_wait_act_proc();
     void clouds_lift_act_proc();
     void setup_action(int);
-    BOOL _execute();
+    bool _execute();
     void setTexMtx();
-    BOOL _draw();
+    bool _draw();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsBVkumo;

@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000000F8       .text _delete__8daFire_cFv */
-BOOL daFire_c::_delete() {
+bool daFire_c::_delete() {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ s32 daFire_c::_create() {
 }
 
 /* 000009F0-00000A70       .text _execute__8daFire_cFv */
-BOOL daFire_c::_execute() {
+bool daFire_c::_execute() {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ void daFire_c::checkCol() {
 }
 
 /* 000015A4-000015AC       .text _draw__8daFire_cFv */
-BOOL daFire_c::_draw() {
+bool daFire_c::_draw() {
     /* Nonmatching */
 }
 

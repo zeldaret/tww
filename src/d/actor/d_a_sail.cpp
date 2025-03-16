@@ -13,6 +13,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_lib.h"
+#include "SSystem/SComponent/c_angle.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -478,7 +479,7 @@ static BOOL daSail_Draw(sail_class* i_this) {
 
     i_this->tevStr = l_p_ship->tevStr;
 
-    g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType(i_this->mSailPacket.mStickModel, &i_this->tevStr);
     mDoExt_modelUpdateDL(i_this->mSailPacket.mStickModel);
 
@@ -738,9 +739,9 @@ static BOOL daSail_Delete(sail_class* i_this) {
     dComIfG_resDelete(&i_this->mClothPhase, "Cloth");
     dComIfG_resDelete(&i_this->mKaizokusenPhase, "Kaizokusen");
     
-    if (l_HIO.mChildID >= 0) {
-        mDoHIO_root.m_subroot.deleteChild(l_HIO.mChildID);
-        l_HIO.mChildID = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_root.m_subroot.deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
     
     return TRUE;
@@ -779,8 +780,8 @@ static s32 daSail_Create(fopAc_ac_c* i_actor) {
     
     int phase_state = cPhs_COMPLEATE_e;
     if (fopAcM_entrySolidHeap(i_this, daSail_checkCreateHeap, 0x4C0)) {
-        if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_root.m_subroot.createChild("海賊船の帆", &l_HIO); // "Pirate Ship's Sail"
+        if (l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_root.m_subroot.createChild("海賊船の帆", &l_HIO); // "Pirate Ship's Sail"
         }
         
         i_this->mSailPacket.m1C44 = 0.0f;

@@ -16,7 +16,7 @@ public:
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void search_target_next(daObjShmrgrd_c*);
     void register_list();
     void leave_list();
@@ -39,8 +39,8 @@ public:
     void mode_u_l();
     void mode_lower_init();
     void mode_lower();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
     /* Place member variables here */

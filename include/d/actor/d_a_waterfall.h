@@ -5,16 +5,16 @@
 
 class daWfall_c : public fopAc_ac_c {
 public:
-    inline BOOL _draw();
+    inline bool _draw();
 
-    BOOL _delete();
+    bool _delete();
     void CreateHeap();
     void CreateInit();
     s32 _create();
     void set_mtx();
     void set_gate_mtx();
     void set_minamo_mtx();
-    BOOL _execute();
+    bool _execute();
     void mode_proc_call();
     void mode_wtr_on_init();
     void mode_wtr_on();

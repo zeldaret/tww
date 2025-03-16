@@ -46,9 +46,9 @@ namespace daComing2 {
         void coming_process_init(short);
         void coming_process_main();
         s32 _create();
-        BOOL _delete();
-        BOOL _execute();
-        BOOL _draw();
+        bool _delete();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

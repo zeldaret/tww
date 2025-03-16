@@ -1976,7 +1976,7 @@ public:
     /* 0x31C8 */ daPy_anmHeap_c m_tex_scroll_heap;
     /* 0x31D8 */ int mCurProc;
     /* 0x31DC */ ProcFunc mCurProcFunc;
-    /* 0x31E8 */ daPy_footEffect_c m31E8[2];
+    /* 0x31E8 */ daPy_footEffect_c mFootEffect[2];
     /* 0x3280 */ dPa_rippleEcallBack m3280;
     /* 0x3294 */ daPy_swimTailEcallBack_c mSwimTailEcallBack[2];
     /* 0x32E4 */ daPy_mtxFollowEcallBack_c m32E4;
@@ -2204,7 +2204,7 @@ public:
     
     struct TexAnmTableEntry {
         /* 0x00 */ u16 mBtpIdx;
-        /* 0x04 */ u16 mBtkIdx;
+        /* 0x02 */ u16 mBtkIdx;
     };  // Size: 0x04
     static const TexAnmTableEntry mTexAnmIndexTable[];
     

@@ -88,12 +88,12 @@ void daDaiocta_Eye_c::modeProcCall() {
 }
 
 /* 00000ED0-00001120       .text _execute__15daDaiocta_Eye_cFv */
-BOOL daDaiocta_Eye_c::_execute() {
+bool daDaiocta_Eye_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001120-000011EC       .text _draw__15daDaiocta_Eye_cFv */
-BOOL daDaiocta_Eye_c::_draw() {
+bool daDaiocta_Eye_c::_draw() {
     /* Nonmatching */
 }
 
@@ -108,7 +108,7 @@ s32 daDaiocta_Eye_c::_create() {
 }
 
 /* 00001764-000017B4       .text _delete__15daDaiocta_Eye_cFv */
-BOOL daDaiocta_Eye_c::_delete() {
+bool daDaiocta_Eye_c::_delete() {
     /* Nonmatching */
 }
 

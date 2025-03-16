@@ -12,8 +12,8 @@ class dDlst_2DObject_c;
 class daMgBoard_c : public fopAc_ac_c {
 public:
     inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _draw();
+    inline bool _delete();
+    inline bool _draw();
     void reqClearGame() {}
     void set_mtx(); // weak but not inlined?
 
@@ -27,7 +27,7 @@ public:
     void set_2dposition();
     void CreateInit();
     void MiniGameInit();
-    BOOL _execute();
+    bool _execute();
     void execGameMain();
     void execEndGame();
     void MinigameMain();

@@ -22,7 +22,7 @@ s32 daObjVtil_c::_create() {
 }
 
 /* 000006CC-00000718       .text _delete__11daObjVtil_cFv */
-BOOL daObjVtil_c::_delete() {
+bool daObjVtil_c::_delete() {
     /* Nonmatching */
 }
 
@@ -162,12 +162,12 @@ void daObjVtil_c::check_circle() {
 }
 
 /* 00001634-000017CC       .text _execute__11daObjVtil_cFv */
-BOOL daObjVtil_c::_execute() {
+bool daObjVtil_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000017CC-00001864       .text _draw__11daObjVtil_cFv */
-BOOL daObjVtil_c::_draw() {
+bool daObjVtil_c::_draw() {
     /* Nonmatching */
 }
 

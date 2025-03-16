@@ -17,7 +17,7 @@ JntHit_HIO_c::JntHit_HIO_c() {
     m1C = 0.0f;
     m20 = 0.0f;
     m24 = 100.0f;
-    mChildID = -1;
+    mNo = -1;
 }
 
 /* 80060C44-80060EC4       .text CreateInit__8JntHit_cFv */

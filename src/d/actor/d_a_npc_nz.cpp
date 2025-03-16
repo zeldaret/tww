@@ -19,13 +19,13 @@ const char daNpc_Nz_c::m_arc_name[] = "NZ";
 const char daNpc_Nz_c::m_bdl_arc_name[] = "Npcnz";
 
 /* 000000EC-00000128       .text daNpcNz_NodeCallBack__FP7J3DNodei */
-static BOOL daNpcNz_NodeCallBack(J3DNode* node, int param_1) {
-    return reinterpret_cast<daNpc_Nz_c*>(j3dSys.getModel()->getUserArea())->NodeCallBack(node, param_1);
+static BOOL daNpcNz_NodeCallBack(J3DNode* node, int calcTiming) {
+    return reinterpret_cast<daNpc_Nz_c*>(j3dSys.getModel()->getUserArea())->NodeCallBack(node, calcTiming);
 }
 
 /* 00000128-0000024C       .text NodeCallBack__10daNpc_Nz_cFP7J3DNodei */
-BOOL daNpc_Nz_c::NodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+BOOL daNpc_Nz_c::NodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
@@ -50,13 +50,13 @@ BOOL daNpc_Nz_c::NodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 00000288-000002C4       .text daNpcNz_TailNodeCallBack__FP7J3DNodei */
-static BOOL daNpcNz_TailNodeCallBack(J3DNode* node, int param_1) {
-    return reinterpret_cast<daNpc_Nz_c*>(j3dSys.getModel()->getUserArea())->TailNodeCallBack(node, param_1);
+static BOOL daNpcNz_TailNodeCallBack(J3DNode* node, int calcTiming) {
+    return reinterpret_cast<daNpc_Nz_c*>(j3dSys.getModel()->getUserArea())->TailNodeCallBack(node, calcTiming);
 }
 
 /* 000002C4-000003A4       .text TailNodeCallBack__10daNpc_Nz_cFP7J3DNodei */
-BOOL daNpc_Nz_c::TailNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+BOOL daNpc_Nz_c::TailNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         s32 idx = 0;
@@ -185,7 +185,7 @@ BOOL daNpc_Nz_c::_createHeap() {
 
 /* 00000F98-00001010       .text __ct__14daNpc_Nz_HIO_cFv */
 daNpc_Nz_HIO_c::daNpc_Nz_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     field_0x06 = 0x1F40;
     field_0x08 = 0x1F40;
     field_0x0A = 0;
@@ -206,7 +206,7 @@ daNpc_Nz_HIO_c::daNpc_Nz_HIO_c() {
 static s16 daNpc_Nz_XyCheckCB(void* i_actor, int i_itemBtn) {
     daNpc_Nz_c* i_this = static_cast<daNpc_Nz_c*>(i_actor);
 
-    if(dComIfGp_getSelectItem(i_itemBtn) == BIRD_ESA_5) {
+    if(dComIfGp_getSelectItem(i_itemBtn) == dItem_BIRD_BAIT_5_e) {
         f32 temp2 = l_HIO.field_0x20;
         daPy_py_c* player = daPy_getPlayerActorClass();
         cXyz temp(player->current.pos);
@@ -394,22 +394,22 @@ void daNpc_Nz_c::setMtx() {
         cXyz temp3 = temp + temp2;
 
         switch(field_0x908) {
-            case BIRD_ESA_5:
+            case dItem_BIRD_BAIT_5_e:
                 temp4 = -15.0f;
                 break;
             case dItem_HYOI_PEAR_e:
                 temp4 = -5.0f;
                 break;
-            case RED_BOTTLE:
-            case BLUE_BOTTLE:
+            case dItem_RED_POTION_e:
+            case dItem_BLUE_POTION_e:
                 temp4 = -5.0f;
                 break;
-            case BOMB_10:
-            case BOMB_30:
+            case dItem_BOMB_10_e:
+            case dItem_BOMB_30_e:
                 temp4 = -15.0f;
                 break;
-            case ARROW_10:
-            case ARROW_30:
+            case dItem_ARROW_10_e:
+            case dItem_ARROW_30_e:
                 temp4 = -10.0f;
                 break;
         }
@@ -496,7 +496,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
         return 0x3405;
     }
 
-    if((itemNo == RED_BOTTLE || itemNo == BLUE_BOTTLE) && !dComIfGs_checkEmptyBottle()) {
+    if((itemNo == dItem_RED_POTION_e || itemNo == dItem_BLUE_POTION_e) && !dComIfGs_checkEmptyBottle()) {
         return 0x3406;
     }
 
@@ -508,7 +508,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
         return 0x3407;
     }
 
-    if((itemNo == BIRD_ESA_5 || itemNo == dItem_HYOI_PEAR_e) && !dComIfGs_checkBaitItemEmpty()) {
+    if((itemNo == dItem_BIRD_BAIT_5_e || itemNo == dItem_HYOI_PEAR_e) && !dComIfGs_checkBaitItemEmpty()) {
         return 0x3407;
     }
 
@@ -594,20 +594,20 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
 
     const u8 itemArr1[4][2] = {
         {
-            BIRD_ESA_5,
+            dItem_BIRD_BAIT_5_e,
             dItem_HYOI_PEAR_e
         },
         {
-            RED_BOTTLE,
-            BLUE_BOTTLE
+            dItem_RED_POTION_e,
+            dItem_BLUE_POTION_e
         },
         {
-            BOMB_10,
-            BOMB_30
+            dItem_BOMB_10_e,
+            dItem_BOMB_30_e
         },
         {
-            ARROW_10,
-            ARROW_30
+            dItem_ARROW_10_e,
+            dItem_ARROW_30_e
         }
     };
 
@@ -623,7 +623,7 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
             if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
                 temp += 1;
             }
-            if(dComIfGs_getItem(dItem_BOW_e) != dItem_NONE_e) {
+            if(dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e) {
                 temp += 1;
             }
 
@@ -885,7 +885,7 @@ void daNpc_Nz_c::setSmokeParticle() {
     }
 
     if(field_0x914.getEmitter() == NULL) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &current.pos, &current.angle, 0, 0xB9, &field_0x914, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, &current.angle, 0, 0xB9, &field_0x914, fopAcM_GetRoomNo(this));
         if(emitter) {
             emitter->setRate(3.0f);
             emitter->setSpread(0.2f);

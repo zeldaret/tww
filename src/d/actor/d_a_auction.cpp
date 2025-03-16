@@ -50,8 +50,8 @@ static daAuction_HIO_c l_HIO;
 
 static daAuction_c::ItemData l_item_dat[] = {
     {dItem_JOY_PENDANT_e, 0x1D10, 40, 0x0F01},
-    {COLLECT_MAP_27, 0x1D11, 5, 0x1080},
-    {COLLECT_MAP_18, 0x1D12, 60, 0x1040},
+    {dItem_COLLECT_MAP_27_e, 0x1D11, 5, 0x1080},
+    {dItem_COLLECT_MAP_18_e, 0x1D12, 60, 0x1040},
     {dItem_HEART_PIECE_e, 0x1D13, 80, 0x1020},
 };
 
@@ -492,6 +492,19 @@ void daAuction_c::privateCut() {
         "END",
         "CAMERA_TEST",
     };
+    enum {
+        ACT_MES_SET,
+        ACT_MES_END,
+        ACT_START,
+        ACT_MAIN,
+        ACT_GET_ITEM,
+        ACT_CAMERA_OFF,
+        ACT_GET_ITEM_NPC,
+        ACT_GET_ITEM_MES,
+        ACT_CAMERA_OFF_NPC,
+        ACT_END,
+        ACT_CAMERA_TEST,
+    };
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Auction");
 
@@ -508,31 +521,31 @@ void daAuction_c::privateCut() {
 
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (mAction) {
-        case 0:
+        case ACT_MES_SET:
             eventTalkInit(staffIdx);
             break;
-        case 2:
+        case ACT_START:
             eventStartInit();
             break;
-        case 3:
+        case ACT_MAIN:
             eventMainInit();
             break;
-        case 4:
+        case ACT_GET_ITEM:
             eventGetItemInit();
             break;
-        case 5:
+        case ACT_CAMERA_OFF:
             eventCameraOffInit();
             break;
-        case 6:
+        case ACT_GET_ITEM_NPC:
             eventGetItemNpcInit(staffIdx);
             break;
-        case 7:
+        case ACT_GET_ITEM_MES:
             eventGetItemMesInit();
             break;
-        case 9:
+        case ACT_END:
             eventEndInit();
             break;
-        case 10:
+        case ACT_CAMERA_TEST:
             eventCameraTestInit();
             break;
         }
@@ -540,31 +553,32 @@ void daAuction_c::privateCut() {
 
     bool evtRes;
     switch (mAction) {
-    case 0:
+    case ACT_MES_SET:
         evtRes = eventMesSet();
         break;
-    case 1:
+    case ACT_MES_END:
         evtRes = eventMesEnd();
         break;
-    case 2:
+    case ACT_START:
         evtRes = eventStart();
         break;
-    case 3:
+    case ACT_MAIN:
         evtRes = eventMain();
         break;
-    case 4:
+    case ACT_GET_ITEM:
         evtRes = eventGetItem();
         break;
-    case 7:
-        evtRes = &daAuction_c::eventMesSet != NULL;
+    case ACT_GET_ITEM_MES:
+        // @bug They probably meant to call this function
+        evtRes = eventMesSet;
         break;
-    case 8:
+    case ACT_CAMERA_OFF_NPC:
         evtRes = eventCameraOffNpc();
         break;
-    case 9:
+    case ACT_END:
         evtRes = eventEnd();
         break;
-    case 10:
+    case ACT_CAMERA_TEST:
         evtRes = eventCameraTest();
         break;
     default:
@@ -1144,7 +1158,7 @@ void daAuction_c::eventMainMsgBikonC() {
         m7A8 = getNpcActorP(m827)->current.pos;
         m7A8.y += getPiconDispOfs(m827);
 
-        dComIfGp_particle_set(0x8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_set(dPa_name::ID_SCENE_8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
         mTimer = 30;
 
         if (m827 == 0) {

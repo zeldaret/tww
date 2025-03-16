@@ -7,6 +7,12 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
+enum {
+    ACT_WAIT,
+    ACT_TALK0,
+    ACT_TALK1,
+};
+
 /* 800737DC-800737F4       .text init__18dEvent_exception_cFv */
 void dEvent_exception_c::init() {
     mEventInfoIdx = -1;
@@ -789,12 +795,12 @@ static int dEv_talkman_get_action(int param_0) {
 
 /* 80075450-8007548C       .text ChkPresentEnd__16dEvent_manager_cFv */
 BOOL dEvent_manager_c::ChkPresentEnd() {
-    return dEv_talkman_get_action(0) >= 1;
+    return dEv_talkman_get_action(ACT_WAIT) >= ACT_TALK0;
 }
 
 /* 8007548C-800754BC       .text CancelPresent__16dEvent_manager_cFv */
 BOOL dEvent_manager_c::CancelPresent() {
-    return dEv_talkman_get_action(1) == 1;
+    return dEv_talkman_get_action(ACT_TALK0) == ACT_TALK0;
 }
 
 /* 800754BC-800754EC       .text checkStartDemo__16dEvent_manager_cFv */

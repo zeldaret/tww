@@ -52,11 +52,11 @@ void JMessage::TControl::reset() {
     reset_();
 
     if (mBaseProcSeq) {
-        mBaseProcSeq->reset_(NULL);
+        mBaseProcSeq->reset();
     }
 
     if (mBaseProcRender) {
-        mBaseProcRender->reset_(NULL);
+        mBaseProcRender->reset();
     }
 }
 

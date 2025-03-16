@@ -102,12 +102,12 @@ void daGy_Ctrl_c::deadCheckGy() {
 }
 
 /* 0000109C-00001100       .text _execute__11daGy_Ctrl_cFv */
-BOOL daGy_Ctrl_c::_execute() {
+bool daGy_Ctrl_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001100-00001210       .text _draw__11daGy_Ctrl_cFv */
-BOOL daGy_Ctrl_c::_draw() {
+bool daGy_Ctrl_c::_draw() {
     /* Nonmatching */
 }
 
@@ -142,7 +142,7 @@ s32 daGy_Ctrl_c::_create() {
 }
 
 /* 00001C3C-00001C44       .text _delete__11daGy_Ctrl_cFv */
-BOOL daGy_Ctrl_c::_delete() {
+bool daGy_Ctrl_c::_delete() {
     /* Nonmatching */
 }
 

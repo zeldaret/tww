@@ -37,17 +37,17 @@ s32 daSie_Flag_c::_create() {
 }
 
 /* 00000814-00000864       .text _delete__12daSie_Flag_cFv */
-BOOL daSie_Flag_c::_delete() {
+bool daSie_Flag_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000864-00000B08       .text _execute__12daSie_Flag_cFv */
-BOOL daSie_Flag_c::_execute() {
+bool daSie_Flag_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000B08-00000B94       .text _draw__12daSie_Flag_cFv */
-BOOL daSie_Flag_c::_draw() {
+bool daSie_Flag_c::_draw() {
     /* Nonmatching */
 }
 

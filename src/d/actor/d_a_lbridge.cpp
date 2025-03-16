@@ -55,7 +55,11 @@ BOOL daLbridge_c::CreateHeap() {
     mpBgW = new dBgW();
 
     if (mpBgW != NULL) {
-        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, GBRG00_DZB_HHASHI1), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
+        if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, GBRG00_DZB_HHASHI1), cBgW::MOVE_BG_e, &mMtx) == true) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
     }
 
     return FALSE;
@@ -68,7 +72,7 @@ void daLbridge_c::CreateInit() {
     fopAcM_setCullSizeBox(this, -600.0f, -100.0f, -150.0f, 600.0f, 100.0f, 150.0f);
     fopAcM_setCullSizeFar(this, 1.5f);
 
-    mpEmitter = dComIfGp_particle_set(0x810FU, &current.pos, &current.angle);
+    mpEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_810F, &current.pos, &current.angle);
 
     if (mpEmitter != NULL) {
         mpEmitter->stopDrawParticle();
@@ -227,8 +231,8 @@ void daLbridge_c::appear_bridge() {
     pos1.z += 100.0f;
     pos2.z -= 100.0f;
 
-    dComIfGp_particle_setProjection(0x8119U, &pos1, &current.angle);
-    dComIfGp_particle_setProjection(0x8119U, &pos2, &current.angle);
+    dComIfGp_particle_setProjection(dPa_name::ID_SCENE_8119, &pos1, &current.angle);
+    dComIfGp_particle_setProjection(dPa_name::ID_SCENE_8119, &pos2, &current.angle);
 
     set_on_se();
 
@@ -286,7 +290,7 @@ bool daLbridge_c::_draw() {
     return TRUE;
 }
 
-BOOL daLbridge_c::_delete() {
+bool daLbridge_c::_delete() {
     if (mpEmitter != NULL) {
         mpEmitter->becomeInvalidEmitter();
         mpEmitter = NULL;

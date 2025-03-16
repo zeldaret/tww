@@ -17,9 +17,9 @@ public:
     void force_calc_wind_rel_angle(short) {}
 
     s32 _create();
-    BOOL _delete();
-    BOOL _execute();
-    BOOL _draw();
+    bool _delete();
+    bool _execute();
+    bool _draw();
 
 public:
     /* Place member variables here */

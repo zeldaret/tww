@@ -102,7 +102,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
 };  // Size: 0x08
 
 

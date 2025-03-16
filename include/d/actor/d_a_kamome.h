@@ -17,11 +17,11 @@ public:
     /* 0x2A0 */ u8 mType;
     /* 0x2A1 */ u8 mKoMaxCount;
     /* 0x2A2 */ u8 mPathIdx;
-    /* 0x2A3 */ u8 mSwitchIdArg;
+    /* 0x2A3 */ u8 mSwitchNoPrm;
     /* 0x2A4 */ int mGlobalTimer;
     /* 0x2A8 */ u8 mAnimState;
     /* 0x2A9 */ u8 mMoveState;
-    /* 0x2AA */ u8 mSwitchId;
+    /* 0x2AA */ u8 mSwitchNo;
     /* 0x2AB */ u8 m2AB;
     /* 0x2AC */ s16 mJointRotY;
     /* 0x2AE */ s16 mJointRotZ;
@@ -66,6 +66,6 @@ public:
     /* 0x55C */ dCcD_Sph mSph;
     /* 0x688 */ u8 m688;
     /* 0x689 */ u8 m689[0x68C - 0x689];
-};
+};  // Size: 0x68C
 
 #endif /* D_A_KAMOME_H */

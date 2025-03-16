@@ -907,7 +907,7 @@ JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignmen
         createdHeap = JKRSolidHeap::create(-1, i_heap, false);
     } else {
         i_size = ALIGN_NEXT(i_size, 0x10);
-        i_size += 0x80;
+        i_size += sizeof(JKRSolidHeap);
 
         if (0x10 < i_alignment) {
             i_size = (i_alignment - 0x10 + i_size);
@@ -968,8 +968,8 @@ s32 mDoExt_adjustSolidHeap(JKRSolidHeap* i_heap) {
         return 0;
 
     s32 result = i_heap->adjustSize();
-    if (result >= 0x80u)
-        result -= 0x80;
+    if (result >= sizeof(JKRSolidHeap))
+        result -= sizeof(JKRSolidHeap);
 
     return result;
 }
@@ -1522,7 +1522,7 @@ void mDoExt_McaMorf2::ERROR_EXIT() {
 
 /* 80013770-80013E50       .text calc__15mDoExt_McaMorf2FUs */
 void mDoExt_McaMorf2::calc(u16 param_0) {
-    /* Nonmatching - regalloc (fixing the regalloc causes an instruction swap on f30 = field_0x84) */
+    /* Nonmatching - regalloc (fixing the regalloc causes an instruction swap on f30 = mAnmRate) */
     if (!mpModel) {
         return;
     }
@@ -1567,8 +1567,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
             *infoPtr = spD8[0];
         } else {
             mpAnm2->getTransform(param_0, &spD8[1]);
-            f31 = 1.0f - field_0x84;
-            f30 = field_0x84;
+            f31 = 1.0f - mAnmRate;
+            f30 = mAnmRate;
             infoPtr->mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
             infoPtr->mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
             infoPtr->mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
@@ -1602,8 +1602,8 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
     } else {
         mpAnm1->getTransform(param_0, &spD8[0]);
         mpAnm2->getTransform(param_0, &spD8[1]);
-        f31 = 1.0f - field_0x84;
-        f30 = field_0x84;
+        f31 = 1.0f - mAnmRate;
+        f30 = mAnmRate;
         sp68.mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
         sp68.mScale.y = spD8[0].mScale.y * f31 + spD8[1].mScale.y * f30;
         sp68.mScale.z = spD8[0].mScale.z * f31 + spD8[1].mScale.z * f30;
@@ -1639,7 +1639,7 @@ void mDoExt_McaMorf2::setAnm(J3DAnmTransform* bckAnm1, J3DAnmTransform* bckAnm2,
                              void* basAnm) {
     mpAnm1 = bckAnm1;
     mpAnm2 = bckAnm2;
-    field_0x84 = f1;
+    mAnmRate = f1;
     setStartFrame(startFrame);
     if (endFrame < 0.0f) {
         if (!mpAnm1) {

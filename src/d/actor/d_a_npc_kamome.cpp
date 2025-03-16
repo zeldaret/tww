@@ -54,7 +54,7 @@ daNpc_kam_HIO1_c::daNpc_kam_HIO1_c() {
 
 /* 00000174-000001F8       .text __ct__15daNpc_kam_HIO_cFv */
 daNpc_kam_HIO_c::daNpc_kam_HIO_c() {
-    mChildID = -1;
+    mNo = -1;
     static const hio_prm_c init_data = {
         /* m08 */ 3000.0f,
         /* m0C */ 1000.0f,
@@ -162,9 +162,9 @@ daNpc_kam_c::~daNpc_kam_c() {
         mpMorf->stopZelAnime();
     }
     
-    if (l_HIO.mChildID >= 0) {
-        mDoHIO_deleteChild(l_HIO.mChildID);
-        l_HIO.mChildID = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
     
     offHyoiKamome();
@@ -195,8 +195,8 @@ void daNpc_kam_c::setBaseMtx() {
 }
 
 /* 00000C00-00000CD0       .text headNodeCallBack__FP7J3DNodei */
-static int headNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static int headNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         J3DModel* model = j3dSys.getModel();
         daNpc_kam_c* i_this = (daNpc_kam_c*)model->getUserArea();
@@ -267,8 +267,8 @@ s32 daNpc_kam_c::create() {
         
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
-        if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_createChild("かもめ", &l_HIO); // "Seagull" (kamome)
+        if (l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("かもめ", &l_HIO); // "Seagull" (kamome)
             l_HIO.mpActor = this;
         }
         
@@ -623,10 +623,10 @@ int daNpc_kam_c::waitNpcAction(void*) {
         mC0C = cLib_getRndValue(10, 80);
     } else if (mActionStatus != ACTION_ENDING) {
         if (changeAreaCheck()) {
-            attention_info.flags |= fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
             mEventState = 6;
         } else {
-            attention_info.flags &= ~(fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
+            cLib_offBit<u32>(attention_info.flags, (fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_NOTALK_e));
             mEventState = -1;
         }
         
@@ -1285,7 +1285,7 @@ BOOL daNpc_kam_c::execute() {
         
         if (!isNoBgCheck()) {
             mAcch.CrrPos(*dComIfG_Bgsp());
-            if (mAcch.GetGroundH() != -1000000000.0f) {
+            if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
                 s8 roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 fopAcM_SetRoomNo(this, roomNo);
                 tevStr.mRoomNo = roomNo;
@@ -1298,13 +1298,13 @@ BOOL daNpc_kam_c::execute() {
                 if (!isWaterHit()) {
                     onWaterHit();
                     
-                    JPABaseEmitter* splashEmitter = dComIfGp_particle_set(0x40, &current.pos);
+                    JPABaseEmitter* splashEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0040, &current.pos);
                     if (splashEmitter) {
                         splashEmitter->setRate(15.0f);
                         splashEmitter->setGlobalScale(splash_scale);
                     }
                     
-                    JPABaseEmitter* rippleEmitter = dComIfGp_particle_setSingleRipple(0x3D, &current.pos);
+                    JPABaseEmitter* rippleEmitter = dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003D, &current.pos);
                     if (rippleEmitter) {
                         rippleEmitter->setGlobalScale(ripple_scale);
                     }

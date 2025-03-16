@@ -58,10 +58,10 @@ public:
     void wait_action(void*);
     void calc_sitpos();
     void set_mtx();
-    BOOL _draw();
+    bool _draw();
     void setTower();
-    BOOL _execute();
-    BOOL _delete();
+    bool _execute();
+    bool _delete();
     void isCreate();
     s32 _create();
     void _createHeap();

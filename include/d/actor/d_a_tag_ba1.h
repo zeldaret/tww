@@ -8,9 +8,9 @@ public:
     void XyCheck_cB(int);
     void XyEvent_cB(int);
     void createInit();
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     s32 _create();
 
 public:

@@ -24,7 +24,7 @@ namespace daObjSwlight {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         static BOOL jnodeCB_moon(J3DNode*, int);
         void set_mtx();
         void init_mtx();
@@ -43,8 +43,8 @@ namespace daObjSwlight {
         void mode_active_moon();
         void mode_active_sun_init();
         void mode_active_sun();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

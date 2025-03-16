@@ -84,9 +84,9 @@ static void mode_dead(bita_class* i_this) {
                 type = 1;
 
             if (type == 0) {
-                dComIfGp_particle_set(0x80e3, &i_this->current.pos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_SCENE_80E3, &i_this->current.pos, &i_this->shape_angle);
             } else {
-                dComIfGp_particle_set(0x80e4, &i_this->current.pos, &i_this->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_SCENE_80E4, &i_this->current.pos, &i_this->shape_angle);
             }
         }
 
@@ -194,7 +194,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     if (i_this->mpBgW == NULL)
         return FALSE;
     cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Bita", ita_dzb[type]);
-    if (i_this->mpBgW->Set(dzb, dBgW::MOVE_BG_e, &i_this->mMtx) == 1)
+    if (i_this->mpBgW->Set(dzb, dBgW::MOVE_BG_e, &i_this->mMtx) == true)
         return FALSE;
 
     i_this->mpBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);

@@ -177,7 +177,7 @@ void daObjEff::Act_c::remove() {
 }
 
 /* 0000126C-00001290       .text _delete__Q28daObjEff5Act_cFv */
-BOOL daObjEff::Act_c::_delete() {
+bool daObjEff::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -217,7 +217,7 @@ void daObjEff::Act_c::die() {
 }
 
 /* 0000149C-000014C0       .text _execute__Q28daObjEff5Act_cFv */
-BOOL daObjEff::Act_c::_execute() {
+bool daObjEff::Act_c::_execute() {
     /* Nonmatching */
 }
 

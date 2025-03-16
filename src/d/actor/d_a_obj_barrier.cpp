@@ -230,7 +230,7 @@ void daObjBarrier_c::break_start_wait_proc() {
         daPy_py_c* player_p = (daPy_py_c*)daPy_getPlayerActorClass();
 
         if ((player_p->current.pos - current.pos).absXZ() >= 8800.0f &&
-            dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX)
+            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e)
         {
             switch (player_p->getCutType()) {
             case 1:
@@ -394,7 +394,7 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
         mDoMtx_stack_c::ZXYrotM(0, angle.y, 0);
         mpModel[effect_idx]->setBaseTRMtx(mDoMtx_stack_c::get());
 
-        dComIfGp_particle_set(0x81A9, &pos, &angle);
+        dComIfGp_particle_set(dPa_name::ID_SCENE_81A9, &pos, &angle);
     }
 }
 

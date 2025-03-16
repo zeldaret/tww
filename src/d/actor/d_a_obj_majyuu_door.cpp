@@ -48,7 +48,7 @@ s32 daObj_MjDoor_c::_create() {
 }
 
 /* 000007F0-00000884       .text _delete__14daObj_MjDoor_cFv */
-BOOL daObj_MjDoor_c::_delete() {
+bool daObj_MjDoor_c::_delete() {
     /* Nonmatching */
 }
 
@@ -83,12 +83,12 @@ void daObj_MjDoor_c::modeDelete() {
 }
 
 /* 00000DF0-00000EB4       .text _execute__14daObj_MjDoor_cFv */
-BOOL daObj_MjDoor_c::_execute() {
+bool daObj_MjDoor_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000EB4-00000F28       .text _draw__14daObj_MjDoor_cFv */
-BOOL daObj_MjDoor_c::_draw() {
+bool daObj_MjDoor_c::_draw() {
     /* Nonmatching */
 }
 

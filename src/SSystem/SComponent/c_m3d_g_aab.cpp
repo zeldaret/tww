@@ -4,7 +4,6 @@
 //
 
 #include "SSystem/SComponent/c_m3d_g_aab.h"
-#include "dolphin/types.h"
 
 /* 80251CC4-80251D08       .text SetMinMax__8cM3dGAabFRC4cXyz */
 void cM3dGAab::SetMinMax(const cXyz& pMinMax) {

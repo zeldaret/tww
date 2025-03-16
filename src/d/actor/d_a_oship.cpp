@@ -177,12 +177,12 @@ void daOship_c::modeProc(daOship_c::Proc_e, int) {
 }
 
 /* 0000263C-00002AD4       .text _execute__9daOship_cFv */
-BOOL daOship_c::_execute() {
+bool daOship_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002AD4-00002B54       .text _draw__9daOship_cFv */
-BOOL daOship_c::_draw() {
+bool daOship_c::_draw() {
     /* Nonmatching */
 }
 
@@ -207,7 +207,7 @@ s32 daOship_c::_create() {
 }
 
 /* 00003E78-00003F20       .text _delete__9daOship_cFv */
-BOOL daOship_c::_delete() {
+bool daOship_c::_delete() {
     /* Nonmatching */
 }
 

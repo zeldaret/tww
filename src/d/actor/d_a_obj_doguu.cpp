@@ -97,7 +97,7 @@ static BOOL daObjDoguu_Draw(void*) {
 }
 
 /* 00001D30-00001F64       .text _draw__12daObjDoguu_cFv */
-BOOL daObjDoguu_c::_draw() {
+bool daObjDoguu_c::_draw() {
     /* Nonmatching */
 }
 
@@ -112,7 +112,7 @@ static BOOL daObjDoguu_Execute(void*) {
 }
 
 /* 00002288-000027AC       .text _execute__12daObjDoguu_cFv */
-BOOL daObjDoguu_c::_execute() {
+bool daObjDoguu_c::_execute() {
     /* Nonmatching */
 }
 

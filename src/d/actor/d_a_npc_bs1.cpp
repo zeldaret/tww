@@ -106,7 +106,7 @@ daNpc_Bs1_HIO_c::daNpc_Bs1_HIO_c() {
     mChild[1].m3C = 27.0f;
     mChild[1].m40 = 20.0f;
     
-    mChildId = -1;
+    mNo = -1;
     m8 = -1;
 }
 
@@ -153,8 +153,8 @@ static const int l_btp_ix_tbl[] = {
 };
 
 /* 00000490-00000658       .text nodeCallBack_Bs__FP7J3DNodei */
-static BOOL nodeCallBack_Bs(J3DNode* node, int value) {
-    if (!value) {
+static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Bs1_c* i_this = (daNpc_Bs1_c*)model->getUserArea();
@@ -362,25 +362,25 @@ void daNpc_Bs1_c::checkOrder() {
 static u32 daNpc_Bs1_getBuyItemMax(int i_itemCost, int i_itemNo) {
     int beastIdx;
     switch (i_itemNo) {
-    case BOKOBABA_SEED:
+    case dItem_BOKOBABA_SEED_e:
         beastIdx = 1;
         break;
-    case SKULL_NECKLACE:
+    case dItem_SKULL_NECKLACE_e:
         beastIdx = 0;
         break;
-    case RED_JELLY:
+    case dItem_RED_JELLY_e:
         beastIdx = 4;
         break;
-    case GREEN_JELLY:
+    case dItem_GREEN_JELLY_e:
         beastIdx = 5;
         break;
-    case BLUE_JELLY:
+    case dItem_BLUE_JELLY_e:
         beastIdx = 6;
         break;
     case dItem_JOY_PENDANT_e:
         beastIdx = 7;
         break;
-    case GOLDEN_FEATHER:
+    case dItem_GOLDEN_FEATHER_e:
         beastIdx = 2;
         break;
     default:
@@ -828,7 +828,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 fopAcM_seStart(this, JA_SE_SHOP_BOUGHT, 0);
                 mShopItems.hideSelectItem();
                 dComIfGp_setItemRupeeCount(-rupee);
-                if(mShopItems.getSelectItemNo() == ESA_BAG) {
+                if(mShopItems.getSelectItemNo() == dItem_BAIT_BAG_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
                 }
@@ -891,18 +891,18 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 mShopItems.hideSelectItem();
                 dComIfGp_setItemRupeeCount(-rupee);
                 u8 itemNo = mShopItems.getSelectItemNo();
-                if(itemNo == EMPTY_BOTTLE || itemNo == dItem_HEART_PIECE_e || itemNo == COLLECT_MAP_30) {
+                if(itemNo == dItem_EMPTY_BOTTLE_e || itemNo == dItem_HEART_PIECE_e || itemNo == dItem_COLLECT_MAP_30_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
 
                     switch(itemNo) {
-                        case EMPTY_BOTTLE:
+                        case dItem_EMPTY_BOTTLE_e:
                             dComIfGs_onEventBit(0x2020);
                             break;
                         case dItem_HEART_PIECE_e:
                             dComIfGs_onEventBit(0x2010);
                             break;
-                        case COLLECT_MAP_30:
+                        case dItem_COLLECT_MAP_30_e:
                             dComIfGs_onEventBit(0x2008);
                             break;
                     }
@@ -988,25 +988,25 @@ u32 daNpc_Bs1_c::getMsg() {
                 if(isEmono(itemNo)) {
                     m840 = itemNo;
                     switch(itemNo) {
-                        case BOKOBABA_SEED:
+                        case dItem_BOKOBABA_SEED_e:
                             msgNo = 0xF78;
                             break;
-                        case SKULL_NECKLACE:
+                        case dItem_SKULL_NECKLACE_e:
                             msgNo = 0xF80;
                             break;
-                        case RED_JELLY:
+                        case dItem_RED_JELLY_e:
                             msgNo = 0xF85;
                             break;
-                        case GREEN_JELLY:
+                        case dItem_GREEN_JELLY_e:
                             msgNo = 0xF8A;
                             break;
-                        case BLUE_JELLY:
+                        case dItem_BLUE_JELLY_e:
                             msgNo = 0xF8F;
                             break;
                         case dItem_JOY_PENDANT_e:
                             msgNo = 0xF94;
                             break;
-                        case GOLDEN_FEATHER:
+                        case dItem_GOLDEN_FEATHER_e:
                             msgNo = 0xF99;
                             break;
                         default:
@@ -1470,7 +1470,7 @@ void daNpc_Bs1_c::createShopList() {
         for(int i = 0; i < 3; i++) {
             u8 itemNo = pDataSet[i]->mpItemData->mItemNo;
             int idx = i;
-            if((itemNo == ESA_BAG && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItem_HYOI_PEAR_e && dComIfGs_checkGetItem(dItem_BOMB_BAG_e))) {
+            if((itemNo == dItem_BAIT_BAG_e && dComIfGs_checkGetItem(itemNo)) || (itemNo == dItem_HYOI_PEAR_e && dComIfGs_checkGetItem(dItem_BOMB_BAG_e))) {
                 itemNo = pDataSet[i + 3][0].mpItemData->mItemNo;
                 idx += 3;
             }
@@ -1942,6 +1942,17 @@ BOOL daNpc_Bs1_c::privateCut() {
         "GETTICKET",
     };
     
+    enum {
+        ACT_TALKMSG,
+        ACT_CONTINUE_TALK,
+        ACT_JNTLOCK,
+        ACT_WAIT,
+        ACT_SETANM,
+        ACT_PRAISE,
+        ACT_MANTAN,
+        ACT_GETTICKET,
+    };
+    
     int staffId = dComIfGp_evmng_getMyStaffId(mEventCut.getActorName());
     if (staffId == -1) {
         return FALSE;
@@ -1952,47 +1963,47 @@ BOOL daNpc_Bs1_c::privateCut() {
     } else {
         if (dComIfGp_evmng_getIsAddvance(staffId)) {
             switch (actIdx) {
-            case 0:
+            case ACT_TALKMSG:
                 evn_talk_init(staffId);
                 break;
-            case 1:
+            case ACT_CONTINUE_TALK:
                 evn_continue_talk_init(staffId);
                 break;
-            case 2:
+            case ACT_JNTLOCK:
                 evn_jnt_lock_init(staffId);
                 break;
-            case 3:
+            case ACT_WAIT:
                 evn_wait_init(staffId);
                 break;
-            case 4:
+            case ACT_SETANM:
                 evn_set_anm_init(staffId);
                 break;
-            case 5:
+            case ACT_PRAISE:
                 evn_praise_init();
                 break;
-            case 6:
+            case ACT_MANTAN:
                 evn_mantan_init();
                 break;
-            case 7:
+            case ACT_GETTICKET:
                 dComIfGs_setReserveItemEmpty();
                 break;
             }
         }
         
-        BOOL r3;
+        BOOL end;
         switch (actIdx) {
-        case 0x0:
-        case 0x1:
-            r3 = evn_talk();
+        case ACT_TALKMSG:
+        case ACT_CONTINUE_TALK:
+            end = evn_talk();
             break;
-        case 0x3:
-            r3 = evn_wait();
+        case ACT_WAIT:
+            end = evn_wait();
             break;
         default:
-            r3 = TRUE;
+            end = TRUE;
             break;
         }
-        if (r3) {
+        if (end) {
             dComIfGp_evmng_cutEnd(staffId);
         }
     }
@@ -2102,7 +2113,7 @@ BOOL daNpc_Bs1_c::_delete() {
         mpMorf->stopZelAnime();
     }
     if (l_HIO.m8 >= 0 && (l_HIO.m8 -= 1) < 0) {
-        mDoHIO_deleteChild(l_HIO.mChildId);
+        mDoHIO_deleteChild(l_HIO.mNo);
     }
     return TRUE;
 }
@@ -2139,7 +2150,7 @@ s32 daNpc_Bs1_c::_create() {
         } else {
             fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
             if (l_HIO.m8 < 0) {
-                l_HIO.mChildId = mDoHIO_createChild("ボ−トショップ店員", &l_HIO); // "Boat Shopkeeper"
+                l_HIO.mNo = mDoHIO_createChild("ボ−トショップ店員", &l_HIO); // "Boat Shopkeeper"
             }
             l_HIO.m8 += 1;
             if (!CreateInit()) {

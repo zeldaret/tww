@@ -79,7 +79,7 @@ public:
     /* 0x000 */ fopEn_enemy_c* mpEnemy;
     /* 0x004 */ s16 m004;
     /* 0x006 */ s16 mState;
-    /* 0x008 */ u16 mEnemyType;
+    /* 0x008 */ s16 mEnemyType;
     /* 0x00A */ u8 m00A[0x00C - 0x00A];
     /* 0x00C */ int mTimer;
     /* 0x010 */ csXyz m010[20];
@@ -197,7 +197,7 @@ BOOL enemy_ice(enemyice*);
 void enemy_fire(enemyfire*);
 void enemy_fire_remove(enemyfire*);
 void enemy_piyo_set(fopAc_ac_c*);
-void wall_angle_get(fopAc_ac_c*, s16);
+s16 wall_angle_get(fopAc_ac_c*, s16);
 void dr_body_bg_check(damagereaction*);
 void dr_joint_bg_check(damagereaction*);
 void kado_check(damagereaction*);

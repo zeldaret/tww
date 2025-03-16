@@ -42,7 +42,7 @@ s32 daObjTry::Act_c::_create() {
 }
 
 /* 00000C88-00000D5C       .text _delete__Q28daObjTry5Act_cFv */
-BOOL daObjTry::Act_c::_delete() {
+bool daObjTry::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -212,12 +212,12 @@ void daObjTry::Act_c::get_water_h() {
 }
 
 /* 00002BB4-00002DA8       .text _execute__Q28daObjTry5Act_cFv */
-BOOL daObjTry::Act_c::_execute() {
+bool daObjTry::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002DA8-00002EA4       .text _draw__Q28daObjTry5Act_cFv */
-BOOL daObjTry::Act_c::_draw() {
+bool daObjTry::Act_c::_draw() {
     /* Nonmatching */
 }
 

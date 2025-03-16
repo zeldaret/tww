@@ -330,10 +330,6 @@ static inline void __OSSwitchThread(OSThread* nextThread) {
     OSLoadContext(&nextThread->context);
 }
 
-inline OSThread* i_OSGetCurrentThread(void) {
-    return OS_CURRENT_THREAD;
-}
-
 static OSThread* SelectThread(BOOL yield) {
     OSContext* currentContext;
     OSThread* currentThread;
@@ -346,7 +342,7 @@ static OSThread* SelectThread(BOOL yield) {
     }
 
     currentContext = OSGetCurrentContext();
-    currentThread = i_OSGetCurrentThread();
+    currentThread = OSGetCurrentThread();
     if (currentContext != &currentThread->context) {
         return 0;
     }

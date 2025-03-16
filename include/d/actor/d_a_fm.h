@@ -105,16 +105,16 @@ public:
     void setHoleEffect();
     void holeExecute();
     void setHoleScale(float, float, float);
-    BOOL _execute();
-    void MtxToRot(float(*)[4], csXyz*);
+    bool _execute();
+    void MtxToRot(Mtx, csXyz*);
     void debugDraw();
     void holeDraw();
     void bodyDraw();
-    BOOL _draw();
+    bool _draw();
     void getArg();
     void createInit();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
 
 public:
     /* 0x2AC */ u8 m2AC[0x2C5 - 0x2AC];

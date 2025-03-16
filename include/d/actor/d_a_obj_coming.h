@@ -38,7 +38,7 @@ namespace daObjComing {
     
         void chk_switch();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void get_aqua_y(const cXyz*);
         void chk_ship_range(const fopAc_ac_c*) const;
         void chk_ship_spd(const fopAc_ac_c*) const;
@@ -55,8 +55,8 @@ namespace daObjComing {
         void mode_barrel2_wait(Ctrl_c*);
         void mode_barrel2_appear(Ctrl_c*);
         void mode_barrel2_leave(Ctrl_c*);
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

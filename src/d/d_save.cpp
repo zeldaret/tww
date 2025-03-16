@@ -7,6 +7,7 @@
 #include "d/d_save_init.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
+#include "m_Do/m_Do_MemCardRWmng.h"
 #if VERSION == VERSION_JPN
 #include "d/d_s_play.h"
 #endif
@@ -93,7 +94,7 @@ void dSv_player_item_c::setBottleItemIn(u8 prevItemNo, u8 newItemNo) {
 
 /* 80058E1C-80058E44       .text setEmptyBottleItemIn__17dSv_player_item_cFUc */
 void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
-    setBottleItemIn(EMPTY_BOTTLE, i_itemNo);
+    setBottleItemIn(dItem_EMPTY_BOTTLE_e, i_itemNo);
 }
 
 /* 80058E44-80058F74       .text setEmptyBottle__17dSv_player_item_cFv */
@@ -101,7 +102,7 @@ void dSv_player_item_c::setEmptyBottle() {
     for (int bottleIdx = 0; bottleIdx < dInvSlot_BOTTLE_COUNT_e; bottleIdx++) {
         int invIdx = dInvSlot_BOTTLE0_e + bottleIdx;
         if (dComIfGs_getItem((u8)invIdx) == dItem_NONE_e) {
-            dComIfGs_setItem((u8)invIdx, EMPTY_BOTTLE);
+            dComIfGs_setItem((u8)invIdx, dItem_EMPTY_BOTTLE_e);
             break;
         }
     }
@@ -124,7 +125,7 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemBtn, u8 i_itemNo) {
 
 /* 8005918C-800591B0       .text setEquipBottleItemEmpty__17dSv_player_item_cFUc */
 void dSv_player_item_c::setEquipBottleItemEmpty(u8 i_itemBtn) {
-    setEquipBottleItemIn(i_itemBtn, EMPTY_BOTTLE);
+    setEquipBottleItemIn(i_itemBtn, dItem_EMPTY_BOTTLE_e);
 }
 
 /* 800591B0-80059408       .text setEquipBottleItemIn__17dSv_player_item_cFUc */
@@ -158,7 +159,7 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemNo) {
 
 /* 80059408-8005942C       .text setEquipBottleItemEmpty__17dSv_player_item_cFv */
 void dSv_player_item_c::setEquipBottleItemEmpty() {
-    setEquipBottleItemIn(EMPTY_BOTTLE);
+    setEquipBottleItemIn(dItem_EMPTY_BOTTLE_e);
 }
 
 /* 8005942C-8005946C       .text checkBottle__17dSv_player_item_cFUc */
@@ -179,7 +180,7 @@ u8 dSv_player_item_c::checkEmptyBottle() {
     u8 ret = 0;
 
     for (int i = 0; i < dInvSlot_BOTTLE_COUNT_e; i++) {
-        if (mItems[i + dInvSlot_BOTTLE0_e] == EMPTY_BOTTLE) {
+        if (mItems[i + dInvSlot_BOTTLE0_e] == dItem_EMPTY_BOTTLE_e) {
             ret++;
         }
     }
@@ -214,16 +215,16 @@ void dSv_player_get_item_c::onBottleItem(u8 i_item) {
     case EMPTY_BSHIP:
         mItemFlags[0] |= 0x02;
         break;
-    case EMPTY_BOTTLE:
+    case dItem_EMPTY_BOTTLE_e:
         mItemFlags[0] |= 0x04;
         break;
-    case RED_BOTTLE:
+    case dItem_RED_POTION_e:
         mItemFlags[0] |= 0x08;
         break;
-    case GREEN_BOTTLE:
+    case dItem_GREEN_POTION_e:
         mItemFlags[0] |= 0x10;
         break;
-    case BLUE_BOTTLE:
+    case dItem_BLUE_POTION_e:
         mItemFlags[0] |= 0x20;
         break;
     case dItem_HALF_SOUP_BOTTLE_e:
@@ -232,16 +233,16 @@ void dSv_player_get_item_c::onBottleItem(u8 i_item) {
     case dItem_SOUP_BOTTLE_e:
         mItemFlags[0] |= 0x80;
         break;
-    case BIN_IN_WATER:
+    case dItem_WATER_BOTTLE_e:
         mItemFlags[1] |= 0x02;
         break;
-    case FAIRY_BOTTLE:
+    case dItem_FAIRY_BOTTLE_e:
         mItemFlags[1] |= 0x04;
         break;
-    case FIREFLY_BOTTLE:
+    case dItem_FIREFLY_BOTTLE_e:
         mItemFlags[1] |= 0x08;
         break;
-    case FWATER_BOTTLE:
+    case dItem_FOREST_WATER_e:
         mItemFlags[1] |= 0x10;
         break;
     case UNK_BOTTLE_5A:
@@ -273,25 +274,25 @@ BOOL dSv_player_get_item_c::isBottleItem(u8 i_item) {
     switch (i_item) {
     case EMPTY_BSHIP:
         return (mItemFlags[0] >> 1) & 1;
-    case EMPTY_BOTTLE:
+    case dItem_EMPTY_BOTTLE_e:
         return (mItemFlags[0] >> 2) & 1;
-    case RED_BOTTLE:
+    case dItem_RED_POTION_e:
         return (mItemFlags[0] >> 3) & 1;
-    case GREEN_BOTTLE:
+    case dItem_GREEN_POTION_e:
         return (mItemFlags[0] >> 4) & 1;
-    case BLUE_BOTTLE:
+    case dItem_BLUE_POTION_e:
         return (mItemFlags[0] >> 5) & 1;
     case dItem_HALF_SOUP_BOTTLE_e:
         return (mItemFlags[0] >> 6) & 1;
     case dItem_SOUP_BOTTLE_e:
         return (mItemFlags[0] >> 7) & 1;
-    case BIN_IN_WATER:
+    case dItem_WATER_BOTTLE_e:
         return (mItemFlags[1] >> 1) & 1;
-    case FAIRY_BOTTLE:
+    case dItem_FAIRY_BOTTLE_e:
         return (mItemFlags[1] >> 2) & 1;
-    case FIREFLY_BOTTLE:
+    case dItem_FIREFLY_BOTTLE_e:
         return (mItemFlags[1] >> 3) & 1;
-    case FWATER_BOTTLE:
+    case dItem_FOREST_WATER_e:
         return (mItemFlags[1] >> 4) & 1;
     case UNK_BOTTLE_5A:
         return (mItemFlags[1] >> 5) & 1;
@@ -491,7 +492,7 @@ void dSv_player_bag_item_c::setBaitItemEmpty() {
     if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
         setBaitItemChange(dItem_NONE_e);
-    } else if (itemNo == BIRD_ESA_5) {
+    } else if (itemNo == dItem_BIRD_BAIT_5_e) {
         num = dComIfGs_getBaitNum(baitSlotIdx);
         if (num > 0) {
             num = num - 1;
@@ -524,7 +525,7 @@ void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_itemBtn) {
     if (itemNo == dItem_HYOI_PEAR_e) {
         u8 num = dComIfGs_getBaitNum(baitSlotIdx);
         setBaitItemChange(i_itemBtn, dItem_NONE_e);
-    } else if (itemNo == BIRD_ESA_5) {
+    } else if (itemNo == dItem_BIRD_BAIT_5_e) {
         num = dComIfGs_getBaitNum(baitSlotIdx);
         if (num > 0) {
             num = num - 1;
@@ -1626,13 +1627,8 @@ BOOL dSv_info_c::isActor(int i_id, int i_roomNo) {
 
 /* 8005E780-8005EA24       .text memory_to_card__10dSv_info_cFPci */
 int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
-    // The size of the dSv_save_c struct in RAM (i.e. with alignment padding) is 0x778.
-    // The size that gets stored to the memory card (i.e. packed, without the padding) is 0x768.
-    // At the end of this function there's a check to ensure it doesn't copy more than 0x768 bytes.
-    // At the start of this function, the size the index gets multiplied by to find the slot in the card is 0x770.
-    // I'm not sure where 0x770 comes from, but my best guess is that it's 0x768 aligned to the next 0x10 bytes.
     char* buffer_start;
-    char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
+    char* buffer = i_cardPtr + i_dataNum * sizeof(card_gamedata);
     buffer_start = buffer;
 
     memcpy(buffer, dComIfGs_getpPlayerStatusA(), sizeof(dSv_player_status_a_c));
@@ -1723,7 +1719,7 @@ int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
 /* 8005EA24-8005ED00       .text card_to_memory__10dSv_info_cFPci */
 int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
     char* buffer_start;
-    char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
+    char* buffer = i_cardPtr + i_dataNum * sizeof(card_gamedata);
     buffer_start = buffer;
 
     memcpy(dComIfGs_getpPlayerStatusA(), buffer, sizeof(dSv_player_status_a_c));
@@ -1810,7 +1806,7 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
 /* 8005ED00-8005EF88       .text initdata_to_card__10dSv_info_cFPci */
 int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     // TODO: This function could probably be cleaned up somehow
-    char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
+    char* buffer = i_cardPtr + i_dataNum * sizeof(card_gamedata);
     char* buffer_start = buffer;
     char* buffer_src;
 

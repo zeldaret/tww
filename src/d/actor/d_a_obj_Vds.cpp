@@ -107,7 +107,7 @@ s32 daObjVds::Act_c::_create() {
 }
 
 /* 000012D4-00001368       .text _delete__Q28daObjVds5Act_cFv */
-BOOL daObjVds::Act_c::_delete() {
+bool daObjVds::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -117,12 +117,12 @@ void daObjVds::Act_c::set_mtx() {
 }
 
 /* 00001420-000014EC       .text _execute__Q28daObjVds5Act_cFv */
-BOOL daObjVds::Act_c::_execute() {
+bool daObjVds::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000014EC-000015A8       .text _draw__Q28daObjVds5Act_cFv */
-BOOL daObjVds::Act_c::_draw() {
+bool daObjVds::Act_c::_draw() {
     /* Nonmatching */
 }
 

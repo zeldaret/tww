@@ -27,14 +27,14 @@ f32 dBgS_ObjGndChk_Wtr_Func(cXyz& r19) {
 }
 
 /* 800A49E0-800A4F68       .text dBgS_SplGrpChk_In_ObjGnd__FR4cXyzP14dBgS_SplGrpChkf */
-BOOL dBgS_SplGrpChk_In_ObjGnd(cXyz& r30, dBgS_SplGrpChk* r31, f32 f31) {
+bool dBgS_SplGrpChk_In_ObjGnd(cXyz& r30, dBgS_SplGrpChk* r31, f32 f31) {
     dBgS_ObjGndChk gndChk;
     cXyz sp1c = r30;
     sp1c.y += f31;
     gndChk.SetPos(&sp1c);
     f32 height = dComIfG_Bgsp()->GroundCross(&gndChk);
     r31->SetHeight(height);
-    if (height == -1e9f) {
+    if (height == C_BG_MIN_HEIGHT) {
         return FALSE;
     }
     
@@ -79,7 +79,7 @@ u32 dBgS_GetGndMtrlSndId_Func(cXyz r21, f32 f1) {
     r21.y += f1;
     dBgS_ObjGndChk gndChk;
     gndChk.SetPos(&r21);
-    if (dComIfG_Bgsp()->GroundCross(&gndChk) == -1e9f) {
+    if (dComIfG_Bgsp()->GroundCross(&gndChk) == C_BG_MIN_HEIGHT) {
         return 0;
     }
     return dComIfG_Bgsp()->GetMtrlSndId(gndChk);

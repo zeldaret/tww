@@ -92,7 +92,7 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
         if (CPad_CHECK_TRIG_UP(0) || CPad_CHECK_TRIG_DOWN(0)) {
             i_this->field_0x1e1 = 20;
         } else {
-            if (!cLib_calcTimer(&i_this->field_0x1e1))
+            if (cLib_calcTimer(&i_this->field_0x1e1) == 0)
                 i_this->field_0x1e1 = 4;
             else
                 trig = FALSE;
@@ -114,7 +114,7 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
         if (CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_A(0)) {
             i_this->field_0x1e2 = 20;
         } else {
-            if (!cLib_calcTimer(&i_this->field_0x1e2))
+            if (cLib_calcTimer(&i_this->field_0x1e2) == 0)
                 i_this->field_0x1e2 = 4;
             else
                 trig = FALSE;
@@ -320,15 +320,14 @@ scene_method_class l_dScnMenu_Method = {
 };
 
 scene_process_profile_definition g_profile_MENU_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_MENU_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(menu_of_scene_class),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnMenu_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_MENU_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(menu_of_scene_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnMenu_Method,
 };

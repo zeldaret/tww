@@ -96,8 +96,8 @@ int daFloor_c::Execute(Mtx**) {
 
 /* 00000548-00000640       .text set_effect__9daFloor_cFv */
 void daFloor_c::set_effect() {
-    dComIfGp_particle_set(0x81A6, &current.pos, &current.angle);
-    JPABaseEmitter* emtr = dComIfGp_particle_set(0x2027, &current.pos, &current.angle, NULL, 255, &mSmokeCallBack, fopAcM_GetRoomNo(this));
+    dComIfGp_particle_set(dPa_name::ID_SCENE_81A6, &current.pos, &current.angle);
+    JPABaseEmitter* emtr = dComIfGp_particle_set(dPa_name::ID_COMMON_2027, &current.pos, &current.angle, NULL, 255, &mSmokeCallBack, fopAcM_GetRoomNo(this));
     if (emtr != NULL) {
         emtr->setRate(30);
         emtr->setMaxFrame(1);

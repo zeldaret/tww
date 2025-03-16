@@ -5,7 +5,7 @@
 
 class daAleaf_c : public fopAc_ac_c {
 public:
-    inline BOOL _delete();
+    inline bool _delete();
 
     void CreateHeap();
     void CreateInit();
@@ -13,8 +13,8 @@ public:
     void create_acorn_sub(bool);
     s32 _create();
     void set_mtx();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
     /* Place member variables here */

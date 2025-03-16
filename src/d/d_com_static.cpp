@@ -428,8 +428,8 @@ void daTitle_proc_c::daTitle_Kirakira_Sound_flag_on() {
 }
 
 /* 80056CCC-80056DE0       .text daiItemNodeCallBack__13daStandItem_cFP7J3DNodei */
-BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -438,10 +438,10 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int param_1) {
             daStandItem_c* i_this = (daStandItem_c*)userArea;
             mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
             switch (i_this->getItemNo()) {
-            case 0x92:
+            case WIND_FLAG:
                 mDoMtx_stack_c::XrotM(i_this->m6B4);
                 break;
-            case 0x95:
+            case WATER_STATUE:
                 if (jntNo == 0) {
                     mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m630);
                 } else if (jntNo == 1) {

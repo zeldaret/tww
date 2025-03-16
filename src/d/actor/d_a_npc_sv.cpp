@@ -49,17 +49,17 @@ void daNpcSv_c::createInit() {
 }
 
 /* 00000C74-00000CD8       .text _delete__9daNpcSv_cFv */
-BOOL daNpcSv_c::_delete() {
+bool daNpcSv_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000CD8-00000DAC       .text _draw__9daNpcSv_cFv */
-BOOL daNpcSv_c::_draw() {
+bool daNpcSv_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000DAC-00000F90       .text _execute__9daNpcSv_cFv */
-BOOL daNpcSv_c::_execute() {
+bool daNpcSv_c::_execute() {
     /* Nonmatching */
 }
 

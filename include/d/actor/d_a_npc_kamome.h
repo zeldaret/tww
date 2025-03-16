@@ -52,7 +52,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ hio_prm_c prm;
     /* 0x20 */ daNpc_kam_c* mpActor;
     /* 0x24 */ daNpc_kam_HIO1_c mHio1;

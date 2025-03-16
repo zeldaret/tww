@@ -27,7 +27,7 @@ s32 daObjRcloud_c::_create() {
 }
 
 /* 00000458-00000494       .text _delete__13daObjRcloud_cFv */
-BOOL daObjRcloud_c::_delete() {
+bool daObjRcloud_c::_delete() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daObjRcloud_c::setup_action(int) {
 }
 
 /* 00000678-000006BC       .text _execute__13daObjRcloud_cFv */
-BOOL daObjRcloud_c::_execute() {
+bool daObjRcloud_c::_execute() {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ void daObjRcloud_c::setTexMtx() {
 }
 
 /* 00000778-00000848       .text _draw__13daObjRcloud_cFv */
-BOOL daObjRcloud_c::_draw() {
+bool daObjRcloud_c::_draw() {
     /* Nonmatching */
 }
 

@@ -42,7 +42,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ s32 field_0x08;
     /* 0x0C */ u8 field_0x0C;
     /* 0x0D */ u8 field_0x0D;

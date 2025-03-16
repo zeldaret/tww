@@ -483,7 +483,7 @@ bool daBFlower_c::_draw() {
     return TRUE;
 }
 
-BOOL daBFlower_c::_delete() {
+bool daBFlower_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arcname);
     return TRUE;
 }

@@ -97,6 +97,13 @@ public:
     void outFontStickAnimePiece(u8, u8);
     void move();
     void setAlpha(u8);
+
+    /* 0x00 */ u8 m00[0x08 - 0x00];
+    /* 0x08 */ J2DPane* m08[3];
+    /* 0x14 */ J2DPane* m14;
+    /* 0x18 */ J2DPane* m18;
+    /* 0x1C */ u8 m1C[0x20 - 0x1C];
+    /* 0x20 */ JUTFont* m20;
 };
 
 #endif /* D_2DNUMBER_H */

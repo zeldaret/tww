@@ -35,6 +35,7 @@
   },
   "clangd.arguments": [
     "--function-arg-placeholders=0",
+    "-header-insertion=never",
     // "--log=verbose",
   ],
 }

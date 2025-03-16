@@ -12,9 +12,9 @@ public:
     void CreateHeap();
     void CreateInit();
     s32 _create();
-    BOOL _delete();
-    BOOL _execute();
-    BOOL _draw();
+    bool _delete();
+    bool _execute();
+    bool _draw();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsEshata;

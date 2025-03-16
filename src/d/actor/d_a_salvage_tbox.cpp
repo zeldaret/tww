@@ -27,7 +27,7 @@ void getWaterY(cXyz) {
 }
 
 /* 000005D8-000006E8       .text _delete__9daSTBox_cFv */
-BOOL daSTBox_c::_delete() {
+bool daSTBox_c::_delete() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daSTBox_c::set_mtx() {
 }
 
 /* 00000C7C-00000EB8       .text _execute__9daSTBox_cFv */
-BOOL daSTBox_c::_execute() {
+bool daSTBox_c::_execute() {
     /* Nonmatching */
 }
 

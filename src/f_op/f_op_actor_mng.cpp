@@ -303,18 +303,18 @@ void fopAcM_DeleteHeap(fopAc_ac_c* i_this) {
 }
 
 namespace fopAcM {
-    bool HeapAdjustEntry;
-    bool HeapAdjustVerbose;
-    bool HeapAdjustQuiet;
+    bool HeapAdjustEntry = false;
+    bool HeapAdjustVerbose = false;
+    bool HeapAdjustQuiet = false;
 }
 
 /* 80024D24-800250E4       .text fopAcM_entrySolidHeap__FP10fopAc_ac_cPFP10fopAc_ac_c_iUl */
-bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u32 maxHeapSize) {
+bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u32 estimatedHeapSize) {
     const char * pProcNameString = fopAcM_getProcNameString(i_this);
     JKRSolidHeap * heap = NULL;
 
-    if (maxHeapSize != 0) {
-        heap = mDoExt_createSolidHeapFromGameToCurrent(maxHeapSize, 0x20);
+    if (estimatedHeapSize != 0) {
+        heap = mDoExt_createSolidHeapFromGameToCurrent(estimatedHeapSize, 0x20);
         if (heap != NULL) {
             bool result = createHeapCB(i_this);
             if (heap->getFreeSize() >= 0x20)
@@ -323,24 +323,30 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
             mDoExt_restoreCurrentHeap();
 
             if (!result) {
-                if (!fopAcM::HeapAdjustQuiet)
-                    OSReport_Error("見積もりヒープサイズ(%08x)で登録失敗しました。[%s]\n", maxHeapSize, pProcNameString);
+                if (!fopAcM::HeapAdjustQuiet) {
+                    // "Entry failed with estimated heap size (%08x). [%s]\n"
+                    OSReport_Error("見積もりヒープサイズ(%08x)で登録失敗しました。[%s]\n", estimatedHeapSize, pProcNameString);
+                }
                 mDoExt_destroySolidHeap(heap);
                 heap = NULL;
             } else {
                 u32 allocSize = ALIGN_NEXT(heap->getSize() - heap->getFreeSize(), 0x20);
-                if (maxHeapSize < allocSize + 0x40) {
+                if (estimatedHeapSize < allocSize + 0x40) {
                     mDoExt_adjustSolidHeap(heap);
                     i_this->heap = heap;
                     return true;
                 }
 
-                if (fopAcM::HeapAdjustVerbose)
-                    OSReport_Warning("見積もりヒープサイズでは空きが多すぎます。 %08x %08x\n\x1b[m", allocSize, maxHeapSize);
+                if (fopAcM::HeapAdjustVerbose) {
+                    // "The estimated heap size leaves too much free space. %08x %08x\n\x1b[m"
+                    OSReport_Warning("見積もりヒープサイズでは空きが多すぎます。 %08x %08x\n\x1b[m", allocSize, estimatedHeapSize);
+                }
             }
         } else {
-            if (!fopAcM::HeapAdjustQuiet)
+            if (!fopAcM::HeapAdjustQuiet) {
+                // "Failed to allocate the estimated heap size.\n"
                 OSReport_Warning("見積もりヒープが確保できませんでした。\n");
+            }
         }
     }
 
@@ -352,6 +358,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
         mDoExt_restoreCurrentHeap();
 
         if (!result) {
+            // "Entry failed with the max allocatable heap size. [%s]\n"
             OSReport_Error("最大空きヒープサイズで登録失敗。[%s]\n", pProcNameString);
             mDoExt_destroySolidHeap(heap);
             return false;
@@ -368,19 +375,23 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
             return true;
         }
 
+        // If fopAcM::HeapAdjustEntry is set, try to reallocate everything a second time.
+        // This time we set the estimated maximum heap size to the exact size allocated last time.
         JKRSolidHeap * heap1 = NULL;
         u32 allocSize = ALIGN_NEXT(heap->getSize() - heap->getFreeSize(), 0x10);
-        if (allocSize + 0x90 < mDoExt_getGameHeap()->getFreeSize())
+        if (allocSize + 0x10 + sizeof(JKRSolidHeap) < mDoExt_getGameHeap()->getFreeSize())
             heap1 = mDoExt_createSolidHeapFromGameToCurrent(allocSize, 0x20);
 
         if (heap1 != NULL) {
             if (heap1 < heap) {
+                // The exact size heap allocated successfully, and it is located before the original (larger) heap.
                 mDoExt_destroySolidHeap(heap);
                 heap = NULL;
                 bool result = createHeapCB(i_this);
                 mDoExt_restoreCurrentHeap();
                 JUT_ASSERT(0x48d, result != FALSE);
-                if (result == 0) {
+                if (result == FALSE) {
+                    // "Entry failed with the exact size heap? (Bug)\n"
                     OSReport_Error("ぴったりサイズで、登録失敗？(バグ)\n");
                     mDoExt_destroySolidHeap(heap1);
                     heap1 = NULL;
@@ -404,10 +415,12 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
             return true;
         }
 
+        // "Buggy!\n"
         OSReport_Error("ばぐばぐです\n");
         JUT_ASSERT(0x4b5, FALSE);
     }
 
+    // "fopAcM_entrySolidHeap failed. [%s]\n"
     OSReport_Error("fopAcM_entrySolidHeap だめでした [%s]\n", pProcNameString);
     return false;
 }
@@ -549,7 +562,6 @@ static fopAc_cullSizeBox l_cullSizeBox[14] = {
     /* fopAc_CULLBOX_11_e */ fopAc_MakeCullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 210.0f, 75.0f)),
     /* fopAc_CULLBOX_12_e */ fopAc_MakeCullSizeBox(cXyz(-70.0f, -100.0f, -80.0f), cXyz(70.0f, 240.0f, 100.0f)),
     /* fopAc_CULLBOX_13_e */ fopAc_MakeCullSizeBox(cXyz(-60.0f, -20.0f, -60.0f), cXyz(60.0f, 160.0f, 60.0f)),
-
 };
 static fopAc_cullSizeSphere l_cullSizeSphere[8] = {
     /* fopAc_CULLSPHERE_0_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 80.0f),
@@ -848,10 +860,12 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo
                     angle = *p_angle;
                 }
 
-                if (tableIdx == RECOVER_FAIRY) {
-                    // Bug: This condition never gets triggered. They meant to check if (itemNo == RECOVER_FAIRY) so
-                    // that the 3x fairies drop table (table 0x14) spawns them in a triangle. But instead they check if
-                    // the table index is equal to 0x16/RECOVER_FAIRY, which will never be true.
+                if (tableIdx == dItem_RECOVER_FAIRY_e) {
+                    // Bug: This condition never gets triggered.
+                    // They meant to check if (itemNo == dItem_RECOVER_FAIRY_e) so that the
+                    // 3x fairies drop table (table 0x14) spawns them in a triangle.
+                    // But instead they check if the table index is equal to
+                    // 0x16/dItem_RECOVER_FAIRY_e, which will never be true.
                     pos += fairy_offset_tbl[i];
                     angle.y = cM_rndF((f32)0x7FFE);
                 }
@@ -966,7 +980,7 @@ fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
     
     switch (i_itemNo) {
-    case RECOVER_FAIRY:
+    case dItem_RECOVER_FAIRY_e:
         return fopAcM_create(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
@@ -1005,7 +1019,7 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
 
     switch (i_itemNo) {
-    case RECOVER_FAIRY:
+    case dItem_RECOVER_FAIRY_e:
         return fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
@@ -1067,7 +1081,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
     daItem_c* item;
     csXyz prmAngle;
     switch (i_itemNo) {
-    case RECOVER_FAIRY:
+    case dItem_RECOVER_FAIRY_e:
         item = (daItem_c*)fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
         return item;
     case dItem_TRIPLE_HEART_e:
@@ -1279,13 +1293,13 @@ BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle) {
     pos.y = dComIfG_Bgsp()->GroundCross(&gndChk);
     s16 targetAngleX;
     int targetAngleZ;
-    if (pos.y != -1e9f) {
+    if (pos.y != C_BG_MIN_HEIGHT) {
         f32 origY = pos.y + 50.0f;
         gndChk.GetPointP()->set(pos.x, origY, pos.z + 10.0f);
         f32 origX = gndChk.GetPointP()->x;
         f32 origZ = gndChk.GetPointP()->z;
         f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (groundY != -1e9f) {
+        if (groundY != C_BG_MIN_HEIGHT) {
             targetAngleX = -cM_atan2s(groundY - pos.y, origZ - pos.z);
         } else {
             pos.y = pos.y; // ?? fakematch?
@@ -1297,7 +1311,7 @@ BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle) {
         f32 tempZ = pos.z;
         gndChk.GetPointP()->set(origX, origY, tempZ);
         groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (groundY != -1e9f) {
+        if (groundY != C_BG_MIN_HEIGHT) {
             targetAngleZ = cM_atan2s(groundY - pos.y, origX - pos.x);
         } else {
             ret = FALSE;
@@ -1398,7 +1412,7 @@ s32 fopAcM_getWaterY(const cXyz* pPos, f32* pDstWaterY) {
     static dBgS_WtrChk water_check;
     s32 ret = 0;
 
-    *pDstWaterY = -1e09;
+    *pDstWaterY = C_BG_MIN_HEIGHT;
 
     cXyz pos;
     pos.x = pPos->x;

@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000000BC       .text _delete__12daWarpdm20_cFv */
-BOOL daWarpdm20_c::_delete() {
+bool daWarpdm20_c::_delete() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daWarpdm20_c::set_mtx() {
 }
 
 /* 00000820-00000988       .text _execute__12daWarpdm20_cFv */
-BOOL daWarpdm20_c::_execute() {
+bool daWarpdm20_c::_execute() {
     /* Nonmatching */
 }
 
@@ -162,7 +162,7 @@ void daWarpdm20_c::check_warp() {
 }
 
 /* 000016EC-000017C0       .text _draw__12daWarpdm20_cFv */
-BOOL daWarpdm20_c::_draw() {
+bool daWarpdm20_c::_draw() {
     /* Nonmatching */
 }
 

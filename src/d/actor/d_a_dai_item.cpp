@@ -549,7 +549,7 @@ bool daStandItem_c::actionFobj09() {
             m698 = NULL;
         }
         if (m690 == NULL) {
-            m690 = dComIfGp_particle_set(0x82B3, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
+            m690 = dComIfGp_particle_set(dPa_name::ID_SCENE_82B3, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
         } else {
             m690->setGlobalRTMatrix(m660);
         }
@@ -574,10 +574,10 @@ bool daStandItem_c::actionFobj09() {
                 m690 = NULL;
             }
             if (m694 == NULL) {
-                m694 = dComIfGp_particle_set(0x82B4, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
+                m694 = dComIfGp_particle_set(dPa_name::ID_SCENE_82B4, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
             }
             if (m698 == NULL) {
-                m698 = dComIfGp_particle_set(0x82B5, &current.pos, &current.angle);
+                m698 = dComIfGp_particle_set(dPa_name::ID_SCENE_82B5, &current.pos, &current.angle);
             }
             if (m698) {
                 m698->becomeImmortalEmitter();
@@ -716,7 +716,7 @@ void daStandItem_c::execAction() {
 void daStandItem_c::mode_carry_init() {
     fopAcM_SetSpeedF(this, 0.0f);
     speed = cXyz::Zero;
-    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     mCyl.OffCoSetBit();
     mMode = MODE_CARRY;
 }

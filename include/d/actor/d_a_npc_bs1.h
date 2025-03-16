@@ -193,7 +193,7 @@ public:
 
 public:
     /* 0x000 */ // this.__vt
-    /* 0x004 */ s8 mChildId;
+    /* 0x004 */ s8 mNo;
     /* 0x008 */ int m8;
     /* 0x00C */ daNpc_Bs1_childHIO_c mChild[2];
 };  // Size: 0x94

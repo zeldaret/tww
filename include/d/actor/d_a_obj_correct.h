@@ -12,7 +12,7 @@ namespace daObjCorrect {
         void prm_get_type() const {}
     
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void chk_try_actor0(fopAc_ac_c*);
         void chk_try_actor1(daObjTry::Act_c*, daObjTry::Type_e, float) const;
         void chk_try_actor2(daObjTry::Act_c*, daObjTry::Type_e, bool, float, float) const;
@@ -34,7 +34,7 @@ namespace daObjCorrect {
         void demo_req();
         void demo_run_init();
         void demo_run();
-        BOOL _execute();
+        bool _execute();
     
     public:
         /* Place member variables here */

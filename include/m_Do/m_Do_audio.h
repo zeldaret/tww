@@ -60,6 +60,10 @@ inline void mDoAud_subBgmStart(u32 param_0) {
     mDoAud_zelAudio_c::getInterface()->subBgmStart(param_0);
 }
 
+inline void mDoAud_subBgmStop() {
+    mDoAud_zelAudio_c::getInterface()->subBgmStop();
+}
+
 inline void mDoAud_bgmStreamPrepare(u32 id) {
     mDoAud_zelAudio_c::getInterface()->bgmStreamPrepare(id);
 }

@@ -19,7 +19,7 @@ daObj_Bscurtain_HIO_c l_HIO;
 
 /* 000000EC-00000118       .text __ct__21daObj_Bscurtain_HIO_cFv */
 daObj_Bscurtain_HIO_c::daObj_Bscurtain_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     field_0x08 = 0.0f;
     field_0x0c = 0;
 }

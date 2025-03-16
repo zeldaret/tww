@@ -19,11 +19,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000098-00000164       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* joint, int timing) {
+static BOOL nodeCallBack(J3DNode* joint, int calcTiming) {
     J3DModel* model = j3dSys.getModel();
     s32 jntNo = ((J3DJoint*)joint)->getJntNo();
     daObjLpalm_c* i_this = (daObjLpalm_c*)model->getUserArea();
-    if (timing == 0 && (jntNo == 2 || jntNo == 3)) {
+    if (calcTiming == J3DNodeCBCalcTiming_In && (jntNo == 2 || jntNo == 3)) {
         mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
         mDoMtx_stack_c::ZrotM(-0x4000);
         mDoMtx_stack_c::quatM(&i_this->mBaseQuat);

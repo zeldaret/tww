@@ -733,7 +733,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2500
     },
     {
-        // 0x09: S_MAGIC
+        // 0x09: dItem_SMALL_MAGIC_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ ALWAYS_BDL_MPODA,
@@ -749,7 +749,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0B80
     },
     {
-        // 0x0A: L_MAGIC
+        // 0x0A: dItem_LARGE_MAGIC_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ ALWAYS_BDL_MPODB,
@@ -765,7 +765,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0B80
     },
     {
-        // 0x0B: BOMB_5
+        // 0x0B: dItem_BOMB_5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
@@ -781,7 +781,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x0C: BOMB_10
+        // 0x0C: dItem_BOMB_10_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
@@ -797,7 +797,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x0D: BOMB_20
+        // 0x0D: dItem_BOMB_20_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
@@ -813,7 +813,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x0E: BOMB_30
+        // 0x0E: dItem_BOMB_30_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ BOMB_00_BDL_VBOMB,
@@ -845,7 +845,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0x10: ARROW_10
+        // 0x10: dItem_ARROW_10_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
         /* mBmdIdx      */ ALWAYS_BDL_ARROWITEM,
@@ -861,7 +861,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x11: ARROW_20
+        // 0x11: dItem_ARROW_20_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
         /* mBmdIdx      */ ALWAYS_BDL_ARROWITEM,
@@ -877,7 +877,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0x12: ARROW_30
+        // 0x12: dItem_ARROW_30_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
         /* mBmdIdx      */ ALWAYS_BDL_ARROWITEM,
@@ -941,7 +941,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3500
     },
     {
-        // 0x16: RECOVER_FAIRY
+        // 0x16: dItem_RECOVER_FAIRY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_FA],
         /* mTexture     */ NULL,
         /* mBmdIdx      */ ALWAYS_BDL_FA, // Note: This file index is for the wrong RARC.
@@ -1005,7 +1005,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0x1A: SUB_DUN_RUPEE
+        // 0x1A: dItem_SUB_DUN_RUPEE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ VLUPY_BDL_VLUPY,
@@ -1165,7 +1165,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x24: EMONO_BAG
+        // 0x24: dItem_SPOILS_BAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGE],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COVEROFBEAST],
         /* mBmdIdx      */ VBAGE_BDL_VBAGE,
@@ -1229,7 +1229,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x28: PWR_GROOVE
+        // 0x28: dItem_POWER_BRACELETS_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VPOWR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GLOVES_00_0x35],
         /* mBmdIdx      */ VPOWR_BDL_VPOWR,
@@ -1293,7 +1293,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x2C: ESA_BAG
+        // 0x2C: dItem_BAIT_BAG_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGF],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COVEROFBAIT],
         /* mBmdIdx      */ VBAGF_BDL_VBAGF,
@@ -1485,7 +1485,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0x38: SWORD
+        // 0x38: dItem_SWORD_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_00],
         /* mBmdIdx      */ VSWON_BDL_VSWON,
@@ -1501,7 +1501,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x39: MASTER_SWORD
+        // 0x39: dItem_MASTER_SWORD_1_e
         /* mArcname     */ NULL,
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_01],
         /* mBmdIdx      */ -1,
@@ -1517,7 +1517,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x5500
     },
     {
-        // 0x3A: LV3_SWORD
+        // 0x3A: dItem_MASTER_SWORD_2_e
         /* mArcname     */ NULL,
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_02],
         /* mBmdIdx      */ -1,
@@ -1533,7 +1533,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x5500
     },
     {
-        // 0x3B: SHIELD
+        // 0x3B: dItem_SHIELD_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSHIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_00],
         /* mBmdIdx      */ VSHIN_BDL_VSHIN,
@@ -1549,7 +1549,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x5000
     },
     {
-        // 0x3C: MIRROR_SHIELD
+        // 0x3C: dItem_MIRROR_SHIELD_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSHIM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_01],
         /* mBmdIdx      */ VSHIM_BDL_VSHIM,
@@ -1565,7 +1565,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x3D: DROPPED_SWORD
+        // 0x3D: dItem_DROPPED_SWORD_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_00],
         /* mBmdIdx      */ VSWON_BDL_VSWON,
@@ -1581,7 +1581,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x3E: MASTER_SWORD_EX
+        // 0x3E: dItem_MASTER_SWORD_3_e
         /* mArcname     */ NULL,
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_03],
         /* mBmdIdx      */ -1,
@@ -1645,7 +1645,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0x42: PIRATES_OMAMORI
+        // 0x42: dItem_PIRATES_CHARM_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
         /* mBmdIdx      */ VAMUK_BDL_VAMUK,
@@ -1661,7 +1661,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x43: HEROS_OMAMORI
+        // 0x43: dItem_HEROS_CHARM_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_01],
         /* mBmdIdx      */ VAMUY_BDL_VAMUY,
@@ -1693,7 +1693,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0x45: SKULL_NECKLACE
+        // 0x45: dItem_SKULL_NECKLACE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDOKU],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_01],
         /* mBmdIdx      */ VDOKU_BDL_VDOKU,
@@ -1709,7 +1709,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0x46: BOKOBABA_SEED
+        // 0x46: dItem_BOKOBABA_SEED_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOKO],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_02],
         /* mBmdIdx      */ VBOKO_BDL_VBOKO,
@@ -1725,7 +1725,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x47: GOLDEN_FEATHER
+        // 0x47: dItem_GOLDEN_FEATHER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHANE],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_03],
         /* mBmdIdx      */ VHANE_BDL_VHANE,
@@ -1757,7 +1757,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0x49: RED_JELLY
+        // 0x49: dItem_RED_JELLY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_05],
         /* mBmdIdx      */ VCHUJ_BDL_VCHUJ,
@@ -1773,7 +1773,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x4A: GREEN_JELLY
+        // 0x4A: dItem_GREEN_JELLY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_06],
         /* mBmdIdx      */ VCHUJ_BDL_VCHUJ,
@@ -1789,7 +1789,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0x4B: BLUE_JELLY
+        // 0x4B: dItem_BLUE_JELLY_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_07],
         /* mBmdIdx      */ VCHUJ_BDL_VCHUJ,
@@ -1869,7 +1869,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0x50: EMPTY_BOTTLE
+        // 0x50: dItem_EMPTY_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ BIN_BDL_VBINX,
@@ -1885,7 +1885,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x51: RED_BOTTLE
+        // 0x51: dItem_RED_POTION_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_R],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_01],
         /* mBmdIdx      */ MED_R_BDL_VBINR,
@@ -1901,7 +1901,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x52: GREEN_BOTTLE
+        // 0x52: dItem_GREEN_POTION_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_G],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_02],
         /* mBmdIdx      */ MED_G_BDL_VBING,
@@ -1917,7 +1917,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x53: BLUE_BOTTLE
+        // 0x53: dItem_BLUE_POTION_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_B],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_03],
         /* mBmdIdx      */ MED_B_BDL_VBINB,
@@ -1965,7 +1965,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x56: BIN_IN_WATER
+        // 0x56: dItem_WATER_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINW],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_05],
         /* mBmdIdx      */ VBINW_BDL_VBINW,
@@ -1981,7 +1981,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x57: FAIRY_BOTTLE
+        // 0x57: dItem_FAIRY_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_06],
         /* mBmdIdx      */ VBINY_BDL_VBINY,
@@ -1997,7 +1997,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x58: FIREFLY_BOTTLE
+        // 0x58: dItem_FIREFLY_BOTTLE_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_07],
         /* mBmdIdx      */ VBINH_BDL_VBINH,
@@ -2013,7 +2013,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x3000
     },
     {
-        // 0x59: FWATER_BOTTLE
+        // 0x59: dItem_FOREST_WATER_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_FWBIN],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_08],
         /* mBmdIdx      */ FWBIN_BDL_VBINW_F,
@@ -2669,7 +2669,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0x82: BIRD_ESA_5
+        // 0x82: dItem_BIRD_BAIT_5_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VESA],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BAIT_01],
         /* mBmdIdx      */ VESA_BDL_VESA,
@@ -3325,7 +3325,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0xAB: MAX_RUPEE_UP1
+        // 0xAB: dItem_MAX_RUPEE_UP1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSAIM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BIG_PURSE],
         /* mBmdIdx      */ VSAIM_BDL_VSAIM,
@@ -3341,7 +3341,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0xAC: MAX_RUPEE_UP2
+        // 0xAC: dItem_MAX_RUPEE_UP2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSAIL],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_MAX_PURSE],
         /* mBmdIdx      */ VSAIL_BDL_VSAIL,
@@ -3357,7 +3357,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0xAD: MAX_BOMB_UP1
+        // 0xAD: dItem_MAX_BOMB_UP1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOMM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMBPOUCH_1],
         /* mBmdIdx      */ VBOMM_BDL_VBOMM,
@@ -3373,7 +3373,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0xAE: MAX_BOMB_UP2
+        // 0xAE: dItem_MAX_BOMB_UP2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOML],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMBPOUCH_2],
         /* mBmdIdx      */ VBOML_BDL_VBOML,
@@ -3389,7 +3389,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0xAF: MAX_ARROW_UP1
+        // 0xAF: dItem_MAX_ARROW_UP1_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VYATM],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROWCASE_1],
         /* mBmdIdx      */ VYATM_BDL_VYATM,
@@ -3405,7 +3405,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0xB0: MAX_ARROW_UP2
+        // 0xB0: dItem_MAX_ARROW_UP2_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VYATL],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROWCASE_2],
         /* mBmdIdx      */ VYATL_BDL_VYATL,
@@ -3421,7 +3421,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x2000
     },
     {
-        // 0xB1: MAGIC_POWER
+        // 0xB1: dItem_MAGIC_POWER_e
         /* mArcname     */ NULL,
         /* mTexture     */ NULL,
         /* mBmdIdx      */ -1,
@@ -3437,7 +3437,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x0000
     },
     {
-        // 0xB2: MAX_MP_UP1
+        // 0xB2: dItem_MAX_MP_UP1_e
         /* mArcname     */ NULL,
         /* mTexture     */ NULL,
         /* mBmdIdx      */ -1,
@@ -3645,7 +3645,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0xBF: COLLECT_MAP_64
+        // 0xBF: dItem_COLLECT_MAP_64_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ VLUPY_BDL_VLUPY,
@@ -3661,7 +3661,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0xC0: COLLECT_MAP_63
+        // 0xC0: dItem_COLLECT_MAP_63_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ VLUPY_BDL_VLUPY,
@@ -3677,7 +3677,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0xC1: COLLECT_MAP_62
+        // 0xC1: dItem_COLLECT_MAP_62_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ VLUPY_BDL_VLUPY,
@@ -3693,7 +3693,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x17C0
     },
     {
-        // 0xC2: COLLECT_MAP_61
+        // 0xC2: dItem_COLLECT_MAP_61_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
@@ -3709,7 +3709,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xC3: COLLECT_MAP_60
+        // 0xC3: dItem_COLLECT_MAP_60_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
@@ -3725,7 +3725,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xC4: COLLECT_MAP_59
+        // 0xC4: dItem_COLLECT_MAP_59_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
@@ -3741,7 +3741,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xC5: COLLECT_MAP_58
+        // 0xC5: dItem_COLLECT_MAP_58_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
@@ -3757,7 +3757,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xC6: COLLECT_MAP_57
+        // 0xC6: dItem_COLLECT_MAP_57_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
@@ -3773,7 +3773,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xC7: COLLECT_MAP_56
+        // 0xC7: dItem_COLLECT_MAP_56_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
@@ -3789,7 +3789,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xC8: COLLECT_MAP_55
+        // 0xC8: dItem_COLLECT_MAP_55_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
@@ -3805,7 +3805,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xC9: COLLECT_MAP_54
+        // 0xC9: dItem_COLLECT_MAP_54_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
@@ -3821,7 +3821,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xCA: COLLECT_MAP_53
+        // 0xCA: dItem_COLLECT_MAP_53_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ VMAPQ_BDL_VMAPQ,
@@ -3837,7 +3837,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xCB: COLLECT_MAP_52
+        // 0xCB: dItem_COLLECT_MAP_52_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPC],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TINGLE2],
         /* mBmdIdx      */ VMAPC_BDL_VMAPC,
@@ -3853,7 +3853,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xCC: COLLECT_MAP_51
+        // 0xCC: dItem_COLLECT_MAP_51_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -3869,7 +3869,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xCD: COLLECT_MAP_50
+        // 0xCD: dItem_COLLECT_MAP_50_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -3885,7 +3885,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xCE: COLLECT_MAP_49
+        // 0xCE: dItem_COLLECT_MAP_49_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -3901,7 +3901,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xCF: COLLECT_MAP_48
+        // 0xCF: dItem_COLLECT_MAP_48_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -3917,7 +3917,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD0: COLLECT_MAP_47
+        // 0xD0: dItem_COLLECT_MAP_47_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -3933,7 +3933,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD1: COLLECT_MAP_46
+        // 0xD1: dItem_COLLECT_MAP_46_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -3949,7 +3949,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD2: COLLECT_MAP_45
+        // 0xD2: dItem_COLLECT_MAP_45_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -3965,7 +3965,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD3: COLLECT_MAP_44
+        // 0xD3: dItem_COLLECT_MAP_44_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -3981,7 +3981,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD4: COLLECT_MAP_43
+        // 0xD4: dItem_COLLECT_MAP_43_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -3997,7 +3997,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD5: COLLECT_MAP_42
+        // 0xD5: dItem_COLLECT_MAP_42_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4013,7 +4013,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD6: COLLECT_MAP_41
+        // 0xD6: dItem_COLLECT_MAP_41_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4029,7 +4029,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD7: COLLECT_MAP_40
+        // 0xD7: dItem_COLLECT_MAP_40_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4045,7 +4045,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD8: COLLECT_MAP_39
+        // 0xD8: dItem_COLLECT_MAP_39_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4061,7 +4061,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xD9: COLLECT_MAP_38
+        // 0xD9: dItem_COLLECT_MAP_38_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4077,7 +4077,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xDA: COLLECT_MAP_37
+        // 0xDA: dItem_COLLECT_MAP_37_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4093,7 +4093,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xDB: COLLECT_MAP_36
+        // 0xDB: dItem_COLLECT_MAP_36_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPG],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_PHANTOMSHIP2],
         /* mBmdIdx      */ VMAPG_BDL_VMAPG,
@@ -4109,7 +4109,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xDC: COLLECT_MAP_35
+        // 0xDC: dItem_COLLECT_MAP_35_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPC],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TINGLE2],
         /* mBmdIdx      */ VMAPC_BDL_VMAPC,
@@ -4125,7 +4125,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xDD: COLLECT_MAP_34
+        // 0xDD: dItem_COLLECT_MAP_34_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4141,7 +4141,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xDE: COLLECT_MAP_33
+        // 0xDE: dItem_COLLECT_MAP_33_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4157,7 +4157,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xDF: COLLECT_MAP_32
+        // 0xDF: dItem_COLLECT_MAP_32_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4173,7 +4173,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE0: COLLECT_MAP_31
+        // 0xE0: dItem_COLLECT_MAP_31_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4189,7 +4189,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE1: COLLECT_MAP_30
+        // 0xE1: dItem_COLLECT_MAP_30_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4205,7 +4205,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE2: COLLECT_MAP_29
+        // 0xE2: dItem_COLLECT_MAP_29_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4221,7 +4221,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE3: COLLECT_MAP_28
+        // 0xE3: dItem_COLLECT_MAP_28_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4237,7 +4237,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE4: COLLECT_MAP_27
+        // 0xE4: dItem_COLLECT_MAP_27_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4253,7 +4253,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE5: COLLECT_MAP_26
+        // 0xE5: dItem_COLLECT_MAP_26_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4269,7 +4269,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE6: COLLECT_MAP_25
+        // 0xE6: dItem_COLLECT_MAP_25_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4285,7 +4285,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE7: COLLECT_MAP_24
+        // 0xE7: dItem_COLLECT_MAP_24_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4301,7 +4301,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE8: COLLECT_MAP_23
+        // 0xE8: dItem_COLLECT_MAP_23_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4317,7 +4317,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xE9: COLLECT_MAP_22
+        // 0xE9: dItem_COLLECT_MAP_22_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4333,7 +4333,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xEA: COLLECT_MAP_21
+        // 0xEA: dItem_COLLECT_MAP_21_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4349,7 +4349,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xEB: COLLECT_MAP_20
+        // 0xEB: dItem_COLLECT_MAP_20_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4365,7 +4365,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xEC: COLLECT_MAP_19
+        // 0xEC: dItem_COLLECT_MAP_19_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ VMAPR_BDL_VMAPL,
@@ -4381,7 +4381,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xED: COLLECT_MAP_18
+        // 0xED: dItem_COLLECT_MAP_18_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4397,7 +4397,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xEE: COLLECT_MAP_17
+        // 0xEE: dItem_COLLECT_MAP_17_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4413,7 +4413,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xEF: COLLECT_MAP_16
+        // 0xEF: dItem_COLLECT_MAP_16_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4429,7 +4429,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF0: COLLECT_MAP_15
+        // 0xF0: dItem_COLLECT_MAP_15_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4445,7 +4445,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF1: COLLECT_MAP_14
+        // 0xF1: dItem_COLLECT_MAP_14_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4461,7 +4461,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF2: COLLECT_MAP_13
+        // 0xF2: dItem_COLLECT_MAP_13_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4477,7 +4477,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF3: COLLECT_MAP_12
+        // 0xF3: dItem_COLLECT_MAP_12_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4493,7 +4493,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF4: COLLECT_MAP_11
+        // 0xF4: dItem_COLLECT_MAP_11_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4509,7 +4509,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF5: COLLECT_MAP_10
+        // 0xF5: dItem_COLLECT_MAP_10_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4525,7 +4525,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF6: COLLECT_MAP_09
+        // 0xF6: dItem_COLLECT_MAP_09_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ VMAPH_BDL_VMAPH,
@@ -4541,7 +4541,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF7: COLLECT_MAP_08
+        // 0xF7: dItem_COLLECT_MAP_08_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ VMAPT_BDL_VMAPT,
@@ -4557,7 +4557,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF8: COLLECT_MAP_07
+        // 0xF8: dItem_COLLECT_MAP_07_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ VMAPT_BDL_VMAPT,
@@ -4573,7 +4573,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xF9: COLLECT_MAP_06
+        // 0xF9: dItem_COLLECT_MAP_06_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ VMAPT_BDL_VMAPT,
@@ -4589,7 +4589,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xFA: COLLECT_MAP_05
+        // 0xFA: dItem_COLLECT_MAP_05_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ VMAPT_BDL_VMAPT,
@@ -4605,7 +4605,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xFB: COLLECT_MAP_04
+        // 0xFB: dItem_COLLECT_MAP_04_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ VMAPT_BDL_VMAPT,
@@ -4621,7 +4621,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xFC: COLLECT_MAP_03
+        // 0xFC: dItem_COLLECT_MAP_03_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ VMAPT_BDL_VMAPT,
@@ -4637,7 +4637,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xFD: COLLECT_MAP_02
+        // 0xFD: dItem_COLLECT_MAP_02_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ VMAPT_BDL_VMAPT,
@@ -4653,7 +4653,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
         /* mHeapSize    */ 0x1000
     },
     {
-        // 0xFE: COLLECT_MAP_01
+        // 0xFE: dItem_COLLECT_MAP_01_e
         /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ VMAPT_BDL_VMAPT,
@@ -4806,7 +4806,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0C60
     },
     {
-        // 0x09: S_MAGIC
+        // 0x09: dItem_SMALL_MAGIC_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_MPODA,
         /* mSrtIdx   */ -1,
@@ -4819,7 +4819,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0700
     },
     {
-        // 0x0A: L_MAGIC
+        // 0x0A: dItem_LARGE_MAGIC_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_MPODB,
         /* mSrtIdx   */ -1,
@@ -4832,7 +4832,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0700
     },
     {
-        // 0x0B: BOMB_5
+        // 0x0B: dItem_BOMB_5_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ LINK_BDL_BOMB,
         /* mSrtIdx   */ -1,
@@ -4845,7 +4845,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CC0
     },
     {
-        // 0x0C: BOMB_10
+        // 0x0C: dItem_BOMB_10_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ LINK_BDL_BOMB,
         /* mSrtIdx   */ -1,
@@ -4858,7 +4858,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CC0
     },
     {
-        // 0x0D: BOMB_20
+        // 0x0D: dItem_BOMB_20_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ LINK_BDL_BOMB,
         /* mSrtIdx   */ -1,
@@ -4871,7 +4871,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CC0
     },
     {
-        // 0x0E: BOMB_30
+        // 0x0E: dItem_BOMB_30_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ LINK_BDL_BOMB,
         /* mSrtIdx   */ -1,
@@ -4897,7 +4897,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0CA0
     },
     {
-        // 0x10: ARROW_10
+        // 0x10: dItem_ARROW_10_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_ARROWITEM,
         /* mSrtIdx   */ -1,
@@ -4910,7 +4910,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0700
     },
     {
-        // 0x11: ARROW_20
+        // 0x11: dItem_ARROW_20_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_ARROWITEM,
         /* mSrtIdx   */ -1,
@@ -4923,7 +4923,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0B40
     },
     {
-        // 0x12: ARROW_30
+        // 0x12: dItem_ARROW_30_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_ARROWITEM,
         /* mSrtIdx   */ -1,
@@ -4975,7 +4975,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0780
     },
     {
-        // 0x16: RECOVER_FAIRY
+        // 0x16: dItem_RECOVER_FAIRY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_FA,
         /* mSrtIdx   */ -1,
@@ -5027,7 +5027,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x1A: SUB_DUN_RUPEE
+        // 0x1A: dItem_SUB_DUN_RUPEE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5157,7 +5157,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x24: EMONO_BAG
+        // 0x24: dItem_SPOILS_BAG_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5209,7 +5209,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x28: PWR_GROOVE
+        // 0x28: dItem_POWER_BRACELETS_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5261,7 +5261,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x2C: ESA_BAG
+        // 0x2C: dItem_BAIT_BAG_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5417,7 +5417,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x38: SWORD
+        // 0x38: dItem_SWORD_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mBmdIdx   */ VSWON_BDL_VSWON,
         /* mSrtIdx   */ -1,
@@ -5430,7 +5430,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x3000
     },
     {
-        // 0x39: MASTER_SWORD
+        // 0x39: dItem_MASTER_SWORD_1_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5443,7 +5443,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x1000
     },
     {
-        // 0x3A: LV3_SWORD
+        // 0x3A: dItem_MASTER_SWORD_2_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5456,7 +5456,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x1000
     },
     {
-        // 0x3B: SHIELD
+        // 0x3B: dItem_SHIELD_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSHIN],
         /* mBmdIdx   */ VSHIN_BDL_VSHIN,
         /* mSrtIdx   */ -1,
@@ -5469,7 +5469,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x5000
     },
     {
-        // 0x3C: MIRROR_SHIELD
+        // 0x3C: dItem_MIRROR_SHIELD_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5482,7 +5482,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x3D: DROPPED_SWORD
+        // 0x3D: dItem_DROPPED_SWORD_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mBmdIdx   */ VSWON_BDL_VSWON,
         /* mSrtIdx   */ -1,
@@ -5495,7 +5495,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x3000
     },
     {
-        // 0x3E: MASTER_SWORD_EX
+        // 0x3E: dItem_MASTER_SWORD_3_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5547,7 +5547,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x42: PIRATES_OMAMORI
+        // 0x42: dItem_PIRATES_CHARM_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5560,7 +5560,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x43: HEROS_OMAMORI
+        // 0x43: dItem_HEROS_CHARM_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5586,7 +5586,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x45: SKULL_NECKLACE
+        // 0x45: dItem_SKULL_NECKLACE_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VDOKL,
         /* mSrtIdx   */ -1,
@@ -5599,7 +5599,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x08A0
     },
     {
-        // 0x46: BOKOBABA_SEED
+        // 0x46: dItem_BOKOBABA_SEED_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VBOKL,
         /* mSrtIdx   */ -1,
@@ -5612,7 +5612,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0720
     },
     {
-        // 0x47: GOLDEN_FEATHER
+        // 0x47: dItem_GOLDEN_FEATHER_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VHANL,
         /* mSrtIdx   */ ALWAYS_BTK_VHANL,
@@ -5638,7 +5638,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0760
     },
     {
-        // 0x49: RED_JELLY
+        // 0x49: dItem_RED_JELLY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VCHUL,
         /* mSrtIdx   */ -1,
@@ -5651,7 +5651,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0800
     },
     {
-        // 0x4A: GREEN_JELLY
+        // 0x4A: dItem_GREEN_JELLY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VCHUL,
         /* mSrtIdx   */ -1,
@@ -5664,7 +5664,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0800
     },
     {
-        // 0x4B: BLUE_JELLY
+        // 0x4B: dItem_BLUE_JELLY_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VCHUL,
         /* mSrtIdx   */ -1,
@@ -5729,7 +5729,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x50: EMPTY_BOTTLE
+        // 0x50: dItem_EMPTY_BOTTLE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5742,7 +5742,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x51: RED_BOTTLE
+        // 0x51: dItem_RED_POTION_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5755,7 +5755,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x52: GREEN_BOTTLE
+        // 0x52: dItem_GREEN_POTION_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5768,7 +5768,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x53: BLUE_BOTTLE
+        // 0x53: dItem_BLUE_POTION_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5807,7 +5807,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x56: BIN_IN_WATER
+        // 0x56: dItem_WATER_BOTTLE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5820,7 +5820,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x57: FAIRY_BOTTLE
+        // 0x57: dItem_FAIRY_BOTTLE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5833,7 +5833,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x58: FIREFLY_BOTTLE
+        // 0x58: dItem_FIREFLY_BOTTLE_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -5846,7 +5846,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x59: FWATER_BOTTLE
+        // 0x59: dItem_FOREST_WATER_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6379,7 +6379,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0x82: BIRD_ESA_5
+        // 0x82: dItem_BIRD_BAIT_5_e
         /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ ALWAYS_BDL_VESAL,
         /* mSrtIdx   */ -1,
@@ -6912,7 +6912,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xAB: MAX_RUPEE_UP1
+        // 0xAB: dItem_MAX_RUPEE_UP1_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6925,7 +6925,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xAC: MAX_RUPEE_UP2
+        // 0xAC: dItem_MAX_RUPEE_UP2_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6938,7 +6938,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xAD: MAX_BOMB_UP1
+        // 0xAD: dItem_MAX_BOMB_UP1_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6951,7 +6951,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xAE: MAX_BOMB_UP2
+        // 0xAE: dItem_MAX_BOMB_UP2_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6964,7 +6964,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xAF: MAX_ARROW_UP1
+        // 0xAF: dItem_MAX_ARROW_UP1_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6977,7 +6977,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xB0: MAX_ARROW_UP2
+        // 0xB0: dItem_MAX_ARROW_UP2_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -6990,7 +6990,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xB1: MAGIC_POWER
+        // 0xB1: dItem_MAGIC_POWER_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7003,7 +7003,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xB2: MAX_MP_UP1
+        // 0xB2: dItem_MAX_MP_UP1_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7172,7 +7172,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xBF: COLLECT_MAP_64
+        // 0xBF: dItem_COLLECT_MAP_64_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7185,7 +7185,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC0: COLLECT_MAP_63
+        // 0xC0: dItem_COLLECT_MAP_63_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7198,7 +7198,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC1: COLLECT_MAP_62
+        // 0xC1: dItem_COLLECT_MAP_62_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7211,7 +7211,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC2: COLLECT_MAP_61
+        // 0xC2: dItem_COLLECT_MAP_61_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7224,7 +7224,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC3: COLLECT_MAP_60
+        // 0xC3: dItem_COLLECT_MAP_60_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7237,7 +7237,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC4: COLLECT_MAP_59
+        // 0xC4: dItem_COLLECT_MAP_59_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7250,7 +7250,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC5: COLLECT_MAP_58
+        // 0xC5: dItem_COLLECT_MAP_58_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7263,7 +7263,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC6: COLLECT_MAP_57
+        // 0xC6: dItem_COLLECT_MAP_57_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7276,7 +7276,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC7: COLLECT_MAP_56
+        // 0xC7: dItem_COLLECT_MAP_56_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7289,7 +7289,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC8: COLLECT_MAP_55
+        // 0xC8: dItem_COLLECT_MAP_55_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7302,7 +7302,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xC9: COLLECT_MAP_54
+        // 0xC9: dItem_COLLECT_MAP_54_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7315,7 +7315,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xCA: COLLECT_MAP_53
+        // 0xCA: dItem_COLLECT_MAP_53_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7328,7 +7328,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xCB: COLLECT_MAP_52
+        // 0xCB: dItem_COLLECT_MAP_52_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7341,7 +7341,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xCC: COLLECT_MAP_51
+        // 0xCC: dItem_COLLECT_MAP_51_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7354,7 +7354,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xCD: COLLECT_MAP_50
+        // 0xCD: dItem_COLLECT_MAP_50_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7367,7 +7367,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xCE: COLLECT_MAP_49
+        // 0xCE: dItem_COLLECT_MAP_49_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7380,7 +7380,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xCF: COLLECT_MAP_48
+        // 0xCF: dItem_COLLECT_MAP_48_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7393,7 +7393,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD0: COLLECT_MAP_47
+        // 0xD0: dItem_COLLECT_MAP_47_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7406,7 +7406,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD1: COLLECT_MAP_46
+        // 0xD1: dItem_COLLECT_MAP_46_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7419,7 +7419,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD2: COLLECT_MAP_45
+        // 0xD2: dItem_COLLECT_MAP_45_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7432,7 +7432,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD3: COLLECT_MAP_44
+        // 0xD3: dItem_COLLECT_MAP_44_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7445,7 +7445,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD4: COLLECT_MAP_43
+        // 0xD4: dItem_COLLECT_MAP_43_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7458,7 +7458,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD5: COLLECT_MAP_42
+        // 0xD5: dItem_COLLECT_MAP_42_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7471,7 +7471,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD6: COLLECT_MAP_41
+        // 0xD6: dItem_COLLECT_MAP_41_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7484,7 +7484,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD7: COLLECT_MAP_40
+        // 0xD7: dItem_COLLECT_MAP_40_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7497,7 +7497,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD8: COLLECT_MAP_39
+        // 0xD8: dItem_COLLECT_MAP_39_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7510,7 +7510,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xD9: COLLECT_MAP_38
+        // 0xD9: dItem_COLLECT_MAP_38_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7523,7 +7523,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xDA: COLLECT_MAP_37
+        // 0xDA: dItem_COLLECT_MAP_37_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7536,7 +7536,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xDB: COLLECT_MAP_36
+        // 0xDB: dItem_COLLECT_MAP_36_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7549,7 +7549,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xDC: COLLECT_MAP_35
+        // 0xDC: dItem_COLLECT_MAP_35_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7562,7 +7562,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xDD: COLLECT_MAP_34
+        // 0xDD: dItem_COLLECT_MAP_34_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7575,7 +7575,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xDE: COLLECT_MAP_33
+        // 0xDE: dItem_COLLECT_MAP_33_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7588,7 +7588,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xDF: COLLECT_MAP_32
+        // 0xDF: dItem_COLLECT_MAP_32_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7601,7 +7601,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE0: COLLECT_MAP_31
+        // 0xE0: dItem_COLLECT_MAP_31_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7614,7 +7614,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE1: COLLECT_MAP_30
+        // 0xE1: dItem_COLLECT_MAP_30_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7627,7 +7627,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE2: COLLECT_MAP_29
+        // 0xE2: dItem_COLLECT_MAP_29_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7640,7 +7640,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE3: COLLECT_MAP_28
+        // 0xE3: dItem_COLLECT_MAP_28_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7653,7 +7653,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE4: COLLECT_MAP_27
+        // 0xE4: dItem_COLLECT_MAP_27_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7666,7 +7666,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE5: COLLECT_MAP_26
+        // 0xE5: dItem_COLLECT_MAP_26_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7679,7 +7679,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE6: COLLECT_MAP_25
+        // 0xE6: dItem_COLLECT_MAP_25_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7692,7 +7692,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE7: COLLECT_MAP_24
+        // 0xE7: dItem_COLLECT_MAP_24_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7705,7 +7705,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE8: COLLECT_MAP_23
+        // 0xE8: dItem_COLLECT_MAP_23_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7718,7 +7718,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xE9: COLLECT_MAP_22
+        // 0xE9: dItem_COLLECT_MAP_22_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7731,7 +7731,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xEA: COLLECT_MAP_21
+        // 0xEA: dItem_COLLECT_MAP_21_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7744,7 +7744,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xEB: COLLECT_MAP_20
+        // 0xEB: dItem_COLLECT_MAP_20_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7757,7 +7757,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xEC: COLLECT_MAP_19
+        // 0xEC: dItem_COLLECT_MAP_19_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7770,7 +7770,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xED: COLLECT_MAP_18
+        // 0xED: dItem_COLLECT_MAP_18_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7783,7 +7783,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xEE: COLLECT_MAP_17
+        // 0xEE: dItem_COLLECT_MAP_17_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7796,7 +7796,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xEF: COLLECT_MAP_16
+        // 0xEF: dItem_COLLECT_MAP_16_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7809,7 +7809,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF0: COLLECT_MAP_15
+        // 0xF0: dItem_COLLECT_MAP_15_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7822,7 +7822,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF1: COLLECT_MAP_14
+        // 0xF1: dItem_COLLECT_MAP_14_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7835,7 +7835,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF2: COLLECT_MAP_13
+        // 0xF2: dItem_COLLECT_MAP_13_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7848,7 +7848,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF3: COLLECT_MAP_12
+        // 0xF3: dItem_COLLECT_MAP_12_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7861,7 +7861,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF4: COLLECT_MAP_11
+        // 0xF4: dItem_COLLECT_MAP_11_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7874,7 +7874,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF5: COLLECT_MAP_10
+        // 0xF5: dItem_COLLECT_MAP_10_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7887,7 +7887,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF6: COLLECT_MAP_09
+        // 0xF6: dItem_COLLECT_MAP_09_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7900,7 +7900,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF7: COLLECT_MAP_08
+        // 0xF7: dItem_COLLECT_MAP_08_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7913,7 +7913,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF8: COLLECT_MAP_07
+        // 0xF8: dItem_COLLECT_MAP_07_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7926,7 +7926,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xF9: COLLECT_MAP_06
+        // 0xF9: dItem_COLLECT_MAP_06_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7939,7 +7939,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xFA: COLLECT_MAP_05
+        // 0xFA: dItem_COLLECT_MAP_05_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7952,7 +7952,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xFB: COLLECT_MAP_04
+        // 0xFB: dItem_COLLECT_MAP_04_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7965,7 +7965,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xFC: COLLECT_MAP_03
+        // 0xFC: dItem_COLLECT_MAP_03_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7978,7 +7978,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xFD: COLLECT_MAP_02
+        // 0xFD: dItem_COLLECT_MAP_02_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -7991,7 +7991,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mHeapSize */ 0x0000
     },
     {
-        // 0xFE: COLLECT_MAP_01
+        // 0xFE: dItem_COLLECT_MAP_01_e
         /* mArc      */ NULL,
         /* mBmdIdx   */ -1,
         /* mSrtIdx   */ -1,
@@ -8084,42 +8084,42 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x01,
     },
     {
-        // 0x09: S_MAGIC
+        // 0x09: dItem_SMALL_MAGIC_e
         0x14,
         0x28,
         0x1E,
         0x00,
     },
     {
-        // 0x0A: L_MAGIC
+        // 0x0A: dItem_LARGE_MAGIC_e
         0x19,
         0x50,
         0x1E,
         0x00,
     },
     {
-        // 0x0B: BOMB_5
+        // 0x0B: dItem_BOMB_5_e
         0x28,
         0x3C,
         0x1E,
         0x00,
     },
     {
-        // 0x0C: BOMB_10
+        // 0x0C: dItem_BOMB_10_e
         0x28,
         0x3C,
         0x1E,
         0x00,
     },
     {
-        // 0x0D: BOMB_20
+        // 0x0D: dItem_BOMB_20_e
         0x28,
         0x3C,
         0x1E,
         0x00,
     },
     {
-        // 0x0E: BOMB_30
+        // 0x0E: dItem_BOMB_30_e
         0x28,
         0x3C,
         0x1E,
@@ -8133,21 +8133,21 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x10: ARROW_10
+        // 0x10: dItem_ARROW_10_e
         0x14,
         0x50,
         0x32,
         0x00,
     },
     {
-        // 0x11: ARROW_20
+        // 0x11: dItem_ARROW_20_e
         0x14,
         0x50,
         0x32,
         0x00,
     },
     {
-        // 0x12: ARROW_30
+        // 0x12: dItem_ARROW_30_e
         0x14,
         0x50,
         0x32,
@@ -8175,7 +8175,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x05,
     },
     {
-        // 0x16: RECOVER_FAIRY
+        // 0x16: dItem_RECOVER_FAIRY_e
         0x1E,
         0x3C,
         0x1E,
@@ -8203,7 +8203,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x1A: SUB_DUN_RUPEE
+        // 0x1A: dItem_SUB_DUN_RUPEE_e
         0x00,
         0x00,
         0x00,
@@ -8273,7 +8273,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x24: EMONO_BAG
+        // 0x24: dItem_SPOILS_BAG_e
         0x00,
         0x00,
         0x00,
@@ -8301,7 +8301,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x28: PWR_GROOVE
+        // 0x28: dItem_POWER_BRACELETS_e
         0x00,
         0x00,
         0x00,
@@ -8329,7 +8329,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x2C: ESA_BAG
+        // 0x2C: dItem_BAIT_BAG_e
         0x00,
         0x28,
         0x28,
@@ -8413,49 +8413,49 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x38: SWORD
+        // 0x38: dItem_SWORD_e
         0x1E,
         0x32,
         0x1E,
         0x10,
     },
     {
-        // 0x39: MASTER_SWORD
+        // 0x39: dItem_MASTER_SWORD_1_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x3A: LV3_SWORD
+        // 0x3A: dItem_MASTER_SWORD_2_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x3B: SHIELD
+        // 0x3B: dItem_SHIELD_e
         0x28,
         0x3C,
         0x28,
         0x10,
     },
     {
-        // 0x3C: MIRROR_SHIELD
+        // 0x3C: dItem_MIRROR_SHIELD_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x3D: DROPPED_SWORD
+        // 0x3D: dItem_DROPPED_SWORD_e
         0x00,
         0x32,
         0x1E,
         0x10,
     },
     {
-        // 0x3E: MASTER_SWORD_EX
+        // 0x3E: dItem_MASTER_SWORD_3_e
         0x00,
         0x00,
         0x00,
@@ -8483,14 +8483,14 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x42: PIRATES_OMAMORI
+        // 0x42: dItem_PIRATES_CHARM_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0x43: HEROS_OMAMORI
+        // 0x43: dItem_HEROS_CHARM_e
         0x00,
         0x00,
         0x00,
@@ -8504,21 +8504,21 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x45: SKULL_NECKLACE
+        // 0x45: dItem_SKULL_NECKLACE_e
         0x28,
         0x5A,
         0x32,
         0x00,
     },
     {
-        // 0x46: BOKOBABA_SEED
+        // 0x46: dItem_BOKOBABA_SEED_e
         0x1E,
         0x50,
         0x28,
         0x00,
     },
     {
-        // 0x47: GOLDEN_FEATHER
+        // 0x47: dItem_GOLDEN_FEATHER_e
         0x1E,
         0x5A,
         0x28,
@@ -8532,21 +8532,21 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x49: RED_JELLY
+        // 0x49: dItem_RED_JELLY_e
         0x19,
         0x46,
         0x28,
         0x00,
     },
     {
-        // 0x4A: GREEN_JELLY
+        // 0x4A: dItem_GREEN_JELLY_e
         0x19,
         0x46,
         0x28,
         0x00,
     },
     {
-        // 0x4B: BLUE_JELLY
+        // 0x4B: dItem_BLUE_JELLY_e
         0x19,
         0x46,
         0x28,
@@ -8581,28 +8581,28 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x50: EMPTY_BOTTLE
+        // 0x50: dItem_EMPTY_BOTTLE_e
         0x00,
         0x28,
         0x28,
         0x00,
     },
     {
-        // 0x51: RED_BOTTLE
+        // 0x51: dItem_RED_POTION_e
         0x00,
         0x28,
         0x28,
         0x00,
     },
     {
-        // 0x52: GREEN_BOTTLE
+        // 0x52: dItem_GREEN_POTION_e
         0x00,
         0x28,
         0x28,
         0x00,
     },
     {
-        // 0x53: BLUE_BOTTLE
+        // 0x53: dItem_BLUE_POTION_e
         0x00,
         0x28,
         0x28,
@@ -8623,28 +8623,28 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x56: BIN_IN_WATER
+        // 0x56: dItem_WATER_BOTTLE_e
         0x00,
         0x28,
         0x28,
         0x00,
     },
     {
-        // 0x57: FAIRY_BOTTLE
+        // 0x57: dItem_FAIRY_BOTTLE_e
         0x00,
         0x28,
         0x28,
         0x00,
     },
     {
-        // 0x58: FIREFLY_BOTTLE
+        // 0x58: dItem_FIREFLY_BOTTLE_e
         0x00,
         0x28,
         0x28,
         0x00,
     },
     {
-        // 0x59: FWATER_BOTTLE
+        // 0x59: dItem_FOREST_WATER_e
         0x00,
         0x28,
         0x28,
@@ -8931,7 +8931,7 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0x82: BIRD_ESA_5
+        // 0x82: dItem_BIRD_BAIT_5_e
         0x19,
         0x37,
         0x23,
@@ -9218,56 +9218,56 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0xAB: MAX_RUPEE_UP1
+        // 0xAB: dItem_MAX_RUPEE_UP1_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xAC: MAX_RUPEE_UP2
+        // 0xAC: dItem_MAX_RUPEE_UP2_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xAD: MAX_BOMB_UP1
+        // 0xAD: dItem_MAX_BOMB_UP1_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xAE: MAX_BOMB_UP2
+        // 0xAE: dItem_MAX_BOMB_UP2_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xAF: MAX_ARROW_UP1
+        // 0xAF: dItem_MAX_ARROW_UP1_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xB0: MAX_ARROW_UP2
+        // 0xB0: dItem_MAX_ARROW_UP2_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xB1: MAGIC_POWER
+        // 0xB1: dItem_MAGIC_POWER_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xB2: MAX_MP_UP1
+        // 0xB2: dItem_MAX_MP_UP1_e
         0x00,
         0x00,
         0x00,
@@ -9358,448 +9358,448 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
         0x00,
     },
     {
-        // 0xBF: COLLECT_MAP_64
+        // 0xBF: dItem_COLLECT_MAP_64_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC0: COLLECT_MAP_63
+        // 0xC0: dItem_COLLECT_MAP_63_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC1: COLLECT_MAP_62
+        // 0xC1: dItem_COLLECT_MAP_62_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC2: COLLECT_MAP_61
+        // 0xC2: dItem_COLLECT_MAP_61_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC3: COLLECT_MAP_60
+        // 0xC3: dItem_COLLECT_MAP_60_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC4: COLLECT_MAP_59
+        // 0xC4: dItem_COLLECT_MAP_59_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC5: COLLECT_MAP_58
+        // 0xC5: dItem_COLLECT_MAP_58_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC6: COLLECT_MAP_57
+        // 0xC6: dItem_COLLECT_MAP_57_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC7: COLLECT_MAP_56
+        // 0xC7: dItem_COLLECT_MAP_56_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC8: COLLECT_MAP_55
+        // 0xC8: dItem_COLLECT_MAP_55_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xC9: COLLECT_MAP_54
+        // 0xC9: dItem_COLLECT_MAP_54_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xCA: COLLECT_MAP_53
+        // 0xCA: dItem_COLLECT_MAP_53_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xCB: COLLECT_MAP_52
+        // 0xCB: dItem_COLLECT_MAP_52_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xCC: COLLECT_MAP_51
+        // 0xCC: dItem_COLLECT_MAP_51_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xCD: COLLECT_MAP_50
+        // 0xCD: dItem_COLLECT_MAP_50_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xCE: COLLECT_MAP_49
+        // 0xCE: dItem_COLLECT_MAP_49_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xCF: COLLECT_MAP_48
+        // 0xCF: dItem_COLLECT_MAP_48_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD0: COLLECT_MAP_47
+        // 0xD0: dItem_COLLECT_MAP_47_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD1: COLLECT_MAP_46
+        // 0xD1: dItem_COLLECT_MAP_46_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD2: COLLECT_MAP_45
+        // 0xD2: dItem_COLLECT_MAP_45_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD3: COLLECT_MAP_44
+        // 0xD3: dItem_COLLECT_MAP_44_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD4: COLLECT_MAP_43
+        // 0xD4: dItem_COLLECT_MAP_43_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD5: COLLECT_MAP_42
+        // 0xD5: dItem_COLLECT_MAP_42_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD6: COLLECT_MAP_41
+        // 0xD6: dItem_COLLECT_MAP_41_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD7: COLLECT_MAP_40
+        // 0xD7: dItem_COLLECT_MAP_40_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD8: COLLECT_MAP_39
+        // 0xD8: dItem_COLLECT_MAP_39_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xD9: COLLECT_MAP_38
+        // 0xD9: dItem_COLLECT_MAP_38_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xDA: COLLECT_MAP_37
+        // 0xDA: dItem_COLLECT_MAP_37_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xDB: COLLECT_MAP_36
+        // 0xDB: dItem_COLLECT_MAP_36_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xDC: COLLECT_MAP_35
+        // 0xDC: dItem_COLLECT_MAP_35_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xDD: COLLECT_MAP_34
+        // 0xDD: dItem_COLLECT_MAP_34_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xDE: COLLECT_MAP_33
+        // 0xDE: dItem_COLLECT_MAP_33_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xDF: COLLECT_MAP_32
+        // 0xDF: dItem_COLLECT_MAP_32_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE0: COLLECT_MAP_31
+        // 0xE0: dItem_COLLECT_MAP_31_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE1: COLLECT_MAP_30
+        // 0xE1: dItem_COLLECT_MAP_30_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE2: COLLECT_MAP_29
+        // 0xE2: dItem_COLLECT_MAP_29_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE3: COLLECT_MAP_28
+        // 0xE3: dItem_COLLECT_MAP_28_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE4: COLLECT_MAP_27
+        // 0xE4: dItem_COLLECT_MAP_27_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE5: COLLECT_MAP_26
+        // 0xE5: dItem_COLLECT_MAP_26_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE6: COLLECT_MAP_25
+        // 0xE6: dItem_COLLECT_MAP_25_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE7: COLLECT_MAP_24
+        // 0xE7: dItem_COLLECT_MAP_24_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE8: COLLECT_MAP_23
+        // 0xE8: dItem_COLLECT_MAP_23_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xE9: COLLECT_MAP_22
+        // 0xE9: dItem_COLLECT_MAP_22_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xEA: COLLECT_MAP_21
+        // 0xEA: dItem_COLLECT_MAP_21_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xEB: COLLECT_MAP_20
+        // 0xEB: dItem_COLLECT_MAP_20_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xEC: COLLECT_MAP_19
+        // 0xEC: dItem_COLLECT_MAP_19_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xED: COLLECT_MAP_18
+        // 0xED: dItem_COLLECT_MAP_18_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xEE: COLLECT_MAP_17
+        // 0xEE: dItem_COLLECT_MAP_17_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xEF: COLLECT_MAP_16
+        // 0xEF: dItem_COLLECT_MAP_16_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF0: COLLECT_MAP_15
+        // 0xF0: dItem_COLLECT_MAP_15_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF1: COLLECT_MAP_14
+        // 0xF1: dItem_COLLECT_MAP_14_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF2: COLLECT_MAP_13
+        // 0xF2: dItem_COLLECT_MAP_13_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF3: COLLECT_MAP_12
+        // 0xF3: dItem_COLLECT_MAP_12_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF4: COLLECT_MAP_11
+        // 0xF4: dItem_COLLECT_MAP_11_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF5: COLLECT_MAP_10
+        // 0xF5: dItem_COLLECT_MAP_10_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF6: COLLECT_MAP_09
+        // 0xF6: dItem_COLLECT_MAP_09_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF7: COLLECT_MAP_08
+        // 0xF7: dItem_COLLECT_MAP_08_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF8: COLLECT_MAP_07
+        // 0xF8: dItem_COLLECT_MAP_07_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xF9: COLLECT_MAP_06
+        // 0xF9: dItem_COLLECT_MAP_06_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xFA: COLLECT_MAP_05
+        // 0xFA: dItem_COLLECT_MAP_05_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xFB: COLLECT_MAP_04
+        // 0xFB: dItem_COLLECT_MAP_04_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xFC: COLLECT_MAP_03
+        // 0xFC: dItem_COLLECT_MAP_03_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xFD: COLLECT_MAP_02
+        // 0xFD: dItem_COLLECT_MAP_02_e
         0x00,
         0x00,
         0x00,
         0x00,
     },
     {
-        // 0xFE: COLLECT_MAP_01
+        // 0xFE: dItem_COLLECT_MAP_01_e
         0x00,
         0x00,
         0x00,
@@ -9818,76 +9818,76 @@ dItem_data_item_info dItem_data::item_info[0x100] = {
 dItem_data_effect_info dItem_data::effect_info[] = {
     {
         // 0x00: dItem_HEART_e
-        0x0002,
+        dPa_name::ID_COMMON_0002,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x01: dItem_GREEN_RUPEE_e
-        0x0003,
+        dPa_name::ID_COMMON_0003,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x02: dItem_BLUE_RUPEE_e
-        0x0003,
+        dPa_name::ID_COMMON_0003,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x03: dItem_YELLOW_RUPEE_e
-        0x0003,
+        dPa_name::ID_COMMON_0003,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x04: dItem_RED_RUPEE_e
-        0x0003,
+        dPa_name::ID_COMMON_0003,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x05: dItem_PURPLE_RUPEE_e
-        0x0003,
+        dPa_name::ID_COMMON_0003,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x06: dItem_ORANGE_RUPEE_e
-        0x0002,
+        dPa_name::ID_COMMON_0002,
         dPa_name::ID_SCENE_END,
     },
     {
         // 0x07: dItem_HEART_PIECE_e
         dPa_name::ID_SCENE_END,
-        0x0293,
+        dPa_name::ID_COMMON_0293,
     },
     {
         // 0x08: dItem_HEART_CONTAINER_e
         dPa_name::ID_SCENE_END,
-        0x0293,
+        dPa_name::ID_COMMON_0293,
     },
     {
-        // 0x09: S_MAGIC
-        dPa_name::ID_SCENE_END,
-        dPa_name::ID_SCENE_END,
-    },
-    {
-        // 0x0A: L_MAGIC
+        // 0x09: dItem_SMALL_MAGIC_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x0B: BOMB_5
+        // 0x0A: dItem_LARGE_MAGIC_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x0C: BOMB_10
+        // 0x0B: dItem_BOMB_5_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x0D: BOMB_20
+        // 0x0C: dItem_BOMB_10_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x0E: BOMB_30
+        // 0x0D: dItem_BOMB_20_e
+        dPa_name::ID_SCENE_END,
+        dPa_name::ID_SCENE_END,
+    },
+    {
+        // 0x0E: dItem_BOMB_30_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9897,17 +9897,17 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x10: ARROW_10
+        // 0x10: dItem_ARROW_10_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x11: ARROW_20
+        // 0x11: dItem_ARROW_20_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x12: ARROW_30
+        // 0x12: dItem_ARROW_30_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9923,11 +9923,11 @@ dItem_data_effect_info dItem_data::effect_info[] = {
     },
     {
         // 0x15: dItem_SMALL_KEY_e
-        0x0003,
+        dPa_name::ID_COMMON_0003,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x16: RECOVER_FAIRY
+        // 0x16: dItem_RECOVER_FAIRY_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9947,7 +9947,7 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x1A: SUB_DUN_RUPEE
+        // 0x1A: dItem_SUB_DUN_RUPEE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -9997,7 +9997,7 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x24: EMONO_BAG
+        // 0x24: dItem_SPOILS_BAG_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10017,7 +10017,7 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x28: PWR_GROOVE
+        // 0x28: dItem_POWER_BRACELETS_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10037,7 +10037,7 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x2C: ESA_BAG
+        // 0x2C: dItem_BAIT_BAG_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10097,37 +10097,37 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x38: SWORD
+        // 0x38: dItem_SWORD_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x39: MASTER_SWORD
+        // 0x39: dItem_MASTER_SWORD_1_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x3A: LV3_SWORD
+        // 0x3A: dItem_MASTER_SWORD_2_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x3B: SHIELD
+        // 0x3B: dItem_SHIELD_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x3C: MIRROR_SHIELD
+        // 0x3C: dItem_MIRROR_SHIELD_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x3D: DROPPED_SWORD
+        // 0x3D: dItem_DROPPED_SWORD_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x3E: MASTER_SWORD_EX
+        // 0x3E: dItem_MASTER_SWORD_3_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10147,12 +10147,12 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x42: PIRATES_OMAMORI
+        // 0x42: dItem_PIRATES_CHARM_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x43: HEROS_OMAMORI
+        // 0x43: dItem_HEROS_CHARM_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10162,39 +10162,39 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x45: SKULL_NECKLACE
+        // 0x45: dItem_SKULL_NECKLACE_e
         dPa_name::ID_SCENE_END,
-        0x0293,
+        dPa_name::ID_COMMON_0293,
     },
     {
-        // 0x46: BOKOBABA_SEED
+        // 0x46: dItem_BOKOBABA_SEED_e
         dPa_name::ID_SCENE_END,
-        0x0293,
+        dPa_name::ID_COMMON_0293,
     },
     {
-        // 0x47: GOLDEN_FEATHER
+        // 0x47: dItem_GOLDEN_FEATHER_e
         dPa_name::ID_SCENE_END,
-        0x0293,
+        dPa_name::ID_COMMON_0293,
     },
     {
         // 0x48: BOKO_BELT
         dPa_name::ID_SCENE_END,
-        0x0293,
+        dPa_name::ID_COMMON_0293,
     },
     {
-        // 0x49: RED_JELLY
+        // 0x49: dItem_RED_JELLY_e
         dPa_name::ID_SCENE_END,
-        0x0293,
+        dPa_name::ID_COMMON_0293,
     },
     {
-        // 0x4A: GREEN_JELLY
+        // 0x4A: dItem_GREEN_JELLY_e
         dPa_name::ID_SCENE_END,
-        0x0293,
+        dPa_name::ID_COMMON_0293,
     },
     {
-        // 0x4B: BLUE_JELLY
+        // 0x4B: dItem_BLUE_JELLY_e
         dPa_name::ID_SCENE_END,
-        0x0293,
+        dPa_name::ID_COMMON_0293,
     },
     {
         // 0x4C: dItem_MAP_e
@@ -10217,22 +10217,22 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x50: EMPTY_BOTTLE
+        // 0x50: dItem_EMPTY_BOTTLE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x51: RED_BOTTLE
+        // 0x51: dItem_RED_POTION_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x52: GREEN_BOTTLE
+        // 0x52: dItem_GREEN_POTION_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x53: BLUE_BOTTLE
+        // 0x53: dItem_BLUE_POTION_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
@@ -10247,22 +10247,22 @@ dItem_data_effect_info dItem_data::effect_info[] = {
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x56: BIN_IN_WATER
+        // 0x56: dItem_WATER_BOTTLE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x57: FAIRY_BOTTLE
+        // 0x57: dItem_FAIRY_BOTTLE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x58: FIREFLY_BOTTLE
+        // 0x58: dItem_FIREFLY_BOTTLE_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },
     {
-        // 0x59: FWATER_BOTTLE
+        // 0x59: dItem_FOREST_WATER_e
         dPa_name::ID_SCENE_END,
         dPa_name::ID_SCENE_END,
     },

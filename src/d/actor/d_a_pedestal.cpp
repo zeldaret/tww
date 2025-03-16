@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_pedestal.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/res/res_hdai1.h"
 
@@ -47,7 +48,11 @@ BOOL daPds_c::CreateHeap() {
     mpBgW = new dBgW();
 
     if (mpBgW != NULL) {
-        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, HDAI1_DZB_HDAI), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
+        if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, HDAI1_DZB_HDAI), cBgW::MOVE_BG_e, &mMtx) == true) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
     }
 
     return FALSE;
@@ -305,7 +310,7 @@ BOOL daPds_c::actionMoveEvent(int) {
 
 /* 00000AEC-00000B40       .text initialEffectSet__Q210daPedestal7daPds_cFi */
 void daPds_c::initialEffectSet(int) {
-    mOctagonGlowCb.makeEmitter(dPa_name::ID_PEDESTAL_OCTAGON_GLOW, &current.pos, &shape_angle, NULL);
+    mOctagonGlowCb.makeEmitter(dPa_name::ID_SCENE_PEDESTAL_OCTAGON_GLOW, &current.pos, &shape_angle, NULL);
     initBrkAnm(0, true);
 }
 
@@ -433,12 +438,7 @@ void daPds_infiniteEcallBack_c::execute(JPABaseEmitter* emitter) {
     }
 
     if (mpAngle != NULL) {
-        JGeometry::TVec3<s16> rot;
-
-        rot.x = mpAngle->x;
-        rot.y = mpAngle->y;
-        rot.z = mpAngle->z;
-
+        JGeometry::TVec3<s16> rot(mpAngle->x, mpAngle->y, mpAngle->z);
         emitter->setGlobalRotation(rot);
     }
 }

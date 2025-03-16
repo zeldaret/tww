@@ -75,17 +75,17 @@ void daNpcMt_c::createInit() {
 }
 
 /* 00000DEC-00000F6C       .text _delete__9daNpcMt_cFv */
-BOOL daNpcMt_c::_delete() {
+bool daNpcMt_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000F6C-0000107C       .text _draw__9daNpcMt_cFv */
-BOOL daNpcMt_c::_draw() {
+bool daNpcMt_c::_draw() {
     /* Nonmatching */
 }
 
 /* 0000107C-000011D0       .text _execute__9daNpcMt_cFv */
-BOOL daNpcMt_c::_execute() {
+bool daNpcMt_c::_execute() {
     /* Nonmatching */
 }
 

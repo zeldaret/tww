@@ -17,11 +17,11 @@ public:
     void create_heap();
     void tg_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void wait_act_proc();
     void fade_out_retire_act_proc();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
     /* Place member variables here */

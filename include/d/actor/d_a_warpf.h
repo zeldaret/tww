@@ -6,12 +6,12 @@
 class daWarpf_c : public fopAc_ac_c {
 public:
     void CreateHeap();
-    BOOL _delete();
+    bool _delete();
     void checkEndDemo();
     void onEndDemo();
     void CreateInit();
     s32 _create();
-    BOOL _execute();
+    bool _execute();
     void eventOrder();
     void checkOrder();
     void demo_proc();
@@ -37,7 +37,7 @@ public:
     void setEndAnim();
     void set_se();
     void set_mtx();
-    BOOL _draw();
+    bool _draw();
 
 public:
     /* Place member variables here */

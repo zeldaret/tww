@@ -107,17 +107,17 @@ s32 daComing3::Act_c::_create() {
 }
 
 /* 00001C38-00001C68       .text _delete__Q29daComing35Act_cFv */
-BOOL daComing3::Act_c::_delete() {
+bool daComing3::Act_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00001C68-00001CA0       .text _execute__Q29daComing35Act_cFv */
-BOOL daComing3::Act_c::_execute() {
+bool daComing3::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001CA0-00001D14       .text _draw__Q29daComing35Act_cFv */
-BOOL daComing3::Act_c::_draw() {
+bool daComing3::Act_c::_draw() {
     /* Nonmatching */
 }
 

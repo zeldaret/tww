@@ -47,7 +47,7 @@ namespace daObjAjav {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void init_mtx();
         void set_tex();
         void set_co_offset();
@@ -58,8 +58,8 @@ namespace daObjAjav {
         void make_shot_rock();
         void make_hamon2(cXyz, float);
         void set_hamon(float);
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

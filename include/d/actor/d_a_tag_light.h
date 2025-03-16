@@ -41,7 +41,7 @@ namespace daTagLight {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void chk_sw() const;
         void chk_sch() const;
         void chk_light() const;
@@ -51,9 +51,9 @@ namespace daTagLight {
         void set_spot_mtx();
         void set_spot();
         void init_spot();
-        BOOL _execute();
+        bool _execute();
         void set_material(J3DMaterial*, unsigned char);
-        BOOL _draw();
+        bool _draw();
         
         static const f32 M_box_x_min;
         static const f32 M_box_x_max;

@@ -58,9 +58,9 @@ public:
     void dummy_action(void*);
     void RoomEffectSet();
     void RoomEffectDelete();
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     s32 _create();
     void CreateHeap();
 

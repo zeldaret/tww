@@ -70,17 +70,17 @@ s32 daGrid_c::_create() {
 }
 
 /* 800EAEAC-800EAF28       .text _delete__8daGrid_cFv */
-BOOL daGrid_c::_delete() {
+bool daGrid_c::_delete() {
     /* Nonmatching */
 }
 
 /* 800EAF28-800EB0EC       .text _execute__8daGrid_cFv */
-BOOL daGrid_c::_execute() {
+bool daGrid_c::_execute() {
     /* Nonmatching */
 }
 
 /* 800EB0EC-800EB328       .text _draw__8daGrid_cFv */
-BOOL daGrid_c::_draw() {
+bool daGrid_c::_draw() {
     /* Nonmatching */
 }
 

@@ -83,7 +83,7 @@ static s32 daObjDoguuD_create(void* i_this) {
     return ((daObjDoguuD_c*)i_this)->_create();
 }
 
-BOOL daObjDoguuD_c::_delete() {
+bool daObjDoguuD_c::_delete() {
     if (heap != NULL && mBgwRegistered == true)
         dComIfG_Bgsp()->Release(mpBgW);
 
@@ -96,7 +96,7 @@ static BOOL daObjDoguuD_Delete(void* i_this) {
     return ((daObjDoguuD_c*)i_this)->_delete();
 }
 
-BOOL daObjDoguuD_c::_draw() {
+bool daObjDoguuD_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
@@ -110,7 +110,7 @@ static BOOL daObjDoguuD_Draw(void* i_this) {
     return ((daObjDoguuD_c*)i_this)->_draw();
 }
 
-BOOL daObjDoguuD_c::_execute() {
+bool daObjDoguuD_c::_execute() {
     if (demoActorID != 0) {
         dDemo_actor_c* demoAc = dComIfGp_demo_getActor(demoActorID);
         if (demoAc != NULL && demoAc->checkEnable(0x10)) {

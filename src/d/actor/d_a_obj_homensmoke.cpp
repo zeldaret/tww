@@ -84,7 +84,7 @@ namespace daObjHomensmoke {
                 cMtx_multVec(mMtx, &norse_offsetS, &mSmokePos);
             }
             
-            JPABaseEmitter* smokeEmitter = dComIfGp_particle_setToon(0x2027, &mSmokePos, NULL, NULL, 0xFF, &mSmokeCb, fopAcM_GetRoomNo(this));
+            JPABaseEmitter* smokeEmitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &mSmokePos, NULL, NULL, 0xFF, &mSmokeCb, fopAcM_GetRoomNo(this));
             if (smokeEmitter) {
                 static f32 rate_table[2] = {1.0f, 0.5f};
                 f32 rate = rate_table[mType & 1];
@@ -100,7 +100,7 @@ namespace daObjHomensmoke {
                 smokeEmitter->setGlobalParticleScale(scale);
             }
             
-            JPABaseEmitter* rubbleEmitter = dComIfGp_particle_setToon(0x81B1, &current.pos);
+            JPABaseEmitter* rubbleEmitter = dComIfGp_particle_setToon(dPa_name::ID_SCENE_81B1, &current.pos);
             if (rubbleEmitter) {
                 rubbleEmitter->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
                 if (mType == 1) {

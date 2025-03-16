@@ -35,13 +35,13 @@ namespace daObjVyasi {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void set_mtx();
         void calc_dif_angle();
         void quaternion_main();
         void leaf_scale_main();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* 0x0290 */ u8 m0290[0x0294 - 0x0290];

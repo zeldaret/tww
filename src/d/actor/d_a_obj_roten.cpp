@@ -14,7 +14,7 @@ daObj_Roten_HIO_c l_HIO;
 
 /* 000000EC-00000118       .text __ct__17daObj_Roten_HIO_cFv */
 daObj_Roten_HIO_c::daObj_Roten_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     field_0x08 = 0.0f;
     field_0x0C = 0;
 }
@@ -134,7 +134,7 @@ static s32 daObj_RotenCreate(void* i_actor) {
     return static_cast<daObj_Roten_c*>(i_actor)->_create();
 }
 
-BOOL daObj_Roten_c::_delete() {
+bool daObj_Roten_c::_delete() {
     if(field_0x2D1 == 0) {
         dComIfG_Bgsp()->Release(mpBgW);
         dComIfG_resDelete(&mPhs, daObj_Roten_c::M_arcname);
@@ -148,7 +148,7 @@ static BOOL daObj_RotenDelete(void* i_actor) {
     return static_cast<daObj_Roten_c*>(i_actor)->_delete();
 }
 
-BOOL daObj_Roten_c::_execute() {
+bool daObj_Roten_c::_execute() {
     set_mtx();
     mpBgW->Move();
 
@@ -160,7 +160,7 @@ static BOOL daObj_RotenExecute(void* i_actor) {
     return static_cast<daObj_Roten_c*>(i_actor)->_execute();
 }
 
-BOOL daObj_Roten_c::_draw() {
+bool daObj_Roten_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);

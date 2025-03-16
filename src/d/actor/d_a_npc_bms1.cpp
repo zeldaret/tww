@@ -202,17 +202,17 @@ void daNpc_Bms1_c::demo_end_init() {
 }
 
 /* 000030B0-00003314       .text _draw__12daNpc_Bms1_cFv */
-BOOL daNpc_Bms1_c::_draw() {
+bool daNpc_Bms1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00003314-00003474       .text _execute__12daNpc_Bms1_cFv */
-BOOL daNpc_Bms1_c::_execute() {
+bool daNpc_Bms1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00003474-00003514       .text _delete__12daNpc_Bms1_cFv */
-BOOL daNpc_Bms1_c::_delete() {
+bool daNpc_Bms1_c::_delete() {
     /* Nonmatching */
 }
 

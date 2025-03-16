@@ -218,11 +218,15 @@ s32 daSwhit0_c::DemoProc() {
         "WAIT",
         "CHANGE"
     };
+    enum {
+        ACT_WAIT,
+        ACT_CHANGE,
+    };
 
     if (dComIfGp_evmng_getIsAddvance(mStaffId))
     {
         switch(dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0)) {
-            case 1:
+            case ACT_CHANGE:
                 dComIfGs_onSwitch(getSwNo(), fopAcM_GetRoomNo(this));
                 onFlag(0x01);
 

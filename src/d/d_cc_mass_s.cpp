@@ -6,6 +6,7 @@
 #include "d/d_cc_mass_s.h"
 #include "d/d_cc_d.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "SSystem/SComponent/c_bg_s.h"
 #include "SSystem/SComponent/c_math.h"
 #include "f_op/f_op_actor.h"
 
@@ -19,10 +20,10 @@ void dCcMassS_Mng::Ct() {
     mFlag = 0;
     mResultCam = 0;
     mCamTopPos.x = 0.0f;
-    mCamTopPos.y = -1e+9f;
+    mCamTopPos.y = C_BG_MIN_HEIGHT;
     mCamTopPos.z = 0.0f;
     mCamBottomPos.x = 0.0f;
-    mCamBottomPos.y = -1e+9f;
+    mCamBottomPos.y = C_BG_MIN_HEIGHT;
     mCamBottomPos.z = 0.0f;
     Clear();
 }
@@ -70,13 +71,13 @@ void dCcMassS_Mng::Prepare() {
         mDivideArea.CalcDivideInfo(&mDivideInfo, mCpsAttr.GetWorkAab(), 0);
     }
     mCamTopPos.x = 0.0f;
-    mCamTopPos.y = -1e+9f;
+    mCamTopPos.y = C_BG_MIN_HEIGHT;
     mCamTopPos.z = 0.0f;
-    mCamTopDist = 1e+9f;
+    mCamTopDist = C_BG_MAX_HEIGHT;
     mCamBottomPos.x = 0.0f;
-    mCamBottomPos.y = -1e+9f;
+    mCamBottomPos.y = C_BG_MIN_HEIGHT;
     mCamBottomPos.z = 0.0f;
-    mCamBottomDist = 1e+9f;
+    mCamBottomDist = C_BG_MAX_HEIGHT;
 }
 
 /* 800ACCB8-800AD17C       .text Chk__12dCcMassS_MngFP4cXyzPP10fopAc_ac_cP15dCcMassS_HitInf */

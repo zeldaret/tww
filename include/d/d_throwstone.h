@@ -8,8 +8,8 @@ class daThrowstone_c : public fopAc_ac_c {
 public:
     BOOL CreateHeap();
     inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _execute();
+    inline bool _delete();
+    inline bool _execute();
     inline bool _draw();
 
     static const char M_arcname[5];

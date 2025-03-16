@@ -7,6 +7,7 @@
 #include "JSystem/JStudio/JStudio/fvb-data.h"
 #include "JSystem/JUtility/JUTException.h"
 #include "dolphin/types.h"
+#include "algorithm.h"
 #include "string.h"
 
 namespace JStudio {
@@ -17,13 +18,12 @@ TObject::~TObject() {}
 
 /* 802739AC-80273BD0       .text prepare__Q37JStudio3fvb7TObjectFRCQ47JStudio3fvb4data13TParse_TBlockPQ37JStudio3fvb8TControl */
 void TObject::prepare(const data::TParse_TBlock& rBlock, TControl* pControl) {
-    /* Nonmatching */
-    ASSERT(pfv_ != 0);
-
-    ASSERT(pControl != 0);
-    TFunctionValueAttributeSet set = pfv_->getAttributeSet();
-    const void* pNext = rBlock.getNext();
-    const void* pData = rBlock.getContent();
+    /* Nonmatching - regalloc */
+    TFunctionValueAttributeSet_const set = pfv_->getAttributeSet();
+    const void* pNext;
+    const void* pData;
+    pNext = rBlock.getNext();
+    pData = rBlock.getContent();
     while (pData < pNext) {
         data::TParse_TParagraph para(pData);
         data::TParse_TParagraph::TData dat;
@@ -31,136 +31,128 @@ void TObject::prepare(const data::TParse_TBlock& rBlock, TControl* pControl) {
         u32 u32Type = dat.u32Type;
         u32 u32Size = dat.u32Size;
         const void* pContent = dat.pContent;
+        TFunctionValueAttribute_range* pfvaRange = set.range_get();
+        TFunctionValueAttribute_refer* referGet;
+        TFunctionValueAttribute_interpolate* pfvaInterpolate = set.interpolate_get();
+
         switch (u32Type) {
         case 0:
-            pfv_->prepare();
-            return;
-        case 1:
+            goto prepare_end;
+        case 1: {
             prepare_data_(dat, pControl);
-            break;
+        } break;
         case 0x10: {
-            JUT_EXPECT(u32Size >= 4);
-            ASSERT(pContent != 0);
-            TFunctionValueAttribute_refer* pfvaRefer = set.refer_get();
-            JUT_EXPECT(pfvaRefer != NULL);
-            if (pfvaRefer == NULL) {
-                JUTWarn w;
-                w << "invalid paragraph";
-            } else {
-                JGadget::TVector_pointer<TFunctionValue*>& rCnt = pfvaRefer->refer_referContainer();
-                data::TParse_TParagraph::TData** pBegin =
-                    (data::TParse_TParagraph::TData**)rCnt.mBegin;
-                // todo: these definitely use a different struct
-                for (data::TParse_TParagraph::TData* i = *pBegin; i != NULL; i = *pBegin) {
-                    TObject* pObject = pControl->getObject(pContent, i->u32Size);
-                    if (pObject == NULL) {
-                        JUTWarn w;
-                        w << "object not found by ID";
-                    } else {
-                        TFunctionValue* const& rfv = pObject->referFunctionValue();
-                        rCnt.push_back(rfv);
-                    }
-                    *pBegin += align_roundUp(i->u32Size, 4);
+            referGet = set.refer_get();
+
+            if (!referGet) {
+                break;
+            }
+
+            JGadget::TVector_pointer<TFunctionValue*>& rCnt = referGet->refer_referContainer();
+
+            typedef struct {
+                u32 length;
+                const u8 data[0];
+            } unkDataHeader;
+
+            typedef struct {
+                u32 count;
+                unkDataHeader dataArray[0];
+            } unkDataArray;
+
+            const unkDataArray* i = static_cast<const unkDataArray*>(pContent);
+            u32 dataCount = i->count;
+            const unkDataHeader* d = i->dataArray;
+
+            for (; dataCount != 0; dataCount--) {
+                u32 length = d->length;
+
+                TObject* pObject = pControl->getObject(&d->data, length);
+
+                if (pObject) {
+                    TFunctionValue* rfv = pObject->referFunctionValue();
+                    rCnt.push_back(rfv);
                 }
+
+#ifdef __MWERKS__ // clang-format off
+                (const u8*)d += align_roundUp(length, sizeof(u32)) + sizeof(u32);
+#else
+                d = (const unkDataHeader*)(((const u8*)d) + align_roundUp(length, sizeof(u32)) + sizeof(u32));
+#endif // clang-format on
             }
         } break;
         case 0x11: {
-            JUT_EXPECT(u32Size >= 4);
-            ASSERT(pContent != 0);
             TFunctionValueAttribute_refer* pfvaRefer = set.refer_get();
-            JUT_EXPECT(pfvaRefer != NULL);
-            if (pfvaRefer == NULL) {
-                JUTWarn w;
-                w << "invalid paragraph";
-            } else {
-                JGadget::TVector_pointer<TFunctionValue*>& rCnt = pfvaRefer->refer_referContainer();
-                data::TParse_TParagraph::TData** pBegin =
-                    (data::TParse_TParagraph::TData**)rCnt.mBegin;
-                for (data::TParse_TParagraph::TData* i = *pBegin; i != NULL; i = *pBegin) {
-                    TObject* pObject = pControl->getObject_index(u32Size);
-                    if (pObject == NULL) {
-                        JUTWarn w;
-                        w << "object not found by index : " << u32Size;
-                    } else {
-                        TFunctionValue* const& rfv = pObject->referFunctionValue();
-                        rCnt.push_back(rfv);
-                    }
-                    *pBegin += align_roundUp(i->u32Size, 4);
+
+            if (!pfvaRefer) {
+                break;
+            }
+
+            JGadget::TVector_pointer<TFunctionValue*>& rCnt = pfvaRefer->refer_referContainer();
+
+            const u32* i = static_cast<const u32*>(pContent);
+            u32 ii = *i;
+
+            for (; i++, ii != 0; ii--) {
+                u32 length = *i;
+                TObject* pObject = pControl->getObject_index(length);
+                if (pObject) {
+                    TFunctionValue* rfv = pObject->referFunctionValue();
+                    rCnt.push_back(rfv);
                 }
             }
         } break;
         case 0x12: {
-            JUT_EXPECT(u32Size == 8);
-            ASSERT(pContent != 0);
-            TFunctionValueAttribute_range* pfvaRange = set.range_get();
-            JUT_EXPECT(pfvaRange != NULL);
-            if (pfvaRange == NULL) {
-                JUTWarn w;
-                w << "invalid paragraph";
-            } else {
-                f64* arr = (f64*)pContent;
-                pfvaRange->range_set(arr[0], arr[1]);
+            if (!pfvaRange) {
+                break;
             }
+            const f32* arr = static_cast<const f32*>(pContent);
+
+            pfvaRange->range_set(arr[0], arr[1]);
         } break;
         case 0x13: {
-            JUT_EXPECT(u32Size == 4);
-            ASSERT(pContent != 0);
-            TFunctionValueAttribute_range* pfvaRange = set.range_get();
-            JUT_EXPECT(pfvaRange != NULL);
-            if (pfvaRange == NULL) {
-                JUTWarn w;
-                w << "invalid paragraph";
-            } else {
-                TFunctionValue::TEProgress prog = *(TFunctionValue::TEProgress*)pContent;
-                pfvaRange->range_setProgress(prog);
+            if (!pfvaRange) {
+                break;
             }
+
+            TFunctionValue::TEProgress prog = *static_cast<const TFunctionValue::TEProgress*>(pContent);
+            pfvaRange->range_setProgress(prog);
+
         } break;
         case 0x14: {
-            JUT_EXPECT(u32Size == 4);
-            ASSERT(pContent != 0);
-            TFunctionValueAttribute_range* pfvaRange = set.range_get();
-            JUT_EXPECT(pfvaRange != NULL);
-            if (pfvaRange == NULL) {
-                JUTWarn w;
-                w << "invalid paragraph";
-            } else {
-                TFunctionValue::TEAdjust adjust = *(TFunctionValue::TEAdjust*)pContent;
-                pfvaRange->range_setAdjust(adjust);
+            if (!pfvaRange) {
+                break;
             }
+
+            TFunctionValue::TEAdjust adjust = *static_cast<const TFunctionValue::TEAdjust*>(pContent);
+            pfvaRange->range_setAdjust(adjust);
+
         } break;
         case 0x15: {
-            JUT_EXPECT(u32Size == 4);
-            ASSERT(pContent != 0);
-            TFunctionValueAttribute_range* pfvaRange = set.range_get();
-            JUT_EXPECT(pfvaRange != NULL);
-            if (pfvaRange == NULL) {
-                JUTWarn w;
-                w << "invalid paragraph";
-            } else {
-                TFunctionValue::TEOutside* out = (TFunctionValue::TEOutside*)pContent;
-                pfvaRange->range_setOutside(out[0], out[1]);
+            if (!pfvaRange) {
+                break;
             }
+
+            TFunctionValue::TEOutside a = (TFunctionValue::TEOutside)(static_cast<const u16*>(pContent))[0];
+            TFunctionValue::TEOutside b = (TFunctionValue::TEOutside)(static_cast<const u16*>(pContent))[1];
+
+            pfvaRange->range_setOutside(a, b);
+
         } break;
         case 0x16: {
-            JUT_EXPECT(u32Size == 4);
-            ASSERT(pContent != 0);
-            TFunctionValueAttribute_interpolate* pfvaInterpolate = set.interpolate_get();
-            JUT_EXPECT(pfvaInterpolate != NULL);
-            if (pfvaInterpolate == NULL) {
-                JUTWarn w;
-                w << "invalid paragraph";
-            } else {
-                TFunctionValue::TEInterpolate interp = *(TFunctionValue::TEInterpolate*)pContent;
-                pfvaInterpolate->interpolate_set(interp);
+            if (!pfvaInterpolate) {
+                break;
             }
+
+            TFunctionValue::TEInterpolate interp = *static_cast<const TFunctionValue::TEInterpolate*>(pContent);
+            pfvaInterpolate->interpolate_set(interp);
+
         } break;
-        default:
-            JUTWarn w;
-            w << "unknown paragraph : " << u32Type;
         }
-        ASSERT(pData != 0);
+        pData = dat.next;
     }
-    JUT_EXPECT(pData == pNext);
+
+prepare_end:
     pfv_->prepare();
 }
 
@@ -201,12 +193,20 @@ TFunctionValue_composite::TData getCompositeData_divide_(const void* arg1) {
     return TFunctionValue_composite::TData(*(f32*)arg1);
 }
 
-// TODO
-static data::CompositeOperation saCompositeOperation_[8];
+static const data::CompositeOperation saCompositeOperation_[data::COMPOSITE_ENUM_SIZE] = {
+    { NULL, NULL },                                                                   // COMPOSITE_NONE
+    { &TFunctionValue_composite::composite_raw, &getCompositeData_raw_ },             // COMPOSITE_RAW
+    { &TFunctionValue_composite::composite_index, &getCompositeData_index_ },         // COMPOSITE_IDX
+    { &TFunctionValue_composite::composite_parameter, &getCompositeData_parameter_ }, // COMPOSITE_PARAM
+    { &TFunctionValue_composite::composite_add, &getCompositeData_add_ },             // COMPOSITE_ADD
+    { &TFunctionValue_composite::composite_subtract, &getCompositeData_subtract_ },   // COMPOSITE_SUB
+    { &TFunctionValue_composite::composite_multiply, &getCompositeData_multiply_ },   // COMPOSITE_MUL
+    { &TFunctionValue_composite::composite_divide, &getCompositeData_divide_ },       // COMPOSITE_DIV
+};
 
 /* 80273C24-80273C38       .text getCompositeOperation___Q37JStudio3fvb17@unnamed@fvb_cpp@FQ47JStudio3fvb4data11TEComposite */
-data::CompositeOperation* getCompositeOperation_(data::TEComposite r3) {
-    return &saCompositeOperation_[r3*2];
+const data::CompositeOperation* getCompositeOperation_(data::TEComposite r3) {
+    return &saCompositeOperation_[r3];
 }
 
 }  // namespace
@@ -218,22 +218,20 @@ TObject_composite::TObject_composite(const data::TParse_TBlock& block) : TObject
 
 /* 80273CB8-80273D1C       .text prepare_data___Q37JStudio3fvb17TObject_compositeFRCQ57JStudio3fvb4data17TParse_TParagraph5TDataPQ37JStudio3fvb8TControl */
 void TObject_composite::prepare_data_(const data::TParse_TParagraph::TData& rData, TControl* control) {
-    /* Nonmatching */
-    ASSERT(rData.u32Type == data::PARAGRAPH_DATA);
+    typedef struct {
+        JStudio::fvb::data::TEComposite _00;
+        const void* _04;
+    } unkOperation;
 
     u32 u32Size = rData.u32Size;
-    JUT_EXPECT(u32Size == 8);
 
-    const TFunctionValue_composite* pContent = static_cast<const TFunctionValue_composite*>(rData.pContent);
-    ASSERT(pContent != NULL);
+    const void* pControl_ = rData.pContent;
+    const unkOperation* content = (const unkOperation*)(pControl_);
+    JStudio::fvb::data::TEComposite v = content->_00;
+    const data::CompositeOperation* res = getCompositeOperation_(v);
+    TFunctionValue_composite::GetCompositeFunc pfvaRange = res->mGetFunc;
 
-    data::CompositeOperation* ops = getCompositeOperation_(*(data::TEComposite*)pContent);
-    data::CompositeOperation pfn = ops[1];
-
-    ASSERT(pfn != NULL);
-
-    pfn(pContent->data);
-    fnValue.data_set((TFunctionValue_composite::CompositeFunc)*ops, pContent->data);
+    fnValue.data_set(res->mSetFunc, pfvaRange(&content->_04));
 }
 
 /* 80273D1C-80273D9C       .text __ct__Q37JStudio3fvb16TObject_constantFRCQ47JStudio3fvb4data13TParse_TBlock */
@@ -334,33 +332,52 @@ TControl::TControl() : pFactory(NULL) {}
 TControl::~TControl() {}
 
 /* 802740E8-80274134       .text appendObject__Q37JStudio3fvb8TControlFPQ37JStudio3fvb7TObject */
-void TControl::appendObject(TObject*) {
-    /* Nonmatching */
+void TControl::appendObject(TObject* pObject) {
+    ocObject_.Push_back(pObject);
 }
 
 /* 80274134-80274164       .text removeObject__Q37JStudio3fvb8TControlFPQ37JStudio3fvb7TObject */
-void TControl::removeObject(TObject*) {
-    /* Nonmatching */
+void TControl::removeObject(TObject* pObject) {
+    ocObject_.Erase(pObject);
 }
 
 /* 80274164-802741B4       .text destroyObject__Q37JStudio3fvb8TControlFPQ37JStudio3fvb7TObject */
-void TControl::destroyObject(TObject*) {
-    /* Nonmatching */
+void TControl::destroyObject(TObject* pObject) {
+    removeObject(pObject);
+    getFactory()->destroy(pObject);
 }
 
 /* 802741B4-80274218       .text destroyObject_all__Q37JStudio3fvb8TControlFv */
 void TControl::destroyObject_all() {
-    /* Nonmatching */
+    while (!ocObject_.empty()) {
+        destroyObject(&ocObject_.back());
+    }
 }
 
 /* 80274218-802742B8       .text getObject__Q37JStudio3fvb8TControlFPCvUl */
-TObject* TControl::getObject(const void*, u32) {
-    /* Nonmatching */
+TObject* TControl::getObject(const void* param_0, u32 param_1) {
+    /* Nonmatching - TPRObject_ID_equal copy issue */
+    JGadget::TLinkList<TObject, -12>::iterator begin = ocObject_.begin();
+    JGadget::TLinkList<TObject, -12>::iterator end = ocObject_.end();
+    JGadget::TLinkList<TObject, -12>::iterator local_50 = std::find_if(begin, end, object::TPRObject_ID_equal(param_0, param_1));
+    if ((local_50 != end) != false) {
+        return &*local_50;
+    }
+    return NULL;
 }
 
 /* 802742B8-802742FC       .text getObject_index__Q37JStudio3fvb8TControlFUl */
-TObject* TControl::getObject_index(u32) {
-    /* Nonmatching */
+TObject* TControl::getObject_index(u32 idx) {
+    if (idx >= ocObject_.size()) {
+        return NULL;
+    }
+
+    JGadget::TLinkList<TObject, -12>::iterator begin(ocObject_.begin());
+    while (idx != 0) {
+        begin++;
+        idx--;
+    }
+    return &*begin;
 }
 
 /* 802742FC-80274344       .text __dt__Q37JStudio3fvb8TFactoryFv */

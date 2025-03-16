@@ -138,9 +138,9 @@ public:
     void talk01();
     void ht_tact01();
     void wait_action(void*);
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     s32 _create();
     void CreateHeap();
 

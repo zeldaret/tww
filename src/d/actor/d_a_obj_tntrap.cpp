@@ -62,7 +62,7 @@ s32 daObjTnTrap_c::_create() {
 }
 
 /* 00000F8C-00001050       .text _delete__13daObjTnTrap_cFv */
-BOOL daObjTnTrap_c::_delete() {
+bool daObjTnTrap_c::_delete() {
     /* Nonmatching */
 }
 
@@ -137,12 +137,12 @@ void daObjTnTrap_c::setup_action(int) {
 }
 
 /* 00001AE4-00001BE8       .text _execute__13daObjTnTrap_cFv */
-BOOL daObjTnTrap_c::_execute() {
+bool daObjTnTrap_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001BE8-00001BF0       .text _draw__13daObjTnTrap_cFv */
-BOOL daObjTnTrap_c::_draw() {
+bool daObjTnTrap_c::_draw() {
     /* Nonmatching */
 }
 

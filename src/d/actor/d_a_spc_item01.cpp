@@ -77,7 +77,7 @@ BOOL daSpcItem01_c::_delete() {
 s32 daSpcItem01_c::_create() {
     fopAcM_SetupActor(this, daSpcItem01_c);
     m_itemNo = daSpcItem01_prm::getItemNo(this);
-    if (m_itemNo == SHIELD && dComIfGs_isEventBit(0xE20)) {
+    if (m_itemNo == dItem_SHIELD_e && dComIfGs_isEventBit(0xE20)) {
         setLoadError();
         return cPhs_ERROR_e;
     }
@@ -114,7 +114,7 @@ BOOL daSpcItem01_c::CreateInit() {
     field_0x644 = daSpcItem01_prm::getFlag(this);
     fopAcM_SetGravity(this, -4.0f);
     switch ((s8)m_itemNo) {
-    case SHIELD:
+    case dItem_SHIELD_e:
         scale.x = 1.5f;
         scale.y = 1.5f;
         scale.z = 1.5f;
@@ -146,7 +146,7 @@ BOOL daSpcItem01_c::_execute() {
 /* 8015DFE8-8015E070       .text set_effect__13daSpcItem01_cFv */
 void daSpcItem01_c::set_effect() {
     if (cLib_checkBit(field_0x644, (u16)0x01) && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != BOKO_BELT) {
-        dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos, (u8)0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos);
     }
 }
 
@@ -173,7 +173,7 @@ void daSpcItem01_c::move() {
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     mAcch.CrrPos(*dComIfG_Bgsp());
     switch (m_itemNo) {
-    case SHIELD:
+    case dItem_SHIELD_e:
         break;
     case dItem_JOY_PENDANT_e:
         if (mAcch.ChkGroundLanding()) {

@@ -64,7 +64,7 @@ s32 fopAc_Draw(void* pProc) {
     return ret;
 }
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
 /* 8002362C-80023BDC       .text fopAc_Execute__FPv */

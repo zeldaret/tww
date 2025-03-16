@@ -7,7 +7,7 @@
 
 class daLbridge_c : public fopAc_ac_c {
 public:
-    inline BOOL _delete();
+    inline bool _delete();
 
     BOOL CreateHeap();
     void CreateInit();

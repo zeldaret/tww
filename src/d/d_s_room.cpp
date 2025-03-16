@@ -13,7 +13,6 @@
 #include "d/d_map.h"
 #include "d/d_procname.h"
 #include "d/d_stage.h"
-#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_npc_md.h"
 #include "m_Do/m_Do_dvd_thread.h"
@@ -309,15 +308,14 @@ scene_method_class l_dScnRoom_Method = {
 };
 
 scene_process_profile_definition g_profile_ROOM_SCENE = {
-    fpcLy_CURRENT_e,
-    0,
-    fpcPi_CURRENT_e,
-    PROC_ROOM_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(room_of_scene_class),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnRoom_Method,
-    NULL,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ROOM_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(room_of_scene_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnRoom_Method,
 };

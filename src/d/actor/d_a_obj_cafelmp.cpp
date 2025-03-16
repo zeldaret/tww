@@ -61,18 +61,18 @@ s32 daObjCafelmp_c::_create() {
     return ret;
 }
 
-BOOL daObjCafelmp_c::_delete() {
+bool daObjCafelmp_c::_delete() {
     dComIfG_resDelete(&mPhs, "Cafelmp");
     return true;
 }
 
-BOOL daObjCafelmp_c::_execute() {
+bool daObjCafelmp_c::_execute() {
     current.angle.y += 0xda;
     set_mtx();
     return true;
 }
 
-BOOL daObjCafelmp_c::_draw() {
+bool daObjCafelmp_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();

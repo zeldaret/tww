@@ -19,7 +19,7 @@ void daPy_py_c::changePlayer(fopAc_ac_c* newPlayer) {
     }
     dComIfGp_setPlayer(0, newPlayer);
     dComIfGp_getCamera(0)->mCamera.mpPlayerActor = newPlayer;
-    dComIfGp_getAttention().mFlags |= 0x80;
+    dComIfGp_att_ChangeOwner();
 }
 
 /* 80102940-80102B84       .text objWindHitCheck__9daPy_py_cFP8dCcD_Cyl */

@@ -4,6 +4,8 @@
 #include "dolphin/os/OSTime.h"
 
 namespace JASystem {
+    class TChannel;
+
     namespace DSPInterface {
         class DSPBuffer;
     }
@@ -38,28 +40,35 @@ namespace JASystem {
         static int getNumBreak();
 
         u8 getNumber() { return mNumber; }
+        u8 getPriority() { return mPriority; }
+        void setPriority(u8 priority) { mPriority = priority; }
+        u16 getPriorityTime() { return mPriorityTime; }
+        void setPriorityTime(u16 time) { mPriorityTime = time; }
+        u16 getCBInterval() { return mCBInterval; }
+        void setCBInterval(u16 interval) { mCBInterval = interval; }
+        void decCBInterval() { mCBInterval--; }
+        TChannel* getLogicalChannel() {
+            if (mCallback != NULL) {
+                return (TChannel*)field_0x8; // ?? is this userdata?
+            } else {
+                return NULL;
+            }
+        }
+
         // TODO: inlines
         void checkSign(u32) {}
         void isFree() {}
-        void getPriority() {}
         void getStatus() {}
-        void getCBInterval() {}
-        void decCBInterval() {}
-        void getPriorityTime() {}
-        void setCBInterval(u16) {}
-        void setPriorityTime(u16) {}
-        void setPriority(u8) {}
-        void getLogicalChannel() {}
         void forceStop(TDSPChannel*) {}
         void release(TDSPChannel*, u32) {}
 
         /* 0x00 */ u8 mNumber;
         /* 0x01 */ u8 field_0x1;
         /* 0x02 */ u8 field_0x2;
-        /* 0x03 */ u8 field_0x3;
-        /* 0x04 */ u16 field_0x4;
-        /* 0x06 */ u16 field_0x6;
-        /* 0x08 */ int field_0x8;
+        /* 0x03 */ u8 mPriority;
+        /* 0x04 */ u16 mPriorityTime;
+        /* 0x06 */ u16 mCBInterval;
+        /* 0x08 */ u32 field_0x8;
         /* 0x0C */ DSPInterface::DSPBuffer* field_0xc;
         /* 0x10 */ int (*mCallback)(TDSPChannel*, u32);
 

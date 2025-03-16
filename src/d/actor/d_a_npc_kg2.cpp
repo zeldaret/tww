@@ -163,17 +163,17 @@ s32 daNpc_Kg2_c::_create() {
 }
 
 /* 00002B6C-00002BFC       .text _delete__11daNpc_Kg2_cFv */
-BOOL daNpc_Kg2_c::_delete() {
+bool daNpc_Kg2_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00002BFC-00002D14       .text _execute__11daNpc_Kg2_cFv */
-BOOL daNpc_Kg2_c::_execute() {
+bool daNpc_Kg2_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002D14-00002E74       .text _draw__11daNpc_Kg2_cFv */
-BOOL daNpc_Kg2_c::_draw() {
+bool daNpc_Kg2_c::_draw() {
     /* Nonmatching */
 }
 

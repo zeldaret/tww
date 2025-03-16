@@ -272,7 +272,7 @@ s32 daObjTapestry_c::_create() {
 }
 
 /* 00005560-00005628       .text _delete__15daObjTapestry_cFv */
-BOOL daObjTapestry_c::_delete() {
+bool daObjTapestry_c::_delete() {
     /* Nonmatching */
 }
 
@@ -307,12 +307,12 @@ void daObjTapestry_c::setup_action(int) {
 }
 
 /* 00005B30-00005BD0       .text _execute__15daObjTapestry_cFv */
-BOOL daObjTapestry_c::_execute() {
+bool daObjTapestry_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00005BD0-00005C44       .text _draw__15daObjTapestry_cFv */
-BOOL daObjTapestry_c::_draw() {
+bool daObjTapestry_c::_draw() {
     /* Nonmatching */
 }
 

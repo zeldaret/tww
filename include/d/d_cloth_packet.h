@@ -80,6 +80,7 @@ private:
     /* 0xF6 */ s16 mRotateY;
     /* 0xF8 */ u8 mCurArr;
 }; // Size: 0xFC
+dCloth_packet_c* dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
 
 class dCloth_packetXlu_c : public dCloth_packet_c {
     virtual void init();
@@ -89,6 +90,7 @@ class dCloth_packetXlu_c : public dCloth_packet_c {
     virtual void TexObjLoad();
     virtual void TevSetting();
 };
+dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
 
 class dClothVobj03_c : public dCloth_packet_c {
     virtual void init();
@@ -149,7 +151,5 @@ public:
     static const s32 cloth_counter;
 };
 dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
-
-dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
 
 #endif /* D_A_CLOTH_PACKET_H */

@@ -32,7 +32,7 @@ s32 daObjLight::Act_c::_create() {
 }
 
 /* 000008C4-00000964       .text _delete__Q210daObjLight5Act_cFv */
-BOOL daObjLight::Act_c::_delete() {
+bool daObjLight::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -92,12 +92,12 @@ void daObjLight::Act_c::control_treasure() {
 }
 
 /* 00001398-00001400       .text _execute__Q210daObjLight5Act_cFv */
-BOOL daObjLight::Act_c::_execute() {
+bool daObjLight::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001400-00001528       .text _draw__Q210daObjLight5Act_cFv */
-BOOL daObjLight::Act_c::_draw() {
+bool daObjLight::Act_c::_draw() {
     /* Nonmatching */
 }
 

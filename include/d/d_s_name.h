@@ -23,7 +23,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 field_0x4;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u8 field_0x6;
     /* 0x07 */ u8 field_0x7;

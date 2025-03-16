@@ -14,7 +14,7 @@ const char daObj_Pbco_c::M_arcname[] = "Pbco";
 
 /* 000000EC-00000104       .text __ct__16daObj_Pbco_HIO_cFv */
 daObj_Pbco_HIO_c::daObj_Pbco_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
 }
 
 /* 00000104-0000018C       .text set_mtx__12daObj_Pbco_cFv */
@@ -81,7 +81,7 @@ static int daObj_PbcoCreate(void* i_this) {
     return static_cast<daObj_Pbco_c*>(i_this)->_create();
 }
 
-BOOL daObj_Pbco_c::_delete() {
+bool daObj_Pbco_c::_delete() {
     if (mpBgW != NULL) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
@@ -95,7 +95,7 @@ static BOOL daObj_PbcoDelete(void* i_this) {
     return TRUE;
 }
 
-BOOL daObj_Pbco_c::_execute() {
+bool daObj_Pbco_c::_execute() {
     if (mpBgW != NULL)
         mpBgW->Move();
     set_mtx();
@@ -107,7 +107,7 @@ static BOOL daObj_PbcoExecute(void* i_this) {
     return static_cast<daObj_Pbco_c*>(i_this)->_execute();
 }
 
-BOOL daObj_Pbco_c::_draw() {
+bool daObj_Pbco_c::_draw() {
     dKy_tevstr_c* pTevStr;
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &tevStr);
     g_env_light.setLightTevColorType(mpModel, pTevStr);

@@ -12,15 +12,15 @@ public:
     void getArg();
     void CreateInit();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void setCollision();
     void modeWaitInit();
     void modeWait();
     void smoke_set();
     void modeDeleteInit();
     void modeDelete();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
     /* Place member variables here */

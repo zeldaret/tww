@@ -62,7 +62,7 @@ s32 daObjHcbh_c::_create() {
 }
 
 /* 000011F4-000012F4       .text _delete__11daObjHcbh_cFv */
-BOOL daObjHcbh_c::_delete() {
+bool daObjHcbh_c::_delete() {
     /* Nonmatching */
 }
 
@@ -77,12 +77,12 @@ void daObjHcbh_c::fall_act_proc() {
 }
 
 /* 000017D8-000018D8       .text _execute__11daObjHcbh_cFv */
-BOOL daObjHcbh_c::_execute() {
+bool daObjHcbh_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000018D8-0000197C       .text _draw__11daObjHcbh_cFv */
-BOOL daObjHcbh_c::_draw() {
+bool daObjHcbh_c::_draw() {
     /* Nonmatching */
 }
 

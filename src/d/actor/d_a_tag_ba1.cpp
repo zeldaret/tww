@@ -37,17 +37,17 @@ void daTag_Ba1_c::createInit() {
 }
 
 /* 00000288-00000290       .text _draw__11daTag_Ba1_cFv */
-BOOL daTag_Ba1_c::_draw() {
+bool daTag_Ba1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000290-00000340       .text _execute__11daTag_Ba1_cFv */
-BOOL daTag_Ba1_c::_execute() {
+bool daTag_Ba1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000340-00000394       .text _delete__11daTag_Ba1_cFv */
-BOOL daTag_Ba1_c::_delete() {
+bool daTag_Ba1_c::_delete() {
     /* Nonmatching */
 }
 

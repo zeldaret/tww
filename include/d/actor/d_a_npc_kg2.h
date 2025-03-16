@@ -39,9 +39,9 @@ public:
     void wait_action(void*);
     void event_wait_action(void*);
     s32 _create();
-    BOOL _delete();
-    BOOL _execute();
-    BOOL _draw();
+    bool _delete();
+    bool _execute();
+    bool _draw();
 
     static void init() {
         canon_game_result = 0;

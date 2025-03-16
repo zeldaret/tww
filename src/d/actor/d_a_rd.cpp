@@ -120,8 +120,8 @@ fopAc_ac_c* daRd_c::_searchNearDeadRd(fopAc_ac_c* i_actor) {
 }
 
 /* 0000030C-00000358       .text nodeControl_CB__FP7J3DNodei */
-static BOOL nodeControl_CB(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daRd_c* i_this = reinterpret_cast<daRd_c*>(model->getUserArea());
         if (i_this) {
@@ -157,8 +157,8 @@ BOOL daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
 }
 
 /* 00000550-0000059C       .text nodeHeadControl_CB__FP7J3DNodei */
-static BOOL nodeHeadControl_CB(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeHeadControl_CB(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daRd_c* i_this = reinterpret_cast<daRd_c*>(model->getUserArea());
         if (i_this) {
@@ -623,7 +623,7 @@ bool daRd_c::checkTgHit() {
             cXyz* hitPos = mCyl.GetTgHitPosP();
             cc_at_check(this, &atInfo);
             if (mHitType == 1 || mHitType == 7 || mHitType == 8 || health <= 0) {
-                dComIfGp_particle_set(0x10, mCyl.GetTgHitPosP());
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, mCyl.GetTgHitPosP());
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, hitPos, &player->shape_angle, &scale);
                 if (health <= 0) {
@@ -1574,7 +1574,7 @@ bool daRd_c::_execute() {
         return true;
     }
     
-    fopAcM_setGbaName(this, MIRROR_SHIELD, 0x12, 0x30);
+    fopAcM_setGbaName(this, dItem_MIRROR_SHIELD_e, 0x12, 0x30);
     setIceCollision();
     if (mMode != MODE_SILENT_PRAY && mMode != MODE_DEATH && mMode != MODE_DAMAGE &&
         mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_CRY_WAIT)
@@ -1672,7 +1672,7 @@ void daRd_c::debugDraw() {
     spawnPos.y += 10.0f;
     cXyz pos = current.pos;
     pos.y += 10.0f;
-    (GXColor){0x00, 0xFF, 0x00, 0x80}; // Unused color, needed for the .rodata section to match.
+    GXColor unused = {0x00, 0xFF, 0x00, 0x80}; // Unused color, needed for the .rodata section to match.
     dLib_debugDrawFan(pos, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, (GXColor){0xFF, 0xFF, 0x00, 0x80});
     dLib_debugDrawFan(pos, shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, (GXColor){0xFF, 0x00, 0x00, 0x80});
     dLib_debugDrawFan(pos, shape_angle.y, l_HIO.m40, l_HIO.m34, (GXColor){0xFF, 0x00, 0xFF, 0x80});

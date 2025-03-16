@@ -13,7 +13,7 @@ struct daShopItem_c_m_data {
 class daShopItem_c : public daItemBase_c {
 public:
     inline int _create();
-    inline BOOL _delete();
+    inline bool _delete();
     void setTevType(int type) { mTevType = type; }
 
     char* getShopArcname();

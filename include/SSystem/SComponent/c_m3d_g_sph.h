@@ -45,7 +45,9 @@ public:
         cXyz temp;
         return cM3d_Cross_CylSph(cyl, this, &temp, out);
     }
-    void cross(const cM3dGTri*) const {}
+    bool cross(const cM3dGTri *param_1) const {
+        return cM3d_Cross_SphTri(this, param_1);
+    }
     const cXyz& GetC() const { return mCenter; }
     cXyz& GetC() { return mCenter; }
     const cXyz* GetCP() const { return &mCenter; }
@@ -57,10 +59,5 @@ public:
 };  // Size = 0x14
 
 STATIC_ASSERT(0x14 == sizeof(cM3dGSph));
-
-// additional symbols needed for cM3dGSph
-extern "C" {
-void Set__8cM3dGSphFRC4cXyzf(void);
-}
 
 #endif

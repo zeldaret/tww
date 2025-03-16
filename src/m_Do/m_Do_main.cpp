@@ -28,8 +28,6 @@
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
-class JUTGamePad;
-
 /* 800056E0-80005748       .text version_check__Fv */
 void version_check() {
     if (strcmp("05Sep2002", "05Sep2002") == 0 && strcmp("", "") == 0) {
@@ -440,7 +438,7 @@ void main01() {
 OSThread mainThread;
 
 /* 80006464-800065DC       .text main */
-void main() {
+int main() {
     OSThread* current_thread = OSGetCurrentThread();
     u8 ALIGN_DECL(0x20) stack[0xF000];
 
@@ -483,5 +481,5 @@ void main() {
     OSCreateThread(&mainThread, (void*)main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
     OSResumeThread(&mainThread);
     OSSetThreadPriority(current_thread, 0x1F);
-    OSSuspendThread(current_thread);
+    return OSSuspendThread(current_thread);
 }

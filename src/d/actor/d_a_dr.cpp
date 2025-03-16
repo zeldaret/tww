@@ -17,7 +17,7 @@ static daDr_HIO_c l_HIO;
 
 /* 000000EC-00000148       .text __ct__10daDr_HIO_cFv */
 daDr_HIO_c::daDr_HIO_c() {
-    mChildID = -1;
+    mNo = -1;
     mScale = 1.0f;
     m0C = false;
     m0E = 10*30;
@@ -82,7 +82,7 @@ static void move(dr_class* i_this) {
         anm_init(i_this, DR_BCK_DR_BIKU1, l_HIO.mBiku1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_BIKU1);
         i_this->mState++;
         i_this->mCountDownTimers[0] = l_HIO.m0E;
-        i_this->mpBreathEmitter = dComIfGp_particle_set(0x81C4, &i_this->current.pos);
+        i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C4, &i_this->current.pos);
         i_this->m2C9 = 0;
         // Fall-through
     case 11:
@@ -100,7 +100,7 @@ static void move(dr_class* i_this) {
             if (i_this->mCountDownTimers[0] != 0) {
                 if (cM_rndF(1.0f) < 0.5f) {
                     anm_init(i_this, DR_BCK_DR_ABARE1, l_HIO.mAbare1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_ABARE1);
-                    i_this->mpBreathEmitter = dComIfGp_particle_set(0x81C5, &i_this->current.pos);
+                    i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C5, &i_this->current.pos);
                     i_this->mCountDownTimers[1] = 500;
                 } else {
                     anm_init(i_this, DR_BCK_DR_ABARE2, l_HIO.mAbare2Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_ABARE2);
@@ -110,14 +110,14 @@ static void move(dr_class* i_this) {
                     MtxP rootJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x00); // dr_all_root joint
                     cMtx_copy(rootJntMtx, *calc_mtx);
                     MtxPosition(&offset, &rootPos);
-                    dComIfGp_particle_set(0x81C7, &rootPos);
+                    dComIfGp_particle_set(dPa_name::ID_SCENE_81C7, &rootPos);
                     
                     fopAcM_seStart(i_this, JA_SE_CM_DRG_MTOP_MAGMA, 0);
                     i_this->mCountDownTimers[1] = 0;
                 }
             } else {
                 anm_init(i_this, DR_BCK_DR_HO1, l_HIO.mHo1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-                i_this->mpBreathEmitter = dComIfGp_particle_set(0x81C6, &i_this->current.pos);
+                i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C6, &i_this->current.pos);
                 i_this->mState++;
             }
         }
@@ -205,8 +205,8 @@ static BOOL daDr_IsDelete(dr_class* i_this) {
 /* 00000A94-00000AE8       .text daDr_Delete__FP8dr_class */
 static BOOL daDr_Delete(dr_class* i_this) {
     dComIfG_resDelete(&i_this->mPhs, "Dr");
-    if (l_HIO.mChildID >= 0) {
-        mDoHIO_deleteChild(l_HIO.mChildID);
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
     }
     return TRUE;
 }
@@ -245,8 +245,8 @@ static s32 daDr_Create(fopAc_ac_c* i_actor) {
         
         daDr_setMtx(i_this);
         
-        if (l_HIO.mChildID < 0) {
-            l_HIO.mChildID = mDoHIO_createChild("ドラゴン", &l_HIO); // "Dragon"
+        if (l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("ドラゴン", &l_HIO); // "Dragon"
         }
     }
     

@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000000D4       .text _delete__11daAmiProp_cFv */
-BOOL daAmiProp_c::_delete() {
+bool daAmiProp_c::_delete() {
     /* Nonmatching */
 }
 
@@ -42,12 +42,12 @@ void daAmiProp_c::setMoveBGMtx() {
 }
 
 /* 0000070C-00000884       .text _execute__11daAmiProp_cFv */
-BOOL daAmiProp_c::_execute() {
+bool daAmiProp_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000884-00000924       .text _draw__11daAmiProp_cFv */
-BOOL daAmiProp_c::_draw() {
+bool daAmiProp_c::_draw() {
     /* Nonmatching */
 }
 

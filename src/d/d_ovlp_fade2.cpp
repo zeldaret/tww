@@ -114,7 +114,7 @@ dOvlpFd2_c::dOvlpFd2_c() {
 /* 80223D84-80223E18       .text execFirstSnap__10dOvlpFd2_cFv */
 void dOvlpFd2_c::execFirstSnap() {
     if (mHasSnap) {
-        if (!cLib_calcTimer(&mTimer)) {
+        if (cLib_calcTimer(&mTimer) == 0) {
             mProc = &dOvlpFd2_c::execFadeOut;
             fopOvlpM_Done(this);
             mTimer = -12;

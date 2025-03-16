@@ -76,7 +76,7 @@ namespace daTsubo {
         void create_init_bgc();
         s32 _create();
         void _is_delete();
-        BOOL _delete();
+        bool _delete();
         void spec_make_boko(int);
         void spec_init();
         void spec_set_actor();
@@ -182,8 +182,8 @@ namespace daTsubo {
         void se_pickup();
         void set_senv(int, int) const;
         void cam_lockoff() const;
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* 0x290 */ request_of_phase_process_class mPhs;
@@ -200,7 +200,7 @@ namespace daTsubo {
         /* 0x638 */ dCcD_Stts mStts;
         /* 0x674 */ int mType;
         /* 0x678 */ int m678;
-        /* 0x67C */ u16 mSwitchId;
+        /* 0x67C */ u16 mSwitchNo;
         /* 0x67E */ u8 m67E[0x67F - 0x67E];
         /* 0x67F */ u8 m67F;
         /* 0x680 */ u8 m680[0x682 - 0x680];
@@ -231,7 +231,7 @@ namespace daTsubo {
         /* 0x802 */ u8 m802[0x814 - 0x802];
         /* 0x814 */ cXyz m814;
         /* 0x820 */ u8 m820[0xF00 - 0x820];
-    };
+    };  // Size: 0xF00
     
     namespace Method {
         s32 Create(void*);

@@ -25,19 +25,19 @@ extern dScnPly_reg_HIO_c g_regHIO;
 const char daObjTpost_c::m_arc_name[] = "Toripost";
 
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
-    {false, 0x1AAF, dItem_HEART_PIECE_e, dSv_evtBit_c::LETTER_BAITOS_MOM},
-    {false, 0x0CF9, dItem_HEART_PIECE_e, dSv_evtBit_c::LETTER_KOMALIS_FATHER},
-    {false, 0x0CFA, COLLECT_MAP_60,      dSv_evtBit_c::LETTER_BOMBS_AD},
-    {false, 0x0CFC, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_ORCA},
-    {false, 0x0805, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_GRANDMA},
-    {false, 0x0CFD, dItem_GREEN_RUPEE_e, dSv_evtBit_c::LETTER_ROCK_SPIRE_SHOP_AD},
-    {true,  0x0DB6, COLLECT_MAP_52,      dSv_evtBit_c::LETTER_TINGLE},
-    {false, 0x1148, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_ARYLL},
-    {false, 0x1AAF, dItem_HEART_PIECE_e, dSv_evtBit_c::LETTER_BAITOS_MOM},
-    {true,  0x0F76, KAISEN_PRESENT1,     dSv_evtBit_c::LETTER_SILVER_MEMBERSHIP},
-    {false, 0x19A6, KAKERA_HEART2,       dSv_evtBit_c::LETTER_HOSKITS_GIRLFRIEND},
-    {true,  0x0CFB, dItem_RED_RUPEE_e,   dSv_evtBit_c::LETTER_BAITO},
-    {true,  0x0F77, KAISEN_PRESENT2,     dSv_evtBit_c::LETTER_GOLD_MEMBERSHIP},
+    {false, 0x1AAF, dItem_HEART_PIECE_e,    dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {false, 0x0CF9, dItem_HEART_PIECE_e,    dSv_evtBit_c::LETTER_KOMALIS_FATHER},
+    {false, 0x0CFA, dItem_COLLECT_MAP_60_e, dSv_evtBit_c::LETTER_BOMBS_AD},
+    {false, 0x0CFC, dItem_RED_RUPEE_e,      dSv_evtBit_c::LETTER_ORCA},
+    {false, 0x0805, dItem_RED_RUPEE_e,      dSv_evtBit_c::LETTER_GRANDMA},
+    {false, 0x0CFD, dItem_GREEN_RUPEE_e,    dSv_evtBit_c::LETTER_ROCK_SPIRE_SHOP_AD},
+    {true,  0x0DB6, dItem_COLLECT_MAP_52_e, dSv_evtBit_c::LETTER_TINGLE},
+    {false, 0x1148, dItem_RED_RUPEE_e,      dSv_evtBit_c::LETTER_ARYLL},
+    {false, 0x1AAF, dItem_HEART_PIECE_e,    dSv_evtBit_c::LETTER_BAITOS_MOM},
+    {true,  0x0F76, KAISEN_PRESENT1,        dSv_evtBit_c::LETTER_SILVER_MEMBERSHIP},
+    {false, 0x19A6, KAKERA_HEART2,          dSv_evtBit_c::LETTER_HOSKITS_GIRLFRIEND},
+    {true,  0x0CFB, dItem_RED_RUPEE_e,      dSv_evtBit_c::LETTER_BAITO},
+    {true,  0x0F77, KAISEN_PRESENT2,        dSv_evtBit_c::LETTER_GOLD_MEMBERSHIP},
 };
 
 const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
@@ -109,7 +109,7 @@ BOOL daObjTpost_c::_createHeap() {
 
 /* 0000022C-00000280       .text __ct__16daObjTpost_HIO_cFv */
 daObjTpost_HIO_c::daObjTpost_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     debug_draw = false;
     field_0x06 = 0;
     field_0x07 = 0;
@@ -337,7 +337,7 @@ int daObjTpost_c::getMsgXY() {
             col.b = REG12_S(2) + 0x80;
             mDoMtx_stack_c::copy(mMorf->getModel()->mpNodeMtx[2]);
             mDoMtx_stack_c::multVec(&pos, &pos);
-            dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0057, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             
             break;
         case dItem_FATHER_LETTER_e:
@@ -631,7 +631,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
         cXyz scale;
         scale.setall(1.0f);
         if(mMorf->getFrame() == 1.0f) {
-            dComIfGp_particle_set(0x8190, &current.pos, &current.angle, &scale);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_8190, &current.pos, &current.angle, &scale);
             mDoAud_seStart(JA_SE_OBJ_POST_LUGGAGE_OUT);
         }
     }

@@ -56,7 +56,7 @@ public:
     void talk01();
     void intro_action(void*);
     void wait_action(void*);
-    BOOL _execute();
+    bool _execute();
     void draw_item(J3DModel*, signed char);
     void drawDagger();
     void drawHead();
@@ -64,12 +64,12 @@ public:
     void drawP2a();
     void drawP2b();
     void drawP2c();
-    BOOL _draw();
+    bool _draw();
     void getArg();
     void _createHeap();
     void createInit();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void cutProc();
     void cutTalkStart(int);
     void cutTalkProc(int);

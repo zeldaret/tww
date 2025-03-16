@@ -11,7 +11,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_kankyo.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
-#include "dolphin/mtx/mtx.h"
 
 static u16 anim_table[] = {
     KWOOD_00_BCK_SWING02, KWOOD_00_BAS_SWING02,

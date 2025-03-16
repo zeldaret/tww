@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000000D4       .text _delete__10daLStair_cFv */
-BOOL daLStair_c::_delete() {
+bool daLStair_c::_delete() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daLStair_c::setMoveBGMtx() {
 }
 
 /* 00000A1C-00000ACC       .text _execute__10daLStair_cFv */
-BOOL daLStair_c::_execute() {
+bool daLStair_c::_execute() {
     /* Nonmatching */
 }
 

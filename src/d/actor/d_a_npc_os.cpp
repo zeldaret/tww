@@ -121,7 +121,7 @@ daNpc_Os_HIO_c::daNpc_Os_HIO_c() {
     field_0xA8 = 0.75f;
     field_0xAC = 18.0f;
     field_0xB0 = 8.0f;
-    field_0x04 = -1;
+    mNo = -1;
 }
 
 /* 00000300-00000354       .text searchFromName__FPcUlUl */
@@ -165,8 +165,8 @@ s32 daNpc_Os_c::create() {
 
         setBaseMtx();
         fopAcM_SetMtx(this, mpMorf->mpModel->getBaseTRMtx());
-        if(l_HIO.field_0x04 < 0) {
-            l_HIO.field_0x04 = mDoHIO_createChild("お供石像", &l_HIO); // "Companion Statue" (otomo sekizou)
+        if(l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("お供石像", &l_HIO); // "Companion Statue" (otomo sekizou)
             l_HIO.field_0x5C = this;
             l_hio_counter = 1;
         }
@@ -185,8 +185,8 @@ s32 daNpc_Os_c::create() {
 }
 
 /* 00000748-000008CC       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Os_c* i_this = (daNpc_Os_c*)model->getUserArea();
@@ -210,8 +210,8 @@ static BOOL nodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 000008CC-00000988       .text tunoNodeCallBack__FP7J3DNodei */
-static BOOL tunoNodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL tunoNodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         J3DModel* model = j3dSys.getModel();
         daNpc_Os_c* i_this = (daNpc_Os_c*)model->getUserArea();
@@ -500,7 +500,7 @@ void daNpc_Os_c::eventOrderCheck() {
 /* 00001300-000013D4       .text makeBeam__10daNpc_Os_cFi */
 void daNpc_Os_c::makeBeam(int param_1) {
     if(field_0x738.getEmitter() == NULL) {
-        field_0x738.makeEmitter(0x826E, &current.pos, &shape_angle, 0);
+        field_0x738.makeEmitter(dPa_name::ID_SCENE_826E, &current.pos, &shape_angle, 0);
 
         if(param_1) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_LIGHT_ST, 0);
@@ -508,7 +508,7 @@ void daNpc_Os_c::makeBeam(int param_1) {
     }
 
     if(field_0x740.getEmitter() == NULL) {
-        field_0x740.makeEmitter(0x826F, &current.pos, &shape_angle, 0);
+        field_0x740.makeEmitter(dPa_name::ID_SCENE_826F, &current.pos, &shape_angle, 0);
     }
 }
 
@@ -694,7 +694,7 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
             }
         }
         else {
-            attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
             s16 angle = shape_angle.y + mJntCtrl.getHead_y() + mJntCtrl.getBackbone_y();
             field_0x7A4 = chkAttention(current.pos, angle);
 
@@ -709,7 +709,7 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
             }
         }
 
-        attention_info.flags &= ~(fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e);
+        cLib_offBit<u32>(attention_info.flags, (fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e));
 
         f32 dist = fopAcM_searchPlayerDistance2(this);
         if(!checkNpcCallCommand()) {
@@ -800,7 +800,7 @@ BOOL daNpc_Os_c::talkNpcAction(void*) {
     if(field_0x7A9 == 0) {
         l_msgId = -1;
         field_0x780 = getMsg();
-        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         field_0x7A3 = 0;
         field_0x7A9 += 1;
     }
@@ -837,7 +837,7 @@ BOOL daNpc_Os_c::carryNpcAction(void* param_1) {
     if(field_0x7A9 == 0) {
         setAnm(0);
 
-        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         offNpcCallCommand();
         field_0x7AC = shape_angle.y - dComIfGp_getPlayer(0)->shape_angle.y;
         field_0x788 = 120.0f;
@@ -872,7 +872,7 @@ BOOL daNpc_Os_c::carryNpcAction(void* param_1) {
             }
             else {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
-                smokeSet(0xA328);
+                smokeSet(dPa_name::ID_SCENE_A328);
                 setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
 
                 return true;
@@ -907,7 +907,7 @@ BOOL daNpc_Os_c::throwNpcAction(void* param_1) {
     else if(field_0x7A9 != -1) {
         if(mAcch.ChkGroundHit()) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
-            smokeSet(0xA33B);
+            smokeSet(dPa_name::ID_SCENE_A33B);
             setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
@@ -933,7 +933,7 @@ BOOL daNpc_Os_c::jumpNpcAction(void* param_1) {
     }
     else if(field_0x7A9 != -1) {
         if(mAcch.ChkGroundHit()) {
-            smokeSet(0xA33B);
+            smokeSet(dPa_name::ID_SCENE_A33B);
             setNpcAction(&daNpc_Os_c::waitNpcAction, 0);
         }
 
@@ -1052,7 +1052,7 @@ BOOL daNpc_Os_c::routeCheck(f32 param_1, s16* param_2) {
 /* 0000375C-000039EC       .text searchNpcAction__10daNpc_Os_cFPv */
 BOOL daNpc_Os_c::searchNpcAction(void*) {
     if(field_0x7A9 == 0) {
-        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         setAnm(1);
         
         field_0x7A9 += 1;
@@ -2054,7 +2054,7 @@ void daNpc_Os_c::animationPlay() {
     mPrevMorfFrame = frame;
 
     if(field_0x78C == 1 && mpMorf->checkFrame(17.0f)) {
-        smokeSet(0xA328);
+        smokeSet(dPa_name::ID_SCENE_A328);
     }
 
     playBrkAnm();
@@ -2129,7 +2129,7 @@ BOOL daNpc_Os_c::execute() {
             mAcch.CrrPos(*dComIfG_Bgsp());
             
             field_0x784 |= 0x10;
-            if(mAcch.GetGroundH() != -1.0e9f) {
+            if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
                 tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
 
@@ -2206,7 +2206,7 @@ BOOL daNpc_Os_c::execute() {
             }
         }
 
-        if(mAcch.GetGroundH() != -1.0e9f) {
+        if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
             cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
             if(plane) {
                 field_0x7F0 = *plane->GetNP();
@@ -2226,7 +2226,7 @@ BOOL daNpc_Os_c::execute() {
 
         field_0x7A8 = mAcch.ChkGroundHit();
         if(!fopAcM_checkCarryNow(this)) {
-            if(mAcch.GetGroundH() == -1.0e9f || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
+            if(mAcch.GetGroundH() == C_BG_MIN_HEIGHT || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
                 if(m4E8 < 30) {
                     m4E8 += 1;
                 }
@@ -2250,13 +2250,13 @@ BOOL daNpc_Os_c::execute() {
                 if(!isWaterHit()) {
                     onWaterHit();
 
-                    JPABaseEmitter* splash = dComIfGp_particle_set(0x40, &current.pos);
+                    JPABaseEmitter* splash = dComIfGp_particle_set(dPa_name::ID_COMMON_0040, &current.pos);
                     if(splash) {
                         splash->setRate(15.0f);
                         splash->setGlobalScale(splash_scale);
                     }
 
-                    JPABaseEmitter* ripple = dComIfGp_particle_setSingleRipple(0x3D, &current.pos);
+                    JPABaseEmitter* ripple = dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003D, &current.pos);
                     if(ripple) {
                         ripple->setGlobalScale(ripple_scale);
                     }
@@ -2268,7 +2268,7 @@ BOOL daNpc_Os_c::execute() {
         mAcch.CrrPos(*dComIfG_Bgsp());
 
         field_0x784 |= 0x10;
-        if(mAcch.GetGroundH() != -1.0e9f) {
+        if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
             tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
@@ -2349,9 +2349,9 @@ daNpc_Os_c::~daNpc_Os_c() {
         l_hio_counter -= 1;
     }
     
-    if(l_hio_counter <= 0 && l_HIO.field_0x04 >= 0) {
-        mDoHIO_deleteChild(l_HIO.field_0x04);
-        l_HIO.field_0x04 = -1;
+    if(l_hio_counter <= 0 && l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 
     m_playerRoom[subtype] = false;
@@ -2403,16 +2403,6 @@ void daNpc_Os_infiniteEcallBack_c::end() {
 void daNpc_Os_infiniteEcallBack_c::makeEmitter(u16 param_1, const cXyz* param_2, const csXyz* param_3, const cXyz* param_4) {
     end();
     dComIfGp_particle_set(param_1, param_2, param_3, param_4, -1, this);
-}
-
-/* 00007A10-00007A14       .text execute__28daNpc_Os_infiniteEcallBack_cFP14JPABaseEmitter */
-void daNpc_Os_infiniteEcallBack_c::execute(JPABaseEmitter*) {
-    return;
-}
-
-/* 00007A14-00007A1C       .text setup__28daNpc_Os_infiniteEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daNpc_Os_infiniteEcallBack_c::setup(JPABaseEmitter* pEmitter, const cXyz*, const csXyz*, signed char) {
-    mpBaseEmitter = pEmitter;
 }
 
 static actor_method_class l_daNpc_Os_Method = {

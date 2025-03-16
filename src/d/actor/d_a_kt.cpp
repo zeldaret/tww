@@ -100,7 +100,7 @@ void kotori_move(kt_class* i_this) {
 
             gndChk.SetPos(&i_this->mTargetPosHome);
             i_this->mTargetPosHome.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (i_this->mTargetPosHome.y == -1e9f)
+            if (i_this->mTargetPosHome.y == C_BG_MIN_HEIGHT)
                 i_this->mTargetPosHome = player->current.pos;
             i_this->mTargetPos = i_this->mTargetPosHome;
             i_this->mSpeedLerp = 0.0f;

@@ -40,7 +40,7 @@ BOOL daMmusic::Act_c::Macore_is_playing() {
         dComIfGs_isEventBit(0x2910) ||
         dComIfGs_isEventBit(0x2e02) ||
         dComIfGs_isEventBit(0x1610) ||
-        !dComIfGs_checkGetItem(LV3_SWORD))
+        !dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e))
         return FALSE;
 
     return TRUE;
@@ -116,7 +116,7 @@ bool daMmusic::Act_c::_execute() {
     if (mpEmitter == NULL && field_0x298 == 1) {
         set_mtx();
         cXyz scale(1.0f, 1.0f, 1.0f);
-        JPABaseEmitter* emtr = dComIfGp_particle_set(0x826c, &current.pos);
+        JPABaseEmitter* emtr = dComIfGp_particle_set(dPa_name::ID_SCENE_826C, &current.pos);
         mpEmitter = emtr;
         if (emtr != NULL) {
             mpEmitter->setGlobalRTMatrix(mMtx);

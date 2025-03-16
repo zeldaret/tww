@@ -3,6 +3,7 @@ CompileFlags:
   Add: [
     "-Wno-c++11-compat-deprecated-writable-strings",
     "-Wno-undefined-inline",
+    "-Wno-multichar",
   ]
 ---
 If:

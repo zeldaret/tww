@@ -13,9 +13,9 @@ public:
     daNpcAuction_c();
 
     inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _draw();
-    inline BOOL _execute();
+    inline bool _delete();
+    inline bool _draw();
+    inline bool _execute();
     void getMdlNo() {}
     void getPhaseP() {}
     f32 getPiconOfsY() { return mPiconOfsY; }

@@ -185,12 +185,9 @@ void dComIfG_play_c::itemInit() {
 int dComIfG_play_c::getLayerNo(int i_roomNo) {
     int stageLayer = dComIfGp_getStartStageLayer();
     if (stageLayer < 0) {
-        int layer = dKy_getdaytime_hour();
-        if (dKy_checkEventNightStop()) {
-            layer = 1;
-        } else {
-            layer = (layer >= 6 && layer < 18) ? 0 : 1;
-        }
+        int hour = dKy_getdaytime_hour();
+        int layer = dKy_checkEventNightStop() ? 1 :
+                    hour >= 6 && hour < 18 ? 0 : 1;
 
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
             if (i_roomNo == dIsleRoom_OutsetIsland_e) {
@@ -557,13 +554,13 @@ s8 dComIfGp_getReverb(int param_0) {
 
 /* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj
  */
-int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly,
+int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyInfo& i_floorPoly,
                               s16 i_angle, f32 param_5, GXTexObj* i_tex) {
-    if (i_floorPoly.ChkSetInfo() && -1000000000.0f != param_1) {
+    if (i_floorPoly.ChkSetInfo() && C_BG_MIN_HEIGHT != groundY) {
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
-        return dComIfGd_setSimpleShadow(i_pos, param_1, param_2, plane_p->GetNP(), i_angle, param_5, i_tex);
+        return dComIfGd_setSimpleShadow(i_pos, groundY, param_2, plane_p->GetNP(), i_angle, param_5, i_tex);
     } else {
         return 0;
     }
@@ -810,12 +807,12 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
             get_item = 1;
         }
         break;
-    case PIRATES_OMAMORI:
+    case dItem_PIRATES_CHARM_e:
         if (dComIfGs_isCollect(3, 0)) {
             get_item = 1;
         }
         break;
-    case HEROS_OMAMORI:
+    case dItem_HEROS_CHARM_e:
         if (dComIfGs_isCollect(4, 0)) {
             get_item = 1;
         }
@@ -934,12 +931,12 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             get_item = 1;
         }
         break;
-    case PIRATES_OMAMORI:
+    case dItem_PIRATES_CHARM_e:
         if (dComIfGs_isCollect(3, 0)) {
             get_item = 1;
         }
         break;
-    case HEROS_OMAMORI:
+    case dItem_HEROS_CHARM_e:
         if (dComIfGs_isCollect(4, 0)) {
             get_item = 1;
         }
@@ -954,23 +951,23 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             get_item = dComIfGs_getBombNum();
         }
         break;
-    case SKULL_NECKLACE:
+    case dItem_SKULL_NECKLACE_e:
         for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == SKULL_NECKLACE) {
+            if (dComIfGs_getBeast(i) == dItem_SKULL_NECKLACE_e) {
                 get_item = dComIfGs_getBeastNum(0);
             }
         }
         break;
-    case BOKOBABA_SEED:
+    case dItem_BOKOBABA_SEED_e:
         for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == BOKOBABA_SEED) {
+            if (dComIfGs_getBeast(i) == dItem_BOKOBABA_SEED_e) {
                 get_item = dComIfGs_getBeastNum(1);
             }
         }
         break;
-    case GOLDEN_FEATHER:
+    case dItem_GOLDEN_FEATHER_e:
         for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == GOLDEN_FEATHER) {
+            if (dComIfGs_getBeast(i) == dItem_GOLDEN_FEATHER_e) {
                 get_item = dComIfGs_getBeastNum(2);
             }
         }
@@ -982,23 +979,23 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             }
         }
         break;
-    case RED_JELLY:
+    case dItem_RED_JELLY_e:
         for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == RED_JELLY) {
+            if (dComIfGs_getBeast(i) == dItem_RED_JELLY_e) {
                 get_item = dComIfGs_getBeastNum(4);
             }
         }
         break;
-    case GREEN_JELLY:
+    case dItem_GREEN_JELLY_e:
         for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == GREEN_JELLY) {
+            if (dComIfGs_getBeast(i) == dItem_GREEN_JELLY_e) {
                 get_item = dComIfGs_getBeastNum(5);
             }
         }
         break;
-    case BLUE_JELLY:
+    case dItem_BLUE_JELLY_e:
         for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == BLUE_JELLY) {
+            if (dComIfGs_getBeast(i) == dItem_BLUE_JELLY_e) {
                 get_item = dComIfGs_getBeastNum(6);
             }
         }
@@ -1036,16 +1033,16 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
 
 /* 80054578-8005468C       .text dComIfGd_setShadow__FUlScP8J3DModelP4cXyzffffR13cBgS_PolyInfoP12dKy_tevstr_csfP9_GXTexObj */
 int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
-                       f32 y, f32 param_8, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
+                       f32 y, f32 groundY, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
                        s16 rotY, f32 param_12, GXTexObj* pTexObj) {
-    if (param_8 <= -1000000000.0f) {
+    if (groundY <= C_BG_MIN_HEIGHT) {
         return 0;
     }
 
-    int sid = dComIfGd_setRealShadow2(id, param_2, pModel, pPos, param_5, y - param_8, param_10);
+    int sid = dComIfGd_setRealShadow2(id, param_2, pModel, pPos, param_5, y - groundY, param_10);
     if (sid == 0) {
         cXyz pos(pPos->x, y, pPos->z);
-        dComIfGd_setSimpleShadow2(&pos, param_8, param_6, pFloorPoly, rotY, param_12, pTexObj);
+        dComIfGd_setSimpleShadow2(&pos, groundY, param_6, pFloorPoly, rotY, param_12, pTexObj);
     }
     return sid;
 }
@@ -1601,32 +1598,32 @@ void dComIfGs_setSelectEquip(int i_type, u8 i_itemNo) {
     switch (i_type) {
     case 0:
         switch (i_itemNo) {
-        case SWORD:
+        case dItem_SWORD_e:
             dComIfGs_onCollect(i_type, 0);
             break;
-        case MASTER_SWORD:
+        case dItem_MASTER_SWORD_1_e:
             dComIfGs_onCollect(i_type, 1);
             break;
-        case LV3_SWORD:
+        case dItem_MASTER_SWORD_2_e:
             dComIfGs_onCollect(i_type, 2);
             break;
-        case MASTER_SWORD_EX:
+        case dItem_MASTER_SWORD_3_e:
             dComIfGs_onCollect(i_type, 3);
             break;
         }
         break;
     case 1:
         switch (i_itemNo) {
-        case SHIELD:
+        case dItem_SHIELD_e:
             dComIfGs_onCollect(i_type, 0);
             break;
-        case MIRROR_SHIELD:
+        case dItem_MIRROR_SHIELD_e:
             dComIfGs_onCollect(i_type, 1);
             break;
         }
         break;
     case 2:
-        if (i_itemNo == PWR_GROOVE) {
+        if (i_itemNo == dItem_POWER_BRACELETS_e) {
             dComIfGs_onCollect(i_type, 0);
         }
         break;

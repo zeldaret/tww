@@ -7,11 +7,11 @@ class daWarphr_c : public fopAc_ac_c {
 public:
     void set_mtx(); // weak but not inlined?
 
-    BOOL _delete();
+    bool _delete();
     void CreateHeap();
     void CreateInit();
     s32 _create();
-    BOOL _execute();
+    bool _execute();
     void normal_execute();
     void demo_execute();
     void demo_proc();
@@ -31,7 +31,7 @@ public:
     void set_end_anim();
     void get_return_count();
     void check_warp();
-    BOOL _draw();
+    bool _draw();
 
 public:
     /* Place member variables here */

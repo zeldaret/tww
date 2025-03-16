@@ -8,7 +8,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */
-BOOL daIlift_c::_delete() {
+bool daIlift_c::_delete() {
     /* Nonmatching */
 }
 
@@ -43,7 +43,7 @@ void daIlift_c::set_mtx() {
 }
 
 /* 0000089C-000009C8       .text _execute__9daIlift_cFv */
-BOOL daIlift_c::_execute() {
+bool daIlift_c::_execute() {
     /* Nonmatching */
 }
 
@@ -68,7 +68,7 @@ void daIlift_c::set_next_pnt() {
 }
 
 /* 00000F58-00000FF8       .text _draw__9daIlift_cFv */
-BOOL daIlift_c::_draw() {
+bool daIlift_c::_draw() {
     /* Nonmatching */
 }
 

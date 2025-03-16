@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000000F0       .text _delete__9daWfall_cFv */
-BOOL daWfall_c::_delete() {
+bool daWfall_c::_delete() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daWfall_c::set_minamo_mtx() {
 }
 
 /* 00000AD0-00000C94       .text _execute__9daWfall_cFv */
-BOOL daWfall_c::_execute() {
+bool daWfall_c::_execute() {
     /* Nonmatching */
 }
 

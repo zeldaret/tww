@@ -86,7 +86,7 @@ static cPhs__Step daObjTower_Create(void* i_this) {
     return ((daObjTower_c*)i_this)->_create();
 }
 
-BOOL daObjTower_c::_delete() {
+bool daObjTower_c::_delete() {
     if (field_0x2d0 == 1) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
@@ -103,7 +103,7 @@ static BOOL daObjTower_Delete(void* i_this) {
     return ((daObjTower_c*)i_this)->_delete();
 }
 
-BOOL daObjTower_c::_draw() {
+bool daObjTower_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
@@ -119,7 +119,7 @@ static BOOL daObjTower_Draw(void* i_this) {
     return ((daObjTower_c*)i_this)->_draw();
 }
 
-BOOL daObjTower_c::_execute() {
+bool daObjTower_c::_execute() {
     if (demoActorID != 0) {
         dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(demoActorID);
         if (pdVar1 != NULL && pdVar1->checkEnable(0x02)) {

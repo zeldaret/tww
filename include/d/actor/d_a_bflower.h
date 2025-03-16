@@ -16,7 +16,7 @@ public:
         STATE_DEAD_e,
     };
 
-    inline BOOL _delete();
+    inline bool _delete();
 
     BOOL CreateHeap();
     void CreateInit();

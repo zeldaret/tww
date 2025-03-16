@@ -36,24 +36,24 @@ float daItem_c::getYOffset() {
     switch (m_itemNo) {
     case BOKO_BELT:
         return 0.0f;
-    case SKULL_NECKLACE:
+    case dItem_SKULL_NECKLACE_e:
         return 0.0f;
-    case BOKOBABA_SEED:
+    case dItem_BOKOBABA_SEED_e:
         return 0.0f;
-    case GOLDEN_FEATHER:
+    case dItem_GOLDEN_FEATHER_e:
         return 0.0f;
-    case RED_JELLY:
-    case GREEN_JELLY:
-    case BLUE_JELLY:
+    case dItem_RED_JELLY_e:
+    case dItem_GREEN_JELLY_e:
+    case dItem_BLUE_JELLY_e:
         return 0.0f;
     case dItem_SMALL_KEY_e:
     case dItem_BOSS_KEY_e:
         return 0.0f;
-    case SHIELD:
+    case dItem_SHIELD_e:
         return 23.0f;
-    case SWORD:
+    case dItem_SWORD_e:
         return 20.0f;
-    case DROPPED_SWORD:
+    case dItem_DROPPED_SWORD_e:
         return 10.0f;
     case dItem_HEART_PIECE_e:
     case dItem_HEART_CONTAINER_e:
@@ -172,10 +172,10 @@ void daItem_c::CreateInit() {
     }
     
     switch (m_itemNo) {
-    case BOMB_5:
-    case BOMB_10:
-    case BOMB_20:
-    case BOMB_30:
+    case dItem_BOMB_5_e:
+    case dItem_BOMB_10_e:
+    case dItem_BOMB_20_e:
+    case dItem_BOMB_30_e:
         mScaleTarget.setall(0.6f);
         break;
     default:
@@ -195,11 +195,11 @@ void daItem_c::CreateInit() {
     initAction();
     
     switch (m_itemNo) {
-    case SWORD:
-    case SHIELD:
+    case dItem_SWORD_e:
+    case dItem_SHIELD_e:
         fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
         break;
-    case DROPPED_SWORD:
+    case dItem_DROPPED_SWORD_e:
         current.angle.x = 0x4000;
         break;
     }
@@ -208,7 +208,7 @@ void daItem_c::CreateInit() {
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     
     if (fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        mpParticleEmitter = dComIfGp_particle_set(0x81E1, &current.pos);
+        mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81E1, &current.pos);
     }
 }
 
@@ -224,7 +224,7 @@ s32 daItem_c::_daItem_create() {
     }
     
     mItemBitNo = daItem_prm::getItemBitNo(this);
-    if (m_itemNo != BLUE_JELLY) { // Blue Chu Jelly uses mItemBitNo as if it was a switch.
+    if (m_itemNo != dItem_BLUE_JELLY_e) { // Blue Chu Jelly uses mItemBitNo as if it was a switch.
         mItemBitNo &= 0x7F;
         if (fopAcM_isItem(this, mItemBitNo) && mItemBitNo != 0x7F) {
             // Already picked up, don't create the item again.
@@ -618,21 +618,21 @@ void daItem_c::itemGetExecute() {
         mDoAud_seStart(JA_SE_HEART_PIECE);
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case S_MAGIC:
+    case dItem_SMALL_MAGIC_e:
         mDoAud_seStart(JA_SE_MAGIC_POT_GET_S);
         execItemGet(m_itemNo);
         break;
-    case L_MAGIC:
+    case dItem_LARGE_MAGIC_e:
         mDoAud_seStart(JA_SE_MAGIC_POT_GET_L);
         execItemGet(m_itemNo);
         break;
-    case BOMB_5:
-    case BOMB_10:
-    case BOMB_20:
-    case BOMB_30:
-    case ARROW_10:
-    case ARROW_20:
-    case ARROW_30:
+    case dItem_BOMB_5_e:
+    case dItem_BOMB_10_e:
+    case dItem_BOMB_20_e:
+    case dItem_BOMB_30_e:
+    case dItem_ARROW_10_e:
+    case dItem_ARROW_20_e:
+    case dItem_ARROW_30_e:
         mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
         execItemGet(m_itemNo);
         break;
@@ -655,26 +655,26 @@ void daItem_c::itemGetExecute() {
     case dItem_DEKU_LEAF_e:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case SWORD: {
+    case dItem_SWORD_e: {
         daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
-        if (item && item->m_itemNo == SHIELD) {
+        if (item && item->m_itemNo == dItem_SHIELD_e) {
             item->itemGetExecute();
         }
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     }
-    case SHIELD: {
+    case dItem_SHIELD_e: {
         daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
-        if (item && item->m_itemNo == SWORD) {
+        if (item && item->m_itemNo == dItem_SWORD_e) {
             item->itemGetExecute();
         }
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     }
-    case DROPPED_SWORD:
+    case dItem_DROPPED_SWORD_e:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
-    case SKULL_NECKLACE:
+    case dItem_SKULL_NECKLACE_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(0)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -683,7 +683,7 @@ void daItem_c::itemGetExecute() {
             execItemGet(m_itemNo);
         }
         break;
-    case BOKOBABA_SEED:
+    case dItem_BOKOBABA_SEED_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(1)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -692,7 +692,7 @@ void daItem_c::itemGetExecute() {
             execItemGet(m_itemNo);
         }
         break;
-    case GOLDEN_FEATHER:
+    case dItem_GOLDEN_FEATHER_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(2)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -710,7 +710,7 @@ void daItem_c::itemGetExecute() {
             execItemGet(m_itemNo);
         }
         break;
-    case RED_JELLY:
+    case dItem_RED_JELLY_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(4)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -719,7 +719,7 @@ void daItem_c::itemGetExecute() {
             execItemGet(m_itemNo);
         }
         break;
-    case GREEN_JELLY:
+    case dItem_GREEN_JELLY_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(5)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -728,7 +728,7 @@ void daItem_c::itemGetExecute() {
             execItemGet(m_itemNo);
         }
         break;
-    case BLUE_JELLY:
+    case dItem_BLUE_JELLY_e:
         mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(6)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -737,7 +737,7 @@ void daItem_c::itemGetExecute() {
             execItemGet(m_itemNo);
         }
         break;
-    case BIRD_ESA_5:
+    case dItem_BIRD_BAIT_5_e:
         mDoAud_seStart(JA_SE_ESA_GET);
         if (!dComIfGs_isGetItemBait(0)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
@@ -979,11 +979,11 @@ BOOL daItem_c::itemActionForSword() {
         f32 temp = field_0x650 * 0.9f;
         fopAcM_SetSpeed(this, 0.0f, -temp, 0.0f);
         
-        if (m_itemNo == SWORD) {
+        if (m_itemNo == dItem_SWORD_e) {
             if (m_get_timer > 15) {
                 fopAcM_seStart(this, JA_SE_OBJ_LNK_SWORD_FALL, 0);
             }
-        } else if (m_itemNo == SHIELD) {
+        } else if (m_itemNo == dItem_SHIELD_e) {
             if (m_get_timer > 15) {
                 fopAcM_seStart(this, JA_SE_OBJ_LNK_SHIELD_FALL, 0);
             }
@@ -1037,10 +1037,7 @@ BOOL daItem_c::itemActionForArrow() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        f32 transX = current.pos.x;
-        f32 transY = current.pos.y;
-        f32 transZ = current.pos.z;
-        mpParticleEmitter->setGlobalTranslation(transX, transY, transZ);
+        mpParticleEmitter->setGlobalTranslation(current.pos);
     }
     
     if (mAcch.ChkGroundLanding()) {
@@ -1055,7 +1052,7 @@ BOOL daItem_c::itemActionForArrow() {
         mOnGroundTimer++;
         
         if (mOnGroundTimer == 1 && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-            JPABaseEmitter* emitter = dComIfGp_particle_set(0xA1E2, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
+            JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_A1E2, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
             if (emitter) {
                 emitter->setMaxFrame(1);
             }
@@ -1135,13 +1132,13 @@ void daItem_c::set_bound_se() {
     case dItem_ORANGE_RUPEE_e:
         fopAcM_seStart(this, JA_SE_OBJ_LUPY_BOUND, temp);
         break;
-    case S_MAGIC:
-    case L_MAGIC:
+    case dItem_SMALL_MAGIC_e:
+    case dItem_LARGE_MAGIC_e:
         fopAcM_seStart(this, JA_SE_OBJ_M_POT_BOUND, temp);
         break;
-    case ARROW_10:
-    case ARROW_20:
-    case ARROW_30:
+    case dItem_ARROW_10_e:
+    case dItem_ARROW_20_e:
+    case dItem_ARROW_30_e:
     case dItem_MAGIC_ARROW_e:
     case dItem_LIGHT_ARROW_e:
         fopAcM_seStart(this, JA_SE_CM_BST_ARROW_BOUND, temp);
@@ -1150,10 +1147,10 @@ void daItem_c::set_bound_se() {
     case dItem_HEART_CONTAINER_e:
         fopAcM_seStart(this, JA_SE_CM_BST_HEART_BOUND, temp);
         break;
-    case BOMB_5:
-    case BOMB_10:
-    case BOMB_20:
-    case BOMB_30:
+    case dItem_BOMB_5_e:
+    case dItem_BOMB_10_e:
+    case dItem_BOMB_20_e:
+    case dItem_BOMB_30_e:
         fopAcM_seStart(this, JA_SE_CM_BST_BOMB_BOUND, temp);
         break;
     }
@@ -1236,7 +1233,7 @@ void daItem_c::mode_water_init() {
     temp3 *= scale.x;
     particleScale.setall(temp3);
     
-    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
+    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
     mPtclRippleCb.mRate = 0.0f;
 }
 
@@ -1244,7 +1241,7 @@ void daItem_c::mode_water_init() {
 void daItem_c::mode_wait() {
     if (checkFlag(FLAG_UNK04) && dItem_data::checkAppearEffect(m_itemNo)) {
         u16 appearEffect = dItem_data::getAppearEffect(m_itemNo);
-        dComIfGp_particle_setSimple(appearEffect, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(appearEffect, &current.pos);
     }
     
     switch (m_itemNo) {
@@ -1254,13 +1251,13 @@ void daItem_c::mode_wait() {
         break;
     case dItem_HEART_PIECE_e:
     case dItem_HEART_CONTAINER_e:
-    case BOMB_5:
-    case BOMB_10:
-    case BOMB_20:
-    case BOMB_30:
-    case ARROW_10:
-    case ARROW_20:
-    case ARROW_30:
+    case dItem_BOMB_5_e:
+    case dItem_BOMB_10_e:
+    case dItem_BOMB_20_e:
+    case dItem_BOMB_30_e:
+    case dItem_ARROW_10_e:
+    case dItem_ARROW_20_e:
+    case dItem_ARROW_30_e:
     case dItem_MAGIC_ARROW_e:
     case dItem_LIGHT_ARROW_e:
         itemActionForArrow();
@@ -1268,21 +1265,21 @@ void daItem_c::mode_wait() {
     case dItem_SMALL_KEY_e:
         itemActionForKey();
         break;
-    case S_MAGIC:
-    case L_MAGIC:
+    case dItem_SMALL_MAGIC_e:
+    case dItem_LARGE_MAGIC_e:
     case dItem_JOY_PENDANT_e:
-    case SKULL_NECKLACE:
-    case BOKOBABA_SEED:
-    case GOLDEN_FEATHER:
+    case dItem_SKULL_NECKLACE_e:
+    case dItem_BOKOBABA_SEED_e:
+    case dItem_GOLDEN_FEATHER_e:
     case BOKO_BELT:
-    case RED_JELLY:
-    case GREEN_JELLY:
-    case BLUE_JELLY:
+    case dItem_RED_JELLY_e:
+    case dItem_GREEN_JELLY_e:
+    case dItem_BLUE_JELLY_e:
         itemActionForEmono();
         break;
-    case SWORD:
-    case SHIELD:
-    case DROPPED_SWORD:
+    case dItem_SWORD_e:
+    case dItem_SHIELD_e:
+    case dItem_DROPPED_SWORD_e:
         itemActionForSword();
         break;
     default:
@@ -1296,12 +1293,12 @@ void daItem_c::mode_wait() {
         mode_water_init();
     }
     
-    dBgS_ObjGndChk_Yogan gndChk;
+    dBgS_ObjGndChk_Yogan lavaChk;
     cXyz temp;
     temp.set(old.pos.x, old.pos.y, old.pos.z);
-    gndChk.SetPos(&temp);
-    f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if (groundY != -1000000000.0f && groundY > current.pos.y) {
+    lavaChk.SetPos(&temp);
+    f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
+    if (lavaY != C_BG_MIN_HEIGHT && lavaY > current.pos.y) {
         fopAcM_delete(this);
     }
 }

@@ -29,11 +29,11 @@ public:
     void setAttentionPos(cXyz*);
     s32 _create();
     void CreateHeap();
-    BOOL _delete();
+    bool _delete();
     void getKajiID();
     void kaji_anm();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
     void lookBack();
 
 public:

@@ -86,19 +86,19 @@ void daRaceItem_c::normalItemGet() {
         case dItem_SILVER_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case S_MAGIC:
+        case dItem_SMALL_MAGIC_e:
             mDoAud_seStart(JA_SE_MAGIC_POT_GET_S);
             break;
-        case L_MAGIC:
+        case dItem_LARGE_MAGIC_e:
             mDoAud_seStart(JA_SE_MAGIC_POT_GET_L);
             break;
-        case BOMB_5:
-        case BOMB_10:
-        case BOMB_20:
-        case BOMB_30:
-        case ARROW_10:
-        case ARROW_20:
-        case ARROW_30:
+        case dItem_BOMB_5_e:
+        case dItem_BOMB_10_e:
+        case dItem_BOMB_20_e:
+        case dItem_BOMB_30_e:
+        case dItem_ARROW_10_e:
+        case dItem_ARROW_20_e:
+        case dItem_ARROW_30_e:
             mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
             break;
         case dItem_TRIPLE_HEART_e:

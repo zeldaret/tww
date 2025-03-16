@@ -66,16 +66,6 @@ public:
     /* 0x00 */ cM3dGAab mAab;
     /* 0x1C vtable */
 
-    struct Shape {
-        ~Shape();
-
-        /* 0x00 */ int _0;
-        /* 0x04 */ f32 _4;
-        /* 0x08 */ f32 _8;
-        /* 0x0C */ f32 _C;
-        /* 0x10 */ f32 _10;
-        /* 0x14 */ f32 _14;
-    };
     cCcD_ShapeAttr() {}
     virtual ~cCcD_ShapeAttr() {}
     virtual bool CrossAtTg(cCcD_ShapeAttr const&, cXyz*) const {
@@ -140,7 +130,7 @@ public:
     virtual bool CrossCo(cCcD_CylAttr const&, f32*) const { return false; }
     virtual bool CrossCo(cCcD_SphAttr const&, f32*) const { return false; }
     virtual ~cCcD_TriAttr() {}
-};
+};  // Size: 0x58
 
 struct cCcD_SrcCpsAttr {
     cM3dGCpsS mCps;
@@ -180,7 +170,7 @@ public:
     virtual bool CrossCo(cCcD_AabAttr const&, f32*) const { return false; }
     virtual void CalcAabBox();
     virtual bool GetNVec(cXyz const&, cXyz*) const;
-};
+};  // Size: 0x40
 
 STATIC_ASSERT(0x40 == sizeof(cCcD_CpsAttr));
 
@@ -219,7 +209,6 @@ public:
     virtual bool CrossCo(cCcD_CylAttr const&, f32*) const;
     virtual void CalcAabBox();
     virtual bool GetNVec(cXyz const&, cXyz*) const;
-
 };  // Size = 0x34
 
 STATIC_ASSERT(0x34 == sizeof(cCcD_SphAttr));
@@ -331,6 +320,8 @@ public:
 private:
     /* 0x00 vtable */
 };  // Size = 0x4
+
+STATIC_ASSERT(sizeof(cCcD_GStts) == 0x4);
 
 class cCcD_Stts {
 private:

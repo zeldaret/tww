@@ -6,9 +6,9 @@
 class daTag_Kk1_c : public fopAc_ac_c {
 public:
     void createInit();
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     s32 _create();
 
 public:

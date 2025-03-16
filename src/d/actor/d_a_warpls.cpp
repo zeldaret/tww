@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000000E0       .text _delete__10daWarpls_cFv */
-BOOL daWarpls_c::_delete() {
+bool daWarpls_c::_delete() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daWarpls_c::set_mtx() {
 }
 
 /* 0000089C-00000984       .text _execute__10daWarpls_cFv */
-BOOL daWarpls_c::_execute() {
+bool daWarpls_c::_execute() {
     /* Nonmatching */
 }
 

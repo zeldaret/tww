@@ -27,7 +27,7 @@ s32 daStone::Act_c::_create() {
 }
 
 /* 000012C8-00001324       .text _delete__Q27daStone5Act_cFv */
-BOOL daStone::Act_c::_delete() {
+bool daStone::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -202,12 +202,12 @@ void daStone::Act_c::cam_lockoff() const {
 }
 
 /* 0000315C-00003358       .text _execute__Q27daStone5Act_cFv */
-BOOL daStone::Act_c::_execute() {
+bool daStone::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00003358-0000344C       .text _draw__Q27daStone5Act_cFv */
-BOOL daStone::Act_c::_draw() {
+bool daStone::Act_c::_draw() {
     /* Nonmatching */
 }
 

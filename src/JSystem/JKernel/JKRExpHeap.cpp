@@ -299,7 +299,7 @@ void* JKRExpHeap::allocFromTail(u32 size, int align) {
 
     if (foundBlock != NULL) {
         if (offset >= sizeof(CMemBlock)) {
-            newBlock->initiate(NULL, NULL, usedSize, mCurrentGroupId, -0x80);
+            newBlock->initiate(NULL, NULL, usedSize, mCurrentGroupId, 0x80);
             foundBlock->size = foundBlock->size - usedSize - sizeof(CMemBlock);
             appendUsedList(newBlock);
             return newBlock->getContent();
@@ -311,7 +311,7 @@ void* JKRExpHeap::allocFromTail(u32 size, int align) {
                 return newBlock->getContent();
             } else {
                 removeFreeBlock(foundBlock);
-                newBlock->initiate(NULL, NULL, usedSize, mCurrentGroupId, -0x80);
+                newBlock->initiate(NULL, NULL, usedSize, mCurrentGroupId, 0x80);
                 appendUsedList(newBlock);
                 return newBlock->getContent();
             }

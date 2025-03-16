@@ -62,17 +62,17 @@ void daNpcBmcon_c::createInit() {
 }
 
 /* 00001468-000014D8       .text _delete__12daNpcBmcon_cFv */
-BOOL daNpcBmcon_c::_delete() {
+bool daNpcBmcon_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000014D8-00001694       .text _draw__12daNpcBmcon_cFv */
-BOOL daNpcBmcon_c::_draw() {
+bool daNpcBmcon_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00001694-00001878       .text _execute__12daNpcBmcon_cFv */
-BOOL daNpcBmcon_c::_execute() {
+bool daNpcBmcon_c::_execute() {
     /* Nonmatching */
 }
 

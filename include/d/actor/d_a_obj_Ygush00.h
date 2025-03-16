@@ -41,7 +41,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 mChildID;
+    /* 0x04 */ s8 mNo;
 };
 
 #endif /* D_A_OBJ_YGUSH00_H */

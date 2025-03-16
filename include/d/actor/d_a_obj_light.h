@@ -11,7 +11,7 @@ namespace daObjLight {
         void init_collision();
         void set_collision();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void set_fire(int);
         void draw_fire();
         void exe_fire();
@@ -23,8 +23,8 @@ namespace daObjLight {
         void renew_angle();
         void control_light();
         void control_treasure();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
         
         static bool renew_light_angle();
         static s16 get_light_angle();

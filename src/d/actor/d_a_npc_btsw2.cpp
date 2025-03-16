@@ -12,6 +12,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
+#include "SSystem/SComponent/c_angle.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -71,7 +72,7 @@ daNpc_Btsw2_HIO_c::daNpc_Btsw2_HIO_c() {
     m38 = 0.95f;
     m3C = 0x5A;
     m3E = 0x5A;
-    mChildID = -1;
+    mNo = -1;
 }
 
 const char daNpc_Btsw2_c::m_arc_name[] = "Btsw";
@@ -95,8 +96,8 @@ static const int l_btp_ix_tbl[] = {
 };
 
 /* 000001A8-000003E0       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Btsw2_c* i_this = (daNpc_Btsw2_c*)model->getUserArea();

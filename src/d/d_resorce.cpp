@@ -3,13 +3,6 @@
 // Translation Unit: d_resorce.cpp
 //
 
-// Fakematch: This is supposed to be a weak function defined in d_a_player.h that wind up at the end of the
-// d_door TU. But weak function ordering is currently broken, so to get d_door to match, we define it
-// here (at the start of the *next* TU after d_door) so that it gets placed into the correct spot in
-// the DOL, even though this is an ugly hack and they're now in the wrong translation unit instead.
-#include "d/actor/d_a_player.h"
-void daPy_py_c::setPlayerPosAndAngle(cXyz*, s16) { }
-
 #include "d/d_resorce.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_printf.h"

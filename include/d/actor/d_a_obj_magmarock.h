@@ -13,9 +13,9 @@ namespace daObjMagmarock {
     public:
         void MeltDownRequest() {}
         inline s32 _create();
-        inline BOOL _delete();
-        inline BOOL _draw();
-        inline BOOL _execute();
+        inline bool _delete();
+        inline bool _draw();
+        inline bool _execute();
         void checkProcess(void (daObjMagmarock::Act_c::*)()) {}
         void setProcess(void (daObjMagmarock::Act_c::*)()) {}
     

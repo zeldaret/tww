@@ -8,7 +8,6 @@
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_scene_mng.h"
 #include "f_op/f_op_overlap_mng.h"
-#include "JSystem/JKernel/JKRSolidHeap.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_audio.h"
@@ -132,29 +131,27 @@ scene_method_class l_dScnOpen_Method = {
 };
 
 scene_process_profile_definition g_profile_OPEN_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_OPEN_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnOpen_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnOpen_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OPEN_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnOpen_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnOpen_Method,
 };
 
 scene_process_profile_definition g_profile_OPEN2_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_OPEN2_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnOpen_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnOpen_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OPEN2_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnOpen_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnOpen_Method,
 };

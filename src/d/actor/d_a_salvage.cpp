@@ -27,12 +27,12 @@ s32 daSalvage_c::_create() {
 }
 
 /* 00000728-00000824       .text _delete__11daSalvage_cFv */
-BOOL daSalvage_c::_delete() {
+bool daSalvage_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000824-000008A4       .text _execute__11daSalvage_cFv */
-BOOL daSalvage_c::_execute() {
+bool daSalvage_c::_execute() {
     /* Nonmatching */
 }
 
@@ -122,7 +122,7 @@ void daSalvage_c::debug_print2() {
 }
 
 /* 00001FAC-00002158       .text _draw__11daSalvage_cFv */
-BOOL daSalvage_c::_draw() {
+bool daSalvage_c::_draw() {
     /* Nonmatching */
 }
 

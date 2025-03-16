@@ -59,9 +59,9 @@ namespace daObjBuoyflag {
     
         void setup(MtxP mtx) { cMtx_copy(mtx, m1090); }
         inline s32 _create();
-        inline BOOL _delete();
-        inline BOOL _draw();
-        inline BOOL _execute();
+        inline bool _delete();
+        inline bool _draw();
+        inline bool _execute();
         void jump_to_sea(float, float, short) {}
         void make_barrel2_mine(fpc_ProcID, cXyz*, int, csXyz*, Texture_e, bool) {}
         void make_barrel2_norm(fpc_ProcID, cXyz*, int, csXyz*, Texture_e) {}

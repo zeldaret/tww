@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_leaflift.h"
+#include "d/d_com_inf_game.h"
 #include "dolphin/types.h"
 
 const f32 daLlift_c::m_height = 560.0f;
@@ -11,12 +12,35 @@ const f32 daLlift_c::m_max_speed = 10.0f;
 const f32 daLlift_c::m_min_speed = 5.0f;
 
 /* 800690E4-80069100       .text checkEndDownLift__9daLlift_cFv */
-void daLlift_c::checkEndDownLift() {
-    /* Nonmatching */
+BOOL daLlift_c::checkEndDownLift() {
+    return (current.pos.y <= home.pos.y);
 }
 
 /* 80069100-800692C4       .text MoveUpLift__9daLlift_cFv */
-void daLlift_c::MoveUpLift() {
-    /* Nonmatching */
+BOOL daLlift_c::MoveUpLift() {
+    cXyz upLiftPos;
+    bool res = FALSE;
+    mEmitterTimer++;
+    if (current.pos.y != home.pos.y + m_height) {
+        m43D = TRUE;
+    }
+    float upVel = cLib_addCalc(&current.pos.y, home.pos.y + m_height, 0.1f, m_max_speed, m_min_speed);
+    if (upVel == 0.0f) {
+        mbIsAscending = FALSE;
+        res = TRUE;
+    }
+    else if ((upVel != 0.0f) && (mbIsAscending == FALSE)) {
+        fopAcM_seStart(this, JA_SE_OBJ_LOTUS_LIFT_UP, 0);
+        mbIsAscending = TRUE;
+        mEmitter1 = dComIfGp_particle_set(dPa_name::ID_SCENE_82AC, &current.pos, &current.angle);
+        mEmitter2 = NULL;
+        upLiftPos = current.pos;
+        upLiftPos.y = mWaterY;
+        mEmitter4 = dComIfGp_particle_set(dPa_name::ID_SCENE_82AB, &upLiftPos, &current.angle);
+        mEmitterTimer = 0;
+        if (mEmitter3) {
+            mEmitter3->stopCreateParticle();
+        }
+    }
+    return res;
 }
-

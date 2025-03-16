@@ -606,7 +606,7 @@ bool dWood::Unit_c::set_ground() {
     gndChk.SetPos(&pos);
     f32 gndHeight = dComIfG_Bgsp()->GroundCross(&gndChk);
 
-    if (gndHeight > -1000000000.0f) {
+    if (gndHeight > C_BG_MIN_HEIGHT) {
         mPos.y = gndHeight;
         cM3dGPla *triPla = dComIfG_Bgsp()->GetTriPla(gndChk);
 
@@ -777,7 +777,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                 g_env_light.settingTevStruct(TEV_TYPE_BG0, &mPos, &mTevStr);
 
                 // Spawn cut down particles (a bunch of leaves)
-                dComIfGp_particle_set(dPa_name::ID_CUT_L_TREE_DOWN, &mPos, NULL,
+                dComIfGp_particle_set(dPa_name::ID_COMMON_CUT_L_TREE_DOWN, &mPos, NULL,
                                       NULL, 0xff, NULL, -1, &mTevStr.mColorK0,
                                       NULL, NULL);
 

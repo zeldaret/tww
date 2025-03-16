@@ -21,11 +21,11 @@ public:
     void modeDeathInit();
     void modeDeath();
     void modeProcCall();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
     void createInit();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
 
 public:
     /* Place member variables here */

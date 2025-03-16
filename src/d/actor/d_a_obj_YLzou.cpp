@@ -67,7 +67,7 @@ s32 daObjYLzou_c::_create() {
 }
 
 /* 00000AE0-00000B7C       .text _delete__12daObjYLzou_cFv */
-BOOL daObjYLzou_c::_delete() {
+bool daObjYLzou_c::_delete() {
     /* Nonmatching */
 }
 
@@ -167,12 +167,12 @@ void daObjYLzou_c::setup_action(int) {
 }
 
 /* 00001740-000017D4       .text _execute__12daObjYLzou_cFv */
-BOOL daObjYLzou_c::_execute() {
+bool daObjYLzou_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000017D4-00001834       .text _draw__12daObjYLzou_cFv */
-BOOL daObjYLzou_c::_draw() {
+bool daObjYLzou_c::_draw() {
     /* Nonmatching */
 }
 

@@ -679,7 +679,7 @@ s16 mCaptureCenterY = 180;
 GXColor mCaptureMonoColor0 = { 0x00, 0x00, 0x00, 0x00 };
 GXColor mCaptureMonoColor1 = { 0xFF, 0xFF, 0xFF, 0xFF };
 u32 mCaptureThreadStackSize = 0x2000;
-u32 mCaptureThreadPriority = 30;
+s32 mCaptureThreadPriority = 30;
 
 /* 80009BBC-80009BE0       .text mCaptureAlarmHandler__FP7OSAlarmP9OSContext */
 void mCaptureAlarmHandler(OSAlarm*, OSContext*) {
@@ -1088,10 +1088,10 @@ out:
 }
 
 /* 8000AAC4-8000AB1C       .text mCaptureProc__FPv */
-void* mCaptureProc(void* dummy) {
-    void* bytesCopied = (void*)encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
+u32 mCaptureProc(void* dummy) {
+    u32 bytesCopied = encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
     DCStoreRange(mCaptureTextureBuffer, mCaptureTextureSize);
-    OSExitThread(bytesCopied);
+    OSExitThread((void*)bytesCopied);
     return bytesCopied;
 }
 

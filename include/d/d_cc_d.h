@@ -12,6 +12,7 @@
 
 enum dCcD_ObjAtType {
     /* 0x00000002 */ AT_TYPE_SWORD          = (1 << 1),
+    /* 0x00000008 */ AT_TYPE_UNK8           = (1 << 3),
     /* 0x00000020 */ AT_TYPE_BOMB           = (1 << 5),
     /* 0x00000040 */ AT_TYPE_BOOMERANG      = (1 << 6),
     /* 0x00000080 */ AT_TYPE_BOKO_STICK     = (1 << 7),
@@ -86,14 +87,14 @@ enum dCcG_hitSe {
 };
 
 enum CcG_At_HitMark {
-    /* 0x0 */ dCcG_AtHitMark_None_e = 0,
-    /* 0x1 */ dCcG_AtHitMark_Unk1_e = 1,
+    /* 0x0 */ dCcG_AtHitMark_None_e = dPa_name::ID_NONE,
+    /* 0x1 */ dCcG_AtHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xD */ dCcG_AtHitMark_Nrm_e = dPa_name::ID_COMMON_NORMAL_HIT,
     /* 0xF */ dCcG_AtHitMark_Big_e = dPa_name::ID_COMMON_BIG_HIT,
 };
 
 enum CcG_Tg_HitMark {
-    /* 0x1 */ dCcG_TgHitMark_Unk1_e = 1,
+    /* 0x1 */ dCcG_TgHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xC */ dCcg_TgHitMark_Purple_e = dPa_name::ID_COMMON_PURPLE_HIT,
 };
 
@@ -102,11 +103,14 @@ enum dCcG_At_Spl {
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
     /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
+    /* 0x8 */ dCcG_At_Spl_UNK8 = 8,
     /* 0x9 */ dCcG_At_Spl_UNK9 = 9,
     /* 0xB */ dCcG_At_Spl_UNKB = 0xB,
 };
 
-enum dCcG_Tg_Spl {};
+enum dCcG_Tg_Spl {
+    /* 0x0 */ dCcG_Tg_Spl_UNK0 = 0,
+};
 
 struct dCcD_SrcGAtTgCoCommonBase {
     /* 0x0 */ u32 mSPrm;
@@ -170,8 +174,8 @@ public:
 
     void Ct();
     void Move();
-    void ClrAt() { mAtSpl = 0; }
-    void ClrTg() { mTgSpl = 0; }
+    void ClrAt() { mAtSpl = dCcG_At_Spl_UNK0; }
+    void ClrTg() { mTgSpl = dCcG_Tg_Spl_UNK0; }
     void SetAtApid(fpc_ProcID id) { mAtApid = id; }
     void SetTgApid(fpc_ProcID id) { mTgApid = id; }
     u8 GetRoomId() { return mRoomId; }
@@ -198,6 +202,8 @@ public:
     /* 0x1C */ u32 mFlag;
 };  // Size = 0x20
 
+STATIC_ASSERT(sizeof(dCcD_GStts) == 0x20);
+
 class dCcD_Stts : public cCcD_Stts, public dCcD_GStts {
 public:
     dCcD_Stts() {}
@@ -220,6 +226,8 @@ public:
     /* 0x18 */ /* vtable */
     /* 0x1C */ /* dCcD_GStts */
 };  // Size = 0x3C
+
+STATIC_ASSERT(sizeof(dCcD_Stts) == 0x3C);
 
 class dCcD_GObjInf;
 typedef void (*dCcD_HitCallback)(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
@@ -345,6 +353,7 @@ private:
 // Correction (Co) Collider
 class dCcD_GObjCo : public dCcD_GAtTgCoCommonBase {
 public:
+    /* 0x00 */ /* dCcD_GAtTgCoCommonBase */
     virtual ~dCcD_GObjCo() {}
     void Set(dCcD_SrcGObjCo const& pSrc) { dCcD_GAtTgCoCommonBase::Set(pSrc.mBase); }
     void ClrHit() { ClrActorInfo(); }
@@ -466,6 +475,7 @@ public:
     cXyz* GetTgHitPosP() { return mGObjTg.GetHitPosP(); }
 
 protected:
+    /* 0x000 */ /* cCcD_GObjInf */
     /* 0x050 */ dCcD_GObjAt mGObjAt;
     /* 0x094 */ dCcD_GObjTg mGObjTg;
     /* 0x0DC */ dCcD_GObjCo mGObjCo;
@@ -480,7 +490,7 @@ public:
     /* 0xF8 */ /* cCcD_CylAttr */
 
     void Set(dCcD_SrcCyl const&);
-    cCcD_ShapeAttr* GetShapeAttr() { return this; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return this; }
     void StartCAt(cXyz&);
     void StartCTg(cXyz&);
     void MoveCAtTg(cXyz&);
@@ -490,9 +500,14 @@ public:
     dCcD_Cyl() {}
 };  // Size = 0x130
 
+STATIC_ASSERT(sizeof(dCcD_Cyl) == 0x130);
+
 // Sphere
 class dCcD_Sph : public dCcD_GObjInf, public cCcD_SphAttr {
 public:
+    /* 0x000 */ /* dCcD_GObjInf */
+    /* 0x0F8 */ /* cCcD_SphAttr */
+
     dCcD_Sph() {}
     void Set(dCcD_SrcSph const&);
     void StartCAt(cXyz&);
@@ -508,7 +523,7 @@ public:
     /* 0xF8 */ /* cCcD_CpsAttr */
 
     void Set(dCcD_SrcCps const&);
-    cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
     void CalcAtVec() {
         cXyz* atVecP = GetAtVecP();
         CalcVec(atVecP);
@@ -521,11 +536,14 @@ public:
 // Triangle
 class dCcD_Tri : public dCcD_GObjInf, public cCcD_TriAttr {
 public:
+    /* 0x00 */ /* dCcD_GObjInf */
+    /* 0xF8 */ /* cCcD_TriAttr */
+
     void Set(dCcD_SrcTri const&);
-    cCcD_ShapeAttr* GetShapeAttr() { return this; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return this; }
     virtual ~dCcD_Tri() {}
     dCcD_Tri() {}
-};
+};  // Size: 0x150
 
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* param_0);
 

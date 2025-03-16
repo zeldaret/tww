@@ -32,8 +32,8 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                     // This also seems to be used by several other enemies, such as Molgera's spawn.
                     static u32 ki_item_d[] = {
                         dItem_HEART_e,
-                        L_MAGIC,
-                        ARROW_10,
+                        dItem_LARGE_MAGIC_e,
+                        dItem_ARROW_10_e,
                     };
                     if (dropType < daDisItem_HEART_e + (int)ARRAY_SIZE(ki_item_d)) {
                         fopAcM_createItem(&i_this->current.pos, ki_item_d[dropType - daDisItem_HEART_e], -1, -1, daItemType_0_e, NULL, daItemAct_4_e);
@@ -76,20 +76,21 @@ void set_disappear(disappear_class* i_this, float scale) {
         case 0xB:
         case 0xC:
         case 0xD:
-            dComIfGp_particle_set(0x14, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0014, &i_this->current.pos, NULL, &particleScale);
+            // Fall-through
         case 0x3:
-            dComIfGp_particle_set(0x13, &i_this->current.pos, NULL, &particleScale);
-            dComIfGp_particle_setStripes(0x15, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
-            dComIfGp_particle_set(0x16, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_setStripes(dPa_name::ID_COMMON_0015, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0016, &i_this->current.pos, NULL, &particleScale);
             break;
         case 0x1:
-            dComIfGp_particle_set(0x13, &i_this->current.pos, NULL, &particleScale);
-            dComIfGp_particle_set(0x16, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0016, &i_this->current.pos, NULL, &particleScale);
             break;
         case 0x4:
-            dComIfGp_particle_set(0x043C, &i_this->current.pos);
-            dComIfGp_particle_set(0x043D, &i_this->current.pos);
-            dComIfGp_particle_set(0x043E, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_043C, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_043D, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_043E, &i_this->current.pos);
             break;
     }
 }

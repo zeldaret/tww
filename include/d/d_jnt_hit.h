@@ -1,7 +1,6 @@
 #ifndef D_JNT_HIT_H
 #define D_JNT_HIT_H
 
-#include "global.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
@@ -80,8 +79,7 @@ public:
     virtual ~JntHit_HIO_c() {}
 
 public:
-    /* 0x04 */ s8 mChildID;
-    /* 0x05 */ u8 m05[0x06 - 0x05];
+    /* 0x04 */ s8 mNo;
     /* 0x06 */ s16 m06;
     /* 0x08 */ s16 m08;
     /* 0x0A */ u8 m0A[0x0C - 0x0A];

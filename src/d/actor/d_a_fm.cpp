@@ -492,12 +492,12 @@ void daFm_c::setHoleScale(float, float, float) {
 }
 
 /* 00008258-00008564       .text _execute__6daFm_cFv */
-BOOL daFm_c::_execute() {
+bool daFm_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00008564-000085A4       .text MtxToRot__6daFm_cFPA4_fP5csXyz */
-void daFm_c::MtxToRot(float(*)[4], csXyz*) {
+void daFm_c::MtxToRot(Mtx, csXyz*) {
     /* Nonmatching */
 }
 
@@ -517,7 +517,7 @@ void daFm_c::bodyDraw() {
 }
 
 /* 00008A88-00008B4C       .text _draw__6daFm_cFv */
-BOOL daFm_c::_draw() {
+bool daFm_c::_draw() {
     /* Nonmatching */
 }
 
@@ -537,7 +537,7 @@ s32 daFm_c::_create() {
 }
 
 /* 0000A094-0000A0FC       .text _delete__6daFm_cFv */
-BOOL daFm_c::_delete() {
+bool daFm_c::_delete() {
     /* Nonmatching */
 }
 

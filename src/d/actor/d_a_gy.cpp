@@ -187,7 +187,7 @@ void daGy_c::getWaterY() {
 }
 
 /* 000039AC-00004264       .text _execute__6daGy_cFv */
-BOOL daGy_c::_execute() {
+bool daGy_c::_execute() {
     /* Nonmatching */
 }
 
@@ -197,7 +197,7 @@ void daGy_c::drawDebug() {
 }
 
 /* 00004560-000046C8       .text _draw__6daGy_cFv */
-BOOL daGy_c::_draw() {
+bool daGy_c::_draw() {
     /* Nonmatching */
 }
 
@@ -212,7 +212,7 @@ s32 daGy_c::_create() {
 }
 
 /* 00005A80-00005AD4       .text _delete__6daGy_cFv */
-BOOL daGy_c::_delete() {
+bool daGy_c::_delete() {
     /* Nonmatching */
 }
 

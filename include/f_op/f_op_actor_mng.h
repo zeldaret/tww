@@ -108,7 +108,7 @@ public:
     void erase() {}
 };
 
-typedef int (*heapCallbackFunc)(fopAc_ac_c*);
+typedef BOOL (*heapCallbackFunc)(fopAc_ac_c*);
 typedef int (*createFunc)(void*);
 
 inline s8 fopAcM_GetRoomNo(fopAc_ac_c* pActor) {
@@ -401,7 +401,7 @@ inline BOOL fopAcM_isItem(fopAc_ac_c* item, int bitNo) {
 
 inline BOOL dComIfGs_isSaveSwitch(int i_stageNo, int i_no);
 inline BOOL fopAcM_isItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
-    if (itemNo == BLUE_JELLY) {
+    if (itemNo == dItem_BLUE_JELLY_e) {
         // Blue Chu Jelly uses itemBitNo as if it was a switch in stageNo 0xE.
         return dComIfGs_isSaveSwitch(dSv_save_c::STAGE_BLUE_CHU_JELLY, itemBitNo);
     } else {
@@ -411,7 +411,7 @@ inline BOOL fopAcM_isItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
 
 inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no);
 inline void fopAcM_onItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
-    if (itemNo == BLUE_JELLY) {
+    if (itemNo == dItem_BLUE_JELLY_e) {
         // Blue Chu Jelly uses itemBitNo as if it was a switch in stageNo 0xE.
         dComIfGs_onSaveSwitch(dSv_save_c::STAGE_BLUE_CHU_JELLY, itemBitNo);
     } else {
@@ -480,7 +480,7 @@ fpc_ProcID fopAcM_createChild(s16 procName, fpc_ProcID parentPId, u32 parameters
                         createFunc p_createFunc = NULL);
 
 fpc_ProcID fopAcM_createChild(char* pProcNameString, fpc_ProcID parentPcId, u32 parameter, cXyz* pPos,
-                        int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc);
+                        int roomNo, csXyz* pAngle, cXyz* pScale = NULL, createFunc createFunc = NULL);
 
 fpc_ProcID fopAcM_createChildFromOffset(s16 procName, fpc_ProcID parentProcID, u32 actorParams,
                                   cXyz* p_pos, int roomNo, csXyz* p_angle,
@@ -491,7 +491,7 @@ fpc_ProcID fopAcM_createChildFromOffset(char* pProcNameString, fpc_ProcID parent
 
 void fopAcM_DeleteHeap(fopAc_ac_c* p_actor);
 
-bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 size);
+bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 estimatedHeapSize);
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
 #ifdef __MWERKS__
@@ -554,7 +554,7 @@ s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, s16 eventIdx, u16 flag, u16 hi
 s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, s16 eventIdx, u16 flag, u16 hind);
 s32 fopAcM_orderOtherEventId(fopAc_ac_c* actor, s16 eventIdx, u8 mapToolID = -1, u16 hind = -1,
                              u16 priority = 0, u16 flag = 1);
-s32 fopAcM_orderPotentialEvent(fopAc_ac_c*, u16, u16, u16);
+s32 fopAcM_orderPotentialEvent(fopAc_ac_c*, u16 flag, u16 hind, u16 priority);
 s32 fopAcM_orderItemEvent(fopAc_ac_c*);
 s32 fopAcM_orderTreasureEvent(fopAc_ac_c*, fopAc_ac_c*);
 fopAc_ac_c* fopAcM_getTalkEventPartner(fopAc_ac_c*);

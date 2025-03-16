@@ -127,17 +127,17 @@ void daNpc_Bmsw_c::shiwake_game_action(void*) {
 }
 
 /* 00002950-00002B24       .text _draw__12daNpc_Bmsw_cFv */
-BOOL daNpc_Bmsw_c::_draw() {
+bool daNpc_Bmsw_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00002B24-00002CA4       .text _execute__12daNpc_Bmsw_cFv */
-BOOL daNpc_Bmsw_c::_execute() {
+bool daNpc_Bmsw_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002CA4-00002D40       .text _delete__12daNpc_Bmsw_cFv */
-BOOL daNpc_Bmsw_c::_delete() {
+bool daNpc_Bmsw_c::_delete() {
     /* Nonmatching */
 }
 

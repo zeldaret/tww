@@ -1111,9 +1111,9 @@ static BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     
     g_msgDHIO.field_0x06 = 0;
     g_msgDHIO.field_0x10 = -1;
-    mDoHIO_deleteChild(g_darkHIO.mChildID);
-    mDoHIO_deleteChild(g_envHIO.mChildID);
-    mDoHIO_deleteChild(g_msgDHIO.mChildID);
+    mDoHIO_deleteChild(g_darkHIO.mNo);
+    mDoHIO_deleteChild(g_envHIO.mNo);
+    mDoHIO_deleteChild(g_msgDHIO.mNo);
     
     dComIfGp_setWindowNum(0);
     
@@ -1339,9 +1339,9 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dStage_Create();
     mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 30);
 
-    g_darkHIO.mChildID = mDoHIO_createChild("暗闇スポット", &g_darkHIO); // "Darkness Spot"
-    g_envHIO.mChildID = mDoHIO_createChild("描画設定", &g_envHIO); // "Draw Settings"
-    g_msgDHIO.mChildID = mDoHIO_createChild("Message Data", &g_msgDHIO);
+    g_darkHIO.mNo = mDoHIO_createChild("暗闇スポット", &g_darkHIO); // "Darkness Spot"
+    g_envHIO.mNo = mDoHIO_createChild("描画設定", &g_envHIO); // "Draw Settings"
+    g_msgDHIO.mNo = mDoHIO_createChild("Message Data", &g_msgDHIO);
 
     new(&dComIfGp_getAttention()) dAttention_c(dComIfGp_getPlayer(0), NULL);
     dComIfGp_getVibration().Init();
@@ -1506,40 +1506,40 @@ static scene_method_class l_dScnPly_Method = {
 };
 
 scene_process_profile_definition g_profile_PLAY_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_PLAY_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnPly_ply_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnPly_Method,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_PLAY_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnPly_ply_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnPly_Method,
 };
 
 scene_process_profile_definition g_profile_OPENING_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_OPENING_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnPly_ply_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnPly_Method,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OPENING_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnPly_ply_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnPly_Method,
 };
 
 scene_process_profile_definition g_profile_OPENING2_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_OPENING2_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnPly_ply_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnPly_Method,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OPENING2_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnPly_ply_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnPly_Method,
 };

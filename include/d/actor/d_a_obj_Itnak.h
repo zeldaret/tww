@@ -14,13 +14,13 @@ namespace daObjItnak {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void set_mtx();
         void set_co_se(dCcD_Cyl*);
         void manage_draw_flag();
         void set_collision();
-        BOOL _execute();
-        BOOL _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         /* Place member variables here */

@@ -211,20 +211,6 @@ struct TAdaptor_light : public JStudio::TAdaptor_light {
     /* 0x118 */ int _118;
 };  // Size: 0x11C
 
-void
-    transform_toGlobalFromLocal(f32 (*)[4],
-                                JStudio::TControl::TTransform_translation_rotation_scaling const&,
-                                JStage::TObject const*, u32);
-void transform_toGlobalFromLocal(f32 (*)[4],
-                                                JStudio::TControl::TTransform_position const&,
-                                                JStage::TObject const*, u32);
-void
-    transform_toLocalFromGlobal(f32 (*)[4],
-                                JStudio::TControl::TTransform_translation_rotation_scaling const&,
-                                JStage::TObject const*, u32);
-void transform_toLocalFromGlobal(f32 (*)[4],
-                                                JStudio::TControl::TTransform_position const&,
-                                                JStage::TObject const*, u32);
 };  // namespace JStudio_JStage
 
 #endif /* JSTUDIO_JSTAGE_CONTROL_H */

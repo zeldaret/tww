@@ -14,12 +14,12 @@ JUTGraphFifo* JUTGraphFifo::sCurrentFifo;
 JUTGraphFifo::JUTGraphFifo(u32 size) {
     mSize = size + 0x1F & ~0x1F;
     if (sInitiated) {
-        mFifo = (GXFifoObj*)JKRAllocFromSysHeap(mSize + 0x80, 32);
+        mFifo = (GXFifoObj*)JKRAllocFromSysHeap(sizeof(GXFifoObj) + mSize, 0x20);
         mBase = mFifo + 1;
         GXInitFifoBase(mFifo, mBase, mSize);
         GXInitFifoPtrs(mFifo, mBase, mBase);
     } else {
-        mBase = JKRAllocFromSysHeap(mSize + 0xA0, 32);
+        mBase = JKRAllocFromSysHeap(0xA0 + mSize, 0x20); // TODO: What struct is 0xA0 bytes in size?
         mBase = (void*)((int)mBase + 0x1F & ~0x1F);
         mFifo = GXInit(mBase, mSize);
         sInitiated = true;

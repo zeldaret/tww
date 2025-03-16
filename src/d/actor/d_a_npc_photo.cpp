@@ -58,17 +58,17 @@ void daNpcPhoto_c::createInit() {
 }
 
 /* 00001048-000010A4       .text _delete__12daNpcPhoto_cFv */
-BOOL daNpcPhoto_c::_delete() {
+bool daNpcPhoto_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000010A4-0000125C       .text _draw__12daNpcPhoto_cFv */
-BOOL daNpcPhoto_c::_draw() {
+bool daNpcPhoto_c::_draw() {
     /* Nonmatching */
 }
 
 /* 0000125C-0000151C       .text _execute__12daNpcPhoto_cFv */
-BOOL daNpcPhoto_c::_execute() {
+bool daNpcPhoto_c::_execute() {
     /* Nonmatching */
 }
 

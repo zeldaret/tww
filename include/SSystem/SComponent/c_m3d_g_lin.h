@@ -13,7 +13,7 @@ private:
 
 public:
     cM3dGLin() {}
-    cM3dGLin(const cXyz&, const cXyz&);
+    cM3dGLin(const cXyz& start, const cXyz& end) : mStart(start), mEnd(end) {}
     virtual ~cM3dGLin() {}
     void SetStartEnd(const cXyz& start, const cXyz& end) {
         mStart = start;
@@ -27,7 +27,12 @@ public:
         mStart = start;
         mEnd = end;
     }
-    void CalcPos(Vec*, f32) const { /* TODO */ }
+    void CalcPos(Vec* out, f32 scale) const {
+        Vec tmp;
+        VECSubtract(&mEnd, &mStart, &tmp);
+        VECScale(&tmp, &tmp, scale);
+        VECAdd(&tmp, &mStart, out);
+    }
     void CalcVec(Vec* pOut) const { VECSubtract(&this->mEnd, &this->mStart, pOut); }
     void SetEnd(const cXyz& pos) { mEnd = pos; }
     const cXyz* GetStartP() const { return &mStart; }

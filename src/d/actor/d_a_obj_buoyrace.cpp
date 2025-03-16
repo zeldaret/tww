@@ -27,7 +27,7 @@ s32 daObjBuoyrace::Act_c::_create() {
 }
 
 /* 00000374-000003C0       .text _delete__Q213daObjBuoyrace5Act_cFv */
-BOOL daObjBuoyrace::Act_c::_delete() {
+bool daObjBuoyrace::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -62,12 +62,12 @@ void daObjBuoyrace::Act_c::set_rope_pos() {
 }
 
 /* 00000A6C-00000AAC       .text _execute__Q213daObjBuoyrace5Act_cFv */
-BOOL daObjBuoyrace::Act_c::_execute() {
+bool daObjBuoyrace::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000AAC-00000B28       .text _draw__Q213daObjBuoyrace5Act_cFv */
-BOOL daObjBuoyrace::Act_c::_draw() {
+bool daObjBuoyrace::Act_c::_draw() {
     /* Nonmatching */
 }
 

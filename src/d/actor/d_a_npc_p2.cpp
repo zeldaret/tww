@@ -228,7 +228,7 @@ void daNpc_P2_c::wait_action(void*) {
 }
 
 /* 00003158-00003520       .text _execute__10daNpc_P2_cFv */
-BOOL daNpc_P2_c::_execute() {
+bool daNpc_P2_c::_execute() {
     /* Nonmatching */
 }
 
@@ -268,7 +268,7 @@ void daNpc_P2_c::drawP2c() {
 }
 
 /* 00003A64-00003AF0       .text _draw__10daNpc_P2_cFv */
-BOOL daNpc_P2_c::_draw() {
+bool daNpc_P2_c::_draw() {
     /* Nonmatching */
 }
 
@@ -298,7 +298,7 @@ s32 daNpc_P2_c::_create() {
 }
 
 /* 00004CDC-00004D54       .text _delete__10daNpc_P2_cFv */
-BOOL daNpc_P2_c::_delete() {
+bool daNpc_P2_c::_delete() {
     /* Nonmatching */
 }
 

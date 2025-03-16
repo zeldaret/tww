@@ -55,15 +55,15 @@ public:
     void modeProc(Proc_e, Mode_e);
     void setAnm();
     void setWater();
-    BOOL _execute();
+    bool _execute();
     void drawAwa();
     void drawSuikomi();
     void drawDebug();
-    BOOL _draw();
+    bool _draw();
     void getArg();
     void createInit();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
 
 public:
     /* 0x290 */ u8 field_0x290[0x574 - 0x290];

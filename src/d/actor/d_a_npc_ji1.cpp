@@ -373,7 +373,7 @@ BOOL daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
             field_0xD74++;
             field_0xD68 = 0;
             setAnm(9, 0.0f, 1);
-            dComIfGp_particle_set(0xC, field_0x7E0.GetTgHitPosP());
+            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
             fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
             fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
         }
@@ -1242,7 +1242,7 @@ void daNpc_Ji1_c::createItem() {
     u8 itemNo;
 
     if(field_0xD7C) {
-        itemNo = SWORD;
+        itemNo = dItem_SWORD_e;
     }
     else if(field_0xD7B == 1) {
         itemNo = dItem_HURRICANE_SPIN_e;
@@ -1753,6 +1753,7 @@ u32 daNpc_Ji1_c::evn_hide_init(int staffIdx) {
 
 /* 00005508-000055E4       .text AnimeControlToWait__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::AnimeControlToWait() {
+    /* Nonmatching */
     if(field_0x330->getPlayMode() == J3DFrameCtrl::LOOP_ONCE_e) {
         if(field_0x330->checkFrame(field_0x330->getEndFrame() - 1.0f)) {
             if(isAttackAnim() || isGuardAnim()) {
@@ -1787,6 +1788,21 @@ u32 daNpc_Ji1_c::privateCut() {
         "CONTINUETALK",
         "SETANGLE",
     };
+    enum {
+        ACT_SETANM,
+        ACT_TALKMSG,
+        ACT_INITPOS,
+        ACT_CREATEITEM,
+        ACT_SOUND,
+        ACT_HEADSWING,
+        ACT_HARPOON,
+        ACT_ROLLAT_CNT,
+        ACT_GAME_MODE,
+        ACT_TURN_TO_PLAYER,
+        ACT_HIDE,
+        ACT_CONTINUETALK,
+        ACT_SETANGLE,
+    };
     int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
     if(actIdx == -1) {
         dComIfGp_evmng_cutEnd(staffIdx);
@@ -1794,40 +1810,40 @@ u32 daNpc_Ji1_c::privateCut() {
     else {
         if(dComIfGp_evmng_getIsAddvance(staffIdx)) {
             switch(actIdx) {
-                case 0:
+                case ACT_SETANM:
                     evn_setAnm_init(staffIdx);
                     break;
-                case 1:
+                case ACT_TALKMSG:
                     evn_talk_init(staffIdx);
                     break;
-                case 2:
+                case ACT_INITPOS:
                     evn_init_pos_init(staffIdx);
                     break;
-                case 3:
+                case ACT_CREATEITEM:
                     createItem();
                     break;
-                case 4:
+                case ACT_SOUND:
                     evn_sound_proc_init(staffIdx);
                     break;
-                case 5:
+                case ACT_HEADSWING:
                     evn_head_swing_init(staffIdx);
                     break;
-                case 6:
+                case ACT_HARPOON:
                     evn_harpoon_proc_init(staffIdx);
                     break;
-                case 7:
+                case ACT_ROLLAT_CNT:
                     evn_RollAtControl_init(staffIdx);
                     break;
-                case 8:
+                case ACT_GAME_MODE:
                     evn_game_mode_init(staffIdx);
                     break;
-                case 0xA:
+                case ACT_HIDE:
                     evn_hide_init(staffIdx);
                     break;
-                case 0xB:
+                case ACT_CONTINUETALK:
                     evn_continue_talk_init(staffIdx);
                     break;
-                case 0xC:
+                case ACT_SETANGLE:
                     evn_setAngle_init(staffIdx);
                     break;
             }
@@ -1835,16 +1851,16 @@ u32 daNpc_Ji1_c::privateCut() {
 
         BOOL end;
         switch(actIdx) {
-            case 1:
+            case ACT_TALKMSG:
                 end = evn_talk();
                 break;
-            case 7:
+            case ACT_ROLLAT_CNT:
                 end = evn_RollAtControl();
                 break;
-            case 9:
+            case ACT_TURN_TO_PLAYER:
                 end = evn_turn_to_player();
                 break;
-            case 0xB:
+            case ACT_CONTINUETALK:
                 end = evn_continue_talk();
                 break;
             default:
@@ -1863,7 +1879,7 @@ u32 daNpc_Ji1_c::privateCut() {
 u32 daNpc_Ji1_c::setParticle(int max, f32 rate, f32 spread) {
     dtParticle();
     if(field_0x2E0.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
         if(emitter) {
             emitter->setRate(rate);
             emitter->setSpread(spread);
@@ -1887,7 +1903,7 @@ void daNpc_Ji1_c::dtParticle() {
 /* 000058F0-000059E8       .text setParticleAT__11daNpc_Ji1_cFiff */
 u32 daNpc_Ji1_c::setParticleAT(int max, f32 rate, f32 spread) {
     if(field_0x300.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
         if(field_0x300.getEmitter()) {
             JGeometry::TVec3<f32> scaleVec;
             scaleVec.x = 2.0f;
@@ -2581,22 +2597,20 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
 /* 0000C7E4-0000CA98       .text battleAction__11daNpc_Ji1_cFPv */
 BOOL daNpc_Ji1_c::battleAction(void*) {
-    /* Nonmatching */
-
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     if(field_0xC78 == 0) {
         u8 icon;
         switch(dComIfGs_getSelectEquip(0)) {
-            case SWORD:
+            case dItem_SWORD_e:
                 icon = 1;
                 break;
                 icon = 2;
                 break;
-            case LV3_SWORD:
+            case dItem_MASTER_SWORD_2_e:
                 icon = 2;
                 break;
-            case MASTER_SWORD:
+            case dItem_MASTER_SWORD_1_e:
             default:
                 icon = 2;
                 break;
@@ -2644,8 +2658,6 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
 
 /* 0000CA98-0000CC28       .text checkCutType__11daNpc_Ji1_cFii */
 BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
-    /* Nonmatching */
-
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     BOOL ret = false;
@@ -2816,7 +2828,7 @@ void daNpc_Ji1_c::setAnimFromMsgNo(u32 msgNo) {
             if(field_0x430 != 0) {
                 field_0x430->becomeInvalidEmitter();
                 field_0x430 = 0;
-                field_0x430 = dComIfGp_particle_set(0x81A5, &current.pos);
+                field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A5, &current.pos);
             }
 
             setAnm(0x18, 8.0f, 0);
@@ -3000,7 +3012,7 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
                 pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NAKU);
 
                 if(field_0x430 == 0) {
-                    field_0x430 = dComIfGp_particle_set(0x81A4, &current.pos);
+                    field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A4, &current.pos);
                     harpoonRelease(0);
                 }
 
@@ -3034,10 +3046,10 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 }
 
 /* 0000DAB0-0000DC04       .text nodeCallBack1__FP7J3DNodei */
-static BOOL nodeCallBack1(J3DNode* node, int param_1) {
+static BOOL nodeCallBack1(J3DNode* node, int calcTiming) {
     /* Nonmatching */
 
-    if (!param_1) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Ji1_c* i_this = (daNpc_Ji1_c*)model->getUserArea();
@@ -3067,8 +3079,8 @@ static BOOL nodeCallBack1(J3DNode* node, int param_1) {
 }
 
 /* 0000DC04-0000DD68       .text nodeCallBack2__FP7J3DNodei */
-static BOOL nodeCallBack2(J3DNode* node, int param_1) {
-    if (!param_1) {
+static BOOL nodeCallBack2(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
         daNpc_Ji1_c* i_this = (daNpc_Ji1_c*)model->getUserArea();
@@ -3098,8 +3110,8 @@ static BOOL nodeCallBack2(J3DNode* node, int param_1) {
 }
 
 /* 0000DD68-0000DE90       .text nodeCallBack3__FP7J3DNodei */
-static BOOL nodeCallBack3(J3DNode* node, int param_1) {
-    if (param_1) {
+static BOOL nodeCallBack3(J3DNode* node, int calcTiming) {
+    if (calcTiming != J3DNodeCBCalcTiming_In) {
         return true;
     }
     else {
@@ -3141,7 +3153,7 @@ s32 daNpc_Ji1_c::_create() {
     s32 state = dComIfG_resLoad(&field_0xC7C, "Ji");
     if(state == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0x16840)) {
-           return cPhs_ERROR_e;
+            return cPhs_ERROR_e;
         }
 
         CreateInit();
@@ -3286,7 +3298,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
     cXyz temp(190.0f, 230.0f, -1100.0f);
     csXyz temp2(0, 0, 0);
 
-    fopAcM_createChild("Kmon", fopAcM_GetID(this), 0, &temp, fopAcM_GetRoomNo(this), &temp2, 0, (createFunc)0);
+    fopAcM_createChild("Kmon", fopAcM_GetID(this), 0, &temp, fopAcM_GetRoomNo(this), &temp2);
     fopAcM_SetMtx(this, field_0x330->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
     gravity = -30.0f;
@@ -3392,7 +3404,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
         }
     }
 
-    dComIfGp_getAttention().setFlag(0x80000000);
+    dComIfGp_att_offAleart();
     mEventCut.setActorInfo("Ji1", this);
     mEventCut.setJntCtrlPtr(&m_jnt);
     field_0xC84 = 0x12;
@@ -3588,8 +3600,6 @@ static void daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
 /* 00010E3C-00010FC0       .text chkAttention__11daNpc_Ji1_cF4cXyzs */
 BOOL daNpc_Ji1_c::chkAttention(cXyz param_1, s16 param_2) {
-    /* Nonmatching */
-
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 temp = 800.0f;
     s32 temp2 = l_HIO.field_0x10 + l_HIO.field_0x12;
@@ -3606,22 +3616,19 @@ BOOL daNpc_Ji1_c::chkAttention(cXyz param_1, s16 param_2) {
         temp2 += 0x71C;
     }
 
-    field_0xD7A = temp2 > abs(static_cast<s16>(angle - param_2)) && temp > dist;
+    angle -= param_2;
+    field_0xD7A = temp2 > abs(angle) && temp > dist;
     
-    return temp2 > abs(static_cast<s16>(angle - param_2)) && temp > dist;
+    return temp2 > abs(angle) && temp > dist;
 }
 
 /* 00010FC0-0001132C       .text lookBack__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::lookBack() {
-    /* Nonmatching */
-
     BOOL ret = false;
 
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    cXyz& this_pos = fopAcM_GetPosition(dComIfGp_getPlayer(0));
-    cXyz& other_pos = fopAcM_GetPosition(this);
-    cXyz temp = (other_pos - this_pos);
+    cXyz temp = fopAcM_GetPosition(player) - fopAcM_GetPosition(this);
     f32 dist = temp.absXZ();
 
     bool temp2 = true;
@@ -3692,8 +3699,8 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
         scale = *param_1;
     }
 
-    dComIfGp_particle_set(0xD, field_0x7E0.GetTgHitPosP(), &angle, &scale);
-    dComIfGp_particle_set(0x10, field_0x7E0.GetTgHitPosP(), 0, &scale);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, field_0x7E0.GetTgHitPosP(), &angle, &scale);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, field_0x7E0.GetTgHitPosP(), 0, &scale);
     fopAcM_seStart(this, JA_SE_CM_JI_DAMAGE, 0);
     fopAcM_seStart(this, param_2, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);
@@ -3701,7 +3708,7 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
 
 /* 000114EC-0001161C       .text setGuardParticle__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::setGuardParticle() {
-    dComIfGp_particle_set(0xC, field_0x7E0.GetTgHitPosP());
+    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
     fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
     fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);

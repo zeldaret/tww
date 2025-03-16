@@ -6,8 +6,8 @@
 class daBeam_c : public fopAc_ac_c {
 public:
     inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _draw();
+    inline bool _delete();
+    inline bool _draw();
     void beamCheck() {}
     void beamOff() {}
     void beamOn() {}
@@ -25,7 +25,7 @@ public:
     void set_mtx();
     void CreateHeap();
     void CreateInit();
-    BOOL _execute();
+    bool _execute();
     void checkRange(csXyz*);
     void move_search();
     void fix_search();

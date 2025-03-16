@@ -84,7 +84,7 @@ void dCloth_packet_c::plot() {
 }
 
 /* 8006487C-800649C4       .text dCloth_packet_create__FP7ResTIMGP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
-void dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
+dCloth_packet_c* dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
     /* Nonmatching */
 }
 
