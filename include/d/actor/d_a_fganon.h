@@ -5,12 +5,10 @@
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_particle.h"
-#include "d/actor/d_a_mant.h"
-#include "d/actor/d_a_boko.h"
-#include "d/actor/d_a_player.h"
-#include "f_op/f_op_camera.h"
 
 class camera_class;
+class mant_class;
+class daBoko_c;
 class daPy_py_c;
 class mDoExt_McaMorf;
 class mDoExt_brkAnm;
@@ -26,7 +24,7 @@ public:
     /* 0x2BF */ u8 m2BF;
     /* 0x2C0 */ mDoExt_McaMorf* mpMorf;
     /* 0x2C4 */ mDoExt_brkAnm* mpBrkAnm1;
-    /* 0x2C8 */ J3DModel* NpcModel;
+    /* 0x2C8 */ J3DModel* mpKenModel;
     /* 0x2CC */ mDoExt_brkAnm* mpBrkAnm2;
     /* 0x2D0 */ s8 m2D0;
     /* 0x2D1 */ u8 m2D1[0x2D4 - 0x2D1];

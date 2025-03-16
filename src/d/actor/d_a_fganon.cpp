@@ -5,22 +5,19 @@
 
 #include "d/actor/d_a_fganon.h"
 #include "d/d_procname.h"
+#include "JSystem/JUtility/JUTReport.h"
+#include "d/actor/d_a_boko.h"
+#include "d/actor/d_a_mant.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
-#include "m_Do/m_Do_hostIO.h"
+#include "d/d_meter.h"
 #include "d/d_s_play.h"
-#include "m_Do/m_Do_audio.h"
-#include "d/d_camera.h"
 #include "d/d_snap.h"
 #include "d/res/res_fganon.h"
 #include "d/res/res_pgsw.h"
-#include "d/d_bg_s_lin_chk.h"
-#include "d/d_kankyo.h"
-#include "d/d_bg_s_func.h"
-#include "d/d_cc_uty.h"
-#include "d/d_meter.h"
-#include "JSystem/JUtility/JUTReport.h"
-#include "d/d_meter.h"
-#include "d/d_particle_name.h"
+#include "f_op/f_op_camera.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -90,7 +87,7 @@ static BOOL daFganon_Draw(fganon_class* i_this) {
     i_this->mpBrkAnm1->entry(pModel->getModelData());
     i_this->mpMorf->entryDL();
     if (i_this->m2D0 != 2) {
-        pModel = i_this->NpcModel;
+        pModel = i_this->mpKenModel;
         g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->mTevStr);
         g_env_light.setLightTevColorType(pModel, &i_this->mTevStr);
         i_this->mpBrkAnm2->entry(pModel->getModelData());
@@ -106,7 +103,7 @@ void deru_brk(fganon_class* i_this) {
     J3DAnmTevRegKey* ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_MAIN1);
     i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_KEN1);
-    i_this->mpBrkAnm2->init(i_this->NpcModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
     fopAcM_seStart(i_this, JA_SE_CM_PG_APPEAR, 0);
     i_this->mbIsMaterialized = TRUE;
     return;
@@ -123,7 +120,7 @@ void kieru_brk(fganon_class* i_this, unsigned char param_2) {
     }
     if ((param_2 == 0) || (param_2 == 2)) {
         ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Pgsw", PGSW_BRK_KIERU_KEN1);
-        i_this->mpBrkAnm2->init(i_this->NpcModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+        i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
     }
     i_this->mbIsMaterialized = FALSE;
     return;
@@ -135,7 +132,7 @@ void deru_brk2(fganon_class* i_this) {
     J3DAnmTevRegKey* ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_MAIN2);
     i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_KEN2);
-    i_this->mpBrkAnm2->init(i_this->NpcModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
     fopAcM_seStart(i_this, JA_SE_CM_PG_APPEAR, 0);
     i_this->mbIsMaterialized = TRUE;
     return;
@@ -148,7 +145,7 @@ void kieru_brk2(fganon_class* i_this) {
     ptrkAnm = (J3DAnmTevRegKey *)(J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_KIERU_MAIN2);
     i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_KIERU_KEN2);
-    i_this->mpBrkAnm2->init(i_this->NpcModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
     fopAcM_seStart(i_this, JA_SE_CM_PG_DISAPPEAR, 0);
     i_this->mbIsMaterialized = FALSE;
     return;
@@ -213,18 +210,18 @@ void fly(fganon_class* i_this) {
         i_this->current.pos.y = player->current.pos.y + l_HIO.m10;
         i_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
         i_this->m388 = 1;
-        anm_init(i_this, 0x16, 20.0f, 2, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         i_this->m3A4[1] = 60;
         break;
     case 0:
-        anm_init(i_this, 0x16, 20.0f, 2, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         i_this->m388++;
         i_this->m3A0 = 0.0f;
         i_this->m3A4[1] = (short)(cM_rndF(50.0f) + 50.0f);
         // Fall-through
     case 1:
         if (i_this->m68A == 1) {
-            anm_init(i_this, 0x16, 10.0f, 2, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         }
         mDoMtx_YrotS(*calc_mtx, i_this->m398);
         cXyz posVec;
@@ -269,7 +266,7 @@ void shot(fganon_class* i_this) {
     switch(i_this->m388) {
         case 0: {
             if (!i_this->m408) {
-                anm_init(i_this, 0x10, 10.0f, 2, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_TAME1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
                 i_this->m388++;
                 i_this->m3A4[0] = 40;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_MAKE_S, 0);
@@ -286,7 +283,7 @@ void shot(fganon_class* i_this) {
                 fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_S, 0);
             }
             if (i_this->m3A4[0] == 0) {
-                anm_init(i_this, 0xD, 3.0f, 0, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_NAGERU1, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 i_this->m388++;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
                 mDoAud_seStart(JA_SE_CM_PG_EBALL_FIRE_S, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
@@ -302,7 +299,7 @@ void shot(fganon_class* i_this) {
                 i_this->m689 = 0;
             }            
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, 0x16, 3.0f, 2, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 3.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
                 i_this->m388++;
             }
             // Fall-through
@@ -313,10 +310,10 @@ void shot(fganon_class* i_this) {
                 if (std::sqrtf(PSVECSquareMag(&local_34)) < REG0_F(1) + (i_this->m404 * (REG0_F(0) + 10.0f) + 400.0f)) {
                     if (i_this->m689 == 0) {
                         if (cM_rndF(1.0f) < 0.5f) {
-                            anm_init(i_this, 0x13, 0.0f, 0, 1.0f, -1);
+                            anm_init(i_this, FGANON_BCK_TENNISLR1, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                         }
                         else {
-                            anm_init(i_this, 0x14, 0.0f, 0, 1.0f, -1);
+                            anm_init(i_this, FGANON_BCK_TENNISRL1, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                         }
                         i_this->m388++;
                         fopAcM_monsSeStart(i_this, JA_SE_CV_PG_REFLECT_EBALL, 0);
@@ -341,7 +338,7 @@ void shot(fganon_class* i_this) {
             }
             if (i_this->mpMorf->isStop() || ((i_this->m2BC >= 1) && (i_this->mpMorf->getFrame() >= 20.0f)))
             {
-                anm_init(i_this, 0x16, 10.0f, 2, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
                 i_this->m388 = 3;
             }
             // Fall-through
@@ -381,20 +378,20 @@ void spinattack(fganon_class* i_this) {
             linChk.Set(&player->eyePos, &i_this->current.pos, a_this);
             if (!dComIfG_Bgsp()->LineCross(&linChk)) {
                 i_this->current.pos.y -= 100.0f;
-                anm_init(i_this, 0x16, 1.0f, 2, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
                 i_this->m388 = 2;
                 i_this->m3A4[0] = 30;
                 deru_brk(i_this);
                 // Fall-through
             }
             else {
-                i_this->shape_angle.y = cM_rndFX(32768.0f);
+                i_this->shape_angle.y = cM_rndFX(0x8000);
                 break;
             }
         }
         case 2: {
             if (i_this->m3A4[0] == 0) {
-                anm_init(i_this, 0x9, 2.0f, 0, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_KAITEN1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 i_this->m388 = 3;
                 i_this->speedF = 0.0f;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
@@ -450,18 +447,18 @@ void fly2(fganon_class* i_this) {
         i_this->current.pos.y = player->current.pos.y + l_HIO.m18;
         i_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
         i_this->m388 = 1;
-        anm_init(i_this, 0x16, 20.0f, 2, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         i_this->m3A4[1] = 40;
         break;
     case 0:
-        anm_init(i_this, 0x16, 20.0f, 2, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         i_this->m388++;
         i_this->m3A0 = 0.0f;
         i_this->m3A4[1] = (short)(cM_rndF(50.0f) + 50.0f);
         // Fall-through
     case 1:
         if (i_this->m68A == 1) {
-            anm_init(i_this, 0x16, 10.0f, 2, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         }
         mDoMtx_YrotS(*calc_mtx, i_this->m398);
         cXyz posVec;
@@ -592,7 +589,7 @@ void shot2(fganon_class* i_this) {
     int mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
     switch(i_this->m388) {
         case 0: {
-            anm_init(i_this, 0x11, 5.0f, 0, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_TAME_S1, 5.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             for (int i = 0; i < 2; i++) {
                 if (i_this->mEmitters2[i] != NULL) {
                     i_this->mEmitters2[i]->becomeInvalidEmitter();
@@ -613,7 +610,7 @@ void shot2(fganon_class* i_this) {
                 }
             }
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, 0x12, 1.0f, 2, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_TAME_S2, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
                 i_this->m3A4[0] = l_HIO.m3C;
                 i_this->m388++;
                 for (int i = 0; i < 2; i++) {
@@ -632,7 +629,7 @@ void shot2(fganon_class* i_this) {
         case 2: {
             fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_L, 0);
             if (i_this->m3A4[0] == 0) {
-                anm_init(i_this, 0xE, 3.0f, 0, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_NAGERU_S1, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 i_this->m388++;
                 i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_821C, &i_this->current.pos, NULL);
                 i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_821D, &i_this->current.pos, NULL);
@@ -676,7 +673,7 @@ void shot2(fganon_class* i_this) {
         }
         case 4: {
             if (i_this->m68A == 1) {
-                anm_init(i_this, 0x16, 10.0f, 2, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             }
             if (i_this->m3A4[0] == 0) {
                 i_this->m386 = 9;
@@ -720,7 +717,7 @@ void spinattack2(fganon_class* i_this) {
             cXyz transformedPos;
             MtxPosition(&posVec, &transformedPos);
             i_this->current.pos = player->current.pos + transformedPos;
-            anm_init(i_this, 10, 1.0f, 2, 1.0f, -1);
+            anm_init(i_this, 10, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             i_this->m388 = 2;
             deru_brk(i_this);
             i_this->m38C = player->current.pos;
@@ -734,7 +731,7 @@ void spinattack2(fganon_class* i_this) {
             local_e4 = i_this->m38C - i_this->current.pos;
             float fVar11 = std::sqrtf(PSVECSquareMag(&local_e4));
             if (fVar11 < l_HIO.m38) {
-                anm_init(i_this, 9, 2.0f, 0, 1.0f, -1);
+                anm_init(i_this, 9, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 i_this->m388 = 3;
                 i_this->speedF = 0.0f;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
@@ -757,7 +754,7 @@ void spinattack2(fganon_class* i_this) {
                 if (i_this->m68F == 0) {
                     i_this->m388 = 4;
                     i_this->m3A4[0] = 40;
-                    anm_init(i_this, 0x16, 10.0f, 2, 1.0f, -1);
+                    anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
                 }
                 else {
                     i_this->m386 = 2;
@@ -782,7 +779,7 @@ void spinattack2(fganon_class* i_this) {
 void down(fganon_class* i_this) {
     switch(i_this->m388) {
         case 0: {
-            anm_init(i_this, 6, 2.0f, 0, 1.0f, -1);
+            anm_init(i_this, 6, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->m388++;
             i_this->speed.y = 0.0f;
         }
@@ -791,7 +788,7 @@ void down(fganon_class* i_this) {
             if (i_this->mAcch.ChkGroundHit()) {
                 if (i_this->mpMorf->isStop()) {
                     i_this->m388++;
-                    anm_init(i_this, 0x15, 2.0f, 0, 1.0f, -1);
+                    anm_init(i_this, FGANON_BCK_TYAKUTI1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 }
             }
             i_this->m3A4[0] = l_HIO.m48;
@@ -800,7 +797,7 @@ void down(fganon_class* i_this) {
         case 2: {
             if (i_this->mpMorf->isStop()) {
                 i_this->m388++;
-                anm_init(i_this, 8, 2.0f, 2, 1.0f, -1);
+                anm_init(i_this, 8, 2.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             }
             break;
         }
@@ -812,7 +809,7 @@ void down(fganon_class* i_this) {
             break;
         }
         case 10: {
-            anm_init(i_this, 7, 2.0f, 0, 1.0f, -1);
+            anm_init(i_this, 7, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->m388 = 2;
         }
         default:
@@ -965,7 +962,7 @@ void fail(fganon_class* i_this) {
         case 0: {
             kieru_brk(i_this, 1);
             i_this->m388 = 1;
-            anm_init(i_this, 7, 2.0f, 0, 1.0f, -1);
+            anm_init(i_this, 7, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             break;
         }
         case 1: {
@@ -1061,7 +1058,7 @@ void fail(fganon_class* i_this) {
                 if (!fopAcM_checkCarryNow(act)) {
                     fopAcM_setCarryNow(act, 0);
                 }
-                act->setMatrix(i_this->NpcModel->getBaseTRMtx());
+                act->setMatrix(i_this->mpKenModel->getBaseTRMtx());
                 if (i_this->m3A4[0] == 0) {
                     fopAcM_delete(i_this);
                     act->m2BC = 1;
@@ -1136,7 +1133,7 @@ void start(fganon_class* i_this) {
             if (distXZ < i_this->m2BD * 10.0f) {
                 i_this->mB54 = 1;
                 i_this->m388 = 1;
-                anm_init(i_this, 0x16, 0.0f, 2, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 0.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
                 mDoAud_bgmAllMute(30);
             }
             break;
@@ -1146,7 +1143,7 @@ void start(fganon_class* i_this) {
             break;
         }
         case 2: {
-            anm_init(i_this, 0x17, 5.0f, 2, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_WARAU1, 5.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             fopAcM_monsSeStart(i_this, JA_SE_CV_PG_LAUGH_2, 0);
             i_this->m388 = 3;
             break;
@@ -1154,7 +1151,7 @@ void start(fganon_class* i_this) {
         case 4: {
             i_this->m388 = 5;
             i_this->m3A4[0] = REG0_S(0) + 0x50;
-            anm_init(i_this, 0x10, 10.0f, 2, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_TAME1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         }
         case 5: {
             if (i_this->m3A4[0] == (s16)(REG0_S(0) + 0x4B)) {
@@ -1193,7 +1190,7 @@ void end(fganon_class* i_this) {
     switch(i_this->m388) {
         case 0: {
             i_this->m388 = 1;
-            anm_init(i_this, 0xB, 2.0f, 0, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_LAST_DAMAGE1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->mB54 = 50;
             dComIfGs_onEventBit(0x3f20); // PG_DEFEATED? It appears further down in `energy_ball_move`
             break;
@@ -1205,14 +1202,14 @@ void end(fganon_class* i_this) {
         }
         case 2: {
             deru_brk(i_this);
-            anm_init(i_this, 0x17, 1.0f, 2, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_WARAU1, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             fopAcM_monsSeStart(i_this, JA_SE_CV_PG_LAUGH_2, 0);
             i_this->m388 = 3;
             break;
         }
         case 4: {
             deru_brk(i_this);
-            anm_init(i_this, 0xF, 1.0f, 0, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_SARU1, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->m388 = 5;
             i_this->speed.y = 0.0f;
             fopAcM_seStart(i_this, JA_SE_CM_PG_END_1, 0);
@@ -1246,7 +1243,7 @@ void last_end(fganon_class* i_this) {
     switch(i_this->m388) {
         case 0: {
             i_this->m388 = 1;
-            anm_init(i_this, 0xC, 2.0f, 0, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_MOGAKU1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->mB54 = 100;
             i_this->m3C0 = 10000.0f;
             i_this->m3A4[0] = REG0_S(4) + 25;
@@ -1296,7 +1293,7 @@ void last_end(fganon_class* i_this) {
                     if (!fopAcM_checkCarryNow(mBoko)) {
                         fopAcM_setCarryNow(mBoko, 0);
                     }
-                    mBoko->setMatrix(i_this->NpcModel->getBaseTRMtx());
+                    mBoko->setMatrix(i_this->mpKenModel->getBaseTRMtx());
                     if (i_this->m3A4[1] == 1) {
                         fopAcM_cancelCarryNow(mBoko);
                         i_this->m388 = 5;
@@ -1415,7 +1412,7 @@ void damage_check(fganon_class* i_this) {
             if (atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == PROC_FGMAHOU)) {
                 i_this->m670++;
 
-                anm_init(i_this, 6, 2.0f, 0, 1.0f, -1);
+                anm_init(i_this, 6, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
 
                 i_this->m3A4[0] = 60;
 
@@ -1684,8 +1681,8 @@ void demo_camera(fganon_class* i_this) {
     switch(i_this->mB54) {
         case 0x1: {
             if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(a_this, 2, -1, 0);
-                i_this->eventInfo.onCondition(2);
+                fopAcM_orderPotentialEvent(a_this, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
+                i_this->eventInfo.onCondition(dEvtCmd_INDEMO_e);
                 bVar3 = FALSE;
                 break;
             }
@@ -1783,8 +1780,8 @@ void demo_camera(fganon_class* i_this) {
         }
         case 0x32: {
             if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(a_this, 2, 0xFFFF, 0);
-                i_this->eventInfo.onCondition(2);
+                fopAcM_orderPotentialEvent(a_this, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
+                i_this->eventInfo.onCondition(dEvtCmd_INDEMO_e);
                 bVar3 = FALSE;
                 break;
             }
@@ -1939,8 +1936,8 @@ void demo_camera(fganon_class* i_this) {
         }
         case 0x64: {
             if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(a_this, 2, -1, 0);
-                i_this->eventInfo.onCondition(2);
+                fopAcM_orderPotentialEvent(a_this, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
+                i_this->eventInfo.onCondition(dEvtCmd_INDEMO_e);
                 bVar3 = FALSE;
                 break;
             }
@@ -2242,7 +2239,9 @@ void energy_ball_move(fganon_class* i_this) {
                 csXyz local_7c(0,0,0);
                 local_7c.y = (short)cM_atan2s(i_this->m3F8.x, i_this->m3F8.z);
                 dComIfGp_particle_set(dPa_name::ID_SCENE_81F0, &i_this->m3E0, &local_7c);
-                mDoAud_seStart(JA_SE_LK_PG_BOMB_STRIKE, &i_this->m3E0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+                #if VERSION == VERSION_USA
+                    mDoAud_seStart(JA_SE_LK_PG_BOMB_STRIKE, &i_this->m3E0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+                #endif
                 PSVECAdd(&i_this->m3E0, &i_this->m3F8, &i_this->m3E0);
                 i_this->m40A = 5;
             }
@@ -2365,7 +2364,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
 
     if (((((i_this->m386 == 5) || (i_this->m386 == 9)) || (i_this->m386 == 7)) || (i_this->m386 == 10)) && ((i_this->m68B != 0 && (i_this->m68A == 0)))) {
         i_this->m68B = 0;
-        anm_init(i_this, 0x17, 6.0f, 2, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WARAU1, 6.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
         i_this->m68A = 60;
         fopAcM_monsSeStart(i_this, JA_SE_CV_PG_LAUGH_3, 0);
     }
@@ -2385,7 +2384,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
 
     if (l_HIO.m05 == 0) {
         if (i_this->mbIsMaterialized != 0) {
-            i_this->attention_info.flags = 4;
+            i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
         }
         else {
             fopAcM_OffStatus(i_this, 0);
@@ -2451,7 +2450,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
         }
         cMtx_ZrotM(*calc_mtx, i_this->m6A2 + iVar4);
         MtxTrans(-REG0_F(12), -REG0_F(13), -(REG0_F(14) + 90.0f), TRUE);
-        i_this->NpcModel->setBaseTRMtx(*calc_mtx);
+        i_this->mpKenModel->setBaseTRMtx(*calc_mtx);
     }
 
     demo_camera(i_this);
@@ -2578,7 +2577,7 @@ static BOOL daFganon_Delete(fganon_class* i_this) {
 
     mDoAud_seDeleteObject(&i_this->m3E0);
 
-    if (i_this->mCapeID != 0xFFFF)
+    if (i_this->mCapeID != 0xFFFF) // bug?
         fopAcM_delete(fopAcM_SearchByID(i_this->mCapeID));
 
     if (i_this->mB89)
@@ -2623,11 +2622,11 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     pModelData = (J3DModelData *)dComIfG_getObjectRes("Pgsw", PGSW_BDL_BPG_KEN1);
-    i_this->NpcModel = mDoExt_J3DModel__create(pModelData, 0, 0x11020203);;
-    if (i_this->NpcModel == NULL)
+    i_this->mpKenModel = mDoExt_J3DModel__create(pModelData, 0, 0x11020203);;
+    if (i_this->mpKenModel == NULL)
         return FALSE;
 
-    pModelData = i_this->NpcModel->getModelData();
+    pModelData = i_this->mpKenModel->getModelData();
     i_this->mpBrkAnm2 = new mDoExt_brkAnm();
     if (i_this->mpBrkAnm2 == NULL)  
         return FALSE;
@@ -2700,8 +2699,8 @@ static dCcD_SrcSph wepon_sph_src = {
         /* SrcObjAt  Type    */ AT_TYPE_UNK8,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
-        /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ dCcG_AtHitMark_Nrm_e,
@@ -2787,7 +2786,7 @@ static s32 daFganon_Create(fopAc_ac_c* i_act) {
     s32 res;
     s32 res2;
     
-    if (fpcM_IsFirstCreating(i_this)) {
+    if (fopAcM_IsFirstCreating(i_this)) {
         i_this->mSwitchNo = fopAcM_GetParam(i_this) >> 0x10;
     }
     
@@ -2818,7 +2817,7 @@ static s32 daFganon_Create(fopAc_ac_c* i_act) {
             return cPhs_ERROR_e;
         }
 
-        i_this->attention_info.flags = 4;
+        i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
         i_this->attention_info.distances[2] = 4;
 
         if (hio_set == 0) {
