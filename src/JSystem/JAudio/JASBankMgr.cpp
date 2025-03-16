@@ -29,7 +29,7 @@ void JASystem::BankMgr::init(int param_1) {
     JUT_ASSERT(72, sVir2PhyTable != NULL);
     Calc::bzero(sBankArray, r31);
     for (int i = 0; i < param_1; i++) {
-        sVir2PhyTable[i] = 0xffffffff;
+        sVir2PhyTable[i] = 0xFFFF;
     }
     sTableSize = param_1;
 }
@@ -134,12 +134,12 @@ JASystem::TChannel* JASystem::BankMgr::noteOnOsc(TChannelMgr* param_1, int param
     channel->field_0x54 = 1.0f;
     channel->field_0x5c = channel->field_0x0 / 127.0f;
     channel->field_0x5c = channel->field_0x54 * (channel->field_0x5c * channel->field_0x5c);
-    channel->field_0x70.field_0x0 = 0.5f;
-    channel->field_0x7c.field_0x0 = 0.0f;
-    channel->field_0x88.field_0x0 = 0.0f;
-    channel->field_0x70.field_0x4 = 0.5f;
-    channel->field_0x7c.field_0x4 = 0.0f;
-    channel->field_0x88.field_0x4 = 0.0f;
+    channel->mPanVec.mSound = 0.5f;
+    channel->mFxmixVec.mSound = 0.0f;
+    channel->mDolbyVec.mSound = 0.0f;
+    channel->mPanVec.mEffect = 0.5f;
+    channel->mFxmixVec.mEffect = 0.0f;
+    channel->mDolbyVec.mEffect = 0.0f;
     channel->field_0x94 = 1.0f;
     channel->field_0x98 = 1.0f;
     channel->setOscInit(0, &OSC_ENV);

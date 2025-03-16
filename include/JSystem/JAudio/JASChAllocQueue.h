@@ -10,7 +10,6 @@ namespace JASystem {
         void enQueue(JASystem::TChannel*);
         int deleteQueue(JASystem::TChannel*);
         void checkQueue();
-
     }
 
     extern JSUList<TChannel> sDspQueueList;

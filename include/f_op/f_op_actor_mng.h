@@ -554,7 +554,7 @@ s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, s16 eventIdx, u16 flag, u16 hi
 s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, s16 eventIdx, u16 flag, u16 hind);
 s32 fopAcM_orderOtherEventId(fopAc_ac_c* actor, s16 eventIdx, u8 mapToolID = -1, u16 hind = -1,
                              u16 priority = 0, u16 flag = 1);
-s32 fopAcM_orderPotentialEvent(fopAc_ac_c*, u16, u16, u16);
+s32 fopAcM_orderPotentialEvent(fopAc_ac_c*, u16 flag, u16 hind, u16 priority);
 s32 fopAcM_orderItemEvent(fopAc_ac_c*);
 s32 fopAcM_orderTreasureEvent(fopAc_ac_c*, fopAc_ac_c*);
 fopAc_ac_c* fopAcM_getTalkEventPartner(fopAc_ac_c*);
