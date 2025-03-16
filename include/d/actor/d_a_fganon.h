@@ -28,7 +28,7 @@ public:
     /* 0x2CC */ mDoExt_brkAnm* mpBrkAnm2;
     /* 0x2D0 */ s8 m2D0;
     /* 0x2D1 */ u8 m2D1[0x2D4 - 0x2D1];
-    /* 0x2D4 */ dKy_tevstr_c mTevStr;
+    /* 0x2D4 */ dKy_tevstr_c mKenTevStr;
     /* 0x384 */ s16 m384;
     /* 0x386 */ s16 m386;
     /* 0x388 */ s16 m388;
@@ -66,7 +66,7 @@ public:
     /* 0x671 */ s8 m671;
     /* 0x672 */ u8 m672;
     /* 0x673 */ s8 m673;
-    /* 0x674 */ J3DModel* EnergySphereModel;
+    /* 0x674 */ J3DModel* mpEnergySphereModel;
     /* 0x678 */ mDoExt_btkAnm* mpBtkAnm;
     /* 0x67C */ mDoExt_brkAnm* mpBrkAnm3;
     /* 0x680 */ f32 m680;

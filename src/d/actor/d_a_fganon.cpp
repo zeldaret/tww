@@ -70,7 +70,7 @@ void anm_init(fganon_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 s
 /* Renders PG's Energy Ball model */
 void tama_draw(fganon_class* i_this) {
     if (i_this->m671 != 0) {
-        J3DModel* pModel = i_this->EnergySphereModel;
+        J3DModel* pModel = i_this->mpEnergySphereModel;
         i_this->mpBrkAnm3->entry(pModel->getModelData());
         i_this->mpBtkAnm->entry(pModel->getModelData());
         mDoExt_modelUpdateDL(pModel);
@@ -79,7 +79,7 @@ void tama_draw(fganon_class* i_this) {
 }
 
 /* 00000338-00000420       .text daFganon_Draw__FP12fganon_class */
-/* Renders PG's NPC model */
+/* Renders all part's of Phantom Ganon's model including his body, sword, and energy ball */
 static BOOL daFganon_Draw(fganon_class* i_this) {
     dSnap_RegistFig(DSNAP_TYPE_UNKC2, i_this, 1.0f, 1.0f, 1.0f);
     J3DModel* pModel = i_this->mpMorf->getModel();
@@ -88,8 +88,8 @@ static BOOL daFganon_Draw(fganon_class* i_this) {
     i_this->mpMorf->entryDL();
     if (i_this->m2D0 != 2) {
         pModel = i_this->mpKenModel;
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->mTevStr);
-        g_env_light.setLightTevColorType(pModel, &i_this->mTevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->mKenTevStr);
+        g_env_light.setLightTevColorType(pModel, &i_this->mKenTevStr);
         i_this->mpBrkAnm2->entry(pModel->getModelData());
         mDoExt_modelUpdateDL(pModel);
     }
@@ -567,7 +567,7 @@ void tama_set(fganon_class* i_this) {
             }
         }
         mDoMtx_stack_c::transS(tempPos.x, tempPos.y, tempPos.z);
-        i_this->EnergySphereModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        i_this->mpEnergySphereModel->setBaseTRMtx(mDoMtx_stack_c::get());
         i_this->mpBrkAnm3->play();
         i_this->mpBtkAnm->play();
     }
@@ -2637,8 +2637,8 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
     
     pModelData = (J3DModelData *)dComIfG_getObjectRes("Fganon", FGANON_BDL_YDKBL00);
-    i_this->EnergySphereModel = mDoExt_J3DModel__create(pModelData, 0, 0x11020203);
-    if (i_this->EnergySphereModel == NULL)
+    i_this->mpEnergySphereModel = mDoExt_J3DModel__create(pModelData, 0, 0x11020203);
+    if (i_this->mpEnergySphereModel == NULL)
         return FALSE;
     
     i_this->mpBtkAnm = new mDoExt_btkAnm();
@@ -2818,7 +2818,7 @@ static s32 daFganon_Create(fopAc_ac_c* i_act) {
         }
 
         i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-        i_this->attention_info.distances[2] = 4;
+        i_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
 
         if (hio_set == 0) {
             i_this->mB88 = 1;
