@@ -1156,7 +1156,7 @@ void start(fganon_class* i_this) {
         case 5: {
             if (i_this->m3A4[0] == (s16)(REG0_S(0) + 0x4B)) {
                 i_this->m408 = 1;
-                mDoAud_subBgmStart(0x80000041);
+                mDoAud_subBgmStart(JA_BGM_P_GANON_1);
             }
             if (i_this->m3A4[0] <= (s16)(REG0_S(0) + 0x4B)) {
                 fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_S, 0);

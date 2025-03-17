@@ -48,7 +48,7 @@ namespace daObjHomensmoke {
             /* 0x0 */ Vec mMin;
             /* 0xC */ Vec mMax;
         };
-        static daObjHomensmoke__cullbox culling_dat[2] = {
+        static daObjHomensmoke__cullbox culling_dat[] = {
             {-300.0f, -30.0f, -100.0f, 300.0f, 600.0f, 300.0f},
             {-100.0f, -30.0f, -100.0f, 100.0f, 250.0f, 120.0f},
         };

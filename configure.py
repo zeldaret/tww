@@ -1661,7 +1661,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_hcbh"),
     ActorRel(Equivalent,  "d_a_obj_hha"), # weak func order
     ActorRel(NonMatching, "d_a_obj_hlift"),
-    ActorRel(NonMatching, "d_a_obj_homen"),
+    ActorRel(Matching,    "d_a_obj_homen", extra_cflags=["-sym off"]),
     ActorRel(Matching,    "d_a_obj_homensmoke", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_hsehi1"),
     ActorRel(NonMatching, "d_a_obj_htetu1"),

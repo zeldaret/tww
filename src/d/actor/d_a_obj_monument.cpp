@@ -7,7 +7,6 @@
 #include "d/res/res_esekh.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "d/d_a_obj.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"

@@ -7,9 +7,7 @@
 #include "d/res/res_x_tower.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "dolphin/mtx/mtx.h"
 #include "f_op/f_op_actor_mng.h"
-#include "m_Do/m_Do_printf.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
