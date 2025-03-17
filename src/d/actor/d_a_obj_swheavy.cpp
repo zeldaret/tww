@@ -57,11 +57,11 @@ const daObjSwheavy::Attr_c daObjSwheavy::Act_c::M_attr[4] = {
 
 /* 00000078-0000009C       .text solidHeapCB__Q212daObjSwheavy5Act_cFP10fopAc_ac_c */
 BOOL daObjSwheavy::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
-    return static_cast<daObjSwheavy::Act_c*>(i_this)->create_heap() & 0xFF; // Fakematch?
+    return static_cast<daObjSwheavy::Act_c*>(i_this)->create_heap();
 }
 
 /* 0000009C-0000032C       .text create_heap__Q212daObjSwheavy5Act_cFv */
-BOOL daObjSwheavy::Act_c::create_heap() {
+u8 daObjSwheavy::Act_c::create_heap() {
     J3DModelData* mdl_1_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, HHBOT_BDL_HHBOT1);
     JUT_ASSERT(0x116, mdl_1_data != NULL);
     mpModel1 = mDoExt_J3DModel__create(mdl_1_data, 0x80000, 0x11000022);
@@ -99,6 +99,8 @@ BOOL daObjSwheavy::Act_c::create_heap() {
         mpBgW1 = NULL;
         mpBgW2 = NULL;
     }
+    // Fakematch? This function should probably have return type bool, but the codegen towards the
+    // end here doesn't work unless the return type is u8.
     return success;
 }
 

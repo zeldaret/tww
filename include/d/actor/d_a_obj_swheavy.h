@@ -43,7 +43,7 @@ namespace daObjSwheavy {
         void rev_switch() const { fopAcM_revSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
     
         static BOOL solidHeapCB(fopAc_ac_c*);
-        BOOL create_heap();
+        u8 create_heap();
         s32 _create();
         bool _delete();
         void set_mtx();
