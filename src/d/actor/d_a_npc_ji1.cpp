@@ -734,7 +734,7 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
             if(l_msg) {
                 if(actionNo == 2) {
                     dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
-                    mDoAud_seStart(JA_SE_CM_AJ_ANGRY_FOOT, 0, 0, 0);
+                    mDoAud_seStart(JA_SE_CM_AJ_ANGRY_FOOT, NULL);
                 }
 
                 field_0xC78 += 1;
