@@ -2711,7 +2711,17 @@ inline void dComIfGp_event_offEventFlag(s16 flag) {
 inline u16 dComIfGp_event_chkEventFlag(s16 flag) {
     return g_dComIfG_gameInfo.play.getEvent().chkEventFlag(flag);
 }
+inline void dComIfGp_event_onHindFlag(s16 flag) {
+    g_dComIfG_gameInfo.play.getEvent().onHindFlag(flag);
+}
 
+inline void dComIfGp_event_offHindFlag(s16 flag) {
+    g_dComIfG_gameInfo.play.getEvent().offHindFlag(flag);
+}
+
+inline u16 dComIfGp_event_chkHindFlag(s16 flag) {
+    return g_dComIfG_gameInfo.play.getEvent().chkHindFlag(flag);
+}
 inline void dComIfGp_event_remove() {
     g_dComIfG_gameInfo.play.getEvent().remove();
 }
