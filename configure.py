@@ -1488,7 +1488,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
     ActorRel(Equivalent,  "d_a_obj_swhammer"), # weak func order
-    ActorRel(NonMatching, "d_a_obj_swheavy"),
+    ActorRel(Matching,    "d_a_obj_swheavy"),
     ActorRel(NonMatching, "d_a_obj_swlight"),
     ActorRel(NonMatching, "d_a_oq"),
     ActorRel(Equivalent,  "d_a_pedestal", extra_cflags=['-pragma "nosyminline on"']), # weak func order
