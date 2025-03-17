@@ -32,7 +32,7 @@ bool daKomore::Act_c::create_heap() {
     JUT_ASSERT(0x6d, btk_data != NULL);
 
     s32 btkRet =
-        mBtkAnm.init(mdl_data, btk_data, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        mBtkAnm.init(mdl_data, btk_data, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
 
     bool ret = FALSE;
     if (mdl_data != NULL && this->mpModel != NULL && btkRet != NULL) {

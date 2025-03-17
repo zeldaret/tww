@@ -74,7 +74,7 @@ bool daObjZouk::Act_c::create_heap() {
             mdl_data,
             NULL, NULL,
             M_bck_data,
-            J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, 1,
+            J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1,
             NULL,
             0x00000000,
             0x11020203

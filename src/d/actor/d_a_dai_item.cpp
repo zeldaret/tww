@@ -236,18 +236,18 @@ BOOL daStandItem_c::CreateHeap() {
         mpBckAnm = new mDoExt_bckAnm();
 
         static const u32 playmode[] = {
-            J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_1 */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_2 */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_3 */
-            -1,                          /* HEROS_FLAG */
-            -1,                          /* TAIRYO_FLAG */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* SALES_FLAG */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* WIND_FLAG */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* RED_FLAG */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* FOSSIL_HEAD */
-            J3DFrameCtrl::LOOP_ONCE_e,   /* WATER_STATUE */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* POSTMAN_STATUE */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* PRESIDENT_STATUE */
+            /* FLOWER_1         */ J3DFrameCtrl::EMode_LOOP,
+            /* FLOWER_2         */ J3DFrameCtrl::EMode_LOOP,
+            /* FLOWER_3         */ J3DFrameCtrl::EMode_LOOP,
+            /* HEROS_FLAG       */ -1,
+            /* TAIRYO_FLAG      */ -1,
+            /* SALES_FLAG       */ J3DFrameCtrl::EMode_LOOP,
+            /* WIND_FLAG        */ J3DFrameCtrl::EMode_LOOP,
+            /* RED_FLAG         */ J3DFrameCtrl::EMode_LOOP,
+            /* FOSSIL_HEAD      */ J3DFrameCtrl::EMode_LOOP,
+            /* WATER_STATUE     */ J3DFrameCtrl::EMode_NONE,
+            /* POSTMAN_STATUE   */ J3DFrameCtrl::EMode_LOOP,
+            /* PRESIDENT_STATUE */ J3DFrameCtrl::EMode_LOOP,
         };
 
         if (mpBckAnm == NULL || !mpBckAnm->init(modelData, pbck, TRUE, playmode[mItemType], 1.0f, 0, -1, false))

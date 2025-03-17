@@ -47,7 +47,7 @@ bool daObjGong::Act_c::create_heap() {
         modelData,
         NULL, NULL,
         bck,
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 0,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0,
         NULL,
         0x00000000,
         0x11020203

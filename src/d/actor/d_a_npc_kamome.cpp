@@ -219,7 +219,7 @@ BOOL daNpc_kam_c::createHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransformKey*)dComIfG_getObjectRes("Kamome", KAMOME_BCK_KA_WAIT1),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         0x11000002
@@ -1118,21 +1118,21 @@ void daNpc_kam_c::setAnm(int anmIdx) {
     static anmPrm_c l_anmPrm[] = {
         {
             /* mAnmTblIdx */ 0,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_REPEAT_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_LOOP,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 1.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 1,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_REPEAT_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_LOOP,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 1.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 2,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_ONCE_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_NONE,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 1.0f,
             /* m10        */ 0,

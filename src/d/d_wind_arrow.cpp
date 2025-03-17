@@ -125,7 +125,7 @@ s32 dWindArrow_c::create() {
     J3DAnmTextureSRTKey* anm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_YA);
     JUT_ASSERT(0x65, anm != NULL);
 
-    if (!mModelInfo.mBtkAnm.init(modelData, anm, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mModelInfo.mBtkAnm.init(modelData, anm, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return cPhs_ERROR_e;
     }
 

@@ -428,12 +428,12 @@ BOOL daIball_c::CreateHeap() {
     
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, ALWAYS_BCK_START);
     JUT_ASSERT(1152, pbck != NULL);
-    int ret = mBckAnm.init(modelData, pbck, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
+    int ret = mBckAnm.init(modelData, pbck, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
     if (!ret) { return FALSE; }
     
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, ALWAYS_BTK_IB);
     JUT_ASSERT(1164, pbtk != NULL);
-    ret = mBtkAnm.init(modelData, pbtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+    ret = mBtkAnm.init(modelData, pbtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
     if (!ret) { return FALSE; }
     
     int brkIds[ARRAY_SIZE(mBrkAnm)] = {
@@ -444,7 +444,7 @@ BOOL daIball_c::CreateHeap() {
     for (int i = 0; i < (int)ARRAY_SIZE(mBrkAnm); i++) {
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, brkIds[i]);
         JUT_ASSERT(1182, pbrk != NULL);
-        ret = mBrkAnm[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        ret = mBrkAnm[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
         if (!ret) { return FALSE; }
     }
     

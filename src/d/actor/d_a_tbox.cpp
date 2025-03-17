@@ -92,7 +92,7 @@ s32 daTbox_c::commonShapeSet() {
 
     // Load open animation
     J3DAnmTransform* openAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", mdlInfo.openBckId);
-    if (mOpenAnm.init(modelData, openAnm, true, J3DFrameCtrl::LOOP_ONCE_e,  1.0f, 0, -1, false) == 0) {
+    if (mOpenAnm.init(modelData, openAnm, true, J3DFrameCtrl::EMode_NONE,  1.0f, 0, -1, false) == 0) {
         return cPhs_ERROR_e;
     }
 
@@ -104,7 +104,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTextureSRTKey* appearTexData = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", mdlInfo.btkId);
-        if (mpAppearTexAnm->init(modelData, appearTexData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0) == 0) {
+        if (mpAppearTexAnm->init(modelData, appearTexData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
 
@@ -119,7 +119,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* appearRegData = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", mdlInfo.brkId);
-        if (mpAppearRegAnm->init(modelData, appearRegData, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
+        if (mpAppearRegAnm->init(modelData, appearRegData, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
 
@@ -143,7 +143,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_YTRIF00);
-        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
+        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
     }
@@ -175,17 +175,17 @@ s32 daTbox_c::effectShapeSet() {
     }
 
     J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", DALWAYS_BCK_IT_TAKARA_FLASH2);
-    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false) == 0) {
+    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BTK_IT_TAKARA_FLASH);
-    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
+    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH);
-    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
     if (regInit) {
         return cPhs_COMPLEATE_e;

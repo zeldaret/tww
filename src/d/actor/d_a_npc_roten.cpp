@@ -1633,7 +1633,7 @@ BOOL daNpcRoten_c::createHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[mNpcNo][field_0x9C0])),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         l_diff_flag_tbl[mNpcNo]
@@ -1648,7 +1648,7 @@ BOOL daNpcRoten_c::createHeap() {
         headModelData,
         NULL, NULL,
         (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bck_ix_tbl[mNpcNo])),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         0x37441422
@@ -1998,7 +1998,7 @@ void daNpcRoten_c::executeTurn() {
 s32 daNpcRoten_c::executeWindInit() {
     setAnmTbl(l_npc_anm_wind);
     J3DAnmTransform* pAnmRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bck_ix_tbl[mNpcNo]));
-    field_0x6D8->setAnm(pAnmRes, J3DFrameCtrl::LOOP_ONCE_e, 14.0f, 1.0f, 0.0f, 39.0f, NULL);
+    field_0x6D8->setAnm(pAnmRes, J3DFrameCtrl::EMode_NONE, 14.0f, 1.0f, 0.0f, 39.0f, NULL);
 
     return 4;
 }
@@ -2689,7 +2689,7 @@ BOOL daNpcRoten_c::initTexPatternAnm(bool modify) {
     m_head_tex_pattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_btp_ix_tbl[mNpcNo]));
     JUT_ASSERT(0xBFF, m_head_tex_pattern != NULL);
 
-    if(!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::LOOP_REPEAT_e,  1.0f, 0, -1, modify, 0)) {
+    if(!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP,  1.0f, 0, -1, modify, 0)) {
         return false;
     }
 

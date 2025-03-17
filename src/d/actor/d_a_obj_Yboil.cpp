@@ -33,11 +33,11 @@ BOOL daObjYboil_c::CreateHeap() {
         if (mModel[i] == NULL)
             return FALSE;
 
-        if (!mBckAnm[i].init(modelData, bck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+        if (!mBckAnm[i].init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
             return FALSE;
-        if (!mBtkAnm[i].init(modelData, btk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+        if (!mBtkAnm[i].init(modelData, btk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
             return FALSE;
-        if (!mBrkAnm[i].init(modelData, brk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+        if (!mBrkAnm[i].init(modelData, brk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
             return FALSE;
     }
 

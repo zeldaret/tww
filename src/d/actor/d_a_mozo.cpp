@@ -79,7 +79,7 @@ BOOL daMozo_c::CreateHeap() {
         0,
         0,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_BCK_MOZ)),
-        J3DFrameCtrl::LOOP_REPEAT_e,
+        J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
         -1,
@@ -97,8 +97,8 @@ BOOL daMozo_c::CreateHeap() {
     m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_BTK_MOZ);
     JUT_ASSERT(0x16D, m_btk != NULL);
 
-    int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
-    int btkInitResult = mBtkAnm.init(mdlData, m_btk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+    int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    int btkInitResult = mBtkAnm.init(mdlData, m_btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
     return mdlData != 0 && mAnimMorf != 0 && mAnimMorf->getModel() != 0 && brkInitResult != 0 && btkInitResult != 0;
 }

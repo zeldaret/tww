@@ -33,7 +33,7 @@ BOOL daObjGryw00_c::setup_high_water_level_btk_anm() {
     BOOL ret = TRUE;
     J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, GRYW00_BTK_GRYW00));
     JUT_ASSERT(223, btk_anm_p != NULL);
-    if (!mBtk.init(mpModel->getModelData(), btk_anm_p, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0x191, -1, -1, 0)) {
+    if (!mBtk.init(mpModel->getModelData(), btk_anm_p, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0x191, -1, -1, 0)) {
         ret = FALSE;
     }
     return ret;
@@ -102,9 +102,9 @@ int daObjGryw00_c::CreateHeap() {
     } else {
         mpModel = mDoExt_J3DModel__create(mdlData, 0x80000U, 0x11000222U);
         BOOL btk_inited = mBtk.init(mpModel->getModelData(), pbtk, TRUE,
-                                    J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, 0x190, FALSE, 0);
+                                    J3DFrameCtrl::EMode_NONE, 0.0f, 0, 0x190, FALSE, 0);
         BOOL bck_inited = mBck.init(mpModel->getModelData(), pbck, TRUE,
-                                    J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, FALSE);
+                                    J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, FALSE);
         if (!mpModel || !btk_inited || !bck_inited) {
             ret = FALSE;
         }

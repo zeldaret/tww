@@ -199,7 +199,7 @@ static BOOL daSyan_solidHeapCB(fopAc_ac_c* i_ac) {
         (J3DModelData*)dComIfG_getObjectRes("Syan", SYAN_BDL_SYAN),
         NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes("Syan", SYAN_BCK_SYAN),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000002
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000002
     );
     return i_this->morf != NULL;
 }

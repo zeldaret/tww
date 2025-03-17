@@ -84,7 +84,7 @@ BOOL daObjHat_c::createHeap() {
         mDoExt_McaMorf* morf = new mDoExt_McaMorf(
             pModelData, NULL, NULL,
             (J3DAnmTransformKey*)dComIfG_getObjectIDRes("Ro", l_bck_ix_tbl[mHatNo]),
-            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
+            J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
 
         mpMorf = morf;
         if (mpMorf == NULL || mpMorf->getModel() == NULL) {

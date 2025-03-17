@@ -239,7 +239,7 @@ BOOL daNpc_Os_c::createHeap() {
         modelData,
         NULL, NULL,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", OS_BCK_OS_MOVE01)),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         0x11000002
@@ -1608,35 +1608,35 @@ void daNpc_Os_c::setAnm(int param_1) {
     static anmPrm_c l_anmPrm[] = {
         {
             /* mAnmTblIdx */ 0,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_REPEAT_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_LOOP,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 0.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 1,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_REPEAT_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_LOOP,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 2.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 2,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_ONCE_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_NONE,
             /* mMorf      */ 0.0f,
             /* mPlaySpeed */ 1.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 2,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_ONCE_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_NONE,
             /* mMorf      */ 0.0f,
             /* mPlaySpeed */ -1.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 2,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_ONCE_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_NONE,
             /* mMorf      */ 0.0f,
             /* mPlaySpeed */ 0.0f,
             /* m10        */ -1,
@@ -1682,15 +1682,15 @@ BOOL daNpc_Os_c::initBrkAnm(u8 param_1, bool param_2) {
     };  // Size: 0x10
 
     static AnmTableEntry brkAnmTbl[] = {
-        {OS_BRK_TURN_OFF, J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  0},
-        {OS_BRK_TURN_OFF, J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  -1},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  0},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::LOOP_ONCE_e,   -1.0f, 0},
-        {OS_BRK_TURN_ON,  J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  0},
-        {OS_BRK_TURN_ON,  J3DFrameCtrl::LOOP_ONCE_e,   0.0f,  0},
-        {OS_BRK_TENMETU,  J3DFrameCtrl::LOOP_REPEAT_e, 1.0f,  0},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::LOOP_ONCE_e,   0.0f,  -1},
-        {OS_BRK_LINK,     J3DFrameCtrl::LOOP_REPEAT_e, 1.0f,  0},
+        {OS_BRK_TURN_OFF, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {OS_BRK_TURN_OFF, J3DFrameCtrl::EMode_NONE,   1.0f,  -1},
+        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   -1.0f, 0},
+        {OS_BRK_TURN_ON,  J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {OS_BRK_TURN_ON,  J3DFrameCtrl::EMode_NONE,   0.0f,  0},
+        {OS_BRK_TENMETU,  J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
+        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   0.0f,  -1},
+        {OS_BRK_LINK,     J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
     };
 
     J3DModelData* modelData = mpMorf->getModel()->getModelData();

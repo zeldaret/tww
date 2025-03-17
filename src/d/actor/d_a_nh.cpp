@@ -429,7 +429,7 @@ BOOL daNh_c::initBrkAnm(bool i_modify) {
     J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Always", ALWAYS_BRK_TNH);
     JUT_ASSERT(883, a_brk != NULL);
     
-    if (mBrkAnm.init(modelData, a_brk, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, i_modify, false)) {
+    if (mBrkAnm.init(modelData, a_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, false)) {
         success = true;
     }
     return success;

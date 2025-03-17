@@ -54,8 +54,8 @@ bool daObjYgush00_c::create_heap() {
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
-        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-        s32 bckRet = mBckAnm.init(pModelData, pBck, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+        s32 bckRet = mBckAnm.init(pModelData, pBck, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
 
         if (!mpModel || !btkRet || !bckRet)
             ret = false;

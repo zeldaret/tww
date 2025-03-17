@@ -190,7 +190,7 @@ BOOL daNpc_Bs1_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Bs", l_btp_ix_tbl[m828]);
     JUT_ASSERT(0x1bd, m_head_tex_pattern != NULL);
-    if (!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, i_modify, 0)) {
+    if (!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, 0)) {
         return FALSE;
     }
     mFrame = 0;
@@ -213,16 +213,16 @@ void daNpc_Bs1_c::playTexPatternAnm() {
 /* 000007F8-0000087C       .text setAnm__11daNpc_Bs1_cFSc */
 void daNpc_Bs1_c::setAnm(s8 index) {
     static u32 play_mode_tbl[10] = {
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_ONCE_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
     };
     static f32 morf_frame_tbl[10] = {8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f};
     static f32 play_speed_tbl[10] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
@@ -2168,7 +2168,7 @@ BOOL daNpc_Bs1_c::CreateHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes("Bs", BS_INDEX_BCK_BS_WAIT01),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
         0, 0x11020203
     );
     if (!mpMorf || !mpMorf->getModel()) {

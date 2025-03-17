@@ -58,7 +58,7 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
     
     const sword_model_tbl_s& model_tbl = checkNormalSwordEquip() ? sword_model_tbl[0] : sword_model_tbl[1];
     J3DModelData* modelData = initModel(&mpEquipItemModel, model_tbl.bladeModel, 0x37221222);
-    BOOL ret = mSwordAnim.init(modelData, bck, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+    BOOL ret = mSwordAnim.init(modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
     if (!ret) { JUT_ASSERT(86, FALSE); }
     
     if (!checkNormalSwordEquip()) {

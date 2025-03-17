@@ -513,12 +513,12 @@ void daPy_lk_c::setAuraEffect() {
         }
 
         if (pYaura00Brk != curYaura00Brk) {
-            mYaura00rBrk.init(mMagicArmorAuraEntries[0].getModel()->getModelData(), pYaura00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            mYaura00rBrk.init(mMagicArmorAuraEntries[0].getModel()->getModelData(), pYaura00Brk, FALSE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
             curYaura00Brk = pYaura00Brk;
         }
 
         if (pYmgcs00Brk != curYmgcs00Brk) {
-            mYmgcs00Brk.init(mpYmgcs00Model->getModelData(), pYmgcs00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            mYmgcs00Brk.init(mpYmgcs00Model->getModelData(), pYmgcs00Brk, FALSE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
             curYmgcs00Brk = pYmgcs00Brk;
         }
     }

@@ -21,8 +21,8 @@ const u32 daYgcwp_c::M_brk_table[] = {
 };
 
 const u32 daYgcwp_c::M_brk_mode_table[] = {
-    J3DFrameCtrl::LOOP_REPEAT_e,
-    J3DFrameCtrl::LOOP_ONCE_e,
+    J3DFrameCtrl::EMode_LOOP,
+    J3DFrameCtrl::EMode_NONE,
 };
 
 const char daYgcwp_c::M_arcname[6] = "Ygcwp";

@@ -73,7 +73,7 @@ const dCcD_SrcSph daObjHha_c::M_sph_data = {
 const HHA_RES_FILE_ID l_daObjHha_bdl_idx_table[2] = {HHA_BDL_HHA1, HHA_BDL_HHA2};
 const HHA_RES_FILE_ID l_daObjHha_dzb_idx_table[2] = {HHA_DZB_HHA1, HHA_DZB_HHA2};
 const HHA_RES_FILE_ID l_daObjHha_btk_idx_table[2] = {HHA_BTK_YSWTR00_01, HHA_BTK_YSWTR00_02};
-const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::LOOP_REPEAT_e, J3DFrameCtrl::LOOP_ONCE_e};
+const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_NONE};
 const u16 l_daObjHha_splash_id_table[] = {
     dPa_name::ID_SCENE_810D,
     dPa_name::ID_SCENE_810E,
@@ -201,11 +201,11 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
             JUT_ASSERT(0x290, btk_data != NULL);
             
-            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, false) != false){  
+            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false) != false){  
                 J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
                 JUT_ASSERT(0x295, bck_data != NULL);
                 
-                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false) != false){
+                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) != false){
                     ret = TRUE;
                 }
             }

@@ -34,7 +34,7 @@ bool daObjAjavW_c::create_heap() {
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
-        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
         mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, AJAVW_DZB_AJAVW), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !btkRet || !mpBgW)

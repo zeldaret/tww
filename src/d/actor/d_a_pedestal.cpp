@@ -338,10 +338,10 @@ BOOL daPds_c::initBrkAnm(u8 param_1, bool param_2) {
     };  // Size: 0x0C
 
     static AnmTableEntry brkAnmTbl[] = {
-        {J3DFrameCtrl::LOOP_REPEAT_e,   1.0f,  0},
-        {J3DFrameCtrl::LOOP_ONCE_e,     0.0f,  0},
-        {J3DFrameCtrl::LOOP_ONCE_e,     0.0f,  0},
-        {J3DFrameCtrl::LOOP_ONCE_e,     0.0f, -1},
+        {J3DFrameCtrl::EMode_LOOP,   1.0f,  0},
+        {J3DFrameCtrl::EMode_NONE,     0.0f,  0},
+        {J3DFrameCtrl::EMode_NONE,     0.0f,  0},
+        {J3DFrameCtrl::EMode_NONE,     0.0f, -1},
     };
 
     J3DModelData* modelData = mpModel->getModelData();

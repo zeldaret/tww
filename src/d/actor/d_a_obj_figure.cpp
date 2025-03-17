@@ -957,7 +957,7 @@ BOOL daObjFigure_c::createHeap() {
             return false;
         }
 
-        if(!mpBrkAnm->init(pModelData, pBrkData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+        if(!mpBrkAnm->init(pModelData, pBrkData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
             return false;
         }
     }
@@ -967,7 +967,7 @@ BOOL daObjFigure_c::createHeap() {
             p1,
             NULL, NULL,
             (J3DAnmTransformKey*)dComIfG_getObjectIDRes(arcname, 0),
-            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+            J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x80000,
             0x11001222
@@ -1002,7 +1002,7 @@ BOOL daObjFigure_c::createHeap() {
         return false;
     }
 
-    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return false;
     }
 

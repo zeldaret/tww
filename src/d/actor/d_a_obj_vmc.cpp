@@ -70,7 +70,7 @@ bool daObjVmc::Act_c::create_heap() {
     {
         J3DAnmTransform* bck_wg = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWG);
         JUT_ASSERT(215, bck_wg != NULL);
-        BOOL ret = mBckAnmGrow.init(mdl_wd_data, bck_wg, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
+        BOOL ret = mBckAnmGrow.init(mdl_wd_data, bck_wg, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
         mBckAnmGrow.setPlaySpeed(0.75f);
         if (!ret)
             return false;
@@ -79,7 +79,7 @@ bool daObjVmc::Act_c::create_heap() {
     {
         J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWH);
         JUT_ASSERT(226, bck_wh != NULL);
-        if (!mBckAnmHookshot.init(mdl_wd_data, bck_wh, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+        if (!mBckAnmHookshot.init(mdl_wd_data, bck_wh, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
             return false;
     }
 
@@ -225,7 +225,7 @@ void daObjVmc::Act_c::daObjVmc_tree_main() {
         if (mCyl.ChkCoHit()) {
             J3DAnmTransform* bck_wh = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, VMC_BCK_VMCWH);
             JUT_ASSERT(0x1ad, bck_wh != NULL);
-            mBckAnmHookshot.init(mModelTree->getModelData(), bck_wh, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true);
+            mBckAnmHookshot.init(mModelTree->getModelData(), bck_wh, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true);
             mHookshotAnim = true;
         }
     } else {

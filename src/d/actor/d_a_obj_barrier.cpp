@@ -109,9 +109,9 @@ bool daObjBarrier_anm_c::init() {
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x1000200);
         BOOL btk_init =
-            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
         BOOL brk_init =
-            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
 
         if (mpModel == NULL || !btk_init || !brk_init) {
             rt = false;
@@ -383,11 +383,11 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
         J3DAnmTevRegKey* brk_anm_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YHRBR00));
         JUT_ASSERT(947, brk_anm_p != NULL);
 
-        mBtk[effect_idx].init(modelData, btk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1,
+        mBtk[effect_idx].init(modelData, btk_anm_p, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1,
                               true, 0);
-        mBck[effect_idx].init(modelData, bck_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1,
+        mBck[effect_idx].init(modelData, bck_anm_p, TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1,
                               true);
-        mBrk[effect_idx].init(modelData, brk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1,
+        mBrk[effect_idx].init(modelData, brk_anm_p, TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1,
                               true, 0);
 
         mDoMtx_stack_c::transS(pos.x, pos.y, pos.z);
@@ -414,11 +414,11 @@ bool daObjBarrier_ef_c::init() {
             mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x5020200);
             setDummyTexture(i);
 
-            BOOL btk_init = mBtk[i].init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0,
+            BOOL btk_init = mBtk[i].init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0,
                                          -1, false, 0);
             BOOL bck_init =
-                mBck[i].init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, false);
-            BOOL brk_init = mBrk[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0,
+                mBck[i].init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, false);
+            BOOL brk_init = mBrk[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0,
                                          -1, false, 0);
 
             if (mpModel[i] == NULL || !btk_init || !bck_init || !brk_init) {

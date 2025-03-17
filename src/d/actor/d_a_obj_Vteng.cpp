@@ -47,7 +47,7 @@ bool daObjVteng_c::create_heap() {
             pModelData,
             NULL, NULL,
             pAnm,
-            J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0x3B, -1, 0,
+            J3DFrameCtrl::EMode_NONE, 1.0f, 0x3B, -1, 0,
             NULL,
             0x00000000,
             0x11020203

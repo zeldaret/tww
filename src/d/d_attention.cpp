@@ -75,7 +75,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
             modelData,
             &mCallBack, NULL,
             (J3DAnmTransformKey*)dComIfG_getObjectRes("Always", ALWAYS_BCK_YJ_LOOP),
-            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+            J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x00080000,
             0x01000003
