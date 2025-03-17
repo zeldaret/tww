@@ -6,11 +6,11 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_npc.h"
 #include "d/actor/d_a_player_npc.h"
-#include "d/actor/d_a_pedestal.h"
 #include "d/d_particle.h"
 #include "m_Do/m_Do_hostIO.h"
 
 class mDoExt_McaMorf;
+namespace daPedestal { class daPds_c; }
 
 class daNpc_Os_infiniteEcallBack_c : public dPa_levelEcallBack {
 public:

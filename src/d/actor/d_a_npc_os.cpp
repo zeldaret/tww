@@ -4,13 +4,14 @@
  */
 
 #include "d/actor/d_a_npc_os.h"
-#include "d/res/res_os.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_pedestal.h"
+#include "d/res/res_os.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "d/actor/d_a_player_main.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep

@@ -4,16 +4,17 @@
  */
 
 #include "d/actor/d_a_shop_item.h"
-#include "d/res/res_fdai.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
+#include "d/d_cloth_packet.h"
+#include "d/res/res_fdai.h"
+#include "d/res/res_cloth.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
-#include "d/res/res_cloth.h"
 
 const char daShopItem_c::m_cloth_arcname[] = "Cloth";
 const f32 daShopItem_c::m_cullfar_max = 5000.0f;

@@ -1,7 +1,6 @@
 #ifndef D_A_DEMO_ITEM_H
 #define D_A_DEMO_ITEM_H
 
-#include "f_op/f_op_actor.h"
 #include "d/actor/d_a_itembase.h"
 #include "f_op/f_op_actor_mng.h"
 #include "SSystem/SComponent/c_lib.h"
