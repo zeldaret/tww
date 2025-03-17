@@ -75,7 +75,7 @@ BOOL daObjSwheavy::Act_c::create_heap() {
     if (mpBgW1 != NULL) {
         cBgD_t* bgw_1_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, HHBOT_DZB_HHBOT1);
         JUT_ASSERT(0x137, bgw_1_data != NULL);
-        if (!mpBgW1->Set(bgw_1_data, dBgW::MOVE_BG_e, &m2A8)) {
+        if (!mpBgW1->Set(bgw_1_data, dBgW::MOVE_BG_e, &mMtx1)) {
             b1 = true;
         }
     }
@@ -85,21 +85,21 @@ BOOL daObjSwheavy::Act_c::create_heap() {
     if (mpBgW2 != NULL) {
         cBgD_t* bgw_2_data = (cBgD_t*) dComIfG_getObjectRes(M_arcname, HHBOT_DZB_HHBOT2);
         JUT_ASSERT(0x146, bgw_2_data != NULL);
-        if (!mpBgW2->Set(bgw_2_data, dBgW::MOVE_BG_e, &m2D8)) {
+        if (!mpBgW2->Set(bgw_2_data, dBgW::MOVE_BG_e, &mMtx2)) {
             b2 = true;
         }
     }
 
-    bool rt = false;
+    bool success = false;
     if (mpModel1 && mpModel2 && b1 && b2) {
-        rt = true;
+        success = true;
     }
 
-    if (!rt) {
+    if (!success) {
         mpBgW1 = NULL;
         mpBgW2 = NULL;
     }
-    return rt;
+    return success;
 }
 
 /* 0000032C-00000628       .text _create__Q212daObjSwheavy5Act_cFv */
@@ -109,17 +109,17 @@ s32 daObjSwheavy::Act_c::_create() {
     s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         mType = prm_get_type();
-        bool b = cLib_checkBit(attr().m04, 0x4) || !is_switch();
+        bool up = cLib_checkBit<u32>(attr().mFlags, FLAG_IS_TOGGLE) || !is_switch();
         scale.z *= 1.5f;
         scale.x *= 1.5f;
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
         mDoMtx_stack_c::scaleM(scale);
-        mDoMtx_copy(mDoMtx_stack_c::get(), m2A8);
-        if (!b) {
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx1);
+        if (!up) {
             mDoMtx_stack_c::get()[1][3] += -35.5f;
         }
-        mDoMtx_copy(mDoMtx_stack_c::get(), m2D8);
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx2);
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x2000)) {
             dComIfG_Bgsp()->Regist(mpBgW1, this);
             mpBgW1->SetCrrFunc(NULL);
@@ -129,32 +129,32 @@ s32 daObjSwheavy::Act_c::_create() {
             fopAcM_SetMtx(this, mpModel1->getBaseTRMtx());
             init_mtx();
             fopAcM_setCullSizeBox(this, -97.5f, -2.0f, -97.5f, 97.5f, 55.0f, 97.5f);
-            m310 = false;
-            m311 = 0;
-            m312 = 0;
-            m314 = false;
-            m315 = false;
-            m316 = 0;
-            m318 = 0;
-            m31A = false;
-            m324 = 0.0f;
+            mRiding = false;
+            mPrevRiding = false;
+            mMiniPushTimer = 0;
+            mMiniPushFlg = false;
+            mHeavyRiding = false;
+            mPrevHeavyRiding = false;
+            mPushTimer = 0;
+            mPushFlg = false;
+            mVSpeed = 0.0f;
             m330 = 0;
             m334 = 0.0f;
-            if (cLib_checkBit(attr().m04, 0x4) || !is_switch()) {
-                m31C = 1.0f;
-                m320 = 1.0f;
+            if (cLib_checkBit<u32>(attr().mFlags, FLAG_IS_TOGGLE) || !is_switch()) {
+                mTargetHFrac = 1.0f;
+                mCurHFrac = 1.0f;
                 m328 = 0.0f;
                 m32C = 1.0f;
                 m338 = 1.0f;
-                m33C = 0.0f;
+                mTopPos = 0.0f;
                 mode_upper_init();
             } else {
-                m31C = 0.0f;
-                m320 = 0.0f;
+                mTargetHFrac = 0.0f;
+                mCurHFrac = 0.0f;
                 m328 = -35.5f;
                 m32C = 0.0f;
                 m338 = 0.0f;
-                m33C = -35.5f;
+                mTopPos = -35.5f;
                 mode_lower_init();
             }
         } else {
@@ -190,9 +190,9 @@ void daObjSwheavy::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_stack_c::scaleM(scale);
-    mDoMtx_copy(mDoMtx_stack_c::get(), m2A8);
-    mDoMtx_stack_c::get()[1][3] += m33C;
-    mDoMtx_copy(mDoMtx_stack_c::get(), m2D8);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx1);
+    mDoMtx_stack_c::get()[1][3] += mTopPos;
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx2);
 }
 
 /* 000007F8-00000850       .text init_mtx__Q212daObjSwheavy5Act_cFv */
@@ -205,27 +205,22 @@ void daObjSwheavy::Act_c::init_mtx() {
 /* 00000850-00000884       .text rideCB__Q212daObjSwheavy5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjSwheavy::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     daObjSwheavy::Act_c *i_this = (daObjSwheavy::Act_c*)i_ac;
-    if (!fopAcM_CheckStatus(i_pt, fopAcStts_FREEZE_e)) {
-        return;
+    if (fopAcM_CheckStatus(i_pt, fopAcStts_FREEZE_e)) {
+        i_this->mRiding = true;
+
+        if (fopAcM_GetProfName(i_pt) == PROC_PLAYER && ((daPy_py_c*)i_pt)->checkEquipHeavyBoots()) {
+            i_this->mHeavyRiding = true;
+        }
     }
-    i_this->m310 = true;
-    if (fopAcM_GetProfName(i_pt) != PROC_PLAYER) {
-        return;
-    }
-    daPy_py_c *py = (daPy_py_c*)i_pt;
-    if (!py->checkEquipHeavyBoots()) {
-        return;
-    }
-    i_this->m315 = true;
 }
 
 /* 00000884-00000998       .text calc_top_pos__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::calc_top_pos() {
-    float decay = attr().m0C;
-    m324 -= (m320 - m31C) * attr().m08;
-    m324 -= m324 * decay;
-    m320 += m324;
-    m328 = (1.0f - m320) * -35.5f;
+    float decay = attr().mVSpeedDecay;
+    mVSpeed -= (mCurHFrac - mTargetHFrac) * attr().mVSpring;
+    mVSpeed -= mVSpeed * decay;
+    mCurHFrac += mVSpeed;
+    m328 = (1.0f - mCurHFrac) * -35.5f;
     m328 = cLib_minMaxLimit(m328, -36.5f, 1.0f);
 
     if (m330 > 0) {
@@ -234,13 +229,13 @@ void daObjSwheavy::Act_c::calc_top_pos() {
         }
     }
     if (mMode == 0) {
-        m338 = m320;
+        m338 = mCurHFrac;
     } else {
         m338 = m32C;
     }
-    m33C = (1.0f - m338) * -35.5f;
-    if (m33C < m328) {
-        m33C = m328;
+    mTopPos = (1.0f - m338) * -35.5f;
+    if (mTopPos < m328) {
+        mTopPos = m328;
     }
 }
 
@@ -252,40 +247,39 @@ void daObjSwheavy::Act_c::top_bg_aim_req(float param_1, short param_2) {
 
 /* 000009A4-00000AF8       .text set_push_flag__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::set_push_flag() {
-    /* Nonmatching */
-    if (m314) {
-        if (m310) {
-            m312 = attr().m16;
+    if (mMiniPushFlg) {
+        if (mRiding) {
+            mMiniPushTimer = attr().mMiniPushDelay;
         } else {
-            if (--m312 <= 0) {
-                m314 = false;
+            if (--mMiniPushTimer <= 0) {
+                mMiniPushFlg = false;
             }
         }
     } else {
-        if (m310) {
-            if (++m312 >= attr().m16) {
-                m314 = true;
+        if (mRiding) {
+            if (++mMiniPushTimer >= attr().mMiniPushDelay) {
+                mMiniPushFlg = true;
             }
         } else {
-            m312 = 0;
+            mMiniPushTimer = 0;
         }
     }
 
-    if (m31A) {
-        if (m315) {
-            m318 = attr().m18;
+    if (mPushFlg) {
+        if (mHeavyRiding) {
+            mPushTimer = attr().mPushDelay;
         } else {
-            if (--m318 <= 0) {
-                m31A = false;
+            if (--mPushTimer <= 0) {
+                mPushFlg = false;
             }
         }
     } else {
-        if (m315) {
-            if (++m318 >= attr().m18) {
-                m31A = true;
+        if (mHeavyRiding) {
+            if (++mPushTimer >= attr().mPushDelay) {
+                mPushFlg = true;
             }
         } else {
-            m318 = 0;
+            mPushTimer = 0;
         }
     }    
 }
@@ -293,48 +287,50 @@ void daObjSwheavy::Act_c::set_push_flag() {
 /* 00000AF8-00000B14       .text mode_upper_init__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_upper_init() {
     mMode = 0;
-    m31C = 1.0f;
-    m31B = false;
+    mTargetHFrac = 1.0f;
+    mChangingState = false;
 }
 
 /* 00000B14-00000C30       .text mode_upper__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_upper() {
-    bool b = false;
-    float f = 1.0f;
-    if (m314) {
-        if (cLib_checkBit(attr().m04, 0x8) && !m31A) {
-            f = 0.9f;
+    bool pressing = false;
+    float height = 1.0f;
+    if (mMiniPushFlg) {
+        if (cLib_checkBit<u32>(attr().mFlags, FLAG_REQ_HEAVY)) {
+            if (mPushFlg) {
+                pressing = true;
+            } else {
+                height = 0.9f;
+            }
         } else {
-            b = true;
+            pressing = true;
         }
     }
 
-    if (b) {
-        m31B = true;
+    if (pressing || (cLib_checkBit<u32>(attr().mFlags, FLAG_OBEY_SAVE) && is_switch())) {
+        if (pressing) {
+            mChangingState = true;
+        }
         mode_u_l_init();
     } else {
-        if (!cLib_checkBit(attr().m04, 0x1) && is_switch()) {
-            mode_u_l_init();
-        } else {
-            m31C = f;
-            top_bg_aim_req(f, 1);
-        }
+        mTargetHFrac = height;
+        top_bg_aim_req(height, 1);
     }
 }
 
 /* 00000C30-00000C90       .text mode_u_l_init__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_u_l_init() {
     mMode = 1;
-    m31C = 0.0f;
-    m324 = attr().m10;
+    mTargetHFrac = 0.0f;
+    mVSpeed = attr().mPushVSpeed0;
     top_bg_aim_req(0.0f, attr().m14);
 }
 
 /* 00000C90-00000D98       .text mode_u_l__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_u_l() {
-    if (m320 <= 0.0f) {
-        if (m31B) {
-            if (cLib_checkBit(attr().m04, 0x4)) {
+    if (mCurHFrac <= 0.0f) {
+        if (mChangingState) {
+            if (cLib_checkBit<u32>(attr().mFlags, FLAG_IS_TOGGLE)) {
                 rev_switch();
             } else {
                 on_switch();
@@ -348,39 +344,33 @@ void daObjSwheavy::Act_c::mode_u_l() {
 /* 00000D98-00000DB8       .text mode_lower_init__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_lower_init() {
     mMode = 2;
-    m31C = 0.0f;
-    m31B = 0;
+    mTargetHFrac = 0.0f;
+    mChangingState = false;
 }
 
 /* 00000DB8-00000F0C       .text mode_lower__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_lower() {
-    bool b = false;
-    if (m314) {
-        if (!cLib_checkBit(attr().m04, 0x8) || m31A) {
-            b = true;
+    bool pressing = false;
+    if (mMiniPushFlg) {
+        if (cLib_checkBit<u32>(attr().mFlags, FLAG_REQ_HEAVY)) {
+            if (mPushFlg) {
+                pressing = true;
+            }
+        } else {
+            pressing = true;
         }
     }
 
-    bool b2 = false;
-    if (!cLib_checkBit(attr().m04, 0x2) && !b) {
-        b2 = true;
-    }
+    bool pop_back_up = !cLib_checkBit<u32>(attr().mFlags, FLAG_STAY_PRESSED) &&
+        !pressing;
+    bool match_state_up = cLib_checkBit<u32>(attr().mFlags, FLAG_OBEY_SAVE) &&
+        !is_switch() &&
+        !pressing;
 
-    bool b3 = false;
-    bool b4 = false;
-    if (cLib_checkBit(attr().m04, 0x1)) {
-        if (!is_switch()) {
-            b4 = true;
-        }
-    }
-
-    if (b4 && !b) {
-        b3 = true;
-    }
-
-    if (b2 || b3) {
-        if (b2 && !cLib_checkBit(attr().m04, 0x4) && !b) {
-            m31B = 1;
+    if (pop_back_up || match_state_up) {
+        bool is_toggle = cLib_checkBit<u32>(attr().mFlags, FLAG_IS_TOGGLE);
+        if (pop_back_up && !is_toggle && !pressing) {
+            mChangingState = true;
         }
         mode_l_u_init();
     }
@@ -388,15 +378,15 @@ void daObjSwheavy::Act_c::mode_lower() {
 
 /* 00000F0C-00000F44       .text mode_l_u_init__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_l_u_init() {
-    mMode =3;
-    m31C = 1.0f;
+    mMode = 3;
+    mTargetHFrac = 1.0f;
     top_bg_aim_req(1.0f, 1);
 }
 
 /* 00000F44-00000FBC       .text mode_l_u__Q212daObjSwheavy5Act_cFv */
 void daObjSwheavy::Act_c::mode_l_u() {
-    if (m320 >= 1.0f) {
-        if (m31B) {
+    if (mCurHFrac >= 1.0f) {
+        if (mChangingState) {
             off_switch();
         }
         mode_upper_init();
@@ -415,10 +405,10 @@ bool daObjSwheavy::Act_c::_execute() {
     set_push_flag();
     (this->*mode_proc[mMode])();
     calc_top_pos();
-    m311 = m310;
-    m316 = m315;
-    m310 = false;
-    m315 = false;
+    mPrevRiding = mRiding;
+    mPrevHeavyRiding = mHeavyRiding;
+    mRiding = false;
+    mHeavyRiding = false;
     set_mtx();
     mpBgW1->Move();
     mpBgW2->Move();

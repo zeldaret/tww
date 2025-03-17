@@ -9,15 +9,22 @@ namespace daObjSwheavy {
     public:
         struct Attr_c {
             u8 m00[0x4];
-            int m04;
-            float m08;
-            float m0C;
-            float m10;
+            int mFlags;
+            float mVSpring;
+            float mVSpeedDecay;
+            float mPushVSpeed0;
             short m14;
-            short m16;
-            short m18;
+            short mMiniPushDelay;
+            short mPushDelay;
         };
         const Attr_c& attr() const { return M_attr[mType]; }
+
+        enum Flag {
+            FLAG_OBEY_SAVE  = 0x1,
+            FLAG_STAY_PRESSED = 0x2,
+            FLAG_IS_TOGGLE  = 0x4,
+            FLAG_REQ_HEAVY  = 0x8,
+        };
 
         enum Prm_e {
             PRM_TYPE_W = 0x3,
@@ -64,32 +71,31 @@ namespace daObjSwheavy {
         /* 0x29c */ J3DModel* mpModel2;
         /* 0x2A0 */ dBgW* mpBgW1;
         /* 0x2A4 */ dBgW* mpBgW2;
-        /* 0x2A8 */ Mtx m2A8;
-        /* 0x2D8 */ Mtx m2D8;
+        /* 0x2A8 */ Mtx mMtx1;
+        /* 0x2D8 */ Mtx mMtx2;
         /* 0x308 */ int mType;
         /* 0x30C */ int mMode;
-        /* 0x310 */ bool m310;
-        /* 0x311 */ u8 m311;
-        /* 0x312 */ short m312;
-        /* 0x314 */ bool m314;
-        /* 0x315 */ bool m315;
-        /* 0x316 */ u8 m316;
-        /* 0x318 */ short m318;
-        /* 0x31A */ bool m31A;
-        /* 0x31B */ bool m31B;
-        /* 0x31C */ float m31C;
-        /* 0x320 */ float m320;
-        /* 0x324 */ float m324;
+        /* 0x310 */ bool mRiding;
+        /* 0x311 */ bool mPrevRiding;
+        /* 0x312 */ short mMiniPushTimer;
+        /* 0x314 */ bool mMiniPushFlg;
+        /* 0x315 */ bool mHeavyRiding;
+        /* 0x316 */ bool mPrevHeavyRiding;
+        /* 0x318 */ short mPushTimer;
+        /* 0x31A */ bool mPushFlg;
+        /* 0x31B */ bool mChangingState;
+        /* 0x31C */ float mTargetHFrac;
+        /* 0x320 */ float mCurHFrac;
+        /* 0x324 */ float mVSpeed;
         /* 0x328 */ float m328;
         /* 0x32C */ float m32C;
-        short m330;
-        u8 m332[0x2];
+        /* 0x330 */ short m330;
         /* 0x334 */ float m334;
         /* 0x338 */ float m338;
-        /* 0x33C */ float m33C;
+        /* 0x33C */ float mTopPos;
     }; /* Size: 0x340 */
 
-    // STATIC_ASSERT(sizeof(Act_c) == 0x340);
+    STATIC_ASSERT(sizeof(Act_c) == 0x340);
 };
 
 #endif /* D_A_OBJ_SWHEAVY_H */
