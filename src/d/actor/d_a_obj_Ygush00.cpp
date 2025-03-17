@@ -15,14 +15,12 @@
 #include "m_Do/m_Do_mtx.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-
 namespace {
     static const char l_arcname[] = "Ygush00";
 };
 
 #ifdef DEBUG
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 static daObjYgush00_HIO_c l_HIO;
 #endif
 
