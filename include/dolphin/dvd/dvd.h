@@ -54,8 +54,12 @@ typedef struct DVDDiskID {
 
 struct DVDFileInfo;
 struct DVDCommandBlock;
+typedef struct DVDCommandBlock DVDCommandBlock;
 typedef void (*DVDCBCallback)(s32 result, struct DVDCommandBlock* block);
 typedef void (*DVDCallback)(s32 result, struct DVDFileInfo* info);
+
+typedef void (*DVDCommandCheckerCallback)(u32);
+typedef void (*DVDCommandChecker)(DVDCommandBlock*, DVDCommandCheckerCallback);
 
 typedef struct DVDCommandBlock {
     /* 0x00 */ struct DVDCommandBlock* next;
@@ -105,7 +109,53 @@ typedef struct DVDBB2 {
     u32 padding0;
 } DVDBB2;
 
+#define DVD_RESULT_GOOD        0
+#define DVD_RESULT_FATAL_ERROR -1
+#define DVD_RESULT_IGNORED     -2
+#define DVD_RESULT_CANCELED    -3
+
+#define DVD_STATE_FATAL_ERROR   -1
+#define DVD_STATE_END            0
+#define DVD_STATE_BUSY           1
+#define DVD_STATE_WAITING        2
+#define DVD_STATE_COVER_CLOSED   3
+#define DVD_STATE_NO_DISK        4
+#define DVD_STATE_COVER_OPEN     5
+#define DVD_STATE_WRONG_DISK     6
+#define DVD_STATE_MOTOR_STOPPED  7
+#define DVD_STATE_PAUSING        8
+#define DVD_STATE_IGNORED        9
+#define DVD_STATE_CANCELED       10
+#define DVD_STATE_RETRY          11
+
 #define DVD_MIN_TRANSFER_SIZE 32
+
+// could be bitfields
+#define DVD_INTTYPE_TC 1
+#define DVD_INTTYPE_DE 2
+// unk type 3
+#define DVD_INTTYPE_CVR 4
+
+// DVD Commands
+
+#define DVD_COMMAND_NONE 0
+#define DVD_COMMAND_READ 1
+#define DVD_COMMAND_SEEK 2
+#define DVD_COMMAND_CHANGE_DISK 3
+#define DVD_COMMAND_BSREAD 4
+#define DVD_COMMAND_READID 5
+#define DVD_COMMAND_INITSTREAM 6
+#define DVD_COMMAND_CANCELSTREAM 7
+#define DVD_COMMAND_STOP_STREAM_AT_END 8
+#define DVD_COMMAND_REQUEST_AUDIO_ERROR 9
+#define DVD_COMMAND_REQUEST_PLAY_ADDR 10
+#define DVD_COMMAND_REQUEST_START_ADDR 11
+#define DVD_COMMAND_REQUEST_LENGTH 12
+#define DVD_COMMAND_AUDIO_BUFFER_CONFIG 13
+#define DVD_COMMAND_INQUIRY 14
+#define DVD_COMMAND_BS_CHANGE_DISK 15
+
+#define DVD_WATYPE_MAX 2
 
 typedef void (*DVDOptionalCommandChecker)(DVDCommandBlock* block, void (*cb)(u32 intType));
 
@@ -144,8 +194,21 @@ static BOOL DVDCancelAsync(DVDCommandBlock* block, DVDCBCallback callback);
 s32 DVDCancel(DVDCommandBlock* block);
 void __DVDPrepareResetAsync(DVDCBCallback callbac);
 BOOL DVDCompareDiskID(DVDDiskID* id1, DVDDiskID* id2);
+void __DVDAudioBufferConfig(struct DVDCommandBlock * block, unsigned long enable, unsigned long size, void (* callback)(long, struct DVDCommandBlock *));
 
 DVDCommandBlock* __DVDPopWaitingQueue(void);
+
+#define DVD_ASSERTMSGLINE(line, cond, msg) \
+    if (!(cond)) \
+        OSPanic(__FILE__, line, msg)
+
+#define DVD_ASSERTMSG1LINE(line, cond, msg, arg1) \
+    if (!(cond)) \
+        OSPanic(__FILE__, line, msg, arg1)
+
+#define DVD_ASSERTMSG2LINE(line, cond, msg, arg1, arg2) \
+    if (!(cond)) \
+        OSPanic(__FILE__, line, msg, arg1, arg2)
 
 #ifdef __cplusplus
 };
