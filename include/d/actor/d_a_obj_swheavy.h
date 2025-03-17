@@ -5,18 +5,19 @@
 #include "d/d_bg_w.h"
 
 namespace daObjSwheavy {
+    struct Attr_c {
+        /* 0x00 */ u8 m00[0x4];
+        /* 0x04 */ int mFlags;
+        /* 0x08 */ float mVSpring;
+        /* 0x0C */ float mVSpeedDecay;
+        /* 0x10 */ float mPushVSpeed0;
+        /* 0x14 */ short m14;
+        /* 0x16 */ short mMiniPushDelay;
+        /* 0x18 */ short mPushDelay;
+    };
+
     class Act_c : public fopAc_ac_c {
     public:
-        struct Attr_c {
-            u8 m00[0x4];
-            int mFlags;
-            float mVSpring;
-            float mVSpeedDecay;
-            float mPushVSpeed0;
-            short m14;
-            short mMiniPushDelay;
-            short mPushDelay;
-        };
         const Attr_c& attr() const { return M_attr[mType]; }
 
         enum Flag {
