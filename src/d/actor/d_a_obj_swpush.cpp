@@ -5,35 +5,139 @@
 
 #include "d/actor/d_a_obj_swpush.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_bg_w_sv.h"
+
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+
+const char daObjSwpush::Act_c::M_arcname_kbota[] = "Kbota_00";
+const char daObjSwpush::Act_c::M_arcname_hhbot[] = "Hhbot";
 
 /* 000000EC-0000011C       .text prmZ_init__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::prmZ_init() {
-    /* Nonmatching */
+    if (m302) {
+        return;
+    }
+    m300 = home.angle.z;
+    m302 = true;
+    home.angle.z = 0;
+    current.angle.z = 0;
+    shape_angle.z = 0;
 }
 
 /* 0000011C-0000019C       .text is_switch2__Q211daObjSwpush5Act_cCFv */
-void daObjSwpush::Act_c::is_switch2() const {
-    /* Nonmatching */
+BOOL daObjSwpush::Act_c::is_switch2() const {
+    s32 prm = prmZ_get_swSave2();
+    if (prm >= 1) {
+        prm = m300 & 0xff;
+    } else {
+        prm = 0xff;
+    }
+    BOOL rt;
+    if (prm == 0xff) {
+        rt = false;
+    } else {
+        rt = fopAcM_isSwitch(const_cast<Act_c*>(this), prm);
+    }
+
+    return rt;
 }
 
 /* 0000019C-000001C0       .text solidHeapCB__Q211daObjSwpush5Act_cFP10fopAc_ac_c */
-void daObjSwpush::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjSwpush::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return static_cast<daObjSwpush::Act_c*>(i_this)->create_heap();
 }
 
 /* 000001C0-00000478       .text create_heap__Q211daObjSwpush5Act_cFv */
-void daObjSwpush::Act_c::create_heap() {
-    /* Nonmatching */
+bool daObjSwpush::Act_c::create_heap() {
+    J3DModelData* model_data = (J3DModelData*) dComIfG_getObjectRes(attr().m18, attr().m22[prm_get_mdl()]);
+    JUT_ASSERT(0x205, model_data != NULL);
+    mpModel = mDoExt_J3DModel__create(model_data, 0x80000, attr().m1C ? 0x11020022 : 0x11000022);
+    if (mpModel) {
+        model_data->getJointNodePointer(1)->setCallBack(jnodeCB);
+        mpModel->setUserArea((u32) this);
+    }
+    int iVar7 = 1;
+    if (attr().m1C != NULL) {
+        J3DAnmTexPattern* btp_data = (J3DAnmTexPattern*) dComIfG_getObjectRes(attr().m1C, attr().m26);
+        JUT_ASSERT(0x21E, btp_data != NULL);
+        iVar7 = mBtpAnm.init(model_data, btp_data, 1, 0, 1.0f, 0, -1, false, 0);
+    }
+    cBgD_t* bg_data = (cBgD_t*) dComIfG_getObjectRes(attr().m14, attr().m20);
+    bool bVar1 = false;
+    JUT_ASSERT(0x22B, bg_data != NULL);
+    dBgWSv* bgW = new dBgWSv();
+    if (bgW != NULL && !bgW->Set(bg_data, 0)) {
+        bVar1 = true;
+    }
+    int rt = 0;
+    if (mpModel != NULL && iVar7 != 0) {
+        if (mMtx[0][0] != 0.0f && bVar1) {
+            rt = 1;
+        }
+    }
+    if (rt == 0) {
+        mMtx[0][0] = 0.0f;
+    }
+    return rt;
 }
 
 /* 00000478-0000051C       .text create_res_load__Q211daObjSwpush5Act_cFv */
-void daObjSwpush::Act_c::create_res_load() {
-    /* Nonmatching */
+cPhs_State daObjSwpush::Act_c::create_res_load() {
+    cPhs_State rt = attr().mKbotaResName != NULL ? dComIfG_resLoad(&mPhs, attr().mKbotaResName) : cPhs_COMPLEATE_e;
+    if (rt != cPhs_COMPLEATE_e) {
+        return rt;
+    }
+    rt = attr().mHhbotResName != NULL ? dComIfG_resLoad(&mPhs, attr().mHhbotResName) : cPhs_COMPLEATE_e;
+    if (rt != cPhs_COMPLEATE_e) {
+        return rt;
+    }
+    return cPhs_COMPLEATE_e;
 }
 
 /* 0000051C-000008C4       .text Mthd_Create__Q211daObjSwpush5Act_cFv */
 cPhs_State daObjSwpush::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjSwpush::Act_c);
+    prmZ_init();
+    mType = prm_get_type();
+    cPhs_State phase_state = create_res_load();
+    if (phase_state != cPhs_COMPLEATE_e) {
+        return phase_state;
+    }
+
+    scale.x *= attr().m08;
+    scale.z *= attr().m08;
+    if (fopAcM_entrySolidHeap(this, solidHeapCB, attr().m00)) {
+        dComIfG_Bgsp()->Regist(mpBgW, this);
+        mDoMtx_stack_c::transM(current.pos);
+        mDoMtx_stack_c::ZXYrotM(shape_angle);
+        mDoMtx_stack_c::scaleM(scale);
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+        mpBgW->ClrNoCalcVtx();
+        mpBgW->SetBaseMtxP(&mMtx);
+        mpBgW->GlobalVtx();
+        mpBgW->SetBaseMtxP(NULL);
+        mpBgW->SetNoCalcVtx();
+        m2D4 = mpBgW->GetVtxTbl()[6].y;
+        mpBgW->SetRideCallback(rideCB);
+        fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+        init_mtx();
+        fopAcM_setCullSizeBox(this, attr().m08 * -60.0f, -2.0f, attr().m08 * -60.0f, attr().m08 * 60.0f, 39.0f, attr().m08 * 60.0f);
+        // TODO: initialize data
+        set_btp_frame();
+
+        if (!cLib_checkBit<u32>(attr().m04, 0x4) && (is_switch() || cLib_checkBit<u32>(attr().m04, 0x1)) && (!is_switch() || !cLib_checkBit<u32>(attr().m04, 0x1))) {
+            mode_lower_init();
+        } else {
+            mode_upper_init();
+        }
+
+        // dComIfGp_evmng_getEventIdx(prm_get_mdl());
+        demo_non_init();
+        return cPhs_COMPLEATE_e;
+    } else {
+        return cPhs_ERROR_e;
+    }
 }
 
 /* 00000968-000009F8       .text Mthd_Delete__Q211daObjSwpush5Act_cFv */
