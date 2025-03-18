@@ -5,71 +5,170 @@
 
 #include "d/actor/d_a_tpota.h"
 #include "d/d_procname.h"
+#include "JSystem/JGeometry.h"
+
+#include "JSystem/JParticle/JPAParticle.h"
+#include "d/d_particle.h"
+#include "d/d_com_inf_game.h"
+
 
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
 s32 daTpota_c::_create() {
+    // fopAcM_SetupActor(this, daTpota_c);
+    // field_0x2a0 = &current.pos.x;
     /* Nonmatching */
 }
 
 /* 00000250-00000298       .text _delete__9daTpota_cFv */
-bool daTpota_c::_delete() {
+BOOL daTpota_c::_delete() {
+    // int iVar1 = 0;
+    // int iVar3 = 2;
+    // do {
+    //     int iVar2 = field_0x2C4 + iVar1 +- -0x2c;
+    // } while
+
+    // return TRUE;
     /* Nonmatching */
 }
 
 /* 00000298-000002FC       .text make_ripple__9daTpota_cF4cXyz */
-void daTpota_c::make_ripple(cXyz) {
-    /* Nonmatching */
+void daTpota_c::make_ripple(cXyz position) {
+    dComIfGp_particle_set(dPa_name::ID_SCENE_82B0, &position,
+        0x0, 0x0, 0xff,0x0, -1, 0x0, 0x0, 0x0);
+    return;
 }
 
+
+
 /* 000002FC-00000354       .text check_water_h__9daTpota_cFP15JPABaseParticlef */
-void daTpota_c::check_water_h(JPABaseParticle*, float) {
+int daTpota_c::check_water_h(JPABaseParticle* ptcl, float position_y) {
+    // int *piVar2 = field_0x2C4;
+    // if (position_y > -230.0) {
+    //     return 0;
+    // }
+    // int iVar3 = 0x1e;
+    // while ((JPABaseParticle*)*piVar2 != ptcl) {
+    //     piVar2 = piVar2 + 2;
+    //     iVar3 = iVar3 + -1;
+    //     if (iVar3 == 0) {
+    //         return 0;
+    //     }
+    // }
+    // if((float)piVar2[1] <= -230.0) {
+    //     return 0;
+    // }
+    // return 1;
+
     /* Nonmatching */
 }
 
 /* 00000354-00000380       .text clear_splash__9daTpota_cFv */
 void daTpota_c::clear_splash() {
+
+    // int *piVar1 = field_0x2C4;
+    // int iVar2 = 0x1e;
+    // do{
+    //     *piVar1 = 0;
+    //     piVar1[1] = 0;
+    //     piVar1 = piVar1 + 2;
+    //     iVar2 = iVar2 + -1;
+    // } while (iVar2 != 0);
+    // return;
     /* Nonmatching */
 }
 
 /* 00000380-000003F4       .text renew_splash__9daTpota_cFv */
 void daTpota_c::renew_splash() {
-    /* Nonmatching */
+    // if (field_0x29C != (int *)0x0){
+    //     int *piVar2 = field_0x29C + 0x5f;
+    //     int *piVar3 = field_0x2C4;
+    //     if (piVar2 != (int *)0x0) {
+    //         clear_splash();
+    //         for (piVar2 = (int *)*piVar2; piVar2 != (int *)0x0; piVar2 = (int *)piVar2[3]){
+    //             int iVar1 = *(int *)(piVar2 + 0x2c);
+    //             *piVar3 = *piVar2;
+    //             piVar3[1] = iVar1;
+    //             piVar3 = piVar3 + 2;
+    //         }
+
+    //     }
+    // }
+    // /* Nonmatching */
+    // return;
 }
 
 /* 000003F4-000004C8       .text _execute__9daTpota_cFv */
 bool daTpota_c::_execute() {
-    /* Nonmatching */
+    JSUPtrList *pJVar3;
+    int iVar4;
+    JPABaseParticle *pJVar5;
+    JSUPtrLink *pJVar6;
+    cXyz local_48;
+    float local_3c;
+    float local_34;
+    float local_38;
+
+    if (emitter != (JPABaseEmitter *)0x0) {
+        pJVar3 = &emitter->mActiveParticles;
+        if(pJVar3 != (JSUPtrList *)0x0){
+            for (pJVar6 = pJVar3->getFirstLink(); pJVar6 != (JSUPtrLink *)0x0 && (pJVar6 != (JSUPtrLink *)0x0);
+            pJVar6 = pJVar6->getNext()){
+                pJVar5 = (JPABaseParticle*)pJVar6->getObjectPtr();
+                JGeometry::TVec3<f32> position;
+                pJVar5->getGlobalPosition(position);
+                float fVar1 = position.x;
+                float fVar2 = position.z;
+                iVar4 = check_water_h(pJVar5, position.y);
+                if(iVar4 != 0){
+                    local_38 = 0xc3660000;
+                    local_48.y = -230.0;
+                    local_48.x = fVar1;
+                    local_48.z = fVar2;
+                    local_3c = fVar1;
+                    local_34 = fVar2;
+                    make_ripple(local_48);
+                }
+            }
+        }
+        renew_splash();
+    }
+    return TRUE;
+
+    // /* Nonmatching */
 }
 
 /* 000004C8-000004D0       .text _draw__9daTpota_cFv */
 bool daTpota_c::_draw() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 namespace {
 /* 000004D0-000004F0       .text Mthd_Create__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+s32 Mthd_Create(void* i_this) {
+    return static_cast<daTpota_c*>(i_this)->_create();
 }
 
 /* 000004F0-00000514       .text Mthd_Delete__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void* i_this) {
+    
+    return static_cast<daTpota_c*>(i_this)->_delete();
     /* Nonmatching */
 }
 
 /* 00000514-00000538       .text Mthd_Execute__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return static_cast<daTpota_c*>(i_this)->_execute();
 }
 
+
 /* 00000538-0000055C       .text Mthd_Draw__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return static_cast<daTpota_c*>(i_this)->_draw();
 }
 
 /* 0000055C-00000564       .text Mthd_IsDelete__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void*) {
+    return TRUE;
 }
 
 static actor_method_class Tpota_Mthd_Table = {
