@@ -24,7 +24,7 @@ void dWpillar_c::draw() {
 }
 
 /* 8023ECF8-8023ED18       .text dWpillar_Draw__FP10dWpillar_c */
-static void dWpillar_Draw(dWpillar_c*) {
+static BOOL dWpillar_Draw(dWpillar_c*) {
     /* Nonmatching */
 }
 
@@ -34,12 +34,12 @@ void dWpillar_c::execute() {
 }
 
 /* 8023EDB0-8023EDD0       .text dWpillar_Execute__FP10dWpillar_c */
-static void dWpillar_Execute(dWpillar_c*) {
+static BOOL dWpillar_Execute(dWpillar_c*) {
     /* Nonmatching */
 }
 
 /* 8023EDD0-8023EDD8       .text dWpillar_IsDelete__FP10dWpillar_c */
-static void dWpillar_IsDelete(dWpillar_c*) {
+static BOOL dWpillar_IsDelete(dWpillar_c*) {
     /* Nonmatching */
 }
 
@@ -49,7 +49,7 @@ void dWpillar_c::wp_delete() {
 }
 
 /* 8023EE08-8023EE28       .text dWpillar_Delete__FP10dWpillar_c */
-static void dWpillar_Delete(dWpillar_c*) {
+static BOOL dWpillar_Delete(dWpillar_c*) {
     /* Nonmatching */
 }
 
@@ -59,6 +59,6 @@ void dWpillar_c::create() {
 }
 
 /* 8023F5B0-8023F5D0       .text dWpillar_Create__FP12kankyo_class */
-static void dWpillar_Create(kankyo_class*) {
+static cPhs_State dWpillar_Create(kankyo_class*) {
     /* Nonmatching */
 }

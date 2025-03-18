@@ -8,13 +8,13 @@
 
 /* 802451B4-802451C0       .text cPhs_Reset__FP30request_of_phase_process_class */
 void cPhs_Reset(request_of_phase_process_class* pPhase) {
-    pPhase->id = cPhs_INIT_e;
+    pPhase->id = 0;
 }
 
 /* 802451C0-802451D0       .text cPhs_Set__FP30request_of_phase_process_classPPFPv_i */
 void cPhs_Set(request_of_phase_process_class* pPhase, cPhs__Handler* pHandlerTable) {
     pPhase->mpHandlerTable = pHandlerTable;
-    pPhase->id = cPhs_INIT_e;
+    pPhase->id = 0;
 }
 
 /* 802451D0-802451F8       .text cPhs_UnCompleate__FP30request_of_phase_process_class */
@@ -24,13 +24,13 @@ void cPhs_UnCompleate(request_of_phase_process_class* pPhase) {
 }
 
 /* 802451F8-80245208       .text cPhs_Compleate__FP30request_of_phase_process_class */
-int cPhs_Compleate(request_of_phase_process_class* pPhase) {
+cPhs_State cPhs_Compleate(request_of_phase_process_class* pPhase) {
     pPhase->mpHandlerTable = NULL;
     return cPhs_COMPLEATE_e;
 }
 
 /* 80245208-80245268       .text cPhs_Next__FP30request_of_phase_process_class */
-int cPhs_Next(request_of_phase_process_class* pPhase) {
+cPhs_State cPhs_Next(request_of_phase_process_class* pPhase) {
     if (const cPhs__Handler* handlerTable = pPhase->mpHandlerTable) {
         pPhase->id++;
         cPhs__Handler handler = handlerTable[pPhase->id];
@@ -48,7 +48,7 @@ int cPhs_Next(request_of_phase_process_class* pPhase) {
 }
 
 /* 80245268-8024533C       .text cPhs_Do__FP30request_of_phase_process_classPv */
-int cPhs_Do(request_of_phase_process_class* pPhase, void* pUserData) {
+cPhs_State cPhs_Do(request_of_phase_process_class* pPhase, void* pUserData) {
     cPhs__Handler * handler = pPhase->mpHandlerTable;
 
     if (handler) {
@@ -78,7 +78,7 @@ int cPhs_Do(request_of_phase_process_class* pPhase, void* pUserData) {
 }
 
 /* 8024533C-80245364       .text cPhs_Handler__FP30request_of_phase_process_classPPFPv_iPv */
-int cPhs_Handler(request_of_phase_process_class* pPhase, cPhs__Handler* pHandlerTable,
+cPhs_State cPhs_Handler(request_of_phase_process_class* pPhase, cPhs__Handler* pHandlerTable,
                  void* pUserData) {
     pPhase->mpHandlerTable = pHandlerTable;
     return cPhs_Do(pPhase, pUserData);

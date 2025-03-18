@@ -234,10 +234,10 @@ int daBFlower_c::init_bck_anm(s16 param) {
 }
 
 /* 0000080C-000008AC       .text _create__11daBFlower_cFv */
-s32 daBFlower_c::_create() {
+cPhs_State daBFlower_c::_create() {
     fopAcM_SetupActor(this, daBFlower_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, m_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xFC0)) {
@@ -489,7 +489,7 @@ bool daBFlower_c::_delete() {
 }
 
 /* 00001AC4-00001AE4       .text daBFlower_Create__FPv */
-static s32 daBFlower_Create(void* i_this) {
+static cPhs_State daBFlower_Create(void* i_this) {
     return static_cast<daBFlower_c*>(i_this)->_create();
 }
 

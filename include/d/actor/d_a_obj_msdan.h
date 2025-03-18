@@ -11,9 +11,9 @@ namespace daObjMsdan {
         void prm_get_sound() const {}
         void prm_get_swSave() const {}
     
-        void Mthd_Create();
-        void Mthd_Execute();
-        void Mthd_Delete();
+        cPhs_State Mthd_Create();
+        BOOL Mthd_Execute();
+        BOOL Mthd_Delete();
     
     public:
         /* Place member variables here */

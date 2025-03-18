@@ -895,7 +895,7 @@ bool daObjTpost_c::_draw() {
     mMorf->entryDL();
     dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), 40.0f, mAcch.m_gnd, shape_angle.y, 1.0f, 0);
 
-    return 1;
+    return true;
 }
 
 /* 00001980-00001BA4       .text createInit__12daObjTpost_cFv */
@@ -961,7 +961,7 @@ int daObjTpost_c::_create() {
     fopAcM_SetupActor(this, daObjTpost_c);
 
     getArg();
-    int step = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State step = dComIfG_resLoad(&mPhs, m_arc_name);
     if(step == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, createHeap_CB, 0x7E0) == 0) {
             return cPhs_ERROR_e;

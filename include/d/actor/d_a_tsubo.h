@@ -74,7 +74,7 @@ namespace daTsubo {
         void create_init_cull();
         void create_init_cc();
         void create_init_bgc();
-        s32 _create();
+        cPhs_State _create();
         void _is_delete();
         bool _delete();
         void spec_make_boko(int);
@@ -234,7 +234,7 @@ namespace daTsubo {
     };  // Size: 0xF00
     
     namespace Method {
-        s32 Create(void*);
+        cPhs_State Create(void*);
         BOOL Delete(void*);
         BOOL Execute(void*);
         BOOL Draw(void*);

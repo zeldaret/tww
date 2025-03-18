@@ -64,7 +64,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c*) {
 }
 
 /* 00001664-000018C8       .text daKui_Create__FP10fopAc_ac_c */
-static s32 daKui_Create(fopAc_ac_c*) {
+static cPhs_State daKui_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

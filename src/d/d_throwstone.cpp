@@ -30,8 +30,8 @@ BOOL daThrowstone_c::CreateHeap() {
     return (mpModel != NULL) ? TRUE : FALSE;
 }
 
-s32 daThrowstone_c::_create() {
-    s32 result = dComIfG_resLoad(&mPhs, M_arcname);
+cPhs_State daThrowstone_c::_create() {
+    cPhs_State result = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (result == cPhs_COMPLEATE_e) {
         fopAcM_SetupActor(this, daThrowstone_c);

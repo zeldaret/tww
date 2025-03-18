@@ -101,7 +101,7 @@ public:
     bool _draw();
     bool _execute();
     bool _delete();
-    s32 _create();
+    cPhs_State _create();
     void create_Anm();
     void create_itm_Mdl();
     void CreateHeap();

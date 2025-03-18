@@ -17,7 +17,7 @@ s32 daObjNest::Act_c::Create() {
 }
 
 /* 000001F0-000002E8       .text Mthd_Create__Q29daObjNest5Act_cFv */
-void daObjNest::Act_c::Mthd_Create() {
+cPhs_State daObjNest::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjNest::Act_c::Delete() {
 }
 
 /* 000002F0-0000033C       .text Mthd_Delete__Q29daObjNest5Act_cFv */
-void daObjNest::Act_c::Mthd_Delete() {
+BOOL daObjNest::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -69,27 +69,27 @@ BOOL daObjNest::Act_c::Draw() {
 namespace daObjNest {
 namespace {
 /* 000007FC-0000081C       .text Mthd_Create__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 0000081C-0000083C       .text Mthd_Delete__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000083C-0000085C       .text Mthd_Execute__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 0000085C-00000888       .text Mthd_Draw__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000888-000008B4       .text Mthd_IsDelete__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

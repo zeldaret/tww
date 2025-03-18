@@ -246,7 +246,7 @@ static BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
 }
 
 /* 8022F3C4-8022F4B0       .text phase_1__FP19menu_of_scene_class */
-s32 phase_1(menu_of_scene_class* i_this) {
+cPhs_State phase_1(menu_of_scene_class* i_this) {
     /* Nonmatching */
     i_this->command = mDoDvdThd_toMainRam_c::create("/res/Menu/Menu1.dat", 0, NULL);
     JUT_ASSERT(732, i_this->command != NULL);
@@ -256,7 +256,7 @@ s32 phase_1(menu_of_scene_class* i_this) {
 }
 
 /* 8022F4B0-8022F70C       .text phase_2__FP19menu_of_scene_class */
-s32 phase_2(menu_of_scene_class* i_this) {
+cPhs_State phase_2(menu_of_scene_class* i_this) {
     /* Nonmatching */
     if (!i_this->command->sync() || !i_this->fontCommand->sync()) {
         return cPhs_INIT_e;
@@ -291,7 +291,7 @@ s32 phase_2(menu_of_scene_class* i_this) {
 }
 
 /* 8022F70C-8022F748       .text dScnMenu_Create__FP11scene_class */
-static s32 dScnMenu_Create(scene_class* i_scn) {
+static cPhs_State dScnMenu_Create(scene_class* i_scn) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,

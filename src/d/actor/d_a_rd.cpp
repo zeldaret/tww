@@ -1815,10 +1815,10 @@ void daRd_c::getArg() {
 }
 
 /* 00004720-000047C8       .text _create__6daRd_cFv */
-s32 daRd_c::_create() {
+cPhs_State daRd_c::_create() {
     fopAcM_SetupActor(this, daRd_c);
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     
     if (phase_state == cPhs_COMPLEATE_e) {
         getArg();

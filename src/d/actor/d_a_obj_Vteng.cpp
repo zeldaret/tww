@@ -77,10 +77,10 @@ bool daObjVteng_c::jokai_demo() {
 }
 
 /* 00000324-000003F4       .text _create__12daObjVteng_cFv */
-s32 daObjVteng_c::_create() {
+cPhs_State daObjVteng_c::_create() {
     fopAcM_SetupActor(this, daObjVteng_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x72a0)) {
@@ -131,7 +131,7 @@ bool daObjVteng_c::_draw() {
 }
 
 /* 00000578-00000598       .text daObjVteng_Create__FP10fopAc_ac_c */
-static s32 daObjVteng_Create(fopAc_ac_c* i_this) {
+static cPhs_State daObjVteng_Create(fopAc_ac_c* i_this) {
     return ((daObjVteng_c*)i_this)->_create();
 }
 

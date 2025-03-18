@@ -57,30 +57,29 @@ void daObjTower_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-cPhs__Step daObjTower_c::_create() {
-    cPhs__Step PVar3;
-
+cPhs_State daObjTower_c::_create() {
     fopAcM_SetupActor(this, daObjTower_c);
 
     field_0x2d0 = 0;
 
+    cPhs_State phase_state;
     if (!dComIfGs_isEventBit(0x1e40)) {
-        PVar3 = cPhs_STOP_e;
+        phase_state = cPhs_STOP_e;
     } else {
-        PVar3 = (cPhs__Step)dComIfG_resLoad(&mPhs, "X_tower");
-        if (PVar3 == cPhs_COMPLEATE_e) {
+        phase_state = dComIfG_resLoad(&mPhs, "X_tower");
+        if (phase_state == cPhs_COMPLEATE_e) {
             if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1c6c0)) {
-                PVar3 = cPhs_ERROR_e;
+                phase_state = cPhs_ERROR_e;
             } else {
                 CreateInit();
             }
         }
     }
 
-    return PVar3;
+    return phase_state;
 }
 /* 0000030C-000003DC       .text daObjTower_Create__FPv */
-static cPhs__Step daObjTower_Create(void* i_this) {
+static cPhs_State daObjTower_Create(void* i_this) {
     return ((daObjTower_c*)i_this)->_create();
 }
 

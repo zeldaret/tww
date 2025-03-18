@@ -22,7 +22,7 @@ void daSalvage_c::CreateInit() {
 }
 
 /* 00000570-00000728       .text _create__11daSalvage_cFv */
-s32 daSalvage_c::_create() {
+cPhs_State daSalvage_c::_create() {
     /* Nonmatching */
 }
 

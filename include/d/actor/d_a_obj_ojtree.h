@@ -12,15 +12,15 @@ namespace daObjOjtree {
         static Mtx M_tmp_mtx;
         static const char M_arcname[];
         
-        int CreateHeap();
-        int Create();
-        s32 Mthd_Create();
-        BOOL Delete();
-        s32 Mthd_Delete();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        cPhs_State Mthd_Create();
+        virtual BOOL Delete();
+        BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
-        int Execute(Mtx**);
-        BOOL Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
 
     public:
         /* 0x2C8 */ request_of_phase_process_class mPhs;

@@ -16,7 +16,7 @@ public:
     BOOL CreateHeap();
     void calcMtx();
     BOOL CreateInit();
-    s32 create();
+    cPhs_State create();
 
     static const char M_arcname[];
 

@@ -178,7 +178,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00007258-00007798       .text daKb_Create__FP10fopAc_ac_c */
-static s32 daKb_Create(fopAc_ac_c*) {
+static cPhs_State daKb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -247,7 +247,7 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000ED8-0000101C       .text create__11daNpc_kam_cFv */
-s32 daNpc_kam_c::create() {
+cPhs_State daNpc_kam_c::create() {
     fopAcM_SetupActor(this, daNpc_kam_c);
     
     if (l_act != NULL && l_act != this) {
@@ -257,7 +257,7 @@ s32 daNpc_kam_c::create() {
     
     static u32 l_heap_size = 0x1360;
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, "Kamome");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Kamome");
     
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, checkCreateHeap, l_heap_size)) {
@@ -1404,7 +1404,7 @@ static BOOL daNpc_kam_Delete(daNpc_kam_c* i_this) {
 }
 
 /* 000045B8-000045D8       .text daNpc_kam_Create__FP10fopAc_ac_c */
-static s32 daNpc_kam_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_kam_Create(fopAc_ac_c* i_this) {
     return ((daNpc_kam_c*)i_this)->create();
 }
 

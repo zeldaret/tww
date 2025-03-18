@@ -240,7 +240,7 @@ static BOOL daEsa_CreateHeap(fopAc_ac_c* i_actor) {
 }
 
 /* 800E8AB0-800E8CA4       .text daEsa_Create__FP10fopAc_ac_c */
-static s32 daEsa_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     fopAcM_SetupActor(i_actor, esa_class);

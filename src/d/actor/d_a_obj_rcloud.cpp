@@ -22,7 +22,7 @@ void daObjRcloud_c::create_heap() {
 }
 
 /* 00000238-000003B4       .text _create__13daObjRcloud_cFv */
-s32 daObjRcloud_c::_create() {
+cPhs_State daObjRcloud_c::_create() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ bool daObjRcloud_c::_draw() {
 }
 
 /* 00000848-00000868       .text daObjRcloud_Create__FP10fopAc_ac_c */
-static s32 daObjRcloud_Create(fopAc_ac_c*) {
+static cPhs_State daObjRcloud_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

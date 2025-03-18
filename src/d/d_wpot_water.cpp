@@ -59,7 +59,7 @@ static BOOL dWpotWater_Delete(dWpotWater_c* i_this) {
     return TRUE;
 }
 
-s32 dWpotWater_c::create() {
+cPhs_State dWpotWater_c::create() {
     new(this) dWpotWater_c();
     dComIfGp_particle_set(dPa_name::ID_SCENE_8083, &mPos);
     dComIfGp_particle_set(dPa_name::ID_SCENE_8084, &mPos);
@@ -73,7 +73,7 @@ s32 dWpotWater_c::create() {
 }
 
 /* 8023F750-8023FFCC       .text dWpotWater_Create__FP12kankyo_class */
-static s32 dWpotWater_Create(kankyo_class* i_k) {
+static cPhs_State dWpotWater_Create(kankyo_class* i_k) {
     dWpotWater_c* i_this = (dWpotWater_c*)i_k;
     
     dBgS_GndChk gndChk;

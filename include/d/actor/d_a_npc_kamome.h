@@ -102,7 +102,7 @@ public:
     void setAttention(bool, int);
     void setBaseMtx();
     BOOL createHeap();
-    s32 create();
+    cPhs_State create();
     daNpc_kam_c() {}
     BOOL init();
     BOOL setAction(ActionFunc*, ActionFunc, void*);

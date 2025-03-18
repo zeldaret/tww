@@ -9,7 +9,7 @@ public:
 
     void getTagNo() {}
 
-    s32 _create();
+    cPhs_State _create();
     void createHeap();
     void createInit();
     bool _delete();

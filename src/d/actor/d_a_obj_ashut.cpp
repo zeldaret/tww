@@ -17,7 +17,7 @@ s32 daObjAshut::Act_c::Create() {
 }
 
 /* 00000224-00000388       .text Mthd_Create__Q210daObjAshut5Act_cFv */
-void daObjAshut::Act_c::Mthd_Create() {
+cPhs_State daObjAshut::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjAshut::Act_c::Delete() {
 }
 
 /* 00000390-000003DC       .text Mthd_Delete__Q210daObjAshut5Act_cFv */
-void daObjAshut::Act_c::Mthd_Delete() {
+BOOL daObjAshut::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -109,27 +109,27 @@ BOOL daObjAshut::Act_c::Draw() {
 namespace daObjAshut {
 namespace {
 /* 00000D6C-00000D8C       .text Mthd_Create__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000D8C-00000DAC       .text Mthd_Delete__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000DAC-00000DCC       .text Mthd_Execute__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000DCC-00000DF8       .text Mthd_Draw__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000DF8-00000E24       .text Mthd_IsDelete__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

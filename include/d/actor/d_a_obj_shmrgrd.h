@@ -15,7 +15,7 @@ public:
     daObjShmrgrd_c();
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void search_target_next(daObjShmrgrd_c*);
     void register_list();

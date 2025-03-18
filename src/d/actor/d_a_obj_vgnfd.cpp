@@ -155,8 +155,8 @@ BOOL daObjVgnfd_c::create_heap() {
 }
 
 /* 000004A4-00000704       .text _create__12daObjVgnfd_cFv */
-s32 daObjVgnfd_c::_create() {
-    s32 ret = cPhs_ERROR_e;
+cPhs_State daObjVgnfd_c::_create() {
+    cPhs_State ret = cPhs_ERROR_e;
 
     fopAcM_SetupActor(this, daObjVgnfd_c);
 
@@ -447,7 +447,7 @@ bool daObjVgnfd_c::_draw() {
 
 namespace {
 /* 000013F0-00001410       .text Mthd_Create__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((daObjVgnfd_c*)i_ac)->_create();
 }
 

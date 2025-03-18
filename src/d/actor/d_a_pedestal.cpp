@@ -95,10 +95,10 @@ void daPds_c::CreateInit() {
 }
 
 /* 00000380-00000474       .text _create__Q210daPedestal7daPds_cFv */
-s32 daPds_c::_create() {
+cPhs_State daPds_c::_create() {
     fopAcM_SetupActor(this, daPds_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhase, m_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, m_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2000)) {
@@ -407,7 +407,7 @@ bool daPds_c::_draw() {
 }
 
 /* 00000F10-00000F30       .text daPds_Create__10daPedestalFPv */
-static s32 daPds_Create(void* i_this) {
+static cPhs_State daPds_Create(void* i_this) {
     return static_cast<daPds_c*>(i_this)->_create();
 }
 

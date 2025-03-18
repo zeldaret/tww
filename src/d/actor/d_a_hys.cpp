@@ -62,7 +62,7 @@ BOOL daHys_c::Draw() {
 }
 
 /* 00000778-00000904       .text daHys_Create__FPv */
-static s32 daHys_Create(void*) {
+static cPhs_State daHys_Create(void*) {
     /* Nonmatching */
 }
 

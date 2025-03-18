@@ -2124,10 +2124,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00004980-00004AD8       .text _create__11daNpc_Bs1_cFv */
-s32 daNpc_Bs1_c::_create() {
+cPhs_State daNpc_Bs1_c::_create() {
     fopAcM_SetupActor(this, daNpc_Bs1_c);
     
-    int phase_state = dComIfG_resLoad(&mPhase, "Bs");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Bs");
     if (phase_state == cPhs_COMPLEATE_e) {
         mType = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x14, 0x4);
         switch (mType) {
@@ -2226,7 +2226,7 @@ BOOL daNpc_Bs1_c::CreateHeap() {
 }
 
 /* 00005470-00005490       .text daNpc_Bs1_Create__FP10fopAc_ac_c */
-static s32 daNpc_Bs1_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Bs1_Create(fopAc_ac_c* i_this) {
     return ((daNpc_Bs1_c*)i_this)->_create();
 }
 

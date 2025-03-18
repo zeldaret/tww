@@ -22,7 +22,7 @@ void daObjBuoyrace::Act_c::create_load() {
 }
 
 /* 00000238-00000374       .text _create__Q213daObjBuoyrace5Act_cFv */
-s32 daObjBuoyrace::Act_c::_create() {
+cPhs_State daObjBuoyrace::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -74,27 +74,27 @@ bool daObjBuoyrace::Act_c::_draw() {
 namespace daObjBuoyrace {
 namespace {
 /* 00000B28-00000B48       .text Mthd_Create__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000B48-00000B6C       .text Mthd_Delete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000B6C-00000B90       .text Mthd_Execute__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000B90-00000BB4       .text Mthd_Draw__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000BB4-00000BBC       .text Mthd_IsDelete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

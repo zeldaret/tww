@@ -233,7 +233,7 @@ s32 daItem_c::_daItem_create() {
         }
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
     if (phase_state == cPhs_COMPLEATE_e) {
         // Note: The demo version calls getHeapSize instead of getFieldHeapSize here.
         u32 heap_size = dItem_data::getFieldHeapSize(m_itemNo);
@@ -1454,7 +1454,7 @@ static BOOL daItem_Delete(daItem_c* i_this) {
 }
 
 /* 800F89D0-800F89F0       .text daItem_Create__FP10fopAc_ac_c */
-static s32 daItem_Create(fopAc_ac_c* i_this) {
+static cPhs_State daItem_Create(fopAc_ac_c* i_this) {
     return ((daItem_c*)i_this)->_daItem_create();
 }
 

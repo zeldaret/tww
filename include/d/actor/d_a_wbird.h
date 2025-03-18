@@ -12,7 +12,7 @@ public:
     void calcMtx();
     void setStartPos();
     void CreateInit();
-    s32 create();
+    cPhs_State create();
     void actionWait();
     void actionEnd();
     void actionMove();

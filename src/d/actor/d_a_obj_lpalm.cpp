@@ -81,10 +81,10 @@ void daObjLpalm_c::CreateInit() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daObjLpalm_c::_create() {
+cPhs_State daObjLpalm_c::_create() {
     fopAcM_SetupActor(this, daObjLpalm_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xf00) == 0) {

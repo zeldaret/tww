@@ -17,7 +17,7 @@ public:
 
         dComIfG_resDelete(&mPhase, m_arcname);
     }
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
 

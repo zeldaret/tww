@@ -24,7 +24,7 @@ struct daSteamTag_mData {
 class daSteamTag_c : public fopAc_ac_c {
 public:
     ~daSteamTag_c();
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
 

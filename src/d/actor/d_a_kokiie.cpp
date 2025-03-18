@@ -47,7 +47,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00001250-000014E4       .text daKokiie_Create__FP10fopAc_ac_c */
-static s32 daKokiie_Create(fopAc_ac_c*) {
+static cPhs_State daKokiie_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

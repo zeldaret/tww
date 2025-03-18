@@ -17,7 +17,7 @@ s32 daObjTenmado::Act_c::Create() {
 }
 
 /* 0000029C-00000394       .text Mthd_Create__Q212daObjTenmado5Act_cFv */
-void daObjTenmado::Act_c::Mthd_Create() {
+cPhs_State daObjTenmado::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjTenmado::Act_c::Delete() {
 }
 
 /* 0000039C-000003E8       .text Mthd_Delete__Q212daObjTenmado5Act_cFv */
-void daObjTenmado::Act_c::Mthd_Delete() {
+BOOL daObjTenmado::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -54,27 +54,27 @@ BOOL daObjTenmado::Act_c::Draw() {
 namespace daObjTenmado {
 namespace {
 /* 00000750-00000770       .text Mthd_Create__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000770-00000790       .text Mthd_Delete__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000790-000007B0       .text Mthd_Execute__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000007B0-000007DC       .text Mthd_Draw__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000007DC-00000808       .text Mthd_IsDelete__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

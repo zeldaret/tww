@@ -10,7 +10,7 @@ public:
     bool _delete();
     void CreateHeap();
     void CreateInit();
-    s32 _create();
+    cPhs_State _create();
     bool _execute();
     void normal_execute();
     void demo_execute();

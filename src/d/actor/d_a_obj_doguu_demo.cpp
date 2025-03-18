@@ -62,11 +62,11 @@ void daObjDoguuD_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daObjDoguuD_c::_create() {
+cPhs_State daObjDoguuD_c::_create() {
     fopAcM_SetupActor(this, daObjDoguuD_c);
     mBgwRegistered = false;
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, "DoguuD");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "DoguuD");
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460)) {

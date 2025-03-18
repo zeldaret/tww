@@ -9,7 +9,7 @@ class daObj_Bscurtain_c : public fopAc_ac_c {
 public:
     BOOL CreateHeap();
     s32 CreateInit();
-    inline s32 _create();
+    inline cPhs_State _create();
     inline bool _delete();
     inline bool _execute();
     inline bool _draw();

@@ -50,10 +50,10 @@ void daObjDmgroom_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daObjDmgroom_c::_create() {
+cPhs_State daObjDmgroom_c::_create() {
     fopAcM_SetupActor(this, daObjDmgroom_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, "Dmgroom");
+    cPhs_State ret = dComIfG_resLoad(&mPhs, "Dmgroom");
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460) == 0) {
@@ -93,7 +93,7 @@ bool daObjDmgroom_c::_draw() {
 }
 
 /* 000002EC-000003B4       .text daObjDmgroom_Create__FPv */
-static s32 daObjDmgroom_Create(void* i_this) {
+static cPhs_State daObjDmgroom_Create(void* i_this) {
     return ((daObjDmgroom_c*)i_this)->_create();
 }
 

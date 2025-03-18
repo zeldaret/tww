@@ -54,7 +54,7 @@ BOOL daObj_Pbco_c::CreateHeap() {
 }
 
 /* 00000348-000003A4       .text CreateInit__12daObj_Pbco_cFv */
-s32 daObj_Pbco_c::CreateInit() {
+cPhs_State daObj_Pbco_c::CreateInit() {
     set_mtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     if (mpBgW) {
@@ -63,9 +63,9 @@ s32 daObj_Pbco_c::CreateInit() {
     return cPhs_COMPLEATE_e;
 }
 
-s32 daObj_Pbco_c::_create() {
+cPhs_State daObj_Pbco_c::_create() {
     fopAcM_SetupActor(this, daObj_Pbco_c);
-    int phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10000)) {
             phase_state = CreateInit();

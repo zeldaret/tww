@@ -6,7 +6,7 @@
 #include "f_pc/f_pc_method_tag.h"
 
 /* 80040260-80040290       .text fpcMtdTg_Do__FP24process_method_tag_class */
-s32 fpcMtdTg_Do(process_method_tag_class* i_methodTag) {
+BOOL fpcMtdTg_Do(process_method_tag_class* i_methodTag) {
     return i_methodTag->mpFunc(i_methodTag->mpMthdData);
 }
 

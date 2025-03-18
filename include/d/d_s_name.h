@@ -67,7 +67,7 @@ public:
 class dScnName_c : public scene_class {
 public:
     ~dScnName_c();
-    s32 create();
+    cPhs_State create();
     void cloth_create();
     void cloth_move();
     void cloth2D_create();

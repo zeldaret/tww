@@ -40,10 +40,10 @@ BOOL daKaji_c::CreateHeap() {
     return mpMorf && mpMorf->getModel();
 }
 
-s32 daKaji_c::_create() {
+cPhs_State daKaji_c::_create() {
     fopAcM_SetupActor(this, daKaji_c);
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x660)) {
             mDoMtx_stack_c::transS(current.pos);

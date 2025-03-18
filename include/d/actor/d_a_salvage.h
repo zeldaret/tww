@@ -41,7 +41,7 @@ public:
 
     void CreateHeap();
     void CreateInit();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     bool _execute();
     void checkOrder();

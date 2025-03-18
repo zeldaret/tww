@@ -48,7 +48,7 @@ void daWindMill_c::search_wind() {
 }
 
 /* 00000670-00000804       .text _create__12daWindMill_cFv */
-s32 daWindMill_c::_create() {
+cPhs_State daWindMill_c::_create() {
     /* Nonmatching */
 }
 
@@ -83,7 +83,7 @@ bool daWindMill_c::_draw() {
 }
 
 /* 000017A4-000017C4       .text daWindMill_Create__FPv */
-static s32 daWindMill_Create(void* i_ac) {
+static cPhs_State daWindMill_Create(void* i_ac) {
     return ((daWindMill_c*)i_ac)->_create();
 }
 

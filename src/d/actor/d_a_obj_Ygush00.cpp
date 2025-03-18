@@ -65,7 +65,7 @@ bool daObjYgush00_c::create_heap() {
 }
 
 /* 00000250-000003F4       .text _create__14daObjYgush00_cFv */
-s32 daObjYgush00_c::_create() {
+cPhs_State daObjYgush00_c::_create() {
     fopAcM_SetupActor(this, daObjYgush00_c);
 
     if (fopAcM_IsFirstCreating(this)) {
@@ -75,7 +75,7 @@ s32 daObjYgush00_c::_create() {
             mType = 0;
     }
 
-    s32 ret = dComIfG_resLoad(&mPhase, l_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhase, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x740) == 1) {
@@ -148,7 +148,7 @@ bool daObjYgush00_c::_draw() {
 }
 
 /* 000006FC-0000071C       .text daObjYgush00_Create__FP14daObjYgush00_c */
-static s32 daObjYgush00_Create(daObjYgush00_c* i_this) {
+static cPhs_State daObjYgush00_Create(daObjYgush00_c* i_this) {
     return i_this->_create();
 }
 

@@ -17,7 +17,7 @@ s32 daObjAygr::Act_c::Create() {
 }
 
 /* 00000310-000004D4       .text Mthd_Create__Q29daObjAygr5Act_cFv */
-void daObjAygr::Act_c::Mthd_Create() {
+cPhs_State daObjAygr::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjAygr::Act_c::Delete() {
 }
 
 /* 000004DC-0000054C       .text Mthd_Delete__Q29daObjAygr5Act_cFv */
-void daObjAygr::Act_c::Mthd_Delete() {
+BOOL daObjAygr::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -54,27 +54,27 @@ BOOL daObjAygr::Act_c::Draw() {
 namespace daObjAygr {
 namespace {
 /* 0000079C-000007BC       .text Mthd_Create__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000007BC-000007DC       .text Mthd_Delete__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000007DC-000007FC       .text Mthd_Execute__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000007FC-00000828       .text Mthd_Draw__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000828-00000854       .text Mthd_IsDelete__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

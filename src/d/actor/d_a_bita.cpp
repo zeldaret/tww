@@ -202,7 +202,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
 }
 
 /* 00000A60-00000D24       .text daBita_Create__FP10fopAc_ac_c */
-static s32 daBita_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daBita_Create(fopAc_ac_c* i_ac) {
     static dCcD_SrcCyl body_cyl_src = {
         // dCcD_SrcGObjInf
         {
@@ -236,7 +236,7 @@ static s32 daBita_Create(fopAc_ac_c* i_ac) {
     fopAcM_SetupActor(i_ac, bita_class);
     bita_class* i_this = (bita_class*)i_ac;
 
-    s32 rt = dComIfG_resLoad(&i_this->mPhs, "Bita");
+    cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Bita");
     if (rt == cPhs_COMPLEATE_e) {
         btd = NULL;
         i_this->mType = (fopAcM_GetParam(i_this) >> 0) & 0xFF;

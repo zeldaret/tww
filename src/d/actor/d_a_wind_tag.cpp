@@ -184,10 +184,10 @@ void daWindTag::daWindTag_c::set_wind_angle() {
 }
 
 /* 000008D4-0000099C       .text _create__Q29daWindTag11daWindTag_cFv */
-s32 daWindTag::daWindTag_c::_create() {
+cPhs_State daWindTag::daWindTag_c::_create() {
     fopAcM_SetupActor(this, daWindTag_c);
     mType = (fopAcM_GetParam(this) >> 21) & 0x03;
-    s32 rt = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    cPhs_State rt = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (rt == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType]))
             return cPhs_ERROR_e;
@@ -326,7 +326,7 @@ void daWindTag::daWindTag_c::MoveEmitter() {
 }
 
 /* 00001B00-00001B20       .text daWindTag_Create__FPv */
-static s32 daWindTag_Create(void* i_ac) {
+static cPhs_State daWindTag_Create(void* i_ac) {
     return ((daWindTag::daWindTag_c*)i_ac)->_create();
 }
 

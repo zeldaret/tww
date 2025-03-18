@@ -477,8 +477,8 @@ void daObjBarrier_ef_c::draw() {
 }
 
 /* 00001638-0000182C       .text _create__14daObjBarrier_cFv */
-int daObjBarrier_c::_create() {
-    int phase = cPhs_ERROR_e;
+cPhs_State daObjBarrier_c::_create() {
+    cPhs_State phase = cPhs_ERROR_e;
     fopAcM_SetupActor(this, daObjBarrier_c);
 
     if (fopAcM_IsFirstCreating(this)) {
@@ -585,28 +585,28 @@ bool daObjBarrier_c::_draw() {
 }
 
 /* 00001C1C-00001C3C       .text daObjBarrier_Create__FP10fopAc_ac_c */
-static int daObjBarrier_Create(fopAc_ac_c* i_this) {
+static cPhs_State daObjBarrier_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_create();
 }
 
 /* 00001C3C-00001C60       .text daObjBarrier_Delete__FP14daObjBarrier_c */
-static int daObjBarrier_Delete(daObjBarrier_c* i_this) {
+static BOOL daObjBarrier_Delete(daObjBarrier_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_delete();
 }
 
 /* 00001C60-00001C84       .text daObjBarrier_Execute__FP14daObjBarrier_c */
-static int daObjBarrier_Execute(daObjBarrier_c* i_this) {
+static BOOL daObjBarrier_Execute(daObjBarrier_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_execute();
 }
 
 /* 00001C84-00001CA8       .text daObjBarrier_Draw__FP14daObjBarrier_c */
-static int daObjBarrier_Draw(daObjBarrier_c* i_this) {
+static BOOL daObjBarrier_Draw(daObjBarrier_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_draw();
 }
 
 /* 00001CA8-00001CB0       .text daObjBarrier_IsDelete__FP14daObjBarrier_c */
-static int daObjBarrier_IsDelete(daObjBarrier_c* i_this) {
-    return 1;
+static BOOL daObjBarrier_IsDelete(daObjBarrier_c* i_this) {
+    return TRUE;
 }
 
 static actor_method_class l_daObjBarrier_Method = {

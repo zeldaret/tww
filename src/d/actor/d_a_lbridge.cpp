@@ -100,10 +100,10 @@ void daLbridge_c::CreateInit() {
 }
 
 /* 00000544-0000063C       .text _create__11daLbridge_cFv */
-s32 daLbridge_c::_create() {
+cPhs_State daLbridge_c::_create() {
     fopAcM_SetupActor(this, daLbridge_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, m_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2E10U)) {
@@ -308,7 +308,7 @@ bool daLbridge_c::_delete() {
 }
 
 /* 00000FF8-00001018       .text daLbridge_Create__FPv */
-static s32 daLbridge_Create(void* i_this) {
+static cPhs_State daLbridge_Create(void* i_this) {
     return static_cast<daLbridge_c*>(i_this)->_create();
 }
 

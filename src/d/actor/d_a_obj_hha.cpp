@@ -295,7 +295,7 @@ BOOL daObjHha_c::create_heap() {
 }
 
 /* 00000E48-000011AC       .text _create__10daObjHha_cFv */
-s32 daObjHha_c::_create() {
+cPhs_State daObjHha_c::_create() {
     static const float pos_y[4] = {150.0f, -150.0f, 0.0f, 0.0f};
     static const float tar_y[4] = {0.0f, 0.0f, 150.0f, -150.0f};
     static const u16 move_frame[2] = {55, 30};
@@ -304,7 +304,7 @@ s32 daObjHha_c::_create() {
 
 
     fopAcM_SetupActor(this, daObjHha_c);
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if(ret == cPhs_COMPLEATE_e){
         ret = cPhs_ERROR_e;
         if(fopAcM_entrySolidHeap(this, &solidHeapCB, 0x3C80) != false){
@@ -669,7 +669,7 @@ bool daObjHha_c::_draw() {
 
 namespace {
 /* 000029F4-00002A14       .text Mthd_Create__25@unnamed@d_a_obj_hha_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<daObjHha_c*>(i_this)->_create();
 }
 

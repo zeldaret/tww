@@ -69,10 +69,10 @@ namespace daObjMovebox {
         {-0.75f, -0.25f, 0.0f, 0.0f},
     };
     
-    s32 Act_c::Mthd_Create() {
+    cPhs_State Act_c::Mthd_Create() {
         fopAcM_SetupActor(this, Act_c);
         
-        s32 phase_state;
+        cPhs_State phase_state;
         mType = prm_get_type();
         phase_state = cPhs_ERROR_e;
         prmX_init();
@@ -1211,14 +1211,14 @@ namespace daObjMovebox {
     }
     
     /* 00001A10-00001B00       .text CreateHeap__Q212daObjMovebox5Act_cFv */
-    int Act_c::CreateHeap() {
+    BOOL Act_c::CreateHeap() {
         BOOL success = TRUE;
         if (i_attr()->mModelFileIndex >= 0) {
             J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname[mType], i_attr()->mModelFileIndex);
             JUT_ASSERT(1722, modelData != NULL);
             
             mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-            success = (mpModel != 0);
+            success = (mpModel != NULL);
         } else {
             mpModel = NULL;
         }
@@ -1305,7 +1305,7 @@ namespace daObjMovebox {
     }
     
     /* 00001DD4-00002214       .text Create__Q212daObjMovebox5Act_cFv */
-    int Act_c::Create() {
+    BOOL Act_c::Create() {
         m604 = 0;
         m608 = 0.0f;
         m60C = 0.0f;
@@ -1892,7 +1892,7 @@ namespace daObjMovebox {
     
     namespace {
         /* 000042A0-000044E0       .text Mthd_Create__Q212daObjMovebox29@unnamed@d_a_obj_movebox_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Create();
         }
         

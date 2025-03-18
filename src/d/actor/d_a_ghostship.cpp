@@ -240,7 +240,7 @@ static s32 daGhostshipCreate(void* i_actor) {
     daGhostship_c* i_this = static_cast<daGhostship_c*>(i_actor);
     fopAcM_SetupActor(i_this, daGhostship_c);
 
-    s32 result = dComIfG_resLoad(&i_this->mPhs, daGhostship_c::m_arc_name);
+    cPhs_State result = dComIfG_resLoad(&i_this->mPhs, daGhostship_c::m_arc_name);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }

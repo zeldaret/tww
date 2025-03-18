@@ -322,7 +322,7 @@ bool daNpc_Pf1_c::_delete() {
 }
 
 /* 00002FF8-00003258       .text _create__11daNpc_Pf1_cFv */
-s32 daNpc_Pf1_c::_create() {
+cPhs_State daNpc_Pf1_c::_create() {
     /* Nonmatching */
 }
 
@@ -337,7 +337,7 @@ void daNpc_Pf1_c::CreateHeap() {
 }
 
 /* 0000381C-0000383C       .text daNpc_Pf1_Create__FP10fopAc_ac_c */
-static s32 daNpc_Pf1_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_Pf1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

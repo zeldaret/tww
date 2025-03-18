@@ -96,7 +96,7 @@ void set_disappear(disappear_class* i_this, float scale) {
 }
 
 /* 800E7DBC-800E7E60       .text daDisappear_Create__FP10fopAc_ac_c */
-static s32 daDisappear_Create(fopAc_ac_c* i_this) {
+static cPhs_State daDisappear_Create(fopAc_ac_c* i_this) {
     disappear_class* dis = static_cast<disappear_class*>(i_this);
 
     fopAcM_SetupActor(dis, disappear_class);

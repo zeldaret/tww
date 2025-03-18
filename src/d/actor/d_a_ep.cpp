@@ -77,7 +77,7 @@ void daEp_CreateInit(fopAc_ac_c*) {
 }
 
 /* 00002608-00002840       .text daEp_Create__FP10fopAc_ac_c */
-static s32 daEp_Create(fopAc_ac_c*) {
+static cPhs_State daEp_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

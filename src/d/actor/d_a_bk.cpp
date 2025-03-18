@@ -3749,12 +3749,12 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 }
 
 /* 0000E310-0000EA2C       .text daBk_Create__FP10fopAc_ac_c */
-static s32 daBk_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
     /* Nonmatching - data */
     fopAcM_SetupActor(i_actor, bk_class);
     bk_class* i_this = (bk_class*)i_actor;
     
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhase, "Bk");
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "Bk");
     if (phase_state == cPhs_COMPLEATE_e) {
         i_this->gbaName = 1;
         

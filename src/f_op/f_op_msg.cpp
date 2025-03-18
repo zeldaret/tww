@@ -70,7 +70,7 @@ int fopMsg_Create(void* i_this) {
         }
     }
 
-    int status = fpcMtd_Create((process_method_class*)_this->sub_method, _this);
+    cPhs_State status = fpcMtd_Create((process_method_class*)_this->sub_method, _this);
     if (status == cPhs_COMPLEATE_e) {
         s32 priority = fpcLf_GetPriority(_this);
         fopDwTg_ToDrawQ(&_this->draw_tag, priority);

@@ -80,7 +80,7 @@ static BOOL daKytag07_Delete(kytag07_class*) {
 }
 
 /* 000002C8-00000350       .text daKytag07_Create__FP10fopAc_ac_c */
-static s32 daKytag07_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daKytag07_Create(fopAc_ac_c* i_ac) {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     kytag07_class* i_this = (kytag07_class*)i_ac;
     fopAcM_SetupActor(i_this, kytag07_class);

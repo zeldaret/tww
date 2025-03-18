@@ -763,12 +763,12 @@ static BOOL daSail_checkCreateHeap(fopAc_ac_c* i_actor) {
 }
 
 /* 00002254-000024E4       .text daSail_Create__FP10fopAc_ac_c */
-static s32 daSail_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daSail_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, sail_class);
     sail_class* i_this = (sail_class*)i_actor;
     
     {
-        int phase_state = dComIfG_resLoad(&i_this->mClothPhase, "Cloth");
+        cPhs_State phase_state = dComIfG_resLoad(&i_this->mClothPhase, "Cloth");
         if (phase_state != cPhs_COMPLEATE_e) {
             return phase_state;
         }
@@ -778,7 +778,7 @@ static s32 daSail_Create(fopAc_ac_c* i_actor) {
         }
     }
     
-    int phase_state = cPhs_COMPLEATE_e;
+    cPhs_State phase_state = cPhs_COMPLEATE_e;
     if (fopAcM_entrySolidHeap(i_this, daSail_checkCreateHeap, 0x4C0)) {
         if (l_HIO.mNo < 0) {
             l_HIO.mNo = mDoHIO_root.m_subroot.createChild("海賊船の帆", &l_HIO); // "Pirate Ship's Sail"

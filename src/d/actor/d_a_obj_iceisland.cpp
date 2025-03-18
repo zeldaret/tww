@@ -72,7 +72,7 @@ void daObjIceisland_c::daObjIceisland_fail_demo_main() {
 }
 
 /* 000009B8-00000B2C       .text daObjIceisland_Create__FPv */
-static s32 daObjIceisland_Create(void*) {
+static cPhs_State daObjIceisland_Create(void*) {
     /* Nonmatching */
 }
 

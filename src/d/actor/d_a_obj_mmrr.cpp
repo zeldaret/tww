@@ -47,7 +47,7 @@ void daObjMmrr::Act_c::set_cull() {
 }
 
 /* 0000102C-0000122C       .text _create__Q29daObjMmrr5Act_cFv */
-s32 daObjMmrr::Act_c::_create() {
+cPhs_State daObjMmrr::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -99,27 +99,27 @@ bool daObjMmrr::Act_c::_draw() {
 namespace daObjMmrr {
 namespace {
 /* 000017E8-00001808       .text Mthd_Create__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001808-0000182C       .text Mthd_Delete__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000182C-00001850       .text Mthd_Execute__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001850-00001874       .text Mthd_Draw__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001874-0000187C       .text Mthd_IsDelete__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

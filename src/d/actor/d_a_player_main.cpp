@@ -4429,7 +4429,7 @@ void daPy_lk_c::playerInit() {
 }
 
 /* 80125CC8-80125D30       .text phase_1__FP9daPy_lk_c */
-int phase_1(daPy_lk_c* i_this) {
+cPhs_State phase_1(daPy_lk_c* i_this) {
     dComIfGp_setPlayer(0, i_this);
     dComIfGp_setLinkPlayer(i_this);
 
@@ -4444,8 +4444,8 @@ int phase_1(daPy_lk_c* i_this) {
 }
 
 /* 80125D30-80125DB4       .text phase_2__FP9daPy_lk_c */
-int phase_2(daPy_lk_c* i_this) {
-    int result;
+cPhs_State phase_2(daPy_lk_c* i_this) {
+    cPhs_State result;
 
     if (dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0)) == NULL)  {
         result = cPhs_INIT_e;
@@ -4471,27 +4471,27 @@ daPy_footData_c::daPy_footData_c() {
 }
 
 /* 80127160-80127B50       .text makeBgWait__9daPy_lk_cFv */
-int daPy_lk_c::makeBgWait() {
+cPhs_State daPy_lk_c::makeBgWait() {
     /* Nonmatching */
     return cPhs_NEXT_e;
 }
 
 /* 80127B50-80127B70       .text phase_3__FP9daPy_lk_c */
-int phase_3(daPy_lk_c* i_this) {
+cPhs_State phase_3(daPy_lk_c* i_this) {
     return i_this->makeBgWait();
 }
 
 /* 80127B70-80127BA0       .text daPy_Create__FP10fopAc_ac_c */
-static s32 daPy_Create(fopAc_ac_c* i_this) {
-    static int (*l_method[4])(daPy_lk_c*) = {
-        phase_1,
-        phase_2,
-        phase_3,
-        NULL,
+static cPhs_State daPy_Create(fopAc_ac_c* i_this) {
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler)phase_1,
+        (cPhs__Handler)phase_2,
+        (cPhs__Handler)phase_3,
+        (cPhs__Handler)NULL,
     };
     daPy_lk_c* a_this = (daPy_lk_c*)i_this;
 
-    return dComLbG_PhaseHandler(a_this->getPhase(), (cPhs__Handler*)l_method, a_this);
+    return dComLbG_PhaseHandler(a_this->getPhase(), l_method, a_this);
 }
 
 /* 80127BA0-80127CC0       .text setSeAnime__9daPy_lk_cFPC14daPy_anmHeap_cP12J3DFrameCtrl */

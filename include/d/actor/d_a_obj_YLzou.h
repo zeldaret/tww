@@ -18,7 +18,7 @@ public:
     void eff_smoke_slip_remove();
     void eff_smoke_proc();
     void vib_proc();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void move_ylzou_demo_start_wait_act_proc();
     void demo_regist_wait_act_proc();

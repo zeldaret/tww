@@ -10,7 +10,7 @@ namespace daTagAttention {
         void prm_get_Type() const {}
         void prm_get_swSave() const {}
     
-        s32 _create();
+        cPhs_State _create();
         bool _execute();
     
     public:

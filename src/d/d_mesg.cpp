@@ -413,12 +413,12 @@ void dMesg_closeProc(sub_mesg_class*) {
 }
 
 /* 801E6E00-801E6E44       .text dMsg_Draw__FP14sub_mesg_class */
-static void dMsg_Draw(sub_mesg_class*) {
+static BOOL dMsg_Draw(sub_mesg_class*) {
     /* Nonmatching */
 }
 
 /* 801E6E44-801E6F34       .text dMsg_Execute__FP14sub_mesg_class */
-static void dMsg_Execute(sub_mesg_class*) {
+static BOOL dMsg_Execute(sub_mesg_class*) {
     /* Nonmatching */
 }
 
@@ -428,17 +428,17 @@ void dMesg_screenData_c::move() {
 }
 
 /* 801E6F38-801E6F40       .text dMsg_IsDelete__FP14sub_mesg_class */
-static void dMsg_IsDelete(sub_mesg_class*) {
+static BOOL dMsg_IsDelete(sub_mesg_class*) {
     /* Nonmatching */
 }
 
 /* 801E6F40-801E7130       .text dMsg_Delete__FP14sub_mesg_class */
-static void dMsg_Delete(sub_mesg_class*) {
+static BOOL dMsg_Delete(sub_mesg_class*) {
     /* Nonmatching */
 }
 
 /* 801E7130-801E7290       .text dMsg_Create__FP9msg_class */
-static void dMsg_Create(msg_class*) {
+static cPhs_State dMsg_Create(msg_class*) {
     /* Nonmatching */
 }
 

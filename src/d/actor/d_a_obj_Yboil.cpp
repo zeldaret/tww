@@ -82,10 +82,10 @@ void daObjYboil_c::set_mtx() {
     }
 }
 
-s32 daObjYboil_c::_create() {
+cPhs_State daObjYboil_c::_create() {
     fopAcM_SetupActor(this, daObjYboil_c);
 
-    s32 ret;
+    cPhs_State ret;
     if (dComIfGs_isEventBit(0x1902)) {
         ret = cPhs_STOP_e;
     } else {
@@ -141,7 +141,7 @@ bool daObjYboil_c::_execute() {
 }
 
 /* 0000066C-000007D8       .text daObjYboil_Create__FPv */
-static s32 daObjYboil_Create(void* i_this) {
+static cPhs_State daObjYboil_Create(void* i_this) {
     return ((daObjYboil_c*)i_this)->_create();
 }
 

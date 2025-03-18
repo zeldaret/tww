@@ -17,7 +17,7 @@ s32 daObjDrift::Act_c::Create() {
 }
 
 /* 00000370-0000050C       .text Mthd_Create__Q210daObjDrift5Act_cFv */
-void daObjDrift::Act_c::Mthd_Create() {
+cPhs_State daObjDrift::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ BOOL daObjDrift::Act_c::Delete() {
 }
 
 /* 0000095C-000009A8       .text Mthd_Delete__Q210daObjDrift5Act_cFv */
-void daObjDrift::Act_c::Mthd_Delete() {
+BOOL daObjDrift::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -99,27 +99,27 @@ BOOL daObjDrift::Act_c::Draw() {
 namespace daObjDrift {
 namespace {
 /* 00001270-00001290       .text Mthd_Create__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001290-000012B0       .text Mthd_Delete__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000012B0-000012D0       .text Mthd_Execute__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000012D0-000012FC       .text Mthd_Draw__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000012FC-00001328       .text Mthd_IsDelete__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

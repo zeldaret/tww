@@ -49,8 +49,8 @@ namespace daObjAkabe {
     }
 
     /* 000001A4-00000360       .text _create__Q210daObjAkabe5Act_cFv */
-    s32 Act_c::_create() {
-        s32 rt = cPhs_ERROR_e;
+    cPhs_State Act_c::_create() {
+        cPhs_State rt = cPhs_ERROR_e;
 
         s32 arg0 = prm_get_arg0();
         if (arg0 == 1)
@@ -153,7 +153,7 @@ namespace daObjAkabe {
 
     namespace {
         /* 000005EC-0000060C       .text Mthd_Create__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

@@ -173,7 +173,7 @@ public:
     BOOL execute();
     void shipDelete();
     void createHeap();
-    s32 create();
+    cPhs_State create();
     void checkForceMove() const;
     void initStartPos(cXyz const*, s16);
 

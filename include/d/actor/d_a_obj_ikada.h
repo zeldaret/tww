@@ -77,7 +77,7 @@ public:
     void getArg();
     void createInit();
     void _createHeap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
 
 public:

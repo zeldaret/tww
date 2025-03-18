@@ -93,8 +93,6 @@ extern BOOL __OSIsGcam;
 extern u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0);
 extern u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);
 
-void OSReportInit__Fv(void);  // needed for inline asm
-
 u8* OSGetStackPointer(void);
 void __OSFPRInit(void);
 static void InquiryCallback(s32 param_0, DVDCommandBlock* param_1);

@@ -527,14 +527,14 @@ BOOL daNpc_Btsw2_c::wait_action(void*) {
 }
 
 /* 00001660-00001884       .text _create__13daNpc_Btsw2_cFv */
-s32 daNpc_Btsw2_c::_create() {
+cPhs_State daNpc_Btsw2_c::_create() {
     fopAcM_SetupActor(this, daNpc_Btsw2_c);
     
     if (dComIfGs_getEventReg(0xC203) == 3 || !checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
         return cPhs_ERROR_e;
     }
     
-    int phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CallbackCreateHeap, 0x29E0)) {
@@ -618,7 +618,7 @@ BOOL daNpc_Btsw2_c::_draw() {
 }
 
 /* 00001F6C-00001F8C       .text daNpc_Btsw2_Create__FP10fopAc_ac_c */
-static s32 daNpc_Btsw2_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Btsw2_Create(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Btsw2_c*>(i_this)->_create();
 }
 

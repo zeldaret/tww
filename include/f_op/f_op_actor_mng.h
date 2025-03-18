@@ -447,9 +447,9 @@ void fopAcM_setStageLayer(void* p_proc);
 
 void fopAcM_setRoomLayer(void* p_proc, int roomNo);
 
-s32 fopAcM_SearchByID(fpc_ProcID id, fopAc_ac_c** p_actor);
+BOOL fopAcM_SearchByID(fpc_ProcID id, fopAc_ac_c** p_actor);
 
-s32 fopAcM_SearchByName(s16 procName, fopAc_ac_c** p_actor);
+BOOL fopAcM_SearchByName(s16 procName, fopAc_ac_c** p_actor);
 
 fopAcM_prm_class* fopAcM_CreateAppend();
 
@@ -459,8 +459,8 @@ fopAcM_prm_class* createAppend(u16 enemyNo, u32 parameters, cXyz* p_pos, int roo
 
 void fopAcM_Log(fopAc_ac_c* p_actor, char* str);
 
-s32 fopAcM_delete(fopAc_ac_c* p_actor);
-s32 fopAcM_delete(fpc_ProcID actorID);
+BOOL fopAcM_delete(fopAc_ac_c* p_actor);
+BOOL fopAcM_delete(fpc_ProcID actorID);
 
 fpc_ProcID fopAcM_create(s16 i_procName, u32 i_parameter, cXyz* i_pos = NULL, int i_roomNo = -1,
                    csXyz* i_angle = NULL, cXyz* i_scale = NULL, s8 i_subType = -1,

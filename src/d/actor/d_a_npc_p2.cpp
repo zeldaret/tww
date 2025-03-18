@@ -293,7 +293,7 @@ void daNpc_P2_c::createInit() {
 }
 
 /* 0000476C-0000492C       .text _create__10daNpc_P2_cFv */
-s32 daNpc_P2_c::_create() {
+cPhs_State daNpc_P2_c::_create() {
     /* Nonmatching */
 }
 

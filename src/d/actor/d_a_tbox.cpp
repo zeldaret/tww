@@ -1240,7 +1240,7 @@ static s32 daTbox_Delete(daTbox_c* i_tbox) {
 }
 
 /* 00003070-0000315C       .text daTbox_Create__FP10fopAc_ac_c */
-static s32 daTbox_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daTbox_Create(fopAc_ac_c* i_actor) {
     static const u32 heapsize_tbl[] = {
         0x2E40,
         0x2D7C,

@@ -17,9 +17,9 @@ namespace daObjHlift {
     
         void CreateHeap();
         s32 Create();
-        void Mthd_Create();
+        cPhs_State Mthd_Create();
         BOOL Delete();
-        void Mthd_Delete();
+        BOOL Mthd_Delete();
         void mode_lower_init();
         void mode_lower();
         void mode_l_u_init();

@@ -17,7 +17,7 @@ public:
     static u8 m_effect_type[];
 
     inline BOOL Delete();
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
     inline BOOL isdelete();

@@ -237,14 +237,14 @@ bool Act_c::create_heap() {
 }
 
 /* 000002B4-000005B0       .text _create__Q210daObjHomen5Act_cFv */
-s32 Act_c::_create() {
+cPhs_State Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
     
     if (param_get_sw() != 0xFF && is_switch() == true) {
         return cPhs_ERROR_e;
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhase, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     
     mType = param_get_arg0() & 1;
     
@@ -819,7 +819,7 @@ bool Act_c::_draw() {
 
 namespace {
 /* 00002954-00002974       .text Mthd_Create__Q210daObjHomen27@unnamed@d_a_obj_homen_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return ((Act_c*)i_this)->_create();
 }
 

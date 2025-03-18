@@ -11,7 +11,7 @@ class dDlst_2DObject_c;
 
 class daMgBoard_c : public fopAc_ac_c {
 public:
-    inline s32 _create();
+    inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     void reqClearGame() {}

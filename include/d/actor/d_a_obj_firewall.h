@@ -20,7 +20,7 @@ public:
     void set_pl_se();
     void setup_burn_up();
     void setup_put_the_fire_out();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void wait_act_proc();
     void wait2_act_proc();

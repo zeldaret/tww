@@ -34,7 +34,7 @@ void phase_2(daNpcSv_c*) {
 }
 
 /* 00000738-00000768       .text _create__9daNpcSv_cFv */
-s32 daNpcSv_c::_create() {
+cPhs_State daNpcSv_c::_create() {
     /* Nonmatching */
 }
 

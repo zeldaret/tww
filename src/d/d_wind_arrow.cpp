@@ -107,7 +107,7 @@ static BOOL dWindArrow_Delete(dWindArrow_c* i_this) {
     return TRUE;
 }
 
-s32 dWindArrow_c::create() {
+cPhs_State dWindArrow_c::create() {
     new(this) dWindArrow_c();
     
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YA);
@@ -133,11 +133,11 @@ s32 dWindArrow_c::create() {
 }
 
 /* 8023E7A8-8023E968       .text dWindArrow_Create__FP12kankyo_class */
-static s32 dWindArrow_Create(kankyo_class* i_k) {
+static cPhs_State dWindArrow_Create(kankyo_class* i_k) {
     dWindArrow_c* i_this = (dWindArrow_c*)i_k;
     if (!i_this->createHeap())
         return cPhs_ERROR_e;
-    s32 phase_state = i_this->create();
+    cPhs_State phase_state = i_this->create();
     i_this->adjustHeap();
     return phase_state;
 }

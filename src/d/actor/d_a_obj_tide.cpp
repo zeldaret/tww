@@ -17,7 +17,7 @@ s32 daObjTide::Act_c::Create() {
 }
 
 /* 000007BC-00000998       .text Mthd_Create__Q29daObjTide5Act_cFv */
-void daObjTide::Act_c::Mthd_Create() {
+cPhs_State daObjTide::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjTide::Act_c::Delete() {
 }
 
 /* 000009EC-00000A54       .text Mthd_Delete__Q29daObjTide5Act_cFv */
-void daObjTide::Act_c::Mthd_Delete() {
+BOOL daObjTide::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -154,27 +154,27 @@ BOOL daObjTide::Act_c::Draw() {
 namespace daObjTide {
 namespace {
 /* 00001DD0-00001DF0       .text Mthd_Create__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001DF0-00001E10       .text Mthd_Delete__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001E10-00001E30       .text Mthd_Execute__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001E30-00001E5C       .text Mthd_Draw__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001E5C-00001E88       .text Mthd_IsDelete__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

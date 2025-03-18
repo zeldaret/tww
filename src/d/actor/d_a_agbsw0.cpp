@@ -67,7 +67,7 @@ BOOL daAgbsw0_c::draw() {
         if(toCheck != 0xFF) {
             if(conditionNo == 0) {
                 if(!fopAcM_isSwitch(this, toCheck)) {
-                    return 1;
+                    return true;
                 }
             }
             else {
@@ -408,7 +408,7 @@ BOOL daAgbsw0_c::ExeSubA() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                    return 1;
+                    return true;
                 }
 
                 MailSend(-1, 0, 0xFF, 0xFF, 0);
@@ -494,7 +494,7 @@ BOOL daAgbsw0_c::ExeSubAT() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                    return 1;
+                    return true;
                 }
 
                 MailSend(-1, 0, 0xFF, 0xFF, 0);
@@ -578,7 +578,7 @@ BOOL daAgbsw0_c::ExeSubA2() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                    return 1;
+                    return true;
                 }
 
                 MailSend(-1, 0, 0xFF, 0xFF, 0);
@@ -2121,7 +2121,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
         case 0x43:
             for (int i = 0; i < 3; i++) {
                 if(daNpc_Os_c::isPlayerRoom(i)) {
-                    return 1;
+                    return true;
                 }
             }
 
@@ -2552,7 +2552,7 @@ static BOOL daAgbsw0_Draw(daAgbsw0_c* i_this) {
 }
 
 /* 00004B2C-00004CF8       .text daAgbsw0_Execute__FP10daAgbsw0_c */
-static void daAgbsw0_Execute(daAgbsw0_c* i_this) {
+static BOOL daAgbsw0_Execute(daAgbsw0_c* i_this) {
     i_this->execute();
 }
 

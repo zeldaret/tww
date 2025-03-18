@@ -15,7 +15,7 @@ public:
     void getPhaseP() {}
     void setResFlag(unsigned char) {}
 
-    s32 _create();
+    cPhs_State _create();
     void createHeap();
     void createInit();
     bool _delete();

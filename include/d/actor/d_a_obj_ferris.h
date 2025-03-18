@@ -39,7 +39,7 @@ namespace daObjFerris {
         s32 param_get_swSave() const { return daObj::PrmAbstract<Param_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
 
         bool create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void set_mtx(int);
         void init_mtx();

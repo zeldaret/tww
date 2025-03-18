@@ -187,7 +187,7 @@ void daArrow_Lighteff_c::set_mtx() {
     }
 }
 
-s32 daArrow_Lighteff_c::_create() {
+cPhs_State daArrow_Lighteff_c::_create() {
     fopAcM_SetupActor(this, daArrow_Lighteff_c);
 
     field_0x2EA = 0;
@@ -201,7 +201,7 @@ s32 daArrow_Lighteff_c::_create() {
 }
 
 /* 00000980-00000A70       .text daArrow_Lighteff_Create__FPv */
-static s32 daArrow_Lighteff_Create(void* i_this) {
+static cPhs_State daArrow_Lighteff_Create(void* i_this) {
     return static_cast<daArrow_Lighteff_c*>(i_this)->_create();
 }
 

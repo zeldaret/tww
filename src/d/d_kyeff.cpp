@@ -135,7 +135,7 @@ static BOOL dKyeff_Delete(dKyeff_c* i_this) {
 }
 
 /* 80198518-80198758       .text dKyeff_Create__FP12kankyo_class */
-static s32 dKyeff_Create(kankyo_class* i_ky) {
+static cPhs_State dKyeff_Create(kankyo_class* i_ky) {
     dKyw_wether_init();
 
     if (strcmp(dComIfGp_getStartStageName(), "Name") == 0) {

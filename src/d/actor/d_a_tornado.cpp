@@ -290,12 +290,12 @@ static BOOL daTornado_createHeap(fopAc_ac_c* i_this) {
 }
 
 /* 000010BC-000014D0       .text create__11daTornado_cFv */
-s32 daTornado_c::create() {
+cPhs_State daTornado_c::create() {
     static cXyz small_scale(0.25f, 0.175f, 0.25f);
     static cXyz under_small_scale(0.251f, 0.25f, 0.251f);
     static cXyz under_scale(1.01f, 1.0f, 1.01f);
 
-    s32 rt = dComIfG_resLoad(&mPhs, l_arcName);
+    cPhs_State rt = dComIfG_resLoad(&mPhs, l_arcName);
     fopAcM_SetupActor(this, daTornado_c);
 
     if (rt == cPhs_COMPLEATE_e) {
@@ -338,7 +338,7 @@ s32 daTornado_c::create() {
 }
 
 /* 0000162C-0000164C       .text daTornado_Create__FP10fopAc_ac_c */
-static s32 daTornado_Create(fopAc_ac_c* i_this) {
+static cPhs_State daTornado_Create(fopAc_ac_c* i_this) {
     return ((daTornado_c*)i_this)->create();
 }
 

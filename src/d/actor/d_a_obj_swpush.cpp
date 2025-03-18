@@ -32,12 +32,12 @@ void daObjSwpush::Act_c::create_res_load() {
 }
 
 /* 0000051C-000008C4       .text Mthd_Create__Q211daObjSwpush5Act_cFv */
-void daObjSwpush::Act_c::Mthd_Create() {
+cPhs_State daObjSwpush::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
 /* 00000968-000009F8       .text Mthd_Delete__Q211daObjSwpush5Act_cFv */
-void daObjSwpush::Act_c::Mthd_Delete() {
+BOOL daObjSwpush::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -177,39 +177,39 @@ void daObjSwpush::Act_c::demo_runSw() {
 }
 
 /* 00001C84-00001F14       .text Mthd_Execute__Q211daObjSwpush5Act_cFv */
-void daObjSwpush::Act_c::Mthd_Execute() {
+BOOL daObjSwpush::Act_c::Mthd_Execute() {
     /* Nonmatching */
 }
 
 /* 00001F14-00001FF8       .text Mthd_Draw__Q211daObjSwpush5Act_cFv */
-void daObjSwpush::Act_c::Mthd_Draw() {
+BOOL daObjSwpush::Act_c::Mthd_Draw() {
     /* Nonmatching */
 }
 
 namespace daObjSwpush {
 namespace {
 /* 00001FF8-00002018       .text Mthd_Create__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00002018-00002038       .text Mthd_Delete__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00002038-00002058       .text Mthd_Execute__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00002058-00002078       .text Mthd_Draw__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00002078-00002080       .text Mthd_IsDelete__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

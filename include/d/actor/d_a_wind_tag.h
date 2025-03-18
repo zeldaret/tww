@@ -22,7 +22,7 @@ namespace daWindTag {
         BOOL CreateHeap();
         void CreateInit();
         void set_wind_angle();
-        s32 _create();
+        cPhs_State _create();
         void set_mtx();
         bool checkSizeSpecialBig();
         void set_wind_se_sub(unsigned long, cXyz*);

@@ -57,7 +57,7 @@ void daObjTnTrap_c::set_em_set_offsetY() {
 }
 
 /* 00000A98-00000C78       .text _create__13daObjTnTrap_cFv */
-s32 daObjTnTrap_c::_create() {
+cPhs_State daObjTnTrap_c::_create() {
     /* Nonmatching */
 }
 
@@ -147,7 +147,7 @@ bool daObjTnTrap_c::_draw() {
 }
 
 /* 00001BF0-00001C10       .text daObjTnTrap_Create__FP10fopAc_ac_c */
-static s32 daObjTnTrap_Create(fopAc_ac_c*) {
+static cPhs_State daObjTnTrap_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -125,7 +125,7 @@ void changeXluMaterialAlpha(J3DMaterial*, unsigned char, bool) {
 }
 
 /* 00001B98-00001BB8       .text daSaku_Create__FP10fopAc_ac_c */
-static s32 daSaku_Create(fopAc_ac_c*) {
+static cPhs_State daSaku_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

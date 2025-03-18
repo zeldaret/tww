@@ -482,7 +482,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00006720-00006BDC       .text daPW_Create__FP10fopAc_ac_c */
-static s32 daPW_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daPW_Create(fopAc_ac_c* i_actor) {
     /* Nonmatching */
     fopAcM_SetupActor(i_actor, pw_class);
 }

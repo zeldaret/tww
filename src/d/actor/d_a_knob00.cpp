@@ -77,7 +77,7 @@ void daKnob00_c::CreateInit() {
 }
 
 /* 00000D84-00000E70       .text create__10daKnob00_cFv */
-s32 daKnob00_c::create() {
+cPhs_State daKnob00_c::create() {
     /* Nonmatching */
 }
 
@@ -182,7 +182,7 @@ static BOOL daKnob00_Delete(daKnob00_c*) {
 }
 
 /* 00001F50-00001F70       .text daKnob00_Create__FP10fopAc_ac_c */
-static s32 daKnob00_Create(fopAc_ac_c*) {
+static cPhs_State daKnob00_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

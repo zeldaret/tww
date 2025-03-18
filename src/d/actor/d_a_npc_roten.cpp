@@ -1586,7 +1586,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 000008EC-00000974       .text phase_1__FP12daNpcRoten_c */
-static s32 phase_1(daNpcRoten_c* i_this) {
+static cPhs_State phase_1(daNpcRoten_c* i_this) {
     fopAcM_SetupActor(i_this, daNpcRoten_c);
 
     i_this->setNpcNo(i_this->getPrmNpcNo());
@@ -1600,8 +1600,8 @@ static s32 phase_1(daNpcRoten_c* i_this) {
 }
 
 /* 00000974-000009F4       .text phase_2__FP12daNpcRoten_c */
-static s32 phase_2(daNpcRoten_c* i_this) {
-    s32 result = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getPrmNpcNo()]);
+static cPhs_State phase_2(daNpcRoten_c* i_this) {
+    cPhs_State result = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getPrmNpcNo()]);
     if(result == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0x4620)) {
             result = i_this->createInit();
@@ -1616,7 +1616,7 @@ static s32 phase_2(daNpcRoten_c* i_this) {
 }
 
 /* 000009F4-00000A24       .text _create__12daNpcRoten_cFv */
-s32 daNpcRoten_c::_create() {
+cPhs_State daNpcRoten_c::_create() {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,

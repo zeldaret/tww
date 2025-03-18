@@ -232,12 +232,12 @@ static BOOL createHeap(fopAc_ac_c* i_actor) {
 }
 
 /* 00000C08-00000CE4       .text daDr_Create__FP10fopAc_ac_c */
-static s32 daDr_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daDr_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, dr_class);
     
     dr_class* i_this = (dr_class*)i_actor;
     
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "Dr");
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Dr");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(i_this, createHeap, 0xF000)) {
             return cPhs_ERROR_e;

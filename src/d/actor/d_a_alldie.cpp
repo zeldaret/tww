@@ -64,7 +64,7 @@ BOOL daAlldie_c::execute() {
     return TRUE;
 }
 
-s32 daAlldie_c::create() {
+cPhs_State daAlldie_c::create() {
     fopAcM_SetupActor(this, daAlldie_c);
 
     if (!dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))) {
@@ -104,7 +104,7 @@ static BOOL daAlldie_Delete(daAlldie_c* i_this) {
 }
 
 /* 00000220-000002CC       .text daAlldie_Create__FP10fopAc_ac_c */
-static s32 daAlldie_Create(fopAc_ac_c* ac) {
+static cPhs_State daAlldie_Create(fopAc_ac_c* ac) {
     return ((daAlldie_c*)ac)->create();
 }
 

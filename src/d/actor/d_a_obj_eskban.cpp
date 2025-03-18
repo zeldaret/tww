@@ -108,7 +108,7 @@ static dCcD_SrcSph sph_check_src = {
 };
 
 /* 000000EC-000001FC       .text CreateHeap__Q211daObjEskban5Act_cFv */
-int daObjEskban::Act_c::CreateHeap() {
+BOOL daObjEskban::Act_c::CreateHeap() {
     J3DModelData* model_data =
         static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ESKBAN_BDL_ESKBAN));
     JUT_ASSERT(261, model_data != NULL);
@@ -119,7 +119,7 @@ int daObjEskban::Act_c::CreateHeap() {
 }
 
 /* 000001FC-00000368       .text Create__Q211daObjEskban5Act_cFv */
-int daObjEskban::Act_c::Create() {
+BOOL daObjEskban::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
     fopAcM_setCullSizeBox(this, -500, -1, -500, 500, 500, 500);
@@ -147,8 +147,8 @@ int daObjEskban::Act_c::Create() {
 }
 
 /* 000003A4-000004D0       .text Mthd_Create__Q211daObjEskban5Act_cFv */
-s32 daObjEskban::Act_c::Mthd_Create() {
-    s32 phase_state;
+cPhs_State daObjEskban::Act_c::Mthd_Create() {
+    cPhs_State phase_state;
     fopAcM_SetupActor(this, Act_c);
     M_smoke = NULL;
 
@@ -267,7 +267,7 @@ void daObjEskban::Act_c::daObjEskban_effect_set() {
 }
 
 /* 00000EF0-00001400       .text Execute__Q211daObjEskban5Act_cFPPA3_A4_f */
-int daObjEskban::Act_c::Execute(Mtx** pMtx) {
+BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
     dComIfG_Ccsp()->Set(&mCheckCyl);
     dComIfG_Ccsp()->Set(&mCameraCyl);
     dComIfG_Ccsp()->Set(&mCheckSph);
@@ -389,28 +389,28 @@ BOOL daObjEskban::Act_c::Draw() {
 namespace daObjEskban {
 namespace {
 /* 000014B4-000014D4       .text Mthd_Create__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_Create(void* i_this) {
-    ((Act_c*)i_this)->Mthd_Create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((Act_c*)i_this)->Mthd_Create();
 }
 
 /* 000014D4-000014F4       .text Mthd_Delete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_Delete(void* i_this) {
-    ((Act_c*)i_this)->Mthd_Delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 000014F4-00001514       .text Mthd_Execute__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_Execute(void* i_this) {
-    ((Act_c*)i_this)->MoveBGExecute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00001514-00001540       .text Mthd_Draw__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_Draw(void* i_this) {
-    ((Act_c*)i_this)->MoveBGDraw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGDraw();
 }
 
 /* 00001540-0000156C       .text Mthd_IsDelete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_IsDelete(void* i_this) {
-    ((Act_c*)i_this)->MoveBGIsDelete();
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Eskban = {

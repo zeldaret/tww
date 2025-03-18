@@ -84,12 +84,12 @@ void daObjPirateship::Act_c::demo_move() {
 }
 
 /* 00000EF0-00000F10       .text Create__Q215daObjPirateship6MethodFPv */
-s32 daObjPirateship::Method::Create(void*) {
+cPhs_State daObjPirateship::Method::Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000F10-000012A4       .text _create__Q215daObjPirateship5Act_cFv */
-s32 daObjPirateship::Act_c::_create() {
+cPhs_State daObjPirateship::Act_c::_create() {
     /* Nonmatching */
 }
 

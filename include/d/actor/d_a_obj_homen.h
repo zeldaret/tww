@@ -46,7 +46,7 @@ namespace daObjHomen {
     
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void set_mtx();
         void init_mtx();

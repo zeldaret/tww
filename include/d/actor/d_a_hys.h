@@ -5,7 +5,7 @@
 
 class daHys_c : public fopAc_ac_c {
 public:
-    inline s32 _create();
+    inline cPhs_State _create();
     void set_mtx();
 
     BOOL Delete();

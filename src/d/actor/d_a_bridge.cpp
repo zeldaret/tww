@@ -93,7 +93,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00004310-00004770       .text daBridge_Create__FP10fopAc_ac_c */
-static s32 daBridge_Create(fopAc_ac_c*) {
+static cPhs_State daBridge_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

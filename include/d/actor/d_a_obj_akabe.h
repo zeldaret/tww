@@ -28,7 +28,7 @@ namespace daObjAkabe {
         s32 prm_get_always() const { return daObj::PrmAbstract(this, PRM_ALWAYS_W, PRM_ALWAYS_S); }
         s32 prm_get_arg0() const { return daObj::PrmAbstract(this, PRM_ARG0_W, PRM_ARG0_S); }
     
-        s32 _create();
+        cPhs_State _create();
         u8 create_heap();
         bool _delete();
         void init_scale();

@@ -3199,7 +3199,7 @@ inline void dComIfGp_setFmapData(void * pData) { g_dComIfG_gameInfo.play.setFmap
  */
 
 class request_of_phase_process_class;
-int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* arc_name);
+cPhs_State dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* arc_name);
 int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* resName, JKRHeap* heap);
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* resName);
 
@@ -3607,7 +3607,7 @@ inline u8 dComIfG_getBrightness() { return g_dComIfG_gameInfo.mBrightness; }
 inline void dComIfG_setBrightness(u8 v) { g_dComIfG_gameInfo.mBrightness = v; }
 
 class scene_class;
-int dComIfG_resetToOpening(scene_class* i_scene);
+BOOL dComIfG_resetToOpening(scene_class* i_scene);
 
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName);
 

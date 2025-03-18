@@ -206,10 +206,10 @@ s32 daMozo_c::CreateInit() {
 }
 
 /* 00002228-000023B0       .text _create__8daMozo_cFv */
-s32 daMozo_c::_create() {
+cPhs_State daMozo_c::_create() {
     fopAcM_SetupActor(this, daMozo_c);
 
-    s32 result = dComIfG_resLoad(&mPhs, "Mozo");
+    cPhs_State result = dComIfG_resLoad(&mPhs, "Mozo");
 
     if (result == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1AA0)) {
@@ -289,7 +289,7 @@ static BOOL daMozo_Delete(daMozo_c* i_this) {
 }
 
 /* 000026F0-00002710       .text daMozo_Create__FP10fopAc_ac_c */
-static s32 daMozo_Create(fopAc_ac_c* i_this) {
+static cPhs_State daMozo_Create(fopAc_ac_c* i_this) {
     return static_cast<daMozo_c*>(i_this)->_create();
 }
 

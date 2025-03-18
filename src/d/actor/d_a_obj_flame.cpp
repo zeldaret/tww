@@ -132,12 +132,12 @@ void daObjFlame::Act_c::mode_proc_call() {
 }
 
 /* 00001EAC-00001ECC       .text Create__Q210daObjFlame6MethodFPv */
-s32 daObjFlame::Method::Create(void*) {
+cPhs_State daObjFlame::Method::Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001ECC-00002200       .text _create__Q210daObjFlame5Act_cFv */
-s32 daObjFlame::Act_c::_create() {
+cPhs_State daObjFlame::Act_c::_create() {
     /* Nonmatching */
 }
 

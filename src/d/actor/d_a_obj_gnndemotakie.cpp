@@ -17,7 +17,7 @@ void daObjGnntakie_c::create_heap() {
 }
 
 /* 000001F4-00000300       .text _create__15daObjGnntakie_cFv */
-s32 daObjGnntakie_c::_create() {
+cPhs_State daObjGnntakie_c::_create() {
     /* Nonmatching */
 }
 
@@ -43,27 +43,27 @@ bool daObjGnntakie_c::_draw() {
 
 namespace {
 /* 00000494-000004B4       .text Mthd_Create__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000004B4-000004D8       .text Mthd_Delete__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000004D8-000004FC       .text Mthd_Execute__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000004FC-00000520       .text Mthd_Draw__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000520-00000528       .text Mthd_IsDelete__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

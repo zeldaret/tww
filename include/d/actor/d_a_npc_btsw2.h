@@ -44,7 +44,7 @@ public:
     void talk01();
     void pathMove();
     BOOL wait_action(void*);
-    s32 _create();
+    cPhs_State _create();
     BOOL _delete();
     BOOL _execute();
     BOOL _draw();

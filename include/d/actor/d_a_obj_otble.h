@@ -6,7 +6,7 @@
 namespace daObj_Otble {
     class Act_c : public fopAc_ac_c {
     public:
-        inline s32 _create();
+        inline cPhs_State _create();
         inline bool _delete();
         void attr() const {}
     
@@ -21,7 +21,7 @@ namespace daObj_Otble {
     };
 
     namespace Mthd {
-        s32 Create(void*);
+        cPhs_State Create(void*);
         BOOL Delete(void*);
         BOOL Execute(void*);
         BOOL Draw(void*);

@@ -45,10 +45,10 @@ void daObjCafelmp_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daObjCafelmp_c::_create() {
+cPhs_State daObjCafelmp_c::_create() {
     fopAcM_SetupActor(this, daObjCafelmp_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, "Cafelmp");
+    cPhs_State ret = dComIfG_resLoad(&mPhs, "Cafelmp");
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x680) == 0) {
@@ -82,7 +82,7 @@ bool daObjCafelmp_c::_draw() {
 }
 
 /* 0000024C-000002EC       .text daObjCafelmp_Create__FPv */
-static s32 daObjCafelmp_Create(void* i_this) {
+static cPhs_State daObjCafelmp_Create(void* i_this) {
     return ((daObjCafelmp_c*)i_this)->_create();
 }
 

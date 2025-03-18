@@ -16,7 +16,7 @@ public:
 
     daObjHat_c();
 
-    s32 _create();
+    cPhs_State _create();
     BOOL createHeap();
     s32 createInit();
     BOOL _delete();

@@ -62,7 +62,7 @@ public:
 
 class dTimer_c : public msg_class {
 public:
-    s32 _create();
+    cPhs_State _create();
     BOOL _execute();
     BOOL _draw();
     BOOL _delete();

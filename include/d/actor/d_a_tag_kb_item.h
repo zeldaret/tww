@@ -11,7 +11,7 @@ public:
     void dig_main();
     bool _delete();
     void CreateInit();
-    int _create();
+    cPhs_State _create();
     bool _execute();
     bool _draw();
 

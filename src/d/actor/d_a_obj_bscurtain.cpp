@@ -60,10 +60,10 @@ s32 daObj_Bscurtain_c::CreateInit() {
     return cPhs_COMPLEATE_e;
 }
 
-s32 daObj_Bscurtain_c::_create() {
+cPhs_State daObj_Bscurtain_c::_create() {
     fopAcM_SetupActor(this, daObj_Bscurtain_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10000)) {

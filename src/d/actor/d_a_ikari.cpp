@@ -116,7 +116,7 @@ bool daIkari_c::_draw() {
 
 /* 00000494-000005B0       .text _create__9daIkari_cFv */
 int daIkari_c::_create() {
-    int phase = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase = dComIfG_resLoad(&mPhs, M_arcname);
 
     fopAcM_SetupActor(this, daIkari_c);
 

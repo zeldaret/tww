@@ -9,9 +9,9 @@ namespace daObjNest {
     public:
         void CreateHeap();
         s32 Create();
-        void Mthd_Create();
+        cPhs_State Mthd_Create();
         BOOL Delete();
-        void Mthd_Delete();
+        BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*);

@@ -57,7 +57,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c*) {
 }
 
 /* 00001FA4-00002304       .text daKantera_Create__FP10fopAc_ac_c */
-static s32 daKantera_Create(fopAc_ac_c*) {
+static cPhs_State daKantera_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

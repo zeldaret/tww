@@ -48,7 +48,7 @@ static BOOL dKyeff2_Delete(dKyeff2_c* i_this) {
 }
 
 /* 801987EC-80198810       .text dKyeff2_Create__FP12kankyo_class */
-static s32 dKyeff2_Create(kankyo_class*) {
+static cPhs_State dKyeff2_Create(kankyo_class*) {
     dKyw_wether_init2();
     return cPhs_COMPLEATE_e;
 }

@@ -192,7 +192,7 @@ static s32 daBemosCreate(void*) {
 }
 
 /* 00003F90-0000403C       .text _create__9daBemos_cFv */
-s32 daBemos_c::_create() {
+cPhs_State daBemos_c::_create() {
     /* Nonmatching */
 }
 

@@ -91,7 +91,7 @@ void daObjGryw00_c::set_se() {
 }
 
 /* 000004C4-00000654       .text CreateHeap__13daObjGryw00_cFv */
-int daObjGryw00_c::CreateHeap() {
+BOOL daObjGryw00_c::CreateHeap() {
     BOOL ret = TRUE;
     J3DModelData* mdlData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, GRYW00_BDL_GRYW00));
     J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, GRYW00_BTK_GRYW00));
@@ -113,7 +113,7 @@ int daObjGryw00_c::CreateHeap() {
 }
 
 /* 00000654-000007D4       .text Create__13daObjGryw00_cFv */
-int daObjGryw00_c::Create() {
+BOOL daObjGryw00_c::Create() {
     mActivationSwitch = param_get_swSave();
     mWaterLvFinalYPos = HIGH_WATER_LEVEL + home.pos.y;
     if (mActivationSwitch != 0xff && fopAcM_isSwitch(this, mActivationSwitch) == TRUE) {
@@ -150,10 +150,10 @@ int daObjGryw00_c::Create() {
 }
 
 /* 000007D4-0000090C       .text Mthd_Create__13daObjGryw00_cFv */
-s32 daObjGryw00_c::Mthd_Create() {
+cPhs_State daObjGryw00_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjGryw00_c);
-    s32 phase_state = dComIfG_resLoad(&mPhs, l_arcname);
 
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, l_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(l_arcname, 0xf, dBgS_MoveBGProc_Trans, 0x9a0);
         JUT_ASSERT(519, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
@@ -270,7 +270,7 @@ BOOL daObjGryw00_c::Draw() {
 }
 
 /* 00000ECC-00000EEC       .text daObjGryw00_Create__FP13daObjGryw00_c */
-static s32 daObjGryw00_Create(daObjGryw00_c* i_this) {
+static cPhs_State daObjGryw00_Create(daObjGryw00_c* i_this) {
     return i_this->Mthd_Create();
 }
 

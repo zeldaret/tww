@@ -25,7 +25,7 @@ public:
     void decisionRtType();
     
     s32 CreateInit();
-    s32 create();
+    cPhs_State create();
 
     s32 checkHit();
     s32 DemoProc();

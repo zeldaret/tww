@@ -137,12 +137,12 @@ void daObjVmc::Act_c::CreateInit() {
 }
 
 /* 000005BC-00000730       .text _create__Q28daObjVmc5Act_cFv */
-s32 daObjVmc::Act_c::_create() {
+cPhs_State daObjVmc::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
     mHasTreeBg = false;
 
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x32a0) != 0) {
@@ -321,7 +321,7 @@ bool daObjVmc::Act_c::_draw() {
 namespace daObjVmc {
 namespace {
 /* 000012CC-000012EC       .text Mthd_Create__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((Act_c*)i_ac)->_create();
 }
 

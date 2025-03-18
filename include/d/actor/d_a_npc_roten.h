@@ -26,7 +26,7 @@ public:
     void setResFlag(u8 flag) { field_0x9BC = flag; }
 
     daNpcRoten_c();
-    s32 _create();
+    cPhs_State _create();
     BOOL createHeap();
     s32 createInit();
     bool _delete();

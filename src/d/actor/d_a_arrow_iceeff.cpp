@@ -106,7 +106,7 @@ void daArrow_Iceeff_c::set_mtx() {
     }
 }
 
-s32 daArrow_Iceeff_c::_create() {
+cPhs_State daArrow_Iceeff_c::_create() {
     fopAcM_SetupActor(this, daArrow_Iceeff_c);
 
     void* arrow = fopAcM_SearchByID(parentActorID);
@@ -131,7 +131,7 @@ s32 daArrow_Iceeff_c::_create() {
 }
 
 /* 0000073C-00000854       .text daArrow_Iceeff_Create__FPv */
-static s32 daArrow_Iceeff_Create(void* i_this) {
+static cPhs_State daArrow_Iceeff_Create(void* i_this) {
     return static_cast<daArrow_Iceeff_c*>(i_this)->_create();
 }
 

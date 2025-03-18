@@ -368,7 +368,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000884-00000D80       .text create__10daNpc_Md_cFv */
-s32 daNpc_Md_c::create() {
+cPhs_State daNpc_Md_c::create() {
     m313D = 0;
     strcpy(mModelArcName, l_arc_name);
     int heapSizeIdx = 0;
@@ -424,7 +424,7 @@ s32 daNpc_Md_c::create() {
         heapSizeIdx = 1;
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhase, mModelArcName);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, mModelArcName);
     m313D = 1;
     if (phase_state == cPhs_COMPLEATE_e) {
         if (dComIfGp_getCb1Player() != NULL) {
@@ -3308,7 +3308,7 @@ daNpc_Md_c::~daNpc_Md_c() {
 }
 
 /* 000110BC-000110DC       .text daNpc_Md_Create__FP10fopAc_ac_c */
-static s32 daNpc_Md_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Md_Create(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Md_c*>(i_this)->create();
 }
 

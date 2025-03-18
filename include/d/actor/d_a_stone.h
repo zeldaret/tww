@@ -23,7 +23,7 @@ namespace daStone {
         
         void create_heap();
         void chk_appear();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void mode_wait_init();
         void mode_wait();
@@ -67,7 +67,7 @@ namespace daStone {
     };
     
     namespace Method {
-        s32 Create(void*);
+        cPhs_State Create(void*);
         BOOL Delete(void*);
         BOOL Execute(void*);
         BOOL Draw(void*);

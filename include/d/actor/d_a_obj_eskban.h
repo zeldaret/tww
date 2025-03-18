@@ -37,18 +37,18 @@ namespace daObjEskban {
 
         Act_c();
 
-        int CreateHeap();
-        int Create();
-        s32 Mthd_Create();
-        int Delete();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        cPhs_State Mthd_Create();
+        virtual BOOL Delete();
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void eff_m_break(unsigned short, unsigned short);
         void eff_b_break(unsigned short);
         void daObjEskban_effect_set();
-        int Execute(Mtx**);
-        int Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
 
     public:
         /* 0x2C4 Act_c vtable */

@@ -374,17 +374,17 @@ void daStandItem_c::CreateInit() {
 }
 
 /* 800E3E94-800E4048       .text _create__13daStandItem_cFv */
-s32 daStandItem_c::_create() {
+cPhs_State daStandItem_c::_create() {
     fopAcM_SetupActor(this, daStandItem_c);
 
     mItemNo = fopAcM_GetParam(this);
     mItemType = convItemNo(mItemNo);
 
-    s32 rt = dComIfG_resLoad(&mPhsDai, m_arcname);
+    cPhs_State rt = dComIfG_resLoad(&mPhsDai, m_arcname);
     if (rt != cPhs_COMPLEATE_e)
         return rt;
 
-    s32 cloth_rt = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    cPhs_State cloth_rt = dComIfG_resLoad(&mPhsCloth, "Cloth");
     if (cloth_rt != cPhs_COMPLEATE_e)
         return cloth_rt;
 
@@ -774,7 +774,7 @@ bool daStandItem_c::_draw() {
 }
 
 /* 800E53B8-800E53D8       .text daStandItem_Create__FPv */
-static s32 daStandItem_Create(void* i_this) {
+static cPhs_State daStandItem_Create(void* i_this) {
     return ((daStandItem_c*)i_this)->_create();
 }
 

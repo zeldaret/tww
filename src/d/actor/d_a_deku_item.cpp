@@ -105,7 +105,7 @@ void daDekuItem_c::CreateInit() {
 }
 
 /* 000003A8-00000598       .text _create__12daDekuItem_cFv */
-s32 daDekuItem_c::_create() {
+cPhs_State daDekuItem_c::_create() {
     fopAcM_SetupActor(this, daDekuItem_c);
 
     mItemBitNo = daDekuItem_prm::getItemBitNo(this);
@@ -118,7 +118,7 @@ s32 daDekuItem_c::_create() {
         return cPhs_ERROR_e;
     }
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, m_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x5000)) {
@@ -249,7 +249,7 @@ bool daDekuItem_c::_draw() {
 }
 
 /* 00000ECC-00000EEC       .text daDekuItem_Create__FPv */
-static s32 daDekuItem_Create(void* i_this) {
+static cPhs_State daDekuItem_Create(void* i_this) {
     return static_cast<daDekuItem_c*>(i_this)->_create();
 }
 

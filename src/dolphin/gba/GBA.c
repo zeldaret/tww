@@ -66,7 +66,6 @@ s32 GBAGetStatus(s32 chan, u8* status) {
 
 s32 GBAResetAsync(s32 chan, u8* status, GBACallback callback) {
     GBAControl* gba = &__GBA[chan];
-    s32 ret;
     if (gba->callback != NULL) {
         return GBA_BUSY;
     }

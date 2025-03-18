@@ -105,10 +105,10 @@ u8 daObjSwheavy::Act_c::create_heap() {
 }
 
 /* 0000032C-00000628       .text _create__Q212daObjSwheavy5Act_cFv */
-s32 daObjSwheavy::Act_c::_create() {
+cPhs_State daObjSwheavy::Act_c::_create() {
     fopAcM_SetupActor(this, daObjSwheavy::Act_c);
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         mType = prm_get_type();
         bool up = cLib_checkBit<u32>(attr().mFlags, FLAG_IS_TOGGLE) || !is_switch();
@@ -435,7 +435,7 @@ bool daObjSwheavy::Act_c::_draw() {
 namespace daObjSwheavy {
 namespace {
 /* 000011C0-000011E0       .text Mthd_Create__Q212daObjSwheavy29@unnamed@d_a_obj_swheavy_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<Act_c*>(i_this)->_create();
 }
 

@@ -49,7 +49,7 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
 #if VERSION == VERSION_PAL
         daMP_c *movie = dScnTitle_c::mMp;
         if (movie == NULL) {
-            s32 rt = fopAcM_SearchByID(i_this->mMoviePId, (fopAc_ac_c**)&movie);
+            BOOL rt = fopAcM_SearchByID(i_this->mMoviePId, (fopAc_ac_c**)&movie);
             JUT_ASSERT(0x8a, rt);
 
             if (movie == NULL)
@@ -59,7 +59,7 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
         }
 #else
         daMP_c *movie;
-        s32 rt = fopAcM_SearchByID(i_this->mMoviePId, (fopAc_ac_c**)&movie);
+        BOOL rt = fopAcM_SearchByID(i_this->mMoviePId, (fopAc_ac_c**)&movie);
         JUT_ASSERT(0x83, rt);
 
         if (movie == NULL)
@@ -102,7 +102,7 @@ static BOOL dScnTitle_Delete(title_of_scene_class* i_this) {
 }
 
 /* 802374D8-80237568       .text dScnTitle_Create__FP11scene_class */
-static s32 dScnTitle_Create(scene_class* i_scn) {
+static cPhs_State dScnTitle_Create(scene_class* i_scn) {
     title_of_scene_class * i_this = (title_of_scene_class*) i_scn;
 
     if (JAInter::BankWave::checkAllWaveLoadStatus())

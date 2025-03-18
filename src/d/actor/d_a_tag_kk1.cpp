@@ -32,12 +32,12 @@ bool daTag_Kk1_c::_delete() {
 }
 
 /* 000002A0-0000046C       .text _create__11daTag_Kk1_cFv */
-s32 daTag_Kk1_c::_create() {
+cPhs_State daTag_Kk1_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000694-000006B4       .text daTag_Kk1_Create__FP10fopAc_ac_c */
-static s32 daTag_Kk1_Create(fopAc_ac_c*) {
+static cPhs_State daTag_Kk1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -17,7 +17,7 @@ s32 daObjMkiek::Act_c::Create() {
 }
 
 /* 00000314-000004F8       .text Mthd_Create__Q210daObjMkiek5Act_cFv */
-void daObjMkiek::Act_c::Mthd_Create() {
+cPhs_State daObjMkiek::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjMkiek::Act_c::Delete() {
 }
 
 /* 0000075C-000007B4       .text Mthd_Delete__Q210daObjMkiek5Act_cFv */
-void daObjMkiek::Act_c::Mthd_Delete() {
+BOOL daObjMkiek::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -69,27 +69,27 @@ BOOL daObjMkiek::Act_c::Draw() {
 namespace daObjMkiek {
 namespace {
 /* 00000E1C-00000E3C       .text Mthd_Create__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000E3C-00000E5C       .text Mthd_Delete__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000E5C-00000E7C       .text Mthd_Execute__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000E7C-00000EA8       .text Mthd_Draw__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000EA8-00000ED4       .text Mthd_IsDelete__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

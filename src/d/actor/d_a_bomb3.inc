@@ -1337,7 +1337,7 @@ int daBomb_c::create() {
 
     fopAcM_SetupActor(this, daBomb_c);
 
-    int status;
+    cPhs_State status;
     if(mType == 1) {
         status = dComIfG_resLoad(&mPhase, m_attrType[mType].resName);
     }

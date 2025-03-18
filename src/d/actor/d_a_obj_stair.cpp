@@ -48,7 +48,7 @@ static s32 daObj_StairCreate(void*) {
 }
 
 /* 000004D8-00000854       .text _create__13daObj_Stair_cFv */
-s32 daObj_Stair_c::_create() {
+cPhs_State daObj_Stair_c::_create() {
     /* Nonmatching */
 }
 

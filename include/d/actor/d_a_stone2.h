@@ -23,9 +23,9 @@ namespace daStone2 {
         void CreateHeap();
         s32 Create();
         void chk_appear();
-        void Mthd_Create();
+        cPhs_State Mthd_Create();
         BOOL Delete();
-        void Mthd_Delete();
+        BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void cull_set_draw();

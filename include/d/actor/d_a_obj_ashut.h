@@ -16,9 +16,9 @@ namespace daObjAshut {
     
         void CreateHeap();
         s32 Create();
-        void Mthd_Create();
+        cPhs_State Mthd_Create();
         BOOL Delete();
-        void Mthd_Delete();
+        BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void chk_safe_area() const;

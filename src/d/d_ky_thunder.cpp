@@ -30,7 +30,7 @@ public:
     inline ~dThunder_c();
     BOOL createHeap();
     void adjustHeap();
-    s32 create();
+    cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
 
@@ -121,18 +121,18 @@ static BOOL dThunder_Delete(dThunder_c* i_this) {
 }
 
 /* 80198B68-80198BC4       .text dThunder_Create__FP12kankyo_class */
-static s32 dThunder_Create(kankyo_class* i_ky) {
+static cPhs_State dThunder_Create(kankyo_class* i_ky) {
     dThunder_c * i_this = (dThunder_c *)i_ky;
     if (!i_this->createHeap())
         return cPhs_ERROR_e;
 
-    s32 ret = i_this->create();
+    cPhs_State ret = i_this->create();
     i_this->adjustHeap();
     return ret;
 }
 
 /* 80198BC4-801990CC       .text create__10dThunder_cFv */
-s32 dThunder_c::create() {
+cPhs_State dThunder_c::create() {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
 

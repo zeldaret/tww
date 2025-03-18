@@ -857,10 +857,10 @@ BOOL kabe_check(fganon_class* i_this) {
         cXyz tempPos = player->eyePos + transformedPos;
         linChk.Set(&player->eyePos, &tempPos, a_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
-            return 1;
+            return TRUE;
         }
     }
-    return 0;
+    return FALSE;
 }
 
 /* 00004300-000044CC       .text deru__FP12fganon_class */
@@ -2780,7 +2780,7 @@ static dCcD_SrcSph ball_at_sph_src = {
 };
 
 /* 00009844-00009C70       .text daFganon_Create__FP10fopAc_ac_c */
-static s32 daFganon_Create(fopAc_ac_c* i_act) {
+static cPhs_State daFganon_Create(fopAc_ac_c* i_act) {
     fganon_class* i_this = (fganon_class*)i_act;
     fopAcM_SetupActor(i_act, fganon_class);
     s32 res;

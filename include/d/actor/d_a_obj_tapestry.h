@@ -23,7 +23,7 @@ public:
     void set_cc_pos();
     void checkCollision();
     void set_eye_pos();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void wait_act_proc();
     void demo_request_act_proc();

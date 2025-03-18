@@ -142,12 +142,12 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000374-00000538       .text create__10daNpc_Os_cFv */
-s32 daNpc_Os_c::create() {
+cPhs_State daNpc_Os_c::create() {
     fopAcM_SetupActor(this, daNpc_Os_c)
 
     static u32 l_heap_size = 0xFA0;
 
-    int result = dComIfG_resLoad(&mPhs, "Os");
+    cPhs_State result = dComIfG_resLoad(&mPhs, "Os");
     if(result == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, l_heap_size)) {
             mpMorf = NULL;
@@ -2360,7 +2360,7 @@ daNpc_Os_c::~daNpc_Os_c() {
 }
 
 /* 00006E1C-00006E3C       .text daNpc_Os_Create__FP10fopAc_ac_c */
-static s32 daNpc_Os_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Os_Create(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Os_c*>(i_this)->create();
 }
 

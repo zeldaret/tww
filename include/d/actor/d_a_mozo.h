@@ -13,7 +13,7 @@ public:
 
     void setProcess(proc_t proc) { mCurrentProc = proc; }
 
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     bool _draw();
     bool _execute();

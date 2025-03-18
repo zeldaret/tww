@@ -11,12 +11,12 @@ namespace daObjDrift {
     
         void CreateHeap();
         s32 Create();
-        void Mthd_Create();
+        cPhs_State Mthd_Create();
         void make_flower();
         void calc_flower_param(cXyz*, csXyz*);
         void set_flower_current();
         BOOL Delete();
-        void Mthd_Delete();
+        BOOL Mthd_Delete();
         void mode_wait_init();
         void mode_wait();
         void mode_rot_init();

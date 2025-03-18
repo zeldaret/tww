@@ -74,10 +74,10 @@ BOOL daObjShelf::Act_c::Create() {
 }
 
 /* 000001A0-0000029C       .text Mthd_Create__Q210daObjShelf5Act_cFv */
-s32 daObjShelf::Act_c::Mthd_Create() {
+cPhs_State daObjShelf::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, OTANA_DZB_OTANA, dBgS_MoveBGProc_Trans, 0xb00);
         JUT_ASSERT(0x15b, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
@@ -91,8 +91,8 @@ BOOL daObjShelf::Act_c::Delete() {
 }
 
 /* 000002A4-000002F0       .text Mthd_Delete__Q210daObjShelf5Act_cFv */
-int daObjShelf::Act_c::Mthd_Delete() {
-    int ret = MoveBGDelete();
+BOOL daObjShelf::Act_c::Mthd_Delete() {
+    BOOL ret = MoveBGDelete();
     dComIfG_resDelete(&mPhs, M_arcname);
     return ret;
 }
@@ -268,17 +268,17 @@ BOOL daObjShelf::Act_c::Draw() {
 namespace daObjShelf {
 namespace {
 /* 00000A50-00000A70       .text Mthd_Create__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<Act_c*>(i_this)->Mthd_Create();
 }
 
 /* 00000A70-00000A90       .text Mthd_Delete__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-int Mthd_Delete(void* i_this) {
+BOOL Mthd_Delete(void* i_this) {
     return static_cast<Act_c*>(i_this)->Mthd_Delete();
 }
 
 /* 00000A90-00000AB0       .text Mthd_Execute__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-int Mthd_Execute(void* i_this) {
+BOOL Mthd_Execute(void* i_this) {
     return static_cast<Act_c*>(i_this)->MoveBGExecute();
 }
 

@@ -62,7 +62,7 @@ static BOOL daYougan_solidHeapCB(fopAc_ac_c*) {
 }
 
 /* 000008A4-000008C4       .text daYougan_Create__FP10fopAc_ac_c */
-static s32 daYougan_Create(fopAc_ac_c*) {
+static cPhs_State daYougan_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -1106,7 +1106,7 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 000033D0-000039AC       .text speakAction__11daNpc_Ji1_cFPv */
@@ -2110,7 +2110,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 setAction(&daNpc_Ji1_c::eventAction, 0);
                 field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
                 
-                return 1;
+                return TRUE;
             }
             
             if(cutType == 8) {
@@ -2119,7 +2119,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 setAction(&daNpc_Ji1_c::eventAction, 0);
                 field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
 
-                return 1;
+                return TRUE;
             }
 
             field_0x7E0.OnTgShield();
@@ -2561,7 +2561,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
                     setClearRecord(field_0xD70);
                 }
 
-                return 1;
+                return TRUE;
             }
         }
 
@@ -2592,7 +2592,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 0000C7E4-0000CA98       .text battleAction__11daNpc_Ji1_cFPv */
@@ -3147,10 +3147,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 0000DED0-0000DF78       .text _create__11daNpc_Ji1_cFv */
-s32 daNpc_Ji1_c::_create() {
+cPhs_State daNpc_Ji1_c::_create() {
     fopAcM_SetupActor(this, daNpc_Ji1_c);
 
-    s32 state = dComIfG_resLoad(&field_0xC7C, "Ji");
+    cPhs_State state = dComIfG_resLoad(&field_0xC7C, "Ji");
     if(state == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0x16840)) {
             return cPhs_ERROR_e;
@@ -3788,7 +3788,7 @@ static BOOL daNpc_Ji1_Delete(daNpc_Ji1_c* i_this) {
 }
 
 /* 00011FC0-00011FE0       .text daNpc_Ji1_Create__FP10fopAc_ac_c */
-static s32 daNpc_Ji1_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Ji1_Create(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Ji1_c*>(i_this)->_create();
 }
 

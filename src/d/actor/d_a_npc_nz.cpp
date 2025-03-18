@@ -901,12 +901,12 @@ void daNpc_Nz_c::getArg() {
 }
 
 /* 00002830-000028FC       .text _create__10daNpc_Nz_cFv */
-s32 daNpc_Nz_c::_create() {
+cPhs_State daNpc_Nz_c::_create() {
     fopAcM_SetupActor(this, daNpc_Nz_c);
 
     getArg();
 
-    s32 result = dComIfG_resLoad(&mPhs1, m_arc_name);
+    cPhs_State result = dComIfG_resLoad(&mPhs1, m_arc_name);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }

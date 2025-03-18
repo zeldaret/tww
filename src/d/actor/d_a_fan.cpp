@@ -69,7 +69,7 @@ BOOL daFan_c::Delete() {
 }
 
 /* 000000F0-0000040C       .text CreateHeap__7daFan_cFv */
-int daFan_c::CreateHeap() {
+BOOL daFan_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]));
     JUT_ASSERT(0x15e, modelData != NULL);
 
@@ -105,7 +105,7 @@ int daFan_c::CreateHeap() {
 static int nodeCallBack(J3DNode*, int);
 
 /* 0000040C-00000640       .text Create__7daFan_cFv */
-int daFan_c::Create() {
+BOOL daFan_c::Create() {
     f32 wind_len = m_wind_length[mType];
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     Vec cullMin = m_cull_min[mType];
@@ -153,15 +153,15 @@ static int nodeCallBack(J3DNode* node, int calcTiming) {
 }
 
 /* 000006F4-00000900       .text _create__7daFan_cFv */
-s32 daFan_c::_create() {
+cPhs_State daFan_c::_create() {
     fopAcM_SetupActor(this, daFan_c);
 
     mType = daFan_prm::getType(this);
-    s32 rt1 = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    cPhs_State rt1 = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (rt1 != cPhs_COMPLEATE_e)
         return rt1;
 
-    s32 rt2 = dComIfG_resLoad(&mWindPhs, m_arcname2);
+    cPhs_State rt2 = dComIfG_resLoad(&mWindPhs, m_arcname2);
     if (rt2 != cPhs_COMPLEATE_e)
         return rt2;
 
@@ -261,7 +261,7 @@ BOOL daFan_c::Draw() {
 }
 
 /* 0000118C-000011AC       .text daFan_Create__FPv */
-static BOOL daFan_Create(void* i_this) {
+static cPhs_State daFan_Create(void* i_this) {
     return ((daFan_c*)i_this)->_create();
 }
 

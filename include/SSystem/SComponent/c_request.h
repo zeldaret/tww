@@ -9,7 +9,7 @@ struct request_base_class {
     u8 flag2 : 6;
 };
 
-int cReq_Is_Done(request_base_class*);
+BOOL cReq_Is_Done(request_base_class*);
 void cReq_Done(request_base_class*);
 void cReq_Command(request_base_class*, u8);
 void cReq_Create(request_base_class*, u8);

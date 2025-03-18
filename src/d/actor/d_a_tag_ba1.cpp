@@ -52,12 +52,12 @@ bool daTag_Ba1_c::_delete() {
 }
 
 /* 00000394-00000454       .text _create__11daTag_Ba1_cFv */
-s32 daTag_Ba1_c::_create() {
+cPhs_State daTag_Ba1_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000454-00000474       .text daTag_Ba1_Create__FP10fopAc_ac_c */
-static s32 daTag_Ba1_Create(fopAc_ac_c*) {
+static cPhs_State daTag_Ba1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

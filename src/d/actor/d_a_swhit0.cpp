@@ -188,7 +188,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actr) {
 }
 
 /* 00000508-000006C0       .text create__10daSwhit0_cFv */
-s32 daSwhit0_c::create() {
+cPhs_State daSwhit0_c::create() {
     fopAcM_SetupActor(this, daSwhit0_c);
 
     shape_angle.z = 0;
@@ -465,7 +465,7 @@ static s32 daSwhit0_Delete(daSwhit0_c* i_swhit) {
 }
 
 /* 00001450-00001470       .text daSwhit0_Create__FP10fopAc_ac_c */
-static s32 daSwhit0_Create(fopAc_ac_c* i_swhit) {
+static cPhs_State daSwhit0_Create(fopAc_ac_c* i_swhit) {
     return static_cast<daSwhit0_c*>(i_swhit)->create();
 }
 

@@ -100,14 +100,14 @@ BOOL daShopItem_c::clothCreate() {
 
         field_0x644 = (*clothFunc[field_0x648])(shopArc, clothArc, &tevStr, 0);
         if (field_0x644 == 0) {
-            return 0;
+            return FALSE;
         }
     }
     else {
         field_0x644 = 0;
     }
     
-    return 1;
+    return TRUE;
 }
 
 /* 000003BC-000005A8       .text set_mtx__12daShopItem_cFv */
@@ -154,7 +154,7 @@ bool daShopItem_c::_execute() {
 
 /* 000005F8-00000694       .text _draw__12daShopItem_cFv */
 bool daShopItem_c::_draw() {
-    if(chkDraw() == 0) return 1;
+    if(!chkDraw()) return true;
 
     if(m_itemNo == WATER_STATUE || m_itemNo == POSTMAN_STATUE) {
         mpModel->getModelData()->getJointTree().getJointNodePointer(0)->setMtxCalc(0);
@@ -202,7 +202,7 @@ int daShopItem_c::_create() {
     }
 
     arcName = getShopArcname();
-    int result = dComIfG_resLoad(&mPhs, arcName);
+    cPhs_State result = dComIfG_resLoad(&mPhs, arcName);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }
@@ -249,7 +249,7 @@ static BOOL daShopItem_Delete(void* i_this) {
     }
     inst->DeleteBase(inst->getShopArcname());
 
-    return 1;
+    return TRUE;
 }
 
 /* 00000D2C-00000D50       .text daShopItem_Draw__FPv */

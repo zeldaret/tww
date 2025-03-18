@@ -205,11 +205,11 @@ static BOOL daSyan_solidHeapCB(fopAc_ac_c* i_ac) {
 }
 
 /* 00000E10-00000FE0       .text daSyan_Create__FP10fopAc_ac_c */
-static s32 daSyan_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daSyan_Create(fopAc_ac_c* i_ac) {
     /* Nonmatching */
     fopAcM_SetupActor(i_ac, syan_class);
     syan_class* i_this = (syan_class*)i_ac;
-    s32 rt = dComIfG_resLoad(&i_this->mPhs, "Syan");
+    cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Syan");
     if (rt == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(i_this, daSyan_solidHeapCB, 0x3e40) != 0) {
             J3DModel* model = i_this->morf->getModel();

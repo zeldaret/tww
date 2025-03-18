@@ -147,7 +147,7 @@ void daObj_Canon_c::getArg() {
 }
 
 /* 00001880-000019D8       .text _create__13daObj_Canon_cFv */
-s32 daObj_Canon_c::_create() {
+cPhs_State daObj_Canon_c::_create() {
     /* Nonmatching */
 }
 

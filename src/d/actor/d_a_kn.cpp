@@ -57,7 +57,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 000010E0-000012B0       .text daKN_Create__FP10fopAc_ac_c */
-static s32 daKN_Create(fopAc_ac_c*) {
+static cPhs_State daKN_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

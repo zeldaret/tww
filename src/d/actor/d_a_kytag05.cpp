@@ -118,11 +118,11 @@ static BOOL daKytag05_Delete(kytag05_class*) {
 }
 
 /* 00000404-000004C0       .text daKytag05_Create__FP10fopAc_ac_c */
-static int daKytag05_Create(fopAc_ac_c* i_this) {
+static cPhs_State daKytag05_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, kytag05_class);
     kytag05_class *a_this = (kytag05_class*)i_this;
     if (dComIfGs_isSymbol(1) != 0) {
-        return 3;
+        return cPhs_STOP_e;
     }
     a_this->mIndex = 0;
     a_this->mTimer = 0;

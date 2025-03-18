@@ -27,7 +27,7 @@ static BOOL daFallRockTag_Delete(daFallRockTag_c*) {
 }
 
 /* 000002EC-00000360       .text daFallRockTag_Create__FP10fopAc_ac_c */
-static s32 daFallRockTag_Create(fopAc_ac_c*) {
+static cPhs_State daFallRockTag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

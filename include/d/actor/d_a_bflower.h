@@ -21,7 +21,7 @@ public:
     BOOL CreateHeap();
     void CreateInit();
     int init_bck_anm(s16 param);
-    s32 _create();
+    cPhs_State _create();
     void set_mtx();
     bool _execute();
     BOOL actLive();

@@ -92,7 +92,7 @@ BOOL daHmlif_c::Draw() {
 }
 
 /* 00001610-00001630       .text daHmlif_Create__FPv */
-static s32 daHmlif_Create(void*) {
+static cPhs_State daHmlif_Create(void*) {
     /* Nonmatching */
 }
 

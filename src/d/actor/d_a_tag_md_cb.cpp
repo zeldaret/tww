@@ -12,7 +12,7 @@ daTag_MdCb_HIO_c::daTag_MdCb_HIO_c() {
 }
 
 /* 00000160-000002D0       .text create__12daTag_MdCb_cFv */
-s32 daTag_MdCb_c::create() {
+cPhs_State daTag_MdCb_c::create() {
     /* Nonmatching */
 }
 
@@ -177,7 +177,7 @@ static BOOL daTag_MdCb_Delete(daTag_MdCb_c*) {
 }
 
 /* 00001990-000019B0       .text daTag_MdCb_Create__FP10fopAc_ac_c */
-static s32 daTag_MdCb_Create(fopAc_ac_c*) {
+static cPhs_State daTag_MdCb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

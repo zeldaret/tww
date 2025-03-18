@@ -32,7 +32,7 @@ void daSie_Flag_c::CreateInit() {
 }
 
 /* 000003D4-00000488       .text _create__12daSie_Flag_cFv */
-s32 daSie_Flag_c::_create() {
+cPhs_State daSie_Flag_c::_create() {
     /* Nonmatching */
 }
 

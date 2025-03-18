@@ -96,7 +96,7 @@ static BOOL Roten_create_check(u8 type) {
 }
 
 
-s32 daObj_Roten_c::_create() {
+cPhs_State daObj_Roten_c::_create() {
     fopAcM_SetupActor(this, daObj_Roten_c);
 
     mType = fopAcM_GetParam(this) >> 0x18;
@@ -109,7 +109,7 @@ s32 daObj_Roten_c::_create() {
         field_0x2D1 = 1;
         return cPhs_ERROR_e;
     }
-    s32 result = dComIfG_resLoad(&mPhs, daObj_Roten_c::M_arcname);
+    cPhs_State result = dComIfG_resLoad(&mPhs, daObj_Roten_c::M_arcname);
 
     u32 heap_size[] = {
         0x2BA0,

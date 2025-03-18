@@ -1120,12 +1120,12 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 }
 
 /* 00003C00-00003F5C       .text daAM_Create__FP10fopAc_ac_c */
-static s32 daAM_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daAM_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, am_class);
 
     am_class* i_this = (am_class*)i_actor;
 
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhase, "AM");
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "AM");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1C80)) {
             return cPhs_ERROR_e;

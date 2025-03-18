@@ -121,10 +121,10 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 800F9A74-800F9C8C       .text create__6daNh_cFv */
-s32 daNh_c::create() {
+cPhs_State daNh_c::create() {
     static u32 a_heap_size_tbl = 0x4000;
     
-    s32 phase_state = cPhs_COMPLEATE_e;
+    cPhs_State phase_state = cPhs_COMPLEATE_e;
     
     fopAcM_SetupActor(this, daNh_c);
     
@@ -494,7 +494,7 @@ static BOOL daNh_Delete(daNh_c* i_this) {
 }
 
 /* 800FAE8C-800FAEAC       .text daNh_Create__FP10fopAc_ac_c */
-static s32 daNh_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNh_Create(fopAc_ac_c* i_this) {
     return ((daNh_c*)i_this)->create();
 }
 

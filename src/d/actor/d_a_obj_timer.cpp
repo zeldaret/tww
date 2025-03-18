@@ -10,7 +10,7 @@
 #include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
-s32 daObjTimer::Act_c::_create() {
+cPhs_State daObjTimer::Act_c::_create() {
     fopAcM_SetupActor(this, daObjTimer::Act_c);
 
     fopAcM_offDraw(this);
@@ -91,7 +91,7 @@ bool daObjTimer::Act_c::_execute() {
 namespace daObjTimer {
 namespace {
 /* 00000394-000003B4       .text Mthd_Create__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<daObjTimer::Act_c*>(i_this)->_create();
 }
 

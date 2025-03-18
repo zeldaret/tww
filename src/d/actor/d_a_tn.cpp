@@ -303,7 +303,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 0000C4E0-0000CBFC       .text daTn_Create__FP10fopAc_ac_c */
-static s32 daTn_Create(fopAc_ac_c*) {
+static cPhs_State daTn_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

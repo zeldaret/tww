@@ -27,7 +27,7 @@ void daObjLight::Act_c::set_collision() {
 }
 
 /* 000004A4-0000070C       .text _create__Q210daObjLight5Act_cFv */
-s32 daObjLight::Act_c::_create() {
+cPhs_State daObjLight::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -104,27 +104,27 @@ bool daObjLight::Act_c::_draw() {
 namespace daObjLight {
 namespace {
 /* 00001528-00001548       .text Mthd_Create__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001548-0000156C       .text Mthd_Delete__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000156C-00001590       .text Mthd_Execute__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001590-000015B4       .text Mthd_Draw__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000015B4-000015BC       .text Mthd_IsDelete__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

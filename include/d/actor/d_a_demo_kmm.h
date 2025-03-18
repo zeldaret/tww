@@ -13,7 +13,7 @@ public:
     void calcMtx();
     void setAnime(int, int, float, float);
     void CreateInit();
-    s32 create();
+    cPhs_State create();
 
 public:
     /* Place member variables here */

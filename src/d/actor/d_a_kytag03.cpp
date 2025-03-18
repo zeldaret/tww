@@ -124,10 +124,10 @@ static BOOL daKytag03_Delete(kytag03_class* i_this) {
 }
 
 /* 00000544-00000604       .text daKytag03_Create__FP10fopAc_ac_c */
-static s32 daKytag03_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daKytag03_Create(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
     fopAcM_SetupActor(i_this, kytag03_class);
-    s32 ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
+    cPhs_State ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
     if (ret == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x4c30)) {
             return cPhs_ERROR_e;

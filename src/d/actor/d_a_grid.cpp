@@ -60,12 +60,12 @@ static BOOL daGrid_Delete(daGrid_c*) {
 }
 
 /* 800EA978-800EA998       .text daGrid_Create__FP10fopAc_ac_c */
-static s32 daGrid_Create(fopAc_ac_c*) {
+static cPhs_State daGrid_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 800EA998-800EAEAC       .text _create__8daGrid_cFv */
-s32 daGrid_c::_create() {
+cPhs_State daGrid_c::_create() {
     /* Nonmatching */
 }
 

@@ -74,7 +74,7 @@ public:
     static bool isPlayerRoom(int idx) { return m_playerRoom[idx]; }
     static bool isPlayerRoom_Goat() { return isPlayerRoom(1); }
 
-    s32 create();
+    cPhs_State create();
     BOOL createHeap();
     BOOL jointCheck(s8);
     BOOL wakeupCheck();

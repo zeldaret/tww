@@ -9,37 +9,25 @@
 #include "f_op/f_op_scene_pause.h"
 #include "f_pc/f_pc_executor.h"
 
-static cPhs__Step fopScnRq_phase_ClearOverlap(scene_request_class* i_sceneReq) {
-    if (fopOvlpM_ClearOfReq() == 1) {
-        return cPhs_NEXT_e;
-    } else {
-        return cPhs_INIT_e;
-    }
+static cPhs_State fopScnRq_phase_ClearOverlap(scene_request_class* i_sceneReq) {
+    return fopOvlpM_ClearOfReq() == TRUE ? cPhs_NEXT_e : cPhs_INIT_e;
 }
 
-static cPhs__Step fopScnRq_phase_Execute(scene_request_class* i_sceneReq) {
-    return (cPhs__Step)fpcNdRq_Execute(&i_sceneReq->mCrtReq);
+static cPhs_State fopScnRq_phase_Execute(scene_request_class* i_sceneReq) {
+    return fpcNdRq_Execute(&i_sceneReq->mCrtReq);
 }
 
-static cPhs__Step fopScnRq_phase_IsDoingOverlap(scene_request_class* i_sceneReq) {
-    if (fopOvlpM_IsDoingReq() == 1) {
-        return cPhs_NEXT_e;
-    } else {
-        return cPhs_INIT_e;
-    }
+static cPhs_State fopScnRq_phase_IsDoingOverlap(scene_request_class* i_sceneReq) {
+    return fopOvlpM_IsDoingReq() == TRUE ? cPhs_NEXT_e : cPhs_INIT_e;
 }
 
-static cPhs__Step fopScnRq_phase_IsDoneOverlap(scene_request_class* i_sceneReq) {
-    if (fopOvlpM_IsDone() == 1) {
-        return cPhs_NEXT_e;
-    } else {
-        return cPhs_INIT_e;
-    }
+static cPhs_State fopScnRq_phase_IsDoneOverlap(scene_request_class* i_sceneReq) {
+    return fopOvlpM_IsDone() == TRUE ? cPhs_NEXT_e : cPhs_INIT_e;
 }
 
 static s32 l_fopScnRq_IsUsingOfOverlap;
 
-static cPhs__Step fopScnRq_phase_Done(scene_request_class* i_sceneReq) {
+static cPhs_State fopScnRq_phase_Done(scene_request_class* i_sceneReq) {
     if (i_sceneReq->mCrtReq.mParameter != 1) {
         fopScnPause_Disable((scene_class*)fpcEx_SearchByID(i_sceneReq->mCrtReq.mCreatingID));
     }
@@ -48,10 +36,11 @@ static cPhs__Step fopScnRq_phase_Done(scene_request_class* i_sceneReq) {
 }
 
 static void fopScnRq_Execute(scene_request_class* i_sceneReq) {
-    int tmp = cPhs_Do(&i_sceneReq->mReqPhsProcCls, i_sceneReq);
-    switch (tmp) {
-    case 2:
+    cPhs_State phase_state = cPhs_Do(&i_sceneReq->mReqPhsProcCls, i_sceneReq);
+    switch (phase_state) {
+    case cPhs_NEXT_e:
         fopScnRq_Execute(i_sceneReq);
+        break;
     }
 }
 

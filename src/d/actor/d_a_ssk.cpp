@@ -53,7 +53,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00000EB8-00001244       .text daSsk_Create__FP10fopAc_ac_c */
-static s32 daSsk_Create(fopAc_ac_c*) {
+static cPhs_State daSsk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

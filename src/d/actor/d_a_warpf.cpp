@@ -37,7 +37,7 @@ void daWarpf_c::CreateInit() {
 }
 
 /* 00000CFC-00000E74       .text _create__9daWarpf_cFv */
-s32 daWarpf_c::_create() {
+cPhs_State daWarpf_c::_create() {
     /* Nonmatching */
 }
 
@@ -177,7 +177,7 @@ bool daWarpf_c::_draw() {
 }
 
 /* 00002340-00002360       .text daWarpf_Create__FPv */
-static s32 daWarpf_Create(void*) {
+static cPhs_State daWarpf_Create(void*) {
     /* Nonmatching */
 }
 

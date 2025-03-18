@@ -473,7 +473,7 @@ daTitle_c::~daTitle_c() {
     dComIfG_resDelete(&mPhs, ARCNAME);
 }
 
-s32 daTitle_c::create() {
+cPhs_State daTitle_c::create() {
     fopAcM_SetupActor(this, daTitle_c);
 
 #if VERSION == VERSION_PAL
@@ -481,7 +481,7 @@ s32 daTitle_c::create() {
     sprintf(ARCNAME, "TlogoE%d\0", dComIfGs_getPalLanguage());
 #endif
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, ARCNAME);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, ARCNAME);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         mpTitleProc = new daTitle_proc_c();
@@ -563,7 +563,7 @@ static BOOL daTitle_Delete(daTitle_c* i_this) {
 }
 
 /* 00001D70-00001E28       .text daTitle_Create__FP10fopAc_ac_c */
-static s32 daTitle_Create(fopAc_ac_c* i_this) {
+static cPhs_State daTitle_Create(fopAc_ac_c* i_this) {
     return static_cast<daTitle_c*>(i_this)->create();
 }
 

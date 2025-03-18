@@ -452,7 +452,7 @@ BOOL daIball_c::CreateHeap() {
 }
 
 /* 800F4B40-800F4B60       .text daIball_Create__FP10fopAc_ac_c */
-static s32 daIball_Create(fopAc_ac_c* i_this) {
+static cPhs_State daIball_Create(fopAc_ac_c* i_this) {
     return static_cast<daIball_c*>(i_this)->_daIball_create();
 }
 

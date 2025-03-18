@@ -23,7 +23,7 @@ namespace daObjTry {
         void init_cc();
         void search_sameType(void*, void*);
         void chk_appear() const;
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void mode_restart_init();
         void mode_restart();

@@ -12,12 +12,12 @@ BOOL daObjTable::Act_c::CreateHeap() {
 }
 
 /* 000001B8-00000284       .text Create__Q210daObjTable5Act_cFv */
-int daObjTable::Act_c::Create() {
+BOOL daObjTable::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 00000284-000003B4       .text Mthd_Create__Q210daObjTable5Act_cFv */
-void daObjTable::Act_c::Mthd_Create() {
+cPhs_State daObjTable::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjTable::Act_c::Delete() {
 }
 
 /* 000003BC-00000408       .text Mthd_Delete__Q210daObjTable5Act_cFv */
-void daObjTable::Act_c::Mthd_Delete() {
+BOOL daObjTable::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daObjTable::Act_c::init_mtx() {
 }
 
 /* 000004C4-00000500       .text Execute__Q210daObjTable5Act_cFPPA3_A4_f */
-int daObjTable::Act_c::Execute(Mtx**) {
+BOOL daObjTable::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -54,27 +54,27 @@ BOOL daObjTable::Act_c::Draw() {
 namespace daObjTable {
 namespace {
 /* 00000608-00000628       .text Mthd_Create__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000628-00000648       .text Mthd_Delete__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000648-00000668       .text Mthd_Execute__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000668-00000694       .text Mthd_Draw__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000694-000006C0       .text Mthd_IsDelete__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 
