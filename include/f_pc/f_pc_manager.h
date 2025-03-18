@@ -34,8 +34,7 @@ inline s16 fpcM_GetProfName(void* pProc) {
 }
 
 inline fpc_ProcID fpcM_Create(s16 procName, FastCreateReqFunc createFunc, void* params) {
-    return fpcSCtRq_Request(fpcLy_CurrentLayer(), procName, (stdCreateFunc)createFunc, NULL,
-                            params);
+    return fpcSCtRq_Request(fpcLy_CurrentLayer(), procName, (stdCreateFunc)createFunc, NULL, params);
 }
 
 inline s16 fpcM_DrawPriority(void* pProc) {

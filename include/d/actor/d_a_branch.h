@@ -25,8 +25,8 @@ public:
     void set_anim(int, int, int);
     void demoPlay(mDoExt_McaMorf*);
 
-    int CreateHeap();
-    static int solidHeapCB(fopAc_ac_c*);
+    BOOL CreateHeap();
+    static BOOL solidHeapCB(fopAc_ac_c*);
     
     MtxP getJointMtx(const char*);
 

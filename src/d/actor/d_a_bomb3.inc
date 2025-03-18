@@ -751,7 +751,7 @@ void daBomb_c::eff_explode() {
 }
 
 /* 800DB024-800DB630       .text procExplode_init__8daBomb_cFv */
-int daBomb_c::procExplode_init() {
+BOOL daBomb_c::procExplode_init() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.ForceLockOff(fopAcM_GetID(this));
 

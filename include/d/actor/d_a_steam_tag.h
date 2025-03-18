@@ -29,7 +29,7 @@ public:
     inline BOOL execute();
 
     const daSteamTag_mData* getData();
-    s32 CreateInit();
+    BOOL CreateInit();
     BOOL createEmitter();
     bool endEmitter();
 

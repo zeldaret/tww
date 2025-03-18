@@ -7,12 +7,12 @@
 #include "d/d_procname.h"
 
 /* 00000078-00000240       .text CreateHeap__Q210daObjMkiek5Act_cFv */
-void daObjMkiek::Act_c::CreateHeap() {
+BOOL daObjMkiek::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000240-00000314       .text Create__Q210daObjMkiek5Act_cFv */
-s32 daObjMkiek::Act_c::Create() {
+BOOL daObjMkiek::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daObjMkiek::Act_c::demo() {
 }
 
 /* 00000C1C-00000D00       .text Execute__Q210daObjMkiek5Act_cFPPA3_A4_f */
-void daObjMkiek::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjMkiek::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

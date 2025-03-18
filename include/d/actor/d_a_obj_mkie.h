@@ -1,10 +1,10 @@
 #ifndef D_A_OBJ_MKIE_H
 #define D_A_OBJ_MKIE_H
 
-#include "f_op/f_op_actor.h"
+#include "d/d_bg_s_movebg_actor.h"
 
 namespace daObjMkie {
-    class Act_c : public fopAc_ac_c {
+    class Act_c : public dBgS_MoveBgActor {
     public:
         static u32 prm_make(u8 eventId, int swNo) {
             return swNo << 0x10 | (eventId | 0x3000);
@@ -20,12 +20,12 @@ namespace daObjMkie {
         void prm_get_swSave() const {}
         void prm_get_type() const {}
     
-        void CreateHeap();
+        virtual BOOL CreateHeap();
         void init_cc();
         void set_cc_pos();
-        s32 Create();
+        virtual BOOL Create();
         cPhs_State Mthd_Create();
-        BOOL Delete();
+        virtual BOOL Delete();
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
@@ -40,11 +40,11 @@ namespace daObjMkie {
         void mode_demo_init();
         void mode_demo();
         void mode_proc_call();
-        void Execute(float(**)[3][4]);
-        BOOL Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
     
     public:
-        /* 0x290 */ u8 m290[0xF58 - 0x290];
+        /* 0x2C8 */ u8 m2C8[0xF58 - 0x2C8];
         /* 0xF58 */ u8 mF58;
         /* 0xF59 */ u8 mF59[0xF64 - 0xF59];
     };

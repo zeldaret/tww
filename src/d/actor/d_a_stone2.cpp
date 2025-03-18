@@ -27,12 +27,12 @@ void daStone2::Act_c::on_switch() const {
 }
 
 /* 00000638-00000704       .text CreateHeap__Q28daStone25Act_cFv */
-void daStone2::Act_c::CreateHeap() {
+BOOL daStone2::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000704-000009C8       .text Create__Q28daStone25Act_cFv */
-s32 daStone2::Act_c::Create() {
+BOOL daStone2::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -227,7 +227,7 @@ void daStone2::Act_c::demo_proc_call() {
 }
 
 /* 000023BC-00002574       .text Execute__Q28daStone25Act_cFPPA3_A4_f */
-void daStone2::Act_c::Execute(float(**)[3][4]) {
+BOOL daStone2::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

@@ -19,7 +19,7 @@ namespace daObjEkskz {
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
-        virtual BOOL Execute(float(**)[3][4]);
+        virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
     
     public:

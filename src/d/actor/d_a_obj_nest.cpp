@@ -7,12 +7,12 @@
 #include "d/d_procname.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q29daObjNest5Act_cFv */
-void daObjNest::Act_c::CreateHeap() {
+BOOL daObjNest::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 0000012C-000001F0       .text Create__Q29daObjNest5Act_cFv */
-s32 daObjNest::Act_c::Create() {
+BOOL daObjNest::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daObjNest::Act_c::vib_proc() {
 }
 
 /* 0000070C-0000075C       .text Execute__Q29daObjNest5Act_cFPPA3_A4_f */
-void daObjNest::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjNest::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

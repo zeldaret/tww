@@ -13,12 +13,12 @@ static BOOL nodeCallBack(J3DNode*, int) {
 }
 
 /* 0000012C-0000026C       .text CreateHeap__Q210daObjHami35Act_cFv */
-void daObjHami3::Act_c::CreateHeap() {
+BOOL daObjHami3::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 0000026C-00000354       .text Create__Q210daObjHami35Act_cFv */
-s32 daObjHami3::Act_c::Create() {
+BOOL daObjHami3::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -78,7 +78,7 @@ void daObjHami3::Act_c::daObjHami3_close_demo() {
 }
 
 /* 00000934-000009F4       .text Execute__Q210daObjHami35Act_cFPPA3_A4_f */
-void daObjHami3::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjHami3::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

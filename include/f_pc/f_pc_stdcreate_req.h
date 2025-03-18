@@ -5,7 +5,7 @@
 
 typedef struct layer_class layer_class;
 
-typedef BOOL (*stdCreateFunc)(void*, void*);
+typedef int (*stdCreateFunc)(void*, void*);
 
 typedef struct standard_create_request_class {
     /* 0x00 */ create_request base;
@@ -25,6 +25,6 @@ cPhs_State fpcSCtRq_phase_Done(standard_create_request_class*);
 cPhs_State fpcSCtRq_Handler(standard_create_request_class* pStdCreateReq);
 BOOL fpcSCtRq_Delete(standard_create_request_class*);
 BOOL fpcSCtRq_Cancel(standard_create_request_class*);
-fpc_ProcID fpcSCtRq_Request(layer_class* param_1, s16 param_2, stdCreateFunc param_3, void* param_4, void* param_5);
+fpc_ProcID fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc i_createFunc, void* param_4, void* i_append);
 
 #endif

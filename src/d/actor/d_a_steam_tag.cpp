@@ -60,7 +60,7 @@ const daSteamTag_mData* daSteamTag_c::getData() {
 }
 
 /* 00000084-0000029C       .text CreateInit__12daSteamTag_cFv */
-s32 daSteamTag_c::CreateInit() {
+BOOL daSteamTag_c::CreateInit() {
     m29B = daSteamTag_prm::getSchBit(this);
     mEmitTimer = getData()->emit_time_min + cM_rndF(getData()->emit_time_range);
     mCreateTimer = cM_rndF(getData()->create_time_range);;

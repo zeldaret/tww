@@ -7,12 +7,12 @@
 #include "d/d_procname.h"
 
 /* 00000078-00000644       .text CreateHeap__Q29daObjTide5Act_cFv */
-void daObjTide::Act_c::CreateHeap() {
+BOOL daObjTide::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 0000068C-000007BC       .text Create__Q29daObjTide5Act_cFv */
-s32 daObjTide::Act_c::Create() {
+BOOL daObjTide::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -142,7 +142,7 @@ void daObjTide::Act_c::se_pos_up() {
 }
 
 /* 00001B78-00001C84       .text Execute__Q29daObjTide5Act_cFPPA3_A4_f */
-void daObjTide::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjTide::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

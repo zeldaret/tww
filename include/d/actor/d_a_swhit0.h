@@ -24,7 +24,7 @@ public:
     BOOL CreateHeap();
     void decisionRtType();
     
-    s32 CreateInit();
+    BOOL CreateInit();
     cPhs_State create();
 
     s32 checkHit();

@@ -1,12 +1,13 @@
 #ifndef D_A_OBJ_PIRATESHIP_H
 #define D_A_OBJ_PIRATESHIP_H
 
+#include "d/d_bg_s_movebg_actor.h"
 #include "f_op/f_op_actor.h"
 
 namespace daObjPirateship {
     f32 getShipOffsetY(s16*, s16*, f32);
     
-    class Act_c : public fopAc_ac_c {
+    class Act_c : public dBgS_MoveBgActor {
     public:
         inline cPhs_State _create();
         inline bool _delete();
@@ -18,18 +19,18 @@ namespace daObjPirateship {
         void pirateCreate(int*);
         void partsCreate();
         void sound_proc();
-        void CreateHeap();
+        virtual BOOL CreateHeap();
         void CreateWave();
         void SetWave();
         void DeleteWave();
-        s32 Create();
-        void Execute(float(**)[3][4]);
-        BOOL Draw();
-        BOOL Delete();
+        virtual BOOL Create();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
+        virtual BOOL Delete();
         void demo_move();
     
     public:
-        /* 0x290 */ u8 m290[0x2CC - 0x290];
+        /* 0x2C8 */ u8 m2C8[0x2CC - 0x2C8];
         /* 0x2CC */ u8 m2CC;
         /* 0x2CD */ u8 m2CD[0x2CE - 0x2CD];
         /* 0x2CE */ u8 m2CE;

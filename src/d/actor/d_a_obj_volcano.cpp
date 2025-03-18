@@ -17,12 +17,12 @@ void daObjVolcano::Act_c::StopFire() {
 }
 
 /* 00000470-00000758       .text CreateHeap__Q212daObjVolcano5Act_cFv */
-void daObjVolcano::Act_c::CreateHeap() {
+BOOL daObjVolcano::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000758-000009C8       .text Create__Q212daObjVolcano5Act_cFv */
-s32 daObjVolcano::Act_c::Create() {
+BOOL daObjVolcano::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -92,7 +92,7 @@ void daObjVolcano::Act_c::daObjVolcano_fail_demo_main() {
 }
 
 /* 00001740-0000199C       .text Execute__Q212daObjVolcano5Act_cFPPA3_A4_f */
-void daObjVolcano::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjVolcano::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

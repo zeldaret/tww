@@ -42,7 +42,7 @@ void daObjEkskz::Act_c::init_mtx() {
 }
 
 /* 00000DC0-00000FFC       .text Execute__Q210daObjEkskz5Act_cFPPA3_A4_f */
-BOOL daObjEkskz::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjEkskz::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

@@ -15,7 +15,7 @@ public:
     void set_mtx();
     void set_wind_length(f32);
     void set_cps(f32);
-    virtual int Execute(Mtx**);
+    virtual BOOL Execute(Mtx**);
     virtual BOOL Draw();
 
 public:

@@ -456,7 +456,7 @@ const DynamicNameTableEntry DynamicNameTable[] = {
 };
 
 /* 800227A0-800229E0       .text cCc_Init__Fv */
-s32 cCc_Init() {
+BOOL cCc_Init() {
     JUT_ASSERT(0x2a, !DMC_initialized);
 
     JKRSolidHeap * pHeap = JKRSolidHeap::create(0x5648, mDoExt_getArchiveHeap(), false);

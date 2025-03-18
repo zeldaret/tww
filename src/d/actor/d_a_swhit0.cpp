@@ -138,7 +138,7 @@ void daSwhit0_c::decisionRtType() {
 }
 
 /* 00000270-000004E8       .text CreateInit__10daSwhit0_cFv */
-s32 daSwhit0_c::CreateInit() {
+BOOL daSwhit0_c::CreateInit() {
     setDrawMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     decisionRtType();

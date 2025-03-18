@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-00000250       .text CreateHeap__Q29daObjMkie5Act_cFv */
-void daObjMkie::Act_c::CreateHeap() {
+BOOL daObjMkie::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daObjMkie::Act_c::set_cc_pos() {
 }
 
 /* 00000420-00000568       .text Create__Q29daObjMkie5Act_cFv */
-s32 daObjMkie::Act_c::Create() {
+BOOL daObjMkie::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -107,7 +107,7 @@ void daObjMkie::Act_c::mode_proc_call() {
 }
 
 /* 000013DC-000014A0       .text Execute__Q29daObjMkie5Act_cFPPA3_A4_f */
-void daObjMkie::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjMkie::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

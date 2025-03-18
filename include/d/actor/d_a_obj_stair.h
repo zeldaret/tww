@@ -1,9 +1,9 @@
 #ifndef D_A_OBJ_STAIR_H
 #define D_A_OBJ_STAIR_H
 
-#include "f_op/f_op_actor.h"
+#include "d/d_bg_s_movebg_actor.h"
 
-class daObj_Stair_c : public fopAc_ac_c {
+class daObj_Stair_c : public dBgS_MoveBgActor {
 public:
     inline cPhs_State _create();
     inline bool _delete();
@@ -11,11 +11,11 @@ public:
     inline bool _execute();
     void set_mtx() {}
 
-    void CreateHeap();
-    s32 Create();
-    void Execute(float(**)[3][4]);
-    BOOL Draw();
-    BOOL Delete();
+    virtual BOOL CreateHeap();
+    virtual BOOL Create();
+    virtual BOOL Execute(Mtx**);
+    virtual BOOL Draw();
+    virtual BOOL Delete();
 
 public:
     /* Place member variables here */

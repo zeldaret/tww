@@ -102,7 +102,7 @@ BOOL daFan_c::CreateHeap() {
     return TRUE;
 }
 
-static int nodeCallBack(J3DNode*, int);
+static BOOL nodeCallBack(J3DNode*, int);
 
 /* 0000040C-00000640       .text Create__7daFan_cFv */
 BOOL daFan_c::Create() {
@@ -135,7 +135,7 @@ BOOL daFan_c::Create() {
 }
 
 /* 00000640-000006F4       .text nodeCallBack__FP7J3DNodei */
-static int nodeCallBack(J3DNode* node, int calcTiming) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         u32 jntNo = joint->getJntNo();
@@ -209,7 +209,7 @@ void daFan_c::set_cps(f32 h) {
 }
 
 /* 00000E54-00001088       .text Execute__7daFan_cFPPA3_A4_f */
-int daFan_c::Execute(Mtx** mtxP) {
+BOOL daFan_c::Execute(Mtx** mtxP) {
     s16 speed = m_fan_speed[mType];
     f32 len = mFanSpeed / (f32)speed;
 

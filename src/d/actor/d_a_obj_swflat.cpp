@@ -12,12 +12,12 @@ daObjSwflat_HIO_c::daObjSwflat_HIO_c() {
 }
 
 /* 00000138-00000280       .text CreateHeap__Q211daObjSwflat5Act_cFv */
-void daObjSwflat::Act_c::CreateHeap() {
+BOOL daObjSwflat::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 000002C8-00000630       .text Create__Q211daObjSwflat5Act_cFv */
-s32 daObjSwflat::Act_c::Create() {
+BOOL daObjSwflat::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daObjSwflat::Act_c::init_mtx() {
 }
 
 /* 00000B20-0000121C       .text Execute__Q211daObjSwflat5Act_cFPPA3_A4_f */
-void daObjSwflat::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjSwflat::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

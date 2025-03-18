@@ -236,7 +236,7 @@ void daGhostship_c::getArg() {
 }
 
 /* 00000C8C-00000DFC .text daGhostshipCreate__FPv */
-static s32 daGhostshipCreate(void* i_actor) {
+static cPhs_State daGhostshipCreate(void* i_actor) {
     daGhostship_c* i_this = static_cast<daGhostship_c*>(i_actor);
     fopAcM_SetupActor(i_this, daGhostship_c);
 

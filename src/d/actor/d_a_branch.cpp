@@ -54,13 +54,13 @@ void daBranch_c::demoPlay(mDoExt_McaMorf* morf) {
 }
 
 /* 00000228-00000248       .text solidHeapCB__10daBranch_cFP10fopAc_ac_c */
-int daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
+BOOL daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
     daBranch_c* branch = static_cast<daBranch_c*>(i_this);
     return branch->CreateHeap();
 }
 
 /* 00000248-0000049C       .text CreateHeap__10daBranch_cFv */
-int daBranch_c::CreateHeap() {
+BOOL daBranch_c::CreateHeap() {
     int bmd[] = { KWOOD_00_BMD_WS, KWOOD_00_BMD_WB };
     int bck[] = { KWOOD_00_BCK_SWING02, KWOOD_00_BCK_BREAK };
     int bas[] = { KWOOD_00_BAS_SWING02, KWOOD_00_BAS_BREAK };

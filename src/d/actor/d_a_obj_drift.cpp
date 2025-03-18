@@ -7,12 +7,12 @@
 #include "d/d_procname.h"
 
 /* 000000EC-000001A0       .text CreateHeap__Q210daObjDrift5Act_cFv */
-void daObjDrift::Act_c::CreateHeap() {
+BOOL daObjDrift::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 000001A0-00000370       .text Create__Q210daObjDrift5Act_cFv */
-s32 daObjDrift::Act_c::Create() {
+BOOL daObjDrift::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -87,7 +87,7 @@ void daObjDrift::Act_c::set_current() {
 }
 
 /* 00001104-000011D0       .text Execute__Q210daObjDrift5Act_cFPPA3_A4_f */
-void daObjDrift::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjDrift::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

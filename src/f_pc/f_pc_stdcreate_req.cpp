@@ -54,7 +54,8 @@ cPhs_State fpcSCtRq_phase_IsComplete(standard_create_request_class* i_SCtReq) {
 
 /* 80040794-800407E4       .text fpcSCtRq_phase_PostMethod__FP29standard_create_request_class */
 cPhs_State fpcSCtRq_phase_PostMethod(standard_create_request_class* i_SCtReq) {
-    if (i_SCtReq->mpCallBack != NULL && i_SCtReq->mpCallBack(i_SCtReq->base.mpRes, i_SCtReq->mpCallBackUserData) == FALSE) {
+    if (i_SCtReq->mpCallBack != NULL &&
+        i_SCtReq->mpCallBack(i_SCtReq->base.mpRes, i_SCtReq->mpCallBackUserData) == 0) {
         return cPhs_INIT_e;
     } else {
         return cPhs_NEXT_e;

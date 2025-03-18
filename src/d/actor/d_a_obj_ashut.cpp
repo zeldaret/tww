@@ -7,12 +7,12 @@
 #include "d/d_procname.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjAshut5Act_cFv */
-void daObjAshut::Act_c::CreateHeap() {
+BOOL daObjAshut::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 0000012C-00000224       .text Create__Q210daObjAshut5Act_cFv */
-s32 daObjAshut::Act_c::Create() {
+BOOL daObjAshut::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -97,7 +97,7 @@ void daObjAshut::Act_c::mode_demoreq() {
 }
 
 /* 00000BE4-00000D0C       .text Execute__Q210daObjAshut5Act_cFPPA3_A4_f */
-void daObjAshut::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjAshut::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 

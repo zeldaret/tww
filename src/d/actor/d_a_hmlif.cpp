@@ -17,12 +17,12 @@ void daHmlif_c::daHmlifDelete() {
 }
 
 /* 000000D8-0000042C       .text CreateHeap__9daHmlif_cFv */
-void daHmlif_c::CreateHeap() {
+BOOL daHmlif_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000474-000007C8       .text Create__9daHmlif_cFv */
-s32 daHmlif_c::Create() {
+BOOL daHmlif_c::Create() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daHmlif_c::set_mtx() {
 }
 
 /* 00000B80-00000BE4       .text Execute__9daHmlif_cFPPA3_A4_f */
-void daHmlif_c::Execute(float(**)[3][4]) {
+BOOL daHmlif_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
