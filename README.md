@@ -103,7 +103,7 @@ We have a shared Ghidra project for TWW already set up. To get access to this se
 
 Then wait for an admin to approve your request. Once you have access, you can set up the Ghidra project like so:
 
-* To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/de/temurin/releases/).
+* To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/temurin/releases/).
 * Download the RootCubed Ghidra build ghidra_11.1_DEV_20240115 from [here](https://rootcubed.dev/ghidra_builds/).
 * Launch Ghidra with `ghidraRun`.
 * In Ghidra, go to `File -> New Project...`. Select `Shared Project` and input the following information:
