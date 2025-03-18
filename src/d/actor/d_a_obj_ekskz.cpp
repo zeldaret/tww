@@ -7,17 +7,17 @@
 #include "d/d_procname.h"
 
 /* 00000078-00000368       .text CreateHeap__Q210daObjEkskz5Act_cFv */
-int daObjEkskz::Act_c::CreateHeap() {
+BOOL daObjEkskz::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000368-0000054C       .text Create__Q210daObjEkskz5Act_cFv */
-int daObjEkskz::Act_c::Create() {
+BOOL daObjEkskz::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 0000054C-00000684       .text Mthd_Create__Q210daObjEkskz5Act_cFv */
-void daObjEkskz::Act_c::Mthd_Create() {
+cPhs_State daObjEkskz::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjEkskz::Act_c::Delete() {
 }
 
 /* 00000C64-00000CBC       .text Mthd_Delete__Q210daObjEkskz5Act_cFv */
-void daObjEkskz::Act_c::Mthd_Delete() {
+BOOL daObjEkskz::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daObjEkskz::Act_c::init_mtx() {
 }
 
 /* 00000DC0-00000FFC       .text Execute__Q210daObjEkskz5Act_cFPPA3_A4_f */
-int daObjEkskz::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjEkskz::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -54,27 +54,27 @@ BOOL daObjEkskz::Act_c::Draw() {
 namespace daObjEkskz {
 namespace {
 /* 00001124-00001144       .text Mthd_Create__Q210daObjEkskz27@unnamed@d_a_obj_ekskz_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001144-00001164       .text Mthd_Delete__Q210daObjEkskz27@unnamed@d_a_obj_ekskz_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001164-00001184       .text Mthd_Execute__Q210daObjEkskz27@unnamed@d_a_obj_ekskz_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001184-000011B0       .text Mthd_Draw__Q210daObjEkskz27@unnamed@d_a_obj_ekskz_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000011B0-000011DC       .text Mthd_IsDelete__Q210daObjEkskz27@unnamed@d_a_obj_ekskz_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

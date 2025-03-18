@@ -147,7 +147,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00002D60-00002ECC       .text _create__12daNpc_Bmsw_cFv */
-s32 daNpc_Bmsw_c::_create() {
+cPhs_State daNpc_Bmsw_c::_create() {
     /* Nonmatching */
 }
 
@@ -252,7 +252,7 @@ void SwCam_c::Move() {
 }
 
 /* 00004D0C-00004D2C       .text daNpc_Bmsw_Create__FP10fopAc_ac_c */
-static s32 daNpc_Bmsw_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_Bmsw_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -19,7 +19,7 @@ bool daDummy::Act_c::create_heap() {
 }
 
 /* 000000A4-0000015C       .text _create__Q27daDummy5Act_cFv */
-s32 daDummy::Act_c::_create() {  
+cPhs_State daDummy::Act_c::_create() {  
     fopAcM_SetupActor(this, Act_c);
 
     if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
@@ -54,7 +54,7 @@ bool daDummy::Act_c::_draw() {
 
 namespace daDummy {
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->_create();
         }
         

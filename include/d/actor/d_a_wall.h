@@ -13,7 +13,7 @@ public:
     bool _delete();
     BOOL CreateHeap();
     void CreateInit();
-    s32 _create();
+    cPhs_State _create();
     void set_mtx();
     void setMoveBGMtx();
     bool _execute();

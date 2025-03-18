@@ -113,7 +113,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00004364-000046F4       .text daKi_Create__FP10fopAc_ac_c */
-static s32 daKi_Create(fopAc_ac_c*) {
+static cPhs_State daKi_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

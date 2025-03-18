@@ -34,8 +34,8 @@ BOOL daObjVmsdz_c::create_heap() {
 }
 
 /* 0000015C-00000208       .text _create__12daObjVmsdz_cFv */
-s32 daObjVmsdz_c::_create() {
-    s32 ret = cPhs_ERROR_e;
+cPhs_State daObjVmsdz_c::_create() {
+    cPhs_State ret = cPhs_ERROR_e;
 
     fopAcM_SetupActor(this, daObjVmsdz_c);
 
@@ -80,7 +80,7 @@ bool daObjVmsdz_c::_draw() {
 
 namespace {
 /* 00000300-00000320       .text Mthd_Create__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((daObjVmsdz_c*)i_ac)->_create();
 }
 

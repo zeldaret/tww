@@ -26,8 +26,8 @@ namespace daObjSwpush {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         void create_res_load();
-        void Mthd_Create();
-        void Mthd_Delete();
+        cPhs_State Mthd_Create();
+        BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void set_btp_frame();
@@ -55,8 +55,8 @@ namespace daObjSwpush {
         void demo_reqSw();
         void demo_runSw_init();
         void demo_runSw();
-        void Mthd_Execute();
-        void Mthd_Draw();
+        BOOL Mthd_Execute();
+        BOOL Mthd_Draw();
     
     public:
         /* Place member variables here */

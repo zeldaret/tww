@@ -202,26 +202,26 @@ void dDlst_2DCopy_c::draw() {
 }
 
 /* 801EA0C8-801EA224       .text dMsg2_Draw__FP14sub_msg2_class */
-static void dMsg2_Draw(sub_msg2_class*) {
+static BOOL dMsg2_Draw(sub_msg2_class*) {
     /* Nonmatching */
 }
 
 /* 801EA224-801EA7C4       .text dMsg2_Execute__FP14sub_msg2_class */
-static void dMsg2_Execute(sub_msg2_class*) {
+static BOOL dMsg2_Execute(sub_msg2_class*) {
     /* Nonmatching */
 }
 
 /* 801EA7C4-801EA7CC       .text dMsg2_IsDelete__FP14sub_msg2_class */
-static void dMsg2_IsDelete(sub_msg2_class*) {
+static BOOL dMsg2_IsDelete(sub_msg2_class*) {
     /* Nonmatching */
 }
 
 /* 801EA7CC-801EA97C       .text dMsg2_Delete__FP14sub_msg2_class */
-static void dMsg2_Delete(sub_msg2_class*) {
+static BOOL dMsg2_Delete(sub_msg2_class*) {
     /* Nonmatching */
 }
 
 /* 801EA97C-801EAFC0       .text dMsg2_Create__FP9msg_class */
-static void dMsg2_Create(msg_class*) {
+static cPhs_State dMsg2_Create(msg_class*) {
     /* Nonmatching */
 }

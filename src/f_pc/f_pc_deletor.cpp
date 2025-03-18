@@ -38,77 +38,75 @@ void fpcDt_Handler(void) {
 }
 
 /* 8003D34C-8003D3C8       .text fpcDt_ToQueue__FP18base_process_class */
-s32 fpcDt_ToQueue(base_process_class* i_proc) {
-    if (i_proc->mUnk0 != 1 && fpcBs_IsDelete(i_proc) == 1) {
+BOOL fpcDt_ToQueue(base_process_class* i_proc) {
+    if (i_proc->mUnk0 != 1 && fpcBs_IsDelete(i_proc) == TRUE) {
         if (fpcPi_IsInQueue(&i_proc->mPi) == 1) {
             fpcPi_Delete(&i_proc->mPi);
         }
         i_proc->mDtTg.mpLayer = i_proc->mLyTg.mpLayer;
         fpcDtTg_ToDeleteQ(&i_proc->mDtTg);
         fpcLy_DeletingMesg(i_proc->mLyTg.mpLayer);
-        return 1;
+        return TRUE;
     } else {
-        return 0;
+        return FALSE;
     }
 }
 
 /* 8003D3C8-8003D51C       .text fpcDt_ToDeleteQ__FP18base_process_class */
-s32 fpcDt_ToDeleteQ(base_process_class* i_proc) {
+BOOL fpcDt_ToDeleteQ(base_process_class* i_proc) {
     if (i_proc->mUnk0 == 1) {
-        return 0;
+        return FALSE;
     } else {
         if (cTg_IsUse(&i_proc->mDtTg.base) != 0) {
-            return 1;
+            return TRUE;
         } else {
             if (fpcBs_Is_JustOfType(g_fpcNd_type, i_proc->mSubType)) {
                 process_node_class* procNode = (process_node_class*)i_proc;
-                if (fpcNd_IsDeleteTiming(procNode) == 0) {
-                    return 0;
+                if (fpcNd_IsDeleteTiming(procNode) == FALSE) {
+                    return FALSE;
                 } else {
                     layer_class* layer = &procNode->mLayer;
 
                     if (!fpcLy_Cancel(layer))
                         JUT_ASSERT(196, FALSE);
 
-                    if (fpcLyIt_OnlyHereLY(layer, (fpcLyIt_OnlyHereFunc)fpcDt_ToDeleteQ, NULL) == 0) {
-                        return 0;
+                    if (fpcLyIt_OnlyHereLY(layer, (fpcLyIt_OnlyHereFunc)fpcDt_ToDeleteQ, NULL) == FALSE) {
+                        return FALSE;
                     }
                 }
             }
 
-            if (fpcDt_ToQueue(i_proc) == 1) {
-                // return type has to be BOOL
-                if (fpcEx_IsExist(i_proc->mBsPcId) == 1) {
-                    if (fpcEx_ExecuteQTo(i_proc) == 0) {
-                        return 0;
+            if (fpcDt_ToQueue(i_proc) == TRUE) {
+                if (fpcEx_IsExist(i_proc->mBsPcId) == TRUE) {
+                    if (fpcEx_ExecuteQTo(i_proc) == FALSE) {
+                        return FALSE;
                     }
                 } else {
-                    // return type is wrong, has to be BOOL
-                    if (fpcCt_Abort(i_proc) == 0) {
-                        return 0;
+                    if (fpcCt_Abort(i_proc) == FALSE) {
+                        return FALSE;
                     }
                 }
                 i_proc->mInitState = 3;
-                return 1;
+                return TRUE;
             } else {
-                return 0;
+                return FALSE;
             }
         }
     }
 }
 
 /* 8003D51C-8003D580       .text fpcDt_Delete__FPv */
-s32 fpcDt_Delete(void* i_proc) {
+BOOL fpcDt_Delete(void* i_proc) {
     base_process_class* proc = static_cast<base_process_class*>(i_proc);
     if (proc != NULL) {
-        if (fpcCt_IsDoing(proc) == 1)
-            return 0;
+        if (fpcCt_IsDoing(proc) == TRUE)
+            return FALSE;
 
         if (proc->mInitState == 3)
-            return 0;
+            return FALSE;
 
         return fpcDt_ToDeleteQ(proc);
     } else {
-        return 1;
+        return TRUE;
     }
 }

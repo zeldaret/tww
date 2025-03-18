@@ -28,7 +28,7 @@ BOOL daObjDmgroom_c::CreateHeap() {
 
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BRK_DMGROOM));
     JUT_ASSERT(0x5c, brk != NULL);
-    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
         return FALSE;
 
     return TRUE;
@@ -50,10 +50,10 @@ void daObjDmgroom_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daObjDmgroom_c::_create() {
+cPhs_State daObjDmgroom_c::_create() {
     fopAcM_SetupActor(this, daObjDmgroom_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, "Dmgroom");
+    cPhs_State ret = dComIfG_resLoad(&mPhs, "Dmgroom");
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460) == 0) {
@@ -93,7 +93,7 @@ bool daObjDmgroom_c::_draw() {
 }
 
 /* 000002EC-000003B4       .text daObjDmgroom_Create__FPv */
-static s32 daObjDmgroom_Create(void* i_this) {
+static cPhs_State daObjDmgroom_Create(void* i_this) {
     return ((daObjDmgroom_c*)i_this)->_create();
 }
 

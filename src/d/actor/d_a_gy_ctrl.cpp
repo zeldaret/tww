@@ -137,7 +137,7 @@ void daGy_Ctrl_c::checkGyCtrlExist() {
 }
 
 /* 00001458-000016AC       .text _create__11daGy_Ctrl_cFv */
-s32 daGy_Ctrl_c::_create() {
+cPhs_State daGy_Ctrl_c::_create() {
     /* Nonmatching */
 }
 

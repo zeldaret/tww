@@ -47,7 +47,7 @@ bool daObjGong::Act_c::create_heap() {
         modelData,
         NULL, NULL,
         bck,
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 0,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0,
         NULL,
         0x00000000,
         0x11020203
@@ -69,10 +69,10 @@ bool daObjGong::Act_c::create_heap() {
 }
 
 /* 0000028C-00000374       .text _create__Q29daObjGong5Act_cFv */
-s32 daObjGong::Act_c::_create() {
+cPhs_State daObjGong::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
@@ -134,7 +134,7 @@ bool daObjGong::Act_c::_draw() {
 namespace daObjGong {
     namespace {
         /* 00000580-000005A0       .text Mthd_Create__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

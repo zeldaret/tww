@@ -18,7 +18,7 @@ public:
     static BOOL solidHeapCB(fopAc_ac_c*);
     BOOL create_bdl_brk(int);
     BOOL create_heap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     s32 get_start_demo_idx();
     BOOL check_fin();

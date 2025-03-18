@@ -95,7 +95,7 @@ BOOL daTori_Flag_c::CreateHeap() {
 }
 
 /* 0000030C-000003A4       .text CreateInit__13daTori_Flag_cFv */
-s32 daTori_Flag_c::CreateInit() {
+cPhs_State daTori_Flag_c::CreateInit() {
     mStts.Init(0xFF,0xFF,this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
@@ -106,13 +106,13 @@ s32 daTori_Flag_c::CreateInit() {
     set_mtx();
     dKy_tevstr_init(&mClothTevStr, current.roomNo, 0xFF);
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    return 4;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000003C4-00000478       .text _create__13daTori_Flag_cFv */
-s32 daTori_Flag_c::_create() {
+cPhs_State daTori_Flag_c::_create() {
     fopAcM_SetupActor(this, daTori_Flag_c);
-    int result = dComIfG_resLoad(&mPhsTrflag, M_arcname);
+    cPhs_State result = dComIfG_resLoad(&mPhsTrflag, M_arcname);
     if (result != cPhs_COMPLEATE_e) {
         return result;
     }

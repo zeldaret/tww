@@ -17,7 +17,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00000664-00000700       .text _create__13daObjKanoke_cFv */
-s32 daObjKanoke_c::_create() {
+cPhs_State daObjKanoke_c::_create() {
     /* Nonmatching */
 }
 

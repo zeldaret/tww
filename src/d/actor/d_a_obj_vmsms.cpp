@@ -34,8 +34,8 @@ BOOL daObjVmsms_c::create_heap() {
 }
 
 /* 0000015C-0000021C       .text _create__12daObjVmsms_cFv */
-s32 daObjVmsms_c::_create() {
-    s32 ret = cPhs_ERROR_e;
+cPhs_State daObjVmsms_c::_create() {
+    cPhs_State ret = cPhs_ERROR_e;
 
     fopAcM_SetupActor(this, daObjVmsms_c);
 
@@ -89,7 +89,7 @@ bool daObjVmsms_c::_draw() {
 
 namespace {
 /* 0000036C-0000038C       .text Mthd_Create__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((daObjVmsms_c*)i_ac)->_create();
 }
 

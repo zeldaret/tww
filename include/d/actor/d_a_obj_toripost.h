@@ -84,7 +84,7 @@ public:
     bool _draw();
     void createInit();
     void getArg();
-    int _create();
+    cPhs_State _create();
     bool _delete();
 
     static const char m_arc_name[];

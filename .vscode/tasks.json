@@ -29,7 +29,7 @@
     {
       "label": "configure",
       "type": "shell",
-      "command": "python configure.py --version ${input:gameVersion}",
+      "command": "${command:python.interpreterPath} configure.py --version ${input:gameVersion}",
       "problemMatcher": [],
     },
   ]

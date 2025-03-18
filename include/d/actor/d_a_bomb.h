@@ -89,7 +89,7 @@ public:
     void eff_explode_normal(const csXyz*);
     void eff_explode_cheap(const csXyz*);
     void eff_explode();
-    int procExplode_init();
+    BOOL procExplode_init();
     bool procExplode();
     bool procCarry_init();
     bool procCarry();
@@ -109,7 +109,7 @@ public:
     void eff_water_splash();
     bool bombDelete();
     BOOL createHeap();
-    int create();
+    cPhs_State create();
     void create_init();
 
     enum State_e {

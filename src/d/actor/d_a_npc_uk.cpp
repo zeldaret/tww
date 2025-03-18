@@ -323,7 +323,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00004D54-00005028       .text _create__10daNpc_Uk_cFv */
-s32 daNpc_Uk_c::_create() {
+cPhs_State daNpc_Uk_c::_create() {
     /* Nonmatching */
 }
 
@@ -333,7 +333,7 @@ void daNpc_Uk_c::CreateHeap() {
 }
 
 /* 00005728-00005748       .text daNpc_Uk_Create__FP10fopAc_ac_c */
-static s32 daNpc_Uk_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_Uk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

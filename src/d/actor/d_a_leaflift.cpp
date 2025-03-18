@@ -148,7 +148,7 @@ void daLlift_c::CreateInit() {
 }
 
 /* 00000634-00000760       .text _create__9daLlift_cFv */
-s32 daLlift_c::_create() {
+cPhs_State daLlift_c::_create() {
     int res;
     fopAcM_SetupActor(this, daLlift_c);
     res = dComIfG_resLoad(&mPhs, m_arcname);
@@ -323,7 +323,7 @@ bool daLlift_c::_draw() {
 }
 
 /* 00001180-000011A0       .text daLlift_Create__FPv */
-static s32 daLlift_Create(void* i_this) {
+static cPhs_State daLlift_Create(void* i_this) {
     return ((daLlift_c*)i_this)->_create();
 }
 

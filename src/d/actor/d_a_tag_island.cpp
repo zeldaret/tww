@@ -446,7 +446,7 @@ BOOL daTag_Island_c::actionWait() {
     return TRUE;
 }
 
-s32 daTag_Island_c::create() {
+cPhs_State daTag_Island_c::create() {
     fopAcM_SetupActor(this, daTag_Island_c);
     s32 swbit = getSwbit();
     makeEvId();
@@ -515,7 +515,7 @@ static BOOL daTag_Island_Delete(daTag_Island_c* i_this) {
 }
 
 /* 000012FC-000013D8       .text daTag_Island_Create__FP10fopAc_ac_c */
-static s32 daTag_Island_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daTag_Island_Create(fopAc_ac_c* i_ac) {
     return ((daTag_Island_c*)i_ac)->create();
 }
 

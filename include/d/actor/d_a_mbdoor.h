@@ -13,7 +13,7 @@ public:
 
     inline BOOL draw();
     inline BOOL execute();
-    s32 create();
+    cPhs_State create();
     
     u8 getSwbit();
     u8 getType();

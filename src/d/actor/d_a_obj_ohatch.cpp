@@ -27,7 +27,7 @@ void daObjOhatch_c::create_heap() {
 }
 
 /* 000003CC-00000548       .text _create__13daObjOhatch_cFv */
-s32 daObjOhatch_c::_create() {
+cPhs_State daObjOhatch_c::_create() {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ bool daObjOhatch_c::_draw() {
 }
 
 /* 00000B64-00000B84       .text daObjOhatch_Create__FP10fopAc_ac_c */
-static s32 daObjOhatch_Create(fopAc_ac_c*) {
+static cPhs_State daObjOhatch_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

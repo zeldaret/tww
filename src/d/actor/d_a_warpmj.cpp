@@ -27,7 +27,7 @@ void daWarpmj_c::CreateInit() {
 }
 
 /* 00000630-00000778       .text _create__10daWarpmj_cFv */
-s32 daWarpmj_c::_create() {
+cPhs_State daWarpmj_c::_create() {
     /* Nonmatching */
 }
 
@@ -122,7 +122,7 @@ bool daWarpmj_c::_draw() {
 }
 
 /* 0000114C-0000116C       .text daWarpmj_Create__FPv */
-static s32 daWarpmj_Create(void*) {
+static cPhs_State daWarpmj_Create(void*) {
     /* Nonmatching */
 }
 

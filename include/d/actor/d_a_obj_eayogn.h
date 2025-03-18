@@ -12,7 +12,7 @@ public:
     // BOOL check_ev_bit() const { return dComIfGs_isSymbol(1); }
     BOOL check_ev_bit() const;
 
-    s32 _create();
+    cPhs_State _create();
     bool _execute();
     bool _draw();
     bool _delete();

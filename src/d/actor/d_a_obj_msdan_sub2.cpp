@@ -7,17 +7,17 @@
 #include "d/d_procname.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q214daObjMsdanSub25Act_cFv */
-void daObjMsdanSub2::Act_c::CreateHeap() {
+BOOL daObjMsdanSub2::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 0000012C-000002E4       .text Create__Q214daObjMsdanSub25Act_cFv */
-s32 daObjMsdanSub2::Act_c::Create() {
+BOOL daObjMsdanSub2::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 000002E4-00000454       .text Mthd_Create__Q214daObjMsdanSub25Act_cFv */
-void daObjMsdanSub2::Act_c::Mthd_Create() {
+cPhs_State daObjMsdanSub2::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjMsdanSub2::Act_c::Delete() {
 }
 
 /* 0000045C-000004A8       .text Mthd_Delete__Q214daObjMsdanSub25Act_cFv */
-void daObjMsdanSub2::Act_c::Mthd_Delete() {
+BOOL daObjMsdanSub2::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daObjMsdanSub2::Act_c::init_mtx() {
 }
 
 /* 00000598-0000090C       .text Execute__Q214daObjMsdanSub25Act_cFPPA3_A4_f */
-void daObjMsdanSub2::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjMsdanSub2::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -54,27 +54,27 @@ BOOL daObjMsdanSub2::Act_c::Draw() {
 namespace daObjMsdanSub2 {
 namespace {
 /* 000009AC-000009CC       .text Mthd_Create__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000009CC-000009EC       .text Mthd_Delete__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000009EC-00000A0C       .text Mthd_Execute__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000A0C-00000A38       .text Mthd_Draw__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000A38-00000A64       .text Mthd_IsDelete__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -1812,7 +1812,7 @@ static BOOL dMeter_Delete(sub_meter_class* i_this) {
 }
 
 /* 80205034-802057B8       .text dMeter_Create__FP9msg_class */
-static s32 dMeter_Create(msg_class* i_this) {
+static cPhs_State dMeter_Create(msg_class* i_this) {
     /* Nonmatching */
     mapAlpha = 0;
     menu_status = 0;

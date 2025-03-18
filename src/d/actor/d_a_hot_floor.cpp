@@ -42,7 +42,7 @@ void daHot_Floor_c::set_mtx() {
 }
 
 /* 00000218-00000264       .text CreateInit__13daHot_Floor_cFv */
-s32 daHot_Floor_c::CreateInit() {
+cPhs_State daHot_Floor_c::CreateInit() {
     mbSpawnParticle = true;
     mSpawnTimer = 0.0f;
     set_mtx_init();
@@ -50,7 +50,7 @@ s32 daHot_Floor_c::CreateInit() {
     return cPhs_COMPLEATE_e;
 }
 
-s32 daHot_Floor_c::_create() {
+cPhs_State daHot_Floor_c::_create() {
     fopAcM_SetupActor(this, daHot_Floor_c);
     return CreateInit();
 }

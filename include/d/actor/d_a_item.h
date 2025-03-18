@@ -43,7 +43,7 @@ public:
     void set_mtx();
     void set_mtx_base(J3DModel*, cXyz, csXyz);
     void CreateInit();
-    s32 _daItem_create();
+    cPhs_State _daItem_create();
     BOOL _daItem_execute();
     void mode_proc_call();
     void execInitNormalDirection();

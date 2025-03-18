@@ -2300,32 +2300,32 @@ void dScnKy_env_light_c::drawKankyo() {
 }
 
 /* 80194888-801948B4       .text dKy_Draw__FP17sub_kankyo__class */
-static int dKy_Draw(sub_kankyo__class*) {
+static BOOL dKy_Draw(sub_kankyo__class*) {
     g_env_light.drawKankyo();
-    return 1;
+    return TRUE;
 }
 
 /* 801948B4-801948E8       .text dKy_Execute__FP17sub_kankyo__class */
-static int dKy_Execute(sub_kankyo__class*) {
+static BOOL dKy_Execute(sub_kankyo__class*) {
     dKy_event_proc();
     g_env_light.exeKankyo();
     dKyw_wind_set();
-    return 1;
+    return TRUE;
 }
 
 /* 801948E8-801948F0       .text dKy_IsDelete__FP17sub_kankyo__class */
-static int dKy_IsDelete(sub_kankyo__class*) {
-    return 1;
+static BOOL dKy_IsDelete(sub_kankyo__class*) {
+    return TRUE;
 }
 
 /* 801948F0-80194914       .text dKy_Delete__FP17sub_kankyo__class */
-static int dKy_Delete(sub_kankyo__class*) {
+static BOOL dKy_Delete(sub_kankyo__class*) {
     plight_init();
-    return 1;
+    return TRUE;
 }
 
 /* 80194914-80194974       .text dKy_Create__FPv */
-static int dKy_Create(void*) {
+static cPhs_State dKy_Create(void*) {
     envcolor_init();
     g_env_light.field_0xc78 = NULL;
     g_env_light.field_0xc44 = 1.0f;

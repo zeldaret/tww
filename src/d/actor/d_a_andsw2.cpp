@@ -183,7 +183,7 @@ BOOL daAndsw2_c::execute() {
     return TRUE;
 }
 
-s32 daAndsw2_c::create() {
+cPhs_State daAndsw2_c::create() {
     int sw = getSwbit();
     
     fopAcM_SetupActor(this, daAndsw2_c);
@@ -249,7 +249,7 @@ static BOOL daAndsw2_Delete(daAndsw2_c* i_this) {
 }
 
 /* 000005AC-00000724       .text daAndsw2_Create__FP10fopAc_ac_c */
-static s32 daAndsw2_Create(fopAc_ac_c* ac) {
+static cPhs_State daAndsw2_Create(fopAc_ac_c* ac) {
     return ((daAndsw2_c*)ac)->create();
 }
 

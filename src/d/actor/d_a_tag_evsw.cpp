@@ -8,7 +8,7 @@
 #include "d/d_com_inf_game.h"
 
 /* 00000078-000001F8       .text _create__Q29daTagEvsw5Act_cFv */
-s32 daTagEvsw::Act_c::_create() {
+cPhs_State daTagEvsw::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
     
     if (dComIfGs_isEventBit(prm_get_eventbitID())) {
@@ -55,7 +55,7 @@ bool daTagEvsw::Act_c::_draw() {
 namespace daTagEvsw {
 namespace {
 /* 00000484-000004A4       .text Mthd_Create__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<Act_c*>(i_this)->_create();
 }
 

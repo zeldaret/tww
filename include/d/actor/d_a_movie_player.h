@@ -106,7 +106,7 @@ static s32 __THPHuffDecodeTab(THPFileInfo* info, THPHuffmanTab* h);
 class daMP_c : public fopAc_ac_c {
 public:
     u32 daMP_c_Get_arg_data();
-    int daMP_c_Init();
+    cPhs_State daMP_c_Init();
     BOOL daMP_c_Finish();
     BOOL daMP_c_Main();
     BOOL daMP_c_Draw();

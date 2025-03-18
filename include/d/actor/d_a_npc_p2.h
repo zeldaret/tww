@@ -68,7 +68,7 @@ public:
     void getArg();
     void _createHeap();
     void createInit();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void cutProc();
     void cutTalkStart(int);

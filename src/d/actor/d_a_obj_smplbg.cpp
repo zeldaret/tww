@@ -7,17 +7,17 @@
 #include "d/d_procname.h"
 
 /* 00000078-00000144       .text CreateHeap__Q211daObjSmplbg5Act_cFv */
-void daObjSmplbg::Act_c::CreateHeap() {
+BOOL daObjSmplbg::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000144-0000032C       .text Create__Q211daObjSmplbg5Act_cFv */
-s32 daObjSmplbg::Act_c::Create() {
+BOOL daObjSmplbg::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 0000032C-00000474       .text Mthd_Create__Q211daObjSmplbg5Act_cFv */
-void daObjSmplbg::Act_c::Mthd_Create() {
+cPhs_State daObjSmplbg::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjSmplbg::Act_c::Delete() {
 }
 
 /* 0000047C-000004D8       .text Mthd_Delete__Q211daObjSmplbg5Act_cFv */
-void daObjSmplbg::Act_c::Mthd_Delete() {
+BOOL daObjSmplbg::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daObjSmplbg::Act_c::exec_qtkhd() {
 }
 
 /* 0000061C-000006CC       .text Execute__Q211daObjSmplbg5Act_cFPPA3_A4_f */
-void daObjSmplbg::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjSmplbg::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -59,27 +59,27 @@ BOOL daObjSmplbg::Act_c::Draw() {
 namespace daObjSmplbg {
 namespace {
 /* 00000764-00000784       .text Mthd_Create__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000784-000007A4       .text Mthd_Delete__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000007A4-000007C4       .text Mthd_Execute__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000007C4-000007F0       .text Mthd_Draw__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000007F0-0000081C       .text Mthd_IsDelete__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

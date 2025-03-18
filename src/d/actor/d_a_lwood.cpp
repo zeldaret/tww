@@ -110,10 +110,10 @@ void daLwood_c::setMoveBGMtx() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
 }
 
-s32 daLwood_c::_create() {
+cPhs_State daLwood_c::_create() {
     fopAcM_SetupActor(this, daLwood_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, m_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x0e40) == 0) {
@@ -149,7 +149,7 @@ bool daLwood_c::_draw() {
 }
 
 /* 000005D8-00000678       .text daLwood_Create__FPv */
-static s32 daLwood_Create(void* i_this) {
+static cPhs_State daLwood_Create(void* i_this) {
     return ((daLwood_c*)i_this)->_create();
 }
 

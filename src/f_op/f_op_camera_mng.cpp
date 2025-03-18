@@ -16,8 +16,8 @@ u32 fopCamM_GetParam(camera_class* i_this) {
 }
 
 /* 80029470-800294D4       .text fopCamM_Create__FisPv */
-fpc_ProcID fopCamM_Create(int i_cameraIdx, s16 i_procName, void* param_3) {
-    l_fopCamM_id[i_cameraIdx] = fpcSCtRq_Request(fpcLy_CurrentLayer(), i_procName, 0, 0, param_3);
+fpc_ProcID fopCamM_Create(int i_cameraIdx, s16 i_procName, void* i_append) {
+    l_fopCamM_id[i_cameraIdx] = fpcSCtRq_Request(fpcLy_CurrentLayer(), i_procName, NULL, NULL, i_append);
     return l_fopCamM_id[i_cameraIdx];
 }
 

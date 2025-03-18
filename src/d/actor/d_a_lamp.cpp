@@ -177,11 +177,11 @@ static BOOL daLamp_solidHeapCB(fopAc_ac_c* i_ac) {
 }
 
 /* 0000075C-00000914       .text daLamp_Create__FP10fopAc_ac_c */
-static int daLamp_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daLamp_Create(fopAc_ac_c* i_ac) {
     fopAcM_SetupActor(i_ac, lamp_class);
     lamp_class* i_this = (lamp_class*)i_ac;
 
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "Lamp");
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Lamp");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(i_this, &daLamp_solidHeapCB, 0x6040)) {
             i_this->mParameters = fopAcM_GetParam(i_this);

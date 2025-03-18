@@ -47,7 +47,7 @@ void daObjHami4_c::daObjHami4_open_stop() {
 }
 
 /* 000007B0-00000870       .text daObjHami4_Create__FPv */
-static s32 daObjHami4_Create(void*) {
+static cPhs_State daObjHami4_Create(void*) {
     /* Nonmatching */
 }
 

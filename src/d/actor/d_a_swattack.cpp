@@ -57,7 +57,7 @@ void daSwAt_c::CreateInit() {
 }
 
 /* 00000120-0000020C       .text _create__8daSwAt_cFv */
-s32 daSwAt_c::_create() {
+cPhs_State daSwAt_c::_create() {
     fopAcM_SetupActor(this, daSwAt_c);
     CreateInit();
     return cPhs_COMPLEATE_e;
@@ -127,7 +127,7 @@ bool daSwAt_c::_draw() {
 }
 
 /* 00000564-00000584       .text daSwAt_Create__FPv */
-static s32 daSwAt_Create(void* i_this) {
+static cPhs_State daSwAt_Create(void* i_this) {
     return ((daSwAt_c*)i_this)->_create();
 }
 

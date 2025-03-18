@@ -15,7 +15,7 @@ public:
     void co_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     void break_proc();
     void set_se();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     bool _execute();
     bool _draw();

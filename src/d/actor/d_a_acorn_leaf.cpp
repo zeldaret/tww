@@ -32,7 +32,7 @@ void daAleaf_c::create_acorn_sub(bool) {
 }
 
 /* 0000049C-000005EC       .text _create__9daAleaf_cFv */
-s32 daAleaf_c::_create() {
+cPhs_State daAleaf_c::_create() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ bool daAleaf_c::_draw() {
 }
 
 /* 00000CD4-00000CF4       .text daAleaf_Create__FPv */
-static s32 daAleaf_Create(void*) {
+static cPhs_State daAleaf_Create(void*) {
     /* Nonmatching */
 }
 

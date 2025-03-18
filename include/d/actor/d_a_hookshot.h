@@ -47,7 +47,7 @@ public:
     BOOL procReturn();
     BOOL execute();
     BOOL hookshot_delete();
-    s32 create();
+    cPhs_State create();
 
 public:
     /* 0x290 */ daHookshot_shape mShape;

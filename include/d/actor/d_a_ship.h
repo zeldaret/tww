@@ -7,7 +7,8 @@
 #include "d/d_particle.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "f_op/f_op_msg.h"
-#include "d/actor/d_a_grid.h"
+
+class daGrid_c;
 
 class daShip_c : public fopAc_ac_c {
 public:
@@ -172,7 +173,7 @@ public:
     BOOL execute();
     void shipDelete();
     void createHeap();
-    s32 create();
+    cPhs_State create();
     void checkForceMove() const;
     void initStartPos(cXyz const*, s16);
 

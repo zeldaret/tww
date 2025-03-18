@@ -20,7 +20,7 @@ public:
     void lightProc();
     void lightInit();
     void CreateInit();
-    s32 create();
+    cPhs_State create();
     void demoInitWait();
     void demoProcWait();
     void demoInitOpen();

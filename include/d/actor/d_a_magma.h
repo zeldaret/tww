@@ -8,7 +8,7 @@
 class daMagma_c : public fopAc_ac_c {
 public:
     inline ~daMagma_c();
-    inline s32 create();
+    inline cPhs_State create();
     inline s32 getPathNo() { return fopAcM_GetParam(this); }
 
 public:

@@ -13,7 +13,7 @@ namespace daObjHomensmoke {
     
         virtual ~Act_c() {}
         void set_mtx();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         bool _execute();
         bool _draw();

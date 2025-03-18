@@ -102,7 +102,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 800F07F4-800F0B08       .text daHimo2_Create__FP10fopAc_ac_c */
-static s32 daHimo2_Create(fopAc_ac_c*) {
+static cPhs_State daHimo2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

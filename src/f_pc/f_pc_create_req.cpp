@@ -40,14 +40,14 @@ void fpcCtRq_ToCreateQ(create_request* i_request) {
 /* 8003CDE0-8003CE54       .text fpcCtRq_Delete__FP14create_request */
 BOOL fpcCtRq_Delete(create_request* i_request) {
     fpcCtRq_CreateQTo(i_request);
-    if (i_request->mpCtRqMtd != NULL && fpcMtd_Method(i_request->mpCtRqMtd->mpDelete, i_request) == 0) {
-        return 0;
+    if (i_request->mpCtRqMtd != NULL && fpcMtd_Method(i_request->mpCtRqMtd->mpDelete, i_request) == FALSE) {
+        return FALSE;
     } else {
         if (i_request->mpRes) {
             i_request->mpRes->mpCtRq = NULL;
         }
         cMl::free(i_request);
-        return 1;
+        return TRUE;
     }
 }
 
@@ -71,7 +71,7 @@ BOOL fpcCtRq_Cancel(create_request* i_request) {
 }
 
 /* 8003CEEC-8003CF08       .text fpcCtRq_IsDoing__FP14create_request */
-s32 fpcCtRq_IsDoing(create_request* i_request) {
+BOOL fpcCtRq_IsDoing(create_request* i_request) {
     if (i_request != NULL)
         return i_request->mbIsCreating;
     else
@@ -80,7 +80,7 @@ s32 fpcCtRq_IsDoing(create_request* i_request) {
 
 /* 8003CF08-8003CFC4       .text fpcCtRq_Do__FP14create_request */
 BOOL fpcCtRq_Do(create_request* i_request) {
-    s32 phase = cPhs_COMPLEATE_e;
+    cPhs_State phase = cPhs_COMPLEATE_e;
 
     if (i_request->mpCtRqMtd != NULL) {
         cPhs__Handler pHandler = i_request->mpCtRqMtd->mpHandler;
@@ -93,22 +93,22 @@ BOOL fpcCtRq_Do(create_request* i_request) {
 
     switch (phase) {
     case cPhs_COMPLEATE_e: {
-        s32 success = fpcEx_ToExecuteQ(i_request->mpRes);
-        if (success == 0)
+        BOOL success = fpcEx_ToExecuteQ(i_request->mpRes);
+        if (success == FALSE)
             return fpcCtRq_Cancel(i_request);
         else
             return fpcCtRq_Delete(i_request);
     }
-    case 3:
+    case cPhs_STOP_e:
     case cPhs_ERROR_e:
         return fpcCtRq_Cancel(i_request);
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 8003CFC4-8003CFF0       .text fpcCtRq_Handler__Fv */
-s32 fpcCtRq_Handler() {
+BOOL fpcCtRq_Handler() {
     return fpcCtIt_Method((fpcCtIt_MethodFunc)fpcCtRq_Do, NULL);
 }
 

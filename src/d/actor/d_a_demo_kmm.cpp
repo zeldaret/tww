@@ -32,7 +32,7 @@ void daDemo_Kmm_c::CreateInit() {
 }
 
 /* 00000308-000003A0       .text create__12daDemo_Kmm_cFv */
-s32 daDemo_Kmm_c::create() {
+cPhs_State daDemo_Kmm_c::create() {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ static BOOL daDemo_Kmm_Delete(daDemo_Kmm_c*) {
 }
 
 /* 00000500-00000520       .text daDemo_Kmm_Create__FP10fopAc_ac_c */
-static s32 daDemo_Kmm_Create(fopAc_ac_c*) {
+static cPhs_State daDemo_Kmm_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

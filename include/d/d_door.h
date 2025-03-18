@@ -73,7 +73,7 @@ public:
 
 class dDoor_key2_c {
 public:
-    void keyResLoad();
+    cPhs_State keyResLoad();
     void keyResDelete();
     void keyInit(dDoor_info_c*);
     BOOL keyProc();
@@ -132,7 +132,7 @@ public:
     void offUse() {}
     void onUse(u8) {}
 
-    s32 resLoad();
+    cPhs_State resLoad();
     void resDelete();
     BOOL create();
     void setAnm(u8);

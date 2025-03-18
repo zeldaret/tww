@@ -3,7 +3,6 @@
 // Translation Unit: d_a_obj_ojtree.cpp
 //
 
-#include "SSystem/SComponent/c_bg_w.h"
 #include "d/res/res_ojtree.h"
 #include "d/actor/d_a_obj_ojtree.h"
 #include "d/d_com_inf_game.h"
@@ -14,7 +13,7 @@ Mtx daObjOjtree::Act_c::M_tmp_mtx;
 const char daObjOjtree::Act_c::M_arcname[] = "Ojtree";
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjOjtree5Act_cFv */
-int daObjOjtree::Act_c::CreateHeap() {
+BOOL daObjOjtree::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, OJTREE_BDL_OJTREE);
     JUT_ASSERT(67, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
@@ -22,7 +21,7 @@ int daObjOjtree::Act_c::CreateHeap() {
 }
 
 /* 0000012C-000001EC       .text Create__Q211daObjOjtree5Act_cFv */
-int daObjOjtree::Act_c::Create() {
+BOOL daObjOjtree::Act_c::Create() {
     cXyz pos;
 
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -36,10 +35,10 @@ int daObjOjtree::Act_c::Create() {
 }
 
 /* 000001EC-000002E4       .text Mthd_Create__Q211daObjOjtree5Act_cFv */
-s32 daObjOjtree::Act_c::Mthd_Create() {
+cPhs_State daObjOjtree::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjOjtree::Act_c);
        
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, OJTREE_DZB_OJTREE, NULL, 0x26a0);
         JUT_ASSERT(123, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
@@ -54,7 +53,7 @@ BOOL daObjOjtree::Act_c::Delete() {
 }
 
 /* 000002EC-00000338       .text Mthd_Delete__Q211daObjOjtree5Act_cFv */
-s32 daObjOjtree::Act_c::Mthd_Delete() {
+BOOL daObjOjtree::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
     dComIfG_resDelete(&mPhs, M_arcname);
     return result;
@@ -75,7 +74,7 @@ void daObjOjtree::Act_c::init_mtx() {
 }
 
 /* 000003F4-0000045C       .text Execute__Q211daObjOjtree5Act_cFPPA3_A4_f */
-int daObjOjtree::Act_c::Execute(Mtx** pMtx) {
+BOOL daObjOjtree::Act_c::Execute(Mtx** pMtx) {
     if(mLockTimer != 0)
     {
         if (--mLockTimer == 0) 
@@ -100,11 +99,11 @@ BOOL daObjOjtree::Act_c::Draw() {
 
 namespace daObjOjtree {
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Create();
         }
         
-        s32 Mthd_Delete(void* i_this) {
+        BOOL Mthd_Delete(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Delete();
         }
         

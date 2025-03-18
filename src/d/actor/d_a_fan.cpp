@@ -69,7 +69,7 @@ BOOL daFan_c::Delete() {
 }
 
 /* 000000F0-0000040C       .text CreateHeap__7daFan_cFv */
-int daFan_c::CreateHeap() {
+BOOL daFan_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]));
     JUT_ASSERT(0x15e, modelData != NULL);
 
@@ -86,26 +86,26 @@ int daFan_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BTK_YAFLW00_01);
     JUT_ASSERT(400, pbtk != NULL);
-    if (!mWindBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0,-1, false, 0))
+    if (!mWindBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0,-1, false, 0))
         return FALSE;
 
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BTK_YAFLW00_02);
     JUT_ASSERT(0x19c, pbtk != NULL);
-    if (!mWindBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0,-1, false, 0))
+    if (!mWindBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0,-1, false, 0))
         return FALSE;
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BCK_YAFLW00);
     JUT_ASSERT(0x1a9, pbck != NULL);
-    if (!mWindBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0,-1, false))
+    if (!mWindBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0,-1, false))
         return FALSE;
 
     return TRUE;
 }
 
-static int nodeCallBack(J3DNode*, int);
+static BOOL nodeCallBack(J3DNode*, int);
 
 /* 0000040C-00000640       .text Create__7daFan_cFv */
-int daFan_c::Create() {
+BOOL daFan_c::Create() {
     f32 wind_len = m_wind_length[mType];
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     Vec cullMin = m_cull_min[mType];
@@ -135,7 +135,7 @@ int daFan_c::Create() {
 }
 
 /* 00000640-000006F4       .text nodeCallBack__FP7J3DNodei */
-static int nodeCallBack(J3DNode* node, int calcTiming) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         u32 jntNo = joint->getJntNo();
@@ -153,15 +153,15 @@ static int nodeCallBack(J3DNode* node, int calcTiming) {
 }
 
 /* 000006F4-00000900       .text _create__7daFan_cFv */
-s32 daFan_c::_create() {
+cPhs_State daFan_c::_create() {
     fopAcM_SetupActor(this, daFan_c);
 
     mType = daFan_prm::getType(this);
-    s32 rt1 = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    cPhs_State rt1 = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (rt1 != cPhs_COMPLEATE_e)
         return rt1;
 
-    s32 rt2 = dComIfG_resLoad(&mWindPhs, m_arcname2);
+    cPhs_State rt2 = dComIfG_resLoad(&mWindPhs, m_arcname2);
     if (rt2 != cPhs_COMPLEATE_e)
         return rt2;
 
@@ -209,7 +209,7 @@ void daFan_c::set_cps(f32 h) {
 }
 
 /* 00000E54-00001088       .text Execute__7daFan_cFPPA3_A4_f */
-int daFan_c::Execute(Mtx** mtxP) {
+BOOL daFan_c::Execute(Mtx** mtxP) {
     s16 speed = m_fan_speed[mType];
     f32 len = mFanSpeed / (f32)speed;
 
@@ -261,7 +261,7 @@ BOOL daFan_c::Draw() {
 }
 
 /* 0000118C-000011AC       .text daFan_Create__FPv */
-static BOOL daFan_Create(void* i_this) {
+static cPhs_State daFan_Create(void* i_this) {
     return ((daFan_c*)i_this)->_create();
 }
 

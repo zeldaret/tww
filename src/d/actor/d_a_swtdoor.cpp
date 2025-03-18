@@ -56,13 +56,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
 }
 
 /* 00000260-00000374       .text daSwtdoor_Create__FP10fopAc_ac_c */
-static s32 daSwtdoor_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daSwtdoor_Create(fopAc_ac_c* i_ac) {
     swtdoor_class * i_this;
 
     fopAcM_SetupActor(i_ac, swtdoor_class);
     i_this = (swtdoor_class *)i_ac;
 
-    s32 rt = dComIfG_resLoad(&i_this->mPhs, "Swtdoor");
+    cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Swtdoor");
     if (rt == cPhs_ERROR_e)
         return cPhs_ERROR_e;
 

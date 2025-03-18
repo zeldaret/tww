@@ -27,7 +27,7 @@ void daWarpgn_c::CreateInit() {
 }
 
 /* 000007D0-000008F4       .text _create__10daWarpgn_cFv */
-s32 daWarpgn_c::_create() {
+cPhs_State daWarpgn_c::_create() {
     /* Nonmatching */
 }
 
@@ -152,7 +152,7 @@ bool daWarpgn_c::_draw() {
 }
 
 /* 000018D4-000018F4       .text daWarpgn_Create__FPv */
-static s32 daWarpgn_Create(void*) {
+static cPhs_State daWarpgn_Create(void*) {
     /* Nonmatching */
 }
 

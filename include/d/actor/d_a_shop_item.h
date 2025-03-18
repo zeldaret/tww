@@ -2,7 +2,8 @@
 #define D_A_SHOP_ITEM_H
 
 #include "d/actor/d_a_itembase.h"
-#include "d/d_cloth_packet.h"
+
+class dCloth_packet_c;
 
 struct daShopItem_c_m_data {
     /* 0x00 */ Vec mScale;
@@ -12,7 +13,7 @@ struct daShopItem_c_m_data {
 
 class daShopItem_c : public daItemBase_c {
 public:
-    inline int _create();
+    inline cPhs_State _create();
     inline bool _delete();
     void setTevType(int type) { mTevType = type; }
 

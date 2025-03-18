@@ -58,7 +58,7 @@ namespace daObjBuoyflag {
         }
     
         void setup(MtxP mtx) { cMtx_copy(mtx, m1090); }
-        inline s32 _create();
+        inline cPhs_State _create();
         inline bool _delete();
         inline bool _draw();
         inline bool _execute();

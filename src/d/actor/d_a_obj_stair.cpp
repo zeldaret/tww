@@ -18,17 +18,17 @@ void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 000001D8-000002C4       .text CreateHeap__13daObj_Stair_cFv */
-void daObj_Stair_c::CreateHeap() {
+BOOL daObj_Stair_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 000002C4-000002D8       .text Create__13daObj_Stair_cFv */
-s32 daObj_Stair_c::Create() {
+BOOL daObj_Stair_c::Create() {
     /* Nonmatching */
 }
 
 /* 000002D8-00000410       .text Execute__13daObj_Stair_cFPPA3_A4_f */
-void daObj_Stair_c::Execute(float(**)[3][4]) {
+BOOL daObj_Stair_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -48,7 +48,7 @@ static s32 daObj_StairCreate(void*) {
 }
 
 /* 000004D8-00000854       .text _create__13daObj_Stair_cFv */
-s32 daObj_Stair_c::_create() {
+cPhs_State daObj_Stair_c::_create() {
     /* Nonmatching */
 }
 

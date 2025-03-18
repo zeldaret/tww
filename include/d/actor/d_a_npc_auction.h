@@ -12,7 +12,7 @@ class daNpcAuction_c : public fopNpc_npc_c {
 public:
     daNpcAuction_c();
 
-    inline s32 _create();
+    inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();

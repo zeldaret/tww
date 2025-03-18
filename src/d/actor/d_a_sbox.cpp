@@ -52,7 +52,7 @@ void daSbox_c::CreateInit() {
 }
 
 /* 000008F0-000009F0       .text create__8daSbox_cFv */
-s32 daSbox_c::create() {
+cPhs_State daSbox_c::create() {
     /* Nonmatching */
 }
 
@@ -132,7 +132,7 @@ static BOOL daSbox_Delete(daSbox_c*) {
 }
 
 /* 00001640-00001660       .text daSbox_Create__FP10fopAc_ac_c */
-static s32 daSbox_Create(fopAc_ac_c*) {
+static cPhs_State daSbox_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

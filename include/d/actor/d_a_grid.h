@@ -16,7 +16,7 @@ class daGrid_c : public fopAc_ac_c {
 public:
     void force_calc_wind_rel_angle(short) {}
 
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     bool _execute();
     bool _draw();

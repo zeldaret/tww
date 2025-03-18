@@ -99,7 +99,7 @@ void daTag_Etc_c::demoInitProc() {
 }
 
 /* 00000368-00000458       .text create__11daTag_Etc_cFv */
-s32 daTag_Etc_c::create() {
+cPhs_State daTag_Etc_c::create() {
     float fVar1;
     u8 stageEVNTListIndex;
 
@@ -238,7 +238,7 @@ static BOOL daTag_Etc_Delete(daTag_Etc_c* i_this) {
 }
 
 /* 00000768-00000788       .text daTag_Etc_Create__FP10fopAc_ac_c */
-static s32 daTag_Etc_Create(fopAc_ac_c* i_this) {
+static cPhs_State daTag_Etc_Create(fopAc_ac_c* i_this) {
     return reinterpret_cast<daTag_Etc_c*>(i_this)->create();
 }
 

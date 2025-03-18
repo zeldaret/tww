@@ -13,7 +13,7 @@ namespace daObjGong {
     
         static const char M_arcname[6];
     
-        s32 _create();
+        cPhs_State _create();
         bool _execute();
         bool _draw();
         bool _delete();

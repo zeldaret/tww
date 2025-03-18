@@ -83,9 +83,9 @@ public:
     void setTalk(u8) {}
 
     daNpcPeople_c();
-    s32 _create();
+    cPhs_State _create();
     BOOL createHeap();
-    s32 createInit();
+    cPhs_State createInit();
     bool _delete();
     bool _draw();
     bool _execute();

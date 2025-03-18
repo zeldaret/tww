@@ -3011,7 +3011,7 @@ u32 daMP_c::daMP_c_Get_arg_data() {
 }
 
 /* 00006390-00006500       .text daMP_c_Init__6daMP_cFv */
-int daMP_c::daMP_c_Init() {
+cPhs_State daMP_c::daMP_c_Init() {
     /* Nonmatching */
     static u8 set_vfilter[7] = {
         0x00, 0x00, 0x15, 0x16, 0x15, 0x00, 0x00,

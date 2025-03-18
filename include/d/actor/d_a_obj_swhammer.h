@@ -3,7 +3,7 @@
 
 #include "d/d_a_obj.h"
 #include "d/d_bg_s_movebg_actor.h"
-#include "c/c_damagereaction.h"
+#include "d/d_particle.h"
 
 class J3DNode;
 
@@ -25,10 +25,10 @@ namespace daObjSwhammer {
         s32 prm_get_swSave2() const { return daObj::PrmAbstract(this, PRM_SWSAVE2_W, PRM_SWSAVE2_S); }
     
         Act_c();
-        BOOL CreateHeap();
-        int Create();
-        s32 _create();
-        BOOL Delete();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        cPhs_State _create();
+        virtual BOOL Delete();
         bool _delete();
         void set_mtx();
         void init_mtx();
@@ -48,8 +48,8 @@ namespace daObjSwhammer {
         void mode_lower();
         void mode_l_u_init();
         void mode_l_u();
-        BOOL Execute(Mtx**);
-        BOOL Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
 
         virtual ~Act_c() {};
 

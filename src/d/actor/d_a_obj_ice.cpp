@@ -39,7 +39,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GO
 }
 
 /* 000005F4-000008C0       .text _create__10daObjIce_cFv */
-s32 daObjIce_c::_create() {
+cPhs_State daObjIce_c::_create() {
     /* Nonmatching */
 }
 
@@ -84,7 +84,7 @@ void daObjIce_c::setEffectMtx() {
 }
 
 /* 000013A0-000013C0       .text daObjIce_Create__FP10fopAc_ac_c */
-static s32 daObjIce_Create(fopAc_ac_c*) {
+static cPhs_State daObjIce_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

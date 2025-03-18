@@ -290,7 +290,7 @@ static BOOL dOw_Delete(dOw_c* i_this) {
 }
 
 /* 80221A04-80221AA0       .text dOw_Create__FP9msg_class */
-static s32 dOw_Create(msg_class* i_msg) {
+static cPhs_State dOw_Create(msg_class* i_msg) {
     dOw_c* i_this = (dOw_c*)i_msg;
 
     JKRExpHeap* heap = fopMsgM_createExpHeap(20000);

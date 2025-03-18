@@ -734,7 +734,7 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
             if(l_msg) {
                 if(actionNo == 2) {
                     dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
-                    mDoAud_seStart(JA_SE_CM_AJ_ANGRY_FOOT, 0, 0, 0);
+                    mDoAud_seStart(JA_SE_CM_AJ_ANGRY_FOOT, NULL);
                 }
 
                 field_0xC78 += 1;
@@ -1106,7 +1106,7 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 000033D0-000039AC       .text speakAction__11daNpc_Ji1_cFPv */
@@ -1754,7 +1754,7 @@ u32 daNpc_Ji1_c::evn_hide_init(int staffIdx) {
 /* 00005508-000055E4       .text AnimeControlToWait__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::AnimeControlToWait() {
     /* Nonmatching */
-    if(field_0x330->getPlayMode() == J3DFrameCtrl::LOOP_ONCE_e) {
+    if(field_0x330->getPlayMode() == J3DFrameCtrl::EMode_NONE) {
         if(field_0x330->checkFrame(field_0x330->getEndFrame() - 1.0f)) {
             if(isAttackAnim() || isGuardAnim()) {
                 setAnm(5, 4.0f, 0);
@@ -2110,7 +2110,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 setAction(&daNpc_Ji1_c::eventAction, 0);
                 field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
                 
-                return 1;
+                return TRUE;
             }
             
             if(cutType == 8) {
@@ -2119,7 +2119,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 setAction(&daNpc_Ji1_c::eventAction, 0);
                 field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
 
-                return 1;
+                return TRUE;
             }
 
             field_0x7E0.OnTgShield();
@@ -2561,7 +2561,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
                     setClearRecord(field_0xD70);
                 }
 
-                return 1;
+                return TRUE;
             }
         }
 
@@ -2592,7 +2592,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 0000C7E4-0000CA98       .text battleAction__11daNpc_Ji1_cFPv */
@@ -3035,10 +3035,10 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
         field_0x330->setAnm(temp1, temp2, param_2, speed, 0.0f, -1.0f, pSoundAnimRes);
         if(field_0xD64 == 0x13) {
-            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK), J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
         else if(field_0xD64 == 0x14) {
-            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_YOKOATTACK), J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_YOKOATTACK), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
 
         return true;
@@ -3147,10 +3147,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 0000DED0-0000DF78       .text _create__11daNpc_Ji1_cFv */
-s32 daNpc_Ji1_c::_create() {
+cPhs_State daNpc_Ji1_c::_create() {
     fopAcM_SetupActor(this, daNpc_Ji1_c);
 
-    s32 state = dComIfG_resLoad(&field_0xC7C, "Ji");
+    cPhs_State state = dComIfG_resLoad(&field_0xC7C, "Ji");
     if(state == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0x16840)) {
             return cPhs_ERROR_e;
@@ -3171,7 +3171,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         modelData,
         NULL, NULL,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", JI_BCK_WAIT01)),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         dComIfG_getObjectRes("Ji", JI_BAS_WAIT01),
         0x00000000,
         0x11020203
@@ -3204,7 +3204,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", JI_BDL_JI_YARI)),
         NULL, NULL,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK)),
-        J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1,
         0,
         0x00000000,
         0x11020203
@@ -3224,8 +3224,8 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     J3DAnmTextureSRTKey* a_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
     JUT_ASSERT(0x15D0, a_btk != NULL);
 
-    int temp1 = field_0x3FC.init(modelData, a_brk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-    int temp2 = field_0x418.init(modelData, a_btk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+    int temp1 = field_0x3FC.init(modelData, a_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int temp2 = field_0x418.init(modelData, a_btk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
 
     if(field_0x3F8 == 0 || temp1 == 0 || temp2 == 0) {
         return false;
@@ -3234,7 +3234,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     headTexPattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Ji", JI_BTP_JI));
     JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
-    if(field_0x3D8.init(modelData, headTexPattern, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0) == 0) {
+    if(field_0x3D8.init(modelData, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
         return false;
     }
 
@@ -3788,7 +3788,7 @@ static BOOL daNpc_Ji1_Delete(daNpc_Ji1_c* i_this) {
 }
 
 /* 00011FC0-00011FE0       .text daNpc_Ji1_Create__FP10fopAc_ac_c */
-static s32 daNpc_Ji1_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Ji1_Create(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Ji1_c*>(i_this)->_create();
 }
 

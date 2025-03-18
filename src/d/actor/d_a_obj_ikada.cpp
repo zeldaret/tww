@@ -267,7 +267,7 @@ void daObj_Ikada_c::_createHeap() {
 }
 
 /* 00004B60-00004C18       .text _create__13daObj_Ikada_cFv */
-s32 daObj_Ikada_c::_create() {
+cPhs_State daObj_Ikada_c::_create() {
     /* Nonmatching */
 }
 

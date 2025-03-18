@@ -33,11 +33,11 @@ BOOL daObjYboil_c::CreateHeap() {
         if (mModel[i] == NULL)
             return FALSE;
 
-        if (!mBckAnm[i].init(modelData, bck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+        if (!mBckAnm[i].init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
             return FALSE;
-        if (!mBtkAnm[i].init(modelData, btk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+        if (!mBtkAnm[i].init(modelData, btk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
             return FALSE;
-        if (!mBrkAnm[i].init(modelData, brk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+        if (!mBrkAnm[i].init(modelData, brk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
             return FALSE;
     }
 
@@ -82,10 +82,10 @@ void daObjYboil_c::set_mtx() {
     }
 }
 
-s32 daObjYboil_c::_create() {
+cPhs_State daObjYboil_c::_create() {
     fopAcM_SetupActor(this, daObjYboil_c);
 
-    s32 ret;
+    cPhs_State ret;
     if (dComIfGs_isEventBit(0x1902)) {
         ret = cPhs_STOP_e;
     } else {
@@ -141,7 +141,7 @@ bool daObjYboil_c::_execute() {
 }
 
 /* 0000066C-000007D8       .text daObjYboil_Create__FPv */
-static s32 daObjYboil_Create(void* i_this) {
+static cPhs_State daObjYboil_Create(void* i_this) {
     return ((daObjYboil_c*)i_this)->_create();
 }
 

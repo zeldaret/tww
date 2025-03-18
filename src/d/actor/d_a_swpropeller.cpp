@@ -33,7 +33,7 @@ static BOOL nodeCallBack(J3DNode*, int) {
 }
 
 /* 00000404-00000590       .text _create__10daSwProp_cFv */
-s32 daSwProp_c::_create() {
+cPhs_State daSwProp_c::_create() {
     /* Nonmatching */
 }
 
@@ -53,7 +53,7 @@ bool daSwProp_c::_draw() {
 }
 
 /* 00000C00-00000C20       .text daSwProp_Create__FPv */
-static s32 daSwProp_Create(void*) {
+static cPhs_State daSwProp_Create(void*) {
     /* Nonmatching */
 }
 

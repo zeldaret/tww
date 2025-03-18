@@ -137,26 +137,26 @@ void dMs_placenameMove(sub_ms_screen_class*) {
 }
 
 /* 801DD6D8-801DD960       .text dMs_Draw__FP19sub_ms_screen_class */
-static void dMs_Draw(sub_ms_screen_class*) {
+static BOOL dMs_Draw(sub_ms_screen_class*) {
     /* Nonmatching */
 }
 
 /* 801DD960-801DF340       .text dMs_Execute__FP19sub_ms_screen_class */
-static void dMs_Execute(sub_ms_screen_class*) {
+static BOOL dMs_Execute(sub_ms_screen_class*) {
     /* Nonmatching */
 }
 
 /* 801DF340-801DF368       .text dMs_IsDelete__FP19sub_ms_screen_class */
-static void dMs_IsDelete(sub_ms_screen_class*) {
+static BOOL dMs_IsDelete(sub_ms_screen_class*) {
     /* Nonmatching */
 }
 
 /* 801DF368-801DF4C4       .text dMs_Delete__FP19sub_ms_screen_class */
-static void dMs_Delete(sub_ms_screen_class*) {
+static BOOL dMs_Delete(sub_ms_screen_class*) {
     /* Nonmatching */
 }
 
 /* 801DF4C4-801DF684       .text dMs_Create__FP9msg_class */
-static void dMs_Create(msg_class*) {
+static cPhs_State dMs_Create(msg_class*) {
     /* Nonmatching */
 }

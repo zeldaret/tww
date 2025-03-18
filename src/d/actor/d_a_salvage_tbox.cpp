@@ -47,7 +47,7 @@ void daSTBox_c::CreateInit() {
 }
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
-s32 daSTBox_c::_create() {
+cPhs_State daSTBox_c::_create() {
     /* Nonmatching */
 }
 
@@ -112,7 +112,7 @@ void daSTBox_c::actWaitDummy(int) {
 }
 
 /* 000013BC-000013DC       .text daSTBox_Create__FPv */
-static s32 daSTBox_Create(void*) {
+static cPhs_State daSTBox_Create(void*) {
     /* Nonmatching */
 }
 

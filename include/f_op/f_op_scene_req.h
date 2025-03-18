@@ -5,11 +5,6 @@
 
 class scene_class;
 
-extern "C" {
-void fopScnRq_Handler__Fv(void);
-void fopScnRq_ReRequest(void);
-}
-
 class scene_request_class {
 public:
     node_create_request mCrtReq;
@@ -18,7 +13,6 @@ public:
     u8 field_0x70[4];
 };
 
-// cPhs__Step fopScnRq_phase_ClearOverlap(scene_request_class* param_1);
 uint fopScnRq_Request(int, scene_class*, s16, void*, s16, u16);
 s32 fopScnRq_ReRequest(uint, s16, void*);
 s32 fopScnRq_Handler(void);

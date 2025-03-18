@@ -11,7 +11,7 @@ public:
     void CreateInit();
     void create_acorn();
     void create_acorn_sub(bool);
-    s32 _create();
+    cPhs_State _create();
     void set_mtx();
     bool _execute();
     bool _draw();

@@ -97,10 +97,10 @@ bool daObjHfuck1_c::checkCollision() {
 }
 
 /* 000002AC-000004B0       .text _create__13daObjHfuck1_cFv */
-s32 daObjHfuck1_c::_create() {
+cPhs_State daObjHfuck1_c::_create() {
     fopAcM_SetupActor(this, daObjHfuck1_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xc20)) {
@@ -172,7 +172,7 @@ bool daObjHfuck1_c::_draw() {
 }
 
 /* 0000082C-0000084C       .text daObjHfuck1_Create__FP10fopAc_ac_c */
-static BOOL daObjHfuck1_Create(fopAc_ac_c* i_this) {
+static cPhs_State daObjHfuck1_Create(fopAc_ac_c* i_this) {
     return ((daObjHfuck1_c*)i_this)->_create();
 }
 

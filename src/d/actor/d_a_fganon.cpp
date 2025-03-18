@@ -101,9 +101,9 @@ static BOOL daFganon_Draw(fganon_class* i_this) {
 /* Appear Animation 1 */
 void deru_brk(fganon_class* i_this) {
     J3DAnmTevRegKey* ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_MAIN1);
-    i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_KEN1);
-    i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     fopAcM_seStart(i_this, JA_SE_CM_PG_APPEAR, 0);
     i_this->mbIsMaterialized = TRUE;
     return;
@@ -115,12 +115,12 @@ void kieru_brk(fganon_class* i_this, unsigned char param_2) {
     J3DAnmTevRegKey* ptrkAnm;
     if ((param_2 == 0) || (param_2 == 1)) {
         ptrkAnm = (J3DAnmTevRegKey *)(J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_KIERU_MAIN1);
-        i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+        i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
         fopAcM_seStart(i_this, JA_SE_CM_PG_DISAPPEAR, 0);
     }
     if ((param_2 == 0) || (param_2 == 2)) {
         ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Pgsw", PGSW_BRK_KIERU_KEN1);
-        i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+        i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     }
     i_this->mbIsMaterialized = FALSE;
     return;
@@ -130,9 +130,9 @@ void kieru_brk(fganon_class* i_this, unsigned char param_2) {
 /* Appear Animation 2 */
 void deru_brk2(fganon_class* i_this) {
     J3DAnmTevRegKey* ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_MAIN2);
-    i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_KEN2);
-    i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     fopAcM_seStart(i_this, JA_SE_CM_PG_APPEAR, 0);
     i_this->mbIsMaterialized = TRUE;
     return;
@@ -143,9 +143,9 @@ void deru_brk2(fganon_class* i_this) {
 void kieru_brk2(fganon_class* i_this) {
     J3DAnmTevRegKey* ptrkAnm;
     ptrkAnm = (J3DAnmTevRegKey *)(J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_KIERU_MAIN2);
-    i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_KIERU_KEN2);
-    i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, TRUE, 0);
+    i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     fopAcM_seStart(i_this, JA_SE_CM_PG_DISAPPEAR, 0);
     i_this->mbIsMaterialized = FALSE;
     return;
@@ -210,18 +210,18 @@ void fly(fganon_class* i_this) {
         i_this->current.pos.y = player->current.pos.y + l_HIO.m10;
         i_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
         i_this->m388 = 1;
-        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->m3A4[1] = 60;
         break;
     case 0:
-        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->m388++;
         i_this->m3A0 = 0.0f;
         i_this->m3A4[1] = (short)(cM_rndF(50.0f) + 50.0f);
         // Fall-through
     case 1:
         if (i_this->m68A == 1) {
-            anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         mDoMtx_YrotS(*calc_mtx, i_this->m398);
         cXyz posVec;
@@ -266,7 +266,7 @@ void shot(fganon_class* i_this) {
     switch(i_this->m388) {
         case 0: {
             if (!i_this->m408) {
-                anm_init(i_this, FGANON_BCK_TAME1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_TAME1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m388++;
                 i_this->m3A4[0] = 40;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_MAKE_S, 0);
@@ -283,7 +283,7 @@ void shot(fganon_class* i_this) {
                 fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_S, 0);
             }
             if (i_this->m3A4[0] == 0) {
-                anm_init(i_this, FGANON_BCK_NAGERU1, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_NAGERU1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m388++;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
                 mDoAud_seStart(JA_SE_CM_PG_EBALL_FIRE_S, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
@@ -299,7 +299,7 @@ void shot(fganon_class* i_this) {
                 i_this->m689 = 0;
             }            
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, FGANON_BCK_WAIT1, 3.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m388++;
             }
             // Fall-through
@@ -310,10 +310,10 @@ void shot(fganon_class* i_this) {
                 if (std::sqrtf(PSVECSquareMag(&local_34)) < REG0_F(1) + (i_this->m404 * (REG0_F(0) + 10.0f) + 400.0f)) {
                     if (i_this->m689 == 0) {
                         if (cM_rndF(1.0f) < 0.5f) {
-                            anm_init(i_this, FGANON_BCK_TENNISLR1, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                            anm_init(i_this, FGANON_BCK_TENNISLR1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                         }
                         else {
-                            anm_init(i_this, FGANON_BCK_TENNISRL1, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                            anm_init(i_this, FGANON_BCK_TENNISRL1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                         }
                         i_this->m388++;
                         fopAcM_monsSeStart(i_this, JA_SE_CV_PG_REFLECT_EBALL, 0);
@@ -338,7 +338,7 @@ void shot(fganon_class* i_this) {
             }
             if (i_this->mpMorf->isStop() || ((i_this->m2BC >= 1) && (i_this->mpMorf->getFrame() >= 20.0f)))
             {
-                anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m388 = 3;
             }
             // Fall-through
@@ -378,7 +378,7 @@ void spinattack(fganon_class* i_this) {
             linChk.Set(&player->eyePos, &i_this->current.pos, a_this);
             if (!dComIfG_Bgsp()->LineCross(&linChk)) {
                 i_this->current.pos.y -= 100.0f;
-                anm_init(i_this, FGANON_BCK_WAIT1, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m388 = 2;
                 i_this->m3A4[0] = 30;
                 deru_brk(i_this);
@@ -391,7 +391,7 @@ void spinattack(fganon_class* i_this) {
         }
         case 2: {
             if (i_this->m3A4[0] == 0) {
-                anm_init(i_this, FGANON_BCK_KAITEN1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_KAITEN1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m388 = 3;
                 i_this->speedF = 0.0f;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
@@ -447,18 +447,18 @@ void fly2(fganon_class* i_this) {
         i_this->current.pos.y = player->current.pos.y + l_HIO.m18;
         i_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
         i_this->m388 = 1;
-        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->m3A4[1] = 40;
         break;
     case 0:
-        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WAIT1, 20.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->m388++;
         i_this->m3A0 = 0.0f;
         i_this->m3A4[1] = (short)(cM_rndF(50.0f) + 50.0f);
         // Fall-through
     case 1:
         if (i_this->m68A == 1) {
-            anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         mDoMtx_YrotS(*calc_mtx, i_this->m398);
         cXyz posVec;
@@ -589,7 +589,7 @@ void shot2(fganon_class* i_this) {
     int mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
     switch(i_this->m388) {
         case 0: {
-            anm_init(i_this, FGANON_BCK_TAME_S1, 5.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_TAME_S1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             for (int i = 0; i < 2; i++) {
                 if (i_this->mEmitters2[i] != NULL) {
                     i_this->mEmitters2[i]->becomeInvalidEmitter();
@@ -610,7 +610,7 @@ void shot2(fganon_class* i_this) {
                 }
             }
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, FGANON_BCK_TAME_S2, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_TAME_S2, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->m3A4[0] = l_HIO.m3C;
                 i_this->m388++;
                 for (int i = 0; i < 2; i++) {
@@ -629,7 +629,7 @@ void shot2(fganon_class* i_this) {
         case 2: {
             fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_L, 0);
             if (i_this->m3A4[0] == 0) {
-                anm_init(i_this, FGANON_BCK_NAGERU_S1, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_NAGERU_S1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m388++;
                 i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_821C, &i_this->current.pos, NULL);
                 i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_821D, &i_this->current.pos, NULL);
@@ -673,7 +673,7 @@ void shot2(fganon_class* i_this) {
         }
         case 4: {
             if (i_this->m68A == 1) {
-                anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
             if (i_this->m3A4[0] == 0) {
                 i_this->m386 = 9;
@@ -717,7 +717,7 @@ void spinattack2(fganon_class* i_this) {
             cXyz transformedPos;
             MtxPosition(&posVec, &transformedPos);
             i_this->current.pos = player->current.pos + transformedPos;
-            anm_init(i_this, 10, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            anm_init(i_this, 10, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m388 = 2;
             deru_brk(i_this);
             i_this->m38C = player->current.pos;
@@ -731,7 +731,7 @@ void spinattack2(fganon_class* i_this) {
             local_e4 = i_this->m38C - i_this->current.pos;
             float fVar11 = std::sqrtf(PSVECSquareMag(&local_e4));
             if (fVar11 < l_HIO.m38) {
-                anm_init(i_this, 9, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                anm_init(i_this, 9, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m388 = 3;
                 i_this->speedF = 0.0f;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
@@ -754,7 +754,7 @@ void spinattack2(fganon_class* i_this) {
                 if (i_this->m68F == 0) {
                     i_this->m388 = 4;
                     i_this->m3A4[0] = 40;
-                    anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                    anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 }
                 else {
                     i_this->m386 = 2;
@@ -779,7 +779,7 @@ void spinattack2(fganon_class* i_this) {
 void down(fganon_class* i_this) {
     switch(i_this->m388) {
         case 0: {
-            anm_init(i_this, 6, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, 6, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m388++;
             i_this->speed.y = 0.0f;
         }
@@ -788,7 +788,7 @@ void down(fganon_class* i_this) {
             if (i_this->mAcch.ChkGroundHit()) {
                 if (i_this->mpMorf->isStop()) {
                     i_this->m388++;
-                    anm_init(i_this, FGANON_BCK_TYAKUTI1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                    anm_init(i_this, FGANON_BCK_TYAKUTI1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 }
             }
             i_this->m3A4[0] = l_HIO.m48;
@@ -797,7 +797,7 @@ void down(fganon_class* i_this) {
         case 2: {
             if (i_this->mpMorf->isStop()) {
                 i_this->m388++;
-                anm_init(i_this, 8, 2.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, 8, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
             break;
         }
@@ -809,7 +809,7 @@ void down(fganon_class* i_this) {
             break;
         }
         case 10: {
-            anm_init(i_this, 7, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, 7, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m388 = 2;
         }
         default:
@@ -857,10 +857,10 @@ BOOL kabe_check(fganon_class* i_this) {
         cXyz tempPos = player->eyePos + transformedPos;
         linChk.Set(&player->eyePos, &tempPos, a_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
-            return 1;
+            return TRUE;
         }
     }
-    return 0;
+    return FALSE;
 }
 
 /* 00004300-000044CC       .text deru__FP12fganon_class */
@@ -962,7 +962,7 @@ void fail(fganon_class* i_this) {
         case 0: {
             kieru_brk(i_this, 1);
             i_this->m388 = 1;
-            anm_init(i_this, 7, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, 7, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             break;
         }
         case 1: {
@@ -1133,7 +1133,7 @@ void start(fganon_class* i_this) {
             if (distXZ < i_this->m2BD * 10.0f) {
                 i_this->mB54 = 1;
                 i_this->m388 = 1;
-                anm_init(i_this, FGANON_BCK_WAIT1, 0.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_WAIT1, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 mDoAud_bgmAllMute(30);
             }
             break;
@@ -1143,7 +1143,7 @@ void start(fganon_class* i_this) {
             break;
         }
         case 2: {
-            anm_init(i_this, FGANON_BCK_WARAU1, 5.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_WARAU1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             fopAcM_monsSeStart(i_this, JA_SE_CV_PG_LAUGH_2, 0);
             i_this->m388 = 3;
             break;
@@ -1151,12 +1151,12 @@ void start(fganon_class* i_this) {
         case 4: {
             i_this->m388 = 5;
             i_this->m3A4[0] = REG0_S(0) + 0x50;
-            anm_init(i_this, FGANON_BCK_TAME1, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_TAME1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         case 5: {
             if (i_this->m3A4[0] == (s16)(REG0_S(0) + 0x4B)) {
                 i_this->m408 = 1;
-                mDoAud_subBgmStart(0x80000041);
+                mDoAud_subBgmStart(JA_BGM_P_GANON_1);
             }
             if (i_this->m3A4[0] <= (s16)(REG0_S(0) + 0x4B)) {
                 fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_S, 0);
@@ -1190,7 +1190,7 @@ void end(fganon_class* i_this) {
     switch(i_this->m388) {
         case 0: {
             i_this->m388 = 1;
-            anm_init(i_this, FGANON_BCK_LAST_DAMAGE1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_LAST_DAMAGE1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mB54 = 50;
             dComIfGs_onEventBit(0x3f20); // PG_DEFEATED? It appears further down in `energy_ball_move`
             break;
@@ -1202,14 +1202,14 @@ void end(fganon_class* i_this) {
         }
         case 2: {
             deru_brk(i_this);
-            anm_init(i_this, FGANON_BCK_WARAU1, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_WARAU1, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             fopAcM_monsSeStart(i_this, JA_SE_CV_PG_LAUGH_2, 0);
             i_this->m388 = 3;
             break;
         }
         case 4: {
             deru_brk(i_this);
-            anm_init(i_this, FGANON_BCK_SARU1, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_SARU1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m388 = 5;
             i_this->speed.y = 0.0f;
             fopAcM_seStart(i_this, JA_SE_CM_PG_END_1, 0);
@@ -1243,7 +1243,7 @@ void last_end(fganon_class* i_this) {
     switch(i_this->m388) {
         case 0: {
             i_this->m388 = 1;
-            anm_init(i_this, FGANON_BCK_MOGAKU1, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_MOGAKU1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mB54 = 100;
             i_this->m3C0 = 10000.0f;
             i_this->m3A4[0] = REG0_S(4) + 25;
@@ -1412,7 +1412,7 @@ void damage_check(fganon_class* i_this) {
             if (atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == PROC_FGMAHOU)) {
                 i_this->m670++;
 
-                anm_init(i_this, 6, 2.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                anm_init(i_this, 6, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
 
                 i_this->m3A4[0] = 60;
 
@@ -2364,7 +2364,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
 
     if (((((i_this->m386 == 5) || (i_this->m386 == 9)) || (i_this->m386 == 7)) || (i_this->m386 == 10)) && ((i_this->m68B != 0 && (i_this->m68A == 0)))) {
         i_this->m68B = 0;
-        anm_init(i_this, FGANON_BCK_WARAU1, 6.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, FGANON_BCK_WARAU1, 6.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->m68A = 60;
         fopAcM_monsSeStart(i_this, JA_SE_CV_PG_LAUGH_3, 0);
     }
@@ -2606,7 +2606,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     
     mDoExt_McaMorf* morf = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("Fganon", FGANON_BDL_BPG), NULL, NULL, 
                                               (J3DAnmTransformKey *)dComIfG_getObjectRes("Fganon", FGANON_BCK_WAIT1), 
-                                              J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
+                                              J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
     
     i_this->mpMorf = morf;
     if ((i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL))
@@ -2617,7 +2617,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_MAIN1);
-    iVar4 = i_this->mpBrkAnm1->init(i_this->mpMorf->mpModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, FALSE, 0);
+    iVar4 = i_this->mpBrkAnm1->init(i_this->mpMorf->mpModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
     if (iVar4 == 0)
         return FALSE;
 
@@ -2632,7 +2632,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_KEN1);
-    iVar4 = i_this->mpBrkAnm2->init(pModelData, ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, FALSE, 0);
+    iVar4 = i_this->mpBrkAnm2->init(pModelData, ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
     if (iVar4 == 0)
         return FALSE;
     
@@ -2646,7 +2646,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     ptsrtkAnm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Fganon", FGANON_BTK_YDKBL00);
-    iVar4 = i_this->mpBtkAnm->init(pModelData, ptsrtkAnm, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, FALSE, 0);
+    iVar4 = i_this->mpBtkAnm->init(pModelData, ptsrtkAnm, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, FALSE, 0);
     if (iVar4 == 0)
         return FALSE;
 
@@ -2655,7 +2655,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_YDKBL00);
-    iVar4 = i_this->mpBrkAnm3->init(pModelData, ptrkAnm, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, FALSE, 0);
+    iVar4 = i_this->mpBrkAnm3->init(pModelData, ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
     if (iVar4 == 0)
         return FALSE;
 
@@ -2780,7 +2780,7 @@ static dCcD_SrcSph ball_at_sph_src = {
 };
 
 /* 00009844-00009C70       .text daFganon_Create__FP10fopAc_ac_c */
-static s32 daFganon_Create(fopAc_ac_c* i_act) {
+static cPhs_State daFganon_Create(fopAc_ac_c* i_act) {
     fganon_class* i_this = (fganon_class*)i_act;
     fopAcM_SetupActor(i_act, fganon_class);
     s32 res;

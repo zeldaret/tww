@@ -1085,14 +1085,14 @@ config.libs = [
     DolphinLib(
         "dvd",
         [
-            Object(NonMatching, "dolphin/dvd/dvdlow.c"),
-            Object(NonMatching, "dolphin/dvd/dvdfs.c"),
-            Object(NonMatching, "dolphin/dvd/dvd.c"),
-            Object(NonMatching, "dolphin/dvd/dvdqueue.c"),
-            Object(NonMatching, "dolphin/dvd/dvderror.c"),
-            Object(NonMatching, "dolphin/dvd/dvdidutils.c"),
-            Object(NonMatching, "dolphin/dvd/dvdFatal.c"),
-            Object(NonMatching, "dolphin/dvd/fstload.c"),
+            Object(Matching, "dolphin/dvd/dvdlow.c"),
+            Object(Matching, "dolphin/dvd/dvdfs.c"),
+            Object(Matching, "dolphin/dvd/dvd.c"),
+            Object(Matching, "dolphin/dvd/dvdqueue.c"),
+            Object(Matching, "dolphin/dvd/dvderror.c"),
+            Object(Matching, "dolphin/dvd/dvdidutils.c"),
+            Object(Matching, "dolphin/dvd/dvdFatal.c"),
+            Object(Matching, "dolphin/dvd/fstload.c"),
         ],
     ),
     DolphinLib(
@@ -1488,7 +1488,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
     ActorRel(Equivalent,  "d_a_obj_swhammer"), # weak func order
-    ActorRel(NonMatching, "d_a_obj_swheavy"),
+    ActorRel(Matching,    "d_a_obj_swheavy"),
     ActorRel(NonMatching, "d_a_obj_swlight"),
     ActorRel(NonMatching, "d_a_oq"),
     ActorRel(Equivalent,  "d_a_pedestal", extra_cflags=['-pragma "nosyminline on"']), # weak func order
@@ -1661,7 +1661,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_hcbh"),
     ActorRel(Equivalent,  "d_a_obj_hha"), # weak func order
     ActorRel(NonMatching, "d_a_obj_hlift"),
-    ActorRel(NonMatching, "d_a_obj_homen"),
+    ActorRel(Matching,    "d_a_obj_homen", extra_cflags=["-sym off"]),
     ActorRel(Matching,    "d_a_obj_homensmoke", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_hsehi1"),
     ActorRel(NonMatching, "d_a_obj_htetu1"),

@@ -121,10 +121,10 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 800F9A74-800F9C8C       .text create__6daNh_cFv */
-s32 daNh_c::create() {
+cPhs_State daNh_c::create() {
     static u32 a_heap_size_tbl = 0x4000;
     
-    s32 phase_state = cPhs_COMPLEATE_e;
+    cPhs_State phase_state = cPhs_COMPLEATE_e;
     
     fopAcM_SetupActor(this, daNh_c);
     
@@ -429,7 +429,7 @@ BOOL daNh_c::initBrkAnm(bool i_modify) {
     J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Always", ALWAYS_BRK_TNH);
     JUT_ASSERT(883, a_brk != NULL);
     
-    if (mBrkAnm.init(modelData, a_brk, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, i_modify, false)) {
+    if (mBrkAnm.init(modelData, a_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, false)) {
         success = true;
     }
     return success;
@@ -494,7 +494,7 @@ static BOOL daNh_Delete(daNh_c* i_this) {
 }
 
 /* 800FAE8C-800FAEAC       .text daNh_Create__FP10fopAc_ac_c */
-static s32 daNh_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNh_Create(fopAc_ac_c* i_this) {
     return ((daNh_c*)i_this)->create();
 }
 

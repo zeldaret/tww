@@ -230,7 +230,7 @@ static BOOL dOvlpFd2_Delete(dOvlpFd2_c*) {
 }
 
 /* 8022423C-80224268       .text dOvlpFd2_Create__FPv */
-static s32 dOvlpFd2_Create(void* i_this) {
+static cPhs_State dOvlpFd2_Create(void* i_this) {
     new (i_this) dOvlpFd2_c();
     return cPhs_COMPLEATE_e;
 }

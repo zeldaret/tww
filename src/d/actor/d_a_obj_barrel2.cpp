@@ -17,7 +17,7 @@ void daObjBarrel2::Act_c::create_heap() {
 }
 
 /* 00000308-0000089C       .text _create__Q212daObjBarrel25Act_cFv */
-s32 daObjBarrel2::Act_c::_create() {
+cPhs_State daObjBarrel2::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -247,7 +247,7 @@ bool daObjBarrel2::Act_c::_draw() {
 }
 
 /* 00002F78-00002F98       .text Create__Q212daObjBarrel26MethodFPv */
-s32 daObjBarrel2::Method::Create(void*) {
+cPhs_State daObjBarrel2::Method::Create(void*) {
     /* Nonmatching */
 }
 

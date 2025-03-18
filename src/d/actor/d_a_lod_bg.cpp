@@ -368,7 +368,7 @@ static BOOL daLodbg_Delete(daLodbg_c* i_this) {
 }
 
 /* 000012EC-0000133C       .text daLodbg_Create__FP10fopAc_ac_c */
-static s32 daLodbg_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daLodbg_Create(fopAc_ac_c* i_ac) {
     /* Nonmatching */
     daLodbg_c* i_this = (daLodbg_c*)i_ac;
     fopAcM_SetupActor(i_this, daLodbg_c);

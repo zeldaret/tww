@@ -18,7 +18,7 @@ public:
 class dWindArrow_c : public kankyo_class {
 public:
     inline ~dWindArrow_c();
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL execute();
     BOOL createHeap();
     void adjustHeap();

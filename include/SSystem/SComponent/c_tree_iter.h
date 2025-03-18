@@ -5,7 +5,7 @@
 
 typedef struct node_lists_tree_class node_lists_tree_class;
 
-int cTrIt_Method(node_lists_tree_class* pTree, cNdIt_MethodFunc pJudgeFunc, void* pUserData);
+BOOL cTrIt_Method(node_lists_tree_class* pTree, cNdIt_MethodFunc pJudgeFunc, void* pUserData);
 void* cTrIt_Judge(node_lists_tree_class* pTree, cNdIt_JudgeFunc pJudgeFunc, void* pUserData);
 
 #endif /* C_TREE_ITER_H */
