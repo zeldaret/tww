@@ -130,7 +130,7 @@ static cPhs_State daSaku_Create(fopAc_ac_c*) {
 }
 
 /* 00001BB8-00001F28       .text _daSaku_create__8daSaku_cFv */
-s32 daSaku_c::_daSaku_create() {
+cPhs_State daSaku_c::_daSaku_create() {
     /* Nonmatching */
 }
 

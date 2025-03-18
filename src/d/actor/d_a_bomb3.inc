@@ -1323,7 +1323,7 @@ static BOOL daBomb_createHeap(fopAc_ac_c* i_this) {
 }
 
 /* 800DCAFC-800DCC0C       .text create__8daBomb_cFv */
-int daBomb_c::create() {
+cPhs_State daBomb_c::create() {
     int state = prm_get_state();
     if(state == 5 || state == 6) {
         mType = 1;
@@ -1358,7 +1358,7 @@ int daBomb_c::create() {
 }
 
 /* 800DCEF8-800DCF18       .text daBomb_Create__FP10fopAc_ac_c */
-static int daBomb_Create(fopAc_ac_c* i_this) {
+static cPhs_State daBomb_Create(fopAc_ac_c* i_this) {
     return static_cast<daBomb_c*>(i_this)->create();
 }
 

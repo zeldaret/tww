@@ -149,7 +149,7 @@ BOOL daAgbsw0_c::draw() {
 }
 
 /* 00004F80-00005458       .text create__10daAgbsw0_cFv */
-int daAgbsw0_c::create() {
+cPhs_State daAgbsw0_c::create() {
     u8 type = getType();
     u8 sw0 = getSw0();
     s16 paramNo = getParamNo();
@@ -2571,7 +2571,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
 }
 
 /* 00004E98-00004F80       .text daAgbsw0_Create__FP10fopAc_ac_c */
-static int daAgbsw0_Create(fopAc_ac_c* i_this) {
+static cPhs_State daAgbsw0_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, daAgbsw0_c);
 
     return static_cast<daAgbsw0_c*>(i_this)->create();

@@ -57,7 +57,7 @@ cPhs_State daObjPbka_c::_create() {
 }
 
 /* 0000024C-000002EC       .text daObjPbka_Create__FPv */
-static int daObjPbka_Create(void* i_this) {
+static cPhs_State daObjPbka_Create(void* i_this) {
     return static_cast<daObjPbka_c*>(i_this)->_create();
 }
 

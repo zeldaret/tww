@@ -957,7 +957,7 @@ void daObjTpost_c::getArg() {
 }
 
 /* 00001BA8-00001D88       .text _create__12daObjTpost_cFv */
-int daObjTpost_c::_create() {
+cPhs_State daObjTpost_c::_create() {
     fopAcM_SetupActor(this, daObjTpost_c);
 
     getArg();
@@ -980,7 +980,7 @@ bool daObjTpost_c::_delete() {
 }
 
 /* 000020C4-000020E4       .text daObjTpostCreate__FPv */
-static int daObjTpostCreate(void* i_this) {
+static cPhs_State daObjTpostCreate(void* i_this) {
     return static_cast<daObjTpost_c*>(i_this)->_create();
 }
 

@@ -52,7 +52,7 @@ int fopMsg_Delete(void* i_this) {
 static int fopMsg_MSG_TYPE;
 
 /* 8002A788-8002A860       .text fopMsg_Create__FPv */
-int fopMsg_Create(void* i_this) {
+cPhs_State fopMsg_Create(void* i_this) {
     msg_class* _this = (msg_class*)i_this;
 
     if (fpcM_IsFirstCreating(_this)) {

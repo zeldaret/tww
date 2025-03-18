@@ -109,7 +109,7 @@ public:
     void eff_water_splash();
     bool bombDelete();
     BOOL createHeap();
-    int create();
+    cPhs_State create();
     void create_init();
 
     enum State_e {

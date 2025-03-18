@@ -372,7 +372,7 @@ bool daPz_c::_delete() {
 }
 
 /* 00007E20-00007E40       .text daPzCreate__FPv */
-static s32 daPzCreate(void*) {
+static cPhs_State daPzCreate(void*) {
     /* Nonmatching */
 }
 

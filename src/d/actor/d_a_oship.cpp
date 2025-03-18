@@ -212,7 +212,7 @@ bool daOship_c::_delete() {
 }
 
 /* 00003F20-00003F40       .text daOshipCreate__FPv */
-static s32 daOshipCreate(void*) {
+static cPhs_State daOshipCreate(void*) {
     /* Nonmatching */
 }
 

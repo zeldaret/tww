@@ -1010,7 +1010,7 @@ BOOL daObjFigure_c::createHeap() {
 }
 
 /* 00000A90-00000BF4       .text createInit__13daObjFigure_cFv */
-s32 daObjFigure_c::createInit() {
+cPhs_State daObjFigure_c::createInit() {
     mStts.Init(0xFF, 0xFF, this);
     mCyl1.Set(l_cyl_src);
     mCyl1.SetStts(&mStts);

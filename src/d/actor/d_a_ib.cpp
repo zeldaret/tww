@@ -407,7 +407,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 800F4698-800F4870       .text _daIball_create__9daIball_cFv */
-s32 daIball_c::_daIball_create() {
+cPhs_State daIball_c::_daIball_create() {
     fopAcM_SetupActor(this, daIball_c);
     
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3500)) {

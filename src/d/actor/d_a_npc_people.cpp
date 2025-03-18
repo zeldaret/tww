@@ -4283,7 +4283,7 @@ s16 daNpcPeople_photoCB(void* i_this, int param_1) {
 }
 
 /* 00000E6C-00001518       .text createInit__13daNpcPeople_cFv */
-s32 daNpcPeople_c::createInit() {
+cPhs_State daNpcPeople_c::createInit() {
     int temp = 0xFF;
 
     u8 pathIndex = getPrmRailID();

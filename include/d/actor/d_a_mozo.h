@@ -20,7 +20,7 @@ public:
     void anime_proc();
     void checkRange(int);
     BOOL CreateHeap();
-    s32 CreateInit();
+    cPhs_State CreateInit();
     void event_move();
     fopAc_ac_c* getBeamActor(fpc_ProcID);
     void search_beam_proc_init();

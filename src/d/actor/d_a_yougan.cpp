@@ -17,7 +17,7 @@ static BOOL daYougan_Draw(daYougan_c*) {
 }
 
 /* 00000178-000002A8       .text _daYougan_draw__10daYougan_cFv */
-void daYougan_c::_daYougan_draw() {
+BOOL daYougan_c::_daYougan_draw() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ static BOOL daYougan_Execute(daYougan_c*) {
 }
 
 /* 000002C8-00000554       .text _daYougan_execute__10daYougan_cFv */
-void daYougan_c::_daYougan_execute() {
+BOOL daYougan_c::_daYougan_execute() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ static BOOL daYougan_IsDelete(daYougan_c*) {
 }
 
 /* 00000574-0000057C       .text _daYougan_isdelete__10daYougan_cFv */
-void daYougan_c::_daYougan_isdelete() {
+BOOL daYougan_c::_daYougan_isdelete() {
     /* Nonmatching */
 }
 
@@ -47,12 +47,12 @@ static BOOL daYougan_Delete(daYougan_c*) {
 }
 
 /* 0000059C-00000600       .text _daYougan_delete__10daYougan_cFv */
-void daYougan_c::_daYougan_delete() {
+BOOL daYougan_c::_daYougan_delete() {
     /* Nonmatching */
 }
 
 /* 00000600-00000884       .text useHeapInit__10daYougan_cFv */
-void daYougan_c::useHeapInit() {
+BOOL daYougan_c::useHeapInit() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ static cPhs_State daYougan_Create(fopAc_ac_c*) {
 }
 
 /* 000008C4-000009C8       .text _daYougan_create__10daYougan_cFv */
-void daYougan_c::_daYougan_create() {
+cPhs_State daYougan_c::_daYougan_create() {
     /* Nonmatching */
 }
 

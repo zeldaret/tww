@@ -186,12 +186,12 @@ void daShopItem_c::setTevStr() {
 }
 
 /* 000007A4-000007C4       .text daShopItem_Create__FPv */
-static int daShopItem_Create(void* i_this) {
+static cPhs_State daShopItem_Create(void* i_this) {
     return static_cast<daShopItem_c*>(i_this)->_create();
 }
 
 /* 000007C4-00000AA4       .text _create__12daShopItem_cFv */
-int daShopItem_c::_create() {
+cPhs_State daShopItem_c::_create() {
     fopAcM_SetupActor(this, daShopItem_c);
     
     m_itemNo = fopAcM_GetParamBit(fopAcM_GetParam(this), 0, 8);

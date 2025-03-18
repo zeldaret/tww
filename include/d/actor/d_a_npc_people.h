@@ -85,7 +85,7 @@ public:
     daNpcPeople_c();
     cPhs_State _create();
     BOOL createHeap();
-    s32 createInit();
+    cPhs_State createInit();
     bool _delete();
     bool _draw();
     bool _execute();

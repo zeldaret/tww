@@ -77,7 +77,7 @@ cPhs_State daObj_Pbco_c::_create() {
 }
 
 /* 000003A4-00000434       .text daObj_PbcoCreate__FPv */
-static int daObj_PbcoCreate(void* i_this) {
+static cPhs_State daObj_PbcoCreate(void* i_this) {
     return static_cast<daObj_Pbco_c*>(i_this)->_create();
 }
 

@@ -81,7 +81,7 @@ daTbox_HIO_c::daTbox_HIO_c() {
 }
 
 /* 00000124-00000550       .text commonShapeSet__8daTbox_cFv */
-s32 daTbox_c::commonShapeSet() {
+cPhs_State daTbox_c::commonShapeSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     // Load model
@@ -165,7 +165,7 @@ s32 daTbox_c::commonShapeSet() {
 }
 
 /* 00000598-00000764       .text effectShapeSet__8daTbox_cFv */
-s32 daTbox_c::effectShapeSet() {
+cPhs_State daTbox_c::effectShapeSet() {
     J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", DALWAYS_BDL_IT_TAKARA_FLASH);
     JUT_ASSERT(0x117, flashModelData != NULL);
 
@@ -195,7 +195,7 @@ s32 daTbox_c::effectShapeSet() {
 }
 
 /* 00000764-00000928       .text envShapeSet__8daTbox_cFv */
-s32 daTbox_c::envShapeSet() {
+cPhs_State daTbox_c::envShapeSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     // Load model
@@ -226,7 +226,7 @@ s32 daTbox_c::envShapeSet() {
 }
 
 /* 00000928-00000BB0       .text bgCheckSet__8daTbox_cFv */
-s32 daTbox_c::bgCheckSet() {
+cPhs_State daTbox_c::bgCheckSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", mdlInfo.closedColId);

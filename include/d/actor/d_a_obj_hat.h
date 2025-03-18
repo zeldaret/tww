@@ -18,7 +18,7 @@ public:
 
     cPhs_State _create();
     BOOL createHeap();
-    s32 createInit();
+    cPhs_State createInit();
     BOOL _delete();
     BOOL _draw();
     BOOL _execute();

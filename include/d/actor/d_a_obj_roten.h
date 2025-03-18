@@ -16,7 +16,7 @@ public:
 
     void set_mtx();
     BOOL CreateHeap();
-    s32 CreateInit();
+    cPhs_State CreateInit();
     
     static int getCreateCount();
 

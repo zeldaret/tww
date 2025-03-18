@@ -9,7 +9,7 @@ public:
     void daHmlifDelete();
     void CreateHeap();
     s32 Create();
-    void daHmlifCreate();
+    cPhs_State daHmlifCreate();
     void set_mtx();
     void Execute(float(**)[3][4]);
     void move();

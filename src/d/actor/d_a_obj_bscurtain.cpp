@@ -54,7 +54,7 @@ BOOL daObj_Bscurtain_c::CreateHeap() {
 }
 
 /* 00000334-00000370       .text CreateInit__17daObj_Bscurtain_cFv */
-s32 daObj_Bscurtain_c::CreateInit() {
+cPhs_State daObj_Bscurtain_c::CreateInit() {
     set_mtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     return cPhs_COMPLEATE_e;

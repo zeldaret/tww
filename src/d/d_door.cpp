@@ -417,8 +417,8 @@ void dDoor_smoke_c::smokeEnd() {
 }
 
 /* 8006C448-8006C478       .text keyResLoad__12dDoor_key2_cFv */
-void dDoor_key2_c::keyResLoad() {
-    dComIfG_resLoad(&mPhs, "Key");
+cPhs_State dDoor_key2_c::keyResLoad() {
+    return dComIfG_resLoad(&mPhs, "Key");
 }
 
 /* 8006C478-8006C4A8       .text keyResDelete__12dDoor_key2_cFv */
@@ -683,7 +683,7 @@ BOOL dDoor_msg_c::proc(cXyz* pos) {
 }
 
 /* 8006D0DC-8006D11C       .text resLoad__12dDoor_hkyo_cFv */
-s32 dDoor_hkyo_c::resLoad() {
+cPhs_State dDoor_hkyo_c::resLoad() {
     if (m11 == 0) {
         return cPhs_COMPLEATE_e;
     }

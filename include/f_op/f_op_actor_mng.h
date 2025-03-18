@@ -470,7 +470,9 @@ fpc_ProcID fopAcM_create(char*, u32 i_parameter, cXyz* i_pos = NULL, int i_roomN
                    csXyz* i_angle = NULL, cXyz* i_scale = NULL,
                    createFunc i_createFunc = NULL);
 
-inline s32 fopAcM_create(s16 i_procName, createFunc i_createFunc, void*);
+inline fpc_ProcID fopAcM_create(s16 i_procName, createFunc i_createFunc, void* params) {
+    return fpcM_Create(i_procName, i_createFunc, params);
+}
 
 void* fopAcM_fastCreate(s16 procName, u32 parameter, cXyz* p_pos = NULL, int roomNo = -1,
                         csXyz* p_angle = NULL, cXyz* p_scale = NULL, s8 subType = -1,

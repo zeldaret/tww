@@ -260,7 +260,7 @@ static BOOL daRaceItem_Delete(daRaceItem_c* i_this) {
 }
 
 /* 00000C6C-00000C8C       .text daRaceItem_Create__FP10fopAc_ac_c */
-static int daRaceItem_Create(fopAc_ac_c* i_this) {
+static cPhs_State daRaceItem_Create(fopAc_ac_c* i_this) {
     return static_cast<daRaceItem_c*>(i_this)->create();
 }
 

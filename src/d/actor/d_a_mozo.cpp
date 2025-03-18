@@ -170,7 +170,7 @@ void daMozo_c::setAnm(int, float) {
 }
 
 /* 00001F70-00002228       .text CreateInit__8daMozo_cFv */
-s32 daMozo_c::CreateInit() {
+cPhs_State daMozo_c::CreateInit() {
     /* Nonmatching */
     J3DModelData* mdlData = mAnimMorf->getModel()->getModelData();
 

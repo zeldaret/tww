@@ -27,7 +27,7 @@ s32 daHmlif_c::Create() {
 }
 
 /* 000007C8-00000930       .text daHmlifCreate__9daHmlif_cFv */
-void daHmlif_c::daHmlifCreate() {
+cPhs_State daHmlif_c::daHmlifCreate() {
     /* Nonmatching */
 }
 

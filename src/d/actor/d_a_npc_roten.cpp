@@ -1693,7 +1693,7 @@ static s16 daNpcRoten_XyEventCB(void* i_this, int param_1) {
 }
 
 /* 00000EA8-000011C8       .text createInit__12daNpcRoten_cFv */
-s32 daNpcRoten_c::createInit() {
+cPhs_State daNpcRoten_c::createInit() {
     int weight = 0xFF;
     if(getPrmRailID() != 0xFF) {
         mPathRun.setInf(getPrmRailID(), fopAcM_GetRoomNo(this), true);

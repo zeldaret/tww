@@ -11,7 +11,7 @@
 
 void fopOvlpReq_SetPeektime(overlap_request_class*, u16);
 
-static int fopOvlpReq_phase_Done(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_Done(overlap_request_class* i_this) {
     if (fpcM_Delete(i_this->mpTask) == TRUE) {
         i_this->mpTask = NULL;
         i_this->field_0x4 = 0;
@@ -24,7 +24,7 @@ static int fopOvlpReq_phase_Done(overlap_request_class* i_this) {
     return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_IsDone(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_IsDone(overlap_request_class* i_this) {
     cReq_Done(i_this);
     if (i_this->mDelay-- <= 0)
         return cPhs_NEXT_e;
@@ -32,7 +32,7 @@ static s32 fopOvlpReq_phase_IsDone(overlap_request_class* i_this) {
         return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_IsWaitOfFadeout(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_IsWaitOfFadeout(overlap_request_class* i_this) {
     if (cReq_Is_Done(&i_this->mpTask->mRq)) {
         i_this->mIsPeek = 0;
         return cPhs_NEXT_e;
@@ -41,7 +41,7 @@ static s32 fopOvlpReq_phase_IsWaitOfFadeout(overlap_request_class* i_this) {
     return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_this) {
     if (i_this->mPeektime)
         i_this->mPeektime--;
 
@@ -54,7 +54,7 @@ static s32 fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_this) {
     return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_IsComplete(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_IsComplete(overlap_request_class* i_this) {
     if (cReq_Is_Done(&i_this->mpTask->mRq)) {
         cReq_Done(i_this);
         return cPhs_NEXT_e;
@@ -63,7 +63,7 @@ static s32 fopOvlpReq_phase_IsComplete(overlap_request_class* i_this) {
     return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_IsCreated(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_IsCreated(overlap_request_class* i_this) {
     if (fpcM_IsCreating(i_this->mPId) == 0) {
         base_process_class* pBaseProc = fpcEx_SearchByID(i_this->mPId);
         if (pBaseProc == NULL)

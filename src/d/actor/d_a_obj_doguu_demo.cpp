@@ -6,7 +6,6 @@
 #include "d/actor/d_a_obj_doguu_demo.h"
 #include "d/res/res_doguud.h"
 #include "d/d_bg_w.h"
-#include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor.h"
@@ -79,7 +78,7 @@ cPhs_State daObjDoguuD_c::_create() {
 }
 
 /* 00000314-000003BC       .text daObjDoguuD_create__FPv */
-static s32 daObjDoguuD_create(void* i_this) {
+static cPhs_State daObjDoguuD_create(void* i_this) {
     return ((daObjDoguuD_c*)i_this)->_create();
 }
 

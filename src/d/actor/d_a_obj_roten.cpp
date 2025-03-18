@@ -58,7 +58,7 @@ BOOL daObj_Roten_c::CreateHeap() {
 }
 
 /* 000002E4-00000348       .text CreateInit__13daObj_Roten_cFv */
-s32 daObj_Roten_c::CreateInit() {
+cPhs_State daObj_Roten_c::CreateInit() {
     set_mtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     mpBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);

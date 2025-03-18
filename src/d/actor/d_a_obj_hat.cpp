@@ -107,7 +107,7 @@ BOOL daObjHat_c::createHeap() {
 }
 
 /* 000005D4-000006AC       .text createInit__10daObjHat_cFv */
-s32 daObjHat_c::createInit() {
+cPhs_State daObjHat_c::createInit() {
     mStts.Init(2, 0xff, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);

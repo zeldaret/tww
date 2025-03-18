@@ -213,7 +213,7 @@ void daItem_c::CreateInit() {
 }
 
 /* 800F53EC-800F5668       .text _daItem_create__8daItem_cFv */
-s32 daItem_c::_daItem_create() {
+cPhs_State daItem_c::_daItem_create() {
     fopAcM_SetupActor(this, daItem_c);
     
     m_itemNo = daItem_prm::getItemNo(this);
