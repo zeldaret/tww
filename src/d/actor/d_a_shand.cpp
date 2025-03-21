@@ -368,13 +368,23 @@ static BOOL daShand_Delete(shand_class* actor) {
 }
 
 /* 000022D4-00002360       .text useHeapInit__FP11shand_class */
-void useHeapInit(shand_class*) {
-    /* Nonmatching */
+static BOOL useHeapInit(shand_class* actor) {
+    const int res_index = ((fopAcM_GetParam(actor) & 0xff) == 53) + 3;
+    ResTIMG* res = static_cast<ResTIMG*>(dComIfG_getObjectRes("Shand", res_index));
+    int ret;
+    if(actor->mLineMat.init(1, 20, res, 1) != 0){
+        ret = TRUE;
+    }
+    else {
+        ret = FALSE;
+    }
+
+    return ret;
 }
 
 /* 00002360-00002380       .text daShand_solidHeapCB__FP10fopAc_ac_c */
-static BOOL daShand_solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL daShand_solidHeapCB(fopAc_ac_c* actor) {
+    return useHeapInit(static_cast<shand_class*>(actor));
 }
 
 /* 00002380-00002630       .text daShand_Create__FP10fopAc_ac_c */
