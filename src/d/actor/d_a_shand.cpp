@@ -87,13 +87,15 @@ void control2(shand_class* actor) {
     cLib_addCalc2(&actor->u2F0, 1.0, 1.0, 0.01);
 
     int i = 18;
+    short Yangle;
+    int XZangle;
     shand_s* shand_i = &actor->u31C[i];
     for(i = 18; i >= 1; i--, shand_i--){
         float delta_pos_x = shand_i->mPos.x - shand_i[1].mPos.x;
         float delta_pos_y = shand_i->mPos.y - shand_i[1].mPos.y;
         float delta_pos_z = shand_i->mPos.z - shand_i[1].mPos.z;
-        int XZangle = cM_atan2s(delta_pos_x, delta_pos_z);
-        short Yangle = -cM_atan2s(delta_pos_y, std::sqrtf(delta_pos_x * delta_pos_x + delta_pos_z * delta_pos_z));
+        XZangle = cM_atan2s(delta_pos_x, delta_pos_z);
+        Yangle = -cM_atan2s(delta_pos_y, std::sqrtf(delta_pos_x * delta_pos_x + delta_pos_z * delta_pos_z));
         mDoMtx_YrotS(*calc_mtx, XZangle);
         mDoMtx_XrotM(*calc_mtx, Yangle);
         MtxPosition(&rel_offset, &abs_offset);
