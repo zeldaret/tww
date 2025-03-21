@@ -55,7 +55,7 @@ public:
 
 public:
     /* 0x0    vtable */ u32 vtable;
-    /* 0x4 */ char u4;
+    /* 0x4 */ s8 mId;
     /* 0x6 */ short u6;
     /* 0x8 */ short u8;
 };
