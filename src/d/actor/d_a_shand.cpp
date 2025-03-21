@@ -333,8 +333,21 @@ void hand_move(shand_class* actor) {
 }
 
 /* 000021EC-0000225C       .text daShand_Execute__FP11shand_class */
-static BOOL daShand_Execute(shand_class*) {
-    /* Nonmatching */
+static BOOL daShand_Execute(shand_class* actor) {
+    actor->mExecuteCount++;
+    
+    
+    for(int i = 4, j = 0; i != 0; i--, j++){
+        if(actor->u2BC[j] != 0)
+            actor->u2BC[j]--;    
+    }
+
+    if(actor->u2C4 != 0)
+        actor->u2C4--;
+
+    hand_move(actor);
+
+    return TRUE;
 }
 
 /* 0000225C-00002264       .text daShand_IsDelete__FP11shand_class */
