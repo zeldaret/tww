@@ -11,6 +11,7 @@
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
 
+bool hio_set;
 daShand_HIO_c l_HIO;
 
 /* 000000EC-00000114       .text __ct__13daShand_HIO_cFv */
@@ -352,12 +353,18 @@ static BOOL daShand_Execute(shand_class* actor) {
 
 /* 0000225C-00002264       .text daShand_IsDelete__FP11shand_class */
 static BOOL daShand_IsDelete(shand_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00002264-000022D4       .text daShand_Delete__FP11shand_class */
-static BOOL daShand_Delete(shand_class*) {
-    /* Nonmatching */
+static BOOL daShand_Delete(shand_class* actor) {
+    dComIfG_resDelete(&actor->mPhs, "Shand");
+    if(actor->mHasHIO){
+        hio_set = false;
+        mDoHIO_deleteChild(l_HIO.mId);
+    }
+
+    return TRUE;
 }
 
 /* 000022D4-00002360       .text useHeapInit__FP11shand_class */
