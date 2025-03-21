@@ -19,7 +19,7 @@ public:
     /* 0x2AC */ request_of_phase_process_class mPhs;
     /* 0x2B4 */ short mExecuteCount;
     short _pad2B6;
-    /* 0x2B8 */ short u2B8;
+    /* 0x2B8 */ short mState;
     /* 0x2BA */ short u2BA;
     /* 0x2BC */ short u2BC[4];
     /* 0x2C4 */ short u2C4;
@@ -32,7 +32,7 @@ public:
     /* 0x2FC */ float u2FC;
     /* 0x300 */ float u300;
     /* 0x304 */ float u304;
-    u8 _pad308[0x30C - 0x308];
+    /* 0x308 */ fpc_ProcID u308;
     /* 0x30C */ shand_class* u30C;
     /* 0x310 */ cXyz* u310;
     /* 0x314 */ u8* u314;
@@ -54,7 +54,10 @@ public:
     void genMessage(JORMContext* ctx){};
 
 public:
-    /* Place member variables here */
+    /* 0x0    vtable */ u32 vtable;
+    /* 0x4 */ char u4;
+    /* 0x6 */ short u6;
+    /* 0x8 */ short u8;
 };
 
 #endif /* D_A_SHAND_H */
