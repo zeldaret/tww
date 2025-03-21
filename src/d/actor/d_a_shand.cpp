@@ -37,6 +37,8 @@ static BOOL daShand_Draw(shand_class* actor) {
 
 /* 000001E0-0000052C       .text control1__FP11shand_class */
 void control1(shand_class* actor) {
+    float fVar_x, fVar_y, fVar_z;
+
     actor->u31C[0].mPos = actor->current.pos;
     int i = 1;
     shand_s* shand_i = &actor->u31C[i];
@@ -58,12 +60,13 @@ void control1(shand_class* actor) {
         idk.z =  fVar1 * cM_scos(actor->mExecuteCount * (REG0_S(7) + 800) + i * (REG0_S(8) + 4000));
         float fVar2 = (i < 15) ? 1.0f : 1.0f - (i - 15) * 0.2f;
 
-        float fVar_x = shand_i->mPos.x - shand_i[-1].mPos.x + (localac.x * fVar2) + (idk.x * fVar2);
-        float fVar_y = shand_i->mPos.y - shand_i[-1].mPos.y + localac.y;
-        float fVar_z = shand_i->mPos.z - shand_i[-1].mPos.z + (localac.z * fVar2) + (idk.z * fVar2);
+        fVar_x = shand_i->mPos.x - shand_i[-1].mPos.x + (localac.x * fVar2) + (idk.x * fVar2);
+        fVar_y = shand_i->mPos.y - shand_i[-1].mPos.y + localac.y;
+        fVar_z = shand_i->mPos.z - shand_i[-1].mPos.z + (localac.z * fVar2) + (idk.z * fVar2);
 
+        short iVar3;
         int iVar2 = cM_atan2s(fVar_x, fVar_z);
-        short iVar3 = -cM_atan2s(fVar_y, std::sqrtf(fVar_x * fVar_x + fVar_z * fVar_z));
+        iVar3 = -cM_atan2s(fVar_y, std::sqrtf(fVar_x * fVar_x + fVar_z * fVar_z));
         mDoMtx_YrotS(*calc_mtx, iVar2);
         mDoMtx_XrotM(*calc_mtx, iVar3);
         MtxPosition(&local94, &cStack_a0);
