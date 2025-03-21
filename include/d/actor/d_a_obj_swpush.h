@@ -19,28 +19,28 @@ namespace daObjSwpush {
     };
 
     struct Attr_c {
-        u32 m00;
-        u32 mFlags;
-        /* 0x08 */ float m08;
+        /* 0x00 */ u32 mHeapSize;
+        /* 0x04 */ AttrFlag_e mFlags;
+        /* 0x08 */ float mScale;
         /* 0x0C */ const char* mKbotaResName;
         /* 0x10 */ const char* mHhbotResName;
-        /* 0x14 */ const char* m14;
-        /* 0x18 */ const char* m18;
-        /* 0x1C */ const char* m1C;
-        /* 0x20 */ short m20;
-        /* 0x22 */ short m22[2];
-        /* 0x26 */ short m26;
-        float m28;
-        float m2C;
-        float m30;
-        float m34;
-        short m38;
-        short mMiniPushDelay1;
-        short mPushDelay;
-        short mMiniPushDelay2;
-        float m40;
-        float m44;
-        short m48;
+        /* 0x14 */ const char* mBgArcName;
+        /* 0x18 */ const char* mModelArcName;
+        /* 0x1C */ const char* mBtpArcName;
+        /* 0x20 */ short mBgResIndex;
+        /* 0x22 */ short mModelResIndices[2];
+        /* 0x26 */ short mBtpResIndex;
+        /* 0x28 */ float mSpring;
+        /* 0x2C */ float mSpeedDecay;
+        /* 0x30 */ float mPushSpeed0;
+        /* 0x34 */ float m34;
+        /* 0x38 */ short m38;
+        /* 0x3A */ short mMiniPushDelay1;
+        /* 0x3C */ short mPushDelay;
+        /* 0x3E */ short mMiniPushDelay2;
+        /* 0x40 */ float m40;
+        /* 0x44 */ float m44;
+        /* 0x48 */ short mPauseDuration;
     };
 
     class Act_c : public fopAc_ac_c {
@@ -76,7 +76,7 @@ namespace daObjSwpush {
         void rev_switch() const { fopAcM_revSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
     
         void prmZ_init();
-        BOOL is_switch2() const;
+        bool is_switch2() const;
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap();
         cPhs_State create_res_load();
@@ -128,11 +128,11 @@ namespace daObjSwpush {
         /* 0x2F0 */ int mType;
         /* 0x2F4 */ int mMode;
         /* 0x2F8 */ int mDemoMode;
-        /* 0x2FC */ short m2FC;
-        /* 0x2FE */ short m2FE;
+        /* 0x2FC */ short mPauseTimer;
+        /* 0x2FE */ short mEventID;
         /* 0x300 */ u16 mPrmZ;
-        /* 0x302 */ bool m302;
-        /* 0x303 */ u8 m303;
+        /* 0x302 */ bool mPrmZInit;
+        /* 0x303 */ u8 mVibTimer;
         /* 0x304 */ u8 mRidingMode;
         /* 0x305 */ bool mPrevRiding;
         /* 0x306 */ short mMiniPushTimer;
@@ -141,17 +141,17 @@ namespace daObjSwpush {
         /* 0x30A */ bool mPrevHeavyRiding;
         /* 0x30C */ short mPushTimer;
         /* 0x30E */ bool mPushFlg;
-        /* 0x30F */ u8 m30F;
+        /* 0x30F */ bool mChangingState;
         /* 0x310 */ float mTargetHFrac;
         /* 0x314 */ float mCurHFrac;
-        /* 0x318 */ float mVSpeed;
+        /* 0x318 */ float mSpeed;
         /* 0x31C */ float m31C;
         /* 0x320 */ float m320;
         /* 0x324 */ short m324;
         /* 0x328 */ float m328;
         /* 0x32C */ float m32C;
         /* 0x330 */ float mTopPos;
-        /* 0x334 */ short m334;
+        /* 0x334 */ short mDebounceTimer;
     }; // Size: 0x338
 
     STATIC_ASSERT(sizeof(Act_c) == 0x338);

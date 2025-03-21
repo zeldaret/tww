@@ -18,7 +18,7 @@ const char daObjSwpush::Act_c::M_arcname_hhbot[] = "Hhbot";
 const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[4] = {
     {
         0xAE0,
-        3,
+        static_cast<AttrFlag_e>(FLAG_STAY_PRESSED | FLAG_OBEY_SAVE),
         1.0f,
         daObjSwpush::Act_c::M_arcname_kbota,
         NULL,
@@ -42,7 +42,7 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[4] = {
     },
     {
         0xAE0,
-        32,
+        static_cast<AttrFlag_e>(FLAG_UNK20),
         1.0f,
         daObjSwpush::Act_c::M_arcname_kbota,
         NULL,
@@ -66,7 +66,7 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[4] = {
     },
     {
         0xAE0,
-        19,
+        static_cast<AttrFlag_e>(FLAG_UNK10 | FLAG_STAY_PRESSED | FLAG_OBEY_SAVE),
         1.0f,
         daObjSwpush::Act_c::M_arcname_kbota,
         NULL,
@@ -90,7 +90,7 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[4] = {
     },
     {
         0x8000,
-        11,
+        static_cast<AttrFlag_e>(FLAG_REQ_HEAVY | FLAG_STAY_PRESSED | FLAG_OBEY_SAVE),
         1.5f,
         daObjSwpush::Act_c::M_arcname_kbota,
         daObjSwpush::Act_c::M_arcname_hhbot,
@@ -118,18 +118,18 @@ const u8 daObjSwpush::Act_c::M_op_vtx[4] = { 6, 10, 11, 7 };
 
 /* 000000EC-0000011C       .text prmZ_init__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::prmZ_init() {
-    if (m302) {
+    if (mPrmZInit) {
         return;
     }
     mPrmZ = home.angle.z;
-    m302 = true;
+    mPrmZInit = true;
     home.angle.z = 0;
     current.angle.z = 0;
     shape_angle.z = 0;
 }
 
 /* 0000011C-0000019C       .text is_switch2__Q211daObjSwpush5Act_cCFv */
-BOOL daObjSwpush::Act_c::is_switch2() const {
+bool daObjSwpush::Act_c::is_switch2() const {
     s32 swSave2 = prmZ_get_swSave2();
 
     if (0xFF == swSave2) {
@@ -148,10 +148,10 @@ BOOL daObjSwpush::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjSwpush::Act_c::create_heap() {
     bool rt = false;
 
-    J3DModelData* model_data = (J3DModelData*) dComIfG_getObjectRes(attr().m18, attr().m22[prm_get_mdl()]);
+    J3DModelData* model_data = (J3DModelData*) dComIfG_getObjectRes(attr().mModelArcName, attr().mModelResIndices[prm_get_mdl()]);
     JUT_ASSERT(0x205, model_data != NULL);
     u32 flag = 0x11000022;
-    if (attr().m1C != NULL) {
+    if (attr().mBtpArcName != NULL) {
         flag |= 0x20000;
     }
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, flag);
@@ -160,12 +160,12 @@ bool daObjSwpush::Act_c::create_heap() {
         mpModel->setUserArea((u32) this);
     }
     int iVar7 = 1;
-    if (attr().m1C != NULL) {
-        J3DAnmTexPattern* btp_data = (J3DAnmTexPattern*) dComIfG_getObjectRes(attr().m1C, attr().m26);
+    if (attr().mBtpArcName != NULL) {
+        J3DAnmTexPattern* btp_data = (J3DAnmTexPattern*) dComIfG_getObjectRes(attr().mBtpArcName, attr().mBtpResIndex);
         JUT_ASSERT(0x21E, btp_data != NULL);
         iVar7 = mBtpAnm.init(model_data, btp_data, 1, 0, 1.0f, 0, -1, false, 0);
     }
-    cBgD_t* bg_data = (cBgD_t*) dComIfG_getObjectRes(attr().m14, attr().m20);
+    cBgD_t* bg_data = (cBgD_t*) dComIfG_getObjectRes(attr().mBgArcName, attr().mBgResIndex);
     bool bVar1 = false;
     JUT_ASSERT(0x22B, bg_data != NULL);
     mpBgW = new dBgWSv();
@@ -200,77 +200,88 @@ cPhs_State daObjSwpush::Act_c::create_res_load() {
 /* 0000051C-000008C4       .text Mthd_Create__Q211daObjSwpush5Act_cFv */
 cPhs_State daObjSwpush::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjSwpush::Act_c);
+
     prmZ_init();
     mType = prm_get_type();
+
     cPhs_State phase_state = create_res_load();
     if (phase_state == cPhs_COMPLEATE_e) {
-        scale.x *= attr().m08;
-        scale.z *= attr().m08;
-        if (fopAcM_entrySolidHeap(this, solidHeapCB, attr().m00)) {
+        scale.x *= attr().mScale;
+        scale.z *= attr().mScale;
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, attr().mHeapSize)) {
             if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
-                return cPhs_ERROR_e;
-            }
-
-            mDoMtx_stack_c::transS(current.pos);
-            mDoMtx_stack_c::ZXYrotM(shape_angle);
-            mDoMtx_stack_c::scaleM(scale);
-            mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
-            mpBgW->ClrNoCalcVtx();
-            mpBgW->SetBaseMtxP(&mMtx);
-            mpBgW->GlobalVtx();
-            mpBgW->SetBaseMtxP(NULL);
-            mpBgW->SetNoCalcVtx();
-
-            m2D4 = mpBgW->GetVtxTbl()[M_op_vtx[0]].y;
-            mpBgW->SetRideCallback(rideCB);
-            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-            init_mtx();
-            fopAcM_setCullSizeBox(this, attr().m08 * -60.0f, -2.0f, attr().m08 * -60.0f, attr().m08 * 60.0f, 39.0f, attr().m08 * 60.0f);
-
-            m303 = 0;
-            mRidingMode = 0;
-            mPrevRiding = false;
-            mMiniPushTimer = 0;
-            mMiniPushFlg = false;
-            mHeavyRiding = false;
-            mPrevHeavyRiding = 0;
-            mPushTimer = 0;
-            mPushFlg = false;
-            mVSpeed = 0.0f;
-            m324 = 0;
-            m328 = 0.0f;
-
-            set_btp_frame();
-
-            u32 flags = attr().mFlags;
-            bool flg1 = cLib_checkBit<u32>(flags, FLAG_UNK10);
-            bool is_sw = is_switch();
-            bool is_sw2 = is_switch2();
-
-            if ((cLib_checkBit<u32>(flags, FLAG_IS_TOGGLE) || (!is_sw && !flg1)) || (is_sw && flg1) && (!cLib_checkBit<u32>(attr().mFlags, FLAG_UNK20) || !is_sw2)) {
-                mTargetHFrac = 1.0f;
-                mCurHFrac = 1.0f;
-                m31C = 0.0f;
-                m320 = 1.0f;
-                m32C = 1.0f;
-                mTopPos = 0.0f;
-                mode_upper_init();
+                phase_state = cPhs_ERROR_e;
             } else {
-                mTargetHFrac = 0.0f;
-                mCurHFrac = 0.0f;
-                m31C = -35.5f;
-                m320 = 0.0f;
-                m32C = 0.0f;
-                mTopPos = -35.5f;
-                mode_lower_init();
-            }
+                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::ZXYrotM(shape_angle);
+                mDoMtx_stack_c::scaleM(scale);
+                mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+                mpBgW->ClrNoCalcVtx();
+                mpBgW->SetBaseMtxP(&mMtx);
+                mpBgW->GlobalVtx();
+                mpBgW->SetBaseMtxP(NULL);
+                mpBgW->SetNoCalcVtx();
 
-            m2FE = dComIfGp_evmng_getEventIdx(NULL, prm_get_evId());
-            demo_non_init();
-            return cPhs_COMPLEATE_e;
+                m2D4 = mpBgW->GetVtxTbl()[M_op_vtx[0]].y;
+                mpBgW->SetRideCallback(rideCB);
+                fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+                init_mtx();
+                fopAcM_setCullSizeBox(this, attr().mScale * -60.0f, -2.0f, attr().mScale * -60.0f, attr().mScale * 60.0f, 39.0f, attr().mScale * 60.0f);
+
+                mVibTimer = 0;
+                mRidingMode = 0;
+                mPrevRiding = false;
+                mMiniPushTimer = 0;
+                mMiniPushFlg = false;
+                mHeavyRiding = false;
+                mPrevHeavyRiding = 0;
+                mPushTimer = 0;
+                mPushFlg = false;
+                mSpeed = 0.0f;
+                m324 = 0;
+                m328 = 0.0f;
+
+                set_btp_frame();
+
+                bool is_toggle = cLib_checkBit(attr().mFlags, FLAG_IS_TOGGLE);
+                bool flg10 = cLib_checkBit(attr().mFlags, FLAG_UNK10);
+                bool flg20 = cLib_checkBit(attr().mFlags, FLAG_UNK20);
+                bool is_sw = is_switch();
+                bool is_sw2 = is_switch2();
+
+                if (
+                    (
+                        is_toggle ||
+                        (!is_sw && !flg10) ||
+                        (is_sw && flg10)
+                    ) && 
+                    (!flg20 || !is_sw2)
+                ) {
+                    mTargetHFrac = 1.0f;
+                    mCurHFrac = 1.0f;
+                    m31C = 0.0f;
+                    m320 = 1.0f;
+                    m32C = 1.0f;
+                    mTopPos = 0.0f;
+                    mode_upper_init();
+                } else {
+                    mTargetHFrac = 0.0f;
+                    mCurHFrac = 0.0f;
+                    m31C = -35.5f;
+                    m320 = 0.0f;
+                    m32C = 0.0f;
+                    mTopPos = -35.5f;
+                    mode_lower_init();
+                }
+
+                mEventID = dComIfGp_evmng_getEventIdx(NULL, prm_get_evId());
+                demo_non_init();
+            }
+        } else {
+            phase_state = cPhs_ERROR_e;
         }
     }
-    return cPhs_ERROR_e;
+    return phase_state;
 }
 
 /* 00000968-000009F8       .text Mthd_Delete__Q211daObjSwpush5Act_cFv */
@@ -300,54 +311,57 @@ void daObjSwpush::Act_c::init_mtx() {
 
 /* 00000AA0-00000B34       .text set_btp_frame__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::set_btp_frame() {
-    if (attr().m1C != NULL) {
-        float fVar1 = is_switch() ? 1.0f : 0.0f;
-        mBtpAnm.setFrame(fVar1);
+    if (attr().mBtpArcName != NULL) {
+        mBtpAnm.setFrame(is_switch() ? 1.0f : 0.0f);
     }
 }
 
 /* 00000B34-00000EDC       .text rideCB__Q211daObjSwpush5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjSwpush::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
-    static const u8 tri_id[2][3] = {
-        {0, 1, 2},
-        {3, 0, 2}
-    };
-
-    daObjSwpush::Act_c *i_this = (daObjSwpush::Act_c*)i_ac;
-
     if (fopAcM_CheckStatus(i_pt, fopAcStts_FREEZE_e)) {
-        cXyz tmp; // TODO ??
         static cXyz no_push_vec[4] = {
             cXyz(-1.0f, 0.0f, -1.0f),
             cXyz(-1.0f, 0.0f, 1.0f),
             cXyz(1.0f, 0.0f,  1.0f),
             cXyz(1.0f, 0.0f, -1.0f)
         };
+        
+        static const s8 tri_id[2][3] = {
+            {0, 1, 2},
+            {3, 0, 2}
+        };
+
+        daObjSwpush::Act_c *i_this = (daObjSwpush::Act_c*)i_ac;
 
         cBgD_Vtx_t* vtx_tbl = i_this->mpBgW->GetVtxTbl();
+    
         cM3dGTri tri;
+        cXyz vecs[4];
+
         float fscale = i_this->mPrevRiding ? i_this->attr().m44 : i_this->attr().m40;
         mDoMtx_stack_c::push();
         mDoMtx_stack_c::YrotS(i_this->shape_angle.y);
         mDoMtx_stack_c::scaleM(fscale, fscale, fscale);
 
         for (int i = 0; i < 4; i++) {
-            cBgD_Vtx_t vtx = vtx_tbl[M_op_vtx[i]];
-            no_push_vec[i].set(vtx);
-            mDoMtx_stack_c::multVec(&no_push_vec[i], &tmp);
-            no_push_vec[i] += tmp;
+            vecs[i].set(vtx_tbl[M_op_vtx[i]]);
+            cXyz out;
+            mDoMtx_stack_c::multVec(&no_push_vec[i], &out);
+            vecs[i] += out;
         }
+
         mDoMtx_stack_c::pop();
         for (int i = 0; i < 2; i++) {
-            tri.setPos(&no_push_vec[tri_id[i][0]], &no_push_vec[tri_id[i][1]], &no_push_vec[tri_id[i][2]]);
+            tri.setPos(&vecs[tri_id[i][0]], &vecs[tri_id[i][1]], &vecs[tri_id[i][2]]);
             if (tri.crossY(&i_pt->current.pos)) {
                 if (fopAcM_CheckStatus(i_pt, fopAcStts_UNK8000000_e)) {
                     i_this->mRidingMode = 2;
                 } else {
                     i_this->mRidingMode = 1;
                 }
+
                 if (fopAcM_GetProfName(i_pt) == PROC_PLAYER) {
-                    i_this->m303 = 4;
+                    i_this->mVibTimer = 4;
                     if (((daPy_py_c*)i_pt)->checkEquipHeavyBoots()) {
                         i_this->mHeavyRiding = true;
                     }
@@ -376,10 +390,10 @@ BOOL daObjSwpush::Act_c::jnodeCB(J3DNode* node, int calcTiming) {
 
 /* 0000105C-00001170       .text calc_top_pos__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::calc_top_pos() {
-    float decay = attr().m2C;
-    mVSpeed -= (mCurHFrac - mTargetHFrac) * attr().m28;
-    mVSpeed -= mVSpeed * decay;
-    mCurHFrac += mVSpeed;
+    float decay = attr().mSpeedDecay;
+    mSpeed -= (mCurHFrac - mTargetHFrac) * attr().mSpring;
+    mSpeed -= mSpeed * decay;
+    mCurHFrac += mSpeed;
     m31C = (1.0f - mCurHFrac) * -35.5f;
     m31C = cLib_minMaxLimit(m31C, -36.5f, 1.0f);
 
@@ -407,8 +421,8 @@ void daObjSwpush::Act_c::top_bg_aim_req(float param_1, short param_2) {
 
 /* 0000117C-0000130C       .text set_push_flag__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::set_push_flag() {
-    if (m303 != 0) {
-        m303--;
+    if (mVibTimer != 0) {
+        mVibTimer--;
     }
     if (mMiniPushFlg) {
         if (mRidingMode != 0) {
@@ -455,8 +469,8 @@ void daObjSwpush::Act_c::set_push_flag() {
 void daObjSwpush::Act_c::mode_upper_init() {
     mMode = 0;
     mTargetHFrac = 1.0f;
-    m30F = 0;
-    m334 = 0;
+    mChangingState = false;
+    mDebounceTimer = 0;
 }
 
 /* 0000132C-00001508       .text mode_upper__Q211daObjSwpush5Act_cFv */
@@ -466,7 +480,7 @@ void daObjSwpush::Act_c::mode_upper() {
     bool pressing = false;
     float height = 1.0f;
     if (mMiniPushFlg) {
-        if (cLib_checkBit<u32>(attr().mFlags, FLAG_REQ_HEAVY)) {
+        if (cLib_checkBit(attr().mFlags, FLAG_REQ_HEAVY)) {
             if (mPushFlg) {
                 pressing = true;
             } else {
@@ -477,24 +491,24 @@ void daObjSwpush::Act_c::mode_upper() {
         }
     }
 
-    if (!cLib_checkBit<u32>(attr().mFlags, FLAG_REQ_HEAVY) && m334 <= 0 && mRidingMode != 0 && !mPrevRiding) {
-        mVSpeed = attr().m34;
-        m334 = 30;
+    if (!cLib_checkBit(attr().mFlags, FLAG_REQ_HEAVY) && mDebounceTimer <= 0 && mRidingMode != 0 && !mPrevRiding) {
+        mSpeed = attr().m34;
+        mDebounceTimer = 30;
         bVar4 = true;
-    } else if (m334 > 0) {
-        m334--;
+    } else if (mDebounceTimer > 0) {
+        mDebounceTimer--;
     }
     bool is_sw = is_switch();
     if (pressing ||
-        (cLib_checkBit<u32>(attr().mFlags, FLAG_OBEY_SAVE) &&
+        (cLib_checkBit(attr().mFlags, FLAG_OBEY_SAVE) &&
             (
-                (is_sw && !cLib_checkBit<u32>(attr().mFlags, FLAG_UNK10)) ||
-                (!is_sw && cLib_checkBit<u32>(attr().mFlags, FLAG_UNK10))
+                (is_sw && !cLib_checkBit(attr().mFlags, FLAG_UNK10)) ||
+                (!is_sw && cLib_checkBit(attr().mFlags, FLAG_UNK10))
             )
         )
     ) {
         if (pressing) {
-            m30F = 1;
+            mChangingState = true;
         }
         bVar3 = true;
         mode_u_l_init();
@@ -513,24 +527,24 @@ void daObjSwpush::Act_c::mode_upper() {
 void daObjSwpush::Act_c::mode_u_l_init() {
     mMode = 1;
     mTargetHFrac = 0.0f;
-    mVSpeed = attr().m30;
+    mSpeed = attr().mPushSpeed0;
     top_bg_aim_req(0.0f, attr().m38);
 }
 
 /* 00001568-000016DC       .text mode_u_l__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::mode_u_l() {
     if (mCurHFrac <= 0.0f) {
-        if (m30F) {
-            if (cLib_checkBit<u32>(attr().mFlags, FLAG_IS_TOGGLE)) {
+        if (mChangingState) {
+            if (cLib_checkBit(attr().mFlags, FLAG_IS_TOGGLE)) {
                 rev_switch();
             } else {
-                if (cLib_checkBit<u32>(attr().mFlags, FLAG_UNK10)) {
+                if (cLib_checkBit(attr().mFlags, FLAG_UNK10)) {
                     off_switch();
                 } else {
                     on_switch();
                 }
             } 
-            if (m303) {
+            if (mVibTimer != 0) {
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             }
         }
@@ -543,14 +557,14 @@ void daObjSwpush::Act_c::mode_u_l() {
 void daObjSwpush::Act_c::mode_lower_init() {
     mMode = 2;
     mTargetHFrac = 0.0f;
-    m30F = 0;
+    mChangingState = 0;
 }
 
 /* 000016FC-00001898       .text mode_lower__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::mode_lower() {
     bool pressing = false;
     if (mMiniPushFlg) {
-        if (cLib_checkBit<u32>(attr().mFlags, FLAG_REQ_HEAVY)) {
+        if (cLib_checkBit(attr().mFlags, FLAG_REQ_HEAVY)) {
             if (mPushFlg) {
                 pressing = true;
             }
@@ -559,22 +573,23 @@ void daObjSwpush::Act_c::mode_lower() {
         }
     }
     bool is_sw = is_switch();
-    BOOL is_sw2 = is_switch2();
-    u32 flags = attr().mFlags;
-    bool uVar5 = cLib_checkBit<u32>(flags, FLAG_UNK10);
-    bool pop_back_up = !cLib_checkBit<u32>(flags, FLAG_STAY_PRESSED) && !pressing;
-
-    bool match_state_up = cLib_checkBit<u32>(flags, FLAG_OBEY_SAVE) &&
-        ((!is_sw && !uVar5) || (is_sw && uVar5)) &&
+    bool is_sw2 = is_switch2();
+    bool obey_save = cLib_checkBit(attr().mFlags, FLAG_OBEY_SAVE);
+    bool stay_pressed = cLib_checkBit(attr().mFlags, FLAG_STAY_PRESSED);
+    bool is_toggle = cLib_checkBit(attr().mFlags, FLAG_IS_TOGGLE);
+    bool flg10 = cLib_checkBit(attr().mFlags, FLAG_UNK10);
+    bool flg20 = cLib_checkBit(attr().mFlags, FLAG_UNK20);
+    
+    bool pop_back_up = !stay_pressed && !pressing;
+    bool match_state_up = obey_save &&
+        ((!is_sw && !flg10) || (is_sw && flg10)) &&
         !pressing;
 
-    bool bVar5 = !cLib_checkBit<u32>(flags, FLAG_UNK20) || !is_sw2;
+    bool bVar5 = !(flg20 && is_sw2);
     if (pop_back_up || match_state_up) {
         if (bVar5) {
-            if (pop_back_up) {
-                if (!cLib_checkBit<u32>(flags, FLAG_OBEY_SAVE) && !pressing) {
-                    m30F = 1;
-                }
+            if (pop_back_up && !is_toggle && !pressing) {
+                mChangingState = true;
             }
             demo_reqSw_init();
             mode_l_u_init();
@@ -592,8 +607,8 @@ void daObjSwpush::Act_c::mode_l_u_init() {
 /* 000018D0-00001990       .text mode_l_u__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::mode_l_u() {
     if (mCurHFrac >= 1.0f) {
-        if (m30F) {
-            if (cLib_checkBit<u32>(attr().mFlags, FLAG_UNK10)) {
+        if (mChangingState) {
+            if (cLib_checkBit(attr().mFlags, FLAG_UNK10)) {
                 on_switch();
             } else {
                 off_switch();
@@ -633,12 +648,13 @@ void daObjSwpush::Act_c::demo_reqPause() {
 /* 00001A2C-00001A54       .text demo_runPause_init__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::demo_runPause_init() {
     mDemoMode = 2;
-    m2FC = attr().m48;
+    mPauseTimer = attr().mPauseDuration;
 }
 
 /* 00001A54-00001AA0       .text demo_runPause__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::demo_runPause() {
-    if (--m2FC <= 0) {
+    --mPauseTimer;
+    if (mPauseTimer <= 0) {
         dComIfGp_event_reset();
         demo_non_init();
     }
@@ -656,10 +672,10 @@ void daObjSwpush::Act_c::demo_stop_puase() {
 
 /* 00001AF8-00001BA4       .text demo_reqSw_init__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::demo_reqSw_init() {
-    if (dComIfGp_evmng_existence(m2FE) && (mDemoMode == 0 || mDemoMode == 1 || mDemoMode == 2)) {
+    if (dComIfGp_evmng_existence(mEventID) && (mDemoMode == 0 || mDemoMode == 1 || mDemoMode == 2)) {
         demo_stop_puase();
         mDemoMode = 3;
-        fopAcM_orderOtherEventId(this, m2FE, prm_get_evId());
+        fopAcM_orderOtherEventId(this, mEventID, prm_get_evId());
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
 }
@@ -669,7 +685,7 @@ void daObjSwpush::Act_c::demo_reqSw() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         demo_runSw_init();
     } else {
-        fopAcM_orderOtherEventId(this, m2FE, prm_get_evId());
+        fopAcM_orderOtherEventId(this, mEventID, prm_get_evId());
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
 }
@@ -681,7 +697,7 @@ void daObjSwpush::Act_c::demo_runSw_init() {
 
 /* 00001C24-00001C84       .text demo_runSw__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::demo_runSw() {
-    if (dComIfGp_evmng_endCheck(m2FE)) {
+    if (dComIfGp_evmng_endCheck(mEventID)) {
         dComIfGp_event_reset();
         demo_non_init();
     }
@@ -719,16 +735,16 @@ BOOL daObjSwpush::Act_c::Mthd_Execute() {
     set_mtx();
     mpBgW->CopyBackVtx();
 
-    cBgD_Vtx_t* pcVar4 = mpBgW->GetVtxTbl();
+    cBgD_Vtx_t* vtx_tbl = mpBgW->GetVtxTbl();
     int i_max = mpBgW->GetVtxNum();
 
     for (int i = 0; i < 4; i++) {
         JUT_ASSERT(0x578, M_op_vtx[i] < i_max)
-        pcVar4[M_op_vtx[i]].y = m2D4 + mTopPos;
+        vtx_tbl[M_op_vtx[i]].y = m2D4 + mTopPos;
     }
     mpBgW->Move();
     eyePos.x = current.pos.x;
-    eyePos.y = current.pos.y + m31C - 35.5f;
+    eyePos.y = current.pos.y + m31C - -35.5f;
     eyePos.z = current.pos.z;
     set_btp_frame();
     return TRUE;
@@ -738,7 +754,7 @@ BOOL daObjSwpush::Act_c::Mthd_Execute() {
 BOOL daObjSwpush::Act_c::Mthd_Draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
-    if (attr().m1C != NULL) {
+    if (attr().mBtpArcName != NULL) {
         mBtpAnm.entry(mpModel->getModelData());
     }
     dComIfGd_setListBG();
