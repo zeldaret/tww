@@ -16,7 +16,9 @@ daShand_HIO_c l_HIO;
 
 /* 000000EC-00000114       .text __ct__13daShand_HIO_cFv */
 daShand_HIO_c::daShand_HIO_c() {
-    /* Nonmatching */
+    this->mId = -1;
+    this->u6 = -3;
+    this->u8 = 50;
 }
 
 /* 00000114-00000194       .text hand_draw__FP11shand_class */
