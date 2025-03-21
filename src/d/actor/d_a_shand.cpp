@@ -4,10 +4,14 @@
 //
 
 #include "d/actor/d_a_shand.h"
+#include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_lin_chk.h"
+#include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
+
+daShand_HIO_c l_HIO;
 
 /* 000000EC-00000114       .text __ct__13daShand_HIO_cFv */
 daShand_HIO_c::daShand_HIO_c() {
@@ -205,7 +209,7 @@ void cut(shand_class* actor) {
     cut_control(actor);
     cut_control3(actor);
     if(actor->u2BC[0] == 0 && actor->u30C->health != 0){
-        actor->u2B8 = 0;
+        actor->mState = 0;
         actor->u2BA = 0;
         actor->u2F0 = 0.0f;
         actor->u300 = 0.0f;
@@ -214,8 +218,118 @@ void cut(shand_class* actor) {
 }
 
 /* 00001508-00001DAC       .text hand_move__FP11shand_class */
-void hand_move(shand_class*) {
-    /* Nonmatching */
+void hand_move(shand_class* actor) {
+    shand_s* shand_i = actor->u31C;
+    actor->u30C = static_cast<shand_class*>(fopAcM_SearchByID(actor->u308));
+    if(actor->u30C != NULL){
+        actor->current.pos.set(*actor->u310);
+        actor->current.angle.y = actor->home.angle.y + actor->u30C->shape_angle.y + REG14_S(3);
+        switch(actor->mState){
+            case 0:
+                normal(actor);
+                actor->attention_info.flags = fopAc_Attn_LOCKON_MISC_e;
+                if(actor->u30C->health == 0){
+                    actor->mState = 1;
+                    actor->u2BA = 0;
+                }
+                break;
+
+            case 1: 
+                if((fopAcM_GetParam(actor) & 0xFF) != 1){
+                    dBgS_GndChk local_ac;
+                    local_ac.m_pos.set(actor->current.pos.x, actor->current.pos.y - 100.0f, actor->current.pos.z);
+                    actor->uCE0 = dComIfG_Bgsp()->GroundCross(&local_ac);
+                    
+                    dBgS_ObjGndChk_Spl local_100;
+                    local_100.m_pos.set(actor->current.pos.x, actor->current.pos.y + 200.0f, actor->current.pos.z);
+                    float gnd_cross = dComIfG_Bgsp()->GroundCross(&local_100) + 10.0f;
+                    if(gnd_cross != -1e09){
+                        actor->uCE0 = gnd_cross + 10.0f;
+                    }
+
+                }
+                else {
+                    actor->uCE0 = -1e9;
+                }
+                actor->mState = 2;
+
+            case 2:
+                cut(actor);
+                fopAcM_OffStatus(actor, 0);
+                actor->attention_info.flags = 0;
+                break;
+        }
+    }
+
+    mDoExt_3Dline_c* lines = actor->mLineMat.mpLines;
+    cXyz* line_data = lines->mpSegments;
+    u8* line_size = lines->mpSize;
+    for(int i = 20; i != 0; i--){
+        line_data->set(shand_i->mPos);
+        *line_size = shand_i->u18;
+
+        shand_i++; line_data++; line_size++;
+    }
+    cXyz* line_segments = actor->mLineMat.mpLines->mpSegments;
+    actor->eyePos = *(line_segments + l_HIO.u6 + 10) ;
+    actor->attention_info.position = actor->eyePos;
+
+    bool is_hit = false;
+    cCcD_Obj* hit_obj;
+    cXyz* hit_pos = NULL;
+    if(actor->u2BC[1] == 0 && actor->mState == 0){
+        actor->mSph.SetC(actor->eyePos);
+        actor->mCylArr[0].SetC(actor->current.pos);
+        for(int i = 0; i < 5; i++){
+            if(actor->u2C4 == 0 && actor->mCylArr[i].ChkTgHit() != 0){
+                hit_obj = actor->mCylArr[i].GetTgHitObj();
+                hit_pos = actor->mCylArr[i].GetTgHitPosP();
+                is_hit = true;
+                break;
+            }
+
+            if(i > 0){
+                cXyz center = line_segments[((actor->mExecuteCount & 0b11) + i) % 20];
+                center.y -= 200.0f;
+                actor->mCylArr[i].SetC(center);   
+            }
+        }
+    }
+    else {
+        cXyz local_128(0.0f, -20000.0f, 0.0f);
+        actor->mSph.SetC(local_128);
+        for(int i = 0; i < 5; i++){
+            actor->mCylArr[i].SetC(local_128);
+        }
+    }
+
+    dComIfG_Ccsp()->Set(&actor->mSph);
+    for(int i = 0; i < 5; i++){
+        dComIfG_Ccsp()->Set(&actor->mCylArr[i]);
+    }
+    
+    if(is_hit || (actor->u2C4 == 0 && actor->mSph.ChkTgHit() != 0)){
+        if(!is_hit){
+            hit_obj = actor->mSph.GetTgHitObj();
+            hit_pos = actor->mSph.GetTgHitPosP();
+        }
+        at_power_check((CcAtInfo*)hit_obj);
+        actor->u2C4 = 10;
+        if(hit_obj != NULL && (def_se_set(actor, hit_obj, 33), actor->u30C != NULL)){
+            fopAc_ac_c* local_118 = (fopAc_ac_c*)hit_obj;
+            actor->mState = 1;
+            actor->u2BA = 0;
+            actor->u2BC[0] = l_HIO.u8;
+            actor->u2BC[1] = l_HIO.u8 + REG0_S(2) + 90;
+            actor->u2F8 = 3.0f;
+            actor->u2FC = 40.0f;
+            actor->u300 = cM_rndF(20.0f) + 30.0f;
+            *actor->u314 = 1;
+            cXyz particle_scale(0.5f, 0.5f, 0.5f);
+            dComIfGp_particle_set(19, &local_118->eyePos, NULL, &particle_scale);
+            dComIfGp_particle_set(22, &local_118->eyePos, NULL, &particle_scale);
+        }
+    }
 }
 
 /* 000021EC-0000225C       .text daShand_Execute__FP11shand_class */
