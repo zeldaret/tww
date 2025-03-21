@@ -228,10 +228,10 @@ static BOOL Mthd_Execute(void* i_this) {
     return static_cast<daObjVfan::Act_c*>(i_this)->MoveBGExecute();
 }
 static BOOL Mthd_Draw(void* i_this) {
-    return static_cast<daObjVfan::Act_c*>(i_this)->Draw();
+    return static_cast<daObjVfan::Act_c*>(i_this)->MoveBGDraw();
 }
 static BOOL Mthd_IsDelete(void* i_this) {
-    return static_cast<daObjVfan::Act_c*>(i_this)->IsDelete();
+    return static_cast<daObjVfan::Act_c*>(i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Vfan = {

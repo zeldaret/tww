@@ -230,12 +230,12 @@ namespace daObjEbomzo {
 
         /* 00000BFC-00000C28      .text Mthd_Draw__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv  */
         BOOL Mthd_Draw(void* i_this) {
-            return static_cast<Act_c*>(i_this)->Draw();
+            return static_cast<Act_c*>(i_this)->MoveBGDraw();
         }
 
         /* 00000C28-00000C54      .text Mthd_IsDelete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv  */
         BOOL Mthd_IsDelete(void* i_this) {
-            return static_cast<Act_c*>(i_this)->IsDelete();
+            return static_cast<Act_c*>(i_this)->MoveBGIsDelete();
         }
 
         static actor_method_class Mthd_Ebomzo = {

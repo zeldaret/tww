@@ -51,7 +51,7 @@ namespace daObjSwhammer {
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
 
-        virtual ~Act_c() {};
+        virtual ~Act_c() {}
 
         static int M_damage;
         static short M_damage_dir;

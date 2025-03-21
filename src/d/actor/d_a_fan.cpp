@@ -272,7 +272,7 @@ static BOOL daFan_Delete(void* i_this) {
 
 /* 000011CC-000011F8       .text daFan_Draw__FPv */
 static BOOL daFan_Draw(void* i_this) {
-    return ((daFan_c*)i_this)->Draw();
+    return ((daFan_c*)i_this)->MoveBGDraw();
 }
 
 /* 000011F8-00001218       .text daFan_Execute__FPv */

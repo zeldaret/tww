@@ -988,12 +988,12 @@ namespace daObjMknjD {
 
         /* 00002490-000024BC       .text Mthd_Draw__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
         BOOL Mthd_Draw(void* i_this) {
-            return static_cast<Act_c*>(i_this)->Draw();
+            return static_cast<Act_c*>(i_this)->MoveBGDraw();
         }
 
         /* 000024BC-000024E8       .text Mthd_IsDelete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
         BOOL Mthd_IsDelete(void* i_this) {
-            return static_cast<Act_c*>(i_this)->IsDelete();
+            return static_cast<Act_c*>(i_this)->MoveBGIsDelete();
         }
 
         static actor_method_class Mthd_Table = {
