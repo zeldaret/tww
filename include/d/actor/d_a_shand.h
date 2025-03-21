@@ -46,7 +46,7 @@ public:
     /* 0xCE4 */ bool mHasHIO;
 };
 
-class daShand_HIO_c {
+class daShand_HIO_c : public JORReflexible {
 public:
     daShand_HIO_c();
     ~daShand_HIO_c(){};

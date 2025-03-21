@@ -378,8 +378,95 @@ static BOOL daShand_solidHeapCB(fopAc_ac_c*) {
 }
 
 /* 00002380-00002630       .text daShand_Create__FP10fopAc_ac_c */
-static s32 daShand_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daShand_Create(shand_class* actor) {
+    static dCcD_SrcCyl tg_src_cyl = {
+        0,
+        0, 
+        0,
+        0,
+        AT_TYPE_ALL - (AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT), // 0xff1dfeff 
+        cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e, 
+        0, 
+        0, 
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0, 
+        0,
+        0,
+        0,
+        0,
+        0,
+        15.0f, 
+        200.0f
+    };
+
+    static dCcD_SrcSph bm_sph_src = {
+        0,
+        0,
+        0,
+        0,
+        AT_TYPE_ALL - (AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT), 
+        cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e, 
+        0, 
+        0, 
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0, 
+        0,
+        0,
+        0,
+        0,
+        0,
+        80.0f
+    };
+
+    fopAcM_SetupActor(actor, shand_class);
+    int ret = dComIfG_resLoad(&actor->mPhs, "Shand");
+    if(ret == cPhs_COMPLEATE_e){
+        if(fopAcM_entrySolidHeap(actor, daShand_solidHeapCB, 0x1040) != false){
+            actor->health = 2;
+            actor->mExecuteCount = cM_rndF(10000.0f);
+            actor->u318 = 10;
+            actor->u2BA = 1;
+            actor->u2F0 = 1.0f;
+            if((fopAcM_GetParam(actor) & 0xff) == true)
+                actor->u304 = 15.75f;
+            else
+                actor->u304 = 10.5f;
+            actor->mStts.Init(0xff, 0xff, actor);
+            for(int i = 0; i < 5; i++){
+                actor->mCylArr[i].Set(tg_src_cyl);
+                actor->mCylArr[i].SetStts(&actor->mStts);
+            }
+            actor->mSph.Set(bm_sph_src);
+            actor->mSph.SetStts(&actor->mStts);
+            actor->u2C4 = 30;
+            for(int i = 0; i < 3; i++){
+                daShand_Execute(actor);
+            }
+        }
+        else {
+            ret = cPhs_ERROR_e;
+        }
+
+        if(hio_set == false){
+            hio_set = true;
+            actor->mHasHIO = true;
+            l_HIO.mId = mDoHIO_createChild("\x94\xc4\x97\x70\x90\x47\x8e\xe8", &l_HIO);
+        }
+    }
+
+    return ret;
 }
 
 static actor_method_class l_daShand_Method = {
