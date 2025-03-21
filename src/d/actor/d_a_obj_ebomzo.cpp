@@ -121,16 +121,10 @@ void daObjEbomzo::Act_c::init_mtx() {
 
 /* 00000668-00000864       .text check__Q211daObjEbomzo5Act_cFv */
 void daObjEbomzo::Act_c::check() {
-    //Nonmatching
-
-    fopAc_ac_c* acActor;
-    cXyz diffVec;
-    u8 b, g, r;
-
     if (mCollider.ChkTgHit()) {
-        acActor = mCollider.GetTgHitAc();
+        fopAc_ac_c* acActor = mCollider.GetTgHitAc();
         if (acActor) {
-            diffVec = mCollider.GetC() - acActor->current.pos;
+            cXyz diffVec = mCollider.GetC() - acActor->current.pos;
             if (diffVec.abs() < 100.0f) {
                 mXRotRate = 8;
                 current.angle.x += mXRotRate;
@@ -141,9 +135,9 @@ void daObjEbomzo::Act_c::check() {
                 fopAcM_onSwitch(this, prm_get_swSave());
                 
                 if (!mpParticleEmitter) {
-                    r = tevStr.mColorK0.r;
-                    g = tevStr.mColorK0.g;
-                    b = tevStr.mColorK0.b;
+                    const u8 r = tevStr.mColorK0.r;
+                    const u8 g = tevStr.mColorK0.g;
+                    const u8 b = tevStr.mColorK0.b;
                     mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_828E, &current.pos, &current.angle);
                     if (mpParticleEmitter) mpParticleEmitter->setGlobalPrmColor(r, g, b);
                 }
