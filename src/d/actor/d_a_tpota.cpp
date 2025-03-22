@@ -11,12 +11,28 @@
 #include "d/d_particle.h"
 #include "d/d_com_inf_game.h"
 
-
+const u16 l_daTpota_idx_table[2] = {dPa_name::ID_SCENE_82AE, dPa_name::ID_SCENE_82AF};
+// const u16 l_daTpota_idx_table[2] = {0x82AE, 0x82AF};
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
 s32 daTpota_c::_create() {
-    // fopAcM_SetupActor(this, daTpota_c);
-    // field_0x2a0 = &current.pos.x;
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daTpota_c);
+    int count = 0;
+    JPABaseEmitter* emitter;
+
+    do {
+        field_0x29C[count] = current.pos;
+        field_0x2B4[count] = current.angle;
+    
+        emitter = dComIfGp_particle_set(
+            l_daTpota_idx_table[count], 
+            &field_0x29C[count], 
+            &field_0x2B4[count], 
+            NULL, 0xff, NULL, -1, NULL, NULL, NULL
+        );
+        emitters[count] = emitter;
+        count++;
+    }while (count < 2);
+    return 4;
 }
 
 /* 00000250-00000298       .text _delete__9daTpota_cFv */
@@ -99,40 +115,40 @@ void daTpota_c::renew_splash() {
 
 /* 000003F4-000004C8       .text _execute__9daTpota_cFv */
 bool daTpota_c::_execute() {
-    JSUPtrList *pJVar3;
-    int iVar4;
-    JPABaseParticle *pJVar5;
-    JSUPtrLink *pJVar6;
-    cXyz local_48;
-    float local_3c;
-    float local_34;
-    float local_38;
+    // JSUPtrList *pJVar3;
+    // int iVar4;
+    // JPABaseParticle *pJVar5;
+    // JSUPtrLink *pJVar6;
+    // cXyz local_48;
+    // float local_3c;
+    // float local_34;
+    // float local_38;
 
-    if (emitter != (JPABaseEmitter *)0x0) {
-        pJVar3 = &emitter->mActiveParticles;
-        if(pJVar3 != (JSUPtrList *)0x0){
-            for (pJVar6 = pJVar3->getFirstLink(); pJVar6 != (JSUPtrLink *)0x0 && (pJVar6 != (JSUPtrLink *)0x0);
-            pJVar6 = pJVar6->getNext()){
-                pJVar5 = (JPABaseParticle*)pJVar6->getObjectPtr();
-                JGeometry::TVec3<f32> position;
-                pJVar5->getGlobalPosition(position);
-                float fVar1 = position.x;
-                float fVar2 = position.z;
-                iVar4 = check_water_h(pJVar5, position.y);
-                if(iVar4 != 0){
-                    local_38 = 0xc3660000;
-                    local_48.y = -230.0;
-                    local_48.x = fVar1;
-                    local_48.z = fVar2;
-                    local_3c = fVar1;
-                    local_34 = fVar2;
-                    make_ripple(local_48);
-                }
-            }
-        }
-        renew_splash();
-    }
-    return TRUE;
+    // if (emitter != (JPABaseEmitter *)0x0) {
+    //     pJVar3 = &emitter->mActiveParticles;
+    //     if(pJVar3 != (JSUPtrList *)0x0){
+    //         for (pJVar6 = pJVar3->getFirstLink(); pJVar6 != (JSUPtrLink *)0x0 && (pJVar6 != (JSUPtrLink *)0x0);
+    //         pJVar6 = pJVar6->getNext()){
+    //             pJVar5 = (JPABaseParticle*)pJVar6->getObjectPtr();
+    //             JGeometry::TVec3<f32> position;
+    //             pJVar5->getGlobalPosition(position);
+    //             float fVar1 = position.x;
+    //             float fVar2 = position.z;
+    //             iVar4 = check_water_h(pJVar5, position.y);
+    //             if(iVar4 != 0){
+    //                 local_38 = 0xc3660000;
+    //                 local_48.y = -230.0;
+    //                 local_48.x = fVar1;
+    //                 local_48.z = fVar2;
+    //                 local_3c = fVar1;
+    //                 local_34 = fVar2;
+    //                 make_ripple(local_48);
+    //             }
+    //         }
+    //     }
+    //     renew_splash();
+    // }
+    // return TRUE;
 
     // /* Nonmatching */
 }
