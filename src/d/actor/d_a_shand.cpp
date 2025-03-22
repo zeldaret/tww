@@ -401,7 +401,7 @@ static BOOL daShand_solidHeapCB(fopAc_ac_c* actor) {
 }
 
 /* 00002380-00002630       .text daShand_Create__FP10fopAc_ac_c */
-static s32 daShand_Create(shand_class* actor) {
+static s32 daShand_Create(fopAc_ac_c* f_this) {
     static dCcD_SrcCyl tg_src_cyl = {
         0,
         0, 
@@ -453,29 +453,30 @@ static s32 daShand_Create(shand_class* actor) {
         80.0f
     };
 
-    fopAcM_SetupActor(actor, shand_class);
-    int ret = dComIfG_resLoad(&actor->mPhs, "Shand");
+    fopAcM_SetupActor(f_this, shand_class);
+    shand_class* s_this = static_cast<shand_class*>(f_this);
+    int ret = dComIfG_resLoad(&s_this->mPhs, "Shand");
     if(ret == cPhs_COMPLEATE_e){
-        if(fopAcM_entrySolidHeap(actor, daShand_solidHeapCB, 0x1040) != false){
-            actor->health = 2;
-            actor->mExecuteCount = cM_rndF(10000.0f);
-            actor->u318 = 10;
-            actor->u2BA = 1;
-            actor->u2F0 = 1.0f;
-            if((fopAcM_GetParam(actor) & 0xff) == true)
-                actor->u304 = 15.75f;
+        if(fopAcM_entrySolidHeap(s_this, daShand_solidHeapCB, 0x1040) != false){
+            s_this->health = 2;
+            s_this->mExecuteCount = cM_rndF(10000.0f);
+            s_this->u318 = 10;
+            s_this->u2BA = 1;
+            s_this->u2F0 = 1.0f;
+            if((fopAcM_GetParam(s_this) & 0xff) == true)
+                s_this->u304 = 15.75f;
             else
-                actor->u304 = 10.5f;
-            actor->mStts.Init(0xff, 0xff, actor);
+                s_this->u304 = 10.5f;
+            s_this->mStts.Init(0xff, 0xff, s_this);
             for(int i = 0; i < 5; i++){
-                actor->mCylArr[i].Set(tg_src_cyl);
-                actor->mCylArr[i].SetStts(&actor->mStts);
+                s_this->mCylArr[i].Set(tg_src_cyl);
+                s_this->mCylArr[i].SetStts(&s_this->mStts);
             }
-            actor->mSph.Set(bm_sph_src);
-            actor->mSph.SetStts(&actor->mStts);
-            actor->u2C4 = 30;
+            s_this->mSph.Set(bm_sph_src);
+            s_this->mSph.SetStts(&s_this->mStts);
+            s_this->u2C4 = 30;
             for(int i = 0; i < 3; i++){
-                daShand_Execute(actor);
+                daShand_Execute(s_this);
             }
         }
         else {
@@ -484,7 +485,7 @@ static s32 daShand_Create(shand_class* actor) {
 
         if(hio_set == false){
             hio_set = true;
-            actor->mHasHIO = true;
+            s_this->mHasHIO = true;
             l_HIO.mId = mDoHIO_createChild("\x94\xc4\x97\x70\x90\x47\x8e\xe8", &l_HIO);
         }
     }
