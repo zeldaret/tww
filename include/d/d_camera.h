@@ -359,7 +359,7 @@ public:
 
     void Bank() {}
     void Up() {}
-    void Center() {}
+    cXyz Center() { return mCenter + mCenterShake; }
 
     void StartEventCamera(int, int, ...);
     void EndEventCamera(int);
