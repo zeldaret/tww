@@ -1401,7 +1401,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_quake"),
     ActorRel(NonMatching, "d_a_obj_rcloud"),
     ActorRel(Matching,    "d_a_obj_roten", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(Equivalent,  "d_a_obj_shelf"), # weak func order
+    ActorRel(Matching,    "d_a_obj_shelf"),
     ActorRel(NonMatching, "d_a_obj_shmrgrd"),
     ActorRel(NonMatching, "d_a_obj_swpush"),
     ActorRel(NonMatching, "d_a_obj_table"),
@@ -1637,7 +1637,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_dragonhead", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_drift"),
     ActorRel(Matching,    "d_a_obj_eayogn"),
-    ActorRel(NonMatching, "d_a_obj_ebomzo"),
+    ActorRel(Matching,    "d_a_obj_ebomzo", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_ekskz"),
     ActorRel(Equivalent,  "d_a_obj_eskban", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(Matching,    "d_a_obj_ferris", extra_cflags=['-pragma "nosyminline on"']),

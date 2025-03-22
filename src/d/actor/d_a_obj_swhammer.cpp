@@ -181,7 +181,7 @@ cPhs_State daObjSwhammer::Act_c::_create() {
 
 /* 000007F8-00000828       .text Delete__Q213daObjSwhammer5Act_cFv */
 BOOL daObjSwhammer::Act_c::Delete() {
-    mSmokeCb.end();
+    mSmokeCb.remove();
     return TRUE;
 }
 
@@ -458,12 +458,12 @@ BOOL Mthd_Execute(void* i_this) {
 
 /* 000015C8-000015F4       .text Mthd_Draw__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
-    return static_cast<daObjSwhammer::Act_c*>(i_this)->Draw();
+    return static_cast<daObjSwhammer::Act_c*>(i_this)->MoveBGDraw();
 }
 
 /* 000015F4-00001620       .text Mthd_IsDelete__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
-    return static_cast<daObjSwhammer::Act_c*>(i_this)->IsDelete();
+    return static_cast<daObjSwhammer::Act_c*>(i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Table = {
