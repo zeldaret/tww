@@ -176,20 +176,18 @@ void cut_control3(shand_class* actor) {
 
 /* 00000C30-00000FF0       .text normal__FP11shand_class */
 void normal(shand_class* actor) {
-    cXyz unused, chk_start, chk_end;
+    cXyz unused;
+    unused.x = unused.y = 0.0f;
 
-    unused.x = unused.y = 0;
     if(actor->u318 != 0){
         dBgS_LinChk local94;
-        chk_end = chk_start = actor->current.pos;
-        chk_start.y = chk_end.y + 50.0f;
+        cXyz chk_start = actor->current.pos;
+        cXyz chk_end = actor->current.pos;
+        chk_start.y += 50.0f;
         chk_end.y += 4000.0f;
         local94.Set(&chk_start, &chk_end, actor);
-        if(dComIfG_Bgsp()->LineCross(&local94) != false){
-            actor->u2C8 = local94.GetLinP()->GetStart();
-            actor->u2D4 = local94.GetCross();
-            actor->u31C[19].mPos = actor->u2D4;
-        };
+        if(dComIfG_Bgsp()->LineCross(&local94) != false)
+            actor->u31C[19].mPos = actor->u2D4 = actor->u2C8 = local94.GetLinP()->GetEnd();
         actor->u318--;
     }
 
@@ -203,7 +201,8 @@ void normal(shand_class* actor) {
             actor->u2D4.set(actor->u2C8);
     }
 
-    cLib_addCalc2(&actor->u2F4, std::abs(actor->home.pos.y - actor->u2C8.y) * (REG14_F(11) + 0.05f), 0.1f, 1.0f);
+    float y_diff = std::abs(actor->home.pos.y - actor->u2C8.y);
+    cLib_addCalc2(&actor->u2F4,   y_diff * (REG14_F(11) + 0.05f), 0.1f, 1.0f);
     cLib_addCalc2(&actor->u300, REG14_F(12) + 10.0f, 0.1f, 0.5f);
     control1(actor);
     control2(actor);
@@ -260,7 +259,7 @@ void hand_move(shand_class* actor) {
                     }
                 }
                 else {
-                    actor->uCE0 = -1e9f;
+                    actor->uCE0 = -1e09f;
                 }
                 actor->mState = 2;
 
@@ -272,9 +271,8 @@ void hand_move(shand_class* actor) {
         }
     }
 
-    mDoExt_3Dline_c* lines = actor->mLineMat.mpLines;
-    cXyz* line_data = lines->mpSegments;
-    u8* line_size = lines->mpSize;
+    cXyz* line_data = actor->mLineMat.mpLines->mpSegments;
+    u8* line_size = actor->mLineMat.mpLines->mpSize;
     for(int i = 20; i != 0; i--){
         *line_data = shand_i->mPos;
         *line_size = shand_i->u18;
@@ -286,9 +284,9 @@ void hand_move(shand_class* actor) {
     actor->eyePos = (line_segments + l_HIO.u6)[10]; // Have not found any "clean" way to write that
     actor->attention_info.position = actor->eyePos;
     
+    bool is_hit = false;
     CcAtInfo hit_atInfo;
     hit_atInfo.pParticlePos = NULL;
-    bool is_hit = false;
     if(actor->u2BC[1] == 0 && actor->mState == 0){
         actor->mSph.SetC(actor->eyePos);
         actor->mCylArr[0].SetC(actor->current.pos);
@@ -399,8 +397,8 @@ static BOOL daShand_solidHeapCB(fopAc_ac_c* actor) {
 }
 
 /* 00002380-00002630       .text daShand_Create__FP10fopAc_ac_c */
-static s32 daShand_Create(fopAc_ac_c* f_this) {
-    static dCcD_SrcCyl tg_src_cyl = {
+static s32 daShand_Create(shand_class* f_this) {
+    static dCcD_SrcCyl tg_cyl_src = {
         0,
         0, 
         0,
@@ -430,10 +428,10 @@ static s32 daShand_Create(fopAc_ac_c* f_this) {
         0,
         0,
         0,
-        0,
+        5,
         AT_TYPE_ALL - (AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT), 
         cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
-        cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e, 
+    0,
         0, 
         0, 
         0,
@@ -467,7 +465,7 @@ static s32 daShand_Create(fopAc_ac_c* f_this) {
                 s_this->u304 = 10.5f;
             s_this->mStts.Init(0xff, 0xff, s_this);
             for(int i = 0; i < 5; i++){
-                s_this->mCylArr[i].Set(tg_src_cyl);
+                s_this->mCylArr[i].Set(tg_cyl_src);
                 s_this->mCylArr[i].SetStts(&s_this->mStts);
             }
             s_this->mSph.Set(bm_sph_src);
