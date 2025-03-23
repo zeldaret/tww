@@ -4,6 +4,8 @@
 //
 
 #include "d/actor/d_a_obj_swpush.h"
+#include "d/res/res_kbota_00.h"
+#include "d/res/res_hhbot.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w_sv.h"
@@ -25,9 +27,9 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[4] = {
         /* mBgArcName       */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mModelArcName    */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mBtpArcName      */ NULL,
-        /* mBgResIndex      */ 7,
-        /* mModelResIndices */ { 4, 4 },
-        /* mBtpResIndex     */ 0xFFFF,
+        /* mBgResIndex      */ KBOTA_00_DZB_KBOTA_00,
+        /* mModelResIndices */ { KBOTA_00_BDL_KBOTA_00, KBOTA_00_BDL_KBOTA_00 },
+        /* mBtpResIndex     */ -1,
         /* mSpring          */ 0.9f,
         /* mSpeedDecay      */ 0.6f,
         /* mPushSpeed0      */ 0.0f,
@@ -49,9 +51,9 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[4] = {
         /* mBgArcName       */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mModelArcName    */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mBtpArcName      */ NULL,
-        /* mBgResIndex      */ 7,
-        /* mModelResIndices */ { 4, 4 },
-        /* mBtpResIndex     */ 0xFFFF,
+        /* mBgResIndex      */ KBOTA_00_DZB_KBOTA_00,
+        /* mModelResIndices */ { KBOTA_00_BDL_KBOTA_00, KBOTA_00_BDL_KBOTA_00 },
+        /* mBtpResIndex     */ -1,
         /* mSpring          */ 0.9f,
         /* mSpeedDecay      */ 0.6f,
         /* mPushSpeed0      */ 0.0f,
@@ -73,9 +75,9 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[4] = {
         /* mBgArcName       */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mModelArcName    */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mBtpArcName      */ NULL,
-        /* mBgResIndex      */ 7,
-        /* mModelResIndices */ { 4, 4 },
-        /* mBtpResIndex     */ 0xFFFF,
+        /* mBgResIndex      */ KBOTA_00_DZB_KBOTA_00,
+        /* mModelResIndices */ { KBOTA_00_BDL_KBOTA_00, KBOTA_00_BDL_KBOTA_00 },
+        /* mBtpResIndex     */ -1,
         /* mSpring          */ 0.9f,
         /* mSpeedDecay      */ 0.6f,
         /* mPushSpeed0      */ 0.0f,
@@ -97,8 +99,8 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[4] = {
         /* mBgArcName       */ daObjSwpush::Act_c::M_arcname_kbota,
         /* mModelArcName    */ daObjSwpush::Act_c::M_arcname_hhbot,
         /* mBtpArcName      */ NULL,
-        /* mBgResIndex      */ 7,
-        /* mModelResIndices */ { 4, 4 },
+        /* mBgResIndex      */ KBOTA_00_DZB_KBOTA_00,
+        /* mModelResIndices */ { HHBOT_BDL_HHBOT1, HHBOT_BDL_HHBOT1 },
         /* mBtpResIndex     */ 0xFFFF,
         /* mSpring          */ 0.93f,
         /* mSpeedDecay      */ 0.42f,
@@ -340,12 +342,12 @@ void daObjSwpush::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
         cM3dGTri tri;
         cXyz vecs[4];
 
-        float fscale = i_this->mPrevRiding ? i_this->attr().m44 : i_this->attr().m40;
+        f32 fscale = i_this->mPrevRiding ? i_this->attr().m44 : i_this->attr().m40;
         mDoMtx_stack_c::push();
         mDoMtx_stack_c::YrotS(i_this->shape_angle.y);
         mDoMtx_stack_c::scaleM(fscale, fscale, fscale);
 
-        for (int i = 0; i < 4; i++) {
+        for (s32 i = 0; i < 4; i++) {
             vecs[i].set(vtx_tbl[M_op_vtx[i]]);
             cXyz out;
             mDoMtx_stack_c::multVec(&no_push_vec[i], &out);
@@ -353,7 +355,7 @@ void daObjSwpush::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
         }
 
         mDoMtx_stack_c::pop();
-        for (int i = 0; i < 2; i++) {
+        for (s32 i = 0; i < 2; i++) {
             tri.setPos(&vecs[tri_id[i][0]], &vecs[tri_id[i][1]], &vecs[tri_id[i][2]]);
             if (tri.crossY(&i_pt->current.pos)) {
                 if (fopAcM_CheckStatus(i_pt, fopAcStts_UNK8000000_e)) {
@@ -395,7 +397,7 @@ BOOL daObjSwpush::Act_c::jnodeCB(J3DNode* node, int calcTiming) {
 
 /* 0000105C-00001170       .text calc_top_pos__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::calc_top_pos() {
-    float decay = attr().mSpeedDecay;
+    f32 decay = attr().mSpeedDecay;
     mSpeed -= (mCurHFrac - mTargetHFrac) * attr().mSpring;
     mSpeed -= mSpeed * decay;
     mCurHFrac += mSpeed;
@@ -419,7 +421,7 @@ void daObjSwpush::Act_c::calc_top_pos() {
 }
 
 /* 00001170-0000117C       .text top_bg_aim_req__Q211daObjSwpush5Act_cFfs */
-void daObjSwpush::Act_c::top_bg_aim_req(float param_1, short param_2) {
+void daObjSwpush::Act_c::top_bg_aim_req(f32 param_1, s16 param_2) {
     m328 = param_1;
     m324 = param_2;
 }
@@ -483,7 +485,7 @@ void daObjSwpush::Act_c::mode_upper() {
     bool bVar4 = false;
     bool bVar3 = false;
     bool pressing = false;
-    float height = 1.0f;
+    f32 height = 1.0f;
     if (mMiniPushFlg) {
         if (cLib_checkBit(attr().mFlags, FLAG_REQ_HEAVY)) {
             if (mPushFlg) {
@@ -637,7 +639,7 @@ void daObjSwpush::Act_c::demo_non() {
 void daObjSwpush::Act_c::demo_reqPause_init() {
     if (mDemoMode == DEMO_MODE_NON) {
         mDemoMode = DEMO_MODE_REQ_PAUSE;
-        fopAcM_orderPotentialEvent(this, 2, 0, 0);
+        fopAcM_orderPotentialEvent(this, dEvtFlag_STAFF_ALL_e, 0, 0);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
 }
@@ -717,7 +719,6 @@ void daObjSwpush::Act_c::demo_runSw() {
 
 /* 00001C84-00001F14       .text Mthd_Execute__Q211daObjSwpush5Act_cFv */
 BOOL daObjSwpush::Act_c::Mthd_Execute() {
-    /* Nonmatching */
     typedef void (daObjSwpush::Act_c::*procFunc)();
 
     static procFunc demo_proc[] = {
