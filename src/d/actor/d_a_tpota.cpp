@@ -20,13 +20,13 @@ s32 daTpota_c::_create() {
     JPABaseEmitter* emitter;
 
     do {
-        field_0x29C[count] = current.pos;
-        field_0x2B4[count] = current.angle;
+        field_0x2A0[count] = current.pos;
+        field_0x2B8[count] = current.angle;
     
         emitter = dComIfGp_particle_set(
-            l_daTpota_idx_table[count], 
-            &field_0x29C[count], 
-            &field_0x2B4[count], 
+            l_daTpota_idx_table[count],
+            &field_0x2A0[count], 
+            &field_0x2B8[count], 
             NULL, 0xff, NULL, -1, NULL, NULL, NULL
         );
         emitters[count] = emitter;
@@ -37,13 +37,24 @@ s32 daTpota_c::_create() {
 
 /* 00000250-00000298       .text _delete__9daTpota_cFv */
 BOOL daTpota_c::_delete() {
-    // int iVar1 = 0;
-    // int iVar3 = 2;
-    // do {
-    //     int iVar2 = field_0x2C4 + iVar1 +- -0x2c;
-    // } while
+    int count = 2;
+    while (count != 0) {
+        JPABaseEmitter* emitter = emitters[count];
+        if(emitter != NULL){
+            emitter->becomeInvalidEmitter();
+            emitter->mMaxFrame = -1;
+            emitter->mFlags |= emitter->mFlags | 1;
 
-    // return TRUE;
+        }
+        count--;
+    }
+    // for (int count = 2; count != 0; count--) {
+    //     JPABaseEmitter* emitter = emitters[count];
+    //     if(emitter != NULL){
+    //         emitter->becomeInvalidEmitter();
+    //         emitter->mFlags |= emitter->mFlags | 1;
+    //     }
+    // }
     /* Nonmatching */
 }
 
@@ -58,97 +69,85 @@ void daTpota_c::make_ripple(cXyz position) {
 
 /* 000002FC-00000354       .text check_water_h__9daTpota_cFP15JPABaseParticlef */
 int daTpota_c::check_water_h(JPABaseParticle* ptcl, float position_y) {
-    // int *piVar2 = field_0x2C4;
+
+    // unknown_struct *ppJVar2 = field_0x2C4;
+    // int count = 30;
     // if (position_y > -230.0) {
-    //     return 0;
+    //   return 0;
     // }
-    // int iVar3 = 0x1e;
-    // while ((JPABaseParticle*)*piVar2 != ptcl) {
-    //     piVar2 = piVar2 + 2;
-    //     iVar3 = iVar3 + -1;
-    //     if (iVar3 == 0) {
+
+    // while(((JPABaseParticle*)ppJVar2->getObjectPtr()) != ptcl) {
+        
+    //     count--;
+    //     if (count == 0) {
     //         return 0;
     //     }
     // }
-    // if((float)piVar2[1] <= -230.0) {
-    //     return 0;
-    // }
-    // return 1;
 
+    
     /* Nonmatching */
 }
 
 /* 00000354-00000380       .text clear_splash__9daTpota_cFv */
 void daTpota_c::clear_splash() {
+    unknown_struct* unknown_struct = field_0x2C4;
+    int count = 30;
 
-    // int *piVar1 = field_0x2C4;
-    // int iVar2 = 0x1e;
-    // do{
-    //     *piVar1 = 0;
-    //     piVar1[1] = 0;
-    //     piVar1 = piVar1 + 2;
-    //     iVar2 = iVar2 + -1;
-    // } while (iVar2 != 0);
-    // return;
+    while (count != 0) {
+        unknown_struct->ptcl = NULL;
+        unknown_struct->field_0x04 = 0.0;
+        unknown_struct++;
+        count--;
+    }
+    return;
     /* Nonmatching */
 }
 
 /* 00000380-000003F4       .text renew_splash__9daTpota_cFv */
 void daTpota_c::renew_splash() {
-    // if (field_0x29C != (int *)0x0){
-    //     int *piVar2 = field_0x29C + 0x5f;
-    //     int *piVar3 = field_0x2C4;
-    //     if (piVar2 != (int *)0x0) {
-    //         clear_splash();
-    //         for (piVar2 = (int *)*piVar2; piVar2 != (int *)0x0; piVar2 = (int *)piVar2[3]){
-    //             int iVar1 = *(int *)(piVar2 + 0x2c);
-    //             *piVar3 = *piVar2;
-    //             piVar3[1] = iVar1;
-    //             piVar3 = piVar3 + 2;
-    //         }
+    if (emitter != NULL) {
+        JSUPtrList* list = &emitter->mActiveParticles;
+        unknown_struct *the_struct = field_0x2C4;
+        if(list != NULL){
+            clear_splash();
+            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL);
+                link = link->getNext()){
+                JGeometry::TVec3<f32> position;
+                ((JPABaseParticle*)link->getObjectPtr())->getGlobalPosition(position);
+                the_struct->ptcl = (JPABaseParticle*)link->getObjectPtr();
+                the_struct->field_0x04 = position.y;
+                the_struct++;
+            }
+            
+        }
 
-    //     }
-    // }
-    // /* Nonmatching */
-    // return;
+    }
+    return;
 }
 
 /* 000003F4-000004C8       .text _execute__9daTpota_cFv */
 bool daTpota_c::_execute() {
-    // JSUPtrList *pJVar3;
-    // int iVar4;
-    // JPABaseParticle *pJVar5;
-    // JSUPtrLink *pJVar6;
-    // cXyz local_48;
-    // float local_3c;
-    // float local_34;
-    // float local_38;
-
-    // if (emitter != (JPABaseEmitter *)0x0) {
-    //     pJVar3 = &emitter->mActiveParticles;
-    //     if(pJVar3 != (JSUPtrList *)0x0){
-    //         for (pJVar6 = pJVar3->getFirstLink(); pJVar6 != (JSUPtrLink *)0x0 && (pJVar6 != (JSUPtrLink *)0x0);
-    //         pJVar6 = pJVar6->getNext()){
-    //             pJVar5 = (JPABaseParticle*)pJVar6->getObjectPtr();
-    //             JGeometry::TVec3<f32> position;
-    //             pJVar5->getGlobalPosition(position);
-    //             float fVar1 = position.x;
-    //             float fVar2 = position.z;
-    //             iVar4 = check_water_h(pJVar5, position.y);
-    //             if(iVar4 != 0){
-    //                 local_38 = 0xc3660000;
-    //                 local_48.y = -230.0;
-    //                 local_48.x = fVar1;
-    //                 local_48.z = fVar2;
-    //                 local_3c = fVar1;
-    //                 local_34 = fVar2;
-    //                 make_ripple(local_48);
-    //             }
-    //         }
-    //     }
-    //     renew_splash();
-    // }
-    // return TRUE;
+    if (emitter != NULL){
+        JSUPtrList* list = &emitter->mActiveParticles;
+        if(list != NULL){
+            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL);
+            link = link->getNext()){
+                JPABaseParticle* particle = (JPABaseParticle *)link->getObjectPtr();
+                JGeometry::TVec3<f32> position;
+                particle->getGlobalPosition(position);
+                int idk = check_water_h(particle, position.y);
+                if(idk != 0){
+                    cXyz local_48;
+                    local_48.x = position.x;
+                    local_48.y = -230.0;
+                    local_48.z = position.z;
+                    make_ripple(local_48);
+                }
+            }
+        }
+        renew_splash();
+    }
+    return 1;
 
     // /* Nonmatching */
 }
