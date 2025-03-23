@@ -1403,7 +1403,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_roten", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_shelf"),
     ActorRel(NonMatching, "d_a_obj_shmrgrd"),
-    ActorRel(NonMatching, "d_a_obj_swpush"),
+    ActorRel(Matching,    "d_a_obj_swpush", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_table"),
     ActorRel(NonMatching, "d_a_obj_tenmado"),
     ActorRel(NonMatching, "d_a_obj_tide"),
