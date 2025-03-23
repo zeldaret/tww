@@ -14,7 +14,7 @@ namespace daObjSwpush {
         FLAG_STAY_PRESSED = 0x2,
         FLAG_IS_TOGGLE = 0x4,
         FLAG_REQ_HEAVY = 0x8,
-        FLAG_UNK10 = 0x10,
+        FLAG_ON_IS_UP = 0x10,
         FLAG_UNK20 = 0x20,
     };
 
@@ -45,6 +45,20 @@ namespace daObjSwpush {
 
     class Act_c : public fopAc_ac_c {
     public:
+        enum Mode_e {
+            MODE_UPPER = 0,
+            MODE_U_L = 1,
+            MODE_LOWER = 2,
+            MODE_L_U = 3
+        };
+
+        enum DemoMode_e {
+            DEMO_MODE_NON = 0,
+            DEMO_MODE_REQ_PAUSE = 1,
+            DEMO_MODE_RUN_PAUSE = 2,
+            DEMO_MODE_REQ_SW = 3,
+            DEMO_MODE_RUN_SW = 4
+        };
 
         enum Prm_e {
             PRM_VERSION_W = 0x1,
@@ -118,8 +132,8 @@ namespace daObjSwpush {
         static const u8 M_op_vtx[4];
     
     public:
-        /* 0x290 */ request_of_phase_process_class mPhs1;
-        /* 0x298 */ request_of_phase_process_class mPhs2;
+        /* 0x290 */ request_of_phase_process_class mKbotaPhs;
+        /* 0x298 */ request_of_phase_process_class mHhbotPhs;
         /* 0x2A0 */ dBgWSv* mpBgW;
         /* 0x2A4 */ Mtx mMtx;
         /* 0x2D4 */ float m2D4;
