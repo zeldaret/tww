@@ -169,6 +169,7 @@ const GXColor color = {0xA0, 0xA0, 0x80, 0xFF};
 /* 000000EC-00000358       .text __ct__14daObjShmrgrd_cFv */
 daObjShmrgrd_c::daObjShmrgrd_c() {
     mSmokeCb.setColor(color);
+    mpNext = NULL;
 }
 
 /* 000005A8-000005C8       .text solidHeapCB__14daObjShmrgrd_cFP10fopAc_ac_c */

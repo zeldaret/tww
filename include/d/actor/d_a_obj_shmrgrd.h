@@ -67,6 +67,8 @@ public:
     bool _execute();
     bool _draw();
 
+    virtual ~daObjShmrgrd_c() {}
+
     static int M_damage;
     static short M_damage_dir;
     static daObjShmrgrd_c* M_list_p;
@@ -78,7 +80,7 @@ public:
     static const char M_arcname[8];
 
 public:
-    u8 m290[0x294 - 0x290];
+    /* 0x290 */ // vtable
     /* 0x294 */ daObjShmrgrd_c* mpNext;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ request_of_phase_process_class mPhs;
