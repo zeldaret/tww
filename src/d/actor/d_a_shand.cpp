@@ -224,7 +224,7 @@ void cut(shand_class* actor) {
 
 /* 00001508-00001DAC       .text hand_move__FP11shand_class */
 void hand_move(shand_class* actor) {
-    shand_s* shand_i = actor->field_31C
+    shand_s* shand_i = actor->field_31C;
     actor->field_30C = static_cast<shand_class*>(fopAcM_SearchByID(actor->field_308));
     if(actor->field_30C != NULL){
         actor->current.pos = *actor->field_310;
@@ -244,13 +244,13 @@ void hand_move(shand_class* actor) {
                     dBgS_GndChk local_ac;
                     float chk_pos_x = actor->current.pos.x, chk_pos_y = actor->current.pos.y, chk_pos_z = actor->current.pos.z;
                     chk_pos_y -= 100.0f;
-                    local_ac.m_pos.set(chk_pos_x, chk_pos_y, chk_pos_z);
+                    local_ac.GetPointP()->set(chk_pos_x, chk_pos_y, chk_pos_z);
                     actor->field_CE0 = dComIfG_Bgsp()->GroundCross(&local_ac);
                     
                     dBgS_ObjGndChk_Spl local_100;
-                    chk_pos_x = actor->current.pos.x; chk_pos_y = actor->current.pos.y; chk_pos_z = actor->current.pos.z;
+                    chk_pos_x = actor->current.pos.x, chk_pos_y = actor->current.pos.y, chk_pos_z = actor->current.pos.z;
                     chk_pos_y += 200.0f;
-                    local_100.m_pos.set(chk_pos_x, chk_pos_y, chk_pos_z);
+                    local_100.GetPointP()->set(chk_pos_x, chk_pos_y, chk_pos_z);
                     float gnd_cross = dComIfG_Bgsp()->GroundCross(&local_100) + 10.0f;
                     if(gnd_cross != -1e09f){
                         actor->field_CE0 = gnd_cross;
