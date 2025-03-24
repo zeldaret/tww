@@ -1432,7 +1432,7 @@ public:
     BOOL procBtVerticalJumpCut();
     BOOL procBtVerticalJumpLand_init();
     BOOL procBtVerticalJumpLand();
-    void shipSpecialDemoStart();
+    BOOL shipSpecialDemoStart();
     BOOL checkJumpRideShip();
     BOOL checkShipNotNormalMode();
     void setShipRideArmAngle(int, J3DTransformInfo*);

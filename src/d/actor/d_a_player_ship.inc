@@ -15,7 +15,7 @@
 #include "d/d_com_inf_game.h"
 
 /* 8013F848-8013F8AC       .text shipSpecialDemoStart__9daPy_lk_cFv */
-void daPy_lk_c::shipSpecialDemoStart() {
+BOOL daPy_lk_c::shipSpecialDemoStart() {
     /* Nonmatching */
 }
 
