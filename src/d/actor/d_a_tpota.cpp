@@ -20,13 +20,13 @@ s32 daTpota_c::_create() {
     JPABaseEmitter* emitter;
 
     do {
-        field_0x2A0[count] = current.pos;
-        field_0x2B8[count] = current.angle;
+        position[count] = current.pos;
+        angle[count] = current.angle;
     
         emitter = dComIfGp_particle_set(
             l_daTpota_idx_table[count],
-            &field_0x2A0[count], 
-            &field_0x2B8[count], 
+            &position[count], 
+            &angle[count], 
             NULL, 0xff, NULL, -1, NULL, NULL, NULL
         );
         emitters[count] = emitter;
@@ -37,17 +37,21 @@ s32 daTpota_c::_create() {
 
 /* 00000250-00000298       .text _delete__9daTpota_cFv */
 BOOL daTpota_c::_delete() {
+    
     int count = 2;
+
     while (count != 0) {
         JPABaseEmitter* emitter = emitters[count];
         if(emitter != NULL){
             emitter->becomeInvalidEmitter();
-            emitter->mMaxFrame = -1;
             emitter->mFlags |= emitter->mFlags | 1;
 
         }
         count--;
     }
+    
+    return 1;
+
     // for (int count = 2; count != 0; count--) {
     //     JPABaseEmitter* emitter = emitters[count];
     //     if(emitter != NULL){
@@ -69,22 +73,26 @@ void daTpota_c::make_ripple(cXyz position) {
 
 /* 000002FC-00000354       .text check_water_h__9daTpota_cFP15JPABaseParticlef */
 int daTpota_c::check_water_h(JPABaseParticle* ptcl, float position_y) {
-
-    // unknown_struct *ppJVar2 = field_0x2C4;
+    // JPABaseParticle *firstEntry;
+    // firstEntry = field_0x2C4[0].ptcl;
     // int count = 30;
     // if (position_y > -230.0) {
     //   return 0;
     // }
 
-    // while(((JPABaseParticle*)ppJVar2->getObjectPtr()) != ptcl) {
-        
+    // while ((JPABaseParticle *)(firstEntry->mLink).getObjectPtr() != ptcl) {
+    //     firstEntry = (JPABaseParticle *)((firstEntry->mLink).getPrev()->getObjectPtr());
+
     //     count--;
     //     if (count == 0) {
     //         return 0;
     //     }
     // }
+    // return 1;
 
-    
+    // if((float)(ptcl->mLink).getList() <= -230.0){
+
+    // }
     /* Nonmatching */
 }
 
@@ -105,8 +113,8 @@ void daTpota_c::clear_splash() {
 
 /* 00000380-000003F4       .text renew_splash__9daTpota_cFv */
 void daTpota_c::renew_splash() {
-    if (emitter != NULL) {
-        JSUPtrList* list = &emitter->mActiveParticles;
+    if (emitters[1] != NULL) {
+        JSUPtrList* list = &emitters[1]->mActiveParticles;
         unknown_struct *the_struct = field_0x2C4;
         if(list != NULL){
             clear_splash();
@@ -127,8 +135,8 @@ void daTpota_c::renew_splash() {
 
 /* 000003F4-000004C8       .text _execute__9daTpota_cFv */
 bool daTpota_c::_execute() {
-    if (emitter != NULL){
-        JSUPtrList* list = &emitter->mActiveParticles;
+    if (emitters[1] != NULL){
+        JSUPtrList* list = &emitters[1]->mActiveParticles;
         if(list != NULL){
             for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL);
             link = link->getNext()){
@@ -149,7 +157,7 @@ bool daTpota_c::_execute() {
     }
     return 1;
 
-    // /* Nonmatching */
+    /* Nonmatching */
 }
 
 /* 000004C8-000004D0       .text _draw__9daTpota_cFv */

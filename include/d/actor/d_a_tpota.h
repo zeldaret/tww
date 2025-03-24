@@ -26,10 +26,9 @@ public:
 
 public:
     /* 0x290 */ u8 field_0x290[0x298 - 0x290];
-    /* 0x298 */ JPABaseEmitter *emitters[2];
-    /* 0x29C */ JPABaseEmitter* emitter;
-    /* 0x2A0 */ cXyz field_0x2A0[2];
-    /* 0x2B8 */ csXyz field_0x2B8[2];
+    /* 0x298 */ JPABaseEmitter* emitters[2];
+    /* 0x2A0 */ cXyz position[2];
+    /* 0x2B8 */ csXyz angle[2];
     /* 0x2C4 */ unknown_struct field_0x2C4[30];
     /* 0x3B4 */ u8 field_0x3B4[0x3E4 - 0x3B4];
 };  // Size: 0x3E4
