@@ -39,21 +39,21 @@ static BOOL daShand_Draw(shand_class* actor) {
 void control1(shand_class* actor) {
     float fVar_x, fVar_y, fVar_z;
 
-    actor->u31C[0].mPos = actor->current.pos;
+    actor->field_31C[0].mPos = actor->current.pos;
     int i = 1;
-    shand_s* shand_i = &actor->u31C[i];
+    shand_s* shand_i = &actor->field_31C[i];
     
     mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
 
     cXyz local94, cStack_a0, localac;
     local94.x = 0.0f;
-    local94.y = actor->u2F8;
-    local94.z = actor->u2FC;
+    local94.y = actor->field_2F8;
+    local94.z = actor->field_2FC;
     MtxPosition(&local94, &localac);
-    cLib_addCalc2(&actor->u2F8, REG0_F(7), 1.0f, 0.1f);
-    cLib_addCalc2(&actor->u2FC, REG0_F(8), 1.0f, 1.0f);
-    local94.z = actor->u2F4;
-    float fVar1 = actor->u300;
+    cLib_addCalc2(&actor->field_2F8, REG0_F(7), 1.0f, 0.1f);
+    cLib_addCalc2(&actor->field_2FC, REG0_F(8), 1.0f, 1.0f);
+    local94.z = actor->field_2F4;
+    float fVar1 = actor->field_300;
     cXyz idk;
     for(i = 1; i < 19; i++, ++shand_i){
         idk.x = fVar1 * cM_ssin(actor->mExecuteCount * (REG0_S(5) + 1100) + i * (REG0_S(6) + 4000));
@@ -79,17 +79,17 @@ void control2(shand_class* actor) {
     cXyz rel_offset, abs_offset;
     rel_offset.x = 0;
     rel_offset.y = 0;
-    rel_offset.z = actor->u2F4;
+    rel_offset.z = actor->field_2F4;
 
-    cLib_addCalc2(&actor->u31C[19].mPos.x, actor->u2D4.x, 1.0, actor->u2F0 * 50.0f);
-    cLib_addCalc2(&actor->u31C[19].mPos.y, actor->u2D4.y, 1.0, actor->u2F0 * 50.0f);
-    cLib_addCalc2(&actor->u31C[19].mPos.z, actor->u2D4.z, 1.0, actor->u2F0 * 50.0f);
-    cLib_addCalc2(&actor->u2F0, 1.0, 1.0, 0.01);
+    cLib_addCalc2(&actor->field_31C[19].mPos.x, actor->field_2D4.x, 1.0, actor->field_2F0 * 50.0f);
+    cLib_addCalc2(&actor->field_31C[19].mPos.y, actor->field_2D4.y, 1.0, actor->field_2F0 * 50.0f);
+    cLib_addCalc2(&actor->field_31C[19].mPos.z, actor->field_2D4.z, 1.0, actor->field_2F0 * 50.0f);
+    cLib_addCalc2(&actor->field_2F0, 1.0, 1.0, 0.01);
 
     int i = 18;
     short Yangle;
     int XZangle;
-    shand_s* shand_i = &actor->u31C[i];
+    shand_s* shand_i = &actor->field_31C[i];
     for(i = 18; i >= 1; i--, shand_i--){
         float delta_pos_x = shand_i->mPos.x - shand_i[1].mPos.x;
         float delta_pos_y = shand_i->mPos.y - shand_i[1].mPos.y;
@@ -105,40 +105,40 @@ void control2(shand_class* actor) {
 
 /* 00000740-000007C4       .text control3__FP11shand_class */
 void control3(shand_class* actor) {
-    shand_s* shand_i = actor->u31C;
+    shand_s* shand_i = actor->field_31C;
     int counter = 0;
     for(int i = 20; i != 0; i--, counter++, shand_i++){
         if(counter < 12){
-            shand_i->u18 = actor->u304;
+            shand_i->u18 = actor->field_304;
         }
         else {
-            shand_i->u18 = actor->u304 * (1.0f - (counter + -10) * 0.05f);
+            shand_i->u18 = actor->field_304 * (1.0f - (counter + -10) * 0.05f);
         }
     }
 }
 
 /* 000007C4-00000BAC       .text cut_control__FP11shand_class */
 void cut_control(shand_class* actor) {
-    actor->u31C[0].mPos = actor->current.pos;
+    actor->field_31C[0].mPos = actor->current.pos;
     int i = 1;
-    shand_s *shand_i = &actor->u31C[i];
+    shand_s *shand_i = &actor->field_31C[i];
 
     cXyz local_b8, cStack_c4, local_d0;
     mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
     local_b8.x = 0.0f;
-    local_b8.y = actor->u2F8;
-    local_b8.z = actor->u2FC;
+    local_b8.y = actor->field_2F8;
+    local_b8.z = actor->field_2FC;
     MtxPosition(&local_b8, &local_d0);
-    cLib_addCalc2(&actor->u2F8, REG14_F(7) + -5.0f, 1.0f, REG12_F(4) + 0.1f);
-    cLib_addCalc2(&actor->u2FC, REG14_F(8) + 20.0f, 1.0f, REG14_F(5) + 0.2f);
-    cLib_addCalc0(&actor->u300, 1.0f, REG12_F(6) + 1.0f);
-    local_b8.z = actor->u2F4;
+    cLib_addCalc2(&actor->field_2F8, REG14_F(7) + -5.0f, 1.0f, REG12_F(4) + 0.1f);
+    cLib_addCalc2(&actor->field_2FC, REG14_F(8) + 20.0f, 1.0f, REG14_F(5) + 0.2f);
+    cLib_addCalc0(&actor->field_300, 1.0f, REG12_F(6) + 1.0f);
+    local_b8.z = actor->field_2F4;
     cXyz d0_scaled, local_e8;
     float fVar_x, fVar_y, fVar_z, delta_y;
     for(i = 1; i < 20; i++, shand_i++){
-        local_e8.x = actor->u300 * cM_ssin(actor->mExecuteCount * (REG0_S(4) + 3500) + i * (REG0_S(5) + 4000));
-        local_e8.y = actor->u300 * cM_scos(actor->mExecuteCount * (REG0_S(6) + 4000) + i * (REG0_S(7) + 4000));
-        local_e8.z = actor->u300 * cM_scos(actor->mExecuteCount * (REG0_S(8) + 3800) + i * (REG0_S(9) + 4000));
+        local_e8.x = actor->field_300 * cM_ssin(actor->mExecuteCount * (REG0_S(4) + 3500) + i * (REG0_S(5) + 4000));
+        local_e8.y = actor->field_300 * cM_scos(actor->mExecuteCount * (REG0_S(6) + 4000) + i * (REG0_S(7) + 4000));
+        local_e8.z = actor->field_300 * cM_scos(actor->mExecuteCount * (REG0_S(8) + 3800) + i * (REG0_S(9) + 4000));
         
         float factor = 1.0f - i * (REG0_F(9) + 0.03763158f);
         d0_scaled.x = local_d0.x * factor;
@@ -146,7 +146,7 @@ void cut_control(shand_class* actor) {
         
         fVar_x = shand_i->mPos.x - shand_i[-1].mPos.x + d0_scaled.x + local_e8.x;
         fVar_y = shand_i->mPos.y + local_d0.y + local_e8.y;
-        if (fVar_y < actor->uCE0) fVar_y = actor->uCE0;
+        if (fVar_y < actor->field_CE0) fVar_y = actor->field_CE0;
         delta_y = fVar_y - shand_i[-1].mPos.y;
         fVar_z = shand_i->mPos.z - shand_i[-1].mPos.z + d0_scaled.z + local_e8.z;
         
@@ -162,14 +162,14 @@ void cut_control(shand_class* actor) {
 
 /* 00000BAC-00000C30       .text cut_control3__FP11shand_class */
 void cut_control3(shand_class* actor) {
-    shand_s* shand_i = actor->u31C;
+    shand_s* shand_i = actor->field_31C;
     int counter = 0;
     for(int i = 20; i != 0; i--, counter++, shand_i++){
         if(counter < 12){
-            shand_i->u18 = actor->u304;
+            shand_i->u18 = actor->field_304;
         }
         else {
-            shand_i->u18 = actor->u304 * (1.0f - (counter - 10) * 0.08f);
+            shand_i->u18 = actor->field_304 * (1.0f - (counter - 10) * 0.08f);
         }
     }
 }
@@ -177,33 +177,32 @@ void cut_control3(shand_class* actor) {
 /* 00000C30-00000FF0       .text normal__FP11shand_class */
 void normal(shand_class* actor) {
     cXyz unused;
-    unused.x = unused.y = 0.0f;
+    unused.x = unused.y = 0;
 
-    if(actor->u318 != 0){
+    if(actor->field_318 != 0){
         dBgS_LinChk local94;
-        cXyz chk_start = actor->current.pos;
-        cXyz chk_end = actor->current.pos;
+        cXyz chk_start = actor->current.pos, chk_end = actor->current.pos;
         chk_start.y += 50.0f;
         chk_end.y += 4000.0f;
         local94.Set(&chk_start, &chk_end, actor);
         if(dComIfG_Bgsp()->LineCross(&local94) != false)
-            actor->u31C[19].mPos = actor->u2D4 = actor->u2C8 = local94.GetLinP()->GetEnd();
-        actor->u318--;
+            actor->field_31C[19].mPos = actor->field_2D4 = actor->field_2C8 = local94.GetCross();
+        actor->field_318--;
     }
 
-    switch(actor->u2BA){
+    switch(actor->field_2BA){
         case 0:
-            if(std::abs(actor->u31C[19].mPos.y - actor->u2D4.y) < 10.0f){
-                actor->u2BA = 1;
-                *actor->u314 = 2;
+            if(std::abs(actor->field_31C[19].mPos.y - actor->field_2D4.y) < 10.0f){
+                actor->field_2BA = 1;
+                *actor->field_314 = 2;
             }
         case 1:
-            actor->u2D4.set(actor->u2C8);
+            actor->field_2D4 = actor->field_2C8;
     }
 
-    float y_diff = std::abs(actor->home.pos.y - actor->u2C8.y);
-    cLib_addCalc2(&actor->u2F4,   y_diff * (REG14_F(11) + 0.05f), 0.1f, 1.0f);
-    cLib_addCalc2(&actor->u300, REG14_F(12) + 10.0f, 0.1f, 0.5f);
+    float y_diff = std::abs(actor->home.pos.y - actor->field_2C8.y);
+    cLib_addCalc2(&actor->field_2F4,   y_diff * (REG14_F(11) + 0.05f), 0.1f, 1.0f);
+    cLib_addCalc2(&actor->field_300, REG14_F(12) + 10.0f, 0.1f, 0.5f);
     control1(actor);
     control2(actor);
     control3(actor);
@@ -211,33 +210,32 @@ void normal(shand_class* actor) {
 
 /* 00001428-00001508       .text cut__FP11shand_class */
 void cut(shand_class* actor) {
-    cLib_addCalc2(&actor->u2F4, REG8_F(12) + 20.0f, 0.1f, 0.5f);
+    cLib_addCalc2(&actor->field_2F4, REG8_F(12) + 20.0f, 0.1f, 0.5f);
     cut_control(actor);
     cut_control3(actor);
-    if(actor->u2BC[0] == 0 && actor->u30C->health != 0){
+    if(actor->field_2BC[0] == 0 && actor->field_30C->health != 0){
         actor->mState = 0;
-        actor->u2BA = 0;
-        actor->u2F0 = 0.0f;
-        actor->u300 = 0.0f;
+        actor->field_2BA = 0;
+        actor->field_2F0 = 0.0f;
+        actor->field_300 = 0.0f;
         fopAcM_seStart(actor, JA_SE_OBJ_VINE_S_RECOVER, 0);
     }
 }
 
 /* 00001508-00001DAC       .text hand_move__FP11shand_class */
 void hand_move(shand_class* actor) {
-    shand_s* shand_i = actor->u31C;
-    
-    actor->u30C = static_cast<shand_class*>(fopAcM_SearchByID(actor->u308));
-    if(actor->u30C != NULL){
-        actor->current.pos = *actor->u310;
-        actor->current.angle.y = actor->home.angle.y + actor->u30C->shape_angle.y + REG14_S(3);
+    shand_s* shand_i = actor->field_31C
+    actor->field_30C = static_cast<shand_class*>(fopAcM_SearchByID(actor->field_308));
+    if(actor->field_30C != NULL){
+        actor->current.pos = *actor->field_310;
+        actor->current.angle.y = actor->home.angle.y + actor->field_30C->shape_angle.y + REG14_S(3);
         switch(actor->mState){
             case 0:
                 normal(actor);
                 actor->attention_info.flags = fopAc_Attn_LOCKON_MISC_e;
-                if(actor->u30C->health == 0){
+                if(actor->field_30C->health == 0){
                     actor->mState = 1;
-                    actor->u2BA = 0;
+                    actor->field_2BA = 0;
                 }
                 break;
 
@@ -247,7 +245,7 @@ void hand_move(shand_class* actor) {
                     float chk_pos_x = actor->current.pos.x, chk_pos_y = actor->current.pos.y, chk_pos_z = actor->current.pos.z;
                     chk_pos_y -= 100.0f;
                     local_ac.m_pos.set(chk_pos_x, chk_pos_y, chk_pos_z);
-                    actor->uCE0 = dComIfG_Bgsp()->GroundCross(&local_ac);
+                    actor->field_CE0 = dComIfG_Bgsp()->GroundCross(&local_ac);
                     
                     dBgS_ObjGndChk_Spl local_100;
                     chk_pos_x = actor->current.pos.x; chk_pos_y = actor->current.pos.y; chk_pos_z = actor->current.pos.z;
@@ -255,11 +253,11 @@ void hand_move(shand_class* actor) {
                     local_100.m_pos.set(chk_pos_x, chk_pos_y, chk_pos_z);
                     float gnd_cross = dComIfG_Bgsp()->GroundCross(&local_100) + 10.0f;
                     if(gnd_cross != -1e09f){
-                        actor->uCE0 = gnd_cross;
+                        actor->field_CE0 = gnd_cross;
                     }
                 }
                 else {
-                    actor->uCE0 = -1e09f;
+                    actor->field_CE0 = -1e09f;
                 }
                 actor->mState = 2;
 
@@ -287,11 +285,12 @@ void hand_move(shand_class* actor) {
     bool is_hit = false;
     CcAtInfo hit_atInfo;
     hit_atInfo.pParticlePos = NULL;
-    if(actor->u2BC[1] == 0 && actor->mState == 0){
+    cXyz center;
+    if(actor->field_2BC[1] == 0 && actor->mState == 0){
         actor->mSph.SetC(actor->eyePos);
         actor->mCylArr[0].SetC(actor->current.pos);
         for(int i = 0; i < 5; i++){
-            if(actor->u2C4 == 0 && actor->mCylArr[i].ChkTgHit() != 0){
+            if(actor->field_2C4 == 0 && actor->mCylArr[i].ChkTgHit() != 0){
                 hit_atInfo.mpObj = actor->mCylArr[i].GetTgHitObj();
                 hit_atInfo.pParticlePos = actor->mCylArr[i].GetTgHitPosP();
                 is_hit = true;
@@ -299,17 +298,17 @@ void hand_move(shand_class* actor) {
             }
 
             if(i > 0){
-                cXyz center = line_segments[((actor->mExecuteCount & 0b11) + (i * 4)) % 20];
+                center = line_segments[((actor->mExecuteCount & 0b11) + (i * 4)) % 20];
                 center.y -= 200.0f;
                 actor->mCylArr[i].SetC(center);   
             }
         }
     }
     else {
-        cXyz local_128(0.0f, -20000.0f, 0.0f);
-        actor->mSph.SetC(local_128);
+        center.set(0.0f, -20000.0f, 0.0f);
+        actor->mSph.SetC(center);
         for(int i = 0; i < 5; i++){
-            actor->mCylArr[i].SetC(local_128);
+            actor->mCylArr[i].SetC(center);
         }
     }
 
@@ -318,24 +317,24 @@ void hand_move(shand_class* actor) {
         dComIfG_Ccsp()->Set(&actor->mCylArr[i]);
     }
     
-    if(is_hit || (actor->u2C4 == 0 && actor->mSph.ChkTgHit() != 0)){
+    if(is_hit || (actor->field_2C4 == 0 && actor->mSph.ChkTgHit() != 0)){
         if(!is_hit){
             hit_atInfo.mpObj = actor->mSph.GetTgHitObj();
             hit_atInfo.pParticlePos = actor->mSph.GetTgHitPosP();
         }
         hit_atInfo.mpActor = at_power_check(&hit_atInfo);
-        actor->u2C4 = 10;
+        actor->field_2C4 = 10;
         if(hit_atInfo.mpActor != NULL){
             def_se_set(actor, hit_atInfo.mpObj, 33);
-            if(actor->u30C != NULL){
+            if(actor->field_30C != NULL){
                 actor->mState = 1;
-                actor->u2BA = 0;
-                actor->u2BC[0] = l_HIO.u8;
-                actor->u2BC[1] = l_HIO.u8 + 90 + REG0_S(2);
-                actor->u2F8 = 3.0f;
-                actor->u2FC = 40.0f;
-                actor->u300 = cM_rndF(20.0f) + 30.0f;
-                *actor->u314 = 1;
+                actor->field_2BA = 0;
+                actor->field_2BC[0] = l_HIO.u8;
+                actor->field_2BC[1] = l_HIO.u8 + 90 + REG0_S(2);
+                actor->field_2F8 = 3.0f;
+                actor->field_2FC = 40.0f;
+                actor->field_300 = cM_rndF(20.0f) + 30.0f;
+                *actor->field_314 = 1;
                 cXyz particle_scale(0.5f, 0.5f, 0.5f);
                 dComIfGp_particle_set(19, &hit_atInfo.mpActor->eyePos, NULL, &particle_scale);
                 dComIfGp_particle_set(22, &hit_atInfo.mpActor->eyePos, NULL, &particle_scale);
@@ -350,12 +349,12 @@ static BOOL daShand_Execute(shand_class* actor) {
     
     
     for(int i = 4, j = 0; i != 0; i--, j++){
-        if(actor->u2BC[j] != 0)
-            actor->u2BC[j]--;    
+        if(actor->field_2BC[j] != 0)
+            actor->field_2BC[j]--;    
     }
 
-    if(actor->u2C4 != 0)
-        actor->u2C4--;
+    if(actor->field_2C4 != 0)
+        actor->field_2C4--;
 
     hand_move(actor);
 
@@ -397,7 +396,7 @@ static BOOL daShand_solidHeapCB(fopAc_ac_c* actor) {
 }
 
 /* 00002380-00002630       .text daShand_Create__FP10fopAc_ac_c */
-static s32 daShand_Create(shand_class* f_this) {
+static s32 daShand_Create(fopAc_ac_c* f_this) {
     static dCcD_SrcCyl tg_cyl_src = {
         0,
         0, 
@@ -456,13 +455,13 @@ static s32 daShand_Create(shand_class* f_this) {
         if(fopAcM_entrySolidHeap(s_this, daShand_solidHeapCB, 0x1040) != false){
             s_this->health = 2;
             s_this->mExecuteCount = cM_rndF(10000.0f);
-            s_this->u318 = 10;
-            s_this->u2BA = 1;
-            s_this->u2F0 = 1.0f;
+            s_this->field_318 = 10;
+            s_this->field_2BA = 1;
+            s_this->field_2F0 = 1.0f;
             if((fopAcM_GetParam(s_this) & 0xff) == true)
-                s_this->u304 = 15.75f;
+                s_this->field_304 = 15.75f;
             else
-                s_this->u304 = 10.5f;
+                s_this->field_304 = 10.5f;
             s_this->mStts.Init(0xff, 0xff, s_this);
             for(int i = 0; i < 5; i++){
                 s_this->mCylArr[i].Set(tg_cyl_src);
@@ -470,7 +469,7 @@ static s32 daShand_Create(shand_class* f_this) {
             }
             s_this->mSph.Set(bm_sph_src);
             s_this->mSph.SetStts(&s_this->mStts);
-            s_this->u2C4 = 30;
+            s_this->field_2C4 = 30;
             for(int i = 0; i < 3; i++){
                 daShand_Execute(s_this);
             }
