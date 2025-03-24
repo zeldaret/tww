@@ -3876,12 +3876,12 @@ BOOL daShip_c::execute() {
                     fopAcM_posMove(this, (cXyz *)&this->mStts);
                     if (dComIfGp_event_runCheck() == 0) {
                         if (this->mAcch.GetGroundH() == -1e+09f || (dPath_GetPolyRoomPathVec(*this->mAcch.pm_out_poly_info,&cStack_98, &local_188) & 0xFF) == 0) {
-                            cLib_addCalcPosXZ(&this->m1044, cXyz::Zero, -23.0f, -22.0f, -21.0f);
+                            cLib_addCalcPosXZ(&this->m1044, cXyz::Zero, 0.5f, 5.0f, 1.0f);
                         }
                         else {
                             cStack_11c.normalizeZP();
                             PSVECScale(&cStack_98, &cStack_98, local_188 >> 1);
-                            cLib_addCalcPosXZ(&this->m1044, cStack_98, -23.0f, -22.0f, -21.0f);
+                            cLib_addCalcPosXZ(&this->m1044, cStack_98, 0.5f, 5.0f, 1.0f);
                         }
                         PSVECAdd(&this->current.pos, &this->m1044, &this->current.pos);
                     }
@@ -3988,7 +3988,7 @@ BOOL daShip_c::execute() {
         this->mpSalvageArmModel->calc();
         setRopePos();
         mDoMtx_multVecZero(this->mpSalvageArmModel->getAnmMtx(1), &this->m102C);
-        if (this->mProc == &daShip_c::procCraneUp && this->mProc == &daShip_c::procCannon) {
+        if (this->mProc == &daShip_c::procCrane && this->mProc == &daShip_c::procCraneUp) {
             this->m0434 = NULL;
         }
         else {
@@ -4007,7 +4007,7 @@ BOOL daShip_c::execute() {
         if (this->mShipMode == UsingCannon) {
             mDoMtx_multVecZero(this->mpCannonModel->getAnmMtx(2), &this->m1038);
             
-            if (this->mProc != &daShip_c::procCrane) {
+            if (this->mProc != &daShip_c::procCannon) {
                 this->m0396 = getAnglePartRate() * 16384.0f;
                 this->m0394 *= getAnglePartRate();
             
