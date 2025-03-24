@@ -22,7 +22,8 @@ public:
     bool _draw();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ u8 m0290[0x2220 - 0x290];
+    /* 0x2220 */ f32 m2220;
 };
 
 class daHo_HIO_c {
