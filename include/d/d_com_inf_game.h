@@ -771,6 +771,7 @@ extern GXColor g_blackColor;
 extern GXColor g_whiteColor;
 extern GXColor g_saftyWhiteColor;
 
+
 /**
  * === SAVE ===
  */
@@ -1847,6 +1848,10 @@ void dComIfGs_revPlayerRecollectionData();
 /**
  * === PLAY ===
  */
+
+inline void dComIfGp_onMenuCollect() {
+    g_dComIfG_gameInfo.play.field_0x495a = 1;
+} 
 
 inline void dComIfGp_init() { g_dComIfG_gameInfo.play.init(); }
 
