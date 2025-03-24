@@ -773,7 +773,6 @@ BOOL daObjSwpush::Act_c::Mthd_Draw() {
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
-    // dComIfG_Bgsp()->DebugDrawPoly();
     return TRUE;
 }
 
