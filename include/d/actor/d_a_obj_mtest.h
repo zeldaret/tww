@@ -55,7 +55,7 @@ namespace daObjMtest {
         virtual BOOL Draw();
         
         bool chk_appear();
-        s32 Mthd_Create();
+        cPhs_State Mthd_Create();
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();

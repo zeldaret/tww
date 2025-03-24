@@ -20,7 +20,7 @@ public:
     void set_tri(int);
     void chk_event_flg();
     void set_em_set_offsetY();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void trap_off_wait_act_proc();
     void trap_on_wait_act_proc();

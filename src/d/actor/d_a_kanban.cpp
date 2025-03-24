@@ -103,7 +103,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00002614-00002A5C       .text daKanban_Create__FP10fopAc_ac_c */
-static s32 daKanban_Create(fopAc_ac_c*) {
+static cPhs_State daKanban_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

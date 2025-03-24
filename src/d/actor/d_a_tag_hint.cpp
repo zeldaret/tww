@@ -187,7 +187,7 @@ static BOOL daTag_Hint_Delete(daTag_Hint_c*) {
 }
 
 /* 00002074-00002194       .text daTag_Hint_Create__FP10fopAc_ac_c */
-static s32 daTag_Hint_Create(fopAc_ac_c*) {
+static cPhs_State daTag_Hint_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -332,11 +332,11 @@ void daDitem_c::set_effect() {
             continue;
         }
         JGeometry::TVec3<s16> rot;
-        rot.set(angleX, angleY, 0);
+        rot.x = angleX;
+        rot.y = angleY;
+        rot.z = 0;
         mpEmitters[i]->playCreateParticle();
-        JGeometry::TVec3<f32> pos;
-        pos.set(current.pos);
-        mpEmitters[i]->setGlobalTranslation(pos);
+        mpEmitters[i]->setGlobalTranslation(current.pos);
         mpEmitters[i]->setGlobalRotation(rot);
     }
 }
@@ -452,7 +452,7 @@ BOOL daDitem_c::Delete() {
     return DeleteBase(dItem_data::getArcname(m_itemNo));
 }
 
-s32 daDitem_c::create() {
+cPhs_State daDitem_c::create() {
     fopAcM_SetupActor(this, daDitem_c);
     
     m_itemNo = daDitem_prm::getNo(this);
@@ -462,7 +462,7 @@ s32 daDitem_c::create() {
         m_itemNo = dItem_GREEN_RUPEE_e;
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, dItem_data::getArcname(m_itemNo));
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, dItem_data::getArcname(m_itemNo));
     if (phase_state == cPhs_COMPLEATE_e) {
         u32 heap_size = dItem_data::getHeapSize(m_itemNo);
         if (!fopAcM_entrySolidHeap(this, CheckItemCreateHeap, heap_size)) {
@@ -507,7 +507,7 @@ static BOOL daDitem_Delete(daDitem_c* i_this) {
 }
 
 /* 00000994-00000B6C       .text daDitem_Create__FP9daDitem_c */
-static s32 daDitem_Create(daDitem_c* i_this) {
+static cPhs_State daDitem_Create(daDitem_c* i_this) {
     return i_this->create();
 }
 

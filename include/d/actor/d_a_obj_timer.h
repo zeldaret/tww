@@ -26,7 +26,7 @@ namespace daObjTimer {
         s32 prm_get_time() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TIME_W, PRM_TIME_S); }
         void stopTimer() { mIsStop = true;}
 
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void mode_wait_init();
         void mode_wait();

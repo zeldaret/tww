@@ -27,18 +27,18 @@ public:
     void particle_move();
     void particle_delete();
     void set_se();
-    int CreateHeap();
-    int Create();
-    s32 Mthd_Create();
-    BOOL Delete();
+    virtual BOOL CreateHeap();
+    virtual BOOL Create();
+    cPhs_State Mthd_Create();
+    virtual BOOL Delete();
     BOOL Mthd_Delete();
     void switch_wait_act_proc();
     void spread_water_face_act_proc();
     void water_level_move_wait_act_proc();
     void anime_loop_start_wait_act_proc();
     void high_water_level_act_proc();
-    BOOL Execute(Mtx**);
-    BOOL Draw();
+    virtual BOOL Execute(Mtx**);
+    virtual BOOL Draw();
 
 public:
     /* 0x2C8 */ request_of_phase_process_class mPhs;

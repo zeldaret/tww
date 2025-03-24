@@ -51,10 +51,10 @@ bool daObjGbed_c::create_heap() {
 }
 
 /* 00000224-000002F8       .text _create__11daObjGbed_cFv */
-s32 daObjGbed_c::_create() {
+cPhs_State daObjGbed_c::_create() {
     fopAcM_SetupActor(this, daObjGbed_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x13e0)) {
@@ -103,7 +103,7 @@ bool daObjGbed_c::_draw() {
 }
 
 /* 00000444-00000464       .text daObjGbed_Create__FP10fopAc_ac_c */
-static s32 daObjGbed_Create(fopAc_ac_c* i_this) {
+static cPhs_State daObjGbed_Create(fopAc_ac_c* i_this) {
     return ((daObjGbed_c*)i_this)->_create();
 }
 

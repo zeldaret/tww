@@ -11,7 +11,7 @@ public:
     void set_mtx();
     void CreateHeap();
     void CreateInit();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     bool _execute();
     bool _draw();

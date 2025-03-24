@@ -6,15 +6,15 @@
 
 class daShutter2_c : public dBgS_MoveBgActor {
 public:
-    BOOL Delete();
-    int CreateHeap();
-    int Create();
-    s32 _create();
+    virtual BOOL Delete();
+    virtual BOOL CreateHeap();
+    virtual BOOL Create();
+    cPhs_State _create();
     void set_mtx();
-    int Execute(Mtx**);
+    virtual BOOL Execute(Mtx**);
     void shutter_move();
     void demo();
-    BOOL Draw();
+    virtual BOOL Draw();
 
     /* 0x00 */ static const float m_max_speed[1];
     /* 0x04 */ static const float m_min_speed[1];

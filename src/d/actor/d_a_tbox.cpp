@@ -81,7 +81,7 @@ daTbox_HIO_c::daTbox_HIO_c() {
 }
 
 /* 00000124-00000550       .text commonShapeSet__8daTbox_cFv */
-s32 daTbox_c::commonShapeSet() {
+cPhs_State daTbox_c::commonShapeSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     // Load model
@@ -92,7 +92,7 @@ s32 daTbox_c::commonShapeSet() {
 
     // Load open animation
     J3DAnmTransform* openAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", mdlInfo.openBckId);
-    if (mOpenAnm.init(modelData, openAnm, true, J3DFrameCtrl::LOOP_ONCE_e,  1.0f, 0, -1, false) == 0) {
+    if (mOpenAnm.init(modelData, openAnm, true, J3DFrameCtrl::EMode_NONE,  1.0f, 0, -1, false) == 0) {
         return cPhs_ERROR_e;
     }
 
@@ -104,7 +104,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTextureSRTKey* appearTexData = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", mdlInfo.btkId);
-        if (mpAppearTexAnm->init(modelData, appearTexData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0) == 0) {
+        if (mpAppearTexAnm->init(modelData, appearTexData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
 
@@ -119,7 +119,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* appearRegData = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", mdlInfo.brkId);
-        if (mpAppearRegAnm->init(modelData, appearRegData, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
+        if (mpAppearRegAnm->init(modelData, appearRegData, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
 
@@ -143,7 +143,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_YTRIF00);
-        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
+        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
     }
@@ -165,7 +165,7 @@ s32 daTbox_c::commonShapeSet() {
 }
 
 /* 00000598-00000764       .text effectShapeSet__8daTbox_cFv */
-s32 daTbox_c::effectShapeSet() {
+cPhs_State daTbox_c::effectShapeSet() {
     J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", DALWAYS_BDL_IT_TAKARA_FLASH);
     JUT_ASSERT(0x117, flashModelData != NULL);
 
@@ -175,17 +175,17 @@ s32 daTbox_c::effectShapeSet() {
     }
 
     J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", DALWAYS_BCK_IT_TAKARA_FLASH2);
-    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false) == 0) {
+    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BTK_IT_TAKARA_FLASH);
-    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
+    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH);
-    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
     if (regInit) {
         return cPhs_COMPLEATE_e;
@@ -195,7 +195,7 @@ s32 daTbox_c::effectShapeSet() {
 }
 
 /* 00000764-00000928       .text envShapeSet__8daTbox_cFv */
-s32 daTbox_c::envShapeSet() {
+cPhs_State daTbox_c::envShapeSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     // Load model
@@ -226,7 +226,7 @@ s32 daTbox_c::envShapeSet() {
 }
 
 /* 00000928-00000BB0       .text bgCheckSet__8daTbox_cFv */
-s32 daTbox_c::bgCheckSet() {
+cPhs_State daTbox_c::bgCheckSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", mdlInfo.closedColId);
@@ -1240,7 +1240,7 @@ static s32 daTbox_Delete(daTbox_c* i_tbox) {
 }
 
 /* 00003070-0000315C       .text daTbox_Create__FP10fopAc_ac_c */
-static s32 daTbox_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daTbox_Create(fopAc_ac_c* i_actor) {
     static const u32 heapsize_tbl[] = {
         0x2E40,
         0x2D7C,

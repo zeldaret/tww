@@ -1,19 +1,19 @@
 #ifndef D_A_OBJ_OSPBOX_H
 #define D_A_OBJ_OSPBOX_H
 
-#include "f_op/f_op_actor.h"
+#include "d/d_bg_s_movebg_actor.h"
 
 namespace daObjOspbox {
-    class Act_c : public fopAc_ac_c {
+    class Act_c : public dBgS_MoveBgActor {
     public:
         void prm_get_itemNo() const {}
         void prm_get_spec() const {}
     
-        void CreateHeap();
-        s32 Create();
-        void Mthd_Create();
-        BOOL Delete();
-        void Mthd_Delete();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        cPhs_State Mthd_Create();
+        virtual BOOL Delete();
+        BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void make_item();
@@ -21,8 +21,8 @@ namespace daObjOspbox {
         void sound_break();
         void set_ground();
         void init_ground();
-        void Execute(float(**)[3][4]);
-        BOOL Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
     
     public:
         /* Place member variables here */

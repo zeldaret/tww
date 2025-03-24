@@ -63,7 +63,7 @@ public:
     bool _execute();
     bool _delete();
     void isCreate();
-    s32 _create();
+    cPhs_State _create();
     void _createHeap();
     void next_msgStatusNormal2(unsigned long*);
     void getMsgNormal2();

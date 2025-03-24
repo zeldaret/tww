@@ -20,7 +20,7 @@ static BOOL daBossItem_Delete(bossitem_class* i_this) {
 }
 
 /* 00000088-00000128       .text daBossItem_Create__FP10fopAc_ac_c */
-static s32 daBossItem_Create(fopAc_ac_c* i_this) {
+static cPhs_State daBossItem_Create(fopAc_ac_c* i_this) {
     bossitem_class* bItem = static_cast<bossitem_class*>(i_this);
 
     fopAcM_SetupActor(bItem, bossitem_class);

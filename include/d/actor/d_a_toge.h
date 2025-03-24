@@ -12,7 +12,7 @@ public:
     BOOL _delete();
     BOOL CreateHeap();
     BOOL Create();
-    s32 _create();
+    cPhs_State _create();
     BOOL _execute();
     void set_collision();
     void search_wind();

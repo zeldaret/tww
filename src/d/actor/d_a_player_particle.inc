@@ -364,12 +364,8 @@ void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle
 
 /* 80129F48-80129F98       .text execute__22daPy_followEcallBack_cFP14JPABaseEmitter */
 void daPy_followEcallBack_c::execute(JPABaseEmitter* emitter) {
-    JGeometry::TVec3<f32> pos(mPos.x, mPos.y, mPos.z);
-    emitter->setGlobalTranslation(pos);
-    JGeometry::TVec3<s16> rot;
-    rot.x = mAngle.x;
-    rot.y = mAngle.y;
-    rot.z = mAngle.z;
+    emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
+    JGeometry::TVec3<s16> rot(mAngle.x, mAngle.y, mAngle.z);
     emitter->setGlobalRotation(rot);
 }
 
@@ -517,12 +513,12 @@ void daPy_lk_c::setAuraEffect() {
         }
 
         if (pYaura00Brk != curYaura00Brk) {
-            mYaura00rBrk.init(mMagicArmorAuraEntries[0].getModel()->getModelData(), pYaura00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            mYaura00rBrk.init(mMagicArmorAuraEntries[0].getModel()->getModelData(), pYaura00Brk, FALSE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
             curYaura00Brk = pYaura00Brk;
         }
 
         if (pYmgcs00Brk != curYmgcs00Brk) {
-            mYmgcs00Brk.init(mpYmgcs00Model->getModelData(), pYmgcs00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            mYmgcs00Brk.init(mpYmgcs00Model->getModelData(), pYmgcs00Brk, FALSE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
             curYmgcs00Brk = pYmgcs00Brk;
         }
     }

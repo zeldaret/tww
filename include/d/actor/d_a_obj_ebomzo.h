@@ -4,11 +4,10 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_a_obj.h"
-#include "d/d_procname.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 
 namespace daObjEbomzo {
-    class Act_c : public dBgS_MoveBgActor{
+    class Act_c : public dBgS_MoveBgActor {
     public:
         enum Prm_e {
             PRM_SWSAVE_W = 8,
@@ -17,14 +16,14 @@ namespace daObjEbomzo {
 
         int prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
     
-        int CreateHeap();
-        int Create();
-        int Delete();
-        int Execute(Mtx**);
-        int Draw();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        virtual BOOL Delete();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
 
-        int Mthd_Create();
-        int Mthd_Delete();
+        cPhs_State Mthd_Create();
+        BOOL Mthd_Delete();
 
         void set_mtx();
         void init_mtx();

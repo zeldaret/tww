@@ -10,7 +10,7 @@ public:
 
     void set_mtx();
     BOOL Delete();
-    s32 create();
+    cPhs_State create();
     BOOL CreateInit();
     void checkGet();
     inline BOOL execute();

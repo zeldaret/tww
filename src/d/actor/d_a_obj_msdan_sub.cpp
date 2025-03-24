@@ -7,17 +7,17 @@
 #include "d/d_procname.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q213daObjMsdanSub5Act_cFv */
-void daObjMsdanSub::Act_c::CreateHeap() {
+BOOL daObjMsdanSub::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 0000012C-00000304       .text Create__Q213daObjMsdanSub5Act_cFv */
-s32 daObjMsdanSub::Act_c::Create() {
+BOOL daObjMsdanSub::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 00000304-00000400       .text Mthd_Create__Q213daObjMsdanSub5Act_cFv */
-void daObjMsdanSub::Act_c::Mthd_Create() {
+cPhs_State daObjMsdanSub::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjMsdanSub::Act_c::Delete() {
 }
 
 /* 00000408-00000454       .text Mthd_Delete__Q213daObjMsdanSub5Act_cFv */
-void daObjMsdanSub::Act_c::Mthd_Delete() {
+BOOL daObjMsdanSub::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daObjMsdanSub::Act_c::init_mtx() {
 }
 
 /* 00000534-00000BB4       .text Execute__Q213daObjMsdanSub5Act_cFPPA3_A4_f */
-void daObjMsdanSub::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjMsdanSub::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -54,27 +54,27 @@ BOOL daObjMsdanSub::Act_c::Draw() {
 namespace daObjMsdanSub {
 namespace {
 /* 00000C54-00000C74       .text Mthd_Create__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000C74-00000C94       .text Mthd_Delete__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000C94-00000CB4       .text Mthd_Execute__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000CB4-00000CE0       .text Mthd_Draw__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000CE0-00000D0C       .text Mthd_IsDelete__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

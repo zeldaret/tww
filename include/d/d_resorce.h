@@ -1,9 +1,9 @@
 #ifndef D_D_RESORCE_H
 #define D_D_RESORCE_H
 
+#include "JSystem/JKernel/JKRArchive.h"
 #include "dolphin/types.h"
 #include "global.h"
-#include "JSystem/JKernel/JKRMemArchive.h"
 
 class JKRArchive;
 class JKRHeap;
@@ -48,7 +48,7 @@ class dRes_control_c {
 public:
     dRes_control_c() {}
     ~dRes_control_c();
-    static int setRes(char const*, dRes_info_c*, int, char const*, u8, JKRHeap*);
+    static BOOL setRes(char const*, dRes_info_c*, int, char const*, u8, JKRHeap*);
     static int syncRes(char const*, dRes_info_c*, int);
     static int deleteRes(char const*, dRes_info_c*, int);
     static void* getRes(char const*, char const*, dRes_info_c*, int);
@@ -58,11 +58,11 @@ public:
     static void* getRes(char const*, s32, dRes_info_c*, int);
     static void* getIDRes(char const*, u16, dRes_info_c*, int);
     static int syncAllRes(dRes_info_c*, int);
-    int setStageRes(char const*, JKRHeap*);
+    BOOL setStageRes(char const*, JKRHeap*);
     void dump();
     int getObjectResName2Index(char const*, char const*);
 
-    int setObjectRes(const char* name, u8 direction, JKRHeap* heap) {
+    BOOL setObjectRes(const char* name, u8 direction, JKRHeap* heap) {
         return setRes(name, &mObjectInfo[0], ARRAY_SIZE(mObjectInfo), "/res/Object/", direction, heap);
     }
 

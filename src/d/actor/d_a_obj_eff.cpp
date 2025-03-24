@@ -137,7 +137,7 @@ void daObjEff::Act_c::eff_set() {
 }
 
 /* 00000F6C-00001030       .text _create__Q28daObjEff5Act_cFv */
-s32 daObjEff::Act_c::_create() {
+cPhs_State daObjEff::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -224,27 +224,27 @@ bool daObjEff::Act_c::_execute() {
 namespace daObjEff {
 namespace {
 /* 000014C0-000014E0       .text Mthd_Create__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000014E0-00001504       .text Mthd_Delete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001504-00001528       .text Mthd_Execute__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001528-00001530       .text Mthd_Draw__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001530-00001538       .text Mthd_IsDelete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -11,8 +11,8 @@ class daHot_Floor_c : public fopAc_ac_c {
 public:
     void set_mtx_init();
     void set_mtx();
-    s32 CreateInit();
-    inline s32 _create();
+    cPhs_State CreateInit();
+    inline cPhs_State _create();
     inline bool _execute();
     inline bool _draw();
     inline bool _delete();

@@ -337,7 +337,7 @@ static BOOL createHeap(fopAc_ac_c*) {
 }
 
 /* 0000BAFC-0000C148       .text daMo2_Create__FP10fopAc_ac_c */
-static s32 daMo2_Create(fopAc_ac_c*) {
+static cPhs_State daMo2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

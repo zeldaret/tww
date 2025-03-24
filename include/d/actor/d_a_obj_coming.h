@@ -37,7 +37,7 @@ namespace daObjComing {
         void prm_get_waitTime() const; // weak but not inlined?
     
         void chk_switch();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void get_aqua_y(const cXyz*);
         void chk_ship_range(const fopAc_ac_c*) const;

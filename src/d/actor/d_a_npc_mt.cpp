@@ -55,7 +55,7 @@ void phase_2(daNpcMt_c*) {
 }
 
 /* 000008D8-00000908       .text _create__9daNpcMt_cFv */
-s32 daNpcMt_c::_create() {
+cPhs_State daNpcMt_c::_create() {
     /* Nonmatching */
 }
 

@@ -396,7 +396,7 @@ static BOOL daShand_solidHeapCB(fopAc_ac_c* actor) {
 }
 
 /* 00002380-00002630       .text daShand_Create__FP10fopAc_ac_c */
-static s32 daShand_Create(fopAc_ac_c* f_this) {
+static cPhs_State daShand_Create(fopAc_ac_c* f_this) {
     static dCcD_SrcCyl tg_cyl_src = {
         0,
         0, 

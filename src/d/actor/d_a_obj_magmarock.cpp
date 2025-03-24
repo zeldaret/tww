@@ -112,7 +112,7 @@ void daObjMagmarock::Act_c::calc_ground_quat() {
 }
 
 /* 000017DC-0000198C       .text Create__Q214daObjMagmarock6MethodFPv */
-s32 daObjMagmarock::Method::Create(void*) {
+cPhs_State daObjMagmarock::Method::Create(void*) {
     /* Nonmatching */
 }
 

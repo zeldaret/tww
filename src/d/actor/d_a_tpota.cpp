@@ -7,7 +7,7 @@
 #include "d/d_procname.h"
 
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
-s32 daTpota_c::_create() {
+cPhs_State daTpota_c::_create() {
     /* Nonmatching */
 }
 
@@ -48,27 +48,27 @@ bool daTpota_c::_draw() {
 
 namespace {
 /* 000004D0-000004F0       .text Mthd_Create__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000004F0-00000514       .text Mthd_Delete__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000514-00000538       .text Mthd_Execute__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000538-0000055C       .text Mthd_Draw__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 0000055C-00000564       .text Mthd_IsDelete__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

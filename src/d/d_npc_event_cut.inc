@@ -75,7 +75,7 @@ bool dNpc_EventCut_c::cutProc() {
                 }
                 
                 (this->*cut_tbl[mCurActIdx].proc)();
-                return 1;
+                return true;
             }
         }
     }

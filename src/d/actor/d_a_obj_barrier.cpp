@@ -109,9 +109,9 @@ bool daObjBarrier_anm_c::init() {
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x1000200);
         BOOL btk_init =
-            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
         BOOL brk_init =
-            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
 
         if (mpModel == NULL || !btk_init || !brk_init) {
             rt = false;
@@ -383,11 +383,11 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
         J3DAnmTevRegKey* brk_anm_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, YCAGE_BRK_YHRBR00));
         JUT_ASSERT(947, brk_anm_p != NULL);
 
-        mBtk[effect_idx].init(modelData, btk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1,
+        mBtk[effect_idx].init(modelData, btk_anm_p, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1,
                               true, 0);
-        mBck[effect_idx].init(modelData, bck_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1,
+        mBck[effect_idx].init(modelData, bck_anm_p, TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1,
                               true);
-        mBrk[effect_idx].init(modelData, brk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1,
+        mBrk[effect_idx].init(modelData, brk_anm_p, TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1,
                               true, 0);
 
         mDoMtx_stack_c::transS(pos.x, pos.y, pos.z);
@@ -414,11 +414,11 @@ bool daObjBarrier_ef_c::init() {
             mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x5020200);
             setDummyTexture(i);
 
-            BOOL btk_init = mBtk[i].init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0,
+            BOOL btk_init = mBtk[i].init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0,
                                          -1, false, 0);
             BOOL bck_init =
-                mBck[i].init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, false);
-            BOOL brk_init = mBrk[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0,
+                mBck[i].init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, false);
+            BOOL brk_init = mBrk[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE, 0.0f, 0,
                                          -1, false, 0);
 
             if (mpModel[i] == NULL || !btk_init || !bck_init || !brk_init) {
@@ -477,8 +477,8 @@ void daObjBarrier_ef_c::draw() {
 }
 
 /* 00001638-0000182C       .text _create__14daObjBarrier_cFv */
-int daObjBarrier_c::_create() {
-    int phase = cPhs_ERROR_e;
+cPhs_State daObjBarrier_c::_create() {
+    cPhs_State phase = cPhs_ERROR_e;
     fopAcM_SetupActor(this, daObjBarrier_c);
 
     if (fopAcM_IsFirstCreating(this)) {
@@ -585,28 +585,28 @@ bool daObjBarrier_c::_draw() {
 }
 
 /* 00001C1C-00001C3C       .text daObjBarrier_Create__FP10fopAc_ac_c */
-static int daObjBarrier_Create(fopAc_ac_c* i_this) {
+static cPhs_State daObjBarrier_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_create();
 }
 
 /* 00001C3C-00001C60       .text daObjBarrier_Delete__FP14daObjBarrier_c */
-static int daObjBarrier_Delete(daObjBarrier_c* i_this) {
+static BOOL daObjBarrier_Delete(daObjBarrier_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_delete();
 }
 
 /* 00001C60-00001C84       .text daObjBarrier_Execute__FP14daObjBarrier_c */
-static int daObjBarrier_Execute(daObjBarrier_c* i_this) {
+static BOOL daObjBarrier_Execute(daObjBarrier_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_execute();
 }
 
 /* 00001C84-00001CA8       .text daObjBarrier_Draw__FP14daObjBarrier_c */
-static int daObjBarrier_Draw(daObjBarrier_c* i_this) {
+static BOOL daObjBarrier_Draw(daObjBarrier_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_draw();
 }
 
 /* 00001CA8-00001CB0       .text daObjBarrier_IsDelete__FP14daObjBarrier_c */
-static int daObjBarrier_IsDelete(daObjBarrier_c* i_this) {
-    return 1;
+static BOOL daObjBarrier_IsDelete(daObjBarrier_c* i_this) {
+    return TRUE;
 }
 
 static actor_method_class l_daObjBarrier_Method = {

@@ -22,7 +22,7 @@ void daWbird_c::CreateInit() {
 }
 
 /* 00000388-000003E0       .text create__9daWbird_cFv */
-s32 daWbird_c::create() {
+cPhs_State daWbird_c::create() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ static BOOL daWbird_Delete(daWbird_c*) {
 }
 
 /* 00000908-00000928       .text daWbird_Create__FP10fopAc_ac_c */
-static s32 daWbird_Create(fopAc_ac_c*) {
+static cPhs_State daWbird_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

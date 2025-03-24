@@ -4109,7 +4109,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 0000075C-000008E0       .text phase_1__FP13daNpcPeople_c */
-static s32 phase_1(daNpcPeople_c* i_this) {
+static cPhs_State phase_1(daNpcPeople_c* i_this) {
     fopAcM_SetupActor(i_this, daNpcPeople_c);
 
     s16 arg0 = i_this->getPrmArg0();
@@ -4168,8 +4168,8 @@ static s32 phase_1(daNpcPeople_c* i_this) {
 }
 
 /* 000008E0-00000960       .text phase_2__FP13daNpcPeople_c */
-static s32 phase_2(daNpcPeople_c* i_this) {
-    int rt = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getNpcNo()]);
+static cPhs_State phase_2(daNpcPeople_c* i_this) {
+    cPhs_State rt = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getNpcNo()]);
     if(rt == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0x3300)) {
             return i_this->createInit();
@@ -4183,7 +4183,7 @@ static s32 phase_2(daNpcPeople_c* i_this) {
 }
 
 /* 00000960-00000990       .text _create__13daNpcPeople_cFv */
-s32 daNpcPeople_c::_create() {
+cPhs_State daNpcPeople_c::_create() {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,
@@ -4200,7 +4200,7 @@ BOOL daNpcPeople_c::createHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcType], getBck(m793))),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         l_diff_flag_tbl[mNpcType]
@@ -4223,7 +4223,7 @@ BOOL daNpcPeople_c::createHeap() {
             headModelData,
             NULL, NULL,
             (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcType], getHeadBck(m793))),
-            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+            J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x00080000,
             l_head_diff_flag_tbl[mNpcType]
@@ -4283,7 +4283,7 @@ s16 daNpcPeople_photoCB(void* i_this, int param_1) {
 }
 
 /* 00000E6C-00001518       .text createInit__13daNpcPeople_cFv */
-s32 daNpcPeople_c::createInit() {
+cPhs_State daNpcPeople_c::createInit() {
     int temp = 0xFF;
 
     u8 pathIndex = getPrmRailID();

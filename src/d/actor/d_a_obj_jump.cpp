@@ -7,17 +7,17 @@
 #include "d/d_procname.h"
 
 /* 00000078-00000184       .text CreateHeap__Q29daObjJump5Act_cFv */
-void daObjJump::Act_c::CreateHeap() {
+BOOL daObjJump::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000184-0000033C       .text Create__Q29daObjJump5Act_cFv */
-s32 daObjJump::Act_c::Create() {
+BOOL daObjJump::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 0000033C-00000544       .text Mthd_Create__Q29daObjJump5Act_cFv */
-void daObjJump::Act_c::Mthd_Create() {
+cPhs_State daObjJump::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ BOOL daObjJump::Act_c::Delete() {
 }
 
 /* 00000A0C-00000A58       .text Mthd_Delete__Q29daObjJump5Act_cFv */
-void daObjJump::Act_c::Mthd_Delete() {
+BOOL daObjJump::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -127,7 +127,7 @@ void daObjJump::Act_c::mode_u_w() {
 }
 
 /* 00001338-000014B0       .text Execute__Q29daObjJump5Act_cFPPA3_A4_f */
-void daObjJump::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjJump::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -139,27 +139,27 @@ BOOL daObjJump::Act_c::Draw() {
 namespace daObjJump {
 namespace {
 /* 00001594-000015B4       .text Mthd_Create__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000015B4-000015D4       .text Mthd_Delete__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000015D4-000015F4       .text Mthd_Execute__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000015F4-00001620       .text Mthd_Draw__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001620-0000164C       .text Mthd_IsDelete__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -32,7 +32,7 @@ namespace daObjEff {
         void eff_set_pinecone_smoke();
         void eff_set_woodBox_smoke();
         void eff_set();
-        s32 _create();
+        cPhs_State _create();
         void remove_barrel_smoke();
         void remove_stool_smoke();
         void remove_skull_smoke();

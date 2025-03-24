@@ -62,7 +62,7 @@ void daObjYLzou_c::vib_proc() {
 }
 
 /* 000009A4-00000AE0       .text _create__12daObjYLzou_cFv */
-s32 daObjYLzou_c::_create() {
+cPhs_State daObjYLzou_c::_create() {
     /* Nonmatching */
 }
 
@@ -177,7 +177,7 @@ bool daObjYLzou_c::_draw() {
 }
 
 /* 00001834-00001854       .text daObjYLzou_Create__FP10fopAc_ac_c */
-static s32 daObjYLzou_Create(fopAc_ac_c*) {
+static cPhs_State daObjYLzou_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

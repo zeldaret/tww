@@ -881,11 +881,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 000005A8-00000624       .text phase_1__FP13daObjFigure_c */
-static s32 phase_1(daObjFigure_c* i_this) {
+static cPhs_State phase_1(daObjFigure_c* i_this) {
     fopAcM_SetupActor(i_this, daObjFigure_c)
     i_this->setResFlag(0x1);
 
-    int status = dComIfG_resLoad(i_this->getPhase1P(), "Figure");
+    cPhs_State status = dComIfG_resLoad(i_this->getPhase1P(), "Figure");
     if(status != cPhs_ERROR_e && status == cPhs_COMPLEATE_e) {
         return cPhs_NEXT_e;
     }
@@ -894,7 +894,7 @@ static s32 phase_1(daObjFigure_c* i_this) {
 }
 
 /* 00000624-000006F0       .text phase_2__FP13daObjFigure_c */
-static s32 phase_2(daObjFigure_c* i_this) {
+static cPhs_State phase_2(daObjFigure_c* i_this) {
     i_this->setResFlag(0x2);
     u8 figureNo = i_this->getFigureNo();
     int id = dSnap_GetFigRoomId(figureNo);
@@ -902,7 +902,7 @@ static s32 phase_2(daObjFigure_c* i_this) {
         id = l_figure_dat_tbl[figureNo].mRoomId;
     }
 
-    int status = dComIfG_resLoad(i_this->getPhase2P(), l_arcname_tbl[id]);
+    cPhs_State status = dComIfG_resLoad(i_this->getPhase2P(), l_arcname_tbl[id]);
 
     if(status == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, figureNo == 0x40 ? 0x25000 : 0xCD90)) {
@@ -917,7 +917,7 @@ static s32 phase_2(daObjFigure_c* i_this) {
 }
 
 /* 000006F0-00000720       .text _create__13daObjFigure_cFv */
-s32 daObjFigure_c::_create() {
+cPhs_State daObjFigure_c::_create() {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)&phase_1,
         (cPhs__Handler)&phase_2,
@@ -957,7 +957,7 @@ BOOL daObjFigure_c::createHeap() {
             return false;
         }
 
-        if(!mpBrkAnm->init(pModelData, pBrkData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+        if(!mpBrkAnm->init(pModelData, pBrkData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
             return false;
         }
     }
@@ -967,7 +967,7 @@ BOOL daObjFigure_c::createHeap() {
             p1,
             NULL, NULL,
             (J3DAnmTransformKey*)dComIfG_getObjectIDRes(arcname, 0),
-            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+            J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x80000,
             0x11001222
@@ -1002,7 +1002,7 @@ BOOL daObjFigure_c::createHeap() {
         return false;
     }
 
-    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return false;
     }
 
@@ -1010,7 +1010,7 @@ BOOL daObjFigure_c::createHeap() {
 }
 
 /* 00000A90-00000BF4       .text createInit__13daObjFigure_cFv */
-s32 daObjFigure_c::createInit() {
+cPhs_State daObjFigure_c::createInit() {
     mStts.Init(0xFF, 0xFF, this);
     mCyl1.Set(l_cyl_src);
     mCyl1.SetStts(&mStts);

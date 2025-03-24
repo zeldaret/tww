@@ -8,15 +8,15 @@
 
 class daFan_c : public dBgS_MoveBgActor {
 public:
-    s32 _create();
-    BOOL Delete();
-    int CreateHeap();
-    int Create();
+    cPhs_State _create();
+    virtual BOOL Delete();
+    virtual BOOL CreateHeap();
+    virtual BOOL Create();
     void set_mtx();
     void set_wind_length(f32);
     void set_cps(f32);
-    int Execute(Mtx**);
-    BOOL Draw();
+    virtual BOOL Execute(Mtx**);
+    virtual BOOL Draw();
 
 public:
     /* 0x2C8 */ request_of_phase_process_class mPhs;

@@ -33,7 +33,7 @@ void daObjRflw_c::set_mtx() {
 }
 
 /* 000003E8-0000051C       .text daObjRflw_Create__FPv */
-static s32 daObjRflw_Create(void*) {
+static cPhs_State daObjRflw_Create(void*) {
     /* Nonmatching */
 }
 

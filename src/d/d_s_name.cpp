@@ -30,6 +30,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
+#include "JSystem/JKernel/JKRMemArchive.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
@@ -62,13 +63,16 @@ dSn_HIO_c::dSn_HIO_c() {
 }
 
 /* 8022F8F0-8022F95C       .text phase_1__FPc */
-static s32 phase_1(char* resName) {
+static cPhs_State phase_1(char* resName) {
     mDoAud_bgmStart(JA_BGM_SELECT);
-    return !dComIfG_setStageRes(resName, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
+    if (dComIfG_setStageRes(resName, NULL) == FALSE) {
+        return cPhs_ERROR_e;
+    }
+    return cPhs_NEXT_e;
 }
 
 /* 8022F95C-8022F9B4       .text phase_2__FPc */
-static s32 phase_2(char* resName) {
+static cPhs_State phase_2(char* resName) {
     s32 rt = dComIfG_syncStageRes(resName);
     if (rt < 0)
         return cPhs_ERROR_e;
@@ -78,12 +82,12 @@ static s32 phase_2(char* resName) {
 }
 
 /* 8022F9B4-8022F9BC       .text phase_3__FPc */
-static s32 phase_3(char*) {
+static cPhs_State phase_3(char*) {
     return cPhs_COMPLEATE_e;
 }
 
 /* 8022F9BC-8022F9FC       .text resLoad__FP30request_of_phase_process_classPc */
-s32 resLoad(request_of_phase_process_class* phase, char* resName) {
+cPhs_State resLoad(request_of_phase_process_class* phase, char* resName) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,
@@ -96,13 +100,13 @@ s32 resLoad(request_of_phase_process_class* phase, char* resName) {
 }
 
 /* 8022F9FC-802301C8       .text create__10dScnName_cFv */
-s32 dScnName_c::create() {
+cPhs_State dScnName_c::create() {
     dComIfGp_offEnableNextStage();
     dComIfGp_setNextStage("Name", 0, 0);
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
     dComIfGp_offEnableNextStage();
 
-    s32 rt = resLoad(&mPhs, "Stage");
+    cPhs_State rt = resLoad(&mPhs, "Stage");
     if (rt == cPhs_COMPLEATE_e) {
         heap = JKRCreateExpHeap(0x68000, mDoExt_getGameHeap(), false);
         JUT_ASSERT(0x1c8, heap != NULL);
@@ -918,28 +922,28 @@ void dScnName_c::changeGameScene() {
 }
 
 /* 80232338-80232358       .text dScnName_Draw__FP10dScnName_c */
-static s32 dScnName_Draw(dScnName_c* i_this) {
+static BOOL dScnName_Draw(dScnName_c* i_this) {
     return i_this->draw();
 }
 
 /* 80232358-80232378       .text dScnName_Execute__FP10dScnName_c */
-static s32 dScnName_Execute(dScnName_c* i_this) {
+static BOOL dScnName_Execute(dScnName_c* i_this) {
     return i_this->execute();
 }
 
 /* 80232378-80232380       .text dScnName_IsDelete__FP10dScnName_c */
-static s32 dScnName_IsDelete(dScnName_c*) {
-    return 1;
+static BOOL dScnName_IsDelete(dScnName_c*) {
+    return TRUE;
 }
 
 /* 80232380-802323A8       .text dScnName_Delete__FP10dScnName_c */
-static s32 dScnName_Delete(dScnName_c* i_this) {
+static BOOL dScnName_Delete(dScnName_c* i_this) {
     i_this->~dScnName_c();
-    return 1;
+    return TRUE;
 }
 
 /* 802323A8-802323F8       .text dScnName_Create__FP11scene_class */
-static s32 dScnName_Create(scene_class* i_scn) {
+static cPhs_State dScnName_Create(scene_class* i_scn) {
     dScnName_c* i_this = new (i_scn) dScnName_c();
     return i_this->create();
 }
@@ -971,29 +975,27 @@ scene_method_class l_dScnName_Method = {
 };
 
 scene_process_profile_definition g_profile_NAME_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_NAME_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnName_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnName_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NAME_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnName_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnName_Method,
 };
 
 scene_process_profile_definition g_profile_NAMEEX_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_NAMEEX_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnName_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnName_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NAMEEX_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnName_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnName_Method,
 };

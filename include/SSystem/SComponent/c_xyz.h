@@ -1,7 +1,7 @@
 #ifndef C_XYZ_H
 #define C_XYZ_H
 
-#include "math.h"
+#include "math.h" // IWYU pragma: keep
 #include "dolphin/mtx/vec.h"
 
 struct cXy {
@@ -40,12 +40,12 @@ struct cXyz : Vec {
         y = vec.y;
         z = vec.z;
     }
-    cXyz operator+(Vec const&) const;
-    cXyz operator-(Vec const&) const;
+    cXyz operator+(const Vec&) const;
+    cXyz operator-(const Vec&) const;
     cXyz operator*(f32) const;
-    cXyz operator*(Vec const&) const;
+    cXyz operator*(const Vec&) const;
     cXyz operator/(f32) const;
-    // void operator=(cXyz const&);
+    // void operator=(const cXyz&);
 
     void operator+=(f32 f) {
         x += f;
@@ -60,16 +60,16 @@ struct cXyz : Vec {
     void operator-=(const Vec& other) { VECSubtract(this, &other, this); }
     void operator+=(const Vec& other) { VECAdd(this, &other, this); }
     void operator*=(f32 scale) { VECScale(this, this, scale); }
-    cXyz getCrossProduct(Vec const&) const;
-    cXyz outprod(Vec const&) const;
+    cXyz getCrossProduct(const Vec&) const;
+    cXyz outprod(const Vec&) const;
     cXyz norm() const;
     cXyz normZP() const;
     cXyz normZC() const;
     cXyz normalize();
     cXyz normalizeZP();
     bool normalizeRS();
-    bool operator==(Vec const&) const;
-    bool operator!=(Vec const&) const;
+    bool operator==(const Vec&) const;
+    bool operator!=(const Vec&) const;
     bool isZero() const;
     s16 atan2sX_Z() const;
     s16 atan2sY_XZ() const;

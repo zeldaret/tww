@@ -107,9 +107,9 @@ bool daObjBarrel::Act_c::create_heap() {
 }
 
 /* 00000160-00000474       .text _create__Q211daObjBarrel5Act_cFv */
-s32 daObjBarrel::Act_c::_create() {
+cPhs_State daObjBarrel::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
-    s32 rt = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State rt = dComIfG_resLoad(&mPhs, M_arcname);
     if (rt == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, solidHeapCB, 0x820) != 0) {
             mAcchCir.SetWall(30.0f, l_l_radius);
@@ -476,7 +476,7 @@ void daObjBarrel::Act_c::eff_break() {
     cXyz pos(current.pos.x, current.pos.y + 50.0f, current.pos.z);
     JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &pos, NULL, NULL, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     if (emitter) {
-        static const JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
+        static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
         emitter->setEmitterScale(em_scl);
     }
     daObjEff::Act_c::make_barrel_smoke(&pos);
@@ -734,7 +734,7 @@ bool daObjBarrel::Act_c::_draw() {
 }
 
 /* 0000241C-0000243C       .text Create__Q211daObjBarrel6MethodFPv */
-s32 daObjBarrel::Method::Create(void* i_this) {
+cPhs_State daObjBarrel::Method::Create(void* i_this) {
     return static_cast<daObjBarrel::Act_c*>(i_this)->_create();
 }
 

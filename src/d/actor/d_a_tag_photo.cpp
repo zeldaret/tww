@@ -27,7 +27,7 @@ void phase_2(daTagPhoto_c*) {
 }
 
 /* 00000198-000001C8       .text _create__12daTagPhoto_cFv */
-s32 daTagPhoto_c::_create() {
+cPhs_State daTagPhoto_c::_create() {
     /* Nonmatching */
 }
 

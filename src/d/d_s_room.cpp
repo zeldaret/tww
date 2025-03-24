@@ -158,14 +158,14 @@ static BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
 }
 
 /* 80236D24-80236D58       .text phase_0__FP19room_of_scene_class */
-s32 phase_0(room_of_scene_class* i_this) {
+cPhs_State phase_0(room_of_scene_class* i_this) {
     s32 roomNo = fopScnM_GetParam(i_this);
     dStage_roomControl_c::setStatusProcID(roomNo, fopScnM_GetID(i_this));
     return cPhs_NEXT_e;
 }
 
 /* 80236D58-80236DE8       .text phase_1__FP19room_of_scene_class */
-s32 phase_1(room_of_scene_class* i_this) {
+cPhs_State phase_1(room_of_scene_class* i_this) {
     s32 roomNo = fopScnM_GetParam(i_this);
     JKRExpHeap * pHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
     if (pHeap != NULL && pHeap->getTotalUsedSize() != 0)
@@ -182,7 +182,7 @@ s32 phase_1(room_of_scene_class* i_this) {
 }
 
 /* 80236DE8-802370A0       .text phase_2__FP19room_of_scene_class */
-s32 phase_2(room_of_scene_class* i_this) {
+cPhs_State phase_2(room_of_scene_class* i_this) {
     const char * arcName = setArcName(i_this);
     s32 rt = dComIfG_syncStageRes(arcName);
     if (rt < 0) {
@@ -235,7 +235,7 @@ s32 phase_2(room_of_scene_class* i_this) {
 }
 
 /* 802370B8-802371D0       .text phase_3__FP19room_of_scene_class */
-s32 phase_3(room_of_scene_class* i_this) {
+cPhs_State phase_3(room_of_scene_class* i_this) {
     if (dStage_roomControl_c::getDemoArcName()[0] != '\0') {
         s32 rt = dComIfG_syncObjectRes(dStage_roomControl_c::getDemoArcName());
         if (rt < 0) {
@@ -260,7 +260,7 @@ s32 phase_3(room_of_scene_class* i_this) {
 }
 
 /* 802371D0-802372C4       .text phase_4__FP19room_of_scene_class */
-s32 phase_4(room_of_scene_class* i_this) {
+cPhs_State phase_4(room_of_scene_class* i_this) {
     if (dComIfGp_getPlayer(0) == NULL)
         return cPhs_INIT_e;
 
@@ -286,7 +286,7 @@ s32 phase_4(room_of_scene_class* i_this) {
 }
 
 /* 802372C4-802372F4       .text dScnRoom_Create__FP11scene_class */
-static s32 dScnRoom_Create(scene_class* i_scn) {
+static cPhs_State dScnRoom_Create(scene_class* i_scn) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_0,
         (cPhs__Handler)phase_1,
@@ -308,15 +308,14 @@ scene_method_class l_dScnRoom_Method = {
 };
 
 scene_process_profile_definition g_profile_ROOM_SCENE = {
-    fpcLy_CURRENT_e,
-    0,
-    fpcPi_CURRENT_e,
-    PROC_ROOM_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(room_of_scene_class),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnRoom_Method,
-    NULL,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ROOM_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(room_of_scene_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnRoom_Method,
 };

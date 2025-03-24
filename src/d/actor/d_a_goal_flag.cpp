@@ -102,7 +102,7 @@ static s32 daGoal_FlagCreate(void*) {
 }
 
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
-s32 daGoal_Flag_c::_create() {
+cPhs_State daGoal_Flag_c::_create() {
     /* Nonmatching */
 }
 

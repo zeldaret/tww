@@ -37,7 +37,7 @@ void daTsubo::Act_c::create_init_bgc() {
 }
 
 /* 00000694-00000B10       .text _create__Q27daTsubo5Act_cFv */
-s32 daTsubo::Act_c::_create() {
+cPhs_State daTsubo::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -587,7 +587,7 @@ bool daTsubo::Act_c::_draw() {
 }
 
 /* 00007D2C-00007D4C       .text Create__Q27daTsubo6MethodFPv */
-s32 daTsubo::Method::Create(void*) {
+cPhs_State daTsubo::Method::Create(void*) {
     /* Nonmatching */
 }
 

@@ -20,7 +20,7 @@ public:
     bool _execute();
     bool _draw();
     void getArg();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
 
 public:

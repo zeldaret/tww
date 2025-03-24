@@ -17,7 +17,7 @@ void daObjGnnbtaki_c::create_heap() {
 }
 
 /* 000001F4-00000348       .text _create__15daObjGnnbtaki_cFv */
-s32 daObjGnnbtaki_c::_create() {
+cPhs_State daObjGnnbtaki_c::_create() {
     /* Nonmatching */
 }
 
@@ -43,27 +43,27 @@ bool daObjGnnbtaki_c::_draw() {
 
 namespace {
 /* 000005CC-000005EC       .text Mthd_Create__32@unnamed@d_a_obj_gnnbtltaki_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000005EC-00000610       .text Mthd_Delete__32@unnamed@d_a_obj_gnnbtltaki_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000610-00000634       .text Mthd_Execute__32@unnamed@d_a_obj_gnnbtltaki_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000634-00000658       .text Mthd_Draw__32@unnamed@d_a_obj_gnnbtltaki_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000658-00000660       .text Mthd_IsDelete__32@unnamed@d_a_obj_gnnbtltaki_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -25,9 +25,9 @@ int dBgS_MoveBgActor::m_dzb_id;
 MoveBGActor_SetFunc dBgS_MoveBgActor::m_set_func;
 
 /* 800A571C-800A57F4       .text MoveBGCreateHeap__16dBgS_MoveBgActorFv */
-int dBgS_MoveBgActor::MoveBGCreateHeap() {
+BOOL dBgS_MoveBgActor::MoveBGCreateHeap() {
     if (!CreateHeap()) {
-        return 0;
+        return FALSE;
     }
 
     mpBgW = new dBgW();
@@ -37,14 +37,14 @@ int dBgS_MoveBgActor::MoveBGCreateHeap() {
         }
     } else {
         mpBgW = NULL;
-        return 0;
+        return FALSE;
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 800A57F4-800A58F4       .text MoveBGCreate__16dBgS_MoveBgActorFPCciPFP4dBgWPvR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz_vUl */
-int dBgS_MoveBgActor::MoveBGCreate(const char* i_arcName, int i_dzb_id,
+cPhs_State dBgS_MoveBgActor::MoveBGCreate(const char* i_arcName, int i_dzb_id,
                                    MoveBGActor_SetFunc i_setFunc, u32 i_heapSize) {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -71,8 +71,8 @@ int dBgS_MoveBgActor::MoveBGCreate(const char* i_arcName, int i_dzb_id,
 }
 
 /* 800A58F4-800A5980       .text MoveBGDelete__16dBgS_MoveBgActorFv */
-int dBgS_MoveBgActor::MoveBGDelete() {
-    int ret = Delete();
+BOOL dBgS_MoveBgActor::MoveBGDelete() {
+    BOOL ret = Delete();
 
     if (mpBgW != NULL && mpBgW->ChkUsed()) {
         dComIfG_Bgsp()->Release(mpBgW);
@@ -81,10 +81,10 @@ int dBgS_MoveBgActor::MoveBGDelete() {
 }
 
 /* 800A5980-800A5A3C       .text MoveBGExecute__16dBgS_MoveBgActorFv */
-int dBgS_MoveBgActor::MoveBGExecute() {
+BOOL dBgS_MoveBgActor::MoveBGExecute() {
     Mtx* new_mtx = NULL;
 
-    int ret = Execute(&new_mtx);
+    BOOL ret = Execute(&new_mtx);
     if (new_mtx == NULL) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::YrotM(shape_angle.y);

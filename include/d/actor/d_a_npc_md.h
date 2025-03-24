@@ -339,7 +339,7 @@ public:
     
     s16 XyCheckCB(int);
     s16 XyEventCB(int);
-    s32 create();
+    cPhs_State create();
     BOOL createHeap();
     BOOL setAction(ActionFunc*, ActionFunc, void*);
     void npcAction(void*);

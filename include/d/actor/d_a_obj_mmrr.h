@@ -17,7 +17,7 @@ namespace daObjMmrr {
         void set_cc_rec_pos();
         void set_cc_trans_pos();
         void set_cull();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void set_mtx();
         void init_mtx();

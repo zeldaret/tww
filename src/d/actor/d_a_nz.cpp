@@ -173,7 +173,7 @@ void daNZ_CreateInit(nz_class*) {
 }
 
 /* 000081AC-00008294       .text daNZ_Create__FP10fopAc_ac_c */
-static s32 daNZ_Create(fopAc_ac_c*) {
+static cPhs_State daNZ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

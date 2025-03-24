@@ -133,7 +133,7 @@ static BOOL createHeap(fopAc_ac_c*) {
 }
 
 /* 00004B94-00004F84       .text daKamome_Create__FP10fopAc_ac_c */
-static s32 daKamome_Create(fopAc_ac_c*) {
+static cPhs_State daKamome_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

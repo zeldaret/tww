@@ -33,7 +33,7 @@ void phase_2(daNpcAh_c*) {
 }
 
 /* 000008D8-00000908       .text _create__9daNpcAh_cFv */
-s32 daNpcAh_c::_create() {
+cPhs_State daNpcAh_c::_create() {
     /* Nonmatching */
 }
 

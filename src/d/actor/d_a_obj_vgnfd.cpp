@@ -92,7 +92,7 @@ BOOL daObjVgnfd_c::create_bdl_brk(int i) {
                 J3DAnmTevRegKey* brk_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, M_brk_table[i]);
                 JUT_ASSERT(0x105, brk_p != NULL);
                 if (brk_p != NULL) {
-                    if (mBrkAnm[i].init(mdl_data, brk_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, FALSE))
+                    if (mBrkAnm[i].init(mdl_data, brk_p, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE))
                         ret = TRUE;
                 }
             } else {
@@ -136,7 +136,7 @@ BOOL daObjVgnfd_c::create_heap() {
         J3DAnmTextureSRTKey* btk_data = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, VGNFD_BTK_YGCBD00);
         JUT_ASSERT(0x144, btk_data != NULL);
 
-        if (btk_data == NULL || !mBtkAnm.init(mModel2[1]->getModelData(), btk_data, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, FALSE)) {
+        if (btk_data == NULL || !mBtkAnm.init(mModel2[1]->getModelData(), btk_data, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
             ret = FALSE;
         }
     }
@@ -155,8 +155,8 @@ BOOL daObjVgnfd_c::create_heap() {
 }
 
 /* 000004A4-00000704       .text _create__12daObjVgnfd_cFv */
-s32 daObjVgnfd_c::_create() {
-    s32 ret = cPhs_ERROR_e;
+cPhs_State daObjVgnfd_c::_create() {
+    cPhs_State ret = cPhs_ERROR_e;
 
     fopAcM_SetupActor(this, daObjVgnfd_c);
 
@@ -447,7 +447,7 @@ bool daObjVgnfd_c::_draw() {
 
 namespace {
 /* 000013F0-00001410       .text Mthd_Create__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((daObjVgnfd_c*)i_ac)->_create();
 }
 

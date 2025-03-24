@@ -523,7 +523,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
 }
 
 /* 00001B38-00001B70       .text daNpc_Nz_ShopItemCreateCB__FPv */
-static int daNpc_Nz_ShopItemCreateCB(void* i_item) {
+static cPhs_State daNpc_Nz_ShopItemCreateCB(void* i_item) {
     daShopItem_c* i_this = static_cast<daShopItem_c*>(i_item);
     i_this->hide();
     i_this->setTevType(TEV_TYPE_ACTOR);
@@ -901,12 +901,12 @@ void daNpc_Nz_c::getArg() {
 }
 
 /* 00002830-000028FC       .text _create__10daNpc_Nz_cFv */
-s32 daNpc_Nz_c::_create() {
+cPhs_State daNpc_Nz_c::_create() {
     fopAcM_SetupActor(this, daNpc_Nz_c);
 
     getArg();
 
-    s32 result = dComIfG_resLoad(&mPhs1, m_arc_name);
+    cPhs_State result = dComIfG_resLoad(&mPhs1, m_arc_name);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }

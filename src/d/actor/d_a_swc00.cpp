@@ -43,7 +43,7 @@ static BOOL daSwc00_Delete(swc00_class* i_this) {
 }
 
 /* 00000190-00000274       .text daSwc00_Create__FP10fopAc_ac_c */
-static s32 daSwc00_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daSwc00_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, swc00_class);
 
     swc00_class* i_this = (swc00_class*)i_actor;

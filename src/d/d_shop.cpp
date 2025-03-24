@@ -1409,7 +1409,7 @@ ShopCursor_c::ShopCursor_c(J3DModelData* modelData, J3DAnmTevRegKey* brkData, f3
     }
     
     mpBrkData = brkData;
-    if (!mBrkAnm.init(modelData, mpBrkData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, mpBrkData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         mpBrkData = NULL;
     }
     

@@ -20,7 +20,7 @@ public:
         ACTION_MJ_READY    = 0xB,
     };
 
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
 

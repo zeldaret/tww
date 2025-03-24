@@ -368,7 +368,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000884-00000D80       .text create__10daNpc_Md_cFv */
-s32 daNpc_Md_c::create() {
+cPhs_State daNpc_Md_c::create() {
     m313D = 0;
     strcpy(mModelArcName, l_arc_name);
     int heapSizeIdx = 0;
@@ -424,7 +424,7 @@ s32 daNpc_Md_c::create() {
         heapSizeIdx = 1;
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhase, mModelArcName);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, mModelArcName);
     m313D = 1;
     if (phase_state == cPhs_COMPLEATE_e) {
         if (dComIfGp_getCb1Player() != NULL) {
@@ -761,7 +761,7 @@ BOOL daNpc_Md_c::createHeap() {
         NULL, NULL,
         (J3DAnmTransformKey*)dComIfG_getObjectRes(mModelArcName, wait_anim_name),
         NULL,
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         0x11020022
@@ -807,7 +807,7 @@ BOOL daNpc_Md_c::createHeap() {
         NULL, NULL,
         (J3DAnmTransformKey*)dComIfG_getObjectRes(mModelArcName, arm_wait_anim_name),
         NULL,
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 0,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0,
         NULL,
         0x00000000,
         0x11020203
@@ -836,7 +836,7 @@ BOOL daNpc_Md_c::createHeap() {
             modelData,
             NULL, NULL,
             (J3DAnmTransformKey*)dComIfG_getObjectRes(mModelArcName, "mdwing_wait01.bck"),
-            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 0,
+            J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0,
             NULL,
             0x00000000,
             0x11020203
@@ -2410,7 +2410,7 @@ BOOL daNpc_Md_c::initTexPatternAnm(u8 btpAnmTblIdx, bool param_2) {
     bool ret = false;
     J3DAnmTexPattern* eyeTexPtrn = (J3DAnmTexPattern*)dComIfG_getObjectRes(mModelArcName, btpAnmTbl[btpAnmTblIdx].m00);
     JUT_ASSERT(7502, eyeTexPtrn != NULL);
-    if (m0520.init(modelData, eyeTexPtrn, TRUE, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0f, 0, -1, param_2, 0)) {
+    if (m0520.init(modelData, eyeTexPtrn, TRUE, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, param_2, 0)) {
         m3112 = eyeTexPtrn->getFrameMax();
         m3133 = 0;
         m3136 = btpAnmTbl[btpAnmTblIdx].m20;
@@ -2430,7 +2430,7 @@ void daNpc_Md_c::playTexPatternAnm() {
     if (m0520.play()) {
         if (cLib_calcTimer(&m3133) == 0) {
             m3133 = 30.0f + cM_rndF(60.0f);
-            m0520.initPlay(m3112, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0f, 0, -1, true);
+            m0520.initPlay(m3112, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, true);
         }
     }
 }
@@ -2502,56 +2502,56 @@ BOOL daNpc_Md_c::setAnm(int anmIdx) {
         {"md_unazuki.bck", ""},
     };
     static anm_prm l_anmPrm[] = {
-        {0x00, 0x00, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x00, 0x00, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
-        {0x01, 0x01, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
-        {0x02, 0x02, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   4.0f, 1.0f},
-        {0x03, 0x03, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
-        {0x04, 0x04, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
-        {0x05, 0x81, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   0.0f, 1.0f},
-        {0x06, 0x82, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 3.0f, 1.0f},
-        {0x06, 0x82, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   3.0f, 1.0f},
-        {0x07, 0x83, 0x03, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x07, 0x83, 0x03, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
-        {0x08, 0x84, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
-        {0x09, 0x05, 0x01, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x0A, 0x06, 0x02, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x0B, 0x07, 0x06, J3DFrameCtrl::LOOP_ONCE_e,   0.0f, 1.0f},
-        {0x0C, 0x08, 0x07, J3DFrameCtrl::LOOP_ONCE_e,   0.0f, 1.0f},
-        {0x0D, 0x09, 0x06, J3DFrameCtrl::LOOP_ONCE_e,   0.0f, 1.0f},
-        {0x0E, 0x0A, 0x05, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x0F, 0x0B, 0x04, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
-        {0x0F, 0x0B, 0x04, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, -1.0f},
-        {0x10, 0x0C, 0x08, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x11, 0x0D, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
-        {0x12, 0x0E, 0x09, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x13, 0x0F, 0x09, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x14, 0x10, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
-        {0x15, 0x85, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
-        {0x16, 0x11, 0x0A, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
-        {0x17, 0x12, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x18, 0x13, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x19, 0x14, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x1A, 0x15, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x1B, 0x16, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.4f},
-        {0x1C, 0x17, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 0.0f},
-        {0x1B, 0x16, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, -1.4f},
-        {0x1D, 0x18, 0x0B, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x1E, 0x19, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x1F, 0x86, 0x0C, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x20, 0x87, 0x0C, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x17, 0x12, 0x05, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x21, 0x1A, 0x0D, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x22, 0x1B, 0x00, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
-        {0x1A, 0x15, 0x05, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
-        {0x23, 0x1C, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x24, 0x1D, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x25, 0x1E, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x25, 0x1E, 0x05, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x07, 0x83, 0x03, J3DFrameCtrl::LOOP_REPEAT_e, 8.0f, 1.0f},
-        {0x04, 0x04, 0x05, J3DFrameCtrl::LOOP_REPEAT_e, 4.0f, 1.0f},
-        {0x00, 0x00, 0x00, J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 1.0f},
-        {0x26, 0x1F, 0x0F, J3DFrameCtrl::LOOP_ONCE_e,   8.0f, 1.0f},
+        {0x00, 0x00, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x00, 0x00, 0x00, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
+        {0x01, 0x01, 0x00, J3DFrameCtrl::EMode_LOOP, 4.0f, 1.0f},
+        {0x02, 0x02, 0x00, J3DFrameCtrl::EMode_NONE,   4.0f, 1.0f},
+        {0x03, 0x03, 0x00, J3DFrameCtrl::EMode_LOOP, 4.0f, 1.0f},
+        {0x04, 0x04, 0x00, J3DFrameCtrl::EMode_LOOP, 4.0f, 1.0f},
+        {0x05, 0x81, 0x00, J3DFrameCtrl::EMode_NONE,   0.0f, 1.0f},
+        {0x06, 0x82, 0x00, J3DFrameCtrl::EMode_LOOP, 3.0f, 1.0f},
+        {0x06, 0x82, 0x00, J3DFrameCtrl::EMode_NONE,   3.0f, 1.0f},
+        {0x07, 0x83, 0x03, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x07, 0x83, 0x03, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
+        {0x08, 0x84, 0x00, J3DFrameCtrl::EMode_LOOP, 4.0f, 1.0f},
+        {0x09, 0x05, 0x01, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x0A, 0x06, 0x02, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x0B, 0x07, 0x06, J3DFrameCtrl::EMode_NONE,   0.0f, 1.0f},
+        {0x0C, 0x08, 0x07, J3DFrameCtrl::EMode_NONE,   0.0f, 1.0f},
+        {0x0D, 0x09, 0x06, J3DFrameCtrl::EMode_NONE,   0.0f, 1.0f},
+        {0x0E, 0x0A, 0x05, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x0F, 0x0B, 0x04, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
+        {0x0F, 0x0B, 0x04, J3DFrameCtrl::EMode_NONE,   8.0f, -1.0f},
+        {0x10, 0x0C, 0x08, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x11, 0x0D, 0x00, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
+        {0x12, 0x0E, 0x09, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x13, 0x0F, 0x09, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x14, 0x10, 0x00, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
+        {0x15, 0x85, 0x00, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
+        {0x16, 0x11, 0x0A, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
+        {0x17, 0x12, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x18, 0x13, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x19, 0x14, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x1A, 0x15, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x1B, 0x16, 0x00, J3DFrameCtrl::EMode_NONE,   8.0f, 1.4f},
+        {0x1C, 0x17, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 0.0f},
+        {0x1B, 0x16, 0x00, J3DFrameCtrl::EMode_NONE,   8.0f, -1.4f},
+        {0x1D, 0x18, 0x0B, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x1E, 0x19, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x1F, 0x86, 0x0C, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x20, 0x87, 0x0C, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x17, 0x12, 0x05, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x21, 0x1A, 0x0D, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x22, 0x1B, 0x00, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
+        {0x1A, 0x15, 0x05, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
+        {0x23, 0x1C, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x24, 0x1D, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x25, 0x1E, 0x00, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x25, 0x1E, 0x05, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x07, 0x83, 0x03, J3DFrameCtrl::EMode_LOOP, 8.0f, 1.0f},
+        {0x04, 0x04, 0x05, J3DFrameCtrl::EMode_LOOP, 4.0f, 1.0f},
+        {0x00, 0x00, 0x00, J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f},
+        {0x26, 0x1F, 0x0F, J3DFrameCtrl::EMode_NONE,   8.0f, 1.0f},
     };
     static anm_tbl armAnmTbl[] = {
         {"mdarm_wait01.bck", ""},
@@ -3267,16 +3267,10 @@ void daNpc_Md_c::emitterTrace(JPABaseEmitter* emitter, MtxP mtx, csXyz* angle) {
     if (emitter == NULL) {
         return;
     }
-    JGeometry::TVec3<f32> pos;
-    pos.x = mtx[0][3];
-    pos.y = mtx[1][3];
-    pos.z = mtx[2][3];
+    JGeometry::TVec3<f32> pos(mtx[0][3], mtx[1][3], mtx[2][3]);
     emitter->setGlobalTranslation(pos);
     if (angle) {
-        JGeometry::TVec3<s16> rot;
-        rot.x = angle->x;
-        rot.y = angle->y;
-        rot.z = angle->z;
+        JGeometry::TVec3<s16> rot(angle->x, angle->y, angle->z);
         emitter->setGlobalRotation(rot);
     }
 }
@@ -3314,7 +3308,7 @@ daNpc_Md_c::~daNpc_Md_c() {
 }
 
 /* 000110BC-000110DC       .text daNpc_Md_Create__FP10fopAc_ac_c */
-static s32 daNpc_Md_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Md_Create(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Md_c*>(i_this)->create();
 }
 
@@ -3342,10 +3336,7 @@ static BOOL daNpc_Md_IsDelete(daNpc_Md_c* i_this) {
 /* 0001114C-0001119C       .text execute__26daNpc_Md_followEcallBack_cFP14JPABaseEmitter */
 void daNpc_Md_followEcallBack_c::execute(JPABaseEmitter* emitter) {
     emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
-    JGeometry::TVec3<s16> rot;
-    rot.x = mAngle.x;
-    rot.y = mAngle.y;
-    rot.z = mAngle.z;
+    JGeometry::TVec3<s16> rot(mAngle.x, mAngle.y, mAngle.z);
     emitter->setGlobalRotation(rot);
 }
 

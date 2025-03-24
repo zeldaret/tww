@@ -69,7 +69,7 @@ const char * name_texture[] = {
 
 class dPn_c : public msg_class {
 public:
-    s32 _create();
+    cPhs_State _create();
     BOOL _execute();
     BOOL _draw();
     BOOL _delete();
@@ -132,8 +132,8 @@ void dPlace_name_c::draw() {
 }
 
 /* 801611E0-801614E8       .text _create__5dPn_cFv */
-s32 dPn_c::_create() {
-    s32 rt = dComIfG_resLoad(&mPhs, "PName");
+cPhs_State dPn_c::_create() {
+    cPhs_State rt = dComIfG_resLoad(&mPhs, "PName");
 
     if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 10) || dComIfGp_getMesgStatus() != 0)
         return cPhs_INIT_e;
@@ -255,7 +255,7 @@ static BOOL dPn_Delete(dPn_c* i_this) {
 }
 
 /* 801616F4-80161714       .text dPn_Create__FP9msg_class */
-static s32 dPn_Create(msg_class* i_msg) {
+static cPhs_State dPn_Create(msg_class* i_msg) {
     dPn_c * i_this = (dPn_c *)i_msg;
     return i_this->_create();
 }

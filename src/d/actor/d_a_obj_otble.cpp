@@ -37,7 +37,7 @@ void daObj_Otble::Act_c::CreateInit() {
 }
 
 /* 000005A0-000006AC       .text Create__Q211daObj_Otble4MthdFPv */
-s32 daObj_Otble::Mthd::Create(void*) {
+cPhs_State daObj_Otble::Mthd::Create(void*) {
     /* Nonmatching */
 }
 

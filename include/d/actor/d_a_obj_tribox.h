@@ -25,7 +25,7 @@ namespace daObjTribox {
         void create_block_after();
         void create_correct_before();
         void create_correct_after();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void set_mtx();
         void init_mtx();

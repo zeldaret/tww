@@ -79,7 +79,7 @@ public:
     void animeStart() { mAnimeStart = true; }
     void setBackAlpha(f32 alpha) { dgo_scrn_c->setAlpha(alpha); }
 
-    s32 _create();
+    cPhs_State _create();
     BOOL _execute();
     BOOL _draw();
     BOOL _delete();

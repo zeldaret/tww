@@ -27,7 +27,7 @@ public:
     void minigameExplainCut();
     void privateCut();
     void setAttentionPos(cXyz*);
-    s32 _create();
+    cPhs_State _create();
     void CreateHeap();
     bool _delete();
     void getKajiID();

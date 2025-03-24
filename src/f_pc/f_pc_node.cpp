@@ -7,13 +7,13 @@
 #include "f_pc/f_pc_layer_iter.h"
 
 /* 8003EFC8-8003EFEC       .text fpcNd_DrawMethod__FP21nodedraw_method_classPv */
-s32 fpcNd_DrawMethod(nodedraw_method_class* i_nodeMethods, void* i_data) {
+BOOL fpcNd_DrawMethod(nodedraw_method_class* i_nodeMethods, void* i_data) {
     return fpcMtd_Method(i_nodeMethods->mpDrawFunc, i_data);
 }
 
 /* 8003EFEC-8003F058       .text fpcNd_Draw__FP18process_node_class */
-s32 fpcNd_Draw(process_node_class* i_procNode) {
-    s32 ret = 0;
+BOOL fpcNd_Draw(process_node_class* i_procNode) {
+    BOOL ret = FALSE;
     if (i_procNode->mUnk0 == 0) {
         layer_class* curLayer_p = fpcLy_CurrentLayer();
         fpcLy_SetCurrentLayer(&i_procNode->mLayer);
@@ -24,8 +24,8 @@ s32 fpcNd_Draw(process_node_class* i_procNode) {
 }
 
 /* 8003F058-8003F0B4       .text fpcNd_Execute__FP18process_node_class */
-s32 fpcNd_Execute(process_node_class* i_procNode) {
-    s32 ret;
+BOOL fpcNd_Execute(process_node_class* i_procNode) {
+    BOOL ret;
     layer_class* curLayer_p = fpcLy_CurrentLayer();
     fpcLy_SetCurrentLayer(&i_procNode->mLayer);
     ret = fpcMtd_Execute(&i_procNode->mpNodeMtd->base, i_procNode);
@@ -55,36 +55,36 @@ void* fpcNd_IsCreatingFromUnder(void* i_procNode) {
 static s32 g_fpcNd_IsCheckOfDeleteTiming = 1;
 
 /* 8003F134-8003F174       .text fpcNd_IsDeleteTiming__FP18process_node_class */
-s32 fpcNd_IsDeleteTiming(process_node_class* i_procNode) {
+BOOL fpcNd_IsDeleteTiming(process_node_class* i_procNode) {
     if (g_fpcNd_IsCheckOfDeleteTiming == 1 && fpcNd_IsCreatingFromUnder(i_procNode) != NULL) {
-        return 0;
+        return FALSE;
     } else {
-        return 1;
+        return TRUE;
     }
 }
 
 /* 8003F174-8003F19C       .text fpcNd_IsDelete__FP18process_node_class */
-s32 fpcNd_IsDelete(process_node_class* i_procNode) {
+BOOL fpcNd_IsDelete(process_node_class* i_procNode) {
     return fpcMtd_IsDelete(&i_procNode->mpNodeMtd->base, i_procNode);
 }
 
 /* 8003F19C-8003F200       .text fpcNd_Delete__FP18process_node_class */
-s32 fpcNd_Delete(process_node_class* i_procNode) {
+BOOL fpcNd_Delete(process_node_class* i_procNode) {
     if ((fpcLy_IsDeletingMesg(&i_procNode->mLayer) == 0) && fpcMtd_Delete(&i_procNode->mpNodeMtd->base, i_procNode) == 1) {
         i_procNode->base.mSubType = 0;
         return fpcLy_Delete(&i_procNode->mLayer);
     } else {
-        return 0;
+        return FALSE;
     }
 }
 
 /* 8003F200-8003F29C       .text fpcNd_Create__FP18process_node_class */
-s32 fpcNd_Create(process_node_class* i_procNode) {
+cPhs_State fpcNd_Create(process_node_class* i_procNode) {
     // this cast looks like a fake match, but it doesn't match without the cast, naive approach
     // swaps r31 and r30 most likely it gets casted to another unknown struct
     process_node_class* pProcNode = (process_node_class*)i_procNode;
     layer_class* curLayer_p;
-    s32 ret;
+    cPhs_State ret;
     if (pProcNode->base.mInitState == 0) {
         node_process_profile_definition* pProcProfileDef = (node_process_profile_definition*)pProcNode->base.mpProf;
         pProcNode->base.mSubType = fpcBs_MakeOfType(&g_fpcNd_type);

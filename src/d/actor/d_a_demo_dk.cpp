@@ -47,7 +47,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 000005FC-00000714       .text daDEMO_DK_Create__FP10fopAc_ac_c */
-static s32 daDEMO_DK_Create(fopAc_ac_c*) {
+static cPhs_State daDEMO_DK_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

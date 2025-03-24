@@ -5,12 +5,12 @@
 
 class daYougan_c : public fopAc_ac_c {
 public:
-    void _daYougan_draw();
-    void _daYougan_execute();
-    void _daYougan_isdelete();
-    void _daYougan_delete();
-    void useHeapInit();
-    void _daYougan_create();
+    BOOL _daYougan_draw();
+    BOOL _daYougan_execute();
+    BOOL _daYougan_isdelete();
+    BOOL _daYougan_delete();
+    BOOL useHeapInit();
+    cPhs_State _daYougan_create();
 
 public:
     /* Place member variables here */

@@ -41,7 +41,7 @@ namespace daPedestal {
         bool _delete();
         BOOL CreateHeap();
         void CreateInit();
-        s32 _create();
+        cPhs_State _create();
         int getMyStaffId();
         BOOL wakeupCheck();
         BOOL finishCheck();

@@ -79,7 +79,7 @@ BOOL daMozo_c::CreateHeap() {
         0,
         0,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_BCK_MOZ)),
-        J3DFrameCtrl::LOOP_REPEAT_e,
+        J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
         -1,
@@ -97,8 +97,8 @@ BOOL daMozo_c::CreateHeap() {
     m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_BTK_MOZ);
     JUT_ASSERT(0x16D, m_btk != NULL);
 
-    int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
-    int btkInitResult = mBtkAnm.init(mdlData, m_btk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+    int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    int btkInitResult = mBtkAnm.init(mdlData, m_btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
     return mdlData != 0 && mAnimMorf != 0 && mAnimMorf->getModel() != 0 && brkInitResult != 0 && btkInitResult != 0;
 }
@@ -170,7 +170,7 @@ void daMozo_c::setAnm(int, float) {
 }
 
 /* 00001F70-00002228       .text CreateInit__8daMozo_cFv */
-s32 daMozo_c::CreateInit() {
+cPhs_State daMozo_c::CreateInit() {
     /* Nonmatching */
     J3DModelData* mdlData = mAnimMorf->getModel()->getModelData();
 
@@ -206,10 +206,10 @@ s32 daMozo_c::CreateInit() {
 }
 
 /* 00002228-000023B0       .text _create__8daMozo_cFv */
-s32 daMozo_c::_create() {
+cPhs_State daMozo_c::_create() {
     fopAcM_SetupActor(this, daMozo_c);
 
-    s32 result = dComIfG_resLoad(&mPhs, "Mozo");
+    cPhs_State result = dComIfG_resLoad(&mPhs, "Mozo");
 
     if (result == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1AA0)) {
@@ -289,7 +289,7 @@ static BOOL daMozo_Delete(daMozo_c* i_this) {
 }
 
 /* 000026F0-00002710       .text daMozo_Create__FP10fopAc_ac_c */
-static s32 daMozo_Create(fopAc_ac_c* i_this) {
+static cPhs_State daMozo_Create(fopAc_ac_c* i_this) {
     return static_cast<daMozo_c*>(i_this)->_create();
 }
 

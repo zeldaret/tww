@@ -43,7 +43,7 @@ void daObj_MjDoor_c::CreateInit() {
 }
 
 /* 00000478-000005B4       .text _create__14daObj_MjDoor_cFv */
-s32 daObj_MjDoor_c::_create() {
+cPhs_State daObj_MjDoor_c::_create() {
     /* Nonmatching */
 }
 

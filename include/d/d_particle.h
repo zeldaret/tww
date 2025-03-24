@@ -80,11 +80,11 @@ public:
 
     void offWindOff() {}
     void onWindOff() {}
-    void setColor(const GXColor&) {}
+    void setColor(const GXColor& color) { mColor = color; }
 
     /* 0x14 */ s8 field_0x14;
     /* 0x15 */ u8 field_0x15;
-    /* 0x16 */ GXColor field_0x16;
+    /* 0x16 */ GXColor mColor;
     /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
     /* 0x1C */ dKy_tevstr_c* mTevstr;
 };  // Size: 0x20

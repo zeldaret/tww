@@ -185,12 +185,9 @@ void dComIfG_play_c::itemInit() {
 int dComIfG_play_c::getLayerNo(int i_roomNo) {
     int stageLayer = dComIfGp_getStartStageLayer();
     if (stageLayer < 0) {
-        int layer = dKy_getdaytime_hour();
-        if (dKy_checkEventNightStop()) {
-            layer = 1;
-        } else {
-            layer = (layer >= 6 && layer < 18) ? 0 : 1;
-        }
+        int hour = dKy_getdaytime_hour();
+        int layer = dKy_checkEventNightStop() ? 1 :
+                    hour >= 6 && hour < 18 ? 0 : 1;
 
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
             if (i_roomNo == dIsleRoom_OutsetIsland_e) {
@@ -494,44 +491,53 @@ int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
 }
 
 /* 8005326C-800532D8       .text dComIfG_resetToOpening__FP11scene_class */
-int dComIfG_resetToOpening(scene_class* i_scene) {
+BOOL dComIfG_resetToOpening(scene_class* i_scene) {
     if (!mDoRst::isReset()) {
-        return 0;
+        return FALSE;
     }
 
     dComIfG_changeOpeningScene(i_scene, 8);
     mDoAud_bgmStop(30);
     mDoAud_resetProcess();
-    return 1;
+    return TRUE;
 }
 
 /* 800532D8-80053330       .text phase_1__FPc */
-static int phase_1(char* i_arcName) {
-    return !dComIfG_setObjectRes(i_arcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
+static cPhs_State phase_1(char* i_arcName) {
+    if (dComIfG_setObjectRes(i_arcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL) == FALSE) {
+        return cPhs_ERROR_e;
+    } else {
+        return cPhs_NEXT_e;
+    }
 }
 
 /* 80053330-80053388       .text phase_2__FPc */
-static int phase_2(char* i_arcName) {
+static cPhs_State phase_2(char* i_arcName) {
     int syncStatus = dComIfG_syncObjectRes(i_arcName);
 
     if (syncStatus < 0) {
         return cPhs_ERROR_e;
+    } else if (syncStatus > 0) {
+        return cPhs_INIT_e;
     } else {
-        return syncStatus > 0 ? 0 : 2;
+        return cPhs_NEXT_e;
     }
 }
 
 /* 80053388-80053390       .text phase_3__FPc */
-static int phase_3(char* i_arcName) {
+static cPhs_State phase_3(char* i_arcName) {
     return cPhs_COMPLEATE_e;
 }
 
 /* 80053390-800533D0       .text dComIfG_resLoad__FP30request_of_phase_process_classPCc */
-int dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* i_arcName) {
-    static int (*l_method[3])(void*) = {(int (*)(void*))phase_1, (int (*)(void*))phase_2,
-                                        (int (*)(void*))phase_3};
+cPhs_State dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* i_arcName) {
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler)phase_1,
+        (cPhs__Handler)phase_2,
+        (cPhs__Handler)phase_3
+    };
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         return cPhs_COMPLEATE_e;
     }
 
@@ -542,9 +548,9 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* i_arcNa
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, const char* i_resName) {
     JUT_ASSERT(VERSION_SELECT(1045, 1048, 1048), i_phase->id != 1);
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         dComIfG_deleteObjectRes(i_resName);
-        i_phase->id = cPhs_INIT_e;
+        i_phase->id = 0;
     }
 
     return 0;

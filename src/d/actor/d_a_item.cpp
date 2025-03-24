@@ -213,7 +213,7 @@ void daItem_c::CreateInit() {
 }
 
 /* 800F53EC-800F5668       .text _daItem_create__8daItem_cFv */
-s32 daItem_c::_daItem_create() {
+cPhs_State daItem_c::_daItem_create() {
     fopAcM_SetupActor(this, daItem_c);
     
     m_itemNo = daItem_prm::getItemNo(this);
@@ -233,7 +233,7 @@ s32 daItem_c::_daItem_create() {
         }
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
     if (phase_state == cPhs_COMPLEATE_e) {
         // Note: The demo version calls getHeapSize instead of getFieldHeapSize here.
         u32 heap_size = dItem_data::getFieldHeapSize(m_itemNo);
@@ -1037,10 +1037,7 @@ BOOL daItem_c::itemActionForArrow() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        f32 transX = current.pos.x;
-        f32 transY = current.pos.y;
-        f32 transZ = current.pos.z;
-        mpParticleEmitter->setGlobalTranslation(transX, transY, transZ);
+        mpParticleEmitter->setGlobalTranslation(current.pos);
     }
     
     if (mAcch.ChkGroundLanding()) {
@@ -1244,7 +1241,7 @@ void daItem_c::mode_water_init() {
 void daItem_c::mode_wait() {
     if (checkFlag(FLAG_UNK04) && dItem_data::checkAppearEffect(m_itemNo)) {
         u16 appearEffect = dItem_data::getAppearEffect(m_itemNo);
-        dComIfGp_particle_setSimple(appearEffect, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(appearEffect, &current.pos);
     }
     
     switch (m_itemNo) {
@@ -1457,7 +1454,7 @@ static BOOL daItem_Delete(daItem_c* i_this) {
 }
 
 /* 800F89D0-800F89F0       .text daItem_Create__FP10fopAc_ac_c */
-static s32 daItem_Create(fopAc_ac_c* i_this) {
+static cPhs_State daItem_Create(fopAc_ac_c* i_this) {
     return ((daItem_c*)i_this)->_daItem_create();
 }
 

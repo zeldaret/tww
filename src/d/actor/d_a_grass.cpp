@@ -32,7 +32,7 @@ static BOOL daGrass_Delete(grass_class*) {
 }
 
 /* 000000FC-000014E0       .text daGrass_Create__FP10fopAc_ac_c */
-static s32 daGrass_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daGrass_Create(fopAc_ac_c* i_ac) {
     static const csXyz l_setType0[] = {
         csXyz(0, 0, 0),
         csXyz(3, 0, -50),

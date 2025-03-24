@@ -456,7 +456,7 @@ const DynamicNameTableEntry DynamicNameTable[] = {
 };
 
 /* 800227A0-800229E0       .text cCc_Init__Fv */
-s32 cCc_Init() {
+BOOL cCc_Init() {
     JUT_ASSERT(0x2a, !DMC_initialized);
 
     JKRSolidHeap * pHeap = JKRSolidHeap::create(0x5648, mDoExt_getArchiveHeap(), false);
@@ -491,7 +491,7 @@ s32 cCc_Init() {
 }
 
 /* 800229E0-80022A80       .text cDyl_IsLinked__Fs */
-s32 cDyl_IsLinked(s16 i_ProfName) {
+BOOL cDyl_IsLinked(s16 i_ProfName) {
     JUT_ASSERT(0xae, cDyl_Initialized);
 
     if (DMC[i_ProfName] != NULL)
@@ -501,14 +501,14 @@ s32 cDyl_IsLinked(s16 i_ProfName) {
 }
 
 /* 80022A80-80022B58       .text cDyl_Unlink__Fs */
-s32 cDyl_Unlink(s16 i_ProfName) {
+BOOL cDyl_Unlink(s16 i_ProfName) {
     JUT_ASSERT(0xc5, cDyl_Initialized);
     JUT_ASSERT(0xc6, i_ProfName < ARRAY_SIZE(DMC));
 
     if (DMC[i_ProfName] != NULL)
         return DMC[i_ProfName]->unlink();
 
-    return 0;
+    return FALSE;
 }
 
 static void dummy(s16 i_ProfName) {
@@ -517,7 +517,7 @@ static void dummy(s16 i_ProfName) {
 }
 
 /* 80022B58-80022CEC       .text cDyl_LinkASync__Fs */
-s32 cDyl_LinkASync(s16 i_ProfName) {
+cPhs_State cDyl_LinkASync(s16 i_ProfName) {
     JUT_ASSERT(0x101, DMC_initialized);
 
     if (!cDyl_Initialized)
@@ -572,7 +572,7 @@ void cDyl_InitAsync() {
 }
 
 /* 80022E70-80022EDC       .text cDyl_InitAsyncIsDone__Fv */
-int cDyl_InitAsyncIsDone() {
+BOOL cDyl_InitAsyncIsDone() {
     if (cDyl_DVD == NULL)
         return TRUE;
 
@@ -586,45 +586,45 @@ int cDyl_InitAsyncIsDone() {
 }
 
 /* 80022EDC-80022EE4       .text phase_01__7cDylPhsFPv */
-int cDylPhs::phase_01(void*) {
+cPhs_State cDylPhs::phase_01(void*) {
     return cPhs_NEXT_e;
 }
 
 /* 80022EE4-80022F1C       .text phase_02__7cDylPhsFPs */
-int cDylPhs::phase_02(s16* pProf) {
-    s32 ret = cDyl_LinkASync(*pProf);
+cPhs_State cDylPhs::phase_02(s16* pProf) {
+    cPhs_State ret = cDyl_LinkASync(*pProf);
     return ret == cPhs_COMPLEATE_e ? cPhs_NEXT_e : ret;
 }
 
 /* 80022F1C-80022F24       .text phase_03__7cDylPhsFPv */
-int cDylPhs::phase_03(void*) {
+cPhs_State cDylPhs::phase_03(void*) {
     return cPhs_INIT_e;
 }
 
 /* 80022F24-80022F68       .text Link__7cDylPhsFP30request_of_phase_process_classs */
-int cDylPhs::Link(request_of_phase_process_class* i_phase, s16 profName) {
+cPhs_State cDylPhs::Link(request_of_phase_process_class* i_phase, s16 profName) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler) &cDylPhs::phase_01,
         (cPhs__Handler) &cDylPhs::phase_02,
         (cPhs__Handler) &cDylPhs::phase_03,
     };
 
-    if (i_phase->id == cPhs_NEXT_e)
+    if (i_phase->id == 2)
         return cPhs_COMPLEATE_e;
 
     return dComLbG_PhaseHandler(i_phase, l_method, &profName);
 }
 
 /* 80022F68-80023004       .text Unlink__7cDylPhsFP30request_of_phase_process_classs */
-int cDylPhs::Unlink(request_of_phase_process_class* i_phase, s16 profName) {
+BOOL cDylPhs::Unlink(request_of_phase_process_class* i_phase, s16 profName) {
     JUT_ASSERT(0x1a6, i_phase->id != 1);
 
-    s32 ret;
-    if (i_phase->id == cPhs_NEXT_e) {
+    BOOL ret;
+    if (i_phase->id == 2) {
         ret = cDyl_Unlink(profName);
-        i_phase->id = cPhs_INIT_e;
+        i_phase->id = 0;
     } else {
-        ret = cPhs_INIT_e;
+        ret = FALSE;
     }
     return ret;
 }

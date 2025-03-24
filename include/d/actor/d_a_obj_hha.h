@@ -123,7 +123,7 @@ public:
 
     static int solidHeapCB(fopAc_ac_c*);
     BOOL create_heap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void set_tex(float, float, int);
     void init_mtx();

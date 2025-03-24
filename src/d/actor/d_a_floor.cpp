@@ -34,7 +34,7 @@ BOOL daFloor_c::Delete() {
 }
 
 /* 0000012C-000001E8       .text CreateHeap__9daFloor_cFv */
-int daFloor_c::CreateHeap() {
+BOOL daFloor_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, HHYU1_BDL_HHYU1);
     JUT_ASSERT(0xc1, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -44,7 +44,7 @@ int daFloor_c::CreateHeap() {
 }
 
 /* 000001E8-0000025C       .text Create__9daFloor_cFv */
-int daFloor_c::Create() {
+BOOL daFloor_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -100.0f, -50.0f, -100.0f, 100.0f, 50.0f, 100.0f);
     set_mtx();
@@ -53,14 +53,14 @@ int daFloor_c::Create() {
 }
 
 /* 0000025C-00000354       .text _create__9daFloor_cFv */
-s32 daFloor_c::_create() {
+cPhs_State daFloor_c::_create() {
     fopAcM_SetupActor(this, daFloor_c);
 
     mSwitchNo = daFloor_prm::getSwitchNo(this);
     if (mSwitchNo != 0xFF && dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this)))
         return cPhs_ERROR_e;
 
-    s32 rt = dComIfG_resLoad(&mPhs, m_arcname);
+    cPhs_State rt = dComIfG_resLoad(&mPhs, m_arcname);
     if (rt == cPhs_COMPLEATE_e) {
         if (!MoveBGCreate(m_arcname, HHYU1_DZB_HHYU1, NULL, 0x8A0))
             return cPhs_ERROR_e;
@@ -77,7 +77,7 @@ void daFloor_c::set_mtx() {
 }
 
 /* 000003D4-00000548       .text Execute__9daFloor_cFPPA3_A4_f */
-int daFloor_c::Execute(Mtx**) {
+BOOL daFloor_c::Execute(Mtx**) {
     if (field_0x2da != 0) {
         field_0x2da--;
         if (field_0x2da == 0) {
@@ -117,7 +117,7 @@ BOOL daFloor_c::Draw() {
 }
 
 /* 000006E0-00000700       .text daFloor_Create__FPv */
-static s32 daFloor_Create(void* i_this) {
+static cPhs_State daFloor_Create(void* i_this) {
     return ((daFloor_c*)i_this)->_create();
 }
 

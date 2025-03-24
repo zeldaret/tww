@@ -74,14 +74,16 @@ BOOL daSpcItem01_c::_delete() {
 }
 
 /* 8015DBF4-8015DDD0       .text _create__13daSpcItem01_cFv */
-s32 daSpcItem01_c::_create() {
+cPhs_State daSpcItem01_c::_create() {
     fopAcM_SetupActor(this, daSpcItem01_c);
+
     m_itemNo = daSpcItem01_prm::getItemNo(this);
     if (m_itemNo == dItem_SHIELD_e && dComIfGs_isEventBit(0xE20)) {
         setLoadError();
         return cPhs_ERROR_e;
     }
-    int phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
+
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, &CheckFieldItemCreateHeap,
                                    dItem_data::getHeapSize(m_itemNo)))
@@ -90,6 +92,7 @@ s32 daSpcItem01_c::_create() {
         }
         CreateInit();
     }
+
     return phase_state;
 }
 
@@ -146,7 +149,7 @@ BOOL daSpcItem01_c::_execute() {
 /* 8015DFE8-8015E070       .text set_effect__13daSpcItem01_cFv */
 void daSpcItem01_c::set_effect() {
     if (cLib_checkBit(field_0x644, (u16)0x01) && dItem_data::checkAppearEffect(m_itemNo) && !field_0x642 && m_itemNo != BOKO_BELT) {
-        dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos, (u8)0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(dItem_data::getAppearEffect(m_itemNo), &current.pos);
     }
 }
 
@@ -263,7 +266,7 @@ static BOOL daSpcItem01_Delete(daSpcItem01_c* i_this) {
 }
 
 /* 8015E3D0-8015E3F0       .text daSpcItem01_Create__FP10fopAc_ac_c */
-static s32 daSpcItem01_Create(fopAc_ac_c* i_this) {
+static cPhs_State daSpcItem01_Create(fopAc_ac_c* i_this) {
     return ((daSpcItem01_c*)i_this)->_create();
 }
 

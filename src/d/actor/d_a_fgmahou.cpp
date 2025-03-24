@@ -42,7 +42,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 000010E4-0000135C       .text daFgmahou_Create__FP10fopAc_ac_c */
-static s32 daFgmahou_Create(fopAc_ac_c*) {
+static cPhs_State daFgmahou_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

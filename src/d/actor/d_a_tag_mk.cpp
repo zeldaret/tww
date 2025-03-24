@@ -177,12 +177,12 @@ static BOOL daTag_Mk_Delete(daTag_Mk_c*) {
 }
 
 /* 00000F00-00000F20       .text daTag_Mk_Create__FP10fopAc_ac_c */
-static s32 daTag_Mk_Create(fopAc_ac_c*) {
+static cPhs_State daTag_Mk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000F20-000011E4       .text create__10daTag_Mk_cFv */
-s32 daTag_Mk_c::create() {
+cPhs_State daTag_Mk_c::create() {
     /* Nonmatching */
 }
 

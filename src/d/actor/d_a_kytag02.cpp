@@ -107,7 +107,7 @@ static BOOL daKytag02_Delete(kytag02_class* i_this) {
 }
 
 /* 00000420-0000047C       .text daKytag02_Create__FP10fopAc_ac_c */
-static s32 daKytag02_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daKytag02_Create(fopAc_ac_c* i_ac) {
     kytag02_class* i_this = (kytag02_class*)i_ac;
     fopAcM_SetupActor(i_this, kytag02_class);
     i_this->mpPath = set_path_info(i_this);

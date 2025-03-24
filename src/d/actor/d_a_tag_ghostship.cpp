@@ -119,7 +119,7 @@ void daTag_Gship_c::getArg() {
 }
 
 /* 00000594-000005EC .text _create__13daTag_Gship_cFv */
-s32 daTag_Gship_c::_create() {
+cPhs_State daTag_Gship_c::_create() {
     fopAcM_SetupActor(this, daTag_Gship_c);
 
     getArg();

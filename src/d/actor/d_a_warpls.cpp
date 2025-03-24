@@ -27,7 +27,7 @@ void daWarpls_c::CreateInit() {
 }
 
 /* 00000764-0000082C       .text _create__10daWarpls_cFv */
-s32 daWarpls_c::_create() {
+cPhs_State daWarpls_c::_create() {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void daWarpls_c::warp_eff_start() {
 }
 
 /* 000010C8-000010E8       .text daWarpls_Create__FPv */
-static s32 daWarpls_Create(void*) {
+static cPhs_State daWarpls_Create(void*) {
     /* Nonmatching */
 }
 

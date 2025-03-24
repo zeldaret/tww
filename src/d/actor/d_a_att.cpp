@@ -112,7 +112,7 @@ static BOOL daAtt_Delete(att_class* i_this) {
 }
 
 /* 00000578-00000768       .text daAtt_Create__FP10fopAc_ac_c */
-static s32 daAtt_Create(fopAc_ac_c* i_this) {
+static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
 #if VERSION == VERSION_USA
     static dCcD_SrcSph sita_sph_src = {
         // dCcD_SrcGObjInf

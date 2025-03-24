@@ -4,13 +4,14 @@
  */
 
 #include "d/actor/d_a_npc_os.h"
-#include "d/res/res_os.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_pedestal.h"
+#include "d/res/res_os.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "d/actor/d_a_player_main.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -141,12 +142,12 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000374-00000538       .text create__10daNpc_Os_cFv */
-s32 daNpc_Os_c::create() {
+cPhs_State daNpc_Os_c::create() {
     fopAcM_SetupActor(this, daNpc_Os_c)
 
     static u32 l_heap_size = 0xFA0;
 
-    int result = dComIfG_resLoad(&mPhs, "Os");
+    cPhs_State result = dComIfG_resLoad(&mPhs, "Os");
     if(result == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, l_heap_size)) {
             mpMorf = NULL;
@@ -238,7 +239,7 @@ BOOL daNpc_Os_c::createHeap() {
         modelData,
         NULL, NULL,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Os", OS_BCK_OS_MOVE01)),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         0x11000002
@@ -1607,35 +1608,35 @@ void daNpc_Os_c::setAnm(int param_1) {
     static anmPrm_c l_anmPrm[] = {
         {
             /* mAnmTblIdx */ 0,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_REPEAT_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_LOOP,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 0.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 1,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_REPEAT_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_LOOP,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 2.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 2,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_ONCE_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_NONE,
             /* mMorf      */ 0.0f,
             /* mPlaySpeed */ 1.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 2,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_ONCE_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_NONE,
             /* mMorf      */ 0.0f,
             /* mPlaySpeed */ -1.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 2,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_ONCE_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_NONE,
             /* mMorf      */ 0.0f,
             /* mPlaySpeed */ 0.0f,
             /* m10        */ -1,
@@ -1681,15 +1682,15 @@ BOOL daNpc_Os_c::initBrkAnm(u8 param_1, bool param_2) {
     };  // Size: 0x10
 
     static AnmTableEntry brkAnmTbl[] = {
-        {OS_BRK_TURN_OFF, J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  0},
-        {OS_BRK_TURN_OFF, J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  -1},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  0},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::LOOP_ONCE_e,   -1.0f, 0},
-        {OS_BRK_TURN_ON,  J3DFrameCtrl::LOOP_ONCE_e,   1.0f,  0},
-        {OS_BRK_TURN_ON,  J3DFrameCtrl::LOOP_ONCE_e,   0.0f,  0},
-        {OS_BRK_TENMETU,  J3DFrameCtrl::LOOP_REPEAT_e, 1.0f,  0},
-        {OS_BRK_OS_AWAKE, J3DFrameCtrl::LOOP_ONCE_e,   0.0f,  -1},
-        {OS_BRK_LINK,     J3DFrameCtrl::LOOP_REPEAT_e, 1.0f,  0},
+        {OS_BRK_TURN_OFF, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {OS_BRK_TURN_OFF, J3DFrameCtrl::EMode_NONE,   1.0f,  -1},
+        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   -1.0f, 0},
+        {OS_BRK_TURN_ON,  J3DFrameCtrl::EMode_NONE,   1.0f,  0},
+        {OS_BRK_TURN_ON,  J3DFrameCtrl::EMode_NONE,   0.0f,  0},
+        {OS_BRK_TENMETU,  J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
+        {OS_BRK_OS_AWAKE, J3DFrameCtrl::EMode_NONE,   0.0f,  -1},
+        {OS_BRK_LINK,     J3DFrameCtrl::EMode_LOOP, 1.0f,  0},
     };
 
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
@@ -2359,7 +2360,7 @@ daNpc_Os_c::~daNpc_Os_c() {
 }
 
 /* 00006E1C-00006E3C       .text daNpc_Os_Create__FP10fopAc_ac_c */
-static s32 daNpc_Os_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Os_Create(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Os_c*>(i_this)->create();
 }
 

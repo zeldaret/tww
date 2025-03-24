@@ -17,7 +17,7 @@ public:
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     void tg_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void wait_proc();
     void alpha_calc_start_wait_proc();

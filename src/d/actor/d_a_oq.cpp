@@ -108,7 +108,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00004708-00004DBC       .text daOQ_Create__FP10fopAc_ac_c */
-static s32 daOQ_Create(fopAc_ac_c*) {
+static cPhs_State daOQ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -9,7 +9,7 @@ namespace daDummy {
     public:
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void set_mtx();
         bool _execute();

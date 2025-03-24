@@ -83,7 +83,7 @@ static s32 daBeamCreate(void*) {
 }
 
 /* 00001CA4-00001D34       .text _create__8daBeam_cFv */
-s32 daBeam_c::_create() {
+cPhs_State daBeam_c::_create() {
     /* Nonmatching */
 }
 

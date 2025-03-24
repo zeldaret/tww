@@ -56,7 +56,7 @@ void daTag_So_c::getArg() {
 }
 
 /* 00000224-0000027C       .text _create__10daTag_So_cFv */
-s32 daTag_So_c::_create() {
+cPhs_State daTag_So_c::_create() {
     fopAcM_SetupActor(this, daTag_So_c);
     getArg();
     return cPhs_COMPLEATE_e;

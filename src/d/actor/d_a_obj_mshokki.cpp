@@ -42,7 +42,7 @@ void daObjMshokki_c::set_se() {
 }
 
 /* 00000740-00000A1C       .text _create__14daObjMshokki_cFv */
-s32 daObjMshokki_c::_create() {
+cPhs_State daObjMshokki_c::_create() {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ bool daObjMshokki_c::_draw() {
 }
 
 /* 00000E84-00000EA4       .text daObjMshokki_Create__FP10fopAc_ac_c */
-static s32 daObjMshokki_Create(fopAc_ac_c*) {
+static cPhs_State daObjMshokki_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

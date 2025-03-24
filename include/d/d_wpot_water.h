@@ -15,7 +15,7 @@ public:
 
 class dWpotWater_c : public kankyo_class {
 public:
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
 

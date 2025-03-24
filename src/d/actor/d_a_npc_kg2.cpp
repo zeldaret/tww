@@ -158,7 +158,7 @@ void daNpc_Kg2_c::event_wait_action(void*) {
 }
 
 /* 00002590-000027BC       .text _create__11daNpc_Kg2_cFv */
-s32 daNpc_Kg2_c::_create() {
+cPhs_State daNpc_Kg2_c::_create() {
     /* Nonmatching */
 }
 
@@ -178,7 +178,7 @@ bool daNpc_Kg2_c::_draw() {
 }
 
 /* 00002E74-00002E94       .text daNpc_Kg2_Create__FP10fopAc_ac_c */
-static s32 daNpc_Kg2_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_Kg2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

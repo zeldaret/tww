@@ -92,7 +92,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 0000367C-000039A4       .text daBwds_Create__FP10fopAc_ac_c */
-static s32 daBwds_Create(fopAc_ac_c*) {
+static cPhs_State daBwds_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -26,9 +26,9 @@ u32 JFWSystem::CSetUpParam::sysHeapSize = 0x400000;
 u32 JFWSystem::CSetUpParam::fifoBufSize = 0x40000;
 u32 JFWSystem::CSetUpParam::aramAudioBufSize = 0x800000;
 u32 JFWSystem::CSetUpParam::aramGraphBufSize = 0x600000;
-u32 JFWSystem::CSetUpParam::streamPriority = 8;
-u32 JFWSystem::CSetUpParam::decompPriority = 7;
-u32 JFWSystem::CSetUpParam::aPiecePriority = 6;
+s32 JFWSystem::CSetUpParam::streamPriority = 8;
+s32 JFWSystem::CSetUpParam::decompPriority = 7;
+s32 JFWSystem::CSetUpParam::aPiecePriority = 6;
 ResFONT* JFWSystem::CSetUpParam::systemFontRes = (ResFONT*)JUTResFONT_Ascfont_fix12;
 GXRenderModeObj* JFWSystem::CSetUpParam::renderMode = &GXNtsc480IntDf;
 u32 JFWSystem::CSetUpParam::exConsoleBufferSize = 0x24F8;
@@ -65,7 +65,9 @@ void JFWSystem::init() {
 
     sInitCalled = true;
 
-    JKRAram::create(CSetUpParam::aramAudioBufSize,CSetUpParam::aramGraphBufSize, CSetUpParam::streamPriority,CSetUpParam::decompPriority, CSetUpParam::aPiecePriority);
+    JKRAram::create(CSetUpParam::aramAudioBufSize, CSetUpParam::aramGraphBufSize,
+                    CSetUpParam::streamPriority,CSetUpParam::decompPriority,
+                    CSetUpParam::aPiecePriority);
     mainThread = new JKRThread(OSGetCurrentThread(), 4);
 
     JUTVideo::createManager(CSetUpParam::renderMode);

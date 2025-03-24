@@ -110,10 +110,10 @@ void daObjDragonhead_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daObjDragonhead_c::_create() {
+cPhs_State daObjDragonhead_c::_create() {
     fopAcM_SetupActor(this, daObjDragonhead_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, "Qdghd");
+    cPhs_State ret = dComIfG_resLoad(&mPhs, "Qdghd");
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10500) == 0) {
@@ -197,7 +197,7 @@ bool daObjDragonhead_c::_draw() {
 }
 
 /* 000003CC-000004FC       .text daObjDragonhead_Create__FPv */
-static s32 daObjDragonhead_Create(void* i_this) {
+static cPhs_State daObjDragonhead_Create(void* i_this) {
     return ((daObjDragonhead_c*)i_this)->_create();
 }
 

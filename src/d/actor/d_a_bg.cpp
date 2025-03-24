@@ -50,7 +50,7 @@ BOOL daBg_btkAnm_c::create(J3DModelData* modelData, J3DAnmTextureSRTKey* anmData
     if (anm == NULL)
         return FALSE;
 
-    if (!anm->init(modelData, anmData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
+    if (!anm->init(modelData, anmData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
         return FALSE;
 
     J3DAnmTextureSRTKey * data = anm->getBtkAnm();
@@ -91,7 +91,7 @@ BOOL daBg_brkAnm_c::create(J3DModelData* modelData, J3DAnmTevRegKey* anmData) {
     if (anm == NULL)
         return FALSE;
 
-    if (!anm->init(modelData, anmData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
+    if (!anm->init(modelData, anmData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
         return FALSE;
 
     J3DAnmTevRegKey * data = anm->getBrkAnm();
@@ -334,12 +334,12 @@ static BOOL daBg_Delete(daBg_c* i_this) {
 }
 
 /* 800D9074-800D9094       .text daBg_Create__FP10fopAc_ac_c */
-static s32 daBg_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daBg_Create(fopAc_ac_c* i_ac) {
     return ((daBg_c*)i_ac)->create();
 }
 
 /* 800D9094-800D9318       .text create__6daBg_cFv */
-s32 daBg_c::create() {
+cPhs_State daBg_c::create() {
     fopAcM_SetupActor(this, daBg_c);
 
     s32 roomNo = fopAcM_GetParam(this);
@@ -348,8 +348,8 @@ s32 daBg_c::create() {
         heap = JKRSolidHeap::create(-1, roomHeap, false);
         JUT_ASSERT(0x2fd, heap != NULL);
         JKRHeap * oldHeap = mDoExt_setCurrentHeap(heap);
-        s32 rt = createHeap();
-        JUT_ASSERT(0x302, rt == 1);
+        BOOL rt = createHeap();
+        JUT_ASSERT(0x302, rt == TRUE);
         mDoExt_setCurrentHeap(oldHeap);
         heap->adjustSize();
     } else {

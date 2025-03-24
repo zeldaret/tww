@@ -77,12 +77,12 @@ void daObjDoguu_c::setFinishMyEvent() {
 }
 
 /* 000016A4-000016C4       .text daObjDoguu_Create__FPv */
-static s32 daObjDoguu_Create(void*) {
+static cPhs_State daObjDoguu_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000016C4-0000178C       .text _create__12daObjDoguu_cFv */
-s32 daObjDoguu_c::_create() {
+cPhs_State daObjDoguu_c::_create() {
     /* Nonmatching */
 }
 

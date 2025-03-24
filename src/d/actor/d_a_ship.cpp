@@ -452,12 +452,12 @@ static BOOL daShip_createHeap(fopAc_ac_c*) {
 }
 
 /* 0000BFD8-0000C790       .text create__8daShip_cFv */
-s32 daShip_c::create() {
+cPhs_State daShip_c::create() {
     /* Nonmatching */
 }
 
 /* 0000D018-0000D038       .text daShip_Create__FP10fopAc_ac_c */
-static s32 daShip_Create(fopAc_ac_c*) {
+static cPhs_State daShip_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

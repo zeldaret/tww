@@ -273,11 +273,11 @@ namespace daBomb2 {
 
         J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, VBAKH_BCK_VBAKM));
         JUT_ASSERT(0x30D, bck_data != NULL);
-        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
+        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
 
         J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, VBAKH_BRK_VBAKM));
         JUT_ASSERT(0x314, brk_data != NULL);
-        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
         return mpModel && temp && temp3;
     }
@@ -405,10 +405,10 @@ namespace daBomb2 {
         start_proc_call();
     }
 
-    int Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
 
-        int status = dComIfG_resLoad(&mPhase, attr().resName);
+        cPhs_State status = dComIfG_resLoad(&mPhase, attr().resName);
 
         if(status == cPhs_COMPLEATE_e) {
             if(fopAcM_entrySolidHeap(this, solidHeapCB, attr().heapSize)) {
@@ -1312,7 +1312,7 @@ namespace daBomb2 {
     }
 
     namespace {
-        int Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->_create();
         }
 
@@ -1328,8 +1328,8 @@ namespace daBomb2 {
             return static_cast<Act_c*>(i_this)->_draw();
         }
 
-        bool Mthd_IsDelete(void*) {
-            return true;
+        BOOL Mthd_IsDelete(void* i_this) {
+            return TRUE;
         }
         
         static actor_method_class Mthd_Table = {

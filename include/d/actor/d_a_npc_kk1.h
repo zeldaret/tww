@@ -116,7 +116,7 @@ public:
     bool _draw();
     bool _execute();
     bool _delete();
-    s32 _create();
+    cPhs_State _create();
     void bodyCreateHeap();
     void effcCreateHeap();
     void CreateHeap();

@@ -8,7 +8,7 @@ public:
     void chkFlag(unsigned char) {}
     void setFlag(unsigned char) {}
 
-    inline s32 _daSaku_create();
+    inline cPhs_State _daSaku_create();
     inline BOOL _daSaku_delete();
     inline BOOL _daSaku_draw();
     inline BOOL _daSaku_execute();

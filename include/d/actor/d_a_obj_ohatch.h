@@ -11,7 +11,7 @@ public:
     void init_mtx();
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void close_wait_act_proc();
     void tremor_act_proc();

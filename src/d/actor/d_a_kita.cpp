@@ -23,7 +23,7 @@ void kita_move(kita_class*) {
 }
 
 /* 00001894-000019F8       .text himo_create__FP10kita_class */
-void himo_create(kita_class*) {
+cPhs_State himo_create(kita_class*) {
     /* Nonmatching */
 }
 
@@ -48,7 +48,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00001EB0-00002224       .text daKita_Create__FP10fopAc_ac_c */
-static s32 daKita_Create(fopAc_ac_c*) {
+static cPhs_State daKita_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

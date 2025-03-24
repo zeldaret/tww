@@ -67,7 +67,7 @@ BOOL daAgbsw0_c::draw() {
         if(toCheck != 0xFF) {
             if(conditionNo == 0) {
                 if(!fopAcM_isSwitch(this, toCheck)) {
-                    return 1;
+                    return true;
                 }
             }
             else {
@@ -149,7 +149,7 @@ BOOL daAgbsw0_c::draw() {
 }
 
 /* 00004F80-00005458       .text create__10daAgbsw0_cFv */
-int daAgbsw0_c::create() {
+cPhs_State daAgbsw0_c::create() {
     u8 type = getType();
     u8 sw0 = getSw0();
     s16 paramNo = getParamNo();
@@ -408,7 +408,7 @@ BOOL daAgbsw0_c::ExeSubA() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                    return 1;
+                    return true;
                 }
 
                 MailSend(-1, 0, 0xFF, 0xFF, 0);
@@ -494,7 +494,7 @@ BOOL daAgbsw0_c::ExeSubAT() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                    return 1;
+                    return true;
                 }
 
                 MailSend(-1, 0, 0xFF, 0xFF, 0);
@@ -578,7 +578,7 @@ BOOL daAgbsw0_c::ExeSubA2() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                    return 1;
+                    return true;
                 }
 
                 MailSend(-1, 0, 0xFF, 0xFF, 0);
@@ -698,15 +698,9 @@ BOOL daAgbsw0_c::ExeSubF2() {
                 agb->onFree();
                 agb->onHold();
 
-                f32 x = current.pos.x;
-                agb->current.pos.x = x;
-                agb->home.pos.x = x;
-                f32 y = current.pos.y + 50.0f;
-                agb->current.pos.y = y;
-                agb->home.pos.y = y;
-                f32 z = current.pos.z;
-                agb->current.pos.z = z;
-                agb->home.pos.z = z;
+                agb->home.pos.x = agb->current.pos.x = current.pos.x;
+                agb->home.pos.y = agb->current.pos.y = current.pos.y + 50.0f;
+                agb->home.pos.z = agb->current.pos.z = current.pos.z;
                 agb->shape_angle.x = 0x3FFF;
                 agb->field_0x67f = true;
                 mOrigScaleX = scale.x;
@@ -1255,7 +1249,7 @@ BOOL daAgbsw0_c::ExeSubR() {
     if(mDoGaC_GbaLink() && mDoGac_SendStatusCheck(5)) {
         if(sw0 != 0xFF && fopAcM_isSwitch(this, sw0)) {
             s32 itemNo = getParamNo();
-            if(itemNo < 0 || 0x1E < itemNo) {
+            if(itemNo < 0 || dItem_TRIPLE_HEART_e < itemNo) {
                 itemNo = 0;
             }
 
@@ -2127,7 +2121,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
         case 0x43:
             for (int i = 0; i < 3; i++) {
                 if(daNpc_Os_c::isPlayerRoom(i)) {
-                    return 1;
+                    return true;
                 }
             }
 
@@ -2558,7 +2552,7 @@ static BOOL daAgbsw0_Draw(daAgbsw0_c* i_this) {
 }
 
 /* 00004B2C-00004CF8       .text daAgbsw0_Execute__FP10daAgbsw0_c */
-static void daAgbsw0_Execute(daAgbsw0_c* i_this) {
+static BOOL daAgbsw0_Execute(daAgbsw0_c* i_this) {
     i_this->execute();
 }
 
@@ -2577,7 +2571,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
 }
 
 /* 00004E98-00004F80       .text daAgbsw0_Create__FP10fopAc_ac_c */
-static int daAgbsw0_Create(fopAc_ac_c* i_this) {
+static cPhs_State daAgbsw0_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, daAgbsw0_c);
 
     return static_cast<daAgbsw0_c*>(i_this)->create();

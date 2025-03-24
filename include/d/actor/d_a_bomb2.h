@@ -97,7 +97,7 @@ namespace daBomb2 {
         void start_carry();
         void start_proc_call();
         void create_init();
-        int _create();
+        cPhs_State _create();
         bool _delete();
         void set_mtx();
         void init_mtx();

@@ -103,7 +103,7 @@ We have a shared Ghidra project for TWW already set up. To get access to this se
 
 Then wait for an admin to approve your request. Once you have access, you can set up the Ghidra project like so:
 
-* To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/de/temurin/releases/).
+* To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/temurin/releases/).
 * Download the RootCubed Ghidra build ghidra_11.1_DEV_20240115 from [here](https://rootcubed.dev/ghidra_builds/).
 * Launch Ghidra with `ghidraRun`.
 * In Ghidra, go to `File -> New Project...`. Select `Shared Project` and input the following information:
@@ -119,3 +119,8 @@ Now you have Ghidra set up and ready to use.
 For an introduction on how to use Ghidra, you can read [this section of the Twilight Princess decompilation's guide](https://zsrtp.link/contribute/decompiler-setup#using-ghidra).
 
 Optionally, you may also want to also request "Read" access to the TwilightPrincess server on https://ghidra.decomp.dev and set that Ghidra project up too, even if you are not interested in working on that game. The reason for this is that a significant amount of engine code is shared between The Wind Waker and Twilight Princess, and the debug version of Twilight Princess (called `shield_chn_debug` in the Ghidra project) is easier to work with because inline functions are not inlined in that version. It can be worth checking if the function you're working on is present in that game as well.
+
+Contributing
+=======
+
+If you've got all the requirements set up and want to learn how to contribute to the decompilation effort, see [this guide](/docs/decompiling.md) for details.
