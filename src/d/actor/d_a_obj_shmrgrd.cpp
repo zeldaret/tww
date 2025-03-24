@@ -4,7 +4,138 @@
 //
 
 #include "d/actor/d_a_obj_shmrgrd.h"
+#include "d/res/res_shmrgrd.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_com_inf_game.h"
+
+struct Attr_c {
+
+};
+
+const Attr_c L_attr = {
+
+};
+
+inline const Attr_c & attr() { return L_attr; }
+
+const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_co = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 100.0f,
+        /* Height */ 112.5f,
+    },
+};
+const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_at = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 100.0f,
+        /* Height */ 112.5f,
+    },
+};
+const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_tg = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 100.0f,
+        /* Height */ 112.5f,
+    },
+};
+const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_gap_co = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 100.0f,
+        /* Height */ 112.5f,
+    },
+};
+const char daObjShmrgrd_c::M_arcname[] = "Shmrgrd";
 
 /* 000000EC-00000358       .text __ct__14daObjShmrgrd_cFv */
 daObjShmrgrd_c::daObjShmrgrd_c() {
@@ -12,18 +143,67 @@ daObjShmrgrd_c::daObjShmrgrd_c() {
 }
 
 /* 000005A8-000005C8       .text solidHeapCB__14daObjShmrgrd_cFP10fopAc_ac_c */
-void daObjShmrgrd_c::solidHeapCB(fopAc_ac_c*) {
+BOOL daObjShmrgrd_c::solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000005C8-000006E0       .text create_heap__14daObjShmrgrd_cFv */
-void daObjShmrgrd_c::create_heap() {
-    /* Nonmatching */
+bool daObjShmrgrd_c::create_heap() {
+    J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, SHMRGRD_BDL_SHMRGRD));
+    JUT_ASSERT(0x21A, mdl_data != NULL);
+    mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
+    if (mpModel) {
+        mdl_data->getJointNodePointer(2)->setCallBack(jnodeCB);
+        mpModel->setUserArea((u32) this);
+        mpBgW = dBgW_NewSet((cBgD_t *)dComIfG_getObjectRes(M_arcname, SHMRGRD_DZB_HGBASE), cBgW::MOVE_BG_e, &mMtx);
+        if (mpBgW) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /* 000006E0-00000964       .text _create__14daObjShmrgrd_cFv */
 cPhs_State daObjShmrgrd_c::_create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, daObjShmrgrd_c);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x12A0)) {
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+            init_mtx();
+            fopAcM_setCullSizeBox(this, -90.0f, 0.0f, -90.0f, 90.0f, 120.0f, 90.0f);
+            mSttsCo.Init(0xFF, 0xFF, this);
+            mCylCo.Set(M_cyl_src_co);
+            mCylCo.SetStts(&mSttsCo);
+            mSttsAt.Init(0xFF, 0xFF, this);
+            mCylAt.Set(M_cyl_src_at);
+            mCylAt.SetStts(&mSttsAt);
+            mCylAt.OnTgNoHitMark();
+            mSttsTg.Init(0xFF, 0xFF, this);
+            mCylTg.Set(M_cyl_src_tg);
+            mCylTg.SetStts(&mSttsTg);
+            mSttsGapCo.Init(0xFF, 0xFF, this);
+            mCylGapCo.Set(M_cyl_src_gap_co);
+            mCylGapCo.SetStts(&mSttsGapCo);
+            m858 = 0;
+            m860 = 0.0f;
+            // TODO: set data
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_MISC_e);
+            attention_info.distances[fopAc_Attn_TYPE_MISC_e] = 0x2D;
+            if (is_switch()) {
+                mode_lower_init();
+            } else {
+                mode_upper_init();
+            }
+            register_list();
+            mDoMtx_copy(mpModel->getBaseTRMtx(), mMtx);
+            dComIfG_Bgsp()->Regist(mpBgW, this);
+        } else {
+            phase_state = cPhs_ERROR_e;
+        }
+    }
+    return phase_state;
 }
 
 /* 00000964-00000A14       .text _delete__14daObjShmrgrd_cFv */
