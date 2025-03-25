@@ -14,7 +14,7 @@ public:
 
 class daGrid_c : public fopAc_ac_c {
 public:
-    void force_calc_wind_rel_angle(short) {}
+    void force_calc_wind_rel_angle(short param_1) { m2216 = param_1; m2218 = 1; }
 
     cPhs_State _create();
     bool _delete();
@@ -22,7 +22,10 @@ public:
     bool _draw();
 
 public:
-    /* 0x290 */ u8 m0290[0x2220 - 0x290];
+    /* 0x290 */ u8 m0290[0x2216 - 0x290];
+    /* 0x2216 */ s16 m2216;
+    /* 0x2218 */ u8 m2218;
+    /* 0x2219 */ u8 m2219;
     /* 0x2220 */ f32 m2220;
 };
 
