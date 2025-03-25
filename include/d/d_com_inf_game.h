@@ -2174,7 +2174,7 @@ inline int dComIfGp_getPlayerCameraID(int idx) {
     return g_dComIfG_gameInfo.play.getPlayerCameraID(idx);
 }
 
-inline BOOL dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
+inline u32 dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
     return g_dComIfG_gameInfo.play.checkCameraAttentionStatus(idx, flag);
 }
 
@@ -2314,11 +2314,11 @@ inline u8 dComIfGp_checkMesgCancelButton() {
     return g_dComIfG_gameInfo.play.checkMesgCancelButton();
 }
 
-inline BOOL dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
+inline u32 dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 0, flag);
 }
 
-inline BOOL dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
+inline u32 dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
 }
 
