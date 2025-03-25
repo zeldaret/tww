@@ -12,6 +12,7 @@ class camera_class;
 class daGrid_c;
 class daTornado_c;
 class daPy_FLG1;
+class daBomb_c;
 
 class daShip_c : public fopAc_ac_c {
 public:

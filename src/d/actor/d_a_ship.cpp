@@ -3498,48 +3498,17 @@ void daShip_c::setHeadAnm() {
 
 /* 00009B4C-0000B978       .text execute__8daShip_cFv */
 BOOL daShip_c::execute() {
-//    u8 uVar1;
     float fVar2;
     float fVar3;
     float fVar4;
-//    short sVar5;
-//    int iVar6;
-//    fpc_ProcID fVar7;
-//    char *pcVar8;
-//    fopAc_ac_c *pfVar9;
-//    bool bVar18;
-//    short sVar16;
-//    char cVar19;
-//    actor_place *paVar11;
-//    bool bVar20;
     uint uVar12;
-//    daBomb_c *this_00;
-//    dCamera_c *this_01;
     Mtx* pMVar13;
-//    cXyz *pcVar14;
-//    short sVar17;
-//    daPy_py_c *this_02;
-//    int iVar15;
-//    void *extraout_r4;
-//    void *extraout_r4_00;
-//    void *extraout_r4_01;
-//    void *extraout_r4_02;
-//    void *pvVar21;
-//    int __x;
-//    int __x_00;
     int unaff_r23;
-//    daGrid_c *pdVar22;
     int iVar23;
-//    J3DModel *pJVar24;
-//    J3DModel *pJVar25;
-//    cCcD_Obj *pObj;
-//    s16 sVar26;
     float dVar27;
     float dVar28;
-//    undefined8 uVar29;
     s16 local_190;
     s16 local_18e;
-//    fpc_ProcID local_18c;
     int local_188;
     csXyz local_184;
     cXyz cStack_17c;
@@ -3554,21 +3523,12 @@ BOOL daShip_c::execute() {
     cXyz cStack_110;
     cXyz local_110;
     cXyz local_104;
-//    cXyz cStack_f8;
-//    cXyz cStack_ec;
     cXyz local_e0;
     cXyz local_d4;
     cXyz cStack_c8;
     cXyz cStack_bc;
     cXyz local_b0;
-//    cXyz cStack_a4;
     cXyz cStack_98;
-//    cXyz local_8c;
-//    longlong local_80;
-//    longlong local_78;
-//    undefined4 local_70;
-//    uint uStack_6c;
-//    longlong local_68;
     BOOL bVar20;
     short sVar16;
     short sVar5;
@@ -3894,7 +3854,7 @@ BOOL daShip_c::execute() {
             }
         }
         else {
-            local_110 = this->m1044 - cXyz::Zero;
+            this->m1044 = cXyz::Zero;
             if (this->mEvtStaffId == fpcM_ERROR_PROCESS_ID_e) {
                 cStack_128 = this->current.pos - this->old.pos;
                 if (checkStateFlg(daSFLG_UNK1_e)) {
@@ -3918,7 +3878,7 @@ BOOL daShip_c::execute() {
     
     local_b0 = this->current.pos;
     
-    this->mAcchCir[2].SetWall(-600.0f - this->current.pos.y, 250.0f);
+    this->mAcchCir[3].SetWall(-600.0f - this->current.pos.y, 250.0f);
     
     this->mAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
 
@@ -3935,27 +3895,26 @@ BOOL daShip_c::execute() {
 
     setYPos();
 
-    fVar3 = this->m03F4;
-    fVar4 = this->current.pos.y;
+    float diff = this->m03F4 - this->current.pos.y;
 
-    this->mTrack.mBaseY = fVar3;
+    this->mTrack.mBaseY = this->m03F4;
     this->mTrack.mMinY = this->m03F8;
 
-    if (checkStateFlg(daSFLG_UNK1_e)) {
-        local_18e = this->m037C;
-        local_190 = this->m037E;
+    if (!checkStateFlg(daSFLG_UNK1_e)) {
+        setWaveAngle(&local_190, &local_18e);
     }
     else {
-        setWaveAngle(&local_18e, &local_190);
+        local_190 = this->m037C;
+        local_18e = this->m037E;
     }
 
-    fVar3 = (fVar3 - fVar4) + 5.0f;
+    diff += 5.0f;
 
-    if (fVar3 > this->m03D8) {
-        this->m03D8 = fVar3;
+    if (diff > this->m03D8) {
+        this->m03D8 = diff;
     }
     else {
-        cLib_chaseF(&this->m03D8, fVar3, 3.0);
+        cLib_chaseF(&this->m03D8, diff, 3.0f);
     }
 
     this->m037C = this->shape_angle.x;
@@ -3974,13 +3933,17 @@ BOOL daShip_c::execute() {
     
     mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), this->shape_angle.x, this->shape_angle.y, this->shape_angle.z);
     
-    this->m0298->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    J3DModel* mModel1 = this->m0298->getModel();
+    J3DModel* mModel2 = this->m029C->getModel(); 
+    
+    mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
     this->m0298->calc();
     
     setHeadAnm();
     
-    this->m029C->getModel()->setBaseTRMtx(this->m0298->getModel()->getAnmMtx(4));
+    mModel2->setBaseTRMtx(mModel1->getAnmMtx(4));
     this->m029C->calc();
+
     if (this->mShipMode == UsingSalvageArm) {
         if (this->m0392 == 10) {
             this->m039A = getAnglePartRate() * this->m039A;
@@ -3990,11 +3953,11 @@ BOOL daShip_c::execute() {
         this->mpSalvageArmModel->calc();
         setRopePos();
         mDoMtx_multVecZero(this->mpSalvageArmModel->getAnmMtx(1), &this->m102C);
-        if (this->mProc == &daShip_c::procCrane && this->mProc == &daShip_c::procCraneUp) {
-            this->m0434 = NULL;
+        if (this->mProc == &daShip_c::procCrane || this->mProc == &daShip_c::procCraneUp) {
+            this->m0434 = this->mRopeLine.mpLines->mpSegments;
         }
         else {
-            this->m0434 = this->mRopeLine.mpLines->mpSegments;
+            this->m0434 = NULL;
         }
     }
     else {
@@ -4025,42 +3988,44 @@ BOOL daShip_c::execute() {
                 daBomb_c* this_00 = (daBomb_c *)fopAcM_fastCreate(0x128, daBomb_c::prm_make(daBomb_c::STATE_4, FALSE, TRUE), &cStack_bc, this->tevStr.mRoomNo, &local_184);
 
                 int bombId;
-                if (this_00 == (daBomb_c *)0x0) {
-                    bombId = 0xffffffff;
-                }
-                else {
-                    bombId = this_00->parentActorID;
-                }
+                if (this_00) {
+                    if (this_00) {
+                        bombId = ((base_process_class*)this_00)->mBsPcId;
+                    }
+                    else {
+                        bombId = 0xffffffff;
+                    }
 
-                dCam_getBody()->ForceLockOn(bombId);
-                
-                this_00->setNoGravityTime(8);
-                
-                this_00->speedF = cM_scos(local_184.x) * 110.0f;
-                this_00->speedF = -(cM_ssin(local_184.x) * 110.0f);
-                
-                this_00->gravity = -2.5f;
-                
-                seStart(0x2852, &this->m1038);
-                
-                onStateFlg(daSFLG_UNK20000_e);
-                
-                dComIfGp_setItemBombNumCount(-1);
-                
-                this->m029C->setPlaySpeed(1.0f);
-                this->m029C->setFrame(0.0f);
-            }
+                    dCam_getBody()->ForceLockOn(bombId);
 
-            this->m037A--;
+                    this_00->setNoGravityTime(8);
+
+                    this_00->speedF = cM_scos(local_184.x) * 110.0f;
+                    this_00->speedF = -(cM_ssin(local_184.x) * 110.0f);
+
+                    this_00->gravity = -2.5f;
+
+                    seStart(0x2852, &this->m1038);
+
+                    onStateFlg(daSFLG_UNK20000_e);
+
+                    dComIfGp_setItemBombNumCount(-1);
+
+                    this->m029C->setPlaySpeed(1.0f);
+                    this->m029C->setFrame(0.0f);
+                }
+                this->m037A--;
+            }  
         }
     }
-    cMtx_multVec(this->m0298->getModel()->getAnmMtx(10), &l_tiller_top_offset, &this->m0438);
 
-    pMVar13 = this->m0298->getModel()->mpNodeMtx;
+    cMtx_multVec(mModel1->getAnmMtx(10), &l_tiller_top_offset, &this->m0438);
 
-    this->m0444.x = pMVar13[7][0][3];
-    this->m0444.y = pMVar13[7][1][3];
-    this->m0444.z = pMVar13[7][2][3];
+    MtxP mMtx = mModel1->getAnmMtx(7);
+
+    this->m0444.x = mMtx[0][3];
+    this->m0444.y = mMtx[1][3];
+    this->m0444.z = mMtx[2][3];
 
     if (this->mpGrid) {
         static cXyz top_offset(0.0f, 0.0f, -365.0f);
@@ -4069,10 +4034,10 @@ BOOL daShip_c::execute() {
         this->mpGrid->current.pos = this->m0444;
         this->mpGrid->shape_angle = this->shape_angle;
 
-        cMtx_multVecSR(pMVar13[7], &top_offset, &cStack_c8);
+        cMtx_multVecSR(mMtx, &top_offset, &cStack_c8);
         this->mpGrid->shape_angle.y = cStack_c8.abs() / 365.0f;
 
-        cMtx_multVecSR(this->m0298->getModel()->mpNodeMtx[8] ,&XZ_top_offset, &cStack_c8);
+        cMtx_multVecSR(mModel1->getAnmMtx(8), &XZ_top_offset, &cStack_c8);
         this->mpGrid->m2220 = 1.0f - (cStack_c8.abs() / 265.0f);
 
         if (this->mTornadoActor) {
