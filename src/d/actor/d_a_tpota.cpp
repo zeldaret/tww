@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 
 const u16 l_daTpota_idx_table[2] = {dPa_name::ID_SCENE_82AE, dPa_name::ID_SCENE_82AF};
-
+const float max_water_height = -230.0;
 // const u16 l_daTpota_idx_table[2] = {0x82AE, 0x82AF};
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
 s32 daTpota_c::_create() {
@@ -60,11 +60,20 @@ void daTpota_c::make_ripple(cXyz position) {
 
 /* 000002FC-00000354       .text check_water_h__9daTpota_cFP15JPABaseParticlef */
 int daTpota_c::check_water_h(JPABaseParticle* ptcl, float position_y) {
-    // JPABaseParticle *firstEntry;
-    // firstEntry = field_0x2C4[0].ptcl;
-    // int count = 30;
-    // if (position_y > -230.0) {
-    //   return 0;
+    unknown_struct* unknown_struct = field_0x2C4;
+    
+    if (position_y > max_water_height) {
+      return 0;
+    }
+
+    for (int i = 0; i < 30; i++) {
+        if (unknown_struct[i].ptcl == ptcl) {
+            // If found, check its field_0x04 value
+            return unknown_struct[i].field_0x04 > max_water_height;
+        }
+    }
+    // if(){
+
     // }
 
     // while ((JPABaseParticle *)(firstEntry->mLink).getObjectPtr() != ptcl) {
