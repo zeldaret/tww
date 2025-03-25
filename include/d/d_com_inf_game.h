@@ -394,7 +394,7 @@ public:
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
     void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
-    bool checkPlayerStatus(int param_0, int i, u32 flag) { return flag & mPlayerStatus[param_0][i]; }
+    BOOL checkPlayerStatus(int param_0, int i, u32 flag) { return mPlayerStatus[param_0][i] & flag; }
 
     u8 getSelectItem(int idx) { return mSelectItem[idx]; }
     void setSelectItem(int idx, u8 itemNo) { mSelectItem[idx] = itemNo; }
@@ -721,7 +721,7 @@ public:
     /* 0x49B0 */ u8 mPlayerInfoBuffer[sizeof(dSv_player_status_c_c)];
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
-    /* 0x4A28 */ u32 mPlayerStatus[2][2];
+    /* 0x4A28 */ u32 mPlayerStatus[1][4];
     /* 0x4A38 */ u16 mMinigameFlags;
     /* 0x4A3A */ u8 mMiniGameType;
     /* 0x4A3C */ s16 mMiniGameRupee;
@@ -2314,11 +2314,11 @@ inline u8 dComIfGp_checkMesgCancelButton() {
     return g_dComIfG_gameInfo.play.checkMesgCancelButton();
 }
 
-inline bool dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
+inline BOOL dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 0, flag);
 }
 
-inline bool dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
+inline BOOL dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
 }
 

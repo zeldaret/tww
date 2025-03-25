@@ -68,7 +68,7 @@ public:
         
     void checkCraneMode() const {}
     void checkCraneUpEnd() const {}
-    bool checkForceMove() const { return getTornadoActor() || getWhirlActor(); }
+    BOOL checkForceMove() const { return getTornadoActor() || getWhirlActor(); }
     void checkJumpOkFlg() const {}
     void checkRopeCntMax() const {}
     void checkRopeDownStart() const {}
