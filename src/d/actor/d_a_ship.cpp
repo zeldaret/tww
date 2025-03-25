@@ -276,7 +276,7 @@ BOOL daShip_c::draw() {
                                          
     if (this->mShadowId != 0) {
         dComIfGd_addRealShadow(this->mShadowId, model_00);
-        if (this->mShipMode == 2) { //UsingCannon
+        if (this->mShipMode == UsingCannon) {
             dComIfGd_addRealShadow(this->mShadowId, this->mpCannonModel);
         }
         else if (this->mShipMode == 3) { //UsingSalvageArm
@@ -1002,6 +1002,7 @@ BOOL daShip_c::checkOutRange() {
 
         short diffNext = angleCurrent - angleNext;
         short diffPrev = cM_atan2s(this->current.pos.x - prevPoint->x, this->current.pos.z - prevPoint->z) - anglePrev;
+        
         if ((s16)(angleNext - anglePrev) >= 0) {
             if (diffNext < 0) {
                 this->m038C = angleNext + 0x4000;
@@ -1011,27 +1012,28 @@ BOOL daShip_c::checkOutRange() {
                 this->m038C = anglePrev + 0x4000;
                 bVar4 = TRUE;
             }
-        } else {
-            if (diffNext < 0 && diffPrev < 0) {
-                float dxNext = nextPoint->x - this->current.pos.x;
-                float dzNext = nextPoint->z - this->current.pos.z;
-                float distNext = std::sqrtf(dxNext * dxNext + dzNext * dzNext);
-
-                float dxPrev = prevPoint->x - this->current.pos.x;
-                float dzPrev = prevPoint->z - this->current.pos.z;
-                float distPrev = std::sqrtf(dxPrev * dxPrev + dzPrev * dzPrev);
-
-                if (distNext > distPrev) {
-                    this->m038C = anglePrev + 0x4000;
-                }
-                else {
-                    this->m038C = angleNext + 0x4000;
-                }
-                bVar4 = TRUE;
+        } 
+        else if (diffNext < 0 && diffPrev < 0) {
+            float dxNext = nextPoint->x - this->current.pos.x;
+            float dzNext = nextPoint->z - this->current.pos.z;
+            float distNext = std::sqrtf(dxNext * dxNext + dzNext * dzNext);
+            
+            float dxPrev = prevPoint->x - this->current.pos.x;
+            float dzPrev = prevPoint->z - this->current.pos.z;
+            float distPrev = std::sqrtf(dxPrev * dxPrev + dzPrev * dzPrev);
+            
+            if (distNext > distPrev) {
+                this->m038C = anglePrev + 0x4000;
             }
+            else {
+                this->m038C = angleNext + 0x4000;
+            }
+            
+            bVar4 = TRUE;
         }
+        
         if (bVar4) {
-            if (g_dComIfG_gameInfo.play.mMiniGameType == 1) {
+            if (dComIfGp_getMiniGameType() == 1) {
                 this->mNextMessageID = 0x60a;
             }
             else if ((bVar5) && (pathIndex != 3)) {
@@ -1040,6 +1042,7 @@ BOOL daShip_c::checkOutRange() {
             else {
                 this->mNextMessageID = 0x5dd;
             }
+
             onStateFlg(daSFLG_UNK400000_e);
             return TRUE;
         }
@@ -1122,7 +1125,7 @@ void daShip_c::changeDemoEndProc() {
     this->gravity = -2.5f;
     
     if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
-        if (this->mShipMode == 0) { //Idle
+        if (this->mShipMode == Idle) {
             procPaddleMove_init();
         }
         else if (this->mShipMode == 2) { //UsingCannon
@@ -1184,7 +1187,7 @@ BOOL daShip_c::checkNextMode(int param_1) {
     cXyz* tgHitPos;
     cXyz* tgRVecP;
     cXyz local_58;
-    cXyz* local_4c;
+    cXyz local_4c;
     cXyz local_40;
     
     if (checkStateFlg(daSFLG_UNK4_e) != 0) {
@@ -1192,6 +1195,7 @@ BOOL daShip_c::checkNextMode(int param_1) {
         offStateFlg(daSFLG_UNK4_e);
         return TRUE;
     }
+
     if (!dComIfGp_checkPlayerStatus0(0, 0x10000)) {
         if (this->m034D == 5) {
             procGetOff_init();
@@ -1201,10 +1205,12 @@ BOOL daShip_c::checkNextMode(int param_1) {
         }
         return TRUE;
     }
+    
     if (dComIfGp_event_runCheck() == 0) {
         tgRVecP = NULL;
         tgHitPos = NULL;
         tgHitObj = NULL;
+
         if (mSph.ChkTgHit()) {
             tgRVecP = this->mSph.GetTgRVecP();
             tgHitPos = this->mSph.GetTgHitPosP();
@@ -1221,6 +1227,7 @@ BOOL daShip_c::checkNextMode(int param_1) {
                 }
             }
         }
+
         if (tgHitObj && (tgHitObj->GetAtType() - AT_TYPE_WIND) == 0) {
             if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
                 onStateFlg((daSHIP_SFLG)(daSFLG_UNK1_e | daSFLG_UNK2000000_e));
@@ -1228,14 +1235,10 @@ BOOL daShip_c::checkNextMode(int param_1) {
         }
         else {
             if (tgRVecP) {
-                local_4c->z = tgHitPos->z;
-                local_4c->y = 0.0f;
-                local_4c->x = tgHitPos->x;
-                if (PSVECSquareMag(local_4c) < 0.1f) {
+                local_4c.set(tgHitPos->x, 0.0f, tgHitPos->z);
+                if (PSVECSquareMag(&local_4c) < 0.1f) {
                     local_40 = this->current.pos - *tgHitPos;
-                    local_58.x = local_40.x;
-                    local_58.y = 0.0f;
-                    local_58.z = local_40.z;
+                    local_58.set(local_40.x, 0.0f, local_40.z);
                     if (PSVECSquareMag(&local_58) < 0.1f) {
                         sVar2 = this->shape_angle.y + 0x8000;
                     }
@@ -1251,28 +1254,27 @@ BOOL daShip_c::checkNextMode(int param_1) {
             }
         }
     }
+
     if (param_1 == this->m034D) {
         return FALSE;
     }
+    else if (this->m034D == 2) {
+        procPaddleMove_init();
+    }
+    else if (this->m034D == 1) {
+        procSteerMove_init();
+    }
+    else if (this->m034D == 9) {
+        procCannonReady_init();
+    }
+    else if (this->m034D == 10) {
+        procCraneReady_init();
+    }
+    else if (this->m034D == 14) {
+        procTactWarp_init();
+    }
     else {
-        if (this->m034D == 2) {
-            procPaddleMove_init();
-        }
-        else if (this->m034D == 1) {
-            procSteerMove_init();
-        }
-        else if (this->m034D == 9) {
-            procCannonReady_init();
-        }
-        else if (this->m034D == 10) {
-            procCraneReady_init();
-        }
-        else if (this->m034D == 14) {
-            procTactWarp_init();
-        }
-        else {
-            return FALSE;
-        }
+        return FALSE;
     }
     return TRUE;
 }
@@ -1409,7 +1411,7 @@ BOOL daShip_c::procWait() {
     cLib_addCalc(&this->speedF, 0.0f, 0.1f, 1.0f, 0.05f);
     
     if (this->m0298->getFrame() >= 7.0f) {
-        this->mShipMode = Idle; //Idle
+        this->mShipMode = Idle;
         this->m03E8 = 1.0f;
     }
 
@@ -1485,7 +1487,7 @@ BOOL daShip_c::procGetOff_init() {
 /* 00003CEC-00003DEC       .text procGetOff__8daShip_cFv */
 BOOL daShip_c::procGetOff() {
     if (this->m0298->getFrame() >= 7.0f) {
-        this->mShipMode = Idle; //Idle
+        this->mShipMode = Idle;
         this->m03E8 = 1.0f;
     }
     if (this->m034D == 6) {
@@ -1551,7 +1553,7 @@ BOOL daShip_c::procPaddleMove() {
         return TRUE;
     }
     if (this->m0298->getFrame() >= 7.0f) {
-        this->mShipMode = Idle; //Idle
+        this->mShipMode = Idle;
         this->m03E8 = 1.0f;
     }
     if (dComIfGp_checkPlayerStatus0(0, 0x685000) || dComIfGp_checkPlayerStatus1(0, 8)) {
@@ -3435,65 +3437,76 @@ void daShip_c::setWhirlActor() {
 
 /* 00009790-00009B4C       .text setHeadAnm__8daShip_cFv */
 void daShip_c::setHeadAnm() {
-    s32 uVar3;
+    s32 newState = -1;
     float speed;
-    float morf;
-    
-    uVar3 = -1;
+    float morph;
+
     if (dComIfGp_event_runCheck()) {
-        if ((s32)this->mEvtStaffId == fpcM_ERROR_PROCESS_ID_e && (dComIfGp_evmng_startCheck("SV_TALK_P1_1ST") || dComIfGp_evmng_startCheck("SV_TALK_P1_2ND") || dComIfGp_evmng_startCheck("SV_TALK_P4_1ST"))) {
-            uVar3 = 14;
+        if (this->mEvtStaffId == fpcM_ERROR_PROCESS_ID_e &&
+            (dComIfGp_evmng_startCheck("SV_TALK_P1_1ST") ||
+             dComIfGp_evmng_startCheck("SV_TALK_P1_2ND") ||
+             dComIfGp_evmng_startCheck("SV_TALK_P4_1ST"))) {
+            newState = 14;
+        } else if (this->m03B4 == 14 || this->m03B4 == 6) {
+            newState = 7;
         }
-        else if (this->m03B4 == 14 || this->m03B4 == 6) {
-            uVar3 = 7;
-        }
-    }
+    } 
     else if (dComIfGp_checkPlayerStatus0(0, 0x10000)) { 
-        if (dComIfGp_checkPlayerStatus0(0, 0x287000) || dComIfGp_checkPlayerStatus1(0, 8) || this->m034C == 9) {
-            uVar3 = 14;
-        }
-        else if ((!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) && (this->mSph.ChkTgHit() || this->mCyl[0].ChkTgHit() || this->mCyl[1].ChkTgHit() || this->mCyl[2].ChkTgHit())) {
+        if (dComIfGp_checkPlayerStatus0(0, 0x287000) || 
+            dComIfGp_checkPlayerStatus1(0, 8) || 
+            this->m034C == 9) {
+            newState = 14;
+        } 
+        else if ((!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+                 (this->mSph.ChkTgHit() || this->mCyl[0].ChkTgHit() ||
+                  this->mCyl[1].ChkTgHit() || this->mCyl[2].ChkTgHit())) {
             this->m03B4 = 7;
-            uVar3 = 6;
-        }
+            newState = 6;
+        } 
         else if (this->m03B4 != 6 || std::fabsf(this->m029C->getPlaySpeed()) < 0.01f) {
-            uVar3 = 7;
+            newState = 7;
         }
-    }
+    } 
     else {
-        if ((!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) && (this->mSph.ChkTgHit() || this->mCyl[0].ChkTgHit() || this->mCyl[1].ChkTgHit() || this->mCyl[2].ChkTgHit())) {
+        if ((!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+            (this->mSph.ChkTgHit() || this->mCyl[0].ChkTgHit() ||
+             this->mCyl[1].ChkTgHit() || this->mCyl[2].ChkTgHit())) {
             this->m03B4 = 7;
-            uVar3 = 6;
-        }
+            newState = 6;
+        } 
         else if (this->m03B4 == 6 || this->m03B4 == 5) {
             if (this->m029C->getPlaySpeed() < 0.01f) {
-                uVar3 = 7;
+                newState = 7;
             }
-        }
-        else if ((this->m03B4 != 7 && this->m03B4 != 8) || std::fabsf(this->m029C->getPlaySpeed()) >= 0.01f || cM_rnd() >= 0.4f || (g_Counter.mTimer & 0x1FF) != 0x1FF || (dComIfGs_isEventBit(0x3910) && !dComIfGs_isEventBit(0x2D02)) || !checkStateFlg(daSFLG_UNK40000000_e)) {
-            uVar3 = 5;
-        }
+        } 
+        else if (!(this->m03B4 != 7 && this->m03B4 != 8) && 
+                 std::fabsf(this->m029C->getPlaySpeed()) < 0.01f && 
+                 cM_rnd() < 0.4f && (g_Counter.mTimer & 0x1FF) == 0x1FF && 
+                 (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+                 !checkStateFlg(daSFLG_UNK40000000_e)) {
+            newState = 5;
+        } 
         else if (this->m03B4 != 8) {
-            uVar3 = 7;
+            newState = 7;
         }
     }
-    if (this->m03B4 != uVar3 && uVar3 != -1) {
-        if (uVar3 == 5) {
+
+    if (this->m03B4 != newState && newState != -1) {
+        if (newState == 5) {
             speed = 1.0f;
-            morf = 5.0f;
-        }
-        else if (uVar3 == 6) {
+            morph = 5.0f;
+        } 
+        else if (newState == 6) {
             speed = 1.0f;
-            morf = 0.0f;
+            morph = 0.0f;
         }
         else {
             speed = 0.0f;
-            morf = 5.0f;
+            morph = 5.0f;
         }
-        this->m03B4 = (short)uVar3;
-        this->m029C->setAnm((J3DAnmTransform *)dComIfG_getObjectRes(l_arcName, this->m03B4), 0, morf, speed, 0.0f, -1.0f, NULL);
+        this->m03B4 = (short)newState;
+        this->m029C->setAnm((J3DAnmTransform *)dComIfG_getObjectRes(l_arcName, this->m03B4), 0, morph, speed, 0.0f, -1.0f, NULL);
     }
-    return;
 }
 
 /* 00009B4C-0000B978       .text execute__8daShip_cFv */
@@ -4556,7 +4569,7 @@ cPhs_State daShip_c::create() {
         this->mpSalvageArmModel->getModelData()->getJointTree().getJointNodePointer(1)->setCallBack(daShip_craneJointCallBack);
         
         this->m034B = fopAcM_GetParam(this);
-        this->mShipMode = Idle; // Idle
+        this->mShipMode = Idle;
         this->mTornadoID = -1;
         this->mTornadoActor = NULL;
         this->mWhirlID = -1;
