@@ -326,13 +326,18 @@ public:
 
     static JPAEmitterInfo emtrInfo;
 
-    void getEmitterAxis(JGeometry::TVec3<f32>& vec0, JGeometry::TVec3<f32>& vec1, JGeometry::TVec3<f32>& vec2) const {
+    void getEmitterAxis(Vec& vec0, Vec& vec1, Vec& vec2) const {
         // Not sure if this implementation is correct. It does seem to match for dPa_waveEcallBack::executeAfter, but
         // a non-static function (const) only referencing a static variable is unusual, and this implementation isn't
         // complex enough to match the size of the inline in the demo debug map (0x128 bytes).
-        vec0.set(emtrInfo.mEmitterGlobalRot[0][0], emtrInfo.mEmitterGlobalRot[1][0], emtrInfo.mEmitterGlobalRot[2][0]);
-        vec1.set(emtrInfo.mEmitterGlobalRot[0][1], emtrInfo.mEmitterGlobalRot[1][1], emtrInfo.mEmitterGlobalRot[2][1]);
-        vec2.set(emtrInfo.mEmitterGlobalRot[0][2], emtrInfo.mEmitterGlobalRot[1][2], emtrInfo.mEmitterGlobalRot[2][2]);
+         
+        //vec0.set(emtrInfo.mEmitterGlobalRot[0][0], emtrInfo.mEmitterGlobalRot[1][0], emtrInfo.mEmitterGlobalRot[2][0]);
+        //vec1.set(emtrInfo.mEmitterGlobalRot[0][1], emtrInfo.mEmitterGlobalRot[1][1], emtrInfo.mEmitterGlobalRot[2][1]);
+        //vec2.set(emtrInfo.mEmitterGlobalRot[0][2], emtrInfo.mEmitterGlobalRot[1][2], emtrInfo.mEmitterGlobalRot[2][2]);
+        
+        reinterpret_cast<JGeometry::TVec3<f32>&>(vec0).set(emtrInfo.mEmitterGlobalRot[0][0], emtrInfo.mEmitterGlobalRot[1][0], emtrInfo.mEmitterGlobalRot[2][0]);
+        reinterpret_cast<JGeometry::TVec3<f32>&>(vec1).set(emtrInfo.mEmitterGlobalRot[0][1], emtrInfo.mEmitterGlobalRot[1][1], emtrInfo.mEmitterGlobalRot[2][1]);
+        reinterpret_cast<JGeometry::TVec3<f32>&>(vec2).set(emtrInfo.mEmitterGlobalRot[0][2], emtrInfo.mEmitterGlobalRot[1][2], emtrInfo.mEmitterGlobalRot[2][2]);
     }
 
     static f32 getAspect() { return emtrInfo.mAspect; }
