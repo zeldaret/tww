@@ -1182,13 +1182,9 @@ void daShip_c::setCrashData(short param1) {
 
 /* 000031E4-00003490       .text checkNextMode__8daShip_cFi */
 BOOL daShip_c::checkNextMode(int param_1) {
-    short sVar2;
-    dCcD_GObjInf* tgHitObj;
-    cXyz* tgHitPos;
-    cXyz* tgRVecP;
-    cXyz local_58;
-    cXyz local_4c;
-    cXyz local_40;
+    cXyz local_8;
+    cXyz local_20;
+    cXyz local_14;
     
     if (checkStateFlg(daSFLG_UNK4_e) != 0) {
         setCrashData(this->shape_angle.y + 0x8000);
@@ -1207,6 +1203,10 @@ BOOL daShip_c::checkNextMode(int param_1) {
     }
     
     if (dComIfGp_event_runCheck() == 0) {
+        cXyz* tgRVecP;
+        cXyz* tgHitPos;
+        dCcD_GObjInf* tgHitObj;
+        
         tgRVecP = NULL;
         tgHitPos = NULL;
         tgHitObj = NULL;
@@ -1235,15 +1235,16 @@ BOOL daShip_c::checkNextMode(int param_1) {
         }
         else {
             if (tgRVecP) {
-                local_4c.set(tgHitPos->x, 0.0f, tgHitPos->z);
-                if (PSVECSquareMag(&local_4c) < 0.1f) {
-                    local_40 = this->current.pos - *tgHitPos;
-                    local_58.set(local_40.x, 0.0f, local_40.z);
-                    if (PSVECSquareMag(&local_58) < 0.1f) {
+                short sVar2;
+                local_14.set(tgRVecP->x, 0.0f, tgRVecP->z);
+                if (PSVECSquareMag(&local_14) < 0.1f) {
+                    local_20 = this->current.pos - *tgHitPos;
+                    local_8.set(local_20.x, 0.0f, local_20.z);
+                    if (PSVECSquareMag(&local_8) < 0.1f) {
                         sVar2 = this->shape_angle.y + 0x8000;
                     }
                     else {
-                        sVar2 = cM_atan2s(local_58.x, local_58.z);
+                        sVar2 = cM_atan2s(local_8.x, local_8.z);
                     }
                 }
                 else {
@@ -3524,14 +3525,11 @@ BOOL daShip_c::execute() {
     s16 local_18e;
     int local_188;
     csXyz local_184;
-    cXyz cStack_17c;
-    cXyz cStack_170;
     cXyz cStack_164;
     cXyz cStack_158;
     cXyz cStack_14c;
     cXyz cStack_140;
     cXyz cStack_134;
-    cXyz cStack_128;
     cXyz cStack_11c;
     cXyz cStack_110;
     cXyz local_110;
@@ -3540,7 +3538,6 @@ BOOL daShip_c::execute() {
     cXyz local_d4;
     cXyz cStack_c8;
     cXyz cStack_bc;
-    cXyz local_b0;
     cXyz cStack_98;
     BOOL bVar20;
     short sVar16;
@@ -3632,6 +3629,7 @@ BOOL daShip_c::execute() {
                     this->eventInfo.onCondition(dEvtCnd_CANTALK_e);
                     fopAcM_orderSpeakEvent(this);
                 }
+                goto label_1; //Not sure how to structure this logic without this goto statement
             }
             else if (checkOutRange()) {
                 firstDecrementShipSpeed(0.0f);   
@@ -3639,6 +3637,7 @@ BOOL daShip_c::execute() {
             this->eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
     }
+    label_1:
 
     this->mpGrid = NULL;
     this->mpGrid = (daGrid_c*)fopAcM_SearchByID(this->mGridID);
@@ -3687,7 +3686,7 @@ BOOL daShip_c::execute() {
         this->m0366 = 0;
         sVar26 = 0;
     }
-
+    
     if (!checkStateFlg(daSFLG_UNK1_e)) {
         if (!(this->m034C == 12 || this->m034C == 15 || this->m034C == 7 || this->m034C == 11 || this->m034C == 13 || this->m034C == 16 || dComIfGp_event_runCheck())) {
             if (this->mTornadoActor) {
@@ -3741,15 +3740,13 @@ BOOL daShip_c::execute() {
 
     if (!(this->m034C == 12 || this->m034C == 15)) {
         if (!(this->m034C == 7 || this->m034C == 11)) {
-            if (!dComIfGp_event_runCheck()) {
-                if (!(!daPy_getPlayerLinkActorClass()->checkNoControll() || this->mEvtStaffId != fpcM_ERROR_PROCESS_ID_e || this->m034C == 8 || this->m034C == 16 || checkStateFlg(daSFLG_UNK100000_e))) {
-                    if (checkStateFlg(daSFLG_UNK20000000_e)) {
-                        if (this->speedF >= 10.0f) {
-                            firstDecrementShipSpeed(10.0f);
-                        }
-                        else {
-                            this->speedF = 0.0f;
-                        }
+            if (!(!dComIfGp_event_runCheck() && !daPy_getPlayerLinkActorClass()->checkNoControll() || this->mEvtStaffId != fpcM_ERROR_PROCESS_ID_e || this->m034C == 8 || this->m034C == 16 || checkStateFlg(daSFLG_UNK100000_e))) {
+                if (checkStateFlg(daSFLG_UNK20000000_e)) {
+                    if (this->speedF >= 10.0f) {
+                        firstDecrementShipSpeed(10.0f);
+                    }
+                    else {
+                        this->speedF = 0.0f;
                     }
                 }
             }
@@ -3833,7 +3830,7 @@ BOOL daShip_c::execute() {
                         }
                     }
                     if (unaff_r23 != 0) {
-                        cStack_110 = this->current.pos - this->old.pos;
+                        cXyz cStack_110(this->current.pos - this->old.pos);
                         dVar27 = cStack_110.absXZ();
                         if (dVar27 > 1.0f) {
                             fVar3 = this->speedF / dVar27;
@@ -3869,7 +3866,7 @@ BOOL daShip_c::execute() {
         else {
             this->m1044 = cXyz::Zero;
             if (this->mEvtStaffId == fpcM_ERROR_PROCESS_ID_e) {
-                cStack_128 = this->current.pos - this->old.pos;
+                cXyz cStack_128(this->current.pos - this->old.pos);
                 if (checkStateFlg(daSFLG_UNK1_e)) {
                     this->speedF = cStack_128.absXZ();
                 }
@@ -3889,7 +3886,7 @@ BOOL daShip_c::execute() {
     }
     this->mStts.ClrCcMove();
     
-    local_b0 = this->current.pos;
+    cXyz local_b0(this->current.pos);
     
     this->mAcchCir[3].SetWall(-600.0f - this->current.pos.y, 250.0f);
     
@@ -4048,7 +4045,7 @@ BOOL daShip_c::execute() {
         this->mpGrid->shape_angle = this->shape_angle;
 
         cMtx_multVecSR(mMtx, &top_offset, &cStack_c8);
-        this->mpGrid->shape_angle.y = cStack_c8.abs() / 365.0f;
+        this->mpGrid->scale.y = cStack_c8.abs() / 365.0f;
 
         cMtx_multVecSR(mModel1->getAnmMtx(8), &XZ_top_offset, &cStack_c8);
         this->mpGrid->m2220 = 1.0f - (cStack_c8.abs() / 265.0f);
@@ -4080,12 +4077,13 @@ BOOL daShip_c::execute() {
         mDoAud_shipCruiseSePlay(&this->current.pos, shipCruiseSpeed);
     }
     
-    pMVar13 = this->m029C->getModel()->mpNodeMtx;
+    pMVar13 = mModel2->mpNodeMtx;
     this->eyePos.x = pMVar13[16][0][3];
     this->eyePos.y = pMVar13[16][1][3];
     this->eyePos.z = pMVar13[16][2][3];
 
-    cStack_134 = daPy_getPlayerLinkActorClass()->current.pos - this->current.pos;
+    daPy_lk_c* link = daPy_getPlayerLinkActorClass();
+    cStack_134 = link->current.pos - this->current.pos;
     float distXz = (cStack_134.x * cM_ssin(this->shape_angle.y) + cStack_134.z * cM_scos(this->shape_angle.y));
     this->attention_info.flags = 0;
     bVar20 = FALSE;
@@ -4106,7 +4104,7 @@ BOOL daShip_c::execute() {
     }
     else if (this->m034C == 8 || distXz > 125.0f) {
         if (dComIfGp_checkPlayerStatus0(0,0x10000) && dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02) && dComIfGp_getMiniGameType() != 1 && fopAcM_searchPlayerDistanceXZ2(this) < 250000.0f) {
-            local_e0 = daPy_getPlayerLinkActorClass()->eyePos - this->eyePos;
+            local_e0 = link->eyePos - this->eyePos;
             bVar20 = TRUE;
             this->attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
         }
@@ -4166,8 +4164,7 @@ BOOL daShip_c::execute() {
 
     if (!(this->m034C == 8 || !checkForceMessage())) {
         this->attention_info.flags &= ~fopAc_Attn_ACTION_SHIP_e;
-        daPy_lk_c* link = daPy_getPlayerLinkActorClass();
-        cStack_170 = this->attention_info.position - link->current.pos;
+        cXyz cStack_170(this->attention_info.position - link->current.pos);
         if ((!dComIfGp_event_runCheck() && dComIfGp_checkPlayerStatus0(0,0x10000)) || std::fabsf(this->current.pos.y - link->current.pos.y) < 50.0f && cStack_170.abs2XZ() < 62500.0f && fopAcM_seenPlayerAngleY(this) < 0x6000 && this->mNextMessageID != 0xD65) {
             fopAcM_orderSpeakEvent(this);
             offStateFlg(daSFLG_UNK400000_e);
@@ -4175,12 +4172,8 @@ BOOL daShip_c::execute() {
             this->eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
     }
-    if (dComIfGs_isEventBit(0x2D10)) {
-        if (daPy_getPlayerLinkActorClass()->checkMasterSwordEquip()) {
-            if ((dComIfGs_isEventBit(0x3804) || dComIfGs_isEventBit(0x2D02)) && (dComIfGs_isEventBit(0x3E10) || dComIfGs_isEventBit(0x3F80))) {
-                goto LAB_8055227c;
-            }
-        }
+    if ((!dComIfGs_isEventBit(0x2D10) || daPy_getPlayerLinkActorClass()->checkMasterSwordEquip()) && (!dComIfGs_isEventBit(0x3804) || dComIfGs_isEventBit(0x2D02)) && (!dComIfGs_isEventBit(0x3E10) || dComIfGs_isEventBit(0x3F80))) {
+        goto LAB_8055227c;
     }
     this->attention_info.flags &= ~fopAc_Attn_ACTION_SHIP_e;
     LAB_8055227c:
@@ -4232,7 +4225,7 @@ BOOL daShip_c::execute() {
         this->m03D4 += 1.0f;
     }
 
-    cStack_17c = this->current.pos - this->old.pos;
+    cXyz cStack_17c(this->current.pos - this->old.pos);
 
     if (this->speedF >= 0.0f) {
         this->mFwdVel = cStack_17c.absXZ();
@@ -4275,7 +4268,7 @@ BOOL daShip_c::execute() {
 
     cMtx_multVec(this->m029C->getModel()->getAnmMtx(8), &sph_offset, &local_104);
 
-    if (dComIfGp_checkPlayerStatus0(0,0x10000)) {
+    if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
         this->mSph.SetTgGrp(4);
     }
     else {
