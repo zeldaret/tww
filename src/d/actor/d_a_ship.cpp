@@ -3874,19 +3874,21 @@ BOOL daShip_c::execute() {
                     this->speed.y = -this->speedF * cM_ssin(this->m0370);
                     this->speed.z = (this->speedF * cM_scos(this->current.angle.y)) * cM_scos(this->m0370);
                     fopAcM_posMove(this, (cXyz *)&this->mStts);
-                    if (dComIfGp_event_runCheck() == 0) {
-                        if (this->mAcch.GetGroundH() == -1e+09f || (dPath_GetPolyRoomPathVec(*this->mAcch.pm_out_poly_info,&cStack_98, &local_188) & 0xFF) == 0) {
-                            cLib_addCalcPosXZ(&this->m1044, cXyz::Zero, 0.5f, 5.0f, 1.0f);
-                        }
-                        else {
+                    if (dComIfGp_event_runCheck()) {
+                        this->m1044 = cXyz::Zero;
+                        
+                    }
+                    else {
+                        if (this->mAcch.GetGroundH() == -1e+09f || dPath_GetPolyRoomPathVec(*this->mAcch.pm_out_poly_info,&cStack_98, &local_188) & 0xFF) {
                             cStack_11c.normalizeZP();
                             PSVECScale(&cStack_98, &cStack_98, local_188 >> 1);
                             cLib_addCalcPosXZ(&this->m1044, cStack_98, 0.5f, 5.0f, 1.0f);
                         }
+                        else {
+                            cLib_addCalcPosXZ(&this->m1044, cXyz::Zero, 0.05f, 0.1f, 0.02f);
+
+                        }
                         PSVECAdd(&this->current.pos, &this->m1044, &this->current.pos);
-                    }
-                    else {
-                        this->m1044 = cXyz::Zero;
                     }
                 }
             }
