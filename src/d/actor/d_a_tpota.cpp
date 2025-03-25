@@ -12,6 +12,7 @@
 #include "d/d_com_inf_game.h"
 
 const u16 l_daTpota_idx_table[2] = {dPa_name::ID_SCENE_82AE, dPa_name::ID_SCENE_82AF};
+
 // const u16 l_daTpota_idx_table[2] = {0x82AE, 0x82AF};
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
 s32 daTpota_c::_create() {
@@ -37,29 +38,15 @@ s32 daTpota_c::_create() {
 
 /* 00000250-00000298       .text _delete__9daTpota_cFv */
 BOOL daTpota_c::_delete() {
-    
-    int count = 2;
-
-    while (count != 0) {
-        JPABaseEmitter* emitter = emitters[count];
-        if(emitter != NULL){
-            emitter->becomeInvalidEmitter();
-            emitter->mFlags |= emitter->mFlags | 1;
-
+    int count = 0;
+    while (count < 2) {
+        if (emitters[count] != NULL) {
+            emitters[count]->becomeInvalidEmitter();
+            emitters[count] = 0;
         }
-        count--;
+        count++;
     }
-    
     return 1;
-
-    // for (int count = 2; count != 0; count--) {
-    //     JPABaseEmitter* emitter = emitters[count];
-    //     if(emitter != NULL){
-    //         emitter->becomeInvalidEmitter();
-    //         emitter->mFlags |= emitter->mFlags | 1;
-    //     }
-    // }
-    /* Nonmatching */
 }
 
 /* 00000298-000002FC       .text make_ripple__9daTpota_cF4cXyz */
@@ -113,19 +100,21 @@ void daTpota_c::clear_splash() {
 
 /* 00000380-000003F4       .text renew_splash__9daTpota_cFv */
 void daTpota_c::renew_splash() {
+    
+
     if (emitters[1] != NULL) {
         JSUPtrList* list = &emitters[1]->mActiveParticles;
         unknown_struct *the_struct = field_0x2C4;
         if(list != NULL){
             clear_splash();
-            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL);
-                link = link->getNext()){
+            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL); link = link->getNext()){
+                JPABaseParticle* particle = (JPABaseParticle*)link->getObjectPtr();
                 JGeometry::TVec3<f32> position;
-                ((JPABaseParticle*)link->getObjectPtr())->getGlobalPosition(position);
-                the_struct->ptcl = (JPABaseParticle*)link->getObjectPtr();
+                particle->getGlobalPosition(position);
+                the_struct->ptcl = particle;
                 the_struct->field_0x04 = position.y;
                 the_struct++;
-            }
+            }   
             
         }
 
@@ -135,6 +124,7 @@ void daTpota_c::renew_splash() {
 
 /* 000003F4-000004C8       .text _execute__9daTpota_cFv */
 bool daTpota_c::_execute() {
+    float local_38;
     if (emitters[1] != NULL){
         JSUPtrList* list = &emitters[1]->mActiveParticles;
         if(list != NULL){
@@ -156,9 +146,8 @@ bool daTpota_c::_execute() {
         renew_splash();
     }
     return 1;
-
-    /* Nonmatching */
 }
+
 
 /* 000004C8-000004D0       .text _draw__9daTpota_cFv */
 bool daTpota_c::_draw() {
