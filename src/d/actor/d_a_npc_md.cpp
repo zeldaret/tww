@@ -2744,7 +2744,7 @@ void daNpc_Md_c::eventOrder() {
             break;
         case 10:
             mCurEvent = 6;
-            dComIfGp_event_order(dEvtType_OTHER_e, 0xFF, 1, 0xFFFF, dComIfGp_getPlayer(0), this, mEventIdxTable[mCurEvent]);
+            dComIfGp_event_order(dEvtType_OTHER_e, 0xFF, dEvtFlag_NOPARTNER_e, 0xFFFF, dComIfGp_getPlayer(0), this, mEventIdxTable[mCurEvent]);
             return;
         case 11:
             mCurEvent = 7;

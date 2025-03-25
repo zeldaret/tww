@@ -5610,7 +5610,7 @@ void daNpcPeople_c::eventOrder() {
         fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, m766[0], 0, 0xFFFF);
     }
     else if(m78D == 0xB) {
-        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, m766[0], 8, 0xFFFF);
+        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, m766[0], dEvtFlag_UNK8_e, 0xFFFF);
     }
     else if(m78D == 0xC) {
         fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, m766[1], 0, 0xFFFF);
