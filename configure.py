@@ -1518,7 +1518,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_bgn2"),
     ActorRel(NonMatching, "d_a_bgn3"),
     ActorRel(NonMatching, "d_a_bigelf"),
-    ActorRel(NonMatching, "d_a_bk"),
+    ActorRel(Matching,    "d_a_bk", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_bl"),
     ActorRel(NonMatching, "d_a_bmd"),
     ActorRel(NonMatching, "d_a_bmdfoot"),
