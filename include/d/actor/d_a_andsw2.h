@@ -17,7 +17,7 @@ public:
     BOOL chkAllSw2();
     
     inline BOOL execute();
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
 
 public:

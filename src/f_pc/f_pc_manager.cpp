@@ -37,22 +37,22 @@
 #include "assets/font_data.h"
 
 /* 8003E318-8003E338       .text fpcM_Draw__FPv */
-void fpcM_Draw(void* i_proc) {
-    fpcDw_Execute((base_process_class*)i_proc);
+BOOL fpcM_Draw(void* i_proc) {
+    return fpcDw_Execute((base_process_class*)i_proc);
 }
 
 /* 8003E338-8003E370       .text fpcM_DrawIterater__FPFPvPv_i */
-s32 fpcM_DrawIterater(fpcM_DrawIteraterFunc i_drawIterFunc) {
+BOOL fpcM_DrawIterater(fpcM_DrawIteraterFunc i_drawIterFunc) {
     return fpcLyIt_OnlyHere(fpcLy_RootLayer(), (fpcLyIt_OnlyHereFunc)i_drawIterFunc, NULL);
 }
 
 /* 8003E370-8003E390       .text fpcM_Execute__FPv */
-s32 fpcM_Execute(void* i_proc) {
+BOOL fpcM_Execute(void* i_proc) {
     return fpcEx_Execute((base_process_class*)i_proc);
 }
 
 /* 8003E390-8003E3B0       .text fpcM_Delete__FPv */
-s32 fpcM_Delete(void* i_proc) {
+BOOL fpcM_Delete(void* i_proc) {
     return fpcDt_Delete((base_process_class*)i_proc);
 }
 

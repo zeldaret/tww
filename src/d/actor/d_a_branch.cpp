@@ -54,13 +54,13 @@ void daBranch_c::demoPlay(mDoExt_McaMorf* morf) {
 }
 
 /* 00000228-00000248       .text solidHeapCB__10daBranch_cFP10fopAc_ac_c */
-int daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
+BOOL daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
     daBranch_c* branch = static_cast<daBranch_c*>(i_this);
     return branch->CreateHeap();
 }
 
 /* 00000248-0000049C       .text CreateHeap__10daBranch_cFv */
-int daBranch_c::CreateHeap() {
+BOOL daBranch_c::CreateHeap() {
     int bmd[] = { KWOOD_00_BMD_WS, KWOOD_00_BMD_WB };
     int bck[] = { KWOOD_00_BCK_SWING02, KWOOD_00_BCK_BREAK };
     int bas[] = { KWOOD_00_BAS_SWING02, KWOOD_00_BAS_BREAK };
@@ -171,12 +171,10 @@ static BOOL daBranch_Delete(daBranch_c* i_this) {
     return TRUE;
 }
 
-inline s32 daBranch_c::create() {
-    int phase_state;
-
+inline cPhs_State daBranch_c::create() {
     fopAcM_SetupActor(this, daBranch_c);
 
-    phase_state = dComIfG_resLoad(&mPhase, daBranch_c::m_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, daBranch_c::m_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, daBranch_c::solidHeapCB, 0x4000)) {
             for (int i = 0; i < (s32)ARRAY_SIZE(mAnims); i++) {
@@ -212,7 +210,7 @@ inline s32 daBranch_c::create() {
 }
 
 /* 00000694-0000080C       .text daBranch_Create__FP10fopAc_ac_c */
-static s32 daBranch_Create(fopAc_ac_c* i_this) {
+static cPhs_State daBranch_Create(fopAc_ac_c* i_this) {
     daBranch_c* branch = static_cast<daBranch_c*>(i_this);
     return branch->create();
 }

@@ -8,7 +8,6 @@
 #include "f_op/f_op_actor.h"
 
 #include "SSystem/SComponent/c_phase.h"
-#include "d/d_bg_w.h"
 
 namespace daObjVfan {
 class Act_c : public dBgS_MoveBgActor {
@@ -23,16 +22,16 @@ public:
 
     s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_W, PRM_S); }
 
-    int CreateHeap();
-    int Create();
-    s32 Mthd_Create();
-    BOOL Delete();
+    virtual BOOL CreateHeap();
+    virtual BOOL Create();
+    cPhs_State Mthd_Create();
+    virtual BOOL Delete();
     BOOL Mthd_Delete();
     void set_mtx();
     void init_mtx();
     void ParticleSet();
-    int Execute(Mtx**);
-    BOOL Draw();
+    virtual BOOL Execute(Mtx**);
+    virtual BOOL Draw();
 
 public:
     /* 0x2C8 */ request_of_phase_process_class mPhs;

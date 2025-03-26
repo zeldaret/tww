@@ -71,7 +71,7 @@ BOOL daObjLadder::Act_c::CreateHeap() {
 }
 
 /* 0000013C-000002F0       .text Create__Q211daObjLadder5Act_cFv */
-int daObjLadder::Act_c::Create() {
+BOOL daObjLadder::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
 
@@ -104,9 +104,9 @@ int daObjLadder::Act_c::Create() {
 }
 
 /* 000002F0-000004F8       .text Mthd_Create__Q211daObjLadder5Act_cFv */
-s32 daObjLadder::Act_c::Mthd_Create() {
+cPhs_State daObjLadder::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, Act_c);
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         mType = prm_get_type();
@@ -270,7 +270,7 @@ void daObjLadder::Act_c::init_mtx() {
 }
 
 /* 00000F88-000010A0       .text Execute__Q211daObjLadder5Act_cFPPA3_A4_f */
-int daObjLadder::Act_c::Execute(Mtx** ppMtx) {
+BOOL daObjLadder::Act_c::Execute(Mtx** ppMtx) {
     typedef void (Act_c::*ModeFunc)();
     static const ModeFunc mode_proc[] = {
         &Act_c::mode_wait,
@@ -304,7 +304,7 @@ BOOL daObjLadder::Act_c::Draw() {
 namespace daObjLadder {
 namespace {
 /* 00001140-00001160       .text Mthd_Create__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-static s32 Mthd_Create(void* i_this) {
+static cPhs_State Mthd_Create(void* i_this) {
     return static_cast<Act_c*>(i_this)->Mthd_Create();
 }
 

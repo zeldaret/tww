@@ -125,12 +125,12 @@ void changeXluMaterialAlpha(J3DMaterial*, unsigned char, bool) {
 }
 
 /* 00001B98-00001BB8       .text daSaku_Create__FP10fopAc_ac_c */
-static s32 daSaku_Create(fopAc_ac_c*) {
+static cPhs_State daSaku_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00001BB8-00001F28       .text _daSaku_create__8daSaku_cFv */
-s32 daSaku_c::_daSaku_create() {
+cPhs_State daSaku_c::_daSaku_create() {
     /* Nonmatching */
 }
 

@@ -11,7 +11,7 @@ public:
     void _createHeap();
     void getArg();
     void CreateInit();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void setCollision();
     void modeWaitInit();

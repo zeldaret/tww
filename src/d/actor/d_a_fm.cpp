@@ -532,7 +532,7 @@ void daFm_c::createInit() {
 }
 
 /* 000090DC-00009258       .text _create__6daFm_cFv */
-s32 daFm_c::_create() {
+cPhs_State daFm_c::_create() {
     /* Nonmatching */
 }
 

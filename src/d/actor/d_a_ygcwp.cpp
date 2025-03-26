@@ -21,8 +21,8 @@ const u32 daYgcwp_c::M_brk_table[] = {
 };
 
 const u32 daYgcwp_c::M_brk_mode_table[] = {
-    J3DFrameCtrl::LOOP_REPEAT_e,
-    J3DFrameCtrl::LOOP_ONCE_e,
+    J3DFrameCtrl::EMode_LOOP,
+    J3DFrameCtrl::EMode_NONE,
 };
 
 const char daYgcwp_c::M_arcname[6] = "Ygcwp";
@@ -76,9 +76,9 @@ BOOL daYgcwp_c::create_heap() {
 }
 
 /* 0000023C-000003A0       .text _create__9daYgcwp_cFv */
-s32 daYgcwp_c::_create() {
+cPhs_State daYgcwp_c::_create() {
     fopAcM_SetupActor(this, daYgcwp_c);
-    s32 rt = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State rt = dComIfG_resLoad(&mPhs, M_arcname);
     if (rt == cPhs_COMPLEATE_e) {
         rt = cPhs_ERROR_e;
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
@@ -202,7 +202,7 @@ bool daYgcwp_c::_draw() {
 
 namespace {
 /* 000008DC-000008FC       .text Mthd_Create__23@unnamed@d_a_ygcwp_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((daYgcwp_c*)i_ac)->_create();
 }
 

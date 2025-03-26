@@ -7,7 +7,7 @@ class daObjGnntakis_c : public fopAc_ac_c {
 public:
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void init_mtx();
     bool _execute();

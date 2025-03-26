@@ -32,7 +32,7 @@ bool daKomore::Act_c::create_heap() {
     JUT_ASSERT(0x6d, btk_data != NULL);
 
     s32 btkRet =
-        mBtkAnm.init(mdl_data, btk_data, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        mBtkAnm.init(mdl_data, btk_data, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
 
     bool ret = FALSE;
     if (mdl_data != NULL && this->mpModel != NULL && btkRet != NULL) {
@@ -42,9 +42,9 @@ bool daKomore::Act_c::create_heap() {
 }
 
 /* 000001F8-000002F8       .text _create__Q28daKomore5Act_cFv */
-s32 daKomore::Act_c::_create() {
+cPhs_State daKomore::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
-    int phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             set_mtx();
@@ -92,27 +92,27 @@ bool daKomore::Act_c::_draw() {
 namespace daKomore {
 namespace {
 /* 00000518-00000538       .text Mthd_Create__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<Act_c*>(i_this)->_create();
 }
 
 /* 00000538-0000055C       .text Mthd_Delete__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-s32 Mthd_Delete(void* i_this) {
+BOOL Mthd_Delete(void* i_this) {
     return static_cast<Act_c*>(i_this)->_delete();
 }
 
 /* 0000055C-00000580       .text Mthd_Execute__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-s32 Mthd_Execute(void* i_this) {
+BOOL Mthd_Execute(void* i_this) {
     return static_cast<Act_c*>(i_this)->_execute();
 }
 
 /* 00000580-000005A4       .text Mthd_Draw__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-s32 Mthd_Draw(void* i_this) {
+BOOL Mthd_Draw(void* i_this) {
     return static_cast<Act_c*>(i_this)->_draw();
 }
 
 /* 000005A4-000005AC       .text Mthd_IsDelete__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-s32 Mthd_IsDelete(void* i_this) {
+BOOL Mthd_IsDelete(void* i_this) {
     return TRUE;
 }
 

@@ -20,7 +20,7 @@ namespace daTagWaterlevel {
         static State_e get_state() { return M_state; }
         inline u8 prm_get_sch() const { return daObj::PrmAbstract(this, PRM_SCH_W, PRM_SCH_S); }
     
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void bgm_proc();
         bool _execute();

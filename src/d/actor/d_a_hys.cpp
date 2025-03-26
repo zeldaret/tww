@@ -12,12 +12,12 @@ BOOL daHys_c::Delete() {
 }
 
 /* 000000B8-00000250       .text CreateHeap__7daHys_cFv */
-void daHys_c::CreateHeap() {
+BOOL daHys_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000250-00000368       .text Create__7daHys_cFv */
-s32 daHys_c::Create() {
+BOOL daHys_c::Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daHys_c::set_mtx() {
 }
 
 /* 000003F8-000004A4       .text Execute__7daHys_cFPPA3_A4_f */
-void daHys_c::Execute(float(**)[3][4]) {
+BOOL daHys_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ BOOL daHys_c::Draw() {
 }
 
 /* 00000778-00000904       .text daHys_Create__FPv */
-static s32 daHys_Create(void*) {
+static cPhs_State daHys_Create(void*) {
     /* Nonmatching */
 }
 

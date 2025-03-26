@@ -32,7 +32,7 @@ public:
     BOOL _daIball_draw();
     BOOL _daIball_execute();
     BOOL _daIball_delete();
-    s32 _daIball_create();
+    cPhs_State _daIball_create();
     BOOL CreateHeap();
     
     static void init();

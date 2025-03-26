@@ -15,11 +15,11 @@
 #include "m_Do/m_Do_graphic.h"
 
 /* 80232A68-80232BC4       .text create__10dScnOpen_cFv */
-s32 dScnOpen_c::create() {
+cPhs_State dScnOpen_c::create() {
     dComIfGp_offEnableNextStage();
     mpProc = NULL;
 
-    s32 rt = dComIfG_resLoad(&mPhs, "Opening");
+    cPhs_State rt = dComIfG_resLoad(&mPhs, "Opening");
     if (rt == cPhs_COMPLEATE_e) {
         solid_heap = mDoExt_createSolidHeapFromGameToCurrent(0x20000, 0);
         JUT_ASSERT(0x3b, solid_heap != NULL);
@@ -117,7 +117,7 @@ static BOOL dScnOpen_Delete(dScnOpen_c* i_this) {
 }
 
 /* 80232EDC-80232EFC       .text dScnOpen_Create__FP11scene_class */
-static s32 dScnOpen_Create(scene_class* i_scn) {
+static cPhs_State dScnOpen_Create(scene_class* i_scn) {
     dScnOpen_c* i_this = (dScnOpen_c*)i_scn;
     return i_this->create();
 }

@@ -35,7 +35,7 @@ namespace daObjMonument {
         Type_e prm_get_type() const { return (Type_e)daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
         u32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
 
-        s32 _create();
+        cPhs_State _create();
         bool _execute();
         bool _draw();
         bool _delete();

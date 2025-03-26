@@ -62,7 +62,7 @@ void daMgBoard_c::CursorMove() {
 }
 
 /* 000013C4-000014C8       .text daMgBoard_Create__FPv */
-static s32 daMgBoard_Create(void*) {
+static cPhs_State daMgBoard_Create(void*) {
     /* Nonmatching */
 }
 

@@ -40,10 +40,10 @@ namespace daObjLadder {
         s32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EV_ID_W, PRM_EV_ID_S); }
 
-        BOOL CreateHeap();
-        int Create();
-        s32 Mthd_Create();
-        BOOL Delete();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        cPhs_State Mthd_Create();
+        virtual BOOL Delete();
         BOOL Mthd_Delete();
         void demo_end_reset();
         void mode_wait_init();
@@ -58,8 +58,8 @@ namespace daObjLadder {
         void mode_fell();
         void set_mtx();
         void init_mtx();
-        int Execute(Mtx**);
-        BOOL Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
 
         static Mtx M_tmp_mtx;
         static const char M_arcname[];

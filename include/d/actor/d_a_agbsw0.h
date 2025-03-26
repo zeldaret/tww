@@ -91,7 +91,7 @@ public:
     static void incTclBeat();
     
     inline BOOL draw();
-    inline int create();
+    inline cPhs_State create();
     inline BOOL execute();
     inline void deleteSub();
     

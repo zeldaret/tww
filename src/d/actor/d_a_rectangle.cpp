@@ -29,7 +29,7 @@ static BOOL daRct_Delete(RECTANGLE_class* i_this) {
 }
 
 /* 00000098-000000A0       .text daRct_Create__FP10fopAc_ac_c */
-static int daRct_Create(fopAc_ac_c* i_this) {
+static cPhs_State daRct_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 

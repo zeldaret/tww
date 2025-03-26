@@ -23,7 +23,7 @@ namespace daObjSwlight {
         void is_switch2() const;
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         static BOOL jnodeCB_moon(J3DNode*, int);
         void set_mtx();

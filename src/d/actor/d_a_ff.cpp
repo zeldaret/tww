@@ -47,7 +47,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 000013D4-0000164C       .text daFf_Create__FP10fopAc_ac_c */
-static s32 daFf_Create(fopAc_ac_c*) {
+static cPhs_State daFf_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

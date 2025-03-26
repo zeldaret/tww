@@ -9,7 +9,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
 
-s32 daSpotbox_c::create() {
+cPhs_State daSpotbox_c::create() {
     fopAcM_SetupActor(this, daSpotbox_c);
     f32 baseScale = getType() != 0 ? 1000.0f : 100.0f;
     scale.x *= baseScale;
@@ -59,7 +59,7 @@ static BOOL daSpotbox_Delete(daSpotbox_c* i_this) {
 }
 
 /* 00000170-00000250       .text daSpotbox_Create__FP10fopAc_ac_c */
-static s32 daSpotbox_Create(fopAc_ac_c* i_this) {
+static cPhs_State daSpotbox_Create(fopAc_ac_c* i_this) {
     daSpotbox_c* a_this = (daSpotbox_c*)i_this;
     return a_this->create();
 }

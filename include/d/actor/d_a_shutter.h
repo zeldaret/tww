@@ -10,8 +10,8 @@ class daShutter_c : public fopAc_ac_c {
 public:
     bool _delete();
     BOOL CreateHeap();
-    s32 Create();
-    s32 _create();
+    BOOL Create();
+    cPhs_State _create();
     void set_mtx();
     bool _execute();
     void shutter_move();

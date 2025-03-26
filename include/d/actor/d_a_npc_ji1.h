@@ -130,7 +130,7 @@ public:
     BOOL checkCutType(int, int);
     void setAnimFromMsgNo(u32);
     BOOL setAnm(int, f32, int);
-    s32 _create();
+    cPhs_State _create();
     BOOL CreateHeap();
     BOOL CreateInit();
     BOOL _delete();

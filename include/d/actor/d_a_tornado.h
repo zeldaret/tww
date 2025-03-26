@@ -26,7 +26,7 @@ public:
     BOOL execute();
     BOOL tornado_delete();
     BOOL createHeap();
-    s32 create();
+    cPhs_State create();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

@@ -7,6 +7,6 @@
 #include "SSystem/SComponent/c_list_iter.h"
 
 /* 8004023C-80040260       .text fpcMtdIt_Method__FP15node_list_classPFPv_i */
-int fpcMtdIt_Method(node_list_class* i_nodeList, fpcMtdIt_MethodFunc i_methods) {
+BOOL fpcMtdIt_Method(node_list_class* i_nodeList, fpcMtdIt_MethodFunc i_methods) {
     return cLsIt_Method(i_nodeList, (cNdIt_MethodFunc)i_methods, NULL);
 }

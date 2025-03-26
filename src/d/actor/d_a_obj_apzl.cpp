@@ -82,7 +82,7 @@ void daObjApzl_c::set_mtx() {
 }
 
 /* 000016B8-00001780       .text daObjApzl_Create__FPv */
-static s32 daObjApzl_Create(void*) {
+static cPhs_State daObjApzl_Create(void*) {
     /* Nonmatching */
 }
 

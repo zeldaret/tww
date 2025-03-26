@@ -53,7 +53,7 @@ void daMachine_c::set_speed() {
 }
 
 /* 000007F8-00000898       .text _create__11daMachine_cFv */
-s32 daMachine_c::_create() {
+cPhs_State daMachine_c::_create() {
     /* Nonmatching */
 }
 
@@ -93,7 +93,7 @@ bool daMachine_c::_draw() {
 }
 
 /* 0000154C-0000156C       .text daMachine_Create__FPv */
-static s32 daMachine_Create(void*) {
+static cPhs_State daMachine_Create(void*) {
     /* Nonmatching */
 }
 

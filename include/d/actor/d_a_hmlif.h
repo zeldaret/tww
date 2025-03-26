@@ -1,17 +1,17 @@
 #ifndef D_A_HMLIF_H
 #define D_A_HMLIF_H
 
-#include "f_op/f_op_actor.h"
+#include "d/d_bg_s_movebg_actor.h"
 
-class daHmlif_c : public fopAc_ac_c {
+class daHmlif_c : public dBgS_MoveBgActor {
 public:
-    BOOL Delete();
+    virtual BOOL Delete();
     void daHmlifDelete();
-    void CreateHeap();
-    s32 Create();
-    void daHmlifCreate();
+    virtual BOOL CreateHeap();
+    virtual BOOL Create();
+    cPhs_State daHmlifCreate();
     void set_mtx();
-    void Execute(float(**)[3][4]);
+    virtual BOOL Execute(Mtx**);
     void move();
     void set_se();
     void anim_play();
@@ -21,7 +21,7 @@ public:
     void set_next_pnt();
     void setNextPath();
     void chkSwitchPathType();
-    BOOL Draw();
+    virtual BOOL Draw();
 
 public:
     /* Place member variables here */

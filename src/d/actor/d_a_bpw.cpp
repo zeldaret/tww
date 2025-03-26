@@ -282,7 +282,7 @@ void tori_create_init(bpw_class*) {
 }
 
 /* 0000D43C-0000DB08       .text daBPW_Create__FP10fopAc_ac_c */
-static s32 daBPW_Create(fopAc_ac_c*) {
+static cPhs_State daBPW_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

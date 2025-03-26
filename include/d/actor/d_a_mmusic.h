@@ -13,7 +13,7 @@ namespace daMmusic {
         bool create_heap();
         BOOL Macore_is_playing();
         void set_mtx();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void init_se();
         void manage_se(int);

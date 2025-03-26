@@ -183,7 +183,7 @@ static BOOL dEnvSe_Delete(dEnvSe_c* i_this) {
 }
 
 /* 8017DB38-8017DB40       .text dEnvSe_Create__FP12kankyo_class */
-static s32 dEnvSe_Create(kankyo_class*) {
+static cPhs_State dEnvSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 

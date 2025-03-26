@@ -227,7 +227,7 @@ void daKddoor_c::CreateInit() {
 }
 
 /* 0000220C-000023CC       .text create__10daKddoor_cFv */
-s32 daKddoor_c::create() {
+cPhs_State daKddoor_c::create() {
     /* Nonmatching */
 }
 
@@ -282,7 +282,7 @@ static BOOL daKddoor_Delete(daKddoor_c*) {
 }
 
 /* 00002C44-00002C64       .text daKddoor_Create__FP10fopAc_ac_c */
-static s32 daKddoor_Create(fopAc_ac_c*) {
+static cPhs_State daKddoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

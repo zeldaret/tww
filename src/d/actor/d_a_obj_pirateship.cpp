@@ -39,7 +39,7 @@ void daObjPirateship::Act_c::sound_proc() {
 }
 
 /* 0000095C-00000A50       .text CreateHeap__Q215daObjPirateship5Act_cFv */
-void daObjPirateship::Act_c::CreateHeap() {
+BOOL daObjPirateship::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
@@ -59,12 +59,12 @@ void daObjPirateship::Act_c::DeleteWave() {
 }
 
 /* 00000D38-00000DA4       .text Create__Q215daObjPirateship5Act_cFv */
-s32 daObjPirateship::Act_c::Create() {
+BOOL daObjPirateship::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 00000DA4-00000DB4       .text Execute__Q215daObjPirateship5Act_cFPPA3_A4_f */
-void daObjPirateship::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjPirateship::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -84,12 +84,12 @@ void daObjPirateship::Act_c::demo_move() {
 }
 
 /* 00000EF0-00000F10       .text Create__Q215daObjPirateship6MethodFPv */
-s32 daObjPirateship::Method::Create(void*) {
+cPhs_State daObjPirateship::Method::Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000F10-000012A4       .text _create__Q215daObjPirateship5Act_cFv */
-s32 daObjPirateship::Act_c::_create() {
+cPhs_State daObjPirateship::Act_c::_create() {
     /* Nonmatching */
 }
 

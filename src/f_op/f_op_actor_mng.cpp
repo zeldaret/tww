@@ -49,29 +49,29 @@ void fopAcM_setRoomLayer(void* pProc, int room_no) {
 }
 
 /* 800241C0-80024230       .text fopAcM_SearchByID__FUiPP10fopAc_ac_c */
-s32 fopAcM_SearchByID(fpc_ProcID actorID, fopAc_ac_c** pDstActor) {
+BOOL fopAcM_SearchByID(fpc_ProcID actorID, fopAc_ac_c** pDstActor) {
     if (fpcM_IsCreating(actorID)) {
         *pDstActor = NULL;
     } else {
         fopAc_ac_c *pActor = fopAcM_Search((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &actorID);
         *pDstActor = pActor;
         if (*pDstActor == NULL)
-            return 0;
+            return FALSE;
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 80024230-800242AC       .text fopAcM_SearchByName__FsPP10fopAc_ac_c */
-s32 fopAcM_SearchByName(s16 procName, fopAc_ac_c** pDstActor) {
+BOOL fopAcM_SearchByName(s16 procName, fopAc_ac_c** pDstActor) {
     *pDstActor = fopAcM_Search((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &procName);
     if (*pDstActor == NULL) {
-        return 0;
+        return FALSE;
     } else {
         if (fpcM_IsCreating(fopAcM_GetID(*pDstActor))) {
             *pDstActor = NULL;
         }
-        return 1;
+        return TRUE;
     }
 }
 
@@ -132,14 +132,14 @@ void fopAcM_Log(fopAc_ac_c*, char*) {
 }
 
 /* 80024478-800244B8       .text fopAcM_delete__FP10fopAc_ac_c */
-s32 fopAcM_delete(fopAc_ac_c* pActor) {
+BOOL fopAcM_delete(fopAc_ac_c* pActor) {
     /* "Deleting Actor" */
     fopAcM_Log(pActor, "アクターの削除");
     return fpcM_Delete(pActor);
 }
 
 /* 800244B8-8002451C       .text fopAcM_delete__FUi */
-s32 fopAcM_delete(fpc_ProcID actorID) {
+BOOL fopAcM_delete(fpc_ProcID actorID) {
     fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcM_SearchByID(actorID);
 
     if (pActor != NULL) {

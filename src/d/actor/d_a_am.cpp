@@ -279,7 +279,7 @@ static BOOL medama_atari_check(am_class* i_this) {
         mDoAud_seStart(JA_SE_LK_MS_WEP_HIT, &i_this->eyePos, 0x42, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
         ret = true;
         if (i_this->mCurrBckIdx == AM_BCK_SLEEP || i_this->mCurrBckIdx == AM_BCK_SLEEP_LOOP) {
-            anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
             i_this->mNeedleCyl.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
             i_this->mNeedleCyl.OnAtHitBit();
@@ -486,7 +486,7 @@ static void action_dousa(am_class* i_this) {
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
             i_this->mCountUpTimers[i] = 0;
         }
-        anm_init(i_this, AM_BCK_SLEEP_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, AM_BCK_SLEEP_LOOP, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mState += 1;
         // Fall-through
     case 1:
@@ -501,7 +501,7 @@ static void action_dousa(am_class* i_this) {
                 break;
             }
             if (Line_check(i_this, player->current.pos)) {
-                anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 fopAcM_monsSeStart(i_this, JA_SE_CV_AM_AWAKE, 0);
                 i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                 i_this->mNeedleCyl.OnAtSetBit();
@@ -524,7 +524,7 @@ static void action_dousa(am_class* i_this) {
                 // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
                 mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             }
-            anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mCountDownTimers[2] = 6;
         }
         i_this->mTargetAngleY = fopAcM_searchPlayerAngleY(i_this);
@@ -578,7 +578,7 @@ static void action_dousa(am_class* i_this) {
     case 6:
         if (i_this->mCurrBckIdx == AM_BCK_CLOSE) {
             if (i_this->mpMorf->isStop()) {
-                anm_init(i_this, AM_BCK_CLOSE_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, AM_BCK_CLOSE_LOOP, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
         }
         if (!i_this->mAcch.ChkGroundHit()) {
@@ -606,7 +606,7 @@ static void action_dousa(am_class* i_this) {
         if (i_this->mCountUpTimers[0] > 2) {
             i_this->mCountDownTimers[0] = 100;
             i_this->mCountUpTimers[0] = 0;
-            anm_init(i_this, AM_BCK_DAMAGE, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, AM_BCK_DAMAGE, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
             // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_IN, 0);
             mDoAud_seStart(JA_SE_CM_AM_NEEDLE_IN, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
@@ -639,7 +639,7 @@ static void action_dousa(am_class* i_this) {
         }
         break;
     case STATE_DOUSA_SLEEP_INIT:
-        anm_init(i_this, AM_BCK_SLEEP, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        anm_init(i_this, AM_BCK_SLEEP, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_IN, 0);
         i_this->mNeedleCyl.OffAtSetBit();
         i_this->mNeedleCyl.OffAtSetBit();
@@ -666,7 +666,7 @@ static void action_dousa(am_class* i_this) {
 static void action_modoru_move(am_class* i_this) {
     switch (i_this->mState) {
     case STATE_MODORU_MOVE_INIT: {
-        anm_init(i_this, AM_BCK_CLOSE_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, AM_BCK_CLOSE_LOOP, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mNeedleCyl.OnAtSetBit();
         i_this->mNeedleCyl.OnAtHitBit();
         i_this->gravity = -11.0f;
@@ -741,7 +741,7 @@ static void action_handou_move(am_class* i_this) {
             // Using the fopAcM_seStart inline multiple times makes the codegen not match.
             // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
             mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-            anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         i_this->mState += 1;
         // Fall-through
@@ -771,7 +771,7 @@ static void action_itai_move(am_class* i_this) {
         i_this->current.angle.y = fopAcM_searchPlayerAngleY(i_this);
         i_this->mTargetAngleY = i_this->current.angle.y;
         fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_IN, 0);
-        anm_init(i_this, AM_BCK_DAMAGE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        anm_init(i_this, AM_BCK_DAMAGE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->mState += 1;
         // Fall-through
     case 41:
@@ -781,14 +781,14 @@ static void action_itai_move(am_class* i_this) {
         }
         i_this->mCountDownTimers[0] = 100;
         i_this->speedF = 0.0f;
-        anm_init(i_this, AM_BCK_DAMAGE_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, AM_BCK_DAMAGE_LOOP, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mState += 1;
         break;
     case 42:
         if (i_this->mCountDownTimers[0] != 0) {
             break;
         }
-        anm_init(i_this, AM_BCK_DAMAGE_END, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        anm_init(i_this, AM_BCK_DAMAGE_END, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
         // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
         // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
@@ -813,7 +813,7 @@ static void action_itai_move(am_class* i_this) {
             0xB9, &i_this->mSmokeCbs[3], fopAcM_GetRoomNo(i_this)
         );
         fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
-        anm_init(i_this, AM_BCK_BOM_NOMI, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        anm_init(i_this, AM_BCK_BOM_NOMI, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         mDoAud_onEnemyDamage();
         i_this->mEyeRot.setall(0);
         i_this->mNeedleCyl.OffAtSetBit();
@@ -873,7 +873,7 @@ static void action_itai_move(am_class* i_this) {
         if (i_this->mCountDownTimers[0] != 0) {
             break;
         }
-        anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         dComIfGp_particle_set(dPa_name::ID_SCENE_8127, &i_this->mWaistPos);
         dComIfGp_particle_set(dPa_name::ID_SCENE_8128, &i_this->mWaistPos);
 
@@ -967,7 +967,7 @@ static BOOL daAM_Execute(am_class* i_this) {
     }
 
     if (i_this->mAction != ACTION_ITAI_MOVE && i_this->mSpawnPosY - 1500.0f > i_this->current.pos.y) {
-        anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
 
         dComIfGp_particle_set(dPa_name::ID_SCENE_8127, &i_this->mWaistPos);
         dComIfGp_particle_set(dPa_name::ID_SCENE_8128, &i_this->mWaistPos);
@@ -1083,7 +1083,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         (J3DModelData*)dComIfG_getObjectRes("AM", AM_BDL_AM),
         NULL, NULL,
         (J3DAnmTransformKey*)dComIfG_getObjectRes("AM", AM_BCK_SLEEP_LOOP),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00000000,
         0x11020203
@@ -1120,12 +1120,12 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 }
 
 /* 00003C00-00003F5C       .text daAM_Create__FP10fopAc_ac_c */
-static s32 daAM_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daAM_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, am_class);
 
     am_class* i_this = (am_class*)i_actor;
 
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhase, "AM");
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "AM");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1C80)) {
             return cPhs_ERROR_e;

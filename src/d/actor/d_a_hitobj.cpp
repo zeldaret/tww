@@ -42,11 +42,11 @@ static BOOL daHitobj_Delete(hitobj_class* i_this) {
 }
 
 /* 00000120-0000025C       .text daHitobj_Create__FP10fopAc_ac_c */
-static s32 daHitobj_Create(fopAc_ac_c* pActor) {
+static cPhs_State daHitobj_Create(fopAc_ac_c* pActor) {
     hitobj_class* i_this = (hitobj_class*)pActor;
     fopAcM_SetupActor(i_this, hitobj_class);
 
-    int res = dComIfG_resLoad(&(i_this->mPhs), "Hitobj");
+    cPhs_State res = dComIfG_resLoad(&(i_this->mPhs), "Hitobj");
     if (res == cPhs_COMPLEATE_e) {
         i_this->mUnusedParam = fopAcM_GetParam(i_this) & 0xFF; 
 

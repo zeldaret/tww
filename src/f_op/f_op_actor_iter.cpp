@@ -8,7 +8,7 @@
 #include "SSystem/SComponent/c_tag_iter.h"
 #include "f_op/f_op_actor_tag.h"
 
-int fopAcIt_Executor(fopAcIt_ExecutorFunc i_execFunc, void* i_data) {
+BOOL fopAcIt_Executor(fopAcIt_ExecutorFunc i_execFunc, void* i_data) {
     method_filter filter;
     filter.mpMethodFunc = (cNdIt_MethodFunc)i_execFunc;
     filter.mpUserData = i_data;

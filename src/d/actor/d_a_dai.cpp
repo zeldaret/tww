@@ -27,7 +27,7 @@ void daDai_c::CreateInit() {
 }
 
 /* 000003A8-00000494       .text _create__7daDai_cFv */
-s32 daDai_c::_create() {
+cPhs_State daDai_c::_create() {
     /* Nonmatching */
 }
 
@@ -92,7 +92,7 @@ void daDai_c::next_msgStatus(unsigned long*) {
 }
 
 /* 0000109C-000010BC       .text daDai_Create__FPv */
-static s32 daDai_Create(void*) {
+static cPhs_State daDai_Create(void*) {
     /* Nonmatching */
 }
 

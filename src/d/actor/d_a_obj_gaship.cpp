@@ -56,10 +56,10 @@ bool daObjGaship::Act_c::create_heap() {
 }
 
 /* 00000448-000004F8       .text _create__Q211daObjGaship5Act_cFv */
-s32 daObjGaship::Act_c::_create() {
+cPhs_State daObjGaship::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             fopAcM_SetMtx(this, mModel->getBaseTRMtx());
@@ -105,7 +105,7 @@ bool daObjGaship::Act_c::_draw() {
 namespace daObjGaship {
 namespace {
 /* 0000066C-0000068C       .text Mthd_Create__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((daObjGaship::Act_c*)i_ac)->_create();
 }
 

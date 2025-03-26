@@ -45,7 +45,7 @@ namespace daComing2 {
         void coming_game_main();
         void coming_process_init(short);
         void coming_process_main();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         bool _execute();
         bool _draw();

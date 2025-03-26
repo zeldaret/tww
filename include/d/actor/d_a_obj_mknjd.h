@@ -35,16 +35,16 @@ namespace daObjMknjD {
             }
         }
     
-        s32 Mthd_Create();
-        s32 Mthd_Delete();
+        cPhs_State Mthd_Create();
+        BOOL Mthd_Delete();
 
         s16 XyCheckCB(int);
         s16 XyEventCB(int);
 
-        int CreateHeap();
-        int Create();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
 
-        int Delete();
+        virtual BOOL Delete();
 
         void set_mtx();
         void init_mtx();
@@ -55,8 +55,8 @@ namespace daObjMknjD {
         void privateCut();
         bool daObjMknjD_break();
 
-        int Execute(Mtx**);
-        int Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
 
         static const char M_arcname[];
         static Mtx M_tmp_mtx;

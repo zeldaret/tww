@@ -202,7 +202,7 @@ void daOship_c::getArg() {
 }
 
 /* 00002F90-000030EC       .text _create__9daOship_cFv */
-s32 daOship_c::_create() {
+cPhs_State daOship_c::_create() {
     /* Nonmatching */
 }
 
@@ -212,7 +212,7 @@ bool daOship_c::_delete() {
 }
 
 /* 00003F20-00003F40       .text daOshipCreate__FPv */
-static s32 daOshipCreate(void*) {
+static cPhs_State daOshipCreate(void*) {
     /* Nonmatching */
 }
 

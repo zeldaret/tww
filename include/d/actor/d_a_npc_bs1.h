@@ -94,7 +94,7 @@ public:
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
-    s32 _create();
+    cPhs_State _create();
     BOOL CreateHeap();
     
     static u8 m_tag_buy_item_max;

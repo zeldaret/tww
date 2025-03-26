@@ -42,7 +42,7 @@ void phase_2(daNpcBmcon_c*) {
 }
 
 /* 00000A14-00000A44       .text _create__12daNpcBmcon_cFv */
-s32 daNpcBmcon_c::_create() {
+cPhs_State daNpcBmcon_c::_create() {
     /* Nonmatching */
 }
 

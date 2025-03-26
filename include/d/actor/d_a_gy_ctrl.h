@@ -37,7 +37,7 @@ public:
     void getParam(unsigned long, unsigned char, unsigned char);
     void getArg();
     void checkGyCtrlExist();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
 
 public:

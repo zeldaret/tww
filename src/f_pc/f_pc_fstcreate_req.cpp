@@ -10,7 +10,7 @@
 #include "SSystem/SComponent/c_phase.h"
 
 /* 80040520-80040570       .text fpcFCtRq_Do__FP19fast_create_request */
-s32 fpcFCtRq_Do(fast_create_request* i_createReq) {
+cPhs_State fpcFCtRq_Do(fast_create_request* i_createReq) {
     if (i_createReq->mpFastCreateFunc != NULL && i_createReq->mpFastCreateFunc(i_createReq->base.mpRes, i_createReq->mpFastCreateData) == 0) {
         return cPhs_STOP_e;
     } else {
@@ -19,21 +19,23 @@ s32 fpcFCtRq_Do(fast_create_request* i_createReq) {
 }
 
 /* 80040570-80040578       .text fpcFCtRq_Delete__FP19fast_create_request */
-s32 fpcFCtRq_Delete(fast_create_request* i_createReq) {
-    return 1;
+BOOL fpcFCtRq_Delete(fast_create_request* i_createReq) {
+    return TRUE;
 }
 
 /* 80040578-80040648       .text fpcFCtRq_Request__FP11layer_classsPFPvPv_iPvPv */
 base_process_class* fpcFCtRq_Request(layer_class* i_layer, s16 i_procTypeID,
                                      fstCreateFunc i_createFunc, void* i_createData, void* pData) {
-    static create_request_method_class submethod = {(cPhs__Handler)fpcFCtRq_Do, NULL,
-                                                    (process_method_func)fpcFCtRq_Delete};
+    static create_request_method_class submethod = {
+        (cPhs__Handler)fpcFCtRq_Do,
+        NULL,
+        (process_method_func)fpcFCtRq_Delete
+    };
 
     if (!fpcLd_Use(i_procTypeID)) {
         return NULL;
     } else {
-        fast_create_request* request =
-            (fast_create_request*)fpcCtRq_Create(i_layer, 0x50, &submethod);
+        fast_create_request* request = (fast_create_request*)fpcCtRq_Create(i_layer, 0x50, &submethod);
         if (request != NULL) {
             base_process_class* proc;
             fpcLy_SetCurrentLayer(i_layer);

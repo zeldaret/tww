@@ -9,7 +9,7 @@ public:
     bool _draw();
     bool _execute();
     bool _delete();
-    s32 _create();
+    cPhs_State _create();
 
 public:
     /* Place member variables here */

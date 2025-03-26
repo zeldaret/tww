@@ -67,7 +67,7 @@ static BOOL daMajuu_Flag_Delete(daMajuu_Flag_c*) {
 }
 
 /* 00001454-00001AE0       .text daMajuu_Flag_Create__FP10fopAc_ac_c */
-static s32 daMajuu_Flag_Create(fopAc_ac_c*) {
+static cPhs_State daMajuu_Flag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

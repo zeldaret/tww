@@ -66,7 +66,7 @@ BOOL daSwItem_c::CreateInit() {
 }
 
 /* 00000154-00000250       .text _create__10daSwItem_cFv */
-s32 daSwItem_c::_create() {
+cPhs_State daSwItem_c::_create() {
     fopAcM_SetupActor(this, daSwItem_c);
 
     if (!CreateInit()) {
@@ -178,7 +178,7 @@ bool daSwItem_c::_draw() {
 }
 
 /* 00000774-00000794       .text daSwItem_Create__FPv */
-static BOOL daSwItem_Create(void* i_this) {
+static cPhs_State daSwItem_Create(void* i_this) {
     return static_cast<daSwItem_c*>(i_this)->_create();
 }
 

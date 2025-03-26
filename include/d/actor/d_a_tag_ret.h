@@ -12,7 +12,7 @@ namespace daTagRet {
             PRM_LINK_ID_S = 0,
         };
 
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void set_mtx();
         bool _execute();

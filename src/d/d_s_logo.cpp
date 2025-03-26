@@ -611,7 +611,7 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
 }
 
 /* 8022D984-8022DB20       .text phase_0__FP10dScnLogo_c */
-s32 phase_0(dScnLogo_c* i_this) {
+cPhs_State phase_0(dScnLogo_c* i_this) {
 #if VERSION != VERSION_PAL
     if (!OSGetResetCode()) {
         if (!VIGetDTVStatus())
@@ -652,7 +652,7 @@ s32 phase_0(dScnLogo_c* i_this) {
 }
 
 /* 8022DB20-8022DC58       .text phase_1__FP10dScnLogo_c */
-s32 phase_1(dScnLogo_c* i_this) {
+cPhs_State phase_1(dScnLogo_c* i_this) {
     if (dComIfG_syncAllObjectRes() != 0)
         return cPhs_INIT_e;
 
@@ -701,7 +701,7 @@ mDoDvdThd_mountXArchive_c * onMemMount(const char* pArc) {
 }
 
 /* 8022DCA8-8022E9B4       .text phase_2__FP10dScnLogo_c */
-s32 phase_2(dScnLogo_c* i_this) {
+cPhs_State phase_2(dScnLogo_c* i_this) {
     s32 rt;
     
     rt = dComIfG_syncObjectRes("Logo");
@@ -911,7 +911,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 }
 
 /* 8022E9B4-8022E9F4       .text dScnLogo_Create__FP11scene_class */
-static s32 dScnLogo_Create(scene_class* i_scn) {
+static cPhs_State dScnLogo_Create(scene_class* i_scn) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_0,
         (cPhs__Handler)phase_1,

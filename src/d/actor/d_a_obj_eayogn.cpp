@@ -40,8 +40,8 @@ BOOL daObjEayogn_c::create_heap() {
 }
 
 /* 00000198-0000029C       .text _create__13daObjEayogn_cFv */
-s32 daObjEayogn_c::_create() {
-    s32 ret = cPhs_ERROR_e;
+cPhs_State daObjEayogn_c::_create() {
+    cPhs_State ret = cPhs_ERROR_e;
 
     fopAcM_SetupActor(this, daObjEayogn_c);
 
@@ -108,7 +108,7 @@ bool daObjEayogn_c::_draw() {
 
 namespace {
     /* 00000490-000004B0       .text Mthd_Create__28@unnamed@d_a_obj_eayogn_cpp@FPv */
-    s32 Mthd_Create(void* i_this) {
+    cPhs_State Mthd_Create(void* i_this) {
         return ((daObjEayogn_c*)i_this)->_create();
     }
 

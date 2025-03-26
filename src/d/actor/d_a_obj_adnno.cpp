@@ -76,10 +76,10 @@ void daObjAdnno_c::set_mtx() {
     }
 }
 
-s32 daObjAdnno_c::_create() {
+cPhs_State daObjAdnno_c::_create() {
     fopAcM_SetupActor(this, daObjAdnno_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, "Adnno");
+    cPhs_State ret = dComIfG_resLoad(&mPhs, "Adnno");
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x9C00) == 0) {
@@ -123,7 +123,7 @@ bool daObjAdnno_c::_draw() {
 }
 
 /* 00000330-000003D4       .text daObjAdnno_Create__FPv */
-static s32 daObjAdnno_Create(void* i_this) {
+static cPhs_State daObjAdnno_Create(void* i_this) {
     return ((daObjAdnno_c*)i_this)->_create();
 }
 

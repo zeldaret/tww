@@ -28,7 +28,7 @@ public:
     void getArg();
     bool _execute();
     bool _draw();
-    int _create();
+    cPhs_State _create();
     bool _delete();
 
 public:

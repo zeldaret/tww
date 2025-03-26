@@ -63,7 +63,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 000017C4-00001C78       .text daKlft_Create__FP10fopAc_ac_c */
-static s32 daKlft_Create(fopAc_ac_c*) {
+static cPhs_State daKlft_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -104,8 +104,8 @@ BOOL daTama_c::_delete() {
 }
 
 /* 000002DC-00000410       .text _create__8daTama_cFv */
-s32 daTama_c::_create() {
-    s32 rt = cPhs_COMPLEATE_e;
+cPhs_State daTama_c::_create() {
+    cPhs_State rt = cPhs_COMPLEATE_e;
     fopAcM_SetupActor(this, daTama_c);
     if (!createInit())
         rt = cPhs_ERROR_e;
@@ -113,7 +113,7 @@ s32 daTama_c::_create() {
 }
 
 /* 00000638-00000658       .text daTama_Create__FP10fopAc_ac_c */
-static s32 daTama_Create(fopAc_ac_c* i_this) {
+static cPhs_State daTama_Create(fopAc_ac_c* i_this) {
     return ((daTama_c*)i_this)->_create();
 }
 

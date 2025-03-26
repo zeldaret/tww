@@ -115,8 +115,8 @@ bool daIkari_c::_draw() {
 }
 
 /* 00000494-000005B0       .text _create__9daIkari_cFv */
-int daIkari_c::_create() {
-    int phase = dComIfG_resLoad(&mPhs, M_arcname);
+cPhs_State daIkari_c::_create() {
+    cPhs_State phase = dComIfG_resLoad(&mPhs, M_arcname);
 
     fopAcM_SetupActor(this, daIkari_c);
 
@@ -150,7 +150,7 @@ bool daIkari_c::_delete() {
 }
 
 /* 000005E0-00000600       .text daIkariCreate__FPv */
-static s32 daIkariCreate(void* i_this) {
+static cPhs_State daIkariCreate(void* i_this) {
     return ((daIkari_c*)i_this)->_create();
 }
 

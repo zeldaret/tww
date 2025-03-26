@@ -136,7 +136,7 @@ BOOL daObjMtest::Act_c::Create() {
 }
 
 /* 000003E8-00000708       .text Mthd_Create__Q210daObjMtest5Act_cFv */
-s32 daObjMtest::Act_c::Mthd_Create() {
+cPhs_State daObjMtest::Act_c::Mthd_Create() {
     static s16 dzb_data[5][Type_Max] = {
         {
             MTEST_DZB_MCUBE,
@@ -247,7 +247,7 @@ s32 daObjMtest::Act_c::Mthd_Create() {
     M_type = prm_get_type();
     JUT_ASSERT(327, M_type < Type_Max);
     
-    s32 phase_state = dComIfG_resLoad(&mPhase, M_arcname[M_type]);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname[M_type]);
     if (phase_state == cPhs_COMPLEATE_e) {
         s32 dzb_idx = 0;
         if (prm_get_arg1() == 1) {
@@ -350,7 +350,7 @@ BOOL daObjMtest::Act_c::Draw() {
 
 namespace daObjMtest {
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->Mthd_Create();
         }
         

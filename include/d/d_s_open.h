@@ -68,7 +68,7 @@ class dScnOpen_c : public scene_class {
 public:
     ~dScnOpen_c();
     void changeGameScene();
-    s32 create();
+    cPhs_State create();
     BOOL draw();
     BOOL execute();
 

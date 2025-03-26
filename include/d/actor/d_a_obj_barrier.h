@@ -77,7 +77,7 @@ public:
     void break_order_proc();
     void break_end_wait_proc();
     bool break_check();
-    int _create();
+    cPhs_State _create();
     bool _delete();
     bool _execute();
     bool _draw();

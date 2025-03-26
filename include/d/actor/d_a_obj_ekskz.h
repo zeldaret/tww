@@ -12,15 +12,15 @@ namespace daObjEkskz {
     public:
         void prm_get_swSave() const {}
     
-        int CreateHeap();
-        int Create();
-        void Mthd_Create();
-        BOOL Delete();
-        void Mthd_Delete();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        cPhs_State Mthd_Create();
+        virtual BOOL Delete();
+        BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
-        int Execute(float(**)[3][4]);
-        BOOL Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
     
     public:
         /* 0x2C8 */ u8 m2C8[0x2D0 - 0x2C8];

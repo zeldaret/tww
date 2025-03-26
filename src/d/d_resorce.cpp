@@ -4,6 +4,7 @@
 //
 
 #include "d/d_resorce.h"
+#include "JSystem/JKernel/JKRMemArchive.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_printf.h"
 #include "m_Do/m_Do_ext.h"
@@ -547,7 +548,7 @@ dRes_control_c::~dRes_control_c() {
 }
 
 /* 8006EF34-8006F01C       .text setRes__14dRes_control_cFPCcP11dRes_info_ciPCcUcP7JKRHeap */
-int dRes_control_c::setRes(const char* pArcName, dRes_info_c* pInfoArr, int infoNum, const char* pArcPath, u8 direction, JKRHeap* pHeap) {
+BOOL dRes_control_c::setRes(const char* pArcName, dRes_info_c* pInfoArr, int infoNum, const char* pArcPath, u8 direction, JKRHeap* pHeap) {
     dRes_info_c * pInfo = getResInfo(pArcName, pInfoArr, infoNum);
 
     if (pInfo == NULL) {
@@ -701,7 +702,7 @@ int dRes_control_c::syncAllRes(dRes_info_c* pInfo, int infoNum) {
 }
 
 /* 8006F430-8006F500       .text setStageRes__14dRes_control_cFPCcP7JKRHeap */
-int dRes_control_c::setStageRes(char const* pArcName, JKRHeap* pHeap) {
+BOOL dRes_control_c::setStageRes(char const* pArcName, JKRHeap* pHeap) {
     char path[20];
     snprintf(path, sizeof(path), "/res/Stage/%s/", strcmp(dComIfGp_getStartStageName(), "ma2room") == 0 && dComIfGs_isEventBit(0x1820) ? "ma3room" : dComIfGp_getStartStageName());
     return setRes(pArcName, &mStageInfo[0], ARRAY_SIZE(mStageInfo), path, 1, pHeap);

@@ -31,7 +31,7 @@ BOOL daKaji_c::CreateHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", KAJI_INDEX_BCK_KJ_WAIT),
-        J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, 1,
         dComIfG_getObjectRes("Kaji", KAJI_INDEX_BAS_KJ_WAIT),
         0x00080000,
         0x11000002
@@ -40,10 +40,10 @@ BOOL daKaji_c::CreateHeap() {
     return mpMorf && mpMorf->getModel();
 }
 
-s32 daKaji_c::_create() {
+cPhs_State daKaji_c::_create() {
     fopAcM_SetupActor(this, daKaji_c);
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x660)) {
             mDoMtx_stack_c::transS(current.pos);

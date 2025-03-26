@@ -15,7 +15,7 @@ class daTpota_c : public fopAc_ac_c {
     };
 
 public:
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void make_ripple(cXyz);
     int check_water_h(JPABaseParticle*, float);

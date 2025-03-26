@@ -65,8 +65,8 @@ void dDlst_Gameover_CAPTURE_c::draw() {
 }
 
 /* 8018E4B4-8018E77C       .text _create__11dGameover_cFv */
-s32 dGameover_c::_create() {
-    s32 rt = dComIfG_resLoad(&mPhs, "Gover");
+cPhs_State dGameover_c::_create() {
+    cPhs_State rt = dComIfG_resLoad(&mPhs, "Gover");
     if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 4) || dComIfGp_getMesgStatus() != 0)
         return cPhs_INIT_e;
 
@@ -437,7 +437,7 @@ static BOOL dGameover_Delete(dGameover_c* i_this) {
 }
 
 /* 8018F654-8018F674       .text dGameover_Create__FP9msg_class */
-static s32 dGameover_Create(msg_class* i_this) {
+static cPhs_State dGameover_Create(msg_class* i_this) {
     return ((dGameover_c*)i_this)->_create();
 }
 

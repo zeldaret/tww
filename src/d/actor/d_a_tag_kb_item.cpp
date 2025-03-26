@@ -14,7 +14,7 @@ bool daTagKbItem_c::_delete() {
         dComIfGs_offSwitch(field_0x2a4, home.roomNo);
     }
 #endif
-    return 1;
+    return true;
 }
 
 /* 000000C8-0000010C       .text CreateInit__13daTagKbItem_cFv */
@@ -30,7 +30,7 @@ void daTagKbItem_c::CreateInit() {
 }
 
 /* 0000010C-000001BC       .text _create__13daTagKbItem_cFv */
-int daTagKbItem_c::_create() {
+cPhs_State daTagKbItem_c::_create() {
     fopAcM_SetupActor(this, daTagKbItem_c);
 
     CreateInit();
@@ -51,37 +51,37 @@ bool daTagKbItem_c::_execute() {
         fopAcM_delete(this);
     }
 #endif
-    return 1;
+    return true;
 }
 
 /* 000001C4-000001CC       .text _draw__13daTagKbItem_cFv */
 bool daTagKbItem_c::_draw() {
-    return 1;
+    return true;
 }
 
 /* 000001CC-000001EC       .text daTagKbItem_Create__FPv */
-static int daTagKbItem_Create(void* i_this) {
+static cPhs_State daTagKbItem_Create(void* i_this) {
     return static_cast<daTagKbItem_c*>(i_this)->_create();
 }
 
 /* 000001EC-00000210       .text daTagKbItem_Delete__FPv */
-static int daTagKbItem_Delete(void* i_this) {
+static BOOL daTagKbItem_Delete(void* i_this) {
     return static_cast<daTagKbItem_c*>(i_this)->_delete();
 }
 
 /* 00000210-00000234       .text daTagKbItem_Draw__FPv */
-static int daTagKbItem_Draw(void* i_this) {
+static BOOL daTagKbItem_Draw(void* i_this) {
     return static_cast<daTagKbItem_c*>(i_this)->_draw();
 }
 
 /* 00000234-00000258       .text daTagKbItem_Execute__FPv */
-static int daTagKbItem_Execute(void* i_this) {
+static BOOL daTagKbItem_Execute(void* i_this) {
     return static_cast<daTagKbItem_c*>(i_this)->_execute();
 }
 
 /* 00000258-00000260       .text daTagKbItem_IsDelete__FPv */
-static int daTagKbItem_IsDelete(void* i_this) {
-    return 1;
+static BOOL daTagKbItem_IsDelete(void* i_this) {
+    return TRUE;
 }
 
 static actor_method_class daTagKbItemMethodTable = {

@@ -87,7 +87,7 @@ void daPy_lk_c::setParachuteFanModel(f32 f31) {
     
     mpParachuteFanMorf = new mDoExt_McaMorf(
         modelData, NULL, NULL, bck,
-        J3DFrameCtrl::LOOP_ONCE_e, daPy_HIO_fan_c0::m.field_0x20, f31, daPy_HIO_fan_c0::m.field_0x4, 0,
+        J3DFrameCtrl::EMode_NONE, daPy_HIO_fan_c0::m.field_0x20, f31, daPy_HIO_fan_c0::m.field_0x4, 0,
         NULL,
         0x00000000,
         0x11020203

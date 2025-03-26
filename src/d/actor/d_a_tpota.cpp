@@ -14,7 +14,7 @@
 
 const u16 l_daTpota_idx_table[2] = {0x82AE, 0x82AF};
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
-s32 daTpota_c::_create() {
+cPhs_State daTpota_c::_create() {
     fopAcM_SetupActor(this, daTpota_c);
     int count = 0;
     JPABaseEmitter* emitter;

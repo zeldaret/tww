@@ -57,7 +57,7 @@ void useHeapInit(himo3_class*) {
 }
 
 /* 00001DD4-00002128       .text daHimo3_Create__FP10fopAc_ac_c */
-static s32 daHimo3_Create(fopAc_ac_c*) {
+static cPhs_State daHimo3_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

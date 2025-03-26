@@ -37,7 +37,7 @@ void daObj_Pfall_c::CreateInit() {
 }
 
 /* 000008CC-000009E8       .text _create__13daObj_Pfall_cFv */
-s32 daObj_Pfall_c::_create() {
+cPhs_State daObj_Pfall_c::_create() {
     /* Nonmatching */
 }
 

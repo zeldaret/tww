@@ -92,7 +92,7 @@ static BOOL checkCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00000930-00000B44       .text create__11daObj_hsh_cFv */
-s32 daObj_hsh_c::create() {
+cPhs_State daObj_hsh_c::create() {
     /* Nonmatching */
 }
 
@@ -272,7 +272,7 @@ static BOOL daObj_hsh_Delete(daObj_hsh_c*) {
 }
 
 /* 000021C8-000021E8       .text daObj_hsh_Create__FP10fopAc_ac_c */
-static s32 daObj_hsh_Create(fopAc_ac_c*) {
+static cPhs_State daObj_hsh_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

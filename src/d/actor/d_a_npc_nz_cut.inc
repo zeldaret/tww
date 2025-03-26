@@ -365,7 +365,7 @@ void daNpc_Nz_c::cutGoHomeProc() {
 /* 000044D4-00004520       .text cutChkGetItemStart__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutChkGetItemStart() {
     if(field_0x8F8 >= 3) {
-        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, field_0x8FA, 1, 0xFFFF);
+        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, field_0x8FA, dEvtFlag_NOPARTNER_e, 0xFFFF);
     }
 }
 

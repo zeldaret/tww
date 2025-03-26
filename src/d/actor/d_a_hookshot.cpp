@@ -287,7 +287,7 @@ static dCcD_SrcCps l_at_cps_src = {
 };
 
 /* 800F2C14-800F2CC8       .text create__12daHookshot_cFv */
-s32 daHookshot_c::create() {
+cPhs_State daHookshot_c::create() {
     fopAcM_SetupActor(this, daHookshot_c);
     
     mShape.setUserArea(reinterpret_cast<u32>(this));
@@ -308,7 +308,7 @@ s32 daHookshot_c::create() {
 }
 
 /* 800F3134-800F3154       .text daHookshot_Create__FP10fopAc_ac_c */
-static s32 daHookshot_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daHookshot_Create(fopAc_ac_c* i_actor) {
     return reinterpret_cast<daHookshot_c*>(i_actor)->create();
 }
 

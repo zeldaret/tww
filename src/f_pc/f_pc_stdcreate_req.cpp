@@ -9,7 +9,7 @@
 #include "f_pc/f_pc_manager.h"
 
 /* 80040648-8004069C       .text fpcSCtRq_phase_Load__FP29standard_create_request_class */
-s32 fpcSCtRq_phase_Load(standard_create_request_class* i_SCtReq) {
+cPhs_State fpcSCtRq_phase_Load(standard_create_request_class* i_SCtReq) {
     switch (fpcLd_Load(i_SCtReq->mProcName)) {
     case cPhs_INIT_e:
         return cPhs_INIT_e;
@@ -23,7 +23,7 @@ s32 fpcSCtRq_phase_Load(standard_create_request_class* i_SCtReq) {
 
 
 /* 8004069C-80040704       .text fpcSCtRq_phase_CreateProcess__FP29standard_create_request_class */
-s32 fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_SCtReq) {
+cPhs_State fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_SCtReq) {
     fpcLy_SetCurrentLayer(i_SCtReq->base.mpLayer);
     i_SCtReq->base.mpRes = fpcBs_Create(i_SCtReq->mProcName, i_SCtReq->base.mBsPcId, i_SCtReq->mpUserData);
     if (i_SCtReq->base.mpRes == NULL) {
@@ -36,13 +36,13 @@ s32 fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_SCtReq) {
 }
 
 /* 80040704-8004073C       .text fpcSCtRq_phase_SubCreateProcess__FP29standard_create_request_class */
-s32 fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_SCtReq) {
+cPhs_State fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_SCtReq) {
     fpcLy_SetCurrentLayer(i_SCtReq->base.mpLayer);
     return fpcBs_SubCreate(i_SCtReq->base.mpRes);
 }
 
 /* 8004073C-80040794       .text fpcSCtRq_phase_IsComplete__FP29standard_create_request_class */
-s32 fpcSCtRq_phase_IsComplete(standard_create_request_class* i_SCtReq) {
+cPhs_State fpcSCtRq_phase_IsComplete(standard_create_request_class* i_SCtReq) {
     process_node_class* procNode = (process_node_class*)i_SCtReq->base.mpRes;
     if (fpcBs_Is_JustOfType(g_fpcNd_type, procNode->base.mSubType) == 1) {
         if (fpcLy_IsCreatingMesg(&procNode->mLayer) == 1) {
@@ -53,8 +53,9 @@ s32 fpcSCtRq_phase_IsComplete(standard_create_request_class* i_SCtReq) {
 }
 
 /* 80040794-800407E4       .text fpcSCtRq_phase_PostMethod__FP29standard_create_request_class */
-s32 fpcSCtRq_phase_PostMethod(standard_create_request_class* i_SCtReq) {
-    if (i_SCtReq->mpCallBack != NULL && i_SCtReq->mpCallBack(i_SCtReq->base.mpRes, i_SCtReq->mpCallBackUserData) == 0) {
+cPhs_State fpcSCtRq_phase_PostMethod(standard_create_request_class* i_SCtReq) {
+    if (i_SCtReq->mpCallBack != NULL &&
+        i_SCtReq->mpCallBack(i_SCtReq->base.mpRes, i_SCtReq->mpCallBackUserData) == 0) {
         return cPhs_INIT_e;
     } else {
         return cPhs_NEXT_e;
@@ -62,13 +63,13 @@ s32 fpcSCtRq_phase_PostMethod(standard_create_request_class* i_SCtReq) {
 }
 
 /* 800407E4-800407EC       .text fpcSCtRq_phase_Done__FP29standard_create_request_class */
-s32 fpcSCtRq_phase_Done(standard_create_request_class* i_SCtReq) {
+cPhs_State fpcSCtRq_phase_Done(standard_create_request_class* i_SCtReq) {
     return cPhs_NEXT_e;
 }
 
 /* 800407EC-8004085C       .text fpcSCtRq_Handler__FP29standard_create_request_class */
-s32 fpcSCtRq_Handler(standard_create_request_class* i_SCtReq) {
-    s32 phase_state = cPhs_Do(&i_SCtReq->mPhase, i_SCtReq);
+cPhs_State fpcSCtRq_Handler(standard_create_request_class* i_SCtReq) {
+    cPhs_State phase_state = cPhs_Do(&i_SCtReq->mPhase, i_SCtReq);
 
     switch (phase_state) {
     case cPhs_NEXT_e:
@@ -83,17 +84,17 @@ s32 fpcSCtRq_Handler(standard_create_request_class* i_SCtReq) {
 }
 
 /* 8004085C-80040864       .text fpcSCtRq_Delete__FP29standard_create_request_class */
-s32 fpcSCtRq_Delete(standard_create_request_class* i_SCtReq) {
-    return 1;
+BOOL fpcSCtRq_Delete(standard_create_request_class* i_SCtReq) {
+    return TRUE;
 }
 
 /* 80040864-8004086C       .text fpcSCtRq_Cancel__FP29standard_create_request_class */
-s32 fpcSCtRq_Cancel(standard_create_request_class* i_SCtReq) {
-    return 1;
+BOOL fpcSCtRq_Cancel(standard_create_request_class* i_SCtReq) {
+    return TRUE;
 }
 
 /* 8004086C-80040900       .text fpcSCtRq_Request__FP11layer_classsPFPvPv_iPvPv */
-fpc_ProcID fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc i_createFunc, void* param_4, void* param_5) {
+fpc_ProcID fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc i_createFunc, void* param_4, void* i_append) {
     static create_request_method_class submethod = {
         (cPhs__Handler)fpcSCtRq_Handler,
         (process_method_func)fpcSCtRq_Cancel,
@@ -121,7 +122,7 @@ fpc_ProcID fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc 
             request->mProcName = i_procName;
             request->mpCallBack = i_createFunc;
             request->mpCallBackUserData = param_4;
-            request->mpUserData = param_5;
+            request->mpUserData = i_append;
             return request->base.mBsPcId;
         }
     }

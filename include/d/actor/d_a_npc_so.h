@@ -77,7 +77,7 @@ public:
     bool _draw();
     void createInit();
     void getArg();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
 
     void cutAppearProc();

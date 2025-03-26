@@ -342,7 +342,7 @@ BOOL daPy_lk_c::procTactWait() {
         if (m34D2 != 0) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
             resetActAnimeUpper(UPPER_MOVE1_e, -1.0f);
-            mDoAud_seStart(JA_SE_TAKT_USE_CANCEL, 0);
+            mDoAud_seStart(JA_SE_TAKT_USE_CANCEL);
         }
         
         g_dComIfG_gameInfo.play.field_0x4947 = 0;
@@ -464,7 +464,7 @@ BOOL daPy_lk_c::procTactWait() {
             )
         ) {
             m34D2 = 30;
-            mDoAud_seStart(JA_SE_WTAKT_MATCH_SIGNAL, 0);
+            mDoAud_seStart(JA_SE_WTAKT_MATCH_SIGNAL);
             m35A0 = 0.0f;
         } else {
             m3574 = -1;
@@ -653,7 +653,7 @@ BOOL daPy_lk_c::procTactPlay() {
             }
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        mDoAud_seStart(JA_SE_TAKT_MATCHED, 0);
+        mDoAud_seStart(JA_SE_TAKT_MATCHED);
         fopMsgM_messageSendOn();
         m34D0 = 1;
         
@@ -688,7 +688,7 @@ BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         dComIfGp_event_setTalkPartner(dComIfGp_getCb1Player());
         fopAcM_orderChangeEvent(this, dComIfGp_getCb1Player(), l_tact_event_label, 0, -1);
-        mDoAud_seStart(JA_SE_CTRL_LINK_TO_NPC, 0);
+        mDoAud_seStart(JA_SE_CTRL_LINK_TO_NPC);
     } else if (r30 == 5) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         fopAcM_orderChangeEvent(this, l_tact_night_event_label, 0, -1);
@@ -803,7 +803,7 @@ BOOL daPy_lk_c::procTactPlayOriginal_init() {
 
 /* 8014F690-8014F8A0       .text procTactPlayOriginal__9daPy_lk_cFv */
 BOOL daPy_lk_c::procTactPlayOriginal() {
-    mDoAud_seStart(JA_SE_LK_WTAKT_USING, 0);
+    mDoAud_seStart(JA_SE_LK_WTAKT_USING);
     
     if (m_old_fdata->getOldFrameRate() < 0.01f) {
         if (m34D6 > 0) {

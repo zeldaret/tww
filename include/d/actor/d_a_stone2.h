@@ -1,10 +1,10 @@
 #ifndef D_A_STONE2_H
 #define D_A_STONE2_H
 
-#include "f_op/f_op_actor.h"
+#include "d/d_bg_s_movebg_actor.h"
 
 namespace daStone2 {
-    class Act_c : public fopAc_ac_c {
+    class Act_c : public dBgS_MoveBgActor {
     public:
         Act_c();
         
@@ -20,12 +20,12 @@ namespace daStone2 {
         void prmZ_init();
         void is_switch() const;
         void on_switch() const;
-        void CreateHeap();
-        s32 Create();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
         void chk_appear();
-        void Mthd_Create();
-        BOOL Delete();
-        void Mthd_Delete();
+        cPhs_State Mthd_Create();
+        virtual BOOL Delete();
+        BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void cull_set_draw();
@@ -60,9 +60,9 @@ namespace daStone2 {
         void demo_run_init();
         void demo_run();
         void demo_proc_call();
-        void Execute(float(**)[3][4]);
+        virtual BOOL Execute(Mtx**);
         void draw_shadow();
-        BOOL Draw();
+        virtual BOOL Draw();
     
     public:
         /* Place member variables here */

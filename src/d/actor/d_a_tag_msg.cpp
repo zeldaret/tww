@@ -233,7 +233,7 @@ BOOL daTag_Msg_c::execute() {
     return TRUE;
 }
 
-s32 daTag_Msg_c::create() {
+cPhs_State daTag_Msg_c::create() {
     int swBit;
     fopAcM_SetupActor(this, daTag_Msg_c);
     swBit = (int)(getSwbit() & 0xFF);
@@ -273,7 +273,7 @@ static BOOL daTag_Msg_Delete(daTag_Msg_c* a_this) {
 }
 
 /* 00000834-00000964       .text daTag_Msg_Create__FP10fopAc_ac_c */
-static s32 daTag_Msg_Create(fopAc_ac_c* i_this) {
+static cPhs_State daTag_Msg_Create(fopAc_ac_c* i_this) {
     daTag_Msg_c* a_this = (daTag_Msg_c*)i_this;
     return a_this->create();
 }

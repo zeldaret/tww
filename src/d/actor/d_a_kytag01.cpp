@@ -71,7 +71,7 @@ void wave_make() {
 }
 
 /* 00000224-00000318       .text daKytag01_Create__FP10fopAc_ac_c */
-static s32 daKytag01_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daKytag01_Create(fopAc_ac_c* i_ac) {
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
     kytag01_class* i_this = (kytag01_class*)i_ac;
     fopAcM_SetupActor(i_this, kytag01_class);

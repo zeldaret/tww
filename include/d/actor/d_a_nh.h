@@ -30,7 +30,7 @@ public:
     ~daNh_c();
     void setBaseMtx();
     BOOL createHeap();
-    s32 create();
+    cPhs_State create();
     BOOL init();
     void action(void*);
     BOOL setAction(ActionFunc, void*);

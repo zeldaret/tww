@@ -7,7 +7,7 @@
 
 class daSwAt_c : public fopAc_ac_c {
 public:
-    s32 _create();
+    cPhs_State _create();
     bool _execute();
     bool _draw();
     bool _delete();

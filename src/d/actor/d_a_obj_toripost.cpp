@@ -579,7 +579,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_POST_GET0
@@ -588,7 +588,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 0.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_POST_GET1
@@ -597,7 +597,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_POST_PUTOUT
@@ -606,7 +606,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_POST_WAIT
@@ -615,7 +615,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
     };
 
@@ -895,7 +895,7 @@ bool daObjTpost_c::_draw() {
     mMorf->entryDL();
     dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), 40.0f, mAcch.m_gnd, shape_angle.y, 1.0f, 0);
 
-    return 1;
+    return true;
 }
 
 /* 00001980-00001BA4       .text createInit__12daObjTpost_cFv */
@@ -957,11 +957,11 @@ void daObjTpost_c::getArg() {
 }
 
 /* 00001BA8-00001D88       .text _create__12daObjTpost_cFv */
-int daObjTpost_c::_create() {
+cPhs_State daObjTpost_c::_create() {
     fopAcM_SetupActor(this, daObjTpost_c);
 
     getArg();
-    int step = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State step = dComIfG_resLoad(&mPhs, m_arc_name);
     if(step == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, createHeap_CB, 0x7E0) == 0) {
             return cPhs_ERROR_e;
@@ -980,7 +980,7 @@ bool daObjTpost_c::_delete() {
 }
 
 /* 000020C4-000020E4       .text daObjTpostCreate__FPv */
-static int daObjTpostCreate(void* i_this) {
+static cPhs_State daObjTpostCreate(void* i_this) {
     return static_cast<daObjTpost_c*>(i_this)->_create();
 }
 

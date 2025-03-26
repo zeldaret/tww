@@ -147,7 +147,7 @@ void daObj_Search::Act_c::CreateInit() {
 }
 
 /* 8010071C-80100B08       .text _create__Q212daObj_Search5Act_cFv */
-s32 daObj_Search::Act_c::_create() {
+cPhs_State daObj_Search::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -232,7 +232,7 @@ BOOL daObj_Search::Act_c::_isdelete() {
 }
 
 /* 80102844-80102864       .text Create__Q212daObj_Search4MthdFPv */
-s32 daObj_Search::Mthd::Create(void*) {
+cPhs_State daObj_Search::Mthd::Create(void*) {
     /* Nonmatching */
 }
 

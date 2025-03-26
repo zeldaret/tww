@@ -34,7 +34,7 @@ bool daObjAjavW_c::create_heap() {
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
-        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
         mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, AJAVW_DZB_AJAVW), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !btkRet || !mpBgW)
@@ -45,10 +45,10 @@ bool daObjAjavW_c::create_heap() {
 }
 
 /* 00000208-00000350       .text _create__12daObjAjavW_cFv */
-s32 daObjAjavW_c::_create() {
+cPhs_State daObjAjavW_c::_create() {
     fopAcM_SetupActor(this, daObjAjavW_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x8c0) == 1) {
@@ -102,7 +102,7 @@ bool daObjAjavW_c::_draw() {
 }
 
 /* 0000056C-0000058C       .text daObjAjavW_Create__FP12daObjAjavW_c */
-static s32 daObjAjavW_Create(daObjAjavW_c* i_this) {
+static cPhs_State daObjAjavW_Create(daObjAjavW_c* i_this) {
     return i_this->_create();
 }
 

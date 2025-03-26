@@ -10,7 +10,7 @@ public:
     void checkEndDemo();
     void onEndDemo();
     void CreateInit();
-    s32 _create();
+    cPhs_State _create();
     bool _execute();
     void eventOrder();
     void checkOrder();

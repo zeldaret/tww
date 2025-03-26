@@ -45,10 +45,10 @@ public:
 
     inline BOOL draw();
     BOOL execute();
-    s32 commonShapeSet();
-    s32 effectShapeSet();
-    s32 envShapeSet();
-    s32 bgCheckSet();
+    cPhs_State commonShapeSet();
+    cPhs_State effectShapeSet();
+    cPhs_State envShapeSet();
+    cPhs_State bgCheckSet();
     void searchRoomNo();
     void lightReady();
     BOOL checkEnv();

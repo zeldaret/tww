@@ -65,7 +65,7 @@ BOOL daShutter_c::CreateHeap() {
 }
 
 /* 000002B8-000004B4       .text Create__11daShutter_cFv */
-s32 daShutter_c::Create() {
+BOOL daShutter_c::Create() {
     fopAcM_SetMtx(this, mpModel[0]->getBaseTRMtx());
     Vec cullMin = m_cull_min[mType];
     Vec cullMax = m_cull_max[mType];
@@ -93,14 +93,14 @@ s32 daShutter_c::Create() {
     if (m_close_ev_name[mType] != NULL) {
         mCloseEventIdx = dComIfGp_evmng_getEventIdx(m_close_ev_name[mType], 0xff);
     }
-    return 1;
+    return TRUE;
 }
 
 /* 000004B4-000005A0       .text _create__11daShutter_cFv */
-s32 daShutter_c::_create() {
+cPhs_State daShutter_c::_create() {
     fopAcM_SetupActor(this, daShutter_c);
     mType = daShutter_prm::getType(this);
-    int result = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    cPhs_State result = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (result == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])){
             return cPhs_ERROR_e;
@@ -278,7 +278,7 @@ bool daShutter_c::_draw() {
 }
 
 /* 00000DD8-00000DF8       .text daShutter_Create__FPv */
-static s32 daShutter_Create(void* i_this) {
+static cPhs_State daShutter_Create(void* i_this) {
     return ((daShutter_c*)i_this)->_create();
 }
 

@@ -153,7 +153,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00002BB0-00002CAC       .text _create__12daNpc_Btsw_cFv */
-s32 daNpc_Btsw_c::_create() {
+cPhs_State daNpc_Btsw_c::_create() {
     /* Nonmatching */
 }
 
@@ -258,7 +258,7 @@ void SwCam2_c::Move() {
 }
 
 /* 00004788-000047A8       .text daNpc_Btsw_Create__FP10fopAc_ac_c */
-static s32 daNpc_Btsw_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_Btsw_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

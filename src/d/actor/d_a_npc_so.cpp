@@ -357,7 +357,7 @@ void daNpc_So_c::getArg() {
 }
 
 /* 00003E24-00003F38       .text _create__10daNpc_So_cFv */
-s32 daNpc_So_c::_create() {
+cPhs_State daNpc_So_c::_create() {
     /* Nonmatching */
 }
 

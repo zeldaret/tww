@@ -235,10 +235,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000664-000006F4       .text _create__11daAuction_cFv */
-s32 daAuction_c::_create() {
+cPhs_State daAuction_c::_create() {
     fopAcM_SetupActor(this, daAuction_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, "Pspl");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Pspl");
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2400)) {
@@ -269,7 +269,7 @@ BOOL daAuction_c::createHeap() {
 }
 
 /* 00000770-000008C4       .text createInit__11daAuction_cFv */
-s32 daAuction_c::createInit() {
+cPhs_State daAuction_c::createInit() {
     mEvtStartIdx = dComIfGp_evmng_getEventIdx("AUCTION_START");
     mEvtGetItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_GET_ITEM");
     mEvtNoItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_NO_ITEM");

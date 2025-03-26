@@ -9,18 +9,18 @@
 #include "dolphin/types.h"
 
 /* 80245410-8024541C       .text cTg_IsUse__FP16create_tag_class */
-int cTg_IsUse(create_tag_class* pTag) {
+BOOL cTg_IsUse(create_tag_class* pTag) {
     return pTag->mbIsUse;
 }
 
 /* 8024541C-8024545C       .text cTg_SingleCutFromTree__FP16create_tag_class */
-int cTg_SingleCutFromTree(create_tag_class* pTag) {
+BOOL cTg_SingleCutFromTree(create_tag_class* pTag) {
     if (pTag->mbIsUse == true) {
         pTag->mbIsUse = false;
         cTr_SingleCut(&pTag->mpNode);
-        return true;
+        return TRUE;
     } else {
-        return false;
+        return FALSE;
     }
 }
 
