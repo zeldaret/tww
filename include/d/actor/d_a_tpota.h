@@ -11,12 +11,12 @@ class daTpota_c : public fopAc_ac_c {
 
     struct unknown_struct {
         JPABaseParticle* ptcl;
-        f32 field_0x04;
+        f32 pos_y;
     };
 
 public:
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void make_ripple(cXyz);
     int check_water_h(JPABaseParticle*, float);
     void clear_splash();

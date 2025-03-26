@@ -11,9 +11,8 @@
 #include "d/d_particle.h"
 #include "d/d_com_inf_game.h"
 
-const u16 l_daTpota_idx_table[2] = {dPa_name::ID_SCENE_82AE, dPa_name::ID_SCENE_82AF};
-const float max_water_height = -230.0;
-// const u16 l_daTpota_idx_table[2] = {0x82AE, 0x82AF};
+
+const u16 l_daTpota_idx_table[2] = {0x82AE, 0x82AF};
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
 s32 daTpota_c::_create() {
     fopAcM_SetupActor(this, daTpota_c);
@@ -37,7 +36,7 @@ s32 daTpota_c::_create() {
 }
 
 /* 00000250-00000298       .text _delete__9daTpota_cFv */
-BOOL daTpota_c::_delete() {
+bool daTpota_c::_delete() {
     int count = 0;
     while (count < 2) {
         if (emitters[count] != NULL) {
@@ -50,46 +49,30 @@ BOOL daTpota_c::_delete() {
 }
 
 /* 00000298-000002FC       .text make_ripple__9daTpota_cF4cXyz */
-void daTpota_c::make_ripple(cXyz position) {
-    dComIfGp_particle_set(dPa_name::ID_SCENE_82B0, &position,
-        0x0, 0x0, 0xff,0x0, -1, 0x0, 0x0, 0x0);
+void daTpota_c::make_ripple(cXyz i_position) {
+    dComIfGp_particle_set(dPa_name::ID_SCENE_82B0, &i_position,
+        NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
     return;
 }
 
 
 
 /* 000002FC-00000354       .text check_water_h__9daTpota_cFP15JPABaseParticlef */
-int daTpota_c::check_water_h(JPABaseParticle* ptcl, float position_y) {
-    unknown_struct* unknown_struct = field_0x2C4;
+int daTpota_c::check_water_h(JPABaseParticle* i_ptcl, float i_position_y) {
     
-    if (position_y > max_water_height) {
-      return 0;
-    }
-
-    for (int i = 0; i < 30; i++) {
-        if (unknown_struct[i].ptcl == ptcl) {
-            // If found, check its field_0x04 value
-            return unknown_struct[i].field_0x04 > max_water_height;
+    unknown_struct* unknown_struct = field_0x2C4;
+    int ret = 0;
+    if (i_position_y <= -230.0f) {
+        for (int i = 0; i < ARRAY_SIZE(field_0x2C4); i++, unknown_struct++) {
+            if (unknown_struct->ptcl == i_ptcl) {
+                if (unknown_struct->pos_y > -230.0f) {
+                    ret = 1;
+                }
+                break;
+            }
         }
     }
-    // if(){
-
-    // }
-
-    // while ((JPABaseParticle *)(firstEntry->mLink).getObjectPtr() != ptcl) {
-    //     firstEntry = (JPABaseParticle *)((firstEntry->mLink).getPrev()->getObjectPtr());
-
-    //     count--;
-    //     if (count == 0) {
-    //         return 0;
-    //     }
-    // }
-    // return 1;
-
-    // if((float)(ptcl->mLink).getList() <= -230.0){
-
-    // }
-    /* Nonmatching */
+    return ret;
 }
 
 /* 00000354-00000380       .text clear_splash__9daTpota_cFv */
@@ -99,12 +82,11 @@ void daTpota_c::clear_splash() {
 
     while (count != 0) {
         unknown_struct->ptcl = NULL;
-        unknown_struct->field_0x04 = 0.0;
+        unknown_struct->pos_y = 0.0;
         unknown_struct++;
         count--;
     }
     return;
-    /* Nonmatching */
 }
 
 /* 00000380-000003F4       .text renew_splash__9daTpota_cFv */
@@ -113,16 +95,16 @@ void daTpota_c::renew_splash() {
 
     if (emitters[1] != NULL) {
         JSUPtrList* list = &emitters[1]->mActiveParticles;
-        unknown_struct *the_struct = field_0x2C4;
+        unknown_struct *unknown_struct = field_0x2C4;
         if(list != NULL){
             clear_splash();
             for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL); link = link->getNext()){
                 JPABaseParticle* particle = (JPABaseParticle*)link->getObjectPtr();
                 JGeometry::TVec3<f32> position;
                 particle->getGlobalPosition(position);
-                the_struct->ptcl = particle;
-                the_struct->field_0x04 = position.y;
-                the_struct++;
+                unknown_struct->ptcl = particle;
+                unknown_struct->pos_y = position.y;
+                unknown_struct++;
             }   
             
         }
@@ -171,9 +153,7 @@ s32 Mthd_Create(void* i_this) {
 
 /* 000004F0-00000514       .text Mthd_Delete__23@unnamed@d_a_tpota_cpp@FPv */
 BOOL Mthd_Delete(void* i_this) {
-    
     return static_cast<daTpota_c*>(i_this)->_delete();
-    /* Nonmatching */
 }
 
 /* 00000514-00000538       .text Mthd_Execute__23@unnamed@d_a_tpota_cpp@FPv */
