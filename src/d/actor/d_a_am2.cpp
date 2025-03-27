@@ -1315,7 +1315,7 @@ static cPhs_State daAM2_Create(fopAc_ac_c* i_actor) {
             // dCcD_SrcGObjInf
             {
                 /* Flags             */ 0,
-                /* SrcObjAt  Type    */ AT_TYPE_UNK1000,
+                /* SrcObjAt  Type    */ AT_TYPE_SPIKE,
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ AT_TYPE_NORMAL_ARROW | AT_TYPE_FIRE_ARROW | AT_TYPE_ICE_ARROW | AT_TYPE_LIGHT_ARROW | AT_TYPE_GRAPPLING_HOOK,
@@ -1347,7 +1347,7 @@ static cPhs_State daAM2_Create(fopAc_ac_c* i_actor) {
             // dCcD_SrcGObjInf
             {
                 /* Flags             */ 0,
-                /* SrcObjAt  Type    */ AT_TYPE_UNK1000,
+                /* SrcObjAt  Type    */ AT_TYPE_SPIKE,
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
@@ -1379,7 +1379,7 @@ static cPhs_State daAM2_Create(fopAc_ac_c* i_actor) {
             // dCcD_SrcGObjInf
             {
                 /* Flags             */ 0,
-                /* SrcObjAt  Type    */ AT_TYPE_UNK1000,
+                /* SrcObjAt  Type    */ AT_TYPE_SPIKE,
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
                 /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
@@ -1411,7 +1411,7 @@ static cPhs_State daAM2_Create(fopAc_ac_c* i_actor) {
             // dCcD_SrcGObjInf
             {
                 /* Flags             */ 0,
-                /* SrcObjAt  Type    */ AT_TYPE_UNK1000,
+                /* SrcObjAt  Type    */ AT_TYPE_SPIKE,
                 /* SrcObjAt  Atp     */ 1,
                 /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
                 /* SrcObjTg  Type    */ 0,
