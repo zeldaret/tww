@@ -11,7 +11,7 @@ public:
 
     void calcMtx();
     void setStartPos();
-    void CreateInit();
+    BOOL CreateInit();
     cPhs_State create();
     void actionWait();
     void actionEnd();
@@ -19,7 +19,12 @@ public:
     void actionSelect();
 
 public:
-    /* Place member variables here */
-};
-
+    /* 0x290 */ u8 field_0x290[0x29C - 0x290];
+    /* 0x29C */ u8 mAction;
+    /* 0x29D */ u8 field_0x29D[0x29E - 0x29D];
+    /* 0x29E */ s16 field_0x29E;
+    /* 0x2A0 */ f32 field_0x2A0;
+    /* 0x2A4 */ s16 field_0x2A4;
+    /* 0x2A6 */ s16 field_0x2A6;
+};  // Size: 0x2A8
 #endif /* D_A_WBIRD_H */

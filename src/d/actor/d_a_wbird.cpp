@@ -5,24 +5,45 @@
 
 #include "d/actor/d_a_wbird.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo_wether.h"
+#include "SSystem/SComponent/c_angle.h"
 
 /* 00000078-000000AC       .text calcMtx__9daWbird_cFv */
 void daWbird_c::calcMtx() {
-    /* Nonmatching */
+    eyePos.x = current.pos.x;
+    eyePos.y = current.pos.y;
+    eyePos.z = current.pos.z;
+    attention_info.position.x = current.pos.x;
+    attention_info.position.y = current.pos.y;
+    attention_info.position.z = current.pos.z;
 }
 
 /* 000000AC-00000324       .text setStartPos__9daWbird_cFv */
 void daWbird_c::setStartPos() {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    cXyz wind = *dKyw_get_wind_vec();
+    // cSGlobe globe1(player->mPosition - current.pos);
+
     /* Nonmatching */
 }
 
 /* 00000324-00000388       .text CreateInit__9daWbird_cFv */
-void daWbird_c::CreateInit() {
-    /* Nonmatching */
+BOOL daWbird_c::CreateInit() {
+    tevStr.mRoomNo = current.roomNo;
+    mAction = 3;
+    fopAcM_orderChangeEvent(this, "TACT_WINDOW", 0, -1);
+    field_0x29E = 0;
+    calcMtx();
+    return TRUE;
 }
 
 /* 00000388-000003E0       .text create__9daWbird_cFv */
 cPhs_State daWbird_c::create() {
+    fopAcM_SetupActor(this, daWbird_c);
+    CreateInit();
+    return cPhs_COMPLEATE_e;
+
     /* Nonmatching */
 }
 
@@ -48,7 +69,7 @@ void daWbird_c::actionSelect() {
 
 /* 00000850-00000858       .text daWbird_Draw__FP9daWbird_c */
 static BOOL daWbird_Draw(daWbird_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000858-000008D0       .text daWbird_Execute__FP9daWbird_c */
@@ -58,16 +79,20 @@ static BOOL daWbird_Execute(daWbird_c*) {
 
 /* 000008D0-000008D8       .text daWbird_IsDelete__FP9daWbird_c */
 static BOOL daWbird_IsDelete(daWbird_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000008D8-00000908       .text daWbird_Delete__FP9daWbird_c */
-static BOOL daWbird_Delete(daWbird_c*) {
+static BOOL daWbird_Delete(daWbird_c* i_this) {
+    // if (i_this != NULL) {
+    //     i_this->fopAc_ac_c::~fopAc_ac_c(); // Call base class destructor explicitly
+    // }
+    // return TRUE;
     /* Nonmatching */
 }
 
 /* 00000908-00000928       .text daWbird_Create__FP10fopAc_ac_c */
-static cPhs_State daWbird_Create(fopAc_ac_c*) {
+static cPhs_State daWbird_Create(fopAc_ac_c* i_this) {
     /* Nonmatching */
 }
 
