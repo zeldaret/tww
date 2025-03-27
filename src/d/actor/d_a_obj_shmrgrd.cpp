@@ -178,17 +178,19 @@ BOOL daObjShmrgrd_c::solidHeapCB(fopAc_ac_c* i_this) {
 }
 
 /* 000005C8-000006E0       .text create_heap__14daObjShmrgrd_cFv */
-bool daObjShmrgrd_c::create_heap() {
-    bool rt = false;
+BOOL daObjShmrgrd_c::create_heap() {
+    BOOL rt = FALSE;
     J3DModelData* mdl_data = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, SHMRGRD_BDL_SHMRGRD));
     JUT_ASSERT(0x21A, mdl_data != NULL);
-    mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
-    if (mpModel) {
-        mdl_data->getJointNodePointer(2)->setCallBack(jnodeCB);
-        mpModel->setUserArea((u32) this);
-        mpBgW = dBgW_NewSet((cBgD_t *)dComIfG_getObjectRes(M_arcname, SHMRGRD_DZB_HGBASE), cBgW::MOVE_BG_e, &mMtx);
-        if (mpBgW) {
-            rt = true;
+    if (mdl_data != NULL) {
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
+        if (mpModel) {
+            mdl_data->getJointNodePointer(2)->setCallBack(jnodeCB);
+            mpModel->setUserArea((u32) this);
+            mpBgW = dBgW_NewSet((cBgD_t *)dComIfG_getObjectRes(M_arcname, SHMRGRD_DZB_HGBASE), cBgW::MOVE_BG_e, &mMtx);
+            if (mpBgW) {
+                rt = TRUE;
+            }
         }
     }
     return rt;
@@ -204,6 +206,7 @@ cPhs_State daObjShmrgrd_c::_create() {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             init_mtx();
             fopAcM_setCullSizeBox(this, -90.0f, 0.0f, -90.0f, 90.0f, 120.0f, 90.0f);
+
             mSttsCo.Init(0xFF, 0xFF, this);
             mCylCo.Set(M_cyl_src_co);
             mCylCo.SetStts(&mSttsCo);
@@ -218,7 +221,6 @@ cPhs_State daObjShmrgrd_c::_create() {
             mCylGapCo.Set(M_cyl_src_gap_co);
             mCylGapCo.SetStts(&mSttsGapCo);
 
-            // TODO: set data
             mCrushTimer = 0;
             mCrushState = 0;
             m85C = 0.0f;
@@ -233,12 +235,12 @@ cPhs_State daObjShmrgrd_c::_create() {
             cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_MISC_e);
             attention_info.distances[fopAc_Attn_TYPE_MISC_e] = 0x2D;
             if (is_switch()) {
-                mCurHFrac = 1.0f;
-                mTopPos = 0.0f;
-                mode_lower_init();
-            } else {
                 mCurHFrac = 0.0f;
                 mTopPos = -85.0f;
+                mode_lower_init();
+            } else {
+                mCurHFrac = 1.0f;
+                mTopPos = 0.0f;
                 mode_upper_init();
             }
             register_list();
@@ -265,17 +267,17 @@ bool daObjShmrgrd_c::_delete() {
 }
 
 /* 00000A14-00000A48       .text search_target_next__14daObjShmrgrd_cFP14daObjShmrgrd_c */
-daObjShmrgrd_c* daObjShmrgrd_c::search_target_next(daObjShmrgrd_c* end) {
+daObjShmrgrd_c* daObjShmrgrd_c::search_target_next(daObjShmrgrd_c* target) {
     daObjShmrgrd_c* cur = M_list_p;
-    daObjShmrgrd_c* found = NULL;
+    daObjShmrgrd_c* rt = NULL;
     while (cur != NULL) {
-        if (cur->mpNext == end) {
-            found = cur;
+        if (cur->mpNext == target) {
+            rt = cur;
             break;
         }
         cur = cur->mpNext;
     }
-    return found;
+    return rt;
 }
 
 /* 00000A48-00000AA4       .text register_list__14daObjShmrgrd_cFv */
@@ -317,7 +319,8 @@ daObjShmrgrd_c* daObjShmrgrd_c::search_gap() {
                 mDoMtx_stack_c::YrotS(shape_angle.y);
                 cXyz calcVec;
                 mDoMtx_stack_c::multVec(&cXyz::BaseZ, &calcVec);
-                if (calcVec.inprodXZ(delta) > 0.0f) {
+                f32 prod = calcVec.inprodXZ(delta);
+                if (prod > 0.0f || prod > 0.0f) {
                     rt = node;
                     break;
                 }
@@ -330,7 +333,8 @@ daObjShmrgrd_c* daObjShmrgrd_c::search_gap() {
 
 /* 00000C8C-00000D2C       .text daObjShmrgrd_get_at_v__FP4cXyzP4cXyz */
 void daObjShmrgrd_get_at_v(cXyz* out, cXyz* other) {
-    cXyz dir = daPy_getPlayerActorClass()->current.pos - *other;
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    cXyz dir = player->current.pos - *other;
     *out = cXyz::Zero;
     if (dir.normalizeRS()) {
         *out = dir;
@@ -366,9 +370,13 @@ void daObjShmrgrd_c::set_mtx() {
 }
 
 /* 00000E98-00000EF4       .text check_player_angle__14daObjShmrgrd_cFP10fopAc_ac_c */
-bool daObjShmrgrd_c::check_player_angle(fopAc_ac_c* ac) {
+BOOL daObjShmrgrd_c::check_player_angle(fopAc_ac_c* ac) {
     s16 angle = ac->shape_angle.y - cLib_targetAngleY(&ac->current.pos, &current.pos);
-    return angle > -0x2000 && angle < 0x2000;
+    BOOL rt = FALSE;
+    if (angle > -0x2000 && angle < 0x2000) {
+        rt = TRUE;
+    }
+    return rt;
 }
 
 /* 00000EF4-0000102C       .text set_damage__14daObjShmrgrd_cFv */
@@ -381,7 +389,7 @@ void daObjShmrgrd_c::set_damage() {
         cCcD_Obj *hitObj = mCylTg.GetTgHitObj();
         fopAc_ac_c* hitActor = mCylTg.GetTgHitAc();
         if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
-            if ((check_player_angle(hitActor) & 0xFF) && (attackState == 0x12 || attackState == 0x13)) {
+            if (check_player_angle(hitActor) && (attackState == 0x12 || attackState == 0x13)) {
                 M_damage = 1;
             } else if (attackState == 0x11) {
                 M_damage_dir = cM_atan2s(mCylTg.GetTgRVecP()->x, mCylTg.GetTgRVecP()->z);

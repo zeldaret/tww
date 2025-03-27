@@ -39,7 +39,7 @@ public:
 
     daObjShmrgrd_c();
     static BOOL solidHeapCB(fopAc_ac_c*);
-    bool create_heap();
+    BOOL create_heap();
     cPhs_State _create();
     bool _delete();
     daObjShmrgrd_c* search_target_next(daObjShmrgrd_c*);
@@ -49,7 +49,7 @@ public:
     void set_gap_co();
     void init_mtx();
     void set_mtx();
-    bool check_player_angle(fopAc_ac_c*);
+    BOOL check_player_angle(fopAc_ac_c*);
     void set_damage();
     void vib_start(short, float);
     void vib_proc();
