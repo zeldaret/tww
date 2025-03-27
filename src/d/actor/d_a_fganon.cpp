@@ -2239,9 +2239,9 @@ void energy_ball_move(fganon_class* i_this) {
                 csXyz local_7c(0,0,0);
                 local_7c.y = (short)cM_atan2s(i_this->m3F8.x, i_this->m3F8.z);
                 dComIfGp_particle_set(dPa_name::ID_SCENE_81F0, &i_this->m3E0, &local_7c);
-                #if VERSION == VERSION_USA
-                    mDoAud_seStart(JA_SE_LK_PG_BOMB_STRIKE, &i_this->m3E0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
-                #endif
+#if VERSION == VERSION_USA
+                mDoAud_seStart(JA_SE_LK_PG_BOMB_STRIKE, &i_this->m3E0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+#endif
                 PSVECAdd(&i_this->m3E0, &i_this->m3F8, &i_this->m3E0);
                 i_this->m40A = 5;
             }

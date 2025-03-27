@@ -299,7 +299,7 @@ static void dummy2() {
     OSReport("[JASHardStream::playBgm] まだ前の曲が再生中ですので、新たに開始できません。\n");
     OSReport("[JASHardStream::main] ファイルが開けません。(%s)\n");
     OSReport("finfo != 0");
-    OSReport("");
+    OSReport("\x00");
 }
 
 /* 8027C5B4-8027C648       .text fileOpen__Q38JASystem10HardStream8TControlFUsP11DVDFileInfo */

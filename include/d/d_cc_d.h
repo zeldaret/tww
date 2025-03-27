@@ -20,7 +20,7 @@ enum dCcD_ObjAtType {
     /* 0x00000200 */ AT_TYPE_FIRE           = (1 << 9),
     /* 0x00000400 */ AT_TYPE_MACHETE        = (1 << 10),
     /* 0x00000800 */ AT_TYPE_UNK800         = (1 << 11),
-    /* 0x00001000 */ AT_TYPE_UNK1000        = (1 << 12),
+    /* 0x00001000 */ AT_TYPE_SPIKE          = (1 << 12),
     /* 0x00002000 */ AT_TYPE_UNK2000        = (1 << 13),
     /* 0x00004000 */ AT_TYPE_NORMAL_ARROW   = (1 << 14),
     /* 0x00008000 */ AT_TYPE_HOOKSHOT       = (1 << 15),
