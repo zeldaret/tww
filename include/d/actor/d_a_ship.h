@@ -48,6 +48,7 @@ public:
         daSFLG_UNK10000000_e  = 0x10000000,
         daSFLG_UNK20000000_e  = 0x20000000,
         daSFLG_UNK40000000_e  = 0x40000000,
+        daSFLG_UNK80000000_e  = 0x80000000
     };
 
     enum daShip_c__ShipMode {
