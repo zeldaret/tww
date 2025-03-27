@@ -49,12 +49,16 @@ cPhs_State daWbird_c::create() {
 
 /* 000003E0-000003E4       .text actionWait__9daWbird_cFv */
 void daWbird_c::actionWait() {
-    /* Nonmatching */
 }
 
 /* 000003E4-00000474       .text actionEnd__9daWbird_cFv */
 void daWbird_c::actionEnd() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_endCheck(field_0x2A6)){
+        dComIfGp_event_reset();
+        fopAcM_delete(this);
+    } else {
+        dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("WINDMAN"));
+    }
 }
 
 /* 00000474-000005DC       .text actionMove__9daWbird_cFv */
