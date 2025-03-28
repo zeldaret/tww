@@ -2092,7 +2092,7 @@ BOOL daShip_c::procZevDemo() {
     if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && m0392 != 10) {
         setPartOffAnime();
     }
-    if ((s32)mEvtStaffId != -1) {
+    if (mEvtStaffId != -1) {
         cXyz* posP = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "pos");
         u32* angleP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "angle");
         float* speedP = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "speed");
