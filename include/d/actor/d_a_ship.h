@@ -80,7 +80,7 @@ public:
     void checkTornadoUp() const {}
     void getBeltSpeed() const {}
     void getBodyMtx() {}
-    s16 getCannonAngleX() const { return this->shape_angle.x + this->m0396 - 0x4000; }
+    s16 getCannonAngleX() const { return shape_angle.x + m0396 - 0x4000; }
     void getCannonAngleY() const {}
     void getCraneAngle() const {}
     void getCraneBaseAngle() const {}
@@ -325,7 +325,7 @@ public:
     /* 0x0424 */ fopAc_ac_c* mWhirlActor;
     /* 0x0428 */ cXyz* m0428;
     /* 0x042C */ fpc_ProcID mTactWarpID;
-    /* 0x0430 */ s32 m0430;
+    /* 0x0430 */ fpc_ProcID m0430;
     /* 0x0434 */ cXyz* m0434;
     /* 0x0438 */ cXyz m0438;
     /* 0x0444 */ cXyz m0444;
