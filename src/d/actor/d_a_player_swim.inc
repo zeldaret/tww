@@ -372,8 +372,41 @@ BOOL daPy_lk_c::procSwimUp() {
 }
 
 /* 8013DB24-8013DCDC       .text procSwimWait_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procSwimWait_init(int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::procSwimWait_init(int param_1) {
+    float fVar1;
+    float fVar2;
+    uint uVar3;
+    double dVar4;
+    J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
+    commonProcInit(daPyProc_SWIM_WAIT_e);
+
+    if (param_1) {
+        fVar2 = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
+        uVar3 = cM_rad2s(fVar2 * 3.1415927f);
+        this->mVelocity = speedF * (1.0f - l_HIO_swim_c0.m.field_0x60) + speedF * std::fabsf(cM_scos(uVar3)) * l_HIO_swim_c0.m.field_0x60;
+    }
+    else {
+        fVar2 = 0.0f;
+    }
+
+    gravity = 0.0f;
+    setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x70) + l_HIO_swim_c0.m.field_0x40, 0.0f, -1, l_HIO_swim_c0.m.field_0x44);
+    mFrameCtrl->setFrame(fVar2 * mFrameCtrl->getEnd());
+    mAnmRatioUnder[0].getAnmTransform()->setFrame(mFrameCtrl->getFrame());
+    dComIfGp_setPlayerStatus0(0, 0x100000);
+
+    if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+        if (mEquipItem != 0x100) {
+            deleteEquipItem(1);
+        }
+        current.pos.y = m35D0;
+        speed.y = 0.0f;
+    }
+
+    m35C4 = l_HIO_swim_c0.m.field_0x48;
+    m34D4 = 0;
+    m3570 = 0;
+    return TRUE;
 }
 
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
