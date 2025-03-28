@@ -377,14 +377,15 @@ public:
     s16 getItemKeyNumCount() { return mItemKeyNumCount; }
     void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
 
-    void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
     s16 getItemBeastNumCount(int i_idx) { return mItemBeastNumCounts[i_idx]; }
+    void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
 
-    void setItemTimeCount(s32 time) { mAirMeter = time; }
     s32 getItemTimeCount() { return mAirMeter; }
-
-    void setItemTimeMax(s32 time) { field_0x4928 = time; }
+    void setItemTimeCount(s32 time) { mAirMeter = time; }
+    void clearItemTimeCount() { mAirMeter = 0; }
+    
     s32 getItemTimeMax() { return field_0x4928; }
+    void setItemTimeMax(s32 time) { field_0x4928 = time; }
 
     u8 getScopeType() { return mScopeType; }
     void setScopeType(u8 type) { mScopeType = type; }
@@ -2231,12 +2232,16 @@ inline void dComIfGp_setItemKeyNumCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemKeyNumCount(num);
 }
 
+inline s32 dComIfGp_getItemTimeCount() {
+    return g_dComIfG_gameInfo.play.getItemTimeCount();
+}
+
 inline void dComIfGp_setItemTimeCount(s32 time) {
     g_dComIfG_gameInfo.play.setItemTimeCount(time);
 }
 
-inline s32 dComIfGp_getItemTimeCount() {
-    return g_dComIfG_gameInfo.play.getItemTimeCount();
+inline void dComIfGp_clearItemTimeCount() {
+    g_dComIfG_gameInfo.play.clearItemTimeCount();
 }
 
 inline void dComIfGp_setItemTimeMax(s32 time) {
