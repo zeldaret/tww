@@ -1238,10 +1238,10 @@ BOOL daShip_c::checkNextMode(int param_1) {
             if (tgRVecP) {
                 short sVar2;
                 local_14.set(tgRVecP->x, 0.0f, tgRVecP->z);
-                if (PSVECSquareMag(&local_14) < 0.1f) {
+                if (local_14.abs2() < 0.1f) {
                     local_20 = current.pos - *tgHitPos;
                     local_8.set(local_20.x, 0.0f, local_20.z);
-                    if (PSVECSquareMag(&local_8) < 0.1f) {
+                    if (local_8.abs2() < 0.1f) {
                         sVar2 = shape_angle.y + 0x8000;
                     }
                     else {
@@ -3227,7 +3227,7 @@ void daShip_c::setRopePos() {
             local_190.y = 0.0f;
             local_190.z = local_d0.z;
 
-            if (PSVECSquareMag(&local_190) < 2500.0f) {
+            if (local_190.abs2() < 2500.0f) {
                 pcVar16 = (cXyz *)&mRopeLineSegments;
                 local_dc.z = cM_scos(shape_angle.x) * 16.0f;
 
