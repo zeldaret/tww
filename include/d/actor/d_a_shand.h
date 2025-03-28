@@ -10,7 +10,7 @@
 typedef struct {
     /* 0x00 */ cXyz mPos;
     u8 _pad[0x18 - 0xc];
-    /* 0x18 */ float u18;
+    /* 0x18 */ float field_18;
 } shand_s;
 
 class shand_class : public fopAc_ac_c {
@@ -42,7 +42,7 @@ public:
     /* 0x588 */ dCcD_Stts mStts;
     /* 0x5C4 */ dCcD_Sph mSph;
     /* 0x6F0 */ dCcD_Cyl mCylArr[5];
-    /* 0xCE0 */ float field_CE0;
+    /* 0xCE0 */ float ground_y;
     /* 0xCE4 */ bool mHasHIO;
 };
 
@@ -55,9 +55,9 @@ public:
 
 public:
     /* 0x0    vtable */
-    /* 0x4 */ s8 mId;
-    /* 0x6 */ short u6;
-    /* 0x8 */ short u8;
+    /* 0x4 */ s8 mNo;
+    /* 0x6 */ short field_6;
+    /* 0x8 */ short field_8;
 };
 
 #endif /* D_A_SHAND_H */
