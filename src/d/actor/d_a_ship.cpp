@@ -931,19 +931,29 @@ void daShip_c::setYPos() {
 
 /* 00002824-00002CC4       .text checkOutRange__8daShip_cFv */
 BOOL daShip_c::checkOutRange() {
-    /* Nonmatching - Regalloc */
+    dPath__Point* pnt;
+    dPath* path;
+    cXyz* closestPoint;
+    cXyz* nextPoint;
+    cXyz* prevPoint;
+    int lastIndex;
+    int closestIndex;
+    int pathIndex;
+    BOOL bVar4;
+    BOOL bVar5;
+
     if (m034B == 0xFF) {
         return FALSE;
     }
 
-    int pathIndex = 0;
-    BOOL bVar4 = FALSE;
-    BOOL bVar5 = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e;
-    dPath* pInPath = dPath_GetRoomPath(m034B, -1);
-    while (pInPath) {
-        dPath__Point* dPathPnt = pInPath->mpPnt;
-        if (pInPath->m_num < 3) {
-            pInPath = dPath_GetNextRoomPath(pInPath, -1);
+    pathIndex = 0;
+    bVar4 = FALSE;
+    bVar5 = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e;
+    path = dPath_GetRoomPath(m034B, -1);
+    while (path) {
+        pnt = path->mpPnt;
+        if (path->m_num < 3) {
+            path = dPath_GetNextRoomPath(path, -1);
             pathIndex++;
             continue;
         }
@@ -953,7 +963,7 @@ BOOL daShip_c::checkOutRange() {
                 (pathIndex == 1 && dComIfGs_isSymbol(2)) ||
                 (pathIndex == 2 && daPy_getPlayerActorClass()->checkMasterSwordEquip())
             ) {
-                pInPath = dPath_GetNextRoomPath(pInPath, -1);
+                path = dPath_GetNextRoomPath(path, -1);
                 pathIndex++;
                 continue;
             } 
@@ -961,46 +971,41 @@ BOOL daShip_c::checkOutRange() {
 
         float minDist = FLOAT_MAX;
         
-        int closestIndex;
-        cXyz* closestPoint;
-
-        for (int i = 0; i < pInPath->m_num; dPathPnt++, i++) {
-            float dx = current.pos.x - dPathPnt->mPos.x;
-            float dz = current.pos.z - dPathPnt->mPos.z;
+        for (int i = 0; i < path->m_num; pnt++, i++) {
+            float dx = current.pos.x - pnt->mPos.x;
+            float dz = current.pos.z - pnt->mPos.z;
             
             float distXZ = dx * dx + dz * dz;
             
             if (minDist > distXZ) {
                 closestIndex = i;
                 minDist = distXZ;
-                closestPoint = &dPathPnt->mPos;
+                closestPoint = &pnt->mPos;
             }
         }
 
-        int lastIndex = pInPath->m_num - 1;
+        lastIndex = path->m_num - 1;
 
-        cXyz* nextPoint;
         if (closestIndex == lastIndex) {
-            nextPoint = &pInPath->mpPnt->mPos;
+            nextPoint = &path->mpPnt->mPos;
         }
         else {
-            nextPoint = &(pInPath->mpPnt + closestIndex + 1)->mPos;
+            nextPoint = &(path->mpPnt + closestIndex + 1)->mPos;
         }
 
-        cXyz* prevPoint;
         if (closestIndex == 0) {
-            prevPoint = &(pInPath->mpPnt + lastIndex)->mPos;
+            prevPoint = &(path->mpPnt + lastIndex)->mPos;
         }
         else {
-            prevPoint = &(pInPath->mpPnt + closestIndex - 1)->mPos;
+            prevPoint = &(path->mpPnt + closestIndex - 1)->mPos;
         }
 
-        short angleNext = cM_atan2s(nextPoint->x - closestPoint->x, nextPoint->z - closestPoint->z);
-        short anglePrev = cM_atan2s(closestPoint->x - prevPoint->x, closestPoint->z - prevPoint->z);
-        short angleCurrent = cM_atan2s(current.pos.x - closestPoint->x, current.pos.z - closestPoint->z);
+        s16 angleNext = cM_atan2s(nextPoint->x - closestPoint->x, nextPoint->z - closestPoint->z);
+        s16 anglePrev = cM_atan2s(closestPoint->x - prevPoint->x, closestPoint->z - prevPoint->z);
+        s16 angleCurrent = cM_atan2s(current.pos.x - closestPoint->x, current.pos.z - closestPoint->z);
 
-        short diffNext = angleCurrent - angleNext;
-        short diffPrev = cM_atan2s(current.pos.x - prevPoint->x, current.pos.z - prevPoint->z) - anglePrev;
+        s16 diffNext = angleCurrent - angleNext;
+        s16 diffPrev = cM_atan2s(current.pos.x - prevPoint->x, current.pos.z - prevPoint->z) - anglePrev;
         
         if ((s16)(angleNext - anglePrev) >= 0) {
             if (diffNext < 0) {
@@ -1035,7 +1040,7 @@ BOOL daShip_c::checkOutRange() {
             if (dComIfGp_getMiniGameType() == 1) {
                 mNextMessageNo = 0x60a;
             }
-            else if ((bVar5) && (pathIndex != 3)) {
+            else if (bVar5 && pathIndex != 3) {
                 mNextMessageNo = 0x609;
             }
             else {
@@ -1045,7 +1050,7 @@ BOOL daShip_c::checkOutRange() {
             onStateFlg(daSFLG_UNK400000_e);
             return TRUE;
         }
-        pInPath = dPath_GetNextRoomPath(pInPath, -1);
+        path = dPath_GetNextRoomPath(path, -1);
         pathIndex++;
     }
     return FALSE;
@@ -3048,7 +3053,6 @@ void daShip_c::setRoomInfo() {
 /* 00008688-0000882C       .text incRopeCnt__8daShip_cFii */
 // Adjusts the length of KORL's Salvage Arm rope
 void daShip_c::incRopeCnt(int lengthChange, int minSegmentLimit) {
-    /* Nonmatching - Regswap */
     cXyz* ropeSegments = mRopeLine.getPos(0);
     int currentRopeSegmentIndex = mCurrentRopeSegmentIndex;
     cXyz* currentRopeSegment = &mRopeLineSegments[currentRopeSegmentIndex];
@@ -3062,12 +3066,11 @@ void daShip_c::incRopeCnt(int lengthChange, int minSegmentLimit) {
         targetRopeSegmentIndex = minSegmentLimit;
     }
 
-    int segmentDifference = targetRopeSegmentIndex - currentRopeSegmentIndex; // Number of segments to increase/decrease the rope by
+    lengthChange = targetRopeSegmentIndex - currentRopeSegmentIndex; // Number of segments to increase/decrease the rope by
 
-    cXyz ropeDisplacement;
-    if (segmentDifference > 0) {
+    if (lengthChange > 0) {
         // Lengthening the rope: Move all segments down by adding a displacement vector
-        cXyz ropeDisplacement = l_rope_base_vec * segmentDifference;
+        cXyz ropeDisplacement = l_rope_base_vec * lengthChange;
         for (currentRopeSegmentIndex = 0; currentRopeSegmentIndex < mCurrentRopeSegmentIndex; currentRopeSegmentIndex++, ropeSegments++) {
             *ropeSegments += ropeDisplacement;
         }
@@ -3084,7 +3087,7 @@ void daShip_c::incRopeCnt(int lengthChange, int minSegmentLimit) {
         }
     }
 
-    if (segmentDifference != 0) {
+    if (lengthChange != 0) {
         if ((minSegmentLimit == 20) && (targetRopeSegmentIndex == 20)) {
             seStart(JA_SE_LK_SHIP_CRANE_STOP, &m102C);
         }
@@ -3098,20 +3101,19 @@ void daShip_c::incRopeCnt(int lengthChange, int minSegmentLimit) {
 
 /* 0000882C-00009314       .text setRopePos__8daShip_cFv */
 void daShip_c::setRopePos() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     float fVar1;
     float fVar2;
-    u16 uVar3;
-    short y;
-    J3DModel *pJVar4;
-    MtxP pMVar5;
-    int iVar6;
-    J3DAnmTransform *pJVar7;
-    short sVar12;
-    short sVar14;
-    cXyz *pcVar16;
     float fVar17;
-    
+
+    MtxP pMVar5;
+    short sVar14;
+    int sVar12;
+    cXyz* ropeSegments;
+    cXyz* currentRopeSegment;
+    short currentRopeSegmentIndex;
+    JPABaseEmitter* emitter;
+
     cXyz spF8;
     cXyz spEC;
     cXyz spE0;
@@ -3123,10 +3125,6 @@ void daShip_c::setRopePos() {
     static Vec rope_offset = {160.0f, 0.0f, 0.0f};
     static Vec water_drop_scale = {1.5f, 1.0f, 1.5f};
     
-    cXyz* ropeSegments;
-    cXyz* currentRopeSegment;
-    short currentRopeSegmentIndex;
-
     currentRopeSegmentIndex = mCurrentRopeSegmentIndex;
     
     if (currentRopeSegmentIndex == 0) {
@@ -3134,9 +3132,7 @@ void daShip_c::setRopePos() {
         ropeSegments = mRopeLineSegments;
     }
     else {
-        currentRopeSegment = mRopeLine.getPos(0);
-        currentRopeSegment -= 1;
-        currentRopeSegment += currentRopeSegmentIndex;
+        currentRopeSegment = mRopeLine.getPos(0) + currentRopeSegmentIndex - 1;
         ropeSegments = &mRopeLineSegments[currentRopeSegmentIndex - 1];
     }
 
@@ -3168,7 +3164,7 @@ void daShip_c::setRopePos() {
         for (int i = mCurrentRopeSegmentIndex + -2; i >= 0; i--, currentRopeSegment--, ropeSegments--) {
             spF8 = *currentRopeSegment;
 
-            if (ropeSegments->y < m03F4) {
+            if (currentRopeSegment->y < m03F4) {
                 *ropeSegments *= 0.6f;
             }
             else {
@@ -3181,7 +3177,7 @@ void daShip_c::setRopePos() {
 
             spEC.set(*currentRopeSegment - *(currentRopeSegment + 1));
 
-            fVar17 = spEC.abs();
+            fVar17 = std::sqrtf(spEC.abs2());
 
             if (fVar17 < 0.01f) {
                 currentRopeSegment->set(*(currentRopeSegment + 1) + l_rope_base_vec);
@@ -3193,12 +3189,12 @@ void daShip_c::setRopePos() {
             *ropeSegments += (*currentRopeSegment - spF8) * 0.05f;
         }
         if (mCurrentRopeSegmentIndex == 20 && checkStateFlg(daSFLG_UNK10000000_e)) {
-            mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(0), &spE0);
-
-            spE0 -= *mRopeLine.getPos(0);
+            cXyz* r4 = mRopeLine.getPos(0);;
+            mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(1), &spE0);
+            spE0 -= *r4;
 
             if (spE0.abs2XZ() < 2500.0f) {
-                pcVar16 = mRopeLineSegments;
+                currentRopeSegment = mRopeLineSegments;
                 f32 f2 = cM_scos(shape_angle.x) * 16.0f;
 
                 if (shape_angle.x <= 0) {
@@ -3211,12 +3207,12 @@ void daShip_c::setRopePos() {
                     f2 * cM_scos(shape_angle.y)
                 );
 
-                for (int i = 0; i < 20; i++, pcVar16++) {
-                    *pcVar16 += spD0;
+                for (int i = 0; i < 20; i++, currentRopeSegment++) {
+                    *currentRopeSegment += spD0;
                     spD0 *= 0.95f;
                 }
                 
-                offStateFlg(daSFLG_UNK1000000_e);
+                offStateFlg(daSFLG_UNK10000000_e);
             }
         }
     }
@@ -3231,14 +3227,13 @@ void daShip_c::setRopePos() {
     else {
         pMVar5 = mpSalvageArmModel->getAnmMtx(1);
         spC8.set(
-            pcVar16->x - pMVar5[0][3],
-            pcVar16->y - pMVar5[1][3],
-            pcVar16->z - pMVar5[2][3]
+            currentRopeSegment->x - pMVar5[0][3],
+            currentRopeSegment->y - pMVar5[1][3],
+            currentRopeSegment->z - pMVar5[2][3]
         );
         sVar14 = 0x7fff;
         int iVar11 = 0x8000 - (m0398 * 2);
-        iVar11 = iVar11 - (0x8000 - m039A) * ((float)m0398 / (float)m039A);
-        sVar12 = (s16)iVar11;
+        sVar12 = iVar11 - (0x8000 - m039A) * ((float)m0398 / (float)m039A);
     }
 
     fVar17 = mpLinkModel->getBaseTRMtx()[1][3];
@@ -3249,19 +3244,17 @@ void daShip_c::setRopePos() {
     spBC.y = spC8.y;
     spBC.z = sin * spC8.x + cos * spC8.z;
     
-    mDoMtx_trans(mDoMtx_stack_c::get(), pcVar16->x, pcVar16->y, pcVar16->z);
+    mDoMtx_trans(mDoMtx_stack_c::get(), currentRopeSegment->x, currentRopeSegment->y, currentRopeSegment->z);
     fVar1 = std::sqrtf(spBC.y * spBC.y + spBC.z * spBC.z);
-    s16 r6 = sVar12 + cM_atan2s(-spBC.x, fVar1);
-    y = shape_angle.y;
-    iVar6 = cM_atan2s(spBC.z, spBC.y);
-    s16 r4 = sVar14 + (s16)iVar6;
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), r4, y, r6);
+    s16 z = sVar12 + cM_atan2s(-spBC.x, fVar1);
+    s16 y = shape_angle.y;
+    s16 x = sVar14 + cM_atan2s(spBC.z, spBC.y);
+    mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), x, y, z);
     mDoMtx_XrotM(mDoMtx_stack_c::get(), -0x4000);
 
     if (m0392 == 11) {
-        pJVar7 = m0298->getAnm();
         J3DTransformInfo sp104;
-        pJVar7->getTransform(6, &sp104);
+        m0298->getAnm()->getTransform(6, &sp104);
         mDoMtx_stack_c::scaleM(sp104.mScale.x, sp104.mScale.y, sp104.mScale.z);
     }
 
@@ -3278,15 +3271,16 @@ void daShip_c::setRopePos() {
     if (fVar2 > currentRopeSegment->y) {
         ropeSegments = currentRopeSegment;
 
+        cXyz* r3 = currentRopeSegment;
         for (int i = 0; i < mCurrentRopeSegmentIndex; i++, ropeSegments++) {
-            if (fVar2 <= currentRopeSegment->y) {
-                currentRopeSegment = ropeSegments;
+            if (ropeSegments->y <= fVar2) {
+                r3 = ropeSegments;
             }
         }
 
-        m1020.x = pcVar16->x;
+        m1020.x = r3->x;
         m1020.y = fVar2;
-        m1020.z = pcVar16->z;
+        m1020.z = r3->z;
 
         if (mRipple.getEmitter() == NULL) { 
             dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &m1020, NULL, &ripple_scale, 0xFF, &mRipple);
@@ -3310,18 +3304,16 @@ void daShip_c::setRopePos() {
 
             seStart(JA_SE_LK_SHIP_CRANE_LIFTUP, &m1020);
 
-            JPABaseEmitter* mEmitter;
-            
             if (m034C != 11) {
                 if (m19AC.getEmitter() == NULL) {
                     ropeSegments = mRopeLine.getPos(0);
 
-                    mEmitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0038, ropeSegments, NULL, NULL, 0xFF, &m19AC);
+                    emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0038, ropeSegments, NULL, NULL, 0xFF, &m19AC);
 
-                    if(mEmitter) {
-                        mEmitter->setGlobalParticleScale(JGeometry::TVec3<f32>(1.5f, 1.5f, 1.0f));
-                        mEmitter->setEmitterScale(water_drop_scale);
-                        mEmitter->setLifeTime(30);
+                    if(emitter) {
+                        emitter->setGlobalParticleScale(JGeometry::TVec3<f32>(1.5f, 1.5f, 1.0f));
+                        emitter->setEmitterScale(water_drop_scale);
+                        emitter->setLifeTime(30);
                     }
                 }
                 
@@ -3330,10 +3322,10 @@ void daShip_c::setRopePos() {
                 dComIfGp_getVibration().StartShock(3, 1, cXyz(0.0f, 1.0f, 0.0f));
                 
                 if (m19C0.getEmitter() == NULL) {
-                    mEmitter = dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &m1074, NULL, &ripple_scale, 0xFF, &m19C0);
+                    emitter = dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &m1074, NULL, &ripple_scale, 0xFF, &m19C0);
                     
-                    if (mEmitter) {
-                        mEmitter->setVolumeSize(30);
+                    if (emitter) {
+                        emitter->setVolumeSize(30);
                     }
                 }
             }
@@ -3349,12 +3341,9 @@ void daShip_c::setRopePos() {
         m19C0.end();
     }
 
-    // This code matches but seems like nonsense, why redeclare `ropeSegments`?
-    ropeSegments = mRopeLine.getPos(0);
-    m1074.x = ropeSegments->x + cM_rndFX(20.0f);
+    m1074.x = mRopeLine.getPos(0)->x + cM_rndFX(20.0f);
     m1074.y = m03F4;
-    ropeSegments = mRopeLine.getPos(0);
-    m1074.z = ropeSegments->z + cM_rndFX(20.0f);
+    m1074.z = mRopeLine.getPos(0)->z + cM_rndFX(20.0f);
 }
 
 /* 00009314-00009384       .text getAnglePartRate__8daShip_cFv */
@@ -3512,22 +3501,23 @@ BOOL daShip_c::execute() {
     /* Nonmatching */
     float fVar2;
     float fVar3;
-    Mtx* pMVar13;
-    int iVar23;
     float dVar27;
     float dVar28;
+
+    Mtx* pMVar13;
+    int iVar23;
+    int sp18;
     s16 sp12;
     s16 sp10;
-    int sp18;
     short sVar16;
     short sVar5;
     int iVar6;  
-    BOOL r24;
     J3DModel* mModel1;
     J3DModel* mModel2;
-    daPy_lk_c* link;
     short sVar26;
     dDemo_actor_c* demoActor;
+    daPy_lk_c* link;
+    MtxP jnt_mtx;
 
     static cXyz sail_offset(0.5f, 155.0f, 50.0f);
     static cXyz sph_offset(-5.0f, 0.0f, 0.0f);
@@ -3650,6 +3640,7 @@ BOOL daShip_c::execute() {
         }
     }
     
+    BOOL r24;
     if (m0351 == 8 || checkStateFlg(daSFLG_UNK4000000_e)) {
         r24 = TRUE;
     }
@@ -3948,7 +3939,7 @@ BOOL daShip_c::execute() {
             f32 rate = getAnglePartRate();
             m0398 = rate * m039A;
             m039C *= getAnglePartRate();
-            incRopeCnt(-0x14, 0);
+            incRopeCnt(-20, 0);
         }
         mpSalvageArmModel->calc();
         setRopePos();
@@ -4066,7 +4057,7 @@ BOOL daShip_c::execute() {
     
     // This should probably use the mDoMtx_multVecZero inline, but it's not getting inlined
     // mDoMtx_multVecZero(mModel2->getAnmMtx(16), &eyePos);
-    MtxP jnt_mtx = mModel2->getAnmMtx(16);
+    jnt_mtx = mModel2->getAnmMtx(16);
     eyePos.x = jnt_mtx[0][3];
     eyePos.y = jnt_mtx[1][3];
     eyePos.z = jnt_mtx[2][3];
@@ -4094,7 +4085,10 @@ BOOL daShip_c::execute() {
             bVar21 = TRUE;
     }
     else if (m034C == 8 || distXz > 125.0f) {
-        if ((!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02))) && dComIfGp_getMiniGameType() != 1 && fopAcM_searchPlayerDistanceXZ2(this) < 250000.0f) {
+        if (
+            (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02))) &&
+            dComIfGp_getMiniGameType() != 1 && fopAcM_searchPlayerDistanceXZ2(this) < 250000.0f
+        ) {
             spC0 = link->eyePos - eyePos;
             bVar21 = TRUE;
             attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
