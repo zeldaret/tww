@@ -81,7 +81,7 @@ public:
     void getBeltSpeed() const {}
     void getBodyMtx() {}
     s16 getCannonAngleX() const { return shape_angle.x + m0396 - 0x4000; }
-    void getCannonAngleY() const {}
+    s16 getCannonAngleY() const { return shape_angle.y + m0394; }
     void getCraneAngle() const {}
     void getCraneBaseAngle() const {}
     void getCraneHookAngleY() const {}
@@ -125,8 +125,8 @@ public:
     void onShortHitFlg() {}
     void onStateFlg(daSHIP_SFLG flag) { mStateFlag |= flag; }
     void onTornadoFlg(u32 tornadoID) { mTornadoID = tornadoID; }
-    void onWhirlFlg(unsigned long, short) {}
-    void onWhirlFlgDirect(unsigned long, short) {}
+    void onWhirlFlg(u32, s16) {}
+    void onWhirlFlgDirect(u32, s16) {}
     void setAtnPos(const cXyz*) {}
     void setCannon() {}
     void setCrane() {}

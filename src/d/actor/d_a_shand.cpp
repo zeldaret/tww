@@ -177,16 +177,17 @@ void cut_control3(shand_class* i_this) {
 
 /* 00000C30-00000FF0       .text normal__FP11shand_class */
 void normal(shand_class* i_this) {
-    /* Nonmatching - regalloc */
+    fopAc_ac_c* actor = i_this;
+
     cXyz unused;
     unused.x = unused.y = 0;
 
     if(i_this->field_318 != 0){
         dBgS_LinChk local94;
-        cXyz chk_start = i_this->current.pos, chk_end = i_this->current.pos;
+        cXyz chk_start = actor->current.pos, chk_end = actor->current.pos;
         chk_start.y += 50.0f;
         chk_end.y += 4000.0f;
-        local94.Set(&chk_start, &chk_end, i_this);
+        local94.Set(&chk_start, &chk_end, actor);
         if(dComIfG_Bgsp()->LineCross(&local94) != false)
             i_this->field_31C[19].mPos = i_this->field_2D4 = i_this->field_2C8 = local94.GetCross();
         i_this->field_318--;
@@ -198,11 +199,13 @@ void normal(shand_class* i_this) {
                 i_this->field_2BA = 1;
                 *i_this->field_314 = 2;
             }
+            // Fall-through
         case 1:
             i_this->field_2D4 = i_this->field_2C8;
+            break;
     }
 
-    float y_diff = std::abs(i_this->home.pos.y - i_this->field_2C8.y);
+    float y_diff = std::abs(actor->home.pos.y - i_this->field_2C8.y);
     cLib_addCalc2(&i_this->field_2F4,   y_diff * (REG14_F(11) + 0.05f), 0.1f, 1.0f);
     cLib_addCalc2(&i_this->field_300, REG14_F(12) + 10.0f, 0.1f, 0.5f);
     control1(i_this);
@@ -226,16 +229,17 @@ void cut(shand_class* i_this) {
 
 /* 00001508-00001DAC       .text hand_move__FP11shand_class */
 void hand_move(shand_class* i_this) {
-    /* Nonmatching - regalloc */
+    fopAc_ac_c* actor = i_this;
+
     shand_s* shand_i = i_this->field_31C;
     i_this->field_30C = static_cast<shand_class*>(fopAcM_SearchByID(i_this->field_308));
     if(i_this->field_30C != NULL){
-        i_this->current.pos = *i_this->field_310;
-        i_this->current.angle.y = i_this->home.angle.y + i_this->field_30C->shape_angle.y + REG14_S(3);
+        actor->current.pos = *i_this->field_310;
+        actor->current.angle.y = actor->home.angle.y + i_this->field_30C->shape_angle.y + REG14_S(3);
         switch(i_this->mState){
             case 0:
                 normal(i_this);
-                i_this->attention_info.flags = fopAc_Attn_LOCKON_MISC_e;
+                actor->attention_info.flags = fopAc_Attn_LOCKON_MISC_e;
                 if(i_this->field_30C->health == 0){
                     i_this->mState = 1;
                     i_this->field_2BA = 0;
@@ -243,15 +247,15 @@ void hand_move(shand_class* i_this) {
                 break;
 
             case 1: 
-                if((fopAcM_GetParam(i_this) & 0xFF) != 1){
+                if((fopAcM_GetParam(actor) & 0xFF) != 1){
                     dBgS_GndChk local_ac;
-                    float chk_pos_x = i_this->current.pos.x, chk_pos_y = i_this->current.pos.y, chk_pos_z = i_this->current.pos.z;
+                    float chk_pos_x = actor->current.pos.x, chk_pos_y = actor->current.pos.y, chk_pos_z = actor->current.pos.z;
                     chk_pos_y -= 100.0f;
                     local_ac.GetPointP()->set(chk_pos_x, chk_pos_y, chk_pos_z);
                     i_this->ground_y = dComIfG_Bgsp()->GroundCross(&local_ac);
                     
                     dBgS_ObjGndChk_Spl local_100;
-                    chk_pos_x = i_this->current.pos.x, chk_pos_y = i_this->current.pos.y, chk_pos_z = i_this->current.pos.z;
+                    chk_pos_x = actor->current.pos.x, chk_pos_y = actor->current.pos.y, chk_pos_z = actor->current.pos.z;
                     chk_pos_y += 200.0f;
                     local_100.GetPointP()->set(chk_pos_x, chk_pos_y, chk_pos_z);
                     float spl_ground_y = dComIfG_Bgsp()->GroundCross(&local_100) + 10.0f;
@@ -264,16 +268,17 @@ void hand_move(shand_class* i_this) {
                 }
                 i_this->mState = 2;
 
+                // Fall-through
             case 2:
                 cut(i_this);
-                fopAcM_OffStatus(i_this, 0);
-                i_this->attention_info.flags = 0;
+                fopAcM_OffStatus(actor, 0);
+                actor->attention_info.flags = 0;
                 break;
         }
     }
 
-    cXyz* line_data = i_this->mLineMat.mpLines->mpSegments;
-    u8* line_size = i_this->mLineMat.mpLines->mpSize;
+    cXyz* line_data = i_this->mLineMat.getPos(0);
+    u8* line_size = i_this->mLineMat.getSize(0);
     for(int i = 20; i != 0; i--){
         *line_data = shand_i->mPos;
         *line_size = shand_i->field_18;
@@ -281,17 +286,18 @@ void hand_move(shand_class* i_this) {
         shand_i++; line_data++; line_size++;
     }
 
-    cXyz* line_segments = i_this->mLineMat.mpLines->mpSegments;
-    i_this->eyePos = (line_segments + l_HIO.field_6)[10]; // Have not found any "clean" way to write that
-    i_this->attention_info.position = i_this->eyePos;
+    cXyz* line_segments = i_this->mLineMat.getPos(0);
+    actor->eyePos = (line_segments + l_HIO.field_6)[10]; // Have not found any "clean" way to write that
+    actor->attention_info.position = actor->eyePos;
     
     bool is_hit = false;
     CcAtInfo hit_atInfo;
     hit_atInfo.pParticlePos = NULL;
     cXyz center;
+    int seg_idx;
     if(i_this->field_2BC[1] == 0 && i_this->mState == 0){
-        i_this->mSph.SetC(i_this->eyePos);
-        i_this->mCylArr[0].SetC(i_this->current.pos);
+        i_this->mSph.SetC(actor->eyePos);
+        i_this->mCylArr[0].SetC(actor->current.pos);
         for(int i = 0; i < 5; i++){
             if(i_this->field_2C4 == 0 && i_this->mCylArr[i].ChkTgHit() != 0){
                 hit_atInfo.mpObj = i_this->mCylArr[i].GetTgHitObj();
@@ -301,7 +307,9 @@ void hand_move(shand_class* i_this) {
             }
 
             if(i > 0){
-                center = line_segments[((i_this->mExecuteCount & 0b11) + (i * 4)) % 20];
+                seg_idx = ((i_this->mExecuteCount & 0b11) + (i * 4));
+                seg_idx %= 20;
+                center = line_segments[seg_idx];
                 center.y -= 200.0f;
                 i_this->mCylArr[i].SetC(center);   
             }
@@ -328,7 +336,7 @@ void hand_move(shand_class* i_this) {
         hit_atInfo.mpActor = at_power_check(&hit_atInfo);
         i_this->field_2C4 = 10;
         if(hit_atInfo.mpActor != NULL){
-            def_se_set(i_this, hit_atInfo.mpObj, 33);
+            def_se_set(actor, hit_atInfo.mpObj, 33);
             if(i_this->field_30C != NULL){
                 i_this->mState = 1;
                 i_this->field_2BA = 0;
@@ -382,10 +390,15 @@ static BOOL daShand_Delete(shand_class* i_this) {
 
 /* 000022D4-00002360       .text useHeapInit__FP11shand_class */
 static BOOL useHeapInit(shand_class* i_this) {
-    const int res_index = ((fopAcM_GetParam(i_this) & 0xff) == 53) ? SHAND_BTI_VHLIF_VINE : SHAND_BTI_SHAND;
-    ResTIMG* res = static_cast<ResTIMG*>(dComIfG_getObjectRes("Shand", res_index));
+    int bti_idx;
+    if ((fopAcM_GetParam(i_this) & 0xff) == 53) {
+        bti_idx = SHAND_BTI_VHLIF_VINE;
+    } else {
+        bti_idx = SHAND_BTI_SHAND;
+    }
+    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes("Shand", bti_idx));
     
-    if(i_this->mLineMat.init(1, 20, res, 1) == FALSE){
+    if(i_this->mLineMat.init(1, 20, img, TRUE) == FALSE){
         return FALSE;
     }
     else{
@@ -407,7 +420,7 @@ static cPhs_State daShand_Create(fopAc_ac_c* i_this) {
             /* SrcObjAt  Type    */ 0,
             /* SrcObjAt  Atp     */ 0,
             /* SrcObjAt  SPrm    */ 0,
-            /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT), // 0xff1dfeff 
+            /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
             /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
             /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
             /* SrcGObjAt Se      */ 0,
@@ -459,21 +472,22 @@ static cPhs_State daShand_Create(fopAc_ac_c* i_this) {
         },
     };
 
-    fopAcM_SetupActor(i_this, shand_class);
     shand_class* s_this = static_cast<shand_class*>(i_this);
-    int ret = dComIfG_resLoad(&s_this->mPhs, "Shand");
+    fopAcM_SetupActor(i_this, shand_class);
+
+    cPhs_State ret = dComIfG_resLoad(&s_this->mPhs, "Shand");
     if(ret == cPhs_COMPLEATE_e){
-        if(fopAcM_entrySolidHeap(s_this, daShand_solidHeapCB, 0x1040) != false){
-            s_this->health = 2;
+        if(fopAcM_entrySolidHeap(i_this, daShand_solidHeapCB, 0x1040) != false){
+            i_this->health = 2;
             s_this->mExecuteCount = cM_rndF(10000.0f);
             s_this->field_318 = 10;
             s_this->field_2BA = 1;
             s_this->field_2F0 = 1.0f;
-            if((fopAcM_GetParam(s_this) & 0xff) == 1)
+            if((fopAcM_GetParam(i_this) & 0xff) == 1)
                 s_this->field_304 = 15.75f;
             else
                 s_this->field_304 = 10.5f;
-            s_this->mStts.Init(0xff, 0xff, s_this);
+            s_this->mStts.Init(0xff, 0xff, i_this);
             for(int i = 0; i < 5; i++){
                 s_this->mCylArr[i].Set(tg_cyl_src);
                 s_this->mCylArr[i].SetStts(&s_this->mStts);
