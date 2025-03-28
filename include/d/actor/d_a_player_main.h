@@ -1432,7 +1432,7 @@ public:
     BOOL procBtVerticalJumpCut();
     BOOL procBtVerticalJumpLand_init();
     BOOL procBtVerticalJumpLand();
-    void shipSpecialDemoStart();
+    BOOL shipSpecialDemoStart();
     BOOL checkJumpRideShip();
     BOOL checkShipNotNormalMode();
     void setShipRideArmAngle(int, J3DTransformInfo*);
@@ -1726,7 +1726,7 @@ public:
             mCurProc == daPyProc_GRAB_UP_e ||
             mCurProc == daPyProc_GRAB_THROW_e;
     }
-    bool checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
+    BOOL checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void clearDamageWait() {}
     void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}

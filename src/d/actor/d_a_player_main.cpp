@@ -1815,7 +1815,7 @@ BOOL daPy_lk_c::changeDamageProc() {
         mCurProc == daPyProc_SHIP_READY_e ||
         (
             dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
-            ship && ship->unknown_inline_TODO()
+            ship && ship->checkForceMove()
         )
     ) {
         offNoResetFlg0(daPyFlg0_SHIP_DROP);

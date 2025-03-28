@@ -52,7 +52,9 @@ enum daPy__PlayerStatus0 {
     daPyStts0_TELESCOPE_LOOK_e = 0x00200000,
     daPyStts0_BOOMERANG_WAIT_e = 0x00400000,
     daPyStts0_UNK800000_e      = 0x00800000,
+    daPyStts0_UNK1000000_e     = 0x01000000,
     daPyStts0_UNK2000000_e     = 0x02000000,
+    daPyStts0_UNK4000000_e     = 0x04000000,
     daPyStts0_CRAWL_e          = 0x08000000,
     daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
@@ -394,7 +396,7 @@ public:
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
     void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
-    bool checkPlayerStatus(int param_0, int i, u32 flag) { return flag & mPlayerStatus[param_0][i]; }
+    BOOL checkPlayerStatus(int param_0, int i, u32 flag) { return mPlayerStatus[param_0][i] & flag; }
 
     u8 getSelectItem(int idx) { return mSelectItem[idx]; }
     void setSelectItem(int idx, u8 itemNo) { mSelectItem[idx] = itemNo; }
@@ -721,7 +723,7 @@ public:
     /* 0x49B0 */ u8 mPlayerInfoBuffer[sizeof(dSv_player_status_c_c)];
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
-    /* 0x4A28 */ u32 mPlayerStatus[2][2];
+    /* 0x4A28 */ u32 mPlayerStatus[1][4];
     /* 0x4A38 */ u16 mMinigameFlags;
     /* 0x4A3A */ u8 mMiniGameType;
     /* 0x4A3C */ s16 mMiniGameRupee;
@@ -770,6 +772,7 @@ extern GXColor g_clearColor;
 extern GXColor g_blackColor;
 extern GXColor g_whiteColor;
 extern GXColor g_saftyWhiteColor;
+
 
 /**
  * === SAVE ===
@@ -1848,6 +1851,10 @@ void dComIfGs_revPlayerRecollectionData();
  * === PLAY ===
  */
 
+inline void dComIfGp_onMenuCollect() {
+    g_dComIfG_gameInfo.play.field_0x495a = 1;
+} 
+
 inline void dComIfGp_init() { g_dComIfG_gameInfo.play.init(); }
 
 void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer = -1,
@@ -2169,7 +2176,7 @@ inline int dComIfGp_getPlayerCameraID(int idx) {
     return g_dComIfG_gameInfo.play.getPlayerCameraID(idx);
 }
 
-inline BOOL dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
+inline u32 dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
     return g_dComIfG_gameInfo.play.checkCameraAttentionStatus(idx, flag);
 }
 
@@ -2309,11 +2316,11 @@ inline u8 dComIfGp_checkMesgCancelButton() {
     return g_dComIfG_gameInfo.play.checkMesgCancelButton();
 }
 
-inline bool dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
+inline u32 dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 0, flag);
 }
 
-inline bool dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
+inline u32 dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
 }
 

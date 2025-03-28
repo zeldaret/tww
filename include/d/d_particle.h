@@ -120,6 +120,14 @@ public:
     void executeAfter(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
+    JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
+    void setTimer (s16 timerVal) { mFadeTimer = timerVal; }
+    void setSpeed (f32 vel) { mVelFade1 = vel; }
+    void setPitch (f32 pitch) { mVelFade2 = pitch; }
+    void setMaxSpeed (f32 vel) { mMaxParticleVelocity = vel; }
+    void setMaxDisSpeed (f32 vel) { mVelSpeed = vel; } 
+    void setAnchor (cXyz* anchorPos1, cXyz* anchorPos2) { mCollapsePos[0].set(*anchorPos1); mCollapsePos[1].set(*anchorPos2); }
+
     virtual ~dPa_waveEcallBack() {}
 
     /* 0x04 */ s16 mState;
@@ -132,7 +140,7 @@ public:
     /* 0x1C */ cXyz mCollapsePos[2];
     /* 0x34 */ const cXyz* mpPos;
     /* 0x38 */ const csXyz* mpRot;
-    /* 0x3C */ JGeometry::TVec3<f32> mRotMtx[3];
+    /* 0x3C */ Vec mRotMtx[3];
     /* 0x60 */ JPABaseEmitter* mpBaseEmitter;
 };
 
@@ -141,6 +149,10 @@ public:
     void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
     void remove();
     void execute(JPABaseEmitter*);
+
+    JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
+    void setSpeed (f32 vel) { mScaleTimer = vel; }
+    void setMaxSpeed (f32 vel) { mMaxScaleTimer = vel; }
 
     virtual ~dPa_splashEcallBack() {}
 
@@ -160,12 +172,16 @@ public:
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
+    JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
+    void setIndirectTexData (f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
+    void setSpeed (f32 vel) { mVel = vel; }
+
     virtual ~dPa_trackEcallBack() {}
 
     /* 0x04 */ s16 mState;
     /* 0x08 */ f32 mBaseY;
     /* 0x0C */ f32 mMinY;
-    /* 0x10 */ Vec mPos[3];
+    /* 0x10 */ JGeometry::TVec3<f32> mPos[3];
     /* 0x34 */ const cXyz* mpPos;
     /* 0x38 */ const csXyz* mpRot;
     /* 0x3C */ f32 mExTransY;

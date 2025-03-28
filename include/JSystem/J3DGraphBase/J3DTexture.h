@@ -68,6 +68,7 @@ public:
     void setEffectMtx(Mtx effectMtx) { mTexMtxInfo.setEffectMtx(effectMtx); }
     Mtx& getViewMtx() { return mViewMtx; }
     void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
+    void setTranslationX(f32 translationX){ mTexMtxInfo.mSRT.mTranslationX = translationX; } // Fakematch
 
     // TODO
     void getTextureSRT() {}
