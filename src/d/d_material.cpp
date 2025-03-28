@@ -25,7 +25,7 @@ void dMat_ice_c::create(J3DMaterialTable* param_1, J3DAnmTextureSRTKey* param_2)
     mMaterialTable = param_1;
     int rt = mBtkAnm.init(mMaterialTable, param_2, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
     JUT_ASSERT(98, rt != FALSE);
-    mBtkAnm.entry(mMaterialTable, mBtkAnm.getFrameCtrl()->getFrame());
+    mBtkAnm.entry(mMaterialTable);
 }
 
 /* 8006F740-8006F780       .text play__10dMat_ice_cFv */

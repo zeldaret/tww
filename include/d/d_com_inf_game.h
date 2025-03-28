@@ -2993,7 +2993,7 @@ inline s32 dComIfGp_demo_mode() {
 }
 
 inline dDemo_actor_c* dComIfGp_demo_getActor(u8 id) {
-    return g_dComIfG_gameInfo.play.getDemo()->mDemoObj.getActor(id);
+    return g_dComIfG_gameInfo.play.getDemo()->getObject()->getActor(id);
 }
 
 /**

@@ -241,6 +241,10 @@ public:
     void remove();
     bool update();
 
+    dDemo_system_c* getSystem() { return mSystem;}
+    JStudio::TControl* getControl() { return mControl; }
+    dMesg_tControl* getMesgControl() { return mMesgControl; }
+    dDemo_object_c* getObject() { return &mDemoObj; }
     int getFrame() { return mFrame; }
     u32 getFrameNoMsg() { return mFrameNoMsg; }
     s32 getMode() { return mMode; }

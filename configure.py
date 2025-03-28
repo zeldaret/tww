@@ -1494,8 +1494,8 @@ config.libs = [
     ActorRel(Equivalent,  "d_a_pedestal", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_saku"),
     ActorRel(Matching,    "d_a_seatag"),
-    ActorRel(NonMatching, "d_a_shand"),
-    ActorRel(NonMatching, "d_a_ship"),
+    ActorRel(Matching,    "d_a_shand", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(NonMatching, "d_a_ship", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Equivalent,  "d_a_shop_item"), # weak func order
     ActorRel(NonMatching, "d_a_sie_flag"),
     ActorRel(NonMatching, "d_a_sitem"),
