@@ -40,7 +40,7 @@ public:
     /* 0x28 */ f32 field_0x28;
     /* 0x2C */ f32 field_0x2C; // 0.7f
     /* 0x30 */ f32 field_0x30; // 0.0f
-    /* 0x34 */ f32 field_0x34;
+    /* 0x34 */ f32 field_0x34; // 19.0f
     /* 0x38 */ f32 field_0x38; // 3.0f
     /* 0x3C */ f32 field_0x3C; // 0.0f
     /* 0x40 */ f32 field_0x40;

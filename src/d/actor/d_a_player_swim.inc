@@ -195,7 +195,7 @@ void daPy_lk_c::swimOutAfter(int param_1) {
     if (param_1) {
         seStartOnlyReverb(0x3809);
     }
-    dComIfGp_setItemTimeCount(0);
+    dComIfGp_clearItemTimeCount();
     dComIfGp_setItemTimeMax(0);
     resetPriTextureAnime();
 }
@@ -261,7 +261,7 @@ void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
 /* 8013D638-8013D6B8       .text getSwimTimerRate__9daPy_lk_cFv */
 f32 daPy_lk_c::getSwimTimerRate() {
     f32 swimTimerRate;
-    if (dComIfGp_getItemTimeMax() && !dComIfGp_event_getMode()) {
+    if (dComIfGp_getItemTimeMax() && !dComIfGp_event_getMode()) { // fakematch? possibly the dComIfGp_getItemSwimTimerStatus inline mentioned in the debug maps
         swimTimerRate = (1.0f - dComIfGp_getItemTimeCount() * 0.0011111111f);
     }
     else {
@@ -341,7 +341,34 @@ BOOL daPy_lk_c::procSwimUp_init(int param_1) {
 
 /* 8013DA18-8013DB24       .text procSwimUp__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimUp() {
-    /* Nonmatching */
+    int iVar1;
+    J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
+    setSpeedAndAngleSwim();
+    if (!changeSwimOutProc()) {
+        if (mFrameCtrl->getRate() < 0.01f) {
+            procSwimWait_init(0);
+        }
+        else {
+            if (mFrameCtrl->getFrame() > l_HIO_swim_c0.m.field_0x34) {
+                if (m35B0 > 0.05f) {
+                    procSwimMove_init(0);
+                }
+            }
+            else {
+                if (mFrameCtrl->checkPass(4.0f)) {
+                    voiceStart(0x1A);
+                    seStartOnlyReverb(0x2840);
+                    seStartOnlyReverb(0x3807);
+                }
+                else {
+                    m35C4 = l_HIO_swim_c0.m.field_0x3C;
+                    current.pos.y = m35D0;
+                }
+            }
+        }
+    }
+    setSwimTimerStartStop();
+    return TRUE;
 }
 
 /* 8013DB24-8013DCDC       .text procSwimWait_init__9daPy_lk_cFi */
