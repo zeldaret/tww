@@ -250,9 +250,9 @@ public:
     /* 0x0352 */ u8 m0352;
     /* 0x0353 */ u8 m0353;
     /* 0x0354 */ int mEvtStaffId;
-    /* 0x0358 */ fpc_ProcID mStateFlag;
-    /* 0x035C */ fpc_ProcID mNextMessageID;
-    /* 0x0360 */ fpc_ProcID mShadowId;
+    /* 0x0358 */ u32 mStateFlag;
+    /* 0x035C */ u32 mNextMessageNo;
+    /* 0x0360 */ u32 mShadowId;
     /* 0x0364 */ s16 m0364;
     /* 0x0366 */ s16 m0366;
     /* 0x0368 */ u8 m0368[0x036C - 0x0368];
