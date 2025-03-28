@@ -918,7 +918,7 @@ public:
     BOOL draw();
     void setAtnList();
     void setActorPointer();
-    void setTalkStatus();
+    BOOL setTalkStatus();
     void setHintActor();
     void setDoStatusBasic();
     void setDoStatus();
@@ -1401,13 +1401,13 @@ public:
     BOOL procGrabRebound();
     void setSpeedAndAngleSwim();
     BOOL checkNextModeSwim();
-    void changeSwimProc();
-    void changeSwimUpProc();
+    BOOL changeSwimProc();
+    BOOL changeSwimUpProc();
     void swimOutAfter(int);
     BOOL checkSwimFallCheck();
-    void changeSwimOutProc();
+    BOOL changeSwimOutProc();
     void setSwimMoveAnime(daPy_ANM);
-    void getSwimTimerRate();
+    f32 getSwimTimerRate();
     void setSwimTimerStartStop();
     BOOL procSwimUp_init(int);
     BOOL procSwimUp();
@@ -1782,7 +1782,7 @@ public:
     void otherWeaponTrigger() const {}
     void spBattleTrigger() const {}
     
-    void checkPlayerDemoMode() const {}
+    BOOL checkPlayerDemoMode(u8 mode) const { return mDemo.getDemoMode() == mode; }
     void checkSpecialDemoMode() const {}
     
     void checkAttentionLock() {}

@@ -1116,7 +1116,7 @@ void daPy_lk_c::setActorPointer() {
 }
 
 /* 80108564-80108634       .text setTalkStatus__9daPy_lk_cFv */
-void daPy_lk_c::setTalkStatus() {
+BOOL daPy_lk_c::setTalkStatus() {
     /* Nonmatching */
 }
 

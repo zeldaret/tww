@@ -381,7 +381,10 @@ public:
     s16 getItemBeastNumCount(int i_idx) { return mItemBeastNumCounts[i_idx]; }
 
     void setItemTimeCount(s32 time) { mAirMeter = time; }
+    s32 getItemTimeCount() { return mAirMeter; }
+
     void setItemTimeMax(s32 time) { field_0x4928 = time; }
+    s32 getItemTimeMax() { return field_0x4928; }
 
     u8 getScopeType() { return mScopeType; }
     void setScopeType(u8 type) { mScopeType = type; }
@@ -2232,8 +2235,16 @@ inline void dComIfGp_setItemTimeCount(s32 time) {
     g_dComIfG_gameInfo.play.setItemTimeCount(time);
 }
 
+inline s32 dComIfGp_getItemTimeCount() {
+    return g_dComIfG_gameInfo.play.getItemTimeCount();
+}
+
 inline void dComIfGp_setItemTimeMax(s32 time) {
     g_dComIfG_gameInfo.play.setItemTimeMax(time);
+}
+
+inline u32 dComIfGp_getItemTimeMax() {
+    return g_dComIfG_gameInfo.play.getItemTimeMax();
 }
 
 inline void dComIfGp_setMessageCountNumber(s16 num) {
