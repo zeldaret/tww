@@ -16,6 +16,7 @@
 
 daPy_HIO_swim_c0 l_HIO_swim_c0;
 daPy_HIO_wallCatch_c0 l_HIO_wallCatch_c0;
+daPy_HIO_turn_c0 l_HIO_turn_c0;
 
 /* 8013CC64-8013CF2C       .text setSpeedAndAngleSwim__9daPy_lk_cFv */
 void daPy_lk_c::setSpeedAndAngleSwim() {
@@ -112,7 +113,7 @@ BOOL daPy_lk_c::changeSwimProc() {
     if (!checkNoResetFlg0(daPyFlg0_UNK80) || checkModeFlg(0x42000) || checkNoControll() || checkPlayerDemoMode(0x11) || m35D0 - current.pos.y > l_HIO_swim_c0.m.field_0x24) {
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(1);
-        g_dComIfG_gameInfo.play.field_0x48c8 = 900; // Some inline?
+        g_dComIfG_gameInfo.play.field_0x48c8 = 900; // Some inline? Debug maps make no mention in this function
 
         offNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS);
         offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
@@ -411,7 +412,46 @@ BOOL daPy_lk_c::procSwimWait_init(int param_1) {
 
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimWait() {
-    /* Nonmatching */
+    fopAc_ac_c* talkEventPartner;
+    short target;
+    double dVar2;
+    float fVar3;
+    
+    setSpeedAndAngleSwim();
+    m34D4 += (short)((cM_rndF(0.3f) + 0.85f) * l_HIO_swim_c0.m.field_0x2);
+    m35C4 = cM_ssin(m34D4) * l_HIO_swim_c0.m.field_0x4C + l_HIO_swim_c0.m.field_0x48;
+    if (changeSwimOutProc()) {
+        return TRUE;
+    }
+    else {
+        if (!checkNoResetFlg0(daPyFlg0_UNK100)) {
+            if (changeSwimUpProc()) {
+                return TRUE;
+            }
+        }
+        else {
+            current.pos.y = m35D0;
+        }
+        if (checkNextModeSwim()) {
+            return TRUE;
+        }
+        else {
+            if (dComIfGp_checkPlayerStatus0(0, 0x10)) {
+                talkEventPartner = fopAcM_getTalkEventPartner(this);
+                if (talkEventPartner) {
+                    target = cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos);
+                    cLib_addCalcAngleS(&shape_angle.y, target, l_HIO_turn_c0.m.field_0x6, l_HIO_turn_c0.m.field_0x8, l_HIO_turn_c0.m.field_0xA);
+                    current.angle.y = shape_angle.y;
+               }
+            }
+            mFrameCtrlUnder[0].setRate((float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x70) + l_HIO_swim_c0.m.field_0x40);
+            if (m35B0 > 0.05f) {
+                procSwimMove_init(1);
+            }
+            setSwimTimerStartStop();
+        }
+    }
+    return TRUE;
 }
 
 /* 8013DE8C-8013DF60       .text procSwimMove_init__9daPy_lk_cFi */
