@@ -84,7 +84,7 @@ static BOOL daTag_SoExecute(void* i_this) {
 
 /* 000002EC-00000310       .text daTag_SoDraw__FPv */
 static BOOL daTag_SoDraw(void* i_this) {
-    return ((daTag_So_c*)i_this)->_draw();;
+    return ((daTag_So_c*)i_this)->_draw();
 }
 
 /* 00000310-00000318       .text daTag_SoIsDelete__FPv */

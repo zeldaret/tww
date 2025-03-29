@@ -184,7 +184,7 @@ cXyz dNpc_PathRun_c::getPoint(u8 pointIdx) {
     cXyz point(0.0f, 0.0f, 0.0f);
 
     if(mPath != 0 && pointIdx < mPath->m_num) {
-        point = mPath->mpPnt[pointIdx].mPos;
+        point = mPath->m_points[pointIdx].m_position;
     }
 
     return point;
@@ -195,19 +195,19 @@ bool dNpc_PathRun_c::chkPointPass(cXyz currPos, bool goingForwards) {
     bool passed = false;
     if (mPath) {
         cXyz target;
-        target.x = mPath->mpPnt[mCurrPointIndex].mPos.x;
-        target.z = mPath->mpPnt[mCurrPointIndex].mPos.z;
+        target.x = mPath->m_points[mCurrPointIndex].m_position.x;
+        target.z = mPath->m_points[mCurrPointIndex].m_position.z;
         f32 deltaX;
         f32 deltaZ;
         if (mCurrPointIndex == 0) {
-            deltaX = mPath->mpPnt[1].mPos.x - mPath->mpPnt[0].mPos.x;
-            deltaZ = mPath->mpPnt[1].mPos.z - mPath->mpPnt[0].mPos.z;
+            deltaX = mPath->m_points[1].m_position.x - mPath->m_points[0].m_position.x;
+            deltaZ = mPath->m_points[1].m_position.z - mPath->m_points[0].m_position.z;
         } else if (mCurrPointIndex == mPath->m_num - 1) {
-            deltaX = mPath->mpPnt[mPath->m_num - 1].mPos.x - mPath->mpPnt[mPath->m_num - 2].mPos.x;
-            deltaZ = mPath->mpPnt[mPath->m_num - 1].mPos.z - mPath->mpPnt[mPath->m_num - 2].mPos.z;
+            deltaX = mPath->m_points[mPath->m_num - 1].m_position.x - mPath->m_points[mPath->m_num - 2].m_position.x;
+            deltaZ = mPath->m_points[mPath->m_num - 1].m_position.z - mPath->m_points[mPath->m_num - 2].m_position.z;
         } else {
-            deltaX = mPath->mpPnt[mCurrPointIndex + 1].mPos.x - mPath->mpPnt[mCurrPointIndex - 1].mPos.x;
-            deltaZ = mPath->mpPnt[mCurrPointIndex + 1].mPos.z - mPath->mpPnt[mCurrPointIndex - 1].mPos.z;
+            deltaX = mPath->m_points[mCurrPointIndex + 1].m_position.x - mPath->m_points[mCurrPointIndex - 1].m_position.x;
+            deltaZ = mPath->m_points[mCurrPointIndex + 1].m_position.z - mPath->m_points[mCurrPointIndex - 1].m_position.z;
         }
         
         f32 f29 = cM_ssin(cM_atan2s(deltaX, deltaZ)) * (f32)0x7FFF;
@@ -258,7 +258,7 @@ bool dNpc_PathRun_c::incIdxAuto() {
     bool hitEnd = true;
 
     if(mPath != 0) {
-        if(mPath->mLoops & 1) {
+        if(dPath_ChkClose(mPath)) {
             mCurrPointIndex += 1;
             if(mCurrPointIndex >= mPath->m_num) {
                 mCurrPointIndex = 0;
@@ -311,7 +311,7 @@ bool dNpc_PathRun_c::decIdxAuto() {
     bool hitEnd = true;
 
     if(mPath != 0) {
-        if(mPath->mLoops & 1) {
+        if(dPath_ChkClose(mPath)) {
             mCurrPointIndex -= 1;
             if(mCurrPointIndex >= mPath->m_num) {
                 mCurrPointIndex = mPath->m_num - 1;
@@ -405,7 +405,7 @@ u8 dNpc_PathRun_c::maxPoint() {
 u8 dNpc_PathRun_c::pointArg(u8 idx) {
     u8 arg = 0;
     if(mPath != 0 && idx < (u8)mPath->m_num) {
-        arg = mPath->mpPnt[idx].mArg3;
+        arg = mPath->m_points[idx].mArg3;
     }
 
     return arg;

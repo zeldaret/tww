@@ -26,9 +26,9 @@ dPath* set_next_path_info(kytag02_class* i_this, dPath* path) {
 /* 000000F0-0000017C       .text get_railwind_vec__FP5dPathi */
 cXyz get_railwind_vec(dPath* path, int i_no) {
     /* Nonmatching */
-    dPath__Point* pnt = path->mpPnt;
-    cXyz p0 = pnt[i_no].mPos;
-    cXyz p1 = pnt[i_no + 1].mPos;
+    dPnt* pnt = path->m_points;
+    cXyz p0 = pnt[i_no].m_position;
+    cXyz p1 = pnt[i_no + 1].m_position;
     cXyz ret;
     dKyr_get_vectle_calc(&p0, &p1, &ret);
     return ret;
@@ -49,8 +49,8 @@ dPath* get_nearpos_rail(kytag02_class* i_this, dPath* i_path, cXyz* pos, int* i_
 
     while (true) {
         for (s32 i = 0; i < path->m_num; i++) {
-            f32 dx = path->mpPnt[i].mPos.x - pos->x;
-            f32 dz = path->mpPnt[i].mPos.z - pos->z;
+            f32 dx = path->m_points[i].m_position.x - pos->x;
+            f32 dz = path->m_points[i].m_position.z - pos->z;
             f32 dist = std::sqrtf(dx*dx + dz*dz);
             if (best > dist) {
                 bestPath = path;
@@ -59,7 +59,7 @@ dPath* get_nearpos_rail(kytag02_class* i_this, dPath* i_path, cXyz* pos, int* i_
             }
         }
 
-        if (path->mNextPathId == 0xFFFF)
+        if (path->m_nextID == 0xFFFF)
             break;
         path = set_next_path_info(i_this, path);
     }
@@ -78,7 +78,7 @@ void windtag_move(kytag02_class* i_this) {
         dPath* path = get_nearpos_rail(i_this, i_this->mpPath, &player->current.pos, &i_no);
         i_this->mWindVec = get_railwind_vec(path, i_no);
         g_env_light.mWind.mpWindVecOverride = &i_this->mWindVec;
-        dPath__Point* pnt = &path->mpPnt[i_no];
+        dPnt* pnt = &path->m_points[i_no];
         u32 strength = (s32)pnt->mArg3 != 0xFF ? pnt->mArg3 : path->mArg0;
         g_env_light.mWind.mWindStrengthOverride = (f32)strength / 100.0f;
     }

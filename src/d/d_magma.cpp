@@ -126,9 +126,9 @@ void dMagma_ballPath_c::setup(f32 offsY, u8 pathNo, int roomNo) {
     /* Nonmatching */
     dPath* path = dPath_GetRoomPath(pathNo, roomNo);
     s32 ptNo = (s32)cM_rndF(path->m_num - 1);
-    dPath__Point* pt = &path->mpPnt[ptNo];
-    mPos.x = pt->mPos.x + cM_rndFX(pt->mArg3 * 100.0f);
-    mPos.z = pt->mPos.z + cM_rndFX(pt->mArg3 * 100.0f);
+    dPnt* pt = &path->m_points[ptNo];
+    mPos.x = pt->m_position.x + cM_rndFX(pt->mArg3 * 100.0f);
+    mPos.z = pt->m_position.z + cM_rndFX(pt->mArg3 * 100.0f);
     mScale = cM_rndF(1.0f) + 1.0f;
     mBaseY = offsY - cM_rndF(20.0f);
     mWave = cM_rndF(8.0f) * 4096.0f;
@@ -424,7 +424,7 @@ dMagma_floor_c* dMagma_packet_c::newFloor(cXyz& p0, cXyz& p1, int i_roomNo, s16 
                 if (path == NULL)
                     return NULL;
 
-                dPath__Point* pnt = path->mpPnt;
+                dPnt* pnt = path->m_points;
                 for (s32 j = 0; j < path->m_num; j++)
                     param += (s32)(pnt->mArg3 * 4.0f); // bug? forgot to increment pnt
             }

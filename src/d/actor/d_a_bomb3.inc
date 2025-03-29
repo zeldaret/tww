@@ -118,7 +118,7 @@ void daBomb_fuseSparksEcallBack::execute(JPABaseEmitter* emitter) {
     f32 z = mpPos->z;
     emitter->mGlobalTranslation.set(x, y, z);
     
-    JSUPtrLink* link = emitter->mActiveParticles.getFirstLink();
+    JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
     while(link != 0) {
         JSUPtrLink* next = link->getNext();
 
@@ -466,22 +466,22 @@ void daBomb_c::posMoveF() {
         water_tention();
         tri = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
 
-        f32 mag = mWindVec.getSquareMag();
-        if(mag > 0.01f) {
-            f32 temp2;
+        if(mWindVec.abs2() > 0.01f) {
+            f32 no_grade_cos;
             cXyz* norm;
+            f32 friction;
             if(tri) {
                 norm = tri->GetNP();
-                mag = 0.06f;
-                temp2 = cM_scos(0xA4F);
+                friction = 0.06f;
+                no_grade_cos = cM_scos(0xA4F);
             }
             else {
                 norm = NULL;
-                mag = 0.0f;
-                temp2 = 0.0f;
+                friction = 0.0f;
+                no_grade_cos = 0.0f;
             }
 
-            daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &mWindVec, 0.002f, 0.0005f, norm, mag, temp2, NULL);
+            daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &mWindVec, 0.002f, 0.0005f, norm, friction, no_grade_cos, NULL);
         }
         else {
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
@@ -1129,7 +1129,7 @@ void daBomb_c::set_wind_vec() {
     cXyz sp48 = *mSph.GetTgRVecP();
     f32 f31 = sp48.abs2();
     if (f31 > 180.0f*180.0f) {
-        sp48 *= 180.0f / std::sqrtf(f31);;
+        sp48 *= 180.0f / std::sqrtf(f31);
     }
     cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
     cXyz hitNormal = cXyz::Zero;

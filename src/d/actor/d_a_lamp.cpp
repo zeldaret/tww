@@ -79,11 +79,11 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
     i_this->mModel->setBaseTRMtx(*calc_mtx);
     MtxTrans(10.0f, -140.0f, -15.0f, 1);
 
-    cXyz pos;
-    pos.z = 0.0f;
-    pos.y = 0.0f;
-    pos.x = 0.0f;
-    MtxPosition(&pos, &i_this->mPos);
+    cXyz offset;
+    offset.z = 0.0f;
+    offset.y = 0.0f;
+    offset.x = 0.0f;
+    MtxPosition(&offset, &i_this->mPos);
 
     if (!i_this->mParticleInit) {
         static cXyz fire_scale(0.5f, 0.5f, 0.5f);

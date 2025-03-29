@@ -147,8 +147,8 @@ void daWindTag::daWindTag_c::CreateInit() {
         if (mpPath != NULL) {
             mPathPointDir = 1;
             mCurPathPoint = 1;
-            mTargetPos = mpPath->mpPnt[mCurPathPoint].mPos;
-            current.pos = mpPath->mpPnt[0].mPos;
+            mTargetPos = mpPath->m_points[mCurPathPoint].m_position;
+            current.pos = mpPath->m_points[0].m_position;
             speedF = 10.0f + ((fopAcM_GetParam(this) >> 16) & 0x1F);
         } else {
             mPathId = 0xFF;
@@ -277,7 +277,7 @@ void daWindTag::daWindTag_c::set_next_pnt() {
         return;
 
     mCurPathPoint += mPathPointDir;
-    if (mpPath->mLoops & 1) {
+    if (dPath_ChkClose(mpPath)) {
         if (mCurPathPoint > mpPath->m_num - 1) {
             mCurPathPoint = 0;
         } else if (mCurPathPoint < 0) {
@@ -293,7 +293,7 @@ void daWindTag::daWindTag_c::set_next_pnt() {
         }
     }
 
-    mTargetPos = mpPath->mpPnt[mCurPathPoint].mPos;
+    mTargetPos = mpPath->m_points[mCurPathPoint].m_position;
 }
 
 /* 00001700-00001814       .text _draw__Q29daWindTag11daWindTag_cFv */

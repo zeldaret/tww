@@ -977,11 +977,11 @@ static void path_check(bk_class* i_this, u8 r19) {
     sp18.y += 100.0f;
     cXyz spc;
     
-    dPath__Point* pnt = i_this->ppd->mpPnt;
+    dPnt* pnt = i_this->ppd->m_points;
     for (int i = 0; i < i_this->ppd->m_num; i++, pnt++) {
-        spc.x = pnt->mPos.x;
-        spc.y = pnt->mPos.y + 100.0f;
-        spc.z = pnt->mPos.z;
+        spc.x = pnt->m_position.x;
+        spc.y = pnt->m_position.y + 100.0f;
+        spc.z = pnt->m_position.z;
         linChk.Set(&sp18, &spc, i_actor);
         if (!dComIfG_Bgsp()->LineCross(&linChk)) {
             sp90[i] = 1;
@@ -993,14 +993,14 @@ static void path_check(bk_class* i_this, u8 r19) {
     f32 f0 = 0.0f;
     bool r6 = false;
     for (int i2 = 0; i2 < 100; i2++, f0 += 50.0f) {
-        pnt = i_this->ppd->mpPnt;
+        pnt = i_this->ppd->m_points;
         for (int j = 0; j < i_this->ppd->m_num; j++, pnt++) {
             if (sp90[j] == 0) {
                 continue;
             }
-            f32 distX = i_this->current.pos.x - pnt->mPos.x;
-            f32 distY = i_this->current.pos.y - pnt->mPos.y;
-            f32 distZ = i_this->current.pos.z - pnt->mPos.z;
+            f32 distX = i_this->current.pos.x - pnt->m_position.x;
+            f32 distY = i_this->current.pos.y - pnt->m_position.y;
+            f32 distZ = i_this->current.pos.z - pnt->m_position.z;
             if (std::sqrtf(distX*distX + distY*distY + distZ*distZ) < f0) {
                 if (r19) {
                     i_this->m1216 = j;
@@ -1062,22 +1062,22 @@ static void jyunkai(bk_class* i_this) {
             if (i_this->m1215 != 0) {
                 i_this->m1216 += i_this->m1217;
                 if (i_this->m1216 >= (s8)i_this->ppd->m_num) {
-                    if (i_this->ppd->mLoops & 1) {
+                    if (dPath_ChkClose(i_this->ppd)) {
                         i_this->m1216 = 0;
                     } else {
                         i_this->m1217 = -1;
                         i_this->m1216 = i_this->ppd->m_num - 2;
                     }
-                    if ((i_this->ppd->mNextPathId & 0xFFFF) != 0xFFFF) {
-                        i_this->ppd = dPath_GetRoomPath(i_this->ppd->mNextPathId, fopAcM_GetRoomNo(i_this));
+                    if ((i_this->ppd->m_nextID & 0xFFFF) != 0xFFFF) {
+                        i_this->ppd = dPath_GetRoomPath(i_this->ppd->m_nextID, fopAcM_GetRoomNo(i_this));
                         JUT_ASSERT(VERSION_SELECT(2907, 2924, 2924), i_this->ppd != NULL);
                     }
                 } else if (i_this->m1216 < 0) {
                     i_this->m1217 = 1;
                     i_this->m1216 = 1;
                 }
-                dPath__Point* point = &i_this->ppd->mpPnt[i_this->m1216];
-                i_this->m0320 = point->mPos;
+                dPnt* point = &i_this->ppd->m_points[i_this->m1216];
+                i_this->m0320 = point->m_position;
             } else {
                 way_pos_check(i_this, &i_this->m0320);
             }
@@ -1104,7 +1104,7 @@ static void jyunkai(bk_class* i_this) {
         
         if (i_this->m1215 != 0 && (i_this->m0B30 != 0 || i_this->m11F3 != 0)) {
             if (std::sqrtf(sp10.x*sp10.x + sp10.z*sp10.z) < f31 * 0.25f * 2.0f) {
-                if (i_this->ppd->mpPnt[i_this->m1216].mArg3 == 3) {
+                if (i_this->ppd->m_points[i_this->m1216].mArg3 == 3) {
                     wait_set(i_this);
                     i_this->dr.m004 = 2;
                 } else {
@@ -1541,8 +1541,8 @@ static void stand2(bk_class* i_this) {
         }
         break;
     case 52: {
-        dPath__Point* pnt = &i_this->ppd->mpPnt[i_this->m1216];
-        i_this->m0320 = pnt->mPos;
+        dPnt* pnt = &i_this->ppd->m_points[i_this->m1216];
+        i_this->m0320 = pnt->m_position;
         sp24 = i_this->m0320 - i_this->current.pos;
         goto temp_568;
     }
@@ -1619,9 +1619,9 @@ static void path_run(bk_class* i_this) {
         i_this->dr.m004 = 1;
         // Fall-through
     case 1:
-        dPath__Point* point = &i_this->ppd->mpPnt[i_this->m1216];
-        f32 x = point->mPos.x + i_this->m0320.x;
-        f32 z = point->mPos.z + i_this->m0320.z;
+        dPnt* point = &i_this->ppd->m_points[i_this->m1216];
+        f32 x = point->m_position.x + i_this->m0320.x;
+        f32 z = point->m_position.z + i_this->m0320.z;
         cXyz sp0C;
         sp0C.x = x - i_this->current.pos.x;
         sp0C.z = z - i_this->current.pos.z;
@@ -1848,7 +1848,7 @@ static void fight_run(bk_class* i_this) {
                     anm_init(i_this, BK_BCK_BK_JUMP1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, BK_BAS_BK_JUMP1);
                     i_this->speed.y = 65.0f + cM_rndF(10.0f + REG8_F(7)) + REG8_F(8);
                     if ((i_this->m02DD & 0xC) == 0) {
-                        s16 temp = cM_rndFX(3000.0f + REG6_F(13));;
+                        s16 temp = cM_rndFX(3000.0f + REG6_F(13));
                         i_this->current.angle.y += temp;
                     }
                     fopAcM_monsSeStart(i_this, JA_SE_CV_BK_JUMP, 0);
@@ -3815,18 +3815,17 @@ static void waki_set(bk_class* i_this) {
     
     cXyz sp2C;
     u8 sp38[0x100];
-    dPath__Point* pnt;
-    int i;
+    dPnt* pnt;
     int pnt_idx;
     
     sp2C = camera->mLookat.mCenter - camera->mLookat.mEye;
     cXyz sp20;
     s16 r27_1 = cM_atan2s(sp2C.x, sp2C.z);
-    pnt = i_this->ppd->mpPnt;
+    pnt = i_this->ppd->m_points;
     for (int i = 0; i < i_this->ppd->m_num; i++, pnt++) {
-        sp2C.x = pnt->mPos.x - camera->mLookat.mEye.x;
-        sp2C.y = pnt->mPos.y - camera->mLookat.mEye.y;
-        sp2C.z = pnt->mPos.z - camera->mLookat.mEye.z;
+        sp2C.x = pnt->m_position.x - camera->mLookat.mEye.x;
+        sp2C.y = pnt->m_position.y - camera->mLookat.mEye.y;
+        sp2C.z = pnt->m_position.z - camera->mLookat.mEye.z;
         cMtx_YrotS(*calc_mtx, -r27_1);
         MtxPosition(&sp2C, &sp20);
         if (sp20.z < 0.0f) {
@@ -3841,12 +3840,12 @@ static void waki_set(bk_class* i_this) {
     int r27 = -1;
     int r24 = 0;
     for (; r24 < 100; r24++, f29 += 100.0f) {
-        pnt = i_this->ppd->mpPnt;
+        pnt = i_this->ppd->m_points;
         for (pnt_idx = 0; pnt_idx < i_this->ppd->m_num; pnt_idx++, pnt++) {
             if (sp38[pnt_idx] == 0) { continue; }
-            sp2C.x = player->current.pos.x - pnt->mPos.x;
-            sp2C.y = player->current.pos.y - pnt->mPos.y;
-            sp2C.z = player->current.pos.z - pnt->mPos.z;
+            sp2C.x = player->current.pos.x - pnt->m_position.x;
+            sp2C.y = player->current.pos.y - pnt->m_position.y;
+            sp2C.z = player->current.pos.z - pnt->m_position.z;
             if (sp2C.abs() < f29) {
                 r27 = pnt_idx;
                 r23 = true;
@@ -3862,12 +3861,12 @@ static void waki_set(bk_class* i_this) {
     r23 = false;
     r24 = 0;
     for (; r24 < 100; r24++, f29 += 100.0f) {
-        pnt = i_this->ppd->mpPnt;
+        pnt = i_this->ppd->m_points;
         for (pnt_idx = 0; pnt_idx < i_this->ppd->m_num; pnt_idx++, pnt++) {
             if (sp38[pnt_idx] == 0) { continue; }
-            sp2C.x = player->current.pos.x - pnt->mPos.x;
-            sp2C.y = player->current.pos.y - pnt->mPos.y;
-            sp2C.z = player->current.pos.z - pnt->mPos.z;
+            sp2C.x = player->current.pos.x - pnt->m_position.x;
+            sp2C.y = player->current.pos.y - pnt->m_position.y;
+            sp2C.z = player->current.pos.z - pnt->m_position.z;
             if (sp2C.abs() > f29 && sp2C.abs() < f29 + 200.0f && r27 != pnt_idx) {
                 r23 = true;
                 break;
@@ -3880,7 +3879,7 @@ static void waki_set(bk_class* i_this) {
     
     if (r23 && r27 >= 0) {
         fopAcM_prm_class* params = fopAcM_CreateAppend();
-        params->mPos = pnt->mPos;
+        params->mPos = pnt->m_position;
         params->mAngle.x = 0;
         params->mAngle.z = pnt_idx;
         if (r27 > pnt_idx) {

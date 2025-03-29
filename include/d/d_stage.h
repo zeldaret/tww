@@ -26,6 +26,7 @@ enum StageType {
     /* 0x08 */ dStageType_UNKNOWN_8_e,
 };
 
+// Virt
 class stage_vrbox_info_class {
 public:
     /* 0x00 */ u32 field_0x00;
@@ -260,6 +261,7 @@ struct stage_sound_data {
     /* 0x1A */ u8 field_0x1a;
 };  // Size: 0x1C
 
+// SOND
 struct dStage_SoundInfo_c {
     /* 0x0 */ int num;
     /* 0x4 */ stage_sound_data* m_entries;
@@ -271,12 +273,10 @@ public:
     /* 0x4 */ f32 mSeaLevel;
 };
 
+// PPNT / RPPN
 struct dStage_dPnt_c {
-    /* 0x0 */ u8 field_0x0;
-    /* 0x1 */ u8 field_0x1;
-    /* 0x2 */ u8 field_0x2;
-    /* 0x3 */ u8 field_0x3;
-    /* 0x4 */ cXyz m_position;
+    /* 0x0 */ int num;
+    /* 0x4 */ u32 m_pnt_offset;
 };  // Size: 0x10
 
 struct dStage_FloorInfo_entry_c {

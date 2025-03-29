@@ -344,9 +344,9 @@ void action_dousa(pw_class* i_this) {
         if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
             i_this->speedF = 5.0f;
             move_sound(i_this);
-            dPath__Point* pnt = &i_this->mpPath->mpPnt[i_this->mPathPntIdx];
-            f32 delta_x = pnt->mPos.x - i_this->current.pos.x;
-            f32 delta_z = pnt->mPos.z - i_this->current.pos.z;
+            dPnt* pnt = &i_this->mpPath->m_points[i_this->mPathPntIdx];
+            f32 delta_x = pnt->m_position.x - i_this->current.pos.x;
+            f32 delta_z = pnt->m_position.z - i_this->current.pos.z;
             i_this->m38C = cM_atan2s(delta_x, delta_z);
             f32 dist_xz = std::sqrtf(delta_x*delta_x + delta_z*delta_z);
             if (dist_xz < 80.0f) {

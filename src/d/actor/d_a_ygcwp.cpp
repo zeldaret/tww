@@ -133,7 +133,7 @@ void daYgcwp_c::make_shine() {
 
 /* 000005F0-00000654       .text set_timer__9daYgcwp_cFv */
 void daYgcwp_c::set_timer() {
-    s32* a_intP = (s32*)dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
+    int* a_intP = dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
     mTimer = 0;
     if (a_intP != NULL)
         mTimer = *a_intP;
