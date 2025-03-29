@@ -110,7 +110,7 @@ BOOL daPy_lk_c::changeSwimProc() {
     BOOL res;
     cXyz local_18;
     
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || checkModeFlg(0x42000) || checkNoControll() || checkPlayerDemoMode(0x11) || m35D0 - current.pos.y > l_HIO_swim_c0.m.field_0x24) {
+    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(0x42000) && !checkNoControll() && !checkPlayerDemoMode(0x11) && m35D0 - current.pos.y > l_HIO_swim_c0.m.field_0x24) {
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(1);
         g_dComIfG_gameInfo.play.field_0x48c8 = 900; // Some inline? Debug maps make no mention in this function
@@ -134,7 +134,7 @@ BOOL daPy_lk_c::changeSwimProc() {
         setSwimTimerStartStop();
         
         if (checkModeFlg(2)) {
-            current.pos.y = current.pos.y + l_HIO_swim_c0.m.field_0x24;
+            current.pos.y += l_HIO_swim_c0.m.field_0x24;
             speed.y = mOldSpeed.y * l_HIO_swim_c0.m.field_0x10;
 
             if (speed.y < l_HIO_swim_c0.m.field_0x14) {
@@ -252,10 +252,11 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 
 /* 8013D530-8013D638       .text setSwimMoveAnime__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
 void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
-    float sVar3;
-    sVar3 = mFrameCtrlUnder[0].getEnd();
-    setSingleMoveAnime(swimMoveAnm, (std::fabsf(mVelocity) * l_HIO_swim_c0.m.field_0x54) / mMaxNormalSpeed + l_HIO_swim_c0.m.field_0x50 + (getSwimTimerRate() * l_HIO_swim_c0.m.field_0x74), 0.0f, -1, l_HIO_swim_c0.m.field_0x58);
-    mFrameCtrlUnder[0].setFrame(mFrameCtrlUnder[0].getFrame() * sVar3 * mFrameCtrlUnder[0].getEnd());
+    /* Nonmatching */
+    //float startFrame = mFrameCtrlUnder[0].getFrame();
+    float endFrame = mFrameCtrlUnder[0].getEnd();
+    setSingleMoveAnime(swimMoveAnm, (std::fabsf(mVelocity) * ((l_HIO_swim_c0.m.field_0x54 - l_HIO_swim_c0.m.field_0x50))) / mMaxNormalSpeed + l_HIO_swim_c0.m.field_0x50 + (float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x74), 0.0f, -1, l_HIO_swim_c0.m.field_0x58); // Missing a `* currentFrame` in here?
+    mFrameCtrlUnder[0].setFrame(endFrame * mFrameCtrlUnder[0].getEnd());
     mAnmRatioUnder[0].getAnmTransform()->setFrame(mFrameCtrlUnder[0].getFrame());
 }
 
@@ -463,10 +464,12 @@ BOOL daPy_lk_c::procSwimMove_init(int param_1) {
     gravity = 0.0f;
     setSwimMoveAnime(ANM_SWIMING);
     m34B8 = 0;
+
     if (checkNoResetFlg0(daPyFlg0_UNK100)) {
         if (mEquipItem != 0x100) {
             deleteEquipItem(1);
         }
+
         current.pos.y = m35D0;
         speed.y = 0.0f;
         setSwimTail();
@@ -484,7 +487,7 @@ BOOL daPy_lk_c::procSwimMove() {
     setSpeedAndAngleSwim();
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
     if (!mpAttention->Lockon()) {
-        iVar1 = FALSE;
+        iVar1 = 0;
     }
     else {
         if (mStickDistance > 0.05f) {
