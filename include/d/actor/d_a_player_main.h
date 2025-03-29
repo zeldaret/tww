@@ -979,7 +979,7 @@ public:
     BOOL changeFrontWallTypeProc();
     int changeSlideProc();
     void changeWaitProc();
-    void changeLandProc(f32);
+    int changeLandProc(f32);
     BOOL setDamagePoint(f32);
     BOOL checkNormalDamage(int);
     void setDashDamage();
@@ -1419,7 +1419,7 @@ public:
     BOOL procSwimMove_init(BOOL);
     BOOL procSwimMove();
     void setSpecialBattle(int);
-    void changeSpecialBattle();
+    int changeSpecialBattle();
     BOOL procBtJump_init(fopEn_enemy_c*);
     BOOL procBtJump();
     BOOL procBtJumpCut_init(cXyz*);

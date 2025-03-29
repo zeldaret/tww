@@ -37,12 +37,14 @@ class J2DOrthoGraph;
 
 enum daPy__PlayerStatus0 {
     daPyStts0_UNK1_e           = 0x00000001,
+    daPyStts0_UNK2_e           = 0x00000002,
     daPyStts0_UNK10_e          = 0x00000010,
     daPyStts0_UNK20_e          = 0x00000020,
     daPyStts0_UNK40_e          = 0x00000040,
     daPyStts0_UNK80_e          = 0x00000080,
     daPyStts0_UNK100_e         = 0x00000100,
     daPyStts0_UNK200_e         = 0x00000200,
+    daPyStts0_UNK400_e         = 0x00000400,
     daPyStts0_BOW_AIM_e        = 0x00001000,
     daPyStts0_UNK2000_e        = 0x00002000,
     daPyStts0_HOOKSHOT_AIM_e   = 0x00004000,
