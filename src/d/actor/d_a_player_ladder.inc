@@ -13,7 +13,7 @@
 #include "d/actor/d_a_player_main.h"
 
 /* 80132F34-80132F58       .text getLadderMoveAnmSpeed__9daPy_lk_cFv */
-void daPy_lk_c::getLadderMoveAnmSpeed() {
+f32 daPy_lk_c::getLadderMoveAnmSpeed() {
     /* Nonmatching */
 }
 
