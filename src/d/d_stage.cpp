@@ -1300,7 +1300,6 @@ const char* dStage_getName2(s16 i_procName, s8 i_subtype) {
  */
 void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm) {
     dStage_objectNameInf* nameinf_p = dStage_searchName(i_actorData->mName);
-    fopAc_ac_c* actor;
 
     if (nameinf_p == NULL) {
         JKRHeap::free(i_actorPrm, NULL);
@@ -1729,7 +1728,6 @@ int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int i_num, void* i_f
 
     for (int i = 0; i < rtbl->num; i++) {
         rtbl_entries[i] = (roomRead_data_class*)((u32)i_file + (u32)rtbl_entries[i]);
-        roomRead_data_class * pEntry = rtbl_entries[i];
         rtbl_entries[i]->mpRooms = (u8*)((u32)i_file + (u32)rtbl_entries[i]->mpRooms);
     }
 

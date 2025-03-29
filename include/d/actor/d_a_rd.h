@@ -120,8 +120,8 @@ public:
     void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
     
     fopAc_ac_c* _searchNearDeadRd(fopAc_ac_c*);
-    BOOL _nodeControl(J3DNode*, J3DModel*);
-    BOOL _nodeHeadControl(J3DNode*, J3DModel*);
+    void _nodeControl(J3DNode*, J3DModel*);
+    void _nodeHeadControl(J3DNode*, J3DModel*);
     BOOL _createHeap();
     bool createArrowHeap();
     bool checkPlayerInAttack();

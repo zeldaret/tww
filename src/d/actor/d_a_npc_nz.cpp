@@ -176,7 +176,8 @@ BOOL daNpc_Nz_c::_createHeap() {
         }
     }
 
-    if (field_0x934.init(1, 10, static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO)), 0)) {
+    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO));
+    if (field_0x934.init(1, 10, img, FALSE)) {
         return TRUE;
     } else {
         return FALSE;

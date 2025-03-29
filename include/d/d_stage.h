@@ -274,7 +274,6 @@ public:
 };
 
 // PPNT / RPPN
-struct dPnt;
 struct dStage_dPnt_c {
     /* 0x0 */ int num;
     /* 0x4 */ u32 m_pnt_offset;

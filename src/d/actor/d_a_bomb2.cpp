@@ -239,7 +239,7 @@ namespace daBomb2 {
         f32 z = mpPos->z;
         emitter->mGlobalTranslation.set(x, y, z);
 
-        JSUPtrLink* link = emitter->mActiveParticles.getFirstLink();
+        JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
         while(link != 0) {
             JSUPtrLink* next = link->getNext();
 
@@ -493,21 +493,21 @@ namespace daBomb2 {
     void Act_c::posMoveF() {
         if (mWindVec.abs2() > 0.01f) {
             cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-            cXyz* r6;
-            f32 f3, f4;
+            cXyz* norm;
+            f32 friction, no_grade_cos;
             if (triPla) {
-                r6 = triPla->GetNP();
-                f3 = 0.06f;
-                f4 = cM_scos(0xA4F);
+                norm = triPla->GetNP();
+                friction = 0.06f;
+                no_grade_cos = cM_scos(0xA4F);
             } else {
-                r6 = NULL;
-                f3 = 0.0f;
-                f4 = 0.0f;
+                norm = NULL;
+                friction = 0.0f;
+                no_grade_cos = 0.0f;
             }
             daObj::posMoveF_grade(
                 this, mStts.GetCCMoveP(), &mWindVec,
                 attr().field_0x30, attr().field_0x34,
-                r6, f3, f4, NULL
+                norm, friction, no_grade_cos, NULL
             );
         } else {
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
@@ -650,7 +650,7 @@ namespace daBomb2 {
         cXyz sp48 = *mSph.GetTgRVecP();
         f32 f31 = sp48.abs2();
         if (f31 > f30*f30) {
-            sp48 *= f30 / std::sqrtf(f31);;
+            sp48 *= f30 / std::sqrtf(f31);
         }
         cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
         cXyz hitNormal = cXyz::Zero;

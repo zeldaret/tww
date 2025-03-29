@@ -2553,7 +2553,7 @@ static BOOL daAgbsw0_Draw(daAgbsw0_c* i_this) {
 
 /* 00004B2C-00004CF8       .text daAgbsw0_Execute__FP10daAgbsw0_c */
 static BOOL daAgbsw0_Execute(daAgbsw0_c* i_this) {
-    i_this->execute();
+    return i_this->execute();
 }
 
 /* 00004CF8-00004D00       .text daAgbsw0_IsDelete__FP10daAgbsw0_c */

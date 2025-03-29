@@ -115,7 +115,6 @@ namespace daObjMovebox {
     
     /* 000001F0-000003A4       .text gnd_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cif */
     void Bgc_c::gnd_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, f32 param_4) {
-        f32 tempz;
         f32 maxGroundY = C_BG_MIN_HEIGHT;
         
         mDoMtx_stack_c::transS(movebox->current.pos);

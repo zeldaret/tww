@@ -3816,7 +3816,6 @@ static void waki_set(bk_class* i_this) {
     cXyz sp2C;
     u8 sp38[0x100];
     dPnt* pnt;
-    int i;
     int pnt_idx;
     
     sp2C = camera->mLookat.mCenter - camera->mLookat.mEye;
