@@ -384,8 +384,8 @@ public:
     void setItemTimeCount(s32 time) { mAirMeter = time; }
     void clearItemTimeCount() { mAirMeter = 0; }
     
-    s32 getItemTimeMax() { return field_0x4928; }
-    void setItemTimeMax(s32 time) { field_0x4928 = time; }
+    s32 getItemTimeMax() { return mItemTimeMax; }
+    void setItemTimeMax(s32 time) { mItemTimeMax = time; }
 
     u8 getScopeType() { return mScopeType; }
     void setScopeType(u8 type) { mScopeType = type; }
@@ -661,7 +661,7 @@ public:
     /* 0x4922 */ s16 mItemTimer;
     /* 0x4924 */ s16 mItemNowLife;
     /* 0x4926 */ s16 mItemNowRupee;
-    /* 0x4928 */ u8 field_0x4928;
+    /* 0x4928 */ u8 mItemTimeMax;
     /* 0x4929 */ u8 field_0x4929;
     /* 0x492A */ u8 mMesgStatus;
     /* 0x492B */ u8 mbCamOverrideFarPlane;

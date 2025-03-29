@@ -25,17 +25,14 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
 
     BOOL bVar3 = false;
 
-    if (mCurProc != 0x35) {
+    if (mCurProc != daPyProc_SWIM_UP_e) {
         if (!mpAttention->Lockon()) {
             if (mStickDistance > 0.05f) {
                 oldAngleY = shape_angle.y;
 
                 if (getDirectionFromShapeAngle() == 1) {
-                    mSwimTailEcallBack[0].field_0x04 = 1;
-                    mSwimTailEcallBack[0].field_0x20 = NULL;
-
-                    mSwimTailEcallBack[1].field_0x04 = 1;
-                    mSwimTailEcallBack[1].field_0x20 = NULL;
+                    mSwimTailEcallBack[0].onEnd();
+                    mSwimTailEcallBack[1].onEnd();
 
                     shape_angle.y = m34E8;
                     current.angle.y = m34E8;
@@ -61,11 +58,8 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
                 oldAngleY = current.angle.y;
 
                 if (getDirectionFromCurrentAngle() == 1) {
-                    mSwimTailEcallBack[0].field_0x04 = 1;
-                    mSwimTailEcallBack[0].field_0x20 = NULL;
-
-                    mSwimTailEcallBack[1].field_0x04 = 1;
-                    mSwimTailEcallBack[1].field_0x20 = NULL;
+                    mSwimTailEcallBack[0].onEnd();
+                    mSwimTailEcallBack[1].onEnd();
 
                     fVar1 = 0.0f;
                     bVar3 = TRUE;
@@ -88,7 +82,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
     }
 
     setNormalSpeedF(fVar1, l_HIO_swim_c0.m.field_0x18, l_HIO_swim_c0.m.field_0x1C, l_HIO_swim_c0.m.field_0x20);
-    
+
     if (bVar3 && mVelocity < 5.0f) {
         current.angle.y = m34E8;
         mVelocity = 0.0f;
@@ -104,12 +98,12 @@ BOOL daPy_lk_c::checkNextModeSwim() {
 
     if (mpAttnEntryA && mpAttnEntryA->mType == 7) { //Action_Ship? fopAc_Attn_ACTION_SHIP_e is 0x80 so not sure why Ghidra is saying this 
         dComIfGp_setDoStatus(0x1C); // Show `Get In` on the A Button? Ghidra says `GetInShip` is the symbol
-        if (mItemTrigger & 1) { 
+        if (doTrigger()) { 
             return procShipReady_init();
         }
     }
 
-    if (setTalkStatus() && (mItemTrigger & 1)) {
+    if (setTalkStatus() && doTrigger()) {
         res = fopAcM_orderTalkEvent(this, mpAttnActorA);
     }
     else {
@@ -124,7 +118,7 @@ BOOL daPy_lk_c::changeSwimProc() {
     BOOL res;
     cXyz local_18;
     
-    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(0x42000) && !checkNoControll() && !checkPlayerDemoMode(daPy_demo_c::DEMO_UNK11_e) && m35D0 - current.pos.y > l_HIO_swim_c0.m.field_0x24) {
+    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && !checkNoControll() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK11_e && m35D0 - current.pos.y > l_HIO_swim_c0.m.field_0x24) {
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(1);
         g_dComIfG_gameInfo.play.field_0x48c8 = 900; // Some inline? Debug maps make no mention of this function but perhaps it was used earlier?
@@ -147,7 +141,7 @@ BOOL daPy_lk_c::changeSwimProc() {
 
         setSwimTimerStartStop();
         
-        if (checkModeFlg(2)) {
+        if (checkModeFlg(ModeFlg_MIDAIR)) {
             current.pos.y += l_HIO_swim_c0.m.field_0x24;
             speed.y = mOldSpeed.y * l_HIO_swim_c0.m.field_0x10;
 
@@ -188,12 +182,12 @@ BOOL daPy_lk_c::changeSwimUpProc() {
         if (speed.y > l_HIO_swim_c0.m.field_0x68) {
             speed.y = l_HIO_swim_c0.m.field_0x68;
         }
-        if (speed.y > 0.0f && mEquipItem != 0x100) { // No value for 0x100 in `ItemTable`?
-            deleteEquipItem(1);
+        if (speed.y > 0.0f && mEquipItem != daPyItem_NONE_e) {
+            deleteEquipItem(TRUE);
         }
     }
     if (m35D0 - current.pos.y < 40.1f + l_HIO_swim_c0.m.field_0x28 && speed.y >= 0.0f) {
-        if (mCurProc == 0xb2) {
+        if (mCurProc == daPyProc_DEMO_DEAD_e) {
             onNoResetFlg0(daPyFlg0_UNK100);
             current.pos.y = m35D0;
             return TRUE;
@@ -217,7 +211,7 @@ void daPy_lk_c::swimOutAfter(int param_1) {
 
 /* 8013D314-8013D354       .text checkSwimFallCheck__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkSwimFallCheck() {
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || current.pos.y > m35D0 + 30.1f && !(dPa_control_c::mStatus & 1)) { // Fakematch? (dPa_control_c::mStatus & 1) seems like an inline
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || current.pos.y > m35D0 + 30.1f && !dPa_control_c::isStatus(1)) {
         return TRUE;
     }
     return FALSE;
@@ -225,7 +219,6 @@ BOOL daPy_lk_c::checkSwimFallCheck() {
 
 /* 8013D354-8013D530       .text changeSwimOutProc__9daPy_lk_cFv */
 BOOL daPy_lk_c::changeSwimOutProc() {
-    /* Nonmatching */
     cM3dGPla* pcVar1;
     
     if (mAcch.GetGroundH() != -1e+09f && dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) {
@@ -236,7 +229,7 @@ BOOL daPy_lk_c::changeSwimOutProc() {
     }
 
     if (checkSwimFallCheck()) {
-        if (mCurProc == 0x37 && m34B8) {
+        if (mCurProc == daPyProc_SWIM_MOVE_e && m34B8) {
             current.pos.y += m35C4;
         }
 
@@ -248,7 +241,7 @@ BOOL daPy_lk_c::changeSwimOutProc() {
         if (!checkNoResetFlg0(daPyFlg0_UNK80) || pcVar1 && pcVar1->mNormal.y >= 0.5f && m35D0 - mAcch.GetGroundH() < l_HIO_swim_c0.m.field_0x24 - 5.0f) {
             current.pos.y = m35D0;
 
-            if (mCurProc == 0x37 && m34B8) {
+            if (mCurProc == daPyProc_SWIM_MOVE_e && m34B8) {
                 current.pos.y += m35C4;
             }
 
@@ -260,7 +253,7 @@ BOOL daPy_lk_c::changeSwimOutProc() {
             if (dComIfGp_getItemTimeCount() <= 0 && startRestartRoom(5, 0xC9, -1.0f, 0)) {
                 voiceStart(0x21);
                 mFrameCtrlUnder[0].mRate = 0.0f;
-                onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); // the `oris` instruction for this code suggests `onNoResetFlg1` needs to include a `<< 16` op but that breaks other functions
+                onNoResetFlg1(daPyFlg1_UNK40000000);
             }
             return FALSE;
         }
@@ -280,7 +273,7 @@ void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
 /* 8013D638-8013D6B8       .text getSwimTimerRate__9daPy_lk_cFv */
 f32 daPy_lk_c::getSwimTimerRate() {
     f32 swimTimerRate;
-    if (dComIfGp_getItemTimeMax() && !dComIfGp_event_getMode()) { // fakematch? possibly the dComIfGp_getItemSwimTimerStatus inline mentioned in the debug maps
+    if (dComIfGp_getItemTimeMax() != 0 && dComIfGp_event_getMode() == dEvtMode_NONE_e) {
         swimTimerRate = (1.0f - dComIfGp_getItemTimeCount() * 0.0011111111f);
     }
     else {
@@ -305,9 +298,9 @@ void daPy_lk_c::setSwimTimerStartStop() {
             float swimTimerRate = getSwimTimerRate();
 
             if (swimTimerRate > 0.5f) {
-                target = cM_scos(cM_rad2s((1.0f - swimTimerRate) * 3.1415927f)) * -l_HIO_swim_c0.m.field_0x78;
+                target = cM_scos(cM_rad2s((1.0f - swimTimerRate) * M_PI)) * -l_HIO_swim_c0.m.field_0x78;
 
-                if (mFrameCtrlUnder->checkPass(0.0f) && mCurProc != 0x35) {
+                if (mFrameCtrlUnder->checkPass(0.0f) && mCurProc != daPyProc_SWIM_UP_e) {
                     if (m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
                         voiceStart(0x22);
                         m3570 = 0;
@@ -416,7 +409,7 @@ BOOL daPy_lk_c::procSwimWait_init(int param_1) {
 
     if (param_1) {
         fVar2 = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
-        uVar3 = cM_rad2s(fVar2 * 3.1415927f);
+        uVar3 = cM_rad2s(fVar2 * M_PI);
         mVelocity = speedF * (1.0f - l_HIO_swim_c0.m.field_0x60) + speedF * std::fabsf(cM_scos(uVar3)) * l_HIO_swim_c0.m.field_0x60;
     }
     else {
@@ -430,8 +423,8 @@ BOOL daPy_lk_c::procSwimWait_init(int param_1) {
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
     if (checkNoResetFlg0(daPyFlg0_UNK100)) {
-        if (mEquipItem != 0x100) {
-            deleteEquipItem(1);
+        if (mEquipItem != daPyItem_NONE_e) {
+            deleteEquipItem(TRUE);
         }
         current.pos.y = m35D0;
         speed.y = 0.0f;
@@ -504,8 +497,8 @@ BOOL daPy_lk_c::procSwimMove_init(int param_1) {
     m34B8 = 0;
 
     if (checkNoResetFlg0(daPyFlg0_UNK100)) {
-        if (mEquipItem != 0x100) {
-            deleteEquipItem(1);
+        if (mEquipItem != daPyItem_NONE_e) {
+            deleteEquipItem(TRUE);
         }
 
         current.pos.y = m35D0;
@@ -570,13 +563,13 @@ BOOL daPy_lk_c::procSwimMove() {
 
         if (m34B8) {
             setTextureAnime(3, 0);
-            onModeFlg(0x100);
-            offModeFlg(0x400);
+            onModeFlg(ModeFlg_00000100);
+            offModeFlg(ModeFlg_00000400);
             mpSeAnmFrameCtrl = NULL;
         }
         else {
-            offModeFlg(0x100);
-            onModeFlg(0x400);
+            offModeFlg(ModeFlg_00000100);
+            onModeFlg(ModeFlg_00000400);
         }
     }
     else {
