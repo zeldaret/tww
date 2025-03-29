@@ -21,43 +21,54 @@ daPy_HIO_turn_c0 l_HIO_turn_c0;
 /* 8013CC64-8013CF2C       .text setSpeedAndAngleSwim__9daPy_lk_cFv */
 void daPy_lk_c::setSpeedAndAngleSwim() {
     float fVar1;
-    BOOL bVar3;    
-    bVar3 = false;
     short oldAngleY;
+
+    BOOL bVar3 = false;
+
     if (mCurProc != 0x35) {
         if (!mpAttention->Lockon()) {
             if (mStickDistance > 0.05f) {
                 oldAngleY = shape_angle.y;
+
                 if (getDirectionFromShapeAngle() == 1) {
                     mSwimTailEcallBack[0].field_0x04 = 1;
                     mSwimTailEcallBack[0].field_0x20 = NULL;
+
                     mSwimTailEcallBack[1].field_0x04 = 1;
                     mSwimTailEcallBack[1].field_0x20 = NULL;
+
                     shape_angle.y = m34E8;
                     current.angle.y = m34E8;
                 }
                 else {
                     cLib_addCalcAngleS(&shape_angle.y, m34E8, l_HIO_swim_c0.m.field_0x8, l_HIO_swim_c0.m.field_0x4, l_HIO_swim_c0.m.field_0x6);     
                 }
+
                 fVar1 = mStickDistance * 3.0f * cM_scos(shape_angle.y - oldAngleY);
             }
             else {
                 fVar1 = 0.0f;
             }
+
             cLib_addCalcAngleS(&current.angle.y, shape_angle.y, 2, 0x2000, 0x1000);
+
             mMaxNormalSpeed = l_HIO_swim_c0.m.field_0xC;
         }
         else {
             setShapeAngleToAtnActor();
+
             if (mStickDistance > 0.05f) {
                 oldAngleY = current.angle.y;
+
                 if (getDirectionFromCurrentAngle() == 1) {
                     mSwimTailEcallBack[0].field_0x04 = 1;
                     mSwimTailEcallBack[0].field_0x20 = NULL;
+
                     mSwimTailEcallBack[1].field_0x04 = 1;
                     mSwimTailEcallBack[1].field_0x20 = NULL;
+
                     fVar1 = 0.0f;
-                    bVar3 = true;
+                    bVar3 = TRUE;
                 }
                 else {
                     cLib_addCalcAngleS(&current.angle.y, m34E8, l_HIO_swim_c0.m.field_0x8, l_HIO_swim_c0.m.field_0x4, l_HIO_swim_c0.m.field_0x6);
@@ -67,6 +78,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
             else {
                 fVar1 = 0.0f;
             }
+            
             mMaxNormalSpeed = ((cM_scos(current.angle.y - shape_angle.y) + 1.0f) * 0.25f + 0.5f) * l_HIO_swim_c0.m.field_0xC;
         }
     }
@@ -74,12 +86,14 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
         fVar1 = 0.0f;
         mMaxNormalSpeed = l_HIO_swim_c0.m.field_0xC;
     }
+
     setNormalSpeedF(fVar1, l_HIO_swim_c0.m.field_0x18, l_HIO_swim_c0.m.field_0x1C, l_HIO_swim_c0.m.field_0x20);
+    
     if (bVar3 && mVelocity < 5.0f) {
         current.angle.y = m34E8;
         mVelocity = 0.0f;
     }
-    if (dComIfGp_checkPlayerStatus0(0, 0x10)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
         mVelocity = 0.0f;
     }
 }
@@ -89,14 +103,14 @@ BOOL daPy_lk_c::checkNextModeSwim() {
     BOOL res;
 
     if (mpAttnEntryA && mpAttnEntryA->mType == 7) { //Action_Ship? fopAc_Attn_ACTION_SHIP_e is 0x80 so not sure why Ghidra is saying this 
-        dComIfGp_setDoStatus(0x1C); //GetInShip
+        dComIfGp_setDoStatus(0x1C); // Show `Get In` on the A Button? Ghidra says `GetInShip` is the symbol
         if (mItemTrigger & 1) { 
             return procShipReady_init();
         }
     }
 
     if (setTalkStatus() && (mItemTrigger & 1)) {
-        res = fopAcM_orderTalkEvent(this,mpAttnActorA);
+        res = fopAcM_orderTalkEvent(this, mpAttnActorA);
     }
     else {
         res = FALSE;
@@ -110,10 +124,10 @@ BOOL daPy_lk_c::changeSwimProc() {
     BOOL res;
     cXyz local_18;
     
-    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(0x42000) && !checkNoControll() && !checkPlayerDemoMode(0x11) && m35D0 - current.pos.y > l_HIO_swim_c0.m.field_0x24) {
+    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(0x42000) && !checkNoControll() && !checkPlayerDemoMode(daPy_demo_c::DEMO_UNK11_e) && m35D0 - current.pos.y > l_HIO_swim_c0.m.field_0x24) {
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(1);
-        g_dComIfG_gameInfo.play.field_0x48c8 = 900; // Some inline? Debug maps make no mention in this function
+        g_dComIfG_gameInfo.play.field_0x48c8 = 900; // Some inline? Debug maps make no mention of this function but perhaps it was used earlier?
 
         offNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS);
         offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
@@ -154,7 +168,7 @@ BOOL daPy_lk_c::changeSwimProc() {
             local_18.y = m35D0;
             local_18.z = current.pos.z;
             fopKyM_createWpillar(&local_18, 1.0f, oldSpeedY, 0);
-            seStartOnlyReverb(0x3808);
+            seStartOnlyReverb(JA_SE_LK_INTO_WATER);
             res = procSwimWait_init(0);
         }
         else {
@@ -174,7 +188,7 @@ BOOL daPy_lk_c::changeSwimUpProc() {
         if (speed.y > l_HIO_swim_c0.m.field_0x68) {
             speed.y = l_HIO_swim_c0.m.field_0x68;
         }
-        if (speed.y > 0.0f && mEquipItem != 0x100) {
+        if (speed.y > 0.0f && mEquipItem != 0x100) { // No value for 0x100 in `ItemTable`?
             deleteEquipItem(1);
         }
     }
@@ -194,7 +208,7 @@ void daPy_lk_c::swimOutAfter(int param_1) {
     onNoResetFlg0(daPyFlg0_UNK100);
     m35C4 = 0.0f;
     if (param_1) {
-        seStartOnlyReverb(0x3809);
+        seStartOnlyReverb(JA_SE_LK_OUTOF_WATER);
     }
     dComIfGp_clearItemTimeCount();
     dComIfGp_setItemTimeMax(0);
@@ -203,7 +217,7 @@ void daPy_lk_c::swimOutAfter(int param_1) {
 
 /* 8013D314-8013D354       .text checkSwimFallCheck__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkSwimFallCheck() {
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || current.pos.y > m35D0 + 30.1f && !(dPa_control_c::mStatus & 1)) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || current.pos.y > m35D0 + 30.1f && !(dPa_control_c::mStatus & 1)) { // Fakematch? (dPa_control_c::mStatus & 1) seems like an inline
         return TRUE;
     }
     return FALSE;
@@ -211,6 +225,7 @@ BOOL daPy_lk_c::checkSwimFallCheck() {
 
 /* 8013D354-8013D530       .text changeSwimOutProc__9daPy_lk_cFv */
 BOOL daPy_lk_c::changeSwimOutProc() {
+    /* Nonmatching */
     cM3dGPla* pcVar1;
     
     if (mAcch.GetGroundH() != -1e+09f && dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) {
@@ -221,7 +236,6 @@ BOOL daPy_lk_c::changeSwimOutProc() {
     }
 
     if (checkSwimFallCheck()) {
-
         if (mCurProc == 0x37 && m34B8) {
             current.pos.y += m35C4;
         }
@@ -233,17 +247,20 @@ BOOL daPy_lk_c::changeSwimOutProc() {
     else {
         if (!checkNoResetFlg0(daPyFlg0_UNK80) || pcVar1 && pcVar1->mNormal.y >= 0.5f && m35D0 - mAcch.GetGroundH() < l_HIO_swim_c0.m.field_0x24 - 5.0f) {
             current.pos.y = m35D0;
+
             if (mCurProc == 0x37 && m34B8) {
                 current.pos.y += m35C4;
             }
+
             swimOutAfter(1);
+
             return checkNextMode(0);
         }
         else {
-            if (dComIfGp_getItemTimeCount() <= 0 && startRestartRoom(5, 0xc9, -1.0f, 0)) {
+            if (dComIfGp_getItemTimeCount() <= 0 && startRestartRoom(5, 0xC9, -1.0f, 0)) {
                 voiceStart(0x21);
                 mFrameCtrlUnder[0].mRate = 0.0f;
-                onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); // DoNotAnimate, the `oris` instruction for this code suggests `onNoResetFlg1` needs to include a `<< 16` op
+                onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); // the `oris` instruction for this code suggests `onNoResetFlg1` needs to include a `<< 16` op but that breaks other functions
             }
             return FALSE;
         }
@@ -280,12 +297,16 @@ f32 daPy_lk_c::getSwimTimerRate() {
 /* 8013D6B8-8013D814       .text setSwimTimerStartStop__9daPy_lk_cFv */
 void daPy_lk_c::setSwimTimerStartStop() {
     float target = 0.0f;
+
     if (mAcch.GetGroundH() <= m35D0 - 175.0f) {
         dComIfGp_setItemTimeMax(1);
+
         if (checkNoResetFlg0(daPyFlg0_UNK100)) {
             float swimTimerRate = getSwimTimerRate();
+
             if (swimTimerRate > 0.5f) {
                 target = cM_scos(cM_rad2s((1.0f - swimTimerRate) * 3.1415927f)) * -l_HIO_swim_c0.m.field_0x78;
+
                 if (mFrameCtrlUnder->checkPass(0.0f) && mCurProc != 0x35) {
                     if (m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
                         voiceStart(0x22);
@@ -301,8 +322,9 @@ void daPy_lk_c::setSwimTimerStartStop() {
     else {
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(1);
-        dComIfGp_setItemTimeMax(0); //Fakematch? Seems nonsensical to set it to 1 then immediately to 0
+        dComIfGp_setItemTimeMax(0); //Fakematch? Seems nonsensical to set it to 1 then immediately to 0, also could be `dComIfGp_stopItemSwimTimer` and `dComIfGp_startItemSwimTimer` inlines mentioned in the debug maps
     }
+
     cLib_chaseF(&m3608, target, 3.0f);
 }
 
@@ -314,15 +336,22 @@ BOOL daPy_lk_c::procSwimUp_init(int param_1) {
     static JGeometry::TVec3<f32> ripple_scale(0.3f, 0.3f, 0.3f);
 
     commonProcInit(daPyProc_SWIM_UP_e);
+
     gravity = 0.0f;
     speed.y = 0.0f;
+
     current.pos.y = m35D0;
+
     setSingleMoveAnime(ANM_SWIMP, l_HIO_swim_c0.m.field_0x2C, l_HIO_swim_c0.m.field_0x30, l_HIO_swim_c0.m.field_0x0, l_HIO_swim_c0.m.field_0x38);
-    dComIfGp_setPlayerStatus0(0, 0x100000);
+
+    dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
+
     m35C4 = l_HIO_swim_c0.m.field_0x3C;
+
     onNoResetFlg0(daPyFlg0_UNK100);
+
     if (param_1) {
-        mEmitter = dComIfGp_particle_setP1(0x40, &current.pos);
+        mEmitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0040, &current.pos);
 
         if (mEmitter) {
             mEmitter->setRate(15.0f);
@@ -330,7 +359,7 @@ BOOL daPy_lk_c::procSwimUp_init(int param_1) {
             mEmitter->setGlobalParticleScale(splash_scale);
         }
 
-        mEmitter = dComIfGp_particle_setShipTail(0x3D, &current.pos, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
+        mEmitter = dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_003D, &current.pos, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
         
         if (mEmitter) {
             mEmitter->setGlobalDynamicsScale(ripple_scale);
@@ -344,8 +373,11 @@ BOOL daPy_lk_c::procSwimUp_init(int param_1) {
 /* 8013DA18-8013DB24       .text procSwimUp__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimUp() {
     int iVar1;
+
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
+
     setSpeedAndAngleSwim();
+
     if (!changeSwimOutProc()) {
         if (mFrameCtrl->getRate() < 0.01f) {
             procSwimWait_init(0);
@@ -359,8 +391,8 @@ BOOL daPy_lk_c::procSwimUp() {
             else {
                 if (mFrameCtrl->checkPass(4.0f)) {
                     voiceStart(0x1A);
-                    seStartOnlyReverb(0x2840);
-                    seStartOnlyReverb(0x3807);
+                    seStartOnlyReverb(JA_SE_LK_WALK_IN_WATER);
+                    seStartOnlyReverb(JA_SE_LK_SWIM);
                 }
                 else {
                     m35C4 = l_HIO_swim_c0.m.field_0x3C;
@@ -375,17 +407,17 @@ BOOL daPy_lk_c::procSwimUp() {
 
 /* 8013DB24-8013DCDC       .text procSwimWait_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procSwimWait_init(int param_1) {
-    float fVar1;
     float fVar2;
-    uint uVar3;
-    double dVar4;
+    u32 uVar3;
+    
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
+
     commonProcInit(daPyProc_SWIM_WAIT_e);
 
     if (param_1) {
         fVar2 = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
         uVar3 = cM_rad2s(fVar2 * 3.1415927f);
-        this->mVelocity = speedF * (1.0f - l_HIO_swim_c0.m.field_0x60) + speedF * std::fabsf(cM_scos(uVar3)) * l_HIO_swim_c0.m.field_0x60;
+        mVelocity = speedF * (1.0f - l_HIO_swim_c0.m.field_0x60) + speedF * std::fabsf(cM_scos(uVar3)) * l_HIO_swim_c0.m.field_0x60;
     }
     else {
         fVar2 = 0.0f;
@@ -395,7 +427,7 @@ BOOL daPy_lk_c::procSwimWait_init(int param_1) {
     setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x70) + l_HIO_swim_c0.m.field_0x40, 0.0f, -1, l_HIO_swim_c0.m.field_0x44);
     mFrameCtrl->setFrame(fVar2 * mFrameCtrl->getEnd());
     mAnmRatioUnder[0].getAnmTransform()->setFrame(mFrameCtrl->getFrame());
-    dComIfGp_setPlayerStatus0(0, 0x100000);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
     if (checkNoResetFlg0(daPyFlg0_UNK100)) {
         if (mEquipItem != 0x100) {
@@ -414,11 +446,12 @@ BOOL daPy_lk_c::procSwimWait_init(int param_1) {
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimWait() {
     fopAc_ac_c* talkEventPartner;
-    short target;
+    short targetAngleY;
     
     setSpeedAndAngleSwim();
     m34D4 += (short)((cM_rndF(0.3f) + 0.85f) * l_HIO_swim_c0.m.field_0x2);
     m35C4 = cM_ssin(m34D4) * l_HIO_swim_c0.m.field_0x4C + l_HIO_swim_c0.m.field_0x48;
+
     if (changeSwimOutProc()) {
         return TRUE;
     }
@@ -435,18 +468,21 @@ BOOL daPy_lk_c::procSwimWait() {
             return TRUE;
         }
         else {
-            if (dComIfGp_checkPlayerStatus0(0, 0x10)) {
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
                 talkEventPartner = fopAcM_getTalkEventPartner(this);
                 if (talkEventPartner) {
-                    target = cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos);
-                    cLib_addCalcAngleS(&shape_angle.y, target, l_HIO_turn_c0.m.field_0x6, l_HIO_turn_c0.m.field_0x8, l_HIO_turn_c0.m.field_0xA);
+                    targetAngleY = cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos);
+                    cLib_addCalcAngleS(&shape_angle.y, targetAngleY, l_HIO_turn_c0.m.field_0x6, l_HIO_turn_c0.m.field_0x8, l_HIO_turn_c0.m.field_0xA);
                     current.angle.y = shape_angle.y;
                }
             }
+
             mFrameCtrlUnder[0].setRate((float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x70) + l_HIO_swim_c0.m.field_0x40);
+
             if (mStickDistance > 0.05f) {
                 procSwimMove_init(1);
             }
+
             setSwimTimerStartStop();
         }
     }
@@ -462,7 +498,9 @@ BOOL daPy_lk_c::procSwimMove_init(int param_1) {
     }
 
     gravity = 0.0f;
+
     setSwimMoveAnime(ANM_SWIMING);
+
     m34B8 = 0;
 
     if (checkNoResetFlg0(daPyFlg0_UNK100)) {
@@ -472,11 +510,15 @@ BOOL daPy_lk_c::procSwimMove_init(int param_1) {
 
         current.pos.y = m35D0;
         speed.y = 0.0f;
+
         setSwimTail();
     }
-    dComIfGp_setPlayerStatus0(0, 0x100000);
+
+    dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
+
     m35C4 = l_HIO_swim_c0.m.field_0x5C;
     m3570 = 0;
+
     return TRUE;
 }
 
@@ -484,8 +526,11 @@ BOOL daPy_lk_c::procSwimMove_init(int param_1) {
 BOOL daPy_lk_c::procSwimMove() {
     int iVar1;
     daPy_ANM anm;
+
     setSpeedAndAngleSwim();
+
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
+
     if (!mpAttention->Lockon()) {
         iVar1 = 0;
     }
@@ -501,12 +546,14 @@ BOOL daPy_lk_c::procSwimMove() {
     if (m34B8 != iVar1) {
         m34B8 = iVar1;
         float fVar1 = m35C4;
+
         if (m34B8 == 0) {
             anm = ANM_SWIMING;
             m35C4 = l_HIO_swim_c0.m.field_0x5C;
         }
         else {
             m35C4 = -80.0f;
+
             if (m34B8 == 2) {
                 anm = ANM_ATNDLS;
             }
@@ -517,8 +564,10 @@ BOOL daPy_lk_c::procSwimMove() {
                 anm = ANM_ATNWB;
             } 
         }
+
         m_old_fdata->getOldFrameTransInfo(0)->mTranslate.y -= m35C4 - fVar1;
         setSwimMoveAnime(anm);
+
         if (m34B8) {
             setTextureAnime(3, 0);
             onModeFlg(0x100);
@@ -565,8 +614,10 @@ BOOL daPy_lk_c::procSwimMove() {
         procSwimWait_init(1);
     }
     else if ((!m34B8 && mFrameCtrl->checkPass(20.0f)) || (m34B8 && mFrameCtrl->checkPass(0.0f))) {
-            seStartOnlyReverb(0x3807);
+            seStartOnlyReverb(JA_SE_LK_SWIM);
     }
+
     setSwimTimerStartStop();
+
     return TRUE;
 }
