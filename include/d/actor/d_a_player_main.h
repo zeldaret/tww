@@ -929,7 +929,7 @@ public:
     void posMoveFromFootPos();
     void posMove();
     void setShapeAngleToAtnActor();
-    void cancelItemUpperReadyAnime();
+    BOOL cancelItemUpperReadyAnime();
     BOOL checkBodyAngleX(s16);
     BOOL setBodyAngleToCamera();
     void setBodyAngleXReadyAnime();
@@ -1505,11 +1505,11 @@ public:
     BOOL procRopeUpHang();
     BOOL checkBoomerangAnime() const;
     void throwBoomerang();
-    void returnBoomerang();
+    int returnBoomerang();
     BOOL checkNextActionBoomerangReady();
     BOOL checkNextActionBoomerangFly();
     BOOL checkNextBoomerangMode();
-    void changeBoomerangCatchProc();
+    int changeBoomerangCatchProc();
     BOOL procBoomerangSubject_init();
     BOOL procBoomerangSubject();
     BOOL procBoomerangMove_init();
