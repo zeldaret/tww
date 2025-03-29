@@ -32,7 +32,8 @@ public:
     u8 m2E4[0x02F0 - 0x02E4];
     /* 0x02F0 */ mDoExt_btkAnm* btk[8];
     /* 0x0310 */ mDoExt_brkAnm* brk[8];
-    u8 m330[0x0340 - 0x0330];
+    /* 0x0330 */ f32 m330;
+    u8 m334[0x0340 - 0x0334];
     /* 0x0340 */ J3DTexNoAnm* m340;
     u8 m344[0x0454 - 0x0344];
     /* 0x0454 */ u8 m454;
@@ -43,12 +44,14 @@ public:
     /* 0x0462 */ s16 m462;
     u8 m464[0x466 - 0x464];
     /* 0x0466 */ s16 m466;
-    u8 m468[0x46A - 0x468];
+    /* 0x0468 */ s16 m468;
     /* 0x046A */ s16 m46A;
-    u8 m46C[0x47C - 0x46C];
+    u8 m46C[0x478 - 0x46C];
+    /* 0x0478 */ f32 m478;
     /* 0x047C */ cXyz m47C;
     /* 0x0488 */ s16 m488;
-    u8 m48A[0x048E - 0x048A];
+    /* 0x048A */ s16 m48A;
+    u8 m48C[0x048E - 0x048C];
     /* 0x048E */ s16 m48E;
     u8 m490[0x0494 - 0x0490];
     /* 0x0494 */ s16 m494;
@@ -74,7 +77,8 @@ public:
     /* 0x18D8 */ J3DModel* br_modelL[3];
     /* 0x18E4 */ J3DModel* br_modelR[3];
     /* 0x18F0 */ f32 m18F0;
-    u8 m18F4[0x18F9 - 0x18F4];
+    /* 0x18F4 */ f32 m18F4;
+    /* 0x18F8 */ u8 m18F8;
     /* 0x18F9 */ u8 m18F9;
     u8 m18FA[0x18FB - 0x18FA];
     /* 0x18FB */ u8 m18FB;
@@ -109,7 +113,8 @@ public:
     /* 0x3A */ s16 m3A;
     /* 0x3C */ s16 m3C;
     /* 0x3E */ s16 m3E;
-
+    u8 m40[0x54 - 0x40];
+    /* 0x54 */ s16 m54;
 };
 
 #endif /* D_A_MT_H */
