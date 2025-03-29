@@ -371,5 +371,7 @@ void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power);
 cXyz dKyw_get_AllWind_vecpow(cXyz* param_0);
 BOOL dKyw_gbwind_use_check();
 void dKyw_tornado_Notice(cXyz* param_0);
+void dKyw_custom_windpower(f32 i_windpower);
+void dKyw_tact_wind_set_go();
 
 #endif /* D_KANKYO_WETHER_H */

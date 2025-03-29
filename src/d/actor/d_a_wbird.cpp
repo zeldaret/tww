@@ -8,6 +8,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "SSystem/SComponent/c_angle.h"
+#include "d/actor/d_a_player.h"
+// #include "JSystem/JMath/JMath.h"
 
 /* 00000078-000000AC       .text calcMtx__9daWbird_cFv */
 void daWbird_c::calcMtx() {
@@ -22,9 +24,44 @@ void daWbird_c::calcMtx() {
 /* 000000AC-00000324       .text setStartPos__9daWbird_cFv */
 void daWbird_c::setStartPos() {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    cXyz wind = *dKyw_get_wind_vec();
-    // cSGlobe globe1(player->mPosition - current.pos);
+    cXyz *wind = dKyw_get_wind_vec();
+    cSGlobe globe(*wind);
+    cSAngle angle(globe.U());
+    cSAngle angle2(globe.U() - player->current.angle.y);
+    if ((((angle2.Val() ^ cSAngle::_0.Val()) >> 1) - ((angle2.Val() ^ cSAngle::_0.Val()) * angle2.Val())) < 0) {
+        angle += cSAngle::_90;
+    } else {    
+        angle -= cSAngle::_90;
+    }
 
+    current.pos.x = player->current.pos.x;
+    current.pos.y = player->current.pos.y;
+    current.pos.z = player->current.pos.z;
+    double dVar6 = angle.Cos();
+    current.pos.x = current.pos.x + (dVar6 * 20.0f);
+    dVar6 = angle.Sin();
+    current.pos.y = current.pos.y + (dVar6 * 20.0f);
+    home.pos.x = current.pos.x;
+    home.pos.y = current.pos.y;
+    home.pos.z = current.pos.z;
+    current.pos.y = current.pos.y + 150.0f;
+    u32 uVar2 = g_env_light.mWind.mTactWindAngleX;
+    float local_38 = jmaCosTable[uVar2 >> jmaSinShift & 0x3f] * jmaCosTable[g_env_light.mWind.mTactWindAngleY >> jmaSinShift & 0x3f];
+    float local_34 = jmaSinTable[uVar2 >> jmaSinShift & 0x3f];
+    float local_30 = jmaCosTable[uVar2 >> jmaSinShift & 0x3f] * jmaSinTable[uVar2 >> jmaSinShift & 0x3f];
+    int iVar5 = cM_atan2s(local_38,local_30);
+    current.angle.y = iVar5;
+    player->shape_angle.y = iVar5;
+    field_0x29E = 80;
+    speed.x = local_38 * 40.0f;
+    speed.z = local_30 * 40.0f;
+    float fVar1 = field_0x29E * 0.5f;
+    current.pos.z = current.pos.z - fVar1 * speed.z;
+    current.pos.x = current.pos.x - fVar1 * speed.x;
+    field_0x29E = field_0x29E + 60;
+    field_0x2A0 = 1.0;
+    current.pos.y = current.pos.y + fVar1 * field_0x2A0 * fVar1 *0.5;
+    speed.y = -(field_0x2A0 * fVar1);
     /* Nonmatching */
 }
 
@@ -63,11 +100,74 @@ void daWbird_c::actionEnd() {
 
 /* 00000474-000005DC       .text actionMove__9daWbird_cFv */
 void daWbird_c::actionMove() {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if(field_0x29D){
+        field_0x29D = false;
+        mDoAud_seStart(JA_SE_TAKT_WIND_DEMO);
+    }
+        
+    if (field_0x29E >= 1) {
+        field_0x29E--;
+        if (field_0x29E > 60) {
+            fopAcM_posMove(this, NULL);
+            speed.y = speed.y + field_0x2A0;
+        }
+        if (field_0x29E < 15) {
+            dKyw_custom_windpower(0.0f);
+        }
+        if (field_0x29E == 70) {
+            dKyw_evt_wind_set_go();
+        }
+    } else {
+        dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("WINDMAN"));
+        player->changeDemoMoveAngle(field_0x2A4);
+        mAction = 1;
+        mDoAud_seStart(JA_SE_TAKT_WIND_DEMO);
+    }
     /* Nonmatching */
 }
 
 /* 000005DC-00000850       .text actionSelect__9daWbird_cFv */
 void daWbird_c::actionSelect() {
+    daPy_py_c* player;
+    short sVar2 = field_0x29E;
+    if (sVar2 == 10) {
+        dComIfGp_setOperateWindOn();
+        mDoAud_seStart(JA_SE_TAKT_WIND_DISP);
+        field_0x29E++;
+    } else if(sVar2 < 11){
+        field_0x29E = sVar2 + 1;    
+    } else{
+        mDoAud_seStart(JA_SE_SYS_WTAKT_WIND_AMB);
+        if(dComIfGp_getOperateWind() == 1){
+            mDoAud_seStart(JA_SE_TAKT_WIND_DECIDE);
+            setStartPos();
+            mAction = 2;
+            player = daPy_getPlayerActorClass();
+            sVar2 = current.angle.y;
+            field_0x2A4 = player->shape_angle.y;
+            player->setPlayerPosAndAngle(&player->current.pos, (sVar2 + 0x7fff));
+            if(dComIfGp_checkPlayerStatus0(0, 0x00010000)){
+                sVar2 = dComIfGp_evmng_getEventIdx("TACT_WINDOW2");
+                field_0x2A6 = sVar2;
+            } else{
+                sVar2 = dComIfGp_evmng_getEventIdx("TACT_WINDOW2_SHIP");
+                field_0x2A6 = sVar2;
+            }
+            fopAcM_orderChangeEventId(this, field_0x2A6, 0, 0xFFFF);
+            player = daPy_getPlayerActorClass();
+
+            /* could be wrong dont fully understand ghidra output */
+            player->cancelOriginalDemo();
+
+            dKyw_custom_windpower(0x3ff0000000000000);
+            field_0x29D = true;
+        } else if(dComIfGp_getOperateWind() == 0){
+            mDoAud_seStart(JA_SE_TAKT_WIND_CANCEL);
+            dComIfGp_event_reset();
+            fopAcM_delete(this);
+        }
+    }
     /* Nonmatching */
 }
 
@@ -77,7 +177,26 @@ static BOOL daWbird_Draw(daWbird_c*) {
 }
 
 /* 00000858-000008D0       .text daWbird_Execute__FP9daWbird_c */
-static BOOL daWbird_Execute(daWbird_c*) {
+static BOOL daWbird_Execute(daWbird_c* i_this) {
+    u8 bVar1 = i_this->mAction;
+
+    if(bVar1 != 2){
+        i_this->actionMove();
+    }else{
+        if(bVar1 <4){
+            i_this->actionSelect();
+            goto calcmtx;
+        }else if(bVar1 < 2){
+            if(bVar1 != 0){
+                i_this->actionEnd();
+                goto calcmtx;
+            }
+        }
+        i_this->actionWait();
+    }
+    calcmtx:
+    i_this->calcMtx();
+    return TRUE;
     /* Nonmatching */
 }
 
@@ -88,15 +207,18 @@ static BOOL daWbird_IsDelete(daWbird_c*) {
 
 /* 000008D8-00000908       .text daWbird_Delete__FP9daWbird_c */
 static BOOL daWbird_Delete(daWbird_c* i_this) {
-    // if (i_this != NULL) {
-    //     i_this->fopAc_ac_c::~fopAc_ac_c(); // Call base class destructor explicitly
-    // }
-    // return TRUE;
+    if(i_this != NULL){
+        fopAcM_delete(i_this);
+    }
+
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 00000908-00000928       .text daWbird_Create__FP10fopAc_ac_c */
 static cPhs_State daWbird_Create(fopAc_ac_c* i_this) {
+    daWbird_c* a_this = (daWbird_c*)i_this;
+    return a_this->create();
     /* Nonmatching */
 }
 
