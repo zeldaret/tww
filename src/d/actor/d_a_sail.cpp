@@ -633,10 +633,10 @@ static BOOL demo_move(sail_class* i_this) {
     if (i_this->demoActorID == 0) {
         return FALSE;
     }
-    dDemo_actor_c* demo = g_dComIfG_gameInfo.play.mDemo->mDemoObj.getActor(i_this->demoActorID);
-    if (demo != NULL) {
-        if (demo->checkEnable(0x40)) {
-            f32 frame = demo->mAnimationFrame;
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(i_this->demoActorID);
+    if (demo_actor != NULL) {
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
+            f32 frame = demo_actor->getAnmFrame();
             frame = 0.6f - (frame * 0.006f);
             i_this->mSailPacket.m1C44 = frame;
             i_this->mSailPacket.m1C44 = cLib_minMaxLimit<f32>(i_this->mSailPacket.m1C44, 0.0f, 0.6f);

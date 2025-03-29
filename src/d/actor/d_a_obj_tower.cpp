@@ -118,9 +118,9 @@ static BOOL daObjTower_Draw(void* i_this) {
 
 bool daObjTower_c::_execute() {
     if (demoActorID != 0) {
-        dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(demoActorID);
-        if (pdVar1 != NULL && pdVar1->checkEnable(0x02)) {
-            current.pos = pdVar1->mTranslation;
+        dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
+        if (demo_actor != NULL && demo_actor->checkEnable(dDemo_actor_c::ENABLE_TRANS_e)) {
+            current.pos = *demo_actor->getTrans();
         }
     }
 

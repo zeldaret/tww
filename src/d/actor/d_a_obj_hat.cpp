@@ -157,7 +157,7 @@ BOOL daObjHat_c::_execute() {
     fopAcM_SetSpeed(this, xspeed, yspeed, zspeed);
 
     fopAcM_posMove(this, mStts.GetCCMoveP());
-    mAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+    mAcch.CrrPos(*dComIfG_Bgsp());
     if (mAcch.ChkWallHit()) {
         fopAcM_SetSpeedF(this, 0.0f);
     }

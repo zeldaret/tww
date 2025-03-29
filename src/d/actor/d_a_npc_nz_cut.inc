@@ -284,9 +284,9 @@ void daNpc_Nz_c::cutHideProc() {
 
 /* 00004100-00004204       .text cutSetAnmStart__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutSetAnmStart() {
-    u32* pAnmNo = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "anm_no");
+    int* pAnmNo = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "anm_no");
     s32 anmNo = 0;
-    u32* pLoopCount = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "loop_count");
+    int* pLoopCount = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "loop_count");
 
     if(pAnmNo) {
         anmNo = *pAnmNo;

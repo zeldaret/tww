@@ -981,7 +981,7 @@ BOOL daNpc_kam_c::actionDefault(int evtStaffId) {
 
 /* 0000351C-00003580       .text initialWaitEvent__11daNpc_kam_cFi */
 void daNpc_kam_c::initialWaitEvent(int evtStaffId) {
-    u32* timerP = dComIfGp_evmng_getMyIntegerP(evtStaffId, "timer");
+    int* timerP = dComIfGp_evmng_getMyIntegerP(evtStaffId, "timer");
     if (timerP) {
         mWaitTimer = *timerP;
     } else {

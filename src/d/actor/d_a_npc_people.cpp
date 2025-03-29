@@ -5770,7 +5770,7 @@ void daNpcPeople_c::eventMesSetTpInit(int param_1) {
 
 /* 00004784-0000498C       .text eventMesSetInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventMesSetInit(int staffIdx) {
-    u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if(pMsgNo) {
         m734 = 0;
 
@@ -5834,8 +5834,8 @@ bool daNpcPeople_c::eventMesSet2() {
 
 /* 000049F8-00004A90       .text eventFlagSetInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventFlagSetInit(int staffIdx) {
-    s32* pTurn = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "Turn");
-    s32* pLook = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "Look");
+    int* pTurn = dComIfGp_evmng_getMyIntegerP(staffIdx, "Turn");
+    int* pLook = dComIfGp_evmng_getMyIntegerP(staffIdx, "Look");
 
     if(*pTurn != 0) {
         m79D = *pTurn;
@@ -5848,7 +5848,7 @@ void daNpcPeople_c::eventFlagSetInit(int staffIdx) {
 /* 00004A90-00004B34       .text eventGetItemInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventGetItemInit(int staffIdx) {
     int itemNo;
-    u32* pItemIdx = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
+    int* pItemIdx = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
     if(pItemIdx) {
         itemNo = l_get_item_no[*pItemIdx];
     }
@@ -5931,7 +5931,7 @@ bool daNpcPeople_c::eventUb1Talk() {
 
 /* 00004DC0-00004F24       .text eventUb1TalkXyInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventUb1TalkXyInit(int staffIdx) {
-    u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     BOOL temp = false;
     if(pMsgNo) {
         switch(*pMsgNo) {
@@ -6090,7 +6090,7 @@ void daNpcPeople_c::eventCameraStartInit() {
 
 /* 00005314-0000539C       .text eventCoCylRInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventCoCylRInit(int staffIdx) {
-    s32* pRad = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "CoCylR");
+    int* pRad = dComIfGp_evmng_getMyIntegerP(staffIdx, "CoCylR");
     if(pRad) {
         m74C = *pRad;
     }
