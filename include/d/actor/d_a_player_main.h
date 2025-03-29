@@ -1546,9 +1546,9 @@ public:
     BOOL procHookshotFly();
     BOOL fanWindEffectDraw();
     BOOL fanWindCrashEffectDraw();
-    void fanJointCB(int);
-    void parachuteJointCB(int);
-    void setShapeFanLeaf();
+    BOOL fanJointCB(int);
+    BOOL parachuteJointCB(int);
+    int setShapeFanLeaf();
     BOOL checkFanGlideProc(int);
     void setFanModel();
     void setSmallFanModel();
