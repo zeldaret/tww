@@ -150,6 +150,7 @@ void mt_move(mt_class*) {
 /* 000042C4-00005088       .text mt_fight__FP8mt_class */
 void mt_fight(mt_class* i_this) {
     float fVar1;
+    float fVar2;
     short sVar9;
     f32 fVar11;
     cXyz local_80;
@@ -357,9 +358,53 @@ void mt_fight(mt_class* i_this) {
             // TODO - GOTO
             break;
         case 0x14:
+            i_this->current.angle.x -= 0x500;
+            cLib_addCalcAngleS2(&i_this->current.angle.y, cM_atan2s(i_this->speed.x, i_this->speed.z) - 0x8000, 2, 0x400);
+            cLib_addCalc2(&i_this->m18F4, 0.9f, 1.0f, 0.1f);
+            if (i_this->speed.y <= 1.0f) {
+                if (i_this->m18F8 == 0) {
+                    i_this->mE48.OffTgShield();
+                    tex_anm_set(i_this, 1);
+                    i_this->m454 = 2;
+                    i_this->m466 = l_HIO.m54;
+                    i_this->m478 = 0.0f;
+                    i_this->m48A = 0;
+                    i_this->m330 = 0.0f;
+                    fVar11 = i_this->speed.z;
+                    fVar1 = i_this->speed.x;
+                    fVar2 = i_this->speed.y;
+                    fVar11 = std::sqrtf(fVar1 * fVar1 + fVar11 * fVar11 + fVar2 * fVar2);
+                    i_this->speedF = -fVar11;
+                    i_this->m455 = 0;
+                    fopAcM_SetMin(i_this, -100.0f, -100.0f, -100.0f);
+                    fopAcM_SetMax(i_this, 100.0f, 100.0f, 100.0f);
+                } else if (i_this->mAcch.ChkGroundHit()) {
+                    i_this->m18F8 = 2;
+                }
+            }
+            // TODO - GOTO
             break;
         case 0x17:
+            i_this->speed.y = 0.0f;
+            cLib_addCalcAngleS2(&i_this->current.angle.x, 0, 1, 0x400);
+            i_this->speed.x *= 0.2f;
+            i_this->speed.z *= 0.2f;
+            if (i_this->m456 == 0) {
+                i_this->m455 = 10;
+            }
             break;
+    }
+
+    if (i_this->m454 < 2) {
+        if (i_this->m455 < 10) {
+            cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->m496, 2, 0x400);
+            local_68.y = i_this->current.pos.y - i_this->mAcch.GetGroundH();
+            if (local_68.y > 250.0f) {
+                i_this->m455 = 10;
+            }
+            cLib_addCalcAngleS2(&i_this->current.angle.x, i_this->m494 + sVar9, 4, 0x800);
+        }
+        cLib_addCalcAngleS2(&i_this->m468, 0, 1, 0x100);
     }
 }
 
