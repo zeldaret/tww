@@ -58,6 +58,7 @@ enum daPy__PlayerStatus0 {
     daPyStts0_CRAWL_e          = 0x08000000,
     daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
+    daPyStts0_UNK80000000_e    = 0x80000000,
 };
 
 enum daPy__PlayerStatus1 {
