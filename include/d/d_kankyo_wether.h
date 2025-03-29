@@ -369,6 +369,7 @@ void dKyw_evt_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_evt_wind_set_go();
 void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power);
 cXyz dKyw_get_AllWind_vecpow(cXyz* param_0);
+int dKyw_get_tactwind_dir();
 BOOL dKyw_gbwind_use_check();
 void dKyw_tornado_Notice(cXyz* param_0);
 
