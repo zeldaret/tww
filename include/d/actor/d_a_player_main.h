@@ -1516,7 +1516,7 @@ public:
     BOOL procBoomerangMove();
     BOOL procBoomerangCatch_init();
     BOOL procBoomerangCatch();
-    void bowJointCB(int);
+    BOOL bowJointCB(int);
     BOOL bowButton() const;
     BOOL checkBowReadyAnime() const;
     BOOL checkBowAnime() const;
