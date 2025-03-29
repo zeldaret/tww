@@ -99,7 +99,7 @@ void dComIfG_play_c::itemInit() {
     mItemTimer = 0;
     mItemNowLife = 0;
     mItemNowRupee = 0;
-    field_0x4928 = 0;
+    mItemTimeMax = 0;
     field_0x4929 = 0;
     mMesgStatus = 0;
     mbCamOverrideFarPlane = 0;
