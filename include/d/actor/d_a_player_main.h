@@ -974,7 +974,7 @@ public:
     BOOL checkIceSlipFall();
     void setFrontWallType();
     BOOL changeFrontWallTypeProc();
-    void changeSlideProc();
+    int changeSlideProc();
     void changeWaitProc();
     void changeLandProc(f32);
     BOOL setDamagePoint(f32);
@@ -1343,13 +1343,13 @@ public:
     BOOL procClimbMoveSide_init(int);
     BOOL procClimbMoveSide();
     void setBlendWHideMoveAnime(f32);
-    void getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
+    int getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
     void getWHideBasePos(cXyz*);
     void getWHideNextPos(cXyz*, cXyz*);
     BOOL checkWHideBackWall(cXyz*);
     BOOL checkWHideFrontFloor(cXyz*);
     BOOL checkWHideModeChange(cXyz*);
-    void changeWHideEndProc(cXyz*);
+    int changeWHideEndProc(cXyz*);
     BOOL procWHideReady_init(cM3dGPla*, cXyz*);
     BOOL procWHideReady();
     BOOL procWHideWait_init();

@@ -1733,7 +1733,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
 }
 
 /* 8010FEC4-8010FFB0       .text changeSlideProc__9daPy_lk_cFv */
-void daPy_lk_c::changeSlideProc() {
+int daPy_lk_c::changeSlideProc() {
     /* Nonmatching */
 }
 
