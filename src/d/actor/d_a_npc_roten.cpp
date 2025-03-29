@@ -2228,7 +2228,7 @@ void daNpcRoten_c::eventInit() {
 
 /* 00002600-0000280C       .text eventMesSetInit__12daNpcRoten_cFi */
 void daNpcRoten_c::eventMesSetInit(int staffIdx) {
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if(pData) {
         u32 msgNo = *pData;
         switch(msgNo) {
@@ -2310,7 +2310,7 @@ void daNpcRoten_c::eventClrItemInit() {
 void daNpcRoten_c::eventGetItemInit(int staffIdx) {
     fpc_ProcID pcId;
 
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
     if(pData != NULL) {
         u32 itemNo = *pData; // fakematch?
         itemNo = l_get_item_no[itemNo];

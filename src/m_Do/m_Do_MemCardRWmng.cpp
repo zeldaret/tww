@@ -259,7 +259,7 @@ void mDoMemCdRWm_SetCardStat(CARDFileInfo* card) {
     CARDSetIconSpeed(&stat, 5, 0);
     CARDSetIconSpeed(&stat, 6, 0);
     CARDSetIconSpeed(&stat, 7, 0);
-    CARDSetStatus(mDoMemCd_getNowSlot(), card->fileNo, &stat);;
+    CARDSetStatus(mDoMemCd_getNowSlot(), card->fileNo, &stat);
 }
 
 /* 8001A1EC-8001A2F0       .text mDoMemCdRWm_CheckCardStat__FP12CARDFileInfo */

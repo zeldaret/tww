@@ -931,7 +931,7 @@ void daShip_c::setYPos() {
 
 /* 00002824-00002CC4       .text checkOutRange__8daShip_cFv */
 BOOL daShip_c::checkOutRange() {
-    dPath__Point* pnt;
+    dPnt* pnt;
     dPath* path;
     cXyz* closestPoint;
     cXyz* nextPoint;
@@ -951,7 +951,7 @@ BOOL daShip_c::checkOutRange() {
     bVar5 = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e;
     path = dPath_GetRoomPath(m034B, -1);
     while (path) {
-        pnt = path->mpPnt;
+        pnt = path->m_points;
         if (path->m_num < 3) {
             path = dPath_GetNextRoomPath(path, -1);
             pathIndex++;
@@ -972,32 +972,32 @@ BOOL daShip_c::checkOutRange() {
         float minDist = FLOAT_MAX;
         
         for (int i = 0; i < path->m_num; pnt++, i++) {
-            float dx = current.pos.x - pnt->mPos.x;
-            float dz = current.pos.z - pnt->mPos.z;
+            float dx = current.pos.x - pnt->m_position.x;
+            float dz = current.pos.z - pnt->m_position.z;
             
             float distXZ = dx * dx + dz * dz;
             
             if (minDist > distXZ) {
                 closestIndex = i;
                 minDist = distXZ;
-                closestPoint = &pnt->mPos;
+                closestPoint = &pnt->m_position;
             }
         }
 
         lastIndex = path->m_num - 1;
 
         if (closestIndex == lastIndex) {
-            nextPoint = &path->mpPnt->mPos;
+            nextPoint = &path->m_points->m_position;
         }
         else {
-            nextPoint = &(path->mpPnt + closestIndex + 1)->mPos;
+            nextPoint = &(path->m_points + closestIndex + 1)->m_position;
         }
 
         if (closestIndex == 0) {
-            prevPoint = &(path->mpPnt + lastIndex)->mPos;
+            prevPoint = &(path->m_points + lastIndex)->m_position;
         }
         else {
-            prevPoint = &(path->mpPnt + closestIndex - 1)->mPos;
+            prevPoint = &(path->m_points + closestIndex - 1)->m_position;
         }
 
         s16 angleNext = cM_atan2s(nextPoint->x - closestPoint->x, nextPoint->z - closestPoint->z);
@@ -1338,9 +1338,6 @@ void daShip_c::setPartAnimeInit(unsigned char param_1) {
 void daShip_c::setSelfMove(int param_1) {
     BOOL bVar1;
     short sVar2;
-    int iVar3;
-    int iVar4;
-    float fVar5;
     float fVar6;
     
     if (param_1) {
@@ -1793,8 +1790,6 @@ BOOL daShip_c::procCraneReady_init() {
 /* 00004B7C-00004CD0       .text procCraneReady__8daShip_cFv */
 BOOL daShip_c::procCraneReady() {
     float fVar1;
-    float fVar2;
-    int iVar3;
     
     if (checkNextMode(10)) {
         return TRUE;
@@ -2028,12 +2023,12 @@ BOOL daShip_c::procToolDemo_init() {
 BOOL daShip_c::procToolDemo() {
     dDemo_actor_c* demoActor = dComIfGp_demo_getActor(demoActorID);
     if (demoActor) {
-        if ((demoActor->mFlags & 2) != 0) {
-            current.pos.x = demoActor->mTranslation.x;
-            current.pos.z = demoActor->mTranslation.z;
+        if (demoActor->checkEnable(dDemo_actor_c::ENABLE_TRANS_e)) {
+            current.pos.x = demoActor->getTrans()->x;
+            current.pos.z = demoActor->getTrans()->z;
         }
-        if ((demoActor->mFlags & 8) != 0) {
-            csXyz demoRot = demoActor->mRotation;
+        if (demoActor->checkEnable(dDemo_actor_c::ENABLE_ROTATE_e)) {
+            csXyz demoRot = *demoActor->getRatate();
             short prevShapeAngleY = shape_angle.y;
             shape_angle.y = demoRot.y;
             current.angle.y = shape_angle.y;
@@ -2071,7 +2066,6 @@ BOOL daShip_c::procZevDemo() {
     float fVar3;
     short sVar5; 
     short sVar15;
-    short uVar16;
     u16 fileIndex;
     float fVar17;
     cXyz local_7c;
@@ -2083,12 +2077,13 @@ BOOL daShip_c::procZevDemo() {
     }
     if (mEvtStaffId != -1) {
         cXyz* posP = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "pos");
-        u32* angleP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "angle");
+        int* angleP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "angle");
         float* speedP = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "speed");
-        u32* partP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "part");
-        s32* talkP = (s32*)dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "talk");
-        u32* atn_actorP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "atn_actor");
+        int* partP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "part");
+        int* talkP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "talk");
+        int* atn_actorP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "atn_actor");
 
+        // Fakematch, dComIfGp_event_getPt1 doesn't work for some reason
         if (atn_actorP && g_dComIfG_gameInfo.play.getEvent().getPt1()) {
             m0428 = &dComIfGp_event_getPt1()->eyePos;
         }
@@ -2398,8 +2393,6 @@ BOOL daShip_c::procZevDemo() {
 
 /* 00006310-00006440       .text procTalkReady_init__8daShip_cFv */
 BOOL daShip_c::procTalkReady_init() {
-    int iVar1;
-    short sVar2;
     J3DAnmTransform* pAnimRes;
     
     mProc = &daShip_c::procTalkReady;
@@ -2518,7 +2511,6 @@ BOOL daShip_c::procTurn_init() {
 
 /* 0000686C-00006C78       .text procTurn__8daShip_cFv */
 BOOL daShip_c::procTurn() {
-    float fVar1;
     float fVar2;
     short sVar4;
     float fVar5;
@@ -2535,7 +2527,6 @@ BOOL daShip_c::procTurn() {
     fVar6 = local_c4.abs(); 
     if (fVar6 > 1.0f) {
         fVar2 = fVar6 * 0.5f;
-        fVar1 = 60.0f;
         if (fVar2 > 60.0f) {
             fVar2 = 60.0f;
         }
@@ -2744,7 +2735,6 @@ BOOL daShip_c::procTactWarp_init() {
     onStateFlg(daSFLG_UNK1_e);
     m037A = 0;
     fopAcM_seStartCurrent(this, 0x186E, 0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCam_getBody()->StartEventCamera(0xe, fopAcM_GetID(this), 0);
     dKy_get_seacolor(amb, &diff);
     m03BC.x = 0;
@@ -2769,7 +2759,6 @@ BOOL daShip_c::procTactWarp() {
             m1984.end();
             m1998.end();
             procPaddleMove_init();
-            camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
             dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         }
         res = FALSE;
@@ -3366,8 +3355,6 @@ f32 daShip_c::getAnglePartRate() {
 
 /* 00009384-000095E4       .text setTornadoActor__8daShip_cFv */
 void daShip_c::setTornadoActor() {
-    float fVar1;
-    float fVar5;
     cXyz local_20;
     
     mTornadoActor = (daTornado_c*)fopAcM_SearchByID(mTornadoID);
@@ -3502,9 +3489,7 @@ BOOL daShip_c::execute() {
     float fVar2;
     float fVar3;
     float dVar27;
-    float dVar28;
 
-    Mtx* pMVar13;
     int iVar23;
     int sp18;
     s16 sp12;
@@ -3870,7 +3855,7 @@ BOOL daShip_c::execute() {
     
     mAcchCir[3].SetWall(-600.0f - current.pos.y, 250.0f);
     
-    mAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+    mAcch.CrrPos(*dComIfG_Bgsp());
 
     if (checkForceMove()) {
         current.pos = spF0;
@@ -3980,7 +3965,6 @@ BOOL daShip_c::execute() {
 
                 daBomb_c* bomb = (daBomb_c *)fopAcM_fastCreate(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_4, FALSE, TRUE), &spE4, tevStr.mRoomNo, &sp1C);
 
-                int bombId;
                 if (bomb) {
                     dCam_getBody()->ForceLockOn(fpcM_GetID(bomb));
 
@@ -4152,10 +4136,12 @@ BOOL daShip_c::execute() {
         cXyz spB4(attention_info.position - link->current.pos);
         if (
             (!dComIfGp_event_runCheck() && dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) ||
-            std::fabsf(current.pos.y - link->current.pos.y) < 50.0f &&
-            spB4.abs2XZ() < 62500.0f &&
-            fopAcM_seenPlayerAngleY(this) < 0x6000 &&
-            mNextMessageNo != 0xD65
+            (
+                std::fabsf(current.pos.y - link->current.pos.y) < 50.0f &&
+                spB4.abs2XZ() < 62500.0f &&
+                fopAcM_seenPlayerAngleY(this) < 0x6000 &&
+                mNextMessageNo != 0xD65
+            )
         ) {
             fopAcM_orderSpeakEvent(this);
             offStateFlg(daSFLG_UNK400000_e);
@@ -4667,7 +4653,7 @@ cPhs_State daShip_c::create() {
         m029C->getModel()->setBaseTRMtx(m0298->getModel()->getAnmMtx(4));
         m029C->calc();
         
-        g_dComIfG_gameInfo.play.mpPlayerPtr[2] = this;
+        dComIfGp_setShipActor(this);
         
         mTrack.mMinVel = 3.0f;
         mWaveL.mMaxParticleVelocity = 40.0f;

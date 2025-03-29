@@ -63,7 +63,7 @@ const daSteamTag_mData* daSteamTag_c::getData() {
 BOOL daSteamTag_c::CreateInit() {
     m29B = daSteamTag_prm::getSchBit(this);
     mEmitTimer = getData()->emit_time_min + cM_rndF(getData()->emit_time_range);
-    mCreateTimer = cM_rndF(getData()->create_time_range);;
+    mCreateTimer = cM_rndF(getData()->create_time_range);
     mpEmitter = NULL;
     mEmitTimer = 0;
     mGStts.Init(0xFF,0xFF,this);

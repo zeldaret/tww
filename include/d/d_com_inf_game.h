@@ -2860,23 +2860,23 @@ inline char* dComIfGp_evmng_getMyActName(int staffIdx) {
 }
 
 inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, char* name) {
-    return reinterpret_cast<f32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 0)); //type 0 is float
+    return reinterpret_cast<f32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_FLOAT));
 }
 
 inline Vec* dComIfGp_evmng_getMyVec3dP(int staffIdx, char* name) {
-    return reinterpret_cast<Vec*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
+    return reinterpret_cast<Vec*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_VEC));
 }
 
 inline cXyz* dComIfGp_evmng_getMyXyzP(int staffIdx, char* name) {
-    return reinterpret_cast<cXyz*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
+    return reinterpret_cast<cXyz*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_VEC));
 }
 
-inline u32* dComIfGp_evmng_getMyIntegerP(int staffIdx, char* name) {
-    return reinterpret_cast<u32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 3)); //type 3 is int
+inline int* dComIfGp_evmng_getMyIntegerP(int staffIdx, char* name) {
+    return reinterpret_cast<int*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_INT));
 }
 
 inline char* dComIfGp_evmng_getMyStringP(int staffIdx, char* name) {
-    return reinterpret_cast<char*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 4)); //type 4 is string
+    return reinterpret_cast<char*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_STRING));
 }
 
 inline BOOL dComIfGp_evmng_startCheck(s16 eventID) {

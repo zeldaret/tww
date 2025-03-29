@@ -1356,7 +1356,7 @@ BOOL daNpc_Ji1_c::eventAction(void*) {
 
 /* 00004714-00004778       .text evn_init_pos_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_init_pos_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "AnmNo");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "AnmNo");
 
     u32 value = 0;
     if(data) {
@@ -1369,7 +1369,7 @@ u32 daNpc_Ji1_c::evn_init_pos_init(int staffIdx) {
 
 /* 00004778-00004838       .text evn_setAnm_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_setAnm_init(int staffIdx) {
-    u32* iData = dComIfGp_evmng_getMyIntegerP(staffIdx, "AnmNo");
+    int* iData = dComIfGp_evmng_getMyIntegerP(staffIdx, "AnmNo");
     f32* fData = dComIfGp_evmng_getMyFloatP(staffIdx, "hokan");
 
     if(iData) {
@@ -1391,8 +1391,8 @@ u32 daNpc_Ji1_c::evn_setAnm_init(int staffIdx) {
 
 /* 00004838-000049AC       .text evn_talk_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_talk_init(int staffIdx) {
-    u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
-    u32* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
 
     l_msgId = fpcM_ERROR_PROCESS_ID_e;
     l_msg = 0;
@@ -1482,7 +1482,7 @@ u32 daNpc_Ji1_c::evn_talk() {
 
 /* 00004B1C-00004B84       .text evn_continue_talk_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_continue_talk_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
 
     if(data) {
         field_0xD80 = *data;
@@ -1542,7 +1542,7 @@ u32 daNpc_Ji1_c::evn_continue_talk() {
 
 /* 00004CF4-00004D50       .text evn_setAngle_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_setAngle_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "angle");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "angle");
 
     if(data) {
         current.angle.y = *data;
@@ -1553,7 +1553,7 @@ u32 daNpc_Ji1_c::evn_setAngle_init(int staffIdx) {
 
 /* 00004D50-00004E8C       .text evn_sound_proc_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
 
     if(data) {
         switch(*data) {
@@ -1576,7 +1576,7 @@ u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
 
 /* 00004E8C-00004F60       .text evn_head_swing_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_head_swing_init(int staffIdx) {
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
     u32 value;
     if(!pData) {
         value = 0;
@@ -1602,7 +1602,7 @@ u32 daNpc_Ji1_c::evn_head_swing_init(int staffIdx) {
 
 /* 00004F60-00005008       .text evn_harpoon_proc_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_harpoon_proc_init(int staffIdx) {
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
     u32 value;
     if(!pData) {
         value = 0;
@@ -1686,7 +1686,7 @@ u32 daNpc_Ji1_c::evn_RollAtControl() {
 
 /* 00005314-000053F8       .text evn_game_mode_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_game_mode_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
 
     u32 value;
     if(data) {
@@ -1725,7 +1725,7 @@ u32 daNpc_Ji1_c::evn_turn_to_player() {
 /* 0000545C-00005508       .text evn_hide_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_hide_init(int staffIdx) {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
     u32 value;
     if(!pData) {
         value = 0;

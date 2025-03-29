@@ -209,7 +209,7 @@ namespace dPa_name {
     };
 
     // Particles that are scene-specific.
-    // These are not in common.jpc, and must be  loaded by a scene's particle bank.
+    // These are not in common.jpc, and must be loaded by a scene's particle bank.
     enum {
         ID_SCENE_8058 = 0x8058,
         ID_SCENE_8059 = 0x8059,

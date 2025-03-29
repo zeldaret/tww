@@ -112,8 +112,8 @@ static BOOL daObjDoguuD_Draw(void* i_this) {
 bool daObjDoguuD_c::_execute() {
     if (demoActorID != 0) {
         dDemo_actor_c* demoAc = dComIfGp_demo_getActor(demoActorID);
-        if (demoAc != NULL && demoAc->checkEnable(0x10)) {
-            mShape = demoAc->mShapeId;
+        if (demoAc != NULL && demoAc->checkEnable(dDemo_actor_c::ENABLE_SHAPE_e)) {
+            mShape = demoAc->getShapeId();
         }
     }
     set_mtx();

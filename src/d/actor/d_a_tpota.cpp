@@ -11,8 +11,8 @@
 #include "d/d_particle.h"
 #include "d/d_com_inf_game.h"
 
-
 const u16 l_daTpota_idx_table[2] = {dPa_name::ID_SCENE_82AE, dPa_name::ID_SCENE_82AF};
+
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
 cPhs_State daTpota_c::_create() {
     fopAcM_SetupActor(this, daTpota_c);

@@ -266,7 +266,7 @@ void daObjVgnfd_c::init_mtx() {
 
 /* 00000B3C-00000BA0       .text set_timer__12daObjVgnfd_cFv */
 void daObjVgnfd_c::set_timer() {
-    u32* int_p = dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
+    int* int_p = dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
     mTimer = 0;
     if (int_p != NULL)
         mTimer = *int_p;

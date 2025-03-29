@@ -326,7 +326,7 @@ void daMbdoor_c::demoProc() {
         case ACT_ADJUSTMENT:
             calcMtx();
             mAdjustmentTimer = 0;
-            u32* timerP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+            int* timerP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
             if (timerP) {
                 mAdjustmentTimer = *timerP;
             }
@@ -540,7 +540,7 @@ BOOL daMbdoor_c::execute() {
     dDemo_actor_c* demoActor = dComIfGp_demo_getActor(demoActorID);
     if (demoActor) {
         field_0x2ad = 0;
-        if (demoActor->checkEnable(0x8)) {
+        if (demoActor->checkEnable(dDemo_actor_c::ENABLE_ROTATE_e)) {
             field_0x2b2 = demoActor->getRatate()->y;
             field_0x2b0 = demoActor->getRatate()->z;
         }

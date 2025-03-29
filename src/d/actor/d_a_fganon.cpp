@@ -172,7 +172,7 @@ void pos_move(fganon_class* i_this, unsigned char param_2) {
     cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
     MtxPosition(&local_44, &i_this->speed);
-    PSVECAdd(&i_this->current.pos, &i_this->speed, &i_this->current.pos);
+    i_this->current.pos += i_this->speed;
     return;
 }
 
@@ -184,8 +184,7 @@ void fly_se_set(fganon_class* i_this) {
     cXyz local_34;
     
     local_34 = i_this->current.pos - i_this->old.pos;
-    fVar4 = PSVECSquareMag(&local_34);
-    uVar2 = (uint)(std::sqrtf(fVar4) * 3.5f);
+    uVar2 = (uint)(local_34.abs() * 3.5f);
     if (uVar2 > 100) {
       uVar2 = 100;
     }
@@ -224,15 +223,15 @@ void fly(fganon_class* i_this) {
             anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         mDoMtx_YrotS(*calc_mtx, i_this->m398);
-        cXyz posVec;
-        posVec.z = l_HIO.m0C;
-        posVec.y = l_HIO.m10;
-        posVec.x = 0.0f;
+        cXyz offset;
+        offset.z = l_HIO.m0C;
+        offset.y = l_HIO.m10;
+        offset.x = 0.0f;
         cXyz transformedPos;
-        MtxPosition(&posVec, &transformedPos);
+        MtxPosition(&offset, &transformedPos);
         i_this->m38C = player->current.pos + transformedPos;
-        posVec = i_this->m38C - i_this->current.pos;
-        if (std::sqrtf(PSVECSquareMag(&posVec)) > REG0_F(12) + 300.0f) {
+        offset = i_this->m38C - i_this->current.pos;
+        if (offset.abs() > REG0_F(12) + 300.0f) {
             cLib_addCalc2(&i_this->speedF, REG0_F(15) + 30.0f, 1.0f, REG0_F(13) + 2.0f);
         } else {
             cLib_addCalc0(&i_this->speedF, 1.0f, REG0_F(14) + 1.0f);
@@ -307,7 +306,7 @@ void shot(fganon_class* i_this) {
         case 3: {
             if (i_this->m408 == 5) {
                 cXyz local_34 = i_this->m3E0 - i_this->eyePos;
-                if (std::sqrtf(PSVECSquareMag(&local_34)) < REG0_F(1) + (i_this->m404 * (REG0_F(0) + 10.0f) + 400.0f)) {
+                if (local_34.abs() < REG0_F(1) + (i_this->m404 * (REG0_F(0) + 10.0f) + 400.0f)) {
                     if (i_this->m689 == 0) {
                         if (cM_rndF(1.0f) < 0.5f) {
                             anm_init(i_this, FGANON_BCK_TENNISLR1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -371,9 +370,9 @@ void spinattack(fganon_class* i_this) {
         }
         case 1: {
             mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
-            cXyz posVec(0.0f, l_HIO.m2C + 100.0f, l_HIO.m30);
+            cXyz offset(0.0f, l_HIO.m2C + 100.0f, l_HIO.m30);
             cXyz transformedPos;
-            MtxPosition(&posVec, &transformedPos);
+            MtxPosition(&offset, &transformedPos);
             i_this->current.pos = player->current.pos + transformedPos;
             linChk.Set(&player->eyePos, &i_this->current.pos, a_this);
             if (!dComIfG_Bgsp()->LineCross(&linChk)) {
@@ -461,15 +460,15 @@ void fly2(fganon_class* i_this) {
             anm_init(i_this, FGANON_BCK_WAIT1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
         mDoMtx_YrotS(*calc_mtx, i_this->m398);
-        cXyz posVec;
-        posVec.z = l_HIO.m14;
-        posVec.y = l_HIO.m18;
-        posVec.x = 0.0f;
+        cXyz offset;
+        offset.z = l_HIO.m14;
+        offset.y = l_HIO.m18;
+        offset.x = 0.0f;
         cXyz transformedPos;
-        MtxPosition(&posVec, &transformedPos);
+        MtxPosition(&offset, &transformedPos);
         i_this->m38C = player->current.pos + transformedPos;
-        posVec = i_this->m38C - i_this->current.pos;
-        if (std::sqrtf(PSVECSquareMag(&posVec)) > REG0_F(12) + 300.0f) {
+        offset = i_this->m38C - i_this->current.pos;
+        if (offset.abs() > REG0_F(12) + 300.0f) {
             cLib_addCalc2(&i_this->speedF, REG0_F(15) + 30.0f, 1.0f, REG0_F(13) + 2.0f);
         } else {
             cLib_addCalc0(&i_this->speedF, 1.0f, REG0_F(14) + 1.0f);
@@ -500,12 +499,12 @@ void fly2(fganon_class* i_this) {
 void tama_set(fganon_class* i_this) {
     if (i_this->m671 != 0) {
         mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
-        cXyz posVec;
-        posVec.x = 0.0f;
-        posVec.y = -i_this->m680;
-        posVec.z = i_this->m680;
+        cXyz offset;
+        offset.x = 0.0f;
+        offset.y = -i_this->m680;
+        offset.z = i_this->m680;
         cXyz transformedPos;
-        MtxPosition(&posVec, &transformedPos);
+        MtxPosition(&offset, &transformedPos);
         cXyz tempPos(i_this->current.pos.x + transformedPos.x, transformedPos.y + (400.0f + i_this->current.pos.y + REG8_F(4)), i_this->current.pos.z + transformedPos.z);
         i_this->m664 = tempPos;
         switch (i_this->m671) {
@@ -710,12 +709,12 @@ void spinattack2(fganon_class* i_this) {
         }
         case 1: {
             mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
-            cXyz posVec;
-            posVec.x = 0.0f;
-            posVec.y = l_HIO.m2C;
-            posVec.z = l_HIO.m34;
+            cXyz offset;
+            offset.x = 0.0f;
+            offset.y = l_HIO.m2C;
+            offset.z = l_HIO.m34;
             cXyz transformedPos;
-            MtxPosition(&posVec, &transformedPos);
+            MtxPosition(&offset, &transformedPos);
             i_this->current.pos = player->current.pos + transformedPos;
             anm_init(i_this, 10, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m388 = 2;
@@ -729,8 +728,7 @@ void spinattack2(fganon_class* i_this) {
             pos_move(i_this, 1);
             cXyz local_e4;
             local_e4 = i_this->m38C - i_this->current.pos;
-            float fVar11 = std::sqrtf(PSVECSquareMag(&local_e4));
-            if (fVar11 < l_HIO.m38) {
+            if (local_e4.abs() < l_HIO.m38) {
                 anm_init(i_this, 9, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m388 = 3;
                 i_this->speedF = 0.0f;
@@ -846,14 +844,14 @@ BOOL kabe_check(fganon_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_LinChk linChk;
-    cXyz posVec;
-    posVec.x = 0.0f;
-    posVec.y = 0.0f;
-    posVec.z = l_HIO.m34 + 100.0f;
+    cXyz offset;
+    offset.x = 0.0f;
+    offset.y = 0.0f;
+    offset.z = l_HIO.m34 + 100.0f;
     for (int i = 0; i < 8; i++) {
         cMtx_YrotS(*calc_mtx, i * 0x2000);
         cXyz transformedPos;
-        MtxPosition(&posVec, &transformedPos);
+        MtxPosition(&offset, &transformedPos);
         cXyz tempPos = player->eyePos + transformedPos;
         linChk.Set(&player->eyePos, &tempPos, a_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
@@ -974,34 +972,34 @@ void fail(fganon_class* i_this) {
                 
                 cMtx_YrotS(*calc_mtx, i_this->home.angle.y);
 
-                cXyz posVec;
-                posVec.x = 0.0f;
-                posVec.y = 0.0f;
-                posVec.z = 10000.0f;
+                cXyz offset;
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 10000.0f;
 
                 cXyz transformedPos;
-                MtxPosition(&posVec, &transformedPos);
+                MtxPosition(&offset, &transformedPos);
 
-                posVec = i_this->home.pos;
-                posVec.y += 100.0f;
+                offset = i_this->home.pos;
+                offset.y += 100.0f;
 
-                PSVECAdd(&transformedPos, &posVec, &transformedPos);
+                transformedPos += offset;
 
-                linChk.Set(&posVec, &transformedPos, a_this);
+                linChk.Set(&offset, &transformedPos, a_this);
 
                 cMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(0x18), *calc_mtx);
                 
-                posVec.x = 0.0f;
-                posVec.y = 0.0f;
-                posVec.z = 0.0f;
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 0.0f;
 
-                MtxPosition(&posVec, &transformedPos);
+                MtxPosition(&offset, &transformedPos);
 
                 if (dComIfG_Bgsp()->LineCross(&linChk)) {
-                    posVec = linChk.GetCross();
+                    offset = linChk.GetCross();
                 }
 
-                i_this->m6A0 = i_this->shape_angle.y - cM_atan2s(transformedPos.x - posVec.x, transformedPos.z - posVec.z) + 0x7058 + REG0_S(8);
+                i_this->m6A0 = i_this->shape_angle.y - cM_atan2s(transformedPos.x - offset.x, transformedPos.z - offset.z) + 0x7058 + REG0_S(8);
                 i_this->m6A4 = REG0_S(5) + 0x80;
                 i_this->m6A8 = 100;
                 break;
@@ -1120,7 +1118,7 @@ void standby(fganon_class* i_this) {
 
 /* 00004DB4-00005128       .text start__FP12fganon_class */
 void start(fganon_class* i_this) {
-    cXyz posVec;
+    cXyz offset;
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     i_this->m3AE = 3;
@@ -1128,8 +1126,8 @@ void start(fganon_class* i_this) {
     i_this->attention_info.flags = 0;
     switch(i_this->m388) {
         case 0: {
-            posVec = player->current.pos - i_this->home.pos;
-            float distXZ = std::sqrtf(posVec.x * posVec.x + posVec.z * posVec.z);
+            offset = player->current.pos - i_this->home.pos;
+            float distXZ = std::sqrtf(offset.x * offset.x + offset.z * offset.z);
             if (distXZ < i_this->m2BD * 10.0f) {
                 i_this->mB54 = 1;
                 i_this->m388 = 1;
@@ -1161,12 +1159,12 @@ void start(fganon_class* i_this) {
             if (i_this->m3A4[0] <= (s16)(REG0_S(0) + 0x4B)) {
                 fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_S, 0);
             }
-            posVec.x = 0.0f;
-            posVec.y = i_this->speedF * 0.5f;
-            posVec.z = -i_this->speedF;
+            offset.x = 0.0f;
+            offset.y = i_this->speedF * 0.5f;
+            offset.z = -i_this->speedF;
             cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
-            MtxPosition(&posVec, &i_this->speed);
-            PSVECAdd(&i_this->current.pos, &i_this->speed, &i_this->current.pos);
+            MtxPosition(&offset, &i_this->speed);
+            i_this->current.pos += i_this->speed;
             float fVar1;
             if (i_this->m3A4[0] == 0) {
                 fVar1 = 0.0f;
@@ -1648,12 +1646,12 @@ s32 move(fganon_class* i_this) {
         i_this->current.pos.z += ccMove->z;
     }
     if (i_this->m3B0 > 0.01f) {
-        cXyz posVec(0.0f, 0.0f, i_this->m3B0);
+        cXyz offset(0.0f, 0.0f, i_this->m3B0);
         cMtx_YrotS(*calc_mtx, i_this->m3B4);
         cMtx_XrotM(*calc_mtx, i_this->m3B6);
         cXyz transformedPos;
-        MtxPosition(&posVec, &transformedPos);
-        PSVECAdd(&i_this->current.pos, &transformedPos, &i_this->current.pos);
+        MtxPosition(&offset, &transformedPos);
+        i_this->current.pos += transformedPos;
         cLib_addCalc0(&i_this->m3B0, 1.0f, 7.0f);
     }
     return res;
@@ -1665,8 +1663,8 @@ void demo_camera(fganon_class* i_this) {
     camera_class* camera2;
     fopAc_ac_c* a_this;
     daPy_py_c* player;
+    cXyz offset;
     cXyz transformedPos;
-    cXyz playerPos;
     float yPos;
     float zPos;
     float yPos2;
@@ -1699,11 +1697,11 @@ void demo_camera(fganon_class* i_this) {
             player->changeDemoMode(0x18);
         }
         case 0x2: {
-            playerPos.x = -300306.0f;
-            playerPos.y = 715.0f; 
-            playerPos.z = -303407.0f;
+            transformedPos.x = -300306.0f;
+            transformedPos.y = 715.0f; 
+            transformedPos.z = -303407.0f;
 
-            player->setPlayerPosAndAngle(&playerPos, -0x7BCD);
+            player->setPlayerPosAndAngle(&transformedPos, -0x7BCD);
             
             i_this->mB68.x = -300319.0f;
             i_this->mB68.y = 812.0f;
@@ -1805,23 +1803,23 @@ void demo_camera(fganon_class* i_this) {
 
             cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
             
-            transformedPos.x = REG0_F(0) - 150.0f;
-            transformedPos.y = REG0_F(1) + 20.0f;
-            transformedPos.z = REG0_F(2) + 500.0f;
+            offset.x = REG0_F(0) - 150.0f;
+            offset.y = REG0_F(1) + 20.0f;
+            offset.z = REG0_F(2) + 500.0f;
             
-            MtxPosition(&transformedPos, &playerPos);
+            MtxPosition(&offset, &transformedPos);
 
-            i_this->mB5C = i_this->current.pos + playerPos;
+            i_this->mB5C = i_this->current.pos + transformedPos;
 
-            transformedPos.x = REG0_F(3);
-            transformedPos.y = 0.0f;
-            transformedPos.z = REG0_F(5) + 280.0f;
+            offset.x = REG0_F(3);
+            offset.y = 0.0f;
+            offset.z = REG0_F(5) + 280.0f;
             
-            MtxPosition(&transformedPos, &playerPos);
-            PSVECAdd(&playerPos, &i_this->current.pos, &playerPos);
-            playerPos.y = 715.0f;
+            MtxPosition(&offset, &transformedPos);
+            transformedPos += i_this->current.pos;
+            transformedPos.y = 715.0f;
             
-            player->setPlayerPosAndAngle(&playerPos, -0x8000);
+            player->setPlayerPosAndAngle(&transformedPos, -0x8000);
 
             i_this->mB68 = i_this->eyePos;
             i_this->mB68.y += REG0_F(6) - 40.0f;
@@ -1843,11 +1841,11 @@ void demo_camera(fganon_class* i_this) {
         }
         case 0x34: {
             yPos = player->current.pos.y;
-            playerPos.x = -300202.0f;
-            playerPos.y = yPos;
-            playerPos.z = -301859.0f;
+            transformedPos.x = -300202.0f;
+            transformedPos.y = yPos;
+            transformedPos.z = -301859.0f;
             
-            player->setPlayerPosAndAngle(&playerPos, 0.0f);
+            player->setPlayerPosAndAngle(&transformedPos, 0.0f);
             
             if (i_this->mB56 == 10) {
                 i_this->m388++;
@@ -1908,15 +1906,15 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB68 = player->current.pos;
             i_this->mB68.y += REG8_F(3);
 
-            transformedPos.x = 0.0f;
-            transformedPos.y = REG8_F(4) + 1500.0f;
-            transformedPos.z = REG8_F(5) + 2000.0f;
+            offset.x = 0.0f;
+            offset.y = REG8_F(4) + 1500.0f;
+            offset.z = REG8_F(5) + 2000.0f;
 
             cMtx_YrotS(*calc_mtx, player->shape_angle.y + i_this->mB76 + REG8_S(5));
-            MtxPosition(&transformedPos, &playerPos);
+            MtxPosition(&offset, &transformedPos);
 
             i_this->mB76 += REG8_S(6) + 30;
-            i_this->mB5C = player->current.pos + playerPos;
+            i_this->mB5C = player->current.pos + transformedPos;
 
             if (i_this->mB56 != 130) {
                 break;
@@ -1965,28 +1963,28 @@ void demo_camera(fganon_class* i_this) {
             cLib_addCalc2(&i_this->mB68.z, i_this->current.pos.z, 0.1f, 200.0f);
             cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
             
-            transformedPos.x = 0.0f;
-            transformedPos.y = REG8_F(0) + -100.0f;
-            transformedPos.z = REG8_F(1) + 400.0f;
+            offset.x = 0.0f;
+            offset.y = REG8_F(0) + -100.0f;
+            offset.z = REG8_F(1) + 400.0f;
             
-            MtxPosition(&transformedPos, &playerPos);
+            MtxPosition(&offset, &transformedPos);
 
-            PSVECAdd(&playerPos, &i_this->current.pos, &playerPos);
+            transformedPos += i_this->current.pos;
 
             {
                 dBgS_LinChk linChk;
-                linChk.Set(&i_this->mB68, &playerPos, a_this);
+                linChk.Set(&i_this->mB68, &transformedPos, a_this);
                 
                 if (dComIfG_Bgsp()->LineCross(&linChk)) {
-                    playerPos = linChk.GetCross();
-                    playerPos.y += REG8_F(18) + 20.0f;
+                    transformedPos = linChk.GetCross();
+                    transformedPos.y += REG8_F(18) + 20.0f;
     
                 }
             }
             
-            cLib_addCalc2(&i_this->mB5C.x, playerPos.x, 0.1f, i_this->mB80 * 50.0f);
-            cLib_addCalc2(&i_this->mB5C.y, playerPos.y, 0.1f, i_this->mB80 * 50.0f);
-            cLib_addCalc2(&i_this->mB5C.z, playerPos.z, 0.1f, i_this->mB80 * 50.0f);
+            cLib_addCalc2(&i_this->mB5C.x, transformedPos.x, 0.1f, i_this->mB80 * 50.0f);
+            cLib_addCalc2(&i_this->mB5C.y, transformedPos.y, 0.1f, i_this->mB80 * 50.0f);
+            cLib_addCalc2(&i_this->mB5C.z, transformedPos.z, 0.1f, i_this->mB80 * 50.0f);
             cLib_addCalc2(&i_this->mB80, 1.0f, 1.0f, REG8_F(7) + 0.1f);
             break;
         }
@@ -2137,7 +2135,7 @@ void energy_ball_move(fganon_class* i_this) {
     }
     if (i_this->m408 >= 3) {
         i_this->m3EC = i_this->m3E0;
-        PSVECAdd(&i_this->m3E0, &i_this->m3F8, &i_this->m3E0);
+        i_this->m3E0 += i_this->m3F8;
         mDoMtx_stack_c::transS(i_this->m3E0.x, i_this->m3E0.y, i_this->m3E0.z);
         for(int i = 0; i < 2; i++) {
             if (i_this->mEmitters2[i] != NULL) {
@@ -2242,7 +2240,7 @@ void energy_ball_move(fganon_class* i_this) {
 #if VERSION == VERSION_USA
                 mDoAud_seStart(JA_SE_LK_PG_BOMB_STRIKE, &i_this->m3E0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
 #endif
-                PSVECAdd(&i_this->m3E0, &i_this->m3F8, &i_this->m3E0);
+                i_this->m3E0 += i_this->m3F8;
                 i_this->m40A = 5;
             }
         }
@@ -2622,7 +2620,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     pModelData = (J3DModelData *)dComIfG_getObjectRes("Pgsw", PGSW_BDL_BPG_KEN1);
-    i_this->mpKenModel = mDoExt_J3DModel__create(pModelData, 0, 0x11020203);;
+    i_this->mpKenModel = mDoExt_J3DModel__create(pModelData, 0, 0x11020203);
     if (i_this->mpKenModel == NULL)
         return FALSE;
 

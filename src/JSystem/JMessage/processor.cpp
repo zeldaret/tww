@@ -477,13 +477,13 @@ void TSequenceProcessor::do_systemTagCode_(u16 code, const void* data, u32 size)
 /* 8029FA2C-8029FA5C       .text process_jump_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
 bool TSequenceProcessor::process_jump_limited_(TSequenceProcessor* proc) {
     JumpCallBackWork* work = (JumpCallBackWork*) &proc->mStatusData.mCallBackWork;
-    process_setMessage_index_(proc->mControl, work->mTarget);
+    return process_setMessage_index_(proc->mControl, work->mTarget);
 }
 
 /* 8029FA5C-8029FA88       .text process_jump___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
 bool TSequenceProcessor::process_jump_(TSequenceProcessor* proc) {
     JumpCallBackWork* work = (JumpCallBackWork*) &proc->mStatusData.mCallBackWork;
-    process_setMessage_code_(proc->mControl, work->mTarget);
+    return process_setMessage_code_(proc->mControl, work->mTarget);
 }
 
 /* 8029FA88-8029FAB8       .text process_branch_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */

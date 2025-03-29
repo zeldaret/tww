@@ -5,18 +5,18 @@
 
 // made up name
 struct controller_pad_buttons {
-    bool left  : 1;
-    bool right : 1;
-    bool down  : 1;
-    bool up    : 1;
-    bool z     : 1;
-    bool r     : 1;
-    bool l     : 1;
-    bool a     : 1;
-    bool b     : 1;
-    bool x     : 1;
-    bool y     : 1;
-    bool start : 1;
+    /* 0x00 (0x80 >> 7) */ bool left  : 1;
+    /* 0x00 (0x40 >> 6) */ bool right : 1;
+    /* 0x00 (0x10 >> 5) */ bool down  : 1;
+    /* 0x00 (0x10 >> 4) */ bool up    : 1;
+    /* 0x00 (0x08 >> 3) */ bool z     : 1;
+    /* 0x00 (0x04 >> 2) */ bool r     : 1;
+    /* 0x00 (0x02 >> 1) */ bool l     : 1;
+    /* 0x00 (0x01 >> 0) */ bool a     : 1;
+    /* 0x01 (0x80 >> 7) */ bool b     : 1;
+    /* 0x01 (0x40 >> 6) */ bool x     : 1;
+    /* 0x01 (0x20 >> 5) */ bool y     : 1;
+    /* 0x01 (0x10 >> 4) */ bool start : 1;
 };
 
 struct interface_of_controller_pad {

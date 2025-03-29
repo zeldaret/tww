@@ -93,7 +93,7 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
         emitter->setDirection(right_dir);
     }
 
-    for (JSULink<JPABaseParticle>* link = emitter->mActiveParticles.getFirst(); link != NULL;) {
+    for (JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst(); link != NULL;) {
         JSULink<JPABaseParticle>* nextLink = link->getNext();
         JPABaseParticle* particle = link->getObject();
 

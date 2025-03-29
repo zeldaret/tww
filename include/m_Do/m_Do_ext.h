@@ -582,7 +582,7 @@ public:
     mDoExt_3Dline_c();
     ~mDoExt_3Dline_c();
 
-    int init(u16, int, int);
+    BOOL init(u16 numSegments, BOOL hasSize, BOOL hasTex);
 
 public:
     /* 0x00 */ cXyz* mpSegments;
@@ -593,7 +593,7 @@ public:
 
 class mDoExt_3DlineMat0_c : public mDoExt_3DlineMat_c {
 public:
-    int init(u16, u16, int);
+    BOOL init(u16 numLines, u16 numSegments, BOOL hasSize);
     void setMaterial();
     void draw();
     void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);
@@ -615,7 +615,7 @@ public:
 
 class mDoExt_3DlineMat1_c : public mDoExt_3DlineMat_c {
 public:
-    int init(u16, u16, ResTIMG*, int);
+    BOOL init(u16 numLines, u16 numSegments, ResTIMG* i_img, BOOL hasSize);
     void setMaterial();
     void draw();
     void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);

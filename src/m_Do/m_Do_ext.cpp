@@ -1763,7 +1763,7 @@ void mDoExt_invJntPacket::draw() {
 #include "assets/l_toonMat1DL.h"
 
 /* 800143B8-80014580       .text init__15mDoExt_3Dline_cFUsii */
-int mDoExt_3Dline_c::init(u16 numSegments, int hasSize, int hasTex) {
+BOOL mDoExt_3Dline_c::init(u16 numSegments, BOOL hasSize, BOOL hasTex) {
     mpSegments = new cXyz[numSegments];
     if (mpSegments == NULL)
         return FALSE;
@@ -1811,7 +1811,7 @@ int mDoExt_3Dline_c::init(u16 numSegments, int hasSize, int hasTex) {
 }
 
 /* 80014584-80014664       .text init__19mDoExt_3DlineMat0_cFUsUsi */
-int mDoExt_3DlineMat0_c::init(u16 numLines, u16 numSegments, int hasSize) {
+BOOL mDoExt_3DlineMat0_c::init(u16 numLines, u16 numSegments, BOOL hasSize) {
     mNumLines = numLines;
     mMaxSegments = numSegments;
     mpLines = new mDoExt_3Dline_c[numLines];
@@ -2070,7 +2070,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
 }
 
 /* 80015328-800154C4       .text init__19mDoExt_3DlineMat1_cFUsUsP7ResTIMGi */
-int mDoExt_3DlineMat1_c::init(u16 numLines, u16 numSegments, ResTIMG* i_img, int hasSize) {
+BOOL mDoExt_3DlineMat1_c::init(u16 numLines, u16 numSegments, ResTIMG* i_img, BOOL hasSize) {
     mNumLines = numLines;
     mMaxSegments = numSegments;
     mpLines = new mDoExt_3Dline_c[numLines];

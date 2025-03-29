@@ -132,7 +132,7 @@ static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
 }
 
 /* 00000358-00000514       .text _nodeControl__6daRd_cFP7J3DNodeP8J3DModel */
-BOOL daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
+void daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = static_cast<J3DJoint*>(node);
     int jntNo = joint->getJntNo();
     cMtx_copy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
@@ -169,7 +169,7 @@ static BOOL nodeHeadControl_CB(J3DNode* node, int calcTiming) {
 }
 
 /* 0000059C-000006A0       .text _nodeHeadControl__6daRd_cFP7J3DNodeP8J3DModel */
-BOOL daRd_c::_nodeHeadControl(J3DNode* node, J3DModel* model) {
+void daRd_c::_nodeHeadControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = static_cast<J3DJoint*>(node);
     int jntNo = joint->getJntNo();
     
