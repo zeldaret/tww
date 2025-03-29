@@ -1442,7 +1442,7 @@ public:
     void setShipRidePos(int);
     void setShipAttentionAnmSpeed(f32);
     void setShipAttnetionBodyAngle();
-    void changeShipEndProc();
+    int changeShipEndProc();
     void initShipBaseAnime();
     void initShipCraneAnime();
     BOOL procShipReady_init();

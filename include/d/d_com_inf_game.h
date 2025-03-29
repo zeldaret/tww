@@ -62,9 +62,12 @@ enum daPy__PlayerStatus0 {
 
 enum daPy__PlayerStatus1 {
     daPyStts1_WIND_WAKER_CONDUCT_e = 0x00000001,
+    daPyStts1_UNK2_e               = 0x00000002,
+    daPyStts1_UNK4_e               = 0x00000004,
     daPyStts1_PICTO_BOX_AIM_e      = 0x00000008,
     daPyStts1_DEKU_LEAF_FLY_e      = 0x00000020,
     daPyStts1_DEKU_LEAF_FAN_e      = 0x00000040,
+    daPyStts1_UNK80_e              = 0x00000080,
     daPyStts1_SAIL_e               = 0x00000400,
     daPyStts1_UNK8000_e            = 0x00008000,
     daPyStts1_UNK10000_e           = 0x00010000,
