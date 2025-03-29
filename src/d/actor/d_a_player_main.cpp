@@ -1116,7 +1116,7 @@ void daPy_lk_c::setActorPointer() {
 }
 
 /* 80108564-80108634       .text setTalkStatus__9daPy_lk_cFv */
-void daPy_lk_c::setTalkStatus() {
+BOOL daPy_lk_c::setTalkStatus() {
     /* Nonmatching */
 }
 
@@ -1217,7 +1217,7 @@ void daPy_lk_c::setSpeedAndAngleAtn() {
 /* 8010AA90-8010AB84       .text setSpeedAndAngleAtnBack__9daPy_lk_cFv */
 void daPy_lk_c::setSpeedAndAngleAtnBack() {
     f32 f1;
-    if (m35B0 > 0.05f) {
+    if (mStickDistance > 0.05f) {
         if (getDirectionFromCurrentAngle() == 1) {
             current.angle.y += 0x8000;
             mVelocity *= -1.0f;
@@ -1229,7 +1229,7 @@ void daPy_lk_c::setSpeedAndAngleAtnBack() {
             daPy_HIO_atnMoveB_c0::m.field_0x0,
             daPy_HIO_atnMoveB_c0::m.field_0x2
         );
-        f1 = (daPy_HIO_atnMoveB_c0::m.field_0x8 * m35B0) * cM_scos(current.angle.y - origAngleY);
+        f1 = (daPy_HIO_atnMoveB_c0::m.field_0x8 * mStickDistance) * cM_scos(current.angle.y - origAngleY);
     } else {
         f1 = 0.0f;
     }
@@ -1728,7 +1728,7 @@ void daPy_lk_c::setFrontWallType() {
 }
 
 /* 8010F9AC-8010FEC4       .text changeFrontWallTypeProc__9daPy_lk_cFv */
-void daPy_lk_c::changeFrontWallTypeProc() {
+BOOL daPy_lk_c::changeFrontWallTypeProc() {
     /* Nonmatching */
 }
 
@@ -3348,7 +3348,7 @@ BOOL daPy_lk_c::execute() {
     
     cXyz oldPos = old.pos;
     m34DE = shape_angle.y;
-    m35B4 = m35B0;
+    m35B4 = mStickDistance;
     m34EA = m34DC;
     
     dComIfGp_setDoStatus(0);

@@ -366,7 +366,7 @@ BOOL daPy_lk_c::procTactWait() {
     if (m3570 != -5) {
         rightDir = mDoAud_getTactDirection(1, m34D4);
         leftDir = mDoAud_getTactDirection(0, m34D6);
-        mDoAud_tact_setVolume(m35B0 * cM_scos(m34DC));
+        mDoAud_tact_setVolume(mStickDistance * cM_scos(m34DC));
     } else {
         rightDir = m34D4;
         leftDir = m34D6;

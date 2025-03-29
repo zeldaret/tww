@@ -918,7 +918,7 @@ public:
     BOOL draw();
     void setAtnList();
     void setActorPointer();
-    void setTalkStatus();
+    BOOL setTalkStatus();
     void setHintActor();
     void setDoStatusBasic();
     void setDoStatus();
@@ -973,7 +973,7 @@ public:
     BOOL checkNextMode(int);
     BOOL checkIceSlipFall();
     void setFrontWallType();
-    void changeFrontWallTypeProc();
+    BOOL changeFrontWallTypeProc();
     void changeSlideProc();
     void changeWaitProc();
     void changeLandProc(f32);
@@ -1401,13 +1401,13 @@ public:
     BOOL procGrabRebound();
     void setSpeedAndAngleSwim();
     BOOL checkNextModeSwim();
-    void changeSwimProc();
-    void changeSwimUpProc();
+    BOOL changeSwimProc();
+    BOOL changeSwimUpProc();
     void swimOutAfter(int);
     BOOL checkSwimFallCheck();
-    void changeSwimOutProc();
+    BOOL changeSwimOutProc();
     void setSwimMoveAnime(daPy_ANM);
-    void getSwimTimerRate();
+    f32 getSwimTimerRate();
     void setSwimTimerStartStop();
     BOOL procSwimUp_init(int);
     BOOL procSwimUp();
@@ -1782,7 +1782,7 @@ public:
     void otherWeaponTrigger() const {}
     void spBattleTrigger() const {}
     
-    void checkPlayerDemoMode() const {}
+    BOOL checkPlayerDemoMode(u8 mode) const { return mDemo.getDemoMode() == mode; }
     void checkSpecialDemoMode() const {}
     
     void checkAttentionLock() {}
@@ -2122,7 +2122,7 @@ public:
     /* 0x35A4 */ f32 m35A4;
     /* 0x35A8 */ f32 m35A8;
     /* 0x35AC */ f32 m35AC;
-    /* 0x35B0 */ f32 m35B0;
+    /* 0x35B0 */ f32 mStickDistance; // 
     /* 0x35B4 */ f32 m35B4;
     /* 0x35B8 */ f32 m35B8;
     /* 0x35BC */ f32 mVelocity;

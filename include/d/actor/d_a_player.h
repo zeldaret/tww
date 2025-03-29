@@ -40,6 +40,7 @@ class daPy_demo_c {
 public:
     enum {
         DEMO_UNK1_e = 0x01,
+        DEMO_UNK11_e = 0x11,
         DEMO_UNK14_e = 0x14,
         DEMO_UNK18_e = 0x18,
         DEMO_UNK1D_e = 0x1D,
