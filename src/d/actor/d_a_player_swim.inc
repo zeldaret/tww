@@ -414,8 +414,6 @@ BOOL daPy_lk_c::procSwimWait_init(int param_1) {
 BOOL daPy_lk_c::procSwimWait() {
     fopAc_ac_c* talkEventPartner;
     short target;
-    double dVar2;
-    float fVar3;
     
     setSpeedAndAngleSwim();
     m34D4 += (short)((cM_rndF(0.3f) + 0.85f) * l_HIO_swim_c0.m.field_0x2);
@@ -455,8 +453,28 @@ BOOL daPy_lk_c::procSwimWait() {
 }
 
 /* 8013DE8C-8013DF60       .text procSwimMove_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procSwimMove_init(int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::procSwimMove_init(int param_1) {
+    commonProcInit(daPyProc_SWIM_MOVE_e);
+
+    if (param_1 == 0) {
+        mFrameCtrlUnder[0].setFrame(0.0f);
+    }
+
+    gravity = 0.0f;
+    setSwimMoveAnime(ANM_SWIMING);
+    m34B8 = 0;
+    if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+        if (mEquipItem != 0x100) {
+            deleteEquipItem(1);
+        }
+        current.pos.y = m35D0;
+        speed.y = 0.0f;
+        setSwimTail();
+    }
+    dComIfGp_setPlayerStatus0(0, 0x100000);
+    m35C4 = l_HIO_swim_c0.m.field_0x5C;
+    m3570 = 0;
+    return TRUE;
 }
 
 /* 8013DF60-8013E250       .text procSwimMove__9daPy_lk_cFv */

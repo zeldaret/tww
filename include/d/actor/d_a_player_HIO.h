@@ -731,7 +731,7 @@ public:
     /* 0x50 */ f32 field_0x50; // 0.6f
     /* 0x54 */ f32 field_0x54; // 0.5f
     /* 0x58 */ f32 field_0x58; // 5.3f
-    /* 0x5C */ f32 field_0x5C;
+    /* 0x5C */ f32 field_0x5C; // 0.0f
     /* 0x60 */ f32 field_0x60; // 0.4f
     /* 0x64 */ f32 field_0x64;
     /* 0x68 */ f32 field_0x68;
