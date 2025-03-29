@@ -246,7 +246,7 @@ int daPy_lk_c::getCutDirection(){
     int iVar1;
     s16 sVar2;
 
-    if (m35B0 <= 0.05f) {
+    if (mStickDistance <= 0.05f) {
         iVar1 = 4;
     }
     else {

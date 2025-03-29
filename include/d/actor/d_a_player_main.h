@@ -973,7 +973,7 @@ public:
     BOOL checkNextMode(int);
     BOOL checkIceSlipFall();
     void setFrontWallType();
-    void changeFrontWallTypeProc();
+    BOOL changeFrontWallTypeProc();
     void changeSlideProc();
     void changeWaitProc();
     void changeLandProc(f32);
@@ -2122,7 +2122,7 @@ public:
     /* 0x35A4 */ f32 m35A4;
     /* 0x35A8 */ f32 m35A8;
     /* 0x35AC */ f32 m35AC;
-    /* 0x35B0 */ f32 m35B0; // mStickDistance
+    /* 0x35B0 */ f32 mStickDistance; // 
     /* 0x35B4 */ f32 m35B4;
     /* 0x35B8 */ f32 m35B8;
     /* 0x35BC */ f32 mVelocity;

@@ -26,7 +26,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
     short oldAngleY;
     if (mCurProc != 0x35) {
         if (!mpAttention->Lockon()) {
-            if (m35B0 > 0.05f) {
+            if (mStickDistance > 0.05f) {
                 oldAngleY = shape_angle.y;
                 if (getDirectionFromShapeAngle() == 1) {
                     mSwimTailEcallBack[0].field_0x04 = 1;
@@ -39,7 +39,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
                 else {
                     cLib_addCalcAngleS(&shape_angle.y, m34E8, l_HIO_swim_c0.m.field_0x8, l_HIO_swim_c0.m.field_0x4, l_HIO_swim_c0.m.field_0x6);     
                 }
-                fVar1 = m35B0 * 3.0f * cM_scos(shape_angle.y - oldAngleY);
+                fVar1 = mStickDistance * 3.0f * cM_scos(shape_angle.y - oldAngleY);
             }
             else {
                 fVar1 = 0.0f;
@@ -49,7 +49,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
         }
         else {
             setShapeAngleToAtnActor();
-            if (m35B0 > 0.05f) {
+            if (mStickDistance > 0.05f) {
                 oldAngleY = current.angle.y;
                 if (getDirectionFromCurrentAngle() == 1) {
                     mSwimTailEcallBack[0].field_0x04 = 1;
@@ -61,7 +61,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
                 }
                 else {
                     cLib_addCalcAngleS(&current.angle.y, m34E8, l_HIO_swim_c0.m.field_0x8, l_HIO_swim_c0.m.field_0x4, l_HIO_swim_c0.m.field_0x6);
-                    fVar1 = m35B0 * 3.0f * cM_scos(current.angle.y - oldAngleY);
+                    fVar1 = mStickDistance * 3.0f * cM_scos(current.angle.y - oldAngleY);
                 }
             }
             else {
@@ -351,7 +351,7 @@ BOOL daPy_lk_c::procSwimUp() {
         }
         else {
             if (mFrameCtrl->getFrame() > l_HIO_swim_c0.m.field_0x34) {
-                if (m35B0 > 0.05f) {
+                if (mStickDistance > 0.05f) {
                     procSwimMove_init(0);
                 }
             }
@@ -443,7 +443,7 @@ BOOL daPy_lk_c::procSwimWait() {
                }
             }
             mFrameCtrlUnder[0].setRate((float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x70) + l_HIO_swim_c0.m.field_0x40);
-            if (m35B0 > 0.05f) {
+            if (mStickDistance > 0.05f) {
                 procSwimMove_init(1);
             }
             setSwimTimerStartStop();
@@ -479,5 +479,91 @@ BOOL daPy_lk_c::procSwimMove_init(int param_1) {
 
 /* 8013DF60-8013E250       .text procSwimMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimMove() {
-    /* Nonmatching */
+    int iVar1;
+    daPy_ANM anm;
+    setSpeedAndAngleSwim();
+    J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
+    if (!mpAttention->Lockon()) {
+        iVar1 = FALSE;
+    }
+    else {
+        if (mStickDistance > 0.05f) {
+            iVar1 = getDirectionFromShapeAngle();
+        }
+        else {
+            iVar1 = 0;
+        }
+    }
+
+    if (m34B8 != iVar1) {
+        m34B8 = iVar1;
+        float fVar1 = m35C4;
+        if (m34B8 == 0) {
+            anm = ANM_SWIMING;
+            m35C4 = l_HIO_swim_c0.m.field_0x5C;
+        }
+        else {
+            m35C4 = -80.0f;
+            if (m34B8 == 2) {
+                anm = ANM_ATNDLS;
+            }
+            else if (m34B8 == 3) {
+                anm = ANM_ATNDRS;
+            }
+            else {
+                anm = ANM_ATNWB;
+            } 
+        }
+        m_old_fdata->getOldFrameTransInfo(0)->mTranslate.y -= m35C4 - fVar1;
+        setSwimMoveAnime(anm);
+        if (m34B8) {
+            setTextureAnime(3, 0);
+            onModeFlg(0x100);
+            offModeFlg(0x400);
+            mpSeAnmFrameCtrl = NULL;
+        }
+        else {
+            offModeFlg(0x100);
+            onModeFlg(0x400);
+        }
+    }
+    else {
+        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (l_HIO_swim_c0.m.field_0x54 - l_HIO_swim_c0.m.field_0x50)) / mMaxNormalSpeed + l_HIO_swim_c0.m.field_0x50 + (float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x74));
+    }
+
+    if (m34B8 == 1) {
+        mFrameCtrl[0].setRate(mFrameCtrl[0].getRate() * 0.5f);
+    }
+
+    if (changeSwimOutProc()) {
+        return TRUE;
+    }
+
+    if (!checkNoResetFlg0(daPyFlg0_UNK100)) {
+        if (changeSwimUpProc()) {
+            return TRUE;
+        }
+    }
+    else {
+        current.pos.y = m35D0;
+        setSwimTail();
+    }
+
+    if (checkNextModeSwim()) {
+        return TRUE;
+    }
+
+    if (changeFrontWallTypeProc()) {
+        swimOutAfter(1);
+        return TRUE;
+    }
+
+    if (mStickDistance <= 0.05f) {
+        procSwimWait_init(1);
+    }
+    else if ((!m34B8 && mFrameCtrl->checkPass(20.0f)) || (m34B8 && mFrameCtrl->checkPass(0.0f))) {
+            seStartOnlyReverb(0x3807);
+    }
+    setSwimTimerStartStop();
+    return TRUE;
 }

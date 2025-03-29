@@ -729,7 +729,7 @@ public:
     /* 0x48 */ f32 field_0x48; // 1.0f
     /* 0x4C */ f32 field_0x4C; // 5.0f
     /* 0x50 */ f32 field_0x50; // 0.6f
-    /* 0x54 */ f32 field_0x54; // 0.5f
+    /* 0x54 */ f32 field_0x54; // 1.1f
     /* 0x58 */ f32 field_0x58; // 5.3f
     /* 0x5C */ f32 field_0x5C; // 0.0f
     /* 0x60 */ f32 field_0x60; // 0.4f
@@ -737,7 +737,7 @@ public:
     /* 0x68 */ f32 field_0x68;
     /* 0x6C */ f32 field_0x6C;
     /* 0x70 */ f32 field_0x70; // 2.5f
-    /* 0x74 */ f32 field_0x74;
+    /* 0x74 */ f32 field_0x74; // 1.0f
     /* 0x78 */ f32 field_0x78; // 30.0f
     /* 0x7C */ f32 field_0x7C;
 };  // Size: 0x80
