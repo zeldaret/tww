@@ -456,8 +456,8 @@ void daNpc_Btsw2_c::pathMove() {
     } else {
         pathPntIdx = 0;
     }
-    dPath__Point* pnt = &mpPath->mpPnt[pathPntIdx];
-    cXyz targetPos(pnt->mPos.x, pnt->mPos.y, pnt->mPos.z);
+    dPnt* pnt = &mpPath->m_points[pathPntIdx];
+    cXyz targetPos(pnt->m_position.x, pnt->m_position.y, pnt->m_position.z);
     s16 targetAngle = cLib_targetAngleY(&current.pos, &targetPos);
     cLib_addCalcAngleS2(&current.angle.y, targetAngle, l_HIO.m32, l_HIO.m30);
     cXyz sp48 = targetPos - current.pos;

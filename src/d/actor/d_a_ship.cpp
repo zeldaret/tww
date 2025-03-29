@@ -931,7 +931,7 @@ void daShip_c::setYPos() {
 
 /* 00002824-00002CC4       .text checkOutRange__8daShip_cFv */
 BOOL daShip_c::checkOutRange() {
-    dPath__Point* pnt;
+    dPnt* pnt;
     dPath* path;
     cXyz* closestPoint;
     cXyz* nextPoint;
@@ -951,7 +951,7 @@ BOOL daShip_c::checkOutRange() {
     bVar5 = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e;
     path = dPath_GetRoomPath(m034B, -1);
     while (path) {
-        pnt = path->mpPnt;
+        pnt = path->m_points;
         if (path->m_num < 3) {
             path = dPath_GetNextRoomPath(path, -1);
             pathIndex++;
@@ -972,32 +972,32 @@ BOOL daShip_c::checkOutRange() {
         float minDist = FLOAT_MAX;
         
         for (int i = 0; i < path->m_num; pnt++, i++) {
-            float dx = current.pos.x - pnt->mPos.x;
-            float dz = current.pos.z - pnt->mPos.z;
+            float dx = current.pos.x - pnt->m_position.x;
+            float dz = current.pos.z - pnt->m_position.z;
             
             float distXZ = dx * dx + dz * dz;
             
             if (minDist > distXZ) {
                 closestIndex = i;
                 minDist = distXZ;
-                closestPoint = &pnt->mPos;
+                closestPoint = &pnt->m_position;
             }
         }
 
         lastIndex = path->m_num - 1;
 
         if (closestIndex == lastIndex) {
-            nextPoint = &path->mpPnt->mPos;
+            nextPoint = &path->m_points->m_position;
         }
         else {
-            nextPoint = &(path->mpPnt + closestIndex + 1)->mPos;
+            nextPoint = &(path->m_points + closestIndex + 1)->m_position;
         }
 
         if (closestIndex == 0) {
-            prevPoint = &(path->mpPnt + lastIndex)->mPos;
+            prevPoint = &(path->m_points + lastIndex)->m_position;
         }
         else {
-            prevPoint = &(path->mpPnt + closestIndex - 1)->mPos;
+            prevPoint = &(path->m_points + closestIndex - 1)->m_position;
         }
 
         s16 angleNext = cM_atan2s(nextPoint->x - closestPoint->x, nextPoint->z - closestPoint->z);

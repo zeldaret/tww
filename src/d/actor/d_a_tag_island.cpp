@@ -314,9 +314,9 @@ void daTag_Island_c::demoProcCom_ikada() {
         ikada->mCurPathP0 = ikada->mInitPos;
         ikada->current.pos = ikada->mCurPathP0;
         ikada->mCurPathPoint = 0;
-        ikada->m02CC = ikada->mpPath->mpPnt[ikada->mCurPathPoint].mPos;
-        ikada->mCurPathP1 = ikada->mpPath->mpPnt[ikada->mCurPathPoint + 1].mPos;
-        ikada->mPathPosTarget = ikada->mpPath->mpPnt[ikada->mCurPathPoint].mPos;
+        ikada->m02CC = ikada->mpPath->m_points[ikada->mCurPathPoint].m_position;
+        ikada->mCurPathP1 = ikada->mpPath->m_points[ikada->mCurPathPoint + 1].m_position;
+        ikada->mPathPosTarget = ikada->mpPath->m_points[ikada->mCurPathPoint].m_position;
     }
 }
 

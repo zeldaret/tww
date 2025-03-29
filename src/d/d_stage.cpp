@@ -1758,7 +1758,7 @@ int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPathInfo(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
-        pPath->mpPnt = (dPath__Point*)((u32)*((int*)i_stage->getPntInf()+1) + (u32)pPath->mpPnt); // TODO clean this up
+        pPath->m_points = (dPnt*)((u32)pPath->m_points + i_stage->getPntInf()->m_pnt_offset);
     return 1;
 }
 
@@ -1775,7 +1775,7 @@ int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPath2Info(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
-        pPath->mpPnt = (dPath__Point*)((u32)*((int*)i_stage->getPnt2Inf()+1) + (u32)pPath->mpPnt); // TODO clean this up
+        pPath->m_points = (dPnt*)((u32)pPath->m_points + i_stage->getPnt2Inf()->m_pnt_offset);
     return 1;
 }
 
