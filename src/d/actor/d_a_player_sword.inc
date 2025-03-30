@@ -268,7 +268,7 @@ void daPy_lk_c::changeCutProc() {
 }
 
 /* 80155C3C-80156034       .text changeCutReverseProc__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
-void daPy_lk_c::changeCutReverseProc(daPy_ANM) {
+int daPy_lk_c::changeCutReverseProc(daPy_ANM) {
     /* Nonmatching */
 }
 

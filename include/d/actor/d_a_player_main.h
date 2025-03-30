@@ -1647,7 +1647,7 @@ public:
     void setJumpCutAtParam();
     int getCutDirection();
     void changeCutProc();
-    void changeCutReverseProc(daPy_ANM);
+    int changeCutReverseProc(daPy_ANM);
     BOOL procCutA_init(s16);
     BOOL procCutA();
     BOOL procCutF_init(s16);
