@@ -56,6 +56,7 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK2000000_e     = 0x02000000,
     daPyStts0_UNK4000000_e     = 0x04000000,
     daPyStts0_CRAWL_e          = 0x08000000,
+    daPyStts0_UNK10000000_e    = 0x10000000,
     daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
 };
@@ -66,6 +67,7 @@ enum daPy__PlayerStatus1 {
     daPyStts1_DEKU_LEAF_FLY_e      = 0x00000020,
     daPyStts1_DEKU_LEAF_FAN_e      = 0x00000040,
     daPyStts1_SAIL_e               = 0x00000400,
+    daPyStts1_UNK4000_e            = 0x00004000,
     daPyStts1_UNK8000_e            = 0x00008000,
     daPyStts1_UNK10000_e           = 0x00010000,
     daPyStts1_UNK40000_e           = 0x00040000,
@@ -793,6 +795,7 @@ extern GXColor g_saftyWhiteColor;
  */
 
 void dComIfGs_gameStart();
+void dComIfGs_setGameStartStage();
 u8 dComIfGs_checkGetItem(u8);
 
 inline void dComIfGs_init() {

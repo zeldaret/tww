@@ -1176,14 +1176,14 @@ public:
     void endFlameDamageEmitter();
     void endDamageEmitter();
     static u32 setItemWaterEffect(fopAc_ac_c*, int, int);
-    void getDemoLookActor();
+    fopAc_ac_c* getDemoLookActor();
     void setTinkleCeiverModel();
     void setTalismanModel();
     void setLetterModel();
     BOOL checkCaughtShapeHide();
     void setShapeAngleToTalkActor();
     BOOL checkEndMessage(u32);
-    void setTalkStartBack();
+    int setTalkStartBack();
     BOOL dProcTool_init();
     BOOL dProcTool();
     BOOL dProcTalk_init();
