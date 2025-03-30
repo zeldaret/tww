@@ -143,6 +143,7 @@ public:
     };
     
     enum daPy_RFLG0 {
+        daPyRFlg0_UNK1                  = 0x00000001,
         daPyRFlg0_UNK2                  = 0x00000002,
         daPyRFlg0_ROPE_GRAB_RIGHT_HAND  = 0x00000004,
         daPyRFlg0_UNK10                 = 0x00000010,

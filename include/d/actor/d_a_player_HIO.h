@@ -237,6 +237,7 @@ public:
 class daPy_HIO_cutEA_c1 {
 public:
     /* 0x00 */ s16 field_0x0;
+    /* 0x02 */ s16 field_0x2;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ f32 field_0xC;
@@ -258,6 +259,7 @@ public:
 class daPy_HIO_cutEB_c1 {
 public:
     /* 0x00 */ s16 field_0x0;
+    /* 0x02 */ s16 field_0x2;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ f32 field_0xC;
@@ -297,6 +299,7 @@ public:
 class daPy_HIO_cutExB_c1 {
 public:
     /* 0x00 */ s16 field_0x0;
+    /* 0x02 */ s16 field_0x2;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ f32 field_0xC;

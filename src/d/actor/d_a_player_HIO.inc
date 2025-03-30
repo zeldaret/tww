@@ -52,11 +52,11 @@ const daPy_HIO_cutL_c1 daPy_HIO_cutL_c0::m = {
 };
 
 const daPy_HIO_cutEA_c1 daPy_HIO_cutEA_c0::m = {
-    19, 1.0f, 4.0f, 0.2f, 15.0f, 4.0f, 0.5f, 0.7f, 2.0f, 6.0f, 5.0f, 11.0f,
+    19, 0, 1.0f, 4.0f, 0.2f, 15.0f, 4.0f, 0.5f, 0.7f, 2.0f, 6.0f, 5.0f, 11.0f,
 };
 
 const daPy_HIO_cutEB_c1 daPy_HIO_cutEB_c0::m = {
-    19, 0.9f, 4.0f, 0.2f, 7.0f, 1.5f, 0.5f, 0.7f, 2.0f, 6.0f, 5.0f, 11.0f,
+    19, 0, 0.9f, 4.0f, 0.2f, 7.0f, 1.5f, 0.5f, 0.7f, 2.0f, 6.0f, 5.0f, 11.0f,
 };
 
 const daPy_HIO_cutExA_c1 daPy_HIO_cutExA_c0::m = {
@@ -64,7 +64,7 @@ const daPy_HIO_cutExA_c1 daPy_HIO_cutExA_c0::m = {
 };
 
 const daPy_HIO_cutExB_c1 daPy_HIO_cutExB_c0::m = {
-    36, 0.9f, 5.0f, 5.0f, 14.0f, 20.0f,
+    36, 0, 0.9f, 5.0f, 5.0f, 14.0f, 20.0f,
 };
 
 const daPy_HIO_cutExMJ_c1 daPy_HIO_cutExMJ_c0::m = {

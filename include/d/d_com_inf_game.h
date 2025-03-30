@@ -68,6 +68,7 @@ enum daPy__PlayerStatus1 {
     daPyStts1_SAIL_e               = 0x00000400,
     daPyStts1_UNK8000_e            = 0x00008000,
     daPyStts1_UNK10000_e           = 0x00010000,
+    daPyStts1_UNK20000_e           = 0x00020000,
     daPyStts1_UNK40000_e           = 0x00040000,
 };
 

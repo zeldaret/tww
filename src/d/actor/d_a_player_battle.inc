@@ -18,7 +18,7 @@ void daPy_lk_c::setSpecialBattle(int) {
 }
 
 /* 8013E384-8013E454       .text changeSpecialBattle__9daPy_lk_cFv */
-void daPy_lk_c::changeSpecialBattle() {
+int daPy_lk_c::changeSpecialBattle() {
     /* Nonmatching */
 }
 
