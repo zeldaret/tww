@@ -466,7 +466,7 @@ u16 daObjTpost_c::next_msgStatus(u32* pMsgNo) {
         case 0xCF4:
         case 0xCF8:
             if(mpCurrMsg->mSelectNum == 0) {
-                s32 price = 0x0A;
+                int price = 0x0A;
                 if(m_letter[mNumReadable].mEventReg == 0xB203) {
                     price = 0xC9;
                 }

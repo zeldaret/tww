@@ -3799,8 +3799,8 @@ static BOOL daPy_IsDelete(daPy_lk_c*) {
 BOOL daPy_lk_c::playerDelete() {
     int i;
     for (i = 0; i < (int)ARRAY_SIZE(mFootEffect); i++) {
-        mFootEffect[i].getSmokeCallBack()->end();
-        mFootEffect[i].getOtherCallBack()->end();
+        mFootEffect[i].getSmokeCallBack()->remove();
+        mFootEffect[i].getOtherCallBack()->remove();
     }
     if (mFanSwingCb.mpEmitter) {
         mFanSwingCb.mpEmitter->clearStatus(0x40);

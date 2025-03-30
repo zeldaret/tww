@@ -52,7 +52,11 @@ public:
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     void setRateOff(u8 param_0) { mRateOff = param_0; }
     bool isEnd() { return mFlag & 1; }
+    void onEnd() { mFlag |= 1; }
+    void remove() { end(); }
+    void setFollowOff() { field_0x12 = 1; }
 
+protected:
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ const cXyz* mPos;
     /* 0x0C */ const csXyz* mAngle;
@@ -79,11 +83,12 @@ public:
     void remove() { end(); }
 
     void offWindOff() {}
-    void onWindOff() {}
+    void onWindOff() { mWindOff = 1; }
     void setColor(const GXColor& color) { mColor = color; }
 
+private:
     /* 0x14 */ s8 field_0x14;
-    /* 0x15 */ u8 field_0x15;
+    /* 0x15 */ u8 mWindOff;
     /* 0x16 */ GXColor mColor;
     /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
     /* 0x1C */ dKy_tevstr_c* mTevstr;

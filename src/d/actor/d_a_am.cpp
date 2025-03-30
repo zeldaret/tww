@@ -585,7 +585,7 @@ static void action_dousa(am_class* i_this) {
             break;
         }
         fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP, 0);
-        i_this->mSmokeCbs[0].end();
+        i_this->mSmokeCbs[0].remove();
         dComIfGp_particle_setToon(
             dPa_name::ID_SCENE_A125, &i_this->mWaistPos, &i_this->shape_angle, NULL,
             0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this)
@@ -634,7 +634,7 @@ static void action_dousa(am_class* i_this) {
             i_this->mTargetAngleY = fopAcM_searchPlayerAngleY(i_this);
         }
         if (i_this->mCountDownTimers[0] == 0) {
-            i_this->mSmokeCbs[2].end();
+            i_this->mSmokeCbs[2].remove();
             i_this->mState = 3;
         }
         break;
@@ -656,9 +656,9 @@ static void action_dousa(am_class* i_this) {
     medama_move(i_this);
 
     if (i_this->mState != 2 && medama_atari_check(i_this)) {
-        i_this->mSmokeCbs[2].end();
+        i_this->mSmokeCbs[2].remove();
     } else if (bomb_nomi_check(i_this)) {
-        i_this->mSmokeCbs[2].end();
+        i_this->mSmokeCbs[2].remove();
     }
 }
 
@@ -684,7 +684,7 @@ static void action_modoru_move(am_class* i_this) {
         f32 xDistToSpawn = i_this->mSpawnPos.x - i_this->current.pos.x;
         f32 zDistToSpawn = i_this->mSpawnPos.z - i_this->current.pos.z;
         if (i_this->mAcch.ChkGroundHit()) {
-            i_this->mSmokeCbs[0].end();
+            i_this->mSmokeCbs[0].remove();
             dComIfGp_particle_setToon(
                 dPa_name::ID_SCENE_A125, &i_this->mWaistPos, &i_this->shape_angle, NULL,
                 0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this)
@@ -806,7 +806,7 @@ static void action_itai_move(am_class* i_this) {
         i_this->mState = 3;
         break;
     case 44:
-        i_this->mSmokeCbs[3].end();
+        i_this->mSmokeCbs[3].remove();
         i_this->mStts.SetWeight(0xFF);
         dComIfGp_particle_setToon(
             dPa_name::ID_SCENE_A155, &i_this->mJawPos, &i_this->shape_angle, NULL,
@@ -830,7 +830,7 @@ static void action_itai_move(am_class* i_this) {
             fopAcM_monsSeStart(i_this, JA_SE_CV_AM_EAT_BOMB, 0);
         }
         if (i_this->mpMorf->checkFrame(6.0f)) {
-            i_this->mSmokeCbs[1].end();
+            i_this->mSmokeCbs[1].remove();
             i_this->mNeedleCyl.OnAtSetBit();
             i_this->mNeedleCyl.OnAtHitBit();
             dComIfGp_particle_setToon(
@@ -852,7 +852,7 @@ static void action_itai_move(am_class* i_this) {
         bomb_move_set(i_this, 1);
         i_this->shape_angle.y += 0x1000;
         if (i_this->mAcch.ChkGroundHit()) {
-            i_this->mSmokeCbs[0].end();
+            i_this->mSmokeCbs[0].remove();
             // The fopAcM_seStart inline makes the codegen not match.
             // fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP, 0);
             mDoAud_seStart(JA_SE_CM_AM_JUMP, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
@@ -1059,9 +1059,9 @@ static BOOL daAM_Delete(am_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "AM");
 
     for (int i = 0; i < 4; i++) {
-        i_this->mSmokeCbs[i].end();
+        i_this->mSmokeCbs[i].remove();
     }
-    i_this->mSmokeCbs[2].end();
+    i_this->mSmokeCbs[2].remove();
 
     if (i_this->m033C) {
         i_this->m033C->becomeInvalidEmitter();

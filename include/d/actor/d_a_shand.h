@@ -49,7 +49,7 @@ public:
 class daShand_HIO_c : public JORReflexible {
 public:
     daShand_HIO_c();
-    virtual ~daShand_HIO_c(){};
+    virtual ~daShand_HIO_c() {};
 
     void genMessage(JORMContext* ctx){};
 

@@ -381,11 +381,21 @@ public:
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
 
     s32 getItemTimeCount() { return mAirMeter; }
-    void setItemTimeCount(s32 time) { mAirMeter = time; }
-    void clearItemTimeCount() { mAirMeter = 0; }
-    
+    void setItemTimeCount(s32 time) {
+        mAirMeter = time;
+        mItemSwimTimerStatus = true;
+    }
+    void clearItemTimeCount() {
+        mAirMeter = 0;
+        mItemSwimTimerStatus = false;
+    }
+
     s32 getItemTimeMax() { return mItemTimeMax; }
     void setItemTimeMax(s32 time) { mItemTimeMax = time; }
+
+    bool getItemSwimTimerStatus() { return mItemSwimTimerStatus; }
+    void startItemSwimTimer() { mItemSwimTimerStatus = true; }
+    void stopItemSwimTimer() { mItemSwimTimerStatus = false; }
 
     u8 getScopeType() { return mScopeType; }
     void setScopeType(u8 type) { mScopeType = type; }
@@ -636,9 +646,9 @@ public:
     /* 0x48AC */ fopAc_ac_c* mpPlayerPtr[3];  // 0: Link, 1: Partner, 2: Ship
     /* 0x48B8 */ f32 field_0x48b8;
     /* 0x48BC */ f32 mItemLifeCount;
-    /* 0x48C0 */ int mItemRupeeCount;
-    /* 0x48C4 */ int mAirMeter;
-    /* 0x48C8 */ int field_0x48c8;
+    /* 0x48C0 */ s32 mItemRupeeCount;
+    /* 0x48C4 */ s32 mAirMeter;
+    /* 0x48C8 */ s32 mItemTimeMax;
     /* 0x48CC */ u32 mNpcNameMessageID;
     /* 0x48D0 */ u32 mItemNameMessageID;
     /* 0x48D4 */ s16 mItemKeyNumCount;
@@ -661,7 +671,7 @@ public:
     /* 0x4922 */ s16 mItemTimer;
     /* 0x4924 */ s16 mItemNowLife;
     /* 0x4926 */ s16 mItemNowRupee;
-    /* 0x4928 */ u8 mItemTimeMax;
+    /* 0x4928 */ bool mItemSwimTimerStatus;
     /* 0x4929 */ u8 field_0x4929;
     /* 0x492A */ u8 mMesgStatus;
     /* 0x492B */ u8 mbCamOverrideFarPlane;
@@ -2244,12 +2254,24 @@ inline void dComIfGp_clearItemTimeCount() {
     g_dComIfG_gameInfo.play.clearItemTimeCount();
 }
 
+inline u32 dComIfGp_getItemTimeMax() {
+    return g_dComIfG_gameInfo.play.getItemTimeMax();
+}
+
 inline void dComIfGp_setItemTimeMax(s32 time) {
     g_dComIfG_gameInfo.play.setItemTimeMax(time);
 }
 
-inline u32 dComIfGp_getItemTimeMax() {
-    return g_dComIfG_gameInfo.play.getItemTimeMax();
+inline bool dComIfGp_getItemSwimTimerStatus() {
+    return g_dComIfG_gameInfo.play.getItemSwimTimerStatus();
+}
+
+inline void dComIfGp_startItemSwimTimer() {
+    g_dComIfG_gameInfo.play.startItemSwimTimer();
+}
+
+inline void dComIfGp_stopItemSwimTimer() {
+    g_dComIfG_gameInfo.play.stopItemSwimTimer();
 }
 
 inline void dComIfGp_setMessageCountNumber(s16 num) {

@@ -164,7 +164,7 @@ static void smoke_set_s(bk_class* i_this, f32 rate) {
     case dBgS_Attr_WOOD_e:
     case dBgS_Attr_STONE_e:
     case dBgS_Attr_SAND_e: {
-        i_this->m0350.end();
+        i_this->m0350.remove();
         JPABaseEmitter* emitter1 = dComIfGp_particle_setToon(
             dPa_name::ID_COMMON_2022, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
             &i_this->m0350, fopAcM_GetRoomNo(i_this)
@@ -255,7 +255,7 @@ static void ground_smoke_set(bk_class* i_this) {
     }
     
     if (i_this->m034C == 0) {
-        i_this->m0350.end();
+        i_this->m0350.remove();
         i_this->m034F = 0;
     }
 }
@@ -4507,8 +4507,8 @@ static BOOL daBk_Delete(bk_class* i_this) {
         hio_set = 0;
         mDoHIO_deleteChild(l_bkHIO.mNo);
     }
-    i_this->m0350.end();
-    i_this->dr.mParticleCallBack.end();
+    i_this->m0350.remove();
+    i_this->dr.mParticleCallBack.remove();
     enemy_fire_remove(&i_this->mEnemyFire);
     return TRUE;
 }

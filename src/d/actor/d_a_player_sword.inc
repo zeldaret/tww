@@ -242,7 +242,7 @@ void daPy_lk_c::setJumpCutAtParam() {
 }
 
 /* 80155970-801559F0       .text getCutDirection__9daPy_lk_cFv */
-int daPy_lk_c::getCutDirection(){
+int daPy_lk_c::getCutDirection() {
     int iVar1;
     s16 sVar2;
 

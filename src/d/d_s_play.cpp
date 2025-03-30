@@ -1052,6 +1052,8 @@ static BOOL dScnPly_Execute(dScnPly_ply_c* i_this) {
     dKy_itudemo_se();
     if (!dMenu_flag()) {
         dComIfGp_demo_update();
+        // dComIfGp_jcame_update(); // Debug only
+        // dComIfGp_jprev_update(); // Debug only
         dComIfGp_evmng_execute();
 
         if (dComIfGp_getAttention().Owner() != NULL) {
@@ -1106,8 +1108,7 @@ static BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     dComIfGp_removeWood();
     dComIfGp_removeFlower();
     
-    dComIfGp_setItemTimeCount(0);
-    dComIfGp_setItemTimeMax(0);
+    dComIfGp_clearItemTimeCount();
     
     g_msgDHIO.field_0x06 = 0;
     g_msgDHIO.field_0x10 = -1;
@@ -1317,11 +1318,14 @@ cPhs_State phase_4(dScnPly_ply_c* i_this) {
         dComIfGp_particle_createScene(NULL);
     }
 
+    // dComIfG_initStopwatch(); // Debug only
     dComIfG_Bgsp()->Ct();
     dComIfG_Ccsp()->Ct();
     dComIfGp_createDemo();
     daSea_Init();
     dSnap_Create();
+    // dComIfGp_createJcame(); // Debug only
+    // dComIfGp_createJprev(); // Debug only
     dComIfGp_setPlayerInfo(0, NULL, 0);
     for (s32 i = 0; i < 3; i++)
         dComIfGp_setPlayerPtr(i, NULL);

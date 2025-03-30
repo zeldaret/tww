@@ -114,14 +114,12 @@ BOOL daPy_lk_c::checkNextModeSwim() {
 
 /* 8013CFC0-8013D1B0       .text changeSwimProc__9daPy_lk_cFv */
 BOOL daPy_lk_c::changeSwimProc() {
-    float fVar1;
     BOOL res;
     cXyz local_18;
     
     if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && !checkNoControll() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK11_e && m35D0 - current.pos.y > l_HIO_swim_c0.m.field_0x24) {
         dComIfGp_setItemTimeCount(900);
-        dComIfGp_setItemTimeMax(1);
-        g_dComIfG_gameInfo.play.field_0x48c8 = 900; // Some inline? Debug maps make no mention of this function but perhaps it was used earlier?
+        dComIfGp_setItemTimeMax(900);
 
         offNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS);
         offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
@@ -205,13 +203,12 @@ void daPy_lk_c::swimOutAfter(int param_1) {
         seStartOnlyReverb(JA_SE_LK_OUTOF_WATER);
     }
     dComIfGp_clearItemTimeCount();
-    dComIfGp_setItemTimeMax(0);
     resetPriTextureAnime();
 }
 
 /* 8013D314-8013D354       .text checkSwimFallCheck__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkSwimFallCheck() {
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || current.pos.y > m35D0 + 30.1f && !dPa_control_c::isStatus(1)) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (current.pos.y > m35D0 + 30.1f && !dPa_control_c::isStatus(1))) {
         return TRUE;
     }
     return FALSE;
@@ -262,10 +259,12 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 
 /* 8013D530-8013D638       .text setSwimMoveAnime__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
 void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
-    /* Nonmatching */
-    //float startFrame = mFrameCtrlUnder[0].getFrame();
-    float endFrame = mFrameCtrlUnder[0].getEnd();
-    setSingleMoveAnime(swimMoveAnm, (std::fabsf(mVelocity) * ((l_HIO_swim_c0.m.field_0x54 - l_HIO_swim_c0.m.field_0x50))) / mMaxNormalSpeed + l_HIO_swim_c0.m.field_0x50 + (float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x74), 0.0f, -1, l_HIO_swim_c0.m.field_0x58); // Missing a `* currentFrame` in here?
+    f32 startFrame = mFrameCtrlUnder[0].getFrame();
+    f32 endFrame = startFrame * mFrameCtrlUnder[0].getEnd();
+    f32 rate = (std::fabsf(mVelocity) * (l_HIO_swim_c0.m.field_0x54 - l_HIO_swim_c0.m.field_0x50) / mMaxNormalSpeed) +
+                l_HIO_swim_c0.m.field_0x50 +
+               (getSwimTimerRate() * l_HIO_swim_c0.m.field_0x74);
+    setSingleMoveAnime(swimMoveAnm, rate, 0.0f, -1, l_HIO_swim_c0.m.field_0x58);
     mFrameCtrlUnder[0].setFrame(endFrame * mFrameCtrlUnder[0].getEnd());
     mAnmRatioUnder[0].getAnmTransform()->setFrame(mFrameCtrlUnder[0].getFrame());
 }
@@ -273,7 +272,7 @@ void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
 /* 8013D638-8013D6B8       .text getSwimTimerRate__9daPy_lk_cFv */
 f32 daPy_lk_c::getSwimTimerRate() {
     f32 swimTimerRate;
-    if (dComIfGp_getItemTimeMax() != 0 && dComIfGp_event_getMode() == dEvtMode_NONE_e) {
+    if (dComIfGp_getItemSwimTimerStatus() && dComIfGp_event_getMode() == dEvtMode_NONE_e) {
         swimTimerRate = (1.0f - dComIfGp_getItemTimeCount() * 0.0011111111f);
     }
     else {
@@ -292,7 +291,7 @@ void daPy_lk_c::setSwimTimerStartStop() {
     float target = 0.0f;
 
     if (mAcch.GetGroundH() <= m35D0 - 175.0f) {
-        dComIfGp_setItemTimeMax(1);
+        dComIfGp_startItemSwimTimer();
 
         if (checkNoResetFlg0(daPyFlg0_UNK100)) {
             float swimTimerRate = getSwimTimerRate();
@@ -314,8 +313,7 @@ void daPy_lk_c::setSwimTimerStartStop() {
     }
     else {
         dComIfGp_setItemTimeCount(900);
-        dComIfGp_setItemTimeMax(1);
-        dComIfGp_setItemTimeMax(0); //Fakematch? Seems nonsensical to set it to 1 then immediately to 0, also could be `dComIfGp_stopItemSwimTimer` and `dComIfGp_startItemSwimTimer` inlines mentioned in the debug maps
+        dComIfGp_stopItemSwimTimer();
     }
 
     cLib_chaseF(&m3608, target, 3.0f);

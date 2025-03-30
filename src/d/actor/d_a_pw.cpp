@@ -393,13 +393,13 @@ void action_dousa(pw_class* i_this) {
         i_this->mState += 1;
         break;
     case 111:
-        if (i_this->m5C4.mpEmitter != NULL) {
+        if (i_this->m5C4.getEmitter() != NULL) {
             i_this->mActorPlace.pos = i_this->current.pos;
             i_this->mActorPlace.angle = i_this->shape_angle;
         }
         if (!i_this->mAcch.ChkGroundHit())
             break;
-        i_this->m5C4.end();
+        i_this->m5C4.remove();
         i_this->speedF = 0.0f;
         i_this->speed.setall(0.0f);
         i_this->gravity = 0.0f;

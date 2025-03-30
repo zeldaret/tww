@@ -120,7 +120,7 @@ public:
 class daFganon_HIO_c {
 public:
     daFganon_HIO_c();
-    virtual ~daFganon_HIO_c(){}
+    virtual ~daFganon_HIO_c() {}
 
 public:
     /* 0x00 */ // vtable  

@@ -459,7 +459,7 @@ void daTbox_c::CreateInit() {
     s32 funcType = getFuncType();
     flagClr();
 
-    mSmokeCB.field_0x15 = 1;
+    mSmokeCB.onWindOff();
     mOpenAnm.setPlaySpeed(0.0f);
 
     if (checkOpen()) {

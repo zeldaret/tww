@@ -122,7 +122,7 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
         }
     } else {
         i_this->mHitTimeoutLeft--;
-        if (i_this->mPa.mpEmitter) {
+        if (i_this->mPa.getEmitter()) {
             float tgtZ;
             if (i_this->mHitTimeoutLeft > 10) {
                 tgtZ = 4.0f;
@@ -131,14 +131,12 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
             }
             cLib_addCalc2(&i_this->mHitReactCurZ, tgtZ, 1.0f, 0.5f);
             cMtx_YrotS(*calc_mtx, i_this->mHitAngle);
-            cXyz localPos;
-            localPos.set(0.0f, 1.0f, i_this->mHitReactCurZ);
-            cXyz globalPos;
-            MtxPosition(&localPos, &globalPos);
-            float y = globalPos.y;
-            float z = globalPos.z;
-            float x = globalPos.x;
-            i_this->mPa.mpEmitter->mEmitterDir.set(x, y, z);
+            cXyz offset;
+            offset.set(0.0f, 1.0f, i_this->mHitReactCurZ);
+            cXyz rotOffset;
+            MtxPosition(&offset, &rotOffset);
+            JGeometry::TVec3<f32> dir(rotOffset);
+            i_this->mPa.getEmitter()->setDirection(dir);
         }
     }
 
@@ -147,7 +145,7 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
 
 /* 00000604-00000634       .text daLamp_IsDelete__FP10lamp_class */
 static BOOL daLamp_IsDelete(lamp_class* i_this) {
-    i_this->mPa.end();
+    i_this->mPa.remove();
     return TRUE;
 }
 

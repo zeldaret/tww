@@ -74,7 +74,7 @@ void dComIfG_play_c::itemInit() {
     mItemLifeCount = 0.0f;
     mItemRupeeCount = 0;
     mAirMeter = 0;
-    field_0x48c8 = 0;
+    mItemTimeMax = 0;
     mNpcNameMessageID = 0;
     mItemNameMessageID = 0;
     mItemKeyNumCount = 0;
@@ -99,7 +99,7 @@ void dComIfG_play_c::itemInit() {
     mItemTimer = 0;
     mItemNowLife = 0;
     mItemNowRupee = 0;
-    mItemTimeMax = 0;
+    mItemSwimTimerStatus = 0;
     field_0x4929 = 0;
     mMesgStatus = 0;
     mbCamOverrideFarPlane = 0;

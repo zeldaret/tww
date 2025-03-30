@@ -304,7 +304,7 @@ BOOL daShip_c::checkForceMessage() {
     else if (dComIfGs_isSymbol(2) && !dComIfGs_isEventBit(0xA08)) {
         mNextMessageNo = 0x5F6;
     }
-    else if (dComIfGs_isEventBit(0xA02) && !dComIfGs_isEventBit(0xA01)) {
+    else if (dComIfGs_isEventBit(dSv_evtBit_c::ENDLESS_NIGHT) && !dComIfGs_isEventBit(0xA01)) {
         mNextMessageNo = 0x607;
     }
     else if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F02)) {
@@ -548,7 +548,7 @@ void daShip_c::setInitMessage() {
         }
     }
     else {
-        if (dComIfGs_isEventBit(0x2A08)) {
+        if (dComIfGs_isEventBit(dSv_evtBit_c::RODE_KORL)) {
             mNextMessageNo = 0xd5c;
         }
         else {
@@ -1517,7 +1517,7 @@ BOOL daShip_c::procPaddleMove_init() {
         current.pos.y -= 50.0f;
     }
     
-    dComIfGs_onEventBit(0x2A08);
+    dComIfGs_onEventBit(dSv_evtBit_c::RODE_KORL);
     
     if (dComIfGs_isEventBit(0xA80)) {
         dComIfGs_onEventBit(0x1980);
@@ -2710,8 +2710,8 @@ BOOL daShip_c::procStartModeWarp() {
             camera->mCamera.Start();
             camera->mCamera.Reset();
             mTactWarpID = fpcM_ERROR_PROCESS_ID_e;
-            m1984.end();
-            m1998.end();
+            m1984.remove();
+            m1998.remove();
             dComIfGp_evmng_cutEnd(mEvtStaffId);
             procPaddleMove_init();
         }
@@ -2756,8 +2756,8 @@ BOOL daShip_c::procTactWarp() {
     if (mpTornado == NULL || fpcM_IsCreating(mTactWarpID)) {
         if (mTactWarpID == fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_onEventFlag(8);
-            m1984.end();
-            m1998.end();
+            m1984.remove();
+            m1998.remove();
             procPaddleMove_init();
             dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         }
@@ -2771,8 +2771,8 @@ BOOL daShip_c::procTactWarp() {
             }
             current.pos.y += speed.y;
             mpTornado->current.pos.y = current.pos.y - 700.0f;
-            m1984.end();
-            m1998.end();
+            m1984.remove();
+            m1998.remove();
         }
         else {
             if ((!m037A) && (m03A6 > 0x1000)) {
@@ -3319,7 +3319,7 @@ void daShip_c::setRopePos() {
                 }
             }
         }
-        mRipple.end();
+        mRipple.remove();
     }
 
     if (m034F) {
@@ -3327,7 +3327,7 @@ void daShip_c::setRopePos() {
     }
 
     if (!m19AC.getEmitter()) {
-        m19C0.end();
+        m19C0.remove();
     }
 
     m1074.x = mRopeLine.getPos(0)->x + cM_rndFX(20.0f);
@@ -3653,7 +3653,6 @@ BOOL daShip_c::execute() {
                 cLib_addCalcAngleS(&shape_angle.y, m040C * 10430.378f + 20480.0f, 5, 0x2000, 0x200);
                 setControllAngle(getAimControllAngle(sVar16));
                 current.angle.y = shape_angle.y;
-                
             }
             else {
                 if (mWhirlActor) {
@@ -3726,7 +3725,8 @@ BOOL daShip_c::execute() {
                 }
                 else {
                     fVar4 = m0404 * 30.0f + 10.0f;
-                    if (dComIfGs_getBombNum() == 0 && fopAcM_GetRoomNo(this) == 0x2C) {
+                    // Bug? This room check assumes we're on the sea without checking?
+                    if (dComIfGs_getBombNum() == 0 && fopAcM_GetRoomNo(this) == dIsleRoom_OutsetIsland_e) {
                           fVar4 *= 1.2f;
                     }
                 }
@@ -3763,7 +3763,8 @@ BOOL daShip_c::execute() {
                         }
                     }
                     else {
-                        if (dComIfGs_getBombNum() == 0 && fopAcM_GetRoomNo(this) == 0x2C) {
+                        // Bug? This room check assumes we're on the sea without checking?
+                        if (dComIfGs_getBombNum() == 0 && fopAcM_GetRoomNo(this) == dIsleRoom_OutsetIsland_e) {
                             fVar3 = 10.0f;
                         }
                         else {
@@ -3937,9 +3938,9 @@ BOOL daShip_c::execute() {
         }
     }
     else {
-        m19C0.end();
-        mRipple.end();
-        m19AC.end();
+        m19C0.remove();
+        mRipple.remove();
+        m19AC.remove();
 
         mCurrentRopeSegmentIndex = 0;
 
@@ -4297,10 +4298,10 @@ BOOL daShip_c::shipDelete() {
     mSplash.remove();
     mTrack.remove();
     mRipple.remove();
-    m1984.end();
-    m1998.end();
-    m19AC.end();
-    m19C0.end();
+    m1984.remove();
+    m1998.remove();
+    m19AC.remove();
+    m19C0.remove();
     mDoAud_seDeleteObject(&m0438);
     mDoAud_seDeleteObject(&m0444);
     mDoAud_seDeleteObject(&m102C);
@@ -4467,7 +4468,7 @@ cPhs_State daShip_c::create() {
     
     fopAcM_SetupActor(this, daShip_c);
     
-    if (!dComIfGs_isEventBit(0xF80)) {
+    if (!dComIfGs_isEventBit(dSv_evtBit_c::MET_KORL)) {
         return cPhs_ERROR_e;
     }
     

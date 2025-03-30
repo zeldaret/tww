@@ -821,8 +821,8 @@ void daPy_lk_c::setFootEffectType(int effectID, cXyz* i_pos, int param_2, int pa
     s32 oldEffectID = footEffect->getID();
     if (effectID != oldEffectID) {
         if (oldEffectID != -1) {
-            footEffect->getSmokeCallBack()->end();
-            footEffect->getOtherCallBack()->end();
+            footEffect->getSmokeCallBack()->remove();
+            footEffect->getOtherCallBack()->remove();
         }
 
         if (effectID == -2) {
@@ -1058,8 +1058,8 @@ void daPy_lk_c::setFootEffect() {
 void daPy_lk_c::resetFootEffect() {
     daPy_footEffect_c* pFootEffect = mFootEffect;
     for (int idx = 0; idx < (s32)ARRAY_SIZE(mFootEffect); idx++, pFootEffect++) {
-        pFootEffect->getSmokeCallBack()->end();
-        pFootEffect->getOtherCallBack()->end();
+        pFootEffect->getSmokeCallBack()->remove();
+        pFootEffect->getOtherCallBack()->remove();
         pFootEffect->setID(-1);
     }
 

@@ -49,8 +49,8 @@ static dCcD_SrcCyl l_cyl_src = {
 /* 000000EC-00000118       .text __ct__17daTori_Flag_HIO_cFv */
 daTori_Flag_HIO_c::daTori_Flag_HIO_c() {
     mNo = -1;
-    someFloat = 0.0f;
-    someShort = 0;
+    m08 = 0.0f;
+    m0C = 0;
     return;
 }
 

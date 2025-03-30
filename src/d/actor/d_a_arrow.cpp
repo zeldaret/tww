@@ -179,7 +179,7 @@ void daArrow_c::setBlur() {
     }
     s32 alpha = blurEmitter->getGlobalAlpha();
     if (alpha - 50 <= 0) {
-        mBlurFollowCb.end();
+        mBlurFollowCb.remove();
     } else {
         blurEmitter->setGlobalAlpha(alpha - 50);
     }
@@ -722,8 +722,8 @@ BOOL daArrow_c::procMove() {
         field_0x604 = 0x28;
         fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
         
-        if (mBlurFollowCb.mpEmitter) {
-            mBlurFollowCb.end();
+        if (mBlurFollowCb.getEmitter()) {
+            mBlurFollowCb.remove();
         }
         
         if (hitType == 1) { // Blocked hit
@@ -1251,7 +1251,7 @@ cPhs_State daArrow_c::_create() {
 
 /* 800D81D0-800D8200       .text _delete__9daArrow_cFv */
 BOOL daArrow_c::_delete() {
-    mBlurFollowCb.end();
+    mBlurFollowCb.remove();
     return TRUE;
 }
 

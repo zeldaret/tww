@@ -18,9 +18,9 @@ void daShip_c::initStartPos(const cXyz* pos, short rotY) {
     mWaveR.remove();
     mSplash.remove();
     mTrack.remove();
-    mRipple.end();
-    m1984.end();
-    m1998.end();
-    m19AC.end();
-    m19C0.end();
+    mRipple.remove();
+    m1984.remove();
+    m1998.remove();
+    m19AC.remove();
+    m19C0.remove();
 }

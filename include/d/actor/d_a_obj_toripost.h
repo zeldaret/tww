@@ -42,7 +42,7 @@ public:
     };
 
     void eventSet(s8 eventIdx) { mEventIdx = eventIdx; }
-    s32 getSendPrice() { return m_send_price[mPayType]; }
+    int getSendPrice() { return m_send_price[mPayType]; }
     bool isAnm(s8 idx) { return mAnmPrmIdx == idx; }
     void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
 

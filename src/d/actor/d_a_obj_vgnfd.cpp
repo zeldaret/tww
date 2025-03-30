@@ -186,8 +186,8 @@ cPhs_State daObjVgnfd_c::_create() {
                 fopAcM_setCullSizeBox(this, -260.0f, -10.0f, -50.0f, 260.0f, 510.0f, 100.0f);
                 mSmoke.setTevStr(&tevStr);
                 mSmoke.setRateOff(0);
-                mSmoke.field_0x15 = 1;
-                mSmoke.field_0x12 = 1;
+                mSmoke.onWindOff();
+                mSmoke.setFollowOff();
 
                 dComIfG_Bgsp()->Regist(M_bgw, this);
                 M_bgw->Move();
@@ -209,7 +209,7 @@ bool daObjVgnfd_c::_delete() {
         }
     }
 
-    mSmoke.end();
+    mSmoke.remove();
     dComIfG_resDelete(&mPhs, M_arcname);
     return true;    
 }

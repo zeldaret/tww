@@ -1896,7 +1896,7 @@ u32 daNpc_Ji1_c::setParticle(int max, f32 rate, f32 spread) {
 /* 000058B8-000058F0       .text dtParticle__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::dtParticle() {
     if(field_0x2E0.getEmitter()) {
-        field_0x2E0.end();
+        field_0x2E0.remove();
     }
 }
 
@@ -1926,7 +1926,7 @@ u32 daNpc_Ji1_c::setParticleAT(int max, f32 rate, f32 spread) {
 /* 000059E8-00005A20       .text dtParticleAT__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::dtParticleAT() {
     if(field_0x300.getEmitter()) {
-        field_0x300.end();
+        field_0x300.remove();
     }
 }
 
@@ -3444,8 +3444,8 @@ BOOL daNpc_Ji1_c::_delete() {
     
     dComIfGp_att_revivalAleart();
 
-    field_0x2E0.end();
-    field_0x300.end();
+    field_0x2E0.remove();
+    field_0x300.remove();
 
     return true;
 }
