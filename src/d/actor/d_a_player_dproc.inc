@@ -156,25 +156,24 @@ int daPy_lk_c::setTalkStartBack() {
 BOOL daPy_lk_c::dProcTool_init() {
     if (mCurProc == daPyProc_DEMO_TOOL_e) {
         return true;
-    } else {
-        commonProcInit(daPyProc_DEMO_TOOL_e);
-        speed.y = speedF = mVelocity = 0.0f;
-        m_anm_heap_under[UNDER_MOVE0_e].field_0x6 = -1;
-        m_anm_heap_under[UNDER_MOVE0_e].field_0x4 = -1;
-        m_anm_heap_upper[UPPER_MOVE0_e].mIdx = -1;
-        m_anm_heap_under[UNDER_MOVE1_e].mIdx = -1;
-        m_anm_heap_upper[UPPER_MOVE1_e].mIdx = -1;
-        m_pbCalc[PART_UPPER_e]->setRatio(0, 1.0f);
-        m_pbCalc[PART_UPPER_e]->setRatio(1, 0.0f);
-        m_pbCalc[PART_UNDER_e]->setRatio(0, 1.0f);
-        m_pbCalc[PART_UNDER_e]->setRatio(1, 0.0f);
-        mAnmRatioUnder[UNDER_MOVE1_e].setAnmTransform(NULL);
-        mAnmRatioUpper[UNDER_MOVE1_e].setAnmTransform(NULL);
-        m3570 = 0;
-        m3574 = 0;
-        m34D4 = 0;
-        m34D6 = 0;
     }
+    commonProcInit(daPyProc_DEMO_TOOL_e);
+    speed.y = speedF = mVelocity = 0.0f;
+    m_anm_heap_under[UNDER_MOVE0_e].field_0x6 = -1;
+    m_anm_heap_under[UNDER_MOVE0_e].field_0x4 = -1;
+    m_anm_heap_upper[UPPER_MOVE0_e].mIdx = -1;
+    m_anm_heap_under[UNDER_MOVE1_e].mIdx = -1;
+    m_anm_heap_upper[UPPER_MOVE1_e].mIdx = -1;
+    m_pbCalc[PART_UPPER_e]->setRatio(0, 1.0f);
+    m_pbCalc[PART_UPPER_e]->setRatio(1, 0.0f);
+    m_pbCalc[PART_UNDER_e]->setRatio(0, 1.0f);
+    m_pbCalc[PART_UNDER_e]->setRatio(1, 0.0f);
+    mAnmRatioUnder[UNDER_MOVE1_e].setAnmTransform(NULL);
+    mAnmRatioUpper[UNDER_MOVE1_e].setAnmTransform(NULL);
+    m3570 = 0;
+    m3574 = 0;
+    m34D4 = 0;
+    m34D6 = 0;
     return true;
 }
 
@@ -313,36 +312,35 @@ BOOL daPy_lk_c::dProcHoldup_init() {
 
     if (mCurProc == daPyProc_DEMO_HOLDUP_e) {
         return false;
-    } else {
-        // TODO: figure out what's going on here.
-        uVar1 = mModeFlg >> 4 & ModeFlg_00000001;
-        commonProcInit(daPyProc_DEMO_HOLDUP_e);
-        if (uVar1) {
-            if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
-                dVar3 = ANM_WALLHOLDUPDW;
-                dVar6 = daPy_HIO_holdup_c0::m.field_0x30;
-                dVar5 = daPy_HIO_holdup_c0::m.field_0x34;
-                sVar2 = daPy_HIO_holdup_c0::m.field_0x6;
-                dVar4 = daPy_HIO_holdup_c0::m.field_0x38;
-            } else {
-                dVar3 = ANM_WALLHOLDUP;
-                dVar6 = daPy_HIO_holdup_c0::m.field_0x24;
-                dVar5 = daPy_HIO_holdup_c0::m.field_0x28;
-                sVar2 = daPy_HIO_holdup_c0::m.field_0x4;
-                dVar4 = daPy_HIO_holdup_c0::m.field_0x2C;
-            }
-            onModeFlg(ModeFlg_WHIDE);
-            setBgCheckParam();
-        } else {
-            dVar3 = ANM_HOLDUP;
-            dVar6 = daPy_HIO_holdup_c0::m.field_0x18;
-            dVar5 = daPy_HIO_holdup_c0::m.field_0x1C;
-            sVar2 = daPy_HIO_holdup_c0::m.field_0x2;
-            dVar4 = daPy_HIO_holdup_c0::m.field_0x20;
-        }
-        setSingleMoveAnime(dVar3, dVar6, dVar5, sVar2, dVar4);
-        mVelocity = 0.0f;
     }
+    // TODO: figure out what's going on here.
+    uVar1 = mModeFlg >> 4 & ModeFlg_00000001;
+    commonProcInit(daPyProc_DEMO_HOLDUP_e);
+    if (uVar1) {
+        if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
+            dVar3 = ANM_WALLHOLDUPDW;
+            dVar6 = daPy_HIO_holdup_c0::m.field_0x30;
+            dVar5 = daPy_HIO_holdup_c0::m.field_0x34;
+            sVar2 = daPy_HIO_holdup_c0::m.field_0x6;
+            dVar4 = daPy_HIO_holdup_c0::m.field_0x38;
+        } else {
+            dVar3 = ANM_WALLHOLDUP;
+            dVar6 = daPy_HIO_holdup_c0::m.field_0x24;
+            dVar5 = daPy_HIO_holdup_c0::m.field_0x28;
+            sVar2 = daPy_HIO_holdup_c0::m.field_0x4;
+            dVar4 = daPy_HIO_holdup_c0::m.field_0x2C;
+        }
+        onModeFlg(ModeFlg_WHIDE);
+        setBgCheckParam();
+    } else {
+        dVar3 = ANM_HOLDUP;
+        dVar6 = daPy_HIO_holdup_c0::m.field_0x18;
+        dVar5 = daPy_HIO_holdup_c0::m.field_0x1C;
+        sVar2 = daPy_HIO_holdup_c0::m.field_0x2;
+        dVar4 = daPy_HIO_holdup_c0::m.field_0x20;
+    }
+    setSingleMoveAnime(dVar3, dVar6, dVar5, sVar2, dVar4);
+    mVelocity = 0.0f;
     return true;
 }
 
