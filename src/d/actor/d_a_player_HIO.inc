@@ -194,7 +194,7 @@ const daPy_HIO_iceSlip_c1 daPy_HIO_iceSlip_c0::m = {
 };
 
 const daPy_HIO_damage_c1 daPy_HIO_damage_c0::m = {
-    9, 8000, 9, 0, 0.0f, 13.0f, 0.05f, 0.6f, 0.0f, 0.5f, 1.2f, 0.25f, 1.5f, 12.0f, 0.6f, 0.0f, 1.0f,
+    9, 8000, 9, 0.0f, 13.0f, 0.05f, 0.6f, 0.0f, 0.5f, 1.2f, 0.25f, 1.5f, 12.0f, 0.6f, 0.0f, 1.0f,
 };
 
 const daPy_HIO_laDamage_c1 daPy_HIO_laDamage_c0::m = {
