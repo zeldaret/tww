@@ -1597,7 +1597,7 @@ public:
     BOOL procHammerFrontSwing();
     BOOL procHammerFrontSwingEnd_init();
     BOOL procHammerFrontSwingEnd();
-    void setPushPullKeepData(dBgW::PushPullLabel);
+    int setPushPullKeepData(dBgW::PushPullLabel);
     BOOL procPushPullWait_init(int);
     BOOL procPushPullWait();
     BOOL procPushMove_init();
