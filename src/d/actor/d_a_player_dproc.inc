@@ -178,7 +178,9 @@ BOOL daPy_lk_c::dProcTool_init() {
 }
 
 /* 8012D3C4-8012DA3C       .text dProcTool__9daPy_lk_cFv */
-BOOL daPy_lk_c::dProcTool() { /* Nonmatching */ }
+BOOL daPy_lk_c::dProcTool() {
+    /* Nonmatching */
+}
 
 /* 8012DA3C-8012DBD0       .text dProcTalk_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcTalk_init() {
@@ -839,10 +841,10 @@ BOOL daPy_lk_c::dProcDead_init() {
         return true;
     }
     int iVar4 = checkShipRideUseItem(0);
-    uint uVar2 = checkModeFlg(ModeFlg_SWIM);
-    uint uVar3 = mNoResetFlg0 & 0x100;
+    u32 uVar2 = checkModeFlg(ModeFlg_SWIM);
+    u32 uVar3 = mNoResetFlg0 & 0x100;
     if (uVar2 != 0) {
-        swimOutAfter(0);
+        swimOutAfter(FALSE);
     }
     commonProcInit(daPyProc_DEMO_DEAD_e);
     if (dComIfGp_event_compulsory(this)) {
@@ -1970,8 +1972,8 @@ BOOL daPy_lk_c::dProcGetDance() {
         dComIfGp_evmng_cutEnd(mStaffIdx);
         return true;
     }
-    if (!(!(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= 11.0f) ||
-          !(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() <= 17.0f))) {
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= 11.0f &&
+        mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() <= 17.0f) {
         if (m34D0 == 0) {
             m34D0 = 1;
             mDoAud_subBgmStart(JA_BGM_GET_SONG);
@@ -2057,9 +2059,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
                 } else {
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
                 }
-                fopAc_ac_c *fa1 = (fopAc_ac_c *)fopAcM_fastCreate(
-                    PROC_NPC_FA1, 3, &mLeftHandPos, fopAcM_GetRoomNo(this),
-                    &shape_angle);
+                fopAcM_fastCreate(PROC_NPC_FA1, 3, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
             }
         }
     }
@@ -2202,8 +2202,7 @@ BOOL daPy_lk_c::dProcPowerUp() {
     if (m3574 != 0) {
         dComIfGp_evmng_cutEnd(mStaffIdx);
         return true;
-    } else if (!(!(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= 11.0f) ||
-                 (m34D0 != 0))) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= 11.0f && m34D0 == 0) {
         m34D0 = 1;
         mDoAud_subBgmStart(JA_BGM_ITEM_GET);
         // mItemLifeCountType? (according to TP)
@@ -2298,7 +2297,7 @@ BOOL daPy_lk_c::dProcLastCombo() {
     }
     if (frameCtrl.getFrame() >= 26.0f) {
         if (frameCtrl.getFrame() < 35.0f) {
-            if (!(checkNoResetFlg0(daPyFlg0_CUT_AT_FLG))) {
+            if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
                 onResetFlg0(daPyRFlg0_UNK1);
             }
             onResetFlg0(daPyRFlg0_UNK2);

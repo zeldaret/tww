@@ -933,7 +933,7 @@ fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz
     }
 
     i_itemNo = check_itemno(i_itemNo);
-    u32 params = (i_itemBitNo & 0x7F) << 0x08 | i_itemNo & 0xFF | (param_7 & 0xF) << 0xF;
+    u32 params = (i_itemBitNo & 0x7F) << 0x08 | (i_itemNo & 0xFF) | (param_7 & 0xF) << 0xF;
     return fopAcM_create(PROC_RACEITEM, params, pos, roomNo, angle, scale);
 }
 
@@ -944,7 +944,7 @@ fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    u32 params = i_itemNo & 0xFF | (i_itemBitNo & 0x7F) << 0x08 | (argFlag & 0xFF) << 0x10;
+    u32 params = (i_itemNo & 0xFF) | (i_itemBitNo & 0x7F) << 0x08 | (argFlag & 0xFF) << 0x10;
     return fopAcM_create(PROC_Demo_Item, params, pos, roomNo, angle, scale);
 }
 
@@ -1274,7 +1274,7 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
 
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */
 fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health, u8 i_itemBitNo) {
-    u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | i_health & 0xFF;
+    u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | (i_health & 0xFF);
     fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor), fopAcM_GetAngle_p(i_actor));
     if (disappear) {
         disappear->itemTableIdx = i_actor->itemTableIdx;
