@@ -25,42 +25,44 @@ void daWbird_c::calcMtx() {
 void daWbird_c::setStartPos() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz *wind = dKyw_get_wind_vec();
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
     cSGlobe globe(*wind);
     cSAngle angle(globe.U());
-    cSAngle angle2(globe.U() - player->current.angle.y);
-    if ((((angle2.Val() ^ cSAngle::_0.Val()) >> 1) - ((angle2.Val() ^ cSAngle::_0.Val()) * angle2.Val())) < 0) {
+    s32 a = globe.U() - player->current.angle.y;
+    s32 transformedResult = a > cSAngle::_0.Val();
+
+    if (transformedResult != 0) {
         angle += cSAngle::_90;
-    } else {    
+    } 
+    else {    
         angle -= cSAngle::_90;
     }
 
-    current.pos.x = player->current.pos.x;
-    current.pos.y = player->current.pos.y;
-    current.pos.z = player->current.pos.z;
-    double dVar6 = angle.Cos();
-    current.pos.x = current.pos.x + (dVar6 * 20.0f);
-    dVar6 = angle.Sin();
-    current.pos.y = current.pos.y + (dVar6 * 20.0f);
-    home.pos.x = current.pos.x;
-    home.pos.y = current.pos.y;
-    home.pos.z = current.pos.z;
-    current.pos.y = current.pos.y + 150.0f;
-    u32 uVar2 = g_env_light.mWind.mTactWindAngleX;
-    float local_38 = jmaCosTable[uVar2 >> jmaSinShift & 0x3f] * jmaCosTable[g_env_light.mWind.mTactWindAngleY >> jmaSinShift & 0x3f];
-    float local_34 = jmaSinTable[uVar2 >> jmaSinShift & 0x3f];
-    float local_30 = jmaCosTable[uVar2 >> jmaSinShift & 0x3f] * jmaSinTable[uVar2 >> jmaSinShift & 0x3f];
-    int iVar5 = cM_atan2s(local_38,local_30);
+    current.pos = player->current.pos;
+    current.pos.x += (angle.Cos() * 20.0f);
+    current.pos.z += (angle.Sin() * 20.0f);
+    home.pos = current.pos;
+    current.pos.y += 150.0f;
+
+    cXyz sp18;
+    sp18.z = cM_scos((int)(u16)envLight.mWind.mTactWindAngleX) * cM_scos((int)(u16)envLight.mWind.mTactWindAngleY);
+
+    sp18.y = cM_ssin((int)(u16)envLight.mWind.mTactWindAngleX);
+    sp18.x = cM_scos((int)(u16)envLight.mWind.mTactWindAngleX) * cM_ssin((int)(u16)envLight.mWind.mTactWindAngleY);
+
+    int iVar5 = cM_atan2s(sp18.x, sp18.z);
+
     current.angle.y = iVar5;
     player->shape_angle.y = iVar5;
     field_0x29E = 80;
-    speed.x = local_38 * 40.0f;
-    speed.z = local_30 * 40.0f;
+    speed.x = sp18.x * 40.0f;
+    speed.z = sp18.z * 40.0f;
     float fVar1 = field_0x29E * 0.5f;
     current.pos.z = current.pos.z - fVar1 * speed.z;
     current.pos.x = current.pos.x - fVar1 * speed.x;
     field_0x29E = field_0x29E + 60;
     field_0x2A0 = 1.0;
-    current.pos.y = current.pos.y + fVar1 * field_0x2A0 * fVar1 *0.5;
+    current.pos.y += field_0x2A0 * fVar1 * fVar1 * 0.5f;
     speed.y = -(field_0x2A0 * fVar1);
     /* Nonmatching */
 }
@@ -135,9 +137,7 @@ void daWbird_c::actionSelect() {
         dComIfGp_setOperateWindOn();
         mDoAud_seStart(JA_SE_TAKT_WIND_DISP);
         field_0x29E++;
-    } else if(sVar2 < 11){
-        field_0x29E = sVar2 + 1;    
-    } else{
+    } else if(sVar2 > 11){
         mDoAud_seStart(JA_SE_SYS_WTAKT_WIND_AMB);
         if(dComIfGp_getOperateWind() == 1){
             mDoAud_seStart(JA_SE_TAKT_WIND_DECIDE);
@@ -146,7 +146,9 @@ void daWbird_c::actionSelect() {
             player = daPy_getPlayerActorClass();
             sVar2 = current.angle.y;
             field_0x2A4 = player->shape_angle.y;
+            
             player->setPlayerPosAndAngle(&player->current.pos, (sVar2 + 0x7fff));
+
             if(dComIfGp_checkPlayerStatus0(0, 0x00010000)){
                 sVar2 = dComIfGp_evmng_getEventIdx("TACT_WINDOW2");
                 field_0x2A6 = sVar2;
@@ -167,6 +169,8 @@ void daWbird_c::actionSelect() {
             dComIfGp_event_reset();
             fopAcM_delete(this);
         }
+    } else{
+        field_0x29E = sVar2 + 1;    
     }
     /* Nonmatching */
 }
@@ -178,26 +182,23 @@ static BOOL daWbird_Draw(daWbird_c*) {
 
 /* 00000858-000008D0       .text daWbird_Execute__FP9daWbird_c */
 static BOOL daWbird_Execute(daWbird_c* i_this) {
-    u8 bVar1 = i_this->mAction;
-
-    if(bVar1 != 2){
+    switch(i_this->mAction) {
+    case 3:
+        i_this->actionSelect();
+        break;
+    case 2:
         i_this->actionMove();
-    }else{
-        if(bVar1 <4){
-            i_this->actionSelect();
-            goto calcmtx;
-        }else if(bVar1 < 2){
-            if(bVar1 != 0){
-                i_this->actionEnd();
-                goto calcmtx;
-            }
-        }
+        break;
+    case 1:
+        i_this->actionEnd();
+        break;
+    default:
         i_this->actionWait();
+        break;
     }
-    calcmtx:
+
     i_this->calcMtx();
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 000008D0-000008D8       .text daWbird_IsDelete__FP9daWbird_c */
@@ -207,12 +208,8 @@ static BOOL daWbird_IsDelete(daWbird_c*) {
 
 /* 000008D8-00000908       .text daWbird_Delete__FP9daWbird_c */
 static BOOL daWbird_Delete(daWbird_c* i_this) {
-    if(i_this != NULL){
-        fopAcM_delete(i_this);
-    }
-
+    i_this->~daWbird_c();
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00000908-00000928       .text daWbird_Create__FP10fopAc_ac_c */
