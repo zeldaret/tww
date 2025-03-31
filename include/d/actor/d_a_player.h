@@ -147,6 +147,7 @@ public:
         daPyRFlg0_UNK1                  = 0x00000001,
         daPyRFlg0_UNK2                  = 0x00000002,
         daPyRFlg0_ROPE_GRAB_RIGHT_HAND  = 0x00000004,
+        daPyRFlg0_UNK8                  = 0x00000008,
         daPyRFlg0_UNK10                 = 0x00000010,
         daPyRFlg0_GRAB_UP_END           = 0x00000020,
         daPyRFlg0_AUTO_JUMP_LAND        = 0x00000040,
