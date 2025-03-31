@@ -2798,7 +2798,7 @@ inline s32 dComIfGp_event_orderOld(u16 eventType, u16 priority, u16 flag, u16 hi
 }
 
 inline fopAc_ac_c* dComIfGp_event_getTalkPartner() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPtT();
+    return g_dComIfG_gameInfo.play.getEvent().getPtT();
 }
 
 inline void dComIfGp_event_setTalkPartner(void* i_actor) {
@@ -2806,7 +2806,7 @@ inline void dComIfGp_event_setTalkPartner(void* i_actor) {
 }
 
 inline fopAc_ac_c* dComIfGp_event_getItemPartner() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPtI();
+    return g_dComIfG_gameInfo.play.getEvent().getPtI();
 }
 
 inline void dComIfGp_event_setItemPartner(void* pt) {
@@ -2818,11 +2818,11 @@ inline void dComIfGp_event_setItemPartnerId(fpc_ProcID id) {
 }
 
 inline fopAc_ac_c* dComIfGp_event_getPt1() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPt1();
+    return g_dComIfG_gameInfo.play.getEvent().getPt1();
 }
 
 inline fopAc_ac_c* dComIfGp_event_getPt2() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPt2();
+    return g_dComIfG_gameInfo.play.getEvent().getPt2();
 }
 
 inline f32 dComIfGp_event_getCullRate() {

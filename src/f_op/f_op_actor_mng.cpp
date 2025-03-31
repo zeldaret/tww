@@ -759,20 +759,20 @@ s32 fopAcM_orderTreasureEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
 
 /* 80026044-80026074       .text fopAcM_getTalkEventPartner__FP10fopAc_ac_c */
 fopAc_ac_c* fopAcM_getTalkEventPartner(fopAc_ac_c*) {
-    return dComIfGp_event_getTalkPartner();
+    return (fopAc_ac_c*)dComIfGp_event_getTalkPartner();
 }
 
 /* 80026074-800260A4       .text fopAcM_getItemEventPartner__FP10fopAc_ac_c */
 fopAc_ac_c* fopAcM_getItemEventPartner(fopAc_ac_c*) {
-    return dComIfGp_event_getItemPartner();
+    return (fopAc_ac_c*)dComIfGp_event_getItemPartner();
 }
 
 /* 800260A4-80026118       .text fopAcM_getEventPartner__FP10fopAc_ac_c */
 fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c* i_this) {
     if (dComIfGp_event_getPt1() != i_this)
-        return dComIfGp_event_getPt1();
+        return (fopAc_ac_c*)dComIfGp_event_getPt1();
 
-    return dComIfGp_event_getPt2();
+    return (fopAc_ac_c*)dComIfGp_event_getPt2();
 }
 
 /* 80026118-800261E8       .text fopAcM_createItemForPresentDemo__FP4cXyziUciiP5csXyzP4cXyz */

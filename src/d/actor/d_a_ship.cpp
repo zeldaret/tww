@@ -2083,8 +2083,7 @@ BOOL daShip_c::procZevDemo() {
         int* talkP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "talk");
         int* atn_actorP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "atn_actor");
 
-        // Fakematch, dComIfGp_event_getPt1 doesn't work for some reason
-        if (atn_actorP && g_dComIfG_gameInfo.play.getEvent().getPt1()) {
+        if (atn_actorP && dComIfGp_event_getPt1()) {
             m0428 = &dComIfGp_event_getPt1()->eyePos;
         }
         else {

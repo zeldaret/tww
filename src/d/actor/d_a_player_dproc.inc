@@ -26,7 +26,6 @@
 
 /* 8012CD60-8012CDD4       .text getDemoLookActor__9daPy_lk_cFv */
 fopAc_ac_c *daPy_lk_c::getDemoLookActor() {
-    /* Nonmatching */
     if (mDemo.getParam0() == 1) {
         return dComIfGp_event_getPt1();
     } else if (mDemo.getParam0() == 2) {
