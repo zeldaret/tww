@@ -1184,7 +1184,7 @@ void daPy_lk_c::setShapeAngleToAtnActor() {
 }
 
 /* 80109ED8-80109F4C       .text cancelItemUpperReadyAnime__9daPy_lk_cFv */
-void daPy_lk_c::cancelItemUpperReadyAnime() {
+BOOL daPy_lk_c::cancelItemUpperReadyAnime() {
     /* Nonmatching */
 }
 

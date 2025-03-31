@@ -932,7 +932,7 @@ public:
     void posMoveFromFootPos();
     void posMove();
     void setShapeAngleToAtnActor();
-    void cancelItemUpperReadyAnime();
+    BOOL cancelItemUpperReadyAnime();
     BOOL checkBodyAngleX(s16);
     BOOL setBodyAngleToCamera();
     void setBodyAngleXReadyAnime();
