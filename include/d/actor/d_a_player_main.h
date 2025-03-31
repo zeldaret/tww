@@ -300,7 +300,10 @@ public:
     daPy_footData_c();
 
 public:
-    /* 0x000 */ u8 field_0x000[0x034 - 0x000];
+    /* 0x000 */ u8 field_0x000[0x018 - 0x000];
+    // TODO: is this right?
+    /* 0x018 */ cXyz field_0x018;
+    /* 0x018 */ u8 field_0x024[0x034 - 0x024];
     /* 0x034 */ dBgS_LinkGndChk field_0x034;
     /* 0x088 */ u8 field_0x088[0x118 - 0x088];
 };
@@ -1307,10 +1310,10 @@ public:
     BOOL procLadderDownEnd();
     BOOL procLadderMove_init(int, int, cXyz*);
     BOOL procLadderMove();
-    void getHangMoveAnmSpeed();
-    void getHangDirectionFromAngle();
-    void changeHangMoveProc(int);
-    void changeHangEndProc(int);
+    f32 getHangMoveAnmSpeed();
+    int getHangDirectionFromAngle();
+    BOOL changeHangMoveProc(int);
+    int changeHangEndProc(int);
     void setHangShapeOffset();
     BOOL procHangStart_init();
     BOOL procHangStart();
