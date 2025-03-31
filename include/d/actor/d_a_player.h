@@ -88,6 +88,7 @@ public:
         daPyFlg0_UNK4               = 0x00000004,
         daPyFlg0_UNK8               = 0x00000008,
         daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
+        daPyFlg0_UNK20              = 0x00000020,
         daPyFlg0_CUT_AT_FLG         = 0x00000040,
         daPyFlg0_UNK80              = 0x00000080,
         daPyFlg0_UNK100             = 0x00000100,
