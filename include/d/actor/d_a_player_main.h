@@ -1549,9 +1549,9 @@ public:
     BOOL procHookshotFly();
     BOOL fanWindEffectDraw();
     BOOL fanWindCrashEffectDraw();
-    void fanJointCB(int);
-    void parachuteJointCB(int);
-    void setShapeFanLeaf();
+    BOOL fanJointCB(int);
+    BOOL parachuteJointCB(int);
+    int setShapeFanLeaf();
     BOOL checkFanGlideProc(int);
     void setFanModel();
     void setSmallFanModel();
@@ -1650,7 +1650,7 @@ public:
     void setJumpCutAtParam();
     int getCutDirection();
     void changeCutProc();
-    void changeCutReverseProc(daPy_ANM);
+    int changeCutReverseProc(daPy_ANM);
     BOOL procCutA_init(s16);
     BOOL procCutA();
     BOOL procCutF_init(s16);

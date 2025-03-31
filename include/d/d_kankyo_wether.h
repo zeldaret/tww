@@ -358,6 +358,8 @@ void dKy_wave_chan_init();
 f32 dKyw_get_wind_pow();
 f32* dKyw_get_wind_power();
 cXyz dKyw_get_wind_vecpow();
+void dKyw_squal_set(cXyz* i_pos, s16 i_x, s16 i_y, f32 i_radius, f32 i_minRadius, f32 i_strength,
+    f32 i_speed, f32 i_maxStrength);
 cXyz * dKyw_get_wind_vec();
 void squal_proc();
 void dKyw_pntwind_set(WIND_INFLUENCE*);
