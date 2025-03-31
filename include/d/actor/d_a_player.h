@@ -155,6 +155,7 @@ public:
         daPyRFlg0_UNK200                = 0x00000200,
         daPyRFlg0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
         daPyRFlg0_LEFT_FOOT_ON_GROUND   = 0x00000800,
+        daPyRFlg0_UNK1000               = 0x00001000,
         daPyRFlg0_FRONT_ROLL_CRASH      = 0x00002000,
         daPyRFlg0_UNK4000               = 0x00004000,
         daPyRFlg0_GRAB_UP_START         = 0x00008000,

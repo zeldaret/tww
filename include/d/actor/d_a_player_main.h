@@ -1361,11 +1361,11 @@ public:
     BOOL procWHideMove();
     BOOL procWHidePeep_init();
     BOOL procWHidePeep();
-    void getCrawlMoveAnmSpeed();
-    void getCrawlMoveSpeed();
+    f32 getCrawlMoveAnmSpeed();
+    f32 getCrawlMoveSpeed();
     void setCrawlMoveDirectionArrow();
     void changeCrawlAutoMoveProc(cXyz*);
-    void getCrawlMoveVec(cXyz*, cXyz*, cXyz*);
+    int getCrawlMoveVec(cXyz*, cXyz*, cXyz*);
     void crawlBgCheck(cXyz*, cXyz*);
     BOOL checkCrawlSideWall(cXyz*, cXyz*, cXyz*, cXyz*, s16*, s16*);
     void setDoStatusCrawl();
