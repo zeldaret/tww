@@ -161,10 +161,10 @@ BOOL daPy_lk_c::changeSwimProc() {
             local_18.z = current.pos.z;
             fopKyM_createWpillar(&local_18, 1.0f, oldSpeedY, 0);
             seStartOnlyReverb(JA_SE_LK_INTO_WATER);
-            res = procSwimWait_init(0);
+            res = procSwimWait_init(FALSE);
         }
         else {
-            res = procSwimUp_init(0);
+            res = procSwimUp_init(FALSE);
         }
     }
     else {
@@ -190,13 +190,13 @@ BOOL daPy_lk_c::changeSwimUpProc() {
             current.pos.y = m35D0;
             return TRUE;
         }
-        return procSwimUp_init(1);
+        return procSwimUp_init(TRUE);
     }
     return FALSE;
 }
 
 /* 8013D2AC-8013D314       .text swimOutAfter__9daPy_lk_cFi */
-void daPy_lk_c::swimOutAfter(int param_1) {
+void daPy_lk_c::swimOutAfter(BOOL param_1) {
     onNoResetFlg0(daPyFlg0_UNK100);
     m35C4 = 0.0f;
     if (param_1) {
@@ -230,19 +230,19 @@ BOOL daPy_lk_c::changeSwimOutProc() {
             current.pos.y += m35C4;
         }
 
-        swimOutAfter(1);
+        swimOutAfter(TRUE);
 
         return procFall_init(1, l_HIO_wallCatch_c0.m.field_0x54);
     }
     else {
-        if (!checkNoResetFlg0(daPyFlg0_UNK80) || pcVar1 && pcVar1->mNormal.y >= 0.5f && m35D0 - mAcch.GetGroundH() < l_HIO_swim_c0.m.field_0x24 - 5.0f) {
+        if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && pcVar1->mNormal.y >= 0.5f && m35D0 - mAcch.GetGroundH() < l_HIO_swim_c0.m.field_0x24 - 5.0f)) {
             current.pos.y = m35D0;
 
             if (mCurProc == daPyProc_SWIM_MOVE_e && m34B8) {
                 current.pos.y += m35C4;
             }
 
-            swimOutAfter(1);
+            swimOutAfter(TRUE);
 
             return checkNextMode(0);
         }
@@ -320,7 +320,7 @@ void daPy_lk_c::setSwimTimerStartStop() {
 }
 
 /* 8013D814-8013DA18       .text procSwimUp_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procSwimUp_init(int param_1) {
+BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
     JPABaseEmitter* mEmitter;
     
     static JGeometry::TVec3<f32> splash_scale(0.4f, 0.4f, 0.4f);
@@ -357,26 +357,25 @@ BOOL daPy_lk_c::procSwimUp_init(int param_1) {
             mEmitter->setGlobalParticleScale(ripple_scale);
         }
     }
+
     m3570 = 0;
     return TRUE;
 }
 
 /* 8013DA18-8013DB24       .text procSwimUp__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimUp() {
-    int iVar1;
-
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
 
     setSpeedAndAngleSwim();
 
     if (!changeSwimOutProc()) {
         if (mFrameCtrl->getRate() < 0.01f) {
-            procSwimWait_init(0);
+            procSwimWait_init(FALSE);
         }
         else {
             if (mFrameCtrl->getFrame() > l_HIO_swim_c0.m.field_0x34) {
                 if (mStickDistance > 0.05f) {
-                    procSwimMove_init(0);
+                    procSwimMove_init(FALSE);
                 }
             }
             else {
@@ -397,7 +396,7 @@ BOOL daPy_lk_c::procSwimUp() {
 }
 
 /* 8013DB24-8013DCDC       .text procSwimWait_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procSwimWait_init(int param_1) {
+BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     float fVar2;
     u32 uVar3;
     
@@ -471,7 +470,7 @@ BOOL daPy_lk_c::procSwimWait() {
             mFrameCtrlUnder[0].setRate((float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x70) + l_HIO_swim_c0.m.field_0x40);
 
             if (mStickDistance > 0.05f) {
-                procSwimMove_init(1);
+                procSwimMove_init(TRUE);
             }
 
             setSwimTimerStartStop();
@@ -481,10 +480,10 @@ BOOL daPy_lk_c::procSwimWait() {
 }
 
 /* 8013DE8C-8013DF60       .text procSwimMove_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procSwimMove_init(int param_1) {
+BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
     commonProcInit(daPyProc_SWIM_MOVE_e);
 
-    if (param_1 == 0) {
+    if (!param_1) {
         mFrameCtrlUnder[0].setFrame(0.0f);
     }
 
@@ -597,12 +596,12 @@ BOOL daPy_lk_c::procSwimMove() {
     }
 
     if (changeFrontWallTypeProc()) {
-        swimOutAfter(1);
+        swimOutAfter(TRUE);
         return TRUE;
     }
 
     if (mStickDistance <= 0.05f) {
-        procSwimWait_init(1);
+        procSwimWait_init(TRUE);
     }
     else if ((!m34B8 && mFrameCtrl->checkPass(20.0f)) || (m34B8 && mFrameCtrl->checkPass(0.0f))) {
             seStartOnlyReverb(JA_SE_LK_SWIM);

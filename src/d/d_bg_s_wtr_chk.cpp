@@ -4,10 +4,8 @@
 //
 
 #include "d/d_bg_s_wtr_chk.h"
-#include "dolphin/types.h"
 
 /* 800A5BDC-800A5C3C       .text __ct__11dBgS_WtrChkFv */
 dBgS_WtrChk::dBgS_WtrChk() {
     OnWaterGrp();
 }
-

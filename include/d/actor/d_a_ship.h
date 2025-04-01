@@ -120,7 +120,8 @@ public:
     void onCrashFlg() {}
     void onFantomGanonBattle() {}
     void onJumpRideFlg() {}
-    void onLinkSit() {}
+    //TODO: Is this right?
+    void onLinkSit() { onStateFlg(daSFLG_UNK4000000_e); }
     void onSceneChange() {}
     void onShortHitFlg() {}
     void onStateFlg(daSHIP_SFLG flag) { mStateFlag |= flag; }

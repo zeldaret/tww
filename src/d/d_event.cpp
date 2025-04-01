@@ -71,16 +71,16 @@ s32 dEvt_control_c::order(u16 eventType, u16 priority, u16 flag, u16 hindFlag, v
 /* 8007002C-8007015C       .text setParam__14dEvt_control_cFP12dEvt_order_c */
 void dEvt_control_c::setParam(dEvt_order_c* order) {
     dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
-    mPt1 = getPId(order->mActor1);
-    mPt2 = getPId(order->mActor2);
+    setPt1(order->mActor1);
+    setPt2(order->mActor2);
     mEventId = order->mEventId;
     mHindFlag = order->mHindFlag;
     if (dComIfGp_getPlayer(0) != order->mActor1) {
-        mPtTalk = getPId(order->mActor1);
-        mPtItem = getPId(order->mActor1);
+        setPtT(order->mActor1);
+        setPtI(order->mActor1);
     } else {
-        mPtTalk = getPId(order->mActor2);
-        mPtItem = getPId(order->mActor2);
+        setPtT(order->mActor2);
+        setPtI(order->mActor2);
     }
 
     mEventInfoIdx = order->mEventInfoIdx;

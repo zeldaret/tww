@@ -32,6 +32,7 @@ enum fopAc_Status_e {
     fopAcStts_CARRY_e       = 0x00002000,
     fopAcStts_UNK4000_e     = 0x00004000,
     fopAcStts_FORCEMOVE_e   = 0x00008000,
+    fopAcStts_UNK10000_e    = 0x00010000,
     fopAcStts_NOPAUSE_e     = 0x00020000,
     fopAcStts_UNK40000_e    = 0x00040000,
     fopAcStts_UNK80000_e    = 0x00080000, // Hookshot related

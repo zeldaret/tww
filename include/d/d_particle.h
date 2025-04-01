@@ -82,7 +82,7 @@ public:
     void setTevStr(dKy_tevstr_c* tevStr) { mTevstr = tevStr; }
     void remove() { end(); }
 
-    void offWindOff() {}
+    void offWindOff() { mWindOff = 0; }
     void onWindOff() { mWindOff = 1; }
     void setColor(const GXColor& color) { mColor = color; }
 
