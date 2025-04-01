@@ -77,6 +77,8 @@ enum daPy__PlayerStatus1 {
     daPyStts1_DEKU_LEAF_FAN_e      = 0x00000040,
     daPyStts1_UNK80_e              = 0x00000080,
     daPyStts1_SAIL_e               = 0x00000400,
+    daPyStts1_UNK1000_e            = 0x00001000,
+    daPyStts1_UNK2000_e            = 0x00002000,
     daPyStts1_UNK4000_e            = 0x00004000,
     daPyStts1_UNK8000_e            = 0x00008000,
     daPyStts1_UNK10000_e           = 0x00010000,

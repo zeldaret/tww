@@ -1607,7 +1607,7 @@ public:
     BOOL procPushMove();
     BOOL procPullMove_init();
     BOOL procPullMove();
-    void changeBottleDrinkFace(int);
+    int changeBottleDrinkFace(int);
     void setBottleModel(u16);
     void makeFairy(cXyz*, u32);
     BOOL procBottleDrink_init(u16);
