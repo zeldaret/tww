@@ -37,9 +37,14 @@ class J2DOrthoGraph;
 
 enum daPy__PlayerStatus0 {
     daPyStts0_UNK1_e           = 0x00000001,
+    daPyStts0_UNK2_e           = 0x00000002,
     daPyStts0_UNK10_e          = 0x00000010,
+    daPyStts0_UNK20_e          = 0x00000020,
+    daPyStts0_UNK40_e          = 0x00000040,
     daPyStts0_UNK80_e          = 0x00000080,
     daPyStts0_UNK100_e         = 0x00000100,
+    daPyStts0_UNK200_e         = 0x00000200,
+    daPyStts0_UNK400_e         = 0x00000400,
     daPyStts0_BOW_AIM_e        = 0x00001000,
     daPyStts0_UNK2000_e        = 0x00002000,
     daPyStts0_HOOKSHOT_AIM_e   = 0x00004000,
@@ -56,16 +61,23 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK2000000_e     = 0x02000000,
     daPyStts0_UNK4000000_e     = 0x04000000,
     daPyStts0_CRAWL_e          = 0x08000000,
+    daPyStts0_UNK10000000_e    = 0x10000000,
     daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
+    daPyStts0_UNK80000000_e    = 0x80000000,
 };
 
 enum daPy__PlayerStatus1 {
     daPyStts1_WIND_WAKER_CONDUCT_e = 0x00000001,
+    daPyStts1_UNK2_e               = 0x00000002,
+    daPyStts1_UNK4_e               = 0x00000004,
     daPyStts1_PICTO_BOX_AIM_e      = 0x00000008,
+    daPyStts1_UNK10_e              = 0x00000010,
     daPyStts1_DEKU_LEAF_FLY_e      = 0x00000020,
     daPyStts1_DEKU_LEAF_FAN_e      = 0x00000040,
+    daPyStts1_UNK80_e              = 0x00000080,
     daPyStts1_SAIL_e               = 0x00000400,
+    daPyStts1_UNK4000_e            = 0x00004000,
     daPyStts1_UNK8000_e            = 0x00008000,
     daPyStts1_UNK10000_e           = 0x00010000,
     daPyStts1_UNK20000_e           = 0x00020000,
@@ -794,6 +806,7 @@ extern GXColor g_saftyWhiteColor;
  */
 
 void dComIfGs_gameStart();
+void dComIfGs_setGameStartStage();
 u8 dComIfGs_checkGetItem(u8);
 
 inline void dComIfGs_init() {
@@ -2796,7 +2809,7 @@ inline s32 dComIfGp_event_orderOld(u16 eventType, u16 priority, u16 flag, u16 hi
 }
 
 inline fopAc_ac_c* dComIfGp_event_getTalkPartner() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPtT();
+    return g_dComIfG_gameInfo.play.getEvent().getPtT();
 }
 
 inline void dComIfGp_event_setTalkPartner(void* i_actor) {
@@ -2804,7 +2817,7 @@ inline void dComIfGp_event_setTalkPartner(void* i_actor) {
 }
 
 inline fopAc_ac_c* dComIfGp_event_getItemPartner() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPtI();
+    return g_dComIfG_gameInfo.play.getEvent().getPtI();
 }
 
 inline void dComIfGp_event_setItemPartner(void* pt) {
@@ -2816,11 +2829,11 @@ inline void dComIfGp_event_setItemPartnerId(fpc_ProcID id) {
 }
 
 inline fopAc_ac_c* dComIfGp_event_getPt1() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPt1();
+    return g_dComIfG_gameInfo.play.getEvent().getPt1();
 }
 
 inline fopAc_ac_c* dComIfGp_event_getPt2() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPt2();
+    return g_dComIfG_gameInfo.play.getEvent().getPt2();
 }
 
 inline f32 dComIfGp_event_getCullRate() {

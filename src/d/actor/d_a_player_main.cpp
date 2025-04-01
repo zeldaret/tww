@@ -923,7 +923,7 @@ BOOL daPy_lk_c::draw() {
         } else {
             hideHatAndBackle(link_root_joint->getMesh());
         }
-        if (!checkNormalSwordEquip() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_FF1_e ||
+        if ((!checkNormalSwordEquip() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_FF1_e) ||
             checkCaughtShapeHide() || checkDemoShieldNoDraw())
         {
             mpCLModelData->getJointNodePointer(0x0D)->getMesh()->getShape()->hide(); // cl_podA joint
@@ -1121,7 +1121,7 @@ BOOL daPy_lk_c::setTalkStatus() {
 }
 
 /* 80108634-801086C8       .text setHintActor__9daPy_lk_cFv */
-void daPy_lk_c::setHintActor() {
+int daPy_lk_c::setHintActor() {
     /* Nonmatching */
 }
 
@@ -1184,7 +1184,7 @@ void daPy_lk_c::setShapeAngleToAtnActor() {
 }
 
 /* 80109ED8-80109F4C       .text cancelItemUpperReadyAnime__9daPy_lk_cFv */
-void daPy_lk_c::cancelItemUpperReadyAnime() {
+BOOL daPy_lk_c::cancelItemUpperReadyAnime() {
     /* Nonmatching */
 }
 
@@ -1877,7 +1877,7 @@ BOOL daPy_lk_c::changeDamageProc() {
     }
     
     if (checkModeFlg(ModeFlg_04000000)) {
-        if (r30 || mCyl.ChkTgHit() && !checkSuccessGuard(spl)) {
+        if (r30 || (mCyl.ChkTgHit() && !checkSuccessGuard(spl))) {
             setDamagePoint(-damage);
             mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x2;
             
@@ -2297,7 +2297,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
         freeHookshotItem();
     }
     if (temp_r28 && !checkModeFlg(ModeFlg_SWIM)) {
-        swimOutAfter(0);
+        swimOutAfter(FALSE);
     }
     
     dComIfGp_setAdvanceDirection(0);
@@ -3073,7 +3073,7 @@ void daPy_lk_c::setBgCheckParam() {
 
 /* 801200F8-8012010C       .text setParamData__9daPy_lk_cFiiii */
 u32 daPy_lk_c::setParamData(int roomNo, int spawnType, int eventInfoIdx, int extraParams) {
-    return roomNo & 0x3F | (spawnType & 0xF) << 0xC | eventInfoIdx << 0x18 | extraParams;
+    return (roomNo & 0x3F) | (spawnType & 0xF) << 0xC | eventInfoIdx << 0x18 | extraParams;
 }
 
 /* 8012010C-8012024C       .text checkLavaFace__9daPy_lk_cFP4cXyzi */
@@ -3956,7 +3956,7 @@ void daPy_lk_c::initTextureScroll() {
                 m_texMtxAnm[no].setAnmTransform(btk);
                 m_texMtxAnm[no].setAnmIndex(no);
                 
-                tmtx->getTexMtxInfo().mInfo = tmtx->getTexMtxInfo().mInfo & 0x7F | btk->getTexMtxCalcType() << 7;
+                tmtx->getTexMtxInfo().mInfo = (tmtx->getTexMtxInfo().mInfo & 0x7F) | btk->getTexMtxCalcType() << 7;
                 // Fakematch? The codegen doesn't match unless a temp variable is used and assigned to multiple times.
                 Vec* temp = &btk->getSRTCenter(no);
                 tmtx->getTexMtxInfo().mCenter.x = temp->x;

@@ -130,7 +130,7 @@ void dOvlpFd2_c::execFirstSnap() {
 void dOvlpFd2_c::execFadeOut() {
     dComIfGp_setWindowNum(0);
     cLib_chaseAngleS(&field_0x112, 2000, 100);
-    s16 r5 = ((field_0x110 + 0x4000) & 0x8000 | 0x4000) - field_0x112;
+    s16 r5 = (((field_0x110 + 0x4000) & 0x8000) | 0x4000) - field_0x112;
     field_0x110 += field_0x112;
     s16 r0_1 = r5 - field_0x110;
     if (field_0x112 * r0_1 < 0) {

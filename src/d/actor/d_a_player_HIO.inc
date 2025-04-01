@@ -140,7 +140,7 @@ const daPy_HIO_swim_c1 daPy_HIO_swim_c0::m = {
 };
 
 const daPy_HIO_b_jump_c1 daPy_HIO_b_jump_c0::m = {
-    256,    0,    8,    3500, 1.0f,  2.0f,  1.0f,   4.0f,  0.0f, 5.0f, -5.0f,
+    1, 0,    0,    8,    3500, 1.0f,  2.0f,  1.0f,   4.0f,  0.0f, 5.0f, -5.0f,
     -3.75f, 0.6f, 0.0f, 1.0f, 32.5f, 12.5f, -3.75f, 10.0f, 2.5f, 6.5f,
 };
 

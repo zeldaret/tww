@@ -277,7 +277,7 @@ public:
 struct dStage_dPnt_c {
     /* 0x0 */ int num;
     /* 0x4 */ u32 m_pnt_offset;
-};  // Size: 0x10
+};  // Size: 0x8
 
 struct dStage_FloorInfo_entry_c {
     /* 0x00 */ int field_0x00;
