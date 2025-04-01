@@ -13,8 +13,7 @@
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 
-/* 801514B0-80151644       .text
- * setPushPullKeepData__9daPy_lk_cFQ24dBgW13PushPullLabel */
+/* 801514B0-80151644       .text setPushPullKeepData__9daPy_lk_cFQ24dBgW13PushPullLabel */
 int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
     if (param_0 != dBgW::PP_UNK0_e) {
         if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
@@ -24,8 +23,7 @@ int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
             cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PP_UNK4_e);
         }
     }
-    fopAc_ac_c *pp_actor = dComIfG_Bgsp()->PushPullCallBack(
-        mPolyInfo, this, shape_angle.y, param_0);
+    fopAc_ac_c* pp_actor = dComIfG_Bgsp()->PushPullCallBack(mPolyInfo, this, shape_angle.y, param_0);
     if (pp_actor == NULL) {
         return 0;
     }
@@ -58,8 +56,9 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
         }
         daPy_matAnm_c::m_maba_flg = 0;
         daPy_matAnm_c::m_maba_timer = 1;
-        setSingleMoveAnime(ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0,
-                           0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4);
+        setSingleMoveAnime(
+            ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
+        );
         m34D6 = 0;
     } else {
         setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
@@ -84,22 +83,18 @@ BOOL daPy_lk_c::procPushPullWait() {
     setFrontWallType();
     if (m34D6 != 0) {
         if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
-            setSingleMoveAnime(ANM_WAITPUSHPULL,
-                               daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1,
-                               daPy_HIO_pushpull_c0::m.field_0x4);
+            setSingleMoveAnime(
+                ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
+            );
             m34D6 = 0;
         }
     } else if ((spActionButton()) && (checkResetFlg0(daPyRFlg0_UNK8))) {
         if (m3570 != 0) {
-            s16 sVar1 =
-                cLib_addCalcAngleS(&shape_angle.y, m34D4, 3, 0x800, 0x100);
+            s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, m34D4, 3, 0x800, 0x100);
             current.angle.y = shape_angle.y;
-            f32 dVar2 =
-                cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
-            f32 dVar3 =
-                cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
-            if (((!sVar1) && ((float)(dVar2 + dVar3) < 5.0f)) &&
-                (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff)) {
+            f32 dVar2 = cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
+            f32 dVar3 = cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
+            if (((!sVar1) && ((float)(dVar2 + dVar3) < 5.0f)) && (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff)) {
                 current.pos.x = m370C.x;
                 current.pos.z = m370C.z;
                 m3570 = 0;
@@ -129,8 +124,9 @@ BOOL daPy_lk_c::procPushMove_init() {
         return false;
     } else {
         commonProcInit(daPyProc_PUSH_MOVE_e);
-        setSingleMoveAnime(ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8,
-                           0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC);
+        setSingleMoveAnime(
+            ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC
+        );
         m3570 = 1;
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
     }
@@ -142,8 +138,7 @@ BOOL daPy_lk_c::procPushMove() {
     dComIfGp_setRStatus(0x11);
     int iVar1 = getDirectionFromShapeAngle();
     setFrontWallType();
-    if ((!checkResetFlg0(daPyRFlg0_UNK8)) ||
-        ((!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP))))) {
+    if ((!checkResetFlg0(daPyRFlg0_UNK8)) || (!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)))) {
         checkNextMode(0);
     } else {
         if (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)) {
@@ -173,8 +168,9 @@ BOOL daPy_lk_c::procPullMove_init() {
         return false;
     } else {
         commonProcInit(daPyProc_PULL_MOVE_e);
-        setSingleMoveAnime(ANM_WALKPULL, daPy_HIO_pushpull_c0::m.field_0x10,
-                           0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x14);
+        setSingleMoveAnime(
+            ANM_WALKPULL, daPy_HIO_pushpull_c0::m.field_0x10, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x14
+        );
         m3570 = 1;
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
     }
@@ -187,8 +183,7 @@ BOOL daPy_lk_c::procPullMove() {
     dComIfGp_setRStatus(0x11);
     int iVar1 = getDirectionFromShapeAngle();
     setFrontWallType();
-    if ((!checkResetFlg0(daPyRFlg0_UNK8)) ||
-        ((!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP))))) {
+    if ((!checkResetFlg0(daPyRFlg0_UNK8)) || (!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)))) {
         checkNextMode(0);
     } else {
         if (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)) {

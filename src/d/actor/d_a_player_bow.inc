@@ -23,8 +23,7 @@ BOOL daPy_lk_c::bowJointCB(int param_0) {
     } else {
         if (param_0 == 6) {
             mDoMtx_trans(mDoMtx_stack_c::now, 0.0f, 4.5f, 4.5f);
-            mDoMtx_concat(mpEquipItemModel->getAnmMtx(6), mDoMtx_stack_c::now,
-                          mDoMtx_stack_c::now);
+            mDoMtx_concat(mpEquipItemModel->getAnmMtx(6), mDoMtx_stack_c::now, mDoMtx_stack_c::now);
             mpEquipItemModel->setAnmMtx(param_0, mDoMtx_stack_c::now);
         } else {
             mpEquipItemModel->setAnmMtx(11, mpEquipItemModel->getAnmMtx(6));
@@ -34,12 +33,12 @@ BOOL daPy_lk_c::bowJointCB(int param_0) {
 }
 
 /* 80149F88-80149FD0       .text daPy_bowJointCB__FP7J3DNodei */
-static BOOL daPy_bowJointCB(J3DNode *node, int calcTiming) {
+static BOOL daPy_bowJointCB(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
-        J3DJoint *joint = static_cast<J3DJoint *>(node);
+        J3DJoint* joint = static_cast<J3DJoint*>(node);
         s32 jntNo = joint->getJntNo();
-        J3DModel *model = j3dSys.getModel();
-        daPy_lk_c *i_this = reinterpret_cast<daPy_lk_c *>(model->getUserArea());
+        J3DModel* model = j3dSys.getModel();
+        daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
         if (i_this != 0) {
             i_this->bowJointCB(jntNo);
         }
@@ -64,18 +63,17 @@ BOOL daPy_lk_c::checkBowReadyAnime() const {
 
 /* 8014A02C-8014A080       .text checkBowAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkBowAnime() const {
-    return (checkBowReadyAnime()) ||
-           (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ARROWSHOOT);
+    return (checkBowReadyAnime()) || (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ARROWSHOOT);
 }
 
 /* 8014A080-8014A180       .text makeArrow__9daPy_lk_cFv */
-void daPy_lk_c::makeArrow() { 
-    /* Nonmatching */ 
+void daPy_lk_c::makeArrow() {
+    /* Nonmatching */
 }
 
 /* 8014A180-8014A1CC       .text deleteArrow__9daPy_lk_cFv */
 void daPy_lk_c::deleteArrow() {
-    fopAc_ac_c *pfVar1 = mActorKeepEquip.getActor();
+    fopAc_ac_c* pfVar1 = mActorKeepEquip.getActor();
 
     if ((pfVar1 != NULL) && (fopAcM_GetName(pfVar1) == PROC_ARROW)) {
         fopAcM_delete(pfVar1);
@@ -86,9 +84,14 @@ void daPy_lk_c::deleteArrow() {
 
 /* 8014A1CC-8014A2A0       .text setBowReadyAnime__9daPy_lk_cFv */
 void daPy_lk_c::setBowReadyAnime() {
-    setActAnimeUpper(LKANM_BCK_ARROWSHOOT, UPPER_MOVE2_e, 1.0f,
-                     daPy_HIO_bow_c0::m.field_0x0 - 0.001f,
-                     daPy_HIO_bow_c0::m.field_0x0, 10.0f);
+    setActAnimeUpper(
+        LKANM_BCK_ARROWSHOOT,
+        UPPER_MOVE2_e,
+        1.0f,
+        daPy_HIO_bow_c0::m.field_0x0 - 0.001f,
+        daPy_HIO_bow_c0::m.field_0x0,
+        10.0f
+    );
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWSHOOTA));
     m35EC = daPy_HIO_bow_c0::m.field_0x0 - 0.001f;
     setPriTextureAnime(0x70, 0);
@@ -100,9 +103,13 @@ void daPy_lk_c::setBowReadyAnime() {
 /* 8014A2A0-8014A328       .text setBowReloadAnime__9daPy_lk_cFv */
 void daPy_lk_c::setBowReloadAnime() {
     setActAnimeUpper(
-        LKANM_BCK_ARROWRELORD, UPPER_MOVE2_e, daPy_HIO_bow_c0::m.field_0x10,
-        daPy_HIO_bow_c0::m.field_0x14, daPy_HIO_bow_c0::m.field_0x2,
-        daPy_HIO_bow_c0::m.field_0x18);
+        LKANM_BCK_ARROWRELORD,
+        UPPER_MOVE2_e,
+        daPy_HIO_bow_c0::m.field_0x10,
+        daPy_HIO_bow_c0::m.field_0x14,
+        daPy_HIO_bow_c0::m.field_0x2,
+        daPy_HIO_bow_c0::m.field_0x18
+    );
     setPriTextureAnime(0x8d, 0);
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWRELORDA));
     m35EC = 0.0f;
@@ -115,15 +122,18 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
     /* Nonmatching - branching, regalloc */
     u16 uVar1 = m_anm_heap_upper[UPPER_MOVE2_e].mIdx;
     if (uVar1 == LKANM_BCK_BOWWAIT) {
-        daArrow_c *bow = (daArrow_c *)mActorKeepEquip.getActor();
+        daArrow_c* bow = (daArrow_c*)mActorKeepEquip.getActor();
         if (m355C != 0) {
             setActAnimeUpper(
-                LKANM_BCK_ARROWSHOOT, UPPER_MOVE2_e,
-                daPy_HIO_bow_c0::m.field_0x4, daPy_HIO_bow_c0::m.field_0x8,
-                daPy_HIO_bow_c0::m.field_0x0, daPy_HIO_bow_c0::m.field_0xC);
+                LKANM_BCK_ARROWSHOOT,
+                UPPER_MOVE2_e,
+                daPy_HIO_bow_c0::m.field_0x4,
+                daPy_HIO_bow_c0::m.field_0x8,
+                daPy_HIO_bow_c0::m.field_0x0,
+                daPy_HIO_bow_c0::m.field_0xC
+            );
             setPriTextureAnime(0x70, 0);
-            mSwordAnim.changeBckOnly(
-                getItemAnimeResource(LKANM_BCK_ARROWSHOOTA));
+            mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWSHOOTA));
             m35EC = 0.0f;
         } else {
             if (bowButton() == NULL) {
@@ -140,9 +150,9 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
                 m355C = 1;
             } else {
                 if (bow->changeArrowMp()) {
-                    if (((mEquipItem != dItem_BOW_e) &&
-                         (dComIfGp_setRStatus(0x22), spActionTrigger())) &&
-                        (bow != NULL)) {
+                    if (((mEquipItem != dItem_BOW_e) && (dComIfGp_setRStatus(0x22), spActionTrigger())) &&
+                        (bow != NULL))
+                    {
                         bow = bow->changeArrowType();
                         mActorKeepEquip.setData(bow);
                         setBowReloadAnime();
@@ -154,8 +164,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
     }
     if (uVar1 == LKANM_BCK_ARROWRELORD) {
         if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
-            setActAnimeUpper(LKANM_BCK_BOWWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1,
-                             -1.0f);
+            setActAnimeUpper(LKANM_BCK_BOWWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
             mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_BOWWAITA));
             m35EC = 0.0f;
             setPriTextureAnime(0x70, 0);
@@ -180,10 +189,9 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
             }
         }
     LAB_8014a5a0:
-        daArrow_c *bow;
+        daArrow_c* bow;
         if (bow->changeArrowMp()) {
-            if ((mEquipItem != dItem_BOW_e) &&
-                (dComIfGp_setRStatus(0x22), spActionTrigger())) {
+            if ((mEquipItem != dItem_BOW_e) && (dComIfGp_setRStatus(0x22), spActionTrigger())) {
                 bow->changeArrowTypeNotReady();
             }
         }
@@ -223,21 +231,16 @@ BOOL daPy_lk_c::checkNextBowMode() {
 /* 8014A6F4-8014A834       .text setBowModel__9daPy_lk_cFv */
 void daPy_lk_c::setBowModel() {
     /* Nonmatching - regalloc */
-    J3DAnmTransform *bck = getItemAnimeResource(LKANM_BCK_ARROWRELORDA);
-    JKRHeap *oldHeap = setItemHeap();
-    J3DModelData *tmp_modelData =
-        initModel(&mpEquipItemModel, LINK_BDL_BOW, 0x37221222);
-    int ret = mSwordAnim.init(tmp_modelData, bck, false,
-                              J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_ARROWRELORDA);
+    JKRHeap* oldHeap = setItemHeap();
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_BOW, 0x37221222);
+    int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
     if (!ret) {
         JUT_ASSERT(394, FALSE);
     }
     mDoExt_setCurrentHeap(oldHeap);
     m35EC = 0.0f;
-    J3DMaterial *mesh = mpEquipItemModel->getModelData()
-                            ->getJointNodePointer(0x00)
-                            ->getMesh()
-                            ->getNext();
+    J3DMaterial* mesh = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
     mesh->getNext()->getShape()->show();
     mesh->getShape()->hide();
     tmp_modelData->getJointNodePointer(6)->setCallBack(daPy_bowJointCB);
@@ -256,8 +259,7 @@ BOOL daPy_lk_c::procBowSubject_init() {
     if (!checkBowAnime()) {
         setBowReadyAnime();
     }
-    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1,
-                       daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
 
     mVelocity = 0.0f;
 

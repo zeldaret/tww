@@ -16,12 +16,12 @@
 
 /* 8014956C-80149590       .text checkBoomerangAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkBoomerangAnime() const {
-    return ((checkBoomerangReadyAnime()) || (checkBoomerangThrowAnime()));
+    return (checkBoomerangReadyAnime()) || (checkBoomerangThrowAnime());
 }
 
 /* 80149590-80149698       .text throwBoomerang__9daPy_lk_cFv */
 void daPy_lk_c::throwBoomerang() {
-    daBoomerang_c *boomerang = (daBoomerang_c *)mActorKeepEquip.getActor();
+    daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepEquip.getActor();
 
     fopAcM_SetParam(boomerang, 1);
     if (mpAttnActorLockOn != NULL) {
@@ -55,18 +55,16 @@ int daPy_lk_c::returnBoomerang() {
         if (daPy_getPlayerActorClass() == this) {
             if (!dComIfGp_event_runCheck()) {
                 if (mDemo.getDemoType() == 0) {
-                    if ((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff ||
-                         (checkPlayerGuard())) ||
-                        ((m_anm_heap_upper[UPPER_MOVE2_e].mIdx ==
-                              LKANM_BCK_DAMDASH ||
-                          (checkBoomerangAnime())))) {
-                        if ((!(checkModeFlg(ModeFlg_WHIDE | ModeFlg_ROPE |
-                                            ModeFlg_IN_SHIP | ModeFlg_CLIMB |
-                                            ModeFlg_SWIM | ModeFlg_00080000 |
-                                            ModeFlg_GRAB | ModeFlg_PUSHPULL |
-                                            ModeFlg_LADDER | ModeFlg_CROUCH |
-                                            ModeFlg_CRAWL)) ||
-                             (mCurProc == daPyProc_SHIP_BOOMERANG_e))) {
+                    if ((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff || (checkPlayerGuard())) ||
+                        (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_DAMDASH || (checkBoomerangAnime())))
+                    {
+                        if (!(checkModeFlg(
+                                ModeFlg_WHIDE | ModeFlg_ROPE | ModeFlg_IN_SHIP | ModeFlg_CLIMB | ModeFlg_SWIM |
+                                ModeFlg_00080000 | ModeFlg_GRAB | ModeFlg_PUSHPULL | ModeFlg_LADDER | ModeFlg_CROUCH |
+                                ModeFlg_CRAWL
+                            )) ||
+                            (mCurProc == daPyProc_SHIP_BOOMERANG_e))
+                        {
                             mActorKeepEquip = mActorKeepThrow;
                             mActorKeepThrow.clearData();
                             mEquipItem = dItem_BOOMERANG_e;
@@ -84,13 +82,15 @@ int daPy_lk_c::returnBoomerang() {
 
 /* 801497A4-8014984C       .text checkNextActionBoomerangReady__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextActionBoomerangReady() {
-    if ((!itemButton()) &&
-        ((mpAttnActorLockOn != NULL ||
-          (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x10))))) {
+    if ((!itemButton()) && (mpAttnActorLockOn != NULL || (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x10)))) {
         setActAnimeUpper(
-            LKANM_BCK_BOOMTHROW, UPPER_MOVE2_e, daPy_HIO_boom_c0::m.field_0x4,
-            daPy_HIO_boom_c0::m.field_0x8, daPy_HIO_boom_c0::m.field_0x0,
-            daPy_HIO_boom_c0::m.field_0xC);
+            LKANM_BCK_BOOMTHROW,
+            UPPER_MOVE2_e,
+            daPy_HIO_boom_c0::m.field_0x4,
+            daPy_HIO_boom_c0::m.field_0x8,
+            daPy_HIO_boom_c0::m.field_0x0,
+            daPy_HIO_boom_c0::m.field_0xC
+        );
         setPriTextureAnime(0x48, 0);
         return true;
     }
@@ -103,9 +103,14 @@ BOOL daPy_lk_c::checkNextActionBoomerangFly() {
         checkNextActionBoomerangReady();
     } else {
         if ((itemTrigger()) && (mEquipItem == getReadyItem())) {
-            setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e,
-                             daPy_HIO_boom_c0::m.field_0x18, 0.0f, -1,
-                             daPy_HIO_basic_c0::m.field_0xC);
+            setActAnimeUpper(
+                LKANM_BCK_BOOMWAIT,
+                UPPER_MOVE2_e,
+                daPy_HIO_boom_c0::m.field_0x18,
+                0.0f,
+                -1,
+                daPy_HIO_basic_c0::m.field_0xC
+            );
         }
     }
     return;
@@ -127,14 +132,17 @@ BOOL daPy_lk_c::checkNextBoomerangMode() {
 /* 80149964-80149A44       .text changeBoomerangCatchProc__9daPy_lk_cFv */
 int daPy_lk_c::changeBoomerangCatchProc() {
     if (checkNoResetFlg0(daPyFlg0_UNK20)) {
-        if ((((!dComIfGp_event_runCheck()) && (mDemo.getDemoType() == 0)) &&
-             (checkModeFlg(ModeFlg_00020000))) &&
-            ((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff ||
-              (checkBoomerangThrowAnime())))) {
+        if ((((!dComIfGp_event_runCheck()) && (mDemo.getDemoType() == 0)) && (checkModeFlg(ModeFlg_00020000))) &&
+            (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff || (checkBoomerangThrowAnime())))
+        {
             setActAnimeUpper(
-                LKANM_BCK_BOOMCATCH, UPPER_MOVE2_e,
-                daPy_HIO_boom_c0::m.field_0x20, daPy_HIO_boom_c0::m.field_0x24,
-                daPy_HIO_boom_c0::m.field_0x2, daPy_HIO_boom_c0::m.field_0x28);
+                LKANM_BCK_BOOMCATCH,
+                UPPER_MOVE2_e,
+                daPy_HIO_boom_c0::m.field_0x20,
+                daPy_HIO_boom_c0::m.field_0x24,
+                daPy_HIO_boom_c0::m.field_0x2,
+                daPy_HIO_boom_c0::m.field_0x28
+            );
             setPriTextureAnime(0x49, 0);
             seStartOnlyReverb(JA_SE_LK_BOOM_CATCH);
             if (checkModeFlg(ModeFlg_00000001)) {
@@ -157,8 +165,7 @@ BOOL daPy_lk_c::procBoomerangSubject_init() {
     mVelocity = 0.0f;
 
     setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
-    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1,
-                       daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
 
@@ -185,8 +192,7 @@ BOOL daPy_lk_c::procBoomerangSubject() {
 
     if (checkNextMode(0) == 0) {
         if (setBodyAngleToCamera()) {
-            daBoomerang_c *boomerang =
-                (daBoomerang_c *)mActorKeepEquip.getActor();
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepEquip.getActor();
             if (boomerang != NULL) {
                 cXyz sight;
                 checkSightLine(boomerang->getFlyMax(), &sight);
@@ -213,8 +219,7 @@ BOOL daPy_lk_c::procBoomerangMove_init() {
             m34B8 = 3;
             current.angle.y = shape_angle.y + -0x4000;
         }
-        setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e,
-                         daPy_HIO_boom_c0::m.field_0x18, 0.0f, -1, -1.0f);
+        setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, daPy_HIO_boom_c0::m.field_0x18, 0.0f, -1, -1.0f);
         setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
         dComIfGp_setPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
         return true;
@@ -255,10 +260,13 @@ BOOL daPy_lk_c::procBoomerangCatch_init() {
         return false;
     } else {
         commonProcInit(daPyProc_BOOMERANG_CATCH_e);
-        setSingleMoveAnime(ANM_BOOMCATCH, daPy_HIO_boom_c0::m.field_0x20,
-                           daPy_HIO_boom_c0::m.field_0x24,
-                           daPy_HIO_boom_c0::m.field_0x2,
-                           daPy_HIO_boom_c0::m.field_0x28);
+        setSingleMoveAnime(
+            ANM_BOOMCATCH,
+            daPy_HIO_boom_c0::m.field_0x20,
+            daPy_HIO_boom_c0::m.field_0x24,
+            daPy_HIO_boom_c0::m.field_0x2,
+            daPy_HIO_boom_c0::m.field_0x28
+        );
         offNoResetFlg0(daPyFlg0_UNK20);
     }
     return true;

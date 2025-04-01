@@ -15,9 +15,8 @@
 
 /* 80135B50-80135B74       .text getClimbMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getClimbMoveAnmSpeed() {
-    return (daPy_HIO_ladder_c0::m.field_0x34 +
-        (mStickDistance * (daPy_HIO_ladder_c0::m.field_0x30 -
-                  daPy_HIO_ladder_c0::m.field_0x34)));
+    return daPy_HIO_ladder_c0::m.field_0x34 +
+           (mStickDistance * (daPy_HIO_ladder_c0::m.field_0x30 - daPy_HIO_ladder_c0::m.field_0x34));
 }
 
 /* 80135B74-80135DA0       .text setClimbShapeOffset__9daPy_lk_cFv */
@@ -27,7 +26,7 @@ void daPy_lk_c::setClimbShapeOffset() {
     cXyz local_4c;
     cXyz local_58;
     cXyz local_64;
-  
+
     s16 uVar3 = m34EC;
     s16 uVar4 = shape_angle.y;
     uVar3 += uVar4;
@@ -38,10 +37,8 @@ void daPy_lk_c::setClimbShapeOffset() {
     local_58.y = current.pos.y - 62.5f;
     f32 fVar1 = cM_scos((int)(uint)uVar4 & 0xffffU);
     local_58.z = current.pos.z + 20.5f * fVar1;
-    local_40.set(local_58.x - fVar4 * 50.0f, local_58.y,
-                 local_58.z - fVar3 * 50.0f);
-    local_4c.set(local_58.x + fVar4 * 50.0f, local_58.y,
-                 local_58.z + fVar3 * 50.0f);
+    local_40.set(local_58.x - fVar4 * 50.0f, local_58.y, local_58.z - fVar3 * 50.0f);
+    local_4c.set(local_58.x + fVar4 * 50.0f, local_58.y, local_58.z + fVar3 * 50.0f);
     f32 dVar10 = fVar3 * 20.0f;
     f32 dVar9 = fVar4 * -20.0f;
     local_40.x += dVar10;
@@ -50,10 +47,10 @@ void daPy_lk_c::setClimbShapeOffset() {
     local_4c.z += dVar9;
     mLinkLinChk.Set(&local_40, &local_4c, this);
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
-      local_64 = mLinkLinChk.GetCross();
+        local_64 = mLinkLinChk.GetCross();
     } else {
-      m34EC = 0;
-      return;
+        m34EC = 0;
+        return;
     }
     local_40.x -= dVar10 * 2.0f;
     local_40.z -= dVar9 * 2.0f;
@@ -61,10 +58,10 @@ void daPy_lk_c::setClimbShapeOffset() {
     local_4c.z -= dVar9 * 2.0f;
     mLinkLinChk.Set(&local_40, &local_4c, this);
     if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
-      m34EC = 0;
+        m34EC = 0;
     } else {
-      local_64 -= mLinkLinChk.GetCross();
-      m34EC = (cM_atan2s(local_64.x, local_64.z) - 0x4000 - shape_angle.y);
+        local_64 -= mLinkLinChk.GetCross();
+        m34EC = (cM_atan2s(local_64.x, local_64.z) - 0x4000 - shape_angle.y);
     }
     return;
 }
@@ -73,17 +70,17 @@ void daPy_lk_c::setClimbShapeOffset() {
 int daPy_lk_c::getClimbDirectionFromAngle() {
     s16 angle = m34E8 - shape_angle.y;
     if (abs(angle) > 0x7000) {
-      return 1;
+        return 1;
     }
-  
+
     if (angle >= 0x1000) {
-      return 2;
+        return 2;
     }
-  
+
     if (angle <= -0x1000) {
-      return 3;
+        return 3;
     }
-  
+
     return 0;
 }
 
@@ -93,12 +90,12 @@ void daPy_lk_c::changeClimbMoveProc(int param_0) {
 
     sVar1 = m34EC;
     if (mStickDistance > 0.05f) {
-      m34B8 = getClimbDirectionFromAngle();
-      if ((m34B8 == 0) || (m34B8 == 1)) {
-        procClimbMoveUpDown_init(param_0);
-      } else {
-        procClimbMoveSide_init(param_0);
-      }
+        m34B8 = getClimbDirectionFromAngle();
+        if ((m34B8 == 0) || (m34B8 == 1)) {
+            procClimbMoveUpDown_init(param_0);
+        } else {
+            procClimbMoveSide_init(param_0);
+        }
     }
     m34EC = sVar1;
     return;
@@ -107,60 +104,54 @@ void daPy_lk_c::changeClimbMoveProc(int param_0) {
 /* 80135E98-80136154       .text setMoveBGCorrectClimb__9daPy_lk_cFv */
 int daPy_lk_c::setMoveBGCorrectClimb() {
     /* Nonmatching - floats */
-        if ((dComIfG_Bgsp()->ChkPolySafe(mPolyInfo)) &&
-            (dComIfG_Bgsp()->ChkMoveBG(mPolyInfo))) {
-            dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &current.pos,
-                                     &current.angle, &shape_angle);
-        }
-        if (checkNoResetFlg1(daPyFlg1_VINE_CATCH)) {
-          return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
-        } else {
-          if ((mCurProc == daPyProc_CLIMB_DOWN_START_e) &&
-              (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > 0.0099999998f)) {
+    if ((dComIfG_Bgsp()->ChkPolySafe(mPolyInfo)) && (dComIfG_Bgsp()->ChkMoveBG(mPolyInfo))) {
+        dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &current.pos, &current.angle, &shape_angle);
+    }
+    if (checkNoResetFlg1(daPyFlg1_VINE_CATCH)) {
+        return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+    } else {
+        if ((mCurProc == daPyProc_CLIMB_DOWN_START_e) && (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > 0.01f)) {
             return 0;
-          }
-          cXyz local_1c;
-          cXyz local_28;
-          local_1c.set(current.pos.x, current.pos.y + 30.0f, current.pos.z);
-          local_28.set(current.pos.x + cM_ssin(shape_angle.y) * 80.0f, local_1c.y,
-                       current.pos.z + cM_scos(shape_angle.y) * 80.0f);
-          mLinkLinChk.Set(&local_1c, &local_28, this);
-          if ((((!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) ||
-                (dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 1)) ||
-               (std::fabsf(dComIfG_Bgsp()->GetTriPla(mLinkLinChk)->GetNP()->y) >
-                0.05f)) ||
-              (((mCurProc == daPyProc_CLIMB_MOVE_UP_DOWN_e ||
-                 (mCurProc == daPyProc_CLIMB_MOVE_SIDE_e)) &&
-                (current.pos.y - 15.0f < mAcch.GetGroundH())))) {
+        }
+        cXyz local_1c;
+        cXyz local_28;
+        local_1c.set(current.pos.x, current.pos.y + 30.0f, current.pos.z);
+        local_28.set(
+            current.pos.x + cM_ssin(shape_angle.y) * 80.0f, local_1c.y, current.pos.z + cM_scos(shape_angle.y) * 80.0f
+        );
+        mLinkLinChk.Set(&local_1c, &local_28, this);
+        if ((((!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) || (dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 1)) ||
+             (std::fabsf(dComIfG_Bgsp()->GetTriPla(mLinkLinChk)->GetNP()->y) > 0.05f)) ||
+            ((mCurProc == daPyProc_CLIMB_MOVE_UP_DOWN_e || (mCurProc == daPyProc_CLIMB_MOVE_SIDE_e)) &&
+             (current.pos.y - 15.0f < mAcch.GetGroundH())))
+        {
             return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
-          } else {
-            cM3dGPla *triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+        } else {
+            cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
             s16 uVar6 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
             if (cLib_distanceAngleS(uVar6, shape_angle.y) <= 0x549f) {
-              return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+                return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
             } else {
-              current.pos.x = mLinkLinChk.GetCrossP()->x + 20.5f * cM_ssin(uVar6);
-              current.pos.z = mLinkLinChk.GetCrossP()->z + 20.5f * cM_scos(uVar6);
-              s16 sVar1 = shape_angle.y;
-              shape_angle.y = uVar6 + 0x8000;
-              current.angle.y += (s16)(shape_angle.y - sVar1);
-              m34EC += (s16)(sVar1 - shape_angle.y);
+                current.pos.x = mLinkLinChk.GetCrossP()->x + 20.5f * cM_ssin(uVar6);
+                current.pos.z = mLinkLinChk.GetCrossP()->z + 20.5f * cM_scos(uVar6);
+                s16 sVar1 = shape_angle.y;
+                shape_angle.y = uVar6 + 0x8000;
+                current.angle.y += (s16)(shape_angle.y - sVar1);
+                m34EC += (s16)(sVar1 - shape_angle.y);
             }
-          }
         }
-        return 0;
+    }
+    return 0;
 }
 
 /* 80136154-80136200       .text checkBgCorrectClimbMove__9daPy_lk_cFP4cXyzP4cXyz */
 BOOL daPy_lk_c::checkBgCorrectClimbMove(cXyz* i_startPos, cXyz* i_endPos) {
     mLinkLinChk.Set(i_startPos, i_endPos, this);
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
-      cM3dGPla *tri_plane = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-      if (cLib_distanceAngleS(
-              cM_atan2s(tri_plane->GetNP()->x, tri_plane->GetNP()->z),
-              shape_angle.y) < 0x549F) {
-        current.pos += mLinkLinChk.GetCross() - *i_endPos;
-      }
+        cM3dGPla* tri_plane = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+        if (cLib_distanceAngleS(cM_atan2s(tri_plane->GetNP()->x, tri_plane->GetNP()->z), shape_angle.y) < 0x549F) {
+            current.pos += mLinkLinChk.GetCross() - *i_endPos;
+        }
     }
     return;
 }
@@ -192,45 +183,43 @@ BOOL daPy_lk_c::checkBgClimbMove() {
     mRoofChk.SetPos(local_5c);
     f32 dVar3 = dComIfG_Bgsp()->RoofChk(&mRoofChk);
     if (dVar3 - 125.0f < current.pos.y) {
-      current.pos.y = dVar3 - 125.0f;
+        current.pos.y = dVar3 - 125.0f;
     }
     local_5c.set(current.pos.x - dVar5, current.pos.y, current.pos.z - dVar4);
     mRoofChk.SetPos(local_5c);
     dVar3 = dComIfG_Bgsp()->RoofChk(&mRoofChk);
     if (dVar3 - 125.0f < current.pos.y) {
-      current.pos.y = dVar3 - 125.0f;
+        current.pos.y = dVar3 - 125.0f;
     }
     local_5c.x = local_68.x + (100.0f * dVar7);
     local_5c.y = local_68.y;
     local_5c.z = local_68.z + (100.0f * dVar6);
     mLinkLinChk.Set(&local_68, &local_5c, this);
     if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
-      local_5c.set(current.pos.x + (25.0f * dVar7), local_68.y + 30.0f,
-                   current.pos.z + (25.0f * dVar6));
-      mGndChk.SetPos(&local_5c);
-      dVar3 = dComIfG_Bgsp()->GroundCross(&mGndChk);
-      cM3dGPla *triPla;
-      if (((-1.0E+9f != dVar3) && (triPla = dComIfG_Bgsp()->GetTriPla(mGndChk),
-                                   triPla->GetNP()->y >= 0.5f)) &&
-          (dVar3 >= (local_68.y - 30.0f))) {
-        dVar4 = 3.0f;
-        current.pos.x = local_5c.x - (dVar4 * dVar7);
-        current.pos.y = dVar3;
-        current.pos.z = local_5c.z - (dVar4 * dVar6);
-        procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
-      } else {
-        procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
-      }
+        local_5c.set(current.pos.x + (25.0f * dVar7), local_68.y + 30.0f, current.pos.z + (25.0f * dVar6));
+        mGndChk.SetPos(&local_5c);
+        dVar3 = dComIfG_Bgsp()->GroundCross(&mGndChk);
+        cM3dGPla* triPla;
+        if (((-1.0E+9f != dVar3) && (triPla = dComIfG_Bgsp()->GetTriPla(mGndChk), triPla->GetNP()->y >= 0.5f)) &&
+            (dVar3 >= (local_68.y - 30.0f)))
+        {
+            dVar4 = 3.0f;
+            current.pos.x = local_5c.x - (dVar4 * dVar7);
+            current.pos.y = dVar3;
+            current.pos.z = local_5c.z - (dVar4 * dVar6);
+            procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
+        } else {
+            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        }
     } else {
-      setClimbShapeOffset();
+        setClimbShapeOffset();
     }
     return;
 }
 
 /* 80136588-801365F4       .text procClimbUpStart_init_sub__9daPy_lk_cFv */
 void daPy_lk_c::procClimbUpStart_init_sub() {
-    setSingleMoveAnime(ANM_LADDERUPST, daPy_HIO_ladder_c0::m.field_0x4, 0.0f, -1,
-      daPy_HIO_ladder_c0::m.field_0x8);
+    setSingleMoveAnime(ANM_LADDERUPST, daPy_HIO_ladder_c0::m.field_0x4, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x8);
     m3570 = 1;
     m34C2 = 4;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);
@@ -245,15 +234,15 @@ BOOL daPy_lk_c::procClimbUpStart_init() {
     mVelocity = 0.0f;
     speedF = 0.0f;
     if (mEquipItem == daPyItem_NONE_e) {
-      if (checkEquipAnime()) {
-        resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
-      }
-      procClimbUpStart_init_sub();
+        if (checkEquipAnime()) {
+            resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
+        }
+        procClimbUpStart_init_sub();
     } else {
-      setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
-      setAnimeUnequip();
-      m3570 = 0;
-      m3598 = 0.0f;
+        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setAnimeUnequip();
+        m3570 = 0;
+        m3598 = 0.0f;
     }
     f32 fVar2 = cM_ssin(m352C);
     f32 fVar1 = cM_scos(m352C);
@@ -269,33 +258,33 @@ BOOL daPy_lk_c::procClimbUpStart_init() {
 BOOL daPy_lk_c::procClimbUpStart() {
     /* Nonmatching - floats */
     if (setMoveBGCorrectClimb()) {
-      return true;
+        return true;
     } else {
-      if (m3570 == 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
-          procLadderUpStart_init_sub();
-        }
-      } else {
-        J3DFrameCtrl &frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
-        m34C2 = 5;
-        if (frameCtrl.getRate() < 0.0099999998f) {
-          dComIfGp_setDoStatus(6);
-          if (m34D4 == 0) {
-            setLadderFootSe();
-            m34D4 = 1;
-          }
-          if (doTrigger()) {
-            m34C2 = 0;
-            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
-          } else {
-            changeClimbMoveProc(1);
-          }
+        if (m3570 == 0) {
+            if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+                procLadderUpStart_init_sub();
+            }
         } else {
-          if (frameCtrl.checkPass(9.0f)) {
-            setLadderFootSe();
-          }
+            J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
+            m34C2 = 5;
+            if (frameCtrl.getRate() < 0.01f) {
+                dComIfGp_setDoStatus(6);
+                if (m34D4 == 0) {
+                    setLadderFootSe();
+                    m34D4 = 1;
+                }
+                if (doTrigger()) {
+                    m34C2 = 0;
+                    procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+                } else {
+                    changeClimbMoveProc(1);
+                }
+            } else {
+                if (frameCtrl.checkPass(9.0f)) {
+                    setLadderFootSe();
+                }
+            }
         }
-      }
     }
     return true;
 }
@@ -309,8 +298,7 @@ BOOL daPy_lk_c::procClimbDownStart_init(s16 param_0) {
     mVelocity = 0.0f;
     speedF = 0.0f;
     deleteEquipItem(TRUE);
-    setSingleMoveAnime(ANM_LADDERDWST, daPy_HIO_ladder_c0::m.field_0x14, 30.0f,
-                       -1, 3.0f);
+    setSingleMoveAnime(ANM_LADDERDWST, daPy_HIO_ladder_c0::m.field_0x14, 30.0f, -1, 3.0f);
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);
     setOldRootQuaternion(0, -0x8000, 0);
     shape_angle.y = param_0 + 0x8000;
@@ -327,24 +315,23 @@ BOOL daPy_lk_c::procClimbDownStart_init(s16 param_0) {
 BOOL daPy_lk_c::procClimbDownStart() {
     /* Nonmatching - floats */
     if (setMoveBGCorrectClimb()) {
-      return true;
+        return true;
     } else {
-      J3DFrameCtrl &frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
-      m34C2 = 5;
-      if (frameCtrl.getRate() < 0.0099999998f) {
-        dComIfGp_setDoStatus(6);
-        if (doTrigger()) {
-          m34C2 = 0;
-          procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
+        m34C2 = 5;
+        if (frameCtrl.getRate() < 0.01f) {
+            dComIfGp_setDoStatus(6);
+            if (doTrigger()) {
+                m34C2 = 0;
+                procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+            } else {
+                changeClimbMoveProc(1);
+            }
         } else {
-          changeClimbMoveProc(1);
+            if (frameCtrl.checkPass(26.0f) || frameCtrl.checkPass(36.0f) || frameCtrl.checkPass(43.0f)) {
+                setLadderFootSe();
+            }
         }
-      } else {
-        if (frameCtrl.checkPass(26.0f) || frameCtrl.checkPass(36.0f) ||
-            frameCtrl.checkPass(43.0f)) {
-          setLadderFootSe();
-        }
-      }
     }
     return true;
 }
@@ -358,28 +345,28 @@ BOOL daPy_lk_c::procClimbMoveUpDown_init(int param_0) {
     commonProcInit(daPyProc_CLIMB_MOVE_UP_DOWN_e);
     current.angle.y = shape_angle.y;
     if (m34B8 == 1) {
-      dVar3 *= -1.0f;
+        dVar3 *= -1.0f;
     }
     if (param_0 != 0) {
-      m3570 = 0;
-      if (m34B8 == 0) {
-        dVar2 = ANM_LADDERLTOR;
-      } else {
-        dVar2 = ANM_LADDERRTOL;
-      }
+        m3570 = 0;
+        if (m34B8 == 0) {
+            dVar2 = ANM_LADDERLTOR;
+        } else {
+            dVar2 = ANM_LADDERRTOL;
+        }
     } else {
-      m3570 = 1;
-      if (m34B8 == 0) {
-        dVar2 = ANM_LADDERRTOL;
-      } else {
-        dVar2 = ANM_LADDERLTOR;
-      }
+        m3570 = 1;
+        if (m34B8 == 0) {
+            dVar2 = ANM_LADDERRTOL;
+        } else {
+            dVar2 = ANM_LADDERLTOR;
+        }
     }
     setSingleMoveAnime(dVar2, dVar3, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x2C);
     if (m34B8 == 0) {
-      setTextureAnime(10, 0);
+        setTextureAnime(10, 0);
     } else {
-      setTextureAnime(11, 0);
+        setTextureAnime(11, 0);
     }
     m34C2 = 7;
     gravity = 0.0f;
@@ -394,31 +381,30 @@ BOOL daPy_lk_c::procClimbMoveUpDown_init(int param_0) {
 /* 80136B80-80136C7C       .text procClimbMoveUpDown__9daPy_lk_cFv */
 BOOL daPy_lk_c::procClimbMoveUpDown() {
     if (setMoveBGCorrectClimb()) {
-      return true;
+        return true;
     } else {
-      m34C2 = 5;
-      dComIfGp_setDoStatus(6);
-      if (doTrigger()) {
-        m34C2 = 0;
-        procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
-      } else {
-        if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) <
-            0.0099999998f) {
-          if (m34D0 != 0) {
-            m34D0 = 0;
-            setLadderFootSe();
-          } else {
-            changeClimbMoveProc(m3570);
-          }
+        m34C2 = 5;
+        dComIfGp_setDoStatus(6);
+        if (doTrigger()) {
+            m34C2 = 0;
+            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
         } else {
-          f32 dVar2 = getLadderMoveAnmSpeed();
-          if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
-            dVar2 *= -1.0f;
-          }
-          (mFrameCtrlUnder[UNDER_MOVE0_e]).setRate(dVar2);
-          checkBgClimbMove();
+            if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
+                if (m34D0 != 0) {
+                    m34D0 = 0;
+                    setLadderFootSe();
+                } else {
+                    changeClimbMoveProc(m3570);
+                }
+            } else {
+                f32 dVar2 = getLadderMoveAnmSpeed();
+                if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
+                    dVar2 *= -1.0f;
+                }
+                (mFrameCtrlUnder[UNDER_MOVE0_e]).setRate(dVar2);
+                checkBgClimbMove();
+            }
         }
-      }
     }
     return true;
 }
@@ -434,19 +420,23 @@ BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
     m34C2 = 7;
     m3570 = param_0;
     if (param_0 != 0) {
-      dVar2 = ANM_FCLIMBSLIDELUP;
-      if (m34B8 == 3) {
-        dVar4 *= -1.0f;
-      }
+        dVar2 = ANM_FCLIMBSLIDELUP;
+        if (m34B8 == 3) {
+            dVar4 *= -1.0f;
+        }
     } else {
-      dVar2 = ANM_FCLIMBSLIDERUP;
-      if (m34B8 == 2) {
-        dVar4 *= -1.0f;
-      }
+        dVar2 = ANM_FCLIMBSLIDERUP;
+        if (m34B8 == 2) {
+            dVar4 *= -1.0f;
+        }
     }
-    setSingleMoveAnime(dVar2, dVar4, daPy_HIO_ladder_c0::m.field_0x38,
-                       daPy_HIO_ladder_c0::m.field_0x0,
-                       daPy_HIO_ladder_c0::m.field_0x3C);
+    setSingleMoveAnime(
+        dVar2,
+        dVar4,
+        daPy_HIO_ladder_c0::m.field_0x38,
+        daPy_HIO_ladder_c0::m.field_0x0,
+        daPy_HIO_ladder_c0::m.field_0x3C
+    );
     gravity = 0.0f;
     speed.y = 0.0f;
     mVelocity = 0.0f;
@@ -460,42 +450,40 @@ BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
 }
 
 /* 80136E28-8013707C       .text procClimbMoveSide__9daPy_lk_cFv */
-BOOL daPy_lk_c::procClimbMoveSide() { 
-  if (setMoveBGCorrectClimb()) {
-    return true;
-  } else {
-    m34C2 = 5;
-    dComIfGp_setDoStatus(6);
-    if (doTrigger()) {
-      m34C2 = 0;
-      procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+BOOL daPy_lk_c::procClimbMoveSide() {
+    if (setMoveBGCorrectClimb()) {
+        return true;
     } else {
-      if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) <
-          0.0099999998f) {
-        if (m34D0 != 0) {
-          m34D0 = 0;
-          setLadderFootSe();
+        m34C2 = 5;
+        dComIfGp_setDoStatus(6);
+        if (doTrigger()) {
+            m34C2 = 0;
+            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
         } else {
-          changeClimbMoveProc(m3570);
+            if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
+                if (m34D0 != 0) {
+                    m34D0 = 0;
+                    setLadderFootSe();
+                } else {
+                    changeClimbMoveProc(m3570);
+                }
+            } else {
+                f32 dVar5 = getClimbMoveAnmSpeed();
+                if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
+                    dVar5 *= -1.0f;
+                }
+                mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar5);
+                cXyz local_28 = (mRightHandPos - mLeftHandPos);
+                dVar5 = local_28.absXZ();
+                f32 fVar1 = std::fabsf(dVar5 - m35A0) * daPy_HIO_ladder_c0::m.field_0x40;
+                f32 fVar2 = fVar1 * cM_ssin(m34D4);
+                current.pos.y += fVar1 * cM_scos(m34D4);
+                current.pos.x += fVar2 * cM_scos(shape_angle.y);
+                current.pos.z -= fVar2 * cM_ssin(shape_angle.y);
+                m35A0 = dVar5;
+                checkBgClimbMove();
+            }
         }
-      } else {
-        f32 dVar5 = getClimbMoveAnmSpeed();
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
-          dVar5 *= -1.0f;
-        }
-        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar5);
-        cXyz local_28 = (mRightHandPos - mLeftHandPos);
-        dVar5 = local_28.absXZ();
-        f32 fVar1 =
-            std::fabsf((dVar5 - m35A0)) * daPy_HIO_ladder_c0::m.field_0x40;
-        f32 fVar2 = fVar1 * cM_ssin(m34D4);
-        current.pos.y += fVar1 * cM_scos(m34D4);
-        current.pos.x += fVar2 * cM_scos(shape_angle.y);
-        current.pos.z -= fVar2 * cM_ssin(shape_angle.y);
-        m35A0 = dVar5;
-        checkBgClimbMove();
-      }
     }
-  }
-  return true;
+    return true;
 }

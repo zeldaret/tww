@@ -46,17 +46,17 @@ enum fopAc_Status_e {
 };
 
 enum fopAc_Condition_e {
-    fopAcCnd_NOEXEC_e       = 0x02,
-    fopAcCnd_NODRAW_e       = 0x04,
-    fopAcCnd_INIT_e         = 0x08,
+    fopAcCnd_NOEXEC_e = 0x02,
+    fopAcCnd_NODRAW_e = 0x04,
+    fopAcCnd_INIT_e   = 0x08,
 };
 
 enum fopAc_Group_e {
-    fopAc_ACTOR_e,
-    fopAc_PLAYER_e,
-    fopAc_ENEMY_e,
-    fopAc_ENV_e,
-    fopAc_NPC_e,
+    fopAc_ACTOR_e  = 0x0,
+    fopAc_PLAYER_e = 0x1,
+    fopAc_ENEMY_e  = 0x2,
+    fopAc_ENV_e    = 0x3,
+    fopAc_NPC_e    = 0x4,
 };
 
 enum fopAc_AttentionType_e {

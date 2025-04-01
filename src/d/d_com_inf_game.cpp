@@ -561,8 +561,7 @@ s8 dComIfGp_getReverb(int param_0) {
     return dStage_roomRead_dt_c_GetReverbStage(*dComIfGp_getStageRoom(), param_0);
 }
 
-/* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj
- */
+/* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyInfo& i_floorPoly,
                               s16 i_angle, f32 param_5, GXTexObj* i_tex) {
     if (i_floorPoly.ChkSetInfo() && C_BG_MIN_HEIGHT != groundY) {

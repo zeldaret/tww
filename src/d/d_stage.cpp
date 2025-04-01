@@ -1296,8 +1296,7 @@ const char* dStage_getName2(s16 i_procName, s8 i_subtype) {
     return dStage_getName(i_procName, i_subtype);
 }
 
-/* 80041628-8004169C       .text dStage_actorCreate__FP22stage_actor_data_classP16fopAcM_prm_class
- */
+/* 80041628-8004169C       .text dStage_actorCreate__FP22stage_actor_data_classP16fopAcM_prm_class */
 void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm) {
     dStage_objectNameInf* nameinf_p = dStage_searchName(i_actorData->mName);
 

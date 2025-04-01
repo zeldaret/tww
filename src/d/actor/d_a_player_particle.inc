@@ -589,7 +589,6 @@ void daPy_lk_c::setAuraEffect() {
             } else {
                 auraEntry->getModel()->setBaseScale((scale * (1.0f - (0.3f * var_f31))) * 2.0f);
             }
-
         }
     }
 
@@ -979,7 +978,6 @@ void daPy_lk_c::setFootEffect() {
         } else {
             var_r29 = 2;
         }
-
     } else {
         if (mCurProc == daPyProc_JUMP_CUT_LAND_e) {
             var_r29 = 3;
