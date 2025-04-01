@@ -1329,11 +1329,11 @@ public:
     BOOL procHangClimb();
     BOOL procHangWallCatch_init();
     BOOL procHangWallCatch();
-    void getClimbMoveAnmSpeed();
+    f32 getClimbMoveAnmSpeed();
     void setClimbShapeOffset();
-    void getClimbDirectionFromAngle();
+    int getClimbDirectionFromAngle();
     void changeClimbMoveProc(int);
-    void setMoveBGCorrectClimb();
+    int setMoveBGCorrectClimb();
     BOOL checkBgCorrectClimbMove(cXyz*, cXyz*);
     BOOL checkBgClimbMove();
     void procClimbUpStart_init_sub();
