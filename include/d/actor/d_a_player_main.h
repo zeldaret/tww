@@ -1642,14 +1642,14 @@ public:
     BOOL checkDemoSwordNoDraw(int);
     BOOL checkChanceMode();
     BOOL checkCutRollChange() const;
-    void getSwordBlurColor();
+    int getSwordBlurColor();
     void setNormalCutAtParam(u8);
     void setFinishCutAtParam(u8);
     void setExtraCutAtParam(u8);
     void setExtraFinishCutAtParam(u8);
     void setJumpCutAtParam();
     int getCutDirection();
-    void changeCutProc();
+    int changeCutProc();
     int changeCutReverseProc(daPy_ANM);
     BOOL procCutA_init(s16);
     BOOL procCutA();
