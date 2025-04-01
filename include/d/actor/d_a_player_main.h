@@ -1294,10 +1294,10 @@ public:
     BOOL dProcHandUp();
     BOOL dProcIceSlip_init();
     BOOL dProcIceSlip();
-    void getLadderMoveAnmSpeed();
+    f32 getLadderMoveAnmSpeed();
     void setLadderFootSe();
-    void changeLadderMoveProc(int);
-    void setMoveBGLadderCorrect();
+    int changeLadderMoveProc(int);
+    int setMoveBGLadderCorrect();
     void procLadderUpStart_init_sub();
     BOOL procLadderUpStart_init();
     BOOL procLadderUpStart();
