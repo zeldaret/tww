@@ -25,17 +25,6 @@ public:
 
 STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 
-// TODO: this probably does not belong in d_a_player.h based on the .text section splitting in d_a_player_main
-class daPy_HIO_c {
-public:
-    // TODO: constructor should be weak, but not inlined?
-    // daPy_HIO_c() {}
-    daPy_HIO_c();
-
-public:
-    /* 0x00 */ u8 temp[0x3F - 0x00];
-};  // Size: 0x3F
-
 class daPy_demo_c {
 public:
     enum {

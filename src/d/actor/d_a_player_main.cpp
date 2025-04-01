@@ -39,7 +39,7 @@ JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.67f, 0.67f, 0.67f);
 
 #include "d/actor/d_a_player_main_data.inc"
 
-#include "d/actor/d_a_player_HIO.inc"
+#include "d/actor/d_a_player_HIO_data.inc"
 
 static void dummydatafunc(f32* temp, f64* temp2) {
     // temporary hack to improve diffs until sdata2 offsets are figured out
@@ -3975,7 +3975,6 @@ void daPy_lk_c::initTextureScroll() {
 
 /* 80123834-8012469C       .text createHeap__9daPy_lk_cFv */
 BOOL daPy_lk_c::createHeap() {
-    /* Nonmatching - daPy_HIO_c constructor */
     J3DModelData* tmp_modelData;
     J3DAnmTransform* bck;
     J3DAnmTevRegKey* brk;
@@ -4788,6 +4787,8 @@ BOOL daPy_lk_c::getBokoFlamePos(cXyz* outPos) {
     }
     return FALSE;
 }
+
+#include "d/actor/d_a_player_HIO.inc"
 
 static actor_method_class2 l_daPy_Method = {
     (process_method_func)daPy_Create,

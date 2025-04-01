@@ -326,6 +326,14 @@ public:
     /* 0x02 */ u16 mUpperBckIdx;
 };
 
+class daPy_HIO_c {
+public:
+    daPy_HIO_c();
+
+public:
+    /* 0x00 */ u8 temp[0x3F - 0x00];
+};  // Size: 0x3F
+
 class daPy_lk_c : public daPy_py_c {
 public:
     enum daPy_PROC {
