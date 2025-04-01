@@ -85,6 +85,7 @@ private:
 class daPy_py_c : public fopAc_ac_c {
 public:
     enum daPy_FLG0 {
+        daPyFlg0_UNK1               = 0x00000001,
         daPyFlg0_UNK4               = 0x00000004,
         daPyFlg0_UNK8               = 0x00000008,
         daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
@@ -104,6 +105,7 @@ public:
         daPyFlg0_PHOTO_BOX_CANCEL   = 0x00080000, // Same as scope cancel
         daPyFlg0_UNK200000          = 0x00200000,
         daPyFlg0_UNK400000          = 0x00400000,
+        daPyFlg0_UNK800000          = 0x00800000,
         daPyFlg0_UNK1000000         = 0x01000000,
         daPyFlg0_EQUIP_HEAVY_BOOTS  = 0x02000000,
         daPyFlg0_NO_DRAW            = 0x08000000,
