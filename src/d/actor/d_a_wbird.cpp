@@ -9,8 +9,10 @@
 #include "d/d_kankyo_wether.h"
 #include "SSystem/SComponent/c_angle.h"
 #include "d/actor/d_a_player.h"
-// #include "JSystem/JMath/JMath.h"
 
+
+const char daWbird_c::m_arcname[] = "Wbird";
+const windpower = 1.875f;
 /* 00000078-000000AC       .text calcMtx__9daWbird_cFv */
 void daWbird_c::calcMtx() {
     eyePos.x = current.pos.x;
@@ -46,8 +48,8 @@ void daWbird_c::setStartPos() {
 
     cXyz sp18;
     sp18.z = cM_scos((int)(u16)envLight.mWind.mTactWindAngleX) * cM_scos((int)(u16)envLight.mWind.mTactWindAngleY);
-
     sp18.y = cM_ssin((int)(u16)envLight.mWind.mTactWindAngleX);
+
     sp18.x = cM_scos((int)(u16)envLight.mWind.mTactWindAngleX) * cM_ssin((int)(u16)envLight.mWind.mTactWindAngleY);
 
     int iVar5 = cM_atan2s(sp18.x, sp18.z);
@@ -61,7 +63,7 @@ void daWbird_c::setStartPos() {
     current.pos.z = current.pos.z - fVar1 * speed.z;
     current.pos.x = current.pos.x - fVar1 * speed.x;
     field_0x29E = field_0x29E + 60;
-    field_0x2A0 = 1.0;
+    field_0x2A0 = 1.0f;
     current.pos.y += field_0x2A0 * fVar1 * fVar1 * 0.5f;
     speed.y = -(field_0x2A0 * fVar1);
     /* Nonmatching */
@@ -108,7 +110,7 @@ void daWbird_c::actionMove() {
         mDoAud_seStart(JA_SE_TAKT_WIND_DEMO);
     }
         
-    if (field_0x29E >= 1) {
+    if (field_0x29E >= 0) {
         field_0x29E--;
         if (field_0x29E > 60) {
             fopAcM_posMove(this, NULL);
@@ -131,50 +133,49 @@ void daWbird_c::actionMove() {
 
 /* 000005DC-00000850       .text actionSelect__9daWbird_cFv */
 void daWbird_c::actionSelect() {
-    daPy_py_c* player;
     short sVar2 = field_0x29E;
     if (sVar2 == 10) {
         dComIfGp_setOperateWindOn();
-        mDoAud_seStart(JA_SE_TAKT_WIND_DISP);
+        mDoAud_seStart(JA_SE_TAKT_WIND_DISP, (Vec*)0);
         field_0x29E++;
-    } else if(sVar2 > 11){
-        mDoAud_seStart(JA_SE_SYS_WTAKT_WIND_AMB);
-        if(dComIfGp_getOperateWind() == 1){
-            mDoAud_seStart(JA_SE_TAKT_WIND_DECIDE);
-            setStartPos();
-            mAction = 2;
-            player = daPy_getPlayerActorClass();
-            sVar2 = current.angle.y;
-            field_0x2A4 = player->shape_angle.y;
+    } else if(sVar2 > 10){
+        mDoAud_seStart(JA_SE_SYS_WTAKT_WIND_AMB, NULL,0,0);
+        switch (dComIfGp_getOperateWind()) {
+            case 1: {
+                mDoAud_seStart(JA_SE_TAKT_WIND_DECIDE, NULL,0,0);
+                setStartPos();
+                mAction = 2;
+                daPy_py_c* player = daPy_getPlayerActorClass();
+                sVar2 = current.angle.y + 0x7fff;
+                field_0x2A4 = player->shape_angle.y;
+                player->setPlayerPosAndAngle(&player->current.pos, sVar2);
+                if(dComIfGp_checkPlayerStatus0(0, 0x00010000)){
+                    field_0x2A6 = dComIfGp_evmng_getEventIdx("TACT_WINDOW2_SHIP");
+                } else{
+                    field_0x2A6 = dComIfGp_evmng_getEventIdx("TACT_WINDOW2");
+                }
+                fopAcM_orderChangeEventId(this, field_0x2A6, 0, 0xFFFF);
+                player = daPy_getPlayerActorClass();
             
-            player->setPlayerPosAndAngle(&player->current.pos, (sVar2 + 0x7fff));
+                player->cancelOriginalDemo();
 
-            if(dComIfGp_checkPlayerStatus0(0, 0x00010000)){
-                sVar2 = dComIfGp_evmng_getEventIdx("TACT_WINDOW2");
-                field_0x2A6 = sVar2;
-            } else{
-                sVar2 = dComIfGp_evmng_getEventIdx("TACT_WINDOW2_SHIP");
-                field_0x2A6 = sVar2;
+                dKyw_custom_windpower(windpower);
+                field_0x29D = true;
+                break;
             }
-            fopAcM_orderChangeEventId(this, field_0x2A6, 0, 0xFFFF);
-            player = daPy_getPlayerActorClass();
-
-            /* could be wrong dont fully understand ghidra output */
-            player->cancelOriginalDemo();
-
-            dKyw_custom_windpower(0x3ff0000000000000);
-            field_0x29D = true;
-        } else if(dComIfGp_getOperateWind() == 0){
-            mDoAud_seStart(JA_SE_TAKT_WIND_CANCEL);
-            dComIfGp_event_reset();
-            fopAcM_delete(this);
+            case 0 : {
+                mDoAud_seStart(JA_SE_TAKT_WIND_CANCEL, NULL,0,0);
+                dComIfGp_event_reset();
+                fopAcM_delete(this);
+                break;
+            }
         }
-    } else{
-        field_0x29E = sVar2 + 1;    
+    }
+    else {
+        field_0x29E++;
     }
     /* Nonmatching */
 }
-
 /* 00000850-00000858       .text daWbird_Draw__FP9daWbird_c */
 static BOOL daWbird_Draw(daWbird_c*) {
     return TRUE;
