@@ -922,7 +922,7 @@ public:
     void setAtnList();
     void setActorPointer();
     BOOL setTalkStatus();
-    void setHintActor();
+    int setHintActor();
     void setDoStatusBasic();
     void setDoStatus();
     int getDirectionFromAngle(s16);

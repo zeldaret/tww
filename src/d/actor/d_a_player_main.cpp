@@ -1121,7 +1121,7 @@ BOOL daPy_lk_c::setTalkStatus() {
 }
 
 /* 80108634-801086C8       .text setHintActor__9daPy_lk_cFv */
-void daPy_lk_c::setHintActor() {
+int daPy_lk_c::setHintActor() {
     /* Nonmatching */
 }
 

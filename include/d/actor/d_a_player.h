@@ -93,6 +93,7 @@ public:
         daPyFlg0_UNK80              = 0x00000080,
         daPyFlg0_UNK100             = 0x00000100,
         daPyFlg0_SHIP_DROP          = 0x00000200,
+        daPyFlg0_UNK400             = 0x00000400,
         daPyFlg0_PUSH_PULL_KEEP     = 0x00000800,
         daPyFlg0_HOVER_BOOTS        = 0x00001000,
         daPyFlg0_UNK4000            = 0x00004000,
