@@ -44,9 +44,11 @@ static int btk_data[8] = {
     MT_BTK_MG_TAIL1
 };
 
-static f32 scale_data[8] = {
-    1.0f, 1.0f, 1.0f, 0.975f, 0.925f, 0.825f, 0.75f, 0.525f
-};
+static int move_ad[8] = {0, -6, -12, -18, -24, -30, -36, -42};
+static int move_ad2[8] = {0, -3, -6, -9, -12, -15, -18, -21};
+
+static s16 br_no[6] = {1, 0x102, 0x202, 0x100, 0, 0};
+static s16 br_ya[11] = {0xCD38, 0xDCD8, 0xF060, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
 /* 000000EC-000001E8       .text __ct__10daMt_HIO_cFv */
@@ -280,9 +282,163 @@ void bakuha(mt_class*) {
     /* Nonmatching */
 }
 
+static f32 check_x[6] = {0.0f, 0.0f, 50.0f, -50.0f, -1.0f, 1.0f};
+static f32 check_y[6] = {-50.0f, -50.0f, -150.0f, -150.0f, 100.0f, 100.0f};
+static f32 check_z[6] = {150.0f, -10.0f, 0.0f, 0.0f, 200.0f, 200.0f};
+static u8 check_bitD[6] = {0x1, 0x2, 0x4, 0x8, 0x10, 0x20};
+
 /* 000037B0-000042C4       .text mt_move__FP8mt_class */
-void mt_move(mt_class*) {
-    /* Nonmatching */
+void mt_move(mt_class* i_this) {
+    u8 bVar8;
+    cXyz local_160[6];
+    cXyz ends[6];
+    dBgS_LinChk linChk;
+    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+    cXyz offset(0.0f, 50.0f, 0.0f);
+    cXyz local_184;
+    MtxPosition(&offset, &local_184);
+    local_184 = local_184 + i_this->current.pos;
+    int iVar6 = abs(i_this->current.angle.x);
+    int iVar11 = iVar6 < 0x1000 ? 6 : 4;
+    for (int i = 0; i < iVar11; i++) {
+        cXyz check;
+        check.x = check_x[i];
+        check.y = check_y[i];
+        check.z = check_z[i];
+        MtxPosition(&check, &ends[i]);
+        ends[i] += i_this->current.pos;
+        linChk.Set(&local_184, &ends[i], i_this);
+        if (dComIfG_Bgsp()->LineCross(&linChk)) {
+            local_160[i] = linChk.GetCross();
+            bVar8 |= check_bitD[i];
+        }
+    }
+
+    if ((bVar8 & 0x3) == 0x3) {
+        cXyz local_190 = local_160[0] - local_160[1];
+        cXyz local_16C(0.0f, l_HIO.m18, 0.0f);
+        cXyz local_178;
+        MtxPosition(&local_16C, &local_178);
+        if (i_this->m48E == 0) {
+            cLib_addCalc2(&i_this->current.pos.x, local_178.x + local_160[1].x + local_190.x * 0.5f, 1.0f, 1.0f);
+            cLib_addCalc2(&i_this->current.pos.y, local_178.y + local_160[1].y + local_190.y * 0.5f, 1.0f, 1.0f);
+            cLib_addCalc2(&i_this->current.pos.z, local_178.z + local_160[1].z + local_190.z * 0.5f, 1.0f, 1.0f);
+        }
+        f32 fVar1 = std::sqrtf(local_190.x * local_190.x + local_190.z * local_190.z);
+        i_this->current.angle.x = -cM_atan2s(local_190.y, fVar1);
+        if (std::fabsf(local_190.x) > 0.1f || std::fabsf(local_190.z) > 0.1f) {
+            i_this->m48C = cM_atan2s(local_190.x, local_190.z);
+        }
+        s16 sVar5 = i_this->m48C - i_this->current.angle.y;
+        uint uVar4 = (sVar5 < 0) ? -sVar5 : sVar5;
+        if (uVar4 > 0x4000) {
+            i_this->current.angle.x = 0x8000 - i_this->current.angle.x;
+        }
+        i_this->m492 = 23;
+    } else if ((bVar8 & 0x1) == 0) {
+        if (i_this->m492 == 0) {
+            i_this->current.angle.x += REG0_S(2) + 0x800;
+        } else {
+            i_this->m492--;
+        }
+    }
+
+    if ((bVar8 & 0xC) == 0xC) {
+        cXyz local_190 = local_160[2] - local_160[3];
+        cMtx_XrotS(*calc_mtx, -i_this->current.angle.x);
+        cMtx_YrotM(*calc_mtx, -i_this->current.angle.y);
+        cXyz local_178;
+        MtxPosition(&local_190, &local_178);
+        f32 fVar1 = std::sqrtf(local_178.x * local_178.x + local_178.z * local_178.z);
+        i_this->current.angle.z = cM_atan2s(local_178.x, fVar1);
+    }
+
+    if (abs(i_this->current.angle.x) < 0x1000) {
+        if ((bVar8 & 0x30) == 0x30) {
+            cXyz local_190 = local_160[4] - local_160[5];
+            i_this->current.angle.y = cM_atan2s(local_190.x, local_190.z) + 0x4000;
+        } else {
+            if (i_this->m2B4 >= 10) {
+                i_this->current.angle.y += i_this->m488;
+            } else {
+                s16 target_angle;
+                if (i_this->m2BC != 0) {
+                    cXyz local_190 = i_this->m47C - i_this->current.pos;
+                    target_angle = cM_atan2s(local_190.x, local_190.z);
+                    i_this->m488 = 0x800;
+                    if (std::sqrtf(local_190.x * local_190.x + local_190.z * local_190.z) < 100.0f) {
+                        i_this->m2BD += i_this->m2BE;
+                        if (i_this->m2BD >= i_this->mpPath->m_num) {
+                            if (dPath_ChkClose(i_this->mpPath)) {
+                                i_this->m2BD = 0;
+                            } else {
+                                i_this->m2BE = -1;
+                                i_this->m2BD = i_this->mpPath->m_num - 2;
+                            } 
+                        } else if (i_this->m2BD < 0) {
+                            i_this->m2BE = 1;
+                            i_this->m2BD = 1;
+                        }
+                        i_this->m47C = i_this->mpPath->m_points[i_this->m2BD].m_position;
+                    }
+                } else {
+                    target_angle = fopAcM_searchPlayerAngleY(i_this);
+                    cLib_addCalcAngleS2(&i_this->m488, REG0_S(4) + 0x400, 1, 0x10);
+                }
+                 
+                if (i_this->m2B5 == 1) {
+                    i_this->current.angle.y = target_angle;
+                } else {
+                    cLib_addCalcAngleS2(&i_this->current.angle.y, target_angle, 0x10, i_this->m488);
+                }
+            } 
+
+            if (i_this->m2B4 < 10 && i_this->m18F9 == 0 && fopAcM_searchPlayerDistance(i_this) < l_HIO.m24) {
+                bool bVar3 = false;
+                for (int i = 0; i < 64; i += 8) {
+                    if (abs(i_this->m9F4[i].x) > 0x1000) {
+                        bVar3 = true;
+                        break;
+                    }
+                }
+                if (!bVar3) {
+                    i_this->mC01 = 1;
+                }
+            }
+        }
+    } else if (i_this->m2B4 < 10) {
+        i_this->m488 = 0;
+    }
+
+    if (i_this->m48E == 0) {
+        cLib_addCalcAngleS2(
+            &i_this->m468,
+            cM_ssin(i_this->m46A * (REG0_S(0) + 2000)) * (cM_ssin(i_this->m46A * 100) * 1000.0f + 3500.0f),
+            4, 0x400
+        );
+        float fVar2 = i_this->mC00 != 0 ? 10.0f : 5.0f;
+        cLib_addCalc2(&i_this->speedF, fVar2, 1.0f, fVar2);
+    } else {
+        cLib_addCalc0(&i_this->speedF, 1.0f, 5.0f);
+    }
+
+    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cMtx_YrotM(*calc_mtx, i_this->m468);
+    cXyz local_16C(0.0f, 0.0f, i_this->speedF);
+    MtxPosition(&local_16C, &i_this->speed);
+    fopAcM_posMove(i_this, NULL);
+    if (bVar8 == 0) {
+        i_this->m46C++;
+        if (i_this->m46C > 9) {
+            i_this->m454 = 1;
+            i_this->m455 = 0x11;
+        }
+    } else {
+        i_this->m46C = 0;
+    }
 }
 
 /* 000042C4-00005088       .text mt_fight__FP8mt_class */
@@ -552,8 +708,11 @@ void mt_move_maru(mt_class*) {
 }
 
 /* 00005B9C-00005C54       .text water_damage_se_set__FP8mt_class */
-void water_damage_se_set(mt_class*) {
-    /* Nonmatching */
+void water_damage_se_set(mt_class* i_this) {
+    fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
+    fopAcM_seStart(a_this, JA_SE_CM_MAGTAIL_WATER, 0);
+    fopAcM_monsSeStart(a_this, JA_SE_CV_MG_WATER, 0);
+    i_this->m348 = 1;
 }
 
 /* 00005C54-0000614C       .text damage_check__FP8mt_class */
@@ -610,7 +769,7 @@ void damage_check(mt_class* i_this) {
                     if (i_this->m454 == 2) {
                         i_this->m460 = 5;
                         cc_at_check(i_this, &atInfo);
-                        if (i_this->health < 1) {
+                        if (i_this->health <= 0) {
                             i_this->m18F8 = 2;
                         }
                         i_this->m18FC = 12;
@@ -929,12 +1088,16 @@ static BOOL daMt_Delete(mt_class* i_this) {
     return TRUE;
 }
 
+static int br_bmd[3] = {
+    0,0,0
+};
+
 static s16 bmd_data[8] = {
     0, MT_BDL_KBB, 0, MT_BDL_KBA, 0, MT_BDL_KBA,0, MT_BDL_KBA
 };
 
-static int br_bmd[3] = {
-    0,0,0
+static f32 scale_data[8] = {
+    1.0f, 1.0f, 1.0f, 0.975f, 0.925f, 0.825f, 0.75f, 0.525f
 };
 
 /* 00007E18-00008400       .text CallbackCreateHeap__FP10fopAc_ac_c */
