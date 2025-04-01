@@ -10,8 +10,9 @@ If you haven't already, you should first follow the instructions in the [readme]
 2. [Setting up classes/structs](#setting-up-classesstructs)
 3. [Decompiling functions](#decompiling-functions)
 4. [Inline functions and how to read the debug maps](#inline-functions-and-how-to-read-the-debug-maps)
-5. [Linking a 100% matching object](#linking-a-100-matching-object)
-6. [Documentation and naming](#documentation-and-naming)
+5. [Fixing minor nonmatching issues](#fixing-minor-nonmatching-issues)
+6. [Linking a 100% matching object](#linking-a-100-matching-object)
+7. [Documentation and naming](#documentation-and-naming)
 
 ## Choosing an object to decompile
 

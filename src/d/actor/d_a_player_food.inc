@@ -125,7 +125,7 @@ BOOL daPy_lk_c::procFoodThrow() {
             dCam_getBody()->EndEventCamera(playerPID);
             endDemoMode();
         }
-    } else if (frameCtrl.checkPass(9.0f)) {
+    } else if (frameCtrl.checkPass(8.0f)) {
         seStartOnlyReverb(JA_SE_LK_ESA_THROW);
         void* esa = fopAcM_fastCreate(PROC_ESA, 0xFFFF0014, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
         if (esa) {

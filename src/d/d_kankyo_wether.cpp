@@ -590,10 +590,14 @@ void wether_move_snow() {
 
 /* 80088A50-80088D08       .text wether_move_star__Fv */
 void wether_move_star() {
-    if (dComIfGp_checkStatus(1) && (!g_env_light.mbVrboxInvisible &&
-                                    strcmp(dComIfGp_getStartStageName(), "M_DragB") != 0) ||
-        strcmp(dComIfGp_getStartStageName(), "Name") == 0)
-    {
+    if (
+        (
+            dComIfGp_checkStatus(1) &&
+            !g_env_light.mbVrboxInvisible &&
+            strcmp(dComIfGp_getStartStageName(), "M_DragB") != 0
+        ) ||
+        strcmp(dComIfGp_getStartStageName(), "Name") == 0
+    ) {
         f32 time = g_env_light.getDaytime();
         f32 target;
 

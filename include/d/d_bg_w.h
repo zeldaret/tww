@@ -19,6 +19,7 @@ typedef struct _GXColor GXColor;
 class dBgW : public cBgW {
 public:
     enum PushPullLabel {
+        PP_UNK0_e = 0x00,
         PP_UNK1_e = 0x01,
         PP_UNK2_e = 0x02,
         PP_UNK4_e = 0x04,

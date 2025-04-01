@@ -419,6 +419,7 @@ void dKy_custom_colset(u8 param_0, u8 param_1, f32 i_blend);
 void dKy_pship_existense_set();
 void dKy_pship_existense_cut();
 u8 dKy_pship_existense_chk();
+void dKy_Itemgetcol_chg_on();
 void dKy_Itemgetcol_chg_off();
 void dKy_Itemgetcol_chg_move();
 void dKy_arrowcol_chg_on(cXyz*, int);
