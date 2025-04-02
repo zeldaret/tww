@@ -70,7 +70,6 @@ void daPy_lk_c::setBlendWHideMoveAnime(f32 param_0) {
     mFrameCtrlUnder[UNDER_MOVE1_e].setFrame(mFrameCtrlUnder[UNDER_MOVE1_e].getEnd() - 0.001f);
     mFrameCtrlUnder[UNDER_MOVE1_e].setRate(0.0f);
     mAnmRatioUnder[UNDER_MOVE1_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE1_e].getFrame());
-    return;
 }
 
 /* 801371E0-80137608       .text getWHideModePolygon__9daPy_lk_cFP4cXyzP4cXyzP4cXyzi */
@@ -183,7 +182,6 @@ void daPy_lk_c::getWHideBasePos(cXyz* param_0) {
         fVar3 = 125.0f;
     }
     param_0->set(current.pos.x, current.pos.y + fVar3, current.pos.z);
-    return;
 }
 
 /* 80137640-8013769C       .text getWHideNextPos__9daPy_lk_cFP4cXyzP4cXyz */
@@ -193,7 +191,6 @@ void daPy_lk_c::getWHideNextPos(cXyz* param_0, cXyz* param_1) {
         param_0->y,
         param_0->z + cM_scos(current.angle.y) * daPy_HIO_wall_c0::m.field_0x54
     );
-    return;
 }
 
 /* 8013769C-80137754       .text checkWHideBackWall__9daPy_lk_cFP4cXyz */

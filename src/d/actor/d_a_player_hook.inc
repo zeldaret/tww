@@ -31,15 +31,14 @@ BOOL daPy_lk_c::checkHookshotReturn() {
 BOOL daPy_lk_c::setHookshotCarryOffset(fpc_ProcID param_0, const cXyz* param_1) {
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
 
-    if ((mEquipItem != dItem_HOOKSHOT_e) || (hookshot == NULL)) {
+    if (mEquipItem != dItem_HOOKSHOT_e || hookshot == NULL) {
         return false;
-    } else {
-        if (param_0 != hookshot->mCarryActorID) {
-            return false;
-        }
-        hookshot->m50C = *param_1;
-        return true;
     }
+    if (param_0 != hookshot->mCarryActorID) {
+        return false;
+    }
+    hookshot->m50C = *param_1;
+    return true;
 }
 
 /* 8014ABF4-8014ACCC       .text setHookshotModel__9daPy_lk_cFv */
@@ -122,7 +121,6 @@ void daPy_lk_c::freeHookshotItem() {
         return;
     }
     fopAcM_SetParam(hookshot, 2);
-    return;
 }
 
 /* 8014B05C-8014B2B8       .text checkNextActionHookshotReady__9daPy_lk_cFv */
@@ -194,7 +192,6 @@ BOOL daPy_lk_c::checkNextHookshotMode() {
     } else {
         procHookshotSubject_init();
     }
-    return;
 }
 
 /* 8014B350-8014B3F4       .text procHookshotSubject_init__9daPy_lk_cFv */
@@ -251,22 +248,22 @@ BOOL daPy_lk_c::procHookshotSubject() {
 BOOL daPy_lk_c::procHookshotMove_init() {
     if (mCurProc == daPyProc_HOOKSHOT_MOVE_e) {
         return false;
-    } else {
-        commonProcInit(daPyProc_HOOKSHOT_MOVE_e);
-        if (m34B8 == 3) {
-            current.angle.y = shape_angle.y + -0x4000;
-        } else {
-            m34B8 = 2;
-            current.angle.y = shape_angle.y + 0x4000;
-        }
-        daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
-        if (fopAcM_GetParam(hookshot) == 0) {
-            setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
-            setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
-        }
-        dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
-        return true;
     }
+
+    commonProcInit(daPyProc_HOOKSHOT_MOVE_e);
+    if (m34B8 == 3) {
+        current.angle.y = shape_angle.y + -0x4000;
+    } else {
+        m34B8 = 2;
+        current.angle.y = shape_angle.y + 0x4000;
+    }
+    daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
+    if (fopAcM_GetParam(hookshot) == 0) {
+        setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
+        setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    }
+    dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
+    return true;
 }
 
 /* 8014B5E8-8014B74C       .text procHookshotMove__9daPy_lk_cFv */
@@ -334,39 +331,39 @@ BOOL daPy_lk_c::procHookshotFly() {
     if (!checkItemModeActorPointer()) {
         voiceStart(10);
         return true;
-    } else {
-        daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
-        if (fopAcM_GetParam(hookshot) != 3) {
-            if ((hookshot->m2A2 != 0) && (procShipJumpRide_init())) {
-                return true;
-            }
-            if ((!mAcch.ChkGroundHit()) && (changeFrontWallTypeProc())) {
-                voiceStart(10);
-                return true;
-            } else {
-                mLinkLinChk.Set(&m370C, &current.pos, this);
-                if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
-                    current.pos = mLinkLinChk.GetCross();
-                }
-                current.pos.x = hookshot->current.pos.x - 35.0f * cM_ssin(shape_angle.y);
-                current.pos.z = hookshot->current.pos.z - 35.0f * cM_scos(shape_angle.y);
-                m3688 = current.pos;
-                m35F0 = m3688.y;
-                m35F4 = m3688.y;
-                if (mAcch.ChkGroundHit()) {
-                    checkNextMode(0);
-                } else {
-                    procFall_init(1, 0.0f);
-                }
-                voiceStart(10);
-            }
-        } else {
-            shape_angle.x = hookshot->shape_angle.x;
-            shape_angle.y = hookshot->shape_angle.y;
-            current.angle.y = shape_angle.y;
-            current.pos += hookshot->getMoveVec();
-            m370C = old.pos;
+    }
+
+    daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
+    if (fopAcM_GetParam(hookshot) != 3) {
+        if ((hookshot->m2A2 != 0) && (procShipJumpRide_init())) {
+            return true;
         }
+        if ((!mAcch.ChkGroundHit()) && (changeFrontWallTypeProc())) {
+            voiceStart(10);
+            return true;
+        }
+
+        mLinkLinChk.Set(&m370C, &current.pos, this);
+        if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+            current.pos = mLinkLinChk.GetCross();
+        }
+        current.pos.x = hookshot->current.pos.x - 35.0f * cM_ssin(shape_angle.y);
+        current.pos.z = hookshot->current.pos.z - 35.0f * cM_scos(shape_angle.y);
+        m3688 = current.pos;
+        m35F0 = m3688.y;
+        m35F4 = m3688.y;
+        if (mAcch.ChkGroundHit()) {
+            checkNextMode(0);
+        } else {
+            procFall_init(1, 0.0f);
+        }
+        voiceStart(10);
+    } else {
+        shape_angle.x = hookshot->shape_angle.x;
+        shape_angle.y = hookshot->shape_angle.y;
+        current.angle.y = shape_angle.y;
+        current.pos += hookshot->getMoveVec();
+        m370C = old.pos;
     }
     return true;
 }

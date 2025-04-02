@@ -48,58 +48,58 @@ BOOL daPy_lk_c::changeHangMoveProc(int i_direction) {
     }
     if (triPla = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd), triPla->GetNP()->y < 0.9986f) {
         return false;
+    }
+
+    if (i_direction == 2) {
+        uVar1 = shape_angle.y + 0x4000;
+    } else if (i_direction == 3) {
+        uVar1 = shape_angle.y + -0x4000;
     } else {
-        if (i_direction == 2) {
-            uVar1 = shape_angle.y + 0x4000;
-        } else if (i_direction == 3) {
-            uVar1 = shape_angle.y + -0x4000;
-        } else {
-            uVar1 = current.angle.y;
-        }
-        cXyz local_28;
-        cXyz local_34;
-        local_28.x = current.pos.x;
-        local_28.y = 5.0f + current.pos.y;
-        local_28.z = current.pos.z;
-        local_34.x = local_28.x + 30.0f * cM_ssin(uVar1);
-        local_34.y = local_28.y;
-        local_34.z = local_28.z + 30.0f * cM_scos(uVar1);
-        mLinkLinChk.Set(&local_28, &local_34, this);
-        if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+        uVar1 = current.angle.y;
+    }
+    cXyz local_28;
+    cXyz local_34;
+    local_28.x = current.pos.x;
+    local_28.y = 5.0f + current.pos.y;
+    local_28.z = current.pos.z;
+    local_34.x = local_28.x + 30.0f * cM_ssin(uVar1);
+    local_34.y = local_28.y;
+    local_34.z = local_28.z + 30.0f * cM_scos(uVar1);
+    mLinkLinChk.Set(&local_28, &local_34, this);
+    if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+        return false;
+    }
+
+    mGndChk.SetPos(&local_34);
+    if (std::fabsf(dComIfG_Bgsp()->GroundCross(&mGndChk) - current.pos.y) > 5.0f) {
+        cXyz local_40;
+        cXyz local_4c;
+        local_40.x = local_34.x;
+        local_40.y = current.pos.y - 5.0f;
+        local_40.z = local_34.z;
+        local_4c.x = local_34.x + 90.0f * cM_ssin(shape_angle.y);
+        local_4c.y = local_40.y;
+        local_4c.z = local_34.z + 90.0f * cM_scos(shape_angle.y);
+        mLinkLinChk.Set(&local_40, &local_4c, this);
+        if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
             return false;
-        } else {
-            mGndChk.SetPos(&local_34);
-            if (std::fabsf(dComIfG_Bgsp()->GroundCross(&mGndChk) - current.pos.y) > 5.0f) {
-                cXyz local_40;
-                cXyz local_4c;
-                local_40.x = local_34.x;
-                local_40.y = current.pos.y - 5.0f;
-                local_40.z = local_34.z;
-                local_4c.x = local_34.x + 90.0f * cM_ssin(shape_angle.y);
-                local_4c.y = local_40.y;
-                local_4c.z = local_34.z + 90.0f * cM_scos(shape_angle.y);
-                mLinkLinChk.Set(&local_40, &local_4c, this);
-                if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
-                    return false;
-                }
-                triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-                if (cLib_distanceAngleS(cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z), shape_angle.y) < 0x549f) {
-                    return false;
-                }
-            }
-            cXyz local_58;
-            local_58.x = cM_ssin(shape_angle.y) * 4.5f;
-            local_58.y = 62.5f;
-            local_58.z = cM_scos(shape_angle.y) * 4.5f;
-            VECSubtract(&local_28, &local_58, &local_28);
-            VECSubtract(&local_34, &local_58, &local_34);
-            mLinkLinChk.Set(&local_28, &local_34, this);
-            if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
-                triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-                if (cLib_distanceAngleS(cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z), shape_angle.y) < 0x549f) {
-                    return false;
-                }
-            }
+        }
+        triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+        if (cLib_distanceAngleS(cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z), shape_angle.y) < 0x549f) {
+            return false;
+        }
+    }
+    cXyz local_58;
+    local_58.x = cM_ssin(shape_angle.y) * 4.5f;
+    local_58.y = 62.5f;
+    local_58.z = cM_scos(shape_angle.y) * 4.5f;
+    VECSubtract(&local_28, &local_58, &local_28);
+    VECSubtract(&local_34, &local_58, &local_34);
+    mLinkLinChk.Set(&local_28, &local_34, this);
+    if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+        triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+        if (cLib_distanceAngleS(cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z), shape_angle.y) < 0x549f) {
+            return false;
         }
     }
     return true;
@@ -167,7 +167,6 @@ void daPy_lk_c::setHangShapeOffset() {
         local_58 -= mLinkLinChk.GetCross();
         m34EC = (cM_atan2s(local_58.x, local_58.z) - 0x4000 - shape_angle.y);
     }
-    return;
 }
 
 /* 80134630-80134908       .text procHangStart_init__9daPy_lk_cFv */

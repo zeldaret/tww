@@ -113,7 +113,6 @@ void daPy_lk_c::setShipRidePosUseItem() {
         shape_angle.y += -0x4000;
         current.angle.y = shape_angle.y;
     }
-    return;
 }
 
 /* 80140018-801403E0       .text setShipRidePos__9daPy_lk_cFi */
@@ -192,7 +191,6 @@ void daPy_lk_c::setShipRidePos(int param_0) {
             cLib_addCalcAngleS(&mBodyAngle.y, sVar4, 4, 0x400, 0x80);
         }
     }
-    return;
 }
 
 /* 801403E0-80140480       .text setShipAttentionAnmSpeed__9daPy_lk_cFf */
@@ -206,7 +204,6 @@ void daPy_lk_c::setShipAttentionAnmSpeed(f32 param_0) {
         mFrameCtrlUpper[UPPER_MOVE2_e].setRate(0.0f);
         mFrameCtrlUpper[UPPER_MOVE2_e].setFrame(0.0f);
     }
-    return;
 }
 
 /* 80140480-801405F0       .text setShipAttnetionBodyAngle__9daPy_lk_cFv */
@@ -248,7 +245,6 @@ void daPy_lk_c::setShipAttnetionBodyAngle() {
         shape_angle.y = shape_angle.y + m34DA;
     }
     current.angle.y = shape_angle.y;
-    return;
 }
 
 /* 801405F0-80140C88       .text changeShipEndProc__9daPy_lk_cFv */
@@ -263,7 +259,6 @@ void daPy_lk_c::initShipBaseAnime() {
     }
     setActAnimeUpper(LKANM_BCK_FN_HAIR1, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
     m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
-    return;
 }
 
 /* 80140D04-80140D80       .text initShipCraneAnime__9daPy_lk_cFv */
@@ -282,7 +277,6 @@ void daPy_lk_c::initShipCraneAnime() {
     daPy_matAnm_c::m_maba_flg = 0;
     daPy_matAnm_c::m_maba_timer = 1;
     setSingleMoveAnime(dVar1, 1.0f, 0.0f, -1, 10.0f);
-    return;
 }
 
 /* 80140D80-80140EF0       .text procShipReady_init__9daPy_lk_cFv */

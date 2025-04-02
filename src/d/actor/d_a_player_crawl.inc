@@ -143,7 +143,6 @@ void daPy_lk_c::crawlBgCheck(cXyz* param_0, cXyz* param_1) {
     } else if (iVar2 != 0) {
         current.pos -= cStack_38;
     }
-    return;
 }
 
 /* 801390B8-801392BC       .text checkCrawlSideWall__9daPy_lk_cFP4cXyzP4cXyzP4cXyzP4cXyzPsPs */

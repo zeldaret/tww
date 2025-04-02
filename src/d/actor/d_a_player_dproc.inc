@@ -100,7 +100,6 @@ void daPy_lk_c::setShapeAngleToTalkActor() {
             daPy_HIO_turn_c0::m.field_0xA
         );
     }
-    return;
 }
 
 /* 8012D08C-8012D134       .text checkEndMessage__9daPy_lk_cFUl */
@@ -418,7 +417,6 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET);
         g_dComIfG_gameInfo.play.field_0x4977 = 1;
     }
-    return;
 }
 
 /* 8012E418-8012E6B4       .text setGetDemo__9daPy_lk_cFv */
@@ -662,7 +660,6 @@ void daPy_lk_c::dProcLavaDamage_init_sub() {
     mDemo.setDemoType(5);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10000000_e);
     daPy_py_c::changePlayer(this);
-    return;
 }
 
 /* 8012EE0C-8012EEE4       .text dProcLavaDamage_init__9daPy_lk_cFv */
@@ -728,7 +725,6 @@ void daPy_lk_c::dProcFreezeDamage_init_sub(int param_0) {
             dComIfGp_particle_setP1(dPa_name::ID_SCENE_827F, &local_28);
         }
     }
-    return;
 }
 
 /* 8012F0DC-8012F174       .text dProcFreezeDamage_init__9daPy_lk_cFv */
@@ -769,7 +765,6 @@ void daPy_lk_c::dProcDead_init_sub() {
     m3628 = fopMsgM_create(PROC_GAMEOVER);
     mDemo.setDemoType(5);
     daPy_py_c::changePlayer(this);
-    return;
 }
 
 /* 8012F288-8012F38C       .text dProcDead_init_sub2__9daPy_lk_cFv */
@@ -793,7 +788,6 @@ void daPy_lk_c::dProcDead_init_sub2() {
         );
         m34D6 = 1;
     }
-    return;
 }
 
 /* 8012F38C-8012F3B8       .text checkGameOverStart__9daPy_lk_cFv */
@@ -1443,7 +1437,6 @@ void daPy_lk_c::dProcPresent_init_sub() {
         ));
     }
     keepItemData();
-    return;
 }
 
 /* 80130BE8-80130CA0       .text dProcPresent_init__9daPy_lk_cFv */

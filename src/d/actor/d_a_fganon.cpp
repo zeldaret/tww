@@ -63,7 +63,6 @@ void anm_init(fganon_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 s
         J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Fganon", bckFileIdx);
         i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
     }
-    return;
 }
 
 /* 000002C8-00000338       .text tama_draw__FP12fganon_class */
@@ -75,7 +74,6 @@ void tama_draw(fganon_class* i_this) {
         i_this->mpBtkAnm->entry(pModel->getModelData());
         mDoExt_modelUpdateDL(pModel);
     }
-    return;
 }
 
 /* 00000338-00000420       .text daFganon_Draw__FP12fganon_class */
@@ -106,7 +104,6 @@ void deru_brk(fganon_class* i_this) {
     i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     fopAcM_seStart(i_this, JA_SE_CM_PG_APPEAR, 0);
     i_this->mbIsMaterialized = TRUE;
-    return;
 }
 
 /* 00000554-000006B8       .text kieru_brk__FP12fganon_classUc */
@@ -123,7 +120,6 @@ void kieru_brk(fganon_class* i_this, unsigned char param_2) {
         i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     }
     i_this->mbIsMaterialized = FALSE;
-    return;
 }
 
 /* 000006B8-000007EC       .text deru_brk2__FP12fganon_class */
@@ -135,7 +131,6 @@ void deru_brk2(fganon_class* i_this) {
     i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     fopAcM_seStart(i_this, JA_SE_CM_PG_APPEAR, 0);
     i_this->mbIsMaterialized = TRUE;
-    return;
 }
 
 /* 000007EC-00000920       .text kieru_brk2__FP12fganon_class */
@@ -148,7 +143,6 @@ void kieru_brk2(fganon_class* i_this) {
     i_this->mpBrkAnm2->init(i_this->mpKenModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, TRUE, 0);
     fopAcM_seStart(i_this, JA_SE_CM_PG_DISAPPEAR, 0);
     i_this->mbIsMaterialized = FALSE;
-    return;
 }
 
 /* 00000920-00000AEC       .text pos_move__FP12fganon_classUc */
@@ -173,7 +167,6 @@ void pos_move(fganon_class* i_this, unsigned char param_2) {
     cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
     MtxPosition(&local_44, &i_this->speed);
     i_this->current.pos += i_this->speed;
-    return;
 }
 
 /* 00000AEC-00000C14       .text fly_se_set__FP12fganon_class */
@@ -189,7 +182,6 @@ void fly_se_set(fganon_class* i_this) {
       uVar2 = 100;
     }
     fopAcM_seStart(i_this, JA_SE_CM_PG_FLYING, uVar2);
-    return;
 }
 
 /* 00000C14-00001170       .text fly__FP12fganon_class */
@@ -256,7 +248,6 @@ void fly(fganon_class* i_this) {
         i_this->m386 = 2;
         i_this->m388 = 0;
     }
-    return;
 }
 
 /* 000015A8-00001BD0       .text shot__FP12fganon_class */
@@ -353,7 +344,6 @@ void shot(fganon_class* i_this) {
     if ((i_this->m388 == 3) || (i_this->m388 == 4)) {
         mDoAud_monsSeStart(JA_SE_OBJ_PG_EBALL_FLY_S, &i_this->m3E0, 100, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
     }
-    return;
 }
 
 /* 00001BD0-000020B8       .text spinattack__FP12fganon_class */
@@ -427,7 +417,6 @@ void spinattack(fganon_class* i_this) {
             break;
         }
     }
-    return;
 }
 
 /* 000020B8-00002614       .text fly2__FP12fganon_class */
@@ -570,7 +559,6 @@ void tama_set(fganon_class* i_this) {
         i_this->mpBrkAnm3->play();
         i_this->mpBtkAnm->play();
     }
-    return;
 }
 
 /* 000029C8-00002A38       .text mahou_set__FP12fganon_class */
@@ -579,7 +567,6 @@ void mahou_set(fganon_class* i_this) {
         fopAcM_create(PROC_FGMAHOU, i, &i_this->m664, i_this->current.roomNo);
     }
     i_this->m670 = 0;
-    return;
 }
 
 /* 00002A38-000030C4       .text shot2__FP12fganon_class */
@@ -688,7 +675,6 @@ void shot2(fganon_class* i_this) {
     pos_move(i_this,0);
     fly_se_set(i_this);
     tama_set(i_this);
-    return;
 }
 
 /* 000030C4-00003690       .text spinattack2__FP12fganon_class */
@@ -836,7 +822,6 @@ void down(fganon_class* i_this) {
             i_this->health = 100;
         }
     }
-    return;
 }
 
 /* 00003F7C-00004300       .text kabe_check__FP12fganon_class */
@@ -919,7 +904,6 @@ void deru(fganon_class* i_this) {
         }
         break;
     }
-    return;
 }
 
 /* 000044CC-00004584       .text kieru__FP12fganon_class */
@@ -948,7 +932,6 @@ void kieru(fganon_class* i_this) {
             break;
         }
     }
-    return;
 }
 
 /* 00004584-00004BC8       .text fail__FP12fganon_class */
@@ -1068,7 +1051,6 @@ void fail(fganon_class* i_this) {
         default: 
             break;
     }
-    return;
 }
 
 /* 00004BC8-00004DB4       .text standby__FP12fganon_class */
@@ -1228,7 +1210,6 @@ void end(fganon_class* i_this) {
         case 6:
             break;
     }
-    return;
 }
 
 /* 00005350-000056A4       .text last_end__FP12fganon_class */
@@ -1320,7 +1301,6 @@ void last_end(fganon_class* i_this) {
         cLib_addCalc2(&i_this->m3C0, 100.0f, 1.0f, REG0_F(4) + 63.5f);
     }
     cLib_addCalcAngleS2(&i_this->current.angle.x, 0, 4, 0x800);
-    return;
 }
 
 /* 000056A4-00006288       .text damage_check__FP12fganon_class */
@@ -1557,7 +1537,6 @@ void damage_check(fganon_class* i_this) {
             }
         }
     }
-    return;
 }
 
 /* 00006288-00006560       .text move__FP12fganon_class */
@@ -2023,7 +2002,6 @@ void demo_camera(fganon_class* i_this) {
         JUTReport(410, 430, "K SUB  COUNT  %d", i_this->mB56);
         i_this->mB56++;
     }
-    return;
 }
 
 /* 00007434-0000778C       .text ball_bg_check__FP12fganon_class */
@@ -2320,7 +2298,6 @@ void energy_ball_move(fganon_class* i_this) {
     if (local_5c.abs() > 10000.0f) {
       i_this->m408 = 35;
     }
-    return;
 }
 
 /* 00008614-000086B4       .text mahou_se_set__FPvPv */

@@ -33,36 +33,35 @@ void daPy_lk_c::makeFairy(cXyz* param_0, u32 param_1) {
     onResetFlg0(daPyRFlg0_FAIRY_USE);
     resetCurse();
     fopAcM_fastCreate(PROC_NPC_FA1, param_1, param_0, fopAcM_GetRoomNo(this), &shape_angle);
-    return;
 }
 
 /* 801521A0-80152300       .text procBottleDrink_init__9daPy_lk_cFUs */
 BOOL daPy_lk_c::procBottleDrink_init(u16 param_0) {
     if (!dComIfGp_event_compulsory(this)) {
         return false;
-    } else {
-        mDemo.setDemoType(5);
-        int iVar1 = checkShipRideUseItem(1);
-        commonProcInit(daPyProc_BOTTLE_DRINK_e);
-        current.angle.y = shape_angle.y;
-        mVelocity = 0.0f;
-        setSingleMoveAnime(
-            ANM_BINDRINKPRE,
-            1.0f,
-            daPy_HIO_bottle_c0::m.field_0x5C,
-            daPy_HIO_bottle_c0::m.field_0xC,
-            daPy_HIO_bottle_c0::m.field_0x60
-        );
-        if (changeBottleDrinkFace(param_0)) {
-            setTextureAnime(0x85, 0);
-        }
-        keepItemData();
-        setBottleModel(param_0);
-        dComIfGp_setPlayerStatus1(0, daPyStts1_UNK2000_e);
-        m3570 = 1;
-        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &m3570, 0);
-        initShipRideUseItem(iVar1, 2);
     }
+
+    mDemo.setDemoType(5);
+    int iVar1 = checkShipRideUseItem(1);
+    commonProcInit(daPyProc_BOTTLE_DRINK_e);
+    current.angle.y = shape_angle.y;
+    mVelocity = 0.0f;
+    setSingleMoveAnime(
+        ANM_BINDRINKPRE,
+        1.0f,
+        daPy_HIO_bottle_c0::m.field_0x5C,
+        daPy_HIO_bottle_c0::m.field_0xC,
+        daPy_HIO_bottle_c0::m.field_0x60
+    );
+    if (changeBottleDrinkFace(param_0)) {
+        setTextureAnime(0x85, 0);
+    }
+    keepItemData();
+    setBottleModel(param_0);
+    dComIfGp_setPlayerStatus1(0, daPyStts1_UNK2000_e);
+    m3570 = 1;
+    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &m3570, 0);
+    initShipRideUseItem(iVar1, 2);
     return true;
 }
 
@@ -75,43 +74,43 @@ BOOL daPy_lk_c::procBottleDrink() {
 BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
     if (mCurProc == daPyProc_BOTTLE_OPEN_e) {
         return true;
-    } else {
-        if (mDemo.getDemoMode() != 0x3d) {
-            if (!dComIfGp_event_compulsory(this)) {
-                return false;
-            }
-            mDemo.setDemoType(5);
-        } else {
-            param_0 = dComIfGp_event_getPreItemNo();
-        }
-        int iVar1 = checkShipRideUseItem(1);
-        commonProcInit(daPyProc_BOTTLE_OPEN_e);
-        current.angle.y = shape_angle.y;
-        mVelocity = 0.0f;
-        setSingleMoveAnime(
-            ANM_BINOPENPRE,
-            1.0f,
-            daPy_HIO_bottle_c0::m.field_0x3C,
-            daPy_HIO_bottle_c0::m.field_0x6,
-            daPy_HIO_bottle_c0::m.field_0x40
-        );
-        keepItemData();
-        setBottleModel(param_0);
-        dComIfGp_setPlayerStatus1(0, daPyStts1_UNK4000_e);
-        if (mEquipItem == dItem_FAIRY_BOTTLE_e) {
-            m3570 = 3;
-        } else {
-            m3570 = 2;
-        }
-        if (mDemo.getDemoMode() != 0x3d) {
-            dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &m3570, 0);
-        }
-        initShipRideUseItem(iVar1, 2);
-        m34D4 = 0;
-        m34D6 = 0;
-        m34D0 = -1;
-        m34D8 = 0;
     }
+
+    if (mDemo.getDemoMode() != 0x3d) {
+        if (!dComIfGp_event_compulsory(this)) {
+            return false;
+        }
+        mDemo.setDemoType(5);
+    } else {
+        param_0 = dComIfGp_event_getPreItemNo();
+    }
+    int iVar1 = checkShipRideUseItem(1);
+    commonProcInit(daPyProc_BOTTLE_OPEN_e);
+    current.angle.y = shape_angle.y;
+    mVelocity = 0.0f;
+    setSingleMoveAnime(
+        ANM_BINOPENPRE,
+        1.0f,
+        daPy_HIO_bottle_c0::m.field_0x3C,
+        daPy_HIO_bottle_c0::m.field_0x6,
+        daPy_HIO_bottle_c0::m.field_0x40
+    );
+    keepItemData();
+    setBottleModel(param_0);
+    dComIfGp_setPlayerStatus1(0, daPyStts1_UNK4000_e);
+    if (mEquipItem == dItem_FAIRY_BOTTLE_e) {
+        m3570 = 3;
+    } else {
+        m3570 = 2;
+    }
+    if (mDemo.getDemoMode() != 0x3d) {
+        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &m3570, 0);
+    }
+    initShipRideUseItem(iVar1, 2);
+    m34D4 = 0;
+    m34D6 = 0;
+    m34D0 = -1;
+    m34D8 = 0;
     return true;
 }
 

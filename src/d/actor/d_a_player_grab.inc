@@ -44,7 +44,6 @@ void daPy_lk_c::setWeaponBlur() {
 
     mSwBlur.mpPosBuffer = new (0x20) Vec[2 * 0x300];
     mDoExt_setCurrentHeap(pJVar1);
-    return;
 }
 
 /* 8013A904-8013A97C       .text checkGrabBarrelSearch__9daPy_lk_cFi */
@@ -159,7 +158,7 @@ void daPy_lk_c::setGrabItemPos() {
                         pfVar8->speedF = 0.0f;
                         pfVar8->current.pos.y = dVar9;
                         freeGrabItem();
-                        goto LAB_8013af64;
+                        return;
                     }
                 }
                 if (fopAcM_GetName(pfVar8) == PROC_MT) {
@@ -189,8 +188,6 @@ void daPy_lk_c::setGrabItemPos() {
             pfVar8->current.pos.y = pfVar8->current.pos.y + m35CC;
         }
     }
-LAB_8013af64:
-    return;
 }
 
 /* 8013AF84-8013B05C       .text freeGrabItem__9daPy_lk_cFv */
@@ -212,7 +209,6 @@ void daPy_lk_c::freeGrabItem() {
     m35CC = 0.0f;
     offNoResetFlg0(daPyFlg0_UNK400);
     dComIfGp_clearPlayerStatus1(0, daPyStts1_UNK40000_e);
-    return;
 }
 
 /* 8013B05C-8013B458       .text checkNextActionGrab__9daPy_lk_cFv */
@@ -222,76 +218,75 @@ BOOL daPy_lk_c::checkNextActionGrab() {
 
     if (pfVar7 == NULL) {
         return false;
+    }
+
+    int iVar3 = checkGrabBarrelSearch(0);
+    if (fopAcM_CheckStatus(pfVar7, fopAcStts_UNK10000_e) && !checkGrabSpecialHeavyState()) {
+        g_dComIfG_gameInfo.play.field_0x492d = 14;
+        dComIfGp_setDoStatus(14);
     } else {
-        int iVar3 = checkGrabBarrelSearch(0);
-        if (fopAcM_CheckStatus(pfVar7, fopAcStts_UNK10000_e) && !checkGrabSpecialHeavyState()) {
-            g_dComIfG_gameInfo.play.field_0x492d = 14;
-            dComIfGp_setDoStatus(14);
-        } else {
-            g_dComIfG_gameInfo.play.field_0x492d = 9;
-        }
-        if (mpAttnActorLockOn == NULL && mpAttnEntryA != NULL && iVar3 == 0 &&
-            mpAttnEntryA->mType == fopAc_Attn_TYPE_DOOR_e && fopAcM_CheckStatus(pfVar7, fopAcStts_UNK2000000_e))
-        {
-            dComIfGp_setDoStatus(11);
-        } else if (iVar3 != 0) {
-            dComIfGp_setDoStatus(9);
-        } else {
-            if (mpAttention->Lockon()) {
-                int iVar4 = getDirectionFromShapeAngle();
-                if ((mStickDistance <= 0.05f) || (mStickDistance > 0.05f && (iVar4 == 0 || (iVar4 == 1)))) {
-                    dComIfGp_setDoStatus(14);
-                }
-            } else {
+        g_dComIfG_gameInfo.play.field_0x492d = 9;
+    }
+    if (mpAttnActorLockOn == NULL && mpAttnEntryA != NULL && iVar3 == 0 &&
+        mpAttnEntryA->mType == fopAc_Attn_TYPE_DOOR_e && fopAcM_CheckStatus(pfVar7, fopAcStts_UNK2000000_e))
+    {
+        dComIfGp_setDoStatus(11);
+    } else if (iVar3 != 0) {
+        dComIfGp_setDoStatus(9);
+    } else {
+        if (mpAttention->Lockon()) {
+            int iVar4 = getDirectionFromShapeAngle();
+            if ((mStickDistance <= 0.05f) || (mStickDistance > 0.05f && (iVar4 == 0 || (iVar4 == 1)))) {
                 dComIfGp_setDoStatus(14);
             }
+        } else {
+            dComIfGp_setDoStatus(14);
         }
-        if ((setHintActor()) && (doTrigger())) {
-            fopAcM_orderZHintEvent(this, dComIfGp_att_getZHint());
+    }
+    if ((setHintActor()) && (doTrigger())) {
+        fopAcM_orderZHintEvent(this, dComIfGp_att_getZHint());
+        return true;
+    } else {
+        if ((checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 1)) ||
+            (checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD) && (checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 0))))
+        {
+            changeDragonShield(1);
             return true;
         } else {
-            if ((checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 1)) ||
-                (checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD) && (checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 0))))
+            if ((checkSetItemTrigger(dItem_IRON_BOOTS_e, 1)) ||
+                (checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS) && (checkSetItemTrigger(dItem_IRON_BOOTS_e, 0))))
             {
-                changeDragonShield(1);
-                return true;
-            } else {
-                if ((checkSetItemTrigger(dItem_IRON_BOOTS_e, 1)) ||
-                    (checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS) && (checkSetItemTrigger(dItem_IRON_BOOTS_e, 0))))
-                {
-                    procBootsEquip_init(dItem_IRON_BOOTS_e);
-                } else if ((fopAcM_GetName(pfVar7) == PROC_BOMB) && (checkSetItemTrigger(dItem_BOMB_BAG_e, 0))) {
-                    procGrabThrow_init(0);
-                } else if ((cancelTrigger()) && (checkSwordEquip()) && (iVar3 == 0)) {
-                    if (g_dComIfG_gameInfo.play.field_0x492d == 14) {
-                        procGrabThrow_init(1);
-                    } else {
-                        freeGrabItem();
-                        setAnimeEquipSword(0);
-                        return true;
-                    }
-                } else if (((!doTrigger()) || (checkNoResetFlg0(daPy_FLG0(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000)))
-                           ) ||
-                           (dComIfGp_getDoStatus() == 11))
-                {
-                    fopAcM_orderDoorEvent(this, mpAttnActorA);
-                    return true;
-                } else if (((!doTrigger()) || (dComIfGp_getDoStatus() != 14)) &&
-                           (g_dComIfG_gameInfo.play.field_0x492d != 14 ||
-                            ((mItemTrigger & 0x1f) == 0 && (spActionTrigger()))))
-                {
-                    if (cancelTrigger()) {
-                        procGrabThrow_init(1);
-                    } else {
-                        procGrabThrow_init(0);
-                    }
-                } else if ((((mItemTrigger & 0x1f) != 0) || (spActionTrigger())) &&
-                           (!doTrigger() || (dComIfGp_getDoStatus() != 0)))
-                {
-                    procGrabPut_init();
+                procBootsEquip_init(dItem_IRON_BOOTS_e);
+            } else if ((fopAcM_GetName(pfVar7) == PROC_BOMB) && (checkSetItemTrigger(dItem_BOMB_BAG_e, 0))) {
+                procGrabThrow_init(0);
+            } else if ((cancelTrigger()) && (checkSwordEquip()) && (iVar3 == 0)) {
+                if (g_dComIfG_gameInfo.play.field_0x492d == 14) {
+                    procGrabThrow_init(1);
                 } else {
-                    return false;
+                    freeGrabItem();
+                    setAnimeEquipSword(0);
+                    return true;
                 }
+            } else if (((!doTrigger()) || (checkNoResetFlg0(daPy_FLG0(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000)))) ||
+                       (dComIfGp_getDoStatus() == 11))
+            {
+                fopAcM_orderDoorEvent(this, mpAttnActorA);
+                return true;
+            } else if (((!doTrigger()) || (dComIfGp_getDoStatus() != 14)) &&
+                       (g_dComIfG_gameInfo.play.field_0x492d != 14 ||
+                        ((mItemTrigger & 0x1f) == 0 && (spActionTrigger()))))
+            {
+                if (cancelTrigger()) {
+                    procGrabThrow_init(1);
+                } else {
+                    procGrabThrow_init(0);
+                }
+            } else if ((((mItemTrigger & 0x1f) != 0) || (spActionTrigger())) &&
+                       (!doTrigger() || (dComIfGp_getDoStatus() != 0)))
+            {
+                procGrabPut_init();
+            } else {
+                return false;
             }
         }
     }
@@ -316,7 +311,6 @@ void daPy_lk_c::initGrabNextMode() {
         m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
         checkNextMode(0);
     }
-    return;
 }
 
 /* 8013B56C-8013B6F4       .text procGrabReady_init__9daPy_lk_cFv */
@@ -900,16 +894,15 @@ BOOL daPy_lk_c::procGrabRebound() {
     if (pfVar2 == NULL) {
         resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         return checkNextMode(0);
-    } else {
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-            initGrabNextMode();
-        } else {
-            if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_grab_c0::m.field_0x9C) &&
-                (fopAcM_CheckStatus(pfVar2, fopAcStts_UNK10000_e)))
-            {
-                initGrabNextMode();
-            }
-        }
-        return true;
     }
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
+        initGrabNextMode();
+    } else {
+        if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_grab_c0::m.field_0x9C) &&
+            (fopAcM_CheckStatus(pfVar2, fopAcStts_UNK10000_e)))
+        {
+            initGrabNextMode();
+        }
+    }
+    return true;
 }
