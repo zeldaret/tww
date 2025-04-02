@@ -4,14 +4,6 @@
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_angle.h"
 
-struct dCamera__Type {
-    /* 0x00 */ char* mName[8];
-    /* 0x08 */ u8 m08[0x18 - 0x00];
-    /* 0x18 */ s16 mStyles[14];
-    /* 0x34 */ u8 m34[0x40 - 0x34];
-    /* Size: 0x40*/
-};
-
 struct dCamera__Style {
     /* 0x00 */ u32 m00;
     /* 0x04 */ u32 m04;

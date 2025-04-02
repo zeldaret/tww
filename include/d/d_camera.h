@@ -35,6 +35,11 @@ struct dCamera__EventParam {
     /* 0x10 */ int mValue;
 };
 
+struct dCamera__Type {
+    /* 0x00 */ char name[24];
+    /* 0x18 */ s16 mStyles[2][11];
+};  // Size: 0x44
+
 class d2DBSplinePath {
 public:
     ~d2DBSplinePath() {}
@@ -146,7 +151,9 @@ public:
     /* 0x178 */ f32 mStickCPosXDelta;
     /* 0x17C */ f32 mStickCPosYDelta;
     /* 0x180 */ f32 mStickCValueDelta;
-    /* 0x184 */ u8 m184[0x190 - 0x184];
+    /* 0x184 */ u32 m184;
+    /* 0x188 */ u32 m188;
+    /* 0x18C */ u32 m18C;
     /* 0x190 */ f32 mTriggerLeftLast;
     /* 0x194 */ f32 mTriggerLeftDelta;
     /* 0x198 */ u8 m198;
@@ -159,12 +166,12 @@ public:
     /* 0x1A5 */ u8 m1A5;
     /* 0x1A6 */ u8 m1A6;
     /* 0x1A7 */ u8 m1A7;
-    /* 0x1A8 */ u8 m1A8;
-    /* 0x1A9 */ u8 m1A9;
-    /* 0x1AA */ u8 m1AA;
-    /* 0x1AB */ u8 m1AB;
-    /* 0x1AC */ u8 m1AC;
-    /* 0x1AD */ u8 m1AD;
+    /* 0x1A8 */ u8 mHoldX;
+    /* 0x1A9 */ u8 mTrigX;
+    /* 0x1AA */ u8 mHoldY;
+    /* 0x1AB */ u8 mTrigY;
+    /* 0x1AC */ u8 mHoldZ;
+    /* 0x1AD */ u8 mTrigZ;
     /* 0x1AE */ u8 m1AE;
     /* 0x1AF */ u8 m1AF[0x1B0 - 0x1AF];
     /* 0x1B0 */ dCamForcusLine mForcusLine;
@@ -296,7 +303,7 @@ public:
     void Start();
     void Stop();
     void Stay();
-    void ChangeModeOK(s32);
+    bool ChangeModeOK(s32);
     void initPad();
     void updatePad();
     void initMonitor();

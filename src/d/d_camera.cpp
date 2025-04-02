@@ -12,9 +12,10 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_pirateship.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 class camera_process_class;
-dCamera__Type types[63];
+extern dCamera__Type types[63];
 
 /* 80161790-801618B8       .text __ct__9dCamera_cFP12camera_class */
 dCamera_c::dCamera_c(camera_class*) : mCamParam(0) {
@@ -82,7 +83,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
             mMapToolType = mapToolType;
         }
     }
-    mCurStyle = types[mCurType].mStyles[mCurMode];
+    mCurStyle = types[mCurType].mStyles[0][mCurMode];
     m130 = -1;
     mStageMapToolCameraIdx = 0xFF;
     m0E8 = -1;
@@ -240,27 +241,74 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
 
 /* 80162128-80162134       .text Start__9dCamera_cFv */
 void dCamera_c::Start() {
-    /* Nonmatching */
+    m004 = 1;
 }
 
 /* 80162134-80162140       .text Stop__9dCamera_cFv */
 void dCamera_c::Stop() {
-    /* Nonmatching */
+    m004 = 0;
 }
 
 /* 80162140-8016214C       .text Stay__9dCamera_cFv */
 void dCamera_c::Stay() {
-    /* Nonmatching */
+    m005 = 1;
 }
 
 /* 8016214C-801621A0       .text ChangeModeOK__9dCamera_cFl */
-void dCamera_c::ChangeModeOK(s32) {
-    /* Nonmatching */
+bool dCamera_c::ChangeModeOK(s32 param_1) {
+    if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
+        return 0;
+    }
+    return !(types[mCurType].mStyles[0][param_1] < 0);
 }
 
 /* 801621A0-801623A0       .text initPad__9dCamera_cFv */
 void dCamera_c::initPad() {
-    /* Nonmatching */
+    mStickMainPosXLast = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
+    mStickMainPosYLast = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
+    mStickMainValueLast = g_mDoCPd_cpadInfo[mPadId].mMainStickValue;
+
+    mStickMainPosXDelta = 0.0f;
+    mStickMainPosYDelta = 0.0f;
+    mStickMainValueDelta = 0.0f;
+
+    mStickCPosXLast = g_mDoCPd_cpadInfo[mPadId].mCStickPosX;
+    mStickCPosYLast = g_mDoCPd_cpadInfo[mPadId].mCStickPosY;
+    mStickCValueLast = g_mDoCPd_cpadInfo[mPadId].mCStickValue;
+
+    mStickCPosXDelta = 0.0f;
+    mStickCPosYDelta = 0.0f;
+    mStickCValueDelta = 0.0f;
+
+    m18C = 0;
+    m188 = 0;
+    m184 = 0;
+
+    mTriggerLeftLast = g_mDoCPd_cpadInfo[mPadId].mTriggerLeft;
+    mTriggerLeftDelta = 0.0f;
+
+    m198 = 0;
+    m199 = 0;
+    m19A = 0;
+    m19B = 0;
+
+    mTriggerRightLast = g_mDoCPd_cpadInfo[mPadId].mTriggerRight;
+    mTriggerRightDelta = 0.0f;
+
+    m1A4 = 0;
+    m1A5 = 0;
+    m1A6 = 0;
+    m1A7 = 0;
+
+    mHoldX = 1 - ((CPad_CHECK_HOLD_X(mPadId) & 1) == 0);
+    mTrigX = 1 - ((CPad_CHECK_TRIG_X(mPadId) & 1) == 0);
+    mHoldY = 1 - ((CPad_CHECK_HOLD_Y(mPadId) & 1) == 0);
+    mTrigY = 1 - ((CPad_CHECK_TRIG_Y(mPadId) & 1) == 0);
+    mHoldY = 1 - ((CPad_CHECK_HOLD_Y(mPadId) & 1) == 0);
+    mTrigY = 1 - ((CPad_CHECK_TRIG_Y(mPadId) & 1) == 0);
+    mHoldZ = 1 - ((CPad_CHECK_HOLD_Z(mPadId) & 1) == 0);
+    mTrigZ = 1 - ((CPad_CHECK_TRIG_Z(mPadId) & 1) == 0);
+    m1AE = 0;
 }
 
 /* 801623A0-80162710       .text updatePad__9dCamera_cFv */

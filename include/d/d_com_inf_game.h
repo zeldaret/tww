@@ -2998,6 +2998,10 @@ inline u8 dComIfGp_evmng_getEventEndSound(s16 eventIdx) {
     return g_dComIfG_gameInfo.play.getEvtManager().getEventEndSound(eventIdx);
 }
 
+inline int dComIfGp_evmng_cameraPlay() {
+    return dComIfGp_getPEvtManager()->getCameraPlay();
+}
+
 /**
  * === DEMO ===
  */
