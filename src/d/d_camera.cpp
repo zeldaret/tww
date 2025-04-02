@@ -95,8 +95,8 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     m318 = -1e+09f;
     m310 = -1e+09f;
     mBG.m58 = -1e+09f;
-    mBG.m04.OffNormalGrp(); //mBG.m54 = mBG.m54 & 0xfffffffe;
-    mBG.m04.OnWaterGrp(); //mBG.m54 = mBG.m54 | 2;
+    mBG.m04.OffNormalGrp();
+    mBG.m04.OnWaterGrp();
     m31D = 0;
     m31C = 0;
     m32C = cXyz::Zero;
@@ -256,10 +256,11 @@ void dCamera_c::Stay() {
 
 /* 8016214C-801621A0       .text ChangeModeOK__9dCamera_cFl */
 bool dCamera_c::ChangeModeOK(s32 param_1) {
+    /* Nonmatching */
     if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
         return 0;
     }
-    return !(types[mCurType].mStyles[0][param_1] < 0);
+    return !(types[mCurType].mStyles[0][param_1] < 0); // something to do with the array sizing of these variables is wrong
 }
 
 /* 801621A0-801623A0       .text initPad__9dCamera_cFv */
@@ -320,7 +321,6 @@ void dCamera_c::updatePad() {
     float fVar1;
     float fVar2;
     float fVar3;
-    int iVar4;
     cSAngle local_48;
     
     if (chkFlag(0x1000000)) {
@@ -439,7 +439,6 @@ void dCamera_c::initMonitor() {
 /* 801627A4-801628DC       .text updateMonitor__9dCamera_cFv */
 void dCamera_c::updateMonitor() {
     float playerMonitorHoritzontalDist;
-    cXyz local_28;
     cXyz playerPos;
     
     if (mpPlayerActor != NULL) {
@@ -452,7 +451,7 @@ void dCamera_c::updateMonitor() {
         m238 += (playerMonitorHoritzontalDist - m238) * 0.075f;
         m234 = playerMonitorHoritzontalDist;
         mMonitorPos = playerPos;
-        if (!m144 && !g_mDoCPd_cpadInfo[0].mButtonHold.right && mStickMainValueLast < 0.05f && mStickCValueLast < 0.05f) {
+        if (!m144 && *(u16*)&g_mDoCPd_cpadInfo[0].mButtonHold == 0 && mStickMainValueLast < 0.05f && mStickCValueLast < 0.05f) { // Possible union between u16 and bitfield rather than *(u16*) cast
             m240++;
         }
         else {
@@ -463,74 +462,65 @@ void dCamera_c::updateMonitor() {
 }
 
 /* 801628DC-80163020       .text calcPeepAngle__9dCamera_cFv */
-void dCamera_c::calcPeepAngle() {
-    uint uVar1;
+cSAngle dCamera_c::calcPeepAngle() {
+    /* Nonmatching */
     dCamera_c* camera;
-    cSAngle local_1d8;
-    cSAngle local_1c0;
-    cXyz local_194;
-    cXyz local_188;
-    cXyz local_134;
-    cXyz local_128;
-    cM3dGPla* plane;
-    
-    local_1c0 = cSAngle(cSAngle::_0);
-    uVar1 = g_dComIfG_gameInfo.play.mPlayerStatus[camera->mPadId * 2][0];
+    cSAngle tempAng;
+    cSAngle res(cSAngle::_0);
+
+    u32 uVar1 = g_dComIfG_gameInfo.play.mPlayerStatus[camera->mPadId][0];
+
     if (uVar1 & 0x20) {
-        local_128.x = 0.0f;
-        local_128.y = 0.0f;
+        f32 temp_30 = 30.0f;
+        cXyz local_b8(0.0f, 0.0f, -temp_30);
 
-        local_134.z = -30.0f;
-        local_134.x = -50.0f;
-        local_134.y = 0.0f;
+        f32 temp_50 = 50.0f;
+        cXyz local_ac(-temp_50, 0.0f, -temp_30);
 
-        local_128.z = local_134.z;
+        cXyz local_a0(relationalPos(camera->mpPlayerActor, &local_b8));
+        cXyz local_94(relationalPos(camera->mpPlayerActor, &local_ac));
 
-        local_188 = relationalPos(camera->mpPlayerActor, &local_128);
+        dBgS_CamLinChk_NorWtr lin_chk;
 
-        local_194 = relationalPos(camera->mpPlayerActor, &local_134);
-
-        dBgS_CamLinChk lin_chk;
-
-        if (lineBGCheck(&local_194, &local_188, &lin_chk, 0x7f)) {
-            plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
-            local_1d8 = cSAngle::_270 + (cSGlobe(plane->mNormal).U() - directionOf((fopAc_ac_c *)camera)); // GetNP() doesn't work?
-            local_1c0.Set(local_1d8.Val());
+        if (lineBGCheck(&local_94, &local_a0, &lin_chk, 0x7f)) {
+            cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
+            tempAng = cSAngle::_90 + (cSGlobe(plane->mNormal).U() - directionOf((fopAc_ac_c *)camera)); // GetNP() doesn't work?
+            res.Set(tempAng.Val());
         }
     }
     else if (uVar1 & 0x40) {
-        local_128.x = 0.0f;
-        local_128.y = 0.0f;
+        f32 temp_30 = 30.0f;
+        cXyz local_88(0.0f, 0.0f, -temp_30);
 
-        local_134.z = -30.0f;
-        local_134.x = 50.0f;
-        local_134.y = 0.0f;
+        cXyz local_7c(50.0f, 0.0f, -temp_30);
 
-        local_128.z = local_134.z;
+        cXyz local_70(relationalPos(camera->mpPlayerActor, &local_88));
+        cXyz local_64(relationalPos(camera->mpPlayerActor, &local_7c));
 
-        local_188 = relationalPos(camera->mpPlayerActor, &local_128);
-
-        local_194 = relationalPos(camera->mpPlayerActor, &local_134);
-
-        dBgS_CamLinChk lin_chk;
+        dBgS_CamLinChk_NorWtr lin_chk;
         
-        if (lineBGCheck(&local_194, &local_188, &lin_chk, 0x7f)) {
-            plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
-            local_1d8 = cSAngle::_270 + (cSGlobe(plane->mNormal).U() - directionOf((fopAc_ac_c *)camera));
-            local_1c0.Set(local_1d8.Val());
+        if (lineBGCheck(&local_64, &local_70, &lin_chk, 0x7f)) {
+            cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
+            tempAng = cSAngle::_270 + (cSGlobe(plane->mNormal).U() - directionOf((fopAc_ac_c *)camera));
+            res.Set(tempAng.Val());
         }
     }
-    //cSAngle((cSAngle *)this,local_1c0);
-}
-
-/* 80163020-8016319C       .text __dt__21dBgS_CamLinChk_NorWtrFv */
-dBgS_CamLinChk_NorWtr::~dBgS_CamLinChk_NorWtr() {
-    /* Nonmatching */
+    return cSAngle(res);
 }
 
 /* 801632F0-8016336C       .text Att__9dCamera_cFv */
 void dCamera_c::Att() {
-    /* Nonmatching */
+    fopAc_ac_c* target;
+    
+    if (mpPlayerActor && !chkFlag(0x2000000)) {
+        if (dComIfGp_getAttention().LockonTruth()) {
+            target = dComIfGp_getAttention().LockonTarget(0);
+        }
+        else {
+            target = NULL;
+        }
+        mpLockonTarget = target;
+    }
 }
 
 /* 8016336C-80163514       .text checkForceLockTarget__9dCamera_cFv */
@@ -750,11 +740,6 @@ void dCamera_c::forwardCheckAngle() {
 
 /* 80167F08-80168D44       .text bumpCheck__9dCamera_cFUl */
 void dCamera_c::bumpCheck(u32) {
-    /* Nonmatching */
-}
-
-/* 80168D44-80168EF0       .text __ct__21dBgS_CamLinChk_NorWtrFv */
-dBgS_CamLinChk_NorWtr::dBgS_CamLinChk_NorWtr() {
     /* Nonmatching */
 }
 

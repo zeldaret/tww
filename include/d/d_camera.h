@@ -310,7 +310,7 @@ public:
     void updatePad();
     void initMonitor();
     void updateMonitor();
-    void calcPeepAngle();
+    cSAngle calcPeepAngle();
     void Att();
     void checkForceLockTarget();
     void Run();
