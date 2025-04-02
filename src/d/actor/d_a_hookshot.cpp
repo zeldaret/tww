@@ -113,13 +113,13 @@ static BOOL daHookshot_Draw(daHookshot_c* i_this) {
 void daHookshot_rockLineCallback(fopAc_ac_c* hookshot_actor, dCcD_GObjInf* objInf, fopAc_ac_c* collided_actor, dCcD_GObjInf*) {
     daHookshot_c* i_this = (daHookshot_c*)hookshot_actor;
     f32 f31 = objInf->GetAtHitPosP()->abs2(i_this->current.pos);
-    f32 f1 = i_this->m2CC.abs2(i_this->current.pos);
+    f32 f1 = i_this->getObjSightCrossPos()->abs2(i_this->current.pos);
     if (f1 > f31) {
-        i_this->m2CC = *objInf->GetAtHitPosP();
+        i_this->setObjSightCrossPos(objInf->GetAtHitPosP());
         if (fopAcM_CheckStatus(collided_actor, fopAcStts_UNK80000_e | fopAcStts_UNK200000_e | fopAcStts_UNK10000000_e)) {
-            i_this->m2B0 = 1;
+            i_this->onObjHookFlg();
         } else {
-            i_this->m2B0 = 0;
+            i_this->offObjHookFlg();
         }
     }
 }
@@ -127,12 +127,12 @@ void daHookshot_rockLineCallback(fopAc_ac_c* hookshot_actor, dCcD_GObjInf* objIn
 /* 800F13E8-800F14CC       .text procWait_init__12daHookshot_cFi */
 BOOL daHookshot_c::procWait_init(BOOL playSe) {
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
-    fopAcM_SetParam(this, 0);
+    fopAcM_SetParam(this, Mode_Wait);
     mCurrProcFunc = &daHookshot_c::procWait;
     mChainCnt = 0;
     current.pos = link->getHookshotRootPos();
     mCarryActorID = fpcM_ERROR_PROCESS_ID_e;
-    m2B0 = 0;
+    mObjHookFlg = FALSE;
     if (playSe) {
         mDoAud_seStart(JA_SE_LK_HS_WIND_UP_FIN, &link->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     }
@@ -148,61 +148,61 @@ BOOL daHookshot_c::procWait() {
     mMtx[0][3] = current.pos.x;
     mMtx[1][3] = current.pos.y;
     mMtx[2][3] = current.pos.z;
-    m2B0 = 0;
+    mObjHookFlg = FALSE;
     
-    if (fopAcM_GetParam(this) == 1) {
+    if (fopAcM_GetParam(this) == Mode_Shot) {
         int angleY = link->getBodyAngleY() + link->shape_angle.y;
         int angleX = link->getBodyAngleX();
         mMoveVec.x = cM_ssin(angleY) * cM_scos(angleX);
         mMoveVec.y = -cM_ssin(angleX);
         mMoveVec.z = cM_scos(angleY) * cM_scos(angleX);
-        mCps.ResetAtHit();
-        mCps.OffAtNoTgHitInfSet();
-        mCps.SetAtHitCallback(NULL);
+        mSightCps.ResetAtHit();
+        mSightCps.OffAtNoTgHitInfSet();
+        mSightCps.SetAtHitCallback(NULL);
         
         cXyz r1_3C = current.pos - mMoveVec * 60.0f;
         mLinChk.Set(&r1_3C, &current.pos, this);
         m2A0 = true;
         if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
             if (dComIfG_Bgsp()->ChkPolyHSStick(mLinChk)) {
-                fopAcM_SetParam(this, 3);
-                m2A2 = 0;
+                fopAcM_SetParam(this, Mode_Pull);
+                mShipRideFlg = false;
                 mCurrProcFunc = &daHookshot_c::procPlayerPull;
                 cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinChk);
-                m2B4 = cM_atan2s(triPla->GetNP()->y, triPla->GetNP()->absXZ());
-                m2B6 = cM_atan2s(-triPla->GetNP()->x, -triPla->GetNP()->z);
-                m2B8 = 0;
+                mHookAngle.x = cM_atan2s(triPla->GetNP()->y, triPla->GetNP()->absXZ());
+                mHookAngle.y = cM_atan2s(-triPla->GetNP()->x, -triPla->GetNP()->z);
+                mHookAngle.z = 0;
                 mMoveVec = cXyz::Zero;
             } else {
-                fopAcM_SetParam(this, 2);
+                fopAcM_SetParam(this, Mode_Return);
                 mCurrProcFunc = &daHookshot_c::procReturn;
             }
         } else {
             mMoveVec *= 7.0f;
             
-            mCps.SetStartEnd(r1_3C, current.pos);
-            mCps.SetR(5.0f);
-            mCps.CalcAtVec();
-            dComIfG_Ccsp()->Set(&mCps);
+            mSightCps.SetStartEnd(r1_3C, current.pos);
+            mSightCps.SetR(5.0f);
+            mSightCps.CalcAtVec();
+            dComIfG_Ccsp()->Set(&mSightCps);
             // Using the inline breaks the match.
             // dComIfG_Ccsp()->SetMass(&mCps, 1);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mCps, 1);
+            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSightCps, 1);
             
             m2A3 = 0;
             mCurrProcFunc = &daHookshot_c::procShot;
         }
     } else {
-        mCps.OnAtNoTgHitInfSet();
-        m2CC.set(
+        mSightCps.OnAtNoTgHitInfSet();
+        mObjSightCrossPos.set(
             current.pos.x + cM_ssin(link->shape_angle.y) * 1500.0f * cM_scos(link->getBodyAngleX()),
             current.pos.y - cM_ssin(link->getBodyAngleX()) * 1500.0f,
             current.pos.z + cM_scos(link->shape_angle.y) * 1500.0f * cM_scos(link->getBodyAngleX())
         );
-        mCps.SetStartEnd(current.pos, m2CC);
-        mCps.SetR(5.0f);
-        mCps.CalcAtVec();
-        mCps.SetAtHitCallback(daHookshot_rockLineCallback);
-        dComIfG_Ccsp()->Set(&mCps);
+        mSightCps.SetStartEnd(current.pos, mObjSightCrossPos);
+        mSightCps.SetR(5.0f);
+        mSightCps.CalcAtVec();
+        mSightCps.SetAtHitCallback(daHookshot_rockLineCallback);
+        dComIfG_Ccsp()->Set(&mSightCps);
     }
     
     return TRUE;
@@ -296,8 +296,8 @@ cPhs_State daHookshot_c::create() {
     gravity = -5.0f;
     
     mStts.Init(10, 0xFF, this);
-    mCps.Set(l_at_cps_src);
-    mCps.SetStts(&mStts);
+    mSightCps.Set(l_at_cps_src);
+    mSightCps.SetStts(&mStts);
     
     int roomNo = dComIfGp_roomControl_getStayNo();
     tevStr.mRoomNo = roomNo;

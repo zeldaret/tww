@@ -257,7 +257,10 @@ public:
     static u8 m_morf_frame;
 
     static void onMabaFlg() { m_maba_flg = 1; }
-    static void offMabaFlg() { m_maba_flg = 0; }
+    static void offMabaFlg() {
+        m_maba_flg = 0;
+        m_maba_timer = 1;
+    }
     static void decMabaTimer() { cLib_calcTimer(&m_maba_timer); }
     static void decMorfFrame() { cLib_calcTimer(&m_morf_frame); }
     static void getEyeMoveFlg() {}

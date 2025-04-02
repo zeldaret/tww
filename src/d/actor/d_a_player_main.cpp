@@ -628,7 +628,6 @@ void daPy_lk_c::setTextureScrollResource(J3DAnmTextureSRTKey* btk, int r31) {
     }
     daPy_matAnm_c::setMorfFrame(3);
     daPy_matAnm_c::offMabaFlg();
-    daPy_matAnm_c::setMabaTimer(1);
     daPy_matAnm_c::setMabaTimer(75.0f + cM_rndF(30.0f));
 }
 
@@ -2283,9 +2282,9 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     m35EC = 0.0f;
     
     if (mEquipItem == dItem_SKULL_HAMMER_e) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(0x97));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMMERDAM));
     } else if (checkBowItem(mEquipItem) && !checkBowAnime()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(0xD));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWRELORDA));
     }
     
     m35E8 = 0.0f;
@@ -2365,7 +2364,6 @@ BOOL daPy_lk_c::procCall_init() {
     commonProcInit(daPyProc_CALL_e);
     mVelocity = 0.0f;
     daPy_matAnm_c::offMabaFlg();
-    daPy_matAnm_c::setMabaTimer(1);
     setSingleMoveAnime(ANM_YOBU, 1.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
     current.angle.y = shape_angle.y;
     if (mEquipItem == daPyItem_BOKO_e) {

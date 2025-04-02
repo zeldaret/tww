@@ -54,8 +54,7 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
         if (checkEquipAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         }
-        daPy_matAnm_c::m_maba_flg = 0;
-        daPy_matAnm_c::m_maba_timer = 1;
+        daPy_matAnm_c::offMabaFlg();
         setSingleMoveAnime(
             ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
         );

@@ -244,7 +244,6 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
 
     commonProcInit(daPyProc_TACT_WAIT_e);
     daPy_matAnm_c::offMabaFlg();
-    daPy_matAnm_c::setMabaTimer(1);
     setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.mAnmRate, 0.0f, -1, daPy_HIO_tact_c0::m.field_0x4);
     setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE1_e, daPy_HIO_tact_c0::m.mAnmRate, 0.0f, -1, -1.0f);
     mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
@@ -782,7 +781,6 @@ BOOL daPy_lk_c::procTactPlayOriginal_init() {
     dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
     m34D0 = 0;
     daPy_matAnm_c::offMabaFlg();
-    daPy_matAnm_c::setMabaTimer(1);
     setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.mAnmRate, 0.0f, -1, daPy_HIO_tact_c0::m.field_0x4);
 
     m3570 = dComIfGp_event_getTactFreeMStick(m34D0);

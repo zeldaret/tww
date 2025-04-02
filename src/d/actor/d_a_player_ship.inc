@@ -274,8 +274,7 @@ void daPy_lk_c::initShipCraneAnime() {
         m3570 = 2;
         m3574 = 2;
     }
-    daPy_matAnm_c::m_maba_flg = 0;
-    daPy_matAnm_c::m_maba_timer = 1;
+    daPy_matAnm_c::offMabaFlg();
     setSingleMoveAnime(dVar1, 1.0f, 0.0f, -1, 10.0f);
 }
 

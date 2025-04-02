@@ -319,8 +319,7 @@ BOOL daPy_lk_c::procWHideReady() {
             cLib_addCalc(&current.pos.x, m370C.x, 0.25f, 10.0f, 4.0f);
             cLib_addCalc(&current.pos.z, m370C.z, 0.25f, 10.0f, 4.0f);
             if (!cLib_addCalcAngleS(&shape_angle.y, m34D4, 2, 0x2000, 0x800)) {
-                daPy_matAnm_c::m_maba_flg = 0;
-                daPy_matAnm_c::m_maba_timer = 1;
+                daPy_matAnm_c::offMabaFlg();
                 procWHideWait_init();
             }
         }
