@@ -64,7 +64,7 @@ private:
     /* 0x2A0 */ bool m2A0;
     /* 0x2A1 */ u8 m2A1;
     /* 0x2A2 */ bool mShipRideFlg;
-    /* 0x2A3 */ u8 m2A3;
+    /* 0x2A3 */ bool m2A3;
     /* 0x2A4 */ s16 m2A4;
     /* 0x2A6 */ u16 m2A6;
     /* 0x2A8 */ int mChainCnt;

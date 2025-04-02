@@ -531,7 +531,7 @@ config.libs = [
             Object(Matching,    "d/actor/d_a_esa.cpp"),
             Object(NonMatching, "d/actor/d_a_grid.cpp"),
             Object(NonMatching, "d/actor/d_a_himo2.cpp"),
-            Object(NonMatching, "d/actor/d_a_hookshot.cpp"),
+            Object(Equivalent,  "d/actor/d_a_hookshot.cpp"), # weak func order
             Object(Matching,    "d/actor/d_a_ib.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(NonMatching, "d/actor/d_a_item.cpp"),
             Object(Matching,    "d/actor/d_a_itembase.cpp"),

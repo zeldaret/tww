@@ -1262,7 +1262,7 @@ u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c* i_actor, int param_1, int param_2)
     static JGeometry::TVec3<f32> direction(0.0f, 1.0f, 0.0f);
 
     f32 waterY;
-    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) != 0 && ((param_1 != 0 && i_actor->current.pos.y > waterY) || (param_1 == 0 && waterY >= i_actor->current.pos.y))) {
+    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) && ((param_1 != 0 && i_actor->current.pos.y > waterY) || (param_1 == 0 && waterY >= i_actor->current.pos.y))) {
         param_1 ^= 1;
         if (param_1 == 0 && param_2 == 0) {
             return param_1;
