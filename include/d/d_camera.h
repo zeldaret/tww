@@ -11,6 +11,8 @@
 
 class camera_class;
 class dBgS_LinChk;
+class dBgS_CamGndChk;
+class cBgS_PolyInfo;
 class dStage_Event_dt_c;
 class fopAc_ac_c;
 
@@ -67,16 +69,22 @@ public:
     struct BG {
         BG() {}
         ~BG() {}
-        u8 temp[0xB0];
+        /* 0x00 */ u8 m00[0x54 - 0x00];
+        /* 0x54 */ dBgS_CamGndChk* m54; //dBgS_CamGndChk* ?
+        /* 0x58 */ f32 m58;
+        /* 0x5C */ u8 m5C[0x74 - 0x5C];
+        /* 0x74 */ cBgS_PolyInfo* m74;
+        /* 0x78 */ u8 m78[0xB0 - 0x78];
+        //u8 temp[0xB0];
     };
 
     /* 0x000 */ camera_class* mpCamera;
     /* 0x004 */ u8 m004;
     /* 0x005 */ u8 m005;
     /* 0x006 */ u8 m006[0x008 - 0x006];
-    /* 0x008 */ f32 m008;
-    /* 0x00C */ s16 m00C;
-    /* 0x00E */ cSAngle m00E;
+    /* 0x008 */ f32 mDistance;
+    /* 0x00C */ cSAngle m00C;
+    /* 0x00E */ cSAngle mNextCsAngle;
     /* 0x010 */ cXyz mCenter;
     /* 0x01C */ cXyz mEye;
     /* 0x028 */ cXyz mUp;
@@ -89,10 +97,12 @@ public:
     /* 0x05C */ s16 m05C;
     /* 0x05E */ u8 m05E[0x060 - 0x05E];
     /* 0x060 */ f32 m060;
-    /* 0x064 */ u8 m064[0x068 - 0x064];
+    /* 0x064 */ f32 m064;
     /* 0x068 */ int m068;
     /* 0x06C */ cSAngle mAngleY;
-    /* 0x06E */ u8 m06E[0x080 - 0x06E];
+    /* 0x06E */ u8 m06E[0x070 - 0x06E];
+    /* 0x070 */ cXyz m070;
+    /* 0x07C */ u32 m07C;
     /* 0x080 */ u32 m080;
     /* 0x084 */ cXyz m084;
     /* 0x090 */ cXyz m090;
@@ -158,25 +168,41 @@ public:
     /* 0x1AE */ u8 m1AE;
     /* 0x1AF */ u8 m1AF[0x1B0 - 0x1AF];
     /* 0x1B0 */ dCamForcusLine mForcusLine;
-    /* 0x220 */ u8 m220[0x228 - 0x220];
+    /* 0x220 */ u8 m220;
+    /* 0x224 */ u8 m221[0x228 - 0x221];
     /* 0x228 */ cXyz mMonitorPos;
     /* 0x234 */ f32 m234;
     /* 0x238 */ f32 m238;
     /* 0x23C */ f32 m23C;
     /* 0x240 */ int m240;
     /* 0x244 */ f32 m244;
-    /* 0x248 */ u8 m248[0x254 - 0x248];
+    /* 0x248 */ int m248;
+    /* 0x24C */ int m24C;
+    /* 0x250 */ int m250;
     /* 0x254 */ int m254;
-    /* 0x258 */ u8 m258[0x25C - 0x258];
+    /* 0x258 */ int m258;
     /* 0x25C */ BG mBG;
-    /* 0x30C */ u8 m30C[0x31D - 0x30C];
+    /* 0x30C */ u8 m30C[0x310 - 0x30C];
+    /* 0x310 */ f32 m310;
+    /* 0x314 */ u8 m314[0x318 - 0x314];
+    /* 0x318 */ f32 m318;
+    /* 0x31C */ u8 m31C;
     /* 0x31D */ u8 m31D;
-    /* 0x31E */ u8 m31E[0x350 - 0x31E];
+    /* 0x31E */ u8 m31E[0x320 - 0x31E];
+    /* 0x320 */ cXyz m320;
+    /* 0x32C */ cXyz m32C;
+    /* 0x338 */ s16 m338;
+    /* 0x33A */ cSAngle m33A;
+    /* 0x33C */ u32 m33C;
+    /* 0x340 */ u8 m340[0x350 - 0x340];
     /* 0x350 */ int m350;
-    /* 0x354 */ u8 m354[0x358 - 0x354];
+    /* 0x354 */ f32 m354;
     /* 0x358 */ int mRoomNo;
     /* 0x35C */ int mRoomMapToolCameraIdx;
-    /* 0x360 */ u8 m360[0x394 - 0x360];
+    /* 0x360 */ u8 m360[0x364 - 0x360];
+    /* 0x364 */ u32 m364;
+    /* 0x368 */ f32 m368;
+    /* 0x36C */ u8 m36C[0x394 - 0x36C];
     /* 0x394 */ f32 mEvFovy;
     /* 0x398 */ f32 mEvBank;
     /* 0x39C */ fopAc_ac_c* mpEvRelActor;
@@ -209,7 +235,10 @@ public:
     /* 0x530 */ int m530;
     /* 0x534 */ s16 m534;
     /* 0x536 */ s16 m536;
-    /* 0x538 */ u8 m538[0x550 - 0x538];
+    /* 0x538 */ f32 m538;
+    /* 0x53C */ u8 m53C[0x540 - 0x53C];
+    /* 0x540 */ f32 m540;
+    /* 0x544 */ u8 m544[0x550 - 0x544];
     /* 0x550 */ int m550;
     /* 0x554 */ int m554;
     /* 0x558 */ u8 m558[0x568 - 0x558];
@@ -229,12 +258,12 @@ public:
     /* 0x5E8 */ int mCurArrowIdx;
     /* 0x5EC */ f32 m5EC;
     /* 0x5F0 */ f32 m5F0;
-    /* 0x5F4 */ u8 m5F4[0x5F8 - 0x5F4];
+    /* 0x5F4 */ f32 m5F4;
     /* 0x5F8 */ f32 m5F8;
     /* 0x5FC */ int m5FC;
-    /* 0x600 */ u8 m600[0x604 - 0x600];
+    /* 0x600 */ int m600;
     /* 0x604 */ f32 m604;
-    /* 0x608 */ u8 m608[0x60C - 0x608];
+    /* 0x608 */ f32 m608;
     /* 0x60C */ dCamSetup_c mCamSetup;
     /* 0x750 */ dCamParam_c mCamParam;
     /* 0x75C */ int mCamTypeField;
@@ -246,7 +275,19 @@ public:
     /* 0x774 */ int m774;
     /* 0x778 */ int mCamTypeKeep;
     /* 0x77C */ int mCamTypeRestrict;
-    /* 0x780 */ u8 field_780[0x800 - 0x780];
+    /* 0x780 */ u8 m780;
+    /* 0x781 */ u8 m781;
+    /* 0x782 */ u8 m782;
+    /* 0x783 */ u8 m783;
+    /* 0x784 */ u8 m784;
+    /* 0x785 */ u8 m785;
+    /* 0x786 */ u8 m786;
+    /* 0x787 */ u8 m787;
+    /* 0x788 */ u8 m788;
+    /* 0x789 */ u8 m789;
+    /* 0x78A */ u8 m78A;
+    /* 0x78B */ u8 m78B;
+    /* 0x78C */ u8 m78C[0x800 - 0x78C];;
 
 public:
     dCamera_c(camera_class*);
@@ -276,12 +317,12 @@ public:
     void SetTypeForce(char*, fopAc_ac_c*);
     void SetTypeForce(s32, fopAc_ac_c*);
     void onStyleChange(s32, s32);
-    void GetCameraTypeFromMapToolID(s32, s32);
-    void GetCameraTypeFromCameraName(const char*);
+    int GetCameraTypeFromMapToolID(s32, s32);
+    int GetCameraTypeFromCameraName(const char*);
     void pushPos();
-    void directionOf(fopAc_ac_c*);
+    cSAngle directionOf(fopAc_ac_c*);
     void positionOf(fopAc_ac_c*);
-    void attentionPos(fopAc_ac_c*);
+    cXyz attentionPos(fopAc_ac_c*);
     void relationalPos(fopAc_ac_c*, cXyz*);
     void relationalPos(fopAc_ac_c*, cXyz*, cSAngle);
     void relationalPos(fopAc_ac_c*, fopAc_ac_c*, cXyz*, f32);
@@ -337,7 +378,7 @@ public:
     void Reset(cXyz, cXyz);
     void Reset();
     void ResetView();
-    void Chtyp(s32);
+    bool Chtyp(s32);
     void U2();
     void shakeCamera();
     void StartShake(s32, u8*, s32, cXyz);

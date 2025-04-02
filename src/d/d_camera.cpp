@@ -9,8 +9,12 @@
 #include "d/d_bg_s_sph_chk.h"
 #include "SSystem/SComponent/c_bg_s.h"
 #include "dolphin/types.h"
+#include "SSystem/SComponent/c_math.h"
+#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_obj_pirateship.h"
 
 class camera_process_class;
+dCamera__Type types[63];
 
 /* 80161790-801618B8       .text __ct__9dCamera_cFP12camera_class */
 dCamera_c::dCamera_c(camera_class*) : mCamParam(0) {
@@ -23,8 +27,215 @@ dCamera_c::~dCamera_c() {
 }
 
 /* 80161994-80162128       .text initialize__9dCamera_cFP12camera_classP10fopAc_ac_cUlUl */
-void dCamera_c::initialize(camera_class*, fopAc_ac_c*, u32, u32) {
+void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 cameraInfoIdx, u32 padId) {
     /* Nonmatching */
+    int mapToolType;
+    stage_stag_info_class* pStagInfo;
+    cXyz local_30;
+    
+    mpCamera = camera;
+    m004 = 1;
+    m005 = 0;
+
+    mpPlayerActor = playerActor;
+    mCameraInfoIdx = cameraInfoIdx;
+    mPadId = padId;
+
+    initMonitor();
+    initPad();
+    mForcusLine.Init();
+
+    mCamTypeField = GetCameraTypeFromCameraName("Field");
+    mCamTypeEvent = GetCameraTypeFromCameraName("Event");
+    mCamTypeWater = GetCameraTypeFromCameraName("Water");
+    m774 = GetCameraTypeFromCameraName("Subject"); // Should be renamed to mCamTypeSubject?
+    mCamTypeBoat = GetCameraTypeFromCameraName("Boat");
+    mCamTypeBoatBattle = GetCameraTypeFromCameraName("BoatBattle");
+    mCamTypeRestrict = GetCameraTypeFromCameraName("Restrict");
+    mCamTypeKeep = GetCameraTypeFromCameraName("Keep");
+    mCurType = mMapToolType = mCamTypeField;
+
+    m524 = 0xFF;
+    m528 = 0;
+    m258 = 0;
+    m254 = 0;
+    m248 = 0x85e;
+    m24C = 0x828;
+    m250 = 0x381b;
+    mCurMode = 0;
+    m144 = 1;
+    m514 = 0;
+    m14C = 0.0f;
+    mEventFlags = 0;
+    m148.Set(cSAngle::_0.Val());
+    m07C = 0;
+    m080 = cM_rndFX(32767.0f);
+    m064 = 1.0f;
+    m5F4 = 0.0f;
+    m5F8 = 0.0f;
+    m5FC = 0;
+    m600 = -1;
+    pStagInfo = (stage_stag_info_class *)dComIfGp_getStageStagInfo();
+    if (pStagInfo && pStagInfo->mCameraMapToolID != -1) {
+        mapToolType = GetCameraTypeFromMapToolID(pStagInfo->mCameraMapToolID, -1);
+        if (mapToolType != 0xFF && Chtyp(mapToolType)) {
+            mMapToolType = mapToolType;
+        }
+    }
+    mCurStyle = types[mCurType].mStyles[mCurMode];
+    m130 = -1;
+    mStageMapToolCameraIdx = 0xFF;
+    m0E8 = -1;
+    m40C = -1;
+    m410 = -1;
+    mStaffIdx = -1;
+    m404 = -1;
+    mRoomNo = -1;
+    m318 = -1e+09f;
+    m310 = -1e+09f;
+    mBG.m58 = -1e+09f;
+    mBG.m54->OffNormalGrp(); //mBG.m54 = mBG.m54 & 0xfffffffe;
+    mBG.m54->OnWaterGrp(); //mBG.m54 = mBG.m54 | 2;
+    m31D = 0;
+    m31C = 0;
+    m32C = cXyz::Zero;
+    m320 = m32C;
+    m33C = 0;
+    m33A.Set(cSAngle::_0.Val());
+    m338 = m33A;
+    m350 = 0;
+    m364 = 0;
+    m368 = 0.0f;
+    m354 = -1e+09f;
+    mRoomMapToolCameraIdx = 0xFF;
+    m608 = mCamSetup.mBGChk.m3C;
+
+    if (!strcmp(dComIfGp_getStartStageName(), "sea")) {
+        m780 = 1;
+    }
+    else {
+        m780 = 0;
+    }
+
+    if (!strcmp(dComIfGp_getStartStageName(), "kaze")) {
+        m788 = 1;
+    }
+    else {
+        m788 = 0;
+    }
+
+    if (!strcmp(dComIfGp_getStartStageName(), "M_Dai")) {
+        m789 = 1;
+    }
+    else {
+        m789 = 0;
+    }
+
+    if (!strcmp(dComIfGp_getStartStageName(), "kazeB")) {
+        m78B = 1;
+    }
+    else {
+        m78B = 0;
+    }
+    
+    if (!strcmp(dComIfGp_getStartStageName(), "GanonK")) {
+        m784 = 1;
+    }
+    else {
+        m784 = 0;
+    }
+
+    if (!strcmp(dComIfGp_getStartStageName(), "GTower")) {
+        m785 = 1;
+    }
+    else {
+        m785 = 0;
+    }
+
+    if (!(strcmp(dComIfGp_getStartStageName(), "Asoko") && 
+          strcmp(dComIfGp_getStartStageName(), "Abship") && 
+          strcmp(dComIfGp_getStartStageName(), "PShip"))) {
+        m781 = 1;
+    }
+    else {
+        m781 = 0;
+    }
+
+    if (!strcmp(dComIfGp_getStartStageName(), "Obshop")) {
+        m782 = 1;
+    }
+    else {
+        m782 = 0;
+    }
+
+    if (!strcmp(dComIfGp_getStartStageName(), "A_umikz")) {
+        m783 = 1;
+    }
+    else {
+        m783 = 0;
+    }
+    
+    m534 = 0;
+    m536 = 0x180;
+
+    if (m781) {
+        m530 = 1;
+        m540 = 1.0f;
+        m538 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f);
+        m538 *= m540;
+    }
+    else if (m782) {
+        m530 = 2;
+        m540 = 0.12f;
+        m538 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f);
+        m538 *= m540;
+    }
+    else if (m783) {
+        m530 = 3;
+        m540 = 1.0f;
+        m538 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f);;
+        m538 *= m540;
+    }
+    else {
+        m530 = 0;
+        m538 = 0.0f;
+        m540 = 0.0f;
+    }
+
+    mCamParam.Change(mCurStyle);
+
+    local_30 = attentionPos(mpPlayerActor);
+    local_30.y += mCamParam.CenterHeight(0.0f);
+
+    m044 = local_30 + cSGlobe(0.0f, cSAngle((s16)0), directionOf((fopAc_ac_c *)this)).Xyz();
+
+    mCenter = m044;
+
+    m03C.Val(200.0f, 0, directionOf((fopAc_ac_c *)this).Inv());
+
+    mDistance = m03C.R();
+
+    m00C.Set(m03C.V().Val());
+
+    mNextCsAngle.Set(m03C.U().Val());
+
+    m050 =  m044 + m03C.Xyz();
+
+    mEye = m050;
+
+    mAngleY.Set(cSAngle(mNextCsAngle.Inv()).Val());
+
+    mUp.x = 0.0f;
+    mUp.y = 1.0f;
+    mUp.z = 0.0f;
+
+    mBank.Set(cSAngle::_0.Val());
+
+    m05C = mBank.Val();
+
+    m060 = mFovY = mCamParam.Fovy(0.0f);
+
+    m220 = 0;
 }
 
 /* 80162128-80162134       .text Start__9dCamera_cFv */
@@ -153,12 +364,12 @@ void dCamera_c::onStyleChange(s32, s32) {
 }
 
 /* 80164F5C-8016513C       .text GetCameraTypeFromMapToolID__9dCamera_cFll */
-void dCamera_c::GetCameraTypeFromMapToolID(s32, s32) {
+int dCamera_c::GetCameraTypeFromMapToolID(s32, s32) {
     /* Nonmatching */
 }
 
 /* 8016513C-801651F0       .text GetCameraTypeFromCameraName__9dCamera_cFPCc */
-void dCamera_c::GetCameraTypeFromCameraName(const char*) {
+int dCamera_c::GetCameraTypeFromCameraName(const char*) {
     /* Nonmatching */
 }
 
@@ -173,7 +384,7 @@ void limited_range_addition(f32*, f32, f32, f32) {
 }
 
 /* 8016528C-801652B0       .text directionOf__9dCamera_cFP10fopAc_ac_c */
-void dCamera_c::directionOf(fopAc_ac_c*) {
+cSAngle dCamera_c::directionOf(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -183,7 +394,7 @@ void dCamera_c::positionOf(fopAc_ac_c*) {
 }
 
 /* 801652CC-801652E8       .text attentionPos__9dCamera_cFP10fopAc_ac_c */
-void dCamera_c::attentionPos(fopAc_ac_c*) {
+cXyz dCamera_c::attentionPos(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -483,7 +694,7 @@ void dCamera_c::ResetView() {
 }
 
 /* 8017B4C4-8017B51C       .text Chtyp__9dCamera_cFl */
-void dCamera_c::Chtyp(s32) {
+bool dCamera_c::Chtyp(s32) {
     /* Nonmatching */
 }
 
