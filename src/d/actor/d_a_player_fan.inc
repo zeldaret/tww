@@ -366,7 +366,6 @@ BOOL daPy_lk_c::procFanGlide_init(int param_0) {
 
 /* 8014CB94-8014D778       .text procFanGlide__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFanGlide() {
-    /* Nonmatching - float regswap and operand swap */
     cXyz local_60;
     cXyz local_54;
     cXyz local_48;
@@ -552,10 +551,9 @@ BOOL daPy_lk_c::procFanGlide() {
             f32 cos = cM_scos(shape_angle.y);
             local_48.set(m3730.x * cos - m3730.z * sin, m3730.y, m3730.x * sin + m3730.z * cos);
 
-            f32 f4 = -local_48.x;
-            f4 *= 0.02f;
-            f32 f3 = local_48.z;
-            f3 *= 0.02f;
+            f32 mult = 1.0f / 50.0f;
+            f32 f4 = -local_48.x * mult;
+            f32 f3 = local_48.z * mult;
 
             if (f4 > 1.0f) {
                 f4 = 1.0f;
@@ -571,7 +569,7 @@ BOOL daPy_lk_c::procFanGlide() {
             int r0 = m34D4 * -8;
             s16 r30 = (r0 + (f4 * 0x1800));
             s16 prev = m34F2;
-            s16 r4 = 0x1800 * (f3 + (mVelocity * 0.02f));
+            s16 r4 = 0x1800 * (f3 + (mVelocity * mult));
             cLib_addCalcAngleS(&m34F2, r4, 5, 0x800, 0x100);
             m34E0 = m34E0 + m34D6;
             m34E0 -= (s16)(m34F2 - prev);
