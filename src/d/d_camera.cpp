@@ -84,7 +84,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
         }
     }
     mCurStyle = types[mCurType].mStyles[0][mCurMode];
-    m130 = -1;
+    mLockOnActorId = -1;
     mStageMapToolCameraIdx = 0xFF;
     m0E8 = -1;
     m40C = -1;
@@ -524,8 +524,24 @@ void dCamera_c::Att() {
 }
 
 /* 8016336C-80163514       .text checkForceLockTarget__9dCamera_cFv */
-void dCamera_c::checkForceLockTarget() {
-    /* Nonmatching */
+BOOL dCamera_c::checkForceLockTarget() {
+    BOOL res = TRUE;
+    if (mLockOnActorId != -1) {
+        mpLockonActor = GetForceLockOnActor();
+        if (mpLockonActor) {
+            if (dComIfGp_getAttention().Lockon() || mForceLockTimer > mCamSetup.ForceLockOffTimer() ||
+                cXyz(positionOf(mpLockonActor) - positionOf(mpPlayerActor)).abs() > mCamSetup.ForceLockOffDist()) {
+                res = FALSE;
+            }
+        }
+        else {
+            res = FALSE;
+        }
+    }
+    else {
+        res = FALSE;
+    }
+    return res;
 }
 
 /* 80163514-80163EF4       .text Run__9dCamera_cFv */
@@ -989,7 +1005,7 @@ void dCamera_c::SubjectLockOff() {
 }
 
 /* 8017BCB8-8017BCEC       .text GetForceLockOnActor__9dCamera_cFv */
-void dCamera_c::GetForceLockOnActor() {
+fopAc_ac_c* dCamera_c::GetForceLockOnActor() {
     /* Nonmatching */
 }
 

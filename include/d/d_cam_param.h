@@ -114,8 +114,8 @@ public:
     /* 0x064 */ f32 m064;
     /* 0x068 */ f32 m068;
     /* 0x06C */ f32 m06C;
-    /* 0x070 */ f32 m070;
-    /* 0x074 */ u32 m074;
+    /* 0x070 */ f32 mForceLockOffDist;
+    /* 0x074 */ int mForceLockOffTimer;
     /* 0x078 */ f32 m078;
     /* 0x07C */ f32 m07C;
     /* 0x080 */ f32 m080;
@@ -144,6 +144,9 @@ public:
 
     bool CheckLatitudeRange(s16*);
     f32 FanBank();
+
+    f32 ForceLockOffTimer() { return mForceLockOffTimer; }
+    f32 ForceLockOffDist() { return mForceLockOffDist; }
 
 public:
     /* 0x0D0 */ dCstick_c mCstick;

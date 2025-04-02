@@ -131,9 +131,9 @@ public:
     /* 0x124 */ int mPadId;
     /* 0x128 */ fopAc_ac_c* mpPlayerActor;
     /* 0x12C */ fopAc_ac_c* mpLockonTarget;
-    /* 0x130 */ int m130;
-    /* 0x134 */ u8 m134[0x138 - 0x134];
-    /* 0x138 */ int m138;
+    /* 0x130 */ u32 mLockOnActorId;
+    /* 0x134 */ fopAc_ac_c* mpLockonActor;
+    /* 0x138 */ int mForceLockTimer;
     /* 0x13C */ int mCurMode;
     /* 0x140 */ int mNextMode;
     /* 0x144 */ int m144;
@@ -312,7 +312,7 @@ public:
     void updateMonitor();
     cSAngle calcPeepAngle();
     void Att();
-    void checkForceLockTarget();
+    BOOL checkForceLockTarget();
     void Run();
     void NotRun();
     void SetTrimSize(s32);
@@ -401,7 +401,7 @@ public:
     void SetBlureTimer(s32);
     void SubjectLockOn(fopAc_ac_c*);
     void SubjectLockOff();
-    void GetForceLockOnActor();
+    fopAc_ac_c* GetForceLockOnActor();
     void ForceLockOn(fpc_ProcID);
     void ForceLockOff(fpc_ProcID);
     void SetExtendedPosition(cXyz*);
