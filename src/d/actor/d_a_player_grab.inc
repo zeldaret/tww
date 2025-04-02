@@ -224,14 +224,14 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         return false;
     } else {
         int iVar3 = checkGrabBarrelSearch(0);
-        if ((fopAcM_CheckStatus(pfVar7, fopAcStts_UNK10000_e)) && (!checkGrabSpecialHeavyState())) {
+        if (fopAcM_CheckStatus(pfVar7, fopAcStts_UNK10000_e) && !checkGrabSpecialHeavyState()) {
             g_dComIfG_gameInfo.play.field_0x492d = 14;
             dComIfGp_setDoStatus(14);
         } else {
             g_dComIfG_gameInfo.play.field_0x492d = 9;
         }
-        if ((((mpAttnActorLockOn == NULL) && (mpAttnEntryA != NULL)) && (iVar3 == 0)) &&
-            (mpAttnEntryA->mType == 5 && (fopAcM_CheckStatus(pfVar7, fopAcStts_UNK2000000_e))))
+        if (mpAttnActorLockOn == NULL && mpAttnEntryA != NULL && iVar3 == 0 &&
+            mpAttnEntryA->mType == fopAc_Attn_TYPE_DOOR_e && fopAcM_CheckStatus(pfVar7, fopAcStts_UNK2000000_e))
         {
             dComIfGp_setDoStatus(11);
         } else if (iVar3 != 0) {

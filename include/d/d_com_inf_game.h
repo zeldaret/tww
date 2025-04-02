@@ -3448,6 +3448,16 @@ inline void dComIfGp_particle_setSimple(u16 particleID, cXyz* pos, u8 alpha = 0x
     pParticle->setSimple(particleID, pos, alpha, prmColor, envColor, param_6);
 }
 
+inline JPABaseEmitter* dComIfGp_particle_setSimpleLand(int param_0, const cXyz* param_1, const csXyz* param_2,
+                                            f32 param_3, f32 param_4, f32 param_5,
+                                            dKy_tevstr_c* param_6, int* param_7, int param_8) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    return pParticle->setSimpleLand(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
+}
+
+// TODO
+inline void dComIfGp_particle_setSimpleLand(cBgS_PolyInfo&, const cXyz*, const csXyz*, f32, f32, f32, dKy_tevstr_c*, int*, int) {}
+
 inline JPABaseEmitter* dComIfGp_particle_setBombSmoke(u16 particleID, const cXyz* pos,
                                            const csXyz* angle = NULL, const cXyz* scale = NULL,
                                            u8 alpha = 0xFF) {

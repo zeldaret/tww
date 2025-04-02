@@ -1743,7 +1743,7 @@ void daPy_lk_c::changeWaitProc() {
 }
 
 /* 80110028-8011029C       .text changeLandProc__9daPy_lk_cFf */
-int daPy_lk_c::changeLandProc(f32) {
+BOOL daPy_lk_c::changeLandProc(f32) {
     /* Nonmatching */
 }
 

@@ -51,31 +51,22 @@ void daPy_lk_c::throwBoomerang() {
 /* 80149698-801497A4       .text returnBoomerang__9daPy_lk_cFv */
 int daPy_lk_c::returnBoomerang() {
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
-    if (mEquipItem == daPyItem_NONE_e) {
-        if (daPy_getPlayerActorClass() == this) {
-            if (!dComIfGp_event_runCheck()) {
-                if (mDemo.getDemoType() == 0) {
-                    if ((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff || (checkPlayerGuard())) ||
-                        (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_DAMDASH || (checkBoomerangAnime())))
-                    {
-                        if (!(checkModeFlg(
-                                ModeFlg_WHIDE | ModeFlg_ROPE | ModeFlg_IN_SHIP | ModeFlg_CLIMB | ModeFlg_SWIM |
-                                ModeFlg_00080000 | ModeFlg_GRAB | ModeFlg_PUSHPULL | ModeFlg_LADDER | ModeFlg_CROUCH |
-                                ModeFlg_CRAWL
-                            )) ||
-                            (mCurProc == daPyProc_SHIP_BOOMERANG_e))
-                        {
-                            mActorKeepEquip = mActorKeepThrow;
-                            mActorKeepThrow.clearData();
-                            mEquipItem = dItem_BOOMERANG_e;
-                            onNoResetFlg0(daPyFlg0_UNK20);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
+
+    if (mEquipItem == daPyItem_NONE_e && !checkNoControll() && !dComIfGp_event_runCheck() &&
+        mDemo.getDemoType() == 0 &&
+        (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff || checkPlayerGuard() ||
+         checkDashDamageAnime() || checkBoomerangAnime()) &&
+        (!checkModeFlg(ModeFlg_WHIDE | ModeFlg_ROPE | ModeFlg_IN_SHIP | ModeFlg_CLIMB |
+                        ModeFlg_SWIM | ModeFlg_00080000 | ModeFlg_GRAB | ModeFlg_PUSHPULL |
+                        ModeFlg_LADDER | ModeFlg_CROUCH | ModeFlg_CRAWL) ||
+         mCurProc == daPyProc_SHIP_BOOMERANG_e)) {
+        mActorKeepEquip = mActorKeepThrow;
+        mActorKeepThrow.clearData();
+        mEquipItem = dItem_BOOMERANG_e;
+        onNoResetFlg0(daPyFlg0_UNK20);
+        return true;
     }
+
     mActorKeepThrow.clearData();
     return false;
 }

@@ -120,8 +120,15 @@ public:
     void onAlphaOutFlg() { mAlphaOutFlg = TRUE; }
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     
-    void deleteCallBack() {}
+    void deleteCallBack() {
+        if(mpEmitter) {
+            mpEmitter->quitImmortalEmitter();
+            mpEmitter->setEmitterCallBackPtr(NULL);
+            mpEmitter = NULL;
+        }
+    }
     
+public:
     /* 0x4 */ BOOL mAlphaOutFlg;
     /* 0x8 */ JPABaseEmitter* mpEmitter;
 };  // Size: 0xC
@@ -987,7 +994,7 @@ public:
     BOOL changeFrontWallTypeProc();
     int changeSlideProc();
     void changeWaitProc();
-    int changeLandProc(f32);
+    BOOL changeLandProc(f32);
     BOOL setDamagePoint(f32);
     BOOL checkNormalDamage(int);
     void setDashDamage();
