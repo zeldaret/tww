@@ -95,8 +95,8 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     m318 = -1e+09f;
     m310 = -1e+09f;
     mBG.m58 = -1e+09f;
-    mBG.m54->OffNormalGrp(); //mBG.m54 = mBG.m54 & 0xfffffffe;
-    mBG.m54->OnWaterGrp(); //mBG.m54 = mBG.m54 | 2;
+    mBG.m04.OffNormalGrp(); //mBG.m54 = mBG.m54 & 0xfffffffe;
+    mBG.m04.OnWaterGrp(); //mBG.m54 = mBG.m54 | 2;
     m31D = 0;
     m31C = 0;
     m32C = cXyz::Zero;
@@ -438,12 +438,89 @@ void dCamera_c::initMonitor() {
 
 /* 801627A4-801628DC       .text updateMonitor__9dCamera_cFv */
 void dCamera_c::updateMonitor() {
-    /* Nonmatching */
+    float playerMonitorHoritzontalDist;
+    cXyz local_28;
+    cXyz playerPos;
+    
+    if (mpPlayerActor != NULL) {
+        playerPos = positionOf(mpPlayerActor);
+        if (m31D != 0) {
+            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m74, TRUE, &mMonitorPos, NULL, NULL);
+        }
+        playerMonitorHoritzontalDist = dCamMath::xyzHorizontalDistance(playerPos, mMonitorPos);
+        m23C = playerMonitorHoritzontalDist - m234;
+        m238 += (playerMonitorHoritzontalDist - m238) * 0.075f;
+        m234 = playerMonitorHoritzontalDist;
+        mMonitorPos = playerPos;
+        if (!m144 && !g_mDoCPd_cpadInfo[0].mButtonHold.right && mStickMainValueLast < 0.05f && mStickCValueLast < 0.05f) {
+            m240++;
+        }
+        else {
+            m240 = 0;
+        }
+        m244 = mDistance - m244;
+    }
 }
 
 /* 801628DC-80163020       .text calcPeepAngle__9dCamera_cFv */
 void dCamera_c::calcPeepAngle() {
-    /* Nonmatching */
+    uint uVar1;
+    dCamera_c* camera;
+    cSAngle local_1d8;
+    cSAngle local_1c0;
+    cXyz local_194;
+    cXyz local_188;
+    cXyz local_134;
+    cXyz local_128;
+    cM3dGPla* plane;
+    
+    local_1c0 = cSAngle(cSAngle::_0);
+    uVar1 = g_dComIfG_gameInfo.play.mPlayerStatus[camera->mPadId * 2][0];
+    if (uVar1 & 0x20) {
+        local_128.x = 0.0f;
+        local_128.y = 0.0f;
+
+        local_134.z = -30.0f;
+        local_134.x = -50.0f;
+        local_134.y = 0.0f;
+
+        local_128.z = local_134.z;
+
+        local_188 = relationalPos(camera->mpPlayerActor, &local_128);
+
+        local_194 = relationalPos(camera->mpPlayerActor, &local_134);
+
+        dBgS_CamLinChk lin_chk;
+
+        if (lineBGCheck(&local_194, &local_188, &lin_chk, 0x7f)) {
+            plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
+            local_1d8 = cSAngle::_270 + (cSGlobe(plane->mNormal).U() - directionOf((fopAc_ac_c *)camera)); // GetNP() doesn't work?
+            local_1c0.Set(local_1d8.Val());
+        }
+    }
+    else if (uVar1 & 0x40) {
+        local_128.x = 0.0f;
+        local_128.y = 0.0f;
+
+        local_134.z = -30.0f;
+        local_134.x = 50.0f;
+        local_134.y = 0.0f;
+
+        local_128.z = local_134.z;
+
+        local_188 = relationalPos(camera->mpPlayerActor, &local_128);
+
+        local_194 = relationalPos(camera->mpPlayerActor, &local_134);
+
+        dBgS_CamLinChk lin_chk;
+        
+        if (lineBGCheck(&local_194, &local_188, &lin_chk, 0x7f)) {
+            plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
+            local_1d8 = cSAngle::_270 + (cSGlobe(plane->mNormal).U() - directionOf((fopAc_ac_c *)camera));
+            local_1c0.Set(local_1d8.Val());
+        }
+    }
+    //cSAngle((cSAngle *)this,local_1c0);
 }
 
 /* 80163020-8016319C       .text __dt__21dBgS_CamLinChk_NorWtrFv */
@@ -562,17 +639,17 @@ cXyz dCamera_c::attentionPos(fopAc_ac_c*) {
 }
 
 /* 801652E8-801653B0       .text relationalPos__9dCamera_cFP10fopAc_ac_cP4cXyz */
-void dCamera_c::relationalPos(fopAc_ac_c*, cXyz*) {
+cXyz dCamera_c::relationalPos(fopAc_ac_c*, cXyz*) {
     /* Nonmatching */
 }
 
 /* 801653B0-8016548C       .text relationalPos__9dCamera_cFP10fopAc_ac_cP4cXyz7cSAngle */
-void dCamera_c::relationalPos(fopAc_ac_c*, cXyz*, cSAngle) {
+cXyz dCamera_c::relationalPos(fopAc_ac_c*, cXyz*, cSAngle) {
     /* Nonmatching */
 }
 
 /* 8016548C-801656AC       .text relationalPos__9dCamera_cFP10fopAc_ac_cP10fopAc_ac_cP4cXyzf */
-void dCamera_c::relationalPos(fopAc_ac_c*, fopAc_ac_c*, cXyz*, f32) {
+cXyz dCamera_c::relationalPos(fopAc_ac_c*, fopAc_ac_c*, cXyz*, f32) {
     /* Nonmatching */
 }
 
@@ -612,17 +689,17 @@ dBgS_CamGndChk_Wtr::~dBgS_CamGndChk_Wtr() {
 }
 
 /* 80166230-80166354       .text lineBGCheck__9dCamera_cFP4cXyzP4cXyzP11dBgS_LinChkUl */
-void dCamera_c::lineBGCheck(cXyz*, cXyz*, dBgS_LinChk*, u32) {
+bool dCamera_c::lineBGCheck(cXyz*, cXyz*, dBgS_LinChk*, u32) {
     /* Nonmatching */
 }
 
 /* 80166354-80166740       .text lineBGCheck__9dCamera_cFP4cXyzP4cXyzP4cXyzUl */
-void dCamera_c::lineBGCheck(cXyz*, cXyz*, cXyz*, u32) {
+bool dCamera_c::lineBGCheck(cXyz*, cXyz*, cXyz*, u32) {
     /* Nonmatching */
 }
 
 /* 80166740-80166A04       .text lineBGCheck__9dCamera_cFP4cXyzP4cXyzUl */
-void dCamera_c::lineBGCheck(cXyz*, cXyz*, u32) {
+bool dCamera_c::lineBGCheck(cXyz*, cXyz*, u32) {
     /* Nonmatching */
 }
 

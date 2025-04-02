@@ -5,8 +5,10 @@
 #include "SSystem/SComponent/c_rnd.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "f_pc/f_pc_base.h"
 #include "d/d_cam_param.h"
+#include "d/d_bg_s_gnd_chk.h"
 #include "global.h"
 
 class camera_class;
@@ -74,12 +76,12 @@ public:
     struct BG {
         BG() {}
         ~BG() {}
-        /* 0x00 */ u8 m00[0x54 - 0x00];
-        /* 0x54 */ dBgS_CamGndChk* m54; //dBgS_CamGndChk* ?
+        /* 0x00 */ u8 m00[0x04 - 0x00];
+        /* 0x04 */ dBgS_CamGndChk m04;
         /* 0x58 */ f32 m58;
         /* 0x5C */ u8 m5C[0x74 - 0x5C];
-        /* 0x74 */ cBgS_PolyInfo* m74;
-        /* 0x78 */ u8 m78[0xB0 - 0x78];
+        /* 0x74 */ cBgS_PolyInfo m74;
+        /* 0x78 */ u8 m84[0xB0 - 0x84];
         //u8 temp[0xB0];
     };
 
@@ -330,18 +332,18 @@ public:
     cSAngle directionOf(fopAc_ac_c*);
     cXyz positionOf(fopAc_ac_c*);
     cXyz attentionPos(fopAc_ac_c*);
-    void relationalPos(fopAc_ac_c*, cXyz*);
-    void relationalPos(fopAc_ac_c*, cXyz*, cSAngle);
-    void relationalPos(fopAc_ac_c*, fopAc_ac_c*, cXyz*, f32);
+    cXyz relationalPos(fopAc_ac_c*, cXyz*);
+    cXyz relationalPos(fopAc_ac_c*, cXyz*, cSAngle);
+    cXyz relationalPos(fopAc_ac_c*, fopAc_ac_c*, cXyz*, f32);
     void setDMCAngle();
     void getDMCAngle(cSAngle);
     void pointInSight(cXyz*);
     void radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*);
     void radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*, cXyz*, cXyz*, f32, s16);
     void groundHeight(cXyz*);
-    void lineBGCheck(cXyz*, cXyz*, dBgS_LinChk*, u32);
-    void lineBGCheck(cXyz*, cXyz*, cXyz*, u32);
-    void lineBGCheck(cXyz*, cXyz*, u32);
+    bool lineBGCheck(cXyz*, cXyz*, dBgS_LinChk*, u32);
+    bool lineBGCheck(cXyz*, cXyz*, cXyz*, u32);
+    bool lineBGCheck(cXyz*, cXyz*, u32);
     void lineBGCheckBack(cXyz*, cXyz*, u32);
     void lineBGCheckBoth(cXyz*, cXyz*, dBgS_LinChk*, u32);
     void lineCollisionCheckBush(cXyz*, cXyz*);
