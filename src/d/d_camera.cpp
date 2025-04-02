@@ -287,33 +287,138 @@ void dCamera_c::initPad() {
     mTriggerLeftLast = g_mDoCPd_cpadInfo[mPadId].mTriggerLeft;
     mTriggerLeftDelta = 0.0f;
 
-    m198 = 0;
-    m199 = 0;
+    mHoldLockL = FALSE;
+    mTrigLockL = FALSE;
     m19A = 0;
     m19B = 0;
 
     mTriggerRightLast = g_mDoCPd_cpadInfo[mPadId].mTriggerRight;
     mTriggerRightDelta = 0.0f;
 
-    m1A4 = 0;
-    m1A5 = 0;
+    mHoldLockR = 0;
+    mTrigLockR = 0;
     m1A6 = 0;
     m1A7 = 0;
 
-    mHoldX = 1 - ((CPad_CHECK_HOLD_X(mPadId) & 1) == 0);
-    mTrigX = 1 - ((CPad_CHECK_TRIG_X(mPadId) & 1) == 0);
-    mHoldY = 1 - ((CPad_CHECK_HOLD_Y(mPadId) & 1) == 0);
-    mTrigY = 1 - ((CPad_CHECK_TRIG_Y(mPadId) & 1) == 0);
-    mHoldY = 1 - ((CPad_CHECK_HOLD_Y(mPadId) & 1) == 0);
-    mTrigY = 1 - ((CPad_CHECK_TRIG_Y(mPadId) & 1) == 0);
-    mHoldZ = 1 - ((CPad_CHECK_HOLD_Z(mPadId) & 1) == 0);
-    mTrigZ = 1 - ((CPad_CHECK_TRIG_Z(mPadId) & 1) == 0);
+    mHoldX = (bool)CPad_CHECK_HOLD_X(mPadId);
+    mTrigX = (bool)CPad_CHECK_TRIG_X(mPadId);
+
+    mHoldY = (bool)CPad_CHECK_HOLD_Y(mPadId);
+    mTrigY = (bool)CPad_CHECK_TRIG_Y(mPadId);
+
+    mHoldY = (bool)CPad_CHECK_HOLD_Y(mPadId);
+    mTrigY = (bool)CPad_CHECK_TRIG_Y(mPadId);
+
+    mHoldZ = (bool)CPad_CHECK_HOLD_Z(mPadId);
+    mTrigZ = (bool)CPad_CHECK_TRIG_Z(mPadId);
+
     m1AE = 0;
 }
 
 /* 801623A0-80162710       .text updatePad__9dCamera_cFv */
 void dCamera_c::updatePad() {
-    /* Nonmatching */
+    float fVar1;
+    float fVar2;
+    float fVar3;
+    int iVar4;
+    cSAngle local_48;
+    
+    if (chkFlag(0x1000000)) {
+        fVar1 = 0.0f;
+        fVar2 = 0.0f;
+        fVar3 = 0.0f;
+    }
+    else {
+        fVar1 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
+        fVar2 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
+        fVar3 = g_mDoCPd_cpadInfo[mPadId].mMainStickValue;
+    }
+
+    cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle); // Unused object? Code matches so perhaps a developer oversight
+
+    mStickMainPosXDelta = fVar1 - mStickMainPosXLast;
+    mStickMainPosYDelta = fVar2 - mStickMainPosYLast;
+    mStickMainValueDelta = fVar3 - mStickMainValueLast;
+
+    mStickMainPosXLast = fVar1;
+    mStickMainPosYLast = fVar2;
+    mStickMainValueLast = fVar3;
+
+    if (chkFlag(0x800000)) {
+        fVar1 = 0.0f;
+        fVar2 = 0.0f;
+        fVar3 = 0.0f;
+    }
+    else {
+        fVar1 = g_mDoCPd_cpadInfo[mPadId].mCStickPosX;
+        fVar2 = g_mDoCPd_cpadInfo[mPadId].mCStickPosY;
+        fVar3 = g_mDoCPd_cpadInfo[mPadId].mCStickValue;
+    }
+
+    mStickCPosXDelta = fVar1 - mStickCPosXLast;
+    mStickCPosYDelta = fVar2 - mStickCPosYLast;
+    mStickCValueDelta = fVar3 - mStickCValueLast;
+
+    mStickCPosXLast = fVar1;
+    mStickCPosYLast = fVar2;
+    mStickCValueLast = fVar3;
+
+    fVar1 = g_mDoCPd_cpadInfo[mPadId].mTriggerLeft;
+    mTriggerLeftDelta = mTriggerLeftLast - fVar1;
+    mTriggerLeftLast = fVar1;
+
+    mHoldLockL = (bool)g_mDoCPd_cpadInfo[mPadId].mHoldLockL;
+    mTrigLockL = (bool)g_mDoCPd_cpadInfo[mPadId].mTrigLockL;
+
+    if (mTriggerLeftLast > mCamSetup.m0A0) {
+        if (m19A == 0) {
+            m19B = 1;
+        }
+        else {
+            m19B = 0;
+        }
+        
+        m19A = 1;
+    }
+    else {
+        m19B = 0;
+        m19A = 0;
+    }
+
+    fVar1 = g_mDoCPd_cpadInfo[mPadId].mTriggerRight;
+    mTriggerRightDelta = mTriggerRightLast - fVar1;
+    mTriggerRightLast = fVar1;
+
+    mHoldLockR = (bool)g_mDoCPd_cpadInfo[mPadId].mHoldLockR;
+    mTrigLockR = (bool)g_mDoCPd_cpadInfo[mPadId].mTrigLockR;
+
+    if (mTriggerRightLast > mCamSetup.m0A0) {
+        if (m1A6 == 0) {
+            m1A7 = 1;
+        }
+        else {
+            m1A7 = 0;
+        }
+        
+        m1A6 = 1;
+    }
+    else {
+        m1A7 = 0;
+        m1A6 = 0;
+    }
+
+
+    mHoldX = (bool)CPad_CHECK_HOLD_X(mPadId);
+    mTrigX = (bool)CPad_CHECK_TRIG_X(mPadId);
+
+    mHoldY = (bool)CPad_CHECK_HOLD_Y(mPadId);
+    mTrigY = (bool)CPad_CHECK_TRIG_Y(mPadId);
+
+    mHoldZ = (bool)CPad_CHECK_HOLD_B(mPadId); // mHoldZ might not be the appropriate name for this?
+    mTrigZ = (bool)CPad_CHECK_TRIG_B(mPadId); // likewise for mTrigZ
+
+    m1AE = 0;
+    return;
 }
 
 /* 80162710-801627A4       .text initMonitor__9dCamera_cFv */

@@ -156,14 +156,14 @@ public:
     /* 0x18C */ u32 m18C;
     /* 0x190 */ f32 mTriggerLeftLast;
     /* 0x194 */ f32 mTriggerLeftDelta;
-    /* 0x198 */ u8 m198;
-    /* 0x199 */ u8 m199;
+    /* 0x198 */ u8 mHoldLockL;
+    /* 0x199 */ u8 mTrigLockL;
     /* 0x19A */ u8 m19A;
     /* 0x19B */ u8 m19B;
     /* 0x19C */ f32 mTriggerRightLast;
     /* 0x1A0 */ f32 mTriggerRightDelta;
-    /* 0x1A4 */ u8 m1A4;
-    /* 0x1A5 */ u8 m1A5;
+    /* 0x1A4 */ u8 mHoldLockR;
+    /* 0x1A5 */ u8 mTrigLockR;
     /* 0x1A6 */ u8 m1A6;
     /* 0x1A7 */ u8 m1A7;
     /* 0x1A8 */ u8 mHoldX;
