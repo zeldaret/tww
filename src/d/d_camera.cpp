@@ -418,12 +418,22 @@ void dCamera_c::updatePad() {
     mTrigZ = (bool)CPad_CHECK_TRIG_B(mPadId); // likewise for mTrigZ
 
     m1AE = 0;
-    return;
 }
 
 /* 80162710-801627A4       .text initMonitor__9dCamera_cFv */
 void dCamera_c::initMonitor() {
-    /* Nonmatching */
+    if (mpPlayerActor) {
+        mMonitorPos = positionOf(mpPlayerActor);
+    }
+    else {
+        mMonitorPos = cXyz::Zero;
+    }
+
+    m23C = 0.0f;
+    m238 = 0.0f;
+    m234 = 0.0f;
+    m240 = 0;
+    m244 = 0.0f;
 }
 
 /* 801627A4-801628DC       .text updateMonitor__9dCamera_cFv */
@@ -542,7 +552,7 @@ cSAngle dCamera_c::directionOf(fopAc_ac_c*) {
 }
 
 /* 801652B0-801652CC       .text positionOf__9dCamera_cFP10fopAc_ac_c */
-void dCamera_c::positionOf(fopAc_ac_c*) {
+cXyz dCamera_c::positionOf(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

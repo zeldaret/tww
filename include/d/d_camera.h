@@ -328,7 +328,7 @@ public:
     int GetCameraTypeFromCameraName(const char*);
     void pushPos();
     cSAngle directionOf(fopAc_ac_c*);
-    void positionOf(fopAc_ac_c*);
+    cXyz positionOf(fopAc_ac_c*);
     cXyz attentionPos(fopAc_ac_c*);
     void relationalPos(fopAc_ac_c*, cXyz*);
     void relationalPos(fopAc_ac_c*, cXyz*, cSAngle);
