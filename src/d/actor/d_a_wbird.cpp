@@ -11,7 +11,7 @@
 #include "d/actor/d_a_player.h"
 
 
-const char daWbird_c::m_arcname[] = "Wbird";
+const char daWbird_c::M_arcname[] = "Wbird";
 const int windpower = 1;
 /* 00000078-000000AC       .text calcMtx__9daWbird_cFv */
 void daWbird_c::calcMtx() {

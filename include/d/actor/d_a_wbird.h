@@ -18,7 +18,7 @@ public:
     void actionMove();
     void actionSelect();
 
-    static const char m_arcname[];
+    static const char M_arcname[];
 
 public:
     /* 0x290 */ u8 field_0x290[0x29C - 0x290];
