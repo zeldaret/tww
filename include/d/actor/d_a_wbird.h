@@ -7,7 +7,9 @@ class daWbird_c : public fopAc_ac_c {
 public:
     inline BOOL draw();
     inline BOOL execute();
-    void setAction(unsigned char) {}
+    void setAction(int action) {
+        mAction = action;
+    }
 
     void calcMtx();
     void setStartPos();
