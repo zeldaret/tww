@@ -130,8 +130,8 @@ namespace JASystem {
         inline void flushChannel(u8) {}
         inline void restart() {}
         inline void setBusConnect(u8, u8, u8) {}
-        inline void setFXLine(u8 i, s16* buffer, FxlineConfig_* config) {
-            getFXHandle(i)->setFXLine(buffer, config);
+        inline bool setFXLine(u8 i, s16* buffer, FxlineConfig_* config) {
+            return getFXHandle(i)->setFXLine(buffer, config);
         }
         inline void setMixerInitDelayMax(u8, u8) {}
         inline void setMixerInitVolume(u8, u8, s16, u8) {}
