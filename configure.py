@@ -820,7 +820,7 @@ config.libs = [
             Object(Matching,    "JSystem/JAudio/JAIBankWave.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIConst.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIDummyObject.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JAIFx.cpp"),
+            Object(Matching,    "JSystem/JAudio/JAIFx.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIGlobalParameter.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIInitData.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAISeMgr.cpp"),

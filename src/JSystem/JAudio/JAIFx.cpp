@@ -17,7 +17,6 @@ void** JAInter::Fx::mFxconfigTable;
 
 /* 80291CCC-80292068       .text init__Q27JAInter2FxFv */
 void JAInter::Fx::init() {
-    /* Nonmatching */
     if (initOnCodeFxScene) {
         mBufferSizeMax = new (JAIBasic::getCurrentJAIHeap(), 4) u32[4];
         mBufferPointer = new (JAIBasic::getCurrentJAIHeap(), 4) s16*[4];
@@ -35,8 +34,7 @@ void JAInter::Fx::init() {
                 s16* _buf = new (JAIBasic::getCurrentJAIHeap(), 0x20) s16[ALIGN_PREV(getBufferSizeMax(i) * 160, 2) / 2];
                 JUT_ASSERT_MSG(57, _buf, "JAIFx::initHeap Cannot Alloc Heap!!\n");
                 setBufferPointer(i, _buf);
-                JASystem::DSPInterface::FxlineConfig_* config = &getFxconfigTable()[0][i];
-                JASystem::DSPInterface::getFXHandle(i)->setFXLine(getBufferPointer(i), config);
+                JASystem::DSPInterface::setFXLine(i, getBufferPointer(i), &getFxconfigTable()[0][i]);
             }
         }
     }
