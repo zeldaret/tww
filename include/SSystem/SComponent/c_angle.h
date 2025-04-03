@@ -19,7 +19,7 @@ public:
     cSAngle(s16);
     cSAngle(float);
     s16 Val() const { return mAngle; }
-    void Set(s16 angle) { this->mAngle = angle; }
+    //void Set(s16 angle) { this->mAngle = angle; }
     void Val(const cSAngle&);
     void Val(s16);
     void Val(float);

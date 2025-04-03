@@ -6,7 +6,7 @@
 
 struct dCamera__Style {
     /* 0x00 */ u32 m00;
-    /* 0x04 */ u32 m04;
+    /* 0x04 */ int engineIdx;
     /* 0x08 */ u32 m08;
     /* 0x0C */ u32 m0C;
     /* 0x10 */ u32 m10;
@@ -57,25 +57,41 @@ class dCamBGChk_c {
 public:
     dCamBGChk_c();
 
+    // copied these from TP's implementation, may not be correct
+    f32 WallUpDistance() { return mWallUpDistance; }
+    f32 FwdDistance(s32 param_0) { return mChkInfo[param_0].mDistance; }
+    s16 FwdChkAngle(s32 param_0) { return cAngle::d2s(mChkInfo[param_0].mChkAngle); }
+    f32 FwdWeightH(s32 param_0) { return mChkInfo[param_0].mWeightH; }
+    f32 FwdWeightL(s32 param_0) { return mChkInfo[param_0].mWeightL; }
+    f32 FwdBackMargin() { return mFwdBackMargin; }
+    f32 FwdCushion() { return mFwdCushion; }
+    f32 GazeBackMargin() { return mGazeBackMargin; }
+    f32 WallCushion() { return mWallCushion; }
+    f32 WallBackCushion() { return mWallBackCushion; }
+    f32 CornerCushion() { return mCornerCushion; }
+    f32 CornerAngleMax() { return mCornerAngleMax; }
+    f32 FloorMargin() { return mFloorMargin; }
+
+    // name is a guess for now
+    struct ChkInfo {
+        /* 0x0 */ f32 mDistance;
+        /* 0x4 */ f32 mChkAngle;
+        /* 0x8 */ f32 mWeightH;
+        /* 0xC */ f32 mWeightL;
+    };  // Size: 0x10
+
 public:
-    /* 0x00 */ f32 m00;
-    /* 0x04 */ f32 m04;
-    /* 0x08 */ f32 m08;
-    /* 0x0C */ f32 m0C;
-    /* 0x10 */ f32 m10;
-    /* 0x14 */ f32 m14;
-    /* 0x18 */ f32 m18;
-    /* 0x1C */ f32 m1C;
-    /* 0x20 */ f32 m20;
-    /* 0x24 */ f32 m24;
-    /* 0x28 */ f32 m28;
+    /* 0x00 */ f32 mFloorMargin;
+    /* 0x04 */ ChkInfo mChkInfo[2];
+    /* 0x24 */ f32 mFwdBackMargin;
+    /* 0x28 */ f32 mFwdCushion;
     /* 0x2C */ f32 m2C;
-    /* 0x30 */ f32 m30;
-    /* 0x34 */ f32 m34;
-    /* 0x38 */ f32 m38;
-    /* 0x3C */ f32 m3C;
-    /* 0x40 */ f32 m40;
-    /* 0x44 */ f32 m44;
+    /* 0x30 */ f32 mGazeBackMargin;
+    /* 0x34 */ f32 mCornerCushion;
+    /* 0x38 */ f32 mWallCushion;
+    /* 0x3C */ f32 mWallUpDistance;
+    /* 0x40 */ f32 mWallBackCushion;
+    /* 0x44 */ f32 mCornerAngleMax;
     /* 0x48 */ f32 m48;
     /* 0x4C */ f32 m4C;
     /* 0x50 */ f32 m50;
@@ -178,6 +194,9 @@ public:
     s16 LockonLatitude(f32);
     f32 LockonFovy(f32);
     f32 LockonCenterHeight(f32);
+    int Algorythmn(s32 i_style) { return mpStyle[i_style].engineIdx; }
+    int Algorythmn() { return mpStyle->engineIdx; }
+    bool CheckFlag(u16 flag) { return mpStyle->flag & flag; }
 };
 
 class dCamMath {

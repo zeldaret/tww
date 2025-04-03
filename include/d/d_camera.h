@@ -9,6 +9,7 @@
 #include "f_pc/f_pc_base.h"
 #include "d/d_cam_param.h"
 #include "d/d_bg_s_gnd_chk.h"
+#include "d/d_com_inf_game.h"
 #include "global.h"
 
 class camera_class;
@@ -39,8 +40,8 @@ struct dCamera__EventParam {
 
 struct dCamera__Type {
     /* 0x00 */ char name[24];
-    /* 0x18 */ s16 mStyles[2][11];
-};  // Size: 0x44
+    /* 0x18 */ s16 mStyles[2][10];
+};  // Size: 0x40
 
 class d2DBSplinePath {
 public:
@@ -71,6 +72,9 @@ public:
     /* 0x10 */ u8 field_10[0x70 - 0x10];
 };
 
+class dCamera_c;
+typedef bool (dCamera_c::*engine_fn)(s32);
+
 class dCamera_c {
 public:
     struct BG {
@@ -88,7 +92,7 @@ public:
     /* 0x000 */ camera_class* mpCamera;
     /* 0x004 */ u8 m004;
     /* 0x005 */ u8 m005;
-    /* 0x006 */ u8 m006[0x008 - 0x006];
+    /* 0x006 */ cSAngle m006;
     /* 0x008 */ f32 mDistance;
     /* 0x00C */ cSAngle m00C;
     /* 0x00E */ cSAngle mNextCsAngle;
@@ -101,7 +105,7 @@ public:
     /* 0x03C */ cSGlobe m03C;
     /* 0x044 */ cXyz m044;
     /* 0x050 */ cXyz m050;
-    /* 0x05C */ s16 m05C;
+    /* 0x05C */ cSAngle m05C;
     /* 0x05E */ u8 m05E[0x060 - 0x05E];
     /* 0x060 */ f32 m060;
     /* 0x064 */ f32 m064;
@@ -119,7 +123,11 @@ public:
     /* 0x0A4 */ u8 m0A4[0x40];
     /* 0x0E4 */ int mStageMapToolCameraIdx;
     /* 0x0E8 */ int m0E8;
-    /* 0x0EC */ u8 m0EC[0x108 - 0x0EC];
+    /* 0x0EC */ u8 m0EC[0x100 - 0x0EC];
+    /* 0x100 */ u8 m100;
+    /* 0x101 */ u8 m101;
+    /* 0x102 */ u8 m102;
+    /* 0x103 */ u8 m103[0x108 - 0x103];
     /* 0x108 */ int m108;
     /* 0x10C */ u8 m10C[0x110 - 0x10C];
     /* 0x110 */ u8 m110;
@@ -178,16 +186,16 @@ public:
     /* 0x1AF */ u8 m1AF[0x1B0 - 0x1AF];
     /* 0x1B0 */ dCamForcusLine mForcusLine;
     /* 0x220 */ u8 m220;
-    /* 0x224 */ u8 m221[0x228 - 0x221];
+    /* 0x221 */ u8 m221[0x224 - 0x221];
+    /* 0x224 */ cSAngle m224;
+    /* 0x226 */ u8 m226[0x228 - 0x226];
     /* 0x228 */ cXyz mMonitorPos;
     /* 0x234 */ f32 m234;
     /* 0x238 */ f32 m238;
     /* 0x23C */ f32 m23C;
     /* 0x240 */ int m240;
     /* 0x244 */ f32 m244;
-    /* 0x248 */ int m248;
-    /* 0x24C */ int m24C;
-    /* 0x250 */ int m250;
+    /* 0x248 */ int m248[3];
     /* 0x254 */ int m254;
     /* 0x258 */ int m258;
     /* 0x25C */ BG mBG;
@@ -208,7 +216,7 @@ public:
     /* 0x354 */ f32 m354;
     /* 0x358 */ int mRoomNo;
     /* 0x35C */ int mRoomMapToolCameraIdx;
-    /* 0x360 */ u8 m360[0x364 - 0x360];
+    /* 0x360 */ u32 m360;
     /* 0x364 */ u32 m364;
     /* 0x368 */ f32 m368;
     /* 0x36C */ u8 m36C[0x394 - 0x36C];
@@ -245,7 +253,7 @@ public:
     /* 0x534 */ s16 m534;
     /* 0x536 */ s16 m536;
     /* 0x538 */ f32 m538;
-    /* 0x53C */ u8 m53C[0x540 - 0x53C];
+    /* 0x53C */ f32 m53C;
     /* 0x540 */ f32 m540;
     /* 0x544 */ u8 m544[0x550 - 0x544];
     /* 0x550 */ int m550;
@@ -312,20 +320,20 @@ public:
     void updateMonitor();
     cSAngle calcPeepAngle();
     void Att();
-    BOOL checkForceLockTarget();
-    void Run();
+    bool checkForceLockTarget();
+    bool Run();
     void NotRun();
     void SetTrimSize(s32);
     void SetTrimTypeForce(s32);
     void CalcTrimSize();
     void Draw();
-    void nextMode(s32);
-    void onModeChange(s32, s32);
-    void nextType(s32);
-    void onTypeChange(s32, s32);
+    int nextMode(s32);
+    bool onModeChange(s32, s32);
+    int nextType(s32);
+    bool onTypeChange(s32, s32);
     void SetTypeForce(char*, fopAc_ac_c*);
     void SetTypeForce(s32, fopAc_ac_c*);
-    void onStyleChange(s32, s32);
+    bool onStyleChange(s32, s32);
     int GetCameraTypeFromMapToolID(s32, s32);
     int GetCameraTypeFromCameraName(const char*);
     void pushPos();
@@ -336,7 +344,7 @@ public:
     cXyz relationalPos(fopAc_ac_c*, cXyz*, cSAngle);
     cXyz relationalPos(fopAc_ac_c*, fopAc_ac_c*, cXyz*, f32);
     void setDMCAngle();
-    void getDMCAngle(cSAngle);
+    cSAngle getDMCAngle(cSAngle);
     void pointInSight(cXyz*);
     void radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*);
     void radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*, cXyz*, cXyz*, f32, s16);
@@ -350,36 +358,36 @@ public:
     void compWallMargin(cXyz*, f32);
     void defaultTriming();
     void setView(f32, f32, f32, f32);
-    void forwardCheckAngle();
+    cSAngle forwardCheckAngle();
     void bumpCheck(u32);
     void getWaterSurfaceHeight(cXyz*);
     void checkSpecialArea();
     void checkGroundInfo();
-    void followCamera2(s32);
-    void followCamera(s32);
+    bool followCamera2(s32);
+    bool followCamera(s32);
     void eyePos(fopAc_ac_c*);
     void heightOf(fopAc_ac_c*);
-    void lockonCamera(s32);
+    bool lockonCamera(s32);
     void getMsgCmdSpeaker();
     void getMsgCmdCut();
-    void talktoCamera(s32);
+    bool talktoCamera(s32);
     void CalcSubjectAngle(s16*, s16*);
-    void subjectCamera(s32);
-    void towerCamera(s32);
-    void crawlCamera(s32);
-    void hookshotCamera(s32);
-    void tornadoCamera(s32);
-    void rideCamera(s32);
-    void hungCamera(s32);
-    void vomitCamera(s32);
-    void shieldCamera(s32);
-    void manualCamera(s32);
-    void nonOwnerCamera(s32);
-    void fixedFrameCamera(s32);
-    void fixedPositionCamera(s32);
-    void eventCamera(s32);
-    void demoCamera(s32);
-    void letCamera(s32);
+    bool subjectCamera(s32);
+    bool towerCamera(s32);
+    bool crawlCamera(s32);
+    bool hookshotCamera(s32);
+    bool tornadoCamera(s32);
+    bool rideCamera(s32);
+    bool hungCamera(s32);
+    bool vomitCamera(s32);
+    bool shieldCamera(s32);
+    bool manualCamera(s32);
+    bool nonOwnerCamera(s32);
+    bool fixedFrameCamera(s32);
+    bool fixedPositionCamera(s32);
+    bool eventCamera(s32);
+    bool demoCamera(s32);
+    bool letCamera(s32);
     void Set(cXyz, cXyz);
     void Set(cXyz, cXyz, f32, s16);
     void Set(cXyz, cXyz, s16, f32);
@@ -459,6 +467,9 @@ public:
     void setFlag(u32 flag) { mEventFlags |= flag; }
     bool chkFlag(u32 flag) { return mEventFlags & flag; }
     void clrFlag(u32 flag) { mEventFlags &= ~flag; }
+
+    static engine_fn engine_tbl[];
+    static dCamera__Type types[63];
 };
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);
@@ -472,5 +483,61 @@ s16 dCam_getAngleX(camera_class*);
 s16 dCam_getControledAngleY(camera_class*);
 camera_class* dCam_getCamera();
 dCamera_c* dCam_getBody();
+
+engine_fn dCamera_c::engine_tbl[] = {
+    &dCamera_c::letCamera,
+    &dCamera_c::lockonCamera,
+    &dCamera_c::talktoCamera,
+    &dCamera_c::subjectCamera,
+    &dCamera_c::fixedPositionCamera,
+    &dCamera_c::fixedFrameCamera,
+    &dCamera_c::towerCamera,
+    &dCamera_c::rideCamera,
+    &dCamera_c::manualCamera,
+    &dCamera_c::eventCamera,
+    &dCamera_c::hookshotCamera,
+    &dCamera_c::followCamera2,
+    &dCamera_c::followCamera,
+    &dCamera_c::crawlCamera,
+    &dCamera_c::tornadoCamera,
+    &dCamera_c::hungCamera,
+    &dCamera_c::vomitCamera,
+    &dCamera_c::shieldCamera,
+    &dCamera_c::nonOwnerCamera,
+    &dCamera_c::demoCamera
+};
+
+
+namespace {
+    static int Stage;
+    
+    inline static u32 check_owner_action(u32 param_0, u32 param_1) {
+        return dComIfGp_checkPlayerStatus0(param_0, param_1);
+    }
+    
+    inline static u32 check_owner_action1(u32 param_0, u32 param_1) {
+        return dComIfGp_checkPlayerStatus1(param_0, param_1);
+    }
+    
+    inline static void setComStat(u32 param_0) {
+        dComIfGp_onCameraAttentionStatus(0, param_0);
+    }
+    
+    inline static void clrComStat(u32 param_0) {
+        dComIfGp_offCameraAttentionStatus(0, param_0);
+    }
+
+    inline static bool getComStat(u32 param_0) {
+        return dComIfGp_getCameraAttentionStatus(0) & param_0;
+    }
+    
+    inline static void setComZoomScale(f32 param_0) {
+        dComIfGp_setCameraZoomScale(0, param_0);
+    }
+    
+    inline static void setComZoomForcus(f32 param_0) {
+        dComIfGp_setCameraZoomForcus(0, param_0);
+    } 
+}  // namespace
 
 #endif /* D_CAMERA_H */
