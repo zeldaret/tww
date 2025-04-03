@@ -19,7 +19,15 @@ namespace daObjTable {
         void init_mtx();
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
-    
+
+
+        static Mtx M_tmp_mtx;
+        static const char M_arcname[6];
+        enum Prm_e {
+            PRM_LINK_ID_W = 8,
+            PRM_LINK_ID_S = 0,
+        };
+
     public:
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
