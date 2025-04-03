@@ -48,9 +48,9 @@ void daWbird_c::setStartPos() {
     current.pos.y += 150.0f;
 
     cXyz sp18;
-    sp18.x = cM_scos(envLight.mWind.mTactWindAngleX) * cM_scos((int)(u16)envLight.mWind.mTactWindAngleY);
+    sp18.x = cM_scos(envLight.mWind.mTactWindAngleX) * cM_scos((u16)envLight.mWind.mTactWindAngleY);
     sp18.y = cM_ssin(envLight.mWind.mTactWindAngleX);
-    sp18.z = cM_scos(envLight.mWind.mTactWindAngleX) * cM_ssin((int)(u16)(u32)envLight.mWind.mTactWindAngleY);
+    sp18.z = cM_scos(envLight.mWind.mTactWindAngleX) * cM_ssin((u16)envLight.mWind.mTactWindAngleY);
     int iVar5 = cM_atan2s(sp18.x, sp18.z);
     
     current.angle.y = iVar5;
