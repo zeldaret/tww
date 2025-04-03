@@ -12,7 +12,7 @@
 
 
 const char daWbird_c::m_arcname[] = "Wbird";
-const windpower = 1.875f;
+const int windpower = 1;
 /* 00000078-000000AC       .text calcMtx__9daWbird_cFv */
 void daWbird_c::calcMtx() {
     eyePos.x = current.pos.x;
@@ -28,6 +28,7 @@ void daWbird_c::setStartPos() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz *wind = dKyw_get_wind_vec();
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
+
     cSGlobe globe(*wind);
     cSAngle angle(globe.U());
     s32 a = globe.U() - player->current.angle.y;
@@ -47,15 +48,14 @@ void daWbird_c::setStartPos() {
     current.pos.y += 150.0f;
 
     cXyz sp18;
-    sp18.z = cM_scos((int)(u16)envLight.mWind.mTactWindAngleX) * cM_scos((int)(u16)envLight.mWind.mTactWindAngleY);
-    sp18.y = cM_ssin((int)(u16)envLight.mWind.mTactWindAngleX);
-
-    sp18.x = cM_scos((int)(u16)envLight.mWind.mTactWindAngleX) * cM_ssin((int)(u16)envLight.mWind.mTactWindAngleY);
+    sp18.x = cM_scos(envLight.mWind.mTactWindAngleX) * cM_scos((int)(u16)envLight.mWind.mTactWindAngleY);
+    sp18.y = cM_ssin(envLight.mWind.mTactWindAngleX);
+    sp18.z = cM_scos(envLight.mWind.mTactWindAngleX) * cM_ssin((int)(u16)(u32)envLight.mWind.mTactWindAngleY);
 
     int iVar5 = cM_atan2s(sp18.x, sp18.z);
-
     current.angle.y = iVar5;
-    player->shape_angle.y = iVar5;
+        shape_angle.y = iVar5;
+
     field_0x29E = 80;
     speed.x = sp18.x * 40.0f;
     speed.z = sp18.z * 40.0f;
@@ -84,8 +84,6 @@ cPhs_State daWbird_c::create() {
     fopAcM_SetupActor(this, daWbird_c);
     CreateInit();
     return cPhs_COMPLEATE_e;
-
-    /* Nonmatching */
 }
 
 /* 000003E0-000003E4       .text actionWait__9daWbird_cFv */
@@ -104,13 +102,12 @@ void daWbird_c::actionEnd() {
 
 /* 00000474-000005DC       .text actionMove__9daWbird_cFv */
 void daWbird_c::actionMove() {
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     if(field_0x29D){
         field_0x29D = false;
         mDoAud_seStart(JA_SE_TAKT_WIND_DEMO);
     }
-        
-    if (field_0x29E >= 0) {
+    if (field_0x29E > 0) {
         field_0x29E--;
         if (field_0x29E > 60) {
             fopAcM_posMove(this, NULL);
@@ -120,15 +117,14 @@ void daWbird_c::actionMove() {
             dKyw_custom_windpower(0.0f);
         }
         if (field_0x29E == 70) {
-            dKyw_evt_wind_set_go();
+            dKyw_tact_wind_set_go();
         }
     } else {
         dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("WINDMAN"));
         player->changeDemoMoveAngle(field_0x2A4);
         mAction = 1;
-        mDoAud_seStart(JA_SE_TAKT_WIND_DEMO);
+        mDoAud_seStart(JA_SE_TAKT_WIND_END);
     }
-    /* Nonmatching */
 }
 
 /* 000005DC-00000850       .text actionSelect__9daWbird_cFv */
@@ -174,7 +170,6 @@ void daWbird_c::actionSelect() {
     else {
         field_0x29E++;
     }
-    /* Nonmatching */
 }
 /* 00000850-00000858       .text daWbird_Draw__FP9daWbird_c */
 static BOOL daWbird_Draw(daWbird_c*) {
@@ -217,7 +212,6 @@ static BOOL daWbird_Delete(daWbird_c* i_this) {
 static cPhs_State daWbird_Create(fopAc_ac_c* i_this) {
     daWbird_c* a_this = (daWbird_c*)i_this;
     return a_this->create();
-    /* Nonmatching */
 }
 
 static actor_method_class l_daWbird_Method = {
