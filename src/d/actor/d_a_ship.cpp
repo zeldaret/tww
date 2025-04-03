@@ -4150,10 +4150,9 @@ BOOL daShip_c::execute() {
         }
     }
     if (
-        !(!dComIfGs_isEventBit(0x2D10) ||
-        daPy_getPlayerLinkActorClass()->checkMasterSwordEquip()) ||
-        !(!dComIfGs_isEventBit(0x3804) || dComIfGs_isEventBit(0x2D02)) ||
-        !(!dComIfGs_isEventBit(0x3E10) || dComIfGs_isEventBit(0x3F80))
+        (dComIfGs_isEventBit(0x2D10) && !daPy_getPlayerLinkActorClass()->checkMasterSwordEquip()) ||
+        (dComIfGs_isEventBit(0x3804) && !dComIfGs_isEventBit(0x2D02)) ||
+        (dComIfGs_isEventBit(0x3E10) && !dComIfGs_isEventBit(0x3F80))
     ) {
         attention_info.flags &= ~fopAc_Attn_ACTION_SHIP_e;
     }
@@ -4238,20 +4237,20 @@ BOOL daShip_c::execute() {
         cyl->SetC(sp9C);
         dComIfG_Ccsp()->Set(cyl);
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-            cyl->SetTgGrp(4);
+            cyl->SetTgGrp(cCcD_AtSPrm_VsPlayer_e);
         }
         else {
-            cyl->SetTgGrp(0xC);
+            cyl->SetTgGrp(cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e);
         }
     }
 
     cMtx_multVec(m029C->getModel()->getAnmMtx(8), &sph_offset, &sp9C);
 
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-        mSph.SetTgGrp(4);
+        mSph.SetTgGrp(cCcD_AtSPrm_VsPlayer_e);
     }
     else {
-        mSph.SetTgGrp(0xC);
+        mSph.SetTgGrp(cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e);
     }
 
     mSph.SetC(sp9C);
@@ -4264,12 +4263,12 @@ BOOL daShip_c::execute() {
     }
 
     if (mShipMode == Sailing) {
-        dComIfGp_setPlayerStatus1(0, 0x400);
+        dComIfGp_setPlayerStatus1(0, daPyStts1_SAIL_e);
         mDoAud_setShipSailState(1);
         
     }
     else {
-        dComIfGp_clearPlayerStatus1(0, 0x400);
+        dComIfGp_clearPlayerStatus1(0, daPyStts1_SAIL_e);
         mDoAud_setShipSailState(0);
     }
 
@@ -4306,7 +4305,7 @@ BOOL daShip_c::shipDelete() {
     mDoAud_seDeleteObject(&m102C);
     mDoAud_seDeleteObject(&m1020);
     mDoAud_seDeleteObject(&m1038);
-    dComIfGp_clearPlayerStatus1(0, 0x400);
+    dComIfGp_clearPlayerStatus1(0, daPyStts1_SAIL_e);
     dComIfG_resDelete(&mPhs, l_arcName);
     return TRUE;
 }

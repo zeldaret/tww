@@ -16,7 +16,7 @@
 
 /* 8014956C-80149590       .text checkBoomerangAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkBoomerangAnime() const {
-    return (checkBoomerangReadyAnime()) || (checkBoomerangThrowAnime());
+    return checkBoomerangReadyAnime() || checkBoomerangThrowAnime();
 }
 
 /* 80149590-80149698       .text throwBoomerang__9daPy_lk_cFv */
@@ -73,7 +73,7 @@ int daPy_lk_c::returnBoomerang() {
 
 /* 801497A4-8014984C       .text checkNextActionBoomerangReady__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextActionBoomerangReady() {
-    if ((!itemButton()) && (mpAttnActorLockOn != NULL || (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x10)))) {
+    if (!itemButton() && (mpAttnActorLockOn != NULL || dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x10))) {
         setActAnimeUpper(
             LKANM_BCK_BOOMTHROW,
             UPPER_MOVE2_e,
@@ -93,7 +93,7 @@ BOOL daPy_lk_c::checkNextActionBoomerangFly() {
     if (checkBoomerangReadyAnime()) {
         checkNextActionBoomerangReady();
     } else {
-        if ((itemTrigger()) && (mEquipItem == getReadyItem())) {
+        if (itemTrigger() && mEquipItem == getReadyItem()) {
             setActAnimeUpper(
                 LKANM_BCK_BOOMWAIT,
                 UPPER_MOVE2_e,
@@ -121,8 +121,8 @@ BOOL daPy_lk_c::checkNextBoomerangMode() {
 /* 80149964-80149A44       .text changeBoomerangCatchProc__9daPy_lk_cFv */
 int daPy_lk_c::changeBoomerangCatchProc() {
     if (checkNoResetFlg0(daPyFlg0_UNK20)) {
-        if ((((!dComIfGp_event_runCheck()) && (mDemo.getDemoType() == 0)) && (checkModeFlg(ModeFlg_00020000))) &&
-            (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff || (checkBoomerangThrowAnime())))
+        if (!dComIfGp_event_runCheck() && mDemo.getDemoType() == 0 && checkModeFlg(ModeFlg_00020000) &&
+            (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff || checkBoomerangThrowAnime()))
         {
             setActAnimeUpper(
                 LKANM_BCK_BOOMCATCH,
