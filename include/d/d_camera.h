@@ -276,9 +276,9 @@ public:
     /* 0x5EC */ f32 m5EC;
     /* 0x5F0 */ f32 m5F0;
     /* 0x5F4 */ f32 m5F4;
-    /* 0x5F8 */ f32 m5F8;
-    /* 0x5FC */ int m5FC;
-    /* 0x600 */ int m600;
+    /* 0x5F8 */ f32 mTrimHeight;
+    /* 0x5FC */ int mTrimSize;
+    /* 0x600 */ int mTrimTypeForce;
     /* 0x604 */ f32 m604;
     /* 0x608 */ f32 m608;
     /* 0x60C */ dCamSetup_c mCamSetup;
@@ -322,11 +322,11 @@ public:
     void Att();
     bool checkForceLockTarget();
     bool Run();
-    void NotRun();
-    void SetTrimSize(s32);
-    void SetTrimTypeForce(s32);
+    bool NotRun();
+    bool SetTrimSize(s32);
+    bool SetTrimTypeForce(s32);
     void CalcTrimSize();
-    void Draw();
+    bool Draw();
     int nextMode(s32);
     bool onModeChange(s32, s32);
     int nextType(s32);

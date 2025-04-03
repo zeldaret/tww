@@ -71,9 +71,9 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     m080 = cM_rndFX(32767.0f);
     m064 = 1.0f;
     m5F4 = 0.0f;
-    m5F8 = 0.0f;
-    m5FC = 0;
-    m600 = -1;
+    mTrimHeight = 0.0f;
+    mTrimSize = 0;
+    mTrimTypeForce = -1;
     pStagInfo = (stage_stag_info_class *)dComIfGp_getStageStagInfo();
     if (pStagInfo && pStagInfo->mCameraMapToolID != -1) {
         mapToolType = GetCameraTypeFromMapToolID(pStagInfo->mCameraMapToolID, -1);
@@ -541,6 +541,7 @@ bool dCamera_c::checkForceLockTarget() {
 
 /* 80163514-80163EF4       .text Run__9dCamera_cFv */
 bool dCamera_c::Run() {
+    /* Nonmatching */
     float fVar1;
     u16 uVar2;
     float fVar3;
@@ -590,7 +591,7 @@ bool dCamera_c::Run() {
             }
             m53C = fVar3;
             m538 = fVar1;
-            m044.y -= m53C * mCamSetup.m0B8;
+            m044.y -= m53C * mCamSetup.mManualStartCThreshold;
         }
     }
 
@@ -665,7 +666,7 @@ bool dCamera_c::Run() {
 
     defaultTriming();
 
-    m600 = -1;
+    mTrimTypeForce = -1;
     m068 = 9;
     
     if (chkFlag(0x200000) && dCamParam_c::styles[mCurStyle].engineIdx != 11) {
@@ -828,28 +829,92 @@ bool dCamera_c::Run() {
 }
 
 /* 80163EF4-801640A8       .text NotRun__9dCamera_cFv */
-void dCamera_c::NotRun() {
-    /* Nonmatching */
+bool dCamera_c::NotRun() {
+    clrFlag(~(0x6feb63de));
+
+    checkGroundInfo();
+
+    dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x80);
+
+    if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
+        if (mCurType != mCamTypeEvent) {
+            pushPos();
+
+            m404 = mCurType;
+        }
+
+        mCurType = mCamTypeEvent;
+
+        eventCamera(types[mCurType].mStyles[0][3]);
+
+        m07C++;
+        m118++;
+        m108++;
+        m11C++;
+    }
+    
+    if (dComIfGp_event_getMode() != 0) {
+        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x48);
+    }
+
+    dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x14);
+    
+    clrFlag(0x90080);
+
+    mForcusLine.Off();
+
+    shakeCamera();
+
+    m005 = 0;
+
+    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 8)) {
+        if (chkFlag(0x400000)) {
+            setView(160.0f, 35.0f, 320.0f, 320.0f);
+        }
+        else {
+            setView(0.0f, 0.0f, 640.0f, 480.0f);
+        }
+    }
+    return TRUE;
 }
 
 /* 801640A8-801640B4       .text SetTrimSize__9dCamera_cFl */
-void dCamera_c::SetTrimSize(s32) {
-    /* Nonmatching */
+bool dCamera_c::SetTrimSize(s32 size) {
+    mTrimSize = size;
+    return TRUE;
 }
 
 /* 801640B4-801640C0       .text SetTrimTypeForce__9dCamera_cFl */
-void dCamera_c::SetTrimTypeForce(s32) {
-    /* Nonmatching */
+bool dCamera_c::SetTrimTypeForce(s32 force) {
+    mTrimTypeForce = force;
+    return TRUE;
 }
 
 /* 801640C0-80164164       .text CalcTrimSize__9dCamera_cFv */
 void dCamera_c::CalcTrimSize() {
-    /* Nonmatching */
+    switch (mTrimSize) {
+        case 0:
+            mTrimHeight += -mTrimHeight * 0.25f;
+            break;
+        case 2:
+            mTrimHeight += (mCamSetup.CinemaScopeTrimHeight() - mTrimHeight) * 0.25f;
+            break;
+        case 1:
+            mTrimHeight += (mCamSetup.VistaTrimHeight() - mTrimHeight) * 0.25f;
+            break;
+        case 3:
+            mTrimHeight = mCamSetup.CinemaScopeTrimHeight();
+            break;
+        case 4:
+            mTrimHeight = 0.0f;
+            break;
+    }
 }
 
 /* 80164164-8016418C       .text Draw__9dCamera_cFv */
-void dCamera_c::Draw() {
-    /* Nonmatching */
+bool dCamera_c::Draw() {
+    mForcusLine.Draw();
+    return TRUE;
 }
 
 /* 8016418C-80164898       .text nextMode__9dCamera_cFl */
