@@ -12,6 +12,10 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_obj_pirateship.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "f_op/f_op_camera.h"
+#include "f_op/f_op_camera_mng.h"
+#include "d/d_com_lib_game.h"
+#include "m_Do/m_Do_graphic.h"
 
 class camera_process_class;
 
@@ -918,8 +922,308 @@ bool dCamera_c::Draw() {
 }
 
 /* 8016418C-80164898       .text nextMode__9dCamera_cFl */
-int dCamera_c::nextMode(s32) {
-    /* Nonmatching */
+int dCamera_c::nextMode(s32 i_curMode) {
+    //bool bVar1;
+    //fopAc_ac_c *pfVar2;
+    //uint uVar3;
+    //int iVar4;
+    //uint uVar5;
+    //long lVar6;
+    //cXyz cStack_44;
+    //cXyz local_38;
+    //float local_2c;
+    //float local_28;
+    //float local_24;
+//
+    //s32 next_mode = i_curMode;
+    //cXyz player_pos = positionOf(mpPlayerActor);
+//
+    //if (!dComIfGp_evmng_cameraPlay()) {
+    //    if (mBG.m58 > player_pos.y) {
+    //        m1AE = 0;
+    //    }
+    //    switch(i_curMode) {
+    //        case 4:
+    //        case 10:
+    //        case 11:
+    //        case 13:
+    //        case 14:
+    //            m144 = 1;
+    //            m184 = 0;
+    //            break;
+    //        case 5:
+    //        case 6:
+    //            m144 = 1;
+    //            m184 = 0;
+    //        case 1:
+    //            mpLockonTarget = NULL;
+    //        default:
+    //            if (m19B == 0) {
+    //                if (mStickCPosYLast > 0.0f || mStickCValueLast <= mCamSetup.m09C) {
+    //                if ((i_curMode == 0 || i_curMode == 0x13) &&
+    //                   (((positionOf(&cStack_44,this,mpPlayerActor), mStickMainValueLast < 0.5 &&
+    //                     (uVar3 = dAttention_c::LockonTruth
+    //                                        (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention),
+    //                     (uVar3 & 0xff) == 0)) &&
+    //                    ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][0] &
+    //                     0x100000) == 0)))) {
+    //                  if (*(int *)&field_0x184 == 1) {
+    //                    if (mStickCPosYLast < (mCamSetup).mCstick.field0_0x0) {
+    //                      *(undefined4 *)&field_0x184 = 0;
+    //                    }
+    //                  }
+    //                  else if (mStickCPosYLast <= (mCamSetup).mCstick.field1_0x4) {
+    //                    d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
+    //                    mCameraAttentionStatus =
+    //                         d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
+    //                         mCameraAttentionStatus | 0x400;
+    //                  }
+    //                  else {
+    //                    d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
+    //                    mCameraAttentionStatus =
+    //                         d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
+    //                         mCameraAttentionStatus | 0x1000;
+    //                    *(undefined4 *)&field_0x184 = 1;
+    //                    d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
+    //                    mCameraAttentionStatus =
+    //                         d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
+    //                         mCameraAttentionStatus | 0x400;
+    //                  }
+    //                }
+    //              }
+    //              else {
+    //                field92_0x144 = 0;
+    //              }
+    //            }
+    //            else {
+    //                m144 = 1;
+    //                m184 = 0;
+    //            }
+//
+    //            break;
+    //        case 12:
+    //            if (mStickCValueLast < 0.01f && mDistance < mCamSetup.m098 || chkFlag(0x80000000)) {
+    //                m144 = 1;
+    //                m184 = 0;
+    //            }
+    //            else if (m19B != 0) {
+    //                m144 = 1;
+    //                m184 = 0;
+    //            }
+//
+    //            break;
+    //    }
+//
+    //    if (chkFlag(0x4000000)) {
+    //        if (m144 == 0) {
+    //            m254 |= 1;
+    //        }
+//
+    //        if (check_owner_action(mPadId, 0x80000000)) {
+    //            setFlag(0x8000);
+    //        }
+//
+    //        m144 = 1;
+//
+    //        clrFlag(0x4000000)
+    //    }
+//
+    //    if (((field84_0x130 != -1) && (*(int *)&field_0x134 != 0)) &&
+    //       (*(short *)(*(int *)&field_0x134 + 8) == 0x171)) {
+    //      field92_0x144 = 1;
+    //      lVar6 = 0;
+    //    }
+//
+    //    if ((lVar6 == 0xc) && (field92_0x144 != 0)) {
+    //      param_1 = 0;
+    //    }
+    //    else {
+    //    uVar3 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][0];
+    //    if (((uVar3 & 0x200000) == 0) &&
+    //       (uVar5 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][1],
+    //       (uVar5 & 8) == 0)) {
+    //      if ((uVar3 & 0x80000080) == 0) {
+    //        if ((uVar3 & 0x800000) == 0) {
+    //          if ((uVar5 & 0x10) == 0) {
+    //            if ((uVar3 & 0x2000) == 0) {
+    //              if ((uVar3 & 0x25000) != 0) {
+    //                bVar1 = true;
+    //                uVar3 = dAttention_c::LockonTruth
+    //                                  (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention);
+    //                if (((uVar3 & 0xff) == 0) &&
+    //                   ((d_com_inf_game::g_dComIfG_gameInfo.play.mAttention.mFlags & 0x20000000) == 0)
+    //                   ) {
+    //                  bVar1 = false;
+    //                }
+    //                if (!bVar1) {
+    //                  param_1 = 10;
+    //                  goto LAB_801647b0;
+    //                }
+    //              }
+    //              if ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][0] &
+    //                  0x80000) != 0) {
+    //                bVar1 = true;
+    //                uVar3 = dAttention_c::LockonTruth
+    //                                  (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention);
+    //                if (((uVar3 & 0xff) == 0) &&
+    //                   ((d_com_inf_game::g_dComIfG_gameInfo.play.mAttention.mFlags & 0x20000000) == 0)
+    //                   ) {
+    //                  bVar1 = false;
+    //                }
+    //                if (!bVar1) {
+    //                  param_1 = 0xb;
+    //                  goto LAB_801647b0;
+    //                }
+    //              }
+    //              if (field92_0x144 == 0) {
+    //                param_1 = 0xc;
+    //              }
+    //              else {
+    //                uVar3 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][1]
+    //                ;
+    //                if ((uVar3 & 2) == 0) {
+    //                  if ((uVar3 & 4) == 0) {
+    //                    uVar3 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
+    //                            [mPadId * 2][0];
+    //                    if ((uVar3 & 0x60) == 0) {
+    //                      if ((uVar3 & 0x61) == 0) {
+    //                        if (((uVar3 & 0x406) == 0) || (lVar6 == 0xc)) {
+    //                          uVar3 = dAttention_c::LockonTruth
+    //                                            (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention);
+    //                          if (((uVar3 & 0xff) == 0) ||
+    //                             ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
+    //                               [mPadId * 2][0] & 0xc000000) != 0)) {
+    //                            bVar1 = true;
+    //                            uVar3 = dAttention_c::LockonTruth
+    //                                              (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention
+    //                                              );
+    //                            if (((uVar3 & 0xff) == 0) &&
+    //                               ((d_com_inf_game::g_dComIfG_gameInfo.play.mAttention.mFlags &
+    //                                0x20000000) == 0)) {
+    //                              bVar1 = false;
+    //                            }
+    //                            if (bVar1) {
+    //                              param_1 = 1;
+    //                            }
+    //                            else {
+    //                              iVar4 = mPadId;
+    //                              uVar3 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
+    //                                      [iVar4 * 2][0];
+    //                              if ((((uVar3 & 0x400000) == 0) || ((uVar3 & 0x36a02371) != 0)) ||
+    //                                 ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
+    //                                   [iVar4 * 2][1] & 0x11) != 0)) {
+    //                                bVar1 = false;
+    //                                if (((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
+    //                                      [iVar4 * 2][1] & 0x80000) != 0) ||
+    //                                   (daNpc_Md_c::m_mirror != '\0')) {
+    //                                  bVar1 = true;
+    //                                }
+    //                                if (bVar1) {
+    //                                  param_1 = 0x13;
+    //                                }
+    //                                else if (field84_0x130 == -1) {
+    //                                  if (lVar6 == 0xc) {
+    //                                    if (field92_0x144 != 0) {
+    //                                      param_1 = 0;
+    //                                    }
+    //                                  }
+    //                                  else {
+    //                                    param_1 = 0;
+    //                                  }
+    //                                }
+    //                                else if (*(fopAc_ac_c **)&field_0x134 == (fopAc_ac_c *)0x0)
+    //                                {
+    //                                  param_1 = 0;
+    //                                  field84_0x130 = -1;
+    //                                }
+    //                                else {
+    //                                  param_1 = 2;
+    //                                  mpLockonTarget = *(fopAc_ac_c **)&field_0x134;
+    //                                }
+    //                              }
+    //                              else {
+    //                                if ((mpPlayerActor->parent).parent.mProcName == 0xa9) {
+    //                                  local_48 = (**(code **)(*(int *)&mpPlayerActor[1].parent.
+    //                                                                   parent.mPi.mMtdTg.parent.
+    //                                                                   mbAdded + 0x54))();
+    //                                  pfVar2 = f_op_actor_iter::fopAcIt_Judge
+    //                                                     (f_pc_searcher::fpcSch_JudgeByID,&local_48);
+    //                                }
+    //                                else {
+    //                                  pfVar2 = (fopAc_ac_c *)0x0;
+    //                                }
+    //                                mpLockonTarget = pfVar2;
+    //                                param_1 = 2;
+    //                                field84_0x130 = -1;
+    //                              }
+    //                            }
+    //                          }
+    //                          else {
+    //                            param_1 = 2;
+    //                          }
+    //                        }
+    //                        else if (mpLockonTarget != (fopAc_ac_c *)0x0) {
+    //                          param_1 = 8;
+    //                        }
+    //                      }
+    //                      else {
+    //                        param_1 = 5;
+    //                      }
+    //                    }
+    //                    else {
+    //                      param_1 = 6;
+    //                    }
+    //                  }
+    //                  else {
+    //                    param_1 = 6;
+    //                  }
+    //                }
+    //                else {
+    //                  param_1 = 5;
+    //                }
+    //              }
+    //            }
+    //            else {
+    //              param_1 = 4;
+    //            }
+    //          }
+    //          else {
+    //            param_1 = 0xf;
+    //          }
+    //        }
+    //        else if (field92_0x144 == 0) {
+    //          param_1 = 0xc;
+    //        }
+    //        else {
+    //          param_1 = 0x12;
+    //        }
+    //      }
+    //      else {
+    //        param_1 = 0x11;
+    //      }
+    //    }
+    //    else {
+    //      param_1 = 0xe;
+    //    }
+    //  }
+    //}
+    //LAB_801647b0:
+    //if (param_1 != 2) {
+    //  field84_0x130 = -1;
+    //}
+    //if ((param_1 == 0xc) && (iVar4 = mCurType, types[iVar4].mStyles[0xc] < 0)) {
+    //  if ((iVar4 != mCamTypeEvent) &&
+    //     (((iVar4 != mCamTypeBoat && (iVar4 != mCamTypeBoatBattle)) &&
+    //      (iVar4 != mCamTypeRestrict)))) {
+    //    field172_0x254 = field172_0x254 | 1;
+    //  }
+    //  field92_0x144 = 1;
+    //  param_1 = lVar6;
+    //}
+    //if ((types[mCurType].mStyles[param_1] > -1) && (lVar6 = param_1, param_1 == 1)) {
+    //  mEventFlags = mEventFlags | 0x100000;
+    //}
+    //return lVar6;
 }
 
 /* 80164898-80164A48       .text onModeChange__9dCamera_cFll */
@@ -1428,8 +1732,21 @@ void camera_draw(camera_process_class*) {
 }
 
 /* 8017C72C-8017C7E4       .text init_phase1__FP12camera_class */
-void init_phase1(camera_class*) {
-    /* Nonmatching */
+int init_phase1(camera_class* i_this) {
+    int camera_id = fopCamM_GetParam(i_this); // get_camera_id(i_this);
+    
+    dComIfGp_setCamera(camera_id, i_this);
+    fopCamM_SetPrm1(i_this, dComIfGp_getCameraWinID(camera_id));
+    fopCamM_SetPrm2(i_this, dComIfGp_getCameraPlayer1ID(camera_id));
+    fopCamM_SetPrm3(i_this, dComIfGp_getCameraPlayer2ID(camera_id));
+    
+    Vec local_18 = {1000000.0f, 1000000.0f, 1000000.0f};
+
+    mDoAud_getCameraInfo(&local_18, j3dSys.getViewMtx(), camera_id);
+
+    dComIfGp_setWindowNum(0);
+    mDoGph_gInf_c::onAutoForcus();
+    return cPhs_NEXT_e;
 }
 
 /* 8017C7E4-8017C980       .text init_phase2__FP12camera_class */
@@ -1438,31 +1755,66 @@ void init_phase2(camera_class*) {
 }
 
 /* 8017C980-8017C9B0       .text camera_create__FP12camera_class */
-void camera_create(camera_class*) {
-    /* Nonmatching */
+cPhs_State camera_create(camera_class* i_this) {
+    static request_of_phase_process_fn l_method[3] = {
+        (request_of_phase_process_fn)init_phase1,
+        (request_of_phase_process_fn)init_phase2,
+        (request_of_phase_process_fn)NULL,
+    };
+
+    return dComLbG_PhaseHandler(&i_this->phase_request, l_method, i_this);
 }
 
 /* 8017C9B0-8017C9DC       .text camera_delete__FP20camera_process_class */
-void camera_delete(camera_process_class*) {
-    /* Nonmatching */
+bool camera_delete(camera_process_class* i_this) {
+    /* Fakematch, instruction swap */
+    dCamera_c* camera = &((camera_class*)i_this)->mCamera;
+    camera->~dCamera_c();
+    return TRUE;
 }
 
 /* 8017C9DC-8017C9E4       .text is_camera_delete__FPv */
-void is_camera_delete(void*) {
-    /* Nonmatching */
+bool is_camera_delete(void*) {
+    return TRUE;
 }
 
 /* 8017C9E4-8017CA7C       .text Init__14dCamForcusLineFv */
 void dCamForcusLine::Init() {
-    /* Nonmatching */
+    m49 = 0;
+    m48 = 1;
+    m38 = cXyz(320.0f, 240.0f, 0.0f);
+    
+    m44.r = 0xFF;
+    m44.g = 0xFF;
+    m44.b = 0xFF;
+    m44.a = 0x60;
+
+    m4C = 100;
+    m50 = 100;
+    m54 = 100;
+    m58 = 0x50;
+    m5A = 0;
+    m5C = 4;
+    m5E = 4;
+    m68 = 180.0f;
+    m6C = 0.0f;
+    m60 = 180.0f;
+    m64 = 60.0f;
 }
 
 /* 8017CA7C-8017CB00       .text Draw__14dCamForcusLineFv */
 void dCamForcusLine::Draw() {
-    /* Nonmatching */
+    if (m49) {
+        if (m48 == 0) {
+            mEffectLine.initRnd(m4C, m50, m54);
+        }
+
+        mEffectLine.update(m38, m44, m58, m5A, m5C, m5E, m60, m64, m68, m6C);
+    }
 }
 
 /* 8017CB00-8017CB18       .text Off__14dCamForcusLineFv */
-void dCamForcusLine::Off() {
-    /* Nonmatching */
+bool dCamForcusLine::Off() {
+    m49 = 0;
+    return m49 == 0;
 }

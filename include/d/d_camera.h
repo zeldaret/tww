@@ -13,6 +13,7 @@
 #include "global.h"
 
 class camera_class;
+class camera_process_class;
 class dBgS_LinChk;
 class dBgS_CamGndChk;
 class cBgS_PolyInfo;
@@ -65,11 +66,24 @@ class dCamForcusLine {
 public:
     void Init();
     void Draw();
-    void Off();
+    bool Off();
 
-    /* 0x00 */ void* vtbl;
-    /* 0x04 */ cM_rnd_c mRnd;
-    /* 0x10 */ u8 field_10[0x70 - 0x10];
+    /* 0x00 */ dDlst_effectLine_c mEffectLine;
+    /* 0x38 */ cXyz m38;
+    /* 0x44 */ GXColor m44;
+    /* 0x48 */ u8 m48;
+    /* 0x49 */ u8 m49;
+    /* 0x4C */ int m4C;
+    /* 0x50 */ int m50;
+    /* 0x54 */ int m54;
+    /* 0x58 */ u16 m58;
+    /* 0x5A */ u16 m5A;
+    /* 0x5C */ u16 m5C;
+    /* 0x5E */ u16 m5E;
+    /* 0x60 */ f32 m60;
+    /* 0x64 */ f32 m64;
+    /* 0x68 */ f32 m68;
+    /* 0x6C */ f32 m6C;
 };
 
 class dCamera_c;
@@ -511,6 +525,10 @@ engine_fn dCamera_c::engine_tbl[] = {
 namespace {
     static int Stage;
     
+    //inline static int get_camera_id(camera_class* i_camera) {
+    //    return fopCamM_GetParam(i_camera);
+    //}
+
     inline static u32 check_owner_action(u32 param_0, u32 param_1) {
         return dComIfGp_checkPlayerStatus0(param_0, param_1);
     }
