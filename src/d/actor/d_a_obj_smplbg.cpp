@@ -5,7 +5,7 @@
 
 #include "d/actor/d_a_obj_smplbg.h"
 #include "d/d_procname.h"
-
+#include "d/d_com_inf_game.h"
 /* 00000078-00000144       .text CreateHeap__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::CreateHeap() {
     /* Nonmatching */
@@ -18,31 +18,46 @@ BOOL daObjSmplbg::Act_c::Create() {
 
 /* 0000032C-00000474       .text Mthd_Create__Q211daObjSmplbg5Act_cFv */
 cPhs_State daObjSmplbg::Act_c::Mthd_Create() {
+    fopAcM_SetupActor(this, Act_c);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Qtkhd", 0x0);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11000022);
+
+    JUT_ASSERT(0x6b, modelData != NULL);
     /* Nonmatching */
 }
 
 /* 00000474-0000047C       .text Delete__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000047C-000004D8       .text Mthd_Delete__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Mthd_Delete() {
+    s32 result = MoveBGDelete();
+    dComIfG_resDelete(&mPhs, "Qtkhd");
+    return result;
     /* Nonmatching */
 }
 
 /* 000004D8-00000558       .text set_mtx__Q211daObjSmplbg5Act_cFv */
 void daObjSmplbg::Act_c::set_mtx() {
+
     /* Nonmatching */
 }
 
 /* 00000558-00000594       .text init_mtx__Q211daObjSmplbg5Act_cFv */
 void daObjSmplbg::Act_c::init_mtx() {
+    mpModel->mBaseScale = scale;
+    set_mtx();
     /* Nonmatching */
 }
 
 /* 00000594-0000061C       .text exec_qtkhd__Q211daObjSmplbg5Act_cFv */
 void daObjSmplbg::Act_c::exec_qtkhd() {
+    if(field_0x2D8 == '\0'){
+        shape_angle.y = shape_angle.y + 0x5b;
+        fopAcM_seStart(this, JA_SE_OBJ_TC_TOWER_ROUND, 0);
+    }
     /* Nonmatching */
 }
 

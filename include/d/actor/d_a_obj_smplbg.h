@@ -24,8 +24,12 @@ namespace daObjSmplbg {
         virtual BOOL Draw();
     
     public:
-        /* Place member variables here */
-    };
+        /* 0x290 */ u8 field_0x290[0x2C8 - 0x290];
+        /* 0x2C8 */ request_of_phase_process_class mPhs;
+        /* 0x2D0 */ J3DModel* mpModel;
+        /* 0x2D4 */ int field_0x2D4;
+        /* 0x2D8 */ u8 field_0x2D8[0x2DC - 0x2D8];
+    };  // Size: 0x2DC
 };
 
 #endif /* D_A_OBJ_SMPLBG_H */
