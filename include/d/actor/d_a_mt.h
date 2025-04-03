@@ -31,15 +31,16 @@ public:
     /* 0x02C0 */ dPath* mpPath;
     /* 0x02C4 */ mDoExt_McaMorf* mpMorfs[8];
     /* 0x02E4 */ u8 m2E4;
-
-    u8 m2E5[0x02F0 - 0x02E5];
-
+    u8 m2E5[0x02E8 - 0x02E5];
+    /* 0x02E8 */ int m2E8;
+    /* 0x02EC */ int m2EC;
     /* 0x02F0 */ mDoExt_btkAnm* btk[8];
     /* 0x0310 */ mDoExt_brkAnm* brk[8];
     /* 0x0330 */ f32 m330;
 
-    u8 m334[0x033C - 0x0334];
+    u8 m334[0x0338 - 0x0334];
 
+    /* 0x0338 */ f32 m338;
     /* 0x033C */ J3DAnmTexPattern* m33C;
     /* 0x0340 */ J3DTexNoAnm* m340; // TODO list?
     /* 0x0344 */ u8 m344;
@@ -68,7 +69,7 @@ public:
     /* 0x046A */ s16 m46A;
     /* 0x046C */ s16 m46C;
     /* 0x046E */ u8 m46E;
-    u8 m470[0x474 - 0x470];
+    /* 0x0470 */ f32 m470;
     /* 0x0474 */ f32 m474;
     /* 0x0478 */ f32 m478;
     /* 0x047C */ cXyz m47C;
@@ -83,11 +84,16 @@ public:
     u8 m498[0x049A - 0x0498];
     /* 0x049A */ s16 m49A;
     /* 0x049C */ s16 m49C;
-    u8 m49E[0x0600 - 0x049E];
-    /* 0x0600 */ f32 m600[8];
+    u8 m49E[0x04A0 - 0x049E];
+    /* 0x04A0 */ cXyz mPos[8];
+    /* 0x0500 */ cXyz mOld[8];
+    /* 0x0560 */ csXyz m560[8];
+    /* 0x0590 */ cXyz m590[8];
 
-    u8 m620[0x0640 - 0x0620];
+    u8 m5F0[0x0600 - 0x05F0];
 
+    /* 0x0600 */ f32 mScale[8];
+    /* 0x0620 */ f32 m620[8];
     /* 0x0640 */ s16 m640;
     u8 m642[0x644 - 0x642];
     /* 0x0644 */ s16 m644;
@@ -114,9 +120,9 @@ public:
     /* 0x06F2 */ s16 m6F2;
     /* 0x06F4 */ cXyz m6F4[64];
     /* 0x09F4 */ csXyz m9F4[64];
-
-    u8 mB74[0x0C00 - 0x0B74];
-
+    /* 0x0B74 */ s16 mB74[64];
+    /* 0x0BF4 */ int mBF4;
+    u8 mBF8[0x0C00 - 0x0BF8];
     /* 0x0C00 */ u8 mC00;
     /* 0x0C01 */ u8 mC01;
     /* 0x0C02 */ s16 mC02;
@@ -125,7 +131,7 @@ public:
     /* 0x0C08 */ dBgS_AcchCir mAcchCir;
     /* 0x0C48 */ dBgS_Acch mAcch;
     /* 0x0E0C */ dCcD_Stts mStts;
-    /* 0x0E48 */ dCcD_Sph mE48[8];
+    /* 0x0E48 */ dCcD_Sph mSph[8];
     /* 0x17A8 */ dCcD_Sph mEyeSph;
     /* 0x18D4 */ u8 m18D4;
     u8 m18D5[0x18D8 - 0x18D5];
