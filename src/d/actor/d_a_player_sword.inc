@@ -421,7 +421,7 @@ BOOL daPy_lk_c::procCutA() {
         if (changeCutReverseProc(ANM_CUTRER)) {
             return true;
         } else {
-            setSpecialBattle(1);
+            setSpecialBattle(TRUE);
             if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
                 changeSpecialBattle();
             } else {
@@ -529,7 +529,7 @@ BOOL daPy_lk_c::procCutF() {
         if (changeCutReverseProc(ANM_CUTRER)) {
             return true;
         } else {
-            setSpecialBattle(1);
+            setSpecialBattle(TRUE);
             if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
                 changeSpecialBattle();
             } else {
@@ -634,7 +634,7 @@ BOOL daPy_lk_c::procCutR() {
         if (changeCutReverseProc(ANM_CUTRER)) {
             return true;
         } else {
-            setSpecialBattle(1);
+            setSpecialBattle(TRUE);
             if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
                 changeSpecialBattle();
             } else {
@@ -739,7 +739,7 @@ BOOL daPy_lk_c::procCutL() {
         if (changeCutReverseProc(ANM_CUTREL)) {
             return true;
         } else {
-            setSpecialBattle(1);
+            setSpecialBattle(TRUE);
             if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
                 changeSpecialBattle();
             } else {
@@ -839,7 +839,7 @@ BOOL daPy_lk_c::procCutEA() {
         setShapeAngleToAtnActor();
         current.angle.y = shape_angle.y;
     }
-    setSpecialBattle(1);
+    setSpecialBattle(TRUE);
     if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
         changeSpecialBattle();
     } else {
@@ -920,7 +920,7 @@ BOOL daPy_lk_c::procCutEB() {
     }
     setShapeAngleToAtnActor();
     current.angle.y = shape_angle.y;
-    setSpecialBattle(1);
+    setSpecialBattle(TRUE);
     if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
         changeSpecialBattle();
     } else {
@@ -1004,7 +1004,7 @@ BOOL daPy_lk_c::procCutExA() {
         if (changeCutReverseProc(ANM_CUTREL)) {
             return true;
         } else {
-            setSpecialBattle(1);
+            setSpecialBattle(TRUE);
             if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
                 changeSpecialBattle();
             } else {
@@ -1094,7 +1094,7 @@ BOOL daPy_lk_c::procCutExB() {
         setShapeAngleToAtnActor();
         current.angle.y = shape_angle.y;
     }
-    setSpecialBattle(1);
+    setSpecialBattle(TRUE);
     if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
         changeSpecialBattle();
     } else {
@@ -1646,7 +1646,7 @@ BOOL daPy_lk_c::procCutExMJ() {
         setShapeAngleToAtnActor();
         current.angle.y = shape_angle.y;
     }
-    setSpecialBattle(1);
+    setSpecialBattle(TRUE);
     if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
         return changeSpecialBattle();
     } else {
@@ -1726,7 +1726,7 @@ BOOL daPy_lk_c::procCutKesa() {
         if (changeCutReverseProc(ANM_CUTREL)) {
             return true;
         } else {
-            setSpecialBattle(1);
+            setSpecialBattle(TRUE);
             if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
                 changeSpecialBattle();
             } else {

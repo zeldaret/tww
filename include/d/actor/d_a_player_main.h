@@ -1436,7 +1436,7 @@ public:
     BOOL procSwimWait();
     BOOL procSwimMove_init(BOOL);
     BOOL procSwimMove();
-    void setSpecialBattle(int);
+    void setSpecialBattle(BOOL);
     int changeSpecialBattle();
     BOOL procBtJump_init(fopEn_enemy_c*);
     BOOL procBtJump();
