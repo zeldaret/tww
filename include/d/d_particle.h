@@ -52,7 +52,11 @@ public:
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     void setRateOff(u8 param_0) { mRateOff = param_0; }
     bool isEnd() { return mFlag & 1; }
+    void onEnd() { mFlag |= 1; }
+    void remove() { end(); }
+    void setFollowOff() { field_0x12 = 1; }
 
+protected:
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ const cXyz* mPos;
     /* 0x0C */ const csXyz* mAngle;
@@ -78,12 +82,13 @@ public:
     void setTevStr(dKy_tevstr_c* tevStr) { mTevstr = tevStr; }
     void remove() { end(); }
 
-    void offWindOff() {}
-    void onWindOff() {}
+    void offWindOff() { mWindOff = 0; }
+    void onWindOff() { mWindOff = 1; }
     void setColor(const GXColor& color) { mColor = color; }
 
+private:
     /* 0x14 */ s8 field_0x14;
-    /* 0x15 */ u8 field_0x15;
+    /* 0x15 */ u8 mWindOff;
     /* 0x16 */ GXColor mColor;
     /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
     /* 0x1C */ dKy_tevstr_c* mTevstr;
@@ -120,6 +125,14 @@ public:
     void executeAfter(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
+    JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
+    void setTimer (s16 timerVal) { mFadeTimer = timerVal; }
+    void setSpeed (f32 vel) { mVelFade1 = vel; }
+    void setPitch (f32 pitch) { mVelFade2 = pitch; }
+    void setMaxSpeed (f32 vel) { mMaxParticleVelocity = vel; }
+    void setMaxDisSpeed (f32 vel) { mVelSpeed = vel; } 
+    void setAnchor (cXyz* anchorPos1, cXyz* anchorPos2) { mCollapsePos[0].set(*anchorPos1); mCollapsePos[1].set(*anchorPos2); }
+
     virtual ~dPa_waveEcallBack() {}
 
     /* 0x04 */ s16 mState;
@@ -132,7 +145,7 @@ public:
     /* 0x1C */ cXyz mCollapsePos[2];
     /* 0x34 */ const cXyz* mpPos;
     /* 0x38 */ const csXyz* mpRot;
-    /* 0x3C */ JGeometry::TVec3<f32> mRotMtx[3];
+    /* 0x3C */ Vec mRotMtx[3];
     /* 0x60 */ JPABaseEmitter* mpBaseEmitter;
 };
 
@@ -141,6 +154,10 @@ public:
     void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
     void remove();
     void execute(JPABaseEmitter*);
+
+    JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
+    void setSpeed (f32 vel) { mScaleTimer = vel; }
+    void setMaxSpeed (f32 vel) { mMaxScaleTimer = vel; }
 
     virtual ~dPa_splashEcallBack() {}
 
@@ -160,12 +177,16 @@ public:
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
+    JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
+    void setIndirectTexData (f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
+    void setSpeed (f32 vel) { mVel = vel; }
+
     virtual ~dPa_trackEcallBack() {}
 
     /* 0x04 */ s16 mState;
     /* 0x08 */ f32 mBaseY;
     /* 0x0C */ f32 mMinY;
-    /* 0x10 */ Vec mPos[3];
+    /* 0x10 */ JGeometry::TVec3<f32> mPos[3];
     /* 0x34 */ const cXyz* mpPos;
     /* 0x38 */ const csXyz* mpRot;
     /* 0x3C */ f32 mExTransY;

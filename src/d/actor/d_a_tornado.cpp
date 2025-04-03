@@ -182,7 +182,7 @@ BOOL daTornado_c::execute() {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_TORNADE_SUS, 100);
 
         if (dComIfGs_isEventBit(0x2710)) {
-            mPtclCb.end();
+            mPtclCb.remove();
             daShip_c* ship = dComIfGp_getShipActor();
             if (ship != NULL) {
                 ship->offTornadoFlg();
@@ -241,7 +241,7 @@ static BOOL daTornado_IsDelete(daTornado_c*) {
 
 /* 00000CB0-00000D30       .text tornado_delete__11daTornado_cFv */
 BOOL daTornado_c::tornado_delete() {
-    mPtclCb.end();
+    mPtclCb.remove();
     if (fopAcM_GetParam(this) == 0 && dComIfGp_getShipActor() != NULL) {
         dComIfGp_getShipActor()->offTornadoFlg();
     }

@@ -421,7 +421,7 @@ static BOOL naraku_check(am2_class* i_this) {
                 i_this->mbMadeWaterSplash = true;
                 
                 cXyz particleScale(1.0f, 1.0f, 1.0f);
-                i_this->mRippleCb.end();
+                i_this->mRippleCb.remove();
                 dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->current.pos, NULL, &particleScale, 0xFF, &i_this->mRippleCb);
                 i_this->mRippleCb.setRate(0.0f);
             }
@@ -436,7 +436,7 @@ static BOOL naraku_check(am2_class* i_this) {
         }
     } else if (i_this->mbMadeWaterSplash) {
         i_this->mbMadeWaterSplash = false;
-        i_this->mRippleCb.end();
+        i_this->mRippleCb.remove();
     }
     
     return FALSE;
@@ -538,7 +538,7 @@ static void action_dousa(am2_class* i_this) {
         }
         if (i_this->mAcch.ChkGroundHit()) {
             fopAcM_seStart(i_this, JA_SE_CM_AM2_LANDING, 0);
-            i_this->mSmokeCb.end();
+            i_this->mSmokeCb.remove();
             // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
             // fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP_S, 0);
             mDoAud_seStart(JA_SE_CM_AM_JUMP_S, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
@@ -663,7 +663,7 @@ static void action_mahi(am2_class* i_this) {
             if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
                 i_this->mAcchRadius = 40.0f + REG8_F(10);
                 i_this->mbMadeWaterSplash = false;
-                i_this->mRippleCb.end();
+                i_this->mRippleCb.remove();
                 i_this->mPickedUpYPos = actor->current.pos.y;
                 fopAcM_OffStatus(actor, fopAcStts_SHOWMAP_e);
                 actor->current.angle.y = player->shape_angle.y;
@@ -719,10 +719,10 @@ static void action_mahi(am2_class* i_this) {
                 
                 i_this->mAcch.OffLineCheck();
                 i_this->mbMadeWaterSplash = false;
-                i_this->mRippleCb.end();
+                i_this->mRippleCb.remove();
                 
                 if (i_this->mCountUpTimers[0] == 0) {
-                    i_this->mSmokeCb.end();
+                    i_this->mSmokeCb.remove();
                     fopAcM_seStart(actor, JA_SE_CM_AM2_LANDING, 0);
                     
                     dComIfGp_particle_setToon(dPa_name::ID_SCENE_A125, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
@@ -896,7 +896,7 @@ static void action_itai(am2_class* i_this) {
         i_this->shape_angle.y += 0x1000;
         
         if (i_this->mAcch.ChkGroundHit()) {
-            i_this->mSmokeCb.end();
+            i_this->mSmokeCb.remove();
             dComIfGp_particle_setToon(dPa_name::ID_SCENE_A125, &i_this->current.pos, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(i_this));
             if (i_this->mSmokeCb.getEmitter()) {
                 i_this->mSmokeCb.getEmitter()->setRate(12.0f);
@@ -1010,7 +1010,7 @@ static void action_modoru_move(am2_class* i_this) {
         dCam_getBody()->ForceLockOff(fopAcM_GetID(i_this));
         i_this->mInAbyssTimer = 0;
         i_this->mbMadeWaterSplash = false;
-        i_this->mRippleCb.end();
+        i_this->mRippleCb.remove();
         anm_init(i_this, AM2_BCK_WAIT, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_seStart(i_this, JA_SE_CM_AM2_WTR_RECOVER, 0);
         i_this->mState++;
@@ -1024,7 +1024,7 @@ static void action_modoru_move(am2_class* i_this) {
             i_this->speed.setall(0.0f);
             i_this->gravity = -3.0f;
             i_this->mbMadeWaterSplash = false;
-            i_this->mRippleCb.end();
+            i_this->mRippleCb.remove();
             
             i_this->current.angle.y = i_this->shape_angle.y;
             i_this->current.pos = i_this->mSpawnPos;
@@ -1173,8 +1173,8 @@ static BOOL daAM2_IsDelete(am2_class* i_this) {
 static BOOL daAM2_Delete(am2_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "AM2");
 
-    i_this->mSmokeCb.end();
-    i_this->mRippleCb.end();
+    i_this->mSmokeCb.remove();
+    i_this->mRippleCb.remove();
 
     return TRUE;
 }

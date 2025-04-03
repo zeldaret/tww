@@ -1347,26 +1347,26 @@ void daNpc_Os_c::initialWaitEvent(int staffIdx) {
         current.pos.set(posData->x, posData->y, posData->z);
     }
 
-    u32* angleData = dComIfGp_evmng_getMyIntegerP(staffIdx, "angle");
+    int* angleData = dComIfGp_evmng_getMyIntegerP(staffIdx, "angle");
     if(angleData) {
         s16 angle = *angleData;
         current.angle.y = angle;
         shape_angle.y = angle;
     }
 
-    u32* gravData = dComIfGp_evmng_getMyIntegerP(staffIdx, "gravity");
+    int* gravData = dComIfGp_evmng_getMyIntegerP(staffIdx, "gravity");
     if(gravData) {
         onGravity();
         maxFallSpeed = -100.0f;
         gravity = l_HIO.field_0x8C;
     }
 
-    u32* quakeData = dComIfGp_evmng_getMyIntegerP(staffIdx, "quake");
+    int* quakeData = dComIfGp_evmng_getMyIntegerP(staffIdx, "quake");
     if(quakeData) {
         dComIfGp_getVibration().StartShock(*quakeData, -0x11, cXyz(0.0f, 1.0f, 0.0f));
     }
 
-    u32* timerData = dComIfGp_evmng_getMyIntegerP(staffIdx, "timer");
+    int* timerData = dComIfGp_evmng_getMyIntegerP(staffIdx, "timer");
     if(timerData) {
         field_0x7C0 = *timerData;
     }
@@ -1439,7 +1439,7 @@ BOOL daNpc_Os_c::actionMoveEvent(int staffIdx) {
 
 /* 00004644-000046E4       .text initialMoveEndEvent__10daNpc_Os_cFi */
 void daNpc_Os_c::initialMoveEndEvent(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "Daiza");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "Daiza");
     if(data && mpPedestal) {
         current.pos.x = mpPedestal->current.pos.x;
         current.pos.y = mpPedestal->current.pos.y + 240.0f;
@@ -1466,7 +1466,7 @@ void daNpc_Os_c::initialTurnEvent(int) {
 
 /* 0000474C-000047D4       .text actionTurnEvent__10daNpc_Os_cFi */
 BOOL daNpc_Os_c::actionTurnEvent(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "Angle");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "Angle");
     if(data) {
         s16 temp = cLib_addCalcAngleS(&shape_angle.y, *data, 0x1E, 0x2000, 0x800);
         current.angle.y = shape_angle.y;
@@ -1481,7 +1481,7 @@ BOOL daNpc_Os_c::actionTurnEvent(int staffIdx) {
 
 /* 000047D4-00004860       .text initialFinishEvent__10daNpc_Os_cFi */
 void daNpc_Os_c::initialFinishEvent(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "Type");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "Type");
 
     u32 value = 0;
     if(data) {
@@ -1506,7 +1506,7 @@ BOOL daNpc_Os_c::actionFinishEvent(int) {
 void daNpc_Os_c::initialMsgSetEvent(int staffIdx) {
     l_msgId = -1;
 
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if(data) {
         field_0x780 = *data;
     }
@@ -1532,7 +1532,7 @@ void daNpc_Os_c::initialSwitchOnEvent(int) {
 
 /* 00004988-00004A60       .text initialNextEvent__10daNpc_Os_cFi */
 void daNpc_Os_c::initialNextEvent(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "SE");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "SE");
 
     if(data) {
         u32 value = *data;

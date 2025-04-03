@@ -222,7 +222,7 @@ void daIball_c::checkGeo() {
 
 /* 800F3E78-800F3EB0       .text mode_wait_init__9daIball_cFv */
 void daIball_c::mode_wait_init() {
-    mRippleCb.end();
+    mRippleCb.remove();
     mMode = MODE_WAIT;
 }
 
@@ -395,7 +395,7 @@ BOOL daIball_c::_daIball_execute() {
 
 /* 800F4634-800F4678       .text _daIball_delete__9daIball_cFv */
 BOOL daIball_c::_daIball_delete() {
-    mRippleCb.end();
+    mRippleCb.remove();
     dKy_plight_cut(&mLight);
     remove(this);
     return TRUE;

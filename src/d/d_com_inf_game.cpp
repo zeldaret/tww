@@ -74,7 +74,7 @@ void dComIfG_play_c::itemInit() {
     mItemLifeCount = 0.0f;
     mItemRupeeCount = 0;
     mAirMeter = 0;
-    field_0x48c8 = 0;
+    mItemTimeMax = 0;
     mNpcNameMessageID = 0;
     mItemNameMessageID = 0;
     mItemKeyNumCount = 0;
@@ -99,7 +99,7 @@ void dComIfG_play_c::itemInit() {
     mItemTimer = 0;
     mItemNowLife = 0;
     mItemNowRupee = 0;
-    field_0x4928 = 0;
+    mItemSwimTimerStatus = 0;
     field_0x4929 = 0;
     mMesgStatus = 0;
     mbCamOverrideFarPlane = 0;
@@ -177,8 +177,6 @@ void dComIfG_play_c::itemInit() {
     for (int i = 0; i < ARRAY_SIZE(field_0x4988); i++) {
         field_0x4988[i] = 0;
     }
-
-    return;
 }
 
 /* 80052400-8005286C       .text getLayerNo__14dComIfG_play_cFi */
@@ -561,8 +559,7 @@ s8 dComIfGp_getReverb(int param_0) {
     return dStage_roomRead_dt_c_GetReverbStage(*dComIfGp_getStageRoom(), param_0);
 }
 
-/* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj
- */
+/* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyInfo& i_floorPoly,
                               s16 i_angle, f32 param_5, GXTexObj* i_tex) {
     if (i_floorPoly.ChkSetInfo() && C_BG_MIN_HEIGHT != groundY) {

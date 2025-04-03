@@ -152,7 +152,6 @@ f32 float_kankyo_color_ratio_set(f32 param_0, f32 param_1, f32 param_2, f32 para
 /* 8018FAE0-8018FB14       .text get_parcent__Ffff */
 static f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
     f32 temp_f1;
-    f32 temp_f2;
     f32 temp_f4 = param_0 - param_1;
 
     if (0.0f != temp_f4) {

@@ -115,7 +115,6 @@ namespace daObjMovebox {
     
     /* 000001F0-000003A4       .text gnd_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cif */
     void Bgc_c::gnd_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, f32 param_4) {
-        f32 tempz;
         f32 maxGroundY = C_BG_MIN_HEIGHT;
         
         mDoMtx_stack_c::transS(movebox->current.pos);
@@ -1156,9 +1155,9 @@ namespace daObjMovebox {
             }
             
             mpPath = dPath_GetRoomPath(pathId, home.roomNo);
-            dPath__Point* pnt = dPath_GetPnt(mpPath, pntIdx);
-            home.pos = pnt->mPos;
-            current.pos = pnt->mPos;
+            dPnt* pnt = dPath_GetPnt(mpPath, pntIdx);
+            home.pos = pnt->m_position;
+            current.pos = pnt->m_position;
         }
     }
     
@@ -1183,7 +1182,7 @@ namespace daObjMovebox {
             
             s32 pntIdx;
             for (pntIdx = 0; pntIdx < numPnts; pntIdx++) {
-                cXyz pntPos = dPath_GetPnt(mpPath, pntIdx)->mPos;
+                cXyz pntPos = dPath_GetPnt(mpPath, pntIdx)->m_position;
                 if (current.pos.abs2(pntPos) < 9.0f) {
                     break;
                 }

@@ -11,7 +11,6 @@
 daTag_So_HIO_c::daTag_So_HIO_c() {
     mNo = -1;
     m05 = 0;
-    return;
 }
 
 static daTag_So_HIO_c l_HIO;
@@ -27,7 +26,6 @@ void daTag_So_c::debugDraw() {
     actorPos.y += 20.0f;
     if (m298 == 1)
         dLib_debugDrawFan(actorPos, shape_angle.y, 0x3500, mRadius, (GXColor){0xFF, 0x00, 0x00, 0x80});
-    return;
 }
 
 /* 0000018C-000001C4       .text _draw__10daTag_So_cFv */
@@ -52,7 +50,6 @@ void daTag_So_c::getArg() {
     else {
         mRadius = paramRadius * 100;
     }
-    return;
 }
 
 /* 00000224-0000027C       .text _create__10daTag_So_cFv */
@@ -84,7 +81,7 @@ static BOOL daTag_SoExecute(void* i_this) {
 
 /* 000002EC-00000310       .text daTag_SoDraw__FPv */
 static BOOL daTag_SoDraw(void* i_this) {
-    return ((daTag_So_c*)i_this)->_draw();;
+    return ((daTag_So_c*)i_this)->_draw();
 }
 
 /* 00000310-00000318       .text daTag_SoIsDelete__FPv */

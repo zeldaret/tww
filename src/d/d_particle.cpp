@@ -283,7 +283,7 @@ dPa_smokeEcallBack::dPa_smokeEcallBack(u8 param_1) {
     field_0x12 = 0;
     mTevstr = NULL;
     field_0x14 = -1;
-    field_0x15 = 0;
+    mWindOff = 0;
 }
 
 /* 8007B4B0-8007B558       .text __ct__18dPa_smokeEcallBackFUcUcUcUc */
@@ -296,7 +296,7 @@ dPa_smokeEcallBack::dPa_smokeEcallBack(u8 param_1, u8 param_2, u8 param_3, u8 pa
     mTevstr = NULL;
     field_0x14 = -1;
     mFlag = param_3;
-    field_0x15 = 0;
+    mWindOff = 0;
 
 }
 
@@ -315,7 +315,7 @@ void dPa_smokeEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, con
     dPa_followEcallBack::setup(param_1, param_2, param_3, param_4);
     field_0x14 = param_4;
     param_1->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
-    param_1->mUserData = field_0x15;
+    param_1->mUserData = mWindOff;
 }
 
 /* 8007B73C-8007B804       .text initiateLighting__FR11_GXColorS10R8_GXColorR8_GXColor */
@@ -984,7 +984,7 @@ void dPa_waveEcallBack::remove() {
 
 /* 8007E2BC-8007E484       .text executeAfter__17dPa_waveEcallBackFP14JPABaseEmitter */
 void dPa_waveEcallBack::executeAfter(JPABaseEmitter* emitter) {
-    emitter->getEmitterAxis(mRotMtx[0], mRotMtx[1], mRotMtx[2]);
+    emitter->getEmitterAxis(reinterpret_cast<JGeometry::TVec3<f32>&>(mRotMtx[0]), reinterpret_cast<JGeometry::TVec3<f32>&>(mRotMtx[1]), reinterpret_cast<JGeometry::TVec3<f32>&>(mRotMtx[2]));
 
     if (mState != 0) {
         emitter->setDirectionalSpeed(0.0f);

@@ -358,7 +358,7 @@ void daItem_c::execInitNormalDirection() {
     mCyl.SetTgType(0);
     mCyl.OffCoSetBit();
     
-    mPtclSmokeCb.end();
+    mPtclSmokeCb.remove();
     if (mpParticleEmitter) {
         mpParticleEmitter->becomeInvalidEmitter();
         mpParticleEmitter = NULL;
@@ -393,7 +393,7 @@ void daItem_c::execInitGetDemoDirection() {
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
     
     hide();
-    mPtclFollowCb.end();
+    mPtclFollowCb.remove();
     
     if (player == link) {
         fopAcM_orderItemEvent(this);
@@ -534,9 +534,9 @@ void daItem_c::setTevStr() {
 
 /* 800F61C8-800F6268       .text _daItem_delete__8daItem_cFv */
 BOOL daItem_c::_daItem_delete() {
-    mPtclRippleCb.end();
-    mPtclFollowCb.end();
-    mPtclSmokeCb.end();
+    mPtclRippleCb.remove();
+    mPtclFollowCb.remove();
+    mPtclSmokeCb.remove();
     if (mpParticleEmitter) {
         mpParticleEmitter->becomeInvalidEmitter();
         mpParticleEmitter = NULL;
@@ -1199,7 +1199,7 @@ BOOL daItem_c::timeCount() {
 void daItem_c::mode_wait_init() {
     mMode = MODE_WAIT;
     gravity = getData()->mGravity;
-    mPtclRippleCb.end();
+    mPtclRippleCb.remove();
 }
 
 /* 800F7F50-800F80CC       .text mode_water_init__8daItem_cFv */

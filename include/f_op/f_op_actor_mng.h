@@ -555,6 +555,7 @@ s32 fopAcM_rollPlayerCrash(fopAc_ac_c* i_this, f32 distAdjust, u32 flag);
 s32 fopAcM_checkCullingBox(Mtx, f32, f32, f32, f32, f32, f32);
 s32 fopAcM_cullingCheck(fopAc_ac_c*);
 s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*);
+s32 fopAcM_orderZHintEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor);
 s32 fopAcM_orderDoorEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderCatchEvent(fopAc_ac_c*, fopAc_ac_c*);
@@ -634,7 +635,7 @@ fopAc_ac_c* fopAcM_findObject4EventCB(fopAc_ac_c* p_actor, void* p_data);
 
 fopAc_ac_c* fopAcM_searchFromName4Event(char* name, s16 eventID);
 
-s32 fopAcM_getWaterY(const cXyz*, f32*);
+BOOL fopAcM_getWaterY(const cXyz*, f32*);
 void fpoAcM_relativePos(fopAc_ac_c* actor, cXyz* p_inPos, cXyz* p_outPos);
 
 void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1);
@@ -643,6 +644,10 @@ inline fopAc_ac_c* dComIfGp_getPlayer(int);
 
 inline s16 fopAcM_searchPlayerAngleY(fopAc_ac_c* actor) {
     return fopAcM_searchActorAngleY(actor, (fopAc_ac_c*)dComIfGp_getPlayer(0));
+}
+
+inline s32 fopAcM_seenPlayerAngleY(fopAc_ac_c* actor) {
+    return fopAcM_seenActorAngleY(actor, (fopAc_ac_c*)dComIfGp_getPlayer(0));
 }
 
 inline f32 fopAcM_searchPlayerDistanceY(fopAc_ac_c* actor) {

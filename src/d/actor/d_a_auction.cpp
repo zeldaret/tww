@@ -611,7 +611,7 @@ void daAuction_c::privateCut() {
 
 /* 00001300-000013C0       .text eventTalkInit__11daAuction_cFi */
 void daAuction_c::eventTalkInit(int staffIdx) {
-    s32* pMsg = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pMsg = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
 
     if (pMsg != NULL) {
         switch (*pMsg) {
@@ -1231,7 +1231,7 @@ void daAuction_c::eventCameraOffInit() {
 void daAuction_c::eventGetItemNpcInit(int staffIdx) {
     setCameraNpc(m824, 0);
 
-    u32* pTimerData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
+    int* pTimerData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
 
     if (pTimerData != NULL) {
         mTimer = *pTimerData;

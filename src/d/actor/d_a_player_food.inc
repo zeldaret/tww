@@ -37,9 +37,9 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
         return FALSE;
     }
-    
+
     dBgS* bgs = dComIfG_Bgsp(); // This is kinda weird, maybe fakematch
-    
+
     if (dComIfGp_event_runCheck() == FALSE) {
         if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
@@ -49,26 +49,18 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     } else {
         deleteEquipItem(FALSE);
     }
-    
+
     int temp = checkShipRideUseItem(1);
-    
+
     commonProcInit(daPyProc_FOOD_THROW_e);
-    
+
     if (temp == 0) {
         f32 offset1 = cM_ssin(shape_angle.y) * 150.0f;
         f32 offset2 = cM_scos(shape_angle.y) * 150.0f;
         cXyz start;
-        start.set(
-            attention_info.position.x,
-            attention_info.position.y - 50.0f,
-            attention_info.position.z
-        );
+        start.set(attention_info.position.x, attention_info.position.y - 50.0f, attention_info.position.z);
         cXyz end;
-        end.set(
-            start.x + offset1,
-            start.y,
-            start.z + offset2
-        );
+        end.set(start.x + offset1, start.y, start.z + offset2);
         mLinkLinChk.Set(&start, &end, this);
         if (bgs->LineCross(&mLinkLinChk)) {
             end.x = start.x - offset1;
@@ -95,20 +87,25 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     }
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
-    
-    daPy_matAnm_c::m_maba_flg = 0;
-    daPy_matAnm_c::m_maba_timer = 1;
-    setSingleMoveAnime(ANM_ESAMAKI, daPy_HIO_food_c0::m.field_0x4, daPy_HIO_food_c0::m.field_0x8, daPy_HIO_food_c0::m.field_0x0, daPy_HIO_food_c0::m.field_0xC);
+
+    daPy_matAnm_c::offMabaFlg();
+    setSingleMoveAnime(
+        ANM_ESAMAKI,
+        daPy_HIO_food_c0::m.field_0x4,
+        daPy_HIO_food_c0::m.field_0x8,
+        daPy_HIO_food_c0::m.field_0x0,
+        daPy_HIO_food_c0::m.field_0xC
+    );
     keepItemData();
-    
+
     if (mDemo.getDemoType() == 5) {
         m3570 = 6;
         dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &m3570, 0);
     }
-    
+
     initShipRideUseItem(temp, 2);
     m3630 = fpcM_ERROR_PROCESS_ID_e;
-    
+
     return TRUE;
 }
 
@@ -125,7 +122,7 @@ BOOL daPy_lk_c::procFoodThrow() {
             dCam_getBody()->EndEventCamera(playerPID);
             endDemoMode();
         }
-    } else if (frameCtrl.checkPass(9.0f)) {
+    } else if (frameCtrl.checkPass(8.0f)) {
         seStartOnlyReverb(JA_SE_LK_ESA_THROW);
         void* esa = fopAcM_fastCreate(PROC_ESA, 0xFFFF0014, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
         if (esa) {
@@ -161,51 +158,57 @@ BOOL daPy_lk_c::procFoodSet_init() {
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
                 }
             }
-            
+
             deleteEquipItem(FALSE);
         } else {
             setHyoiModel();
         }
         return TRUE;
     }
-    
+
     if (dComIfGp_event_runCheck() == FALSE) {
         if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
         }
         mDemo.setDemoType(5);
     }
-    
+
     int temp = checkShipRideUseItem(1);
     commonProcInit(daPyProc_FOOD_SET_e);
     current.angle.y = shape_angle.y;
-    
+
     mVelocity = 0.0f;
-    setSingleMoveAnime(ANM_SETHYOINOMI, daPy_HIO_food_c0::m.field_0x10, daPy_HIO_food_c0::m.field_0x14, daPy_HIO_food_c0::m.field_0x2, daPy_HIO_food_c0::m.field_0x18);
+    setSingleMoveAnime(
+        ANM_SETHYOINOMI,
+        daPy_HIO_food_c0::m.field_0x10,
+        daPy_HIO_food_c0::m.field_0x14,
+        daPy_HIO_food_c0::m.field_0x2,
+        daPy_HIO_food_c0::m.field_0x18
+    );
     keepItemData();
     setHyoiModel();
-    
+
     if (mDemo.getDemoType() == 5) {
         m3570 = 1;
         dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &m3570, 0);
     }
-    
+
     initShipRideUseItem(temp, 2);
-    m34D0 = 1*30;
-    
+    m34D0 = 1 * 30;
+
     return TRUE;
 }
 
 /* 80154A48-80154B80       .text procFoodSet__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFoodSet() {
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
-    
+
     setShipRidePosUseItem();
-    
+
     if (frameCtrl.getRate() > 0.0f && frameCtrl.checkPass(9.0f)) {
         seStartOnlyReverb(JA_SE_LK_HYOI_SET);
     }
-    
+
     if (std::abs(frameCtrl.getRate()) < 0.01f) {
         if (mDemo.getDemoType() != 5) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
@@ -222,6 +225,6 @@ BOOL daPy_lk_c::procFoodSet() {
             m34D0--;
         }
     }
-    
+
     return TRUE;
 }

@@ -12,7 +12,7 @@ public:
         unk[1] = 0;
         mWindPowerScale = 0.1f;
     }
-    virtual ~daObjIkariHIO_c(){};
+    virtual ~daObjIkariHIO_c() {};
 
     void genMessage(JORMContext* ctx);
 

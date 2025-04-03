@@ -351,8 +351,7 @@ void dWood::Anm_c::copy_angamp(const dWood::Anm_c *other) {
     }
 }
 
-/* 800BD848-800BD8BC       .text mode_cut_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs
- */
+/* 800BD848-800BD8BC       .text mode_cut_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs */
 void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, s16 targetAngle) {
     for (u32 i = 0; i < 2; i++) {
         mPhaseY[i] = 0;

@@ -218,7 +218,7 @@ void daWall_c::mode_break() {
                 fopAcM_delete(this);
             }
 
-            JPABaseEmitter* pEmitter = mSmokeCb.mpEmitter;
+            JPABaseEmitter* pEmitter = mSmokeCb.getEmitter();
             if (pEmitter != NULL) {
                 pEmitter->setGlobalAlpha(mDst);
             }

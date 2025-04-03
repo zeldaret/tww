@@ -49,9 +49,8 @@ static dCcD_SrcCyl l_cyl_src = {
 /* 000000EC-00000118       .text __ct__17daTori_Flag_HIO_cFv */
 daTori_Flag_HIO_c::daTori_Flag_HIO_c() {
     mNo = -1;
-    someFloat = 0.0f;
-    someShort = 0;
-    return;
+    m08 = 0.0f;
+    m0C = 0;
 }
 
 static daTori_Flag_HIO_c l_HIO;
@@ -68,7 +67,6 @@ void daTori_Flag_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mDoMtx_stack_c::transM(l_flag_offset);
     mpCloth->setMtx(mDoMtx_stack_c::get());
-    return;
 }
 
 /* 000001C4-000001E4       .text CheckCreateHeap__FP10fopAc_ac_c */

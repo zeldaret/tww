@@ -1791,8 +1791,8 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
 
 /* 00003CB4-00003D7C       .text evn_talk_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_talk_init(int actorId) {
-    u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "MsgNo");
-    u32* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "MsgNo");
+    int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
     l_msgId = fpcM_ERROR_PROCESS_ID_e;
     l_msg = NULL;
     if (pMsgNo != NULL) {
@@ -1810,7 +1810,7 @@ BOOL daNpc_Bs1_c::evn_talk_init(int actorId) {
 
 /* 00003D7C-00003DE4       .text evn_continue_talk_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_continue_talk_init(int actorId) {
-    u32* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
+    int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
     if (pEndMsgNo != NULL) {
         m744 = *pEndMsgNo;
     } else {
@@ -1852,7 +1852,7 @@ BOOL daNpc_Bs1_c::evn_talk() {
 
 /* 00003F14-00003FE0       .text evn_jnt_lock_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_jnt_lock_init(int actorIdx) {
-    u32* substance = dComIfGp_evmng_getMyIntegerP(actorIdx, "prm");
+    int* substance = dComIfGp_evmng_getMyIntegerP(actorIdx, "prm");
     u32 jnt_to_lock;
     if (substance != NULL) {
         jnt_to_lock = *substance;
@@ -1882,7 +1882,7 @@ BOOL daNpc_Bs1_c::evn_jnt_lock_init(int actorIdx) {
 
 /* 00003FE0-00004048       .text evn_wait_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_wait_init(int actorIdx) {
-    u32* pTimer = dComIfGp_evmng_getMyIntegerP(actorIdx, "Timer");
+    int* pTimer = dComIfGp_evmng_getMyIntegerP(actorIdx, "Timer");
     if (pTimer != NULL) {
         m63E = (u16)*pTimer;
     } else {
@@ -1899,7 +1899,7 @@ BOOL daNpc_Bs1_c::evn_wait() {
 /* 00004078-000040E4       .text evn_set_anm_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_set_anm_init(int actorIdx) {
     u32 anmNo;
-    u32* pAnmNo = dComIfGp_evmng_getMyIntegerP(actorIdx, "AnmNo");
+    int* pAnmNo = dComIfGp_evmng_getMyIntegerP(actorIdx, "AnmNo");
     if (pAnmNo != NULL) {
         anmNo = *pAnmNo;
     } else {

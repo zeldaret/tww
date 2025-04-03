@@ -29,7 +29,7 @@ public:
 class daTag_So_HIO_c {
 public:
     daTag_So_HIO_c();
-    virtual ~daTag_So_HIO_c(){}
+    virtual ~daTag_So_HIO_c() {}
 
 public:
     /* 0x00 */ //vtable

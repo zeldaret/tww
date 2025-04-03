@@ -2239,30 +2239,30 @@ void cM3d_CalcVecAngle(const Vec& vec, s16* a, s16* b) {
 
 /* 80251560-80251634       .text cM3d_CalcVecZAngle__FRC3VecP5csXyz */
 void cM3d_CalcVecZAngle(const Vec& param_0, csXyz* param_1) {
-    param_1->x = -cM_atan2s(param_0.y, std::sqrtf(param_0.x * param_0.x + param_0.z * param_0.z));;
+    param_1->x = -cM_atan2s(param_0.y, std::sqrtf(param_0.x * param_0.x + param_0.z * param_0.z));
     param_1->y = cM_atan2s(param_0.x, param_0.z);
     param_1->z = 0;
 }
 
 /* 80251634-8025172C       .text cM3d_UpMtx_Base__FRC3VecRC3VecPA4_f */
 int cM3d_UpMtx_Base(const Vec& param_0, const Vec& param_1, Mtx m) {
-    if (cM3d_IsZero(PSVECMag(&param_1))) {
+    if (cM3d_IsZero(VECMag(&param_1))) {
         MTXIdentity(m);
         return 0;
     }
 
     Vec sp3C;
     Vec sp48;
-    PSVECNormalize(&param_1, &sp48);
-    PSVECCrossProduct(&param_0, &sp48, &sp3C);
+    VECNormalize(&param_1, &sp48);
+    VECCrossProduct(&param_0, &sp48, &sp3C);
 
-    if (cM3d_IsZero(PSVECMag(&sp3C))) {
+    if (cM3d_IsZero(VECMag(&sp3C))) {
         sp3C.x = 1.0f;
         sp3C.y = 0.0f;
         sp3C.z = 0.0f;
     }
 
-    f32 var_f31 = PSVECDotProduct(&param_0, &sp48);
+    f32 var_f31 = VECDotProduct(&param_0, &sp48);
     if (var_f31 > 1.0f) {
         var_f31 = 1.0f;
     } else if (var_f31 < -1.0f) {

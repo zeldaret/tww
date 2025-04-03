@@ -1575,7 +1575,7 @@ static BOOL daAgb_Execute(daAgb_c* i_this) {
         i_this->field_0x66b = 0;
         i_this->field_0x630 = 0;
         i_this->field_0x632 = 0;
-        i_this->field_0x684.end();
+        i_this->field_0x684.remove();
     }
 
     i_this->modeProcCall();
@@ -1704,7 +1704,7 @@ static BOOL daAgb_IsDelete(daAgb_c* i_this) {
 /* 800D38F8-800D394C       .text daAgb_Delete__FP7daAgb_c */
 static BOOL daAgb_Delete(daAgb_c* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Agb");
-    i_this->field_0x684.end();
+    i_this->field_0x684.remove();
     return TRUE;
 }
 

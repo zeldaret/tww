@@ -179,6 +179,14 @@ inline void mDoAud_setLinkHp(s32 param_0, s32 param_1) {
     mDoAud_zelAudio_c::getInterface()->setLinkHp(param_0, param_1);
 }
 
+inline void mDoAud_setShipSailState(s32 state) {
+    mDoAud_zelAudio_c::getInterface()->setShipSailState(state);
+}
+
+inline void mDoAud_shipCruiseSePlay(Vec* i_sePos, f32 param_1) {
+    mDoAud_zelAudio_c::getInterface()->shipCruiseSePlay(i_sePos, param_1);
+}
+
 inline void mDoAud_monsSeInit() {
     mDoAud_zelAudio_c::getInterface()->monsSeInit();
 }

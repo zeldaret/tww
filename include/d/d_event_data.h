@@ -23,6 +23,13 @@ struct event_binary_data_header {
 
 class dEvDtData_c {
 public:
+    enum DataType {
+        /* 0x0 */ TYPE_FLOAT,
+        /* 0x1 */ TYPE_VEC,
+        /* 0x3 */ TYPE_INT = 3,
+        /* 0x4 */ TYPE_STRING
+    };
+
     /* 0x00 */ char mName[32];
     /* 0x20 */ s32 mIndex;
     /* 0x24 */ s32 mSubstanceType;

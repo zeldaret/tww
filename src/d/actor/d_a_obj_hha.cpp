@@ -182,7 +182,7 @@ void daObjHhaSplash_c::create_s(u16 particleID, cXyz* pPos, float offsetY, float
     mPos += calcVec;
     mBasePos = mPos;
     mAngle = *pAngle;
-    dComIfGp_particle_set(particleID, &mPos, &mAngle, NULL, 255, &mEcallBack);
+    dComIfGp_particle_set(particleID, &mPos, &mAngle, NULL, 255, &mSplashCb);
     bIsActive = true;
 }
 

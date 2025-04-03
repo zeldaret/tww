@@ -74,8 +74,8 @@ bool daObjDmgroom_c::_delete() {
 bool daObjDmgroom_c::_execute() {
     if (demoActorID != 0) {
         dDemo_actor_c * demoAc = dComIfGp_demo_getActor(demoActorID);
-        if (demoAc != NULL && demoAc->checkEnable(0x40))
-            mBrkAnm.setFrame(demoAc->mAnimationFrame);
+        if (demoAc != NULL && demoAc->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e))
+            mBrkAnm.setFrame(demoAc->getAnmFrame());
     }
     set_mtx();
     return true;

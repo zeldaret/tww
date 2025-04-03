@@ -430,7 +430,6 @@ void daObjShmrgrd_c::crush_proc() {
         mScaleY = 0.2f;
         mCrushState = 2;
         mCrushTimer = attr().mCrushDuration;
-        return;
     } else if (mCrushState == 2) {
         if (--mCrushTimer > 0) {
             return;

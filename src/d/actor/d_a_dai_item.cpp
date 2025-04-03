@@ -759,7 +759,7 @@ bool daStandItem_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     if (mItemNo == WIND_FLAG)
-        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+        mDoExt_bckAnmRemove(mpModel->getModelData());
     else if (mpBckAnm != NULL)
         mpBckAnm->entry(mpModel->getModelData());
 

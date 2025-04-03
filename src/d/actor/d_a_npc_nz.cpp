@@ -96,7 +96,7 @@ void daNpc_Nz_c::TailControl() {
     int temp7;
     cXyz* r19 = &field_0x974[1];
     cXyz* r18 = &field_0x9EC[1];
-    cXyz* r17 = &field_0x934.mpLines->mpSegments[0];
+    cXyz* r17 = field_0x934.getPos(0);
     dBgS_GndChk gndChk;
     for(i = 1; i < 10; i++, r19++, r18++) {
         f32 temp3 = 1.0f - (i-1) * 0.1f;
@@ -176,7 +176,8 @@ BOOL daNpc_Nz_c::_createHeap() {
         }
     }
 
-    if (field_0x934.init(1, 10, static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO)), 0)) {
+    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO));
+    if (field_0x934.init(1, 10, img, FALSE)) {
         return TRUE;
     } else {
         return FALSE;

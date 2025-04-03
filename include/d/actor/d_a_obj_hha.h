@@ -51,14 +51,14 @@ public:
     bool chk_stop() { return bIsActive == false; }
     
     void delete_s() {
-        if(mEcallBack.getEmitter() != NULL){
-            mEcallBack.end();
+        if(mSplashCb.getEmitter() != NULL){
+            mSplashCb.remove();
             bIsActive = false;
         }
     }
 
     void play_particle() {
-        JPABaseEmitter* pSplashEmitter = mEcallBack.getEmitter();
+        JPABaseEmitter* pSplashEmitter = mSplashCb.getEmitter();
         if(pSplashEmitter != NULL){
             pSplashEmitter->clearStatus(1);
             bIsActive = true;
@@ -66,7 +66,7 @@ public:
     }
     
     void stop_particle() {
-        JPABaseEmitter* pSplashEmitter = mEcallBack.getEmitter();
+        JPABaseEmitter* pSplashEmitter = mSplashCb.getEmitter();
         if(pSplashEmitter != NULL){
             pSplashEmitter->setStatus(1);
             bIsActive = false;
@@ -76,7 +76,7 @@ public:
     void create_s(u16, cXyz*, float, float, csXyz*);
 
 public:
-    /* 0x00 */ dPa_followEcallBack mEcallBack;
+    /* 0x00 */ dPa_followEcallBack mSplashCb;
     /* 0x14 */ cXyz mBasePos;
     /* 0x20 */ cXyz mPos;
     /* 0x2C */ csXyz mAngle;

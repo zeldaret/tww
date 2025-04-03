@@ -37,9 +37,14 @@ class J2DOrthoGraph;
 
 enum daPy__PlayerStatus0 {
     daPyStts0_UNK1_e           = 0x00000001,
+    daPyStts0_UNK2_e           = 0x00000002,
     daPyStts0_UNK10_e          = 0x00000010,
+    daPyStts0_UNK20_e          = 0x00000020,
+    daPyStts0_UNK40_e          = 0x00000040,
     daPyStts0_UNK80_e          = 0x00000080,
     daPyStts0_UNK100_e         = 0x00000100,
+    daPyStts0_UNK200_e         = 0x00000200,
+    daPyStts0_UNK400_e         = 0x00000400,
     daPyStts0_BOW_AIM_e        = 0x00001000,
     daPyStts0_UNK2000_e        = 0x00002000,
     daPyStts0_HOOKSHOT_AIM_e   = 0x00004000,
@@ -52,20 +57,32 @@ enum daPy__PlayerStatus0 {
     daPyStts0_TELESCOPE_LOOK_e = 0x00200000,
     daPyStts0_BOOMERANG_WAIT_e = 0x00400000,
     daPyStts0_UNK800000_e      = 0x00800000,
+    daPyStts0_UNK1000000_e     = 0x01000000,
     daPyStts0_UNK2000000_e     = 0x02000000,
+    daPyStts0_UNK4000000_e     = 0x04000000,
     daPyStts0_CRAWL_e          = 0x08000000,
+    daPyStts0_UNK10000000_e    = 0x10000000,
     daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
+    daPyStts0_UNK80000000_e    = 0x80000000,
 };
 
 enum daPy__PlayerStatus1 {
     daPyStts1_WIND_WAKER_CONDUCT_e = 0x00000001,
+    daPyStts1_UNK2_e               = 0x00000002,
+    daPyStts1_UNK4_e               = 0x00000004,
     daPyStts1_PICTO_BOX_AIM_e      = 0x00000008,
+    daPyStts1_UNK10_e              = 0x00000010,
     daPyStts1_DEKU_LEAF_FLY_e      = 0x00000020,
     daPyStts1_DEKU_LEAF_FAN_e      = 0x00000040,
+    daPyStts1_UNK80_e              = 0x00000080,
     daPyStts1_SAIL_e               = 0x00000400,
+    daPyStts1_UNK1000_e            = 0x00001000,
+    daPyStts1_UNK2000_e            = 0x00002000,
+    daPyStts1_UNK4000_e            = 0x00004000,
     daPyStts1_UNK8000_e            = 0x00008000,
     daPyStts1_UNK10000_e           = 0x00010000,
+    daPyStts1_UNK20000_e           = 0x00020000,
     daPyStts1_UNK40000_e           = 0x00040000,
 };
 
@@ -375,11 +392,25 @@ public:
     s16 getItemKeyNumCount() { return mItemKeyNumCount; }
     void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
 
-    void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
     s16 getItemBeastNumCount(int i_idx) { return mItemBeastNumCounts[i_idx]; }
+    void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
 
-    void setItemTimeCount(s32 time) { mAirMeter = time; }
-    void setItemTimeMax(s32 time) { field_0x4928 = time; }
+    s32 getItemTimeCount() { return mAirMeter; }
+    void setItemTimeCount(s32 time) {
+        mAirMeter = time;
+        mItemSwimTimerStatus = true;
+    }
+    void clearItemTimeCount() {
+        mAirMeter = 0;
+        mItemSwimTimerStatus = false;
+    }
+
+    s32 getItemTimeMax() { return mItemTimeMax; }
+    void setItemTimeMax(s32 time) { mItemTimeMax = time; }
+
+    bool getItemSwimTimerStatus() { return mItemSwimTimerStatus; }
+    void startItemSwimTimer() { mItemSwimTimerStatus = true; }
+    void stopItemSwimTimer() { mItemSwimTimerStatus = false; }
 
     u8 getScopeType() { return mScopeType; }
     void setScopeType(u8 type) { mScopeType = type; }
@@ -394,7 +425,7 @@ public:
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
     void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
-    bool checkPlayerStatus(int param_0, int i, u32 flag) { return flag & mPlayerStatus[param_0][i]; }
+    BOOL checkPlayerStatus(int param_0, int i, u32 flag) { return mPlayerStatus[param_0][i] & flag; }
 
     u8 getSelectItem(int idx) { return mSelectItem[idx]; }
     void setSelectItem(int idx, u8 itemNo) { mSelectItem[idx] = itemNo; }
@@ -630,9 +661,9 @@ public:
     /* 0x48AC */ fopAc_ac_c* mpPlayerPtr[3];  // 0: Link, 1: Partner, 2: Ship
     /* 0x48B8 */ f32 field_0x48b8;
     /* 0x48BC */ f32 mItemLifeCount;
-    /* 0x48C0 */ int mItemRupeeCount;
-    /* 0x48C4 */ int mAirMeter;
-    /* 0x48C8 */ int field_0x48c8;
+    /* 0x48C0 */ s32 mItemRupeeCount;
+    /* 0x48C4 */ s32 mAirMeter;
+    /* 0x48C8 */ s32 mItemTimeMax;
     /* 0x48CC */ u32 mNpcNameMessageID;
     /* 0x48D0 */ u32 mItemNameMessageID;
     /* 0x48D4 */ s16 mItemKeyNumCount;
@@ -655,7 +686,7 @@ public:
     /* 0x4922 */ s16 mItemTimer;
     /* 0x4924 */ s16 mItemNowLife;
     /* 0x4926 */ s16 mItemNowRupee;
-    /* 0x4928 */ u8 field_0x4928;
+    /* 0x4928 */ bool mItemSwimTimerStatus;
     /* 0x4929 */ u8 field_0x4929;
     /* 0x492A */ u8 mMesgStatus;
     /* 0x492B */ u8 mbCamOverrideFarPlane;
@@ -721,7 +752,7 @@ public:
     /* 0x49B0 */ u8 mPlayerInfoBuffer[sizeof(dSv_player_status_c_c)];
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
-    /* 0x4A28 */ u32 mPlayerStatus[2][2];
+    /* 0x4A28 */ u32 mPlayerStatus[1][4];
     /* 0x4A38 */ u16 mMinigameFlags;
     /* 0x4A3A */ u8 mMiniGameType;
     /* 0x4A3C */ s16 mMiniGameRupee;
@@ -771,11 +802,13 @@ extern GXColor g_blackColor;
 extern GXColor g_whiteColor;
 extern GXColor g_saftyWhiteColor;
 
+
 /**
  * === SAVE ===
  */
 
 void dComIfGs_gameStart();
+void dComIfGs_setGameStartStage();
 u8 dComIfGs_checkGetItem(u8);
 
 inline void dComIfGs_init() {
@@ -1848,6 +1881,10 @@ void dComIfGs_revPlayerRecollectionData();
  * === PLAY ===
  */
 
+inline void dComIfGp_onMenuCollect() {
+    g_dComIfG_gameInfo.play.field_0x495a = 1;
+} 
+
 inline void dComIfGp_init() { g_dComIfG_gameInfo.play.init(); }
 
 void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer = -1,
@@ -2169,7 +2206,7 @@ inline int dComIfGp_getPlayerCameraID(int idx) {
     return g_dComIfG_gameInfo.play.getPlayerCameraID(idx);
 }
 
-inline BOOL dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
+inline u32 dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
     return g_dComIfG_gameInfo.play.checkCameraAttentionStatus(idx, flag);
 }
 
@@ -2221,12 +2258,36 @@ inline void dComIfGp_setItemKeyNumCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemKeyNumCount(num);
 }
 
+inline s32 dComIfGp_getItemTimeCount() {
+    return g_dComIfG_gameInfo.play.getItemTimeCount();
+}
+
 inline void dComIfGp_setItemTimeCount(s32 time) {
     g_dComIfG_gameInfo.play.setItemTimeCount(time);
 }
 
+inline void dComIfGp_clearItemTimeCount() {
+    g_dComIfG_gameInfo.play.clearItemTimeCount();
+}
+
+inline u32 dComIfGp_getItemTimeMax() {
+    return g_dComIfG_gameInfo.play.getItemTimeMax();
+}
+
 inline void dComIfGp_setItemTimeMax(s32 time) {
     g_dComIfG_gameInfo.play.setItemTimeMax(time);
+}
+
+inline bool dComIfGp_getItemSwimTimerStatus() {
+    return g_dComIfG_gameInfo.play.getItemSwimTimerStatus();
+}
+
+inline void dComIfGp_startItemSwimTimer() {
+    g_dComIfG_gameInfo.play.startItemSwimTimer();
+}
+
+inline void dComIfGp_stopItemSwimTimer() {
+    g_dComIfG_gameInfo.play.stopItemSwimTimer();
 }
 
 inline void dComIfGp_setMessageCountNumber(s16 num) {
@@ -2309,11 +2370,11 @@ inline u8 dComIfGp_checkMesgCancelButton() {
     return g_dComIfG_gameInfo.play.checkMesgCancelButton();
 }
 
-inline bool dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
+inline u32 dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 0, flag);
 }
 
-inline bool dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
+inline u32 dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
 }
 
@@ -2750,7 +2811,7 @@ inline s32 dComIfGp_event_orderOld(u16 eventType, u16 priority, u16 flag, u16 hi
 }
 
 inline fopAc_ac_c* dComIfGp_event_getTalkPartner() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPtT();
+    return g_dComIfG_gameInfo.play.getEvent().getPtT();
 }
 
 inline void dComIfGp_event_setTalkPartner(void* i_actor) {
@@ -2758,7 +2819,7 @@ inline void dComIfGp_event_setTalkPartner(void* i_actor) {
 }
 
 inline fopAc_ac_c* dComIfGp_event_getItemPartner() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPtI();
+    return g_dComIfG_gameInfo.play.getEvent().getPtI();
 }
 
 inline void dComIfGp_event_setItemPartner(void* pt) {
@@ -2770,11 +2831,11 @@ inline void dComIfGp_event_setItemPartnerId(fpc_ProcID id) {
 }
 
 inline fopAc_ac_c* dComIfGp_event_getPt1() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPt1();
+    return g_dComIfG_gameInfo.play.getEvent().getPt1();
 }
 
 inline fopAc_ac_c* dComIfGp_event_getPt2() {
-    return (fopAc_ac_c*)g_dComIfG_gameInfo.play.getEvent().getPt2();
+    return g_dComIfG_gameInfo.play.getEvent().getPt2();
 }
 
 inline f32 dComIfGp_event_getCullRate() {
@@ -2837,23 +2898,23 @@ inline char* dComIfGp_evmng_getMyActName(int staffIdx) {
 }
 
 inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, char* name) {
-    return reinterpret_cast<f32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 0)); //type 0 is float
+    return reinterpret_cast<f32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_FLOAT));
 }
 
 inline Vec* dComIfGp_evmng_getMyVec3dP(int staffIdx, char* name) {
-    return reinterpret_cast<Vec*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
+    return reinterpret_cast<Vec*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_VEC));
 }
 
 inline cXyz* dComIfGp_evmng_getMyXyzP(int staffIdx, char* name) {
-    return reinterpret_cast<cXyz*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
+    return reinterpret_cast<cXyz*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_VEC));
 }
 
-inline u32* dComIfGp_evmng_getMyIntegerP(int staffIdx, char* name) {
-    return reinterpret_cast<u32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 3)); //type 3 is int
+inline int* dComIfGp_evmng_getMyIntegerP(int staffIdx, char* name) {
+    return reinterpret_cast<int*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_INT));
 }
 
 inline char* dComIfGp_evmng_getMyStringP(int staffIdx, char* name) {
-    return reinterpret_cast<char*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 4)); //type 4 is string
+    return reinterpret_cast<char*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, dEvDtData_c::TYPE_STRING));
 }
 
 inline BOOL dComIfGp_evmng_startCheck(s16 eventID) {
@@ -2970,7 +3031,7 @@ inline s32 dComIfGp_demo_mode() {
 }
 
 inline dDemo_actor_c* dComIfGp_demo_getActor(u8 id) {
-    return g_dComIfG_gameInfo.play.getDemo()->mDemoObj.getActor(id);
+    return g_dComIfG_gameInfo.play.getDemo()->getObject()->getActor(id);
 }
 
 /**
@@ -3386,6 +3447,16 @@ inline void dComIfGp_particle_setSimple(u16 particleID, cXyz* pos, u8 alpha = 0x
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
     pParticle->setSimple(particleID, pos, alpha, prmColor, envColor, param_6);
 }
+
+inline JPABaseEmitter* dComIfGp_particle_setSimpleLand(int param_0, const cXyz* param_1, const csXyz* param_2,
+                                            f32 param_3, f32 param_4, f32 param_5,
+                                            dKy_tevstr_c* param_6, int* param_7, int param_8) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    return pParticle->setSimpleLand(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
+}
+
+// TODO
+inline void dComIfGp_particle_setSimpleLand(cBgS_PolyInfo&, const cXyz*, const csXyz*, f32, f32, f32, dKy_tevstr_c*, int*, int) {}
 
 inline JPABaseEmitter* dComIfGp_particle_setBombSmoke(u16 particleID, const cXyz* pos,
                                            const csXyz* angle = NULL, const cXyz* scale = NULL,

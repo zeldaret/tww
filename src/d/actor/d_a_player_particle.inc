@@ -93,7 +93,7 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
         emitter->setDirection(right_dir);
     }
 
-    for (JSULink<JPABaseParticle>* link = emitter->mActiveParticles.getFirst(); link != NULL;) {
+    for (JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst(); link != NULL;) {
         JSULink<JPABaseParticle>* nextLink = link->getNext();
         JPABaseParticle* particle = link->getObject();
 
@@ -589,7 +589,6 @@ void daPy_lk_c::setAuraEffect() {
             } else {
                 auraEntry->getModel()->setBaseScale((scale * (1.0f - (0.3f * var_f31))) * 2.0f);
             }
-
         }
     }
 
@@ -821,8 +820,8 @@ void daPy_lk_c::setFootEffectType(int effectID, cXyz* i_pos, int param_2, int pa
     s32 oldEffectID = footEffect->getID();
     if (effectID != oldEffectID) {
         if (oldEffectID != -1) {
-            footEffect->getSmokeCallBack()->end();
-            footEffect->getOtherCallBack()->end();
+            footEffect->getSmokeCallBack()->remove();
+            footEffect->getOtherCallBack()->remove();
         }
 
         if (effectID == -2) {
@@ -979,7 +978,6 @@ void daPy_lk_c::setFootEffect() {
         } else {
             var_r29 = 2;
         }
-
     } else {
         if (mCurProc == daPyProc_JUMP_CUT_LAND_e) {
             var_r29 = 3;
@@ -1058,8 +1056,8 @@ void daPy_lk_c::setFootEffect() {
 void daPy_lk_c::resetFootEffect() {
     daPy_footEffect_c* pFootEffect = mFootEffect;
     for (int idx = 0; idx < (s32)ARRAY_SIZE(mFootEffect); idx++, pFootEffect++) {
-        pFootEffect->getSmokeCallBack()->end();
-        pFootEffect->getOtherCallBack()->end();
+        pFootEffect->getSmokeCallBack()->remove();
+        pFootEffect->getOtherCallBack()->remove();
         pFootEffect->setID(-1);
     }
 
@@ -1264,7 +1262,7 @@ u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c* i_actor, int param_1, int param_2)
     static JGeometry::TVec3<f32> direction(0.0f, 1.0f, 0.0f);
 
     f32 waterY;
-    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) != 0 && ((param_1 != 0 && i_actor->current.pos.y > waterY) || (param_1 == 0 && waterY >= i_actor->current.pos.y))) {
+    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) && ((param_1 != 0 && i_actor->current.pos.y > waterY) || (param_1 == 0 && waterY >= i_actor->current.pos.y))) {
         param_1 ^= 1;
         if (param_1 == 0 && param_2 == 0) {
             return param_1;

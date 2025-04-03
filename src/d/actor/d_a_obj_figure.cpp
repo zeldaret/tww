@@ -1204,7 +1204,7 @@ void daObjFigure_c::privateCut() {
 
 /* 0000119C-00001294       .text eventMesSetInit__13daObjFigure_cFi */
 void daObjFigure_c::eventMesSetInit(int staffIdx) {
-    u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if(pMsgNo) {
         m72C = NULL;
         switch(*pMsgNo) {

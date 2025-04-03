@@ -95,7 +95,6 @@ void daTag_Etc_c::demoInitProc() {
         field_0x29A = 15;
         break;
     }
-    return;
 }
 
 /* 00000368-00000458       .text create__11daTag_Etc_cFv */

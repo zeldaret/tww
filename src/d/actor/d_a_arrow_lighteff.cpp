@@ -58,14 +58,14 @@ void daArrow_Lighteff_c::delete_particle() {
             field_0x2F4.getEmitter()->setGlobalAlpha(0);
         }
 
-        field_0x2F4.end();
+        field_0x2F4.remove();
     }
     if(field_0x308.getEmitter()) {
         if(field_0x2E8 == 3) {
             field_0x308.getEmitter()->setGlobalAlpha(0);
         }
 
-        field_0x308.end();
+        field_0x308.remove();
     }
 }
 
