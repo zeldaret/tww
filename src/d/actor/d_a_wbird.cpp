@@ -51,11 +51,10 @@ void daWbird_c::setStartPos() {
     sp18.x = cM_scos(envLight.mWind.mTactWindAngleX) * cM_scos((int)(u16)envLight.mWind.mTactWindAngleY);
     sp18.y = cM_ssin(envLight.mWind.mTactWindAngleX);
     sp18.z = cM_scos(envLight.mWind.mTactWindAngleX) * cM_ssin((int)(u16)(u32)envLight.mWind.mTactWindAngleY);
-
     int iVar5 = cM_atan2s(sp18.x, sp18.z);
+    
     current.angle.y = iVar5;
-        shape_angle.y = iVar5;
-
+    shape_angle.y = iVar5;
     field_0x29E = 80;
     speed.x = sp18.x * 40.0f;
     speed.z = sp18.z * 40.0f;
@@ -66,7 +65,6 @@ void daWbird_c::setStartPos() {
     field_0x2A0 = 1.0f;
     current.pos.y += field_0x2A0 * fVar1 * fVar1 * 0.5f;
     speed.y = -(field_0x2A0 * fVar1);
-    /* Nonmatching */
 }
 
 /* 00000324-00000388       .text CreateInit__9daWbird_cFv */
@@ -92,7 +90,7 @@ void daWbird_c::actionWait() {
 
 /* 000003E4-00000474       .text actionEnd__9daWbird_cFv */
 void daWbird_c::actionEnd() {
-    if (dComIfGp_evmng_endCheck(field_0x2A6)){
+    if (dComIfGp_evmng_endCheck(mEventIdx)){
         dComIfGp_event_reset();
         fopAcM_delete(this);
     } else {
@@ -121,7 +119,7 @@ void daWbird_c::actionMove() {
         }
     } else {
         dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("WINDMAN"));
-        player->changeDemoMoveAngle(field_0x2A4);
+        player->changeDemoMoveAngle(mAngle);
         mAction = 1;
         mDoAud_seStart(JA_SE_TAKT_WIND_END);
     }
@@ -132,35 +130,33 @@ void daWbird_c::actionSelect() {
     short sVar2 = field_0x29E;
     if (sVar2 == 10) {
         dComIfGp_setOperateWindOn();
-        mDoAud_seStart(JA_SE_TAKT_WIND_DISP, (Vec*)0);
+        mDoAud_seStart(JA_SE_TAKT_WIND_DISP);
         field_0x29E++;
     } else if(sVar2 > 10){
-        mDoAud_seStart(JA_SE_SYS_WTAKT_WIND_AMB, NULL,0,0);
+        mDoAud_seStart(JA_SE_SYS_WTAKT_WIND_AMB);
         switch (dComIfGp_getOperateWind()) {
             case 1: {
-                mDoAud_seStart(JA_SE_TAKT_WIND_DECIDE, NULL,0,0);
+                mDoAud_seStart(JA_SE_TAKT_WIND_DECIDE);
                 setStartPos();
                 mAction = 2;
                 daPy_py_c* player = daPy_getPlayerActorClass();
                 sVar2 = current.angle.y + 0x7fff;
-                field_0x2A4 = player->shape_angle.y;
+                mAngle = player->shape_angle.y;
                 player->setPlayerPosAndAngle(&player->current.pos, sVar2);
                 if(dComIfGp_checkPlayerStatus0(0, 0x00010000)){
-                    field_0x2A6 = dComIfGp_evmng_getEventIdx("TACT_WINDOW2_SHIP");
+                    mEventIdx = dComIfGp_evmng_getEventIdx("TACT_WINDOW2_SHIP");
                 } else{
-                    field_0x2A6 = dComIfGp_evmng_getEventIdx("TACT_WINDOW2");
+                    mEventIdx = dComIfGp_evmng_getEventIdx("TACT_WINDOW2");
                 }
-                fopAcM_orderChangeEventId(this, field_0x2A6, 0, 0xFFFF);
+                fopAcM_orderChangeEventId(this, mEventIdx, 0, 0xFFFF);
                 player = daPy_getPlayerActorClass();
-            
                 player->cancelOriginalDemo();
-
                 dKyw_custom_windpower(windpower);
                 field_0x29D = true;
                 break;
             }
             case 0 : {
-                mDoAud_seStart(JA_SE_TAKT_WIND_CANCEL, NULL,0,0);
+                mDoAud_seStart(JA_SE_TAKT_WIND_CANCEL);
                 dComIfGp_event_reset();
                 fopAcM_delete(this);
                 break;
@@ -192,7 +188,6 @@ static BOOL daWbird_Execute(daWbird_c* i_this) {
         i_this->actionWait();
         break;
     }
-
     i_this->calcMtx();
     return TRUE;
 }

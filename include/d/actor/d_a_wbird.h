@@ -26,7 +26,7 @@ public:
     /* 0x29D */ bool field_0x29D;
     /* 0x29E */ s16 field_0x29E;
     /* 0x2A0 */ f32 field_0x2A0;
-    /* 0x2A4 */ s16 field_0x2A4;
-    /* 0x2A6 */ s16 field_0x2A6;
+    /* 0x2A4 */ s16 mAngle;
+    /* 0x2A6 */ s16 mEventIdx;
 };  // Size: 0x2A8
 #endif /* D_A_WBIRD_H */
