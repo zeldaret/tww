@@ -16,6 +16,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "d/d_com_lib_game.h"
 #include "m_Do/m_Do_graphic.h"
+#include "f_ap/f_ap_game.h"
 
 class camera_process_class;
 
@@ -1750,8 +1751,46 @@ int init_phase1(camera_class* i_this) {
 }
 
 /* 8017C7E4-8017C980       .text init_phase2__FP12camera_class */
-void init_phase2(camera_class*) {
-    /* Nonmatching */
+int init_phase2(camera_class* i_this) {
+    camera_process_class* a_this = (camera_process_class*)i_this;
+    dCamera_c* body = &i_this->mCamera;
+    int camId = fopCamM_GetParam(i_this);
+
+    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(dComIfGp_getCameraPlayer1ID(fopCamM_GetParam(i_this))); // get_player_actor(i_this)
+    
+    if (player == NULL) {
+        return cPhs_INIT_e;
+    }
+
+    fopAcM_setStageLayer(player);
+    
+    dComIfGp_setWindowNum(1);
+    
+    new (body) dCamera_c(i_this);
+
+    float farPlane = 160000.0f;
+
+    if (dComIfGp_getStage().getStagInfo() != NULL) {
+        dStage_stageDt_c* stage_dt = &dComIfGp_getStage();
+        stage_dt->getStagInfo();
+
+        farPlane = stage_dt->getStagInfo()->mFarPlane;
+    }
+
+    view_port_class* viewPort = dComIfGp_getWindow(dComIfGp_getCameraWinID(camId))->getViewPort(); //get_window(camId)
+    
+    fopCamM_SetNear(i_this, 1.0f);
+    fopCamM_SetFar(i_this, farPlane);
+    fopCamM_SetFovy(i_this, 30.0f);
+    fopCamM_SetAspect(i_this, viewPort->mWidth / viewPort->mHeight * g_HIO.getAspectRatio());
+    fopCamM_SetCenter(i_this, player->current.pos.x, player->current.pos.y, player->current.pos.z);
+    fopCamM_SetBank(i_this, 0);
+        
+    store(i_this);
+    
+    view_setup(i_this);
+    
+    return cPhs_NEXT_e;
 }
 
 /* 8017C980-8017C9B0       .text camera_create__FP12camera_class */

@@ -2,7 +2,6 @@
 #define D_CAMERA_H
 
 #include "SSystem/SComponent/c_angle.h"
-#include "SSystem/SComponent/c_rnd.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
@@ -522,11 +521,21 @@ engine_fn dCamera_c::engine_tbl[] = {
 };
 
 
-namespace {
-    static int Stage;
-    
+namespace {    
     //inline static int get_camera_id(camera_class* i_camera) {
     //    return fopCamM_GetParam(i_camera);
+    //}
+
+    //inline static dDlst_window_c* get_window(int param_0) {
+    //    return dComIfGp_getWindow(dComIfGp_getCameraWinID(param_0));
+    //}
+    //
+    //inline static dDlst_window_c* get_window(camera_class* i_camera) {
+    //    return dComIfGp_getWindow(dComIfGp_getCameraWinID(get_camera_id(i_camera)));
+    //}
+
+    //inline static fopAc_ac_c* get_player_actor(camera_class* i_camera) {
+    //    return dComIfGp_getPlayer(dComIfGp_getCameraPlayer1ID(get_camera_id(i_camera)));
     //}
 
     inline static u32 check_owner_action(u32 param_0, u32 param_1) {
