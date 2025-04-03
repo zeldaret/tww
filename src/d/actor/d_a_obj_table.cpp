@@ -140,7 +140,7 @@ BOOL daObjTable::Act_c::Draw() {
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
     
-    prm = daObj::PrmAbstract(this, 8, 0);
+    prm = daObj::PrmAbstract(this, PRM_LINK_ID_W, PRM_LINK_ID_S);
     if ((int)prm == 0) {
         angle = 120.0;
     } else {
@@ -157,25 +157,25 @@ BOOL daObjTable::Act_c::Draw() {
 namespace daObjTable {
 namespace {
 /* 00000608-00000628       .text Mthd_Create__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-cPhs_State Mthd_Create(void* i_this) {
+void Mthd_Create(void* i_this) {
     ((Act_c*) i_this)->Mthd_Create();
     return;
 }
 
 /* 00000628-00000648       .text Mthd_Delete__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-BOOL Mthd_Delete(void* i_this) {
+void Mthd_Delete(void* i_this) {
     ((Act_c*) i_this)->Mthd_Delete();
     return;
 }
 
 /* 00000648-00000668       .text Mthd_Execute__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-BOOL Mthd_Execute(void* i_this) {
+void Mthd_Execute(void* i_this) {
     ((Act_c*) i_this)->MoveBGExecute();
     return;
 }
 
 /* 00000668-00000694       .text Mthd_Draw__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-BOOL Mthd_Draw(void* i_this) {
+void Mthd_Draw(void* i_this) {
     ((Act_c*) i_this)->Draw();
     return;
 }
