@@ -13,8 +13,8 @@ class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
     void execute(JPABaseEmitter*);
     void end();
-    void makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
-    void makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
+    JPABaseEmitter* makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
+    JPABaseEmitter* makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) { mpEmitter = emitter; }
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
@@ -457,20 +457,22 @@ public:
     bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
-    bool checkNormalSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e ||
-            dComIfGp_getMiniGameType() == 2;
+    BOOL checkNormalSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e || checkSwordMiniGame();
     }
     BOOL checkMasterSwordEquip() const {
         return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
                dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
                dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
     }
+    BOOL checkFinalMasterSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+    }
+    
     void setFace(daPy_FACE face) { mFace = face; }
     
-    void checkFinalMasterSwordEquip() const {}
+    BOOL checkSwordMiniGame() const { return dComIfGp_getMiniGameType() == 2; }
     void checkBowMiniGame() const {}
-    void checkSwordMiniGame() const {}
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
     void checkUseArrowEffect() const {}

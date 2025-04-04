@@ -1437,7 +1437,7 @@ public:
     BOOL procSwimMove_init(BOOL);
     BOOL procSwimMove();
     void setSpecialBattle(BOOL);
-    int changeSpecialBattle();
+    BOOL changeSpecialBattle();
     BOOL procBtJump_init(fopEn_enemy_c*);
     BOOL procBtJump();
     BOOL procBtJumpCut_init(cXyz*);
@@ -1657,7 +1657,7 @@ public:
     void setSwordModel(BOOL);
     void setLightSaver();
     BOOL checkDemoShieldNoDraw();
-    BOOL checkDemoSwordNoDraw(int);
+    BOOL checkDemoSwordNoDraw(BOOL);
     BOOL checkChanceMode();
     BOOL checkCutRollChange() const;
     int getSwordBlurColor();
@@ -1766,8 +1766,7 @@ public:
         }
     }
     bool checkSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) != dItem_NONE_e ||
-            dComIfGp_getMiniGameType() == 2;
+        return dComIfGs_getSelectEquip(0) != dItem_NONE_e || checkSwordMiniGame();
     }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
@@ -1792,6 +1791,7 @@ public:
     
     BOOL doTrigger() const { return mItemTrigger & BTN_A; }
     BOOL talkTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL spBattleTrigger() const {return mItemTrigger & BTN_A; }
     BOOL swordTrigger() const { return mItemTrigger & BTN_B; }
     BOOL cancelTrigger() const { return mItemTrigger & BTN_B; }
     BOOL itemTriggerX() const { return mItemTrigger & BTN_X; }
@@ -1801,7 +1801,6 @@ public:
     BOOL spActionTrigger() const { return mItemTrigger & BTN_R; }
     void allTrigger() const {}
     void otherWeaponTrigger() const {}
-    void spBattleTrigger() const {}
     
     BOOL checkPlayerDemoMode() const { return mDemo.getDemoType(); }
     void checkSpecialDemoMode() const {}

@@ -989,7 +989,7 @@ BOOL daPy_lk_c::draw() {
             mDoExt_modelUpdateDL(mpSuimenMunyaModel);
         }
         if (!r24 && !dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)) {
-            if (checkSwordEquip() && !checkDemoSwordNoDraw(1)) {
+            if (checkSwordEquip() && !checkDemoSwordNoDraw(TRUE)) {
                 entryDLSetLight(mpEquippedSwordModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
             }
         }
@@ -1003,7 +1003,7 @@ BOOL daPy_lk_c::draw() {
         if (mpBottleContentsModel != NULL) {
             updateDLSetLight(mpBottleContentsModel, 0);
         }
-        if (mpEquipItemModel && !checkCaughtShapeHide() && !checkDemoSwordNoDraw(0)) {
+        if (mpEquipItemModel && !checkCaughtShapeHide() && !checkDemoSwordNoDraw(FALSE)) {
             if (!checkBowItem(mEquipItem) || !checkPlayerGuard()) {
                 if (mEquipItem == dItem_HOOKSHOT_e) {
                     if (mActorKeepEquip.getActor()) {
@@ -1013,7 +1013,7 @@ BOOL daPy_lk_c::draw() {
                 }
                 entryDLSetLight(mpEquipItemModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
                 if (mpSwordModel1 != NULL) {
-                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e) {
+                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || checkFinalMasterSwordEquip()) {
                         updateDLSetLight(mpSwordModel1, 0);
                     }
                 }
@@ -1752,7 +1752,7 @@ BOOL daPy_lk_c::setDamagePoint(f32 amount) {
         dComIfGp_setItemLifeCount(amount);
         if (amount < 0.0f) {
             offNoResetFlg1(daPyFlg1_UNK8000);
-            if (dComIfGs_getSelectEquip(0) != dItem_MASTER_SWORD_3_e) {
+            if (!checkFinalMasterSwordEquip()) {
                 offNoResetFlg1(daPyFlg1_UNK200000);
             }
         }

@@ -1,8 +1,7 @@
 /**
  * d_a_player_battle.inc
  *
- * Code relating to (?) (How is this different from the "cut" functions in the
- * sword file?)
+ * Code relating to parrying enemies.
  *
  * This file is not a standalone translation unit and is instead directly
  * included into d_a_player_main.cpp.
@@ -53,10 +52,10 @@ void daPy_lk_c::setSpecialBattle(BOOL param_0) {
 }
 
 /* 8013E384-8013E454       .text changeSpecialBattle__9daPy_lk_cFv */
-int daPy_lk_c::changeSpecialBattle() {
+BOOL daPy_lk_c::changeSpecialBattle() {
     if (mpAttnActorLockOn != NULL && (dComIfGp_getDoStatus() == 26 || (m34C5 == 5))) {
         fopEn_enemy_c* enemy = (fopEn_enemy_c*)mpAttnActorLockOn;
-        if (m34C5 == 5 || (doTrigger() && enemy->getBtStartFrame() <= enemy->getBtNowFrame())) {
+        if (m34C5 == 5 || (spBattleTrigger() && enemy->getBtStartFrame() <= enemy->getBtNowFrame())) {
             if (enemy->getBtAttackType() == 1) {
                 return procBtJump_init(enemy);
             }

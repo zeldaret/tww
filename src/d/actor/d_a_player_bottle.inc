@@ -131,7 +131,7 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
     iVar2 = checkShipRideUseItem(1);
     commonProcInit(daPyProc_BOTTLE_SWING_e);
     if ((int)param_0 != 0) {
-        deleteEquipItem(0);
+        deleteEquipItem(FALSE);
         setBottleModel(0x50);
     }
     current.angle.y = shape_angle.y;
@@ -211,7 +211,7 @@ BOOL daPy_lk_c::procBottleGet() {
     if ((frameCtrl.getRate() < 0.01f) && (checkEndMessage(mEquipItem + 0x65))) {
         dComIfGp_event_reset();
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
-        deleteEquipItem(0);
+        deleteEquipItem(FALSE);
         endDemoMode();
     } else {
         if (frameCtrl.getFrame() >= 9.0f) {

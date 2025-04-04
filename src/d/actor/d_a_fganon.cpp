@@ -171,13 +171,8 @@ void pos_move(fganon_class* i_this, unsigned char param_2) {
 
 /* 00000AEC-00000C14       .text fly_se_set__FP12fganon_class */
 void fly_se_set(fganon_class* i_this) {
-    float fVar1;
-    uint uVar2;
-    float fVar4;
-    cXyz local_34;
-    
-    local_34 = i_this->current.pos - i_this->old.pos;
-    uVar2 = (uint)(local_34.abs() * 3.5f);
+    cXyz local_34 = i_this->current.pos - i_this->old.pos;
+    uint uVar2 = (uint)(local_34.abs() * 3.5f);
     if (uVar2 > 100) {
       uVar2 = 100;
     }
@@ -812,7 +807,7 @@ void down(fganon_class* i_this) {
     sp2C.y += 300.0f;
     gndChk.SetPos(&sp2C);
     f32 height = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if ((height != -1e+09f) && (i_this->current.pos.y <= height)) {
+    if (height != C_BG_MIN_HEIGHT && i_this->current.pos.y <= height) {
         bVar3 = TRUE;
     }
     if ((i_this->m3A4[0] == 0) || bVar3) {
@@ -937,7 +932,7 @@ void kieru(fganon_class* i_this) {
 /* 00004584-00004BC8       .text fail__FP12fganon_class */
 void fail(fganon_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
+
     i_this->m3AE = 3;
     switch(i_this->m388) {
         case 0: {
@@ -1162,7 +1157,7 @@ void start(fganon_class* i_this) {
 /* 00005128-00005350       .text end__FP12fganon_class */
 void end(fganon_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
+
     i_this->m3AE = 3;
     fopAcM_OffStatus(i_this, 0);
     i_this->attention_info.flags = 0;
@@ -1215,7 +1210,7 @@ void end(fganon_class* i_this) {
 /* 00005350-000056A4       .text last_end__FP12fganon_class */
 void last_end(fganon_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
+
     i_this->m3AE = 3;
     fopAcM_OffStatus(i_this, 0);
     i_this->attention_info.flags = 0;
@@ -1593,7 +1588,7 @@ s32 move(fganon_class* i_this) {
         fly2(i_this);
         res = 1;
         break;
-    case 0xB:
+    case 11:
         shot2(i_this);
         res = 1;
         break;
@@ -1604,13 +1599,13 @@ s32 move(fganon_class* i_this) {
         down(i_this);
         res = 1;
         break;
-    case 0x14:
+    case 20:
         start(i_this);
         break;
-    case 0x15:
+    case 21:
         end(i_this);
         break;
-    case 0x16:
+    case 22:
         last_end(i_this);
         break;    
     default:
@@ -1656,7 +1651,7 @@ void demo_camera(fganon_class* i_this) {
     camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     bVar3 = TRUE;
     switch(i_this->mB54) {
-        case 0x1: {
+        case 1: {
             if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
                 fopAcM_orderPotentialEvent(a_this, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
                 i_this->eventInfo.onCondition(dEvtCmd_INDEMO_e);
@@ -1675,7 +1670,7 @@ void demo_camera(fganon_class* i_this) {
             player->changeOriginalDemo();
             player->changeDemoMode(0x18);
         }
-        case 0x2: {
+        case 2: {
             transformedPos.x = -300306.0f;
             transformedPos.y = 715.0f; 
             transformedPos.z = -303407.0f;
@@ -1726,7 +1721,7 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB68 = i_this->current.pos;
             i_this->mB68.y += REG0_F(0) + 160.0f;
         }
-        case 0x3: {
+        case 3: {
             if (i_this->mB56 > 60) {
                 cLib_addCalc2(&i_this->mB5C.x, -300269.0f, 0.1f, i_this->mB80 * 100.0f);
                 cLib_addCalc2(&i_this->mB5C.y, 870.0f, 0.1f, i_this->mB80 * 100.0f);
@@ -1755,7 +1750,7 @@ void demo_camera(fganon_class* i_this) {
             }
             break;
         }
-        case 0x32: {
+        case 50: {
             if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
                 fopAcM_orderPotentialEvent(a_this, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
                 i_this->eventInfo.onCondition(dEvtCmd_INDEMO_e);
@@ -1775,7 +1770,7 @@ void demo_camera(fganon_class* i_this) {
 
             i_this->shape_angle.y = 0;
         }
-        case 0x33: {
+        case 51: {
             i_this->current.pos.x = -300202.0f;
             i_this->current.pos.y = 715.0f;
             i_this->current.pos.z = -301859.0f;
@@ -1818,7 +1813,7 @@ void demo_camera(fganon_class* i_this) {
             }
             break;
         }
-        case 0x34: {
+        case 52: {
             yPos = player->current.pos.y;
             transformedPos.x = -300202.0f;
             transformedPos.y = yPos;
@@ -1841,7 +1836,7 @@ void demo_camera(fganon_class* i_this) {
             }
             break;
         }
-        case 0x35: {
+        case 53: {
             i_this->mB68.x = -300098.0f;
             i_this->mB68.y = 580.0f;
             i_this->mB68.z = -301997.0f;
@@ -1866,7 +1861,7 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB68.y -= REG0_F(11) + 30.0f;
             i_this->m388++;
         }
-        case 0x36: {
+        case 54: {
             cLib_addCalc2(&i_this->mB68.y, (i_this->eyePos.y - 30.0f) + REG0_F(11), 0.1f, 20.0f);
             if (i_this->mB56 == 100) {
                 i_this->mB54 = 55;
@@ -1877,7 +1872,7 @@ void demo_camera(fganon_class* i_this) {
                 break;
             }
         }
-        case 0x37: {
+        case 55: {
             if (i_this->mB56 == 20) {
                 mDoAud_seStart(JA_SE_CV_PG_LAUGH_1, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
             }
@@ -1909,9 +1904,9 @@ void demo_camera(fganon_class* i_this) {
 
             i_this->mB54 = 150;
             fopAcM_delete(a_this);
-            goto label0x96;
+            goto case_150;
         }
-        case 0x64: {
+        case 100: {
             if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
                 fopAcM_orderPotentialEvent(a_this, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
                 i_this->eventInfo.onCondition(dEvtCmd_INDEMO_e);
@@ -1936,7 +1931,7 @@ void demo_camera(fganon_class* i_this) {
 
             i_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
         }
-        case 0x65: {
+        case 101: {
             cLib_addCalc2(&i_this->mB68.x, i_this->current.pos.x, 0.1f, 200.0f);
             cLib_addCalc2(&i_this->mB68.y, i_this->eyePos.y - 50.0f, 0.1f, 200.0f);
             cLib_addCalc2(&i_this->mB68.z, i_this->current.pos.z, 0.1f, 200.0f);
@@ -1967,11 +1962,11 @@ void demo_camera(fganon_class* i_this) {
             cLib_addCalc2(&i_this->mB80, 1.0f, 1.0f, REG8_F(7) + 0.1f);
             break;
         }
-        case 0x0:
+        case 0:
         default: {
             break;
         }
-        case 0x67: {
+        case 103: {
             if (i_this->mB56 > REG0_S(2) + 8) {
                 cLib_addCalc2(&i_this->mB68.y, player->current.pos.y + REG0_F(9), 0.8f, REG0_F(10) + 30.0f);
             }
@@ -1988,8 +1983,8 @@ void demo_camera(fganon_class* i_this) {
                 dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(a_this));
             }
         }
-        case 0x96: {
-            label0x96:
+        case 150: {
+        case_150:
             camera->mCamera.SetTrimSize(0);
             camera->mCamera.Start();
             dMeter_mtrShow();
@@ -2007,7 +2002,6 @@ void demo_camera(fganon_class* i_this) {
 /* 00007434-0000778C       .text ball_bg_check__FP12fganon_class */
 BOOL ball_bg_check(fganon_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_LinChk linChk;
     cXyz posVec = i_this->m3E0 + (i_this->m3E0 - i_this->m3EC) * 1.05f;
     linChk.Set(&i_this->m3E0, &posVec, a_this);
@@ -2165,33 +2159,38 @@ void energy_ball_move(fganon_class* i_this) {
                 atInfo.mResultingAttackType = 0xFF;
                 atInfo.mpObj = NULL;
             }
-            if ((atInfo.mpObj && (atInfo.mResultingAttackType == 1) && atInfo.mpObj->ChkAtType(AT_TYPE_SWORD)) && 
-                (dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e || dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e || dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e) || bVar3) {
-                    local_5c = a_this->eyePos - i_this->m3E0;
-                    local_5c.y -= REG0_F(17) + 30.0f;
+            if ((atInfo.mpObj && atInfo.mResultingAttackType == 1 && atInfo.mpObj->ChkAtType(AT_TYPE_SWORD) &&
+                 (dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
+                  dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e ||
+                  dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e)) ||
+                bVar3)
+            {
+                local_5c = a_this->eyePos - i_this->m3E0;
+                local_5c.y -= REG0_F(17) + 30.0f;
 
-                    cMtx_YrotS(*calc_mtx, cM_atan2s(local_5c.x, local_5c.z));                    
-                    cMtx_XrotM(*calc_mtx, -cM_atan2s(local_5c.y, std::sqrtf(local_5c.x * local_5c.x + local_5c.z * local_5c.z)));
-                    
-                    local_50.z = i_this->m404;
-                    
-                    MtxPosition(&local_50, &i_this->m3F8);
-                    
-                    i_this->m408 = 5;
-                    
-                    dScnPly_ply_c::setPauseTimer(2);
-                    
-                    bVar2 = TRUE;
-                    
-                    s32 lVar11 = i_this->m688 + 2;
-                    if (lVar11 > 7) {
-                      lVar11 = 7;
-                    }
-                    mDoAud_changeSubBgmStatus(lVar11);
-                    i_this->m688++;
-                    dComIfGs_onEventBit(0x3f20);
-            }
-            else if (bVar5) {
+                cMtx_YrotS(*calc_mtx, cM_atan2s(local_5c.x, local_5c.z));
+                cMtx_XrotM(
+                    *calc_mtx, -cM_atan2s(local_5c.y, std::sqrtf(local_5c.x * local_5c.x + local_5c.z * local_5c.z))
+                );
+
+                local_50.z = i_this->m404;
+
+                MtxPosition(&local_50, &i_this->m3F8);
+
+                i_this->m408 = 5;
+
+                dScnPly_ply_c::setPauseTimer(2);
+
+                bVar2 = TRUE;
+
+                s32 lVar11 = i_this->m688 + 2;
+                if (lVar11 > 7) {
+                    lVar11 = 7;
+                }
+                mDoAud_changeSubBgmStatus(lVar11);
+                i_this->m688++;
+                dComIfGs_onEventBit(0x3f20);
+            } else if (bVar5) {
                 local_5c = player->eyePos - i_this->m3E0;
                 local_5c.y -= REG0_F(18) + 50.0f;
 

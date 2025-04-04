@@ -399,7 +399,7 @@ BOOL daPy_lk_c::procShipSteer_init() {
         return false;
     } else {
         commonProcInit(daPyProc_SHIP_STEER_e);
-        deleteEquipItem(1);
+        deleteEquipItem(TRUE);
         gravity = 0.0f;
         mVelocity = 0.0f;
         speed.y = 0.0f;
@@ -461,7 +461,7 @@ BOOL daPy_lk_c::procShipPaddle() {
 BOOL daPy_lk_c::procShipScope_init(int param_0) {
     daShip_c* iVar1 = dComIfGp_getShipActor();
     commonProcInit(daPyProc_SHIP_SCOPE_e);
-    deleteEquipItem(1);
+    deleteEquipItem(TRUE);
     gravity = 0.0f;
     iVar1->m034D = 2;
     setShipRidePos(0);
@@ -591,7 +591,7 @@ BOOL daPy_lk_c::procShipCannon_init() {
     } else {
         daShip_c* iVar1 = dComIfGp_getShipActor();
         commonProcInit(daPyProc_SHIP_CANNON_e);
-        deleteEquipItem(1);
+        deleteEquipItem(TRUE);
         gravity = 0.0f;
         mVelocity = 0.0f;
         iVar1->m034D = 9;

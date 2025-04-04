@@ -384,7 +384,7 @@ BOOL daPy_lk_c::procWeaponThrow() {
             boko->m2BA = 1;
             boko->m2CA = uVar2;
             voiceStart(0);
-            deleteEquipItem(0);
+            deleteEquipItem(FALSE);
         }
         return true;
     }
