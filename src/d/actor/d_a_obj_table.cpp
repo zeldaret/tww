@@ -4,66 +4,58 @@
 //
 
 #include "d/actor/d_a_obj_table.h"
-#include "d/d_a_obj.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "SSystem/SComponent/c_phase.h"
+#include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "dolphin/types.h"
 #include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/res/res_table.h"
 
 Mtx daObjTable::Act_c::M_tmp_mtx;
 const char daObjTable::Act_c::M_arcname[6] = "Table";
 
 /* 00000078-000001B8       .text CreateHeap__Q210daObjTable5Act_cFv */
 BOOL daObjTable::Act_c::CreateHeap() {
-    u8 prm;
     J3DModelData *model_data;
     J3DModel *model;
 
-
-    prm = daObj::PrmAbstract(this, PRM_LINK_ID_W, PRM_LINK_ID_S);
-    if (!prm) {
-        model_data = (J3DModelData*) dRes_control_c::getRes(M_arcname, 4, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+    if ((u8)prm_get_mdl() == 0) {
+        model_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, TABLE_BDL_YTBLE);
         
-        JUT_ASSERT(0x51, model_data != 0);
+        JUT_ASSERT(0x51, model_data != NULL);
         
         model = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
         mpModel = model;
     } else {
-        model_data = (J3DModelData *) dRes_control_c::getRes(M_arcname, 5, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+        model_data = (J3DModelData *) dComIfG_getObjectRes(M_arcname, TABLE_BDL_QCFIS);
         
-        JUT_ASSERT(0x57, model_data != 0);
+        JUT_ASSERT(0x57, model_data != NULL);
         
         model = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
         mpModel = model;
     }
-    return this->mpModel != 0;
+    return this->mpModel != NULL;
 }
 
 /* 000001B8-00000284       .text Create__Q210daObjTable5Act_cFv */
 BOOL daObjTable::Act_c::Create() {
     u8 prm;
-    dBgW *coll;
     uint coll_id;
-    u8 release;
+    BOOL release;
 
     cullMtx = mpModel->mBaseTransformMtx;
     init_mtx();
-
     fopAcM_setCullSizeBox(this, -80.0f, -1.0f, -80.0f, 80.0f, 205.0f, 80.0f);
-    prm = daObj::PrmAbstract(this, PRM_LINK_ID_W, PRM_LINK_ID_S);
-
-    if (((uint)prm == '\x02') && (coll = mpBgW, coll != NULL)) {
-        coll_id = (coll->GetId());
-        if (((int)coll_id >= 0) && ((int)coll_id < 0x100)) {
-            release = true;
-        } else {
-            release = false;
-        }
-        
-        if (release) {
-            dComIfG_Bgsp()->Release(coll);
+    prm = prm_get_mdl();
+    if ((uint)prm == 2 && mpBgW != NULL) {
+        if (mpBgW->ChkUsed()) {
+            dComIfG_Bgsp()->Release(mpBgW);
         }
     }
-    return 1;
+    return TRUE;
 }
 
 /* 00000284-000003B4       .text Mthd_Create__Q210daObjTable5Act_cFv */
@@ -74,14 +66,13 @@ cPhs_State daObjTable::Act_c::Mthd_Create() {
 
     phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        prm = daObj::PrmAbstract((fopAc_ac_c*) this, PRM_LINK_ID_W, PRM_LINK_ID_S);
-        if (prm == 0) {
-            phase_state = MoveBGCreate(M_arcname, 9, 0, 0xffffffff);
+        if ((u8)prm_get_mdl() == 0) {
+            phase_state = MoveBGCreate(M_arcname, TABLE_DZB_YTBLE, NULL, -1);
         } else {
-            phase_state = MoveBGCreate(M_arcname, 8, 0, 0xffffffff);
+            phase_state = MoveBGCreate(M_arcname, TABLE_DZB_QCFIS, NULL, -1);
         }
         
-       JUT_ASSERT(0x8c, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));  
+       JUT_ASSERT(0x8c, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     
     return phase_state;
@@ -89,7 +80,7 @@ cPhs_State daObjTable::Act_c::Mthd_Create() {
 
 /* 000003B4-000003BC       .text Delete__Q210daObjTable5Act_cFv */
 BOOL daObjTable::Act_c::Delete() {
-    return 1;
+    return TRUE;
 }
 
 /* 000003BC-00000408       .text Mthd_Delete__Q210daObjTable5Act_cFv */
@@ -101,36 +92,29 @@ BOOL daObjTable::Act_c::Mthd_Delete() {
 
 /* 00000408-00000488       .text set_mtx__Q210daObjTable5Act_cFv */
 void daObjTable::Act_c::set_mtx() {
-    PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, shape_angle.x, shape_angle.y, shape_angle.z);
-    PSMTXCopy(mDoMtx_stack_c::now, mpModel->mBaseTransformMtx);
-    PSMTXCopy(mDoMtx_stack_c::now, M_tmp_mtx);
-    return;
+    mDoMtx_trans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z); 
+    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, shape_angle.x, shape_angle.y, shape_angle.z); 
+    mDoMtx_copy(mDoMtx_stack_c::now, mpModel->mBaseTransformMtx);
+    mDoMtx_copy(mDoMtx_stack_c::now, M_tmp_mtx);
 }
 
 /* 00000488-000004C4       .text init_mtx__Q210daObjTable5Act_cFv */
 void daObjTable::Act_c::init_mtx() {
-    J3DModel *model;
-    model = mpModel;
-    
-    model->mBaseScale.x = scale.x;
-    model->mBaseScale.y = scale.y;
-    model->mBaseScale.z = scale.z;
+    J3DModel *model = mpModel;
+    model->setBaseScale(scale);
     set_mtx();
-    return;
 }
 
 /* 000004C4-00000500       .text Execute__Q210daObjTable5Act_cFPPA3_A4_f */
 BOOL daObjTable::Act_c::Execute(Mtx** matrix) {
     set_mtx();
     *matrix = &M_tmp_mtx;
-    return 1;
+    return TRUE;
 }
 
 /* 00000500-00000608       .text Draw__Q210daObjTable5Act_cFv */
 BOOL daObjTable::Act_c::Draw() {
-    f32 angle; // not 100% sure it's an angle, best guess
-    u8 prm;
+    f32 fVar;
     cXyz pos[2];
 
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
@@ -139,45 +123,41 @@ BOOL daObjTable::Act_c::Draw() {
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
-    
-    prm = daObj::PrmAbstract(this, PRM_LINK_ID_W, PRM_LINK_ID_S);
-    if ((int)prm == 0) {
-        angle = 120.0;
+
+    if ((u8)prm_get_mdl() == 0) {
+        fVar = 120.0;
     } else {
-        angle = 30.0;
+        fVar = 30.0;
     }
+
     pos[0].x = 0.0;
     pos[0].y = 1.0;
     pos[0].z = 0.0;
 
-    dComIfGd_setSimpleShadow(&current.pos, current.pos.y, angle, pos, 0, 1.0);
-    return 1;
+    dComIfGd_setSimpleShadow(&current.pos, current.pos.y, fVar, pos, 0, 1.0);
+    return TRUE;
 }
 
 namespace daObjTable {
 namespace {
 /* 00000608-00000628       .text Mthd_Create__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void Mthd_Create(void* i_this) {
-    ((Act_c*) i_this)->Mthd_Create();
-    return;
+cPhs_State Mthd_Create(void* i_this) {
+    return ((Act_c*) i_this)->Mthd_Create();
 }
 
 /* 00000628-00000648       .text Mthd_Delete__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void Mthd_Delete(void* i_this) {
-    ((Act_c*) i_this)->Mthd_Delete();
-    return;
+BOOL Mthd_Delete(void* i_this) {
+    return ((Act_c*) i_this)->Mthd_Delete(); 
 }
 
 /* 00000648-00000668       .text Mthd_Execute__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void Mthd_Execute(void* i_this) {
-    ((Act_c*) i_this)->MoveBGExecute();
-    return;
+BOOL Mthd_Execute(void* i_this) {
+    return ((Act_c*) i_this)->MoveBGExecute();
 }
 
 /* 00000668-00000694       .text Mthd_Draw__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void Mthd_Draw(void* i_this) {
-    ((Act_c*) i_this)->Draw();
-    return;
+BOOL Mthd_Draw(void* i_this) {
+    return ((Act_c*) i_this)->Draw();
 }
 
 /* 00000694-000006C0       .text Mthd_IsDelete__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */

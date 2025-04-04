@@ -1,15 +1,14 @@
 #ifndef D_A_OBJ_TABLE_H
 #define D_A_OBJ_TABLE_H
 
+#include "d/d_a_obj.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "SSystem/SComponent/c_phase.h"
 
 namespace daObjTable {
     class Act_c : public dBgS_MoveBgActor {
-    public:
-        void prm_get_mdl() const {}
-    
+    public: 
         virtual BOOL CreateHeap();
         virtual BOOL Create();
         cPhs_State Mthd_Create();
@@ -19,13 +18,13 @@ namespace daObjTable {
         void init_mtx();
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
-
-
+        
+        s32 prm_get_mdl() const { return daObj::PrmAbstract(this, PRM_MDL_W, PRM_MDL_S); }
         static Mtx M_tmp_mtx;
         static const char M_arcname[6];
         enum Prm_e {
-            PRM_LINK_ID_W = 8,
-            PRM_LINK_ID_S = 0,
+            PRM_MDL_W = 8,
+            PRM_MDL_S = 0,
         };
 
     public:
