@@ -903,7 +903,7 @@ BOOL daPy_lk_c::procCutEB() {
     current.angle.y = shape_angle.y;
     setSpecialBattle(TRUE);
     if (doTrigger() && dComIfGp_getDoStatus() == 26) {
-        changeSpecialBattle();
+        return changeSpecialBattle();
     }
 
     if (frameCtrl.checkPass(daPy_HIO_cutEB_c0::m.field_0x24)) {

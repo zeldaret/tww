@@ -1364,7 +1364,7 @@ public:
     BOOL procClimbMoveSide_init(int);
     BOOL procClimbMoveSide();
     void setBlendWHideMoveAnime(f32);
-    int getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
+    cM3dGPla* getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
     void getWHideBasePos(cXyz*);
     void getWHideNextPos(cXyz*, cXyz*);
     BOOL checkWHideBackWall(cXyz*);

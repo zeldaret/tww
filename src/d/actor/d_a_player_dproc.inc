@@ -293,7 +293,6 @@ BOOL daPy_lk_c::dProcDamage() {
 
 /* 8012DF24-8012E054       .text dProcHoldup_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcHoldup_init() {
-    s32 uVar1;
     daPy_ANM dVar3;
     short sVar2;
     f32 dVar6;
@@ -303,8 +302,8 @@ BOOL daPy_lk_c::dProcHoldup_init() {
     if (mCurProc == daPyProc_DEMO_HOLDUP_e) {
         return false;
     }
-    // TODO: figure out what's going on here.
-    uVar1 = mModeFlg >> 4 & ModeFlg_00000001;
+
+    BOOL uVar1 = checkModeFlg(ModeFlg_WHIDE) ? TRUE : FALSE;
     commonProcInit(daPyProc_DEMO_HOLDUP_e);
     if (uVar1) {
         if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
