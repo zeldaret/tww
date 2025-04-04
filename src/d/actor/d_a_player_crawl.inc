@@ -208,11 +208,11 @@ BOOL daPy_lk_c::checkNotCrawlStand(cXyz* param_0) {
 
 /* 801396B0-80139760       .text checkNotCrawlStand__9daPy_lk_cFP4cXyzP4cXyz */
 BOOL daPy_lk_c::checkNotCrawlStand(cXyz* param_0, cXyz* param_1) {
-    cXyz local_2c = (*param_0 + *param_1);
+    cXyz local_2c = *param_0 + *param_1;
     if (checkNotCrawlStand(&local_2c)) {
         return true;
     }
-    local_2c = (*param_0 - *param_1);
+    local_2c = *param_0 - *param_1;
     if (checkNotCrawlStand(&local_2c)) {
         return true;
     }

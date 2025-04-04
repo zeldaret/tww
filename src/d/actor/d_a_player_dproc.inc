@@ -884,7 +884,7 @@ BOOL daPy_lk_c::dProcDead() {
         if (frameCtrl.getRate() < 0.01f) {
             dGameover_c* this_01;
             cLib_chaseF(&m35A0, 0.0f, 0.01f);
-            f32 dVar3 = (1.0f - m35A0);
+            f32 dVar3 = 1.0f - m35A0;
             if ((m3628 != fpcM_ERROR_PROCESS_ID_e) && (this_01 = (dGameover_c*)fopMsgM_SearchByID(m3628), this_01)) {
                 this_01->setBackAlpha(dVar3);
             }
@@ -1459,7 +1459,7 @@ BOOL daPy_lk_c::dProcPresent_init() {
 BOOL daPy_lk_c::dProcPresent() {
     setShapeAngleToTalkActor();
     if (m3570 != 0) {
-        cXyz local_28 = (m370C - current.pos);
+        cXyz local_28 = m370C - current.pos;
         if ((0x4000 < cLib_distanceAngleS(cM_atan2s(local_28.x, local_28.z), current.angle.y)) || mAcch.ChkWallHit()) {
             current.pos.x = m370C.x;
             current.pos.z = m370C.z;
@@ -1541,14 +1541,14 @@ BOOL daPy_lk_c::dProcStandItemPut_init() {
     m3570 = 0;
     pdVar1 = (daPy_py_c*)fopAcM_getEventPartner(this);
     if (pdVar1 != NULL) {
-        cXyz local_20 = (pdVar1->current.pos - current.pos);
+        cXyz local_20 = pdVar1->current.pos - current.pos;
         angle = fopAcM_GetShapeAngle_p(this);
         angle->y = fopAcM_searchActorAngleY(this, pdVar1);
         dVar5 = local_20.absXZ();
         if (0.0f < dVar5) {
             in_f4 = 0.5;
         }
-        m35C8 = (dVar5 - 47.0f);
+        m35C8 = dVar5 - 47.0f;
         angle = fopAcM_GetShapeAngle_p(pdVar1);
     } else {
         m35C8 = 15.0f;

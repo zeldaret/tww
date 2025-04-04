@@ -29,7 +29,7 @@ int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
     }
     if (param_0 != dBgW::PP_UNK0_e) {
         if (pp_actor->shape_angle.y != m34D4) {
-            cXyz local_28 = (current.pos - m370C);
+            cXyz local_28 = current.pos - m370C;
             mDoMtx_trans(mDoMtx_stack_c::now, m370C.x, m370C.y, m370C.z);
             mDoMtx_YrotM(mDoMtx_stack_c::now, pp_actor->shape_angle.y - m34D4);
             mDoMtx_multVec(mDoMtx_stack_c::now, &local_28, &current.pos);

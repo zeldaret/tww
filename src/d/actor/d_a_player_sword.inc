@@ -1259,7 +1259,7 @@ BOOL daPy_lk_c::procCutTurnMove() {
                 mVelocity *= 0.5f;
             }
             if (m34B8 == uVar5) {
-                dVar8 = (daPy_HIO_move_c0::m.field_0x14 * mStickDistance);
+                dVar8 = daPy_HIO_move_c0::m.field_0x14 * mStickDistance;
             } else {
                 m34B8 = (u8)uVar5;
             }
@@ -1277,7 +1277,7 @@ BOOL daPy_lk_c::procCutTurnMove() {
         } else {
             dVar8 = daPy_HIO_cutTurnR_c0::m.field_0x20;
         }
-        f32 dVar7 = (mVelocity / mMaxNormalSpeed);
+        f32 dVar7 = mVelocity / mMaxNormalSpeed;
         mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar7 * dVar8);
         if (dVar8 >= 0.0f) {
             mFrameCtrlUnder[UNDER_MOVE0_e].setLoop(mFrameCtrlUnder[UNDER_MOVE0_e].getStart());
@@ -1439,7 +1439,7 @@ BOOL daPy_lk_c::procJumpCut() {
 
 /* 80159608-80159864       .text procJumpCutLand_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procJumpCutLand_init() {
-    f32 dVar3 = (m35F0 - current.pos.y);
+    f32 dVar3 = m35F0 - current.pos.y;
     commonProcInit(daPyProc_JUMP_CUT_LAND_e);
     if (!dComIfGp_event_runCheck()) {
         if (dVar3 >= (100.0f * daPy_HIO_fall_c0::m.field_0x10)) {

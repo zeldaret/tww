@@ -255,7 +255,7 @@ BOOL daPy_lk_c::procFanSwing() {
             if (mpAttnActorLockOn == NULL) {
                 m3538 = 0;
             } else {
-                local_54 = (mpAttnActorLockOn->eyePos - current.pos);
+                local_54 = mpAttnActorLockOn->eyePos - current.pos;
                 m3538 = cM_atan2s(-local_54.y, local_54.absXZ());
             }
             mpYuchw00Brk->setFrame(0.0f);
