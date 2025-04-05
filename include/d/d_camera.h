@@ -4,7 +4,6 @@
 #include "SSystem/SComponent/c_angle.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "f_pc/f_pc_base.h"
 #include "d/d_cam_param.h"
 #include "d/d_bg_s_gnd_chk.h"
@@ -96,10 +95,7 @@ public:
         /* 0x00 */ u8 m00[0x04 - 0x00];
         /* 0x04 */ dBgS_CamGndChk m04;
         /* 0x58 */ f32 m58;
-        /* 0x5C */ u8 m5C[0x74 - 0x5C];
-        /* 0x74 */ cBgS_PolyInfo m74;
-        /* 0x78 */ u8 m84[0xB0 - 0x84];
-        //u8 temp[0xB0];
+        /* 0x5C */ dBgS_CamGndChk m5C;
     };
 
     /* 0x000 */ camera_class* mpCamera;
@@ -142,7 +138,7 @@ public:
     /* 0x102 */ u8 m102;
     /* 0x103 */ u8 m103[0x108 - 0x103];
     /* 0x108 */ int m108;
-    /* 0x10C */ u8 m10C[0x110 - 0x10C];
+    /* 0x10C */ int m10C;
     /* 0x110 */ u8 m110;
     /* 0x111 */ u8 m111[0x114 - 0x111];
     /* 0x114 */ int m114;
@@ -299,10 +295,10 @@ public:
     /* 0x75C */ int mCamTypeField;
     /* 0x760 */ int mCamTypeEvent;
     /* 0x764 */ int mCamTypeWater;
-    /* 0x768 */ int mCamTypeSubject;
+    /* 0x768 */ int m768;
     /* 0x76C */ int mCamTypeBoat;
     /* 0x770 */ int mCamTypeBoatBattle;
-    /* 0x774 */ int m774;
+    /* 0x774 */ int mCamTypeSubject;
     /* 0x778 */ int mCamTypeKeep;
     /* 0x77C */ int mCamTypeRestrict;
     /* 0x780 */ u8 m780;
@@ -482,7 +478,10 @@ public:
     void clrFlag(u32 flag) { mEventFlags &= ~flag; }
 
     static engine_fn engine_tbl[];
+
     static dCamera__Type types[63];
+
+    static char* mvBGTypes[];
 };
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);
@@ -496,28 +495,5 @@ s16 dCam_getAngleX(camera_class*);
 s16 dCam_getControledAngleY(camera_class*);
 camera_class* dCam_getCamera();
 dCamera_c* dCam_getBody();
-
-engine_fn dCamera_c::engine_tbl[] = {
-    &dCamera_c::letCamera,
-    &dCamera_c::lockonCamera,
-    &dCamera_c::talktoCamera,
-    &dCamera_c::subjectCamera,
-    &dCamera_c::fixedPositionCamera,
-    &dCamera_c::fixedFrameCamera,
-    &dCamera_c::towerCamera,
-    &dCamera_c::rideCamera,
-    &dCamera_c::manualCamera,
-    &dCamera_c::eventCamera,
-    &dCamera_c::hookshotCamera,
-    &dCamera_c::followCamera2,
-    &dCamera_c::followCamera,
-    &dCamera_c::crawlCamera,
-    &dCamera_c::tornadoCamera,
-    &dCamera_c::hungCamera,
-    &dCamera_c::vomitCamera,
-    &dCamera_c::shieldCamera,
-    &dCamera_c::nonOwnerCamera,
-    &dCamera_c::demoCamera
-};
 
 #endif /* D_CAMERA_H */

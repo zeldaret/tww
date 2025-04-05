@@ -18,6 +18,8 @@
 #include "m_Do/m_Do_graphic.h"
 #include "f_ap/f_ap_game.h"
 #include "d/actor/d_a_npc_md.h"
+#include "d/actor/d_a_npc_kamome.h"
+#include "d/d_procname.h"
 
 namespace {  
     static f32 limitf(f32 value, f32 min, f32 max) {
@@ -26,33 +28,38 @@ namespace {
         } else if (value < min) {
             return min;
         }
-    
         return value;
     }
     
-    inline static f32 rangef(f32 value1, f32 value2, f32 ratio) {
-        return value1 + (value2 - value1) * ratio;
-    }
-    
     inline static bool is_player(fopAc_ac_c* actor) {
-        return fopAcM_GetName(actor) == 0x00FD || fopAcM_GetName(actor) == 0x00FD;
+        return fopAcM_GetName(actor) == PROC_PLAYER;
     }
 
     inline static bool isPlayerGuarding(u32 param_0) {
         return dComIfGp_checkPlayerStatus1(param_0, 0x80000) ||  daNpc_Md_c::m_mirror;
     }
 
-    static void hideActor(fopAc_ac_c* actor) {
+    inline static fopAc_ac_c* get_boomerang_actor(fopAc_ac_c* actor) {
         if (is_player(actor)) {
-            dComIfGp_onCameraAttentionStatus(0, 2);
+            daPy_py_c* link = (daPy_py_c*)actor;
+            return fopAcM_SearchByID(link->getThrowBoomerangID());
         } else {
-            fopAcM_OnStatus(actor, 0x1000000);
+            return NULL;
         }
+    }
+
+    inline static void hideActor(fopAc_ac_c* actor) {
+        fopAcM_OnStatus(actor, 0x1000000);
     }
 
     inline static int get_camera_id(camera_class* i_camera) {
         return fopCamM_GetParam(i_camera);
     }
+
+    inline static int get_controller_id(camera_class* i_camera) {
+        return dComIfGp_getCameraPlayer1ID(get_camera_id(i_camera));
+    }
+    
 
     inline static dDlst_window_c* get_window(int param_0) {
         return dComIfGp_getWindow(dComIfGp_getCameraWinID(param_0));
@@ -95,22 +102,82 @@ namespace {
     } 
 }  // namespace
 
-/* 80161790-801618B8       .text __ct__9dCamera_cFP12camera_class */
-dCamera_c::dCamera_c(camera_class*) : mCamParam(0) {
-    /* Nonmatching */
-}
+engine_fn dCamera_c::engine_tbl[] = {
+    &dCamera_c::letCamera,
+    &dCamera_c::lockonCamera,
+    &dCamera_c::talktoCamera,
+    &dCamera_c::subjectCamera,
+    &dCamera_c::fixedPositionCamera,
+    &dCamera_c::fixedFrameCamera,
+    &dCamera_c::towerCamera,
+    &dCamera_c::rideCamera,
+    &dCamera_c::manualCamera,
+    &dCamera_c::eventCamera,
+    &dCamera_c::hookshotCamera,
+    &dCamera_c::followCamera2,
+    &dCamera_c::followCamera,
+    &dCamera_c::crawlCamera,
+    &dCamera_c::tornadoCamera,
+    &dCamera_c::hungCamera,
+    &dCamera_c::vomitCamera,
+    &dCamera_c::shieldCamera,
+    &dCamera_c::nonOwnerCamera,
+    &dCamera_c::demoCamera
+};
 
+char* dCamera_c::mvBGTypes[] = {
+    "Field",
+    "Dungeon",
+    "Plain",
+    "DungeonDown",
+    "DungeonUp",
+    "DungeonCorner",
+    "Jump",
+    "DungeonWide",
+    "Room",
+    "FieldCushion",
+    "OverLook",
+    "Corridor",
+    "Subject",
+    "DungeonPassage",
+    "Cliff",
+    "Cliff2",
+    "MajTower",
+    "Boss01",
+    "Boss02",
+    "Gamoss",
+    "MiniIsland",
+    "Amoss",
+    "Cafe",
+    "P_Ganon1",
+    "P_Ganon2",
+    "WindBoss",
+    "P_Ganon3",
+    "G_BedRoom",
+    "G_Roof",
+    "G_BedRoom2",
+    "Boss04",
+    "WindHall",
+    "BigBird",
+    "DStairs"
+};
+
+/* 80161790-801618B8       .text __ct__9dCamera_cFP12camera_class */
+dCamera_c::dCamera_c(camera_class* i_camera) : mCamParam(0) {
+    /* Nonmatching */
+    mForcusLine.mEffectLine.initRnd(100, 100, 100);
+    initialize(i_camera, get_player_actor(i_camera), get_camera_id(i_camera), get_controller_id(i_camera));
+}
 /* 801618B8-80161994       .text __dt__9dCamera_cFv */
 dCamera_c::~dCamera_c() {
     /* Nonmatching */
+    fopAc_ac_c::setStopStatus(0);
 }
 
 /* 80161994-80162128       .text initialize__9dCamera_cFP12camera_classP10fopAc_ac_cUlUl */
 void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 cameraInfoIdx, u32 padId) {
     /* Nonmatching */
     int mapToolType;
-    stage_stag_info_class* pStagInfo;
-    cXyz local_30;
     
     mpCamera = camera;
     m004 = 1;
@@ -127,7 +194,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mCamTypeField = GetCameraTypeFromCameraName("Field");
     mCamTypeEvent = GetCameraTypeFromCameraName("Event");
     mCamTypeWater = GetCameraTypeFromCameraName("Water");
-    m774 = GetCameraTypeFromCameraName("Subject"); // Should be renamed to mCamTypeSubject?
+    mCamTypeSubject = GetCameraTypeFromCameraName("Subject");
     mCamTypeBoat = GetCameraTypeFromCameraName("Boat");
     mCamTypeBoatBattle = GetCameraTypeFromCameraName("BoatBattle");
     mCamTypeRestrict = GetCameraTypeFromCameraName("Restrict");
@@ -154,13 +221,18 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mTrimHeight = 0.0f;
     mTrimSize = 0;
     mTrimTypeForce = -1;
-    pStagInfo = (stage_stag_info_class *)dComIfGp_getStageStagInfo();
-    if (pStagInfo && pStagInfo->mCameraMapToolID != -1) {
-        mapToolType = GetCameraTypeFromMapToolID(pStagInfo->mCameraMapToolID, -1);
-        if (mapToolType != 0xFF && Chtyp(mapToolType)) {
-            mMapToolType = mapToolType;
+
+    dStage_stageDt_c* stage_dt = &dComIfGp_getStage();
+    if (stage_dt != NULL) {
+        stage_stag_info_class*  stag_info = stage_dt->getStagInfo();
+        if (stag_info && stag_info->mCameraMapToolID != -1) {
+            mapToolType = GetCameraTypeFromMapToolID(stag_info->mCameraMapToolID, -1);
+            if (mapToolType != 0xFF && Chtyp(mapToolType)) {
+                mMapToolType = mapToolType;
+            }
         }
     }
+
     mCurStyle = types[mCurType].mStyles[0][mCurMode];
     mLockOnActorId = -1;
     mStageMapToolCameraIdx = 0xFF;
@@ -283,14 +355,14 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
 
     mCamParam.Change(mCurStyle);
 
-    local_30 = attentionPos(mpPlayerActor);
-    local_30.y += mCamParam.CenterHeight(0.0f);
+    cXyz attnPos = attentionPos(mpPlayerActor);
+    attnPos.y += mCamParam.CenterHeight(0.0f);
 
-    m044 = local_30 + cSGlobe(0.0f, cSAngle((s16)0), directionOf((fopAc_ac_c *)this)).Xyz();
+    m044 = attnPos + cSGlobe(0.0f, cSAngle((s16)0), directionOf(mpPlayerActor)).Xyz();
 
     mCenter = m044;
 
-    m03C.Val(200.0f, 0, directionOf((fopAc_ac_c *)this).Inv());
+    m03C.Val(200.0f, 0, directionOf(mpPlayerActor).Inv());
 
     mDistance = m03C.R();
 
@@ -521,7 +593,7 @@ void dCamera_c::updateMonitor() {
     if (mpPlayerActor != NULL) {
         playerPos = positionOf(mpPlayerActor);
         if (m31D != 0) {
-            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m74, TRUE, &mMonitorPos, NULL, NULL);
+            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C, TRUE, &mMonitorPos, NULL, NULL);
         }
         playerMonitorHoritzontalDist = dCamMath::xyzHorizontalDistance(playerPos, mMonitorPos);
         m23C = playerMonitorHoritzontalDist - m234;
@@ -623,36 +695,17 @@ bool dCamera_c::checkForceLockTarget() {
 bool dCamera_c::Run() {
     /* Nonmatching */
     float fVar1;
-    u16 uVar2;
     float fVar3;
     bool bVar4;
     uint uVar5;
-    char cVar9;
-    int iVar6;
-    dDemo_camera_c *pdVar7;
-    short sVar8;
     long next;
-    uint uVar10;
-    dCamera_c *pdVar11;
-    double dVar12;
-    cSAngle local_58 ;
-    cSAngle local_54 ;
-    cSAngle local_50 ;
-    short local_4c;
-    cSAngle acStack_48;
-    cSAngle local_44 ;
+    dCamera_c* camera;
     cSAngle local_40 ;
-    cSAngle acStack_3c ;
-    cSAngle acStack_38 ;
-    cSAngle acStack_34 ;
-    cSAngle local_30;
-    cSAngle local_2c;
-    cSAngle local_28;
     cSAngle local_24;
 
     bool bVar9 = FALSE;
     
-    pdVar11 = (dCamera_c *)0x0;
+    camera = (dCamera_c *)0x0;
 
     mForcusLine.Off();
 
@@ -774,14 +827,12 @@ bool dCamera_c::Run() {
         }
     }
     else {
-        pdVar7 = g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera();
-
-        if (pdVar7) {
+        if (g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera()) {
             if (mCamParam.Algorythmn(mCurStyle) != 11) {
-                pdVar11 = (dCamera_c *)demoCamera(0);
+                camera = (dCamera_c *)demoCamera(0);
             }
         }
-        pdVar11 = this;
+        camera = this;
         bVar9 = (this->*engine_tbl[dCamParam_c::styles[mCurStyle].engineIdx])(mCurStyle);
         m07C++;
         m080++;
@@ -829,6 +880,7 @@ bool dCamera_c::Run() {
     else {
         mCenter = m044;
     }
+    
     mFovY = m060;
 
     mBank = m05C;
@@ -999,6 +1051,7 @@ bool dCamera_c::Draw() {
 
 /* 8016418C-80164898       .text nextMode__9dCamera_cFl */
 int dCamera_c::nextMode(s32 i_curMode) {
+    /* Nonmatching - regswap */
     dAttention_c& attn = dComIfGp_getAttention();
     s32 next_mode = i_curMode;
     cXyz player_pos = positionOf(mpPlayerActor);
@@ -1033,7 +1086,13 @@ int dCamera_c::nextMode(s32 i_curMode) {
                     }
                     else {
                         if (i_curMode == 0 || i_curMode == 0x13) {
-                            if (!(positionOf(mpPlayerActor).y >= 0.5f || attn.LockonTruth() || check_owner_action(mPadId, 0x100000))) { // Not meant to be using the y coordinate, not sure what to put
+                            positionOf(mpPlayerActor);
+                            if (
+                                !(
+                                    mStickMainValueLast >= 0.5f ||
+                                    attn.LockonTruth() ||
+                                    check_owner_action(mPadId, 0x100000))
+                                ) {
                                 if (m184 == 1) {
                                     if (mStickCPosYLast < mCamSetup.mCstick.m00) {
                                         m184 = 0;
@@ -1101,19 +1160,11 @@ int dCamera_c::nextMode(s32 i_curMode) {
             next_mode = 4;
         }
         else {
-            if (check_owner_action(mPadId, 0x25000)) {
-                if (!attn.Lockon()) {
-                    next_mode = 10;
-                    goto LAB_801647b0;
-                }
-            }
-            if (check_owner_action(mPadId, 0x80000)) {
-                if (!attn.Lockon()) {
-                    next_mode = 11;
-                    goto LAB_801647b0;
-                }
-            }
-            if (m144 == 0) {
+            if (check_owner_action(mPadId, 0x25000) && !attn.Lockon()) {
+                next_mode = 10;
+            } else if (check_owner_action(mPadId, 0x80000) && !attn.Lockon()) {
+                next_mode = 11;
+            } else if (m144 == 0) {
                 next_mode = 12;
             }
             else if (check_owner_action1(mPadId, 2)) {
@@ -1128,7 +1179,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
             else if (check_owner_action(mPadId, 0x61)) {
                 next_mode = 5;
             }
-            else if (check_owner_action(mPadId, 0x406) && next_mode != 12) {
+            else if (check_owner_action(mPadId, 0x406) && i_curMode != 12) {
                 if (mpLockonTarget) {
                     next_mode = 8;
                 }
@@ -1140,14 +1191,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
                 next_mode = 1;
             }
             else if (check_owner_action(mPadId, 0x400000) && !check_owner_action(mPadId, 0x36a02371) && !check_owner_action1(mPadId, 0x11)) {
-                fopAc_ac_c* lockonTarget;
-                if (fopAcM_GetName(mpPlayerActor) == 0xa9) {
-                    lockonTarget = fopAcM_SearchByID(mpPlayerActor->parentActorID); // Something wrong with this call
-                }
-                else {
-                    lockonTarget = NULL;
-                }
-                mpLockonTarget = lockonTarget;
+                mpLockonTarget = get_boomerang_actor(mpPlayerActor);
                 next_mode = 2;
                 mLockOnActorId = -1;
             }
@@ -1164,15 +1208,19 @@ int dCamera_c::nextMode(s32 i_curMode) {
                     mLockOnActorId = -1;
                 }
             }
-            else if (i_curMode != 12 || m144 != 0) {
-                next_mode = 0;
-            }
             else {
-                next_mode = 0;
+                switch (i_curMode) {
+                case 12:
+                    if (m144 != 0) {
+                        next_mode = 0;
+                    }
+                    break;
+                default:
+                    next_mode = 0;
+                }
             }
         }
     }
-    LAB_801647b0:
 
     if (next_mode != 2) {
         mLockOnActorId = -1;
@@ -1197,13 +1245,144 @@ int dCamera_c::nextMode(s32 i_curMode) {
 }
 
 /* 80164898-80164A48       .text onModeChange__9dCamera_cFll */
-bool dCamera_c::onModeChange(s32, s32) {
-    /* Nonmatching */
+bool dCamera_c::onModeChange(s32 i_curMode, s32 i_nextMode) {
+    if (i_curMode == 0xe && mCamParam.CheckFlag(0x10)) {
+        setView(0.0f, 0.0f, 640.0f, 480.0f);
+    }
+    
+    m108 = 0;
+    m100 = 0;
+    m101 = 0;
+    m102 = 0;
+    m10C = 0;
+    m110 = 1;
+    m14C = 0.0f;
+    
+    clrFlag(0x11E);
+    clrFlag(0x2000);
+    
+    switch (i_curMode) {
+        case 3:
+        case 4:
+            break;
+        case 0xb:
+        case 0xc:
+            dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 4);
+            break;
+    }
+    if (i_nextMode <= 0xc) {
+        setFlag(0x10);
+    }
+    else if (i_curMode == 1 && types[mCurType].mStyles[0][0] == types[mCurType].mStyles[0][1]) {
+        m110 = 0;
+    }
+    else if (i_curMode == 0 && types[mCurType].mStyles[0][0] == types[mCurType].mStyles[0][1]) {
+        m110 = 0;
+    }
+    else if (i_curMode != i_nextMode) {
+        m254 |= 2;
+    }
+    return TRUE;
 }
 
 /* 80164A48-80164CEC       .text nextType__9dCamera_cFl */
-int dCamera_c::nextType(s32) {
-    /* Nonmatching */
+int dCamera_c::nextType(s32 curType) {
+    int iVar1;
+    int idx;
+    int iVar2;
+    int roomNo;
+    uint uVar3;
+
+    int next_type = curType;
+    
+    if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
+        next_type = mCamTypeEvent;
+        if (curType != next_type) {
+            clrFlag(0x200000);
+            if (curType != mCamTypeEvent) {
+                pushPos();
+                m404 = curType;
+            }
+        }
+    }
+    else {
+        if (mpPlayerActor && m514 != 1) {
+            if (curType == mCamTypeEvent) {
+                next_type = m404;
+                m404 = -1;
+            }
+            
+            if (daNpc_kam_c::m_hyoi_kamome) {
+                next_type = GetCameraTypeFromCameraName("Seagal");
+            }
+            else {
+                if (!check_owner_action(mPadId, 0x1010000) || (check_owner_action1(mPadId, 0x80) && m524 == 0xFF)) {
+                    next_type = mCamTypeBoat;
+                }
+                else {
+                    roomNo = -1;
+                    idx = mStageMapToolCameraIdx;
+                    if (idx == 0xff) {
+                        if (mRoomNo != -1) {
+                            roomNo = mRoomNo;
+                        }
+                        idx = mRoomMapToolCameraIdx;
+                    }
+                    if (m524 == 0xff) {
+                        next_type = m524;
+                        if (m528 != NULL) {
+                            //mpLockonTarget = m528;
+                        }
+                    }
+                    else {
+                        if (idx == 0xff) {
+                            iVar1 = m350;
+                            if (iVar1 < 1) {
+                                if ((uVar3 & 0x100000) == 0) {
+                                    next_type = mMapToolType;
+                                }
+                                else {
+                                    next_type = mCamTypeWater;
+                                }
+                            }
+                            else if (iVar1 < 0x23) {
+                                iVar1 = GetCameraTypeFromCameraName(mvBGTypes[iVar1]);
+                                if (iVar1 != mCamTypeKeep) {
+                                    next_type = iVar1;
+                                }
+                            if (m350 == 0x11) {
+                                GetCameraTypeFromMapToolID(0, fopAcM_GetRoomNo(mpPlayerActor));
+                            }
+                          }
+                        }
+                        else if (idx == 0x1ff) {
+                            if (check_owner_action1(mPadId, 0x80) == 0) {
+                              if (check_owner_action(mPadId, 0x100000) != 0) {
+                                next_type = mCamTypeWater;
+                              }
+                            }
+                            else {
+                                next_type = mMapToolType;
+                            }
+                            if (curType == mCamTypeBoat || (iVar1 = GetCameraTypeFromCameraName("BoatBattle"), curType == iVar1)) {
+                                next_type = mCamTypeWater;
+                            }
+                        }
+                        else {
+                            iVar1 = GetCameraTypeFromMapToolID(idx, roomNo);
+                            
+                            if ((iVar1 != mCamTypeKeep) && (next_type = iVar1, iVar1 == 0xff)) {
+                                next_type = mMapToolType;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    m524 = 0xFF;
+    m528 = 0;
+    return next_type;
 }
 
 /* 80164CEC-80164DB4       .text onTypeChange__9dCamera_cFll */
@@ -1552,8 +1731,14 @@ void dCamera_c::ResetView() {
 }
 
 /* 8017B4C4-8017B51C       .text Chtyp__9dCamera_cFl */
-bool dCamera_c::Chtyp(s32) {
-    /* Nonmatching */
+bool dCamera_c::Chtyp(s32 nextType) {
+    if (onTypeChange(mCurType, nextType)) {
+        mCurType = nextType;
+        return TRUE;
+    }
+    else {
+        return FALSE;
+    }
 }
 
 /* 8017B51C-8017B524       .text U2__9dCamera_cFv */
