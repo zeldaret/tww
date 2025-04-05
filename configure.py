@@ -920,7 +920,7 @@ config.libs = [
         [
             Object(Matching,    "JSystem/JGadget/binary.cpp"),
             Object(Matching,    "JSystem/JGadget/linklist.cpp"),
-            Object(Equivalent,  "JSystem/JGadget/std-vector.cpp"), # weak func order
+            Object(Matching,    "JSystem/JGadget/std-vector.cpp"),
         ],
     ),
     JSystemLib(
