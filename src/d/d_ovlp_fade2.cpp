@@ -51,7 +51,7 @@ void dOvlpFd2_dlst_c::draw() {
     GXEnd();
 
     Mtx44 proj;
-    C_MTXPerspective(proj, 60.0f, g_HIO.field_0x0c * 1.33333333f, 100.0f, 100000.0f);
+    C_MTXPerspective(proj, 60.0f, g_HIO.getAspectRatio() * 1.33333333f, 100.0f, 100000.0f);
     GXSetProjection(proj, GX_PERSPECTIVE);
 
     GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), mDoGph_gInf_c::getFrameBufferTex(), 320, 240, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);

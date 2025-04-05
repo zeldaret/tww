@@ -566,7 +566,7 @@ void dKyr_sun_move() {
         cLib_addCalc(&pSunPkt->mSunAlpha, 1.0f, 0.5f, 0.1f, 0.01f);
 
         if (pCamera != NULL) {
-            borderY = pCamera->mCamera.m5F8;
+            borderY = pCamera->mCamera.mTrimHeight;
         }
 
         cXyz projected;
