@@ -14,6 +14,7 @@ public:
     virtual ~fapGm_HIO_c();
 
     void genMessage(JORMContext* ctx);
+    f32 getAspectRatio() { return mAspectRatio; }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -24,7 +25,7 @@ public:
     /* 0x09 */ u8 field_0x09;
     /* 0x0A */ u8 field_0x0a;
     /* 0x0B */ u8 field_0x0b;
-    /* 0x0C */ f32 field_0x0c;
+    /* 0x0C */ f32 mAspectRatio;
     /* 0x10 */ u8 field_0x10;
     /* 0x11 */ u8 field_0x11;
     /* 0x12 */ u8 field_0x12;

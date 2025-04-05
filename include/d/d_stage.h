@@ -59,13 +59,13 @@ public:
 };
 
 struct stage_stag_info_class {
-    /* 0x00 */ f32 field_0x0;
-    /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ u8 mDefaultCameraType;
-    /* 0x09 */ u8 field_0x09;
-    /* 0x0A */ u16 field_0x0a;
-    /* 0x0C */ u32 field_0x0c;
-    /* 0x10 */ u32 field_0x10;
+    /* 0x00 */ f32 mNearPlane;
+    /* 0x04 */ f32 mFarPlane;
+    /* 0x08 */ u8 mCameraMapToolID;
+    /* 0x09 */ u8 mProp;
+    /* 0x0A */ u16 mParticleSceneNo;
+    /* 0x0C */ u32 mStageTypeAndSchbit;
+    /* 0x10 */ u32 mSchbitEnableAndFarPlane; // High 16 bits are the schbit enable, low 16 bits are the far plane
     /* 0x14 */ u32 field_0x14;
     /* 0x18 */ u32 field_0x18;
     /* 0x1C */ u32 field_0x1c;
@@ -1009,43 +1009,43 @@ const char* dStage_getName2(s16 i_procName, s8 i_subtype);
 
 
 inline u8 dStage_stagInfo_DefaultCameraType(stage_stag_info_class* p_info) {
-    return p_info->mDefaultCameraType;
+    return p_info->mCameraMapToolID;
 }
 
 inline s32 dStage_stagInfo_ChkKeyDisp(stage_stag_info_class* i_stagInfo) {
-    return i_stagInfo->field_0x09 & 1;
+    return i_stagInfo->mProp & 1;
 }
 
 inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
-    return (i_stagInfo->field_0x09 >> 1) & 0x7F;
+    return (i_stagInfo->mProp >> 1) & 0x7F;
 }
 
 inline u32 dStage_stagInfo_GetSTType(stage_stag_info_class* i_stagInfo) {
-    return (i_stagInfo->field_0x0c >> 16) & 7;
+    return (i_stagInfo->mStageTypeAndSchbit >> 16) & 7;
 }
 
 inline u8 dStage_stagInfo_GetUpButton(stage_stag_info_class* i_stagInfo) {
-    return i_stagInfo->field_0x0a & 3;
+    return i_stagInfo->mParticleSceneNo & 3;
 }
 
 inline u8 dStage_stagInfo_GetParticleNo(stage_stag_info_class* i_stagInfo) {
-    return (i_stagInfo->field_0x0a >> 0x3) & 0xFF;
+    return (i_stagInfo->mParticleSceneNo >> 0x3) & 0xFF;
 }
 
 inline s8 dStage_stagInfo_GetTimeH(stage_stag_info_class* p_info) {
-    return (p_info->field_0x0c >> 8) & 0xFF;
+    return (p_info->mStageTypeAndSchbit >> 8) & 0xFF;
 }
 
 inline u16 dStage_stagInfo_GetCullPoint(stage_stag_info_class* p_info) {
-    return p_info->field_0x10 & 0xFFFF;
+    return p_info->mSchbitEnableAndFarPlane & 0xFFFF;
 }
 
 inline u8 dStage_stagInfo_getStartSch(stage_stag_info_class* p_info) {
-    return (p_info->field_0x10 >> 0x10) & 0xFF;
+    return (p_info->mSchbitEnableAndFarPlane >> 0x10) & 0xFF;
 }
 
 inline u8 dStage_stagInfo_GetSchSec(stage_stag_info_class* p_info) {
-    return p_info->field_0x0c & 0xFF;
+    return p_info->mStageTypeAndSchbit & 0xFF;
 }
 
 // TODO:

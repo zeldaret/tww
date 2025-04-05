@@ -68,6 +68,7 @@ public:
     int setStartDemo(int eventInfoIdx) { return mException.setStartDemo(eventInfoIdx); }
     void cancelStartDemo() { /* TODO */ }
     void setCameraPlay(u32 v) { mCameraPlay = v; }
+    int getCameraPlay() { return mCameraPlay; }
 
     /* 0x000 */ dEvDtBase_c mList;
     /* 0x020 */ u32 mCameraPlay;

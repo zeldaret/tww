@@ -77,9 +77,12 @@ public:
 
 class dBgS_CamLinChk_NorWtr : public dBgS_CamLinChk {
 public:
-    dBgS_CamLinChk_NorWtr();
+    dBgS_CamLinChk_NorWtr() {
+        OnWaterGrp();
+        OnNormalGrp();
+    }
 
-    virtual ~dBgS_CamLinChk_NorWtr();
+    virtual ~dBgS_CamLinChk_NorWtr() {}
 };
 
 class dBgS_MirLightLinChk : public dBgS_LinChk {

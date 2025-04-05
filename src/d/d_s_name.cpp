@@ -152,7 +152,7 @@ cPhs_State dScnName_c::create() {
         field_0x2a0 = 160000.0f;
         field_0x2a4 = 60.0f;
         f32 aspect = dComIfGp_getWindow(0)->getViewPort()->mWidth / dComIfGp_getWindow(0)->getViewPort()->mHeight;
-        field_0x2a8 = aspect * g_HIO.field_0x0c;
+        field_0x2a8 = aspect * g_HIO.getAspectRatio();
         field_0x2ac.x = 9377.0f;
         field_0x2ac.y = 0.0;
         field_0x2ac.z = 7644.0;
@@ -960,7 +960,7 @@ void dDlst_FLSEL_CLOTH_c::draw() {
     Mtx44 mtx;
     view_port_class* viewport = dComIfGp_getCurrentViewport();
     f32 aspect = viewport->mWidth / viewport->mHeight;
-    C_MTXPerspective(mtx, 30.0f, aspect * g_HIO.field_0x0c, 1.0f, 100000.0f);
+    C_MTXPerspective(mtx, 30.0f, aspect * g_HIO.getAspectRatio(), 1.0f, 100000.0f);
     GXSetProjection(mtx, GX_PERSPECTIVE);
     cloth_c->draw(0.0f, (GXColor){0xe3, 0xff, 0xb3, 0xff}, (GXColor){0x00, 0x00, 0x00, 0x00}, 0);
     dComIfGp_getCurrentGrafPort()->setPort();
