@@ -79,16 +79,14 @@ public:
         /* 0x00 */ u8 m00[0x04 - 0x00];
         /* 0x04 */ dBgS_CamGndChk m04; // dBgS_CamGndChk might be too large by 4 bytes
         /* 0x58 */ f32 m58;
-        /* 0x5C */ dBgS_CamGndChk m5C; // This offset, needs to be at 0x60
+        /* 0x5C */ dBgS_CamGndChk m5C; // This offset is wrong, needs to be at 0x60
     };
 
     /* 0x000 */ camera_class* mpCamera;
     /* 0x004 */ u8 m004;
     /* 0x005 */ u8 m005;
     /* 0x006 */ cSAngle m006;
-    /* 0x008 */ f32 mDistance;
-    /* 0x00C */ cSAngle m00C;
-    /* 0x00E */ cSAngle mNextCsAngle;
+    /* 0x008 */ cSGlobe mDirection;
     /* 0x010 */ cXyz mCenter;
     /* 0x01C */ cXyz mEye;
     /* 0x028 */ cXyz mUp;
@@ -116,7 +114,8 @@ public:
     /* 0x0A4 */ u8 m0A4[0x40];
     /* 0x0E4 */ int mStageMapToolCameraIdx;
     /* 0x0E8 */ int m0E8;
-    /* 0x0EC */ u8 m0EC[0x100 - 0x0EC];
+    /* 0x0EC */ cXyz mExtendedPos;
+    /* 0x0F8 */ u8 m0F8[0x100 - 0x0F8];
     /* 0x100 */ u8 m100;
     /* 0x101 */ u8 m101;
     /* 0x102 */ u8 m102;
@@ -266,13 +265,13 @@ public:
     /* 0x5C0 */ stage_camera__entry mCurRoomCamEntry;
     /* 0x5D4 */ stage_arrow__entry mCurRoomArrowEntry;
     /* 0x5E8 */ int mCurArrowIdx;
-    /* 0x5EC */ f32 m5EC;
-    /* 0x5F0 */ f32 m5F0;
+    /* 0x5EC */ f32 mWindowWidth;
+    /* 0x5F0 */ f32 mWindowHeight;
     /* 0x5F4 */ f32 m5F4;
     /* 0x5F8 */ f32 mTrimHeight;
     /* 0x5FC */ int mTrimSize;
     /* 0x600 */ int mTrimTypeForce;
-    /* 0x604 */ f32 m604;
+    /* 0x604 */ f32 mWindowAspectRatio;
     /* 0x608 */ f32 m608;
     /* 0x60C */ dCamSetup_c mCamSetup;
     /* 0x750 */ dCamParam_c mCamParam;
@@ -313,6 +312,11 @@ public:
     void updateMonitor();
     cSAngle calcPeepAngle();
     void Att();
+    void SetWindow(f32 window_width, f32 window_height) {
+        mWindowWidth = window_width;
+        mWindowHeight = window_height;
+        mWindowAspectRatio = window_width / window_height;
+    }
     bool checkForceLockTarget();
     bool Run();
     bool NotRun();
@@ -389,7 +393,8 @@ public:
     void Reset();
     void ResetView();
     bool Chtyp(s32);
-    void U2();
+    s16 U2();
+    //void U2(s16 i_val) { mAngleY = cSAngle(i_val); }
     void shakeCamera();
     void StartShake(s32, u8*, s32, cXyz);
     void StopShake();
@@ -400,13 +405,13 @@ public:
     void SetBlurePosition(f32, f32, f32);
     void SetBlurePositionType(int);
     void SetBlureTimer(s32);
-    void SubjectLockOn(fopAc_ac_c*);
-    void SubjectLockOff();
+    bool SubjectLockOn(fopAc_ac_c*);
+    bool SubjectLockOff();
     fopAc_ac_c* GetForceLockOnActor();
-    void ForceLockOn(fpc_ProcID);
-    void ForceLockOff(fpc_ProcID);
-    void SetExtendedPosition(cXyz*);
-    void ScopeViewMsgModeOff();
+    bool ForceLockOn(fpc_ProcID);
+    bool ForceLockOff(fpc_ProcID);
+    bool SetExtendedPosition(cXyz*);
+    bool ScopeViewMsgModeOff();
 
     void Bank() {}
     void Up() {}

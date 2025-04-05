@@ -363,18 +363,19 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mCenter = m044;
 
     m03C.Val(200.0f, 0, directionOf(mpPlayerActor).Inv());
-
-    mDistance = m03C.R();
-
-    m00C = m03C.V();
-
-    mNextCsAngle = m03C.U();
+    
+    mDirection.Val(m03C);
+    //mDistance = m03C.R();
+//
+    //m00C = m03C.V();
+//
+    //mNextCsAngle = m03C.U();
 
     m050 =  m044 + m03C.Xyz();
 
     mEye = m050;
 
-    mAngleY = cSAngle(mNextCsAngle.Inv());
+    mAngleY = cSAngle(mDirection.U().Inv());
 
     mUp.x = 0.0f;
     mUp.y = 1.0f;
@@ -607,7 +608,7 @@ void dCamera_c::updateMonitor() {
         else {
             m240 = 0;
         }
-        m244 = mDistance - m244;
+        m244 = mDirection.R() - m244;
     }
 }
 
@@ -895,7 +896,7 @@ bool dCamera_c::Run() {
         mAngleY = getDMCAngle(cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle));
     }
     else {
-        mAngleY = cSAngle(mNextCsAngle.Inv());
+        mAngleY = cSAngle(mDirection.U().Inv());
     }
 
     if (mCenter.x == mEye.x && mCenter.z == mEye.z) {
@@ -903,7 +904,7 @@ bool dCamera_c::Run() {
         mUp.y = 1.0f;
         mUp.z = 0.0f;
     }
-    else if (m006.Val() >= cSAngle(-90.0f).Val() && m00C.Val() <= cSAngle(90.0f).Val()) {
+    else if (m006.Val() >= cSAngle(-90.0f).Val() && mDirection.V().Val() <= cSAngle(90.0f).Val()) {
         mUp.x = 0.0f;
         mUp.y = 1.0f;
         mUp.z = 0.0f;
@@ -943,7 +944,7 @@ bool dCamera_c::Run() {
         dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
     }
     else {
-        if (mDistance < mCamSetup.m048) {
+        if (mDirection.R() < mCamSetup.m048) {
             if (chkFlag(0x800)) {
                 dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
             }
@@ -1108,7 +1109,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
                 }
                 break;
             case 12:
-                if (mStickCValueLast < 0.01f && mDistance < mCamSetup.m098 || chkFlag(0x80000000)) {
+                if (mStickCValueLast < 0.01f && mDirection.R() < mCamSetup.m098 || chkFlag(0x80000000)) {
                     m144 = 1;
                     m184 = 0;
                 }
@@ -1738,8 +1739,8 @@ bool dCamera_c::Chtyp(s32 nextType) {
 }
 
 /* 8017B51C-8017B524       .text U2__9dCamera_cFv */
-void dCamera_c::U2() {
-    /* Nonmatching */
+s16 dCamera_c::U2() {
+    return mAngleY.Val();
 }
 
 /* 8017B524-8017BA50       .text shakeCamera__9dCamera_cFv */
@@ -1793,73 +1794,101 @@ void dCamera_c::SetBlureTimer(s32) {
 }
 
 /* 8017BC84-8017BC9C       .text SubjectLockOn__9dCamera_cFP10fopAc_ac_c */
-void dCamera_c::SubjectLockOn(fopAc_ac_c*) {
-    /* Nonmatching */
+bool dCamera_c::SubjectLockOn(fopAc_ac_c* target) {
+    setFlag(0x3000000);
+    mpLockonTarget = target;
+    return TRUE;
 }
 
 /* 8017BC9C-8017BCB8       .text SubjectLockOff__9dCamera_cFv */
-void dCamera_c::SubjectLockOff() {
-    /* Nonmatching */
+bool dCamera_c::SubjectLockOff() {
+    clrFlag(0x3000000);
+    mpLockonTarget = NULL;
+    return TRUE;
 }
 
 /* 8017BCB8-8017BCEC       .text GetForceLockOnActor__9dCamera_cFv */
 fopAc_ac_c* dCamera_c::GetForceLockOnActor() {
-    /* Nonmatching */
+    return fopAcM_SearchByID(mLockOnActorId);
 }
 
 /* 8017BCEC-8017BD2C       .text ForceLockOn__9dCamera_cFUi */
-void dCamera_c::ForceLockOn(fpc_ProcID) {
-    /* Nonmatching */
+bool dCamera_c::ForceLockOn(fpc_ProcID procId) {
+    mLockOnActorId = procId;
+    mForceLockTimer = 0;
+    mpLockonActor = GetForceLockOnActor();
+    return TRUE;
 }
 
 /* 8017BD2C-8017BD5C       .text ForceLockOff__9dCamera_cFUi */
-void dCamera_c::ForceLockOff(fpc_ProcID) {
-    /* Nonmatching */
+bool dCamera_c::ForceLockOff(fpc_ProcID procId) {
+    if (procId == mLockOnActorId || procId == -1) {
+        mLockOnActorId = -1;
+        return TRUE;
+    }
+    return FALSE;
+    
+    
 }
 
 /* 8017BD5C-8017BD7C       .text SetExtendedPosition__9dCamera_cFP4cXyz */
-void dCamera_c::SetExtendedPosition(cXyz*) {
-    /* Nonmatching */
+bool dCamera_c::SetExtendedPosition(cXyz* pos) {
+    mExtendedPos.x = pos->x;
+    mExtendedPos.y = pos->y;
+    mExtendedPos.z = pos->z;
+    return TRUE;
 }
 
 /* 8017BD7C-8017BD90       .text ScopeViewMsgModeOff__9dCamera_cFv */
-void dCamera_c::ScopeViewMsgModeOff() {
-    /* Nonmatching */
+bool dCamera_c::ScopeViewMsgModeOff() {
+    clrFlag(0x400000);
+    return TRUE;
 }
 
 /* 8017BD90-8017BD9C       .text dCam_isManual__FP12camera_class */
-void dCam_isManual(camera_class*) {
-    /* Nonmatching */
+bool dCam_isManual(camera_class* i_this) {
+    return i_this->mCamera.chkFlag(0x20);
 }
 
 /* 8017BD9C-8017BDC0       .text dCam_getAngleY__FP12camera_class */
-s16 dCam_getAngleY(camera_class*) {
-    /* Nonmatching */
+s16 dCam_getAngleY(camera_class* i_this) {
+    return i_this->mCamera.mDirection.U().Inv();
 }
 
 /* 8017BDC0-8017BDC8       .text dCam_getAngleX__FP12camera_class */
-s16 dCam_getAngleX(camera_class*) {
-    /* Nonmatching */
+s16 dCam_getAngleX(camera_class* i_this) {
+    return i_this->mCamera.mDirection.V();
 }
 
 /* 8017BDC8-8017BDEC       .text dCam_getControledAngleY__FP12camera_class */
-s16 dCam_getControledAngleY(camera_class*) {
-    /* Nonmatching */
+s16 dCam_getControledAngleY(camera_class* i_this) {
+    return i_this->mCamera.U2();
 }
 
 /* 8017BDEC-8017BDFC       .text dCam_getCamera__Fv */
 camera_class* dCam_getCamera() {
-    /* Nonmatching */
+    return dComIfGp_getCamera(0);
 }
 
 /* 8017BDFC-8017BE20       .text dCam_getBody__Fv */
-dCamera_c* dCam_getBody() {
-    /* Nonmatching */
+dCamera_c* dCam_getBody() {  
+    return &dCam_getCamera()->mCamera;
 }
 
 /* 8017BE20-8017BEB0       .text preparation__FP20camera_process_class */
-void preparation(camera_process_class*) {
-    /* Nonmatching */
+void preparation(camera_process_class* i_this) {
+    /* Nonmatching - Code 100% */
+    camera_class* a_this = (camera_class*)i_this;
+    dCamera_c* camera = &a_this->mCamera;
+
+    int camera_id = get_camera_id(a_this);
+    dDlst_window_c* window = get_window(camera_id);
+    view_port_class* viewport = window->getViewPort();
+    f32 aspect = 1.3333334f * g_HIO.getAspectRatio();
+
+    camera->SetWindow(viewport->mWidth, viewport->mHeight);
+    fopCamM_SetAspect(a_this, aspect);
+    dComIfGp_offCameraAttentionStatus(camera_id, 0x23);
 }
 
 /* 8017BEB0-8017BFAC       .text view_setup__FP20camera_process_class */
