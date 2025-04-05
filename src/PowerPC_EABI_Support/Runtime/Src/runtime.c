@@ -107,10 +107,6 @@ static const u32 __constants[] = {
 	0x00000000, 0x00000000, 0x41F00000, 0x00000000, 0x41E00000, 0x00000000,
 };
 
-/**
- * @note Address: 0x800C1B4C
- * @note Size: 0x5C
- */
 ASM u32 __cvt_fp2unsigned(register f64 d)
 {
 #ifdef __MWERKS__ // clang-format off
@@ -142,10 +138,6 @@ ASM u32 __cvt_fp2unsigned(register f64 d)
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C1BA8
- * @note Size: 0x4C
- */
 ASM static void __save_fpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -175,10 +167,6 @@ ASM static void __save_fpr(void) {
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C1BF4
- * @note Size: 0x4C
- */
 ASM static void __restore_fpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -208,10 +196,6 @@ ASM static void __restore_fpr(void) {
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C1C40
- * @note Size: 0x4C
- */
 ASM static void __save_gpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -253,10 +237,6 @@ ASM static void __save_gpr(void) {
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C1C8C
- * @note Size: 0x4C
- */
 ASM static void __restore_gpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -298,10 +278,6 @@ ASM static void __restore_gpr(void) {
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C1CD8
- * @note Size: 0xEC
- */
 ASM void __div2u(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -376,10 +352,6 @@ lab9:
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C1DC4
- * @note Size: 0x138
- */
 ASM void __div2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -479,10 +451,6 @@ func_end:
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C1EFC
- * @note Size: 0xE4
- */
 ASM void __mod2u(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -555,10 +523,6 @@ lab9:
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C1FE0
- * @note Size: 0x10C
- */
 ASM void __mod2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -645,10 +609,6 @@ no_adjust:
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C20EC
- * @note Size: 0x24
- */
 ASM void __shl2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -664,10 +624,6 @@ ASM void __shl2i(void) {
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C2110
- * @note Size: 0x24
- */
 ASM void __shr2u(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -683,10 +639,6 @@ ASM void __shr2u(void) {
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C2134
- * @note Size: 0x28
- */
 ASM void __shr2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -704,10 +656,6 @@ around:
 #endif // clang-format on
 }
 
-/**
- * @note Address: 0x800C21F8
- * @note Size: 0xCC
- */
 ASM void __cvt_dbl_usll(void)
 {
 #ifdef __MWERKS__ // clang-format off

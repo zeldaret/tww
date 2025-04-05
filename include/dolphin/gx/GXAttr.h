@@ -27,7 +27,7 @@ void GXClearVtxDesc(void);
 void GXSetVtxAttrFmt(GXVtxFmt fmt, GXAttr attr, GXCompCnt cnt, GXCompType type, u8 frac);
 void GXSetVtxAttrFmtv(GXVtxFmt fmt, GXVtxAttrFmtList* list);
 void __GXSetVAT(void);
-void GXSetArray(GXAttr attr, void* base, u8);
+void GXSetArray(GXAttr attr, void* basePtr, u8 stride);
 void GXInvalidateVtxCache(void);
 void GXSetTexCoordGen2(GXTexCoordID dst, GXTexGenType type, GXTexGenSrc src, u32 mtx,
                        GXBool renormalize, u32 pt_mtx);

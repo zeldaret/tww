@@ -1,6 +1,7 @@
 #ifndef MSL_ALGORITHM_H_
 #define MSL_ALGORITHM_H_
 
+#include <string.h>
 #include <iterator.h>
 
 namespace std {
