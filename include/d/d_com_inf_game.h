@@ -203,6 +203,13 @@ struct ItemTableList {
     u8 mItemTables[0x1E][0x10];
 };
 
+class dComIfG_MesgCamInfo_c {
+public:
+    /* 0x00 */ int mID;
+    /* 0x04 */ int mBasicID;
+    /* 0x08 */ fopAc_ac_c* mActor[10];
+};
+
 class dComIfG_play_c {
 public:
 #if VERSION == VERSION_JPN
@@ -278,6 +285,10 @@ public:
         *o_fovy = mCameraInfo[i].mCameraFovy;
         *o_bank = mCameraInfo[i].mCameraBank;
     }
+    void setMesgCamInfoBasicID(int id) { mMesgCamInfo.mBasicID = id; }
+    dComIfG_MesgCamInfo_c* getMesgCamInfo() { return &mMesgCamInfo; }
+    void setMesgCamInfoID(int param_0) { mMesgCamInfo.mID = param_0; }
+
     ~dComIfG_play_c() {}
 
     dStage_roomControl_c* getRoomControl() { return &mRoomCtrl; }
@@ -776,9 +787,7 @@ public:
     /* 0x497A */ u8 field_0x497a;
     /* 0x497B */ u8 field_0x497B[0x497C - 0x497B];
     /* 0x497C */ JKRExpHeap* mpExpHeap2D;
-    /* 0x4980 */ int mMesgCameraTagInfo;
-    /* 0x4984 */ int field_0x4984;
-    /* 0x4988 */ int field_0x4988[10];
+    /* 0x4980 */ dComIfG_MesgCamInfo_c mMesgCamInfo;
     /* 0x49B0 */ u8 mPlayerInfoBuffer[sizeof(dSv_player_status_c_c)];
     /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
@@ -2698,6 +2707,18 @@ inline void dComIfGp_clearMesgAnimeTagInfo() {
 
 inline u8 dComIfGp_getMesgStatus() {
     return g_dComIfG_gameInfo.play.getMesgStatus();
+}
+
+inline void dComIfGp_setMesgCameraTagInfo(int id) {
+    g_dComIfG_gameInfo.play.setMesgCamInfoID(id);
+}
+
+inline void dComIfGp_setMesgCameraAttrInfo(int param_1) {
+  g_dComIfG_gameInfo.play.setMesgCamInfoBasicID(param_1);
+}
+
+inline dComIfG_MesgCamInfo_c* dComIfGp_getMesgCameraInfo() {
+    return g_dComIfG_gameInfo.play.getMesgCamInfo();
 }
 
 inline JKRAramBlock* dComIfGp_getPictureBoxData(int i) {

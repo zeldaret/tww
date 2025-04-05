@@ -21,7 +21,7 @@ public:
 
     virtual ~dBgS_RoofChk() {}
 
-    void SetPos(cXyz& pos) { m_pos = pos; }
+    void SetPos(cXyz const& pos) { m_pos = pos; }
     cXyz* GetPosP() { return &m_pos; }
     f32 GetNowY() { return m_now_y; }
     void SetNowY(f32 y) { m_now_y = y; }

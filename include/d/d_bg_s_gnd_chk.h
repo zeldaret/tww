@@ -67,14 +67,17 @@ public:
 
 class dBgS_CamGndChk : public dBgS_GndChk {
 public:
-    dBgS_CamGndChk() { /* SetCam(); */ }
+    dBgS_CamGndChk() { SetCam(); }
 
     virtual ~dBgS_CamGndChk() {}
 };
 
 class dBgS_CamGndChk_Wtr : public dBgS_CamGndChk {
 public:
-    dBgS_CamGndChk_Wtr();
+    dBgS_CamGndChk_Wtr() {
+        OffNormalGrp();
+        OnWaterGrp();
+    };
 
     virtual ~dBgS_CamGndChk_Wtr();
 };

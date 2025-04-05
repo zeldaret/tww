@@ -23,7 +23,7 @@ public:
     cBgS_Chk() {
         mPolyPassChk = NULL;
         mGrpPassChk = NULL;
-        mSameActorChk = 1;
+        mSameActorChk = true;
     }
     void SetExtChk(cBgS_Chk& other) {
         mPolyPassChk = other.mPolyPassChk;

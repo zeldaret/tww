@@ -7,25 +7,25 @@ class cBgS_PolyPassChk {
 public:
     virtual ~cBgS_PolyPassChk() {}
 
-    /* 0x4 */ u8 mbObjThrough;
-    /* 0x5 */ u8 mbCamThrough;
-    /* 0x6 */ u8 mbLinkThrough;
-    /* 0x7 */ u8 mbArrowThrough; // Also light
-    /* 0x8 */ u8 mbBombThrough;
-    /* 0x9 */ u8 mbBoomerangThrough;
-    /* 0xA */ u8 mbRopeThrough; // Actually Hookshot?
+    /* 0x4 */ bool mbObjThrough;
+    /* 0x5 */ bool mbCamThrough;
+    /* 0x6 */ bool mbLinkThrough;
+    /* 0x7 */ bool mbArrowThrough; // Also light
+    /* 0x8 */ bool mbBombThrough;
+    /* 0x9 */ bool mbBoomerangThrough;
+    /* 0xA */ bool mbRopeThrough; // Actually Hookshot?
 };
 
 class dBgS_PolyPassChk : public cBgS_PolyPassChk {
 public:
     dBgS_PolyPassChk() {
-        mbObjThrough = 0;
-        mbCamThrough = 0;
-        mbLinkThrough = 0;
-        mbArrowThrough = 0;
-        mbBombThrough = 0;
-        mbBoomerangThrough = 0;
-        mbRopeThrough = 0;
+        mbObjThrough = false;
+        mbCamThrough = false;
+        mbLinkThrough = false;
+        mbArrowThrough = false;
+        mbBombThrough = false;
+        mbBoomerangThrough = false;
+        mbRopeThrough = false;
     }
     virtual ~dBgS_PolyPassChk() {}
 

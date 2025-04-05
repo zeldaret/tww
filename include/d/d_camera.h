@@ -175,7 +175,7 @@ public:
     /* 0x1AC */ u8 mHoldZ;
     /* 0x1AD */ u8 mTrigZ;
     /* 0x1AE */ u8 m1AE;
-    /* 0x1AF */ u8 m1AF[0x1B0 - 0x1AF];
+    /* 0x1AF */ u8 m1AF;
     /* 0x1B0 */ dCamForcusLine mForcusLine;
     /* 0x220 */ u8 m220;
     /* 0x221 */ u8 m221[0x224 - 0x221];
@@ -208,7 +208,8 @@ public:
     /* 0x354 */ f32 m354;
     /* 0x358 */ int mRoomNo;
     /* 0x35C */ int mRoomMapToolCameraIdx;
-    /* 0x360 */ u32 m360;
+    /* 0x360 */ u8 m360;
+    /* 0x361 */ u8 m361[0x364 - 0x361];
     /* 0x364 */ u32 m364;
     /* 0x368 */ f32 m368;
     /* 0x36C */ u8 m36C[0x394 - 0x36C];
@@ -231,7 +232,7 @@ public:
     /* 0x414 */ u8 m414[0x424 - 0x414];
     /* 0x424 */ dCamera__EventParam mEventParams[8];
     /* 0x4C4 */ dStage_Event_dt_c* m4C4;
-    /* 0x4C8 */ d2DBSplinePath mSpline2DPath; // Not calling the class constructor for some reason?
+    /* 0x4C8 */ d2DBSplinePath mSpline2DPath;
     /* 0x50C */ u32 mEventFlags;
     /* 0x510 */ int mCurStyle;
     /* 0x514 */ int m514;
@@ -360,16 +361,16 @@ public:
     void setView(f32, f32, f32, f32);
     cSAngle forwardCheckAngle();
     void bumpCheck(u32);
-    void getWaterSurfaceHeight(cXyz*);
+    f32 getWaterSurfaceHeight(cXyz*);
     void checkSpecialArea();
     void checkGroundInfo();
     bool followCamera2(s32);
     bool followCamera(s32);
-    void eyePos(fopAc_ac_c*);
-    void heightOf(fopAc_ac_c*);
+    cXyz eyePos(fopAc_ac_c*);
+    f32 heightOf(fopAc_ac_c*);
     bool lockonCamera(s32);
-    void getMsgCmdSpeaker();
-    void getMsgCmdCut();
+    fopAc_ac_c* getMsgCmdSpeaker();
+    int getMsgCmdCut();
     bool talktoCamera(s32);
     void CalcSubjectAngle(s16*, s16*);
     bool subjectCamera(s32);
@@ -472,10 +473,10 @@ public:
     void clrFlag(u32 flag) { mEventFlags &= ~flag; }
 
     static engine_fn engine_tbl[];
-
+    static int type_num;
     static dCamera__Type types[63];
-
-    static char* mvBGTypes[];
+    static int mvBGType_num;
+    static char* mvBGTypes[34];
 };
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);

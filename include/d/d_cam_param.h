@@ -137,8 +137,8 @@ public:
     /* 0x07C */ f32 m07C;
     /* 0x080 */ f32 m080;
     /* 0x084 */ f32 m084;
-    /* 0x088 */ f32 m088;
-    /* 0x08C */ f32 m08C;
+    /* 0x088 */ f32 mDMCValue;
+    /* 0x08C */ f32 mDMCAngle;
     /* 0x090 */ f32 m090;
     /* 0x094 */ int m094;
     /* 0x098 */ f32 m098;
@@ -180,6 +180,8 @@ public:
     f32 CusCus() { return mCusCus; }
     f32 ParallelDist() { return mParallelDist; }
     f32 CurveWeight() { return mCurveWeight; }
+    f32 DMCAngle() { return mDMCAngle; }
+    f32 DMCValue() { return mDMCValue; }
 
 public:
     /* 0x0D0 */ dCstick_c mCstick;
