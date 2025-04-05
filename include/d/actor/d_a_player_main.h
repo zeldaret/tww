@@ -1816,7 +1816,7 @@ public:
     cXyz getHookshotRootPos() const { return mHookshotRootPos; }
     void getIceParticleBtk() {}
     void getIceWaterParticleBtk() {}
-    void getShadowID() const {}
+    u32 getShadowID() const { return mShadowID; }
     void npcStartRestartRoom() { startRestartRoom(5, 0xC9, -1.0f, 0); }
     void setDaiokutaEnd() {}
     void setWhirlId(fpc_ProcID id) { mWhirlId = id; }
@@ -2232,7 +2232,7 @@ public:
     /* 0x3608 */ f32 m3608;
     /* 0x360C */ f32 mSeAnmRate;
     /* 0x3610 */ f32 m3610;
-    /* 0x3614 */ int m3614;
+    /* 0x3614 */ u32 mShadowID;
     /* 0x3618 */ u32 mModeFlg;
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;
