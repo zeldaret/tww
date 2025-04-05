@@ -452,6 +452,8 @@ public:
     void bSplineEvCamera();
     void twoActor0EvCamera();
 
+    void Pause() { if (g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera()) ResetView(); }
+    void Active() { if (m004 && !m005) Run(); else NotRun(); }
     void CStickUse() { clrFlag(0x800000); }
     void CStickUseless() { setFlag(0x800000); }
     cXyz Eye() { return mEye + mEyeShake; }

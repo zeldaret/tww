@@ -20,6 +20,7 @@
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_kamome.h"
 #include "d/d_procname.h"
+#include "d/d_demo.h"
 
 namespace {  
     static f32 limitf(f32 value, f32 min, f32 max) {
@@ -1872,8 +1873,26 @@ void store(camera_process_class*) {
 }
 
 /* 8017C29C-8017C350       .text camera_execute__FP20camera_process_class */
-void camera_execute(camera_process_class*) {
-    /* Nonmatching */
+int camera_execute(camera_process_class* i_this) {
+    camera_class* a_this = (camera_class*)i_this;
+    
+    preparation(i_this);
+
+    a_this->mCamera.Pause();
+
+    if (!dComIfGp_evmng_cameraPlay()) {
+        mDoGph_gInf_c::mAutoForcus = 1;
+    }
+
+    a_this->mCamera.Active();
+
+    a_this->mCamera.CalcTrimSize();
+
+    store(i_this);
+
+    view_setup(i_this);
+
+    return TRUE;
 }
 
 /* 8017C350-8017C72C       .text camera_draw__FP20camera_process_class */
