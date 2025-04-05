@@ -1684,47 +1684,102 @@ bool dCamera_c::eventCamera(s32) {
 
 /* 8017B144-8017B14C       .text demoCamera__9dCamera_cFl */
 bool dCamera_c::demoCamera(s32) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 8017B14C-8017B154       .text letCamera__9dCamera_cFl */
 bool dCamera_c::letCamera(s32) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 8017B154-8017B18C       .text Set__9dCamera_cF4cXyz4cXyz */
-void dCamera_c::Set(cXyz, cXyz) {
-    /* Nonmatching */
+bool dCamera_c::Set(cXyz center, cXyz eye) {
+    mCenter = center;
+
+    mEye = eye;
+
+    return TRUE;
 }
 
 /* 8017B18C-8017B1EC       .text Set__9dCamera_cF4cXyz4cXyzfs */
-void dCamera_c::Set(cXyz, cXyz, f32, s16) {
-    /* Nonmatching */
+bool dCamera_c::Set(cXyz center, cXyz eye, f32 fovY, s16 bank) {
+    mCenter = center;
+
+    mEye = eye;
+
+    mFovY = fovY;
+
+    mBank.Val(bank);
+
+    return TRUE;
 }
 
 /* 8017B1EC-8017B24C       .text Set__9dCamera_cF4cXyz4cXyzsf */
-void dCamera_c::Set(cXyz, cXyz, s16, f32) {
-    /* Nonmatching */
+bool dCamera_c::Set(cXyz center, cXyz eye, s16 bank, f32 fovY) {
+    mCenter = center;
+
+    mEye = eye;
+
+    mFovY = fovY;
+
+    mBank.Val(bank);
+
+    return TRUE;
 }
 
 /* 8017B24C-8017B31C       .text Reset__9dCamera_cF4cXyz4cXyzfs */
-void dCamera_c::Reset(cXyz, cXyz, f32, s16) {
-    /* Nonmatching */
+bool dCamera_c::Reset(cXyz center, cXyz eye, f32 fovY, s16 bank) {
+    m044 = mCenter = center;
+
+    m050 = mEye = eye;
+
+    m060 = mFovY = fovY;
+
+    mBank = cSAngle(bank);
+    m05C = mBank;
+
+    m03C.Val(m050 - m044);
+
+    return Reset();
 }
 
 /* 8017B31C-8017B3D8       .text Reset__9dCamera_cF4cXyz4cXyz */
-void dCamera_c::Reset(cXyz, cXyz) {
-    /* Nonmatching */
+bool dCamera_c::Reset(cXyz center, cXyz eye) {
+    m044 = mCenter = center;
+
+    m050 = mEye = eye;
+
+    m060 = mFovY;
+
+    m05C = mBank;
+
+    m03C.Val(m050 - m044);
+
+    return Reset();
 }
 
 /* 8017B3D8-8017B494       .text Reset__9dCamera_cFv */
-void dCamera_c::Reset() {
-    /* Nonmatching */
+bool dCamera_c::Reset() {
+    m044 = mCenter;
+
+    m050 = mEye;
+
+    m060 = mFovY;
+
+    mDirection.Val(mEye - mCenter);
+
+    m03C = mDirection;
+
+    m05C = mBank;
+
+    m03C.Val(m050 - m044);
+
+    return TRUE;
 }
 
 /* 8017B494-8017B4C4       .text ResetView__9dCamera_cFv */
 void dCamera_c::ResetView() {
-    /* Nonmatching */
+    setView(0.0f, 0.0f, 640.0f, 480.0f);
 }
 
 /* 8017B4C4-8017B51C       .text Chtyp__9dCamera_cFl */
@@ -1754,43 +1809,67 @@ void dCamera_c::StartShake(s32, u8*, s32, cXyz) {
 }
 
 /* 8017BB8C-8017BBA4       .text StopShake__9dCamera_cFv */
-void dCamera_c::StopShake() {
-    /* Nonmatching */
+bool dCamera_c::StopShake() {
+    m550 = 0;
+    m554 = 0;
+    m588 = 0;
+    return TRUE;
 }
 
 /* 8017BBA4-8017BBF0       .text ResetBlure__9dCamera_cFi */
-void dCamera_c::ResetBlure(int) {
-    /* Nonmatching */
+void dCamera_c::ResetBlure(int param_0) {
+    /* Nonmatching - Code 100% */
+    m58C = param_0;
+    mBlureAlpha = 0.75f;
+    mBlurePositionType = 0;
+    mBlurePosition.x = 0.5f;
+    mBlurePosition.y = 0.5f;
+    mBlurePosition.z = 0.0f;
+    mBlureScale.x = 0.99f;
+    mBlureScale.y = 0.99f;
+    mBlureScale.z = 0.0f;
+    m594.x = 0;
+    m594.y = 0;
+    m594.z = 0;
+    mBlureTimer = 0;
 }
 
 /* 8017BBF0-8017BBF8       .text SetBlureAlpha__9dCamera_cFf */
-void dCamera_c::SetBlureAlpha(f32) {
-    /* Nonmatching */
+void dCamera_c::SetBlureAlpha(f32 alpha) {
+    mBlureAlpha = alpha;
 }
 
 /* 8017BBF8-8017BC08       .text SetBlureScale__9dCamera_cFfff */
-void dCamera_c::SetBlureScale(f32, f32, f32) {
-    /* Nonmatching */
+void dCamera_c::SetBlureScale(f32 scale_x, f32 scale_y, f32 scale_z) {
+    mBlureScale.x = scale_x;
+    mBlureScale.y = scale_y;
+    mBlureScale.z = scale_z;
+    return;
 }
 
 /* 8017BC08-8017BC1C       .text SetBlureScale__9dCamera_cFf */
-void dCamera_c::SetBlureScale(f32) {
-    /* Nonmatching */
+void dCamera_c::SetBlureScale(f32 scale) {
+    mBlureScale.x = scale;
+    mBlureScale.y = scale;
+    mBlureScale.z = 0.0f;
 }
 
 /* 8017BC1C-8017BC74       .text SetBlurePosition__9dCamera_cFfff */
-void dCamera_c::SetBlurePosition(f32, f32, f32) {
-    /* Nonmatching */
+void dCamera_c::SetBlurePosition(f32 pos_x, f32 pos_y, f32 pos_z) {
+    SetBlurePositionType(1);
+    mBlurePosition.x = pos_x;
+    mBlurePosition.y = pos_y;
+    mBlurePosition.z = pos_z;
 }
 
 /* 8017BC74-8017BC7C       .text SetBlurePositionType__9dCamera_cFi */
-void dCamera_c::SetBlurePositionType(int) {
-    /* Nonmatching */
+void dCamera_c::SetBlurePositionType(int positionType) {
+    mBlurePositionType = positionType;
 }
 
 /* 8017BC7C-8017BC84       .text SetBlureTimer__9dCamera_cFl */
-void dCamera_c::SetBlureTimer(s32) {
-    /* Nonmatching */
+void dCamera_c::SetBlureTimer(s32 timerVal) {
+    mBlureTimer = timerVal;
 }
 
 /* 8017BC84-8017BC9C       .text SubjectLockOn__9dCamera_cFP10fopAc_ac_c */
