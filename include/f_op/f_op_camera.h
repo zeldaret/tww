@@ -22,7 +22,6 @@ public:
 class camera_class : public camera_process_class {
 public:
     /* 0x23C */ request_of_phase_process_class phase_request;
-    /* 0x240 */ int field_0x244;
     /* 0x244 */ dCamera_c mCamera;
 };
 

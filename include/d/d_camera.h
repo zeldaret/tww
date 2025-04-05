@@ -174,7 +174,7 @@ public:
     /* 0x178 */ f32 mStickCPosXDelta;
     /* 0x17C */ f32 mStickCPosYDelta;
     /* 0x180 */ f32 mStickCValueDelta;
-    /* 0x184 */ u32 m184;
+    /* 0x184 */ int m184;
     /* 0x188 */ u32 m188;
     /* 0x18C */ u32 m18C;
     /* 0x190 */ f32 mTriggerLeftLast;
@@ -519,52 +519,5 @@ engine_fn dCamera_c::engine_tbl[] = {
     &dCamera_c::nonOwnerCamera,
     &dCamera_c::demoCamera
 };
-
-
-namespace {    
-    //inline static int get_camera_id(camera_class* i_camera) {
-    //    return fopCamM_GetParam(i_camera);
-    //}
-
-    //inline static dDlst_window_c* get_window(int param_0) {
-    //    return dComIfGp_getWindow(dComIfGp_getCameraWinID(param_0));
-    //}
-    //
-    //inline static dDlst_window_c* get_window(camera_class* i_camera) {
-    //    return dComIfGp_getWindow(dComIfGp_getCameraWinID(get_camera_id(i_camera)));
-    //}
-
-    //inline static fopAc_ac_c* get_player_actor(camera_class* i_camera) {
-    //    return dComIfGp_getPlayer(dComIfGp_getCameraPlayer1ID(get_camera_id(i_camera)));
-    //}
-
-    inline static u32 check_owner_action(u32 param_0, u32 param_1) {
-        return dComIfGp_checkPlayerStatus0(param_0, param_1);
-    }
-    
-    inline static u32 check_owner_action1(u32 param_0, u32 param_1) {
-        return dComIfGp_checkPlayerStatus1(param_0, param_1);
-    }
-    
-    inline static void setComStat(u32 param_0) {
-        dComIfGp_onCameraAttentionStatus(0, param_0);
-    }
-    
-    inline static void clrComStat(u32 param_0) {
-        dComIfGp_offCameraAttentionStatus(0, param_0);
-    }
-
-    inline static bool getComStat(u32 param_0) {
-        return dComIfGp_getCameraAttentionStatus(0) & param_0;
-    }
-    
-    inline static void setComZoomScale(f32 param_0) {
-        dComIfGp_setCameraZoomScale(0, param_0);
-    }
-    
-    inline static void setComZoomForcus(f32 param_0) {
-        dComIfGp_setCameraZoomForcus(0, param_0);
-    } 
-}  // namespace
 
 #endif /* D_CAMERA_H */

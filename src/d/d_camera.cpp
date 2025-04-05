@@ -17,8 +17,83 @@
 #include "d/d_com_lib_game.h"
 #include "m_Do/m_Do_graphic.h"
 #include "f_ap/f_ap_game.h"
+#include "d/actor/d_a_npc_md.h"
 
-class camera_process_class;
+namespace {  
+    static f32 limitf(f32 value, f32 min, f32 max) {
+        if (value > max) {
+            return max;
+        } else if (value < min) {
+            return min;
+        }
+    
+        return value;
+    }
+    
+    inline static f32 rangef(f32 value1, f32 value2, f32 ratio) {
+        return value1 + (value2 - value1) * ratio;
+    }
+    
+    inline static bool is_player(fopAc_ac_c* actor) {
+        return fopAcM_GetName(actor) == 0x00FD || fopAcM_GetName(actor) == 0x00FD;
+    }
+
+    inline static bool isPlayerGuarding(u32 param_0) {
+        return dComIfGp_checkPlayerStatus1(param_0, 0x80000) ||  daNpc_Md_c::m_mirror;
+    }
+
+    static void hideActor(fopAc_ac_c* actor) {
+        if (is_player(actor)) {
+            dComIfGp_onCameraAttentionStatus(0, 2);
+        } else {
+            fopAcM_OnStatus(actor, 0x1000000);
+        }
+    }
+
+    inline static int get_camera_id(camera_class* i_camera) {
+        return fopCamM_GetParam(i_camera);
+    }
+
+    inline static dDlst_window_c* get_window(int param_0) {
+        return dComIfGp_getWindow(dComIfGp_getCameraWinID(param_0));
+    }
+    
+    inline static dDlst_window_c* get_window(camera_class* i_camera) {
+        return dComIfGp_getWindow(dComIfGp_getCameraWinID(get_camera_id(i_camera)));
+    }
+
+    inline static fopAc_ac_c* get_player_actor(camera_class* i_camera) {
+        return dComIfGp_getPlayer(dComIfGp_getCameraPlayer1ID(get_camera_id(i_camera)));
+    }
+
+    inline static u32 check_owner_action(u32 param_0, u32 param_1) {
+        return dComIfGp_checkPlayerStatus0(param_0, param_1);
+    }
+    
+    inline static u32 check_owner_action1(u32 param_0, u32 param_1) {
+        return dComIfGp_checkPlayerStatus1(param_0, param_1);
+    }
+    
+    inline static void setComStat(u32 param_0) {
+        dComIfGp_onCameraAttentionStatus(0, param_0);
+    }
+    
+    inline static void clrComStat(u32 param_0) {
+        dComIfGp_offCameraAttentionStatus(0, param_0);
+    }
+
+    inline static bool getComStat(u32 param_0) {
+        return dComIfGp_getCameraAttentionStatus(0) & param_0;
+    }
+    
+    inline static void setComZoomScale(f32 param_0) {
+        dComIfGp_setCameraZoomScale(0, param_0);
+    }
+    
+    inline static void setComZoomForcus(f32 param_0) {
+        dComIfGp_setCameraZoomForcus(0, param_0);
+    } 
+}  // namespace
 
 /* 80161790-801618B8       .text __ct__9dCamera_cFP12camera_class */
 dCamera_c::dCamera_c(camera_class*) : mCamParam(0) {
@@ -924,307 +999,201 @@ bool dCamera_c::Draw() {
 
 /* 8016418C-80164898       .text nextMode__9dCamera_cFl */
 int dCamera_c::nextMode(s32 i_curMode) {
-    //bool bVar1;
-    //fopAc_ac_c *pfVar2;
-    //uint uVar3;
-    //int iVar4;
-    //uint uVar5;
-    //long lVar6;
-    //cXyz cStack_44;
-    //cXyz local_38;
-    //float local_2c;
-    //float local_28;
-    //float local_24;
-//
-    //s32 next_mode = i_curMode;
-    //cXyz player_pos = positionOf(mpPlayerActor);
-//
-    //if (!dComIfGp_evmng_cameraPlay()) {
-    //    if (mBG.m58 > player_pos.y) {
-    //        m1AE = 0;
-    //    }
-    //    switch(i_curMode) {
-    //        case 4:
-    //        case 10:
-    //        case 11:
-    //        case 13:
-    //        case 14:
-    //            m144 = 1;
-    //            m184 = 0;
-    //            break;
-    //        case 5:
-    //        case 6:
-    //            m144 = 1;
-    //            m184 = 0;
-    //        case 1:
-    //            mpLockonTarget = NULL;
-    //        default:
-    //            if (m19B == 0) {
-    //                if (mStickCPosYLast > 0.0f || mStickCValueLast <= mCamSetup.m09C) {
-    //                if ((i_curMode == 0 || i_curMode == 0x13) &&
-    //                   (((positionOf(&cStack_44,this,mpPlayerActor), mStickMainValueLast < 0.5 &&
-    //                     (uVar3 = dAttention_c::LockonTruth
-    //                                        (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention),
-    //                     (uVar3 & 0xff) == 0)) &&
-    //                    ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][0] &
-    //                     0x100000) == 0)))) {
-    //                  if (*(int *)&field_0x184 == 1) {
-    //                    if (mStickCPosYLast < (mCamSetup).mCstick.field0_0x0) {
-    //                      *(undefined4 *)&field_0x184 = 0;
-    //                    }
-    //                  }
-    //                  else if (mStickCPosYLast <= (mCamSetup).mCstick.field1_0x4) {
-    //                    d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
-    //                    mCameraAttentionStatus =
-    //                         d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
-    //                         mCameraAttentionStatus | 0x400;
-    //                  }
-    //                  else {
-    //                    d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
-    //                    mCameraAttentionStatus =
-    //                         d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
-    //                         mCameraAttentionStatus | 0x1000;
-    //                    *(undefined4 *)&field_0x184 = 1;
-    //                    d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
-    //                    mCameraAttentionStatus =
-    //                         d_com_inf_game::g_dComIfG_gameInfo.play.mCameraInfo[mCameraInfoIdx].
-    //                         mCameraAttentionStatus | 0x400;
-    //                  }
-    //                }
-    //              }
-    //              else {
-    //                field92_0x144 = 0;
-    //              }
-    //            }
-    //            else {
-    //                m144 = 1;
-    //                m184 = 0;
-    //            }
-//
-    //            break;
-    //        case 12:
-    //            if (mStickCValueLast < 0.01f && mDistance < mCamSetup.m098 || chkFlag(0x80000000)) {
-    //                m144 = 1;
-    //                m184 = 0;
-    //            }
-    //            else if (m19B != 0) {
-    //                m144 = 1;
-    //                m184 = 0;
-    //            }
-//
-    //            break;
-    //    }
-//
-    //    if (chkFlag(0x4000000)) {
-    //        if (m144 == 0) {
-    //            m254 |= 1;
-    //        }
-//
-    //        if (check_owner_action(mPadId, 0x80000000)) {
-    //            setFlag(0x8000);
-    //        }
-//
-    //        m144 = 1;
-//
-    //        clrFlag(0x4000000)
-    //    }
-//
-    //    if (((field84_0x130 != -1) && (*(int *)&field_0x134 != 0)) &&
-    //       (*(short *)(*(int *)&field_0x134 + 8) == 0x171)) {
-    //      field92_0x144 = 1;
-    //      lVar6 = 0;
-    //    }
-//
-    //    if ((lVar6 == 0xc) && (field92_0x144 != 0)) {
-    //      param_1 = 0;
-    //    }
-    //    else {
-    //    uVar3 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][0];
-    //    if (((uVar3 & 0x200000) == 0) &&
-    //       (uVar5 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][1],
-    //       (uVar5 & 8) == 0)) {
-    //      if ((uVar3 & 0x80000080) == 0) {
-    //        if ((uVar3 & 0x800000) == 0) {
-    //          if ((uVar5 & 0x10) == 0) {
-    //            if ((uVar3 & 0x2000) == 0) {
-    //              if ((uVar3 & 0x25000) != 0) {
-    //                bVar1 = true;
-    //                uVar3 = dAttention_c::LockonTruth
-    //                                  (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention);
-    //                if (((uVar3 & 0xff) == 0) &&
-    //                   ((d_com_inf_game::g_dComIfG_gameInfo.play.mAttention.mFlags & 0x20000000) == 0)
-    //                   ) {
-    //                  bVar1 = false;
-    //                }
-    //                if (!bVar1) {
-    //                  param_1 = 10;
-    //                  goto LAB_801647b0;
-    //                }
-    //              }
-    //              if ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][0] &
-    //                  0x80000) != 0) {
-    //                bVar1 = true;
-    //                uVar3 = dAttention_c::LockonTruth
-    //                                  (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention);
-    //                if (((uVar3 & 0xff) == 0) &&
-    //                   ((d_com_inf_game::g_dComIfG_gameInfo.play.mAttention.mFlags & 0x20000000) == 0)
-    //                   ) {
-    //                  bVar1 = false;
-    //                }
-    //                if (!bVar1) {
-    //                  param_1 = 0xb;
-    //                  goto LAB_801647b0;
-    //                }
-    //              }
-    //              if (field92_0x144 == 0) {
-    //                param_1 = 0xc;
-    //              }
-    //              else {
-    //                uVar3 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[mPadId * 2][1]
-    //                ;
-    //                if ((uVar3 & 2) == 0) {
-    //                  if ((uVar3 & 4) == 0) {
-    //                    uVar3 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
-    //                            [mPadId * 2][0];
-    //                    if ((uVar3 & 0x60) == 0) {
-    //                      if ((uVar3 & 0x61) == 0) {
-    //                        if (((uVar3 & 0x406) == 0) || (lVar6 == 0xc)) {
-    //                          uVar3 = dAttention_c::LockonTruth
-    //                                            (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention);
-    //                          if (((uVar3 & 0xff) == 0) ||
-    //                             ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
-    //                               [mPadId * 2][0] & 0xc000000) != 0)) {
-    //                            bVar1 = true;
-    //                            uVar3 = dAttention_c::LockonTruth
-    //                                              (&d_com_inf_game::g_dComIfG_gameInfo.play.mAttention
-    //                                              );
-    //                            if (((uVar3 & 0xff) == 0) &&
-    //                               ((d_com_inf_game::g_dComIfG_gameInfo.play.mAttention.mFlags &
-    //                                0x20000000) == 0)) {
-    //                              bVar1 = false;
-    //                            }
-    //                            if (bVar1) {
-    //                              param_1 = 1;
-    //                            }
-    //                            else {
-    //                              iVar4 = mPadId;
-    //                              uVar3 = d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
-    //                                      [iVar4 * 2][0];
-    //                              if ((((uVar3 & 0x400000) == 0) || ((uVar3 & 0x36a02371) != 0)) ||
-    //                                 ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
-    //                                   [iVar4 * 2][1] & 0x11) != 0)) {
-    //                                bVar1 = false;
-    //                                if (((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus
-    //                                      [iVar4 * 2][1] & 0x80000) != 0) ||
-    //                                   (daNpc_Md_c::m_mirror != '\0')) {
-    //                                  bVar1 = true;
-    //                                }
-    //                                if (bVar1) {
-    //                                  param_1 = 0x13;
-    //                                }
-    //                                else if (field84_0x130 == -1) {
-    //                                  if (lVar6 == 0xc) {
-    //                                    if (field92_0x144 != 0) {
-    //                                      param_1 = 0;
-    //                                    }
-    //                                  }
-    //                                  else {
-    //                                    param_1 = 0;
-    //                                  }
-    //                                }
-    //                                else if (*(fopAc_ac_c **)&field_0x134 == (fopAc_ac_c *)0x0)
-    //                                {
-    //                                  param_1 = 0;
-    //                                  field84_0x130 = -1;
-    //                                }
-    //                                else {
-    //                                  param_1 = 2;
-    //                                  mpLockonTarget = *(fopAc_ac_c **)&field_0x134;
-    //                                }
-    //                              }
-    //                              else {
-    //                                if ((mpPlayerActor->parent).parent.mProcName == 0xa9) {
-    //                                  local_48 = (**(code **)(*(int *)&mpPlayerActor[1].parent.
-    //                                                                   parent.mPi.mMtdTg.parent.
-    //                                                                   mbAdded + 0x54))();
-    //                                  pfVar2 = f_op_actor_iter::fopAcIt_Judge
-    //                                                     (f_pc_searcher::fpcSch_JudgeByID,&local_48);
-    //                                }
-    //                                else {
-    //                                  pfVar2 = (fopAc_ac_c *)0x0;
-    //                                }
-    //                                mpLockonTarget = pfVar2;
-    //                                param_1 = 2;
-    //                                field84_0x130 = -1;
-    //                              }
-    //                            }
-    //                          }
-    //                          else {
-    //                            param_1 = 2;
-    //                          }
-    //                        }
-    //                        else if (mpLockonTarget != (fopAc_ac_c *)0x0) {
-    //                          param_1 = 8;
-    //                        }
-    //                      }
-    //                      else {
-    //                        param_1 = 5;
-    //                      }
-    //                    }
-    //                    else {
-    //                      param_1 = 6;
-    //                    }
-    //                  }
-    //                  else {
-    //                    param_1 = 6;
-    //                  }
-    //                }
-    //                else {
-    //                  param_1 = 5;
-    //                }
-    //              }
-    //            }
-    //            else {
-    //              param_1 = 4;
-    //            }
-    //          }
-    //          else {
-    //            param_1 = 0xf;
-    //          }
-    //        }
-    //        else if (field92_0x144 == 0) {
-    //          param_1 = 0xc;
-    //        }
-    //        else {
-    //          param_1 = 0x12;
-    //        }
-    //      }
-    //      else {
-    //        param_1 = 0x11;
-    //      }
-    //    }
-    //    else {
-    //      param_1 = 0xe;
-    //    }
-    //  }
-    //}
-    //LAB_801647b0:
-    //if (param_1 != 2) {
-    //  field84_0x130 = -1;
-    //}
-    //if ((param_1 == 0xc) && (iVar4 = mCurType, types[iVar4].mStyles[0xc] < 0)) {
-    //  if ((iVar4 != mCamTypeEvent) &&
-    //     (((iVar4 != mCamTypeBoat && (iVar4 != mCamTypeBoatBattle)) &&
-    //      (iVar4 != mCamTypeRestrict)))) {
-    //    field172_0x254 = field172_0x254 | 1;
-    //  }
-    //  field92_0x144 = 1;
-    //  param_1 = lVar6;
-    //}
-    //if ((types[mCurType].mStyles[param_1] > -1) && (lVar6 = param_1, param_1 == 1)) {
-    //  mEventFlags = mEventFlags | 0x100000;
-    //}
-    //return lVar6;
+    dAttention_c& attn = dComIfGp_getAttention();
+    s32 next_mode = i_curMode;
+    cXyz player_pos = positionOf(mpPlayerActor);
+
+    if (!dComIfGp_evmng_cameraPlay()) {
+        if (mBG.m58 > player_pos.y) {
+            m1AE = 0;
+        }
+        switch(i_curMode) {
+            case 4:
+            case 10:
+            case 11:
+            case 13:
+            case 14:
+                m144 = 1;
+                m184 = 0;
+                break;
+            case 5:
+            case 6:
+                m144 = 1;
+                m184 = 0;
+            case 1:
+                mpLockonTarget = NULL;
+            default:
+                if (m19B) {
+                    m144 = 1;
+                    m184 = 0;
+                }
+                else {
+                    if (mStickCPosYLast <= 0.0f && mStickCValueLast > mCamSetup.m09C) {
+                        m144 = 0;
+                    }
+                    else {
+                        if (i_curMode == 0 || i_curMode == 0x13) {
+                            if (!(positionOf(mpPlayerActor).y >= 0.5f || attn.LockonTruth() || check_owner_action(mPadId, 0x100000))) { // Not meant to be using the y coordinate, not sure what to put
+                                if (m184 == 1) {
+                                    if (mStickCPosYLast < mCamSetup.mCstick.m00) {
+                                        m184 = 0;
+                                    }
+                                }
+                                else if (mStickCPosYLast > mCamSetup.mCstick.m04) {
+                                    dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x1000);
+                                    m184 = 1;
+                                    dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x400);
+                                }
+                                else {
+                                    dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x400);
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case 12:
+                if (mStickCValueLast < 0.01f && mDistance < mCamSetup.m098 || chkFlag(0x80000000)) {
+                    m144 = 1;
+                    m184 = 0;
+                }
+                else if (m19B != 0) {
+                    m144 = 1;
+                    m184 = 0;
+                }
+                break;
+        }
+        if (chkFlag(0x4000000)) {
+            if (m144 == 0) {
+                m254 |= 1;
+            }
+            if (check_owner_action(mPadId, 0x80000000)) {
+                setFlag(0x8000);
+            }
+            m144 = 1;
+            clrFlag(0x4000000);
+        }
+        if (mLockOnActorId != -1 && mpLockonActor && fopAcM_GetName(mpLockonActor) == 0x171) {
+            m144 = 1;
+            i_curMode = 0;
+        }
+        if (i_curMode == 12 && m144 != 0) {
+            next_mode = 0;
+        }
+        else if (check_owner_action(mPadId, 0x200000) || check_owner_action1(mPadId, 8)) {
+                next_mode = 14;
+        }
+        else if (check_owner_action(mPadId, 0x80000080)) {
+            next_mode = 0x11;
+        }
+        else if (check_owner_action(mPadId, 0x800000)) {
+            if (m144 == 0) {
+                next_mode = 0xc;
+            }
+            else {
+                next_mode = 0x12;
+            }
+        }
+        else if (check_owner_action1(mPadId, 0x10)) {
+            next_mode = 0xf;
+        }
+        else if (check_owner_action(mPadId, 0x2000)) {
+            next_mode = 4;
+        }
+        else {
+            if (check_owner_action(mPadId, 0x25000)) {
+                if (!attn.Lockon()) {
+                    next_mode = 10;
+                    goto LAB_801647b0;
+                }
+            }
+            if (check_owner_action(mPadId, 0x80000)) {
+                if (!attn.Lockon()) {
+                    next_mode = 11;
+                    goto LAB_801647b0;
+                }
+            }
+            if (m144 == 0) {
+                next_mode = 12;
+            }
+            else if (check_owner_action1(mPadId, 2)) {
+                next_mode = 5;
+            }
+            else if (check_owner_action1(mPadId, 4)) {
+                next_mode = 6;
+            }
+            else if (check_owner_action(mPadId, 0x60)) {
+                next_mode = 6;
+            }
+            else if (check_owner_action(mPadId, 0x61)) {
+                next_mode = 5;
+            }
+            else if (check_owner_action(mPadId, 0x406) && next_mode != 12) {
+                if (mpLockonTarget) {
+                    next_mode = 8;
+                }
+            }
+            else if (attn.LockonTruth() && !check_owner_action(mPadId, 0xC000000)) {
+                next_mode = 2;
+            }
+            else if (attn.Lockon()) {
+                next_mode = 1;
+            }
+            else if (check_owner_action(mPadId, 0x400000) && !check_owner_action(mPadId, 0x36a02371) && !check_owner_action1(mPadId, 0x11)) {
+                fopAc_ac_c* lockonTarget;
+                if (fopAcM_GetName(mpPlayerActor) == 0xa9) {
+                    lockonTarget = fopAcM_SearchByID(mpPlayerActor->parentActorID); // Something wrong with this call
+                }
+                else {
+                    lockonTarget = NULL;
+                }
+                mpLockonTarget = lockonTarget;
+                next_mode = 2;
+                mLockOnActorId = -1;
+            }
+            else if (isPlayerGuarding(mPadId)) {
+                next_mode = 19;
+            }
+            else if (mLockOnActorId != -1) {
+                if (mpLockonActor) {
+                    next_mode = 2;
+                    mpLockonTarget = mpLockonActor;
+                }
+                else {
+                    next_mode = 0;
+                    mLockOnActorId = -1;
+                }
+            }
+            else if (i_curMode != 12 || m144 != 0) {
+                next_mode = 0;
+            }
+            else {
+                next_mode = 0;
+            }
+        }
+    }
+    LAB_801647b0:
+
+    if (next_mode != 2) {
+        mLockOnActorId = -1;
+    }
+
+    if (next_mode == 12 && types[mCurType].mStyles[0][next_mode] < 0) {
+        next_mode = i_curMode;
+        if (mCurType != mCamTypeEvent && mCurType != mCamTypeBoat && mCurType != mCamTypeBoatBattle && mCurType != mCamTypeRestrict) {
+            m254 |= 1;
+        }
+        m144 = 1;
+    }
+
+    if (types[mCurType].mStyles[0][next_mode] >= 0) {
+        if (next_mode == 1) {
+            setFlag(0x100000);
+        }
+        return next_mode;
+    }
+
+    return i_curMode;
 }
 
 /* 80164898-80164A48       .text onModeChange__9dCamera_cFll */
@@ -1734,7 +1703,7 @@ void camera_draw(camera_process_class*) {
 
 /* 8017C72C-8017C7E4       .text init_phase1__FP12camera_class */
 int init_phase1(camera_class* i_this) {
-    int camera_id = fopCamM_GetParam(i_this); // get_camera_id(i_this);
+    int camera_id = get_camera_id(i_this);
     
     dComIfGp_setCamera(camera_id, i_this);
     fopCamM_SetPrm1(i_this, dComIfGp_getCameraWinID(camera_id));
@@ -1756,7 +1725,7 @@ int init_phase2(camera_class* i_this) {
     dCamera_c* body = &i_this->mCamera;
     int camId = fopCamM_GetParam(i_this);
 
-    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(dComIfGp_getCameraPlayer1ID(fopCamM_GetParam(i_this))); // get_player_actor(i_this)
+    fopAc_ac_c* player = (fopAc_ac_c*)get_player_actor(i_this);
     
     if (player == NULL) {
         return cPhs_INIT_e;
@@ -1777,7 +1746,7 @@ int init_phase2(camera_class* i_this) {
         farPlane = stage_dt->getStagInfo()->mFarPlane;
     }
 
-    view_port_class* viewPort = dComIfGp_getWindow(dComIfGp_getCameraWinID(camId))->getViewPort(); //get_window(camId)
+    view_port_class* viewPort = (view_port_class*)get_window(camId);
     
     fopCamM_SetNear(i_this, 1.0f);
     fopCamM_SetFar(i_this, farPlane);

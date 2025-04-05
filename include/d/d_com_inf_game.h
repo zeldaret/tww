@@ -330,7 +330,7 @@ public:
     void setGameoverStatus(u8 stts) { mGameoverStatus = stts; }
 
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
-    fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
+    fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx * 2]; }
     void setPlayer(int idx, fopAc_ac_c* player) { mpPlayer[idx] = (daPy_py_c*)player; }
     void setPlayerPtr(int idx, fopAc_ac_c* playerPtr) { mpPlayerPtr[idx] = playerPtr; }
     s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
