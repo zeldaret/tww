@@ -357,7 +357,7 @@ public:
     void lineBGCheckBoth(cXyz*, cXyz*, dBgS_LinChk*, u32);
     void lineCollisionCheckBush(cXyz*, cXyz*);
     void compWallMargin(cXyz*, f32);
-    void defaultTriming();
+    int defaultTriming();
     void setView(f32, f32, f32, f32);
     cSAngle forwardCheckAngle();
     void bumpCheck(u32);
@@ -480,10 +480,6 @@ public:
 };
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);
-
-class dBgS_CamSphChk {
-    ~dBgS_CamSphChk();
-};
 
 s16 dCam_getAngleY(camera_class*);
 s16 dCam_getAngleX(camera_class*);

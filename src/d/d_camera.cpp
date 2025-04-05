@@ -1494,11 +1494,6 @@ void dCamera_c::groundHeight(cXyz*) {
     /* Nonmatching */
 }
 
-/* 801660C8-80166230       .text __dt__18dBgS_CamGndChk_WtrFv */
-dBgS_CamGndChk_Wtr::~dBgS_CamGndChk_Wtr() {
-    /* Nonmatching */
-}
-
 /* 80166230-80166354       .text lineBGCheck__9dCamera_cFP4cXyzP4cXyzP11dBgS_LinChkUl */
 bool dCamera_c::lineBGCheck(cXyz*, cXyz*, dBgS_LinChk*, u32) {
     /* Nonmatching */
@@ -1539,19 +1534,61 @@ void dCamera_c::compWallMargin(cXyz*, f32) {
     /* Nonmatching */
 }
 
-/* 80167294-801673DC       .text __dt__14dBgS_CamSphChkFv */
-dBgS_CamSphChk::~dBgS_CamSphChk() {
-    /* Nonmatching */
-}
-
 /* 801674F4-801675E8       .text defaultTriming__9dCamera_cFv */
-void dCamera_c::defaultTriming() {
-    /* Nonmatching */
+int dCamera_c::defaultTriming() {
+    /* Nonmatching - Code 100% */
+    if (mTrimTypeForce >= 0) {
+        mTrimSize = mTrimTypeForce;
+    } 
+    else if (!is_player(mpPlayerActor)) {
+        mTrimSize = 1;
+    } 
+    else {
+        switch (mCurMode) {
+            case 12:
+                if (chkFlag(0x1000)) {
+                    mTrimSize = 1;
+                }
+                else {
+                    mTrimSize = 0;
+                }
+                break;
+            case 1:
+            case 2:
+            case 8:
+                mTrimSize = 2;
+                break;
+            case 3:
+                mTrimSize = 1;
+                break;
+            case 4:
+                mTrimSize = 0;
+                break;
+            case 10:
+            case 11:
+                if (check_owner_action(mPadId, 0x40000)) {
+                    mTrimSize = 2;
+
+                }
+                else if (check_owner_action(mPadId, 0xa5000)) {
+                    mTrimSize = 1;
+                }
+                break;
+            default:
+                mTrimSize = 0;
+                break;
+            
+        }
+    }
+    return mTrimSize;
 }
 
 /* 801675E8-801676C0       .text setView__9dCamera_cFffff */
-void dCamera_c::setView(f32, f32, f32, f32) {
-    /* Nonmatching */
+void dCamera_c::setView(f32 i_xOrig, f32 i_yOrig, f32 i_width, f32 i_height) {
+    dDlst_window_c* window = get_window(mpCamera);
+    view_port_class* view_port = window->getViewPort();
+    window->setViewPort(i_xOrig, i_yOrig, i_width, i_height, view_port->mNearZ, view_port->mFarZ);
+    window->setScissor(i_xOrig, i_yOrig, i_width, i_height);
 }
 
 /* 801676C0-80167F08       .text forwardCheckAngle__9dCamera_cFv */
