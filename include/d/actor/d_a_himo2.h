@@ -13,6 +13,11 @@ public:
 
 public:
     /* Place member variables here */
+    // TODO: is this right?
+    /* 0x290 */ u8 field_0x290[0x2DC - 0x290];
+    /* 0x2DC */ s32 field_0x2DC;
+    /* 0x2E0 */ u8 field_0x2E0[0x15F8 - 0x2E0];
+    /* 0x15FC */ cXyz field_0x15F8;
 };
 
 class himo2HIO_c {

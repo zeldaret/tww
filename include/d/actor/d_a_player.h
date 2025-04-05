@@ -161,6 +161,7 @@ public:
         daPyRFlg0_UNK8000000            = 0x08000000,
         daPyRFlg0_UNK10000000           = 0x10000000,
         daPyRFlg0_ARROW_SHOOT           = 0x20000000,
+        daPyRFlg0_UNK40000000           = 0x40000000,
         // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
         // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
         // 0x04000000 set in daPy_lk_c::procShipPaddle
