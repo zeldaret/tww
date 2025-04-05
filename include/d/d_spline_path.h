@@ -7,7 +7,6 @@ class cXyz;
 
 class d2DBSplinePath {
 public:
-    d2DBSplinePath() { Init(0, 0); }
     void Last() {}
 
     void Init(s32, s32);
@@ -28,7 +27,10 @@ public:
     /* 0x24 */ f32 mCurveWeight[3];
     /* 0x30 */ s32 mCurveKey[3];
     /* 0x3C */ void* mUser;
-    /* 0x40 */ void* vtbl; // XXX
+    /* 0x40 */ //void* vtbl; // XXX
+    
+    d2DBSplinePath() { Init(0, 0); }
+    virtual ~d2DBSplinePath(){};
 };
 
 #endif /* D_SPLINE_PATH_H */

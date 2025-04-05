@@ -165,7 +165,6 @@ char* dCamera_c::mvBGTypes[] = {
 /* 80161790-801618B8       .text __ct__9dCamera_cFP12camera_class */
 dCamera_c::dCamera_c(camera_class* i_camera) : mCamParam(0) {
     /* Nonmatching */
-    mForcusLine.mEffectLine.initRnd(100, 100, 100);
     initialize(i_camera, get_player_actor(i_camera), get_camera_id(i_camera), get_controller_id(i_camera));
 }
 /* 801618B8-80161994       .text __dt__9dCamera_cFv */
@@ -176,7 +175,7 @@ dCamera_c::~dCamera_c() {
 
 /* 80161994-80162128       .text initialize__9dCamera_cFP12camera_classP10fopAc_ac_cUlUl */
 void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 cameraInfoIdx, u32 padId) {
-    /* Nonmatching */
+    /* Nonmatching - Code 100% */
     int mapToolType;
     
     mpCamera = camera;
@@ -587,6 +586,7 @@ void dCamera_c::initMonitor() {
 
 /* 801627A4-801628DC       .text updateMonitor__9dCamera_cFv */
 void dCamera_c::updateMonitor() {
+    /* Nonmatching - Code 100% */
     float playerMonitorHoritzontalDist;
     cXyz playerPos;
     
@@ -612,44 +612,39 @@ void dCamera_c::updateMonitor() {
 
 /* 801628DC-80163020       .text calcPeepAngle__9dCamera_cFv */
 cSAngle dCamera_c::calcPeepAngle() {
-    /* Nonmatching */
-    dCamera_c* camera;
-    cSAngle tempAng;
     cSAngle res(cSAngle::_0);
     
-    if (check_owner_action(camera->mPadId, 0x20)) {
+    if (check_owner_action(mPadId, 0x20)) {
         f32 temp_30 = 30.0f;
         cXyz local_b8(0.0f, 0.0f, -temp_30);
 
         f32 temp_50 = 50.0f;
         cXyz local_ac(-temp_50, 0.0f, -temp_30);
 
-        cXyz local_a0(relationalPos(camera->mpPlayerActor, &local_b8));
-        cXyz local_94(relationalPos(camera->mpPlayerActor, &local_ac));
+        cXyz local_a0(relationalPos(mpPlayerActor, &local_b8));
+        cXyz local_94(relationalPos(mpPlayerActor, &local_ac));
 
         dBgS_CamLinChk_NorWtr lin_chk;
 
         if (lineBGCheck(&local_94, &local_a0, &lin_chk, 0x7f)) {
             cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
-            tempAng = cSAngle::_90 + (cSGlobe(plane->mNormal).U() - directionOf((fopAc_ac_c *)camera)); // GetNP() doesn't work?
-            res = tempAng;
+            res = cSAngle::_90 + (cSGlobe(plane->mNormal).U() - directionOf(mpPlayerActor)); // GetNP() doesn't work?
         }
     }
-    else if (check_owner_action(camera->mPadId, 0x40)) {
+    else if (check_owner_action(mPadId, 0x40)) {
         f32 temp_30 = 30.0f;
         cXyz local_88(0.0f, 0.0f, -temp_30);
 
         cXyz local_7c(50.0f, 0.0f, -temp_30);
 
-        cXyz local_70(relationalPos(camera->mpPlayerActor, &local_88));
-        cXyz local_64(relationalPos(camera->mpPlayerActor, &local_7c));
+        cXyz local_70(relationalPos(mpPlayerActor, &local_88));
+        cXyz local_64(relationalPos(mpPlayerActor, &local_7c));
 
         dBgS_CamLinChk_NorWtr lin_chk;
         
         if (lineBGCheck(&local_64, &local_70, &lin_chk, 0x7f)) {
             cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
-            tempAng = cSAngle::_270 + (cSGlobe(plane->mNormal).U() - directionOf((fopAc_ac_c *)camera));
-            res = tempAng;
+            res = cSAngle::_270 + (cSGlobe(plane->mNormal).U() - directionOf(mpPlayerActor));
         }
     }
     return cSAngle(res);
@@ -1888,6 +1883,7 @@ void camera_draw(camera_process_class*) {
 
 /* 8017C72C-8017C7E4       .text init_phase1__FP12camera_class */
 int init_phase1(camera_class* i_this) {
+    /* Nonmatching - Code 100% */
     int camera_id = get_camera_id(i_this);
     
     dComIfGp_setCamera(camera_id, i_this);
@@ -1906,6 +1902,7 @@ int init_phase1(camera_class* i_this) {
 
 /* 8017C7E4-8017C980       .text init_phase2__FP12camera_class */
 int init_phase2(camera_class* i_this) {
+    /* Nonmatching - Code 100% */
     camera_process_class* a_this = (camera_process_class*)i_this;
     dCamera_c* body = &i_this->mCamera;
     int camId = fopCamM_GetParam(i_this);
@@ -1949,6 +1946,7 @@ int init_phase2(camera_class* i_this) {
 
 /* 8017C980-8017C9B0       .text camera_create__FP12camera_class */
 cPhs_State camera_create(camera_class* i_this) {
+    /* Nonmatching - Code 100% */
     static request_of_phase_process_fn l_method[3] = {
         (request_of_phase_process_fn)init_phase1,
         (request_of_phase_process_fn)init_phase2,
@@ -1960,7 +1958,7 @@ cPhs_State camera_create(camera_class* i_this) {
 
 /* 8017C9B0-8017C9DC       .text camera_delete__FP20camera_process_class */
 bool camera_delete(camera_process_class* i_this) {
-    /* Fakematch, instruction swap */
+    /* Nonmatching - fakematch, instruction swap */
     dCamera_c* camera = &((camera_class*)i_this)->mCamera;
     camera->~dCamera_c();
     return TRUE;
@@ -1973,6 +1971,7 @@ bool is_camera_delete(void*) {
 
 /* 8017C9E4-8017CA7C       .text Init__14dCamForcusLineFv */
 void dCamForcusLine::Init() {
+    /* Nonmatching - Code 100% */
     m49 = 0;
     m48 = 1;
     m38 = cXyz(320.0f, 240.0f, 0.0f);

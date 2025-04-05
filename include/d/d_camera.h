@@ -8,13 +8,14 @@
 #include "d/d_cam_param.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_spline_path.h"
 #include "global.h"
 
 class camera_class;
 class camera_process_class;
 class dBgS_LinChk;
 class dBgS_CamGndChk;
-class cBgS_PolyInfo;
+class d2DBSplinePath;
 class dStage_Event_dt_c;
 class fopAc_ac_c;
 
@@ -42,26 +43,9 @@ struct dCamera__Type {
     /* 0x18 */ s16 mStyles[2][10];
 };  // Size: 0x40
 
-class d2DBSplinePath {
-public:
-    ~d2DBSplinePath() {}
-    /* 0x00 */ int mKeyframeCur;
-    /* 0x04 */ int mTimer;
-    /* 0x08 */ int mKeyframeNum;
-    /* 0x0C */ int mState;
-    /* 0x10 */ int m10;
-    /* 0x14 */ int mKeyframeLast;
-    /* 0x18 */ u8 m18[0x1C - 0x18];
-    /* 0x1C */ f32 mTime;
-    /* 0x20 */ u8 m20[0x24 - 0x20];
-    /* 0x24 */ f32 mFrameWeight[3];
-    /* 0x30 */ int mFrameIdx[3];
-    /* 0x3C */ u8 m3C[0x40 - 0x3C];
-    /* 0x40 */ void* vtbl;
-};
-
 class dCamForcusLine {
 public:
+    dCamForcusLine() { mEffectLine.initRnd(100, 100, 100); }
     void Init();
     void Draw();
     bool Off();
@@ -93,9 +77,9 @@ public:
         BG() {}
         ~BG() {}
         /* 0x00 */ u8 m00[0x04 - 0x00];
-        /* 0x04 */ dBgS_CamGndChk m04;
+        /* 0x04 */ dBgS_CamGndChk m04; // dBgS_CamGndChk might be too large by 4 bytes
         /* 0x58 */ f32 m58;
-        /* 0x5C */ dBgS_CamGndChk m5C;
+        /* 0x5C */ dBgS_CamGndChk m5C; // This offset, needs to be at 0x60
     };
 
     /* 0x000 */ camera_class* mpCamera;
@@ -248,7 +232,7 @@ public:
     /* 0x414 */ u8 m414[0x424 - 0x414];
     /* 0x424 */ dCamera__EventParam mEventParams[8];
     /* 0x4C4 */ dStage_Event_dt_c* m4C4;
-    /* 0x4C8 */ d2DBSplinePath mSpline2DPath;
+    /* 0x4C8 */ d2DBSplinePath mSpline2DPath; // Not calling the class constructor for some reason?
     /* 0x50C */ u32 mEventFlags;
     /* 0x510 */ int mCurStyle;
     /* 0x514 */ int m514;
