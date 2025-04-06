@@ -99,6 +99,7 @@ Ghidra is a tool that automatically decompiles code. Although Ghidra's output is
 We have a shared Ghidra project for TWW already set up. To get access to this server:
 
 * Go to https://ghidra.decomp.dev and link your Discord account.
+* Create a Ghidra account by entering a new username and password into the form on the right.
 * Request "Read" access to the WindWaker server.
 
 Then wait for an admin to approve your request. Once you have access, you can set up the Ghidra project like so:
@@ -109,9 +110,8 @@ Then wait for an admin to approve your request. Once you have access, you can se
 * In Ghidra, go to `File -> New Project...`. Select `Shared Project` and input the following information:
     * Server Name: ghidra.decomp.dev
     * Port Number: 13100
-    * User ID: `put your own username here`
-    * Password: changeme
-* After logging in, change your password as prompted so that it's not "changeme".
+    * User ID: (the username that you chose earlier)
+    * Password: (the password that you chose earlier)
 * You should now be able to view the files in the Ghidra project. You should checkout the `main` file.
 
 Now you have Ghidra set up and ready to use.
