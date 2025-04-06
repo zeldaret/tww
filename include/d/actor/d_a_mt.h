@@ -28,7 +28,7 @@ public:
     /* 0x02BD */ s8 mPathPntIdx;
     /* 0x02BE */ s8 mPathDir;
     /* 0x02C0 */ dPath* mpPath;
-    /* 0x02C4 */ mDoExt_McaMorf* mpMorfs[8];
+    /* 0x02C4 */ mDoExt_McaMorf* mpMorf[8];
     /* 0x02E4 */ u8 m2E4;
     /* 0x02E8 */ int mBrkFrame;
     /* 0x02EC */ int mBtkFrame;
@@ -47,17 +47,14 @@ public:
     /* 0x034A */ s16 m34A;
     /* 0x034C */ bool m34C;
     /* 0x0350 */ cXyz m350[8];
-    /* 0x03B0 */ dPa_followEcallBack* m3B0[8];
-
-    u8 m3D0[0x0450 - 0x03D0];
-
+    /* 0x03B0 */ dPa_followEcallBack mPtclCallback[8];
     /* 0x0450 */ JPABaseEmitter* mpEmitter;
     /* 0x0454 */ u8 mMode;
     /* 0x0455 */ u8 mFightMode;
     /* 0x0456 */ s16 mTimer[5];
     /* 0x0460 */ s16 m460;
     /* 0x0462 */ s16 m462;
-    /* 0x0464 */ s16 m464;
+    /* 0x0464 */ s16 mBlinkTimer;
     /* 0x0466 */ s16 m466;
     /* 0x0468 */ s16 m468;
     /* 0x046A */ s16 m46A;
@@ -77,7 +74,7 @@ public:
     /* 0x0496 */ s16 m496;
     /* 0x049A */ csXyz m49A;
     /* 0x04A0 */ cXyz mPos[8];
-    /* 0x0500 */ cXyz mOld[8];
+    /* 0x0500 */ cXyz mOldPos[8];
     /* 0x0560 */ csXyz mAngle[8];
     /* 0x0590 */ cXyz m590[8];
     /* 0x05F0 */ s16 m5F0[8];
@@ -104,8 +101,8 @@ public:
     /* 0x18F0 */ f32 m18F0;
     /* 0x18F4 */ f32 m18F4;
     /* 0x18F8 */ s8 m18F8;
-    /* 0x18F9 */ bool m18F9;
-    /* 0x18FA */ bool m18FA;
+    /* 0x18F9 */ bool mBlocked;
+    /* 0x18FA */ bool mInLava;
     /* 0x18FB */ s8 m18FB;
     /* 0x18FC */ s16 m18FC;
     /* 0x1900 */ enemyice mEnemyIce;
@@ -123,17 +120,16 @@ public:
 public:
     /* 0x00 */ // vtable  
     /* 0x04 */ u8 m04;
-    u8 m05;
-    u8 m06;
-    u8 m07;
-    s16 m08;
-    f32 m0C;
+    /* 0x05 */ u8 m05;
+    /* 0x06 */ u8 m06;
+    /* 0x07 */ u8 m07;
+    /* 0x08 */ s16 m08;
+    /* 0x0C */ f32 m0C;
     /* 0x10 */ s16 m10;
-    u8 m12[0x14 - 0x12];
     /* 0x14 */ f32 m14;
     /* 0x18 */ f32 m18;
-    f32 m1C;
-    f32 m20;
+    /* 0x1C */ f32 m1C;
+    /* 0x20 */ f32 m20;
     /* 0x24 */ f32 m24;
     /* 0x28 */ f32 m28;
     /* 0x28 */ f32 m2C;
@@ -144,15 +140,15 @@ public:
     /* 0x3A */ s16 m3A;
     /* 0x3C */ s16 m3C;
     /* 0x3E */ s16 m3E;
-    f32 m40;
-    f32 m44;
-    f32 m48;
-    f32 m4C;
-    s16 m50;
-    s16 m52;
+    /* 0x40 */ f32 m40;
+    /* 0x44 */ f32 m44;
+    /* 0x48 */ f32 m48;
+    /* 0x4C */ f32 m4C;
+    /* 0x50 */ s16 m50;
+    /* 0x52 */ s16 m52;
     /* 0x54 */ s16 m54;
-    f32 m58;
-    f32 m5C;
+    /* 0x58 */ f32 m58;
+    /* 0x5C */ f32 m5C;
 };
 
 #endif /* D_A_MT_H */
