@@ -43,6 +43,24 @@ struct dCamera__Type {
     /* 0x18 */ s16 mStyles[2][10];
 };  // Size: 0x40
 
+struct camSphChkdata {
+    camSphChkdata(cXyz* i_center, f32 i_radius) {
+        field_0x0 = i_center;
+        field_0x8 = *i_center;
+        field_0x4 = i_radius;
+        //field_0x14.x = i_radius;
+        //field_0x14.y = i_radius;
+        //field_0x14.z = i_radius;
+    }
+
+    ~camSphChkdata(){}
+
+    /* 0x00 */ cXyz* field_0x0;
+    /* 0x04 */ f32 field_0x4;
+    /* 0x08 */ cXyz field_0x8;
+    /* 0x14 */ cXyz field_0x14;
+};
+
 class dCamForcusLine {
 public:
     dCamForcusLine() { mEffectLine.initRnd(100, 100, 100); }
@@ -358,7 +376,7 @@ public:
     bool lineBGCheckBack(cXyz*, cXyz*, u32);
     bool lineBGCheckBoth(cXyz*, cXyz*, dBgS_LinChk*, u32);
     BOOL lineCollisionCheckBush(cXyz*, cXyz*);
-    void compWallMargin(cXyz*, f32);
+    cXyz compWallMargin(cXyz*, f32);
     int defaultTriming();
     void setView(f32, f32, f32, f32);
     cSAngle forwardCheckAngle();

@@ -1632,18 +1632,30 @@ cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor, cXyz* i_offset) {
         return cXyz::Zero;
     }
 
-    cXyz offset = dCamMath::xyzRotateY(*i_offset, cSAngle(i_actor->shape_angle.y));
-    return attentionPos(i_actor) + offset;
+    cSGlobe offset_globe(*i_offset);
+
+    offset_globe.V(directionOf(i_actor) + offset_globe.U());
+
+    return attentionPos(i_actor) + offset_globe.Xyz();
 }
 
 /* 801653B0-8016548C       .text relationalPos__9dCamera_cFP10fopAc_ac_cP4cXyz7cSAngle */
-cXyz dCamera_c::relationalPos(fopAc_ac_c*, cXyz*, cSAngle) {
-    /* Nonmatching */
+cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor, cXyz* i_offset, cSAngle param_2) {
+    if (i_actor == NULL) {
+        return cXyz::Zero;
+    }
+
+    cSGlobe offset_globe(*i_offset);
+
+    offset_globe.V(directionOf(i_actor) + offset_globe.U() + param_2);
+
+    return attentionPos(i_actor) + offset_globe.Xyz();
 }
 
 /* 8016548C-801656AC       .text relationalPos__9dCamera_cFP10fopAc_ac_cP10fopAc_ac_cP4cXyzf */
 cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* i_offset,
     f32 param_3) {
+    /* Nonmatching */
     if (i_actor1 == NULL) {
         return cXyz::Zero;
     }
@@ -1833,13 +1845,30 @@ BOOL dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
 }
 
 /* 80166DE8-80166EA4       .text sph_chk_callback__FP11dBgS_SphChkP10cBgD_Vtx_tiiiP8cM3dGPlaPv */
-void sph_chk_callback(dBgS_SphChk*, cBgD_Vtx_t*, int, int, int, cM3dGPla*, void*) {
-    /* Nonmatching */
+void sph_chk_callback(dBgS_SphChk* i_sphChk, cBgD_Vtx_t* i_vtxTbl, int i_vtxIdx0, int i_vtxIdx1, int i_vtxIdx2, cM3dGPla* i_plane, void* i_data) {
+    /* Nonmatching - Code 100% */
+    camSphChkdata* sph_chk_data = (camSphChkdata*)i_data;
+    f32 len = cM3d_SignedLenPlaAndPos(i_plane, &sph_chk_data->field_0x8);
+    if (i_plane->getPlaneFunc(&sph_chk_data->field_0x14) >= -0.0001f && len < sph_chk_data->field_0x4) {
+        cXyz normal = *i_plane->GetNP();
+        sph_chk_data->field_0x8 += normal * (sph_chk_data->field_0x4 - len);
+    }
 }
 
 /* 80166EA4-80167294       .text compWallMargin__9dCamera_cFP4cXyzf */
-void dCamera_c::compWallMargin(cXyz*, f32) {
-    /* Nonmatching */
+cXyz dCamera_c::compWallMargin(cXyz* i_center, f32 i_radius) {
+    dBgS_CamSphChk sph_chk;
+    camSphChkdata sph_chk_data(i_center, i_radius);
+    sph_chk_data.field_0x14 = sph_chk_data.field_0x8;
+    sph_chk.SetCallback(&sph_chk_callback);
+    sph_chk.Set(*i_center, i_radius);
+
+    if (dComIfG_Bgsp()->SphChk(&sph_chk, &sph_chk_data)) {
+        return sph_chk_data.field_0x8;
+    }
+    else {
+        return *i_center;
+    }
 }
 
 /* 801674F4-801675E8       .text defaultTriming__9dCamera_cFv */
