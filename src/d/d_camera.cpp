@@ -125,7 +125,7 @@ namespace {
 }  // namespace
 
 
-engine_fn dCamera_c::engine_tbl[] = { // Correct length, wrong func order?
+engine_fn dCamera_c::engine_tbl[] = {
     &dCamera_c::letCamera,
     &dCamera_c::lockonCamera,
     &dCamera_c::talktoCamera,
