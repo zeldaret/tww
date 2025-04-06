@@ -109,7 +109,8 @@ public:
     /* 0x084 */ cXyz m084;
     /* 0x090 */ cXyz m090;
     /* 0x09C */ f32 m09C;
-    /* 0x0A0 */ f32 m0A0;
+    /* 0x0A0 */ cSAngle m0A0;
+    /* 0x0A2 */ u8 m0A2[0x0A4 - 0x0A2];
     // /* 0x0A4 */ @class$4017d_camera_cpp m0A4[2];
     /* 0x0A4 */ u8 m0A4[0x40];
     /* 0x0E4 */ int mStageMapToolCameraIdx;

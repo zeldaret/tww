@@ -1577,27 +1577,51 @@ int dCamera_c::GetCameraTypeFromCameraName(const char* i_name) {
 
 /* 801651F0-80165234       .text pushPos__9dCamera_cFv */
 void dCamera_c::pushPos() {
-    /* Nonmatching */
+    m084 = m044;
+    m090 = m050;
+    m09C = m060;
+    m0A0 = m05C;
+    return;
 }
 
 /* 80165234-8016528C       .text limited_range_addition__FPffff */
-void limited_range_addition(f32*, f32, f32, f32) {
-    /* Nonmatching */
+bool limited_range_addition(f32* param_1, f32 param_2, f32 param_3, f32 param_4) {
+    float fVar1 = param_3;
+    float fVar2 = param_4;
+
+    if (param_3 > param_4) {
+        param_2 = -param_2;
+        fVar1 = param_4;
+        fVar2 = param_3;
+    }
+
+    *param_1 += param_2;
+
+    if (*param_1 < fVar1) {
+        *param_1 = fVar1;
+        return false;
+    }
+
+    if (*param_1 > fVar2) {
+        *param_1 = fVar2;
+        return false;
+    }
+    return true;
 }
 
 /* 8016528C-801652B0       .text directionOf__9dCamera_cFP10fopAc_ac_c */
-cSAngle dCamera_c::directionOf(fopAc_ac_c*) {
-    /* Nonmatching */
+cSAngle dCamera_c::directionOf(fopAc_ac_c* i_this) {
+    return cSAngle(i_this->shape_angle.y);
 }
 
 /* 801652B0-801652CC       .text positionOf__9dCamera_cFP10fopAc_ac_c */
-cXyz dCamera_c::positionOf(fopAc_ac_c*) {
-    /* Nonmatching */
+cXyz dCamera_c::positionOf(fopAc_ac_c* i_this) {
+    return i_this->current.pos;
 }
 
 /* 801652CC-801652E8       .text attentionPos__9dCamera_cFP10fopAc_ac_c */
-cXyz dCamera_c::attentionPos(fopAc_ac_c*) {
-    /* Nonmatching */
+cXyz dCamera_c::attentionPos(fopAc_ac_c* i_this) {
+    return i_this->attention_info.position;
 }
 
 /* 801652E8-801653B0       .text relationalPos__9dCamera_cFP10fopAc_ac_cP4cXyz */
