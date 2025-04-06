@@ -1408,9 +1408,9 @@ fopAc_ac_c* fopAcM_searchFromName(char* pProcName, u32 paramMask, u32 parameter)
 }
 
 /* 80028448-80028560       .text fopAcM_getWaterY__FPC4cXyzPf */
-s32 fopAcM_getWaterY(const cXyz* pPos, f32* pDstWaterY) {
+BOOL fopAcM_getWaterY(const cXyz* pPos, f32* pDstWaterY) {
     static dBgS_WtrChk water_check;
-    s32 ret = 0;
+    BOOL ret = FALSE;
 
     *pDstWaterY = C_BG_MIN_HEIGHT;
 
@@ -1423,14 +1423,14 @@ s32 fopAcM_getWaterY(const cXyz* pPos, f32* pDstWaterY) {
     bool hit = dComIfG_Bgsp()->WaterChk(&water_check);
     if (hit) {
         *pDstWaterY = water_check.GetHeight();
-        ret = 1;
+        ret = TRUE;
     }
 
     if (daSea_ChkArea(pPos->x, pPos->z)) {
         f32 waveY = daSea_calcWave(pPos->x, pPos->z);
         if (waveY > *pDstWaterY)
             *pDstWaterY = waveY;
-        ret = 1;
+        ret = TRUE;
     }
 
     return ret;

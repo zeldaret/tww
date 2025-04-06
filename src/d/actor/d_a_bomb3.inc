@@ -755,7 +755,7 @@ BOOL daBomb_c::procExplode_init() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.ForceLockOff(fopAcM_GetID(this));
 
-    s32 temp;
+    BOOL temp;
     if(chk_state(STATE_8)) {
         f32 temp2;
         temp = fopAcM_getWaterY(&current.pos, &temp2);
@@ -766,15 +766,15 @@ BOOL daBomb_c::procExplode_init() {
             gndCheck.SetPos(&temp3);
 
             if(dComIfG_Bgsp()->GroundCross(&gndCheck) > temp2 || current.pos.y > temp2 + 50.0f) {
-                temp = 0;
+                temp = FALSE;
             }
         }
     }
     else {
-        temp = 0;
+        temp = FALSE;
     }
 
-    if(temp == 0) {
+    if(!temp) {
         eff_explode();
     }
     else {

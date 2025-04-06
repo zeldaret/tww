@@ -628,7 +628,6 @@ void daPy_lk_c::setTextureScrollResource(J3DAnmTextureSRTKey* btk, int r31) {
     }
     daPy_matAnm_c::setMorfFrame(3);
     daPy_matAnm_c::offMabaFlg();
-    daPy_matAnm_c::setMabaTimer(1);
     daPy_matAnm_c::setMabaTimer(75.0f + cM_rndF(30.0f));
 }
 
@@ -990,7 +989,7 @@ BOOL daPy_lk_c::draw() {
             mDoExt_modelUpdateDL(mpSuimenMunyaModel);
         }
         if (!r24 && !dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)) {
-            if (checkSwordEquip() && !checkDemoSwordNoDraw(1)) {
+            if (checkSwordEquip() && !checkDemoSwordNoDraw(TRUE)) {
                 entryDLSetLight(mpEquippedSwordModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
             }
         }
@@ -1004,7 +1003,7 @@ BOOL daPy_lk_c::draw() {
         if (mpBottleContentsModel != NULL) {
             updateDLSetLight(mpBottleContentsModel, 0);
         }
-        if (mpEquipItemModel && !checkCaughtShapeHide() && !checkDemoSwordNoDraw(0)) {
+        if (mpEquipItemModel && !checkCaughtShapeHide() && !checkDemoSwordNoDraw(FALSE)) {
             if (!checkBowItem(mEquipItem) || !checkPlayerGuard()) {
                 if (mEquipItem == dItem_HOOKSHOT_e) {
                     if (mActorKeepEquip.getActor()) {
@@ -1014,7 +1013,7 @@ BOOL daPy_lk_c::draw() {
                 }
                 entryDLSetLight(mpEquipItemModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
                 if (mpSwordModel1 != NULL) {
-                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e) {
+                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || checkFinalMasterSwordEquip()) {
                         updateDLSetLight(mpSwordModel1, 0);
                     }
                 }
@@ -1743,7 +1742,7 @@ void daPy_lk_c::changeWaitProc() {
 }
 
 /* 80110028-8011029C       .text changeLandProc__9daPy_lk_cFf */
-int daPy_lk_c::changeLandProc(f32) {
+BOOL daPy_lk_c::changeLandProc(f32) {
     /* Nonmatching */
 }
 
@@ -1753,7 +1752,7 @@ BOOL daPy_lk_c::setDamagePoint(f32 amount) {
         dComIfGp_setItemLifeCount(amount);
         if (amount < 0.0f) {
             offNoResetFlg1(daPyFlg1_UNK8000);
-            if (dComIfGs_getSelectEquip(0) != dItem_MASTER_SWORD_3_e) {
+            if (!checkFinalMasterSwordEquip()) {
                 offNoResetFlg1(daPyFlg1_UNK200000);
             }
         }
@@ -2283,9 +2282,9 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     m35EC = 0.0f;
     
     if (mEquipItem == dItem_SKULL_HAMMER_e) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(0x97));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMMERDAM));
     } else if (checkBowItem(mEquipItem) && !checkBowAnime()) {
-        mSwordAnim.changeBckOnly(getItemAnimeResource(0xD));
+        mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWRELORDA));
     }
     
     m35E8 = 0.0f;
@@ -2365,7 +2364,6 @@ BOOL daPy_lk_c::procCall_init() {
     commonProcInit(daPyProc_CALL_e);
     mVelocity = 0.0f;
     daPy_matAnm_c::offMabaFlg();
-    daPy_matAnm_c::setMabaTimer(1);
     setSingleMoveAnime(ANM_YOBU, 1.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
     current.angle.y = shape_angle.y;
     if (mEquipItem == daPyItem_BOKO_e) {

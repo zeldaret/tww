@@ -552,8 +552,6 @@ void daObjTpost_c::checkOrder() {
             }
         }
     }
-
-    return;
 }
 
 /* 00000E48-00000EA4       .text setAttention__12daObjTpost_cFv */

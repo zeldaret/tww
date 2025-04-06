@@ -88,8 +88,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
 
-    daPy_matAnm_c::m_maba_flg = 0;
-    daPy_matAnm_c::m_maba_timer = 1;
+    daPy_matAnm_c::offMabaFlg();
     setSingleMoveAnime(
         ANM_ESAMAKI,
         daPy_HIO_food_c0::m.field_0x4,

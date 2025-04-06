@@ -1,9 +1,30 @@
 #ifndef MSL_ALGORITHM_H_
 #define MSL_ALGORITHM_H_
 
+#include <string.h>
+#include <iterator.h>
+
 namespace std {
 template <class ForwardIterator, class T>
-ForwardIterator lower_bound(ForwardIterator first, ForwardIterator last, const T& val);
+ForwardIterator lower_bound(ForwardIterator first, ForwardIterator last, const T& val) {
+	typedef typename iterator_traits<ForwardIterator>::difference_type difference_type;
+	difference_type len = std::distance(first, last);
+
+	while (len > 0) {
+		ForwardIterator i = first;
+		difference_type step = len / 2;
+		std::advance(i, step);
+
+		if (*i < val) {
+			first = ++i;
+			len -= step + 1;
+		} else {
+			len = step;
+		}
+	}
+
+	return first;
+}
 
 template <class ForwardIterator, class T>
 ForwardIterator upper_bound(ForwardIterator first, ForwardIterator last, const T& val);
@@ -38,11 +59,62 @@ void __fill(ForwardIt first, ForwardIt last, const T& value, std::random_access_
 */
 
 template<class ForwardIt, class T>
-void fill(ForwardIt first, ForwardIt last, const T& value) {
+inline void fill(ForwardIt first, ForwardIt last, const T& value) {
     for (; first != last; ++first){
         *first = value;
     }
 }
+
+template<class InputIt, class OutputIt>
+inline OutputIt copy(InputIt first, InputIt last,
+              OutputIt d_first) {
+    for (; first < last; ++first, ++d_first) {
+        *d_first = *first;
+    }
+    return d_first;
+}
+
+template <class BidirectionalIterator1, class BidirectionalIterator2>
+inline BidirectionalIterator2 copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 result) {
+	while (last != first)
+		*--result = *--last;
+	return result;
+}
+
+template <class T, bool A>
+struct __copy_backward
+{
+	static T* copy_backward(T* first, T* last, T* result)
+	{
+		while (last > first)
+			*--result = *--last;
+		return result;
+	}
+};
+
+template <class T>
+struct __copy_backward<T, true>
+{
+	static T* copy_backward(T* first, T* last, T* result)
+	{
+#ifdef DEBUG
+		size_t n = static_cast<size_t>(last - first);
+		result -= n;
+		memmove(result, first, n*sizeof(T));
+		return result;
+#else
+        while (last > first)
+			*--result = *--last;
+		return result;
+#endif
+	}
+};
+
+template <class T>
+inline T* copy_backward(T* first, T* last, T* result) {
+	return __copy_backward<T, true>::copy_backward(first, last, result);
+}
+
 }  // namespace std
 
 #endif

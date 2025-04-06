@@ -21,7 +21,6 @@ f32 daPy_lk_c::getLadderMoveAnmSpeed() {
 
 /* 80132F58-80133058       .text setLadderFootSe__9daPy_lk_cFv */
 void daPy_lk_c::setLadderFootSe() {
-    /* Nonmatching - floats */
     cXyz local_28(
         current.pos.x + cM_ssin(shape_angle.y) * 50.0f, current.pos.y, current.pos.z + cM_scos(shape_angle.y) * 50.0f
     );
@@ -32,12 +31,10 @@ void daPy_lk_c::setLadderFootSe() {
     } else {
         seStartOnlyReverb(JA_SE_FT_LADDER_CLIMB_D);
     }
-    return;
 }
 
 /* 80133058-80133240       .text changeLadderMoveProc__9daPy_lk_cFi */
 int daPy_lk_c::changeLadderMoveProc(int param_0) {
-    /* Nonmatching - floats */
     cXyz local_2c;
     cXyz local_38;
     BOOL iVar5;
@@ -63,7 +60,7 @@ int daPy_lk_c::changeLadderMoveProc(int param_0) {
         local_38.z = local_2c.z + cM_scos(shape_angle.y) * 50.0f;
         local_38.y = local_2c.y;
         mLinkLinChk.Set(&local_2c, &local_38, this);
-        if ((!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) || (dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 4)) {
+        if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk) || dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 4) {
             if (iVar2 < 0x4000) {
                 procLadderUpEnd_init(param_0);
             } else {
@@ -78,7 +75,6 @@ int daPy_lk_c::changeLadderMoveProc(int param_0) {
 
 /* 80133240-801333A8       .text setMoveBGLadderCorrect__9daPy_lk_cFv */
 int daPy_lk_c::setMoveBGLadderCorrect() {
-    /* Nonmatching - floats */
     if (dComIfG_Bgsp()->ChkPolySafe(mPolyInfo)) {
         if (dComIfG_Bgsp()->ChkMoveBG(mPolyInfo)) {
             dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &current.pos, &current.angle, &shape_angle);
@@ -101,12 +97,10 @@ void daPy_lk_c::procLadderUpStart_init_sub() {
     m3570 = 1;
     m34C2 = 4;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
-    return;
 }
 
 /* 80133414-8013356C       .text procLadderUpStart_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procLadderUpStart_init() {
-    /* Nonmatching - floats */
     commonProcInit(daPyProc_LADDER_UP_START_e);
     gravity = 0.0f;
     speed.y = 0.0f;
@@ -139,33 +133,32 @@ BOOL daPy_lk_c::procLadderUpStart_init() {
 
 /* 8013356C-80133670       .text procLadderUpStart__9daPy_lk_cFv */
 BOOL daPy_lk_c::procLadderUpStart() {
-    /* Nonmatching - floats */
     if (setMoveBGLadderCorrect()) {
         return true;
+    }
+
+    if (m3570 == 0) {
+        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+            procLadderUpStart_init_sub();
+        }
     } else {
-        if (m3570 == 0) {
-            if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
-                procLadderUpStart_init_sub();
+        J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
+        m34C2 = 5;
+        if (frameCtrl.getRate() < 0.01f) {
+            dComIfGp_setDoStatus(6);
+            if (m34D4 == 0) {
+                setLadderFootSe();
+                m34D4 = 1;
+            }
+            if (doTrigger()) {
+                m34C2 = 0;
+                procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+            } else {
+                changeLadderMoveProc(1);
             }
         } else {
-            J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
-            m34C2 = 5;
-            if (frameCtrl.getRate() < 0.01f) {
-                dComIfGp_setDoStatus(6);
-                if (m34D4 == 0) {
-                    setLadderFootSe();
-                    m34D4 = 1;
-                }
-                if (doTrigger()) {
-                    m34C2 = 0;
-                    procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
-                } else {
-                    changeLadderMoveProc(1);
-                }
-            } else {
-                if (frameCtrl.checkPass(9.0f)) {
-                    setLadderFootSe();
-                }
+            if (frameCtrl.checkPass(9.0f)) {
+                setLadderFootSe();
             }
         }
     }
@@ -194,20 +187,19 @@ BOOL daPy_lk_c::procLadderUpEnd_init(int param_0) {
 
 /* 80133710-801337B4       .text procLadderUpEnd__9daPy_lk_cFv */
 BOOL daPy_lk_c::procLadderUpEnd() {
-    /* Nonmatching - floats */
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
 
     if (setMoveBGLadderCorrect()) {
         return true;
+    }
+
+    if (frameCtrl.getRate() < 0.01f) {
+        checkNextMode(0);
     } else {
-        if (frameCtrl.getRate() < 0.01f) {
-            checkNextMode(0);
-        } else {
-            if (frameCtrl.checkPass(9.0f) || frameCtrl.checkPass(19.0f)) {
-                setLadderFootSe();
-            }
-            m34C2 = 5;
+        if (frameCtrl.checkPass(9.0f) || frameCtrl.checkPass(19.0f)) {
+            setLadderFootSe();
         }
+        m34C2 = 5;
     }
     return true;
 }
@@ -221,12 +213,10 @@ void daPy_lk_c::procLadderDownStart_init_sub() {
     setOldRootQuaternion(0, -0x8000, 0);
     shape_angle.y += 0x8000;
     current.angle.y = shape_angle.y;
-    return;
 }
 
 /* 8013384C-8013399C       .text procLadderDownStart_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procLadderDownStart_init() {
-    /* Nonmatching - floats */
     commonProcInit(daPyProc_LADDER_DOWN_START_e);
     gravity = 0.0f;
     speed.y = 0.0f;
@@ -258,29 +248,28 @@ BOOL daPy_lk_c::procLadderDownStart_init() {
 
 /* 8013399C-80133AB8       .text procLadderDownStart__9daPy_lk_cFv */
 BOOL daPy_lk_c::procLadderDownStart() {
-    /* Nonmatching - floats */
     if (setMoveBGLadderCorrect()) {
         return true;
+    }
+
+    if (m3570 == 0) {
+        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+            procLadderDownStart_init_sub();
+        }
     } else {
-        if (m3570 == 0) {
-            if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
-                procLadderDownStart_init_sub();
+        J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
+        m34C2 = 5;
+        if (frameCtrl.getRate() < 0.01f) {
+            dComIfGp_setDoStatus(6);
+            if (doTrigger()) {
+                m34C2 = 0;
+                procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+            } else {
+                changeLadderMoveProc(1);
             }
         } else {
-            J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
-            m34C2 = 5;
-            if (frameCtrl.getRate() < 0.01f) {
-                dComIfGp_setDoStatus(6);
-                if (doTrigger()) {
-                    m34C2 = 0;
-                    procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
-                } else {
-                    changeLadderMoveProc(1);
-                }
-            } else {
-                if ((frameCtrl.checkPass(26.0f) || frameCtrl.checkPass(36.0f)) || frameCtrl.checkPass(43.0f)) {
-                    setLadderFootSe();
-                }
+            if (frameCtrl.checkPass(26.0f) || frameCtrl.checkPass(36.0f) || frameCtrl.checkPass(43.0f)) {
+                setLadderFootSe();
             }
         }
     }
@@ -289,15 +278,14 @@ BOOL daPy_lk_c::procLadderDownStart() {
 
 /* 80133AB8-80133B4C       .text procLadderDownEnd_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procLadderDownEnd_init(int param_0) {
-    daPy_ANM dVar1;
-
     commonProcInit(daPyProc_LADDER_DOWN_END_e);
+    daPy_ANM anm;
     if (param_0 != 0) {
-        dVar1 = ANM_LADDERDWEDL;
+        anm = ANM_LADDERDWEDL;
     } else {
-        dVar1 = ANM_LADDERDWEDR;
+        anm = ANM_LADDERDWEDR;
     }
-    setSingleMoveAnime(dVar1, daPy_HIO_ladder_c0::m.field_0x1C, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x20);
+    setSingleMoveAnime(anm, daPy_HIO_ladder_c0::m.field_0x1C, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x20);
     m34C2 = 7;
     gravity = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
@@ -308,21 +296,19 @@ BOOL daPy_lk_c::procLadderDownEnd_init(int param_0) {
 BOOL daPy_lk_c::procLadderDownEnd() {
     if (setMoveBGLadderCorrect()) {
         return true;
+    }
+
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
+        checkNextMode(0);
     } else {
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-            checkNextMode(0);
-        } else {
-            m34C2 = 5;
-        }
+        m34C2 = 5;
     }
     return true;
 }
 
 /* 80133BB4-80133E28       .text procLadderMove_init__9daPy_lk_cFiiP4cXyz */
 BOOL daPy_lk_c::procLadderMove_init(int param_0, int param_1, cXyz* param_2) {
-    /* Nonmatching - floats */
-    daPy_ANM dVar2;
-    int uVar3 = checkModeFlg(2) ? true : false;
+    int uVar3 = checkModeFlg(ModeFlg_MIDAIR) ? true : false;
     float dVar4 = getLadderMoveAnmSpeed();
 
     commonProcInit(daPyProc_LADDER_MOVE_e);
@@ -338,6 +324,8 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int param_1, cXyz* param_2) {
     }
     m370C.x = param_2->x;
     m370C.z = param_2->z;
+
+    daPy_ANM anm;
     if (param_0 != 0) {
         if (uVar3 != 0) {
             m3570 = 1;
@@ -347,21 +335,22 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int param_1, cXyz* param_2) {
             m370C.z = m370C.z - -2.0f * cM_ssin(shape_angle.y);
         }
         if (dVar4 >= 0.0f) {
-            dVar2 = ANM_LADDERLTOR;
+            anm = ANM_LADDERLTOR;
         } else {
-            dVar2 = ANM_LADDERRTOL;
+            anm = ANM_LADDERRTOL;
         }
     } else {
         m3570 = 1;
         if (dVar4 >= 0.0f) {
-            dVar2 = ANM_LADDERRTOL;
+            anm = ANM_LADDERRTOL;
         } else {
-            dVar2 = ANM_LADDERLTOR;
+            anm = ANM_LADDERLTOR;
         }
         m370C.x = m370C.x + 2.0f * cM_scos(shape_angle.y);
         m370C.z = m370C.z + -2.0f * cM_ssin(shape_angle.y);
     }
-    setSingleMoveAnime(dVar2, dVar4, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x2C);
+
+    setSingleMoveAnime(anm, dVar4, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x2C);
     m34B8 = param_1;
     if (param_1 == 0) {
         setTextureAnime(10, 0);
@@ -382,28 +371,27 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int param_1, cXyz* param_2) {
 BOOL daPy_lk_c::procLadderMove() {
     if (setMoveBGLadderCorrect()) {
         return true;
-    } else {
-        m34C2 = 5;
-        dComIfGp_setDoStatus(6);
-        if (doTrigger()) {
-            m34C2 = 0;
-            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
-        } else {
-            if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
-                if ((int)m34D0 > 0) {
-                    m34D0--;
-                    setLadderFootSe();
-                } else {
-                    changeLadderMoveProc(m3570);
-                }
-            } else {
-                f32 dVar2 = getLadderMoveAnmSpeed();
-                if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
-                    dVar2 *= -1.0f;
-                }
-                mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar2);
-            }
-        }
     }
+    m34C2 = 5;
+    dComIfGp_setDoStatus(6);
+
+    if (doTrigger()) {
+        m34C2 = 0;
+        procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+    } else if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
+        if ((int)m34D0 > 0) {
+            m34D0--;
+            setLadderFootSe();
+        } else {
+            changeLadderMoveProc(m3570);
+        }
+    } else {
+        f32 dVar2 = getLadderMoveAnmSpeed();
+        if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
+            dVar2 *= -1.0f;
+        }
+        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar2);
+    }
+
     return true;
 }

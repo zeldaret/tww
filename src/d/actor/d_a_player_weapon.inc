@@ -374,7 +374,7 @@ BOOL daPy_lk_c::procWeaponThrow() {
             daBoko_c* boko = static_cast<daBoko_c*>(mActorKeepEquip.getActor());
             s16 uVar2 = 0xf400;
             if (mpAttnActorLockOn != NULL) {
-                cXyz local_34 = (mpAttnActorLockOn->eyePos - boko->current.pos);
+                cXyz local_34 = mpAttnActorLockOn->eyePos - boko->current.pos;
                 f32 dVar5 = local_34.abs();
                 if (dVar5 >= 1.0f) {
                     dVar5 = local_34.absXZ();
@@ -384,7 +384,7 @@ BOOL daPy_lk_c::procWeaponThrow() {
             boko->m2BA = 1;
             boko->m2CA = uVar2;
             voiceStart(0);
-            deleteEquipItem(0);
+            deleteEquipItem(FALSE);
         }
         return true;
     }
