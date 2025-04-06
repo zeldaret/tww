@@ -240,7 +240,7 @@ public:
     /* 0x51C */ int mNextType;
     /* 0x520 */ int mMapToolType;
     /* 0x524 */ int m524;
-    /* 0x528 */ int m528;
+    /* 0x528 */ fopAc_ac_c* m528;
     /* 0x52C */ u8 m52C[0x530 - 0x52C];
     /* 0x530 */ int m530;
     /* 0x534 */ s16 m534;

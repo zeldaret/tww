@@ -219,7 +219,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mCurType = mMapToolType = mCamTypeField;
 
     m524 = 0xFF;
-    m528 = 0;
+    m528 = NULL;
     m258 = 0;
     m254 = 0;
     m248[0] = 0x85e;
@@ -422,7 +422,7 @@ bool dCamera_c::ChangeModeOK(s32 param_1) {
     if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
         return 0;
     }
-    return !(types[mCurType].mStyles[0][param_1] < 0); // something to do with the array sizing of these variables is wrong
+    return !(types[mCurType].mStyles[0][param_1] < 0);
 }
 
 /* 801621A0-801623A0       .text initPad__9dCamera_cFv */
@@ -873,7 +873,7 @@ bool dCamera_c::Run() {
         mCenter.z = m044.z;
         
         if ((dCamParam_c::styles[mCurStyle].engineIdx == 4) && chkFlag(0x10000800)) {
-            m068 &= ~8; //0xfffffff7
+            m068 &= ~8;
             mCenter.y = m044.y;
         }
         else {
@@ -986,7 +986,7 @@ bool dCamera_c::NotRun() {
         m11C++;
     }
     
-    if (dComIfGp_event_getMode() != 0) {
+    if (dComIfGp_event_runCheck()) {
         dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x48);
     }
 
@@ -1252,7 +1252,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
 
 /* 80164898-80164A48       .text onModeChange__9dCamera_cFll */
 bool dCamera_c::onModeChange(s32 i_curMode, s32 i_nextMode) {
-    /* Nonmatching */
+    /* Nonmatching - Code 100% */
     if (i_curMode == 0xe && mCamParam.CheckFlag(0x10)) {
         setView(0.0f, 0.0f, 640.0f, 480.0f);
     }
@@ -1268,45 +1268,53 @@ bool dCamera_c::onModeChange(s32 i_curMode, s32 i_nextMode) {
     clrFlag(0x11E);
     clrFlag(0x2000);
     
-    switch (i_curMode) { // branches are incorrect
-        case 3:
-        case 4:
-            break;
-        case 0xb:
-        case 0xc:
-            dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 4);
-            break;
+    switch (i_curMode) {
+    case 3:
+        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 4);
+        break;
+    case 4:
+    case 10:
+    case 11:
+    case 13:
+    case 14:
+        break;
     }
-    if (i_nextMode <= 0xc) {
-        // some function call of something in .data missing
+    
+    switch(i_nextMode) {
+    case 7:
         setFlag(0x10);
-    }
-    else if (i_curMode == 1 && types[mCurType].mStyles[0][0] == types[mCurType].mStyles[0][1]) {
-        m110 = 0;
-    }
-    else if (i_curMode == 0 && types[mCurType].mStyles[0][0] == types[mCurType].mStyles[0][1]) {
-        m110 = 0;
-    }
-    else if (i_curMode != i_nextMode) {
-        m254 |= 2;
+        break;
+    case 0:
+        if (i_curMode == 1 && types[mCurType].mStyles[0][0] == types[mCurType].mStyles[0][1]) {
+            m110 = 0;
+        }
+        break;
+    case 1:
+        if (i_curMode == 0 && types[mCurType].mStyles[0][0] == types[mCurType].mStyles[0][1]) {
+            m110 = 0;
+        }
+        break;
+    case 12:
+        if (i_curMode != i_nextMode) {
+            m254 |= 2;
+        }
+        break;
+    case 4:
+        break;
     }
     return TRUE;
 }
 
 /* 80164A48-80164CEC       .text nextType__9dCamera_cFl */
 int dCamera_c::nextType(s32 curType) {
-    /* Nonmatching */
-    int iVar1;
     int idx;
-    int iVar2;
     int roomNo;
-    uint uVar3;
-
-    int next_type = curType;
+    
+    s32 nextType = curType;
     
     if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
-        next_type = mCamTypeEvent;
-        if (curType != next_type) {
+        nextType = mCamTypeEvent;
+        if (curType != nextType) {
             clrFlag(0x200000);
             if (curType != mCamTypeEvent) {
                 pushPos();
@@ -1317,86 +1325,124 @@ int dCamera_c::nextType(s32 curType) {
     else {
         if (mpPlayerActor && m514 != 1) {
             if (curType == mCamTypeEvent) {
-                next_type = m404;
+                nextType = m404;
                 m404 = -1;
             }
             
             if (daNpc_kam_c::m_hyoi_kamome) {
-                next_type = GetCameraTypeFromCameraName("Seagal");
+                nextType = GetCameraTypeFromCameraName("Seagal");
+            }
+            else if ((check_owner_action(mPadId, 0x1010000) || check_owner_action1(mPadId, 0x80)) && m524 == 0xFF) {
+                nextType = mCamTypeBoat;
             }
             else {
-                if (!check_owner_action(mPadId, 0x1010000) || (check_owner_action1(mPadId, 0x80) && m524 == 0xFF)) {
-                    next_type = mCamTypeBoat;
+                roomNo = -1;
+
+                if (mStageMapToolCameraIdx != 0xff) {   
+                    idx = mStageMapToolCameraIdx;
                 }
                 else {
-                    roomNo = -1;
-                    idx = mStageMapToolCameraIdx;
-                    if (idx == 0xff) {
-                        if (mRoomNo != -1) {
-                            roomNo = mRoomNo;
-                        }
-                        idx = mRoomMapToolCameraIdx;
+                    if (mRoomNo != -1) {
+                        roomNo = mRoomNo;
                     }
-                    if (m524 == 0xff) {
-                        next_type = m524;
-                        if (m528 != NULL) {
-                            //mpLockonTarget = m528;
+                    idx = mRoomMapToolCameraIdx;
+                }
+                
+                if (m524 != 0xff) {
+                    nextType = m524;
+                    if (m528) {
+                        mpLockonTarget = m528;
+                    }
+                }
+                else if (idx == 0xff) {
+                    idx = m350;
+                    if (idx > 0) {
+                        if (idx < mvBGType_num) {
+                            int cameraTypeFromCameraName = GetCameraTypeFromCameraName(mvBGTypes[idx]);
+
+                            if (cameraTypeFromCameraName != mCamTypeKeep) {
+                                nextType = cameraTypeFromCameraName;
+                            }
+
+                            if (m350 == 0x11) {
+                                roomNo = fopAcM_GetRoomNo(mpPlayerActor);
+                                GetCameraTypeFromMapToolID(0, roomNo);
+                            }
                         }
                     }
                     else {
-                        if (idx == 0xff) {
-                            iVar1 = m350;
-                            if (iVar1 < 1) {
-                                if ((uVar3 & 0x100000) == 0) {
-                                    next_type = mMapToolType;
-                                }
-                                else {
-                                    next_type = mCamTypeWater;
-                                }
-                            }
-                            else if (iVar1 < 0x23) {
-                                iVar1 = GetCameraTypeFromCameraName(mvBGTypes[iVar1]);
-                                if (iVar1 != mCamTypeKeep) {
-                                    next_type = iVar1;
-                                }
-                            if (m350 == 0x11) {
-                                GetCameraTypeFromMapToolID(0, fopAcM_GetRoomNo(mpPlayerActor));
-                            }
-                          }
-                        }
-                        else if (idx == 0x1ff) {
-                            if (check_owner_action1(mPadId, 0x80) == 0) {
-                              if (check_owner_action(mPadId, 0x100000) != 0) {
-                                next_type = mCamTypeWater;
-                              }
-                            }
-                            else {
-                                next_type = mMapToolType;
-                            }
-                            if (curType == mCamTypeBoat || (iVar1 = GetCameraTypeFromCameraName("BoatBattle"), curType == iVar1)) {
-                                next_type = mCamTypeWater;
-                            }
+                        if (check_owner_action(mPadId, 0x100000)) {
+                            nextType = mCamTypeWater;
                         }
                         else {
-                            iVar1 = GetCameraTypeFromMapToolID(idx, roomNo);
-                            
-                            if ((iVar1 != mCamTypeKeep) && (next_type = iVar1, iVar1 == 0xff)) {
-                                next_type = mMapToolType;
-                            }
+                            nextType = mMapToolType;
                         }
+                    }
+                }
+                else if (idx == 0x1ff) {
+                    if (check_owner_action1(mPadId, 0x20)) {
+                        nextType = mMapToolType;
+                    }
+                    else if (check_owner_action(mPadId, 0x100000)) {
+                        nextType = mCamTypeWater;
+                    }
+                    
+                    if (curType == mCamTypeBoat || curType == GetCameraTypeFromCameraName("BoatBattle")) {
+                        nextType = mCamTypeWater;
+                    }
+                }
+                else {
+                    int cameraTypeFromMapToolId = GetCameraTypeFromMapToolID(idx, roomNo);
+
+                    if (cameraTypeFromMapToolId == mCamTypeKeep) {
+                        nextType = curType;
+                    }
+                    else if (cameraTypeFromMapToolId != 0xff) {
+                        nextType = cameraTypeFromMapToolId;
+                    }
+                    else {
+                        nextType = mMapToolType;
                     }
                 }
             }
         }
     }
+
     m524 = 0xFF;
-    m528 = 0;
-    return next_type;
+    m528 = NULL;
+    return nextType;
 }
 
 /* 80164CEC-80164DB4       .text onTypeChange__9dCamera_cFll */
-bool dCamera_c::onTypeChange(s32, s32) {
-    /* Nonmatching */
+bool dCamera_c::onTypeChange(s32 i_curType, s32 i_nextType) {
+    s32 mode;
+    
+    m118 = 0;
+    m114 = 0;
+    mode = mCurMode;
+    if (m144 == 0) {
+        s32 style = types[i_nextType].mStyles[0][0];
+        if (style >= 0) {
+            switch (dCamParam_c::styles[style].engineIdx) {
+            case 5:
+            case 6:
+            case 11:
+            case 12:
+            case 13:
+                mode = 0;
+                m144 = 1;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    if (onModeChange(mCurMode, mode)) {
+        m11C = 0;
+    }
+
+    return TRUE;
 }
 
 /* 80164DB4-80164DFC       .text SetTypeForce__9dCamera_cFPcP10fopAc_ac_c */
