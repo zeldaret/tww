@@ -1315,10 +1315,10 @@ int dStage_cameraCreate(stage_camera2_data_class* i_cameraData, int i_cameraIdx,
     i_cameraData = static_cast<stage_camera2_data_class*>(cMl::memalignB(-4, 0x18));
 
     if (i_cameraData != NULL) {
-        i_cameraData->field_0x4 = 0.0f;
-        i_cameraData->field_0x8 = 0.0f;
-        i_cameraData->field_0x4 = 0.0f;
-        i_cameraData->field_0x0 = param_2;
+        i_cameraData->m00.mpTypeStr[1] = 0;
+        i_cameraData->m00.mpTypeStr[2] = 0;
+        i_cameraData->m00.mpTypeStr[1] = 0;
+        i_cameraData->m00.mpTypeStr[2] = param_2;
         fopCamM_Create(i_cameraIdx, PROC_CAMERA, i_cameraData);
     }
 
@@ -1499,7 +1499,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
 int dStage_cameraInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
     stage_camera_class* camera = (stage_camera_class*)((char*)i_data + 4);
     i_stage->setCamera(camera);
-    dStage_cameraCreate(camera->m_entries, 0, 0);
+    dStage_cameraCreate(camera->mEntries, 0, 0);
     return 1;
 }
 
