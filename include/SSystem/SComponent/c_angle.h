@@ -65,8 +65,14 @@ struct cAngle {
     /* Converts Radian value into Degree value */
     static f32 r2d(f32 r) { return Radian_to_Degree(r); }
 
+    /* Converts Degree value into Radian value */
+    static f32 d2r(f32 d) { return Degree_to_Radian(d); }
+
     /* Converts Degree value to s16 angle */
     static s16 d2s(f32 d) { return Degree_to_SAngle(d); }
+
+    /* Converts s16 angle to Degree value */
+    static f32 s2d(s16 a) { return SAngle_to_Degree(a); }
 
     template <typename T>
     static T Adjust(T f1, T f2, T f3);
@@ -112,6 +118,10 @@ public:
     void Val(const cXyz&);
     cXyz Xyz() const;
     void Globe(class cSGlobe*) const;
+
+    void R(f32 i_radial) { mRadial = i_radial; }
+    void U(cSAngle const& i_angle) { mAngle2 = i_angle.Val(); }
+    void V(cSAngle const& i_angle) { mAngle1 = i_angle.Val(); }
 };
 
 class cSGlobe {
@@ -135,6 +145,11 @@ public:
     float R() const { return mRadius; }
     const cSAngle& V() const { return mAzimuth; }
     const cSAngle& U() const { return mInclination; }
+
+    void R(f32 i_radius) { mRadius = i_radius; }
+    void U(cSAngle const& i_azimuth) { mAzimuth = i_azimuth.Val(); }
+    void V(cSAngle const& i_inclination) { mInclination = i_inclination.Val(); }
+
     cXyz Xyz() const;
     void Polar(cSPolar*) const;
     cXyz Norm() const;

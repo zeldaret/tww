@@ -245,6 +245,7 @@ public:
     void setScissor(f32, f32, f32, f32);
 
     view_port_class* getViewPort() { return &mViewport; }
+    scissor_class* getScissor() { return &mViewport.mScissor; }
     s8 getCameraID() { return mCameraID; }
     void setCameraID(int id) { mCameraID = id; }
     void setMode(int mode) { mMode = mode; }

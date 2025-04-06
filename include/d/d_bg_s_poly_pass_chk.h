@@ -36,6 +36,14 @@ public:
     void SetBomb() { mbBombThrough = true; }
     void SetBoomerang() { mbBoomerangThrough = true; }
     void SetRope() { mbRopeThrough = true; }
+
+    void ClrObj() { mbObjThrough = false; }
+    void ClrCam() { mbCamThrough = false; }
+    void ClrLink() { mbLinkThrough = false; }
+    void ClrArrow() { mbArrowThrough = false; }
+    void ClrBomb() { mbBombThrough = false; }
+    void ClrBoomerang() { mbBoomerangThrough = false; }
+    void ClrRope() { mbRopeThrough = false; }
     
     void SetPassChkInfo(dBgS_PolyPassChk& other) {
         *this = other;
