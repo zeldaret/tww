@@ -246,7 +246,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     dStage_stageDt_c* stage_dt = &dComIfGp_getStage();
     if (stage_dt != NULL) {
         stage_stag_info_class*  stag_info = stage_dt->getStagInfo();
-        if (stag_info && stag_info->mCameraMapToolID != -1) {
+        if (stag_info && stag_info->mCameraMapToolID != -1) { // Bug? 
             mapToolType = GetCameraTypeFromMapToolID(stag_info->mCameraMapToolID, -1);
             if (mapToolType != 0xFF && Chtyp(mapToolType)) {
                 mMapToolType = mapToolType;
@@ -2710,6 +2710,7 @@ void preparation(camera_process_class* i_this) {
 
 /* 8017BEB0-8017BFAC       .text view_setup__FP20camera_process_class */
 void view_setup(camera_process_class* i_this) {
+    /* Nonmatching - Code 100% */
     camera_class* a_this = (camera_class*)i_this;
     dDlst_window_c* window = get_window(a_this);
 
