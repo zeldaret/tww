@@ -54,7 +54,6 @@ struct camSphChkdata {
     }
 
     ~camSphChkdata(){}
-
     /* 0x00 */ cXyz* field_0x0;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ cXyz field_0x8;
@@ -211,18 +210,18 @@ public:
     /* 0x254 */ int m254;
     /* 0x258 */ int m258;
     /* 0x25C */ BG mBG;
-    /* 0x30C */ u8 m30C[0x310 - 0x30C];
+    /* 0x30C */ int m30C;
     /* 0x310 */ f32 m310;
-    /* 0x314 */ u8 m314[0x318 - 0x314];
+    /* 0x314 */ int m314;
     /* 0x318 */ f32 m318;
     /* 0x31C */ u8 m31C;
     /* 0x31D */ u8 m31D;
     /* 0x31E */ u8 m31E[0x320 - 0x31E];
     /* 0x320 */ cXyz m320;
     /* 0x32C */ cXyz m32C;
-    /* 0x338 */ s16 m338;
+    /* 0x338 */ cSAngle m338;
     /* 0x33A */ cSAngle m33A;
-    /* 0x33C */ u32 m33C;
+    /* 0x33C */ fopAc_ac_c* m33C;
     /* 0x340 */ u8 m340[0x350 - 0x340];
     /* 0x350 */ int m350;
     /* 0x354 */ f32 m354;
@@ -367,7 +366,7 @@ public:
     void setDMCAngle();
     cSAngle getDMCAngle(cSAngle);
     bool pointInSight(cXyz*);
-    void radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*);
+    f32 radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*);
     f32 radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*, cXyz*, cXyz*, f32, s16);
     f32 groundHeight(cXyz*);
     bool lineBGCheck(cXyz*, cXyz*, dBgS_LinChk*, u32);
