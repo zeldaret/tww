@@ -2709,8 +2709,31 @@ void preparation(camera_process_class* i_this) {
 }
 
 /* 8017BEB0-8017BFAC       .text view_setup__FP20camera_process_class */
-void view_setup(camera_process_class*) {
-    /* Nonmatching */
+void view_setup(camera_process_class* i_this) {
+    camera_class* a_this = (camera_class*)i_this;
+    dDlst_window_c* window = get_window(a_this);
+
+    view_port_class* viewport = window->getViewPort();
+    view_class* view = (view_class*)i_this;
+    mDoMtx_lookAt(view->mViewMtx, &view->mLookat.mEye, &view->mLookat.mCenter, &view->mLookat.mUp, view->mBank);
+    MTXCopy(view->mViewMtx, view->mViewMtxNoTrans);
+
+    view->mViewMtxNoTrans[0][3] = 0.0f;
+    view->mViewMtxNoTrans[1][3] = 0.0f;
+    view->mViewMtxNoTrans[2][3] = 0.0f;
+
+    dComIfGd_setWindow(window);
+    dComIfGd_setViewport(viewport);
+    dComIfGd_setView(view);
+
+    f32 far;
+    if (g_dComIfG_gameInfo.play.mbCamOverrideFarPlane != 0) { // inline?
+        far = view->mFar;
+    } else {
+        far = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
+    }
+
+    mDoLib_clipper::setup(view->mFovy, view->mAspect, view->mNear, far);
 }
 
 /* 8017BFAC-8017C29C       .text store__FP20camera_process_class */
