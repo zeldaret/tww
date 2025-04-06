@@ -29,7 +29,7 @@ int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
     }
     if (param_0 != dBgW::PP_UNK0_e) {
         if (pp_actor->shape_angle.y != m34D4) {
-            cXyz local_28 = (current.pos - m370C);
+            cXyz local_28 = current.pos - m370C;
             mDoMtx_trans(mDoMtx_stack_c::now, m370C.x, m370C.y, m370C.z);
             mDoMtx_YrotM(mDoMtx_stack_c::now, pp_actor->shape_angle.y - m34D4);
             mDoMtx_multVec(mDoMtx_stack_c::now, &local_28, &current.pos);
@@ -54,8 +54,7 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
         if (checkEquipAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         }
-        daPy_matAnm_c::m_maba_flg = 0;
-        daPy_matAnm_c::m_maba_timer = 1;
+        daPy_matAnm_c::offMabaFlg();
         setSingleMoveAnime(
             ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
         );

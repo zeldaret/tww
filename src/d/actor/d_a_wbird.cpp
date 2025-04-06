@@ -5,70 +5,214 @@
 
 #include "d/actor/d_a_wbird.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo_wether.h"
+#include "SSystem/SComponent/c_angle.h"
+#include "d/actor/d_a_player.h"
 
+
+const char daWbird_c::M_arcname[] = "Wbird";
 /* 00000078-000000AC       .text calcMtx__9daWbird_cFv */
 void daWbird_c::calcMtx() {
-    /* Nonmatching */
+    eyePos = current.pos;
+    attention_info.position = current.pos;
 }
 
 /* 000000AC-00000324       .text setStartPos__9daWbird_cFv */
 void daWbird_c::setStartPos() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    cXyz *wind = dKyw_get_wind_vec();
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+
+    cSGlobe globe(*wind);
+    cSAngle angle(globe.U());
+    s32 a = globe.U() - player->current.angle.y;
+    s32 transformedResult = a > cSAngle::_0.Val();
+
+    if (transformedResult != 0) {
+        angle += cSAngle::_90;
+    } 
+    else {    
+        angle -= cSAngle::_90;
+    }
+
+    current.pos = player->current.pos;
+    current.pos.x += (angle.Cos() * 20.0f);
+    current.pos.z += (angle.Sin() * 20.0f);
+    home.pos = current.pos;
+    current.pos.y += 150.0f;
+
+    cXyz sp18;
+    sp18.x = cM_scos(envLight.mWind.mTactWindAngleX) * cM_scos((u16)envLight.mWind.mTactWindAngleY);
+    sp18.y = cM_ssin(envLight.mWind.mTactWindAngleX);
+    sp18.z = cM_scos(envLight.mWind.mTactWindAngleX) * cM_ssin((u16)envLight.mWind.mTactWindAngleY);
+    int iVar5 = cM_atan2s(sp18.x, sp18.z);
+    
+    current.angle.y = iVar5;
+    shape_angle.y = iVar5;
+    field_0x29E = 80;
+    speed.x = sp18.x * 40.0f;
+    speed.z = sp18.z * 40.0f;
+    float fVar1 = field_0x29E * 0.5f;
+    current.pos.z = current.pos.z - fVar1 * speed.z;
+    current.pos.x = current.pos.x - fVar1 * speed.x;
+    field_0x29E = field_0x29E + 60;
+    field_0x2A0 = 1.0f;
+    current.pos.y += field_0x2A0 * fVar1 * fVar1 * 0.5f;
+    speed.y = -(field_0x2A0 * fVar1);
 }
 
 /* 00000324-00000388       .text CreateInit__9daWbird_cFv */
-void daWbird_c::CreateInit() {
-    /* Nonmatching */
+BOOL daWbird_c::CreateInit() {
+    tevStr.mRoomNo = current.roomNo;
+    setAction(3);
+    fopAcM_orderChangeEvent(this, "TACT_WINDOW", 0, -1);
+    field_0x29E = 0;
+    calcMtx();
+    return TRUE;
 }
 
 /* 00000388-000003E0       .text create__9daWbird_cFv */
 cPhs_State daWbird_c::create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daWbird_c);
+    CreateInit();
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000003E0-000003E4       .text actionWait__9daWbird_cFv */
 void daWbird_c::actionWait() {
-    /* Nonmatching */
 }
 
 /* 000003E4-00000474       .text actionEnd__9daWbird_cFv */
 void daWbird_c::actionEnd() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_endCheck(mEventIdx)){
+        dComIfGp_event_reset();
+        fopAcM_delete(this);
+    } else {
+        dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("WINDMAN"));
+    }
 }
 
 /* 00000474-000005DC       .text actionMove__9daWbird_cFv */
 void daWbird_c::actionMove() {
-    /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
+    if(field_0x29D){
+        field_0x29D = false;
+        mDoAud_seStart(JA_SE_TAKT_WIND_DEMO);
+    }
+    if (field_0x29E > 0) {
+        field_0x29E--;
+        if (field_0x29E > 60) {
+            fopAcM_posMove(this, NULL);
+            speed.y = speed.y + field_0x2A0;
+        }
+        if (field_0x29E < 15) {
+            dKyw_custom_windpower(0.0f);
+        }
+        if (field_0x29E == 70) {
+            dKyw_tact_wind_set_go();
+        }
+    } else {
+        dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("WINDMAN"));
+        player->changeDemoMoveAngle(mAngle);
+        setAction(1);
+        mDoAud_seStart(JA_SE_TAKT_WIND_END);
+    }
 }
 
 /* 000005DC-00000850       .text actionSelect__9daWbird_cFv */
 void daWbird_c::actionSelect() {
-    /* Nonmatching */
+    short sVar2 = field_0x29E;
+    if (sVar2 == 10) {
+        dComIfGp_setOperateWindOn();
+        mDoAud_seStart(JA_SE_TAKT_WIND_DISP);
+        field_0x29E++;
+    } else if(sVar2 > 10){
+        mDoAud_seStart(JA_SE_SYS_WTAKT_WIND_AMB);
+        switch (dComIfGp_getOperateWind()) {
+            case 1: {
+                mDoAud_seStart(JA_SE_TAKT_WIND_DECIDE);
+                setStartPos();
+                setAction(2);
+                daPy_py_c* player = daPy_getPlayerActorClass();
+                sVar2 = current.angle.y + 0x7fff;
+                mAngle = player->shape_angle.y;
+                player->setPlayerPosAndAngle(&player->current.pos, sVar2);
+                if(dComIfGp_checkPlayerStatus0(0, 0x00010000)){
+                    mEventIdx = dComIfGp_evmng_getEventIdx("TACT_WINDOW2_SHIP");
+                } else{
+                    mEventIdx = dComIfGp_evmng_getEventIdx("TACT_WINDOW2");
+                }
+                fopAcM_orderChangeEventId(this, mEventIdx, 0, 0xFFFF);
+                player = daPy_getPlayerActorClass();
+                player->cancelOriginalDemo();
+                dKyw_custom_windpower(1.0f);
+                field_0x29D = true;
+                break;
+            }
+            case 0 : {
+                mDoAud_seStart(JA_SE_TAKT_WIND_CANCEL);
+                dComIfGp_event_reset();
+                fopAcM_delete(this);
+                break;
+            }
+        }
+    }
+    else {
+        field_0x29E++;
+    }
+    
 }
 
+BOOL daWbird_c::draw(){
+    return TRUE;
+}
+
+BOOL daWbird_c::execute(){
+    switch(mAction) {
+        case 3:
+            actionSelect();
+            break;
+        case 2:
+            actionMove();
+            break;
+        case 1:
+            actionEnd();
+            break;
+        default:
+            actionWait();
+            break;
+        }
+        calcMtx();
+        return TRUE;
+}
+
+
 /* 00000850-00000858       .text daWbird_Draw__FP9daWbird_c */
-static BOOL daWbird_Draw(daWbird_c*) {
-    /* Nonmatching */
+static BOOL daWbird_Draw(daWbird_c* i_this) {
+    return i_this->draw();
 }
 
 /* 00000858-000008D0       .text daWbird_Execute__FP9daWbird_c */
-static BOOL daWbird_Execute(daWbird_c*) {
-    /* Nonmatching */
+static BOOL daWbird_Execute(daWbird_c* i_this) {
+    return i_this->execute();  
 }
 
 /* 000008D0-000008D8       .text daWbird_IsDelete__FP9daWbird_c */
 static BOOL daWbird_IsDelete(daWbird_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000008D8-00000908       .text daWbird_Delete__FP9daWbird_c */
-static BOOL daWbird_Delete(daWbird_c*) {
-    /* Nonmatching */
+static BOOL daWbird_Delete(daWbird_c* i_this) {
+    i_this->~daWbird_c();
+    return TRUE;
 }
 
 /* 00000908-00000928       .text daWbird_Create__FP10fopAc_ac_c */
-static cPhs_State daWbird_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daWbird_Create(fopAc_ac_c* i_this) {
+    daWbird_c* a_this = (daWbird_c*)i_this;
+    return a_this->create();
 }
 
 static actor_method_class l_daWbird_Method = {

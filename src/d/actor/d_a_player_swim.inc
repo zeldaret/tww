@@ -96,7 +96,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
 BOOL daPy_lk_c::checkNextModeSwim() {
     BOOL res;
 
-    if (mpAttnEntryA && mpAttnEntryA->mType == 7) { //Action_Ship? fopAc_Attn_ACTION_SHIP_e is 0x80 so not sure why Ghidra is saying this 
+    if (mpAttnEntryA && mpAttnEntryA->mType == fopAc_Attn_TYPE_SHIP_e) {
         dComIfGp_setDoStatus(0x1C); // Show `Get In` on the A Button? Ghidra says `GetInShip` is the symbol
         if (doTrigger()) { 
             return procShipReady_init();
@@ -218,7 +218,7 @@ BOOL daPy_lk_c::checkSwimFallCheck() {
 BOOL daPy_lk_c::changeSwimOutProc() {
     cM3dGPla* pcVar1;
     
-    if (mAcch.GetGroundH() != -1e+09f && dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) {
+    if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT && dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) {
         pcVar1 = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);   
     }
     else {

@@ -89,7 +89,6 @@ void daShutter2_c::set_mtx() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
-    return;
 }
 
 /* 000004AC-00000528       .text Execute__12daShutter2_cFPPA3_A4_f */
@@ -156,7 +155,6 @@ void daShutter2_c::shutter_move() {
             dComIfGp_evmng_cutEnd(mStaffId);
             break;
     }
-    return;
 }
 
 /* 00000698-000008B0       .text demo__12daShutter2_cFv */
@@ -204,7 +202,6 @@ void daShutter2_c::demo() {
         fopAcM_orderOtherEventId(this, mCloseEventIdx);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
-    return;
 }
 
 /* 000008B0-00000950       .text Draw__12daShutter2_cFv */

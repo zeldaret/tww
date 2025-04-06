@@ -51,7 +51,6 @@ daTori_Flag_HIO_c::daTori_Flag_HIO_c() {
     mNo = -1;
     m08 = 0.0f;
     m0C = 0;
-    return;
 }
 
 static daTori_Flag_HIO_c l_HIO;
@@ -68,7 +67,6 @@ void daTori_Flag_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mDoMtx_stack_c::transM(l_flag_offset);
     mpCloth->setMtx(mDoMtx_stack_c::get());
-    return;
 }
 
 /* 000001C4-000001E4       .text CheckCreateHeap__FP10fopAc_ac_c */

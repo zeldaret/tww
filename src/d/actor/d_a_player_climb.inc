@@ -63,7 +63,6 @@ void daPy_lk_c::setClimbShapeOffset() {
         local_64 -= mLinkLinChk.GetCross();
         m34EC = (cM_atan2s(local_64.x, local_64.z) - 0x4000 - shape_angle.y);
     }
-    return;
 }
 
 /* 80135DA0-80135E14       .text getClimbDirectionFromAngle__9daPy_lk_cFv */
@@ -98,7 +97,6 @@ void daPy_lk_c::changeClimbMoveProc(int param_0) {
         }
     }
     m34EC = sVar1;
-    return;
 }
 
 /* 80135E98-80136154       .text setMoveBGCorrectClimb__9daPy_lk_cFv */
@@ -153,7 +151,6 @@ BOOL daPy_lk_c::checkBgCorrectClimbMove(cXyz* i_startPos, cXyz* i_endPos) {
             current.pos += mLinkLinChk.GetCross() - *i_endPos;
         }
     }
-    return;
 }
 
 /* 80136200-80136588       .text checkBgClimbMove__9daPy_lk_cFv */
@@ -164,8 +161,8 @@ BOOL daPy_lk_c::checkBgClimbMove() {
 
     f32 dVar7 = cM_ssin(shape_angle.y);
     f32 dVar6 = cM_scos(shape_angle.y);
-    f32 dVar5 = (30.0f * dVar6);
-    f32 dVar4 = (-30.0f * dVar7);
+    f32 dVar5 = 30.0f * dVar6;
+    f32 dVar4 = -30.0f * dVar7;
     local_5c.set(current.pos.x + dVar5, current.pos.y, current.pos.z + dVar4);
     checkBgCorrectClimbMove(&current.pos, &local_5c);
 
@@ -200,7 +197,7 @@ BOOL daPy_lk_c::checkBgClimbMove() {
         mGndChk.SetPos(&local_5c);
         dVar3 = dComIfG_Bgsp()->GroundCross(&mGndChk);
         cM3dGPla* triPla;
-        if (((-1.0E+9f != dVar3) && (triPla = dComIfG_Bgsp()->GetTriPla(mGndChk), triPla->GetNP()->y >= 0.5f)) &&
+        if (((C_BG_MIN_HEIGHT != dVar3) && (triPla = dComIfG_Bgsp()->GetTriPla(mGndChk), triPla->GetNP()->y >= 0.5f)) &&
             (dVar3 >= (local_68.y - 30.0f)))
         {
             dVar4 = 3.0f;
@@ -214,7 +211,6 @@ BOOL daPy_lk_c::checkBgClimbMove() {
     } else {
         setClimbShapeOffset();
     }
-    return;
 }
 
 /* 80136588-801365F4       .text procClimbUpStart_init_sub__9daPy_lk_cFv */
@@ -223,7 +219,6 @@ void daPy_lk_c::procClimbUpStart_init_sub() {
     m3570 = 1;
     m34C2 = 4;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);
-    return;
 }
 
 /* 801365F4-80136708       .text procClimbUpStart_init__9daPy_lk_cFv */
@@ -382,29 +377,27 @@ BOOL daPy_lk_c::procClimbMoveUpDown_init(int param_0) {
 BOOL daPy_lk_c::procClimbMoveUpDown() {
     if (setMoveBGCorrectClimb()) {
         return true;
-    } else {
-        m34C2 = 5;
-        dComIfGp_setDoStatus(6);
-        if (doTrigger()) {
-            m34C2 = 0;
-            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+    }
+
+    m34C2 = 5;
+    dComIfGp_setDoStatus(6);
+    if (doTrigger()) {
+        m34C2 = 0;
+        procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+    } else if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
+        if (m34D0 != 0) {
+            m34D0 = 0;
+            setLadderFootSe();
         } else {
-            if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
-                if (m34D0 != 0) {
-                    m34D0 = 0;
-                    setLadderFootSe();
-                } else {
-                    changeClimbMoveProc(m3570);
-                }
-            } else {
-                f32 dVar2 = getLadderMoveAnmSpeed();
-                if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
-                    dVar2 *= -1.0f;
-                }
-                (mFrameCtrlUnder[UNDER_MOVE0_e]).setRate(dVar2);
-                checkBgClimbMove();
-            }
+            changeClimbMoveProc(m3570);
         }
+    } else {
+        f32 dVar2 = getLadderMoveAnmSpeed();
+        if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
+            dVar2 *= -1.0f;
+        }
+        (mFrameCtrlUnder[UNDER_MOVE0_e]).setRate(dVar2);
+        checkBgClimbMove();
     }
     return true;
 }
@@ -443,7 +436,7 @@ BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
     speedF = 0.0f;
     m34D0 = 1;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);
-    cXyz local_38 = (mRightHandPos - mLeftHandPos);
+    cXyz local_38 = mRightHandPos - mLeftHandPos;
     dVar4 = local_38.absXZ();
     m35A0 = dVar4;
     return true;
@@ -453,37 +446,35 @@ BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
 BOOL daPy_lk_c::procClimbMoveSide() {
     if (setMoveBGCorrectClimb()) {
         return true;
-    } else {
-        m34C2 = 5;
-        dComIfGp_setDoStatus(6);
-        if (doTrigger()) {
-            m34C2 = 0;
-            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+    }
+
+    m34C2 = 5;
+    dComIfGp_setDoStatus(6);
+    if (doTrigger()) {
+        m34C2 = 0;
+        procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+    } else if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
+        if (m34D0 != 0) {
+            m34D0 = 0;
+            setLadderFootSe();
         } else {
-            if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
-                if (m34D0 != 0) {
-                    m34D0 = 0;
-                    setLadderFootSe();
-                } else {
-                    changeClimbMoveProc(m3570);
-                }
-            } else {
-                f32 dVar5 = getClimbMoveAnmSpeed();
-                if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
-                    dVar5 *= -1.0f;
-                }
-                mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar5);
-                cXyz local_28 = (mRightHandPos - mLeftHandPos);
-                dVar5 = local_28.absXZ();
-                f32 fVar1 = std::fabsf(dVar5 - m35A0) * daPy_HIO_ladder_c0::m.field_0x40;
-                f32 fVar2 = fVar1 * cM_ssin(m34D4);
-                current.pos.y += fVar1 * cM_scos(m34D4);
-                current.pos.x += fVar2 * cM_scos(shape_angle.y);
-                current.pos.z -= fVar2 * cM_ssin(shape_angle.y);
-                m35A0 = dVar5;
-                checkBgClimbMove();
-            }
+            changeClimbMoveProc(m3570);
         }
+    } else {
+        f32 dVar5 = getClimbMoveAnmSpeed();
+        if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
+            dVar5 *= -1.0f;
+        }
+        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar5);
+        cXyz local_28 = mRightHandPos - mLeftHandPos;
+        dVar5 = local_28.absXZ();
+        f32 fVar1 = std::fabsf(dVar5 - m35A0) * daPy_HIO_ladder_c0::m.field_0x40;
+        f32 fVar2 = fVar1 * cM_ssin(m34D4);
+        current.pos.y += fVar1 * cM_scos(m34D4);
+        current.pos.x += fVar2 * cM_scos(shape_angle.y);
+        current.pos.z -= fVar2 * cM_ssin(shape_angle.y);
+        m35A0 = dVar5;
+        checkBgClimbMove();
     }
     return true;
 }

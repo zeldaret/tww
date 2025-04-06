@@ -196,7 +196,6 @@ daSteamTag_c::~daSteamTag_c() {
         mpEmitter = NULL;
     }
     mPointWind.set_pwind_delete();
-    return;
 }
 
 cPhs_State daSteamTag_c::create() {

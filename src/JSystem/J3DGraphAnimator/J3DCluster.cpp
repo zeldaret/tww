@@ -432,6 +432,10 @@ void J3DSkinDeform::calcNrmMtx(J3DModel* model) {
     }
 }
 
+#ifdef DEBUG
+#pragma push
+#pragma optimization_level 1
+#endif
 /* 802F4850-802F4974       .text deformVtxPos_F32__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxPos_F32(J3DModel* model) const {
     /* Nonmatching */
@@ -452,6 +456,9 @@ void J3DSkinDeform::deformVtxPos_F32(J3DModel* model) const {
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxPos(0), model->getModelData()->getVtxNum() * sizeof(Vec));
     model->setCurrentVtxPos(transformedVtxPos);
 }
+#ifdef DEBUG
+#pragma pop
+#endif
 
 /* 802F4974-802F4AB4       .text deformVtxPos_S16__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {

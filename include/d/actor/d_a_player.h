@@ -13,8 +13,8 @@ class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
     void execute(JPABaseEmitter*);
     void end();
-    void makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
-    void makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
+    JPABaseEmitter* makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
+    JPABaseEmitter* makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) { mpEmitter = emitter; }
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
@@ -161,6 +161,7 @@ public:
         daPyRFlg0_UNK8000000            = 0x08000000,
         daPyRFlg0_UNK10000000           = 0x10000000,
         daPyRFlg0_ARROW_SHOOT           = 0x20000000,
+        daPyRFlg0_UNK40000000           = 0x40000000,
         // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
         // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
         // 0x04000000 set in daPy_lk_c::procShipPaddle
@@ -457,20 +458,22 @@ public:
     bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
-    bool checkNormalSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e ||
-            dComIfGp_getMiniGameType() == 2;
+    BOOL checkNormalSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e || checkSwordMiniGame();
     }
     BOOL checkMasterSwordEquip() const {
         return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
                dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
                dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
     }
+    BOOL checkFinalMasterSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+    }
+    
     void setFace(daPy_FACE face) { mFace = face; }
     
-    void checkFinalMasterSwordEquip() const {}
+    BOOL checkSwordMiniGame() const { return dComIfGp_getMiniGameType() == 2; }
     void checkBowMiniGame() const {}
-    void checkSwordMiniGame() const {}
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
     void checkUseArrowEffect() const {}

@@ -177,8 +177,6 @@ void dComIfG_play_c::itemInit() {
     for (int i = 0; i < ARRAY_SIZE(mMesgCamInfo.mActor); i++) {
         mMesgCamInfo.mActor[i] = 0;
     }
-
-    return;
 }
 
 /* 80052400-8005286C       .text getLayerNo__14dComIfG_play_cFi */

@@ -217,11 +217,9 @@ BOOL daPy_lk_c::procHammerFrontSwingEnd_init() {
 BOOL daPy_lk_c::procHammerFrontSwingEnd() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         return checkNextMode(0);
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_ham_c0::m.field_0x3C) {
+        return checkNextMode(1);
     } else {
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_ham_c0::m.field_0x3C) {
-            return checkNextMode(1);
-        } else {
-            return true;
-        }
+        return true;
     }
 }

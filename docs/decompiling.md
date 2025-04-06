@@ -241,7 +241,7 @@ void daWall_c::set_se() {
 ```
 
 This is much closer to how it would have looked when written by the original devs.  
-(The `JA_SE` value there is part of an enum of sound effects - if you search through the decomp for decompiled actors that call `fopAcM_seStart`, you will see this enum being when that inline is called.)  
+(The `JA_SE` value there is part of an enum of sound effects - if you search through the decomp for decompiled actors that call `fopAcM_seStart`, you will see this enum being used when that inline is called.)  
 
 However, there's an important caveat to keep in mind when reading the debug maps: Each inline only appears **once per map**, even if it was called multiple times.  
 We got lucky in this example, because `fopAcM_seStart` was only called once in the entire file. But if it had been called multiple times and it already appeared higher up in the tree, nothing would have appeared underneath `set_se` when we had looked at it.  

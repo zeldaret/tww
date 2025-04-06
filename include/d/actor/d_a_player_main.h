@@ -120,8 +120,15 @@ public:
     void onAlphaOutFlg() { mAlphaOutFlg = TRUE; }
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     
-    void deleteCallBack() {}
+    void deleteCallBack() {
+        if(mpEmitter) {
+            mpEmitter->quitImmortalEmitter();
+            mpEmitter->setEmitterCallBackPtr(NULL);
+            mpEmitter = NULL;
+        }
+    }
     
+public:
     /* 0x4 */ BOOL mAlphaOutFlg;
     /* 0x8 */ JPABaseEmitter* mpEmitter;
 };  // Size: 0xC
@@ -250,7 +257,10 @@ public:
     static u8 m_morf_frame;
 
     static void onMabaFlg() { m_maba_flg = 1; }
-    static void offMabaFlg() { m_maba_flg = 0; }
+    static void offMabaFlg() {
+        m_maba_flg = 0;
+        m_maba_timer = 1;
+    }
     static void decMabaTimer() { cLib_calcTimer(&m_maba_timer); }
     static void decMorfFrame() { cLib_calcTimer(&m_morf_frame); }
     static void getEyeMoveFlg() {}
@@ -987,7 +997,7 @@ public:
     BOOL changeFrontWallTypeProc();
     int changeSlideProc();
     void changeWaitProc();
-    int changeLandProc(f32);
+    BOOL changeLandProc(f32);
     BOOL setDamagePoint(f32);
     BOOL checkNormalDamage(int);
     void setDashDamage();
@@ -1354,7 +1364,7 @@ public:
     BOOL procClimbMoveSide_init(int);
     BOOL procClimbMoveSide();
     void setBlendWHideMoveAnime(f32);
-    int getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
+    cM3dGPla* getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
     void getWHideBasePos(cXyz*);
     void getWHideNextPos(cXyz*, cXyz*);
     BOOL checkWHideBackWall(cXyz*);
@@ -1426,8 +1436,8 @@ public:
     BOOL procSwimWait();
     BOOL procSwimMove_init(BOOL);
     BOOL procSwimMove();
-    void setSpecialBattle(int);
-    int changeSpecialBattle();
+    void setSpecialBattle(BOOL);
+    BOOL changeSpecialBattle();
     BOOL procBtJump_init(fopEn_enemy_c*);
     BOOL procBtJump();
     BOOL procBtJumpCut_init(cXyz*);
@@ -1482,14 +1492,14 @@ public:
     BOOL procShipRestart();
     BOOL checkRopeAnime() const;
     void freeRopeItem();
-    BOOL checkRopeRoofHit(s16);
-    void changeRopeSwingProc();
-    void changeRopeEndProc(int);
+    f32 checkRopeRoofHit(s16);
+    int changeRopeSwingProc();
+    int changeRopeEndProc(int);
     BOOL checkSpecialRope();
-    void changeRopeToHangProc();
+    int changeRopeToHangProc();
     BOOL checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*);
     void setBlendRopeMoveAnime(int);
-    void throwRope();
+    int throwRope();
     BOOL checkNextActionRopeReady();
     BOOL checkNextRopeMode();
     BOOL checkHangRopeActorNull();
@@ -1501,7 +1511,7 @@ public:
     BOOL procRopeSwing();
     BOOL procRopeHangWait_init(int);
     BOOL procRopeHangWait();
-    void specialRopeHangUp();
+    int specialRopeHangUp();
     BOOL procRopeUp_init();
     BOOL procRopeUp();
     BOOL procRopeDown_init();
@@ -1647,7 +1657,7 @@ public:
     void setSwordModel(BOOL);
     void setLightSaver();
     BOOL checkDemoShieldNoDraw();
-    BOOL checkDemoSwordNoDraw(int);
+    BOOL checkDemoSwordNoDraw(BOOL);
     BOOL checkChanceMode();
     BOOL checkCutRollChange() const;
     int getSwordBlurColor();
@@ -1756,8 +1766,7 @@ public:
         }
     }
     bool checkSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) != dItem_NONE_e ||
-            dComIfGp_getMiniGameType() == 2;
+        return dComIfGs_getSelectEquip(0) != dItem_NONE_e || checkSwordMiniGame();
     }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
@@ -1782,6 +1791,7 @@ public:
     
     BOOL doTrigger() const { return mItemTrigger & BTN_A; }
     BOOL talkTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL spBattleTrigger() const {return mItemTrigger & BTN_A; }
     BOOL swordTrigger() const { return mItemTrigger & BTN_B; }
     BOOL cancelTrigger() const { return mItemTrigger & BTN_B; }
     BOOL itemTriggerX() const { return mItemTrigger & BTN_X; }
@@ -1791,7 +1801,6 @@ public:
     BOOL spActionTrigger() const { return mItemTrigger & BTN_R; }
     void allTrigger() const {}
     void otherWeaponTrigger() const {}
-    void spBattleTrigger() const {}
     
     BOOL checkPlayerDemoMode() const { return mDemo.getDemoType(); }
     void checkSpecialDemoMode() const {}

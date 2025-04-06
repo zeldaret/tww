@@ -20,14 +20,14 @@ BOOL daPy_lk_c::bowJointCB(int param_0) {
     /* Nonmatching - floats */
     if (checkBowReadyAnime()) {
         return true;
+    }
+
+    if (param_0 == 6) {
+        mDoMtx_trans(mDoMtx_stack_c::now, 0.0f, 4.5f, 4.5f);
+        mDoMtx_concat(mpEquipItemModel->getAnmMtx(6), mDoMtx_stack_c::now, mDoMtx_stack_c::now);
+        mpEquipItemModel->setAnmMtx(param_0, mDoMtx_stack_c::now);
     } else {
-        if (param_0 == 6) {
-            mDoMtx_trans(mDoMtx_stack_c::now, 0.0f, 4.5f, 4.5f);
-            mDoMtx_concat(mpEquipItemModel->getAnmMtx(6), mDoMtx_stack_c::now, mDoMtx_stack_c::now);
-            mpEquipItemModel->setAnmMtx(param_0, mDoMtx_stack_c::now);
-        } else {
-            mpEquipItemModel->setAnmMtx(11, mpEquipItemModel->getAnmMtx(6));
-        }
+        mpEquipItemModel->setAnmMtx(11, mpEquipItemModel->getAnmMtx(6));
     }
     return true;
 }
@@ -79,7 +79,6 @@ void daPy_lk_c::deleteArrow() {
         fopAcM_delete(pfVar1);
         mActorKeepEquip.clearData();
     }
-    return;
 }
 
 /* 8014A1CC-8014A2A0       .text setBowReadyAnime__9daPy_lk_cFv */
@@ -97,7 +96,6 @@ void daPy_lk_c::setBowReadyAnime() {
     setPriTextureAnime(0x70, 0);
     m355E = 10;
     seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
-    return;
 }
 
 /* 8014A2A0-8014A328       .text setBowReloadAnime__9daPy_lk_cFv */
@@ -114,7 +112,6 @@ void daPy_lk_c::setBowReloadAnime() {
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWRELORDA));
     m35EC = 0.0f;
     seStartOnlyReverb(JA_SE_LK_DRAW_BOW);
-    return;
 }
 
 /* 8014A328-8014A60C       .text checkNextActionBowReady__9daPy_lk_cFv */
@@ -202,7 +199,6 @@ LAB_8014a5d8:
     }
 LAB_8014a5ec:
     cancelItemUpperReadyAnime();
-    return;
 }
 
 /* 8014A60C-8014A680       .text checkNextActionBowFly__9daPy_lk_cFv */
@@ -215,7 +211,6 @@ BOOL daPy_lk_c::checkNextActionBowFly() {
             m355E = 0;
         }
     }
-    return;
 }
 
 /* 8014A680-8014A6F4       .text checkNextBowMode__9daPy_lk_cFv */
@@ -225,7 +220,6 @@ BOOL daPy_lk_c::checkNextBowMode() {
     } else {
         procBowSubject_init();
     }
-    return;
 }
 
 /* 8014A6F4-8014A834       .text setBowModel__9daPy_lk_cFv */
@@ -288,21 +282,21 @@ BOOL daPy_lk_c::procBowSubject() {
 BOOL daPy_lk_c::procBowMove_init() {
     if (mCurProc == daPyProc_BOW_MOVE_e) {
         return false;
-    } else {
-        commonProcInit(daPyProc_BOW_MOVE_e);
-        if (m34B8 == 2) {
-            current.angle.y = shape_angle.y + 0x4000;
-        } else {
-            m34B8 = 3;
-            current.angle.y = shape_angle.y + -0x4000;
-        }
-        if (!checkBowAnime()) {
-            setBowReadyAnime();
-        }
-        setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
-        dComIfGp_setPlayerStatus0(0, daPyStts0_BOW_AIM_e);
-        return true;
     }
+
+    commonProcInit(daPyProc_BOW_MOVE_e);
+    if (m34B8 == 2) {
+        current.angle.y = shape_angle.y + 0x4000;
+    } else {
+        m34B8 = 3;
+        current.angle.y = shape_angle.y + -0x4000;
+    }
+    if (!checkBowAnime()) {
+        setBowReadyAnime();
+    }
+    setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_BOW_AIM_e);
+    return true;
 }
 
 /* 8014AA2C-8014AB5C       .text procBowMove__9daPy_lk_cFv */

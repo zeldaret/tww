@@ -224,8 +224,8 @@ BOOL daRaceItem_c::execute() {
             if (hitObj->ChkAtType(AT_TYPE_BOOMERANG)) {
                 cLib_onBit(field_0x645, (u8)0x01);
             } else if (hitObj->ChkAtType(AT_TYPE_HOOKSHOT)) {
-                cXyz pos(0.0f, dItem_data::getH(m_itemNo) / 2.0f, 0.0f);
-                daPy_getPlayerActorClass()->setHookshotCarryOffset(fopAcM_GetID(this), &pos);
+                cXyz offset(0.0f, dItem_data::getH(m_itemNo) / 2.0f, 0.0f);
+                daPy_getPlayerActorClass()->setHookshotCarryOffset(fopAcM_GetID(this), &offset);
             }
         }
     }
